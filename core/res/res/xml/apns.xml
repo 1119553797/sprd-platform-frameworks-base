@@ -22,5 +22,9 @@
 <!-- If you edit this version, also edit the version in the partner-supplied 
     apns-conf.xml configuration file -->
 <apns version="6">
-
+<apn carrier="CMCCNET" apn="cmnet" proxy="" port="" user="" password="" server="" mmsc="" mmsproxy="" mmsport="" mcc="460" mnc="02" type="default">
+</apn>
+<apn carrier="CMCCWAP" apn="cmwap" proxy="10.0.0.172" port="80" user="" password="" server="" mmsc="http://mmsc.monternet.com" mmsproxy="10.0.0.172" mmsport="80" mcc="460" mnc="02" type="mms">
+</apn>
 </apns>
+
