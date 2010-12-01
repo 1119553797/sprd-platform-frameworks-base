@@ -144,7 +144,8 @@ public class GSMPhone extends PhoneBase {
         mCT = new GsmCallTracker(this);
         mSST = new GsmServiceStateTracker (this);
         mSMS = new GsmSMSDispatcher(this);
-        mIccFileHandler = new SIMFileHandler(this);
+        //mIccFileHandler = new SIMFileHandler(this);
+        mIccFileHandler = new TDUSIMFileHandler(this);
         mSIMRecords = new SIMRecords(this);
         mDataConnection = new GsmDataConnectionTracker (this);
         mSimCard = new SimCard(this);

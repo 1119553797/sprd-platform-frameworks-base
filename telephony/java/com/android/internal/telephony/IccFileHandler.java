@@ -56,7 +56,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     static protected final int RESPONSE_DATA_RFU_1 = 0;
     static protected final int RESPONSE_DATA_RFU_2 = 1;
 
-    static protected final int RESPONSE_DATA_FILE_SIZE_1 = 2;
+    static protected final int RESPONSE_DATA_FILE_SIZE_1 = 1;
     static protected final int RESPONSE_DATA_FILE_SIZE_2 = 3;
 
     static protected final int RESPONSE_DATA_FILE_ID_1 = 4;
@@ -92,15 +92,15 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
      // member variables
     protected PhoneBase phone;
 
-    static class LoadLinearFixedContext {
+    public static class LoadLinearFixedContext {
 
-        int efid;
-        int recordNum, recordSize, countRecords;
-        boolean loadAll;
+        public int efid;
+        public int recordNum, recordSize, countRecords;
+        public boolean loadAll;
 
-        Message onLoaded;
+        public Message onLoaded;
 
-        ArrayList<byte[]> results;
+        public ArrayList<byte[]> results;
 
         LoadLinearFixedContext(int efid, int recordNum, Message onLoaded) {
             this.efid = efid;
@@ -361,13 +361,15 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                 response = lc.onLoaded;
 
                 if (ar.exception != null) {
-                    sendResult(response, null, ar.exception);
+                    loge("Icc FileHandler: ar.exception");
+                	sendResult(response, null, ar.exception);
                     break;
                 }
 
                 iccException = result.getException();
 
                 if (iccException != null) {
+                    loge("Icc FileHandler: iccException");
                     sendResult(response, null, iccException);
                     break;
                 }
@@ -377,10 +379,12 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                 recordNum = lc.recordNum;
 
                 if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
+                    loge("Icc FileHandler: TYPE_EF exception");
                     throw new IccFileTypeMismatch();
                 }
 
                 if (EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
+                    loge("Icc FileHandler: EF_TYPE_LINEAR_FIXED exception");
                     throw new IccFileTypeMismatch();
                 }
 

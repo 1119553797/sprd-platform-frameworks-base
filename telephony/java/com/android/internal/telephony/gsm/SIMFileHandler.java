@@ -28,7 +28,7 @@ import com.android.internal.telephony.Phone;
 /**
  * {@hide}
  */
-public final class SIMFileHandler extends IccFileHandler implements IccConstants {
+public class SIMFileHandler extends IccFileHandler implements IccConstants {
     static final String LOG_TAG = "GSM";
     private Phone mPhone;
 
