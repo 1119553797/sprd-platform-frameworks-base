@@ -380,7 +380,9 @@ MediaProfiles::createDefaultVideoEncoders(MediaProfiles *profiles)
 MediaProfiles::createDefaultCamcorderHighProfile()
 {
     MediaProfiles::VideoCodec *videoCodec =
-        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 360000, 352, 288, 20);
+        //new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 360000, 352, 288, 20);
+        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 192000, 176, 144, 5);
+        //new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 192000, 352, 288, 20);
 
     AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
     CamcorderProfile *profile = new CamcorderProfile;
