@@ -27,6 +27,7 @@ namespace android {
 
 class MediaSource;
 class AudioTrack;
+class AwesomePlayer;
 
 class AudioPlayer : public TimeSource {
 public:
@@ -35,7 +36,9 @@ public:
         SEEK_COMPLETE
     };
 
-    AudioPlayer(const sp<MediaPlayerBase::AudioSink> &audioSink);
+    AudioPlayer(const sp<MediaPlayerBase::AudioSink> &audioSink,
+                AwesomePlayer *audioObserver = NULL);
+
     virtual ~AudioPlayer();
 
     // Caller retains ownership of "source".
@@ -46,10 +49,8 @@ public:
 
     status_t start(bool sourceAlreadyStarted = false);
 
-    void pause();
+    void pause(bool playPendingSamples = false);
     void resume();
-
-    void stop();
 
     // Returns the timestamp of the last buffer played (in us).
     int64_t getMediaTimeUs();
@@ -86,7 +87,12 @@ private:
 
     bool mStarted;
 
+    bool mIsFirstBuffer;
+    status_t mFirstBufferResult;
+    MediaBuffer *mFirstBuffer;
+
     sp<MediaPlayerBase::AudioSink> mAudioSink;
+    AwesomePlayer *mObserver;
 
     static void AudioCallback(int event, void *user, void *info);
     void AudioCallback(int event, void *info);
@@ -98,6 +104,8 @@ private:
     size_t fillBuffer(void *data, size_t size);
 
     int64_t getRealTimeUsLocked() const;
+
+    void reset();
 
     AudioPlayer(const AudioPlayer &);
     AudioPlayer &operator=(const AudioPlayer &);

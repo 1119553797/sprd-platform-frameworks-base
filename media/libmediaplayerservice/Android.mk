@@ -37,11 +37,16 @@ LOCAL_SHARED_LIBRARIES :=     		\
 	libvorbisidec         			\
 	libsonivox            			\
 	libmedia              			\
+	libcamera_client                        \
 	libandroid_runtime    			\
 	libstagefright        			\
 	libstagefright_omx    			\
-	libstagefright_color_conversion \
+	libstagefright_color_conversion         \
+	libstagefright_foundation               \
 	libsurfaceflinger_client
+
+LOCAL_STATIC_LIBRARIES := \
+        libstagefright_rtsp
 
 ifneq ($(BUILD_WITHOUT_PV),true)
 LOCAL_SHARED_LIBRARIES += \
@@ -60,6 +65,7 @@ LOCAL_C_INCLUDES :=                                                 \
 	$(call include-path-for, graphics corecg)                       \
 	$(TOP)/external/opencore/extern_libs_v2/khronos/openmax/include \
 	$(TOP)/frameworks/base/media/libstagefright/include             \
+	$(TOP)/frameworks/base/media/libstagefright/rtsp                \
         $(TOP)/external/tremolo/Tremolo
 
 LOCAL_MODULE:= libmediaplayerservice

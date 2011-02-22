@@ -21,14 +21,16 @@ namespace android {
 
 FileSource::FileSource(const char *filename)
     : mFile(fopen(filename, "rb")),
+      mFd(fileno(mFile)),
       mOffset(0),
-      mLength(-1) {
+      mLength(-1){
 }
 
 FileSource::FileSource(int fd, int64_t offset, int64_t length)
     : mFile(fdopen(fd, "rb")),
+      mFd(fd),
       mOffset(offset),
-      mLength(length) {
+      mLength(length){
     CHECK(offset >= 0);
     CHECK(length >= 0);
 }
@@ -45,6 +47,10 @@ status_t FileSource::initCheck() const {
 }
 
 ssize_t FileSource::readAt(off_t offset, void *data, size_t size) {
+    if (mFile == NULL) {
+        return NO_INIT;
+    }
+
     Mutex::Autolock autoLock(mLock);
 
     if (mLength >= 0) {
@@ -57,16 +63,20 @@ ssize_t FileSource::readAt(off_t offset, void *data, size_t size) {
         }
     }
 
-    int err = fseeko(mFile, offset + mOffset, SEEK_SET);
-    if (err < 0) {
-        LOGE("seek to %lld failed", offset + mOffset);
-        return UNKNOWN_ERROR;
-    }
+        int err = fseeko(mFile, offset + mOffset, SEEK_SET);
+        if (err < 0) {
+            LOGE("seek to %lld failed", offset + mOffset);
+            return UNKNOWN_ERROR;
+        }
 
-    return fread(data, 1, size, mFile);
+        return fread(data, 1, size, mFile);
 }
 
 status_t FileSource::getSize(off_t *size) {
+    if (mFile == NULL) {
+        return NO_INIT;
+    }
+
     if (mLength >= 0) {
         *size = mLength;
 

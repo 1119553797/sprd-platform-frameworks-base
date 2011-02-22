@@ -23,6 +23,7 @@
 
 namespace android {
 
+struct AMessage;
 class DataSource;
 class SampleTable;
 class String8;
@@ -37,6 +38,10 @@ public:
     virtual sp<MetaData> getTrackMetaData(size_t index, uint32_t flags);
 
     virtual sp<MetaData> getMetaData();
+
+    // for DRM
+    virtual void setDrmFlag(bool flag);
+    virtual char* getDrmTrackInfo(size_t trackID, int *len);
 
 protected:
     virtual ~MPEG4Extractor();
@@ -70,12 +75,28 @@ private:
 
     static status_t verifyTrack(Track *track);
 
+    struct SINF {
+        SINF *next;
+        uint16_t trackID;
+        uint8_t IPMPDescriptorID;
+        ssize_t len;
+        char *IPMPData;
+    };
+
+    SINF *mFirstSINF;
+
+    bool mIsDrm;
+    status_t parseDrmSINF(off_t *offset, off_t data_offset);
+
+    status_t parseTrackHeader(off_t data_offset, off_t data_size);
+
     MPEG4Extractor(const MPEG4Extractor &);
     MPEG4Extractor &operator=(const MPEG4Extractor &);
 };
 
 bool SniffMPEG4(
-        const sp<DataSource> &source, String8 *mimeType, float *confidence);
+        const sp<DataSource> &source, String8 *mimeType, float *confidence,
+        sp<AMessage> *);
 
 }  // namespace android
 
