@@ -183,6 +183,7 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.video.decoder.avc" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.TI.Video.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.SEC.AVC.Decoder" },
+    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.PV.avcdec" },//@zha
     { MEDIA_MIMETYPE_VIDEO_AVC, "AVCDecoder" },
 //    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.PV.avcdec" },
     { MEDIA_MIMETYPE_AUDIO_VORBIS, "VorbisDecoder" },
@@ -201,12 +202,14 @@ static const CodecInfo kEncoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.qcom.video.encoder.mpeg4" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.TI.Video.encoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.SEC.MPEG4.Encoder" },
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.PV.mpeg4enc" },//@zha
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "M4vH263Encoder" },
 //    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.PV.mpeg4enc" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.7x30.video.encoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.video.encoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.TI.Video.encoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.H263.Encoder" },
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.PV.h263enc" },//@zha
     { MEDIA_MIMETYPE_VIDEO_H263, "M4vH263Encoder" },
 //    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.PV.h263enc" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.7x30.video.encoder.avc" },
@@ -352,8 +355,20 @@ uint32_t OMXCodec::getComponentQuirks(
         const char *componentName, bool isEncoder) {
     uint32_t quirks = 0;
 
+    if (!strcmp(componentName, "OMX.PV.h263dec")) {
+	quirks |= kDefersOutputBufferAllocation;
+        quirks |= kRequiresAllocateBufferOnOutputPorts;
+    }
+
+    if (!strcmp(componentName, "OMX.PV.mpeg4dec")) {
+	quirks |= kDefersOutputBufferAllocation;
+        quirks |= kRequiresAllocateBufferOnOutputPorts;
+    }
+
     if (!strcmp(componentName, "OMX.PV.avcdec")) {
         quirks |= kWantsNALFragments;
+	quirks |= kDefersOutputBufferAllocation;
+	quirks |= kRequiresAllocateBufferOnOutputPorts;
     }
     if (!strcmp(componentName, "OMX.TI.MP3.decode")) {
         quirks |= kNeedsFlushBeforeDisable;
