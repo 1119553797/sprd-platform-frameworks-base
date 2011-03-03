@@ -23,18 +23,17 @@
 namespace android {
 namespace renderscript {
 
-class Program;
+
 
 class Allocation : public ObjectBase
 {
     // The graphics equilivent of malloc.  The allocation contains a structure of elements.
 
+
 public:
     // By policy this allocation will hold a pointer to the type
     // but will not destroy it on destruction.
     Allocation(Context *rsc, const Type *);
-    Allocation(Context *rsc, const Type *, void *bmp, void *callbackData, RsBitmapCallback_t callback);
-
     virtual ~Allocation();
 
     void setCpuWritable(bool);
@@ -47,12 +46,10 @@ public:
     void * getPtr() const {return mPtr;}
     const Type * getType() const {return mType.get();}
 
-    void deferedUploadToTexture(const Context *rsc, bool genMipmap, uint32_t lodOffset);
-    void uploadToTexture(const Context *rsc);
+    void uploadToTexture(Context *rsc, uint32_t lodOffset = 0);
     uint32_t getTextureID() const {return mTextureID;}
 
-    void deferedUploadToBufferObject(const Context *rsc);
-    void uploadToBufferObject(const Context *rsc);
+    void uploadToBufferObject();
     uint32_t getBufferObjectID() const {return mBufferID;}
 
 
@@ -68,25 +65,12 @@ public:
     void enableGLVertexBuffers() const;
     void setupGLIndexBuffers() const;
 
-    void addProgramToDirty(const Program *);
-    void removeProgramToDirty(const Program *);
-
     virtual void dumpLOGV(const char *prefix) const;
 
-    virtual void uploadCheck(const Context *rsc);
 
 protected:
-    void sendDirty() const;
-
     ObjectBaseRef<const Type> mType;
     void * mPtr;
-
-    Vector<const Program *> mToDirtyList;
-
-    // Is we have a non-null user bitmap callback we do not own the bits and
-    // instead call this function to free the memort when its time.
-    RsBitmapCallback_t mUserBitmapCallback;
-    void *mUserBitmapCallbackData;
 
     // Usage restrictions
     bool mCpuWrite;
@@ -104,8 +88,6 @@ protected:
     // Is this a legal structure to be used as a texture source.
     // Initially this will require 1D or 2D and color data
     bool mIsTexture;
-    bool mTextureGenMipmap;
-    uint32_t mTextureLOD;
     uint32_t mTextureID;
 
     // Is this a legal structure to be used as a vertex source.
@@ -113,12 +95,6 @@ protected:
     // is allowed.
     bool mIsVertexBuffer;
     uint32_t mBufferID;
-
-    bool mUploadDefered;
-
-private:
-    void init(Context *rsc, const Type *);
-
 };
 
 }

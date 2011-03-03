@@ -56,7 +56,6 @@ public:
 protected:
     const char *mAllocFile;
     uint32_t mAllocLine;
-    Context *mRSC;
 
 private:
     void add() const;
@@ -65,6 +64,7 @@ private:
     bool checkDelete() const;
 
     char * mName;
+    Context *mRSC;
     mutable int32_t mSysRefCount;
     mutable int32_t mUserRefCount;
 

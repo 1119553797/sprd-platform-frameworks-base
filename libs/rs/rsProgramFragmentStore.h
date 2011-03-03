@@ -28,11 +28,10 @@ class ProgramFragmentStoreState;
 class ProgramFragmentStore : public Program
 {
 public:
-    ProgramFragmentStore(Context *);
+    ProgramFragmentStore(Context *, Element *in, Element *out);
     virtual ~ProgramFragmentStore();
 
     virtual void setupGL(const Context *, ProgramFragmentStoreState *);
-    virtual void setupGL2(const Context *, ProgramFragmentStoreState *);
 
     void setDepthFunc(RsDepthFunc);
     void setDepthMask(bool);

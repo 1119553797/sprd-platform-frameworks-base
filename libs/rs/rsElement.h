@@ -18,8 +18,6 @@
 #define ANDROID_STRUCTURED_ELEMENT_H
 
 #include "rsComponent.h"
-#include "rsUtils.h"
-#include "rsObjectBase.h"
 
 // ---------------------------------------------------------------------------
 namespace android {
@@ -30,57 +28,41 @@ namespace renderscript {
 class Element : public ObjectBase
 {
 public:
+    Element(Context *, uint32_t count);
     ~Element();
+
+
+    void setComponent(uint32_t idx, Component *c);
 
     uint32_t getGLType() const;
     uint32_t getGLFormat() const;
+
 
     size_t getSizeBits() const;
     size_t getSizeBytes() const {
         return (getSizeBits() + 7) >> 3;
     }
 
-    size_t getFieldOffsetBits(uint32_t componentNumber) const;
-    size_t getFieldOffsetBytes(uint32_t componentNumber) const {
-        return (getFieldOffsetBits(componentNumber) + 7) >> 3;
+    size_t getComponentOffsetBits(uint32_t componentNumber) const;
+    size_t getComponentOffsetBytes(uint32_t componentNumber) const {
+        return (getComponentOffsetBits(componentNumber) + 7) >> 3;
     }
 
-    uint32_t getFieldCount() const {return mFieldCount;}
-    const Element * getField(uint32_t idx) const {return mFields[idx].e.get();}
-    const char * getFieldName(uint32_t idx) const {return mFields[idx].name.string();}
+    uint32_t getComponentCount() const {return mComponentCount;}
+    Component * getComponent(uint32_t idx) const {return mComponents[idx].get();}
 
-    const Component & getComponent() const {return mComponent;}
-    RsDataType getType() const {return mComponent.getType();}
-    RsDataKind getKind() const {return mComponent.getKind();}
-    uint32_t getBits() const {return mBits;}
-
-    String8 getCType(uint32_t indent=0) const;
-    String8 getCStructBody(uint32_t indent=0) const;
-    String8 getGLSLType(uint32_t indent=0) const;
 
     void dumpLOGV(const char *prefix) const;
-
-    static const Element * create(Context *rsc, RsDataType dt, RsDataKind dk,
-                            bool isNorm, uint32_t vecSize);
-    static const Element * create(Context *rsc, size_t count, const Element **,
-                            const char **, const size_t * lengths);
 
 protected:
     // deallocate any components that are part of this element.
     void clear();
 
-    typedef struct {
-        String8 name;
-        ObjectBaseRef<const Element> e;
-    } ElementField_t;
-    ElementField_t *mFields;
-    size_t mFieldCount;
-
+    size_t mComponentCount;
+    ObjectBaseRef<Component> * mComponents;
+    //uint32_t *mOffsetTable;
 
     Element(Context *);
-
-    Component mComponent;
-    uint32_t mBits;
 };
 
 
@@ -89,8 +71,7 @@ public:
     ElementState();
     ~ElementState();
 
-    // Cache of all existing elements.
-    Vector<const Element *> mElements;
+    Vector<Component *> mComponentBuildList;
 };
 
 

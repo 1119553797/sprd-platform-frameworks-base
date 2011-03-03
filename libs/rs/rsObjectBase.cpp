@@ -191,7 +191,6 @@ void ObjectBase::dumpAll(Context *rsc)
     LOGV("Dumping all objects");
     const ObjectBase * o = rsc->mObjHead;
     while (o) {
-        LOGV(" Object %p", o);
         o->dumpLOGV("  ");
         o = o->mNext;
     }

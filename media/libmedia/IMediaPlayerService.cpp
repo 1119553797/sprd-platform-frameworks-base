@@ -22,6 +22,7 @@
 #include <binder/IMemory.h>
 #include <media/IMediaPlayerService.h>
 #include <media/IMediaRecorder.h>
+#include <media/IMediaPhone.h>
 #include <media/IOMX.h>
 
 #include <utils/Errors.h>  // for status_t
@@ -34,6 +35,7 @@ enum {
     DECODE_URL,
     DECODE_FD,
     CREATE_MEDIA_RECORDER,
+    CREATE_MEDIA_PHONE,
     CREATE_METADATA_RETRIEVER,
     GET_OMX,
     SNOOP
@@ -87,6 +89,15 @@ public:
         data.writeInt32(pid);
         remote()->transact(CREATE_MEDIA_RECORDER, data, &reply);
         return interface_cast<IMediaRecorder>(reply.readStrongBinder());
+    }
+
+    virtual sp<IMediaPhone> createMediaPhone(pid_t pid)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPlayerService::getInterfaceDescriptor());
+        data.writeInt32(pid);
+        remote()->transact(CREATE_MEDIA_PHONE, data, &reply);
+        return interface_cast<IMediaPhone>(reply.readStrongBinder());
     }
 
     virtual sp<IMediaPlayer> create(pid_t pid, const sp<IMediaPlayerClient>& client, int fd, int64_t offset, int64_t length)
@@ -223,6 +234,13 @@ status_t BnMediaPlayerService::onTransact(
             pid_t pid = data.readInt32();
             sp<IMediaRecorder> recorder = createMediaRecorder(pid);
             reply->writeStrongBinder(recorder->asBinder());
+            return NO_ERROR;
+        } break;
+        case CREATE_MEDIA_PHONE: {
+            CHECK_INTERFACE(IMediaPlayerService, data, reply);
+            pid_t pid = data.readInt32();
+            sp<IMediaPhone> phone = createMediaPhone(pid);
+            reply->writeStrongBinder(phone->asBinder());
             return NO_ERROR;
         } break;
         case CREATE_METADATA_RETRIEVER: {

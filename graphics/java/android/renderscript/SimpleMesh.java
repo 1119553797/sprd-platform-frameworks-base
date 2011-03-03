@@ -313,36 +313,28 @@ public class SimpleMesh extends BaseObj {
         public SimpleMesh create() {
             Element.Builder b = new Element.Builder(mRS);
             int floatCount = mVtxSize;
-            b.add(Element.createAttrib(mRS,
-                                       Element.DataType.FLOAT_32,
-                                       Element.DataKind.POSITION,
-                                       mVtxSize), "position");
+            if (mVtxSize == 2) {
+                b.addFloatXY();
+            } else {
+                b.addFloatXYZ();
+            }
             if ((mFlags & COLOR) != 0) {
                 floatCount += 4;
-                b.add(Element.createAttrib(mRS,
-                                           Element.DataType.FLOAT_32,
-                                           Element.DataKind.COLOR,
-                                           4), "color");
+                b.addFloatRGBA();
             }
             if ((mFlags & TEXTURE_0) != 0) {
                 floatCount += 2;
-                b.add(Element.createAttrib(mRS,
-                                           Element.DataType.FLOAT_32,
-                                           Element.DataKind.TEXTURE,
-                                           2), "texture");
+                b.addFloatST();
             }
             if ((mFlags & NORMAL) != 0) {
                 floatCount += 3;
-                b.add(Element.createAttrib(mRS,
-                                           Element.DataType.FLOAT_32,
-                                           Element.DataKind.NORMAL,
-                                           3), "normal");
+                b.addFloatNorm();
             }
             mElement = b.create();
 
             Builder smb = new Builder(mRS);
             smb.addVertexType(mElement, mVtxCount / floatCount);
-            smb.setIndexType(Element.createIndex(mRS), mIndexCount);
+            smb.setIndexType(Element.INDEX_16(mRS), mIndexCount);
             smb.setPrimitive(Primitive.TRIANGLE);
             SimpleMesh sm = smb.create();
 

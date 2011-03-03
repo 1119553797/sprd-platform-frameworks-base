@@ -30,13 +30,10 @@ class ProgramVertex : public Program
 public:
     const static uint32_t MAX_LIGHTS = 8;
 
-    ProgramVertex(Context *,const char * shaderText, uint32_t shaderLength,
-                  const uint32_t * params, uint32_t paramLength);
-    ProgramVertex(Context *, bool texMat);
+    ProgramVertex(Context *, Element *in, Element *out);
     virtual ~ProgramVertex();
 
     virtual void setupGL(const Context *rsc, ProgramVertexState *state);
-    virtual void setupGL2(const Context *rsc, ProgramVertexState *state, ShaderCache *sc);
 
 
     void setTextureMatrixEnable(bool e) {mTextureMatrixEnable = e;}
@@ -48,10 +45,6 @@ public:
 
     void transformToScreen(const Context *, float *v4out, const float *v3in) const;
 
-    virtual void createShader();
-    virtual void loadShader(Context *);
-    virtual void init(Context *);
-
 
 protected:
     uint32_t mLightCount;
@@ -59,9 +52,6 @@ protected:
 
     // Hacks to create a program for now
     bool mTextureMatrixEnable;
-
-private:
-    void initAddUserElement(const Element *e, String8 *names, uint32_t *count, const char *prefix);
 };
 
 
@@ -81,8 +71,11 @@ public:
 
     ObjectBaseRef<Type> mAllocType;
 
+    ProgramVertex *mPV;
 
-    float color[4];
+    //ObjectBaseRef<Type> mTextureTypes[ProgramFragment::MAX_TEXTURE];
+
+
 };
 
 

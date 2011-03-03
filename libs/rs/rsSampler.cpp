@@ -53,7 +53,7 @@ Sampler::~Sampler()
 {
 }
 
-void Sampler::setupGL(const Context *rsc, bool npot)
+void Sampler::setupGL()
 {
     GLenum trans[] = {
         GL_NEAREST, //RS_SAMPLER_NEAREST,
@@ -64,22 +64,12 @@ void Sampler::setupGL(const Context *rsc, bool npot)
 
     };
 
-    bool forceNonMip = false;
-    if (!rsc->ext_OES_texture_npot() && npot) {
-        forceNonMip = true;
-    }
 
-    if ((mMinFilter == RS_SAMPLER_LINEAR_MIP_LINEAR) && forceNonMip) {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    } else {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, trans[mMinFilter]);
-    }
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, trans[mMinFilter]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, trans[mMagFilter]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, trans[mWrapS]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, trans[mWrapT]);
 
-
-    rsc->checkError("ProgramFragment::setupGL2 tex env");
 }
 
 void Sampler::bindToContext(SamplerState *ss, uint32_t slot)
@@ -94,18 +84,18 @@ void Sampler::unbindFromContext(SamplerState *ss)
     mBoundSlot = -1;
     ss->mSamplers[slot].clear();
 }
-/*
+
 void SamplerState::setupGL()
 {
     for (uint32_t ct=0; ct < RS_MAX_SAMPLER_SLOT; ct++) {
         Sampler *s = mSamplers[ct].get();
         if (s) {
-            s->setupGL(rsc);
+            s->setupGL();
         } else {
             glBindTexture(GL_TEXTURE_2D, 0);
         }
     }
-}*/
+}
 
 ////////////////////////////////
 

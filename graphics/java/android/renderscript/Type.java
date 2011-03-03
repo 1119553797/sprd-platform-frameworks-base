@@ -34,9 +34,6 @@ public class Type extends BaseObj {
     private int mNativeCache;
     Class mJavaClass;
 
-    public Element getElement() {
-        return mElement;
-    }
 
     public int getX() {
         return mDimX;
@@ -125,16 +122,16 @@ public class Type extends BaseObj {
                 Field f = fields[ct];
                 Class fc = f.getType();
                 if(fc == int.class) {
-                    arTypes[ct] = Element.DataType.SIGNED_32.mID;
+                    arTypes[ct] = Element.DataType.SIGNED.mID;
                     arBits[ct] = 32;
                 } else if(fc == short.class) {
-                    arTypes[ct] = Element.DataType.SIGNED_16.mID;
+                    arTypes[ct] = Element.DataType.SIGNED.mID;
                     arBits[ct] = 16;
                 } else if(fc == byte.class) {
-                    arTypes[ct] = Element.DataType.SIGNED_8.mID;
+                    arTypes[ct] = Element.DataType.SIGNED.mID;
                     arBits[ct] = 8;
                 } else if(fc == float.class) {
-                    arTypes[ct] = Element.DataType.FLOAT_32.mID;
+                    arTypes[ct] = Element.DataType.FLOAT.mID;
                     arBits[ct] = 32;
                 } else {
                     throw new IllegalArgumentException("Unkown field type");

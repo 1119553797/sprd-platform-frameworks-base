@@ -92,6 +92,7 @@ private:
     // camera and camcorder need access to the ISurface binder interface for preview
     friend class Camera;
     friend class MediaRecorder;
+    friend class MediaPhone;
     // mediaplayer needs access to ISurface for display
     friend class MediaPlayer;
     // for testing
@@ -179,6 +180,7 @@ private:
     // camera and camcorder need access to the ISurface binder interface for preview
     friend class Camera;
     friend class MediaRecorder;
+    friend class MediaPhone;
     // mediaplayer needs access to ISurface for display
     friend class MediaPlayer;
     friend class IOMX;

@@ -19,7 +19,6 @@
 #include "rsThreadIO.h"
 #include <ui/FramebufferNativeWindow.h>
 #include <ui/EGLUtils.h>
-#include <ui/egl/android_natives.h>
 
 #include <sys/types.h>
 #include <sys/resource.h>
@@ -28,8 +27,6 @@
 
 #include <GLES/gl.h>
 #include <GLES/glext.h>
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
 
 #include <cutils/sched_policy.h>
 
@@ -53,24 +50,17 @@ static void checkEglError(const char* op, EGLBoolean returnVal = EGL_TRUE) {
     }
 }
 
-void Context::initEGL(bool useGL2)
+void Context::initEGL()
 {
     mEGL.mNumConfigs = -1;
     EGLint configAttribs[128];
     EGLint *configAttribsPtr = configAttribs;
-    EGLint context_attribs2[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE };
 
     memset(configAttribs, 0, sizeof(configAttribs));
 
     configAttribsPtr[0] = EGL_SURFACE_TYPE;
     configAttribsPtr[1] = EGL_WINDOW_BIT;
     configAttribsPtr += 2;
-
-    if (useGL2) {
-        configAttribsPtr[0] = EGL_RENDERABLE_TYPE;
-        configAttribsPtr[1] = EGL_OPENGL_ES2_BIT;
-        configAttribsPtr += 2;
-    }
 
     if (mUseDepth) {
         configAttribsPtr[0] = EGL_DEPTH_SIZE;
@@ -101,11 +91,7 @@ void Context::initEGL(bool useGL2)
     //eglChooseConfig(mEGL.mDisplay, configAttribs, &mEGL.mConfig, 1, &mEGL.mNumConfigs);
 
 
-    if (useGL2) {
-        mEGL.mContext = eglCreateContext(mEGL.mDisplay, mEGL.mConfig, EGL_NO_CONTEXT, context_attribs2);
-    } else {
-        mEGL.mContext = eglCreateContext(mEGL.mDisplay, mEGL.mConfig, EGL_NO_CONTEXT, NULL);
-    }
+    mEGL.mContext = eglCreateContext(mEGL.mDisplay, mEGL.mConfig, EGL_NO_CONTEXT, NULL);
     checkEglError("eglCreateContext");
     if (mEGL.mContext == EGL_NO_CONTEXT) {
         LOGE("eglCreateContext returned EGL_NO_CONTEXT");
@@ -143,13 +129,6 @@ uint32_t Context::runScript(Script *s, uint32_t launchID)
     return ret;
 }
 
-void Context::checkError(const char *msg) const
-{
-    GLenum err = glGetError();
-    if (err != GL_NO_ERROR) {
-        LOGE("GL Error, 0x%x, from %s", err, msg);
-    }
-}
 
 uint32_t Context::runRootScript()
 {
@@ -177,12 +156,11 @@ uint32_t Context::runRootScript()
     mStateFragmentStore.mLast.clear();
     uint32_t ret = runScript(mRootScript.get(), 0);
 
-    checkError("runRootScript");
-    if (mError != RS_ERROR_NONE) {
-        // If we have an error condition we stop rendering until
-        // somthing changes that might fix it.
-        ret = 0;
+    GLenum err = glGetError();
+    if (err != GL_NO_ERROR) {
+        LOGE("Pending GL Error, 0x%x", err);
     }
+
     return ret;
 }
 
@@ -245,26 +223,12 @@ void Context::timerPrint()
     }
 }
 
-bool Context::setupCheck()
+void Context::setupCheck()
 {
-    if (checkVersion2_0()) {
-        if (!mShaderCache.lookup(this, mVertex.get(), mFragment.get())) {
-            LOGE("Context::setupCheck() 1 fail");
-            return false;
-        }
-
-        mFragmentStore->setupGL2(this, &mStateFragmentStore);
-        mFragment->setupGL2(this, &mStateFragment, &mShaderCache);
-        mRaster->setupGL2(this, &mStateRaster);
-        mVertex->setupGL2(this, &mStateVertex, &mShaderCache);
-
-    } else {
-        mFragmentStore->setupGL(this, &mStateFragmentStore);
-        mFragment->setupGL(this, &mStateFragment);
-        mRaster->setupGL(this, &mStateRaster);
-        mVertex->setupGL(this, &mStateVertex);
-    }
-    return true;
+    mFragmentStore->setupGL(this, &mStateFragmentStore);
+    mFragment->setupGL(this, &mStateFragment);
+    mRaster->setupGL(this, &mStateRaster);
+    mVertex->setupGL(this, &mStateVertex);
 }
 
 static bool getProp(const char *str)
@@ -284,8 +248,11 @@ void * Context::threadProc(void *vrsc)
 
      rsc->props.mLogTimes = getProp("debug.rs.profile");
      rsc->props.mLogScripts = getProp("debug.rs.script");
-     rsc->props.mLogObjects = getProp("debug.rs.object");
-     rsc->props.mLogShaders = getProp("debug.rs.shader");
+     rsc->props.mLogObjects = getProp("debug.rs.objects");
+
+     //pthread_mutex_lock(&gInitMutex);
+     //rsc->initEGL();
+     //pthread_mutex_unlock(&gInitMutex);
 
      ScriptTLSStruct *tlsStruct = new ScriptTLSStruct;
      if (!tlsStruct) {
@@ -299,17 +266,14 @@ void * Context::threadProc(void *vrsc)
          LOGE("pthread_setspecific %i", status);
      }
 
-     if (rsc->mIsGraphicsContext) {
-         rsc->mStateRaster.init(rsc, rsc->mEGL.mWidth, rsc->mEGL.mHeight);
-         rsc->setRaster(NULL);
-         rsc->mStateVertex.init(rsc, rsc->mEGL.mWidth, rsc->mEGL.mHeight);
-         rsc->setVertex(NULL);
-         rsc->mStateFragment.init(rsc, rsc->mEGL.mWidth, rsc->mEGL.mHeight);
-         rsc->setFragment(NULL);
-         rsc->mStateFragmentStore.init(rsc, rsc->mEGL.mWidth, rsc->mEGL.mHeight);
-         rsc->setFragmentStore(NULL);
-         rsc->mStateVertexArray.init(rsc);
-     }
+     rsc->mStateRaster.init(rsc, rsc->mEGL.mWidth, rsc->mEGL.mHeight);
+     rsc->setRaster(NULL);
+     rsc->mStateVertex.init(rsc, rsc->mEGL.mWidth, rsc->mEGL.mHeight);
+     rsc->setVertex(NULL);
+     rsc->mStateFragment.init(rsc, rsc->mEGL.mWidth, rsc->mEGL.mHeight);
+     rsc->setFragment(NULL);
+     rsc->mStateFragmentStore.init(rsc, rsc->mEGL.mWidth, rsc->mEGL.mHeight);
+     rsc->setFragmentStore(NULL);
 
      rsc->mRunning = true;
      bool mDraw = true;
@@ -319,7 +283,7 @@ void * Context::threadProc(void *vrsc)
          mDraw &= (rsc->mWndSurface != NULL);
 
          uint32_t targetTime = 0;
-         if (mDraw && rsc->mIsGraphicsContext) {
+         if (mDraw) {
              targetTime = rsc->runRootScript();
              mDraw = targetTime && !rsc->mPaused;
              rsc->timerSet(RS_TIMER_CLEAR_SWAP);
@@ -341,27 +305,27 @@ void * Context::threadProc(void *vrsc)
      }
 
      LOGV("RS Thread exiting");
-     if (rsc->mIsGraphicsContext) {
-         rsc->mRaster.clear();
-         rsc->mFragment.clear();
-         rsc->mVertex.clear();
-         rsc->mFragmentStore.clear();
-         rsc->mRootScript.clear();
-         rsc->mStateRaster.deinit(rsc);
-         rsc->mStateVertex.deinit(rsc);
-         rsc->mStateFragment.deinit(rsc);
-         rsc->mStateFragmentStore.deinit(rsc);
-     }
+     rsc->mRaster.clear();
+     rsc->mFragment.clear();
+     rsc->mVertex.clear();
+     rsc->mFragmentStore.clear();
+     rsc->mRootScript.clear();
+     rsc->mStateRaster.deinit(rsc);
+     rsc->mStateVertex.deinit(rsc);
+     rsc->mStateFragment.deinit(rsc);
+     rsc->mStateFragmentStore.deinit(rsc);
      ObjectBase::zeroAllUserRef(rsc);
 
      rsc->mObjDestroy.mNeedToEmpty = true;
      rsc->objDestroyOOBRun();
 
-     if (rsc->mIsGraphicsContext) {
-         pthread_mutex_lock(&gInitMutex);
-         rsc->deinitEGL();
-         pthread_mutex_unlock(&gInitMutex);
-     }
+     glClearColor(0,0,0,0);
+     glClear(GL_COLOR_BUFFER_BIT);
+     eglSwapBuffers(rsc->mEGL.mDisplay, rsc->mEGL.mSurface);
+
+     pthread_mutex_lock(&gInitMutex);
+     rsc->deinitEGL();
+     pthread_mutex_unlock(&gInitMutex);
 
      LOGV("RS Thread exited");
      return NULL;
@@ -387,7 +351,7 @@ void Context::setPriority(int32_t p)
 #endif
 }
 
-Context::Context(Device *dev, bool isGraphics, bool useDepth)
+Context::Context(Device *dev, bool useDepth)
 {
     pthread_mutex_lock(&gInitMutex);
 
@@ -398,12 +362,7 @@ Context::Context(Device *dev, bool isGraphics, bool useDepth)
     mUseDepth = useDepth;
     mPaused = false;
     mObjHead = NULL;
-    mError = RS_ERROR_NONE;
-    mErrorMsg = NULL;
-
     memset(&mEGL, 0, sizeof(mEGL));
-    memset(&mGL, 0, sizeof(mGL));
-    mIsGraphicsContext = isGraphics;
 
     int status;
     pthread_attr_t threadAttr;
@@ -473,9 +432,9 @@ Context::~Context()
     objDestroyOOBDestroy();
 }
 
-void Context::setSurface(uint32_t w, uint32_t h, android_native_window_t *sur)
+void Context::setSurface(uint32_t w, uint32_t h, Surface *sur)
 {
-    rsAssert(mIsGraphicsContext);
+    LOGV("setSurface %i %i %p", w, h, sur);
 
     EGLBoolean ret;
     if (mEGL.mSurface != NULL) {
@@ -498,7 +457,7 @@ void Context::setSurface(uint32_t w, uint32_t h, android_native_window_t *sur)
         if (!mEGL.mContext) {
             first = true;
             pthread_mutex_lock(&gInitMutex);
-            initEGL(true);
+            initEGL();
             pthread_mutex_unlock(&gInitMutex);
         }
 
@@ -529,37 +488,15 @@ void Context::setSurface(uint32_t w, uint32_t h, android_native_window_t *sur)
 
             //LOGV("EGL Version %i %i", mEGL.mMajorVersion, mEGL.mMinorVersion);
             LOGV("GL Version %s", mGL.mVersion);
-            //LOGV("GL Vendor %s", mGL.mVendor);
+            LOGV("GL Vendor %s", mGL.mVendor);
             LOGV("GL Renderer %s", mGL.mRenderer);
             //LOGV("GL Extensions %s", mGL.mExtensions);
 
-            const char *verptr = NULL;
-            if (strlen((const char *)mGL.mVersion) > 9) {
-                if (!memcmp(mGL.mVersion, "OpenGL ES-CM", 12)) {
-                    verptr = (const char *)mGL.mVersion + 12;
-                }
-                if (!memcmp(mGL.mVersion, "OpenGL ES ", 10)) {
-                    verptr = (const char *)mGL.mVersion + 9;
-                }
-            }
-
-            if (!verptr) {
+            if ((strlen((const char *)mGL.mVersion) < 12) || memcmp(mGL.mVersion, "OpenGL ES-CM", 12)) {
                 LOGE("Error, OpenGL ES Lite not supported");
             } else {
-                sscanf(verptr, " %i.%i", &mGL.mMajorVersion, &mGL.mMinorVersion);
+                sscanf((const char *)mGL.mVersion + 13, "%i.%i", &mGL.mMajorVersion, &mGL.mMinorVersion);
             }
-
-            glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &mGL.mMaxVertexAttribs);
-            glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &mGL.mMaxVertexUniformVectors);
-            glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &mGL.mMaxVertexTextureUnits);
-
-            glGetIntegerv(GL_MAX_VARYING_VECTORS, &mGL.mMaxVaryingVectors);
-            glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &mGL.mMaxTextureImageUnits);
-
-            glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &mGL.mMaxFragmentTextureImageUnits);
-            glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &mGL.mMaxFragmentUniformVectors);
-
-            mGL.OES_texture_npot = NULL != strstr((const char *)mGL.mExtensions, "GL_OES_texture_npot");
         }
 
     }
@@ -567,25 +504,21 @@ void Context::setSurface(uint32_t w, uint32_t h, android_native_window_t *sur)
 
 void Context::pause()
 {
-    rsAssert(mIsGraphicsContext);
     mPaused = true;
 }
 
 void Context::resume()
 {
-    rsAssert(mIsGraphicsContext);
     mPaused = false;
 }
 
 void Context::setRootScript(Script *s)
 {
-    rsAssert(mIsGraphicsContext);
     mRootScript.set(s);
 }
 
 void Context::setFragmentStore(ProgramFragmentStore *pfs)
 {
-    rsAssert(mIsGraphicsContext);
     if (pfs == NULL) {
         mFragmentStore.set(mStateFragmentStore.mDefault);
     } else {
@@ -595,7 +528,6 @@ void Context::setFragmentStore(ProgramFragmentStore *pfs)
 
 void Context::setFragment(ProgramFragment *pf)
 {
-    rsAssert(mIsGraphicsContext);
     if (pf == NULL) {
         mFragment.set(mStateFragment.mDefault);
     } else {
@@ -605,7 +537,6 @@ void Context::setFragment(ProgramFragment *pf)
 
 void Context::setRaster(ProgramRaster *pr)
 {
-    rsAssert(mIsGraphicsContext);
     if (pr == NULL) {
         mRaster.set(mStateRaster.mDefault);
     } else {
@@ -613,14 +544,21 @@ void Context::setRaster(ProgramRaster *pr)
     }
 }
 
+void Context::allocationCheck(const Allocation *a)
+{
+    mVertex->checkUpdatedAllocation(a);
+    mFragment->checkUpdatedAllocation(a);
+    mFragmentStore->checkUpdatedAllocation(a);
+}
+
 void Context::setVertex(ProgramVertex *pv)
 {
-    rsAssert(mIsGraphicsContext);
     if (pv == NULL) {
         mVertex.set(mStateVertex.mDefault);
     } else {
         mVertex.set(pv);
     }
+    mVertex->forceDirty();
 }
 
 void Context::assignName(ObjectBase *obj, const char *name, uint32_t len)
@@ -658,6 +596,26 @@ void Context::appendNameDefines(String8 *str) const
         str->append(mNames[ct]->getName());
         str->append(" ");
         sprintf(buf, "%i\n", (int)mNames[ct]);
+        str->append(buf);
+    }
+}
+
+void Context::appendVarDefines(String8 *str) const
+{
+    char buf[256];
+    for (size_t ct=0; ct < mInt32Defines.size(); ct++) {
+        str->append("#define ");
+        str->append(mInt32Defines.keyAt(ct));
+        str->append(" ");
+        sprintf(buf, "%i\n", (int)mInt32Defines.valueAt(ct));
+        str->append(buf);
+
+    }
+    for (size_t ct=0; ct < mFloatDefines.size(); ct++) {
+        str->append("#define ");
+        str->append(mFloatDefines.keyAt(ct));
+        str->append(" ");
+        sprintf(buf, "%ff\n", mFloatDefines.valueAt(ct));
         str->append(buf);
     }
 }
@@ -776,23 +734,6 @@ void Context::deinitToClient()
     mIO.mToClient.shutdown();
 }
 
-const char * Context::getError(RsError *err)
-{
-    *err = mError;
-    mError = RS_ERROR_NONE;
-    if (*err != RS_ERROR_NONE) {
-        return mErrorMsg;
-    }
-    return NULL;
-}
-
-void Context::setError(RsError e, const char *msg)
-{
-    mError = e;
-    mErrorMsg = msg;
-}
-
-
 void Context::dumpDebug() const
 {
     LOGE("RS Context debug %p", this);
@@ -810,10 +751,6 @@ void Context::dumpDebug() const
     LOGE(" RS running %i, exit %i, useDepth %i, paused %i", mRunning, mExit, mUseDepth, mPaused);
     LOGE(" RS pThreadID %li, nativeThreadID %i", mThreadId, mNativeThreadId);
 
-    LOGV("MAX Textures %i, %i  %i", mGL.mMaxVertexTextureUnits, mGL.mMaxFragmentTextureImageUnits, mGL.mMaxTextureImageUnits);
-    LOGV("MAX Attribs %i", mGL.mMaxVertexAttribs);
-    LOGV("MAX Uniforms %i, %i", mGL.mMaxVertexUniformVectors, mGL.mMaxFragmentUniformVectors);
-    LOGV("MAX Varyings %i", mGL.mMaxVaryingVectors);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -878,6 +815,16 @@ void rsi_ObjDestroy(Context *rsc, void *obj)
     ob->decUserRef();
 }
 
+void rsi_ContextSetDefineF(Context *rsc, const char* name, float value)
+{
+    rsc->addInt32Define(name, value);
+}
+
+void rsi_ContextSetDefineI32(Context *rsc, const char* name, int32_t value)
+{
+    rsc->addFloatDefine(name, value);
+}
+
 void rsi_ContextPause(Context *rsc)
 {
     rsc->pause();
@@ -888,9 +835,9 @@ void rsi_ContextResume(Context *rsc)
     rsc->resume();
 }
 
-void rsi_ContextSetSurface(Context *rsc, uint32_t w, uint32_t h, android_native_window_t *sur)
+void rsi_ContextSetSurface(Context *rsc, uint32_t w, uint32_t h, void *sur)
 {
-    rsc->setSurface(w, h, sur);
+    rsc->setSurface(w, h, (Surface *)sur);
 }
 
 void rsi_ContextSetPriority(Context *rsc, int32_t p)
@@ -903,32 +850,14 @@ void rsi_ContextDump(Context *rsc, int32_t bits)
     ObjectBase::dumpAll(rsc);
 }
 
-const char * rsi_ContextGetError(Context *rsc, RsError *e)
+}
+}
+
+
+RsContext rsContextCreate(RsDevice vdev, uint32_t version, bool useDepth)
 {
-    const char *msg = rsc->getError(e);
-    if (*e != RS_ERROR_NONE) {
-        LOGE("RS Error %i %s", *e, msg);
-    }
-    return msg;
-}
-
-}
-}
-
-
-RsContext rsContextCreate(RsDevice vdev, uint32_t version)
-{
-    LOGV("rsContextCreate %p", vdev);
     Device * dev = static_cast<Device *>(vdev);
-    Context *rsc = new Context(dev, false, false);
-    return rsc;
-}
-
-RsContext rsContextCreateGL(RsDevice vdev, uint32_t version, bool useDepth)
-{
-    LOGV("rsContextCreateGL %p, %i", vdev, useDepth);
-    Device * dev = static_cast<Device *>(vdev);
-    Context *rsc = new Context(dev, true, useDepth);
+    Context *rsc = new Context(dev, useDepth);
     return rsc;
 }
 

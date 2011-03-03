@@ -324,7 +324,6 @@ void FileA3D::processChunk_Verticies(Context *rsc, IO *io, A3DIndexEntry *ie)
 
 void FileA3D::processChunk_Element(Context *rsc, IO *io, A3DIndexEntry *ie)
 {
-    /*
     rsi_ElementBegin(rsc);
 
     uint32_t count = io->loadU32();
@@ -339,7 +338,6 @@ void FileA3D::processChunk_Element(Context *rsc, IO *io, A3DIndexEntry *ie)
     }
     LOGE("processChunk_Element create");
     ie->mRsObj = rsi_ElementCreate(rsc);
-    */
 }
 
 void FileA3D::processChunk_ElementSource(Context *rsc, IO *io, A3DIndexEntry *ie)

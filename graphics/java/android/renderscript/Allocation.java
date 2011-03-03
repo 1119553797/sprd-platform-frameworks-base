@@ -32,7 +32,6 @@ import android.util.TypedValue;
  **/
 public class Allocation extends BaseObj {
     Type mType;
-    Bitmap mBitmap;
 
     Allocation(int id, RenderScript rs, Type t) {
         super(rs);
@@ -40,22 +39,15 @@ public class Allocation extends BaseObj {
         mType = t;
     }
 
-    public Type getType() {
-        return mType;
-    }
-
     public void uploadToTexture(int baseMipLevel) {
         mRS.validate();
-        mRS.nAllocationUploadToTexture(mID, false, baseMipLevel);
-    }
-
-    public void uploadToTexture(boolean genMips, int baseMipLevel) {
-        mRS.validate();
-        mRS.nAllocationUploadToTexture(mID, genMips, baseMipLevel);
+        mRS.validateSurface();
+        mRS.nAllocationUploadToTexture(mID, baseMipLevel);
     }
 
     public void uploadToBufferObject() {
         mRS.validate();
+        mRS.validateSurface();
         mRS.nAllocationUploadToBufferObject(mID);
     }
 
@@ -179,10 +171,9 @@ public class Allocation extends BaseObj {
     public Adapter1D createAdapter1D() {
         mRS.validate();
         int id = mRS.nAdapter1DCreate();
-        if(id == 0) {
-            throw new IllegalStateException("allocation failed.");
+        if (id != 0) {
+            mRS.nAdapter1DBindAllocation(id, mID);
         }
-        mRS.nAdapter1DBindAllocation(id, mID);
         return new Adapter1D(id, mRS);
     }
 
@@ -222,10 +213,9 @@ public class Allocation extends BaseObj {
     public Adapter2D createAdapter2D() {
         mRS.validate();
         int id = mRS.nAdapter2DCreate();
-        if(id == 0) {
-            throw new IllegalStateException("allocation failed.");
+        if (id != 0) {
+            mRS.nAdapter2DBindAllocation(id, mID);
         }
-        mRS.nAdapter2DBindAllocation(id, mID);
         return new Adapter2D(id, mRS);
     }
 
@@ -263,68 +253,19 @@ public class Allocation extends BaseObj {
         return new Allocation(id, rs, t);
     }
 
-    static private Element elementFromBitmap(RenderScript rs, Bitmap b) {
-        final Bitmap.Config bc = b.getConfig();
-        if (bc == Bitmap.Config.ALPHA_8) {
-            return Element.A_8(rs);
-        }
-        if (bc == Bitmap.Config.ARGB_4444) {
-            return Element.RGBA_4444(rs);
-        }
-        if (bc == Bitmap.Config.ARGB_8888) {
-            return Element.RGBA_8888(rs);
-        }
-        if (bc == Bitmap.Config.RGB_565) {
-            return Element.RGB_565(rs);
-        }
-        throw new IllegalStateException("Bad bitmap type.");
-    }
-
-    static private Type typeFromBitmap(RenderScript rs, Bitmap b) {
-        Element e = elementFromBitmap(rs, b);
-        Type.Builder tb = new Type.Builder(rs, e);
-        tb.add(Dimension.X, b.getWidth());
-        tb.add(Dimension.Y, b.getHeight());
-        return tb.create();
-    }
-
     static public Allocation createFromBitmap(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
         throws IllegalArgumentException {
 
         rs.validate();
-        Type t = typeFromBitmap(rs, b);
-
         int id = rs.nAllocationCreateFromBitmap(dstFmt.mID, genMips, b);
-        if(id == 0) {
-            throw new IllegalStateException("Load failed.");
-        }
-        return new Allocation(id, rs, t);
+        return new Allocation(id, rs, null);
     }
 
-    static public Allocation createBitmapRef(RenderScript rs, Bitmap b)
-        throws IllegalArgumentException {
-
-        rs.validate();
-        Type t = typeFromBitmap(rs, b);
-
-        int id = rs.nAllocationCreateBitmapRef(t.getID(), b);
-        if(id == 0) {
-            throw new IllegalStateException("Load failed.");
-        }
-
-        Allocation a = new Allocation(id, rs, t);
-        a.mBitmap = b;
-        return a;
-    }
-
-    static Allocation createFromBitmapBoxed(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
+    static public Allocation createFromBitmapBoxed(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
         throws IllegalArgumentException {
 
         rs.validate();
         int id = rs.nAllocationCreateFromBitmapBoxed(dstFmt.mID, genMips, b);
-        if(id == 0) {
-            throw new IllegalStateException("Load failed.");
-        }
         return new Allocation(id, rs, null);
     }
 
@@ -341,9 +282,6 @@ public class Allocation extends BaseObj {
             int allocationId = rs.nAllocationCreateFromAssetStream(dstFmt.mID, genMips,
                     asset);
 
-            if(allocationId == 0) {
-                throw new IllegalStateException("Load failed.");
-            }
             return new Allocation(allocationId, rs, null);
         } catch (Exception e) {
             // Ignore

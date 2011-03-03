@@ -25,10 +25,12 @@ using namespace android::renderscript;
 
 
 ProgramRaster::ProgramRaster(Context *rsc,
+                             Element *in,
+                             Element *out,
                              bool pointSmooth,
                              bool lineSmooth,
                              bool pointSprite) :
-    Program(rsc)
+    Program(rsc, in, out)
 {
     mAllocFile = __FILE__;
     mAllocLine = __LINE__;
@@ -84,14 +86,6 @@ void ProgramRaster::setupGL(const Context *rsc, ProgramRasterState *state)
     }
 }
 
-void ProgramRaster::setupGL2(const Context *rsc, ProgramRasterState *state)
-{
-    if (state->mLast.get() == this) {
-        return;
-    }
-    state->mLast.set(this);
-}
-
 
 
 ProgramRasterState::ProgramRasterState()
@@ -104,7 +98,7 @@ ProgramRasterState::~ProgramRasterState()
 
 void ProgramRasterState::init(Context *rsc, int32_t w, int32_t h)
 {
-    ProgramRaster *pr = new ProgramRaster(rsc, false, false, false);
+    ProgramRaster *pr = new ProgramRaster(rsc, NULL, NULL, false, false, false);
     mDefault.set(pr);
 }
 
@@ -124,6 +118,8 @@ RsProgramRaster rsi_ProgramRasterCreate(Context * rsc, RsElement in, RsElement o
                                       bool pointSprite)
 {
     ProgramRaster *pr = new ProgramRaster(rsc,
+                                          static_cast<Element *>(in),
+                                          static_cast<Element *>(out),
                                           pointSmooth,
                                           lineSmooth,
                                           pointSprite);

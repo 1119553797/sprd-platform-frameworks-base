@@ -20,6 +20,16 @@ ContextBindProgramRaster {
 	param RsProgramRaster pgm
 	}
 
+ContextSetDefineF {
+    param const char* name
+    param float value
+    }
+
+ContextSetDefineI32 {
+    param const char* name
+    param int32_t value
+    }
+
 ContextPause {
 	}
 
@@ -29,17 +39,12 @@ ContextResume {
 ContextSetSurface {
 	param uint32_t width
 	param uint32_t height
-	param android_native_window_t *sur
+	param void *sur
 	}
 
 ContextDump {
 	param int32_t bits
 }
-
-ContextGetError {
-	param RsError *err
-	ret const char *
-	}
 
 ContextSetPriority {
 	param int32_t priority
@@ -55,19 +60,18 @@ ObjDestroy {
 	param void *obj
 	}
 
-ElementCreate {
-	param RsDataType mType
-	param RsDataKind mKind
-	param bool mNormalized
-	param uint32_t mVectorSize
-	ret RsElement
+ElementBegin {
+}
+
+ElementAdd {
+	param RsDataKind dataKind
+	param RsDataType dataType
+	param bool isNormalized
+	param size_t bits
+	param const char * name
 	}
 
-ElementCreate2 {
-	param size_t count
-	param const RsElement * elements
-	param const char ** names
-	param const size_t * nameLengths
+ElementCreate {
 	ret RsElement
 	}
 
@@ -95,14 +99,6 @@ AllocationCreateSized {
 	ret RsAllocation
 	}
 
-AllocationCreateBitmapRef {
-	param RsType type
-	param void * bmpPtr
-	param void * callbackData
-	param RsBitmapCallback_t callback
-	ret RsAllocation
-	}
-
 AllocationCreateFromBitmap {
 	param uint32_t width
 	param uint32_t height
@@ -126,7 +122,6 @@ AllocationCreateFromBitmapBoxed {
 
 AllocationUploadToTexture {
 	param RsAllocation alloc
-	param bool genMipMaps
 	param uint32_t baseMipLevel
 	}
 
@@ -371,50 +366,56 @@ ProgramRasterSetPointSize{
 }
 
 
-ProgramBindConstants {
-	param RsProgram vp
-	param uint32_t slot
-	param RsAllocation constants
+ProgramFragmentBegin {
+	param RsElement in
+	param RsElement out
+	param bool pointSpriteEnable
 	}
 
-
-ProgramBindTexture {
+ProgramFragmentBindTexture {
 	param RsProgramFragment pf
 	param uint32_t slot
 	param RsAllocation a
 	}
 
-ProgramBindSampler {
+ProgramFragmentBindSampler {
 	param RsProgramFragment pf
 	param uint32_t slot
 	param RsSampler s
 	}
 
+ProgramFragmentSetSlot {
+	param uint32_t slot
+	param bool enable
+	param RsTexEnvMode env
+	param RsType t
+	}
+
 ProgramFragmentCreate {
-	param const uint32_t * params
-	param uint32_t paramLength
 	ret RsProgramFragment
 	}
 
-ProgramFragmentCreate2 {
-	param const char * shaderText
-	param uint32_t shaderLength
-	param const uint32_t * params
-	param uint32_t paramLength
-	ret RsProgramFragment
+
+ProgramVertexBegin {
+	param RsElement in
+	param RsElement out
 	}
 
 ProgramVertexCreate {
-	param bool texMat
 	ret RsProgramVertex
 	}
 
-ProgramVertexCreate2 {
-	param const char * shaderText
-	param uint32_t shaderLength
-	param const uint32_t * params
-	param uint32_t paramLength
-	ret RsProgramVertex
+ProgramVertexBindAllocation {
+	param RsProgramVertex vpgm
+	param RsAllocation constants
+	}
+
+ProgramVertexSetTextureMatrixEnable {
+	param bool enable
+	}
+
+ProgramVertexAddLight {
+	param RsLight light
 	}
 
 LightBegin {

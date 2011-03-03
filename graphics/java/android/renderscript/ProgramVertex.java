@@ -25,67 +25,72 @@ import android.util.Log;
  * @hide
  *
  **/
-public class ProgramVertex extends Program {
+public class ProgramVertex extends BaseObj {
     public static final int MAX_LIGHT = 8;
 
-
     ProgramVertex(int id, RenderScript rs) {
-        super(id, rs);
+        super(rs);
+        mID = id;
     }
 
     public void bindAllocation(MatrixAllocation va) {
         mRS.validate();
-        bindConstants(va.mAlloc, 0);
+        mRS.nProgramVertexBindAllocation(mID, va.mAlloc.mID);
     }
 
 
     public static class Builder {
         RenderScript mRS;
+        Element mIn;
+        Element mOut;
+        Light[] mLights;
+        int mLightCount;
         boolean mTextureMatrixEnable;
+
 
         public Builder(RenderScript rs, Element in, Element out) {
             mRS = rs;
+            mIn = in;
+            mOut = out;
+            mLights = new Light[MAX_LIGHT];
+            mLightCount = 0;
         }
 
         public void setTextureMatrixEnable(boolean enable) {
             mTextureMatrixEnable = enable;
         }
 
-        public ProgramVertex create() {
-            int id = mRS.nProgramVertexCreate(mTextureMatrixEnable);
-            return new ProgramVertex(id, mRS);
+        public void addLight(Light l) throws IllegalStateException {
+            if(mLightCount >= MAX_LIGHT) {
+                throw new IllegalArgumentException("Max light count exceeded.");
+            }
+            mLights[mLightCount] = l;
+            mLightCount++;
         }
-    }
 
-    public static class ShaderBuilder extends BaseProgramBuilder {
-        public ShaderBuilder(RenderScript rs) {
-            super(rs);
+
+
+        static synchronized ProgramVertex internalCreate(RenderScript rs, Builder b) {
+            int inID = 0;
+            int outID = 0;
+            if (b.mIn != null) {
+                inID = b.mIn.mID;
+            }
+            if (b.mOut != null) {
+                outID = b.mOut.mID;
+            }
+            rs.nProgramVertexBegin(inID, outID);
+            for(int ct=0; ct < b.mLightCount; ct++) {
+                rs.nProgramVertexAddLight(b.mLights[ct].mID);
+            }
+            rs.nProgramVertexSetTextureMatrixEnable(b.mTextureMatrixEnable);
+            int id = rs.nProgramVertexCreate();
+            return new ProgramVertex(id, rs);
         }
 
         public ProgramVertex create() {
             mRS.validate();
-            int[] tmp = new int[(mInputCount + mOutputCount + mConstantCount +1) * 2];
-            int idx = 0;
-
-            for (int i=0; i < mInputCount; i++) {
-                tmp[idx++] = 0;
-                tmp[idx++] = mInputs[i].mID;
-            }
-            for (int i=0; i < mOutputCount; i++) {
-                tmp[idx++] = 1;
-                tmp[idx++] = mOutputs[i].mID;
-            }
-            for (int i=0; i < mConstantCount; i++) {
-                tmp[idx++] = 2;
-                tmp[idx++] = mConstants[i].mID;
-            }
-            tmp[idx++] = 3;
-            tmp[idx++] = mTextureCount;
-
-            int id = mRS.nProgramVertexCreate2(mShader, tmp);
-            ProgramVertex pv = new ProgramVertex(id, mRS);
-            initProgram(pv);
-            return pv;
+            return internalCreate(mRS, this);
         }
     }
 
@@ -96,18 +101,18 @@ public class ProgramVertex extends Program {
         static final int PROJECTION_OFFSET = 16;
         static final int TEXTURE_OFFSET = 32;
 
-        Matrix4f mModel;
-        Matrix4f mProjection;
-        Matrix4f mTexture;
+        Matrix mModel;
+        Matrix mProjection;
+        Matrix mTexture;
 
         public Allocation mAlloc;
 
         public MatrixAllocation(RenderScript rs) {
-            mModel = new Matrix4f();
-            mProjection = new Matrix4f();
-            mTexture = new Matrix4f();
+            mModel = new Matrix();
+            mProjection = new Matrix();
+            mTexture = new Matrix();
 
-            mAlloc = Allocation.createSized(rs, Element.createUser(rs, Element.DataType.FLOAT_32), 48);
+            mAlloc = Allocation.createSized(rs, Element.USER_F32(rs), 48);
             mAlloc.subData1D(MODELVIEW_OFFSET, 16, mModel.mMat);
             mAlloc.subData1D(PROJECTION_OFFSET, 16, mProjection.mMat);
             mAlloc.subData1D(TEXTURE_OFFSET, 16, mTexture.mMat);
@@ -118,17 +123,17 @@ public class ProgramVertex extends Program {
             mAlloc = null;
         }
 
-        public void loadModelview(Matrix4f m) {
+        public void loadModelview(Matrix m) {
             mModel = m;
             mAlloc.subData1D(MODELVIEW_OFFSET, 16, m.mMat);
         }
 
-        public void loadProjection(Matrix4f m) {
+        public void loadProjection(Matrix m) {
             mProjection = m;
             mAlloc.subData1D(PROJECTION_OFFSET, 16, m.mMat);
         }
 
-        public void loadTexture(Matrix4f m) {
+        public void loadTexture(Matrix m) {
             mTexture = m;
             mAlloc.subData1D(TEXTURE_OFFSET, 16, m.mMat);
         }
@@ -152,8 +157,8 @@ public class ProgramVertex extends Program {
 
         public void setupProjectionNormalized(int w, int h) {
             // range -1,1 in the narrow axis at z = 0.
-            Matrix4f m1 = new Matrix4f();
-            Matrix4f m2 = new Matrix4f();
+            Matrix m1 = new Matrix();
+            Matrix m2 = new Matrix();
 
             if(w > h) {
                 float aspect = ((float)w) / h;

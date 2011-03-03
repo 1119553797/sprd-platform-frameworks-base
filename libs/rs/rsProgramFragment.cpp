@@ -19,49 +19,24 @@
 
 #include <GLES/gl.h>
 #include <GLES/glext.h>
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
 
 using namespace android;
 using namespace android::renderscript;
 
 
-ProgramFragment::ProgramFragment(Context *rsc, const uint32_t * params,
-                                 uint32_t paramLength) :
-    Program(rsc)
+ProgramFragment::ProgramFragment(Context *rsc, Element *in, Element *out, bool pointSpriteEnable) :
+    Program(rsc, in, out)
 {
     mAllocFile = __FILE__;
     mAllocLine = __LINE__;
-    rsAssert(paramLength = 5);
-
-    mEnvModes[0] = (RsTexEnvMode)params[0];
-    mTextureFormats[0] = params[1];
-    mEnvModes[1] = (RsTexEnvMode)params[2];
-    mTextureFormats[1] = params[3];
-    mPointSpriteEnable = params[4] != 0;
-
+    for (uint32_t ct=0; ct < MAX_TEXTURE; ct++) {
+        mEnvModes[ct] = RS_TEX_ENV_MODE_REPLACE;
+        mTextureDimensions[ct] = 2;
+    }
     mTextureEnableMask = 0;
-    if (mEnvModes[0]) {
-        mTextureEnableMask |= 1;
-    }
-    if (mEnvModes[1]) {
-        mTextureEnableMask |= 2;
-    }
-    init(rsc);
+    mPointSpriteEnable = pointSpriteEnable;
+    mEnvModes[1] = RS_TEX_ENV_MODE_DECAL;
 }
-
-ProgramFragment::ProgramFragment(Context *rsc, const char * shaderText,
-                                 uint32_t shaderLength, const uint32_t * params,
-                                 uint32_t paramLength) :
-    Program(rsc, shaderText, shaderLength, params, paramLength)
-{
-    mAllocFile = __FILE__;
-    mAllocLine = __LINE__;
-
-    init(rsc);
-    mTextureEnableMask = (1 << mTextureCount) -1;
-}
-
 
 ProgramFragment::~ProgramFragment()
 {
@@ -90,13 +65,23 @@ void ProgramFragment::setupGL(const Context *rsc, ProgramFragmentState *state)
             }
             glTexEnvi(GL_POINT_SPRITE_OES, GL_COORD_REPLACE_OES, mPointSpriteEnable);
         }
-        mTextures[ct]->uploadCheck(rsc);
+
+        rsAssert(mTextures[ct]->getTextureID() != 0);
+        if (mTextures[ct]->getTextureID() == 0) {
+            // This is a hack for eclair to try to fix the white squares bug.
+            Allocation *a = (Allocation *)mTextures[ct].get();
+            a->uploadToTexture((Context *)rsc, 0);
+            if (mTextures[ct]->getTextureID() == 0) {
+                // At this point we are screwed.  Crash to restart the app.
+                rsc->dumpDebug();
+                LOGE("Multiple failures during texture upload.  Driver appears wedged.");
+                ((char *)0)[0] = 0;
+            }
+
+        }
         glBindTexture(GL_TEXTURE_2D, mTextures[ct]->getTextureID());
 
         switch(mEnvModes[ct]) {
-        case RS_TEX_ENV_MODE_NONE:
-            rsAssert(0);
-            break;
         case RS_TEX_ENV_MODE_REPLACE:
             glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
             break;
@@ -109,7 +94,7 @@ void ProgramFragment::setupGL(const Context *rsc, ProgramFragmentState *state)
         }
 
         if (mSamplers[ct].get()) {
-            mSamplers[ct]->setupGL(rsc, mTextures[ct]->getType()->getIsNp2());
+            mSamplers[ct]->setupGL();
         } else {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -136,158 +121,73 @@ void ProgramFragment::setupGL(const Context *rsc, ProgramFragmentState *state)
     }
     glActiveTexture(GL_TEXTURE0);
     mDirty = false;
-    rsc->checkError("ProgramFragment::setupGL");
 }
 
-void ProgramFragment::setupGL2(const Context *rsc, ProgramFragmentState *state, ShaderCache *sc)
+
+void ProgramFragment::bindTexture(uint32_t slot, Allocation *a)
 {
-
-    //LOGE("sgl2 frag1 %x", glGetError());
-    if ((state->mLast.get() == this) && !mDirty) {
-        //return;
-    }
-    state->mLast.set(this);
-
-    rsc->checkError("ProgramFragment::setupGL2 start");
-    for (uint32_t ct=0; ct < MAX_TEXTURE; ct++) {
-        glActiveTexture(GL_TEXTURE0 + ct);
-        if (!(mTextureEnableMask & (1 << ct)) || !mTextures[ct].get()) {
-            continue;
-        }
-
-        mTextures[ct]->uploadCheck(rsc);
-        glBindTexture(GL_TEXTURE_2D, mTextures[ct]->getTextureID());
-        rsc->checkError("ProgramFragment::setupGL2 tex bind");
-        if (mSamplers[ct].get()) {
-            mSamplers[ct]->setupGL(rsc, mTextures[ct]->getType()->getIsNp2());
-        } else {
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            rsc->checkError("ProgramFragment::setupGL2 tex env");
-        }
-
-        glUniform1i(sc->fragUniformSlot(ct), ct);
-        rsc->checkError("ProgramFragment::setupGL2 uniforms");
+    if (slot >= MAX_TEXTURE) {
+        LOGE("Attempt to bind a texture to a slot > MAX_TEXTURE");
+        return;
     }
 
-    glActiveTexture(GL_TEXTURE0);
-    mDirty = false;
-    rsc->checkError("ProgramFragment::setupGL2");
+    //LOGE("bindtex %i %p", slot, a);
+    mTextures[slot].set(a);
+    mDirty = true;
 }
 
-void ProgramFragment::loadShader(Context *rsc) {
-    Program::loadShader(rsc, GL_FRAGMENT_SHADER);
-}
-
-void ProgramFragment::createShader()
+void ProgramFragment::bindSampler(uint32_t slot, Sampler *s)
 {
-    mShader.setTo("precision mediump float;\n");
-    mShader.append("varying vec4 varColor;\n");
-    mShader.append("varying vec4 varTex0;\n");
+    if (slot >= MAX_TEXTURE) {
+        LOGE("Attempt to bind a Sampler to a slot > MAX_TEXTURE");
+        return;
+    }
 
-    if (mUserShader.length() > 1) {
-        for (uint32_t ct=0; ct < mTextureCount; ct++) {
-            char buf[256];
-            sprintf(buf, "uniform sampler2D uni_Tex%i;\n", ct);
-            mShader.append(buf);
-        }
+    mSamplers[slot].set(s);
+    mDirty = true;
+}
 
-        mShader.append(mUserShader);
-    } else {
-        uint32_t mask = mTextureEnableMask;
-        uint32_t texNum = 0;
-        while (mask) {
-            if (mask & 1) {
-                char buf[64];
-                mShader.append("uniform sampler2D uni_Tex");
-                sprintf(buf, "%i", texNum);
-                mShader.append(buf);
-                mShader.append(";\n");
-            }
-            mask >>= 1;
-            texNum++;
-        }
+void ProgramFragment::setType(uint32_t slot, const Element *e, uint32_t dim)
+{
+    if (slot >= MAX_TEXTURE) {
+        LOGE("Attempt to setType to a slot > MAX_TEXTURE");
+        return;
+    }
 
+    if (dim >= 4) {
+        LOGE("Attempt to setType to a dimension > 3");
+        return;
+    }
 
-        mShader.append("void main() {\n");
-        mShader.append("  vec4 col = varColor;\n");
+    mTextureFormats[slot].set(e);
+    mTextureDimensions[slot] = dim;
+}
 
-        if (mTextureEnableMask) {
-            if (mPointSpriteEnable) {
-                mShader.append("  vec2 t0 = gl_PointCoord;\n");
-            } else {
-                mShader.append("  vec2 t0 = varTex0.xy;\n");
-            }
-        }
+void ProgramFragment::setEnvMode(uint32_t slot, RsTexEnvMode env)
+{
+    if (slot >= MAX_TEXTURE) {
+        LOGE("Attempt to setEnvMode to a slot > MAX_TEXTURE");
+        return;
+    }
 
-        mask = mTextureEnableMask;
-        texNum = 0;
-        while (mask) {
-            if (mask & 1) {
-                switch(mEnvModes[texNum]) {
-                case RS_TEX_ENV_MODE_NONE:
-                    rsAssert(0);
-                    break;
-                case RS_TEX_ENV_MODE_REPLACE:
-                    switch(mTextureFormats[texNum]) {
-                    case 1:
-                        mShader.append("  col.a = texture2D(uni_Tex0, t0).a;\n");
-                        break;
-                    case 2:
-                        mShader.append("  col.rgba = texture2D(uni_Tex0, t0).rgba;\n");
-                        break;
-                    case 3:
-                        mShader.append("  col.rgb = texture2D(uni_Tex0, t0).rgb;\n");
-                        break;
-                    case 4:
-                        mShader.append("  col.rgba = texture2D(uni_Tex0, t0).rgba;\n");
-                        break;
-                    }
-                    break;
-                case RS_TEX_ENV_MODE_MODULATE:
-                    switch(mTextureFormats[texNum]) {
-                    case 1:
-                        mShader.append("  col.a *= texture2D(uni_Tex0, t0).a;\n");
-                        break;
-                    case 2:
-                        mShader.append("  col.rgba *= texture2D(uni_Tex0, t0).rgba;\n");
-                        break;
-                    case 3:
-                        mShader.append("  col.rgb *= texture2D(uni_Tex0, t0).rgb;\n");
-                        break;
-                    case 4:
-                        mShader.append("  col.rgba *= texture2D(uni_Tex0, t0).rgba;\n");
-                        break;
-                    }
-                    break;
-                case RS_TEX_ENV_MODE_DECAL:
-                    mShader.append("  col = texture2D(uni_Tex0, t0);\n");
-                    break;
-                }
+    mEnvModes[slot] = env;
+}
 
-            }
-            mask >>= 1;
-            texNum++;
-        }
+void ProgramFragment::setTexEnable(uint32_t slot, bool enable)
+{
+    if (slot >= MAX_TEXTURE) {
+        LOGE("Attempt to setEnvMode to a slot > MAX_TEXTURE");
+        return;
+    }
 
-        //mShader.append("  col.a = 1.0;\n");
-        //mShader.append("  col.r = 0.5;\n");
-
-        mShader.append("  gl_FragColor = col;\n");
-        mShader.append("}\n");
+    uint32_t bit = 1 << slot;
+    mTextureEnableMask &= ~bit;
+    if (enable) {
+        mTextureEnableMask |= bit;
     }
 }
 
-void ProgramFragment::init(Context *rsc)
-{
-    mUniformCount = 2;
-    mUniformNames[0].setTo("uni_Tex0");
-    mUniformNames[1].setTo("uni_Tex1");
 
-    createShader();
-}
 
 ProgramFragmentState::ProgramFragmentState()
 {
@@ -302,14 +202,8 @@ ProgramFragmentState::~ProgramFragmentState()
 
 void ProgramFragmentState::init(Context *rsc, int32_t w, int32_t h)
 {
-    uint32_t tmp[5] = {
-        RS_TEX_ENV_MODE_NONE, 0,
-        RS_TEX_ENV_MODE_NONE, 0,
-        0
-    };
-    ProgramFragment *pf = new ProgramFragment(rsc, tmp, 5);
+    ProgramFragment *pf = new ProgramFragment(rsc, NULL, NULL, false);
     mDefault.set(pf);
-    pf->init(rsc);
 }
 
 void ProgramFragmentState::deinit(Context *rsc)
@@ -322,23 +216,49 @@ void ProgramFragmentState::deinit(Context *rsc)
 namespace android {
 namespace renderscript {
 
-RsProgramFragment rsi_ProgramFragmentCreate(Context *rsc,
-                                            const uint32_t * params,
-                                            uint32_t paramLength)
+void rsi_ProgramFragmentBegin(Context * rsc, RsElement in, RsElement out, bool pointSpriteEnable)
 {
-    ProgramFragment *pf = new ProgramFragment(rsc, params, paramLength);
+    delete rsc->mStateFragment.mPF;
+    rsc->mStateFragment.mPF = new ProgramFragment(rsc, (Element *)in, (Element *)out, pointSpriteEnable);
+}
+
+void rsi_ProgramFragmentBindTexture(Context *rsc, RsProgramFragment vpf, uint32_t slot, RsAllocation a)
+{
+    ProgramFragment *pf = static_cast<ProgramFragment *>(vpf);
+    pf->bindTexture(slot, static_cast<Allocation *>(a));
+}
+
+void rsi_ProgramFragmentBindSampler(Context *rsc, RsProgramFragment vpf, uint32_t slot, RsSampler s)
+{
+    ProgramFragment *pf = static_cast<ProgramFragment *>(vpf);
+    pf->bindSampler(slot, static_cast<Sampler *>(s));
+}
+
+void rsi_ProgramFragmentSetSlot(Context *rsc, uint32_t slot, bool enable, RsTexEnvMode env, RsType vt)
+{
+    const Type *t = static_cast<const Type *>(vt);
+    if (t) {
+        uint32_t dim = 1;
+        if (t->getDimY()) {
+            dim ++;
+            if (t->getDimZ()) {
+                dim ++;
+            }
+        }
+        rsc->mStateFragment.mPF->setType(slot, t->getElement(), dim);
+    }
+    rsc->mStateFragment.mPF->setEnvMode(slot, env);
+    rsc->mStateFragment.mPF->setTexEnable(slot, enable);
+}
+
+RsProgramFragment rsi_ProgramFragmentCreate(Context *rsc)
+{
+    ProgramFragment *pf = rsc->mStateFragment.mPF;
     pf->incUserRef();
+    rsc->mStateFragment.mPF = 0;
     return pf;
 }
 
-RsProgramFragment rsi_ProgramFragmentCreate2(Context *rsc, const char * shaderText,
-                             uint32_t shaderLength, const uint32_t * params,
-                             uint32_t paramLength)
-{
-    ProgramFragment *pf = new ProgramFragment(rsc, shaderText, shaderLength, params, paramLength);
-    pf->incUserRef();
-    return pf;
-}
 
 }
 }

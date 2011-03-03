@@ -24,8 +24,8 @@ using namespace android;
 using namespace android::renderscript;
 
 
-ProgramFragmentStore::ProgramFragmentStore(Context *rsc) :
-    Program(rsc)
+ProgramFragmentStore::ProgramFragmentStore(Context *rsc, Element *in, Element *out) :
+    Program(rsc, in, out)
 {
     mAllocFile = __FILE__;
     mAllocLine = __LINE__;
@@ -83,43 +83,9 @@ void ProgramFragmentStore::setupGL(const Context *rsc, ProgramFragmentStoreState
     } else {
         glDisable(GL_DITHER);
     }
+
+
 }
-
-void ProgramFragmentStore::setupGL2(const Context *rsc, ProgramFragmentStoreState *state)
-{
-    if (state->mLast.get() == this) {
-        return;
-    }
-    state->mLast.set(this);
-
-    glColorMask(mColorRWriteEnable,
-                mColorGWriteEnable,
-                mColorBWriteEnable,
-                mColorAWriteEnable);
-    if (mBlendEnable) {
-        glEnable(GL_BLEND);
-        glBlendFunc(mBlendSrc, mBlendDst);
-    } else {
-        glDisable(GL_BLEND);
-    }
-
-    //LOGE("pfs  %i, %i, %x", mDepthWriteEnable, mDepthTestEnable, mDepthFunc);
-
-    glDepthMask(mDepthWriteEnable);
-    if(mDepthTestEnable || mDepthWriteEnable) {
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(mDepthFunc);
-    } else {
-        glDisable(GL_DEPTH_TEST);
-    }
-
-    if (mDitherEnable) {
-        glEnable(GL_DITHER);
-    } else {
-        glDisable(GL_DITHER);
-    }
-}
-
 
 void ProgramFragmentStore::setDitherEnable(bool enable)
 {
@@ -249,7 +215,7 @@ ProgramFragmentStoreState::~ProgramFragmentStoreState()
 
 void ProgramFragmentStoreState::init(Context *rsc, int32_t w, int32_t h)
 {
-    ProgramFragmentStore *pfs = new ProgramFragmentStore(rsc);
+    ProgramFragmentStore *pfs = new ProgramFragmentStore(rsc, NULL, NULL);
     mDefault.set(pfs);
 }
 
@@ -266,7 +232,7 @@ namespace renderscript {
 void rsi_ProgramFragmentStoreBegin(Context * rsc, RsElement in, RsElement out)
 {
     delete rsc->mStateFragmentStore.mPFS;
-    rsc->mStateFragmentStore.mPFS = new ProgramFragmentStore(rsc);
+    rsc->mStateFragmentStore.mPFS = new ProgramFragmentStore(rsc, (Element *)in, (Element *)out);
 
 }
 

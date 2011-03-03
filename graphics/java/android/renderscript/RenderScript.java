@@ -31,9 +31,11 @@ import android.view.Surface;
  **/
 public class RenderScript {
     static final String LOG_TAG = "RenderScript_jni";
-    protected static final boolean DEBUG  = false;
+    private static final boolean DEBUG  = false;
     @SuppressWarnings({"UnusedDeclaration", "deprecation"})
-    protected static final boolean LOG_ENABLED = DEBUG ? Config.LOGD : Config.LOGV;
+    private static final boolean LOG_ENABLED = DEBUG ? Config.LOGD : Config.LOGV;
+    int mWidth;
+    int mHeight;
 
 
 
@@ -42,8 +44,8 @@ public class RenderScript {
      * field offsets.
      */
     @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
-    protected static boolean sInitialized;
-    native protected static void _nInit();
+    private static boolean sInitialized;
+    native private static void _nInit();
 
 
     static {
@@ -62,8 +64,7 @@ public class RenderScript {
     native int  nDeviceCreate();
     native void nDeviceDestroy(int dev);
     native void nDeviceSetConfig(int dev, int param, int value);
-    native int  nContextCreateGL(int dev, int ver, boolean useDepth);
-    native int  nContextCreate(int dev, int ver);
+    native int  nContextCreate(int dev, int ver, boolean useDepth);
     native void nContextDestroy(int con);
     native void nContextSetSurface(int w, int h, Surface sur);
     native void nContextSetPriority(int p);
@@ -75,6 +76,8 @@ public class RenderScript {
     native void nContextBindProgramFragment(int pf);
     native void nContextBindProgramVertex(int pf);
     native void nContextBindProgramRaster(int pr);
+    native void nContextAddDefineI32(String name, int value);
+    native void nContextAddDefineF(String name, float value);
     native void nContextPause();
     native void nContextResume();
     native int nContextGetMessage(int[] data, boolean wait);
@@ -86,9 +89,9 @@ public class RenderScript {
     native void nObjDestroyOOB(int id);
     native int  nFileOpen(byte[] name);
 
-
-    native int  nElementCreate(int type, int kind, boolean norm, int vecSize);
-    native int  nElementCreate2(int[] elements, String[] names);
+    native void nElementBegin();
+    native void nElementAdd(int kind, int type, boolean norm, int bits, String s);
+    native int  nElementCreate();
 
     native void nTypeBegin(int elementID);
     native void nTypeAdd(int dim, int val);
@@ -98,11 +101,10 @@ public class RenderScript {
 
     native int  nAllocationCreateTyped(int type);
     native int  nAllocationCreateFromBitmap(int dstFmt, boolean genMips, Bitmap bmp);
-    native int  nAllocationCreateBitmapRef(int type, Bitmap bmp);
     native int  nAllocationCreateFromBitmapBoxed(int dstFmt, boolean genMips, Bitmap bmp);
     native int  nAllocationCreateFromAssetStream(int dstFmt, boolean genMips, int assetStream);
 
-    native void nAllocationUploadToTexture(int alloc, boolean genMips, int baseMioLevel);
+    native void nAllocationUploadToTexture(int alloc, int baseMioLevel);
     native void nAllocationUploadToBufferObject(int alloc);
 
     native void nAllocationSubData1D(int id, int off, int count, int[] d, int sizeBytes);
@@ -165,15 +167,17 @@ public class RenderScript {
     native void nProgramRasterSetLineWidth(int pr, float v);
     native void nProgramRasterSetPointSize(int pr, float v);
 
-    native void nProgramBindConstants(int pv, int slot, int mID);
-    native void nProgramBindTexture(int vpf, int slot, int a);
-    native void nProgramBindSampler(int vpf, int slot, int s);
+    native void nProgramFragmentBegin(int in, int out, boolean pointSpriteEnable);
+    native void nProgramFragmentBindTexture(int vpf, int slot, int a);
+    native void nProgramFragmentBindSampler(int vpf, int slot, int s);
+    native void nProgramFragmentSetSlot(int slot, boolean enable, int env, int vt);
+    native int  nProgramFragmentCreate();
 
-    native int  nProgramFragmentCreate(int[] params);
-    native int  nProgramFragmentCreate2(String shader, int[] params);
-
-    native int  nProgramVertexCreate(boolean texMat);
-    native int  nProgramVertexCreate2(String shader, int[] params);
+    native void nProgramVertexBindAllocation(int pv, int mID);
+    native void nProgramVertexBegin(int inID, int outID);
+    native void nProgramVertexSetTextureMatrixEnable(boolean enable);
+    native void nProgramVertexAddLight(int id);
+    native int  nProgramVertexCreate();
 
     native void nLightBegin();
     native void nLightSetIsMono(boolean isMono);
@@ -190,10 +194,12 @@ public class RenderScript {
     native void nAnimationAdd(float time, float[] attribs);
     native int  nAnimationCreate();
 
-    protected int     mDev;
-    protected int     mContext;
+    private int     mDev;
+    private int     mContext;
     @SuppressWarnings({"FieldCanBeLocal"})
-    protected MessageThread mMessageThread;
+    private Surface mSurface;
+    private MessageThread mMessageThread;
+
 
     Element mElement_USER_U8;
     Element mElement_USER_I8;
@@ -201,7 +207,7 @@ public class RenderScript {
     Element mElement_USER_I16;
     Element mElement_USER_U32;
     Element mElement_USER_I32;
-    Element mElement_USER_F32;
+    Element mElement_USER_FLOAT;
 
     Element mElement_A_8;
     Element mElement_RGB_565;
@@ -211,12 +217,9 @@ public class RenderScript {
     Element mElement_RGBA_8888;
 
     Element mElement_INDEX_16;
-    Element mElement_POSITION_2;
-    Element mElement_POSITION_3;
-    Element mElement_TEXTURE_2;
-    Element mElement_NORMAL_3;
-    Element mElement_COLOR_U8_4;
-    Element mElement_COLOR_F32_4;
+    Element mElement_XY_F32;
+    Element mElement_XYZ_F32;
+
 
     ///////////////////////////////////////////////////////////////////////////////////
     //
@@ -245,12 +248,17 @@ public class RenderScript {
         }
     }
 
+    void validateSurface() {
+        if (mSurface == null) {
+            throw new IllegalStateException("Uploading data to GL with no surface.");
+        }
+    }
+
     public void contextSetPriority(Priority p) {
-        validate();
         nContextSetPriority(p.mID);
     }
 
-    protected static class MessageThread extends Thread {
+    private static class MessageThread extends Thread {
         RenderScript mRS;
         boolean mRun = true;
 
@@ -288,27 +296,32 @@ public class RenderScript {
         }
     }
 
-    protected RenderScript() {
+    public RenderScript(boolean useDepth, boolean forceSW) {
+        mSurface = null;
+        mWidth = 0;
+        mHeight = 0;
+        mDev = nDeviceCreate();
+        if(forceSW) {
+            nDeviceSetConfig(mDev, 0, 1);
+        }
+        mContext = nContextCreate(mDev, 0, useDepth);
+        Element.initPredefined(this);
+        mMessageThread = new MessageThread(this);
+        mMessageThread.start();
     }
 
-    public static RenderScript create() {
-        RenderScript rs = new RenderScript();
-
-        rs.mDev = rs.nDeviceCreate();
-        rs.mContext = rs.nContextCreate(rs.mDev, 0);
-        rs.mMessageThread = new MessageThread(rs);
-        rs.mMessageThread.start();
-        Element.initPredefined(rs);
-        return rs;
+    public void contextSetSurface(int w, int h, Surface sur) {
+        mSurface = sur;
+        mWidth = w;
+        mHeight = h;
+        nContextSetSurface(w, h, mSurface);
     }
 
     public void contextDump(int bits) {
-        validate();
         nContextDump(bits);
     }
 
     public void destroy() {
-        validate();
         nContextDeinitToClient();
         mMessageThread.mRun = false;
 
@@ -323,15 +336,70 @@ public class RenderScript {
         return mContext != 0;
     }
 
+    void pause() {
+        nContextPause();
+    }
+
+    void resume() {
+        nContextResume();
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
+    // File
+
+    public class File extends BaseObj {
+        File(int id) {
+            super(RenderScript.this);
+            mID = id;
+        }
+    }
+
+    public File fileOpen(String s) throws IllegalStateException, IllegalArgumentException
+    {
+        if(s.length() < 1) {
+            throw new IllegalArgumentException("fileOpen does not accept a zero length string.");
+        }
+
+        try {
+            byte[] bytes = s.getBytes("UTF-8");
+            int id = nFileOpen(bytes);
+            return new File(id);
+        } catch (java.io.UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     ///////////////////////////////////////////////////////////////////////////////////
     // Root state
 
-    protected int safeID(BaseObj o) {
+    private int safeID(BaseObj o) {
         if(o != null) {
             return o.mID;
         }
         return 0;
     }
+
+    public void contextBindRootScript(Script s) {
+        nContextBindRootScript(safeID(s));
+    }
+
+    public void contextBindProgramFragmentStore(ProgramStore p) {
+        nContextBindProgramFragmentStore(safeID(p));
+    }
+
+    public void contextBindProgramFragment(ProgramFragment p) {
+        nContextBindProgramFragment(safeID(p));
+    }
+
+    public void contextBindProgramRaster(ProgramRaster p) {
+        nContextBindProgramRaster(safeID(p));
+    }
+
+    public void contextBindProgramVertex(ProgramVertex p) {
+        nContextBindProgramVertex(safeID(p));
+    }
+
 }
 
 

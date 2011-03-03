@@ -69,45 +69,23 @@ public class Sampler extends BaseObj {
         }
 
         public void setMin(Value v) {
-            if (v == Value.NEAREST ||
-                v == Value.LINEAR ||
-                v == Value.LINEAR_MIP_LINEAR) {
-                mMin = v;
-            } else {
-                throw new IllegalArgumentException("Invalid value");
-            }
+            mMin = v;
         }
 
         public void setMag(Value v) {
-            if (v == Value.NEAREST || v == Value.LINEAR) {
-                mMag = v;
-            } else {
-                throw new IllegalArgumentException("Invalid value");
-            }
+            mMag = v;
         }
 
         public void setWrapS(Value v) {
-            if (v == Value.WRAP || v == Value.CLAMP) {
-                mWrapS = v;
-            } else {
-                throw new IllegalArgumentException("Invalid value");
-            }
+            mWrapS = v;
         }
 
         public void setWrapT(Value v) {
-            if (v == Value.WRAP || v == Value.CLAMP) {
-                mWrapT = v;
-            } else {
-                throw new IllegalArgumentException("Invalid value");
-            }
+            mWrapT = v;
         }
 
         public void setWrapR(Value v) {
-            if (v == Value.WRAP || v == Value.CLAMP) {
-                mWrapR = v;
-            } else {
-                throw new IllegalArgumentException("Invalid value");
-            }
+            mWrapR = v;
         }
 
         static synchronized Sampler internalCreate(RenderScript rs, Builder b) {

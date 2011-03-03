@@ -52,6 +52,7 @@
 #include <media/AudioTrack.h>
 
 #include "MediaRecorderClient.h"
+#include "MediaPhoneClient.h"
 #include "MediaPlayerService.h"
 #include "MetadataRetrieverClient.h"
 
@@ -240,11 +241,28 @@ sp<IMediaRecorder> MediaPlayerService::createMediaRecorder(pid_t pid)
     return recorder;
 }
 
+sp<IMediaPhone> MediaPlayerService::createMediaPhone(pid_t pid)
+{
+    sp<MediaPhoneClient> phone = new MediaPhoneClient(this, pid);
+    wp<MediaPhoneClient> w = phone;
+    Mutex::Autolock lock(mLock);
+    mMediaPhoneClients.add(w);
+    LOGV("Create new media recorder client from pid %d", pid);
+    return phone;
+}
+
 void MediaPlayerService::removeMediaRecorderClient(wp<MediaRecorderClient> client)
 {
     Mutex::Autolock lock(mLock);
     mMediaRecorderClients.remove(client);
     LOGV("Delete media recorder client");
+}
+
+void MediaPlayerService::removeMediaPhoneClient(wp<MediaPhoneClient> client)
+{
+    Mutex::Autolock lock(mLock);
+    mMediaPhoneClients.remove(client);
+    LOGV("Delete media phone client");
 }
 
 sp<IMediaMetadataRetriever> MediaPlayerService::createMetadataRetriever(pid_t pid)

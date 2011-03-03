@@ -36,7 +36,7 @@ import android.view.SurfaceView;
  **/
 public class RSSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mSurfaceHolder;
-    private RenderScriptGL mRS;
+    private RenderScript mRS;
 
     /**
      * Standard View constructor. In order to render something, you
@@ -146,13 +146,13 @@ public class RSSurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     // ----------------------------------------------------------------------
 
-    public RenderScriptGL createRenderScript(boolean useDepth, boolean forceSW) {
+    public RenderScript createRenderScript(boolean useDepth, boolean forceSW) {
         Log.v(RenderScript.LOG_TAG, "createRenderScript");
-        mRS = new RenderScriptGL(useDepth, forceSW);
+        mRS = new RenderScript(useDepth, forceSW);
         return mRS;
     }
 
-    public RenderScriptGL createRenderScript(boolean useDepth) {
+    public RenderScript createRenderScript(boolean useDepth) {
         return createRenderScript(useDepth, false);
     }
 
@@ -160,10 +160,6 @@ public class RSSurfaceView extends SurfaceView implements SurfaceHolder.Callback
         Log.v(RenderScript.LOG_TAG, "destroyRenderScript");
         mRS.destroy();
         mRS = null;
-    }
-    
-    public void createRenderScript(RenderScriptGL rs) {
-        mRS = rs;
     }
 }
 

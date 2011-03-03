@@ -26,17 +26,12 @@ Type::Type(Context *rsc) : ObjectBase(rsc)
     mAllocLine = __LINE__;
     mLODs = 0;
     mLODCount = 0;
+    memset(&mGL, 0, sizeof(mGL));
     clear();
 }
 
 Type::~Type()
 {
-    for (uint32_t ct = 0; ct < mRSC->mStateType.mTypes.size(); ct++) {
-        if (mRSC->mStateType.mTypes[ct] == this) {
-            mRSC->mStateType.mTypes.removeAt(ct);
-            break;
-        }
-    }
     if (mLODs) {
         delete [] mLODs;
     }
@@ -98,9 +93,9 @@ void Type::compute()
         mLODs[lod].mZ = tz;
         mLODs[lod].mOffset = offset;
         offset += tx * rsMax(ty, 1u) * rsMax(tz, 1u) * mElement->getSizeBytes();
-        if (tx > 1) tx >>= 1;
-        if (ty > 1) ty >>= 1;
-        if (tz > 1) tz >>= 1;
+        tx = (tx + 1) >> 1;
+        ty = (ty + 1) >> 1;
+        tz = (tz + 1) >> 1;
     }
 
     // At this point the offset is the size of a mipmap chain;
@@ -138,64 +133,110 @@ uint32_t Type::getLODOffset(uint32_t lod, uint32_t x, uint32_t y, uint32_t z) co
 
 void Type::makeGLComponents()
 {
-    uint32_t userNum = 0;
+    uint32_t texNum = 0;
+    memset(&mGL, 0, sizeof(mGL));
 
-    for (uint32_t ct=0; ct < getElement()->getFieldCount(); ct++) {
-        const Component &c = getElement()->getField(ct)->getComponent();
+    for (uint32_t ct=0; ct < getElement()->getComponentCount(); ct++) {
+        const Component *c = getElement()->getComponent(ct);
 
-        switch(c.getKind()) {
-        case RS_KIND_USER:
-            mGL.mUser[userNum].size = c.getVectorSize();
-            mGL.mUser[userNum].offset = mElement->getFieldOffsetBytes(ct);
-            mGL.mUser[userNum].type = c.getGLType();
-            mGL.mUser[userNum].normalized = c.getType() != RS_TYPE_FLOAT_32;//c.getIsNormalized();
-            mGL.mUser[userNum].name.setTo(getElement()->getFieldName(ct));
-            userNum ++;
-            break;
-
-        case RS_KIND_POSITION:
+        switch(c->getKind()) {
+        case Component::X:
             rsAssert(mGL.mVtx.size == 0);
-            mGL.mVtx.size = c.getVectorSize();
-            mGL.mVtx.offset = mElement->getFieldOffsetBytes(ct);
-            mGL.mVtx.type = c.getGLType();
-            mGL.mVtx.normalized = false;
-            mGL.mVtx.name.setTo("Position");
+            mGL.mVtx.size = 1;
+            mGL.mVtx.offset = mElement->getComponentOffsetBytes(ct);
+            mGL.mVtx.type = c->getGLType();
             break;
+        case Component::Y:
+            rsAssert(mGL.mVtx.size == 1);
+            rsAssert(mGL.mVtx.type == c->getGLType());
+            mGL.mVtx.size = 2;
+            break;
+        case Component::Z:
+            rsAssert(mGL.mVtx.size == 2);
+            rsAssert(mGL.mVtx.type == c->getGLType());
+            mGL.mVtx.size = 3;
+            break;
+        case Component::W:
+            rsAssert(mGL.mVtx.size == 4);
+            rsAssert(mGL.mVtx.type == c->getGLType());
+            mGL.mVtx.size = 4;
+        break;
 
-        case RS_KIND_COLOR:
+        case Component::RED:
             rsAssert(mGL.mColor.size == 0);
-            mGL.mColor.size = c.getVectorSize();
-            mGL.mColor.offset = mElement->getFieldOffsetBytes(ct);
-            mGL.mColor.type = c.getGLType();
-            mGL.mColor.normalized = c.getType() != RS_TYPE_FLOAT_32;
-            mGL.mColor.name.setTo("Color");
+            mGL.mColor.size = 1;
+            mGL.mColor.offset = mElement->getComponentOffsetBytes(ct);
+            mGL.mColor.type = c->getGLType();
             break;
+        case Component::GREEN:
+            rsAssert(mGL.mColor.size == 1);
+            rsAssert(mGL.mColor.type == c->getGLType());
+            mGL.mColor.size = 2;
+            break;
+        case Component::BLUE:
+            rsAssert(mGL.mColor.size == 2);
+            rsAssert(mGL.mColor.type == c->getGLType());
+            mGL.mColor.size = 3;
+            break;
+        case Component::ALPHA:
+            // Can be RGBA or A at this point
+            if (mGL.mColor.size > 0) {
+                rsAssert(mGL.mColor.size == 3);
+                rsAssert(mGL.mColor.type == c->getGLType());
+                mGL.mColor.size = 4;
+            } else {
+                mGL.mColor.size = 1;
+                mGL.mColor.offset = mElement->getComponentOffsetBytes(ct);
+                mGL.mColor.type = c->getGLType();
+            }
+        break;
 
-        case RS_KIND_NORMAL:
+        case Component::NX:
             rsAssert(mGL.mNorm.size == 0);
-            mGL.mNorm.size = c.getVectorSize();
-            mGL.mNorm.offset = mElement->getFieldOffsetBytes(ct);
-            mGL.mNorm.type = c.getGLType();
-            mGL.mNorm.normalized = false;
-            mGL.mNorm.name.setTo("Normal");
-            break;
+            mGL.mNorm.size = 1;
+            mGL.mNorm.offset = mElement->getComponentOffsetBytes(ct);
+            mGL.mNorm.type = c->getGLType();
+        break;
+        case Component::NY:
+            rsAssert(mGL.mNorm.size == 1);
+            rsAssert(mGL.mNorm.type == c->getGLType());
+            mGL.mNorm.size = 2;
+        break;
+        case Component::NZ:
+            rsAssert(mGL.mNorm.size == 2);
+            rsAssert(mGL.mNorm.type == c->getGLType());
+            mGL.mNorm.size = 3;
+        break;
 
-        case RS_KIND_TEXTURE:
-            rsAssert(mGL.mTex.size == 0);
-            mGL.mTex.size = c.getVectorSize();
-            mGL.mTex.offset = mElement->getFieldOffsetBytes(ct);
-            mGL.mTex.type = c.getGLType();
-            mGL.mTex.normalized = false;
-            mGL.mTex.name.setTo("Texture");
-            break;
+        case Component::S:
+            if (mGL.mTex[texNum].size) {
+                texNum++;
+            }
+            mGL.mTex[texNum].size = 1;
+            mGL.mTex[texNum].offset = mElement->getComponentOffsetBytes(ct);
+            mGL.mTex[texNum].type = c->getGLType();
+        break;
+        case Component::T:
+            rsAssert(mGL.mTex[texNum].size == 1);
+            rsAssert(mGL.mTex[texNum].type == c->getGLType());
+            mGL.mTex[texNum].size = 2;
+        break;
+        case Component::R:
+            rsAssert(mGL.mTex[texNum].size == 2);
+            rsAssert(mGL.mTex[texNum].type == c->getGLType());
+            mGL.mTex[texNum].size = 3;
+        break;
+        case Component::Q:
+            rsAssert(mGL.mTex[texNum].size == 3);
+            rsAssert(mGL.mTex[texNum].type == c->getGLType());
+            mGL.mTex[texNum].size = 4;
+        break;
 
-        case RS_KIND_POINT_SIZE:
+        case Component::POINT_SIZE:
             rsAssert(!mGL.mPointSize.size);
-            mGL.mPointSize.size = c.getVectorSize();
-            mGL.mPointSize.offset = mElement->getFieldOffsetBytes(ct);
-            mGL.mPointSize.type = c.getGLType();
-            mGL.mPointSize.normalized = false;
-            mGL.mPointSize.name.setTo("PointSize");
+            mGL.mPointSize.size = 1;
+            mGL.mPointSize.offset = mElement->getComponentOffsetBytes(ct);
+            mGL.mPointSize.type = c->getGLType();
         break;
 
         default:
@@ -204,74 +245,61 @@ void Type::makeGLComponents()
     }
 }
 
-void Type::enableGLVertexBuffer(VertexArray *va) const
+void Type::enableGLVertexBuffer() const
 {
     // Note: We are only going to enable buffers and never disable them
-    // here.  The reason is more than one Allocation may be used as a vertex
+    // here.  The reasonis more than one Allocation may be used as a vertex
     // source.  So we cannot disable arrays that may have been in use by
     // another allocation.
 
     uint32_t stride = mElement->getSizeBytes();
     if (mGL.mVtx.size) {
-        va->addLegacy(mGL.mVtx.type,
-                      mGL.mVtx.size,
-                      stride,
-                      RS_KIND_POSITION,
-                      false,
-                      mGL.mVtx.offset);
+        //LOGE("va vtx %i %x, %i, %p", mGL.mVtx.size, mGL.mVtx.type, stride, (void *)mGL.mVtx.offset);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(mGL.mVtx.size,
+                        mGL.mVtx.type,
+                        stride,
+                        (void *)mGL.mVtx.offset);
     }
 
     if (mGL.mNorm.size) {
-        va->addLegacy(mGL.mNorm.type,
-                     3,
-                     stride,
-                     RS_KIND_NORMAL,
-                     false,
-                     mGL.mNorm.offset);
+        //LOGE("va norm %i %x, %i, %p", mGL.mNorm.size, mGL.mNorm.type, stride, (void *)mGL.mNorm.offset);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        rsAssert(mGL.mNorm.size == 3);
+        glNormalPointer(mGL.mNorm.type,
+                        stride,
+                        (void *)mGL.mNorm.offset);
     }
 
     if (mGL.mColor.size) {
-        va->addLegacy(mGL.mColor.type,
-                     mGL.mColor.size,
-                     stride,
-                     RS_KIND_COLOR,
-                     true,
-                     mGL.mColor.offset);
+        glEnableClientState(GL_COLOR_ARRAY);
+        glColorPointer(mGL.mColor.size,
+                       mGL.mColor.type,
+                       stride,
+                       (void *)mGL.mColor.offset);
     }
 
-    if (mGL.mTex.size) {
-        va->addLegacy(mGL.mTex.type,
-                     mGL.mTex.size,
-                     stride,
-                     RS_KIND_TEXTURE,
-                     false,
-                     mGL.mTex.offset);
-    }
-
-    if (mGL.mPointSize.size) {
-        va->addLegacy(mGL.mPointSize.type,
-                     1,
-                     stride,
-                     RS_KIND_POINT_SIZE,
-                     false,
-                     mGL.mPointSize.offset);
-    }
-
-}
-
-void Type::enableGLVertexBuffer2(VertexArray *va) const
-{
-    // Do legacy buffers
-    enableGLVertexBuffer(va);
-
-    uint32_t stride = mElement->getSizeBytes();
-    for (uint32_t ct=0; ct < RS_MAX_ATTRIBS; ct++) {
-        if (mGL.mUser[ct].size) {
-            va->addUser(mGL.mUser[ct], stride);
+    for (uint32_t ct=0; ct < RS_MAX_TEXTURE; ct++) {
+        if (mGL.mTex[ct].size) {
+            //LOGE("va tex%i %i %x, %i, %p", ct, mGL.mTex[ct].size, mGL.mTex[ct].type, stride, (void *)mGL.mTex[ct].offset);
+            glClientActiveTexture(GL_TEXTURE0 + ct);
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            glTexCoordPointer(mGL.mTex[ct].size,
+                              mGL.mTex[ct].type,
+                              stride,
+                              (void *)mGL.mTex[ct].offset);
         }
     }
-}
+    glClientActiveTexture(GL_TEXTURE0);
 
+    if (mGL.mPointSize.size) {
+        glEnableClientState(GL_POINT_SIZE_ARRAY_OES);
+        glPointSizePointerOES(mGL.mPointSize.type,
+                              stride,
+                              (void *)mGL.mPointSize.offset);
+    }
+
+}
 
 
 void Type::dumpLOGV(const char *prefix) const
@@ -281,24 +309,6 @@ void Type::dumpLOGV(const char *prefix) const
     LOGV("%s   Type: x=%i y=%i z=%i mip=%i face=%i", prefix, mDimX, mDimY, mDimZ, mDimLOD, mFaces);
     sprintf(buf, "%s element: ", prefix);
     mElement->dumpLOGV(buf);
-}
-
-bool Type::getIsNp2() const
-{
-    uint32_t x = getDimX();
-    uint32_t y = getDimY();
-    uint32_t z = getDimZ();
-
-    if (x && (x & (x-1))) {
-        return true;
-    }
-    if (y && (y & (y-1))) {
-        return true;
-    }
-    if (z && (z & (z-1))) {
-        return true;
-    }
-    return false;
 }
 
 
@@ -365,18 +375,6 @@ RsType rsi_TypeCreate(Context *rsc)
 {
     TypeState * stc = &rsc->mStateType;
 
-    for (uint32_t ct=0; ct < stc->mTypes.size(); ct++) {
-        Type *t = stc->mTypes[ct];
-        if (t->getElement() != stc->mElement.get()) continue;
-        if (t->getDimX() != stc->mX) continue;
-        if (t->getDimY() != stc->mY) continue;
-        if (t->getDimZ() != stc->mZ) continue;
-        if (t->getDimLOD() != stc->mLOD) continue;
-        if (t->getDimFaces() != stc->mFaces) continue;
-        t->incUserRef();
-        return t;
-    }
-
     Type * st = new Type(rsc);
     st->incUserRef();
     st->setDimX(stc->mX);
@@ -387,7 +385,7 @@ RsType rsi_TypeCreate(Context *rsc)
     st->setDimFaces(stc->mFaces);
     st->compute();
     stc->mElement.clear();
-    stc->mTypes.push(st);
+
     return st;
 }
 
