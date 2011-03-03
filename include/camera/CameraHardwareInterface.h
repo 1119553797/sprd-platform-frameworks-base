@@ -213,6 +213,16 @@ public:
     virtual status_t dump(int fd, const Vector<String16>& args) const = 0;
 };
 
+/**
+ * The functions need to be provided by the camera HAL.
+ *
+ * If getNumberOfCameras() returns N, the valid cameraId for getCameraInfo()
+ * and openCameraHardware() is 0 to N-1.
+ */
+extern "C" int HAL_getNumberOfCameras();
+extern "C" void HAL_getCameraInfo(int cameraId, struct CameraInfo* cameraInfo);
+extern "C" int HAL_setCameraId(int cameraId);
+
 /** factory function to instantiate a camera hardware object */
 extern "C" sp<CameraHardwareInterface> openCameraHardware();
 

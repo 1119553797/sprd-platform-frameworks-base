@@ -33,7 +33,34 @@ public:
         : BpInterface<ICameraService>(impl)
     {
     }
+    // get number of cameras available
+    virtual int32_t getNumberOfCameras()
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(ICameraService::getInterfaceDescriptor());
+        remote()->transact(BnCameraService::GET_NUMBER_OF_CAMERAS, data, &reply);
+        return reply.readInt32();
+    }
 
+    // get information about a camera
+    virtual status_t getCameraInfo(int cameraId,
+                                   struct CameraInfo* cameraInfo) {
+        Parcel data, reply;
+        data.writeInterfaceToken(ICameraService::getInterfaceDescriptor());
+        data.writeInt32(cameraId);
+        remote()->transact(BnCameraService::GET_CAMERA_INFO, data, &reply);
+        cameraInfo->facing = reply.readInt32();
+        cameraInfo->orientation = reply.readInt32();
+        return reply.readInt32();
+    }
+    virtual int32_t setCameraId(int cameraId)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(ICameraService::getInterfaceDescriptor());
+	data.writeInt32(cameraId);
+        remote()->transact(BnCameraService::SET_CAMERA_ID, data, &reply);
+        return reply.readInt32();
+    }	
     // connect to camera service
     virtual sp<ICamera> connect(const sp<ICameraClient>& cameraClient)
     {
@@ -53,6 +80,26 @@ status_t BnCameraService::onTransact(
     uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
 {
     switch(code) {
+        case GET_NUMBER_OF_CAMERAS: {
+            CHECK_INTERFACE(ICameraService, data, reply);
+            reply->writeInt32(getNumberOfCameras());
+            return NO_ERROR;
+        } break;
+        case GET_CAMERA_INFO: {
+            CHECK_INTERFACE(ICameraService, data, reply);
+            CameraInfo cameraInfo;
+            memset(&cameraInfo, 0, sizeof(cameraInfo));
+            status_t result = getCameraInfo(data.readInt32(), &cameraInfo);
+            reply->writeInt32(cameraInfo.facing);
+            reply->writeInt32(cameraInfo.orientation);
+            reply->writeInt32(result);
+            return NO_ERROR;
+        } break;	
+        case SET_CAMERA_ID: {
+            CHECK_INTERFACE(ICameraService, data, reply);
+            reply->writeInt32(setCameraId(data.readInt32()));
+            return NO_ERROR;
+        } break;		
         case CONNECT: {
             CHECK_INTERFACE(ICameraService, data, reply);
             sp<ICameraClient> cameraClient = interface_cast<ICameraClient>(data.readStrongBinder());

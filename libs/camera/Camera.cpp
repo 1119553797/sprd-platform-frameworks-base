@@ -94,6 +94,25 @@ Camera::~Camera()
 {
     disconnect();
 }
+int32_t Camera::getNumberOfCameras()
+{
+    const sp<ICameraService>& cs = getCameraService();
+    if (cs == 0) return 0;
+    return cs->getNumberOfCameras();
+}
+
+status_t Camera::getCameraInfo(int cameraId,
+                               struct CameraInfo* cameraInfo) {
+    const sp<ICameraService>& cs = getCameraService();
+    if (cs == 0) return UNKNOWN_ERROR;
+    return cs->getCameraInfo(cameraId, cameraInfo);
+}
+int32_t Camera::setCameraId(int cameraId)
+{
+    const sp<ICameraService>& cs = getCameraService();
+    if (cs == 0) return 0;
+    return cs->setCameraId(cameraId);
+}
 
 sp<Camera> Camera::connect()
 {

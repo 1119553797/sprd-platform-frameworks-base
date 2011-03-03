@@ -94,6 +94,23 @@ CameraService::~CameraService()
         LOGE("mClient was still connected in destructor!");
     }
 }
+int32_t CameraService::getNumberOfCameras() {
+    return HAL_getNumberOfCameras();
+}
+
+status_t CameraService::getCameraInfo(int cameraId,
+                                      struct CameraInfo* cameraInfo) {
+    int mNumberOfCameras = HAL_getNumberOfCameras();                           
+    if (cameraId < 0 || cameraId >= mNumberOfCameras) {
+        return BAD_VALUE;
+    }
+
+    HAL_getCameraInfo(cameraId, cameraInfo);
+    return OK;
+}
+int32_t CameraService::setCameraId(int cameraId) {
+    return HAL_setCameraId(cameraId);
+}
 
 sp<ICamera> CameraService::connect(const sp<ICameraClient>& cameraClient)
 {
