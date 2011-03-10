@@ -393,7 +393,20 @@ sp<CameraHardwareInterface> CameraHardwareStub::createInstance()
     singleton = hardware;
     return hardware;
 }
+	
+extern "C" int HAL_getNumberOfCameras()
+{
+    return 0;
+}
 
+extern "C" void HAL_getCameraInfo(int cameraId, struct CameraInfo* cameraInfo)
+{    
+}
+extern "C" int HAL_setCameraId(int cameraId)
+{	
+	return 0;
+}
+	
 extern "C" sp<CameraHardwareInterface> openCameraHardware()
 {
     return CameraHardwareStub::createInstance();
