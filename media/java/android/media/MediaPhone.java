@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
+import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -38,7 +39,10 @@ import java.io.IOException;
 import java.util.Set;
 import java.lang.ref.WeakReference;
 
-public class MediaPhone
+import com.android.internal.telephony.CommandsInterface;
+
+
+public class MediaPhone extends Handler
 {
     static {
         System.loadLibrary("media_jni");
@@ -60,6 +64,11 @@ public class MediaPhone
     private PowerManager.WakeLock mWakeLock = null;
     private boolean mScreenOnWhilePlaying;
     private boolean mStayAwake;
+
+	private CommandsInterface mCm;	
+	private Message msgTracker = null;
+	private static int ARG_SKIP_MSGTRACKER = -1;
+	
 
     /**
      * Default constructor. Consider using one of the create() methods for
@@ -139,8 +148,12 @@ public class MediaPhone
      * @param uri the Uri from which to get the datasource
      * @return a MediaPhone object, or null if creation failed
      */
-    public static MediaPhone create(Context context, Uri uri) {
-        return create (context, uri, null, null);
+     /**
+	 * {@hide}
+	 */
+    public static MediaPhone create(CommandsInterface ril, Context context, Uri uri) {
+    	Log.d(TAG, "create" + uri);
+        return create (ril, context, uri, null, null);
     }
 
     /**
@@ -156,7 +169,10 @@ public class MediaPhone
      * @param localSurface the Surface to use for preview the camera
      * @return a MediaPhone object, or null if creation failed
      */
-    public static MediaPhone create(Context context, Uri uri, SurfaceHolder remoteHolder, Surface localSurface) {
+    /**
+	 * {@hide}
+	 */
+    public static MediaPhone create(CommandsInterface ril, Context context, Uri uri, SurfaceHolder remoteHolder, Surface localSurface) {
 
         try {
             MediaPhone mp = new MediaPhone();
@@ -167,6 +183,13 @@ public class MediaPhone
             if (localSurface != null) {
             	mp.setLocalDisplay(localSurface);
             }
+			mp.mCm = ril;
+			mp.mCm.setOnVPData(mp.mEventHandler, MEDIA_UNSOL_DATA, null);
+			mp.mCm.setOnVPCodec(mp.mEventHandler, MEDIA_UNSOL_CODEC, null);
+			mp.mCm.setOnVPStrs(mp.mEventHandler, MEDIA_UNSOL_STR, null);
+			mp.mCm.setOnVPRemoteMedia(mp.mEventHandler, MEDIA_UNSOL_REMOTE_VIDEO, null);
+			mp.mCm.setOnVPMMRing(mp.mEventHandler, MEDIA_UNSOL_MM_RING, null);
+			mp.mCm.setOnVPRecordVideo(mp.mEventHandler, MEDIA_UNSOL_RECORD_VIDEO, null);
             return mp;
         } catch (IOException ex) {
             Log.d(TAG, "create failed:", ex);
@@ -178,7 +201,6 @@ public class MediaPhone
             Log.d(TAG, "create failed:", ex);
             // fall through
         }
-
         return null;
     }
 
@@ -250,18 +272,123 @@ public class MediaPhone
     }
 
     private native void _stop() throws IllegalStateException;
-    
+	
+    public  void dial(String address, String sub_address, int clirMode, Message result) throws IllegalStateException {
+    	Log.d(TAG, "dial");
+        stayAwake(true);
+		
+		Message msg = Message.obtain(mEventHandler,MEDIA_SOL_DIAL);
+		msgTracker = result;
+		mCm.dialVideo(address, sub_address, clirMode, msg);
+    }
+
+    /**
+     * Stops playback after playback has been stopped or paused.
+     *
+     * @throws IllegalStateException if the internal player engine has not been
+     * initialized.
+     */
+    public void hangup(Message result) throws IllegalStateException {
+    	Log.d(TAG, "hangup");
+        stayAwake(false);
+
+		Message msg = Message.obtain(mEventHandler,MEDIA_SOL_HANGUP);
+		msgTracker = result;
+		mCm.hangupVP(msg);	
+    }
+
+	public void acceptCall(Message result) throws IllegalStateException {
+		Log.d(TAG, "acceptCall");
+		stayAwake(true);
+
+		Message msg = Message.obtain(mEventHandler,MEDIA_SOL_ACCEPT);		
+		msgTracker = result;
+		mCm.acceptVP(msg);
+	}
+
+	public void sendStrs(String str, Message result) {
+		Log.d(TAG, "sendStrs");
+		stayAwake(true);
+
+		Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
+		msgTracker = result;
+		mCm.sendVPStrs(str, msg);
+	}
+
+	public void openLocalVideo(Message result) {
+		Log.d(TAG, "openLocalVideo");
+		stayAwake(true);
+		
+		Message msg1 = Message.obtain(mEventHandler, MEDIA_SOL_NOP, ARG_SKIP_MSGTRACKER, 0);	
+		mCm.setVPLocalMedia(1, 1, false, msg1);
+
+		Message msg2 = Message.obtain(mEventHandler, MEDIA_SOL_NOP);
+		msgTracker = result;
+		sendStrs("open_:camera_", msg2);
+	}
+
+
+	public void closeLocalVideo(boolean bReplaceImg, Message result) {
+		Log.d(TAG, "closeLocalVideo");
+		stayAwake(true);
+		
+		Message msg1 = Message.obtain(mEventHandler, MEDIA_SOL_NOP, ARG_SKIP_MSGTRACKER, 0);		
+		mCm.setVPLocalMedia(1, 0, bReplaceImg, msg1);
+
+		if (bReplaceImg) 
+			return;
+
+		Message msg2 = Message.obtain(mEventHandler, MEDIA_SOL_NOP);
+		msgTracker = result;
+		sendStrs("close_:camera_", msg2);
+	}
+
+	public void enableLocalAudio(boolean enable, Message result) {
+		Log.d(TAG, "enableLocalAudio");
+		stayAwake(true);
+		
+		Message msg = Message.obtain(mEventHandler,MEDIA_SOL_NOP);		
+		msgTracker = result;
+		mCm.setVPLocalMedia(0, enable?1:0, false, msg);
+	}
+
+	public void recordVideo(boolean bStart, Message result) {
+		Log.d(TAG, "recordVideo");
+		stayAwake(true);
+		
+		Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
+		msgTracker = result;
+		mCm.recordVPVideo(bStart, msg);
+	}
+	
+	public void recordAudio(boolean bStart, int mode, Message result) {
+		Log.d(TAG, "recordAudio");
+		stayAwake(true);
+		
+		Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
+		msgTracker = result;
+		mCm.recordVPAudio(bStart, mode, msg);
+	}
+
+	public void test(int flag, int value, Message result) {
+		Log.d(TAG, "test");
+		stayAwake(true);
+		
+		Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
+		msgTracker = result;
+		mCm.testVP(flag, value, msg);
+	}	
 
     /**
      * Set the low-level power management behavior for this MediaPhone.  This
      * can be used when the MediaPhone is not playing through a SurfaceHolder
-     * set with {@link #setDisplay(SurfaceHolder)} and thus can use the
-     * high-level {@link #setScreenOnWhilePlaying(boolean)} feature.
+     * set with  and thus can use the
+     * high-level  feature.
      *
      * <p>This function has the MediaPhone access the low-level power manager
      * service to control the device's power usage while playing is occurring.
-     * The parameter is a combination of {@link android.os.PowerManager} wake flags.
-     * Use of this method requires {@link android.Manifest.permission#WAKE_LOCK}
+     * The parameter is a combination of  wake flags.
+     * Use of this method requires 
      * permission.
      * By default, no attempt is made to keep the device awake during playback.
      *
@@ -350,13 +477,19 @@ public class MediaPhone
      * done using the MediaPhone.
      */
     public void release() {
+    	Log.d(TAG, "release");
         stayAwake(false);
         updateSurfaceScreenOn();
-        mOnConnectCompletionListener = null;
-        mOnDisconnectCompletionListener = null;
         mOnErrorListener = null;
         mOnInfoListener = null;
         mOnVideoSizeChangedListener = null;
+
+		mCm.unSetOnVPData(mEventHandler);
+		mCm.unSetOnVPCodec(mEventHandler);
+		mCm.unSetOnVPStrs(mEventHandler);
+		mCm.unSetOnVPRemoteMedia(mEventHandler);
+		mCm.unSetOnVPMMRing(mEventHandler);
+		mCm.unSetOnVPRecordVideo(mEventHandler);
         _release();
     }
 
@@ -409,6 +542,20 @@ public class MediaPhone
     private static final int MEDIA_ERROR = 100;
     private static final int MEDIA_INFO = 200;
 
+	// solicited events
+	private static final int MEDIA_SOL_NOP	= 10;
+    private static final int MEDIA_SOL_DIAL	          = 11;
+    private static final int MEDIA_SOL_HANGUP            = 12;
+    private static final int MEDIA_SOL_ACCEPT            = 13;
+
+	// unsolicited events
+	private static final int MEDIA_UNSOL_DATA = 20;
+	private static final int MEDIA_UNSOL_CODEC = 21;
+	private static final int MEDIA_UNSOL_STR = 22;
+	private static final int MEDIA_UNSOL_REMOTE_VIDEO = 23;
+	private static final int MEDIA_UNSOL_MM_RING = 24;
+	private static final int MEDIA_UNSOL_RECORD_VIDEO = 25;
+
     private class EventHandler extends Handler
     {
         private MediaPhone mMediaPhone;
@@ -424,19 +571,12 @@ public class MediaPhone
                 Log.w(TAG, "mediaphone went away with unhandled events");
                 return;
             }
+			Log.d(TAG, "handleMessage " + msg);
+
+			AsyncResult ar;
+			ar = (AsyncResult) msg.obj;
+			
             switch(msg.what) {
-            case MEDIA_CONNECT_COMPLETE:
-                if (mOnConnectCompletionListener != null)
-                    mOnConnectCompletionListener.onConnectCompletion(mMediaPhone);
-                stayAwake(false);
-                return;
-
-            case MEDIA_DISCONNECT_COMPLETE:
-                if (mOnDisconnectCompletionListener != null)
-                    mOnDisconnectCompletionListener.onDisconnectCompletion(mMediaPhone);
-                stayAwake(false);
-                return;
-
             case MEDIA_SET_VIDEO_SIZE:
               if (mOnVideoSizeChangedListener != null)
                   mOnVideoSizeChangedListener.onVideoSizeChanged(mMediaPhone, msg.arg1, msg.arg2);
@@ -450,13 +590,6 @@ public class MediaPhone
                 if (mOnErrorListener != null) {
                     error_was_handled = mOnErrorListener.onError(mMediaPhone, msg.arg1, msg.arg2);
                 }
-                //todo: 
-                if (mOnConnectCompletionListener != null && ! error_was_handled) {
-                    mOnConnectCompletionListener.onConnectCompletion(mMediaPhone);
-                }
-                if (mOnDisconnectCompletionListener != null && ! error_was_handled) {
-                    mOnDisconnectCompletionListener.onDisconnectCompletion(mMediaPhone);
-                }
                 stayAwake(false);
                 return;
 
@@ -469,10 +602,48 @@ public class MediaPhone
                 }
                 // No real default action so far.
                 return;
+				
+			// following is messages from RIL.java
+            case MEDIA_SOL_NOP: 
+			case MEDIA_SOL_DIAL:
+			case MEDIA_SOL_HANGUP:
+			case MEDIA_SOL_ACCEPT:
+				if ((msgTracker != null) && (msg.arg1 != ARG_SKIP_MSGTRACKER)) {
+					msgTracker.obj = msg.obj;
+					msgTracker.sendToTarget();
+					msgTracker = null;
+				}
+				break;
+				
+			case MEDIA_UNSOL_DATA:{
+				int[] params = (int[])ar.result;
+				int indication = params[0];
+				break;
+				}
+			case MEDIA_UNSOL_STR:
+				String str = (String)ar.result;
+				break;
 
-            case MEDIA_NOP: // interface test message - ignore
-                break;
-
+			case MEDIA_UNSOL_REMOTE_VIDEO:{
+				int[] params = (int[])ar.result;
+				int datatype = params[0];
+				int sw = params[1];
+				int indication;
+				
+				if (params.length > 2)
+					indication = params[2];
+				break;
+				}
+			case MEDIA_UNSOL_MM_RING:{
+				int[] params = (int[])ar.result;
+				int timer = params[0];
+				break;
+				}
+			case MEDIA_UNSOL_RECORD_VIDEO:{
+				int[] params = (int[])ar.result;
+				int indication = params[0];
+				break;
+				}
             default:
                 Log.e(TAG, "Unknown message type " + msg.what);
                 return;
@@ -500,60 +671,6 @@ public class MediaPhone
             mp.mEventHandler.sendMessage(m);
         }
     }
-
-    /**
-     * Interface definition for a callback to be invoked when playback of
-     * a media source has completed.
-     */
-    public interface OnConnectCompletionListener
-    {
-        /**
-         * Called when the end of a media source is reached during playback.
-         *
-         * @param mp the MediaPhone that reached the end of the file
-         */
-        void onConnectCompletion(MediaPhone mp);
-    }
-
-    /**
-     * Register a callback to be invoked when the end of a media source
-     * has been reached during playback.
-     *
-     * @param listener the callback that will be run
-     */
-    public void setOnConnectCompletionListener(OnConnectCompletionListener listener)
-    {
-        mOnConnectCompletionListener = listener;
-    }
-
-    private OnConnectCompletionListener mOnConnectCompletionListener;
-
-    /**
-     * Interface definition for a callback to be invoked when playback of
-     * a media source has completed.
-     */
-    public interface OnDisconnectCompletionListener
-    {
-        /**
-         * Called when the end of a media source is reached during playback.
-         *
-         * @param mp the MediaPhone that reached the end of the file
-         */
-        void onDisconnectCompletion(MediaPhone mp);
-    }
-
-    /**
-     * Register a callback to be invoked when the end of a media source
-     * has been reached during playback.
-     *
-     * @param listener the callback that will be run
-     */
-    public void setOnDisconnectCompletionListener(OnDisconnectCompletionListener listener)
-    {
-        mOnDisconnectCompletionListener = listener;
-    }
-
-    private OnDisconnectCompletionListener mOnDisconnectCompletionListener;
 
     /**
      * Interface definition of a callback to be invoked when the

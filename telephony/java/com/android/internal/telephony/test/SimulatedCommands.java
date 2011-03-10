@@ -18,6 +18,7 @@ package com.android.internal.telephony.test;
 
 
 import android.os.AsyncResult;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
@@ -1456,4 +1457,67 @@ public final class SimulatedCommands extends BaseCommands
     public void getGsmBroadcastConfig(Message response) {
         unimplemented(response);
     }
+	
+    public void dialVideo(String address, String sub_address, int clirMode, Message result){
+    }
+	
+    public void hangupVP(Message result){
+    }
+	
+	public void	acceptVP(Message result){
+	}
+	
+	public void dropVP(Message result){
+	}
+
+	public void sendVPStrs(String str, Message result){
+	}
+	
+	public void setVPLocalMedia(int datatype, int sw, boolean enable, Message result){
+	}
+	
+	public void recordVPVideo(boolean bStart, Message result){
+	}
+	
+	public void recordVPAudio(boolean bStart, int mode, Message result){
+	}
+	
+	public void testVP(int flag, int value, Message result){
+	}
+	
+	public void setOnVPData(Handler h, int what, Object obj){
+	}
+	
+	public void unSetOnVPData(Handler h){
+	}
+	
+	public void setOnVPCodec(Handler h, int what, Object obj){
+	}
+	
+	public void unSetOnVPCodec(Handler h){
+	}
+	
+	public void setOnVPStrs(Handler h, int what, Object obj){
+	}
+
+	public void unSetOnVPStrs(Handler h){
+	}
+	
+	public void setOnVPRemoteMedia(Handler h, int what, Object obj){
+	}
+	
+	public void unSetOnVPRemoteMedia(Handler h){
+	}
+	
+	public void setOnVPMMRing(Handler h, int what, Object obj){
+	}
+	
+	public void unSetOnVPMMRing(Handler h){
+	}
+	
+	public void setOnVPRecordVideo(Handler h, int what, Object obj){
+	}
+	
+	public void unSetOnVPRecordVideo(Handler h){
+	}
 }

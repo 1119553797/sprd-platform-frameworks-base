@@ -30,6 +30,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.util.Log;
+import android.view.SurfaceHolder;
 
 import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
@@ -254,6 +255,82 @@ public class PhoneProxy extends Handler implements Phone {
     public void unregisterForDisconnect(Handler h) {
         mActivePhone.unregisterForDisconnect(h);
     }
+
+//----------------------------- add for videocall ----------------------------
+
+	public void registerForPreciseVideoCallStateChanged(Handler h, int what, Object obj) {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.registerForPreciseVideoCallStateChanged(h, what, obj);
+		}
+	}
+
+	public void unregisterForPreciseVideoCallStateChanged(Handler h) {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.unregisterForPreciseVideoCallStateChanged(h);
+		}
+	}
+
+	public void registerForNewRingingVideoCall(Handler h, int what, Object obj) {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.registerForNewRingingVideoCall(h, what, obj);
+		}
+	}
+
+	public void unregisterForNewRingingVideoCall(Handler h) {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.unregisterForNewRingingVideoCall(h);
+		}
+	}
+
+	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj) {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.registerForIncomingRingVideoCall(h, what, obj);
+		}
+	}
+
+	public void unregisterForIncomingRingVideoCall(Handler h) {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.unregisterForIncomingRingVideoCall(h);
+		}
+	}
+
+	public void registerForVideoCallDisconnect(Handler h, int what, Object obj) {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.registerForVideoCallDisconnect(h, what, obj);
+		}
+	}
+
+	public void unregisterForVideoCallDisconnect(Handler h) {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.unregisterForVideoCallDisconnect(h);
+		}
+	}
+
+	public CallType getCallType() {
+		return mActivePhone.getCallType();
+	}
+	
+	public Connection  dialVideo(String dialString) throws CallStateException{
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			return mActivePhone.dialVideo(dialString);
+		}
+		return null;
+	}
+
+	
+	public void setLocalDisplay(SurfaceHolder sh) {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.setLocalDisplay(sh);
+		}
+	}
+
+	public void setRemoteDisplay(SurfaceHolder sh)  {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.setRemoteDisplay(sh);
+		} 
+	}
+
+//----------------------------- end add for videocall ------------------------
 
     public void registerForMmiInitiate(Handler h, int what, Object obj) {
         mActivePhone.registerForMmiInitiate(h, what, obj);

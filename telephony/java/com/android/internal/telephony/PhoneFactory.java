@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
+import com.android.internal.telephony.gsm.TDPhone;
 
 /**
  * {@hide}
@@ -116,6 +117,10 @@ public class PhoneFactory {
                     sProxyPhone = new PhoneProxy(new CDMAPhone(context,
                             sCommandsInterface, sPhoneNotifier));
                     Log.i(LOG_TAG, "Creating CDMAPhone");
+                } else if (phoneType == Phone.PHONE_TYPE_TD) {
+                    sProxyPhone = new PhoneProxy(new TDPhone(context,
+                            sCommandsInterface, sPhoneNotifier));
+                    Log.i(LOG_TAG, "Creating TDPhone");
                 }
 
                 sMadeDefaults = true;

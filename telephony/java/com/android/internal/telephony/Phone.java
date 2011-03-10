@@ -25,13 +25,16 @@ import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.view.SurfaceHolder;
 
+import com.android.internal.telephony.CallStateException;
 import com.android.internal.telephony.DataConnection;
 import com.android.internal.telephony.gsm.NetworkInfo;
 import com.android.internal.telephony.gsm.GsmDataConnection;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 
 import java.util.List;
+
 
 /**
  * Internal interface used to control the phone; SDK developers cannot
@@ -94,6 +97,11 @@ public interface Phone {
     enum SuppService {
       UNKNOWN, SWITCH, SEPARATE, TRANSFER, CONFERENCE, REJECT, HANGUP;
     };
+
+    public enum CallType {
+        NONE, VOICE, VIDEO;
+    };
+
 
     static final String STATE_KEY = "state";
     static final String PHONE_NAME_KEY = "phoneName";
@@ -177,6 +185,7 @@ public interface Phone {
     static final int PHONE_TYPE_NONE = RILConstants.NO_PHONE;
     static final int PHONE_TYPE_GSM = RILConstants.GSM_PHONE;
     static final int PHONE_TYPE_CDMA = RILConstants.CDMA_PHONE;
+    static final int PHONE_TYPE_TD = RILConstants.TD_PHONE;
 
     // Used for preferred network type
     // Note NT_* substitute RILConstants.NETWORK_MODE_* above the Phone
@@ -1695,5 +1704,29 @@ public interface Phone {
      */
     void unsetOnEcbModeExitResponse(Handler h);
 
+	public void registerForPreciseVideoCallStateChanged(Handler h, int what, Object obj);
+
+	public void unregisterForPreciseVideoCallStateChanged(Handler h);
+
+	public void registerForNewRingingVideoCall(Handler h, int what, Object obj);
+
+	public void unregisterForNewRingingVideoCall(Handler h);
+
+	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj);
+
+	public void unregisterForIncomingRingVideoCall(Handler h);
+
+	public void registerForVideoCallDisconnect(Handler h, int what, Object obj);
+
+	public void unregisterForVideoCallDisconnect(Handler h);
+
+	public CallType getCallType() ;
+
+	public Connection  dialVideo(String dialString) throws CallStateException;
+
+	public void setLocalDisplay(SurfaceHolder sh);
+
+	public void setRemoteDisplay(SurfaceHolder sh);
 
 }
+

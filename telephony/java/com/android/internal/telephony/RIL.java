@@ -1936,6 +1936,131 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
         send(rr);
     }
+	
+    public void
+    dialVideo (String address, String sub_address, int clirMode, Message result) {
+        RILRequest rr = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_DIAL/*RIL_REQUEST_DIALVIDEO*/, result);
+
+        rr.mp.writeString(address);
+		rr.mp.writeString(sub_address);
+        rr.mp.writeInt(clirMode);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+    }
+
+	public void
+	hangupVP(Message result) {
+        RILRequest rr = RILRequest.obtain(
+                        RIL_REQUEST_VIDEOPHONE_HANGUP,
+                                        result);
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+	}
+
+	public void
+	acceptVP(Message result) {
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_ANSWER, result);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+    }
+
+	public void dropVP(Message result) {
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_DROP, result);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+    }
+	
+    public void sendVPStrs(String str, Message result) {
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_STR, result);
+
+        // count ints
+        rr.mp.writeString(str);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                    + " " + str);
+
+        send(rr);
+    }	
+     public void setVPLocalMedia(int datatype, int sw, boolean enable, Message result) {
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_LOCAL_MEDIA, result);
+
+        // count ints
+        if (enable)
+			rr.mp.writeInt(3);
+        else
+			rr.mp.writeInt(2);
+
+        rr.mp.writeInt(datatype);
+        rr.mp.writeInt(sw);
+
+		if (enable)
+	        rr.mp.writeInt(enable?1:0);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                    + " " + datatype + " " + sw + " " + enable);
+
+        send(rr);
+    }
+
+    public void recordVPVideo(boolean bStart, Message result) {
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_RECORD_VIDEO, result);
+
+        // count ints
+        rr.mp.writeInt((bStart)?1:0);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                    + " " + bStart);
+
+        send(rr);
+    }
+	
+    public void recordVPAudio(boolean bStart, int mode, Message result) {
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_RECORD_AUDIO, result);
+
+        // count ints
+        if (mode >= 0)			
+			rr.mp.writeInt(2);
+		else			
+			rr.mp.writeInt(1);
+		
+        rr.mp.writeInt((bStart)?1:0);
+
+		if (mode >= 0)
+			rr.mp.writeInt(mode);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                    + " " + bStart);
+
+        send(rr);
+    }
+	
+    public void testVP(int flag, int value, Message result) {
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_TEST, result);
+
+        // count ints		
+		rr.mp.writeInt(2);	
+		rr.mp.writeInt(flag);	
+        rr.mp.writeInt(value);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                    + " " + flag + " " + value);
+
+        send(rr);
+    }
 
     protected void
     onRadioAvailable() {
@@ -2193,6 +2318,16 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_EXIT_EMERGENCY_CALLBACK_MODE: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: ret = responseVoid(p); break;
+			case RIL_REQUEST_VIDEOPHONE_DIAL: ret = responseVoid(p); break;
+			case RIL_REQUEST_VIDEOPHONE_CODEC: ret = responseVoid(p); break;
+			case RIL_REQUEST_VIDEOPHONE_HANGUP: ret = responseVoid(p); break;
+			case RIL_REQUEST_VIDEOPHONE_ANSWER: ret = responseVoid(p); break;
+			case RIL_REQUEST_VIDEOPHONE_DROP: ret = responseVoid(p); break;
+			case RIL_REQUEST_VIDEOPHONE_STR: ret = responseVoid(p); break;
+			case RIL_REQUEST_VIDEOPHONE_LOCAL_MEDIA: ret = responseVoid(p); break;
+			case RIL_REQUEST_VIDEOPHONE_RECORD_VIDEO: ret = responseVoid(p); break;
+			case RIL_REQUEST_VIDEOPHONE_RECORD_AUDIO: ret = responseVoid(p); break;
+			case RIL_REQUEST_VIDEOPHONE_TEST: ret = responseVoid(p); break;
             default:
                 throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
             //break;
@@ -2334,6 +2469,12 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_UNSOL_OEM_HOOK_RAW: ret = responseRaw(p); break;
             case RIL_UNSOL_RINGBACK_TONE: ret = responseInts(p); break;
             case RIL_UNSOL_RESEND_INCALL_MUTE: ret = responseVoid(p); break;
+			case RIL_UNSOL_VIDEOPHONE_DATA: ret = responseInts(p); break;
+            case RIL_UNSOL_VIDEOPHONE_CODEC: ret = responseVoid(p); break;
+            case RIL_UNSOL_VIDEOPHONE_STR: ret = responseString(p); break;
+            case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: ret = responseInts(p); break;
+            case RIL_UNSOL_VIDEOPHONE_MM_RING: ret = responseInts(p); break;
+            case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: ret = responseInts(p); break;
 
             default:
                 throw new RuntimeException("Unrecognized unsol response: " + response);
@@ -2635,6 +2776,81 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                     mResendIncallMuteRegistrants.notifyRegistrants(
                                         new AsyncResult (null, ret, null));
                 }
+				break;			
+			case RIL_UNSOL_VIDEOPHONE_DATA:		{		
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                int[] params = (int[])ret;
+
+                if(params.length == 1) {
+                    if (mVPDataRegistrant != null) {
+                        mVPDataRegistrant
+							.notifyRegistrant(new AsyncResult(null, params, null));
+                    }
+                } else {
+                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_DATA ERROR with wrong length "
+                            + params.length);
+                }
+            	break;
+			}
+			case RIL_UNSOL_VIDEOPHONE_CODEC:
+				break;
+            case RIL_UNSOL_VIDEOPHONE_STR: 
+                if (RILJ_LOGD) unsljLog(response);
+				
+                if (mVPStrsRegistrant != null) {
+                    mVPStrsRegistrant
+                        .notifyRegistrant(new AsyncResult(null, ret, null));
+                }
+            	break;
+            case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: {
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                int[] params = (int[])ret;
+
+                if(params.length >= 2) {
+                    if (mVPRemoteMediaRegistrant != null) {
+                        mVPRemoteMediaRegistrant
+							.notifyRegistrant(new AsyncResult(null, params, null));
+                    }
+                } else {
+                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA ERROR with wrong length "
+                            + params.length);
+                }
+            	break;
+            }
+            case RIL_UNSOL_VIDEOPHONE_MM_RING: {
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                int[] params = (int[])ret;
+
+                if(params.length == 1) {
+                    if (mVPMMRingRegistrant != null) {
+                        mVPMMRingRegistrant
+							.notifyRegistrant(new AsyncResult(null, params, null));
+                    }
+                } else {
+                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_MM_RING ERROR with wrong length "
+                            + params.length);
+                }
+            	break;
+            }
+            case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: {
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                int[] params = (int[])ret;
+
+                if(params.length == 1) {
+                    if (mVPRecordVideoRegistrant != null) {
+                        mVPRecordVideoRegistrant
+							.notifyRegistrant(new AsyncResult(null, params, null));
+                    }
+                } else {
+                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO ERROR with wrong length "
+                            + params.length);
+                }
+            	break;
+            }
         }
     }
 
@@ -3234,6 +3450,16 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_EXIT_EMERGENCY_CALLBACK_MODE: return "REQUEST_EXIT_EMERGENCY_CALLBACK_MODE";
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: return "RIL_REQUEST_REPORT_SMS_MEMORY_STATUS";
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: return "RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING";
+			case RIL_REQUEST_VIDEOPHONE_DIAL: return "RIL_REQUEST_VIDEOPHONE_DIAL";
+			case RIL_REQUEST_VIDEOPHONE_CODEC: return "RIL_REQUEST_VIDEOPHONE_CODEC";
+			case RIL_REQUEST_VIDEOPHONE_HANGUP: return "RIL_REQUEST_VIDEOPHONE_HANGUP";
+			case RIL_REQUEST_VIDEOPHONE_ANSWER: return "RIL_REQUEST_VIDEOPHONE_ANSWER";
+			case RIL_REQUEST_VIDEOPHONE_DROP: return "RIL_REQUEST_VIDEOPHONE_DROP";
+			case RIL_REQUEST_VIDEOPHONE_STR: return "RIL_REQUEST_VIDEOPHONE_STR";
+			case RIL_REQUEST_VIDEOPHONE_LOCAL_MEDIA: return "RIL_REQUEST_VIDEOPHONE_LOCAL_MEDIA";
+			case RIL_REQUEST_VIDEOPHONE_RECORD_VIDEO: return "RIL_REQUEST_VIDEOPHONE_RECORD_VIDEO";
+			case RIL_REQUEST_VIDEOPHONE_RECORD_AUDIO: return "RIL_REQUEST_VIDEOPHONE_RECORD_AUDIO";
+			case RIL_REQUEST_VIDEOPHONE_TEST: return "RIL_REQUEST_VIDEOPHONE_TEST";
             default: return "<unknown request>";
         }
     }
@@ -3278,6 +3504,14 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_UNSOL_OEM_HOOK_RAW: return "UNSOL_OEM_HOOK_RAW";
             case RIL_UNSOL_RINGBACK_TONE: return "UNSOL_RINGBACK_TONG";
             case RIL_UNSOL_RESEND_INCALL_MUTE: return "UNSOL_RESEND_INCALL_MUTE";
+            case RIL_UNSOL_VIDEOPHONE_DATA: return "UNSOL_VIDEOPHONE_DATA";
+            case RIL_UNSOL_VIDEOPHONE_CODEC: return "UNSOL_VIDEOPHONE_CODEC";
+            case RIL_UNSOL_VIDEOPHONE_DCPI: return "UNSOL_VIDEOPHONE_DCPI";
+            case RIL_UNSOL_VIDEOPHONE_DSCI: return "UNSOL_VIDEOPHONE_DSCI";
+            case RIL_UNSOL_VIDEOPHONE_STR: return "UNSOL_VIDEOPHONE_STR";
+            case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: return "UNSOL_VIDEOPHONE_REMOTE_MEDIA";
+            case RIL_UNSOL_VIDEOPHONE_MM_RING: return "UNSOL_VIDEOPHONE_MM_RING";
+            case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: return "UNSOL_VIDEOPHONE_RECORD_VIDEO";
             default: return "<unknown reponse>";
         }
     }

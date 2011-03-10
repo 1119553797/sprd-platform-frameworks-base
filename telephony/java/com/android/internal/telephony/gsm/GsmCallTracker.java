@@ -52,7 +52,7 @@ public final class GsmCallTracker extends CallTracker {
     static final String LOG_TAG = "GSM";
     private static final boolean REPEAT_POLLING = false;
 
-    private static final boolean DBG_POLL = false;
+    private static final boolean DBG_POLL = true;
 
     //***** Constants
 
@@ -434,8 +434,14 @@ public final class GsmCallTracker extends CallTracker {
                 }
             }
 
-            if (DBG_POLL) log("poll: conn[i=" + i + "]=" +
+            if (DBG_POLL) log("poll["+ this + "]: conn[i=" + i + "]=" +
                     conn+", dc=" + dc);
+
+			if ((dc != null) && (!dc.isVoice))
+			{
+				if (DBG_POLL) log("not voice call, return");
+				return;
+			}
 
             if (conn == null && dc != null) {
                 // Connection appeared in CLCC response that we don't know about
@@ -895,7 +901,7 @@ public final class GsmCallTracker extends CallTracker {
 
             case EVENT_REPOLL_AFTER_DELAY:
             case EVENT_CALL_STATE_CHANGE:
-                pollCallsWhenSafe();
+//                pollCallsWhenSafe();
             break;
 
             case EVENT_RADIO_AVAILABLE:

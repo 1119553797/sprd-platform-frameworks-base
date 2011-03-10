@@ -479,17 +479,17 @@ public class GSMPhone extends PhoneBase {
         mCT.explicitCallTransfer();
     }
 
-    public GsmCall
+    public Call
     getForegroundCall() {
         return mCT.foregroundCall;
     }
 
-    public GsmCall
+    public Call
     getBackgroundCall() {
         return mCT.backgroundCall;
     }
 
-    public GsmCall
+    public Call
     getRingingCall() {
         return mCT.ringingCall;
     }
