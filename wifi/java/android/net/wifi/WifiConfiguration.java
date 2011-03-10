@@ -106,7 +106,10 @@ public class WifiConfiguration implements Parcelable {
 
         public static final String varName = "key_mgmt";
 
-        public static final String[] strings = { "NONE", "WPA_PSK", "WPA_EAP", "IEEE8021X" };
+        public static final String[] strings = { "NONE", "WPA_PSK", "WPA_EAP", "IEEE8021X" 
+/* ATH_WAPI+++ */
+            , "WAPI_PSK", "WAPI_CERT" };
+/* ATH_WAPI--- */
     }
 
     /**
@@ -122,7 +125,10 @@ public class WifiConfiguration implements Parcelable {
 
         public static final String varName = "proto";
 
-        public static final String[] strings = { "WPA", "RSN" };
+        public static final String[] strings = { "WPA", "RSN" 
+/* ATH_WAPI+++ */
+            , "WAPI" };
+/* ATH_WAPI--- */
     }
 
     /**
@@ -158,7 +164,10 @@ public class WifiConfiguration implements Parcelable {
 
         public static final String varName = "pairwise";
 
-        public static final String[] strings = { "NONE", "TKIP", "CCMP" };
+        public static final String[] strings = { "NONE", "TKIP", "CCMP" 
+/* ATH_WAPI+++ */
+            , "SMS4" };
+/* ATH_WAPI--- */
     }
 
     /**
@@ -184,7 +193,10 @@ public class WifiConfiguration implements Parcelable {
 
         public static final String varName = "group";
 
-        public static final String[] strings = { "WEP40", "WEP104", "TKIP", "CCMP" };
+        public static final String[] strings = { "WEP40", "WEP104", "TKIP", "CCMP" 
+/* ATH_WAPI+++ */
+            , "SMS4" };
+/* ATH_WAPI--- */
     }
 
     /** Possible status of a network configuration. */
