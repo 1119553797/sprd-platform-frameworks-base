@@ -1220,8 +1220,9 @@ void AwesomePlayer::onVideoEvent() {
 
     finishSeekIfNecessary(timeUs);
 
-    TimeSource *ts = (mFlags & AUDIO_AT_EOS) ? &mSystemTimeSource : mTimeSource;
-
+    // TimeSource *ts = (mFlags & AUDIO_AT_EOS) ? &mSystemTimeSource : mTimeSource;
+    TimeSource *ts = &mSystemTimeSource;//@jgdu
+   
     if (mFlags & FIRST_FRAME) {
         mFlags &= ~FIRST_FRAME;
 
