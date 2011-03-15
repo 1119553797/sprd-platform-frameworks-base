@@ -267,6 +267,7 @@ VideoFrame *StagefrightMetadataRetriever::captureFrame() {
         return NULL;
     }
 
+    LOGI("extractVideoFrameWithSoftCodec\n");	//@jgdu
     VideoFrame *frame =
         extractVideoFrameWithCodecFlags(
                 &mClient, trackMeta, source, OMXCodec::kPreferSoftwareCodecs);
@@ -275,7 +276,8 @@ VideoFrame *StagefrightMetadataRetriever::captureFrame() {
         LOGV("Software decoder failed to extract thumbnail, "
              "trying hardware decoder.");
 
-        frame = extractVideoFrameWithCodecFlags(&mClient, trackMeta, source, 0);
+    //LOGI("extractVideoFrameWithHWCodec\n");	
+    //    frame = extractVideoFrameWithCodecFlags(&mClient, trackMeta, source, 0);
     }
 
     return frame;
