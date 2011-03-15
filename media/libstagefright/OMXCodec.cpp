@@ -161,7 +161,7 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.TI.WBAMR.decode" },
     { MEDIA_MIMETYPE_AUDIO_AMR_WB, "AMRWBDecoder" },
 //    { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.PV.amrdec" },
-    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.PV.aacdec" },
+    //{ MEDIA_MIMETYPE_AUDIO_AAC, "OMX.PV.aacdec" },//@jgdu
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.TI.AAC.decode" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "AACDecoder" },
     { MEDIA_MIMETYPE_AUDIO_G711_ALAW, "G711Decoder" },
@@ -354,6 +354,14 @@ static int CompareSoftwareCodecsFirst(
 uint32_t OMXCodec::getComponentQuirks(
         const char *componentName, bool isEncoder) {
     uint32_t quirks = 0;
+
+    if (!strcmp(componentName, "OMX.PV.h263enc")) {
+	quirks |= kAvoidMemcopyInputRecordingFrames;
+    }
+	
+    if (!strcmp(componentName, "OMX.PV.mpeg4enc")) {
+	quirks |= kAvoidMemcopyInputRecordingFrames;
+    }
 
     if (!strcmp(componentName, "OMX.PV.h263dec")) {
 	quirks |= kDefersOutputBufferAllocation;
@@ -2475,6 +2483,13 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
             CHECK(mOMXLivesLocally && offset == 0);
             OMX_BUFFERHEADERTYPE *header = (OMX_BUFFERHEADERTYPE *) info->mBuffer;
             header->pBuffer = (OMX_U8 *) srcBuffer->data() + srcBuffer->range_offset();
+	    //added by jgdu to get physical address
+	    int32_t  phy_addr;
+	    srcBuffer->meta_data()->findInt32(kKeyPlatformPrivate, &phy_addr);
+	    header->pPlatformPrivate = (OMX_PTR)phy_addr;
+            releaseBuffer = false;
+            info->mMediaBuffer = srcBuffer;			
+	   // CODEC_LOGI("drainInputBuffer:%x,%x\n",header->pBuffer,phy_addr);
         } else {
             if (mQuirks & kStoreMetaDataInInputVideoBuffers) {
                 releaseBuffer = false;

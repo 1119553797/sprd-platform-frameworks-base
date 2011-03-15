@@ -30,6 +30,9 @@
 #include <utils/String8.h>
 #include <cutils/properties.h>
 
+#include <sys/ioctl.h>
+#include <linux/android_pmem.h>
+
 namespace android {
 
 struct CameraSourceListener : public CameraListener {
@@ -320,6 +323,17 @@ status_t CameraSource::read(
                 (*buffer)->add_ref();
                 (*buffer)->meta_data()->setInt64(kKeyTime, frameTime);
 
+		//added by jgdu to get physical address 
+		int32_t phy_addr;
+		ssize_t offset = 0;
+    		size_t size = 0;
+    		sp<IMemoryHeap> heap = frame->getMemory(&offset, &size);
+		int fd = heap->getHeapID();	
+	        struct pmem_region region;
+	        ::ioctl(fd,PMEM_GET_PHYS,&region);
+		phy_addr = region.offset+offset;								
+    		//LOGI("CameraSource::read: ID = %d, base = %p, offset = %p, size = %d pointer %p,phy addr %p", heap->getHeapID(), heap->base(), offset, size, frame->pointer(),phy_addr);
+		(*buffer)->meta_data()->setInt32(kKeyPlatformPrivate, phy_addr);
                 return OK;
             }
         }
