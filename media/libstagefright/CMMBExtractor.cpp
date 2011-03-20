@@ -13,6 +13,15 @@
 #include <media/stagefright/MetaData.h>
 #include <media/stagefright/Utils.h>
 #include <stdio.h>
+#include <utils/threads.h>
+
+#include <stdint.h>
+#include <stddef.h>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
 #define 	SAFE_DELETE(p) if ( (p) != NULL) {delete (p); (p) =NULL;}
 #define	SAFE_FREE(p)	if ( (p) != NULL) {free(p); (p) =NULL;}
@@ -37,7 +46,6 @@ public:
 protected:
 	
     	virtual ~CMMBSource();
-	
 private:
 
 	enum AVC_FRAME_TYPE
@@ -46,6 +54,29 @@ private:
 		SPS_FRAME 	= 7,
 		PPS_FRAME,
 	};
+	
+	struct CMMBAVData
+	{
+		int			nId;
+		uint32_t		nTs;
+		uint16_t 		nUnitLen;
+		char*		buffer;
+		int			frame_type;
+	};
+	
+private:
+	
+	static void *	ThreadWrapper(void *);
+	
+    	status_t 		threadFunc();
+
+	int			read(CMMBAVData &buffer);
+	
+	void			release(CMMBAVData buffer);
+	
+	int 			addData(const uint8_t*const  data, size_t size, uint32_t ts);
+	
+private:
 
 	bool				m_bFirstGet;
 	bool 			m_bGetSPS;
@@ -54,7 +85,7 @@ private:
 	
     	Mutex 			m_Lock;
 		
-	Condition 		m_DataGet;
+	Condition 		m_BufferGet;
 	
     	sp<MetaData> 	m_Format;
 
@@ -68,8 +99,22 @@ private:
 
 	FILE*			m_fAVStream;
 
+	pthread_t 		m_Thread;
+
 	DPLAYER_STRM_DATA_T	m_StreamData;
 
+	Vector<CMMBAVData>		m_DataBuffers;
+	
+	uint16_t			m_nBufferNum;
+	
+	uint16_t			m_nDataStart;
+	
+	uint16_t			m_nDataEnd;
+	
+	int 				m_sockRev;
+
+	sockaddr_in		m_addrSock;
+		
 };
 
 #define VIDEO_SHARE_MEM 	"/video"
@@ -175,11 +220,13 @@ status_t CMMBExtractor::readMetaData()
 	}
 
 success:
+	
 	LOGI("CMMBExtractor::readMetaData SUCCESS");
 	m_bHaveMetadata = true;
     	return OK;
 
 fail:
+	
 	LOGE("CMMBExtractor::readMetaData FAIL");
 	return UNKNOWN_ERROR;
 }
@@ -210,10 +257,12 @@ CMMBSource::CMMBSource(
         const sp<MetaData> &format)
     : m_Format(format),
       m_bStarted(false),
-      	m_pGroup(NULL)
+      	m_pGroup(NULL),
+      	m_sockRev(-1)
 {
 	LOGI("CMMBSource::CMMBSource");
 	m_fAVStream		= NULL;
+	m_nBufferNum	= 100;
 }
 
 CMMBSource::~CMMBSource() 
@@ -230,7 +279,12 @@ status_t CMMBSource::start(MetaData *params)
 	m_bFirstGet	= true;	
 	status_t 		err 		= NO_MEMORY;
 	bool			bRet	= false;
-
+	pthread_attr_t	attr;
+	int 			recvsize		=1024*512;
+	int 			getsizetemp	=0;
+	int 			lentemp		=sizeof(int);
+	int 			flags;
+	
 	if (m_bStarted)
 		goto success;
 	
@@ -243,17 +297,95 @@ status_t CMMBSource::start(MetaData *params)
 		goto fail;
 	
 	if (!strncasecmp("video/", m_strMime, 6))
-   		m_fAVStream = fopen("/mnt/sdcard/video.dat","r");
-	else
-		m_fAVStream = fopen("/mnt/sdcard/audio.dat","r");
+	{
+		CMMBAVData	tempData;
+		for (int i =0;i < m_nBufferNum;i++)
+		{
+			tempData.nId	= i;
+			if (tempData.buffer = (char*)malloc(30000))
+				m_DataBuffers.add(tempData);
+			else
+				goto fail;
+		}	
+		m_sockRev	= socket(AF_INET, SOCK_DGRAM, 0);
+    		if (m_sockRev < 0) 
+    		{
+    			LOGE("CMMBSource::start  socket 's cread is fail! mime = %s",m_strMime);
+        		goto fail;
+    		}
 
-	if (m_fAVStream == NULL)
+    		bzero(&m_addrSock, sizeof(m_addrSock));
+    		m_addrSock.sin_family			= AF_INET;
+    		m_addrSock.sin_port 			= htons(6970);
+    		m_addrSock.sin_addr.s_addr 	=inet_addr("127.0.0.1");
+		if (bind(m_sockRev,(sockaddr*)&m_addrSock,sizeof(m_addrSock)) < 0)
+		{
+			LOGE("CMMBSource::start  video's socket is fail!");
+			goto fail;
+		}
+	}
+	else
+	{
+		CMMBAVData	tempData;
+		for (int i =0;i < m_nBufferNum;i++)
+		{
+			tempData.nId	= i;
+			if (tempData.buffer = (char*)malloc(500))
+				m_DataBuffers.add(tempData);
+			else
+				goto fail;
+		}
+		m_sockRev	= socket(AF_INET, SOCK_DGRAM, 0);
+    		if (m_sockRev < 0) 
+    		{
+    			LOGE("CMMBSource::start  socket 's cread is fail! mime = %s",m_strMime);
+        		goto fail;
+    		}
+
+    		bzero(&m_addrSock, sizeof(m_addrSock));
+    		m_addrSock.sin_family			= AF_INET;
+    		m_addrSock.sin_port 			= htons(6972);
+    		m_addrSock.sin_addr.s_addr 	= inet_addr("127.0.0.1");
+		if (bind(m_sockRev,(sockaddr*)&m_addrSock,sizeof(m_addrSock)) < 0)
+		{
+			LOGE("CMMBSource::start  audio's socket is fail!");
+			goto fail;
+		}
+	}
+
+	 if(setsockopt(m_sockRev,SOL_SOCKET ,SO_RCVBUF,(char*)&recvsize,sizeof(int) )==-1)
+	 {
+	 	 LOGE((0, "CMMBSource::start setopt  socket failed,mime = %s",m_strMime));
+		 goto fail;
+	 }
+
+	if(getsockopt(m_sockRev,SOL_SOCKET ,SO_RCVBUF,(void *)&getsizetemp,&lentemp )==-1)
+	{
+		LOGE((0, "CMMBSource::start getopt  socket failed,mime = %s",m_strMime));
+		goto fail;
+	}
+	  
+	if (((flags = fcntl(m_sockRev, 3, 0)) < 0) || (fcntl(m_sockRev, 4, flags | 4) < 0) )
+	{
+                LOGE((0, "CMMBSource::start set   socket non-blocking failed,mime = %s",m_strMime));
+                goto fail;
+	}         
+	
+	m_nDataEnd		= 0;
+	m_nDataStart		= m_nBufferNum - 1;
+	
+    	pthread_attr_init(&attr);
+    	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+    	pthread_create(&m_Thread, &attr, ThreadWrapper, this);
+    	pthread_attr_destroy(&attr);
+		
+	/*if (m_fAVStream == NULL)
 	{
         	LOGE("Cannot open file");
 		goto fail;
 	}
 
-	MultimediaIL_Reset(0);
+	MultimediaIL_Reset(0);*/
 		
 success:
 
@@ -272,29 +404,81 @@ status_t CMMBSource::stop()
 	Mutex::Autolock autoLock(m_Lock);
 	
 	status_t err;
-	
+	void *dummy;
+
     	if (!m_bStarted)
 		goto success;
+		
+	m_bStarted = false;
 	
-	SAFE_DELETE(m_pGroup);
+	pthread_join(m_Thread, &dummy);
 
-	if (m_fAVStream)
+	SAFE_DELETE(m_pGroup);
+	
+	//clear av data
+	for (int i = 0; i < m_DataBuffers.size(); i++)
+	{
+		CMMBAVData *tempData = &m_DataBuffers.editItemAt(i);
+		if (tempData != NULL &&  tempData->buffer != NULL)
+			SAFE_FREE(tempData->buffer);
+	}
+	m_DataBuffers.clear();
+	
+	if (m_sockRev >= 0) 
+	{
+		close(m_sockRev);
+		m_sockRev = -1;
+	}
+	/*if (m_fAVStream)
 	{
 		fclose(m_fAVStream);
 		m_fAVStream	= NULL;
-	}
+	}*/
 	
 	//relese the share mem
 	//........
 	
 success:
 	
-	m_bStarted = false;
     	return OK;
 
 fail:
 
 	return err;
+}
+
+int CMMBSource::addData(const uint8_t*const  data, size_t size, uint32_t ts)
+{	
+	Mutex::Autolock lock(m_Lock);
+	
+	if (!m_bStarted)
+		return 0;
+	
+	if( m_nDataEnd  == m_nDataStart)
+	{
+		LOGE("****CMMBSource::GetFreeBuffer()! cannot get a free buffer! type = %s****",m_strMime);
+		return 0;
+	}
+	
+	/*TV_LOGI("====================================== SIZE = %d",size);
+	if (m_Params.pType == MEDIA_MIMETYPE_VIDEO_AVC)
+	{
+		for (int i = 0;i < 5;i++)
+			TV_LOGI("%x",*(data+i));
+	}
+	TV_LOGI("====================================== SIZE = %d",size);*/
+	
+	CMMBAVData	*temp = &m_DataBuffers.editItemAt(m_nDataEnd);
+	int	type=(*(char*)data) & 0x1F;
+	memcpy(temp->buffer,data,size);
+	temp->nUnitLen 	= size;
+	temp->nTs		= ts;
+	temp->frame_type	= type;
+	
+	m_nDataEnd			= (m_nDataEnd + 1) % m_nBufferNum;
+	m_BufferGet.signal();
+	
+	return size;
 }
 
 sp<MetaData> CMMBSource::getFormat() 
@@ -313,6 +497,37 @@ static uint32_t	VAL32(uint32_t   x)
 static int64_t	To64(uint32_t   x,uint32_t y)
 {
 	return   (int64_t)(y<<32 | x); 
+}
+
+// static
+void *CMMBSource::ThreadWrapper(void *me) 
+{
+    	return (void *) static_cast<CMMBSource *>(me)->threadFunc();
+}
+
+status_t CMMBSource::threadFunc()
+{
+	status_t 	err = OK;
+	uint8_t*  	cTempMem = (uint8_t*)malloc(30000);
+	int		nLen;
+	uint32_t	nSize;
+	int64_t	nPts;
+	LOGI("CMMBSource::threadFunc() start");
+    	while (m_bStarted) 
+	{
+		if (m_sockRev >= 0) 
+			nLen = recv(m_sockRev,cTempMem,30000,MSG_DONTWAIT);
+
+		if (m_bStarted && nLen > 0)
+		{
+			nPts		= VAL32(*(uint32_t*)(char*)(cTempMem + 4));
+			nSize 	= VAL32(*(uint32_t*)(char*)(cTempMem + 12));
+			LOGI("CMMBSource::threadFunc():nPts = %d, nSize = %d",nPts,nSize);
+			addData(cTempMem + 16 ,nSize,nPts);
+		}
+    	}
+	LOGI("CMMBSource::threadFunc() end");	
+   	return err;
 }
 
 status_t CMMBSource::read(
@@ -334,6 +549,7 @@ status_t CMMBSource::read(
 	int 		type;
 
 	MediaBuffer*		pMediaBuffer;
+	CMMBAVData 		tempData;
 
 	if(!m_bStarted)
 		goto fail;
@@ -357,20 +573,27 @@ status_t CMMBSource::read(
 		goto success;
 	}
 
-	if (!strncasecmp("video/", m_strMime, 6))
+	/*if (!strncasecmp("video/", m_strMime, 6))
 		err = MultimediaIL_GetFrame(NULL,DPLY_STRM_VID_FRAME,&m_StreamData);
 	else
-		err = MultimediaIL_GetFrame(NULL,DPLY_STRM_AUD_FRAME,&m_StreamData);
+		err = MultimediaIL_GetFrame(NULL,DPLY_STRM_AUD_FRAME,&m_StreamData);*/
 
+	err = read(tempData);
 	if (err != OK)
 		goto fail;
-		
-	nPts 	= To64(m_StreamData.data_pos.pos_low32, 
+
+	memcpy(pMediaBuffer->data(),tempData.buffer,tempData.nUnitLen);
+	release(tempData);
+	
+	nPts		= tempData.nTs;
+	nSize	= tempData.nUnitLen;	
+	type		= tempData.frame_type;
+	
+	/*nPts 	= To64(m_StreamData.data_pos.pos_low32, 
 		m_StreamData.data_pos.pos_up32);
 	nSize	= m_StreamData.data_len;
 	type		= m_StreamData.data_type;
-	
-	/*fread(cHeader,1,16,m_fAVStream);
+	fread(cHeader,1,16,m_fAVStream);
 	nPts		= VAL32(*(uint32_t*)(char*)(cHeader + 4));
 	nSize 	= VAL32(*(uint32_t*)(char*)(cHeader + 12));
 	
@@ -402,6 +625,48 @@ fail:
 	
 	LOGE("***CMMBSource::read FAIL***");
 	return err;
+}
+
+int CMMBSource::read(CMMBAVData &buffer)
+{
+	Mutex::Autolock lock(m_Lock);
+	
+	if (!m_bStarted)
+	{
+		LOGI("CMMBSource::read m_bStarted == false");
+		return -1;
+	}
+			
+	int	nNext;
+	
+	while (m_bStarted)
+	{
+		nNext = (m_nDataStart + 1) % m_nBufferNum;
+		
+		if (nNext == m_nDataEnd)
+			m_BufferGet.wait(m_Lock);
+		
+		if (!m_bStarted)
+		{
+			LOGI("CMMBSource::read m_bWorking == false");
+			return -1;
+		}
+
+		nNext 	= (m_nDataStart + 1) % m_nBufferNum;
+		buffer 	= m_DataBuffers.editItemAt(nNext);
+		
+		return OK;
+	}
+	
+	LOGI("CMMBSource::read m_bWorking == false");
+	return -1;
+
+}
+
+void	CMMBSource::release(CMMBAVData buffer)
+{
+	Mutex::Autolock lock(m_Lock);
+	m_nDataStart = (m_nDataStart + 1) % m_nBufferNum;
 }
 
 }  // namespace android

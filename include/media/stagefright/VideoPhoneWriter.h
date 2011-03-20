@@ -15,8 +15,8 @@ struct MetaData;
 
 struct VideoPhoneWriter : public MediaWriter 
 {
-    	VideoPhoneWriter(const char *filename);
-		
+
+    	VideoPhoneWriter(int	handle);
 
     	status_t 			initCheck() const;
 
@@ -27,7 +27,9 @@ struct VideoPhoneWriter : public MediaWriter
     	virtual status_t 	start(MetaData *params = NULL);
 		
     	virtual status_t 	stop();
-		
+
+	virtual status_t 	pause();
+
 protected:
 	
     	virtual ~VideoPhoneWriter();
@@ -40,21 +42,23 @@ private:
 		
 private:
 	
-    FILE*				m_File;
+    	FILE*			m_File;
+
+	int				m_nHandle;
 	
-    status_t 			m_nInitCheck;
+    	status_t 			m_nInitCheck;
 	
-    sp<MediaSource> 	m_MediaSource;
+    	sp<MediaSource> 	m_MediaSource;
 	
-    bool 				m_bStarted;
+    	bool 				m_bStarted;
 	
-    volatile bool 		m_bReachedEOS;
+    	volatile bool 		m_bReachedEOS;
 	
-    pthread_t 			m_Thread;
+    	pthread_t 			m_Thread;
 	
-    int64_t 			m_nEstimatedSizeBytes;
+    	int64_t 			m_nEstimatedSizeBytes;
 	
-    int64_t 			m_nEstimatedDurationUs;
+    	int64_t 			m_nEstimatedDurationUs;
 
 };
 

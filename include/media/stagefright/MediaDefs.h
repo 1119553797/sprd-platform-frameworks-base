@@ -45,7 +45,7 @@ extern const char *MEDIA_MIMETYPE_CONTAINER_MATROSKA;
 extern const char *MEDIA_MIMETYPE_CONTAINER_MPEG2TS;
 
 extern const char *MEDIA_MIMETYPE_CONTAINER_CMMB;
-
+extern const char *MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE;
 
 }  // namespace android
 

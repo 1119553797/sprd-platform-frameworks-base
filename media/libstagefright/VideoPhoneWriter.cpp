@@ -11,9 +11,9 @@
 
 namespace android {
 
-VideoPhoneWriter::VideoPhoneWriter(const char *filename)
-    : m_File(fopen(filename, "wb")),
-      m_nInitCheck(m_File != NULL ? OK : NO_INIT),
+VideoPhoneWriter::VideoPhoneWriter(int handle)
+    : m_nHandle(handle),
+      m_nInitCheck(m_nHandle > 0 ? OK : NO_INIT),
       m_bStarted(false)
 {
 }
@@ -134,6 +134,11 @@ over:
    	return err;
 }
 
+status_t VideoPhoneWriter::pause()
+{
+	return stop();
+}
+	
 // static
 void *VideoPhoneWriter::ThreadWrapper(void *me) 
 {
@@ -156,9 +161,9 @@ status_t VideoPhoneWriter::threadFunc()
 
 		ssize_t nLen = (ssize_t)buffer->range_length();
 		
-        	ssize_t n = fwrite(
+        	ssize_t n = write(m_nHandle,
                 	(const uint8_t *)buffer->data() + buffer->range_offset(),
-                	1,nLen,m_File);
+                	nLen);
 
 		buffer->release();
             	buffer = NULL;
@@ -167,9 +172,9 @@ status_t VideoPhoneWriter::threadFunc()
             		break;
     	}
 
-    	fflush(m_File);
-    	fclose(m_File);
-    	m_File 			= NULL;
+    	//flush(m_nHandle);
+    	/*fclose(m_File);
+    	m_File 			= NULL;*/
     	m_bReachedEOS 	= true;
 	
     	if (err == ERROR_END_OF_STREAM)

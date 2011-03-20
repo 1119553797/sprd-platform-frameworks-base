@@ -1433,7 +1433,20 @@ status_t AwesomePlayer::finishSetDataSource_l() {
         mConnectingDataSource.clear();
 
         dataSource = mCachedSource;
-    } else if (!strncasecmp(mUri.string(), "httplive://", 11)) {
+    } 
+	else if (!strncasecmp(mUri.string(), "cmmb://", 7)) 
+	{
+		sp<MediaExtractor> extractor =
+            		MediaExtractor::Create(dataSource, MEDIA_MIMETYPE_CONTAINER_CMMB);
+		 return setDataSource_l(extractor);
+	}
+	else if (!strncasecmp(mUri.string(), "videophone://", 13)) 
+	{
+		sp<MediaExtractor> extractor =
+            		MediaExtractor::Create(dataSource, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE);
+		 return setDataSource_l(extractor);
+	}
+    else if (!strncasecmp(mUri.string(), "httplive://", 11)) {
         String8 uri("http://");
         uri.append(mUri.string() + 11);
 

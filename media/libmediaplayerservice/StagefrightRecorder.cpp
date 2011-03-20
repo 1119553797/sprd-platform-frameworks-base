@@ -26,6 +26,8 @@
 #include <media/stagefright/CameraSource.h>
 #include <media/stagefright/MPEG2TSWriter.h>
 #include <media/stagefright/MPEG4Writer.h>
+#include <media/stagefright/VideoPhoneWriter.h>
+
 #include <media/stagefright/MediaDebug.h>
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MetaData.h>
@@ -637,7 +639,10 @@ status_t StagefrightRecorder::start() {
         case OUTPUT_FORMAT_THREE_GPP:
         case OUTPUT_FORMAT_MPEG_4:
             return startMPEG4Recording();
-
+			
+	case OUTPUT_FORMAT_VIDEOPHONE:
+		return startVideoPhoneRecording();
+	
         case OUTPUT_FORMAT_AMR_NB:
         case OUTPUT_FORMAT_AMR_WB:
             return startAMRRecording();
@@ -1077,6 +1082,28 @@ status_t StagefrightRecorder::setupAudioEncoder(const sp<MediaWriter>& writer) {
 
     writer->addSource(audioEncoder);
     return OK;
+}
+
+status_t StagefrightRecorder::startVideoPhoneRecording()
+{
+    	status_t err = OK;
+    	sp<MediaWriter> writer 	= new VideoPhoneWriter(dup(mOutputFd));
+		
+	if (mVideoSource == VIDEO_SOURCE_DEFAULT
+            || mVideoSource == VIDEO_SOURCE_CAMERA) 
+	{
+        	sp<MediaSource> 	encoder;
+        	err = setupVideoEncoder(&encoder);
+        	if (err != OK) 
+			return err;
+        	writer->addSource(encoder);
+	}
+
+	sp<MetaData> meta 		= new MetaData;
+    	meta->setInt32(kKeyFileType, mOutputFormat);
+    	writer->setListener(mListener);
+    	mWriter = writer;
+	return mWriter->start(meta.get());
 }
 
 status_t StagefrightRecorder::startMPEG4Recording() {

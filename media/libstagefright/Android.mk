@@ -68,7 +68,7 @@ LOCAL_SHARED_LIBRARIES := \
         libsurfaceflinger_client \
         libcamera_client  \
 	libosal		\
-	libcmmb		  
+	libcmmb		
 
 LOCAL_STATIC_LIBRARIES := \
         libstagefright_aacdec \
