@@ -210,9 +210,11 @@ void *TimedEventQueue::ThreadWrapper(void *me) {
     vm->AttachCurrentThread(&env, NULL);
 #endif
 
-    setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_FOREGROUND);
-    set_sched_policy(androidGetTid(), SP_FOREGROUND);
-
+    //setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_FOREGROUND);
+    setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_AUDIO);
+    //set_sched_policy(androidGetTid(), SP_FOREGROUND);//@jgdu
+LOGI("ThreadWrapper setpriority ");
+	
     static_cast<TimedEventQueue *>(me)->threadEntry();
 
 #ifdef ANDROID_SIMULATOR

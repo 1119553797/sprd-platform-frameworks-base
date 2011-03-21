@@ -1220,8 +1220,7 @@ void AwesomePlayer::onVideoEvent() {
 
     finishSeekIfNecessary(timeUs);
 
-    // TimeSource *ts = (mFlags & AUDIO_AT_EOS) ? &mSystemTimeSource : mTimeSource;
-    TimeSource *ts = &mSystemTimeSource;//@jgdu
+    TimeSource *ts = (mFlags & AUDIO_AT_EOS) ? &mSystemTimeSource : mTimeSource;
    
     if (mFlags & FIRST_FRAME) {
         mFlags &= ~FIRST_FRAME;
@@ -1245,10 +1244,9 @@ void AwesomePlayer::onVideoEvent() {
         latenessUs = 0;
     }
 
-    if (latenessUs > 40000) {
+    if (latenessUs > 400000) {//@jgdu 400ms
         // We're more than 40ms late.
         LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
-
         mVideoBuffer->release();
         mVideoBuffer = NULL;
 
