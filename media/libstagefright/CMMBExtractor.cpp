@@ -3,7 +3,7 @@
 
 #include "include/CMMBExtractor.h"
 
-#include <multimedia_il.h>
+//#include <multimedia_il.h>
 
 #include <media/stagefright/DataSource.h>
  #include <media/stagefright/MediaBuffer.h>
@@ -101,7 +101,7 @@ private:
 
 	pthread_t 		m_Thread;
 
-	DPLAYER_STRM_DATA_T	m_StreamData;
+	//DPLAYER_STRM_DATA_T	m_StreamData;
 
 	Vector<CMMBAVData>		m_DataBuffers;
 	
@@ -131,14 +131,14 @@ CMMBExtractor::CMMBExtractor(const sp<DataSource> &source)
 	m_AVMeta[0] 	= 	new MetaData();
       	m_AVMeta[1]	=	new MetaData();
 
-	MultimediaIL_Init(NULL);
+	//MultimediaIL_Init(NULL);
 }
 
 CMMBExtractor::~CMMBExtractor() 
 {
 	//SAFE_DELETE(m_AVMeta[0]);
 	//SAFE_DELETE(m_AVMeta[1]);
-	MultimediaIL_Exit();
+	//MultimediaIL_Exit();
 	LOGI("CMMBExtractor::~CMMBExtractor");
 }
 
@@ -559,7 +559,7 @@ status_t CMMBSource::read(
 	if (err != OK)
 		goto fail;
 	
-	m_StreamData.data_ptr = (uint8*)pMediaBuffer->data();
+	//m_StreamData.data_ptr = (uint8*)pMediaBuffer->data();
 	
 	if (m_bFirstGet && !strncasecmp("audio/", m_strMime, 6))
 	{
