@@ -116,6 +116,16 @@ public interface CommandsInterface {
     static final String CB_FACILITY_BA_SIM       = "SC";
     static final String CB_FACILITY_BA_FD        = "FD";
 
+    static final int CB_REASON_AO    = 0;
+    static final int CB_REASON_OI    = 1;
+    static final int CB_REASON_OX    = 2;
+    static final int CB_REASON_AI    = 3;
+    static final int CB_REASON_IR    = 4;
+    static final int CB_REASON_AB    = 5;
+
+	static final int CB_ACTION_DISABLE		= 0;
+	static final int CB_ACTION_ENABLE		= 1;
+
 
     // Used for various supp services apis
     // See 27.007 +CCFC or +CLCK

@@ -100,6 +100,10 @@ public abstract class PhoneBase extends Handler implements Phone {
     protected static final int EVENT_SET_ENHANCED_VP                = 24;
     protected static final int EVENT_EMERGENCY_CALLBACK_MODE_ENTER  = 25;
     protected static final int EVENT_EXIT_EMERGENCY_CALLBACK_RESPONSE = 26;
+	
+    protected static final int EVENT_SET_CALL_BARRING_DONE       = 27;
+    protected static final int EVENT_GET_CALL_BARRING_DONE       = 28;
+    protected static final int EVENT_CHANGE_CALL_BARRING_PASSWORD_DONE       = 29;
 
     // Key used to read/write current CLIR setting
     public static final String CLIR_KEY = "clir_key";

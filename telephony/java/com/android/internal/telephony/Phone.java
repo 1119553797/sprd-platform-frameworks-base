@@ -983,6 +983,13 @@ public interface Phone {
                                  int timerSeconds,
                                  Message onComplete);
 
+	void queryFacilityLock (String facility, String password, int serviceClass, Message onComplete);
+	
+    void setFacilityLock (String facility, boolean lockState, String password,
+                        int serviceClass, Message onComplete);	
+
+	void changeBarringPassword(String facility, String oldPwd, String newPwd, Message onComplete);
+
     /**
      * getOutgoingCallerIdDisplay
      * gets outgoing caller id display. The return value of

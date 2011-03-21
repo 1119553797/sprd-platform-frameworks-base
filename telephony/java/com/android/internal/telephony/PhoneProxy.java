@@ -912,4 +912,19 @@ public class PhoneProxy extends Handler implements Phone {
     public void unsetOnEcbModeExitResponse(Handler h){
         mActivePhone.unsetOnEcbModeExitResponse(h);
     }
+	
+	public void queryFacilityLock (String facility, String password, int serviceClass, Message onComplete){
+		Log.d(LOG_TAG, "queryFacilityLock(), facility: " + facility);
+        mActivePhone.queryFacilityLock(facility, password, serviceClass, onComplete);
+	}
+	
+    public void setFacilityLock (String facility, boolean lockState, String password,
+                        int serviceClass, Message onComplete){
+		Log.d(LOG_TAG, "setFacilityLock(), facility: " + facility);
+		mActivePhone.setFacilityLock(facility, lockState, password, serviceClass, onComplete);
+	}
+	public void changeBarringPassword(String facility, String oldPwd, String newPwd, Message onComplete){
+		Log.d(LOG_TAG, "changeBarringPassword(), facility: " + facility);
+		mActivePhone.changeBarringPassword(facility, oldPwd, newPwd, onComplete);
+	}
 }

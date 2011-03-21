@@ -1604,6 +1604,9 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
         rr.mp.writeString(Integer.toString(serviceClass));
 
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                            + ", facility:" + facility + ", serviceClass:" + serviceClass);
+
         send(rr);
     }
 
@@ -1624,6 +1627,9 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         rr.mp.writeString(lockString);
         rr.mp.writeString(password);
         rr.mp.writeString(Integer.toString(serviceClass));
+		
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                            + ", facility:" + facility + ", lockState:" + lockState + ", serviceClass:" + serviceClass);
 
         send(rr);
 

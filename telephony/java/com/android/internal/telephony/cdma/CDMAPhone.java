@@ -1406,4 +1406,17 @@ public class CDMAPhone extends PhoneBase {
         return false;
     }
 
+	public void queryFacilityLock (String facility, String password, int serviceClass, Message onComplete){
+		Log.d(LOG_TAG, "queryFacilityLock: " + facility);
+	}
+	
+    public void setFacilityLock (String facility, boolean lockState, String password,
+                        int serviceClass, Message onComplete){
+        Log.d(LOG_TAG, "setFacilityLock: " + facility);
+	}
+
+	public void changeBarringPassword(String facility, String oldPwd, String newPwd, Message onComplete){
+        Log.d(LOG_TAG, "changeBarringPassword: " + facility);
+	}
+
 }

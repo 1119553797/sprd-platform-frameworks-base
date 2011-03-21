@@ -955,6 +955,23 @@ public class GSMPhone extends PhoneBase {
                     resp);
         }
     }
+	
+	public void queryFacilityLock (String facility, String password, int serviceClass, Message onComplete){
+		if (LOCAL_DEBUG) Log.d(LOG_TAG, "queryFacilityLock: " + facility);
+		mCM.queryFacilityLock(facility, password, serviceClass, obtainMessage(EVENT_GET_CALL_BARRING_DONE, onComplete));
+	}
+	
+    public void setFacilityLock (String facility, boolean lockState, String password,
+                        int serviceClass, Message onComplete){
+		if (LOCAL_DEBUG) Log.d(LOG_TAG, "setFacilityLock: " + facility);
+		mCM.setFacilityLock(facility, lockState, password, serviceClass, obtainMessage(EVENT_SET_CALL_BARRING_DONE, onComplete));
+    }
+
+	public void changeBarringPassword(String facility, String oldPwd, String newPwd, Message onComplete){
+		if (LOCAL_DEBUG) Log.d(LOG_TAG, "changeBarringPassword: " + facility);
+		mCM.changeBarringPassword(facility, oldPwd, newPwd, obtainMessage(EVENT_CHANGE_CALL_BARRING_PASSWORD_DONE, onComplete));
+	}
+
 
     public void getOutgoingCallerIdDisplay(Message onComplete) {
         mCM.getCLIR(onComplete);
@@ -1328,6 +1345,42 @@ public class GSMPhone extends PhoneBase {
                     onComplete.sendToTarget();
                 }
                 break;
+				
+			case EVENT_SET_CALL_BARRING_DONE:
+				ar = (AsyncResult)msg.obj;
+				if (ar.exception == null) {
+					//mSIMRecords.setVoiceCallForwardingFlag(1, msg.arg1 == 1);
+				}
+				onComplete = (Message) ar.userObj;
+				if (onComplete != null) {
+					AsyncResult.forMessage(onComplete, ar.result, ar.exception);
+					onComplete.sendToTarget();
+				}
+				break;
+				
+            case EVENT_GET_CALL_BARRING_DONE:
+                ar = (AsyncResult)msg.obj;
+                if (ar.exception == null) {
+                    //handleCfuQueryResult((CallForwardInfo[])ar.result);
+                }
+                onComplete = (Message) ar.userObj;
+                if (onComplete != null) {
+                    AsyncResult.forMessage(onComplete, ar.result, ar.exception);
+                    onComplete.sendToTarget();
+                }
+                break;
+				
+			case EVENT_CHANGE_CALL_BARRING_PASSWORD_DONE:
+				ar = (AsyncResult)msg.obj;
+				if (ar.exception == null) {
+					//mSIMRecords.setVoiceCallForwardingFlag(1, msg.arg1 == 1);
+				}
+				onComplete = (Message) ar.userObj;
+				if (onComplete != null) {
+					AsyncResult.forMessage(onComplete, ar.result, ar.exception);
+					onComplete.sendToTarget();
+				}
+				break;
 
             // handle the select network completion callbacks.
             case EVENT_SET_NETWORK_MANUAL_COMPLETE:
