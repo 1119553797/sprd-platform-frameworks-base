@@ -88,6 +88,8 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 "net.eth0.dns4",
                 "net.gprs.dns1",
                 "net.gprs.dns2",
+                "net.veth0.dns1",
+                "net.veth0.dns2",
                 "net.ppp0.dns1",
                 "net.ppp0.dns2"};
 
