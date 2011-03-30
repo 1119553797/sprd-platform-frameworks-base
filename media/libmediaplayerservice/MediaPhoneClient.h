@@ -20,19 +20,75 @@
 
 #include <media/IMediaPhone.h>
 #include <media/MediaPlayerInterface.h>
+#include <camera/ICamera.h>
 
 namespace android {
 
+class ICamera;
 class MediaPlayerBase;
 class MediaPlayerService;
 class MediaRecorderBase;
 class ISurface;
 class MediaPlayerService;
 
+#define MAX_URL_LEN 256
+
 class MediaPhoneClient : public BnMediaPhone
 {
+    class AudioOutput : public MediaPlayerBase::AudioSink
+    {
+    public:
+                                AudioOutput();
+        virtual                 ~AudioOutput();
+
+        virtual bool            ready() const { return mTrack != NULL; }
+        virtual bool            realtime() const { return true; }
+        virtual ssize_t         bufferSize() const;
+        virtual ssize_t         frameCount() const;
+        virtual ssize_t         channelCount() const;
+        virtual ssize_t         frameSize() const;
+        virtual uint32_t        latency() const;
+        virtual float           msecsPerFrame() const;
+        virtual status_t        getPosition(uint32_t *position);
+
+        virtual status_t        open(
+                uint32_t sampleRate, int channelCount,
+                int format, int bufferCount,
+                AudioCallback cb, void *cookie);
+
+        virtual void            start();
+        virtual ssize_t         write(const void* buffer, size_t size);
+        virtual void            stop();
+        virtual void            flush();
+        virtual void            pause();
+        virtual void            close();
+                void            setAudioStreamType(int streamType) { mStreamType = streamType; }
+                void            setVolume(float left, float right);
+        virtual status_t        dump(int fd, const Vector<String16>& args) const;
+
+        static bool             isOnEmulator();
+        static int              getMinBufferCount();
+    private:
+        static void             setMinBufferCount();
+        static void             CallbackWrapper(
+                int event, void *me, void *info);
+
+        AudioTrack*             mTrack;
+        AudioCallback           mCallback;
+        void *                  mCallbackCookie;
+        int                     mStreamType;
+        float                   mLeftVolume;
+        float                   mRightVolume;
+        float                   mMsecsPerFrame;
+        uint32_t                mLatency;
+
+        static bool             mIsOnEmulator;
+        static int              mMinBufferCount;  // 12 for emulator; otherwise 4
+
+    };
+
 public:
-    virtual     status_t    setComm(const char *urlIn, const char *urlout);
+    virtual     status_t    setComm(const char *urlIn, const char *urlOut);
     virtual	    status_t		setCamera(const sp<ICamera>& camera);
     virtual     status_t    setRemoteSurface(const sp<ISurface>& surface);
     virtual     status_t    setLocalSurface(const sp<ISurface>& surface);
@@ -55,11 +111,16 @@ private:
 
     pid_t			 mPid;
     Mutex			 mLock;
+    sp<ICamera>                  mCamera;
+    sp<ISurface>                 mPreviewSurface;
     MediaRecorderBase            *mRecorder;
-    MediaPlayerBase              *mPlayer;
+    sp<MediaPlayerBase>          mPlayer;
     sp<MediaPlayerService>       mMediaPlayerService;
+    sp<AudioOutput>              mAudioOutput;
 
     sp<IMediaPlayerClient>       mListener;
+    char                         mUrlIn[MAX_URL_LEN];
+    char                         mUrlOut[MAX_URL_LEN];
 };
 
 }; // namespace android

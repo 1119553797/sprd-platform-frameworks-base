@@ -26,6 +26,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.view.SurfaceHolder;
+import android.hardware.Camera;
 
 import com.android.internal.telephony.CallStateException;
 import com.android.internal.telephony.DataConnection;
@@ -1735,5 +1736,6 @@ public interface Phone {
 
 	public void setRemoteDisplay(SurfaceHolder sh);
 
+	public void setCamera(Camera c);
 }
 

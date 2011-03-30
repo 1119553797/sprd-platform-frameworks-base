@@ -15,8 +15,8 @@
  ** limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
-#define LOG_TAG "MediaPhone"
+#define LOG_NDEBUG 0
+#define LOG_TAG "MediaPhoneC"
 #include <utils/Log.h>
 #include <surfaceflinger/Surface.h>
 #include <media/mediaphone.h>
@@ -45,6 +45,7 @@ status_t MediaPhone::setComm(const char* urlIn, const char* urlOut)
         mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
+    //mCurrentState = MEDIA_PHONE_INITIALIZED;
     return ret;
 }
 
@@ -140,7 +141,7 @@ status_t MediaPhone::setParameters(const String8& params) {
 // must call with lock held
 status_t MediaPhone::prepareAsync_l()
 {
-    if ( (mMediaPhone != 0) && ( mCurrentState & MEDIA_PHONE_INITIALIZED ) ) {
+    if ( (mMediaPhone != 0) && ( mCurrentState & MEDIA_PHONE_IDLE ) ) {
         //mMediaPhone->setAudioStreamType(mStreamType);
         mCurrentState = MEDIA_PHONE_PREPARING;
         return mMediaPhone->prepareAsync();
@@ -164,7 +165,7 @@ status_t MediaPhone::start()
         return INVALID_OPERATION;
     }
     if (!(mCurrentState & MEDIA_PHONE_PREPARED)) {
-        LOGE("connect called in an invalid state: %d", mCurrentState);
+        LOGE("start called in an invalid state: %d", mCurrentState);
         return INVALID_OPERATION;
     }
 
@@ -186,7 +187,7 @@ status_t MediaPhone::stop()
         return INVALID_OPERATION;
     }
     if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
-        LOGE("disconnect called in an invalid state: %d", mCurrentState);
+        LOGE("stop called in an invalid state: %d", mCurrentState);
         return INVALID_OPERATION;
     }
 
@@ -254,6 +255,13 @@ status_t MediaPhone::setListener(const sp<MediaPhoneListener>& listener)
     LOGV("setListener");
     Mutex::Autolock _l(mLock);
     mListener = listener;
+    
+    status_t ret = mMediaPhone->setListener(this);
+    if (OK != ret) {
+        LOGV("setListener failed: %d", ret);
+        mCurrentState = MEDIA_PHONE_ERROR;
+        return ret;
+    }
 
     return NO_ERROR;
 }
@@ -288,6 +296,13 @@ status_t MediaPhone::setVolume(float leftVolume, float rightVolume)
 void MediaPhone::notify(int msg, int ext1, int ext2)
 {
     LOGV("message received msg=%d, ext1=%d, ext2=%d", msg, ext1, ext2);
+    
+    switch (msg) {
+    case MEDIA_PHONE_EVENT_PREPARED:
+        LOGV("prepared");
+        mCurrentState = MEDIA_PHONE_PREPARED;
+        break;
+    }
 
     sp<MediaPhoneListener> listener;
     mLock.lock();

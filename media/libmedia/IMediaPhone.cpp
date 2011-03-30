@@ -15,7 +15,7 @@
  ** limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "IMediaPhone"
 #include <utils/Log.h>
 #include <binder/Parcel.h>
@@ -72,7 +72,7 @@ public:
 
     status_t setRemoteSurface(const sp<ISurface>& surface)
     {
-        LOGV("setPreviewSurface(%p)", surface.get());
+        LOGV("setRemoteSurface(%p)", surface.get());
         Parcel data, reply;
         data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
         data.writeStrongBinder(surface->asBinder());
@@ -82,7 +82,7 @@ public:
 
     status_t setLocalSurface(const sp<ISurface>& surface)
     {
-        LOGV("setPreviewSurface(%p)", surface.get());
+        LOGV("setLocalSurface(%p)", surface.get());
         Parcel data, reply;
         data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
         data.writeStrongBinder(surface->asBinder());

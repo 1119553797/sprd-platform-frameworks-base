@@ -57,8 +57,10 @@ enum media_phone_states {
 
 // The "msg" code passed to the listener in notify.
 enum media_phone_event_type {
-    MEDIA_PHONE_EVENT_ERROR                    = 1,
-    MEDIA_PHONE_EVENT_INFO                     = 2
+    MEDIA_PHONE_EVENT_PREPARED                 = 1,
+    MEDIA_PHONE_EVENT_SET_VIDEO_SIZE           = 2,
+    MEDIA_PHONE_EVENT_ERROR                    = 100,
+    MEDIA_PHONE_EVENT_INFO                     = 200
 };
 
 enum media_phone_error_type {
