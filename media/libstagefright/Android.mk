@@ -91,6 +91,8 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_rtsp \
         libstagefright_id3 \
         libstagefright_g711dec \
+	libstagefright_aacdec_sprd \
+	libaacdec_sprd
 
 LOCAL_SHARED_LIBRARIES += \
         libstagefright_amrnb_common \
