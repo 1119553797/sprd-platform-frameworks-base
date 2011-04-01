@@ -74,6 +74,7 @@ import com.android.internal.telephony.IccVmNotSupportedException;
 import com.android.internal.telephony.gsm.GsmCall;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.hardware.Camera;
 
 
 import java.io.IOException;
@@ -531,6 +532,10 @@ public class TDPhone extends GSMPhone {
 
 	public void setRemoteDisplay(SurfaceHolder sh)  {
 		mVideoCT.setRemoteDisplay(sh);
+	}
+
+	public void setCamera(Camera c) {
+		mVideoCT.setCamera(c);
 	}
 
 	private void backToVoiceCall(){

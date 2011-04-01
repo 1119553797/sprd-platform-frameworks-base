@@ -34,6 +34,7 @@ import android.telephony.ServiceState;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
+import android.hardware.Camera;
 
 import com.android.internal.R;
 import com.android.internal.telephony.gsm.GsmDataConnection;
@@ -1118,5 +1119,8 @@ public abstract class PhoneBase extends Handler implements Phone {
 	}
 
 	public void setRemoteDisplay(SurfaceHolder sh) {
+	}
+
+	public void setCamera(Camera c) {
 	}
 }

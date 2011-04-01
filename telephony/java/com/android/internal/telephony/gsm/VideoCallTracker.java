@@ -44,9 +44,10 @@ import com.android.internal.telephony.gsm.TDPhone;
 import com.android.internal.telephony.gsm.VideoCall;
 import com.android.internal.telephony.gsm.VideoConnection;
 
+import android.media.AudioManager;
 import android.media.MediaPhone;
 import android.view.SurfaceHolder;
-
+import android.hardware.Camera;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public final class VideoCallTracker extends CallTracker
 
     static final int MAX_CONNECTIONS = 1;   // only 7 connections allowed in GSM
     static final int MAX_CONNECTIONS_PER_CALL = 1; // only 5 connections allowed per call
+    private static final String DEFAULT_COMM = "file:///mnt/sdcard/in.m4v";
 
     //***** Instance Variables
     VideoConnection connections[] = new VideoConnection[MAX_CONNECTIONS];
@@ -112,7 +114,8 @@ public final class VideoCallTracker extends CallTracker
         cm.registerForOn(this, EVENT_RADIO_AVAILABLE, null);
         cm.registerForNotAvailable(this, EVENT_RADIO_NOT_AVAILABLE, null);
 
-		mp = MediaPhone.create(cm,null,null);
+		mp = MediaPhone.create(cm, DEFAULT_COMM);
+		mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mp.setOnVideoSizeChangedListener(this);
 		mp.setOnErrorListener(this);
     }
@@ -371,6 +374,7 @@ public final class VideoCallTracker extends CallTracker
 
     protected void
     handlePollCalls(AsyncResult ar) {
+    if (false) {
         List polledCalls;
 
         if (ar.exception == null) {
@@ -572,7 +576,7 @@ public final class VideoCallTracker extends CallTracker
         }
 
         //dumpState();
-			
+		}
     }
 
     private void
@@ -715,7 +719,7 @@ public final class VideoCallTracker extends CallTracker
                             "handle EVENT_POLL_CALL_RESULT: set needsPoll=F");
                     needsPoll = false;
                     lastRelevantPoll = null;
-                    handlePollCalls((AsyncResult)msg.obj);
+                    //handlePollCalls((AsyncResult)msg.obj);
                 }
             break;
 
@@ -801,11 +805,20 @@ public final class VideoCallTracker extends CallTracker
 	public void setLocalDisplay(SurfaceHolder sh){
 		Log.i(LOG_TAG,"setLocalDisplay: ");// + sh.toString());
 		mLocalSurface = sh;
+		if (sh != null) {
+			mp.setLocalDisplay(sh.getSurface());
+		}
 	}
 
 	public void setRemoteDisplay(SurfaceHolder sh){
 		Log.i(LOG_TAG,"setRemoteDisplay: ");// + sh.toString());
 		mRemoteSurface = sh;
+		mp.setRemoteDisplay(sh);
+	}
+
+	public void setCamera(Camera c) {
+		Log.i(LOG_TAG,"setCamera: ");// + sh.toString());
+		mp.setCamera(c);
 	}
 
 	public void onConnectCompletion(MediaPhone mp){
@@ -845,6 +858,7 @@ public final class VideoCallTracker extends CallTracker
 
 	private void internaleHangup(){
 		try{
+			mp.stop();
 			mp.hangup(obtainCompleteMessage());
 		}catch (IllegalStateException ex) {
 	        // Ignore "connection not found"

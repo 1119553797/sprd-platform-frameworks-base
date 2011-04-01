@@ -25,6 +25,7 @@
 #include "include/OggExtractor.h"
 #include "include/MPEG2TSExtractor.h"
 #include "include/CMMBExtractor.h"
+#include "include/VideoPhoneExtractor.h"
 #include "matroska/MatroskaExtractor.h"
 
 #include <media/stagefright/foundation/AMessage.h>
@@ -81,6 +82,8 @@ sp<MediaExtractor> MediaExtractor::Create(
         return new MPEG2TSExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_CMMB)) {
         return new CMMBExtractor(source);
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE)) {
+        return new VideoPhoneExtractor(source);
     }
 
     return NULL;

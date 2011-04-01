@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "MediaPhoneJNI"
 #include <utils/Log.h>
 
@@ -98,7 +98,7 @@ JNIMediaPhoneListener::~JNIMediaPhoneListener()
 
 void JNIMediaPhoneListener::notify(int msg, int ext1, int ext2)
 {
-    LOGV("JNIMediaPhoneListener::notify");
+    LOGV("JNIMediaPhoneListener::notify %d %d %d", msg, ext1, ext2);
 
     JNIEnv *env = AndroidRuntime::getJNIEnv();
     env->CallStaticVoidMethod(mClass, fields.post_event, mObject, msg, ext1, ext2, 0);
@@ -180,7 +180,7 @@ static void setRemoteSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz
     jobject surface = env->GetObjectField(thiz, fields.remote_surface);
     if (surface != NULL) {
         const sp<Surface> native_surface = get_surface(env, surface);
-        LOGV("prepare: surface=%p (id=%d)",
+        LOGV("setRemoteSurface: surface=%p (id=%d)",
              native_surface.get(), native_surface->ID());
         mp->setRemoteSurface(native_surface);
     }
@@ -266,7 +266,7 @@ android_media_MediaPhone_prepareAsync(JNIEnv *env, jobject thiz)
     jobject surface = env->GetObjectField(thiz, fields.remote_surface);
     if (surface != NULL) {
         const sp<Surface> native_surface = get_surface(env, surface);
-        LOGV("prepareAsync: surface=%p (id=%d)",
+        LOGV("setRemote: surface=%p (id=%d)",
              native_surface.get(), native_surface->getIdentity());
         mp->setRemoteSurface(native_surface);
     }
@@ -282,7 +282,7 @@ android_media_MediaPhone_prepareAsync(JNIEnv *env, jobject thiz)
             return;
         }
 
-        LOGI("prepare: surface=%p (identity=%d)", native_surface.get(), native_surface->getIdentity());
+        LOGI("setLocal: surface=%p (identity=%d)", native_surface.get(), native_surface->getIdentity());
         if (process_media_phone_call(env, thiz, mp->setLocalSurface(native_surface), "java/lang/RuntimeException", "setPreviewSurface failed.")) {
             return;
         }
@@ -469,7 +469,7 @@ android_media_MediaPhone_native_finalize(JNIEnv *env, jobject thiz)
 static JNINativeMethod gMethods[] = {
     {"setCamera",            "(Landroid/hardware/Camera;)V",    (void *)android_media_MediaPhone_setCamera},
     {"_setRemoteSurface",    "()V",                             (void *)android_media_MediaPhone_setRemoteSurface},
-    {"setParameters",         "(Ljava/lang/String;)V",           (void *)android_media_MediaPhone_setParameters},
+    {"setParameters",        "(Ljava/lang/String;)V",           (void *)android_media_MediaPhone_setParameters},
     {"prepareAsync",         "()V",                              (void *)android_media_MediaPhone_prepareAsync},
     {"setComm",              "(Ljava/lang/String;Ljava/lang/String;)V",           (void *)android_media_MediaPhone_setComm},
     {"_start",               "()V",                             (void *)android_media_MediaPhone_start},

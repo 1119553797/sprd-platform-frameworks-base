@@ -1,4 +1,5 @@
-#define LOG_TAG "VideoPhone"
+#define LOG_NDEBUG 0
+#define LOG_TAG "VideoPhoneExtractor"
 #include <utils/Log.h>
 
 #include "include/VideoPhoneExtractor.h"
@@ -17,9 +18,13 @@
 #include <unistd.h> 
 #include <math.h>
 
-#define 	SAFE_DELETE(p) if ( (p) != NULL) {delete (p); (p) =NULL;}
+#include <errno.h>
+#include <string.h>
+
+#define SAFE_DELETE(p) if ( (p) != NULL) {delete (p); (p) =NULL;}
 #define	SAFE_FREE(p)	if ( (p) != NULL) {free(p); (p) =NULL;}
-#define	MAX_BUFFER_SIZE	100000
+#define	MAX_BUFFER_SIZE	(128*1024)
+//#define DEBUG_FILE     "/data/vpin"
 
 namespace android {
 
@@ -27,7 +32,8 @@ class VideoPhoneSource : public MediaSource
 {
 public:
 	
-    	VideoPhoneSource(const sp<MetaData> &format);
+    	VideoPhoneSource(const sp<MetaData> &format,
+    	                const sp<DataSource> &dataSource);
 
     	virtual status_t start(MetaData *params = NULL);
 	
@@ -50,7 +56,7 @@ private:
 
 	int			writeRingBuffer(char* data,int nLen);
 
-	int			readRingBuffer(char* data);
+	int			readRingBuffer(char* data, size_t nSize);
 		
 private:
 
@@ -92,9 +98,9 @@ private:
 
 
 VideoPhoneExtractor::VideoPhoneExtractor(const sp<DataSource> &source)
-    : m_bHaveMetadata(false),
-      	mFileMetaData(new MetaData)
-  
+    : mDataSource(source),
+      m_bHaveMetadata(false),
+      mFileMetaData(new MetaData)
 {    	
 	LOGI("VideoPhoneExtractor::VideoPhoneExtractor");
 	
@@ -109,11 +115,11 @@ VideoPhoneExtractor::~VideoPhoneExtractor()
 sp<MetaData> VideoPhoneExtractor::getMetaData() 
 {
 	LOGI("VideoPhoneExtractor::getMetaData");
-    	status_t err;
-    	if ((err = readMetaData()) != OK)
-        	return NULL;
+	status_t err;
+	if ((err = readMetaData()) != OK)
+		return NULL;
 
-    	return mFileMetaData;
+	return mFileMetaData;
 }
 
 size_t VideoPhoneExtractor::countTracks() 
@@ -129,7 +135,10 @@ sp<MetaData> VideoPhoneExtractor::getTrackMetaData(
 	if (index > 1)
 		goto fail;
 	
-    	return m_AVMeta;
+	status_t err;
+	if ((err = readMetaData()) != OK)
+		return NULL;
+	return m_AVMeta;
 
 fail:
 	
@@ -144,16 +153,16 @@ status_t VideoPhoneExtractor::readMetaData()
     	if (m_bHaveMetadata)
         	goto success;
 
-	mFileMetaData->setCString(kKeyMIMEType, "video/mpeg4");
+	mFileMetaData->setCString(kKeyMIMEType, "video/3gpp");
 		
-	m_AVMeta->setCString(kKeyMIMEType, "video/mpeg4");
+	m_AVMeta->setCString(kKeyMIMEType, "video/3gpp");
 	m_AVMeta->setInt32(kKeyWidth, 176);
 	m_AVMeta->setInt32(kKeyHeight, 144);
 
 
 success:
 	
-	LOGI("CMMBExtractor::readMetaData SUCCESS");
+	LOGI("VideoPhoneExtractor::readMetaData SUCCESS");
 	m_bHaveMetadata = true;
     	return OK;
 
@@ -172,7 +181,7 @@ sp<MediaSource> VideoPhoneExtractor::getTrack(size_t index)
 	if (index > 1)
 		goto fail;
 
-    	return new VideoPhoneSource(m_AVMeta);
+    	return new VideoPhoneSource(m_AVMeta, mDataSource);
 
 fail:
 	
@@ -181,12 +190,16 @@ fail:
 }
 
 /////////////////////////////////////////////////////////////////////
+#undef LOG_TAG
+#define LOG_TAG "VideoPhoneSource"
 
 VideoPhoneSource::VideoPhoneSource(
-        const sp<MetaData> &format)
+        const sp<MetaData> &format,
+        const sp<DataSource> &dataSource)
     : m_Format(format),
+    	m_DataSource(dataSource),
       m_bStarted(false),
-      	m_pGroup(NULL)
+      m_pGroup(NULL)
 {
 	LOGI("VideoPhoneSource::VideoPhoneSource");
 	m_fAVStream		= NULL;
@@ -196,14 +209,15 @@ VideoPhoneSource::VideoPhoneSource(
 VideoPhoneSource::~VideoPhoneSource() 
 {	
 	LOGI("VideoPhoneSource::~VideoPhoneSource");
-    	if (m_bStarted)
-        	stop();
+	if (m_bStarted)
+		stop();
 }
 
 status_t VideoPhoneSource::start(MetaData *params) 
 {
-    	Mutex::Autolock autoLock(m_Lock);
+	Mutex::Autolock autoLock(m_Lock);
 		
+	LOGI("VideoPhoneSource::start");
 	m_bFirstGet	= true;	
 	status_t 		err 		= NO_MEMORY;
 	bool			bRet	= false;
@@ -221,14 +235,18 @@ status_t VideoPhoneSource::start(MetaData *params)
 
 	if (!bRet)
 		goto fail;
-	
-   	/*m_fAVStream = fopen("/mnt/sdcard/video.dat","r");
-   	if (m_fAVStream == NULL)
+
+#ifdef DEBUG_FILE
+	m_fAVStream = fopen(DEBUG_FILE,"r");
+	if (m_fAVStream != NULL) fseek(m_fAVStream, 0, SEEK_SET);
+	if (m_fAVStream == NULL)
 	{
-        	LOGE("Cannot open file");
+		LOGE("Cannot open file %s", DEBUG_FILE);
 		goto fail;
-	}*/
-	
+	}
+	LOGD("file opened %p", m_fAVStream);
+#else
+ #if 0
    	m_Modem	= open("",O_RDONLY,O_NONBLOCK);
 
 	if (m_Modem < 0)
@@ -236,6 +254,15 @@ status_t VideoPhoneSource::start(MetaData *params)
 		LOGE("Cannot open file");
 		goto fail;
 	}
+	LOGD("file opened %d", m_Modem);
+ #else
+	if (m_DataSource->initCheck() != OK)
+	{
+		LOGE("Cannot open file");
+		goto fail;
+	}
+ #endif
+#endif
 
 	m_RingBuffer 		= (uint8_t*)malloc(MAX_BUFFER_SIZE);
 	m_nDataEnd		= 0;
@@ -264,6 +291,7 @@ status_t VideoPhoneSource::stop()
 	
 	status_t err;
 	
+	LOGI("VideoPhoneSource::stop");
     	if (!m_bStarted)
 		goto success;
 
@@ -273,24 +301,29 @@ status_t VideoPhoneSource::stop()
 	
 	SAFE_DELETE(m_pGroup);
 
-	/*if (m_fAVStream)
+#ifdef DEBUG_FILE
+	if (m_fAVStream)
 	{
 		fclose(m_fAVStream);
 		m_fAVStream	= NULL;
-	}*/
-
+	}
+#else
+ #if 0
 	if (m_Modem > 0)
 	{
 		close(m_Modem);
 		m_Modem	= -1;
 	}
-	
+ #endif
+#endif
+
 	SAFE_FREE(m_RingBuffer);
 	//relese the share mem
 	//........
 	
 success:
-	
+		LOGI("VideoPhoneSource::stop SUCCESS!");
+
     	return OK;
 
 fail:
@@ -304,13 +337,6 @@ sp<MetaData> VideoPhoneSource::getFormat()
 
     return m_Format;
 }
-
-static uint32_t	VAL32(uint32_t   x)
-{
-  	u_char   *s   =   (u_char   *)&x; 
-	return   (uint32_t)(s[0] << 24 | s[1]   << 16 | s[2] << 8 | s[3]); 
-}
-
 
 status_t VideoPhoneSource::read(
         MediaBuffer **out, const ReadOptions *options) 
@@ -338,19 +364,7 @@ status_t VideoPhoneSource::read(
 	if (err != OK)
 		goto fail;
 	
-	/*fread(cHeader,1,16,m_fAVStream);
-	nPts		= VAL32(*(uint32_t*)(char*)(cHeader + 4));
-	nSize 	= VAL32(*(uint32_t*)(char*)(cHeader + 12));
-	
-	if (fread((uint8_t *)pMediaBuffer->data(),1,nSize,m_fAVStream) == 0)
-	{
-		pMediaBuffer->release();
-		err 	= ERROR_END_OF_STREAM;
-		LOGI("*****CMMBSource::read: It's end!******");
-		goto fail;
-	}*/
-	
-	nSize 	= readRingBuffer((char*)pMediaBuffer->data());
+	nSize 	= readRingBuffer((char*)pMediaBuffer->data(), pMediaBuffer->size());
 	if (nSize == 0)
 		goto fail;
 	
@@ -390,25 +404,61 @@ void *VideoPhoneSource::ThreadWrapper(void *me)
 
 status_t VideoPhoneSource::threadFunc() 
 {
+	const int BUFFER_SIZE = 2000;
 	status_t 	err = OK;
-	char		cTempbuffer[10000];	
+	char		cTempbuffer[BUFFER_SIZE];	
 	int 		nLen;
 	
-    	while (m_bStarted) 
+	LOGI("enter threadFunc");
+	while (m_bStarted) 
 	{
 		Mutex::Autolock autoLock(m_Lock);
-		
+
+#ifdef DEBUG_FILE
+   	if (m_fAVStream == NULL)
+			break;
+#else
+ #if 0
 		if (m_Modem < 0)
 			break;
-		
-        	nLen = ::read(m_Modem,(void *)cTempbuffer,10000);
+ #else
+		if (m_DataSource->initCheck() != OK)
+			break;
+ #endif
+#endif
+
+#ifdef DEBUG_FILE
+		LOGI("before read %p", m_fAVStream);
+    nLen = fread((void *)cTempbuffer,1, BUFFER_SIZE, m_fAVStream);
+#else
+ #if 0
+		LOGI("before read %d", m_Modem);
+		nLen = ::read(m_Modem,(void *)cTempbuffer,BUFFER_SIZE);
+ #else
+		LOGI("before read");
+		nLen = m_DataSource->readAt(0, (void *)cTempbuffer, BUFFER_SIZE);
+ #endif
+#endif
+		if (nLen == 0)
+		{
+			LOGW("read error %s", strerror(errno));
+#ifdef DEBUG_FILE
+			if (feof(m_fAVStream)) break;
+#else
+			break;
+#endif
+			usleep(1000*1000);
+		}
+		LOGI("after read %d", nLen);
+
 		writeRingBuffer(cTempbuffer,nLen);
-    	}
+	}
+	LOGI("exit threadFunc");
 	
-    	if (err == ERROR_END_OF_STREAM)
-        	err	= OK;
+	if (err == ERROR_END_OF_STREAM)
+		err	= OK;
 		
-   	return err;
+	return err;
 }
 
 int	VideoPhoneSource::writeRingBuffer(char* data,int nLen)
@@ -420,7 +470,10 @@ int	VideoPhoneSource::writeRingBuffer(char* data,int nLen)
 	
 	if ((m_nDataEnd < m_nDataStart && m_nDataEnd + nLen > m_nDataStart)
 		|| (m_nDataEnd > m_nDataStart && m_nDataEnd + nLen > m_nDataStart + m_nRingBufferSize))
+	{
+		LOGE("buffer is overrun!!!");
 		bChangeStart = true;
+	}
 
 	int nTemp = nLen;
 	
@@ -440,31 +493,36 @@ int	VideoPhoneSource::writeRingBuffer(char* data,int nLen)
 	if (bChangeStart)
 		m_nDataStart = m_nDataEnd;
 
+	LOGI("signal");
 	m_GetBuffer.signal();
 	
 	return nLen;	
 }
 
-int	VideoPhoneSource::readRingBuffer(char* data)
+int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 {
 	LOGI("VideoPhoneSource::readRingBuffer START0");	
 
 	if (m_RingBuffer == NULL)
 		return 0;
 
-	int	nNext;
+	int	nNext = m_nDataStart;
 	int	nLen;
 	bool	bStartRead 	= false;
 	bool	bIsMpege4	= false;
 	int	nStart,nEnd;
-	LOGI("VideoPhoneSource::readRingBuffer START1");	
+	LOGI("VideoPhoneSource::readRingBuffer START1 %d", m_bStarted);
 	while (m_bStarted)
 	{
 		nEnd	= nNext;
 		nNext = (nNext + 1) % m_nRingBufferSize;
 		
 		if (nNext == m_nDataEnd)
+		{
+			LOGI("wait 1");
 			m_GetBuffer.wait(m_Lock);
+			LOGI("wait 2");
+		}
 		
 		if (!m_bStarted)
 			return 0;
@@ -484,8 +542,8 @@ int	VideoPhoneSource::readRingBuffer(char* data)
 				else
 					break;
 			}
-			else if  (m_RingBuffer[(nNext + 2) % m_nRingBufferSize] == 0x80 &&
-				m_RingBuffer[(nNext + 3) % m_nRingBufferSize] == 0x02)
+			else if  ((m_RingBuffer[(nNext + 2) % m_nRingBufferSize] & 0xFC) == 0x80 &&
+				(m_RingBuffer[(nNext + 3) % m_nRingBufferSize] & 0x03) == 0x02)
 			{
 				if (!bStartRead)
 				{
@@ -499,16 +557,27 @@ int	VideoPhoneSource::readRingBuffer(char* data)
 		}
 		nNext++;
 	}
-	
+	LOGI("find frame %d %d", nStart, nEnd);
+
+#if 0
 	nLen 	= ((nEnd - nStart) + m_nRingBufferSize) % m_nRingBufferSize - 4;
 	nStart 	= (nStart + 4) % m_nRingBufferSize;
+#else
+	nLen 	= ((nEnd - nStart) + m_nRingBufferSize) % m_nRingBufferSize;
+#endif
 
+	if (nLen > nSize)
+	{
+		LOGE("nLen %d exceeds nSize %d", nLen, nSize);
+		return 0;
+	}
 	int nTemp = nLen;
 
 	if (nTemp > m_nRingBufferSize - nStart)
 		nTemp = m_nRingBufferSize - nStart;
 		
 	memcpy(data,m_RingBuffer+nStart,nTemp);
+	data += nTemp;
 	
 	if ((nTemp = nLen - nTemp) > 0)
 		memcpy(data,m_RingBuffer ,nTemp);

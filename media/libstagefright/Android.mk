@@ -46,7 +46,7 @@ LOCAL_SRC_FILES:=                         \
 	CMMBExtractor.cpp		  \
 	VideoPhoneExtractor.cpp		  \
 	VideoPhoneWriter.cpp		  \
-
+        CharDeviceSource.cpp
 
 LOCAL_C_INCLUDES:= \
 	$(JNI_H_INCLUDE) \

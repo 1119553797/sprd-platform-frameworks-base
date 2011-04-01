@@ -19,7 +19,7 @@ package android.media;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
-import android.net.Uri;
+//import android.net.Uri;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
@@ -55,6 +55,8 @@ public class MediaPhone extends Handler
     // macro invocation in IMediaPhone.cpp
     private final static String IMEDIA_PHONE = "android.media.IMediaPhone";
 
+    private final static boolean DEBUG_WITHOUT_MODEM = true;
+
     private int mNativeContext; // accessed by native methods
     private int mListenerContext; // accessed by native methods
     private Surface mRemoteSurface; // accessed by native methods
@@ -65,9 +67,9 @@ public class MediaPhone extends Handler
     private boolean mScreenOnWhilePlaying;
     private boolean mStayAwake;
 
-	private CommandsInterface mCm;	
-	private Message msgTracker = null;
-	private static int ARG_SKIP_MSGTRACKER = -1;
+    private CommandsInterface mCm;	
+    private Message msgTracker = null;
+    private static int ARG_SKIP_MSGTRACKER = -1;
 	
 
     /**
@@ -77,7 +79,7 @@ public class MediaPhone extends Handler
      * to free the resources. If not released, too many MediaPhone instances may
      * result in an exception.</p>
      */
-    public MediaPhone() {
+    public MediaPhone(CommandsInterface ril) {
 
         Looper looper;
         if ((looper = Looper.myLooper()) != null) {
@@ -87,6 +89,7 @@ public class MediaPhone extends Handler
         } else {
             mEventHandler = null;
         }
+        mCm = ril;
 
         /* Native setup requires a weak reference to our object.
          * It's easier to create it here than in C++.
@@ -151,9 +154,9 @@ public class MediaPhone extends Handler
      /**
 	 * {@hide}
 	 */
-    public static MediaPhone create(CommandsInterface ril, Context context, Uri uri) {
-    	Log.d(TAG, "create" + uri);
-        return create (ril, context, uri, null, null);
+    public static MediaPhone create(CommandsInterface ril, String url) {
+        Log.d(TAG, "create" + url);
+        return create (ril, url, null, null);
     }
 
     /**
@@ -172,24 +175,26 @@ public class MediaPhone extends Handler
     /**
 	 * {@hide}
 	 */
-    public static MediaPhone create(CommandsInterface ril, Context context, Uri uri, SurfaceHolder remoteHolder, Surface localSurface) {
+    public static MediaPhone create(CommandsInterface ril, String url, SurfaceHolder remoteHolder, Surface localSurface) {
 
         try {
-            MediaPhone mp = new MediaPhone();
-            mp.setComm(context, uri);
+            MediaPhone mp = new MediaPhone(ril);
+            mp.setComm(url, url);
+            //mp.setComm("/data/in.3gp", "/data/out.3gp");
+            mp.setComm("videophone:///data/vpin", "videophone:///data/vpout");
             if (remoteHolder != null) {
                 mp.setRemoteDisplay(remoteHolder);
             }
             if (localSurface != null) {
             	mp.setLocalDisplay(localSurface);
             }
-			mp.mCm = ril;
-			mp.mCm.setOnVPData(mp.mEventHandler, MEDIA_UNSOL_DATA, null);
-			mp.mCm.setOnVPCodec(mp.mEventHandler, MEDIA_UNSOL_CODEC, null);
-			mp.mCm.setOnVPStrs(mp.mEventHandler, MEDIA_UNSOL_STR, null);
-			mp.mCm.setOnVPRemoteMedia(mp.mEventHandler, MEDIA_UNSOL_REMOTE_VIDEO, null);
-			mp.mCm.setOnVPMMRing(mp.mEventHandler, MEDIA_UNSOL_MM_RING, null);
-			mp.mCm.setOnVPRecordVideo(mp.mEventHandler, MEDIA_UNSOL_RECORD_VIDEO, null);
+            //mp.mCm = ril;
+            mp.mCm.setOnVPData(mp.mEventHandler, MEDIA_UNSOL_DATA, null);
+            mp.mCm.setOnVPCodec(mp.mEventHandler, MEDIA_UNSOL_CODEC, null);
+            mp.mCm.setOnVPStrs(mp.mEventHandler, MEDIA_UNSOL_STR, null);
+            mp.mCm.setOnVPRemoteMedia(mp.mEventHandler, MEDIA_UNSOL_REMOTE_VIDEO, null);
+            mp.mCm.setOnVPMMRing(mp.mEventHandler, MEDIA_UNSOL_MM_RING, null);
+            mp.mCm.setOnVPRecordVideo(mp.mEventHandler, MEDIA_UNSOL_RECORD_VIDEO, null);
             return mp;
         } catch (IOException ex) {
             Log.d(TAG, "create failed:", ex);
@@ -225,18 +230,26 @@ public class MediaPhone extends Handler
      * @param uri the Content URI of the data you want to play
      * @throws IllegalStateException if it is called in an invalid state
      */
-    public void setComm(Context context, Uri uri)
+    /*
+    public void setComm(String uriIn, String uriOut)
         throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
-
-        String scheme = uri.getScheme();
-        if(scheme == null || scheme.equals("file")) {
-            setComm(uri.getPath(), uri.getPath());
-            return;
+        String pathIn, pathOut;
+        String scheme = uriIn.getScheme();
+        if (scheme == null || scheme.equals("file")) {
+            pathIn = uriIn.getPath();
+        } else {
+            throw (new IllegalArgumentException("uri is not a file type"));
+        }
+        scheme = uriOut.getScheme();
+        if (scheme == null || scheme.equals("file")) {
+            pathOut = uriOut.getPath();
+        } else {
+            throw (new IllegalArgumentException("uri is not a file type"));
         }
 
-        return;
+        setComm(pathIn, pathOut);
     }
-
+    */
     /**
      * Sets the data source (file-path or http/rtsp URL) to use.
      *
@@ -253,7 +266,7 @@ public class MediaPhone extends Handler
      *
      * @throws IllegalStateException if it is called in an invalid state
      */
-    public  void start() throws IllegalStateException {
+    public void start() throws IllegalStateException {
         stayAwake(true);
         _start();
     }
@@ -273,13 +286,21 @@ public class MediaPhone extends Handler
 
     private native void _stop() throws IllegalStateException;
 	
-    public  void dial(String address, String sub_address, int clirMode, Message result) throws IllegalStateException {
-    	Log.d(TAG, "dial");
+    public void dial(String address, String sub_address, int clirMode, Message result) throws IllegalStateException {
+        Log.d(TAG, "dial");
         stayAwake(true);
 		
-		Message msg = Message.obtain(mEventHandler,MEDIA_SOL_DIAL);
-		msgTracker = result;
-		mCm.dialVideo(address, sub_address, clirMode, msg);
+        Message msg = Message.obtain(mEventHandler,MEDIA_SOL_DIAL);
+        msgTracker = result;
+        mCm.dialVideo(address, sub_address, clirMode, msg);
+
+        if (DEBUG_WITHOUT_MODEM) {
+            msgTracker.sendToTarget();
+            msgTracker = null;
+
+            Message m = mEventHandler.obtainMessage(MEDIA_UNSOL_CODEC, CODEC_OPEN, 0);
+            mEventHandler.sendMessage(m);
+        }
     }
 
     /**
@@ -289,95 +310,105 @@ public class MediaPhone extends Handler
      * initialized.
      */
     public void hangup(Message result) throws IllegalStateException {
-    	Log.d(TAG, "hangup");
+        Log.d(TAG, "hangup");
         stayAwake(false);
 
-		Message msg = Message.obtain(mEventHandler,MEDIA_SOL_HANGUP);
-		msgTracker = result;
-		mCm.hangupVP(msg);	
+        Message msg = Message.obtain(mEventHandler,MEDIA_SOL_HANGUP);
+        msgTracker = result;
+        mCm.hangupVP(msg);	
+
+        if (DEBUG_WITHOUT_MODEM) {
+            msgTracker.sendToTarget();
+            msgTracker = null;
+        }
     }
 
-	public void acceptCall(Message result) throws IllegalStateException {
-		Log.d(TAG, "acceptCall");
-		stayAwake(true);
+    public void acceptCall(Message result) throws IllegalStateException {
+        Log.d(TAG, "acceptCall");
+        stayAwake(true);
 
-		Message msg = Message.obtain(mEventHandler,MEDIA_SOL_ACCEPT);		
-		msgTracker = result;
-		mCm.acceptVP(msg);
-	}
+        Message msg = Message.obtain(mEventHandler,MEDIA_SOL_ACCEPT);		
+        msgTracker = result;
+        mCm.acceptVP(msg);
 
-	public void sendStrs(String str, Message result) {
-		Log.d(TAG, "sendStrs");
-		stayAwake(true);
+        if (DEBUG_WITHOUT_MODEM) {
+            msgTracker.sendToTarget();
+            msgTracker = null;
+        }
+    }
 
-		Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
-		msgTracker = result;
-		mCm.sendVPStrs(str, msg);
-	}
+    public void sendStrs(String str, Message result) {
+        Log.d(TAG, "sendStrs");
+        stayAwake(true);
 
-	public void openLocalVideo(Message result) {
-		Log.d(TAG, "openLocalVideo");
-		stayAwake(true);
+        Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
+        msgTracker = result;
+        mCm.sendVPStrs(str, msg);
+    }
+
+    public void openLocalVideo(Message result) {
+        Log.d(TAG, "openLocalVideo");
+        stayAwake(true);
 		
-		Message msg1 = Message.obtain(mEventHandler, MEDIA_SOL_NOP, ARG_SKIP_MSGTRACKER, 0);	
-		mCm.setVPLocalMedia(1, 1, false, msg1);
+        Message msg1 = Message.obtain(mEventHandler, MEDIA_SOL_NOP, ARG_SKIP_MSGTRACKER, 0);	
+        mCm.setVPLocalMedia(1, 1, false, msg1);
 
-		Message msg2 = Message.obtain(mEventHandler, MEDIA_SOL_NOP);
-		msgTracker = result;
-		sendStrs("open_:camera_", msg2);
-	}
+        Message msg2 = Message.obtain(mEventHandler, MEDIA_SOL_NOP);
+        msgTracker = result;
+        sendStrs("open_:camera_", msg2);
+    }
 
 
-	public void closeLocalVideo(boolean bReplaceImg, Message result) {
-		Log.d(TAG, "closeLocalVideo");
-		stayAwake(true);
+    public void closeLocalVideo(boolean bReplaceImg, Message result) {
+        Log.d(TAG, "closeLocalVideo");
+        stayAwake(true);
 		
-		Message msg1 = Message.obtain(mEventHandler, MEDIA_SOL_NOP, ARG_SKIP_MSGTRACKER, 0);		
-		mCm.setVPLocalMedia(1, 0, bReplaceImg, msg1);
+        Message msg1 = Message.obtain(mEventHandler, MEDIA_SOL_NOP, ARG_SKIP_MSGTRACKER, 0);		
+        mCm.setVPLocalMedia(1, 0, bReplaceImg, msg1);
 
-		if (bReplaceImg) 
-			return;
+        if (bReplaceImg) 
+            return;
 
-		Message msg2 = Message.obtain(mEventHandler, MEDIA_SOL_NOP);
-		msgTracker = result;
-		sendStrs("close_:camera_", msg2);
-	}
+        Message msg2 = Message.obtain(mEventHandler, MEDIA_SOL_NOP);
+        msgTracker = result;
+        sendStrs("close_:camera_", msg2);
+    }
 
-	public void enableLocalAudio(boolean enable, Message result) {
-		Log.d(TAG, "enableLocalAudio");
-		stayAwake(true);
+    public void enableLocalAudio(boolean enable, Message result) {
+        Log.d(TAG, "enableLocalAudio");
+        stayAwake(true);
 		
-		Message msg = Message.obtain(mEventHandler,MEDIA_SOL_NOP);		
-		msgTracker = result;
-		mCm.setVPLocalMedia(0, enable?1:0, false, msg);
-	}
+        Message msg = Message.obtain(mEventHandler,MEDIA_SOL_NOP);		
+        msgTracker = result;
+        mCm.setVPLocalMedia(0, enable?1:0, false, msg);
+    }
 
-	public void recordVideo(boolean bStart, Message result) {
-		Log.d(TAG, "recordVideo");
-		stayAwake(true);
+    public void recordVideo(boolean bStart, Message result) {
+        Log.d(TAG, "recordVideo");
+        stayAwake(true);
 		
-		Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
-		msgTracker = result;
-		mCm.recordVPVideo(bStart, msg);
-	}
+        Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
+        msgTracker = result;
+        mCm.recordVPVideo(bStart, msg);
+    }
 	
-	public void recordAudio(boolean bStart, int mode, Message result) {
-		Log.d(TAG, "recordAudio");
-		stayAwake(true);
+    public void recordAudio(boolean bStart, int mode, Message result) {
+        Log.d(TAG, "recordAudio");
+        stayAwake(true);
 		
-		Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
-		msgTracker = result;
-		mCm.recordVPAudio(bStart, mode, msg);
-	}
+        Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
+        msgTracker = result;
+        mCm.recordVPAudio(bStart, mode, msg);
+    }
 
-	public void test(int flag, int value, Message result) {
-		Log.d(TAG, "test");
-		stayAwake(true);
+    public void test(int flag, int value, Message result) {
+        Log.d(TAG, "test");
+        stayAwake(true);
 		
-		Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
-		msgTracker = result;
-		mCm.testVP(flag, value, msg);
-	}	
+        Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
+        msgTracker = result;
+        mCm.testVP(flag, value, msg);
+    }	
 
     /**
      * Set the low-level power management behavior for this MediaPhone.  This
@@ -477,19 +508,19 @@ public class MediaPhone extends Handler
      * done using the MediaPhone.
      */
     public void release() {
-    	Log.d(TAG, "release");
+        Log.d(TAG, "release");
         stayAwake(false);
         updateSurfaceScreenOn();
         mOnErrorListener = null;
         mOnInfoListener = null;
         mOnVideoSizeChangedListener = null;
 
-		mCm.unSetOnVPData(mEventHandler);
-		mCm.unSetOnVPCodec(mEventHandler);
-		mCm.unSetOnVPStrs(mEventHandler);
-		mCm.unSetOnVPRemoteMedia(mEventHandler);
-		mCm.unSetOnVPMMRing(mEventHandler);
-		mCm.unSetOnVPRecordVideo(mEventHandler);
+        mCm.unSetOnVPData(mEventHandler);
+        mCm.unSetOnVPCodec(mEventHandler);
+        mCm.unSetOnVPStrs(mEventHandler);
+        mCm.unSetOnVPRemoteMedia(mEventHandler);
+        mCm.unSetOnVPMMRing(mEventHandler);
+        mCm.unSetOnVPRecordVideo(mEventHandler);
         _release();
     }
 
@@ -535,26 +566,31 @@ public class MediaPhone extends Handler
     /* Do not change these values without updating their counterparts
      * in include/media/mediaphone.h!
      */
-    private static final int MEDIA_NOP = 0; // interface test message
-    private static final int MEDIA_CONNECT_COMPLETE = 1;
-    private static final int MEDIA_DISCONNECT_COMPLETE = 2;
-    private static final int MEDIA_SET_VIDEO_SIZE = 3;
+    private static final int MEDIA_PREPARED = 1;
+    //private static final int MEDIA_CONNECT_COMPLETE = 2;
+    //private static final int MEDIA_DISCONNECT_COMPLETE = 3;
+    private static final int MEDIA_SET_VIDEO_SIZE = 2;
     private static final int MEDIA_ERROR = 100;
     private static final int MEDIA_INFO = 200;
 
-	// solicited events
-	private static final int MEDIA_SOL_NOP	= 10;
+    // solicited events
+    private static final int MEDIA_SOL_NOP	          = 10;
     private static final int MEDIA_SOL_DIAL	          = 11;
-    private static final int MEDIA_SOL_HANGUP            = 12;
-    private static final int MEDIA_SOL_ACCEPT            = 13;
+    private static final int MEDIA_SOL_HANGUP         = 12;
+    private static final int MEDIA_SOL_ACCEPT         = 13;
 
-	// unsolicited events
-	private static final int MEDIA_UNSOL_DATA = 20;
-	private static final int MEDIA_UNSOL_CODEC = 21;
-	private static final int MEDIA_UNSOL_STR = 22;
-	private static final int MEDIA_UNSOL_REMOTE_VIDEO = 23;
-	private static final int MEDIA_UNSOL_MM_RING = 24;
-	private static final int MEDIA_UNSOL_RECORD_VIDEO = 25;
+    // unsolicited events
+    private static final int MEDIA_UNSOL_DATA = 20;
+    private static final int MEDIA_UNSOL_CODEC = 21;
+    private static final int MEDIA_UNSOL_STR = 22;
+    private static final int MEDIA_UNSOL_REMOTE_VIDEO = 23;
+    private static final int MEDIA_UNSOL_MM_RING = 24;
+    private static final int MEDIA_UNSOL_RECORD_VIDEO = 25;
+
+    // codec request type
+    private static final int CODEC_OPEN = 1;
+    private static final int CODEC_CLOSE = 2;
+    private static final int CODEC_SET_PARAM = 3;
 
     private class EventHandler extends Handler
     {
@@ -571,16 +607,26 @@ public class MediaPhone extends Handler
                 Log.w(TAG, "mediaphone went away with unhandled events");
                 return;
             }
-			Log.d(TAG, "handleMessage " + msg);
+            Log.d(TAG, "handleMessage " + msg);
 
-			AsyncResult ar;
-			ar = (AsyncResult) msg.obj;
+            AsyncResult ar;
+            ar = (AsyncResult) msg.obj;
 			
             switch(msg.what) {
+            case MEDIA_PREPARED:
+                //todo: call ril send AT
+                Log.d(TAG, "receive MEDIA_PREPARED");
+
+                if (DEBUG_WITHOUT_MODEM) {
+                    Message m = mEventHandler.obtainMessage(MEDIA_UNSOL_CODEC, CODEC_SET_PARAM, 0);
+                    mEventHandler.sendMessage(m);
+                }
+                return;
+
             case MEDIA_SET_VIDEO_SIZE:
-              if (mOnVideoSizeChangedListener != null)
-                  mOnVideoSizeChangedListener.onVideoSizeChanged(mMediaPhone, msg.arg1, msg.arg2);
-              return;
+                if (mOnVideoSizeChangedListener != null)
+                    mOnVideoSizeChangedListener.onVideoSizeChanged(mMediaPhone, msg.arg1, msg.arg2);
+                return;
 
             case MEDIA_ERROR:
                 // For PV specific error values (msg.arg2) look in
@@ -603,47 +649,59 @@ public class MediaPhone extends Handler
                 // No real default action so far.
                 return;
 				
-			// following is messages from RIL.java
+            // following is messages from RIL.java
             case MEDIA_SOL_NOP: 
-			case MEDIA_SOL_DIAL:
-			case MEDIA_SOL_HANGUP:
-			case MEDIA_SOL_ACCEPT:
-				if ((msgTracker != null) && (msg.arg1 != ARG_SKIP_MSGTRACKER)) {
-					msgTracker.obj = msg.obj;
-					msgTracker.sendToTarget();
-					msgTracker = null;
-				}
-				break;
+            case MEDIA_SOL_DIAL:
+            case MEDIA_SOL_HANGUP:
+            case MEDIA_SOL_ACCEPT:
+                if ((msgTracker != null) && (msg.arg1 != ARG_SKIP_MSGTRACKER)) {
+                    msgTracker.obj = msg.obj;
+                    msgTracker.sendToTarget();
+                    msgTracker = null;
+                }
+                return;
 				
-			case MEDIA_UNSOL_DATA:{
-				int[] params = (int[])ar.result;
-				int indication = params[0];
-				break;
-				}
-			case MEDIA_UNSOL_STR:
-				String str = (String)ar.result;
-				break;
+            case MEDIA_UNSOL_DATA: {
+                int[] params = (int[])ar.result;
+                int indication = params[0];
+                return;
+            }
 
-			case MEDIA_UNSOL_REMOTE_VIDEO:{
-				int[] params = (int[])ar.result;
-				int datatype = params[0];
-				int sw = params[1];
-				int indication;
+            case MEDIA_UNSOL_CODEC: {
+                int type = msg.arg1;
+                String param = (String)msg.obj;
+                onCodecRequest(type, param);
+                return;
+            }
+
+            case MEDIA_UNSOL_STR: {
+                String str = (String)ar.result;
+                return;
+            }
+
+            case MEDIA_UNSOL_REMOTE_VIDEO: {
+                int[] params = (int[])ar.result;
+                int datatype = params[0];
+                int sw = params[1];
+                int indication;
 				
-				if (params.length > 2)
-					indication = params[2];
-				break;
-				}
-			case MEDIA_UNSOL_MM_RING:{
-				int[] params = (int[])ar.result;
-				int timer = params[0];
-				break;
-				}
-			case MEDIA_UNSOL_RECORD_VIDEO:{
-				int[] params = (int[])ar.result;
-				int indication = params[0];
-				break;
-				}
+                if (params.length > 2)
+                    indication = params[2];
+                return;
+            }
+
+            case MEDIA_UNSOL_MM_RING: {
+                int[] params = (int[])ar.result;
+                int timer = params[0];
+                return;
+            }
+
+            case MEDIA_UNSOL_RECORD_VIDEO: {
+                int[] params = (int[])ar.result;
+                int indication = params[0];
+                return;
+            }
+
             default:
                 Log.e(TAG, "Unknown message type " + msg.what);
                 return;
@@ -669,6 +727,38 @@ public class MediaPhone extends Handler
         if (mp.mEventHandler != null) {
             Message m = mp.mEventHandler.obtainMessage(what, arg1, arg2, obj);
             mp.mEventHandler.sendMessage(m);
+        }
+    }
+    
+    private void onCodecRequest(int type, String param)
+    {
+        Log.d(TAG, "onCodecRequest:" + type/* + " " + param*/);
+        switch (type) {
+        case CODEC_OPEN:
+            try {
+                prepareAsync();
+            } catch (IllegalStateException ex) {
+                Log.d(TAG, "prepareAsync fail " + ex);
+            }
+            break;
+
+        case CODEC_SET_PARAM:
+            if (param != null) {
+            }
+            try {
+                start();
+            } catch (IllegalStateException ex) {
+                Log.d(TAG, "start fail " + ex);
+            }
+            break;
+
+        case CODEC_CLOSE:
+            try {
+                stop();
+            } catch (IllegalStateException ex) {
+                Log.d(TAG, "stop fail " + ex);
+            }
+            break;
         }
     }
 

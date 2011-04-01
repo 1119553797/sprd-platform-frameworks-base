@@ -14,18 +14,19 @@
  ** limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "MediaPhoneService"
 #include <utils/Log.h>
 
-#include <fcntl.h>
-
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <errno.h>
 #include <string.h>
 #include <cutils/atomic.h>
+#include <cutils/properties.h> // for property_get
 #include <android_runtime/ActivityManager.h>
 #include <binder/IPCThreadState.h>
 #include <binder/IServiceManager.h>
@@ -34,6 +35,7 @@
 #include <utils/String16.h>
 
 #include <media/AudioTrack.h>
+#include <media/mediaphone.h>
 
 #include "MediaPhoneClient.h"
 #include "MediaPlayerService.h"
@@ -41,23 +43,17 @@
 #include "StagefrightPlayer.h"
 #include "StagefrightRecorder.h"
 
-//notes:
-//create   new mediaplayer, new mediarecorder,init,setListener
-//setsurface
-//setcamera                 setCamera
-//setcomm  setDataSource    setOutputFile
-//prepare  prepareAsync     setVideoSource/setOutputFormat/setVideoEncoder/prepare
-//setparams                 setParameters/setVideoEncoder
-//star     start            start
-//stop     stop             stop
-//
-//(idle)-setcomm->(inited)-prepare->(prepared)-start->(started)-stop->(stopped)
-
 namespace android {
 
 static const char* cameraPermission = "android.permission.CAMERA";
 static const char* recordAudioPermission = "android.permission.RECORD_AUDIO";
 
+#define CHECK_RT(val) \
+    do { \
+        status_t r = val; \
+        if (r != OK) return r; \
+    } while(0)
+	
 static bool checkPermission(const char* permissionString) {
 #ifndef HAVE_ANDROID_OS
     return true;
@@ -68,17 +64,16 @@ static bool checkPermission(const char* permissionString) {
     return ok;
 }
 
-status_t MediaPhoneClient::setComm(const char *urlIn, const char *urlout)
+status_t MediaPhoneClient::setComm(const char *urlIn, const char *urlOut)
 {
-    LOGV("setComm");
-    //todo: fix me
-    if (mPlayer == NULL) {
-        LOGE("mediaphone: player is not initialized");
-        return NO_INIT;
+    LOGV("setComm %s %s", urlIn, urlOut);
+    if (strlen(urlIn) >= MAX_URL_LEN || strlen(urlOut) >= MAX_URL_LEN) {
+        LOGE("mediaphone: url length exceeds MAX_URL_LEN");
+        return UNKNOWN_ERROR;
     }
-    mPlayer->setDataSource(urlIn, NULL);
-    int fd = open(urlout, O_WRONLY);
-    return mRecorder->setOutputFile(fd, 0, 0);
+    strcpy(mUrlIn, urlIn);
+    strcpy(mUrlOut, urlOut);
+    return OK;
 }
 
 status_t MediaPhoneClient::setCamera(const sp<ICamera>& camera)
@@ -89,7 +84,9 @@ status_t MediaPhoneClient::setCamera(const sp<ICamera>& camera)
         LOGE("mediaphone: recorder is not initialized");
         return NO_INIT;
     }
-    return mRecorder->setCamera(camera);
+    mCamera = camera;
+    return OK;
+    //return mRecorder->setCamera(camera);
 }
 
 status_t MediaPhoneClient::setRemoteSurface(const sp<ISurface>& surface)
@@ -111,7 +108,9 @@ status_t MediaPhoneClient::setLocalSurface(const sp<ISurface>& surface)
         LOGE("mediaphone: recorder is not initialized");
         return NO_INIT;
     }
-    return mRecorder->setPreviewSurface(surface);
+    mPreviewSurface = surface;
+    return OK;
+    //return mRecorder->setPreviewSurface(surface);
 }
 
 status_t MediaPhoneClient::setParameters(const String8 &params)
@@ -122,21 +121,61 @@ status_t MediaPhoneClient::setParameters(const String8 &params)
         LOGE("mediaphone: recorder is not initialized");
         return NO_INIT;
     }
-    //todo: video encoder setting
     return mRecorder->setParameters(params);
 }
 
 status_t MediaPhoneClient::prepareAsync()
 {
-    LOGV("[%d] prepareAsync", mConnId);
+    LOGV("prepareAsync");
     if (mPlayer == NULL || mRecorder == NULL) {
-        LOGE("mediaphone: recorder is not initialized");
+        LOGE("mediaphone: player or recorder is not initialized");
         return NO_INIT;
     }
-    mRecorder->setVideoSource(VIDEO_SOURCE_CAMERA);
-    mRecorder->setOutputFormat(OUTPUT_FORMAT_MPEG_4);
-    mRecorder->setVideoEncoder(VIDEO_ENCODER_H263);
-    mRecorder->prepare();
+    if (!mPlayer->hardwareOutput()) {
+        mAudioOutput = new AudioOutput();
+        static_cast<MediaPlayerInterface*>(mPlayer.get())->setAudioSink(mAudioOutput);
+    }
+#if 0 //test code
+    FILE *fi = fopen(mUrlIn, "rb");
+    if (fi == NULL) {
+        LOGE("mediaphone: open %s failed errno=%d", mUrlIn, errno);
+    } else {
+        fclose(fi);
+    }
+#endif
+    CHECK_RT(mPlayer->setDataSource(mUrlIn, NULL));
+    char urlOut[MAX_URL_LEN];
+    if (!strncasecmp(mUrlOut, "videophone://", 13))
+        strcpy(urlOut, mUrlOut + 13);
+    else
+        strcpy(urlOut, mUrlOut);
+    int fd = open(urlOut, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd == -1) {
+        LOGE("mediaphone: open %s failed errno=%d", urlOut, errno);
+    } else {
+        LOGI("mediaphone: open %s successed with %d", urlOut, fd);
+    }
+    CHECK_RT(mRecorder->setCamera(mCamera));
+    CHECK_RT(mRecorder->setVideoSource(VIDEO_SOURCE_CAMERA));
+    //CHECK_RT(mRecorder->setAudioSource(AUDIO_SOURCE_MIC));
+    //CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
+    CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_VIDEOPHONE));
+    CHECK_RT(mRecorder->setVideoFrameRate(15));
+    CHECK_RT(mRecorder->setVideoSize(176, 144));
+    //setVideoEncodingBitRate(48*1024);
+    CHECK_RT(mRecorder->setParameters(String8("video-param-encoding-bitrate=393216")));
+    //setAudioEncodingBitRate();
+    //CHECK_RT(mRecorder->setParameters(String8("audio-param-encoding-bitrate=98304")));
+    //setAudioChannels(profile.audioChannels);
+    //CHECK_RT(mRecorder->setParameters(String8("audio-param-number-of-channels=1")));
+    //setAudioSamplingRate(profile.audioSampleRate);
+    //CHECK_RT(mRecorder->setParameters(String8("audio-param-sampling-rate=8000")));
+    CHECK_RT(mRecorder->setVideoEncoder(VIDEO_ENCODER_H263));
+    //CHECK_RT(mRecorder->setAudioEncoder(AUDIO_ENCODER_AMR_NB));
+    CHECK_RT(mRecorder->setOutputFile(fd, 0, 0));
+    CHECK_RT(mRecorder->setPreviewSurface(mPreviewSurface));
+    CHECK_RT(mRecorder->prepare());
+
     return mPlayer->prepareAsync();
 }
 
@@ -148,8 +187,9 @@ status_t MediaPhoneClient::start()
         LOGE("mediaphone: player & recorder is not initialized");
         return NO_INIT;
     }
-    mPlayer->start();
-    mRecorder->start();
+
+    CHECK_RT(mPlayer->start());
+    CHECK_RT(mRecorder->start());
     return OK;
 }
 
@@ -175,8 +215,8 @@ status_t MediaPhoneClient::release()
         mRecorder = NULL;
     }
     if (mPlayer != NULL) {
-        delete mPlayer;
-        mPlayer = NULL;
+        mPlayer->setNotifyCallback(0, 0);
+        mPlayer.clear();
     }
     wp<MediaPhoneClient> client(this);
     mMediaPlayerService->removeMediaPhoneClient(client);
@@ -196,16 +236,29 @@ MediaPhoneClient::MediaPhoneClient(const sp<MediaPlayerService>& service, pid_t 
 MediaPhoneClient::~MediaPhoneClient()
 {
     LOGV("Client destructor");
+    mAudioOutput.clear();
     release();
 }
 
 void MediaPhoneClient::notify(void* cookie, int msg, int ext1, int ext2)
 {
-    LOGV("notify");
+    LOGV("notify %d %d %d", msg, ext1, ext2);
     MediaPhoneClient* client = static_cast<MediaPhoneClient*>(cookie);
     //todo: handle prepared/media_error msgs
     //refer to mediaplayer.cpp notify
-    client->mListener->notify(msg, ext1, ext2);
+    switch (msg) {
+    case MEDIA_PREPARED:
+        LOGV("prepared");
+        msg = MEDIA_PHONE_EVENT_PREPARED;
+        break;
+    case MEDIA_SET_VIDEO_SIZE:
+        msg = MEDIA_PHONE_EVENT_SET_VIDEO_SIZE;
+        break;
+    }
+    if (client->mListener != NULL) {
+        client->mListener->notify(msg, ext1, ext2);
+    }
+    LOGV("notify end");
 }
 
 status_t MediaPhoneClient::setListener(const sp<IMediaPlayerClient>& listener)
@@ -224,15 +277,261 @@ status_t MediaPhoneClient::setAudioStreamType(int type)
 {
     LOGV("setAudioStreamType(%d)", type);
     Mutex::Autolock l(mLock);
-    //if (mAudioOutput != 0) mAudioOutput->setAudioStreamType(type);
+    if (mAudioOutput != 0) mAudioOutput->setAudioStreamType(type);
     return NO_ERROR;
 }
 
 status_t MediaPhoneClient::setVolume(float leftVolume, float rightVolume)
 {
-    LOGV("[%d] setVolume(%f, %f)", mConnId, leftVolume, rightVolume);
+    LOGV("setVolume(%f, %f)", leftVolume, rightVolume);
     Mutex::Autolock l(mLock);
-    //if (mAudioOutput != 0) mAudioOutput->setVolume(leftVolume, rightVolume);
+    if (mAudioOutput != 0) mAudioOutput->setVolume(leftVolume, rightVolume);
+    return NO_ERROR;
+}
+
+// TODO: Find real cause of Audio/Video delay in PV framework and remove this workaround
+/* static */ int MediaPhoneClient::AudioOutput::mMinBufferCount = 4;
+/* static */ bool MediaPhoneClient::AudioOutput::mIsOnEmulator = false;
+
+#undef LOG_TAG
+#define LOG_TAG "AudioSink"
+MediaPhoneClient::AudioOutput::AudioOutput()
+    : mCallback(NULL),
+      mCallbackCookie(NULL) {
+    LOGV("AudioOutput");
+    mTrack = 0;
+    mStreamType = AudioSystem::MUSIC;
+    mLeftVolume = 1.0;
+    mRightVolume = 1.0;
+    mLatency = 0;
+    mMsecsPerFrame = 0;
+    setMinBufferCount();
+}
+
+MediaPhoneClient::AudioOutput::~AudioOutput()
+{
+    LOGV("~AudioOutput");
+    close();
+}
+
+void MediaPhoneClient::AudioOutput::setMinBufferCount()
+{
+    char value[PROPERTY_VALUE_MAX];
+    if (property_get("ro.kernel.qemu", value, 0)) {
+        mIsOnEmulator = true;
+        mMinBufferCount = 12;  // to prevent systematic buffer underrun for emulator
+    }
+}
+
+bool MediaPhoneClient::AudioOutput::isOnEmulator()
+{
+    setMinBufferCount();
+    return mIsOnEmulator;
+}
+
+int MediaPhoneClient::AudioOutput::getMinBufferCount()
+{
+    setMinBufferCount();
+    return mMinBufferCount;
+}
+
+ssize_t MediaPhoneClient::AudioOutput::bufferSize() const
+{
+    if (mTrack == 0) return NO_INIT;
+    return mTrack->frameCount() * frameSize();
+}
+
+ssize_t MediaPhoneClient::AudioOutput::frameCount() const
+{
+    if (mTrack == 0) return NO_INIT;
+    return mTrack->frameCount();
+}
+
+ssize_t MediaPhoneClient::AudioOutput::channelCount() const
+{
+    if (mTrack == 0) return NO_INIT;
+    return mTrack->channelCount();
+}
+
+ssize_t MediaPhoneClient::AudioOutput::frameSize() const
+{
+    if (mTrack == 0) return NO_INIT;
+    return mTrack->frameSize();
+}
+
+uint32_t MediaPhoneClient::AudioOutput::latency () const
+{
+    return mLatency;
+}
+
+float MediaPhoneClient::AudioOutput::msecsPerFrame() const
+{
+    return mMsecsPerFrame;
+}
+
+status_t MediaPhoneClient::AudioOutput::getPosition(uint32_t *position)
+{
+    if (mTrack == 0) return NO_INIT;
+    return mTrack->getPosition(position);
+}
+
+status_t MediaPhoneClient::AudioOutput::open(
+        uint32_t sampleRate, int channelCount, int format, int bufferCount,
+        AudioCallback cb, void *cookie)
+{
+    mCallback = cb;
+    mCallbackCookie = cookie;
+
+    // Check argument "bufferCount" against the mininum buffer count
+    if (bufferCount < mMinBufferCount) {
+        LOGD("bufferCount (%d) is too small and increased to %d", bufferCount, mMinBufferCount);
+        bufferCount = mMinBufferCount;
+
+    }
+    LOGV("open(%u, %d, %d, %d)", sampleRate, channelCount, format, bufferCount);
+    if (mTrack) close();
+    int afSampleRate;
+    int afFrameCount;
+    int frameCount;
+
+    if (AudioSystem::getOutputFrameCount(&afFrameCount, mStreamType) != NO_ERROR) {
+        return NO_INIT;
+    }
+    if (AudioSystem::getOutputSamplingRate(&afSampleRate, mStreamType) != NO_ERROR) {
+        return NO_INIT;
+    }
+
+    frameCount = (sampleRate*afFrameCount*bufferCount)/afSampleRate;
+
+    AudioTrack *t;
+    if (mCallback != NULL) {
+        t = new AudioTrack(
+                mStreamType,
+                sampleRate,
+                format,
+                (channelCount == 2) ? AudioSystem::CHANNEL_OUT_STEREO : AudioSystem::CHANNEL_OUT_MONO,
+                frameCount,
+                0 /* flags */,
+                CallbackWrapper,
+                this);
+    } else {
+        t = new AudioTrack(
+                mStreamType,
+                sampleRate,
+                format,
+                (channelCount == 2) ? AudioSystem::CHANNEL_OUT_STEREO : AudioSystem::CHANNEL_OUT_MONO,
+                frameCount);
+    }
+
+    if ((t == 0) || (t->initCheck() != NO_ERROR)) {
+        LOGE("Unable to create audio track");
+        delete t;
+        return NO_INIT;
+    }
+
+    LOGV("setVolume");
+    t->setVolume(mLeftVolume, mRightVolume);
+
+    mMsecsPerFrame = 1.e3 / (float) sampleRate;
+    mLatency = t->latency();
+    mTrack = t;
+    return NO_ERROR;
+}
+
+void MediaPhoneClient::AudioOutput::start()
+{
+    LOGV("start");
+    if (mTrack) {
+        mTrack->setVolume(mLeftVolume, mRightVolume);
+        mTrack->start();
+    }
+}
+
+
+
+ssize_t MediaPhoneClient::AudioOutput::write(const void* buffer, size_t size)
+{
+    LOG_FATAL_IF(mCallback != NULL, "Don't call write if supplying a callback.");
+
+    LOGV("write(%p, %u)", buffer, size);
+    if (mTrack) {
+        ssize_t ret = mTrack->write(buffer, size);
+        return ret;
+    }
+    return NO_INIT;
+}
+
+void MediaPhoneClient::AudioOutput::stop()
+{
+    LOGV("stop");
+    if (mTrack) mTrack->stop();
+}
+
+void MediaPhoneClient::AudioOutput::flush()
+{
+    LOGV("flush");
+    if (mTrack) mTrack->flush();
+}
+
+void MediaPhoneClient::AudioOutput::pause()
+{
+    LOGV("pause");
+    if (mTrack) mTrack->pause();
+}
+
+void MediaPhoneClient::AudioOutput::close()
+{
+    LOGV("close");
+    delete mTrack;
+    mTrack = 0;
+}
+
+void MediaPhoneClient::AudioOutput::setVolume(float left, float right)
+{
+    LOGV("setVolume(%f, %f)", left, right);
+    mLeftVolume = left;
+    mRightVolume = right;
+    if (mTrack) {
+        mTrack->setVolume(left, right);
+    }
+}
+
+// static
+void MediaPhoneClient::AudioOutput::CallbackWrapper(
+        int event, void *cookie, void *info) {
+    //LOGV("callbackwrapper");
+    if (event != AudioTrack::EVENT_MORE_DATA) {
+        return;
+    }
+
+    AudioOutput *me = (AudioOutput *)cookie;
+    AudioTrack::Buffer *buffer = (AudioTrack::Buffer *)info;
+
+    size_t actualSize = (*me->mCallback)(
+            me, buffer->raw, buffer->size, me->mCallbackCookie);
+
+    buffer->size = actualSize;
+
+}
+
+status_t MediaPhoneClient::AudioOutput::dump(int fd, const Vector<String16>& args) const
+{
+    const size_t SIZE = 256;
+    char buffer[SIZE];
+    String8 result;
+
+    result.append(" AudioOutput\n");
+    snprintf(buffer, 255, "  stream type(%d), left - right volume(%f, %f)\n",
+            mStreamType, mLeftVolume, mRightVolume);
+    result.append(buffer);
+    snprintf(buffer, 255, "  msec per frame(%f), latency (%d)\n",
+            mMsecsPerFrame, mLatency);
+    result.append(buffer);
+
+    ::write(fd, result.string(), result.size());
+    if (mTrack != 0) {
+        mTrack->dump(fd, args);
+    }
     return NO_ERROR;
 }
 

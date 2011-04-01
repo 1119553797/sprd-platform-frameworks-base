@@ -31,6 +31,7 @@ import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.util.Log;
 import android.view.SurfaceHolder;
+import android.hardware.Camera;
 
 import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
@@ -327,6 +328,12 @@ public class PhoneProxy extends Handler implements Phone {
 	public void setRemoteDisplay(SurfaceHolder sh)  {
 		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
 			mActivePhone.setRemoteDisplay(sh);
+		} 
+	}
+
+	public void setCamera(Camera c) {
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.setCamera(c);
 		} 
 	}
 
