@@ -144,14 +144,22 @@ status_t MediaPhoneClient::prepareAsync()
     }
 #endif
     CHECK_RT(mPlayer->setDataSource(mUrlIn, NULL));
-    int fd = open(mUrlOut, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    char urlOut[MAX_URL_LEN];
+    if (!strncasecmp(mUrlOut, "videophone://", 13))
+        strcpy(urlOut, mUrlOut + 13);
+    else
+        strcpy(urlOut, mUrlOut);
+    int fd = open(urlOut, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1) {
-        LOGE("mediaphone: open %s failed errno=%d", mUrlOut, errno);
+        LOGE("mediaphone: open %s failed errno=%d", urlOut, errno);
+    } else {
+        LOGI("mediaphone: open %s successed with %d", urlOut, fd);
     }
     CHECK_RT(mRecorder->setCamera(mCamera));
     CHECK_RT(mRecorder->setVideoSource(VIDEO_SOURCE_CAMERA));
     //CHECK_RT(mRecorder->setAudioSource(AUDIO_SOURCE_MIC));
-    CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
+    //CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
+    CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_VIDEOPHONE));
     CHECK_RT(mRecorder->setVideoFrameRate(15));
     CHECK_RT(mRecorder->setVideoSize(176, 144));
     //setVideoEncodingBitRate(48*1024);

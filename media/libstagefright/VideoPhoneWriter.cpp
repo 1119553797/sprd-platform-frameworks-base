@@ -1,3 +1,7 @@
+#define LOG_NDEBUG 0
+#define LOG_TAG "VideoPhoneWriter"
+#include <utils/Log.h>
+
 #include <media/stagefright/VideoPhoneWriter.h>
 #include <media/stagefright/MediaBuffer.h>
 #include <media/stagefright/MediaDebug.h>
@@ -13,21 +17,25 @@ namespace android {
 
 VideoPhoneWriter::VideoPhoneWriter(int handle)
     : m_nHandle(handle),
-      m_nInitCheck(m_nHandle > 0 ? OK : NO_INIT),
+    	m_MediaSource(NULL),
+      m_nInitCheck(m_nHandle >= 0 ? OK : NO_INIT),
       m_bStarted(false)
 {
+	LOGI("VideoPhoneWriter::VideoPhoneWriter");
 }
 
 VideoPhoneWriter::~VideoPhoneWriter() 
 {
+	LOGI("VideoPhoneWriter::~VideoPhoneWriter");
     	if (m_bStarted) 
         	stop();
-
+/*
     	if (m_File != NULL) 
-	{
+    	{
         	fclose(m_File);
         	m_File = NULL;
     	}
+*/    	
 }
 
 status_t VideoPhoneWriter::initCheck() const 
@@ -43,6 +51,7 @@ status_t VideoPhoneWriter::addSource(const sp<MediaSource> &source)
     	int32_t 		nVideoHeight;
 	sp<MetaData>meta;	
 	
+	LOGI("VideoPhoneWriter::addSource");
 	if (m_nInitCheck != OK)
         	goto over;
 
@@ -63,6 +72,7 @@ status_t VideoPhoneWriter::addSource(const sp<MediaSource> &source)
 	err = OK;
 	
 over:
+	LOGI("VideoPhoneWriter::addSource end %d", err);
 	
     	return err;
 }
@@ -142,45 +152,50 @@ status_t VideoPhoneWriter::pause()
 // static
 void *VideoPhoneWriter::ThreadWrapper(void *me) 
 {
-    	return (void *) static_cast<VideoPhoneWriter *>(me)->threadFunc();
+	return (void *) static_cast<VideoPhoneWriter *>(me)->threadFunc();
 }
 
 status_t VideoPhoneWriter::threadFunc() 
 {
 	status_t err = OK;
 
-    	prctl(PR_SET_NAME, (unsigned long)"VideoPhoneWriter", 0, 0, 0);
+	prctl(PR_SET_NAME, (unsigned long)"VideoPhoneWriter", 0, 0, 0);
 		
-    	while (m_bStarted) 
+	LOGI("enter thread");
+	while (m_bStarted) 
 	{
-        	MediaBuffer *buffer;
-        	err = m_MediaSource->read(&buffer);
+		MediaBuffer *buffer;
+		LOGI("before read");
+		err = m_MediaSource->read(&buffer);
+		LOGI("after read %d", err);
 
-        	if (err != OK)
-            		break;
+		if (err != OK)
+			break;
 
 		ssize_t nLen = (ssize_t)buffer->range_length();
+		LOGI("before write %d", nLen);
 		
-        	ssize_t n = write(m_nHandle,
-                	(const uint8_t *)buffer->data() + buffer->range_offset(),
-                	nLen);
+		ssize_t n = write(m_nHandle,
+										(const uint8_t *)buffer->data() + buffer->range_offset(),
+										nLen);
+		LOGI("after write %d", n);
 
 		buffer->release();
-            	buffer = NULL;
+		buffer = NULL;
 					
-        	if (n < nLen) 
-            		break;
-    	}
+		if (n < nLen)
+			break;
+	}
 
     	//flush(m_nHandle);
     	/*fclose(m_File);
     	m_File 			= NULL;*/
-    	m_bReachedEOS 	= true;
+	m_bReachedEOS 	= true;
 	
-    	if (err == ERROR_END_OF_STREAM)
-        	err	= OK;
+	if (err == ERROR_END_OF_STREAM)
+		err	= OK;
 	
-   	return err;
+	return err;
 }
 
 bool VideoPhoneWriter::reachedEOS() 

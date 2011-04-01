@@ -37,6 +37,7 @@
 #include <media/stagefright/AudioPlayer.h>
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/FileSource.h>
+#include <media/stagefright/CharDeviceSource.h>
 #include <media/stagefright/MediaBuffer.h>
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MediaExtractor.h>
@@ -1103,7 +1104,7 @@ void AwesomePlayer::finishSeekIfNecessary(int64_t videoTimeUs) {
     }
 
     if (mAudioPlayer != NULL) {
-        LOGV("seeking audio to %lld us (%.2f secs).", timeUs, timeUs / 1E6);
+        //LOGV("seeking audio to %lld us (%.2f secs).", timeUs, timeUs / 1E6);
 
         // If we don't have a video time, seek audio to the originally
         // requested seek time instead.
@@ -1432,18 +1433,19 @@ status_t AwesomePlayer::finishSetDataSource_l() {
 
         dataSource = mCachedSource;
     } 
-	else if (!strncasecmp(mUri.string(), "cmmb://", 7)) 
-	{
-		sp<MediaExtractor> extractor =
-            		MediaExtractor::Create(dataSource, MEDIA_MIMETYPE_CONTAINER_CMMB);
-		 return setDataSource_l(extractor);
-	}
-	else if (!strncasecmp(mUri.string(), "videophone://", 13)) 
-	{
-		sp<MediaExtractor> extractor =
-            		MediaExtractor::Create(dataSource, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE);
-		 return setDataSource_l(extractor);
-	}
+    else if (!strncasecmp(mUri.string(), "cmmb://", 7)) 
+    {
+        sp<MediaExtractor> extractor =
+            MediaExtractor::Create(dataSource, MEDIA_MIMETYPE_CONTAINER_CMMB);
+         return setDataSource_l(extractor);
+    }
+    else if (!strncasecmp(mUri.string(), "videophone://", 13)) 
+    {
+        sp<DataSource> source = new CharDeviceSource(mUri.string() + 13);
+        sp<MediaExtractor> extractor =
+            MediaExtractor::Create(source, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE);
+        return setDataSource_l(extractor);
+    }
     else if (!strncasecmp(mUri.string(), "httplive://", 11)) {
         String8 uri("http://");
         uri.append(mUri.string() + 11);

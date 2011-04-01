@@ -180,7 +180,8 @@ public class MediaPhone extends Handler
         try {
             MediaPhone mp = new MediaPhone(ril);
             mp.setComm(url, url);
-            mp.setComm("/data/in.3gp", "/data/out.3gp");
+            //mp.setComm("/data/in.3gp", "/data/out.3gp");
+            mp.setComm("videophone:///data/vpin", "videophone:///data/vpout");
             if (remoteHolder != null) {
                 mp.setRemoteDisplay(remoteHolder);
             }

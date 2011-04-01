@@ -41,6 +41,7 @@ private:
 	bool				m_bHaveMetadata;
 
 	sp<MetaData>	mFileMetaData;
+    sp<DataSource> mDataSource;
 
 };
 
