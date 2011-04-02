@@ -136,8 +136,6 @@ public class PhoneFactory {
      * @return Phone Type
      */
     public static int getPhoneType(int networkMode) {
-        return Phone.PHONE_TYPE_TD;//@zha
-/*
         switch(networkMode) {
         case RILConstants.NETWORK_MODE_CDMA:
         case RILConstants.NETWORK_MODE_CDMA_NO_EVDO:
@@ -155,7 +153,6 @@ public class PhoneFactory {
         default:
             return Phone.PHONE_TYPE_GSM;
         }
-*/
     }
 
     public static Phone getDefaultPhone() {

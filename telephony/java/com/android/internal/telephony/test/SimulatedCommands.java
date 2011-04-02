@@ -18,6 +18,7 @@ package com.android.internal.telephony.test;
 
 
 import android.os.AsyncResult;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -1483,6 +1484,9 @@ public final class SimulatedCommands extends BaseCommands
 	}
 	
 	public void testVP(int flag, int value, Message result){
+	}
+	
+	public void codecVP(int type, Bundle param, Message result){
 	}
 	
 	public void setOnVPData(Handler h, int what, Object obj){

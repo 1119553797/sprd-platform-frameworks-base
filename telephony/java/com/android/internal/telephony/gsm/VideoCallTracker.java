@@ -118,6 +118,9 @@ public final class VideoCallTracker extends CallTracker
 		mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mp.setOnVideoSizeChangedListener(this);
 		mp.setOnErrorListener(this);
+		mp.setOnDial(this, EVENT_OPERATION_COMPLETE, null);
+		mp.setOnAccept(this, EVENT_OPERATION_COMPLETE, null);
+		mp.setOnHangup(this, EVENT_OPERATION_COMPLETE, null);
     }
 
     public void dispose() {
@@ -125,6 +128,10 @@ public final class VideoCallTracker extends CallTracker
         cm.unregisterForCallStateChanged(this);
         cm.unregisterForOn(this);
         cm.unregisterForNotAvailable(this);
+		
+	mp.unSetDial(this);
+	mp.unSetAccept(this);
+	mp.unSetDial(this);
 
         for(VideoConnection c : connections) {
             try {
@@ -374,7 +381,6 @@ public final class VideoCallTracker extends CallTracker
 
     protected void
     handlePollCalls(AsyncResult ar) {
-    if (false) {
         List polledCalls;
 
         if (ar.exception == null) {
@@ -576,7 +582,7 @@ public final class VideoCallTracker extends CallTracker
         }
 
         //dumpState();
-		}
+			
     }
 
     private void
@@ -719,7 +725,7 @@ public final class VideoCallTracker extends CallTracker
                             "handle EVENT_POLL_CALL_RESULT: set needsPoll=F");
                     needsPoll = false;
                     lastRelevantPoll = null;
-                    //handlePollCalls((AsyncResult)msg.obj);
+                    handlePollCalls((AsyncResult)msg.obj);
                 }
             break;
 
