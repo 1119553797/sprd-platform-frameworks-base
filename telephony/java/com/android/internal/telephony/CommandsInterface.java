@@ -20,6 +20,7 @@ import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 
 import android.os.Message;
 import android.os.Handler;
+import android.os.Bundle;
 
 
 /**
@@ -1408,6 +1409,7 @@ public interface CommandsInterface {
 	public void recordVPVideo(boolean bStart, Message result);
 	public void recordVPAudio(boolean bStart, int mode, Message result);
 	public void testVP(int flag, int value, Message result);
+	public void codecVP(int type, Bundle param, Message result);
 	
 	public void setOnVPData(Handler h, int what, Object obj);
 	public void unSetOnVPData(Handler h);

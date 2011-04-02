@@ -24,9 +24,11 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.PowerManager;
+import android.os.Registrant;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -36,6 +38,7 @@ import android.hardware.Camera;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.lang.SecurityException;
 import java.util.Set;
 import java.lang.ref.WeakReference;
 
@@ -55,7 +58,7 @@ public class MediaPhone extends Handler
     // macro invocation in IMediaPhone.cpp
     private final static String IMEDIA_PHONE = "android.media.IMediaPhone";
 
-    private final static boolean DEBUG_WITHOUT_MODEM = true;
+    private final static boolean DEBUG_WITHOUT_MODEM = false;
 
     private int mNativeContext; // accessed by native methods
     private int mListenerContext; // accessed by native methods
@@ -70,7 +73,12 @@ public class MediaPhone extends Handler
     private CommandsInterface mCm;	
     private Message msgTracker = null;
     private static int ARG_SKIP_MSGTRACKER = -1;
-	
+
+    private boolean m_bStartTester = false;
+    private Process m_prog = null;
+    private Registrant m_DialRegistrant;
+    private Registrant m_AcceptRegistrant;
+    private Registrant m_HangupRegistrant;
 
     /**
      * Default constructor. Consider using one of the create() methods for
@@ -90,6 +98,7 @@ public class MediaPhone extends Handler
             mEventHandler = null;
         }
         mCm = ril;
+	m_bStartTester = false;
 
         /* Native setup requires a weak reference to our object.
          * It's easier to create it here than in C++.
@@ -179,7 +188,7 @@ public class MediaPhone extends Handler
 
         try {
             MediaPhone mp = new MediaPhone(ril);
-            mp.setComm(url, url);
+            //mp.setComm(url, url);
             //mp.setComm("/data/in.3gp", "/data/out.3gp");
             mp.setComm("videophone:///data/vpin", "videophone:///data/vpout");
             if (remoteHolder != null) {
@@ -195,6 +204,7 @@ public class MediaPhone extends Handler
             mp.mCm.setOnVPRemoteMedia(mp.mEventHandler, MEDIA_UNSOL_REMOTE_VIDEO, null);
             mp.mCm.setOnVPMMRing(mp.mEventHandler, MEDIA_UNSOL_MM_RING, null);
             mp.mCm.setOnVPRecordVideo(mp.mEventHandler, MEDIA_UNSOL_RECORD_VIDEO, null);
+	    mp.m_bStartTester = false;
             return mp;
         } catch (IOException ex) {
             Log.d(TAG, "create failed:", ex);
@@ -410,6 +420,20 @@ public class MediaPhone extends Handler
         mCm.testVP(flag, value, msg);
     }	
 
+    public void codec(int type, Bundle param, Message result) {
+        Log.d(TAG, "codec");
+        stayAwake(false);
+
+        Message msg = Message.obtain(mEventHandler,MEDIA_SOL_CODEC);
+        msgTracker = result;
+        mCm.codecVP(type, param, msg);	
+
+        if ((DEBUG_WITHOUT_MODEM) && (msgTracker != null)) {
+            msgTracker.sendToTarget();
+            msgTracker = null;
+        }
+    }
+
     /**
      * Set the low-level power management behavior for this MediaPhone.  This
      * can be used when the MediaPhone is not playing through a SurfaceHolder
@@ -578,6 +602,7 @@ public class MediaPhone extends Handler
     private static final int MEDIA_SOL_DIAL	          = 11;
     private static final int MEDIA_SOL_HANGUP         = 12;
     private static final int MEDIA_SOL_ACCEPT         = 13;
+    private static final int MEDIA_SOL_CODEC         = 14;
 
     // unsolicited events
     private static final int MEDIA_UNSOL_DATA = 20;
@@ -652,25 +677,54 @@ public class MediaPhone extends Handler
             // following is messages from RIL.java
             case MEDIA_SOL_NOP: 
             case MEDIA_SOL_DIAL:
+		if (m_DialRegistrant != null) {
+			 Log.i(TAG, " notify MEDIA_SOL_DIAL ");
+			 m_DialRegistrant
+				   .notifyRegistrant(new AsyncResult(null, msg.obj, null));
+		}
+		break;
             case MEDIA_SOL_HANGUP:
+		if (m_HangupRegistrant != null) {
+			 Log.i(TAG, " notify MEDIA_SOL_HANGUP ");
+			 m_HangupRegistrant
+				   .notifyRegistrant(new AsyncResult(null, msg.obj, null));
+		}
+		break;
             case MEDIA_SOL_ACCEPT:
-                if ((msgTracker != null) && (msg.arg1 != ARG_SKIP_MSGTRACKER)) {
-                    msgTracker.obj = msg.obj;
-                    msgTracker.sendToTarget();
-                    msgTracker = null;
-                }
-                return;
+		if (m_AcceptRegistrant != null) {
+			 Log.i(TAG, " notify MEDIA_SOL_ACCEPT ");
+			 m_AcceptRegistrant
+				   .notifyRegistrant(new AsyncResult(null, msg.obj, null));
+		}
+		break;
 				
             case MEDIA_UNSOL_DATA: {
                 int[] params = (int[])ar.result;
                 int indication = params[0];
+		Log.d(TAG, "m_bStartTester: " + m_bStartTester);
+		if (!m_bStartTester)
+		{
+		   try{
+		     m_prog = Runtime.getRuntime().exec("/system/bin/VPTESER");
+		     m_bStartTester = true;
+		   }catch (IOException ex) {
+	                Log.d(TAG, "exec fail " + ex);
+	            }catch (SecurityException ex) {
+	                Log.d(TAG, "exec fail " + ex);
+	            }
+	    }
                 return;
             }
 
             case MEDIA_UNSOL_CODEC: {
-                int type = msg.arg1;
-                String param = (String)msg.obj;
-                onCodecRequest(type, param);
+		if (ar == null) {
+			Log.d(TAG, "handleMessage(), ar == null");
+			return;
+		}
+                //int type = msg.arg1;
+                //String param = (String)msg.obj;
+                int[] result = (int[])ar.result;
+                onCodecRequest(result[0], null);
                 return;
             }
 
@@ -736,28 +790,36 @@ public class MediaPhone extends Handler
         switch (type) {
         case CODEC_OPEN:
             try {
-                prepareAsync();
+                //prepareAsync();
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "prepareAsync fail " + ex);
             }
+	    codec(CODEC_OPEN, null, null);
             break;
 
         case CODEC_SET_PARAM:
             if (param != null) {
             }
             try {
-                start();
+                //start();
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "start fail " + ex);
             }
+	    codec(CODEC_SET_PARAM, null, null);
             break;
 
         case CODEC_CLOSE:
             try {
-                stop();
+                //stop();
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "stop fail " + ex);
             }
+	    codec(CODEC_CLOSE, null, null);
+	    m_bStartTester = false;
+	    if (m_prog != null) {
+		m_prog.destroy();
+		m_prog = null;
+	    }
             break;
         }
     }
@@ -925,4 +987,28 @@ public class MediaPhone extends Handler
      * @hide
      */
     //public native static int snoop(short [] outData, int kind);
+    
+    public void setOnDial(Handler h, int what, Object obj) {
+        m_DialRegistrant = new Registrant (h, what, obj);
+    }
+
+    public void unSetDial(Handler h) {
+        m_DialRegistrant.clear();
+    }
+	
+    public void setOnAccept(Handler h, int what, Object obj) {
+        m_AcceptRegistrant = new Registrant (h, what, obj);
+    }
+
+    public void unSetAccept(Handler h) {
+        m_AcceptRegistrant.clear();
+    }
+	
+    public void setOnHangup(Handler h, int what, Object obj) {
+        m_HangupRegistrant = new Registrant (h, what, obj);
+    }
+
+    public void unSetHangup(Handler h) {
+        m_HangupRegistrant.clear();
+    }
 }

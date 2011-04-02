@@ -37,6 +37,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
+import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemProperties;
 import android.os.PowerManager.WakeLock;
@@ -2068,6 +2069,19 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         send(rr);
     }
 
+   public void codecVP(int type, Bundle param, Message result){
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_CODEC, result);
+	
+        	rr.mp.writeInt(type);
+		rr.mp.writeBundle(param);	
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                    + " " + type + " " + param);
+
+        send(rr);
+    }
+
     protected void
     onRadioAvailable() {
         // In case screen state was lost (due to process crash),
@@ -2476,7 +2490,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_UNSOL_RINGBACK_TONE: ret = responseInts(p); break;
             case RIL_UNSOL_RESEND_INCALL_MUTE: ret = responseVoid(p); break;
 			case RIL_UNSOL_VIDEOPHONE_DATA: ret = responseInts(p); break;
-            case RIL_UNSOL_VIDEOPHONE_CODEC: ret = responseVoid(p); break;
+            case RIL_UNSOL_VIDEOPHONE_CODEC: ret = responseInts(p); break;
             case RIL_UNSOL_VIDEOPHONE_STR: ret = responseString(p); break;
             case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: ret = responseInts(p); break;
             case RIL_UNSOL_VIDEOPHONE_MM_RING: ret = responseInts(p); break;
@@ -2799,8 +2813,21 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                 }
             	break;
 			}
-			case RIL_UNSOL_VIDEOPHONE_CODEC:
-				break;
+	case RIL_UNSOL_VIDEOPHONE_CODEC:{		
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                int[] params = (int[])ret;
+                if(params.length == 1) {
+                    if (mVPCodecRegistrant != null) {
+                        mVPCodecRegistrant
+							.notifyRegistrant(new AsyncResult(null, params, null));
+                    }
+                } else {
+                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_CODEC ERROR with wrong length "
+                            + params.length);
+                }
+            	break;
+		}
             case RIL_UNSOL_VIDEOPHONE_STR: 
                 if (RILJ_LOGD) unsljLog(response);
 				
