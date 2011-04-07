@@ -19,7 +19,9 @@
 #include <utils/Log.h>
 
 #include "include/AACDecoder.h"
+#ifdef BUILD_SPRD_AAC
 #include "include/AACSPRDDecoder.h"
+#endif
 #include "include/AACEncoder.h"
 #include "include/AMRNBDecoder.h"
 #include "include/AMRNBEncoder.h"
@@ -80,7 +82,9 @@ FACTORY_CREATE(MP3Decoder)
 FACTORY_CREATE(AMRNBDecoder)
 FACTORY_CREATE(AMRWBDecoder)
 FACTORY_CREATE(AACDecoder)
+#ifdef BUILD_SPRD_AAC
 FACTORY_CREATE(AACSPRDDecoder)
+#endif
 FACTORY_CREATE(AVCDecoder)
 FACTORY_CREATE(G711Decoder)
 FACTORY_CREATE(M4vH263Decoder)
@@ -129,7 +133,9 @@ static sp<MediaSource> InstantiateSoftwareCodec(
         FACTORY_REF(AMRNBDecoder)
         FACTORY_REF(AMRWBDecoder)
         FACTORY_REF(AACDecoder)
-        FACTORY_REF(AACSPRDDecoder)        
+#ifdef BUILD_SPRD_AAC        
+        FACTORY_REF(AACSPRDDecoder)
+#endif        
         FACTORY_REF(AVCDecoder)
         FACTORY_REF(G711Decoder)
         FACTORY_REF(M4vH263Decoder)
@@ -166,8 +172,10 @@ static const CodecInfo kDecoderInfo[] = {
 //    { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.PV.amrdec" },
     //{ MEDIA_MIMETYPE_AUDIO_AAC, "OMX.PV.aacdec" },//@jgdu
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.TI.AAC.decode" }, 
-    { MEDIA_MIMETYPE_AUDIO_AAC, "AACDecoder" },
-    { MEDIA_MIMETYPE_AUDIO_AAC, "AACSPRDDecoder" },    
+#ifdef BUILD_SPRD_AAC    
+    { MEDIA_MIMETYPE_AUDIO_AAC, "AACSPRDDecoder" },   
+#endif    
+    { MEDIA_MIMETYPE_AUDIO_AAC, "AACDecoder" },    
     { MEDIA_MIMETYPE_AUDIO_G711_ALAW, "G711Decoder" },
     { MEDIA_MIMETYPE_AUDIO_G711_MLAW, "G711Decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.qcom.7x30.video.decoder.mpeg4" },

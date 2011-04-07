@@ -47,11 +47,17 @@ private:
     MediaBufferGroup *mBufferGroup;
 
     void *mDecoderBuf;
+    uint32_t *mCodec_specific_data;	
+    int32_t mCodec_specific_data_size;
+    bool mIsLATM;
+    int32_t mSamplingRate;
+    uint16_t *mPcm_out_l;	
+    uint16_t *mPcm_out_r;
+	
     int64_t mAnchorTimeUs;
     int64_t mNumSamplesOutput;
     status_t mInitCheck;
     int64_t  mNumDecodedBuffers;
-    int32_t  mUpsamplingFactor;
 
     MediaBuffer *mInputBuffer;
 

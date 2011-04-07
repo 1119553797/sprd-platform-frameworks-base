@@ -90,9 +90,13 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_httplive \
         libstagefright_rtsp \
         libstagefright_id3 \
-        libstagefright_g711dec \
+        libstagefright_g711dec
+	
+ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
+LOCAL_STATIC_LIBRARIES += \
 	libstagefright_aacdec_sprd \
 	libaacdec_sprd
+endif
 
 LOCAL_SHARED_LIBRARIES += \
         libstagefright_amrnb_common \
@@ -116,6 +120,10 @@ ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
 endif
 
 LOCAL_CFLAGS += -Wno-multichar
+
+ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
+LOCAL_CFLAGS += -DBUILD_SPRD_AAC
+endif
 
 LOCAL_MODULE:= libstagefright
 
