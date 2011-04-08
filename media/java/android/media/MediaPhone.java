@@ -156,8 +156,8 @@ public class MediaPhone extends Handler
      * to free the resources. If not released, too many MediaPhone instances will
      * result in an exception.</p>
      *
-     * @param context the Context to use
-     * @param uri the Uri from which to get the datasource
+     * @param ril the ril to use
+     * @param url the Url from which to get the datasource
      * @return a MediaPhone object, or null if creation failed
      */
      /**
@@ -175,8 +175,8 @@ public class MediaPhone extends Handler
      * to free the resources. If not released, too many MediaPhone instances will
      * result in an exception.</p>
      *
-     * @param context the Context to use
-     * @param uri the Uri from which to get the datasource
+     * @param ril the ril to use
+     * @param url the Url from which to get the datasource
      * @param remoteHolder the SurfaceHolder to use for displaying the video
      * @param localSurface the Surface to use for preview the camera
      * @return a MediaPhone object, or null if creation failed
@@ -236,8 +236,8 @@ public class MediaPhone extends Handler
     /**
      * Sets the data source as a content Uri.
      *
-     * @param context the Context to use when resolving the Uri
-     * @param uri the Content URI of the data you want to play
+     * @param uriIn the Content URI of the input data you want to play
+     * @param uriOut the Content URI of the output data you want to play
      * @throws IllegalStateException if it is called in an invalid state
      */
     /*
@@ -263,7 +263,8 @@ public class MediaPhone extends Handler
     /**
      * Sets the data source (file-path or http/rtsp URL) to use.
      *
-     * @param path the path of the file, or the http/rtsp URL of the stream you want to play
+     * @param path_in the input path of the file, or the http/rtsp URL of the stream you want to play
+     * @param path_out the output path of the file, or the http/rtsp URL of the stream you want to play
      * @throws IllegalStateException if it is called in an invalid state
      */
     public native void setComm(String path_in, String path_out) throws IOException, IllegalArgumentException, IllegalStateException;
