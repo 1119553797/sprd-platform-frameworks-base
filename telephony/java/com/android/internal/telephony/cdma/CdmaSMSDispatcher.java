@@ -339,6 +339,21 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
         }
     }
 
+     /**
+     * Called when received sms cell broadcast 
+     *
+     * @param ar AsyncResult passed into the message handler.  ar.result should
+     *           be a String representing the status report PDU, as ASCII hex.
+     */
+    protected  void handleSmsCB(AsyncResult ar){
+
+      //is not implemented
+
+
+
+
+
+   }
     /** {@inheritDoc} */
     protected void sendData(String destAddr, String scAddr, int destPort,
             byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
