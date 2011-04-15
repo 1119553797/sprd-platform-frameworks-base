@@ -171,7 +171,7 @@ public class StkService extends Handler implements AppInterface {
         // Register for SIM ready event.
         mSimRecords.registerForRecordsLoaded(this, MSG_ID_SIM_LOADED, null);
 
-        mCmdIf.reportStkServiceIsRunning(null);
+        //mCmdIf.reportStkServiceIsRunning(null);
         StkLog.d(this, "StkService: is running");
     }
 
@@ -514,6 +514,7 @@ public class StkService extends Handler implements AppInterface {
             mMsgDecoder.sendStartDecodingMessageParams(new RilMessage(msg.what, null));
             break;
         case MSG_ID_SIM_LOADED:
+            mCmdIf.reportStkServiceIsRunning(null);
             break;
         case MSG_ID_RIL_MSG_DECODED:
             handleRilMsg((RilMessage) msg.obj);
