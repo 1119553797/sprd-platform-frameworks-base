@@ -129,7 +129,13 @@
         android:protectionLevel="dangerous"
         android:label="@string/permlab_receiveSms"
         android:description="@string/permdesc_receiveSms" />
-
+    <!-- Allows an application to monitor incoming SMSCB messages, to record
+         or perform processing on them. -->
+    <permission android:name="android.permission.RECEIVE_SMSCB"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:protectionLevel="dangerous"
+        android:label="@string/permlab_receiveSmsCB"
+        android:description="@string/permdesc_receiveSmsCB" />
     <!-- Allows an application to monitor incoming MMS messages, to record
          or perform processing on them. -->
     <permission android:name="android.permission.RECEIVE_MMS"
@@ -1097,6 +1103,14 @@
         android:label="@string/permlab_broadcastSmsReceived"
         android:description="@string/permdesc_broadcastSmsReceived"
         android:protectionLevel="signature" />
+
+    <!-- Allows an application to broadcast an SMS receipt notification -->
+    <permission android:name="android.permission.BROADCAST_SMSCB"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:label="@string/permlab_broadcastSmsCBReceived"
+        android:description="@string/permdesc_broadcastSmsCBReceived"
+        android:protectionLevel="signature" />
+
 
     <!-- Allows an application to broadcast a WAP PUSH receipt notification -->
     <permission android:name="android.permission.BROADCAST_WAP_PUSH"

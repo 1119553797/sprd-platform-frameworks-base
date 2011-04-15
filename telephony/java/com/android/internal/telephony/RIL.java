@@ -1893,17 +1893,21 @@ public final class RIL extends BaseCommands implements CommandsInterface {
      * {@inheritDoc}
      */
     public void setGsmBroadcastConfig(SmsBroadcastConfigInfo[] config, Message response) {
+
+
+        Log.i("RIL","setGsmBroadcastConfig");
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_GSM_SET_BROADCAST_CONFIG, response);
 
         int numOfConfig = config.length;
         rr.mp.writeInt(numOfConfig);
-
+        
+        Log.i("RIL","setGsmBroadcastConfig len "+config.length);
         for(int i = 0; i < numOfConfig; i++) {
             rr.mp.writeInt(config[i].getFromServiceId());
             rr.mp.writeInt(config[i].getToServiceId());
             rr.mp.writeInt(config[i].getFromCodeScheme());
             rr.mp.writeInt(config[i].getToCodeScheme());
-            rr.mp.writeInt(config[i].isSelected() ? 1 : 0);
+            rr.mp.writeInt(config[i].isSelected());
         }
 
         if (RILJ_LOGD) {
@@ -1922,7 +1926,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
      */
     public void setGsmBroadcastActivation(boolean activate, Message response) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_GSM_BROADCAST_ACTIVATION, response);
-
+        Log.i("RIL","setGsmBroadcastActivation");
         rr.mp.writeInt(1);
         rr.mp.writeInt(activate ? 0 : 1);
 
@@ -3214,7 +3218,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             int toId = p.readInt();
             int fromScheme = p.readInt();
             int toScheme = p.readInt();
-            boolean selected = (p.readInt() == 1);
+            int selected = p.readInt();
 
             info = new SmsBroadcastConfigInfo(fromId, toId, fromScheme,
                     toScheme, selected);

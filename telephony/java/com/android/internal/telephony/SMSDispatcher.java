@@ -114,7 +114,9 @@ public abstract class SMSDispatcher extends Handler {
 
     /** Radio is ON */
     static final protected int EVENT_RADIO_ON = 12;
-
+	
+    static final protected int EVENT_NEW_SMS_CELL_BROADCAST = 13;
+	
     protected Phone mPhone;
     protected Context mContext;
     protected ContentResolver mResolver;
@@ -243,6 +245,7 @@ public abstract class SMSDispatcher extends Handler {
         mCm.setOnSmsStatus(this, EVENT_NEW_SMS_STATUS_REPORT, null);
         mCm.setOnIccSmsFull(this, EVENT_ICC_FULL, null);
         mCm.registerForOn(this, EVENT_RADIO_ON, null);
+	mCm.setOnNewGsmBroadcastSms(this,EVENT_NEW_SMS_CELL_BROADCAST,null);
 
         // Don't always start message ref at 0.
         sConcatenatedRef = new Random().nextInt(256);
@@ -262,6 +265,7 @@ public abstract class SMSDispatcher extends Handler {
         mCm.unSetOnSmsStatus(this);
         mCm.unSetOnIccSmsFull(this);
         mCm.unregisterForOn(this);
+	mCm.unSetOnNewGsmBroadcastSms(this);
     }
 
     protected void finalize() {
@@ -317,7 +321,15 @@ public abstract class SMSDispatcher extends Handler {
             }
 
             break;
+			
+	case EVENT_NEW_SMS_CELL_BROADCAST:
 
+	    if (Config.LOGD) {
+                Log.d(TAG, "New SMSCB Message Received");
+            }
+
+           handleSmsCB((AsyncResult)msg.obj);
+           break;
         case EVENT_SEND_SMS_COMPLETE:
             // An outbound SMS has been successfully transferred, or failed.
             handleSendComplete((AsyncResult) msg.obj);
@@ -443,7 +455,14 @@ public abstract class SMSDispatcher extends Handler {
      *           be a String representing the status report PDU, as ASCII hex.
      */
     protected abstract void handleStatusReport(AsyncResult ar);
-
+   
+    /**
+     * Called when received sms cell broadcast 
+     *
+     * @param ar AsyncResult passed into the message handler.  ar.result should
+     *           be a String representing the status report PDU, as ASCII hex.
+     */
+    protected abstract void handleSmsCB(AsyncResult ar);
     /**
      * Called when SMS send completes. Broadcasts a sentIntent on success.
      * On failure, either sets up retries or broadcasts a sentIntent with
@@ -649,6 +668,19 @@ public abstract class SMSDispatcher extends Handler {
         dispatch(intent, "android.permission.RECEIVE_SMS");
     }
 
+
+
+      /**
+     * Dispatches standard PDUs to interested applications
+     *
+     * @param pdus The raw PDUs making up the message
+     */
+   protected void dispatchSmsCB(byte[][]  pages) {
+        Log.i("SMSDispatcher","dispatchSmsCB");
+        Intent intent = new Intent(Intents.SMSCB_RECEIVED_ACTION);
+        intent.putExtra("pages", pages);
+        dispatch(intent, "android.permission.RECEIVE_SMSCB");
+    }
     /**
      * Dispatches port addressed PDUs to interested applications
      *

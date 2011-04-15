@@ -408,6 +408,13 @@
       and process SMS messages. Malicious applications may monitor
       your messages or delete them without showing them to you.</string>
 
+       <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_receiveSmsCB">receive SMSCB</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveSmsCB">Allows application to receive
+      and process SMSCB messages. Malicious applications may monitor
+      your messages or delete them without showing them to you.</string>
+
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_receiveMms">receive MMS</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -540,6 +547,15 @@
     <string name="permdesc_broadcastSmsReceived">Allows an application to
         broadcast a notification that an SMS message has been received.
         Malicious applications may use this to forge incoming SMS messages.</string>
+      <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_broadcastSmsCBReceived">send SMSCB-received broadcast</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_broadcastSmsCBReceived">Allows an application to
+        broadcast a notification that an SMSCB message has been received.
+        Malicious applications may use this to forge incoming SMSCB messages.</string>
+
+
+
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_broadcastWapPush">send WAP-PUSH-received broadcast</string>

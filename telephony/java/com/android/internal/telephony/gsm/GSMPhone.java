@@ -1521,15 +1521,23 @@ public class GSMPhone extends PhoneBase {
     }
 
     public void activateCellBroadcastSms(int activate, Message response) {
-        Log.e(LOG_TAG, "Error! This functionality is not implemented for GSM.");
+        Log.i(LOG_TAG, " This functionality is  implemented for GSM.");
+        mSMS.activateCellBroadcastSms(activate,response);
+        
+        
     }
 
     public void getCellBroadcastSmsConfig(Message response) {
-        Log.e(LOG_TAG, "Error! This functionality is not implemented for GSM.");
+        Log.i(LOG_TAG, "! This functionality is not implemented for GSM.");
+        mSMS.getCellBroadcastSmsConfig(response);
     }
 
     public void setCellBroadcastSmsConfig(int[] configValuesArray, Message response){
-        Log.e(LOG_TAG, "Error! This functionality is not implemented for GSM.");
+
+	Log.i(LOG_TAG, " This setCellBroadcastSmsConfig  is  implemented for GSM.");
+         mSMS.setCellBroadcastConfig(configValuesArray,response);
+        
+        
     }
 
 }

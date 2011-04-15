@@ -34,9 +34,12 @@ import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsMessageBase;
-
+import com.android.internal.telephony.PhoneBase;
+import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
+import com.android.internal.telephony.gsm.SmsCBMessage;
+import com.android.internal.telephony.gsm.SmsCBMessage.SmsCBPage;
 
 import static android.telephony.SmsMessage.MessageClass;
 
@@ -83,6 +86,38 @@ final class GsmSMSDispatcher extends SMSDispatcher {
         acknowledgeLastIncomingSms(true, Intents.RESULT_SMS_HANDLED, null);
     }
 
+   /**
+     * If this is the last part send the parts out to the application, otherwise
+     * the part is stored for later processing.
+     *  
+     */
+
+
+   
+
+
+
+    /**
+     * Called when received sms cell broadcast 
+     *
+     * @param ar AsyncResult passed into the message handler.  ar.result should
+     *           be a String representing the status report PDU, as ASCII hex.
+     */
+    protected  void handleSmsCB(AsyncResult ar){
+       String pduString = (String) ar.result;
+       Log.i(TAG,"handleSmsCB pduString"+pduString);
+       byte[][]  bytePages = SmsCBMessage.getSmsCBPage(pduString,pduString.length());
+
+     //  processSmsCBPage(page);     
+       Log.i(TAG,"handleSmsCB bytePages");
+      if(bytePages != null){
+
+           dispatchSmsCB(bytePages);
+ 
+      	}
+
+
+   }
 
     /** {@inheritDoc} */
     protected int dispatchMessage(SmsMessageBase smsb) {
@@ -346,22 +381,58 @@ final class GsmSMSDispatcher extends SMSDispatcher {
     /** {@inheritDoc} */
     protected void activateCellBroadcastSms(int activate, Message response) {
         // Unless CBS is implemented for GSM, this point should be unreachable.
-        Log.e(TAG, "Error! The functionality cell broadcast sms is not implemented for GSM.");
-        response.recycle();
+        Log.i(TAG, "Error! The functionality cell broadcast sms is not implemented for GSM.");
+        if(mCm != null)
+            mCm.setGsmBroadcastActivation((activate == 0), response);
+        //response.recycle();
     }
 
     /** {@inheritDoc} */
     protected void getCellBroadcastSmsConfig(Message response){
         // Unless CBS is implemented for GSM, this point should be unreachable.
-        Log.e(TAG, "Error! The functionality cell broadcast sms is not implemented for GSM.");
-        response.recycle();
+        Log.i(TAG, "Error! The functionality cell broadcast sms is not implemented for GSM.");
+        if(mCm != null)
+           mCm.getGsmBroadcastConfig(response);
+        //response.recycle();
     }
 
     /** {@inheritDoc} */
     protected  void setCellBroadcastConfig(int[] configValuesArray, Message response) {
         // Unless CBS is implemented for GSM, this point should be unreachable.
-        Log.e(TAG, "Error! The functionality cell broadcast sms is not implemented for GSM.");
-        response.recycle();
+        Log.i(TAG, "setCellBroadcastConfig! The functionality cell broadcast sms is  implemented for GSM.");
+
+	 int count = 5 ;//NO_OF_INTS_STRUCT_1 ,see in class CellBroadcastSmsSettingActivity
+	 Log.i(TAG, "setCellBroadcastConfig! The functionality cell configValuesArray[0] "+configValuesArray[0]+ "mCm" + mCm);
+	 if(mCm != null){
+	SmsBroadcastConfigInfo[]  config = new SmsBroadcastConfigInfo[configValuesArray.length/count];	
+	int j =0;
+       	for(int i= 0;i<configValuesArray.length;i+=count){
+			
+		
+			
+           
+			config[j] =  new  SmsBroadcastConfigInfo(    
+			                    
+					configValuesArray[i],
+					configValuesArray[i+1],
+					configValuesArray[i+2],
+					configValuesArray[i+3],
+					configValuesArray[i+4]
+					 
+			);
+			j++;
+			
+                        //break;
+						
+		} 
+
+
+		 Log.i(TAG, "setCellBroadcastConfig! config.length"+config.length);
+			
+		mCm.setGsmBroadcastConfig(config, response);
+	 }
+        //response.recycle();
+        
     }
 
     private int resultToCause(int rc) {

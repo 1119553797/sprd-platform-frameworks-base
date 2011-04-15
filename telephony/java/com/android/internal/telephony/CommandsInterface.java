@@ -264,6 +264,10 @@ public interface CommandsInterface {
     void setOnNewSMS(Handler h, int what, Object obj);
     void unSetOnNewSMS(Handler h);
 
+
+
+    public void setOnNewGsmBroadcastSms(Handler h, int what, Object obj) ;
+    public void unSetOnNewGsmBroadcastSms(Handler h);
    /**
      * Register for NEW_SMS_ON_SIM unsolicited message
      *
