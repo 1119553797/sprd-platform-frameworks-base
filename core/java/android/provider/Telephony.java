@@ -68,7 +68,7 @@ public final class Telephony {
         public static final int MESSAGE_TYPE_OUTBOX = 4;
         public static final int MESSAGE_TYPE_FAILED = 5; // for failed outgoing messages
         public static final int MESSAGE_TYPE_QUEUED = 6; // for messages to send later
-
+        public static final int  MESSAGE_TYPE_CBSMS = 7; // for messages to send later
 
         /**
          * The thread ID of the message
@@ -271,6 +271,7 @@ public final class Telephony {
             switch(folder) {
             case MESSAGE_TYPE_INBOX:
             case MESSAGE_TYPE_DRAFT:
+	    case MESSAGE_TYPE_CBSMS:
                 break;
             case MESSAGE_TYPE_OUTBOX:
             case MESSAGE_TYPE_SENT:
@@ -342,7 +343,39 @@ public final class Telephony {
                         subject, date, read, false);
             }
         }
+               /**
+         * Contains all text based SMS messages in the SMS app's inbox.
+         */
+        public static final class CellBroadcastSms implements BaseColumns, TextBasedSmsColumns {
+            /**
+             * The content:// style URL for this table
+             */
+            public static final Uri CONTENT_URI =
+                Uri.parse("content://sms/cbsms");
 
+            /**
+             * The default sort order for this table
+             */
+            public static final String DEFAULT_SORT_ORDER = "date DESC";
+
+            /**
+             * Add an SMS to the Draft box.
+             *
+             * @param resolver the content resolver to use
+             * @param address the address of the sender
+             * @param body the body of the message
+             * @param subject the psuedo-subject of the message
+             * @param date the timestamp for the message
+             * @param read true if the message has been read, false if not
+             * @return the URI for the new message
+             */
+            public static Uri addMessage(ContentResolver resolver,
+                    String address, String body, String subject, Long date,
+                    boolean read) {
+                return addMessageToUri(resolver, CONTENT_URI, address, body,
+                        subject, date, read, false);
+            }
+        }
         /**
          * Contains all sent text based SMS messages in the SMS app's.
          */
@@ -534,7 +567,25 @@ public final class Telephony {
             @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
             public static final String SMS_RECEIVED_ACTION =
                     "android.provider.Telephony.SMS_RECEIVED";
-
+             /**
+             * Broadcast Action: A new text based SMSCB message has been received
+             * by the device. The intent will have the following extra
+             * values:</p>
+             *
+             * <ul>
+             *   <li><em>pdus</em> - An Object[] od byte[]s containing the PDUs
+             *   that make up the message.</li>
+             * </ul>
+             *
+             * <p>The extra values can be extracted using
+             * {@link #getMessagesFromIntent(Intent)}.</p>
+             *
+             * <p>If a BroadcastReceiver encounters an error while processing
+             * this intent it should set the result code appropriately.</p>
+             */
+            @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+            public static final String SMSCB_RECEIVED_ACTION =
+                    "android.provider.Telephony.SMSCB_RECEIVED";
             /**
              * Broadcast Action: A new data based SMS message has been received
              * by the device. The intent will have the following extra
@@ -1091,6 +1142,22 @@ public final class Telephony {
          * <P>Type: TEXT</P>
          */
         public static final String ADDRESS = "address";
+    }
+
+       /**
+     * Columns for the "cbsmssetting" table used by "cell broacast sms"
+     */
+    public interface CellBroadcastSmsSettingColumns extends BaseColumns {
+        /**
+         * An address used in MMS or SMS.  Email addresses are
+         * converted to lower case and are compared by string
+         * equality.  Other addresses are compared using
+         * PHONE_NUMBERS_EQUAL.
+         * <P>Type: TEXT</P>
+         */
+        public static final String CHANNEL_ID = "channel_id";
+	public static final String CHANNEL_NAME = "channel_name";
+	public static final String CHANNEL_ENABLE = "enable";
     }
 
     /**

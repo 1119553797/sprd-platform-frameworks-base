@@ -39,13 +39,13 @@ public class SmsBroadcastConfigInfo {
     private int toServiceId;
     private int fromCodeScheme;
     private int toCodeScheme;
-    private boolean selected;
+    private int selected;
 
     /**
      * Initialize the object from rssi and cid.
      */
     public SmsBroadcastConfigInfo(int fromId, int toId, int fromScheme,
-            int toScheme, boolean selected) {
+            int toScheme, int selected) {
         setFromServiceId(fromId);
         setToServiceId(toId);
         setFromCodeScheme(fromScheme);
@@ -112,14 +112,14 @@ public class SmsBroadcastConfigInfo {
     /**
      * @param selected the selected to set
      */
-    public void setSelected(boolean selected) {
+    public void setSelected(int selected) {
         this.selected = selected;
     }
 
     /**
      * @return the selected
      */
-    public boolean isSelected() {
+    public int isSelected() {
         return selected;
     }
 
@@ -127,7 +127,6 @@ public class SmsBroadcastConfigInfo {
     public String toString() {
         return "SmsBroadcastConfigInfo: Id [" +
             getFromServiceId() + "," + getToServiceId() + "] Code [" +
-            getFromCodeScheme() + "," + getToCodeScheme() + "] " +
-            (isSelected() ? "ENABLED" : "DISABLED");
+            getFromCodeScheme() + "," + getToCodeScheme() + "] " + "enable"+ isSelected();
     }
 }
