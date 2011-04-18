@@ -160,7 +160,7 @@ status_t MediaPhoneClient::prepareAsync()
     //CHECK_RT(mRecorder->setAudioSource(AUDIO_SOURCE_MIC));
     //CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
     CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_VIDEOPHONE));
-    CHECK_RT(mRecorder->setVideoFrameRate(15));
+    CHECK_RT(mRecorder->setVideoFrameRate(10));
     CHECK_RT(mRecorder->setVideoSize(176, 144));
     //setVideoEncodingBitRate(48*1024);
     CHECK_RT(mRecorder->setParameters(String8("video-param-encoding-bitrate=393216")));
@@ -174,9 +174,17 @@ status_t MediaPhoneClient::prepareAsync()
     //CHECK_RT(mRecorder->setAudioEncoder(AUDIO_ENCODER_AMR_NB));
     CHECK_RT(mRecorder->setOutputFile(fd, 0, 0));
     CHECK_RT(mRecorder->setPreviewSurface(mPreviewSurface));
-    CHECK_RT(mRecorder->prepare());
 
-    return mPlayer->prepareAsync();
+#if 0
+    if (mListener != NULL)
+    {
+        mListener->notify(MEDIA_PHONE_EVENT_PREPARED, 0, 0);
+    }
+#endif
+
+    CHECK_RT(mRecorder->prepare());
+    CHECK_RT(mPlayer->prepareAsync());
+    return OK;
 }
 
 status_t MediaPhoneClient::start()
@@ -188,8 +196,8 @@ status_t MediaPhoneClient::start()
         return NO_INIT;
     }
 
-    CHECK_RT(mPlayer->start());
     CHECK_RT(mRecorder->start());
+    CHECK_RT(mPlayer->start());
     return OK;
 }
 
@@ -201,8 +209,8 @@ status_t MediaPhoneClient::stop()
         LOGE("mediaphone: player & recorder is not initialized");
         return NO_INIT;
     }
-    mPlayer->stop();
     mRecorder->stop();
+    mPlayer->stop();
     return OK;
 }
 

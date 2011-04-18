@@ -81,7 +81,7 @@ import java.util.List;
 /**
  * {@hide}
  */
-public class GSMPhone extends PhoneBase {
+public abstract class GSMPhone extends PhoneBase {
     // NOTE that LOG_TAG here is "GSM", which means that log messages
     // from this file will go into the radio log rather than the main
     // log.  (Use "adb logcat -b radio" to see them.)

@@ -26,7 +26,6 @@ import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.view.SurfaceHolder;
-import android.hardware.Camera;
 
 import com.android.internal.telephony.CallStateException;
 import com.android.internal.telephony.DataConnection;
@@ -44,7 +43,7 @@ import java.util.List;
  * {@hide}
  *
  */
-public interface Phone {
+public interface Phone extends SprdVideoPhone{
 
     /** used to enable additional debug messages */
     static final boolean DEBUG_PHONE = true;
@@ -98,11 +97,6 @@ public interface Phone {
     enum SuppService {
       UNKNOWN, SWITCH, SEPARATE, TRANSFER, CONFERENCE, REJECT, HANGUP;
     };
-
-    public enum CallType {
-        NONE, VOICE, VIDEO;
-    };
-
 
     static final String STATE_KEY = "state";
     static final String PHONE_NAME_KEY = "phoneName";
@@ -1712,30 +1706,5 @@ public interface Phone {
      */
     void unsetOnEcbModeExitResponse(Handler h);
 
-	public void registerForPreciseVideoCallStateChanged(Handler h, int what, Object obj);
-
-	public void unregisterForPreciseVideoCallStateChanged(Handler h);
-
-	public void registerForNewRingingVideoCall(Handler h, int what, Object obj);
-
-	public void unregisterForNewRingingVideoCall(Handler h);
-
-	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj);
-
-	public void unregisterForIncomingRingVideoCall(Handler h);
-
-	public void registerForVideoCallDisconnect(Handler h, int what, Object obj);
-
-	public void unregisterForVideoCallDisconnect(Handler h);
-
-	public CallType getCallType() ;
-
-	public Connection  dialVideo(String dialString) throws CallStateException;
-
-	public void setLocalDisplay(SurfaceHolder sh);
-
-	public void setRemoteDisplay(SurfaceHolder sh);
-
-	public void setCamera(Camera c);
 }
 

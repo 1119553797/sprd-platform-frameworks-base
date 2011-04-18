@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "AwesomePlayer"
 #include <utils/Log.h>
 
@@ -1656,6 +1656,7 @@ void AwesomePlayer::onPrepareAsyncEvent() {
         }
     }
 
+    LOGI("onPrepareAsyncEvent 1");
     if (mAudioTrack != NULL && mAudioSource == NULL) {
         status_t err = initAudioDecoder();
 
@@ -1665,15 +1666,18 @@ void AwesomePlayer::onPrepareAsyncEvent() {
         }
     }
 
+    LOGI("onPrepareAsyncEvent 2");
     if (mCachedSource != NULL || mRTSPController != NULL) {
         postBufferingEvent_l();
     } else {
         finishAsyncPrepare_l();
     }
+    LOGI("onPrepareAsyncEvent 3");
 }
 
 void AwesomePlayer::finishAsyncPrepare_l() {
     if (mIsAsyncPrepare) {
+        LOGI("is AsyncPrepare");
         if (mVideoWidth < 0 || mVideoHeight < 0) {
             notifyListener_l(MEDIA_SET_VIDEO_SIZE, 0, 0);
         } else {
@@ -1697,6 +1701,7 @@ void AwesomePlayer::finishAsyncPrepare_l() {
 
         notifyListener_l(MEDIA_PREPARED);
     }
+    LOGI("finishAsyncPrepare_l 2");
 
     mPrepareResult = OK;
     mFlags &= ~(PREPARING|PREPARE_CANCELLED);

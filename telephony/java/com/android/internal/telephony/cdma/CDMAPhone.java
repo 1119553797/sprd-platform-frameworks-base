@@ -76,7 +76,7 @@ import java.util.regex.Pattern;
 /**
  * {@hide}
  */
-public class CDMAPhone extends PhoneBase {
+public abstract class CDMAPhone extends PhoneBase {
     static final String LOG_TAG = "CDMA";
     private static final boolean DBG = true;
 

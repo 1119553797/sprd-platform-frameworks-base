@@ -204,7 +204,7 @@ class RILRequest {
  *
  * {@hide}
  */
-public final class RIL extends BaseCommands implements CommandsInterface {
+public abstract class RIL extends BaseCommands implements CommandsInterface {
     static final String LOG_TAG = "RILJ";
     private static final boolean DBG = false;
     static final boolean RILJ_LOGD = Config.LOGD;
@@ -1591,52 +1591,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     }
 
     public void
-    queryFacilityLock (String facility, String password, int serviceClass,
-                            Message response) {
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_QUERY_FACILITY_LOCK, response);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        // count strings
-        rr.mp.writeInt(3);
-
-        rr.mp.writeString(facility);
-        rr.mp.writeString(password);
-
-        rr.mp.writeString(Integer.toString(serviceClass));
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                            + ", facility:" + facility + ", serviceClass:" + serviceClass);
-
-        send(rr);
-    }
-
-    public void
-    setFacilityLock (String facility, boolean lockState, String password,
-                        int serviceClass, Message response) {
-        String lockString;
-         RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_SET_FACILITY_LOCK, response);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        // count strings
-        rr.mp.writeInt(4);
-
-        rr.mp.writeString(facility);
-        lockString = (lockState)?"1":"0";
-        rr.mp.writeString(lockString);
-        rr.mp.writeString(password);
-        rr.mp.writeString(Integer.toString(serviceClass));
-		
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                            + ", facility:" + facility + ", lockState:" + lockState + ", serviceClass:" + serviceClass);
-
-        send(rr);
-
-    }
-
-    public void
     sendUSSD (String ussdString, Message response) {
         RILRequest rr
                 = RILRequest.obtain(RIL_REQUEST_SEND_USSD, response);
@@ -1944,144 +1898,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         send(rr);
     }
 	
-    public void
-    dialVideo (String address, String sub_address, int clirMode, Message result) {
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_DIAL/*RIL_REQUEST_DIALVIDEO*/, result);
-
-        rr.mp.writeString(address);
-		rr.mp.writeString(sub_address);
-        rr.mp.writeInt(clirMode);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        send(rr);
-    }
-
-	public void
-	hangupVP(Message result) {
-        RILRequest rr = RILRequest.obtain(
-                        RIL_REQUEST_VIDEOPHONE_HANGUP,
-                                        result);
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        send(rr);
-	}
-
-	public void
-	acceptVP(Message result) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_ANSWER, result);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        send(rr);
-    }
-
-	public void dropVP(Message result) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_DROP, result);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        send(rr);
-    }
-	
-    public void sendVPStrs(String str, Message result) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_STR, result);
-
-        // count ints
-        rr.mp.writeString(str);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                    + " " + str);
-
-        send(rr);
-    }	
-     public void setVPLocalMedia(int datatype, int sw, boolean enable, Message result) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_LOCAL_MEDIA, result);
-
-        // count ints
-        if (enable)
-			rr.mp.writeInt(3);
-        else
-			rr.mp.writeInt(2);
-
-        rr.mp.writeInt(datatype);
-        rr.mp.writeInt(sw);
-
-		if (enable)
-	        rr.mp.writeInt(enable?1:0);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                    + " " + datatype + " " + sw + " " + enable);
-
-        send(rr);
-    }
-
-    public void recordVPVideo(boolean bStart, Message result) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_RECORD_VIDEO, result);
-
-        // count ints
-        rr.mp.writeInt((bStart)?1:0);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                    + " " + bStart);
-
-        send(rr);
-    }
-	
-    public void recordVPAudio(boolean bStart, int mode, Message result) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_RECORD_AUDIO, result);
-
-        // count ints
-        if (mode >= 0)			
-			rr.mp.writeInt(2);
-		else			
-			rr.mp.writeInt(1);
-		
-        rr.mp.writeInt((bStart)?1:0);
-
-		if (mode >= 0)
-			rr.mp.writeInt(mode);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                    + " " + bStart);
-
-        send(rr);
-    }
-	
-    public void testVP(int flag, int value, Message result) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_TEST, result);
-
-        // count ints		
-		rr.mp.writeInt(2);	
-		rr.mp.writeInt(flag);	
-        rr.mp.writeInt(value);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                    + " " + flag + " " + value);
-
-        send(rr);
-    }
-
-   public void codecVP(int type, Bundle param, Message result){
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_CODEC, result);
-	
-        	rr.mp.writeInt(type);
-		rr.mp.writeBundle(param);	
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                    + " " + type + " " + param);
-
-        send(rr);
-    }
-
     protected void
     onRadioAvailable() {
         // In case screen state was lost (due to process crash),
@@ -2092,7 +1908,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         sendScreenState(true);
    }
 
-    private void setRadioStateFromRILInt(int state) {
+    protected void setRadioStateFromRILInt(int state) {
         RadioState newState;
 
         /* RIL_RadioState ril.h */
@@ -2166,7 +1982,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
-    private void
+    protected void
     send(RILRequest rr) {
         Message msg;
 
@@ -2192,7 +2008,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         releaseWakeLockIfDone();
     }
 
-    private RILRequest findAndRemoveRequestFromList(int serial) {
+    protected RILRequest findAndRemoveRequestFromList(int serial) {
         synchronized (mRequestsList) {
             for (int i = 0, s = mRequestsList.size() ; i < s ; i++) {
                 RILRequest rr = mRequestsList.get(i);
@@ -2207,7 +2023,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return null;
     }
 
-    private void
+    protected void
     processSolicited (Parcel p) {
         int serial, error;
         boolean found = false;
@@ -2276,8 +2092,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_GET_IMEISV: ret =  responseString(p); break;
             case RIL_REQUEST_ANSWER: ret =  responseVoid(p); break;
             case RIL_REQUEST_DEACTIVATE_DATA_CALL: ret =  responseVoid(p); break;
-            case RIL_REQUEST_QUERY_FACILITY_LOCK: ret =  responseInts(p); break;
-            case RIL_REQUEST_SET_FACILITY_LOCK: ret =  responseInts(p); break;
             case RIL_REQUEST_CHANGE_BARRING_PASSWORD: ret =  responseVoid(p); break;
             case RIL_REQUEST_QUERY_NETWORK_SELECTION_MODE: ret =  responseInts(p); break;
             case RIL_REQUEST_SET_NETWORK_SELECTION_AUTOMATIC: ret =  responseVoid(p); break;
@@ -2338,16 +2152,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_EXIT_EMERGENCY_CALLBACK_MODE: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: ret = responseVoid(p); break;
-			case RIL_REQUEST_VIDEOPHONE_DIAL: ret = responseVoid(p); break;
-			case RIL_REQUEST_VIDEOPHONE_CODEC: ret = responseVoid(p); break;
-			case RIL_REQUEST_VIDEOPHONE_HANGUP: ret = responseVoid(p); break;
-			case RIL_REQUEST_VIDEOPHONE_ANSWER: ret = responseVoid(p); break;
-			case RIL_REQUEST_VIDEOPHONE_DROP: ret = responseVoid(p); break;
-			case RIL_REQUEST_VIDEOPHONE_STR: ret = responseVoid(p); break;
-			case RIL_REQUEST_VIDEOPHONE_LOCAL_MEDIA: ret = responseVoid(p); break;
-			case RIL_REQUEST_VIDEOPHONE_RECORD_VIDEO: ret = responseVoid(p); break;
-			case RIL_REQUEST_VIDEOPHONE_RECORD_AUDIO: ret = responseVoid(p); break;
-			case RIL_REQUEST_VIDEOPHONE_TEST: ret = responseVoid(p); break;
             default:
                 throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
             //break;
@@ -2384,7 +2188,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         rr.release();
     }
 
-    private String
+    protected String
     retToString(int req, Object ret) {
         if (ret == null) return "";
         switch (req) {
@@ -2445,7 +2249,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return s;
     }
 
-    private void
+    protected void
     processUnsolicited (Parcel p) {
         int response;
         Object ret;
@@ -2489,12 +2293,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_UNSOL_OEM_HOOK_RAW: ret = responseRaw(p); break;
             case RIL_UNSOL_RINGBACK_TONE: ret = responseInts(p); break;
             case RIL_UNSOL_RESEND_INCALL_MUTE: ret = responseVoid(p); break;
-			case RIL_UNSOL_VIDEOPHONE_DATA: ret = responseInts(p); break;
-            case RIL_UNSOL_VIDEOPHONE_CODEC: ret = responseInts(p); break;
-            case RIL_UNSOL_VIDEOPHONE_STR: ret = responseString(p); break;
-            case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: ret = responseInts(p); break;
-            case RIL_UNSOL_VIDEOPHONE_MM_RING: ret = responseInts(p); break;
-            case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: ret = responseInts(p); break;
 
             default:
                 throw new RuntimeException("Unrecognized unsol response: " + response);
@@ -2797,97 +2595,10 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                                         new AsyncResult (null, ret, null));
                 }
 				break;			
-			case RIL_UNSOL_VIDEOPHONE_DATA:		{		
-                if (RILJ_LOGD) unsljLogRet(response, ret);
-
-                int[] params = (int[])ret;
-
-                if(params.length == 1) {
-                    if (mVPDataRegistrant != null) {
-                        mVPDataRegistrant
-							.notifyRegistrant(new AsyncResult(null, params, null));
-                    }
-                } else {
-                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_DATA ERROR with wrong length "
-                            + params.length);
-                }
-            	break;
-			}
-	case RIL_UNSOL_VIDEOPHONE_CODEC:{		
-                if (RILJ_LOGD) unsljLogRet(response, ret);
-
-                int[] params = (int[])ret;
-                if(params.length == 1) {
-                    if (mVPCodecRegistrant != null) {
-                        mVPCodecRegistrant
-							.notifyRegistrant(new AsyncResult(null, params, null));
-                    }
-                } else {
-                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_CODEC ERROR with wrong length "
-                            + params.length);
-                }
-            	break;
-		}
-            case RIL_UNSOL_VIDEOPHONE_STR: 
-                if (RILJ_LOGD) unsljLog(response);
-				
-                if (mVPStrsRegistrant != null) {
-                    mVPStrsRegistrant
-                        .notifyRegistrant(new AsyncResult(null, ret, null));
-                }
-            	break;
-            case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: {
-                if (RILJ_LOGD) unsljLogRet(response, ret);
-
-                int[] params = (int[])ret;
-
-                if(params.length >= 2) {
-                    if (mVPRemoteMediaRegistrant != null) {
-                        mVPRemoteMediaRegistrant
-							.notifyRegistrant(new AsyncResult(null, params, null));
-                    }
-                } else {
-                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA ERROR with wrong length "
-                            + params.length);
-                }
-            	break;
-            }
-            case RIL_UNSOL_VIDEOPHONE_MM_RING: {
-                if (RILJ_LOGD) unsljLogRet(response, ret);
-
-                int[] params = (int[])ret;
-
-                if(params.length == 1) {
-                    if (mVPMMRingRegistrant != null) {
-                        mVPMMRingRegistrant
-							.notifyRegistrant(new AsyncResult(null, params, null));
-                    }
-                } else {
-                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_MM_RING ERROR with wrong length "
-                            + params.length);
-                }
-            	break;
-            }
-            case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: {
-                if (RILJ_LOGD) unsljLogRet(response, ret);
-
-                int[] params = (int[])ret;
-
-                if(params.length == 1) {
-                    if (mVPRecordVideoRegistrant != null) {
-                        mVPRecordVideoRegistrant
-							.notifyRegistrant(new AsyncResult(null, params, null));
-                    }
-                } else {
-                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO ERROR with wrong length "
-                            + params.length);
-                }
-            	break;
-            }
         }
     }
 
-    private Object
+    protected Object
     responseInts(Parcel p) {
         int numInts;
         int response[];
@@ -2904,12 +2615,12 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     }
 
 
-    private Object
+    protected Object
     responseVoid(Parcel p) {
         return null;
     }
 
-    private Object
+    protected Object
     responseCallForward(Parcel p) {
         int numInfos;
         CallForwardInfo infos[];
@@ -2932,7 +2643,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return infos;
     }
 
-    private Object
+    protected Object
     responseSuppServiceNotification(Parcel p) {
         SuppServiceNotification notification = new SuppServiceNotification();
 
@@ -2945,7 +2656,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return notification;
     }
 
-    private Object
+    protected Object
     responseCdmaSms(Parcel p) {
         SmsMessage sms;
         sms = SmsMessage.newFromParcel(p);
@@ -2953,7 +2664,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return sms;
     }
 
-    private Object
+    protected Object
     responseString(Parcel p) {
         String response;
 
@@ -2962,7 +2673,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private Object
+    protected Object
     responseStrings(Parcel p) {
         int num;
         String response[];
@@ -2981,7 +2692,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private Object
+    protected Object
     responseRaw(Parcel p) {
         int num;
         byte response[];
@@ -2991,7 +2702,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private Object
+    protected Object
     responseSMS(Parcel p) {
         int messageRef, errorCode;
         String ackPDU;
@@ -3006,7 +2717,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     }
 
 
-    private Object
+    protected Object
      responseICC_IO(Parcel p) {
         int sw1, sw2;
         byte data[] = null;
@@ -3025,7 +2736,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return new IccIoResult(sw1, sw2, s);
     }
 
-    private Object
+    protected Object
     responseIccCardStatus(Parcel p) {
         IccCardApplication ca;
 
@@ -3057,7 +2768,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return status;
     }
 
-    private Object
+    protected Object
     responseCallList(Parcel p) {
         int num;
         int voiceSettings;
@@ -3111,7 +2822,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private Object
+    protected Object
     responseDataCallList(Parcel p) {
         int num;
         ArrayList<DataCallState> response;
@@ -3134,7 +2845,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private Object
+    protected Object
     responseNetworkInfos(Parcel p) {
         String strings[] = (String [])responseStrings(p);
         ArrayList<NetworkInfo> ret;
@@ -3159,7 +2870,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return ret;
     }
 
-   private Object
+   protected Object
    responseCellList(Parcel p) {
        int num, rssi;
        String location;
@@ -3201,7 +2912,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
        return response;
     }
 
-    private Object responseGmsBroadcastConfig(Parcel p) {
+    protected Object responseGmsBroadcastConfig(Parcel p) {
         int num;
         ArrayList<SmsBroadcastConfigInfo> response;
         SmsBroadcastConfigInfo info;
@@ -3223,7 +2934,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private Object
+    protected Object
     responseCdmaBroadcastConfig(Parcel p) {
         int numServiceCategories;
         int response[];
@@ -3262,7 +2973,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private Object
+    protected Object
     responseSignalStrength(Parcel p) {
         int numInts = 7;
         int response[];
@@ -3276,7 +2987,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private ArrayList<CdmaInformationRecords>
+    protected ArrayList<CdmaInformationRecords>
     responseCdmaInformationRecord(Parcel p) {
         int numberOfInfoRecs;
         ArrayList<CdmaInformationRecords> response;
@@ -3296,7 +3007,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private Object
+    protected Object
     responseCdmaCallWaiting(Parcel p) {
         CdmaCallWaitingNotification notification = new CdmaCallWaitingNotification();
 
@@ -3312,7 +3023,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return notification;
     }
 
-    private Object
+    protected Object
     responseCallRing(Parcel p){
         char response[] = new char[4];
 
@@ -3324,7 +3035,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-    private void
+    protected void
     notifyRegistrantsCdmaInfoRec(CdmaInformationRecords infoRec) {
         int response = RIL_UNSOL_CDMA_INFO_REC;
         if (infoRec.record instanceof CdmaInformationRecords.CdmaDisplayInfoRec) {
@@ -3421,8 +3132,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_GET_IMEISV: return "GET_IMEISV";
             case RIL_REQUEST_ANSWER: return "ANSWER";
             case RIL_REQUEST_DEACTIVATE_DATA_CALL: return "DEACTIVATE_DATA_CALL";
-            case RIL_REQUEST_QUERY_FACILITY_LOCK: return "QUERY_FACILITY_LOCK";
-            case RIL_REQUEST_SET_FACILITY_LOCK: return "SET_FACILITY_LOCK";
             case RIL_REQUEST_CHANGE_BARRING_PASSWORD: return "CHANGE_BARRING_PASSWORD";
             case RIL_REQUEST_QUERY_NETWORK_SELECTION_MODE: return "QUERY_NETWORK_SELECTION_MODE";
             case RIL_REQUEST_SET_NETWORK_SELECTION_AUTOMATIC: return "SET_NETWORK_SELECTION_AUTOMATIC";
@@ -3483,21 +3192,11 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_EXIT_EMERGENCY_CALLBACK_MODE: return "REQUEST_EXIT_EMERGENCY_CALLBACK_MODE";
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: return "RIL_REQUEST_REPORT_SMS_MEMORY_STATUS";
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: return "RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING";
-			case RIL_REQUEST_VIDEOPHONE_DIAL: return "RIL_REQUEST_VIDEOPHONE_DIAL";
-			case RIL_REQUEST_VIDEOPHONE_CODEC: return "RIL_REQUEST_VIDEOPHONE_CODEC";
-			case RIL_REQUEST_VIDEOPHONE_HANGUP: return "RIL_REQUEST_VIDEOPHONE_HANGUP";
-			case RIL_REQUEST_VIDEOPHONE_ANSWER: return "RIL_REQUEST_VIDEOPHONE_ANSWER";
-			case RIL_REQUEST_VIDEOPHONE_DROP: return "RIL_REQUEST_VIDEOPHONE_DROP";
-			case RIL_REQUEST_VIDEOPHONE_STR: return "RIL_REQUEST_VIDEOPHONE_STR";
-			case RIL_REQUEST_VIDEOPHONE_LOCAL_MEDIA: return "RIL_REQUEST_VIDEOPHONE_LOCAL_MEDIA";
-			case RIL_REQUEST_VIDEOPHONE_RECORD_VIDEO: return "RIL_REQUEST_VIDEOPHONE_RECORD_VIDEO";
-			case RIL_REQUEST_VIDEOPHONE_RECORD_AUDIO: return "RIL_REQUEST_VIDEOPHONE_RECORD_AUDIO";
-			case RIL_REQUEST_VIDEOPHONE_TEST: return "RIL_REQUEST_VIDEOPHONE_TEST";
             default: return "<unknown request>";
         }
     }
 
-    static String
+    protected String
     responseToString(int request)
     {
 /*
@@ -3537,39 +3236,31 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_UNSOL_OEM_HOOK_RAW: return "UNSOL_OEM_HOOK_RAW";
             case RIL_UNSOL_RINGBACK_TONE: return "UNSOL_RINGBACK_TONG";
             case RIL_UNSOL_RESEND_INCALL_MUTE: return "UNSOL_RESEND_INCALL_MUTE";
-            case RIL_UNSOL_VIDEOPHONE_DATA: return "UNSOL_VIDEOPHONE_DATA";
-            case RIL_UNSOL_VIDEOPHONE_CODEC: return "UNSOL_VIDEOPHONE_CODEC";
-            case RIL_UNSOL_VIDEOPHONE_DCPI: return "UNSOL_VIDEOPHONE_DCPI";
-            case RIL_UNSOL_VIDEOPHONE_DSCI: return "UNSOL_VIDEOPHONE_DSCI";
-            case RIL_UNSOL_VIDEOPHONE_STR: return "UNSOL_VIDEOPHONE_STR";
-            case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: return "UNSOL_VIDEOPHONE_REMOTE_MEDIA";
-            case RIL_UNSOL_VIDEOPHONE_MM_RING: return "UNSOL_VIDEOPHONE_MM_RING";
-            case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: return "UNSOL_VIDEOPHONE_RECORD_VIDEO";
             default: return "<unknown reponse>";
         }
     }
 
-    private void riljLog(String msg) {
+    protected void riljLog(String msg) {
         Log.d(LOG_TAG, msg);
     }
 
-    private void riljLogv(String msg) {
+    protected void riljLogv(String msg) {
         Log.v(LOG_TAG, msg);
     }
 
-    private void unsljLog(int response) {
+    protected void unsljLog(int response) {
         riljLog("[UNSL]< " + responseToString(response));
     }
 
-    private void unsljLogMore(int response, String more) {
+    protected void unsljLogMore(int response, String more) {
         riljLog("[UNSL]< " + responseToString(response) + " " + more);
     }
 
-    private void unsljLogRet(int response, Object ret) {
+    protected void unsljLogRet(int response, Object ret) {
         riljLog("[UNSL]< " + responseToString(response) + " " + retToString(response, ret));
     }
 
-    private void unsljLogvRet(int response, Object ret) {
+    protected void unsljLogvRet(int response, Object ret) {
         riljLogv("[UNSL]< " + responseToString(response) + " " + retToString(response, ret));
     }
 

@@ -74,7 +74,6 @@ import com.android.internal.telephony.IccVmNotSupportedException;
 import com.android.internal.telephony.gsm.GsmCall;
 import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.hardware.Camera;
 
 
 import java.io.IOException;
@@ -88,17 +87,40 @@ import java.util.List;
 /**
  * {@hide}
  */
-public class TDPhone extends GSMPhone {
+public final class TDPhone extends GSMPhone {
     // NOTE that LOG_TAG here is "TD", which means that log messages
     // from this file will go into the radio log rather than the main
     // log.  (Use "adb logcat -b radio" to see them.)
     static final String LOG_TAG = "TD";
     private static final boolean LOCAL_DEBUG = true;
 	
+    protected final RegistrantList mPreciseVideoCallStateRegistrants
+            = new RegistrantList();
+
+    protected final RegistrantList mNewRingingVideoCallRegistrants
+            = new RegistrantList();
+
+    protected final RegistrantList mIncomingRingVideoCallRegistrants
+            = new RegistrantList();
+
+    protected final RegistrantList mVideoCallDisconnectRegistrants
+            = new RegistrantList();
+
+    protected final RegistrantList mVideoCallFallBackRegistrants
+            = new RegistrantList();
+
+    protected final RegistrantList mVideoCallFailRegistrants
+            = new RegistrantList();
+
+    protected final RegistrantList mVideoCallRemoteCameraRegistrants
+            = new RegistrantList();
 
     // Instance Variables
 	VideoCallTracker mVideoCT;
 	CallType callType;
+	
+    protected static final int EVENT_CONTROL_CAMERA_DONE       = 100;
+    protected static final int EVENT_CONTROL_AUDIO_DONE       = 101;
 	
     // Constructors
 
@@ -134,7 +156,7 @@ public class TDPhone extends GSMPhone {
     }
 
     public Phone.State getState() {
-		if (LOCAL_DEBUG) Log.d(LOG_TAG, "VideoCT: "+ mVideoCT.state + " CT: " + mCT.state);
+		//if (LOCAL_DEBUG) Log.d(LOG_TAG, "VideoCT: "+ mVideoCT.state + " CT: " + mCT.state);
 		if (mVideoCT.isAlive())
 			return mVideoCT.state;
 		else
@@ -471,6 +493,10 @@ public class TDPhone extends GSMPhone {
 					super.handleMessage(msg);
 				}
                 break;
+
+			case EVENT_CONTROL_CAMERA_DONE:
+			case EVENT_CONTROL_AUDIO_DONE:
+				break;
 			default:
 				super.handleMessage(msg);
 
@@ -478,6 +504,107 @@ public class TDPhone extends GSMPhone {
     }
 
 	/******** 	New Added for VideoCall 	********/
+
+	public void registerForPreciseVideoCallStateChanged(Handler h, int what, Object obj){
+        checkCorrectThread(h);
+
+        mPreciseVideoCallStateRegistrants.addUnique(h, what, obj);
+    }
+
+	public void unregisterForPreciseVideoCallStateChanged(Handler h){
+        mPreciseVideoCallStateRegistrants.remove(h);
+    }
+
+	public void registerForNewRingingVideoCall(Handler h, int what, Object obj){
+        checkCorrectThread(h);
+
+        mNewRingingVideoCallRegistrants.addUnique(h, what, obj);
+    }
+
+	public void unregisterForNewRingingVideoCall(Handler h){
+        mNewRingingVideoCallRegistrants.remove(h);
+    }
+
+	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj){
+        checkCorrectThread(h);
+
+        mIncomingRingVideoCallRegistrants.addUnique(h, what, obj);
+    }
+
+	public void unregisterForIncomingRingVideoCall(Handler h){
+        mIncomingRingVideoCallRegistrants.remove(h);
+    }
+
+	public void registerForVideoCallDisconnect(Handler h, int what, Object obj){
+        checkCorrectThread(h);
+
+        mVideoCallDisconnectRegistrants.addUnique(h, what, obj);
+    }
+
+	public void unregisterForVideoCallDisconnect(Handler h){
+        mVideoCallDisconnectRegistrants.remove(h);
+    }
+
+	public void registerForVideoCallFallBack(Handler h, int what, Object obj){
+        checkCorrectThread(h);
+
+        mVideoCallFallBackRegistrants.addUnique(h, what, obj);
+    }
+
+	public void unregisterForVideoCallFallBack(Handler h){
+        mVideoCallFallBackRegistrants.remove(h);
+    }
+	
+	public void registerForVideoCallFail(Handler h, int what, Object obj){
+        checkCorrectThread(h);
+
+        mVideoCallFailRegistrants.addUnique(h, what, obj);
+    }
+
+	public void unregisterForVideoCallFail(Handler h){
+        mVideoCallFailRegistrants.remove(h);
+    }
+	
+	public void registerForRemoteCamera(Handler h, int what, Object obj){
+        checkCorrectThread(h);
+
+        mVideoCallRemoteCameraRegistrants.addUnique(h, what, obj);
+    }
+
+	public void unregisterForRemoteCamera(Handler h){
+        mVideoCallRemoteCameraRegistrants.remove(h);
+    }
+
+     void notifyPreciseVideoCallStateChanged() {
+        AsyncResult ar = new AsyncResult(null, this, null);
+        mPreciseVideoCallStateRegistrants.notifyRegistrants(ar);
+    }
+	
+     void notifyNewRingingVideoCall(Connection cn) {
+        AsyncResult ar = new AsyncResult(null, cn, null);
+        mNewRingingVideoCallRegistrants.notifyRegistrants(ar);
+    }
+
+    void notifyIncomingRingVideoCall() {
+        AsyncResult ar = new AsyncResult(null, this, null);
+        mIncomingRingVideoCallRegistrants.notifyRegistrants(ar);
+    }
+	
+	void notifyVideoCallDisconnect(Connection cn) {
+        AsyncResult ar = new AsyncResult(null, cn, null);
+        mVideoCallDisconnectRegistrants.notifyRegistrants(ar);
+    }
+	
+	void notifyVideoCallFallBack(){
+        AsyncResult ar = new AsyncResult(null, this, null);
+        mVideoCallFallBackRegistrants.notifyRegistrants(ar);
+    }
+	
+	void notifyVideoCallFail(){
+        AsyncResult ar = new AsyncResult(null, this, null);
+        mVideoCallFailRegistrants.notifyRegistrants(ar);
+    }
+
 	public CallType getCallType() {
 		if (mVideoCT.isAlive())
 			return CallType.VIDEO;
@@ -495,10 +622,10 @@ public class TDPhone extends GSMPhone {
 	}
 
 	public Connection
-    dialVideo (String dialString) throws CallStateException {
+    dialVP (String dialString) throws CallStateException {
         // Need to make sure dialString gets parsed properly
         String newDialString = PhoneNumberUtils.stripSeparators(dialString);
-		Log.d(LOG_TAG,"dialVideo '" + dialString);
+		Log.d(LOG_TAG,"dialVP '" + dialString);
 
         // handle in-call MMI first if applicable
         if (handleInCallMmiCommands(newDialString)) {
@@ -526,20 +653,22 @@ public class TDPhone extends GSMPhone {
         }
     }
 
-	public void setLocalDisplay(SurfaceHolder sh) {
-		mVideoCT.setLocalDisplay(sh);
+	public void  fallBack() throws CallStateException{
+		mVideoCT.fallBack();
+	}
+	
+	public void  acceptFallBack() throws CallStateException{
+		mVideoCT.acceptFallBack();
 	}
 
-	public void setRemoteDisplay(SurfaceHolder sh)  {
-		mVideoCT.setRemoteDisplay(sh);
+	public void  controlCamera(boolean bEnable) throws CallStateException{
+		mCM.controlVPCamera(bEnable, obtainMessage(EVENT_CONTROL_CAMERA_DONE, bEnable?1:0, 0, 0));
 	}
 
-	public void setCamera(Camera c) {
-		mVideoCT.setCamera(c);
+	public void  controlAudio(boolean bEnable) throws CallStateException{
+		mCM.controlVPAudio(bEnable, obtainMessage(EVENT_CONTROL_AUDIO_DONE, bEnable?1:0, 0, 0));
 	}
 
-	private void backToVoiceCall(){
-	}
 
 /*	public VideoCallTracker.VideoCallState getVideoCallState(){
 		return mVideoCT.callState;
@@ -562,17 +691,5 @@ public class TDPhone extends GSMPhone {
         }
     }
 
-  
-     void notifyPreciseVideoCallStateChanged() {
-        super.notifyPreciseVideoCallStateChangedP();
-    }
-	
-    void notifyNewRingingVideoCall(Connection cn) {
-        super.notifyNewRingingVideoCallP(cn);
-    }
-	
-	void notifyVideoCallDisconnect(Connection cn) {
-        super.notifyVideoCallDisconnectP(cn);
-	}
 }
 

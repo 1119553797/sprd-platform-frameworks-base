@@ -106,10 +106,10 @@ public class PhoneFactory {
                 Log.i(LOG_TAG, "Cdma Subscription set to " + Integer.toString(cdmaSubscription));
 
                 //reads the system properties and makes commandsinterface
-                sCommandsInterface = new RIL(context, networkMode, cdmaSubscription);
+                sCommandsInterface = new SprdRIL(context, networkMode, cdmaSubscription);
 
                 int phoneType = getPhoneType(networkMode);
-                if (phoneType == Phone.PHONE_TYPE_GSM) {
+               /* if (phoneType == Phone.PHONE_TYPE_GSM) {
                     sProxyPhone = new PhoneProxy(new GSMPhone(context,
                             sCommandsInterface, sPhoneNotifier));
                     Log.i(LOG_TAG, "Creating GSMPhone");
@@ -117,7 +117,7 @@ public class PhoneFactory {
                     sProxyPhone = new PhoneProxy(new CDMAPhone(context,
                             sCommandsInterface, sPhoneNotifier));
                     Log.i(LOG_TAG, "Creating CDMAPhone");
-                } else if (phoneType == Phone.PHONE_TYPE_TD) {
+                } else if (phoneType == Phone.PHONE_TYPE_TD) */{
                     sProxyPhone = new PhoneProxy(new TDPhone(context,
                             sCommandsInterface, sPhoneNotifier));
                     Log.i(LOG_TAG, "Creating TDPhone");
@@ -136,7 +136,8 @@ public class PhoneFactory {
      * @return Phone Type
      */
     public static int getPhoneType(int networkMode) {
-        switch(networkMode) {
+    return Phone.PHONE_TYPE_TD;
+/*        switch(networkMode) {
         case RILConstants.NETWORK_MODE_CDMA:
         case RILConstants.NETWORK_MODE_CDMA_NO_EVDO:
         case RILConstants.NETWORK_MODE_EVDO_NO_CDMA:
@@ -152,7 +153,7 @@ public class PhoneFactory {
             return Phone.PHONE_TYPE_CDMA;
         default:
             return Phone.PHONE_TYPE_GSM;
-        }
+        }*/
     }
 
     public static Phone getDefaultPhone() {
@@ -169,15 +170,29 @@ public class PhoneFactory {
 
     public static Phone getCdmaPhone() {
         synchronized(PhoneProxy.lockForRadioTechnologyChange) {
-            Phone phone = new CDMAPhone(sContext, sCommandsInterface, sPhoneNotifier);
-            return phone;
+            //Phone phone = new CDMAPhone(sContext, sCommandsInterface, sPhoneNotifier);
+            //return phone;
+            return null;
         }
     }
 
     public static Phone getGsmPhone() {
         synchronized(PhoneProxy.lockForRadioTechnologyChange) {
-            Phone phone = new GSMPhone(sContext, sCommandsInterface, sPhoneNotifier);
-            return phone;
+            //Phone phone = new GSMPhone(sContext, sCommandsInterface, sPhoneNotifier);
+            //return phone;
+            return null;
         }
+    }
+	
+    public static CommandsInterface getDefaultCM() {
+        if (sLooper != Looper.myLooper()) {
+            throw new RuntimeException(
+                "PhoneFactory.getDefaultCM must be called from Looper thread");
+        }
+
+        if (null == sCommandsInterface) {
+            throw new IllegalStateException("Default CommandsInfterface haven't been made yet!");
+        }
+       return sCommandsInterface;
     }
 }
