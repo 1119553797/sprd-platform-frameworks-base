@@ -84,13 +84,6 @@ public abstract class BaseCommands implements CommandsInterface {
     protected Registrant mRestrictedStateRegistrant;
     protected Registrant mGsmBroadcastSmsRegistrant;
 
-	protected Registrant mVPDataRegistrant;
-	protected Registrant mVPCodecRegistrant;
-	protected Registrant mVPStrsRegistrant;
-	protected Registrant mVPRemoteMediaRegistrant;
-	protected Registrant mVPMMRingRegistrant;
-	protected Registrant mVPRecordVideoRegistrant;
-
     // Network Mode received from PhoneFactory
     protected int mNetworkMode;
     // CDMA subscription received from PhoneFactory
@@ -704,53 +697,4 @@ public abstract class BaseCommands implements CommandsInterface {
 
     protected void onRadioAvailable() {
     }
-
-    public void setOnVPData(Handler h, int what, Object obj) {
-        mVPDataRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPData(Handler h) {
-        mVPDataRegistrant.clear();
-    }
-
-    public void setOnVPCodec(Handler h, int what, Object obj) {
-        mVPCodecRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPCodec(Handler h) {
-        mVPCodecRegistrant.clear();
-    }
-	
-    public void setOnVPStrs(Handler h, int what, Object obj) {
-        mVPStrsRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPStrs(Handler h) {
-        mVPStrsRegistrant.clear();
-    }
-	
-    public void setOnVPRemoteMedia(Handler h, int what, Object obj) {
-        mVPRemoteMediaRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPRemoteMedia(Handler h) {
-        mVPRemoteMediaRegistrant.clear();
-    }
-	
-    public void setOnVPMMRing(Handler h, int what, Object obj) {
-        mVPMMRingRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPMMRing(Handler h) {
-        mVPMMRingRegistrant.clear();
-    }
-	
-    public void setOnVPRecordVideo(Handler h, int what, Object obj) {
-        mVPRecordVideoRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPRecordVideo(Handler h) {
-        mVPRecordVideoRegistrant.clear();
-    }
-	
 }

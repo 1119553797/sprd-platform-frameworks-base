@@ -34,7 +34,6 @@ import android.telephony.ServiceState;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.hardware.Camera;
 
 import com.android.internal.R;
 import com.android.internal.telephony.gsm.GsmDataConnection;
@@ -133,7 +132,6 @@ public abstract class PhoneBase extends Handler implements Phone {
         SystemProperties.set(property, value);
     }
 
-
     protected final RegistrantList mPreciseCallStateRegistrants
             = new RegistrantList();
 
@@ -159,18 +157,6 @@ public abstract class PhoneBase extends Handler implements Phone {
             = new RegistrantList();
 
     protected final RegistrantList mSuppServiceFailedRegistrants
-            = new RegistrantList();
-	
-    protected final RegistrantList mPreciseVideoCallStateRegistrants
-            = new RegistrantList();
-
-    protected final RegistrantList mNewRingingVideoCallRegistrants
-            = new RegistrantList();
-
-    protected final RegistrantList mIncomingRingVideoCallRegistrants
-            = new RegistrantList();
-
-    protected final RegistrantList mVideoCallDisconnectRegistrants
             = new RegistrantList();
 
     protected Looper mLooper; /* to insure registrants are in correct thread*/
@@ -1044,83 +1030,4 @@ public abstract class PhoneBase extends Handler implements Phone {
         Log.e(LOG_TAG, "Error! " + name + "() in PhoneBase should not be " +
                 "called, CDMAPhone inactive.");
     }
-
-	public void registerForPreciseVideoCallStateChanged(Handler h, int what, Object obj){
-        checkCorrectThread(h);
-
-        mPreciseVideoCallStateRegistrants.addUnique(h, what, obj);
-    }
-
-	public void unregisterForPreciseVideoCallStateChanged(Handler h){
-        mPreciseVideoCallStateRegistrants.remove(h);
-    }
-
-	public void registerForNewRingingVideoCall(Handler h, int what, Object obj){
-        checkCorrectThread(h);
-
-        mNewRingingVideoCallRegistrants.addUnique(h, what, obj);
-    }
-
-	public void unregisterForNewRingingVideoCall(Handler h){
-        mNewRingingVideoCallRegistrants.remove(h);
-    }
-
-	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj){
-        checkCorrectThread(h);
-
-        mIncomingRingVideoCallRegistrants.addUnique(h, what, obj);
-    }
-
-	public void unregisterForIncomingRingVideoCall(Handler h){
-        mIncomingRingVideoCallRegistrants.remove(h);
-    }
-
-	public void registerForVideoCallDisconnect(Handler h, int what, Object obj){
-        checkCorrectThread(h);
-
-        mVideoCallDisconnectRegistrants.addUnique(h, what, obj);
-    }
-
-	public void unregisterForVideoCallDisconnect(Handler h){
-        mVideoCallDisconnectRegistrants.remove(h);
-    }
-
-     protected void notifyPreciseVideoCallStateChangedP() {
-        AsyncResult ar = new AsyncResult(null, this, null);
-        mPreciseVideoCallStateRegistrants.notifyRegistrants(ar);
-    }
-	
-    protected  void notifyNewRingingVideoCallP(Connection cn) {
-        AsyncResult ar = new AsyncResult(null, cn, null);
-        mNewRingingVideoCallRegistrants.notifyRegistrants(ar);
-    }
-
-    protected void notifyIncomingRingVideoCall() {
-        AsyncResult ar = new AsyncResult(null, this, null);
-        mIncomingRingVideoCallRegistrants.notifyRegistrants(ar);
-    }
-	
-	protected void notifyVideoCallDisconnectP(Connection cn) {
-        AsyncResult ar = new AsyncResult(null, cn, null);
-        mVideoCallDisconnectRegistrants.notifyRegistrants(ar);
-    }
-
-	public CallType getCallType() {
-		return CallType.NONE;
-	}
-		
-	public Connection  dialVideo(String dialString) throws CallStateException{
-		if (getPhoneType() != Phone.PHONE_TYPE_TD)
-			throw new CallStateException("phone type isn't td");
-		return null;
-	}
-
-	public void setLocalDisplay(SurfaceHolder sh) {
-	}
-
-	public void setRemoteDisplay(SurfaceHolder sh) {
-	}
-
-	public void setCamera(Camera c) {
-	}
 }

@@ -76,10 +76,6 @@ public class MediaPhone extends Handler
 
     private boolean m_bStartTester = false;
     private Process m_prog = null;
-    private Registrant m_DialRegistrant;
-    private Registrant m_AcceptRegistrant;
-    private Registrant m_HangupRegistrant;
-
     /**
      * Default constructor. Consider using one of the create() methods for
      * synchronously instantiating a MediaPhone from a Uri or resource.
@@ -188,9 +184,9 @@ public class MediaPhone extends Handler
 
         try {
             MediaPhone mp = new MediaPhone(ril);
-            //mp.setComm(url, url);
+            mp.setComm(url, url);
             //mp.setComm("/data/in.3gp", "/data/out.3gp");
-            mp.setComm("videophone:///data/vpin", "videophone:///data/vpout");
+            //mp.setComm("videophone:///data/vpin", "videophone:///data/vpout");
             if (remoteHolder != null) {
                 mp.setRemoteDisplay(remoteHolder);
             }
@@ -200,7 +196,7 @@ public class MediaPhone extends Handler
             //mp.mCm = ril;
             mp.mCm.setOnVPData(mp.mEventHandler, MEDIA_UNSOL_DATA, null);
             mp.mCm.setOnVPCodec(mp.mEventHandler, MEDIA_UNSOL_CODEC, null);
-            mp.mCm.setOnVPStrs(mp.mEventHandler, MEDIA_UNSOL_STR, null);
+            mp.mCm.setOnVPString(mp.mEventHandler, MEDIA_UNSOL_STR, null);
             mp.mCm.setOnVPRemoteMedia(mp.mEventHandler, MEDIA_UNSOL_REMOTE_VIDEO, null);
             mp.mCm.setOnVPMMRing(mp.mEventHandler, MEDIA_UNSOL_MM_RING, null);
             mp.mCm.setOnVPRecordVideo(mp.mEventHandler, MEDIA_UNSOL_RECORD_VIDEO, null);
@@ -296,57 +292,6 @@ public class MediaPhone extends Handler
     }
 
     private native void _stop() throws IllegalStateException;
-	
-    public void dial(String address, String sub_address, int clirMode, Message result) throws IllegalStateException {
-        Log.d(TAG, "dial");
-        stayAwake(true);
-		
-        Message msg = Message.obtain(mEventHandler,MEDIA_SOL_DIAL);
-        msgTracker = result;
-        mCm.dialVideo(address, sub_address, clirMode, msg);
-
-        if (DEBUG_WITHOUT_MODEM) {
-            msgTracker.sendToTarget();
-            msgTracker = null;
-
-            Message m = mEventHandler.obtainMessage(MEDIA_UNSOL_CODEC, CODEC_OPEN, 0);
-            mEventHandler.sendMessage(m);
-        }
-    }
-
-    /**
-     * Stops playback after playback has been stopped or paused.
-     *
-     * @throws IllegalStateException if the internal player engine has not been
-     * initialized.
-     */
-    public void hangup(Message result) throws IllegalStateException {
-        Log.d(TAG, "hangup");
-        stayAwake(false);
-
-        Message msg = Message.obtain(mEventHandler,MEDIA_SOL_HANGUP);
-        msgTracker = result;
-        mCm.hangupVP(msg);	
-
-        if (DEBUG_WITHOUT_MODEM) {
-            msgTracker.sendToTarget();
-            msgTracker = null;
-        }
-    }
-
-    public void acceptCall(Message result) throws IllegalStateException {
-        Log.d(TAG, "acceptCall");
-        stayAwake(true);
-
-        Message msg = Message.obtain(mEventHandler,MEDIA_SOL_ACCEPT);		
-        msgTracker = result;
-        mCm.acceptVP(msg);
-
-        if (DEBUG_WITHOUT_MODEM) {
-            msgTracker.sendToTarget();
-            msgTracker = null;
-        }
-    }
 
     public void sendStrs(String str, Message result) {
         Log.d(TAG, "sendStrs");
@@ -354,7 +299,7 @@ public class MediaPhone extends Handler
 
         Message msg = Message.obtain(mEventHandler, MEDIA_SOL_NOP);		
         msgTracker = result;
-        mCm.sendVPStrs(str, msg);
+        mCm.sendVPString(str, msg);
     }
 
     public void openLocalVideo(Message result) {
@@ -422,8 +367,8 @@ public class MediaPhone extends Handler
     }	
 
     public void codec(int type, Bundle param, Message result) {
-        Log.d(TAG, "codec");
-        stayAwake(false);
+        Log.d(TAG, "codec " + type);
+        //stayAwake(false);
 
         Message msg = Message.obtain(mEventHandler,MEDIA_SOL_CODEC);
         msgTracker = result;
@@ -542,7 +487,7 @@ public class MediaPhone extends Handler
 
         mCm.unSetOnVPData(mEventHandler);
         mCm.unSetOnVPCodec(mEventHandler);
-        mCm.unSetOnVPStrs(mEventHandler);
+        mCm.unSetOnVPString(mEventHandler);
         mCm.unSetOnVPRemoteMedia(mEventHandler);
         mCm.unSetOnVPMMRing(mEventHandler);
         mCm.unSetOnVPRecordVideo(mEventHandler);
@@ -600,10 +545,8 @@ public class MediaPhone extends Handler
 
     // solicited events
     private static final int MEDIA_SOL_NOP	          = 10;
-    private static final int MEDIA_SOL_DIAL	          = 11;
-    private static final int MEDIA_SOL_HANGUP         = 12;
-    private static final int MEDIA_SOL_ACCEPT         = 13;
-    private static final int MEDIA_SOL_CODEC         = 14;
+    private static final int MEDIA_SOL_CODEC         = 11;
+	private static final int MEDIA_SOL_SEND			= 12;
 
     // unsolicited events
     private static final int MEDIA_UNSOL_DATA = 20;
@@ -642,6 +585,7 @@ public class MediaPhone extends Handler
             case MEDIA_PREPARED:
                 //todo: call ril send AT
                 Log.d(TAG, "receive MEDIA_PREPARED");
+	        codec(CODEC_OPEN, null, null);
 
                 if (DEBUG_WITHOUT_MODEM) {
                     Message m = mEventHandler.obtainMessage(MEDIA_UNSOL_CODEC, CODEC_SET_PARAM, 0);
@@ -677,33 +621,19 @@ public class MediaPhone extends Handler
 				
             // following is messages from RIL.java
             case MEDIA_SOL_NOP: 
-            case MEDIA_SOL_DIAL:
-		if (m_DialRegistrant != null) {
-			 Log.i(TAG, " notify MEDIA_SOL_DIAL ");
-			 m_DialRegistrant
-				   .notifyRegistrant(new AsyncResult(null, msg.obj, null));
-		}
-		break;
-            case MEDIA_SOL_HANGUP:
-		if (m_HangupRegistrant != null) {
-			 Log.i(TAG, " notify MEDIA_SOL_HANGUP ");
-			 m_HangupRegistrant
-				   .notifyRegistrant(new AsyncResult(null, msg.obj, null));
-		}
-		break;
-            case MEDIA_SOL_ACCEPT:
-		if (m_AcceptRegistrant != null) {
-			 Log.i(TAG, " notify MEDIA_SOL_ACCEPT ");
-			 m_AcceptRegistrant
-				   .notifyRegistrant(new AsyncResult(null, msg.obj, null));
-		}
-		break;
+			case MEDIA_SOL_CODEC:
+                if ((msgTracker != null) && (msg.arg1 != ARG_SKIP_MSGTRACKER)) {
+                    msgTracker.obj = msg.obj;
+                    msgTracker.sendToTarget();
+                    msgTracker = null;
+                }
+                return;
 				
             case MEDIA_UNSOL_DATA: {
                 int[] params = (int[])ar.result;
                 int indication = params[0];
 		Log.d(TAG, "m_bStartTester: " + m_bStartTester);
-		if (!m_bStartTester)
+		/*if (!m_bStartTester)
 		{
 		   try{
 		     m_prog = Runtime.getRuntime().exec("/system/bin/VPTESER");
@@ -713,7 +643,7 @@ public class MediaPhone extends Handler
 	            }catch (SecurityException ex) {
 	                Log.d(TAG, "exec fail " + ex);
 	            }
-	    }
+	    }*/
                 return;
             }
 
@@ -791,18 +721,17 @@ public class MediaPhone extends Handler
         switch (type) {
         case CODEC_OPEN:
             try {
-                //prepareAsync();
+                prepareAsync();
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "prepareAsync fail " + ex);
             }
-	    codec(CODEC_OPEN, null, null);
             break;
 
         case CODEC_SET_PARAM:
             if (param != null) {
             }
             try {
-                //start();
+                start();
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "start fail " + ex);
             }
@@ -811,7 +740,7 @@ public class MediaPhone extends Handler
 
         case CODEC_CLOSE:
             try {
-                //stop();
+                stop();
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "stop fail " + ex);
             }
@@ -988,28 +917,4 @@ public class MediaPhone extends Handler
      * @hide
      */
     //public native static int snoop(short [] outData, int kind);
-    
-    public void setOnDial(Handler h, int what, Object obj) {
-        m_DialRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetDial(Handler h) {
-        m_DialRegistrant.clear();
-    }
-	
-    public void setOnAccept(Handler h, int what, Object obj) {
-        m_AcceptRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetAccept(Handler h) {
-        m_AcceptRegistrant.clear();
-    }
-	
-    public void setOnHangup(Handler h, int what, Object obj) {
-        m_HangupRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetHangup(Handler h) {
-        m_HangupRegistrant.clear();
-    }
 }

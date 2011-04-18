@@ -44,10 +44,8 @@ import com.android.internal.telephony.gsm.TDPhone;
 import com.android.internal.telephony.gsm.VideoCall;
 import com.android.internal.telephony.gsm.VideoConnection;
 
-import android.media.AudioManager;
 import android.media.MediaPhone;
 import android.view.SurfaceHolder;
-import android.hardware.Camera;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -55,10 +53,7 @@ import java.util.ArrayList;
 /**
  * {@hide}
  */
-public final class VideoCallTracker extends CallTracker
-                          implements MediaPhone.OnErrorListener,
-                          MediaPhone.OnInfoListener,
-                          MediaPhone.OnVideoSizeChangedListener {
+public final class VideoCallTracker extends CallTracker {
     static final String LOG_TAG = "VideoCallTracker";
     private static final boolean REPEAT_POLLING = false;
 
@@ -68,7 +63,6 @@ public final class VideoCallTracker extends CallTracker
 
     static final int MAX_CONNECTIONS = 1;   // only 7 connections allowed in GSM
     static final int MAX_CONNECTIONS_PER_CALL = 1; // only 5 connections allowed per call
-    private static final String DEFAULT_COMM = "file:///mnt/sdcard/in.m4v";
 
     //***** Instance Variables
     VideoConnection connections[] = new VideoConnection[MAX_CONNECTIONS];
@@ -90,15 +84,10 @@ public final class VideoCallTracker extends CallTracker
     boolean hangupPendingMO;
 
     TDPhone phone;
-	MediaPhone mp;
 
     boolean desiredMute = false;    // false = mute off
 
     Phone.State state = Phone.State.IDLE;
-	
-	SurfaceHolder mLocalSurface = null;
-	SurfaceHolder mRemoteSurface = null;
-
 
     //***** Events
 
@@ -109,18 +98,10 @@ public final class VideoCallTracker extends CallTracker
         this.phone = phone;
         cm = phone.mCM;
 
-        cm.registerForCallStateChanged(this, EVENT_CALL_STATE_CHANGE, null);
+        cm.registerForVideoCallStateChanged(this, EVENT_CALL_STATE_CHANGE, null);
 
         cm.registerForOn(this, EVENT_RADIO_AVAILABLE, null);
         cm.registerForNotAvailable(this, EVENT_RADIO_NOT_AVAILABLE, null);
-
-		mp = MediaPhone.create(cm, DEFAULT_COMM);
-		mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		mp.setOnVideoSizeChangedListener(this);
-		mp.setOnErrorListener(this);
-		mp.setOnDial(this, EVENT_OPERATION_COMPLETE, null);
-		mp.setOnAccept(this, EVENT_OPERATION_COMPLETE, null);
-		mp.setOnHangup(this, EVENT_OPERATION_COMPLETE, null);
     }
 
     public void dispose() {
@@ -128,10 +109,6 @@ public final class VideoCallTracker extends CallTracker
         cm.unregisterForCallStateChanged(this);
         cm.unregisterForOn(this);
         cm.unregisterForNotAvailable(this);
-		
-	mp.unSetDial(this);
-	mp.unSetAccept(this);
-	mp.unSetDial(this);
 
         for(VideoConnection c : connections) {
             try {
@@ -209,7 +186,7 @@ public final class VideoCallTracker extends CallTracker
             setMute(false);
 
 			try{
-				mp.dial(pendingMO.address, null, clirMode, obtainCompleteMessage());
+				cm.dialVP(pendingMO.address, null, clirMode, obtainCompleteMessage());
 			}catch (IllegalStateException ex) {
 		        // Ignore "connection not found"
 		        // Call may have hung up already
@@ -239,7 +216,7 @@ public final class VideoCallTracker extends CallTracker
             // Always unmute when answering a new call
             setMute(false);
 			try{
-				mp.acceptCall(obtainCompleteMessage());
+				cm.acceptVP(obtainCompleteMessage());
 			}catch (IllegalStateException ex) {
 		        // Ignore "connection not found"
 		        // Call may have hung up already
@@ -258,6 +235,33 @@ public final class VideoCallTracker extends CallTracker
             internaleHangup();
         } else {
             throw new CallStateException("phone not ringing");
+        }
+    }
+	
+    void
+    fallBack () throws CallStateException {
+        if (ringingCall.getState().isRinging()) {
+            try{
+				cm.fallBackVP(obtainCompleteMessage());	
+			}catch (IllegalStateException ex) {
+		        Log.w(LOG_TAG,"fallBack failed");
+		    }			
+        } else {
+            throw new CallStateException("phone not ringing");
+        }
+    }
+	
+    void
+    acceptFallBack () throws CallStateException {
+        if ((ringingCall.getState().isRinging()) 
+			&& (pendingMO != null)){
+            try{
+				cm.fallBackVP(obtainCompleteMessage());	
+			}catch (IllegalStateException ex) {
+		        Log.w(LOG_TAG,"acceptFallBack failed");
+		    }			
+        } else {
+            throw new CallStateException("phone not ringing or isn't in dialing");
         }
     }
 
@@ -343,7 +347,7 @@ public final class VideoCallTracker extends CallTracker
 
         if (pendingOperations == 0 && needsPoll) {
             lastRelevantPoll = obtainMessage(EVENT_POLL_CALLS_RESULT);
-            cm.getCurrentCalls(lastRelevantPoll);
+            cm.getCurrentVideoCalls(lastRelevantPoll);
         } else if (pendingOperations < 0) {
             // this should never happen
             Log.e(LOG_TAG,"VideoCallTracker.pendingOperations < 0");
@@ -807,35 +811,6 @@ public final class VideoCallTracker extends CallTracker
     protected void log(String msg) {
         Log.d(LOG_TAG, "[VideoCallTracker] " + msg);
     }
-	
-	public void setLocalDisplay(SurfaceHolder sh){
-		Log.i(LOG_TAG,"setLocalDisplay: ");// + sh.toString());
-		mLocalSurface = sh;
-		if (sh != null) {
-			mp.setLocalDisplay(sh.getSurface());
-		}
-	}
-
-	public void setRemoteDisplay(SurfaceHolder sh){
-		Log.i(LOG_TAG,"setRemoteDisplay: ");// + sh.toString());
-		mRemoteSurface = sh;
-		mp.setRemoteDisplay(sh);
-	}
-
-	public void setCamera(Camera c) {
-		Log.i(LOG_TAG,"setCamera: ");// + sh.toString());
-		mp.setCamera(c);
-	}
-
-	public void onConnectCompletion(MediaPhone mp){
-		phone.notifyPreciseVideoCallStateChanged();
-	}
-
-	public void onDisconnectCompletion(MediaPhone mp){
-
-		phone.notifyPreciseVideoCallStateChanged();
-		hangupConnection(connections[0]);
-	}
 
 	void hangupConnection(VideoConnection conn)
 	{
@@ -843,34 +818,28 @@ public final class VideoCallTracker extends CallTracker
         internaleHangup();
 	}
 
-	public void onVideoSizeChanged(MediaPhone mp, int width, int height)
-	{
-	}
-
-	public boolean onError(MediaPhone mp, int what, int extra)
-	{
-		return true;
-	}
-
-	public boolean onInfo(MediaPhone mp, int what, int extra)
-	{
-		return true;
-	}
-
 	public boolean isAlive(){
-		Log.w(LOG_TAG,"VideoCallTracker isAlive(), foregroundCall: " + foregroundCall + "ringingCall: " + ringingCall);
+		//Log.w(LOG_TAG,"VideoCallTracker isAlive(), foregroundCall: " + foregroundCall + ", ringingCall: " + ringingCall);
 		return (foregroundCall.getState().isAlive() || ringingCall.getState().isAlive());
 	};
 
 	private void internaleHangup(){
 		try{
-			mp.stop();
-			mp.hangup(obtainCompleteMessage());
+			cm.hangupVP(obtainCompleteMessage());	
 		}catch (IllegalStateException ex) {
 	        // Ignore "connection not found"
 	        // Call may have hung up already
 	        Log.w(LOG_TAG,"Mediaphone disconnect failed");
 	    }
 	}
+
+	protected void pollCallsWhenSafe() {
+        needsPoll = true;
+
+        if (checkNoOperationsPending()) {
+            lastRelevantPoll = obtainMessage(EVENT_POLL_CALLS_RESULT);
+            cm.getCurrentVideoCalls(lastRelevantPoll);
+        }
+    }
 }
 

@@ -109,7 +109,7 @@ public abstract class CallTracker extends Handler {
      * @return true if we're idle or there's a call to getCurrentCalls() pending
      * but nothing else
      */
-    private boolean
+    protected boolean
     checkNoOperationsPending() {
         if (DBG_POLL) log("checkNoOperationsPending: pendingOperations=" +
                 pendingOperations);

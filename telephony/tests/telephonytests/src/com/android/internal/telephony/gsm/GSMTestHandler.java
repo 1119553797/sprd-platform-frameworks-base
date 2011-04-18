@@ -51,8 +51,8 @@ public class GSMTestHandler extends HandlerThread implements Handler.Callback {
 
     @Override
     protected void onLooperPrepared() {
-        sc = new SimulatedCommands();
-        mGSMPhone = new GSMPhone(mContext, sc, new TestPhoneNotifier(), true);
+        //sc = new SimulatedCommands();
+        //mGSMPhone = new GSMPhone(mContext, sc, new TestPhoneNotifier(), true);
         mHandler = new Handler(getLooper(), this);
         synchronized (this) {
             notifyAll();

@@ -31,7 +31,6 @@ import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.hardware.Camera;
 
 import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
@@ -307,34 +306,76 @@ public class PhoneProxy extends Handler implements Phone {
 		}
 	}
 
+	public void registerForVideoCallFallBack(Handler h, int what, Object obj){
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.registerForVideoCallFallBack(h, what, obj);
+		}
+	}
+
+	public void unregisterForVideoCallFallBack(Handler h){
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.unregisterForVideoCallFallBack(h);
+		}
+	}
+
+	public void registerForVideoCallFail(Handler h, int what, Object obj){
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.registerForVideoCallFail(h, what, obj);
+		}
+	}
+
+	public void unregisterForVideoCallFail(Handler h){
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.unregisterForVideoCallFail(h);
+		}
+	}
+	
+	public void registerForRemoteCamera(Handler h, int what, Object obj){
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.registerForRemoteCamera(h, what, obj);
+		}
+	}
+
+	public void unregisterForRemoteCamera(Handler h){
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.unregisterForRemoteCamera(h);
+		}
+	}
+
 	public CallType getCallType() {
 		return mActivePhone.getCallType();
 	}
 	
-	public Connection  dialVideo(String dialString) throws CallStateException{
+	public Connection  dialVP(String dialString) throws CallStateException{
 		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
-			return mActivePhone.dialVideo(dialString);
+			return mActivePhone.dialVP(dialString);
 		}
 		return null;
 	}
 
 	
-	public void setLocalDisplay(SurfaceHolder sh) {
+	public void  fallBack() throws CallStateException{
 		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
-			mActivePhone.setLocalDisplay(sh);
+			mActivePhone.fallBack();
+		}
+	}
+	
+	public void  acceptFallBack() throws CallStateException{
+		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+			mActivePhone.acceptFallBack();
 		}
 	}
 
-	public void setRemoteDisplay(SurfaceHolder sh)  {
+	public void  controlCamera(boolean bEnable) throws CallStateException{
 		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
-			mActivePhone.setRemoteDisplay(sh);
-		} 
+			mActivePhone.controlCamera(bEnable);
+		}
 	}
 
-	public void setCamera(Camera c) {
+	public void  controlAudio(boolean bEnable) throws CallStateException{
 		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
-			mActivePhone.setCamera(c);
-		} 
+			mActivePhone.controlAudio(bEnable);
+		}
 	}
 
 //----------------------------- end add for videocall ------------------------
