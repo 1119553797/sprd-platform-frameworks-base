@@ -26,6 +26,7 @@
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MetaData.h>
 
+#define AAC_STREAM_BUF_SIZE 1024*64
 namespace android {
 
 AACSPRDDecoder::AACSPRDDecoder(const sp<MediaSource> &source)
@@ -38,6 +39,7 @@ AACSPRDDecoder::AACSPRDDecoder(const sp<MediaSource> &source)
       mIsLATM(false),
       mPcm_out_l(NULL),
       mPcm_out_r(NULL),
+      mStreamBuf(NULL),
       mAnchorTimeUs(0),
       mNumSamplesOutput(0),
       mInputBuffer(NULL){
@@ -96,7 +98,7 @@ status_t AACSPRDDecoder::initCheck() {
     const char *mime;
     if( meta->findCString(kKeyMIMEType, &mime))
     {
-        LOGE("AACSPRDDecoder mime %s\n",mime);
+        LOGI("AACSPRDDecoder mime %s\n",mime);
     }
     return OK;
 }
@@ -115,7 +117,7 @@ status_t AACSPRDDecoder::start(MetaData *params) {
 
     mPcm_out_l = new uint16_t[2048*2];
     mPcm_out_r = new uint16_t[2048*2];	
-
+    mStreamBuf = new uint32_t[AAC_STREAM_BUF_SIZE/4];
     mSource->start();
 
     mAnchorTimeUs = 0;
@@ -144,6 +146,8 @@ status_t AACSPRDDecoder::stop() {
     mPcm_out_l = NULL;
     delete []mPcm_out_r;
     mPcm_out_r = NULL;	
+    delete []mStreamBuf;
+    mStreamBuf = NULL;	
 
     if(mCodec_specific_data){
 	delete []mCodec_specific_data;	
@@ -159,6 +163,29 @@ status_t AACSPRDDecoder::stop() {
 
 sp<MetaData> AACSPRDDecoder::getFormat() {
     return mMeta;
+}
+
+void aac_dump_stream0( uint8_t* pBuffer,uint32_t aInBufSize)
+{
+	FILE *fp = fopen("/data/aac_dump.data","wb");
+	LOGI("aac_dump_stream %d\n",aInBufSize);	
+	fwrite(&aInBufSize,1,4,fp);
+	if(aInBufSize>0)
+		fwrite(pBuffer,1,aInBufSize,fp);
+	fclose(fp);
+}
+
+void aac_dump_stream( uint8_t* pBuffer,uint32_t aInBufSize)
+{
+	FILE *fp_index = fopen("/data/aac_dump.index","ab");
+	FILE *fp = fopen("/data/aac_dump.data","ab");
+	LOGI("aac_dump_stream %d\n",aInBufSize);	
+	if(aInBufSize>0){	
+		fwrite(&aInBufSize,1,4,fp_index);
+		fwrite(pBuffer,1,aInBufSize,fp);
+	}
+	fclose(fp_index);
+	fclose(fp);
 }
 
 status_t AACSPRDDecoder::read(
@@ -247,9 +274,17 @@ status_t AACSPRDDecoder::read(
          }	
     }
 
-   // LOGI("AACDecoder %d:0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x\n",(int)mNumDecodedBuffers,pInputBuffer[0],pInputBuffer[1],pInputBuffer[2],pInputBuffer[3],pInputBuffer[4],pInputBuffer[5],pInputBuffer[6],pInputBuffer[7]);
-    int16_t decoderRet = AAC_FrameDecode(pInputBuffer,inputBufferCurrentLength,mPcm_out_l,mPcm_out_r,&frm_pcm_len,mDecoderBuf,1);
-	
+   //LOGI("AACDecoder %d,%d:0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x\n",(int)mNumDecodedBuffers,inputBufferCurrentLength,pInputBuffer[0],pInputBuffer[1],pInputBuffer[2],pInputBuffer[3],pInputBuffer[4],pInputBuffer[5],pInputBuffer[6],pInputBuffer[7]);
+   aac_dump_stream0(pInputBuffer,inputBufferCurrentLength);
+   int16_t decoderRet;
+   if((inputBufferCurrentLength<=AAC_STREAM_BUF_SIZE)&& (inputBufferCurrentLength>0)){
+   	memcpy(mStreamBuf,pInputBuffer,inputBufferCurrentLength);
+        decoderRet = AAC_FrameDecode((uint8_t *)mStreamBuf,inputBufferCurrentLength,mPcm_out_l,mPcm_out_r,&frm_pcm_len,mDecoderBuf,1);
+   }else{
+        LOGW("AAC decoder stream buf size error %d",inputBufferCurrentLength);
+        decoderRet = 2;
+	frm_pcm_len = 2048;
+   }
     mNumDecodedBuffers++;
 	
     if((decoderRet!=0)&&(decoderRet!=1)){ //decoder error
@@ -270,8 +305,13 @@ status_t AACSPRDDecoder::read(
     size_t numOutBytes =  frm_pcm_len * sizeof(int16_t) *2;
     uint16_t * pOutputBuffer = static_cast<uint16_t *>(buffer->data());
     for(int i=0;i<frm_pcm_len;i++){
-		pOutputBuffer[2*i] = mPcm_out_l[i];
-		pOutputBuffer[2*i+1] = mPcm_out_r[i];		
+		if(decoderRet==2){
+			pOutputBuffer[2*i] = 0;
+			pOutputBuffer[2*i+1] = 0;			
+		}else{
+			pOutputBuffer[2*i] = mPcm_out_l[i];
+			pOutputBuffer[2*i+1] = mPcm_out_r[i];
+		}
     }
 	
     buffer->set_range(0, numOutBytes);
