@@ -52,9 +52,6 @@ LOCAL_C_INCLUDES:= \
 	$(JNI_H_INCLUDE) \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
         $(TOP)/external/tremolo \
-	$(TOP)/external/sprd/mtv/include \
-	$(TOP)/external/sprd/mtv/libcmmb/include \
-	$(TOP)/external/sprd/mtv/libosal/include/KD\
         $(TOP)/frameworks/base/media/libstagefright/rtsp
 
 LOCAL_SHARED_LIBRARIES := \
@@ -66,9 +63,7 @@ LOCAL_SHARED_LIBRARIES := \
         libsonivox        \
         libvorbisidec     \
         libsurfaceflinger_client \
-        libcamera_client  \
-	libosal		\
-	libcmmb		
+        libcamera_client 
 
 LOCAL_STATIC_LIBRARIES := \
         libstagefright_aacdec \
