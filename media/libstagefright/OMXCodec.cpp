@@ -82,9 +82,6 @@ FACTORY_CREATE(MP3Decoder)
 FACTORY_CREATE(AMRNBDecoder)
 FACTORY_CREATE(AMRWBDecoder)
 FACTORY_CREATE(AACDecoder)
-#ifdef BUILD_SPRD_AAC
-FACTORY_CREATE(AACSPRDDecoder)
-#endif
 FACTORY_CREATE(AVCDecoder)
 FACTORY_CREATE(G711Decoder)
 FACTORY_CREATE(M4vH263Decoder)
@@ -95,6 +92,9 @@ FACTORY_CREATE_ENCODER(AMRWBEncoder)
 FACTORY_CREATE_ENCODER(AACEncoder)
 FACTORY_CREATE_ENCODER(AVCEncoder)
 FACTORY_CREATE_ENCODER(M4vH263Encoder)
+#ifdef BUILD_SPRD_AAC
+FACTORY_CREATE(AACSPRDDecoder)
+#endif
 
 static sp<MediaSource> InstantiateSoftwareEncoder(
         const char *name, const sp<MediaSource> &source,
@@ -1917,7 +1917,9 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
         {
             CODEC_LOGE("ERROR(0x%08lx, %ld)", data1, data2);
 
-            setState(ERROR);
+	    if(data1!=OMX_ErrorStreamCorrupt){//@jgdu
+		setState(ERROR);
+	    }
             break;
         }
 

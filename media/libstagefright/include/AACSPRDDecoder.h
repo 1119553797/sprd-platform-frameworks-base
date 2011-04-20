@@ -53,6 +53,7 @@ private:
     int32_t mSamplingRate;
     uint16_t *mPcm_out_l;	
     uint16_t *mPcm_out_r;
+    uint32_t *mStreamBuf;	
 	
     int64_t mAnchorTimeUs;
     int64_t mNumSamplesOutput;
