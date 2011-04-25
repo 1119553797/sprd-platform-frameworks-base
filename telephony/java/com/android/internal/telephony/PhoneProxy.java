@@ -259,85 +259,85 @@ public class PhoneProxy extends Handler implements Phone {
 //----------------------------- add for videocall ----------------------------
 
 	public void registerForPreciseVideoCallStateChanged(Handler h, int what, Object obj) {
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.registerForPreciseVideoCallStateChanged(h, what, obj);
 		}
 	}
 
 	public void unregisterForPreciseVideoCallStateChanged(Handler h) {
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.unregisterForPreciseVideoCallStateChanged(h);
 		}
 	}
 
 	public void registerForNewRingingVideoCall(Handler h, int what, Object obj) {
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.registerForNewRingingVideoCall(h, what, obj);
 		}
 	}
 
 	public void unregisterForNewRingingVideoCall(Handler h) {
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.unregisterForNewRingingVideoCall(h);
 		}
 	}
 
 	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj) {
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.registerForIncomingRingVideoCall(h, what, obj);
 		}
 	}
 
 	public void unregisterForIncomingRingVideoCall(Handler h) {
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.unregisterForIncomingRingVideoCall(h);
 		}
 	}
 
 	public void registerForVideoCallDisconnect(Handler h, int what, Object obj) {
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.registerForVideoCallDisconnect(h, what, obj);
 		}
 	}
 
 	public void unregisterForVideoCallDisconnect(Handler h) {
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.unregisterForVideoCallDisconnect(h);
 		}
 	}
 
 	public void registerForVideoCallFallBack(Handler h, int what, Object obj){
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.registerForVideoCallFallBack(h, what, obj);
 		}
 	}
 
 	public void unregisterForVideoCallFallBack(Handler h){
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.unregisterForVideoCallFallBack(h);
 		}
 	}
 
 	public void registerForVideoCallFail(Handler h, int what, Object obj){
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.registerForVideoCallFail(h, what, obj);
 		}
 	}
 
 	public void unregisterForVideoCallFail(Handler h){
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.unregisterForVideoCallFail(h);
 		}
 	}
 	
 	public void registerForRemoteCamera(Handler h, int what, Object obj){
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.registerForRemoteCamera(h, what, obj);
 		}
 	}
 
 	public void unregisterForRemoteCamera(Handler h){
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.unregisterForRemoteCamera(h);
 		}
 	}
@@ -347,33 +347,33 @@ public class PhoneProxy extends Handler implements Phone {
 	}
 	
 	public Connection  dialVP(String dialString) throws CallStateException{
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			return mActivePhone.dialVP(dialString);
 		}
-		return null;
+	//	return null;
 	}
 
 	
 	public void  fallBack() throws CallStateException{
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.fallBack();
 		}
 	}
 	
 	public void  acceptFallBack() throws CallStateException{
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.acceptFallBack();
 		}
 	}
 
 	public void  controlCamera(boolean bEnable) throws CallStateException{
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.controlCamera(bEnable);
 		}
 	}
 
 	public void  controlAudio(boolean bEnable) throws CallStateException{
-		if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.controlAudio(bEnable);
 		}
 	}

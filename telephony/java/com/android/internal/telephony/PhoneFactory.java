@@ -109,19 +109,15 @@ public class PhoneFactory {
                 sCommandsInterface = new SprdRIL(context, networkMode, cdmaSubscription);
 
                 int phoneType = getPhoneType(networkMode);
-               /* if (phoneType == Phone.PHONE_TYPE_GSM) {
-                    sProxyPhone = new PhoneProxy(new GSMPhone(context,
-                            sCommandsInterface, sPhoneNotifier));
-                    Log.i(LOG_TAG, "Creating GSMPhone");
-                } else if (phoneType == Phone.PHONE_TYPE_CDMA) {
-                    sProxyPhone = new PhoneProxy(new CDMAPhone(context,
-                            sCommandsInterface, sPhoneNotifier));
-                    Log.i(LOG_TAG, "Creating CDMAPhone");
-                } else if (phoneType == Phone.PHONE_TYPE_TD) */{
+                if (phoneType == Phone.PHONE_TYPE_GSM) {
                     sProxyPhone = new PhoneProxy(new TDPhone(context,
                             sCommandsInterface, sPhoneNotifier));
                     Log.i(LOG_TAG, "Creating TDPhone");
-                }
+                }/* else if (phoneType == Phone.PHONE_TYPE_CDMA) {
+                    sProxyPhone = new PhoneProxy(new CDMAPhone(context,
+                            sCommandsInterface, sPhoneNotifier));
+                    Log.i(LOG_TAG, "Creating CDMAPhone");
+                }*/
 
                 sMadeDefaults = true;
             }
@@ -136,8 +132,7 @@ public class PhoneFactory {
      * @return Phone Type
      */
     public static int getPhoneType(int networkMode) {
-    return Phone.PHONE_TYPE_TD;
-/*        switch(networkMode) {
+        switch(networkMode) {
         case RILConstants.NETWORK_MODE_CDMA:
         case RILConstants.NETWORK_MODE_CDMA_NO_EVDO:
         case RILConstants.NETWORK_MODE_EVDO_NO_CDMA:
@@ -153,7 +148,7 @@ public class PhoneFactory {
             return Phone.PHONE_TYPE_CDMA;
         default:
             return Phone.PHONE_TYPE_GSM;
-        }*/
+        }
     }
 
     public static Phone getDefaultPhone() {
@@ -178,9 +173,8 @@ public class PhoneFactory {
 
     public static Phone getGsmPhone() {
         synchronized(PhoneProxy.lockForRadioTechnologyChange) {
-            //Phone phone = new GSMPhone(sContext, sCommandsInterface, sPhoneNotifier);
-            //return phone;
-            return null;
+            Phone phone = new TDPhone(sContext, sCommandsInterface, sPhoneNotifier);
+            return phone;
         }
     }
 	

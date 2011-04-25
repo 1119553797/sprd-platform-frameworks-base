@@ -160,24 +160,24 @@ public final class SprdRIL extends RIL {
 	
 		 send(rr);
 	 }	 
-	  public void setVPLocalMedia(int datatype, int sw, boolean enable, Message result) {
+	  public void controlVPLocalMedia(int datatype, int sw, boolean bReplaceImg, Message result) {
 		 RILRequest rr
 				 = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_LOCAL_MEDIA, result);
 	
 		 // count ints
-		 if (enable)
+//		 if ((datatype == 1) && (sw == 0))
 			 rr.mp.writeInt(3);
-		 else
-			 rr.mp.writeInt(2);
+//		 else
+//			 rr.mp.writeInt(2);
 	
 		 rr.mp.writeInt(datatype);
 		 rr.mp.writeInt(sw);
 	
-		 if (enable)
-			 rr.mp.writeInt(enable?1:0);
+//		 if ((datatype == 1) && (sw == 0))
+			 rr.mp.writeInt(bReplaceImg?1:0);
 	
 		 if (RILJ_LOGD) riljLog(rr.serialString() + "> " + sprdRequestToString(rr.mRequest)
-					 + " " + datatype + " " + sw + " " + enable);
+					 + " " + datatype + " " + sw + " " + bReplaceImg);
 	
 		 send(rr);
 	 }
@@ -816,14 +816,14 @@ public final class SprdRIL extends RIL {
 				 case RIL_UNSOL_OEM_HOOK_RAW: ret = responseRaw(p); break;
 				 case RIL_UNSOL_RINGBACK_TONE: ret = responseInts(p); break;
 				 case RIL_UNSOL_RESEND_INCALL_MUTE: ret = responseVoid(p); break;
-	  	 case RIL_UNSOL_VIDEOPHONE_DATA: ret = responseInts(p); break;
-	        case RIL_UNSOL_VIDEOPHONE_CODEC: ret = responseInts(p); break;
-	        case RIL_REQUEST_VIDEOPHONE_STRING: ret = responseString(p); break;
-	        case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: ret = responseInts(p); break;
-	        case RIL_UNSOL_VIDEOPHONE_MM_RING: ret = responseInts(p); break;
-	        case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: ret = responseInts(p); break;
-	   	case RIL_UNSOL_VIDEOPHONE_DSCI: ret = responseInts(p); break;
-	   	case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:ret =  responseVoid(p); break;
+			  	 case RIL_UNSOL_VIDEOPHONE_DATA: ret = responseInts(p); break;
+				 case RIL_UNSOL_VIDEOPHONE_CODEC: ret = responseInts(p); break;
+				 case RIL_REQUEST_VIDEOPHONE_STRING: ret = responseString(p); break;
+				 case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: ret = responseInts(p); break;
+				 case RIL_UNSOL_VIDEOPHONE_MM_RING: ret = responseInts(p); break;
+				 case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: ret = responseInts(p); break;
+			   	 case RIL_UNSOL_VIDEOPHONE_DSCI: ret = responseInts(p); break;
+			   	 case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:ret =  responseVoid(p); break;
 	 
 				 default:
 					 throw new RuntimeException("Unrecognized unsol response: " + response);
@@ -1221,23 +1221,36 @@ public final class SprdRIL extends RIL {
                 }
             	break;
             }	    
-	    case RIL_UNSOL_VIDEOPHONE_DSCI:{		
-                if (RILJ_LOGD) unsljLogRet(response, ret);
+		    case RIL_UNSOL_VIDEOPHONE_DSCI:{		
+	                if (RILJ_LOGD) unsljLogRet(response, ret);
 
-                int[] params = (int[])ret;
-                if(params.length == 1) {
-		   if ((params[0] == 47) || (params[0] == 57) || (params[0] == 58) || (params[0] == 88)) {
-                    if (mVPFallBackRegistrant != null) {
-                        mVPFallBackRegistrant
-							.notifyRegistrant(new AsyncResult(null, params, null));
-                    }
-		   }
-                } else {
-                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_DSCI ERROR with wrong length "
-                            + params.length);
-                }
-            	break;
-		}	
+	                int[] params = (int[])ret;
+					if (params.length >= 4){
+						if (params[3] == 1){
+							if (params.length == 9){
+								Integer cause = new Integer(params[8]);
+								
+								if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_DSCI cause: " + cause);
+								if ((cause == 47) || (cause == 57) || (cause == 58) || (cause == 88)) {
+							        if (mVPFallBackRegistrant != null) {
+							            mVPFallBackRegistrant.notifyRegistrant(new AsyncResult(null, cause, null));
+							        }
+								} else {
+									if (mVPFailRegistrant != null) {
+								        mVPFailRegistrant.notifyRegistrant(new AsyncResult(null, cause, null));
+									}
+								}
+							} else {
+	                    		if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_DSCI ERROR with wrong length "
+	                            + params.length);
+	                		}
+						}
+					} else {
+	                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_DSCI ERROR with wrong length "
+	                            + params.length);
+	                }
+	            	break;
+			}	
             case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:
                 if (RILJ_LOGD) unsljLog(response);
 
