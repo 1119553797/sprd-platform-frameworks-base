@@ -132,17 +132,17 @@ public final class TDPhone extends GSMPhone {
     public
     TDPhone (Context context, CommandsInterface ci, PhoneNotifier notifier, boolean unitTestMode) {
         super(context, ci, notifier, unitTestMode);
-	mVideoCT = new VideoCallTracker(this);
+		mVideoCT = new VideoCallTracker(this);
 
         if (ci instanceof SimulatedRadioControl) {
             mSimulatedRadioControl = (SimulatedRadioControl) ci;
         }
 
-        mCM.setPhoneType(Phone.PHONE_TYPE_TD);
+        //mCM.setPhoneType(Phone.PHONE_TYPE_TD);
 
         //Change the system property
-        SystemProperties.set(TelephonyProperties.CURRENT_ACTIVE_PHONE,
-                new Integer(Phone.PHONE_TYPE_TD).toString());
+        /*SystemProperties.set(TelephonyProperties.CURRENT_ACTIVE_PHONE,
+                new Integer(Phone.PHONE_TYPE_TD).toString());*/
     }
 
     public void dispose() {
@@ -167,9 +167,9 @@ public final class TDPhone extends GSMPhone {
         return "TD";
     }
 
-    public int getPhoneType() {
+    /*public int getPhoneType() {
         return Phone.PHONE_TYPE_TD;
-    }
+    }*/
 
     public DataState getDataConnectionState() {
         DataState ret = DataState.DISCONNECTED;
@@ -600,8 +600,7 @@ public final class TDPhone extends GSMPhone {
         mVideoCallFallBackRegistrants.notifyRegistrants(ar);
     }
 	
-	void notifyVideoCallFail(){
-        AsyncResult ar = new AsyncResult(null, this, null);
+	void notifyVideoCallFail(AsyncResult ar){
         mVideoCallFailRegistrants.notifyRegistrants(ar);
     }
 

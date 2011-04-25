@@ -63,6 +63,9 @@ public final class VideoCallTracker extends CallTracker {
 
     static final int MAX_CONNECTIONS = 1;   // only 7 connections allowed in GSM
     static final int MAX_CONNECTIONS_PER_CALL = 1; // only 5 connections allowed per call
+    
+    protected static final int EVENT_FALLBACK = 100;
+	protected static final int EVENT_VIDEOCALLFAIL = 101;
 
     //***** Instance Variables
     VideoConnection connections[] = new VideoConnection[MAX_CONNECTIONS];
@@ -102,6 +105,8 @@ public final class VideoCallTracker extends CallTracker {
 
         cm.registerForOn(this, EVENT_RADIO_AVAILABLE, null);
         cm.registerForNotAvailable(this, EVENT_RADIO_NOT_AVAILABLE, null);
+		cm.setOnVPFallBack(this, EVENT_FALLBACK, null);
+		cm.setOnVPFail(this, EVENT_VIDEOCALLFAIL, null);
     }
 
     public void dispose() {
@@ -109,6 +114,8 @@ public final class VideoCallTracker extends CallTracker {
         cm.unregisterForCallStateChanged(this);
         cm.unregisterForOn(this);
         cm.unregisterForNotAvailable(this);
+		cm.unSetOnVPFallBack(this);
+		cm.unSetOnVPFail(this);
 
         for(VideoConnection c : connections) {
             try {
@@ -805,6 +812,13 @@ public final class VideoCallTracker extends CallTracker {
             case EVENT_RADIO_NOT_AVAILABLE:
                 handleRadioNotAvailable();
             break;
+
+			case EVENT_FALLBACK:
+				phone.notifyVideoCallFallBack();
+			break;
+			case EVENT_VIDEOCALLFAIL:
+				phone.notifyVideoCallFail((AsyncResult)msg.obj);
+			break;
         }
     }
 

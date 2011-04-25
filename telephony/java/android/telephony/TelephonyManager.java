@@ -272,8 +272,6 @@ public class TelephonyManager {
     public static final int PHONE_TYPE_GSM = Phone.PHONE_TYPE_GSM;
     /** Phone radio is CDMA. */
     public static final int PHONE_TYPE_CDMA = Phone.PHONE_TYPE_CDMA;
-    /** Phone radio is TD */
-    public static final int PHONE_TYPE_TD = Phone.PHONE_TYPE_TD;
 
     /**
      * Returns a constant indicating the device phone type.

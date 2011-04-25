@@ -14,7 +14,7 @@ public interface SprdCommandsInterface {
 	public void acceptVP(Message result);
 	public void fallBackVP(Message result);
 	public void sendVPString(String str, Message result);
-	public void setVPLocalMedia(int datatype, int sw, boolean enable, Message result);
+	public void controlVPLocalMedia(int datatype, int sw, boolean bReplaceImg, Message result);
 	public void recordVPVideo(boolean bStart, Message result);
 	public void recordVPAudio(boolean bStart, int mode, Message result);
 	public void testVP(int flag, int value, Message result);
