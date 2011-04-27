@@ -109,6 +109,19 @@ AACSPRDDecoder::~AACSPRDDecoder() {
     }
 }
 
+static FILE * g_fp_aac_log;
+void aac_dump_stream0( uint8_t* pBuffer,uint32_t aInBufSize)
+{
+	//FILE *fp = fopen("/data/aac_dump.data","wb");
+	//LOGI("aac_dump_stream %d\n",aInBufSize);	
+	if(aInBufSize>0){
+		fseek(g_fp_aac_log,0,0);
+		fwrite(&aInBufSize,1,4,g_fp_aac_log);
+		fwrite(pBuffer,1,aInBufSize,g_fp_aac_log);
+	}
+	//fclose(fp);
+}
+
 status_t AACSPRDDecoder::start(MetaData *params) {
     CHECK(!mStarted);
 
@@ -124,6 +137,8 @@ status_t AACSPRDDecoder::start(MetaData *params) {
     mNumSamplesOutput = 0;
     mStarted = true;
     mNumDecodedBuffers = 0;
+
+    g_fp_aac_log = fopen("/data/aac_dump.data","wb");
 
     return OK;
 }
@@ -157,7 +172,9 @@ status_t AACSPRDDecoder::stop() {
     mSource->stop();
 
     mStarted = false;
-
+	
+    fclose(g_fp_aac_log);
+	
     return OK;
 }
 
@@ -165,15 +182,6 @@ sp<MetaData> AACSPRDDecoder::getFormat() {
     return mMeta;
 }
 
-void aac_dump_stream0( uint8_t* pBuffer,uint32_t aInBufSize)
-{
-	FILE *fp = fopen("/data/aac_dump.data","wb");
-	LOGI("aac_dump_stream %d\n",aInBufSize);	
-	fwrite(&aInBufSize,1,4,fp);
-	if(aInBufSize>0)
-		fwrite(pBuffer,1,aInBufSize,fp);
-	fclose(fp);
-}
 
 void aac_dump_stream( uint8_t* pBuffer,uint32_t aInBufSize)
 {
