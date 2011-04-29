@@ -2341,6 +2341,14 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
                     mSMSRegistrant
                         .notifyRegistrant(new AsyncResult(null, sms, null));
                 }
+                //@TEST
+                if (RILJ_LOGD) unsljLog(response);
+
+                if (mGsmBroadcastSmsRegistrant != null) {
+                    mGsmBroadcastSmsRegistrant
+                        .notifyRegistrant(new AsyncResult(null, ret, null));
+                }
+
             break;
             }
             case RIL_UNSOL_RESPONSE_NEW_SMS_STATUS_REPORT:
