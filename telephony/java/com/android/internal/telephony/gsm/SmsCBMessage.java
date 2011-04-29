@@ -368,7 +368,7 @@ public class SmsCBMessage {
 		Log.i(TAG, "getSmsCBPage length" + length);
 
 
-		boolean isPdu =false;// mIsPdu;
+		boolean isPdu = mIsPdu;
 
 		mContext = context;
 		mContentResolver = contentResolver;
