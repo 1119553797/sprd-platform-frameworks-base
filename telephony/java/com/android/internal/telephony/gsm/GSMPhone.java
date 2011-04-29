@@ -1528,7 +1528,7 @@ public abstract class GSMPhone extends PhoneBase {
     }
 
     public void getCellBroadcastSmsConfig(Message response) {
-        Log.i(LOG_TAG, "Error! This functionality is not implemented for GSM.");
+        Log.i(LOG_TAG, "! This functionality is not implemented for GSM.");
         mSMS.getCellBroadcastSmsConfig(response);
     }
 
