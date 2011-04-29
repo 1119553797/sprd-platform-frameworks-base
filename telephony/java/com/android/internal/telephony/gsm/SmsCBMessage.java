@@ -306,7 +306,7 @@ public class SmsCBMessage {
 
 				if (pages[i] == CR ) {
 
-					newContentPos = i;
+					newContentPos = i+1;
 					break;
 				}
 			}
@@ -350,7 +350,7 @@ public class SmsCBMessage {
 				
 				Log.v(TAG, "getOneSmsCBPage ENCODING_16BIT atContentData: " +atContentData[i] );
 			}
-			mPage.content = getUserDataUCS2(atContentData, (mDcs.byteOffset));// @???
+			mPage.content = getUserDataUCS2(atContentData, 0);// (mDcs.byteOffset)
 			break;
 		}
 
@@ -528,7 +528,7 @@ public class SmsCBMessage {
 				//cursor = SqliteWrapper.query(mContext, mContentResolver,
 				//		RawUri, CB_RAW_PROJECTION, null, null, null);
 
-				if (cursor != null && cursor.moveToFirst()) {
+				if (cursor != null ) {
 					cursorCount = cursor.getCount();
 					
 					Log.i(TAG, "processSmsCBPage cursorCount " + cursorCount + "page.totalNum "+page.totalNum);
@@ -711,9 +711,11 @@ public class SmsCBMessage {
 						lang_id_l = (byte) ((msg[7] & 0x3f) << 1)
 								| ((msg[6] & 0x80) >> 7);
 					} else {
-						lang_id_h = (byte) (msg[0] & 0x7f);
-						lang_id_l = (byte) ((msg[1] & 0x3f) << 1)
-								| ((msg[0] & 0x80) >> 7);
+						//lang_id_h = (byte) (msg[0] & 0x7f);
+						//lang_id_l = (byte) ((msg[1] & 0x3f) << 1)
+							//	| ((msg[0] & 0x80) >> 7);
+						lang_id_h = msg[0];
+						lang_id_l = msg[1];
 
 					}
 					mDcs.languageId = (lang_id_h << 8) | lang_id_l;
@@ -736,10 +738,11 @@ public class SmsCBMessage {
 						lang_id_l = (byte) ((msg[7] & 0x3f) << 1)
 								| ((msg[7] & 0x80) >> 7);
 					} else {
-						lang_id_h = (msg[0] & 0x7f);
-						lang_id_l = (byte) ((msg[1] & 0x3f) << 1)
-								| ((msg[1] & 0x80) >> 7);
-
+						//lang_id_h = (msg[0] & 0x7f);
+						//lang_id_l = (byte) ((msg[1] & 0x3f) << 1)
+							//	| ((msg[1] & 0x80) >> 7);
+						lang_id_h = msg[0];
+						lang_id_l = msg[1];
 					}
 					mDcs.languageId = (lang_id_h << 8) | lang_id_l;
 					mDcs.alphabetType = ENCODING_16BIT;
