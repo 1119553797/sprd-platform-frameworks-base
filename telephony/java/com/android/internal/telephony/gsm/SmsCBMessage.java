@@ -93,6 +93,7 @@ public class SmsCBMessage {
 	private static final char SEMICOLON = ';';
 	private static final char CR = '\n';
 	private static final char LF = '\t';
+	private static boolean mIsPdu = true;
 
 	public SmsCBMessage(Context context, ContentResolver contentResolver) {
 		mContext = context;
@@ -134,6 +135,7 @@ public class SmsCBMessage {
 		 * it indicates content of message ,see TS23.041
 		 */
 		public String content;
+		public int langId;
 
 		public byte[] decodedData;
 
@@ -165,9 +167,9 @@ public class SmsCBMessage {
 
 		int j = 0;
 		byte[] data = new byte[5];
-		for (int i = 0; i < msg.length; i++) {
+		for (int i = 0; i < msg.length-1; i++) {
 			Log.i(TAG, "getValue msg :" + msg[i]);
-			if (msg[i] == COMMA) {
+			if (msg[i] == COMMA ) {
 
 				if (i == 0) {
 					continue;
@@ -176,7 +178,10 @@ public class SmsCBMessage {
 					break;
 				}
 			} else {
-
+                if(msg[i] == CR &&  msg[i+1] == LF){
+                	
+                	break;
+                }
 				data[j] = msg[i];
 				j++;
 			}
@@ -203,9 +208,9 @@ public class SmsCBMessage {
 		return mRet;
 	}
 
-	private static SmsCBPage getOneSmsCBPage(String msg, int length) {
+	private static SmsCBPage getOneSmsCBPage(String msg, int length ) {
 		Log.i(TAG, "getSmsCBPage length" + msg.length());
-
+		String midDecodeData;
 		byte[] pages = msg.getBytes();
 
 		ParseValue retSn = getValue(pages);
@@ -240,13 +245,18 @@ public class SmsCBMessage {
 			if (pages[i] == CR && pages[i + 1] == LF) {
 
 				contentPos = i + 2;
+				break;
 			}
 		}
 
 		Log.i(TAG, "getSmsCBPage pos" + contentPos);
-		String midDecodeData = msg.substring(contentPos);
-		byte[] byteDecodeData = midDecodeData.getBytes();
-
+				
+		Log.i(TAG, "getSmsCBPage pos" + contentPos);
+		String DecodeData = msg.substring(contentPos);
+		byte[] byteDecodeData = DecodeData.getBytes();
+		
+		
+	
 		int encodingType = ENCODING_UNKNOWN;
 		mPage = new SmsCBPage();
 
@@ -257,7 +267,7 @@ public class SmsCBMessage {
 			
 		
 
-		mPage.gs = byteSn[0] >> 5 & 0x3;
+		mPage.gs = byteSn[0] >> 6 & 0x3;
 		mPage.messageCode = (byteSn[0] & 0x3F) | ((byteSn[1] >> 4) & 0xF);
 		mPage.updateNum = byteSn[1] & 0xF;
 		
@@ -278,15 +288,46 @@ public class SmsCBMessage {
 
 		mPage.totalNum =  retPages.ret;
 
+	   
 		mPage.decodedData = byteDecodeData;
-
-		Log.i(TAG, "parseUserData gs :" + mPage.gs + "messageCode : "+mPage.messageCode + "updateNum: "+mPage.updateNum+
+		Log.i(TAG, "getOneSmsCBPage gs :" + mPage.gs + "messageCode : "+mPage.messageCode + "updateNum: "+mPage.updateNum+
 				"msgId: "+mPage.msgId+"dcs : "+mPage.dcs+"sequenceNum: "+mPage.sequenceNum +"totalNum: "+mPage.totalNum);
 		
 
 		mDcs = decodeSmsCBCds(mPage.dcs, mPage.decodedData, false);
+		mPage.langId = mDcs.languageId;
+		midDecodeData = msg.substring(contentPos);
+		
+		if(mDcs.byteOffset > 0 ){
+			
+			int newContentPos = 0;
+			int i =0;
+			for (i = contentPos; i < contentPos+3 ; i++) {
 
-		Log.i(TAG, "parseUserData encodingType" + encodingType);
+				if (pages[i] == CR ) {
+
+					newContentPos = i;
+					break;
+				}
+			}
+			
+			if(i< contentPos+3){
+				
+				midDecodeData = msg.substring(newContentPos);
+			}
+				
+				
+			
+			
+			
+		}
+		Log.v(TAG, "getOneSmsCBPage ENCODING_16BIT midDecodeData: " +midDecodeData );
+		
+		//byte[] byteDecodeData =  IccUtils.hexStringToBytes(midDecodeData);	
+		//Log.v(TAG, "getOneSmsCBPage ENCODING_16BIT byteDecodeData.length: " +byteDecodeData.length );
+		//mPage.decodedData = byteDecodeData;
+		
+		Log.i(TAG, "getOneSmsCBPage encodingType" + encodingType);
 
 		switch (mDcs.alphabetType) {
 
@@ -295,21 +336,25 @@ public class SmsCBMessage {
 			mPage.content = null;
 			break;
 
-		case ENCODING_7BIT:
-
-			mPage.content = "1234567890123456789012345678901234567890";
-			// tmp;
-			// mPage.content = GsmAlphabet.gsm7BitPackedToString(msg,
-			// dcs.byteOffset, 88,// @???
-			// dcs.bitOffset);
+		case ENCODING_7BIT:		
+		    mPage.content = midDecodeData;//new String(mPage.decodedData);     
+		    
+		    
 			break;
 
 		case ENCODING_16BIT:
-			mPage.content = getUserDataUCS2(mPage.decodedData, mDcs.byteOffset);// @???
+			
+			byte atContentData[] = IccUtils.hexStringToBytes(midDecodeData);	
+			
+			for(int i=0; i<atContentData.length; i++){
+				
+				Log.v(TAG, "getOneSmsCBPage ENCODING_16BIT atContentData: " +atContentData[i] );
+			}
+			mPage.content = getUserDataUCS2(atContentData, (mDcs.byteOffset));// @???
 			break;
 		}
 
-		Log.v(TAG, "decodeSmsCBCds SMS message body (raw): " + mPage.content);
+		Log.v(TAG, "getOneSmsCBPage SMS message body (raw): " + mPage.content);
 
 		return mPage;
 
@@ -318,43 +363,73 @@ public class SmsCBMessage {
 	/*
 	 * get page information in pdu mode ,see TS 23.041 9.4.1.2
 	 */
-	public static byte[][] getSmsCBPage(String msg, int length) {
-		// String
-		// tmp="4000010000171234567890123456789012345678901234567890123456789012345678901234567890123456789012";
-		// SmsCBPage page;
-		String tmp = "1,34,1,1,1,\n\tMay you lucky";
+	public static byte[][] getSmsCBPage(String msg, int length,Context context, ContentResolver contentResolver) {
+
 		Log.i(TAG, "getSmsCBPage length" + length);
 
-		byte[] pages = tmp.getBytes();
-		// byte[] pages = HexDump.hexStringToByteArray(msg);
-		Log.i(TAG, "getSmsCBPage pages" + pages.toString());
-		boolean isPdu = false;
+
+		boolean isPdu =false;// mIsPdu;
+
+		mContext = context;
+		mContentResolver = contentResolver;
+		
 		if (isPdu == false) {
-			getOneSmsCBPage(tmp, tmp.length());
+			getOneSmsCBPage(msg, msg.length());
 		} else {
+						
+			byte[] pages = msg.getBytes();
+			
+			
+			
+			int contentPos = 0;
+			for(int i= 0; i<pages.length-1; i++){
+				
+				if (pages[i] == CR && pages[i + 1] == LF) {
 
-			for (int i = 0; i < 88; i += 8) {
-
-				Log.i(TAG, "getSmsCBPage pages    " + pages[i] + "   "
-						+ pages[i + 1] + "   " + pages[i + 2] + "   "
-						+ pages[i + 3] + "   " + pages[i + 4] + "   "
-						+ pages[i + 5] + "   " + pages[i + 6] + "   "
-						+ pages[i + 7] + "   ");
-
+					contentPos = i + 2;
+					break;
+				}
+				
 			}
-			for (int i = 0; i < 88; i++) {
-
-				pages[i] = (byte) (pages[i] - 0x30);
+			
+			Log.i(TAG, "getSmsCBPage contentPos" + contentPos);
+			
+			int dataLen =  pages.length -contentPos;
+			int j=0;
+			byte contentPages[] = new byte[dataLen];
+			
+			for (int i=contentPos; i<pages.length; i++)
+			{
+				contentPages[j] = pages[i];
+				
+				//Log.i(TAG, "getSmsCBPage contentPages" + contentPages[j]);
+				j++;
 			}
+			
+			String atString = new String(contentPages);
+			Log.i(TAG, "getSmsCBPage atString" + atString);
+			byte atContentData[] = IccUtils.hexStringToBytes(atString);	
+	
 
-			mDcs = decodeSmsCBCds(pages[4], pages, true);
+			mDcs = decodeSmsCBCds(atContentData[4], atContentData, true);
+			
 			Log.i(TAG, "getSmsCBPage mDcs" + mDcs.toString());
-			// parseUserData(pages, length, mDcs);
-			parseUserData(pages, 88, mDcs);
+	
+			
+			
+			parseUserData(atContentData, atContentData.length, mDcs);
 		}
 		return processSmsCBPage(mPage);
 
 	}
+	
+	public static void setSmsCBMode(boolean isPdu){
+		
+		mIsPdu = isPdu;
+		
+	}
+
+	
 
 	private static byte[][] convertToBytes(SmsCBPage[] pages, int totalNum) {
 		byte[][] bytePages = new byte[totalNum][];
@@ -366,16 +441,30 @@ public class SmsCBMessage {
 			baos.write(pages[i].gs);
 			baos.write(pages[i].messageCode);
 			baos.write(pages[i].updateNum);
-			baos.write(pages[i].msgId);
+			byte high =(byte) (pages[i].msgId >>0x08);
+			baos.write(high);
+			byte low = (byte)(pages[i].msgId &0xFF);
+			baos.write(low);
+			Log.i(TAG, "convertToBytes high " +high + "low :"
+					+ low);
+			//baos.write(pages[i].msgId);
 			baos.write(pages[i].dcs);
 			baos.write(pages[i].sequenceNum);
 			baos.write(pages[i].totalNum);
 			Log.i(TAG, "convertToBytes otput " + pages[i].content + "content :"
-					+ pages[i].content);
+					+ pages[i].content + "msgId " + pages[i].msgId);
 			byte[] byteContent = new byte[pages[i].content.getBytes().length];
 			byteContent = pages[i].content.getBytes();
 			Log.i(TAG, "convertToBytes otput " + byteContent
 					+ "length of bytes array :" + byteContent.length);
+			
+			high =(byte) (pages[i].langId >>0x08);
+			baos.write(high);
+			low = (byte)(pages[i].langId &0xFF);
+			baos.write(low);
+			Log.i(TAG, "convertToBytes high " +high + "low :"
+					+ low);
+			
 			baos.write(byteContent.length);
 			baos.write(byteContent, 0, byteContent.length);
 			// dos.writeBytes(pages[i].content);
@@ -401,19 +490,24 @@ public class SmsCBMessage {
 		Uri RawUri = Uri.parse("content://sms/cbsmsraw");
 
 		String[] CB_RAW_PROJECTION = new String[] { "gs", "message_code",
-				"update_num", "message_id", "dcs", "count", "sequence",
+				"update_num", "message_id", "dcs", "count", "sequence","langId",
 				"content" };
 
 		SmsCBPage[] pages;
 
 		// Lookup all other related parts
-		StringBuilder where = new StringBuilder("message_id =");
-		where.append(" AND address = ?");
-		where.append(page.msgId);
-		where.append("AND gs=");
+		StringBuilder where = new StringBuilder("gs =");
 		where.append(page.gs);
-		where.append("AND message_code=");
+	
+		where.append(" AND message_code=");
 		where.append(page.messageCode);
+	
+		where.append(" AND message_id=");
+		where.append(page.msgId);
+		
+		StringBuilder whereArgs = new StringBuilder(page.msgId);
+		
+	    String [] ww = new String[]{whereArgs.toString()}; 
 		Cursor cursor = null;
 		int cursorCount = 0;
 		boolean isNew = true;
@@ -430,31 +524,38 @@ public class SmsCBMessage {
 			if (page.totalNum > 1) {
 
 				cursor = SqliteWrapper.query(mContext, mContentResolver,
-						RawUri, CB_RAW_PROJECTION, null, null, null);
+						RawUri, CB_RAW_PROJECTION, where.toString(), null, null);//ww
+				//cursor = SqliteWrapper.query(mContext, mContentResolver,
+				//		RawUri, CB_RAW_PROJECTION, null, null, null);
 
-				if (cursor != null) {
+				if (cursor != null && cursor.moveToFirst()) {
 					cursorCount = cursor.getCount();
+					
+					Log.i(TAG, "processSmsCBPage cursorCount " + cursorCount + "page.totalNum "+page.totalNum);
 					pages = new SmsCBPage[cursorCount + 1];
 
-					int gsColumn = cursor.getColumnIndex("gs");
-
-					int messageCodeColumn = cursor
-							.getColumnIndex("message_code");
-
-					int updateNumColumn = cursor.getColumnIndex("update_num");
-
-					int messageColumn = cursor.getColumnIndex("message_id");
-
-					int dcsColumn = cursor.getColumnIndex("dcs");
-
-					int countColumn = cursor.getColumnIndex("count");
-
-					int sequenceColumn = cursor.getColumnIndex("sequence");
-					int contentColumn = cursor.getColumnIndex("content");
 
 					for (i = 0; i < cursorCount; i++) {
 						cursor.moveToNext();
 						pages[i] = new SmsCBPage();
+
+						int gsColumn = cursor.getColumnIndex("gs");
+
+						int messageCodeColumn = cursor
+								.getColumnIndex("message_code");
+
+						int updateNumColumn = cursor.getColumnIndex("update_num");
+
+						int messageColumn = cursor.getColumnIndex("message_id");
+
+						int dcsColumn = cursor.getColumnIndex("dcs");
+
+						int countColumn = cursor.getColumnIndex("count");
+
+						int sequenceColumn = cursor.getColumnIndex("sequence");
+						int langColumn = cursor.getColumnIndex("langId");
+						int contentColumn = cursor.getColumnIndex("content");
+						
 						pages[i].gs = (byte) cursor.getInt(gsColumn);
 						pages[i].messageCode = (byte) cursor
 								.getInt(messageCodeColumn);
@@ -465,29 +566,45 @@ public class SmsCBMessage {
 						pages[i].sequenceNum = cursor.getInt(sequenceColumn);
 						pages[i].decodedData = (cursor.getString(contentColumn))
 								.getBytes();
+						pages[i].dcs = cursor.getInt(dcsColumn);
+						pages[i].langId = cursor.getInt(langColumn);
 						pages[i].content = cursor.getString(contentColumn);
 						if (pages[i].gs == page.gs
 								&& pages[i].messageCode == page.messageCode
 								&& pages[i].updateNum == page.updateNum
-								&& pages[i].msgId == page.msgId) {
+								&& pages[i].msgId == page.msgId && pages[i].sequenceNum == page.sequenceNum) {
 
 							isNew = false;
 							return null;
 						}
 
 					}
+					Log.i(TAG, "convertToBytes i " + i);
+					pages[i] = new SmsCBPage();
 					pages[i].gs = page.gs;
 					pages[i].messageCode = page.messageCode;
 					pages[i].updateNum = page.updateNum;
 					pages[i].msgId = page.msgId;
-					pages[i].totalNum = page.msgId;
+					pages[i].totalNum = page.totalNum;
 					pages[i].sequenceNum = page.sequenceNum;
 					pages[i].decodedData = page.decodedData;
-					pages[i].decodedData = page.decodedData;
+					pages[i].content = page.content;
+					pages[i].langId = page.langId;
+					
+					
 					if (cursorCount + 1 == page.totalNum) {
+						
+						
+						SqliteWrapper
+						.delete(mContext, mContentResolver, RawUri, where.toString(), null);// 
 						return convertToBytes(pages, cursorCount + 1);
 					}
 
+				}else{
+					
+					
+					
+					
 				}
 			} else {
 				pages = new SmsCBPage[1];
@@ -496,17 +613,20 @@ public class SmsCBMessage {
 				pages[0].messageCode = page.messageCode;
 				pages[0].updateNum = page.updateNum;
 				pages[0].msgId = page.msgId;
-				pages[0].totalNum = page.msgId;
+				pages[0].totalNum = page.totalNum;
 				pages[0].sequenceNum = page.sequenceNum;
 				pages[0].decodedData = page.decodedData;
-
+				pages[0].langId = page.langId;				
 				pages[0].content = page.content;
 				Log.i(TAG, "convertToBytes input " + "page.content :"
 						+ page.content);
-
+				Log.v(TAG, "processSmsCBPage SMS message count  "+ cursorCount);
+				
+			
+				
 				return convertToBytes(pages, 1);
 			}
-
+            
 			if (isNew && cursorCount != page.totalNum) {
 				// We don't have all the parts yet, store this one away
 				ContentValues values = new ContentValues();
@@ -517,15 +637,15 @@ public class SmsCBMessage {
 				values.put("dcs", page.dcs);
 				values.put("count", page.totalNum);
 				values.put("sequence", page.sequenceNum);
+				values.put("langId", page.langId);
 				values.put("content", page.content);
 
 				Uri insertedUri = SqliteWrapper.insert(mContext,
 						mContentResolver, RawUri, values);
-
+				Log.i(TAG, " processSmsCBPage page number " + page.sequenceNum);
 				return null;
 			}
-			SqliteWrapper
-					.delete(mContext, mContentResolver, RawUri, null, null);// @????
+		
 
 		} catch (SQLException e) {
 			Log.e(TAG, "Can't access multipart SMS database", e);
@@ -553,7 +673,7 @@ public class SmsCBMessage {
 
 		}
 		Log.i(TAG, "decodeSmsCBCds dcs_data" + dcs_data);
-		int coding_group = (dcs_data & 0xC0)>>0x06;
+		int coding_group = (dcs_data & 0xC0);
 		mDcs = new SmsCBDcs();
 		mDcs.byteOffset = 6;
 		Log.i(TAG, "decodeSmsCBCds coding_group : "+coding_group);
@@ -562,9 +682,9 @@ public class SmsCBMessage {
 		// 00xx xxxx
 		case 0x00:
 			mDcs.classIsPresent = false;
-			int tmp = (dcs_data & 0xF0)>>0x04;
-			Log.i(TAG, "decodeSmsCBCds (dcs_data & 0xF0)>>0x04 : "+tmp);
-			switch ((dcs_data & 0xF0)>>0x04) {
+			int tmp = (dcs_data & 0xF0);
+			Log.i(TAG, "decodeSmsCBCds (dcs_data & 0xF0) "+tmp);
+			switch ((dcs_data & 0xF0)) {
 			// 0000 xxxx
 			case 0x00:
 				mDcs.alphabetType = ENCODING_7BIT;
@@ -572,7 +692,7 @@ public class SmsCBMessage {
 				mDcs.languageId = (dcs_data & 0x0F);
 				break;
 			// 0001 xxxx
-			case 0x01:
+			case 0x10:
 				switch (dcs_data & 0x0F) {
 				// 0001 0000
 				case 0x00:
@@ -582,6 +702,7 @@ public class SmsCBMessage {
 					// followed by a CR character.
 					// The CR character is then followed by 90 characters of
 					// text.
+				
 					mDcs.byteOffset = 8;
 					mDcs.bitOffset = 5;
 					mDcs.languageIdPresent = true;
@@ -592,10 +713,11 @@ public class SmsCBMessage {
 					} else {
 						lang_id_h = (byte) (msg[0] & 0x7f);
 						lang_id_l = (byte) ((msg[1] & 0x3f) << 1)
-								| ((msg[6] & 0x80) >> 7);
+								| ((msg[0] & 0x80) >> 7);
 
 					}
 					mDcs.languageId = (lang_id_h << 8) | lang_id_l;
+					
 					mDcs.alphabetType = ENCODING_7BIT;
 					Log.d(TAG, "SMSCB:language id =" + lang_id_h + lang_id_l);
 					break;
@@ -734,14 +856,18 @@ public class SmsCBMessage {
 	 */
 	private static String getUserDataUCS2(byte[] msg, int byteOffset) {
 		String ret;
-
+               Log.i(TAG, "getUserDataUCS2 byteOffset " +byteOffset + "msg.length " + msg.length );
 		try {
-			ret = new String(msg, byteOffset, 88, "utf-16");// ?????
+			ret = new String(msg, byteOffset,( msg.length -byteOffset), "utf-16");
+
+			//String test = "4F60597DFF01";
+			//byte atContentData[] = IccUtils.hexStringToBytes(test);				
+			//ret = new String(atContentData,"utf-16");
 		} catch (UnsupportedEncodingException ex) {
 			ret = "";
 			Log.e(TAG, "implausible UnsupportedEncodingException", ex);
 		}
-
+		Log.i(TAG, "getUserDataUCS2"+ret);
 		return ret;
 	}
 
@@ -756,15 +882,16 @@ public class SmsCBMessage {
 	private static SmsCBPage parseUserData(byte[] msg, int length, SmsCBDcs dcs) {
 
 		int encodingType = ENCODING_UNKNOWN;
+	
 		mPage = new SmsCBPage();
-		mPage.gs = msg[0] >> 5 & 0x3;
+		mPage.gs = msg[0] >> 6 & 0x3;
 		mPage.messageCode = (msg[0] & 0x3F) | ((msg[1] >> 4) & 0xF);
 		mPage.updateNum = msg[1] & 0xF;
 		mPage.msgId = msg[2] | (msg[3] << 8);
 		mPage.dcs = msg[4];
-		mPage.sequenceNum = (msg[5] >> 4) & 0xFF;
-		mPage.totalNum = msg[5] & 0xFF;
-
+		mPage.sequenceNum = (msg[5] >> 4) & 0x0F;
+		mPage.totalNum = msg[5] & 0x0F;
+		mPage.langId = mDcs.languageId;
 		mPage.decodedData = new byte[MAX_USER_DATA_BYTES];
 		Log.i(TAG, "parseUserData length" + length);
 
@@ -773,10 +900,12 @@ public class SmsCBMessage {
 			return null;
 		}
 
-		for (int i = 0; i < (length - 6); i++) {
-			mPage.decodedData[i] = msg[6 + i];
-		}
-
+	//	for (int i = 0; i < length ; i++) {
+		//	Log.i(TAG,"parseUserData"+msg[i]);
+	//	}
+                Log.i(TAG, "parseUserData gs :" + mPage.gs + "messageCode : "+mPage.messageCode + "updateNum: "+mPage.updateNum+
+				"msgId: "+mPage.msgId+"dcs : "+mPage.dcs+"sequenceNum: "+mPage.sequenceNum +"totalNum: "+mPage.totalNum);
+		
 		encodingType = dcs.alphabetType;
 		Log.i(TAG, "parseUserData encodingType" + encodingType);
 
@@ -788,11 +917,19 @@ public class SmsCBMessage {
 
 		case ENCODING_7BIT:
 
-			mPage.content = "1234567890123456789012345678901234567890";
+			//mPage.content = "1234567890123456789012345678901234567890";
 			// tmp;
 			// mPage.content = GsmAlphabet.gsm7BitPackedToString(msg,
-			// dcs.byteOffset, 88,// @???
-			// dcs.bitOffset);
+				//	 6, msg.length,// @???
+					// 0);
+			 int len = ((msg.length-dcs.byteOffset)*8 - dcs.bitOffset)/7;
+			 
+			 Log.i(TAG, "parseUserData byteoffset  :" +dcs. byteOffset + "bitOffset : " +dcs.bitOffset + "7bit len " + len);
+			 
+			
+			 mPage.content = GsmAlphabet.gsm7BitPackedToString(msg,
+			 dcs.byteOffset,len,// @???
+			 dcs.bitOffset);
 			break;
 
 		case ENCODING_16BIT:
@@ -800,7 +937,7 @@ public class SmsCBMessage {
 			break;
 		}
 
-		Log.v(TAG, "decodeSmsCBCds SMS message body (raw): " + mPage.content);
+		Log.v(TAG, "decodeSmsCBCds body (raw): " + mPage.content);
 
 		return mPage;
 	}
