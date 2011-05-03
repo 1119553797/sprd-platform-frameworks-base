@@ -45,6 +45,8 @@ public:
     void getPreviewSize(int *width, int *height) const;
     void setPreviewFrameRate(int fps);
     int getPreviewFrameRate() const;
+//    void setCamId(int cameraId);
+//    int getCamId() const;	
     void setPreviewFormat(const char *format);
     const char *getPreviewFormat() const;
     void setPictureSize(int width, int height);
@@ -77,6 +79,12 @@ public:
     // Supported number of preview frames per second.
     // Example value: "24,15,10". Read.
     static const char KEY_SUPPORTED_PREVIEW_FRAME_RATES[];
+    // The camera string.
+    // Example value: "back_camera". Read/write.
+    static const char KEY_CAMERA_ID[];
+    // Supported the camera strings.
+    // Example value: "front_camera, back_camera". Read only.
+    static const char KEY_SUPPORTED_CAMERA_ID[];	
     // The dimensions for captured pictures in pixels (width x height).
     // Example value: "1024x768". Read/write.
     static const char KEY_PICTURE_SIZE[];
