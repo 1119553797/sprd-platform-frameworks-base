@@ -95,6 +95,7 @@ public class Camera {
     public native static void getCameraInfo(int cameraId, CameraInfo cameraInfo);
 
     public native static int setCameraId(int cameraId);
+   public native static int getCameraId();	
 	
     /**
      * Information about a camera
@@ -770,6 +771,7 @@ public class Camera {
         private static final String KEY_PREVIEW_FORMAT = "preview-format";
         private static final String KEY_PREVIEW_FRAME_RATE = "preview-frame-rate";
         private static final String KEY_PICTURE_SIZE = "picture-size";
+        private static final String KEY_CAMERA_ID = "cameraid";		
         private static final String KEY_PICTURE_FORMAT = "picture-format";
         private static final String KEY_JPEG_THUMBNAIL_SIZE = "jpeg-thumbnail-size";
         private static final String KEY_JPEG_THUMBNAIL_WIDTH = "jpeg-thumbnail-width";
@@ -807,24 +809,28 @@ public class Camera {
 
         // Values for white balance settings.
         public static final String WHITE_BALANCE_AUTO = "auto";
-        public static final String WHITE_BALANCE_INCANDESCENT = "incandescent";
-        public static final String WHITE_BALANCE_FLUORESCENT = "fluorescent";
+        public static final String WHITE_BALANCE_INCANDESCENT = "incandescent"; //bai zhi deng
+        public static final String WHITE_BALANCE_FLUORESCENT = "fluorescent"; //ying guang deng
         public static final String WHITE_BALANCE_WARM_FLUORESCENT = "warm-fluorescent";
         public static final String WHITE_BALANCE_DAYLIGHT = "daylight";
         public static final String WHITE_BALANCE_CLOUDY_DAYLIGHT = "cloudy-daylight";
-        public static final String WHITE_BALANCE_TWILIGHT = "twilight";
+        public static final String WHITE_BALANCE_TWILIGHT = "twilight";//huang hun
         public static final String WHITE_BALANCE_SHADE = "shade";
+
+        // Values for cameraId settings.
+        public static final String CAMERA_ID_BACK = "back_camera";
+        public static final String CAMERA_ID_FRONT = "front_camera";		
 
         // Values for color effect settings.
         public static final String EFFECT_NONE = "none";
-        public static final String EFFECT_MONO = "mono";
-        public static final String EFFECT_NEGATIVE = "negative";
-        public static final String EFFECT_SOLARIZE = "solarize";
-        public static final String EFFECT_SEPIA = "sepia";
+        public static final String EFFECT_MONO = "mono";//dan se
+        public static final String EFFECT_NEGATIVE = "negative";//di pian mode
+        public static final String EFFECT_SOLARIZE = "solarize";//jiu zhao pian
+        public static final String EFFECT_SEPIA = "sepia";//he se
         public static final String EFFECT_POSTERIZE = "posterize";
         public static final String EFFECT_WHITEBOARD = "whiteboard";
         public static final String EFFECT_BLACKBOARD = "blackboard";
-        public static final String EFFECT_AQUA = "aqua";
+        public static final String EFFECT_AQUA = "aqua";//shui wen
 
         // Values for antibanding settings.
         public static final String ANTIBANDING_AUTO = "auto";
@@ -1305,6 +1311,44 @@ public class Camera {
             }
             return formats;
         }
+  
+public   void setCamId(int cameraId)
+{
+	if(0 == cameraId){
+		set(KEY_CAMERA_ID, "back_camera");
+        }
+	else{
+            	set(KEY_CAMERA_ID, "front_camera");
+	}
+}
+public  int getCamId() 
+{	
+	if("back_camera" == get(KEY_CAMERA_ID)){
+		return 0;
+	}
+	else{
+		return 1;
+	}
+}
+public   void setCameraIdString(String value)
+{
+	set(KEY_CAMERA_ID, value);
+}
+public  String getCameraIdString() 
+{	
+	return get(KEY_CAMERA_ID);
+}
+        /**
+         * Gets the supported preview frame rates.
+         *
+         * @return a list of supported preview frame rates. null if preview
+         *         frame rate setting is not supported.
+         */
+        public List<String> getSupportedCameraId() {
+            String str = get(KEY_CAMERA_ID + SUPPORTED_VALUES_SUFFIX);	    
+            return split(str);
+        }		
+		
 
         private String cameraFormatForPixelFormat(int pixel_format) {
             switch(pixel_format) {
