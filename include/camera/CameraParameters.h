@@ -85,6 +85,18 @@ public:
     // Supported the camera strings.
     // Example value: "front_camera, back_camera". Read only.
     static const char KEY_SUPPORTED_CAMERA_ID[];	
+    // The camera string.
+    // Example value: "1". Read/write.
+    static const char KEY_BRIGHTNESS[];
+    // Supported the camera strings.
+    // Example value: "0,1,2,3,4,5,6". Read only.
+    static const char KEY_SUPPORTED_BRIGHTNESS[];	
+    // The camera string.
+    // Example value: "1". Read/write.
+    static const char KEY_CONTRAST[];
+    // Supported the camera strings.
+    // Example value: "0,1,2,3,4,5,6". Read only.
+    static const char KEY_SUPPORTED_CONTRAST[];		
     // The dimensions for captured pictures in pixels (width x height).
     // Example value: "1024x768". Read/write.
     static const char KEY_PICTURE_SIZE[];
