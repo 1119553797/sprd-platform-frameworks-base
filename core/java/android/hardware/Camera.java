@@ -772,6 +772,8 @@ public class Camera {
         private static final String KEY_PREVIEW_FRAME_RATE = "preview-frame-rate";
         private static final String KEY_PICTURE_SIZE = "picture-size";
         private static final String KEY_CAMERA_ID = "cameraid";		
+        private static final String KEY_BRIGHTNESS = "brightness";		
+        private static final String KEY_CONTRAST = "contrast";				
         private static final String KEY_PICTURE_FORMAT = "picture-format";
         private static final String KEY_JPEG_THUMBNAIL_SIZE = "jpeg-thumbnail-size";
         private static final String KEY_JPEG_THUMBNAIL_WIDTH = "jpeg-thumbnail-width";
@@ -1347,8 +1349,31 @@ public  String getCameraIdString()
         public List<String> getSupportedCameraId() {
             String str = get(KEY_CAMERA_ID + SUPPORTED_VALUES_SUFFIX);	    
             return split(str);
+        }	
+	public   void setBrightness(String value)
+	{
+		set(KEY_BRIGHTNESS, value);
+	}
+	public  String getBrightness() 
+	{	
+		return get(KEY_BRIGHTNESS);
+	}		
+        public List<String> getSupportedBrightness() {
+            String str = get(KEY_BRIGHTNESS + SUPPORTED_VALUES_SUFFIX);	    
+            return split(str);
+        }
+	public   void setContrast(String value)
+	{
+		set(KEY_CONTRAST, value);
+	}
+	public  String getContrast() 
+	{	
+		return get(KEY_BRIGHTNESS);
+	}		
+        public List<String> getSupportedContrast() {
+            String str = get(KEY_CONTRAST + SUPPORTED_VALUES_SUFFIX);	    
+            return split(str);
         }		
-		
 
         private String cameraFormatForPixelFormat(int pixel_format) {
             switch(pixel_format) {
