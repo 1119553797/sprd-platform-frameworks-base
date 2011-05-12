@@ -2341,13 +2341,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
                     mSMSRegistrant
                         .notifyRegistrant(new AsyncResult(null, sms, null));
                 }
-                //@TEST
-                if (RILJ_LOGD) unsljLog(response);
-
-                if (mGsmBroadcastSmsRegistrant != null) {
-                    mGsmBroadcastSmsRegistrant
-                        .notifyRegistrant(new AsyncResult(null, ret, null));
-                }
+            
 
             break;
             }
@@ -2926,23 +2920,33 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
 
     protected Object responseGmsBroadcastConfig(Parcel p) {
         int num;
-        ArrayList<SmsBroadcastConfigInfo> response;
-        SmsBroadcastConfigInfo info;
-
+   
+		
+        //ArrayList<SmsBroadcastConfigInfo> response;
+        //SmsBroadcastConfigInfo info;
+        
+        Log.i("RIL","responseGmsBroadcastConfig");	
         num = p.readInt();
-        response = new ArrayList<SmsBroadcastConfigInfo>(num);
 
-        for (int i = 0; i < num; i++) {
-            int fromId = p.readInt();
-            int toId = p.readInt();
-            int fromScheme = p.readInt();
-            int toScheme = p.readInt();
-            int selected = p.readInt();
+       String response =  p.readString();
 
-            info = new SmsBroadcastConfigInfo(fromId, toId, fromScheme,
-                    toScheme, selected);
-            response.add(info);
-        }
+          Log.i("RIL","responseGmsBroadcastConfig  " +  response);	
+	   
+       // response = new ArrayList<SmsBroadcastConfigInfo>(num);
+
+        //for (int i = 0; i < num; i++) {
+          //  int fromId = p.readInt();
+       //     int toId = p.readInt();
+      //int fromScheme = p.readInt();
+       //       int toScheme = p.readInt();
+       //      int selected = p.readInt();
+
+       //     info = new SmsBroadcastConfigInfo(fromId, toId, fromScheme,
+        //            toScheme, selected);
+          //  response.add(info);
+
+	   
+       // }
         return response;
     }
 
