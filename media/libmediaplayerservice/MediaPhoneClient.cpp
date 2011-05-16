@@ -297,6 +297,56 @@ status_t MediaPhoneClient::setVolume(float leftVolume, float rightVolume)
     return NO_ERROR;
 }
 
+status_t MediaPhoneClient::enableRecord(bool isEnable, int fd)
+{
+    //todo: set correct parameters
+    if (isEnable) {
+        mRecordRecorder = new StagefrightRecorder();
+        //CHECK_RT(mRecordRecorder->setCamera(mCamera));
+        CHECK_RT(mRecordRecorder->setVideoSource(VIDEO_SOURCE_CAMERA));
+        CHECK_RT(mRecordRecorder->setAudioSource(AUDIO_SOURCE_MIC));
+        //CHECK_RT(mRecordRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
+        CHECK_RT(mRecordRecorder->setOutputFormat(OUTPUT_FORMAT_VIDEOPHONE));
+        CHECK_RT(mRecordRecorder->setVideoFrameRate(10));
+        CHECK_RT(mRecordRecorder->setVideoSize(176, 144));
+        CHECK_RT(mRecordRecorder->setParameters(String8("video-param-encoding-bitrate=393216")));
+        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-encoding-bitrate=98304")));
+        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-number-of-channels=1")));
+        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-sampling-rate=8000")));
+        CHECK_RT(mRecordRecorder->setVideoEncoder(VIDEO_ENCODER_H263));
+        CHECK_RT(mRecordRecorder->setAudioEncoder(AUDIO_ENCODER_AMR_NB));
+        CHECK_RT(mRecordRecorder->setOutputFile(fd, 0, 0));
+        CHECK_RT(mRecordRecorder->setPreviewSurface(mPreviewSurface));
+        CHECK_RT(mRecordRecorder->prepare());
+        CHECK_RT(mRecordRecorder->start());
+
+        return OK;
+    } else {
+        if (mRecordRecorder != NULL) {
+            CHECK_RT(mRecordRecorder->stop());
+            delete mRecordRecorder;
+            mRecordRecorder = NULL;
+            return OK;
+        } else {
+            LOGE("mediaphone is not initialized");
+            return NO_INIT;
+        }
+    }
+}
+
+status_t MediaPhoneClient::startUpLink()
+{
+    CHECK_RT(mRecorder->start());
+    return OK;
+}
+
+status_t MediaPhoneClient::stopUpLink()
+{
+    CHECK_RT(mRecorder->stop());
+    return OK;
+}
+
+
 // TODO: Find real cause of Audio/Video delay in PV framework and remove this workaround
 /* static */ int MediaPhoneClient::AudioOutput::mMinBufferCount = 4;
 /* static */ bool MediaPhoneClient::AudioOutput::mIsOnEmulator = false;

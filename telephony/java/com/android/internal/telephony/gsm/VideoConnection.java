@@ -399,7 +399,7 @@ public class VideoConnection extends Connection {
             disconnected = true;
 
             if (Config.LOGD) Log.d(LOG_TAG,
-                    "[GSMConn] onDisconnect: cause=" + cause);
+                    "[VideoConn] onDisconnect: cause=" + cause);
 
             owner.phone.notifyVideoCallDisconnect(this);
 

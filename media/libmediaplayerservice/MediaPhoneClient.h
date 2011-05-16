@@ -89,7 +89,7 @@ class MediaPhoneClient : public BnMediaPhone
 
 public:
     virtual     status_t    setComm(const char *urlIn, const char *urlOut);
-    virtual	    status_t		setCamera(const sp<ICamera>& camera);
+    virtual     status_t    setCamera(const sp<ICamera>& camera);
     virtual     status_t    setRemoteSurface(const sp<ISurface>& surface);
     virtual     status_t    setLocalSurface(const sp<ISurface>& surface);
     virtual     status_t    setListener(const sp<IMediaPlayerClient>& listener);
@@ -97,11 +97,14 @@ public:
     virtual     status_t    prepareAsync();
     virtual     status_t    start();
     virtual     status_t    stop();
-    virtual     status_t		setAudioStreamType(int type);
-    virtual     status_t		setVolume(float leftVolume, float rightVolume);
-    virtual     status_t		release();
+    virtual     status_t    setAudioStreamType(int type);
+    virtual     status_t    setVolume(float leftVolume, float rightVolume);
+    virtual     status_t    release();
+    virtual     status_t    enableRecord(bool isEnable, int fd);
+    virtual     status_t    startUpLink();
+    virtual     status_t    stopUpLink();
 
-    static      void			notify(void* cookie, int msg, int ext1, int ext2);
+    static      void        notify(void* cookie, int msg, int ext1, int ext2);
 
 private:
     friend class                 MediaPlayerService;  // for accessing private constructor
@@ -114,6 +117,7 @@ private:
     sp<ICamera>                  mCamera;
     sp<ISurface>                 mPreviewSurface;
     MediaRecorderBase            *mRecorder;
+    MediaRecorderBase            *mRecordRecorder;
     sp<MediaPlayerBase>          mPlayer;
     sp<MediaPlayerService>       mMediaPlayerService;
     sp<AudioOutput>              mAudioOutput;
