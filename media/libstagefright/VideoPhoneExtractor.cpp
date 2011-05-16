@@ -1,6 +1,7 @@
 #define LOG_NDEBUG 0
 #define LOG_TAG "VideoPhoneExtractor"
 #include <utils/Log.h>
+#include <utils/Singleton.h>
 
 #include "include/VideoPhoneExtractor.h"
 
@@ -25,10 +26,43 @@
 #define	SAFE_FREE(p)	if ( (p) != NULL) {free(p); (p) =NULL;}
 #define	MAX_BUFFER_SIZE	(128*1024)
 //#define DEBUG_FILE     "/data/vpin"
+#define USE_DATA_DEVICE
 
 namespace android {
 
-class VideoPhoneSource : public MediaSource 
+class VideoPhoneSourceInterface
+{
+public:
+    virtual int write(char* data, int nLen) = 0;
+    VideoPhoneSourceInterface() {};
+    virtual ~VideoPhoneSourceInterface() {};
+};
+
+class VideoPhoneDataDevice : public Singleton<VideoPhoneDataDevice>
+{
+public:
+    status_t registerClient(VideoPhoneSourceInterface *client, sp<DataSource> dataSource);
+    void unregisterClient(VideoPhoneSourceInterface *client);
+
+private:
+    friend class Singleton<VideoPhoneDataDevice>;
+
+    VideoPhoneDataDevice();
+    ~VideoPhoneDataDevice();
+    static void *ThreadWrapper(void *);
+    status_t threadFunc();
+    status_t startThread();
+    void stopThread();
+
+    SortedVector<VideoPhoneSourceInterface *> mClients;
+    sp<DataSource> mDataSource;
+    pthread_t m_Thread;
+    Mutex m_Lock;
+    bool mStarted;
+};
+
+class VideoPhoneSource : public MediaSource,
+                         public VideoPhoneSourceInterface
 {
 public:
 	
@@ -44,23 +78,23 @@ public:
     	virtual status_t read(
             MediaBuffer **buffer, const ReadOptions *options = NULL);
 
+	int write(char* data, int nLen);
 protected:
 	
     	virtual ~VideoPhoneSource();
 
 private:
-	
+#ifndef USE_DATA_DEVICE	
 	static void *	ThreadWrapper(void *);
 	
     	status_t 		threadFunc();
-
+#endif
 	int			writeRingBuffer(char* data,int nLen);
 
 	int			readRingBuffer(char* data, size_t nSize);
 		
 private:
-
-	bool				m_bFirstGet;
+	//bool				m_bFirstGet;
 	
     	Mutex 			m_Lock;
 		
@@ -78,8 +112,6 @@ private:
 
 	FILE*			m_fAVStream;
 
-	int				m_Modem;
-
 	int64_t			m_nStartSysTime;
 
 	uint8_t*			m_RingBuffer;
@@ -93,14 +125,15 @@ private:
 	pthread_t 		m_Thread;
 
 	Condition			m_GetBuffer;
-	
+
+	int			m_nNum;	
 };
 
 
 VideoPhoneExtractor::VideoPhoneExtractor(const sp<DataSource> &source)
-    : mDataSource(source),
-      m_bHaveMetadata(false),
-      mFileMetaData(new MetaData)
+    : m_bHaveMetadata(false),
+      mFileMetaData(new MetaData),
+      mDataSource(source)
 {    	
 	LOGI("VideoPhoneExtractor::VideoPhoneExtractor");
 	
@@ -155,6 +188,7 @@ status_t VideoPhoneExtractor::readMetaData()
 
 	mFileMetaData->setCString(kKeyMIMEType, "video/3gpp");
 		
+	m_AVMeta->setInt32(kKeyRotation, 0);
 	m_AVMeta->setCString(kKeyMIMEType, "video/3gpp");
 	m_AVMeta->setInt32(kKeyWidth, 176);
 	m_AVMeta->setInt32(kKeyHeight, 144);
@@ -197,13 +231,13 @@ VideoPhoneSource::VideoPhoneSource(
         const sp<MetaData> &format,
         const sp<DataSource> &dataSource)
     : m_Format(format),
-    	m_DataSource(dataSource),
+      m_DataSource(dataSource),
       m_bStarted(false),
-      m_pGroup(NULL)
+      m_pGroup(NULL),
+      m_nNum(0)
 {
 	LOGI("VideoPhoneSource::VideoPhoneSource");
 	m_fAVStream		= NULL;
-	m_Modem		= -1;
 }
 
 VideoPhoneSource::~VideoPhoneSource() 
@@ -218,10 +252,12 @@ status_t VideoPhoneSource::start(MetaData *params)
 	Mutex::Autolock autoLock(m_Lock);
 		
 	LOGI("VideoPhoneSource::start");
-	m_bFirstGet	= true;	
+	//m_bFirstGet	= true;	
 	status_t 		err 		= NO_MEMORY;
 	bool			bRet	= false;
-	pthread_attr_t	attr;
+#ifndef USE_DATA_DEVICE	
+	pthread_attr_t attr;
+#endif
 
 	if (m_bStarted)
 		goto success;
@@ -236,6 +272,12 @@ status_t VideoPhoneSource::start(MetaData *params)
 	if (!bRet)
 		goto fail;
 
+	m_RingBuffer 		= (uint8_t*)malloc(MAX_BUFFER_SIZE);
+	m_nDataEnd		= 0;
+	m_nDataStart		= MAX_BUFFER_SIZE - 1;
+	m_nRingBufferSize	= MAX_BUFFER_SIZE;
+
+#ifndef USE_DATA_DEVICE	
 #ifdef DEBUG_FILE
 	m_fAVStream = fopen(DEBUG_FILE,"r");
 	if (m_fAVStream != NULL) fseek(m_fAVStream, 0, SEEK_SET);
@@ -246,33 +288,24 @@ status_t VideoPhoneSource::start(MetaData *params)
 	}
 	LOGD("file opened %p", m_fAVStream);
 #else
- #if 0
-   	m_Modem	= open("",O_RDONLY,O_NONBLOCK);
-
-	if (m_Modem < 0)
-	{
-		LOGE("Cannot open file");
-		goto fail;
-	}
-	LOGD("file opened %d", m_Modem);
- #else
 	if (m_DataSource->initCheck() != OK)
 	{
 		LOGE("Cannot open file");
 		goto fail;
 	}
- #endif
 #endif
 
-	m_RingBuffer 		= (uint8_t*)malloc(MAX_BUFFER_SIZE);
-	m_nDataEnd		= 0;
-	m_nDataStart		= MAX_BUFFER_SIZE - 1;
-	m_nRingBufferSize	= MAX_BUFFER_SIZE;
-	
 	pthread_attr_init(&attr);
     	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     	pthread_create(&m_Thread, &attr, ThreadWrapper, this);
-    	pthread_attr_destroy(&attr);		
+    	pthread_attr_destroy(&attr);
+#else
+    if (VideoPhoneDataDevice::getInstance().registerClient(this, m_DataSource) != OK)
+    {
+        LOGE("Cannot register client");
+        goto fail;
+    }
+#endif		
 		
 success:
 
@@ -282,6 +315,11 @@ success:
 fail:
 	
 	LOGE("***VideoPhoneSource::start FAIL***");
+	if (m_RingBuffer != NULL) {
+	SAFE_FREE(m_RingBuffer);
+		free(m_RingBuffer);
+		m_RingBuffer = NULL;
+	}
 	return err;
 }
 
@@ -307,14 +345,6 @@ status_t VideoPhoneSource::stop()
 		fclose(m_fAVStream);
 		m_fAVStream	= NULL;
 	}
-#else
- #if 0
-	if (m_Modem > 0)
-	{
-		close(m_Modem);
-		m_Modem	= -1;
-	}
- #endif
 #endif
 
 	SAFE_FREE(m_RingBuffer);
@@ -343,17 +373,17 @@ status_t VideoPhoneSource::read(
 {
     	Mutex::Autolock autoLock(m_Lock);
 	
-	static	int		nNum;
-	LOGI("VideoPhoneSource::read START nNum = %d",nNum);	
+	//static	int		nNum;
+	LOGI("VideoPhoneSource::read START nNum = %d",m_nNum);	
 	
-	uint32_t	nStart;
+	uint32_t	nStart = 0;
 	uint32_t	nEnd;
 	status_t 	err	= UNKNOWN_ERROR;
 
 	char 	cHeader[16];
 	uint32_t	nSize;
-	uint32_t	nPts;
-	int 		type;
+	uint32_t	nPts = 0;//not used
+	int 		type = 0;//not used
 
 	MediaBuffer*		pMediaBuffer;
 
@@ -373,12 +403,12 @@ status_t VideoPhoneSource::read(
 success:
 	
 	LOGI("VideoPhoneSource::read:  nNum = %d nStart = %d  nEnd = %d  nPts = %d   type = %d  mime = %s",
-		nNum,nStart,nEnd,nPts,type,m_strMime);
+		m_nNum,nStart,nEnd,nPts,type,m_strMime);
 
 	pMediaBuffer->set_range(nStart, nEnd);
 	pMediaBuffer->meta_data()->clear();
 
-	if (nNum ==0)
+	if (m_nNum == 0)
 		m_nStartSysTime	= nanoseconds_to_milliseconds(systemTime());
 
 	pMediaBuffer->meta_data()->setInt64(
@@ -387,7 +417,7 @@ success:
 	
 	*out = pMediaBuffer;
 	LOGI("VideoPhoneSource::read OK");
-	nNum++;
+	m_nNum++;
 	return OK;
 
 fail:
@@ -396,7 +426,7 @@ fail:
 	return err;
 }
 
-// static
+#ifndef USE_DATA_DEVICE	
 void *VideoPhoneSource::ThreadWrapper(void *me) 
 {
     	return (void *) static_cast<VideoPhoneSource *>(me)->threadFunc();
@@ -418,26 +448,16 @@ status_t VideoPhoneSource::threadFunc()
    	if (m_fAVStream == NULL)
 			break;
 #else
- #if 0
-		if (m_Modem < 0)
-			break;
- #else
 		if (m_DataSource->initCheck() != OK)
 			break;
- #endif
 #endif
 
 #ifdef DEBUG_FILE
 		LOGI("before read %p", m_fAVStream);
     nLen = fread((void *)cTempbuffer,1, BUFFER_SIZE, m_fAVStream);
 #else
- #if 0
-		LOGI("before read %d", m_Modem);
-		nLen = ::read(m_Modem,(void *)cTempbuffer,BUFFER_SIZE);
- #else
 		LOGI("before read");
 		nLen = m_DataSource->readAt(0, (void *)cTempbuffer, BUFFER_SIZE);
- #endif
 #endif
 		if (nLen == 0)
 		{
@@ -460,6 +480,7 @@ status_t VideoPhoneSource::threadFunc()
 		
 	return err;
 }
+#endif
 
 int	VideoPhoneSource::writeRingBuffer(char* data,int nLen)
 {
@@ -510,7 +531,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 	int	nLen;
 	bool	bStartRead 	= false;
 	bool	bIsMpege4	= false;
-	int	nStart,nEnd;
+	int	nStart = m_nDataStart, nEnd = m_nDataStart;
 	LOGI("VideoPhoneSource::readRingBuffer START1 %d", m_bStarted);
 	while (m_bStarted)
 	{
@@ -587,5 +608,134 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 	return nLen;
 }
 	
+int VideoPhoneSource::write(char* data,int nLen)
+{
+    return writeRingBuffer(data, nLen);
+}
+
+/////////////////////////////////////////////////////////////////////
+#undef LOG_TAG
+#define LOG_TAG "VideoPhoneDataDevice"
+
+ANDROID_SINGLETON_STATIC_INSTANCE(VideoPhoneDataDevice);
+
+VideoPhoneDataDevice::VideoPhoneDataDevice()
+    : mDataSource(NULL)
+{
+    mClients.clear();
+    LOGV("VideoPhoneDataDevice created");
+}
+
+VideoPhoneDataDevice::~VideoPhoneDataDevice()
+{
+    LOGV("VideoPhoneDataDevice destroyed");
+}
+
+status_t VideoPhoneDataDevice::startThread()
+{
+    pthread_attr_t attr;
+
+    mStarted = true;
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+    pthread_create(&m_Thread, &attr, ThreadWrapper, this);
+    pthread_attr_destroy(&attr);
+
+    return OK;
+}
+
+void VideoPhoneDataDevice::stopThread()
+{
+    mStarted = false;
+}
+
+status_t VideoPhoneDataDevice::registerClient(VideoPhoneSourceInterface *client, sp<DataSource> dataSource)
+{
+    Mutex::Autolock autoLock(m_Lock);
+    if (mClients.size() == 0) {
+        mDataSource = dataSource;
+        if (mDataSource == NULL) {
+            LOGE("first registrant should not have NULL dataSource");
+            return BAD_VALUE;
+        }
+        if (mDataSource->initCheck() != OK)
+        {
+            LOGE("register initCheck fail");
+            return BAD_VALUE;
+        }
+        startThread();
+    }
+    mClients.add(client);
+    LOGV("register Client %p", client);
+    return OK;
+}
+
+void VideoPhoneDataDevice::unregisterClient(VideoPhoneSourceInterface *client)
+{
+    Mutex::Autolock autoLock(m_Lock);
+    mClients.remove(client);
+    LOGV("unregister Client %p", client);
+    if (mClients.size() == 0) {
+        stopThread();
+    }
+}
+
+void *VideoPhoneDataDevice::ThreadWrapper(void *me) 
+{
+    return (void *) static_cast<VideoPhoneDataDevice *>(me)->threadFunc();
+}
+
+status_t VideoPhoneDataDevice::threadFunc() 
+{
+    const int BUFFER_SIZE = 2000;
+    status_t 	err = OK;
+    char cTempbuffer[BUFFER_SIZE];	
+    int nLen;
+	
+    LOGI("enter threadFunc");
+    while (mStarted) 
+    {
+        Mutex::Autolock autoLock(m_Lock);
+
+#ifdef DEBUG_FILE
+   	if (m_fAVStream == NULL)
+			break;
+#else
+		if (mDataSource->initCheck() != OK)
+			break;
+#endif
+
+#ifdef DEBUG_FILE
+		LOGI("before read %p", m_fAVStream);
+    nLen = fread((void *)cTempbuffer,1, BUFFER_SIZE, m_fAVStream);
+#else
+		LOGI("before read");
+		nLen = mDataSource->readAt(0, (void *)cTempbuffer, BUFFER_SIZE);
+#endif
+		if (nLen == 0)
+		{
+			LOGW("read error %s", strerror(errno));
+#ifdef DEBUG_FILE
+			if (feof(m_fAVStream)) break;
+#else
+			break;
+#endif
+			usleep(1000*1000);
+		}
+		LOGI("after read %d", nLen);
+
+        for (int i = 0, n = mClients.size(); i < n; ++i) {
+            static_cast<VideoPhoneSourceInterface *>(mClients[i])->write(cTempbuffer, nLen);
+		//writeRingBuffer(cTempbuffer,nLen);
+        }
+    }
+    LOGI("exit threadFunc");
+	
+    if (err == ERROR_END_OF_STREAM)
+        err = OK;
+		
+    return err;
+}
+
 }  // namespace android
 

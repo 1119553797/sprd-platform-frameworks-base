@@ -314,8 +314,6 @@ public class MediaPhone extends Handler
     public void controlLocalVideo(boolean bEnable, boolean bReplaceImg, Message result) {
         Log.d(TAG, "controlLocalVideo");
         stayAwake(true);
-			
-        mCm.controlVPLocalMedia(1, bEnable?1:0, false, internalGetMessage(result, MEDIA_SOL_CONTROL_LOCALVIDEO));
 
 		if (bReplaceImg){
 			if (bEnable)
@@ -323,6 +321,8 @@ public class MediaPhone extends Handler
 			else
 				sendString("close_:camera_", Message.obtain(mEventHandler, MEDIA_SOL_SENDSTRING));
 		}
+			
+        mCm.controlVPLocalMedia(1, bEnable?1:0, false, internalGetMessage(result, MEDIA_SOL_CONTROL_LOCALVIDEO));
     }
 
     public void controlLocalAudio(boolean bEnable, Message result) {
@@ -512,6 +512,40 @@ public class MediaPhone extends Handler
      */
     public native Bitmap getFrameAt(int msec) throws IllegalStateException;
 
+    /**
+     * Enable or disable remote video recording.
+     *
+     * @param isEnable enable or disable
+     * @param fd file descriptor for result video file
+     */
+    private native void enableRecord(boolean isEnable, int fd);
+
+    /**
+     * Start up link data transfer.
+     * This API is used to swith the camera between back, front or fake.
+     * To switch camera, stopUpLink() is called first, then call setCamera()
+     * with the newly created camera instance, finally call startUpLink().
+     * This API will return successfully when the up link is already started.
+     * The fake camera is used for sending alternative picture or video(not implemented yet) to remote.
+     *
+     * @param isEnable enable or disable
+     * @param fd file descriptor for result video file
+     */
+    private native void startUpLink();
+
+    /**
+     * Stop up link data transfer.
+     * This API is used to swith the camera between back, front or fake.
+     * To switch camera, stopUpLink() is called first, then call setCamera()
+     * with the newly created camera instance, finally call startUpLink().
+     * This API will return successfully when the up link is already started.
+     * The fake camera is used for sending alternative picture or video(not implemented yet) to remote.
+     *
+     * @param isEnable enable or disable
+     * @param fd file descriptor for result video file
+     */
+    private native void stopUpLink();
+
     private static native final void native_init();
     private native final void native_setup(Object mediaphone_this);
     private native final void native_finalize();
@@ -645,7 +679,7 @@ public class MediaPhone extends Handler
             case MEDIA_UNSOL_DATA: {
                 int[] params = (int[])ar.result;
                 int indication = params[0];
-				Log.d(TAG, "m_bStartTester: " + m_bStartTester);
+				Log.d(TAG, "handleMessage(MEDIA_UNSOL_DATA), indication: " + indication);
                 return;
             }
 
@@ -657,6 +691,7 @@ public class MediaPhone extends Handler
                 //int type = msg.arg1;
                 //String param = (String)msg.obj;
                 int[] result = (int[])ar.result;
+				Log.d(TAG, "handleMessage(MEDIA_UNSOL_CODEC), result: " + result[0]);
                 onCodecRequest(result[0], null);
                 return;
             }
@@ -740,7 +775,7 @@ public class MediaPhone extends Handler
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "start fail " + ex);
             }
-	    codec(CODEC_SET_PARAM, null, null);
+	    	codec(CODEC_SET_PARAM, null, null);
             break;
 
         case CODEC_CLOSE:
@@ -854,30 +889,30 @@ public class MediaPhone extends Handler
     /** Unspecified media player info.
      * @see android.media.MediaPhone.OnMediaInfoListener
      */
-    public static final int MEDIA_MEDIAINFO_UNKNOWN = 1;
+    public static final int MEDIA_INFO_UNKNOWN = 1;
 
     /** The video is too complex for the decoder: it can't decode frames fast
      *  enough. Possibly only the audio plays fine at this stage.
      * @see android.media.MediaPhone.OnMediaInfoListener
      */
-    public static final int MEDIA_MEDIAINFO_VIDEO_TRACK_LAGGING = 700;
+    public static final int MEDIA_INFO_VIDEO_TRACK_LAGGING = 700;
 
     /** Bad interleaving means that a media has been improperly interleaved or
      * not interleaved at all, e.g has all the video samples first then all the
      * audio ones. Video is playing but a lot of disk seeks may be happening.
      * @see android.media.MediaPhone.OnMediaInfoListener
      */
-    public static final int MEDIA_MEDIAINFO_BAD_INTERLEAVING = 800;
+    public static final int MEDIA_INFO_BAD_INTERLEAVING = 800;
 
     /** The media cannot be seeked (e.g live stream)
      * @see android.media.MediaPhone.OnMediaInfoListener
      */
-    public static final int MEDIA_MEDIAINFO_NOT_SEEKABLE = 801;
+    public static final int MEDIA_INFO_NOT_SEEKABLE = 801;
 
     /** A new set of metadata is available.
      * @see android.media.MediaPhone.OnMediaInfoListener
      */
-    public static final int MEDIA_MEDIAINFO_METADATA_UPDATE = 802;
+    public static final int MEDIA_INFO_METADATA_UPDATE = 802;
 
     /**
      * Interface definition of a callback to be invoked to communicate some

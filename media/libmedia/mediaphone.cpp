@@ -171,11 +171,13 @@ status_t MediaPhone::start()
 
     status_t ret = mMediaPhone->start();
     if (OK != ret) {
-        LOGE("connect failed: %d", ret);
+        LOGE("start failed: %d", ret);
         mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
     mCurrentState = MEDIA_PHONE_STARTED;
+    mIsRecording = false;
+    mIsUpLinkStopped = false;
     return ret;
 }
 
@@ -186,14 +188,18 @@ status_t MediaPhone::stop()
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+    if (!(mCurrentState & (MEDIA_PHONE_STARTED|MEDIA_PHONE_PREPARED))) {
         LOGE("stop called in an invalid state: %d", mCurrentState);
+        return INVALID_OPERATION;
+    }
+    if (mIsRecording) {
+        LOGE("should stop recording first");
         return INVALID_OPERATION;
     }
 
     status_t ret = mMediaPhone->stop();
     if (OK != ret) {
-        LOGE("disconnect failed: %d", ret);
+        LOGE("stop failed: %d", ret);
         mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
@@ -291,6 +297,85 @@ status_t MediaPhone::setVolume(float leftVolume, float rightVolume)
         return mMediaPhone->setVolume(leftVolume, rightVolume);
     }
     return OK;
+}
+
+status_t MediaPhone::enableRecord(bool isEnable, int fd)
+{
+    LOGV("enable");
+    if (mMediaPhone == NULL) {
+        LOGE("media phone is not initialized yet");
+        return INVALID_OPERATION;
+    }
+    if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+        LOGE("enableRecord called in an invalid state: %d", mCurrentState);
+        return INVALID_OPERATION;
+    }
+    if (mIsRecording) {
+        return OK;
+    }
+
+    status_t ret = mMediaPhone->enableRecord(isEnable, fd);
+    if (OK != ret) {
+        LOGE("enableRecord failed: %d", ret);
+        mCurrentState = MEDIA_PHONE_ERROR;
+        return ret;
+    } else {
+        mIsRecording = isEnable;
+    }
+
+    return ret;
+}
+
+status_t MediaPhone::startUpLink()
+{
+    LOGV("startUpLink");
+    if (mMediaPhone == NULL) {
+        LOGE("media phone is not initialized yet");
+        return INVALID_OPERATION;
+    }
+    if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+        LOGE("startUpLink called in an invalid state: %d", mCurrentState);
+        return INVALID_OPERATION;
+    }
+    if (!mIsUpLinkStopped) {
+        LOGI("alreading started UpLink");
+        return OK;
+    }
+
+    status_t ret = mMediaPhone->startUpLink();
+    if (OK != ret) {
+        LOGE("startUpLink failed: %d", ret);
+        mCurrentState = MEDIA_PHONE_ERROR;
+        return ret;
+    }
+
+    return ret;
+}
+
+status_t MediaPhone::stopUpLink()
+{
+    LOGV("stopUpLink");
+    if (mMediaPhone == NULL) {
+        LOGE("media phone is not initialized yet");
+        return INVALID_OPERATION;
+    }
+    if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+        LOGE("stopUpLink called in an invalid state: %d", mCurrentState);
+        return INVALID_OPERATION;
+    }
+    if (mIsUpLinkStopped) {
+        LOGI("alreading stopped UpLink");
+        return OK;
+    }
+
+    status_t ret = mMediaPhone->stopUpLink();
+    if (OK != ret) {
+        LOGE("stopUpLink failed: %d", ret);
+        mCurrentState = MEDIA_PHONE_ERROR;
+        return ret;
+    }
+
+    return ret;
 }
 
 void MediaPhone::notify(int msg, int ext1, int ext2)

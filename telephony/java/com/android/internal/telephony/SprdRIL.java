@@ -727,7 +727,7 @@ public final class SprdRIL extends RIL {
 					 // Exceptions here usually mean invalid RIL responses
 	 
 					 Log.w(LOG_TAG, rr.serialString() + "< "
-							 + requestToString(rr.mRequest)
+							 + sprdRequestToString(rr.mRequest)
 							 + " exception, possible invalid RIL response", tr);
 	 
 					 if (rr.mResult != null) {
@@ -745,10 +745,11 @@ public final class SprdRIL extends RIL {
 				 return;
 			 }
 	 
-			 if (RILJ_LOGD) riljLog(rr.serialString() + "< " + requestToString(rr.mRequest)
+			 if (RILJ_LOGD) riljLog(rr.serialString() + "< " + sprdRequestToString(rr.mRequest)
 				 + " " + retToString(rr.mRequest, ret));
 	 
 			 if (rr.mResult != null) {
+			 	if (RILJ_LOGD) riljLog("SprdRIL:processSolicited: " + rr.serialString() + "< send result: " + rr.mResult.what);
 				 AsyncResult.forMessage(rr.mResult, ret, null);
 				 rr.mResult.sendToTarget();
 			 }

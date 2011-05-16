@@ -38,7 +38,10 @@ enum {
     START,
     STOP,
     SET_AUDIO_STREAM_TYPE,
-    SET_VOLUME
+    SET_VOLUME,
+    ENABLE_RECORD,
+    START_UPLINK,
+    STOP_UPLINK
 };
 
 class BpMediaPhone: public BpInterface<IMediaPhone>
@@ -166,6 +169,35 @@ public:
         remote()->transact(SET_VOLUME, data, &reply);
         return reply.readInt32();
     }
+
+    status_t enableRecord(bool isEnable, int fd)
+    {
+        LOGV("enableRecord(%d, %d)", isEnable, fd);
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        data.writeInt32(isEnable?1:0);
+        data.writeInt32(fd);
+        remote()->transact(ENABLE_RECORD, data, &reply);
+        return reply.readInt32();
+    }
+
+    status_t startUpLink()
+    {
+        LOGV("startUpLink()");
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        remote()->transact(START_UPLINK, data, &reply);
+        return reply.readInt32();
+    }
+
+    status_t stopUpLink()
+    {
+        LOGV("stopUpLink()");
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        remote()->transact(STOP_UPLINK, data, &reply);
+        return reply.readInt32();
+    }
 };
 
 IMPLEMENT_META_INTERFACE(MediaPhone, "android.media.IMediaPhone");
@@ -250,6 +282,23 @@ status_t BnMediaPhone::onTransact(
         case SET_VOLUME: {
             CHECK_INTERFACE(IMediaPhone, data, reply);
             reply->writeInt32(setVolume(data.readFloat(), data.readFloat()));
+            return NO_ERROR;
+        } break;
+        case ENABLE_RECORD: {
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+            reply->writeInt32(enableRecord(data.readInt32() == 1, data.readInt32()));
+            return NO_ERROR;
+        } break;
+        case START_UPLINK: {
+            LOGV("START_UPLINK");
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+            reply->writeInt32(startUpLink());
+            return NO_ERROR;
+        } break;
+        case STOP_UPLINK: {
+            LOGV("STOP_UPLINK");
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+            reply->writeInt32(stopUpLink());
             return NO_ERROR;
         } break;
         default:

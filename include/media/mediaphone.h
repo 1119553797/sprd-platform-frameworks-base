@@ -102,21 +102,26 @@ public:
     status_t    release();
     status_t    setAudioStreamType(int type);
     status_t    setVolume(float leftVolume, float rightVolume);
+    status_t    enableRecord(bool isEnable, int fd);
+    status_t    startUpLink();
+    status_t    stopUpLink();
     void        notify(int msg, int ext1, int ext2);
 
 private:
     status_t    prepareAsync_l();
-    void                    doCleanUp();
+    void        doCleanUp();
 
     sp<IMediaPhone>          mMediaPhone;
     sp<MediaPhoneListener>   mListener;
     media_phone_states       mCurrentState;
-    bool                        mIsCommSet;
-    bool                        mIsCameraSet;
-    bool                        mIsLocalSurfaceSet;
-    bool                        mIsRemoteSurfaceSet;
-    Mutex                       mLock;
-    Mutex                       mNotifyLock;
+    bool                     mIsCommSet;
+    bool                     mIsCameraSet;
+    bool                     mIsLocalSurfaceSet;
+    bool                     mIsRemoteSurfaceSet;
+    bool                     mIsRecording;
+    bool                     mIsUpLinkStopped;
+    Mutex                    mLock;
+    Mutex                    mNotifyLock;
 };
 
 };  // namespace android

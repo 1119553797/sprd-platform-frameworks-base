@@ -353,7 +353,7 @@ android_media_MediaPhone_getVideoHeight(JNIEnv *env, jobject thiz)
 }
 
 static void
-android_media_MediaPhone_setAudioStreamType(JNIEnv *env, jobject thiz, int streamtype)
+android_media_MediaPhone_setAudioStreamType(JNIEnv *env, jobject thiz, jint streamtype)
 {
     LOGV("setAudioStreamType: %d", streamtype);
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
@@ -365,7 +365,7 @@ android_media_MediaPhone_setAudioStreamType(JNIEnv *env, jobject thiz, int strea
 }
 
 static void
-android_media_MediaPhone_setVolume(JNIEnv *env, jobject thiz, float leftVolume, float rightVolume)
+android_media_MediaPhone_setVolume(JNIEnv *env, jobject thiz, jfloat leftVolume, jfloat rightVolume)
 {
     LOGV("setVolume: left %f  right %f", leftVolume, rightVolume);
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
@@ -374,6 +374,42 @@ android_media_MediaPhone_setVolume(JNIEnv *env, jobject thiz, float leftVolume, 
         return;
     }
     process_media_phone_call(env, thiz, mp->setVolume(leftVolume, rightVolume), NULL, NULL);
+}
+
+static void
+android_media_MediaPhone_enableRecord(JNIEnv *env, jobject thiz, jboolean isEnable, jint fd)
+{
+    LOGV("enableRecord: isEnable %d  fd %d", isEnable, fd);
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    process_media_phone_call(env, thiz, mp->enableRecord(isEnable, fd), NULL, NULL);
+}
+
+static void
+android_media_MediaPhone_startUpLink(JNIEnv *env, jobject thiz)
+{
+    LOGV("startUpLink: ");
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    process_media_phone_call(env, thiz, mp->startUpLink(), NULL, NULL);
+}
+
+static void
+android_media_MediaPhone_stopUpLink(JNIEnv *env, jobject thiz)
+{
+    LOGV("stopUpLink: ");
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    process_media_phone_call(env, thiz, mp->stopUpLink(), NULL, NULL);
 }
 
 // FIXME: deprecated
@@ -479,6 +515,9 @@ static JNINativeMethod gMethods[] = {
     {"_release",             "()V",                             (void *)android_media_MediaPhone_release},
     {"setAudioStreamType",   "(I)V",                            (void *)android_media_MediaPhone_setAudioStreamType},
     {"setVolume",            "(FF)V",                           (void *)android_media_MediaPhone_setVolume},
+    {"enableRecord",         "(ZI)V",                           (void *)android_media_MediaPhone_enableRecord},
+    {"startUpLink",          "()V",                             (void *)android_media_MediaPhone_startUpLink},
+    {"stopUpLink",           "()V",                             (void *)android_media_MediaPhone_stopUpLink},
     {"getFrameAt",           "(I)Landroid/graphics/Bitmap;",    (void *)android_media_MediaPhone_getFrameAt},
     {"native_init",          "()V",                             (void *)android_media_MediaPhone_native_init},
     {"native_setup",         "(Ljava/lang/Object;)V",           (void *)android_media_MediaPhone_native_setup},

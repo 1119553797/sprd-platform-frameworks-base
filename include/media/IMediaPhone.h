@@ -32,17 +32,20 @@ public:
     DECLARE_META_INTERFACE(MediaPhone);
 
     virtual status_t    setComm(const char *urlIn, const char *urlOut) = 0;
-    virtual	status_t		setCamera(const sp<ICamera>& camera) = 0;
-    virtual	status_t		setRemoteSurface(const sp<ISurface>& surface) = 0;
-    virtual	status_t		setLocalSurface(const sp<ISurface>& surface) = 0;
-    virtual	status_t		setListener(const sp<IMediaPlayerClient>& listener) = 0;
+    virtual status_t	setCamera(const sp<ICamera>& camera) = 0;
+    virtual status_t	setRemoteSurface(const sp<ISurface>& surface) = 0;
+    virtual status_t	setLocalSurface(const sp<ISurface>& surface) = 0;
+    virtual status_t	setListener(const sp<IMediaPlayerClient>& listener) = 0;
     virtual status_t    setParameters(const String8 &params) = 0;
     virtual status_t    prepareAsync() = 0;
-    virtual	status_t		start() = 0;
-    virtual	status_t		stop() = 0;
+    virtual status_t	start() = 0;
+    virtual status_t	stop() = 0;
     virtual status_t    release() = 0;
-    virtual status_t		setAudioStreamType(int type) = 0;
-    virtual status_t		setVolume(float leftVolume, float rightVolume) = 0;
+    virtual status_t	setAudioStreamType(int type) = 0;
+    virtual status_t	setVolume(float leftVolume, float rightVolume) = 0;
+    virtual status_t    enableRecord(bool isEnable, int fd) = 0;
+    virtual status_t    startUpLink() = 0;
+    virtual status_t    stopUpLink() = 0;
 };
 
 // ----------------------------------------------------------------------------
