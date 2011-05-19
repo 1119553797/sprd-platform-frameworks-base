@@ -41,6 +41,7 @@ public:
 class VideoPhoneDataDevice : public Singleton<VideoPhoneDataDevice>
 {
 public:
+    FILE* m_fAVStream;
     status_t registerClient(VideoPhoneSourceInterface *client, sp<DataSource> dataSource);
     void unregisterClient(VideoPhoneSourceInterface *client);
 
@@ -398,7 +399,8 @@ status_t VideoPhoneSource::read(
 	if (nSize == 0)
 		goto fail;
 	
-	nEnd	= nSize - 1;
+	//nEnd	= nSize - 1;
+	nEnd	= nSize;
 
 success:
 	
@@ -413,7 +415,7 @@ success:
 
 	pMediaBuffer->meta_data()->setInt64(
                     kKeyTime,  
-                    nanoseconds_to_milliseconds(systemTime()) -m_nStartSysTime);
+                    1000 * (nanoseconds_to_milliseconds(systemTime()) -m_nStartSysTime));
 	
 	*out = pMediaBuffer;
 	LOGI("VideoPhoneSource::read OK");
@@ -532,7 +534,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 	bool	bStartRead 	= false;
 	bool	bIsMpege4	= false;
 	int	nStart = m_nDataStart, nEnd = m_nDataStart;
-	LOGI("VideoPhoneSource::readRingBuffer START1 %d", m_bStarted);
+	LOGI("VideoPhoneSource::readRingBuffer START1 %d, m_nDataStart: %d, m_nDataEnd: %d", m_bStarted, m_nDataStart, m_nDataEnd);
 	while (m_bStarted)
 	{
 		nEnd	= nNext;
@@ -548,35 +550,35 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 		if (!m_bStarted)
 			return 0;
 
-		if (m_RingBuffer[nNext] == 0x00 && 
-			m_RingBuffer[(nNext + 1) % m_nRingBufferSize] == 0x00)
+		if (m_RingBuffer[nEnd] == 0x00 && 
+			m_RingBuffer[(nEnd + 1) % m_nRingBufferSize] == 0x00)
 		{
-			if (m_RingBuffer[(nNext + 2) % m_nRingBufferSize] == 0x01 &&
-				m_RingBuffer[(nNext + 3) % m_nRingBufferSize] == 0xb6)
+			if (m_RingBuffer[(nEnd + 2) % m_nRingBufferSize] == 0x01 &&
+				m_RingBuffer[(nEnd + 3) % m_nRingBufferSize] == 0xb6)
 			{
 				if (!bStartRead)
 				{
 					LOGI("VideoPhoneSource::readRingBuffer START MEPGE4");
-					nStart		= nNext;
+					nStart		= nEnd;
 					bStartRead 	= true;
 				}
 				else
 					break;
 			}
-			else if  ((m_RingBuffer[(nNext + 2) % m_nRingBufferSize] & 0xFC) == 0x80 &&
-				(m_RingBuffer[(nNext + 3) % m_nRingBufferSize] & 0x03) == 0x02)
+			else if  ((m_RingBuffer[(nEnd + 2) % m_nRingBufferSize] & 0xFC) == 0x80 &&
+				(m_RingBuffer[(nEnd + 3) % m_nRingBufferSize] & 0x03) == 0x02)
 			{
 				if (!bStartRead)
 				{
 					LOGI("VideoPhoneSource::readRingBuffer START VOP");
-					nStart		= nNext;
+					nStart		= nEnd;
 					bStartRead 	= true;
 				}
 				else
 					break;
 			}
 		}
-		nNext++;
+		//nNext++;
 	}
 	LOGI("find frame %d %d", nStart, nEnd);
 
