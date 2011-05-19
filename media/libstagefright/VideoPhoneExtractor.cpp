@@ -27,6 +27,7 @@
 #define	MAX_BUFFER_SIZE	(128*1024)
 //#define DEBUG_FILE     "/data/vpin"
 #define USE_DATA_DEVICE
+//#define DUMP_FILE	"/data/vpout"
 
 namespace android {
 
@@ -522,6 +523,30 @@ int	VideoPhoneSource::writeRingBuffer(char* data,int nLen)
 	return nLen;	
 }
 
+#ifdef DUMP_FILE
+void dumpToFile(char *w_ptr, int w_len)
+{
+	static FILE* m_fWrite = 0;
+	if (m_fWrite == NULL){
+		m_fWrite = fopen(DUMP_FILE,"ab");
+	}
+
+	if (m_fWrite == NULL){	
+		LOGE("fhy: fopen() failed, m_fWrite: 0x%p", m_fWrite);	
+		goto fail;
+	}
+	
+	LOGE("fhy: fwrite(), w_len: %d", w_len);	
+	fwrite(w_ptr,1,w_len,m_fWrite);
+	fclose(m_fWrite);
+	m_fWrite = NULL;
+	return;
+
+fail:
+	LOGE("fhy: fail out");
+}
+#endif
+
 int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 {
 	LOGI("VideoPhoneSource::readRingBuffer START0");	
@@ -594,6 +619,10 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 		LOGE("nLen %d exceeds nSize %d", nLen, nSize);
 		return 0;
 	}
+#ifdef DUMP_FILE
+	dumpToFile(data, nLen);
+#endif
+
 	int nTemp = nLen;
 
 	if (nTemp > m_nRingBufferSize - nStart)
