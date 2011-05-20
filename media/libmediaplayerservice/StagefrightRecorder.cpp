@@ -27,6 +27,8 @@
 #include <media/stagefright/MPEG2TSWriter.h>
 #include <media/stagefright/MPEG4Writer.h>
 #include <media/stagefright/VideoPhoneWriter.h>
+#include <media/stagefright/DataSource.h>
+#include "../libstagefright/include/VideoPhoneExtractor.h"
 
 #include <media/stagefright/MediaDebug.h>
 #include <media/stagefright/MediaDefs.h>
@@ -1124,6 +1126,25 @@ status_t StagefrightRecorder::startMPEG4Recording() {
         if (err != OK) return err;
         writer->addSource(encoder);
         totalBitRate += mVideoBitRate;
+    }else if(mVideoSource == VIDEO_SOURCE_VIDEOPHONE_VIDEO_ES){
+        sp<MetaData> AVMeta = new MetaData();
+    	switch (mVideoEncoder) {
+        	case VIDEO_ENCODER_H263:
+	    	AVMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_H263);		
+                break;
+
+        case VIDEO_ENCODER_MPEG_4_SP:
+            	AVMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_MPEG4);
+            break;
+        default:
+            CHECK(!"Should not be here, unsupported video encoding.");
+            break;
+   	 }		
+	AVMeta->setInt32(kKeyWidth, mVideoWidth);
+	AVMeta->setInt32(kKeyHeight, mVideoHeight);
+    	sp<MediaSource> videoPhoneVideoES = new VideoPhoneSource(AVMeta,NULL);
+        writer->addSource(videoPhoneVideoES);
+        totalBitRate += mVideoBitRate;		 
     }
 
     if (mInterleaveDurationUs > 0) {

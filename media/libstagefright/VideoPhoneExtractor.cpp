@@ -5,13 +5,6 @@
 
 #include "include/VideoPhoneExtractor.h"
 
-#include <media/stagefright/DataSource.h>
-#include <media/stagefright/MediaBuffer.h>
-#include <media/stagefright/MediaBufferGroup.h>
-#include <media/stagefright/MediaDefs.h>
-#include <media/stagefright/MediaSource.h>
-#include <media/stagefright/MetaData.h>
-#include <media/stagefright/Utils.h>
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -25,20 +18,11 @@
 #define SAFE_DELETE(p) if ( (p) != NULL) {delete (p); (p) =NULL;}
 #define	SAFE_FREE(p)	if ( (p) != NULL) {free(p); (p) =NULL;}
 #define	MAX_BUFFER_SIZE	(128*1024)
+
 //#define DEBUG_FILE     "/data/vpin"
-#define USE_DATA_DEVICE
 //#define DUMP_FILE	"/data/vpout"
 
 namespace android {
-
-class VideoPhoneSourceInterface
-{
-public:
-    virtual int write(char* data, int nLen) = 0;
-    VideoPhoneSourceInterface() {};
-    virtual ~VideoPhoneSourceInterface() {};
-};
-
 class VideoPhoneDataDevice : public Singleton<VideoPhoneDataDevice>
 {
 public:
@@ -61,74 +45,6 @@ private:
     pthread_t m_Thread;
     Mutex m_Lock;
     bool mStarted;
-};
-
-class VideoPhoneSource : public MediaSource,
-                         public VideoPhoneSourceInterface
-{
-public:
-	
-    	VideoPhoneSource(const sp<MetaData> &format,
-    	                const sp<DataSource> &dataSource);
-
-    	virtual status_t start(MetaData *params = NULL);
-	
-    	virtual status_t stop();
-
-    	virtual sp<MetaData> getFormat();
-
-    	virtual status_t read(
-            MediaBuffer **buffer, const ReadOptions *options = NULL);
-
-	int write(char* data, int nLen);
-protected:
-	
-    	virtual ~VideoPhoneSource();
-
-private:
-#ifndef USE_DATA_DEVICE	
-	static void *	ThreadWrapper(void *);
-	
-    	status_t 		threadFunc();
-#endif
-	int			writeRingBuffer(char* data,int nLen);
-
-	int			readRingBuffer(char* data, size_t nSize);
-		
-private:
-	//bool				m_bFirstGet;
-	
-    	Mutex 			m_Lock;
-		
-	Condition 		m_DataGet;
-	
-    	sp<MetaData> 	m_Format;
-
-	const char *		m_strMime;
-
-    	sp<DataSource> 	m_DataSource;
-
-    	bool 			m_bStarted;
-
-	MediaBufferGroup*	m_pGroup;
-
-	FILE*			m_fAVStream;
-
-	int64_t			m_nStartSysTime;
-
-	uint8_t*			m_RingBuffer;
-
-	int				m_nDataStart;
-
-	int				m_nDataEnd;	
-
-	size_t			m_nRingBufferSize;
-
-	pthread_t 		m_Thread;
-
-	Condition			m_GetBuffer;
-
-	int			m_nNum;	
 };
 
 
@@ -265,6 +181,8 @@ status_t VideoPhoneSource::start(MetaData *params)
 		goto success;
 
 	m_bStarted = true;
+	
+	m_nInitialDelayUs = 300000; //300 um to syc with audio
 
 	m_pGroup = new MediaBufferGroup;
     	m_pGroup->add_buffer(new MediaBuffer(30000));
@@ -370,6 +288,125 @@ sp<MetaData> VideoPhoneSource::getFormat()
     return m_Format;
 }
 
+typedef struct{
+	unsigned char *start;
+	unsigned char *curent;
+	unsigned char   current_byte;
+	int current_bit;
+	int length;
+}video_srteam_t;
+
+static int video_stream_init(video_srteam_t *pStream,unsigned char *start,int length)
+{
+	if(length<=0)
+		return 1;
+	pStream->start = start;
+	pStream->curent = start;
+	pStream->current_bit = 0;
+	pStream->length = length;
+	return 0;
+}
+
+static unsigned int show_video_bits(video_srteam_t *pStream,int num)//num<=32
+{
+	unsigned int first32bits;
+	unsigned int firstByte = 0;
+	unsigned int secondByte = 0;	
+	unsigned int thirdByte = 0;	
+	unsigned int fourthByte = 0;
+	unsigned int fifthByte = 0;	
+	if((pStream->curent)<(pStream->start+pStream->length ))
+		firstByte =  *pStream->curent;
+	if((pStream->curent+1)<(pStream->start+pStream->length ))
+		secondByte =  *(pStream->curent+1);	
+	if((pStream->curent+2)<(pStream->start+pStream->length ))
+		thirdByte =  *(pStream->curent+2);
+	if((pStream->curent+3)<(pStream->start+pStream->length ))
+		fourthByte =  *(pStream->curent+3);	
+	if((pStream->curent+4)<(pStream->start+pStream->length ))
+		fifthByte =  *(pStream->curent+4);	
+
+	first32bits = (firstByte<<24)|(secondByte<<16)|(thirdByte<<8)|(fourthByte);
+	if(pStream->current_bit!=0)
+		first32bits = (first32bits<<pStream->current_bit)|(fifthByte>>(8-pStream->current_bit));
+	
+	return first32bits>>(32-num);
+}
+
+static void  flush_video_bits(video_srteam_t *pStream,int num)//num<=32
+{
+	pStream->curent += (pStream->current_bit+num)/8; 
+	pStream->current_bit = (pStream->current_bit+num)%8; 
+}
+static unsigned int read_video_bits(video_srteam_t *pStream,int num)//num<=32
+{
+	unsigned int tmp = show_video_bits(pStream,num);
+	flush_video_bits(pStream,num);
+	return tmp;
+}
+
+static int decode_h263_header(video_srteam_t *pStream,int *is_I_vop)
+{
+	unsigned int tmpVar = show_video_bits(pStream,22);
+	if(0x20 != tmpVar)
+		return 1;
+	flush_video_bits(pStream,22);
+	tmpVar = read_video_bits(pStream,9);
+	if(!(tmpVar&0x1))
+		return 1;
+	tmpVar = read_video_bits(pStream,7);	
+	if(tmpVar>>3)
+		return 1;
+	tmpVar = tmpVar&0x07;
+	if(tmpVar==7) //do not  support  EXTENDED_PTYPE
+		return 1;
+	tmpVar = read_video_bits(pStream,11);	
+	if((tmpVar>>10)==0){
+		*is_I_vop = 1;
+	}else{
+		*is_I_vop = 0;		
+	}
+	return 0;
+}
+
+static int decode_mpeg4_header(video_srteam_t *pStream,int *is_I_vop)
+{
+	unsigned int tmpVar, uStartCode = 0;
+	int loopNum = 0;
+	int vopType;
+	while(uStartCode!=0x1B6){
+		uStartCode = show_video_bits(pStream,32);
+		if(0x1B6 == uStartCode){
+			tmpVar = read_video_bits(pStream,32);	
+			tmpVar =  read_video_bits(pStream,3);
+			vopType = tmpVar>>1;
+			if(vopType==0){
+				*is_I_vop = 1;
+			}else{
+				*is_I_vop = 0;		
+			}
+		}else{
+			read_video_bits(pStream,8);	
+		}	
+		loopNum++;
+		if(loopNum>2048)
+			return 1;
+	}
+	return 0;
+}
+
+static int get_video_stream_info(video_srteam_t *pStream,int *is_I_vop)
+{
+	int is_h263;
+	*is_I_vop = 0;
+	is_h263 = (show_video_bits(pStream,21)==0x10);
+	if(is_h263){
+		return decode_h263_header(pStream,is_I_vop);
+	}else{
+		return decode_mpeg4_header(pStream,is_I_vop);
+	}	
+}
+
 status_t VideoPhoneSource::read(
         MediaBuffer **out, const ReadOptions *options) 
 {
@@ -414,11 +451,32 @@ success:
 	if (m_nNum == 0)
 		m_nStartSysTime	= nanoseconds_to_milliseconds(systemTime());
 
+	{
+		video_srteam_t streambuf;
+		int ret = video_stream_init(&streambuf,(unsigned char *)pMediaBuffer->data(),nSize);
+		if(ret!=0)
+			goto fail;
+		int is_I_vop;
+		ret =get_video_stream_info(&streambuf,&is_I_vop);
+		if((ret==0)&&(is_I_vop==1)){
+			//LOGI("VideoPhoneSource::read find I vop");
+			pMediaBuffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);		
+		}
+		if(m_nNum ==0)
+			pMediaBuffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);			
+	}
+#ifdef DEBUG_FILE
 	pMediaBuffer->meta_data()->setInt64(
                     kKeyTime,  
-                    1000 * (nanoseconds_to_milliseconds(systemTime()) -m_nStartSysTime));
-	
-	*out = pMediaBuffer;
+		   m_nInitialDelayUs + m_nNum*60*1000);
+	usleep(50*1000);
+#else
+	pMediaBuffer->meta_data()->setInt64(
+                    kKeyTime,  
+                    1000 * (nanoseconds_to_milliseconds(systemTime()) -m_nStartSysTime));	
+#endif
+
+        *out = pMediaBuffer;
 	LOGI("VideoPhoneSource::read OK");
 	m_nNum++;
 	return OK;
