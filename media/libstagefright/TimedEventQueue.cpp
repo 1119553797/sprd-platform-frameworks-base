@@ -211,8 +211,8 @@ void *TimedEventQueue::ThreadWrapper(void *me) {
 #endif
 
     //setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_FOREGROUND);
-    setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_AUDIO);
-    //set_sched_policy(androidGetTid(), SP_FOREGROUND);//@jgdu
+    setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_URGENT_DISPLAY);//@jgdu
+    set_sched_policy(androidGetTid(), SP_FOREGROUND);
 LOGI("ThreadWrapper setpriority ");
 	
     static_cast<TimedEventQueue *>(me)->threadEntry();
