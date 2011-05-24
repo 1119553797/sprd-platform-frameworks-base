@@ -1244,8 +1244,8 @@ void AwesomePlayer::onVideoEvent() {
         // and we'll play incoming video as fast as we get it.
         latenessUs = 0;
     }
-
-    if (latenessUs > 400000) {//@jgdu 400ms
+    //LOGI("sync (%lld us,%lld us,%lld us),(%lld us,%lld us,%lld us)",realTimeUs,mediaTimeUs,mTimeSourceDeltaUs,nowUs, timeUs,latenessUs);
+    if (latenessUs > 150000) {//@jgdu 150ms
         // We're more than 40ms late.
         LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
         mVideoBuffer->release();
@@ -1255,10 +1255,10 @@ void AwesomePlayer::onVideoEvent() {
         return;
     }
 
-    if (latenessUs < -10000) {
+    if (latenessUs < -40000) {//@jgdu 40ms
         // We're more than 10ms early.
 
-        postVideoEvent_l(10000);
+        postVideoEvent_l(40000);
         return;
     }
 
