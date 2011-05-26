@@ -50,6 +50,8 @@
 
 #include <media/stagefright/foundation/ALooper.h>
 
+#define _SYNC_USE_SYSTEM_TIME_
+
 namespace android {
 
 static int64_t kLowWaterMarkUs = 2000000ll;  // 2secs
@@ -780,7 +782,9 @@ status_t AwesomePlayer::play_l() {
             mAudioPlayer->resume();
         }
     }
-
+#ifdef _SYNC_USE_SYSTEM_TIME_
+    mSystemTimeSourceForSync.resume();//@jgdu
+#endif	
     if (mTimeSource == NULL && mAudioPlayer == NULL) {
         mTimeSource = &mSystemTimeSource;
     }
@@ -881,7 +885,9 @@ status_t AwesomePlayer::pause_l(bool at_eos) {
     }
 
     mFlags &= ~PLAYING;
-
+#ifdef _SYNC_USE_SYSTEM_TIME_
+    mSystemTimeSourceForSync.pause();//@jgdu
+#endif    
     return OK;
 }
 
@@ -1122,6 +1128,9 @@ void AwesomePlayer::finishSeekIfNecessary(int64_t videoTimeUs) {
     mFlags |= FIRST_FRAME;
     mSeeking = false;
     mSeekNotificationSent = false;
+#ifdef _SYNC_USE_SYSTEM_TIME_	
+    mSystemTimeSourceForSync.resume();//@jgdu
+#endif    
 }
 
 void AwesomePlayer::onVideoEvent() {
@@ -1221,11 +1230,14 @@ void AwesomePlayer::onVideoEvent() {
 
     finishSeekIfNecessary(timeUs);
 
+#ifdef _SYNC_USE_SYSTEM_TIME_   
+    TimeSource *ts = &mSystemTimeSourceForSync;//@jgdu
+#else   
     TimeSource *ts = (mFlags & AUDIO_AT_EOS) ? &mSystemTimeSource : mTimeSource;
-   
+#endif
+
     if (mFlags & FIRST_FRAME) {
         mFlags &= ~FIRST_FRAME;
-
         mTimeSourceDeltaUs = ts->getRealTimeUs() - timeUs;
     }
 
@@ -1235,7 +1247,16 @@ void AwesomePlayer::onVideoEvent() {
         mTimeSourceDeltaUs = realTimeUs - mediaTimeUs;
     }
 
-    int64_t nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs;
+#ifdef _SYNC_USE_SYSTEM_TIME_  
+   int64_t nowUs;//@jgdu
+   if(mAudioPlayer != NULL){
+   	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs -  mAudioPlayer->getAudioLatencyUs() + 500000;
+   }else{
+   	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs;
+   }
+#else
+   int64_t nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs;
+#endif
 
     int64_t latenessUs = nowUs - timeUs;
 
@@ -1245,7 +1266,8 @@ void AwesomePlayer::onVideoEvent() {
         latenessUs = 0;
     }
     //LOGI("sync (%lld us,%lld us,%lld us),(%lld us,%lld us,%lld us)",realTimeUs,mediaTimeUs,mTimeSourceDeltaUs,nowUs, timeUs,latenessUs);
-    if (latenessUs > 150000) {//@jgdu 150ms
+
+    if (latenessUs > 40000) {
         // We're more than 40ms late.
         LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
         mVideoBuffer->release();
@@ -1255,10 +1277,10 @@ void AwesomePlayer::onVideoEvent() {
         return;
     }
 
-    if (latenessUs < -40000) {//@jgdu 40ms
+    if (latenessUs < -10000) {
         // We're more than 10ms early.
 
-        postVideoEvent_l(40000);
+       postVideoEvent_l(10000);
         return;
     }
 
@@ -1279,6 +1301,7 @@ void AwesomePlayer::onVideoEvent() {
     mLastVideoBuffer = mVideoBuffer;
     mVideoBuffer = NULL;
 
+    //usleep(1000);//@jgdu to shedule surface flinger
     postVideoEvent_l();
 }
 

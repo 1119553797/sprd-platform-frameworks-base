@@ -63,7 +63,8 @@ public:
 
     bool isSeeking();
     bool reachedEOS(status_t *finalStatus);
-
+	
+    int64_t getAudioLatencyUs(); 
 private:
     sp<MediaSource> mSource;
     AudioTrack *mAudioTrack;

@@ -124,6 +124,7 @@ private:
     sp<MediaPlayerBase::AudioSink> mAudioSink;
 
     SystemTimeSource mSystemTimeSource;
+    SystemTimeSourceForSync	 mSystemTimeSourceForSync;//@jgdu
     TimeSource *mTimeSource;
 
     String8 mUri;
