@@ -37,5 +37,50 @@ int64_t SystemTimeSource::GetSystemTimeUs() {
     return (int64_t)tv.tv_sec * 1000000 + tv.tv_usec;
 }
 
+SystemTimeSourceForSync::SystemTimeSourceForSync()
+    : mStartTimeUs(GetSystemTimeUs()),mPauseTimeUs(-1),mTotalPauseTimeUs(0),mIsPaused(false) {
+}
+
+int64_t SystemTimeSourceForSync::getRealTimeUs() {
+    Mutex::Autolock autoLock(mLock);	
+    if(mIsPaused){
+    	return mPauseTimeUs - mStartTimeUs -mTotalPauseTimeUs;	
+    }else{
+    	return GetSystemTimeUs() - mStartTimeUs - mTotalPauseTimeUs;
+    }
+}
+
+// static
+int64_t SystemTimeSourceForSync::GetSystemTimeUs() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    return (int64_t)tv.tv_sec * 1000000 + tv.tv_usec;
+}
+
+ void SystemTimeSourceForSync::pause(){
+        Mutex::Autolock autoLock(mLock);	
+ 	if(mIsPaused)
+		return;
+ 	mPauseTimeUs = GetSystemTimeUs();
+ 	mIsPaused = true;
+ }
+ 
+ void SystemTimeSourceForSync::resume(){
+        Mutex::Autolock autoLock(mLock);	
+ 	if(!mIsPaused)
+		return;
+ 	mTotalPauseTimeUs += GetSystemTimeUs() - mPauseTimeUs;
+ 	mIsPaused = false;
+ }
+ 
+void SystemTimeSourceForSync::reset(){
+        Mutex::Autolock autoLock(mLock);	
+	mStartTimeUs = GetSystemTimeUs();
+	mPauseTimeUs = -1;
+	mTotalPauseTimeUs	 = 0;
+	mIsPaused = false;
+}
+	
 }  // namespace android
 

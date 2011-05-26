@@ -18,6 +18,12 @@
 #define LOG_TAG "AudioPlayer"
 #include <utils/Log.h>
 
+#include <utils/threads.h>
+#include <cutils/sched_policy.h>
+#include <sys/prctl.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+
 #include <binder/IPCThreadState.h>
 #include <media/AudioTrack.h>
 #include <media/stagefright/AudioPlayer.h>
@@ -283,6 +289,7 @@ void AudioPlayer::AudioCallback(int event, void *info) {
 size_t AudioPlayer::fillBuffer(void *data, size_t size) {
     if (mNumFramesPlayed == 0) {
         LOGV("AudioCallback");
+	 setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_DISPLAY);//@jgdu
     }
 
     if (mReachedEOS) {
@@ -393,6 +400,10 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
 int64_t AudioPlayer::getRealTimeUs() {
     Mutex::Autolock autoLock(mLock);
     return getRealTimeUsLocked();
+}
+
+int64_t AudioPlayer::getAudioLatencyUs() {
+    return mLatencyUs;
 }
 
 int64_t AudioPlayer::getRealTimeUsLocked() const {
