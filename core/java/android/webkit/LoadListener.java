@@ -378,7 +378,7 @@ class LoadListener extends Handler implements EventHandler {
             } else {
                 // It seems that xhtml+xml and vnd.wap.xhtml+xml mime
                 // subtypes are used interchangeably. So treat them the same.
-              /*  if (mMimeType.equals("application/vnd.wap.xhtml+xml")) {
+                /*if (mMimeType.equals("application/vnd.wap.xhtml+xml")) {
                     mMimeType = "application/xhtml+xml";
                 }
 		*/
@@ -386,6 +386,7 @@ class LoadListener extends Handler implements EventHandler {
 		) {
                     mMimeType = "text/html";
                 }
+		
             }
         } else {
             /* Often when servers respond with 304 Not Modified or a
