@@ -485,7 +485,9 @@ void AwesomePlayer::reset_l() {
     mVideoWidth = mVideoHeight = -1;
     mTimeSourceDeltaUs = 0;
     mVideoTimeUs = 0;
-
+#ifdef _SYNC_USE_SYSTEM_TIME_
+    mSystemTimeSourceForSync.reset();//@jgdu
+#endif	
     mSeeking = false;
     mSeekNotificationSent = false;
     mSeekTimeUs = 0;
@@ -1265,7 +1267,7 @@ void AwesomePlayer::onVideoEvent() {
         // and we'll play incoming video as fast as we get it.
         latenessUs = 0;
     }
-    //LOGI("sync (%lld us,%lld us,%lld us),(%lld us,%lld us,%lld us)",realTimeUs,mediaTimeUs,mTimeSourceDeltaUs,nowUs, timeUs,latenessUs);
+    //LOGI("sync (%lld us,%lld us,%lld us),(%lld us,%lld us,%lld us),%lld",realTimeUs,mediaTimeUs,mTimeSourceDeltaUs,nowUs, timeUs,latenessUs,mediaTimeUs-timeUs);
 
     if (latenessUs > 40000) {
         // We're more than 40ms late.

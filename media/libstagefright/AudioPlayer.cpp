@@ -289,9 +289,12 @@ void AudioPlayer::AudioCallback(int event, void *info) {
 size_t AudioPlayer::fillBuffer(void *data, size_t size) {
     if (mNumFramesPlayed == 0) {
         LOGV("AudioCallback");
-	 setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_DISPLAY);//@jgdu
     }
 
+    if( ANDROID_PRIORITY_DISPLAY != getpriority(PRIO_PROCESS, 0)){
+	 setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_DISPLAY);//@jgdu
+    }
+	 
     if (mReachedEOS) {
         return 0;
     }
