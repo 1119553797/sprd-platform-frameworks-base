@@ -425,11 +425,18 @@ public class SmsCBMessage {
 	
 	public static void setSmsCBMode(boolean isPdu){
 		
-		mIsPdu = isPdu;
+	       Log.i(TAG, "getSmsCBPage mDcs" + isPdu);		
+               mIsPdu = isPdu;
 		
 	}
 
-	
+	public static boolean getSmsCBMode(){
+		
+	       Log.i(TAG, "getSmsCBPage mDcs" + mIsPdu);		
+               return mIsPdu ;
+		
+	}
+
 
 	private static byte[][] convertToBytes(SmsCBPage[] pages, int totalNum) {
 		byte[][] bytePages = new byte[totalNum][];
