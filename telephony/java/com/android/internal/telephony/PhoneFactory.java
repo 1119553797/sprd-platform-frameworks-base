@@ -108,12 +108,12 @@ public class PhoneFactory {
                 //reads the system properties and makes commandsinterface
                 sCommandsInterface = new SprdRIL(context, networkMode, cdmaSubscription);
 
-                int phoneType = getPhoneType(networkMode);
-                if (phoneType == Phone.PHONE_TYPE_GSM) {
+                //int phoneType = getPhoneType(networkMode);
+                //if (phoneType == Phone.PHONE_TYPE_GSM) {
                     sProxyPhone = new PhoneProxy(new TDPhone(context,
                             sCommandsInterface, sPhoneNotifier));
                     Log.i(LOG_TAG, "Creating TDPhone");
-                }/* else if (phoneType == Phone.PHONE_TYPE_CDMA) {
+                /*} else if (phoneType == Phone.PHONE_TYPE_CDMA) {
                     sProxyPhone = new PhoneProxy(new CDMAPhone(context,
                             sCommandsInterface, sPhoneNotifier));
                     Log.i(LOG_TAG, "Creating CDMAPhone");

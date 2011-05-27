@@ -591,8 +591,10 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         switch(networkMode) {
             case RILConstants.NETWORK_MODE_WCDMA_PREF:
             case RILConstants.NETWORK_MODE_GSM_ONLY:
-            case RILConstants.NETWORK_MODE_WCDMA_ONLY:
+            //case RILConstants.NETWORK_MODE_WCDMA_ONLY:
             case RILConstants.NETWORK_MODE_GSM_UMTS:
+            case RILConstants.NETWORK_MODE_AUTO:
+            case RILConstants.NETWORK_MODE_TD_SCDMA_ONLY:
                 mPhoneType = RILConstants.GSM_PHONE;
                 break;
             case RILConstants.NETWORK_MODE_CDMA:
