@@ -374,7 +374,7 @@ class LoadListener extends Handler implements EventHandler {
                 }
             } else if (mMimeType.equals("text/vnd.wap.wml")) {
                 // As we don't support wml, render it as plain text
-                mMimeType = "text/plain";
+//                mMimeType = "text/plain";
             } else {
                 // It seems that xhtml+xml and vnd.wap.xhtml+xml mime
                 // subtypes are used interchangeably. So treat them the same.
