@@ -50,6 +50,12 @@ int64_t SystemTimeSourceForSync::getRealTimeUs() {
     }
 }
 
+void SystemTimeSourceForSync::increaseRealTimeUs(int64_t deltaTime)
+{
+    Mutex::Autolock autoLock(mLock);	
+    mStartTimeUs -= deltaTime;
+}
+	
 // static
 int64_t SystemTimeSourceForSync::GetSystemTimeUs() {
     struct timeval tv;

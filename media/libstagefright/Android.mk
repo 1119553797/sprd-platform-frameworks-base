@@ -91,6 +91,9 @@ ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
 LOCAL_STATIC_LIBRARIES += \
 	libstagefright_aacdec_sprd \
 	libaacdec_sprd
+else
+LOCAL_LDFLAGS += $(TOP)/vendor/sprd/hsdroid/proprietary/stagefright/libstagefright_aacdec_sprd.a
+LOCAL_LDFLAGS += $(TOP)/vendor/sprd/hsdroid/proprietary/stagefright/libaacdec_sprd.a
 endif
 
 LOCAL_SHARED_LIBRARIES += \

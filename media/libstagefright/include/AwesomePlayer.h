@@ -110,6 +110,7 @@ private:
         AUDIO_AT_EOS        = 256,
         VIDEO_AT_EOS        = 512,
         AUTO_LOOPING        = 1024,
+        NOT_FIRST_PLAY     = 2048,
     };
 
     mutable Mutex mLock;

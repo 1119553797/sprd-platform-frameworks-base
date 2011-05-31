@@ -55,6 +55,7 @@ public:
     void pause();
     void resume();
     void reset();
+    void increaseRealTimeUs(int64_t deltaTime);
 
 private:
     static int64_t GetSystemTimeUs();
