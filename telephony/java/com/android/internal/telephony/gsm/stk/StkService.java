@@ -231,6 +231,20 @@ public class StkService extends Handler implements AppInterface {
         case MSG_ID_CALL_SETUP:
             // prior event notify command supplied all the information
             // needed for set up call processing.
+            StkLog.d(this, "[stk] MSG_ID_CALL_SETUP");
+            mCmdIf.handleCallSetupRequestFromSim(false, null);
+/*            StkLog.d(this, "[stk] send action_call");
+            String test_num = "1234567";
+            Uri uri = Uri.parse(test_num);
+
+            Intent newIntent = new Intent(Intent.ACTION_CALL, uri);
+            newIntent.putExtra(Intent.EXTRA_PHONE_NUMBER, test_num);
+            //newIntent.setClass(mContext, InCallScreen.class);
+	        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        mContext.startActivity(newIntent);
+	        //mContext.sendBroadcast(newIntent);
+            StkLog.d(this, "[stk] send action_call over");
+*/
             break;
         }
     }
@@ -496,7 +510,9 @@ public class StkService extends Handler implements AppInterface {
         case MSG_ID_PROACTIVE_COMMAND:
         case MSG_ID_EVENT_NOTIFY:
         case MSG_ID_REFRESH:
-            StkLog.d(this, "ril message arrived");
+        case MSG_ID_CALL_SETUP:
+//            StkLog.d(this, "ril message arrived");
+            StkLog.d(this, "[stk]ril message arrived = " + msg.what);
             String data = null;
             if (msg.obj != null) {
                 AsyncResult ar = (AsyncResult) msg.obj;
@@ -510,9 +526,9 @@ public class StkService extends Handler implements AppInterface {
             }
             mMsgDecoder.sendStartDecodingMessageParams(new RilMessage(msg.what, data));
             break;
-        case MSG_ID_CALL_SETUP:
-            mMsgDecoder.sendStartDecodingMessageParams(new RilMessage(msg.what, null));
-            break;
+//        case MSG_ID_CALL_SETUP:
+//            mMsgDecoder.sendStartDecodingMessageParams(new RilMessage(msg.what, null));
+//            break;
         case MSG_ID_SIM_LOADED:
             mCmdIf.reportStkServiceIsRunning(null);
             break;

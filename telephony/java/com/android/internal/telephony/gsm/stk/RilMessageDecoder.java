@@ -137,16 +137,18 @@ class RilMessageDecoder extends HierarchicalStateMachine {
         mCurrentRilMessage = rilMsg;
         switch(rilMsg.mId) {
         case StkService.MSG_ID_SESSION_END:
-        case StkService.MSG_ID_CALL_SETUP:
+        //case StkService.MSG_ID_CALL_SETUP:
             mCurrentRilMessage.mResCode = ResultCode.OK;
             sendCmdForExecution(mCurrentRilMessage);
             decodingStarted = false;
             break;
+        case StkService.MSG_ID_CALL_SETUP:
         case StkService.MSG_ID_PROACTIVE_COMMAND:
         case StkService.MSG_ID_EVENT_NOTIFY:
         case StkService.MSG_ID_REFRESH:
             byte[] rawData = null;
             try {
+                StkLog.d(this, "[stk]ril msg = " + rilMsg.mId + " mData =" + (String)rilMsg.mData);
                 rawData = IccUtils.hexStringToBytes((String) rilMsg.mData);
             } catch (Exception e) {
                 // zombie messages are dropped

@@ -801,7 +801,8 @@ public final class SprdRIL extends RIL {
 				 case RIL_UNSOL_STK_SESSION_END: ret = responseVoid(p); break;
 				 case RIL_UNSOL_STK_PROACTIVE_COMMAND: ret = responseString(p); break;
 				 case RIL_UNSOL_STK_EVENT_NOTIFY: ret = responseString(p); break;
-				 case RIL_UNSOL_STK_CALL_SETUP: ret = responseInts(p); break;
+//				 case RIL_UNSOL_STK_CALL_SETUP: ret = responseInts(p); break;
+				 case RIL_UNSOL_STK_CALL_SETUP: ret = responseString(p); break;
 				 case RIL_UNSOL_SIM_SMS_STORAGE_FULL: ret =  responseVoid(p); break;
 				 case RIL_UNSOL_SIM_REFRESH: ret =	responseInts(p); break;
 				 case RIL_UNSOL_CALL_RING: ret =  responseCallRing(p); break;
