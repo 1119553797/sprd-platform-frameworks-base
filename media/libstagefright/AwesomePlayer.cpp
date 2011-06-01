@@ -785,7 +785,7 @@ status_t AwesomePlayer::play_l() {
         }
     }
 #ifdef _SYNC_USE_SYSTEM_TIME_
-    if(! (mFlags & NOT_FIRST_PLAY))
+    if(0== (mFlags & NOT_FIRST_PLAY))
 		mSystemTimeSourceForSync.reset();
     mFlags |= 	NOT_FIRST_PLAY;
     mSystemTimeSourceForSync.resume();//@jgdu
@@ -1109,6 +1109,13 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
     return mVideoSource != NULL ? OK : UNKNOWN_ERROR;
 }
 
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+
 void AwesomePlayer::finishSeekIfNecessary(int64_t videoTimeUs) {
     if (!mSeeking) {
         return;
@@ -1236,7 +1243,11 @@ void AwesomePlayer::onVideoEvent() {
     finishSeekIfNecessary(timeUs);
 
 #ifdef _SYNC_USE_SYSTEM_TIME_   
-    TimeSource *ts = &mSystemTimeSourceForSync;//@jgdu
+    TimeSource *ts; //@jgdu
+    if(mFlags & AUDIO_AT_EOS)
+	ts =   &mSystemTimeSource;
+    else
+	ts =   &mSystemTimeSourceForSync;	
 #else   
     TimeSource *ts = (mFlags & AUDIO_AT_EOS) ? &mSystemTimeSource : mTimeSource;
 #endif
@@ -1254,11 +1265,14 @@ void AwesomePlayer::onVideoEvent() {
 
 #ifdef _SYNC_USE_SYSTEM_TIME_  
    int64_t nowUs;//@jgdu
-   if(mAudioPlayer != NULL){
+   if((mAudioPlayer != NULL)&&(0==(mFlags & AUDIO_AT_EOS))){
         int64_t  sysRealTimeUs =  ts->getRealTimeUs();  	
-        if((realTimeUs-sysRealTimeUs)>1300000)
-             mSystemTimeSourceForSync.increaseRealTimeUs(realTimeUs-sysRealTimeUs -1300000); 	  	
-   	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs - mAudioPlayer->getAudioLatencyUs() + 1000000;
+	int64_t  AudioLatencyUs =  mAudioPlayer->getAudioLatencyUs();
+        if((realTimeUs-sysRealTimeUs)>max(700000,AudioLatencyUs*7/10))
+             mSystemTimeSourceForSync.increaseRealTimeUs(realTimeUs-sysRealTimeUs -max(700000,AudioLatencyUs*7/10)); 	  	
+	if((realTimeUs-sysRealTimeUs)<min(-300000,-AudioLatencyUs*3/10))	
+             mSystemTimeSourceForSync.increaseRealTimeUs(min(-300000,-AudioLatencyUs*3/10)); 		
+   	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs -700000;//assume display latency  700ms
    }else{
    	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs;
    }
@@ -1273,7 +1287,7 @@ void AwesomePlayer::onVideoEvent() {
         // and we'll play incoming video as fast as we get it.
         latenessUs = 0;
     }
-   // LOGI("sync (%lld, %lld us,%lld us,%lld us),(%lld us,%lld us,%lld us),(%lld,%lld)",mAudioPlayer->getAudioLatencyUs(),realTimeUs,mediaTimeUs,mTimeSourceDeltaUs,ts->getRealTimeUs(),timeUs,nowUs,realTimeUs-ts->getRealTimeUs(),latenessUs);
+  // LOGI("sync (%lld, %lld us,%lld us,%lld us),(%lld us,%lld us,%lld us),(%lld,%lld)",mAudioPlayer->getAudioLatencyUs(),realTimeUs,mediaTimeUs,mTimeSourceDeltaUs,ts->getRealTimeUs(),timeUs,nowUs,realTimeUs-ts->getRealTimeUs(),latenessUs);
 
     if (latenessUs > 40000) {
         // We're more than 40ms late.
