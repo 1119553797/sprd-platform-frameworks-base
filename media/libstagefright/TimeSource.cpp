@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+//#define LOG_NDEBUG 0
+#define LOG_TAG "TimeSource"
+#include <utils/Log.h>
 
 #include <stddef.h>
 #include <sys/time.h>
@@ -53,6 +56,7 @@ int64_t SystemTimeSourceForSync::getRealTimeUs() {
 void SystemTimeSourceForSync::increaseRealTimeUs(int64_t deltaTime)
 {
     Mutex::Autolock autoLock(mLock);	
+    LOGI("SystemTimeSourceForSync::pause %d,%lld",mIsPaused,deltaTime);	
     mStartTimeUs -= deltaTime;
 }
 	
@@ -66,6 +70,7 @@ int64_t SystemTimeSourceForSync::GetSystemTimeUs() {
 
  void SystemTimeSourceForSync::pause(){
         Mutex::Autolock autoLock(mLock);	
+	LOGI("SystemTimeSourceForSync::pause %d",mIsPaused);		
  	if(mIsPaused)
 		return;
  	mPauseTimeUs = GetSystemTimeUs();
@@ -74,6 +79,7 @@ int64_t SystemTimeSourceForSync::GetSystemTimeUs() {
  
  void SystemTimeSourceForSync::resume(){
         Mutex::Autolock autoLock(mLock);	
+	LOGI("SystemTimeSourceForSync::resume %d",mIsPaused);		
  	if(!mIsPaused)
 		return;
  	mTotalPauseTimeUs += GetSystemTimeUs() - mPauseTimeUs;
@@ -82,6 +88,7 @@ int64_t SystemTimeSourceForSync::GetSystemTimeUs() {
  
 void SystemTimeSourceForSync::reset(){
         Mutex::Autolock autoLock(mLock);	
+	LOGI("SystemTimeSourceForSync::reset %d",mIsPaused);
 	mStartTimeUs = GetSystemTimeUs();
 	mPauseTimeUs = -1;
 	mTotalPauseTimeUs	 = 0;
