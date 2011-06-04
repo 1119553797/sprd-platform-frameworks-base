@@ -229,7 +229,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     int mRequestMessagesPending;
 
     // Is this the first radio state change?
-    private boolean mInitialRadioStateChange = true;
+    private boolean mInitialRadioStateChange = false;
 
     //I'd rather this be LinkedList or something
     ArrayList<RILRequest> mRequestsList = new ArrayList<RILRequest>();
