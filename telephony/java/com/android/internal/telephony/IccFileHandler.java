@@ -56,7 +56,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     static protected final int RESPONSE_DATA_RFU_1 = 0;
     static protected final int RESPONSE_DATA_RFU_2 = 1;
 
-    static protected final int RESPONSE_DATA_FILE_SIZE_1 = 1;
+    static protected final int RESPONSE_DATA_FILE_SIZE_1 = 2;
     static protected final int RESPONSE_DATA_FILE_SIZE_2 = 3;
 
     static protected final int RESPONSE_DATA_FILE_ID_1 = 4;
