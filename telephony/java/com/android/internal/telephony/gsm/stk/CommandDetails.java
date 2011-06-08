@@ -41,8 +41,8 @@ class CommandDetails extends ValueObject implements Parcelable {
     }
 
     public boolean compareTo(CommandDetails other) {
-        return (this.compRequired == other.compRequired &&
-                this.commandNumber == other.commandNumber &&
+        //return (this.compRequired == other.compRequired &&
+        return (this.commandNumber == other.commandNumber &&
                 this.commandQualifier == other.commandQualifier &&
                 this.typeOfCommand == other.typeOfCommand);
     }
