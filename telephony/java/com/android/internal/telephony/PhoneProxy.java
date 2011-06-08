@@ -975,4 +975,41 @@ public class PhoneProxy extends Handler implements Phone {
 		Log.d(LOG_TAG, "changeBarringPassword(), facility: " + facility);
 		mActivePhone.changeBarringPassword(facility, oldPwd, newPwd, onComplete);
 	}
+	
+	/**
+     * Returns the array，String[0] - sres,String[1] - kc,
+     *
+     * @hide
+     */
+    public String Mbbms_Gsm_Authenticate(String nonce) {
+    	String authen = mActivePhone.Mbbms_Gsm_Authenticate(nonce);
+    	return authen;
+    }
+    /**
+     * Returns the array，String[0] ，“1” -need GBA recynchronization，“0” - succeed。
+     * String[1] - res, String[2] -ck, String[3] - ik;
+     *
+     * @hide
+     */
+    public String Mbbms_USim_Authenticate(String nonce, String autn) {
+    	String authen = mActivePhone.Mbbms_USim_Authenticate(nonce, autn);
+        return authen;    	
+    }
+    
+    /**
+     * Returns the type，0 --SIM，1 -- USIM,
+     *
+     * @hide
+     */
+    public String getSimType() {
+        return mActivePhone.getSimType();
+    }
+    
+    public String[] getRegistrationState() {
+    	return mActivePhone.getRegistrationState();
+    }
+	
+	public boolean isVTCall() {
+		return mActivePhone.isVTCall();
+	}
 }

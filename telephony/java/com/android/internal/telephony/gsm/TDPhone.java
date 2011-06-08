@@ -57,6 +57,7 @@ import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.DataConnection;
 import com.android.internal.telephony.DataConnectionTracker;
 import com.android.internal.telephony.IccCard;
+import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.IccFileHandler;
 import com.android.internal.telephony.IccPhoneBookInterfaceManager;
 import com.android.internal.telephony.IccSmsInterfaceManager;
@@ -66,6 +67,7 @@ import com.android.internal.telephony.PhoneBase;
 import com.android.internal.telephony.PhoneNotifier;
 import com.android.internal.telephony.PhoneProxy;
 import com.android.internal.telephony.PhoneSubInfo;
+import com.android.internal.telephony.SmsRawData;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.gsm.stk.StkService;
 import com.android.internal.telephony.test.SimulatedRadioControl;
@@ -94,6 +96,8 @@ public final class TDPhone extends GSMPhone {
     static final String LOG_TAG = "TD";
     private static final boolean LOCAL_DEBUG = true;
 	
+    private final Object mLock = new Object();
+    
     protected final RegistrantList mPreciseVideoCallStateRegistrants
             = new RegistrantList();
 
@@ -121,6 +125,10 @@ public final class TDPhone extends GSMPhone {
 	
     protected static final int EVENT_CONTROL_CAMERA_DONE       = 100;
     protected static final int EVENT_CONTROL_AUDIO_DONE       = 101;
+    protected static final int EVENT_GSM_AUTHEN_DONE       = 102;
+    protected static final int EVENT_USIM_AUTHEN_DONE       = 103;
+    protected static final int EVENT_GET_SIM_TYPE_DONE       = 104;
+    protected static final int EVENT_GET_REGISTRATION_STATE_DONE       = 105;
 	
     // Constructors
 
@@ -690,5 +698,151 @@ public final class TDPhone extends GSMPhone {
         }
     }
 
+    private String mGsmAuthen = null;
+    private String mUsimAuthen = null ;
+    private String mSimType = null;
+    private String[] mRegistrationState = null;
+    
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AsyncResult ar;
+
+            switch (msg.what) {
+                case EVENT_GSM_AUTHEN_DONE:
+                    ar = (AsyncResult) msg.obj;
+                    synchronized (mLock) {
+                    	if (ar.exception == null) {
+                    		mGsmAuthen = (String ) ar.result;	
+                    	}
+                    	else {
+                    		Log.d(LOG_TAG,"handleMessage GSM error!");
+                    		mGsmAuthen = null;
+                    	}                    		
+                        mLock.notifyAll();
+                    }
+                    break;
+                case EVENT_USIM_AUTHEN_DONE:
+                    ar = (AsyncResult)msg.obj;
+                    synchronized (mLock) {
+                    	if (ar.exception == null) {
+                    		mUsimAuthen = (String ) ar.result;	
+                    	}
+                    	else {
+                    		Log.d(LOG_TAG,"handleMessage USIM error!");
+                    		mUsimAuthen = null;
+                    	}                    
+                        mLock.notifyAll();
+                    }
+                    break;
+                case EVENT_GET_SIM_TYPE_DONE:
+                	ar = (AsyncResult) msg.obj;
+                    synchronized (mLock) {
+                    	if (ar.exception == null) {
+                    		mSimType = (String ) ar.result;	
+                    	}
+                    	else {
+                    		Log.d(LOG_TAG,"handleMessage SIM type error!");
+                    		mSimType = null;
+                    	}                    
+                        mLock.notifyAll();
+                    }
+                    break;
+                case EVENT_GET_REGISTRATION_STATE_DONE:
+                	ar = (AsyncResult) msg.obj;
+                    synchronized (mLock) {
+                    	if (ar.exception == null) {
+                    		mRegistrationState = (String []) ar.result;	
+                    	}
+                    	else {
+                    		Log.d(LOG_TAG,"handleMessage registration state error!");
+                    		mRegistrationState = null;
+                    	}                    
+                        mLock.notifyAll();
+                    }
+                    break;
+            }
+        }
+    };
+    
+    /**
+     * Return gam Authenticate
+     */
+	public String Mbbms_Gsm_Authenticate(String nonce) {
+		Log.d(LOG_TAG, "Mbbms_Gsm_Authenticate nonce:"+nonce);
+		
+		synchronized(mLock) {
+            Message response = mHandler.obtainMessage(EVENT_GSM_AUTHEN_DONE);
+            mCM.Mbbms_Gsm_Authenticate(nonce, response);
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+            	Log.d(LOG_TAG,"interrupted while trying to authenticate the SIM");
+            }
+        }
+		Log.d(LOG_TAG, "Mbbms_Gsm_Authenticate mGsmAuthen:"+mGsmAuthen);
+		return mGsmAuthen;
+	}
+
+    /**
+     * Return usim Authenticate
+     */    
+	public String  Mbbms_USim_Authenticate(String nonce, String autn) {
+		Log.d(LOG_TAG, "Mbbms_USim_Authenticate nonce:"+nonce + " autn:"+autn);
+
+		synchronized(mLock) {
+            Message response = mHandler.obtainMessage(EVENT_USIM_AUTHEN_DONE);
+            mCM.Mbbms_USim_Authenticate(nonce, autn, response);
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+            	Log.d(LOG_TAG,"interrupted while trying to authenticate the USIM");
+            }
+        }
+
+		Log.d(LOG_TAG, "Mbbms_USim_Authenticate mUsimAuthen:"+mUsimAuthen);
+		return mUsimAuthen;
+	}
+    
+    /**
+     * Return sim type
+     */
+	public String getSimType() {	
+		Log.d(LOG_TAG, "getSimType");
+		
+		synchronized(mLock) {
+            Message response = mHandler.obtainMessage(EVENT_GET_SIM_TYPE_DONE);
+            mCM.getSimType(response);
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+            	Log.d(LOG_TAG,"interrupted while trying to get sim type");
+            }
+        }
+		
+		Log.d(LOG_TAG, "getSimType:"+mSimType);
+		return mSimType;
+	}
+	
+	public String[] getRegistrationState() {
+	    Log.d(LOG_TAG, "getRegistrationState");
+		
+		synchronized(mLock) {
+            Message response = mHandler.obtainMessage(EVENT_GET_REGISTRATION_STATE_DONE);
+            mCM.getRegistrationState(response);
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+            	Log.d(LOG_TAG,"interrupted while trying to get registration state");
+            }
+        }
+		
+		Log.d(LOG_TAG, "getRegistrationState:"+mRegistrationState);
+		return mRegistrationState;	
+	}
+	
+	public boolean isVTCall() {
+		return (getCallType() == CallType.VIDEO? true:false);
+	}
 }
 

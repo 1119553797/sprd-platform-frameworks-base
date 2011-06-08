@@ -61,6 +61,24 @@ public interface SprdVideoPhone {
 
 	public void  controlAudio(boolean bEnable) throws CallStateException;
 
+	/**
+     * Return gam Authenticate
+     */
+	public String Mbbms_Gsm_Authenticate(String nonce);
+
+    /**
+     * Return usim Authenticate
+     */    
+	public String Mbbms_USim_Authenticate(String nonce, String autn);
+    
+    /**
+     * Return sim type
+     */
+	public String getSimType();
+	
+	public String[] getRegistrationState();
+	
+	public boolean isVTCall();
 /*	public void notifyPreciseVideoCallStateChanged();
 	public void notifyNewRingingVideoCall(Connection cn);
 	public void notifyIncomingRingVideoCall();

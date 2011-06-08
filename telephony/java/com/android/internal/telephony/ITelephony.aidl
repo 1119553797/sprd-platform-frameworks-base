@@ -257,5 +257,24 @@ interface ITelephony {
      * Return true if an ICC card is present
      */
     boolean hasIccCard();
+    
+    /**
+     * Return gam Authenticate
+     */
+    String[] Mbbms_Gsm_Authenticate(String nonce);
+
+    /**
+     * Return usim Authenticate
+     */    
+    String[] Mbbms_USim_Authenticate(String nonce, String autn);
+    
+    /**
+     * Return sim type
+     */
+    String getSimType();
+    
+    String[] getRegistrationState();
+    
+    boolean isVTCall();
 }
 

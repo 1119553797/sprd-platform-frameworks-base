@@ -23,6 +23,8 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
+import android.telephony.gsm.GsmCellLocation;
+import android.util.Log;
 
 import com.android.internal.telephony.IPhoneSubInfo;
 import com.android.internal.telephony.ITelephony;
@@ -871,7 +873,7 @@ public class TelephonyManager {
             return -1;
         }
     }
-
+    
     /**
      * Returns the CDMA ERI text,
      *
@@ -887,4 +889,79 @@ public class TelephonyManager {
             return null;
         }
     }
+    /**
+     * Returns the array，String[0] - sres,String[1] - kc,
+     *
+     * @hide
+     */
+    public String[] Mbbms_Gsm_Authenticate(String nonce) {
+    	String[] authen;
+    	try {
+    		authen = getITelephony().Mbbms_Gsm_Authenticate(nonce);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return null;
+        } catch (NullPointerException ex) {
+            return null;
+        }
+    	return authen;
+    }
+    /**
+     * Returns the array，String[0] ，“1” -need GBA recynchronization，“0” - succeed。
+     * String[1] - res, String[2] -ck, String[3] - ik;
+     *
+     * @hide
+     */
+    public String[] Mbbms_USim_Authenticate(String nonce, String autn) {
+    	String[] authen;
+    	try {
+    		authen = getITelephony().Mbbms_USim_Authenticate(nonce, autn);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return null;
+        } catch (NullPointerException ex) {
+            return null;
+        }
+        return authen;    	
+    }
+    
+    /**
+     * Returns the type，0 --SIM，1 -- USIM,
+     *
+     * @hide
+     */
+    public String getSimType() {
+
+        try {
+        	return getITelephony().getSimType();
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return null;
+        } catch (NullPointerException ex) {
+            return null;
+        }
+    }
+    
+    public String[] getRegistrationState() {
+    	 try {
+         	return getITelephony().getRegistrationState();
+         } catch (RemoteException ex) {
+             // the phone process is restarting.
+             return null;
+         } catch (NullPointerException ex) {
+             return null;
+         }
+    }
+    
+    public boolean isVTCall() {
+    	 try {
+         	return getITelephony().isVTCall();
+         } catch (RemoteException ex) {
+             // the phone process is restarting.
+             return false;
+         } catch (NullPointerException ex) {
+             return false;
+         }	
+    }
+
 }
