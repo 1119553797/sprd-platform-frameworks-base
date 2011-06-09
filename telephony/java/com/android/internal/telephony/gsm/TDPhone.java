@@ -449,11 +449,12 @@ public final class TDPhone extends GSMPhone {
         Message onComplete;
 
         switch (msg.what) {
-            case EVENT_SET_CALL_FORWARD_DONE:
+            /*case EVENT_SET_CALL_FORWARD_DONE:
                 break;
 
             case EVENT_GET_CALL_FORWARD_DONE:
                 break;
+*/
 
 
             case EVENT_SET_CLIR_COMPLETE:
