@@ -27,6 +27,7 @@
 #include "include/NuCachedSource2.h"
 #include "include/ThrottledSource.h"
 #include "include/MPEG2TSExtractor.h"
+#include "include/VideoPhoneExtractor.h"
 
 #include "ARTPSession.h"
 #include "APacketSource.h"
@@ -56,6 +57,13 @@ namespace android {
 
 static int64_t kLowWaterMarkUs = 2000000ll;  // 2secs
 static int64_t kHighWaterMarkUs = 10000000ll;  // 10secs
+
+#define CHECK_RT(val) \
+    do { \
+        status_t r = val; \
+        if (r != OK) return r; \
+    } while(0)
+
 
 struct AwesomeEvent : public TimedEventQueue::Event {
     AwesomeEvent(
@@ -403,6 +411,7 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
 }
 
 void AwesomePlayer::reset() {
+    LOGV("reset");
     Mutex::Autolock autoLock(mLock);
     reset_l();
 }
@@ -670,6 +679,7 @@ void AwesomePlayer::partial_reset_l() {
 
 void AwesomePlayer::onStreamDone() {
     // Posted whenever any stream finishes playing.
+    LOGV("onStreamDone");
 
     Mutex::Autolock autoLock(mLock);
     if (!mStreamDoneEventPending) {
@@ -728,6 +738,7 @@ void AwesomePlayer::onStreamDone() {
 }
 
 status_t AwesomePlayer::play() {
+    LOGV("play");
     Mutex::Autolock autoLock(mLock);
 
     mFlags &= ~CACHE_UNDERRUN;
@@ -863,7 +874,14 @@ void AwesomePlayer::initRenderer_l() {
     }
 }
 
+status_t AwesomePlayer::forceStop(){
+    LOGV("forceStop");
+	VideoPhoneDataDevice::getInstance().stop();
+	return pause();
+}
+
 status_t AwesomePlayer::pause() {
+    LOGV("pause");
     Mutex::Autolock autoLock(mLock);
 
     mFlags &= ~CACHE_UNDERRUN;
@@ -1097,8 +1115,12 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyWidth, &mVideoWidth));
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyHeight, &mVideoHeight));
+		
+		LOGV("initVideoDecoder, before start");
 
         status_t err = mVideoSource->start();
+
+		LOGV("initVideoDecoder, after start");
 
         if (err != OK) {
             mVideoSource.clear();
@@ -1146,6 +1168,7 @@ void AwesomePlayer::finishSeekIfNecessary(int64_t videoTimeUs) {
 }
 
 void AwesomePlayer::onVideoEvent() {
+    LOGV("onVideoEvent");
     Mutex::Autolock autoLock(mLock);
     if (!mVideoEventPending) {
         // The event has been cancelled in reset_l() but had already
@@ -1190,7 +1213,9 @@ void AwesomePlayer::onVideoEvent() {
                     mSeekTimeUs, MediaSource::ReadOptions::SEEK_CLOSEST_SYNC);
         }
         for (;;) {
+    		LOGV("onVideoEvent before read");
             status_t err = mVideoSource->read(&mVideoBuffer, &options);
+    		LOGV("onVideoEvent after read");
             options.clearSeekTo();
 
             if (err != OK) {
@@ -1313,7 +1338,9 @@ void AwesomePlayer::onVideoEvent() {
     }
 
     if (mVideoRenderer != NULL) {
+    	LOGV("onVideoEvent before render");
         mVideoRenderer->render(mVideoBuffer);
+    	LOGV("onVideoEvent after render");
     }
 
     if (mLastVideoBuffer) {
@@ -1393,6 +1420,7 @@ void AwesomePlayer::onCheckAudioStatus() {
 }
 
 status_t AwesomePlayer::prepare() {
+    LOGV("prepare");
     Mutex::Autolock autoLock(mLock);
     return prepare_l();
 }
@@ -1421,6 +1449,7 @@ status_t AwesomePlayer::prepare_l() {
 }
 
 status_t AwesomePlayer::prepareAsync() {
+    LOGV("prepareAsync");
     Mutex::Autolock autoLock(mLock);
 
     if (mFlags & PREPARING) {
@@ -1450,9 +1479,23 @@ status_t AwesomePlayer::prepareAsync_l() {
     return OK;
 }
 
+char* strsplit(const char* src, char c, char* dest)
+{
+	char *temp = strchr(src, c);
+	int len = 0;
+
+	if ((src == NULL)||(dest == NULL)) return NULL;
+	if (temp == NULL) return NULL;
+	
+	len = temp - src;
+	memcpy(dest, src, len);
+	LOGV("strsplit(%s, %c, %s)\n", src, c, dest);
+	return dest;
+}
+
 status_t AwesomePlayer::finishSetDataSource_l() {
     sp<DataSource> dataSource;
-
+	LOGV("finishSetDataSource_l(), mUri: %s", mUri.string());
     if (!strncasecmp("http://", mUri.string(), 7)) {
         mConnectingDataSource = new NuHTTPDataSource;
 
@@ -1486,9 +1529,22 @@ status_t AwesomePlayer::finishSetDataSource_l() {
     }
     else if (!strncasecmp(mUri.string(), "videophone://", 13)) 
     {
-        sp<DataSource> source = new CharDeviceSource(mUri.string() + 13);
-        sp<MediaExtractor> extractor =
-            MediaExtractor::Create(source, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE);
+    	char buf[30] = {0};
+		strsplit(mUri.string() + 13, ';', buf);
+        sp<DataSource> source = new CharDeviceSource(buf);
+        sp<MediaExtractor> extractor = NULL;
+		int nLen = strlen(mUri.string());
+		LOGV("string: %s, nLen: %d", mUri.string(), nLen);
+		LOGV("string compare: %s", (mUri.string() + nLen - 5));
+		if (!strncasecmp((mUri.string() + nLen - 5), "mpeg4", 5)){
+			LOGV("mpeg4");
+			extractor =
+            MediaExtractor::Create(source, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_MPEG4);
+		} else {
+			LOGV("3gpp");
+        	extractor =
+            MediaExtractor::Create(source, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263);
+		}
         return setDataSource_l(extractor);
     }
     else if (!strncasecmp(mUri.string(), "httplive://", 11)) {
@@ -1675,6 +1731,7 @@ bool AwesomePlayer::ContinuePreparation(void *cookie) {
 }
 
 void AwesomePlayer::onPrepareAsyncEvent() {
+    LOGV("onPrepareAsyncEvent");
     Mutex::Autolock autoLock(mLock);
 
     if (mFlags & PREPARE_CANCELLED) {

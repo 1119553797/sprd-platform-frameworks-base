@@ -43,7 +43,8 @@ const char *MEDIA_MIMETYPE_CONTAINER_MATROSKA = "video/x-matroska";
 const char *MEDIA_MIMETYPE_CONTAINER_MPEG2TS = "video/mp2ts";
 
 const char *MEDIA_MIMETYPE_CONTAINER_CMMB		= "video/cmmb";
-const char *MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE	= "video/videophone";
+const char *MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263	= "video/videophone/3gpp";
+const char *MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_MPEG4	= "video/videophone/mpeg4";
 
 
 }  // namespace android

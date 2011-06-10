@@ -18,7 +18,7 @@
 #include <media/stagefright/MediaDebug.h>
 
 #define LOG_NDEBUG 0
-#define LOG_TAG "VideoPhoneExtractor"
+#define LOG_TAG "CharDeviceSource"
 #include <utils/Log.h>
 
 #include <stdio.h>
@@ -27,7 +27,7 @@
 namespace android {
 
 CharDeviceSource::CharDeviceSource(const char *filename)
-    : mFd(open(filename, O_RDONLY)),
+    : mFd(open(filename, O_RDONLY|O_NONBLOCK)),
     	mNeedClose(1) {
 }
 

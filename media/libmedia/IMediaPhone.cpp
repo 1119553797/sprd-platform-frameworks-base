@@ -37,11 +37,15 @@ enum {
     PREPARE_ASYNC,
     START,
     STOP,
+    SET_DECODE_TYPE,
     SET_AUDIO_STREAM_TYPE,
     SET_VOLUME,
     ENABLE_RECORD,
     START_UPLINK,
-    STOP_UPLINK
+    STOP_UPLINK,
+    START_DOWNLINK,
+    STOP_DOWNLINK,
+    SET_CAMERA_PARAM
 };
 
 class BpMediaPhone: public BpInterface<IMediaPhone>
@@ -148,6 +152,16 @@ public:
         remote()->transact(RELEASE, data, &reply);
         return reply.readInt32();
     }
+	
+    status_t setDecodeType(int type)
+    {
+        LOGV("setDecodeType(%d)", type);
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        data.writeInt32(type);
+        remote()->transact(SET_DECODE_TYPE, data, &reply);
+        return reply.readInt32();
+    }
 
     status_t setAudioStreamType(int type)
     {
@@ -170,13 +184,13 @@ public:
         return reply.readInt32();
     }
 
-    status_t enableRecord(bool isEnable, int fd)
+    status_t enableRecord(bool isEnable, const char *fn)
     {
-        LOGV("enableRecord(%d, %d)", isEnable, fd);
+        LOGV("enableRecord(%d, %s)", isEnable, fn);
         Parcel data, reply;
         data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
         data.writeInt32(isEnable?1:0);
-        data.writeInt32(fd);
+        data.writeCString(fn);
         remote()->transact(ENABLE_RECORD, data, &reply);
         return reply.readInt32();
     }
@@ -196,6 +210,35 @@ public:
         Parcel data, reply;
         data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
         remote()->transact(STOP_UPLINK, data, &reply);
+        return reply.readInt32();
+    }
+	
+    status_t startDownLink()
+    {
+        LOGV("startDownLink()");
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        remote()->transact(START_DOWNLINK, data, &reply);
+        return reply.readInt32();
+    }
+
+    status_t stopDownLink()
+    {
+        LOGV("stopDownLink()");
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        remote()->transact(STOP_DOWNLINK, data, &reply);
+        return reply.readInt32();
+    }
+
+    status_t setCameraParam(const char *key, int value)
+    {
+        LOGV("setCameraParam()");
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        data.writeCString(key);
+        data.writeInt32(value);
+        remote()->transact(SET_CAMERA_PARAM, data, &reply);
         return reply.readInt32();
     }
 };
@@ -274,6 +317,11 @@ status_t BnMediaPhone::onTransact(
             reply->writeInt32(stop());
             return NO_ERROR;
         } break;
+        case SET_DECODE_TYPE: {
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+            reply->writeInt32(setDecodeType(data.readInt32()));
+            return NO_ERROR;
+        } break;
         case SET_AUDIO_STREAM_TYPE: {
             CHECK_INTERFACE(IMediaPhone, data, reply);
             reply->writeInt32(setAudioStreamType(data.readInt32()));
@@ -286,7 +334,7 @@ status_t BnMediaPhone::onTransact(
         } break;
         case ENABLE_RECORD: {
             CHECK_INTERFACE(IMediaPhone, data, reply);
-            reply->writeInt32(enableRecord(data.readInt32() == 1, data.readInt32()));
+            reply->writeInt32(enableRecord(data.readInt32() == 1, data.readCString()));
             return NO_ERROR;
         } break;
         case START_UPLINK: {
@@ -299,6 +347,24 @@ status_t BnMediaPhone::onTransact(
             LOGV("STOP_UPLINK");
             CHECK_INTERFACE(IMediaPhone, data, reply);
             reply->writeInt32(stopUpLink());
+            return NO_ERROR;
+        } break;
+        case START_DOWNLINK: {
+            LOGV("START_DOWNLINK");
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+            reply->writeInt32(startDownLink());
+            return NO_ERROR;
+        } break;
+        case STOP_DOWNLINK: {
+            LOGV("STOP_DOWNLINK");
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+            reply->writeInt32(stopDownLink());
+            return NO_ERROR;
+        } break;
+        case SET_CAMERA_PARAM: {
+            LOGV("STOP_DOWNLINK");
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+            reply->writeInt32(setCameraParam(data.readCString(), data.readInt32()));
             return NO_ERROR;
         } break;
         default:

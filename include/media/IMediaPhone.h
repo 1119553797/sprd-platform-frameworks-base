@@ -41,11 +41,15 @@ public:
     virtual status_t	start() = 0;
     virtual status_t	stop() = 0;
     virtual status_t    release() = 0;
+    virtual status_t	setDecodeType(int type) = 0;
     virtual status_t	setAudioStreamType(int type) = 0;
     virtual status_t	setVolume(float leftVolume, float rightVolume) = 0;
-    virtual status_t    enableRecord(bool isEnable, int fd) = 0;
+    virtual status_t    enableRecord(bool isEnable, const char *fn) = 0;
     virtual status_t    startUpLink() = 0;
     virtual status_t    stopUpLink() = 0;
+    virtual status_t    startDownLink() = 0;
+    virtual status_t    stopDownLink() = 0;
+    virtual status_t    setCameraParam(const char *key, int value) = 0;
 };
 
 // ----------------------------------------------------------------------------

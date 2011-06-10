@@ -68,7 +68,8 @@ status_t StagefrightPlayer::start() {
 status_t StagefrightPlayer::stop() {
     LOGV("stop");
 
-    return pause();  // what's the difference?
+	return mPlayer->forceStop();
+    //return pause();  // what's the difference?
 }
 
 status_t StagefrightPlayer::pause() {

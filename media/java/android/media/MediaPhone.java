@@ -60,6 +60,9 @@ public class MediaPhone extends Handler
     private final static String IMEDIA_PHONE = "android.media.IMediaPhone";
 	private final static String MSG_TAG = "resend";
 
+	private final static String CAMERA_OPEN_STR = "open_:camera_";
+	private final static String CAMERA_CLOSE_STR = "close_:camera_";
+
     private final static boolean DEBUG_WITHOUT_MODEM = false;
 
     private int mNativeContext; // accessed by native methods
@@ -76,8 +79,6 @@ public class MediaPhone extends Handler
     private Message msgTracker = null;
     private static int ARG_SKIP_MSGTRACKER = -1;
 
-    private boolean m_bStartTester = false;
-    private Process m_prog = null;
     /**
      * Default constructor. Consider using one of the create() methods for
      * synchronously instantiating a MediaPhone from a Uri or resource.
@@ -96,7 +97,6 @@ public class MediaPhone extends Handler
             mEventHandler = null;
         }
         mCm = ril;
-	m_bStartTester = false;
 
         /* Native setup requires a weak reference to our object.
          * It's easier to create it here than in C++.
@@ -202,7 +202,6 @@ public class MediaPhone extends Handler
             mp.mCm.setOnVPRemoteMedia(mp.mEventHandler, MEDIA_UNSOL_REMOTE_VIDEO, null);
             mp.mCm.setOnVPMMRing(mp.mEventHandler, MEDIA_UNSOL_MM_RING, null);
             mp.mCm.setOnVPRecordVideo(mp.mEventHandler, MEDIA_UNSOL_RECORD_VIDEO, null);
-	    mp.m_bStartTester = false;
             return mp;
         } catch (IOException ex) {
             Log.d(TAG, "create failed:", ex);
@@ -218,6 +217,8 @@ public class MediaPhone extends Handler
     }
 
     private native void setParameters(String nameValuePair);
+
+    public native void prepare() throws IllegalStateException;
 
     /**
      * Prepares the player for playback, asynchronously.
@@ -516,9 +517,9 @@ public class MediaPhone extends Handler
      * Enable or disable remote video recording.
      *
      * @param isEnable enable or disable
-     * @param fd file descriptor for result video file
+     * @param fn file name for result video file
      */
-    private native void enableRecord(boolean isEnable, int fd);
+    public native void enableRecord(boolean isEnable, String fn);
 
     /**
      * Start up link data transfer.
@@ -531,7 +532,7 @@ public class MediaPhone extends Handler
      * @param isEnable enable or disable
      * @param fd file descriptor for result video file
      */
-    private native void startUpLink();
+    public native void startUpLink();
 
     /**
      * Stop up link data transfer.
@@ -544,7 +545,17 @@ public class MediaPhone extends Handler
      * @param isEnable enable or disable
      * @param fd file descriptor for result video file
      */
-    private native void stopUpLink();
+    public native void stopUpLink();
+	
+    public native void startDownLink();
+	
+    public native void stopDownLink();
+
+	public native void setSubtitutePic(String fn);
+
+	public native void setDecodeType(int type);
+
+	public native void setCameraParam(String key, int value);
 
     private static native final void native_init();
     private native final void native_setup(Object mediaphone_this);
@@ -581,9 +592,9 @@ public class MediaPhone extends Handler
     private static final int MEDIA_UNSOL_RECORD_VIDEO = 25;
 
     // codec request type
-    private static final int CODEC_OPEN = 1;
-    private static final int CODEC_CLOSE = 2;
-    private static final int CODEC_SET_PARAM = 3;
+    public static final int CODEC_OPEN = 1;
+    public static final int CODEC_CLOSE = 2;
+    public static final int CODEC_SET_PARAM = 3;
 
     private class EventHandler extends Handler
     {
@@ -685,19 +696,42 @@ public class MediaPhone extends Handler
 
             case MEDIA_UNSOL_CODEC: {
 				if (ar == null) {
-					Log.d(TAG, "handleMessage(), ar == null");
+					Log.d(TAG, "handleMessage(MEDIA_UNSOL_CODEC), ar == null");
 					return;
 				}
-                //int type = msg.arg1;
-                //String param = (String)msg.obj;
-                int[] result = (int[])ar.result;
-				Log.d(TAG, "handleMessage(MEDIA_UNSOL_CODEC), result: " + result[0]);
-                onCodecRequest(result[0], null);
+                int[] params = (int[])ar.result;
+				Log.d(TAG, "handleMessage(MEDIA_UNSOL_CODEC), params: " + params[0] + ", length: " + params.length);
+				if (params[0] == 3){	// config message
+					if (params.length >= 4){
+						if (params[2] == 1) {	// decode
+							setDecodeType(params[3]);
+						}
+	                	onCodecRequest(params[0], params[2]);
+					}
+				} else {
+	                onCodecRequest(params[0], 0);
+				}
                 return;
             }
 
             case MEDIA_UNSOL_STR: {
+				if (ar == null) {
+					Log.d(TAG, "handleMessage(MEDIA_UNSOL_STR), ar == null");
+					return;
+				}
+				
                 String str = (String)ar.result;
+				Log.d(TAG, "handleMessage(MEDIA_UNSOL_STR), str == " + str);
+				
+				if (str.equals(CAMERA_OPEN_STR)){
+					if (mOnCallEventListener != null){
+						mOnCallEventListener.onCallEvent(mMediaPhone, MEDIA_CALLEVENT_CAMERAOPEN, null);
+					}
+				} else if (str.equals(CAMERA_CLOSE_STR)){
+					if (mOnCallEventListener != null){
+						mOnCallEventListener.onCallEvent(mMediaPhone, MEDIA_CALLEVENT_CAMERACLOSE, null);
+					}
+				}
                 return;
             }
 
@@ -754,10 +788,10 @@ public class MediaPhone extends Handler
             mp.mEventHandler.sendMessage(m);
         }
     }
-    
-    private void onCodecRequest(int type, String param)
+	
+    public void onCodecRequest(int type, int param)
     {
-        Log.d(TAG, "onCodecRequest:" + type/* + " " + param*/);
+        Log.d(TAG, "onCodecRequest:" + type + ", " + param);
         switch (type) {
         case CODEC_OPEN:
             try {
@@ -765,15 +799,16 @@ public class MediaPhone extends Handler
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "prepareAsync fail " + ex);
             }
+	        codec(CODEC_OPEN, null, null);
             break;
 
         case CODEC_SET_PARAM:
-            if (param != null) {
-            }
-            try {
-                start();
-            } catch (IllegalStateException ex) {
-                Log.d(TAG, "start fail " + ex);
+            if (param == 1) { /* decoder */
+	            try {
+	                start();
+	            } catch (IllegalStateException ex) {
+	                Log.d(TAG, "start fail " + ex);
+	            }
             }
 	    	codec(CODEC_SET_PARAM, null, null);
             break;
@@ -784,12 +819,7 @@ public class MediaPhone extends Handler
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "stop fail " + ex);
             }
-	    codec(CODEC_CLOSE, null, null);
-	    m_bStartTester = false;
-	    if (m_prog != null) {
-		m_prog.destroy();
-		m_prog = null;
-	    }
+	    	codec(CODEC_CLOSE, null, null);
             break;
         }
     }
@@ -955,6 +985,7 @@ public class MediaPhone extends Handler
 	
 	
 	public static final int MEDIA_CALLEVENT_CAMERACLOSE = 100;
+	public static final int MEDIA_CALLEVENT_CAMERAOPEN = 101;
 	
     /**
      * Interface definition of a callback to be invoked to communicate some

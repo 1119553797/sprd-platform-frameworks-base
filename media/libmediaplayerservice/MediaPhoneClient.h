@@ -97,12 +97,16 @@ public:
     virtual     status_t    prepareAsync();
     virtual     status_t    start();
     virtual     status_t    stop();
+    virtual     status_t    setDecodeType(int type);
     virtual     status_t    setAudioStreamType(int type);
     virtual     status_t    setVolume(float leftVolume, float rightVolume);
     virtual     status_t    release();
-    virtual     status_t    enableRecord(bool isEnable, int fd);
+    virtual     status_t    enableRecord(bool isEnable, const char *fn);
     virtual     status_t    startUpLink();
     virtual     status_t    stopUpLink();
+    virtual     status_t    startDownLink();
+    virtual     status_t    stopDownLink();
+    virtual     status_t    setCameraParam(const char *key, int value);
 
     static      void        notify(void* cookie, int msg, int ext1, int ext2);
 
@@ -111,6 +115,8 @@ private:
 
                                  MediaPhoneClient(const sp<MediaPlayerService>& service, pid_t pid);
     virtual 		         ~MediaPhoneClient();
+	status_t	prepareRecorder();
+	status_t	preparePlayer();
 
     pid_t			 mPid;
     Mutex			 mLock;
@@ -125,6 +131,7 @@ private:
     sp<IMediaPlayerClient>       mListener;
     char                         mUrlIn[MAX_URL_LEN];
     char                         mUrlOut[MAX_URL_LEN];
+	int							 mDecodeType; // 1 - H263; 2 - MPEG4
 };
 
 }; // namespace android

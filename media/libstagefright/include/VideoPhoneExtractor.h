@@ -12,6 +12,9 @@
 #include <media/stagefright/MetaData.h>
 #include <media/stagefright/Utils.h>
 
+#include <stdio.h>
+#include <fcntl.h>
+#include <utils/Singleton.h>
 
 #define USE_DATA_DEVICE
 
@@ -24,6 +27,7 @@ class VideoPhoneSourceInterface
 {
 public:
     virtual int write(char* data, int nLen) = 0;
+	virtual void stopCB() = 0;
     VideoPhoneSourceInterface() {};
     virtual ~VideoPhoneSourceInterface() {};
 };
@@ -45,7 +49,8 @@ public:
     	virtual status_t read(
             MediaBuffer **buffer, const ReadOptions *options = NULL);
 
-	int write(char* data, int nLen);
+		int write(char* data, int nLen);
+		void stopCB();
 protected:
 	
     	virtual ~VideoPhoneSource();
@@ -74,6 +79,8 @@ private:
     	sp<DataSource> 	m_DataSource;
 
     	bool 			m_bStarted;
+		
+    	bool 			m_bForeStop;
 
 	MediaBufferGroup*	m_pGroup;
 
@@ -103,7 +110,7 @@ class VideoPhoneExtractor : public MediaExtractor
 public:
 	
     // Extractor assumes ownership of "source".
-    VideoPhoneExtractor(const sp<DataSource> &source);
+    VideoPhoneExtractor(const sp<DataSource> &source, int decodeType);
 
     virtual 	size_t countTracks();
 	
@@ -128,10 +135,37 @@ private:
 	sp<MetaData> 	m_AVMeta;
 		
 	bool				m_bHaveMetadata;
+	int					m_decodeType;
 
 	sp<MetaData>	mFileMetaData;
     sp<DataSource> mDataSource;
 
+};
+
+class VideoPhoneDataDevice : public Singleton<VideoPhoneDataDevice>
+{
+public:
+    FILE* m_fAVStream;
+    status_t registerClient(VideoPhoneSourceInterface *client, sp<DataSource> dataSource);
+    void unregisterClient(VideoPhoneSourceInterface *client);
+	void stop();
+	status_t start();
+
+private:
+    friend class Singleton<VideoPhoneDataDevice>;
+
+    VideoPhoneDataDevice();
+    ~VideoPhoneDataDevice();
+    static void *ThreadWrapper(void *);
+    status_t threadFunc();
+    status_t startThread();
+    void stopThread();
+
+    SortedVector<VideoPhoneSourceInterface *> mClients;
+    sp<DataSource> mDataSource;
+    pthread_t m_Thread;
+    Mutex m_Lock;
+    bool mStarted;
 };
 
 }  // namespace android

@@ -95,6 +95,8 @@ struct AwesomePlayer {
     void postAudioEOS();
     void postAudioSeekComplete();
 
+	status_t forceStop();
+
 private:
     friend struct AwesomeEvent;
 

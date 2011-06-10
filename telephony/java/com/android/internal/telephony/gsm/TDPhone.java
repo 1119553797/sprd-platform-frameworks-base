@@ -845,5 +845,44 @@ public final class TDPhone extends GSMPhone {
 	public boolean isVTCall() {
 		return (getCallType() == CallType.VIDEO? true:false);
 	}
+	
+	public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete) {
+		if (isValidCommandInterfaceCFReason(commandInterfaceCFReason)) {
+			if (LOCAL_DEBUG) Log.d(LOG_TAG, "requesting call forwarding query.");
+			Message resp;
+			if (commandInterfaceCFReason == CF_REASON_UNCONDITIONAL) {
+				resp = obtainMessage(EVENT_GET_CALL_FORWARD_DONE, onComplete);
+			} else {
+				resp = onComplete;
+			}
+			mCM.queryCallForwardStatus(commandInterfaceCFReason,serviceClass,null,resp);
+		}
+	}
+
+	public void setCallForwardingOption(int commandInterfaceCFAction,
+			int commandInterfaceCFReason,
+			int serviceClass,
+			String dialingNumber,
+			int timerSeconds,
+			Message onComplete) {
+		if (	(isValidCommandInterfaceCFAction(commandInterfaceCFAction)) &&
+				(isValidCommandInterfaceCFReason(commandInterfaceCFReason))) {
+
+			Message resp;
+			if (commandInterfaceCFReason == CF_REASON_UNCONDITIONAL) {
+				resp = obtainMessage(EVENT_SET_CALL_FORWARD_DONE,
+						isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, onComplete);
+			} else {
+				resp = onComplete;
+			}
+			mCM.setCallForward(commandInterfaceCFAction,
+					commandInterfaceCFReason,
+					serviceClass,
+					dialingNumber,
+					timerSeconds,
+					resp);
+		}
+	}
+
 }
 
