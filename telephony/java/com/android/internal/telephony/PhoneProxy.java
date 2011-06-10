@@ -377,6 +377,16 @@ public class PhoneProxy extends Handler implements Phone {
 			mActivePhone.controlAudio(bEnable);
 		}
 	}
+	
+	public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete){
+		mActivePhone.getCallForwardingOption(commandInterfaceCFReason, serviceClass, onComplete);
+	}
+	
+	public void setCallForwardingOption(int commandInterfaceCFAction, int commandInterfaceCFReason, int serviceClass,
+				String dialingNumber, int timerSeconds, Message onComplete){
+		mActivePhone.setCallForwardingOption(commandInterfaceCFAction, commandInterfaceCFReason, serviceClass, dialingNumber,
+			timerSeconds, onComplete);
+	}
 
 //----------------------------- end add for videocall ------------------------
 

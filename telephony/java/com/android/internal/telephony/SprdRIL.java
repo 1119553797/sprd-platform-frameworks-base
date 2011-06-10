@@ -819,7 +819,7 @@ public final class SprdRIL extends RIL {
 				 case RIL_UNSOL_RESEND_INCALL_MUTE: ret = responseVoid(p); break;
 			  	 case RIL_UNSOL_VIDEOPHONE_DATA: ret = responseInts(p); break;
 				 case RIL_UNSOL_VIDEOPHONE_CODEC: ret = responseInts(p); break;
-				 case RIL_REQUEST_VIDEOPHONE_STRING: ret = responseString(p); break;
+				 case RIL_UNSOL_VIDEOPHONE_STRING: ret = responseString(p); break;
 				 case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: ret = responseInts(p); break;
 				 case RIL_UNSOL_VIDEOPHONE_MM_RING: ret = responseInts(p); break;
 				 case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: ret = responseInts(p); break;
@@ -1147,18 +1147,13 @@ public final class SprdRIL extends RIL {
                 if (RILJ_LOGD) unsljLogRet(response, ret);
 
                 int[] params = (int[])ret;
-                if(params.length == 1) {
-                    if (mVPCodecRegistrant != null) {
-                        mVPCodecRegistrant
-							.notifyRegistrant(new AsyncResult(null, params, null));
-                    }
-                } else {
-                    if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_CODEC ERROR with wrong length "
-                            + params.length);
+                if (mVPCodecRegistrant != null) {
+                    mVPCodecRegistrant
+						.notifyRegistrant(new AsyncResult(null, params, null));
                 }
             	break;
 		}
-            case RIL_REQUEST_VIDEOPHONE_STRING: 
+            case RIL_UNSOL_VIDEOPHONE_STRING: 
                 if (RILJ_LOGD) unsljLog(response);
 				
                 if (mVPStrsRegistrant != null) {
@@ -1300,7 +1295,7 @@ public final class SprdRIL extends RIL {
 		            case RIL_UNSOL_VIDEOPHONE_CODEC: return "UNSOL_VIDEOPHONE_CODEC";
 		            case RIL_UNSOL_VIDEOPHONE_DCPI: return "UNSOL_VIDEOPHONE_DCPI";
 		            case RIL_UNSOL_VIDEOPHONE_DSCI: return "UNSOL_VIDEOPHONE_DSCI";
-		            case RIL_UNSOL_VIDEOPHONE_STRING: return "RIL_REQUEST_VIDEOPHONE_STRING";
+		            case RIL_UNSOL_VIDEOPHONE_STRING: return "UNSOL_VIDEOPHONE_STRING";
 		            case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: return "UNSOL_VIDEOPHONE_REMOTE_MEDIA";
 		            case RIL_UNSOL_VIDEOPHONE_MM_RING: return "UNSOL_VIDEOPHONE_MM_RING";
 		            case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: return "UNSOL_VIDEOPHONE_RECORD_VIDEO";

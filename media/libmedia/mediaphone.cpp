@@ -56,10 +56,10 @@ status_t MediaPhone::setCamera(const sp<ICamera>& camera)
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    if (!(mCurrentState & MEDIA_PHONE_IDLE)) {
+    /*if (!(mCurrentState & MEDIA_PHONE_IDLE)) {
         LOGE("setCamera called in an invalid state(%d)", mCurrentState);
         return INVALID_OPERATION;
-    }
+    }*/
 
     status_t ret = mMediaPhone->setCamera(camera);
     if (OK != ret) {
@@ -138,6 +138,28 @@ status_t MediaPhone::setParameters(const String8& params) {
     return ret;
 }
 
+status_t MediaPhone::prepare()
+{
+	LOGV("prepare");
+	Mutex::Autolock _l(mLock);
+	if (mPrepareSync) {
+		return -EALREADY;
+	}
+	mPrepareSync = true;
+	status_t ret = prepareAsync_l();
+	if (ret != NO_ERROR) {
+		return ret;
+	}
+
+	if (mPrepareSync) {
+		mSignal.wait(mLock);  // wait for prepare done
+		mPrepareSync = false;
+	}
+	LOGV("prepare complete - status=%d", mPrepareStatus);
+	return mPrepareStatus;
+}
+
+
 // must call with lock held
 status_t MediaPhone::prepareAsync_l()
 {
@@ -153,21 +175,31 @@ status_t MediaPhone::prepareAsync_l()
 status_t MediaPhone::prepareAsync()
 {
     LOGV("prepareAsync");
-    Mutex::Autolock _l(mLock);
-    return prepareAsync_l();
+    return OK;
 }
 
 status_t MediaPhone::start()
 {
     LOGV("start");
+	return internal_prepareAsync();
+}
+
+status_t MediaPhone::internal_prepareAsync(){
+    LOGV("internal_prepareAsync");
+    Mutex::Autolock _l(mLock);
+    return prepareAsync_l();
+}
+
+status_t MediaPhone::internal_start(){
+    LOGV("internal_start");
     if (mMediaPhone == NULL) {
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    if (!(mCurrentState & MEDIA_PHONE_PREPARED)) {
+    /*if (!(mCurrentState & MEDIA_PHONE_PREPARED)) {
         LOGE("start called in an invalid state: %d", mCurrentState);
         return INVALID_OPERATION;
-    }
+    }*/
 
     status_t ret = mMediaPhone->start();
     if (OK != ret) {
@@ -178,6 +210,7 @@ status_t MediaPhone::start()
     mCurrentState = MEDIA_PHONE_STARTED;
     mIsRecording = false;
     mIsUpLinkStopped = false;
+	mIsDownLinkStopped = false;
     return ret;
 }
 
@@ -203,7 +236,8 @@ status_t MediaPhone::stop()
         mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
-
+	
+	mPrepareSync = false;
     mCurrentState = MEDIA_PHONE_IDLE;
     return ret;
 }
@@ -222,6 +256,9 @@ MediaPhone::MediaPhone()
     LOGV("constructor");
     sp<IServiceManager> sm = defaultServiceManager();
     sp<IBinder> binder;
+
+    mPrepareSync = false;
+    mPrepareStatus = NO_ERROR;
 
     do {
         binder = sm->getService(String16("media.player"));
@@ -272,6 +309,27 @@ status_t MediaPhone::setListener(const sp<MediaPhoneListener>& listener)
     return NO_ERROR;
 }
 
+status_t MediaPhone::setDecodeType(int type)
+{
+    LOGV("setDecodeType");
+    Mutex::Autolock _l(mLock);
+	
+    if (mCurrentState & MEDIA_PHONE_STARTED) {
+        // Can't change the stream type after prepare
+        LOGE("setDecodeType called in state %d", mCurrentState);
+        return INVALID_OPERATION;
+    }
+	
+	status_t ret = mMediaPhone->setDecodeType(type);
+    if (OK != ret) {
+        LOGV("setDecodeType failed: %d", ret);
+        mCurrentState = MEDIA_PHONE_ERROR;
+        return ret;
+    }
+	
+    return OK;
+}
+
 status_t MediaPhone::setAudioStreamType(int type)
 {
     LOGV("setAudioStreamType");
@@ -299,9 +357,9 @@ status_t MediaPhone::setVolume(float leftVolume, float rightVolume)
     return OK;
 }
 
-status_t MediaPhone::enableRecord(bool isEnable, int fd)
+status_t MediaPhone::enableRecord(bool isEnable, const char *fn)
 {
-    LOGV("enable");
+    LOGV("enable, isEnable: %d, fn: %s", isEnable, fn);
     if (mMediaPhone == NULL) {
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
@@ -310,11 +368,12 @@ status_t MediaPhone::enableRecord(bool isEnable, int fd)
         LOGE("enableRecord called in an invalid state: %d", mCurrentState);
         return INVALID_OPERATION;
     }
-    if (mIsRecording) {
+    if (isEnable && mIsRecording) {
+    	LOGV("during recording, return");
         return OK;
     }
 
-    status_t ret = mMediaPhone->enableRecord(isEnable, fd);
+    status_t ret = mMediaPhone->enableRecord(isEnable, fn);
     if (OK != ret) {
         LOGE("enableRecord failed: %d", ret);
         mCurrentState = MEDIA_PHONE_ERROR;
@@ -333,10 +392,10 @@ status_t MediaPhone::startUpLink()
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+    /*if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
         LOGE("startUpLink called in an invalid state: %d", mCurrentState);
         return INVALID_OPERATION;
-    }
+    }*/
     if (!mIsUpLinkStopped) {
         LOGI("alreading started UpLink");
         return OK;
@@ -348,6 +407,7 @@ status_t MediaPhone::startUpLink()
         mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
+	mIsUpLinkStopped = false;
 
     return ret;
 }
@@ -359,10 +419,10 @@ status_t MediaPhone::stopUpLink()
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+    /*if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
         LOGE("stopUpLink called in an invalid state: %d", mCurrentState);
         return INVALID_OPERATION;
-    }
+    }*/
     if (mIsUpLinkStopped) {
         LOGI("alreading stopped UpLink");
         return OK;
@@ -374,7 +434,84 @@ status_t MediaPhone::stopUpLink()
         mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
+	mIsUpLinkStopped = true;
+    return ret;
+}
 
+status_t MediaPhone::startDownLink()
+{
+    LOGV("startDownLink");
+    if (mMediaPhone == NULL) {
+        LOGE("media phone is not initialized yet");
+        return INVALID_OPERATION;
+    }
+    /*if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+        LOGE("startUpLink called in an invalid state: %d", mCurrentState);
+        return INVALID_OPERATION;
+    }*/
+    if (!mIsDownLinkStopped) {
+        LOGI("alreading started DownLink");
+        return OK;
+    }
+
+    status_t ret = mMediaPhone->startDownLink();
+    if (OK != ret) {
+        LOGE("startDownLink failed: %d", ret);
+        mCurrentState = MEDIA_PHONE_ERROR;
+        return ret;
+    }
+	mIsDownLinkStopped = false;
+
+    return ret;
+}
+
+status_t MediaPhone::stopDownLink()
+{
+    LOGV("stopDownLink");
+    if (mMediaPhone == NULL) {
+        LOGE("media phone is not initialized yet");
+        return INVALID_OPERATION;
+    }
+    /*if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+        LOGE("stopUpLink called in an invalid state: %d", mCurrentState);
+        return INVALID_OPERATION;
+    }*/
+    if (mIsDownLinkStopped) {
+        LOGI("alreading stopped DownLink");
+        return OK;
+    }
+
+    status_t ret = mMediaPhone->stopDownLink();
+    if (OK != ret) {
+        LOGE("stopDownLink failed: %d", ret);
+        mCurrentState = MEDIA_PHONE_ERROR;
+        return ret;
+    }
+	mIsDownLinkStopped = true;
+    return ret;
+}
+
+status_t MediaPhone::setCameraParam(const char *key, int value)
+{
+	LOGV("setCameraParam");
+    if (mMediaPhone == NULL) {
+        LOGE("media phone is not initialized yet");
+        return INVALID_OPERATION;
+    }
+	
+    /*if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+        LOGE("stopUpLink called in an invalid state: %d", mCurrentState);
+        return INVALID_OPERATION;
+    }*/
+    
+
+    status_t ret = mMediaPhone->setCameraParam(key, value);
+    if (OK != ret) {
+        LOGE("setCameraParam failed: %d", ret);
+        mCurrentState = MEDIA_PHONE_ERROR;
+        return ret;
+    }
+	mIsDownLinkStopped = true;
     return ret;
 }
 
@@ -384,8 +521,27 @@ void MediaPhone::notify(int msg, int ext1, int ext2)
     
     switch (msg) {
     case MEDIA_PHONE_EVENT_PREPARED:
-        LOGV("prepared");
+        LOGV("prepared");/*
         mCurrentState = MEDIA_PHONE_PREPARED;
+        if (mPrepareSync) {
+            LOGV("signal application thread");
+            mPrepareSync = false;
+            mPrepareStatus = NO_ERROR;
+            mSignal.signal();
+        }*/
+		internal_start();
+		return;
+        break;
+    case MEDIA_PHONE_EVENT_ERROR:
+        LOGE("error (%d, %d)", ext1, ext2);
+        mCurrentState = MEDIA_PHONE_ERROR;
+        if (mPrepareSync)
+        {
+            LOGV("signal application thread");
+            mPrepareSync = false;
+            mPrepareStatus = ext1;
+            mSignal.signal();
+        }
         break;
     }
 

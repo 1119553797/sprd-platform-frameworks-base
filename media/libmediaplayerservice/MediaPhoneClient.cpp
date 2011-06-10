@@ -34,6 +34,10 @@
 #include <binder/MemoryBase.h>
 #include <utils/String16.h>
 
+#include <camera/ICamera.h>
+#include <camera/Camera.h>
+#include <camera/CameraParameters.h>
+
 #include <media/AudioTrack.h>
 #include <media/mediaphone.h>
 
@@ -124,26 +128,14 @@ status_t MediaPhoneClient::setParameters(const String8 &params)
     return mRecorder->setParameters(params);
 }
 
-status_t MediaPhoneClient::prepareAsync()
+status_t MediaPhoneClient::prepareRecorder()
 {
-    LOGV("prepareAsync");
-    if (mPlayer == NULL || mRecorder == NULL) {
-        LOGE("mediaphone: player or recorder is not initialized");
+    LOGV("prepareRecorder");
+    if (mRecorder == NULL) {
+        LOGE("mediaphone: recorder is not initialized");
         return NO_INIT;
     }
-    if (!mPlayer->hardwareOutput()) {
-        mAudioOutput = new AudioOutput();
-        static_cast<MediaPlayerInterface*>(mPlayer.get())->setAudioSink(mAudioOutput);
-    }
-#if 0 //test code
-    FILE *fi = fopen(mUrlIn, "rb");
-    if (fi == NULL) {
-        LOGE("mediaphone: open %s failed errno=%d", mUrlIn, errno);
-    } else {
-        fclose(fi);
-    }
-#endif
-    CHECK_RT(mPlayer->setDataSource(mUrlIn, NULL));
+	
     char urlOut[MAX_URL_LEN];
     if (!strncasecmp(mUrlOut, "videophone://", 13))
         strcpy(urlOut, mUrlOut + 13);
@@ -155,6 +147,7 @@ status_t MediaPhoneClient::prepareAsync()
     } else {
         LOGI("mediaphone: open %s successed with %d", urlOut, fd);
     }
+	
     CHECK_RT(mRecorder->setCamera(mCamera));
     CHECK_RT(mRecorder->setVideoSource(VIDEO_SOURCE_CAMERA));
     //CHECK_RT(mRecorder->setAudioSource(AUDIO_SOURCE_MIC));
@@ -174,16 +167,60 @@ status_t MediaPhoneClient::prepareAsync()
     //CHECK_RT(mRecorder->setAudioEncoder(AUDIO_ENCODER_AMR_NB));
     CHECK_RT(mRecorder->setOutputFile(fd, 0, 0));
     CHECK_RT(mRecorder->setPreviewSurface(mPreviewSurface));
+    CHECK_RT(mRecorder->prepare());
+    LOGV("prepareRecorder OK");
+    return OK;
+}
 
-#if 0
-    if (mListener != NULL)
-    {
-        mListener->notify(MEDIA_PHONE_EVENT_PREPARED, 0, 0);
+char* getUrlIn(char* dest, const char* url, int decodeType)
+{
+	const char* strH263 = ";3gpp";
+	const char* strMpeg = ";mpeg4";
+	
+	if (dest == NULL)
+		return NULL;
+
+	strcat(dest, url);
+	if (decodeType == 2){
+		strcat(dest, strMpeg);
+	} else {
+		strcat(dest, strH263);
+	}
+	return dest;
+}
+
+status_t MediaPhoneClient::preparePlayer()
+{
+    LOGV("preparePlayer");
+    if (!mPlayer->hardwareOutput()) {
+        mAudioOutput = new AudioOutput();
+        static_cast<MediaPlayerInterface*>(mPlayer.get())->setAudioSink(mAudioOutput);
+    }
+	static char dest[30] = {0};
+	memset(dest, 0, sizeof(dest)/sizeof(dest[0]));
+    CHECK_RT(mPlayer->setDataSource(getUrlIn(dest, mUrlIn, mDecodeType), NULL));
+    CHECK_RT(mPlayer->prepareAsync());
+    return OK;
+}
+
+status_t MediaPhoneClient::prepareAsync()
+{
+    LOGV("prepareAsync");
+    if (mPlayer == NULL || mRecorder == NULL) {
+        LOGE("mediaphone: player or recorder is not initialized");
+        return NO_INIT;
+    }
+#if 0 //test code
+    FILE *fi = fopen(mUrlIn, "rb");
+    if (fi == NULL) {
+        LOGE("mediaphone: open %s failed errno=%d", mUrlIn, errno);
+    } else {
+        fclose(fi);
     }
 #endif
+	CHECK_RT(prepareRecorder());
+	CHECK_RT(preparePlayer());
 
-    CHECK_RT(mRecorder->prepare());
-    CHECK_RT(mPlayer->prepareAsync());
     return OK;
 }
 
@@ -196,8 +233,10 @@ status_t MediaPhoneClient::start()
         return NO_INIT;
     }
 
-    CHECK_RT(mRecorder->start());
+	//CHECK_RT(prepareRecorder());
+	//CHECK_RT(preparePlayer());
     CHECK_RT(mPlayer->start());
+    CHECK_RT(mRecorder->start());
     return OK;
 }
 
@@ -235,6 +274,7 @@ MediaPhoneClient::MediaPhoneClient(const sp<MediaPlayerService>& service, pid_t 
 {
     LOGV("Client constructor");
     mPid = pid;
+	mDecodeType = 1;
     mRecorder = new StagefrightRecorder();
     mPlayer = new StagefrightPlayer();
     mMediaPlayerService = service;
@@ -281,6 +321,14 @@ status_t MediaPhoneClient::setListener(const sp<IMediaPlayerClient>& listener)
     return mRecorder->setListener(listener);
 }
 
+status_t MediaPhoneClient::setDecodeType(int type)
+{
+    LOGV("setDecodeType(%d)", type);
+    Mutex::Autolock l(mLock);
+	mDecodeType = type;
+    return NO_ERROR;
+}
+
 status_t MediaPhoneClient::setAudioStreamType(int type)
 {
     LOGV("setAudioStreamType(%d)", type);
@@ -297,35 +345,43 @@ status_t MediaPhoneClient::setVolume(float leftVolume, float rightVolume)
     return NO_ERROR;
 }
 
-status_t MediaPhoneClient::enableRecord(bool isEnable, int fd)
+status_t MediaPhoneClient::enableRecord(bool isEnable, const char *fn)
 {
+    LOGV("enableRecord(), isEnable: %d, fn: %s", isEnable, fn);
     //todo: set correct parameters
     if (isEnable) {
+		int fd = open(fn, O_WRONLY|O_CREAT|O_TRUNC);
+		if (fd <= 0){
+        	LOGE("create file fail");
+            return NO_INIT;
+		}
         mRecordRecorder = new StagefrightRecorder();
-        //CHECK_RT(mRecordRecorder->setCamera(mCamera));
-        CHECK_RT(mRecordRecorder->setVideoSource(VIDEO_SOURCE_CAMERA));
+        CHECK_RT(mRecordRecorder->setVideoSource(VIDEO_SOURCE_VIDEOPHONE_VIDEO_ES));
         CHECK_RT(mRecordRecorder->setAudioSource(AUDIO_SOURCE_MIC));
-        //CHECK_RT(mRecordRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
-        CHECK_RT(mRecordRecorder->setOutputFormat(OUTPUT_FORMAT_VIDEOPHONE));
-        CHECK_RT(mRecordRecorder->setVideoFrameRate(10));
+        CHECK_RT(mRecordRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
+        CHECK_RT(mRecordRecorder->setVideoFrameRate(15));
         CHECK_RT(mRecordRecorder->setVideoSize(176, 144));
-        CHECK_RT(mRecordRecorder->setParameters(String8("video-param-encoding-bitrate=393216")));
-        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-encoding-bitrate=98304")));
-        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-number-of-channels=1")));
-        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-sampling-rate=8000")));
+        CHECK_RT(mRecordRecorder->setParameters(String8("video-param-encoding-bitrate=48000")));
+        /*CHECK_RT(mRecordRecorder->setParameters(String8("video-param-encoding-bitrate=393216")));
+	        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-encoding-bitrate=98304")));
+	        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-number-of-channels=1")));
+	        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-sampling-rate=8000")));*/
         CHECK_RT(mRecordRecorder->setVideoEncoder(VIDEO_ENCODER_H263));
         CHECK_RT(mRecordRecorder->setAudioEncoder(AUDIO_ENCODER_AMR_NB));
         CHECK_RT(mRecordRecorder->setOutputFile(fd, 0, 0));
-        CHECK_RT(mRecordRecorder->setPreviewSurface(mPreviewSurface));
+        //CHECK_RT(mRecordRecorder->setPreviewSurface(mPreviewSurface));        
+		int iRet = close(fd);
+		LOGV("enableRecord: close file: %d, iRet= %d", fd, iRet);
         CHECK_RT(mRecordRecorder->prepare());
         CHECK_RT(mRecordRecorder->start());
-
+		LOGV("enableRecord(), enable ok");
         return OK;
     } else {
         if (mRecordRecorder != NULL) {
             CHECK_RT(mRecordRecorder->stop());
             delete mRecordRecorder;
             mRecordRecorder = NULL;
+	    	LOGV("enableRecord(), disable ok");
             return OK;
         } else {
             LOGE("mediaphone is not initialized");
@@ -336,16 +392,59 @@ status_t MediaPhoneClient::enableRecord(bool isEnable, int fd)
 
 status_t MediaPhoneClient::startUpLink()
 {
+    LOGV("startUpLink");
+	CHECK_RT(prepareRecorder());
     CHECK_RT(mRecorder->start());
     return OK;
 }
 
 status_t MediaPhoneClient::stopUpLink()
 {
+    LOGV("stopUpLink");
     CHECK_RT(mRecorder->stop());
     return OK;
 }
 
+status_t MediaPhoneClient::startDownLink()
+{
+    LOGV("startDownLink");
+	//CHECK_RT(preparePlayer());
+    //CHECK_RT(mPlayer->start());
+    CHECK_RT(mPlayer->resume());
+    return OK;
+}
+
+status_t MediaPhoneClient::stopDownLink()
+{
+    LOGV("stopDownLink");
+    //CHECK_RT(mPlayer->stop());
+    CHECK_RT(mPlayer->pause());
+    return OK;
+}
+
+status_t MediaPhoneClient::setCameraParam(const char *key, int value)
+{
+    LOGV("setCameraParam, key: %s, value: %d", key, value);
+	
+	if (mCamera == NULL){
+		LOGE("camera is NULL");
+        return NO_INIT;
+	}
+	
+    int64_t token = IPCThreadState::self()->clearCallingIdentity();
+	
+    // Set the actual video recording frame size
+    CameraParameters params(mCamera->getParameters());
+	LOGV("before set, key: %s, value: %s", key, params.get(key));
+    params.set(key, value);
+    String8 s = params.flatten();
+    if (OK != mCamera->setParameters(s)) {
+        LOGE("Could not change settings."
+             " Someone else is using camera");
+    }
+    IPCThreadState::self()->restoreCallingIdentity(token);
+    return OK;
+}
 
 // TODO: Find real cause of Audio/Video delay in PV framework and remove this workaround
 /* static */ int MediaPhoneClient::AudioOutput::mMinBufferCount = 4;

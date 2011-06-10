@@ -29,6 +29,12 @@
 #include <fcntl.h>
 #include <utils/threads.h>
 
+#include <cutils/properties.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h> 
+#include <errno.h>
+
 #include "jni.h"
 #include "JNIHelp.h"
 #include "android_runtime/AndroidRuntime.h"
@@ -256,6 +262,42 @@ android_media_MediaPhone_setComm(JNIEnv *env, jobject thiz, jstring path_in, jst
 }
 
 static void
+android_media_MediaPhone_prepare(JNIEnv *env, jobject thiz)
+{
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    jobject surface = env->GetObjectField(thiz, fields.remote_surface);
+    if (surface != NULL) {
+        const sp<Surface> native_surface = get_surface(env, surface);
+        LOGV("setRemote: surface=%p (id=%d)",
+             native_surface.get(), native_surface->getIdentity());
+        mp->setRemoteSurface(native_surface);
+    }
+    surface = env->GetObjectField(thiz, fields.local_surface);
+    if (surface != NULL) {
+        const sp<Surface> native_surface = get_surface(env, surface);
+
+        // The application may misbehave and
+        // the preview surface becomes unavailable
+        if (native_surface.get() == 0) {
+            LOGE("Application lost the surface");
+            jniThrowException(env, "java/io/IOException", "invalid preview surface");
+            return;
+        }
+
+        LOGI("setLocal: surface=%p (identity=%d)", native_surface.get(), native_surface->getIdentity());
+        if (process_media_phone_call(env, thiz, mp->setLocalSurface(native_surface), "java/lang/RuntimeException", "setPreviewSurface failed.")) {
+            return;
+        }
+    }
+    
+    process_media_phone_call( env, thiz, mp->prepare(), "java/io/IOException", "Prepare Async failed.");
+}
+
+static void
 android_media_MediaPhone_prepareAsync(JNIEnv *env, jobject thiz)
 {
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
@@ -353,6 +395,18 @@ android_media_MediaPhone_getVideoHeight(JNIEnv *env, jobject thiz)
 }
 
 static void
+android_media_MediaPhone_setDecodeType(JNIEnv *env, jobject thiz, jint type)
+{
+    LOGV("setDecodeType: %d", type);
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    process_media_phone_call(env, thiz, mp->setDecodeType(type) , NULL, NULL);
+}
+
+static void
 android_media_MediaPhone_setAudioStreamType(JNIEnv *env, jobject thiz, jint streamtype)
 {
     LOGV("setAudioStreamType: %d", streamtype);
@@ -377,15 +431,27 @@ android_media_MediaPhone_setVolume(JNIEnv *env, jobject thiz, jfloat leftVolume,
 }
 
 static void
-android_media_MediaPhone_enableRecord(JNIEnv *env, jobject thiz, jboolean isEnable, jint fd)
-{
-    LOGV("enableRecord: isEnable %d  fd %d", isEnable, fd);
+android_media_MediaPhone_enableRecord(JNIEnv *env, jobject thiz, jboolean isEnable, jstring fn)
+{		
+    LOGV("enableRecord: isEnable %d ", isEnable);
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
-    if (mp == NULL ) {
+    if ((mp == NULL) || ((isEnable && (fn == NULL)))) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return;
     }
-    process_media_phone_call(env, thiz, mp->enableRecord(isEnable, fd), NULL, NULL);
+
+	if (isEnable){		
+	    const char *temp_fn = env->GetStringUTFChars(fn, NULL);
+	    if (temp_fn == NULL) {  // Out of memory
+	        jniThrowException(env, "java/lang/RuntimeException", "Out of memory");
+	        return;
+	    }
+		LOGV("enableRecord: fn %s", temp_fn);
+    	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, temp_fn), NULL, NULL);
+		env->ReleaseStringUTFChars(fn, temp_fn);
+	} else {
+    	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, NULL), NULL, NULL);
+	}
 }
 
 static void
@@ -412,11 +478,79 @@ android_media_MediaPhone_stopUpLink(JNIEnv *env, jobject thiz)
     process_media_phone_call(env, thiz, mp->stopUpLink(), NULL, NULL);
 }
 
+static void
+android_media_MediaPhone_startDownLink(JNIEnv *env, jobject thiz)
+{
+    LOGV("startDownLink: ");
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    process_media_phone_call(env, thiz, mp->startDownLink(), NULL, NULL);
+}
+
+static void
+android_media_MediaPhone_stopDownLink(JNIEnv *env, jobject thiz)
+{
+    LOGV("stopDownLink: ");
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    process_media_phone_call(env, thiz, mp->stopDownLink(), NULL, NULL);
+}
+
 // FIXME: deprecated
 static jobject
 android_media_MediaPhone_getFrameAt(JNIEnv *env, jobject thiz, jint msec)
 {
     return NULL;
+}
+
+static void
+android_media_MediaPhone_setSubtitutePic(JNIEnv *env, jobject thiz, jstring fn)
+{
+    LOGV("setSubtitutePic()");
+    if (fn == NULL)
+    {
+        LOGE("Invalid or empty params string.  This parameter will be ignored.");
+        return;
+    }
+
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+
+    const char* temp_fn = env->GetStringUTFChars(fn, NULL);
+    if (temp_fn == NULL)
+    {
+        LOGE("Failed to covert jstring to String8.  This parameter will be ignored.");
+        return;
+    }
+	LOGV("setSubtitutePic(), temp_fn: %s", temp_fn);
+
+	property_set("hw.camera.picture", temp_fn);	
+	char propBuf[PROPERTY_VALUE_MAX];  
+    property_get("hw.camera.picture", propBuf, "");	
+	LOGV("property_get: %s.", propBuf);
+
+    env->ReleaseStringUTFChars(fn,temp_fn);
+}
+
+static void
+android_media_MediaPhone_setCameraParam(JNIEnv *env, jobject thiz, jstring key, jint value)
+{
+    LOGV("setCameraParam()");
+	const char *temp_key = env->GetStringUTFChars(key, NULL);
+    if (temp_key == NULL) {  // Out of memory
+        jniThrowException(env, "java/lang/RuntimeException", "Out of memory");
+        return;
+    }
+	LOGV("setCameraParam: key %s, value %d", temp_key, value);
+	
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+	process_media_phone_call(env, thiz, mp->setCameraParam(temp_key, value), NULL, NULL);
+	env->ReleaseStringUTFChars(key, temp_key);
 }
 
 // This function gets some field IDs, which in turn causes class initialization.
@@ -506,19 +640,25 @@ static JNINativeMethod gMethods[] = {
     {"setCamera",            "(Landroid/hardware/Camera;)V",    (void *)android_media_MediaPhone_setCamera},
     {"_setRemoteSurface",    "()V",                             (void *)android_media_MediaPhone_setRemoteSurface},
     {"setParameters",        "(Ljava/lang/String;)V",           (void *)android_media_MediaPhone_setParameters},
-    {"prepareAsync",         "()V",                              (void *)android_media_MediaPhone_prepareAsync},
+    {"prepare",         	 "()V",                             (void *)android_media_MediaPhone_prepare},
+    {"prepareAsync",         "()V",                             (void *)android_media_MediaPhone_prepareAsync},
     {"setComm",              "(Ljava/lang/String;Ljava/lang/String;)V",           (void *)android_media_MediaPhone_setComm},
     {"_start",               "()V",                             (void *)android_media_MediaPhone_start},
     {"_stop",                "()V",                             (void *)android_media_MediaPhone_stop},
     {"getVideoWidth",        "()I",                             (void *)android_media_MediaPhone_getVideoWidth},
     {"getVideoHeight",       "()I",                             (void *)android_media_MediaPhone_getVideoHeight},
     {"_release",             "()V",                             (void *)android_media_MediaPhone_release},
+    {"setDecodeType",   	 "(I)V",                            (void *)android_media_MediaPhone_setDecodeType},
     {"setAudioStreamType",   "(I)V",                            (void *)android_media_MediaPhone_setAudioStreamType},
     {"setVolume",            "(FF)V",                           (void *)android_media_MediaPhone_setVolume},
-    {"enableRecord",         "(ZI)V",                           (void *)android_media_MediaPhone_enableRecord},
+    {"enableRecord",         "(ZLjava/lang/String;)V",          (void *)android_media_MediaPhone_enableRecord},
     {"startUpLink",          "()V",                             (void *)android_media_MediaPhone_startUpLink},
     {"stopUpLink",           "()V",                             (void *)android_media_MediaPhone_stopUpLink},
+    {"startDownLink",        "()V",                           	(void *)android_media_MediaPhone_startDownLink},
+    {"stopDownLink",         "()V",                           	(void *)android_media_MediaPhone_stopDownLink},
     {"getFrameAt",           "(I)Landroid/graphics/Bitmap;",    (void *)android_media_MediaPhone_getFrameAt},
+    {"setSubtitutePic",      "(Ljava/lang/String;)V",         	(void *)android_media_MediaPhone_setSubtitutePic},
+    {"setCameraParam",       "(Ljava/lang/String;I)V",          (void *)android_media_MediaPhone_setCameraParam},
     {"native_init",          "()V",                             (void *)android_media_MediaPhone_native_init},
     {"native_setup",         "(Ljava/lang/Object;)V",           (void *)android_media_MediaPhone_native_setup},
     {"native_finalize",      "()V",                             (void *)android_media_MediaPhone_native_finalize},

@@ -96,20 +96,27 @@ public:
     status_t    setLocalSurface(const sp<Surface>& surface);
     status_t    setListener(const sp<MediaPhoneListener>& listener);
     status_t    setParameters(const String8 &params);
+	status_t	prepare();
     status_t    prepareAsync();
     status_t    start();
     status_t    stop();
     status_t    release();
+    status_t    setDecodeType(int type);
     status_t    setAudioStreamType(int type);
     status_t    setVolume(float leftVolume, float rightVolume);
-    status_t    enableRecord(bool isEnable, int fd);
+    status_t    enableRecord(bool isEnable, const char *fn);
     status_t    startUpLink();
     status_t    stopUpLink();
+    status_t    startDownLink();
+    status_t    stopDownLink();
+	status_t	setCameraParam(const char *key, int value);
     void        notify(int msg, int ext1, int ext2);
 
 private:
     status_t    prepareAsync_l();
     void        doCleanUp();
+    status_t    internal_prepareAsync();
+    status_t    internal_start();	
 
     sp<IMediaPhone>          mMediaPhone;
     sp<MediaPhoneListener>   mListener;
@@ -120,6 +127,10 @@ private:
     bool                     mIsRemoteSurfaceSet;
     bool                     mIsRecording;
     bool                     mIsUpLinkStopped;
+    bool                     mIsDownLinkStopped;
+	bool					 mPrepareSync;
+    status_t                 mPrepareStatus;
+	Condition                mSignal;
     Mutex                    mLock;
     Mutex                    mNotifyLock;
 };

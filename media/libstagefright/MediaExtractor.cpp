@@ -82,8 +82,10 @@ sp<MediaExtractor> MediaExtractor::Create(
         return new MPEG2TSExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_CMMB)) {
         return new CMMBExtractor(source);
-    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE)) {
-        return new VideoPhoneExtractor(source);
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263)) {
+        return new VideoPhoneExtractor(source, 1);
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_MPEG4)) {
+        return new VideoPhoneExtractor(source, 2);
     }
 
     return NULL;
