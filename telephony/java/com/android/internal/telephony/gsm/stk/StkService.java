@@ -118,7 +118,7 @@ public class StkService extends Handler implements AppInterface {
 
     // Service members.
     private static StkService sInstance;
-    private CommandsInterface mCmdIf;
+    private static CommandsInterface mCmdIf;
     private Context mContext;
     private StkCmdMessage mCurrntCmd = null;
     private StkCmdMessage mMenuCmd = null;
@@ -164,19 +164,21 @@ public class StkService extends Handler implements AppInterface {
         mCmdIf.setOnStkProactiveCmd(this, MSG_ID_PROACTIVE_COMMAND, null);
         mCmdIf.setOnStkEvent(this, MSG_ID_EVENT_NOTIFY, null);
         mCmdIf.setOnStkCallSetUp(this, MSG_ID_CALL_SETUP, null);
+        mCmdIf.registerForSIMReady(this, MSG_ID_SIM_LOADED, null);
         //mCmdIf.setOnSimRefresh(this, MSG_ID_REFRESH, null);
 
         mSimRecords = sr;
 
         // Register for SIM ready event.
-        mSimRecords.registerForRecordsLoaded(this, MSG_ID_SIM_LOADED, null);
+        //mSimRecords.registerForRecordsLoaded(this, MSG_ID_SIM_LOADED, null);
 
         //mCmdIf.reportStkServiceIsRunning(null);
         StkLog.d(this, "StkService: is running");
     }
 
     public void dispose() {
-        mSimRecords.unregisterForRecordsLoaded(this);
+        //mSimRecords.unregisterForRecordsLoaded(this);
+        mCmdIf.unregisterForSIMReady(this);
         mCmdIf.unSetOnStkSessionEnd(this);
         mCmdIf.unSetOnStkProactiveCmd(this);
         mCmdIf.unSetOnStkEvent(this);
@@ -231,20 +233,15 @@ public class StkService extends Handler implements AppInterface {
         case MSG_ID_CALL_SETUP:
             // prior event notify command supplied all the information
             // needed for set up call processing.
-            StkLog.d(this, "[stk] MSG_ID_CALL_SETUP");
-            mCmdIf.handleCallSetupRequestFromSim(false, null);
-/*            StkLog.d(this, "[stk] send action_call");
-            String test_num = "1234567";
-            Uri uri = Uri.parse(test_num);
-
-            Intent newIntent = new Intent(Intent.ACTION_CALL, uri);
-            newIntent.putExtra(Intent.EXTRA_PHONE_NUMBER, test_num);
-            //newIntent.setClass(mContext, InCallScreen.class);
-	        newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	        mContext.startActivity(newIntent);
-	        //mContext.sendBroadcast(newIntent);
-            StkLog.d(this, "[stk] send action_call over");
-*/
+            StkLog.d(this, "[stk] MSG_ID_CALL_SETUP rescode = "+rilMsg.mResCode);
+            if (rilMsg.mResCode == ResultCode.OK) {
+                cmdParams = (CommandParams) rilMsg.mData;
+                if (cmdParams != null) {
+                    handleProactiveCommand(cmdParams);
+                } else {
+                    StkLog.d(this, "[stk] cmdParams is NULL");
+                }
+            }
             break;
         }
     }
@@ -480,12 +477,15 @@ public class StkService extends Handler implements AppInterface {
             thread.start();
             sInstance = new StkService(ci, sr, context, fh, sc);
             StkLog.d(sInstance, "NEW sInstance");
-        } else if ((sr != null) && (mSimRecords != sr)) {
+//      } else if ((sr != null) && (mSimRecords != sr)) {
+        } else if ((ci != null) && (mCmdIf != ci)) {
             StkLog.d(sInstance, "Reinitialize the Service with SIMRecords");
-            mSimRecords = sr;
+            //mSimRecords = sr;
 
             // re-Register for SIM ready event.
-            mSimRecords.registerForRecordsLoaded(sInstance, MSG_ID_SIM_LOADED, null);
+            //mSimRecords.registerForRecordsLoaded(sInstance, MSG_ID_SIM_LOADED, null);
+            mCmdIf = ci;
+            mCmdIf.registerForSIMReady(sInstance, MSG_ID_SIM_LOADED, null);
             StkLog.d(sInstance, "sr changed reinitialize and return current sInstance");
         } else {
             StkLog.d(sInstance, "Return current sInstance");
@@ -630,6 +630,7 @@ public class StkService extends Handler implements AppInterface {
             case LAUNCH_BROWSER:
                 break;
             case SET_UP_CALL:
+                StkLog.d(this, "[stk] handleCmdResponse MSG_ID_CALL_SETUP");
                 mCmdIf.handleCallSetupRequestFromSim(resMsg.usersConfirm, null);
                 // No need to send terminal response for SET UP CALL. The user's
                 // confirmation result is send back using a dedicated ril message
