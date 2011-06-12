@@ -176,6 +176,8 @@ private:
     status_t mPrepareResult;
     status_t mStreamDoneStatus;
 
+	bool mIsVideoPhoneStream;
+
     void postVideoEvent_l(int64_t delayUs = -1);
     void postBufferingEvent_l();
     void postStreamDoneEvent_l(status_t status);
