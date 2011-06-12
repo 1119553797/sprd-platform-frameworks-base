@@ -845,7 +845,7 @@ public final class TDPhone extends GSMPhone {
 	public boolean isVTCall() {
 		return (getCallType() == CallType.VIDEO? true:false);
 	}
-	
+		
 	public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete) {
 		if (isValidCommandInterfaceCFReason(commandInterfaceCFReason)) {
 			if (LOCAL_DEBUG) Log.d(LOG_TAG, "requesting call forwarding query.");

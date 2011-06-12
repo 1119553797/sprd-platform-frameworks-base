@@ -61,6 +61,11 @@ public interface SprdVideoPhone {
 
 	public void  controlAudio(boolean bEnable) throws CallStateException;
 
+	public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete);
+
+	public void setCallForwardingOption(int commandInterfaceCFAction, int commandInterfaceCFReason, int serviceClass,
+			String dialingNumber, int timerSeconds, Message onComplete);
+
 	/**
      * Return gam Authenticate
      */
@@ -79,10 +84,6 @@ public interface SprdVideoPhone {
 	public String[] getRegistrationState();
 	
 	public boolean isVTCall();
-	public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete);
-
-	public void setCallForwardingOption(int commandInterfaceCFAction, int commandInterfaceCFReason, int serviceClass,
-			String dialingNumber, int timerSeconds, Message onComplete);
 /*	public void notifyPreciseVideoCallStateChanged();
 	public void notifyNewRingingVideoCall(Connection cn);
 	public void notifyIncomingRingVideoCall();

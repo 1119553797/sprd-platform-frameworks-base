@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "AwesomePlayer"
 #include <utils/Log.h>
 
@@ -242,7 +242,8 @@ AwesomePlayer::AwesomePlayer()
       mExtractorFlags(0),
       mLastVideoBuffer(NULL),
       mVideoBuffer(NULL),
-      mSuspensionState(NULL) {
+      mSuspensionState(NULL),
+      mIsVideoPhoneStream(false){
     CHECK_EQ(mClient.connect(), OK);
 
     DataSource::RegisterDefaultSniffers();
@@ -1307,7 +1308,7 @@ void AwesomePlayer::onVideoEvent() {
 
     int64_t latenessUs = nowUs - timeUs;
 
-    if (mRTPSession != NULL) {
+    if ((mRTPSession != NULL) || mIsVideoPhoneStream) {
         // We'll completely ignore timestamps for gtalk videochat
         // and we'll play incoming video as fast as we get it.
         latenessUs = 0;
@@ -1529,13 +1530,13 @@ status_t AwesomePlayer::finishSetDataSource_l() {
     }
     else if (!strncasecmp(mUri.string(), "videophone://", 13)) 
     {
+    	mIsVideoPhoneStream = true;
     	char buf[30] = {0};
 		strsplit(mUri.string() + 13, ';', buf);
         sp<DataSource> source = new CharDeviceSource(buf);
         sp<MediaExtractor> extractor = NULL;
 		int nLen = strlen(mUri.string());
-		LOGV("string: %s, nLen: %d", mUri.string(), nLen);
-		LOGV("string compare: %s", (mUri.string() + nLen - 5));
+		LOGV("mUri: %s, nLen: %d", mUri.string(), nLen);
 		if (!strncasecmp((mUri.string() + nLen - 5), "mpeg4", 5)){
 			LOGV("mpeg4");
 			extractor =
