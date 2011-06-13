@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.android.internal.telephony.GsmAlphabet;
+import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.gsm.SIMFileHandler;
 
 import java.util.Iterator;
@@ -820,6 +821,8 @@ class CommandParamsFactory extends Handler {
         TextMessage confirmMsg = new TextMessage();
         // Call set up phase message.
         TextMessage callMsg = new TextMessage();
+        // Call address message.
+        TextMessage callAddress = new TextMessage();
         IconId confirmIconId = null;
         IconId callIconId = null;
 
@@ -847,7 +850,26 @@ class CommandParamsFactory extends Handler {
             callMsg.iconSelfExplanatory = callIconId.selfExplanatory;
         }
 
-        mCmdParams = new CallSetupParams(cmdDet, confirmMsg, callMsg);
+        // get call set up address.
+        ctlv = searchForTag(ComprehensionTlvTag.ADDRESS, ctlvs);
+        if (ctlv != null) {
+            byte[] rawValue = ctlv.getRawValue();
+            int valueIndex = ctlv.getValueIndex();
+            int length = ctlv.getLength();
+            StkLog.d(this, "process SetupCall call valueIndex="+valueIndex+" length="+length);
+            if ( length > 0) {
+                //Skip TON/NPI
+            	length -= 1;
+                callAddress.text = IccUtils.bcdToString(rawValue, valueIndex+1, length-1);
+                StkLog.d(this, "process SetupCall call adress ="+callAddress.text);
+            } else {
+                StkLog.d(this, "process SetupCall call adress is NULL");
+            }
+        } else {
+            StkLog.d(this, "process SetupCall call ctlv not found");
+        }
+
+        mCmdParams = new CallSetupParams(cmdDet, confirmMsg, callMsg, callAddress);
 
         if (confirmIconId != null || callIconId != null) {
             mIconLoadState = LOAD_MULTI_ICONS;

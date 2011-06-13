@@ -48,6 +48,7 @@ public class StkCmdMessage implements Parcelable {
     public class CallSettings {
         public TextMessage confirmMsg;
         public TextMessage callMsg;
+        public TextMessage calladdress;
     }
 
     StkCmdMessage(CommandParams cmdParams) {
@@ -84,6 +85,7 @@ public class StkCmdMessage implements Parcelable {
             mCallSettings = new CallSettings();
             mCallSettings.confirmMsg = ((CallSetupParams) cmdParams).confirmMsg;
             mCallSettings.callMsg = ((CallSetupParams) cmdParams).callMsg;
+            mCallSettings.calladdress = ((CallSetupParams) cmdParams).calladdress;
             break;
         }
     }
@@ -106,6 +108,7 @@ public class StkCmdMessage implements Parcelable {
             mCallSettings = new CallSettings();
             mCallSettings.confirmMsg = in.readParcelable(null);
             mCallSettings.callMsg = in.readParcelable(null);
+            mCallSettings.calladdress = in.readParcelable(null);
             break;
         }
     }
@@ -126,6 +129,7 @@ public class StkCmdMessage implements Parcelable {
         case SET_UP_CALL:
             dest.writeParcelable(mCallSettings.confirmMsg, 0);
             dest.writeParcelable(mCallSettings.callMsg, 0);
+            dest.writeParcelable(mCallSettings.calladdress, 0);
             break;
         }
     }

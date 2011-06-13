@@ -45,6 +45,7 @@ enum ComprehensionTlvTag {
   RESULT(0x03),
   DURATION(0x04),
   ALPHA_ID(0x05),
+  ADDRESS(0x06),
   USSD_STRING(0x0a),
   TEXT_STRING(0x0d),
   TONE(0x0e),

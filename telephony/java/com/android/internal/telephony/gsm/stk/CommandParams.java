@@ -98,12 +98,14 @@ class PlayToneParams extends CommandParams {
 class CallSetupParams extends CommandParams {
     TextMessage confirmMsg;
     TextMessage callMsg;
+    TextMessage calladdress;
 
     CallSetupParams(CommandDetails cmdDet, TextMessage confirmMsg,
-            TextMessage callMsg) {
+            TextMessage callMsg, TextMessage calladdress) {
         super(cmdDet);
         this.confirmMsg = confirmMsg;
         this.callMsg = callMsg;
+        this.calladdress = calladdress;
     }
 
     boolean setIcon(Bitmap icon) {
