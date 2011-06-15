@@ -134,7 +134,7 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
 
         mLatencyUs = (int64_t)mAudioSink->latency() * 1000;
         mFrameSize = mAudioSink->frameSize();
-
+        LOGI("mAudioSink->latency() %d ms",mAudioSink->latency());
         mAudioSink->start();
     } else {
         mAudioTrack = new AudioTrack(
@@ -162,9 +162,10 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
 
         mLatencyUs = (int64_t)mAudioTrack->latency() * 1000;
         mFrameSize = mAudioTrack->frameSize();
-
+        LOGI("mAudioTrack->latency() %d ms",mAudioTrack->latency());
         mAudioTrack->start();
     }
+
 
     mStarted = true;
 
