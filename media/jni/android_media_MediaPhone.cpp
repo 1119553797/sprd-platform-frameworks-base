@@ -431,9 +431,9 @@ android_media_MediaPhone_setVolume(JNIEnv *env, jobject thiz, jfloat leftVolume,
 }
 
 static void
-android_media_MediaPhone_enableRecord(JNIEnv *env, jobject thiz, jboolean isEnable, jstring fn)
+android_media_MediaPhone_enableRecord(JNIEnv *env, jobject thiz, jboolean isEnable, int type, jstring fn)
 {		
-    LOGV("enableRecord: isEnable %d ", isEnable);
+    LOGV("enableRecord: isEnable %d, type: %d", isEnable, type);
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if ((mp == NULL) || ((isEnable && (fn == NULL)))) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
@@ -447,10 +447,10 @@ android_media_MediaPhone_enableRecord(JNIEnv *env, jobject thiz, jboolean isEnab
 	        return;
 	    }
 		LOGV("enableRecord: fn %s", temp_fn);
-    	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, temp_fn), NULL, NULL);
+    	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, type, temp_fn), NULL, NULL);
 		env->ReleaseStringUTFChars(fn, temp_fn);
 	} else {
-    	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, NULL), NULL, NULL);
+    	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, type, NULL), NULL, NULL);
 	}
 }
 
@@ -507,34 +507,6 @@ static jobject
 android_media_MediaPhone_getFrameAt(JNIEnv *env, jobject thiz, jint msec)
 {
     return NULL;
-}
-
-static void
-android_media_MediaPhone_setSubtitutePic(JNIEnv *env, jobject thiz, jstring fn)
-{
-    LOGV("setSubtitutePic()");
-    if (fn == NULL)
-    {
-        LOGE("Invalid or empty params string.  This parameter will be ignored.");
-        return;
-    }
-
-    sp<MediaPhone> mp = getMediaPhone(env, thiz);
-
-    const char* temp_fn = env->GetStringUTFChars(fn, NULL);
-    if (temp_fn == NULL)
-    {
-        LOGE("Failed to covert jstring to String8.  This parameter will be ignored.");
-        return;
-    }
-	LOGV("setSubtitutePic(), temp_fn: %s", temp_fn);
-
-	property_set("hw.camera.picture", temp_fn);	
-	char propBuf[PROPERTY_VALUE_MAX];  
-    property_get("hw.camera.picture", propBuf, "");	
-	LOGV("property_get: %s.", propBuf);
-
-    env->ReleaseStringUTFChars(fn,temp_fn);
 }
 
 static void
@@ -651,13 +623,12 @@ static JNINativeMethod gMethods[] = {
     {"setDecodeType",   	 "(I)V",                            (void *)android_media_MediaPhone_setDecodeType},
     {"setAudioStreamType",   "(I)V",                            (void *)android_media_MediaPhone_setAudioStreamType},
     {"setVolume",            "(FF)V",                           (void *)android_media_MediaPhone_setVolume},
-    {"enableRecord",         "(ZLjava/lang/String;)V",          (void *)android_media_MediaPhone_enableRecord},
+    {"enableRecord",         "(ZILjava/lang/String;)V",         (void *)android_media_MediaPhone_enableRecord},
     {"startUpLink",          "()V",                             (void *)android_media_MediaPhone_startUpLink},
     {"stopUpLink",           "()V",                             (void *)android_media_MediaPhone_stopUpLink},
     {"startDownLink",        "()V",                           	(void *)android_media_MediaPhone_startDownLink},
     {"stopDownLink",         "()V",                           	(void *)android_media_MediaPhone_stopDownLink},
     {"getFrameAt",           "(I)Landroid/graphics/Bitmap;",    (void *)android_media_MediaPhone_getFrameAt},
-    {"setSubtitutePic",      "(Ljava/lang/String;)V",         	(void *)android_media_MediaPhone_setSubtitutePic},
     {"setCameraParam",       "(Ljava/lang/String;I)V",          (void *)android_media_MediaPhone_setCameraParam},
     {"native_init",          "()V",                             (void *)android_media_MediaPhone_native_init},
     {"native_setup",         "(Ljava/lang/Object;)V",           (void *)android_media_MediaPhone_native_setup},

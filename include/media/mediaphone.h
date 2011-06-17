@@ -104,7 +104,7 @@ public:
     status_t    setDecodeType(int type);
     status_t    setAudioStreamType(int type);
     status_t    setVolume(float leftVolume, float rightVolume);
-    status_t    enableRecord(bool isEnable, const char *fn);
+    status_t    enableRecord(bool isEnable, int type, const char *fn);
     status_t    startUpLink();
     status_t    stopUpLink();
     status_t    startDownLink();

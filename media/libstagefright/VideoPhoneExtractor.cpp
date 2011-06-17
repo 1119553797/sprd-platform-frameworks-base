@@ -393,11 +393,11 @@ static int get_video_stream_info(video_srteam_t *pStream,int *is_I_vop)
 status_t VideoPhoneSource::read(
         MediaBuffer **out, const ReadOptions *options) 
 {
-	LOGI("[%p]VideoPhoneSource::read before lock",this, m_nNum);	
+	//LOGI("[%p]VideoPhoneSource::read before lock",this, m_nNum);	
     Mutex::Autolock autoLock(m_Lock);
 	
 	//static	int		nNum;
-	LOGI("[%p]VideoPhoneSource::read START nNum = %d",this, m_nNum);	
+	//LOGI("[%p]VideoPhoneSource::read START nNum = %d",this, m_nNum);	
 	
 	uint32_t	nStart = 0;
 	uint32_t	nEnd;
@@ -647,7 +647,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 			{
 				if (!bStartRead)
 				{
-					LOGI("VideoPhoneSource::readRingBuffer START VOP");
+					//LOGI("VideoPhoneSource::readRingBuffer START VOP");
 					nStart		= nEnd;
 					bStartRead 	= true;
 				}
@@ -669,7 +669,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 		}
 		//nNext++;
 	}
-	LOGI("[%p]find frame %d %d", this, nStart, nEnd);
+	//LOGI("[%p]find frame %d %d", this, nStart, nEnd);
 
 #if 0
 	nLen 	= ((nEnd - nStart) + m_nRingBufferSize) % m_nRingBufferSize - 4;

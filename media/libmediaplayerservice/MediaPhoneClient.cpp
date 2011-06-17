@@ -345,31 +345,35 @@ status_t MediaPhoneClient::setVolume(float leftVolume, float rightVolume)
     return NO_ERROR;
 }
 
-status_t MediaPhoneClient::enableRecord(bool isEnable, const char *fn)
+status_t MediaPhoneClient::enableRecord(bool isEnable, int type, const char *fn)
 {
-    LOGV("enableRecord(), isEnable: %d, fn: %s", isEnable, fn);
+    LOGV("enableRecord(), isEnable: %d, type: %d, fn: %s", isEnable, type, fn);
     //todo: set correct parameters
     if (isEnable) {
+		if ((type < 0) || (type > 2)){
+        	LOGE("type is incorrect, type: %d", type);
+            return NO_INIT;
+		}
 		int fd = open(fn, O_WRONLY|O_CREAT|O_TRUNC);
 		if (fd <= 0){
         	LOGE("create file fail");
             return NO_INIT;
 		}
         mRecordRecorder = new StagefrightRecorder();
-        CHECK_RT(mRecordRecorder->setVideoSource(VIDEO_SOURCE_VIDEOPHONE_VIDEO_ES));
-        CHECK_RT(mRecordRecorder->setAudioSource(AUDIO_SOURCE_MIC));
+		if ((type == 0) || (type == 2)){
+	        CHECK_RT(mRecordRecorder->setVideoSource(VIDEO_SOURCE_VIDEOPHONE_VIDEO_ES));
+	        CHECK_RT(mRecordRecorder->setVideoFrameRate(15));
+	        CHECK_RT(mRecordRecorder->setVideoSize(176, 144));
+	        CHECK_RT(mRecordRecorder->setParameters(String8("video-param-encoding-bitrate=48000")));
+	        CHECK_RT(mRecordRecorder->setVideoEncoder(VIDEO_ENCODER_H263));
+		}
+		if ((type == 0) || (type == 1)){
+        	CHECK_RT(mRecordRecorder->setAudioSource(AUDIO_SOURCE_VOICE_CALL));
+	        CHECK_RT(mRecordRecorder->setAudioEncoder(AUDIO_ENCODER_AMR_NB));
+		}
         CHECK_RT(mRecordRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
-        CHECK_RT(mRecordRecorder->setVideoFrameRate(15));
-        CHECK_RT(mRecordRecorder->setVideoSize(176, 144));
-        CHECK_RT(mRecordRecorder->setParameters(String8("video-param-encoding-bitrate=48000")));
-        /*CHECK_RT(mRecordRecorder->setParameters(String8("video-param-encoding-bitrate=393216")));
-	        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-encoding-bitrate=98304")));
-	        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-number-of-channels=1")));
-	        CHECK_RT(mRecordRecorder->setParameters(String8("audio-param-sampling-rate=8000")));*/
-        CHECK_RT(mRecordRecorder->setVideoEncoder(VIDEO_ENCODER_H263));
-        CHECK_RT(mRecordRecorder->setAudioEncoder(AUDIO_ENCODER_AMR_NB));
-        CHECK_RT(mRecordRecorder->setOutputFile(fd, 0, 0));
-        //CHECK_RT(mRecordRecorder->setPreviewSurface(mPreviewSurface));        
+        CHECK_RT(mRecordRecorder->setOutputFile(fd, 0, 0)); 
+		 
 		int iRet = close(fd);
 		LOGV("enableRecord: close file: %d, iRet= %d", fd, iRet);
         CHECK_RT(mRecordRecorder->prepare());

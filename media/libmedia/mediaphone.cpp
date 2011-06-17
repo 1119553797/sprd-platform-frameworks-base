@@ -357,9 +357,9 @@ status_t MediaPhone::setVolume(float leftVolume, float rightVolume)
     return OK;
 }
 
-status_t MediaPhone::enableRecord(bool isEnable, const char *fn)
+status_t MediaPhone::enableRecord(bool isEnable, int type, const char *fn)
 {
-    LOGV("enable, isEnable: %d, fn: %s", isEnable, fn);
+    LOGV("enable, isEnable: %d, type: %d, fn: %s", isEnable, type, fn);
     if (mMediaPhone == NULL) {
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
@@ -373,7 +373,7 @@ status_t MediaPhone::enableRecord(bool isEnable, const char *fn)
         return OK;
     }
 
-    status_t ret = mMediaPhone->enableRecord(isEnable, fn);
+    status_t ret = mMediaPhone->enableRecord(isEnable, type, fn);
     if (OK != ret) {
         LOGE("enableRecord failed: %d", ret);
         mCurrentState = MEDIA_PHONE_ERROR;

@@ -29,6 +29,7 @@ import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.PowerManager;
 import android.os.Registrant;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -384,7 +385,7 @@ public class MediaPhone extends Handler
      * @see android.os.PowerManager
      */
     public void setWakeMode(Context context, int mode) {
-        boolean washeld = false;
+        /*boolean washeld = false;
         if (mWakeLock != null) {
             if (mWakeLock.isHeld()) {
                 washeld = true;
@@ -398,7 +399,7 @@ public class MediaPhone extends Handler
         mWakeLock.setReferenceCounted(false);
         if (washeld) {
             mWakeLock.acquire();
-        }
+        }*/
     }
 
     /**
@@ -419,7 +420,7 @@ public class MediaPhone extends Handler
     }
 
     private void stayAwake(boolean awake) {
-        if (mWakeLock != null) {
+        /*if (mWakeLock != null) {
             if (awake && !mWakeLock.isHeld()) {
                 mWakeLock.acquire();
             } else if (!awake && mWakeLock.isHeld()) {
@@ -427,14 +428,21 @@ public class MediaPhone extends Handler
             }
         }
         mStayAwake = awake;
-        updateSurfaceScreenOn();
+        updateSurfaceScreenOn();*/
     }
 
     private void updateSurfaceScreenOn() {
-        if (mRemoteSurfaceHolder != null) {
+        /*if (mRemoteSurfaceHolder != null) {
             mRemoteSurfaceHolder.setKeepScreenOn(mScreenOnWhilePlaying && mStayAwake);
-        }
+        }*/
     }
+
+	public void setSubtitutePic(String fn){
+		String oldValue = SystemProperties.get("gsm.camera.picture");
+		SystemProperties.set("gsm.camera.picture", fn);
+		String newValue = SystemProperties.get("gsm.camera.picture");
+		Log.d(TAG, "oldValue: " + oldValue + ", newValue" + newValue);		
+	}
 
     /**
      * Returns the width of the video.
@@ -519,7 +527,7 @@ public class MediaPhone extends Handler
      * @param isEnable enable or disable
      * @param fn file name for result video file
      */
-    public native void enableRecord(boolean isEnable, String fn);
+    public native void enableRecord(boolean isEnable, int type, String fn);
 
     /**
      * Start up link data transfer.
@@ -550,8 +558,6 @@ public class MediaPhone extends Handler
     public native void startDownLink();
 	
     public native void stopDownLink();
-
-	public native void setSubtitutePic(String fn);
 
 	public native void setDecodeType(int type);
 
@@ -730,6 +736,10 @@ public class MediaPhone extends Handler
 				} else if (str.equals(CAMERA_CLOSE_STR)){
 					if (mOnCallEventListener != null){
 						mOnCallEventListener.onCallEvent(mMediaPhone, MEDIA_CALLEVENT_CAMERACLOSE, null);
+					}
+				} else if (str.length() > 0){
+					if (mOnCallEventListener != null){
+						mOnCallEventListener.onCallEvent(mMediaPhone, MEDIA_CALLEVENT_STRING, str);
 					}
 				}
                 return;
@@ -986,6 +996,7 @@ public class MediaPhone extends Handler
 	
 	public static final int MEDIA_CALLEVENT_CAMERACLOSE = 100;
 	public static final int MEDIA_CALLEVENT_CAMERAOPEN = 101;
+	public static final int MEDIA_CALLEVENT_STRING = 102;
 	
     /**
      * Interface definition of a callback to be invoked to communicate some
