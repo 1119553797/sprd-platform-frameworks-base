@@ -165,7 +165,10 @@ final class GeolocationService implements LocationListener {
         } catch(SecurityException e) {
             Log.e(TAG, "Caught security exception registering for location updates from system. " +
                 "This should only happen in DumpRenderTree.");
-        }
+        }catch(IllegalArgumentException e) {  //jimcui 2011.06.17
+            Log.e(TAG, "Caught IllegalArgumentException exception registering for location updates from system. " );
+
+	}
     }
 
     /**
