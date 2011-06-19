@@ -106,6 +106,10 @@ AMPEG4ElementaryAssembler::AMPEG4ElementaryAssembler(
       mAccessUnitDamaged(false) {
     mIsGeneric = desc.startsWith("mpeg4-generic/");
 
+    if (!mIsGeneric) {
+        mIsGeneric = desc.startsWith("MPEG4-GENERIC/");
+    }
+
     if (mIsGeneric) {
         AString value;
         CHECK(GetAttribute(params.c_str(), "mode", &value));
