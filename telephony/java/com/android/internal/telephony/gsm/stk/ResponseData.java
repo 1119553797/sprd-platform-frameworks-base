@@ -96,7 +96,7 @@ class GetInkeyInputResponseData extends ResponseData {
         } else if (mInData != null && mInData.length() > 0) {
             try {
                 if (mIsUcs2) {
-                    data = mInData.getBytes("UTF-16");
+                    data = mInData.getBytes("UTF-16BE");
                 } else if (mIsPacked) {
                     int size = mInData.length();
 
