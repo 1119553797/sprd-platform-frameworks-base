@@ -348,6 +348,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             case EVENT_RADIO_AVAILABLE:
                 //this is unnecessary
                 //setPowerStateToDesired();
+                cm.setGprsAttach(null);
                 break;
 
             case EVENT_SIM_READY:
