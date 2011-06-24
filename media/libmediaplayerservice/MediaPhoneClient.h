@@ -101,7 +101,7 @@ public:
     virtual     status_t    setAudioStreamType(int type);
     virtual     status_t    setVolume(float leftVolume, float rightVolume);
     virtual     status_t    release();
-    virtual     status_t    enableRecord(bool isEnable, int type, const char *fn); // type: 0 audio&video; 1 audio only; 2 video only
+    virtual     status_t    enableRecord(bool isEnable, int type, int fd); // type: 0 audio&video; 1 audio only; 2 video only
     virtual     status_t    startUpLink();
     virtual     status_t    stopUpLink();
     virtual     status_t    startDownLink();
@@ -121,6 +121,7 @@ private:
     pid_t			 mPid;
     Mutex			 mLock;
     sp<ICamera>                  mCamera;
+    sp<ISurface>                 mRemoteSurface;
     sp<ISurface>                 mPreviewSurface;
     MediaRecorderBase            *mRecorder;
     MediaRecorderBase            *mRecordRecorder;
