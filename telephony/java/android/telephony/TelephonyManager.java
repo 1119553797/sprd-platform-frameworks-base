@@ -775,6 +775,11 @@ public class TelephonyManager {
      * data activity may be suspended when a voice call arrives. */
     public static final int DATA_SUSPENDED      = 3;
 
+	public static final int MODEM_TYPE_GSM = 0;
+
+	public static final int MODEM_TYPE_TDSCDMA = 1;
+	
+
     /**
      * Returns a constant indicating the current data connection state
      * (cellular).
@@ -889,6 +894,28 @@ public class TelephonyManager {
             return null;
         }
     }
+
+   	/**
+     * {@hide}
+     */
+    public static int getModemType(){
+		String baseBand = SystemProperties.get(TelephonyProperties.PROPERTY_BASEBAND_VERSION, "");
+		String modemValue = null;
+
+		if(baseBand != null && !baseBand.equals("")){
+			Log.d(TAG, "baseband = "+baseBand);
+			modemValue =  baseBand.split("\\|")[1];
+			Log.d(TAG, "modemValue = "+modemValue);
+			if(modemValue.equals("sc8805_sp8805")){
+				return MODEM_TYPE_TDSCDMA;
+			}else if(modemValue.equals("sc6810_sp6810")){
+				return MODEM_TYPE_GSM;
+			}
+		}
+		Log.d(TAG, "can not get the baseband version");
+		return MODEM_TYPE_GSM;
+    }
+
     /**
      * Returns the array，String[0] - sres,String[1] - kc,
      *
@@ -965,3 +992,4 @@ public class TelephonyManager {
     }
 
 }
+
