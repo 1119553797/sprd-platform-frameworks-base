@@ -1815,6 +1815,7 @@ void AwesomePlayer::finishAsyncPrepare_l() {
 
 status_t AwesomePlayer::suspend() {
     LOGV("suspend");
+	VideoPhoneDataDevice::getInstance().stop();
     Mutex::Autolock autoLock(mLock);
 
     if (mSuspensionState != NULL) {

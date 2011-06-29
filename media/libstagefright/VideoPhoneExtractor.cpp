@@ -764,11 +764,13 @@ status_t VideoPhoneDataDevice::startThread()
 
 void VideoPhoneDataDevice::stopThread()
 {
+    LOGI("stopThread");
     mStarted = false;
 }
 
 void VideoPhoneDataDevice::stop()
 {
+    LOGI("stop");
 	stopThread();
 }
 
@@ -824,8 +826,10 @@ status_t VideoPhoneDataDevice::threadFunc()
    		if (m_fAVStream == NULL)
 			break;
 #else
-		if (mDataSource->initCheck() != OK)
+		if (mDataSource->initCheck() != OK){			
+			LOGI("initCheck fail,break");
 			break;
+		}
 #endif
 
 #ifdef DEBUG_FILE
