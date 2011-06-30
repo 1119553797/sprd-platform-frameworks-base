@@ -352,6 +352,11 @@ status_t SharedBufferClient::setDirtyRegion(int buffer, const Region& reg)
     return stack.setDirtyRegion(buffer, reg);
 }
 
+void SharedBufferClient::setPatch(int32_t patch)
+{
+	mSharedStack->patch_scaling = patch;
+}
+
 // ----------------------------------------------------------------------------
 
 SharedBufferServer::SharedBufferServer(SharedClient* sharedClient,
@@ -414,6 +419,11 @@ Region SharedBufferServer::getDirtyRegion(int buffer) const
 {
     SharedBufferStack& stack( *mSharedStack );
     return stack.getDirtyRegion(buffer);
+}
+
+int32_t SharedBufferServer::getPatch() const
+{
+	return mSharedStack->patch_scaling;
 }
 
 SharedBufferStack::Statistics SharedBufferServer::getStats() const

@@ -95,6 +95,8 @@ public:
     status_t setDirtyRegion(int buffer, const Region& reg);
     Region getDirtyRegion(int buffer) const;
 
+    volatile int32_t patch_scaling;
+
     // these attributes are part of the conditions/updates
     volatile int32_t head;      // server's current front buffer
     volatile int32_t available; // number of dequeue-able buffers
@@ -106,7 +108,7 @@ public:
     volatile int32_t reallocMask;
 
     int32_t     identity;       // surface's identity (const)
-    int32_t     reserved32[9];
+    int32_t     reserved32[8];
     Statistics  stats;
     FlatRegion  dirtyRegion[NUM_BUFFER_MAX];    // 12*4=48 bytes
 };
@@ -238,6 +240,7 @@ public:
     status_t queue(int buf);
     bool needNewBuffer(int buffer) const;
     status_t setDirtyRegion(int buffer, const Region& reg);
+    void setPatch(int32_t patch);
     
 private:
     friend struct Condition;
@@ -292,6 +295,7 @@ public:
     int32_t getQueuedCount() const;
     
     Region getDirtyRegion(int buffer) const;
+    int32_t getPatch() const;
 
     SharedBufferStack::Statistics getStats() const;
     

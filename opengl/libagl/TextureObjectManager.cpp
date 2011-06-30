@@ -157,6 +157,16 @@ status_t EGLTextureObject::setImage(android_native_buffer_t* native_buffer)
     sur.stride= native_buffer->stride;
     sur.format= native_buffer->format;
     sur.data  = 0;
+
+    switch(native_buffer->patch_scaling)
+    {
+    case 0x3:
+        sur.height /= 2;
+    case 0x1:
+        sur.width /= 2;
+        sur.stride /= 2;
+    }
+
     setSurface(&sur);
     buffer = native_buffer;
     return NO_ERROR;

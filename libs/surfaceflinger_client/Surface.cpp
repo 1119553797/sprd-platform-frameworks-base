@@ -492,6 +492,8 @@ int Surface::dequeueBuffer(android_native_buffer_t** buffer)
         return bufIdx;
     }
 
+    mSharedBufferClient->setPatch(patch_scaling);
+
     // below we make sure we AT LEAST have the usage flags we want
     const uint32_t usage(getUsage());
     const sp<GraphicBuffer>& backBuffer(mBuffers[bufIdx]);

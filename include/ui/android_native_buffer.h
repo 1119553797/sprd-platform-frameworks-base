@@ -32,10 +32,14 @@ typedef struct android_native_buffer_t
         common.magic = ANDROID_NATIVE_BUFFER_MAGIC;
         common.version = sizeof(android_native_buffer_t);
         memset(common.reserved, 0, sizeof(common.reserved));
+
+        patch_scaling = 0;
     }
 #endif
 
     struct android_native_base_t common;
+
+    uint32_t patch_scaling;
 
     int width;
     int height;
