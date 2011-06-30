@@ -1,3 +1,4 @@
+
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -43,16 +44,21 @@ LOCAL_SRC_FILES:=                         \
         WAVExtractor.cpp                  \
         avc_utils.cpp                     \
         string.cpp			  \
-	CMMBExtractor.cpp		  \
 	VideoPhoneExtractor.cpp		  \
 	VideoPhoneWriter.cpp		  \
         CharDeviceSource.cpp
 
+#CMMBExtractor.cpp		  
+	
 LOCAL_C_INCLUDES:= \
 	$(JNI_H_INCLUDE) \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
         $(TOP)/external/tremolo \
-        $(TOP)/frameworks/base/media/libstagefright/rtsp
+	$(TOP)/external/sprd/mtv/include \
+	$(TOP)/external/sprd/mtv/libcmmb/include \
+	$(TOP)/external/sprd/mtv/libosal/include/KD\
+    $(TOP)/frameworks/base/media/libstagefright/rtsp \
+	$(LO_3RDPARTY_INNO_MTV)/source_header/innofidei/common/cmmb/cmmbservice
 
 LOCAL_SHARED_LIBRARIES := \
         libbinder         \
@@ -63,7 +69,9 @@ LOCAL_SHARED_LIBRARIES := \
         libsonivox        \
         libvorbisidec     \
         libsurfaceflinger_client \
-        libcamera_client 
+        libcamera_client  \
+	libosal		\
+	libcmmb		
 
 LOCAL_STATIC_LIBRARIES := \
         libstagefright_aacdec \
@@ -85,15 +93,12 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_httplive \
         libstagefright_rtsp \
         libstagefright_id3 \
-        libstagefright_g711dec
-	
+        libstagefright_g711dec \
+
 ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
 LOCAL_STATIC_LIBRARIES += \
 	libstagefright_aacdec_sprd \
 	libaacdec_sprd
-else
-LOCAL_LDFLAGS += $(TOP)/vendor/sprd/hsdroid/proprietary/stagefright/libstagefright_aacdec_sprd.a
-LOCAL_LDFLAGS += $(TOP)/vendor/sprd/hsdroid/proprietary/stagefright/libaacdec_sprd.a
 endif
 
 LOCAL_SHARED_LIBRARIES += \
@@ -101,7 +106,8 @@ LOCAL_SHARED_LIBRARIES += \
         libstagefright_enc_common \
         libstagefright_avc_common \
         libstagefright_foundation \
-        libstagefright_color_conversion
+        libstagefright_color_conversion \
+		libcmmbservice
 
 ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
         LOCAL_LDLIBS += -lpthread -ldl
@@ -124,6 +130,12 @@ LOCAL_CFLAGS += -DBUILD_SPRD_AAC
 endif
 
 LOCAL_MODULE:= libstagefright
+
+# LOCAL_LDLIBS += -lcmmbservice
+# TARGET_GLOBAL_LD_DIRS += -L$(LO_3RDPARTY_INNO_MTV)/lib
+# LOCAL_LDFLAGS += -L$(LO_3RDPARTY_INNO_MTV)/lib
+LOCAL_LDFLAGS += $(LO_3RDPARTY_INNO_MTV)/lib/libstagefright_cmmb.a
+LOCAL_LDFLAGS += $(LO_3RDPARTY_INNO_MTV)/lib/libcmmbsystem.a
 
 include $(BUILD_SHARED_LIBRARY)
 

@@ -277,6 +277,7 @@ MediaPhoneClient::MediaPhoneClient(const sp<MediaPlayerService>& service, pid_t 
 	mDecodeType = 1;
     mRecorder = new StagefrightRecorder();
     mPlayer = new StagefrightPlayer();
+	mRecordRecorder = NULL;
     mMediaPlayerService = service;
     mPlayer->setNotifyCallback(this, notify);
 }

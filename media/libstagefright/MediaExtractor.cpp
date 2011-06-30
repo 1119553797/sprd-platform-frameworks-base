@@ -35,6 +35,10 @@
 #include <media/stagefright/MetaData.h>
 #include <utils/String8.h>
 
+//added by innofidei begin
+#include "include/CMMBExtractor.h"
+//added by innofidei end
+
 namespace android {
 
 sp<MetaData> MediaExtractor::getMetaData() {

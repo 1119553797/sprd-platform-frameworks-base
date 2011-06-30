@@ -23,7 +23,6 @@
 #include <sys/prctl.h>
 #include <sys/time.h>
 #include <sys/resource.h>
-
 #include <binder/IPCThreadState.h>
 #include <media/AudioTrack.h>
 #include <media/stagefright/AudioPlayer.h>
@@ -134,7 +133,7 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
 
         mLatencyUs = (int64_t)mAudioSink->latency() * 1000;
         mFrameSize = mAudioSink->frameSize();
-        LOGI("mAudioSink->latency() %d ms mSampleRate %d",mAudioSink->latency(),mSampleRate);
+        LOGI("mAudioSink->latency() %d ms",mAudioSink->latency());
         mAudioSink->start();
     } else {
         mAudioTrack = new AudioTrack(
@@ -162,10 +161,9 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
 
         mLatencyUs = (int64_t)mAudioTrack->latency() * 1000;
         mFrameSize = mAudioTrack->frameSize();
-        LOGI("mAudioTrack->latency() %d ms mSampleRate %d",mAudioTrack->latency(),mSampleRate);
+        LOGI("mAudioTrack->latency() %d ms",mAudioTrack->latency());
         mAudioTrack->start();
     }
-
 
     mStarted = true;
 
@@ -343,7 +341,12 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
             } else {
                 err = mSource->read(&mInputBuffer, &options);
             }
-
+            //innofidei added code begin
+            if(err == ERROR_NOT_CONNECTED)
+            {
+                return 0;
+            }
+            //innofidei added code end
             CHECK((err == OK && mInputBuffer != NULL)
                    || (err != OK && mInputBuffer == NULL));
 

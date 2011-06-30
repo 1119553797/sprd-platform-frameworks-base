@@ -227,7 +227,8 @@ status_t MediaPhone::stop()
     }
     if (mIsRecording) {
         LOGE("should stop recording first");
-        return INVALID_OPERATION;
+        //return INVALID_OPERATION;
+        mMediaPhone->enableRecord(false, 0, 0);
     }
 
     status_t ret = mMediaPhone->stop();
@@ -258,6 +259,7 @@ MediaPhone::MediaPhone()
     sp<IBinder> binder;
 
     mPrepareSync = false;
+	mIsRecording = false;
     mPrepareStatus = NO_ERROR;
 
     do {

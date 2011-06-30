@@ -1099,11 +1099,20 @@ void AwesomePlayer::setVideoSource(sp<MediaSource> source) {
 }
 
 status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
-    mVideoSource = OMXCodec::Create(
-            mClient.interface(), mVideoTrack->getFormat(),
-            false, // createEncoder
-            mVideoTrack,
-            NULL, flags);
+	LOGI("initVideoDecoder, mIsVideoPhoneStream: %d", mIsVideoPhoneStream);
+	if (mIsVideoPhoneStream){
+	    mVideoSource = OMXCodec::Create(
+	            mClient.interface(), mVideoTrack->getFormat(),
+	            false, // createEncoder
+	            mVideoTrack,
+	            NULL, flags, 1, 3);
+	} else {
+	    mVideoSource = OMXCodec::Create(
+	            mClient.interface(), mVideoTrack->getFormat(),
+	            false, // createEncoder
+	            mVideoTrack,
+	            NULL, flags);
+	}
 
     if (mVideoSource != NULL) {
         int64_t durationUs;
@@ -1117,11 +1126,7 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyWidth, &mVideoWidth));
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyHeight, &mVideoHeight));
 		
-		LOGV("initVideoDecoder, before start");
-
         status_t err = mVideoSource->start();
-
-		LOGV("initVideoDecoder, after start");
 
         if (err != OK) {
             mVideoSource.clear();
@@ -1313,11 +1318,11 @@ void AwesomePlayer::onVideoEvent() {
         // and we'll play incoming video as fast as we get it.
         latenessUs = 0;
     }
-  // LOGI("sync (%lld, %lld us,%lld us,%lld us),(%lld us,%lld us,%lld us),(%lld,%lld)",mAudioPlayer->getAudioLatencyUs(),realTimeUs,mediaTimeUs,mTimeSourceDeltaUs,ts->getRealTimeUs(),timeUs,nowUs,realTimeUs-ts->getRealTimeUs(),latenessUs);
 
     if (latenessUs > 40000) {
         // We're more than 40ms late.
         LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
+
         mVideoBuffer->release();
         mVideoBuffer = NULL;
 
@@ -1328,7 +1333,7 @@ void AwesomePlayer::onVideoEvent() {
     if (latenessUs < -10000) {
         // We're more than 10ms early.
 
-       postVideoEvent_l(10000);
+        postVideoEvent_l(10000);
         return;
     }
 
@@ -1351,7 +1356,6 @@ void AwesomePlayer::onVideoEvent() {
     mLastVideoBuffer = mVideoBuffer;
     mVideoBuffer = NULL;
 
-    //usleep(1000);//@jgdu to shedule surface flinger
     postVideoEvent_l();
 }
 
@@ -1694,7 +1698,22 @@ status_t AwesomePlayer::finishSetDataSource_l() {
 
         sp<MediaExtractor> extractor = mRTSPController.get();
         return setDataSource_l(extractor);
-    } else {
+
+    } 
+//added by innofidei begin
+    else if(!strncasecmp("cmmb://", mUri.string(), 7)) {
+			LOGI("uri path is cmmb");
+
+            sp<MediaExtractor> extractor = MediaExtractor::Create(dataSource, "video/cmmb");
+            if (extractor == NULL) {
+            	LOGE("Create CMMBExtractor fail");
+                return UNKNOWN_ERROR;
+            }
+            LOGI("Create CMMBExtractor successful");
+            return setDataSource_l(extractor);
+        }
+//added by innofidei end
+	else {
         dataSource = DataSource::CreateFromURI(mUri.string(), &mUriHeaders);
     }
 
@@ -1732,7 +1751,7 @@ bool AwesomePlayer::ContinuePreparation(void *cookie) {
 }
 
 void AwesomePlayer::onPrepareAsyncEvent() {
-    LOGV("onPrepareAsyncEvent");
+    LOGI("onPrepareAsyncEvent");
     Mutex::Autolock autoLock(mLock);
 
     if (mFlags & PREPARE_CANCELLED) {
