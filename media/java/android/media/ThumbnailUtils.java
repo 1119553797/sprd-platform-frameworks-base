@@ -34,6 +34,8 @@ import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.Thumbnails;
 import android.util.Log;
 
+import android.os.SystemProperties;
+
 import java.io.FileInputStream;
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -201,6 +203,19 @@ public class ThumbnailUtils {
         } else {
             scale = height / (float) source.getHeight();
         }
+
+	// FIXME: Fix CC ticket #249912, sometimes we meet some bad jpeg source files
+	// such as 1 x 3072, this will cause OOM(out of memory) when make thumbnail,
+	// fetch heapsize as the limit here to avoid this situation.
+	// by Spreadtrum
+	int iTargetSize = (int)(scale * source.getWidth() * scale * source.getHeight() * 2);
+	String vmHeapSize = SystemProperties.get("dalvik.vm.heapsize", "16m");
+	int iHeapsize = Integer.parseInt(vmHeapSize.substring(0, vmHeapSize.length()-1));
+	if (iTargetSize > (iHeapsize - 3)* 1024 * 1024) {
+        	Log.e(TAG, "Bitmap size too large, scale: " + scale + ", size: " + iTargetSize);
+		return null;
+	}
+
         Matrix matrix = new Matrix();
         matrix.setScale(scale, scale);
         Bitmap thumbnail = transform(matrix, source, width, height,
