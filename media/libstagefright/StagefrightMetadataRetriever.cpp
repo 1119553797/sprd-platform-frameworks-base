@@ -363,6 +363,11 @@ void StagefrightMetadataRetriever::parseMetaData() {
         const char *value;
         if (meta->findCString(kMap[i].from, &value)) {
             mMetaData.add(kMap[i].to, String8(value));
+            //CR 247130 Modify start
+            if(kMap[i].to == METADATA_KEY_MIMETYPE) {
+                mMetaData.add(METADATA_KEY_VIDEO_FORMAT, String8(value));
+            }
+            //CR 247130 Modify end
         }
     }
 
