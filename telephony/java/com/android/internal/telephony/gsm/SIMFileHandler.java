@@ -73,6 +73,7 @@ public class SIMFileHandler extends IccFileHandler implements IccConstants {
         case EF_SPDI:
         case EF_SST:
         case EF_CFIS:
+        case EF_ECC:
             return MF_SIM + DF_GSM;
 
         case EF_MAILBOX_CPHS:

@@ -140,6 +140,7 @@ public final class SIMRecords extends IccRecords {
     private static final int EVENT_SET_MSISDN_DONE = 30;
     private static final int EVENT_SIM_REFRESH = 31;
     private static final int EVENT_GET_CFIS_DONE = 32;
+    private static final int EVENT_GET_ECC_DONE = 33;
 
     // ***** Constructor
 
@@ -993,6 +994,20 @@ public final class SIMRecords extends IccRecords {
 
                 ((GSMPhone) phone).notifyCallForwardingIndicator();
                 break;
+            case EVENT_GET_ECC_DONE:
+                isRecordLoadResponse = true;
+
+                ar = (AsyncResult)msg.obj;
+
+                if (ar.exception != null) {
+                    break;
+                }
+
+                byte[] eccList = (byte[])ar.result;
+                System.setProperty("ril.sim.ecclist", IccUtils.bytesToHexString(eccList));
+
+                if (DBG) log("ECC List: " + IccUtils.bytesToHexString(eccList));
+                break;
 
         }}catch (RuntimeException exc) {
             // I don't want these exceptions to be fatal
@@ -1245,6 +1260,9 @@ public final class SIMRecords extends IccRecords {
         recordsToLoad++;
 
         iccFh.loadEFTransparent(EF_INFO_CPHS, obtainMessage(EVENT_GET_INFO_CPHS_DONE));
+        recordsToLoad++;
+
+        iccFh.loadEFTransparent(EF_ECC, obtainMessage(EVENT_GET_ECC_DONE));
         recordsToLoad++;
 
         // XXX should seek instead of examining them all
