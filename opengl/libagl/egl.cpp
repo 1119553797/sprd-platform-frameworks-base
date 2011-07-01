@@ -352,6 +352,8 @@ private:
     Rect oldDirtyRegion;
 };
 
+uint32_t patch_scaling = 0;
+
 egl_window_surface_v2_t::egl_window_surface_v2_t(EGLDisplay dpy,
         EGLConfig config,
         int32_t depthFormat,
@@ -374,6 +376,34 @@ egl_window_surface_v2_t::egl_window_surface_v2_t(EGLDisplay dpy,
     nativeWindow->common.incRef(&nativeWindow->common);
     nativeWindow->query(nativeWindow, NATIVE_WINDOW_WIDTH, &width);
     nativeWindow->query(nativeWindow, NATIVE_WINDOW_HEIGHT, &height);
+
+    patch_scaling =
+    nativeWindow->patch_scaling = 0;
+
+    char path[20];
+    char buffer[256];
+    sprintf(path, "/proc/%d/maps", getpid());
+    FILE* fp = fopen(path, "r");
+    if(fp)
+    {
+        while(!feof(fp))
+        {
+            fgets(buffer, 256, fp);
+            if(strstr(buffer, "birds"))
+            {
+                patch_scaling =
+                nativeWindow->patch_scaling = 0x1;
+                break;
+            }
+            else if(strstr(buffer, "ninja"))
+            {
+                patch_scaling =
+                nativeWindow->patch_scaling = 0x3;
+                break;
+            }
+        }
+        fclose(fp);
+    }
 }
 
 egl_window_surface_v2_t::~egl_window_surface_v2_t() {
@@ -654,6 +684,16 @@ EGLBoolean egl_window_surface_v2_t::bindDrawSurface(ogles_context_t* gl)
     buffer.stride  = this->buffer->stride;
     buffer.data    = (GGLubyte*)bits;
     buffer.format  = this->buffer->format;
+
+    switch(nativeWindow->patch_scaling)
+    {
+    case 0x3:
+        buffer.height /= 2;
+    case 0x1:
+        buffer.width  /= 2;
+        buffer.stride /= 2;
+    }
+
     gl->rasterizer.procs.colorBuffer(gl, &buffer);
     if (depth.data != gl->rasterizer.state.buffers.depth.data)
         gl->rasterizer.procs.depthBuffer(gl, &depth);
@@ -681,6 +721,16 @@ EGLBoolean egl_window_surface_v2_t::bindReadSurface(ogles_context_t* gl)
     buffer.stride  = this->buffer->stride;
     buffer.data    = (GGLubyte*)bits; // FIXME: hopefully is is LOCKED!!!
     buffer.format  = this->buffer->format;
+
+    switch(nativeWindow->patch_scaling)
+    {
+    case 0x3:
+        buffer.height /= 2;
+    case 0x1:
+        buffer.width  /= 2;
+        buffer.stride /= 2;
+    }
+
     gl->rasterizer.procs.readBuffer(gl, &buffer);
     return EGL_TRUE;
 }

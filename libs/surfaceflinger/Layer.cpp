@@ -169,6 +169,7 @@ void Layer::reloadTexture(const Region& dirty)
     if (mFlags & DisplayHardware::DIRECT_TEXTURE) {
         if (buffer->usage & GraphicBuffer::USAGE_HW_TEXTURE) {
             if (mTextures[index].dirty) {
+                buffer->patch_scaling = lcblk->getPatch();
                 if (initializeEglImage(buffer, &mTextures[index]) != NO_ERROR) {
                     // not sure what we can do here...
                     mFlags &= ~DisplayHardware::DIRECT_TEXTURE;

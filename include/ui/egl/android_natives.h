@@ -88,10 +88,14 @@ typedef struct android_native_window_t
         common.magic = ANDROID_NATIVE_WINDOW_MAGIC;
         common.version = sizeof(android_native_window_t);
         memset(common.reserved, 0, sizeof(common.reserved));
+
+        patch_scaling = 0;
     }
 #endif
     
     struct android_native_base_t common;
+
+    uint32_t patch_scaling;
 
     /* flags describing some attributes of this surface or its updater */
     const uint32_t flags;

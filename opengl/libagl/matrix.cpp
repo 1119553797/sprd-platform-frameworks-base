@@ -677,12 +677,22 @@ void ogles_scissor(ogles_context_t* c,
     c->rasterizer.procs.scissor(c, x, y, w, h);
 }
 
+extern uint32_t patch_scaling;
+
 void ogles_viewport(ogles_context_t* c,
         GLint x, GLint y, GLsizei w, GLsizei h)
 {
     if ((w|h)<0) {
         ogles_error(c, GL_INVALID_VALUE);
         return;
+    }
+
+    switch(patch_scaling)
+    {
+    case 0x3:
+        h /= 2;
+    case 0x1:
+        w /= 2;
     }
 
     c->viewport.x = x;
