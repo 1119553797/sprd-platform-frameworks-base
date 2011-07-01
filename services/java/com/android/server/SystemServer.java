@@ -503,9 +503,36 @@ class ServerThread extends Thread {
             }
         });
 
+	(new Thread(new WakelockMonitor(power))).start();
+
         Looper.loop();
         Slog.d(TAG, "System ServerThread is exiting!");
     }
+
+	/* Thread for monitoring wakelock. 
+	     wang liwei.
+	     2011-06-30.
+	*/
+	private static class WakelockMonitor implements Runnable {
+		PowerManagerService mPmService;
+		private static final int WAKELOCK_MONITOR_INTERVAL = 30 * 1000;
+		public WakelockMonitor(PowerManagerService pmService) {
+			this.mPmService = pmService;
+		}
+		public void run() {
+			while(true) {
+				System.out.printf("## [%d] ##: Wakelock Monitor[%d]:%n", SystemClock.uptimeMillis(), android.os.Process.myTid());
+				mPmService.dumpWakeLock();
+				try {
+					Thread.sleep(WAKELOCK_MONITOR_INTERVAL);
+				} catch(InterruptedException e) {
+
+				}
+			}
+		}
+	}
+
+	
 }
 
 class DemoThread extends Thread

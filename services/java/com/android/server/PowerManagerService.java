@@ -1022,6 +1022,97 @@ class PowerManagerService extends IPowerManager.Stub
         }
     }
 
+    public void dumpWakeLock() {
+		System.out.printf("%n==================================================%n");
+		System.out.printf("%n==================================================%n");
+        long now = SystemClock.uptimeMillis();
+
+        System.out.println("Power Manager State:");
+/*
+        System.out.println("  mIsPowered=" + mIsPowered
+                + " mPowerState=" + mPowerState
+                + " mScreenOffTime=" + (SystemClock.elapsedRealtime()-mScreenOffTime)
+                + " ms");
+         System.out.println("  mPartialCount=" + mPartialCount);
+         System.out.println("  mWakeLockState=" + dumpPowerState(mWakeLockState));
+         System.out.println("  mUserState=" + dumpPowerState(mUserState));
+         System.out.println("  mPowerState=" + dumpPowerState(mPowerState));
+         System.out.println("  mLocks.gather=" + dumpPowerState(mLocks.gatherState()));
+         System.out.println("  mNextTimeout=" + mNextTimeout + " now=" + now
+                + " " + ((mNextTimeout-now)/1000) + "s from now");
+         System.out.println("  mDimScreen=" + mDimScreen
+                + " mStayOnConditions=" + mStayOnConditions);
+         System.out.println("  mScreenOffReason=" + mScreenOffReason
+                + " mUserState=" + mUserState);
+         System.out.println("  mBroadcastQueue={" + mBroadcastQueue[0] + ',' + mBroadcastQueue[1]
+                + ',' + mBroadcastQueue[2] + "}");
+         System.out.println("  mBroadcastWhy={" + mBroadcastWhy[0] + ',' + mBroadcastWhy[1]
+                + ',' + mBroadcastWhy[2] + "}");
+         System.out.println("  mPokey=" + mPokey + " mPokeAwakeonSet=" + mPokeAwakeOnSet);
+         System.out.println("  mKeyboardVisible=" + mKeyboardVisible
+                + " mUserActivityAllowed=" + mUserActivityAllowed);
+         System.out.println("  mKeylightDelay=" + mKeylightDelay + " mDimDelay=" + mDimDelay
+                + " mScreenOffDelay=" + mScreenOffDelay);
+         System.out.println("  mPreventScreenOn=" + mPreventScreenOn
+                + "  mScreenBrightnessOverride=" + mScreenBrightnessOverride);
+         System.out.println("  mTotalDelaySetting=" + mTotalDelaySetting);
+         System.out.println("  mLastScreenOnTime=" + mLastScreenOnTime);
+         System.out.println("  mBroadcastWakeLock=" + mBroadcastWakeLock);
+         System.out.println("  mStayOnWhilePluggedInScreenDimLock=" + mStayOnWhilePluggedInScreenDimLock);
+         System.out.println("  mStayOnWhilePluggedInPartialLock=" + mStayOnWhilePluggedInPartialLock);
+         System.out.println("  mPreventScreenOnPartialLock=" + mPreventScreenOnPartialLock);
+         System.out.println("  mProximityPartialLock=" + mProximityPartialLock);
+         System.out.println("  mProximityWakeLockCount=" + mProximityWakeLockCount);
+         System.out.println("  mProximitySensorEnabled=" + mProximitySensorEnabled);
+         System.out.println("  mProximitySensorActive=" + mProximitySensorActive);
+         System.out.println("  mProximityPendingValue=" + mProximityPendingValue);
+         System.out.println("  mLastProximityEventTime=" + mLastProximityEventTime);
+         System.out.println("  mLightSensorEnabled=" + mLightSensorEnabled);
+         System.out.println("  mLightSensorValue=" + mLightSensorValue);
+         System.out.println("  mLightSensorPendingValue=" + mLightSensorPendingValue);
+         System.out.println("  mUseSoftwareAutoBrightness=" + mUseSoftwareAutoBrightness);
+         System.out.println("  mAutoBrightessEnabled=" + mAutoBrightessEnabled);
+*/
+        int N = mLocks.size();
+         System.out.println();
+         System.out.println("mLocks.size=" + N + ":");
+        for (int i=0; i<N; i++) {
+            WakeLock wl = mLocks.get(i);
+            String type = lockType(wl.flags & LOCK_MASK);
+            String acquireCausesWakeup = "";
+            if ((wl.flags & PowerManager.ACQUIRE_CAUSES_WAKEUP) != 0) {
+                acquireCausesWakeup = "ACQUIRE_CAUSES_WAKEUP ";
+            }
+            String activated = "";
+            if (wl.activated) {
+               activated = " activated";
+            }
+             System.out.println("  " + type + " '" + wl.tag + "'" + acquireCausesWakeup
+                    + activated + " (minState=" + wl.minState + ")");
+        }
+        
+         System.out.println();
+         System.out.println("mPokeLocks.size=" + mPokeLocks.size() + ":");
+        for (PokeLock p: mPokeLocks.values()) {
+             System.out.println("    poke lock '" + p.tag + "':"
+                    + ((p.pokey & POKE_LOCK_IGNORE_CHEEK_EVENTS) != 0
+                            ? " POKE_LOCK_IGNORE_CHEEK_EVENTS" : "")
+                    + ((p.pokey & POKE_LOCK_IGNORE_TOUCH_AND_CHEEK_EVENTS) != 0
+                            ? " POKE_LOCK_IGNORE_TOUCH_AND_CHEEK_EVENTS" : "")
+                    + ((p.pokey & POKE_LOCK_SHORT_TIMEOUT) != 0
+                            ? " POKE_LOCK_SHORT_TIMEOUT" : "")
+                    + ((p.pokey & POKE_LOCK_MEDIUM_TIMEOUT) != 0
+                            ? " POKE_LOCK_MEDIUM_TIMEOUT" : ""));
+        }
+
+        System.out.println();
+		System.out.printf("%n==================================================%n");
+		System.out.printf("%n==================================================%n");
+    }
+
+
+
+
     private void setTimeoutLocked(long now, int nextState)
     {
         if (mBootCompleted) {
