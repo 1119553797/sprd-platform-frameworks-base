@@ -16,6 +16,9 @@
 
 package android.media;
 
+import java.io.FileOutputStream;
+import java.io.FileDescriptor;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -69,7 +72,6 @@ public class MediaPhone extends Handler
     private int mNativeContext; // accessed by native methods
     private int mListenerContext; // accessed by native methods
     private Surface mRemoteSurface; // accessed by native methods
-    private SurfaceHolder  mRemoteSurfaceHolder;
     private Surface mLocalSurface;
     private EventHandler mEventHandler;
     private PowerManager.WakeLock mWakeLock = null;
@@ -118,6 +120,8 @@ public class MediaPhone extends Handler
      * Update the MediaPhone ISurface. Call after updating mRemoteSurface.
      */
     private native void _setRemoteSurface();
+	
+    private native void _setLocalSurface();
 
     /**
      * Sets the SurfaceHolder to use for displaying the video portion of the media.
@@ -126,15 +130,9 @@ public class MediaPhone extends Handler
      *
      * @param sh the SurfaceHolder to use for video display
      */
-    public void setRemoteDisplay(SurfaceHolder sh) {
-        mRemoteSurfaceHolder = sh;
-        if (sh != null) {
-            mRemoteSurface = sh.getSurface();
-        } else {
-            mRemoteSurface = null;
-        }
+    public void setRemoteDisplay(Surface sv) {
+        mRemoteSurface = sv;
         _setRemoteSurface();
-        updateSurfaceScreenOn();
     }
 
     /**
@@ -146,6 +144,7 @@ public class MediaPhone extends Handler
      */
     public void setLocalDisplay(Surface sv) {
         mLocalSurface = sv;
+		_setLocalSurface();
     }
 
     /**
@@ -183,20 +182,17 @@ public class MediaPhone extends Handler
     /**
 	 * {@hide}
 	 */
-    public static MediaPhone create(CommandsInterface ril, String url, SurfaceHolder remoteHolder, Surface localSurface) {
+    public static MediaPhone create(CommandsInterface ril, String url, Surface remoteSurface, Surface localSurface) {
 
         try {
             MediaPhone mp = new MediaPhone(ril);
             mp.setComm(url, url);
-            //mp.setComm("/data/in.3gp", "/data/out.3gp");
-            //mp.setComm("videophone:///data/vpin", "videophone:///data/vpout");
-            if (remoteHolder != null) {
-                mp.setRemoteDisplay(remoteHolder);
+            if (remoteSurface != null) {
+                mp.setRemoteDisplay(remoteSurface);
             }
             if (localSurface != null) {
             	mp.setLocalDisplay(localSurface);
             }
-            //mp.mCm = ril;
             mp.mCm.setOnVPData(mp.mEventHandler, MEDIA_UNSOL_DATA, null);
             mp.mCm.setOnVPCodec(mp.mEventHandler, MEDIA_UNSOL_CODEC, null);
             mp.mCm.setOnVPString(mp.mEventHandler, MEDIA_UNSOL_STR, null);
@@ -402,23 +398,6 @@ public class MediaPhone extends Handler
         }*/
     }
 
-    /**
-     * Control whether we should use the attached SurfaceHolder to keep the
-     * screen on while video playback is occurring.  This is the preferred
-     * method over {@link #setWakeMode} where possible, since it doesn't
-     * require that the application have permission for low-level wake lock
-     * access.
-     *
-     * @param screenOn Supply true to keep the screen on, false to allow it
-     * to turn off.
-     */
-    public void setScreenOnWhilePlaying(boolean screenOn) {
-        if (mScreenOnWhilePlaying != screenOn) {
-            mScreenOnWhilePlaying = screenOn;
-            updateSurfaceScreenOn();
-        }
-    }
-
     private void stayAwake(boolean awake) {
         /*if (mWakeLock != null) {
             if (awake && !mWakeLock.isHeld()) {
@@ -427,14 +406,7 @@ public class MediaPhone extends Handler
                 mWakeLock.release();
             }
         }
-        mStayAwake = awake;
-        updateSurfaceScreenOn();*/
-    }
-
-    private void updateSurfaceScreenOn() {
-        /*if (mRemoteSurfaceHolder != null) {
-            mRemoteSurfaceHolder.setKeepScreenOn(mScreenOnWhilePlaying && mStayAwake);
-        }*/
+        mStayAwake = awake;*/
     }
 
 	public void setSubtitutePic(String fn){
@@ -474,7 +446,6 @@ public class MediaPhone extends Handler
     public void release() {
         Log.d(TAG, "release");
         stayAwake(false);
-        updateSurfaceScreenOn();
         mOnErrorListener = null;
         mOnMediaInfoListener = null;
 		mOnCallEventListener = null;
@@ -487,6 +458,24 @@ public class MediaPhone extends Handler
         mCm.unSetOnVPMMRing(mEventHandler);
         mCm.unSetOnVPRecordVideo(mEventHandler);
         _release();
+    }
+
+    public void enableRecord(boolean isEnable, int type, String fn) throws IllegalStateException, IOException
+	{
+        Log.d(TAG, "enableRecord(" + isEnable + ", " + type + ", " + fn);
+		if (isEnable){
+			if (fn != null) {
+	            FileOutputStream fos = new FileOutputStream(fn);
+	            try {
+					_enableRecord(isEnable, type, fos.getFD());
+	            } finally {
+	            	Log.e(TAG, "enableRecord fail");
+	                fos.close();
+	            }
+	        }
+		} else {
+			_enableRecord(isEnable, type, null);
+		}
     }
 
     private native void _release();
@@ -527,7 +516,7 @@ public class MediaPhone extends Handler
      * @param isEnable enable or disable
      * @param fn file name for result video file
      */
-    public native void enableRecord(boolean isEnable, int type, String fn);
+    private native void _enableRecord(boolean isEnable, int type, FileDescriptor fd);
 
     /**
      * Start up link data transfer.

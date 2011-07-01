@@ -192,6 +192,17 @@ static void setRemoteSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz
     }
 }
 
+static void setLocalSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz)
+{
+    jobject surface = env->GetObjectField(thiz, fields.local_surface);
+    if (surface != NULL) {
+        const sp<Surface> native_surface = get_surface(env, surface);
+        LOGV("setLocalSurface: surface=%p (id=%d)",
+             native_surface.get(), native_surface->ID());
+        mp->setLocalSurface(native_surface);
+    }
+}
+
 static void
 android_media_MediaPhone_setRemoteSurface(JNIEnv *env, jobject thiz)
 {
@@ -201,6 +212,17 @@ android_media_MediaPhone_setRemoteSurface(JNIEnv *env, jobject thiz)
         return;
     }
     setRemoteSurface(mp, env, thiz);
+}
+
+static void
+android_media_MediaPhone_setLocalSurface(JNIEnv *env, jobject thiz)
+{
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    setLocalSurface(mp, env, thiz);
 }
 
 
@@ -431,26 +453,20 @@ android_media_MediaPhone_setVolume(JNIEnv *env, jobject thiz, jfloat leftVolume,
 }
 
 static void
-android_media_MediaPhone_enableRecord(JNIEnv *env, jobject thiz, jboolean isEnable, int type, jstring fn)
+android_media_MediaPhone_enableRecord(JNIEnv *env, jobject thiz, jboolean isEnable, int type, jobject fileDescriptor)
 {		
     LOGV("enableRecord: isEnable %d, type: %d", isEnable, type);
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
-    if ((mp == NULL) || ((isEnable && (fn == NULL)))) {
+    if ((mp == NULL) || ((isEnable && (fileDescriptor == NULL)))) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return;
     }
 
 	if (isEnable){		
-	    const char *temp_fn = env->GetStringUTFChars(fn, NULL);
-	    if (temp_fn == NULL) {  // Out of memory
-	        jniThrowException(env, "java/lang/RuntimeException", "Out of memory");
-	        return;
-	    }
-		LOGV("enableRecord: fn %s", temp_fn);
-    	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, type, temp_fn), NULL, NULL);
-		env->ReleaseStringUTFChars(fn, temp_fn);
+    	int fd = getParcelFileDescriptorFD(env, fileDescriptor);
+    	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, type, fd), NULL, NULL);
 	} else {
-    	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, type, NULL), NULL, NULL);
+    	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, type, 0), NULL, NULL);
 	}
 }
 
@@ -611,6 +627,7 @@ android_media_MediaPhone_native_finalize(JNIEnv *env, jobject thiz)
 static JNINativeMethod gMethods[] = {
     {"setCamera",            "(Landroid/hardware/Camera;)V",    (void *)android_media_MediaPhone_setCamera},
     {"_setRemoteSurface",    "()V",                             (void *)android_media_MediaPhone_setRemoteSurface},
+    {"_setLocalSurface",    "()V",                              (void *)android_media_MediaPhone_setLocalSurface},
     {"setParameters",        "(Ljava/lang/String;)V",           (void *)android_media_MediaPhone_setParameters},
     {"prepare",         	 "()V",                             (void *)android_media_MediaPhone_prepare},
     {"prepareAsync",         "()V",                             (void *)android_media_MediaPhone_prepareAsync},
@@ -623,7 +640,7 @@ static JNINativeMethod gMethods[] = {
     {"setDecodeType",   	 "(I)V",                            (void *)android_media_MediaPhone_setDecodeType},
     {"setAudioStreamType",   "(I)V",                            (void *)android_media_MediaPhone_setAudioStreamType},
     {"setVolume",            "(FF)V",                           (void *)android_media_MediaPhone_setVolume},
-    {"enableRecord",         "(ZILjava/lang/String;)V",         (void *)android_media_MediaPhone_enableRecord},
+    {"_enableRecord",        "(ZILjava/io/FileDescriptor;)V",   (void *)android_media_MediaPhone_enableRecord},
     {"startUpLink",          "()V",                             (void *)android_media_MediaPhone_startUpLink},
     {"stopUpLink",           "()V",                             (void *)android_media_MediaPhone_stopUpLink},
     {"startDownLink",        "()V",                           	(void *)android_media_MediaPhone_startDownLink},

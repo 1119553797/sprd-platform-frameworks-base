@@ -1318,6 +1318,18 @@ public class PhoneNumberUtils
             numbers = SystemProperties.get("ro.ril.ecclist");
         }
 
+        // retrieve the list of ecc in sim card
+        String eccList = SystemProperties.get("ril.sim.ecclist");
+        StringBuilder builder = new StringBuilder("000,08,110,999,118,119");
+        if (!TextUtils.isEmpty(eccList)) {
+            builder.append(",").append(eccList);
+        }
+        if (!TextUtils.isEmpty(numbers)) {
+            builder.append(",").append(numbers);
+        }
+        numbers = builder.toString();
+        log("emergency numbers: " + numbers);
+
         if (!TextUtils.isEmpty(numbers)) {
             // searches through the comma-separated list for a match,
             // return true if one is found.

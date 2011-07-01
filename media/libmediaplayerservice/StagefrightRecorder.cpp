@@ -208,6 +208,13 @@ status_t StagefrightRecorder::setCamera(const sp<ICamera> &camera) {
 status_t StagefrightRecorder::setPreviewSurface(const sp<ISurface> &surface) {
     LOGV("setPreviewSurface: %p", surface.get());
     mPreviewSurface = surface;
+    int64_t token = IPCThreadState::self()->clearCallingIdentity();
+    if ((mCamera != 0) && (mPreviewSurface != 0)) {
+		if (mCamera->previewEnabled()){
+			CHECK_EQ(OK, mCamera->setPreviewDisplay(mPreviewSurface));
+		}
+    }
+    IPCThreadState::self()->restoreCallingIdentity(token);
 
     return OK;
 }

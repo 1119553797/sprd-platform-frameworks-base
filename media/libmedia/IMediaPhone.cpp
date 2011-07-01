@@ -184,15 +184,15 @@ public:
         return reply.readInt32();
     }
 
-    status_t enableRecord(bool isEnable, int type, const char *fn)
+    status_t enableRecord(bool isEnable, int type, int fd)
     {
-        LOGV("enableRecord(%d, %s)", isEnable, fn);
+        LOGV("enableRecord(%d, %d)", isEnable, fd);
         Parcel data, reply;
         data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
         data.writeInt32(isEnable?1:0);
         data.writeInt32(type);
-		if (fn != NULL){
-        	data.writeCString(fn);
+		if (isEnable && (fd > 0)){
+        	data.writeFileDescriptor(fd);
 		}
 	    remote()->transact(ENABLE_RECORD, data, &reply);
         return reply.readInt32();
@@ -338,7 +338,15 @@ status_t BnMediaPhone::onTransact(
         case ENABLE_RECORD: {
             CHECK_INTERFACE(IMediaPhone, data, reply);
 			bool bEnable = (data.readInt32() == 1);
-            reply->writeInt32(enableRecord(bEnable, data.readInt32(), bEnable?data.readCString():NULL));
+			int type = data.readInt32();
+			if (bEnable){
+				int oldfd = data.readFileDescriptor();
+	            int fd = dup(oldfd);
+	            LOGV("ENABLE_RECORD, oldfd: %d, fd: %d", oldfd, fd);
+            	reply->writeInt32(enableRecord(bEnable, type, fd));
+			} else {
+            	reply->writeInt32(enableRecord(bEnable, type, 0));
+			}
             return NO_ERROR;
         } break;
         case START_UPLINK: {

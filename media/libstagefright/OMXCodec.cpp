@@ -505,7 +505,9 @@ sp<MediaSource> OMXCodec::Create(
         const sp<MetaData> &meta, bool createEncoder,
         const sp<MediaSource> &source,
         const char *matchComponentName,
-        uint32_t flags) {
+        uint32_t flags,
+        OMX_U32 bufferCountInput,
+        OMX_U32 bufferCountOutput) {
     const char *mime;
     bool success = meta->findCString(kKeyMIMEType, &mime);
     CHECK(success);
@@ -561,7 +563,7 @@ sp<MediaSource> OMXCodec::Create(
             sp<OMXCodec> codec = new OMXCodec(
                     omx, node, quirks,
                     createEncoder, mime, componentName,
-                    source);
+                    source, bufferCountInput, bufferCountOutput);
 
             observer->setCodec(codec);
 
@@ -1452,7 +1454,9 @@ OMXCodec::OMXCodec(
         bool isEncoder,
         const char *mime,
         const char *componentName,
-        const sp<MediaSource> &source)
+        const sp<MediaSource> &source,
+        OMX_U32 bufferCountInput,
+        OMX_U32 bufferCountOutput)
     : mOMX(omx),
       mOMXLivesLocally(omx->livesLocally(getpid())),
       mNode(node),
@@ -1472,7 +1476,9 @@ OMXCodec::OMXCodec(
       mTargetTimeUs(-1),
       mSkipTimeUs(-1),
       mLeftOverBuffer(NULL),
-      mPaused(false) {
+      mPaused(false),
+      mBufferCountInput(bufferCountInput),
+      mBufferCountOutput(bufferCountOutput) {
     mPortStatus[kPortIndexInput] = ENABLED;
     mPortStatus[kPortIndexOutput] = ENABLED;
 
@@ -1630,6 +1636,39 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
     CODEC_LOGI("allocating %lu buffers of size %lu on %s port",
             def.nBufferCountActual, def.nBufferSize,
             portIndex == kPortIndexInput ? "input" : "output");
+
+	CODEC_LOGI("allocateBuffersOnPort, mBufferCountInput: %d, mBufferCountOutput: %d", 
+			mBufferCountInput, mBufferCountOutput);
+	
+	bool bResetBuffer = false;
+	if (portIndex == kPortIndexInput) {
+		if (mBufferCountInput > 0) {
+			def.nBufferCountActual = mBufferCountInput;
+			bResetBuffer = true;
+		}
+	} else {
+		if (mBufferCountOutput > 0) {
+			def.nBufferCountActual = mBufferCountOutput;
+			bResetBuffer = true;
+		}
+	}
+
+	if (bResetBuffer){
+	    err = mOMX->setParameter(mNode, OMX_IndexParamPortDefinition, &def, sizeof(def));
+	    if (err != OK) {
+			CODEC_LOGE("allocateBuffersOnPort, setParameter err: %d", err);
+	        return err;
+	    }
+		
+		err = mOMX->getParameter(mNode, OMX_IndexParamPortDefinition, &def, sizeof(def));
+	    if (err != OK) {
+			CODEC_LOGE("allocateBuffersOnPort, getParameter err: %d", err);
+	        return err;
+	    }
+		CODEC_LOGI("after reset, allocating %lu buffers of size %lu on %s port",
+            def.nBufferCountActual, def.nBufferSize,
+            portIndex == kPortIndexInput ? "input" : "output");
+	}
 
     size_t totalSize = def.nBufferCountActual * def.nBufferSize;
     mDealer[portIndex] = new MemoryDealer(totalSize, "OMXCodec");

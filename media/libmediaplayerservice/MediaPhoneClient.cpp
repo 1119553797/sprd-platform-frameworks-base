@@ -101,6 +101,7 @@ status_t MediaPhoneClient::setRemoteSurface(const sp<ISurface>& surface)
         LOGE("mediaphone: player is not initialized");
         return NO_INIT;
     }
+	mRemoteSurface = surface;
     return mPlayer->setVideoSurface(surface);
 }
 
@@ -113,8 +114,7 @@ status_t MediaPhoneClient::setLocalSurface(const sp<ISurface>& surface)
         return NO_INIT;
     }
     mPreviewSurface = surface;
-    return OK;
-    //return mRecorder->setPreviewSurface(surface);
+    return mRecorder->setPreviewSurface(surface);
 }
 
 status_t MediaPhoneClient::setParameters(const String8 &params)
@@ -277,6 +277,7 @@ MediaPhoneClient::MediaPhoneClient(const sp<MediaPlayerService>& service, pid_t 
 	mDecodeType = 1;
     mRecorder = new StagefrightRecorder();
     mPlayer = new StagefrightPlayer();
+	mRecordRecorder = NULL;
     mMediaPlayerService = service;
     mPlayer->setNotifyCallback(this, notify);
 }
@@ -345,18 +346,13 @@ status_t MediaPhoneClient::setVolume(float leftVolume, float rightVolume)
     return NO_ERROR;
 }
 
-status_t MediaPhoneClient::enableRecord(bool isEnable, int type, const char *fn)
+status_t MediaPhoneClient::enableRecord(bool isEnable, int type, int fd)
 {
-    LOGV("enableRecord(), isEnable: %d, type: %d, fn: %s", isEnable, type, fn);
+    LOGV("enableRecord(), isEnable: %d, type: %d, fd: %d", isEnable, type, fd);
     //todo: set correct parameters
     if (isEnable) {
 		if ((type < 0) || (type > 2)){
         	LOGE("type is incorrect, type: %d", type);
-            return NO_INIT;
-		}
-		int fd = open(fn, O_WRONLY|O_CREAT|O_TRUNC);
-		if (fd <= 0){
-        	LOGE("create file fail");
             return NO_INIT;
 		}
         mRecordRecorder = new StagefrightRecorder();
@@ -373,9 +369,6 @@ status_t MediaPhoneClient::enableRecord(bool isEnable, int type, const char *fn)
 		}
         CHECK_RT(mRecordRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
         CHECK_RT(mRecordRecorder->setOutputFile(fd, 0, 0)); 
-		 
-		int iRet = close(fd);
-		LOGV("enableRecord: close file: %d, iRet= %d", fd, iRet);
         CHECK_RT(mRecordRecorder->prepare());
         CHECK_RT(mRecordRecorder->start());
 		LOGV("enableRecord(), enable ok");
@@ -412,8 +405,6 @@ status_t MediaPhoneClient::stopUpLink()
 status_t MediaPhoneClient::startDownLink()
 {
     LOGV("startDownLink");
-	//CHECK_RT(preparePlayer());
-    //CHECK_RT(mPlayer->start());
     CHECK_RT(mPlayer->resume());
     return OK;
 }
@@ -421,8 +412,15 @@ status_t MediaPhoneClient::startDownLink()
 status_t MediaPhoneClient::stopDownLink()
 {
     LOGV("stopDownLink");
-    //CHECK_RT(mPlayer->stop());
-    CHECK_RT(mPlayer->pause());
+    CHECK_RT(mPlayer->suspend());
+	
+    int64_t token = IPCThreadState::self()->clearCallingIdentity();
+	mCamera->stopPreview();
+	mCamera->setPreviewDisplay(NULL);
+    mCamera->startPreview();
+    LOGV("stopDownLink, mRemoteSurface(%p)", mRemoteSurface.get());
+	//mRecorder->setPreviewSurface(mRemoteSurface);
+    IPCThreadState::self()->restoreCallingIdentity(token);
     return OK;
 }
 

@@ -77,10 +77,10 @@ status_t MediaPhone::setRemoteSurface(const sp<Surface>& surface)
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    if (!(mCurrentState & MEDIA_PHONE_IDLE)) {
+/*    if (!(mCurrentState & MEDIA_PHONE_IDLE)) {
         LOGE("setRemoteSurface called in an invalid state(%d)", mCurrentState);
         return INVALID_OPERATION;
-    }
+    }*/
 
     status_t ret = mMediaPhone->setRemoteSurface(surface->getISurface());
     if (OK != ret) {
@@ -98,10 +98,10 @@ status_t MediaPhone::setLocalSurface(const sp<Surface>& surface)
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    if (!(mCurrentState & MEDIA_PHONE_IDLE)) {
+    /*if (!(mCurrentState & MEDIA_PHONE_IDLE)) {
         LOGE("setLocalSurface called in an invalid state(%d)", mCurrentState);
         return INVALID_OPERATION;
-    }
+    }*/
 
     status_t ret = mMediaPhone->setLocalSurface(surface->getISurface());
     if (OK != ret) {
@@ -227,7 +227,8 @@ status_t MediaPhone::stop()
     }
     if (mIsRecording) {
         LOGE("should stop recording first");
-        return INVALID_OPERATION;
+        //return INVALID_OPERATION;
+        mMediaPhone->enableRecord(false, 0, 0);
     }
 
     status_t ret = mMediaPhone->stop();
@@ -258,6 +259,7 @@ MediaPhone::MediaPhone()
     sp<IBinder> binder;
 
     mPrepareSync = false;
+	mIsRecording = false;
     mPrepareStatus = NO_ERROR;
 
     do {
@@ -357,9 +359,9 @@ status_t MediaPhone::setVolume(float leftVolume, float rightVolume)
     return OK;
 }
 
-status_t MediaPhone::enableRecord(bool isEnable, int type, const char *fn)
+status_t MediaPhone::enableRecord(bool isEnable, int type, int fd)
 {
-    LOGV("enable, isEnable: %d, type: %d, fn: %s", isEnable, type, fn);
+    LOGV("enable, isEnable: %d, type: %d, fd: %d", isEnable, type, fd);
     if (mMediaPhone == NULL) {
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
@@ -373,7 +375,7 @@ status_t MediaPhone::enableRecord(bool isEnable, int type, const char *fn)
         return OK;
     }
 
-    status_t ret = mMediaPhone->enableRecord(isEnable, type, fn);
+    status_t ret = mMediaPhone->enableRecord(isEnable, type, fd);
     if (OK != ret) {
         LOGE("enableRecord failed: %d", ret);
         mCurrentState = MEDIA_PHONE_ERROR;
@@ -456,7 +458,7 @@ status_t MediaPhone::startDownLink()
 
     status_t ret = mMediaPhone->startDownLink();
     if (OK != ret) {
-        LOGE("startDownLink failed: %d", ret);
+        LOGE("startDownLink failed: %d, %s", ret, strerror(ret));
         mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
@@ -521,15 +523,15 @@ void MediaPhone::notify(int msg, int ext1, int ext2)
     
     switch (msg) {
     case MEDIA_PHONE_EVENT_PREPARED:
-        LOGV("prepared");/*
+        LOGV("prepared");
         mCurrentState = MEDIA_PHONE_PREPARED;
+		internal_start();
         if (mPrepareSync) {
             LOGV("signal application thread");
             mPrepareSync = false;
             mPrepareStatus = NO_ERROR;
             mSignal.signal();
-        }*/
-		internal_start();
+        }
 		return;
         break;
     case MEDIA_PHONE_EVENT_ERROR:

@@ -50,7 +50,8 @@ public interface SprdCommandsInterface {
 	public void  getSimType(Message result);
 	public void  getRegistrationState(Message result);
 	
-	
+	public void setGprsAttach(Message response);
+	public void setGprsDetach(Message response);
 
 }
 

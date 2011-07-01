@@ -974,7 +974,7 @@ public class StatusBarPolicy {
     private final void updateSignalStrength() {
         int iconLevel = -1;
         int[] iconList;
-
+	if (mServiceState == null) return;
         // Display signal strength while in "emergency calls only" mode
         if (!hasService() && !mServiceState.isEmergencyOnly()) {
             //Slog.d(TAG, "updateSignalStrength: no service");
