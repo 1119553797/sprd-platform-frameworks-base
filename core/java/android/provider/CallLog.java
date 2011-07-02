@@ -131,6 +131,9 @@ public class CallLog {
          */
         public static final String CACHED_NUMBER_LABEL = "numberlabel";
 
+        public static final String VIDEO_CALL_FLAG = "videocallflag";
+
+
         /**
          * Adds a call to the call log.
          *
@@ -163,14 +166,78 @@ public class CallLog {
                 number = CallerInfo.UNKNOWN_NUMBER;
                 if (ci != null) ci.name = "";
             }
-
-            ContentValues values = new ContentValues(5);
+			
+            ContentValues values = new ContentValues(6);
 
             values.put(NUMBER, number);
             values.put(TYPE, Integer.valueOf(callType));
             values.put(DATE, Long.valueOf(start));
             values.put(DURATION, Long.valueOf(duration));
             values.put(NEW, Integer.valueOf(1));
+
+            values.put(VIDEO_CALL_FLAG, Integer.valueOf(0));
+
+	
+            if (ci != null) {
+                values.put(CACHED_NAME, ci.name);
+                values.put(CACHED_NUMBER_TYPE, ci.numberType);
+                values.put(CACHED_NUMBER_LABEL, ci.numberLabel);
+            }
+
+            if ((ci != null) && (ci.person_id > 0)) {
+                ContactsContract.Contacts.markAsContacted(resolver, ci.person_id);
+            }
+
+            Uri result = resolver.insert(CONTENT_URI, values);
+
+            removeExpiredEntries(context);
+
+            return result;
+        }
+
+        /**
+         * Adds a call to the call log.
+         *
+         * @param ci the CallerInfo object to get the target contact from.  Can be null
+         * if the contact is unknown.
+         * @param context the context used to get the ContentResolver
+         * @param number the phone number to be added to the calls db
+         * @param presentation the number presenting rules set by the network for
+         *        "allowed", "payphone", "restricted" or "unknown"
+         * @param callType enumerated values for "incoming", "outgoing", or "missed"
+         * @param start time stamp for the call in milliseconds
+         * @param duration call duration in seconds
+         * @param  flag  videocall type 
+         *
+         * {@hide}
+         */
+        
+	  public static Uri addCall(CallerInfo ci, Context context, String number,
+                int presentation, int callType, long start, int duration,int videocallflag)  {
+            final ContentResolver resolver = context.getContentResolver();
+
+            // If this is a private number then set the number to Private, otherwise check
+            // if the number field is empty and set the number to Unavailable
+            if (presentation == Connection.PRESENTATION_RESTRICTED) {
+                number = CallerInfo.PRIVATE_NUMBER;
+                if (ci != null) ci.name = "";
+            } else if (presentation == Connection.PRESENTATION_PAYPHONE) {
+                number = CallerInfo.PAYPHONE_NUMBER;
+                if (ci != null) ci.name = "";
+            } else if (TextUtils.isEmpty(number)
+                    || presentation == Connection.PRESENTATION_UNKNOWN) {
+                number = CallerInfo.UNKNOWN_NUMBER;
+                if (ci != null) ci.name = "";
+            }
+
+            ContentValues values = new ContentValues(6);
+
+            values.put(NUMBER, number);
+            values.put(TYPE, Integer.valueOf(callType));
+            values.put(DATE, Long.valueOf(start));
+            values.put(DURATION, Long.valueOf(duration));
+            values.put(NEW, Integer.valueOf(1));
+	        values.put(VIDEO_CALL_FLAG, Integer.valueOf(videocallflag));
             if (ci != null) {
                 values.put(CACHED_NAME, ci.name);
                 values.put(CACHED_NUMBER_TYPE, ci.numberType);
