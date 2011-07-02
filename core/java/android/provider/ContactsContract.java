@@ -1210,7 +1210,14 @@ public final class ContactsContract {
          * <P>Type: INTEGER</P>
          */
         public static final String DELETED = "deleted";
-
+		
+		//yeezone:jinwei add sim_index reference
+		/**
+		 * The "sim_index" flag: "0" stands for phone contact
+		 * not "0" stands for sim card contact
+		 */
+		public static final String SIM_INDEX = "sim_index";
+		
         /**
          * The "name_verified" flag: "1" means that the name fields on this raw
          * contact can be trusted and therefore should be used for the entire
@@ -5497,6 +5504,42 @@ public final class ContactsContract {
             intent.putExtra(EXTRA_EXCLUDE_MIMES, excludeMimes);
             context.startActivity(intent);
         }
+		
+		//yeezone:jinwei add show quick contact for sim card contacts
+		/**
+         * add sim index
+         */
+        public static void showQuickContact(Context context, View target, Uri lookupUri, int mode,
+                String[] excludeMimes, int sim_index) {
+            // Find location and bounds of target view
+            final int[] location = new int[2];
+            target.getLocationOnScreen(location);
+
+            final Rect rect = new Rect();
+            rect.left = location[0];
+            rect.top = location[1];
+            rect.right = rect.left + target.getWidth();
+            rect.bottom = rect.top + target.getHeight();
+
+            // Trigger with obtained rectangle
+            showQuickContact(context, rect, lookupUri, mode, excludeMimes, sim_index);
+        }
+        
+        public static void showQuickContact(Context context, Rect target, Uri lookupUri, int mode,
+                String[] excludeMimes, int sim_index) {
+            // Launch pivot dialog through intent for now
+            final Intent intent = new Intent(ACTION_QUICK_CONTACT);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+            intent.setData(lookupUri);
+            intent.putExtra(EXTRA_TARGET_RECT, target);
+            intent.putExtra(EXTRA_MODE, mode);
+            intent.putExtra(EXTRA_EXCLUDE_MIMES, excludeMimes);
+            intent.putExtra("sim_index", sim_index);
+            context.startActivity(intent);
+        }
+		//end add show quick contact for sim card contacts
     }
 
     /**

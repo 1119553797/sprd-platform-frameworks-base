@@ -76,10 +76,13 @@ public class ContactHeaderWidget extends FrameLayout implements View.OnClickList
     private QueryHandler mQueryHandler;
 
     protected Uri mContactUri;
+    protected long mContactId = -1;	//yeezone:jinwei
 
     protected String[] mExcludeMimes = null;
 
     protected ContentResolver mContentResolver;
+
+    private int mSimIndex = 0;	//yeezone:jinwei
 
     /**
      * Interface for callbacks invoked when the user interacts with a header.
@@ -134,9 +137,11 @@ public class ContactHeaderWidget extends FrameLayout implements View.OnClickList
     protected static final String[] PHONE_LOOKUP_PROJECTION = new String[] {
         PhoneLookup._ID,
         PhoneLookup.LOOKUP_KEY,
+        RawContacts.SIM_INDEX,	//yeezone:jinwei get sim index
     };
     protected static final int PHONE_LOOKUP_CONTACT_ID_COLUMN_INDEX = 0;
     protected static final int PHONE_LOOKUP_CONTACT_LOOKUP_KEY_COLUMN_INDEX = 1;
+    private static final int PHONE_LOOKUP_CONTACT_SIM_INDEX_COLUMN_INDEX = 2;	//yeezone:jinwei
 
     //Projection used for looking up contact id from email address
     protected static final String[] EMAIL_LOOKUP_PROJECTION = new String[] {
@@ -267,6 +272,13 @@ public class ContactHeaderWidget extends FrameLayout implements View.OnClickList
                     case TOKEN_CONTACT_INFO: {
                         if (cursor != null && cursor.moveToFirst()) {
                             bindContactInfo(cursor);
+							//yeezone:jinwei
+                            Log.d("", "-----------ContactheaderWidget::mSimIndex = " + mSimIndex);
+                            if(mSimIndex != 0){
+                                mPhotoView.assignContactsSimIndex(mSimIndex);
+                            }
+                            mContactId=cursor.getLong(ContactQuery._ID);
+							//end
                             Uri lookupUri = Contacts.getLookupUri(cursor.getLong(ContactQuery._ID),
                                     cursor.getString(ContactQuery.LOOKUP_KEY));
 
@@ -295,6 +307,9 @@ public class ContactHeaderWidget extends FrameLayout implements View.OnClickList
                             long contactId = cursor.getLong(PHONE_LOOKUP_CONTACT_ID_COLUMN_INDEX);
                             String lookupKey = cursor.getString(
                                     PHONE_LOOKUP_CONTACT_LOOKUP_KEY_COLUMN_INDEX);
+							//yeezone:jinwei get sim index
+                            mSimIndex = cursor.getInt(PHONE_LOOKUP_CONTACT_SIM_INDEX_COLUMN_INDEX);
+							
                             bindFromContactUriInternal(Contacts.getLookupUri(contactId, lookupKey),
                                     false /* don't reset query handler */);
                         } else {
@@ -489,8 +504,14 @@ public class ContactHeaderWidget extends FrameLayout implements View.OnClickList
             resetAsyncQueryHandler();
         }
 
+		//yeezone:jinwei
+        String selection = null;
+        if(mSimIndex != 0){
+            selection = "sim_index='" + mSimIndex + "'";    //add sim index
+        }
         mQueryHandler.startQuery(TOKEN_CONTACT_INFO, contactUri, contactUri, ContactQuery.COLUMNS,
-                null, null, null);
+                selection, null, null);
+		//end
     }
 
     /**

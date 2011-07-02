@@ -22,7 +22,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.ServiceManager;
-
+import android.telephony.PhoneNumberUtils;
+import android.util.Log;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +38,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
     protected AdnRecordCache adnCache;
     protected final Object mLock = new Object();
     protected int recordSize[];
+    protected int sim_index = 0;	//yeezone:jinwei add sim manage
     protected boolean success;
     protected List<AdnRecord> records;
 
@@ -70,6 +73,11 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                     ar = (AsyncResult) msg.obj;
                     synchronized (mLock) {
                         success = (ar.exception == null);
+						//yeezone:jinwei get sim index from AsynResult object
+                        if(success){
+                            sim_index = Integer.valueOf(ar.result.toString());
+                        }
+						//end 
                         mLock.notifyAll();
                     }
                     break;
@@ -159,6 +167,44 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         }
         return success;
     }
+
+	//yeezone:jinwei Add a new contact in SimCard.
+     /**Add newAdn in ADN-like record in EF	 
+      * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN	 
+      * @param newTag adn tag to be stored     
+      * @param newPhoneNumber adn number ot be stored     
+      *        Set both newTag and newPhoneNubmer to "" means to replace the old     
+      *        record with empty one, aka, delete old record     
+      * @param pin2 required to update EF_FDN, otherwise must be null     
+      * @return sim_index	
+     */
+     public int addAdnRecordsInEf(int efid, String newTag, String newPhoneNumber, String pin2){
+        if (phone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+                    "Requires android.permission.WRITE_CONTACTS permission");
+        }
+        Log.v("IccPhoneBookInterfaceManager", "addIccRecordToEf** ");
+        if (DBG) logd("addAdnRecordsInEf: efid=" + efid +
+                " ("+ newTag + "," + newPhoneNumber + ")"+ " pin2=" + pin2);
+        synchronized(mLock) {
+            sim_index = 0;
+            checkThread();
+            Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE);
+            AdnRecord oldAdn = new AdnRecord("", "");
+            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
+            Log.v("IccPhoneBookInterfaceManager", "newTag="+newTag+"  newPhoneNumber="+newPhoneNumber);
+            adnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                logd("interrupted while trying to update by search");
+            }
+        }
+        return sim_index;
+    }
+	//end Add a new contact in SimCard.
 
     /**
      * Update an ADN-like EF record by record index

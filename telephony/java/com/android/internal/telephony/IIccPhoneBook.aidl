@@ -67,7 +67,21 @@ interface IIccPhoneBook {
             String oldTag, String oldPhoneNumber,
             String newTag, String newPhoneNumber,
             String pin2);
-
+	//yeezone:jinwei
+	/**Add newAdn in ADN-like record in EF
+	 * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN
+	 * @param newTag adn tag to be stored
+     * @param newPhoneNumber adn number to be stored
+     *        Set both newTag and newPhoneNubmer to "" means to replace the old
+     *        record with empty one, aka, delete old record
+     * @param pin2 required to update EF_FDN, otherwise must be null
+     * @return sim_index
+	*/
+	// Add a new contact in SimCard.
+	int addAdnRecordsInEf(int efid,
+            String newTag, String newPhoneNumber,
+            String pin2);
+	//end
     /**
      * Update an ADN-like EF record by record index
      *

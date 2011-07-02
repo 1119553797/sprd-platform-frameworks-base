@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.QuickContact;
 import android.provider.ContactsContract.Intents;
 import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.QuickContact;
@@ -45,6 +46,7 @@ public class QuickContactBadge extends ImageView implements OnClickListener {
     private String mContactEmail;
     private String mContactPhone;
     private int mMode;
+    private int mSimIndex = 0;	//yeezone:jinwei default value
     private QueryHandler mQueryHandler;
     private Drawable mBadgeBackground;
     private Drawable mNoBadgeBackground;
@@ -133,6 +135,12 @@ public class QuickContactBadge extends ImageView implements OnClickListener {
         onContactUriChanged();
     }
 
+	//yeezone:jinwei pass sim index for this class
+    public void assignContactsSimIndex(int index){
+        mSimIndex = index;
+    }
+	//end
+	
     private void onContactUriChanged() {
         if (mContactUri == null && mContactEmail == null && mContactPhone == null) {
             if (mNoBadgeBackground == null) {
@@ -188,9 +196,15 @@ public class QuickContactBadge extends ImageView implements OnClickListener {
 
     public void onClick(View v) {
         if (mContactUri != null) {
-            mQueryHandler.startQuery(TOKEN_CONTACT_LOOKUP_AND_TRIGGER, null,
+			//yeezone:jinwei
+            /*mQueryHandler.startQuery(TOKEN_CONTACT_LOOKUP_AND_TRIGGER, null,
                     mContactUri,
-                    CONTACT_LOOKUP_PROJECTION, null, null, null);
+                    CONTACT_LOOKUP_PROJECTION, null, null, null);*/
+			final ContentResolver resolver = getContext().getContentResolver();
+            final Uri lookupUri = Contacts.getLookupUri(resolver, mContactUri);
+            //trigger(lookupUri);
+            triggerIncludeSimIndex(lookupUri);
+			//end
         } else if (mContactEmail != null) {
             mQueryHandler.startQuery(TOKEN_EMAIL_LOOKUP_AND_TRIGGER, mContactEmail,
                     Uri.withAppendedPath(Email.CONTENT_LOOKUP_URI, Uri.encode(mContactEmail)),
@@ -217,7 +231,13 @@ public class QuickContactBadge extends ImageView implements OnClickListener {
     private void trigger(Uri lookupUri) {
         QuickContact.showQuickContact(getContext(), this, lookupUri, mMode, mExcludeMimes);
     }
-
+	
+	//yeezone:jinwei
+	private void triggerIncludeSimIndex(Uri lookupUri) {
+	        QuickContact.showQuickContact(getContext(), this, lookupUri, mMode, mExcludeMimes, mSimIndex);
+	    }
+	//end
+	
     private class QueryHandler extends AsyncQueryHandler {
 
         public QueryHandler(ContentResolver cr) {

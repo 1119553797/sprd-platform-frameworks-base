@@ -191,7 +191,8 @@ public class IccProvider extends ContentProvider {
     private static final String[] ADDRESS_BOOK_COLUMN_NAMES = new String[] {
         "name",
         "number",
-        "emails"
+        "emails",
+        "sim_index"	//add sim index column
     };
 
     private static final int ADN = 1;
@@ -316,15 +317,23 @@ public class IccProvider extends ContentProvider {
                         "Cannot insert into URL: " + url);
         }
 
-        String tag = initialValues.getAsString("tag");
-        String number = initialValues.getAsString("number");
+        String tag = initialValues.getAsString("newTag");		//yeezone:jinwei tag->newTag
+        String number = initialValues.getAsString("newNumber");	//yeezone:jinwei number->newNumber
         // TODO(): Read email instead of sending null.
-        boolean success = addIccRecordToEf(efType, tag, number, null, pin2);
+
+		//yeezone:jinwei return sim index after add a new contact in SimCard.
+        //boolean success = addIccRecordToEf(efType, tag, number, null, pin2);
+        int simIndex = addIccRecordToEf(efType, tag, number, null, pin2);
+        if (simIndex == 0) {
+            return null;
+        }
+        /*boolean success = addIccRecordToEf(efType, tag, number, null, pin2);
 
         if (!success) {
             return null;
-        }
-
+        }*/
+		//end
+		
         StringBuilder buf = new StringBuilder("content://icc/");
         switch (match) {
             case ADN:
@@ -337,7 +346,10 @@ public class IccProvider extends ContentProvider {
         }
 
         // TODO: we need to find out the rowId for the newly added record
-        buf.append(0);
+		//yeezone:jinwei
+        //buf.append(0);
+        buf.append(simIndex);
+        //end
 
         resultUri = Uri.parse(buf.toString());
 
@@ -382,6 +394,13 @@ public class IccProvider extends ContentProvider {
                         "Cannot insert into URL: " + url);
         }
 
+		//yeezone:jinwei add function that delete IccRecord by sim indext
+        boolean success = false;
+        if(where.equals("sim_index=?")){
+            int sim_index = Integer.valueOf(whereArgs[0]);
+            success = deleteIccRecordFromEfByIndex(efType, sim_index); //end
+        }else{
+
         // parse where clause
         String tag = null;
         String number = null;
@@ -425,7 +444,9 @@ public class IccProvider extends ContentProvider {
             return 0;
         }
 
-        boolean success = deleteIccRecordFromEf(efType, tag, number, emails, pin2);
+        success = deleteIccRecordFromEf(efType, tag, number, emails, pin2);	//yeezone:jinwei remove boolean because of define above
+        } //yeezone:jinwei else {}
+		
         if (!success) {
             return 0;
         }
@@ -461,10 +482,22 @@ public class IccProvider extends ContentProvider {
         String[] emails = null;
         String newTag = values.getAsString("newTag");
         String newNumber = values.getAsString("newNumber");
+        Integer sim_index = values.getAsInteger("sim_index");	//yeezone:jinwei
         String[] newEmails = null;
         // TODO(): Update for email.
-        boolean success = updateIccRecordInEf(efType, tag, number,
+		
+		//yeezone:jinwei
+		boolean success = false;
+        if(sim_index == null){
+            success = updateIccRecordInEf(efType, tag, number,
                 newTag, newNumber, pin2);
+        }else{
+            success = updateIccRecordInEfByIndex(efType, tag, number,
+                newTag, newNumber, sim_index, pin2);
+        }
+		
+        /*boolean success = updateIccRecordInEf(efType, tag, number,
+                newTag, newNumber, pin2);*/
 
         if (!success) {
             return 0;
@@ -507,12 +540,13 @@ public class IccProvider extends ContentProvider {
         return results;
     }
 
-    private boolean
+    //yeezone:jinwei return sim index after add a new contact in SimCard. return int insteat of return boolean
+    private int
     addIccRecordToEf(int efType, String name, String number, String[] emails, String pin2) {
         if (DBG) log("addIccRecordToEf: efType=" + efType + ", name=" + name +
                 ", number=" + number + ", emails=" + emails);
-
-        boolean success = false;
+		int simIndex = 0;
+        //boolean success = false;
 
         // TODO: do we need to call getAdnRecordsInEf() before calling
         // updateAdnRecordsInEfBySearch()? In any case, we will leave
@@ -523,16 +557,20 @@ public class IccProvider extends ContentProvider {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfBySearch(efType, "", "",
-                        name, number, pin2);
+                /*success = iccIpb.updateAdnRecordsInEfBySearch(efType, "", "",
+                        name, number, pin2);*/
+				Log.v("IccProvider", "addIccRecordToEf***iccIpb  ");
+                simIndex = iccIpb.addAdnRecordsInEf(efType, name, number, pin2);
             }
         } catch (RemoteException ex) {
             // ignore it
         } catch (SecurityException ex) {
             if (DBG) log(ex.toString());
         }
-        if (DBG) log("addIccRecordToEf: " + success);
-        return success;
+		if (DBG) log("addIccRecordToEf: " + simIndex);
+        return simIndex;
+        /*if (DBG) log("addIccRecordToEf: " + success);
+        return success;*/
     }
 
     private boolean
@@ -559,7 +597,32 @@ public class IccProvider extends ContentProvider {
         return success;
     }
 
+	//yeezone:jinwei update icc record from sim
+    private boolean
+    updateIccRecordInEfByIndex(int efType, String oldName, String oldNumber,
+            String newName, String newNumber, int sim_index, String pin2) {
+        if (DBG) log("updateIccRecordInEf: efType=" + efType +
+                ", oldname=" + oldName + ", oldnumber=" + oldNumber +
+                ", newname=" + newName + ", newnumber=" + newNumber);
+        boolean success = false;
 
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                success = iccIpb.updateAdnRecordsInEfByIndex(efType,
+                        newName, newNumber, sim_index, pin2);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log(ex.toString());
+        }
+        if (DBG) log("updateIccRecordInEf: " + success);
+        return success;
+    }
+	//end update sim icc record
+	
     private boolean deleteIccRecordFromEf(int efType, String name, String number, String[] emails,
             String pin2) {
         if (DBG) log("deleteIccRecordFromEf: efType=" + efType +
@@ -583,6 +646,29 @@ public class IccProvider extends ContentProvider {
         return success;
     }
 
+	//yeezone:jinwei delete icc record from sim
+    private boolean deleteIccRecordFromEfByIndex(int efType, int sim_index) {
+        if (DBG) log("deleteIccRecordFromEfByIndex: efType = " + efType + ", sim_index = " + sim_index);
+
+        boolean success = false;
+
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                success = iccIpb.updateAdnRecordsInEfByIndex(efType,
+                        "", "", sim_index, "");
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log(ex.toString());
+        }
+        if (DBG) log("deleteIccRecordFromEfByIndex: " + success);
+        return success;
+    }
+	//end delete icc record from sim
+	
     /**
      * Loads an AdnRecord into an ArrayList. Must be called with mLock held.
      *
@@ -596,7 +682,10 @@ public class IccProvider extends ContentProvider {
             String alphaTag = record.getAlphaTag();
             String number = record.getNumber();
             String[] emails = record.getEmails();
-
+			//yeezone:jinwei get sim index from adn record
+            String sim_index = String.valueOf(record.getRecordNumber());
+            Log.d("IccProvider", "**loadRecord::sim_index = " + sim_index);
+			
             if (DBG) log("loadRecord: " + alphaTag + ", " + number + ",");
             contact.add(alphaTag);
             contact.add(number);
@@ -612,6 +701,7 @@ public class IccProvider extends ContentProvider {
             } else {
                 contact.add(null);
             }
+            contact.add(sim_index);	//yeezone:jinwei
             results.add(contact);
         }
     }

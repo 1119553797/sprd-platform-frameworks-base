@@ -147,6 +147,16 @@ public class AdnRecord implements Parcelable {
         this.emails = emails;
     }
 
+	//yeezone:jinwei for sim index
+    public void setRecordNumber(int sim_index) {
+        recordNumber = sim_index;
+    }
+    
+    public int getRecordNumber() {
+        return recordNumber;
+    }
+	//end for sim index yeezone:jinwei
+	
     public String toString() {
         return "ADN Record '" + alphaTag + "' '" + number + " " + emails + "'";
     }

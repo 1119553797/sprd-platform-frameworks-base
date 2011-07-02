@@ -58,6 +58,12 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
                 efid, oldTag, oldPhoneNumber, newTag, newPhoneNumber, pin2);
     }
 
+    //yeezone:jinwei Add a new contact in SimCard.
+    public 	int addAdnRecordsInEf(int efid, String newTag, String newPhoneNumber, String pin2){
+        return mIccPhoneBookInterfaceManager.addAdnRecordsInEf(efid, newTag, newPhoneNumber, pin2);
+    }
+	//end Add a new contact in SimCard.
+	
     public boolean
     updateAdnRecordsInEfByIndex(int efid, String newTag,
             String newPhoneNumber, int index, String pin2) throws android.os.RemoteException {

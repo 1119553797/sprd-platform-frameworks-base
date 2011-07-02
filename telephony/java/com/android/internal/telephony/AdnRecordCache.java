@@ -328,7 +328,11 @@ public final class AdnRecordCache extends Handler implements IccConstants {
                 efid = msg.arg1;
                 int index = msg.arg2;
                 AdnRecord adn = (AdnRecord) (ar.userObj);
-
+				
+                //yeezone:jinwei add sim_index.
+                adn.setRecordNumber(index);
+                //end
+				
                 if (ar.exception == null) {
                     adnLikeFiles.get(efid).set(index - 1, adn);
                 }
@@ -336,7 +340,9 @@ public final class AdnRecordCache extends Handler implements IccConstants {
                 Message response = userWriteResponse.get(efid);
                 userWriteResponse.delete(efid);
 
-                AsyncResult.forMessage(response, null, ar.exception);
+                //yeezone:jinwei return sim_index after add a new contact in SimCard.
+                //AsyncResult.forMessage(response, null, ar.exception);
+                AsyncResult.forMessage(response, index, ar.exception);
                 response.sendToTarget();
                 break;
         }
