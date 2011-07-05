@@ -861,4 +861,10 @@
     <string name="throttle_warning_notification_message" msgid="2609734763845705708">"轻触以了解有关手机流量详情"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"已超出手机数据上限"</string>
     <string name="throttled_notification_message" msgid="4712369856601275146">"轻触以了解有关手机流量详情"</string>
+    <!--PUK Input Add start-->
+    <string name="keyguard_password_enter_puk_code" >"输入 PUK 码"</string>
+    <string name="keyguard_password_enter_new_pin_first_code" >"输入新的 PIN 码"</string>
+    <string name="keyguard_password_enter_new_pin_second_code" >"再输入一次 PIN 码"</string>
+    <string name="keyguard_password_wrong_puk_code">"PUK 码不正确！"</string>
+    <!--PUK Input Add end-->
 </resources>

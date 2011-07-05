@@ -2285,4 +2285,10 @@
     <!-- Shown when the users bandwidth is reduced because of excessive data use -->
     <string name="throttled_notification_title">Mobile data limit exceeded</string>
     <string name="throttled_notification_message">Touch to learn more about mobile data use</string>
+    <!--PUK Input Add start-->
+    <string name="keyguard_password_enter_puk_code" >Enter PUK Code</string>
+    <string name="keyguard_password_enter_new_pin_first_code" >Enter New PIN Code</string>
+    <string name="keyguard_password_enter_new_pin_second_code" >Enter New PIN Code Again</string>
+    <string name="keyguard_password_wrong_puk_code">Wrong PUK Code</string>
+    <!--PUK Input Add end-->
 </resources>
