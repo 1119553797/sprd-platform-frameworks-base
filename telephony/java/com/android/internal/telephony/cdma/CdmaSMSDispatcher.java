@@ -200,7 +200,7 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
             if (smsHeader != null && smsHeader.portAddrs != null) {
                 if (smsHeader.portAddrs.destPort == SmsHeader.PORT_WAP_PUSH) {
                     // GSM-style WAP indication
-                    return mWapPush.dispatchWapPdu(sms.getUserData());
+                    return mWapPush.dispatchWapPdu(sms.getUserData(), pdus);
                 } else {
                     // The message was sent to a port, so concoct a URI for it.
                     dispatchPortAddressedPdus(pdus, smsHeader.portAddrs.destPort);
@@ -327,7 +327,7 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
         switch (destinationPort) {
         case SmsHeader.PORT_WAP_PUSH:
             // Handle the PUSH
-            return mWapPush.dispatchWapPdu(datagram);
+            return mWapPush.dispatchWapPdu(datagram, null);
 
         default:{
             pdus = new byte[1][];

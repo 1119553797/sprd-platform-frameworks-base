@@ -57,7 +57,7 @@ public class WapPushOverSms {
      *         {@link Activity#RESULT_OK} if the message has been broadcast
      *         to applications
      */
-    public int dispatchWapPdu(byte[] pdu) {
+    public int dispatchWapPdu(byte[] pdu, byte[][] pdus) {
 
         if (Config.LOGD) Log.d(LOG_TAG, "Rx: " + IccUtils.bytesToHexString(pdu));
 
@@ -71,7 +71,7 @@ public class WapPushOverSms {
             if (Config.LOGD) Log.w(LOG_TAG, "Received non-PUSH WAP PDU. Type = " + pduType);
             return Intents.RESULT_SMS_HANDLED;
         }
-
+        Log.d(LOG_TAG, "Start new wap pdu");
         pduDecoder = new WspTypeDecoder(pdu);
 
         /**
@@ -101,14 +101,17 @@ public class WapPushOverSms {
          * Length-quote = <Octet 31>         (WAP_PDU_LENGTH_QUOTE)
          * Length = Uintvar-integer
          */
+        Log.d(LOG_TAG, "Start parse");
         if (pduDecoder.decodeContentType(index) == false) {
             if (Config.LOGD) Log.w(LOG_TAG, "Received PDU. Header Content-Type error.");
             return Intents.RESULT_SMS_GENERIC_ERROR;
         }
         int binaryContentType;
         String mimeType = pduDecoder.getValueString();
+        Log.d(LOG_TAG, "mimeType= "+mimeType);
         if (mimeType == null) {
             binaryContentType = (int)pduDecoder.getValue32();
+            Log.d(LOG_TAG, "binaryContentType 1= "+binaryContentType);
             // TODO we should have more generic way to map binaryContentType code to mimeType.
             switch (binaryContentType) {
                 case WspTypeDecoder.CONTENT_TYPE_B_DRM_RIGHTS_XML:
@@ -162,9 +165,10 @@ public class WapPushOverSms {
         index += pduDecoder.getDecodedDataLength();
 
         boolean dispatchedByApplication = false;
+        Log.d(LOG_TAG, "binaryContentType 2= "+binaryContentType);
         switch (binaryContentType) {
             case WspTypeDecoder.CONTENT_TYPE_B_PUSH_CO:
-                dispatchWapPdu_PushCO(pdu, transactionId, pduType, headerStartIndex, headerLength);
+                dispatchWapPdu_PushCO(pdus, pdu, transactionId, pduType, headerStartIndex, headerLength);
                 dispatchedByApplication = true;
                 break;
             case WspTypeDecoder.CONTENT_TYPE_B_MMS:
@@ -175,19 +179,22 @@ public class WapPushOverSms {
                 break;
         }
         if (dispatchedByApplication == false) {
-            dispatchWapPdu_default(pdu, transactionId, pduType, mimeType,
+            Log.d(LOG_TAG, "dispatch default");
+            dispatchWapPdu_default(pdus, pdu, transactionId, pduType, mimeType,
                                    headerStartIndex, headerLength);
         }
         return Activity.RESULT_OK;
     }
 
-    private void dispatchWapPdu_default(byte[] pdu, int transactionId, int pduType,
+    private void dispatchWapPdu_default(byte[][] pdus, byte[] pdu, int transactionId, int pduType,
                                         String mimeType, int headerStartIndex, int headerLength) {
         byte[] header = new byte[headerLength];
         System.arraycopy(pdu, headerStartIndex, header, 0, header.length);
         int dataIndex = headerStartIndex + headerLength;
         byte[] data;
 
+        Log.d(LOG_TAG, "dispatchWapPdu_default transactionId="+transactionId+" pduType="+pduType+" mimeType="+mimeType
+              +" headerStartIndex="+headerStartIndex+" headerLength="+headerLength);
         data = new byte[pdu.length - dataIndex];
         System.arraycopy(pdu, dataIndex, data, 0, data.length);
 
@@ -197,11 +204,12 @@ public class WapPushOverSms {
         intent.putExtra("pduType", pduType);
         intent.putExtra("header", header);
         intent.putExtra("data", data);
+        intent.putExtra("pdus", pdus);
 
         mSmsDispatcher.dispatch(intent, "android.permission.RECEIVE_WAP_PUSH");
     }
 
-    private void dispatchWapPdu_PushCO(byte[] pdu, int transactionId, int pduType,
+    private void dispatchWapPdu_PushCO(byte[][] pdus, byte[] pdu, int transactionId, int pduType,
                                        int headerStartIndex, int headerLength) {
         byte[] header = new byte[headerLength];
         System.arraycopy(pdu, headerStartIndex, header, 0, header.length);
@@ -212,6 +220,7 @@ public class WapPushOverSms {
         intent.putExtra("pduType", pduType);
         intent.putExtra("header", header);
         intent.putExtra("data", pdu);
+        intent.putExtra("pdus", pdus);
 
         mSmsDispatcher.dispatch(intent, "android.permission.RECEIVE_WAP_PUSH");
     }

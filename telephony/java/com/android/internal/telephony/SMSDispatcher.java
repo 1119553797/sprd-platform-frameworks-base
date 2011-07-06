@@ -645,7 +645,7 @@ public abstract class SMSDispatcher extends Handler {
                     output.write(data, 0, data.length);
                 }
                 // Handle the PUSH
-                return mWapPush.dispatchWapPdu(output.toByteArray());
+                return mWapPush.dispatchWapPdu(output.toByteArray(), pdus);
             } else {
                 // The messages were sent to a port, so concoct a URI for it
                 dispatchPortAddressedPdus(pdus, portAddrs.destPort);
