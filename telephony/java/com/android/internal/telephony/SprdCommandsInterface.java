@@ -52,6 +52,8 @@ public interface SprdCommandsInterface {
 	
 	public void setGprsAttach(Message response);
 	public void setGprsDetach(Message response);
+	
+	public void getRemainTimes(int type, Message response);
 
 }
 

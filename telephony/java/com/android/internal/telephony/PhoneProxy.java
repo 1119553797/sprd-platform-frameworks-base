@@ -1022,4 +1022,8 @@ public class PhoneProxy extends Handler implements Phone {
 	public boolean isVTCall() {
 		return mActivePhone.isVTCall();
 	}
+	
+	public int getRemainTimes(int type) {
+		return mActivePhone.getRemainTimes(type);
+	}
 }

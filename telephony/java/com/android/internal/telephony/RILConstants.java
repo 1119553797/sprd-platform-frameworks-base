@@ -258,6 +258,8 @@ cat include/telephony/ril.h | \
 
     int RIL_REQUEST_GPRS_ATTACH = 119;
     int RIL_REQUEST_GPRS_DETACH = 120;
+    
+    int RIL_REQUEST_GET_REMAIN_TIMES = 121;
 
     int RIL_UNSOL_RESPONSE_BASE = 1000;
     int RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED = 1000;

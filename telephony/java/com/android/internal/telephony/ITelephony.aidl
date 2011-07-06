@@ -280,5 +280,7 @@ interface ITelephony {
     String[] getRegistrationState();
     
     boolean isVTCall();
+    
+    int getRemainTimes(int type);
 }
 

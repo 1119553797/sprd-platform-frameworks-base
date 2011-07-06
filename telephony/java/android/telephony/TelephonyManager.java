@@ -990,6 +990,24 @@ public class TelephonyManager {
              return false;
          }	
     }
+    
+    public static final int UNLOCK_PIN   = 0;
+    public static final int UNLOCK_PIN2   = 1;
+    public static final int UNLOCK_PUK   = 2;
+    public static final int UNLOCK_PUK2   = 3;
+    
+    // return -1 if invalid
+    public int getRemainTimes(int type) {
+        try {
+        	return getITelephony().getRemainTimes(type);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return -1;
+        } catch (NullPointerException ex) {
+            return -1;
+        }
+    	
+    }
 
 }
 

@@ -129,6 +129,7 @@ public final class TDPhone extends GSMPhone {
     protected static final int EVENT_USIM_AUTHEN_DONE       = 103;
     protected static final int EVENT_GET_SIM_TYPE_DONE       = 104;
     protected static final int EVENT_GET_REGISTRATION_STATE_DONE       = 105;
+    protected static final int EVENT_GET_REMIAN_TIMES_DONE       = 106;
 	
     // Constructors
 
@@ -703,7 +704,7 @@ public final class TDPhone extends GSMPhone {
     private String mUsimAuthen = null ;
     private String mSimType = null;
     private String[] mRegistrationState = null;
-    
+    private int mRemainTimes = -1;
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -762,6 +763,20 @@ public final class TDPhone extends GSMPhone {
                         mLock.notifyAll();
                     }
                     break;
+                case EVENT_GET_REMIAN_TIMES_DONE:
+                  	ar = (AsyncResult) msg.obj;
+                    synchronized (mLock) {
+                    	if (ar.exception == null) {
+                    		mRemainTimes = (((int []) ar.result))[0];	
+                    	}
+                    	else {
+                    		Log.d(LOG_TAG,"handleMessage registration state error!");
+                    		mRemainTimes = -1;
+                    	}                    
+                        mLock.notifyAll();
+                    }
+                    break;
+                	
             }
         }
     };
@@ -882,6 +897,23 @@ public final class TDPhone extends GSMPhone {
 					timerSeconds,
 					resp);
 		}
+	}
+	
+	public int getRemainTimes(int type) {	
+		Log.d(LOG_TAG, "getRemainTimes type:"+type);
+		
+		synchronized(mLock) {
+            Message response = mHandler.obtainMessage(EVENT_GET_REMIAN_TIMES_DONE);
+            mCM.getRemainTimes(type,response);
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+            	Log.d(LOG_TAG,"interrupted while trying to get remain times");
+            }
+        }
+		
+		Log.d(LOG_TAG, "getRemainTimes:"+mRemainTimes);
+		return mRemainTimes;
 	}
 
 }

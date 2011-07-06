@@ -90,6 +90,8 @@ public interface SprdVideoPhone {
 	public void notifyVideoCallDisconnect(Connection cn);
 	public void notifyVideoCallFallBack();
 	public void notifyVideoCallFail();*/
+	
+	public int getRemainTimes(int type);
 
 }
 
