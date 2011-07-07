@@ -1379,6 +1379,21 @@ public final class Settings {
          */
         public static final String VIBRATE_IN_SILENT = "vibrate_in_silent";
 
+        
+     // ************Modify by luning at01-07-01 begin************
+        public static final String PHONE_PROFILES_MODE = "phone_profiles_mode";
+        public static final String PROFILES_LAST_MODE = "profiles_last_mode";
+        
+        public static final String PROFILES_MODE_GENERAL = "general";      
+        public static final String PROFILES_MODE_SILENT = "silent";   
+        public static final String PROFILES_MODE_MEETING = "meeting"; 
+        public static final String PROFILES_MODE_OUTDOOR = "outdoor";
+        public static final String PROFILES_MODE_INDOOR = "indoor";
+        
+        public static final String APPEND_FOR_VOLUME = "_volume";
+     // ************Modify by luning at01-07-01 end************
+        
+        
         /**
          * The mapping of stream type (integer) to its setting.
          */
@@ -1718,6 +1733,15 @@ public final class Settings {
             VOLUME_NOTIFICATION + APPEND_FOR_LAST_AUDIBLE,
             VOLUME_BLUETOOTH_SCO + APPEND_FOR_LAST_AUDIBLE,
             VIBRATE_IN_SILENT,
+         // ************Modify by luning at01-07-01 begin************
+            PHONE_PROFILES_MODE,
+            PROFILES_LAST_MODE,
+            PROFILES_MODE_GENERAL + APPEND_FOR_VOLUME,    
+            PROFILES_MODE_SILENT  + APPEND_FOR_VOLUME,
+            PROFILES_MODE_MEETING + APPEND_FOR_VOLUME,
+            PROFILES_MODE_OUTDOOR + APPEND_FOR_VOLUME,
+            PROFILES_MODE_INDOOR + APPEND_FOR_VOLUME,
+         // ************Modify by luning at01-07-01 end************
             TEXT_AUTO_REPLACE,
             TEXT_AUTO_CAPS,
             TEXT_AUTO_PUNCTUATE,

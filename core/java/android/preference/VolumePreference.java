@@ -30,6 +30,7 @@ import android.os.Parcelable;
 import android.provider.Settings;
 import android.provider.Settings.System;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.SeekBar;
@@ -45,17 +46,26 @@ public class VolumePreference extends SeekBarPreference implements
     
     private int mStreamType;
 
-    /** May be null if the dialog isn't visible. */
-    private SeekBarVolumizer mSeekBarVolumizer;
-    
-    public VolumePreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        
-        TypedArray a = context.obtainStyledAttributes(attrs,
-                com.android.internal.R.styleable.VolumePreference, 0, 0);
-        mStreamType = a.getInt(android.R.styleable.VolumePreference_streamType, 0);
-        a.recycle();        
-    }
+	/** May be null if the dialog isn't visible. */
+	private SeekBarVolumizer mSeekBarVolumizer;
+	
+	// ************Modify by luning at01-07-01 begin************
+	private Context mContext;
+	// ************Modify by luning at01-07-01 end************
+	
+	public VolumePreference(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		
+		// ************Modify by luning at01-07-01 begin************
+		mContext = context;
+		// ************Modify by luning at01-07-01 end************
+		
+		TypedArray a = context.obtainStyledAttributes(attrs,
+				com.android.internal.R.styleable.VolumePreference, 0, 0);
+		mStreamType = a.getInt(android.R.styleable.VolumePreference_streamType,
+				0);
+		a.recycle();
+	}
 
     public void setStreamType(int streamType) {
         mStreamType = streamType;
@@ -215,32 +225,41 @@ public class VolumePreference extends SeekBarPreference implements
      */
     public class SeekBarVolumizer implements OnSeekBarChangeListener, Runnable {
 
-        private Context mContext;
-        private Handler mHandler = new Handler();
-    
-        private AudioManager mAudioManager;
-        private int mStreamType;
-        private int mOriginalStreamVolume; 
-        private Ringtone mRingtone;
-    
-        private int mLastProgress = -1;
-        private SeekBar mSeekBar;
-        
-        private ContentObserver mVolumeObserver = new ContentObserver(mHandler) {
-            @Override
-            public void onChange(boolean selfChange) {
-                super.onChange(selfChange);
-                if (mSeekBar != null) {
-                    int volume = System.getInt(mContext.getContentResolver(),
-                            System.VOLUME_SETTINGS[mStreamType], -1);
-                    // Works around an atomicity problem with volume updates
-                    // TODO: Fix the actual issue, probably in AudioService
-                    if (volume >= 0) {
-                        mSeekBar.setProgress(volume);
-                    }
-                }
-            }
-        };
+		private Context mContext;
+		private Handler mHandler = new Handler();
+
+		private AudioManager mAudioManager;
+		private int mStreamType;
+		private int mOriginalStreamVolume;
+		private Ringtone mRingtone;
+
+		private int mLastProgress = -1;
+		private SeekBar mSeekBar;
+
+		private ContentObserver mVolumeObserver = new ContentObserver(mHandler) {
+			@Override
+			public void onChange(boolean selfChange) {
+				super.onChange(selfChange);
+				if (mSeekBar != null) {
+					int volume = System.getInt(mContext.getContentResolver(),
+							System.VOLUME_SETTINGS[mStreamType], -1);
+					// Works around an atomicity problem with volume updates
+					// TODO: Fix the actual issue, probably in AudioService
+					
+					if (volume >= 0) {
+						mSeekBar.setProgress(volume);					
+						// ************Modify by luning at01-07-01 begin************
+						if(mStreamType == AudioManager.STREAM_RING)
+						{
+							String currMode = mAudioManager.getCurrProfilesMode(mContext);
+							mAudioManager.saveProfilesVolume(mContext, currMode, volume);
+						}
+						// ************Modify by luning at01-07-01 end************
+					}
+
+				}
+			}
+		};
 
         public SeekBarVolumizer(Context context, SeekBar seekBar, int streamType) {
             mContext = context;
@@ -305,26 +324,37 @@ public class VolumePreference extends SeekBarPreference implements
         public void onStartTrackingTouch(SeekBar seekBar) {
         }
 
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            if (mRingtone != null && !mRingtone.isPlaying()) {
-                sample();
-            }
-        }
-        
-        public void run() {
-            mAudioManager.setStreamVolume(mStreamType, mLastProgress, 0);
-        }
-        
-        private void sample() {
-            onSampleStarting(this);
-            mRingtone.play();
-        }
-    
-        public void stopSample() {
-            if (mRingtone != null) {
-                mRingtone.stop();
-            }
-        }
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			if (mRingtone != null && !mRingtone.isPlaying()) {
+				sample();
+			}
+		}
+
+		public void run() {		
+			
+			// ************Modify by luning at01-07-01 begin************
+			if(mStreamType == AudioManager.STREAM_RING)
+			{
+				String currMode = mAudioManager.getCurrProfilesMode(mContext);
+				mAudioManager.saveProfilesVolume(mContext, currMode, mLastProgress);
+				//sync phone call volume
+				mAudioManager.synPhoneVolume(mContext,mLastProgress);
+			}
+			// ************Modify by luning at01-07-01 end************
+			
+			mAudioManager.setStreamVolume(mStreamType, mLastProgress, 0);
+		}
+
+		private void sample() {
+			onSampleStarting(this);
+			mRingtone.play();
+		}
+
+		public void stopSample() {
+			if (mRingtone != null) {
+				mRingtone.stop();
+			}
+		}
 
         public SeekBar getSeekBar() {
             return mSeekBar;
@@ -345,12 +375,13 @@ public class VolumePreference extends SeekBarPreference implements
             }
         }
 
-        public void onRestoreInstanceState(VolumeStore volumeStore) {
-            if (volumeStore.volume != -1) {
-                mOriginalStreamVolume = volumeStore.originalVolume;
-                mLastProgress = volumeStore.volume;
-                postSetVolume(mLastProgress);
-            }
-        }
-    }
+		public void onRestoreInstanceState(VolumeStore volumeStore) {
+			if (volumeStore.volume != -1) {
+				mOriginalStreamVolume = volumeStore.originalVolume;			
+				mLastProgress = volumeStore.volume;		
+				postSetVolume(mLastProgress);
+			}
+		}
+
+	}
 }

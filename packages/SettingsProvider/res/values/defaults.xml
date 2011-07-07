@@ -71,4 +71,12 @@
 
     <!-- Default for Settings.System.VIBRATE_IN_SILENT -->
     <bool name="def_vibrate_in_silent">true</bool>
+    
+    <!-- Modify by luning at01-07-01 -->
+    <string name="def_phone_profiles_mode" translatable="false">general</string>
+    <string name="def_profiles_last_mode" translatable="false">general</string>
+    <integer name="def_profiles_general_volume">5</integer>
+    <integer name="def_profiles_meeting_volume">0</integer>
+    <integer name="def_profiles_outdoor_volume">7</integer>
+    <integer name="def_profiles_indoor_volume">5</integer>
 </resources>

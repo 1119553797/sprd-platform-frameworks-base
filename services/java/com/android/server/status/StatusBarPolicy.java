@@ -51,6 +51,7 @@ import android.text.format.DateFormat;
 import android.text.style.RelativeSizeSpan;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.util.Slog;
 import android.view.View;
 import android.view.ViewGroup;
@@ -396,6 +397,7 @@ public class StatusBarPolicy {
             }
             else if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION) ||
                     action.equals(AudioManager.VIBRATE_SETTING_CHANGED_ACTION)) {
+            	
                 updateVolume();
             }
             else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
@@ -403,7 +405,7 @@ public class StatusBarPolicy {
             }
             else if (action.equals(TtyIntent.TTY_ENABLED_CHANGE_ACTION)) {
                 updateTTY(intent);
-            }
+            }         
         }
     };
 
@@ -512,7 +514,8 @@ public class StatusBarPolicy {
         mVolumeIcon = service.addIcon(mVolumeData, null);
         service.setIconVisibility(mVolumeIcon, false);
         updateVolume();
-
+        
+        
         IntentFilter filter = new IntentFilter();
 
         // Register for Intent broadcasts for...
@@ -1176,13 +1179,37 @@ public class StatusBarPolicy {
 
     private final void updateVolume() {
         AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        final int ringerMode = audioManager.getRingerMode();
-        final boolean visible = ringerMode == AudioManager.RINGER_MODE_SILENT ||
-                ringerMode == AudioManager.RINGER_MODE_VIBRATE;
-        final int iconId = (ringerMode == AudioManager.RINGER_MODE_VIBRATE)
-                ? com.android.internal.R.drawable.stat_sys_ringer_vibrate
-                : com.android.internal.R.drawable.stat_sys_ringer_silent;
-
+          // ************Modify by luning at 01-07-01 begin************
+//        final int ringerMode = audioManager.getRingerMode();
+//        final boolean visible = ringerMode == AudioManager.RINGER_MODE_SILENT ||
+//                ringerMode == AudioManager.RINGER_MODE_VIBRATE;
+//        final int iconId = (ringerMode == AudioManager.RINGER_MODE_VIBRATE)
+//                ? com.android.internal.R.drawable.stat_sys_ringer_vibrate
+//                : com.android.internal.R.drawable.stat_sys_ringer_silent;
+        // ************Modify by luning at 01-07-01 end************
+    	
+    	// ************Modify by luning at 01-07-01 begin************
+		String currMode = audioManager.getCurrProfilesMode(mContext);
+		boolean visible = !currMode.equals(Settings.System.PROFILES_MODE_GENERAL); //general icon invisible
+		int iconId = 0;	
+		if(currMode .equals(Settings.System.PROFILES_MODE_SILENT))  //silent
+		{			
+			iconId = R.drawable.stat_sys_profiles_silent;
+		}
+		else if(currMode .equals(Settings.System.PROFILES_MODE_MEETING)) //meeting
+		{			
+			iconId = R.drawable.stat_sys_profiles_meeting;
+		}
+		else if(currMode .equals(Settings.System.PROFILES_MODE_OUTDOOR))  //outdoor
+		{			
+			iconId = R.drawable.stat_sys_profiles_outdoor;
+		}
+		else if(currMode .equals(Settings.System.PROFILES_MODE_INDOOR))  //indoor
+		{
+			iconId = R.drawable.stat_sys_profiles_indoor;
+		}			
+		// ************Modify by luning at 01-07-01 end************
+    	
         if (visible) {
             mVolumeData.iconId = iconId;
             mService.updateIcon(mVolumeIcon, mVolumeData, null);
@@ -1192,6 +1219,7 @@ public class StatusBarPolicy {
             mVolumeVisible = visible;
         }
     }
+    
 
     private final void updateBluetooth(Intent intent) {
         int iconId = com.android.internal.R.drawable.stat_sys_data_bluetooth;

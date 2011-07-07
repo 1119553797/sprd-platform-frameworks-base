@@ -660,6 +660,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + " VALUES(?,?);");
                 loadBooleanSetting(stmt, Settings.System.VIBRATE_IN_SILENT,
                         R.bool.def_vibrate_in_silent);
+                
+             // ************Modify by luning at01-07-01 begin************
+                loadStringSetting(stmt,Settings.System.PHONE_PROFILES_MODE,R.string.def_phone_profiles_mode);
+                loadStringSetting(stmt,Settings.System.PROFILES_LAST_MODE,R.string.def_profiles_last_mode);
+                loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_GENERAL + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_general_volume);
+                loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_MEETING + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_meeting_volume);
+                loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_OUTDOOR + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_outdoor_volume);
+                loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_INDOOR + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_indoor_volume);
+             // ************Modify by luning at01-07-01 end************
+                
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -1047,6 +1057,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
             loadBooleanSetting(stmt, Settings.System.VIBRATE_IN_SILENT,
                     R.bool.def_vibrate_in_silent);
+            
+         // ************Modify by luning at01-07-01 begin************
+            loadStringSetting(stmt,Settings.System.PHONE_PROFILES_MODE,R.string.def_phone_profiles_mode);
+            loadStringSetting(stmt,Settings.System.PROFILES_LAST_MODE,R.string.def_profiles_last_mode);
+            loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_GENERAL + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_general_volume);
+            loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_MEETING + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_meeting_volume);
+            loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_OUTDOOR + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_outdoor_volume);
+            loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_INDOOR + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_indoor_volume);
+            // ************Modify by luning at01-07-01 end************
+            
         } finally {
             if (stmt != null) stmt.close();
         }
