@@ -1338,8 +1338,6 @@ public class PhoneNumberUtils
                     return true;
                 }
             }
-            // no matches found against the list!
-            return false;
         }
 
         //no ecclist system property, so use our own list.
