@@ -1073,6 +1073,7 @@ class PowerManagerService extends IPowerManager.Stub
          System.out.println("  mUseSoftwareAutoBrightness=" + mUseSoftwareAutoBrightness);
          System.out.println("  mAutoBrightessEnabled=" + mAutoBrightessEnabled);
 */
+		synchronized (mLocks) {
         int N = mLocks.size();
          System.out.println();
          System.out.println("mLocks.size=" + N + ":");
@@ -1104,7 +1105,7 @@ class PowerManagerService extends IPowerManager.Stub
                     + ((p.pokey & POKE_LOCK_MEDIUM_TIMEOUT) != 0
                             ? " POKE_LOCK_MEDIUM_TIMEOUT" : ""));
         }
-
+		}
         System.out.println();
 		System.out.printf("%n==================================================%n");
 		System.out.printf("%n==================================================%n");
