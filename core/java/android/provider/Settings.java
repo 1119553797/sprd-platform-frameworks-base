@@ -337,6 +337,20 @@ public final class Settings {
      * Output: Nothing.
      */
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_APPLICATION_SPRD_USB_SETTINGS =
+            "android.settings.APPLICATION_SPRD_USB_SETTINGS";  //Add by liguxiang 07-08-11 for USB settings function
+    
+    /**
+     * Activity Action: Show settings to allow configuration of quick launch shortcuts.
+     * <p>
+     * In some cases, a matching Activity may not exist, so ensure you
+     * safeguard against this.
+     * <p>
+     * Input: Nothing.
+     * <p>
+     * Output: Nothing.
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_QUICK_LAUNCH_SETTINGS =
             "android.settings.QUICK_LAUNCH_SETTINGS";
 
@@ -705,6 +719,10 @@ public final class Settings {
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_COUNT);
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_DELAY_MS);
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS);
+            //Add by liguxiang 07-08-11 for USB settings function begin
+            MOVED_TO_SECURE.add(Secure.VSERIAL_ENABLED);
+            MOVED_TO_SECURE.add(Secure.GSERIAL_ENABLED);
+            //Add by liguxiang 07-08-11 for USB settings function end
         }
 
         /**
@@ -1773,6 +1791,14 @@ public final class Settings {
          */
         @Deprecated
         public static final String ADB_ENABLED = Secure.ADB_ENABLED;
+        
+        //Add by liguxiang 07-08-11 for USB settings function begin
+        @Deprecated
+        public static final String VSERIAL_ENABLED = Secure.VSERIAL_ENABLED;
+        
+        @Deprecated
+        public static final String GSERIAL_ENABLED = Secure.GSERIAL_ENABLED;
+        //Add by liguxiang 07-08-11 for USB settings function end
 
         /**
          * @deprecated Use {@link android.provider.Settings.Secure#ANDROID_ID} instead
@@ -2259,7 +2285,12 @@ public final class Settings {
          * Whether ADB is enabled.
          */
         public static final String ADB_ENABLED = "adb_enabled";
-
+        
+        //Add by liguxiang 07-08-11 for USB settings function begin
+        public static final String VSERIAL_ENABLED = "vserial_enabled";
+        public static final String GSERIAL_ENABLED = "gserial_enabled";
+        //Add by liguxiang 07-08-11 for USB settings function end
+        
         /**
          * Setting to allow mock locations and location provider status to be injected into the
          * LocationManager service for testing purposes during application development.  These
@@ -3410,7 +3441,11 @@ public final class Settings {
             MOUNT_UMS_AUTOSTART,
             MOUNT_UMS_PROMPT,
             MOUNT_UMS_NOTIFY_ENABLED,
-            UI_NIGHT_MODE
+            UI_NIGHT_MODE,
+            //Add by liguxiang 07-08-11 for USB settings function begin
+            VSERIAL_ENABLED,
+            GSERIAL_ENABLED
+            //Add by liguxiang 07-08-11 for USB settings function end
         };
 
         /**

@@ -121,13 +121,15 @@ public class StorageNotification extends StorageEventListener {
              * Storage is now shared. Modify the UMS notification
              * for stopping UMS.
              */
-            Intent intent = new Intent();
-            intent.setClass(mContext, com.android.server.status.UsbStorageActivity.class);
-            PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
-            setUsbStorageNotification(
-                    com.android.internal.R.string.usb_storage_stop_notification_title,
-                    com.android.internal.R.string.usb_storage_stop_notification_message,
-                    com.android.internal.R.drawable.stat_sys_warning, false, true, pi);
+        	//Add by liguxiang 07-08-11 for USB settings function begin
+//            Intent intent = new Intent();
+//            intent.setClass(mContext, com.android.server.status.UsbStorageActivity.class);
+//            PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
+//            setUsbStorageNotification(
+//                    com.android.internal.R.string.usb_storage_stop_notification_title,
+//                    com.android.internal.R.string.usb_storage_stop_notification_message,
+//                    com.android.internal.R.drawable.stat_sys_warning, false, true, pi);
+        	//Add by liguxiang 07-08-11 for USB settings function end
         } else if (newState.equals(Environment.MEDIA_CHECKING)) {
             /*
              * Storage is now checking. Update media notification and disable
@@ -239,21 +241,24 @@ public class StorageNotification extends StorageEventListener {
     void updateUsbMassStorageNotification(boolean available) {
 
         if (available) {
-            Intent intent = new Intent();
-            intent.setClass(mContext, com.android.server.status.UsbStorageActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        	//Add by liguxiang 07-08-11 for USB settings function begin
+//            Intent intent = new Intent();
+//            intent.setClass(mContext, com.android.server.status.UsbStorageActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        	//Add by liguxiang 07-08-11 for USB settings function end
 
             final boolean adbOn = 1 == Settings.Secure.getInt(
                 mContext.getContentResolver(),
                 Settings.Secure.ADB_ENABLED,
                 0);
-
-            PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
-            setUsbStorageNotification(
-                    com.android.internal.R.string.usb_storage_notification_title,
-                    com.android.internal.R.string.usb_storage_notification_message,
-                    com.android.internal.R.drawable.stat_sys_data_usb,
-                    false, true, pi);
+          //Add by liguxiang 07-08-11 for USB settings function begin
+//            PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
+//            setUsbStorageNotification(
+//                    com.android.internal.R.string.usb_storage_notification_title,
+//                    com.android.internal.R.string.usb_storage_notification_message,
+//                    com.android.internal.R.drawable.stat_sys_data_usb,
+//                    false, true, pi);
+          //Add by liguxiang 07-08-11 for USB settings function end
 
             if (POP_UMS_ACTIVITY_ON_CONNECT && !adbOn) {
                 // We assume that developers don't want to enable UMS every
@@ -262,7 +267,7 @@ public class StorageNotification extends StorageEventListener {
                 // is harmless) or transfer files (in which case this coaches
                 // the user about how to complete that task and saves several
                 // steps).
-                mContext.startActivity(intent);
+                //mContext.startActivity(intent);  //Add by liguxiang 07-08-11 for USB settings function
             }
         } else {
             setUsbStorageNotification(0, 0, 0, false, false, null);

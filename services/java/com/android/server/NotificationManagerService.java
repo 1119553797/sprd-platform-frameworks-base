@@ -114,6 +114,20 @@ class NotificationManagerService extends INotificationManager.Stub
     private boolean mAdbEnabled = false;
     private boolean mAdbNotificationShown = false;
     private Notification mAdbNotification;
+    
+    //Add by liguxiang 07-08-11 for USB settings function begin
+    private boolean mUmsEnabled = false;
+    private boolean mUmsNotificationShown = false;
+    private Notification mUmsNotification;
+    
+    private boolean mVserEnabled = false;
+    private boolean mVserNotificationShown = false;
+    private Notification mVserNotification;
+    
+    private boolean mGserEnabled = false;
+    private boolean mGserNotificationShown = false;
+    private Notification mGserNotification;
+    //Add by liguxiang 07-08-11 for USB settings function end
 
     private final ArrayList<NotificationRecord> mNotificationList =
             new ArrayList<NotificationRecord>();
@@ -132,7 +146,15 @@ class NotificationManagerService extends INotificationManager.Stub
     private static final int BATTERY_FULL_ARGB = 0xFF00FF00; // Charging Full - green solid on
     private static final int BATTERY_BLINK_ON = 125;
     private static final int BATTERY_BLINK_OFF = 2875;
-
+    //Add by liguxiang 07-08-11 for USB settings function begin
+    public enum UsbType{
+    	RNDIS,
+    	ADB,
+    	UMS,
+    	VSER,
+    	GSER
+    }
+    //Add by liguxiang 07-08-11 for USB settings function end
     private static String idDebugString(Context baseContext, String packageName, int id) {
         Context c = null;
 
@@ -328,10 +350,22 @@ class NotificationManagerService extends INotificationManager.Stub
                 }
             } else if (action.equals(Intent.ACTION_UMS_CONNECTED)) {
                 mUsbConnected = true;
-                updateAdbNotification();
+                //Add by liguxiang 07-08-11 for USB settings function begin
+                //updateAdbNotification();
+                updateUsbNotification(UsbType.ADB,mAdbEnabled,mAdbNotificationShown);
+                updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
+                updateUsbNotification(UsbType.VSER,mVserEnabled,mVserNotificationShown);
+                updateUsbNotification(UsbType.GSER,mGserEnabled,mGserNotificationShown);
+              //Add by liguxiang 07-08-11 for USB settings function end
             } else if (action.equals(Intent.ACTION_UMS_DISCONNECTED)) {
                 mUsbConnected = false;
-                updateAdbNotification();
+              //Add by liguxiang 07-08-11 for USB settings function begin
+                //updateAdbNotification();
+                updateUsbNotification(UsbType.ADB,mAdbEnabled,mAdbNotificationShown);
+                updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
+                updateUsbNotification(UsbType.VSER,mVserEnabled,mVserNotificationShown);
+                updateUsbNotification(UsbType.GSER,mGserEnabled,mGserNotificationShown);
+              //Add by liguxiang 07-08-11 for USB settings function end
             } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)
                     || action.equals(Intent.ACTION_PACKAGE_RESTARTED)
                     || (queryRestart=action.equals(Intent.ACTION_QUERY_PACKAGE_RESTART))
@@ -379,6 +413,18 @@ class NotificationManagerService extends INotificationManager.Stub
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.ADB_ENABLED), false, this);
+            
+            //Add by liguxiang 07-08-11 for USB settings function begin
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.USB_MASS_STORAGE_ENABLED), false, this);
+            
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.VSERIAL_ENABLED), false, this);
+            
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.GSERIAL_ENABLED), false, this);
+            //Add by liguxiang 07-08-11 for USB settings function end
+            
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE), false, this);
             update();
@@ -392,10 +438,43 @@ class NotificationManagerService extends INotificationManager.Stub
             ContentResolver resolver = mContext.getContentResolver();
             boolean adbEnabled = Settings.Secure.getInt(resolver,
                         Settings.Secure.ADB_ENABLED, 0) != 0;
+            
+            //Add by liguxiang 07-08-11 for USB settings function begin
+            boolean umsEnabled = Settings.Secure.getInt(resolver,
+                    Settings.Secure.USB_MASS_STORAGE_ENABLED, 0) != 0;
+            
+            boolean vserialEnabled = Settings.Secure.getInt(resolver,
+                    Settings.Secure.VSERIAL_ENABLED, 0) != 0;
+            
+            boolean gserialEnabled = Settings.Secure.getInt(resolver,
+                    Settings.Secure.GSERIAL_ENABLED, 0) != 0;
+            //Add by liguxiang 07-08-11 for USB settings function end
+            
             if (mAdbEnabled != adbEnabled) {
                 mAdbEnabled = adbEnabled;
-                updateAdbNotification();
+                //Modify by liguxiang 07-08-11 for USB settings function begin
+                //updateAdbNotification();
+                updateUsbNotification(UsbType.ADB,mAdbEnabled,mAdbNotificationShown);
+                //Modify by liguxiang 07-08-11 for USB settings function end
             }
+            
+            //Add by liguxiang 07-08-11 for USB settings function begin
+            if (mUmsEnabled != umsEnabled) {
+            	mUmsEnabled = umsEnabled;
+                updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
+            }
+            
+            if (mVserEnabled != vserialEnabled) {
+            	mVserEnabled = vserialEnabled;
+            	 updateUsbNotification(UsbType.VSER,mVserEnabled,mVserNotificationShown);
+            }
+            
+            if (mGserEnabled != gserialEnabled) {
+            	mGserEnabled = gserialEnabled;
+            	updateUsbNotification(UsbType.GSER,mGserEnabled,mGserNotificationShown);
+            }
+            //Add by liguxiang 07-08-11 for USB settings function end
+            
             boolean pulseEnabled = Settings.System.getInt(resolver,
                         Settings.System.NOTIFICATION_LIGHT_PULSE, 0) != 0;
             if (mNotificationPulseEnabled != pulseEnabled) {
@@ -1172,6 +1251,163 @@ class NotificationManagerService extends INotificationManager.Stub
                 mAdbNotificationShown = false;
                 notificationManager.cancel(
                         com.android.internal.R.string.adb_active_notification_title);
+            }
+        }
+    }
+    
+    private void updateUsbNotification(UsbType usbtype,boolean usbEnabled,boolean usbNotificationShown) {
+    	if (usbtype == UsbType.ADB && ("0".equals(SystemProperties.get("persist.adb.notify")))) {
+            return;
+        }
+        if (usbEnabled && mUsbConnected) {
+            if (!usbNotificationShown) {
+                NotificationManager notificationManager = (NotificationManager) mContext
+                        .getSystemService(Context.NOTIFICATION_SERVICE);
+                if (notificationManager != null) {
+                    Resources r = mContext.getResources();
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_SPRD_USB_SETTINGS);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                		  Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                    // Note: we are hard-coding the component because this is
+                    // an important security UI that we don't want anyone
+                    // intercepting.
+                    intent.setComponent(new ComponentName("com.android.settings","com.android.settings.SprdUsbSettings"));
+                    PendingIntent pi = PendingIntent.getActivity(mContext, 0,intent, 0);
+                    
+                    switch(usbtype){
+                    case ADB:
+                    	CharSequence title = r.getText(
+                                com.android.internal.R.string.adb_active_notification_title);
+                        CharSequence message = r.getText(
+                                com.android.internal.R.string.adb_active_notification_message);
+
+                        if (mAdbNotification == null) {
+                            mAdbNotification = new Notification();
+                            mAdbNotification.icon = com.android.internal.R.drawable.stat_sys_adb;
+                            mAdbNotification.when = 0;
+                            mAdbNotification.flags = Notification.FLAG_ONGOING_EVENT;
+                            mAdbNotification.tickerText = title;
+                            mAdbNotification.defaults = 0; // please be quiet
+                            mAdbNotification.sound = null;
+                            mAdbNotification.vibrate = null;
+                        }
+                        
+                        mAdbNotification.setLatestEventInfo(mContext, title, message, pi);
+                        	mAdbNotificationShown = true;
+                        	notificationManager.notify(
+                                    com.android.internal.R.string.adb_active_notification_title,
+                                    mAdbNotification);
+                        break;
+                        
+                    case UMS:
+                    	CharSequence umstitle = r.getText(
+                                com.android.internal.R.string.usb_storage_notification_title);
+                        CharSequence umsmessage = r.getText(
+                                com.android.internal.R.string.ums_active_notification_message);
+
+                        if (mUmsNotification == null) {
+                        	mUmsNotification = new Notification();
+                        	mUmsNotification.icon = com.android.internal.R.drawable.stat_sys_data_usb;
+                        	mUmsNotification.when = 0;
+                        	mUmsNotification.flags = Notification.FLAG_ONGOING_EVENT;
+                        	mUmsNotification.tickerText = umstitle;
+                        	mUmsNotification.defaults = 0; // please be quiet
+                        	mUmsNotification.sound = null;
+                        	mUmsNotification.vibrate = null;
+                        }
+                        
+                        mUmsNotification.setLatestEventInfo(mContext, umstitle, umsmessage, pi);
+                        mUmsNotificationShown = true;
+                        notificationManager.notify(
+                                com.android.internal.R.string.usb_storage_notification_title,
+                                mUmsNotification);
+                        break;
+                        
+                    case VSER:
+                    	CharSequence vserialtitle = r.getText(
+                                com.android.internal.R.string.vserial_active_notification_title);
+                        CharSequence vserialmessage = r.getText(
+                                com.android.internal.R.string.vserial_active_notification_message);
+
+                        if (mVserNotification == null) {
+                        	mVserNotification = new Notification();
+                        	mVserNotification.icon = com.android.internal.R.drawable.stat_sys_modemlog;
+                        	mVserNotification.when = 0;
+                        	mVserNotification.flags = Notification.FLAG_ONGOING_EVENT;
+                        	mVserNotification.tickerText = vserialtitle;
+                        	mVserNotification.defaults = 0; // please be quiet
+                        	mVserNotification.sound = null;
+                        	mVserNotification.vibrate = null;
+                        }
+                        
+                        mVserNotification.setLatestEventInfo(mContext, vserialtitle, vserialmessage, pi);
+                        mVserNotificationShown = true;
+                        notificationManager.notify(
+                                com.android.internal.R.string.vserial_active_notification_title,
+                                mVserNotification);
+                    	break;
+
+                    case GSER:
+                    	CharSequence gserialtitle = r.getText(
+                                com.android.internal.R.string.gserial_active_notification_title);
+                        CharSequence gserialmessage = r.getText(
+                                com.android.internal.R.string.gserial_active_notification_message);
+
+                        if (mGserNotification == null) {
+                        	mGserNotification = new Notification();
+                        	mGserNotification.icon = com.android.internal.R.drawable.stat_sys_serial;
+                        	mGserNotification.when = 0;
+                        	mGserNotification.flags = Notification.FLAG_ONGOING_EVENT;
+                        	mGserNotification.tickerText = gserialtitle;
+                        	mGserNotification.defaults = 0; // please be quiet
+                        	mGserNotification.sound = null;
+                        	mGserNotification.vibrate = null;
+                        }
+                        
+                        mGserNotification.setLatestEventInfo(mContext, gserialtitle, gserialmessage, pi);
+                        mGserNotificationShown = true;
+                        notificationManager.notify(
+                                com.android.internal.R.string.gserial_active_notification_title,
+                                mGserNotification);
+                    	break;
+                    	
+                    default:
+                        	break;
+                    }
+                }
+            }
+
+        } else if (usbNotificationShown) {
+            NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+            	switch(usbtype){
+            	case ADB:
+            		mAdbNotificationShown = false;
+                    notificationManager.cancel(
+                            com.android.internal.R.string.adb_active_notification_title);
+                    break;
+                    
+            	case UMS:
+            		mUmsNotificationShown = false;
+                    notificationManager.cancel(
+                            com.android.internal.R.string.usb_storage_notification_title);
+                    break;
+                    
+            	case VSER:
+            		mVserNotificationShown = false;
+                    notificationManager.cancel(
+                            com.android.internal.R.string.vserial_active_notification_title);
+                    break;            
+                    
+            	case GSER:
+            		mGserNotificationShown = false;
+                    notificationManager.cancel(
+                            com.android.internal.R.string.gserial_active_notification_title);
+                    break;
+                default:
+                	break;
+            	}
+                
             }
         }
     }

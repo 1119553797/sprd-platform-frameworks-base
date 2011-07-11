@@ -867,4 +867,13 @@
     <string name="keyguard_password_enter_new_pin_second_code" >"再输入一次 PIN 码"</string>
     <string name="keyguard_password_wrong_puk_code">"PUK 码不正确！"</string>
     <!--PUK Input Add end-->
+    
+    <!--Add by liguxiang 07-08-11 for USB settings function begin -->
+    <string name="ums_active_notification_message" >已启用大容量存储</string>
+    <string name="vserial_active_notification_title" >使用手机日志模式</string>
+    <string name="vserial_active_notification_message" >已启用手机日志模式</string>
+    <string name="gserial_active_notification_title" >使用串口连接</string>
+    <string name="gserial_active_notification_message" >已启用串口连接</string>
+    <!--Add by liguxiang 07-08-11 for USB settings function end -->
+    
 </resources>
