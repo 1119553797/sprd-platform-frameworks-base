@@ -731,13 +731,13 @@ public class AudioManager {
     
     public void saveProfilesVolume(Context context,String currMode,int volume)
     {
-    	Log.d("hoperun", "saveProfilesVolume"+"  currMode: "+currMode+"   volume:"+volume);
+    	
     	Settings.System.putInt(context.getContentResolver(), currMode + Settings.System.APPEND_FOR_VOLUME, volume);
     }
        
     public int getProfilesVolume(Context context,String currMode ,int def)
     {
-    	Log.d("hoperun", "saveProfilesVolume"+"  currMode: "+currMode+"   volume:"+Settings.System.getInt(context.getContentResolver(), currMode + Settings.System.APPEND_FOR_VOLUME , def));
+    	
     	return Settings.System.getInt(context.getContentResolver(), currMode + Settings.System.APPEND_FOR_VOLUME , def);
     }
     
