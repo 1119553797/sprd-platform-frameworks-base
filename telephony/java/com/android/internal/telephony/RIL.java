@@ -1801,10 +1801,13 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     public void setSmscAddress(String address, Message result) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_SET_SMSC_ADDRESS, result);
 
-        rr.mp.writeString(address);
+        String hexAddr = IccUtils.bytesToHexString(address.getBytes());
+        Log.d(LOG_TAG, "[sms]setSmscAddress ="+hexAddr);
+
+        rr.mp.writeString(hexAddr);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                + " : " + address);
+                + " : " + hexAddr);
 
         send(rr);
     }
@@ -2681,6 +2684,18 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
 
         response = p.readString();
 
+        return response;
+    }
+
+    protected Object
+    responseSMSCString(Parcel p) {
+        String response;
+        String hexString;
+
+        hexString = p.readString();
+        byte[] dataSmsc = IccUtils.hexStringToBytes(hexString);
+        response = new String(dataSmsc);
+        Log.d(LOG_TAG, "[sms]responseSMSCString ="+response);
         return response;
     }
 
