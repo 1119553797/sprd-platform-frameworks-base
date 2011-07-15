@@ -819,7 +819,10 @@ public final class SprdRIL extends RIL {
 				case RIL_UNSOL_RESPONSE_NEW_SMS: ret =  responseString(p); break;
 				case RIL_UNSOL_RESPONSE_NEW_SMS_STATUS_REPORT: ret =  responseString(p); break;
 				case RIL_UNSOL_RESPONSE_NEW_SMS_ON_SIM: ret =	responseInts(p); break;
-				case RIL_UNSOL_ON_USSD: ret =	responseStrings(p); break;
+				//add by liguxiang 07-15-11 for MS253993 begin
+				//case RIL_UNSOL_ON_USSD: ret =	responseStrings(p); break;
+				case RIL_UNSOL_ON_USSD: ret =	responseUnsolUssdStrings(p); break;
+				//add by liguxiang 07-15-11 for MS253993 end
 				case RIL_UNSOL_NITZ_TIME_RECEIVED: ret =  responseString(p); break;
 				case RIL_UNSOL_SIGNAL_STRENGTH: ret = responseSignalStrength(p); break;
 				case RIL_UNSOL_DATA_CALL_LIST_CHANGED: ret = responseDataCallList(p);break;
