@@ -1738,7 +1738,7 @@ public class WifiService extends IWifiManager.Stub {
          */
         private boolean shouldWifiStayAwake(int stayAwakeConditions, int pluggedType) {
             int wifiSleepPolicy = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+                    Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
 
             if (wifiSleepPolicy == Settings.System.WIFI_SLEEP_POLICY_NEVER) {
                 // Never sleep
