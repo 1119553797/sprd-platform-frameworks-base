@@ -605,8 +605,7 @@ public final class TDPhone extends GSMPhone {
         mVideoCallDisconnectRegistrants.notifyRegistrants(ar);
     }
 	
-	void notifyVideoCallFallBack(){
-        AsyncResult ar = new AsyncResult(null, this, null);
+	void notifyVideoCallFallBack(AsyncResult ar){
         mVideoCallFallBackRegistrants.notifyRegistrants(ar);
     }
 	

@@ -814,7 +814,7 @@ public final class VideoCallTracker extends CallTracker {
             break;
 
 			case EVENT_FALLBACK:
-				phone.notifyVideoCallFallBack();
+				phone.notifyVideoCallFallBack((AsyncResult)msg.obj);
 			break;
 			case EVENT_VIDEOCALLFAIL:
 				phone.notifyVideoCallFail((AsyncResult)msg.obj);
