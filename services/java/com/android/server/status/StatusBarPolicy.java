@@ -68,7 +68,11 @@ import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.cdma.EriInfo;
 import com.android.internal.telephony.cdma.TtyIntent;
+//CR253162 Modify Start
+import com.android.internal.telephony.PhoneStateIntentReceiver;
+//CR253162 Modify End
 import com.android.server.am.BatteryStatsService;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -86,6 +90,11 @@ public class StatusBarPolicy {
 
     // message codes for the handler
     private static final int EVENT_BATTERY_CLOSE = 4;
+
+    //CR253162 Modify Start
+    private static final int EVENT_AIRPLANE_MODE = 5;
+    private PhoneStateIntentReceiver mPhoneStateReceiver;
+    //CR253162 Modify End
 
     private final Context mContext;
     private final StatusBarService mService;
@@ -544,6 +553,12 @@ public class StatusBarPolicy {
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TtyIntent.TTY_ENABLED_CHANGE_ACTION);
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
+
+        //CR253162 Modify Start
+        mPhoneStateReceiver = new PhoneStateIntentReceiver(mContext, mHandler);
+        mPhoneStateReceiver.notifyServiceState(EVENT_AIRPLANE_MODE);
+        mPhoneStateReceiver.registerIntent();
+        //CR253162 Modify End
 
         // load config to determine if to distinguish Hspa data icon
         try {
@@ -1410,6 +1425,11 @@ public class StatusBarPolicy {
                     closeLastBatteryView();
                 }
                 break;
+            //CR253162 Modify Start
+            case EVENT_AIRPLANE_MODE:
+                updateSignalStrength();
+                break;
+            //CR253162 Modify End
             }
         }
     }
