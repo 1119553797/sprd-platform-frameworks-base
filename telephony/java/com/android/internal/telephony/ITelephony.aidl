@@ -148,6 +148,9 @@ interface ITelephony {
     boolean supplyPuk(String puk,String newPin);
     //PUK Input Add End
     
+    String getSmsc();
+    boolean setSmsc(String smscAddr);
+    
     /**
      * Handles PIN MMI commands (PIN/PIN2/PUK/PUK2), which are initiated
      * without SEND (so <code>dial</code> is not appropriate).
