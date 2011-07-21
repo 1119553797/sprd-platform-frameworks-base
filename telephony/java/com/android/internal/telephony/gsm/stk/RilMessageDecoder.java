@@ -150,6 +150,12 @@ class RilMessageDecoder extends HierarchicalStateMachine {
             try {
                 StkLog.d(this, "[stk]ril msg = " + rilMsg.mId + " mData =" + (String)rilMsg.mData);
                 rawData = IccUtils.hexStringToBytes((String) rilMsg.mData);
+                StkLog.d(this, "[stk]rawData length"+rawData.length);
+                if (rawData.length == 0) {
+                    StkLog.d(this, "[stk]rawData is empty");
+                    decodingStarted = false;
+                    break;
+                }
             } catch (Exception e) {
                 // zombie messages are dropped
                 StkLog.d(this, "decodeMessageParams dropping zombie messages");
