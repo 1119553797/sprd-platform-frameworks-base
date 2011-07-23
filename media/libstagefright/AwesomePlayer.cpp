@@ -1105,7 +1105,7 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 	            mClient.interface(), mVideoTrack->getFormat(),
 	            false, // createEncoder
 	            mVideoTrack,
-	            NULL, flags, 1, 3);
+	            NULL, flags, 2, 3);
 	} else {
 	    mVideoSource = OMXCodec::Create(
 	            mClient.interface(), mVideoTrack->getFormat(),

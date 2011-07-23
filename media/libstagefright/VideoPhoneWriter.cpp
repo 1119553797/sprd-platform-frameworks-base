@@ -27,8 +27,21 @@ VideoPhoneWriter::VideoPhoneWriter(int handle)
 VideoPhoneWriter::~VideoPhoneWriter() 
 {
 	LOGI("VideoPhoneWriter::~VideoPhoneWriter");
-    	if (m_bStarted) 
-        	stop();
+	if (m_bStarted) 
+    	stop();
+
+	if (m_MediaSource != NULL) {
+		// The following hack is necessary to ensure that the OMX
+		// component is completely released by the time we may try
+		// to instantiate it again.
+		wp<MediaSource> tmp = m_MediaSource;
+		m_MediaSource.clear();
+		while (tmp.promote() != NULL) {
+			usleep(1000);
+		}
+		//IPCThreadState::self()->flushCommands();
+	}
+
 /*
     	if (m_File != NULL) 
     	{
@@ -118,21 +131,22 @@ fail:
 status_t VideoPhoneWriter::stop() 
 {
 	status_t err 	= OK;
-	m_bStarted 	= false;
 
 	if (!m_bStarted)
         	goto over;
+	
+	m_bStarted 	= false;
 
-    	void *dummy;
-    	pthread_join(m_Thread, &dummy);
+	void *dummy;
+	pthread_join(m_Thread, &dummy);
 
-    	if ((err = (status_t) dummy) != OK)
-    	{
-    		m_MediaSource->stop();
+	if ((err = (status_t) dummy) != OK)
+	{
+		m_MediaSource->stop();
 		goto over;
-    	}
-		
-       err = m_MediaSource->stop();
+	}
+	
+   err = m_MediaSource->stop();
 
 over:
 	
@@ -165,20 +179,20 @@ status_t VideoPhoneWriter::threadFunc()
 	while (m_bStarted) 
 	{
 		MediaBuffer *buffer;
-		LOGI("before read");
+		//LOGI("before read");
 		err = m_MediaSource->read(&buffer);
-		LOGI("after read %d", err);
+		//LOGI("after read %d", err);
 
 		if (err != OK)
 			break;
 
 		ssize_t nLen = (ssize_t)buffer->range_length();
-		LOGI("before write %d", nLen);
+		//LOGI("before write %d", nLen);
 		
 		ssize_t n = write(m_nHandle,
 										(const uint8_t *)buffer->data() + buffer->range_offset(),
 										nLen);
-		LOGI("after write %d", n);
+		//LOGI("after write %d", n);
 
 		buffer->release();
 		buffer = NULL;

@@ -221,7 +221,7 @@ status_t MediaPhone::stop()
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    if (!(mCurrentState & (MEDIA_PHONE_STARTED|MEDIA_PHONE_PREPARED))) {
+    if (!(mCurrentState & (MEDIA_PHONE_STARTED|MEDIA_PHONE_PREPARED|MEDIA_PHONE_ERROR))) {
         LOGE("stop called in an invalid state: %d", mCurrentState);
         return INVALID_OPERATION;
     }
@@ -474,10 +474,10 @@ status_t MediaPhone::stopDownLink()
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    /*if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+    if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
         LOGE("stopUpLink called in an invalid state: %d", mCurrentState);
         return INVALID_OPERATION;
-    }*/
+    }
     if (mIsDownLinkStopped) {
         LOGI("alreading stopped DownLink");
         return OK;

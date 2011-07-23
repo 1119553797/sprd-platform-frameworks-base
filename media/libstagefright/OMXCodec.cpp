@@ -1468,6 +1468,8 @@ OMXCodec::OMXCodec(
       mCodecSpecificDataIndex(0),
       mState(LOADED),
       mInitialBufferSubmit(true),
+      mInitialRead(true),
+      mWaitOutput(false),
       mSignalledEOS(false),
       mNoMoreOutputData(false),
       mOutputPortSettingsHaveChanged(false),
@@ -1787,6 +1789,14 @@ void OMXCodec::on_message(const omx_message &msg) {
                     info->mMediaBuffer = NULL;
                 }
             }
+			
+			if (!mWaitOutput && (mBufferCountOutput > 0)){
+				CODEC_LOGV("mEmptyBuffers.push(%d)", i);
+				mEmptyBuffers.push(i);
+				CODEC_LOGV("EMPTY_BUFFER_DONE, just return");
+				return;
+			}
+			mWaitOutput = false;
 
             if (mPortStatus[kPortIndexInput] == DISABLING) {
                 CODEC_LOGV("Port is disabled, freeing buffer %p", buffer);
@@ -1955,6 +1965,7 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
         case OMX_EventError:
         {
             CODEC_LOGE("ERROR(0x%08lx, %ld)", data1, data2);
+			mWaitOutput = true;
 
 	    if(data1!=OMX_ErrorStreamCorrupt){//@jgdu
 		setState(ERROR);
@@ -2302,6 +2313,8 @@ status_t OMXCodec::freeBuffersOnPort(
     }
 
     CHECK(onlyThoseWeOwn || buffers->isEmpty());
+
+	mEmptyBuffers.clear();
 
     return stickyErr;
 }
@@ -3010,6 +3023,8 @@ status_t OMXCodec::start(MetaData *meta) {
 
     mCodecSpecificDataIndex = 0;
     mInitialBufferSubmit = true;
+	mInitialRead = true;
+	mWaitOutput = false;
     mSignalledEOS = false;
     mNoMoreOutputData = false;
     mOutputPortSettingsHaveChanged = false;
@@ -3173,11 +3188,27 @@ status_t OMXCodec::read(
         }
     }
 
+	CODEC_LOGV("mInitialRead: %d", mInitialRead);
+	if (mInitialRead){
+		mInitialRead = false;
+	} else {
+		if ((mBufferCountOutput > 0) && (mEmptyBuffers.size() > 0)){
+			int index = mEmptyBuffers.top();
+			CODEC_LOGV("mEmptyBuffers, size: %d, index: %d", mEmptyBuffers.size(), index);
+			mEmptyBuffers.pop();
+			Vector<BufferInfo> *buffers = &mPortBuffers[kPortIndexInput];
+			drainInputBuffer(&buffers->editItemAt(index));
+		}
+	}
+
     while (mState != ERROR && !mNoMoreOutputData && mFilledBuffers.empty()) {
+		CODEC_LOGV("mNoMoreOutputData: %d, mFilledBuffers.empty(): %d", mNoMoreOutputData, mFilledBuffers.empty());
         mBufferFilled.wait(mLock);
+		CODEC_LOGV("continue");
     }
 
     if (mState == ERROR) {
+		CODEC_LOGV("read end UNKNOWN_ERROR");
         return UNKNOWN_ERROR;
     }
 
@@ -3188,6 +3219,8 @@ status_t OMXCodec::read(
     if (mOutputPortSettingsHaveChanged) {
         mOutputPortSettingsHaveChanged = false;
 
+		CODEC_LOGV("read end INFO_FORMAT_CHANGED");
+
         return INFO_FORMAT_CHANGED;
     }
 
@@ -3197,9 +3230,31 @@ status_t OMXCodec::read(
     BufferInfo *info = &mPortBuffers[kPortIndexOutput].editItemAt(index);
     info->mMediaBuffer->add_ref();
     *buffer = info->mMediaBuffer;
+	
+	CODEC_LOGV("read end OK");
 
     return OK;
 }
+
+void OMXCodec::internalSignalBufferReturned(MediaBuffer *buffer) {
+
+    Vector<BufferInfo> *buffers = &mPortBuffers[kPortIndexOutput];
+	CODEC_LOGV("internalSignalBufferReturned, size: %d", buffers->size());
+    for (size_t i = 0; i < buffers->size(); ++i) {
+        BufferInfo *info = &buffers->editItemAt(i);
+		
+		CODEC_LOGV("internalSignalBufferReturned, i: %d", i);
+
+        if (info->mMediaBuffer == buffer) {
+            CHECK_EQ(mPortStatus[kPortIndexOutput], ENABLED);
+            fillOutputBuffer(info);
+            return;
+        }
+    }
+
+    CHECK(!"should not be here.");
+}
+
 
 void OMXCodec::signalBufferReturned(MediaBuffer *buffer) {
     Mutex::Autolock autoLock(mLock);
