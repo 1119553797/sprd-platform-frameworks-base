@@ -720,8 +720,7 @@ public final class Settings {
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_DELAY_MS);
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS);
             //Add by liguxiang 07-08-11 for USB settings function begin
-            MOVED_TO_SECURE.add(Secure.VSERIAL_ENABLED);
-            MOVED_TO_SECURE.add(Secure.GSERIAL_ENABLED);
+            MOVED_TO_SECURE.add(Secure.MODEM_ENABLED);
             //Add by liguxiang 07-08-11 for USB settings function end
         }
 
@@ -1794,10 +1793,7 @@ public final class Settings {
         
         //Add by liguxiang 07-08-11 for USB settings function begin
         @Deprecated
-        public static final String VSERIAL_ENABLED = Secure.VSERIAL_ENABLED;
-        
-        @Deprecated
-        public static final String GSERIAL_ENABLED = Secure.GSERIAL_ENABLED;
+        public static final String VSERIAL_ENABLED = Secure.MODEM_ENABLED;
         //Add by liguxiang 07-08-11 for USB settings function end
 
         /**
@@ -2287,8 +2283,7 @@ public final class Settings {
         public static final String ADB_ENABLED = "adb_enabled";
         
         //Add by liguxiang 07-08-11 for USB settings function begin
-        public static final String VSERIAL_ENABLED = "vserial_enabled";
-        public static final String GSERIAL_ENABLED = "gserial_enabled";
+        public static final String MODEM_ENABLED = "modem_enabled";
         //Add by liguxiang 07-08-11 for USB settings function end
         
         /**
@@ -3443,8 +3438,7 @@ public final class Settings {
             MOUNT_UMS_NOTIFY_ENABLED,
             UI_NIGHT_MODE,
             //Add by liguxiang 07-08-11 for USB settings function begin
-            VSERIAL_ENABLED,
-            GSERIAL_ENABLED
+            MODEM_ENABLED
             //Add by liguxiang 07-08-11 for USB settings function end
         };
 

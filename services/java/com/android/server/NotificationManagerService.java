@@ -120,13 +120,9 @@ class NotificationManagerService extends INotificationManager.Stub
     private boolean mUmsNotificationShown = false;
     private Notification mUmsNotification;
     
-    private boolean mVserEnabled = false;
-    private boolean mVserNotificationShown = false;
-    private Notification mVserNotification;
-    
-    private boolean mGserEnabled = false;
-    private boolean mGserNotificationShown = false;
-    private Notification mGserNotification;
+    private boolean mModemEnabled = false;
+    private boolean mModemNotificationShown = false;
+    private Notification mModemNotification;
     //Add by liguxiang 07-08-11 for USB settings function end
 
     private final ArrayList<NotificationRecord> mNotificationList =
@@ -151,8 +147,7 @@ class NotificationManagerService extends INotificationManager.Stub
     	RNDIS,
     	ADB,
     	UMS,
-    	VSER,
-    	GSER
+        MODEM
     }
     //Add by liguxiang 07-08-11 for USB settings function end
     private static String idDebugString(Context baseContext, String packageName, int id) {
@@ -354,8 +349,7 @@ class NotificationManagerService extends INotificationManager.Stub
                 //updateAdbNotification();
                 updateUsbNotification(UsbType.ADB,mAdbEnabled,mAdbNotificationShown);
                 updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
-                updateUsbNotification(UsbType.VSER,mVserEnabled,mVserNotificationShown);
-                updateUsbNotification(UsbType.GSER,mGserEnabled,mGserNotificationShown);
+                updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
               //Add by liguxiang 07-08-11 for USB settings function end
             } else if (action.equals(Intent.ACTION_UMS_DISCONNECTED)) {
                 mUsbConnected = false;
@@ -363,8 +357,7 @@ class NotificationManagerService extends INotificationManager.Stub
                 //updateAdbNotification();
                 updateUsbNotification(UsbType.ADB,mAdbEnabled,mAdbNotificationShown);
                 updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
-                updateUsbNotification(UsbType.VSER,mVserEnabled,mVserNotificationShown);
-                updateUsbNotification(UsbType.GSER,mGserEnabled,mGserNotificationShown);
+                updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
               //Add by liguxiang 07-08-11 for USB settings function end
             } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)
                     || action.equals(Intent.ACTION_PACKAGE_RESTARTED)
@@ -419,10 +412,7 @@ class NotificationManagerService extends INotificationManager.Stub
                     Settings.Secure.USB_MASS_STORAGE_ENABLED), false, this);
             
             resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.VSERIAL_ENABLED), false, this);
-            
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.GSERIAL_ENABLED), false, this);
+                    Settings.Secure.MODEM_ENABLED), false, this);
             //Add by liguxiang 07-08-11 for USB settings function end
             
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -443,11 +433,9 @@ class NotificationManagerService extends INotificationManager.Stub
             boolean umsEnabled = Settings.Secure.getInt(resolver,
                     Settings.Secure.USB_MASS_STORAGE_ENABLED, 0) != 0;
             
-            boolean vserialEnabled = Settings.Secure.getInt(resolver,
-                    Settings.Secure.VSERIAL_ENABLED, 0) != 0;
+            boolean modemEnabled = Settings.Secure.getInt(resolver,
+                    Settings.Secure.MODEM_ENABLED, 0) != 0;
             
-            boolean gserialEnabled = Settings.Secure.getInt(resolver,
-                    Settings.Secure.GSERIAL_ENABLED, 0) != 0;
             //Add by liguxiang 07-08-11 for USB settings function end
             
             if (mAdbEnabled != adbEnabled) {
@@ -464,14 +452,9 @@ class NotificationManagerService extends INotificationManager.Stub
                 updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
             }
             
-            if (mVserEnabled != vserialEnabled) {
-            	mVserEnabled = vserialEnabled;
-            	 updateUsbNotification(UsbType.VSER,mVserEnabled,mVserNotificationShown);
-            }
-            
-            if (mGserEnabled != gserialEnabled) {
-            	mGserEnabled = gserialEnabled;
-            	updateUsbNotification(UsbType.GSER,mGserEnabled,mGserNotificationShown);
+            if (mModemEnabled != modemEnabled) {
+            	mModemEnabled = modemEnabled;
+            	 updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
             }
             //Add by liguxiang 07-08-11 for USB settings function end
             
@@ -1323,54 +1306,30 @@ class NotificationManagerService extends INotificationManager.Stub
                                 mUmsNotification);
                         break;
                         
-                    case VSER:
+                    case MODEM:
                     	CharSequence vserialtitle = r.getText(
-                                com.android.internal.R.string.vserial_active_notification_title);
+                                com.android.internal.R.string.modem_active_notification_title);
                         CharSequence vserialmessage = r.getText(
-                                com.android.internal.R.string.vserial_active_notification_message);
+                                com.android.internal.R.string.modem_active_notification_message);
 
-                        if (mVserNotification == null) {
-                        	mVserNotification = new Notification();
-                        	mVserNotification.icon = com.android.internal.R.drawable.stat_sys_modemlog;
-                        	mVserNotification.when = 0;
-                        	mVserNotification.flags = Notification.FLAG_ONGOING_EVENT;
-                        	mVserNotification.tickerText = vserialtitle;
-                        	mVserNotification.defaults = 0; // please be quiet
-                        	mVserNotification.sound = null;
-                        	mVserNotification.vibrate = null;
+                        if (mModemNotification == null) {
+                        	mModemNotification = new Notification();
+                        	mModemNotification.icon = com.android.internal.R.drawable.stat_sys_modemlog;
+                        	mModemNotification.when = 0;
+                        	mModemNotification.flags = Notification.FLAG_ONGOING_EVENT;
+                        	mModemNotification.tickerText = vserialtitle;
+                        	mModemNotification.defaults = 0; // please be quiet
+                        	mModemNotification.sound = null;
+                        	mModemNotification.vibrate = null;
                         }
                         
-                        mVserNotification.setLatestEventInfo(mContext, vserialtitle, vserialmessage, pi);
-                        mVserNotificationShown = true;
+                        mModemNotification.setLatestEventInfo(mContext, vserialtitle, vserialmessage, pi);
+                        mModemNotificationShown = true;
                         notificationManager.notify(
-                                com.android.internal.R.string.vserial_active_notification_title,
-                                mVserNotification);
+                                com.android.internal.R.string.modem_active_notification_title,
+                                mModemNotification);
                     	break;
 
-                    case GSER:
-                    	CharSequence gserialtitle = r.getText(
-                                com.android.internal.R.string.gserial_active_notification_title);
-                        CharSequence gserialmessage = r.getText(
-                                com.android.internal.R.string.gserial_active_notification_message);
-
-                        if (mGserNotification == null) {
-                        	mGserNotification = new Notification();
-                        	mGserNotification.icon = com.android.internal.R.drawable.stat_sys_serial;
-                        	mGserNotification.when = 0;
-                        	mGserNotification.flags = Notification.FLAG_ONGOING_EVENT;
-                        	mGserNotification.tickerText = gserialtitle;
-                        	mGserNotification.defaults = 0; // please be quiet
-                        	mGserNotification.sound = null;
-                        	mGserNotification.vibrate = null;
-                        }
-                        
-                        mGserNotification.setLatestEventInfo(mContext, gserialtitle, gserialmessage, pi);
-                        mGserNotificationShown = true;
-                        notificationManager.notify(
-                                com.android.internal.R.string.gserial_active_notification_title,
-                                mGserNotification);
-                    	break;
-                    	
                     default:
                         	break;
                     }
@@ -1393,17 +1352,12 @@ class NotificationManagerService extends INotificationManager.Stub
                             com.android.internal.R.string.usb_storage_notification_title);
                     break;
                     
-            	case VSER:
-            		mVserNotificationShown = false;
+            	case MODEM:
+            		mModemNotificationShown = false;
                     notificationManager.cancel(
-                            com.android.internal.R.string.vserial_active_notification_title);
+                            com.android.internal.R.string.modem_active_notification_title);
                     break;            
                     
-            	case GSER:
-            		mGserNotificationShown = false;
-                    notificationManager.cancel(
-                            com.android.internal.R.string.gserial_active_notification_title);
-                    break;
                 default:
                 	break;
             	}

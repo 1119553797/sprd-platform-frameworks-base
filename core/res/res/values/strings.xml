@@ -2294,10 +2294,8 @@
     
     <!--Add by liguxiang 07-08-11 for USB settings function begin -->
     <string name="ums_active_notification_message" >usb mass storage enabled</string>
-    <string name="vserial_active_notification_title" >use mobile log mode</string>
-    <string name="vserial_active_notification_message" >mobile log enabled</string>
-    <string name="gserial_active_notification_title" >use serial connection</string>
-    <string name="gserial_active_notification_message" >serial connection enabled</string>
+    <string name="modem_active_notification_title" >use modem debug mode</string>
+    <string name="modem_active_notification_message" >modem debug mode enabled</string>
     <!--Add by liguxiang 07-08-11 for USB settings function end -->
     
 </resources>
