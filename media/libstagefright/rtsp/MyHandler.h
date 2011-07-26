@@ -18,7 +18,7 @@
 
 #define MY_HANDLER_H_
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "MyHandler"
 #include <utils/Log.h>
 
@@ -41,25 +41,25 @@
 
 // If no access units are received within 3 secs, assume that the rtp
 // stream has ended and signal end of stream.
-static int64_t kAccessUnitTimeoutUs = 3000000ll;
+static int64_t kAccessUnitTimeoutUs = 10000000ll;  //@hong change 3s to 5s 
 
 // If no access units arrive for the first 10 secs after starting the
 // stream, assume none ever will and signal EOS or switch transports.
-static int64_t kStartupTimeoutUs = 10000000ll;
+static int64_t kStartupTimeoutUs = 10000000ll; //@hong changed from 10 to 1 
 
 namespace android {
 
-static void MakeUserAgentString(AString *s) {
-    s->setTo("stagefright/1.1 (Linux;Android ");
-
+static void MakeUserAgentString(AString *s) { //@hong change the prop of useragent.
+//    s->setTo("stagefright/1.1 (Linux;Android ");
+      s->setTo("HUAWEI T2011_TD/1.0");
 #if (PROPERTY_VALUE_MAX < 8)
 #error "PROPERTY_VALUE_MAX must be at least 8"
 #endif
 
-    char value[PROPERTY_VALUE_MAX];
-    property_get("ro.build.version.release", value, "Unknown");
-    s->append(value);
-    s->append(")");
+//    char value[PROPERTY_VALUE_MAX];
+//    property_get("ro.build.version.release", value, "Unknown");
+//    s->append(value);
+//    s->append(")");
 }
 
 static bool GetAttribute(const char *s, const char *key, AString *value) {
@@ -104,7 +104,7 @@ struct MyHandler : public AHandler {
           mNumAccessUnitsReceived(0),
           mCheckPending(false),
           mCheckGeneration(0),
-          mTryTCPInterleaving(false),
+          mTryTCPInterleaving(false),  
           mTryFakeRTCP(false),
           mReceivedFirstRTCPPacket(false),
           mReceivedFirstRTPPacket(false),
@@ -112,7 +112,7 @@ struct MyHandler : public AHandler {
         mNetLooper->setName("rtsp net");
         mNetLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
-                          PRIORITY_HIGHEST);
+                          PRIORITY_HIGHEST); //HIGHEST @hong
     }
 
     void connect(const sp<AMessage> &doneMsg) {
@@ -131,7 +131,7 @@ struct MyHandler : public AHandler {
 
     void disconnect(const sp<AMessage> &doneMsg) {
         mDoneMsg = doneMsg;
-
+	LOGI("disconnect.enter...");
         (new AMessage('abor', id()))->post();
     }
 
@@ -282,13 +282,15 @@ struct MyHandler : public AHandler {
     }
 
     virtual void onMessageReceived(const sp<AMessage> &msg) {
+	AString ua;
         switch (msg->what()) {
             case 'conn':
             {
                 int32_t result;
                 CHECK(msg->findInt32("result", &result));
-
-                LOGI("connection request completed with result %d (%s)",
+	    struct timeval tv;  //@hong add timecheck.
+	    gettimeofday(&tv, NULL);
+                LOGI("connection request completed time %d with result %d (%s)", tv.tv_sec,
                      result, strerror(-result));
 
                 if (result == OK) {
@@ -297,6 +299,11 @@ struct MyHandler : public AHandler {
                     request.append(mSessionURL);
                     request.append(" RTSP/1.0\r\n");
                     request.append("Accept: application/sdp\r\n");
+
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+                    request.append("\r\n");
+
                     request.append("\r\n");
 
                     sp<AMessage> reply = new AMessage('desc', id());
@@ -344,6 +351,11 @@ struct MyHandler : public AHandler {
                         request.append(mSessionURL);
                         request.append(" RTSP/1.0\r\n");
                         request.append("Accept: application/sdp\r\n");
+
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+	            request.append("\r\n");
+
                         request.append("\r\n");
 
                         sp<AMessage> reply = new AMessage('desc', id());
@@ -472,6 +484,10 @@ struct MyHandler : public AHandler {
                     request.append(mSessionID);
                     request.append("\r\n");
 
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+	            request.append("\r\n");
+
                     request.append("\r\n");
 
                     sp<AMessage> reply = new AMessage('play', id());
@@ -487,7 +503,9 @@ struct MyHandler : public AHandler {
             {
                 int32_t result;
                 CHECK(msg->findInt32("result", &result));
-
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGV("play time:%d s", tv.tv_sec);
                 LOGI("PLAY completed with result %d (%s)",
                      result, strerror(-result));
 
@@ -517,6 +535,7 @@ struct MyHandler : public AHandler {
 
             case 'abor':
             {
+		LOGI("abor received...");
                 for (size_t i = 0; i < mTracks.size(); ++i) {
                     TrackInfo *info = &mTracks.editItemAt(i);
 
@@ -557,15 +576,22 @@ struct MyHandler : public AHandler {
                 request.append(mSessionID);
                 request.append("\r\n");
 
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+	            request.append("\r\n");
+
+
                 request.append("\r\n");
 
                 mConn->sendRequest(request.c_str(), reply);
+		LOGI("abor over sending teardown...");
                 break;
             }
 
             case 'tear':
             {
                 int32_t result;
+		LOGI(" teardown enter...");
                 CHECK(msg->findInt32("result", &result));
 
                 LOGI("TEARDOWN completed with result %d (%s)",
@@ -579,6 +605,7 @@ struct MyHandler : public AHandler {
                 }
 
                 mConn->disconnect(reply);
+		LOGI(" teardown over");
                 break;
             }
 
@@ -598,12 +625,21 @@ struct MyHandler : public AHandler {
                 CHECK(msg->findInt32("generation", &generation));
                 if (generation != mCheckGeneration) {
                     // This is an outdated message. Ignore.
-                    break;
+                  //  break; //@hong not ignore the outdated msg.
                 }
 
                 if (mNumAccessUnitsReceived == 0) {
-                    LOGI("stream ended? aborting.");
+
+                   // @hong not send abor signal. 
+#if 1
+			LOGI("stream ended? aborting.");
                     (new AMessage('abor', id()))->post();
+#else
+			LOGI("stream ended? aborting & reconnect");
+		    sp<AMessage> msg = new AMessage('abor', id());
+		    msg->setInt32("reconnect", true);
+		    msg->post();
+#endif
                     break;
                 }
 
@@ -615,13 +651,26 @@ struct MyHandler : public AHandler {
             case 'accu':
             {
                 int32_t first;
+		 //@hong add for fast 
+#if 0 //o: orignal..
+                if (mFirstAccessUnit) {
+                    mDoneMsg->setInt32("result", OK);
+                    mDoneMsg->post();
+                    mDoneMsg = NULL;
+
+                    mFirstAccessUnit = false;
+                }
+#endif
+		LOGI("accu received");
                 if (msg->findInt32("first-rtcp", &first)) {
                     mReceivedFirstRTCPPacket = true;
+			LOGI("accu received first rtcp");
                     break;
                 }
 
                 if (msg->findInt32("first-rtp", &first)) {
                     mReceivedFirstRTPPacket = true;
+			LOGI("accu received first rtp");
                     break;
                 }
 
@@ -679,8 +728,10 @@ struct MyHandler : public AHandler {
                     LOGV("first segment unit ntpTime=0x%016llx rtpTime=%u seq=%d",
                          ntpTime, rtpTime, seqNum);
                 }
-
-                if (mFirstAccessUnit) {
+  //@hong remove for fast 
+#if 1 //1orignal
+                if (mFirstAccessUnit)  //@hong remove this check.
+			{ 
                     mDoneMsg->setInt32("result", OK);
                     mDoneMsg->post();
                     mDoneMsg = NULL;
@@ -688,7 +739,7 @@ struct MyHandler : public AHandler {
                     mFirstAccessUnit = false;
                     mFirstAccessUnitNTP = ntpTime;
                 }
-
+#endif
                 if (ntpTime >= mFirstAccessUnitNTP) {
                     ntpTime -= mFirstAccessUnitNTP;
                 } else {
@@ -747,6 +798,11 @@ struct MyHandler : public AHandler {
                 request.append(mSessionID);
                 request.append("\r\n");
 
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+	            request.append("\r\n");
+
+
                 request.append("\r\n");
 
                 sp<AMessage> reply = new AMessage('see1', id());
@@ -769,6 +825,11 @@ struct MyHandler : public AHandler {
                 AString request = "PLAY ";
                 request.append(mSessionURL);
                 request.append(" RTSP/1.0\r\n");
+
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+	            request.append("\r\n");
+
 
                 request.append("Session: ");
                 request.append(mSessionID);
@@ -848,10 +909,10 @@ struct MyHandler : public AHandler {
             {
                 if (!mReceivedFirstRTCPPacket) {
                     if (mTryFakeRTCP) {
-                        LOGW("Never received any data, disconnecting.");
+                        LOGI("Never received any data, disconnecting.");
                         (new AMessage('abor', id()))->post();
                     } else if (mTryTCPInterleaving && mReceivedFirstRTPPacket) {
-                        LOGW("We received RTP packets but no RTCP packets, "
+                        LOGI("We received RTP packets but no RTCP packets, "
                              "using fake timestamps.");
 
                         mTryFakeRTCP = true;
@@ -859,7 +920,7 @@ struct MyHandler : public AHandler {
                         mReceivedFirstRTCPPacket = true;
                         mRTPConn->fakeTimestamps();
                     } else {
-                        LOGW("Never received any data, switching transports.");
+                        LOGI("Never received any data, switching transports.");
 
                         mTryTCPInterleaving = true;
 
@@ -940,13 +1001,14 @@ struct MyHandler : public AHandler {
         for (List<AString>::iterator it = streamInfos.begin();
              it != streamInfos.end(); ++it) {
             (*it).trim();
-            LOGV("streamInfo[%d] = %s", n, (*it).c_str());
+            LOGI("streamInfo[%d] = %s", n, (*it).c_str());
 
             CHECK(GetAttribute((*it).c_str(), "url", &val));
-
+		LOGI("streamInfo val = %s", val.c_str());
             size_t trackIndex = 0;
             while (trackIndex < mTracks.size()
-                    && !(val == mTracks.editItemAt(trackIndex).mURL)) {
+      //              && !(val == mTracks.editItemAt(trackIndex).mURL)) { //@hong change for compatible.
+		      && (mTracks.editItemAt(trackIndex).mURL.find(val.c_str())== -1)){
                 ++trackIndex;
             }
             CHECK_LT(trackIndex, mTracks.size());
@@ -1050,7 +1112,7 @@ private:
         info->mFirstSeqNumInSegment = 0;
         info->mNewSegment = true;
 
-        LOGV("track #%d URL=%s", mTracks.size(), trackURL.c_str());
+        LOGI("track #%d URL=%s", mTracks.size(), trackURL.c_str());
 
         AString request = "SETUP ";
         request.append(trackURL);

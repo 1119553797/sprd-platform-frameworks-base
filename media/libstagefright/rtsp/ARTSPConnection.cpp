@@ -66,6 +66,7 @@ void ARTSPConnection::disconnect(const sp<AMessage> &reply) {
 
 void ARTSPConnection::sendRequest(
         const char *request, const sp<AMessage> &reply) {
+	LOGV("sendRequest...");
     sp<AMessage> msg = new AMessage(kWhatSendRequest, id());
     msg->setString("request", request);
     msg->setMessage("reply", reply);
@@ -324,6 +325,7 @@ void ARTSPConnection::onCompleteConnection(const sp<AMessage> &msg) {
 
 void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
     sp<AMessage> reply;
+//	LOGV("onSendRequest...");
     CHECK(msg->findMessage("reply", &reply));
 
     if (mState != CONNECTED) {
@@ -336,7 +338,10 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
     CHECK(msg->findString("request", &request));
 
     // Find the boundary between headers and the body.
+    ssize_t teardown = request.find("TEARDOWN");
+
     ssize_t i = request.find("\r\n\r\n");
+
     CHECK_GE(i, 0);
 
     int32_t cseq = mNextCSeq++;
@@ -355,7 +360,7 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
             send(mSocket, request.c_str() + numBytesSent,
                  request.size() - numBytesSent, 0);
 
-        if (n == 0) {
+        if (n == 0 || teardown >= 0) {  //@hong hisense server close at first
             // Server closed the connection.
             LOGE("Server unexpectedly closed the connection.");
 
@@ -364,6 +369,7 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
             return;
         } else if (n < 0) {
             if (errno == EINTR) {
+		LOGV("errno == EINTR");
                 continue;
             }
 
@@ -377,12 +383,14 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
     }
 
     mPendingRequests.add(cseq, reply);
+	LOGV("onSendRequest over");
 }
 
 void ARTSPConnection::onReceiveResponse() {
     mReceiveResponseEventPending = false;
-
+//	LOGV("onReceiveResponse entering...");
     if (mState != CONNECTED) {
+	LOGV("onReceiveResponse return for NOT CONNECTED..");
         return;
     }
 
@@ -406,12 +414,15 @@ void ARTSPConnection::onReceiveResponse() {
 
         if (!success) {
             // Something horrible, irreparable has happened.
+	    LOGV("onReceiveResponse receive fail");
             flushPendingRequests();
             return;
         }
+	LOGV("onReceiveResponse SUCCESS");
     }
 
     postReceiveReponseEvent();
+    LOGV("onReceiveResponse end...");
 }
 
 void ARTSPConnection::flushPendingRequests() {
@@ -431,7 +442,7 @@ void ARTSPConnection::postReceiveReponseEvent() {
     }
 
     sp<AMessage> msg = new AMessage(kWhatReceiveResponse, id());
-    msg->post();
+    msg->post(50000ll);
 
     mReceiveResponseEventPending = true;
 }
