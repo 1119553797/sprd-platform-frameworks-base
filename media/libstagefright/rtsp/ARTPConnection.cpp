@@ -49,7 +49,7 @@ static uint64_t u64at(const uint8_t *data) {
 }
 
 // static
-const int64_t ARTPConnection::kSelectTimeoutUs = 1000ll;
+const int64_t ARTPConnection::kSelectTimeoutUs = 20000ll; //@hong
 
 struct ARTPConnection::StreamInfo {
     int mRTPSocket;

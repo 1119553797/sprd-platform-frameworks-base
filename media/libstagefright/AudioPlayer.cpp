@@ -72,7 +72,7 @@ void AudioPlayer::setSource(const sp<MediaSource> &source) {
 status_t AudioPlayer::start(bool sourceAlreadyStarted) {
     CHECK(!mStarted);
     CHECK(mSource != NULL);
-
+LOGI("start.");
     status_t err;
     if (!sourceAlreadyStarted) {
         err = mSource->start();
@@ -171,6 +171,7 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
 }
 
 void AudioPlayer::pause(bool playPendingSamples) {
+LOGI("pause.");
     CHECK(mStarted);
 
     if (playPendingSamples) {
@@ -186,9 +187,12 @@ void AudioPlayer::pause(bool playPendingSamples) {
             mAudioTrack->pause();
         }
     }
+LOGI("pause.end");
 }
 
 void AudioPlayer::resume() {
+	LOGI("resume.");
+
     CHECK(mStarted);
 
     if (mAudioSink.get() != NULL) {
@@ -196,9 +200,11 @@ void AudioPlayer::resume() {
     } else {
         mAudioTrack->start();
     }
+LOGI("resume.end");
 }
 
 void AudioPlayer::reset() {
+LOGI("reset.");
     CHECK(mStarted);
 
     if (mAudioSink.get() != NULL) {
@@ -245,6 +251,7 @@ void AudioPlayer::reset() {
     mReachedEOS = false;
     mFinalStatus = OK;
     mStarted = false;
+LOGI("reset.end");
 }
 
 // static
@@ -253,11 +260,13 @@ void AudioPlayer::AudioCallback(int event, void *user, void *info) {
 }
 
 bool AudioPlayer::isSeeking() {
+LOGI("isSeeking...");
     Mutex::Autolock autoLock(mLock);
     return mSeeking;
 }
 
 bool AudioPlayer::reachedEOS(status_t *finalStatus) {
+	LOGI("reachedEOS...");
     *finalStatus = OK;
 
     Mutex::Autolock autoLock(mLock);
@@ -269,13 +278,16 @@ bool AudioPlayer::reachedEOS(status_t *finalStatus) {
 size_t AudioPlayer::AudioSinkCallback(
         MediaPlayerBase::AudioSink *audioSink,
         void *buffer, size_t size, void *cookie) {
+	LOGI("Audio sink Callback...");
     AudioPlayer *me = (AudioPlayer *)cookie;
 
     return me->fillBuffer(buffer, size);
 }
 
 void AudioPlayer::AudioCallback(int event, void *info) {
+	LOGI("AudioCallback...");
     if (event != AudioTrack::EVENT_MORE_DATA) {
+	LOGI("AudioCallback not EVENT_MORE_DATA...");
         return;
     }
 
@@ -353,12 +365,16 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
             Mutex::Autolock autoLock(mLock);
 
             if (err != OK) {
+		   LOGV("fillbuffer err == %d",err);
+#if 0		//@hong should not permit to postEOS here!
                 if (mObserver && !mReachedEOS) {
+
                     mObserver->postAudioEOS();
                 }
 
                 mReachedEOS = true;
                 mFinalStatus = err;
+#endif
                 break;
             }
 
@@ -400,7 +416,7 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
 
     Mutex::Autolock autoLock(mLock);
     mNumFramesPlayed += size_done / mFrameSize;
-
+    LOGI("fillBuffer over...");
     return size_done;
 }
 
@@ -443,6 +459,7 @@ bool AudioPlayer::getMediaTimeMapping(
 }
 
 status_t AudioPlayer::seekTo(int64_t time_us) {
+ LOGV("seekTo");
     Mutex::Autolock autoLock(mLock);
 
     mSeeking = true;

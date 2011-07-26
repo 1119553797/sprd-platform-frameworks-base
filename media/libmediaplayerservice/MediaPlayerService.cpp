@@ -870,7 +870,24 @@ status_t MediaPlayerService::Client::setDataSource(
     LOGV("setDataSource(%s)", url);
     if (url == NULL)
         return UNKNOWN_ERROR;
-
+/*
+	{//@hong differ the CMMB from RTSP 
+	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",url,35) || 
+		!strncasecmp("rtsp://gtalk/",url,13))
+		{
+//                 system("setprop media.stagefright.enable-rtsp true");
+		property_set("stream.sprd.useragent","true");
+		property_set("media.stagefright.enable-rtsp","true");
+		LOGI("CMMB set to stagefright to work");
+		}else
+		{
+		property_set("stream.sprd.useragent","false");
+//                 system("setprop media.stagefright.enable-rtsp false");
+		property_set("media.stagefright.enable-rtsp","false");
+		LOGI("RTSP set to opencore to work");
+		}
+	}
+*/
     if (strncmp(url, "content://", 10) == 0) {
         // get a filedescriptor for the content Uri and
         // pass it to the setDataSource(fd) method
