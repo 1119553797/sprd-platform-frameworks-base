@@ -120,7 +120,13 @@ class GetInkeyInputResponseData extends ResponseData {
         }
 
         // length - one more for data coding scheme.
-        buf.write(data.length + 1);
+        // 11.14 Annex D
+        if (data.length < 0x80) {
+            buf.write(data.length + 1);
+        } else {
+            buf.write(0x81);
+            buf.write(data.length + 1);
+        }
 
         // data coding scheme
         if (mIsUcs2) {
