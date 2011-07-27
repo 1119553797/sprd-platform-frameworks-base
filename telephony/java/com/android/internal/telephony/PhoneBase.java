@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.os.AsyncResult;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.RegistrantList;
@@ -116,6 +117,7 @@ public abstract class PhoneBase extends Handler implements Phone {
     protected IccFileHandler mIccFileHandler;
     boolean mDnsCheckDisabled = false;
     public DataConnectionTracker mDataConnection;
+    public Looper mDataConnectionLooper;
     protected  boolean mDoesRilSendMultipleCallRing;
     protected int mCallRingContinueToken = 0;
     protected int mCallRingDelay;
@@ -226,6 +228,14 @@ public abstract class PhoneBase extends Handler implements Phone {
         mCallRingDelay = SystemProperties.getInt(
                 TelephonyProperties.PROPERTY_CALL_RING_DELAY, 3000);
         Log.d(LOG_TAG, "mCallRingDelay=" + mCallRingDelay);
+
+        // DataConnectionTracker running in a seperate thread
+        // due to cannot deactivate connection before radio off when set radio off
+        HandlerThread thread = new HandlerThread("RILSender");
+        thread.start();
+
+        mDataConnectionLooper = thread.getLooper();
+
     }
 
     public void dispose() {

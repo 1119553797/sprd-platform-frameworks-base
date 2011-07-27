@@ -1448,6 +1448,13 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             return;
         }
 
+        // wait until mDataConnection is set to avoid exception
+        // which introduced by running DataConnectTracker in
+        // a seperate thread
+        while (mGsmPhone.mDataConnection == null) {
+            SystemClock.sleep(100);
+        }
+
         switch (msg.what) {
             case EVENT_RECORDS_LOADED:
                 onRecordsLoaded();

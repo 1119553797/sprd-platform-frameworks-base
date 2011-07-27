@@ -147,6 +147,7 @@ public final class TDPhone extends GSMPhone {
             mSimulatedRadioControl = (SimulatedRadioControl) ci;
         }
 
+        mDataConnection = new GsmDataConnectionTracker (this);
         //mCM.setPhoneType(Phone.PHONE_TYPE_TD);
 
         //Change the system property

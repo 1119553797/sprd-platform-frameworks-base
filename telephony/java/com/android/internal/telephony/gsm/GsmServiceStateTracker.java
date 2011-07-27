@@ -165,7 +165,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     static final int PS_NOTIFICATION = 888;  // Id to update and cancel PS restricted
     static final int CS_NOTIFICATION = 999;  // Id to update and cancel CS restricted
 
-    static final int MAX_NUM_DATA_STATE_READS = 15;
+    static final int MAX_NUM_DATA_STATE_READS = 20;
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -348,7 +348,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             case EVENT_RADIO_AVAILABLE:
                 //this is unnecessary
                 //setPowerStateToDesired();
-                cm.setGprsAttach(null);
+                //cm.setGprsAttach(null);
                 break;
 
             case EVENT_SIM_READY:

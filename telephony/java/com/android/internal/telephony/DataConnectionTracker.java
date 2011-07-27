@@ -192,7 +192,7 @@ public abstract class DataConnectionTracker extends Handler {
      * Default constructor
      */
     protected DataConnectionTracker(PhoneBase phone) {
-        super();
+        super(phone.mDataConnectionLooper);
         this.phone = phone;
     }
 
