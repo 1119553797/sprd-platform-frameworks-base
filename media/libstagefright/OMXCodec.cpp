@@ -2995,6 +2995,21 @@ void OMXCodec::clearCodecSpecificData() {
     mCodecSpecificData.clear();
     mCodecSpecificDataIndex = 0;
 }
+/** Defines the major version of the core */
+#define SPECVERSIONMAJOR  1
+/** Defines the minor version of the core */
+#define SPECVERSIONMINOR  0
+/** Defines the revision of the core */
+#define SPECREVISION      0
+/** Defines the step version of the core */
+#define SPECSTEP          0
+
+#define CONFIG_SIZE_AND_VERSION(param) \
+        param.nSize=sizeof(param); \
+        param.nVersion.s.nVersionMajor = SPECVERSIONMAJOR; \
+        param.nVersion.s.nVersionMinor = SPECVERSIONMINOR; \
+        param.nVersion.s.nRevision = SPECREVISION; \
+        param.nVersion.s.nStep = SPECSTEP;
 
 status_t OMXCodec::start(MetaData *meta) {
     Mutex::Autolock autoLock(mLock);
@@ -3033,6 +3048,17 @@ status_t OMXCodec::start(MetaData *meta) {
     mTargetTimeUs = -1;
     mFilledBuffers.clear();
     mPaused = false;
+
+	if (mBufferCountOutput > 0) {
+		OMX_PARAM_DEBLOCKINGTYPE DeBlock;
+		CONFIG_SIZE_AND_VERSION(DeBlock);
+		
+		DeBlock.nPortIndex = kPortIndexOutput;
+		DeBlock.bDeblocking = OMX_TRUE;	
+
+		status_t bRet = 0;
+		bRet = mOMX->setParameter(mNode, OMX_IndexParamCommonDeblocking, &DeBlock, sizeof(DeBlock));
+	}
 
     return init();
 }

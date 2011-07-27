@@ -154,7 +154,7 @@ status_t MediaPhoneClient::prepareRecorder()
     //CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
     CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_VIDEOPHONE));
     CHECK_RT(mRecorder->setVideoFrameRate(10));
-    CHECK_RT(mRecorder->setVideoSize(176, 144));
+    CHECK_RT(mRecorder->setVideoSize(144, 176));
     //setVideoEncodingBitRate(48*1024);
     CHECK_RT(mRecorder->setParameters(String8("video-param-encoding-bitrate=393216")));
     //setAudioEncodingBitRate();
