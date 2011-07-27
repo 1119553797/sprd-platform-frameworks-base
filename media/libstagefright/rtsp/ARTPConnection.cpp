@@ -238,7 +238,7 @@ void ARTPConnection::postPollEvent() {
     }
 
     sp<AMessage> msg = new AMessage(kWhatPollStreams, id());
-    msg->post();
+    msg->post(10000l);
 
     mPollEventPending = true;
 }

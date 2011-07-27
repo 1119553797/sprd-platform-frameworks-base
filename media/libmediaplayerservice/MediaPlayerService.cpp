@@ -802,6 +802,37 @@ player_type getPlayerType(const char* url)
             // by default until we can clear up a few more issues.
             return PV_PLAYER;
         }
+
+	{//@hong differ the CMMB from RTSP 
+	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",url,35) || 
+		!strncasecmp("rtsp://gtalk/",url,13))
+		{
+//                 system("setprop media.stagefright.enable-rtsp true");
+		property_get("media.stagefright.enable-rtsp", value, 0);
+		LOGI("CMMB get media.stagefright.enable-rtsp is %s", value);
+
+		property_set("stream.sprd.useragent","true");
+		property_set("media.stagefright.enable-rtsp","true");
+		LOGI("CMMB set to stagefright to work");
+
+		property_get("media.stagefright.enable-rtsp", value, 0);
+		LOGI("CMMB set to true and get media.stagefright.enable-rtsp is %s", value);
+		}else
+		{
+		property_get("media.stagefright.enable-rtsp", value, 0);
+		LOGI("CMMB get media.stagefright.enable-rtsp is %s", value);
+
+		property_set("stream.sprd.useragent","false");
+//                 system("setprop media.stagefright.enable-rtsp false");
+		property_set("media.stagefright.enable-rtsp","false");
+		LOGI("RTSP set to opencore to work");
+
+		property_get("media.stagefright.enable-rtsp", value, 0);
+		LOGI("CMMB get media.stagefright.enable-rtsp is %s", value);
+		return PV_PLAYER;
+		}
+	}
+
     }
 
     return getDefaultPlayerType();
@@ -867,6 +898,7 @@ sp<MediaPlayerBase> MediaPlayerService::Client::createPlayer(player_type playerT
 status_t MediaPlayerService::Client::setDataSource(
         const char *url, const KeyedVector<String8, String8> *headers)
 {
+    char value[128];
     LOGV("setDataSource(%s)", url);
     if (url == NULL)
         return UNKNOWN_ERROR;
@@ -876,15 +908,29 @@ status_t MediaPlayerService::Client::setDataSource(
 		!strncasecmp("rtsp://gtalk/",url,13))
 		{
 //                 system("setprop media.stagefright.enable-rtsp true");
+		property_get("media.stagefright.enable-rtsp", value, 0);
+		LOGI("CMMB get media.stagefright.enable-rtsp is %s", value);
+
 		property_set("stream.sprd.useragent","true");
 		property_set("media.stagefright.enable-rtsp","true");
 		LOGI("CMMB set to stagefright to work");
+
+		property_get("media.stagefright.enable-rtsp", value, 0);
+		LOGI("CMMB set to true and get media.stagefright.enable-rtsp is %s", value);
+
 		}else
 		{
+		property_get("media.stagefright.enable-rtsp", value, 0);
+		LOGI("CMMB get media.stagefright.enable-rtsp is %s", value);
+
 		property_set("stream.sprd.useragent","false");
 //                 system("setprop media.stagefright.enable-rtsp false");
 		property_set("media.stagefright.enable-rtsp","false");
 		LOGI("RTSP set to opencore to work");
+
+		property_get("media.stagefright.enable-rtsp", value, 0);
+		LOGI("CMMB get media.stagefright.enable-rtsp is %s", value);
+
 		}
 	}
 */

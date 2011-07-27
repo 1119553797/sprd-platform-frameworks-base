@@ -661,7 +661,7 @@ struct MyHandler : public AHandler {
                     mFirstAccessUnit = false;
                 }
 #endif
-		LOGI("accu received");
+		//LOGI("accu received");
                 if (msg->findInt32("first-rtcp", &first)) {
                     mReceivedFirstRTCPPacket = true;
 			LOGI("accu received first rtcp");
