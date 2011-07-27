@@ -237,6 +237,7 @@ AwesomePlayer::AwesomePlayer()
     : mQueueStarted(false),
       mTimeSource(NULL),
       mVideoRendererIsPreview(false),
+      mNewSurfaceIsSet(false),
       mAudioPlayer(NULL),
       mFlags(0),
       mExtractorFlags(0),
@@ -827,6 +828,7 @@ status_t AwesomePlayer::play_l() {
 }
 
 void AwesomePlayer::initRenderer_l() {
+LOGV("initRenderer_l");
     if (mISurface != NULL) {
         sp<MetaData> meta = mVideoSource->getFormat();
 
@@ -854,6 +856,7 @@ void AwesomePlayer::initRenderer_l() {
             // Our OMX codecs allocate buffers on the media_server side
             // therefore they require a remote IOMXRenderer that knows how
             // to display them.
+	    LOGV("new AwesomeRemoteRenderer");
             mVideoRenderer = new AwesomeRemoteRenderer(
                 mClient.interface()->createRenderer(
                         mISurface, component,
@@ -864,6 +867,7 @@ void AwesomePlayer::initRenderer_l() {
         } else {
             // Other decoders are instantiated locally and as a consequence
             // allocate their buffers in local address space.
+	    LOGV("new AwesomeLocalRenderer");
             mVideoRenderer = new AwesomeLocalRenderer(
                 false,  // previewOnly
                 component,
@@ -920,13 +924,16 @@ bool AwesomePlayer::isPlaying() const {
 }
 
 void AwesomePlayer::setISurface(const sp<ISurface> &isurface) {
+    LOGV("setISurface");
     Mutex::Autolock autoLock(mLock);
 
     mISurface = isurface;
+    mNewSurfaceIsSet = true;
 }
 
 void AwesomePlayer::setAudioSink(
         const sp<MediaPlayerBase::AudioSink> &audioSink) {
+    LOGV("setAudioSink");
     Mutex::Autolock autoLock(mLock);
 
     mAudioSink = audioSink;
@@ -1174,7 +1181,7 @@ void AwesomePlayer::finishSeekIfNecessary(int64_t videoTimeUs) {
 }
 
 void AwesomePlayer::onVideoEvent() {
-    LOGV("onVideoEvent");
+    //LOGV("onVideoEvent");
     Mutex::Autolock autoLock(mLock);
     if (!mVideoEventPending) {
         // The event has been cancelled in reset_l() but had already
@@ -1219,9 +1226,9 @@ void AwesomePlayer::onVideoEvent() {
                     mSeekTimeUs, MediaSource::ReadOptions::SEEK_CLOSEST_SYNC);
         }
         for (;;) {
-    		LOGV("onVideoEvent before read");
+    		//LOGV("onVideoEvent before read");
             status_t err = mVideoSource->read(&mVideoBuffer, &options);
-    		LOGV("onVideoEvent after read");
+    		//LOGV("onVideoEvent after read");
             options.clearSeekTo();
 
             if (err != OK) {
@@ -1232,6 +1239,7 @@ void AwesomePlayer::onVideoEvent() {
 
                     if (mVideoRenderer != NULL) {
                         mVideoRendererIsPreview = false;
+			mNewSurfaceIsSet = false;
                         initRenderer_l();
                     }
                     continue;
@@ -1299,11 +1307,11 @@ void AwesomePlayer::onVideoEvent() {
    if((mAudioPlayer != NULL)&&(0==(mFlags & AUDIO_AT_EOS))){
         int64_t  sysRealTimeUs =  ts->getRealTimeUs();  	
 	int64_t  AudioLatencyUs =  mAudioPlayer->getAudioLatencyUs();
-        if((realTimeUs-sysRealTimeUs)>max(700000,AudioLatencyUs*7/10))
-             mSystemTimeSourceForSync.increaseRealTimeUs(realTimeUs-sysRealTimeUs -max(700000,AudioLatencyUs*7/10)); 	  	
+        if((realTimeUs-sysRealTimeUs)>max(500000,AudioLatencyUs*5/10))
+             mSystemTimeSourceForSync.increaseRealTimeUs(realTimeUs-sysRealTimeUs -max(500000,AudioLatencyUs*5/10)); 	  	
 	if((realTimeUs-sysRealTimeUs)<min(-300000,-AudioLatencyUs*3/10))	
              mSystemTimeSourceForSync.increaseRealTimeUs(min(-300000,-AudioLatencyUs*3/10)); 		
-   	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs - AudioLatencyUs + 100000;// assume display latency  100ms
+   	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs -AudioLatencyUs +400000;//assume display latency  400ms
    }else{
    	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs;
    }
@@ -1337,16 +1345,16 @@ void AwesomePlayer::onVideoEvent() {
         return;
     }
 
-    if (mVideoRendererIsPreview || mVideoRenderer == NULL) {
+    if (mVideoRendererIsPreview || mVideoRenderer == NULL || mNewSurfaceIsSet) {
         mVideoRendererIsPreview = false;
-
+	mNewSurfaceIsSet = false;
         initRenderer_l();
     }
 
     if (mVideoRenderer != NULL) {
-    	LOGV("onVideoEvent before render");
+    //	LOGV("onVideoEvent before render");
         mVideoRenderer->render(mVideoBuffer);
-    	LOGV("onVideoEvent after render");
+    //	LOGV("onVideoEvent after render");
     }
 
     if (mLastVideoBuffer) {
@@ -1943,6 +1951,7 @@ status_t AwesomePlayer::resume() {
     mFlags = state->mFlags & (AUTO_LOOPING | LOOPING | AT_EOS);
 
     if (state->mLastVideoFrame && mISurface != NULL) {
+	LOGV("new AwesomeLocalRenderer 0");
         mVideoRenderer =
             new AwesomeLocalRenderer(
                     true,  // previewOnly

@@ -139,6 +139,7 @@ private:
     sp<MediaSource> mVideoSource;
     sp<AwesomeRenderer> mVideoRenderer;
     bool mVideoRendererIsPreview;
+    bool mNewSurfaceIsSet;
 
     sp<MediaSource> mAudioTrack;
     sp<MediaSource> mAudioSource;
