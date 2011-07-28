@@ -233,7 +233,7 @@ void Camera::stopRecording()
 // release a recording frame
 void Camera::releaseRecordingFrame(const sp<IMemory>& mem)
 {
-    LOGV("releaseRecordingFrame");
+    //LOGV("releaseRecordingFrame");
     sp <ICamera> c = mCamera;
     if (c == 0) return;
     c->releaseRecordingFrame(mem);

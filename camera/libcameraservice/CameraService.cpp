@@ -995,7 +995,7 @@ void CameraService::Client::handlePreviewData(const sp<IMemory>& mem)
     // is callback enabled?
     if (!(flags & FRAME_CALLBACK_FLAG_ENABLE_MASK)) {
         // If the enable bit is off, the copy-out and one-shot bits are ignored
-        LOGV("frame callback is diabled");
+        //LOGV("frame callback is diabled");
         return;
     }
 
@@ -1123,7 +1123,7 @@ void CameraService::Client::notifyCallback(int32_t msgType, int32_t ext1, int32_
 
 void CameraService::Client::dataCallback(int32_t msgType, const sp<IMemory>& dataPtr, void* user)
 {
-    LOGV("dataCallback(%d)", msgType);
+    //LOGV("dataCallback(%d)", msgType);
 
     sp<Client> client = getClientFromCookie(user);
     if (client == 0) {
@@ -1171,7 +1171,7 @@ void CameraService::Client::dataCallback(int32_t msgType, const sp<IMemory>& dat
 void CameraService::Client::dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType,
                                                   const sp<IMemory>& dataPtr, void* user)
 {
-    LOGV("dataCallbackTimestamp(%d)", msgType);
+    //LOGV("dataCallbackTimestamp(%d)", msgType);
 
     sp<Client> client = getClientFromCookie(user);
     if (client == 0) {
