@@ -438,6 +438,25 @@ public class SmsMessage {
         return new SubmitPdu(spb);
     }
 
+	/* Start liuhongxing 20110602 */
+    public static SubmitPdu getSubmitPdu(String scAddress,
+            String destinationAddress, short destinationPort, int srcPort, byte[] data,
+            boolean statusReportRequested) {
+        SubmitPduBase spb;
+        int activePhone = TelephonyManager.getDefault().getPhoneType();
+
+        if (PHONE_TYPE_CDMA == activePhone) {
+            spb = com.android.internal.telephony.cdma.SmsMessage.getSubmitPdu(scAddress,
+                    destinationAddress, destinationPort, data, statusReportRequested);
+        } else {
+            spb = com.android.internal.telephony.gsm.SmsMessage.getSubmitPdu(scAddress,
+                    destinationAddress, destinationPort, srcPort, data, statusReportRequested);
+        }
+
+        return new SubmitPdu(spb);
+    }
+	/* End liu 20110602 */
+
     /**
      * Returns the address of the SMS service center that relayed this message
      * or null if there is none.

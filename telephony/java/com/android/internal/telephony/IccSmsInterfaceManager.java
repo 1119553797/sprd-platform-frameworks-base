@@ -86,6 +86,21 @@ public abstract class IccSmsInterfaceManager extends ISms.Stub {
         mDispatcher.sendData(destAddr, scAddr, destPort, data, sentIntent, deliveryIntent);
     }
 
+/*Start liuhongxing 20110602 */
+    public void sendDmData(String destAddr, String scAddr, int destPort, int srcPort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        mPhone.getContext().enforceCallingPermission(
+                "android.permission.SEND_SMS",
+                "Sending SMS message");
+        if (Log.isLoggable("SMS", Log.VERBOSE)) {
+            log("sendData: destAddr=" + destAddr + " scAddr=" + scAddr + " destPort=" +
+                destPort + " data='"+ HexDump.toHexString(data)  + "' sentIntent=" +
+                sentIntent + " deliveryIntent=" + deliveryIntent);
+        }
+        mDispatcher.sendDmData(destAddr, scAddr, destPort, srcPort, data, sentIntent, deliveryIntent);
+    }
+/*End liu 20110602 */
+
     /**
      * Send a text based SMS.
      *

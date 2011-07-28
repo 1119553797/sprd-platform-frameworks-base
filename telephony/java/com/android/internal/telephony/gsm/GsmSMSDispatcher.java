@@ -164,7 +164,9 @@ final class GsmSMSDispatcher extends SMSDispatcher {
 
             if (smsHeader != null && smsHeader.portAddrs != null) {
                 if (smsHeader.portAddrs.destPort == SmsHeader.PORT_WAP_PUSH) {
-                    return mWapPush.dispatchWapPdu(sms.getUserData(), pdus);
+                    // Start liuhongxing 20110603
+                    return mWapPush.dispatchWapPdu(sms.getUserData(), pdus, sms.getDisplayOriginatingAddress());
+                    // End liu 20110603
                 } else {
                     // The message was sent to a port, so concoct a URI for it.
                     dispatchPortAddressedPdus(pdus, smsHeader.portAddrs.destPort);
@@ -188,6 +190,15 @@ final class GsmSMSDispatcher extends SMSDispatcher {
         sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent);
     }
 
+    /* Start liuhongxing 20110602 */
+    protected void sendDmData(String destAddr, String scAddr, int destPort, int srcPort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
+                scAddr, destAddr, destPort, srcPort, data, (deliveryIntent != null));
+        sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent);
+    }
+ 	/* End liu 20110602 */
+		
     /** {@inheritDoc} */
     protected void sendText(String destAddr, String scAddr, String text,
             PendingIntent sentIntent, PendingIntent deliveryIntent) {

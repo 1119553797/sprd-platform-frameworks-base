@@ -56,6 +56,14 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
                 sentIntent, deliveryIntent);
     }
 
+/*Start liuhongxing 20110602 */
+    public void sendDmData(String destAddr, String scAddr, int destPort, int srcPort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        mIccSmsInterfaceManager.sendDmData(destAddr, scAddr, destPort, srcPort, data,
+                sentIntent, deliveryIntent);
+    }    
+/*End liu 20110602 */    
+
     public void sendText(String destAddr, String scAddr,
             String text, PendingIntent sentIntent, PendingIntent deliveryIntent) {
         mIccSmsInterfaceManager.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent);
