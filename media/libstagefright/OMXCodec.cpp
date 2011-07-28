@@ -57,6 +57,10 @@
 
 #include "include/ThreadedSource.h"
 
+#define MIN_MPEG4INPUTBUFFER_FORVTMODE 3
+
+//#define FEATURE_MINIMUM_BUFFER
+
 namespace android {
 
 static const int OMX_QCOM_COLOR_FormatYVU420SemiPlanar = 0x7FA30C00;
@@ -1645,6 +1649,13 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
 	bool bResetBuffer = false;
 	if (portIndex == kPortIndexInput) {
 		if (mBufferCountInput > 0) {
+#ifdef FEATURE_MINIMUM_BUFFER
+			if ( (mBufferCountInput < MIN_MPEG4INPUTBUFFER_FORVTMODE)
+				&& (!strcmp(mComponentName, "OMX.PV.mpeg4dec"))) {
+				LOGE (" force set buffer count %d", MIN_MPEG4INPUTBUFFER_FORVTMODE);
+				mBufferCountInput = MIN_MPEG4INPUTBUFFER_FORVTMODE;
+			}
+#endif //FEATURE_MINIMUM_BUFFER
 			def.nBufferCountActual = mBufferCountInput;
 			bResetBuffer = true;
 		}
@@ -1789,7 +1800,7 @@ void OMXCodec::on_message(const omx_message &msg) {
                     info->mMediaBuffer = NULL;
                 }
             }
-			
+#ifdef FEATURE_MINIMUM_BUFFER
 			if (!mWaitOutput && (mBufferCountOutput > 0)){
 				CODEC_LOGV("mEmptyBuffers.push(%d)", i);
 				mEmptyBuffers.push(i);
@@ -1797,6 +1808,7 @@ void OMXCodec::on_message(const omx_message &msg) {
 				return;
 			}
 			mWaitOutput = false;
+#endif //FEATURE_MINIMUM_BUFFER
 
             if (mPortStatus[kPortIndexInput] == DISABLING) {
                 CODEC_LOGV("Port is disabled, freeing buffer %p", buffer);
@@ -3049,7 +3061,7 @@ status_t OMXCodec::start(MetaData *meta) {
     mFilledBuffers.clear();
     mPaused = false;
 
-	if (mBufferCountOutput > 0) {
+/*	if (mBufferCountOutput > 0) {
 		OMX_PARAM_DEBLOCKINGTYPE DeBlock;
 		CONFIG_SIZE_AND_VERSION(DeBlock);
 		
@@ -3058,7 +3070,7 @@ status_t OMXCodec::start(MetaData *meta) {
 
 		status_t bRet = 0;
 		bRet = mOMX->setParameter(mNode, OMX_IndexParamCommonDeblocking, &DeBlock, sizeof(DeBlock));
-	}
+	}*/
 
     return init();
 }
@@ -3213,7 +3225,8 @@ status_t OMXCodec::read(
             mBufferFilled.wait(mLock);
         }
     }
-
+	
+#ifdef FEATURE_MINIMUM_BUFFER
 	CODEC_LOGV("mInitialRead: %d", mInitialRead);
 	if (mInitialRead){
 		mInitialRead = false;
@@ -3226,6 +3239,7 @@ status_t OMXCodec::read(
 			drainInputBuffer(&buffers->editItemAt(index));
 		}
 	}
+#endif //FEATURE_MINIMUM_BUFFER
 
     while (mState != ERROR && !mNoMoreOutputData && mFilledBuffers.empty()) {
 		CODEC_LOGV("mNoMoreOutputData: %d, mFilledBuffers.empty(): %d", mNoMoreOutputData, mFilledBuffers.empty());

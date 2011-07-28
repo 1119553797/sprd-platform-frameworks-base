@@ -1,4 +1,4 @@
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "VideoPhoneExtractor"
 #include <utils/Log.h>
 
@@ -610,6 +610,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 	int	nLen;
 	bool	bStartRead 	= false;
 	bool	bIsMpege4	= false;
+	bool bMpeg4Header = false;
 	int	nStart = m_nDataStart, nEnd = m_nDataStart;
 	//LOGI("[%p]VideoPhoneSource::readRingBuffer START1 %d, m_nDataStart: %d, m_nDataEnd: %d", this, m_bStarted, m_nDataStart, m_nDataEnd);
 	while (m_bStarted)
@@ -635,8 +636,13 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 			{
 				if (!bStartRead)
 				{
-					LOGI("VideoPhoneSource::readRingBuffer START MEPGE4");
-					nStart		= nEnd;
+					//LOGI("VideoPhoneSource::readRingBuffer START MEPGE4");
+					if (bMpeg4Header) {
+						bMpeg4Header = false;
+						LOGI("FrameHeader intermedially follow mpeg4 header");
+					} else {
+						nStart		= nEnd;
+					}
 					bStartRead 	= true;
 				}
 				else
@@ -661,7 +667,8 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 				{
 					LOGI("VideoPhoneSource::readRingBuffer START MEPGE4 Header");
 					nStart		= nEnd;
-					bStartRead 	= true;
+					//bStartRead 	= true;
+					bMpeg4Header = true;
 				}
 				else
 					break;
@@ -670,6 +677,8 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 		//nNext++;
 	}
 	//LOGI("[%p]find frame %d %d", this, nStart, nEnd);
+	LOGI("[%p]find frame 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, m_RingBuffer[nStart + 2], m_RingBuffer[nStart + 3], m_RingBuffer[nStart + 4], m_RingBuffer[nStart + 5]
+	, m_RingBuffer[nStart + 6], m_RingBuffer[nStart + 7], m_RingBuffer[nStart + 8], m_RingBuffer[nStart + 9]);
 
 #if 0
 	nLen 	= ((nEnd - nStart) + m_nRingBufferSize) % m_nRingBufferSize - 4;
