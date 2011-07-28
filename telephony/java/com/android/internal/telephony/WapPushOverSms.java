@@ -24,6 +24,8 @@ import android.provider.Telephony.Sms.Intents;
 import android.util.Config;
 import android.util.Log;
 
+import android.text.TextUtils; // Add liuhongxing 20110603
+
 
 /**
  * WAP push handler class.
@@ -57,7 +59,15 @@ public class WapPushOverSms {
      *         {@link Activity#RESULT_OK} if the message has been broadcast
      *         to applications
      */
-    public int dispatchWapPdu(byte[] pdu, byte[][] pdus) {
+    
+    // Start liuhongxing 20110603
+    public int dispatchWapPdu(byte[] pdu) 
+    {
+        return dispatchWapPdu(pdu, null, "");
+    }
+    
+    public int dispatchWapPdu(byte[] pdu, byte[][] pdus, String number) {
+    // End liu 20110603
 
         if (Config.LOGD) Log.d(LOG_TAG, "Rx: " + IccUtils.bytesToHexString(pdu));
 
@@ -135,6 +145,17 @@ public class WapPushOverSms {
                 case WspTypeDecoder.CONTENT_TYPE_B_VND_DOCOMO_PF:
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_VND_DOCOMO_PF;
                     break;
+                // Start liuhongxing 20110603  
+                case WspTypeDecoder.CONTENT_TYPE_B_DM_WBXML:
+                    mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_WBXML;
+                    break;
+                case WspTypeDecoder.CONTENT_TYPE_B_DM_XML:
+                    mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_XML;
+                    break;
+                case WspTypeDecoder.CONTENT_TYPE_B_DM_NOTIFICATION:
+                    mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_NOTIFICATION;
+                    break;        
+                // End liu 20110603
                 default:
                     if (Config.LOGD) {
                         Log.w(LOG_TAG,
@@ -157,6 +178,14 @@ public class WapPushOverSms {
                 binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_MMS;
             } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_VND_DOCOMO_PF)) {
                 binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_VND_DOCOMO_PF;
+            // Start liuhongxing 20110603    
+            } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_WBXML)) {
+                binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_DM_WBXML;
+            } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_XML)) {
+                binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_DM_XML;
+            } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_NOTIFICATION)) {
+                binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_DM_NOTIFICATION;           
+            // End liu 20110603
             } else {
                 if (Config.LOGD) Log.w(LOG_TAG, "Received PDU. Unknown Content-Type = " + mimeType);
                 return Intents.RESULT_SMS_HANDLED;
@@ -181,13 +210,13 @@ public class WapPushOverSms {
         if (dispatchedByApplication == false) {
             Log.d(LOG_TAG, "dispatch default");
             dispatchWapPdu_default(pdus, pdu, transactionId, pduType, mimeType,
-                                   headerStartIndex, headerLength);
+                                   headerStartIndex, headerLength, number /* Add liuhongxing 20110603 */);
         }
         return Activity.RESULT_OK;
     }
 
     private void dispatchWapPdu_default(byte[][] pdus, byte[] pdu, int transactionId, int pduType,
-                                        String mimeType, int headerStartIndex, int headerLength) {
+                                        String mimeType, int headerStartIndex, int headerLength, String number /* Add liuhongxing 20110603 */) {
         byte[] header = new byte[headerLength];
         System.arraycopy(pdu, headerStartIndex, header, 0, header.length);
         int dataIndex = headerStartIndex + headerLength;
@@ -205,6 +234,12 @@ public class WapPushOverSms {
         intent.putExtra("header", header);
         intent.putExtra("data", data);
         intent.putExtra("pdus", pdus);
+        // Start liuhongxing 20110603
+        if (!TextUtils.isEmpty(number))
+        {
+            intent.putExtra("from", number);
+        }
+        // End liu 20110603
 
         mSmsDispatcher.dispatch(intent, "android.permission.RECEIVE_WAP_PUSH");
     }

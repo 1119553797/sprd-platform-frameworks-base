@@ -218,6 +218,33 @@ public final class SmsManager {
         }
     }
 
+/* Start liuhongxing 20110602 */
+    public void sendDmDataMessage(
+            String destinationAddress, String scAddress, short destinationPort,
+            short sourcePort,            
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        if (TextUtils.isEmpty(destinationAddress)) {
+            throw new IllegalArgumentException("Invalid destinationAddress");
+        }
+
+        if (data == null || data.length == 0) {
+            throw new IllegalArgumentException("Invalid message data");
+        }
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            if (iccISms != null) {
+                iccISms.sendDmData(destinationAddress, scAddress, destinationPort & 0xFFFF,
+                        sourcePort & 0xFFFF,
+                        data, sentIntent, deliveryIntent);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+    }
+
+/* End liu 20110602 */
+
     /**
      * Get the default instance of the SmsManager
      *

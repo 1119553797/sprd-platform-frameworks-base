@@ -41,6 +41,12 @@ public class WspTypeDecoder {
     public static final int CONTENT_TYPE_B_MMS = 0x3e;
     public static final int CONTENT_TYPE_B_VND_DOCOMO_PF = 0x0310;
 
+    // Start liuhongxing 20110603     
+    public static final int CONTENT_TYPE_B_DM_WBXML = 0x42;
+    public static final int CONTENT_TYPE_B_DM_XML = 0x43;
+    public static final int CONTENT_TYPE_B_DM_NOTIFICATION = 0x44;
+    // End liu 20110603
+
     public static final String CONTENT_MIME_TYPE_B_DRM_RIGHTS_XML =
             "application/vnd.oma.drm.rights+xml";
     public static final String CONTENT_MIME_TYPE_B_DRM_RIGHTS_WBXML =
@@ -51,6 +57,12 @@ public class WspTypeDecoder {
     public static final String CONTENT_MIME_TYPE_B_MMS = "application/vnd.wap.mms-message";
     public static final String CONTENT_MIME_TYPE_B_VND_DOCOMO_PF = "application/vnd.docomo.pf";
 
+    // Start liuhongxing 20110603
+    public static final String CONTENT_MIME_TYPE_B_DM_WBXML        = "application/vnd.syncml.dm+wbxml";    // 1.5 0x42 
+    public static final String CONTENT_MIME_TYPE_B_DM_XML          = "application/vnd.syncml.dm+xml";      // 1.5 0x43
+    public static final String CONTENT_MIME_TYPE_B_DM_NOTIFICATION = "application/vnd.syncml.notification";// 1.5 0x44 
+    // End liu 20110603
+    
     public static final int PARAMETER_ID_X_WAP_APPLICATION_ID = 0x2f;
 
 

@@ -645,7 +645,9 @@ public abstract class SMSDispatcher extends Handler {
                     output.write(data, 0, data.length);
                 }
                 // Handle the PUSH
-                return mWapPush.dispatchWapPdu(output.toByteArray(), pdus);
+                // Start liuhongxing 20110603
+                return mWapPush.dispatchWapPdu(output.toByteArray(), pdus, sms.getDisplayOriginatingAddress());
+                // End liu 20110603
             } else {
                 // The messages were sent to a port, so concoct a URI for it
                 dispatchPortAddressedPdus(pdus, portAddrs.destPort);
@@ -722,6 +724,12 @@ public abstract class SMSDispatcher extends Handler {
     protected abstract void sendData(String destAddr, String scAddr, int destPort,
             byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent);
 
+    /* Start liuhongxing 20110602 */
+    protected abstract void sendDmData(String destAddr, String scAddr, int destPort,
+            int srcPort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent);
+    /* End liu 20110602 */
+    
     /**
      * Send a text based SMS.
      *

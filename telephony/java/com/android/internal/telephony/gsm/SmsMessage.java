@@ -420,6 +420,55 @@ public class SmsMessage extends SmsMessageBase{
         return ret;
     }
 
+	/* Start liuhongxing 20110602 */
+    public static SubmitPdu getSubmitPdu(String scAddress,
+            String destinationAddress, int destinationPort, int srcPort,
+            byte[] data,
+            boolean statusReportRequested) {
+
+        SmsHeader.PortAddrs portAddrs = new SmsHeader.PortAddrs();
+        portAddrs.destPort = destinationPort;
+        portAddrs.origPort = srcPort;
+        portAddrs.areEightBits = false;
+
+        SmsHeader smsHeader = new SmsHeader();
+        smsHeader.portAddrs = portAddrs;
+
+        byte[] smsHeaderData = SmsHeader.toByteArray(smsHeader);
+
+        if ((data.length + smsHeaderData.length + 1) > MAX_USER_DATA_BYTES) {
+            Log.e(LOG_TAG, "SMS data message may only contain "
+                    + (MAX_USER_DATA_BYTES - smsHeaderData.length - 1) + " bytes");
+            return null;
+        }
+
+        SubmitPdu ret = new SubmitPdu();
+        ByteArrayOutputStream bo = getSubmitPduHead(
+                scAddress, destinationAddress, (byte) 0x41, // MTI = SMS-SUBMIT,
+                                                            // TP-UDHI = true
+                statusReportRequested, ret);
+
+        // TP-Data-Coding-Scheme
+        // No class, 8 bit data
+        bo.write(0x04);
+
+        // (no TP-Validity-Period)
+
+        // Total size
+        bo.write(data.length + smsHeaderData.length + 1);
+
+        // User data header
+        bo.write(smsHeaderData.length);
+        bo.write(smsHeaderData, 0, smsHeaderData.length);
+
+        // User data
+        bo.write(data, 0, data.length);
+
+        ret.encodedMessage = bo.toByteArray();
+        return ret;
+    }	
+	/* End liu 20110602 */    
+
     /**
      * Create the beginning of a SUBMIT PDU.  This is the part of the
      * SUBMIT PDU that is common to the two versions of {@link #getSubmitPdu},
@@ -752,6 +801,25 @@ public class SmsMessage extends SmsMessageBase{
             return ret;
         }
 
+        // Start liuhongxing 20110603
+        /**
+         * Interprets the user data payload as pack GSM 8bit characters, and
+         * decodes them into a String.
+         *
+         * @param septetCount the number of septets in the user data payload
+         * @return a String with the decoded characters
+         */
+        String getUserDataGSM8Bit(int septetCount) {
+            String ret;
+            Log.d(LOG_TAG, "z1471 septetCount = " + septetCount);
+            Log.d(LOG_TAG, "z1472 cur = " + cur);
+
+            ret = new String(pdu, cur, septetCount);
+            cur += septetCount;
+            return ret;
+        }
+        // End liu 20110603
+        
         /**
          * Interprets the user data payload as UCS2 characters, and
          * decodes them into a String.
@@ -1109,7 +1177,10 @@ public class SmsMessage extends SmsMessageBase{
         switch (encodingType) {
         case ENCODING_UNKNOWN:
         case ENCODING_8BIT:
-            messageBody = null;
+            //messageBody = null;
+            // Start liuhongxing 20110603
+            messageBody = p.getUserDataGSM8Bit(count);
+            // End liu 20110603
             break;
 
         case ENCODING_7BIT:
