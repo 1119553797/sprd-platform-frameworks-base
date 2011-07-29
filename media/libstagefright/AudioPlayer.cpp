@@ -366,7 +366,7 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
 
             if (err != OK) {
 		   LOGV("fillbuffer err == %d",err);
-#if 0		//@hong should not permit to postEOS here!
+#if 1		//@hong should not permit to postEOS here!
                 if (mObserver && !mReachedEOS) {
 
                     mObserver->postAudioEOS();
