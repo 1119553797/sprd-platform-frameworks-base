@@ -51,6 +51,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
     static final int EVENT_LOAD_ALL_ADN_LIKE_DONE = 1;
     static final int EVENT_UPDATE_ADN_DONE = 2;
+    private int[] mEfid = null;	
 
     //***** Constructor
 
@@ -101,6 +102,33 @@ public final class AdnRecordCache extends Handler implements IccConstants {
     getRecordsIfLoaded(int efid) {
         return adnLikeFiles.get(efid);
     }
+    public int[] getRecordsEfId(int efid){
+
+    
+          int efIds[] = null;
+          Log.i("AdnRecordCache","getRecordsEfId"+efid);
+	    if(EF_PBR == efid){
+
+		   efIds = mUsimPhoneBookManager.getEfFilesFromUsim();
+
+	    }else{
+
+
+
+                efIds = new int[1];
+		   efIds[0] = efid;
+
+
+	   }
+         mEfid = efIds;
+         return efIds;
+
+
+
+
+
+   }
+
 
     /**
      * Returns extension ef associated with ADN-like EF or -1 if
@@ -116,7 +144,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
             case EF_FDN: return EF_EXT2;
             case EF_MSISDN: return EF_EXT1;
             case EF_PBR: return 0; // The EF PBR doesn't have an extension record
-            default: return -1;
+            default: return 0;
         }
     }
 
@@ -160,6 +188,65 @@ public final class AdnRecordCache extends Handler implements IccConstants {
                 obtainMessage(EVENT_UPDATE_ADN_DONE, efid, recordIndex, adn));
     }
 
+     private boolean isLastAdn(int efid){
+        int i=0;
+	  Log.i("AdnRecordCache","addAdnRecordsInEf: efid=" + efid +"mEfid.length"+ mEfid.length);
+           
+	  for( i=0; i<mEfid.length;i++){
+	  	
+            Log.i("AdnRecordCache","addAdnRecordsInEf: mEfid=" + mEfid[i]);
+
+	      if(efid ==  mEfid[i]){
+
+
+
+                 break;
+	     }
+
+
+		  
+	  }
+
+	  if(i == mEfid.length-1 ){
+             Log.i("AdnRecordCache","addAdnRecordsInEf: true");
+             return true;
+	  }
+           Log.i("AdnRecordCache","addAdnRecordsInEf: false");
+         return false;
+     }
+
+     public int getAdnIndex(int efid, AdnRecord oldAdn){
+
+
+        ArrayList<AdnRecord>  oldAdnList;
+        oldAdnList = getRecordsIfLoaded(efid);
+        Log.i("AdnRecordCache","getAdnIndex efid "+efid );
+        if (oldAdnList == null) {
+     
+            return -1;
+        }
+        Log.i("AdnRecordCache","updateAdnBySearch (2)");
+        int index = -1;
+        int count = 1;
+        for (Iterator<AdnRecord> it = oldAdnList.iterator(); it.hasNext(); ) {
+            if (oldAdn.isEqual(it.next())) {
+                index = count;
+                break;
+            }
+            count++;
+        }
+
+
+       return index;
+
+
+
+
+
+    }
+
+
+
     /**
      * Replace oldAdn with newAdn in ADN-like record in EF
      *
@@ -174,25 +261,25 @@ public final class AdnRecordCache extends Handler implements IccConstants {
      * @param response message to be posted when done
      *        response.exception hold the exception in error
      */
-    public void updateAdnBySearch(int efid, AdnRecord oldAdn, AdnRecord newAdn,
+    public boolean updateAdnBySearch(int efid, AdnRecord oldAdn, AdnRecord newAdn,
             String pin2, Message response) {
 
         int extensionEF;
         extensionEF = extensionEfForEf(efid);
-
+        Log.i("AdnRecordCache","updateAdnBySearch");
         if (extensionEF < 0) {
             sendErrorResponse(response, "EF is not known ADN-like EF:" + efid);
-            return;
+            return false;
         }
-
+        Log.i("AdnRecordCache","updateAdnBySearch (1)");
         ArrayList<AdnRecord>  oldAdnList;
         oldAdnList = getRecordsIfLoaded(efid);
 
         if (oldAdnList == null) {
             sendErrorResponse(response, "Adn list not exist for EF:" + efid);
-            return;
+            return false;
         }
-
+        Log.i("AdnRecordCache","updateAdnBySearch (2)");
         int index = -1;
         int count = 1;
         for (Iterator<AdnRecord> it = oldAdnList.iterator(); it.hasNext(); ) {
@@ -202,27 +289,40 @@ public final class AdnRecordCache extends Handler implements IccConstants {
             }
             count++;
         }
-
-        if (index == -1) {
-            sendErrorResponse(response, "Adn record don't exist for " + oldAdn);
-            return;
+        Log.i("AdnRecordCache","updateAdnBySearch (3) index" + index);
+        if (index == -1 ) {
+            if(isLastAdn(efid)){
+                 sendErrorResponse(response, "Adn record don't exist for " + oldAdn);
+            }
+            Log.i("AdnRecordCache","updateAdnBySearch >>>>>>>>>>>>>>>>>>>>>>>> Adn record don't exist for" );
+            return false;
         }
 
         Message pendingResponse = userWriteResponse.get(efid);
 
         if (pendingResponse != null) {
             sendErrorResponse(response, "Have pending update for EF:" + efid);
-            return;
+            return false;
         }
 
         userWriteResponse.put(efid, response);
-
+        Log.i("AdnRecordCache","updateAdnBySearch (4) index" + index);
         new AdnRecordLoader(phone).updateEF(newAdn, efid, extensionEF,
                 index, pin2,
                 obtainMessage(EVENT_UPDATE_ADN_DONE, efid, index, newAdn));
+
+	 return true;
+    }
+    public  int[] getAdnRecordsSize(int efid){
+
+            Log.i("AdnRecordCache","getAdnRecordsSize");
+            return mUsimPhoneBookManager.getAdnRecordsSize(efid);
+       
     }
 
 
+     
+	
     /**
      * Responds with exception (in response) if efid is not a known ADN-like
      * record
@@ -330,19 +430,22 @@ public final class AdnRecordCache extends Handler implements IccConstants {
                 AdnRecord adn = (AdnRecord) (ar.userObj);
 				
                 //yeezone:jinwei add sim_index.
+                Log.i("AdnRecordCache","efid "+efid+"index " +index);
                 adn.setRecordNumber(index);
                 //end
 				
                 if (ar.exception == null) {
                     adnLikeFiles.get(efid).set(index - 1, adn);
                 }
-
+                Log.i("AdnRecordCache","efid" +efid);
                 Message response = userWriteResponse.get(efid);
+		      Log.i("AdnRecordCache","response" +response +"index " + index);
                 userWriteResponse.delete(efid);
 
                 //yeezone:jinwei return sim_index after add a new contact in SimCard.
                 //AsyncResult.forMessage(response, null, ar.exception);
                 AsyncResult.forMessage(response, index, ar.exception);
+		   Log.i("AdnRecordCache","response" +response +"index " + index + "target "+ response.getTarget());
                 response.sendToTarget();
                 break;
         }

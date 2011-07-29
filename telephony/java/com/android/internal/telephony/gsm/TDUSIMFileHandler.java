@@ -32,6 +32,7 @@ import com.android.internal.telephony.IccException;
 import com.android.internal.telephony.IccFileTypeMismatch;
 import com.android.internal.telephony.IccIoResult;
 import com.android.internal.telephony.gsm.SIMFileHandler;
+import com.android.internal.telephony.gsm.UsimPhoneBookManager;
 /**s
  * {@hide}
  */
@@ -48,8 +49,13 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements IccConsta
     static protected final byte RESPONSE_DATA_FILE_RECORD_LEN_2 = 7;
     static protected final byte RESPONSE_DATA_FILE_RECORD_COUNT_FLAG = 8;
 
+
+    static private final byte USIM_RECORD_SIZE_1= 4; 	
+    static private final byte USIM_RECORD_SIZE_2= 5; 	
+    static private final byte USIM_RECORD_COUNT= 6; 	
     static final String LOG_TAG = "TD-SCDMA";
     private Phone mPhone;
+    private Object mLock = new Object();
 
     //***** Instance Variables
 
@@ -123,6 +129,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements IccConsta
         int fileid;
         int recordNum;
         int recordSize[];
+	  int index =0;
 
         try {
             switch (msg.what) {
@@ -152,8 +159,42 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements IccConsta
                 lc = (IccFileHandler.LoadLinearFixedContext) ar.userObj;
                 result = (IccIoResult) ar.result;
                 response = lc.onLoaded;
+                data = result.payload;
+                logbyte(data);
 
+        	   Log.i(LOG_TAG, "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE  data[11]" +data[11] + "data[12 ] :" +data[12]  );	
+                IccCard card = phone.getIccCard();
+                 Log.i(LOG_TAG, "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE usim" +card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)  );	
+                if(card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM))
+		   //if(card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM) && (data[11]&0xff) ==  0x6f &&   (data[12]&0xff)  == 0x3b)
+                {
+			  for(int i= 0; i<data.length; i++){
+                            if(data[i] == TYPE_FILE_DES){
+
+					 index = i;
+					 break;
+				  }
+							
+			  }
+			  Log.i(LOG_TAG, "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE  index" + index );
+                     if(index < 2 ){
+                            throw new IccFileTypeMismatch();
+			  }
+		    //UICC 12.1.1.4.3    
+		    recordSize = new int[3];
+               
+                 recordSize[0] = ((data[index + USIM_RECORD_SIZE_1] & 0xff) << 8)
+                       + (data[index +USIM_RECORD_SIZE_2 ] & 0xff);
+                 recordSize[2] = data[index+USIM_RECORD_COUNT] & 0xff;
+		    recordSize[1] =  recordSize[0] *recordSize[2];
+                 for(int i=0; i<3; i++ ){
+		          Log.i(LOG_TAG, "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE  recordSize" + recordSize[i] );
+                 }
+                 sendResult(response, recordSize, null);
+                 break;
+		   }
                 if (ar.exception != null) {
+			  Log.i(LOG_TAG, "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE exception (1) " );	
                     sendResult(response, null, ar.exception);
                     break;
                 }
@@ -164,7 +205,10 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements IccConsta
                     break;
                 }
 
-                data = result.payload;
+             
+               
+        
+		   
 
                 if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE] ||
                     EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {

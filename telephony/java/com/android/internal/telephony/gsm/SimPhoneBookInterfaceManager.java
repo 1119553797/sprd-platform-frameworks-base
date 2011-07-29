@@ -48,8 +48,8 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
         }
         if(DBG) Log.d(LOG_TAG, "SimPhoneBookInterfaceManager finalized");
     }
-
-    public int[] getAdnRecordsSize(int efid) {
+   
+   /*  public int[] getAdnRecordsSize(int efid) {
         if (DBG) logd("getAdnRecordsSize: efid=" + efid);
         synchronized(mLock) {
             checkThread();
@@ -68,7 +68,7 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
 
         return recordSize;
     }
-
+    */
     protected void logd(String msg) {
         Log.d(LOG_TAG, "[SimPbInterfaceManager] " + msg);
     }

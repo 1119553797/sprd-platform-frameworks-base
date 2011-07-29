@@ -188,14 +188,32 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         Log.v("IccPhoneBookInterfaceManager", "addIccRecordToEf** ");
         if (DBG) logd("addAdnRecordsInEf: efid=" + efid +
                 " ("+ newTag + "," + newPhoneNumber + ")"+ " pin2=" + pin2);
+
+	  int newid =   updateEfForIccType(efid);
+
+	  int fileId[] = adnCache.getRecordsEfId(newid);
+
+	  for(int i=0; i<fileId.length;i++){
+	  	
+            if (DBG) logd("addAdnRecordsInEf: efid=" + fileId[i]);
+	  }
         synchronized(mLock) {
             sim_index = 0;
             checkThread();
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE);
             AdnRecord oldAdn = new AdnRecord("", "");
             AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
-            Log.v("IccPhoneBookInterfaceManager", "newTag="+newTag+"  newPhoneNumber="+newPhoneNumber);
-            adnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
+            Log.i("IccPhoneBookInterfaceManager", "newTag="+newTag+"  newPhoneNumber="+newPhoneNumber);
+            for(int i=0; i<fileId.length;i++){
+	  	   
+                if (DBG) logd("addAdnRecordsInEf: efid=" + fileId[i]);
+				
+		   if(adnCache.updateAdnBySearch(fileId[i], oldAdn, newAdn, pin2, response)){
+
+			  break;
+		   }
+	     }
+	
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
@@ -261,7 +279,45 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
      *            recordSizes[1]  is the total length of the EF file
      *            recordSizes[2]  is the number of records in the EF file
      */
-    public abstract int[] getAdnRecordsSize(int efid);
+    public  int[] getAdnRecordsSize(int efid){
+
+          if (DBG) logd("getAdnRecordsSize: efid=" + efid);
+
+	    int nefid = updateEfForIccType(efid);
+
+	    if(nefid == IccConstants.EF_PBR){
+
+
+	          recordSize = adnCache.getAdnRecordsSize(efid);
+	    }else{
+	    
+               getRecordsSizeofAnd(efid);
+	   }
+
+        return recordSize;
+
+
+    }
+
+    private int[] getRecordsSizeofAnd(int efid) {
+        if (DBG) logd("getAdnRecordsSize: efid=" + efid);
+        synchronized(mLock) {
+            checkThread();
+            recordSize = new int[3];
+
+            //Using mBaseHandler, no difference in EVENT_GET_SIZE_DONE handling
+            Message response = mBaseHandler.obtainMessage(EVENT_GET_SIZE_DONE);
+
+            phone.getIccFileHandler().getEFLinearRecordSize(efid, response);
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                logd("interrupted while trying to load from the SIM");
+            }
+        }
+
+        return recordSize;
+    }
 
     /**
      * Loads the AdnRecords in efid and returns them as a

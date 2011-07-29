@@ -162,7 +162,7 @@ public class AdnRecordLoader extends Handler {
                         throw new RuntimeException("worong ADN format",
                                 ar.exception);
                     }
-
+                    Log.i("AdnRecordLoader","recordNumber "+recordNumber);  
                     phone.mIccFileHandler.updateEFLinearFixed(ef, recordNumber,
                             data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
 
@@ -170,6 +170,7 @@ public class AdnRecordLoader extends Handler {
 
                     break;
                 case EVENT_UPDATE_RECORD_DONE:
+			 Log.i("AdnRecordLoader","EVENT_UPDATE_RECORD_DONE "+recordNumber); 
                     ar = (AsyncResult)(msg.obj);
                     if (ar.exception != null) {
                         throw new RuntimeException("update EF adn record failed",

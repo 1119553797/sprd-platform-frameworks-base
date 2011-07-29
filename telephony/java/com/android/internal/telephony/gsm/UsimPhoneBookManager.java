@@ -28,7 +28,7 @@ import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.PhoneBase;
 
 import org.apache.harmony.luni.lang.reflect.ListOfTypes;
-
+import com.android.internal.telephony.IccPhoneBookInterfaceManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,11 +53,15 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     private ArrayList<byte[]> mIapFileRecord;
     private ArrayList<byte[]> mEmailFileRecord;
     private Map<Integer, ArrayList<String>> mEmailsForAdnRec;
-
+    private int mAdnCount = 0;
+    private int mAdnSize = 0;
+    protected int recordSize[];
+	
     private static final int EVENT_PBR_LOAD_DONE = 1;
     private static final int EVENT_USIM_ADN_LOAD_DONE = 2;
     private static final int EVENT_IAP_LOAD_DONE = 3;
     private static final int EVENT_EMAIL_LOAD_DONE = 4;
+    private static final int EVENT_ADN_RECORD_COUNT = 5;
 
     private static final int USIM_TYPE1_TAG   = 0xA8;
     private static final int USIM_TYPE2_TAG   = 0xA9;
@@ -107,6 +111,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             if (mPbrFile == null) return null;
 
             int numRecs = mPbrFile.mFileIds.size();
+            Log.i("UsimPhoneBookManager" ,"loadEfFilesFromUsim" +numRecs);	 	
             for (int i = 0; i < numRecs; i++) {
                 readAdnFileAndWait(i);
                 readEmailFileAndWait(i);
@@ -114,6 +119,73 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             // All EF files are loaded, post the response.
         }
         return mPhoneBookRecords;
+    }
+
+    public int[] getAdnRecordsSize(int efid) {
+       
+      
+          Log.i("UsimPhoneBookManager" ,"getEFLinearRecordSize" +efid);	 
+	   synchronized (mLock) {
+          
+            if (mPbrFile == null) {
+                readPbrFileAndWait();
+            }
+
+            if (mPbrFile == null) return null;
+
+            int numRecs = mPbrFile.mFileIds.size();
+            Log.i("UsimPhoneBookManager" ,"loadEfFilesFromUsim" +numRecs);	 
+	      mAdnCount = 0;
+             mAdnSize = 0;
+            for (int i = 0; i < numRecs; i++) {
+                readAdnFileSizeAndWait(i);
+               
+            }
+            // All EF files are loaded, post the response.
+        }
+      
+        return recordSize;
+    }
+
+
+
+    
+    private int readAdnFileSizeAndWait(int recNum) {
+        Map <Integer,Integer> fileIds;
+        fileIds = mPbrFile.mFileIds.get(recNum);
+	  Log.i("UsimPhoneBookManager" ,"recNum" +recNum);
+	  
+        if (fileIds == null || fileIds.isEmpty()) return 0;
+
+            mPhone.getIccFileHandler().getEFLinearRecordSize(fileIds.get(USIM_EFADN_TAG),
+             obtainMessage(EVENT_ADN_RECORD_COUNT));
+        try {
+            mLock.wait();
+        } catch (InterruptedException e) {
+            Log.e(LOG_TAG, "Interrupted Exception in readAdnFileAndWait");
+        }
+          Log.i("UsimPhoneBookManager" ,"mAdnCount" +mAdnCount);	 
+	  return 	mAdnCount;
+    }
+     public int[] getEfFilesFromUsim() {
+
+	   int[] efids = null;
+
+	  int len = 0;
+
+	  
+
+	   len = mPbrFile.mFileIds.size();
+          Log.i("UsimPhoneBookManager" ,"getEfFilesFromUsim" +len );	 
+	   efids = new int [len];
+
+	   for(int i=0; i<len; i++){
+              Map <Integer,Integer> fileIds = mPbrFile.mFileIds.get(i);
+               efids[i]= fileIds.get(USIM_EFADN_TAG);
+		  Log.i("UsimPhoneBookManager" ,"getEfFilesFromUsim" +efids[i] );	 
+	   }
+	   
+         return efids;
     }
 
     private void readPbrFileAndWait() {
@@ -347,6 +419,26 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                 mLock.notify();
             }
             break;
+	  case EVENT_ADN_RECORD_COUNT:
+	      Log.i(LOG_TAG,"Loading EVENT_ADN_RECORD_COUNT");
+             ar = (AsyncResult) msg.obj;
+             synchronized (mLock) {
+                        if (ar.exception == null) {
+                            recordSize = (int[])ar.result;
+                            // recordSize[0]  is the record length
+                            // recordSize[1]  is the total length of the EF file
+                            // recordSize[2]  is the number of records in the EF file
+                            Log.i(LOG_TAG,"EVENT_ADN_RECORD_COUNT Size " + recordSize[0] +
+                                    " total " + recordSize[1] +
+                                    " #record " + recordSize[2]);
+				  mAdnCount +=   recordSize[2];
+                            mAdnSize += recordSize[1];
+				  recordSize[2] =  mAdnCount;
+				  recordSize[1] = mAdnSize;
+                            mLock.notifyAll();
+                        }
+                    }
+                    break;
         }
     }
 
