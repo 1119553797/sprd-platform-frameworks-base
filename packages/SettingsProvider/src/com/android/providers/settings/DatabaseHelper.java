@@ -413,18 +413,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (upgradeVersion == 37) {
-            db.beginTransaction();
-            SQLiteStatement stmt = null;
-            try {
-                stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
-                        + " VALUES(?,?);");
-                loadStringSetting(stmt, Settings.System.AIRPLANE_MODE_TOGGLEABLE_RADIOS,
-                        R.string.airplane_mode_toggleable_radios);
-                db.setTransactionSuccessful();
-            } finally {
-                db.endTransaction();
-                if (stmt != null) stmt.close();
-            }
+//            db.beginTransaction();
+//            SQLiteStatement stmt = null;
+//            try {
+//                stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
+//                        + " VALUES(?,?);");
+//                loadStringSetting(stmt, Settings.System.AIRPLANE_MODE_TOGGLEABLE_RADIOS,
+//                        R.string.airplane_mode_toggleable_radios);
+//                db.setTransactionSuccessful();
+//            } finally {
+//                db.endTransaction();
+//                if (stmt != null) stmt.close();
+//            }
             upgradeVersion = 38;
         }
 
@@ -1028,8 +1028,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadStringSetting(stmt, Settings.System.AIRPLANE_MODE_RADIOS,
                     R.string.def_airplane_mode_radios);
     
-            loadStringSetting(stmt, Settings.System.AIRPLANE_MODE_TOGGLEABLE_RADIOS,
-                    R.string.airplane_mode_toggleable_radios);
+//            loadStringSetting(stmt, Settings.System.AIRPLANE_MODE_TOGGLEABLE_RADIOS,
+//                    R.string.airplane_mode_toggleable_radios);
     
             loadBooleanSetting(stmt, Settings.System.AUTO_TIME,
                     R.bool.def_auto_time); // Sync time to NITZ
