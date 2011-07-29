@@ -484,12 +484,7 @@ public class GsmAlphabet {
             throw new EncodeException(c);
         } else {
             // count as a space char
-            if (c > 0xff) {
-                return 3;
-            }
-            else {
-                return 1;
-            }
+            return 1;
         }
     }
 
@@ -552,6 +547,20 @@ public class GsmAlphabet {
             }
         }
         return size;
+    }
+
+    public static byte[] isAsciiStringToGsm8BitUnpackedField(String s)
+    throws EncodeException{
+	int i;
+	for(i=0;i<s.length();i++)
+	{
+		int c = s.charAt(i);
+		if(c >= 128){
+			 throw new EncodeException("string is not ascii string");}
+	}
+
+	return stringToGsm8BitPacked(s);
+	
     }
 
     // Set in the static initializer

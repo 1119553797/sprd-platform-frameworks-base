@@ -20,6 +20,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
+import android.text.TextUtils;
 
 import com.android.internal.telephony.GsmAlphabet;
 import java.io.UnsupportedEncodingException;
@@ -236,88 +237,31 @@ public class AdnRecord implements Parcelable {
             adnString[footerOffset + ADN_EXTENSION_ID]
                     = (byte) 0xFF; // Extension Record Id
 
-            //byteTag = GsmAlphabet.stringToGsm8BitPacked(alphaTag);
-            byteTag = yzStringToGsm8BitPacked(alphaTag);
-            System.arraycopy(byteTag, 0, adnString, 0, byteTag.length);
+           // zhanglj modify begin 2010-08-11 for English and Chinese name alphaTag format
+            if (!TextUtils.isEmpty(alphaTag)) {
+                //byteTag = GsmAlphabet.stringToGsm8BitPacked(alphaTag);            
+                //System.arraycopy(byteTag, 0, adnString, 0, byteTag.length);
+                
+                try {
+                    byteTag = GsmAlphabet.isAsciiStringToGsm8BitUnpackedField(alphaTag);
+                    System.arraycopy(byteTag, 0, adnString, 0, byteTag.length);                  
+                } catch (EncodeException ex) {
+                    try {
+                        byteTag = alphaTag.getBytes("utf-16be");
+                        System.arraycopy(byteTag, 0, adnString, ADN_TON_AND_NPI, byteTag.length);
+                        adnString[0] = (byte)0x80;
+                    } catch (java.io.UnsupportedEncodingException ex2) {
+                        Log.e(LOG_TAG,"[AdnRecord]alphaTag convert byte excepiton");
+                    }
+                }
+            }
+            // zhanglj modify end
 
         }
 
         return adnString;
     }
 
-	/**
-     * bin.lai
-     * @param s
-     * @return
-     */
-    private byte[] yzStringToGsm8BitPacked(String s){
-    	byte[] ret;
-
-        int septets = 0;
-
-        septets = GsmAlphabet.countGsmSeptets(s);
-        ret = new byte[septets];
-        Log.v(LOG_TAG,"septets:"+septets);
-        yzStringToGsm8BitUnpackedField(s, ret, 0, ret.length);
-        return ret;
-    }
-    
-    private void yzStringToGsm8BitUnpackedField(String s, byte dest[], int offset, int length) {
-    	int outByteIndex = offset;
-        Log.v(LOG_TAG,"length:"+length);
-        int flag=0;
-        for (int i = 0, sz = s.length()
-                ; i < sz && (outByteIndex - offset) < length
-                ; i++
-        ) {
-            char c = s.charAt(i);
-
-            int v = GsmAlphabet.charToGsm(c);
-
-            if (v == GsmAlphabet.GSM_EXTENDED_ESCAPE) {
-                // make sure we can fit an escaped char
-                if (! (outByteIndex + 1 - offset < length)) {
-                    break;
-                }
-
-                dest[outByteIndex++] = GsmAlphabet.GSM_EXTENDED_ESCAPE;
-
-                v = GsmAlphabet.charToGsmExtended(c);
-                
-                
-                
-            }
-            Log.v(LOG_TAG,"v:"+v);
-            if(v == 32){
-            	if(flag ==0){
-            		dest[outByteIndex++] = (byte) 0x80;
-            		flag=-1;
-            	}
-            	Log.v(LOG_TAG,"lybeen --> GSM_EXTENDED_ESCAPE");
-            	String str = new String(c+"");
-            	byte[] bs=null;
-				try {
-					bs = str.getBytes("utf-16");
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            	Log.v(LOG_TAG,"bs.length:"+bs.length);
-            	
-            	//for(int j=2;j<bs.length;j++){
-            		dest[outByteIndex++] = bs[3];
-            		dest[outByteIndex++] = bs[2];
-            	//}
-            }else{
-            	dest[outByteIndex++] = (byte)v;
-            }
-        }
-        flag=0;
-        // pad with 0xff's
-        while((outByteIndex - offset) < length) {
-            dest[outByteIndex++] = (byte)0xff;
-        }
-    }
     /**
      * See TS 51.011 10.5.10
      */
