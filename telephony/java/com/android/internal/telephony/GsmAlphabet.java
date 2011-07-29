@@ -484,7 +484,12 @@ public class GsmAlphabet {
             throw new EncodeException(c);
         } else {
             // count as a space char
-            return 1;
+            if (c > 0xff) {
+                return 3;
+            }
+            else {
+                return 1;
+            }
         }
     }
 
