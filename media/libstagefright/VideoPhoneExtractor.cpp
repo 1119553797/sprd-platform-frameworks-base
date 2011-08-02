@@ -677,8 +677,8 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 		//nNext++;
 	}
 	//LOGI("[%p]find frame %d %d", this, nStart, nEnd);
-	LOGI("[%p]find frame 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, m_RingBuffer[nStart + 2], m_RingBuffer[nStart + 3], m_RingBuffer[nStart + 4], m_RingBuffer[nStart + 5]
-	, m_RingBuffer[nStart + 6], m_RingBuffer[nStart + 7], m_RingBuffer[nStart + 8], m_RingBuffer[nStart + 9]);
+	//LOGI("[%p]find frame 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, m_RingBuffer[nStart + 2], m_RingBuffer[nStart + 3], m_RingBuffer[nStart + 4], m_RingBuffer[nStart + 5]
+	//, m_RingBuffer[nStart + 6], m_RingBuffer[nStart + 7], m_RingBuffer[nStart + 8], m_RingBuffer[nStart + 9]);
 
 #if 0
 	nLen 	= ((nEnd - nStart) + m_nRingBufferSize) % m_nRingBufferSize - 4;

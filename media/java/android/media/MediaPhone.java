@@ -603,6 +603,8 @@ public class MediaPhone extends Handler
 		private void internalResendMessage(Message msg){
 			Bundle bundle = msg.getData();
 			Message tempMsg = (Message)bundle.getParcelable(MSG_TAG);
+
+			if (tempMsg == null) return;
 			
 			AsyncResult ar = (AsyncResult) msg.obj;
 			//Throwable e = ar.exception;
