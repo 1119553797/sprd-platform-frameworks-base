@@ -179,6 +179,13 @@ public abstract class IccSmsInterfaceManager extends ISms.Stub {
                 (ArrayList<PendingIntent>) sentIntents, (ArrayList<PendingIntent>) deliveryIntents);
     }
 
+    public boolean saveMultipartText(String destAddr, String scAddr,
+    		List<String> parts, boolean isOutbox, String timestring, int savestatus) {
+
+        return mDispatcher.saveMultipartText(destAddr, scAddr, (ArrayList<String>) parts, isOutbox,
+        		timestring, savestatus);
+    }
+
     /**
      * create SmsRawData lists from all sms record byte[]
      * Use null to indicate "free" record

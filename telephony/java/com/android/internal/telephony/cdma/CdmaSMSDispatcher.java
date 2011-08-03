@@ -442,6 +442,11 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
         }
     }
 
+    protected boolean saveMultipartText(String destinationAddress, String scAddress,
+    		ArrayList<String> parts, boolean isOutbox, String timestring, int savestatus) {
+    	return false;
+    }
+
     protected void sendSubmitPdu(SmsMessage.SubmitPdu pdu,
             PendingIntent sentIntent, PendingIntent deliveryIntent) {
         if (SystemProperties.getBoolean(TelephonyProperties.PROPERTY_INECM_MODE, false)) {

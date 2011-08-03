@@ -17,8 +17,10 @@
 package com.android.internal.telephony;
 
 import android.app.PendingIntent;
+import android.os.RemoteException;
 import android.os.ServiceManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IccSmsInterfaceManagerProxy extends ISms.Stub {
@@ -76,4 +78,11 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
                 parts, sentIntents, deliveryIntents);
     }
 
+	@Override
+	public boolean saveMultipartText(String destinationAddress, String scAddress,
+			List<String> parts, boolean isOutbox, String timestring,
+			int savestatus) throws RemoteException {
+        return mIccSmsInterfaceManager.saveMultipartText(destinationAddress, scAddress,
+                parts, isOutbox, timestring, savestatus);
+	}
 }

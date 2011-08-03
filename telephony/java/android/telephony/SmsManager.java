@@ -20,12 +20,15 @@ import android.app.PendingIntent;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.internal.telephony.EncodeException;
 import com.android.internal.telephony.ISms;
 import com.android.internal.telephony.IccConstants;
+import com.android.internal.telephony.SMSDispatcher;
+import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsRawData;
-
+import com.android.internal.telephony.SmsMessageBase.TextEncodingDetails;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -167,6 +170,57 @@ public final class SmsManager {
             sendTextMessage(destinationAddress, scAddress, parts.get(0),
                     sentIntent, deliveryIntent);
         }
+    }
+
+    public boolean saveMultipartTextMessage(String destinationAddress, ArrayList<String> parts,
+    		boolean isOutbox, String timestring) {
+    	boolean result = false;
+
+        Log.d("SMSMANGER", "[cmgw]message size = " + parts.size());
+    	if (parts == null || parts.size() < 1) {
+            Log.d("SMSMANGER", "[cmgw]Invalid message body");
+            return result;
+        }
+    	int savestatus = isOutbox ? STATUS_ON_ICC_SENT : STATUS_ON_ICC_READ;
+
+        if (!isOutbox) {
+            if (parts.size() > 1) {
+                //result = SmsMessage.saveMultipartText(destinationAddress, null, parts, isOutbox, timestring);
+                try {
+                    ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+                    if (iccISms != null) {
+                        result = iccISms.saveMultipartText(destinationAddress, null, parts, isOutbox, timestring, savestatus);
+                    } else {
+                        Log.d("SMSMANGER", "[cmgw]iccISms is null");
+                    }
+                } catch (RemoteException ex) {
+                    Log.d("SMSMANGER", "[cmgw]RemoteException");
+                    // ignore it
+                }
+            } else {
+	            SmsMessage.DeliverPdu pdu = SmsMessage.getDeliverPdu(null, destinationAddress, parts.get(0), timestring);
+	            result = copyMessageToIcc(null, pdu.encodedMessage, STATUS_ON_ICC_READ);
+            }
+        } else {
+            if (parts.size() > 1) {
+                //result = SmsMessage.saveMultipartText(destinationAddress, null, parts, isOutbox, null);
+                try {
+                    ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+                    if (iccISms != null) {
+                        result = iccISms.saveMultipartText(destinationAddress, null, parts, isOutbox, timestring, savestatus);
+                    } else {
+                        Log.d("SMSMANGER", "[cmgw]iccISms is null");
+                    }
+                } catch (RemoteException ex) {
+                    // ignore it
+                    Log.d("SMSMANGER", "[cmgw]RemoteException");
+                }
+            } else {
+	            SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(null, destinationAddress, parts.get(0), false);
+	            result = copyMessageToIcc(null, pdu.encodedMessage, STATUS_ON_ICC_SENT);
+            }
+        }
+        return result;
     }
 
     /**

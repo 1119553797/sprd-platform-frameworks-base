@@ -103,6 +103,28 @@ public class SmsMessage {
 
     }
 
+    public static class DeliverPdu {
+
+        public byte[] encodedScAddress; // Null if not applicable.
+        public byte[] encodedMessage;
+
+        public String toString() {
+            return "DeliverPdu: encodedScAddress = "
+                    + Arrays.toString(encodedScAddress)
+                    + ", encodedMessage = "
+                    + Arrays.toString(encodedMessage);
+        }
+
+        /**
+         * @hide
+         */
+        protected DeliverPdu(SubmitPduBase spb) {
+            this.encodedMessage = spb.encodedMessage;
+            this.encodedScAddress = spb.encodedScAddress;
+        }
+
+    }
+
     /**
      * Constructor
      *
@@ -418,6 +440,30 @@ public class SmsMessage {
         }
 
         return new SubmitPdu(spb);
+    }
+
+    /**
+     * Get an SMS_DELIVER PDU for a destination address and a message
+     *
+     * @param scAddress Service Centre address.  Null means use default.
+     * @return a <code>SubmitPdu</code> containing the encoded SC
+     *         address, if applicable, and the encoded message.
+     *         Returns null on encode error.
+     */
+    public static DeliverPdu getDeliverPdu(String scAddress,
+            String destinationAddress, String message, String timestamp) {
+        SubmitPduBase spb;
+        int activePhone = TelephonyManager.getDefault().getPhoneType();
+
+        if (PHONE_TYPE_CDMA == activePhone) {
+            Log.d(LOG_TAG, "[cmgw]get phone type error");
+            return null;
+        } else {
+            spb = com.android.internal.telephony.gsm.SmsMessage.getDeliverPdu(scAddress,
+                    destinationAddress, message, timestamp);
+        }
+
+        return new DeliverPdu(spb);
     }
 
     /**

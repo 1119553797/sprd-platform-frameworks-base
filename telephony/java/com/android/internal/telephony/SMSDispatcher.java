@@ -786,6 +786,9 @@ public abstract class SMSDispatcher extends Handler {
             ArrayList<String> parts, ArrayList<PendingIntent> sentIntents,
             ArrayList<PendingIntent> deliveryIntents);
 
+    protected abstract boolean saveMultipartText(String destinationAddress, String scAddress,
+    		ArrayList<String> parts, boolean isOutbox, String timestring, int savestatus);
+
     /**
      * Send a SMS
      *

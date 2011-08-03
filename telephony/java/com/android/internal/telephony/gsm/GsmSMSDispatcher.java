@@ -24,6 +24,7 @@ import android.os.AsyncResult;
 import android.os.Message;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.ServiceState;
+import android.telephony.SmsManager;
 import android.util.Config;
 import android.util.Log;
 
@@ -256,6 +257,48 @@ final class GsmSMSDispatcher extends SMSDispatcher {
 
             sendRawPdu(pdus.encodedScAddress, pdus.encodedMessage, sentIntent, deliveryIntent);
         }
+    }
+
+    protected boolean saveMultipartText(String destinationAddress, String scAddress,
+    		ArrayList<String> parts, boolean isOutbox, String timestring, int savestatus) {
+
+        int refNumber = SMSDispatcher.getNextConcatenatedRef() & 0x00FF;
+        int msgCount = parts.size();
+        int encoding = android.telephony.SmsMessage.ENCODING_UNKNOWN;
+        boolean result = false;
+
+        for (int i = 0; i < msgCount; i++) {
+            TextEncodingDetails details = com.android.internal.telephony.gsm.SmsMessage.calculateLength(parts.get(i), false);
+            if (encoding != details.codeUnitSize
+                    && (encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN
+                            || encoding == android.telephony.SmsMessage.ENCODING_7BIT)) {
+                encoding = details.codeUnitSize;
+            }
+        }
+    	SmsManager smsManager = SmsManager.getDefault();
+
+        for (int i = 0; i < msgCount; i++) {
+            SmsHeader.ConcatRef concatRef = new SmsHeader.ConcatRef();
+            concatRef.refNumber = refNumber;
+            concatRef.seqNumber = i + 1;  // 1-based sequence
+            concatRef.msgCount = msgCount;
+            concatRef.isEightBits = true;
+            SmsHeader smsHeader = new SmsHeader();
+            smsHeader.concatRef = concatRef;
+
+            if (!isOutbox) {
+	            SmsMessage.DeliverPdu pdus = com.android.internal.telephony.gsm.SmsMessage.getDeliverPdu(null, destinationAddress,
+	            		parts.get(i), timestring, SmsHeader.toByteArray(smsHeader), encoding);
+                result = smsManager.copyMessageToIcc(null, pdus.encodedMessage, savestatus);
+            } else {
+                SmsMessage.SubmitPdu pdus = SmsMessage.getSubmitPdu(scAddress, destinationAddress,
+                        parts.get(i), false, SmsHeader.toByteArray(smsHeader),
+                        encoding);
+                result = smsManager.copyMessageToIcc(null, pdus.encodedMessage, savestatus);
+            }
+            if (!result) break;
+        }
+        return result;
     }
 
     /**

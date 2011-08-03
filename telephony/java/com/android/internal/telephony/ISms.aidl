@@ -170,4 +170,7 @@ interface ISms {
             in List<String> parts, in List<PendingIntent> sentIntents,
             in List<PendingIntent> deliveryIntents);
 
+    boolean saveMultipartText(in String destinationAddress, in String scAddress,
+    		in List<String> parts, in boolean isOutbox, in String timestring, in int savestatus);
+
 }
