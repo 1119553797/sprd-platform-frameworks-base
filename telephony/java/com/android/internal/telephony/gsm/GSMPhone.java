@@ -1015,6 +1015,7 @@ public abstract class GSMPhone extends PhoneBase {
         public Message message;
         public String operatorNumeric;
         public String operatorAlphaLong;
+        public int operatorAct;
     }
 
     public void
@@ -1026,6 +1027,7 @@ public abstract class GSMPhone extends PhoneBase {
         nsm.message = response;
         nsm.operatorNumeric = "";
         nsm.operatorAlphaLong = "";
+        nsm.operatorAct = com.android.internal.telephony.gsm.NetworkInfo.ACT_GSM;
 
         // get the message
         Message msg = obtainMessage(EVENT_SET_NETWORK_AUTOMATIC_COMPLETE, nsm);
@@ -1044,11 +1046,12 @@ public abstract class GSMPhone extends PhoneBase {
         nsm.message = response;
         nsm.operatorNumeric = network.operatorNumeric;
         nsm.operatorAlphaLong = network.operatorAlphaLong;
+        nsm.operatorAct = network.act;
 
         // get the message
         Message msg = obtainMessage(EVENT_SET_NETWORK_MANUAL_COMPLETE, nsm);
 
-        mCM.setNetworkSelectionModeManual(network.operatorNumeric, msg);
+        mCM.setNetworkSelectionModeManual(network.operatorNumeric, network.act, msg);
     }
 
     public void
@@ -1452,6 +1455,7 @@ public abstract class GSMPhone extends PhoneBase {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(NETWORK_SELECTION_KEY, nsm.operatorNumeric);
         editor.putString(NETWORK_SELECTION_NAME_KEY, nsm.operatorAlphaLong);
+        editor.putInt(NETWORK_SELECTION_ACT_KEY, nsm.operatorAct);
 
         // commit and log the result.
         if (! editor.commit()) {

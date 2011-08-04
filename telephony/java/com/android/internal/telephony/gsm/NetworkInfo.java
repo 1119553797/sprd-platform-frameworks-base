@@ -29,12 +29,17 @@ public class NetworkInfo implements Parcelable {
         CURRENT,
         FORBIDDEN;
     }
-
+    
+    public static final int ACT_GSM = 0;
+    public static final int ACT_GSM_COMPACT = 1;
+    public static final int ACT_UTRAN = 2;
+    	
     String operatorAlphaLong;
     String operatorAlphaShort;
     String operatorNumeric;
 
     State state = State.UNKNOWN;
+    int act = ACT_GSM;
 
 
     public String
@@ -56,26 +61,35 @@ public class NetworkInfo implements Parcelable {
     getState() {
         return state;
     }
+    
+    public int
+    getAct() {
+    	return act;
+    }
 
     NetworkInfo(String operatorAlphaLong,
                 String operatorAlphaShort,
                 String operatorNumeric,
-                State state) {
+                State state,
+                int act) {
 
         this.operatorAlphaLong = operatorAlphaLong;
         this.operatorAlphaShort = operatorAlphaShort;
         this.operatorNumeric = operatorNumeric;
 
         this.state = state;
+        this.act = act;
     }
 
 
     public NetworkInfo(String operatorAlphaLong,
                 String operatorAlphaShort,
                 String operatorNumeric,
-                String stateString) {
+                String stateString,
+                String actString) {
         this (operatorAlphaLong, operatorAlphaShort,
-                operatorNumeric, rilStateToState(stateString));
+                operatorNumeric, rilStateToState(stateString),
+                rilActToAct(actString));
     }
 
     /**
@@ -96,12 +110,28 @@ public class NetworkInfo implements Parcelable {
         }
     }
 
+    /**
+     * See state strings defined in ril.h RIL_REQUEST_QUERY_AVAILABLE_NETWORKS
+     */
+    private static int rilActToAct(String s) {
+        if (s.equals("GSM")) {
+            return ACT_GSM;
+        } else if (s.equals("GSMCompact")) {
+            return ACT_GSM_COMPACT;
+        } else if (s.equals("UTRAN")) {
+            return ACT_UTRAN;
+        } else {
+            throw new RuntimeException(
+                "RIL impl error: Invalid network act '" + s + "'");
+        }
+    }
 
     public String toString() {
         return "NetworkInfo " + operatorAlphaLong
                 + "/" + operatorAlphaShort
                 + "/" + operatorNumeric
-                + "/" + state;
+                + "/" + state
+                + "/" + act;
     }
 
     /**
@@ -125,6 +155,7 @@ public class NetworkInfo implements Parcelable {
         dest.writeString(operatorAlphaShort);
         dest.writeString(operatorNumeric);
         dest.writeSerializable(state);
+        dest.writeInt(act);
     }
 
     /**
@@ -138,7 +169,8 @@ public class NetworkInfo implements Parcelable {
                         in.readString(), /*operatorAlphaLong*/
                         in.readString(), /*operatorAlphaShort*/
                         in.readString(), /*operatorNumeric*/
-                        (State) in.readSerializable()); /*state*/
+                        (State) in.readSerializable(), /*state*/
+                        in.readInt()); /*act*/
                 return netInfo;
             }
 

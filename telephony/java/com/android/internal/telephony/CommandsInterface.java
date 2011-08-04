@@ -1057,7 +1057,7 @@ public interface CommandsInterface extends SprdCommandsInterface{
 
     void setNetworkSelectionModeAutomatic(Message response);
 
-    void setNetworkSelectionModeManual(String operatorNumeric, Message response);
+    void setNetworkSelectionModeManual(String operatorNumeric, int act, Message response);
 
     /**
      * Queries whether the current network selection mode is automatic

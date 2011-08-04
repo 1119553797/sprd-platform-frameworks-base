@@ -45,6 +45,7 @@ import android.telephony.NeighboringCellInfo;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.telephony.TelephonyManager;
 import android.util.Config;
 import android.util.Log;
 
@@ -1497,15 +1498,16 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     }
 
     public void
-    setNetworkSelectionModeManual(String operatorNumeric, Message response) {
+    setNetworkSelectionModeManual(String operatorNumeric, int act, Message response) {
         RILRequest rr
                 = RILRequest.obtain(RIL_REQUEST_SET_NETWORK_SELECTION_MANUAL,
                                     response);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
-                    + " " + operatorNumeric);
+                    + " " + operatorNumeric + " " + act);
 
         rr.mp.writeString(operatorNumeric);
+        rr.mp.writeInt(act);
 
         send(rr);
     }
@@ -2893,21 +2895,22 @@ responseUnsolUssdStrings(Parcel p){
         String strings[] = (String [])responseStrings(p);
         ArrayList<NetworkInfo> ret;
 
-        if (strings.length % 4 != 0) {
+        if (strings.length % 5 != 0) {
             throw new RuntimeException(
                 "RIL_REQUEST_QUERY_AVAILABLE_NETWORKS: invalid response. Got "
-                + strings.length + " strings, expected multible of 4");
+                + strings.length + " strings, expected multible of 5");
         }
 
-        ret = new ArrayList<NetworkInfo>(strings.length / 4);
+        ret = new ArrayList<NetworkInfo>(strings.length / 5);
 
-        for (int i = 0 ; i < strings.length ; i += 4) {
+        for (int i = 0 ; i < strings.length ; i += 5) {
             ret.add (
                 new NetworkInfo(
                     strings[i+0],
                     strings[i+1],
                     strings[i+2],
-                    strings[i+3]));
+                    strings[i+3],
+                    strings[i+4]));
         }
 
         return ret;

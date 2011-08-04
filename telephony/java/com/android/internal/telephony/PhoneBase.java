@@ -38,6 +38,7 @@ import android.view.SurfaceHolder;
 
 import com.android.internal.R;
 import com.android.internal.telephony.gsm.GsmDataConnection;
+import com.android.internal.telephony.gsm.NetworkInfo;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 
 import java.util.List;
@@ -64,6 +65,8 @@ public abstract class PhoneBase extends Handler implements Phone {
     public static final String NETWORK_SELECTION_KEY = "network_selection_key";
     // Key used to read and write the saved network selection operator name
     public static final String NETWORK_SELECTION_NAME_KEY = "network_selection_name_key";
+    // Key used to read and write the saved network selection operator act
+    public static final String NETWORK_SELECTION_ACT_KEY = "network_selection_act_key";
 
 
     // Key used to read/write "disable data connection on boot" pref (used for testing)
@@ -449,6 +452,15 @@ public abstract class PhoneBase extends Handler implements Phone {
     }
 
     /**
+     * Method to retrieve the saved operator act from the Shared Preferences
+     */
+    private int getSavedNetworkSelectionAct() {
+        // open the shared preferences and search with our key.
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+        return sp.getInt(NETWORK_SELECTION_ACT_KEY, NetworkInfo.ACT_GSM);
+    }
+
+    /**
      * Method to restore the previously saved operator id, or reset to
      * automatic selection, all depending upon the value in the shared
      * preferences.
@@ -456,12 +468,13 @@ public abstract class PhoneBase extends Handler implements Phone {
     public void restoreSavedNetworkSelection(Message response) {
         // retrieve the operator id
         String networkSelection = getSavedNetworkSelection();
+        int networkSelectionAct = getSavedNetworkSelectionAct();
 
         // set to auto if the id is empty, otherwise select the network.
         if (TextUtils.isEmpty(networkSelection)) {
             mCM.setNetworkSelectionModeAutomatic(response);
         } else {
-            mCM.setNetworkSelectionModeManual(networkSelection, response);
+            mCM.setNetworkSelectionModeManual(networkSelection, networkSelectionAct, response);
         }
     }
 
