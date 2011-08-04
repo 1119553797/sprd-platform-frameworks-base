@@ -119,9 +119,9 @@ endif
 
 LOCAL_CFLAGS += -Wno-multichar
 
-ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
+#ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
 LOCAL_CFLAGS += -DBUILD_SPRD_AAC
-endif
+#endif
 
 LOCAL_MODULE:= libstagefright
 
