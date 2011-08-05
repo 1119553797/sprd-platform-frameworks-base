@@ -127,6 +127,7 @@ struct MyHandler : public AHandler {
 
         sp<AMessage> reply = new AMessage('conn', id());
         mConn->connect(mSessionURL.c_str(), reply);
+	LOGI("connecting %s",mSessionURL.c_str());
     }
 
     void disconnect(const sp<AMessage> &doneMsg) {
@@ -628,7 +629,9 @@ struct MyHandler : public AHandler {
                   //  break; //@hong not ignore the outdated msg.
                 }
 
-                if (mNumAccessUnitsReceived == 0) {
+// we do not abort when playing cmmb
+                if (mNumAccessUnitsReceived == 0  && 
+		strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) {  
 
                    // @hong not send abor signal. 
 #if 1
