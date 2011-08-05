@@ -67,6 +67,14 @@ interface ISms {
     boolean copyMessageToIccEf(int status, in byte[] pdu, in byte[] smsc);
 
     /**
+     * Get Sim card capacity.
+     *
+     * @return Sim capacity string.
+     *
+     */
+    String getSimCapacity();
+
+    /**
      * Send a data SMS.
      *
      * @param smsc the SMSC to send the message through, or NULL for the

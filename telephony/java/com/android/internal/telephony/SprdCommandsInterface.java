@@ -54,6 +54,7 @@ public interface SprdCommandsInterface {
 	public void setGprsDetach(Message response);
 	
 	public void getRemainTimes(int type, Message response);
+	public void getSimCapacity(Message result);
 
 }
 

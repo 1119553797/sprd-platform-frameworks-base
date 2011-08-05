@@ -344,6 +344,28 @@ public final class SmsManager {
     }
 
     /**
+     * Get Sim card capacity.
+     *
+     * @return success or not
+     *
+     */
+    public String getSimCapacity() {
+        boolean success = false;
+        String simCapacity = new String("0:0");
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            if (iccISms != null) {
+                simCapacity = iccISms.getSimCapacity();
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return simCapacity;
+    }
+
+    /**
      * Delete the specified message from the ICC.
      * ICC (Integrated Circuit Card) is the card of the device.
      * For example, this can be the SIM or USIM for GSM.

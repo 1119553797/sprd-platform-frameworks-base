@@ -44,13 +44,16 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
     private final Object mLock = new Object();
     private boolean mSuccess;
     private List<SmsRawData> mSms;
+    private String simCapacity;
 
     private static final int EVENT_LOAD_DONE = 1;
     private static final int EVENT_UPDATE_DONE = 2;
+    private static final int EVENT_GET_CAPACITY_DONE = 3;
 
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            String strCapacity[];
             AsyncResult ar;
 
             switch (msg.what) {
@@ -72,6 +75,23 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
                                 mSms.clear();
                         }
                         mLock.notifyAll();
+                    }
+                    break;
+                case EVENT_GET_CAPACITY_DONE:
+                    ar = (AsyncResult)msg.obj;
+                    synchronized (mLock) {
+	                    if (ar.exception == null) {
+	                        mSuccess = true;
+	                        strCapacity = (String[])ar.result;
+	                        if (strCapacity != null && strCapacity.length >= 2) {
+	                            if(DBG) log("[sms]sim used:" + strCapacity[0] +" total:" + strCapacity[1]);
+	                            simCapacity = strCapacity[0] + ":" +strCapacity[1];
+	                            if(DBG) log("[sms]simCapacity: " + simCapacity);
+	                        }
+	                    } else {
+	                        if(DBG) log("[sms]get sim capacity fail");
+	                    }
+	                    mLock.notifyAll();
                     }
                     break;
             }
@@ -163,6 +183,28 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
             }
         }
         return mSuccess;
+    }
+
+    /**
+     * Get Sim card capacity.
+     *
+     * @return success or not
+     *
+     */
+    public String getSimCapacity() {
+        synchronized(mLock) {
+            mSuccess = false;
+            Message response = mHandler.obtainMessage(EVENT_GET_CAPACITY_DONE);
+
+            mPhone.mCM.getSimCapacity(response);
+
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                log("interrupted while trying to update by index");
+            }
+        }
+        return simCapacity;
     }
 
     /**

@@ -168,6 +168,17 @@ public class RuimSmsInterfaceManager extends IccSmsInterfaceManager {
     }
 
     /**
+     * Get Sim card capacity.
+     *
+     * @return success or not
+     *
+     */
+    public String getSimCapacity() {
+        String capacity = new String("0:0");
+        return capacity;
+    }
+
+    /**
      * Retrieves all messages currently stored on RUIM.
      */
     public List<SmsRawData> getAllMessagesFromIccEf() {

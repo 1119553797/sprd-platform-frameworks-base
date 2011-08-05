@@ -748,6 +748,7 @@ public final class SprdRIL extends RIL {
 				 case RIL_REQUEST_GPRS_ATTACH: ret = responseVoid(p); break;
 				 case RIL_REQUEST_GPRS_DETACH: ret = responseVoid(p); break;
 				 case RIL_REQUEST_GET_REMAIN_TIMES: ret =  responseInts(p); break;
+				 case RIL_REQUEST_GET_SIM_CAPACITY: ret =  responseStrings(p); break;
 				 default:
 				 	throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
 							       //break;
@@ -1315,6 +1316,7 @@ public final class SprdRIL extends RIL {
 			 case RIL_REQUEST_GPRS_ATTACH: return "GPRS_ATTACH";			 
 			 case RIL_REQUEST_GPRS_DETACH: return "GPRS_DETACH";			 
 			 case RIL_REQUEST_GET_REMAIN_TIMES: return "REMAIN_TIMES";
+			 case RIL_REQUEST_GET_SIM_CAPACITY: return "GET_SIM_CAPACITY";
 			 default: return requestToString(request);
 		 }
 	 }
@@ -1383,5 +1385,14 @@ public final class SprdRIL extends RIL {
 
 	 }
 
+	 public void getSimCapacity(Message result){
+
+		 RILRequest rr = RILRequest.obtain(RIL_REQUEST_GET_SIM_CAPACITY, result);
+
+		 if (RILJ_LOGD) riljLog(rr.serialString() + "> " + sprdRequestToString(rr.mRequest));
+
+		 send(rr);
+
+	 }
  }
 
