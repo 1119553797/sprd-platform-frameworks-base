@@ -338,13 +338,14 @@ static bool copybit(GLint x, GLint y,
         if (err == NO_ERROR) {
             copybit_image_t tmp_dst;
             copybit_rect_t tmp_rect;
-            tmp_dst.w = tmp_w;
+
+            tmp_dst.w = tempBitmap->getStride();//tmp_w;@jgdu
             tmp_dst.h = tmp_h;
             tmp_dst.format = tempBitmap->format;
             tmp_dst.handle = (native_handle_t*)tempBitmap->getNativeBuffer()->handle;
             tmp_rect.l = 0;
             tmp_rect.t = 0;
-            tmp_rect.r = tmp_dst.w;
+            tmp_rect.r = tmp_w;//tmp_dst.w;@jgdu
             tmp_rect.b = tmp_dst.h;
             region_iterator tmp_it(Region(Rect(tmp_rect.r, tmp_rect.b)));
             copybit->set_parameter(copybit, COPYBIT_TRANSFORM, 0);
@@ -376,7 +377,7 @@ static bool copybit(GLint x, GLint y,
         copybit_image_t tmpCbImg;
         copybit_rect_t tmpCbRect;
         copybit_rect_t tmpdrect = drect;
-        tmpCbImg.w = w;
+        tmpCbImg.w = tempCb->getStride();//w;@jgdu
         tmpCbImg.h = h;
         tmpCbImg.format = tempCb->format;
         tmpCbImg.handle = (native_handle_t*)tempCb->getNativeBuffer()->handle;
@@ -391,8 +392,10 @@ static bool copybit(GLint x, GLint y,
             tmpCbRect.t = -tmpdrect.t;
             tmpdrect.t = 0;
         }
-        if (drect.l + tmpCbImg.w > dst.w) {
-            tmpCbImg.w = dst.w - drect.l;
+	    int tmpCbImg_w = w;
+        if (drect.l + tmpCbImg_w > dst.w) {
+            //tmpCbImg.w = dst.w - drect.l;//@jgdu
+	        tmpCbImg_w = dst.w - drect.l;
             tmpdrect.r = dst.w;
         }
         if (drect.t + tmpCbImg.h > dst.h) {
@@ -400,7 +403,7 @@ static bool copybit(GLint x, GLint y,
             tmpdrect.b = dst.h;
         }
 
-        tmpCbRect.r = tmpCbImg.w;
+        tmpCbRect.r = tmpCbImg_w;//tmpCbImg.w;@jgdu
         tmpCbRect.b = tmpCbImg.h;
 
         if (!err) {
