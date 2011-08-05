@@ -19,6 +19,7 @@ package com.android.internal.telephony.gsm.stk;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.PhoneNumberUtils;
 
 import com.android.internal.telephony.GsmAlphabet;
 import com.android.internal.telephony.IccUtils;
@@ -858,9 +859,7 @@ class CommandParamsFactory extends Handler {
             int length = ctlv.getLength();
             StkLog.d(this, "process SetupCall call valueIndex="+valueIndex+" length="+length);
             if ( length > 0) {
-                //Skip TON/NPI
-            	length -= 1;
-                callAddress.text = IccUtils.bcdToString(rawValue, valueIndex+1, length-1);
+                callAddress.text = PhoneNumberUtils.calledPartyBCDToString(rawValue, valueIndex, length);
                 StkLog.d(this, "process SetupCall call adress ="+callAddress.text);
             } else {
                 StkLog.d(this, "process SetupCall call adress is NULL");
