@@ -459,7 +459,10 @@ static bool copybit(GLint x, GLint y,
         err = copybit->stretch(copybit, &dst, &src, &drect, &srect, &it);
     }
     if (err != NO_ERROR) {
-        c->textures.tmu[0].texture->try_copybit = false;
+        // we have a better understanding of what we can do, and we need
+	// the "try" procedure to make the software backup method work
+	// properly, so comment off the assignment below and keep trying.
+        // c->textures.tmu[0].texture->try_copybit = false;
     }
     return err == NO_ERROR ? true : false;
 }
