@@ -55,7 +55,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     private Map<Integer, ArrayList<String>> mEmailsForAdnRec;
     private int mAdnCount = 0;
     private int mAdnSize = 0;
-    protected int recordSize[];
+    protected int recordSize[] = new int [3];
 	
     private static final int EVENT_PBR_LOAD_DONE = 1;
     private static final int EVENT_USIM_ADN_LOAD_DONE = 2;
@@ -104,6 +104,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
             // Check if the PBR file is present in the cache, if not read it
             // from the USIM.
+            Log.i("UsimPhoneBookManager","loadEfFilesFromUsim");
             if (mPbrFile == null) {
                 readPbrFileAndWait();
             }
@@ -111,6 +112,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             if (mPbrFile == null) return null;
 
             int numRecs = mPbrFile.mFileIds.size();
+	      mAdnCount = 0;
             Log.i("UsimPhoneBookManager" ,"loadEfFilesFromUsim" +numRecs);	 	
             for (int i = 0; i < numRecs; i++) {
                 readAdnFileAndWait(i);
@@ -125,7 +127,9 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
        
       
           Log.i("UsimPhoneBookManager" ,"getEFLinearRecordSize" +efid);	 
-	   synchronized (mLock) {
+          
+	   recordSize[2] =  mAdnCount; 
+	/*   synchronized (mLock) {
           
             if (mPbrFile == null) {
                 readPbrFileAndWait();
@@ -142,7 +146,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                
             }
             // All EF files are loaded, post the response.
-        }
+        }*/
       
         return recordSize;
     }
@@ -189,6 +193,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     }
 
     private void readPbrFileAndWait() {
+        Log.i("UsimPhoneBookManager","readPbrFileAndWait");
         mPhone.getIccFileHandler().loadEFLinearFixedAll(EF_PBR, obtainMessage(EVENT_PBR_LOAD_DONE));
         try {
             mLock.wait();
@@ -391,6 +396,9 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         case EVENT_USIM_ADN_LOAD_DONE:
             log("Loading USIM ADN records done");
             ar = (AsyncResult) msg.obj;
+	      int size = ((ArrayList<AdnRecord>)ar.result).size();
+	      log("EVENT_USIM_ADN_LOAD_DONE size"+ size);
+	      mAdnCount += size;
             if (ar.exception == null) {
                 mPhoneBookRecords.addAll((ArrayList<AdnRecord>)ar.result);
             }
