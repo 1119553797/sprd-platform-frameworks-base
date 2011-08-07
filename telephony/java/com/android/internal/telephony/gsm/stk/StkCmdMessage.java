@@ -33,6 +33,7 @@ public class StkCmdMessage implements Parcelable {
     private BrowserSettings mBrowserSettings = null;
     private ToneSettings mToneSettings = null;
     private CallSettings mCallSettings = null;
+    private AppInterface.EventListType mEventType;
 
     /*
      * Container for Launch Browser command settings.
@@ -86,6 +87,9 @@ public class StkCmdMessage implements Parcelable {
             mCallSettings.confirmMsg = ((CallSetupParams) cmdParams).confirmMsg;
             mCallSettings.callMsg = ((CallSetupParams) cmdParams).callMsg;
             mCallSettings.calladdress = ((CallSetupParams) cmdParams).calladdress;
+            break;
+        case SET_UP_EVENT_LIST:
+            mEventType = ((EventListParams) cmdParams).eventType;
             break;
         }
     }
@@ -175,5 +179,9 @@ public class StkCmdMessage implements Parcelable {
 
     public CallSettings getCallSettings() {
         return mCallSettings;
+    }
+
+    public AppInterface.EventListType getEventType() {
+        return mEventType;
     }
 }

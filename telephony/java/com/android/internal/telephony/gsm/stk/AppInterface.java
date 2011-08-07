@@ -87,4 +87,37 @@ public interface AppInterface {
             return null;
         }
     }
+
+    public static enum EventListType {
+        Event_MTCall(0x00),              //terminal response OK
+        Event_CallConnected(0x01),       //terminal response OK
+        Event_CallDisconnected(0x02),    //terminal response OK
+        Event_LocationStatus(0x03),      //terminal response OK
+        Event_UserActivity(0x04),        //先回terminal response OK。当用户按键时，发envelope命令给AT,这是一次性的事件
+        Event_IdleScreenAvailable(0x05), //先回terminal response OK。当屏幕空闲时，发envelope命令给AT,这是一次性的事件
+        Event_CardReaderStatus(0x06),    //(if support class "a")terminal response OK
+        Event_LanguageSelection(0x07),   //先回terminal response OK。当选择的语言发生变化时，发envelope命令给AT
+        Event_BrowserTermination(0x08),  //先回terminal response OK。当浏览器关闭时，发envelope命令给AT
+        Event_DataAvailable(0x09),       //(if support class "e")先回terminal response OK。当从网络端收到GPRS数据时，发envelope命令给AT
+        Event_ChannelStatus(0x0a),       //(if support class "e")先回terminal response OK。当GPRS 通道状态发生变化时，发envelope命令给AT
+        Event_Unknown(0xff);
+
+        private int mValue;
+
+        EventListType(int value) {
+            mValue = value;
+        }
+
+        public int value() {
+            return mValue;
+        }
+        public static EventListType fromInt(int value) {
+            for (EventListType e : EventListType.values()) {
+                if (e.mValue == value) {
+                    return e;
+                }
+            }
+            return null;
+        }
+    }
 }

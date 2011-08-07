@@ -157,6 +157,9 @@ class CommandParamsFactory extends Handler {
              case PLAY_TONE:
                 cmdPending = processPlayTone(cmdDet, ctlvs);
                 break;
+             case SET_UP_EVENT_LIST:
+                processSetUpEventList(cmdDet, ctlvs);
+                break;
             default:
                 // unsupported proactive commands
                 mCmdParams = new CommandParams(cmdDet);
@@ -647,18 +650,23 @@ class CommandParamsFactory extends Handler {
     private boolean processSetUpEventList(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) {
 
-        StkLog.d(this, "process SetUpEventList");
-        //
-        // ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.EVENT_LIST,
-        // ctlvs);
-        // if (ctlv != null) {
-        // try {
-        // byte[] rawValue = ctlv.getRawValue();
-        // int valueIndex = ctlv.getValueIndex();
-        // int valueLen = ctlv.getLength();
-        //
-        // } catch (IndexOutOfBoundsException e) {}
-        // }
+        StkLog.d(this, "processSetUpEventList");
+        AppInterface.EventListType eventType = AppInterface.EventListType.Event_Unknown;
+
+         ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.EVENT_LIST, ctlvs);
+         if (ctlv != null) {
+             try {
+                 byte[] rawValue = ctlv.getRawValue();
+                 int valueIndex = ctlv.getValueIndex();
+                 eventType = AppInterface.EventListType.fromInt(rawValue[valueIndex] & 0xff);
+                 StkLog.d(this, "processSetUpEventList:eventtype = " + eventType);
+             } catch (IndexOutOfBoundsException e) {
+                 StkLog.d(this, "Failed to processSetUpEventList");
+             }
+         } else {
+             StkLog.d(this, "processSetUpEventList:get ctlv Failed");
+         }
+         mCmdParams = new EventListParams(cmdDet, eventType);
         return true;
     }
 

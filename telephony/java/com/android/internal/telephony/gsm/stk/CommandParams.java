@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony.gsm.stk;
 
+import com.android.internal.telephony.gsm.stk.AppInterface.EventListType;
+
 import android.graphics.Bitmap;
 
 /**
@@ -168,4 +170,12 @@ class GetInputParams extends CommandParams {
     }
 }
 
+class EventListParams extends CommandParams {
+    EventListType eventType;
+
+    EventListParams(CommandDetails cmdDet, EventListType eventtype) {
+        super(cmdDet);
+        this.eventType = eventtype;
+    }
+}
 

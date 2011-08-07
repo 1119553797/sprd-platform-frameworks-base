@@ -296,6 +296,35 @@ public class StkService extends Handler implements AppInterface {
         case SET_UP_CALL:
             // nothing to do on telephony!
             break;
+        case SET_UP_EVENT_LIST:
+            AppInterface.EventListType eventType = cmdMsg.getEventType();
+            StkLog.d(this, "[stk] handleProactiveCommand: eventType = " + eventType);
+            switch (eventType) {
+            case Event_MTCall:
+            case Event_CallConnected:
+            case Event_CallDisconnected:
+            case Event_LocationStatus:
+            case Event_CardReaderStatus:
+                StkLog.d(this, "[stk] SET_UP_EVENT_LIST");
+                sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
+                        0, null);
+                break;
+            case Event_UserActivity:
+            case Event_IdleScreenAvailable:
+            case Event_LanguageSelection:
+            case Event_BrowserTermination:
+            case Event_DataAvailable:
+            case Event_ChannelStatus:
+                //TODO event neet Anrdoid to deal with
+                sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
+                        0, null);
+                break;
+            default:
+                sendTerminalResponse(cmdParams.cmdDet, ResultCode.CMD_TYPE_NOT_UNDERSTOOD,
+                        false, 0, null);
+                break;
+            }
+            return;
         default:
             StkLog.d(this, "Unsupported command");
             return;
