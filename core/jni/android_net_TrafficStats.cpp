@@ -109,7 +109,7 @@ static jlong getMobileRxPackets(JNIEnv* env, jobject clazz) {
 
 static jlong getMobileTxBytes(JNIEnv* env, jobject clazz) {
     return tryBoth(
-            "/sys/class/net/veth0/statistics/rx_bytes",
+            "/sys/class/net/veth0/statistics/tx_bytes",
             "/sys/class/net/ppp0/statistics/tx_bytes");
 }
 
