@@ -147,9 +147,16 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
             throw new SecurityException(
                     "Requires android.permission.WRITE_CONTACTS permission");
         }
+        int newid =   updateEfForIccType(efid);
 
+	  int fileId[] = adnCache.getRecordsEfId(newid);
 
-        if (DBG) logd("updateAdnRecordsInEfBySearch: efid=" + efid +
+	  for(int i=0; i<fileId.length;i++){
+	  	
+            Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch: efid=" + fileId[i]);
+	  }
+
+       Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch: efid=" + efid +
                 " ("+ oldTag + "," + oldPhoneNumber + ")"+ "==>" +
                 " ("+ newTag + "," + newPhoneNumber + ")"+ " pin2=" + pin2);
         synchronized(mLock) {
@@ -158,7 +165,17 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
             Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE);
             AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
             AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
-            adnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
+	      Log.i("IccPhoneBookInterfaceManager", "newTag="+newTag+"  newPhoneNumber="+newPhoneNumber);
+            for(int i=0; i<fileId.length;i++){
+	  	   
+                if (DBG) logd("addAdnRecordsInEf: efid=" + fileId[i]);
+				
+		   if(adnCache.updateAdnBySearch(fileId[i], oldAdn, newAdn, pin2, response)){
+
+			  break;
+		   }
+	     }
+            //adnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
             try {
                 mLock.wait();
             } catch (InterruptedException e) {

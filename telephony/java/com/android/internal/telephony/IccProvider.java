@@ -488,16 +488,16 @@ public class IccProvider extends ContentProvider {
 		
 		//yeezone:jinwei
 		boolean success = false;
-        if(sim_index == null){
+       /* if(sim_index == null){
             success = updateIccRecordInEf(efType, tag, number,
                 newTag, newNumber, pin2);
         }else{
             success = updateIccRecordInEfByIndex(efType, tag, number,
                 newTag, newNumber, sim_index, pin2);
-        }
+        }*/
 		
-        /*boolean success = updateIccRecordInEf(efType, tag, number,
-                newTag, newNumber, pin2);*/
+         success = updateIccRecordInEf(efType, tag, number,
+                newTag, newNumber, pin2);
 
         if (!success) {
             return 0;
