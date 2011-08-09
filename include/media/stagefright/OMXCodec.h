@@ -46,7 +46,7 @@ struct OMXCodec : public MediaSource,
             const char *matchComponentName = NULL,
             uint32_t flags = 0,
             OMX_U32 bufferCountInput = 0,
-            OMX_U32 bufferCountOutput = 0);
+            OMX_U32 bufferCountOutput = 0);//sprd
 
     static void setComponentRole(
             const sp<IOMX> &omx, IOMX::node_id node, bool isEncoder,
@@ -62,16 +62,20 @@ struct OMXCodec : public MediaSource,
 
     virtual status_t pause();
 
-    void on_message(const omx_message &msg);
-
     // from MediaBufferObserver
     virtual void signalBufferReturned(MediaBuffer *buffer);
 
 protected:
-    virtual void internalSignalBufferReturned(MediaBuffer *buffer);
     virtual ~OMXCodec();
 
 private:
+
+    // Make sure mLock is accessible to OMXCodecObserver
+    friend class OMXCodecObserver;
+
+    // Call this with mLock hold
+    void on_message(const omx_message &msg);
+
     enum State {
         DEAD,
         LOADED,

@@ -25,13 +25,14 @@
 #include <arpa/inet.h>
 #include <ctype.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <netdb.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include <media/stagefright/MediaDebug.h>
+#include <media/stagefright/foundation/ADebug.h>
 
 namespace android {
 
@@ -47,6 +48,82 @@ HTTPStream::~HTTPStream() {
     disconnect();
 }
 
+static bool MakeSocketBlocking(int s, bool blocking) {
+    // Make socket non-blocking.
+    int flags = fcntl(s, F_GETFL, 0);
+    if (flags == -1) {
+        return false;
+    }
+
+    if (blocking) {
+        flags &= ~O_NONBLOCK;
+    } else {
+        flags |= O_NONBLOCK;
+    }
+
+    return fcntl(s, F_SETFL, flags) != -1;
+}
+
+static status_t MyConnect(
+        int s, const struct sockaddr *addr, socklen_t addrlen) {
+    status_t result = UNKNOWN_ERROR;
+
+    MakeSocketBlocking(s, false);
+
+    if (connect(s, addr, addrlen) == 0) {
+        result = OK;
+    } else if (errno != EINPROGRESS) {
+        result = -errno;
+    } else {
+        for (;;) {
+            fd_set rs, ws;
+            FD_ZERO(&rs);
+            FD_ZERO(&ws);
+            FD_SET(s, &rs);
+            FD_SET(s, &ws);
+
+            struct timeval tv;
+            tv.tv_sec = 0;
+            tv.tv_usec = 100000ll;
+
+            int nfds = ::select(s + 1, &rs, &ws, NULL, &tv);
+
+            if (nfds < 0) {
+                if (errno == EINTR) {
+                    continue;
+                }
+
+                result = -errno;
+                break;
+            }
+
+            if (FD_ISSET(s, &ws) && !FD_ISSET(s, &rs)) {
+                result = OK;
+                break;
+            }
+
+            if (FD_ISSET(s, &rs) || FD_ISSET(s, &ws)) {
+                // Get the pending error.
+                int error = 0;
+                socklen_t errorLen = sizeof(error);
+                if (getsockopt(s, SOL_SOCKET, SO_ERROR, &error, &errorLen) == -1) {
+                    // Couldn't get the real error, so report why not.
+                    result = -errno;
+                } else {
+                    result = -error;
+                }
+                break;
+            }
+
+            // Timeout expired. Try again.
+        }
+    }
+
+    MakeSocketBlocking(s, true);
+
+    return result;
+}
+
 status_t HTTPStream::connect(const char *server, int port) {
     Mutex::Autolock autoLock(mLock);
 
@@ -56,46 +133,64 @@ status_t HTTPStream::connect(const char *server, int port) {
         return ERROR_ALREADY_CONNECTED;
     }
 
-    struct hostent *ent = gethostbyname(server);
-    if (ent == NULL) {
+    if (port < 0 || port > (int) USHRT_MAX) {
+        return UNKNOWN_ERROR;
+    }
+
+    char service[sizeof("65536")];
+    sprintf(service, "%d", port);
+    struct addrinfo hints, *ai;
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV;
+    hints.ai_socktype = SOCK_STREAM;
+
+    int ret = getaddrinfo(server, service, &hints, &ai);
+    if (ret) {
         return ERROR_UNKNOWN_HOST;
     }
 
     CHECK_EQ(mSocket, -1);
-    mSocket = socket(AF_INET, SOCK_STREAM, 0);
-
-    if (mSocket < 0) {
-        return UNKNOWN_ERROR;
-    }
-
-    setReceiveTimeout(30);  // Time out reads after 30 secs by default
 
     mState = CONNECTING;
+    status_t res = -1;
+    struct addrinfo *tmp;
+    for (tmp = ai; tmp; tmp = tmp->ai_next) {
+        mSocket = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol);
+        if (mSocket < 0) {
+            continue;
+        }
 
-    int s = mSocket;
+        setReceiveTimeout(30);  // Time out reads after 30 secs by default.
 
-    mLock.unlock();
+        int s = mSocket;
 
-    struct sockaddr_in addr;
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(port);
-    addr.sin_addr.s_addr = *(in_addr_t *)ent->h_addr;
-    memset(addr.sin_zero, 0, sizeof(addr.sin_zero));
+        mLock.unlock();
 
-    int res = ::connect(s, (const struct sockaddr *)&addr, sizeof(addr));
+        res = MyConnect(s, tmp->ai_addr, tmp->ai_addrlen);
 
-    mLock.lock();
+        mLock.lock();
 
-    if (mState != CONNECTING) {
-        return UNKNOWN_ERROR;
+        if (mState != CONNECTING) {
+            close(s);
+            freeaddrinfo(ai);
+            return UNKNOWN_ERROR;
+        }
+
+        if (res == OK) {
+            break;
+        }
+
+        close(s);
     }
 
-    if (res < 0) {
+    freeaddrinfo(ai);
+
+    if (res != OK) {
         close(mSocket);
         mSocket = -1;
 
         mState = READY;
-        return UNKNOWN_ERROR;
+        return res;
     }
 
     mState = CONNECTED;

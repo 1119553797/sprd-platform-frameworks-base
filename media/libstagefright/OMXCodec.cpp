@@ -255,7 +255,9 @@ struct OMXCodecObserver : public BnOMXObserver {
         sp<OMXCodec> codec = mTarget.promote();
 
         if (codec.get() != NULL) {
+            Mutex::Autolock autoLock(codec->mLock);
             codec->on_message(msg);
+            codec.clear();
         }
     }
 
@@ -1761,8 +1763,6 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
 }
 
 void OMXCodec::on_message(const omx_message &msg) {
-    Mutex::Autolock autoLock(mLock);
-
     switch (msg.type) {
         case omx_message::EVENT:
         {
@@ -3275,26 +3275,6 @@ status_t OMXCodec::read(
 
     return OK;
 }
-
-void OMXCodec::internalSignalBufferReturned(MediaBuffer *buffer) {
-
-    Vector<BufferInfo> *buffers = &mPortBuffers[kPortIndexOutput];
-	CODEC_LOGV("internalSignalBufferReturned, size: %d", buffers->size());
-    for (size_t i = 0; i < buffers->size(); ++i) {
-        BufferInfo *info = &buffers->editItemAt(i);
-		
-		CODEC_LOGV("internalSignalBufferReturned, i: %d", i);
-
-        if (info->mMediaBuffer == buffer) {
-            CHECK_EQ(mPortStatus[kPortIndexOutput], ENABLED);
-            fillOutputBuffer(info);
-            return;
-        }
-    }
-
-    CHECK(!"should not be here.");
-}
-
 
 void OMXCodec::signalBufferReturned(MediaBuffer *buffer) {
     Mutex::Autolock autoLock(mLock);
