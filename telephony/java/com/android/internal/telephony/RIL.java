@@ -1585,6 +1585,26 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
 
 
     public void
+    queryCOLP(Message response) {
+        RILRequest rr
+            = RILRequest.obtain(RIL_REQUEST_QUERY_COLP, response);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+    }
+
+    public void
+    queryCOLR(Message response) {
+        RILRequest rr
+            = RILRequest.obtain(RIL_REQUEST_QUERY_COLR, response);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+    }
+
+    public void
     getBasebandVersion (Message response) {
         RILRequest rr
                 = RILRequest.obtain(RIL_REQUEST_BASEBAND_VERSION, response);
@@ -2115,6 +2135,8 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_SET_MUTE: ret =  responseVoid(p); break;
             case RIL_REQUEST_GET_MUTE: ret =  responseInts(p); break;
             case RIL_REQUEST_QUERY_CLIP: ret =  responseInts(p); break;
+            case RIL_REQUEST_QUERY_COLP: ret =  responseInts(p); break;
+            case RIL_REQUEST_QUERY_COLR: ret =  responseInts(p); break;
             case RIL_REQUEST_LAST_DATA_CALL_FAIL_CAUSE: ret =  responseInts(p); break;
             case RIL_REQUEST_DATA_CALL_LIST: ret =  responseDataCallList(p); break;
             case RIL_REQUEST_RESET_RADIO: ret =  responseVoid(p); break;
@@ -3200,6 +3222,8 @@ responseUnsolUssdStrings(Parcel p){
             case RIL_REQUEST_SET_MUTE: return "SET_MUTE";
             case RIL_REQUEST_GET_MUTE: return "GET_MUTE";
             case RIL_REQUEST_QUERY_CLIP: return "QUERY_CLIP";
+            case RIL_REQUEST_QUERY_COLP: return "QUERY_COLP";
+            case RIL_REQUEST_QUERY_COLR: return "QUERY_COLR";
             case RIL_REQUEST_LAST_DATA_CALL_FAIL_CAUSE: return "LAST_DATA_CALL_FAIL_CAUSE";
             case RIL_REQUEST_DATA_CALL_LIST: return "DATA_CALL_LIST";
             case RIL_REQUEST_RESET_RADIO: return "RESET_RADIO";

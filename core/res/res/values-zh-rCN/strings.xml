@@ -49,6 +49,8 @@
     <string name="needPuk2" msgid="4526033371987193070">"输入 PUK2 码以解锁 SIM 卡。"</string>
     <string name="ClipMmi" msgid="6952821216480289285">"来电显示"</string>
     <string name="ClirMmi" msgid="7784673673446833091">"本机号码"</string>
+    <string name="ColpMmi" msgid="">"显示实际接听号码"</string>
+    <string name="ColrMmi" msgid="">"隐藏实际接通号码"</string>
     <string name="CfMmi" msgid="5123218989141573515">"来电转接"</string>
     <string name="CwMmi" msgid="9129678056795016867">"来电等待"</string>
     <string name="BaMmi" msgid="455193067926770581">"呼叫限制"</string>

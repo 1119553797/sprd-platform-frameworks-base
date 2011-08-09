@@ -681,6 +681,8 @@ public final class SprdRIL extends RIL {
 				 case RIL_REQUEST_SET_MUTE: ret =  responseVoid(p); break;
 				 case RIL_REQUEST_GET_MUTE: ret =  responseInts(p); break;
 				 case RIL_REQUEST_QUERY_CLIP: ret =  responseInts(p); break;
+				 case RIL_REQUEST_QUERY_COLP: ret =  responseInts(p); break;
+				 case RIL_REQUEST_QUERY_COLR: ret =  responseInts(p); break;
 				 case RIL_REQUEST_LAST_DATA_CALL_FAIL_CAUSE: ret =	responseInts(p); break;
 				 case RIL_REQUEST_DATA_CALL_LIST: ret =  responseDataCallList(p); break;
 				 case RIL_REQUEST_RESET_RADIO: ret =  responseVoid(p); break;

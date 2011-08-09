@@ -56,6 +56,12 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
     //Called line presentation
     static final String SC_CLIP    = "30";
     static final String SC_CLIR    = "31";
+   
+    //Connected line identification presentation 
+    static final String SC_COLP    = "76";
+
+    //Connected line identification restriction 
+    static final String SC_COLR    = "77";
 
     // Call Forwarding
     static final String SC_CFU     = "21";
@@ -98,6 +104,7 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
     static final int EVENT_QUERY_COMPLETE       = 5;
     static final int EVENT_SET_CFF_COMPLETE     = 6;
     static final int EVENT_USSD_CANCEL_COMPLETE = 7;
+    static final int EVENT_QUERY_LI_COMPLETE    = 8;
 
     //***** Instance Variables
 
@@ -567,6 +574,24 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                 } else {
                     throw new RuntimeException ("Invalid or Unsupported MMI Code");
                 }
+            } else if (sc != null && sc.equals(SC_COLP)) {
+                Log.d(LOG_TAG, "------ is COLP");
+                if (isInterrogate()) {
+                    phone.mCM.queryCOLP(
+                            obtainMessage(EVENT_QUERY_LI_COMPLETE , this));
+                } else {
+                    throw new RuntimeException ("Invalid or Unsupported MMI Code");
+                }
+	    
+	    } else if (sc != null && sc.equals(SC_COLR)) {
+                Log.d(LOG_TAG, "------ is COLR");
+                if (isInterrogate()) {
+                    phone.mCM.queryCOLR(
+                            obtainMessage(EVENT_QUERY_LI_COMPLETE , this));
+                } else {
+                    throw new RuntimeException ("Invalid or Unsupported MMI Code");
+                }
+		    
             } else if (isServiceCodeCallForwarding(sc)) {
                 Log.d(LOG_TAG, "is CF");
 
@@ -823,6 +848,11 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                 onGetClirComplete(ar);
             break;
 
+            case EVENT_QUERY_LI_COMPLETE:
+                ar = (AsyncResult) (msg.obj);
+                onQueryLiComplete(ar);
+            break;
+
             case EVENT_QUERY_CF_COMPLETE:
                 ar = (AsyncResult) (msg.obj);
                 onQueryCfComplete(ar);
@@ -874,8 +904,12 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                 return context.getText(com.android.internal.R.string.CwMmi);
             } else if (isPinCommand()) {
                 return context.getText(com.android.internal.R.string.PinMmi);
-            }
-        }
+            } else if (sc.equals(SC_COLP)) {
+                return context.getText(com.android.internal.R.string.ColpMmi);
+	        } else if (sc.equals(SC_COLR)) {
+                return context.getText(com.android.internal.R.string.ColrMmi);
+	        }
+         }
 
         return "";
     }
@@ -1172,6 +1206,36 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
         message = sb;
         phone.onMMIDone(this);
 
+    }
+
+    private void
+    onQueryLiComplete(AsyncResult ar) {
+        StringBuilder sb = new StringBuilder(getScString());
+        sb.append("\n");
+
+        if (ar.exception != null) {
+            state = State.FAILED;
+            sb.append(context.getText(com.android.internal.R.string.mmiError));
+        } else {
+            int[] ints = (int[])ar.result;
+
+            if (ints.length != 0) {
+		        if (ints[0] == 0) {  
+                    sb.append(context.getText(com.android.internal.R.string.serviceDisabled));
+		        } else if (ints[0] == 1) {
+                    sb.append(context.getText(com.android.internal.R.string.serviceEnabled));
+		        } else {
+                    sb.append(context.getText(com.android.internal.R.string.mmiError));
+		        }
+            } else {
+                sb.append(context.getText(com.android.internal.R.string.mmiError));
+            }
+
+            state = State.COMPLETE;
+	    }
+
+        message = sb;
+        phone.onMMIDone(this);
     }
 
     private void

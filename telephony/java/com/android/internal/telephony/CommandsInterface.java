@@ -993,6 +993,28 @@ public interface CommandsInterface extends SprdCommandsInterface{
     void queryCLIP(Message response);
 
     /**
+     * (AsyncResult)response.obj).result is an int[] with element [0] set to
+     * 0 for "COLP is Inactive", and 1 for "COLP is Active",and 2
+     * for "COLP is No network"
+     *
+     * @param response is callback message
+     */
+
+    void queryCOLP(Message response);
+
+
+    /**
+     * (AsyncResult)response.obj).result is an int[] with element [0] set to
+     * 0 for "COLP is Inactive", and 1 for "COLP is Active",and 2
+     * for "COLP is No network"
+     *
+     * @param response is callback message
+     */
+
+    void queryCOLR(Message response);
+
+
+    /**
      * response.obj will be a an int[2]
      *
      * response.obj[0] will be TS 27.007 +CLIR parameter 'n'
