@@ -90,6 +90,9 @@ private:
         int64_t			m_nInitialDelayUs;
 		
 	uint8_t*			m_RingBuffer;
+	static uint8_t		m_Mpeg4Header[1024];
+	static int			m_iMpeg4Header_size;
+	bool				m_bHasMpeg4Header;
 
 	int				m_nDataStart;
 

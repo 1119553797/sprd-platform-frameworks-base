@@ -447,10 +447,10 @@ status_t MediaPhone::startDownLink()
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    /*if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+    if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
         LOGE("startUpLink called in an invalid state: %d", mCurrentState);
         return INVALID_OPERATION;
-    }*/
+    }
     if (!mIsDownLinkStopped) {
         LOGI("alreading started DownLink");
         return OK;
@@ -536,7 +536,9 @@ void MediaPhone::notify(int msg, int ext1, int ext2)
         break;
     case MEDIA_PHONE_EVENT_ERROR:
         LOGE("error (%d, %d)", ext1, ext2);
-        mCurrentState = MEDIA_PHONE_ERROR;
+	if (ext1 != INVALID_OPERATION) {
+        	mCurrentState = MEDIA_PHONE_ERROR;
+	}
         if (mPrepareSync)
         {
             LOGV("signal application thread");
