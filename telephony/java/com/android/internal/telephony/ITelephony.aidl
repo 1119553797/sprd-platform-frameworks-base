@@ -285,5 +285,9 @@ interface ITelephony {
     boolean isVTCall();
     
     int getRemainTimes(int type);
+    
+    boolean setApnActivePdpFilter(String apntype,boolean filterenable);
+    
+    boolean getApnActivePdpFilter(String apntype);
 }
 

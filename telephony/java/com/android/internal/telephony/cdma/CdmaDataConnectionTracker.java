@@ -1029,4 +1029,15 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
     protected void log(String s) {
         Log.d(LOG_TAG, "[CdmaDataConnectionTracker] " + s);
     }
+
+
+   public boolean setApnActivePdpFilter(String apntype,boolean filterenable) 
+   {
+        return false ;
+   }
+
+   public  boolean getApnActivePdpFilter(String apntype) 
+   {
+           return false;
+   }
 }

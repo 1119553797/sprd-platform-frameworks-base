@@ -48,6 +48,7 @@ import android.telephony.gsm.GsmCellLocation;
 import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Log;
+import android.util.Patterns;
 
 import com.android.internal.R;
 import com.android.internal.telephony.DataCallState;
@@ -60,6 +61,7 @@ import com.android.internal.telephony.DataConnection.FailCause;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * {@hide}
@@ -68,6 +70,17 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     protected final String LOG_TAG = "GSM";
 
     private GSMPhone mGsmPhone;
+
+    private ArrayList<HashMap<String,Boolean>> ApnFilters = null;
+
+    private static final String[] mSupportedApnTypesFilters = {
+            Phone.APN_TYPE_ALL,
+            Phone.APN_TYPE_DEFAULT,
+            Phone.APN_TYPE_MMS,
+            Phone.APN_TYPE_SUPL,
+            Phone.APN_TYPE_DUN,
+            Phone.APN_TYPE_HIPRI };
+
     /**
      * Handles changes to the APN db.
      */
@@ -239,7 +252,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                 Telephony.Carriers.CONTENT_URI, true, apnObserver);
 
         createAllPdpList();
-
+        initApnActivePdpFilter();
+     
+        
         // This preference tells us 1) initial condition for "dataEnabled",
         // and 2) whether the RIL will setup the baseband to auto-PS attach.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(phone.getContext());
@@ -576,12 +591,90 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
         return null;
     }
 
+    private void initApnActivePdpFilter() 
+    {
+        if(ApnFilters == null){
+            ApnFilters = new ArrayList<HashMap<String,Boolean>>();
+            for(String ApnTypesFilters : mSupportedApnTypesFilters)
+            {
+                HashMap<String,Boolean> map = new HashMap<String,Boolean>();
+                map.put(ApnTypesFilters,false);
+                ApnFilters.add(map);
+            }
+        }
+    }
+    public boolean setApnActivePdpFilter(String apntype,boolean filterenable) 
+   {
+        if(ApnFilters != null&& apntype != null )
+        {
+            for(HashMap<String,Boolean> ApnTypesFilter : ApnFilters)
+            {
+                if(ApnTypesFilter.containsKey(apntype))
+                {
+                     ApnTypesFilter.put(apntype,filterenable);
+                     return true ;
+                }
+            }
+        }
+        return false ;
+   }
+
+   public  boolean getApnActivePdpFilter(String apntype) 
+   {
+       if(ApnFilters != null&& apntype!= null )
+       {
+           Boolean filterenable= false;
+ 
+           for(HashMap<String,Boolean> ApnTypesFilter : ApnFilters)
+           {
+               if(ApnTypesFilter.containsKey(apntype))
+               {
+                   filterenable = ApnTypesFilter.get(apntype);
+                   break;
+               }
+           }
+           
+           Log.d(LOG_TAG, " getApnActivePdpFilter  apntypes:"+apntype+"filterenable:"+filterenable);
+           
+           return filterenable;
+       }
+        
+       return false;
+   }
+	
+  private boolean ApnActivePdpFilter(ApnSetting apn) 
+  {
+      if(ApnFilters != null&& apn!= null )
+      {
+          String apntype = apn.types[0];
+          Boolean filterenable= false;
+          Log.d(LOG_TAG, " ApnActivePdpFilter  apntypes"+apntype);
+          
+          if(getApnActivePdpFilter(Phone.APN_TYPE_ALL))  return true;
+          
+          if(apntype == null 
+            || apntype.equals(Phone.APN_TYPE_ALL))
+          {
+              if(Patterns.IP_ADDRESS.matcher(apn.mmsProxy).matches())
+              {
+                  apntype = Phone.APN_TYPE_MMS;
+              }
+          }
+          
+          return getApnActivePdpFilter(apntype);
+      }
+      
+      return false;
+      
+  }
+
     private boolean setupData(String reason) {
         ApnSetting apn;
         GsmDataConnection pdp;
 
         apn = getNextApn();
         if (apn == null) return false;
+        if(ApnActivePdpFilter(apn)) return false;
         pdp = findFreePdp();
         if (pdp == null) {
             if (DBG) log("setupData: No free GsmDataConnection found!");

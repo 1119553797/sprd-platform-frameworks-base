@@ -1706,6 +1706,9 @@ public interface Phone extends SprdVideoPhone{
      * @param h Handler to be removed from the registrant list.
      */
     void unsetOnEcbModeExitResponse(Handler h);
+	
+     boolean setApnActivePdpFilter(String apntype,boolean filterenable);
 
-
+     boolean  getApnActivePdpFilter(String apntype);
+	
 }

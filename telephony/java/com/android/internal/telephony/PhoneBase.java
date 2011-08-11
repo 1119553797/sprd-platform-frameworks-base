@@ -1053,4 +1053,17 @@ public abstract class PhoneBase extends Handler implements Phone {
         Log.e(LOG_TAG, "Error! " + name + "() in PhoneBase should not be " +
                 "called, CDMAPhone inactive.");
     }
+	
+   public  boolean setApnActivePdpFilter(String apntype,boolean filterenable)
+   {
+       	Log.d(LOG_TAG, " setApnActivePdpFilter:"+apntype+filterenable); 
+      return  mDataConnection.setApnActivePdpFilter(apntype,filterenable);
+
+    }
+    public boolean getApnActivePdpFilter(String apntype)
+   {
+       	Log.d(LOG_TAG, " getApnActivePdpFilter:"+apntype); 
+	return mDataConnection.getApnActivePdpFilter(apntype);
+		
+    }
 }

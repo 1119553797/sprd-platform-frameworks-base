@@ -421,6 +421,10 @@ public abstract class DataConnectionTracker extends Handler {
 
     protected abstract void setState(State s);
 
+    public abstract  boolean setApnActivePdpFilter(String apntype,boolean filterenable);
+	
+    public abstract boolean getApnActivePdpFilter(String apntype) ;
+	
     protected synchronized boolean isEnabled(int id) {
         if (id != APN_INVALID_ID) {
             return dataEnabled[id];

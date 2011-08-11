@@ -1008,6 +1008,28 @@ public class TelephonyManager {
         }
     	
     }
+    
+    public  boolean setApnActivePdpFilter(String apntype,boolean filterenable) {
+        try {
+           return getITelephony().setApnActivePdpFilter(apntype,filterenable);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }  
+   }
+
+    public  boolean  getApnActivePdpFilter(String apntype) {
+        try {
+           return getITelephony().getApnActivePdpFilter(apntype);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }  
+   }
 
 }
 

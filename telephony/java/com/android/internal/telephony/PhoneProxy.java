@@ -1026,4 +1026,18 @@ public class PhoneProxy extends Handler implements Phone {
 	public int getRemainTimes(int type) {
 		return mActivePhone.getRemainTimes(type);
 	}
+
+      public  boolean setApnActivePdpFilter(String apntype,boolean filterenable)
+   {
+       	Log.d(LOG_TAG, " setApnActivePdpFilter:"+apntype+filterenable); 
+      return  mActivePhone.setApnActivePdpFilter(apntype,filterenable);
+
+    }
+    public boolean getApnActivePdpFilter(String apntype)
+   {
+       	Log.d(LOG_TAG, " getApnActivePdpFilter:"+apntype); 
+	return mActivePhone.getApnActivePdpFilter(apntype);
+		
+    }
+
 }
