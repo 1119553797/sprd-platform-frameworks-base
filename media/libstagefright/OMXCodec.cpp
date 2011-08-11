@@ -59,7 +59,7 @@
 
 #define MIN_MPEG4INPUTBUFFER_FORVTMODE 3
 
-//#define FEATURE_MINIMUM_BUFFER
+#define FEATURE_MINIMUM_BUFFER
 
 namespace android {
 

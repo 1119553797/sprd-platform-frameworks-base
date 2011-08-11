@@ -695,6 +695,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 			memcpy(data, m_Mpeg4Header, m_iMpeg4Header_size);
 			data += m_iMpeg4Header_size;
 			nExtraLen = m_iMpeg4Header_size;
+			LOGI("add mpeg4 header");
 		}
 	}
 

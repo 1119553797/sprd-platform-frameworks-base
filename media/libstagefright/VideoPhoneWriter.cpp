@@ -187,7 +187,7 @@ status_t VideoPhoneWriter::threadFunc()
 			break;
 
 		ssize_t nLen = (ssize_t)buffer->range_length();
-		//LOGI("before write %d", nLen);
+		LOGI("before write %d", nLen);
 		
 		ssize_t n = write(m_nHandle,
 										(const uint8_t *)buffer->data() + buffer->range_offset(),
