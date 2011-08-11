@@ -78,7 +78,7 @@ public class AdnRecord implements Parcelable {
             int recordNumber;
             String alphaTag;
             String number;
-            String[] emails;
+            String[] emails ;
 
             efid = source.readInt();
             recordNumber = source.readInt();
@@ -172,8 +172,8 @@ public class AdnRecord implements Parcelable {
 
     public boolean isEqual(AdnRecord adn) {
         return ( alphaTag.equals(adn.getAlphaTag()) &&
-                number.equals(adn.getNumber()) &&
-                Arrays.equals(emails, adn.getEmails()));
+                number.equals(adn.getNumber())/* &&
+                Arrays.equals(emails, adn.getEmails())*/);//it is temp,will modify after the email is displayed 
     }
     //***** Parcelable Implementation
 

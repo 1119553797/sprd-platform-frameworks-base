@@ -185,7 +185,7 @@ class ArrayListCursor extends AbstractCursor {
  */
 public class IccProvider extends ContentProvider {
     private static final String TAG = "IccProvider";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
 
     private static final String[] ADDRESS_BOOK_COLUMN_NAMES = new String[] {
@@ -436,9 +436,9 @@ public class IccProvider extends ContentProvider {
             }
         }
 
-        if (TextUtils.isEmpty(tag)) {
+       /* if (TextUtils.isEmpty(tag)) {
             return 0;
-        }
+        }*/
 
         if (efType == FDN && TextUtils.isEmpty(pin2)) {
             return 0;
