@@ -184,4 +184,8 @@ public class StkCmdMessage implements Parcelable {
     public AppInterface.EventListType getEventType() {
         return mEventType;
     }
+
+    public CommandDetails getCmdDet() {
+        return mCmdDet;
+    }
 }

@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.gsm.stk;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +25,7 @@ import android.telephony.PhoneNumberUtils;
 import com.android.internal.telephony.GsmAlphabet;
 import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.gsm.SIMFileHandler;
+import com.android.internal.R;
 
 import java.util.Iterator;
 import java.util.List;
@@ -50,6 +52,7 @@ class CommandParamsFactory extends Handler {
 
     // Command Qualifier values for refresh command
     static final int REFRESH_NAA_INIT_AND_FULL_FILE_CHANGE  = 0x00;
+    static final int REFRESH_FILE_CHANGE                    = 0x01;
     static final int REFRESH_NAA_INIT_AND_FILE_CHANGE       = 0x02;
     static final int REFRESH_NAA_INIT                       = 0x03;
     static final int REFRESH_UICC_RESET                     = 0x04;
@@ -481,17 +484,24 @@ class CommandParamsFactory extends Handler {
     private boolean processRefresh(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) {
 
-        StkLog.d(this, "process Refresh");
+        StkLog.d(this, "processRefresh");
+        TextMessage textMsg = new TextMessage();
+        Resources r = Resources.getSystem();
 
-        // REFRESH proactive command is rerouted by the baseband and handled by
-        // the telephony layer. IDLE TEXT should be removed for a REFRESH command
-        // with "initialization" or "reset"
         switch (cmdDet.commandQualifier) {
         case REFRESH_NAA_INIT_AND_FULL_FILE_CHANGE:
+        case REFRESH_FILE_CHANGE:
         case REFRESH_NAA_INIT_AND_FILE_CHANGE:
         case REFRESH_NAA_INIT:
+            textMsg.text = r.getString(R.string.stk_refresh_sim_init_message);
+            mCmdParams = new DisplayTextParams(cmdDet, textMsg);
+            break;
         case REFRESH_UICC_RESET:
-            mCmdParams = new DisplayTextParams(cmdDet, null);
+            textMsg.text = r.getString(R.string.stk_refresh_sim_reset_message);
+            mCmdParams = new DisplayTextParams(cmdDet, textMsg);
+            break;
+        default:
+            StkLog.d(this, "processRefresh: wrong commandQualifier");
             break;
         }
         return false;

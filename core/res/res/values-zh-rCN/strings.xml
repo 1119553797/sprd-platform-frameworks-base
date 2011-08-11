@@ -875,5 +875,8 @@
     <string name="modem_active_notification_title" >使用modem调试模式</string>
     <string name="modem_active_notification_message" >已启用modem调试模式</string>
     <!--Add by liguxiang 07-08-11 for USB settings function end -->
-    
+    <!--STK Add start-->
+    <string name="stk_refresh_sim_init_message" >SIM卡更新中</string>
+    <string name="stk_refresh_sim_reset_message" >手机即将重启</string>
+    <!--STK Add end  -->
 </resources>

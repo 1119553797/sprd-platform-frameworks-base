@@ -4,6 +4,7 @@ package com.android.internal.telephony;
 import android.os.Message;
 import android.os.Handler;
 import android.os.Bundle;
+import android.os.Registrant;
 
 /**
  * {@hide}
@@ -55,6 +56,8 @@ public interface SprdCommandsInterface {
 	
 	public void getRemainTimes(int type, Message response);
 	public void getSimCapacity(Message result);
+    public void setOnStkStin(Handler h, int what, Object obj);
+    public void unsetOnStkStin(Handler h);
 
 }
 

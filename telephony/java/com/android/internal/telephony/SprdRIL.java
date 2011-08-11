@@ -48,6 +48,7 @@ public final class SprdRIL extends RIL {
 	protected Registrant mVPFailRegistrant;
 	protected Registrant mVPRemoteCameraRegistrant;
 	protected RegistrantList mVideoCallStateRegistrants = new RegistrantList();
+    protected Registrant mStkStinRegistrant;
 
 	//***** Constructors
 	public
@@ -372,6 +373,14 @@ public final class SprdRIL extends RIL {
 	   public void unregisterForVideoCallStateChanged(Handler h) {
 		   mVideoCallStateRegistrants.remove(h);
 	   }
+
+    public void setOnStkStin(Handler h, int what, Object obj) {
+        mStkStinRegistrant = new Registrant (h, what, obj);
+    }
+
+    public void unsetOnStkStin(Handler h) {
+        mStkStinRegistrant.clear();
+    }
 
 /*
 	   protected void
@@ -858,6 +867,7 @@ public final class SprdRIL extends RIL {
 				case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: ret = responseInts(p); break;
 				case RIL_UNSOL_VIDEOPHONE_DSCI: ret = responseInts(p); break;
 				case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:ret =  responseVoid(p); break;
+				case RIL_UNSOL_ON_STIN:ret = responseInts(p); break;
 				default:
 					throw new RuntimeException("Unrecognized unsol response: " + response);
 										//break; (implied)
@@ -1287,6 +1297,15 @@ public final class SprdRIL extends RIL {
 							       mVideoCallStateRegistrants
 								       .notifyRegistrants(new AsyncResult(null, null, null));
 							       break; 
+
+				case RIL_UNSOL_ON_STIN:
+								 if (RILJ_LOGD) unsljLogRet(response, ret);
+
+								 if (mStkStinRegistrant != null) {
+									 mStkStinRegistrant.notifyRegistrant(
+											 new AsyncResult (null, ret, null));
+								 }
+								 break;
 			}
 		}
 

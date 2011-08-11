@@ -133,6 +133,7 @@ public class StkService extends Handler implements AppInterface {
     static final int MSG_ID_CALL_SETUP               = 4;
     static final int MSG_ID_REFRESH                  = 5;
     static final int MSG_ID_RESPONSE                 = 6;
+    static final int MSG_ID_REFRESH_STIN             = 7;
 
     static final int MSG_ID_RIL_MSG_DECODED          = 10;
 
@@ -166,7 +167,8 @@ public class StkService extends Handler implements AppInterface {
         mCmdIf.setOnStkEvent(this, MSG_ID_EVENT_NOTIFY, null);
         mCmdIf.setOnStkCallSetUp(this, MSG_ID_CALL_SETUP, null);
         mCmdIf.registerForSIMReady(this, MSG_ID_SIM_LOADED, null);
-        //mCmdIf.setOnSimRefresh(this, MSG_ID_REFRESH, null);
+        mCmdIf.setOnStkStin(this, MSG_ID_REFRESH_STIN, null);
+       //mCmdIf.setOnSimRefresh(this, MSG_ID_REFRESH, null);
 
         mSimRecords = sr;
 
@@ -184,6 +186,7 @@ public class StkService extends Handler implements AppInterface {
         mCmdIf.unSetOnStkProactiveCmd(this);
         mCmdIf.unSetOnStkEvent(this);
         mCmdIf.unSetOnStkCallSetUp(this);
+        mCmdIf.unsetOnStkStin(this);
 
         this.removeCallbacksAndMessages(null);
     }
@@ -274,12 +277,12 @@ public class StkService extends Handler implements AppInterface {
                         0, null);
             }
             break;
-        case REFRESH:
+//        case REFRESH:
             // ME side only handles refresh commands which meant to remove IDLE
             // MODE TEXT.
-            cmdParams.cmdDet.typeOfCommand = CommandType.SET_UP_IDLE_MODE_TEXT
-                    .value();
-            break;
+//            cmdParams.cmdDet.typeOfCommand = CommandType.SET_UP_IDLE_MODE_TEXT
+//                    .value();
+//            break;
         case SET_UP_IDLE_MODE_TEXT:
             sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
                     0, null);
@@ -294,6 +297,7 @@ public class StkService extends Handler implements AppInterface {
         case SEND_USSD:
         case PLAY_TONE:
         case SET_UP_CALL:
+        case REFRESH:
             // nothing to do on telephony!
             break;
         case SET_UP_EVENT_LIST:
@@ -568,6 +572,22 @@ public class StkService extends Handler implements AppInterface {
         case MSG_ID_RESPONSE:
             handleCmdResponse((StkResponseMessage) msg.obj);
             break;
+        case MSG_ID_REFRESH_STIN:
+            StkLog.d(this, "[stk]MSG_ID_REFRESH_STIN" );
+            int result = 1;
+            if (msg.obj != null) {
+                AsyncResult ar = (AsyncResult) msg.obj;
+                if (ar != null && ar.result != null) {
+                    int[] params = (int[])ar.result;
+                    result = params[0];
+                    StkLog.d(this, "[stk]MSG_ID_REFRESH_STIN result = " + result);
+                    if (0 == result) {
+                        mSimRecords.onRefresh(true, null);
+                    }
+                    handleRefreshCmdResponse(result);
+                }
+            }
+            break;
         default:
             throw new AssertionError("Unrecognized STK command: " + msg.what);
         }
@@ -679,5 +699,24 @@ public class StkService extends Handler implements AppInterface {
         }
         sendTerminalResponse(cmdDet, resMsg.resCode, false, 0, resp);
         mCurrntCmd = null;
+    }
+
+    private void handleRefreshCmdResponse(int result) {
+        if (mCurrntCmd == null) {
+            StkLog.d(this, "[stk]handleRefreshCmdResponse mCurrntCmd is NULL" );
+            return;
+        }
+        CommandDetails cmdDet = mCurrntCmd.getCmdDet();
+
+        switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
+        case REFRESH:
+            ResultCode resCode = (0 == result) ? ResultCode.OK : ResultCode.TERMINAL_CRNTLY_UNABLE_TO_PROCESS;
+            sendTerminalResponse(cmdDet, resCode, false, 0, null);
+            mCurrntCmd = null;
+            break;
+        default:
+            StkLog.d(this, "[stk]handleRefreshCmdResponse CommandType is wrong" );
+            return;
+        }
     }
 }
