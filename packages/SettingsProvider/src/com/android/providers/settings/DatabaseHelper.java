@@ -80,6 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mValidTables.add("favorites");
         mValidTables.add("gservices");
         mValidTables.add("old_favorites");
+        mValidTables.add("proxy");//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910)
     }
 
     public DatabaseHelper(Context context) {
@@ -127,7 +128,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "shortcut INTEGER," +
                     "ordering INTEGER" +
                     ");");
-
+        
+        //add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start
+        db.execSQL("CREATE TABLE proxy (" +
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "name TEXT UNIQUE ON CONFLICT REPLACE," +
+                "value TEXT," + 
+                "flag INTEGER" +
+                ");");
+		//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
+        
         db.execSQL("CREATE INDEX bookmarksIndex1 ON bookmarks (folder);");
         db.execSQL("CREATE INDEX bookmarksIndex2 ON bookmarks (shortcut);");
 
@@ -739,6 +749,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP INDEX IF EXISTS bookmarksIndex1");
             db.execSQL("DROP INDEX IF EXISTS bookmarksIndex2");
             db.execSQL("DROP TABLE IF EXISTS favorites");
+            db.execSQL("DROP TABLE IF EXISTS proxy");//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910)
             onCreate(db);
 
             // Added for diagnosing settings.db wipes after the fact

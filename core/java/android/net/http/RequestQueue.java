@@ -22,12 +22,15 @@
 package android.net.http;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Proxy;
+import android.net.Uri;
 import android.net.WebAddress;
 import android.os.Handler;
 import android.os.Message;
@@ -41,6 +44,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Map;
+
+import junit.framework.Assert;
 
 import org.apache.http.HttpHost;
 
@@ -60,10 +65,13 @@ public class RequestQueue implements RequestFeeder {
 
     private HttpHost mProxyHost = null;
     private BroadcastReceiver mProxyChangeReceiver;
-
+	
     /* default simultaneous connection count */
     private static final int CONNECTION_COUNT = 4;
-
+	//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start
+    private static final String URISTR= "content://settings/proxy";
+    private static final Uri CONTENT_URI = Uri.parse(URISTR);
+	//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
     /**
      * This class maintains active connection threads
      */
@@ -262,7 +270,29 @@ public class RequestQueue implements RequestFeeder {
     private synchronized void setProxyConfig() {
         NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
         if (info != null && info.getType() == ConnectivityManager.TYPE_WIFI) {
-            mProxyHost = null;
+		//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start
+        	Cursor c = getWifiCursor(mContext);
+        	int flag = -1;
+        	if(c != null && c.moveToNext()) {
+        		flag = c.getInt(c.getColumnIndex("flag"));
+        		if(flag < 1) {
+        			mProxyHost = null;
+        		}
+        		else {
+        			String proxyport = c.getString(c.getColumnIndex("value"));
+        			if(proxyport != null) {
+        				String proxy = getWifiProxy(proxyport);
+        				int port = getwifiProt(proxyport);
+        				mActivePool.disablePersistence();
+        				mProxyHost = new HttpHost(proxy,port,"http");
+        			}else {
+        				mProxyHost = null;
+        			}
+        		}
+        	}else {
+        		mProxyHost = null;
+        	}
+			//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
         } else {
             String host = Proxy.getHost(mContext);
             if (HttpLog.LOGV) HttpLog.v("RequestQueue.setProxyConfig " + host);
@@ -543,4 +573,34 @@ public class RequestQueue implements RequestFeeder {
         Connection getConnection(Context context, HttpHost host);
         boolean recycleConnection(Connection connection);
     }
+   //add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start 
+    private String getWifiProxy(String proxyport) {
+    	if (proxyport != null) {
+            int i = proxyport.indexOf(':');
+            if (i == -1) { 
+                return null;
+            }
+            return proxyport.substring(0, i);
+        }
+		return null;
+    }
+    private int getwifiProt(String proxyport) {
+    	if (proxyport != null) {
+            int i = proxyport.indexOf(':');
+            if (i == -1) {
+                
+                return -1;
+            }
+            return Integer.parseInt(proxyport.substring(i+1));
+        }
+    	return -1;
+    }
+    
+    static final public Cursor getWifiCursor(Context ctx) {
+    	ContentResolver contentResolver = ctx.getContentResolver();
+        Assert.assertNotNull(contentResolver);
+        Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null);
+        return cursor;
+    }
+	//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
 }
