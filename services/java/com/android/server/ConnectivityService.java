@@ -59,7 +59,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private static final String TAG = "ConnectivityService";
 
     // how long to wait before switching back to a radio's default network
-    private static final int RESTORE_DEFAULT_NETWORK_DELAY = 1 * 60 * 1000;
+    private static final int RESTORE_DEFAULT_NETWORK_DELAY = 10 * 60 * 1000;
     // system property that can override the above value
     private static final String NETWORK_RESTORE_DELAY_PROP_NAME =
             "android.telephony.apn-restore";
