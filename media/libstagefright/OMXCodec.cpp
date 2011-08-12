@@ -3061,7 +3061,7 @@ status_t OMXCodec::start(MetaData *meta) {
     mFilledBuffers.clear();
     mPaused = false;
 
-/*	if (mBufferCountOutput > 0) {
+	if (mBufferCountOutput > 0) {
 		OMX_PARAM_DEBLOCKINGTYPE DeBlock;
 		CONFIG_SIZE_AND_VERSION(DeBlock);
 		
@@ -3070,7 +3070,7 @@ status_t OMXCodec::start(MetaData *meta) {
 
 		status_t bRet = 0;
 		bRet = mOMX->setParameter(mNode, OMX_IndexParamCommonDeblocking, &DeBlock, sizeof(DeBlock));
-	}*/
+	}
 
     return init();
 }

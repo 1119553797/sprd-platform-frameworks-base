@@ -67,11 +67,11 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
 
 static size_t getFrameSize(bool isWide, unsigned FT) {
-    static const size_t kFrameSizeNB[8] = {
-        95, 103, 118, 134, 148, 159, 204, 244
+    static const size_t kFrameSizeNB[16] = {
+        95, 103, 118, 134, 148, 159, 204, 244,39,0,0,0,0,0,0,0
     };
-    static const size_t kFrameSizeWB[9] = {
-        132, 177, 253, 285, 317, 365, 397, 461, 477
+    static const size_t kFrameSizeWB[16] = {
+        132, 177, 253, 285, 317, 365, 397, 461, 477,0,0,0,0,0,0,0
     };
 
     size_t frameSize = isWide ? kFrameSizeWB[FT] : kFrameSizeNB[FT];
@@ -212,40 +212,51 @@ status_t AMRSource::read(
     *out = NULL;
 
     int64_t seekTimeUs;
+    uint32_t demux_ok = 0;
+    size_t frameSize = 0;
+    ssize_t n = 0;
     ReadOptions::SeekMode mode;
     if (options && options->getSeekTo(&seekTimeUs, &mode)) {
         int64_t seekFrame = seekTimeUs / 20000ll;  // 20ms per frame.
         mCurrentTimeUs = seekFrame * 20000ll;
         mOffset = seekFrame * mFrameSize + (mIsWide ? 9 : 6);
     }
+    
+    while(!demux_ok)
+    {
+        uint8_t header;
+        n = mDataSource->readAt(mOffset, &header, 1);
 
-    uint8_t header;
-    ssize_t n = mDataSource->readAt(mOffset, &header, 1);
+        if (n < 1) {
+            return ERROR_END_OF_STREAM;
+        }
 
-    if (n < 1) {
-        return ERROR_END_OF_STREAM;
+        if ((header & 0x83)&&mIsWide) {
+            // Padding bits must be 0.
+            LOGE("padding bits must be 0, header is 0x%02x", header);
+
+            return ERROR_MALFORMED;
+        }
+
+        unsigned FT = (header >> 3) & 0x0f;
+
+        if (FT > 15) {
+
+            LOGE("illegal AMR frame type %d", FT);
+
+            return ERROR_MALFORMED;
+        }
+
+        frameSize = getFrameSize(mIsWide, FT);
+        if((mIsWide&&(frameSize >64))
+        ||(!mIsWide&&(frameSize >32))||!frameSize){
+            mOffset++;            
+        }
+        else{
+            demux_ok=1;
+        }
     }
-
-    if (header & 0x83) {
-        // Padding bits must be 0.
-
-        LOGE("padding bits must be 0, header is 0x%02x", header);
-
-        return ERROR_MALFORMED;
-    }
-
-    unsigned FT = (header >> 3) & 0x0f;
-
-    if (FT > 8 || (!mIsWide && FT > 7)) {
-
-        LOGE("illegal AMR frame type %d", FT);
-
-        return ERROR_MALFORMED;
-    }
-
-    size_t frameSize = getFrameSize(mIsWide, FT);
-    CHECK_EQ(frameSize, mFrameSize);
-
+    
     MediaBuffer *buffer;
     status_t err = mGroup->acquire_buffer(&buffer);
     if (err != OK) {
