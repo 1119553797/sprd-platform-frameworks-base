@@ -22,12 +22,19 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.os.Bundle;
 
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.gsm.SimCard;
 import com.android.internal.telephony.gsm.SIMFileHandler;
 import com.android.internal.telephony.gsm.SIMRecords;
+
+
+import com.android.internal.telephony.ITelephony;
+
 
 import android.util.Config;
 
@@ -62,7 +69,10 @@ enum ComprehensionTlvTag {
   LANGUAGE(0x2d),
   URL(0x31),
   BROWSER_TERMINATION_CAUSE(0x34),
-  TEXT_ATTRIBUTE(0x50);
+  TEXT_ATTRIBUTE(0x50),
+  //Deal With DTMF Message Start
+  DTMF(0x2c);
+  //Deal With DTMF Message End
 
     private int mValue;
 
@@ -140,6 +150,10 @@ public class StkService extends Handler implements AppInterface {
     // Events to signal SIM presence or absent in the device.
     private static final int MSG_ID_SIM_LOADED       = 20;
 
+    //Deal With DTMF Message Start
+    private static final int MSG_ID_SEND_SECOND_DTMF = 30;
+    private static final int SEND_DTMF_INTERVAL = 3*1000;
+    //Deal With DTMF Message End
     private static final int DEV_ID_KEYPAD      = 0x01;
     private static final int DEV_ID_DISPLAY     = 0x02;
     private static final int DEV_ID_EARPIECE    = 0x03;
@@ -287,11 +301,17 @@ public class StkService extends Handler implements AppInterface {
             sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
                     0, null);
             break;
+
+        //Deal With DTMF Message Start
+        case SEND_DTMF:
+            DtmfMessage dtmf = cmdMsg.getDtmfMessage();
+            retrieveDtmfString(cmdParams,dtmf.mdtmfString);
+        break;
+        //Deal With DTMF Message Start
         case LAUNCH_BROWSER:
         case SELECT_ITEM:
         case GET_INPUT:
         case GET_INKEY:
-        case SEND_DTMF:
         case SEND_SMS:
         case SEND_SS:
         case SEND_USSD:
@@ -588,6 +608,18 @@ public class StkService extends Handler implements AppInterface {
                 }
             }
             break;
+
+        //Deal With DTMF Message Start
+        case MSG_ID_SEND_SECOND_DTMF:
+           
+
+           char channel = msg.getData().getString("channel").charAt(0);
+           mCmdIf.sendDtmf(channel,null);
+           CommandParams cmdParams = (CommandParams)msg.obj;
+           sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
+                    0, null);
+           break;
+        //Deal With DTMF Message End
         default:
             throw new AssertionError("Unrecognized STK command: " + msg.what);
         }
@@ -719,4 +751,58 @@ public class StkService extends Handler implements AppInterface {
             return;
         }
     }
+    //Deal With DTMF Message Start
+    private void retrieveDtmfString(CommandParams cmdParams,String dtmf) {
+        if(!isInCall()) {
+            System.out.println("retrieveDtmfString trace is not incall");
+            sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, true,
+                    20, null);
+        } else {
+            System.out.println("retrieveDtmfString trace is incall");
+            int mPindex = dtmf.indexOf("P");
+            if(mPindex != -1) {
+                System.out.println("mPindex is " + mPindex);
+                try {
+                    char channel1 = dtmf.substring(0,1).charAt(0);
+                    String channel2 = dtmf.substring(dtmf.length() - 1,dtmf.length());
+                    System.out.println("retrieveDtmfString trace is incall,channel1 is " + channel1);
+                    System.out.println("retrieveDtmfString trace is incall,channel2 is " + channel2);
+
+                    int interval = (dtmf.length() - 2)*SEND_DTMF_INTERVAL;
+                    mCmdIf.sendDtmf(channel1,null);
+                    Message message = new Message();
+                    message.what = MSG_ID_SEND_SECOND_DTMF;
+                    message.obj = cmdParams;
+                    Bundle bundle = new Bundle();
+                    bundle.putString("channel",channel2);
+                    message.setData(bundle);
+                    this.sendMessageDelayed(message, interval);
+
+                } catch(Exception e) {}
+            }else {
+                System.out.println("retrieveDtmfString trace2");
+                String tempDtmf = new String(dtmf);
+                while(tempDtmf.length() != 0) {
+                    mCmdIf.sendDtmf(tempDtmf.substring(0, 1).charAt(0),null);
+                    tempDtmf = tempDtmf.substring(1, tempDtmf.length());
+		}
+            }
+        }
+    }
+
+    private boolean isInCall() {
+        final ITelephony phone = getPhoneInterface();
+        if (phone == null) {
+            return false;
+        } try {
+            return phone.isOffhook();
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+
+    private ITelephony getPhoneInterface() {
+        return ITelephony.Stub.asInterface(ServiceManager.checkService(Context.TELEPHONY_SERVICE));
+    }
+    //Deal With DTMF Message End
 }

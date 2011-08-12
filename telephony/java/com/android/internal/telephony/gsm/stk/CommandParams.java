@@ -55,6 +55,26 @@ class DisplayTextParams extends CommandParams {
     }
 }
 
+//Deal With DTMF Message Start
+class DtmfParams extends CommandParams{
+    TextMessage textMsg;
+    String dtmfString;
+
+    DtmfParams(CommandDetails cmdDet, TextMessage textMsg,String dtmf) {
+        super(cmdDet);
+        this.textMsg = textMsg;
+        dtmfString = dtmf;
+    }
+
+    boolean setIcon(Bitmap icon) {
+        if (icon != null && textMsg != null) {
+            textMsg.icon = icon;
+            return true;
+        }
+        return false;
+    }
+}
+//Deal With DTMF Message End
 class LaunchBrowserParams extends CommandParams {
     TextMessage confirmMsg;
     LaunchBrowserMode mode;

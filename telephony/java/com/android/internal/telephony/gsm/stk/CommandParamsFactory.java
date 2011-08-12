@@ -142,6 +142,10 @@ class CommandParamsFactory extends Handler {
                  cmdPending = processGetInput(cmdDet, ctlvs);
                  break;
              case SEND_DTMF:
+                 //Deal With DTMF Message Start
+                 cmdPending = processDtmfNotify(cmdDet, ctlvs);
+                 break;
+                 //Deal With DTMF Message End
              case SEND_SMS:
              case SEND_SS:
              case SEND_USSD:
@@ -648,6 +652,49 @@ class CommandParamsFactory extends Handler {
         return false;
     }
 
+    //Deal With DTMF Message Start
+    private boolean processDtmfNotify(CommandDetails cmdDet,
+            List<ComprehensionTlv> ctlvs) throws ResultException {
+
+        System.out.println("wangsl processDtmfNotify start");
+        String dtmfString = null;
+        TextMessage textMsg = new TextMessage();
+        IconId iconId = null;
+
+        ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.DTMF,
+                ctlvs);
+        if (ctlv != null) {
+            dtmfString = ValueParser.retrieveDTMF(ctlv);
+            System.out.println("wangsl dtmfString is:" + dtmfString);
+        } else {
+            System.out.println("wangsl retrieve dtmf error");
+            throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+        }
+
+        ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID,
+                ctlvs);
+        if (ctlv != null) {
+            textMsg.text = ValueParser.retrieveAlphaId(ctlv);
+        }
+
+        ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
+        if (ctlv != null) {
+            iconId = ValueParser.retrieveIconId(ctlv);
+            textMsg.iconSelfExplanatory = iconId.selfExplanatory;
+        }
+
+        textMsg.responseNeeded = false;
+        mCmdParams = new DtmfParams(cmdDet, textMsg,dtmfString);
+
+        if (iconId != null) {
+            mIconLoadState = LOAD_SINGLE_ICON;
+            mIconLoader.loadIcon(iconId.recordNumber, this
+                    .obtainMessage(MSG_ID_LOAD_ICON_DONE));
+            return true;
+        }
+        return false;
+    }
+    //Deal With DTMF Message End
     /**
      * Processes SET_UP_EVENT_LIST proactive command from the SIM card.
      *

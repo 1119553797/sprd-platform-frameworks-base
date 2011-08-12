@@ -34,6 +34,9 @@ public class StkCmdMessage implements Parcelable {
     private ToneSettings mToneSettings = null;
     private CallSettings mCallSettings = null;
     private AppInterface.EventListType mEventType;
+    //Deal With DTMF Message Start
+    private DtmfMessage mDtmfMessage;
+    //Deal With DTMF Message End
 
     /*
      * Container for Launch Browser command settings.
@@ -59,9 +62,14 @@ public class StkCmdMessage implements Parcelable {
         case SELECT_ITEM:
             mMenu = ((SelectItemParams) cmdParams).menu;
             break;
+        //Deal With DTMF Message Start
+        case SEND_DTMF:
+            mDtmfMessage = new DtmfMessage();
+            mDtmfMessage.mdtmfString = ((DtmfParams)cmdParams).dtmfString;
+            break;
+        //Deal With DTMF Message End
         case DISPLAY_TEXT:
         case SET_UP_IDLE_MODE_TEXT:
-        case SEND_DTMF:
         case SEND_SMS:
         case SEND_SS:
         case SEND_USSD:
@@ -114,6 +122,11 @@ public class StkCmdMessage implements Parcelable {
             mCallSettings.callMsg = in.readParcelable(null);
             mCallSettings.calladdress = in.readParcelable(null);
             break;
+        //Deal With DTMF Message Start
+        case SEND_DTMF:
+            mDtmfMessage = in.readParcelable(null);
+            break;
+        //Deal With DTMF Message End
         }
     }
 
@@ -135,6 +148,11 @@ public class StkCmdMessage implements Parcelable {
             dest.writeParcelable(mCallSettings.callMsg, 0);
             dest.writeParcelable(mCallSettings.calladdress, 0);
             break;
+        //Deal With DTMF Message Start
+        case SEND_DTMF:
+            dest.writeParcelable(mDtmfMessage, 0);
+            break;
+        //Deal With DTMF Message End
         }
     }
 
@@ -188,4 +206,10 @@ public class StkCmdMessage implements Parcelable {
     public CommandDetails getCmdDet() {
         return mCmdDet;
     }
+
+    //Deal With DTMF Message Start
+    public DtmfMessage getDtmfMessage() {
+        return mDtmfMessage;
+    }
+    //Deal With DTMF Message Start
 }
