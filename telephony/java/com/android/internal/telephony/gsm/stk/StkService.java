@@ -615,18 +615,6 @@ public class StkService extends Handler implements AppInterface {
                 }
             }
             break;
-
-        //Deal With DTMF Message Start
-        case MSG_ID_SEND_SECOND_DTMF:
-           
-
-           char channel = msg.getData().getString("channel").charAt(0);
-           mCmdIf.sendDtmf(channel,null);
-           CommandParams cmdParams = (CommandParams)msg.obj;
-           sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
-                    0, null);
-           break;
-        //Deal With DTMF Message End
         default:
             throw new AssertionError("Unrecognized STK command: " + msg.what);
         }
