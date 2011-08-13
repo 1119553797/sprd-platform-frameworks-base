@@ -294,7 +294,9 @@ void SurfaceFlinger::bootFinished()
     const nsecs_t duration = now - mBootTime;
     LOGI("Boot is finished (%ld ms)", long(ns2ms(duration)) );  
     mBootFinished = true;
-    property_set("ctl.stop", "bootanim");
+    if (property_set("ctl.stop", "bootanim") != 0) {
+        LOGI("Stopping bootanim failed!"); 
+    }
     property_set("ctl.start","startupsound");
 }
 
