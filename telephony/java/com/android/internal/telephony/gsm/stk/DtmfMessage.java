@@ -23,12 +23,18 @@ import android.os.Parcelable;
 public class DtmfMessage implements Parcelable {
 
     public String mdtmfString = null;
+    //DTMF ALPAID MODIFY Start
+    TextMessage mTextMsg = null;
+    //DTMF ALPAID MODIFY End
    
     public DtmfMessage() {
     }
 
     private DtmfMessage(Parcel in) {
         mdtmfString = in.readString();
+        //DTMF ALPAID MODIFY Start
+        mTextMsg = in.readParcelable(null);
+        //DTMF ALPAID MODIFY End
     }
 
     public int describeContents() {
@@ -37,6 +43,9 @@ public class DtmfMessage implements Parcelable {
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mdtmfString);
+        //DTMF ALPAID MODIFY Start
+        dest.writeParcelable(mTextMsg, 0);
+        //DTMF ALPAID MODIFY End
     }
 
     public static final Parcelable.Creator<DtmfMessage> CREATOR = new Parcelable.Creator<DtmfMessage>() {

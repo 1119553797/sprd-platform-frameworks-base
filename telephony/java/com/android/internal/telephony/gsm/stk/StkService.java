@@ -592,6 +592,13 @@ public class StkService extends Handler implements AppInterface {
         case MSG_ID_RESPONSE:
             handleCmdResponse((StkResponseMessage) msg.obj);
             break;
+        //Deal With DTMF Message Start
+        case MSG_ID_SEND_SECOND_DTMF:
+           CommandParams cmdParams = (CommandParams)msg.obj;
+           String str = msg.getData().getString("dtmf");
+           retrieveDtmfString(cmdParams,str);
+           break;
+        //Deal With DTMF Message End
         case MSG_ID_REFRESH_STIN:
             StkLog.d(this, "[stk]MSG_ID_REFRESH_STIN" );
             int result = 1;
@@ -754,39 +761,32 @@ public class StkService extends Handler implements AppInterface {
     //Deal With DTMF Message Start
     private void retrieveDtmfString(CommandParams cmdParams,String dtmf) {
         if(!isInCall()) {
-            System.out.println("retrieveDtmfString trace is not incall");
             sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, true,
                     20, null);
         } else {
-            System.out.println("retrieveDtmfString trace is incall");
-            int mPindex = dtmf.indexOf("P");
-            if(mPindex != -1) {
-                System.out.println("mPindex is " + mPindex);
-                try {
-                    char channel1 = dtmf.substring(0,1).charAt(0);
-                    String channel2 = dtmf.substring(dtmf.length() - 1,dtmf.length());
-                    System.out.println("retrieveDtmfString trace is incall,channel1 is " + channel1);
-                    System.out.println("retrieveDtmfString trace is incall,channel2 is " + channel2);
-
-                    int interval = (dtmf.length() - 2)*SEND_DTMF_INTERVAL;
-                    mCmdIf.sendDtmf(channel1,null);
-                    Message message = new Message();
-                    message.what = MSG_ID_SEND_SECOND_DTMF;
-                    message.obj = cmdParams;
+            String dtmfTemp = new String(dtmf);
+            while(dtmfTemp.length() != 0) {
+                String firstStr = dtmfTemp.substring(0,1);
+        
+                if(firstStr.equals("P")) {
+                    
+                    Message msg = new Message();
                     Bundle bundle = new Bundle();
-                    bundle.putString("channel",channel2);
-                    message.setData(bundle);
-                    this.sendMessageDelayed(message, interval);
-
-                } catch(Exception e) {}
-            }else {
-                System.out.println("retrieveDtmfString trace2");
-                String tempDtmf = new String(dtmf);
-                while(tempDtmf.length() != 0) {
-                    mCmdIf.sendDtmf(tempDtmf.substring(0, 1).charAt(0),null);
-                    tempDtmf = tempDtmf.substring(1, tempDtmf.length());
-		}
+            
+                    bundle.putString("dtmf", dtmf.substring(1, dtmf.length()));
+                    msg.what = MSG_ID_SEND_SECOND_DTMF;
+                    msg.obj = cmdParams;
+                    msg.setData(bundle);
+            
+                    this.sendMessageDelayed(msg, SEND_DTMF_INTERVAL);
+                    return;
+                }else {
+                    mCmdIf.sendDtmf(firstStr.charAt(0),null);
+                    dtmfTemp = dtmfTemp.substring(1,dtmfTemp.length());
+                }
             }
+            sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
+                    0, null);
         }
     }
 

@@ -66,6 +66,7 @@ public class StkCmdMessage implements Parcelable {
         case SEND_DTMF:
             mDtmfMessage = new DtmfMessage();
             mDtmfMessage.mdtmfString = ((DtmfParams)cmdParams).dtmfString;
+            mTextMsg = ((DtmfParams)cmdParams).textMsg;
             break;
         //Deal With DTMF Message End
         case DISPLAY_TEXT:
