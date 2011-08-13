@@ -273,9 +273,15 @@ public class RequestQueue implements RequestFeeder {
 		//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start
         	Cursor c = getWifiCursor(mContext);
         	int flag = -1;
+        	String proxyList = "";
+        	String curfilter = "";
         	if(c != null && c.moveToNext()) {
         		flag = c.getInt(c.getColumnIndex("flag"));
-        		if(flag < 1) {
+        		proxyList = c.getString(c.getColumnIndex("proxyfilter"));
+        		curfilter = c.getString(c.getColumnIndex("curfilter"));
+        		if(proxyList==null)proxyList = "";
+        		if(curfilter==null)curfilter = "";
+        		if(flag < 1 || proxyList.contains(curfilter)) {
         			mProxyHost = null;
         		}
         		else {

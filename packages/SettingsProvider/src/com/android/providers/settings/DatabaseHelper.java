@@ -134,7 +134,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT UNIQUE ON CONFLICT REPLACE," +
                 "value TEXT," + 
-                "flag INTEGER" +
+                "flag INTEGER," +
+                "proxyfilter TEXT," +
+                "curfilter TEXT" +
                 ");");
 		//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
         
@@ -1194,6 +1196,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
             loadBooleanSetting(stmt, Settings.Secure.MOUNT_UMS_NOTIFY_ENABLED,
                     R.bool.def_mount_ums_notify_enabled);
+            //add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start
+            db.execSQL("INSERT OR IGNORE INTO proxy(name,value,flag)"
+                    + " VALUES('http_proxy','10.0.0.172:80',-1);");
+            //add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
         } finally {
             if (stmt != null) stmt.close();
         }
