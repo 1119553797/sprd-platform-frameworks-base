@@ -394,6 +394,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements IccConsta
     }
 
     protected String getEFPath(int efid) {
+        IccCard card = phone.getIccCard();
         switch(efid) {
         case EF_SMS:
             return MF_SIM + DF_TELECOM;
@@ -410,6 +411,10 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements IccConsta
         case EF_CFIS:
         case EF_ECC:
             return MF_SIM + DF_GSM;
+	  case EF_FDN:
+	  	if (card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)) {
+                return MF_SIM + DF_ADF;
+            }
 
         case EF_MAILBOX_CPHS:
         case EF_VOICE_MAIL_INDICATOR_CPHS:
@@ -428,7 +433,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements IccConsta
             // The EFids in USIM phone book entries are decided by the card manufacturer.
             // So if we don't match any of the cases above and if its a USIM return
             // the phone book path.
-            IccCard card = phone.getIccCard();
+           
             if (card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)) {
                 return MF_SIM + DF_TELECOM + DF_PHONEBOOK;
             }
