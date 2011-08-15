@@ -22,265 +22,674 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
+import android.os.Looper;
+import com.android.internal.telephony.IccUtils;
 
 public class AdnRecordLoader extends Handler {
-    static String LOG_TAG;
+	static String LOG_TAG;
 
-    //***** Instance Variables
+	// ***** Instance Variables
 
-    PhoneBase phone;
-    int ef;
-    int extensionEF;
-    int pendingExtLoads;
-    Message userResponse;
-    String pin2;
+	PhoneBase phone;
+	int ef;
+	int extensionEF;
+	int pendingExtLoads;
+	Message userResponse;
+	String pin2;
 
-    // For "load one"
-    int recordNumber;
+	// add multi record and email in usim begin
+	private IccFileHandler mFh;
+	int emailEF;
+	int iapEF;
 
-    // for "load all"
-    ArrayList<AdnRecord> adns; // only valid after EVENT_ADN_LOAD_ALL_DONE
+	int sneEF;
+	int aasEF;
+	int grpEF;
+	int gasEF;
+	int fileCount;
+	int emailNum;
+	int adnNum;
+	int emailNumInIap;
+	int emailTagInIap;
+	int aasNum;
+	ArrayList<Integer> anrefids;
 
-    // Either an AdnRecord or a reference to adns depending
-    // if this is a load one or load all operation
-    Object result;
+	// add multi record and email in usim end
 
-    //***** Event Constants
+	// For "load one"
+	int recordNumber;
 
-    static final int EVENT_ADN_LOAD_DONE = 1;
-    static final int EVENT_EXT_RECORD_LOAD_DONE = 2;
-    static final int EVENT_ADN_LOAD_ALL_DONE = 3;
-    static final int EVENT_EF_LINEAR_RECORD_SIZE_DONE = 4;
-    static final int EVENT_UPDATE_RECORD_DONE = 5;
+	// for "load all"
+	ArrayList<AdnRecord> adns; // only valid after EVENT_ADN_LOAD_ALL_DONE
 
-    //***** Constructor
+	// Either an AdnRecord or a reference to adns depending
+	// if this is a load one or load all operation
+	Object result;
 
-    public AdnRecordLoader(PhoneBase phone) {
-        // The telephony unit-test cases may create AdnRecords
-        // in secondary threads
-        super(phone.getHandler().getLooper());
+	// ***** Event Constants
 
-        this.phone = phone;
-        LOG_TAG = phone.getPhoneName();
-    }
+	static final int EVENT_ADN_LOAD_DONE = 1;
+	static final int EVENT_EXT_RECORD_LOAD_DONE = 2;
+	static final int EVENT_ADN_LOAD_ALL_DONE = 3;
+	static final int EVENT_EF_LINEAR_RECORD_SIZE_DONE = 4;
+	static final int EVENT_UPDATE_RECORD_DONE = 5;
 
-    /**
-     * Resulting AdnRecord is placed in response.obj.result
-     * or response.obj.exception is set
-     */
-    public void
-    loadFromEF(int ef, int extensionEF, int recordNumber,
-                Message response) {
-        this.ef = ef;
-        this.extensionEF = extensionEF;
-        this.recordNumber = recordNumber;
-        this.userResponse = response;
+	// add multi record and email in usim begin
+	static final int EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE = 6;
+	static final int EVENT_EF_PBR_IAP_LINEAR_RECORD_SIZE_DONE = 7;
 
-        phone.mIccFileHandler.loadEFLinearFixed(
-                    ef, recordNumber,
-                    obtainMessage(EVENT_ADN_LOAD_DONE));
+	static final int EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE = 8;
+	static final int EVENT_EF_PBR_SNE_LINEAR_RECORD_SIZE_DONE = 9;
+	static final int EVENT_UPDATE_ANR_RECORD_DONE = 10;
+	static final int EVENT_EF_PBR_AAS_LINEAR_RECORD_SIZE_DONE = 11;
+	static final int EVENT_EF_PBR_GRP_LINEAR_RECORD_SIZE_DONE = 12;
+	static final int EVENT_EF_PBR_GAS_LINEAR_RECORD_SIZE_DONE = 13;
+	static final int EVENT_UPDATE_AAS_RECORD_DONE = 14;
+	static final int EVENT_UPDATE_SNE_RECORD_DONE = 15;
+	static final int EVENT_UPDATE_GRP_RECORD_DONE = 16;
+	static final int EVENT_UPDATE_GAS_RECORD_DONE = 17;
 
-    }
+	// add multi record and email in usim end
 
+	// ***** Constructor
 
-    /**
-     * Resulting ArrayList&lt;adnRecord> is placed in response.obj.result
-     * or response.obj.exception is set
-     */
-    public void
-    loadAllFromEF(int ef, int extensionEF,
-                Message response) {
-        this.ef = ef;
-        this.extensionEF = extensionEF;
-        this.userResponse = response;
+	public AdnRecordLoader(PhoneBase phone) {
+		// The telephony unit-test cases may create AdnRecords
+		// in secondary threads
+		super(phone.getHandler().getLooper());
 
-        phone.mIccFileHandler.loadEFLinearFixedAll(
-                    ef,
-                    obtainMessage(EVENT_ADN_LOAD_ALL_DONE));
+		this.phone = phone;
+		mFh = phone.getIccFileHandler();
+		LOG_TAG = phone.getPhoneName();
+	}
 
-    }
+	// add multi record and email in usim
+	public AdnRecordLoader(IccFileHandler fh) {
+		// The telephony unit-test cases may create AdnRecords
+		// in secondary threads
+		super(Looper.getMainLooper());
+		mFh = fh;
+	}
 
-    /**
-     * Write adn to a EF SIM record
-     * It will get the record size of EF record and compose hex adn array
-     * then write the hex array to EF record
-     *
-     * @param adn is set with alphaTag and phoneNubmer
-     * @param ef EF fileid
-     * @param extensionEF extension EF fileid
-     * @param recordNumber 1-based record index
-     * @param pin2 for CHV2 operations, must be null if pin2 is not needed
-     * @param response will be sent to its handler when completed
-     */
-    public void
-    updateEF(AdnRecord adn, int ef, int extensionEF, int recordNumber,
-            String pin2, Message response) {
-        this.ef = ef;
-        this.extensionEF = extensionEF;
-        this.recordNumber = recordNumber;
-        this.userResponse = response;
-        this.pin2 = pin2;
+	/**
+	 * Resulting AdnRecord is placed in response.obj.result or
+	 * response.obj.exception is set
+	 */
+	public void loadFromEF(int ef, int extensionEF, int recordNumber,
+			Message response) {
+		this.ef = ef;
+		this.extensionEF = extensionEF;
+		this.recordNumber = recordNumber;
+		this.userResponse = response;
 
-        phone.mIccFileHandler.getEFLinearRecordSize( ef,
-            obtainMessage(EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
-    }
+		/*
+		 * phone.mIccFileHandler.loadEFLinearFixed( ef, recordNumber,
+		 * obtainMessage(EVENT_ADN_LOAD_DONE));
+		 */
+		mFh.loadEFLinearFixed(ef, recordNumber,
+				obtainMessage(EVENT_ADN_LOAD_DONE));
+	}
 
-    //***** Overridden from Handler
+	/**
+	 * Resulting ArrayList&lt;adnRecord> is placed in response.obj.result or
+	 * response.obj.exception is set
+	 */
+	public void loadAllFromEF(int ef, int extensionEF, Message response) {
+		this.ef = ef;
+		this.extensionEF = extensionEF;
+		this.userResponse = response;
 
-    public void
-    handleMessage(Message msg) {
-        AsyncResult ar;
-        byte data[];
-        AdnRecord adn;
+		/*
+		 * phone.mIccFileHandler.loadEFLinearFixedAll( ef,
+		 * obtainMessage(EVENT_ADN_LOAD_ALL_DONE));
+		 */
+		mFh.loadEFLinearFixedAll(ef, obtainMessage(EVENT_ADN_LOAD_ALL_DONE));
+	}
 
-        try {
-            switch (msg.what) {
-                case EVENT_EF_LINEAR_RECORD_SIZE_DONE:
-                    ar = (AsyncResult)(msg.obj);
-                    adn = (AdnRecord)(ar.userObj);
+	/**
+	 * Write adn to a EF SIM record It will get the record size of EF record and
+	 * compose hex adn array then write the hex array to EF record
+	 * 
+	 * @param adn
+	 *            is set with alphaTag and phoneNubmer
+	 * @param ef
+	 *            EF fileid
+	 * @param extensionEF
+	 *            extension EF fileid
+	 * @param recordNumber
+	 *            1-based record index
+	 * @param pin2
+	 *            for CHV2 operations, must be null if pin2 is not needed
+	 * @param response
+	 *            will be sent to its handler when completed
+	 */
+	public void updateEF(AdnRecord adn, int ef, int extensionEF,
+			int recordNumber, String pin2, Message response) {
+		this.ef = ef;
+		this.extensionEF = extensionEF;
+		this.recordNumber = recordNumber;
+		this.userResponse = response;
+		this.pin2 = pin2;
 
-                    if (ar.exception != null) {
-                        throw new RuntimeException("get EF record size failed",
-                                ar.exception);
-                    }
+		/*
+		 * phone.mIccFileHandler.getEFLinearRecordSize( ef,
+		 * obtainMessage(EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
+		 */
+		mFh.getEFLinearRecordSize(ef, obtainMessage(
+				EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
+	}
 
-                    int[] recordSize = (int[])ar.result;
-                    // recordSize is int[3] array
-                    // int[0]  is the record length
-                    // int[1]  is the total length of the EF file
-                    // int[2]  is the number of records in the EF file
-                    // So int[0] * int[2] = int[1]
-                   if (recordSize.length != 3 || recordNumber > recordSize[2]) {
-                        throw new RuntimeException("get wrong EF record size format",
-                                ar.exception);
-                    }
+	// ***** Overridden from Handler
+	// add multi record and email in usim begin
+	public void updateEFAdnToUsim(AdnRecord adn, int ef, int extensionEF,
+			int recordNumber, String pin2, Message response) {
+		this.ef = ef;
+		this.extensionEF = extensionEF;
+		this.recordNumber = recordNumber;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(ef, obtainMessage(
+				EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
+	}
 
-                    data = adn.buildAdnString(recordSize[0]);
+	public void updateEFEmailToUsim(AdnRecord adn, int emailEF, int emailNum,
+			int efid, int adnNum, int emailTagInIap, String pin2,
+			Message response) {
+		this.emailEF = emailEF;
+		this.emailNum = emailNum;
+		this.ef = efid;
+		this.adnNum = adnNum;
+		this.emailTagInIap = emailTagInIap;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(emailEF, obtainMessage(
+				EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE, adn));
 
-                    if(data == null) {
-                        throw new RuntimeException("worong ADN format",
-                                ar.exception);
-                    }
-                    Log.i("AdnRecordLoader","recordNumber "+recordNumber);  
-                    phone.mIccFileHandler.updateEFLinearFixed(ef, recordNumber,
-                            data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
+	}
 
-                    pendingExtLoads = 1;
+	public void updateEFAnrToUsim(AdnRecord adn, ArrayList<Integer> anrefids,
+			int efid, int adnNum, String pin2, Message response) {
+		this.anrefids = anrefids;
+		this.ef = efid;
+		this.adnNum = adnNum;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(anrefids.get(0), obtainMessage(
+				EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE, adn));
 
-                    break;
-                case EVENT_UPDATE_RECORD_DONE:
-			 Log.i("AdnRecordLoader","EVENT_UPDATE_RECORD_DONE "+recordNumber); 
-                    ar = (AsyncResult)(msg.obj);
-                    if (ar.exception != null) {
-                        throw new RuntimeException("update EF adn record failed",
-                                ar.exception);
-                    }
-                    pendingExtLoads = 0;
-                    result = null;
-                    break;
-                case EVENT_ADN_LOAD_DONE:
-                    ar = (AsyncResult)(msg.obj);
-                    data = (byte[])(ar.result);
+	}
 
-                    if (ar.exception != null) {
-                        throw new RuntimeException("load failed", ar.exception);
-                    }
+	public void updateEFSneToUsim(AdnRecord adn, int sneEF, int efid,
+			int adnNum, String pin2, Message response) {
+		this.sneEF = sneEF;
+		this.ef = efid;
+		this.adnNum = adnNum;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(sneEF, obtainMessage(
+				EVENT_EF_PBR_SNE_LINEAR_RECORD_SIZE_DONE, adn));
 
-                    if (false) {
-                        Log.d(LOG_TAG,"ADN EF: 0x"
-                            + Integer.toHexString(ef)
-                            + ":" + recordNumber
-                            + "\n" + IccUtils.bytesToHexString(data));
-                    }
+	}
 
-                    adn = new AdnRecord(ef, recordNumber, data);
-                    result = adn;
+	public void updateEFAasToUsim(AdnRecord adn, int aasEF, int efid,
+			int aasNum, String pin2, Message response) {
+		this.aasEF = aasEF;
+		this.ef = efid;
+		this.aasNum = aasNum;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(aasEF, obtainMessage(
+				EVENT_EF_PBR_AAS_LINEAR_RECORD_SIZE_DONE, adn));
 
-                    if (adn.hasExtendedRecord()) {
-                        // If we have a valid value in the ext record field,
-                        // we're not done yet: we need to read the corresponding
-                        // ext record and append it
+	}
 
-                        pendingExtLoads = 1;
+	public void updateEFGrpToUsim(AdnRecord adn, int grpEF, int efid,
+			int adnNum, String pin2, Message response) {
+		this.grpEF = grpEF;
+		this.ef = efid;
+		this.adnNum = adnNum;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(grpEF, obtainMessage(
+				EVENT_EF_PBR_GRP_LINEAR_RECORD_SIZE_DONE, adn));
 
-                        phone.mIccFileHandler.loadEFLinearFixed(
+	}
+
+	public void updateEFGasToUsim(AdnRecord adn, int gasEF, int efid,
+			int adnNum, String pin2, Message response) {
+		this.gasEF = gasEF;
+		this.ef = efid;
+		this.adnNum = adnNum;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(gasEF, obtainMessage(
+				EVENT_EF_PBR_GAS_LINEAR_RECORD_SIZE_DONE, adn));
+
+	}
+
+	public void updateEFIapToUsim(AdnRecord adn, int iapEF, int adnNum,
+			int emailNumInIap, String pin2, Message response) {
+		this.iapEF = iapEF;
+		this.adnNum = adnNum;
+		this.emailNumInIap = emailNumInIap;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(iapEF, obtainMessage(
+				EVENT_EF_PBR_IAP_LINEAR_RECORD_SIZE_DONE, adn));
+
+	}
+
+	// add multi record and email in usim end
+	public void handleMessage(Message msg) {
+		AsyncResult ar;
+		byte data[];
+		AdnRecord adn;
+
+		try {
+			switch (msg.what) {
+			case EVENT_EF_LINEAR_RECORD_SIZE_DONE:
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
+
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
+
+				int[] recordSize = (int[]) ar.result;
+				// recordSize is int[3] array
+				// int[0] is the record length
+				// int[1] is the total length of the EF file
+				// int[2] is the number of records in the EF file
+				// So int[0] * int[2] = int[1]
+				if (recordSize.length != 3 || recordNumber > recordSize[2]) {
+					throw new RuntimeException(
+							"get wrong EF record size format", ar.exception);
+				}
+
+				data = adn.buildAdnString(recordSize[0]);
+
+				if (data == null) {
+					throw new RuntimeException("worong ADN format",
+							ar.exception);
+				}
+				Log.i("AdnRecordLoader", "recordNumber " + recordNumber);
+				/*
+				 * phone.mIccFileHandler.updateEFLinearFixed(ef, recordNumber,
+				 * data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
+				 */
+				mFh.updateEFLinearFixed(ef, recordNumber, data, pin2,
+						obtainMessage(EVENT_UPDATE_RECORD_DONE));
+				pendingExtLoads = 1;
+
+				break;
+
+			case EVENT_ADN_LOAD_DONE:
+				ar = (AsyncResult) (msg.obj);
+				data = (byte[]) (ar.result);
+
+				if (ar.exception != null) {
+					throw new RuntimeException("load failed", ar.exception);
+				}
+
+				if (false) {
+					Log.d(LOG_TAG, "ADN EF: 0x" + Integer.toHexString(ef) + ":"
+							+ recordNumber + "\n"
+							+ IccUtils.bytesToHexString(data));
+				}
+
+				adn = new AdnRecord(ef, recordNumber, data);
+				result = adn;
+
+				if (adn.hasExtendedRecord()) {
+					// If we have a valid value in the ext record field,
+					// we're not done yet: we need to read the corresponding
+					// ext record and append it
+
+					pendingExtLoads = 1;
+
+					/*phone.mIccFileHandler.loadEFLinearFixed(extensionEF,
+							adn.extRecord, obtainMessage(
+									EVENT_EXT_RECORD_LOAD_DONE, adn));*/
+					mFh.loadEFLinearFixed(
                             extensionEF, adn.extRecord,
                             obtainMessage(EVENT_EXT_RECORD_LOAD_DONE, adn));
-                    }
-                break;
+				}
+				break;
 
-                case EVENT_EXT_RECORD_LOAD_DONE:
-                    ar = (AsyncResult)(msg.obj);
-                    data = (byte[])(ar.result);
-                    adn = (AdnRecord)(ar.userObj);
+			case EVENT_EXT_RECORD_LOAD_DONE:
+				ar = (AsyncResult) (msg.obj);
+				data = (byte[]) (ar.result);
+				adn = (AdnRecord) (ar.userObj);
 
-                    if (ar.exception != null) {
-                        throw new RuntimeException("load failed", ar.exception);
-                    }
+				if (ar.exception != null) {
+					throw new RuntimeException("load failed", ar.exception);
+				}
 
-                    Log.d(LOG_TAG,"ADN extention EF: 0x"
-                        + Integer.toHexString(extensionEF)
-                        + ":" + adn.extRecord
-                        + "\n" + IccUtils.bytesToHexString(data));
+				Log.d(LOG_TAG, "ADN extention EF: 0x"
+						+ Integer.toHexString(extensionEF) + ":"
+						+ adn.extRecord + "\n"
+						+ IccUtils.bytesToHexString(data));
 
-                    adn.appendExtRecord(data);
+				adn.appendExtRecord(data);
 
-                    pendingExtLoads--;
-                    // result should have been set in
-                    // EVENT_ADN_LOAD_DONE or EVENT_ADN_LOAD_ALL_DONE
-                break;
+				pendingExtLoads--;
+				// result should have been set in
+				// EVENT_ADN_LOAD_DONE or EVENT_ADN_LOAD_ALL_DONE
+				break;
 
-                case EVENT_ADN_LOAD_ALL_DONE:
-                    ar = (AsyncResult)(msg.obj);
-                    ArrayList<byte[]> datas = (ArrayList<byte[]>)(ar.result);
+			case EVENT_ADN_LOAD_ALL_DONE:
+				ar = (AsyncResult) (msg.obj);
+				ArrayList<byte[]> datas = (ArrayList<byte[]>) (ar.result);
 
-                    if (ar.exception != null) {
-                        throw new RuntimeException("load failed", ar.exception);
-                    }
+				if (ar.exception != null) {
+					throw new RuntimeException("load failed", ar.exception);
+				}
 
-                    adns = new ArrayList<AdnRecord>(datas.size());
-                    result = adns;
-                    pendingExtLoads = 0;
+				adns = new ArrayList<AdnRecord>(datas.size());
+				result = adns;
+				pendingExtLoads = 0;
 
-                    for(int i = 0, s = datas.size() ; i < s ; i++) {
-                        adn = new AdnRecord(ef, 1 + i, datas.get(i));
-                        adns.add(adn);
+				for (int i = 0, s = datas.size(); i < s; i++) {
+					adn = new AdnRecord(ef, 1 + i, datas.get(i));
+					adns.add(adn);
 
-                        if (adn.hasExtendedRecord()) {
-                            // If we have a valid value in the ext record field,
-                            // we're not done yet: we need to read the corresponding
-                            // ext record and append it
+					if (adn.hasExtendedRecord()) {
+						// If we have a valid value in the ext record field,
+						// we're not done yet: we need to read the corresponding
+						// ext record and append it
 
-                            pendingExtLoads++;
+						pendingExtLoads++;
 
-                            phone.mIccFileHandler.loadEFLinearFixed(
-                                extensionEF, adn.extRecord,
-                                obtainMessage(EVENT_EXT_RECORD_LOAD_DONE, adn));
-                        }
-                    }
-                break;
-            }
-        } catch (RuntimeException exc) {
-            if (userResponse != null) {
-                AsyncResult.forMessage(userResponse)
-                                .exception = exc;
-                userResponse.sendToTarget();
-                // Loading is all or nothing--either every load succeeds
-                // or we fail the whole thing.
-                userResponse = null;
-            }
-            return;
-        }
+						/*phone.mIccFileHandler.loadEFLinearFixed(extensionEF,
+								adn.extRecord, obtainMessage(
+										EVENT_EXT_RECORD_LOAD_DONE, adn));*/
+						mFh.loadEFLinearFixed(extensionEF,
+								adn.extRecord, obtainMessage(
+										EVENT_EXT_RECORD_LOAD_DONE, adn));
+					}
+				}
+				break;
+			// add multi record and email in usim begin
+			case EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE:
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
 
-        if (userResponse != null && pendingExtLoads == 0) {
-            AsyncResult.forMessage(userResponse).result
-                = result;
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
 
-            userResponse.sendToTarget();
-            userResponse = null;
-        }
-    }
+				recordSize = (int[]) ar.result;
+				// recordSize is int[3] array
+				// int[0] is the record length
+				// int[1] is the total length of the EF file
+				// int[2] is the number of records in the EF file
+				// So int[0] * int[2] = int[1]
+				if (recordSize.length != 3 || emailNum > recordSize[2]) {
+					throw new RuntimeException(
+							"get wrong EF record size format", ar.exception);
+				}
 
+				data = adn.buildEmailString(recordSize[0], emailTagInIap, ef,
+						adnNum);
+
+				if (data == null) {
+					throw new RuntimeException("wrong ADN format", ar.exception);
+				}
+
+				mFh.updateEFLinearFixed(emailEF, emailNum, data, pin2,
+						obtainMessage(EVENT_UPDATE_RECORD_DONE));
+
+				pendingExtLoads = 1;
+
+				break;
+	
+			case EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE:
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
+				Log.e("GSM", "EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE");
+
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
+				recordSize = (int[]) ar.result;
+				if (recordSize.length != 3 || adnNum > recordSize[2]) {
+					throw new RuntimeException(
+							"get wrong EF record size format", ar.exception);
+				}
+				Log.e("GSM", "anrefids = " + anrefids);
+				Log.e("GSM", "anrefids.size is " + anrefids.size()
+						+ "   ADNefid == ef:" + ef);
+
+				fileCount = 0;
+				for (int i = 0, size = anrefids.size(); i < size; i++) {
+					Log.e("GSM", "efids.get(" + i + ") is " + anrefids.get(i));
+
+					data = adn.buildAnrString(recordSize[0], i, ef, adnNum);
+
+					if (i < anrefids.size()) {
+						fileCount++;
+						mFh.updateEFLinearFixed(anrefids.get(i), adnNum, data,
+								pin2,
+								obtainMessage(EVENT_UPDATE_ANR_RECORD_DONE));
+					}
+				}
+				pendingExtLoads = 1;
+				break;
+
+			case EVENT_EF_PBR_SNE_LINEAR_RECORD_SIZE_DONE:
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
+				Log.e("GSM", "EVENT_EF_PBR_SNE_LINEAR_RECORD_SIZE_DONE");
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
+
+				recordSize = (int[]) ar.result;
+				// if (recordSize.length != 3 || adnNum > recordSize[2]) {
+				// throw new RuntimeException("get wrong EF record size format",
+				// ar.exception);
+				// }
+
+				data = adn.buildSneString(recordSize[0], ef, adnNum);
+				if (data == null) {
+					throw new RuntimeException("wrong ADN format", ar.exception);
+				}
+
+				mFh.updateEFLinearFixed(sneEF, adnNum, data, pin2,
+						obtainMessage(EVENT_UPDATE_AAS_RECORD_DONE));
+
+				pendingExtLoads = 1;
+
+				break;
+			case EVENT_EF_PBR_AAS_LINEAR_RECORD_SIZE_DONE:
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
+				Log.e("GSM", "EVENT_EF_PBR_SNE_LINEAR_RECORD_SIZE_DONE");
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
+
+				recordSize = (int[]) ar.result;
+				
+				data = adn.buildAasString(recordSize[0], ef, adnNum);
+				if (data == null) {
+					throw new RuntimeException("wrong ADN format", ar.exception);
+				}
+				mFh.updateEFLinearFixed(aasEF, adnNum, data, pin2,
+						obtainMessage(EVENT_UPDATE_AAS_RECORD_DONE));
+
+				pendingExtLoads = 1;
+
+				break;
+			case EVENT_EF_PBR_GRP_LINEAR_RECORD_SIZE_DONE:
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
+
+				recordSize = (int[]) ar.result;
+
+				// adnNum = 20;
+				// if (recordSize.length != 3 || adnNum > recordSize[2]) {
+				// throw new RuntimeException("get wrong EF record size format",
+				// ar.exception);
+				// }
+				// data = adn.buildGasString(recordSize[0], ef, adnNum);
+				data = null;
+				if (data == null) {
+					throw new RuntimeException("wrong ADN format", ar.exception);
+				}
+				mFh.updateEFLinearFixed(grpEF, adnNum, data, pin2,
+						obtainMessage(EVENT_UPDATE_GRP_RECORD_DONE));
+
+				pendingExtLoads = 1;
+
+				break;
+			case EVENT_EF_PBR_GAS_LINEAR_RECORD_SIZE_DONE:
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
+
+				recordSize = (int[]) ar.result;
+				// if (recordSize.length != 3 || adnNum > recordSize[2]) {
+				// throw new RuntimeException("get wrong EF record size format",
+				// ar.exception);
+				// }
+				data = adn.buildGasString(recordSize[0], ef, adnNum);
+				if (data == null) {
+					throw new RuntimeException("worong ADN format",
+							ar.exception);
+				}
+				mFh.updateEFLinearFixed(gasEF, adnNum, data, pin2,
+						obtainMessage(EVENT_UPDATE_GAS_RECORD_DONE));
+
+				pendingExtLoads = 1;
+
+				break;
+
+			case EVENT_UPDATE_AAS_RECORD_DONE:
+				ar = (AsyncResult) (msg.obj);
+				if (ar.exception != null) {
+					throw new RuntimeException("update EF adn record failed",
+							ar.exception);
+				}
+				pendingExtLoads = 0;
+				result = null;
+				break;
+
+			case EVENT_UPDATE_GRP_RECORD_DONE:
+				ar = (AsyncResult) (msg.obj);
+				Log.e("yuyong", "update Grp OK");
+				if (ar.exception != null) {
+					throw new RuntimeException("update EF adn record failed",
+							ar.exception);
+				}
+				pendingExtLoads = 0;
+				result = null;
+				break;
+			case EVENT_UPDATE_GAS_RECORD_DONE:
+				ar = (AsyncResult) (msg.obj);
+				Log.e("yuyong", "update Gas OK");
+				if (ar.exception != null) {
+					throw new RuntimeException("update EF adn record failed",
+							ar.exception);
+				}
+				pendingExtLoads = 0;
+				result = null;
+				break;
+
+			// add end
+			case EVENT_EF_PBR_IAP_LINEAR_RECORD_SIZE_DONE:
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
+
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
+
+				recordSize = (int[]) ar.result;
+				// recordSize is int[3] array
+				// int[0] is the record length
+				// int[1] is the total length of the EF file
+				// int[2] is the number of records in the EF file
+				// So int[0] * int[2] = int[1]
+				if (recordSize.length != 3 || adnNum > recordSize[2]) {
+					throw new RuntimeException(
+							"get wrong EF record size format", ar.exception);
+				}
+				if (adn.emails == null) {
+					emailNumInIap = -1;
+				}
+				data = adn.buildIapString(recordSize[0], emailNumInIap);
+
+				if (data == null) {
+					throw new RuntimeException("worong ADN format",
+							ar.exception);
+				}
+
+				mFh.updateEFLinearFixed(iapEF, adnNum, data, pin2,
+						obtainMessage(EVENT_UPDATE_RECORD_DONE));
+
+				pendingExtLoads = 1;
+
+				break;
+			
+			case EVENT_UPDATE_RECORD_DONE:
+				ar = (AsyncResult) (msg.obj);
+				if (ar.exception != null) {
+					throw new RuntimeException("update EF adn record failed",
+							ar.exception);
+				}
+				pendingExtLoads = 0;
+				result = null;
+				break;
+			
+			case EVENT_UPDATE_ANR_RECORD_DONE:
+				ar = (AsyncResult) (msg.obj);
+				if (ar.exception != null) {
+					throw new RuntimeException("update EF adn record failed",
+							ar.exception);
+				}
+				Log.e(LOG_TAG, "EVENT_UPDATE_ANR_RECORD_DONE, message is "
+						+ msg.toString());
+				pendingExtLoads = 0;
+				result = null;
+				fileCount--;
+				if (fileCount == 0)
+					break;
+				else
+					return;
+				// add multi record and email in usim end
+
+			}
+		} catch (RuntimeException exc) {
+			if (userResponse != null) {
+				AsyncResult.forMessage(userResponse).exception = exc;
+				userResponse.sendToTarget();
+				// Loading is all or nothing--either every load succeeds
+				// or we fail the whole thing.
+				userResponse = null;
+			}
+			return;
+		}
+
+		if (userResponse != null && pendingExtLoads == 0) {
+			AsyncResult.forMessage(userResponse).result = result;
+
+			userResponse.sendToTarget();
+			userResponse = null;
+		}
+	}
 
 }

@@ -30,7 +30,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.HashMap;
 
 import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.AdnRecord;
@@ -43,6 +46,9 @@ import com.android.internal.telephony.IIccPhoneBook;
 class ArrayListCursor extends AbstractCursor {
     private String[] mColumnNames;
     private ArrayList<Object>[] mRows;
+
+    public static final HashMap<Long, Integer> mIdIndexMap = new HashMap<Long, Integer>();
+    public static long mMaxId = -1;
 
     @SuppressWarnings({"unchecked"})
     public ArrayListCursor(String[] columnNames, ArrayList<ArrayList> rows) {
@@ -191,7 +197,12 @@ public class IccProvider extends ContentProvider {
     private static final String[] ADDRESS_BOOK_COLUMN_NAMES = new String[] {
         "name",
         "number",
-        "emails",
+        "email",	
+        "anr",
+        "aas",
+        "sne",
+        "grp",
+        "gas",
         "sim_index"	//add sim index column
     };
 
@@ -201,8 +212,13 @@ public class IccProvider extends ContentProvider {
 
     private static final String STR_TAG = "tag";
     private static final String STR_NUMBER = "number";
-    private static final String STR_EMAILS = "emails";
+    private static final String STR_EMAILS = "email";
     private static final String STR_PIN2 = "pin2";
+    private static final String STR_ANR = "anr";
+    private static final String STR_AAS = "aas";
+    private static final String STR_SNE = "sne";
+    private static final String STR_GRP = "grp";
+    private static final String STR_GAS = "gas";
 
     private static final UriMatcher URL_MATCHER =
                             new UriMatcher(UriMatcher.NO_MATCH);
@@ -216,6 +232,25 @@ public class IccProvider extends ContentProvider {
 
     private boolean mSimulator;
 
+    public static class AdnComparator implements Comparator<AdnRecord> {
+        public final int compare(AdnRecord a, AdnRecord b) {
+            String alabel = a.getAlphaTag();
+            String blabel = b.getAlphaTag();
+			//modified by XJF 2011-5-23 for the bug: can't compare records when some label is null 
+			if (alabel != null && blabel != null){
+            //return alabel.compareToIgnoreCase(blabel);
+			}else if (alabel == null){
+				Log.e(TAG,"alabel == null");
+				alabel = "";
+			}else if (blabel == null){
+				Log.e(TAG,"blabel == null");
+				blabel = "";
+			}
+            return alabel.compareToIgnoreCase(blabel);
+			//modified end.
+        }
+    }
+    private AdnComparator mAdnComparator = new AdnComparator();
     @Override
     public boolean onCreate() {
         String device = SystemProperties.get("ro.product.device");
@@ -317,13 +352,31 @@ public class IccProvider extends ContentProvider {
                         "Cannot insert into URL: " + url);
         }
 
+
         String tag = initialValues.getAsString("newTag");		//yeezone:jinwei tag->newTag
-        String number = initialValues.getAsString("newNumber");	//yeezone:jinwei number->newNumber
+		if(tag==null){
+			Log.e(TAG,"error, no name input");
+			return null;
+		}      
+		String number = initialValues.getAsString("newNumber");	//yeezone:jinwei number->newNumber
         // TODO(): Read email instead of sending null.
+
+String mEmail = initialValues.getAsString("email");
+		String [] emails = null;
+		if (mEmail != null){
+			emails = new String[1];
+			emails[0] = mEmail;
+		}
+
+	String anr = initialValues.getAsString("anr");
+	String aas = initialValues.getAsString("aas");
+	String sne = initialValues.getAsString("sne");
+	String grp = initialValues.getAsString("grp");
+	String gas = initialValues.getAsString("gas");
 
 		//yeezone:jinwei return sim index after add a new contact in SimCard.
         //boolean success = addIccRecordToEf(efType, tag, number, null, pin2);
-        int simIndex = addIccRecordToEf(efType, tag, number, null, pin2);
+        int simIndex = addIccRecordToEf(efType, tag, number, emails, anr, aas,sne,grp,gas, pin2);
         if (simIndex == 0) {
             return null;
         }
@@ -351,6 +404,13 @@ public class IccProvider extends ContentProvider {
         buf.append(simIndex);
         //end
 
+	synchronized (ArrayListCursor.mIdIndexMap) {
+	    ArrayListCursor.mMaxId++;
+	    ArrayListCursor.mIdIndexMap.put(ArrayListCursor.mMaxId, simIndex);
+	}
+	buf.append(ArrayListCursor.mMaxId);
+	if (DBG) log("yuyong insert: ID: " + ArrayListCursor.mMaxId + ",index: " + simIndex + ",Map size: " + ArrayListCursor.mIdIndexMap.size());
+
         resultUri = Uri.parse(buf.toString());
 
         /*
@@ -358,6 +418,10 @@ public class IccProvider extends ContentProvider {
         getContext().getContentResolver().notifyInsert(
                 resultUri, rowID, null);
         */
+
+        if(resultUri!=null)
+        getContext().getContentResolver().notifyChange(Uri.parse("content://icc/adn"), null);
+
 
         return resultUri;
     }
@@ -396,15 +460,17 @@ public class IccProvider extends ContentProvider {
 
 		//yeezone:jinwei add function that delete IccRecord by sim indext
         boolean success = false;
-        if(where.equals("sim_index=?")){
+/*        if(where.equals("sim_index=?")){
             int sim_index = Integer.valueOf(whereArgs[0]);
-            success = deleteIccRecordFromEfByIndex(efType, sim_index); //end
+            success = deleteIccRecordFromEfByIndex(efType, sim_index,null); //end
         }else{
+        	
+        }*/
 
         // parse where clause
         String tag = null;
         String number = null;
-        String[] emails = null;
+        String[] emails = whereArgs;
         String pin2 = null;
 
         String[] tokens = where.split("AND");
@@ -430,7 +496,7 @@ public class IccProvider extends ContentProvider {
                 number = normalizeValue(val);
             } else if (STR_EMAILS.equals(key)) {
                 //TODO(): Email is null.
-                emails = null;
+                // emails = null;
             } else if (STR_PIN2.equals(key)) {
                 pin2 = normalizeValue(val);
             }
@@ -440,16 +506,40 @@ public class IccProvider extends ContentProvider {
             return 0;
         }*/
 
+	int delIndex = -1;
+	long delId = -1;
+	String[] pair = where.split("=");
+	if (pair.length != 2) {
+		Log.e(TAG, "resolve: bad whereClause: " + where);
+		return 0;
+	}	
+	String key = pair[0].trim();
+	String val = pair[1].trim();	
+	if ("_id".equals(key)) {
+		delId = Long.parseLong(normalizeValue(val));
+		if(ArrayListCursor.mIdIndexMap.containsKey(delId)) {
+			delIndex = (int) (ArrayListCursor.mIdIndexMap.get(delId));
+		}else {
+			return 0;
+		}
+
         if (efType == FDN && TextUtils.isEmpty(pin2)) {
             return 0;
         }
 
-        success = deleteIccRecordFromEf(efType, tag, number, emails, pin2);	//yeezone:jinwei remove boolean because of define above
+       success = deleteIccRecordFromEf(efType, tag, number, emails, pin2);	//yeezone:jinwei remove boolean because of define above
+      	 //success = deleteIccRecordFromEfByIndex(efType, delIndex, pin2);
         } //yeezone:jinwei else {}
 		
         if (!success) {
             return 0;
-        }
+        }else{
+		synchronized (ArrayListCursor.mIdIndexMap) {
+		ArrayListCursor.mIdIndexMap.remove(delId);
+		if (DBG)log("after delete Map size:" + ArrayListCursor.mIdIndexMap.size());
+		}
+            getContext().getContentResolver().notifyChange(Uri.parse("content://icc/adn"), null);
+}
 
         return 1;
     }
@@ -479,12 +569,64 @@ public class IccProvider extends ContentProvider {
 
         String tag = values.getAsString("tag");
         String number = values.getAsString("number");
-        String[] emails = null;
+
+	String anr = values.getAsString("anr");
+	String aas = values.getAsString("aas");
+	String sne = values.getAsString("sne");
+	String grp = values.getAsString("grp");
+	String gas = values.getAsString("gas");
+
+        	String[] emails = new String[1];
+		String mEmail = values.getAsString("email");
+		
+		emails[0] = mEmail;
+	 
+        if (DBG) log("update tag: "+tag +"number : "+ number+"anr : "+ anr + "aas : "+ aas +"sne : "+ sne + "grp : "+ grp + "gas :"+gas + "mEmail  :" +mEmail );
         String newTag = values.getAsString("newTag");
         String newNumber = values.getAsString("newNumber");
         Integer sim_index = values.getAsInteger("sim_index");	//yeezone:jinwei
-        String[] newEmails = null;
-        // TODO(): Update for email.
+        String[]  newemails = new String[1];
+	  String nEmail = values.getAsString("newEmail");
+	
+       newemails[0] = nEmail;
+	if(TextUtils.isEmpty(newTag))
+	{
+		newTag = tag;
+	}
+	if(TextUtils.isEmpty(newNumber))
+	{
+		newNumber = number;
+	}
+
+String newanr = values.getAsString("newAnr");
+	String newaas = values.getAsString("newAas");
+	String newsne = values.getAsString("newAne");
+	String newgrp = values.getAsString("newGrp");
+	String newgas = values.getAsString("newGas");
+
+	int updateIndex = -1;
+	long updateId = -1;
+
+	 if (DBG) log("update  new >>> tag: "+newTag +"number : "+ newNumber+"anr : "+ newanr + "aas : "+ newaas +"sne : "+ newsne + "grp : "+ newgrp + "gas :"+newgas + "mEmail  :" +nEmail );
+       /* 
+	String[] pair = where.split("=");
+	Log.e("TAG","wangtong0: pair_.length is   " + pair.length);
+    	if (pair.length != 2) {
+            Log.e(TAG, "resolve: bad whereClause: " + where);
+            return 0;
+        }	
+
+        		
+      String key = pair[0].trim();
+        String val = pair[1].trim();	
+        if ("_id".equals(key)) {
+            updateId = Long.parseLong(normalizeValue(val));
+	    if(ArrayListCursor.mIdIndexMap.containsKey(updateId)) {
+		updateIndex = (int) (ArrayListCursor.mIdIndexMap.get(updateId));
+	    }else {
+		return 0;
+	    }
+       }*/
 		
 		//yeezone:jinwei
 		boolean success = false;
@@ -495,17 +637,22 @@ public class IccProvider extends ContentProvider {
             success = updateIccRecordInEfByIndex(efType, tag, number,
                 newTag, newNumber, sim_index, pin2);
         }*/
-		
-         success = updateIccRecordInEf(efType, tag, number,
-                newTag, newNumber, pin2);
+
+      
+       success = updateIccRecordInEf(efType,tag,number, emails,newTag,newNumber,
+                          newemails,newanr,newaas,newsne,newgrp,newgas,pin2);
+
+       /*	success = updateIccRecordInEfByIndex(efType, tag, number, emails, anr, aas,sne,grp,gas, updateIndex, pin2);*/
 
         if (!success) {
             return 0;
+        }else{
+            getContext().getContentResolver().notifyChange(Uri.parse("content://icc/adn"), null);
         }
 
         return 1;
     }
-
+ 
     private ArrayList<ArrayList> loadFromEf(int efType) {
         ArrayList<ArrayList> results = new ArrayList<ArrayList>();
         List<AdnRecord> adnRecords = null;
@@ -573,9 +720,37 @@ public class IccProvider extends ContentProvider {
         return success;*/
     }
 
-    private boolean
-    updateIccRecordInEf(int efType, String oldName, String oldNumber,
-            String newName, String newNumber, String pin2) {
+    private int
+    addIccRecordToEf(int efType, String name, String number, String[] emails, String anr,String aas, String sne,String grp, String gas, String pin2) {
+        if (DBG) log("addIccRecordToEf: efType=" + efType + ", name=" + name +
+                ", number=" + number + ", emails=" + emails);
+        boolean success = false;
+        int index = -1;
+        try {
+            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+                    ServiceManager.getService("simphonebook"));
+            if (iccIpb != null) {
+                success = iccIpb.updateAdnRecordsInEfBySearch(efType, "", "", null,
+                        name, number, emails, anr, aas, sne, grp, gas,pin2);
+            }
+		if(success) {
+		    index= iccIpb.getInsertIndex();
+		}
+        } catch (RemoteException ex) {
+            // ignore it
+        } catch (SecurityException ex) {
+            if (DBG) log(ex.toString());
+        }
+        if (DBG) log("updateIccRecordInEf: " + success);
+        return index;
+    }
+
+    private boolean   updateIccRecordInEf(int efType,
+            String oldName, String oldNumber,String[] oldEmailList,
+            String newName, String newNumber,String[] newEmailList,
+            String newAnr,String newAas, String newSne, String newGrp, 
+            String newGas,  String pin2) 
+	{
         if (DBG) log("updateIccRecordInEf: efType=" + efType +
                 ", oldname=" + oldName + ", oldnumber=" + oldNumber +
                 ", newname=" + newName + ", newnumber=" + newNumber);
@@ -586,7 +761,10 @@ public class IccProvider extends ContentProvider {
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
                 success = iccIpb.updateAdnRecordsInEfBySearch(efType,
-                        oldName, oldNumber, newName, newNumber, pin2);
+               oldName,oldNumber,oldEmailList,
+               newName, newNumber,newEmailList,
+               newAnr, newAas,  newSne,  newGrp, 
+               newGas,   pin2) ;
             }
         } catch (RemoteException ex) {
             // ignore it
@@ -596,22 +774,20 @@ public class IccProvider extends ContentProvider {
         if (DBG) log("updateIccRecordInEf: " + success);
         return success;
     }
-
 	//yeezone:jinwei update icc record from sim
-    private boolean
-    updateIccRecordInEfByIndex(int efType, String oldName, String oldNumber,
-            String newName, String newNumber, int sim_index, String pin2) {
-        if (DBG) log("updateIccRecordInEf: efType=" + efType +
-                ", oldname=" + oldName + ", oldnumber=" + oldNumber +
-                ", newname=" + newName + ", newnumber=" + newNumber);
+   private boolean
+updateIccRecordInEfByIndex(int efType, String newName, String newNumber, List<String> newEmailList,
+		   String newAnr,String newAas, String newSne,String newGrp,String newGas, int sim_index, String pin2) {
+		   if (DBG) log("updateIccRecordInEfByIndex: efType=" + efType	+ ", newname=" + newName + ", newnumber=" + newNumber
+			   +", newEmailList=" + newEmailList +", newAnr=" + newAnr +", newSne=" + newSne+", index=" + sim_index);
         boolean success = false;
 
         try {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfByIndex(efType,
-                        newName, newNumber, sim_index, pin2);
+ success = iccIpb.updateAdnRecordsInEfByIndex(efType,
+						   newName, newNumber, newEmailList, newAnr, newAas,newSne,newGrp,newGas,sim_index, pin2);
             }
         } catch (RemoteException ex) {
             // ignore it
@@ -635,7 +811,13 @@ public class IccProvider extends ContentProvider {
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
                 success = iccIpb.updateAdnRecordsInEfBySearch(efType,
-                        name, number, "", "", pin2);
+            name, number,emails,
+            "","",null,
+            "","", "", "", 
+            "",   pin2);
+
+		
+				
             }
         } catch (RemoteException ex) {
             // ignore it
@@ -646,9 +828,8 @@ public class IccProvider extends ContentProvider {
         return success;
     }
 
-	//yeezone:jinwei delete icc record from sim
-    private boolean deleteIccRecordFromEfByIndex(int efType, int sim_index) {
-        if (DBG) log("deleteIccRecordFromEfByIndex: efType = " + efType + ", sim_index = " + sim_index);
+    private boolean deleteIccRecordFromEfByIndex(int efType,int index, String pin2) {
+        if (DBG) log("deleteIccRecordFromEfByIndex: efType=" + efType + ", index=" + index + ", pin2=" + pin2);
 
         boolean success = false;
 
@@ -656,8 +837,8 @@ public class IccProvider extends ContentProvider {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfByIndex(efType,
-                        "", "", sim_index, "");
+                success = iccIpb.updateAdnRecordsInEfByIndex(efType, "", "", null, "", "", "","","",index, pin2);
+				
             }
         } catch (RemoteException ex) {
             // ignore it
@@ -682,6 +863,13 @@ public class IccProvider extends ContentProvider {
             String alphaTag = record.getAlphaTag();
             String number = record.getNumber();
             String[] emails = record.getEmails();
+	    String anr = record.getAnr();
+	    String aas = record.getAas();
+	    String sne = record.getSne();
+	    String grp = record.getGrp();
+	    String gas = record.getGas();
+	    int index = record.getIndex();
+
 			//yeezone:jinwei get sim index from adn record
             String sim_index = String.valueOf(record.getRecordNumber());
             Log.d("IccProvider", "**loadRecord::sim_index = " + sim_index);
@@ -697,10 +885,17 @@ public class IccProvider extends ContentProvider {
                     emailString.append(email);
                     emailString.append(",");
                 }
-                contact.add(emailString.toString());
+				String mEmail = emails[0];
+                contact.add(mEmail);
+                //contact.add(emailString.toString());
             } else {
                 contact.add(null);
             }
+	    contact.add(anr);
+            contact.add(aas);
+	    contact.add(sne);
+            contact.add(grp);
+            contact.add(gas);
             contact.add(sim_index);	//yeezone:jinwei
             results.add(contact);
         }

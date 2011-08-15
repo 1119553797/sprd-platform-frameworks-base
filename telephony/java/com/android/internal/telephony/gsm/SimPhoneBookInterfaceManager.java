@@ -69,6 +69,15 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
         return recordSize;
     }
     */
+    public  int[] getEmailRecordsSize(){
+         
+          return null;
+    }
+
+    public  int getAnrCountsSize(){
+ 
+          return 0;
+   }
     protected void logd(String msg) {
         Log.d(LOG_TAG, "[SimPbInterfaceManager] " + msg);
     }

@@ -69,6 +69,15 @@ public class RuimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager 
         return recordSize;
     }
 
+    protected  int[] getEmailRecordsSize(){
+           int[] temp = new int [4];
+          return temp;
+    }
+
+    protected  int getAnrCountsSize(){
+         
+          return 0;
+   }
     protected void logd(String msg) {
         Log.d(LOG_TAG, "[RuimPbInterfaceManager] " + msg);
     }

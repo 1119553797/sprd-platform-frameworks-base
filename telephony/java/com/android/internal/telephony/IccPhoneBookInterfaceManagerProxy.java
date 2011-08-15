@@ -49,7 +49,10 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
         this.mIccPhoneBookInterfaceManager = iccPhoneBookInterfaceManager;
     }
 
-    public boolean
+     public int  getInsertIndex(){
+		return mIccPhoneBookInterfaceManager.getInsertIndex();
+	}
+  /*  public boolean
     updateAdnRecordsInEfBySearch (int efid,
             String oldTag, String oldPhoneNumber,
             String newTag, String newPhoneNumber,
@@ -57,20 +60,20 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
         return mIccPhoneBookInterfaceManager.updateAdnRecordsInEfBySearch(
                 efid, oldTag, oldPhoneNumber, newTag, newPhoneNumber, pin2);
     }
-
+*/
     //yeezone:jinwei Add a new contact in SimCard.
     public 	int addAdnRecordsInEf(int efid, String newTag, String newPhoneNumber, String pin2){
         return mIccPhoneBookInterfaceManager.addAdnRecordsInEf(efid, newTag, newPhoneNumber, pin2);
     }
 	//end Add a new contact in SimCard.
 	
-    public boolean
+  /*  public boolean
     updateAdnRecordsInEfByIndex(int efid, String newTag,
             String newPhoneNumber, int index, String pin2) throws android.os.RemoteException {
         return mIccPhoneBookInterfaceManager.updateAdnRecordsInEfByIndex(efid,
                 newTag, newPhoneNumber, index, pin2);
     }
-
+*/
     public int[] getAdnRecordsSize(int efid) throws android.os.RemoteException {
         return mIccPhoneBookInterfaceManager.getAdnRecordsSize(efid);
     }
@@ -78,4 +81,28 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
     public List<AdnRecord> getAdnRecordsInEf(int efid) throws android.os.RemoteException {
         return mIccPhoneBookInterfaceManager.getAdnRecordsInEf(efid);
     }
+
+    public boolean
+    updateAdnRecordsInEfBySearch (int efid,
+            String oldTag, String oldPhoneNumber,String[] oldEmailList,
+            String newTag, String newPhoneNumber,String[] newEmailList,
+            String newAnr,String newAas, String newSne, String newGrp, 
+            String newGas,  String pin2){
+
+
+            return mIccPhoneBookInterfaceManager.updateAdnRecordsInEfBySearch(efid,oldTag, oldPhoneNumber, oldEmailList,
+             newTag,  newPhoneNumber, newEmailList,
+             newAnr, newAas,  newSne,  newGrp, 
+             newGas,   pin2);
+	}
+
+     public boolean updateAdnRecordsInEfByIndex(int efid, String newTag, String newPhoneNumber,
+				List<String> newEmailList,String newAnr,String newAas, String newSne,String newGrp, String newGas,  int index, String pin2){
+
+             return mIccPhoneBookInterfaceManager.updateAdnRecordsInEfByIndex( efid,  newTag, newPhoneNumber,
+				 newEmailList, newAnr, newAas,  newSne, newGrp,  newGas,   index,  pin2);
+
+
+	 }
+	
 }

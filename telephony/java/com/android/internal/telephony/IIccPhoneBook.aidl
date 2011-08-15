@@ -63,10 +63,10 @@ interface IIccPhoneBook {
      * @param pin2 required to update EF_FDN, otherwise must be null
      * @return true for success
      */
-    boolean updateAdnRecordsInEfBySearch(int efid,
+    /*boolean updateAdnRecordsInEfBySearch(int efid,
             String oldTag, String oldPhoneNumber,
             String newTag, String newPhoneNumber,
-            String pin2);
+            String pin2);*/
 	//yeezone:jinwei
 	/**Add newAdn in ADN-like record in EF
 	 * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN
@@ -82,25 +82,7 @@ interface IIccPhoneBook {
             String newTag, String newPhoneNumber,
             String pin2);
 	//end
-    /**
-     * Update an ADN-like EF record by record index
-     *
-     * This is useful for iteration the whole ADN file, such as write the whole
-     * phone book or erase/format the whole phonebook
-     *
-     * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN
-     * @param newTag adn tag to be stored
-     * @param newPhoneNumber adn number to be stored
-     *        Set both newTag and newPhoneNubmer to "" means to replace the old
-     *        record with empty one, aka, delete old record
-     * @param index is 1-based adn record index to be updated
-     * @param pin2 required to update EF_FDN, otherwise must be null
-     * @return true for success
-     */
-    boolean updateAdnRecordsInEfByIndex(int efid, String newTag,
-            String newPhoneNumber, int index,
-            String pin2);
-
+  
     /**
      * Get the max munber of records in efid
      *
@@ -111,5 +93,45 @@ interface IIccPhoneBook {
      *            recordSizes[2]  is the number of records in the EF file
      */
     int[] getAdnRecordsSize(int efid);
+    
+    int getInsertIndex();
+    
+    //add multi record and email in usim
+    //yeezone:jinwei Add a new contact in SimCard.
+     /**Add newAdn in ADN-like record in EF	 
+      * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN	 
+      * @param newTag adn tag to be stored     
+      * @param newPhoneNumber adn number ot be stored     
+      *        Set both newTag and newPhoneNubmer to "" means to replace the old     
+      *        record with empty one, aka, delete old record     
+      * @param pin2 required to update EF_FDN, otherwise must be null     
+      * @return sim_index	
+     */
+    boolean
+    updateAdnRecordsInEfBySearch (int efid,
+            String oldTag, String oldPhoneNumber,in String[] oldEmailList,
+            String newTag, String newPhoneNumber,in String[] newEmailList,
+            String newAnr,String newAas, String newSne, String newGrp,
+            String newGas,  String pin2);
+       /**
+     * Update an ADN-like EF record by record index
+     *
+     * This is useful for iteration the whole ADN file, such as write the whole
+     * phone book or erase/format the whole phonebook. Currently the email field
+     * if set in the ADN record is ignored.
+     * throws SecurityException if no WRITE_CONTACTS permission
+     *
+     * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN
+     * @param newTag adn tag to be stored
+     * @param newPhoneNumber adn number to be stored
+     *        Set both newTag and newPhoneNubmer to "" means to replace the old
+     *        record with empty one, aka, delete old record
+     * @param index is 1-based adn record index to be updated
+     * @param pin2 required to update EF_FDN, otherwise must be null
+     * @return true for success
+     */
+    boolean updateAdnRecordsInEfByIndex(int efid, String newTag, String newPhoneNumber,
+				in List<String> newEmailList,String newAnr,String newAas, String newSne,String newGrp, String      newGas,  int index, String pin2);
 
+    
 }
