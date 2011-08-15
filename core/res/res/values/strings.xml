@@ -102,6 +102,16 @@
     <string name="CwMmi">Call waiting</string>
     <!-- Displayed as the title for a success/failure report enabling/disabling call barring. -->
     <string name="BaMmi">Call barring</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="ActiveUnconCf">Call forwarded unconditional</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="ActiveConCf">Call forwarded conditional</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="CallForwarded">Call forwarded</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="CallWaiting">Call waiting</string>
+    <!-- Displayed as the title for a MT call status in call forwarding. -->
+    <string name="ForwardedCall">Forwarded call</string>
     <!-- Displayed as the title for a success/failure report changing the SIM password. -->
     <string name="PwdMmi">Password change</string>
     <!-- Displayed as the title for a success/failure report changing the SIM PIN. -->

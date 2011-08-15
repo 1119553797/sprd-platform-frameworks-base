@@ -35,6 +35,7 @@ import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_DISABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_ENABLE;
@@ -70,6 +71,7 @@ import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.gsm.stk.StkService;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.IccVmNotSupportedException;
+import com.android.internal.telephony.gsm.SuppServiceNotification;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -124,6 +126,8 @@ public abstract class GSMPhone extends PhoneBase {
     private String mImeiSv;
     private String mVmNumber;
 
+    private static final int MO_CALL = 0;
+    private static final int MT_CALL = 1;
 
     // Constructors
 
@@ -1307,9 +1311,33 @@ public abstract class GSMPhone extends PhoneBase {
 
             case EVENT_SSN:
                 ar = (AsyncResult)msg.obj;
-                SuppServiceNotification not = (SuppServiceNotification) ar.result;
-                mSsnRegistrants.notifyRegistrants(ar);
-            break;
+		String str = null;
+                SuppServiceNotification ssn = (SuppServiceNotification) ar.result;
+		if (ssn.notificationType == MO_CALL) {
+		    switch(ssn.code) {
+	                case SuppServiceNotification.MO_CODE_UNCONDITIONAL_CF_ACTIVE:
+		            str = mContext.getText(com.android.internal.R.string.ActiveUnconCf).toString();
+		            break;
+	                case SuppServiceNotification.MO_CODE_SOME_CF_ACTIVE:
+		            str = mContext.getText(com.android.internal.R.string.ActiveConCf).toString();
+		            break;
+	                case SuppServiceNotification.MO_CODE_CALL_FORWARDED:
+		            str = mContext.getText(com.android.internal.R.string.CallForwarded).toString();
+		            break;
+	                case SuppServiceNotification.MO_CODE_CALL_IS_WAITING:
+		            str = mContext.getText(com.android.internal.R.string.CallWaiting).toString();
+		            break;
+		    }
+		} else if (ssn.notificationType == MT_CALL) {
+		    switch(ssn.code) {
+	                case SuppServiceNotification.MT_CODE_FORWARDED_CALL:
+		            str = mContext.getText(com.android.internal.R.string.ForwardedCall).toString();
+		            break;
+		    }
+		}
+		Toast.makeText(mContext, str, Toast.LENGTH_LONG).show();
+                //mSsnRegistrants.notifyRegistrants(ar);
+                break;
 
             case EVENT_SET_CALL_FORWARD_DONE:
                 ar = (AsyncResult)msg.obj;

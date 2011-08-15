@@ -54,6 +54,11 @@
     <string name="CfMmi" msgid="5123218989141573515">"来电转接"</string>
     <string name="CwMmi" msgid="9129678056795016867">"来电等待"</string>
     <string name="BaMmi" msgid="455193067926770581">"呼叫限制"</string>
+    <string name="ActiveUnconCf" msgid="">"无条件呼叫转移启动"</string>
+    <string name="ActiveConCf" msgid="">"有条件呼叫转移启动"</string>
+    <string name="CallForwarded" msgid="">"呼叫已转移"</string>
+    <string name="CallWaiting" msgid="">"呼叫等待"</string>
+    <string name="ForwardedCall" msgid="">"转移呼叫"</string>
     <string name="PwdMmi" msgid="7043715687905254199">"密码更改"</string>
     <string name="PinMmi" msgid="3113117780361190304">"PIN 码更改"</string>
     <string name="CnipMmi" msgid="3110534680557857162">"显示号码"</string>
