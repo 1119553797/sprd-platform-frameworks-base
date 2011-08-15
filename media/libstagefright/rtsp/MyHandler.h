@@ -41,7 +41,7 @@
 
 // If no access units are received within 3 secs, assume that the rtp
 // stream has ended and signal end of stream.
-static int64_t kAccessUnitTimeoutUs = 10000000ll;  //@hong change 3s to 5s 
+static int64_t kAccessUnitTimeoutUs = 3000000ll;  //@hong change 3s to 5s 
 
 // If no access units arrive for the first 10 secs after starting the
 // stream, assume none ever will and signal EOS or switch transports.
@@ -522,6 +522,9 @@ struct MyHandler : public AHandler {
                         parsePlayResponse(response);
 
                         sp<AMessage> timeout = new AMessage('tiou', id());
+			if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
+                        timeout->post(kStartupTimeoutUs/4);  //only use 2sec.
+			else			
                         timeout->post(kStartupTimeoutUs);
                     }
                 }

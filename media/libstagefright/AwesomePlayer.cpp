@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "AwesomePlayer"
 #include <utils/Log.h>
 
@@ -310,6 +310,7 @@ void AwesomePlayer::setListener(const wp<MediaPlayerBase> &listener) {
 
 status_t AwesomePlayer::setDataSource(
         const char *uri, const KeyedVector<String8, String8> *headers) {
+LOGV("setdatasource11 ");
     Mutex::Autolock autoLock(mLock);
     return setDataSource_l(uri, headers);
 }
@@ -333,6 +334,8 @@ status_t AwesomePlayer::setDataSource_l(
 
 status_t AwesomePlayer::setDataSource(
         int fd, int64_t offset, int64_t length) {
+	LOGV("setdatasource ");
+
     Mutex::Autolock autoLock(mLock);
 
     reset_l();
@@ -428,7 +431,10 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
 }
 
 void AwesomePlayer::reset() {
+    LOGV("reset");
+
     Mutex::Autolock autoLock(mLock);
+     LOGI("reset_l wait");
     reset_l();
 }
 
@@ -440,17 +446,19 @@ void AwesomePlayer::reset_l() {
             mConnectingDataSource->disconnect();
         }
     }
-
-    while (mFlags & PREPARING) {
+	LOGI("reset_l wait");
+    while (mFlags & PREPARING && mConnectingDataSource != NULL) { 
+//@hong check... && mConnectingDataSource != NULL
         mPreparedCondition.wait(mLock);
     }
 
+	LOGI("cancel event");
     cancelPlayerEvents();
 
     mCachedSource.clear();
     mAudioTrack.clear();
     mVideoTrack.clear();
-
+LOGI("cancel clear ok");
     // Shutdown audio first, so that the respone to the reset request
     // appears to happen instantaneously as far as the user is concerned
     // If we did this later, audio would continue playing while we
@@ -463,47 +471,54 @@ void AwesomePlayer::reset_l() {
         mAudioSource->stop();
     }
     mAudioSource.clear();
-
+LOGI("cancel source ok");
     mTimeSource = NULL;
 
     delete mAudioPlayer;
     mAudioPlayer = NULL;
 
     mVideoRenderer.clear();
-
+LOGI(" mVideoRenderer clear ok");
     if (mLastVideoBuffer) {
         mLastVideoBuffer->release();
         mLastVideoBuffer = NULL;
     }
-
+LOGI(" mLastVideoBuffer release ok");
     if (mVideoBuffer) {
         mVideoBuffer->release();
         mVideoBuffer = NULL;
     }
+LOGI(" mVideoBuffer->release release ok");
 
     if (mRTSPController != NULL) {
         mRTSPController->disconnect();
         mRTSPController.clear();
     }
+LOGI(" mRTSPController->disconnect ok");
 
     mRTPPusher.clear();
     mRTCPPusher.clear();
     mRTPSession.clear();
+LOGI(" mRTP clear ok");
 
     if (mVideoSource != NULL) {
         mVideoSource->stop();
+LOGI(" mVideoSource stop ok");
 
         // The following hack is necessary to ensure that the OMX
         // component is completely released by the time we may try
         // to instantiate it again.
         wp<MediaSource> tmp = mVideoSource;
         mVideoSource.clear();
+LOGI("mVideoSource.clear ok");
         while (tmp.promote() != NULL) {
             usleep(1000);
         }
+LOGI(" flushCommands");
+
         IPCThreadState::self()->flushCommands();
     }
-
+LOGI(" flushCommands ok");
     mDurationUs = -1;
     mFlags = 0;
     mExtractorFlags = 0;
@@ -513,6 +528,7 @@ void AwesomePlayer::reset_l() {
 #ifdef _SYNC_USE_SYSTEM_TIME_
     mSystemTimeSourceForSync.reset();//@jgdu
 #endif	
+LOGI(" mSystemTimeSourceForSync reset ok");
     mSeeking = false;
     mSeekNotificationSent = false;
     mSeekTimeUs = 0;
@@ -521,11 +537,14 @@ void AwesomePlayer::reset_l() {
     mUriHeaders.clear();
 
     mFileSource.clear();
+LOGI(" mFileSource clear ok");
 
     delete mSuspensionState;
     mSuspensionState = NULL;
 
     mBitrate = -1;
+LOGI(" ok..reset");
+
 }
 
 void AwesomePlayer::notifyListener_l(int msg, int ext1, int ext2) {
@@ -681,9 +700,12 @@ void AwesomePlayer::partial_reset_l() {
         // to instantiate it again.
         wp<MediaSource> tmp = mVideoSource;
         mVideoSource.clear();
+	LOGV("partial_reset_l waiting...");
         while (tmp.promote() != NULL) {
             usleep(1000);
         }
+	LOGV("partial_reset_l waiting..ok.");
+	
         IPCThreadState::self()->flushCommands();
     }
 
@@ -750,6 +772,7 @@ void AwesomePlayer::onStreamDone() {
 }
 
 status_t AwesomePlayer::play() {
+	LOGV("play");
     Mutex::Autolock autoLock(mLock);
 
     mFlags &= ~CACHE_UNDERRUN;
@@ -898,6 +921,13 @@ status_t AwesomePlayer::initRenderer_l() {
 
 status_t AwesomePlayer::forceStop(){
     LOGV("forceStop");
+	
+	 //@hong to handle stop failed. 2011-8-15
+       if (mFlags & PREPARING) {
+          abortPrepare(UNKNOWN_ERROR);
+	  // return OK;
+	  	}
+	   
 	VideoPhoneDataDevice::getInstance().stop();
 	return pause();
 }
@@ -1465,11 +1495,13 @@ void AwesomePlayer::onCheckAudioStatus() {
 }
 
 status_t AwesomePlayer::prepare() {
+   LOGV("prepare");
     Mutex::Autolock autoLock(mLock);
     return prepare_l();
 }
 
 status_t AwesomePlayer::prepare_l() {
+   LOGV("prepare_l");
     if (mFlags & PREPARED) {
         return OK;
     }
@@ -1484,15 +1516,17 @@ status_t AwesomePlayer::prepare_l() {
     if (err != OK) {
         return err;
     }
+LOGV("prepare_l waiting...");
 
     while (mFlags & PREPARING) {
         mPreparedCondition.wait(mLock);
     }
-
+LOGV("prepare_l waiting.ok..");
     return mPrepareResult;
 }
 
 status_t AwesomePlayer::prepareAsync() {
+   LOGV("prepareAsync");	
     Mutex::Autolock autoLock(mLock);
 
     if (mFlags & PREPARING) {
@@ -1920,10 +1954,11 @@ status_t AwesomePlayer::suspend() {
             mConnectingDataSource->disconnect();
         }
     }
-
+LOGV("suspend waiting...");
     while (mFlags & PREPARING) {
         mPreparedCondition.wait(mLock);
     }
+LOGV("suspend waiting over");
 
     SuspensionState *state = new SuspensionState;
     state->mUri = mUri;

@@ -362,7 +362,7 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
 
         if (n == 0 || teardown >= 0) {  //@hong hisense server close at first
             // Server closed the connection.
-            LOGE("Server unexpectedly closed the connection.");
+            LOGE("Server unexpectedly closed the connection1.");
 
             reply->setInt32("result", ERROR_IO);
             reply->post();
@@ -453,7 +453,7 @@ status_t ARTSPConnection::receive(void *data, size_t size) {
         ssize_t n = recv(mSocket, (uint8_t *)data + offset, size - offset, 0);
         if (n == 0) {
             // Server closed the connection.
-            LOGE("Server unexpectedly closed the connection.");
+            LOGE("Server unexpectedly closed the connection2.");
             return ERROR_IO;
         } else if (n < 0) {
             if (errno == EINTR) {

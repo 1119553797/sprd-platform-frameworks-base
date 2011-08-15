@@ -723,7 +723,7 @@ public class ThrottleService extends IThrottleManager.Stub {
     }
 
     private static final int MAX_NTP_CACHE_AGE_SEC = 60 * 60 * 24; // 1 day
-    private static final int MAX_NTP_FETCH_WAIT = 10 * 1000;
+    private static final int MAX_NTP_FETCH_WAIT = 3 * 1000;  //Hong changed from 10 to 3
     private int mMaxNtpCacheAgeSec = MAX_NTP_CACHE_AGE_SEC;
     private long cachedNtp;
     private long cachedNtpTimestamp;

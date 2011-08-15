@@ -38,7 +38,7 @@ import java.util.Iterator;
  */
 public class NetworkConnectivityListener {
     private static final String TAG = "NetworkConnectivityListener";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
     private Context mContext;
     private HashMap<Handler, Integer> mHandlers = new HashMap<Handler, Integer>();
@@ -134,14 +134,19 @@ public class NetworkConnectivityListener {
      * @param context
      */
     public synchronized void startListening(Context context) {
+	Log.w(TAG, "startListeninging enter");
         if (!mListening) {
             mContext = context;
 
+            mListening = true;
+            Log.w(TAG, "change mListening to true");
             IntentFilter filter = new IntentFilter();
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
             context.registerReceiver(mReceiver, filter);
-            mListening = true;
+            Log.w(TAG, "registerReceiver CONNECTIVITY_ACTION ok");
+//            mListening = true;
         }
+	Log.w(TAG, "startListeninging end");
     }
 
     /**
