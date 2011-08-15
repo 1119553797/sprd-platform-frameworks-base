@@ -23,6 +23,8 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncResult;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
@@ -130,7 +132,7 @@ public final class TDPhone extends GSMPhone {
     protected static final int EVENT_GET_SIM_TYPE_DONE       = 104;
     protected static final int EVENT_GET_REGISTRATION_STATE_DONE       = 105;
     protected static final int EVENT_GET_REMIAN_TIMES_DONE       = 106;
-	
+
     // Constructors
 
     public
@@ -153,6 +155,11 @@ public final class TDPhone extends GSMPhone {
         //Change the system property
         /*SystemProperties.set(TelephonyProperties.CURRENT_ACTIVE_PHONE,
                 new Integer(Phone.PHONE_TYPE_TD).toString());*/
+
+        HandlerThread thread = new HandlerThread("TDSyncSender");
+        thread.start();
+
+        mHandler = new SyncHandler(thread.getLooper());
     }
 
     public void dispose() {
@@ -705,11 +712,18 @@ public final class TDPhone extends GSMPhone {
     private String mSimType = null;
     private String[] mRegistrationState = null;
     private int mRemainTimes = -1;
-    Handler mHandler = new Handler() {
+    SyncHandler mHandler;
+    class SyncHandler extends Handler 
+    {
+        
+        SyncHandler (Looper looper) {
+            
+            super(looper);
+        }
         @Override
         public void handleMessage(Message msg) {
             AsyncResult ar;
-
+            Log.d(LOG_TAG, "handleMessage msg.what:"+msg.what);
             switch (msg.what) {
                 case EVENT_GSM_AUTHEN_DONE:
                     ar = (AsyncResult) msg.obj;
@@ -765,6 +779,7 @@ public final class TDPhone extends GSMPhone {
                     break;
                 case EVENT_GET_REMIAN_TIMES_DONE:
                   	ar = (AsyncResult) msg.obj;
+                        Log.d(LOG_TAG, "handleMessage EVENT_GET_REMIAN_TIMES_DONE");
                     synchronized (mLock) {
                     	if (ar.exception == null) {
                     		mRemainTimes = (((int []) ar.result))[0];	
@@ -779,7 +794,7 @@ public final class TDPhone extends GSMPhone {
                 	
             }
         }
-    };
+    }
     
     /**
      * Return gam Authenticate
@@ -905,8 +920,10 @@ public final class TDPhone extends GSMPhone {
 		synchronized(mLock) {
             Message response = mHandler.obtainMessage(EVENT_GET_REMIAN_TIMES_DONE);
             mCM.getRemainTimes(type,response);
+            Log.d(LOG_TAG, "enter mLock.wait");
             try {
                 mLock.wait();
+                Log.d(LOG_TAG, "leave mLock.wait");
             } catch (InterruptedException e) {
             	Log.d(LOG_TAG,"interrupted while trying to get remain times");
             }
