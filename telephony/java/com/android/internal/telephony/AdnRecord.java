@@ -289,12 +289,45 @@ public class AdnRecord implements Parcelable {
 		return (s1.trim().equals(s2.trim()));
 	}
 
-	public boolean isEqual(AdnRecord adn) {
 
-		return (stringCompareNullEqualsEmpty(alphaTag, adn.alphaTag)
+      private boolean stringCompareEmais(String[] e1, String[] e2)
+      	{
+             String e = "";
+		 
+             if(e1 == null){
+
+                 e1= new String[1];
+		    e1[0]= e;
+	      }
+
+			 
+             if(e2 == null){
+
+                 e2= new String[1];
+		    e2[0]= e;
+	      }
+
+             return Arrays.equals(e1, e2);
+
+			 
+	}
+	public boolean isEqual(AdnRecord adn) {
+             Log.i("AdnRecord","isEqual  adn  adn.alphaTag:" +adn.alphaTag+ "number " +adn.number + "anr "+adn.anr );
+		Log.i("AdnRecord","isEqual  adn  adn.alphaTag:" +alphaTag+ "number " +number + "anr "+anr );	 
+		Log.i("AdnRecord","isEqual  adn  EMAIL comp:" +stringCompareEmais(emails, adn.emails) );	 
+             return (stringCompareNullEqualsEmpty(alphaTag, adn.alphaTag)
+				&& stringCompareNullEqualsEmpty(number, adn.number)
+				&& stringCompareEmais(emails, adn.emails) && stringCompareNullEqualsEmpty(
+				anr, adn.anr));
+		 
+             /* return ( alphaTag.equals(adn.getAlphaTag()) &&
+                number.equals(adn.getNumber()) &&
+                Arrays.equals(emails, adn.getEmails()));*/
+              
+		/*return (stringCompareNullEqualsEmpty(alphaTag, adn.alphaTag)
 				&& stringCompareNullEqualsEmpty(number, adn.number)
 				&& Arrays.equals(emails, adn.emails) && stringCompareNullEqualsEmpty(
-				anr, adn.anr));
+				anr, adn.anr));*/
 	}
 
 	// add multi record and email in usim end

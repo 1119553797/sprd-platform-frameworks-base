@@ -109,7 +109,7 @@ interface IIccPhoneBook {
      */
     boolean
     updateAdnRecordsInEfBySearch (int efid,
-            String oldTag, String oldPhoneNumber,in String[] oldEmailList,
+            String oldTag, String oldPhoneNumber,in String[] oldEmailList, String oldAnr,
             String newTag, String newPhoneNumber,in String[] newEmailList,
             String newAnr,String newAas, String newSne, String newGrp,
             String newGas,  String pin2);

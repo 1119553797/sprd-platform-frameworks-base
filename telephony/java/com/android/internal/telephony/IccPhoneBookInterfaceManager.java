@@ -81,7 +81,8 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                         success = (ar.exception == null);
 						//yeezone:jinwei get sim index from AsynResult object
                         if(success){
-                            sim_index = Integer.valueOf(ar.result.toString());
+                            //sim_index = Integer.valueOf(ar.result.toString());
+                            sim_index = getInsertIndex();
                         }
 						//end 
                         mLock.notifyAll();
@@ -257,7 +258,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
      */
     public boolean
     updateAdnRecordsInEfBySearch (int efid,
-            String oldTag, String oldPhoneNumber,String[] oldEmailList,
+            String oldTag, String oldPhoneNumber,String[] oldEmailList,String oldAnr,
             String newTag, String newPhoneNumber,String[] newEmailList,
             String newAnr,String newAas, String newSne, String newGrp, 
             String newGas,  String pin2) {
@@ -267,8 +268,8 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
             throw new SecurityException(
                     "Requires android.permission.WRITE_CONTACTS permission");
         }
-        Log.v("IccPhoneBookInterfaceManager", "addIccRecordToEf** ");
-        if (DBG) logd("addAdnRecordsInEf: efid=" + efid +
+        Log.v("IccPhoneBookInterfaceManager", "updateAdnRecordsInEfBySearch** ");
+        if (DBG) logd("updateAdnRecordsInEfBySearch: efid=" + efid +
                 " ("+ newTag + "," + newPhoneNumber + ")"+ " pin2=" + pin2);
 
 	  int newid =   updateEfForIccType(efid);
@@ -287,8 +288,8 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
             AdnRecord oldAdn = null;
             AdnRecord newAdn = null;
 
-            if (efid == IccConstants.EF_PBR) {
-                oldAdn = new AdnRecord(oldTag, oldPhoneNumber,oldEmailList);
+            if (newid == IccConstants.EF_PBR) {
+                oldAdn = new AdnRecord(oldTag, oldPhoneNumber,oldEmailList,oldAnr,"","","","");
                 newAdn = new AdnRecord(newTag, newPhoneNumber,newEmailList,newAnr,newAas,newSne,newGrp,newGas);
                 adnCache.updateUSIMAdnBySearch(newid, oldAdn, newAdn, pin2, response);
             } else {

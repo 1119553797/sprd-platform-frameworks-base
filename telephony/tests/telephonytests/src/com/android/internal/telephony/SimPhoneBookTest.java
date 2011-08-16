@@ -78,7 +78,7 @@ public class SimPhoneBookTest extends TestCase {
 
         // replace by search
         success = simPhoneBook.updateAdnRecordsInEfBySearch(IccConstants.EF_ADN,
-                firstAdn.getAlphaTag(), firstAdn.getNumber(),null,
+                firstAdn.getAlphaTag(), firstAdn.getNumber(),null,"",
                 secondAdn.getAlphaTag(), secondAdn.getNumber(),null,"","","","","", pin2);
         adnRecordList = simPhoneBook.getAdnRecordsInEf(IccConstants.EF_ADN);
         tmpAdn = adnRecordList.get(listIndex);
@@ -88,7 +88,7 @@ public class SimPhoneBookTest extends TestCase {
 
         // erase be search
         success = simPhoneBook.updateAdnRecordsInEfBySearch(IccConstants.EF_ADN,
-                secondAdn.getAlphaTag(), secondAdn.getNumber(),null,
+                secondAdn.getAlphaTag(), secondAdn.getNumber(),null,"",
                 emptyAdn.getAlphaTag(), emptyAdn.getNumber(),null,"","","","","", pin2);
         adnRecordList = simPhoneBook.getAdnRecordsInEf(IccConstants.EF_ADN);
         tmpAdn = adnRecordList.get(listIndex);

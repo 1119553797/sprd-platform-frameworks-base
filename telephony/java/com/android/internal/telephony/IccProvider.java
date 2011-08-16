@@ -466,12 +466,14 @@ String mEmail = initialValues.getAsString("email");
         }else{
         	
         }*/
-
+ 
         // parse where clause
-        String tag = null;
-        String number = null;
-        String[] emails = whereArgs;
+
+        String tag = "";
+        String number ="";
+        String[] emails = null;
         String pin2 = null;
+	  String anr = "";
 
         String[] tokens = where.split("AND");
         int n = tokens.length;
@@ -481,11 +483,12 @@ String mEmail = initialValues.getAsString("email");
             if (DBG) log("parsing '" + param + "'");
 
             String[] pair = param.split("=");
-
-            if (pair.length != 2) {
+            
+	      if (DBG) log("delete  pair length "+pair.length);
+           /*  if (pair.length != 2) {
                 Log.e(TAG, "resolve: bad whereClause parameter: " + param);
                 continue;
-            }
+            }*/
 
             String key = pair[0].trim();
             String val = pair[1].trim();
@@ -496,12 +499,17 @@ String mEmail = initialValues.getAsString("email");
                 number = normalizeValue(val);
             } else if (STR_EMAILS.equals(key)) {
                 //TODO(): Email is null.
-                // emails = null;
+                 emails = new String[1];
+		    emails[0] = normalizeValue(val);                 
+                 if (DBG) log("delete  email "+ emails[0]); 
             } else if (STR_PIN2.equals(key)) {
                 pin2 = normalizeValue(val);
-            }
+            }else if(STR_ANR.equals(key)){
+                anr = normalizeValue(val);
+	      }
         }
-
+        
+        
        /* if (TextUtils.isEmpty(tag)) {
             return 0;
         }*/
@@ -509,12 +517,14 @@ String mEmail = initialValues.getAsString("email");
 	int delIndex = -1;
 	long delId = -1;
 	String[] pair = where.split("=");
-	if (pair.length != 2) {
+      if (DBG) log("delete  pair length "+pair.length);
+	/*(pair.length != 2) {
 		Log.e(TAG, "resolve: bad whereClause: " + where);
 		return 0;
-	}	
+	}*/	
 	String key = pair[0].trim();
 	String val = pair[1].trim();	
+	
 	if ("_id".equals(key)) {
 		delId = Long.parseLong(normalizeValue(val));
 		if(ArrayListCursor.mIdIndexMap.containsKey(delId)) {
@@ -522,14 +532,15 @@ String mEmail = initialValues.getAsString("email");
 		}else {
 			return 0;
 		}
+	}
 
         if (efType == FDN && TextUtils.isEmpty(pin2)) {
             return 0;
         }
 
-       success = deleteIccRecordFromEf(efType, tag, number, emails, pin2);	//yeezone:jinwei remove boolean because of define above
+       success = deleteIccRecordFromEf(efType, tag, number, emails, anr,pin2);	//yeezone:jinwei remove boolean because of define above
       	 //success = deleteIccRecordFromEfByIndex(efType, delIndex, pin2);
-        } //yeezone:jinwei else {}
+        //yeezone:jinwei else {}
 		
         if (!success) {
             return 0;
@@ -639,7 +650,7 @@ String newanr = values.getAsString("newAnr");
         }*/
 
       
-       success = updateIccRecordInEf(efType,tag,number, emails,newTag,newNumber,
+       success = updateIccRecordInEf(efType,tag,number, emails,anr,newTag,newNumber,
                           newemails,newanr,newaas,newsne,newgrp,newgas,pin2);
 
        /*	success = updateIccRecordInEfByIndex(efType, tag, number, emails, anr, aas,sne,grp,gas, updateIndex, pin2);*/
@@ -730,7 +741,7 @@ String newanr = values.getAsString("newAnr");
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfBySearch(efType, "", "", null,
+                success = iccIpb.updateAdnRecordsInEfBySearch(efType, "", "", null,"",
                         name, number, emails, anr, aas, sne, grp, gas,pin2);
             }
 		if(success) {
@@ -746,7 +757,7 @@ String newanr = values.getAsString("newAnr");
     }
 
     private boolean   updateIccRecordInEf(int efType,
-            String oldName, String oldNumber,String[] oldEmailList,
+            String oldName, String oldNumber,String[] oldEmailList,String oldAnr,
             String newName, String newNumber,String[] newEmailList,
             String newAnr,String newAas, String newSne, String newGrp, 
             String newGas,  String pin2) 
@@ -761,7 +772,7 @@ String newanr = values.getAsString("newAnr");
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
                 success = iccIpb.updateAdnRecordsInEfBySearch(efType,
-               oldName,oldNumber,oldEmailList,
+               oldName,oldNumber,oldEmailList,oldAnr,
                newName, newNumber,newEmailList,
                newAnr, newAas,  newSne,  newGrp, 
                newGas,   pin2) ;
@@ -799,7 +810,7 @@ updateIccRecordInEfByIndex(int efType, String newName, String newNumber, List<St
     }
 	//end update sim icc record
 	
-    private boolean deleteIccRecordFromEf(int efType, String name, String number, String[] emails,
+    private boolean deleteIccRecordFromEf(int efType, String name, String number, String[] emails,String anr,
             String pin2) {
         if (DBG) log("deleteIccRecordFromEf: efType=" + efType +
                 ", name=" + name + ", number=" + number + ", emails=" + emails + ", pin2=" + pin2);
@@ -811,7 +822,7 @@ updateIccRecordInEfByIndex(int efType, String newName, String newNumber, List<St
                     ServiceManager.getService("simphonebook"));
             if (iccIpb != null) {
                 success = iccIpb.updateAdnRecordsInEfBySearch(efType,
-            name, number,emails,
+            name, number,emails,anr,
             "","",null,
             "","", "", "", 
             "",   pin2);

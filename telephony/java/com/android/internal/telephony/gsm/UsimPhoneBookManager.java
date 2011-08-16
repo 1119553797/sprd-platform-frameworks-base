@@ -48,7 +48,7 @@ import java.util.Iterator;
  * {@hide}
  */
 public class UsimPhoneBookManager extends Handler implements IccConstants {
-    private static final String LOG_TAG = "GSM";
+    private static final String LOG_TAG = "UsimPhoneBookManager";
     private static final boolean DBG = true;
     public PbrFile mPbrFile;
     private Boolean mIsPbrPresent;
@@ -349,6 +349,10 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			return -1;
 		}
         fileIds = mPbrFile.mFileIds.get(index);
+        if(fileIds == null)  {
+			Log.i("UsimPhoneBookManager   ","findEFEmailInfo  fileIds == null  index :" +index);	
+                    return -1;
+	 }
 
         return fileIds.get(USIM_EFEMAIL_TAG);
     }
@@ -385,6 +389,10 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			return -1;
 		}
         fileIds = mPbrFile.mFileIds.get(index);
+	  if(fileIds == null)  {
+			Log.i("UsimPhoneBookManager   ","findEFAnrInfo  fileIds == null  index :" +index);	
+                    return -1;
+	 }
 
         return fileIds.get(USIM_EFANR_TAG);
     }
@@ -1017,7 +1025,7 @@ private void readAasFileAndWait(int recNum) {
 			rec.setAas(aas);
                     } else {
                         // might be a record with only anr
-                        //rec = new AdnRecord("", "", null, anr, "", "", "", "");
+                        rec = new AdnRecord("", "", null, anr, "", "", "", "");
                     }
                     mPhoneBookRecords.set(adnNum, rec);
             }

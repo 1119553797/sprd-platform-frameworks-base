@@ -84,13 +84,13 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
 
     public boolean
     updateAdnRecordsInEfBySearch (int efid,
-            String oldTag, String oldPhoneNumber,String[] oldEmailList,
+            String oldTag, String oldPhoneNumber,String[] oldEmailList,String oldAnr,
             String newTag, String newPhoneNumber,String[] newEmailList,
             String newAnr,String newAas, String newSne, String newGrp, 
             String newGas,  String pin2){
 
 
-            return mIccPhoneBookInterfaceManager.updateAdnRecordsInEfBySearch(efid,oldTag, oldPhoneNumber, oldEmailList,
+            return mIccPhoneBookInterfaceManager.updateAdnRecordsInEfBySearch(efid,oldTag, oldPhoneNumber, oldEmailList,oldAnr,
              newTag,  newPhoneNumber, newEmailList,
              newAnr, newAas,  newSne,  newGrp, 
              newGas,   pin2);

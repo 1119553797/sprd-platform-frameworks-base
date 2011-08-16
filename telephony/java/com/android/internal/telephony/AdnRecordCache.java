@@ -434,7 +434,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
         boolean isUpdateIap = false;
         boolean isUpdateEmail = true;
 		boolean newEmail = false;
-        Log.i("GSM","updateUSIMAdnBySearch efid" +efid);
+        Log.i("AdnRecordCache","updateUSIMAdnBySearch efid" +efid);
         for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
 
             efid = mUsimPhoneBookManager.findEFInfo(num);
@@ -458,13 +458,13 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		 {
 		 	gasEF =mUsimPhoneBookManager.findEFGasInfo(num);
 		  }
-		 Log.e("yuyong", "efid : " + efid + " iapEF:" + iapEF + " sneEF: "+ sneEF + " aasEF: " + aasEF +" grpEF:  "+grpEF + " gasEF: "+ gasEF);
+		 Log.e("yuyong", "efid : " + efid +"extensionEF :"+extensionEF + " iapEF:" + iapEF + " sneEF: "+ sneEF + " aasEF: " + aasEF +" grpEF:  "+grpEF + " gasEF: "+ gasEF);
 
-		if(efid < 0 || extensionEF < 0){
+		if(efid < 0  || extensionEF < 0 ){
                 sendErrorResponse(response, "EF is not known ADN-like EF:" + "efid"+efid +",extensionEF="+extensionEF);
                 return;
             }
-
+            Log.i("AdnRecordCache","updateUSIMAdnBySearch (1)" );
             ArrayList<AdnRecord> oldAdnList;
 
             Log.e("GSM", "efid is " + efid);
@@ -474,7 +474,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
                 sendErrorResponse(response, "Adn list not exist for EF:" + efid);
                 return;
             }
-
+            Log.i("AdnRecordCache","updateUSIMAdnBySearch (2)" );
             if(mUsimPhoneBookManager.anrFileCount == 0x3 && TextUtils.isEmpty(oldAdn.anr))
             {
             	oldAdn.anr = ";;"; 
@@ -505,6 +505,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		if(num > 0) {
                 	    mInsetIndex += mUsimPhoneBookManager.mAdnRecordSizeArray[num - 1];
 		}
+             Log.i("AdnRecordCache","updateUSIMAdnBySearch (3)" );
 		Log.e("yuyong ","we got the mInsetIndex" + mInsetIndex);
             	Log.e("GSM", "find the index!");
                	Log.e("GSM", "find the mInsetIndex:" +mInsetIndex);
@@ -518,7 +519,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
             return;
         }
 
-
+            Log.i("AdnRecordCache","updateUSIMAdnBySearch (4)" );
 			byte[] record = null;
 			int emailNumInIap =0;
 			int iapRecNum = 0;
