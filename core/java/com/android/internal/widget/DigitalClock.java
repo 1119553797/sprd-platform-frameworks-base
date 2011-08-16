@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,12 +52,13 @@ public class DigitalClock extends RelativeLayout {
     private ContentObserver mFormatChangeObserver;
     private boolean mLive = true;
     private boolean mAttached;
-
+    private static final String TAG = "DigitalClock"; 
     /* called by system on minute ticks */
     private final Handler mHandler = new Handler();
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+            	Log.d(TAG, "action=" + intent.getAction());
                 if (mLive && intent.getAction().equals(
                             Intent.ACTION_TIMEZONE_CHANGED)) {
                     mCalendar = Calendar.getInstance();
@@ -145,7 +147,7 @@ public class DigitalClock extends RelativeLayout {
         mFormatChangeObserver = new FormatChangeObserver();
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.CONTENT_URI, true, mFormatChangeObserver);
-
+        Log.d(TAG, "DigitalClock");
         updateTime();
     }
 
@@ -170,11 +172,14 @@ public class DigitalClock extends RelativeLayout {
     }
 
     private void updateTime() {
+    	Log.d(TAG, "updateTime");
         if (mLive) {
+        	Log.d(TAG, "mLive is true");
             mCalendar.setTimeInMillis(System.currentTimeMillis());
         }
 
         CharSequence newTime = DateFormat.format(mFormat, mCalendar);
+        Log.d(TAG, "updateTime =" + newTime);
         mTimeDisplay.setText(newTime);
         mAmPm.setIsMorning(mCalendar.get(Calendar.AM_PM) == 0);
     }

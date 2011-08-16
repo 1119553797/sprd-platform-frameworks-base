@@ -356,16 +356,19 @@ public class StatusBarPolicy {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            Log.d(TAG, "action=" + action);
             if (action.equals(Intent.ACTION_TIME_TICK)) {
                 updateClock();
             }
             else if (action.equals(Intent.ACTION_TIME_CHANGED)) {
+            	Log.d(TAG, "Action_time_changed");
                 updateClock();
             }
             else if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
                 updateBattery(intent);
             }
             else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
+            	Log.d(TAG, "Action_configuration_changed");
                 updateClock();
             }
             else if (action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
@@ -374,6 +377,7 @@ public class StatusBarPolicy {
                 if (mClockFormat != null) {
                     mClockFormat.setTimeZone(mCalendar.getTimeZone());
                 }
+                Log.d(TAG, "Action_timezone_changed");
                 updateClock();
             }
             else if (action.equals(Intent.ACTION_ALARM_CHANGED)) {
@@ -428,6 +432,7 @@ public class StatusBarPolicy {
         mCalendar = Calendar.getInstance(TimeZone.getDefault());
         mClockData = IconData.makeText("clock", "");
         mClockIcon = service.addIcon(mClockData, null);
+        Log.d(TAG, "new StatusBarPolicy");
         updateClock();
 
         // storage
@@ -647,6 +652,7 @@ public class StatusBarPolicy {
     private final void updateClock() {
         mCalendar.setTimeInMillis(System.currentTimeMillis());
         mClockData.text = getSmallTime();
+        Log.d(TAG, "mClockData.text=" + mClockData.text);
         mService.updateIcon(mClockIcon, mClockData, null);
     }
 
