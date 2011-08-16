@@ -370,6 +370,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             case EVENT_RADIO_STATE_CHANGED:
                 // This will do nothing in the radio not
                 // available case
+            	if(SystemProperties.get("sys.power.off").equals("true"))
+            		break;
                 setPowerStateToDesired();
                 pollState();
                 break;
@@ -545,6 +547,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             // If it's on and available and we want it off gracefully
             powerOffRadioSafely();
         } // Otherwise, we're in the desired state
+        else if (!mDesiredPowerState && !cm.getRadioState().isOn() && SystemProperties.get("sys.power.off").equals("true")) {
+        	// power off when the airplane mode is enabled for 3G Phone
+        	cm.setRadioPower(false, null);
+        }
     }
 
     @Override
