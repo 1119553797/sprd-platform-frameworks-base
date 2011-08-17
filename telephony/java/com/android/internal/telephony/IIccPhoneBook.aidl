@@ -93,7 +93,33 @@ interface IIccPhoneBook {
      *            recordSizes[2]  is the number of records in the EF file
      */
     int[] getAdnRecordsSize(int efid);
+   
     
+    /**
+     * Get the max munber of email in efid
+     *
+     *
+     * @return  int[3] array
+     *            recordSizes[0]  is the single record length
+     *            recordSizes[1]  is the total length of the EF file
+     *            recordSizes[2]  is the number of records in the EF file
+     */
+    int[] getEmailRecordsSize();
+    /**
+     * Get the max munber of anr in efid
+     *
+     *
+     * @return  int[3] array
+     *            recordSizes[0]  is the single record length
+     *            recordSizes[1]  is the total length of the EF file
+     *            recordSizes[2]  is the number of records in the EF file
+     */
+    int[] getAnrRecordsSize();
+  
+    int getAnrNum();
+
+    int getEmailNum(); 
+  
     int getInsertIndex();
     
     //add multi record and email in usim

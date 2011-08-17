@@ -86,6 +86,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     private static final int EVENT_GRP_LOAD_DONE = 8;
     private static final int EVENT_GAS_LOAD_DONE = 9;
     private static final int EVENT_ANR_LOAD_DONE = 10;
+    private int mAnrNum = 0; 	
 // zhanglj add end
     
     private ArrayList<byte[]> mAnrFileRecord;
@@ -208,7 +209,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
                 // zhanglj add begin for add multi record and email in usim
                 readAnrFileAndWait(i);
-                	readAasFileAndWait(i);
+              
                 updatePhoneAdnRecord(i);
                 // zhanglj add end
             }
@@ -231,7 +232,36 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		}
         return mPbrFile.mFileIds.size();
     }
-    
+
+    public int getAnrNum(){
+
+             int num = 0;
+		if(getNumRecs() == 0 ){
+
+			return 0;
+	       }
+
+		Log.i("UsimPhoneBookManager", "getNumRecs " +getNumRecs() + "mAnrNum " +mAnrNum);
+	   	num = mAnrNum/getNumRecs();
+
+
+		return num;
+
+    }
+
+     public int getEmailNum(){
+
+
+            if(ishaveEmail){
+		    Log.i("UsimPhoneBookManager", "ishaveEmail " +ishaveEmail );		
+                 return 1;
+            }else{
+
+                 return 0;
+	      }	
+
+    }
+	
 	public ArrayList<byte[]> getIapFileRecord(int recNum){
 		int efid = findEFIapInfo(recNum);
 		// zhanglj add begin 2010-11-29 for avoid some exception because ril restart
@@ -359,23 +389,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         return fileIds.get(USIM_EFEMAIL_TAG);
     }
 
-    public int findEFSneInfo(int index) {
-        
-        Map <Integer,Integer> fileIds;
-		//for reload the pbr file when the pbr file is null
-		synchronized (mLock) {
-			if(mPbrFile == null){
-				readPbrFileAndWait();
-			}
-		}
-		if(mPbrFile == null){
-			Log.e(LOG_TAG, "Error: Pbr file is empty");
-			return -1;
-		}
-        fileIds = mPbrFile.mFileIds.get(index);
 
-        return fileIds.get(USIM_EFSNE_TAG);
-    }
 
     public int findEFAnrInfo(int index) {
         
@@ -398,58 +412,8 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
         return fileIds.get(USIM_EFANR_TAG);
     }
-	public int findEFAasInfo(int index) {
-		   
-		   Map <Integer,Integer> fileIds;
-		   //for reload the pbr file when the pbr file is null
-		   synchronized (mLock) {
-			   if(mPbrFile == null){
-				   readPbrFileAndWait();   
-			   }
-		   }
-		   if(mPbrFile == null){
-			   Log.e(LOG_TAG, "Error: Pbr file is empty");
-			   return -1;
-		   }
-		   fileIds = mPbrFile.mFileIds.get(index);
-	
-		   return fileIds.get(USIM_EFAAS_TAG);
-	   }
 
-public int findEFGrpInfo(int index) {
-	   
-	   Map <Integer,Integer> fileIds;
-	   //for reload the pbr file when the pbr file is null
-	   synchronized (mLock) {
-		   if(mPbrFile == null){
-			   readPbrFileAndWait();   
-		   }
-	   }
-	   if(mPbrFile == null){
-		   Log.e(LOG_TAG, "Error: Pbr file is empty");
-		   return -1;
-	   }
-	   fileIds = mPbrFile.mFileIds.get(index);
 
-	   return fileIds.get(USIM_EFGRP_TAG);
-   }
-public int findEFGasInfo(int index) {
-	   
-	   Map <Integer,Integer> fileIds;
-	   //for reload the pbr file when the pbr file is null
-	   synchronized (mLock) {
-		   if(mPbrFile == null){
-			   readPbrFileAndWait();   
-		   }
-	   }
-	   if(mPbrFile == null){
-		   Log.e(LOG_TAG, "Error: Pbr file is empty");
-		   return -1;
-	   }
-	   fileIds = mPbrFile.mFileIds.get(index);
-
-	   return fileIds.get(USIM_EFGAS_TAG);
-   }
 
 
     public int findEFIapInfo(int index) {
@@ -653,17 +617,7 @@ private void readAnrFileAndWait(int recNum) {
 	 Map <Integer,Integer> fileIds;
 	 fileIds = mPbrFile.mFileIds.get(recNum);
 	 
- // print hashmap key and value
- /*
- Iterator iter = fileIds.entrySet().iterator();
- while(iter.hasNext())
- {
-	 Map.Entry entry = (Map.Entry) iter.next();
-	 Object key = entry.getKey();
-	 Object value = entry.getValue();
-	 Log.e("yuyong","key= "+key + "   value=" + value);
- }	 
- */
+
 	 if (fileIds == null) return;
 	 if (fileIds.containsKey(USIM_EFANR_TAG)) {
 	 	ishaveAnr = true;
@@ -694,153 +648,7 @@ private void readAnrFileAndWait(int recNum) {
 
  }
 
-private void readSneFileAndWait(int recNum) {
-	    Log.i("UsimPhoneBookManager","readSneFileAndWait");
-	   synchronized (mLock) {
-		   if(mPbrFile == null){
-			   readPbrFileAndWait();   
-		   }
-	   }
-	   if(mPbrFile == null){
-		   Log.e(LOG_TAG, "Error: Pbr file is empty");
-		   return;
-	   }
-  	 log("readSneFileAndWait recNum is  " + recNum);
-	   Map <Integer,Integer> fileIds;
-	   fileIds = mPbrFile.mFileIds.get(recNum);
-	   if (fileIds == null) return;
 
-	if (fileIds.containsKey(USIM_EFSNE_TAG)) {
-		   ishaveSne = true;
-		   int efid = fileIds.get(USIM_EFSNE_TAG);
-		   log("sne efid is "+efid);
-		  
-		   // Read the sne file.
-		  mFh.loadEFLinearFixedAll(fileIds.get(USIM_EFSNE_TAG),
-				   obtainMessage(EVENT_SNE_LOAD_DONE));
-		   try {
-			   mLock.wait();
-		   } catch (InterruptedException e) {
-			   Log.e(LOG_TAG, "Interrupted Exception in readEmailFileAndWait");
-		   }
-
-		   if (mSneFileRecord == null) {
-			   Log.e(LOG_TAG, "Error: Email file is empty");
-			   return;
-		   }
-	   }
-   }
-
-
-private void readGrpFileAndWait(int recNum) {
-	    Log.i("UsimPhoneBookManager","readGrpFileAndWait");
-	synchronized (mLock) {
-		if(mPbrFile == null){
-			readPbrFileAndWait();	
-		}
-	}
-	if(mPbrFile == null){
-		Log.e(LOG_TAG, "Error: Pbr file is empty");
-		return;
-	}
-	log("readGrpFileAndWait recNum is  " + recNum);
-	Map <Integer,Integer> fileIds;
-	fileIds = mPbrFile.mFileIds.get(recNum);
-	if (fileIds == null) return;
-
-	if (fileIds.containsKey(USIM_EFGRP_TAG)) {
-		ishaveGrp = true;
-		int efid = fileIds.get(USIM_EFGRP_TAG);
-		log("grp efid is "+efid);
-	   
-		// Read the grp file.
-		mFh.loadEFLinearFixedAll(fileIds.get(USIM_EFGRP_TAG),obtainMessage(EVENT_GRP_LOAD_DONE));
-		try {
-			mLock.wait();
-		} catch (InterruptedException e) {
-			Log.e(LOG_TAG, "Interrupted Exception in readEmailFileAndWait");
-		}
-
-		if (mGrpFileRecord == null) {
-			Log.e(LOG_TAG, "Error: Email file is empty");
-			return;
-		}
-	}
-
-}
-
-private void readGasFileAndWait(int recNum) {
-	Log.i("UsimPhoneBookManager","readGasFileAndWait");
-	synchronized (mLock) {
-		if(mPbrFile == null){
-			readPbrFileAndWait();	
-		}
-	}
-	if(mPbrFile == null){
-		Log.e(LOG_TAG, "Error: Pbr file is empty");
-		return;
-	}
-	log("readGasFileAndWait recNum is  " + recNum);
-	Map <Integer,Integer> fileIds;
-	fileIds = mPbrFile.mFileIds.get(recNum);
-	if (fileIds == null) return;
-
-	if (fileIds.containsKey(USIM_EFGAS_TAG)) {
-		ishaveGas = true;
-		int efid = fileIds.get(USIM_EFGAS_TAG);
-		log("gas efid is "+efid);
-	   
-		// Read the gas file.
-		mFh.loadEFLinearFixedAll(fileIds.get(USIM_EFGAS_TAG),obtainMessage(EVENT_GAS_LOAD_DONE));
-		try {
-			mLock.wait();
-		} catch (InterruptedException e) {
-			Log.e(LOG_TAG, "Interrupted Exception in readEmailFileAndWait");
-		}
-
-		if (mGasFileRecord == null) {
-			Log.e(LOG_TAG, "Error: Email file is empty");
-			return;
-		}
-	}
-
-}
-private void readAasFileAndWait(int recNum) {
-	Log.i("UsimPhoneBookManager","readAasFileAndWait");
-	synchronized (mLock) {
-		if(mPbrFile == null){
-			readPbrFileAndWait();	
-		}
-	}
-	if(mPbrFile == null){
-		Log.e(LOG_TAG, "Error: Pbr file is empty");
-		return;
-	}
-	log("readAasFileAndWait recNum is  " + recNum);
-	Map <Integer,Integer> fileIds;
-	fileIds = mPbrFile.mFileIds.get(recNum);
-	if (fileIds == null) return;
-
-	if (fileIds.containsKey(USIM_EFAAS_TAG)) {
-		
-		ishaveAas = true;
-		int efid = fileIds.get(USIM_EFAAS_TAG);
-		log("aas efid is "+efid);
-	  	// Read the aas file.
-		mFh.loadEFLinearFixedAll(fileIds.get(USIM_EFAAS_TAG),obtainMessage(EVENT_AAS_LOAD_DONE));
-		try {
-			mLock.wait();
-		} catch (InterruptedException e) {
-			Log.e(LOG_TAG, "Interrupted Exception in readEmailFileAndWait");
-		}
-
-		if (mAasFileRecord == null) {
-			Log.e(LOG_TAG, "Error: Email file is empty");
-			return;
-		}
-	}
-
-}
 
     private void updatePhoneAdnRecord() {
         if (mEmailFileRecord == null) return;
@@ -911,7 +719,7 @@ private void readAasFileAndWait(int recNum) {
   
 	mAdnRecordSizeArray[num] = mPhoneBookRecords.size();
 	 Log.i("LOG_TAG","updatePhoneAdnRecord mAdnRecordSizeArray[num] : "+numAdnRecs + "num "+num );
-	//yuyong 20110505 add for usim phonebook
+	
          int numIapRec = 0;
 	//add end
 	  Log.i("LOG_TAG","updatePhoneAdnRecord mIapFileRecord : " +mIapFileRecord );
@@ -927,7 +735,7 @@ private void readAasFileAndWait(int recNum) {
 			mIapRecordSizeArray[num] = mIapFileRecord.size();
 
 			mAnrRecordSizeArray[num] = mAnrFileRecord.size();
-			mAasRecordSizeArray[num] = mAasFileRecord.size();
+		
  
             for (int i = 0; i < numIapRec; i++) {
                 byte[] record = null;
@@ -941,7 +749,7 @@ private void readAasFileAndWait(int recNum) {
 				recNum = ((recNum ==0xFF)? (-1):recNum);
 					//Log.e(LOG_TAG,"iap recNum=="+recNum);
                 if (recNum != -1) {
-                    // zhanglj add 2010-11-01 for add email function in usim card
+                   
                     usedEmailNumSet.add(new Integer(recNum));
 
                     String[] emails = new String[1];
@@ -949,7 +757,7 @@ private void readAasFileAndWait(int recNum) {
                     emails[0] = readEmailRecord(recNum - 1);
 					if (emails[0] == null)
 					{emails[0] = " ";Log.e(LOG_TAG,"emails[0]==null");}
-                    // zhanglj modify begin 2010-11-01 for add email function in usim card
+                 
                     int adnNum = numAdnRecs - numIapRec +i;
                     // AdnRecord rec = mPhoneBookRecords.get(i);
                     AdnRecord rec = mPhoneBookRecords.get(adnNum);
@@ -960,7 +768,7 @@ private void readAasFileAndWait(int recNum) {
                         // might be a record with only email
                         rec = new AdnRecord("", "", emails);
                     }
-                    // zhanglj modify 2010-11-01 for add email function in usim card
+                    
                     // mPhoneBookRecords.set(i, rec);
                     mPhoneBookRecords.set(adnNum, rec);
                 }
@@ -970,13 +778,13 @@ private void readAasFileAndWait(int recNum) {
         mEmailRecordSizeArray[num] = mEmailFileRecord.size();
         mIapRecordSizeArray[num] = mIapFileRecord.size();
 	 mAnrRecordSizeArray[num] = mAnrFileRecord.size();
-	 mAasRecordSizeArray[num] = mAasFileRecord.size();
+	
         }
    
       Log.i(LOG_TAG,"updatePhoneAdnRecord mEmailRecordSizeArray[num] : " + mEmailFileRecord.size() );
       Log.i(LOG_TAG,"updatePhoneAdnRecord mIapRecordSizeArray[num] : " + mIapFileRecord.size() );
       Log.i(LOG_TAG,"updatePhoneAdnRecord mAnrRecordSizeArray[num] : " + mAnrFileRecord.size() );
-      Log.i(LOG_TAG,"updatePhoneAdnRecord mAasRecordSizeArray[num] : " + mAasFileRecord.size() );
+
         // ICC cards can be made such that they have an IAP file but all
         // records are empty. So we read both type 1 and type 2 file
         // email records, just to be sure.
@@ -1004,116 +812,26 @@ private void readAasFileAndWait(int recNum) {
             rec.setEmails(emails);
             mPhoneBookRecords.set(i, rec);
         }
-	//yuyong 20110505  add for usim phonebook
-	byte[] aasIndex = new byte[3];
-	aasIndex[0] = 0;
+	
+	
 	if(num > 0 && ishaveAnr)
 	{
 		for (int i = 0; i < mAnrFileRecord.size()/anrFileCount; i++) {
                     // SIM record numbers are 1 based
                     String anr = null;
                     anr = readAnrRecord(i);
-		    aasIndex =  readAasIndex(i);
-		   String aas = null;
-
-		   if(aasIndex[0] != 0)
-		   {	
-			 aas = readAasRecord(aasIndex[0]);
-		   }
+		
                     int adnNum = numAdnRecs - numIapRec +i;
                     AdnRecord rec = mPhoneBookRecords.get(adnNum);
                     if (rec != null) {
                         rec.setAnr(anr);
-			rec.setAas(aas);
-                    } else {
-                        // might be a record with only anr
-                        rec = new AdnRecord("", "", null, anr, "", "", "", "");
-                    }
+			
+                    } 
                     mPhoneBookRecords.set(adnNum, rec);
             }
 	}
 
 
-	if(num >= 0 && ishaveAas)
-	{
-		for (int i = 0; i < mAasFileRecord.size(); i++) {
-                
-                    String aas = null;
-                    // SIM record numbers are 1 based
-                    aas = readAasRecord(i);
-		    if(TextUtils.isEmpty(aas)) break;
-			
-                    int adnNum = numAdnRecs - numIapRec +i;
-		    AdnRecord rec = mPhoneBookRecords.get(adnNum);   
-		    
-                    if (rec != null) {
-                        rec.setAas(aas);
-                    } else {
-                        // might be a record with only aas
-                        //rec = new AdnRecord("", "", "", "", aas);
-                    }
-                    mPhoneBookRecords.set(adnNum, rec);					
-            }
-	}	
-/*
-	if( ishaveGas)
-	{
-		for (int i = 0; i < mGasFileRecord.size(); i++) {
-		
-		    String gas = null;
-                    // SIM record numbers are 1 based
-                    gas = readGasRecord(i);
-		    if(TextUtils.isEmpty(gas)) break;
-                    int adnNum = numAdnRecs - numIapRec +i;
-                    AdnRecord rec = mPhoneBookRecords.get(adnNum);
-                    if (rec != null) {
-                        rec.setGas(gas);
-                    } else {
-                        // might be a record with only gas
-                        //rec = new AdnRecord("", "", "", "", "", "", gas);
-                    }
-                    mPhoneBookRecords.set(adnNum, rec);	   
-            }
-	}
-
-	if(ishaveSne)
-	{
-		for (int i = 0; i < mSneFileRecord.size(); i++) {
-	                    String sne = null;
-	                    // SIM record numbers are 1 based
-	                    sne = readSneRecord(i);
-	                    int adnNum = numAdnRecs - numIapRec +i;
-	                    AdnRecord rec = mPhoneBookRecords.get(adnNum);
-	                    if (rec != null) {
-	                        rec.setSne(sne);
-	                    } else {
-	                        // might be a record with only sne
-	                        //rec = new AdnRecord("", "", null, "", "", sne, "", "");
-	                    }
-	                    mPhoneBookRecords.set(adnNum, rec);
-	            }
-	}
-	
-	if(ishaveGrp)
-	{
-		for (int i = 0; i < mGrpFileRecord.size(); i++) {
-               
-                    String grp = null;
-	                    // SIM record numbers are 1 based
-	                    grp = readGrpRecord(i);
-			    if(TextUtils.isEmpty(grp)) break;
-	                    int adnNum = numAdnRecs - numIapRec +i;
-	                    AdnRecord rec = mPhoneBookRecords.get(adnNum);
-	                    if (rec != null) {
-	                        rec.setGrp(grp);
-	                    } else {
-	                        // might be a record with only grp
-	                        //rec = new AdnRecord("", "", "", "", "", "", grp);
-	                    }
-	                    mPhoneBookRecords.set(adnNum, rec);
-	            }
-	}
-	*/
 
     }
 
@@ -1179,7 +897,7 @@ private void readAasFileAndWait(int recNum) {
 	{
 		anr1Rec = mAnrFileRecord.get(recNum);
 		anr = PhoneNumberUtils.calledPartyBCDToString(anr1Rec, 2, (0xff & anr1Rec[2]));   
-		log("readAnrRecord--anr:" + anr);    
+		log("readAnrRecord anr:" + anr);    
 		return anr;
 	}
 	else
@@ -1198,16 +916,14 @@ private void readAasFileAndWait(int recNum) {
 		            return null;
 		        }
 
-		        // The total length is 17 byte, 10 byte of them is anr number
-			//log("before parse--anr1Rec  is :" +IccUtils.bytesToHexString(anr1Rec)); 
-
+		    
 		        anr1 = PhoneNumberUtils.calledPartyBCDToString(anr1Rec, 2, (0xff & anr1Rec[2]));   
 		        anr2 = PhoneNumberUtils.calledPartyBCDToString(anr2Rec, 2, (0xff & anr2Rec[2]));   
 			if(anrFileCount > 0x2)
 		        {
 		        	anr3 = PhoneNumberUtils.calledPartyBCDToString(anr3Rec, 2, (0xff & anr3Rec[2]));   
 				anr = anr1 +";"+ anr2 +";"+ anr3;
-				log("readAnrRecord--anr:" + anr);    
+				log("readAnrRecord anr:" + anr);    
 	       			return anr;
 			}
 		}
@@ -1232,7 +948,7 @@ private void readAasFileAndWait(int recNum) {
 		        {
 		        	anr3 = PhoneNumberUtils.calledPartyBCDToString(anr3Rec, 2, (0xff & anr3Rec[2]));   
 				anr = anr1 +";"+ anr2 +";"+ anr3;
-				log("readAnrRecord--anr:" + anr);    
+				log("readAnrRecord anr:" + anr);    
 	       			return anr;
 			}   
 		}
@@ -1241,162 +957,9 @@ private void readAasFileAndWait(int recNum) {
 			log("the total anr size is exceed mAnrFileRecord.size()  "+mAnrFileRecord.size());
 		}
 		anr = anr1 +";"+ anr2;
-		log("readAnrRecord--anr:" + anr);    
+		log("readAnrRecord anr:" + anr);    
 	        return anr;  
 	}
-    }
-    private String readAasRecord(int recNum) {
-        byte[] aasRec = null;
-        try {
-            aasRec = mAasFileRecord.get(recNum);
-        } catch (IndexOutOfBoundsException e) {
-            return null;
-        }
-
-        // The length of the record is 15 byte
-        String aas = IccUtils.adnStringFieldToString(aasRec, 0, aasRec.length);
-        return aas;
-    }
-
-    private byte[] readAasIndex(int recNum) {
-        byte[] anr1Rec = null;
-	byte[] anr2Rec = null;
-	byte[] anr3Rec = null;
-	String anr1 = null;
-	String anr2 = null;
-	String anr3 = null;
-	String anr = null;
-	byte[]   aasIndex = new byte[3];
-	int firstAnrFileRecordCount = mAnrRecordSizeArray[0]/anrFileCount;
-	//log("firstAnrFileRecordCount is "+firstAnrFileRecordCount);
-	if(anrFileCount == 0x1)
-	{
-		anr1Rec = mAnrFileRecord.get(recNum);
-		aasIndex[0] = anr1Rec[0];
-		return aasIndex;
-	}
-	else
-	{
-		if(recNum < firstAnrFileRecordCount)
-		{
-		        try {
-		            anr1Rec = mAnrFileRecord.get(recNum);
-			    anr2Rec = mAnrFileRecord.get(recNum + firstAnrFileRecordCount);
-			    if(anrFileCount > 0x2)
-			    {
-			    	anr3Rec = mAnrFileRecord.get(recNum + 2*firstAnrFileRecordCount);
-			    }
-			    
-		        } catch (IndexOutOfBoundsException e) {
-		            return null;
-		        }
-
-		        // The total length is 17 byte, 10 byte of them is anr number
-			//log("before parse--anr1Rec  is :" +IccUtils.bytesToHexString(anr1Rec)); 
-
-		       // anr1 = PhoneNumberUtils.calledPartyBCDToString(anr1Rec, 2, (0xff & anr1Rec[2]));   
-		        //anr2 = PhoneNumberUtils.calledPartyBCDToString(anr2Rec, 2, (0xff & anr2Rec[2]));  
-			aasIndex[0] = anr1Rec[0];
-			aasIndex[1] = anr2Rec[0];
-			if(anrFileCount > 0x2)
-		        {
-		        	aasIndex[2] = anr3Rec[0];
-		
-	       			return aasIndex;
-			}
-		}
-		else if(recNum >= firstAnrFileRecordCount && recNum < mAnrFileRecord.size()/anrFileCount)
-		{
-			int secondAnrFileRecordCount = (mAnrFileRecord.size() -mAnrRecordSizeArray[0])/anrFileCount;
-			//log("secondAnrFileRecordCount is "+secondAnrFileRecordCount);
-			try {
-			    int secondAnrfileread = mAnrRecordSizeArray[0] + recNum%firstAnrFileRecordCount;
-		            anr1Rec = mAnrFileRecord.get(secondAnrfileread);
-			    anr2Rec = mAnrFileRecord.get(secondAnrfileread + secondAnrFileRecordCount);
-			    aasIndex[0] = anr1Rec[0];
-			    aasIndex[1] = anr2Rec[0];
-			    if(anrFileCount > 0x2)
-			    {
-			   	anr3Rec = mAnrFileRecord.get(secondAnrfileread + 2*secondAnrFileRecordCount);
-				aasIndex[2] = anr3Rec[0];
-			    }
-		        } catch (IndexOutOfBoundsException e) {
-		            return null;
-		        }
-		   
-	       	        return aasIndex;
-
-		}
-		else
-		{
-			log("the total anr size is exceed mAnrFileRecord.size()  "+mAnrFileRecord.size());
-		}
-	
-	        return aasIndex;  
-	}
-    }
-
-    private String readSneRecord(int recNum) {
-        byte[] sneRec = null;
-        try {
-            sneRec = mSneFileRecord.get(recNum);
-        } catch (IndexOutOfBoundsException e) {
-            return null;
-        }
-
-        // The length of the record is 17 byte
-        String sne = IccUtils.adnStringFieldToString(sneRec, 0, sneRec.length -2);
-	log("readSneRecord--sne:" + sne);   
-        return sne;
-    }
-    private String readGrpRecord(int recNum) {
-        byte[] grpRec = null;
-        try {
-            grpRec = mGrpFileRecord.get(recNum);
-        } catch (IndexOutOfBoundsException e) {
-            return null;
-        }
-
-        // The length of the record is 8 byte
-        String grp = IccUtils.adnStringFieldToString(grpRec, 0, grpRec.length);
-        return grp;
-    }
-    private String readGasRecord(int recNum) {
-        byte[] gasRec = null;
-        try {
-            gasRec = mGasFileRecord.get(recNum);
-        } catch (IndexOutOfBoundsException e) {
-            return null;
-        }
-
-        // The length of the record is 15 byte
-        String gas = IccUtils.adnStringFieldToString(gasRec, 0, gasRec.length);
-        return gas;
-    }
-
-
-
-    private void g(int recNum) {
-		synchronized (mLock) {
-			if(mPbrFile == null){
-				readPbrFileAndWait();	
-			}
-		}
-		if(mPbrFile == null){
-			Log.e(LOG_TAG, "Error: Pbr file is empty");
-          return;
-		}
-        Map <Integer,Integer> fileIds;
-        fileIds = mPbrFile.mFileIds.get(recNum);
-        if (fileIds == null || fileIds.isEmpty()) return;
-
-        mAdnCache.requestLoadAllAdnLike(fileIds.get(USIM_EFADN_TAG),
-            fileIds.get(USIM_EFEXT1_TAG), obtainMessage(EVENT_USIM_ADN_LOAD_DONE));
-        try {
-            mLock.wait();
-        } catch (InterruptedException e) {
-            Log.e(LOG_TAG, "Interrupted Exception in readAdnFileAndWait");
-        }
     }
 
     private void createPbrFile(ArrayList<byte[]> records) {
@@ -1457,13 +1020,7 @@ private void readAasFileAndWait(int recNum) {
 				mAnrFileRecord = new ArrayList<byte[]>();
 			}
 			mAnrFileRecord.addAll((ArrayList<byte[]>)ar.result);
-			/*
-			for(int i = 0; i < mAnrFileRecord.size(); i ++)
-			{
-				byte[] test = mAnrFileRecord.get(i);
-				Log.e("yuyong555", "anr record: "+IccUtils.bytesToHexString(test) );
-			}
-			*/
+		
 			log("mAnrFileRecord.size() is "+mAnrFileRecord.size());
 		}
 
@@ -1494,12 +1051,7 @@ private void readAasFileAndWait(int recNum) {
 				}
 				
 				mAasFileRecord.addAll((ArrayList<byte[]>)ar.result);
-/*
-				 for(int i = 0; i < mAasFileRecord.size(); i ++)
-			{
-				byte[] test = mAasFileRecord.get(i);
-				Log.e("yuyong111", "anr record: "+IccUtils.bytesToHexString(test) );
-			}*/
+
 				}
 			synchronized (mLock) {
 				mLock.notify();
@@ -1575,12 +1127,13 @@ private void readAasFileAndWait(int recNum) {
         // RecNum <EF Tag, efid>
         HashMap<Integer,Map<Integer,Integer>> mFileIds;
 	    public ArrayList<SimTlv> tlvList;
-
+  
         PbrFile(ArrayList<byte[]> records) {
             mFileIds = new HashMap<Integer, Map<Integer, Integer>>();
 	        tlvList = new ArrayList<SimTlv>();
             SimTlv recTlv;
             int recNum = 0;
+	      mAnrNum = 0;	
             for (byte[] record: records) {
 			    log("before making TLVs, data is " + IccUtils.bytesToHexString(record));
 			    if (IccUtils.bytesToHexString(record).startsWith("ffff")) {
@@ -1650,6 +1203,7 @@ private void readAasFileAndWait(int recNum) {
             int tag;
             byte[] data;
             Map<Integer, Integer> val = new HashMap<Integer, Integer>();
+		
             do {
                 tag = tlv.getTag();
                 switch(tag) {
@@ -1663,6 +1217,7 @@ private void readAasFileAndWait(int recNum) {
                 }
             } while (tlv.nextObject());
             mFileIds.put(recNum, val);
+	      Log.i(LOG_TAG,"parseTag mAnrNum" + mAnrNum);
         }
 
         void parseEf(SimTlv tlv, Map<Integer, Integer> val, int parentTag) {
@@ -1675,6 +1230,10 @@ private void readAasFileAndWait(int recNum) {
                     mEmailPresentInIap = true;
                     mEmailTagNumberInIap = tagNumberWithinParentTag;
                 }
+                if(tag == USIM_EFANR_TAG){
+                       mAnrNum++; 
+		    }
+				
                 switch(tag) {
                     case USIM_EFEMAIL_TAG:
                     case USIM_EFADN_TAG:
@@ -1689,6 +1248,7 @@ private void readAasFileAndWait(int recNum) {
                     case USIM_EFIAP_TAG:
                     case USIM_EFSNE_TAG:
                         data = tlv.getData();
+			     
                         int efid = ((data[0] & 0xFF) << 8) | (data[1] & 0xFF);
                         val.put(tag, efid);
                         break;

@@ -19,6 +19,8 @@ package com.android.internal.telephony.gsm;
 import android.os.Message;
 import android.util.Log;
 
+import com.android.internal.telephony.IccCardApplication;
+import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.IccPhoneBookInterfaceManager;
 
 /**
@@ -50,7 +52,7 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
         if(DBG) Log.d(LOG_TAG, "SimPhoneBookInterfaceManager finalized");
     }
    
-   /*  public int[] getAdnRecordsSize(int efid) {
+    private int[] getRecordsSize(int efid) {
         if (DBG) logd("getAdnRecordsSize: efid=" + efid);
         synchronized(mLock) {
             checkThread();
@@ -69,16 +71,130 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
 
         return recordSize;
     }
-    */
-    public  int[] getEmailRecordsSize(){
-         
-          return null;
+
+
+	public int[] getAdnRecordsSize(int efid){
+
+		if(phone.getIccCard().isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)
+				&&(efid == IccConstants.EF_ADN)){
+			return getUsimAdnRecordsSize();
+		}else{
+			return getRecordsSize(efid);
+		}
+
+	}
+
+	private int[] getUsimAdnRecordsSize(){
+		if(adnCache == null){
+			return null;	
+		}
+		UsimPhoneBookManager mUsimPhoneBookManager = adnCache.getUsimPhoneBookManager();
+		if(mUsimPhoneBookManager == null){
+			return null;	
+		}
+		int efid;
+		int [] recordSizeAdn,recordSizeTotal = new int[3];
+		for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
+			efid = mUsimPhoneBookManager.findEFInfo(num);
+
+			if(efid == -1){
+				return null;	
+			}
+			recordSizeAdn = getRecordsSize(efid);
+			recordSizeTotal[0] = recordSizeAdn[0];
+			recordSizeTotal[1] += recordSizeAdn[1];
+			recordSizeTotal[2] += recordSizeAdn[2];
+		}
+		return recordSizeTotal;
+	}
+    
+
+    public int[] getEmailRecordsSize(){
+		if(adnCache == null){
+			return null;	
+		}
+		UsimPhoneBookManager mUsimPhoneBookManager = adnCache.getUsimPhoneBookManager();
+		if(mUsimPhoneBookManager == null){
+			return null;	
+		}
+		int efid;
+		int [] recordSizeEmail,recordSizeTotal = new int[3];
+		for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
+			efid = mUsimPhoneBookManager.findEFEmailInfo(num);
+			if(efid < -1){
+				return null;
+			}
+			// zhanglj add end
+			recordSizeEmail = getRecordsSize(efid);
+			recordSizeTotal[0] = recordSizeEmail[0];
+			recordSizeTotal[1] += recordSizeEmail[1];
+			recordSizeTotal[2] += recordSizeEmail[2];
+		}
+		return recordSizeTotal;
     }
 
-    public  int getAnrCountsSize(){
- 
-          return 0;
+    public int getEmailNum()
+    {
+          int[] record = null ;  
+          if(phone.getIccCard().isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)){
+           if(adnCache == null){
+			return 0;	
+	    }
+	    UsimPhoneBookManager mUsimPhoneBookManager = adnCache.getUsimPhoneBookManager();
+	    if(mUsimPhoneBookManager == null){
+			return 0;	
+	    }
+
+	    return mUsimPhoneBookManager.getEmailNum();
+	
+	   }
+
+
+	   return 0;
+    }
+
+    public int getAnrNum(){
+	   if(phone.getIccCard().isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)){
+           if(adnCache == null){
+			return 0;	
+	    }
+	    UsimPhoneBookManager mUsimPhoneBookManager = adnCache.getUsimPhoneBookManager();
+	    if(mUsimPhoneBookManager == null){
+			return 0;	
+	    }
+
+	    return mUsimPhoneBookManager.getAnrNum();
+
+	   }
+
+
+	   return 0;
+          
+
+    }
+    public int[] getAnrRecordsSize(){
+       if(adnCache == null){
+			return null;	
+		}
+		UsimPhoneBookManager mUsimPhoneBookManager = adnCache.getUsimPhoneBookManager();
+		if(mUsimPhoneBookManager == null){
+			return null;	
+		}
+		int efid;
+		int [] recordSizeAnr,recordSizeTotal = new int[3];
+		for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
+			efid = mUsimPhoneBookManager.findEFAnrInfo(num);
+			if(efid < -1){
+				return null;
+			}
+			recordSizeAnr = getRecordsSize(efid);
+			recordSizeTotal[0] = recordSizeAnr[0];
+			recordSizeTotal[1] += recordSizeAnr[1];
+			recordSizeTotal[2] += recordSizeAnr[2];
+		}
+		return recordSizeTotal;
    }
+
     protected void logd(String msg) {
         Log.d(LOG_TAG, "[SimPbInterfaceManager] " + msg);
     }

@@ -78,6 +78,21 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
         return mIccPhoneBookInterfaceManager.getAdnRecordsSize(efid);
     }
 
+    public int[] getEmailRecordsSize() throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getEmailRecordsSize();
+    }
+
+    public int[] getAnrRecordsSize() throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getAnrRecordsSize();
+    }
+    public int getEmailNum() throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getEmailNum();
+    }
+
+    public int getAnrNum() throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getAnrNum();
+    }
+
     public List<AdnRecord> getAdnRecordsInEf(int efid) throws android.os.RemoteException {
         return mIccPhoneBookInterfaceManager.getAdnRecordsInEf(efid);
     }

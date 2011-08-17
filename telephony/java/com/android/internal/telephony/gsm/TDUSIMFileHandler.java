@@ -162,11 +162,11 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements IccConsta
                 data = result.payload;
                 logbyte(data);
 
-        	   Log.i(LOG_TAG, "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE  data[11]" +data[11] + "data[12 ] :" +data[12]  );	
+        	 
                 IccCard card = phone.getIccCard();
                  Log.i(LOG_TAG, "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE usim" +card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)  );	
                 if(card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM))
-		   //if(card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM) && (data[11]&0xff) ==  0x6f &&   (data[12]&0xff)  == 0x3b)
+		  
                 {
 			  for(int i= 0; i<data.length; i++){
                             if(data[i] == TYPE_FILE_DES){

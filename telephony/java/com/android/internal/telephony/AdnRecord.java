@@ -41,7 +41,7 @@ public class AdnRecord implements Parcelable {
 
 	String alphaTag = null;
 	String number = null;
-	String[] emails;
+	String[] emails = null;
 	int extRecord = 0xff;
 	int efid; // or 0 if none
 	int recordNumber; // or 0 if none
@@ -162,6 +162,7 @@ public class AdnRecord implements Parcelable {
 	 String anr, String aas, String sne, String grp, String gas) {
 	 
 		 this(0, 0, alphaTag, number, emails, anr, aas, sne, grp, gas);
+		 
 	 }
 	public AdnRecord(int efid, int recordNumber, String alphaTag,
 			String number, String[] emails, String anr, String aas, String sne,

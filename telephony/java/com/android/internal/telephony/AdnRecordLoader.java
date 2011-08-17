@@ -589,7 +589,7 @@ public class AdnRecordLoader extends Handler {
 
 			case EVENT_UPDATE_GRP_RECORD_DONE:
 				ar = (AsyncResult) (msg.obj);
-				Log.e("yuyong", "update Grp OK");
+				Log.e("GSM", "update Grp OK");
 				if (ar.exception != null) {
 					throw new RuntimeException("update EF adn record failed",
 							ar.exception);
@@ -599,7 +599,7 @@ public class AdnRecordLoader extends Handler {
 				break;
 			case EVENT_UPDATE_GAS_RECORD_DONE:
 				ar = (AsyncResult) (msg.obj);
-				Log.e("yuyong", "update Gas OK");
+				Log.e("GSM", "update Gas OK");
 				if (ar.exception != null) {
 					throw new RuntimeException("update EF adn record failed",
 							ar.exception);

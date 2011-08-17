@@ -176,76 +176,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         }
         return sim_index;
     }
-    /**
-     * Replace oldAdn with newAdn in ADN-like record in EF
-     *
-     * getAdnRecordsInEf must be called at least once before this function,
-     * otherwise an error will be returned. Currently the email field
-     * if set in the ADN record is ignored.
-     * throws SecurityException if no WRITE_CONTACTS permission
-     *
-     * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN
-     * @param oldTag adn tag to be replaced
-     * @param oldPhoneNumber adn number to be replaced
-     *        Set both oldTag and oldPhoneNubmer to "" means to replace an
-     *        empty record, aka, insert new record
-     * @param newTag adn tag to be stored
-     * @param newPhoneNumber adn number ot be stored
-     *        Set both newTag and newPhoneNubmer to "" means to replace the old
-     *        record with empty one, aka, delete old record
-     * @param pin2 required to update EF_FDN, otherwise must be null
-     * @return true for success
-     */
-    /*public boolean
-    updateAdnRecordsInEfBySearch (int efid,
-            String oldTag, String oldPhoneNumber,
-            String newTag, String newPhoneNumber, String pin2) {
-
-
-        if (phone.getContext().checkCallingOrSelfPermission(
-                android.Manifest.permission.WRITE_CONTACTS)
-            != PackageManager.PERMISSION_GRANTED) {
-            throw new SecurityException(
-                    "Requires android.permission.WRITE_CONTACTS permission");
-        }
-        int newid =   updateEfForIccType(efid);
-
-	  int fileId[] = adnCache.getRecordsEfId(newid);
-
-	  for(int i=0; i<fileId.length;i++){
-	  	
-            Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch: efid=" + fileId[i]);
-	  }
-
-       Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch: efid=" + efid +
-                " ("+ oldTag + "," + oldPhoneNumber + ")"+ "==>" +
-                " ("+ newTag + "," + newPhoneNumber + ")"+ " pin2=" + pin2);
-        synchronized(mLock) {
-            checkThread();
-            success = false;
-            Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE);
-            AdnRecord oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
-            AdnRecord newAdn = new AdnRecord(newTag, newPhoneNumber);
-	      Log.i("IccPhoneBookInterfaceManager", "newTag="+newTag+"  newPhoneNumber="+newPhoneNumber);
-            for(int i=0; i<fileId.length;i++){
-	  	   
-                if (DBG) logd("addAdnRecordsInEf: efid=" + fileId[i]);
-				
-		   if(adnCache.updateAdnBySearch(fileId[i], oldAdn, newAdn, pin2, response)){
-
-			  break;
-		   }
-	     }
-            //adnCache.updateAdnBySearch(efid, oldAdn, newAdn, pin2, response);
-            try {
-                mLock.wait();
-            } catch (InterruptedException e) {
-                logd("interrupted while trying to update by search");
-            }
-        }
-        return success;
-    }*/
-
+  
 	//yeezone:jinwei Add a new contact in SimCard.
      /**Add newAdn in ADN-like record in EF	 
       * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN	 
@@ -269,6 +200,10 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                     "Requires android.permission.WRITE_CONTACTS permission");
         }
         Log.v("IccPhoneBookInterfaceManager", "updateAdnRecordsInEfBySearch** ");
+        Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch: efid=" + efid +
+                " ("+ oldTag + "," + oldPhoneNumber + ","+oldAnr+")"+ "==>" +
+                " ("+ newTag + "," + newPhoneNumber + ","+newAnr+")"+ " pin2=" + pin2);
+		 
         if (DBG) logd("updateAdnRecordsInEfBySearch: efid=" + efid +
                 " ("+ newTag + "," + newPhoneNumber + ")"+ " pin2=" + pin2);
 
@@ -381,7 +316,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
      *            recordSizes[1]  is the total length of the EF file
      *            recordSizes[2]  is the number of records in the EF file
      */
-    public  int[] getAdnRecordsSize(int efid){
+    /*public  int[] getAdnRecordsSize(int efid){
 
           if (DBG) logd("getAdnRecordsSize: efid=" + efid);
 
@@ -399,8 +334,8 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         return recordSize;
 
 
-    }
-
+    }*/
+ 
     private int[] getRecordsSizeofAnd(int efid) {
         if (DBG) logd("getAdnRecordsSize: efid=" + efid);
         synchronized(mLock) {
@@ -422,8 +357,11 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
     }
 
 // zhanglj add begin for
-    protected abstract int[] getEmailRecordsSize();
-    protected abstract int getAnrCountsSize();
+  
+    public abstract int[] getEmailRecordsSize();
+    public abstract int[] getAnrRecordsSize();
+    public abstract int getEmailNum();
+    public abstract int getAnrNum();
 
 	public boolean hasEmailInIccCard(){
 		return adnCache.mUsimPhoneBookManager.ishaveEmail;

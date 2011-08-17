@@ -246,12 +246,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
             iapEF =mUsimPhoneBookManager.findEFIapInfo(num);
 
-	     if(mUsimPhoneBookManager.ishaveSne)
-	     {
-	     	sneEF =mUsimPhoneBookManager.findEFSneInfo(num);
-	     }
-
-	    if(efid < 0 || extensionEF < 0){
+	      if(efid < 0 || extensionEF < 0){
                 sendErrorResponse(response, "EF is not known ADN-like EF:" + "efid"+efid +",extensionEF="+extensionEF);
                 return;
             }
@@ -447,22 +442,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
            	 iapEF =mUsimPhoneBookManager.findEFIapInfo(num);
 
-		 if(mUsimPhoneBookManager.ishaveSne)
-		 {
-		 	sneEF =mUsimPhoneBookManager.findEFSneInfo(num);
-		  }
-		 if(mUsimPhoneBookManager.ishaveAas)
-		 {
-		 	aasEF =mUsimPhoneBookManager.findEFAasInfo(num);
-		  }
-		 if(mUsimPhoneBookManager.ishaveGrp)
-		 {
-		 	grpEF =mUsimPhoneBookManager.findEFGrpInfo(num);
-		  }
-		 if(mUsimPhoneBookManager.ishaveGas)
-		 {
-		 	gasEF =mUsimPhoneBookManager.findEFGasInfo(num);
-		  }
+		
 		 Log.e("yuyong", "efid : " + efid +"extensionEF :"+extensionEF + " iapEF:" + iapEF + " sneEF: "+ sneEF + " aasEF: " + aasEF +" grpEF:  "+grpEF + " gasEF: "+ gasEF);
 
 		if(efid < 0  || extensionEF < 0 ){
@@ -536,6 +516,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 					iapRecNum = mUsimPhoneBookManager.getIapRecordSizeArray()[recNum] - 
 						mUsimPhoneBookManager.getIapRecordSizeArray()[recNum - 1] + index;
 				}
+				Log.i("AdnRecordCache","updateUSIMAdnBySearch (5)" );
 
 				if (mIapFileRecord != null){
 					record = mIapFileRecord.get(iapRecNum - 1);
@@ -547,6 +528,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
         	} catch (IndexOutOfBoundsException e) {
             	Log.e("GSM", "Error: Improper ICC card: No IAP record for ADN, continuing");
         	}
+				Log.i("AdnRecordCache","updateUSIMAdnBySearch (6)" );
 				if(record !=null){
 					emailNumInIap = mUsimPhoneBookManager.getEmailTagNumberInIap();
         			emailNum = (int)(record[emailNumInIap] & 0xFF);
@@ -574,7 +556,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
         }else if(newAdn.emails == null){
 			isUpdateIap = true;			
 		}
-
+        Log.i("AdnRecordCache","updateUSIMAdnBySearch (7) isUpdateIap " +isUpdateIap );
         Message pendingResponse = userWriteResponse.get(efid);
 
         if (pendingResponse != null) {
@@ -588,7 +570,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
         AdnRecordLoader adnRecordLoader = new AdnRecordLoader(mFh);
 
-
+        Log.i("AdnRecordCache","updateUSIMAdnBySearch (8) isUpdateIap " +isUpdateIap );
         adnRecordLoader.updateEFAdnToUsim(newAdn, efid, extensionEF,
                 index, pin2,
                 obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
@@ -605,7 +587,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 			}
 			return;
 		}
-
+             Log.i("AdnRecordCache","updateUSIMAdnBySearch (9)  " );
 	   	if(isUpdateIap){
 
 			if(newAdn.emails ==null){
@@ -623,7 +605,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 					null);
 			}
 		}
-
+             	Log.i("AdnRecordCache","updateUSIMAdnBySearch (10)" );
 		int emailRecordCount = 0;
 		int [] mEmailRecordSize = mUsimPhoneBookManager.getEmailRecordSizeArray();
 		for(int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++){
@@ -637,6 +619,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		}else{
 			emailEF = mUsimPhoneBookManager.findEFEmailInfo(0);			
 		}
+		 Log.i("AdnRecordCache","updateUSIMAdnBySearch (10 .1) emailEF" +emailEF +"isUpdateEmail" +isUpdateEmail );
 		if(isUpdateEmail && emailEF > 0){
 			Log.e("GSM","begin to update Email ---Email id " + emailNum);
 			adnRecordLoader = new AdnRecordLoader(mFh);
@@ -644,7 +627,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
 					null);
 		}
-	
+	      Log.i("AdnRecordCache","updateUSIMAdnBySearch (11)" );
 		if(mUsimPhoneBookManager.ishaveAnr)
 		{
 			ArrayList<Integer> anrefids =  mUsimPhoneBookManager.mPbrFile.
@@ -655,14 +638,14 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
 					null);	
 		}
-		if(mUsimPhoneBookManager.ishaveSne)
+	/*	if(mUsimPhoneBookManager.ishaveSne)
 		{	
 			Log.e("GSM","begin to update Sne ---sneEF is " + sneEF);
 			adnRecordLoader = new AdnRecordLoader(mFh);
 			adnRecordLoader.updateEFSneToUsim(newAdn, sneEF, efid, index, pin2,
 					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
 					null);
-		}	
+		}*/	
 		/*if(mUsimPhoneBookManager.ishaveAas)
 		{
 			Log.e("GSM","begin to update Aas ---aasEF is " + aasEF);
@@ -820,12 +803,12 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
 	 return true;
     }
-    public  int[] getAdnRecordsSize(int efid){
+  /*  public  int[] getAdnRecordsSize(int efid){
 
             Log.i("AdnRecordCache","getAdnRecordsSize");
             return mUsimPhoneBookManager.getAdnRecordsSize(efid);
        
-    }
+    }*/
 
 
      

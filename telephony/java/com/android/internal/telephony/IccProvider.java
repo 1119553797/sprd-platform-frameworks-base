@@ -409,7 +409,7 @@ String mEmail = initialValues.getAsString("email");
 	    ArrayListCursor.mIdIndexMap.put(ArrayListCursor.mMaxId, simIndex);
 	}
 	buf.append(ArrayListCursor.mMaxId);
-	if (DBG) log("yuyong insert: ID: " + ArrayListCursor.mMaxId + ",index: " + simIndex + ",Map size: " + ArrayListCursor.mIdIndexMap.size());
+	if (DBG) log("GSM insert: ID: " + ArrayListCursor.mMaxId + ",index: " + simIndex + ",Map size: " + ArrayListCursor.mIdIndexMap.size());
 
         resultUri = Uri.parse(buf.toString());
 
@@ -763,8 +763,8 @@ String newanr = values.getAsString("newAnr");
             String newGas,  String pin2) 
 	{
         if (DBG) log("updateIccRecordInEf: efType=" + efType +
-                ", oldname=" + oldName + ", oldnumber=" + oldNumber +
-                ", newname=" + newName + ", newnumber=" + newNumber);
+                ", oldname=" + oldName + ", oldnumber=" + oldNumber + ",oldAnr"+oldAnr+
+                ", newname=" + newName + ", newnumber=" + newNumber+",newAnr"+newAnr);
         boolean success = false;
 
         try {
