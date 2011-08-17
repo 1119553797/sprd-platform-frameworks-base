@@ -283,6 +283,7 @@ public final class TDPhone extends GSMPhone {
 
     public void clearDisconnected() {
         mCT.clearDisconnected();
+	 mVideoCT.clearDisconnected();
     }
 
     public boolean canTransfer() {
@@ -295,7 +296,8 @@ public final class TDPhone extends GSMPhone {
 
     public Call
     getForegroundCall() {
-    	if (mVideoCT.isAlive())
+    	//if (mVideoCT.isAlive())
+    	if (mVideoCT.foregroundCall.getState() != Call.State.IDLE)
 			return mVideoCT.foregroundCall;
 		else
 	        return mCT.foregroundCall;

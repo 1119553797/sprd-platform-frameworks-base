@@ -587,6 +587,8 @@ public final class VideoCallTracker extends CallTracker {
         if (unknownConnectionAppeared) {
             phone.notifyUnknownConnection();
         }
+		
+	log("handlePollCalls(), hasNonHangupStateChanged: " + hasNonHangupStateChanged);
 
         if (hasNonHangupStateChanged || newRinging != null) {
             phone.notifyPreciseVideoCallStateChanged();
@@ -833,8 +835,11 @@ public final class VideoCallTracker extends CallTracker {
 	}
 
 	public boolean isAlive(){
-		//Log.w(LOG_TAG,"VideoCallTracker isAlive(), foregroundCall: " + foregroundCall + ", ringingCall: " + ringingCall);
-		return (foregroundCall.getState().isAlive() || ringingCall.getState().isAlive());
+		if (state != Phone.State.IDLE)
+			return true;
+		else
+			return false;
+		//return (foregroundCall.getState().isAlive() || ringingCall.getState().isAlive());
 	};
 
 	private void internaleHangup(){

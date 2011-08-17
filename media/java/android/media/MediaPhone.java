@@ -795,6 +795,9 @@ public class MediaPhone extends Handler
         Log.d(TAG, "onCodecRequest:" + type + ", " + param);
         switch (type) {
         case CODEC_OPEN:
+			if (mOnCallEventListener != null){
+				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_OPEN, null);
+			}
             try {
                 prepareAsync();
             } catch (IllegalStateException ex) {
@@ -815,6 +818,9 @@ public class MediaPhone extends Handler
             break;
 
         case CODEC_CLOSE:
+			if (mOnCallEventListener != null){
+				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_CLOSE, null);
+			}
             try {
                 stop();
             } catch (IllegalStateException ex) {
@@ -988,6 +994,10 @@ public class MediaPhone extends Handler
 	public static final int MEDIA_CALLEVENT_CAMERACLOSE = 100;
 	public static final int MEDIA_CALLEVENT_CAMERAOPEN = 101;
 	public static final int MEDIA_CALLEVENT_STRING = 102;
+	public static final int MEDIA_CALLEVENT_CODEC_OPEN = 103;
+	public static final int MEDIA_CALLEVENT_CODEC_SET_PARAM_DECODER = 104;
+	public static final int MEDIA_CALLEVENT_CODEC_SET_PARAM_ENCODER = 105;
+	public static final int MEDIA_CALLEVENT_CODEC_CLOSE = 106;
 	
     /**
      * Interface definition of a callback to be invoked to communicate some
