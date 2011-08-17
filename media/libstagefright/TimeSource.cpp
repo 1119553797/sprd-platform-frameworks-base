@@ -56,7 +56,7 @@ int64_t SystemTimeSourceForSync::getRealTimeUs() {
 void SystemTimeSourceForSync::increaseRealTimeUs(int64_t deltaTime)
 {
     Mutex::Autolock autoLock(mLock);	
-    LOGI("SystemTimeSourceForSync::pause %d,%lld",mIsPaused,deltaTime);	
+    LOGI("SystemTimeSourceForSync::increase %d,%lld",mIsPaused,deltaTime);	
     mStartTimeUs -= deltaTime;
 }
 	
