@@ -291,7 +291,7 @@ status_t MediaPlayer::stop()
     if (mCurrentState & MEDIA_PLAYER_STOPPED) return NO_ERROR;
     if ( (mPlayer != 0) && ( mCurrentState & ( MEDIA_PLAYER_STARTED | MEDIA_PLAYER_PREPARED |
                     MEDIA_PLAYER_PAUSED | MEDIA_PLAYER_PLAYBACK_COMPLETE
-                    | MEDIA_PLAYER_PREPARING /*@hong */) ) ) {
+                   /* | MEDIA_PLAYER_PREPARING  @hong */) ) ) {
         status_t ret = mPlayer->stop();
         if (ret != NO_ERROR) {
 	LOGE("stop erro ret:%d",ret);

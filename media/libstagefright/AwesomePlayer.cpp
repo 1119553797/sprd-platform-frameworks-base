@@ -433,6 +433,11 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
 void AwesomePlayer::reset() {
     LOGV("reset");
 
+	 //@hong to handle stop failed. 2011-8-15
+       if (mFlags & PREPARING) {
+          abortPrepare(UNKNOWN_ERROR);
+	  	}
+	   
     Mutex::Autolock autoLock(mLock);
      LOGI("reset_l wait");
     reset_l();
@@ -921,12 +926,6 @@ status_t AwesomePlayer::initRenderer_l() {
 
 status_t AwesomePlayer::forceStop(){
     LOGV("forceStop");
-	
-	 //@hong to handle stop failed. 2011-8-15
-       if (mFlags & PREPARING) {
-          abortPrepare(UNKNOWN_ERROR);
-	  // return OK;
-	  	}
 	   
 	VideoPhoneDataDevice::getInstance().stop();
 	return pause();

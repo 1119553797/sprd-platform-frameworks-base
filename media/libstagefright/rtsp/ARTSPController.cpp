@@ -40,6 +40,8 @@ ARTSPController::~ARTSPController() {
     mLooper->unregisterHandler(mReflector->id());
 }
 
+
+
 status_t ARTSPController::connect(const char *url) {
     Mutex::Autolock autoLock(mLock);
 

@@ -66,7 +66,7 @@ public class NetworkConnectivityListener {
 
             if (!action.equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
                 mListening == false) {
-                Log.w(TAG, "onReceived() called with " + mState.toString() + " and " + intent);
+                Log.w(TAG, "111onReceived() called with " + mState.toString() + " and " + intent);
                 return;
             }
 
@@ -89,7 +89,7 @@ public class NetworkConnectivityListener {
                 intent.getBooleanExtra(ConnectivityManager.EXTRA_IS_FAILOVER, false);
 
             if (DBG) {
-                Log.d(TAG, "onReceive(): mNetworkInfo=" + mNetworkInfo +  " mOtherNetworkInfo = "
+                Log.w(TAG, "onReceive(): mNetworkInfo=" + mNetworkInfo +  " mOtherNetworkInfo = "
                         + (mOtherNetworkInfo == null ? "[none]" : mOtherNetworkInfo +
                         " noConn=" + noConnectivity) + " mState=" + mState.toString());
             }
@@ -153,6 +153,7 @@ public class NetworkConnectivityListener {
      * This method stops this class from listening for network changes.
      */
     public synchronized void stopListening() {
+    Log.w(TAG, "stopListeninging enter");
         if (mListening) {
             mContext.unregisterReceiver(mReceiver);
             mContext = null;

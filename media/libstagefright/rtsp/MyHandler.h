@@ -108,6 +108,7 @@ struct MyHandler : public AHandler {
           mTryFakeRTCP(false),
           mReceivedFirstRTCPPacket(false),
           mReceivedFirstRTPPacket(false),
+          mServerException(false),
           mSeekable(false) {
         mNetLooper->setName("rtsp net");
         mNetLooper->start(false /* runOnCallingThread */,
@@ -127,13 +128,30 @@ struct MyHandler : public AHandler {
 
         sp<AMessage> reply = new AMessage('conn', id());
         mConn->connect(mSessionURL.c_str(), reply);
+		
+	sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
+	mConn->serverexception(reply1);
+	
 	LOGI("connecting %s",mSessionURL.c_str());
     }
 
     void disconnect(const sp<AMessage> &doneMsg) {
         mDoneMsg = doneMsg;
 	LOGI("disconnect.enter...");
+#if 1
         (new AMessage('abor', id()))->post();
+#else
+	if (mServerException == false)
+	{
+	mServerException  = true;
+        (new AMessage('abor', id()))->post();
+	}
+	else
+	{
+	 doneMsg->post();
+	 mDoneMsg = NULL;
+	}
+#endif
     }
 
     void seek(int64_t timeUs, const sp<AMessage> &doneMsg) {
@@ -620,6 +638,7 @@ struct MyHandler : public AHandler {
                     mDoneMsg->post();
                     mDoneMsg = NULL;
                 }
+		mServerException = false;
                 break;
             }
 
@@ -937,7 +956,24 @@ struct MyHandler : public AHandler {
                 }
                 break;
             }
-
+	    case 'expt':  //@hong server exception
+/*	    
+	       if (mServerException == false)
+		{
+			mServerException = true;
+                        sp<AMessage> msg = new AMessage('abor', id());
+                        msg->post();		
+			break;
+	    	}
+*/
+		LOGI("server exception error.");
+             if (mDoneMsg != NULL) {
+		LOGI("server exception error1.");
+                    mDoneMsg->setInt32("result", UNKNOWN_ERROR);
+                    mDoneMsg->post();
+                    mDoneMsg = NULL;
+                }
+		break;
             default:
                 TRESPASS();
                 break;
@@ -1076,6 +1112,7 @@ private:
     bool mReceivedFirstRTPPacket;
     bool mSeekable;
 
+    bool mServerException;
     struct TrackInfo {
         AString mURL;
         int mRTPSocket;

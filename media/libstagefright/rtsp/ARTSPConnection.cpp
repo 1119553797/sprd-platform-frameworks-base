@@ -33,13 +33,14 @@
 namespace android {
 
 // static
-const int64_t ARTSPConnection::kSelectTimeoutUs = 1000ll;
+const int64_t ARTSPConnection::kSelectTimeoutUs = 10000ll;
 
 ARTSPConnection::ARTSPConnection()
     : mState(DISCONNECTED),
       mSocket(-1),
       mConnectionID(0),
       mNextCSeq(0),
+      mServerExceptionMsg(NULL),
       mReceiveResponseEventPending(false) {
 }
 
@@ -62,6 +63,11 @@ void ARTSPConnection::disconnect(const sp<AMessage> &reply) {
     sp<AMessage> msg = new AMessage(kWhatDisconnect, id());
     msg->setMessage("reply", reply);
     msg->post();
+}
+
+void  ARTSPConnection::serverexception(const sp<AMessage> &reply)
+{
+	mServerExceptionMsg = reply;
 }
 
 void ARTSPConnection::sendRequest(
@@ -454,6 +460,12 @@ status_t ARTSPConnection::receive(void *data, size_t size) {
         if (n == 0) {
             // Server closed the connection.
             LOGE("Server unexpectedly closed the connection2.");
+		mState = DISCONNECTED;  //@hong handle server exception.
+		if (mServerExceptionMsg!= NULL)
+			{
+			mServerExceptionMsg->post();
+			mServerExceptionMsg = NULL;
+			}
             return ERROR_IO;
         } else if (n < 0) {
             if (errno == EINTR) {
