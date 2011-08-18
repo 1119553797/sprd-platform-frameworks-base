@@ -80,6 +80,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mValidTables.add("favorites");
         mValidTables.add("gservices");
         mValidTables.add("old_favorites");
+
+     // ************Modify by luning 11-07-30 for CR<NEWMS00107904> begin************
+        mValidTables.add("trusted_list");
+     // ************Modify by luning 11-07-30 for CR<NEWMS00107904> end************
+        
         mValidTables.add("proxy");//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910)
     }
 
@@ -128,7 +133,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "shortcut INTEGER," +
                     "ordering INTEGER" +
                     ");");
-        
+     // ************Modify by luning 11-07-30 for CR<NEWMS00107904> begin************
+        db.execSQL("CREATE TABLE trusted_list (" +
+                "_id INTEGER PRIMARY KEY," +
+                "ssid TEXT UNIQUE ON CONFLICT REPLACE," +
+                "priority INTEGER" +
+                ");");
+     // ************Modify by luning 11-07-30 for CR<NEWMS00107904> end************
+		
         //add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start
         db.execSQL("CREATE TABLE proxy (" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -751,6 +763,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP INDEX IF EXISTS bookmarksIndex1");
             db.execSQL("DROP INDEX IF EXISTS bookmarksIndex2");
             db.execSQL("DROP TABLE IF EXISTS favorites");
+         // ************Modify by luning 11-07-30 for CR<NEWMS00107904> begin************
+            db.execSQL("DROP TABLE IF EXISTS trusted_list");
+         // ************Modify by luning 11-07-30 for CR<NEWMS00107904> end************
             db.execSQL("DROP TABLE IF EXISTS proxy");//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910)
             onCreate(db);
 

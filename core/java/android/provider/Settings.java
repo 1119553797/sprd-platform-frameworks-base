@@ -705,6 +705,7 @@ public final class Settings {
             MOVED_TO_SECURE.add(Secure.USB_MASS_STORAGE_ENABLED);
             MOVED_TO_SECURE.add(Secure.USE_GOOGLE_MAIL);
             MOVED_TO_SECURE.add(Secure.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON);
+            MOVED_TO_SECURE.add(Secure.WIFI_AUTO_CONNECT);  //add by liguxiang 08-17-11 for wifi autoconnect control
             MOVED_TO_SECURE.add(Secure.WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY);
             MOVED_TO_SECURE.add(Secure.WIFI_NUM_OPEN_NETWORKS_KEPT);
             MOVED_TO_SECURE.add(Secure.WIFI_ON);
@@ -1913,6 +1914,9 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON =
             Secure.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON;
+        
+        @Deprecated
+        public static final String WIFI_AUTO_CONNECT = Secure.WIFI_AUTO_CONNECT;  //add by liguxiang 08-17-11 for wifi autoconnect control
 
         /**
          * @deprecated Use
@@ -2534,6 +2538,8 @@ public final class Settings {
          */
         public static final String WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON =
                 "wifi_networks_available_notification_on";
+        
+        public static final String WIFI_AUTO_CONNECT = "wifi_auto_connect";  //add by liguxiang 08-17-11 for wifi autoconnect control
 
         /**
          * Delay (in seconds) before repeating the Wi-Fi networks available notification.
@@ -3429,6 +3435,7 @@ public final class Settings {
             TTS_DEFAULT_COUNTRY,
             TTS_ENABLED_PLUGINS,
             WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON,
+            WIFI_AUTO_CONNECT,  //add by liguxiang 08-17-11 for wifi autoconnect control
             WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY,
             WIFI_NUM_ALLOWED_CHANNELS,
             WIFI_NUM_OPEN_NETWORKS_KEPT,
