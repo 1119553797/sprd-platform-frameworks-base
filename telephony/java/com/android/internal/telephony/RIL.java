@@ -2726,19 +2726,33 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         return response;
     }
 
-//add by liguxiang 07-15-11 for MS253993 begin
 protected Object
 responseUnsolUssdStrings(Parcel p){
-    String response;
-    String hexString[] = null;
+    String response[] = null;
 
-    hexString = p.readStringArray();
-    byte[] dataUssd = IccUtils.hexStringToBytes(hexString[1]);
-    response= new String(dataUssd);
+    response = p.readStringArray();
+    if (response.length > 2) {
+        int num = Integer.parseInt(response[2]);
+        if (num == 15) {
+            byte[] dataUssd = IccUtils.hexStringToBytes(response[1]);
+            String tmpString = new String(dataUssd);
+            response[1] = tmpString;
+	} else if (num == 72) {
+	    byte[] bytes = new byte[response[1].length()/2];
+	    for (int i=0; i<response[1].length(); i+=2) {
+		bytes[i/2] = (byte)(Integer.parseInt(response[1].substring(i,i+2),16));
+	    }
+	    try{
+	        String utfString = new String(bytes,"UTF-16");
+	        response[1] = utfString;
+	    }catch(Exception e){
+
+	    }
+	}
+    }
     
     return response;
 }
-//add by liguxiang 07-15-11 for MS253993 end
 
     protected Object
     responseStrings(Parcel p) {
