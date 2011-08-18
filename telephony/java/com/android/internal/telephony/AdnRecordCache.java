@@ -41,7 +41,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 	public UsimPhoneBookManager mUsimPhoneBookManager;
     PhoneBase phone;
     // to resolve deadlock between usimPhoneBookManager & iccPhoneBookinterfacemanager
-    private final Object mLock = new Object();
+    //private final Object mLock = new Object();
 
     // Indexed by EF ID
     SparseArray<ArrayList<AdnRecord>> adnLikeFiles
