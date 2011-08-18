@@ -128,6 +128,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
     private static final int USIM_EFCCP1_TAG  = 0xCB;
 
     public UsimPhoneBookManager(PhoneBase phone,IccFileHandler fh,AdnRecordCache cache) {
+        super();
         mFh = fh;
 	  mPhone = phone;
         mPhoneBookRecords = new ArrayList<AdnRecord>();
@@ -144,6 +145,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
         ishaveGrp = false;
         ishaveGas = false;
         // zhanglj add end
+        mLock = cache.getLock();
     }
 
     public void reset() {
@@ -1546,26 +1548,26 @@ private void readAasFileAndWait(int recNum) {
                 mLock.notify();
             }
             break;
-	  case EVENT_ADN_RECORD_COUNT:
-	      Log.i(LOG_TAG,"Loading EVENT_ADN_RECORD_COUNT");
-             ar = (AsyncResult) msg.obj;
-             synchronized (mLock) {
-                        if (ar.exception == null) {
-                            recordSize = (int[])ar.result;
-                            // recordSize[0]  is the record length
-                            // recordSize[1]  is the total length of the EF file
-                            // recordSize[2]  is the number of records in the EF file
-                            Log.i(LOG_TAG,"EVENT_ADN_RECORD_COUNT Size " + recordSize[0] +
-                                    " total " + recordSize[1] +
-                                    " #record " + recordSize[2]);
-				  mAdnCount +=   recordSize[2];
-                            mAdnSize += recordSize[1];
-				  recordSize[2] =  mAdnCount;
-				  recordSize[1] = mAdnSize;
-                            mLock.notifyAll();
-                        }
-                    }
-                    break;
+        case EVENT_ADN_RECORD_COUNT:
+            Log.i(LOG_TAG, "Loading EVENT_ADN_RECORD_COUNT");
+            ar = (AsyncResult) msg.obj;
+            synchronized (mLock) {
+                if (ar.exception == null) {
+                    recordSize = (int[])ar.result;
+                    // recordSize[0]  is the record length
+                    // recordSize[1]  is the total length of the EF file
+                    // recordSize[2]  is the number of records in the EF file
+                    Log.i(LOG_TAG,"EVENT_ADN_RECORD_COUNT Size " + recordSize[0] +
+                            " total " + recordSize[1] +
+                            " #record " + recordSize[2]);
+                    mAdnCount +=   recordSize[2];
+                    mAdnSize += recordSize[1];
+                    recordSize[2] =  mAdnCount;
+                    recordSize[1] = mAdnSize;
+                    mLock.notifyAll();
+                }
+            }
+            break;
         }
     }
 

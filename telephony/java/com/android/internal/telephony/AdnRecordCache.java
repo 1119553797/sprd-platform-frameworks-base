@@ -40,7 +40,9 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 	private IccFileHandler mFh;
 	public UsimPhoneBookManager mUsimPhoneBookManager;
     PhoneBase phone;
-   
+    // to resolve deadlock between usimPhoneBookManager & iccPhoneBookinterfacemanager
+    private final Object mLock = new Object();
+
     // Indexed by EF ID
     SparseArray<ArrayList<AdnRecord>> adnLikeFiles
         = new SparseArray<ArrayList<AdnRecord>>();
@@ -89,6 +91,9 @@ public final class AdnRecordCache extends Handler implements IccConstants {
         mUsimPhoneBookManager = new UsimPhoneBookManager(phone,mFh, this);
     }
 
+    public Object getLock() {
+        return mLock;
+    }
     //***** Called from SIMRecords
 
     /**
@@ -900,7 +905,6 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
         for (int i = 0, s = waiters.size() ; i < s ; i++) {
             Message waiter = waiters.get(i);
-
             AsyncResult.forMessage(waiter, ar.result, ar.exception);
             waiter.sendToTarget();
         }

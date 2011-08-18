@@ -34,6 +34,7 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
         super(phone);
         adnCache = phone.mSIMRecords.getAdnCache();
         //NOTE service "simphonebook" added by IccSmsInterfaceManagerProxy
+        mLock = adnCache.getLock();
     }
 
     public void dispose() {

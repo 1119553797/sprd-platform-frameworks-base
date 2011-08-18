@@ -36,7 +36,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 
     protected PhoneBase phone;
     protected AdnRecordCache adnCache;
-    protected final Object mLock = new Object();
+    protected /*final*/ Object mLock = new Object();
 //zhanglj add begin for 
 	protected final Object mUsimLock = new Object();
 	protected final Object mEfLock = new Object();
