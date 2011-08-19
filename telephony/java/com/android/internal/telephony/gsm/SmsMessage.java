@@ -62,7 +62,8 @@ public class SmsMessage extends SmsMessageBase{
     // TP-Data-Coding-Scheme
     // see TS 23.038
     private int dataCodingScheme;
-
+    //see TS23.040
+    private int validityPeriodFormat;
     // TP-Reply-Path
     // e.g. 23.040 9.2.2.1
     private boolean replyPathPresent = false;
@@ -1122,6 +1123,9 @@ public class SmsMessage extends SmsMessageBase{
         switch (mti) {
         // TP-Message-Type-Indicator
         // 9.2.3
+        case 1:
+            parseSmsSubmit(p, firstByte);
+            break;
         case 0:
             parseSmsDeliver(p, firstByte);
             break;
@@ -1214,6 +1218,41 @@ public class SmsMessage extends SmsMessageBase{
 
         parseUserData(p, hasUserDataHeader);
     }
+
+    //3GPP TS 23.040
+    private void parseSmsSubmit(PduParser p, int firstByte) {
+        Log.i(LOG_TAG,"parseSmsSubmit,sprdroid ====== parseSmsSubmit" + firstByte);
+
+        validityPeriodFormat = ((firstByte>>3) & 0x3);
+        Log.v("parseSmsSubmit", "validityPeriodFormat" +validityPeriodFormat);
+        //TP-RP b refer. Layout of SMS-SUBMIT
+        replyPathPresent = (firstByte & 0x80) == 0x80;
+        // TP-MR I
+        messageRef = p.getByte();
+        // TP-DA 2-12o
+        originatingAddress= p.getAddress();
+
+        if (originatingAddress != null) {
+            Log.v("parseSmsSubmit", "SMS destinationAddress: "
+                    + originatingAddress.address);
+        }
+        // TP-PID o
+        protocolIdentifier = p.getByte();
+        // TP-DCS o
+        dataCodingScheme = p.getByte();
+        Log.v("parseSmsSubmit", "SMS TP-PID:" + protocolIdentifier
+                    + " data coding scheme: " + (dataCodingScheme & 0xff));
+
+        if (validityPeriodFormat != 0) {
+            // TP-VP
+            int Validityperiod = p.getByte();
+            Log.v("parseSmsSubmit", "validityPeriodFormat" + validityPeriodFormat);
+        }
+        // TP-UD
+        boolean hasUserDataHeader = (firstByte & 0x40) == 0x40;
+        parseUserData(p, hasUserDataHeader);
+    }
+
 
     /**
      * Parses the User Data of an SMS.
