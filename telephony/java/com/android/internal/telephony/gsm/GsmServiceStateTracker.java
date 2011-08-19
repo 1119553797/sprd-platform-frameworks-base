@@ -593,7 +593,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         if (plmn.equals("CMCC") || plmn.equals("CHINA MOBILE") ) {
              displayPlmn = Resources.getSystem().getText(
                     com.android.internal.R.string.custom_china_mobile).toString();
-        }else if (plmn.equals("CHN-UNICOM") || plmn.equals("China Unicom") || plmn.equals("UNICOM")) {
+        }else if (plmn.equals("CHN-CUGSM") || plmn.equals("CHN-UNICOM") || plmn.equals("China Unicom") || plmn.equals("UNICOM")) {
              displayPlmn = Resources.getSystem().getText(
                     com.android.internal.R.string.custom_china_unicom).toString();
         }else {
@@ -617,11 +617,16 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         if (rule != curSpnRule
                 || !TextUtils.equals(spn, curSpn)
                 || !TextUtils.equals(plmn, curPlmn)) {
-            plmn = plmnDisplay(plmn);  //add by liguxiang 08-19-11 for custom plmn display
+        	//add by liguxiang 08-19-11 for custom plmn display begin
+            plmn = plmnDisplay(plmn);  
+            spn = plmnDisplay(spn);
+            //add by liguxiang 08-19-11 for custom plmn display end
             boolean showSpn = !mEmergencyOnly
                 && (rule & SIMRecords.SPN_RULE_SHOW_SPN) == SIMRecords.SPN_RULE_SHOW_SPN;
             boolean showPlmn =
                 (rule & SIMRecords.SPN_RULE_SHOW_PLMN) == SIMRecords.SPN_RULE_SHOW_PLMN;
+            Log.d(LOG_TAG,"curSpn = " + curSpn + "  showSpn = " + showSpn 
+            		+ "  curPlmn = " + curPlmn + "  showPlmn = " + showPlmn);
 
             Intent intent = new Intent(Intents.SPN_STRINGS_UPDATED_ACTION);
             intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
