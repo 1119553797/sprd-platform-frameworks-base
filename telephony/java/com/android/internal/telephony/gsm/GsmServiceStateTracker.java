@@ -583,6 +583,26 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         cm.setRadioPower(false, null);
     }
 
+   //add by liguxiang 08-19-11 for custom spn display begin 
+   private String plmnDisplay(String plmn) {
+        String displayPlmn;
+        if (plmn == null) {
+            return plmn;
+        }
+
+        if (plmn.equals("CMCC") || plmn.equals("CHINA MOBILE") ) {
+             displayPlmn = Resources.getSystem().getText(
+                    com.android.internal.R.string.custom_china_mobile).toString();
+        }else if (plmn.equals("CHN-UNICOM") || plmn.equals("China Unicom") || plmn.equals("UNICOM")) {
+             displayPlmn = Resources.getSystem().getText(
+                    com.android.internal.R.string.custom_china_unicom).toString();
+        }else {
+            return plmn;
+        }
+        return  displayPlmn;
+    }
+    //add by liguxiang 08-19-11 for custom spn display end 
+
     protected void updateSpnDisplay() {
         int rule = phone.mSIMRecords.getDisplayRule(ss.getOperatorNumeric());
         String spn = phone.mSIMRecords.getServiceProviderName();
@@ -597,6 +617,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         if (rule != curSpnRule
                 || !TextUtils.equals(spn, curSpn)
                 || !TextUtils.equals(plmn, curPlmn)) {
+            plmn = plmnDisplay(plmn);  //add by liguxiang 08-19-11 for custom plmn display
             boolean showSpn = !mEmergencyOnly
                 && (rule & SIMRecords.SPN_RULE_SHOW_SPN) == SIMRecords.SPN_RULE_SHOW_SPN;
             boolean showPlmn =

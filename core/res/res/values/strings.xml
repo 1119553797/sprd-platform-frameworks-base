@@ -2314,4 +2314,9 @@
     <string name="stk_refresh_sim_init_message" >SIM card is updating</string>
     <string name="stk_refresh_sim_reset_message" >Phone will reboot</string>
     <!--STK Add end  -->
+
+    <!-- add by liguxiang 08-19-11 for custom spn display begin -->
+    <string name="custom_china_mobile" >China Mobile</string>
+    <string name="custom_china_unicom" >China Unicom</string>    
+    <!-- add by liguxiang 08-19-11 for custom spn display end -->
 </resources>

@@ -884,4 +884,9 @@
     <string name="stk_refresh_sim_init_message" >SIM卡更新中</string>
     <string name="stk_refresh_sim_reset_message" >手机即将重启</string>
     <!--STK Add end  -->
+ 
+    <!-- add by liguxiang 08-19-11 for custom spn display begin -->
+    <string name="custom_china_mobile" >中国移动</string>
+    <string name="custom_china_unicom" >中国联通</string>
+    <!-- add by liguxiang 08-19-11 for custom spn display end -->
 </resources>
