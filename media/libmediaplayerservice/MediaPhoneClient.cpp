@@ -303,6 +303,9 @@ void MediaPhoneClient::notify(void* cookie, int msg, int ext1, int ext2)
     case MEDIA_SET_VIDEO_SIZE:
         msg = MEDIA_PHONE_EVENT_SET_VIDEO_SIZE;
         break;
+    default:
+	LOGE("notify error: %d, description: %s", msg, strerror(msg));
+	break;
     }
     if (client->mListener != NULL) {
         client->mListener->notify(msg, ext1, ext2);

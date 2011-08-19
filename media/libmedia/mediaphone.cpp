@@ -42,7 +42,7 @@ status_t MediaPhone::setComm(const char* urlIn, const char* urlOut)
     status_t ret = mMediaPhone->setComm(urlIn, urlOut);
     if (OK != ret) {
         LOGV("setComm failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
     //mCurrentState = MEDIA_PHONE_INITIALIZED;
@@ -64,7 +64,7 @@ status_t MediaPhone::setCamera(const sp<ICamera>& camera)
     status_t ret = mMediaPhone->setCamera(camera);
     if (OK != ret) {
         LOGV("setCamera failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
     return ret;
@@ -85,7 +85,7 @@ status_t MediaPhone::setRemoteSurface(const sp<Surface>& surface)
     status_t ret = mMediaPhone->setRemoteSurface(surface->getISurface());
     if (OK != ret) {
         LOGV("setRemoteSurface failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
     return ret;
@@ -106,7 +106,7 @@ status_t MediaPhone::setLocalSurface(const sp<Surface>& surface)
     status_t ret = mMediaPhone->setLocalSurface(surface->getISurface());
     if (OK != ret) {
         LOGV("setLocalSurface failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
     return ret;
@@ -204,7 +204,7 @@ status_t MediaPhone::internal_start(){
     status_t ret = mMediaPhone->start();
     if (OK != ret) {
         LOGE("start failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
     mCurrentState = MEDIA_PHONE_STARTED;
@@ -234,7 +234,7 @@ status_t MediaPhone::stop()
     status_t ret = mMediaPhone->stop();
     if (OK != ret) {
         LOGE("stop failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
 	
@@ -304,7 +304,7 @@ status_t MediaPhone::setListener(const sp<MediaPhoneListener>& listener)
     status_t ret = mMediaPhone->setListener(this);
     if (OK != ret) {
         LOGV("setListener failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
 
@@ -325,7 +325,7 @@ status_t MediaPhone::setDecodeType(int type)
 	status_t ret = mMediaPhone->setDecodeType(type);
     if (OK != ret) {
         LOGV("setDecodeType failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
 	
@@ -378,7 +378,7 @@ status_t MediaPhone::enableRecord(bool isEnable, int type, int fd)
     status_t ret = mMediaPhone->enableRecord(isEnable, type, fd);
     if (OK != ret) {
         LOGE("enableRecord failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     } else {
         mIsRecording = isEnable;
@@ -406,7 +406,7 @@ status_t MediaPhone::startUpLink()
     status_t ret = mMediaPhone->startUpLink();
     if (OK != ret) {
         LOGE("startUpLink failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
 	mIsUpLinkStopped = false;
@@ -433,7 +433,7 @@ status_t MediaPhone::stopUpLink()
     status_t ret = mMediaPhone->stopUpLink();
     if (OK != ret) {
         LOGE("stopUpLink failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
 	mIsUpLinkStopped = true;
@@ -459,7 +459,7 @@ status_t MediaPhone::startDownLink()
     status_t ret = mMediaPhone->startDownLink();
     if (OK != ret) {
         LOGE("startDownLink failed: %d, %s", ret, strerror(ret));
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
 	mIsDownLinkStopped = false;
@@ -486,7 +486,7 @@ status_t MediaPhone::stopDownLink()
     status_t ret = mMediaPhone->stopDownLink();
     if (OK != ret) {
         LOGE("stopDownLink failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
 	mIsDownLinkStopped = true;
@@ -510,7 +510,7 @@ status_t MediaPhone::setCameraParam(const char *key, int value)
     status_t ret = mMediaPhone->setCameraParam(key, value);
     if (OK != ret) {
         LOGE("setCameraParam failed: %d", ret);
-        mCurrentState = MEDIA_PHONE_ERROR;
+//        mCurrentState = MEDIA_PHONE_ERROR;
         return ret;
     }
 	mIsDownLinkStopped = true;
@@ -537,7 +537,7 @@ void MediaPhone::notify(int msg, int ext1, int ext2)
     case MEDIA_PHONE_EVENT_ERROR:
         LOGE("error (%d, %d)", ext1, ext2);
 	if (ext1 != INVALID_OPERATION) {
-        	mCurrentState = MEDIA_PHONE_ERROR;
+//        	mCurrentState = MEDIA_PHONE_ERROR;
 	}
         if (mPrepareSync)
         {
