@@ -1179,7 +1179,25 @@ public class PduParser {
             return parseLongInteger(pduDataStream);
         }
     }
-
+    
+    //======fixed CR<NEWMS00110183> by luning at 11-08-18 begin======
+    protected static long parseInteger(ByteArrayInputStream pduDataStream) {
+        assert(null != pduDataStream);
+        pduDataStream.mark(1);
+        int temp = pduDataStream.read();
+        assert(-1 != temp);
+        pduDataStream.reset();
+        if (temp > SHORT_INTEGER_MAX && temp < 255) {
+            return parseShortInteger(pduDataStream);
+        } else {
+            return parseLongInteger(pduDataStream);
+        }
+    }
+    //======fixed CR<NEWMS00110183> by luning at 11-08-18 end======
+    
+    
+    
+   
     /**
      * To skip length of the wap value.
      *
@@ -1335,11 +1353,16 @@ public class PduParser {
                             map.put(PduPart.P_CHARSET, CharacterSets.ANY_CHARSET);
                         }
                     } else {
-                        //Well-known-charset
-                        int charset = (int) parseIntegerValue(pduDataStream);
-                        if (map != null) {
-                            map.put(PduPart.P_CHARSET, charset);
-                        }
+					// Well-known-charset
+
+                    	//======fixed CR<NEWMS00110183> by luning at 11-08-18 begin======
+//						int charset = (int) parseIntegerValue(pduDataStream);
+						int charset = (int) parseInteger(pduDataStream);
+						if (map != null) {
+							Log.d("lu","PduParser---->parser charset:"+charset);
+							map.put(PduPart.P_CHARSET, charset);
+						}
+						//======fixed CR<NEWMS00110183> by luning at 11-08-18 end======
                     }
 
                     tempPos = pduDataStream.available();

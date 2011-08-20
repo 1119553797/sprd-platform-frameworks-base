@@ -949,8 +949,14 @@ public class PduComposer {
             // content-type parameter : charset
             int charset = part.getCharset();
             if (charset != 0) {
-                appendOctet(PduPart.P_CHARSET);
-                appendShortInteger(charset);
+				appendOctet(PduPart.P_CHARSET);
+				//======fixed CR<NEWMS00110183> by luning at 11-08-18 begin======
+				if (charset >> 7 == 0) {
+					appendShortInteger(charset);
+				} else {
+					appendLongInteger(charset);
+				}
+				//======fixed CR<NEWMS00110183> by luning at 11-08-18 end======
             }
 
             int contentTypeLength = contentTypeBegin.getLength();

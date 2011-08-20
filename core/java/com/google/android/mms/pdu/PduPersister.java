@@ -424,8 +424,25 @@ public class PduPersister {
                     // faster.
                     if ("text/plain".equals(type) || "application/smil".equals(type)) {
                         String text = c.getString(PART_COLUMN_TEXT);
-                        byte [] blob = new EncodedStringValue(text != null ? text : "")
-                            .getTextString();
+                        //======fixed CR<NEWMS00110183> by luning at 11-08-18 begin======
+						byte[] blob;
+						if(null == text){
+							text = "";
+						}
+						Log.d("lu", "PduPersister--->get text from database,text decode use charset:"+part.getCharset());
+						if (part.getCharset() != CharacterSets.ANY_CHARSET) {
+							try {
+								blob = text.getBytes(CharacterSets.getMimeName(part.getCharset()));
+							} catch (UnsupportedEncodingException e) {
+								blob = new EncodedStringValue(text).getTextString();
+							}
+						} else {
+							//I noticed that when MediaModelFactory create TextModel,
+							//the default way is to use ISO_8859_1 to decode the data
+							//maybe something wrong at here!
+							blob = new EncodedStringValue(text).getTextString();
+						}
+						//======fixed CR<NEWMS00110183> by luning at 11-08-18 end======
                         baos.write(blob, 0, blob.length);
                     } else {
 
@@ -737,8 +754,12 @@ public class PduPersister {
         try {
             byte[] data = part.getData();
             if ("text/plain".equals(contentType) || "application/smil".equals(contentType)) {
-                ContentValues cv = new ContentValues();
-                cv.put(Telephony.Mms.Part.TEXT, new EncodedStringValue(data).getString());
+                ContentValues cv = new ContentValues();            
+                //======fixed CR<NEWMS00110183> by luning at 11-08-18 begin======
+                int charset = part.getCharset(); 
+                Log.d("lu", "PduPersister--->save text to database,use charset:"+charset);
+                cv.put(Telephony.Mms.Part.TEXT, new EncodedStringValue(charset,data).getString());
+                //======fixed CR<NEWMS00110183> by luning at 11-08-18 end======
                 if (mContentResolver.update(uri, cv, null, null) != 1) {
                     throw new MmsException("unable to update " + uri.toString());
                 }
