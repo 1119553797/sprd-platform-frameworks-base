@@ -35,6 +35,7 @@ import android.net.WebAddress;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -45,7 +46,6 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Map;
 
-import junit.framework.Assert;
 
 import org.apache.http.HttpHost;
 
@@ -68,10 +68,12 @@ public class RequestQueue implements RequestFeeder {
 	
     /* default simultaneous connection count */
     private static final int CONNECTION_COUNT = 4;
-	//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start
-    private static final String URISTR= "content://settings/proxy";
-    private static final Uri CONTENT_URI = Uri.parse(URISTR);
-	//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
+	//add by niezhong 08-21-11 for wifiProxy(NEWMS00107910) start
+    private boolean isContain = false;
+    private boolean setProxy = false;
+    private String mSsid = "";
+ 
+	//add by niezhong 08-21-11 for wifiProxy(NEWMS00107910) end
     /**
      * This class maintains active connection threads
      */
@@ -270,35 +272,20 @@ public class RequestQueue implements RequestFeeder {
     private synchronized void setProxyConfig() {
         NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
         if (info != null && info.getType() == ConnectivityManager.TYPE_WIFI) {
-		//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start
-        	Cursor c = getWifiCursor(mContext);
-        	int flag = -1;
-        	String proxyList = "";
-        	String curfilter = "";
-        	if(c != null && c.moveToNext()) {
-        		flag = c.getInt(c.getColumnIndex("flag"));
-        		proxyList = c.getString(c.getColumnIndex("proxyfilter"));
-        		curfilter = c.getString(c.getColumnIndex("curfilter"));
-        		if(proxyList==null)proxyList = "";
-        		if(curfilter==null)curfilter = "";
-        		if(flag < 1 || proxyList.contains(curfilter)) {
-        			mProxyHost = null;
-        		}
-        		else {
-        			String proxyport = c.getString(c.getColumnIndex("value"));
-        			if(proxyport != null) {
-        				String proxy = getWifiProxy(proxyport);
-        				int port = getwifiProt(proxyport);
-        				mActivePool.disablePersistence();
-        				mProxyHost = new HttpHost(proxy,port,"http");
-        			}else {
-        				mProxyHost = null;
-        			}
-        		}
-        	}else {
+		//add by niezhong 08-21-11 for wifiProxy(NEWMS00107910) start
+        	String tmpPorxyPort = getProxyPort(mContext);
+        	if(tmpPorxyPort == null) {
         		mProxyHost = null;
         	}
-			//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
+        	else {
+        		String hostname = getWifiProxy(tmpPorxyPort);
+        		int port = getWifiPort(tmpPorxyPort);
+        		mActivePool.disablePersistence();
+        		mProxyHost = new HttpHost(hostname,port,"http");
+        		setProxy = true;
+		        isContain =false;
+        	}
+			//add by niezhong 08-21-11 for wifiProxy(NEWMS00107910) end
         } else {
             String host = Proxy.getHost(mContext);
             if (HttpLog.LOGV) HttpLog.v("RequestQueue.setProxyConfig " + host);
@@ -353,7 +340,13 @@ public class RequestQueue implements RequestFeeder {
             String url, WebAddress uri, String method, Map<String, String> headers,
             EventHandler eventHandler,
             InputStream bodyProvider, int bodyLength) {
-
+    	if(setProxy==true) {
+    		isContain = isContainUrl(uri.mHost);
+    		if(isContain) {
+    			mProxyHost=null;
+   		}
+    		setProxy = false;
+    	}
         if (HttpLog.LOGV) HttpLog.v("RequestQueue.queueRequest " + uri);
 
         // Ensure there is an eventHandler set
@@ -579,7 +572,27 @@ public class RequestQueue implements RequestFeeder {
         Connection getConnection(Context context, HttpHost host);
         boolean recycleConnection(Connection connection);
     }
-   //add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start 
+    /////////////add by niezhong for wifiproxy 08-21-11(NEWMS00107910) start//////////////////
+    private String getProxyPort(Context ctx) {
+    	String proxyPortStr = "";
+    	if(ctx != null) {
+    		Cursor c = ctx.getContentResolver().query(Settings.Proxy.CONTENT_URI, null, "proxyflag=?", 
+    				new String[]{"1"}, null);
+    		if((c != null)&& c.moveToNext()) {
+    			proxyPortStr = c.getString(c.getColumnIndex(Settings.Proxy.VALUE));
+    			mSsid = c.getString(c.getColumnIndex(Settings.Proxy.NAME));
+    		}else{
+    			return null;
+    		}
+    		if(c != null) {
+    			c.close();
+    		}
+    	}else {
+    		return null;
+    	}
+    	return proxyPortStr;
+    }
+    
     private String getWifiProxy(String proxyport) {
     	if (proxyport != null) {
             int i = proxyport.indexOf(':');
@@ -590,7 +603,8 @@ public class RequestQueue implements RequestFeeder {
         }
 		return null;
     }
-    private int getwifiProt(String proxyport) {
+    
+    private int getWifiPort(String proxyport) {
     	if (proxyport != null) {
             int i = proxyport.indexOf(':');
             if (i == -1) {
@@ -602,11 +616,27 @@ public class RequestQueue implements RequestFeeder {
     	return -1;
     }
     
-    static final public Cursor getWifiCursor(Context ctx) {
-    	ContentResolver contentResolver = ctx.getContentResolver();
-        Assert.assertNotNull(contentResolver);
-        Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null);
-        return cursor;
+    private boolean isContainUrl(String curUrl) {
+    	Log.d("niezhong", "the access url = " + curUrl);
+    	boolean flag = false;
+    	if(mSsid == null || "".equals(mSsid) || mContext==null) {
+    		flag = false;
+    	}
+    	else {
+    		Cursor c = mContext.getContentResolver().query(Settings.ProxyList.CONTENT_URI, null, 
+    				 "name=? and '"+curUrl+"' like proxyfilter", new String[]{mSsid}, null);
+    		if(c != null && c.moveToNext()) {
+    			flag = true;
+    		}
+    		else {
+    			flag = false;
+    		}
+    		if(c != null) {
+    			c.close();
+    		}
+    	}
+    	Log.d("niezhong", "the result of filter = " + flag);
+    	return flag;
     }
-	//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
+    /////////////add by niezhong for wifiproxy(NEWMS00107910) end//////////////////
 }

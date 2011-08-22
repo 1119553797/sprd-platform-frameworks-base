@@ -85,7 +85,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mValidTables.add("trusted_list");
      // ************Modify by luning 11-07-30 for CR<NEWMS00107904> end************
         
-        mValidTables.add("proxy");//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910)
+        // Add by niezhong 08-22-11 for wifiProxy(NEWMS00107910)
+        mValidTables.add("proxy");
+        mValidTables.add("proxylist");
     }
 
     public DatabaseHelper(Context context) {
@@ -141,16 +143,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ");");
      // ************Modify by luning 11-07-30 for CR<NEWMS00107904> end************
 		
-        //add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start
+        // Add by niezhong 08-22-11 for wifiProxy(NEWMS00107910) start
         db.execSQL("CREATE TABLE proxy (" +
-                "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "name TEXT UNIQUE ON CONFLICT REPLACE," +
-                "value TEXT," + 
-                "flag INTEGER," +
-                "proxyfilter TEXT," +
-                "curfilter TEXT" +
-                ");");
-		//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
+                	"_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                	"name TEXT UNIQUE ON CONFLICT REPLACE," +
+                	"value TEXT," +
+                	"password TEXT," +
+                	"paswdflag INTEGER," +
+                	"proxyflag INTEGER," +
+                	"proxyfilter TEXT" +
+                	");");
+        
+        db.execSQL("CREATE TABLE proxylist (" +
+        			"_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+        			"name TEXT," +
+        			"proxyfilter TEXT" +
+        			");");
+		// Add by niezhong 08-22-11 for wifiProxy(NEWMS00107910) end
         
         db.execSQL("CREATE INDEX bookmarksIndex1 ON bookmarks (folder);");
         db.execSQL("CREATE INDEX bookmarksIndex2 ON bookmarks (shortcut);");
@@ -766,7 +775,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
          // ************Modify by luning 11-07-30 for CR<NEWMS00107904> begin************
             db.execSQL("DROP TABLE IF EXISTS trusted_list");
          // ************Modify by luning 11-07-30 for CR<NEWMS00107904> end************
-            db.execSQL("DROP TABLE IF EXISTS proxy");//add by niezhong 08-04-11 for wifiProxy(NEWMS00107910)
+		 
+            // Add by niezhong 08-04-11 for wifiProxy(NEWMS00107910)
+            db.execSQL("DROP TABLE IF EXISTS proxy");
+            db.execSQL("DROP TABLE IF EXISTS proxylist");
+            
             onCreate(db);
 
             // Added for diagnosing settings.db wipes after the fact
@@ -1211,10 +1224,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
             loadBooleanSetting(stmt, Settings.Secure.MOUNT_UMS_NOTIFY_ENABLED,
                     R.bool.def_mount_ums_notify_enabled);
-            //add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) start
-            db.execSQL("INSERT OR IGNORE INTO proxy(name,value,flag)"
-                    + " VALUES('http_proxy','10.0.0.172:80',-1);");
-            //add by niezhong 08-04-11 for wifiProxy(NEWMS00107910) end
         } finally {
             if (stmt != null) stmt.close();
         }

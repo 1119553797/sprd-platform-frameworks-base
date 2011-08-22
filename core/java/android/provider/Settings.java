@@ -1411,7 +1411,12 @@ public final class Settings {
         public static final String APPEND_FOR_VOLUME = "_volume";
      // ************Modify by luning at01-07-01 end************
         
-        
+        //add by niezhong for cellular->WLAN 08-20-11 NEWMS00110041 start
+        public static final String WIFI_CELLULAR_WLAN = "wifi_cellular_wlan";
+        public static final int CELLULAR_WALN_AUTO = 0;
+        public static final int CELLULAR_WALN_MANUAL = 1;
+        public static final int CELLULAR_WALN_ALWAYS = 2;
+        //add by niezhong for cellular->WLAN 08-20-11 NEWMS00110041 end
         /**
          * The mapping of stream type (integer) to its setting.
          */
@@ -1780,7 +1785,10 @@ public final class Settings {
             DOCK_SOUNDS_ENABLED,
             LOCKSCREEN_SOUNDS_ENABLED,
             SHOW_WEB_SUGGESTIONS,
-            NOTIFICATION_LIGHT_PULSE
+            NOTIFICATION_LIGHT_PULSE,
+            //add by niezhong for wifi proxy settings(NEWMS00107901) start
+            WIFI_CELLULAR_WLAN
+            //add by niezhong for wifi proxy settings(NEWMS00107901) end
         };
 
         // Settings moved to Settings.Secure
@@ -3712,4 +3720,26 @@ public final class Settings {
     public static String getGTalkDeviceId(long androidId) {
         return "android-" + Long.toHexString(androidId);
     }
+    
+    //add by niezhong for wifi proxy settings(NEWMS00107901) start
+    public static final class Proxy implements BaseColumns {
+    	public static final Uri CONTENT_URI =
+            Uri.parse("content://" + AUTHORITY + "/proxy"); 
+    	public static final String ID = "_id";
+    	public static final String NAME = "name";
+    	public static final String VALUE = "value";
+    	public static final String PASSWORD = "password";
+    	public static final String PASWDFLAG = "paswdflag";
+    	public static final String PROXYFLAG = "proxyflag";
+    	public static final String PROXYFILTER = "proxyfilter";
+    	
+    }
+    public static final class ProxyList implements BaseColumns{
+    	public static final Uri CONTENT_URI =
+            Uri.parse("content://" + AUTHORITY + "/proxylist"); 
+    	public static final String ID = "_id";
+    	public static final String NAME = "name";
+    	public static final String PROXYFILTER = "proxyfilter";
+    }
+  //add by niezhong for wifi proxy settings(NEWMS00107901) end
 }
