@@ -128,6 +128,7 @@ public class AdnRecord implements Parcelable {
 
 	public AdnRecord(int efid, int recordNumber, byte[] record) {
 		this.efid = efid;
+		Log.i("AdnRecord", "recordNumber : " + recordNumber);
 		this.recordNumber = recordNumber;
 		parseRecord(record);
 	}
@@ -158,12 +159,13 @@ public class AdnRecord implements Parcelable {
 	}
 
 	// add multi record and email in usim
-        public AdnRecord (String alphaTag, String number, String[] emails, 
-	 String anr, String aas, String sne, String grp, String gas) {
-	 
-		 this(0, 0, alphaTag, number, emails, anr, aas, sne, grp, gas);
-		 
-	 }
+	public AdnRecord(String alphaTag, String number, String[] emails,
+			String anr, String aas, String sne, String grp, String gas) {
+
+		this(0, 0, alphaTag, number, emails, anr, aas, sne, grp, gas);
+
+	}
+
 	public AdnRecord(int efid, int recordNumber, String alphaTag,
 			String number, String[] emails, String anr, String aas, String sne,
 			String grp, String gas) {
@@ -290,45 +292,39 @@ public class AdnRecord implements Parcelable {
 		return (s1.trim().equals(s2.trim()));
 	}
 
+	public boolean stringCompareEmails(String[] e1, String[] e2) {
+		String e = "";
 
-      private boolean stringCompareEmais(String[] e1, String[] e2)
-      	{
-             String e = "";
-		 
-             if(e1 == null){
+		if (e1 == null) {
 
-                 e1= new String[1];
-		    e1[0]= e;
-	      }
+			e1 = new String[1];
+			e1[0] = e;
+		}
 
-			 
-             if(e2 == null){
+		if (e2 == null) {
 
-                 e2= new String[1];
-		    e2[0]= e;
-	      }
+			e2 = new String[1];
+			e2[0] = e;
+		}
 
-             return Arrays.equals(e1, e2);
+		// return Arrays.equals(e1, e2);
+		Log.i("AdnRecord", "isEqual  adn  e1[0]:" + e1[0] + "e2[0]:" + e2[0]);
+		return stringCompareNullEqualsEmpty(e1[0], e2[0]);
 
-			 
 	}
+
 	public boolean isEqual(AdnRecord adn) {
-             Log.i("AdnRecord","isEqual  adn  adn.alphaTag:" +adn.alphaTag+ "number " +adn.number + "anr "+adn.anr );
-		Log.i("AdnRecord","isEqual  adn  adn.alphaTag:" +alphaTag+ "number " +number + "anr "+anr );	 
-		Log.i("AdnRecord","isEqual  adn  EMAIL comp:" +stringCompareEmais(emails, adn.emails) );	 
-             return (stringCompareNullEqualsEmpty(alphaTag, adn.alphaTag)
+		Log.i("AdnRecord", "isEqual  adn  adn.alphaTag:" + adn.alphaTag
+				+ "number: " + adn.number + "anr: " + adn.anr);
+		Log.i("AdnRecord", "isEqual  adn  adn.alphaTag:" + alphaTag
+				+ "number: " + number + "anr: " + anr);
+		Log.i("AdnRecord", "isEqual  adn  EMAIL comp:"
+				+ stringCompareEmails(emails, adn.emails));
+		return (stringCompareNullEqualsEmpty(alphaTag, adn.alphaTag)
 				&& stringCompareNullEqualsEmpty(number, adn.number)
-				&& stringCompareEmais(emails, adn.emails) && stringCompareNullEqualsEmpty(
+				&& stringCompareEmails(emails, adn.emails) && stringCompareNullEqualsEmpty(
 				anr, adn.anr));
-		 
-             /* return ( alphaTag.equals(adn.getAlphaTag()) &&
-                number.equals(adn.getNumber()) &&
-                Arrays.equals(emails, adn.getEmails()));*/
-              
-		/*return (stringCompareNullEqualsEmpty(alphaTag, adn.alphaTag)
-				&& stringCompareNullEqualsEmpty(number, adn.number)
-				&& Arrays.equals(emails, adn.emails) && stringCompareNullEqualsEmpty(
-				anr, adn.anr));*/
+
 	}
 
 	// add multi record and email in usim end
@@ -374,6 +370,8 @@ public class AdnRecord implements Parcelable {
 			adnString[i] = (byte) 0xFF;
 		}
 
+		Log.i("AdnRecord", "buildAdnString number " + number + "alphaTag"
+				+ alphaTag);
 		if (TextUtils.isEmpty(number) && TextUtils.isEmpty(alphaTag)) {
 			Log.w(LOG_TAG, "[buildAdnString] Empty dialing number");
 			return adnString; // return the empty record (for delete)
@@ -398,12 +396,12 @@ public class AdnRecord implements Parcelable {
 
 				adnString[footerOffset + ADN_BCD_NUMBER_LENGTH] = (byte) (bcdNumber.length);
 				adnString[footerOffset + ADN_CAPABILITY_ID] = (byte) 0xFF; // Capacility
-																			// Id
+				// Id
 				adnString[footerOffset + ADN_EXTENSION_ID] = (byte) 0xFF; // Extension
-																			// Record
-																			// Id
+				// Record
+				// Id
 			}
-			// zhanglj modify begin 2010-08-11 for English and Chinese name
+
 			// alphaTag format
 			if (!TextUtils.isEmpty(alphaTag)) {
 				// byteTag = GsmAlphabet.stringToGsm8BitPacked(alphaTag);
@@ -433,7 +431,6 @@ public class AdnRecord implements Parcelable {
 					return null;
 				}
 			}
-			// zhanglj modify end
 
 			return adnString;
 
@@ -484,7 +481,6 @@ public class AdnRecord implements Parcelable {
 		return emailString;
 	}
 
-	
 	public byte[] buildAnrString(int recordSize, int anrCount, int efid,
 			int adnNum) {
 		byte[] anrString;
@@ -522,13 +518,13 @@ public class AdnRecord implements Parcelable {
 				if (recordSize > TYPE1_DATA_LENGTH) {
 					anrString[recordSize - 4] = (byte) 0xFF; // Capacility Id
 					anrString[recordSize - 3] = (byte) 0xFF; // Extension Record
-																// Id
+					// Id
 					anrString[recordSize - 2] = (byte) efid; // Adn Sfi
 					anrString[recordSize - 1] = (byte) adnNum; // Adn Record Id
 				} else {
 					anrString[recordSize - 2] = (byte) 0xFF; // Capacility Id
 					anrString[recordSize - 1] = (byte) 0xFF; // Extension Record
-																// Id
+					// Id
 				}
 			}
 			return anrString;
@@ -672,7 +668,7 @@ public class AdnRecord implements Parcelable {
 		return iapString;
 	}
 
-	//add multi record and email in usim end
+	// add multi record and email in usim end
 
 	/**
 	 * See TS 51.011 10.5.10
@@ -718,7 +714,9 @@ public class AdnRecord implements Parcelable {
 
 			if (numberLength > MAX_NUMBER_SIZE_BYTES) {
 				// Invalid number length
-				number = "";
+				Log.i("AdnRecord", "parseRecord number is empty length"
+						+ numberLength);
+				number = null;
 				return;
 			}
 

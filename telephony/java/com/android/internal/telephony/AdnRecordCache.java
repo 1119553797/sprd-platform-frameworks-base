@@ -30,964 +30,996 @@ import java.util.Iterator;
 import com.android.internal.telephony.IccConstants;
 import android.text.TextUtils;
 
-
 /**
  * {@hide}
  */
 public final class AdnRecordCache extends Handler implements IccConstants {
-    //***** Instance Variables
+	// ***** Instance Variables
 
 	private IccFileHandler mFh;
 	public UsimPhoneBookManager mUsimPhoneBookManager;
-    PhoneBase phone;
-    // to resolve deadlock between usimPhoneBookManager & iccPhoneBookinterfacemanager
-    //private final Object mLock = new Object();
+	PhoneBase phone;
 
-    // Indexed by EF ID
-    SparseArray<ArrayList<AdnRecord>> adnLikeFiles
-        = new SparseArray<ArrayList<AdnRecord>>();
+	// Indexed by EF ID
+	SparseArray<ArrayList<AdnRecord>> adnLikeFiles = new SparseArray<ArrayList<AdnRecord>>();
 
-    // People waiting for ADN-like files to be loaded
-    SparseArray<ArrayList<Message>> adnLikeWaiters
-        = new SparseArray<ArrayList<Message>>();
+	// People waiting for ADN-like files to be loaded
+	SparseArray<ArrayList<Message>> adnLikeWaiters = new SparseArray<ArrayList<Message>>();
 
-    // People waiting for adn record to be updated
-    SparseArray<Message> userWriteResponse = new SparseArray<Message>();
+	// People waiting for adn record to be updated
+	SparseArray<Message> userWriteResponse = new SparseArray<Message>();
 
-    //***** Event Constants
+	// ***** Event Constants
 
-    static final int EVENT_LOAD_ALL_ADN_LIKE_DONE = 1;
-    static final int EVENT_UPDATE_ADN_DONE = 2;
-    private int[] mEfid = null;	
-    
-    //add multi record and email in usim begin
-    static final int EVENT_UPDATE_USIM_ADN_DONE = 3;
-	
-    public int mInsetIndex = -1;
+	static final int EVENT_LOAD_ALL_ADN_LIKE_DONE = 1;
+	static final int EVENT_UPDATE_ADN_DONE = 2;
+	private int[] mEfid = null;
+
+	// add multi record and email in usim begin
+	static final int EVENT_UPDATE_USIM_ADN_DONE = 3;
+
+	public int mInsetIndex = -1;
 	protected final Object mLock = new Object();
 	public boolean updateUsimOthers = true;
 
-  /*  public AdnRecordCache(IccFileHandler fh) {
-	     mFh = fh;
-	     mUsimPhoneBookManager = new UsimPhoneBookManager(mFh, this);
-	}
-	*/
-	public int getAdnLikeSize(){
+	/*
+	 * public AdnRecordCache(IccFileHandler fh) { mFh = fh;
+	 * mUsimPhoneBookManager = new UsimPhoneBookManager(mFh, this); }
+	 */
+	public int getAdnLikeSize() {
 		return adnLikeFiles.size();
 	}
-	
-	public UsimPhoneBookManager getUsimPhoneBookManager(){
+
+	public UsimPhoneBookManager getUsimPhoneBookManager() {
 		return mUsimPhoneBookManager;
 	}
+
 	// add multi record and email in usim end
 
-	//***** Constructor
+	// ***** Constructor
 
-
-
-    public AdnRecordCache(PhoneBase phone) {
-        this.phone = phone;
-	  mFh = phone.getIccFileHandler();
-        mUsimPhoneBookManager = new UsimPhoneBookManager(phone,mFh, this);
-    }
-
-    public Object getLock() {
-        return mLock;
-    }
-    //***** Called from SIMRecords
-
-    /**
-     * Called from SIMRecords.onRadioNotAvailable and SIMRecords.handleSimRefresh.
-     */
-    public void reset() {
-        adnLikeFiles.clear();
-        mUsimPhoneBookManager.reset();
-
-        clearWaiters();
-        clearUserWriters();
-
-    }
-
-    private void clearWaiters() {
-        int size = adnLikeWaiters.size();
-        for (int i = 0; i < size; i++) {
-            ArrayList<Message> waiters = adnLikeWaiters.valueAt(i);
-            AsyncResult ar = new AsyncResult(null, null, new RuntimeException("AdnCache reset"));
-            notifyWaiters(waiters, ar);
-        }
-        adnLikeWaiters.clear();
-    }
-
-    private void clearUserWriters() {
-        int size = userWriteResponse.size();
-        for (int i = 0; i < size; i++) {
-            sendErrorResponse(userWriteResponse.valueAt(i), "AdnCace reset");
-        }
-        userWriteResponse.clear();
-    }
-
-    /**
-     * @return List of AdnRecords for efid if we've already loaded them this
-     * radio session, or null if we haven't
-     */
-    public ArrayList<AdnRecord>
-    getRecordsIfLoaded(int efid) {
-        return adnLikeFiles.get(efid);
-    }
-    public int[] getRecordsEfId(int efid){
-
-    
-          int efIds[] = null;
-          Log.i("AdnRecordCache","getRecordsEfId"+efid);
-	    if(EF_PBR == efid){
-
-		   efIds = mUsimPhoneBookManager.getEfFilesFromUsim();
-
-	    }else{
-
-
-
-                efIds = new int[1];
-		   efIds[0] = efid;
-
-
-	   }
-         mEfid = efIds;
-         return efIds;
-
-
-
-
-
-   }
-
-
-    /**
-     * Returns extension ef associated with ADN-like EF or -1 if
-     * we don't know.
-     *
-     * See 3GPP TS 51.011 for this mapping
-     */
-    int extensionEfForEf(int efid) {
-        switch (efid) {
-            case EF_MBDN: return EF_EXT6;
-            case EF_ADN: return EF_EXT1;
-            case EF_SDN: return EF_EXT3;
-            case EF_FDN: return EF_EXT2;
-            case EF_MSISDN: return EF_EXT1;
-            case EF_PBR: return 0; // The EF PBR doesn't have an extension record
-            default: return 0;
-        }
-    }
-
-    private void sendErrorResponse(Message response, String errString) {
-        if (response != null) {
-            Exception e = new RuntimeException(errString);
-            AsyncResult.forMessage(response).exception = e;
-            response.sendToTarget();
-        }
-    }
-
-    /**
-     * Update an ADN-like record in EF by record index
-     *
-     * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN
-     * @param adn is the new adn to be stored
-     * @param recordIndex is the 1-based adn record index
-     * @param pin2 is required to update EF_FDN, otherwise must be null
-     * @param response message to be posted when done
-     *        response.exception hold the exception in error
-     */
-    public void updateAdnByIndex(int efid, AdnRecord adn, int recordIndex, String pin2,
-            Message response) {
-
-        int extensionEF = extensionEfForEf(efid);
-        if (extensionEF < 0) {
-            sendErrorResponse(response, "EF is not known ADN-like EF:" + efid);
-            return;
-        }
-
-        Message pendingResponse = userWriteResponse.get(efid);
-        if (pendingResponse != null) {
-            sendErrorResponse(response, "Have pending update for EF:" + efid);
-            return;
-        }
-
-        userWriteResponse.put(efid, response);
-
-        /*new AdnRecordLoader(phone).updateEF(adn, efid, extensionEF,
-                recordIndex, pin2,
-                obtainMessage(EVENT_UPDATE_ADN_DONE, efid, recordIndex, adn));*/
-        //add multi record and email in usim
-        new AdnRecordLoader(mFh).updateEF(adn, efid, extensionEF,
-                recordIndex, pin2,
-                obtainMessage(EVENT_UPDATE_ADN_DONE, efid, recordIndex, adn));
-    }
-    //add multi record and email begin 
-    public void updateUSIMAdnByIndex(int efid, AdnRecord newAdn, int recordIndex, String pin2,
-            Message response) {
-            
-	int extensionEF = 0;
-
-        int emailEF = 0;
-        int iapEF = 0;
-	int sneEF= 0;
-	
-        int emailNum = -1;
-        int recNum = 0;
-        boolean isUpdateIap = false;
-        boolean isUpdateEmail = true;
-        int numRecs = 0;
-
-        for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) { 
-
-            efid = mUsimPhoneBookManager.findEFInfo(num);
-            extensionEF = mUsimPhoneBookManager.findExtensionEFInfo(num);
-
-            iapEF =mUsimPhoneBookManager.findEFIapInfo(num);
-
-	      if(efid < 0 || extensionEF < 0){
-                sendErrorResponse(response, "EF is not known ADN-like EF:" + "efid"+efid +",extensionEF="+extensionEF);
-                return;
-            }
-		
-            Log.e("GSM", "efid is " + efid);
-            numRecs = num;
-
-	    if(recordIndex <= mUsimPhoneBookManager.mAdnRecordSizeArray[num])
-            {
-            	Log.e("GSM"," recordIndex is small,so break;");
-                break;
-            }			
+	public AdnRecordCache(PhoneBase phone) {
+		this.phone = phone;
+		mFh = phone.getIccFileHandler();
+		mUsimPhoneBookManager = new UsimPhoneBookManager(phone, mFh, this);
 	}
 
-        if(numRecs > 0) {
-	    recordIndex -= mUsimPhoneBookManager.mAdnRecordSizeArray[numRecs - 1];
-        }
-        Log.e("GSM", "recordIndex is " + recordIndex);
-        
-			byte[] record = null;
-			int emailNumInIap =0;
-			int iapRecNum = 0;
-			boolean newEmail = false;
-			try {
-				ArrayList<byte[]> mIapFileRecord = mUsimPhoneBookManager.getIapFileRecord(numRecs);
-				// record = mUsimPhoneBookManager.getIapFileRecord(recNum).get(index-1);
-				if(numRecs == 0){
-					iapRecNum = recordIndex;	
-				}else {
-					iapRecNum = mUsimPhoneBookManager.getIapRecordSizeArray()[numRecs] - 
-						mUsimPhoneBookManager.getIapRecordSizeArray()[numRecs - 1] + recordIndex;
-				}
+	public Object getLock() {
+		return mLock;
+	}
 
-				if (mIapFileRecord != null){
-					record = mIapFileRecord.get(iapRecNum - 1);
-					
-				}else{
-					return;
-				}
+	// ***** Called from SIMRecords
 
-        	} catch (IndexOutOfBoundsException e) {
-            	Log.e("GSM", "Error: Improper ICC card: No IAP record for ADN, continuing");
-        	}
-				if(record !=null){
-					emailNumInIap = mUsimPhoneBookManager.getEmailTagNumberInIap();
-        			emailNum = (int) (record[emailNumInIap] & 0XFF);
-					emailNum = emailNum==0xFF? (-1):emailNum;
-				}else{
-					emailNum = -1;	
-				}
-		//Log.e("GSM","emailNumInIap ="+emailNumInIap);
-		//Log.e("GSM","emailNum =="+emailNum);
-        if(emailNum == -1){
-			if(newAdn.emails == null){
-				isUpdateEmail = false;
-			}else{	
-            	emailNum = mUsimPhoneBookManager.getNewEmailNumber();
-				if(emailNum == -1){
-					Log.e("GSM","Email space is full!");
-					isUpdateIap = false;
-					isUpdateEmail = false;
-					newAdn.setEmails(null);
-				}else{
-					isUpdateIap = true ;
-					newEmail = true;
-				}
-			}
-        }else if(newAdn.emails == null){
-			isUpdateIap = true;			
+	/**
+	 * Called from SIMRecords.onRadioNotAvailable and
+	 * SIMRecords.handleSimRefresh.
+	 */
+	public void reset() {
+		adnLikeFiles.clear();
+		mUsimPhoneBookManager.reset();
+
+		clearWaiters();
+		clearUserWriters();
+
+	}
+
+	private void clearWaiters() {
+		int size = adnLikeWaiters.size();
+		for (int i = 0; i < size; i++) {
+			ArrayList<Message> waiters = adnLikeWaiters.valueAt(i);
+			AsyncResult ar = new AsyncResult(null, null, new RuntimeException(
+					"AdnCache reset"));
+			notifyWaiters(waiters, ar);
 		}
-		//Log.e("GSM","isUpdateIap =="+isUpdateIap);
-        Message pendingResponse = userWriteResponse.get(efid);
+		adnLikeWaiters.clear();
+	}
 
-        if (pendingResponse != null) {
-            sendErrorResponse(response, "Have pending update for EF:" + efid);
-            return;
-        }
-
-        userWriteResponse.put(efid, response);
-
-        AdnRecordLoader adnRecordLoader = new AdnRecordLoader(mFh);
-		synchronized(mLock){
-        adnRecordLoader.updateEFAdnToUsim(newAdn, efid, extensionEF,
-                recordIndex, pin2,
-                obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, recordIndex, newAdn));
-
-		updateUsimOthers = false;
-		try{
-		mLock.wait();
-		}catch (InterruptedException e){
-			Log.e("GSM"," InterruptedException at Adn update");
+	private void clearUserWriters() {
+		int size = userWriteResponse.size();
+		for (int i = 0; i < size; i++) {
+			sendErrorResponse(userWriteResponse.valueAt(i), "AdnCace reset");
 		}
+		userWriteResponse.clear();
+	}
 
-		if (!updateUsimOthers){
-			if (newEmail){
-			mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
-			}
+	/**
+	 * @return List of AdnRecords for efid if we've already loaded them this
+	 *         radio session, or null if we haven't
+	 */
+	public ArrayList<AdnRecord> getRecordsIfLoaded(int efid) {
+		return adnLikeFiles.get(efid);
+	}
+
+	public int[] getRecordsEfId(int efid) {
+
+		int efIds[] = null;
+		Log.i("AdnRecordCache", "getRecordsEfId" + efid);
+		if (EF_PBR == efid) {
+
+			efIds = mUsimPhoneBookManager.getEfFilesFromUsim();
+
+		} else {
+
+			efIds = new int[1];
+			efIds[0] = efid;
+
+		}
+		mEfid = efIds;
+		return efIds;
+
+	}
+
+	/**
+	 * Returns extension ef associated with ADN-like EF or -1 if we don't know.
+	 * 
+	 * See 3GPP TS 51.011 for this mapping
+	 */
+	int extensionEfForEf(int efid) {
+		switch (efid) {
+		case EF_MBDN:
+			return EF_EXT6;
+		case EF_ADN:
+			return EF_EXT1;
+		case EF_SDN:
+			return EF_EXT3;
+		case EF_FDN:
+			return EF_EXT2;
+		case EF_MSISDN:
+			return EF_EXT1;
+		case EF_PBR:
+			return 0; // The EF PBR doesn't have an extension record
+		default:
+			return 0;
+		}
+	}
+
+	private void sendErrorResponse(Message response, String errString) {
+		if (response != null) {
+			Exception e = new RuntimeException(errString);
+			AsyncResult.forMessage(response).exception = e;
+			response.sendToTarget();
+		}
+	}
+
+	/**
+	 * Update an ADN-like record in EF by record index
+	 * 
+	 * @param efid
+	 *            must be one among EF_ADN, EF_FDN, and EF_SDN
+	 * @param adn
+	 *            is the new adn to be stored
+	 * @param recordIndex
+	 *            is the 1-based adn record index
+	 * @param pin2
+	 *            is required to update EF_FDN, otherwise must be null
+	 * @param response
+	 *            message to be posted when done response.exception hold the
+	 *            exception in error
+	 */
+	public void updateAdnByIndex(int efid, AdnRecord adn, int recordIndex,
+			String pin2, Message response) {
+
+		int extensionEF = extensionEfForEf(efid);
+		if (extensionEF < 0) {
+			sendErrorResponse(response, "EF is not known ADN-like EF:" + efid);
 			return;
 		}
 
+		Message pendingResponse = userWriteResponse.get(efid);
+		if (pendingResponse != null) {
+			sendErrorResponse(response, "Have pending update for EF:" + efid);
+			return;
+		}
 
-		int tmpEmailInIap = -1;
-	   	if(isUpdateIap){
+		userWriteResponse.put(efid, response);
 
-			if(newAdn.emails ==null){
-				mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
-				mUsimPhoneBookManager.setIapFileRecord(numRecs, iapRecNum-1, (byte)0xFF);
-				tmpEmailInIap = -1;
-			}else{
-				mUsimPhoneBookManager.setIapFileRecord(numRecs,iapRecNum-1,(byte)(emailNum & 0xFF));
-				tmpEmailInIap = emailNum;
+		/*
+		 * new AdnRecordLoader(phone).updateEF(adn, efid, extensionEF,
+		 * recordIndex, pin2, obtainMessage(EVENT_UPDATE_ADN_DONE, efid,
+		 * recordIndex, adn));
+		 */
+		// add multi record and email in usim
+		new AdnRecordLoader(mFh).updateEF(adn, efid, extensionEF, recordIndex,
+				pin2, obtainMessage(EVENT_UPDATE_ADN_DONE, efid, recordIndex,
+						adn));
+	}
+
+	// add multi record and email begin
+	public void updateUSIMAdnByIndex(int efid, AdnRecord newAdn,
+			int recordIndex, String pin2, Message response) {
+
+		int extensionEF = 0;
+
+		int emailEF = 0;
+		int iapEF = 0;
+		int sneEF = 0;
+
+		int emailNum = -1;
+		int recNum = 0;
+		boolean isUpdateIap = false;
+		boolean isUpdateEmail = true;
+		int numRecs = 0;
+
+		for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
+
+			efid = mUsimPhoneBookManager.findEFInfo(num);
+			extensionEF = mUsimPhoneBookManager.findExtensionEFInfo(num);
+
+			iapEF = mUsimPhoneBookManager.findEFIapInfo(num);
+
+			if (efid < 0 || extensionEF < 0) {
+				sendErrorResponse(response, "EF is not known ADN-like EF:"
+						+ "efid" + efid + ",extensionEF=" + extensionEF);
+				return;
 			}
-			if(iapEF > 0){
-			Log.e("GSM","begin to update IAP ---IAP id " + recordIndex);
-			adnRecordLoader = new AdnRecordLoader(mFh);
-			adnRecordLoader.updateEFIapToUsim(newAdn, iapEF, recordIndex, tmpEmailInIap, pin2,
-					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, recordIndex, newAdn)); 
-					null);
+
+			Log.e("GSM", "efid is " + efid);
+			numRecs = num;
+
+			if (recordIndex <= mUsimPhoneBookManager.mAdnRecordSizeArray[num]) {
+				Log.e("GSM", " recordIndex is small,so break;");
+				break;
 			}
 		}
 
-		int emailRecordCount = 0;
-		int [] mEmailRecordSize = mUsimPhoneBookManager.getEmailRecordSizeArray();
-		for(int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++){
-			if(emailNum > mEmailRecordSize[num]){
-				//Log.e("GSM","emailNum =="+emailNum+"mEmailRecordSize["+num+"] =="+mEmailRecordSize[num]);
-				emailRecordCount++;	
-			}
+		if (numRecs > 0) {
+			recordIndex -= mUsimPhoneBookManager.mAdnRecordSizeArray[numRecs - 1];
 		}
-		if(emailRecordCount != 0){
-			emailNum -= mEmailRecordSize[emailRecordCount -1];
-			emailEF = mUsimPhoneBookManager.findEFEmailInfo(emailRecordCount);
-		}else{
-			emailEF = mUsimPhoneBookManager.findEFEmailInfo(0);			
-		}
+		Log.e("GSM", "recordIndex is " + recordIndex);
 
-		if(isUpdateEmail && emailEF > 0){
-			Log.e("GSM","begin to update Email ---emailNum= " + emailNum);
-			adnRecordLoader = new AdnRecordLoader(mFh);
-			adnRecordLoader.updateEFEmailToUsim(newAdn, emailEF, emailNum, efid, recordIndex,emailNumInIap, pin2,
-					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, recordIndex, newAdn));
-					null);
-		}
-		
-		if(mUsimPhoneBookManager.ishaveAnr)
-		{
-			ArrayList<Integer> anrefids =  mUsimPhoneBookManager.mPbrFile.getFileIdsByTagAdn(UsimPhoneBookManager.USIM_EFANR_TAG, efid);
-			Log.e("GSM","begin to update Anr ---anrefids is " + anrefids);
-			adnRecordLoader = new AdnRecordLoader(mFh);
-			adnRecordLoader.updateEFAnrToUsim(newAdn, anrefids, efid, recordIndex, pin2,
-					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, recordIndex, newAdn));
-					null);
-		}
-		
-		if(mUsimPhoneBookManager.ishaveSne)
-		{	
-			Log.e("GSM","begin to update Sne ---sneEF is " + sneEF);
-			adnRecordLoader = new AdnRecordLoader(mFh);
-			adnRecordLoader.updateEFSneToUsim(newAdn, sneEF, efid, recordIndex, pin2,
-					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, recordIndex, newAdn));
-					null);
-		}		
-		}
-    }
-
-
-
-   
-    public void updateUSIMAdnBySearch(int efid, AdnRecord oldAdn, AdnRecord newAdn,
-            String pin2, Message response) {
-        
-        int extensionEF = 0;
-        int index = -1;
-
-        int emailEF = 0;
-        int iapEF = 0;
-
-	int sneEF= 0;
-	int aasEF = 0;
-	int gasEF = 0;
-	int grpEF = 0;
-
-        int emailNum = -1;
-        int recNum = 0;
-        boolean isUpdateIap = false;
-        boolean isUpdateEmail = true;
+		byte[] record = null;
+		int emailNumInIap = 0;
+		int iapRecNum = 0;
 		boolean newEmail = false;
-        Log.i("AdnRecordCache","updateUSIMAdnBySearch efid" +efid);
-        for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
+		try {
+			ArrayList<byte[]> mIapFileRecord = mUsimPhoneBookManager
+					.getIapFileRecord(numRecs);
+			// record =
+			// mUsimPhoneBookManager.getIapFileRecord(recNum).get(index-1);
+			if (numRecs == 0) {
+				iapRecNum = recordIndex;
+			} else {
+				iapRecNum = mUsimPhoneBookManager.getIapRecordSizeArray()[numRecs]
+						- mUsimPhoneBookManager.getIapRecordSizeArray()[numRecs - 1]
+						+ recordIndex;
+			}
 
-            efid = mUsimPhoneBookManager.findEFInfo(num);
-            extensionEF = mUsimPhoneBookManager.findExtensionEFInfo(num);
+			if (mIapFileRecord != null) {
+				record = mIapFileRecord.get(iapRecNum - 1);
 
-           	 iapEF =mUsimPhoneBookManager.findEFIapInfo(num);
+			} else {
+				return;
+			}
 
-		
-		 Log.e("yuyong", "efid : " + efid +"extensionEF :"+extensionEF + " iapEF:" + iapEF + " sneEF: "+ sneEF + " aasEF: " + aasEF +" grpEF:  "+grpEF + " gasEF: "+ gasEF);
-
-		if(efid < 0  || extensionEF < 0 ){
-                sendErrorResponse(response, "EF is not known ADN-like EF:" + "efid"+efid +",extensionEF="+extensionEF);
-                return;
-            }
-            Log.i("AdnRecordCache","updateUSIMAdnBySearch (1)" );
-            ArrayList<AdnRecord> oldAdnList;
-
-            Log.e("GSM", "efid is " + efid);
-
-            oldAdnList = getRecordsIfLoaded(efid);
-            if (oldAdnList == null) {
-                sendErrorResponse(response, "Adn list not exist for EF:" + efid);
-                return;
-            }
-            Log.i("AdnRecordCache","updateUSIMAdnBySearch (2)" );
-            if(mUsimPhoneBookManager.anrFileCount == 0x3 && TextUtils.isEmpty(oldAdn.anr))
-            {
-            	oldAdn.anr = ";;"; 
-            }
-	        else if(mUsimPhoneBookManager.anrFileCount == 0x2 && TextUtils.isEmpty(oldAdn.anr))
-	        {
-	    	    oldAdn.anr = ";";
-	        }       
-
-            int count = 1;
-            boolean find_index = false;
-            for (Iterator<AdnRecord> it = oldAdnList.iterator(); it.hasNext();) {
-                if (oldAdn.isEqual(it.next())) {
-                    Log.e("GSM", "we got the index " + count);
-                    find_index = true;
-                    index = count;
-
-		    mInsetIndex = index;
-
-                    break;
-                }
-                count++;
-            }
-            
-            if (find_index) {
-            	recNum = num;
-
-		if(num > 0) {
-                	    mInsetIndex += mUsimPhoneBookManager.mAdnRecordSizeArray[num - 1];
+		} catch (IndexOutOfBoundsException e) {
+			Log
+					.e("GSM",
+							"Error: Improper ICC card: No IAP record for ADN, continuing");
 		}
-             Log.i("AdnRecordCache","updateUSIMAdnBySearch (3)" );
-		Log.e("yuyong ","we got the mInsetIndex" + mInsetIndex);
-            	Log.e("GSM", "find the index!");
-               	Log.e("GSM", "find the mInsetIndex:" +mInsetIndex);
+		if (record != null) {
+			emailNumInIap = mUsimPhoneBookManager.getEmailTagNumberInIap();
+			emailNum = (int) (record[emailNumInIap] & 0XFF);
+			emailNum = emailNum == 0xFF ? (-1) : emailNum;
+		} else {
+			emailNum = -1;
+		}
+		// Log.e("GSM","emailNumInIap ="+emailNumInIap);
+		// Log.e("GSM","emailNum =="+emailNum);
+		if (emailNum == -1) {
+			if (newAdn.emails == null) {
+				isUpdateEmail = false;
+			} else {
+				emailNum = mUsimPhoneBookManager.getNewEmailNumber();
+				if (emailNum == -1) {
+					Log.e("GSM", "Email space is full!");
+					isUpdateIap = false;
+					isUpdateEmail = false;
+					newAdn.setEmails(null);
+				} else {
+					isUpdateIap = true;
+					newEmail = true;
+				}
+			}
+		} else if (newAdn.emails == null) {
+			isUpdateIap = true;
+		}
+		// Log.e("GSM","isUpdateIap =="+isUpdateIap);
+		Message pendingResponse = userWriteResponse.get(efid);
+
+		if (pendingResponse != null) {
+			sendErrorResponse(response, "Have pending update for EF:" + efid);
+			return;
+		}
+
+		userWriteResponse.put(efid, response);
+
+		AdnRecordLoader adnRecordLoader = new AdnRecordLoader(mFh);
+		synchronized (mLock) {
+			adnRecordLoader.updateEFAdnToUsim(newAdn, efid, extensionEF,
+					recordIndex, pin2, obtainMessage(
+							EVENT_UPDATE_USIM_ADN_DONE, efid, recordIndex,
+							newAdn));
+
+			updateUsimOthers = false;
+			try {
+				mLock.wait();
+			} catch (InterruptedException e) {
+				Log.e("GSM", " InterruptedException at Adn update");
+			}
+
+			if (!updateUsimOthers) {
+				if (newEmail) {
+					mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
+				}
+				return;
+			}
+
+			int tmpEmailInIap = -1;
+			if (isUpdateIap) {
+
+				if (newAdn.emails == null) {
+					mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
+					mUsimPhoneBookManager.setIapFileRecord(numRecs,
+							iapRecNum - 1, (byte) 0xFF);
+					tmpEmailInIap = -1;
+				} else {
+					mUsimPhoneBookManager.setIapFileRecord(numRecs,
+							iapRecNum - 1, (byte) (emailNum & 0xFF));
+					tmpEmailInIap = emailNum;
+				}
+				if (iapEF > 0) {
+					Log
+							.e("GSM", "begin to update IAP ---IAP id "
+									+ recordIndex);
+					adnRecordLoader = new AdnRecordLoader(mFh);
+					adnRecordLoader.updateEFIapToUsim(newAdn, iapEF,
+							recordIndex, tmpEmailInIap, pin2,
+							// obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid,
+							// recordIndex, newAdn));
+							null);
+				}
+			}
+
+			int emailRecordCount = 0;
+			int[] mEmailRecordSize = mUsimPhoneBookManager
+					.getEmailRecordSizeArray();
+			for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
+				if (emailNum > mEmailRecordSize[num]) {
+					// Log.e("GSM","emailNum =="+emailNum+"mEmailRecordSize["+num+"] =="+mEmailRecordSize[num]);
+					emailRecordCount++;
+				}
+			}
+			if (emailRecordCount != 0) {
+				emailNum -= mEmailRecordSize[emailRecordCount - 1];
+				emailEF = mUsimPhoneBookManager
+						.findEFEmailInfo(emailRecordCount);
+			} else {
+				emailEF = mUsimPhoneBookManager.findEFEmailInfo(0);
+			}
+
+			if (isUpdateEmail && emailEF > 0) {
+				Log.e("GSM", "begin to update Email ---emailNum= " + emailNum);
+				adnRecordLoader = new AdnRecordLoader(mFh);
+				adnRecordLoader.updateEFEmailToUsim(newAdn, emailEF, emailNum,
+						efid, recordIndex, emailNumInIap, pin2,
+						// obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid,
+						// recordIndex, newAdn));
+						null);
+			}
+
+			if (mUsimPhoneBookManager.ishaveAnr) {
+				ArrayList<Integer> anrefids = mUsimPhoneBookManager.mPbrFile
+						.getFileIdsByTagAdn(
+								UsimPhoneBookManager.USIM_EFANR_TAG, efid);
+				Log.e("GSM", "begin to update Anr ---anrefids is " + anrefids);
+				adnRecordLoader = new AdnRecordLoader(mFh);
+				adnRecordLoader.updateEFAnrToUsim(newAdn, anrefids, efid,
+						recordIndex, pin2,
+						// obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid,
+						// recordIndex, newAdn));
+						null);
+			}
+
+			if (mUsimPhoneBookManager.ishaveSne) {
+				Log.e("GSM", "begin to update Sne ---sneEF is " + sneEF);
+				adnRecordLoader = new AdnRecordLoader(mFh);
+				adnRecordLoader.updateEFSneToUsim(newAdn, sneEF, efid,
+						recordIndex, pin2,
+						// obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid,
+						// recordIndex, newAdn));
+						null);
+			}
+		}
+	}
+
+	public void updateUSIMAdnBySearch(int efid, AdnRecord oldAdn,
+			AdnRecord newAdn, String pin2, Message response) {
+
+		int extensionEF = 0;
+		int index = -1;
+
+		int emailEF = 0;
+		int iapEF = 0;
+
+		int sneEF = 0;
+		int aasEF = 0;
+		int gasEF = 0;
+		int grpEF = 0;
+
+		int emailNum = -1;
+		int recNum = 0;
+		boolean isUpdateIap = false;
+		boolean isUpdateEmail = true;
+		boolean newEmail = false;
+		int iapRecNum = 0;
+		int emailNumInIap = 0;
+		Log.i("AdnRecordCache", "updateUSIMAdnBySearch efid" + efid);
+		for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
+
+			efid = mUsimPhoneBookManager.findEFInfo(num);
+			extensionEF = mUsimPhoneBookManager.findExtensionEFInfo(num);
+
+			iapEF = mUsimPhoneBookManager.findEFIapInfo(num);
+
+			Log.e("yuyong", "efid : " + efid + "extensionEF :" + extensionEF
+					+ " iapEF:" + iapEF + " sneEF: " + sneEF + " aasEF: "
+					+ aasEF + " grpEF:  " + grpEF + " gasEF: " + gasEF);
+
+			if (efid < 0 || extensionEF < 0) {
+				sendErrorResponse(response, "EF is not known ADN-like EF:"
+						+ "efid" + efid + ",extensionEF=" + extensionEF);
+				return;
+			}
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (1)");
+			ArrayList<AdnRecord> oldAdnList;
+
+			Log.e("GSM", "efid is " + efid);
+
+			oldAdnList = getRecordsIfLoaded(efid);
+			if (oldAdnList == null) {
+				sendErrorResponse(response, "Adn list not exist for EF:" + efid);
+				return;
+			}
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (2)");
+			if (mUsimPhoneBookManager.anrFileCount == 0x3
+					&& TextUtils.isEmpty(oldAdn.anr)) {
+				oldAdn.anr = ";;";
+			} else if (mUsimPhoneBookManager.anrFileCount == 0x2
+					&& TextUtils.isEmpty(oldAdn.anr)) {
+				oldAdn.anr = ";";
+			}
+
+			int count = 1;
+			boolean find_index = false;
+			for (Iterator<AdnRecord> it = oldAdnList.iterator(); it.hasNext();) {
+				if (oldAdn.isEqual(it.next())) {
+					Log.e("GSM", "we got the index " + count);
+					find_index = true;
+					index = count;
+
+					mInsetIndex = index;
+
+					break;
+				}
+				count++;
+			}
+
+			if (find_index) {
+				recNum = num;
+
+				if (num > 0) {
+					mInsetIndex += mUsimPhoneBookManager.mAdnRecordSizeArray[num - 1];
+				}
+				Log.i("AdnRecordCache", "updateUSIMAdnBySearch (3)");
+				Log.e("yuyong ", "we got the mInsetIndex" + mInsetIndex);
+				Log.e("GSM", "find the index!");
+				Log.e("GSM", "find the mInsetIndex:" + mInsetIndex);
 
 				break;
-            }
-        }
-        
-        if (index == -1) {
-            sendErrorResponse(response, "Adn record don't exist for " + oldAdn);
-            return;
-        }
+			}
+		}
 
-            Log.i("AdnRecordCache","updateUSIMAdnBySearch (4)" );
+		if (index == -1) {
+			sendErrorResponse(response, "Adn record don't exist for " + oldAdn);
+			return;
+		}
+
+		if (newAdn.stringCompareEmails(newAdn.emails, oldAdn.emails)) {
+			isUpdateEmail = false;
+		} else {
+
+			isUpdateIap = true;
+			isUpdateEmail = true;
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (4) mInsetIndex  "
+					+ mInsetIndex);
 			byte[] record = null;
-			int emailNumInIap =0;
-			int iapRecNum = 0;
-			try {
-				ArrayList<byte[]> mIapFileRecord = mUsimPhoneBookManager.getIapFileRecord(recNum);
-				if(recNum == 0){
-					iapRecNum = index;	
-				}else {
-					iapRecNum = mUsimPhoneBookManager.getIapRecordSizeArray()[recNum] - 
-						mUsimPhoneBookManager.getIapRecordSizeArray()[recNum - 1] + index;
-				}
-				Log.i("AdnRecordCache","updateUSIMAdnBySearch (5)" );
 
-				if (mIapFileRecord != null){
+			try {
+				ArrayList<byte[]> mIapFileRecord = mUsimPhoneBookManager
+						.getIapFileRecord(recNum);
+
+				iapRecNum = mInsetIndex;
+
+				Log.i("AdnRecordCache", "updateUSIMAdnBySearch (5) iapRecNum "
+						+ iapRecNum);
+
+				if (mIapFileRecord != null) {
 					record = mIapFileRecord.get(iapRecNum - 1);
-					
-				}else{
+
+				} else {
 					return;
 				}
 
-        	} catch (IndexOutOfBoundsException e) {
-            	Log.e("GSM", "Error: Improper ICC card: No IAP record for ADN, continuing");
-        	}
-				Log.i("AdnRecordCache","updateUSIMAdnBySearch (6)" );
-				if(record !=null){
-					emailNumInIap = mUsimPhoneBookManager.getEmailTagNumberInIap();
-        			emailNum = (int)(record[emailNumInIap] & 0xFF);
-					emailNum = emailNum==0xFF? (-1):emailNum;
-				}else{
-					emailNum = -1;	
-				}
-		//Log.e("GSM","emailNumInIap ="+emailNumInIap);
-		//Log.e("GSM","emailNum =="+emailNum);
-        if(emailNum == -1){
-			if(newAdn.emails == null){
+			} catch (IndexOutOfBoundsException e) {
+				Log
+						.e("GSM",
+								"Error: Improper ICC card: No IAP record for ADN, continuing");
+			}
+			if (record != null) {
+
+				emailNumInIap = mUsimPhoneBookManager.getEmailTagNumberInIap();
+				Log.i("AdnRecordCache", "emailNumInIap =" + emailNumInIap);
+				emailNum = (int) (record[emailNumInIap] & 0xFF);
+				Log.i("AdnRecordCache", "emailNum =" + emailNum);
+				emailNum = emailNum == 0xFF ? (-1) : emailNum;
+				Log.i("AdnRecordCache", "emailNum =" + emailNum);
+			} else {
+
+				emailNum = -1;
+
+			}
+
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (6) ");
+
+			if (emailNum == -1) {
+
+				emailNum = mUsimPhoneBookManager.getNewEmailNumber();
+			}
+
+			Log.i("AdnRecordCache", "new emailNum ==" + emailNum);
+			if (emailNum == -1) {
+
+				Log.i("AdnRecordCache", "Email space is full!");
+				isUpdateIap = false;
 				isUpdateEmail = false;
-			}else{	
-            	emailNum = mUsimPhoneBookManager.getNewEmailNumber();
-				if(emailNum == -1){
-					Log.e("GSM","Email space is full!");
-					isUpdateIap = false;
-					isUpdateEmail = false;
-					newAdn.setEmails(null);
-				}else{
-					isUpdateIap = true ;
-					newEmail = true;
-				}
+				newAdn.setEmails(null);
+			} else {
+
+				newEmail = true;
 			}
-        }else if(newAdn.emails == null){
-			isUpdateIap = true;			
-		}
-        Log.i("AdnRecordCache","updateUSIMAdnBySearch (7) isUpdateIap " +isUpdateIap );
-        Message pendingResponse = userWriteResponse.get(efid);
 
-        if (pendingResponse != null) {
-            sendErrorResponse(response, "Have pending update for EF:" + efid);
-            return;
-        }
-
-        userWriteResponse.put(efid, response);
-
-		synchronized(mLock){
-
-        AdnRecordLoader adnRecordLoader = new AdnRecordLoader(mFh);
-
-        Log.i("AdnRecordCache","updateUSIMAdnBySearch (8) isUpdateIap " +isUpdateIap );
-        adnRecordLoader.updateEFAdnToUsim(newAdn, efid, extensionEF,
-                index, pin2,
-                obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
-		updateUsimOthers = false;
-		try{
-		mLock.wait();
-		}catch (InterruptedException e){
-			Log.e("GSM","xiaojf1 InterruptedException at Adn update");
 		}
 
-		if (!updateUsimOthers){
-			if (newEmail){
-			mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
-			}
+		Log.i("AdnRecordCache", "updateUSIMAdnBySearch (7) isUpdateIap "
+				+ isUpdateIap);
+		Message pendingResponse = userWriteResponse.get(efid);
+
+		if (pendingResponse != null) {
+			sendErrorResponse(response, "Have pending update for EF:" + efid);
 			return;
 		}
-             Log.i("AdnRecordCache","updateUSIMAdnBySearch (9)  " );
-	   	if(isUpdateIap){
 
-			if(newAdn.emails ==null){
-				mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
-				mUsimPhoneBookManager.setIapFileRecord(recNum, iapRecNum-1, (byte)0xFF);
-				emailNum = -1;
-			}else{
-				mUsimPhoneBookManager.setIapFileRecord(recNum,iapRecNum-1,(byte)(emailNum & 0xFF));	
+		userWriteResponse.put(efid, response);
+
+		synchronized (mLock) {
+
+			AdnRecordLoader adnRecordLoader = new AdnRecordLoader(mFh);
+
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (8) isUpdateIap "
+					+ isUpdateIap);
+			adnRecordLoader.updateEFAdnToUsim(newAdn, efid, extensionEF, index,
+					pin2, obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid,
+							index, newAdn));
+			updateUsimOthers = false;
+			try {
+				mLock.wait();
+			} catch (InterruptedException e) {
+				Log.e("GSM", "xiaojf1 InterruptedException at Adn update");
 			}
-			if(iapEF > 0){
-			Log.e("GSM","begin to update IAP ---IAP id " + index);
-			adnRecordLoader = new AdnRecordLoader(mFh);
-			adnRecordLoader.updateEFIapToUsim(newAdn, iapEF, index, emailNum, pin2,
-					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
-					null);
+
+			if (!updateUsimOthers) {
+				if (newEmail) {
+					mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
+				}
+				return;
 			}
-		}
-             	Log.i("AdnRecordCache","updateUSIMAdnBySearch (10)" );
-		int emailRecordCount = 0;
-		int [] mEmailRecordSize = mUsimPhoneBookManager.getEmailRecordSizeArray();
-		for(int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++){
-			if(emailNum > mEmailRecordSize[num]){
-				emailRecordCount++;	
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (9) iapRecNum "
+					+ iapRecNum);
+			if (isUpdateIap) {
+
+				if (newAdn.emails == null) {
+					mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
+					mUsimPhoneBookManager.setIapFileRecord(recNum,
+							iapRecNum - 1, (byte) 0xFF);
+					// emailNum = -1;
+				} else {
+					mUsimPhoneBookManager.setIapFileRecord(recNum,
+							iapRecNum - 1, (byte) (emailNum & 0xFF));
+				}
+				if (iapEF > 0) {
+					Log.e("GSM", "begin to update IAP ---IAP id " + index);
+					adnRecordLoader = new AdnRecordLoader(mFh);
+					adnRecordLoader.updateEFIapToUsim(newAdn, iapEF, index,
+							emailNum, pin2,
+							// obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid,
+							// index, newAdn));
+							null);
+				}
 			}
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (10)");
+			int emailRecordCount = 0;
+			int[] mEmailRecordSize = mUsimPhoneBookManager
+					.getEmailRecordSizeArray();
+			Log.i("AdnRecordCache",
+					"updateUSIMAdnBySearch (10) mEmailRecordSize"
+							+ mEmailRecordSize);
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (10) emailNum"
+					+ emailNum);
+			for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
+				Log.i("AdnRecordCache",
+						"updateUSIMAdnBySearch (10) mEmailRecordSize[num]"
+								+ mEmailRecordSize[num]);
+				if (emailNum > mEmailRecordSize[num]) {
+					emailRecordCount++;
+				}
+			}
+			Log.i("AdnRecordCache",
+					"updateUSIMAdnBySearch (10) emailRecordCount"
+							+ emailRecordCount);
+			if (emailRecordCount != 0) {
+				Log.i("AdnRecordCache", "updateUSIMAdnBySearch (10.0) emailNum"
+						+ emailNum);
+
+				emailNum -= mEmailRecordSize[emailRecordCount - 1];
+				Log.i("AdnRecordCache", "updateUSIMAdnBySearch (10.1) emailNum"
+						+ emailNum);
+				emailEF = mUsimPhoneBookManager
+						.findEFEmailInfo(emailRecordCount);
+			} else {
+				emailEF = mUsimPhoneBookManager.findEFEmailInfo(0);
+			}
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (10.2) emailNum"
+					+ emailNum);
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (10.3) emailEF"
+					+ emailEF + "isUpdateEmail" + isUpdateEmail);
+			if (isUpdateEmail && emailEF > 0) {
+				Log.e("GSM", "begin to update Email ---Email id " + emailNum);
+				adnRecordLoader = new AdnRecordLoader(mFh);
+				adnRecordLoader.updateEFEmailToUsim(newAdn, emailEF, emailNum,
+						efid, index, emailNumInIap, pin2,
+
+						null);
+			}
+			Log.i("AdnRecordCache", "updateUSIMAdnBySearch (11)");
+			if (mUsimPhoneBookManager.ishaveAnr) {
+				ArrayList<Integer> anrefids = mUsimPhoneBookManager.mPbrFile
+						.getFileIdsByTagAdn(
+								UsimPhoneBookManager.USIM_EFANR_TAG, efid);
+				Log.e("GSM", "begin to update Anr ---anrefids is " + anrefids);
+				adnRecordLoader = new AdnRecordLoader(mFh);
+				adnRecordLoader.updateEFAnrToUsim(newAdn, anrefids, efid,
+						index, pin2, null);
+			}
+
 		}
-		if(emailRecordCount != 0){
-			emailNum -= mEmailRecordSize[emailRecordCount -1];
-			emailEF = mUsimPhoneBookManager.findEFEmailInfo(emailRecordCount);
-		}else{
-			emailEF = mUsimPhoneBookManager.findEFEmailInfo(0);			
+	}
+
+	// add multi record and email in usim end
+	private boolean isLastAdn(int efid) {
+		int i = 0;
+		Log.i("AdnRecordCache", "addAdnRecordsInEf: efid=" + efid
+				+ "mEfid.length" + mEfid.length);
+
+		for (i = 0; i < mEfid.length; i++) {
+
+			Log.i("AdnRecordCache", "addAdnRecordsInEf: mEfid=" + mEfid[i]);
+
+			if (efid == mEfid[i]) {
+
+				break;
+			}
+
 		}
-		 Log.i("AdnRecordCache","updateUSIMAdnBySearch (10 .1) emailEF" +emailEF +"isUpdateEmail" +isUpdateEmail );
-		if(isUpdateEmail && emailEF > 0){
-			Log.e("GSM","begin to update Email ---Email id " + emailNum);
-			adnRecordLoader = new AdnRecordLoader(mFh);
-			adnRecordLoader.updateEFEmailToUsim(newAdn, emailEF, emailNum, efid, index,emailNumInIap, pin2,
-					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
-					null);
+
+		if (i == mEfid.length - 1) {
+			Log.i("AdnRecordCache", "addAdnRecordsInEf: true");
+			return true;
 		}
-	      Log.i("AdnRecordCache","updateUSIMAdnBySearch (11)" );
-		if(mUsimPhoneBookManager.ishaveAnr)
-		{
-			ArrayList<Integer> anrefids =  mUsimPhoneBookManager.mPbrFile.
-				getFileIdsByTagAdn(UsimPhoneBookManager.USIM_EFANR_TAG, efid);
-			Log.e("GSM","begin to update Anr ---anrefids is " + anrefids);
-			adnRecordLoader = new AdnRecordLoader(mFh);
-			adnRecordLoader.updateEFAnrToUsim(newAdn, anrefids, efid, index, pin2,
-					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
-					null);	
+		Log.i("AdnRecordCache", "addAdnRecordsInEf: false");
+		return false;
+	}
+
+	public int getAdnIndex(int efid, AdnRecord oldAdn) {
+
+		ArrayList<AdnRecord> oldAdnList;
+		oldAdnList = getRecordsIfLoaded(efid);
+		Log.i("AdnRecordCache", "getAdnIndex efid " + efid);
+		if (oldAdnList == null) {
+
+			return -1;
 		}
-	/*	if(mUsimPhoneBookManager.ishaveSne)
-		{	
-			Log.e("GSM","begin to update Sne ---sneEF is " + sneEF);
-			adnRecordLoader = new AdnRecordLoader(mFh);
-			adnRecordLoader.updateEFSneToUsim(newAdn, sneEF, efid, index, pin2,
-					//obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
-					null);
-		}*/	
-		/*if(mUsimPhoneBookManager.ishaveAas)
-		{
-			Log.e("GSM","begin to update Aas ---aasEF is " + aasEF);
-			adnRecordLoader.updateEFAasToUsim(newAdn, aasEF, efid, index, pin2,
-					obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
-		}	*/
+		Log.i("AdnRecordCache", "updateAdnBySearch (2)");
+		int index = -1;
+		int count = 1;
+		for (Iterator<AdnRecord> it = oldAdnList.iterator(); it.hasNext();) {
+			if (oldAdn.isEqual(it.next())) {
+				index = count;
+				break;
+			}
+			count++;
+		}
+
+		return index;
+
+	}
+
+	/**
+	 * Replace oldAdn with newAdn in ADN-like record in EF
+	 * 
+	 * The ADN-like records must be read through requestLoadAllAdnLike() before
+	 * 
+	 * @param efid
+	 *            must be one of EF_ADN, EF_FDN, and EF_SDN
+	 * @param oldAdn
+	 *            is the adn to be replaced If oldAdn.isEmpty() is ture, it
+	 *            insert the newAdn
+	 * @param newAdn
+	 *            is the adn to be stored If newAdn.isEmpty() is true, it delete
+	 *            the oldAdn
+	 * @param pin2
+	 *            is required to update EF_FDN, otherwise must be null
+	 * @param response
+	 *            message to be posted when done response.exception hold the
+	 *            exception in error
+	 */
+	public boolean updateAdnBySearch(int efid, AdnRecord oldAdn,
+			AdnRecord newAdn, String pin2, Message response) {
+
+		int extensionEF;
+		extensionEF = extensionEfForEf(efid);
+		Log.i("AdnRecordCache", "updateAdnBySearch");
+		if (extensionEF < 0) {
+			sendErrorResponse(response, "EF is not known ADN-like EF:" + efid);
+			return false;
+		}
+		Log.i("AdnRecordCache", "updateAdnBySearch (1)");
+		ArrayList<AdnRecord> oldAdnList;
+		oldAdnList = getRecordsIfLoaded(efid);
+
+		if (oldAdnList == null) {
+			sendErrorResponse(response, "Adn list not exist for EF:" + efid);
+			return false;
+		}
+		Log.i("AdnRecordCache", "updateAdnBySearch (2)");
+		int index = -1;
+		int count = 1;
+		for (Iterator<AdnRecord> it = oldAdnList.iterator(); it.hasNext();) {
+			if (oldAdn.isEqual(it.next())) {
+				index = count;
+				mInsetIndex = index;
+				break;
+			}
+			count++;
+		}
+		Log.i("AdnRecordCache", "updateAdnBySearch (3) index" + index);
+		if (index == -1) {
+			if (isLastAdn(efid)) {
+				sendErrorResponse(response, "Adn record don't exist for "
+						+ oldAdn);
+			}
+			Log
+					.i("AdnRecordCache",
+							"updateAdnBySearch >>>>>>>>>>>>>>>>>>>>>>>> Adn record don't exist for");
+			return false;
+		}
+
+		Message pendingResponse = userWriteResponse.get(efid);
+
+		if (pendingResponse != null) {
+			sendErrorResponse(response, "Have pending update for EF:" + efid);
+			return false;
+		}
+
+		userWriteResponse.put(efid, response);
+		Log.i("AdnRecordCache", "updateAdnBySearch (4) index" + index);
 		/*
-		if(mUsimPhoneBookManager.ishaveGrp)
-		{	
-			Log.e("yuyong","begin to update Grp ---grpEF is " + grpEF +  " index : " + index + " grp: " + newAdn.getGrp());
-			adnRecordLoader.updateEFGrpToUsim(newAdn, grpEF, efid, index, pin2,
-					obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
-		}	*/
-		/*
-		if(mUsimPhoneBookManager.ishaveGas)
-		{	
-			Log.e("yuyong","begin to update Gas ---gasEF is " + gasEF + " index : " + index + " grp: " + newAdn.getGas());
-			adnRecordLoader.updateEFGasToUsim(newAdn, gasEF, efid, index, pin2,
-					obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index, newAdn));
-		}	*/
-		
+		 * new AdnRecordLoader(phone).updateEF(newAdn, efid, extensionEF, index,
+		 * pin2, obtainMessage(EVENT_UPDATE_ADN_DONE, efid, index, newAdn));
+		 */
+		// add multi record and email in usim
+		new AdnRecordLoader(mFh)
+				.updateEF(newAdn, efid, extensionEF, index, pin2,
+						obtainMessage(EVENT_UPDATE_ADN_DONE, efid, index,
+								newAdn));
+
+		return true;
+	}
+
+	/*
+	 * public int[] getAdnRecordsSize(int efid){
+	 * 
+	 * Log.i("AdnRecordCache","getAdnRecordsSize"); return
+	 * mUsimPhoneBookManager.getAdnRecordsSize(efid);
+	 * 
+	 * }
+	 */
+
+	/**
+	 * Responds with exception (in response) if efid is not a known ADN-like
+	 * record
+	 */
+	public void requestLoadAllAdnLike(int efid, int extensionEf,
+			Message response) {
+		ArrayList<Message> waiters;
+		ArrayList<AdnRecord> result;
+
+		if (efid == EF_PBR) {
+			result = mUsimPhoneBookManager.loadEfFilesFromUsim();
+		} else {
+			result = getRecordsIfLoaded(efid);
 		}
-    }
-    
-    
-    //add multi record and email in usim end
-     private boolean isLastAdn(int efid){
-        int i=0;
-	  Log.i("AdnRecordCache","addAdnRecordsInEf: efid=" + efid +"mEfid.length"+ mEfid.length);
-           
-	  for( i=0; i<mEfid.length;i++){
-	  	
-            Log.i("AdnRecordCache","addAdnRecordsInEf: mEfid=" + mEfid[i]);
 
-	      if(efid ==  mEfid[i]){
+		// Have we already loaded this efid?
+		if (result != null) {
+			if (response != null) {
+				AsyncResult.forMessage(response).result = result;
+				response.sendToTarget();
+			}
 
+			return;
+		}
 
+		// Have we already *started* loading this efid?
 
-                 break;
-	     }
+		waiters = adnLikeWaiters.get(efid);
 
+		if (waiters != null) {
+			// There's a pending request for this EF already
+			// just add ourselves to it
 
-		  
-	  }
+			waiters.add(response);
+			return;
+		}
 
-	  if(i == mEfid.length-1 ){
-             Log.i("AdnRecordCache","addAdnRecordsInEf: true");
-             return true;
-	  }
-           Log.i("AdnRecordCache","addAdnRecordsInEf: false");
-         return false;
-     }
+		// Start loading efid
 
-     public int getAdnIndex(int efid, AdnRecord oldAdn){
+		waiters = new ArrayList<Message>();
+		waiters.add(response);
 
+		adnLikeWaiters.put(efid, waiters);
 
-        ArrayList<AdnRecord>  oldAdnList;
-        oldAdnList = getRecordsIfLoaded(efid);
-        Log.i("AdnRecordCache","getAdnIndex efid "+efid );
-        if (oldAdnList == null) {
-     
-            return -1;
-        }
-        Log.i("AdnRecordCache","updateAdnBySearch (2)");
-        int index = -1;
-        int count = 1;
-        for (Iterator<AdnRecord> it = oldAdnList.iterator(); it.hasNext(); ) {
-            if (oldAdn.isEqual(it.next())) {
-                index = count;
-                break;
-            }
-            count++;
-        }
+		if (extensionEf < 0) {
+			// respond with error if not known ADN-like record
 
+			if (response != null) {
+				AsyncResult.forMessage(response).exception = new RuntimeException(
+						"EF is not known ADN-like EF:" + efid);
+				response.sendToTarget();
+			}
 
-       return index;
+			return;
+		}
 
+		/*
+		 * new AdnRecordLoader(phone).loadAllFromEF(efid, extensionEf,
+		 * obtainMessage(EVENT_LOAD_ALL_ADN_LIKE_DONE, efid, 0));
+		 */
+		new AdnRecordLoader(mFh).loadAllFromEF(efid, extensionEf,
+				obtainMessage(EVENT_LOAD_ALL_ADN_LIKE_DONE, efid, 0));
+	}
 
+	// ***** Private methods
 
+	private void notifyWaiters(ArrayList<Message> waiters, AsyncResult ar) {
 
+		if (waiters == null) {
+			return;
+		}
 
-    }
+		for (int i = 0, s = waiters.size(); i < s; i++) {
+			Message waiter = waiters.get(i);
 
+			AsyncResult.forMessage(waiter, ar.result, ar.exception);
+			waiter.sendToTarget();
+		}
+	}
 
+	// ***** Overridden from Handler
 
-    /**
-     * Replace oldAdn with newAdn in ADN-like record in EF
-     *
-     * The ADN-like records must be read through requestLoadAllAdnLike() before
-     *
-     * @param efid must be one of EF_ADN, EF_FDN, and EF_SDN
-     * @param oldAdn is the adn to be replaced
-     *        If oldAdn.isEmpty() is ture, it insert the newAdn
-     * @param newAdn is the adn to be stored
-     *        If newAdn.isEmpty() is true, it delete the oldAdn
-     * @param pin2 is required to update EF_FDN, otherwise must be null
-     * @param response message to be posted when done
-     *        response.exception hold the exception in error
-     */
-    public boolean updateAdnBySearch(int efid, AdnRecord oldAdn, AdnRecord newAdn,
-            String pin2, Message response) {
-
-        int extensionEF;
-        extensionEF = extensionEfForEf(efid);
-        Log.i("AdnRecordCache","updateAdnBySearch");
-        if (extensionEF < 0) {
-            sendErrorResponse(response, "EF is not known ADN-like EF:" + efid);
-            return false;
-        }
-        Log.i("AdnRecordCache","updateAdnBySearch (1)");
-        ArrayList<AdnRecord>  oldAdnList;
-        oldAdnList = getRecordsIfLoaded(efid);
-
-        if (oldAdnList == null) {
-            sendErrorResponse(response, "Adn list not exist for EF:" + efid);
-            return false;
-        }
-        Log.i("AdnRecordCache","updateAdnBySearch (2)");
-        int index = -1;
-        int count = 1;
-        for (Iterator<AdnRecord> it = oldAdnList.iterator(); it.hasNext(); ) {
-            if (oldAdn.isEqual(it.next())) {
-                index = count;
-            	mInsetIndex = index;
-                break;
-            }
-            count++;
-        }
-        Log.i("AdnRecordCache","updateAdnBySearch (3) index" + index);
-        if (index == -1 ) {
-            if(isLastAdn(efid)){
-                 sendErrorResponse(response, "Adn record don't exist for " + oldAdn);
-            }
-            Log.i("AdnRecordCache","updateAdnBySearch >>>>>>>>>>>>>>>>>>>>>>>> Adn record don't exist for" );
-            return false;
-        }
-
-        Message pendingResponse = userWriteResponse.get(efid);
-
-        if (pendingResponse != null) {
-            sendErrorResponse(response, "Have pending update for EF:" + efid);
-            return false;
-        }
-
-        userWriteResponse.put(efid, response);
-        Log.i("AdnRecordCache","updateAdnBySearch (4) index" + index);
-        /*new AdnRecordLoader(phone).updateEF(newAdn, efid, extensionEF,
-                index, pin2,
-                obtainMessage(EVENT_UPDATE_ADN_DONE, efid, index, newAdn));
-        */
-        //add multi record and email in usim
-        new AdnRecordLoader(mFh).updateEF(newAdn, efid, extensionEF,
-                index, pin2,
-                obtainMessage(EVENT_UPDATE_ADN_DONE, efid, index, newAdn));
-
-	 return true;
-    }
-  /*  public  int[] getAdnRecordsSize(int efid){
-
-            Log.i("AdnRecordCache","getAdnRecordsSize");
-            return mUsimPhoneBookManager.getAdnRecordsSize(efid);
-       
-    }*/
-
-
-     
-	
-    /**
-     * Responds with exception (in response) if efid is not a known ADN-like
-     * record
-     */
-    public void
-    requestLoadAllAdnLike (int efid, int extensionEf, Message response) {
-        ArrayList<Message> waiters;
-        ArrayList<AdnRecord> result;
-
-        if (efid == EF_PBR) {
-            result = mUsimPhoneBookManager.loadEfFilesFromUsim();
-        } else {
-            result = getRecordsIfLoaded(efid);
-        }
-
-        // Have we already loaded this efid?
-        if (result != null) {
-            if (response != null) {
-                AsyncResult.forMessage(response).result = result;
-                response.sendToTarget();
-            }
-
-            return;
-        }
-
-        // Have we already *started* loading this efid?
-
-        waiters = adnLikeWaiters.get(efid);
-
-        if (waiters != null) {
-            // There's a pending request for this EF already
-            // just add ourselves to it
-
-            waiters.add(response);
-            return;
-        }
-
-        // Start loading efid
-
-        waiters = new ArrayList<Message>();
-        waiters.add(response);
-
-        adnLikeWaiters.put(efid, waiters);
-
-
-        if (extensionEf < 0) {
-            // respond with error if not known ADN-like record
-
-            if (response != null) {
-                AsyncResult.forMessage(response).exception
-                    = new RuntimeException("EF is not known ADN-like EF:" + efid);
-                response.sendToTarget();
-            }
-
-            return;
-        }
-
-        /*new AdnRecordLoader(phone).loadAllFromEF(efid, extensionEf,
-            obtainMessage(EVENT_LOAD_ALL_ADN_LIKE_DONE, efid, 0));
-            */
-        new AdnRecordLoader(mFh).loadAllFromEF(efid, extensionEf,
-                obtainMessage(EVENT_LOAD_ALL_ADN_LIKE_DONE, efid, 0));
-    }
-
-    //***** Private methods
-
-    private void
-    notifyWaiters(ArrayList<Message> waiters, AsyncResult ar) {
-
-        if (waiters == null) {
-            return;
-        }
-
-        for (int i = 0, s = waiters.size() ; i < s ; i++) {
-            Message waiter = waiters.get(i);
-            AsyncResult.forMessage(waiter, ar.result, ar.exception);
-            waiter.sendToTarget();
-        }
-    }
-
-    //***** Overridden from Handler
-
-    public void
-    handleMessage(Message msg) {
-        AsyncResult ar;
-        int efid;
-    	int index;
+	public void handleMessage(Message msg) {
+		AsyncResult ar;
+		int efid;
+		int index;
 		AdnRecord adn;
 		Message response;
 
-        switch(msg.what) {
-            case EVENT_LOAD_ALL_ADN_LIKE_DONE:
-                /* arg1 is efid, obj.result is ArrayList<AdnRecord>*/
-                ar = (AsyncResult) msg.obj;
-                efid = msg.arg1;
-                ArrayList<Message> waiters;
+		switch (msg.what) {
+		case EVENT_LOAD_ALL_ADN_LIKE_DONE:
+			/* arg1 is efid, obj.result is ArrayList<AdnRecord> */
+			ar = (AsyncResult) msg.obj;
+			efid = msg.arg1;
+			ArrayList<Message> waiters;
 
-                waiters = adnLikeWaiters.get(efid);
-                adnLikeWaiters.delete(efid);
+			waiters = adnLikeWaiters.get(efid);
+			adnLikeWaiters.delete(efid);
 
-                if (ar.exception == null) {
-                    adnLikeFiles.put(efid, (ArrayList<AdnRecord>) ar.result);
-                }
-                notifyWaiters(waiters, ar);
-                break;
-            case EVENT_UPDATE_ADN_DONE:
-                ar = (AsyncResult)msg.obj;
-                efid = msg.arg1;
-                index = msg.arg2;
-                 adn = (AdnRecord) (ar.userObj);
-				
-                //yeezone:jinwei add sim_index.
-                Log.i("AdnRecordCache","efid "+efid+"index " +index);
-                adn.setRecordNumber(index);
-                //end
-				
-                if (ar.exception == null) {
-                    adnLikeFiles.get(efid).set(index - 1, adn);
-                }
-                Log.i("AdnRecordCache","efid" +efid);
-                response = userWriteResponse.get(efid);
-		      Log.i("AdnRecordCache","response" +response +"index " + index);
-                userWriteResponse.delete(efid);
+			if (ar.exception == null) {
+				adnLikeFiles.put(efid, (ArrayList<AdnRecord>) ar.result);
+			}
+			notifyWaiters(waiters, ar);
+			break;
+		case EVENT_UPDATE_ADN_DONE:
+			ar = (AsyncResult) msg.obj;
+			efid = msg.arg1;
+			index = msg.arg2;
+			adn = (AdnRecord) (ar.userObj);
 
-                //yeezone:jinwei return sim_index after add a new contact in SimCard.
-                //AsyncResult.forMessage(response, null, ar.exception);
-                AsyncResult.forMessage(response, index, ar.exception);
-		   Log.i("AdnRecordCache","response" +response +"index " + index + "target "+ response.getTarget());
-                response.sendToTarget();
-                break;
-           //add multi record and email in usim begin
-            case EVENT_UPDATE_USIM_ADN_DONE:
+			// yeezone:jinwei add sim_index.
+			Log.i("AdnRecordCache", "efid " + efid + "index " + index);
+			adn.setRecordNumber(index);
+			// end
 
-                ar = (AsyncResult)msg.obj;
-                efid = msg.arg1;
-                index = msg.arg2;
-                adn = (AdnRecord) (ar.userObj);
-				int recNum = -1;
-				for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
-					int adnEF = mUsimPhoneBookManager.findEFInfo(num);
-					if(efid == adnEF){
-						recNum = num;
-					}
+			if (ar.exception == null) {
+				adnLikeFiles.get(efid).set(index - 1, adn);
+			}
+			Log.i("AdnRecordCache", "efid" + efid);
+			response = userWriteResponse.get(efid);
+			Log.i("AdnRecordCache", "response" + response + "index " + index);
+			userWriteResponse.delete(efid);
+
+			// yeezone:jinwei return sim_index after add a new contact in
+			// SimCard.
+			// AsyncResult.forMessage(response, null, ar.exception);
+			AsyncResult.forMessage(response, index, ar.exception);
+			Log.i("AdnRecordCache", "response" + response + "index " + index
+					+ "target " + response.getTarget());
+			response.sendToTarget();
+			break;
+		// add multi record and email in usim begin
+		case EVENT_UPDATE_USIM_ADN_DONE:
+			Log.i("AdnRecordCache", "EVENT_UPDATE_USIM_ADN_DONE");
+			ar = (AsyncResult) msg.obj;
+			efid = msg.arg1;
+			index = msg.arg2;
+			adn = (AdnRecord) (ar.userObj);
+			int recNum = -1;
+			for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
+				int adnEF = mUsimPhoneBookManager.findEFInfo(num);
+				if (efid == adnEF) {
+					recNum = num;
 				}
-				int [] mAdnRecordSizeArray = mUsimPhoneBookManager.getAdnRecordSizeArray();
-				int adnRecNum;
-				if(recNum == -1){
-					break;
-				}else if(recNum == 0){
-					adnRecNum = index - 1;
-				}else{
-					adnRecNum = mAdnRecordSizeArray[recNum - 1] + index - 1;
-				}
+			}
+			int[] mAdnRecordSizeArray = mUsimPhoneBookManager
+					.getAdnRecordSizeArray();
+			int adnRecNum;
+			if (recNum == -1) {
+				break;
+			} else if (recNum == 0) {
+				adnRecNum = index - 1;
+			} else {
+				adnRecNum = mAdnRecordSizeArray[recNum - 1] + index - 1;
+			}
 
-                if (ar.exception == null) {
-					mUsimPhoneBookManager.setPhoneBookRecords(adnRecNum, adn);
-                    adnLikeFiles.get(efid).set(index - 1, adn);
-					updateUsimOthers = true;
-                }else{
-					Log.e("GSM","xiaojf1 fail to Update Usim Adn");
-				}
-				synchronized(mLock){
-					mLock.notifyAll();
-				}
+			if (ar.exception == null) {
+				mUsimPhoneBookManager.setPhoneBookRecords(adnRecNum, adn);
+				adnLikeFiles.get(efid).set(index - 1, adn);
+				updateUsimOthers = true;
+			} else {
+				Log.e("GSM", "xiaojf1 fail to Update Usim Adn");
+			}
+			synchronized (mLock) {
+				mLock.notifyAll();
+			}
 
-                response = userWriteResponse.get(efid);
-                userWriteResponse.delete(efid);
+			response = userWriteResponse.get(efid);
+			userWriteResponse.delete(efid);
 
-                AsyncResult.forMessage(response, null, ar.exception);
-                response.sendToTarget();
-                break;     
-           //add multi record and email in usim   end
-        }
+			AsyncResult.forMessage(response, null, ar.exception);
+			response.sendToTarget();
+			break;
+		// add multi record and email in usim end
+		}
 
-    }
-
+	}
 
 }

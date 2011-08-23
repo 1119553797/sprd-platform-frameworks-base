@@ -348,12 +348,13 @@ public class AdnRecordLoader extends Handler {
 
 					pendingExtLoads = 1;
 
-					/*phone.mIccFileHandler.loadEFLinearFixed(extensionEF,
-							adn.extRecord, obtainMessage(
-									EVENT_EXT_RECORD_LOAD_DONE, adn));*/
-					mFh.loadEFLinearFixed(
-                            extensionEF, adn.extRecord,
-                            obtainMessage(EVENT_EXT_RECORD_LOAD_DONE, adn));
+					/*
+					 * phone.mIccFileHandler.loadEFLinearFixed(extensionEF,
+					 * adn.extRecord, obtainMessage( EVENT_EXT_RECORD_LOAD_DONE,
+					 * adn));
+					 */
+					mFh.loadEFLinearFixed(extensionEF, adn.extRecord,
+							obtainMessage(EVENT_EXT_RECORD_LOAD_DONE, adn));
 				}
 				break;
 
@@ -401,17 +402,21 @@ public class AdnRecordLoader extends Handler {
 
 						pendingExtLoads++;
 
-						/*phone.mIccFileHandler.loadEFLinearFixed(extensionEF,
-								adn.extRecord, obtainMessage(
-										EVENT_EXT_RECORD_LOAD_DONE, adn));*/
-						mFh.loadEFLinearFixed(extensionEF,
-								adn.extRecord, obtainMessage(
-										EVENT_EXT_RECORD_LOAD_DONE, adn));
+						/*
+						 * phone.mIccFileHandler.loadEFLinearFixed(extensionEF,
+						 * adn.extRecord, obtainMessage(
+						 * EVENT_EXT_RECORD_LOAD_DONE, adn));
+						 */
+						mFh.loadEFLinearFixed(extensionEF, adn.extRecord,
+								obtainMessage(EVENT_EXT_RECORD_LOAD_DONE, adn));
 					}
 				}
 				break;
 			// add multi record and email in usim begin
 			case EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE:
+				Log.d(LOG_TAG,
+						"EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE emailNum :"
+								+ emailNum);
 				ar = (AsyncResult) (msg.obj);
 				adn = (AdnRecord) (ar.userObj);
 
@@ -444,7 +449,7 @@ public class AdnRecordLoader extends Handler {
 				pendingExtLoads = 1;
 
 				break;
-	
+
 			case EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE:
 				ar = (AsyncResult) (msg.obj);
 				adn = (AdnRecord) (ar.userObj);
@@ -515,7 +520,7 @@ public class AdnRecordLoader extends Handler {
 				}
 
 				recordSize = (int[]) ar.result;
-				
+
 				data = adn.buildAasString(recordSize[0], ef, adnNum);
 				if (data == null) {
 					throw new RuntimeException("wrong ADN format", ar.exception);
@@ -644,8 +649,9 @@ public class AdnRecordLoader extends Handler {
 				pendingExtLoads = 1;
 
 				break;
-			
+
 			case EVENT_UPDATE_RECORD_DONE:
+				Log.e("AdnRecordLoader", "EVENT_UPDATE_RECORD_DONE");
 				ar = (AsyncResult) (msg.obj);
 				if (ar.exception != null) {
 					throw new RuntimeException("update EF adn record failed",
@@ -654,7 +660,7 @@ public class AdnRecordLoader extends Handler {
 				pendingExtLoads = 0;
 				result = null;
 				break;
-			
+
 			case EVENT_UPDATE_ANR_RECORD_DONE:
 				ar = (AsyncResult) (msg.obj);
 				if (ar.exception != null) {
@@ -662,7 +668,7 @@ public class AdnRecordLoader extends Handler {
 							ar.exception);
 				}
 				Log.e(LOG_TAG, "EVENT_UPDATE_ANR_RECORD_DONE, message is "
-						+ msg.toString());
+						+ msg.toString() + "fileCount " + fileCount);
 				pendingExtLoads = 0;
 				result = null;
 				fileCount--;
