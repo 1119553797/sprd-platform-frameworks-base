@@ -367,7 +367,8 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 	 *            the EF id of a ADN-like ICC
 	 * @return List of AdnRecord
 	 */
-	public List<AdnRecord> getAdnRecordsInEf(int efid) {
+	public synchronized List<AdnRecord> getAdnRecordsInEf(int efid) { //add by zhengshenglan at 08-23-2011 for NEWMS00113396
+	//public List<AdnRecord> getAdnRecordsInEf(int efid) {
 
 		if (phone.getContext().checkCallingOrSelfPermission(
 				android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
