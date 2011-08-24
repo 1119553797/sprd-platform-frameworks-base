@@ -158,7 +158,12 @@ struct vertex_t {
 };
 
 struct point_size_t {
-    GGLcoord    size;
+    GLfixed     size;
+    GLfixed     min_size;
+    GLfixed     max_size;
+    GLfixed     threshold_size;
+    GLfixed     attenuation[3];
+    GLboolean   effectiveAttenuation;
     GLboolean   smooth;
 };
 
@@ -199,6 +204,7 @@ struct array_t {
 struct array_machine_t {
     array_t         vertex;
     array_t         normal;
+    array_t         pointsize;
     array_t         color;
     array_t         texture[GGL_TEXTURE_UNIT_COUNT];
     uint8_t         activeTexture;

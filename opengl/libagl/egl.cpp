@@ -980,6 +980,8 @@ static const extention_map_t gExtentionMap[] = {
             (__eglMustCastToProperFunctionPointerType)&glDeleteBuffers },
     { "glGenBuffers",
             (__eglMustCastToProperFunctionPointerType)&glGenBuffers },
+    { "glPointSizePointerOES",
+            (__eglMustCastToProperFunctionPointerType)&glPointSizePointerOES },
     { "eglCreateImageKHR",  
             (__eglMustCastToProperFunctionPointerType)&eglCreateImageKHR }, 
     { "eglDestroyImageKHR", 

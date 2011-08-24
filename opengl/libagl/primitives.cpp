@@ -475,6 +475,20 @@ void primitive_point(ogles_context_t* c, vertex_t* v)
         }
     }
 
+    GLfixed pointsize;
+
+    const GLvoid* psp = c->arrays.pointsize.element(
+            v->index & vertex_cache_t::INDEX_MASK);
+    c->arrays.pointsize.fetch(c, &pointsize, psp);
+
+    if (ggl_likely(c->point.effectiveAttenuation)) {
+        GLfixed* attenuation = c->point.attenuation;
+        GLfixed z = (v->eye.z<0) ? -v->eye.z : v->eye.z;
+        pointsize = gglMulx(pointsize, gglSqrtRecipx(gglMulAddx(z, gglMulAddx(z, attenuation[2], attenuation[1]), attenuation[0])));
+        if(pointsize > c->point.max_size) pointsize = c->point.max_size;
+        if(pointsize < c->point.min_size) pointsize = c->point.min_size;
+    }
+
     // XXX: we don't need to do that each-time
     // if color array and lighting not enabled 
     c->rasterizer.procs.color4xv(c, v->color.v);
@@ -486,17 +500,32 @@ void primitive_point(ogles_context_t* c, vertex_t* v)
             if (!c->rasterizer.state.texture[i].enable) 
                 continue;
             int32_t itt[8];
-            itt[1] = itt[2] = itt[4] = itt[5] = 0;
-            itt[6] = itt[7] = 16; // XXX: check that
-            if (c->rasterizer.state.texture[i].s_wrap == GGL_CLAMP) {
-                int width = c->textures.tmu[i].texture->surface.width;
-                itt[0] = v->texture[i].S * width;
-                itt[6] = 0;
+            if ((enables & GGL_ENABLE_POINT_SPRITE) &&
+                (c->rasterizer.state.texture[i].coord_replace))
+            {
+                int d = gglRecipQ(pointsize, 16);
+                itt[0] = -(v->window.x>>TRI_FRACTION_BITS) * d + (pointsize>>17) * d;
+                itt[1] =  d;
+                itt[2] =  0;
+                itt[3] =  (v->window.y>>TRI_FRACTION_BITS) * d + (pointsize>>17) * d;
+                itt[4] =  0;
+                itt[5] = -d;
+                itt[6] = itt[7] = 0;
             }
-            if (c->rasterizer.state.texture[i].t_wrap == GGL_CLAMP) {
-                int height = c->textures.tmu[i].texture->surface.height;
-                itt[3] = v->texture[i].T * height;
-                itt[7] = 0;
+            else
+            {
+                itt[1] = itt[2] = itt[4] = itt[5] = 0;
+                itt[6] = itt[7] = 16; // XXX: check that
+                if (c->rasterizer.state.texture[i].s_wrap == GGL_CLAMP) {
+                    int width = c->textures.tmu[i].texture->surface.width;
+                    itt[0] = v->texture[i].S * width;
+                    itt[6] = 0;
+                }
+                if (c->rasterizer.state.texture[i].t_wrap == GGL_CLAMP) {
+                    int height = c->textures.tmu[i].texture->surface.height;
+                    itt[3] = v->texture[i].T * height;
+                    itt[7] = 0;
+                }
             }
             c->rasterizer.procs.texCoordGradScale8xv(c, i, itt);
         }
@@ -517,7 +546,7 @@ void primitive_point(ogles_context_t* c, vertex_t* v)
     }
 
     // Render our point...
-    c->rasterizer.procs.pointx(c, v->window.v, c->point.size);
+    c->rasterizer.procs.pointx(c, v->window.v, TRI_FROM_FIXED(pointsize));
 }
 
 // ----------------------------------------------------------------------------

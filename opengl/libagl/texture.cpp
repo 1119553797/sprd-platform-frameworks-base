@@ -989,6 +989,18 @@ void glPixelStorei(GLenum pname, GLint param)
         c->textures.unpackAlignment = param;
 }
 
+void glTexEnvi(GLenum target, GLenum pname, GLint param)
+{
+    ogles_context_t* c = ogles_context_t::get();
+    c->rasterizer.procs.texEnvi(c, target, pname, param);
+}
+
+void glTexEnviv(GLenum target, GLenum pname, const GLint *params)
+{
+    ogles_context_t* c = ogles_context_t::get();
+    c->rasterizer.procs.texEnvi(c, target, pname, params[0]);
+}
+
 void glTexEnvf(GLenum target, GLenum pname, GLfloat param)
 {
     ogles_context_t* c = ogles_context_t::get();
@@ -1053,11 +1065,25 @@ void glTexParameterf(
     texParameterx(target, pname, GLfixed(param), c);
 }
 
+void glTexParameterfv(
+        GLenum target, GLenum pname, const GLfloat *params)
+{
+    ogles_context_t* c = ogles_context_t::get();
+    texParameterx(target, pname, GLfixed(params[0]), c);
+}
+
 void glTexParameterx(
         GLenum target, GLenum pname, GLfixed param)
 {
     ogles_context_t* c = ogles_context_t::get();
     texParameterx(target, pname, param, c);
+}
+
+void glTexParameterxv(
+        GLenum target, GLenum pname, const GLfixed *params)
+{
+    ogles_context_t* c = ogles_context_t::get();
+    texParameterx(target, pname, params[0], c);
 }
 
 void glTexParameteri(

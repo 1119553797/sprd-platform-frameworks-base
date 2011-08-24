@@ -38,7 +38,7 @@ namespace android {
 
 static char const * const gVendorString     = "Android";
 static char const * const gRendererString   = "Android PixelFlinger 1.3";
-static char const * const gVersionString    = "OpenGL ES-CM 1.0";
+static char const * const gVersionString    = "OpenGL ES-CM 1.1";
 static char const * const gExtensionsString =
     "GL_OES_byte_coordinates "              // OK
     "GL_OES_fixed_point "                   // OK
@@ -48,8 +48,8 @@ static char const * const gExtensionsString =
     "GL_OES_draw_texture "                  // OK
     "GL_OES_matrix_get "                    // OK
     "GL_OES_query_matrix "                  // OK
-    //        "GL_OES_point_size_array "              // TODO
-    //        "GL_OES_point_sprite "                  // TODO
+    "GL_OES_point_size_array "              // OK
+    "GL_OES_point_sprite "                  // OK
     "GL_OES_EGL_image "                     // OK
 #ifdef GL_OES_compressed_ETC1_RGB8_texture
     "GL_OES_compressed_ETC1_RGB8_texture "  // OK
@@ -92,7 +92,8 @@ ogles_context_t *ogles_init(size_t extra)
     ogles_init_texture(c);
 
     c->rasterizer.base = base;
-    c->point.size = TRI_ONE;
+    c->point.size = FIXED_ONE;
+    c->point.max_size = FIXED_ONE;
     c->line.width = TRI_ONE;
 
     // in OpenGL, writing to the depth buffer is enabled by default.
@@ -226,6 +227,7 @@ static void enable_disable(ogles_context_t* c, GLenum cap, int enabled)
     case GL_DITHER:
     case GL_STENCIL_TEST:
     case GL_TEXTURE_2D:
+    case GL_POINT_SPRITE_OES:
         // these need to fall through into the rasterizer
         c->rasterizer.procs.enableDisable(c, cap, enabled);
         break;
@@ -516,24 +518,106 @@ void glGetIntegerv(GLenum pname, GLint *params)
 
 // ----------------------------------------------------------------------------
 
+void glPointParameterf (GLenum pname, GLfloat param)
+{
+    glPointParameterx(pname, gglFloatToFixed(param));
+}
+
+void glPointParameterfv (GLenum pname, const GLfloat *params)
+{
+    ogles_context_t* c = ogles_context_t::get();
+    switch(pname) {
+    case GL_POINT_SIZE_MIN:
+    case GL_POINT_SIZE_MAX:
+    case GL_POINT_FADE_THRESHOLD_SIZE:
+        glPointParameterx(pname, gglFloatToFixed(params[0]));
+        break;
+    case GL_POINT_DISTANCE_ATTENUATION:
+        c->point.attenuation[0] = gglFloatToFixed(params[0]);
+        c->point.attenuation[1] = gglFloatToFixed(params[1]);
+        c->point.attenuation[2] = gglFloatToFixed(params[2]);
+        c->point.effectiveAttenuation =!((c->point.attenuation[0] == FIXED_ONE) &&
+                                        (c->point.attenuation[1] == 0) &&
+                                        (c->point.attenuation[2] == 0));
+        break;
+    default:
+        ogles_error(c, GL_INVALID_ENUM);
+        break;
+    }
+}
+
+void glPointParameterx (GLenum pname, GLfixed param)
+{
+    ogles_context_t* c = ogles_context_t::get();
+    switch(pname) {
+    case GL_POINT_SIZE_MIN:
+        if (param < 0) {
+            ogles_error(c, GL_INVALID_VALUE);
+            return;
+        }
+        c->point.min_size = param;
+        break;
+    case GL_POINT_SIZE_MAX:
+        if (param < 0) {
+            ogles_error(c, GL_INVALID_VALUE);
+            return;
+        }
+        c->point.max_size = param;
+        break;
+    case GL_POINT_FADE_THRESHOLD_SIZE:
+        if (param < 0) {
+            ogles_error(c, GL_INVALID_VALUE);
+            return;
+        }
+        c->point.threshold_size = param;
+        break;
+    default:
+        ogles_error(c, GL_INVALID_ENUM);
+        break;
+    }
+}
+
+void glPointParameterxv (GLenum pname, const GLfixed *params)
+{
+    ogles_context_t* c = ogles_context_t::get();
+    switch(pname) {
+    case GL_POINT_SIZE_MIN:
+    case GL_POINT_SIZE_MAX:
+    case GL_POINT_FADE_THRESHOLD_SIZE:
+        glPointParameterx(pname, params[0]);
+        break;
+    case GL_POINT_DISTANCE_ATTENUATION:
+        c->point.attenuation[0] = params[0];
+        c->point.attenuation[1] = params[1];
+        c->point.attenuation[2] = params[2];
+        c->point.effectiveAttenuation =!((c->point.attenuation[0] == FIXED_ONE) &&
+                                        (c->point.attenuation[1] == 0) &&
+                                        (c->point.attenuation[2] == 0));
+        break;
+    default:
+        ogles_error(c, GL_INVALID_ENUM);
+        break;
+    }
+}
+
 void glPointSize(GLfloat size)
 {
     ogles_context_t* c = ogles_context_t::get();
     if (size <= 0) {
-        ogles_error(c, GL_INVALID_ENUM);
+        ogles_error(c, GL_INVALID_VALUE);
         return;
     }
-    c->point.size = TRI_FROM_FIXED(gglFloatToFixed(size));
+    c->point.size = gglFloatToFixed(size);
 }
 
 void glPointSizex(GLfixed size)
 {
     ogles_context_t* c = ogles_context_t::get();
     if (size <= 0) {
-        ogles_error(c, GL_INVALID_ENUM);
+        ogles_error(c, GL_INVALID_VALUE);
         return;
     }
-    c->point.size = TRI_FROM_FIXED(size);
+    c->point.size = size;
 }
 
 // ----------------------------------------------------------------------------
@@ -542,7 +626,7 @@ void glLineWidth(GLfloat width)
 {
     ogles_context_t* c = ogles_context_t::get();
     if (width <= 0) {
-        ogles_error(c, GL_INVALID_ENUM);
+        ogles_error(c, GL_INVALID_VALUE);
         return;
     }
     c->line.width = TRI_FROM_FIXED(gglFloatToFixed(width));
@@ -552,7 +636,7 @@ void glLineWidthx(GLfixed width)
 {
     ogles_context_t* c = ogles_context_t::get();
     if (width <= 0) {
-        ogles_error(c, GL_INVALID_ENUM);
+        ogles_error(c, GL_INVALID_VALUE);
         return;
     }
     c->line.width = TRI_FROM_FIXED(width);

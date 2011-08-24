@@ -113,6 +113,8 @@ void ogles_init_array(ogles_context_t* c)
     c->arrays.color.type = GL_FLOAT;
     c->arrays.normal.size = 4;
     c->arrays.normal.type = GL_FLOAT;
+    c->arrays.pointsize.size = 1;
+    c->arrays.pointsize.type = GL_FLOAT;
     for (int i=0 ; i<GGL_TEXTURE_UNIT_COUNT ; i++) {
         c->arrays.texture[i].size = 4;
         c->arrays.texture[i].type = GL_FLOAT;
@@ -145,12 +147,21 @@ static void currentColor_clamp(ogles_context_t* c, GLfixed* v, const GLvoid*) {
 static void currentNormal(ogles_context_t* c, GLfixed* v, const GLvoid*) {
     memcpy(v, c->currentNormal.v, sizeof(vec3_t));
 }
+static void currentPointSize(ogles_context_t* c, GLfixed* v, const GLvoid*) {
+    v[0] = c->point.size;
+}
 static void currentTexCoord(ogles_context_t* c, GLfixed* v, const GLvoid*) {
     memcpy(v, c->current.texture[c->arrays.tmu].v, sizeof(vec4_t));
 }
 
 
 static void fetchNop(ogles_context_t*, GLfixed*, const GLvoid*) {
+}
+static void fetch1x(ogles_context_t*, GLfixed* v, const GLfixed* p) {
+    v[0] = p[0];
+}
+static void fetch1f(ogles_context_t*, GLfixed* v, const GLfloat* p) {
+    v[0] = gglFloatToFixed(p[0]);
 }
 static void fetch2b(ogles_context_t*, GLfixed* v, const GLbyte* p) {
     v[0] = gglIntToFixed(p[0]);
@@ -276,6 +287,11 @@ static const fn_t normal_fct[1][16] = { // size={3}, type={b,s,f,x}
       (fn_t)fetchExpand3s, 0, 0, 0,
       (fn_t)fetch3f, 0, 0, 0, 0, 0,
       (fn_t)fetch3x },
+};
+static const fn_t pointsize_fct[1][16] = { // size={1}, type={f,x}
+    { 0, 0, 0, 0, 0, 0,
+      (fn_t)fetch1f, 0, 0, 0, 0, 0,
+      (fn_t)fetch1x },
 };
 static const fn_t vertex_fct[3][16] = { // size={2,3,4}, type={b,s,f,x}
     { (fn_t)fetch2b, 0,
@@ -439,6 +455,7 @@ void enableDisableClientState(ogles_context_t* c, GLenum array, bool enable)
     case GL_NORMAL_ARRAY:           a = &c->arrays.normal;          break;
     case GL_TEXTURE_COORD_ARRAY:    a = &c->arrays.texture[tmu];    break;
     case GL_VERTEX_ARRAY:           a = &c->arrays.vertex;          break;
+    case GL_POINT_SIZE_ARRAY_OES:   a = &c->arrays.pointsize;       break;
     default:
         ogles_error(c, GL_INVALID_ENUM);
         return;
@@ -1103,12 +1120,12 @@ void validate_arrays(ogles_context_t* c, GLenum mode)
     GLboolean smooth = GL_FALSE;
     switch (mode) {
     case GL_POINTS:
-        smooth = c->point.smooth;
+        smooth = (mode == GL_POINTS) && (c->point.smooth && !(enables & GGL_POINT_SPRITE_OES));
         break;
     case GL_LINES:
     case GL_LINE_LOOP:
     case GL_LINE_STRIP:
-        smooth = c->line.smooth;
+        smooth = ((mode >= GL_LINES) && (mode <= GL_LINE_STRIP)) && c->line.smooth;
         break;
     }
     if (((enables & GGL_ENABLE_AA)?1:0) != smooth)
@@ -1159,6 +1176,7 @@ void validate_arrays(ogles_context_t* c, GLenum mode)
     am.vertex.fetch = fetchNop;
     am.normal.fetch = currentNormal;
     am.color.fetch = currentColor;
+    am.pointsize.fetch = currentPointSize;
 
     if (am.vertex.enable) {
         am.vertex.resolve();
@@ -1171,6 +1189,13 @@ void validate_arrays(ogles_context_t* c, GLenum mode)
         am.normal.resolve();
         if (am.normal.bo || am.normal.pointer) {
             am.normal.fetch = normal_fct[am.normal.size-3][am.normal.type & 0xF];
+        }
+    }
+
+    if (am.pointsize.enable) {
+        am.pointsize.resolve();
+        if (am.pointsize.bo || am.pointsize.pointer) {
+            am.pointsize.fetch = pointsize_fct[am.pointsize.size-1][am.pointsize.type & 0xF];
         }
     }
 
@@ -1326,6 +1351,24 @@ void glTexCoordPointer(
             c->arrays.array_buffer, 0);
 }
 
+void glPointSizePointerOES(
+    GLenum type, GLsizei stride, const GLvoid *pointer)
+{
+    ogles_context_t* c = ogles_context_t::get();
+    if (stride<0) {
+        ogles_error(c, GL_INVALID_VALUE);
+        return;
+    }
+    switch (type) {
+    case GL_FIXED:
+    case GL_FLOAT:
+        break;
+    default:
+        ogles_error(c, GL_INVALID_ENUM);
+        return;
+    }
+    c->arrays.pointsize.init(1, type, stride, pointer, c->arrays.array_buffer, 0);
+}
 
 void glEnableClientState(GLenum array) {
     ogles_context_t* c = ogles_context_t::get();
@@ -1566,6 +1609,11 @@ void glDeleteBuffers(GLsizei n, const GLuint* buffers)
             if (c->arrays.normal.bo) {
                 if (c->arrays.normal.bo->name == name) {
                     c->arrays.normal.bo = 0;
+                }
+            }
+            if (c->arrays.pointsize.bo) {
+                if (c->arrays.pointsize.bo->name == name) {
+                    c->arrays.pointsize.bo = 0;
                 }
             }
             if (c->arrays.color.bo) {

@@ -183,6 +183,18 @@ static void clipPlanex(GLenum plane, const GLfixed* equ, ogles_context_t* c)
 
 using namespace android;
 
+void glColor4ub(GLubyte r, GLubyte g, GLubyte b, GLubyte a)
+{
+    ogles_context_t* c = ogles_context_t::get();
+    c->current.color.r       = GGL_UB_TO_X(r);
+    c->currentColorClamped.r = gglClampx(c->current.color.r);
+    c->current.color.g       = GGL_UB_TO_X(g);
+    c->currentColorClamped.g = gglClampx(c->current.color.g);
+    c->current.color.b       = GGL_UB_TO_X(b);
+    c->currentColorClamped.b = gglClampx(c->current.color.b);
+    c->current.color.a       = GGL_UB_TO_X(a);
+    c->currentColorClamped.a = gglClampx(c->current.color.a);
+}
 
 void glColor4f(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
