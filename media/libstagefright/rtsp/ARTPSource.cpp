@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "ARTPSource"
 #include <utils/Log.h>
 
@@ -46,6 +46,7 @@ ARTPSource::ARTPSource(
       mLastNTPTime(0),
       mLastNTPTimeUpdateUs(0),
       mIssueFIRRequests(false),
+      mLocalTimestamps(false), //@hong
       mLastFIRRequestUs(-1),
       mNextFIRSeqNo((rand() * 256.0) / RAND_MAX) {
     unsigned long PT;
@@ -80,14 +81,20 @@ static uint32_t AbsDiff(uint32_t seq1, uint32_t seq2) {
     return seq1 > seq2 ? seq1 - seq2 : seq2 - seq1;
 }
 
+void ARTPSource::setLocalTimestamps(bool local) //@hong
+{
+	mLocalTimestamps = local;
+}
+    
 void ARTPSource::processRTPPacket(const sp<ABuffer> &buffer) {
     if (queuePacket(buffer)
-            && mNumTimes == 2
+            && mNumTimes == 2   //@hong not check it.
             && mAssembler != NULL) {
         mAssembler->onPacketReceived(this);
     }
 }
 
+#if 0
 void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
     LOGV("timeUpdate");
 
@@ -115,9 +122,72 @@ void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
     }
 }
 
+#else  //#hong test
+void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
+    LOGV("timeUpdate");
+
+    mLastNTPTime = ntpTime;
+  // if (mNumTimes == 0)
+  //  mLastNTPTimeUpdateUs = ALooper::GetNowUs()-1000000ll;
+  // else  if (mNumTimes ==1)
+    mLastNTPTimeUpdateUs = ALooper::GetNowUs();
+   	
+
+    if (mNumTimes == 2) {
+        mNTPTime[0] = mNTPTime[1];
+        mRTPTime[0] = mRTPTime[1];
+        mNumTimes = 1;
+    }
+    mNTPTime[mNumTimes] = ntpTime;
+    mRTPTime[mNumTimes++] = rtpTime;
+
+    if (timeEstablished()) {
+        for (List<sp<ABuffer> >::iterator it = mQueue.begin();
+             it != mQueue.end(); ++it) {
+            sp<AMessage> meta = (*it)->meta();
+
+            uint32_t rtpTime;
+            CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
+
+            meta->setInt64("ntp-time", RTP2NTP(rtpTime));
+        }
+    }
+}
+#endif
 bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
     uint32_t seqNum = (uint32_t)buffer->int32Data();
 
+/*         quick rtp time established..............*///@hong
+   if (mLocalTimestamps)
+   	{
+	    uint64_t  ntpTime = ALooper::GetNowUs();
+	    if (mLastNTPTimeUpdateUs == 0 ||
+			(mNumTimes==1 &&  ntpTime > (mLastNTPTimeUpdateUs + 2000000ll)) ||
+			(mNumTimes==2 &&  ntpTime > (mLastNTPTimeUpdateUs + 6000000ll)))
+	    	{
+	    	sp<AMessage> meta = buffer->meta();
+
+	        uint32_t rtpTime;
+	        CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
+		
+		 uint64_t ntpTime1;
+		 ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
+		 
+	    	 timeUpdate(rtpTime, ntpTime1);
+	    	}
+
+	    if (mNumTimes == 2) {
+		        sp<AMessage> meta = buffer->meta();
+
+		        uint32_t rtpTime;
+		        CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
+
+		        meta->setInt64("ntp-time", RTP2NTP(rtpTime));
+		    }
+		
+   	}
+   	else
+/*         quick rtp time established..............*/
     if (mNumTimes == 2) {
         sp<AMessage> meta = buffer->meta();
 

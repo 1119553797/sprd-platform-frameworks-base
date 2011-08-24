@@ -460,9 +460,10 @@ status_t ARTSPConnection::receive(void *data, size_t size) {
         if (n == 0) {
             // Server closed the connection.
             LOGE("Server unexpectedly closed the connection2.");
-		mState = DISCONNECTED;  //@hong handle server exception.
+
 		if (mServerExceptionMsg!= NULL)
 			{
+			mState = DISCONNECTED;  //@hong handle server exception.		
 			mServerExceptionMsg->post();
 			mServerExceptionMsg = NULL;
 			}

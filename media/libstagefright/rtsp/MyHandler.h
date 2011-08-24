@@ -95,7 +95,7 @@ struct MyHandler : public AHandler {
         : mLooper(looper),
           mNetLooper(new ALooper),
           mConn(new ARTSPConnection),
-          mRTPConn(new ARTPConnection),
+          mRTPConn(new ARTPConnection), //@hong faketype.
           mSessionURL(url),
           mSetupTracksSuccessful(false),
           mSeekPending(false),
@@ -110,6 +110,10 @@ struct MyHandler : public AHandler {
           mReceivedFirstRTPPacket(false),
           mServerException(false),
           mSeekable(false) {
+          
+	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
+	mRTPConn->setlocalTimestamps(true);
+	
         mNetLooper->setName("rtsp net");
         mNetLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
@@ -138,20 +142,7 @@ struct MyHandler : public AHandler {
     void disconnect(const sp<AMessage> &doneMsg) {
         mDoneMsg = doneMsg;
 	LOGI("disconnect.enter...");
-#if 1
         (new AMessage('abor', id()))->post();
-#else
-	if (mServerException == false)
-	{
-	mServerException  = true;
-        (new AMessage('abor', id()))->post();
-	}
-	else
-	{
-	 doneMsg->post();
-	 mDoneMsg = NULL;
-	}
-#endif
     }
 
     void seek(int64_t timeUs, const sp<AMessage> &doneMsg) {
@@ -349,6 +340,9 @@ struct MyHandler : public AHandler {
             {
                 int32_t result;
                 CHECK(msg->findInt32("result", &result));
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGI("describle time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
 
                 LOGI("DESCRIBE completed with result %d (%s)",
                      result, strerror(-result));
@@ -423,6 +417,9 @@ struct MyHandler : public AHandler {
             {
                 size_t index;
                 CHECK(msg->findSize("index", &index));
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGI("setup time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
 
                 TrackInfo *track = NULL;
                 size_t trackIndex;
@@ -524,7 +521,7 @@ struct MyHandler : public AHandler {
                 CHECK(msg->findInt32("result", &result));
 	    struct timeval tv;
 	    gettimeofday(&tv, NULL);
-	LOGV("play time:%d s", tv.tv_sec);
+	LOGI("play time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
                 LOGI("PLAY completed with result %d (%s)",
                      result, strerror(-result));
 
@@ -638,7 +635,6 @@ struct MyHandler : public AHandler {
                     mDoneMsg->post();
                     mDoneMsg = NULL;
                 }
-		mServerException = false;
                 break;
             }
 
@@ -676,28 +672,30 @@ struct MyHandler : public AHandler {
             case 'accu':
             {
                 int32_t first;
-		 //@hong add for fast 
-#if 0 //o: orignal..
-                if (mFirstAccessUnit) {
-                    mDoneMsg->setInt32("result", OK);
-                    mDoneMsg->post();
-                    mDoneMsg = NULL;
 
-                    mFirstAccessUnit = false;
-                }
-#endif
 		//LOGI("accu received");
+		
                 if (msg->findInt32("first-rtcp", &first)) {
                     mReceivedFirstRTCPPacket = true;
 			LOGI("accu received first rtcp");
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGI("accu firstrtcp time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
+			
                     break;
                 }
 
                 if (msg->findInt32("first-rtp", &first)) {
                     mReceivedFirstRTPPacket = true;
 			LOGI("accu received first rtp");
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGI("accu firstrtp time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
                     break;
                 }
+
+
+
 
                 ++mNumAccessUnitsReceived;
                 postAccessUnitTimeoutCheck();
@@ -729,12 +727,12 @@ struct MyHandler : public AHandler {
                 uint32_t seqNum = (uint32_t)accessUnit->int32Data();
 
                 if (mSeekPending) {
-                    LOGV("we're seeking, dropping stale packet.");
+                    LOGI("we're seeking, dropping stale packet.");
                     break;
                 }
 
                 if (seqNum < track->mFirstSeqNumInSegment) {
-                    LOGV("dropping stale access-unit (%d < %d)",
+                    LOGI("dropping stale access-unit (%d < %d)",
                          seqNum, track->mFirstSeqNumInSegment);
                     break;
                 }
@@ -747,10 +745,17 @@ struct MyHandler : public AHandler {
                 CHECK(accessUnit->meta()->findInt32(
                             "rtp-time", (int32_t *)&rtpTime));
 
+
                 if (track->mNewSegment) {
                     track->mNewSegment = false;
 
-                    LOGV("first segment unit ntpTime=0x%016llx rtpTime=%u seq=%d",
+		if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB					
+		mReceivedFirstRTCPPacket = true;	//@hong
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGI("first segment unit  time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
+	
+                    LOGI("first segment unit ntpTime=0x%016llx rtpTime=%u seq=%d",
                          ntpTime, rtpTime, seqNum);
                 }
   //@hong remove for fast 
@@ -760,9 +765,11 @@ struct MyHandler : public AHandler {
                     mDoneMsg->setInt32("result", OK);
                     mDoneMsg->post();
                     mDoneMsg = NULL;
-
                     mFirstAccessUnit = false;
                     mFirstAccessUnitNTP = ntpTime;
+
+			mConn->serverexception(NULL);  //@hong
+
                 }
 #endif
                 if (ntpTime >= mFirstAccessUnitNTP) {
@@ -786,6 +793,7 @@ struct MyHandler : public AHandler {
                     TrackInfo *track = &mTracks.editItemAt(trackIndex);
                     track->mPacketSource->queueAccessUnit(accessUnit);
                 }
+
                 break;
             }
 
@@ -957,15 +965,6 @@ struct MyHandler : public AHandler {
                 break;
             }
 	    case 'expt':  //@hong server exception
-/*	    
-	       if (mServerException == false)
-		{
-			mServerException = true;
-                        sp<AMessage> msg = new AMessage('abor', id());
-                        msg->post();		
-			break;
-	    	}
-*/
 		LOGI("server exception error.");
              if (mDoneMsg != NULL) {
 		LOGI("server exception error1.");
@@ -1068,7 +1067,7 @@ struct MyHandler : public AHandler {
 
             uint32_t rtpTime = strtoul(val.c_str(), &end, 10);
 
-            LOGV("track #%d: rtpTime=%u <=> ntp=%.2f", n, rtpTime, npt1);
+            LOGI("track #%d: rtpTime=%u <=> ntp=%.2f", n, rtpTime, npt1);
 
             info->mPacketSource->setNormalPlayTimeMapping(
                     rtpTime, (int64_t)(npt1 * 1E6));

@@ -49,7 +49,9 @@ struct ARTPSource : public RefBase {
     bool timeEstablished() const {
         return mNumTimes == 2;
     }
-
+	
+    void setLocalTimestamps(bool local); //@hong
+	
 private:
     uint32_t mID;
     uint32_t mHighestSeqNumber;
@@ -64,7 +66,9 @@ private:
 
     uint64_t mLastNTPTime;
     int64_t mLastNTPTimeUpdateUs;
-
+	
+    bool mLocalTimestamps; //@hong
+		
     bool mIssueFIRRequests;
     int64_t mLastFIRRequestUs;
     uint8_t mNextFIRSeqNo;
