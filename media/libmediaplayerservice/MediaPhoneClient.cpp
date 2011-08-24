@@ -156,7 +156,7 @@ status_t MediaPhoneClient::prepareRecorder()
     CHECK_RT(mRecorder->setVideoFrameRate(10));
     CHECK_RT(mRecorder->setVideoSize(176, 144));
     //setVideoEncodingBitRate(48*1024);
-    CHECK_RT(mRecorder->setParameters(String8("video-param-encoding-bitrate=393216")));
+    CHECK_RT(mRecorder->setParameters(String8("video-param-encoding-bitrate=48000")));
     //setAudioEncodingBitRate();
     //CHECK_RT(mRecorder->setParameters(String8("audio-param-encoding-bitrate=98304")));
     //setAudioChannels(profile.audioChannels);

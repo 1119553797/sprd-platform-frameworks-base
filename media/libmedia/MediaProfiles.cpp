@@ -358,14 +358,14 @@ MediaProfiles::getInstance()
 MediaProfiles::createDefaultH263VideoEncoderCap()
 {
     return new MediaProfiles::VideoEncoderCap(
-        VIDEO_ENCODER_H263, 192000, 420000, 176, 352, 144, 288, 1, 20);
+        VIDEO_ENCODER_H263, 48000, 420000, 176, 352, 144, 288, 1, 20);
 }
 
 /*static*/ MediaProfiles::VideoEncoderCap*
 MediaProfiles::createDefaultM4vVideoEncoderCap()
 {
     return new MediaProfiles::VideoEncoderCap(
-        VIDEO_ENCODER_MPEG_4_SP, 192000, 420000, 176, 352, 144, 288, 1, 20);
+        VIDEO_ENCODER_MPEG_4_SP, 48000, 420000, 176, 352, 144, 288, 1, 20);
 }
 
 
