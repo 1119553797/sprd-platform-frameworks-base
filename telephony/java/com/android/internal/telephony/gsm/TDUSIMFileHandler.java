@@ -160,8 +160,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 										+ card
 												.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM));
 				if (card != null
-						&& card
-								.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM))
+						&& card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM))
 
 				{
 					for (int i = 0; i < data.length; i++) {

@@ -59,14 +59,14 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 	private boolean mEmailPresentInIap = false;
 	private int mEmailTagNumberInIap = 0;
 	private ArrayList<byte[]> mIapFileRecord;
-	// zhanglj add begin for add multi record and email in usim
+	//  add begin for add multi record and email in usim
 	private Object[] mIapFileRecordArray;
 	private int newEmailNum;
 	private Set<Integer> usedEmailNumSet;
 	public int[] mAdnRecordSizeArray;
 	private int[] mEmailRecordSizeArray;
 	private int[] mIapRecordSizeArray;
-	// zhanglj add end
+	//add end
 	private ArrayList<byte[]> mEmailFileRecord;
 	private Map<Integer, ArrayList<String>> mEmailsForAdnRec;
 	private int mAdnCount = 0;
@@ -79,14 +79,14 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 	private static final int EVENT_EMAIL_LOAD_DONE = 4;
 	private static final int EVENT_ADN_RECORD_COUNT = 5;
 
-	// zhanglj add begin for add multi record and email in usim
+	//  add begin for add multi record and email in usim
 	private static final int EVENT_AAS_LOAD_DONE = 6;
 	private static final int EVENT_SNE_LOAD_DONE = 7;
 	private static final int EVENT_GRP_LOAD_DONE = 8;
 	private static final int EVENT_GAS_LOAD_DONE = 9;
 	private static final int EVENT_ANR_LOAD_DONE = 10;
 	private int mAnrNum = 0;
-	// zhanglj add end
+	//  add end
 
 	private ArrayList<byte[]> mAnrFileRecord;
 	private int[] mAnrRecordSizeArray;
@@ -139,14 +139,14 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		// reads.
 		mIsPbrPresent = true;
 		mAdnCache = cache;
-		// zhanglj add begin for add multi record and email in usim
+		//   add begin for add multi record and email in usim
 		ishaveEmail = false;
 		ishaveAnr = false;
 		ishaveAas = false;
 		ishaveSne = false;
 		ishaveGrp = false;
 		ishaveGas = false;
-		// zhanglj add end
+		//   add end
 		mLock = cache.getLock();
 	}
 
@@ -156,7 +156,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		mEmailFileRecord = null;
 		mPbrFile = null;
 		mIsPbrPresent = true;
-		// zhanglj add begin for add multi record and email in usim
+		//   add begin for add multi record and email in usim
 		mAnrFileRecord = null;
 		mAasFileRecord = null;
 		mSneFileRecord = null;
@@ -170,7 +170,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		ishaveGas = false;
 		anrFileCount = 0;
 		usedEmailNumSet = null;
-		// zhanglj add end
+		//   add end
 	}
 
 	public ArrayList<AdnRecord> loadEfFilesFromUsim() {
@@ -192,7 +192,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 			int numRecs = mPbrFile.mFileIds.size();
 
-			// zhanglj add begin for add multi record and email in usim
+			//   add begin for add multi record and email in usim
 			mIapFileRecordArray = new Object[numRecs];
 			usedEmailNumSet = new HashSet<Integer>();
 			mAdnRecordSizeArray = new int[numRecs];
@@ -203,7 +203,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			mSneRecordSizeArray = new int[numRecs];
 			mGrpRecordSizeArray = new int[numRecs];
 			mGasRecordSizeArray = new int[numRecs];
-			// zhanglj add end
+			//   add end
 
 			mAdnCount = 0;
 			Log.i("UsimPhoneBookManager", "loadEfFilesFromUsim" + numRecs);
@@ -211,20 +211,20 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				readAdnFileAndWait(i);
 				readEmailFileAndWait(i);
 
-				// zhanglj add begin for add multi record and email in usim
+				//   add begin for add multi record and email in usim
 				readAnrFileAndWait(i);
 
 				updatePhoneAdnRecord(i);
-				// zhanglj add end
+				//   add end
 			}
 			// All EF files are loaded, post the response.
 		}
 		return mPhoneBookRecords;
 	}
 
-	// zhanglj add begin for add multi record and email in usim
+	//   add begin for add multi record and email in usim
 	public int getNumRecs() {
-		// zhanglj add begin 2010-11-25 for reload the pbr file when the pbr
+		//   add begin 2010-11-25 for reload the pbr file when the pbr
 		// file is null
 		synchronized (mLock) {
 			if (mPbrFile == null) {
@@ -268,7 +268,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 	public ArrayList<byte[]> getIapFileRecord(int recNum) {
 		int efid = findEFIapInfo(recNum);
-		// zhanglj add begin 2010-11-29 for avoid some exception because ril
+		//   add begin 2010-11-29 for avoid some exception because ril
 		// restart
 		if (efid < 0) {
 			return null;
@@ -438,7 +438,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 	}
 
-	// zhanglj add end
+	//   add end
 
 	public int[] getAdnRecordsSize(int efid) {
 
@@ -588,7 +588,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				Log.e(LOG_TAG, "Error: Email file is empty");
 				return;
 			}
-			// updatePhoneAdnRecord(recNum);
+			
 		}
 
 	}
@@ -644,7 +644,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				}
 				log("load ANR times ...... " + (i + 1));
 				if (mAnrFileRecord == null) {
-					Log.e(LOG_TAG, "Error: Email file is empty");
+					Log.e(LOG_TAG, "Error: ANR file is empty");
 					return;
 				}
 			}
@@ -726,8 +726,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 	}
 
 	private void updatePhoneAdnRecord(int num) {
-		if (mEmailFileRecord == null)
-			return;
+		
 		int numAdnRecs = mPhoneBookRecords.size();
 
 		mAdnRecordSizeArray[num] = mPhoneBookRecords.size();
@@ -735,9 +734,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				+ numAdnRecs + "num " + num);
 
 		int numIapRec = 0;
-		// add end
-		// Log.i("LOG_TAG","updatePhoneAdnRecord mIapFileRecord : "
-		// +mIapFileRecord );
+	
 		if (mIapFileRecord != null) {
 			// The number of records in the IAP file is same as the number of
 			// records in ADN file.
@@ -748,13 +745,23 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			// i.e value of mEmailTagNumberInIap
 
 			numIapRec = mIapFileRecord.size();
+			Log.i(LOG_TAG, "updatePhoneAdnRecord mIapRecordSizeArray[num] : "
+			+ mIapFileRecord.size());
 			mIapFileRecordArray[num] = mIapFileRecord;
-			mEmailRecordSizeArray[num] = mEmailFileRecord.size();
+			if(mEmailFileRecord != null){
+			  mEmailRecordSizeArray[num] = mEmailFileRecord.size();
+			  Log.i(LOG_TAG, "updatePhoneAdnRecord mEmailRecordSizeArray[num] : "
+				+ mEmailFileRecord.size());
+			}
 			mIapRecordSizeArray[num] = mIapFileRecord.size();
+                   if(mAnrFileRecord != null){
+			      mAnrRecordSizeArray[num] = mAnrFileRecord.size();
+                   	}
+                   Log.i("AdnRecord", "updatePhoneAdnRecord,numIapRec  " + numIapRec);
 
-			mAnrRecordSizeArray[num] = mAnrFileRecord.size();
-
-			Log.i("AdnRecord", "updatePhoneAdnRecord,numIapRec  " + numIapRec);
+		
+			numIapRec = (numAdnRecs > numIapRec) ? numIapRec:numAdnRecs;
+			if(mEmailFileRecord != null){
 
 			for (int i = 0; i < numIapRec; i++) {
 				byte[] record = null;
@@ -790,13 +797,16 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 						nEmails = emails;
 					}
-					int adnNum = numAdnRecs - numIapRec + i;
+					
+					int adnNum =  i;
+				
+					
 					Log
 							.i("AdnRecord", "updatePhoneAdnRecord,numIapRec  "
 									+ numIapRec + "numAdnRecs " + numAdnRecs
 									+ "i " + i);
 
-					// AdnRecord rec = mPhoneBookRecords.get(i);
+					
 					AdnRecord rec = mPhoneBookRecords.get(adnNum);
 
 					Log.i("AdnRecord", "updatePhoneAdnRecord,rec name:"
@@ -812,16 +822,25 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 										+ emails[0]);
 					}
 
-					// mPhoneBookRecords.set(i, rec);
+					
 					mPhoneBookRecords.set(adnNum, rec);
 				}
 			}
+			}
 		} else {
 			mIapFileRecordArray[num] = mIapFileRecord;
+			if(mIapFileRecord != null){
 			mEmailRecordSizeArray[num] = mEmailFileRecord.size();
+                   Log.i(LOG_TAG, "updatePhoneAdnRecord mEmailRecordSizeArray[num] : "
+				+ mEmailFileRecord.size());
+			}
 			mIapRecordSizeArray[num] = mIapFileRecord.size();
-			mAnrRecordSizeArray[num] = mAnrFileRecord.size();
+			if(mAnrFileRecord != null){
+			    mAnrRecordSizeArray[num] = mAnrFileRecord.size();
+			}
+			if(mEmailFileRecord != null){
 			int len = mEmailFileRecord.size();
+			
 			// Type 1 file, the number of records is the same as the number of
 			// records in the ADN file.
 			if (mEmailsForAdnRec == null) {
@@ -846,37 +865,31 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				rec.setEmails(emails);
 				mPhoneBookRecords.set(i, rec);
 			}
+			}
 
 		}
 
-		Log.i(LOG_TAG, "updatePhoneAdnRecord mEmailRecordSizeArray[num] : "
-				+ mEmailFileRecord.size());
-		Log.i(LOG_TAG, "updatePhoneAdnRecord mIapRecordSizeArray[num] : "
-				+ mIapFileRecord.size());
-		Log.i(LOG_TAG, "updatePhoneAdnRecord mAnrRecordSizeArray[num] : "
-				+ mAnrFileRecord.size());
-
+		
 		// ICC cards can be made such that they have an IAP file but all
 		// records are empty. So we read both type 1 and type 2 file
 		// email records, just to be sure.
-		// zhanglj modify 2010-11-01 for add email function in usim card
-		// int len = mPhoneBookRecords.size();
 
 		Log.i(LOG_TAG, "updatePhoneAdnRecord ANR >>>>>>>>>>>>>> ");
-		if (num > 0 && ishaveAnr) {
-			for (int i = 0; i < mAnrFileRecord.size() / anrFileCount; i++) {
+		if (num >= 0 && ishaveAnr && mAnrFileRecord != null ) {
+			Log.i(LOG_TAG, "updatePhoneAdnRecord mAnrRecordSizeArray[num] : "
+				+ mAnrFileRecord.size());
+                   int count = (mAnrFileRecord.size()/anrFileCount > numAdnRecs) ? numAdnRecs :mAnrFileRecord.size()/anrFileCount;  
+                   Log.i(LOG_TAG, "updatePhoneAdnRecord ANR  count " +count);
+			for (int i = 0; i < count ; i++) {
 				// SIM record numbers are 1 based
 				String anr = null;
 				anr = readAnrRecord(i);
-
-				int adnNum = numAdnRecs - numIapRec + i;
-
-				AdnRecord rec = mPhoneBookRecords.get(adnNum);
+				AdnRecord rec = mPhoneBookRecords.get(i);
 				if (rec != null) {
 					rec.setAnr(anr);
 
 				}
-				mPhoneBookRecords.set(adnNum, rec);
+				mPhoneBookRecords.set(i, rec);
 			}
 		}
 
@@ -1081,64 +1094,10 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				mLock.notify();
 			}
 			break;
-		case EVENT_SNE_LOAD_DONE:
-			log("Loading USIM SNE records done");
-			ar = (AsyncResult) msg.obj;
-			if (ar.exception == null) {
-				if (mSneFileRecord == null) {
-					mSneFileRecord = new ArrayList<byte[]>();
-				}
-				mSneFileRecord.addAll((ArrayList<byte[]>) ar.result);
-			}
+	
 
-			synchronized (mLock) {
-				mLock.notify();
-			}
-			break;
-		case EVENT_AAS_LOAD_DONE:
-			log("Loading USIM AAS records done");
-			ar = (AsyncResult) msg.obj;
-			if (ar.exception == null) {
-				if (mAasFileRecord == null) {
-					mAasFileRecord = new ArrayList<byte[]>();
-				}
-
-				mAasFileRecord.addAll((ArrayList<byte[]>) ar.result);
-
-			}
-			synchronized (mLock) {
-				mLock.notify();
-			}
-
-			break;
-		case EVENT_GRP_LOAD_DONE:
-			log("Loading USIM GRP records done");
-			ar = (AsyncResult) msg.obj;
-			if (ar.exception == null) {
-				if (mGrpFileRecord == null) {
-					mGrpFileRecord = new ArrayList<byte[]>();
-				}
-				mGrpFileRecord.addAll((ArrayList<byte[]>) ar.result);
-			}
-
-			synchronized (mLock) {
-				mLock.notify();
-			}
-			break;
-		case EVENT_GAS_LOAD_DONE:
-			log("Loading USIM GAS records done");
-			ar = (AsyncResult) msg.obj;
-			if (ar.exception == null) {
-				if (mGasFileRecord == null) {
-					mGasFileRecord = new ArrayList<byte[]>();
-				}
-				mGasFileRecord.addAll((ArrayList<byte[]>) ar.result);
-			}
-
-			synchronized (mLock) {
-				mLock.notify();
-			}
-			break;
+	
+	
 		case EVENT_EMAIL_LOAD_DONE:
 			log("Loading USIM Email records done");
 			ar = (AsyncResult) msg.obj;

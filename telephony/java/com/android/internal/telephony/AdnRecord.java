@@ -199,7 +199,7 @@ public class AdnRecord implements Parcelable {
 		this.emails = emails;
 	}
 
-	// jinwei for sim index
+
 	public void setRecordNumber(int sim_index) {
 		recordNumber = sim_index;
 	}
@@ -278,7 +278,7 @@ public class AdnRecord implements Parcelable {
 	}
 
 	// add multi record and email in usim begin
-	private static boolean stringCompareNullEqualsEmpty(String s1, String s2) {
+	public static boolean stringCompareNullEqualsEmpty(String s1, String s2) {
 		if (s1 == s2) {
 			return true;
 		}
@@ -531,126 +531,7 @@ public class AdnRecord implements Parcelable {
 		}
 	}
 
-	public byte[] buildSneString(int recordSize, int efid, int adnNum) {
-		byte[] byteTag;
-		byte[] sneString;
-		Log.e(LOG_TAG, "enter buildSneString");
-		// create an empty record
-		sneString = new byte[recordSize];
-		for (int i = 0; i < recordSize; i++) {
-			sneString[i] = (byte) 0xFF;
-		}
-		if (!TextUtils.isEmpty(sne)) {
-			try {
-				byteTag = GsmAlphabet.isAsciiStringToGsm8BitUnpackedField(sne);
-				System.arraycopy(byteTag, 0, sneString, 0, byteTag.length);
-			} catch (EncodeException ex) {
-				try {
-					byteTag = sne.getBytes("utf-16be");
-					System.arraycopy(byteTag, 0, sneString, ADN_TON_AND_NPI,
-							byteTag.length);
-					sneString[0] = (byte) 0x80;
-				} catch (java.io.UnsupportedEncodingException ex2) {
-					Log.e(LOG_TAG,
-							"[sAdnRecord]alphaTag convert byte excepiton");
-				}
-			}
-			if (recordSize > TYPE1_DATA_LENGTH) {
-				sneString[recordSize - 2] = (byte) efid; // Adn Sfi
-				sneString[recordSize - 1] = (byte) adnNum; // Adn Record Id
-			}
-			return sneString;
-		}
-		return sneString;
-	}
-
-	public byte[] buildAasString(int recordSize, int efid, int adnNum) {
-		byte[] byteTag;
-		byte[] aasString;
-		Log.e(LOG_TAG, "enter buildAasString");
-		// create an empty record
-		aasString = new byte[recordSize];
-		for (int i = 0; i < recordSize; i++) {
-			aasString[i] = (byte) 0xFF;
-		}
-		if (!TextUtils.isEmpty(aas)) {
-			try {
-				byteTag = GsmAlphabet.isAsciiStringToGsm8BitUnpackedField(aas);
-				System.arraycopy(byteTag, 0, aasString, 0, byteTag.length);
-			} catch (EncodeException ex) {
-				try {
-					byteTag = aas.getBytes("utf-16be");
-					System.arraycopy(byteTag, 0, aasString, ADN_TON_AND_NPI,
-							byteTag.length);
-					aasString[0] = (byte) 0x80;
-				} catch (java.io.UnsupportedEncodingException ex2) {
-					Log.e(LOG_TAG,
-							"[sAdnRecord]alphaTag convert byte excepiton");
-				}
-			}
-			return aasString;
-		}
-		return aasString;
-	}
-
-	public byte[] buildGrpString(int recordSize, int efid, int adnNum) {
-		byte[] byteTag;
-		byte[] grpString;
-		Log.e(LOG_TAG, "enter buildGrpString");
-		// create an empty record
-		grpString = new byte[recordSize];
-		for (int i = 0; i < recordSize; i++) {
-			grpString[i] = (byte) 0xFF;
-		}
-		if (!TextUtils.isEmpty(grp)) {
-			try {
-				byteTag = GsmAlphabet.isAsciiStringToGsm8BitUnpackedField(gas);
-				System.arraycopy(byteTag, 0, grpString, 0, byteTag.length);
-			} catch (EncodeException ex) {
-				try {
-					byteTag = grp.getBytes("utf-16be");
-					System.arraycopy(byteTag, 0, grpString, ADN_TON_AND_NPI,
-							byteTag.length);
-					grpString[0] = (byte) 0x80;
-				} catch (java.io.UnsupportedEncodingException ex2) {
-					Log.e(LOG_TAG,
-							"[sAdnRecord]alphaTag convert byte excepiton");
-				}
-			}
-			return grpString;
-		}
-		return grpString;
-	}
-
-	public byte[] buildGasString(int recordSize, int efid, int adnNum) {
-		byte[] byteTag;
-		byte[] gasString;
-		Log.e(LOG_TAG, "enter buildGasString");
-		// create an empty record
-		gasString = new byte[recordSize];
-		for (int i = 0; i < recordSize; i++) {
-			gasString[i] = (byte) 0xFF;
-		}
-		if (!TextUtils.isEmpty(gas)) {
-			try {
-				byteTag = GsmAlphabet.isAsciiStringToGsm8BitUnpackedField(gas);
-				System.arraycopy(byteTag, 0, gasString, 0, byteTag.length);
-			} catch (EncodeException ex) {
-				try {
-					byteTag = gas.getBytes("utf-16be");
-					System.arraycopy(byteTag, 0, gasString, ADN_TON_AND_NPI,
-							byteTag.length);
-					gasString[0] = (byte) 0x80;
-				} catch (java.io.UnsupportedEncodingException ex2) {
-					Log.e(LOG_TAG,
-							"[sAdnRecord]alphaTag convert byte excepiton");
-				}
-			}
-			return gasString;
-		}
-		return gasString;
-	}
-
+	
 	// a end
 	public byte[] buildIapString(int recordSize, int recNum) {
 		// byte[] byteTag;

@@ -126,7 +126,7 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
 			if (efid < -1) {
 				return null;
 			}
-			// zhanglj add end
+			//  add end
 			recordSizeEmail = getRecordsSize(efid);
 			recordSizeTotal[0] = recordSizeEmail[0];
 			recordSizeTotal[1] += recordSizeEmail[1];

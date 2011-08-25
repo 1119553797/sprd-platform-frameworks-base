@@ -668,10 +668,6 @@ public class IccProvider extends ContentProvider {
 				newNumber, newemails, newanr, newaas, newsne, newgrp, newgas,
 				pin2);
 
-		/*
-		 * success = updateIccRecordInEfByIndex(efType, tag, number, emails,
-		 * anr, aas,sne,grp,gas, updateIndex, pin2);
-		 */
 
 		if (!success) {
 			return 0;

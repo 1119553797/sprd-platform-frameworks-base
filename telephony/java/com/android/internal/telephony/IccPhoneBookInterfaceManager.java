@@ -37,12 +37,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 	protected PhoneBase phone;
 	protected AdnRecordCache adnCache;
 	protected/* final */Object mLock = new Object();
-	// zhanglj add begin for
-	protected final Object mUsimLock = new Object();
-	protected final Object mEfLock = new Object();
-	protected final Object mAdnLock = new Object();
-	protected final Object mSyncLock = new Object();
-	// zhanglj add begin for
+
 	protected int recordSize[];
 	protected int sim_index = 0; // yeezone:jinwei add sim manage
 	protected boolean success;
@@ -76,10 +71,12 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 				}
 				break;
 			case EVENT_UPDATE_DONE:
+				Log.i("IccPhoneBookInterfaceManager ","EVENT_UPDATE_DONE ");
 				ar = (AsyncResult) msg.obj;
 				synchronized (mLock) {
 					success = (ar.exception == null);
 					// yeezone:jinwei get sim index from AsynResult object
+					Log.i("IccPhoneBookInterfaceManager ","EVENT_UPDATE_DONE  success " +success);
 					if (success) {
 						// sim_index = Integer.valueOf(ar.result.toString());
 						sim_index = getInsertIndex();
@@ -152,11 +149,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 		Log
 				.v("IccPhoneBookInterfaceManager",
 						"updateAdnRecordsInEfBySearch** ");
-		Log.i("IccPhoneBookInterfaceManager",
-				"updateAdnRecordsInEfBySearch: efid=" + efid + " (" + oldTag
-						+ "," + oldPhoneNumber + "," + oldAnr + ")" + "==>"
-						+ " (" + newTag + "," + newPhoneNumber + "," + newAnr
-						+ ")" + " pin2=" + pin2);
+	
 
 		if (DBG)
 			logd("updateAdnRecordsInEfBySearch: efid=" + efid + " (" + newTag
@@ -164,20 +157,14 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 
 		int newid = updateEfForIccType(efid);
 
-		Log.i("IccPhoneBookInterfaceManager ", " newid " + newid);
-		/*
-		 * int fileId[] = adnCache.getRecordsEfId(newid);
-		 * 
-		 * for(int i=0; i<fileId.length;i++){
-		 * 
-		 * if (DBG) logd("addAdnRecordsInEf: efid=" + fileId[i]); }
-		 */
+
 
 		synchronized (mLock) {
 			checkThread();
 			Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE);
 			AdnRecord oldAdn = null;
 			AdnRecord newAdn = null;
+			Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch ( 0 ) "+success );
 
 			if (newid == IccConstants.EF_PBR) {
 				oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmailList,
@@ -186,6 +173,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 						newAnr, newAas, newSne, newGrp, newGas);
 				adnCache.updateUSIMAdnBySearch(newid, oldAdn, newAdn, pin2,
 						response);
+				Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch (1) "+success );
 			} else {
 				oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
 				newAdn = new AdnRecord(newTag, newPhoneNumber);
@@ -232,105 +220,15 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 			String newAas, String newSne, String newGrp, String newGas,
 			int index, String pin2) {
 
-		if (phone.getContext().checkCallingOrSelfPermission(
-				android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-			throw new SecurityException(
-					"Requires android.permission.WRITE_CONTACTS permission");
-		}
-
-		if (DBG)
-			logd("updateAdnRecordsInEfByIndex: efid=" + efid + " ( index= "
-					+ index + ")" + "==>" + " (" + newTag + ","
-					+ newPhoneNumber + "," + newAnr + "," + newSne + ")"
-					+ " pin2=" + pin2);
-
-		efid = updateEfForIccType(efid);
-
-		String[] newEmails = null;
-		if (newEmailList != null) {
-			newEmails = newEmailList.toArray(new String[newEmailList.size()]);
-		}
-		synchronized (mSyncLock) {
-			logd("mSyncLock into");
-			synchronized (mLock) {
-				// checkThread();
-				success = false;
-				Message response = mBaseHandler
-						.obtainMessage(EVENT_UPDATE_DONE);
-
-				AdnRecord newAdn = null;
-				if (efid == IccConstants.EF_PBR) {
-					newAdn = new AdnRecord(newTag, newPhoneNumber, newEmails,
-							newAnr, newAas, newSne, newGrp, newGas);
-					adnCache.updateUSIMAdnByIndex(efid, newAdn, index, pin2,
-							response);
-				} else {
-					newAdn = new AdnRecord(newTag, newPhoneNumber);
-					adnCache.updateAdnByIndex(efid, newAdn, index, pin2,
-							response);
-				}
-				try {
-					mLock.wait();
-				} catch (InterruptedException e) {
-					logd("interrupted while trying to update by index");
-				}
-			}
-		}
-		logd("mSyncLock outo");
+	
+		
 		return success;
 	}
 
-	/**
-	 * Get the capacity of records in efid
-	 * 
-	 * @param efid
-	 *            the EF id of a ADN-like ICC
-	 * @return int[3] array recordSizes[0] is the single record length
-	 *         recordSizes[1] is the total length of the EF file recordSizes[2]
-	 *         is the number of records in the EF file
-	 */
-	/*
-	 * public int[] getAdnRecordsSize(int efid){
-	 * 
-	 * if (DBG) logd("getAdnRecordsSize: efid=" + efid);
-	 * 
-	 * int nefid = updateEfForIccType(efid);
-	 * 
-	 * if(nefid == IccConstants.EF_PBR){
-	 * 
-	 * 
-	 * recordSize = adnCache.getAdnRecordsSize(efid); }else{
-	 * 
-	 * getRecordsSizeofAnd(efid); }
-	 * 
-	 * return recordSize;
-	 * 
-	 * 
-	 * }
-	 */
+	
+	
 
-	private int[] getRecordsSizeofAnd(int efid) {
-		if (DBG)
-			logd("getAdnRecordsSize: efid=" + efid);
-		synchronized (mLock) {
-			checkThread();
-			recordSize = new int[3];
 
-			// Using mBaseHandler, no difference in EVENT_GET_SIZE_DONE handling
-			Message response = mBaseHandler.obtainMessage(EVENT_GET_SIZE_DONE);
-
-			phone.getIccFileHandler().getEFLinearRecordSize(efid, response);
-			try {
-				mLock.wait();
-			} catch (InterruptedException e) {
-				logd("interrupted while trying to load from the SIM");
-			}
-		}
-
-		return recordSize;
-	}
-
-	// zhanglj add begin for
 
 	public abstract int[] getEmailRecordsSize();
 
@@ -348,15 +246,12 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 		return adnCache.mUsimPhoneBookManager.ishaveAnr;
 	}
 
-	public boolean getIshaveSneField() {
-		return adnCache.mUsimPhoneBookManager.ishaveSne;
-	}
-
+	
 	public int getInsertIndex() {
-		return adnCache.mInsetIndex;
+		return adnCache.mInsertId;
 	}
 
-	// zhanglj add end
+
 
 	/**
 	 * Loads the AdnRecords in efid and returns them as a List of AdnRecords
