@@ -58,7 +58,17 @@
     <string name="ActiveConCf" msgid="">"有條件呼叫轉移啟動"</string>
     <string name="CallForwarded" msgid="">"呼叫已轉移"</string>
     <string name="CallWaiting" msgid="">"呼叫等待"</string>
+    <string name="CugCall" msgid="">"屬於限制呼叫號碼組"</string>
+    <string name="OutCallBarred" msgid="">"呼出被禁止"</string>
+    <string name="InCallBarred" msgid="">"呼入被禁止"</string>
+    <string name="ClirRejected" msgid="">"CLIR被禁止"</string>
     <string name="ForwardedCall" msgid="">"轉移呼叫"</string>
+    <string name="CallHold" msgid="">"呼叫被阻塞"</string>
+    <string name="CallRetrieved" msgid="">"呼叫被激活"</string>
+    <string name="MultiCall" msgid="">"進入多方通話"</string>
+    <string name="HoldCallReleased" msgid="">"已經釋放被阻塞的呼叫"</string>
+    <string name="ConnectingEct" msgid="">"正在連接的遠端多方通話"</string>
+    <string name="ConnectedEct" msgid="">"連接的遠端多方通話"</string>
     <string name="PwdMmi" msgid="7043715687905254199">"變更密碼"</string>
     <string name="PinMmi" msgid="3113117780361190304">"PIN 已變更"</string>
     <string name="CnipMmi" msgid="3110534680557857162">"顯示來電號碼"</string>
