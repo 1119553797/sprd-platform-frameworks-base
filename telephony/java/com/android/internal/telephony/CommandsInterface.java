@@ -145,6 +145,7 @@ public interface CommandsInterface extends SprdCommandsInterface{
     // by messages sent to setOnUSSD handler
     static final int USSD_MODE_NOTIFY       = 0;
     static final int USSD_MODE_REQUEST      = 1;
+    static final int USSD_MODE_TERMINATED   = 2;
 
     // SIM Refresh results, passed up from RIL.
     static final int SIM_REFRESH_FILE_UPDATED   = 0;  // Single file updated
