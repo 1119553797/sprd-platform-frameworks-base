@@ -70,6 +70,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     protected final String LOG_TAG = "GSM";
 
     private GSMPhone mGsmPhone;
+    private WifiManager mWifiManager;  //add by liguxiang 08-26-11 for Cellular network to WLAN
 
     private ArrayList<HashMap<String,Boolean>> ApnFilters = null;
 
@@ -253,6 +254,12 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
 
         createAllPdpList();
         initApnActivePdpFilter();
+        
+		//add by liguxiang 08-26-11 for Cellular network to WLAN begin
+        if(mWifiManager == null){
+        	mWifiManager = (WifiManager) phone.getContext().getSystemService(Context.WIFI_SERVICE);
+        }
+		//add by liguxiang 08-26-11 for Cellular network to WLAN end
      
         
         // This preference tells us 1) initial condition for "dataEnabled",
@@ -898,12 +905,20 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             Log.d(LOG_TAG, "[DataConnection] Start poll NetStat");
             resetPollStats();
             netStatPollEnabled = true;
+            //add by liguxiang 08-26-11 for Cellular network to WLAN begin
+            SystemProperties.set("gsm.gprs.attached", "true");
+            mWifiManager.setGprsConnectState(true);
+			//add by liguxiang 08-26-11 for Cellular network to WLAN end
             mPollNetStat.run();
         }
     }
 
     protected void stopNetStatPoll() {
         netStatPollEnabled = false;
+        //add by liguxiang 08-26-11 for Cellular network to WLAN begin
+        SystemProperties.set("gsm.gprs.attached", "false");
+        mWifiManager.setGprsConnectState(false);
+		//add by liguxiang 08-26-11 for Cellular network to WLAN end
         removeCallbacks(mPollNetStat);
         Log.d(LOG_TAG, "[DataConnection] Stop poll NetStat");
     }
