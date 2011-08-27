@@ -944,6 +944,15 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                     sb.append("\n");
                     sb.append(context.getText(
                             com.android.internal.R.string.needPuk2));
+                } else if (err == CommandException.Error.GENERIC_FAILURE) {
+                    if (isServiceCodeCallBarring(sc)) {
+                        sb.append(context.getText(
+                                com.android.internal.R.string.OprNotComplete));
+		    }
+                    if (sc.equals(SC_PWD)) {
+                        sb.append(context.getText(
+                                com.android.internal.R.string.passwordIncorrect));
+		    }
                 } else {
                     sb.append(context.getText(
                             com.android.internal.R.string.mmiError));
@@ -1245,7 +1254,11 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
 
         if (ar.exception != null) {
             state = State.FAILED;
-            sb.append(context.getText(com.android.internal.R.string.mmiError));
+            if (isServiceCodeCallBarring(sc)) {
+                sb.append(context.getText(com.android.internal.R.string.RequestUnfinished));
+	    } else {
+                sb.append(context.getText(com.android.internal.R.string.mmiError));
+	    }
         } else {
             int[] ints = (int[])ar.result;
 
@@ -1257,7 +1270,7 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                     sb.append(createQueryCallWaitingResultMessage(ints[1]));
                 } else if (isServiceCodeCallBarring(sc)) {
                     // ints[0] for Call Barring is a bit vector of services
-                    sb.append(createQueryCallBarringResultMessage(ints[0]));
+                    sb.append(createQueryCallBarringResultMessage(ints[1]));
                 } else if (ints[0] == 1) {
                     // for all other services, treat it as a boolean
                     sb.append(context.getText(com.android.internal.R.string.serviceEnabled));
