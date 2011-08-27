@@ -1212,4 +1212,8 @@ public class WifiManager {
              return false;
         }
     }
+
+    public boolean setGprsConnectState(boolean connected){
+        return connected;
+    }
 }
