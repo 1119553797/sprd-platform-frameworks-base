@@ -55,8 +55,8 @@
 
 namespace android {
 
-static int64_t kLowWaterMarkUs = 1000000ll;  // 2secs @hong
-static int64_t kHighWaterMarkUs = 5000000ll;  // 10secs @hong
+static int64_t kLowWaterMarkUs = 500000ll;  // 2secs @hong
+static int64_t kHighWaterMarkUs = 1200000ll;  // 10secs @hong
 static const size_t kLowWaterMarkBytes = 40000;
 static const size_t kHighWaterMarkBytes = 200000;
 
@@ -609,6 +609,10 @@ void AwesomePlayer::onBufferingUpdate() {
     if (!mBufferingEventPending) {
         return;
     }
+
+   if (mFlags & CACHE_UNDERRUN)
+    LOGI("Buffering...");
+
     mBufferingEventPending = false;
 
     if (mCachedSource != NULL) {
@@ -643,14 +647,14 @@ void AwesomePlayer::onBufferingUpdate() {
                          kLowWaterMarkBytes);
                     mFlags |= CACHE_UNDERRUN;
                     pause_l();
-                    notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);
-                } else if (eos || cachedDataRemaining > kHighWaterMarkBytes) {
+                    notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START); //@hong
+                } else if (eos || cachedDataRemaining > kHighWaterMarkBytes) { 
                     if (mFlags & CACHE_UNDERRUN) {
                         LOGI("cache has filled up (> %d), resuming.",
                              kHighWaterMarkBytes);
                         mFlags &= ~CACHE_UNDERRUN;
                         play_l();
-                        notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END);
+                        notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END);  //@hong
                     } else if (mFlags & PREPARING) {
                         LOGV("cache has filled up (> %d), prepare is done",
                              kHighWaterMarkBytes);
@@ -670,14 +674,14 @@ void AwesomePlayer::onBufferingUpdate() {
                  cachedDurationUs / 1E6);
             mFlags |= CACHE_UNDERRUN;
             pause_l();
-            notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);
+            notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);  //@hong
         } else if (eos || cachedDurationUs > kHighWaterMarkUs) {
             if (mFlags & CACHE_UNDERRUN) {
                 LOGI("cache has filled up (%.2f secs), resuming.",
                      cachedDurationUs / 1E6);
                 mFlags &= ~CACHE_UNDERRUN;
                 play_l();
-                notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END);
+                notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); //@hong
             } else if (mFlags & PREPARING) {
                 LOGV("cache has filled up (%.2f secs), prepare is done",
                      cachedDurationUs / 1E6);

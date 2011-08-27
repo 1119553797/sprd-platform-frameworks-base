@@ -68,6 +68,7 @@ private:
     int64_t mLastNTPTimeUpdateUs;
 	
     bool mLocalTimestamps; //@hong
+    uint64_t mPeriodCheck;
 		
     bool mIssueFIRRequests;
     int64_t mLastFIRRequestUs;

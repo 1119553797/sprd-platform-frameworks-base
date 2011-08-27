@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "APacketSource"
 #include <utils/Log.h>
 
@@ -782,7 +782,7 @@ int64_t APacketSource::getQueueDurationUs(bool *eos) {
 
     const sp<ABuffer> first = *mBuffers.begin();
     const sp<ABuffer> last = *--mBuffers.end();
-
+ 
     int64_t firstTimeUs;
     CHECK(first->meta()->findInt64("timeUs", &firstTimeUs));
 
@@ -792,10 +792,31 @@ int64_t APacketSource::getQueueDurationUs(bool *eos) {
     if (lastTimeUs < firstTimeUs) {
         LOGE("Huh? Time moving backwards? %lld > %lld",
              firstTimeUs, lastTimeUs);
+//@hong
+//	if (mBuffers.size() < 3) return 0;
 
-        return 0;
+
+	int64_t secondUs;
+	List<sp<ABuffer> >::iterator it = mBuffers.begin();
+       while(it != mBuffers.end())
+       {
+        it = mBuffers.begin();
+       CHECK((*it)->meta()->findInt64("timeUs", &firstTimeUs));
+        if ( firstTimeUs > lastTimeUs ) 
+		{
+			LOGE("Huh?   remove: %lld", firstTimeUs);
+			mBuffers.erase(it);
+        	}
+	else 
+		break;
+       }
+	 
+	   LOGE("adjust ok duration time:%lld",
+             lastTimeUs - firstTimeUs); 	
+	 return lastTimeUs - firstTimeUs;
     }
-
+   LOGE("duration time:%lld",
+             lastTimeUs - firstTimeUs); 
     return lastTimeUs - firstTimeUs;
 }
 

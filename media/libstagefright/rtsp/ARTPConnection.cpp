@@ -255,7 +255,6 @@ void ARTPConnection::onPollStreams() {
     if (mStreams.empty()) {
         return;
     }
-
     struct timeval tv;
     tv.tv_sec = 0;
     tv.tv_usec = kSelectTimeoutUs;
@@ -307,7 +306,7 @@ void ARTPConnection::onPollStreams() {
     postPollEvent();
 
     int64_t nowUs = ALooper::GetNowUs();
-   
+   {
     if (mLastReceiverReportTimeUs <= 0
             || mLastReceiverReportTimeUs + 5000000ll <= nowUs) {
         sp<ABuffer> buffer = new ABuffer(kMaxUDPSize);
@@ -350,6 +349,7 @@ void ARTPConnection::onPollStreams() {
             }
         }
     }
+   	}
 }
 
 status_t ARTPConnection::receive(StreamInfo *s, bool receiveRTP) {
@@ -375,7 +375,7 @@ status_t ARTPConnection::receive(StreamInfo *s, bool receiveRTP) {
 
     buffer->setRange(0, nbytes);
 
-    // LOGI("received %d bytes.", buffer->size());
+    //LOGI("received %d bytes.", buffer->size());
 
     status_t err;
     if (receiveRTP) {

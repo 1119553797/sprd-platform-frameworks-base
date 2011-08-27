@@ -94,42 +94,11 @@ void ARTPSource::processRTPPacket(const sp<ABuffer> &buffer) {
     }
 }
 
-#if 0
+
 void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
     LOGV("timeUpdate");
 
     mLastNTPTime = ntpTime;
-    mLastNTPTimeUpdateUs = ALooper::GetNowUs();
-
-    if (mNumTimes == 2) {
-        mNTPTime[0] = mNTPTime[1];
-        mRTPTime[0] = mRTPTime[1];
-        mNumTimes = 1;
-    }
-    mNTPTime[mNumTimes] = ntpTime;
-    mRTPTime[mNumTimes++] = rtpTime;
-
-    if (timeEstablished()) {
-        for (List<sp<ABuffer> >::iterator it = mQueue.begin();
-             it != mQueue.end(); ++it) {
-            sp<AMessage> meta = (*it)->meta();
-
-            uint32_t rtpTime;
-            CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
-
-            meta->setInt64("ntp-time", RTP2NTP(rtpTime));
-        }
-    }
-}
-
-#else  //#hong test
-void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
-    LOGV("timeUpdate");
-
-    mLastNTPTime = ntpTime;
-  // if (mNumTimes == 0)
-  //  mLastNTPTimeUpdateUs = ALooper::GetNowUs()-1000000ll;
-  // else  if (mNumTimes ==1)
     mLastNTPTimeUpdateUs = ALooper::GetNowUs();
    	
 
@@ -153,35 +122,38 @@ void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
         }
     }
 }
-#endif
+
 bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
     uint32_t seqNum = (uint32_t)buffer->int32Data();
 
-/*         quick rtp time established..............*///@hong
+/*        time establish..............*///@hong
    if (mLocalTimestamps)
    	{
 	    uint64_t  ntpTime = ALooper::GetNowUs();
-	    if (mLastNTPTimeUpdateUs == 0 ||
-			(mNumTimes==1 &&  ntpTime > (mLastNTPTimeUpdateUs + 2000000ll)) ||
-			(mNumTimes==2 &&  ntpTime > (mLastNTPTimeUpdateUs + 6000000ll)))
-	    	{
-	    	sp<AMessage> meta = buffer->meta();
-
+		sp<AMessage> meta = buffer->meta();
 	        uint32_t rtpTime;
 	        CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
+			
+	    if (mLastNTPTimeUpdateUs == 0 ||
+			(ntpTime > (mLastNTPTimeUpdateUs + mPeriodCheck)))
+	    	{
+	    	sp<AMessage> meta = buffer->meta();
+        	if (mLastNTPTimeUpdateUs ==0) mPeriodCheck = 800000ll;
+		else
+		  if (mPeriodCheck < 6000000ll)
+		  {
+		  	mPeriodCheck +=mPeriodCheck;
+		  }
+
+
 		
 		 uint64_t ntpTime1;
 		 ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
-		 
+
 	    	 timeUpdate(rtpTime, ntpTime1);
 	    	}
-
 	    if (mNumTimes == 2) {
-		        sp<AMessage> meta = buffer->meta();
-
-		        uint32_t rtpTime;
-		        CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
-
+		       
 		        meta->setInt64("ntp-time", RTP2NTP(rtpTime));
 		    }
 		
@@ -253,10 +225,20 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 
 uint64_t ARTPSource::RTP2NTP(uint32_t rtpTime) const {
     CHECK_EQ(mNumTimes, 2u);
-
+   if (mLocalTimestamps)
+   {
+   if (rtpTime >= mRTPTime[0])
     return mNTPTime[0] + (double)(mNTPTime[1] - mNTPTime[0])
             * ((double)rtpTime - (double)mRTPTime[0])
             / (double)(mRTPTime[1] - mRTPTime[0]);
+   else
+   	return mNTPTime[1];
+   }
+   else
+    return mNTPTime[0] + (double)(mNTPTime[1] - mNTPTime[0])
+            * ((double)rtpTime - (double)mRTPTime[0])
+            / (double)(mRTPTime[1] - mRTPTime[0]);
+   
 }
 
 void ARTPSource::byeReceived() {
