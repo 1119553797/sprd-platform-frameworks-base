@@ -156,7 +156,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				Log
 						.i(
 								LOG_TAG,
-								"EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE usim"
+								"EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE usim "
 										+ card
 												.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM));
 				if (card != null

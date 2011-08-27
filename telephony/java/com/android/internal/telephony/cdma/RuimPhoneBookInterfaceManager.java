@@ -48,7 +48,8 @@ public class RuimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager 
         }
         if(DBG) Log.d(LOG_TAG, "RuimPhoneBookInterfaceManager finalized");
     }
-
+   
+    @Override
     public int[] getAdnRecordsSize(int efid) {
         if (DBG) logd("getAdnRecordsSize: efid=" + efid);
         synchronized(mLock) {

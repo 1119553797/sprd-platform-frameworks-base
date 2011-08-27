@@ -57,6 +57,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 			switch (msg.what) {
 			case EVENT_GET_SIZE_DONE:
 				ar = (AsyncResult) msg.obj;
+				 Log.i("IccPhoneBookInterfaceManager", "EVENT_GET_SIZE_DONE" );
 				synchronized (mLock) {
 					if (ar.exception == null) {
 						recordSize = (int[]) ar.result;
@@ -252,6 +253,29 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 	}
 
 
+	public int[] getRecordsSize(int efid) {
+		if (DBG)
+			logd("getAdnRecordsSize: efid=" + efid);
+		synchronized (mLock) {
+			checkThread();
+			recordSize = new int[3];
+
+			// Using mBaseHandler, no difference in EVENT_GET_SIZE_DONE handling
+			Message response = mBaseHandler.obtainMessage(EVENT_GET_SIZE_DONE);
+
+		
+                  
+			phone.getIccFileHandler().getEFLinearRecordSize(efid, response);
+			try {
+				 Log.i("IccPhoneBookInterfaceManager", "getRecordsSize wait lock" );
+				mLock.wait();
+			} catch (InterruptedException e) {
+				logd("interrupted while trying to load from the SIM");
+			}
+		}
+
+		return recordSize;
+	}
 
 	/**
 	 * Loads the AdnRecords in efid and returns them as a List of AdnRecords

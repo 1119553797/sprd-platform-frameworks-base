@@ -29,7 +29,7 @@ import com.android.internal.telephony.IccPhoneBookInterfaceManager;
  */
 
 public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
-	static final String LOG_TAG = "GSM";
+	static final String LOG_TAG = "SimPhoneBookInterfaceManager";
 
 	public SimPhoneBookInterfaceManager(GSMPhone phone) {
 		super(phone);
@@ -52,29 +52,9 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
 			Log.d(LOG_TAG, "SimPhoneBookInterfaceManager finalized");
 	}
 
-	private int[] getRecordsSize(int efid) {
-		if (DBG)
-			logd("getAdnRecordsSize: efid=" + efid);
-		synchronized (mLock) {
-			checkThread();
-			recordSize = new int[3];
-
-			// Using mBaseHandler, no difference in EVENT_GET_SIZE_DONE handling
-			Message response = mBaseHandler.obtainMessage(EVENT_GET_SIZE_DONE);
-
-			phone.getIccFileHandler().getEFLinearRecordSize(efid, response);
-			try {
-				mLock.wait();
-			} catch (InterruptedException e) {
-				logd("interrupted while trying to load from the SIM");
-			}
-		}
-
-		return recordSize;
-	}
 
 	public int[] getAdnRecordsSize(int efid) {
-
+             Log.i(LOG_TAG,"getAdnRecordsSize");
 		if (phone.getIccCard().isApplicationOnIcc(
 				IccCardApplication.AppType.APPTYPE_USIM)
 				&& (efid == IccConstants.EF_ADN)) {
@@ -86,6 +66,7 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
 	}
 
 	private int[] getUsimAdnRecordsSize() {
+		Log.i(LOG_TAG,"getUsimAdnRecordsSize");
 		if (adnCache == null) {
 			return null;
 		}
@@ -94,7 +75,8 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
 		if (mUsimPhoneBookManager == null) {
 			return null;
 		}
-		int efid;
+
+		/*int efid;
 		int[] recordSizeAdn, recordSizeTotal = new int[3];
 		for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
 			efid = mUsimPhoneBookManager.findEFInfo(num);
@@ -103,11 +85,14 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
 				return null;
 			}
 			recordSizeAdn = getRecordsSize(efid);
+			Log.i(LOG_TAG,"getUsimAdnRecordsSize  num "+num);
 			recordSizeTotal[0] = recordSizeAdn[0];
 			recordSizeTotal[1] += recordSizeAdn[1];
 			recordSizeTotal[2] += recordSizeAdn[2];
 		}
-		return recordSizeTotal;
+		return recordSizeTotal;*/
+
+		return mUsimPhoneBookManager.getAdnRecordsSize();
 	}
 
 	public int[] getEmailRecordsSize() {

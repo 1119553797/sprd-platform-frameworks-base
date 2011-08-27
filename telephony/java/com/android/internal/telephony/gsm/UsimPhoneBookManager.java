@@ -439,14 +439,17 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 	}
 
 	//   add end
+        
+	public int[] getAdnRecordsSize() {
+	      int size[] = new int [3];
 
-	public int[] getAdnRecordsSize(int efid) {
+		Log.i("UsimPhoneBookManager", "getEFLinearRecordSize" );
 
-		Log.i("UsimPhoneBookManager", "getEFLinearRecordSize" + efid);
+		size[2] =  mPhoneBookRecords.size();
+		Log.i("UsimPhoneBookManager", "getEFLinearRecordSize size" + size[2]);
 
-		recordSize[2] = mAdnCount;
-		/*
-		 * synchronized (mLock) {
+		
+	/*	 * synchronized (mLock) {
 		 * 
 		 * if (mPbrFile == null) { readPbrFileAndWait(); }
 		 * 
@@ -457,9 +460,9 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		 * (int i = 0; i < numRecs; i++) { readAdnFileSizeAndWait(i);
 		 * 
 		 * } // All EF files are loaded, post the response. }
-		 */
-
-		return recordSize;
+		 
+           */
+		return size;
 	}
 
 	private int readAdnFileSizeAndWait(int recNum) {
