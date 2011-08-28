@@ -69,7 +69,7 @@
     <string name="HoldCallReleased" msgid="">"已经释放被阻塞的呼叫"</string>
     <string name="ConnectingEct" msgid="">"正在连接的远端多方通话"</string>
     <string name="ConnectedEct" msgid="">"连接的远端多方通话"</string>
-    <string name="RequestUnfinished" msgid="">"请求未完成"</string>
+    <string name="RequestPending" msgid="">"请求未完成"</string>
     <string name="OprNotComplete" msgid="">"操作未完成"</string>
     <string name="PwdMmi" msgid="7043715687905254199">"密码更改"</string>
     <string name="PinMmi" msgid="3113117780361190304">"PIN 码更改"</string>

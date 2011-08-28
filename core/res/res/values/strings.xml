@@ -122,7 +122,7 @@
     <string name="ConnectingEct" msgid="">"Connecting ECT"</string>
     <string name="ConnectedEct" msgid="">"Connected ECT"</string>
     <!-- Displayed as the content for failure of request for callbarring. -->
-    <string name="RequestUnfinished" msgid="">"Request is unfinished"</string>
+    <string name="RequestPending" msgid="">"Request pending"</string>
     <!-- Displayed as the content for failure of setting for callbarring. -->
     <string name="OprNotComplete" msgid="">"Operation is not complete"</string>
     <!-- Displayed as the title for a success/failure report changing the SIM password. -->

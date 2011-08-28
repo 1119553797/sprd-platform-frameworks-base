@@ -945,13 +945,15 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                     sb.append(context.getText(
                             com.android.internal.R.string.needPuk2));
                 } else if (err == CommandException.Error.GENERIC_FAILURE) {
-                    if (isServiceCodeCallBarring(sc)) {
+                    if (isServiceCodeCallBarring(sc) || sc.equals(SC_WAIT)) {
                         sb.append(context.getText(
                                 com.android.internal.R.string.OprNotComplete));
-		    }
-                    if (sc.equals(SC_PWD)) {
+		    } else if (sc.equals(SC_PWD)) {
                         sb.append(context.getText(
                                 com.android.internal.R.string.passwordIncorrect));
+		    } else {
+                        sb.append(context.getText(
+                                com.android.internal.R.string.mmiError));
 		    }
                 } else {
                     sb.append(context.getText(
@@ -1254,8 +1256,8 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
 
         if (ar.exception != null) {
             state = State.FAILED;
-            if (isServiceCodeCallBarring(sc)) {
-                sb.append(context.getText(com.android.internal.R.string.RequestUnfinished));
+            if (isServiceCodeCallBarring(sc) || sc.equals(SC_WAIT)) {
+                sb.append(context.getText(com.android.internal.R.string.RequestPending));
 	    } else {
                 sb.append(context.getText(com.android.internal.R.string.mmiError));
 	    }
