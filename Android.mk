@@ -47,6 +47,17 @@ LOCAL_SRC_FILES := $(filter-out \
 			org/mobilecontrol/% \
 			,$(LOCAL_SRC_FILES))
 
+#LOCAL_SRC_FILES := $(filter-out \
+			telephony/java/com/android/internal/telephony/% \
+			,$(LOCAL_SRC_FILES))
+
+ifeq ($(BUILD_SPRD_TELEPHONY),false)
+LOCAL_SRC_FILES := $(filter-out \
+			telephony/% \
+			,$(LOCAL_SRC_FILES))
+endif
+
+#$(info $(LOCAL_SRC_FILES) ....framework....)
 # Include a different set of source files when building a debug build.
 # TODO: Maybe build these into a separate .jar and put it on the classpath
 #       in front of framework.jar.
@@ -194,6 +205,11 @@ LOCAL_INTERMEDIATE_SOURCES := \
 
 LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_JAVA_LIBRARIES := core ext
+ifeq ($(BUILD_SPRD_TELEPHONY),true)
+#LOCAL_JAVA_LIBRARIES += telephony_sp 
+else
+LOCAL_JAVA_LIBRARIES += telephony_sp 
+endif
 
 LOCAL_MODULE := framework
 LOCAL_MODULE_CLASS := JAVA_LIBRARIES
