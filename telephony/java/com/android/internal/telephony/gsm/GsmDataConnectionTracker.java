@@ -125,6 +125,12 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     private ArrayList<ApnSetting> allApns = null;
 
     /**
+     * spreadtrum don't support muti-channel, so need protect
+     * access to allApns
+     */
+    protected static Object allApnsLock = new Object();
+
+    /**
      * waitingApns holds all apns that are waiting to be connected
      *
      * It is a subset of allApns and has the same format
@@ -393,10 +399,12 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             return (fetchDunApn() != null);
         }
 
-        if (allApns != null) {
-            for (ApnSetting apn : allApns) {
-                if (apn.canHandleType(type)) {
-                    return true;
+        synchronized (allApnsLock){
+            if (allApns != null) {
+                for (ApnSetting apn : allApns) {
+                    if (apn.canHandleType(type)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -477,7 +485,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                     notifyNoData(GsmDataConnection.FailCause.MISSING_UKNOWN_APN);
                     return false;
                 } else {
-                    log ("Create from allApns : " + apnListToString(allApns));
+                    synchronized (allApnsLock){
+                        log ("Create from allApns : " + apnListToString(allApns));
+                    }
                 }
             }
 
@@ -1361,40 +1371,42 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
      *
      */
     private void createAllApnList() {
-        allApns = new ArrayList<ApnSetting>();
-        String operator = mGsmPhone.mSIMRecords.getSIMOperatorNumeric();
+        synchronized (allApnsLock){
+            allApns = new ArrayList<ApnSetting>();
+            String operator = mGsmPhone.mSIMRecords.getSIMOperatorNumeric();
 
-        if (operator != null) {
-            String selection = "numeric = '" + operator + "'";
+            if (operator != null) {
+                String selection = "numeric = '" + operator + "'";
 
-            Cursor cursor = phone.getContext().getContentResolver().query(
-                    Telephony.Carriers.CONTENT_URI, null, selection, null, null);
+                Cursor cursor = phone.getContext().getContentResolver().query(
+                        Telephony.Carriers.CONTENT_URI, null, selection, null, null);
 
-            if (cursor != null) {
-                if (cursor.getCount() > 0) {
-                    allApns = createApnList(cursor);
-                    // TODO: Figure out where this fits in.  This basically just
-                    // writes the pap-secrets file.  No longer tied to GsmDataConnection
-                    // object.  Not used on current platform (no ppp).
-                    //GsmDataConnection pdp = pdpList.get(pdp_name);
-                    //if (pdp != null && pdp.dataLink != null) {
-                    //    pdp.dataLink.setPasswordInfo(cursor);
-                    //}
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        allApns = createApnList(cursor);
+                        // TODO: Figure out where this fits in.  This basically just
+                        // writes the pap-secrets file.  No longer tied to GsmDataConnection
+                        // object.  Not used on current platform (no ppp).
+                        //GsmDataConnection pdp = pdpList.get(pdp_name);
+                        //if (pdp != null && pdp.dataLink != null) {
+                        //    pdp.dataLink.setPasswordInfo(cursor);
+                        //}
+                    }
+                    cursor.close();
                 }
-                cursor.close();
             }
-        }
 
-        if (allApns.isEmpty()) {
-            if (DBG) log("No APN found for carrier: " + operator);
-            preferredApn = null;
-            notifyNoData(GsmDataConnection.FailCause.MISSING_UKNOWN_APN);
-        } else {
-            preferredApn = getPreferredApn();
-            Log.d(LOG_TAG, "Get PreferredAPN");
-            if (preferredApn != null && !preferredApn.numeric.equals(operator)) {
+            if (allApns.isEmpty()) {
+                if (DBG) log("No APN found for carrier: " + operator);
                 preferredApn = null;
-                setPreferredApn(-1);
+                notifyNoData(GsmDataConnection.FailCause.MISSING_UKNOWN_APN);
+            } else {
+                preferredApn = getPreferredApn();
+                Log.d(LOG_TAG, "Get PreferredAPN");
+                if (preferredApn != null && !preferredApn.numeric.equals(operator)) {
+                    preferredApn = null;
+                    setPreferredApn(-1);
+                }
             }
         }
     }
@@ -1458,10 +1470,12 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             }
         }
 
-        if (allApns != null) {
-            for (ApnSetting apn : allApns) {
-                if (apn.canHandleType(mRequestedApnType)) {
-                    apnList.add(apn);
+        synchronized (allApnsLock){
+            if (allApns != null) {
+                for (ApnSetting apn : allApns) {
+                    if (apn.canHandleType(mRequestedApnType)) {
+                        apnList.add(apn);
+                    }
                 }
             }
         }
@@ -1515,6 +1529,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     }
 
     private ApnSetting getPreferredApn() {
+        //synchronized (allApnsLock){
         if (allApns.isEmpty()) {
             return null;
         }
@@ -1546,6 +1561,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
         }
 
         return null;
+        //}
     }
 
     public void handleMessage (Message msg) {
