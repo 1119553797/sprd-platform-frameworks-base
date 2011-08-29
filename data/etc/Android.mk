@@ -34,6 +34,197 @@ LOCAL_SRC_FILES := $(LOCAL_MODULE)
 include $(BUILD_PREBUILT)
 
 ########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := android.hardware.camera.autofocus.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := android.hardware.camera.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := android.hardware.location.gps.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := android.hardware.sensor.accelerometer.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := android.hardware.sensor.compass.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := android.hardware.sensor.light.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+
+########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := android.hardware.sensor.proximity.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := android.hardware.telephony.gsm.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := android.hardware.touchscreen.multitouch.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+
+########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := android.hardware.wifi.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+
+########################
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := handheld_core_hardware.xml
+
+LOCAL_MODULE_TAGS := user
+
+LOCAL_MODULE_CLASS := ETC
+
+# This will install the file in /system/etc/permissions
+#
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
+
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+
+include $(BUILD_PREBUILT)
+
+
+########################
 #include $(CLEAR_VARS)
 
 #LOCAL_MODULE := required_hardware.xml
