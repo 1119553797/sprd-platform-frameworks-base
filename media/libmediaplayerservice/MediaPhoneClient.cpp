@@ -408,6 +408,11 @@ status_t MediaPhoneClient::stopUpLink()
 status_t MediaPhoneClient::startDownLink()
 {
     LOGV("startDownLink");
+    if (mPreviewSurface != NULL) {
+    	int64_t token = IPCThreadState::self()->clearCallingIdentity();
+	mCamera->setPreviewDisplay(mPreviewSurface);
+    	IPCThreadState::self()->restoreCallingIdentity(token);
+    }
     CHECK_RT(mPlayer->resume());
     return OK;
 }
