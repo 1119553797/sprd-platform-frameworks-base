@@ -687,12 +687,6 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                 // sia = basic service group
                 int serviceClass = siToServiceClass(sia);
 
-                //add by liguxiang 07-26-11 for cw settings begin
-                if(serviceClass == 0){
-                    serviceClass = 1;
-                }
-                //add by liguxiang 07-26-11 for cw settings end
-
                 if (isActivate() || isDeactivate()) {
                     phone.mCM.setCallWaiting(isActivate(), serviceClass,
                             obtainMessage(EVENT_SET_COMPLETE, this));
@@ -1174,7 +1168,8 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
 
         if (ar.exception != null) {
             state = State.FAILED;
-            sb.append(context.getText(com.android.internal.R.string.mmiError));
+            //sb.append(context.getText(com.android.internal.R.string.mmiError));
+            sb.append(context.getText(com.android.internal.R.string.RequestPending));
         } else {
             CallForwardInfo infos[];
 
