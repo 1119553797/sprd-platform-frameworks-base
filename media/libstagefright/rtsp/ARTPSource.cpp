@@ -88,7 +88,7 @@ void ARTPSource::setLocalTimestamps(bool local) //@hong
     
 void ARTPSource::processRTPPacket(const sp<ABuffer> &buffer) {
     if (queuePacket(buffer)
-            && mNumTimes == 2   //@hong not check it.
+ //           && mNumTimes == 2   //@hong not check it.
             && mAssembler != NULL) {
         mAssembler->onPacketReceived(this);
     }
@@ -130,8 +130,10 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
    if (mLocalTimestamps)
    	{
 	    uint64_t  ntpTime = ALooper::GetNowUs();
-		sp<AMessage> meta = buffer->meta();
-	        uint32_t rtpTime;
+	   sp<AMessage> meta = buffer->meta();
+	   uint32_t rtpTime;
+	   uint64_t ntpTime1;
+	 
 	        CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
 			
 	    if (mLastNTPTimeUpdateUs == 0 ||
@@ -147,15 +149,22 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 
 
 		
-		 uint64_t ntpTime1;
+		
 		 ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
 
 	    	 timeUpdate(rtpTime, ntpTime1);
 	    	}
-	    if (mNumTimes == 2) {
-		       
-		        meta->setInt64("ntp-time", RTP2NTP(rtpTime));
-		    }
+	    if (mNumTimes == 2 && mPeriodCheck > 1600000ll ) 
+	    	{
+		ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
+		        meta->setInt64("ntp-time", (rtpTime>mRTPTime[0])?RTP2NTP(rtpTime):ntpTime1);
+	    	}
+		else
+		{
+		ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
+		        meta->setInt64("ntp-time", ntpTime1);
+		 }
+		 
 		
    	}
    	else
@@ -224,20 +233,24 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 }
 
 uint64_t ARTPSource::RTP2NTP(uint32_t rtpTime) const {
-    CHECK_EQ(mNumTimes, 2u);
+ CHECK_EQ(mNumTimes, 2u);
+ 
    if (mLocalTimestamps)
    {
-   if (rtpTime >= mRTPTime[0])
+
     return mNTPTime[0] + (double)(mNTPTime[1] - mNTPTime[0])
             * ((double)rtpTime - (double)mRTPTime[0])
             / (double)(mRTPTime[1] - mRTPTime[0]);
-   else
-   	return mNTPTime[1];
+
    }
    else
-    return mNTPTime[0] + (double)(mNTPTime[1] - mNTPTime[0])
+   {
+   
+
+	return mNTPTime[0] + (double)(mNTPTime[1] - mNTPTime[0])
             * ((double)rtpTime - (double)mRTPTime[0])
             / (double)(mRTPTime[1] - mRTPTime[0]);
+   }
    
 }
 
