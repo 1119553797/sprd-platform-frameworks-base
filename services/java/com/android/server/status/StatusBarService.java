@@ -40,6 +40,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.provider.Telephony;
 import android.util.Slog;
 import android.view.Display;
@@ -1763,10 +1764,14 @@ public class StatusBarService extends IStatusBar.Stub
                     + " showPlmn=" + showPlmn + " plmn=" + plmn);
         }
         boolean something = false;
+        String radiotype = getRadioType(SystemProperties.get("gsm.network.type", ""));  //add by liguxiang 08-30-11 for NEWMS00117967
         if (showPlmn) {
             mPlmnLabel.setVisibility(View.VISIBLE);
             if (plmn != null) {
-                mPlmnLabel.setText(plmn);
+            	//add by liguxiang 08-30-11 for NEWMS00117967 begin
+            	//mPlmnLabel.setText(plmn);
+                mPlmnLabel.setText(plmn + radiotype);
+                //add by liguxiang 08-30-11 for NEWMS00117967 end
             } else {
                 mPlmnLabel.setText(R.string.lockscreen_carrier_default);
             }
@@ -1775,7 +1780,10 @@ public class StatusBarService extends IStatusBar.Stub
             mPlmnLabel.setVisibility(View.GONE);
         }
         if (showSpn && spn != null) {
-            mSpnLabel.setText(spn);
+        	//add by liguxiang 08-30-11 for NEWMS00117967 begin
+        	//mSpnLabel.setText(spn);
+            mSpnLabel.setText(spn + radiotype);
+            //add by liguxiang 08-30-11 for NEWMS00117967 end
             mSpnLabel.setVisibility(View.VISIBLE);
             something = true;
         } else {
@@ -1783,6 +1791,17 @@ public class StatusBarService extends IStatusBar.Stub
             mSpnLabel.setVisibility(View.GONE);
         }
     }
+    
+    //add by liguxiang 08-30-11 for NEWMS00117967 begin
+    private String getRadioType(String type){
+    	if(type.equals("UMTS") || type.equals("HSDPA") || type.equals("HSUPA") 
+    			|| type.equals("HSPA") || type.equals("EVDO_0") || type.equals("EVDO_A")){
+    		return " 3G";
+    	}else{
+        	return "";
+        }
+    }
+    //add by liguxiang 08-30-11 for NEWMS00117967 end
 
     /**
      * Reload some of our resources when the configuration changes.
