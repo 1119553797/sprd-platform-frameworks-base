@@ -162,10 +162,11 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 
 		synchronized (mLock) {
 			checkThread();
+		       success = false;
 			Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE);
 			AdnRecord oldAdn = null;
 			AdnRecord newAdn = null;
-			Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch ( 0 ) "+success );
+			
 
 			if (newid == IccConstants.EF_PBR) {
 				oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmailList,
@@ -174,7 +175,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 						newAnr, newAas, newSne, newGrp, newGas);
 				adnCache.updateUSIMAdnBySearch(newid, oldAdn, newAdn, pin2,
 						response);
-				Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch (1) "+success );
+				
 			} else {
 				oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
 				newAdn = new AdnRecord(newTag, newPhoneNumber);
@@ -188,7 +189,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 			}
 
 		}
-
+             Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch end "+success );
 		return success;
 	}
 

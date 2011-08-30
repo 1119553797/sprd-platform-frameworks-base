@@ -263,7 +263,7 @@ public class AdnRecordLoader extends Handler {
 
 				data = adn.buildAdnString(recordSize[0]);
 
-				if (data == null) {
+				if (data == null ) {
 					throw new RuntimeException("worong ADN format",
 							ar.exception);
 				}
