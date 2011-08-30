@@ -16,30 +16,32 @@
 
 package com.android.internal.telephony.gsm;
 
-import android.os.Parcel;
-import android.telephony.PhoneNumberUtils;
-import android.text.format.Time;
-import android.util.Config;
-import android.util.Log;
-import com.android.internal.telephony.IccUtils;
-import com.android.internal.telephony.EncodeException;
-import com.android.internal.telephony.GsmAlphabet;
-import com.android.internal.telephony.SmsHeader;
-import com.android.internal.telephony.SmsMessageBase;
-import com.android.internal.telephony.SmsMessageBase.TextEncodingDetails;
-
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-
+import static android.telephony.SmsMessage.ENCODING_16BIT;
 import static android.telephony.SmsMessage.ENCODING_7BIT;
 import static android.telephony.SmsMessage.ENCODING_8BIT;
-import static android.telephony.SmsMessage.ENCODING_16BIT;
 import static android.telephony.SmsMessage.ENCODING_UNKNOWN;
 import static android.telephony.SmsMessage.MAX_USER_DATA_BYTES;
 import static android.telephony.SmsMessage.MAX_USER_DATA_BYTES_WITH_HEADER;
 import static android.telephony.SmsMessage.MAX_USER_DATA_SEPTETS;
 import static android.telephony.SmsMessage.MAX_USER_DATA_SEPTETS_WITH_HEADER;
-import static android.telephony.SmsMessage.MessageClass;
+
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+
+import android.content.Context;
+import android.os.Parcel;
+import android.provider.Settings;
+import android.telephony.PhoneNumberUtils;
+import android.telephony.SmsMessage.MessageClass;
+import android.text.format.Time;
+import android.util.Config;
+import android.util.Log;
+
+import com.android.internal.telephony.EncodeException;
+import com.android.internal.telephony.GsmAlphabet;
+import com.android.internal.telephony.IccUtils;
+import com.android.internal.telephony.SmsHeader;
+import com.android.internal.telephony.SmsMessageBase;
 
 /**
  * A Short Message Service message.
@@ -317,7 +319,14 @@ public class SmsMessage extends SmsMessageBase{
             bo.write(0x0b);
         }
 
-        // (no TP-Validity-Period)
+        // TP-Validity-Period
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+		if (validity != 0) {
+			bo.write(validity);
+			Log.d("lu", "SmsMessage --> write into TP-VP:" + validity);
+		}
+		//=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
+     
         bo.write(userData, 0, userData.length);
         ret.encodedMessage = bo.toByteArray();
         return ret;
@@ -408,7 +417,13 @@ public class SmsMessage extends SmsMessageBase{
         // No class, 8 bit data
         bo.write(0x04);
 
-        // (no TP-Validity-Period)
+        // TP-Validity-Period
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+		if (validity != 0) {
+			bo.write(validity);
+			Log.d("lu", "SmsMessage --> write into TP-VP:" + validity);
+		}
+		//=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
 
         // Total size
         bo.write(data.length + smsHeaderData.length + 1);
@@ -456,7 +471,13 @@ public class SmsMessage extends SmsMessageBase{
         // No class, 8 bit data
         bo.write(0x04);
 
-        // (no TP-Validity-Period)
+        // TP-Validity-Period
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+		if (validity != 0) {
+			bo.write(validity);
+			Log.d("lu", "SmsMessage --> write into TP-VP:" + validity);
+		}
+		//=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
 
         // Total size
         bo.write(data.length + smsHeaderData.length + 1);
@@ -498,7 +519,15 @@ public class SmsMessage extends SmsMessageBase{
             ret.encodedScAddress = PhoneNumberUtils.networkPortionToCalledPartyBCDWithLength(
                     scAddress);
         }
-
+        
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+        //TP-Validity-Period-Format   
+        if (validity != 0){
+        	mtiByte |= 0x10;
+        	Log.d("lu", "SmsMessage --> TP-VPF = 0x10");
+        }
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 end ===
+         
         // TP-Message-Type-Indicator (and friends)
         if (statusReportRequested) {
             // Set TP-Status-Report-Request bit.
@@ -1399,4 +1428,12 @@ public class SmsMessage extends SmsMessageBase{
         return messageClass;
     }
 
+    //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin === 	
+	private static int validity;
+	public static void getSmsValidity(Context context) {
+		if (null != context) {
+			validity = Settings.System.getInt(context.getContentResolver(), Settings.System.SMS_VALIDITY , 255);
+		}
+	}
+	//=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
 }

@@ -79,4 +79,9 @@
     <integer name="def_profiles_meeting_volume">0</integer>
     <integer name="def_profiles_outdoor_volume">7</integer>
     <integer name="def_profiles_indoor_volume">5</integer>
+    
+    
+     <!-- fixed CR<NEWMSOO112910> by luning at 11-08-27 begin -->
+    <integer name="def_sms_validity">255</integer>
+     <!-- fixed CR<NEWMSOO112910> by luning at 11-08-27  end  -->
 </resources>

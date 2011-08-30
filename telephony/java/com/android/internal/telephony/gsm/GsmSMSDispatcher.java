@@ -186,6 +186,9 @@ final class GsmSMSDispatcher extends SMSDispatcher {
     /** {@inheritDoc} */
     protected void sendData(String destAddr, String scAddr, int destPort,
             byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+    	//=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+    	SmsMessage.getSmsValidity(this.mContext);
+    	//=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
         SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
                 scAddr, destAddr, destPort, data, (deliveryIntent != null));
         sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent);
@@ -194,6 +197,9 @@ final class GsmSMSDispatcher extends SMSDispatcher {
     /* Start liuhongxing 20110602 */
     protected void sendDmData(String destAddr, String scAddr, int destPort, int srcPort,
             byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+    	//=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+    	SmsMessage.getSmsValidity(this.mContext);
+    	//=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
         SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
                 scAddr, destAddr, destPort, srcPort, data, (deliveryIntent != null));
         sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent);
@@ -203,6 +209,9 @@ final class GsmSMSDispatcher extends SMSDispatcher {
     /** {@inheritDoc} */
     protected void sendText(String destAddr, String scAddr, String text,
             PendingIntent sentIntent, PendingIntent deliveryIntent) {
+    	//=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+    	SmsMessage.getSmsValidity(this.mContext);
+    	//=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
         SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
                 scAddr, destAddr, text, (deliveryIntent != null));
         sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent);
@@ -226,6 +235,10 @@ final class GsmSMSDispatcher extends SMSDispatcher {
             }
         }
 
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+    	SmsMessage.getSmsValidity(this.mContext);
+    	//=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
+        
         for (int i = 0; i < msgCount; i++) {
             SmsHeader.ConcatRef concatRef = new SmsHeader.ConcatRef();
             concatRef.refNumber = refNumber;

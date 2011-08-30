@@ -702,6 +702,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_OUTDOOR + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_outdoor_volume);
                 loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_INDOOR + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_indoor_volume);
              // ************Modify by luning at01-07-01 end************
+              //====== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ======
+                loadStringSetting(stmt,Settings.System.SMS_VALIDITY,R.integer.def_sms_validity);
+              //====== fixed CR<NEWMSOO112910> by luning at 11-08-27 end ======
                 
                 db.setTransactionSuccessful();
             } finally {
@@ -1107,6 +1110,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_OUTDOOR + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_outdoor_volume);
             loadIntegerSetting(stmt,Settings.System.PROFILES_MODE_INDOOR + Settings.System.APPEND_FOR_VOLUME,R.integer.def_profiles_indoor_volume);
             // ************Modify by luning at01-07-01 end************
+            
+          //====== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ======
+            loadStringSetting(stmt,Settings.System.SMS_VALIDITY,R.integer.def_sms_validity);
+          //====== fixed CR<NEWMSOO112910> by luning at 11-08-27 end ======
             
         } finally {
             if (stmt != null) stmt.close();

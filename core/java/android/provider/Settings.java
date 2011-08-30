@@ -1411,6 +1411,16 @@ public final class Settings {
         public static final String APPEND_FOR_VOLUME = "_volume";
      // ************Modify by luning at01-07-01 end************
         
+      //====== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ======
+        /**
+         * @hide
+         */
+        public static final String SMS_VALIDITY = "sms_validity";
+      //====== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ======
+        
+        
+        
+        
         //add by niezhong for cellular->WLAN 08-20-11 NEWMS00110041 start
         public static final String WIFI_CELLULAR_WLAN = "wifi_cellular_wlan";
         public static final int CELLULAR_WALN_AUTO = 0;
@@ -1765,6 +1775,9 @@ public final class Settings {
             PROFILES_MODE_OUTDOOR + APPEND_FOR_VOLUME,
             PROFILES_MODE_INDOOR + APPEND_FOR_VOLUME,
          // ************Modify by luning at01-07-01 end************
+          //====== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ======
+            SMS_VALIDITY,
+          //====== fixed CR<NEWMSOO112910> by luning at 11-08-27 end ======
             TEXT_AUTO_REPLACE,
             TEXT_AUTO_CAPS,
             TEXT_AUTO_PUNCTUATE,
