@@ -822,7 +822,11 @@
     <style name="MediaButton.Pause">
         <item name="android:src">@android:drawable/ic_media_pause</item>
     </style>
-
+    
+    <style name="MediaButton.Stop">
+        <item name="android:src">@android:drawable/ic_media_stop</item>
+    </style>
+    
     <style name="ZoomControls">
         <item name="android:gravity">bottom</item>
         <item name="android:paddingLeft">15dip</item>

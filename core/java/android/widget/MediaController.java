@@ -93,6 +93,8 @@ public class MediaController extends FrameLayout {
     private ImageButton         mRewButton;
     private ImageButton         mNextButton;
     private ImageButton         mPrevButton;
+    private ImageButton         mStopButton;
+	
 
     public MediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -198,6 +200,15 @@ public class MediaController extends FrameLayout {
             mPauseButton.setOnClickListener(mPauseListener);
         }
 
+        Log.i("MediaController", "initControllerView");
+        mStopButton = (ImageButton) v.findViewById(com.android.internal.R.id.stop);
+        if (mStopButton != null) {
+            mStopButton.setOnClickListener(mStopListener);
+            if (!mFromXml) {
+                mStopButton.setVisibility(mUseFastForward ? View.VISIBLE : View.GONE);
+            }
+        }
+		
         mFfwdButton = (ImageButton) v.findViewById(com.android.internal.R.id.ffwd);
         if (mFfwdButton != null) {
             mFfwdButton.setOnClickListener(mFfwdListener);
@@ -238,6 +249,7 @@ public class MediaController extends FrameLayout {
         mFormatBuilder = new StringBuilder();
         mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
 
+        
         installPrevNextListeners();
     }
 
@@ -271,7 +283,48 @@ public class MediaController extends FrameLayout {
             // the buttons.
         }
     }
-    
+
+    private void updateSeekButtons() {
+        try {
+            if(mRewButton != null ){
+                if (mPlayer.canSeekBackward()) {
+                    mRewButton.setEnabled(true);
+                }
+                else
+                {
+                    mRewButton.setEnabled(false);
+                }
+            }
+            
+            if (mFfwdButton != null )
+            {
+               if(mPlayer.canSeekForward()) {
+                    mFfwdButton.setEnabled(true);
+                }
+                else
+                {
+                    mFfwdButton.setEnabled(false);
+                }
+            }
+            
+            if(mProgress != null)
+            {
+                if((mPlayer.canSeekBackward()||mPlayer.canSeekForward())){
+                    mProgress.setEnabled(true);
+                }
+                else
+                {
+                    mProgress.setEnabled(false);
+                }
+            }
+            
+        } catch (IncompatibleClassChangeError ex) {
+            // We were given an old version of the interface, that doesn't have
+            // the canPause/canSeekXYZ methods. This is OK, it just means we
+            // assume the media can be paused and seeked, and so we don't disable
+            // the buttons.
+        }
+    }
     /**
      * Show the controller on screen. It will go away
      * automatically after 'timeout' milliseconds of inactivity.
@@ -305,7 +358,7 @@ public class MediaController extends FrameLayout {
             mShowing = true;
         }
         updatePausePlay();
-        
+        updateSeekButtons();
         // cause the progress bar to be updated even if mShowing
         // was already true.  This happens, for example, if we're
         // paused with the progress bar showing the user hits play.
@@ -389,7 +442,7 @@ public class MediaController extends FrameLayout {
             int percent = mPlayer.getBufferPercentage();
             mProgress.setSecondaryProgress(percent * 10);
         }
-
+        Log.i("MediaController", "setProgress"+"duration"+duration+"position"+position);
         if (mEndTime != null)
             mEndTime.setText(stringForTime(duration));
         if (mCurrentTime != null)
@@ -398,6 +451,22 @@ public class MediaController extends FrameLayout {
         return position;
     }
 
+    private void resetProgress() {
+        if (mPlayer == null || mDragging) {
+            return ;
+        }
+
+        if (mProgress != null) {
+           mProgress.setProgress( (int) 0);
+           mProgress.setSecondaryProgress(0);
+        }
+
+        if (mEndTime != null)
+            mEndTime.setText(stringForTime(0));
+        if (mCurrentTime != null)
+            mCurrentTime.setText(stringForTime(0));
+
+    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         show(sDefaultTimeout);
@@ -450,10 +519,17 @@ public class MediaController extends FrameLayout {
         }
     };
 
+    private View.OnClickListener mStopListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            doStop();
+            show(sDefaultTimeout);
+        }
+    };
+
+
     private void updatePausePlay() {
         if (mRoot == null || mPauseButton == null)
             return;
-
         if (mPlayer.isPlaying()) {
             mPauseButton.setImageResource(com.android.internal.R.drawable.ic_media_pause);
         } else {
@@ -468,7 +544,20 @@ public class MediaController extends FrameLayout {
             mPlayer.start();
         }
         updatePausePlay();
+        updateSeekButtons();
     }
+
+
+    private void doStop() {
+        
+       mPlayer.stop();
+       resetProgress();    
+       Log.i("MediaController", "doStop");
+       updatePausePlay();
+       updateSeekButtons();
+  
+    }
+
 
     // There are two scenarios that can trigger the seekbar listener to trigger:
     //
@@ -600,6 +689,7 @@ public class MediaController extends FrameLayout {
     public interface MediaPlayerControl {
         void    start();
         void    pause();
+        void    stop();
         int     getDuration();
         int     getCurrentPosition();
         void    seekTo(int pos);

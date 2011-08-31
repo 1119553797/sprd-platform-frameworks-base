@@ -27,6 +27,7 @@ import android.media.Metadata;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.net.Uri;
+import android.os.Message;
 import android.os.PowerManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -39,7 +40,7 @@ import android.widget.MediaController.*;
 
 import java.io.IOException;
 import java.util.Map;
-
+import android.os.Handler;
 /**
  * Displays a video file.  The VideoView class
  * can load images from various sources (such as resources or content
@@ -84,6 +85,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private MediaController mMediaController;
     private OnCompletionListener mOnCompletionListener;
     private MediaPlayer.OnPreparedListener mOnPreparedListener;
+    private Handler.Callback mStateCallback;
     private int         mCurrentBufferPercentage;
     private OnErrorListener mOnErrorListener;
     private int         mSeekWhenPrepared;  // recording the seek position while preparing
@@ -200,6 +202,45 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
     }
 
+    private void startVideo() {
+        if (mUri == null || mSurfaceHolder == null) {
+            // not ready for playback just yet, will try again later
+            return;
+        }
+  
+        try {
+            mMediaPlayer = new MediaPlayer();
+            mMediaPlayer.setOnPreparedListener(mPreparedListener);
+            mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
+            mDuration = -1;
+            mMediaPlayer.setOnCompletionListener(mCompletionListener);
+            mMediaPlayer.setOnErrorListener(mErrorListener);
+            mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
+            mCurrentBufferPercentage = 0;
+            mMediaPlayer.setDataSource(mContext, mUri, mHeaders);
+            mMediaPlayer.setDisplay(mSurfaceHolder);
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mMediaPlayer.setScreenOnWhilePlaying(true);
+            mMediaPlayer.prepareAsync();
+            // we don't set the target state here either, but preserve the
+            // target state that was there before.
+            mCurrentState = STATE_PREPARING;
+            MediaPlayerStateCallback(mCurrentState,mTargetState);
+        } catch (IOException ex) {
+            Log.w(TAG, "Unable to open content: " + mUri, ex);
+            mCurrentState = STATE_ERROR;
+            mTargetState = STATE_ERROR;
+            mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
+            return;
+        } catch (IllegalArgumentException ex) {
+            Log.w(TAG, "Unable to open content: " + mUri, ex);
+            mCurrentState = STATE_ERROR;
+            mTargetState = STATE_ERROR;
+            mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
+            return;
+        }
+    }
+    
     private void openVideo() {
         if (mUri == null || mSurfaceHolder == null) {
             // not ready for playback just yet, will try again later
@@ -231,6 +272,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             // we don't set the target state here either, but preserve the
             // target state that was there before.
             mCurrentState = STATE_PREPARING;
+            MediaPlayerStateCallback(mCurrentState,mTargetState);
             attachMediaController();
         } catch (IOException ex) {
             Log.w(TAG, "Unable to open content: " + mUri, ex);
@@ -279,7 +321,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     MediaPlayer.OnPreparedListener mPreparedListener = new MediaPlayer.OnPreparedListener() {
         public void onPrepared(MediaPlayer mp) {
             mCurrentState = STATE_PREPARED;
-
+            MediaPlayerStateCallback(mCurrentState,mTargetState);
             // Get the capabilities of the player for this stream
             Metadata data = mp.getMetadata(MediaPlayer.METADATA_ALL,
                                       MediaPlayer.BYPASS_METADATA_FILTER);
@@ -316,6 +358,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                     // we need), so we won't get a "surface changed" callback, so
                     // start the video here instead of in the callback.
                     if (mTargetState == STATE_PLAYING) {
+                        Log.w(TAG, "OnPreparedListener  start");
                         start();
                         if (mMediaController != null) {
                             mMediaController.show();
@@ -433,7 +476,17 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     {
         mOnCompletionListener = l;
     }
-
+    /**
+     * Register a callback to be invoked when the state of a media is changed
+     *
+     * @param l The callback that will be run
+     */
+    public void setStateCallbackListener(Handler.Callback l)
+    {
+        mStateCallback = l;
+    }
+    
+    
     /**
      * Register a callback to be invoked when an error occurs
      * during playback or setup.  If no listener is specified,
@@ -508,7 +561,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (isInPlaybackState() && mMediaController != null) {
+        if (isInPlaybackState() && mMediaController != null
+                ||(mCurrentState == STATE_IDLE )) {
             toggleMediaControlsVisiblity();
         }
         return false;
@@ -567,7 +621,14 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             mMediaPlayer.start();
             mCurrentState = STATE_PLAYING;
         }
+        else if(mCurrentState == STATE_IDLE
+                && mTargetState == STATE_IDLE)
+        {
+            Log.w(TAG, "start startVideo");
+            startVideo();
+        }
         mTargetState = STATE_PLAYING;
+        MediaPlayerStateCallback(mCurrentState,mTargetState);
     }
 
     public void pause() {
@@ -579,7 +640,15 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
         mTargetState = STATE_PAUSED;
     }
-
+    
+    public void  stop()
+    {
+        Log.w(TAG, "stop release");
+        release(true);
+        mCanSeekBack = mCanSeekForward = false;
+        MediaPlayerStateCallback(mCurrentState,mTargetState);
+    }
+    
     public void suspend() {
         if (isInPlaybackState()) {
             if (mMediaPlayer.suspend()) {
@@ -659,6 +728,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 mCurrentState != STATE_IDLE &&
                 mCurrentState != STATE_PREPARING);
     }
+  
 
     public boolean canPause() {
         return mCanPause;
@@ -670,5 +740,15 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
     public boolean canSeekForward() {
         return mCanSeekForward;
+    }
+    
+    public void MediaPlayerStateCallback(int mCurrentState ,int mTargetState) {
+        if(mStateCallback!=null)
+        {  
+            Message msg = Message.obtain();
+            msg.arg1= mCurrentState ;
+            msg.arg2= mTargetState ;
+            mStateCallback.handleMessage(msg);
+        }
     }
 }
