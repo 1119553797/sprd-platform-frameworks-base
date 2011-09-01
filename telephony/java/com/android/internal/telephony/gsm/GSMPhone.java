@@ -79,6 +79,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import android.app.Notification;
+import android.app.NotificationManager;
 
 /**
  * {@hide}
@@ -96,7 +98,8 @@ public abstract class GSMPhone extends PhoneBase {
     public static final String VM_NUMBER = "vm_number_key";
     // Key used to read/write the SIM IMSI used for storing the voice mail
     public static final String VM_SIM_IMSI = "vm_sim_imsi_key";
-
+    // Notification id for USSD
+    private static final int NOTIFICATION_ID_USSD = 300;
     // Instance Variables
     GsmCallTracker mCT;
     GsmServiceStateTracker mSST;
@@ -1201,6 +1204,11 @@ public abstract class GSMPhone extends PhoneBase {
                 mmi = GsmMmiCode.newNetworkInitiatedUssd(ussdMessage,
                                                    isUssdRequest,
                                                    GSMPhone.this);
+	        NotificationManager nm = (NotificationManager)mContext
+	           .getSystemService(Context.NOTIFICATION_SERVICE);
+	        Notification notification = new Notification();
+	        notification.defaults = Notification.DEFAULT_SOUND;
+	        nm.notify(NOTIFICATION_ID_USSD,notification);
                 onNetworkInitiatedUssd(mmi);
             }
         }
