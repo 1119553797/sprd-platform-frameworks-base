@@ -301,14 +301,19 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		int newEmailNum = -1;
 		int numEmailRec = 0;
 		try {
-			numEmailRec = mEmailRecordSizeArray[getNumRecs() - 1];
+			numEmailRec = mEmailRecordSizeArray[ getNumRecs() - 1];
+                   Log.i(LOG_TAG,"getNewEmailNumber numEmailRec "+ numEmailRec );
+			
 		} catch (IndexOutOfBoundsException e) {
 			Log.e(LOG_TAG, "Error: Improper ICC card");
 		}
 		for (int i = 1; i <= numEmailRec; i++) {
 			Integer emailNum = new Integer(i);
+			  Log.i(LOG_TAG,"getNewEmailNumber  emailNum (0)"+ emailNum );
 			if (!usedEmailNumSet.contains(emailNum)) {
 				newEmailNum = (int) emailNum;
+				
+			      Log.i(LOG_TAG,"getNewEmailNumber  emailNum(1) "+ emailNum );
 				usedEmailNumSet.add(emailNum);
 				break;
 			}
@@ -781,8 +786,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				recNum = ((recNum == 0xFF) ? (-1) : recNum);
 				Log.e("AdnRecord", "iap recNum == " + recNum);
 				if (recNum != -1) {
-
-					usedEmailNumSet.add(new Integer(recNum));
+			
 
 					String[] emails = new String[1];
 					String[] nEmails = null;
@@ -791,16 +795,20 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 					Log.i("AdnRecord", "updatePhoneAdnRecord,emails[0] "
 							+ emails[0]);
 					if (emails[0] == null || emails[0] == "") {
-						{
-							Log.i("AdnRecord",
+						
+						Log.i("AdnRecord",
 									"updatePhoneAdnRecord,emails[0]==null");
-						}
+						setIapFileRecord(num,
+							i, (byte) 0xFF);
+
+						continue;
 
 					} else {
 
 						nEmails = emails;
 					}
-					
+					usedEmailNumSet.add(new Integer(recNum));
+
 					int adnNum =  i;
 				
 					

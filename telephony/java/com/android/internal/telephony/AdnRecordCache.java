@@ -213,6 +213,9 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 	public void updateUSIMAdnBySearch(int efid, AdnRecord oldAdn,
 			AdnRecord newAdn, String pin2, Message response) {
 
+
+			
+
 		int extensionEF = 0;
 		int index = -1;
 		int emailEF = 0;
@@ -350,7 +353,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
 			}
 
-			Log.i(LOG_TAG, "updateUSIMAdnBySearch (6) ");
+			Log.i(LOG_TAG, "updateUSIMAdnBySearch (6)  emailNum  " +emailNum);
 
 			if (emailNum == -1) {
 
@@ -390,35 +393,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 			Log.i(LOG_TAG, "updateUSIMAdnBySearch (8) isUpdateIap "
 					+ isUpdateIap);		
 			updateOthers = false;	
-
-			if (!updateOthers) {
-				if (newEmail) {
-					mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
-				}
-				
-			}
-			Log.i(LOG_TAG, "updateUSIMAdnBySearch (9) iapRecNum "
-					+ iapRecNum);
-			if (isUpdateIap) {
-
-				if (newAdn.emails == null) {
-					mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
-					mUsimPhoneBookManager.setIapFileRecord(recNum,
-							iapRecNum - 1, (byte) 0xFF);
 			
-				} else {
-					mUsimPhoneBookManager.setIapFileRecord(recNum,
-							iapRecNum - 1, (byte) (emailNum & 0xFF));
-				}
-				if (iapEF > 0) {
-					Log.e(LOG_TAG, "begin to update IAP ---IAP id " + index);
-					adnRecordLoader = new AdnRecordLoader(mFh);
-					adnRecordLoader.updateEFIapToUsim(newAdn, iapEF, index,
-							emailNum, pin2,
-							
-							null);
-				}
-			}
 			Log.i(LOG_TAG, "updateUSIMAdnBySearch (10)");
 			int emailRecordCount = 0;
 			int[] mEmailRecordSize = mUsimPhoneBookManager
@@ -440,21 +415,32 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 					"updateUSIMAdnBySearch (10) emailRecordCount"
 							+ emailRecordCount);
 			if (emailRecordCount != 0) {
-				Log.i(LOG_TAG, "updateUSIMAdnBySearch (10.0) emailNum"
-						+ emailNum);
-
+				
+			    if(mUsimPhoneBookManager
+						.findEFEmailInfo(emailRecordCount) != mUsimPhoneBookManager
+						.findEFEmailInfo(emailRecordCount-1)  ){
 				emailNum -= mEmailRecordSize[emailRecordCount - 1];
 				Log.i(LOG_TAG, "updateUSIMAdnBySearch (10.1) emailNum"
 						+ emailNum);
 				emailEF = mUsimPhoneBookManager
 						.findEFEmailInfo(emailRecordCount);
+                          }else{
+                                 Log.i(LOG_TAG, "updateUSIMAdnBySearch (10.1) email num over limit and same email EF, are "
+						+ mUsimPhoneBookManager.findEFEmailInfo(emailRecordCount)  + " and  "+
+						mUsimPhoneBookManager.findEFEmailInfo(emailRecordCount-1) );
+						mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);		 
+                                       isUpdateEmail = false;
+                                       isUpdateIap = false;									   
+
+				}
 			} else {
 				emailEF = mUsimPhoneBookManager.findEFEmailInfo(0);
 			}
 			Log.i(LOG_TAG, "updateUSIMAdnBySearch (10.2) emailNum"
 					+ emailNum);
-			Log.i(LOG_TAG, "updateUSIMAdnBySearch (10.3) emailEF"
-					+ emailEF + "isUpdateEmail" + isUpdateEmail);
+			Log.i(LOG_TAG, "updateUSIMAdnBySearch (10.3) emailEF "
+					+ emailEF + "isUpdateEmail " + isUpdateEmail);
+			
 			if (isUpdateEmail && emailEF > 0) {
 				Log.e(LOG_TAG, "begin to update Email ---Email id " + emailNum);
 				adnRecordLoader = new AdnRecordLoader(mFh);
@@ -462,6 +448,29 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 						efid, index, emailNumInIap, pin2,
 
 						null);
+			}
+			
+			Log.i(LOG_TAG, "updateUSIMAdnBySearch (10.4) iapRecNum "
+					+ iapRecNum + "isUpdateIap " + isUpdateIap );
+			if (isUpdateIap) {
+
+				if (newAdn.emails == null) {
+					mUsimPhoneBookManager.removeEmailNumFromSet(emailNum);
+					mUsimPhoneBookManager.setIapFileRecord(recNum,
+							iapRecNum - 1, (byte) 0xFF);
+			
+				} else {
+					mUsimPhoneBookManager.setIapFileRecord(recNum,
+							iapRecNum - 1, (byte) (emailNum & 0xFF));
+				}
+				if (iapEF > 0) {
+					Log.e(LOG_TAG, "begin to update IAP ---IAP id  " + index+ "emailNum " +emailNum);
+					adnRecordLoader = new AdnRecordLoader(mFh);
+					adnRecordLoader.updateEFIapToUsim(newAdn, iapEF, index,
+							emailNum, pin2,
+							
+							null);
+				}
 			}
 			Log.i(LOG_TAG, "updateUSIMAdnBySearch (11)");
 			if (mUsimPhoneBookManager.ishaveAnr && !newAdn.stringCompareNullEqualsEmpty(newAdn.anr,oldAdn.anr)) {

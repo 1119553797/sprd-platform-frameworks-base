@@ -173,6 +173,9 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 						oldAnr, "", "", "", "");
 				newAdn = new AdnRecord(newTag, newPhoneNumber, newEmailList,
 						newAnr, newAas, newSne, newGrp, newGas);
+                          //adnCache.TestDeleteUSIMAdnBySearch(newid, oldAdn, newAdn, pin2,
+					//	response);
+				
 				adnCache.updateUSIMAdnBySearch(newid, oldAdn, newAdn, pin2,
 						response);
 				

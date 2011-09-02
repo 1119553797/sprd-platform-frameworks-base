@@ -537,8 +537,10 @@ public class IccProvider extends ContentProvider {
 			return 0;
 		}
 
+             
+ 
 		success = deleteIccRecordFromEf(efType, tag, number, emails, anr, pin2); 
-		
+             
 		if (DBG)
 			log("delete  success " + success);
 
