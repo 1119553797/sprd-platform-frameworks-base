@@ -317,7 +317,8 @@ status_t CameraSource::read(
                 }
             } else {
                 mFramesBeingEncoded.push_back(frame);
-                *buffer = new MediaBuffer(frame->pointer(), frame->size()*3/4);//@zha temporary modify for sprd camera output size error
+                //*buffer = new MediaBuffer(frame->pointer(), frame->size()*3/4);//@zha temporary modify for sprd camera output size error
+                *buffer = new MediaBuffer(frame->pointer(), frame->size());//@zha temporary modify for sprd camera output size error
                 LOGV("read: buffer.size() %d", (*buffer)->size());
                 (*buffer)->setObserver(this);
                 (*buffer)->add_ref();
