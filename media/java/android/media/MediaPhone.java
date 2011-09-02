@@ -82,6 +82,30 @@ public class MediaPhone extends Handler
     private Message msgTracker = null;
     private static int ARG_SKIP_MSGTRACKER = -1;
 
+    private int mCodecCount = 0;
+	public enum CodecState {
+		CODEC_IDLE ,		
+		CODEC_OPEN,	
+		CODEC_START, 	
+		CODEC_CLOSE;
+
+		public String toString() {
+			switch(this) {
+				case CODEC_IDLE:
+					return "CODEC_IDLE";
+				case CODEC_OPEN:
+					return "CODEC_OPEN";
+				case CODEC_START:
+					return "CODEC_START";
+				case CODEC_CLOSE:
+					return "CODEC_CLOSE";
+			}
+			return "CODEC_IDLE";
+		}
+	}
+
+	
+   private CodecState mCodecState = CodecState.CODEC_IDLE;
     /**
      * Default constructor. Consider using one of the create() methods for
      * synchronously instantiating a MediaPhone from a Uri or resource.
@@ -549,6 +573,8 @@ public class MediaPhone extends Handler
     public native void stopDownLink();
 
 	public native void setDecodeType(int type);
+	
+	public native void setEncodeType(int type);
 
 	public native void setCameraParam(String key, int value);
 
@@ -697,11 +723,15 @@ public class MediaPhone extends Handler
 					return;
 				}
                 int[] params = (int[])ar.result;
-				Log.d(TAG, "handleMessage(MEDIA_UNSOL_CODEC), params: " + params[0] + ", length: " + params.length);
+				Log.d(TAG, "handleMessage(MEDIA_UNSOL_CODEC), params: " + params[0] + ", length: " + params.length + ", mCodecCount: " + mCodecCount);
 				if (params[0] == 3){	// config message
 					if (params.length >= 4){
 						if (params[2] == 1) {	// decode
 							setDecodeType(params[3]);
+							mCodecCount++;
+						} else {	// encode
+							setEncodeType(params[3]);
+							mCodecCount++;
 						}
 	                	onCodecRequest(params[0], params[2]);
 					}
@@ -795,11 +825,12 @@ public class MediaPhone extends Handler
         Log.d(TAG, "onCodecRequest:" + type + ", " + param);
         switch (type) {
         case CODEC_OPEN:
-			if (mOnCallEventListener != null){
-				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_OPEN, null);
-			}
+		if (mOnCallEventListener != null){
+			mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_OPEN, null);
+		}
             try {
                 prepareAsync();
+		mCodecState = CodecState.CODEC_OPEN;
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "prepareAsync fail " + ex);
             }
@@ -807,9 +838,20 @@ public class MediaPhone extends Handler
             break;
 
         case CODEC_SET_PARAM:
-            if (param == 1) { /* decoder */
+		if (mOnCallEventListener != null){
+			if (param == 1){
+				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_SET_PARAM_DECODER, null);
+			} else {
+				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_SET_PARAM_ENCODER, null);
+			}
+		}
+            if (mCodecCount == 2) { /* decoder */
 	            try {
 	                start();
+			mCodecState = CodecState.CODEC_START;
+			if (mOnCallEventListener != null) {
+				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_START, null);
+			}
 	            } catch (IllegalStateException ex) {
 	                Log.d(TAG, "start fail " + ex);
 	            }
@@ -818,11 +860,12 @@ public class MediaPhone extends Handler
             break;
 
         case CODEC_CLOSE:
-			if (mOnCallEventListener != null){
-				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_CLOSE, null);
-			}
             try {
                 stop();
+		mCodecState = CodecState.CODEC_CLOSE;
+		if (mOnCallEventListener != null){
+			mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_CLOSE, null);
+		}
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "stop fail " + ex);
             }
@@ -831,6 +874,10 @@ public class MediaPhone extends Handler
         }
     }
 
+   public CodecState getCodecState() {
+   	Log.d(TAG, "getCodecState(), " + mCodecState);
+   	return mCodecState;
+   }
     /**
      * Interface definition of a callback to be invoked when the
      * video size is first known or updated
@@ -997,7 +1044,8 @@ public class MediaPhone extends Handler
 	public static final int MEDIA_CALLEVENT_CODEC_OPEN = 103;
 	public static final int MEDIA_CALLEVENT_CODEC_SET_PARAM_DECODER = 104;
 	public static final int MEDIA_CALLEVENT_CODEC_SET_PARAM_ENCODER = 105;
-	public static final int MEDIA_CALLEVENT_CODEC_CLOSE = 106;
+	public static final int MEDIA_CALLEVENT_CODEC_START = 106;
+	public static final int MEDIA_CALLEVENT_CODEC_CLOSE = 107;
 	
     /**
      * Interface definition of a callback to be invoked to communicate some

@@ -332,6 +332,27 @@ status_t MediaPhone::setDecodeType(int type)
     return OK;
 }
 
+status_t MediaPhone::setEncodeType(int type)
+{
+    LOGV("setEncodeType");
+    Mutex::Autolock _l(mLock);
+	
+    if (mCurrentState & MEDIA_PHONE_STARTED) {
+        // Can't change the stream type after prepare
+        LOGE("setEncodeType called in state %d", mCurrentState);
+        return INVALID_OPERATION;
+    }
+	
+	status_t ret = mMediaPhone->setEncodeType(type);
+    if (OK != ret) {
+        LOGV("setEncodeType failed: %d", ret);
+//        mCurrentState = MEDIA_PHONE_ERROR;
+        return ret;
+    }
+	
+    return OK;
+}
+
 status_t MediaPhone::setAudioStreamType(int type)
 {
     LOGV("setAudioStreamType");

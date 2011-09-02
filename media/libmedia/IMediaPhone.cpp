@@ -38,6 +38,7 @@ enum {
     START,
     STOP,
     SET_DECODE_TYPE,
+    SET_ENCODE_TYPE,
     SET_AUDIO_STREAM_TYPE,
     SET_VOLUME,
     ENABLE_RECORD,
@@ -160,6 +161,16 @@ public:
         data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
         data.writeInt32(type);
         remote()->transact(SET_DECODE_TYPE, data, &reply);
+        return reply.readInt32();
+    }
+	
+    status_t setEncodeType(int type)
+    {
+        LOGV("setEncodeType(%d)", type);
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        data.writeInt32(type);
+        remote()->transact(SET_ENCODE_TYPE, data, &reply);
         return reply.readInt32();
     }
 
@@ -323,6 +334,11 @@ status_t BnMediaPhone::onTransact(
         case SET_DECODE_TYPE: {
             CHECK_INTERFACE(IMediaPhone, data, reply);
             reply->writeInt32(setDecodeType(data.readInt32()));
+            return NO_ERROR;
+        } break;
+        case SET_ENCODE_TYPE: {
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+            reply->writeInt32(setEncodeType(data.readInt32()));
             return NO_ERROR;
         } break;
         case SET_AUDIO_STREAM_TYPE: {

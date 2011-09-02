@@ -102,6 +102,7 @@ public:
     status_t    stop();
     status_t    release();
     status_t    setDecodeType(int type);
+    status_t    setEncodeType(int type);
     status_t    setAudioStreamType(int type);
     status_t    setVolume(float leftVolume, float rightVolume);
     status_t    enableRecord(bool isEnable, int type, int fd);

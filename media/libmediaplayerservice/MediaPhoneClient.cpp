@@ -163,7 +163,11 @@ status_t MediaPhoneClient::prepareRecorder()
     //CHECK_RT(mRecorder->setParameters(String8("audio-param-number-of-channels=1")));
     //setAudioSamplingRate(profile.audioSampleRate);
     //CHECK_RT(mRecorder->setParameters(String8("audio-param-sampling-rate=8000")));
-    CHECK_RT(mRecorder->setVideoEncoder(VIDEO_ENCODER_H263));
+    if (mEncodeType == 1) { // h263    
+	    CHECK_RT(mRecorder->setVideoEncoder(VIDEO_ENCODER_H263));
+    } else {
+	    CHECK_RT(mRecorder->setVideoEncoder(VIDEO_ENCODER_MPEG_4_SP));
+    }
     //CHECK_RT(mRecorder->setAudioEncoder(AUDIO_ENCODER_AMR_NB));
     CHECK_RT(mRecorder->setOutputFile(fd, 0, 0));
     CHECK_RT(mRecorder->setPreviewSurface(mPreviewSurface));
@@ -330,6 +334,15 @@ status_t MediaPhoneClient::setDecodeType(int type)
     LOGV("setDecodeType(%d)", type);
     Mutex::Autolock l(mLock);
 	mDecodeType = type;
+    return NO_ERROR;
+}
+
+status_t MediaPhoneClient::setEncodeType(int type)
+{
+	type = 1;
+    LOGV("setEncodeType(%d)", type);
+    Mutex::Autolock l(mLock);
+	mEncodeType = type;
     return NO_ERROR;
 }
 

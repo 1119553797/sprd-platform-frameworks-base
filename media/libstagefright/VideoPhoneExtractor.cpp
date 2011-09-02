@@ -10,6 +10,9 @@
 #include <errno.h>
 #include <string.h>
 
+#include <time.h>
+#include <stdio.h>
+
 #define SAFE_DELETE(p) if ( (p) != NULL) {delete (p); (p) =NULL;}
 #define	SAFE_FREE(p)	if ( (p) != NULL) {free(p); (p) =NULL;}
 #define	MAX_BUFFER_SIZE	(128*1024)
@@ -125,6 +128,8 @@ fail:
 
 uint8_t VideoPhoneSource::m_Mpeg4Header[1024] = {0};
 int VideoPhoneSource::m_iMpeg4Header_size = 0;
+static FILE* m_fWrite = 0;
+static FILE* m_fLen = 0;
 
 VideoPhoneSource::VideoPhoneSource(
         const sp<MetaData> &format,
@@ -139,6 +144,8 @@ VideoPhoneSource::VideoPhoneSource(
 {
 	LOGI("[%p]VideoPhoneSource::VideoPhoneSource", this);
 	m_fAVStream		= NULL;
+	m_fWrite = NULL;
+	m_fLen = NULL;
 }
 
 VideoPhoneSource::~VideoPhoneSource() 
@@ -146,6 +153,12 @@ VideoPhoneSource::~VideoPhoneSource()
 	LOGI("[%p]VideoPhoneSource::~VideoPhoneSource", this);
 	if (m_bStarted)
 		stop();
+	if (m_fWrite != NULL){
+		fclose(m_fWrite);
+	}
+	if (m_fLen != NULL){
+		fclose(m_fLen);
+	}
 }
 
 status_t VideoPhoneSource::start(MetaData *params) 
@@ -576,20 +589,39 @@ int	VideoPhoneSource::writeRingBuffer(char* data,int nLen)
 #ifdef DUMP_FILE
 void dumpToFile(char *w_ptr, int w_len)
 {
-	static FILE* m_fWrite = 0;
+	char fn_fWrite[100] = {0};
+	char fn_fLen[100] = {0};
+	char buf[10] = {0};
+	time_t timep;
+	struct tm *p;
+	time(&timep);
+	p=gmtime(&timep);
+	//printf(“%d%d%d”,(1900+p->tm_year), (1+p->tm_mon),p->tm_mday);
 	if (m_fWrite == NULL){
-		m_fWrite = fopen(DUMP_FILE,"ab");
+		sprintf(fn_fWrite, "/data/videocall%02d%02d%02d.3gp", p->tm_hour, p->tm_min, p->tm_sec);
+		LOGI("fn_fWrite: %s", fn_fWrite);
+		m_fWrite = fopen(fn_fWrite,"ab");
+	}
+	if (m_fLen == NULL){
+		sprintf(fn_fLen, "/data/videocall-len%02d%02d%02d.txt", p->tm_hour, p->tm_min, p->tm_sec);
+		LOGI("fn_fLen: %s", fn_fLen);
+		m_fLen = fopen(fn_fLen,"ab");
 	}
 
 	if (m_fWrite == NULL){	
 		LOGE("fhy: fopen() failed, m_fWrite: 0x%p", m_fWrite);	
 		goto fail;
 	}
+	if (m_fLen == NULL){	
+		LOGE("fhy: fopen() failed, m_fLen: 0x%p", m_fLen);	
+		goto fail;
+	}
 	
 	LOGE("fhy: fwrite(), w_len: %d", w_len);	
 	fwrite(w_ptr,1,w_len,m_fWrite);
-	fclose(m_fWrite);
-	m_fWrite = NULL;
+	sprintf(buf, "%d\n", w_len);
+	LOGE("fhy: fwrite(), buf: %s", buf);	
+	fwrite(buf, 1, strlen(buf)+1, m_fLen);
 	return;
 
 fail:
@@ -763,6 +795,18 @@ status_t VideoPhoneDataDevice::start()
 
 status_t VideoPhoneDataDevice::startThread()
 {
+#ifdef DEBUG_FILE
+		m_fAVStream = fopen(DEBUG_FILE,"r");
+		if (m_fAVStream != NULL) fseek(m_fAVStream, 0, SEEK_SET);
+		if (m_fAVStream == NULL)
+		{
+			LOGE("Cannot open file %s", DEBUG_FILE);
+		} else {
+			LOGD("file opened %p", m_fAVStream);
+		}
+#endif
+
+
     pthread_attr_t attr;
 
     mStarted = true;
@@ -867,6 +911,10 @@ status_t VideoPhoneDataDevice::threadFunc()
 				LOGI("read nothing,break");
 				break;
 			}
+#endif
+		} else {
+#ifdef DEBUG_FILE
+			usleep(100 * 1000);
 #endif
 		}
 		//LOGI("after read %d", nLen);

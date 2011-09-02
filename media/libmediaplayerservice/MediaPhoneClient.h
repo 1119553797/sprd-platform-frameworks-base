@@ -98,6 +98,7 @@ public:
     virtual     status_t    start();
     virtual     status_t    stop();
     virtual     status_t    setDecodeType(int type);
+    virtual     status_t    setEncodeType(int type);
     virtual     status_t    setAudioStreamType(int type);
     virtual     status_t    setVolume(float leftVolume, float rightVolume);
     virtual     status_t    release();
@@ -133,6 +134,7 @@ private:
     char                         mUrlIn[MAX_URL_LEN];
     char                         mUrlOut[MAX_URL_LEN];
 	int							 mDecodeType; // 1 - H263; 2 - MPEG4
+	int							 mEncodeType; // 1 - H263; 2 - MPEG4
 };
 
 }; // namespace android

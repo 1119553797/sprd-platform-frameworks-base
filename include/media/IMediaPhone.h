@@ -42,6 +42,7 @@ public:
     virtual status_t	stop() = 0;
     virtual status_t    release() = 0;
     virtual status_t	setDecodeType(int type) = 0;
+    virtual status_t	setEncodeType(int type) = 0;
     virtual status_t	setAudioStreamType(int type) = 0;
     virtual status_t	setVolume(float leftVolume, float rightVolume) = 0;
     virtual status_t    enableRecord(bool isEnable, int type, int fd) = 0;

@@ -327,31 +327,6 @@ android_media_MediaPhone_prepareAsync(JNIEnv *env, jobject thiz)
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return;
     }
-    jobject surface = env->GetObjectField(thiz, fields.remote_surface);
-    if (surface != NULL) {
-        const sp<Surface> native_surface = get_surface(env, surface);
-        LOGV("setRemote: surface=%p (id=%d)",
-             native_surface.get(), native_surface->getIdentity());
-        mp->setRemoteSurface(native_surface);
-    }
-    surface = env->GetObjectField(thiz, fields.local_surface);
-    if (surface != NULL) {
-        const sp<Surface> native_surface = get_surface(env, surface);
-
-        // The application may misbehave and
-        // the preview surface becomes unavailable
-        if (native_surface.get() == 0) {
-            LOGE("Application lost the surface");
-            jniThrowException(env, "java/io/IOException", "invalid preview surface");
-            return;
-        }
-
-        LOGI("setLocal: surface=%p (identity=%d)", native_surface.get(), native_surface->getIdentity());
-        if (process_media_phone_call(env, thiz, mp->setLocalSurface(native_surface), "java/lang/RuntimeException", "setPreviewSurface failed.")) {
-            return;
-        }
-    }
-    
     process_media_phone_call( env, thiz, mp->prepareAsync(), "java/io/IOException", "Prepare Async failed." );
 }
 
@@ -426,6 +401,18 @@ android_media_MediaPhone_setDecodeType(JNIEnv *env, jobject thiz, jint type)
         return;
     }
     process_media_phone_call(env, thiz, mp->setDecodeType(type) , NULL, NULL);
+}
+
+static void
+android_media_MediaPhone_setEncodeType(JNIEnv *env, jobject thiz, jint type)
+{
+    LOGV("setEncodeType: %d", type);
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    process_media_phone_call(env, thiz, mp->setEncodeType(type) , NULL, NULL);
 }
 
 static void
@@ -638,6 +625,7 @@ static JNINativeMethod gMethods[] = {
     {"getVideoHeight",       "()I",                             (void *)android_media_MediaPhone_getVideoHeight},
     {"_release",             "()V",                             (void *)android_media_MediaPhone_release},
     {"setDecodeType",   	 "(I)V",                            (void *)android_media_MediaPhone_setDecodeType},
+    {"setEncodeType",   	 "(I)V",                            (void *)android_media_MediaPhone_setEncodeType},
     {"setAudioStreamType",   "(I)V",                            (void *)android_media_MediaPhone_setAudioStreamType},
     {"setVolume",            "(FF)V",                           (void *)android_media_MediaPhone_setVolume},
     {"_enableRecord",        "(ZILjava/io/FileDescriptor;)V",   (void *)android_media_MediaPhone_enableRecord},
