@@ -760,6 +760,7 @@ public final class SprdRIL extends RIL {
 				 case RIL_REQUEST_GPRS_DETACH: ret = responseVoid(p); break;
 				 case RIL_REQUEST_GET_REMAIN_TIMES: ret =  responseInts(p); break;
 				 case RIL_REQUEST_GET_SIM_CAPACITY: ret =  responseStrings(p); break;
+				 case RIL_REQUEST_MMI_ENTER_SIM: ret =	responseInts(p); break;
 				 default:
 				 	throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
 							       //break;
@@ -1415,5 +1416,20 @@ public final class SprdRIL extends RIL {
 		 send(rr);
 
 	 }
+	 
+	 public void mmiEnterSim(String pukNewPin, Message result){
+
+		 RILRequest rr = RILRequest.obtain(RIL_REQUEST_MMI_ENTER_SIM, result);
+         
+		 rr.mp.writeString(pukNewPin);
+		 
+		 if (RILJ_LOGD) riljLog(rr.serialString() + "> " + sprdRequestToString(rr.mRequest));
+
+		 send(rr);
+
+	 }
+
+	   
+	 
  }
 

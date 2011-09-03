@@ -740,16 +740,16 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                     } else {
                         // pre-checks OK
                         if (sc.equals(SC_PIN)) {
-                            phone.mCM.changeIccPin(oldPinOrPuk, newPin,
+                            phone.mCM.mmiEnterSim(poundString,
                                     obtainMessage(EVENT_SET_COMPLETE, this));
                         } else if (sc.equals(SC_PIN2)) {
-                            phone.mCM.changeIccPin2(oldPinOrPuk, newPin,
+                            phone.mCM.mmiEnterSim(poundString,
                                     obtainMessage(EVENT_SET_COMPLETE, this));
                         } else if (sc.equals(SC_PUK)) {
-                            phone.mCM.supplyIccPuk(oldPinOrPuk, newPin,
+                            phone.mCM.mmiEnterSim(poundString,
                                     obtainMessage(EVENT_SET_COMPLETE, this));
                         } else if (sc.equals(SC_PUK2)) {
-                            phone.mCM.supplyIccPuk2(oldPinOrPuk, newPin,
+                            phone.mCM.mmiEnterSim(poundString,
                                     obtainMessage(EVENT_SET_COMPLETE, this));
                         }
                     }
