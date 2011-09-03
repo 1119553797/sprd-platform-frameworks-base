@@ -541,6 +541,14 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
         return isUssdRequest;
     }
 
+    private boolean isRightTime(int time) {
+        if ((time == 5) || (time == 10) || (time == 15) ||
+	        (time == 20) || (time == 25) || (time == 30)) {
+	   return true;	
+	}
+        return false;	
+    }
+
     /** Process a MMI code or short code...anything that isn't a dialing number */
     void
     processCode () {
@@ -628,6 +636,21 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                     int isEnableDesired =
                         ((cfAction == CommandsInterface.CF_ACTION_ENABLE) ||
                                 (cfAction == CommandsInterface.CF_ACTION_REGISTRATION)) ? 1 : 0;
+
+		    if (time != 0) {
+		        if ((cfAction == CommandsInterface.CF_ACTION_ENABLE) &&
+	                        (dialingNumber != null && dialingNumber.length() != 0)) {
+                            cfAction = CommandsInterface.CF_ACTION_REGISTRATION;
+		        }
+
+		        if ((cfAction == CommandsInterface.CF_ACTION_REGISTRATION) && 
+			        !isRightTime(time)) {
+                            state = State.FAILED;
+                            message = context.getText(com.android.internal.R.string.mmiError);
+                            phone.onMMIDone(this);
+			    return;
+		        }  
+		    }
 
                     Log.d(LOG_TAG, "is CF setCallForward");
                     phone.mCM.setCallForward(cfAction, reason, serviceClass,
