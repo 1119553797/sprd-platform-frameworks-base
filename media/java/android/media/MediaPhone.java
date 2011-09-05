@@ -152,7 +152,7 @@ public class MediaPhone extends Handler
      * This call is optional. Not calling it when playing back a video will
      * result in only the audio track being played.
      *
-     * @param sh the SurfaceHolder to use for video display
+     * @param sv the SurfaceHolder to use for video display
      */
     public void setRemoteDisplay(Surface sv) {
         mRemoteSurface = sv;
@@ -550,8 +550,6 @@ public class MediaPhone extends Handler
      * This API will return successfully when the up link is already started.
      * The fake camera is used for sending alternative picture or video(not implemented yet) to remote.
      *
-     * @param isEnable enable or disable
-     * @param fd file descriptor for result video file
      */
     public native void startUpLink();
 
@@ -563,8 +561,6 @@ public class MediaPhone extends Handler
      * This API will return successfully when the up link is already started.
      * The fake camera is used for sending alternative picture or video(not implemented yet) to remote.
      *
-     * @param isEnable enable or disable
-     * @param fd file descriptor for result video file
      */
     public native void stopUpLink();
 	
