@@ -717,10 +717,8 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 		LOGE("nLen %d exceeds nSize %d", nLen, nSize);
 		return 0;
 	}
-#ifdef DUMP_FILE
-	dumpToFile(data, nLen);
-#endif
 	
+	char* pOrginData = data;
 	//LOGI("m_nNum %d, m_bHasMpeg4Header %d", m_nNum, m_bHasMpeg4Header);
 	if ((m_nNum == 0) && (!m_bHasMpeg4Header)){
 		if (!strcmp(m_strMime, MIME_MPEG4)){
@@ -742,6 +740,12 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 	if ((nTemp = nLen - nTemp) > 0)
 		memcpy(data,m_RingBuffer ,nTemp);
 	
+#ifdef DUMP_FILE
+	LOGI("[%p]dumpToFile 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, pOrginData[0], pOrginData[1], pOrginData[ 2], pOrginData[3]
+		, pOrginData[4], pOrginData[4], pOrginData[5], pOrginData[6]);
+	dumpToFile(pOrginData, (nLen + nExtraLen));
+#endif
+
 	m_nDataStart	= nEnd;
 	//LOGI("[%p]VideoPhoneSource::readRingBuffer END", this);	
 	return (nLen + nExtraLen);
