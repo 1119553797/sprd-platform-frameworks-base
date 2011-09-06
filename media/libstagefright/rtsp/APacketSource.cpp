@@ -669,6 +669,8 @@ status_t APacketSource::start(MetaData *params) {
 }
 
 status_t APacketSource::stop() {
+     LOGE("stopping ");
+     signalEOS(ERROR_END_OF_STREAM);
     return OK;
 }
 
@@ -679,11 +681,12 @@ sp<MetaData> APacketSource::getFormat() {
 status_t APacketSource::read(
         MediaBuffer **out, const ReadOptions *) {
     *out = NULL;
-
+//	LOGE("read entering... ");
     Mutex::Autolock autoLock(mLock);
-    while (mEOSResult == OK && mBuffers.empty()) {
+    while (mEOSResult == OK && mBuffers.empty()) {  //@hong not check empty for unkown error.
         mCondition.wait(mLock);
     }
+//	LOGE("read ok..");
 
     if (!mBuffers.empty()) {
         const sp<ABuffer> buffer = *mBuffers.begin();

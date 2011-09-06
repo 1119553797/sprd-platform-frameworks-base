@@ -468,7 +468,10 @@ void AwesomePlayer::reset_l() {
 	LOGI("cancel event");
     cancelPlayerEvents();
 
+
+
     mCachedSource.clear();
+
     mAudioTrack.clear();
     mVideoTrack.clear();
 LOGI("cancel clear ok");
@@ -503,6 +506,7 @@ LOGI(" mLastVideoBuffer release ok");
     }
 LOGI(" mVideoBuffer->release release ok");
 
+
     if (mRTSPController != NULL) {
         mRTSPController->disconnect();
         mRTSPController.clear();
@@ -513,6 +517,7 @@ LOGI(" mRTSPController->disconnect ok");
     mRTCPPusher.clear();
     mRTPSession.clear();
 LOGI(" mRTP clear ok");
+
 
     if (mVideoSource != NULL) {
         mVideoSource->stop();
@@ -942,7 +947,11 @@ status_t AwesomePlayer::initRenderer_l() {
 
 status_t AwesomePlayer::forceStop(){
     LOGV("forceStop");
-	   
+
+    if (mRTSPController != NULL) {  //@hong
+        mRTSPController->stopSource();
+   	}
+   
 	VideoPhoneDataDevice::getInstance().stop();
 	return pause();
 }
