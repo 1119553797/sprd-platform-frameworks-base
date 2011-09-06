@@ -646,7 +646,11 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
 		        if ((cfAction == CommandsInterface.CF_ACTION_REGISTRATION) && 
 			        !isRightTime(time)) {
                             state = State.FAILED;
-                            message = context.getText(com.android.internal.R.string.mmiError);
+                            StringBuilder sb = new StringBuilder(getScString());
+                            sb.append("\n");
+                            sb.append(context.getText(
+                                com.android.internal.R.string.mmiError));
+                            message = sb;
                             phone.onMMIDone(this);
 			    return;
 		        }  
@@ -962,7 +966,8 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                     sb.append(context.getText(
                             com.android.internal.R.string.needPuk2));
                 } else if (err == CommandException.Error.GENERIC_FAILURE) {
-                    if (isServiceCodeCallBarring(sc) || sc.equals(SC_WAIT)) {
+                    if (isServiceCodeCallBarring(sc) || sc.equals(SC_WAIT) ||
+	                    isServiceCodeCallForwarding(sc)) {
                         sb.append(context.getText(
                                 com.android.internal.R.string.OprNotComplete));
 		    } else if (sc.equals(SC_PWD)) {
@@ -1173,7 +1178,8 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
         destinations[1] = PhoneNumberUtils.stringFromStringAndTOA(info.number, info.toa);
         destinations[2] = Integer.toString(info.timeSeconds);
 
-        if (info.reason == CommandsInterface.CF_REASON_UNCONDITIONAL &&
+	int reason = scToCallForwardReason(sc);
+        if (reason == CommandsInterface.CF_REASON_UNCONDITIONAL &&
                 (info.serviceClass & serviceClassMask)
                         == CommandsInterface.SERVICE_CLASS_VOICE) {
             boolean cffEnabled = (info.status == 1);
