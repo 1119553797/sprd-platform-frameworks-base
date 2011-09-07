@@ -336,6 +336,10 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     protected void setState(State s) {
         if (DBG) log ("setState: " + s);
         if (state != s) {
+            if (state == State.DISCONNECTING && s == State.CONNECTED) {
+                if (DBG) log("setState: DISCONNECTING=>CONNECTED ignore state change");
+                return;
+            }
             EventLog.writeEvent(EventLogTags.GSM_DATA_STATE_CHANGE, state.toString(), s.toString());
             state = s;
         }
