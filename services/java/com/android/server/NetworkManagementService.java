@@ -69,6 +69,9 @@ class NetworkManagementService extends INetworkManagementService.Stub {
         public static final int InterfaceTxCounterResult  = 217;
         public static final int InterfaceRxThrottleResult = 218;
         public static final int InterfaceTxThrottleResult = 219;
+        public static final int UsbGserStatusResult      = 220;
+        public static final int UsbVserStatusResult      = 221;
+        public static final int UsbUdcpowerStatusResult  = 222;
 
         public static final int InterfaceChange           = 600;
     }
@@ -469,6 +472,102 @@ class NetworkManagementService extends INetworkManagementService.Stub {
         }
         throw new IllegalStateException("Got an empty response");
     }
+    
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> begin
+    public void startUsbUdcpower() throws IllegalStateException{
+    	mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.CHANGE_NETWORK_STATE, "NetworkManagementService");
+    	mConnector.doCommand("usb startudcpower");
+    }
+    
+    public void stopUsbUdcpower() throws IllegalStateException{
+    	mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.CHANGE_NETWORK_STATE, "NetworkManagementService");
+    	mConnector.doCommand("usb stopudcpower");
+    }
+    
+    public boolean isUsbUdcpowerStarted() throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
+        ArrayList<String> rsp = mConnector.doCommand("usb udcpowerstatus");
+
+        for (String line : rsp) {
+            String []tok = line.split(" ");
+            int code = Integer.parseInt(tok[0]);
+            if (code == NetdResponseCode.UsbUdcpowerStatusResult) {
+                if (tok[3].equals("started"))
+                    return true;
+                return false;
+            } else {
+                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+            }
+        }
+        throw new IllegalStateException("Got an empty response");
+    }
+    
+    public void startUsbGser() throws IllegalStateException{
+    	mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.CHANGE_NETWORK_STATE, "NetworkManagementService");
+    	mConnector.doCommand("usb startgser");
+    }
+    
+    public void stopUsbGser() throws IllegalStateException{
+    	mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.CHANGE_NETWORK_STATE, "NetworkManagementService");
+    	mConnector.doCommand("usb stopgser");
+    }
+    
+    public boolean isUsbGserStarted() throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
+        ArrayList<String> rsp = mConnector.doCommand("usb gserstatus");
+
+        for (String line : rsp) {
+            String []tok = line.split(" ");
+            int code = Integer.parseInt(tok[0]);
+            if (code == NetdResponseCode.UsbGserStatusResult) {
+                if (tok[3].equals("started"))
+                    return true;
+                return false;
+            } else {
+                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+            }
+        }
+        throw new IllegalStateException("Got an empty response");
+    }
+    
+    public void startUsbVser() throws IllegalStateException{
+    	mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.CHANGE_NETWORK_STATE, "NetworkManagementService");
+    	mConnector.doCommand("usb startvser");
+    }
+    
+    public void stopUsbVser() throws IllegalStateException{
+    	mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.CHANGE_NETWORK_STATE, "NetworkManagementService");
+    	mConnector.doCommand("usb stopvser");
+    }
+    
+    public boolean isUsbVserStarted() throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
+        ArrayList<String> rsp = mConnector.doCommand("usb vserstatus");
+
+        for (String line : rsp) {
+            String []tok = line.split(" ");
+            int code = Integer.parseInt(tok[0]);
+            if (code == NetdResponseCode.UsbVserStatusResult) {
+                if (tok[3].equals("started"))
+                    return true;
+                return false;
+            } else {
+                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+            }
+        }
+        throw new IllegalStateException("Got an empty response");
+    }
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> end
+    
 
     public void startAccessPoint(WifiConfiguration wifiConfig, String wlanIface, String softapIface)
              throws IllegalStateException {

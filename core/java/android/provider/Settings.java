@@ -720,9 +720,13 @@ public final class Settings {
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_COUNT);
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_DELAY_MS);
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS);
-            //Add by liguxiang 07-08-11 for USB settings function begin
+            //add by liguxiang 08-29-11 for spreadtrum usb settings <udcpower && gser && vser> begin
+            MOVED_TO_SECURE.add(Secure.CHARGE_ONLY);  
+            MOVED_TO_SECURE.add(Secure.RNDIS_ENABLED);
+            MOVED_TO_SECURE.add(Secure.UMS_MOUNTED);  
             MOVED_TO_SECURE.add(Secure.MODEM_ENABLED);
-            //Add by liguxiang 07-08-11 for USB settings function end
+            MOVED_TO_SECURE.add(Secure.REMEMBER_USB_CHOICE);  
+            //add by liguxiang 08-29-11 for spreadtrum usb settings <udcpower && gser && vser> end
         }
 
         /**
@@ -1813,11 +1817,6 @@ public final class Settings {
         @Deprecated
         public static final String ADB_ENABLED = Secure.ADB_ENABLED;
         
-        //Add by liguxiang 07-08-11 for USB settings function begin
-        @Deprecated
-        public static final String VSERIAL_ENABLED = Secure.MODEM_ENABLED;
-        //Add by liguxiang 07-08-11 for USB settings function end
-
         /**
          * @deprecated Use {@link android.provider.Settings.Secure#ANDROID_ID} instead
          */
@@ -2307,9 +2306,32 @@ public final class Settings {
          */
         public static final String ADB_ENABLED = "adb_enabled";
         
-        //Add by liguxiang 07-08-11 for USB settings function begin
+        //add by liguxiang 08-29-11 for spreadtrum usb settings <udcpower && gser && vser> begin
+        /**
+         * Whether CHARGE_ONLY is enabled.
+         */
+        public static final String CHARGE_ONLY = "charge_only"; 
+        
+        /**
+         * Whether CHARGE_ONLY is enabled.
+         */
+        public static final String RNDIS_ENABLED = "rndis_enabled"; 
+        
+        /**
+         * Whether UMS_MOUNTED is enabled.
+         */
+        public static final String UMS_MOUNTED = "ums_mounted";  
+        
+        /**
+         * Whether MODEMLOG(GSER&&VSER) is enabled.
+         */
         public static final String MODEM_ENABLED = "modem_enabled";
-        //Add by liguxiang 07-08-11 for USB settings function end
+        
+        /**
+         * Whether remember choice for usb.
+         */
+        public static final String REMEMBER_USB_CHOICE = "remember_usb_choice"; 
+        //add by liguxiang 08-29-11 for spreadtrum usb settings <udcpower && gser && vser> end
         
         /**
          * Setting to allow mock locations and location provider status to be injected into the
@@ -3465,9 +3487,13 @@ public final class Settings {
             MOUNT_UMS_PROMPT,
             MOUNT_UMS_NOTIFY_ENABLED,
             UI_NIGHT_MODE,
-            //Add by liguxiang 07-08-11 for USB settings function begin
-            MODEM_ENABLED
-            //Add by liguxiang 07-08-11 for USB settings function end
+            //add by liguxiang 08-29-11 for spreadtrum usb settings <udcpower && gser && vser> begin
+            CHARGE_ONLY,
+            RNDIS_ENABLED,
+            UMS_MOUNTED,
+            MODEM_ENABLED,
+            REMEMBER_USB_CHOICE
+            //add by liguxiang 08-29-11 for spreadtrum usb settings <udcpower && gser && vser> end
         };
 
         /**

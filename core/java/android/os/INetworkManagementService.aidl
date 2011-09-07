@@ -206,5 +206,51 @@ interface INetworkManagementService
      * for the specified interface
      */
     int getInterfaceTxThrottle(String iface);
+    
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> begin
+    /**
+     * Turn on USB Udcpower support
+     */
+    void startUsbUdcpower();
 
+    /**
+     * Turn off USB Udcpower support
+     */
+    void stopUsbUdcpower();
+
+    /**
+     * Check the status of USB Udcpower support
+     */
+    boolean isUsbUdcpowerStarted();
+    
+    /**
+     * Turn on USB Gser support
+     */
+    void startUsbGser();
+
+    /**
+     * Turn off USB Gser support
+     */
+    void stopUsbGser();
+
+    /**
+     * Check the status of USB Gser support
+     */
+    boolean isUsbGserStarted();
+    
+    /**
+     * Turn on USB Vser support
+     */
+    void startUsbVser();
+
+    /**
+     * Turn off USB Vser support
+     */
+    void stopUsbVser();
+
+    /**
+     * Check the status of USB Vser support
+     */
+    boolean isUsbVserStarted();
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> end
 }

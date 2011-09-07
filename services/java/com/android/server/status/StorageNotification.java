@@ -43,6 +43,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 public class StorageNotification extends StorageEventListener {
     private static final String TAG = "StorageNotification";
@@ -116,6 +117,14 @@ public class StorageNotification extends StorageEventListener {
     public void onStorageStateChanged(String path, String oldState, String newState) {
         Slog.i(TAG, String.format(
                 "Media {%s} state changed from {%s} -> {%s}", path, oldState, newState));
+        //add by liguxiang 09-07-11 for spreadtrum usb settings begin
+        if(oldState.equals(Environment.MEDIA_SHARED) && newState.equals(Environment.MEDIA_CHECKING)){
+        	Log.d(TAG,"send usbIntent");
+            Intent usbIntent = new Intent("com.android.action.ums.operator");
+            mContext.sendBroadcast(usbIntent);
+        }
+        //add by liguxiang 09-07-11 for spreadtrum usb settings end
+
         if (newState.equals(Environment.MEDIA_SHARED)) {
             /*
              * Storage is now shared. Modify the UMS notification

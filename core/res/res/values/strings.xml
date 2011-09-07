@@ -2332,4 +2332,9 @@
     <string name="custom_china_mobile" >China Mobile</string>
     <string name="custom_china_unicom" >China Unicom</string>    
     <!-- add by liguxiang 08-19-11 for custom spn display end -->
+    
+    <!--add by liguxiang 08-30-11 for spreadtrum usb settings <udcpower> begin -->
+    <string name="charge_active_notification_message" >Charge only mode enabled</string>
+    <string name="charge_active_notification_title" >Use Charge only when usb connected</string>
+    <!--add by liguxiang 08-30-11 for spreadtrum usb settings <udcpower> end -->
 </resources>

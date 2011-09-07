@@ -72,4 +72,18 @@ interface IConnectivityManager
     String[] getTetherableUsbRegexs();
 
     String[] getTetherableWifiRegexs();
+    
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> begin
+    boolean enableUdcpower(boolean enabled);
+    boolean isUsbUdcpowerStarted();
+    
+    boolean enableGser(boolean enabled);
+    boolean isUsbGserStarted();
+    
+    boolean enableVser(boolean enabled);
+    boolean isUsbVserStarted();
+    
+    boolean isUsbRNDISStarted();
+    boolean isUsbConnected();
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> end
 }

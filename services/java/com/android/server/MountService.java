@@ -41,6 +41,7 @@ import android.os.SystemProperties;
 import android.util.Slog;
 import java.util.ArrayList;
 import java.util.HashSet;
+import android.util.Log;
 
 /**
  * MountService implements back-end services for platform storage
@@ -165,6 +166,11 @@ class MountService extends IMountService.Stub
         void handleFinished() {
             super.handleFinished();
             doShareUnshareVolume(path, method, true);
+            //add by liguxiang 09-07-11 for spreadtrum usb settings begin
+            Log.d(TAG,"send usbIntent");
+            Intent usbIntent = new Intent("com.android.action.ums.operator");
+            mContext.sendBroadcast(usbIntent);
+            //add by liguxiang 09-07-11 for spreadtrum usb settings end
         }
     }
 

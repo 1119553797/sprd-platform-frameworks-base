@@ -116,6 +116,10 @@ class NotificationManagerService extends INotificationManager.Stub
     private Notification mAdbNotification;
     
     //Add by liguxiang 07-08-11 for USB settings function begin
+    private boolean mChargeEnabled = false;
+    private boolean mChargeNotificationShown = false;
+    private Notification mChargeNotification;
+    
     private boolean mUmsEnabled = false;
     private boolean mUmsNotificationShown = false;
     private Notification mUmsNotification;
@@ -144,8 +148,8 @@ class NotificationManagerService extends INotificationManager.Stub
     private static final int BATTERY_BLINK_OFF = 2875;
     //Add by liguxiang 07-08-11 for USB settings function begin
     public enum UsbType{
+    	CHARGE,
     	RNDIS,
-    	ADB,
     	UMS,
         MODEM
     }
@@ -346,16 +350,16 @@ class NotificationManagerService extends INotificationManager.Stub
             } else if (action.equals(Intent.ACTION_UMS_CONNECTED)) {
                 mUsbConnected = true;
                 //Add by liguxiang 07-08-11 for USB settings function begin
-                //updateAdbNotification();
-                updateUsbNotification(UsbType.ADB,mAdbEnabled,mAdbNotificationShown);
+                updateAdbNotification();
+                updateUsbNotification(UsbType.CHARGE,mAdbEnabled,mAdbNotificationShown);
                 updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
                 updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
               //Add by liguxiang 07-08-11 for USB settings function end
             } else if (action.equals(Intent.ACTION_UMS_DISCONNECTED)) {
                 mUsbConnected = false;
               //Add by liguxiang 07-08-11 for USB settings function begin
-                //updateAdbNotification();
-                updateUsbNotification(UsbType.ADB,mAdbEnabled,mAdbNotificationShown);
+                updateAdbNotification();
+                updateUsbNotification(UsbType.CHARGE,mAdbEnabled,mAdbNotificationShown);
                 updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
                 updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
               //Add by liguxiang 07-08-11 for USB settings function end
@@ -409,7 +413,10 @@ class NotificationManagerService extends INotificationManager.Stub
             
             //Add by liguxiang 07-08-11 for USB settings function begin
             resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.USB_MASS_STORAGE_ENABLED), false, this);
+                    Settings.Secure.CHARGE_ONLY), false, this);
+            
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.UMS_MOUNTED), false, this);
             
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.MODEM_ENABLED), false, this);
@@ -430,8 +437,11 @@ class NotificationManagerService extends INotificationManager.Stub
                         Settings.Secure.ADB_ENABLED, 0) != 0;
             
             //Add by liguxiang 07-08-11 for USB settings function begin
+            boolean chargeEnabled = Settings.Secure.getInt(resolver,
+                    Settings.Secure.CHARGE_ONLY, 0) != 0;
+            
             boolean umsEnabled = Settings.Secure.getInt(resolver,
-                    Settings.Secure.USB_MASS_STORAGE_ENABLED, 0) != 0;
+                    Settings.Secure.UMS_MOUNTED, 0) != 0;
             
             boolean modemEnabled = Settings.Secure.getInt(resolver,
                     Settings.Secure.MODEM_ENABLED, 0) != 0;
@@ -441,12 +451,16 @@ class NotificationManagerService extends INotificationManager.Stub
             if (mAdbEnabled != adbEnabled) {
                 mAdbEnabled = adbEnabled;
                 //Modify by liguxiang 07-08-11 for USB settings function begin
-                //updateAdbNotification();
-                updateUsbNotification(UsbType.ADB,mAdbEnabled,mAdbNotificationShown);
+                updateAdbNotification();
                 //Modify by liguxiang 07-08-11 for USB settings function end
             }
             
             //Add by liguxiang 07-08-11 for USB settings function begin
+            if (mChargeEnabled != chargeEnabled) {
+            	mChargeEnabled = chargeEnabled;
+                updateUsbNotification(UsbType.CHARGE,mChargeEnabled,mChargeNotificationShown);
+            }
+            
             if (mUmsEnabled != umsEnabled) {
             	mUmsEnabled = umsEnabled;
                 updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
@@ -1239,9 +1253,6 @@ class NotificationManagerService extends INotificationManager.Stub
     }
     
     private void updateUsbNotification(UsbType usbtype,boolean usbEnabled,boolean usbNotificationShown) {
-    	if (usbtype == UsbType.ADB && ("0".equals(SystemProperties.get("persist.adb.notify")))) {
-            return;
-        }
         if (usbEnabled && mUsbConnected) {
             if (!usbNotificationShown) {
                 NotificationManager notificationManager = (NotificationManager) mContext
@@ -1258,28 +1269,28 @@ class NotificationManagerService extends INotificationManager.Stub
                     PendingIntent pi = PendingIntent.getActivity(mContext, 0,intent, 0);
                     
                     switch(usbtype){
-                    case ADB:
+                    case CHARGE:
                     	CharSequence title = r.getText(
-                                com.android.internal.R.string.adb_active_notification_title);
+                                com.android.internal.R.string.charge_active_notification_title);
                         CharSequence message = r.getText(
-                                com.android.internal.R.string.adb_active_notification_message);
+                                com.android.internal.R.string.charge_active_notification_message);
 
-                        if (mAdbNotification == null) {
-                            mAdbNotification = new Notification();
-                            mAdbNotification.icon = com.android.internal.R.drawable.stat_sys_adb;
-                            mAdbNotification.when = 0;
-                            mAdbNotification.flags = Notification.FLAG_ONGOING_EVENT;
-                            mAdbNotification.tickerText = title;
-                            mAdbNotification.defaults = 0; // please be quiet
-                            mAdbNotification.sound = null;
-                            mAdbNotification.vibrate = null;
+                        if (mChargeNotification == null) {
+                        	mChargeNotification = new Notification();
+                        	mChargeNotification.icon = com.android.internal.R.drawable.stat_sys_charge_only;
+                        	mChargeNotification.when = 0;
+                        	mChargeNotification.flags = Notification.FLAG_ONGOING_EVENT;
+                        	mChargeNotification.tickerText = title;
+                        	mChargeNotification.defaults = 0; // please be quiet
+                        	mChargeNotification.sound = null;
+                        	mChargeNotification.vibrate = null;
                         }
                         
-                        mAdbNotification.setLatestEventInfo(mContext, title, message, pi);
-                        	mAdbNotificationShown = true;
+                        mChargeNotification.setLatestEventInfo(mContext, title, message, pi);
+                        	mChargeNotificationShown = true;
                         	notificationManager.notify(
-                                    com.android.internal.R.string.adb_active_notification_title,
-                                    mAdbNotification);
+                                    com.android.internal.R.string.charge_active_notification_title,
+                                    mChargeNotification);
                         break;
                         
                     case UMS:
@@ -1340,10 +1351,10 @@ class NotificationManagerService extends INotificationManager.Stub
             NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             if (notificationManager != null) {
             	switch(usbtype){
-            	case ADB:
-            		mAdbNotificationShown = false;
+            	case CHARGE:
+            		mChargeNotificationShown = false;
                     notificationManager.cancel(
-                            com.android.internal.R.string.adb_active_notification_title);
+                            com.android.internal.R.string.charge_active_notification_title);
                     break;
                     
             	case UMS:

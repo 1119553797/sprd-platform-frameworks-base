@@ -455,6 +455,104 @@ public class ConnectivityManager
             return TETHER_ERROR_SERVICE_UNAVAIL;
         }
     }
+    
+    /**
+     * @return error A false value indicating success or failure type
+     * {@hide}
+     */
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> begin
+    public boolean enableUdcpower(boolean enabled) {
+        try {
+            return mService.enableUdcpower(enabled);
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * @return error A false value indicating success or failure type
+     * {@hide}
+     */
+    public boolean isUsbUdcpowerStarted() {
+        try {
+            return mService.isUsbUdcpowerStarted();
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * @return error A false value indicating success or failure type
+     * {@hide}
+     */
+    public boolean enableGser(boolean enabled) {
+        try {
+            return mService.enableGser(enabled);
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * @return error A false value indicating success or failure type
+     * {@hide}
+     */
+    public boolean isUsbGserStarted() {
+        try {
+            return mService.isUsbGserStarted();
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * @return error A false value indicating success or failure type
+     * {@hide}
+     */
+    public boolean enableVser(boolean enabled) {
+        try {
+            return mService.enableVser(enabled);
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * @return error A false value indicating success or failure type
+     * {@hide}
+     */
+    public boolean isUsbVserStarted() {
+        try {
+            return mService.isUsbVserStarted();
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * @return error A false value indicating success or failure type
+     * {@hide}
+     */
+    public boolean isUsbConnected() {
+        try {
+            return mService.isUsbConnected();
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * @return error A false value indicating success or failure type
+     * {@hide}
+     */
+    public boolean isUsbRNDISStarted() {
+        try {
+            return mService.isUsbRNDISStarted();
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> end
 
     /**
      * {@hide}

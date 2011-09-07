@@ -1478,6 +1478,40 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             return ConnectivityManager.TETHER_ERROR_UNSUPPORTED;
         }
     }
+    
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> begin
+    public boolean enableUdcpower(boolean enabled){
+    	return mTethering.enableUsbUdcpower(enabled);
+    }
+    
+    public boolean isUsbUdcpowerStarted(){
+    	return mTethering.isUsbUdcpowerStarted();
+    }
+    
+    public boolean enableGser(boolean enabled){
+    	return mTethering.enableUsbGser(enabled);
+    }
+    
+    public boolean isUsbGserStarted(){
+    	return mTethering.isUsbGserStarted();
+    }
+    
+    public boolean enableVser(boolean enabled){
+    	return mTethering.enableUsbVser(enabled);
+    }
+    
+    public boolean isUsbVserStarted(){
+    	return mTethering.isUsbVserStarted();
+    }
+    
+    public boolean isUsbRNDISStarted(){
+    	return mTethering.isUsbRNDISStarted();
+    }
+    
+    public boolean isUsbConnected(){
+    	return mTethering.isUsbConnected();
+    }
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> end
 
     // javadoc from interface
     public int getLastTetherError(String iface) {

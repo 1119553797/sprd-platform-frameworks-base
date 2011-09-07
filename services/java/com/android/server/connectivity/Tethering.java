@@ -491,6 +491,131 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         }
         return true;
     }
+    
+    public boolean isUsbRNDISStarted(){
+    	IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+        INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+        try{
+        	 return service.isUsbRNDISStarted();
+       } catch (Exception e) {
+           Log.e(TAG, "Error toggling usb RNDIS :" + e);
+           return false;
+       }
+    }
+    
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> begin
+    public boolean enableUsbUdcpower(boolean enabled) {
+        Log.d(TAG, "enableUsbUdcpower(" + enabled + ")");
+        IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+                INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+
+        try {
+            if (enabled) {
+                synchronized (this) {
+                    if (!service.isUsbUdcpowerStarted()) {
+                        service.startUsbUdcpower();
+                    }
+                }
+            } else {
+                if (service.isUsbUdcpowerStarted()) {
+                    service.stopUsbUdcpower();
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error toggling usb Udcpower :" + e);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean isUsbUdcpowerStarted(){
+    	IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+        INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+        try{
+        	 return service.isUsbUdcpowerStarted();
+        } catch (Exception e) {
+            Log.e(TAG, "Error toggling usb Udcpower :" + e);
+            return false;
+        }
+       
+    }
+    
+    public boolean enableUsbGser(boolean enabled) {
+        Log.d(TAG, "enableUsbGser(" + enabled + ")");
+        IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+                INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+
+        try {
+            if (enabled) {
+                synchronized (this) {
+                    if (!service.isUsbGserStarted()) {
+                        service.startUsbGser();
+                    }
+                }
+            } else {
+                if (service.isUsbGserStarted()) {
+                    service.stopUsbGser();
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error toggling usb Gser :" + e);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean isUsbGserStarted(){
+    	IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+        INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+        try{
+        	return service.isUsbGserStarted();
+       } catch (Exception e) {
+           Log.e(TAG, "Error toggling usb Gser :" + e);
+           return false;
+       }
+    }
+    
+    public boolean enableUsbVser(boolean enabled) {
+        Log.d(TAG, "enableUsbVser(" + enabled + ")");
+        IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+                INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+
+        try {
+            if (enabled) {
+                synchronized (this) {
+                    if (!service.isUsbVserStarted()) {
+                        service.startUsbVser();
+                    }
+                }
+            } else {
+                if (service.isUsbVserStarted()) {
+                    service.stopUsbVser();
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error toggling usb Vser :" + e);
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean isUsbVserStarted(){
+    	IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+        INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+        try{
+        	return service.isUsbVserStarted();
+       } catch (Exception e) {
+           Log.e(TAG, "Error toggling usb Vser :" + e);
+           return false;
+       }
+    }
+    
+    public boolean isUsbConnected(){
+    	return mUsbConnected;
+    }
+    
+    //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> end
+
 
     // configured when we start tethering and unconfig'd on error or conclusion
     private boolean configureUsbIface(boolean enabled) {
