@@ -562,7 +562,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (isInPlaybackState() && mMediaController != null
-                ||(mCurrentState == STATE_IDLE )) {
+                ||(mCurrentState == STATE_IDLE && mMediaController != null )) {
             toggleMediaControlsVisiblity();
         }
         return false;
@@ -609,7 +609,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     }
 
     private void toggleMediaControlsVisiblity() {
-        if (mMediaController.isShowing()) {
+      	  if (mMediaController.isShowing()) {
             mMediaController.hide();
         } else {
             mMediaController.show();
