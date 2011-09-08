@@ -51,7 +51,7 @@
 
 #include <media/stagefright/foundation/ALooper.h>
 
-#define _SYNC_USE_SYSTEM_TIME_
+//#define _SYNC_USE_SYSTEM_TIME_
 
 namespace android {
 
@@ -1416,7 +1416,7 @@ void AwesomePlayer::onVideoEvent() {
         latenessUs = 0;
     }
 
-    if (latenessUs > 40000) {
+    if (latenessUs > 60000) {
         // We're more than 40ms late.
         LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
 
