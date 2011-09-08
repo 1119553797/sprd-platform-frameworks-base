@@ -21,8 +21,10 @@
 
 //#define DEBUG_FILE     "/data/vpin"
 //#define DUMP_FILE	"/data/vpout"
+//#define FEATURE_COMBINE_MPEG4_HEADER
 
 namespace android {
+
 VideoPhoneExtractor::VideoPhoneExtractor(const sp<DataSource> &source, int decodeType)
     : m_bHaveMetadata(false),
       mFileMetaData(new MetaData),
@@ -85,7 +87,8 @@ status_t VideoPhoneExtractor::readMetaData()
 		m_AVMeta->setCString(kKeyMIMEType, MIME_H263);
 	} else {
 		mFileMetaData->setCString(kKeyMIMEType, MIME_MPEG4);
-		m_AVMeta->setCString(kKeyMIMEType, MIME_MPEG4);
+		m_AVMeta->setCString(kKeyMIMEType, MIME_MPEG4);		
+		EsdsGenerator::generateEsds(m_AVMeta);
 	}
 		
 	m_AVMeta->setInt32(kKeyRotation, 0);
@@ -126,8 +129,9 @@ fail:
 #undef LOG_TAG
 #define LOG_TAG "VideoPhoneSource"
 
-uint8_t VideoPhoneSource::m_Mpeg4Header[1024] = {0};
+uint8_t VideoPhoneSource::m_Mpeg4Header[100] = {0};
 int VideoPhoneSource::m_iMpeg4Header_size = 0;
+
 static FILE* m_fWrite = 0;
 static FILE* m_fLen = 0;
 
@@ -429,9 +433,9 @@ status_t VideoPhoneSource::read(
 	if (err != OK)
 		goto fail;
 	
-	nSize = readRingBuffer((char*)pMediaBuffer->data(), pMediaBuffer->size());
+	nSize = readRingBuffer(pMediaBuffer);
 	if (nSize == 0){
-		err = NOT_ENOUGH_DATA;
+		err = ERROR_END_OF_STREAM;
 		goto fail;
 	}
 	
@@ -629,9 +633,11 @@ fail:
 }
 #endif
 
-int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
+int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 {
 	//LOGI("[%p]VideoPhoneSource::readRingBuffer START0", this);	
+	char* data = (char*)pMediaBuffer->data();
+	size_t nSize = pMediaBuffer->size();
 
 	if (m_RingBuffer == NULL)
 		return 0;
@@ -666,7 +672,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 			{
 				if (!bStartRead)
 				{
-					//LOGI("VideoPhoneSource::readRingBuffer START MEPGE4");
+					LOGI("[%p]VideoPhoneSource::readRingBuffer START MEPGE4", this);
 					if (bMpeg4Header) {
 						bMpeg4Header = false;
 						m_bHasMpeg4Header = true;
@@ -676,6 +682,9 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 					} else {
 						nStart		= nEnd;
 					}
+#ifndef FEATURE_COMBINE_MPEG4_HEADER
+					nStart		= nEnd;
+#endif
 					bStartRead 	= true;
 				}
 				else
@@ -686,7 +695,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 			{
 				if (!bStartRead)
 				{
-					//LOGI("VideoPhoneSource::readRingBuffer START VOP");
+					LOGI("[%p]VideoPhoneSource::readRingBuffer START VOP", this);
 					nStart		= nEnd;
 					bStartRead 	= true;
 				}
@@ -698,7 +707,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 			{
 				if (!bStartRead)
 				{
-					LOGI("VideoPhoneSource::readRingBuffer START MEPGE4 Header");
+					LOGI("[%p]VideoPhoneSource::readRingBuffer START MEPGE4 Header", this);
 					nStart		= nEnd;
 					bMpeg4Header = true;
 				}
@@ -719,6 +728,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 	}
 	
 	char* pOrginData = data;
+#ifdef FEATURE_COMBINE_MPEG4_HEADER
 	//LOGI("m_nNum %d, m_bHasMpeg4Header %d", m_nNum, m_bHasMpeg4Header);
 	if ((m_nNum == 0) && (!m_bHasMpeg4Header)){
 		if (!strcmp(m_strMime, MIME_MPEG4)){
@@ -728,6 +738,7 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 			LOGI("add mpeg4 header");
 		}
 	}
+#endif //FEATURE_COMBINE_MPEG4_HEADER
 
 	int nTemp = nLen;
 
@@ -739,8 +750,15 @@ int	VideoPhoneSource::readRingBuffer(char* data, size_t nSize)
 	
 	if ((nTemp = nLen - nTemp) > 0)
 		memcpy(data,m_RingBuffer ,nTemp);
-	
+
 #ifdef DUMP_FILE
+#ifndef FEATURE_COMBINE_MPEG4_HEADER
+	if ((m_nNum == 0) && m_bHasMpeg4Header) {
+		LOGI("[%p]dumpToFile 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, m_Mpeg4Header[0], m_Mpeg4Header[1], m_Mpeg4Header[ 2], m_Mpeg4Header[3]
+			, m_Mpeg4Header[4], m_Mpeg4Header[4], m_Mpeg4Header[5], m_Mpeg4Header[6]);
+		dumpToFile((char*)m_Mpeg4Header, m_iMpeg4Header_size);
+	}
+#endif
 	LOGI("[%p]dumpToFile 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, pOrginData[0], pOrginData[1], pOrginData[ 2], pOrginData[3]
 		, pOrginData[4], pOrginData[4], pOrginData[5], pOrginData[6]);
 	dumpToFile(pOrginData, (nLen + nExtraLen));
@@ -938,6 +956,103 @@ status_t VideoPhoneDataDevice::threadFunc()
         err = OK;
 		
     return err;
+}
+
+/////////////////////////////////////////////////////////////////////
+#undef LOG_TAG
+#define LOG_TAG "EsdsGenerator"
+
+uint8_t EsdsGenerator::m_Mpeg4Header[100] = {0x00, 0x00, 0x01, 0xb0, 0x14, 0x00, 0x00, 0x01, 0xb5, 0x09, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+ 0x01, 0x20, 0x00, 0x84, 0x40, 0xfa, 0x28, 0x2c, 0x20, 0x90, 0xa2, 0x1f, 0x00, 0x00, 0x00, 0x00};
+int EsdsGenerator::m_iMpeg4Header_size = 32;
+
+static EsdsGenerator* g_Esds = NULL;
+
+EsdsGenerator::EsdsGenerator()
+{
+	memset(m_EsdsBuffer, 0, 150);
+	m_iEsds_size = 0;
+}
+
+EsdsGenerator::~EsdsGenerator()
+{
+}
+
+void EsdsGenerator::generateEsds(sp<MetaData> AVMeta)
+{
+	LOGI("generateEsds()");
+
+	if (g_Esds == NULL) {
+		g_Esds = new EsdsGenerator();
+	}
+
+	if (g_Esds->m_iEsds_size > 0) {
+		AVMeta->setData(	kKeyESDS, 0, g_Esds->m_EsdsBuffer, g_Esds->m_iEsds_size);	
+		return;
+	}
+	
+	//writeInt32(0);			 // version=0, flags=0
+	g_Esds->writeInt8(0x03);  // ES_DescrTag
+	g_Esds->writeInt8(23 + m_iMpeg4Header_size);
+	g_Esds->writeInt16(0x0000);  // ES_ID
+	g_Esds->writeInt8(0x1f);
+	g_Esds->writeInt8(0x04);  // DecoderConfigDescrTag
+	g_Esds->writeInt8(15 + m_iMpeg4Header_size);
+	g_Esds->writeInt8(0x20);  // objectTypeIndication ISO/IEC 14492-2
+	g_Esds->writeInt8(0x11);  // streamType VisualStream
+	
+	static const uint8_t kData[] = {
+		0x01, 0x77, 0x00,
+		0x00, 0x03, 0xe8, 0x00,
+		0x00, 0x03, 0xe8, 0x00
+	};
+	g_Esds->writeEsds(kData, sizeof(kData));
+	
+	g_Esds->writeInt8(0x05);  // DecoderSpecificInfoTag
+	
+	g_Esds->writeInt8(m_iMpeg4Header_size);
+	g_Esds->writeEsds(m_Mpeg4Header, m_iMpeg4Header_size);
+	
+	static const uint8_t kData2[] = {
+		0x06,  // SLConfigDescriptorTag
+		0x01,
+		0x02
+	};
+	g_Esds->writeEsds(kData2, sizeof(kData2));
+	
+	AVMeta->setData(
+				kKeyESDS, 0,
+				g_Esds->m_EsdsBuffer, g_Esds->m_iEsds_size);	
+}
+
+void EsdsGenerator::writeEsds(const void *ptr, size_t size)
+{
+	if (m_iEsds_size + size > 1500) {
+		LOGE("writeEsds(), buffer overflow");
+		return;
+	}
+
+	memcpy(m_EsdsBuffer + m_iEsds_size, ptr, size);
+	m_iEsds_size += size;
+	LOGI("writeEsds(), size: %d, m_iEsds_size: %d", size, m_iEsds_size);
+}
+
+void EsdsGenerator::writeInt8(int8_t x)
+{
+	LOGI("writeInt8(), x: %d, 0x%x", x, x);
+	writeEsds(&x, 1);
+}
+
+void EsdsGenerator::writeInt16(int16_t x)
+{
+	LOGI("writeInt16(), x: %d, 0x%x", x, x);
+	writeEsds(&x, 2);
+}
+
+void EsdsGenerator::writeInt32(int32_t x)
+{
+	LOGI("writeInt32(), x: %d, 0x%x", x, x);
+	writeEsds(&x, 4);
 }
 
 }  // namespace android

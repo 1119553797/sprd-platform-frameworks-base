@@ -339,7 +339,7 @@ status_t MediaPhoneClient::setDecodeType(int type)
 
 status_t MediaPhoneClient::setEncodeType(int type)
 {
-	type = 1;
+    type = 1;
     LOGV("setEncodeType(%d)", type);
     Mutex::Autolock l(mLock);
 	mEncodeType = type;
@@ -377,7 +377,7 @@ status_t MediaPhoneClient::enableRecord(bool isEnable, int type, int fd)
 	        CHECK_RT(mRecordRecorder->setVideoFrameRate(15));
 	        CHECK_RT(mRecordRecorder->setVideoSize(176, 144));
 	        CHECK_RT(mRecordRecorder->setParameters(String8("video-param-encoding-bitrate=48000")));
-	        CHECK_RT(mRecordRecorder->setVideoEncoder(VIDEO_ENCODER_H263));
+	        CHECK_RT(mRecordRecorder->setVideoEncoder((mEncodeType == 1)?VIDEO_ENCODER_H263:VIDEO_ENCODER_MPEG_4_SP));
 		}
 		if ((type == 0) || (type == 1)){
         	CHECK_RT(mRecordRecorder->setAudioSource(AUDIO_SOURCE_VOICE_CALL));

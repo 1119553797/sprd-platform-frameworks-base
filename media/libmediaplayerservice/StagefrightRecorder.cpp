@@ -1157,6 +1157,7 @@ status_t StagefrightRecorder::startMPEG4Recording() {
    	 }		
 	AVMeta->setInt32(kKeyWidth, mVideoWidth);
 	AVMeta->setInt32(kKeyHeight, mVideoHeight);
+	EsdsGenerator::generateEsds(AVMeta);
     	sp<MediaSource> videoPhoneVideoES = new VideoPhoneSource(AVMeta,NULL);
         writer->addSource(videoPhoneVideoES);
         totalBitRate += mVideoBitRate;		 

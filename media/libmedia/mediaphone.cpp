@@ -225,11 +225,6 @@ status_t MediaPhone::stop()
         LOGE("stop called in an invalid state: %d", mCurrentState);
         return INVALID_OPERATION;
     }
-    if (mIsRecording) {
-        LOGE("should stop recording first");
-        //return INVALID_OPERATION;
-        mMediaPhone->enableRecord(false, 0, 0);
-    }
 
     status_t ret = mMediaPhone->stop();
     if (OK != ret) {
@@ -238,6 +233,11 @@ status_t MediaPhone::stop()
         return ret;
     }
 	
+    if (mIsRecording) {
+        LOGE("should stop recording first");
+        //return INVALID_OPERATION;
+        mMediaPhone->enableRecord(false, 0, 0);
+    }
 	mPrepareSync = false;
     mCurrentState = MEDIA_PHONE_IDLE;
     return ret;

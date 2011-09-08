@@ -63,7 +63,7 @@ private:
 #endif
 	int			writeRingBuffer(char* data,int nLen);
 
-	int			readRingBuffer(char* data, size_t nSize);
+	int			readRingBuffer(MediaBuffer *pMediaBuffer);
 		
 private:
 	//bool				m_bFirstGet;
@@ -90,7 +90,7 @@ private:
         int64_t			m_nInitialDelayUs;
 		
 	uint8_t*			m_RingBuffer;
-	static uint8_t		m_Mpeg4Header[1024];
+	static uint8_t		m_Mpeg4Header[100];
 	static int			m_iMpeg4Header_size;
 	bool				m_bHasMpeg4Header;
 
@@ -126,9 +126,8 @@ public:
 protected:
 	
     virtual 	~VideoPhoneExtractor();
-
-private:
 	
+private:	
 	status_t	readMetaData();
 
 private:
@@ -171,5 +170,25 @@ private:
     bool mStarted;
 };
 
+class EsdsGenerator{
+public:
+	static void	generateEsds(sp<MetaData> AVMeta);
+	
+private:
+	EsdsGenerator();
+	~EsdsGenerator();
+	void			writeEsds(const void *ptr, size_t size);
+	void			writeInt8(int8_t x);
+	void			writeInt16(int16_t x);
+	void			writeInt32(int32_t x);
+	
+private:
+	static uint8_t		m_Mpeg4Header[100];
+	static int			m_iMpeg4Header_size;
+	static bool		m_bEsdsOK;
+	bool				m_bHasMpeg4Header;
+	uint8_t			m_EsdsBuffer[150];
+	int				m_iEsds_size;
+};
 }  // namespace android
 #endif
