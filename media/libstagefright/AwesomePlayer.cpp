@@ -680,14 +680,15 @@ void AwesomePlayer::onBufferingUpdate() {
             mFlags |= CACHE_UNDERRUN;
             pause_l();
             notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);  //@hong
-        } else if (eos || cachedDurationUs > kHighWaterMarkUs) {
-            if (mFlags & CACHE_UNDERRUN) {
+        } else // if (eos || cachedDurationUs > kHighWaterMarkUs) 
+             {
+            if ((eos || cachedDurationUs > kHighWaterMarkUs) && (mFlags & CACHE_UNDERRUN)) { //@hong
                 LOGI("cache has filled up (%.2f secs), resuming.",
                      cachedDurationUs / 1E6);
                 mFlags &= ~CACHE_UNDERRUN;
                 play_l();
                 notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); //@hong
-            } else if (mFlags & PREPARING) {
+            } else if ((eos || cachedDurationUs > 1100000ll /*kHighWaterMarkUs*/) && (mFlags & PREPARING)) { //@hong
                 LOGV("cache has filled up (%.2f secs), prepare is done",
                      cachedDurationUs / 1E6);
                 finishAsyncPrepare_l();
@@ -1486,7 +1487,7 @@ void AwesomePlayer::postBufferingEvent_l() {
         return;
     }
     mBufferingEventPending = true;
-    mQueue.postEventWithDelay(mBufferingEvent, 1000000ll);
+    mQueue.postEventWithDelay(mBufferingEvent, 500000ll); //@hong 1000000ll
 }
 
 void AwesomePlayer::postCheckAudioStatusEvent_l() {
