@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "MP3Extractor"
 #include <utils/Log.h>
 
@@ -311,7 +311,7 @@ static bool Resync(
     if (*inout_pos == 0) {
         // Skip an optional ID3 header if syncing at the very beginning
         // of the datasource.
-
+	 LOGV("Skip an optional ID3 header");
         for (;;) {
             uint8_t id3header[10];
             if (source->readAt(*inout_pos, id3header, sizeof(id3header))
@@ -709,7 +709,7 @@ status_t MP3Source::read(
         }
 
         // Lost sync.
-        LOGV("lost sync! header = 0x%08x, old header = 0x%08x\n", header, mFixedHeader);
+        LOGV("lost sync! header = 0x%08x, old header = 0x%08x, mCurrentPos = %ld, mByteNumber %d\n", header, mFixedHeader,mCurrentPos,mByteNumber);
 
         off_t pos = mCurrentPos;
         if (!Resync(mDataSource, mFixedHeader, &pos, NULL)) {
