@@ -118,10 +118,12 @@ public class StorageNotification extends StorageEventListener {
         Slog.i(TAG, String.format(
                 "Media {%s} state changed from {%s} -> {%s}", path, oldState, newState));
         //add by liguxiang 09-07-11 for spreadtrum usb settings begin
-        if(oldState.equals(Environment.MEDIA_SHARED) && newState.equals(Environment.MEDIA_CHECKING)){
-        	Log.d(TAG,"send usbIntent");
-            Intent usbIntent = new Intent("com.android.action.ums.operator");
-            mContext.sendBroadcast(usbIntent);
+        if(oldState != null && newState != null){
+        	if(oldState.equals(Environment.MEDIA_SHARED) && newState.equals(Environment.MEDIA_CHECKING)){
+            	Log.d(TAG,"send usbIntent");
+                Intent usbIntent = new Intent("com.android.action.ums.operator");
+                mContext.sendBroadcast(usbIntent);
+            }
         }
         //add by liguxiang 09-07-11 for spreadtrum usb settings end
 
