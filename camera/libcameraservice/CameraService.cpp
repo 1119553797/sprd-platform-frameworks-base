@@ -527,7 +527,7 @@ status_t CameraService::Client::startCameraMode(camera_mode mode)
     case CAMERA_RECORDING_MODE:
         if (mSurface == 0) {
             LOGE("setPreviewDisplay must be called before startRecordingMode.");
-            return INVALID_OPERATION;
+    	    //return INVALID_OPERATION; //wxz20110913: delete it for VT. VT need to record even if surface is null in some case
         }
         return startRecordingMode();
 
