@@ -906,4 +906,8 @@
     <string name="charge_active_notification_message" >已启用仅充电模式</string>
     <string name="charge_active_notification_title" >当USB连接时仅使用充电功能</string>
     <!--add by liguxiang 08-30-11 for spreadtrum usb settings <udcpower> end -->
+
+	<!--modify by zhaoming at 2011-09-09 for <NEWMS00115314> begin-->
+    <string name="shutdown_after_seconds">您的手机会在<xliff:g id="NUMBER">%d</xliff:g>秒后关机</string>
+	<!--modify by zhaoming at 2011-09-09 for <NEWMS00115314> end-->
 </resources>

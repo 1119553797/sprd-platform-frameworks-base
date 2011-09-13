@@ -43,6 +43,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+//modify by zhaoming at 2011-09-09 for <NEWMS00115314> begin
+import android.app.KeyguardManager;
+//modify by zhaoming at 2011-09-09 for <NEWMS00115314> end
 
 /**
  * <p>BatteryService monitors the charging status, and charge level of the device
@@ -184,7 +187,17 @@ class BatteryService extends Binder {
         // shut down gracefully if our battery is critically low and we are not powered.
         // wait until the system has booted before attempting to display the shutdown dialog.
         if (mBatteryLevel == 0 && !isPowered() && ActivityManagerNative.isSystemReady()) {
-            Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
+			//modify by zhaoming at 2011-09-09 for <NEWMS00115314> begin
+            //Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
+			Intent intent;
+			KeyguardManager km=(KeyguardManager)mContext.getSystemService(Context.KEYGUARD_SERVICE);
+			if(km.inKeyguardRestrictedInputMode()){
+				intent=new Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN_FULLSCREEN");
+			}
+			else{
+				intent= new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
+			}
+			//modify by zhaoming at 2011-09-09 for <NEWMS00115314> end
             intent.putExtra(Intent.EXTRA_KEY_CONFIRM, false);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);

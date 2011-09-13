@@ -1295,7 +1295,16 @@
                 android:exported="true">
         </activity>
 
-        <activity android:name="com.android.server.ShutdownActivity"
+	<!--modify by zhaoming at 2011-09-09 for <NEWMS00115314> begin-->
+        <!--<activity android:name="com.android.server.ShutdownActivity"
+            android:permission="android.permission.SHUTDOWN"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_REQUEST_SHUTDOWN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>--> 
+	<activity android:name="com.android.server.ShutdownActivity" android:theme="@android:style/Theme.Dialog" android:configChanges="orientation|keyboardHidden" android:windowSoftInputMode="stateHidden"
             android:permission="android.permission.SHUTDOWN"
             android:excludeFromRecents="true">
             <intent-filter>
@@ -1303,6 +1312,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name="com.android.server.ShutdownFullscreenActivity" android:theme="@android:style/Theme.Wallpaper.NoTitleBar" android:configChanges="orientation|keyboardHidden" android:windowSoftInputMode="stateHidden" android:permission="android.permission.SHUTDOWN" android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_REQUEST_SHUTDOWN_FULLSCREEN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+	</activity>
+	<!--modify by zhaoming at 2011-09-09 for <NEWMS00115314> end-->
         <activity android:name="com.android.internal.app.NetInitiatedActivity"
                 android:theme="@style/Theme.Dialog.Alert"
                 android:excludeFromRecents="true">

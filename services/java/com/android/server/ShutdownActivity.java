@@ -24,16 +24,20 @@ import android.os.Handler;
 import android.util.Slog;
 import com.android.internal.app.ShutdownThread;
 
-public class ShutdownActivity extends Activity {
+//modify by zhaoming at 2011-09-09 for <NEWMS00115314> begin
+import android.widget.TextView;
 
+//public class ShutdownActivity extends Activity {
+public class ShutdownActivity extends ShutdownFullscreenActivity {
+//modify by zhaoming at 2011-09-09 for <NEWMS00115314> end
     private static final String TAG = "ShutdownActivity";
     private boolean mConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mConfirm = getIntent().getBooleanExtra(Intent.EXTRA_KEY_CONFIRM, false);
+	//modify by zhaoming at 2011-09-09 for <NEWMS00115314> begin
+        /*mConfirm = getIntent().getBooleanExtra(Intent.EXTRA_KEY_CONFIRM, false);
         Slog.i(TAG, "onCreate(): confirm=" + mConfirm);
 
         Handler h = new Handler();
@@ -41,6 +45,8 @@ public class ShutdownActivity extends Activity {
             public void run() {
                 ShutdownThread.shutdown(ShutdownActivity.this, mConfirm);
             }
-        });
+        });*/
+	setContentView(new TextView(this));
+	//modify by zhaoming at 2011-09-09 for <NEWMS00115314> end
     }
 }
