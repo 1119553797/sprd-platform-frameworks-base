@@ -189,6 +189,9 @@ static void setRemoteSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz
         LOGV("setRemoteSurface: surface=%p (id=%d)",
              native_surface.get(), native_surface->ID());
         mp->setRemoteSurface(native_surface);
+    } else {
+	    LOGV("setRemoteSurface: surface=NULL");
+		mp->setRemoteSurface(NULL);
     }
 }
 
@@ -200,6 +203,9 @@ static void setLocalSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz)
         LOGV("setLocalSurface: surface=%p (id=%d)",
              native_surface.get(), native_surface->ID());
         mp->setLocalSurface(native_surface);
+    } else {
+    	LOGV("setLocalSurface: surface=NULL");
+		mp->setLocalSurface(NULL);
     }
 }
 

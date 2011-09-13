@@ -82,7 +82,12 @@ status_t MediaPhone::setRemoteSurface(const sp<Surface>& surface)
         return INVALID_OPERATION;
     }*/
 
-    status_t ret = mMediaPhone->setRemoteSurface(surface->getISurface());
+    status_t ret = OK;
+	if (surface != NULL) {
+		ret = mMediaPhone->setRemoteSurface(surface->getISurface());
+	} else {
+		ret = mMediaPhone->setRemoteSurface(NULL);
+	}
     if (OK != ret) {
         LOGV("setRemoteSurface failed: %d", ret);
 //        mCurrentState = MEDIA_PHONE_ERROR;
@@ -103,7 +108,12 @@ status_t MediaPhone::setLocalSurface(const sp<Surface>& surface)
         return INVALID_OPERATION;
     }*/
 
-    status_t ret = mMediaPhone->setLocalSurface(surface->getISurface());
+    status_t ret = OK;
+	if (surface != NULL) {
+		ret = mMediaPhone->setLocalSurface(surface->getISurface());
+	} else {
+		ret = mMediaPhone->setLocalSurface(NULL);
+	}
     if (OK != ret) {
         LOGV("setLocalSurface failed: %d", ret);
 //        mCurrentState = MEDIA_PHONE_ERROR;
