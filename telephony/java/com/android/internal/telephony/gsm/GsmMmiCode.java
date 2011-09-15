@@ -222,7 +222,7 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
             ret.isPendingUSSD = true;
             ret.state = State.PENDING;
         } else {
-            ret.state = State.COMPLETE;
+            ret.state = State.NETCOMPLETE;
         }
 
         return ret;

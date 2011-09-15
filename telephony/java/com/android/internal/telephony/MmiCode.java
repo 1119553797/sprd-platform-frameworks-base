@@ -28,6 +28,7 @@ public interface MmiCode
         PENDING,
         CANCELLED,
         COMPLETE,
+	NETCOMPLETE,
         FAILED
     }
 
