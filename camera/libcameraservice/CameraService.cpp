@@ -1014,12 +1014,17 @@ void CameraService::Client::handlePreviewData(const sp<IMemory>& mem)
     }
 
     // Is the received frame copied out or not?
-    if (flags & FRAME_CALLBACK_FLAG_COPY_OUT_MASK) {
-        LOGV("frame is copied");
-        copyFrameAndPostCopiedFrame(c, heap, offset, size);
-    } else {
-        LOGV("frame is forwarded");
-        c->dataCallback(CAMERA_MSG_PREVIEW_FRAME, mem);
+    if(c != NULL){ //wxz20110915: check if the cameraclient is null. Fix Bug 2804.
+    	if (flags & FRAME_CALLBACK_FLAG_COPY_OUT_MASK) {
+        	LOGV("frame is copied");
+	        copyFrameAndPostCopiedFrame(c, heap, offset, size);
+	    } else {
+        	LOGV("frame is forwarded");
+	        c->dataCallback(CAMERA_MSG_PREVIEW_FRAME, mem);
+	    }
+    }
+    else{
+        LOGI("wxz: mCameraClient is null in CameraService::Client::handlePreviewData.");
     }
 }
 
