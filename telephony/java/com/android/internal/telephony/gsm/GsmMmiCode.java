@@ -637,12 +637,12 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                         ((cfAction == CommandsInterface.CF_ACTION_ENABLE) ||
                                 (cfAction == CommandsInterface.CF_ACTION_REGISTRATION)) ? 1 : 0;
 
-		    if (time != 0) {
-		        if ((cfAction == CommandsInterface.CF_ACTION_ENABLE) &&
-	                        (dialingNumber != null && dialingNumber.length() != 0)) {
-                            cfAction = CommandsInterface.CF_ACTION_REGISTRATION;
-		        }
+		    if ((cfAction == CommandsInterface.CF_ACTION_ENABLE) &&
+	                   (dialingNumber != null && dialingNumber.length() != 0)) {
+                        cfAction = CommandsInterface.CF_ACTION_REGISTRATION;
+		    }
 
+		    if (time != 0) {
 		        if ((cfAction == CommandsInterface.CF_ACTION_REGISTRATION) && 
 			        !isRightTime(time)) {
                             state = State.FAILED;
