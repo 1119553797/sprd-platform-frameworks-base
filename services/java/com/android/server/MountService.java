@@ -108,6 +108,7 @@ class MountService extends IMountService.Stub
          */
         public static final int VolumeStateChange              = 605;
         public static final int ShareAvailabilityChange        = 620;
+        public static final int UsbAvailabilityChange        = 621;  //add by liguxiang 09-15-11 for whether usb available
         public static final int VolumeDiskInserted             = 630;
         public static final int VolumeDiskRemoved              = 631;
         public static final int VolumeBadRemoval               = 632;
@@ -482,7 +483,7 @@ class MountService extends IMountService.Stub
      */
     public boolean onEvent(int code, String raw, String[] cooked) {
         Intent in = null;
-
+        Log.d("ligx----------","code = " + code);
         if (DEBUG_EVENTS) {
             StringBuilder builder = new StringBuilder();
             builder.append("onEvent::");
@@ -511,7 +512,16 @@ class MountService extends IMountService.Stub
                 avail = true;
             }
             notifyShareAvailabilityChange(cooked[3], avail);
-        } else if ((code == VoldResponseCode.VolumeDiskInserted) ||
+        //add by liguxiang 09-15-11 for whether usb available begin
+	 } else if(code == VoldResponseCode.UsbAvailabilityChange){
+	    boolean avail = false;
+	    Log.d("ligx-----------","cooked[3] = " + cooked[3]);
+	    if(cooked[3].equals("available")){
+		avail = true;
+	    }
+	    notifyUsbAvailabilityChange(avail);
+	 //add by liguxiang 09-15-11 for whether usb available end
+        }else if ((code == VoldResponseCode.VolumeDiskInserted) ||
                    (code == VoldResponseCode.VolumeDiskRemoved) ||
                    (code == VoldResponseCode.VolumeBadRemoval)) {
             // FMT: NNN Volume <label> <mountpoint> disk inserted (<major>:<minor>)
@@ -855,6 +865,18 @@ class MountService extends IMountService.Stub
                 new Intent((c ? Intent.ACTION_UMS_CONNECTED : Intent.ACTION_UMS_DISCONNECTED)));
     }
 
+    //add by liguxiang 09-15-11 for whether usb available begin
+    private void notifyUsbAvailabilityChange(final boolean avail){
+        sendUsbIntent(avail);
+    }
+
+    private void sendUsbIntent(boolean c){
+	 Log.d("ligx----------","sendUsbIntent");
+	 mContext.sendBroadcast(
+	 	new Intent((c ? "sprd.com.android.usb.available" : "sprd.com.android.usb.unavailable")));
+    }
+    //add by liguxiang 09-15-11 for whether usb available end
+    
     private void validatePermission(String perm) {
         if (mContext.checkCallingOrSelfPermission(perm) != PackageManager.PERMISSION_GRANTED) {
             throw new SecurityException(String.format("Requires %s permission", perm));
