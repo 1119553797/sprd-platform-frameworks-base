@@ -2341,4 +2341,8 @@
 	<!--modify by zhaoming at 2011-09-09 for <NEWMS00115314> begin-->
     <string name="shutdown_after_seconds">Phone will shut down after <xliff:g id="NUMBER">%d</xliff:g> seconds</string>
 	<!--modify by zhaoming at 2011-09-09 for <NEWMS00115314> end-->
+	
+	<!-- add by niezhong 09-14-11 for NEWMS00118697 begin -->
+	<string name="lockscreen_password_error">The password is error,try again!</string>
+	<!-- add by niezhong 09-14-11 for NEWMS00118697 begin -->
 </resources>

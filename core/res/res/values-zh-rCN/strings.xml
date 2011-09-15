@@ -910,4 +910,8 @@
 	<!--modify by zhaoming at 2011-09-09 for <NEWMS00115314> begin-->
     <string name="shutdown_after_seconds">您的手机会在<xliff:g id="NUMBER">%d</xliff:g>秒后关机</string>
 	<!--modify by zhaoming at 2011-09-09 for <NEWMS00115314> end-->
+	
+	<!-- add by niezhong 09-14-11 for NEWMS00118697 begin -->
+	<string name="lockscreen_password_error">密码错误，请重试!</string>
+	<!-- add by niezhong 09-14-11 for NEWMS00118697 begin -->
 </resources>
