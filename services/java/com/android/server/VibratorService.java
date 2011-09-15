@@ -237,9 +237,10 @@ public class VibratorService extends IVibratorService.Stub {
     // Lock held on mVibrations
     private void startNextVibrationLocked() {
         if (mVibrations.size() <= 0) {
+            mCurrentVibration = null;
             return;
         }
-        mCurrentVibration = mVibrations.getFirst();
+	mCurrentVibration = mVibrations.getFirst();
         startVibrationLocked(mCurrentVibration);
     }
 
@@ -263,16 +264,27 @@ public class VibratorService extends IVibratorService.Stub {
             Vibration vib = iter.next();
             if (vib.mToken == token) {
                 iter.remove();
-                return vib;
+                unlinkVibration(vib);
+	        return vib;
             }
         }
         // We might be looking for a simple vibration which is only stored in
         // mCurrentVibration.
         if (mCurrentVibration != null && mCurrentVibration.mToken == token) {
+            unlinkVibration(mCurrentVibration);
             return mCurrentVibration;
         }
         return null;
     }
+
+    private void unlinkVibration(Vibration vib) {
+	           if (vib.mPattern != null) {
+		                // If Vibration object has a pattern,
+		                // the Vibration object has also been linkedToDeath.
+		                vib.mToken.unlinkToDeath(vib, 0);
+		            }
+		   }
+		    
 
     private class VibrateThread extends Thread {
         final Vibration mVibration;
@@ -348,7 +360,8 @@ public class VibratorService extends IVibratorService.Stub {
                     // If this vibration finished naturally, start the next
                     // vibration.
                     mVibrations.remove(mVibration);
-                    startNextVibrationLocked();
+                    unlinkVibration(mVibration);
+		    startNextVibrationLocked();
                 }
             }
         }
