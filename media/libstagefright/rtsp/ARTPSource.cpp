@@ -154,13 +154,19 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 
 	    	 timeUpdate(rtpTime, ntpTime1);
 	    	}
-	    if (mNumTimes == 2 && mPeriodCheck > 1600000ll ) 
+	    if (mNumTimes == 2 && mPeriodCheck > 6000000ll ) 
 	    	{
 		ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
 		        meta->setInt64("ntp-time", (rtpTime>mRTPTime[0])?RTP2NTP(rtpTime):ntpTime1);
 	    	}
 		else
 		{
+/*
+		ntpTime1 = mNTPTime[0] + \
+			((uint32_t) (((double)rtpTime - (double)mRTPTime[0]) /90000ll) )*0x100000000ll \
+			+ ( ((uint64_t)(rtpTime - mRTPTime[0]) % 90000ll) * 0x100000000ll /90000ll);
+*/			
+      
 		ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
 		        meta->setInt64("ntp-time", ntpTime1);
 		 }
