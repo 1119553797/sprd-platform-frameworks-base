@@ -1293,18 +1293,18 @@ public final class SIMRecords extends IccRecords {
      * If the SPN is not found on the SIM, the rule is always PLMN_ONLY.
      */
     protected int getDisplayRule(String plmn) {
-        int rule;
+        int rule = 0;
         if (spn == null || spnDisplayCondition == -1) {
             // EF_SPN was not found on the SIM, or not yet loaded.  Just show ONS.
             rule = SPN_RULE_SHOW_PLMN;
         } else if (isOnMatchingPlmn(plmn)) {
-            rule = SPN_RULE_SHOW_SPN;
+            //rule = SPN_RULE_SHOW_SPN;
             if ((spnDisplayCondition & 0x01) == 0x01) {
                 // ONS required when registered to HPLMN or PLMN in EF_SPDI
                 rule |= SPN_RULE_SHOW_PLMN;
             }
         } else {
-            rule = SPN_RULE_SHOW_PLMN;
+            //rule = SPN_RULE_SHOW_PLMN;
             if ((spnDisplayCondition & 0x02) == 0x00) {
                 // SPN required if not registered to HPLMN or PLMN in EF_SPDI
                 rule |= SPN_RULE_SHOW_SPN;
