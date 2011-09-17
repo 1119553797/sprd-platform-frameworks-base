@@ -20,8 +20,12 @@
 #define MIME_MPEG4 "video/mp4v-es"
 
 //#define DEBUG_FILE     "/data/vpin"
-//#define DUMP_FILE	"/data/vpout"
-//#define FEATURE_COMBINE_MPEG4_HEADER
+//#define DUMP_FILE
+//#define DUMP_FIXFILE "/data/vpout"
+#ifdef DUMP_FIXFILE
+#define DUMP_FIXFILELEN "/data/vpout-len.txt"
+#endif //DUMP_FIXFILE
+#define FEATURE_COMBINE_MPEG4_HEADER
 
 namespace android {
 
@@ -88,7 +92,7 @@ status_t VideoPhoneExtractor::readMetaData()
 	} else {
 		mFileMetaData->setCString(kKeyMIMEType, MIME_MPEG4);
 		m_AVMeta->setCString(kKeyMIMEType, MIME_MPEG4);		
-		EsdsGenerator::generateEsds(m_AVMeta);
+		//EsdsGenerator::generateEsds(m_AVMeta);
 	}
 		
 	m_AVMeta->setInt32(kKeyRotation, 0);
@@ -157,12 +161,14 @@ VideoPhoneSource::~VideoPhoneSource()
 	LOGI("[%p]VideoPhoneSource::~VideoPhoneSource", this);
 	if (m_bStarted)
 		stop();
+#ifndef DUMP_FIXFILE
 	if (m_fWrite != NULL){
 		fclose(m_fWrite);
 	}
 	if (m_fLen != NULL){
 		fclose(m_fLen);
 	}
+#endif //DUMP_FIXFILE
 }
 
 status_t VideoPhoneSource::start(MetaData *params) 
@@ -601,6 +607,10 @@ void dumpToFile(char *w_ptr, int w_len)
 	time(&timep);
 	p=gmtime(&timep);
 	//printf(“%d%d%d”,(1900+p->tm_year), (1+p->tm_mon),p->tm_mday);
+#ifdef DUMP_FIXFILE
+	m_fWrite = fopen(DUMP_FIXFILE,"ab");
+	m_fLen = fopen(DUMP_FIXFILELEN,"ab");
+#else
 	if (m_fWrite == NULL){
 		sprintf(fn_fWrite, "/data/videocall%02d%02d%02d.3gp", p->tm_hour, p->tm_min, p->tm_sec);
 		LOGI("fn_fWrite: %s", fn_fWrite);
@@ -611,6 +621,7 @@ void dumpToFile(char *w_ptr, int w_len)
 		LOGI("fn_fLen: %s", fn_fLen);
 		m_fLen = fopen(fn_fLen,"ab");
 	}
+#endif //DUMP_FIXFILE
 
 	if (m_fWrite == NULL){	
 		LOGE("fhy: fopen() failed, m_fWrite: 0x%p", m_fWrite);	
@@ -626,6 +637,14 @@ void dumpToFile(char *w_ptr, int w_len)
 	sprintf(buf, "%d\n", w_len);
 	LOGE("fhy: fwrite(), buf: %s", buf);	
 	fwrite(buf, 1, strlen(buf)+1, m_fLen);
+#ifdef DUMP_FIXFILE	
+	if (m_fWrite != NULL){
+		fclose(m_fWrite);
+	}
+	if (m_fLen != NULL){
+		fclose(m_fLen);
+	}
+#endif
 	return;
 
 fail:
@@ -962,9 +981,13 @@ status_t VideoPhoneDataDevice::threadFunc()
 #undef LOG_TAG
 #define LOG_TAG "EsdsGenerator"
 
-uint8_t EsdsGenerator::m_Mpeg4Header[100] = {0x00, 0x00, 0x01, 0xb0, 0x14, 0x00, 0x00, 0x01, 0xb5, 0x09, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+/*uint8_t EsdsGenerator::m_Mpeg4Header[100] = {0x00, 0x00, 0x01, 0xb0, 0x05, 0x00, 0x00, 0x01, 0xb5, 0x09, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+ 0x01, 0x20, 0x00, 0x84, 0x40, 0x07, 0xa8, 0x2c, 0x20, 0x90, 0xa2, 0x8f};
+{0x00, 0x00, 0x01, 0xb0, 0x01, 0x00, 0x00, 0x01, 0xb5, 0x09, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+ 0x01, 0x20, 0x00, 0x84, 0x5d, 0x4c, 0x28, 0x2c, 0x20, 0x90, 0xa2, 0x1f};*/
+/*{0x00, 0x00, 0x01, 0xb0, 0x14, 0x00, 0x00, 0x01, 0xb5, 0x09, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
  0x01, 0x20, 0x00, 0x84, 0x40, 0xfa, 0x28, 0x2c, 0x20, 0x90, 0xa2, 0x1f, 0x00, 0x00, 0x00, 0x00};
-int EsdsGenerator::m_iMpeg4Header_size = 32;
+int EsdsGenerator::m_iMpeg4Header_size = 28;*/
 
 static EsdsGenerator* g_Esds = NULL;
 
@@ -982,22 +1005,15 @@ void EsdsGenerator::generateEsds(sp<MetaData> AVMeta)
 {
 	LOGI("generateEsds()");
 
-	if (g_Esds == NULL) {
-		g_Esds = new EsdsGenerator();
-	}
-
-	if (g_Esds->m_iEsds_size > 0) {
-		AVMeta->setData(	kKeyESDS, 0, g_Esds->m_EsdsBuffer, g_Esds->m_iEsds_size);	
-		return;
-	}
+	g_Esds = new EsdsGenerator();
 	
 	//writeInt32(0);			 // version=0, flags=0
 	g_Esds->writeInt8(0x03);  // ES_DescrTag
-	g_Esds->writeInt8(23 + m_iMpeg4Header_size);
+	g_Esds->writeInt8(23 + VideoPhoneSource::m_iMpeg4Header_size);
 	g_Esds->writeInt16(0x0000);  // ES_ID
 	g_Esds->writeInt8(0x1f);
 	g_Esds->writeInt8(0x04);  // DecoderConfigDescrTag
-	g_Esds->writeInt8(15 + m_iMpeg4Header_size);
+	g_Esds->writeInt8(15 + VideoPhoneSource::m_iMpeg4Header_size);
 	g_Esds->writeInt8(0x20);  // objectTypeIndication ISO/IEC 14492-2
 	g_Esds->writeInt8(0x11);  // streamType VisualStream
 	
@@ -1010,8 +1026,8 @@ void EsdsGenerator::generateEsds(sp<MetaData> AVMeta)
 	
 	g_Esds->writeInt8(0x05);  // DecoderSpecificInfoTag
 	
-	g_Esds->writeInt8(m_iMpeg4Header_size);
-	g_Esds->writeEsds(m_Mpeg4Header, m_iMpeg4Header_size);
+	g_Esds->writeInt8(VideoPhoneSource::m_iMpeg4Header_size);
+	g_Esds->writeEsds(VideoPhoneSource::m_Mpeg4Header,VideoPhoneSource::m_iMpeg4Header_size);
 	
 	static const uint8_t kData2[] = {
 		0x06,  // SLConfigDescriptorTag
@@ -1023,6 +1039,7 @@ void EsdsGenerator::generateEsds(sp<MetaData> AVMeta)
 	AVMeta->setData(
 				kKeyESDS, 0,
 				g_Esds->m_EsdsBuffer, g_Esds->m_iEsds_size);	
+	delete g_Esds;
 }
 
 void EsdsGenerator::writeEsds(const void *ptr, size_t size)

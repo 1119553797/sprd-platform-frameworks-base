@@ -339,7 +339,6 @@ status_t MediaPhoneClient::setDecodeType(int type)
 
 status_t MediaPhoneClient::setEncodeType(int type)
 {
-    type = 1;
     LOGV("setEncodeType(%d)", type);
     Mutex::Autolock l(mLock);
 	mEncodeType = type;

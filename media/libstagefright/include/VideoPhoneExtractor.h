@@ -66,6 +66,7 @@ private:
 	int			readRingBuffer(MediaBuffer *pMediaBuffer);
 		
 private:
+	friend class EsdsGenerator;
 	//bool				m_bFirstGet;
 	
     	Mutex 			m_Lock;
@@ -183,10 +184,8 @@ private:
 	void			writeInt32(int32_t x);
 	
 private:
-	static uint8_t		m_Mpeg4Header[100];
-	static int			m_iMpeg4Header_size;
-	static bool		m_bEsdsOK;
-	bool				m_bHasMpeg4Header;
+//	static uint8_t		m_Mpeg4Header[100];
+//	static int			m_iMpeg4Header_size;
 	uint8_t			m_EsdsBuffer[150];
 	int				m_iEsds_size;
 };
