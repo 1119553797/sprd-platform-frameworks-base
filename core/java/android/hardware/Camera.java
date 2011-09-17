@@ -1368,7 +1368,7 @@ public  String getCameraIdString()
 	}
 	public  String getContrast() 
 	{	
-		return get(KEY_BRIGHTNESS);
+		return get(KEY_CONTRAST);
 	}		
         public List<String> getSupportedContrast() {
             String str = get(KEY_CONTRAST + SUPPORTED_VALUES_SUFFIX);	    
