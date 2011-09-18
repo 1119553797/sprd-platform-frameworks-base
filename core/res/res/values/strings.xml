@@ -2344,5 +2344,11 @@
 	
 	<!-- add by niezhong 09-14-11 for NEWMS00118697 begin -->
 	<string name="lockscreen_password_error">The password is error,try again!</string>
-	<!-- add by niezhong 09-14-11 for NEWMS00118697 begin -->
+	<!-- add by niezhong 09-14-11 for NEWMS00118697 end -->
+	
+	<!-- add by niezhong 09-16-11 for NEWMS00118697 begin -->
+	<string name="lockscreen_too_many_password_failed_attempts_dialog_message">
+		You have incorrectly input your unlock password <xliff:g id="number">%d</xliff:g> times.
+        \n\nPlease try again in <xliff:g id="number">%d</xliff:g> seconds.</string>
+	<!-- add by niezhong 09-16-11 for NEWMS00118697 end -->
 </resources>
