@@ -877,13 +877,17 @@ public class PduParser {
         int temp = pduDataStream.read();
         assert(-1 != temp);
         int first = temp & 0xFF;
-
         if (first <= SHORT_LENGTH_MAX) {
             return first;
-        } else if (first == LENGTH_QUOTE) {
+        } else if (first == LENGTH_QUOTE) {      	
             return parseUnsignedInt(pduDataStream);
-        }
-
+        } 
+        // ===== fixed CR<NEWMS00122619> by luning at 11-09-19 begin =====
+        else if (first > LENGTH_QUOTE){ 
+        	Log.d("lu", "PduParser.parseValueLength --> WARNING : Value length > LENGTH_QUOTE!");
+        	return first;
+        }   
+        // ===== fixed CR<NEWMS00122619> by luning at 11-09-19 end =====
         throw new RuntimeException ("Value length > LENGTH_QUOTE!");
     }
 
