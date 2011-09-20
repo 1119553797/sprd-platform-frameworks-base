@@ -196,10 +196,10 @@ char* getUrlIn(char* dest, const char* url, int decodeType)
 status_t MediaPhoneClient::preparePlayer()
 {
     LOGV("preparePlayer");
-    if (!mPlayer->hardwareOutput()) {
+    /*if (!mPlayer->hardwareOutput()) {
         mAudioOutput = new AudioOutput();
         static_cast<MediaPlayerInterface*>(mPlayer.get())->setAudioSink(mAudioOutput);
-    }
+    }*/
 	static char dest[30] = {0};
 	memset(dest, 0, sizeof(dest)/sizeof(dest[0]));
     CHECK_RT(mPlayer->setDataSource(getUrlIn(dest, mUrlIn, mDecodeType), NULL));
@@ -289,7 +289,7 @@ MediaPhoneClient::MediaPhoneClient(const sp<MediaPlayerService>& service, pid_t 
 MediaPhoneClient::~MediaPhoneClient()
 {
     LOGV("Client destructor");
-    mAudioOutput.clear();
+    //mAudioOutput.clear();
     release();
 }
 
