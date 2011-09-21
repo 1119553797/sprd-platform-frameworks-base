@@ -14,16 +14,40 @@
  * limitations under the License.
  */
 
+
+#define LOG_TAG "FileSource"
+#include <utils/Log.h>
+
 #include <media/stagefright/FileSource.h>
 #include <media/stagefright/MediaDebug.h>
 
 namespace android {
 
+/*
 FileSource::FileSource(const char *filename)
     : mFile(fopen(filename, "rb")),
       mFd(fileno(mFile)),
       mOffset(0),
       mLength(-1){
+}
+*/
+//jgdu for fopen error
+FileSource::FileSource(const char *filename)
+    : mFile(fopen(filename, "rb")),
+      mOffset(0),
+      mLength(-1){
+    if(mFile != NULL)
+        mFd = fileno(mFile);
+    else{
+	 LOGE("FileSource open fail %s",filename);
+	 FILE *fp = fopen("/dev/vhub.port0","a");
+	 if(fp!=NULL){
+	 	fprintf(fp,"FileSource open fail %s\n",filename);	 	
+		fclose(fp);
+	 }else{
+	 	LOGE("open /dev/vhub.port0 fail");
+	 }
+    }
 }
 
 FileSource::FileSource(int fd, int64_t offset, int64_t length)
@@ -32,7 +56,7 @@ FileSource::FileSource(int fd, int64_t offset, int64_t length)
       mOffset(offset),
       mLength(length){
     CHECK(offset >= 0);
-    CHECK(length >= 0);
+    CHECK(length >= 0);	
 }
 
 FileSource::~FileSource() {
