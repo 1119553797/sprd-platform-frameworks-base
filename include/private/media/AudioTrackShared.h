@@ -30,7 +30,7 @@ namespace android {
 // Maximum cumulated timeout milliseconds before restarting audioflinger thread
 #define MAX_STARTUP_TIMEOUT_MS  3000    // Longer timeout period at startup to cope with A2DP init time
 #define MAX_RUN_TIMEOUT_MS      1000
-#define WAIT_PERIOD_MS          50 //@hong from 10 to 100.
+#define WAIT_PERIOD_MS          10
 
 
 struct audio_track_cblk_t

@@ -1404,7 +1404,11 @@ void AwesomePlayer::onVideoEvent() {
 
     int64_t latenessUs = nowUs - timeUs;
 
-//    LOGI("onVideoEvent laternessUS:%u nowUS:%u timeUS:%u", latenessUs, nowUs, timeUs);
+    if(latenessUs > 10000000 || latenessUs< -10000000){//jgdu 10s
+	LOGI("onVideoEvent time info:mTimeSourceDeltaUs:%lld realTimeUs:%lld mediaTimeUs:%lld", mTimeSourceDeltaUs, realTimeUs, mediaTimeUs);
+	LOGI("onVideoEvent time info2:getRealTimeUs:%lld nowUs:%lld latenessUs:%lld timeUs:%lld", ts->getRealTimeUs(), nowUs,latenessUs, timeUs);	
+    }
+	
     if (wasSeeking) {
         // Let's display the first frame after seeking right away.
         latenessUs = 0;

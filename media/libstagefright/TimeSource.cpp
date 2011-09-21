@@ -46,17 +46,20 @@ SystemTimeSourceForSync::SystemTimeSourceForSync()
 
 int64_t SystemTimeSourceForSync::getRealTimeUs() {
     Mutex::Autolock autoLock(mLock);	
+    return getRealTimeUs_nolock();
+}
+
+int64_t SystemTimeSourceForSync::getRealTimeUs_nolock(){
     if(mIsPaused){
     	return mPauseTimeUs - mStartTimeUs -mTotalPauseTimeUs;	
     }else{
     	return GetSystemTimeUs() - mStartTimeUs - mTotalPauseTimeUs;
-    }
+    }	
 }
-
 void SystemTimeSourceForSync::increaseRealTimeUs(int64_t deltaTime)
 {
     Mutex::Autolock autoLock(mLock);	
-    LOGI("SystemTimeSourceForSync::increase %d,%lld",mIsPaused,deltaTime);	
+    LOGI("SystemTimeSourceForSync::increase %d,%lld [%lld]",mIsPaused,deltaTime,getRealTimeUs_nolock());	
     mStartTimeUs -= deltaTime;
 }
 	
@@ -70,7 +73,7 @@ int64_t SystemTimeSourceForSync::GetSystemTimeUs() {
 
  void SystemTimeSourceForSync::pause(){
         Mutex::Autolock autoLock(mLock);	
-	LOGI("SystemTimeSourceForSync::pause %d",mIsPaused);		
+	LOGI("SystemTimeSourceForSync::pause %d [%lld]",mIsPaused,getRealTimeUs_nolock());		
  	if(mIsPaused)
 		return;
  	mPauseTimeUs = GetSystemTimeUs();
@@ -79,7 +82,7 @@ int64_t SystemTimeSourceForSync::GetSystemTimeUs() {
  
  void SystemTimeSourceForSync::resume(){
         Mutex::Autolock autoLock(mLock);	
-	LOGI("SystemTimeSourceForSync::resume %d",mIsPaused);		
+	LOGI("SystemTimeSourceForSync::resume %d [%lld]",mIsPaused,getRealTimeUs_nolock());		
  	if(!mIsPaused)
 		return;
  	mTotalPauseTimeUs += GetSystemTimeUs() - mPauseTimeUs;
@@ -88,7 +91,7 @@ int64_t SystemTimeSourceForSync::GetSystemTimeUs() {
  
 void SystemTimeSourceForSync::reset(){
         Mutex::Autolock autoLock(mLock);	
-	LOGI("SystemTimeSourceForSync::reset %d",mIsPaused);
+	LOGI("SystemTimeSourceForSync::reset %d [%lld]",mIsPaused,getRealTimeUs_nolock());
 	mStartTimeUs = GetSystemTimeUs();
 	mPauseTimeUs = -1;
 	mTotalPauseTimeUs	 = 0;

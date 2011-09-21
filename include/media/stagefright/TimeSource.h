@@ -60,6 +60,7 @@ public:
 
 private:
     static int64_t GetSystemTimeUs();
+    int64_t getRealTimeUs_nolock();	
 
     int64_t mStartTimeUs;
     int64_t mPauseTimeUs;
