@@ -154,7 +154,7 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 
 	    	 timeUpdate(rtpTime, ntpTime1);
 	    	}
-	    if (mNumTimes == 2 && mPeriodCheck > 3000000ll ) 
+	    if (mNumTimes == 2 && mPeriodCheck > 1600000ll ) 
 	    	{
 		ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
 		        meta->setInt64("ntp-time", (rtpTime>mRTPTime[0])?RTP2NTP(rtpTime):ntpTime1);

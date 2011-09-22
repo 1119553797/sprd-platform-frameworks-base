@@ -999,8 +999,10 @@ bool AwesomePlayer::isPlaying() const {
 
 void AwesomePlayer::setISurface(const sp<ISurface> &isurface) {
     Mutex::Autolock autoLock(mLock);
-
+    bool inull;
     mISurface = isurface;
+	inull = (mISurface == NULL)?0:1;
+    LOGI("setISurface %d", inull);
     mNewSurfaceIsSet = true;
 }
 
@@ -1371,6 +1373,7 @@ void AwesomePlayer::onVideoEvent() {
 #endif
 
     int is_first_frame = 0;
+    uint32_t tmp_mFlags = mFlags;
     if (mFlags & FIRST_FRAME) {
         mFlags &= ~FIRST_FRAME;
 		
@@ -1439,10 +1442,12 @@ void AwesomePlayer::onVideoEvent() {
         latenessUs = 0;
     }
 
-    if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)&&is_first_frame) //@Hong. SpeedupCMMB
+    if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)) //@Hong. SpeedupCMMB
     {
-    	latenessUs = 0;
-	LOGI("cmmb is_first_frame");
+    	if(is_first_frame){
+    		latenessUs = 0;
+		LOGI("cmmb is_first_frame");
+    	}
     }
 
     if (latenessUs > 60000) {
@@ -1482,6 +1487,11 @@ void AwesomePlayer::onVideoEvent() {
 	 LOGI("cmmb disp first_frame");	
         mVideoRenderer->render(mVideoBuffer);
     }else{
+    	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)){ //@Hong. SpeedupCMMB	
+       	if(tmp_mFlags& FIRST_FRAME){
+	   		mFlags |= FIRST_FRAME;
+       	}
+    	}
     	LOGI("mVideoRenderer is NULL");	
     }
 
