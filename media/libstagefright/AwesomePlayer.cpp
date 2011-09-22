@@ -445,7 +445,7 @@ void AwesomePlayer::reset() {
        if (mFlags & PREPARING) {
           abortPrepare(UNKNOWN_ERROR);
 	  	}
-	   
+   
     Mutex::Autolock autoLock(mLock);
      LOGI("reset_l wait");
     reset_l();
@@ -682,6 +682,7 @@ void AwesomePlayer::onBufferingUpdate() {
             notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);  //@hong
         } else // if (eos || cachedDurationUs > kHighWaterMarkUs) 
              {
+			 
             if ((eos || cachedDurationUs > kHighWaterMarkUs) && (mFlags & CACHE_UNDERRUN)) { //@hong
                 LOGI("cache has filled up (%.2f secs), resuming.",
                      cachedDurationUs / 1E6);
@@ -888,6 +889,7 @@ LOGV("play_l enter time:%d s",tv.tv_sec*1000+tv.tv_usec/1000);
 
 status_t AwesomePlayer::initRenderer_l() {
     if (mISurface == NULL) {
+	 LOGI("mISurface == NULL");
         return OK;
     }
 
@@ -1368,13 +1370,30 @@ void AwesomePlayer::onVideoEvent() {
     TimeSource *ts = (mFlags & AUDIO_AT_EOS) ? &mSystemTimeSource : mTimeSource;
 #endif
 
+    int is_first_frame = 0;
     if (mFlags & FIRST_FRAME) {
         mFlags &= ~FIRST_FRAME;
 		
 	    struct timeval tv;  //@hong add timecheck.
 	    gettimeofday(&tv, NULL);
 	LOGV("First Frame time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
-
+	is_first_frame = 1;
+/*	
+	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)) //@Hong. SpeedupCMMB
+	{
+		int64_t TimeUs,audioTimeUs;
+		int64_t  AudioLatencyUs =  mAudioPlayer->getAudioLatencyUs();
+		mAudioPlayer->seekTo(AudioLatencyUs);
+		
+		if(mAudioPlayer->getMediaTimeMapping(&TimeUs, &audioTimeUs)){
+			LOGI("cmmb seek audio audioTimeUs=%lld,videoTime=%lld audiolatencyus:%lld",audioTimeUs,timeUs,AudioLatencyUs);
+			if(timeUs>audioTimeUs)
+				mAudioPlayer->seekTo(AudioLatencyUs);
+		}else{
+			LOGI("fail getMediaTimeMapping");
+		}
+	}
+*/		
 	   
         mTimeSourceDeltaUs = ts->getRealTimeUs() - timeUs;
     }
@@ -1420,6 +1439,12 @@ void AwesomePlayer::onVideoEvent() {
         latenessUs = 0;
     }
 
+    if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)&&is_first_frame) //@Hong. SpeedupCMMB
+    {
+    	latenessUs = 0;
+	LOGI("cmmb is_first_frame");
+    }
+
     if (latenessUs > 60000) {
         // We're more than 40ms late.
         LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
@@ -1454,7 +1479,10 @@ void AwesomePlayer::onVideoEvent() {
     }
 
     if (mVideoRenderer != NULL) {
+	 LOGI("cmmb disp first_frame");	
         mVideoRenderer->render(mVideoBuffer);
+    }else{
+    	LOGI("mVideoRenderer is NULL");	
     }
 
     if (mLastVideoBuffer) {
@@ -1535,6 +1563,7 @@ void AwesomePlayer::onCheckAudioStatus() {
 
 status_t AwesomePlayer::prepare() {
 	    struct timeval tv;  //@hong add timecheck.
+
 	    gettimeofday(&tv, NULL);
 LOGV("prepare enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
 	
@@ -1571,7 +1600,7 @@ LOGV("prepare_l waiting.ok..");
 status_t AwesomePlayer::prepareAsync() {
    LOGV("prepareAsync");	
     Mutex::Autolock autoLock(mLock);
-
+	
     if (mFlags & PREPARING) {
         return UNKNOWN_ERROR;  // async prepare already pending
     }
@@ -1942,6 +1971,7 @@ void AwesomePlayer::onPrepareAsyncEvent() {
     }
 }
 
+
 void AwesomePlayer::finishAsyncPrepare_l() {
     if (mIsAsyncPrepare) {
         if (mVideoWidth < 0 || mVideoHeight < 0) {
@@ -1968,6 +1998,10 @@ void AwesomePlayer::finishAsyncPrepare_l() {
         notifyListener_l(MEDIA_PREPARED);
     }
 
+	
+	    if (mIsAsyncPrepare) 
+        notifyListener_l(MEDIA_PREPARED);
+		
     mPrepareResult = OK;
     mFlags &= ~(PREPARING|PREPARE_CANCELLED);
     mFlags |= PREPARED;
