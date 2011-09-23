@@ -265,12 +265,51 @@ public class AdnRecord implements Parcelable {
 		return "ADN Record '" + alphaTag + "' '" + number + " " + emails + "'";
 	}
 
+	public boolean isEmptyAnr(String s) {
+		
+		if (TextUtils.isEmpty(s)) {
+
+			return true;
+		}
+		for (int i = 0; i < s.length(); i++) {
+
+			if (s.charAt(i) != ';') {
+
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
+	public boolean stringCompareAnr(String s1, String s2) {
+	
+		String[] pair;
+		if (TextUtils.isEmpty(s1) || isEmptyAnr(s1)) {
+
+			s1 = "";
+
+		}
+
+		if (TextUtils.isEmpty(s2) || isEmptyAnr(s2)) {
+
+			s2 = "";
+
+		}
+
+	
+
+		return stringCompareNullEqualsEmpty(s1, s2);
+
+	}
+
+
 	public boolean isEmpty() {
 		return TextUtils.isEmpty(alphaTag)
 				&& TextUtils.isEmpty(number)
 				&& emails == null
-				&& (TextUtils.isEmpty(anr) || anr.equals(";") || anr
-						.equals(";;"));
+				&& isEmptyAnr(anr) ;
 	}
 
 	public boolean hasExtendedRecord() {
@@ -322,7 +361,7 @@ public class AdnRecord implements Parcelable {
 				+ stringCompareEmails(emails, adn.emails));
 		return (stringCompareNullEqualsEmpty(alphaTag, adn.alphaTag)
 				&& stringCompareNullEqualsEmpty(number, adn.number)
-				&& stringCompareEmails(emails, adn.emails) && stringCompareNullEqualsEmpty(
+				&& stringCompareEmails(emails, adn.emails) && stringCompareAnr(
 				anr, adn.anr));
 
 	}

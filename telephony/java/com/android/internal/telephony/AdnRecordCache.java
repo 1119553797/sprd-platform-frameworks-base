@@ -210,7 +210,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 	// add multi record and email begin
 	
 
-	public void updateUSIMAdnBySearch(int efid, AdnRecord oldAdn,
+	public synchronized void updateUSIMAdnBySearch(int efid, AdnRecord oldAdn,
 			AdnRecord newAdn, String pin2, Message response) {
 
 
@@ -228,6 +228,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		boolean newEmail = false;
 		int iapRecNum = 0;
 		int emailNumInIap = 0;
+		int pageNum = 0;
 		Log.i(LOG_TAG, "updateUSIMAdnBySearch efid " + efid);
 		for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
 
@@ -290,7 +291,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
 			if (find_index) {
 				recNum = num;
-
+                          pageNum = num;
 				if (num > 0) {
 					mInsertId += mUsimPhoneBookManager.mAdnRecordSizeArray[num - 1];
 				}
@@ -473,14 +474,31 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 				}
 			}
 			Log.i(LOG_TAG, "updateUSIMAdnBySearch (11)");
-			if (mUsimPhoneBookManager.ishaveAnr && !newAdn.stringCompareNullEqualsEmpty(newAdn.anr,oldAdn.anr)) {
-				ArrayList<Integer> anrefids = mUsimPhoneBookManager.mPbrFile
-						.getFileIdsByTagAdn(
-								UsimPhoneBookManager.USIM_EFANR_TAG, efid);
+			if (mUsimPhoneBookManager.ishaveAnr && !newAdn.stringCompareAnr(newAdn.anr,oldAdn.anr)) {
+				ArrayList<Integer> anrefids = mUsimPhoneBookManager.getAnrFileIdsByTagAdn(pageNum);
 				Log.e(LOG_TAG, "updateUSIMAdnBySearch update Anr  anrefids is " + anrefids);
+				ArrayList<Integer> toUpefids  = new ArrayList<Integer>(); 
+                		boolean isUpdateAnr = true;
+                      
+						  
+				if(anrefids != null){
+
+				for (int i = 0; i < anrefids.size(); i++) {
+					if(mUsimPhoneBookManager.getNewAnrNumber( pageNum, anrefids.get(i), 0,index,false)  == index){
+					       Log.e(LOG_TAG, "updateUSIMAdnBySearch update Anr  anrefids is " + anrefids);
+						 toUpefids.add(anrefids.get(i));
+					     
+					}
+					
+				}
+
+				}
+				Log.e(LOG_TAG, "updateUSIMAdnBySearch update Anr  toUpefids is " + toUpefids);
+				if(toUpefids != null && toUpefids.size() > 0){
 				adnRecordLoader = new AdnRecordLoader(mFh);
-				adnRecordLoader.updateEFAnrToUsim(newAdn, anrefids, efid,
+				adnRecordLoader.updateEFAnrToUsim(newAdn, toUpefids, efid,
 						index, pin2, null);
+				}
 			}
 			adnRecordLoader.updateEFAdnToUsim(newAdn, efid, extensionEF, index,
 					pin2, obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid,
