@@ -55,20 +55,4 @@ public class PreferenceCategory extends PreferenceGroup {
         return false;
     }
 
-    //add by Qian JianBo 2011-9-22 for NEWMS125077 begin
-    @Override
-    public Preference getPreference(int index) {
-    	Preference preference = null;
-        synchronized(this) {
-        	if (index < super.getPreferenceCount())
-        	{
-        		preference = super.getPreference(index);        		
-        	}
-        }
-        notifyHierarchyChanged();
-
-        return preference;
-    }
-    //add by Qian JianBo 2011-9-22 for NEWMS125077 end
-
 }
