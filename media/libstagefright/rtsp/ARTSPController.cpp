@@ -192,9 +192,10 @@ int64_t ARTSPController::getQueueDurationUs(bool *eos) {
         if (!newEOS) {
             *eos = false;
         }
-        if (i == 0 || queuedDurationUs > minQueuedDurationUs ) {  //@hong use max time for CMMB temply
-            minQueuedDurationUs = queuedDurationUs;
-        }
+        if (i == 0 || queuedDurationUs > minQueuedDurationUs) {  //@hong use max time for CMMB temply
+		if (minQueuedDurationUs > 100000ll || i==0) 
+		minQueuedDurationUs = queuedDurationUs;
+        }else if (queuedDurationUs < 100000ll) minQueuedDurationUs = queuedDurationUs;
 
 	
     }

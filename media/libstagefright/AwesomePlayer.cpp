@@ -689,7 +689,7 @@ void AwesomePlayer::onBufferingUpdate() {
                 mFlags &= ~CACHE_UNDERRUN;
                 play_l();
                 notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); //@hong
-            } else if ((eos || cachedDurationUs > kHighWaterMarkUs /*kHighWaterMarkUs*/) && (mFlags & PREPARING)) { //@hong
+            } else if ((eos || cachedDurationUs > 300000ll) && (mFlags & PREPARING)) { //@hong
                 LOGV("cache has filled up (%.2f secs), prepare is done",
                      cachedDurationUs / 1E6);
                 finishAsyncPrepare_l();
@@ -1004,6 +1004,7 @@ void AwesomePlayer::setISurface(const sp<ISurface> &isurface) {
 	inull = (mISurface == NULL)?0:1;
     LOGI("setISurface %d", inull);
     mNewSurfaceIsSet = true;
+
 }
 
 void AwesomePlayer::setAudioSink(
