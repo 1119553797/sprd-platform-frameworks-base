@@ -2008,10 +2008,6 @@ void AwesomePlayer::finishAsyncPrepare_l() {
 
         notifyListener_l(MEDIA_PREPARED);
     }
-
-	
-	    if (mIsAsyncPrepare) 
-        notifyListener_l(MEDIA_PREPARED);
 		
     mPrepareResult = OK;
     mFlags &= ~(PREPARING|PREPARE_CANCELLED);
