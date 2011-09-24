@@ -564,8 +564,16 @@ public class MediaPlayer
      */
     public void setDisplay(SurfaceHolder sh) {
         mSurfaceHolder = sh;
+		
+	Log.d(TAG, "setDisplay ");
+
         if (sh != null) {
             mSurface = sh.getSurface();
+		if (mSurface !=null)
+          	Log.d(TAG, "setDisplay 1");
+		else
+		Log.d(TAG, "setDisplay 0");
+		
         } else {
             mSurface = null;
         }
