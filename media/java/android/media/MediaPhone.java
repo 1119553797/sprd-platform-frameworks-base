@@ -818,7 +818,7 @@ public class MediaPhone extends Handler
 	
     public void onCodecRequest(int type, int param)
     {
-        Log.d(TAG, "onCodecRequest:" + type + ", " + param);
+        Log.d(TAG, "onCodecRequest:" + type + ", " + param + ", mCodecState: " + mCodecState);
         switch (type) {
         case CODEC_OPEN:
 		if (mOnCallEventListener != null){
@@ -841,7 +841,7 @@ public class MediaPhone extends Handler
 				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_SET_PARAM_ENCODER, null);
 			}
 		}
-            if (mCodecCount == 2) { /* decoder */
+            	if (mCodecState != CodecState.CODEC_START) { 
 	            try {
 	                start();
 			mCodecState = CodecState.CODEC_START;
