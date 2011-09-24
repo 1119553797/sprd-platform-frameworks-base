@@ -1302,12 +1302,16 @@ public final class SIMRecords extends IccRecords {
             if ((spnDisplayCondition & 0x01) == 0x01) {
                 // ONS required when registered to HPLMN or PLMN in EF_SPDI
                 rule |= SPN_RULE_SHOW_PLMN;
+            }else{
+            	rule |= SPN_RULE_SHOW_SPN;
             }
         } else {
             //rule = SPN_RULE_SHOW_PLMN;
             if ((spnDisplayCondition & 0x02) == 0x00) {
                 // SPN required if not registered to HPLMN or PLMN in EF_SPDI
                 rule |= SPN_RULE_SHOW_SPN;
+            }else{
+            	rule |= SPN_RULE_SHOW_PLMN;
             }
         }
         return rule;
