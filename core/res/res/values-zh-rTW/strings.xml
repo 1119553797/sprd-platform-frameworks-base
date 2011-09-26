@@ -52,6 +52,12 @@
     <string name="ColpMmi" msgid="">"顯示實際接聽號碼"</string>
     <string name="ColrMmi" msgid="">"隱藏實際接通號碼"</string>
     <string name="CfMmi" msgid="5123218989141573515">"來電轉接"</string>
+    <string name="UnConditionCfMmi" msgid="">"無條件來電轉接"</string>
+    <string name="BusyCfMmi" msgid="">"遇忙時來電轉接"</string>
+    <string name="NoReplyCfMmi" msgid="">"無應答時來電轉接"</string>
+    <string name="NotReachCfMmi" msgid="">"無法接通時來電轉接"</string>
+    <string name="AllCfMmi" msgid="">"所有來電轉接"</string>
+    <string name="ConditionCfMmi" msgid="">"所有條件來電轉接"</string>
     <string name="CwMmi" msgid="9129678056795016867">"來電待接"</string>
     <string name="BaMmi" msgid="455193067926770581">"通話限制"</string>
     <string name="ActiveUnconCf" msgid="">"無條件呼叫轉移啟動"</string>

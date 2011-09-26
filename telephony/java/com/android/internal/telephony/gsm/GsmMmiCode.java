@@ -914,7 +914,21 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
             if (isServiceCodeCallBarring(sc)) {
                 return context.getText(com.android.internal.R.string.BaMmi);
             } else if (isServiceCodeCallForwarding(sc)) {
-                return context.getText(com.android.internal.R.string.CfMmi);
+                if (sc.equals(SC_CFU)) {
+                    return context.getText(com.android.internal.R.string.UnConditionCfMmi);
+                } else if (sc.equals(SC_CFB)) {
+                    return context.getText(com.android.internal.R.string.BusyCfMmi);
+                } else if (sc.equals(SC_CFNRy)) {
+                    return context.getText(com.android.internal.R.string.NoReplyCfMmi);
+                } else if (sc.equals(SC_CFNR)) {
+                    return context.getText(com.android.internal.R.string.NotReachCfMmi);
+                } else if (sc.equals(SC_CF_All)) {
+                    return context.getText(com.android.internal.R.string.AllCfMmi);
+                } else if (sc.equals(SC_CF_All_Conditional)) {
+                    return context.getText(com.android.internal.R.string.ConditionCfMmi);
+                } else { 
+                    return context.getText(com.android.internal.R.string.CfMmi);
+                }
             } else if (sc.equals(SC_CLIP)) {
                 return context.getText(com.android.internal.R.string.ClipMmi);
             } else if (sc.equals(SC_CLIR)) {

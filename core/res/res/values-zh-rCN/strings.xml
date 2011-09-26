@@ -52,6 +52,12 @@
     <string name="ColpMmi" msgid="">"显示实际接听号码"</string>
     <string name="ColrMmi" msgid="">"隐藏实际接通号码"</string>
     <string name="CfMmi" msgid="5123218989141573515">"来电转接"</string>
+    <string name="UnConditionCfMmi" msgid="">"无条件来电转接"</string>
+    <string name="BusyCfMmi" msgid="">"遇忙时来电转接"</string>
+    <string name="NoReplyCfMmi" msgid="">"无应答时来电转接"</string>
+    <string name="NotReachCfMmi" msgid="">"无法接通时来电转接"</string>
+    <string name="AllCfMmi" msgid="">"所有来电转接"</string>
+    <string name="ConditionCfMmi" msgid="">"所有条件来电转接"</string>
     <string name="CwMmi" msgid="9129678056795016867">"来电等待"</string>
     <string name="BaMmi" msgid="455193067926770581">"呼叫限制"</string>
     <string name="ActiveUnconCf" msgid="">"无条件呼叫转移启动"</string>

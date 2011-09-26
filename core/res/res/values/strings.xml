@@ -98,6 +98,12 @@
     <string name="ColrMmi">Connected line identification restriction</string>
     <!-- Displayed as the title for a success/failure report enabling/disabling call forwarding. -->
     <string name="CfMmi">Call forwarding</string>
+    <string name="UnConditionCfMmi" msgid="">"Unconditionally call forwarding"</string>
+    <string name="BusyCfMmi" msgid="">"When busy call forwarding"</string>
+    <string name="NoReplyCfMmi" msgid="">"When no reply call forwarding"</string>
+    <string name="NotReachCfMmi" msgid="">"When not reachable call forwarding"</string>
+    <string name="AllCfMmi" msgid="">"All call forwarding"</string>
+    <string name="ConditionCfMmi" msgid="">"Conditionally call forwarding"</string>
     <!-- Displayed as the title for a success/failure report enabling/disabling call waiting. -->
     <string name="CwMmi">Call waiting</string>
     <!-- Displayed as the title for a success/failure report enabling/disabling call barring. -->
