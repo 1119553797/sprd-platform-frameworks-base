@@ -442,9 +442,12 @@ void AwesomePlayer::reset() {
     LOGV("reset");
 
 	 //@hong to handle stop failed. 2011-8-15
+    if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)) 
+    {
        if (mFlags & PREPARING) {
           abortPrepare(UNKNOWN_ERROR);
 	  	}
+    }
    
     Mutex::Autolock autoLock(mLock);
      LOGI("reset_l wait");
@@ -459,13 +462,13 @@ void AwesomePlayer::reset_l() {
             mConnectingDataSource->disconnect();
         }
     }
-	LOGI("reset_l wait");
-    while (mFlags & PREPARING && mConnectingDataSource != NULL) { 
-//@hong check... && mConnectingDataSource != NULL
+	LOGI("--reset_l wait");
+    while (mFlags & PREPARING) { 
+        LOGI("--prepare Condition.wait");
         mPreparedCondition.wait(mLock);
     }
 
-	LOGI("cancel event");
+	LOGI("--cancel event");
     cancelPlayerEvents();
 
 
@@ -474,7 +477,7 @@ void AwesomePlayer::reset_l() {
 
     mAudioTrack.clear();
     mVideoTrack.clear();
-LOGI("cancel clear ok");
+LOGI("--cancel clear ok");
     // Shutdown audio first, so that the respone to the reset request
     // appears to happen instantaneously as far as the user is concerned
     // If we did this later, audio would continue playing while we
@@ -487,56 +490,56 @@ LOGI("cancel clear ok");
         mAudioSource->stop();
     }
     mAudioSource.clear();
-LOGI("cancel source ok");
+LOGI("--cancel source ok");
     mTimeSource = NULL;
 
     delete mAudioPlayer;
     mAudioPlayer = NULL;
 
     mVideoRenderer.clear();
-LOGI(" mVideoRenderer clear ok");
+LOGI("--mVideoRenderer clear ok");
     if (mLastVideoBuffer) {
         mLastVideoBuffer->release();
         mLastVideoBuffer = NULL;
     }
-LOGI(" mLastVideoBuffer release ok");
+LOGI("--mLastVideoBuffer release ok");
     if (mVideoBuffer) {
         mVideoBuffer->release();
         mVideoBuffer = NULL;
     }
-LOGI(" mVideoBuffer->release release ok");
+LOGI("--mVideoBuffer->release release ok");
 
 
     if (mRTSPController != NULL) {
         mRTSPController->disconnect();
         mRTSPController.clear();
     }
-LOGI(" mRTSPController->disconnect ok");
+LOGI("--mRTSPController->disconnect ok");
 
     mRTPPusher.clear();
     mRTCPPusher.clear();
     mRTPSession.clear();
-LOGI(" mRTP clear ok");
+LOGI("--mRTP clear ok");
 
 
     if (mVideoSource != NULL) {
         mVideoSource->stop();
-LOGI(" mVideoSource stop ok");
+LOGI("--mVideoSource stop ok");
 
         // The following hack is necessary to ensure that the OMX
         // component is completely released by the time we may try
         // to instantiate it again.
         wp<MediaSource> tmp = mVideoSource;
         mVideoSource.clear();
-LOGI("mVideoSource.clear ok");
+LOGI("--mVideoSource.clear ok");
         while (tmp.promote() != NULL) {
             usleep(1000);
         }
-LOGI(" flushCommands");
+LOGI("--flushCommands");
 
         IPCThreadState::self()->flushCommands();
     }
-LOGI(" flushCommands ok");
+LOGI("--flushCommands ok");
     mDurationUs = -1;
     mFlags = 0;
     mExtractorFlags = 0;
@@ -546,7 +549,7 @@ LOGI(" flushCommands ok");
 #ifdef _SYNC_USE_SYSTEM_TIME_
     mSystemTimeSourceForSync.reset();//@jgdu
 #endif	
-LOGI(" mSystemTimeSourceForSync reset ok");
+LOGI("--mSystemTimeSourceForSync reset ok");
     mSeeking = false;
     mSeekNotificationSent = false;
     mSeekTimeUs = 0;
@@ -555,13 +558,13 @@ LOGI(" mSystemTimeSourceForSync reset ok");
     mUriHeaders.clear();
 
     mFileSource.clear();
-LOGI(" mFileSource clear ok");
+LOGI("--mFileSource clear ok");
 
     delete mSuspensionState;
     mSuspensionState = NULL;
 
     mBitrate = -1;
-LOGI(" ok..reset");
+LOGI("--ok..reset");
 
 }
 
@@ -961,6 +964,7 @@ status_t AwesomePlayer::forceStop(){
 
 
 status_t AwesomePlayer::pause() {
+    LOGV("pause");   	
     Mutex::Autolock autoLock(mLock);
 
     mFlags &= ~CACHE_UNDERRUN;
@@ -1004,11 +1008,11 @@ void AwesomePlayer::setISurface(const sp<ISurface> &isurface) {
 	inull = (mISurface == NULL)?0:1;
     LOGI("setISurface %d", inull);
     mNewSurfaceIsSet = true;
-
 }
 
 void AwesomePlayer::setAudioSink(
         const sp<MediaPlayerBase::AudioSink> &audioSink) {
+    LOGV("setAudioSink");    
     Mutex::Autolock autoLock(mLock);
 
     mAudioSink = audioSink;
@@ -1057,6 +1061,7 @@ status_t AwesomePlayer::getPosition(int64_t *positionUs) {
 }
 
 status_t AwesomePlayer::seekTo(int64_t timeUs) {
+    LOGV("seekTo %lld",timeUs);	
     if (mExtractorFlags & MediaExtractor::CAN_SEEK) {
         Mutex::Autolock autoLock(mLock);
         return seekTo_l(timeUs);
@@ -1129,6 +1134,7 @@ status_t AwesomePlayer::getVideoDimensions(
 }
 
 void AwesomePlayer::setAudioSource(sp<MediaSource> source) {
+    LOGV("setAudioSource");	
     CHECK(source != NULL);
 
     mAudioTrack = source;
@@ -1381,23 +1387,7 @@ void AwesomePlayer::onVideoEvent() {
 	    struct timeval tv;  //@hong add timecheck.
 	    gettimeofday(&tv, NULL);
 	LOGV("First Frame time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
-	is_first_frame = 1;
-/*	
-	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)) //@Hong. SpeedupCMMB
-	{
-		int64_t TimeUs,audioTimeUs;
-		int64_t  AudioLatencyUs =  mAudioPlayer->getAudioLatencyUs();
-		mAudioPlayer->seekTo(AudioLatencyUs);
-		
-		if(mAudioPlayer->getMediaTimeMapping(&TimeUs, &audioTimeUs)){
-			LOGI("cmmb seek audio audioTimeUs=%lld,videoTime=%lld audiolatencyus:%lld",audioTimeUs,timeUs,AudioLatencyUs);
-			if(timeUs>audioTimeUs)
-				mAudioPlayer->seekTo(AudioLatencyUs);
-		}else{
-			LOGI("fail getMediaTimeMapping");
-		}
-	}
-*/		
+	is_first_frame = 1;	
 	   
         mTimeSourceDeltaUs = ts->getRealTimeUs() - timeUs;
     }
@@ -1485,7 +1475,6 @@ void AwesomePlayer::onVideoEvent() {
     }
 
     if (mVideoRenderer != NULL) {
-	 LOGI("cmmb disp first_frame");	
         mVideoRenderer->render(mVideoBuffer);
     }else{
     	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)){ //@Hong. SpeedupCMMB	
