@@ -12,6 +12,7 @@
 #include <media/mediarecorder.h>
 #include <sys/prctl.h>
 #include <sys/resource.h>
+#include <cutils/properties.h>
 
 namespace android {
 
@@ -179,6 +180,17 @@ status_t VideoPhoneWriter::threadFunc()
 	while (m_bStarted) 
 	{
 		MediaBuffer *buffer;
+		char propBuf[PROPERTY_VALUE_MAX] = {0};
+		property_get("gsm.vt.buffer", propBuf, "unknown");
+		LOGI("property_get: %s.", propBuf);
+
+		while (strcmp(propBuf, "0")) {
+			usleep(100 * 1000);
+			property_get("gsm.vt.buffer", propBuf, "unknown");	
+			LOGI("property_get: %s.", propBuf);
+			if (!m_bStarted) break;
+		} ;
+				
 		//LOGI("before read");
 		err = m_MediaSource->read(&buffer);
 		//LOGI("after read %d", err);
@@ -195,6 +207,12 @@ status_t VideoPhoneWriter::threadFunc()
 		ssize_t n = write(m_nHandle,
 										(const uint8_t *)buffer->data() + buffer->range_offset(),
 										nLen);
+		/*ssize_t n = 0;
+		do {
+			n += write(m_nHandle, (const uint8_t *)buffer->data() + buffer->range_offset() + n,
+										((nLen - n)>120)?120:(nLen-n));
+			LOGI("write n: %d", n);
+		} while(n < nLen);*/
 		//LOGI("after write %d", n);
 
 		buffer->release();

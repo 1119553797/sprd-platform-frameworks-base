@@ -297,12 +297,19 @@ public class MediaPhone extends Handler
      *
      * @throws IllegalStateException if it is called in an invalid state
      */
-    public void start() throws IllegalStateException {
+    public void startPlayer() throws IllegalStateException {
         stayAwake(true);
-        _start();
+        _startPlayer();
     }
 
-    private native void _start() throws IllegalStateException;
+    public void startRecorder() throws IllegalStateException {
+        stayAwake(true);
+        _startRecorder();
+    }
+
+    private native void _startPlayer() throws IllegalStateException;
+	
+    private native void _startRecorder() throws IllegalStateException;
 
     /**
      * Stops playback after playback has been stopped or paused.
@@ -707,9 +714,8 @@ public class MediaPhone extends Handler
                 return;
 				
             case MEDIA_UNSOL_DATA: {
-                int[] params = (int[])ar.result;
-                int indication = params[0];
-				Log.d(TAG, "handleMessage(MEDIA_UNSOL_DATA), indication: " + indication);
+                String indication = (String)ar.result;
+		  Log.d(TAG, "handleMessage(MEDIA_UNSOL_DATA), indication: " + indication);
                 return;
             }
 
@@ -837,13 +843,14 @@ public class MediaPhone extends Handler
 		if (mOnCallEventListener != null){
 			if (param == 1){
 				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_SET_PARAM_DECODER, null);
+				startPlayer();
 			} else {
 				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_SET_PARAM_ENCODER, null);
+				startRecorder();
 			}
 		}
             	if (mCodecState != CodecState.CODEC_START) { 
 	            try {
-	                start();
 			mCodecState = CodecState.CODEC_START;
 			if (mOnCallEventListener != null) {
 				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_START, null);

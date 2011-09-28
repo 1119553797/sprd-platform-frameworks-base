@@ -27,6 +27,13 @@
 
 namespace android {
 
+#define CHECK_RT(val) \
+		do { \
+			status_t r = val; \
+			if (r != OK) return r; \
+		} while(0)
+		
+
 status_t MediaPhone::setComm(const char* urlIn, const char* urlOut)
 {
     LOGV("setComm(%p, %p)", urlIn, urlOut);
@@ -156,10 +163,8 @@ status_t MediaPhone::prepare()
 		return -EALREADY;
 	}
 	mPrepareSync = true;
-	status_t ret = prepareAsync_l();
-	if (ret != NO_ERROR) {
-		return ret;
-	}
+	CHECK_RT(mMediaPhone->prepareRecorder());
+	CHECK_RT(preparePlayerAsync_l());
 
 	if (mPrepareSync) {
 		mSignal.wait(mLock);  // wait for prepare done
@@ -171,14 +176,14 @@ status_t MediaPhone::prepare()
 
 
 // must call with lock held
-status_t MediaPhone::prepareAsync_l()
+status_t MediaPhone::preparePlayerAsync_l()
 {
     if ( (mMediaPhone != 0) && ( mCurrentState & MEDIA_PHONE_IDLE ) ) {
         //mMediaPhone->setAudioStreamType(mStreamType);
         mCurrentState = MEDIA_PHONE_PREPARING;
-        return mMediaPhone->prepareAsync();
+        return mMediaPhone->preparePlayer();
     }
-    LOGE("prepareAsync called in state %d", mCurrentState);
+    LOGE("preparePlayerAsync_l called in state %d", mCurrentState);
     return INVALID_OPERATION;
 }
 
@@ -188,20 +193,27 @@ status_t MediaPhone::prepareAsync()
     return OK;
 }
 
-status_t MediaPhone::start()
+status_t MediaPhone::startPlayer()
 {
-    LOGV("start");
-	return internal_prepareAsync();
+    LOGV("startPlayer");
+	return internal_preparePlayerAsync();
 }
 
-status_t MediaPhone::internal_prepareAsync(){
-    LOGV("internal_prepareAsync");
+status_t MediaPhone::startRecorder()
+{
+    LOGV("startRecorder");
+	CHECK_RT(mMediaPhone->prepareRecorder());
+	return mMediaPhone->startRecorder();
+}
+
+status_t MediaPhone::internal_preparePlayerAsync(){
+    LOGV("internal_preparePlayerAsync");
     Mutex::Autolock _l(mLock);
-    return prepareAsync_l();
+    return preparePlayerAsync_l();
 }
 
-status_t MediaPhone::internal_start(){
-    LOGV("internal_start");
+status_t MediaPhone::internal_startPlayer(){
+    LOGV("internal_startPlayer");
     if (mMediaPhone == NULL) {
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
@@ -211,7 +223,7 @@ status_t MediaPhone::internal_start(){
         return INVALID_OPERATION;
     }*/
 
-    status_t ret = mMediaPhone->start();
+    status_t ret = mMediaPhone->startPlayer();
     if (OK != ret) {
         LOGE("start failed: %d", ret);
 //        mCurrentState = MEDIA_PHONE_ERROR;
@@ -326,11 +338,11 @@ status_t MediaPhone::setDecodeType(int type)
     LOGV("setDecodeType");
     Mutex::Autolock _l(mLock);
 	
-    if (mCurrentState & MEDIA_PHONE_STARTED) {
+/*    if (mCurrentState & MEDIA_PHONE_STARTED) {
         // Can't change the stream type after prepare
         LOGE("setDecodeType called in state %d", mCurrentState);
         return INVALID_OPERATION;
-    }
+    }*/
 	
 	status_t ret = mMediaPhone->setDecodeType(type);
     if (OK != ret) {
@@ -347,11 +359,11 @@ status_t MediaPhone::setEncodeType(int type)
     LOGV("setEncodeType");
     Mutex::Autolock _l(mLock);
 	
-    if (mCurrentState & MEDIA_PHONE_STARTED) {
+    /*if (mCurrentState & MEDIA_PHONE_STARTED) {
         // Can't change the stream type after prepare
         LOGE("setEncodeType called in state %d", mCurrentState);
         return INVALID_OPERATION;
-    }
+    }*/
 	
 	status_t ret = mMediaPhone->setEncodeType(type);
     if (OK != ret) {
@@ -556,7 +568,7 @@ void MediaPhone::notify(int msg, int ext1, int ext2)
     case MEDIA_PHONE_EVENT_PREPARED:
         LOGV("prepared");
         mCurrentState = MEDIA_PHONE_PREPARED;
-		internal_start();
+		internal_startPlayer();
         if (mPrepareSync) {
             LOGV("signal application thread");
             mPrepareSync = false;

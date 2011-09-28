@@ -94,8 +94,10 @@ public:
     virtual     status_t    setLocalSurface(const sp<ISurface>& surface);
     virtual     status_t    setListener(const sp<IMediaPlayerClient>& listener);
     virtual     status_t    setParameters(const String8 &params);
-    virtual     status_t    prepareAsync();
-    virtual     status_t    start();
+    virtual     status_t    prepareRecorder();
+    virtual     status_t    preparePlayer();
+    virtual     status_t    startPlayer();
+    virtual     status_t    startRecorder();
     virtual     status_t    stop();
     virtual     status_t    setDecodeType(int type);
     virtual     status_t    setEncodeType(int type);
@@ -116,8 +118,6 @@ private:
 
                                  MediaPhoneClient(const sp<MediaPlayerService>& service, pid_t pid);
     virtual 		         ~MediaPhoneClient();
-	status_t	prepareRecorder();
-	status_t	preparePlayer();
 
     pid_t			 mPid;
     Mutex			 mLock;

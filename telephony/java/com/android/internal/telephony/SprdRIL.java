@@ -860,7 +860,7 @@ public final class SprdRIL extends RIL {
 				case RIL_UNSOL_OEM_HOOK_RAW: ret = responseRaw(p); break;
 				case RIL_UNSOL_RINGBACK_TONE: ret = responseInts(p); break;
 				case RIL_UNSOL_RESEND_INCALL_MUTE: ret = responseVoid(p); break;
-				case RIL_UNSOL_VIDEOPHONE_DATA: ret = responseInts(p); break;
+				case RIL_UNSOL_VIDEOPHONE_DATA: ret = responseString(p); break;
 				case RIL_UNSOL_VIDEOPHONE_CODEC: ret = responseInts(p); break;
 				case RIL_UNSOL_VIDEOPHONE_STRING: ret = responseString(p); break;
 				case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: ret = responseInts(p); break;
@@ -1175,7 +1175,7 @@ public final class SprdRIL extends RIL {
 				case RIL_UNSOL_VIDEOPHONE_DATA:{		
 								       if (RILJ_LOGD) unsljLogRet(response, ret);
 
-								       int[] params = (int[])ret;
+								       /*int[] params = (int[])ret;
 
 								       if(params.length == 1) {
 									       if (mVPDataRegistrant != null) {
@@ -1185,7 +1185,11 @@ public final class SprdRIL extends RIL {
 								       } else {
 									       if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_DATA ERROR with wrong length "
 											       + params.length);
-								       }
+								       }*/
+									if (mVPDataRegistrant != null) {
+										mVPDataRegistrant
+											.notifyRegistrant(new AsyncResult(null, ret, null));
+									}
 								       break;
 							       }
 				case RIL_UNSOL_VIDEOPHONE_CODEC:{		

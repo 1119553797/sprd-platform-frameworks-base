@@ -37,8 +37,10 @@ public:
     virtual status_t	setLocalSurface(const sp<ISurface>& surface) = 0;
     virtual status_t	setListener(const sp<IMediaPlayerClient>& listener) = 0;
     virtual status_t    setParameters(const String8 &params) = 0;
-    virtual status_t    prepareAsync() = 0;
-    virtual status_t	start() = 0;
+    virtual status_t	preparePlayer() = 0;
+    virtual status_t	prepareRecorder() = 0;
+    virtual status_t	startPlayer() = 0;
+    virtual status_t	startRecorder() = 0;
     virtual status_t	stop() = 0;
     virtual status_t    release() = 0;
     virtual status_t	setDecodeType(int type) = 0;

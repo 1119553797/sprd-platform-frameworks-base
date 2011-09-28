@@ -735,10 +735,10 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 			}
 		}
 	}
-	LOGI("[%p]find frame 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, m_RingBuffer[nStart + 2], m_RingBuffer[nStart + 3], m_RingBuffer[nStart + 4], m_RingBuffer[nStart + 5]
-	, m_RingBuffer[nStart + 6], m_RingBuffer[nStart + 7], m_RingBuffer[nStart + 8], m_RingBuffer[nStart + 9]);
-
 	nLen = ((nEnd - nStart) + m_nRingBufferSize) % m_nRingBufferSize;
+	
+	LOGI("[%p]find frame size: %d, 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, nLen, m_RingBuffer[nStart + 2], m_RingBuffer[nStart + 3], m_RingBuffer[nStart + 4], m_RingBuffer[nStart + 5]
+	, m_RingBuffer[nStart + 6], m_RingBuffer[nStart + 7], m_RingBuffer[nStart + 8], m_RingBuffer[nStart + 9]);
 
 	if (nLen > nSize)
 	{

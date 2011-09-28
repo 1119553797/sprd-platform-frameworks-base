@@ -207,39 +207,28 @@ status_t MediaPhoneClient::preparePlayer()
     return OK;
 }
 
-status_t MediaPhoneClient::prepareAsync()
-{
-    LOGV("prepareAsync");
-    if (mPlayer == NULL || mRecorder == NULL) {
-        LOGE("mediaphone: player or recorder is not initialized");
-        return NO_INIT;
-    }
-#if 0 //test code
-    FILE *fi = fopen(mUrlIn, "rb");
-    if (fi == NULL) {
-        LOGE("mediaphone: open %s failed errno=%d", mUrlIn, errno);
-    } else {
-        fclose(fi);
-    }
-#endif
-	CHECK_RT(prepareRecorder());
-	CHECK_RT(preparePlayer());
-
-    return OK;
-}
-
-status_t MediaPhoneClient::start()
+status_t MediaPhoneClient::startPlayer()
 {
     LOGV("start");
     //todo: fix me
-    if (mPlayer == NULL || mRecorder == NULL) {
-        LOGE("mediaphone: player & recorder is not initialized");
+    if (mPlayer == NULL) {
+        LOGE("mediaphone: player is not initialized");
         return NO_INIT;
     }
 
-	//CHECK_RT(prepareRecorder());
-	//CHECK_RT(preparePlayer());
     CHECK_RT(mPlayer->start());
+    return OK;
+}
+
+status_t MediaPhoneClient::startRecorder()
+{
+    LOGV("start");
+    //todo: fix me
+    if (mRecorder == NULL) {
+        LOGE("mediaphone: recorder is not initialized");
+        return NO_INIT;
+    }
+
     CHECK_RT(mRecorder->start());
     return OK;
 }
@@ -342,11 +331,6 @@ status_t MediaPhoneClient::setEncodeType(int type)
     LOGV("setEncodeType(%d)", type);
     Mutex::Autolock l(mLock);
 	mEncodeType = type;
-    if (mEncodeType == 2) { // mpeg4    
-	    CHECK_RT(mRecorder->setVideoEncoder(VIDEO_ENCODER_MPEG_4_SP));
-    } else {
-	    CHECK_RT(mRecorder->setVideoEncoder(VIDEO_ENCODER_H263));
-    }
     return NO_ERROR;
 }
 
@@ -419,6 +403,13 @@ status_t MediaPhoneClient::stopUpLink()
 {
     LOGV("stopUpLink");
     CHECK_RT(mRecorder->stop());
+    /*LOGV("stopUpLink, set camera surface");
+    //CHECK_RT(mRecorder->stop());
+    int64_t token = IPCThreadState::self()->clearCallingIdentity();
+	mCamera->lock();
+	mCamera->setPreviewDisplay(mPreviewSurface);
+	mCamera->unlock();
+    IPCThreadState::self()->restoreCallingIdentity(token);*/
     return OK;
 }
 

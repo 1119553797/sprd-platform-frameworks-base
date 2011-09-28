@@ -98,7 +98,8 @@ public:
     status_t    setParameters(const String8 &params);
 	status_t	prepare();
     status_t    prepareAsync();
-    status_t    start();
+    status_t    startPlayer();
+    status_t    startRecorder();
     status_t    stop();
     status_t    release();
     status_t    setDecodeType(int type);
@@ -114,10 +115,10 @@ public:
     void        notify(int msg, int ext1, int ext2);
 
 private:
-    status_t    prepareAsync_l();
+    status_t    preparePlayerAsync_l();
     void        doCleanUp();
-    status_t    internal_prepareAsync();
-    status_t    internal_start();	
+    status_t    internal_preparePlayerAsync();
+    status_t    internal_startPlayer();	
 
     sp<IMediaPhone>          mMediaPhone;
     sp<MediaPhoneListener>   mListener;

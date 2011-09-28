@@ -34,8 +34,10 @@ enum {
     SET_LOCAL_SURFACE,
     SET_LISTENER,
     SET_PARAMETERS,
-    PREPARE_ASYNC,
-    START,
+    PREPARE_PLAYER,
+    PREPARE_RECORDER,
+    START_PLAYER,
+    START_RECORDER,
     STOP,
     SET_DECODE_TYPE,
     SET_ENCODE_TYPE,
@@ -118,21 +120,39 @@ public:
         return reply.readInt32();
     }
 
-    status_t prepareAsync()
+    status_t preparePlayer()
     {
-        LOGV("prepareAsync");
+        LOGV("preparePlayer");
         Parcel data, reply;
         data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
-        remote()->transact(PREPARE_ASYNC, data, &reply);
+        remote()->transact(PREPARE_PLAYER, data, &reply);
+        return reply.readInt32();
+    }
+	
+    status_t prepareRecorder()
+    {
+        LOGV("prepareRecorder");
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        remote()->transact(PREPARE_RECORDER, data, &reply);
         return reply.readInt32();
     }
 
-    status_t start()
+    status_t startPlayer()
     {
-        LOGV("start");
+        LOGV("startPlayer");
         Parcel data, reply;
         data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
-        remote()->transact(START, data, &reply);
+        remote()->transact(START_PLAYER, data, &reply);
+        return reply.readInt32();
+    }
+
+    status_t startRecorder()
+    {
+        LOGV("startRecorder");
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        remote()->transact(START_RECORDER, data, &reply);
         return reply.readInt32();
     }
 
@@ -314,15 +334,28 @@ status_t BnMediaPhone::onTransact(
             reply->writeInt32(setParameters(data.readString8()));
             return NO_ERROR;
         } break;
-        case PREPARE_ASYNC: {
+        case PREPARE_PLAYER: {
+            LOGV("PREPARE_PLAYER");
             CHECK_INTERFACE(IMediaPhone, data, reply);
-            reply->writeInt32(prepareAsync());
+            reply->writeInt32(preparePlayer());
             return NO_ERROR;
         } break;
-        case START: {
-            LOGV("START");
+        case PREPARE_RECORDER: {
+            LOGV("PREPARE_RECORDER");
             CHECK_INTERFACE(IMediaPhone, data, reply);
-            reply->writeInt32(start());
+            reply->writeInt32(prepareRecorder());
+            return NO_ERROR;
+        } break;
+        case START_PLAYER: {
+            LOGV("START_PLAYER");
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+            reply->writeInt32(startPlayer());
+            return NO_ERROR;
+        } break;
+        case START_RECORDER: {
+            LOGV("START_RECORDER");
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+            reply->writeInt32(startRecorder());
             return NO_ERROR;
         } break;
         case STOP: {

@@ -337,11 +337,19 @@ android_media_MediaPhone_prepareAsync(JNIEnv *env, jobject thiz)
 }
 
 static void
-android_media_MediaPhone_start(JNIEnv *env, jobject thiz)
+android_media_MediaPhone_startPlayer(JNIEnv *env, jobject thiz)
 {
-    LOGV("start");
+    LOGV("startPlayer");
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
-    process_media_phone_call(env, thiz, mp->start(), "java/lang/RuntimeException", "start failed.");
+    process_media_phone_call(env, thiz, mp->startPlayer(), "java/lang/RuntimeException", "startPlayer failed.");
+}
+
+static void
+android_media_MediaPhone_startRecorder(JNIEnv *env, jobject thiz)
+{
+    LOGV("startRecorder");
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+    process_media_phone_call(env, thiz, mp->startRecorder(), "java/lang/RuntimeException", "startRecorder failed.");
 }
 
 static void
@@ -625,7 +633,8 @@ static JNINativeMethod gMethods[] = {
     {"prepare",         	 "()V",                             (void *)android_media_MediaPhone_prepare},
     {"prepareAsync",         "()V",                             (void *)android_media_MediaPhone_prepareAsync},
     {"setComm",              "(Ljava/lang/String;Ljava/lang/String;)V",           (void *)android_media_MediaPhone_setComm},
-    {"_start",               "()V",                             (void *)android_media_MediaPhone_start},
+    {"_startPlayer",         "()V",                             (void *)android_media_MediaPhone_startPlayer},
+    {"_startRecorder",       "()V",                             (void *)android_media_MediaPhone_startRecorder},
     {"_stop",                "()V",                             (void *)android_media_MediaPhone_stop},
     {"getVideoWidth",        "()I",                             (void *)android_media_MediaPhone_getVideoWidth},
     {"getVideoHeight",       "()I",                             (void *)android_media_MediaPhone_getVideoHeight},
