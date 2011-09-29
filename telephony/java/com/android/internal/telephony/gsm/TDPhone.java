@@ -123,6 +123,7 @@ public final class TDPhone extends GSMPhone {
 
     // Instance Variables
 	VideoCallTracker mVideoCT;
+	HandlerThread mVideoCTTread;
 	CallType callType;
 	
     protected static final int EVENT_CONTROL_CAMERA_DONE       = 100;
@@ -143,7 +144,25 @@ public final class TDPhone extends GSMPhone {
     public
     TDPhone (Context context, CommandsInterface ci, PhoneNotifier notifier, boolean unitTestMode) {
         super(context, ci, notifier, unitTestMode);
-		mVideoCT = new VideoCallTracker(this);
+		
+	final Object syncObj = new Object();
+	final TDPhone phone = this;
+        mVideoCTTread = new HandlerThread("VideoCallTracker"){					
+		protected void onLooperPrepared() {
+			synchronized(syncObj) {
+				mVideoCT = new VideoCallTracker(phone);
+				syncObj.notifyAll();
+			}
+		}
+        };
+        mVideoCTTread.start();
+	synchronized(syncObj) {
+		try{
+			syncObj.wait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
         if (ci instanceof SimulatedRadioControl) {
             mSimulatedRadioControl = (SimulatedRadioControl) ci;
