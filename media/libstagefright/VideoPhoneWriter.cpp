@@ -1,6 +1,7 @@
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "VideoPhoneWriter"
 #include <utils/Log.h>
+#include <fcntl.h>
 
 #include <media/stagefright/VideoPhoneWriter.h>
 #include <media/stagefright/MediaBuffer.h>
@@ -22,12 +23,12 @@ VideoPhoneWriter::VideoPhoneWriter(int handle)
       m_nInitCheck(m_nHandle >= 0 ? OK : NO_INIT),
       m_bStarted(false)
 {
-	LOGI("VideoPhoneWriter::VideoPhoneWriter");
+	LOGV("VideoPhoneWriter::VideoPhoneWriter");
 }
 
 VideoPhoneWriter::~VideoPhoneWriter() 
 {
-	LOGI("VideoPhoneWriter::~VideoPhoneWriter");
+	LOGV("VideoPhoneWriter::~VideoPhoneWriter");
 	if (m_bStarted) 
     	stop();
 
@@ -65,7 +66,7 @@ status_t VideoPhoneWriter::addSource(const sp<MediaSource> &source)
     	int32_t 		nVideoHeight;
 	sp<MetaData>meta;	
 	
-	LOGI("VideoPhoneWriter::addSource");
+	LOGV("VideoPhoneWriter::addSource");
 	if (m_nInitCheck != OK)
         	goto over;
 
@@ -86,7 +87,7 @@ status_t VideoPhoneWriter::addSource(const sp<MediaSource> &source)
 	err = OK;
 	
 over:
-	LOGI("VideoPhoneWriter::addSource end %d", err);
+	LOGV("VideoPhoneWriter::addSource end %d", err);
 	
     	return err;
 }
@@ -119,7 +120,7 @@ status_t VideoPhoneWriter::start(MetaData *params)
 	
 success:
 	
-	LOGI("VideoPhoneWriter::start SUCCESS!");
+	LOGV("VideoPhoneWriter::start SUCCESS!");
     	return OK;
 
 fail:
@@ -151,7 +152,7 @@ status_t VideoPhoneWriter::stop()
 
 over:
 	
-	LOGI("VideoPhoneWriter::stop()  err = %d",err);
+	LOGV("VideoPhoneWriter::stop()  err = %d",err);
 	
 	if (err == ERROR_END_OF_STREAM) 
 		err = OK;
@@ -173,27 +174,34 @@ void *VideoPhoneWriter::ThreadWrapper(void *me)
 status_t VideoPhoneWriter::threadFunc() 
 {
 	status_t err = OK;
-
+	static int vt_pipe = -1;
+	vt_pipe = -1;
+	
 	prctl(PR_SET_NAME, (unsigned long)"VideoPhoneWriter", 0, 0, 0);
-		
-	LOGI("enter thread");
+	
+	LOGV("enter thread");
 	while (m_bStarted) 
 	{
 		MediaBuffer *buffer;
-		char propBuf[PROPERTY_VALUE_MAX] = {0};
-		property_get("gsm.vt.buffer", propBuf, "unknown");
-		LOGI("property_get: %s.", propBuf);
 
-		while (strcmp(propBuf, "0")) {
-			usleep(100 * 1000);
-			property_get("gsm.vt.buffer", propBuf, "unknown");	
-			LOGI("property_get: %s.", propBuf);
-			if (!m_bStarted) break;
-		} ;
+		// synchronized with at command (SPDVTDATA=0)
+		if (vt_pipe < 0) vt_pipe = open("/dev/pipe/ril.vt.0", O_RDWR|O_NONBLOCK);
+		if (vt_pipe > 0) {
+			char buf[128];
+			ssize_t len = -1;
+			do {
+				LOGV("before read pipe");
+				len = read(vt_pipe, buf, sizeof(buf) - 1);
+				LOGV("after read pipe, len: %d", len);
+				usleep(15*1000);
+				if (!m_bStarted ) break;
+			} while(len < 0);
+			if (!m_bStarted ) break;
+		}
 				
-		//LOGI("before read");
+		//LOGV("before read");
 		err = m_MediaSource->read(&buffer);
-		//LOGI("after read %d", err);
+		//LOGV("after read %d", err);
 
 		if (err != OK)
 			break;
@@ -201,7 +209,7 @@ status_t VideoPhoneWriter::threadFunc()
 		ssize_t nLen = (ssize_t)buffer->range_length();
 
 		const uint8_t *pData = (const uint8_t *)buffer->data() + buffer->range_offset();
-		LOGI("before write %d, data: 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x", 
+		LOGV("before write %d, data: 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x, 0x%02x", 
 				nLen, *pData, *(pData + 1), *(pData + 2), *(pData + 3), *(pData + 4), *(pData + 5), *(pData + 6), *(pData + 7));
 		
 		ssize_t n = write(m_nHandle,
@@ -211,9 +219,9 @@ status_t VideoPhoneWriter::threadFunc()
 		do {
 			n += write(m_nHandle, (const uint8_t *)buffer->data() + buffer->range_offset() + n,
 										((nLen - n)>120)?120:(nLen-n));
-			LOGI("write n: %d", n);
+			LOGV("write n: %d", n);
 		} while(n < nLen);*/
-		//LOGI("after write %d", n);
+		//LOGV("after write %d", n);
 
 		buffer->release();
 		buffer = NULL;
@@ -229,7 +237,11 @@ status_t VideoPhoneWriter::threadFunc()
 	
 	if (err == ERROR_END_OF_STREAM)
 		err	= OK;
-	
+
+	if (vt_pipe > 0){
+		vt_pipe = -1;
+		close(vt_pipe);
+	}
 	return err;
 }
 

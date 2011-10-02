@@ -217,7 +217,7 @@ public class MediaPhone extends Handler
             if (localSurface != null) {
             	mp.setLocalDisplay(localSurface);
             }
-            mp.mCm.setOnVPData(mp.mEventHandler, MEDIA_UNSOL_DATA, null);
+            //mp.mCm.setOnVPData(mp.mEventHandler, MEDIA_UNSOL_DATA, null);
             mp.mCm.setOnVPCodec(mp.mEventHandler, MEDIA_UNSOL_CODEC, null);
             mp.mCm.setOnVPString(mp.mEventHandler, MEDIA_UNSOL_STR, null);
             mp.mCm.setOnVPRemoteMedia(mp.mEventHandler, MEDIA_UNSOL_REMOTE_VIDEO, null);

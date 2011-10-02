@@ -1,4 +1,4 @@
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "VideoPhoneExtractor"
 #include <utils/Log.h>
 
@@ -35,19 +35,19 @@ VideoPhoneExtractor::VideoPhoneExtractor(const sp<DataSource> &source, int decod
       mDataSource(source),
       m_decodeType(decodeType)
 {    	
-	LOGI("VideoPhoneExtractor::VideoPhoneExtractor, decodeType: %d", decodeType);
+	LOGV("VideoPhoneExtractor::VideoPhoneExtractor, decodeType: %d", decodeType);
 	
 	m_AVMeta	= 	new MetaData();
 }
 
 VideoPhoneExtractor::~VideoPhoneExtractor() 
 {
-	LOGI("VideoPhoneExtractor::~VideoPhoneExtractor");
+	LOGV("VideoPhoneExtractor::~VideoPhoneExtractor");
 }
 
 sp<MetaData> VideoPhoneExtractor::getMetaData() 
 {
-	LOGI("VideoPhoneExtractor::getMetaData");
+	LOGV("VideoPhoneExtractor::getMetaData");
 	status_t err;
 	if ((err = readMetaData()) != OK)
 		return NULL;
@@ -64,7 +64,7 @@ sp<MetaData> VideoPhoneExtractor::getTrackMetaData(
         size_t index, uint32_t flags) 
 {
 
-	LOGI("VideoPhoneExtractor::getTrackMetaData START index = %d",index);
+	LOGV("VideoPhoneExtractor::getTrackMetaData START index = %d",index);
 	if (index > 1)
 		goto fail;
 	
@@ -81,7 +81,7 @@ fail:
 
 status_t VideoPhoneExtractor::readMetaData() 
 {
-	LOGI("VideoPhoneExtractor::readMetaData START, %d", m_decodeType);
+	LOGV("VideoPhoneExtractor::readMetaData START, %d", m_decodeType);
 
     	if (m_bHaveMetadata)
         	goto success;
@@ -102,7 +102,7 @@ status_t VideoPhoneExtractor::readMetaData()
 
 success:
 	
-	LOGI("VideoPhoneExtractor::readMetaData SUCCESS");
+	LOGV("VideoPhoneExtractor::readMetaData SUCCESS");
 	m_bHaveMetadata = true;
     	return OK;
 
@@ -114,7 +114,7 @@ fail:
 
 sp<MediaSource> VideoPhoneExtractor::getTrack(size_t index) 
 {		
-	LOGI("VideoPhoneExtractor::getTrack START");
+	LOGV("VideoPhoneExtractor::getTrack START");
     	if (readMetaData()!= OK)
         	goto fail;
 		
@@ -150,7 +150,7 @@ VideoPhoneSource::VideoPhoneSource(
       m_nNum(0),
       m_bHasMpeg4Header(false)
 {
-	LOGI("[%p]VideoPhoneSource::VideoPhoneSource", this);
+	LOGV("[%p]VideoPhoneSource::VideoPhoneSource", this);
 	m_fAVStream		= NULL;
 	m_fWrite = NULL;
 	m_fLen = NULL;
@@ -158,7 +158,7 @@ VideoPhoneSource::VideoPhoneSource(
 
 VideoPhoneSource::~VideoPhoneSource() 
 {	
-	LOGI("[%p]VideoPhoneSource::~VideoPhoneSource", this);
+	LOGV("[%p]VideoPhoneSource::~VideoPhoneSource", this);
 	if (m_bStarted)
 		stop();
 #ifndef DUMP_FIXFILE
@@ -175,7 +175,7 @@ status_t VideoPhoneSource::start(MetaData *params)
 {
 	Mutex::Autolock autoLock(m_Lock);
 		
-	LOGI("[%p]VideoPhoneSource::start", this);
+	LOGV("[%p]VideoPhoneSource::start", this);
 	//m_bFirstGet	= true;	
 	status_t 		err 		= NO_MEMORY;
 	bool			bRet	= false;
@@ -195,7 +195,7 @@ status_t VideoPhoneSource::start(MetaData *params)
     m_pGroup->add_buffer(new MediaBuffer(30000));
 
 	bRet = m_Format->findCString(kKeyMIMEType, &m_strMime);
-	LOGI("[%p]VideoPhoneSource::start 1, bRet: %d, m_strMime: %s", this, bRet, m_strMime);
+	LOGV("[%p]VideoPhoneSource::start 1, bRet: %d, m_strMime: %s", this, bRet, m_strMime);
 
 	if (!bRet)
 		goto fail;
@@ -214,7 +214,7 @@ status_t VideoPhoneSource::start(MetaData *params)
 		LOGE("Cannot open file %s", DEBUG_FILE);
 		goto fail;
 	}
-	LOGD("file opened %p", m_fAVStream);
+	LOGV("file opened %p", m_fAVStream);
 #else
 	if (m_DataSource->initCheck() != OK)
 	{
@@ -228,7 +228,7 @@ status_t VideoPhoneSource::start(MetaData *params)
     	pthread_create(&m_Thread, &attr, ThreadWrapper, this);
     	pthread_attr_destroy(&attr);
 #else
-	LOGI("[%p]VideoPhoneSource::start 2", this);
+	LOGV("[%p]VideoPhoneSource::start 2", this);
     if (VideoPhoneDataDevice::getInstance().registerClient(this, m_DataSource) != OK)
     {
         LOGE("[%p]Cannot register client", this);
@@ -239,7 +239,7 @@ status_t VideoPhoneSource::start(MetaData *params)
 		
 success:
 
-	LOGI("[%p]VideoPhoneSource::start SUCCESS!", this);
+	LOGV("[%p]VideoPhoneSource::start SUCCESS!", this);
     	return OK;
 
 fail:
@@ -255,7 +255,7 @@ status_t VideoPhoneSource::stop()
 	
 	status_t err;
 	
-	LOGI("[%p]VideoPhoneSource::stop", this);
+	LOGV("[%p]VideoPhoneSource::stop", this);
     if (!m_bStarted)
 		goto success;
 
@@ -280,7 +280,7 @@ status_t VideoPhoneSource::stop()
 	//........
 	
 success:
-	LOGI("[%p]VideoPhoneSource::stop SUCCESS!", this);
+	LOGV("[%p]VideoPhoneSource::stop SUCCESS!", this);
 
     return OK;
 
@@ -419,7 +419,7 @@ status_t VideoPhoneSource::read(
         MediaBuffer **out, const ReadOptions *options) 
 {
     Mutex::Autolock autoLock(m_Lock);
-	//LOGI("[%p]VideoPhoneSource::read START nNum = %d",this, m_nNum);	
+	//LOGV("[%p]VideoPhoneSource::read START nNum = %d",this, m_nNum);	
 	
 	uint32_t	nStart = 0;
 	uint32_t	nEnd;
@@ -449,7 +449,7 @@ status_t VideoPhoneSource::read(
 
 success:
 	
-	//LOGI("[%p]VideoPhoneSource::read:  nNum = %d nStart = %d  nEnd = %d  nPts = %d   type = %d  mime = %s",
+	//LOGV("[%p]VideoPhoneSource::read:  nNum = %d nStart = %d  nEnd = %d  nPts = %d   type = %d  mime = %s",
 		//this, m_nNum,nStart,nEnd,nPts,type,m_strMime);
 
 	pMediaBuffer->set_range(nStart, nEnd);
@@ -466,7 +466,7 @@ success:
 		int is_I_vop;
 		ret =get_video_stream_info(&streambuf,&is_I_vop);
 		if((ret==0)&&(is_I_vop==1)){
-			//LOGI("VideoPhoneSource::read find I vop");
+			//LOGV("VideoPhoneSource::read find I vop");
 			pMediaBuffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);		
 		}
 		if(m_nNum ==0)
@@ -484,7 +484,7 @@ success:
 #endif
 
     *out = pMediaBuffer;
-	//LOGI("[%p]VideoPhoneSource::read OK", this);
+	//LOGV("[%p]VideoPhoneSource::read OK", this);
 	m_nNum++;
 	return OK;
 
@@ -515,7 +515,7 @@ status_t VideoPhoneSource::threadFunc()
 	char		cTempbuffer[BUFFER_SIZE];	
 	int 		nLen;
 	
-	LOGI("enter threadFunc");
+	LOGV("enter threadFunc");
 	while (m_bStarted) 
 	{
 		Mutex::Autolock autoLock(m_Lock);
@@ -529,10 +529,10 @@ status_t VideoPhoneSource::threadFunc()
 #endif
 
 #ifdef DEBUG_FILE
-		LOGI("before read %p", m_fAVStream);
+		LOGV("before read %p", m_fAVStream);
     nLen = fread((void *)cTempbuffer,1, BUFFER_SIZE, m_fAVStream);
 #else
-		//LOGI("before read");
+		//LOGV("before read");
 		nLen = m_DataSource->readAt(0, (void *)cTempbuffer, BUFFER_SIZE);
 #endif
 		if (nLen == 0)
@@ -545,11 +545,11 @@ status_t VideoPhoneSource::threadFunc()
 #endif
 			usleep(1000*1000);
 		}
-		//LOGI("after read %d", nLen);
+		//LOGV("after read %d", nLen);
 
 		writeRingBuffer(cTempbuffer,nLen);
 	}
-	LOGI("exit threadFunc");
+	LOGV("exit threadFunc");
 	
 	if (err == ERROR_END_OF_STREAM)
 		err	= OK;
@@ -590,7 +590,7 @@ int	VideoPhoneSource::writeRingBuffer(char* data,int nLen)
 	if (bChangeStart)
 		m_nDataStart = m_nDataEnd;
 
-	//LOGI("signal");
+	//LOGV("signal");
 	m_GetBuffer.signal();
 	
 	return nLen;	
@@ -613,12 +613,12 @@ void dumpToFile(char *w_ptr, int w_len)
 #else
 	if (m_fWrite == NULL){
 		sprintf(fn_fWrite, "/data/videocall%02d%02d%02d.3gp", p->tm_hour, p->tm_min, p->tm_sec);
-		LOGI("fn_fWrite: %s", fn_fWrite);
+		LOGV("fn_fWrite: %s", fn_fWrite);
 		m_fWrite = fopen(fn_fWrite,"ab");
 	}
 	if (m_fLen == NULL){
 		sprintf(fn_fLen, "/data/videocall-len%02d%02d%02d.txt", p->tm_hour, p->tm_min, p->tm_sec);
-		LOGI("fn_fLen: %s", fn_fLen);
+		LOGV("fn_fLen: %s", fn_fLen);
 		m_fLen = fopen(fn_fLen,"ab");
 	}
 #endif //DUMP_FIXFILE
@@ -654,7 +654,7 @@ fail:
 
 int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 {
-	//LOGI("[%p]VideoPhoneSource::readRingBuffer START0", this);	
+	//LOGV("[%p]VideoPhoneSource::readRingBuffer START0", this);	
 	char* data = (char*)pMediaBuffer->data();
 	size_t nSize = pMediaBuffer->size();
 
@@ -667,7 +667,7 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 	bool bIsMpege4 = false;
 	bool bMpeg4Header = false;
 	int	nStart = m_nDataStart, nEnd = m_nDataStart;
-	//LOGI("[%p]VideoPhoneSource::readRingBuffer START1 %d, m_nDataStart: %d, m_nDataEnd: %d", this, m_bStarted, m_nDataStart, m_nDataEnd);
+	//LOGV("[%p]VideoPhoneSource::readRingBuffer START1 %d, m_nDataStart: %d, m_nDataEnd: %d", this, m_bStarted, m_nDataStart, m_nDataEnd);
 	while (m_bStarted)
 	{
 		nEnd	= nNext;
@@ -675,9 +675,9 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 		
 		if (nNext == m_nDataEnd)
 		{
-			//LOGI("[%p]wait 1", this);
+			//LOGV("[%p]wait 1", this);
 			m_GetBuffer.wait(m_Lock);
-			//LOGI("[%p]wait 2", this);
+			//LOGV("[%p]wait 2", this);
 		}
 		
 		if ((!m_bStarted) || m_bForeStop)
@@ -691,13 +691,13 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 			{
 				if (!bStartRead)
 				{
-					LOGI("[%p]VideoPhoneSource::readRingBuffer START MEPGE4", this);
+					LOGV("[%p]VideoPhoneSource::readRingBuffer START MEPGE4", this);
 					if (bMpeg4Header) {
 						bMpeg4Header = false;
 						m_bHasMpeg4Header = true;
 						m_iMpeg4Header_size = ((nEnd - nStart) + m_nRingBufferSize) % m_nRingBufferSize;
 						memcpy(m_Mpeg4Header,m_RingBuffer+nStart,m_iMpeg4Header_size);
-						LOGI("FrameHeader intermedially follow mpeg4 header, Header_size: %d", m_iMpeg4Header_size);
+						LOGV("FrameHeader intermedially follow mpeg4 header, Header_size: %d", m_iMpeg4Header_size);
 					} else {
 						nStart		= nEnd;
 					}
@@ -714,7 +714,7 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 			{
 				if (!bStartRead)
 				{
-					LOGI("[%p]VideoPhoneSource::readRingBuffer START VOP", this);
+					LOGV("[%p]VideoPhoneSource::readRingBuffer START VOP", this);
 					nStart		= nEnd;
 					bStartRead 	= true;
 				}
@@ -726,7 +726,7 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 			{
 				if (!bStartRead)
 				{
-					LOGI("[%p]VideoPhoneSource::readRingBuffer START MEPGE4 Header", this);
+					LOGV("[%p]VideoPhoneSource::readRingBuffer START MEPGE4 Header", this);
 					nStart		= nEnd;
 					bMpeg4Header = true;
 				}
@@ -737,7 +737,7 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 	}
 	nLen = ((nEnd - nStart) + m_nRingBufferSize) % m_nRingBufferSize;
 	
-	LOGI("[%p]find frame size: %d, 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, nLen, m_RingBuffer[nStart + 2], m_RingBuffer[nStart + 3], m_RingBuffer[nStart + 4], m_RingBuffer[nStart + 5]
+	LOGV("[%p]find frame size: %d, 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, nLen, m_RingBuffer[nStart + 2], m_RingBuffer[nStart + 3], m_RingBuffer[nStart + 4], m_RingBuffer[nStart + 5]
 	, m_RingBuffer[nStart + 6], m_RingBuffer[nStart + 7], m_RingBuffer[nStart + 8], m_RingBuffer[nStart + 9]);
 
 	if (nLen > nSize)
@@ -748,13 +748,13 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 	
 	char* pOrginData = data;
 #ifdef FEATURE_COMBINE_MPEG4_HEADER
-	//LOGI("m_nNum %d, m_bHasMpeg4Header %d", m_nNum, m_bHasMpeg4Header);
+	//LOGV("m_nNum %d, m_bHasMpeg4Header %d", m_nNum, m_bHasMpeg4Header);
 	if ((m_nNum == 0) && (!m_bHasMpeg4Header)){
 		if (!strcmp(m_strMime, MIME_MPEG4)){
 			memcpy(data, m_Mpeg4Header, m_iMpeg4Header_size);
 			data += m_iMpeg4Header_size;
 			nExtraLen = m_iMpeg4Header_size;
-			LOGI("add mpeg4 header");
+			LOGV("add mpeg4 header");
 		}
 	}
 #endif //FEATURE_COMBINE_MPEG4_HEADER
@@ -773,30 +773,30 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 #ifdef DUMP_FILE
 #ifndef FEATURE_COMBINE_MPEG4_HEADER
 	if ((m_nNum == 0) && m_bHasMpeg4Header) {
-		LOGI("[%p]dumpToFile 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, m_Mpeg4Header[0], m_Mpeg4Header[1], m_Mpeg4Header[ 2], m_Mpeg4Header[3]
+		LOGV("[%p]dumpToFile 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, m_Mpeg4Header[0], m_Mpeg4Header[1], m_Mpeg4Header[ 2], m_Mpeg4Header[3]
 			, m_Mpeg4Header[4], m_Mpeg4Header[4], m_Mpeg4Header[5], m_Mpeg4Header[6]);
 		dumpToFile((char*)m_Mpeg4Header, m_iMpeg4Header_size);
 	}
 #endif
-	LOGI("[%p]dumpToFile 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, pOrginData[0], pOrginData[1], pOrginData[ 2], pOrginData[3]
+	LOGV("[%p]dumpToFile 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x", this, pOrginData[0], pOrginData[1], pOrginData[ 2], pOrginData[3]
 		, pOrginData[4], pOrginData[4], pOrginData[5], pOrginData[6]);
 	dumpToFile(pOrginData, (nLen + nExtraLen));
 #endif
 
 	m_nDataStart	= nEnd;
-	//LOGI("[%p]VideoPhoneSource::readRingBuffer END", this);	
+	//LOGV("[%p]VideoPhoneSource::readRingBuffer END", this);	
 	return (nLen + nExtraLen);
 }
 	
 int VideoPhoneSource::write(char* data,int nLen)
 {
-    LOGI("[%p]VideoPhoneSource::write nLen: %d", this, nLen);	
+    LOGV("[%p]VideoPhoneSource::write nLen: %d", this, nLen);	
     return writeRingBuffer(data, nLen);
 }
 
 void VideoPhoneSource::stopCB()
 {
-	LOGI("[%p]stopCB, m_bForeStop: %d", this, m_bForeStop);
+	LOGV("[%p]stopCB, m_bForeStop: %d", this, m_bForeStop);
 	
     if ((!m_bStarted) || m_bForeStop)
 		return;
@@ -843,7 +843,7 @@ status_t VideoPhoneDataDevice::startThread()
 		{
 			LOGE("Cannot open file %s", DEBUG_FILE);
 		} else {
-			LOGD("file opened %p", m_fAVStream);
+			LOGV("file opened %p", m_fAVStream);
 		}
 #endif
 
@@ -861,13 +861,13 @@ status_t VideoPhoneDataDevice::startThread()
 
 void VideoPhoneDataDevice::stopThread()
 {
-    LOGI("stopThread");
+    LOGV("stopThread");
     mStarted = false;
 }
 
 void VideoPhoneDataDevice::stop()
 {
-    LOGI("stop");
+    LOGV("stop");
 	stopThread();
 }
 
@@ -914,7 +914,7 @@ status_t VideoPhoneDataDevice::threadFunc()
     char cTempbuffer[BUFFER_SIZE];	
     int nLen;
 	
-    LOGI("enter threadFunc");
+    LOGV("enter threadFunc");
     while (mStarted) 
     {
         Mutex::Autolock autoLock(m_Lock);
@@ -924,16 +924,16 @@ status_t VideoPhoneDataDevice::threadFunc()
 			break;
 #else
 		if (mDataSource->initCheck() != OK){			
-			LOGI("initCheck fail,break");
+			LOGV("initCheck fail,break");
 			break;
 		}
 #endif
 
 #ifdef DEBUG_FILE
-		LOGI("before read %p", m_fAVStream);
+		LOGV("before read %p", m_fAVStream);
     	nLen = fread((void *)cTempbuffer,1, BUFFER_SIZE, m_fAVStream);
 #else
-		//LOGI("before read");
+		//LOGV("before read");
 		nLen = mDataSource->readAt(0, (void *)cTempbuffer, BUFFER_SIZE);
 #endif
 		if (nLen <= 0)
@@ -944,12 +944,12 @@ status_t VideoPhoneDataDevice::threadFunc()
 			usleep(1000*1000);
 			break;
 #else
-			//LOGI("read nothing, mStarted: %d, nLen: %d, error: %s", mStarted, nLen, strerror(errno));
+			//LOGV("read nothing, mStarted: %d, nLen: %d, error: %s", mStarted, nLen, strerror(errno));
 			if (mStarted){
 				usleep(1000);
 				continue;
 			} else {
-				LOGI("read nothing,break");
+				LOGV("read nothing,break");
 				break;
 			}
 #endif
@@ -958,7 +958,7 @@ status_t VideoPhoneDataDevice::threadFunc()
 			usleep(100 * 1000);
 #endif
 		}
-		//LOGI("after read %d", nLen);
+		//LOGV("after read %d", nLen);
 
         for (int i = 0, n = mClients.size(); i < n; ++i) {
             static_cast<VideoPhoneSourceInterface *>(mClients[i])->write(cTempbuffer, nLen);
@@ -969,7 +969,7 @@ status_t VideoPhoneDataDevice::threadFunc()
     for (int i = 0, n = mClients.size(); i < n; ++i) {
         static_cast<VideoPhoneSourceInterface *>(mClients[i])->stopCB();
     }
-    LOGI("exit threadFunc");
+    LOGV("exit threadFunc");
 	
     if (err == ERROR_END_OF_STREAM)
         err = OK;
@@ -1003,7 +1003,7 @@ EsdsGenerator::~EsdsGenerator()
 
 void EsdsGenerator::generateEsds(sp<MetaData> AVMeta)
 {
-	LOGI("generateEsds()");
+	LOGV("generateEsds()");
 
 	g_Esds = new EsdsGenerator();
 	
@@ -1051,24 +1051,24 @@ void EsdsGenerator::writeEsds(const void *ptr, size_t size)
 
 	memcpy(m_EsdsBuffer + m_iEsds_size, ptr, size);
 	m_iEsds_size += size;
-	LOGI("writeEsds(), size: %d, m_iEsds_size: %d", size, m_iEsds_size);
+	LOGV("writeEsds(), size: %d, m_iEsds_size: %d", size, m_iEsds_size);
 }
 
 void EsdsGenerator::writeInt8(int8_t x)
 {
-	LOGI("writeInt8(), x: %d, 0x%x", x, x);
+	LOGV("writeInt8(), x: %d, 0x%x", x, x);
 	writeEsds(&x, 1);
 }
 
 void EsdsGenerator::writeInt16(int16_t x)
 {
-	LOGI("writeInt16(), x: %d, 0x%x", x, x);
+	LOGV("writeInt16(), x: %d, 0x%x", x, x);
 	writeEsds(&x, 2);
 }
 
 void EsdsGenerator::writeInt32(int32_t x)
 {
-	LOGI("writeInt32(), x: %d, 0x%x", x, x);
+	LOGV("writeInt32(), x: %d, 0x%x", x, x);
 	writeEsds(&x, 4);
 }
 
