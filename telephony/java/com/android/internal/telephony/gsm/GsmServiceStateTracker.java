@@ -209,6 +209,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         cm.setOnSignalStrengthUpdate(this, EVENT_SIGNAL_STRENGTH_UPDATE, null);
         cm.setOnRestrictedStateChanged(this, EVENT_RESTRICTED_STATE_CHANGED, null);
         cm.registerForSIMReady(this, EVENT_SIM_READY, null);
+        cm.setOnSimSmsReady(this, EVENT_SIM_SMS_READY, null);
 
         // system setting property AIRPLANE_MODE_ON is set in Settings.
         int airplaneMode = Settings.System.getInt(
@@ -241,6 +242,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         cm.unSetOnRestrictedStateChanged(this);
         cm.unSetOnNITZTime(this);
         cr.unregisterContentObserver(this.mAutoTimeObserver);
+        cm.unSetOnSimSmsReady(this);
     }
 
     protected void finalize() {
@@ -343,12 +345,19 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         int[] ints;
         String[] strings;
         Message message;
+        Intent intent;
 
         switch (msg.what) {
             case EVENT_RADIO_AVAILABLE:
                 //this is unnecessary
                 //setPowerStateToDesired();
                 //cm.setGprsAttach(null);
+
+                // initialize the flag to false
+                //intent = new Intent(TelephonyIntents.ACTION_IS_SIM_SMS_READY);
+                //intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+                //intent.putExtra("isReady", false);
+                //phone.getContext().sendStickyBroadcast(intent);
                 break;
 
             case EVENT_SIM_READY:
@@ -525,6 +534,13 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 ar = (AsyncResult) msg.obj;
 
                 onRestrictedStateChanged(ar);
+                break;
+
+            case EVENT_SIM_SMS_READY:
+                intent = new Intent(TelephonyIntents.ACTION_IS_SIM_SMS_READY);
+                intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+                intent.putExtra("isReady", true);
+                phone.getContext().sendStickyBroadcast(intent);
                 break;
 
             default:

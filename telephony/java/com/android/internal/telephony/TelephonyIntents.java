@@ -236,4 +236,15 @@ public class TelephonyIntents {
      */
     public static final String ACTION_SHOW_NOTICE_ECM_BLOCK_OTHERS
             = "android.intent.action.ACTION_SHOW_NOTICE_ECM_BLOCK_OTHERS";
+
+    /**
+     * <p>Broadcast Action: It indicates if the sim sms is ready
+     * <p class="note">.
+     * This is a notice to application if the SMS related operations is allowed
+     * 
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     */
+    public static final String ACTION_IS_SIM_SMS_READY
+            = "android.intent.action.ACTION_IS_SIM_SMS_READY";
 }

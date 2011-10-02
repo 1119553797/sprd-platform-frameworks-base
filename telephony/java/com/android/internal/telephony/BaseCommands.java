@@ -83,6 +83,8 @@ public abstract class BaseCommands implements CommandsInterface {
     protected Registrant mRingRegistrant;
     protected Registrant mRestrictedStateRegistrant;
     protected Registrant mGsmBroadcastSmsRegistrant;
+    
+    protected Registrant mSimSmsReadyRegistrant;
 
     // Network Mode received from PhoneFactory
     protected int mNetworkMode;
@@ -453,6 +455,14 @@ public abstract class BaseCommands implements CommandsInterface {
 
     public void unSetOnCallRing(Handler h) {
         mRingRegistrant.clear();
+    }
+    
+    public void setOnSimSmsReady(Handler h, int what, Object obj) {
+        mSimSmsReadyRegistrant = new Registrant (h, what, obj);
+    }
+
+    public void unSetOnSimSmsReady(Handler h) {
+        mSimSmsReadyRegistrant.clear();
     }
 
     public void registerForInCallVoicePrivacyOn(Handler h, int what, Object obj) {

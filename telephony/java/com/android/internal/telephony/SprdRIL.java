@@ -869,6 +869,7 @@ public final class SprdRIL extends RIL {
 				case RIL_UNSOL_VIDEOPHONE_DSCI: ret = responseInts(p); break;
 				case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:ret =  responseVoid(p); break;
 				case RIL_UNSOL_ON_STIN:ret = responseInts(p); break;
+				case RIL_UNSOL_SIM_SMS_READY:ret = responseVoid(p); break;
 				default:
 					throw new RuntimeException("Unrecognized unsol response: " + response);
 										//break; (implied)
@@ -1058,6 +1059,15 @@ public final class SprdRIL extends RIL {
 											 new AsyncResult (null, ret, null));
 								 }
 								 break;
+
+	            case RIL_UNSOL_SIM_SMS_READY:
+	                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+	                if (mSimSmsReadyRegistrant != null) {
+	                    mSimSmsReadyRegistrant.notifyRegistrant(
+	                            new AsyncResult (null, ret, null));
+	                }
+	                break;
 
 				case RIL_UNSOL_RESTRICTED_STATE_CHANGED:
 								 if (RILJ_LOGD) unsljLogvRet(response, ret);
@@ -1364,7 +1374,8 @@ public final class SprdRIL extends RIL {
 		            case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: return "UNSOL_VIDEOPHONE_REMOTE_MEDIA";
 		            case RIL_UNSOL_VIDEOPHONE_MM_RING: return "UNSOL_VIDEOPHONE_MM_RING";
 		            case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: return "UNSOL_VIDEOPHONE_RECORD_VIDEO";
-			    case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED: return "UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED";
+			     case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED: return "UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED";
+			     case RIL_UNSOL_SIM_SMS_READY: return "UNSOL_SIM_SMS_READY";
 			 default: return super.responseToString(request);
 		 }
 	 }

@@ -312,4 +312,6 @@ cat include/telephony/ril.h | \
 
     // for STK
 	int RIL_UNSOL_ON_STIN = 1040;
+	
+	int RIL_UNSOL_SIM_SMS_READY = 1041;
 }

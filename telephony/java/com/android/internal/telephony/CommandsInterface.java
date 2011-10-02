@@ -367,6 +367,17 @@ public interface CommandsInterface extends SprdCommandsInterface{
     void unSetOnCallRing(Handler h);
 
     /**
+     * Sets the handler for Sim Sms Ready notifications.
+     * Unlike the register* methods, there's only one notification handler
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    void setOnSimSmsReady(Handler h, int what, Object obj);
+    void unSetOnSimSmsReady(Handler h);
+
+    /**
      * Sets the handler for RESTRICTED_STATE changed notification,
      * eg, for Domain Specific Access Control
      * unlike the register* methods, there's only one signal strength handler
