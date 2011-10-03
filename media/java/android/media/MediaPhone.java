@@ -482,7 +482,7 @@ public class MediaPhone extends Handler
 		mOnCallEventListener = null;
         mOnVideoSizeChangedListener = null;
 
-        mCm.unSetOnVPData(mEventHandler);
+        //mCm.unSetOnVPData(mEventHandler);
         mCm.unSetOnVPCodec(mEventHandler);
         mCm.unSetOnVPString(mEventHandler);
         mCm.unSetOnVPRemoteMedia(mEventHandler);
