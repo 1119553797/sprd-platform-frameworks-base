@@ -1375,9 +1375,6 @@ public abstract class GSMPhone extends PhoneBase {
                         case SuppServiceNotification.MT_CODE_CALL_CONNECTED_ECT:
                         cs = mContext.getText(com.android.internal.R.string.ConnectedEct);
                         break;*/
-                        case SuppServiceNotification.MT_CODE_ADDITIONAL_CALL_FORWARDED:
-                        cs = mContext.getText(com.android.internal.R.string.IncomingCallForwarded);
-                        break;
                     }
                 }
                 if (cs!=null) {
