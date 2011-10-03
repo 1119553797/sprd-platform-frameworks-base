@@ -1320,66 +1320,69 @@ public abstract class GSMPhone extends PhoneBase {
 
             case EVENT_SSN:
                 ar = (AsyncResult)msg.obj;
-		CharSequence cs = null;
+                CharSequence cs = null;
                 SuppServiceNotification ssn = (SuppServiceNotification) ar.result;
-		if (ssn.notificationType == MO_CALL) {
-		    switch(ssn.code) {
-	                case SuppServiceNotification.MO_CODE_UNCONDITIONAL_CF_ACTIVE:
-		            cs = mContext.getText(com.android.internal.R.string.ActiveUnconCf);
-		            break;
-	                case SuppServiceNotification.MO_CODE_SOME_CF_ACTIVE:
-		            cs = mContext.getText(com.android.internal.R.string.ActiveConCf);
-		            break;
-	                case SuppServiceNotification.MO_CODE_CALL_FORWARDED:
-		            cs = mContext.getText(com.android.internal.R.string.CallForwarded);
-		            break;
-	                case SuppServiceNotification.MO_CODE_CALL_IS_WAITING:
-		            cs = mContext.getText(com.android.internal.R.string.CallWaiting);
-		            break;
-	                //case SuppServiceNotification.MO_CODE_CUG_CALL:
-		        //    cs = mContext.getText(com.android.internal.R.string.CugCall);
-		        //    break;
-	                case SuppServiceNotification.MO_CODE_OUTGOING_CALLS_BARRED:
-		            cs = mContext.getText(com.android.internal.R.string.OutCallBarred);
-		            break;
-	                case SuppServiceNotification.MO_CODE_INCOMING_CALLS_BARRED:
-		            cs = mContext.getText(com.android.internal.R.string.InCallBarred);
-		            break;
-	                //case SuppServiceNotification.MO_CODE_CLIR_SUPPRESSION_REJECTED:
-		        //    cs = mContext.getText(com.android.internal.R.string.ClirRejected);
-		        //    break;
-		    }
-		} else if (ssn.notificationType == MT_CALL) {
-		    switch(ssn.code) {
-	                case SuppServiceNotification.MT_CODE_FORWARDED_CALL:
-		            cs = mContext.getText(com.android.internal.R.string.ForwardedCall);
-		            break;
-	             /* case SuppServiceNotification.MT_CODE_CUG_CALL://golden 31.8.7
-		            cs = mContext.getText(com.android.internal.R.string.CugCall);
-		            break;
-	                case SuppServiceNotification.MT_CODE_CALL_ON_HOLD://golden 31.8.7
-		            cs = mContext.getText(com.android.internal.R.string.CallHold);
-		            break;
-	                case SuppServiceNotification.MT_CODE_CALL_RETRIEVED://golden 31.8.7
-		            cs = mContext.getText(com.android.internal.R.string.CallRetrieved);
-		            break;
-	                case SuppServiceNotification.MT_CODE_MULTI_PARTY_CALL://golden 31.8.7
-		            cs = mContext.getText(com.android.internal.R.string.MultiCall);
-		            break;
-	                case SuppServiceNotification.MT_CODE_ON_HOLD_CALL_RELEASED://golden 31.8.7
-		            cs = mContext.getText(com.android.internal.R.string.HoldCallReleased);
-		            break;
-	                case SuppServiceNotification.MT_CODE_CALL_CONNECTING_ECT://golden 31.8.7
-		            cs = mContext.getText(com.android.internal.R.string.ConnectingEct);
-		            break;
-	                case SuppServiceNotification.MT_CODE_CALL_CONNECTED_ECT://golden 31.8.7
-		            cs = mContext.getText(com.android.internal.R.string.ConnectedEct);
-		            break;*/
-		    }
-		}
-		if (cs!=null) {
-		    Toast.makeText(mContext, cs, Toast.LENGTH_LONG).show();
-		}
+                if (ssn.notificationType == MO_CALL) {
+                    switch(ssn.code) {
+                        case SuppServiceNotification.MO_CODE_UNCONDITIONAL_CF_ACTIVE:
+                        cs = mContext.getText(com.android.internal.R.string.ActiveUnconCf);
+                        break;
+                        case SuppServiceNotification.MO_CODE_SOME_CF_ACTIVE:
+                        cs = mContext.getText(com.android.internal.R.string.ActiveConCf);
+                        break;
+                        case SuppServiceNotification.MO_CODE_CALL_FORWARDED:
+                        cs = mContext.getText(com.android.internal.R.string.CallForwarded);
+                        break;
+                        case SuppServiceNotification.MO_CODE_CALL_IS_WAITING:
+                        cs = mContext.getText(com.android.internal.R.string.CallWaiting);
+                        break;
+                        //case SuppServiceNotification.MO_CODE_CUG_CALL:
+                        //cs = mContext.getText(com.android.internal.R.string.CugCall);
+                        //break;
+                        case SuppServiceNotification.MO_CODE_OUTGOING_CALLS_BARRED:
+                        cs = mContext.getText(com.android.internal.R.string.OutCallBarred);
+                        break;
+                        case SuppServiceNotification.MO_CODE_INCOMING_CALLS_BARRED:
+                        cs = mContext.getText(com.android.internal.R.string.InCallBarred);
+                        break;
+                        //case SuppServiceNotification.MO_CODE_CLIR_SUPPRESSION_REJECTED:
+                        //cs = mContext.getText(com.android.internal.R.string.ClirRejected);
+                        //break;
+                    }
+                } else if (ssn.notificationType == MT_CALL) {
+                    switch(ssn.code) {
+                        case SuppServiceNotification.MT_CODE_FORWARDED_CALL:
+                        cs = mContext.getText(com.android.internal.R.string.ForwardedCall);
+                        break;
+                     /* case SuppServiceNotification.MT_CODE_CUG_CALL:
+                        cs = mContext.getText(com.android.internal.R.string.CugCall);
+                        break;
+                        case SuppServiceNotification.MT_CODE_CALL_ON_HOLD:
+                        cs = mContext.getText(com.android.internal.R.string.CallHold);
+                        break;
+                        case SuppServiceNotification.MT_CODE_CALL_RETRIEVED:
+                        cs = mContext.getText(com.android.internal.R.string.CallRetrieved);
+                        break;
+                        case SuppServiceNotification.MT_CODE_MULTI_PARTY_CALL:
+                        cs = mContext.getText(com.android.internal.R.string.MultiCall);
+                        break;
+                        case SuppServiceNotification.MT_CODE_ON_HOLD_CALL_RELEASED:
+                        cs = mContext.getText(com.android.internal.R.string.HoldCallReleased);
+                        break;
+                        case SuppServiceNotification.MT_CODE_CALL_CONNECTING_ECT:
+                        cs = mContext.getText(com.android.internal.R.string.ConnectingEct);
+                        break;
+                        case SuppServiceNotification.MT_CODE_CALL_CONNECTED_ECT:
+                        cs = mContext.getText(com.android.internal.R.string.ConnectedEct);
+                        break;*/
+                        case SuppServiceNotification.MT_CODE_ADDITIONAL_CALL_FORWARDED:
+                        cs = mContext.getText(com.android.internal.R.string.IncomingCallForwarded);
+                        break;
+                    }
+                }
+                if (cs!=null) {
+                    Toast.makeText(mContext, cs, Toast.LENGTH_LONG).show();
+                }
                 //mSsnRegistrants.notifyRegistrants(ar);
                 break;
 

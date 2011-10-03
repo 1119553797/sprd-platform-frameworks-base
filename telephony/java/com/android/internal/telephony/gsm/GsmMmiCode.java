@@ -590,8 +590,8 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                 } else {
                     throw new RuntimeException ("Invalid or Unsupported MMI Code");
                 }
-	    
-	    } else if (sc != null && sc.equals(SC_COLR)) {
+
+            } else if (sc != null && sc.equals(SC_COLR)) {
                 Log.d(LOG_TAG, "------ is COLR");
                 if (isInterrogate()) {
                     phone.mCM.queryCOLR(
@@ -599,7 +599,7 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                 } else {
                     throw new RuntimeException ("Invalid or Unsupported MMI Code");
                 }
-		    
+
             } else if (isServiceCodeCallForwarding(sc)) {
                 Log.d(LOG_TAG, "is CF");
 
@@ -637,14 +637,14 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                         ((cfAction == CommandsInterface.CF_ACTION_ENABLE) ||
                                 (cfAction == CommandsInterface.CF_ACTION_REGISTRATION)) ? 1 : 0;
 
-		    if ((cfAction == CommandsInterface.CF_ACTION_ENABLE) &&
-	                   (dialingNumber != null && dialingNumber.length() != 0)) {
+                    if ((cfAction == CommandsInterface.CF_ACTION_ENABLE) &&//golden
+                        (dialingNumber != null && dialingNumber.length() != 0)) {
                         cfAction = CommandsInterface.CF_ACTION_REGISTRATION;
-		    }
+                    }
 
-		    if (time != 0) {
-		        if ((cfAction == CommandsInterface.CF_ACTION_REGISTRATION) && 
-			        !isRightTime(time)) {
+                    if (time != 0) {
+                        if ((cfAction == CommandsInterface.CF_ACTION_REGISTRATION) && 
+                            !isRightTime(time)) {
                             state = State.FAILED;
                             StringBuilder sb = new StringBuilder(getScString());
                             sb.append("\n");
@@ -652,9 +652,9 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                                 com.android.internal.R.string.mmiError));
                             message = sb;
                             phone.onMMIDone(this);
-			    return;
-		        }  
-		    }
+                            return;
+                        }  
+                    }
 
                     Log.d(LOG_TAG, "is CF setCallForward");
                     phone.mCM.setCallForward(cfAction, reason, serviceClass,
@@ -987,10 +987,10 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
 		    } else if (sc.equals(SC_PWD)) {
                         sb.append(context.getText(
                                 com.android.internal.R.string.passwordIncorrect));
-		    } else {
+                    } else {
                         sb.append(context.getText(
                                 com.android.internal.R.string.mmiError));
-		    }
+                    }
                 } else {
                     sb.append(context.getText(
                             com.android.internal.R.string.mmiError));
@@ -1269,19 +1269,19 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
             int[] ints = (int[])ar.result;
 
             if (ints.length != 0) {
-		        if (ints[0] == 0) {  
+                if (ints[0] == 0) {  
                     sb.append(context.getText(com.android.internal.R.string.serviceDisabled));
-		        } else if (ints[0] == 1) {
+                } else if (ints[0] == 1) {
                     sb.append(context.getText(com.android.internal.R.string.serviceEnabled));
-		        } else {
+                } else {
                     sb.append(context.getText(com.android.internal.R.string.mmiError));
-		        }
+                }
             } else {
                 sb.append(context.getText(com.android.internal.R.string.mmiError));
             }
 
             state = State.COMPLETE;
-	    }
+        }
 
         message = sb;
         phone.onMMIDone(this);
@@ -1296,9 +1296,9 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
             state = State.FAILED;
             if (isServiceCodeCallBarring(sc) || sc.equals(SC_WAIT)) {
                 sb.append(context.getText(com.android.internal.R.string.RequestPending));
-	    } else {
+            } else {
                 sb.append(context.getText(com.android.internal.R.string.mmiError));
-	    }
+            }
         } else {
             int[] ints = (int[])ar.result;
 
