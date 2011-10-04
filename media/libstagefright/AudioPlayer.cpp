@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "AudioPlayer"
 #include <utils/Log.h>
 
@@ -370,9 +370,9 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
                     / mSampleRate;
 
             LOGV("buffer->size() = %d, "
-                 "mPositionTimeMediaUs=%.2f mPositionTimeRealUs=%.2f",
+                 "mPositionTimeMediaUs=%lld mPositionTimeRealUs=%lld",
                  mInputBuffer->range_length(),
-                 mPositionTimeMediaUs / 1E6, mPositionTimeRealUs / 1E6);
+                 mPositionTimeMediaUs , mPositionTimeRealUs );
         }
 
         if (mInputBuffer->range_length() == 0) {

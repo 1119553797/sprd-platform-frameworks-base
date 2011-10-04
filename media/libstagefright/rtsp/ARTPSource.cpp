@@ -156,15 +156,16 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 	    	}
 	    if (mNumTimes == 2 && mPeriodCheck > 1600000ll ) 
 	    	{
-		ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
-		        meta->setInt64("ntp-time", (rtpTime>mRTPTime[0])?RTP2NTP(rtpTime):ntpTime1);
+//		ntpTime1 =( ntpTime /1000000ll ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
+//		        meta->setInt64("ntp-time", (rtpTime>mRTPTime[0])?RTP2NTP(rtpTime):ntpTime1);
+		        meta->setInt64("ntp-time", RTP2NTP(rtpTime));
 	    	}
 		else
 		{
 
-		ntpTime1 = mNTPTime[0] + (double)(0x300000000ll)
+		ntpTime1 = mNTPTime[0] + (double)(0x600000000ll)
             * ((double)rtpTime - (double)mRTPTime[0])
-            / (double)(3*90000ll);
+            / (double)(6*90000ll);
 		meta->setInt64("ntp-time", ntpTime1);
 		LOGI("rtp:%u ntp:0x%llx", rtpTime, ntpTime1);
 		 }
@@ -243,8 +244,8 @@ uint64_t ARTPSource::RTP2NTP(uint32_t rtpTime) const {
    {
 
     return mNTPTime[0] + (double)(mNTPTime[1] - mNTPTime[0])
-            * ((double)rtpTime - (double)mRTPTime[0])
-            / (double)(mRTPTime[1] - mRTPTime[0]);
+            * ((rtpTime >= mRTPTime[0])?(rtpTime - mRTPTime[0]):(0x100000000ll- mRTPTime[0] +rtpTime ))
+            / ((mRTPTime[1] >= mRTPTime[0])?(mRTPTime[1] - mRTPTime[0]):(0x100000000ll- mRTPTime[0]+mRTPTime[1] ));
 
    }
    else

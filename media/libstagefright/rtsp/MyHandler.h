@@ -781,8 +781,8 @@ struct MyHandler : public AHandler {
                 int64_t timeUs = (int64_t)(ntpTime * 1000000ll) / 0x100000000ll;
 
                 accessUnit->meta()->setInt64("timeUs", timeUs);
-//		LOGI("first segment unit ntpTime=0x%llx rtpTime=%u timeus=%u",
-//                         ntpTime, rtpTime, timeUs);
+		LOGI("first segment unit ntpTime=0x%llx rtpTime=%u timeus=%lld",
+                         ntpTime, rtpTime, timeUs);
 #if 0
                 int32_t damaged;
                 if (accessUnit->meta()->findInt32("damaged", &damaged)
