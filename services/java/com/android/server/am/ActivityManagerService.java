@@ -3409,7 +3409,7 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                     // being started, which means not bringing it to the front
                     // if the caller is not itself in the front.
                     HistoryRecord curTop = topRunningNonDelayedActivityLocked(notTop);
-                    if (curTop.task != taskTop.task) {
+                    if (curTop != null && curTop.task != taskTop.task) {
                         r.intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                         boolean callerAtFront = sourceRecord == null
                                 || curTop.task == sourceRecord.task;
@@ -5879,9 +5879,11 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                 String[] pkgs = intent.getStringArrayExtra(Intent.EXTRA_PACKAGES);
                 if (pkgs != null) {
                     for (String pkg : pkgs) {
-                        if (forceStopPackageLocked(pkg, -1, false, false, false)) {
-                            setResultCode(Activity.RESULT_OK);
-                            return;
+                        synchronized (ActivityManagerService.this) {
+                            if (forceStopPackageLocked(pkg, -1, false, false, false)) {
+                                setResultCode(Activity.RESULT_OK);
+                                return;
+                            }
                         }
                     }
                 }
@@ -11360,6 +11362,15 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             if (DEBUG_SERVICE) Slog.v(
                 TAG, "Removed service that is not running: " + r.shortName);
         }
+
+        if(0 < r.bindings.size()) {
+             r.bindings.clear();
+        }
+
+        if(r.restarter instanceof ServiceRestarter) {
+            ((ServiceRestarter)r.restarter).setService(null);
+        }
+
     }
 
     ComponentName startServiceLocked(IApplicationThread caller,
