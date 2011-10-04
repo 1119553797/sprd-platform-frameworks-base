@@ -1293,14 +1293,28 @@ public abstract class GSMPhone extends PhoneBase {
 
             case EVENT_USSD:
                 ar = (AsyncResult)msg.obj;
+                if (ar.exception != null) {
+                    Log.d(LOG_TAG, "EVENT_USSD  ar.exception != null");
+                    GsmMmiCode found = null;
+                    for(int i=0,s=mPendingMMIs.size(); i<s; i++) {
+                        if (mPendingMMIs.get(i).isPendingUSSD()) {
+                            found = mPendingMMIs.get(i);
+                            break;
+                        }
+                    }
+                    if (found != null) {
+                        Log.d(LOG_TAG, "EVENT_USSD found != null");
+                        found.onUssdFinishedError();
+                    }
+                } else {
+                    String[] ussdResult = (String[]) ar.result;
 
-                String[] ussdResult = (String[]) ar.result;
-
-                if (ussdResult.length > 1) {
-                    try {
-                        onIncomingUSSD(Integer.parseInt(ussdResult[0]), ussdResult[1]);
-                    } catch (NumberFormatException e) {
-                        Log.w(LOG_TAG, "error parsing USSD");
+                    if (ussdResult.length > 1) {
+                        try {
+                            onIncomingUSSD(Integer.parseInt(ussdResult[0]), ussdResult[1]);
+                        } catch (NumberFormatException e) {
+                            Log.w(LOG_TAG, "error parsing USSD");
+                        }
                     }
                 }
             break;
