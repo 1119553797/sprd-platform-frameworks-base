@@ -1416,7 +1416,7 @@ void AwesomePlayer::onVideoEvent() {
 #endif
 
     int64_t latenessUs = nowUs - timeUs;
-    LOGI("video timestamp %lld,%lld, %lld, %lld",nowUs,timeUs, mTimeSourceDeltaUs,mAudioPlayer->getAudioLatencyUs());
+    LOGI("video timestamp %lld,%lld",nowUs,timeUs);//LOGI("video timestamp %lld,%lld, %lld, %lld",nowUs,timeUs, mTimeSourceDeltaUs,mAudioPlayer->getAudioLatencyUs());
 
 	
     if(latenessUs > 2000000 || latenessUs< -2000000){//jgdu 2s
