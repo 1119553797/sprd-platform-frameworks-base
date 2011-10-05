@@ -981,12 +981,9 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
                             com.android.internal.R.string.needPuk2));
                 } else if (err == CommandException.Error.GENERIC_FAILURE) {
                     if (isServiceCodeCallBarring(sc) || sc.equals(SC_WAIT) ||
-	                    isServiceCodeCallForwarding(sc)) {
+                        isServiceCodeCallForwarding(sc) || sc.equals(SC_PWD)) {
                         sb.append(context.getText(
                                 com.android.internal.R.string.OprNotComplete));
-		    } else if (sc.equals(SC_PWD)) {
-                        sb.append(context.getText(
-                                com.android.internal.R.string.passwordIncorrect));
                     } else {
                         sb.append(context.getText(
                                 com.android.internal.R.string.mmiError));
@@ -1017,8 +1014,13 @@ public final class GsmMmiCode  extends Handler implements MmiCode {
             }
         } else if (isRegister()) {
             state = State.COMPLETE;
-            sb.append(context.getText(
-                    com.android.internal.R.string.serviceRegistered));
+            if (sc != null && sc.equals(SC_PWD)) {
+                sb.append(context.getText(
+                        com.android.internal.R.string.passwordChange));
+            } else {
+                sb.append(context.getText(
+                        com.android.internal.R.string.serviceRegistered));
+            }
         } else if (isErasure()) {
             state = State.COMPLETE;
             sb.append(context.getText(

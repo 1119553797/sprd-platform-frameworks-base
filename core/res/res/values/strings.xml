@@ -73,6 +73,8 @@
     <string name="serviceErased">Erasure was successful.</string>
     <!-- Displayed when a SIM password was entered incorrectly. -->
     <string name="passwordIncorrect">Incorrect password.</string>
+    <!-- Displayed when a SIM password changed correctly. -->
+    <string name="passwordChange" msgid="">"Password changed"</string>
     <!-- Displayed when a phone feature triggered by an MMI code is complete. -->
     <string name="mmiComplete">MMI complete.</string>
     <!-- Displayed when a SIM PIN password is entered incorrectly. -->

@@ -40,6 +40,7 @@
     <string name="serviceRegistered" msgid="6275019082598102493">"註冊成功。"</string>
     <string name="serviceErased" msgid="1288584695297200972">"清除成功。"</string>
     <string name="passwordIncorrect" msgid="7612208839450128715">"密碼錯誤。"</string>
+    <string name="passwordChange" msgid="">"密碼已改。"</string>
     <string name="mmiComplete" msgid="8232527495411698359">"MMI 完成。"</string>
     <string name="badPin" msgid="5085454289896032547">"您輸入的舊 PIN 不正確。"</string>
     <string name="badPuk" msgid="5702522162746042460">"您輸入的 PUK 不正確。"</string>
