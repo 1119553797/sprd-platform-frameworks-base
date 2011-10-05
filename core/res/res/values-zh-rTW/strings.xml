@@ -75,6 +75,7 @@
     <string name="HoldCallReleased" msgid="">"已經釋放被阻塞的呼叫"</string>
     <string name="ConnectingEct" msgid="">"正在連接的遠端多方通話"</string>
     <string name="ConnectedEct" msgid="">"連接的遠端多方通話"</string>
+    <string name="IncomingCallForwarded" msgid="">"來電被轉移"</string>
     <string name="RequestPending" msgid="">"請求未完成"</string>
     <string name="OprNotComplete" msgid="">"操作未完成"</string>
     <string name="PwdMmi" msgid="7043715687905254199">"變更密碼"</string>
