@@ -4,7 +4,9 @@ import java.io.InputStream;
 import java.util.Vector;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Bitmap.Config;
+import android.util.Log;
 
 
 
@@ -29,19 +31,18 @@ public interface GifDecodeInterface {
 //			return gifHander;		
 //		}
 		
-	    public Bitmap initGifData(InputStream data)
-	    {   	
-	    	Bitmap first = null;
-	    	if(null != data){   		
-	    		decode = new GIFDecode();
-	    		decode.read(data);
-	    		first = decode.getFrame(0);
-	    		if (first == null) {
-	    			first = BitmapFactory.decodeStream(data);			
-	    		}
-	    	}
-	    	return first;
-	    }
+		public Bitmap initGifData(InputStream data) throws OutOfMemoryError {
+			Bitmap first = null;
+			if (null != data) {
+				decode = new GIFDecode();
+				decode.read(data);
+				first = decode.getFrame(0);
+				if (first == null) {
+					first = BitmapFactory.decodeStream(data);
+				}
+			}
+			return first;
+		}
 	    
 	    public Bitmap nextFrameBitmap()
 	    {
@@ -71,6 +72,15 @@ public interface GifDecodeInterface {
 	    	if(null != decode)
 	    	{
 	    		decode.recycleFrames();
+	    		decode.lastPixels = null;
+	    		if(null != decode.lastImage){
+//	    			decode.lastImage.recycle();
+	    			decode.lastImage = null;
+	    		}
+	    		if(null != decode.image){
+//	    			decode.image.recycle();
+	    			decode.image = null;
+	    		}
 	    		decode = null;
 	    	}
 	    }
@@ -81,7 +91,10 @@ public interface GifDecodeInterface {
     	public static final int STATUS_OK = 0;
     	public static final int STATUS_FORMAT_ERROR = 1;
     	public static final int STATUS_OPEN_ERROR = 2;
-
+		//===== fixed CR<NEWMS00128398> by luning at 11-10-07 begin =====
+    	public static final int FRAME_BOUNDS_LIMIT = 320;
+    	private int[] lastPixels =null;
+    	//===== fixed CR<NEWMS00128398> by luning at 11-10-07 end =====
     	private InputStream in;
     	private int status;
 
@@ -141,7 +154,7 @@ public interface GifDecodeInterface {
     	private byte[] pixelStack;
     	private byte[] pixels;
 
-    	private Vector frames; // frames read from current file
+    	private Vector<GifFrame> frames; // frames read from current file
     	private int frameCount;
 
     	
@@ -156,7 +169,7 @@ public interface GifDecodeInterface {
     	public int getDelay(int n) {
     		delay = -1;
     		if ((n >= 0) && (n < frameCount)) {
-    			delay = ((GifFrame) frames.elementAt(n)).delay;
+    			delay = (frames.elementAt(n)).delay;
     		}
     		return delay;
     	}
@@ -173,7 +186,7 @@ public interface GifDecodeInterface {
     		return loopCount;
     	}
 
-    	private void setPixels() {
+    	private int[] getSrcPixels() {
     		int[] dest = new int[width * height];
     		// fill in starting image contents based on last image's dispose code
     		if (lastDispose > 0) {
@@ -187,7 +200,11 @@ public interface GifDecodeInterface {
     				}
     			}
     			if (lastImage != null) {
-    				lastImage.getPixels(dest, 0, width, 0, 0, width, height);
+    				if(null == lastPixels){
+    				    lastImage.getPixels(dest, 0, width, 0, 0, width, height);
+    				}else{
+    					dest = lastPixels; 					
+    				}
     				// copy pixels
     				if (lastDispose == 2) {
     					// fill last image rect area with background color
@@ -251,13 +268,13 @@ public interface GifDecodeInterface {
     				}
     			}
     		}
-    		image = Bitmap.createBitmap(dest, width, height, Config.RGB_565);
+    		return dest;
     	}
 
     	public Bitmap getFrame(int n) {
     		Bitmap im = null;
     		if ((n >= 0) && (n < frameCount)) {
-    			im = ((GifFrame) frames.elementAt(n)).image;
+    			im = (frames.elementAt(n)).image;
     		}
     		return im;
     	}
@@ -267,7 +284,7 @@ public interface GifDecodeInterface {
     		if (frameindex > frames.size() - 1) {
     			frameindex = 0;
     		}
-    		GifFrame currFrame = (GifFrame) frames.elementAt(frameindex);
+    		GifFrame currFrame = frames.elementAt(frameindex);
     		delay = currFrame.delay;
     		return currFrame.image;
     	}
@@ -410,7 +427,7 @@ public interface GifDecodeInterface {
     	private void init() {
     		status = STATUS_OK;
     		frameCount = 0;
-    		frames = new Vector();
+    		frames = new Vector<GifFrame>();
     		gct = null;
     		lct = null;
     	}
@@ -582,10 +599,25 @@ public interface GifDecodeInterface {
     			return;
     		}
     		frameCount++;
+    		//===== fixed CR<NEWMS00128398> by luning at 11-10-07 begin =====
     		// create new image to receive frame data
-    		image = Bitmap.createBitmap(width, height, Config.RGB_565);
-    		// createImage(width, height);
-    		setPixels(); // transfer pixel data to image
+//    		image = Bitmap.createBitmap(width, height, Config.RGB_565);
+    		// get pixel data from image
+    		int[] src = getSrcPixels();
+    		int[] dest;
+    		// save lastPixels
+    		lastPixels = new int[src.length];
+    		System.arraycopy(src, 0, lastPixels, 0, src.length);
+    		if(width > FRAME_BOUNDS_LIMIT){//need resize   			
+				float scale =  ((float)FRAME_BOUNDS_LIMIT/width);
+				int rY = (int) (height * scale);
+				dest = resizePixels(FRAME_BOUNDS_LIMIT, rY, width, height, src);		
+				image = Bitmap.createBitmap(dest, FRAME_BOUNDS_LIMIT, rY, Config.RGB_565);
+    		}else{//not need resize
+    			dest = src;
+    			image = Bitmap.createBitmap(dest, width, height, Config.RGB_565);
+    		}		
+    		//===== fixed CR<NEWMS00128398> by luning at 11-10-07 end =====
     		frames.addElement(new GifFrame(image, delay)); // add image to frame
     		// list
     		if (transparency) {
@@ -593,7 +625,23 @@ public interface GifDecodeInterface {
     		}
     		resetFrame();
     	}
-
+    	
+    	//===== fixed CR<NEWMS00128398> by luning at 11-10-07 begin =====
+		private int[] resizePixels(int destW, int destH, int srcW, int srcH,
+				int[] srcPixels) {
+			int[] destPixels = new int[destW * destH];
+			for (int destY = 0; destY < destH; ++destY) {
+				for (int destX = 0; destX < destW; ++destX) {
+					int offsetX = (destX * srcW) / destW;
+					int offsetY = (destY * srcH) / destH;
+					destPixels[destX + destY * destW] = srcPixels[offsetX
+							+ offsetY * srcW];
+				}
+			}
+			return destPixels;
+		}
+		//===== fixed CR<NEWMS00128398> by luning at 11-10-07 end =====  
+		
     	private void readLSD() {
     		// logical screen size
     		width = readShort();
@@ -649,12 +697,15 @@ public interface GifDecodeInterface {
     	}
     	
     	public void recycleFrames(){
-    		if(null != frames){
-    			frames.removeAllElements();
-    			frames = null;
-    		}
-    	}
-    	
+			if (null != frames) {
+				for (GifFrame frame : frames) {
+//					frame.image.recycle();
+					frame.image = null;
+				}
+				frames.removeAllElements();
+				frames = null;
+			}
+    	}   	
     }
     
     static class GifFrame {
@@ -666,8 +717,4 @@ public interface GifDecodeInterface {
     	public Bitmap image;
     	public int delay;
     }  
-    
-
-
-
 }
