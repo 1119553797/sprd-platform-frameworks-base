@@ -167,11 +167,6 @@ class MountService extends IMountService.Stub
         void handleFinished() {
             super.handleFinished();
             doShareUnshareVolume(path, method, true);
-            //add by liguxiang 09-07-11 for spreadtrum usb settings begin
-            Log.d(TAG,"send usbIntent");
-            Intent usbIntent = new Intent("com.android.action.ums.operator");
-            mContext.sendBroadcast(usbIntent);
-            //add by liguxiang 09-07-11 for spreadtrum usb settings end
         }
     }
 
@@ -515,7 +510,6 @@ class MountService extends IMountService.Stub
         //add by liguxiang 09-15-11 for whether usb available begin
 	 } else if(code == VoldResponseCode.UsbAvailabilityChange){
 	    boolean avail = false;
-	    Log.d("ligx-----------","cooked[3] = " + cooked[3]);
 	    if(cooked[3].equals("available")){
 		avail = true;
 	    }
@@ -873,7 +867,7 @@ class MountService extends IMountService.Stub
     private void sendUsbIntent(boolean c){
 	 Log.d("ligx----------","sendUsbIntent");
 	 mContext.sendBroadcast(
-	 	new Intent((c ? "sprd.com.android.usb.available" : "sprd.com.android.usb.unavailable")));
+	 	new Intent((c ? Intent.ACTION_SPRD_USB_AVAILABLE : Intent.ACTION_SPRD_USB_UNAVAILABLE)));
     }
     //add by liguxiang 09-15-11 for whether usb available end
     

@@ -1879,6 +1879,23 @@ public class Intent implements Parcelable, Cloneable {
      */
     public static final String ACTION_PRE_BOOT_COMPLETED =
             "android.intent.action.PRE_BOOT_COMPLETED";
+    
+    //add by liguxiang 09-27-11 for usb settings begin
+    /**
+     * @hide 
+    */
+    public static String ACTION_SPRD_UMS_OPERATOR = "com.sprd.android.action.UMS_OPERATOR";
+    
+    /**
+     * @hide 
+    */
+    public static String ACTION_SPRD_USB_AVAILABLE = "com.sprd.android.action.USB_AVAILABLE";
+    
+    /**
+     * @hide 
+    */
+    public static String ACTION_SPRD_USB_UNAVAILABLE = "com.sprd.android.action.USB_UNAVAILABLE";
+    //add by liguxiang 09-27-11 for usb settings end
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------

@@ -397,7 +397,22 @@ class NotificationManagerService extends INotificationManager.Stub
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 mInCall = (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_OFFHOOK));
                 updateNotificationPulse();
+	    //add by liguxiang 10-07-11 for NEWMS00128631 begin
+            }else if(action.equals(Intent.ACTION_LOCALE_CHANGED)){
+            	mAdbNotification = null;
+            	mAdbNotificationShown = false;
+            	updateAdbNotification();
+            	mChargeNotification = null;
+            	mChargeNotificationShown = false;
+            	updateUsbNotification(UsbType.CHARGE,mChargeEnabled,mChargeNotificationShown);
+            	mUmsNotification = null;
+            	mUmsNotificationShown = false;
+            	updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
+            	mModemNotification = null;
+            	mModemNotificationShown = false;
+            	updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
             }
+	    //add by liguxiang 10-07-11 for NEWMS00128631 end
         }
     };
 
@@ -524,6 +539,7 @@ class NotificationManagerService extends INotificationManager.Stub
         filter.addAction(Intent.ACTION_UMS_DISCONNECTED);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_LOCALE_CHANGED);  //add by liguxiang 10-07-11 for NEWMS00128631
         filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
         mContext.registerReceiver(mIntentReceiver, filter);
         IntentFilter pkgFilter = new IntentFilter();
