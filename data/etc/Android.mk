@@ -240,3 +240,6 @@ include $(BUILD_PREBUILT)
 #LOCAL_SRC_FILES := $(LOCAL_MODULE)
 
 #include $(BUILD_PREBUILT)
+
+PRODUCT_COPY_FILES += \
+packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml 
