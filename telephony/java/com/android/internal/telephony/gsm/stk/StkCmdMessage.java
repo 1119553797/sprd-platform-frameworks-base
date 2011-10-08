@@ -74,6 +74,7 @@ public class StkCmdMessage implements Parcelable {
         case SEND_SMS:
         case SEND_SS:
         case SEND_USSD:
+        case REFRESH:
             mTextMsg = ((DisplayTextParams) cmdParams).textMsg;
             break;
         case GET_INPUT:
