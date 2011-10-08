@@ -778,6 +778,9 @@ class PowerManagerService extends IPowerManager.Stub
         } else if ((wl.flags & LOCK_MASK) == PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK) {
             mProximityWakeLockCount--;
             if (mProximityWakeLockCount == 0) {
+				//disable proximity immediately 
+				disableProximityLockLocked(); 
+			/*
                 if (mProximitySensorActive &&
                         ((flags & PowerManager.WAIT_FOR_PROXIMITY_NEGATIVE) != 0)) {
                     // wait for proximity sensor to go negative before disabling sensor
@@ -787,6 +790,7 @@ class PowerManagerService extends IPowerManager.Stub
                 } else {
                     disableProximityLockLocked();
                 }
+            */
             }
         }
         // Unlink the lock from the binder.
