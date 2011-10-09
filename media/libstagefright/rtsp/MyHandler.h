@@ -778,7 +778,7 @@ struct MyHandler : public AHandler {
                     ntpTime = 0;
                 }
 
-                int64_t timeUs = (int64_t)(ntpTime * 1000000ll) / 0x100000000ll;
+                int64_t timeUs = (int64_t)(ntpTime * 1E6 / (1ll<<32));
 
                 accessUnit->meta()->setInt64("timeUs", timeUs);
 		LOGI("first segment unit ntpTime=0x%llx rtpTime=%u timeus=%lld",
