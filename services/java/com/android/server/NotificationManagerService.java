@@ -900,15 +900,12 @@ class NotificationManagerService extends INotificationManager.Stub
                 // vibrate
                 final boolean useDefaultVibrate =
                     (notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
-                Log.d("lu", "useDefaultVibrate:"+useDefaultVibrate);
-                Log.d("lu", "notification.vibrate:"+notification.vibrate);
                 //===== fixed CR<NEWMS00121394,NEWMS00121342> by luning at 11-10-09 begin ======
 //                if ((useDefaultVibrate || notification.vibrate != null)
 //                        && audioManager.shouldVibrate(AudioManager.VIBRATE_TYPE_NOTIFICATION)) {
                 if (useDefaultVibrate || notification.vibrate != null) {
                 //===== fixed CR<NEWMS00121394,NEWMS00121342> by luning at 11-10-09 begin ======
                     mVibrateNotification = r;
-                    Log.d("lu", "XX");
                     mVibrator.vibrate(useDefaultVibrate ? DEFAULT_VIBRATE_PATTERN
                                                         : notification.vibrate,
                               ((notification.flags & Notification.FLAG_INSISTENT) != 0) ? 0: -1);
