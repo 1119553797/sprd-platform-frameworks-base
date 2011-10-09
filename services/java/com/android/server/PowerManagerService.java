@@ -779,6 +779,7 @@ class PowerManagerService extends IPowerManager.Stub
             mProximityWakeLockCount--;
             if (mProximityWakeLockCount == 0) {
 				//disable proximity immediately 
+				//modify by yunlong.wang
 				disableProximityLockLocked(); 
 			/*
                 if (mProximitySensorActive &&
@@ -1537,11 +1538,14 @@ class PowerManagerService extends IPowerManager.Stub
             if (noChangeLights) {
                 newState = (newState & ~LIGHTS_MASK) | (mPowerState & LIGHTS_MASK);
             }
+			//don't care proximity status
+			//mask by yunlong.wang
+		/*
             if (mProximitySensorActive) {
                 // don't turn on the screen when the proximity sensor lock is held
                 newState = (newState & ~SCREEN_BRIGHT);
             }
-
+		*/
             if (batteryIsLow()) {
                 newState |= BATTERY_LOW_BIT;
             } else {
@@ -2112,6 +2116,14 @@ class PowerManagerService extends IPowerManager.Stub
             if (mProximitySensorActive && mProximityWakeLockCount == 0) {
                 mProximitySensorActive = false;
             }
+
+			//Force to turn on backlight even if Proximity sensor is active
+			//add by yunlong.wang
+			if(mProximitySensorActive == true) {
+				Slog.d(TAG, "Force to turn on backlight even if Proximity sensor is active");
+				force = true;
+			}
+
             if (mLastEventTime <= time || force) {
                 mLastEventTime = time;
                 if ((mUserActivityAllowed && !mProximitySensorActive) || force) {
