@@ -1666,7 +1666,7 @@
     <string name="factorytest_reboot">Reboot</string>
 
     <!-- Do not translate.  WebView User Agent string -->
-    <string name="web_user_agent" translatable="false"><xliff:g id="x">4G_W4_TD/1.0 Android/2.2 MocorDroid/ W11.32 Release/2011 Browser/AppleWebKit5333.1 Profile/MIDP-2.0 Configuration/CLDC-1.1</xliff:g></string>
+    <string name="web_user_agent" translatable="false"><xliff:g id="x">Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1</xliff:g></string>
 
     <!-- Title for a JavaScript dialog. "The page at <url of current page> says:" -->
     <string name="js_dialog_title">The page at \'<xliff:g id="title">%s</xliff:g>\' says:</string>
