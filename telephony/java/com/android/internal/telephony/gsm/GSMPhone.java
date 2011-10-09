@@ -1537,7 +1537,7 @@ public abstract class GSMPhone extends PhoneBase {
             AsyncResult.forMessage(nsm.message, ar.result, ar.exception);
             nsm.message.sendToTarget();
         }
-
+/*    for NEWMS00129043
         // open the shared preferences editor, and write the value.
         // nsm.operatorNumeric is "" if we're in automatic.selection.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -1550,7 +1550,7 @@ public abstract class GSMPhone extends PhoneBase {
         if (! editor.commit()) {
             Log.e(LOG_TAG, "failed to commit network selection preference");
         }
-
+*/ 
     }
 
     /**
