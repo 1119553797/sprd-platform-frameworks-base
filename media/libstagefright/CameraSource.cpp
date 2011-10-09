@@ -217,7 +217,7 @@ status_t CameraSource::stop() {
                 mFramesBeingEncoded.size());
         mFrameCompleteCondition.wait(mLock);
     }
-    mCamera = NULL;
+    mCamera.clear();
     IPCThreadState::self()->restoreCallingIdentity(token);
 
     if (mCollectStats) {

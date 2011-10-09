@@ -243,6 +243,7 @@ status_t MediaPhoneClient::stop()
     }
     mRecorder->stop();
     mPlayer->stop();
+    mCamera.clear();
     return OK;
 }
 
