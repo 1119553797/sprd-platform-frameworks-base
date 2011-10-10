@@ -1571,9 +1571,6 @@ uint32_t AudioFlinger::MixerThread::prepareTracks_l(const SortedVector< wp<Track
         } else {
             //LOGV("track %d u=%08x, s=%08x [NOT READY] on thread %p", track->name(), cblk->user, cblk->server, this);
             if (track->isStopped()) {
-                // add by xiaguowu 2011-10-10 for Bug 1503 begin
-                usleep(50000);
-                // add by xiaguowu 2011-10-10 for Bug 1503 end
                 track->reset();
             }
             if (track->isTerminated() || track->isStopped() || track->isPaused()) {
