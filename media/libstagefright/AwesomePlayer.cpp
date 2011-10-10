@@ -56,7 +56,8 @@
 namespace android {
 
 static int64_t kLowWaterMarkUs = 500000ll;  // 2secs @hong
-static int64_t kHighWaterMarkUs = 1800000ll;  // 10secs @hong
+static int64_t kHighWaterMarkUs = 2500000ll;  // 10secs @hong
+static int64_t kStartLowWaterMarkUs = 150000ll;
 static const size_t kLowWaterMarkBytes = 40000;
 static const size_t kHighWaterMarkBytes = 200000;
 
@@ -692,7 +693,7 @@ void AwesomePlayer::onBufferingUpdate() {
                 mFlags &= ~CACHE_UNDERRUN;
                 play_l();
                 notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); //@hong
-            } else if ((eos || cachedDurationUs > 100000ll) && (mFlags & PREPARING)) { //@hong
+            } else if ((eos || cachedDurationUs > kStartLowWaterMarkUs) && (mFlags & PREPARING)) { //@hong
                 LOGV("cache has filled up (%.2f secs), prepare is done",
                      cachedDurationUs / 1E6);
                 finishAsyncPrepare_l();
