@@ -1430,7 +1430,12 @@ bool AudioFlinger::MixerThread::threadLoop()
             }
             mStandby = false;
         } else {
-            usleep(sleepTime);
+            // add by xiaguowu 2011-10-10 for Bug 1503 begin
+            //usleep(sleepTime);
+            mLock.lock();
+            mWaitWorkCV.waitRelative(mLock, microseconds(sleepTime));
+            mLock.unlock();
+            // add by xiaguowu 2011-10-10 for Bug 1503 end
         }
 
         // finally let go of all our tracks, without the lock held
@@ -1566,6 +1571,9 @@ uint32_t AudioFlinger::MixerThread::prepareTracks_l(const SortedVector< wp<Track
         } else {
             //LOGV("track %d u=%08x, s=%08x [NOT READY] on thread %p", track->name(), cblk->user, cblk->server, this);
             if (track->isStopped()) {
+                // add by xiaguowu 2011-10-10 for Bug 1503 begin
+                usleep(50000);
+                // add by xiaguowu 2011-10-10 for Bug 1503 end
                 track->reset();
             }
             if (track->isTerminated() || track->isStopped() || track->isPaused()) {
