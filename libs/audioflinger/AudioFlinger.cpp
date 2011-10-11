@@ -18,6 +18,7 @@
 
 #define LOG_TAG "AudioFlinger"
 //#define LOG_NDEBUG 0
+#define LUTHER_CTS_DEBUG    0
 
 #include <math.h>
 #include <signal.h>
@@ -1326,6 +1327,9 @@ bool AudioFlinger::MixerThread::threadLoop()
             Mutex::Autolock _l(mLock);
 
             if (checkForNewParameters_l()) {
+#if LUTHER_CTS_DEBUG
+                LOGW("88888888 [%d:%d]", mFrameCount, mFrameSize);
+#endif
                 mixBufferSize = mFrameCount * mFrameSize;
                 // FIXME: Relaxed timing because of a certain device that can't meet latency
                 // Should be reduced to 2x after the vendor fixes the driver issue
@@ -1402,6 +1406,9 @@ bool AudioFlinger::MixerThread::threadLoop()
         }
         // sleepTime == 0 means we must write to audio hardware
         if (sleepTime == 0) {
+#if LUTHER_CTS_DEBUG
+            LOGW("aaaaaaaaaa write data start");
+#endif
             mLastWriteTime = systemTime();
             mInWrite = true;
             mBytesWritten += mixBufferSize;
@@ -1429,6 +1436,9 @@ bool AudioFlinger::MixerThread::threadLoop()
                 }
             }
             mStandby = false;
+#if LUTHER_CTS_DEBUG
+            LOGW("bbbbbbbbbb write data finished");
+#endif
         } else {
             // add by xiaguowu 2011-10-10 for Bug 1503 begin
             //usleep(sleepTime);
@@ -1462,6 +1472,9 @@ uint32_t AudioFlinger::MixerThread::prepareTracks_l(const SortedVector< wp<Track
 
     float masterVolume = mMasterVolume;
     bool  masterMute = mMasterMute;
+#if LUTHER_CTS_DEBUG
+    int num = 0;
+#endif
 
 #ifdef LVMX
     bool tracksConnectedChanged = false;
@@ -1568,12 +1581,21 @@ uint32_t AudioFlinger::MixerThread::prepareTracks_l(const SortedVector< wp<Track
             // reset retry count
             track->mRetryCount = kMaxTrackRetries;
             mixerStatus = MIXER_TRACKS_READY;
+#if LUTHER_CTS_DEBUG
+            LOGW("11111111 [active track num=%d sampleRate=%d %d:%d]", num++, int(cblk->sampleRate), mFrameCount, mFrameSize);
+#endif
         } else {
             //LOGV("track %d u=%08x, s=%08x [NOT READY] on thread %p", track->name(), cblk->user, cblk->server, this);
             if (track->isStopped()) {
+#if LUTHER_CTS_DEBUG
+                LOGW("BBBBBBBB track is reseted");
+#endif
                 track->reset();
             }
             if (track->isTerminated() || track->isStopped() || track->isPaused()) {
+#if LUTHER_CTS_DEBUG
+                LOGW("CCCCCCCC track is %d:%d:%d", track->isTerminated(), track->isStopped(), track->isPaused());
+#endif
                 // We have consumed all the buffers of this track.
                 // Remove it from the list of active tracks.
                 tracksToRemove->add(track);
