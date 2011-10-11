@@ -114,7 +114,7 @@ class PowerManagerService extends IPowerManager.Stub
     private static final int BUTTON_BRIGHT_BIT      = 0x00000004;
     private static final int KEYBOARD_BRIGHT_BIT    = 0x00000008;
     private static final int BATTERY_LOW_BIT        = 0x00000010;
-
+    private static final int FLASH_BRIGHT_BIT        = 0x00000020;
     // values for setPowerState
 
     // SCREEN_OFF == everything off
@@ -188,6 +188,7 @@ class PowerManagerService extends IPowerManager.Stub
     private LightsService.Light mButtonLight;
     private LightsService.Light mKeyboardLight;
     private LightsService.Light mAttentionLight;
+    private LightsService.Light mFlashLedLight;
     private UnsynchronizedWakeLock mBroadcastWakeLock;
     private UnsynchronizedWakeLock mStayOnWhilePluggedInScreenDimLock;
     private UnsynchronizedWakeLock mStayOnWhilePluggedInPartialLock;
@@ -462,7 +463,7 @@ class PowerManagerService extends IPowerManager.Stub
         mButtonLight = lights.getLight(LightsService.LIGHT_ID_BUTTONS);
         mKeyboardLight = lights.getLight(LightsService.LIGHT_ID_KEYBOARD);
         mAttentionLight = lights.getLight(LightsService.LIGHT_ID_ATTENTION);
-
+	mFlashLedLight= lights.getLight(LightsService.LIGHT_ID_FLASHLED);
         mHandlerThread = new HandlerThread("PowerManagerService") {
             @Override
             protected void onLooperPrepared() {
@@ -1872,6 +1873,12 @@ class PowerManagerService extends IPowerManager.Stub
         if ((mask & KEYBOARD_BRIGHT_BIT) != 0) {
             mKeyboardLight.setBrightness(value);
         }
+
+        if ((mask & FLASH_BRIGHT_BIT) != 0) {
+            mFlashLedLight.setBrightness(value);
+        }
+
+
     }
 
     class BrightnessState {
@@ -2659,6 +2666,10 @@ class PowerManagerService extends IPowerManager.Stub
         }
 
         return result;
+    }
+
+    public void setFlashledBrightness(int brightness) {
+        mFlashLedLight.setFlashing(brightness, 0, 0, 0);
     }
 
     public void setBacklightBrightness(int brightness) {
