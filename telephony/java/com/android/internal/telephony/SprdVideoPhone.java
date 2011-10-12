@@ -1,5 +1,6 @@
 package com.android.internal.telephony;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.PhoneStateListener;
@@ -49,6 +50,10 @@ public interface SprdVideoPhone {
 
 	public void unregisterForRemoteCamera(Handler h);
 
+	public void registerForVideoCallCodec(Handler h, int what, Object obj);
+
+	public void unregisterForVideoCallCodec(Handler h);
+
 	public CallType getCallType() ;
 
 	public Connection  dialVP(String dialString) throws CallStateException;
@@ -60,6 +65,8 @@ public interface SprdVideoPhone {
 	public void  controlCamera(boolean bEnable) throws CallStateException;
 
 	public void  controlAudio(boolean bEnable) throws CallStateException;
+
+	public void codecVP(int type, Bundle param);
 
 	public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete);
 

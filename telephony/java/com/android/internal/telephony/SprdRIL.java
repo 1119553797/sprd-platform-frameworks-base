@@ -39,7 +39,7 @@ public final class SprdRIL extends RIL {
 	static final String LOG_TAG = "SprdRILJ";
 
 	protected Registrant mVPDataRegistrant;
-	protected Registrant mVPCodecRegistrant;
+	protected RegistrantList mVPCodecRegistrants = new RegistrantList();
 	protected Registrant mVPStrsRegistrant;
 	protected Registrant mVPRemoteMediaRegistrant;
 	protected Registrant mVPMMRingRegistrant;
@@ -301,12 +301,14 @@ public final class SprdRIL extends RIL {
     }
 
     public void setOnVPCodec(Handler h, int what, Object obj) {
-        mVPCodecRegistrant = new Registrant (h, what, obj);
-    }
+	   Registrant r = new Registrant (h, what, obj);
+   
+	   mVPCodecRegistrants.add(r);
+   }
 
     public void unSetOnVPCodec(Handler h) {
-        mVPCodecRegistrant.clear();
-    }
+	   mVPCodecRegistrants.remove(h);
+   }
 	
     public void setOnVPString(Handler h, int what, Object obj) {
         mVPStrsRegistrant = new Registrant (h, what, obj);
@@ -1206,10 +1208,8 @@ public final class SprdRIL extends RIL {
 									if (RILJ_LOGD) unsljLogRet(response, ret);
 
 									int[] params = (int[])ret;
-									if (mVPCodecRegistrant != null) {
-										mVPCodecRegistrant
-											.notifyRegistrant(new AsyncResult(null, params, null));
-									}
+								       mVPCodecRegistrants
+									       .notifyRegistrants(new AsyncResult(null, params, null));
 									break;
 								}
 				case RIL_UNSOL_VIDEOPHONE_STRING: 

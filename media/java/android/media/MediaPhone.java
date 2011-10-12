@@ -836,7 +836,7 @@ public class MediaPhone extends Handler
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "prepareAsync fail " + ex);
             }
-	        codec(CODEC_OPEN, null, null);
+	        //codec(CODEC_OPEN, null, null);
             break;
 
         case CODEC_SET_PARAM:

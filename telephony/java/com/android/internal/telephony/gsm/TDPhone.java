@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncResult;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -119,6 +120,9 @@ public final class TDPhone extends GSMPhone {
             = new RegistrantList();
 
     protected final RegistrantList mVideoCallRemoteCameraRegistrants
+            = new RegistrantList();
+
+    protected final RegistrantList mVideoCallCodecRegistrants
             = new RegistrantList();
 
     // Instance Variables
@@ -613,6 +617,16 @@ public final class TDPhone extends GSMPhone {
 	public void unregisterForRemoteCamera(Handler h){
         mVideoCallRemoteCameraRegistrants.remove(h);
     }
+	
+	public void registerForVideoCallCodec(Handler h, int what, Object obj){
+        checkCorrectThread(h);
+
+        mVideoCallCodecRegistrants.addUnique(h, what, obj);
+    }
+
+	public void unregisterForVideoCallCodec(Handler h){
+        mVideoCallCodecRegistrants.remove(h);
+    }
 
      void notifyPreciseVideoCallStateChanged() {
         AsyncResult ar = new AsyncResult(null, this, null);
@@ -640,6 +654,10 @@ public final class TDPhone extends GSMPhone {
 	
 	void notifyVideoCallFail(AsyncResult ar){
         mVideoCallFailRegistrants.notifyRegistrants(ar);
+    }
+	
+	void notifyVideoCallCodec(AsyncResult ar){
+        mVideoCallCodecRegistrants.notifyRegistrants(ar);
     }
 
 	public CallType getCallType() {
@@ -704,6 +722,10 @@ public final class TDPhone extends GSMPhone {
 
 	public void  controlAudio(boolean bEnable) throws CallStateException{
 		mCM.controlVPAudio(bEnable, obtainMessage(EVENT_CONTROL_AUDIO_DONE, bEnable?1:0, 0, 0));
+	}
+	
+	public void  codecVP(int type, Bundle param) {
+		mCM.codecVP(type, param, null);
 	}
 
 

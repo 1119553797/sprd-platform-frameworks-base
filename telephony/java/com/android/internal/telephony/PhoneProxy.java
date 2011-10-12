@@ -21,6 +21,7 @@ import android.app.ActivityManagerNative;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
@@ -342,6 +343,18 @@ public class PhoneProxy extends Handler implements Phone {
 		}
 	}
 
+	public void registerForVideoCallCodec(Handler h, int what, Object obj){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
+			mActivePhone.registerForVideoCallCodec(h, what, obj);
+		}
+	}
+
+	public void unregisterForVideoCallCodec(Handler h){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
+			mActivePhone.unregisterForVideoCallCodec(h);
+		}
+	}
+
 	public CallType getCallType() {
 		return mActivePhone.getCallType();
 	}
@@ -375,6 +388,12 @@ public class PhoneProxy extends Handler implements Phone {
 	public void  controlAudio(boolean bEnable) throws CallStateException{
 		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.controlAudio(bEnable);
+		}
+	}
+	
+	public void codecVP(int type, Bundle param){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
+			mActivePhone.codecVP(type, param);
 		}
 	}
 	

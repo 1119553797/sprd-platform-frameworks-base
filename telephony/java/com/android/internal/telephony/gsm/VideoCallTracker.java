@@ -66,6 +66,7 @@ public final class VideoCallTracker extends CallTracker {
     
     protected static final int EVENT_FALLBACK = 100;
 	protected static final int EVENT_VIDEOCALLFAIL = 101;
+	protected static final int EVENT_VIDEOCALLCODEC = 102;
 
     //***** Instance Variables
     VideoConnection connections[] = new VideoConnection[MAX_CONNECTIONS];
@@ -107,6 +108,7 @@ public final class VideoCallTracker extends CallTracker {
         cm.registerForNotAvailable(this, EVENT_RADIO_NOT_AVAILABLE, null);
 		cm.setOnVPFallBack(this, EVENT_FALLBACK, null);
 		cm.setOnVPFail(this, EVENT_VIDEOCALLFAIL, null);
+		cm.setOnVPCodec(this, EVENT_VIDEOCALLCODEC, null);
     }
 
     public void dispose() {
@@ -115,7 +117,8 @@ public final class VideoCallTracker extends CallTracker {
         cm.unregisterForOn(this);
         cm.unregisterForNotAvailable(this);
 		cm.unSetOnVPFallBack(this);
-		cm.unSetOnVPFail(this);
+		cm.unSetOnVPFail(this);		
+        cm.unSetOnVPCodec(this);
 
         for(VideoConnection c : connections) {
             try {
@@ -820,6 +823,9 @@ public final class VideoCallTracker extends CallTracker {
 			break;
 			case EVENT_VIDEOCALLFAIL:
 				phone.notifyVideoCallFail((AsyncResult)msg.obj);
+			break;
+			case EVENT_VIDEOCALLCODEC:
+				phone.notifyVideoCallCodec((AsyncResult)msg.obj);
 			break;
         }
     }
