@@ -1440,12 +1440,15 @@ bool AudioFlinger::MixerThread::threadLoop()
             LOGW("bbbbbbbbbb write data finished");
 #endif
         } else {
+            #if 1
+            usleep(sleepTime);
+            #else
             // add by xiaguowu 2011-10-10 for Bug 1503 begin
-            //usleep(sleepTime);
             mLock.lock();
             mWaitWorkCV.waitRelative(mLock, microseconds(sleepTime));
             mLock.unlock();
             // add by xiaguowu 2011-10-10 for Bug 1503 end
+            #endif
         }
 
         // finally let go of all our tracks, without the lock held
