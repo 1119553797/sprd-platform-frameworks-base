@@ -44,6 +44,7 @@ ARTPSource::ARTPSource(
       mHighestSeqNumber(0),
       mNumBuffersReceived(0),
       mNumTimes(0),
+      mDeltaT(0),
       mLastNTPTime(0),
       mLastNTPTimeUpdateUs(0),
       mIssueFIRRequests(false),
@@ -138,7 +139,7 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 	   uint64_t ntptime2;
 	 
 	        CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
-			
+			updatetime = false;
 	    if (mLastNTPTimeUpdateUs == 0 ||
 			(ntpTime > (mLastNTPTimeUpdateUs + mPeriodCheck)))
 	    	{
@@ -154,66 +155,56 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 		
 		
 		 ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
-#if 0		 
-		 if (mPeriodCheck < 3*800000ll)
-		 timeUpdate(rtpTime, ntpTime1);
-		 else
-		 if (rtpTime >= (mRTPTime[1] + 450000)  || 
-		 	((rtpTime < 450000) &&  ((uint32_t)0xffffffff-450000ll+ rtpTime) >  mRTPTime[1] ))
-		 {
-		        if (ntpTime1 >= RTP2NTP(rtpTime) )
-		        	{
-				if ((ntpTime1 - RTP2NTP(rtpTime) ) < 0x40000000ll)
-					{
-					LOGI("OK rtp-ntp:%u ntp:0x%llx", RTP2NTP(rtpTime), ntpTime1);
-	               	    	 timeUpdate(rtpTime, ntpTime1);
-					}
-				else
-					{
-					LOGI("adjust ERR rtp-ntp:%u ntp:0x%llx", RTP2NTP(rtpTime), ntpTime1);
-	               	    	 timeUpdate(rtpTime, RTP2NTP(rtpTime) );	
-					 timeUpdate(rtpTime+450000, ntpTime1 /*+RTP2NTP(rtpTime))/2 */  + 0x500000000ll);
-					}
-		        	}
-			else
-				{
-				if ((RTP2NTP(rtpTime)-ntpTime1 )< 0x40000000ll)
-					{
-					LOGI("OK rtp-ntp:%u ntp:0x%llx", RTP2NTP(rtpTime), ntpTime1);
-	               	    	 timeUpdate(rtpTime, ntpTime1);
-					}
-				else
-					{
-					LOGI("adjust ERR rtp-ntp:%u ntp:0x%llx", RTP2NTP(rtpTime), ntpTime1);
-	               	    	 timeUpdate(rtpTime, RTP2NTP(rtpTime) );	
-					 timeUpdate(rtpTime+450000,  ntpTime1 /*+RTP2NTP(rtpTime))/2 */ + 0x500000000ll);
-					}
-				}
-		 	}	
-#else
+
 		if (mNumTimes == 2 )
+		{
 		ntptime2 = RTP2NTP(rtpTime);
-		 timeUpdate(rtpTime, ntpTime1);
+		 }
+		 
+		if (mLastNTPTimeUpdateUs == 0 )
+			{
+			mStartingT = ntpTime1;
+			mStartRTP = rtpTime;
+			}
+		timeUpdate(rtpTime, ntpTime1);
+		
 		updatetime = true;
-#endif
+		mDeltaT = 0;
 	    	}
 	    if (mNumTimes == 2 && mPeriodCheck > 3000000ll ) 
 	    	{
-//		ntpTime1 =( ntpTime /1000000ll ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
-//		        meta->setInt64("ntp-time", (rtpTime>mRTPTime[0])?RTP2NTP(rtpTime):ntpTime1);
 			if (updatetime)
-		        meta->setInt64("ntp-time", ntptime2);
+			{
+			        meta->setInt64("ntp-time", ntptime2  );
+				 mDeltaT =(int64_t)(ntpTime1 -ntptime2);
+				 LOGI("STAMP rtp:%d ntp:0x%llx deltaT:%.2f ", rtpTime, ntptime2,((double)(mDeltaT >> 29)/8));
+				 if (((double)(mDeltaT >> 29)/8) > 3 || ((double)(mDeltaT >> 29)/8) < -3)
+				 	{
+				 	LOGI("STAMP EXCEPTION adjust Delta to 0 ");
+					mDeltaT = 0;
+				 	}
+			}
 			else
-		        meta->setInt64("ntp-time", RTP2NTP(rtpTime));
+			{
+			if (((double)(mDeltaT >> 29)/8) >= (-1.2) && ((double)(mDeltaT >> 29)/8) <= 1.2)
+			{
+			ntptime2 = RTP2NTP(rtpTime) - mDeltaT+ ((double) mDeltaT)*((double)((rtpTime>=mRTPTime[1])?(rtpTime-mRTPTime[1]):(0x100000000ll-mRTPTime[1]+rtpTime))*10.0/(mPeriodCheck*18.0));
+			}
+			else
+			{
+			ntptime2 = RTP2NTP(rtpTime) - mDeltaT+  ((double) mDeltaT)*((double)((rtpTime>=mRTPTime[1])?(rtpTime-mRTPTime[1]):(0x100000000ll-mRTPTime[1]+rtpTime))*10.0/(mPeriodCheck*45.0));
+			}
+			meta->setInt64("ntp-time", ntptime2);
+		       LOGI("rtp:%d ntp:0x%llx deltaT:%.2f ", rtpTime, ntptime2,((double)((int64_t)(RTP2NTP(rtpTime)-ntptime2)))/0x100000000ll);
+			}
 	    	}
 		else
 		{
 
-		ntpTime1 = mNTPTime[0] + (double)(0x600000000ll)
-            * ((double)rtpTime - (double)mRTPTime[0])
+		ntpTime1 = mStartingT + (double) 0x600000000ll
+            *(double)((rtpTime >= mStartRTP)? (rtpTime - mStartRTP):(0x100000000ll - mStartRTP+rtpTime))
             / (double)(6*90000ll);
 		meta->setInt64("ntp-time", ntpTime1);
-		LOGI("rtp:%u ntp:0x%llx", rtpTime, ntpTime1);
 		 }
 		 
 		
@@ -290,11 +281,8 @@ uint64_t ARTPSource::RTP2NTP(uint32_t rtpTime) const {
    {
 
     return mNTPTime[0] + (double)(mNTPTime[1] - mNTPTime[0])
-            * ((double)rtpTime - (double)mRTPTime[0])
-            / (double)(mRTPTime[1] - mRTPTime[0]);		
- //           * (((double)rtpTime >= (double)mRTPTime[0])?(rtpTime - mRTPTime[0]):((uint32_t)0xffffffff- mRTPTime[0] +rtpTime ))
-//            / ((mRTPTime[1] > mRTPTime[0])?(mRTPTime[1] - mRTPTime[0]):((uint32_t)0xffffffff- mRTPTime[0]+mRTPTime[1] ));
-
+            * (double)((rtpTime >= mRTPTime[0])?(rtpTime -mRTPTime[0]):(0x100000000ll- mRTPTime[0]+rtpTime))
+            / (double)((mRTPTime[1] > mRTPTime[0])?(mRTPTime[1] - mRTPTime[0]):(0x100000000ll- mRTPTime[0]+mRTPTime[1]));		
    }
    else
    {

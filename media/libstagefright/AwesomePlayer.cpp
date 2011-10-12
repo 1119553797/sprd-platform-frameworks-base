@@ -55,7 +55,7 @@
 
 namespace android {
 
-static int64_t kLowWaterMarkUs = 500000ll;  // 2secs @hong
+static int64_t kLowWaterMarkUs = 400000ll;  // 2secs @hong
 static int64_t kHighWaterMarkUs = 2500000ll;  // 10secs @hong
 static int64_t kStartLowWaterMarkUs = 150000ll;
 static const size_t kLowWaterMarkBytes = 40000;
@@ -1866,7 +1866,7 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
  //           mLooper->start();
  	   mLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
-                          PRIORITY_AUDIO); //@hong
+                          PRIORITY_FOREGROUND); //@hong
 			
         }
         mRTSPController = new ARTSPController(mLooper);

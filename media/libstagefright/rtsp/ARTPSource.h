@@ -64,10 +64,14 @@ private:
     uint64_t mNTPTime[2];
     uint32_t mRTPTime[2];
 
+
     uint64_t mLastNTPTime;
     int64_t mLastNTPTimeUpdateUs;
 	
     bool mLocalTimestamps; //@hong
+    int64_t mDeltaT;
+    uint64_t mStartingT;
+    uint32_t mStartRTP;
     uint64_t mPeriodCheck;
 		
     bool mIssueFIRRequests;
