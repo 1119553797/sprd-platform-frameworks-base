@@ -78,6 +78,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+//add by zhaoming 2011-09-06 <NEWMS00120155> and <NEWMS00119919> begin
+import android.media.MediaPlayer;
+import java.io.IOException;
+//add by zhaoming 2011-09-06 <NEWMS00120155> and <NEWMS00119919> end
 /**
  * This class contains all of the policy about which icons are installed in the status
  * bar at boot time.  In reality, it should go into the android.policy package, but
@@ -732,6 +736,9 @@ public class StatusBarPolicy {
             mLowBatteryDialog.dismiss();
             mBatteryShowLowOnEndCall = false;
         }
+		//add by zhaoming 2011-09-06 <NEWMS00120155> and <NEWMS00119919> begin
+		isTick=false;
+		//add by zhaoming 2011-09-06 <NEWMS00120155> and <NEWMS00119919> begin
     }
 
     private void showBatteryView() {
@@ -841,6 +848,11 @@ public class StatusBarPolicy {
             d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             d.show();
             mLowBatteryDialog = d;
+			
+			//add by zhaoming 2011-09-06 <NEWMS00120155> and <NEWMS00119919> begin
+			isTick=true;
+			handler.post(runable);
+			//add by zhaoming 2011-09-06 <NEWMS00120155> and <NEWMS00119919> end
         }
 
         final ContentResolver cr = mContext.getContentResolver();
@@ -861,6 +873,33 @@ public class StatusBarPolicy {
             }
         }
     }
+	//add by zhaoming 2011-09-06 <NEWMS00120155> and <NEWMS00119919> begin
+	Handler handler=new Handler();
+	Boolean isTick=false;
+	Runnable runable=new Runnable(){
+		public void run(){
+			if(isTick){
+        		final ContentResolver cr = mContext.getContentResolver();
+        		String path=Settings.System.getString(cr,Settings.System.NOTIFICATION_SOUND);
+				
+				MediaPlayer mplayer=new MediaPlayer();
+				try{
+					mplayer.reset();
+					if(null!=path){
+						mplayer.setDataSource(path);
+					}
+					else{
+						mplayer.setDataSource("/system/media/audio/notifications/Heaven.ogg");
+					}
+					mplayer.prepare();
+					mplayer.start();
+				}
+				catch(IOException e){}
+				//handler.postDelayed(runable,60*1000);
+			}
+		}
+	};
+	//add by zhaoming 2011-09-06 <NEWMS00120155> and <NEWMS00119919> end
 
     private final void updateCallState(int state) {
         mPhoneState = state;
