@@ -119,7 +119,7 @@ ARTPAssembler::AssemblyStatus AAVCAssembler::addNALUnit(
 void AAVCAssembler::addSingleNALUnit(const sp<ABuffer> &buffer) {
     LOGV("addSingleNALUnit of size %d", buffer->size());
 #if !LOG_NDEBUG
-    hexdump(buffer->data(), buffer->size());
+   // hexdump(buffer->data(), buffer->size());
 #endif
 
     uint32_t rtpTime;
@@ -289,7 +289,7 @@ ARTPAssembler::AssemblyStatus AAVCAssembler::addFragmentedNALUnit(
 
         LOGV("piece #%d/%d", i + 1, totalCount);
 #if !LOG_NDEBUG
-        hexdump(buffer->data(), buffer->size());
+      //  hexdump(buffer->data(), buffer->size());
 #endif
 
         memcpy(unit->data() + offset, buffer->data() + 2, buffer->size() - 2);

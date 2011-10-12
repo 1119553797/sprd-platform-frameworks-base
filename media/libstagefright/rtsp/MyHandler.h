@@ -38,6 +38,7 @@
 
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <netdb.h>
 
 // If no access units are received within 3 secs, assume that the rtp
 // stream has ended and signal end of stream.
@@ -95,7 +96,8 @@ struct MyHandler : public AHandler {
         : mLooper(looper),
           mNetLooper(new ALooper),
           mConn(new ARTSPConnection),
-          mRTPConn(new ARTPConnection), //@hong faketype.
+          mRTPConn(new ARTPConnection),
+          mOriginalSessionURL(url),
           mSessionURL(url),
           mSetupTracksSuccessful(false),
           mSeekPending(false),
@@ -117,7 +119,27 @@ struct MyHandler : public AHandler {
         mNetLooper->setName("rtsp net");
         mNetLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
-                          PRIORITY_HIGHEST); //HIGHEST @hong
+                          PRIORITY_HIGHEST);
+
+        // Strip any authentication info from the session url, we don't
+        // want to transmit user/pass in cleartext.
+        AString host, path, user, pass;
+        unsigned port;
+        CHECK(ARTSPConnection::ParseURL(
+                    mSessionURL.c_str(), &host, &port, &path, &user, &pass));
+
+        if (user.size() > 0) {
+            mSessionURL.clear();
+            mSessionURL.append("rtsp://");
+            mSessionURL.append(host);
+            mSessionURL.append(":");
+            mSessionURL.append(StringPrintf("%u", port));
+            mSessionURL.append(path);
+
+            LOGI("rewritten session url: '%s'", mSessionURL.c_str());
+        }
+
+        mSessionHost = host;
     }
 
     void connect(const sp<AMessage> &doneMsg) {
@@ -131,17 +153,18 @@ struct MyHandler : public AHandler {
         mConn->observeBinaryData(notify);
 
         sp<AMessage> reply = new AMessage('conn', id());
-        mConn->connect(mSessionURL.c_str(), reply);
+         mConn->connect(mOriginalSessionURL.c_str(), reply);
 		
-	sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
-	mConn->serverexception(reply1);
 	
-	LOGI("connecting %s",mSessionURL.c_str());
+        sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
+	    mConn->serverexception(reply1);
+	
+	    LOGI("connecting %s",mSessionURL.c_str());
     }
 
     void disconnect(const sp<AMessage> &doneMsg) {
         mDoneMsg = doneMsg;
-	LOGI("disconnect.enter...");
+	    LOGE("disconnect.enter...");
         (new AMessage('abor', id()))->post();
     }
 
@@ -238,34 +261,64 @@ struct MyHandler : public AHandler {
     // In case we're behind NAT, fire off two UDP packets to the remote
     // rtp/rtcp ports to poke a hole into the firewall for future incoming
     // packets. We're going to send an RR/SDES RTCP packet to both of them.
-    void pokeAHole(int rtpSocket, int rtcpSocket, const AString &transport) {
+    bool pokeAHole(int rtpSocket, int rtcpSocket, const AString &transport) {
+        struct sockaddr_in addr;
+        memset(addr.sin_zero, 0, sizeof(addr.sin_zero));
+        addr.sin_family = AF_INET;
+
         AString source;
         AString server_port;
         if (!GetAttribute(transport.c_str(),
                           "source",
-                          &source)
-                || !GetAttribute(transport.c_str(),
+                          &source)) {
+            LOGW("Missing 'source' field in Transport response. Using "
+                 "RTSP endpoint address.");
+
+            struct hostent *ent = gethostbyname(mSessionHost.c_str());
+            if (ent == NULL) {
+                LOGE("Failed to look up address of session host '%s'",
+                     mSessionHost.c_str());
+
+                return false;
+            }
+
+            addr.sin_addr.s_addr = *(in_addr_t *)ent->h_addr;
+        } else {
+            addr.sin_addr.s_addr = inet_addr(source.c_str());
+        }
+
+        if (!GetAttribute(transport.c_str(),
                                  "server_port",
                                  &server_port)) {
-            return;
+            LOGI("Missing 'server_port' field in Transport response.");
+            return false;
         }
 
         int rtpPort, rtcpPort;
         if (sscanf(server_port.c_str(), "%d-%d", &rtpPort, &rtcpPort) != 2
                 || rtpPort <= 0 || rtpPort > 65535
                 || rtcpPort <=0 || rtcpPort > 65535
-                || rtcpPort != rtpPort + 1
-                || (rtpPort & 1) != 0) {
-            return;
+                || rtcpPort != rtpPort + 1) {
+            LOGE("Server picked invalid RTP/RTCP port pair %s,"
+                 " RTP port must be even, RTCP port must be one higher.",
+                 server_port.c_str());
+
+            return false;
         }
 
-        struct sockaddr_in addr;
-        memset(addr.sin_zero, 0, sizeof(addr.sin_zero));
-        addr.sin_family = AF_INET;
-        addr.sin_addr.s_addr = inet_addr(source.c_str());
+        if (rtpPort & 1) {
+            LOGW("Server picked an odd RTP port, it should've picked an "
+                 "even one, we'll let it pass for now, but this may break "
+                 "in the future.");
+        }
 
         if (addr.sin_addr.s_addr == INADDR_NONE) {
-            return;
+            return true;
+        }
+
+        if (IN_LOOPBACK(ntohl(addr.sin_addr.s_addr))) {
+            // No firewalls to traverse on the loopback interface.
+            return true;
         }
 
         // Make up an RR/SDES RTCP packet.
@@ -279,16 +332,26 @@ struct MyHandler : public AHandler {
         ssize_t n = sendto(
                 rtpSocket, buf->data(), buf->size(), 0,
                 (const sockaddr *)&addr, sizeof(addr));
-        CHECK_EQ(n, (ssize_t)buf->size());
+
+        if (n < (ssize_t)buf->size()) {
+            LOGE("failed to poke a hole for RTP packets");
+            return false;
+        }
 
         addr.sin_port = htons(rtcpPort);
 
         n = sendto(
                 rtcpSocket, buf->data(), buf->size(), 0,
                 (const sockaddr *)&addr, sizeof(addr));
-        CHECK_EQ(n, (ssize_t)buf->size());
+
+        if (n < (ssize_t)buf->size()) {
+            LOGE("failed to poke a hole for RTCP packets");
+            return false;
+        }
 
         LOGV("successfully poked holes.");
+
+        return true;
     }
 
     virtual void onMessageReceived(const sp<AMessage> &msg) {
@@ -329,7 +392,7 @@ struct MyHandler : public AHandler {
                 int32_t reconnect;
                 if (msg->findInt32("reconnect", &reconnect) && reconnect) {
                     sp<AMessage> reply = new AMessage('conn', id());
-                    mConn->connect(mSessionURL.c_str(), reply);
+                    mConn->connect(mOriginalSessionURL.c_str(), reply);
                 } else {
                     (new AMessage('quit', id()))->post();
                 }
@@ -386,6 +449,7 @@ struct MyHandler : public AHandler {
                                 response->mContent->size());
 
                         if (!mSessionDesc->isValid()) {
+                            LOGE("Failed to parse session description.");
                             result = ERROR_MALFORMED;
                         } else {
                             ssize_t i = response->mHeaders.indexOfKey("content-base");
@@ -398,6 +462,25 @@ struct MyHandler : public AHandler {
                                 } else {
                                     mBaseURL = mSessionURL;
                                 }
+                            }
+
+                            if (!mBaseURL.startsWith("rtsp://")) {
+                                // Some misbehaving servers specify a relative
+                                // URL in one of the locations above, combine
+                                // it with the absolute session URL to get
+                                // something usable...
+
+                                LOGW("Server specified a non-absolute base URL"
+                                     ", combining it with the session URL to "
+                                     "get something usable...");
+
+                                AString tmp;
+                                CHECK(MakeURL(
+                                            mSessionURL.c_str(),
+                                            mBaseURL.c_str(),
+                                            &tmp));
+
+                                mBaseURL = tmp;
                             }
 
                             CHECK_GT(mSessionDesc->countTracks(), 1u);
@@ -463,9 +546,12 @@ struct MyHandler : public AHandler {
                         if (!track->mUsingInterleavedTCP) {
                             AString transport = response->mHeaders.valueAt(i);
 
-                            pokeAHole(track->mRTPSocket,
-                                      track->mRTCPSocket,
-                                      transport);
+                            // We are going to continue even if we were
+                            // unable to poke a hole into the firewall...
+                            pokeAHole(
+                                    track->mRTPSocket,
+                                    track->mRTCPSocket,
+                                    transport);
                         }
 
                         mRTPConn->addStream(
@@ -673,7 +759,7 @@ struct MyHandler : public AHandler {
             {
                 int32_t first;
 
-		//LOGI("accu received");
+		//LOGE("accu received");
 		
                 if (msg->findInt32("first-rtcp", &first)) {
                     mReceivedFirstRTCPPacket = true;
@@ -694,9 +780,6 @@ struct MyHandler : public AHandler {
                     break;
                 }
 
-
-
-
                 ++mNumAccessUnitsReceived;
                 postAccessUnitTimeoutCheck();
 
@@ -704,7 +787,7 @@ struct MyHandler : public AHandler {
                 CHECK(msg->findSize("track-index", &trackIndex));
 
                 if (trackIndex >= mTracks.size()) {
-                    LOGV("late packets ignored.");
+                    LOGE("late packets ignored.");
                     break;
                 }
 
@@ -712,7 +795,7 @@ struct MyHandler : public AHandler {
 
                 int32_t eos;
                 if (msg->findInt32("eos", &eos)) {
-                    LOGI("received BYE on track index %d", trackIndex);
+                    LOGE("received BYE on track index %d", trackIndex);
 #if 0
                     track->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
 #endif
@@ -745,7 +828,6 @@ struct MyHandler : public AHandler {
                 CHECK(accessUnit->meta()->findInt32(
                             "rtp-time", (int32_t *)&rtpTime));
 
-
                 if (track->mNewSegment) {
                     track->mNewSegment = false;
 
@@ -755,24 +837,22 @@ struct MyHandler : public AHandler {
 	    gettimeofday(&tv, NULL);
 	LOGI("first segment unit  time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
 	
-                    LOGI("first segment unit ntpTime=0x%016llx rtpTime=%u seq=%d",
+                    LOGE("first segment unit ntpTime=0x%016llx rtpTime=%u seq=%d",
                          ntpTime, rtpTime, seqNum);
                 }
-  //@hong remove for fast 
-#if 1 //1orignal
-                if (mFirstAccessUnit)  //@hong remove this check.
-			{ 
+                if (mFirstAccessUnit) {
                     mDoneMsg->setInt32("result", OK);
                     mDoneMsg->post();
                     mDoneMsg = NULL;
                     mFirstAccessUnit = false;
                     mFirstAccessUnitNTP = ntpTime;
-
-			mConn->serverexception(NULL);  //@hong
-
+					mConn->serverexception(NULL);  //@hong
                 }
-#endif
-                if (ntpTime >= mFirstAccessUnitNTP) {
+
+				LOGE("first segment unit ntpTime=%lld,mFirstAccessUnitNTP =%lld",
+									 ntpTime,mFirstAccessUnitNTP);
+
+				if (ntpTime >= mFirstAccessUnitNTP) {
                     ntpTime -= mFirstAccessUnitNTP;
                 } else {
                     ntpTime = 0;
@@ -794,7 +874,6 @@ struct MyHandler : public AHandler {
                     TrackInfo *track = &mTracks.editItemAt(trackIndex);
                     track->mPacketSource->queueAccessUnit(accessUnit);
                 }
-
                 break;
             }
 
@@ -942,25 +1021,25 @@ struct MyHandler : public AHandler {
             case 'tiou':
             {
                 if (!mReceivedFirstRTCPPacket) {
-                    if (mTryFakeRTCP) {
-                        LOGI("Never received any data, disconnecting.");
-                        (new AMessage('abor', id()))->post();
-                    } else if (mTryTCPInterleaving && mReceivedFirstRTPPacket) {
-                        LOGI("We received RTP packets but no RTCP packets, "
+                    if (mReceivedFirstRTPPacket && !mTryFakeRTCP) {
+                        LOGW("We received RTP packets but no RTCP packets, "
                              "using fake timestamps.");
 
                         mTryFakeRTCP = true;
 
                         mReceivedFirstRTCPPacket = true;
                         mRTPConn->fakeTimestamps();
-                    } else {
-                        LOGI("Never received any data, switching transports.");
+                    } else if (!mReceivedFirstRTPPacket && !mTryTCPInterleaving) {
+                        LOGW("Never received any data, switching transports.");
 
                         mTryTCPInterleaving = true;
 
                         sp<AMessage> msg = new AMessage('abor', id());
                         msg->setInt32("reconnect", true);
                         msg->post();
+                    } else {
+                        LOGW("Never received any data, disconnecting.");
+                        (new AMessage('abor', id()))->post();
                     }
                 }
                 break;
@@ -1023,13 +1102,11 @@ struct MyHandler : public AHandler {
 
         AString val;
         CHECK(GetAttribute(range.c_str(), "npt", &val));
-        float npt1, npt2;
 
-        if (val == "now-") {
+        float npt1, npt2;
+        if (!ASessionDescription::parseNTPRange(val.c_str(), &npt1, &npt2)) {
             // This is a live stream and therefore not seekable.
             return;
-        } else {
-            CHECK_EQ(sscanf(val.c_str(), "%f-%f", &npt1, &npt2), 2);
         }
 
         i = response->mHeaders.indexOfKey("rtp-info");
@@ -1096,7 +1173,9 @@ private:
     sp<ARTSPConnection> mConn;
     sp<ARTPConnection> mRTPConn;
     sp<ASessionDescription> mSessionDesc;
+    AString mOriginalSessionURL;  // This one still has user:pass@
     AString mSessionURL;
+    AString mSessionHost;
     AString mBaseURL;
     AString mSessionID;
     bool mSetupTracksSuccessful;
