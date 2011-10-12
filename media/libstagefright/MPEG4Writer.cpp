@@ -2119,6 +2119,9 @@ void MPEG4Writer::Track::writeTrackHeader(
     int32_t mvhdTimeScale = mOwner->getTimeScale();
     int64_t trakDurationUs = getDurationUs();
 
+    LOGV("%s track duration: %lld",
+        mIsAudio? "Audio": "Video", trakDurationUs);
+	
     mOwner->beginBox("trak");
 
       mOwner->beginBox("tkhd");

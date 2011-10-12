@@ -38,7 +38,6 @@ ARTPAssembler::ARTPAssembler()
 void ARTPAssembler::onPacketReceived(const sp<ARTPSource> &source) {
     AssemblyStatus status;
     for (;;) {
-//	  LOGI("onPacketReceived add source");
         status = assembleMore(source);
 
         if (status == WRONG_SEQUENCE_NUMBER) {

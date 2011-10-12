@@ -627,8 +627,7 @@ APacketSource::APacketSource(
 
         mFormat->setInt32(kKeyWidth, width);
         mFormat->setInt32(kKeyHeight, height);
-    } else if (!strncmp(desc.c_str(), "mpeg4-generic/", 14)
-               || !strncmp(desc.c_str(), "MPEG4-GENERIC/", 14)) {
+    } else if (!strncasecmp(desc.c_str(), "mpeg4-generic/", 14)) {
         AString val;
         if (!GetAttribute(params.c_str(), "mode", &val)
                 || (strcasecmp(val.c_str(), "AAC-lbr")
@@ -800,20 +799,43 @@ int64_t APacketSource::getQueueDurationUs(bool *eos) {
 
 
 	int64_t secondUs;
-	List<sp<ABuffer> >::iterator it = mBuffers.begin();
-       while(it != mBuffers.end())
-       {
-        it = mBuffers.begin();
-       CHECK((*it)->meta()->findInt64("timeUs", &firstTimeUs));
-        if ( firstTimeUs > lastTimeUs ) 
+#if 0
+	List<sp<ABuffer> >::iterator it = --mBuffers.end();
+	while(it != mBuffers.begin())
+	{
+	 CHECK((*it)->meta()->findInt64("timeUs", &lastTimeUs));
+		if ( firstTimeUs > lastTimeUs ) 
 		{
-			LOGE("Huh?   remove: %lld", firstTimeUs);
+			LOGE("Huh?   remove: %lld", lastTimeUs);
+
 			mBuffers.erase(it);
-        	}
-	else 
+			it = --mBuffers.end();
+		}
+		else
 		break;
-       }
-	 
+	}
+#else
+	List<sp<ABuffer> >::iterator it = --mBuffers.end();
+	List<sp<ABuffer> >::iterator ita = mBuffers.begin();
+
+	while(it != mBuffers.begin())
+	{
+	 CHECK((*it)->meta()->findInt64("timeUs", &lastTimeUs));
+        CHECK((*ita)->meta()->findInt64("timeUs", &firstTimeUs));
+		if ( firstTimeUs > lastTimeUs ) 
+		{
+			LOGE("Huh?   remove: %lld", lastTimeUs);
+			ita = mBuffers.begin();
+			mBuffers.insert(ita, *it);
+			mBuffers.erase(it);
+			it = --mBuffers.end();
+			ita = mBuffers.begin();
+		}
+		else
+		break;
+	}
+	
+#endif
 	   LOGE("adjust ok duration time:%lld",
              lastTimeUs - firstTimeUs); 	
 	 return lastTimeUs - firstTimeUs;

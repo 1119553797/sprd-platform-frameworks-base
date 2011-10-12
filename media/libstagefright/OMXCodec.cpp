@@ -1976,12 +1976,14 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
 
         case OMX_EventError:
         {
-            CODEC_LOGE("ERROR(0x%08lx, %ld)", data1, data2);
-			mWaitOutput = true;
-
+			CODEC_LOGE("ERROR(0x%08lx, %ld)", data1, data2);
+			
+        mWaitOutput = true;
+#if 0
 	    if(data1!=OMX_ErrorStreamCorrupt){//@jgdu
 		setState(ERROR);
 	    }
+#endif		
             break;
         }
 

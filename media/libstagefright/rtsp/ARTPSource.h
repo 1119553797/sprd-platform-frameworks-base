@@ -18,11 +18,16 @@
 
 #define A_RTP_SOURCE_H_
 
+#define LOG_NDEBUG 0
+
 #include <stdint.h>
 
 #include <media/stagefright/foundation/ABase.h>
 #include <utils/List.h>
 #include <utils/RefBase.h>
+#define LOG_TAG "ARTPSource"
+#include <utils/Log.h>
+
 
 namespace android {
 
@@ -49,11 +54,12 @@ struct ARTPSource : public RefBase {
     bool timeEstablished() const {
         return mNumTimes == 2;
     }
-	
+	uint32_t getSampeRate(){return mHZ ;};
     void setLocalTimestamps(bool local); //@hong
 	
 private:
     uint32_t mID;
+	uint32_t mHZ;
     uint32_t mHighestSeqNumber;
     int32_t mNumBuffersReceived;
 

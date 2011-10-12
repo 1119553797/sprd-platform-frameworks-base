@@ -40,8 +40,6 @@ ARTSPController::~ARTSPController() {
     mLooper->unregisterHandler(mReflector->id());
 }
 
-
-
 status_t ARTSPController::connect(const char *url) {
     Mutex::Autolock autoLock(mLock);
 
@@ -180,9 +178,8 @@ int64_t ARTSPController::getNormalPlayTimeUs() {
 
 int64_t ARTSPController::getQueueDurationUs(bool *eos) {
     *eos = true;
-   
+
     int64_t minQueuedDurationUs = 0;
-    LOGI("getQueueDurationUs");
     for (size_t i = 0; i < mHandler->countTracks(); ++i) {
         sp<APacketSource> source = mHandler->getPacketSource(i);
 
