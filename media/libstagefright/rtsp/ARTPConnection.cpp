@@ -129,7 +129,7 @@ void ARTPConnection::MakePortPair(
         struct sockaddr_in addr;
         memset(addr.sin_zero, 0, sizeof(addr.sin_zero));
         addr.sin_family = AF_INET;
-        addr.sin_addr.s_addr = htonl(INADDR_ANY);
+        addr.sin_addr.s_addr = INADDR_ANY;
         addr.sin_port = htons(port);
 
         if (bind(*rtpSocket,
@@ -353,8 +353,6 @@ void ARTPConnection::onPollStreams() {
 }
 
 status_t ARTPConnection::receive(StreamInfo *s, bool receiveRTP) {
-    LOGV("receiving %s", receiveRTP ? "RTP" : "RTCP");
-
     CHECK(!s->mIsInjected);
 
     sp<ABuffer> buffer = new ABuffer(65536);
@@ -377,7 +375,7 @@ status_t ARTPConnection::receive(StreamInfo *s, bool receiveRTP) {
 
     buffer->setRange(0, nbytes);
 
-    LOGE("received %d bytes.receiveRTP %d", buffer->size(),receiveRTP);
+    //LOGI("received %d bytes.", buffer->size());
 
     status_t err;
     if (receiveRTP) {
@@ -471,14 +469,12 @@ status_t ARTPConnection::parseRTP(StreamInfo *s, const sp<ABuffer> &buffer) {
     buffer->setRange(payloadOffset, size - payloadOffset);
 
     if ((mFlags & kFakeTimestamps) && !source->timeEstablished()) {
-	        uint32_t mHZ = source->getSampeRate();
-			    LOGE("onFakeTimestamps timeUpdate getSampeRate =%d",mHZ);
-			
-                source->timeUpdate(0, 0);
-			
-				source->timeUpdate(0 + mHZ, 0x100000000ll);
+        source->timeUpdate(rtpTime, 0);
+        source->timeUpdate(rtpTime + 90000, 0x100000000ll);
         CHECK(source->timeEstablished());
     }
+
+
 
     source->processRTPPacket(buffer);
 
@@ -494,7 +490,6 @@ status_t ARTPConnection::parseRTCP(StreamInfo *s, const sp<ABuffer> &buffer) {
 
     const uint8_t *data = buffer->data();
     size_t size = buffer->size();
-	LOGE("ARTPConnection::parseRTCP");
 
     while (size > 0) {
         if (size < 8) {
@@ -597,7 +592,7 @@ status_t ARTPConnection::parseSR(
     uint64_t ntpTime = u64at(&data[8]);
     uint32_t rtpTime = u32at(&data[16]);
 
-#if 0
+#if 1
     LOGI("XXX timeUpdate: ssrc=0x%08x, rtpTime %u == ntpTime %.3f",
          id,
          rtpTime,
@@ -612,6 +607,19 @@ status_t ARTPConnection::parseSR(
 	        source->timeUpdate(rtpTime, ntpTime);
 	    }
     }
+/*  update all source timestamp */ //@hong
+#if 0
+ List<StreamInfo>::iterator it = mStreams.begin();
+    while (it != mStreams.end()) {
+        StreamInfo &info = *it++;
+
+        for (size_t j = 0; j < s->mSources.size(); ++j) {
+           sp<ARTPSource> source = s->mSources.valueAt(j);
+		source->timeUpdate(rtpTime, ntpTime);
+          }
+    	}
+#endif
+/////@hong.................................
 
     return 0;
 }
@@ -683,15 +691,10 @@ void ARTPConnection::onFakeTimestamps() {
             sp<ARTPSource> source = info.mSources.valueAt(j);
 
             if (!source->timeEstablished()) {
-
-                uint32_t mHZ = source->getSampeRate();
-			    LOGE("onFakeTimestamps timeUpdate getSampeRate =%d",mHZ);
-			
                 source->timeUpdate(0, 0);
-			
-				source->timeUpdate(0 + mHZ, 0x100000000ll);//zhangjl modify  for no rtcp sr message come so use des information for  streaming Timestamps
-			
-				mFlags |= kFakeTimestamps;
+                source->timeUpdate(0 + 90000, 0x100000000ll);
+
+                mFlags |= kFakeTimestamps;
             }
         }
     }

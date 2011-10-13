@@ -44,10 +44,6 @@ struct ARTSPConnection : public AHandler {
 
     void observeBinaryData(const sp<AMessage> &reply);
 
-    static bool ParseURL(
-            const char *url, AString *host, unsigned *port, AString *path,
-            AString *user, AString *pass);
-
 protected:
     virtual ~ARTSPConnection();
     virtual void onMessageReceived(const sp<AMessage> &msg);
@@ -68,18 +64,9 @@ private:
         kWhatObserveBinaryData  = 'obin',
     };
 
-    enum AuthType {
-        NONE,
-        BASIC,
-        DIGEST
-    };
-
     static const int64_t kSelectTimeoutUs;
 
     State mState;
-    AString mUser, mPass;
-    AuthType mAuthType;
-    AString mNonce;
     int mSocket;
     int32_t mConnectionID;
     int32_t mNextCSeq;
@@ -106,13 +93,8 @@ private:
     sp<ABuffer> receiveBinaryData();
     bool notifyResponseListener(const sp<ARTSPResponse> &response);
 
-    bool parseAuthMethod(const sp<ARTSPResponse> &response);
-    void addAuthentication(AString *request);
-
-    status_t findPendingRequest(
-            const sp<ARTSPResponse> &response, ssize_t *index) const;
-
-    bool handleServerRequest(const sp<ARTSPResponse> &request);
+    static bool ParseURL(
+            const char *url, AString *host, unsigned *port, AString *path);
 
     static bool ParseSingleUnsignedLong(
             const char *from, unsigned long *x);

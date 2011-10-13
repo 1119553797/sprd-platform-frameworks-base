@@ -55,7 +55,7 @@
 
 namespace android {
 
-static int64_t kLowWaterMarkUs = 500000ll;  // 2secs @hong
+static int64_t kLowWaterMarkUs = 400000ll;  // 2secs @hong
 static int64_t kHighWaterMarkUs = 2500000ll;  // 10secs @hong
 static int64_t kStartLowWaterMarkUs = 150000ll;
 static const size_t kLowWaterMarkBytes = 40000;
@@ -311,7 +311,7 @@ void AwesomePlayer::setListener(const wp<MediaPlayerBase> &listener) {
 
 status_t AwesomePlayer::setDataSource(
         const char *uri, const KeyedVector<String8, String8> *headers) {
-	LOGV("setdatasource11 ");
+LOGV("setdatasource11 ");
     Mutex::Autolock autoLock(mLock);
     return setDataSource_l(uri, headers);
 }
@@ -320,21 +320,21 @@ status_t AwesomePlayer::setDataSource_l(
         const char *uri, const KeyedVector<String8, String8> *headers) {
 	    struct timeval tv;  //@hong add timecheck.
 	    gettimeofday(&tv, NULL);
-		LOGV("setdatasource 22 time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
-	    reset_l();
+LOGV("setdatasource 22 time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
+    reset_l();
 
-	    mUri = uri;
+    mUri = uri;
 
-	    if (headers) {
-	        mUriHeaders = *headers;
-	    }
+    if (headers) {
+        mUriHeaders = *headers;
+    }
 
     // The actual work will be done during preparation in the call to
     // ::finishSetDataSource_l to avoid blocking the calling thread in
     // setDataSource for any significant time.
 	    gettimeofday(&tv, NULL);
-		LOGV("setdatasource 33 time:%d s",tv.tv_sec);
-  		return OK;
+LOGV("setdatasource 33 time:%d s",tv.tv_sec);
+    return OK;
 }
 
 status_t AwesomePlayer::setDataSource(
@@ -1340,7 +1340,7 @@ void AwesomePlayer::onVideoEvent() {
                 finishSeekIfNecessary(-1);
 
                 mFlags |= VIDEO_AT_EOS;
-				LOGV("video stream ended err2:%d !",err);
+		LOGV("video stream ended err2:%d !",err);
 
                 postStreamDoneEvent_l(err);
                 return;
@@ -1456,7 +1456,7 @@ void AwesomePlayer::onVideoEvent() {
         return;
     }
 
-    if (latenessUs < -50000) {
+    if (latenessUs < -10000) {
         // We're more than 10ms early.
 
         postVideoEvent_l(10000);
@@ -1866,7 +1866,7 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
  //           mLooper->start();
  	   mLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
-                          PRIORITY_AUDIO); //@hong
+                          PRIORITY_FOREGROUND); //@hong
 			
         }
         mRTSPController = new ARTSPController(mLooper);

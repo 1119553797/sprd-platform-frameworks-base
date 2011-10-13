@@ -104,7 +104,7 @@ void scanFile(const char *path) {
             printf("found album art: size=%d mime='%s'\n", dataSize,
                    mime.string());
 
-           // hexdump(data, dataSize > 128 ? 128 : dataSize);
+            hexdump(data, dataSize > 128 ? 128 : dataSize);
         }
     }
 }

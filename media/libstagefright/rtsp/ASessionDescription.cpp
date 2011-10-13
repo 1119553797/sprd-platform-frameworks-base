@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "ASessionDescription"
 #include <utils/Log.h>
 
@@ -57,31 +57,16 @@ bool ASessionDescription::parse(const void *data, size_t size) {
 
     size_t i = 0;
     for (;;) {
-        ssize_t eolPos = desc.find("\n", i);
-
+        ssize_t eolPos = desc.find("\r\n", i);
         if (eolPos < 0) {
             break;
         }
 
-        AString line;
-        if ((size_t)eolPos > i && desc.c_str()[eolPos - 1] == '\r') {
-            // We accept both '\n' and '\r\n' line endings, if it's
-            // the latter, strip the '\r' as well.
-            line.setTo(desc, i, eolPos - i - 1);
-        } else {
-            line.setTo(desc, i, eolPos - i);
-        }
-
-        if (line.empty()) {
-            i = eolPos + 1;
-            continue;
-        }
+        AString line(desc, i, eolPos - i);
 
         if (line.size() < 2 || line.c_str()[1] != '=') {
             return false;
         }
-
-        LOGI("%s", line.c_str());
 
         switch (line.c_str()[0]) {
             case 'v':
@@ -121,7 +106,7 @@ bool ASessionDescription::parse(const void *data, size_t size) {
                 key.trim();
                 value.trim();
 
-                LOGE("adding '%s' => '%s'", key.c_str(), value.c_str());
+                LOGV("adding '%s' => '%s'", key.c_str(), value.c_str());
 
                 mTracks.editItemAt(mTracks.size() - 1).add(key, value);
                 break;
@@ -129,7 +114,7 @@ bool ASessionDescription::parse(const void *data, size_t size) {
 
             case 'm':
             {
-                LOGE("new section '%s'",
+                LOGV("new section '%s'",
                      AString(line, 2, line.size() - 2).c_str());
 
                 mTracks.push(Attribs());
@@ -149,14 +134,14 @@ bool ASessionDescription::parse(const void *data, size_t size) {
                 key.trim();
                 value.trim();
 
-                LOGE("adding '%s' => '%s'", key.c_str(), value.c_str());
+                LOGV("adding '%s' => '%s'", key.c_str(), value.c_str());
 
                 mTracks.editItemAt(mTracks.size() - 1).add(key, value);
                 break;
             }
         }
 
-        i = eolPos + 1;
+        i = eolPos + 2;
     }
 
     return true;
@@ -260,14 +245,30 @@ bool ASessionDescription::getDurationUs(int64_t *durationUs) const {
         return false;
     }
 
+    if (value == "npt=now-") {
+        return false;
+    }
+
     if (strncmp(value.c_str(), "npt=", 4)) {
         return false;
     }
 
-    float from, to;
-    if (!parseNTPRange(value.c_str() + 4, &from, &to)) {
+    const char *s = value.c_str() + 4;
+    char *end;
+    double from = strtod(s, &end);
+    CHECK_GT(end, s);
+    CHECK_EQ(*end, '-');
+
+    s = end + 1;
+    //@zha fix parsing error with "npt=0-"
+    if (*s == '\0') {
         return false;
     }
+    double to = strtod(s, &end);
+    CHECK_GT(end, s);
+    CHECK_EQ(*end, '\0');
+
+    CHECK_GE(to, from);
 
     *durationUs = (int64_t)((to - from) * 1E6);
 
@@ -297,40 +298,6 @@ void ASessionDescription::ParseFormatDesc(
 
         *numChannels = x;
     }
-}
-
-// static
-bool ASessionDescription::parseNTPRange(
-        const char *s, float *npt1, float *npt2) {
-    if (s[0] == '-') {
-        return false;  // no start time available.
-    }
-
-    if (!strncmp("now", s, 3)) {
-        return false;  // no absolute start time available
-    }
-
-    char *end;
-    *npt1 = strtof(s, &end);
-
-    if (end == s || *end != '-') {
-        // Failed to parse float or trailing "dash".
-        return false;
-    }
-
-    s = end + 1;  // skip the dash.
-
-    if (!strncmp("now", s, 3)) {
-        return false;  // no absolute end time available
-    }
-
-    *npt2 = strtof(s, &end);
-
-    if (end == s || *end != '\0') {
-        return false;
-    }
-
-    return *npt2 > *npt1;
 }
 
 }  // namespace android
