@@ -13,6 +13,7 @@
 #include <media/mediarecorder.h>
 #include <sys/prctl.h>
 #include <sys/resource.h>
+#include <time.h>  //add
 #include <cutils/properties.h>
 
 namespace android {
@@ -176,6 +177,7 @@ status_t VideoPhoneWriter::threadFunc()
 	status_t err = OK;
 	static int vt_pipe = -1;
 	vt_pipe = -1;
+	char buf[128];
 	
 	prctl(PR_SET_NAME, (unsigned long)"VideoPhoneWriter", 0, 0, 0);
 	
@@ -183,19 +185,31 @@ status_t VideoPhoneWriter::threadFunc()
 	while (m_bStarted) 
 	{
 		MediaBuffer *buffer;
+		int retval = -1;
 
 		// synchronized with at command (SPDVTDATA=0)
-		if (vt_pipe < 0) vt_pipe = open("/dev/pipe/ril.vt.0", O_RDWR|O_NONBLOCK);
+		if (vt_pipe < 0) vt_pipe = open("/dev/pipe/ril.vt.0", O_RDWR);
 		if (vt_pipe > 0) {
-			char buf[128];
-			ssize_t len = -1;
 			do {
-				LOGV("before read pipe");
-				len = read(vt_pipe, buf, sizeof(buf) - 1);
-				LOGV("after read pipe, len: %d", len);
-				usleep(15*1000);
-				if (!m_bStarted ) break;
-			} while(len < 0);
+				struct timeval tv = {0};
+				tv.tv_sec = 0;
+			       tv.tv_usec = 200 * 1000;
+				fd_set rfds;
+				FD_ZERO(&rfds);
+				FD_SET(vt_pipe, &rfds);
+
+				retval = select(vt_pipe + 1, &rfds, NULL, NULL, &tv);
+				if (retval == -1) {
+					LOGV("select err");
+				} else if (retval > 0) {
+					ssize_t len = read(vt_pipe, buf, sizeof(buf) - 1);
+					//LOGV("select ok, read pipe, len: %d", len);
+					break;
+				} else {
+					LOGV("select timeout");				
+					if (!m_bStarted ) break;
+				}
+			} while (1);
 			if (!m_bStarted ) break;
 		}
 				
