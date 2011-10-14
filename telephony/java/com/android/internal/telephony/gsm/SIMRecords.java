@@ -1314,10 +1314,17 @@ public final class SIMRecords extends IccRecords {
                 SimCard.INTENT_VALUE_ICC_READY, null);
 
         //fetchSimRecords();
-	//add by chengyake for CR128237 Wednesday, October 12 2011 begin
-        Message resp = obtainMessage(222); 
-        phone.getCallForwardingOption(0, 1, resp); //0-4,1,m
-        //add by chengyake for CR128237 Wednesday, October 12 2011 begin
+		// add by chengyake for CR128237 Wednesday, October 12 2011 begin
+        // modify by wangxiaobin for MSNEW00130772 2011-10-14 begin
+        int cf = SystemProperties.getInt("persist.sys.callforwarding", 0);
+        if(cf == 1){
+        	Message resp = obtainMessage(222);
+        	phone.getCallForwardingOption(0, 1, resp); // 0-4,1,m
+//        	Message resp = obtainMessage(222);
+//        	phone.getCallForwardingOption(0, 1, resp); // 0-4,1,m
+        }
+        // modify by wangxiaobin for MSNEW00130772 2011-10-14 begin
+		// add by chengyake for CR128237 Wednesday, October 12 2011 begin
     }
 
     private void fetchSimRecords() {
