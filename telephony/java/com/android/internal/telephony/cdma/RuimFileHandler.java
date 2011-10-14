@@ -66,7 +66,9 @@ public final class RuimFileHandler extends IccFileHandler {
 
         super.handleMessage(msg);
     }
-
+     protected String getEFPathAgain(int efid) {
+          return getEFPath(efid);
+    }
     protected String getEFPath(int efid) {
         switch(efid) {
         case EF_SMS:

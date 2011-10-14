@@ -35,9 +35,15 @@ import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.IccVmFixedException;
 import com.android.internal.telephony.IccVmNotSupportedException;
 import com.android.internal.telephony.MccTable;
-
+import com.android.internal.telephony.IccCard;
+import com.android.internal.telephony.IccCardApplication;
+import com.android.internal.telephony.IccConstants;
 import java.util.ArrayList;
-
+import android.telephony.PhoneNumberUtils;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.Context;
 
 /**
  * {@hide}
@@ -60,7 +66,7 @@ public final class SIMRecords extends IccRecords {
 
     String imsi;
     boolean callForwardingEnabled;
-
+    private Context mContext; 
 
     /**
      * States only used by getSpnFsm FSM
@@ -141,6 +147,7 @@ public final class SIMRecords extends IccRecords {
     private static final int EVENT_SIM_REFRESH = 31;
     private static final int EVENT_GET_CFIS_DONE = 32;
     private static final int EVENT_GET_ECC_DONE = 33;
+    private static final int EVENT_GET_ICC_STATUS_DONE = 34;
 
     // ***** Constructor
 
@@ -169,11 +176,38 @@ public final class SIMRecords extends IccRecords {
 
     }
 
+    SIMRecords(GSMPhone p,Context context) {
+        super(p);
+
+        adnCache = new AdnRecordCache(phone);
+
+        mVmConfig = new VoiceMailConstants();
+        mSpnOverride = new SpnOverride();
+
+        recordsRequested = false;  // No load request is made till SIM ready
+
+        // recordsToLoad is set to 0 because no requests are made yet
+        recordsToLoad = 0;
+
+
+        p.mCM.registerForSIMReady(this, EVENT_SIM_READY, null);
+        p.mCM.registerForOffOrNotAvailable(
+                        this, EVENT_RADIO_OFF_OR_NOT_AVAILABLE, null);
+        p.mCM.setOnSmsOnSim(this, EVENT_SMS_ON_SIM, null);
+        p.mCM.setOnIccRefresh(this, EVENT_SIM_REFRESH, null);
+
+        // Start off by setting empty state
+        onRadioOffOrNotAvailable();
+	  mContext = context;
+	  registerGetStatusDoneReceiver(context);
+
+    }
     public void dispose() {
         //Unregister for all events
         phone.mCM.unregisterForSIMReady(this);
         phone.mCM.unregisterForOffOrNotAvailable( this);
         phone.mCM.unSetOnIccRefresh(this);
+	  unregisterRefreshListViewReceiver(); 
     }
 
     protected void finalize() {
@@ -444,6 +478,40 @@ public final class SIMRecords extends IccRecords {
             // just re-fetch all SIM records that we cache.
             fetchSimRecords();
         }
+    }
+
+    private BroadcastReceiver mGetStatusDoneReceiver;
+
+    private String SIM_GET_STATUS_DONE = "android.intent.action.SIM_GET_STATUS_DONE";
+	
+    private void registerGetStatusDoneReceiver(Context context){
+    	if(mGetStatusDoneReceiver == null){
+    		mGetStatusDoneReceiver = new BroadcastReceiver(){
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					// TODO Auto-generated method stub
+					String action = intent.getAction();
+					 if(DBG) log("registerGetStatusDoneReceiver:  action " +action );
+					if(action.equals(SIM_GET_STATUS_DONE)){
+
+						 if(DBG) log("registerGetStatusDoneReceiver:  receiver " );
+						 fetchSimRecords();
+						
+					}
+				}				
+    		};
+    		IntentFilter filter = new IntentFilter();
+    		filter.addAction(SIM_GET_STATUS_DONE);
+    		
+    		context.registerReceiver(mGetStatusDoneReceiver, filter);
+    	}
+    }
+    
+    private void unregisterRefreshListViewReceiver(){
+    	if(mGetStatusDoneReceiver != null){
+    		mContext.unregisterReceiver(mGetStatusDoneReceiver);
+    		mGetStatusDoneReceiver = null;
+    	}
     }
 
     /** Returns the 5 or 6 digit MCC/MNC of the operator that
@@ -1003,10 +1071,57 @@ public final class SIMRecords extends IccRecords {
                     break;
                 }
 
-                byte[] eccList = (byte[])ar.result;
-                System.setProperty("ril.sim.ecclist", IccUtils.bytesToHexString(eccList));
+                 IccCard card = phone.getIccCard();
+                if (DBG) log("EVENT_GET_ECC_DONE ");
+		    if (card != null
+						&& card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)) {
+					String eccList = "";
+					String number = "";
 
-                if (DBG) log("ECC List: " + IccUtils.bytesToHexString(eccList));
+					int footerOffset = 0;
+					int numberLength = 3;
+					ArrayList<byte[]> results = (ArrayList<byte[]>) ar.result;
+					if(results == null){
+
+                                      break;
+					}
+			
+					for (int i = 0; i < results.size(); i++) {
+                                      if (DBG) log( "ECC: " +
+                                            IccUtils.bytesToHexString(results.get(i)));
+						number = PhoneNumberUtils.calledPartyBCDFragmentToString(
+								results.get(i), footerOffset, numberLength);
+
+						if (DBG)
+							log("ECC number: " + number);
+
+						if (!number.equals("")) {
+
+							eccList = eccList + number + ",";
+						}
+
+											
+					}
+
+                                if (DBG)
+							log("ECC List: " + eccList);
+
+                                if(!eccList.equals("")){
+					        SystemProperties.set("ril.sim.ecclist", eccList);
+						  if (DBG)
+							log("ECC List: " + eccList);
+                                }
+
+				} else {
+
+					byte[] eccList = (byte[]) ar.result;
+					SystemProperties.set("ril.sim.ecclist", IccUtils
+							.bytesToHexString(eccList));
+
+					if (DBG)
+						log("ECC List: " + IccUtils.bytesToHexString(eccList));
+
+				}
                 break;
 
         }}catch (RuntimeException exc) {
@@ -1198,7 +1313,7 @@ public final class SIMRecords extends IccRecords {
         ((GSMPhone) phone).mSimCard.broadcastIccStateChangedIntent(
                 SimCard.INTENT_VALUE_ICC_READY, null);
 
-        fetchSimRecords();
+        //fetchSimRecords();
 	//add by chengyake for CR128237 Wednesday, October 12 2011 begin
         Message resp = obtainMessage(222); 
         phone.getCallForwardingOption(0, 1, resp); //0-4,1,m

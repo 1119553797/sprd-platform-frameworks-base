@@ -54,9 +54,17 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 	static private final byte USIM_RECORD_SIZE_1 = 4;
 	static private final byte USIM_RECORD_SIZE_2 = 5;
 	static private final byte USIM_RECORD_COUNT = 6;
+
+	static private final int EVENT_GET_USIM_ECC_DONE = 0x10;
 	static final String LOG_TAG = "TD-SCDMA";
 	private Phone mPhone;
 	private Object mLock = new Object();
+
+	//private final int mDualMapFile[]  ={EF_ADN,EF_ARR,EF_FDN,EF_SMS,EF_MSISDN,
+	//	EF_SMSP,EF_SMSS,EF_SMSR,EF_SDN,EF_EXT2,EF_EXT3,EF_EXT4,EF_BDN,EF_TEST}; 
+	private final int mDualMapFile[]  ={EF_SMS}; 
+   
+  
 
 	// ***** Instance Variables
 
@@ -103,6 +111,171 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 		response.sendToTarget();
 	}
 
+        /**
+     * Load a SIM Transparent EF
+     *
+     * @param fileid EF id
+     * @param onLoaded
+     *
+     * ((AsyncResult)(onLoaded.obj)).result is the byte[]
+     *
+     */
+
+    private boolean isDualMapFile(int fileId){
+
+         Log.i(LOG_TAG,"isDualMapFile  fileId "+ fileId);
+
+	   for(int i=0; i < mDualMapFile.length; i++){
+
+                // if(fileId == mDualMapFile[i] || ((fileId >>8)& 0xff) == 0x4f ){
+                 if(fileId == mDualMapFile[i]){
+                       return true;
+		    }
+	    }
+
+           return false;
+    }
+
+    private boolean isFinishLoadFile(int fileId, int pathNum){
+
+          Log.i(LOG_TAG,"isFinishLoadFile  fileId "+ fileId +  "pathNum " +  pathNum);
+
+          if(isDualMapFile(fileId)){
+		  	
+                 if(pathNum == 1){
+
+			    return true;
+
+		    }
+                 if(pathNum == 0)
+                 {
+
+                       return false;   
+		     }
+	   }
+
+
+	    return true;
+
+    }
+    protected String getEFPathAgain(int efid ){
+          return getEFPathofUsim(efid);
+    }
+    protected String getEFPathofUsim(int efid ){
+           String oldPath = getEFPath(efid);
+           IccCard card = phone.getIccCard();
+	     boolean isUsim =false;
+	     if (card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)){
+               isUsim = true;
+	    }
+	     if(!isUsim){
+		 	
+                return oldPath;
+	    }
+
+	     String pathFirst="";
+	     String pathSecond ="";
+	     String pathLast  ="";
+	 
+	     //Log.i(LOG_TAG,"getEFPathofUsim  try again oldPath" + oldPath + "length "+oldPath.length()  );
+	     if(oldPath.length() <8){
+                     return oldPath;					 
+		 }else{
+
+			 pathFirst = oldPath.substring(0,4); 
+                    pathSecond = oldPath.substring(4,8); 
+					
+			 if(oldPath.length() > 8){
+			    pathLast = oldPath.substring(8,oldPath.length());
+			 }
+		 }	
+
+		// Log.i(LOG_TAG,"getEFPathofUsim false , try again pathFirst " + pathFirst + "pathSecond " +pathSecond + "pathLast " +pathLast);
+              if(pathSecond.equals(DF_ADF)){
+			  	
+                    pathSecond = DF_TELECOM;
+                   
+		 }
+              // if(pathSecond.equals(DF_TELECOM)){
+			  	
+                 //   pathSecond = DF_ADF;
+                   
+		 //}           
+		  else{
+
+                  
+                    return oldPath;
+		 } 
+
+		 String newPath = pathFirst+pathSecond+pathLast;
+
+		 return newPath;
+
+    }
+
+
+    public boolean loadFileAgain(int fileId, int pathNum , int event,Object obj){
+
+	  Log.i(LOG_TAG,"loadFileAgain  "  + "event " +event );
+	  IccCard card = phone.getIccCard();
+	  boolean isUsim =false;
+	  if (card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)){
+               isUsim = true;
+	  }
+      
+         if(!isUsim){
+		 	
+                return false;
+	  }
+         Log.i(LOG_TAG,"loadFileAgain is Usim"  );
+
+        if(isFinishLoadFile(fileId, pathNum)){
+              // Log.i(LOG_TAG,"isFinishLoadFile true");
+               return false;
+	 }else{
+
+
+              String newPath = getEFPathofUsim(fileId);
+
+		 if(newPath.equals(getEFPath(fileId))){
+
+                    return false;
+		 }
+		
+              Message response = obtainMessage(event,
+                        fileId, 1, obj);
+			
+		 Log.i(LOG_TAG,"isFinishLoadFile false , try again newPath   " + newPath);	
+              phone.mCM.iccIO(COMMAND_GET_RESPONSE, fileId,newPath,
+                    0, 0, GET_RESPONSE_EF_SIZE_BYTES, null, null, response);
+	 }
+
+
+	 return true;
+
+
+    }
+
+   
+    @Override
+    public void loadEFTransparent(int fileid, Message onLoaded) {
+       
+       IccCard card = phone.getIccCard();
+       Log.i(LOG_TAG,"loadEFTransparent fileid " + fileid);
+       if (card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM) && fileid == EF_ECC){
+           Log.i(LOG_TAG,"loadEFTransparent is usim card");
+	  
+           loadEFLinearFixedAll(fileid,onLoaded); 
+	  }else{
+             Message response = obtainMessage(EVENT_GET_BINARY_SIZE_DONE,
+                        fileid, 0, onLoaded);
+		phone.mCM.iccIO(COMMAND_GET_RESPONSE, fileid, getEFPath(fileid),
+                        0, 0, GET_RESPONSE_EF_SIZE_BYTES, null, null, response);
+
+	  }
+    }
+
+
 	// ***** Overridden from IccFileHandler
 
 	@Override
@@ -120,7 +293,13 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 		int recordNum;
 		int recordSize[];
 		int index = 0;
-
+		boolean isUsim = false;
+		int pathNum = msg.arg2;
+		String path;
+             IccCard card = phone.getIccCard();
+		if (card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)){
+                    isUsim = true;
+		}
 		try {
 			switch (msg.what) {
 			case EVENT_READ_IMG_DONE:
@@ -150,19 +329,39 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				result = (IccIoResult) ar.result;
 				response = lc.onLoaded;
 				data = result.payload;
-				logbyte(data);
-
-				IccCard card = phone.getIccCard();
-				Log
-						.i(
-								LOG_TAG,
-								"EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE usim "
-										+ card
-												.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM));
-				if (card != null
-						&& card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM))
-
+				
+				                         
+				if (ar.exception != null) {
+					Log.i(LOG_TAG,"EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE exception ");
+					sendResult(response, null, ar.exception);
+					break;
+				}
+				
+				if(data != null){
+				     logbyte(data);
+				}
+                        
+				iccException = result.getException();
+                			
+		             if(isUsim)                  
 				{
+			            int fileId = lc.efid;
+                            
+                                if(iccException!= null){
+						  Log.i(LOG_TAG, "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE pathNum "+ pathNum);
+
+						if(!loadFileAgain(fileId, pathNum , msg.what,lc)){
+                                 
+						     sendResult(response, null, iccException);
+						}
+					      break;
+					}
+					if (iccException != null) {
+						loge("EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE ar.exception");
+					      sendResult(response, null, iccException);
+					      break;
+				      }
+
 					for (int i = 0; i < data.length; i++) {
 						if (data[i] == TYPE_FILE_DES) {
 
@@ -189,18 +388,11 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 								"EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE  recordSize"
 										+ recordSize[i]);
 					}
+					response.arg2 = msg.arg2;
 					sendResult(response, recordSize, null);
 					break;
 				}
-				if (ar.exception != null) {
-					Log
-							.i(LOG_TAG,
-									"EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE exception (1) ");
-					sendResult(response, null, ar.exception);
-					break;
-				}
-
-				iccException = result.getException();
+			         Log.i(LOG_TAG, "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE (4)");
 				if (iccException != null) {
 					sendResult(response, null, iccException);
 					break;
@@ -225,14 +417,28 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				result = (IccIoResult) ar.result;
 				response = lc.onLoaded;
 				if (ar.exception != null) {
-					loge("ar.exception");
+					loge("EVENT_GET_RECORD_SIZE_DONE ar.exception");
 					sendResult(response, null, ar.exception);
 					break;
 				}
 				iccException = result.getException();
+				
+				if(isUsim)                  
+				{
+			             int fileId = lc.efid;
+                               
+                                if(iccException != null ){                           
+                                  
+						if(!loadFileAgain(fileId, pathNum ,msg.what,lc)){
+							sendResult(response, null, iccException);
+						}
+					      break;
+					}
+				}
+			
 
 				if (iccException != null) {
-					loge("iccException");
+					loge("EVENT_GET_RECORD_SIZE_DONE iccException");
 					sendResult(response, null, iccException);
 					break;
 				}
@@ -241,10 +447,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				recordNum = lc.recordNum;
 
 				logbyte(data);
-				Log
-						.d(
-								LOG_TAG,
-								"FCP:"
+				Log.d(LOG_TAG,"FCP:"
 										+ Integer
 												.toHexString(data[RESPONSE_DATA_FCP_FLAG])
 										+ "DES:"
@@ -287,10 +490,13 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				if (lc.loadAll) {
 					lc.results = new ArrayList<byte[]>(lc.countRecords);
 				}
+				
+				path = (pathNum == 0) ? getEFPath(lc.efid) : getEFPathofUsim(lc.efid);
+				loge("EVENT_GET_RECORD_SIZE_DONE path " + path);
 				phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid,
-						getEFPath(lc.efid), lc.recordNum,
+						path, lc.recordNum,
 						READ_RECORD_MODE_ABSOLUTE, lc.recordSize, null, null,
-						obtainMessage(EVENT_READ_RECORD_DONE, lc));
+						obtainMessage(EVENT_READ_RECORD_DONE,0,pathNum,lc));
 				break;
 			case EVENT_GET_BINARY_SIZE_DONE:
 				ar = (AsyncResult) msg.obj;
@@ -304,7 +510,22 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 
 				iccException = result.getException();
 
+				if(isUsim)                  
+				{
+			           
+                                  int fileId = msg.arg1;
+                                if(iccException != null ){
+                                  
+						if(!loadFileAgain(fileId, pathNum , msg.what,response)){
+                                              sendResult(response, null, iccException);
+						}
+					      break;
+					}
+				}
+
+				
 				if (iccException != null) {
+					loge("EVENT_GET_BINARY_SIZE_DONE iccException");
 					sendResult(response, null, iccException);
 					break;
 				}
@@ -323,10 +544,14 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 
 				size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
 						+ (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
+				
+				path = (pathNum == 0) ? getEFPath(fileid) : getEFPathofUsim(fileid);
+				loge("EVENT_GET_BINARY_SIZE_DONE path " + path); 
 
-				phone.mCM.iccIO(COMMAND_READ_BINARY, fileid, getEFPath(fileid),
+				
+				phone.mCM.iccIO(COMMAND_READ_BINARY, fileid, path,
 						0, 0, size, null, null, obtainMessage(
-								EVENT_READ_BINARY_DONE, fileid, 0, response));
+								EVENT_READ_BINARY_DONE, fileid, pathNum, response));
 				break;
 
 			case EVENT_READ_RECORD_DONE:
@@ -358,12 +583,13 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 					if (lc.recordNum > lc.countRecords) {
 						sendResult(response, lc.results, null);
 					} else {
-						phone.mCM
-								.iccIO(COMMAND_READ_RECORD, lc.efid,
-										getEFPath(lc.efid), lc.recordNum,
+					   
+				             path = (pathNum == 0) ? getEFPath(lc.efid) : getEFPathofUsim(lc.efid);
+						phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid,
+										path, lc.recordNum,
 										READ_RECORD_MODE_ABSOLUTE,
 										lc.recordSize, null, null,
-										obtainMessage(EVENT_READ_RECORD_DONE,
+										obtainMessage(EVENT_READ_RECORD_DONE,0,pathNum,
 												lc));
 					}
 				}
@@ -400,28 +626,62 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 		}
 	}
 
+   
+     private String getCommonIccEFPathOfUsim(int efid) {
+        switch(efid) {
+        case EF_ADN:
+        case EF_FDN:
+        case EF_MSISDN:
+        case EF_SDN:
+        case EF_EXT1:
+        case EF_EXT2:
+        case EF_EXT3:
+            //return MF_SIM + DF_ADF;
+            return MF_SIM + DF_TELECOM;
+
+        case EF_ICCID:
+            return MF_SIM;
+        case EF_IMG:
+            return MF_SIM + DF_TELECOM + DF_GRAPHICS;
+        }
+        return null;
+    }
+
+
 	protected String getEFPath(int efid) {
 		IccCard card = phone.getIccCard();
+		boolean isUsim = false;
+             if (card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)) {
+			isUsim = true;
+		}
+		
 		switch (efid) {
 		case EF_SMS:
+			if (isUsim) {
+				return MF_SIM + DF_ADF;
+			}
 			return MF_SIM + DF_TELECOM;
-
+            case EF_ECC:
+			if (isUsim) {
+				return MF_SIM + DF_ADF;
+			}
+                   
+			return MF_SIM + DF_GSM;
 		case EF_EXT6:
 		case EF_MWIS:
 		case EF_MBI:
 		case EF_SPN:
 		case EF_AD:
+			 
 		case EF_MBDN:
 		case EF_PNN:
 		case EF_SPDI:
 		case EF_SST:
 		case EF_CFIS:
-		case EF_ECC:
+	                  
 			return MF_SIM + DF_GSM;
 		case EF_FDN:
-			if (card != null
-					&& card
-							.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)) {
+			if (isUsim) {
 				return MF_SIM + DF_ADF;
 			}
 
@@ -437,7 +697,11 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 			// we only support global phonebook.
 			return MF_SIM + DF_TELECOM + DF_PHONEBOOK;
 		}
-		String path = getCommonIccEFPath(efid);
+		String path = null;
+     
+			 
+		path = getCommonIccEFPath(efid);
+	
 		if (path == null) {
 			// The EFids in USIM phone book entries are decided by the card
 			// manufacturer.
@@ -445,9 +709,8 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 			// return
 			// the phone book path.
 
-			if (card != null
-					&& card
-							.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)) {
+			if (isUsim) {
+				//return MF_SIM + DF_ADF + DF_PHONEBOOK;
 				return MF_SIM + DF_TELECOM + DF_PHONEBOOK;
 			}
 			Log.e(LOG_TAG, "Error: EF Path being returned in null");

@@ -63,7 +63,7 @@ public class PhoneNumberUtils
     public static final int TOA_Unknown = 0x81;
 
     static final String LOG_TAG = "PhoneNumberUtils";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
     /*
      * global-phone-number = ["+"] 1*( DIGIT / written-sep )
@@ -1320,6 +1320,8 @@ public class PhoneNumberUtils
 
         // retrieve the list of ecc in sim card
         String eccList = SystemProperties.get("ril.sim.ecclist");
+	  log("emergency eccList: " + eccList);
+	
         StringBuilder builder = new StringBuilder("000,08,110,999,118,119");
         if (!TextUtils.isEmpty(eccList)) {
             builder.append(",").append(eccList);
@@ -1334,7 +1336,9 @@ public class PhoneNumberUtils
             // searches through the comma-separated list for a match,
             // return true if one is found.
             for (String emergencyNum : numbers.split(",")) {
+		   if (DBG) log("emergencyNum  " + emergencyNum);
                 if (emergencyNum.equals(number)) {
+			 if (DBG) log("the number is  emergencyNum");
                     return true;
                 }
             }

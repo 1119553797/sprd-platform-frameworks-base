@@ -153,7 +153,7 @@ public abstract class GSMPhone extends PhoneBase {
         mSMS = new GsmSMSDispatcher(this);
         //mIccFileHandler = new SIMFileHandler(this);
         mIccFileHandler = new TDUSIMFileHandler(this);
-        mSIMRecords = new SIMRecords(this);
+        mSIMRecords = new SIMRecords(this,context);
         //mDataConnection = new GsmDataConnectionTracker (this);
         mSimCard = new SimCard(this);
         if (!unitTestMode) {

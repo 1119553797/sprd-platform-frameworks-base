@@ -34,7 +34,7 @@ import com.android.internal.telephony.CommandsInterface.RadioState;
  */
 public abstract class IccCard {
     protected String mLogTag;
-    protected boolean mDbg;
+    protected boolean mDbg = true;
 
     private IccCardStatus mIccCardStatus = null;
     protected State mState = null;
@@ -425,7 +425,11 @@ public abstract class IccCard {
             mNetworkLockedRegistrants.notifyRegistrants();
             broadcastIccStateChangedIntent(INTENT_VALUE_ICC_LOCKED,
                   INTENT_VALUE_LOCKED_NETWORK);
-        }
+        }else if(mState == State.READY){
+
+            broadcastGetIccStatusDoneIntent();
+	  }
+	  
     }
 
     /**
@@ -474,6 +478,14 @@ public abstract class IccCard {
         intent.putExtra(INTENT_KEY_LOCKED_REASON, reason);
         if(mDbg) log("Broadcasting intent ACTION_SIM_STATE_CHANGED " +  value
                 + " reason " + reason);
+        ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
+    }
+
+    public void broadcastGetIccStatusDoneIntent() {
+        Intent intent = new Intent("android.intent.action.SIM_GET_STATUS_DONE");
+     
+        if(mDbg) log("Broadcasting intent ACTION_SIM_GET_STATUS_DONE ");
+		
         ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
     }
 

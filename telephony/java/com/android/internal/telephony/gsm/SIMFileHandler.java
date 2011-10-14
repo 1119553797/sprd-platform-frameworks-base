@@ -55,7 +55,9 @@ public class SIMFileHandler extends IccFileHandler implements IccConstants {
     public void handleMessage(Message msg) {
         super.handleMessage(msg);
     }
-
+    protected String  getEFPathAgain(int efid){
+          return  getEFPath( efid);
+   }
     protected String getEFPath(int efid) {
         // TODO(): DF_GSM can be 7F20 or 7F21 to handle backward compatibility.
         // Implement this after discussion with OEMs.

@@ -256,6 +256,25 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                         IccUtils.bytesToHexString(data), pin2, onComplete);
     }
 
+        /**
+     * Update a record in a linear fixed EF
+     * @param fileid EF id
+     * @param recordNum 1-based (not 0-based) record number
+     * @param data must be exactly as long as the record in the EF
+     * @param pin2 for CHV2 operations, otherwist must be null
+     * @param onComplete onComplete.obj will be an AsyncResult
+     *                   onComplete.obj.userObj will be a IccIoResult on success
+     */
+    public void updateEFLinearFixed(int fileid, int recordNum, byte[] data,
+            String pin2, Message onComplete, int pathNum) {
+
+	 String path = (pathNum == 0) ?  getEFPath(fileid): getEFPathAgain(fileid);
+        phone.mCM.iccIO(COMMAND_UPDATE_RECORD, fileid, path,
+                        recordNum, READ_RECORD_MODE_ABSOLUTE, data.length,
+                        IccUtils.bytesToHexString(data), pin2, onComplete);
+	 
+    }
+
     /**
      * Update a transparent EF
      * @param fileid EF id
@@ -298,6 +317,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
         int fileid;
         int recordNum;
         int recordSize[];
+	  int pathNum = msg.arg2;
 
         try {
             switch (msg.what) {
@@ -323,6 +343,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                 }
                 break;
             case EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE:
+		   Log.i("IccFileHandler ", "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE ");
                 ar = (AsyncResult)msg.obj;
                 lc = (LoadLinearFixedContext) ar.userObj;
                 result = (IccIoResult) ar.result;
@@ -541,6 +562,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     }
 
     protected abstract String getEFPath(int efid);
+    protected abstract String getEFPathAgain(int efid);
     protected abstract void logd(String s);
 
     protected abstract void loge(String s);
