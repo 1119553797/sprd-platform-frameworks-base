@@ -388,19 +388,17 @@ static void tearDownEventLoop(native_data_t *nat) {
             LOG_AND_FREE_DBUS_ERROR(&err);
         }
         dbus_bus_remove_match(nat->conn,
-                "type='signal',interface='org.bluez.Device'",
+                "type='signal',interface='org.bluez.audio.Device'",
                 &err);
         if (dbus_error_is_set(&err)) {
             LOG_AND_FREE_DBUS_ERROR(&err);
         }
-#if 0
         dbus_bus_remove_match(nat->conn,
                 "type='signal',interface='org.bluez.audio.Manager'",
                 &err);
         if (dbus_error_is_set(&err)) {
             LOG_AND_FREE_DBUS_ERROR(&err);
         }
-#endif 
         dbus_bus_remove_match(nat->conn,
                 "type='signal',interface='"BLUEZ_DBUS_BASE_IFC".Adapter'",
                 &err);
