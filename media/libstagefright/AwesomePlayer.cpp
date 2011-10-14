@@ -1052,8 +1052,14 @@ status_t AwesomePlayer::getPosition(int64_t *positionUs) {
     } else if (mVideoSource != NULL) {
         Mutex::Autolock autoLock(mMiscStateLock);
         *positionUs = mVideoTimeUs;
+	 if((mDurationUs>0)&&(mFlags&AT_EOS)){
+	 	*positionUs = mDurationUs;
+	 }		
     } else if (mAudioPlayer != NULL) {
         *positionUs = mAudioPlayer->getMediaTimeUs();
+	 if((mDurationUs>0)&&(mFlags&AT_EOS)){
+	 	*positionUs = mDurationUs;
+	 }		
     } else {
         *positionUs = 0;
     }
