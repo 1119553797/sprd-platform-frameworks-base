@@ -89,10 +89,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+class syncLock{
+	static final String LOG_TAG = "syncLock";
+
+	interface syncCallBack{
+		Object onSyncCallBack(Object obj);
+	}
+	public synchronized static Object syncCall(syncCallBack callBack, Object obj){
+		Log.d(LOG_TAG, "syncLock.sync() --- " + Thread.currentThread().getName());
+		return callBack.onSyncCallBack(obj);
+	}
+}
+
 /**
  * {@hide}
  */
-public final class TDPhone extends GSMPhone {
+public final class TDPhone extends GSMPhone implements syncLock.syncCallBack {
     // NOTE that LOG_TAG here is "TD", which means that log messages
     // from this file will go into the radio log rather than the main
     // log.  (Use "adb logcat -b radio" to see them.)
@@ -195,12 +207,17 @@ public final class TDPhone extends GSMPhone {
         if(LOCAL_DEBUG) Log.d(LOG_TAG, "TDPhone finalized");
     }
 
-    public Phone.State getState() {
-		//if (LOCAL_DEBUG) Log.d(LOG_TAG, "VideoCT: "+ mVideoCT.state + " CT: " + mCT.state);
+    public Object onSyncCallBack(Object obj){	
+		Log.d(LOG_TAG, "onSyncCallBack");
 		if (mVideoCT.isAlive())
 			return mVideoCT.state;
 		else
-	        return mCT.state;
+			return mCT.state;
+    }
+	
+    public Phone.State getState() {
+		if (LOCAL_DEBUG) Log.d(LOG_TAG, "VideoCT: "+ mVideoCT.state + " CT: " + mCT.state);
+		return (Phone.State)syncLock.syncCall(this, null);
     }
 
     public String getPhoneName() {

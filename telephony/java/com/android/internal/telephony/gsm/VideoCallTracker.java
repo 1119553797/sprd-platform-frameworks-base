@@ -53,7 +53,7 @@ import java.util.ArrayList;
 /**
  * {@hide}
  */
-public final class VideoCallTracker extends CallTracker {
+public final class VideoCallTracker extends CallTracker implements syncLock.syncCallBack {
     static final String LOG_TAG = "VideoCallTracker";
     private static final boolean REPEAT_POLLING = false;
 
@@ -725,6 +725,19 @@ public final class VideoCallTracker extends CallTracker {
         }
         return Phone.SuppService.UNKNOWN;
     }
+	
+    public Object onSyncCallBack(Object obj){ 
+	   log("onSyncCallBack");
+	    for (int i = 0, s =  droppedDuringPoll.size(); i < s ; i++) {
+	        VideoConnection conn = droppedDuringPoll.get(i);
+	        conn.onRemoteDisconnect((Integer)obj);
+	    }
+
+	    updatePhoneState();
+            phone.notifyPreciseVideoCallStateChanged();
+            droppedDuringPoll.clear();
+	    return null;
+    }
 
     //****** Overridden from Handler
 
@@ -790,19 +803,7 @@ public final class VideoCallTracker extends CallTracker {
                             causeCode, loc != null ? loc.getCid() : -1,
                             TelephonyManager.getDefault().getNetworkType());
                 }
-
-                for (int i = 0, s =  droppedDuringPoll.size()
-                        ; i < s ; i++
-                ) {
-                    VideoConnection conn = droppedDuringPoll.get(i);
-
-                    conn.onRemoteDisconnect(causeCode);
-                }
-
-                updatePhoneState();
-
-                phone.notifyPreciseVideoCallStateChanged();
-                droppedDuringPoll.clear();
+		  syncLock.syncCall(this, (Integer)causeCode);
             break;
 
             case EVENT_REPOLL_AFTER_DELAY:
