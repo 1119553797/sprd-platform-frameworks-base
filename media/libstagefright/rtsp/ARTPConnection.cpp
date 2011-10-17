@@ -607,6 +607,10 @@ status_t ARTPConnection::parseSR(
 	        source->timeUpdate(rtpTime, ntpTime);
 	    }
     }
+    else
+    {
+               source->timeUpdate2(rtpTime, ntpTime);
+    }
 /*  update all source timestamp */ //@hong
 #if 0
  List<StreamInfo>::iterator it = mStreams.begin();

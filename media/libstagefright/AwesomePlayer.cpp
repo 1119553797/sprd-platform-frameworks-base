@@ -1872,7 +1872,7 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
  //           mLooper->start();
  	   mLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
-                          PRIORITY_FOREGROUND); //@hong
+                          ANDROID_PRIORITY_AUDIO); //@hong
 			
         }
         mRTSPController = new ARTSPController(mLooper);

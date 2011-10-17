@@ -39,6 +39,7 @@ struct ARTPSource : public RefBase {
 
     void processRTPPacket(const sp<ABuffer> &buffer);
     void timeUpdate(uint32_t rtpTime, uint64_t ntpTime);
+    void timeUpdate2(uint32_t rtpTime, uint64_t ntpTime);	
     void byeReceived();
 
     List<sp<ABuffer> > *queue() { return &mQueue; }
@@ -73,6 +74,13 @@ private:
     uint64_t mStartingT;
     uint32_t mStartRTP;
     uint64_t mPeriodCheck;
+
+    size_t myNumTimes;
+    int64_t mylocalBaseNTP;
+    int64_t myBaseNTP;
+    uint64_t myNTPTime[2];
+    uint32_t myRTPTime[2];
+
 		
     bool mIssueFIRRequests;
     int64_t mLastFIRRequestUs;

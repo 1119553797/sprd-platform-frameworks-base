@@ -188,10 +188,10 @@ bool ALooper::loop() {
             int64_t delayUs = whenUs - nowUs;
 
 	    if (mName.find("rtsp net")>=0)
-            mQueueChangedCondition.waitRelative(mLock, (delayUs ) * 1000ll); //@hong +50000ll wait more time for performance
+            mQueueChangedCondition.waitRelative(mLock, (delayUs + 20) * 1000ll); //@hong +50000ll wait more time for performance
 	    else
 	    if (mName.find("rtsp")>=0)
-            mQueueChangedCondition.waitRelative(mLock, (delayUs ) * 1000ll); //@hong + 100000ll wait more time for performance
+            mQueueChangedCondition.waitRelative(mLock, (delayUs + 30) * 1000ll); //@hong + 100000ll wait more time for performance
 	    else
             mQueueChangedCondition.waitRelative(mLock, (delayUs ) * 1000ll); //@hong wait more time for performance
 

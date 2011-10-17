@@ -117,7 +117,7 @@ struct MyHandler : public AHandler {
         mNetLooper->setName("rtsp net");
         mNetLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
-                          PRIORITY_HIGHEST); //HIGHEST @hong
+                          ANDROID_PRIORITY_AUDIO); //HIGHEST @hong
     }
 
     void connect(const sp<AMessage> &doneMsg) {
@@ -751,9 +751,9 @@ struct MyHandler : public AHandler {
 
 		if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB					
 		mReceivedFirstRTCPPacket = true;	//@hong
-	    struct timeval tv;
-	    gettimeofday(&tv, NULL);
-	LOGI("first segment unit  time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
+//	    struct timeval tv;
+//	    gettimeofday(&tv, NULL);
+//	LOGI("first segment unit  time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
 	
                     LOGI("first segment unit ntpTime=0x%016llx rtpTime=%u seq=%d",
                          ntpTime, rtpTime, seqNum);

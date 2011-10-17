@@ -44,6 +44,7 @@ ARTPSource::ARTPSource(
       mHighestSeqNumber(0),
       mNumBuffersReceived(0),
       mNumTimes(0),
+      myNumTimes(0),
       mDeltaT(0),
       mLastNTPTime(0),
       mLastNTPTimeUpdateUs(0),
@@ -125,6 +126,30 @@ void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
     }
 }
 
+void ARTPSource::timeUpdate2(uint32_t rtpTime, uint64_t ntpTime) 
+{
+	if (myNumTimes == 0)
+	{
+ 		myRTPTime[myNumTimes] = rtpTime;
+		myNTPTime[myNumTimes] = ntpTime;
+		mylocalBaseNTP = RTP2NTP(rtpTime);
+		myBaseNTP = ntpTime;
+		myNumTimes++;
+		return ;
+	}
+	if (myNumTimes == 1)
+	{
+ 		myRTPTime[myNumTimes] = rtpTime;
+		myNTPTime[myNumTimes] = ntpTime;
+		timeUpdate(myRTPTime[0], mylocalBaseNTP);
+		timeUpdate(myRTPTime[1], mylocalBaseNTP+(ntpTime-myBaseNTP));
+		LOGI("timeUpdate2 established.....");
+		myNumTimes++;
+		return;
+	}
+	timeUpdate(rtpTime, mylocalBaseNTP+(ntpTime-myBaseNTP));	
+}
+
 bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
     uint32_t seqNum = (uint32_t)buffer->int32Data();
 
@@ -139,9 +164,11 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 	   uint64_t ntptime2;
 	 
 	        CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
+			
+		if (rtpTime == 0) return false; 
 			updatetime = false;
-	    if (mLastNTPTimeUpdateUs == 0 ||
-			(ntpTime > (mLastNTPTimeUpdateUs + mPeriodCheck)))
+	    if ((mLastNTPTimeUpdateUs == 0 ||
+			(ntpTime > (mLastNTPTimeUpdateUs + mPeriodCheck))) && (myNumTimes<2))
 	    	{
 	    	sp<AMessage> meta = buffer->meta();
         	if (mLastNTPTimeUpdateUs ==0) mPeriodCheck = 800000ll;
@@ -171,6 +198,12 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 		updatetime = true;
 		mDeltaT = 0;
 	    	}
+	    if (myNumTimes == 2)
+	    	{
+		meta->setInt64("ntp-time", RTP2NTP(rtpTime));
+		       LOGI("rtp:%u ntp:0x%llx ", rtpTime, ntpTime1);	    	
+	    	}
+	    else
 	    if (mNumTimes == 2 && mPeriodCheck > 3000000ll ) 
 	    	{
 			if (updatetime)
@@ -192,19 +225,20 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 			}
 			else
 			{
-			ntptime2 = RTP2NTP(rtpTime) - mDeltaT+  ((double) mDeltaT)*((double)((rtpTime>=mRTPTime[1])?(rtpTime-mRTPTime[1]):(0x100000000ll-mRTPTime[1]+rtpTime))*10.0/(mPeriodCheck*45.0));
+			ntptime2 = RTP2NTP(rtpTime) - mDeltaT+  ((double) mDeltaT)*((double)((rtpTime>=mRTPTime[1])?(rtpTime-mRTPTime[1]):(0x100000000ll-mRTPTime[1]+rtpTime))*10.0/(mPeriodCheck*36.0));
 			}
 			meta->setInt64("ntp-time", ntptime2);
-		       LOGI("rtp:%d ntp:0x%llx deltaT:%.2f ", rtpTime, ntptime2,((double)((int64_t)(RTP2NTP(rtpTime)-ntptime2)))/0x100000000ll);
+		       LOGI("rtp:%u ntp:0x%llx deltaT:%.2f ", rtpTime, ntptime2,((double)((int64_t)(RTP2NTP(rtpTime)-ntptime2)))/0x100000000ll);
 			}
 	    	}
 		else
 		{
 
-		ntpTime1 = mStartingT + (double) 0x600000000ll
-            *(double)((rtpTime >= mStartRTP)? (rtpTime - mStartRTP):(0x100000000ll - mStartRTP+rtpTime))
+		ntpTime1 = mRTPTime[0] + (double) 0x600000000ll
+            *(uint64_t)((rtpTime >= mRTPTime[0])? (rtpTime - mRTPTime[0]):((uint64_t)0x100000000ll - mRTPTime[0]+rtpTime))
             / (double)(6*90000ll);
 		meta->setInt64("ntp-time", ntpTime1);
+		       LOGI("rtp:%u ntp:0x%llx ", rtpTime, ntpTime1);
 		 }
 		 
 		
@@ -273,6 +307,7 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
 
     return true;
 }
+
 
 uint64_t ARTPSource::RTP2NTP(uint32_t rtpTime) const {
  CHECK_EQ(mNumTimes, 2u);
