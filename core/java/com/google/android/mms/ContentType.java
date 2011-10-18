@@ -37,6 +37,7 @@ public class ContentType {
     public static final String IMAGE_JPG         = "image/jpg";
     public static final String IMAGE_GIF         = "image/gif";
     public static final String IMAGE_WBMP        = "image/vnd.wap.wbmp";
+    public static final String IMAGE_BMP         = "image/x-ms-bmp";
     public static final String IMAGE_PNG         = "image/png";
 
     public static final String AUDIO_UNSPECIFIED = "audio/*";
@@ -124,6 +125,7 @@ public class ContentType {
         sSupportedImageTypes.add(IMAGE_JPEG);
         sSupportedImageTypes.add(IMAGE_GIF);
         sSupportedImageTypes.add(IMAGE_WBMP);
+        sSupportedImageTypes.add(IMAGE_BMP);
         sSupportedImageTypes.add(IMAGE_PNG);
         sSupportedImageTypes.add(IMAGE_JPG);
 
