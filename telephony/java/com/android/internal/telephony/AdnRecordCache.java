@@ -349,8 +349,17 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 				emailNum = emailNum == 0xFF ? (-1) : emailNum;
 				Log.i(LOG_TAG, "emailNum =" + emailNum);
 			} else {
+                          if(mUsimPhoneBookManager.getEmailType()  == UsimPhoneBookManager.USIM_TYPE1_TAG) {
 
-				emailNum = -1;
+					 emailNum =  mInsertId;	
+					  
+				}else if(mUsimPhoneBookManager.getEmailType()  == UsimPhoneBookManager.USIM_TYPE2_TAG) {
+
+					  emailNum = -1;
+			      }else{  
+                                  isUpdateEmail = false;
+					  emailNum = 0;  
+				}  
 
 			}
 

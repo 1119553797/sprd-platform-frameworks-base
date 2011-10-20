@@ -124,8 +124,8 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 	};
 
-	private static final int USIM_TYPE1_TAG = 0xA8;
-	private static final int USIM_TYPE2_TAG = 0xA9;
+	public static final int USIM_TYPE1_TAG = 0xA8;
+	public  static final int USIM_TYPE2_TAG = 0xA9;
 	private static final int USIM_TYPE3_TAG = 0xAA;
 	private static final int USIM_EFADN_TAG = 0xC0;
 	private static final int USIM_EFIAP_TAG = 0xC1;
@@ -312,6 +312,24 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		return mEmailTagNumberInIap;
 	}
 
+      public int     getEmailType(){
+
+		if(ishaveEmail ){
+			
+                  if(mEmailPresentInIap)  {
+				  	
+		           return  USIM_TYPE2_TAG;		    	
+  		     }else{
+  
+                         return   USIM_TYPE1_TAG;
+		     }  
+
+		}
+
+	       return 0;
+
+	}   
+	  	
 	public int getNewEmailNumber() {
 		int newEmailNum = -1;
 		int numEmailRec = 0;
@@ -449,7 +467,19 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			return -1;
 		}
 		fileIds = mPbrFile.mFileIds.get(index);
-		return fileIds.get(USIM_EFADN_TAG);
+
+		if(fileIds  == null){
+                   Log.e(LOG_TAG, "Error: fileIds is empty");
+                   return -1;
+
+		}
+		
+		if (fileIds.containsKey(USIM_EFADN_TAG)) {
+
+			 return fileIds.get(USIM_EFADN_TAG);
+		}
+
+		return -1;
 	}
 
 	public int findExtensionEFInfo(int index) {
@@ -467,7 +497,19 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		}
 		fileIds = mPbrFile.mFileIds.get(index);
 
-		return fileIds.get(USIM_EFEXT1_TAG);
+		if(fileIds == null){
+                     Log.e(LOG_TAG, "Error: fileIds is empty");
+                    return -1;
+	       }
+
+		Log.i(LOG_TAG, "findExtensionEFInfo fileIds " +  fileIds);
+
+	      if (fileIds.containsKey(USIM_EFEXT1_TAG)) {
+		  	
+			return  fileIds.get(USIM_EFEXT1_TAG);
+		}
+
+		return 0;
 
 	}
 
@@ -486,12 +528,16 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		}
 		fileIds = mPbrFile.mFileIds.get(index);
 		if (fileIds == null) {
-			Log.i("UsimPhoneBookManager   ",
+			Log.i(LOG_TAG,
 					"findEFEmailInfo  fileIds == null  index :" + index);
 			return -1;
 		}
+             if (fileIds.containsKey(USIM_EFEMAIL_TAG)){
+			 	
+		     return fileIds.get(USIM_EFEMAIL_TAG);
+             }
 
-		return fileIds.get(USIM_EFEMAIL_TAG);
+	       return 0;
 	}
 
 	public int findEFAnrInfo(int index) {
@@ -509,12 +555,15 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		}
 		fileIds = mPbrFile.mFileIds.get(index);
 		if (fileIds == null) {
-			Log.i("UsimPhoneBookManager   ",
+			Log.i(LOG_TAG,
 					"findEFAnrInfo  fileIds == null  index :" + index);
 			return -1;
 		}
+             if (fileIds.containsKey(USIM_EFANR_TAG)){
+		      return fileIds.get(USIM_EFANR_TAG);
+             }
 
-		return fileIds.get(USIM_EFANR_TAG);
+		return 0;
 	}
 
 	public int findEFIapInfo(int index) {
@@ -531,9 +580,16 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			return -1;
 		}
 		fileIds = mPbrFile.mFileIds.get(index);
+		if (fileIds == null) {
+			Log.i(LOG_TAG,
+					"findEFIapInfo  fileIds == null  index :" + index);
+			return -1;
+		} 
+             if (fileIds.containsKey(USIM_EFIAP_TAG)){
+		      return fileIds.get(USIM_EFIAP_TAG);
+             }
 
-		return fileIds.get(USIM_EFIAP_TAG);
-
+              return -1;
 	}
 
 	// add end
@@ -721,6 +777,9 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 		if (fileIds == null)
 			return;
+		if(mAnrInfoFromPBR == null){
+                   return;
+		}
 		SubjectIndexOfAdn records = mAnrInfoFromPBR.get(recNum);
 
 		records.record = new HashMap<Integer, ArrayList<byte[]>>();
@@ -974,14 +1033,14 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				}
 			}
 		} else {
-			mIapFileRecordArray[num] = mIapFileRecord;
-			if (mIapFileRecord != null) {
+			//mIapFileRecordArray[num] = mIapFileRecord;
+			if (mEmailFileRecord != null) {
 				mEmailRecordSizeArray[num] = mEmailFileRecord.size();
 				Log.i(LOG_TAG,
 						"updatePhoneAdnRecord mEmailRecordSizeArray[num] : "
 								+ mEmailFileRecord.size());
 			}
-			mIapRecordSizeArray[num] = mIapFileRecord.size();
+			//mIapRecordSizeArray[num] = mIapFileRecord.size();
 			if (mAnrFileRecord != null) {
 				mAnrRecordSizeArray[num] = mAnrFileRecord.size();
 			}
@@ -991,6 +1050,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				// Type 1 file, the number of records is the same as the number
 				// of
 				// records in the ADN file.
+				Log.i(LOG_TAG,"updatePhoneAdnRecord mEmailsForAdnRec: " + mEmailsForAdnRec );
 				if (mEmailsForAdnRec == null) {
 					parseType1EmailFile(len);
 				}
@@ -1055,6 +1115,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 	void parseType1EmailFile(int numRecs) {
 		mEmailsForAdnRec = new HashMap<Integer, ArrayList<String>>();
 		byte[] emailRec = null;
+		Log.i(LOG_TAG, "parseType1EmailFile  numRecs " +numRecs);
 		for (int i = 0; i < numRecs; i++) {
 			try {
 				emailRec = mEmailFileRecord.get(i);
@@ -1064,7 +1125,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 								"Error: Improper ICC card: No email record for ADN, continuing");
 				break;
 			}
-			int adnRecNum = emailRec[emailRec.length - 1];
+			int adnRecNum = i+1   ;//emailRec[emailRec.length - 1];
 
 			if (adnRecNum == -1) {
 				continue;
@@ -1421,9 +1482,12 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 					int efid = ((data[0] & 0xFF) << 8) | (data[1] & 0xFF);
 					val.put(tag, efid);
-					if (parentTag == USIM_TYPE2_TAG && tag == USIM_EFEMAIL_TAG) {
-						mEmailPresentInIap = true;
-						mEmailTagNumberInIap = tagNumberWithinParentTag;
+					if ( tag == USIM_EFEMAIL_TAG) {
+						
+						if(parentTag == USIM_TYPE2_TAG ){
+						      mEmailPresentInIap = true;
+						      mEmailTagNumberInIap = tagNumberWithinParentTag;
+						}
 						Log.i(LOG_TAG, "parseEf   email  TAG  " + parentTag
 								+ "num " + tagNumberWithinParentTag);
 					}
