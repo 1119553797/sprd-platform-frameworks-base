@@ -45,7 +45,6 @@ import android.provider.Telephony;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
-import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Patterns;
@@ -136,7 +135,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
      * It is a subset of allApns and has the same format
      */
     private ArrayList<ApnSetting> waitingApns = null;
-
+    private int waitingApnsPermanentFailureCountDown = 0;
     private ApnSetting preferredApn = null;
 
     /* Currently active APN */
@@ -171,9 +170,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     static final String APN_ID = "apn_id";
     private boolean canSetPreferApn = false;
 
-    // for tracking retrys on the default APN
+    // for tracking retries on the default APN
     private RetryManager mDefaultRetryManager;
-    // for tracking retrys on a secondary APN
+    // for tracking retries on a secondary APN
     private RetryManager mSecondaryRetryManager;
 
     BroadcastReceiver mIntentReceiver = new BroadcastReceiver ()
@@ -210,8 +209,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                         WifiManager.WIFI_STATE_UNKNOWN) == WifiManager.WIFI_STATE_ENABLED;
 
                 if (!enabled) {
-                    // when wifi got disabeled, the NETWORK_STATE_CHANGED_ACTION
-                    // quit and wont report disconnected til next enalbing.
+                    // when wifi got disabled, the NETWORK_STATE_CHANGED_ACTION
+                    // quit and won't report disconnected til next enabling.
                     mIsWifiConnected = false;
                 }
             }
@@ -394,6 +393,12 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     @Override
     protected boolean isApnTypeActive(String type) {
         // TODO: support simultaneous with List instead
+        if (Phone.APN_TYPE_DUN.equals(type)) {
+            ApnSetting dunApn = fetchDunApn();
+            if (dunApn != null) {
+                return ((mActiveApn != null) && (dunApn.toString().equals(mActiveApn.toString())));
+            }
+        }
         return mActiveApn != null && mActiveApn.canHandleType(type);
     }
 
@@ -484,9 +489,10 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
 
             if (state == State.IDLE) {
                 waitingApns = buildWaitingApns();
+                waitingApnsPermanentFailureCountDown = waitingApns.size();
                 if (waitingApns.isEmpty()) {
                     if (DBG) log("No APN found");
-                    notifyNoData(GsmDataConnection.FailCause.MISSING_UKNOWN_APN);
+                    notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);
                     return false;
                 } else {
                     synchronized (allApnsLock){
@@ -595,7 +601,10 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                         cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.USER)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.PASSWORD)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers.AUTH_TYPE)),
-                        types);
+                        types,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.PROTOCOL)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(
+                                Telephony.Carriers.ROAMING_PROTOCOL)));
                 result.add(apn);
             } while (cursor.moveToNext());
         }
@@ -1252,7 +1261,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             if (isApnTypeActive(Phone.APN_TYPE_DEFAULT)) {
                 SystemProperties.set("gsm.defaultpdpcontext.active", "true");
                         if (canSetPreferApn && preferredApn == null) {
-                            Log.d(LOG_TAG, "PREFERED APN is null");
+                            Log.d(LOG_TAG, "PREFERRED APN is null");
                             preferredApn = mActiveApn;
                             setPreferredApn(preferredApn.id);
                         }
@@ -1277,22 +1286,25 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                         TelephonyManager.getDefault().getNetworkType());
             }
 
-            // No try for permanent failure
-            if (cause.isPermanentFail()) {
-                notifyNoData(cause);
-                if (!mRequestedApnType.equals(Phone.APN_TYPE_DEFAULT)) {
-                    phone.notifyDataConnection(Phone.REASON_APN_FAILED);
-                    onEnableApn(apnTypeToId(mRequestedApnType), DISABLED);
-                }
-                return;
-            }
-
+            // Count permanent failures and remove the APN we just tried
+            waitingApnsPermanentFailureCountDown -= cause.isPermanentFail() ? 1 : 0;
             waitingApns.remove(0);
+            if (DBG) log(String.format("onDataSetupComplete: waitingApns.size=%d" +
+                            " waitingApnsPermanenatFailureCountDown=%d",
+                            waitingApns.size(), waitingApnsPermanentFailureCountDown));
+
+            // See if there are more APN's to try
             if (waitingApns.isEmpty()) {
-                // No more to try, start delayed retry
-                startDelayedRetry(cause, reason);
+                if (waitingApnsPermanentFailureCountDown == 0) {
+                    if (DBG) log("onDataSetupComplete: Permanent failures stop retrying");
+                    notifyNoData(cause);
+                    phone.notifyDataConnection(Phone.REASON_APN_FAILED);
+                } else {
+                    if (DBG) log("onDataSetupComplete: Not all permanent failures, retry");
+                    startDelayedRetry(cause, reason);
+                }
             } else {
-                // we still have more apns to try
+                if (DBG) log("onDataSetupComplete: Try next APN");
                 setState(State.SCANNING);
                 // Wait a bit before trying the next APN, so that
                 // we're not tying up the RIL command channel
@@ -1400,8 +1412,19 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                 }
             }
 
-            if (allApns.isEmpty()) {
-                if (DBG) log("No APN found for carrier: " + operator);
+
+ //           if (allApns.isEmpty()) {
+  //              if (DBG) log("No APN found for carrier: " + operator);
+
+        if (allApns.isEmpty()) {
+            if (DBG) log("No APN found for carrier: " + operator);
+            preferredApn = null;
+            notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);
+        } else {
+            preferredApn = getPreferredApn();
+            Log.d(LOG_TAG, "Get PreferredAPN");
+            if (preferredApn != null && !preferredApn.numeric.equals(operator)) {
+
                 preferredApn = null;
                 notifyNoData(GsmDataConnection.FailCause.MISSING_UKNOWN_APN);
             } else {

@@ -68,6 +68,7 @@ import com.android.internal.telephony.PhoneNotifier;
 import com.android.internal.telephony.PhoneProxy;
 import com.android.internal.telephony.PhoneSubInfo;
 import com.android.internal.telephony.TelephonyProperties;
+import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.gsm.stk.StkService;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.IccVmNotSupportedException;
@@ -121,10 +122,6 @@ public abstract class GSMPhone extends PhoneBase {
     Thread debugPortThread;
     ServerSocket debugSocket;
 
-    private int mReportedRadioResets;
-    private int mReportedAttemptedConnects;
-    private int mReportedSuccessfulConnects;
-
     private String mImei;
     private String mImeiSv;
     private String mVmNumber;
@@ -158,7 +155,7 @@ public abstract class GSMPhone extends PhoneBase {
         mSimCard = new SimCard(this);
         if (!unitTestMode) {
             mSimPhoneBookIntManager = new SimPhoneBookInterfaceManager(this);
-            mSimSmsIntManager = new SimSmsInterfaceManager(this);
+            mSimSmsIntManager = new SimSmsInterfaceManager(this, mSMS);
             mSubInfo = new PhoneSubInfo(this);
         }
         mStkService = StkService.getInstance(mCM, mSIMRecords, mContext,
@@ -719,7 +716,12 @@ public abstract class GSMPhone extends PhoneBase {
     }
 
     public Connection
-    dial (String dialString) throws CallStateException {
+    dial(String dialString) throws CallStateException {
+        return dial(dialString, null);
+    }
+
+    public Connection
+    dial (String dialString, UUSInfo uusInfo) throws CallStateException {
         // Need to make sure dialString gets parsed properly
         String newDialString = PhoneNumberUtils.stripSeparators(dialString);
 
@@ -735,9 +737,9 @@ public abstract class GSMPhone extends PhoneBase {
                                "dialing w/ mmi '" + mmi + "'...");
 
         if (mmi == null) {
-            return mCT.dial(newDialString);
+            return mCT.dial(newDialString, uusInfo);
         } else if (mmi.isTemporaryModeCLIR()) {
-            return mCT.dial(mmi.dialingNumber, mmi.getCLIRMode());
+            return mCT.dial(mmi.dialingNumber, mmi.getCLIRMode(), uusInfo);
         } else {
             mPendingMMIs.add(mmi);
             mMmiRegistrants.notifyRegistrants(new AsyncResult(null, mmi, null));
@@ -809,7 +811,7 @@ public abstract class GSMPhone extends PhoneBase {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(VM_NUMBER, number);
-        editor.commit();
+        editor.apply();
         setVmSimImsi(getSubscriberId());
     }
 
@@ -832,7 +834,7 @@ public abstract class GSMPhone extends PhoneBase {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(VM_SIM_IMSI, imsi);
-        editor.commit();
+        editor.apply();
     }
 
     public String getVoiceMailAlphaTag() {
@@ -1613,24 +1615,43 @@ public abstract class GSMPhone extends PhoneBase {
         return this.mIccFileHandler;
     }
 
+    /**
+     * Activate or deactivate cell broadcast SMS.
+     *
+     * @param activate 0 = activate, 1 = deactivate
+     * @param response Callback message is empty on completion
+     */
     public void activateCellBroadcastSms(int activate, Message response) {
+
         Log.i(LOG_TAG, " This functionality is  implemented for GSM.");
         mSMS.activateCellBroadcastSms(activate,response);
         
         
+
+        Log.e(LOG_TAG, "[GSMPhone] activateCellBroadcastSms() is obsolete; use SmsManager");
+        response.sendToTarget();
+
     }
 
+    /**
+     * Query the current configuration of cdma cell broadcast SMS.
+     *
+     * @param response Callback message is empty on completion
+     */
     public void getCellBroadcastSmsConfig(Message response) {
+
         Log.i(LOG_TAG, "! This functionality is not implemented for GSM.");
         mSMS.getCellBroadcastSmsConfig(response);
-    }
+        response.sendToTarget();
+   
+ }
 
     public void setCellBroadcastSmsConfig(int[] configValuesArray, Message response){
 
 	Log.i(LOG_TAG, " This setCellBroadcastSmsConfig  is  implemented for GSM.");
          mSMS.setCellBroadcastConfig(configValuesArray,response);
         
-        
-    }
+          response.sendToTarget();        
 
+    }
 }

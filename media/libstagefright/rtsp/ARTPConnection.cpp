@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "ARTPConnection"
 #include <utils/Log.h>
 
@@ -49,7 +49,7 @@ static uint64_t u64at(const uint8_t *data) {
 }
 
 // static
-const int64_t ARTPConnection::kSelectTimeoutUs = 10000ll; //@hong
+const int64_t ARTPConnection::kSelectTimeoutUs = 1000ll;
 
 struct ARTPConnection::StreamInfo {
     int mRTPSocket;
@@ -69,18 +69,12 @@ struct ARTPConnection::StreamInfo {
 ARTPConnection::ARTPConnection(uint32_t flags)
     : mFlags(flags),
       mPollEventPending(false),
-      mLocalTimestamps(false),
       mLastReceiverReportTimeUs(-1) {
 }
 
 ARTPConnection::~ARTPConnection() {
 }
 
-void ARTPConnection::setlocalTimestamps(bool local)  //@hong
- {
- 	mLocalTimestamps = local;
- }
- 
 void ARTPConnection::addStream(
         int rtpSocket, int rtcpSocket,
         const sp<ASessionDescription> &sessionDesc,
@@ -129,7 +123,7 @@ void ARTPConnection::MakePortPair(
         struct sockaddr_in addr;
         memset(addr.sin_zero, 0, sizeof(addr.sin_zero));
         addr.sin_family = AF_INET;
-        addr.sin_addr.s_addr = INADDR_ANY;
+        addr.sin_addr.s_addr = htonl(INADDR_ANY);
         addr.sin_port = htons(port);
 
         if (bind(*rtpSocket,
@@ -255,6 +249,7 @@ void ARTPConnection::onPollStreams() {
     if (mStreams.empty()) {
         return;
     }
+
     struct timeval tv;
     tv.tv_sec = 0;
     tv.tv_usec = kSelectTimeoutUs;
@@ -306,7 +301,6 @@ void ARTPConnection::onPollStreams() {
     postPollEvent();
 
     int64_t nowUs = ALooper::GetNowUs();
-   {
     if (mLastReceiverReportTimeUs <= 0
             || mLastReceiverReportTimeUs + 5000000ll <= nowUs) {
         sp<ABuffer> buffer = new ABuffer(kMaxUDPSize);
@@ -349,10 +343,11 @@ void ARTPConnection::onPollStreams() {
             }
         }
     }
-   	}
 }
 
 status_t ARTPConnection::receive(StreamInfo *s, bool receiveRTP) {
+    LOGV("receiving %s", receiveRTP ? "RTP" : "RTCP");
+
     CHECK(!s->mIsInjected);
 
     sp<ABuffer> buffer = new ABuffer(65536);
@@ -375,7 +370,7 @@ status_t ARTPConnection::receive(StreamInfo *s, bool receiveRTP) {
 
     buffer->setRange(0, nbytes);
 
-    //LOGI("received %d bytes.", buffer->size());
+    // LOGI("received %d bytes.", buffer->size());
 
     status_t err;
     if (receiveRTP) {
@@ -474,8 +469,6 @@ status_t ARTPConnection::parseRTP(StreamInfo *s, const sp<ABuffer> &buffer) {
         CHECK(source->timeEstablished());
     }
 
-
-
     source->processRTPPacket(buffer);
 
     return OK;
@@ -525,7 +518,7 @@ status_t ARTPConnection::parseRTCP(StreamInfo *s, const sp<ABuffer> &buffer) {
 
         switch (data[1]) {
             case 200:
-            {				
+            {
                 parseSR(s, data, headerLength);
                 break;
             }
@@ -592,7 +585,7 @@ status_t ARTPConnection::parseSR(
     uint64_t ntpTime = u64at(&data[8]);
     uint32_t rtpTime = u32at(&data[16]);
 
-#if 1
+#if 0
     LOGI("XXX timeUpdate: ssrc=0x%08x, rtpTime %u == ntpTime %.3f",
          id,
          rtpTime,
@@ -601,29 +594,9 @@ status_t ARTPConnection::parseSR(
 
     sp<ARTPSource> source = findSource(s, id);
 
-    if (mLocalTimestamps == false)  //@hong
-    {
-	    if ((mFlags & kFakeTimestamps) == 0) {
-	        source->timeUpdate(rtpTime, ntpTime);
-	    }
+    if ((mFlags & kFakeTimestamps) == 0) {
+        source->timeUpdate(rtpTime, ntpTime);
     }
-    else
-    {
-               source->timeUpdate2(rtpTime, ntpTime);
-    }
-/*  update all source timestamp */ //@hong
-#if 0
- List<StreamInfo>::iterator it = mStreams.begin();
-    while (it != mStreams.end()) {
-        StreamInfo &info = *it++;
-
-        for (size_t j = 0; j < s->mSources.size(); ++j) {
-           sp<ARTPSource> source = s->mSources.valueAt(j);
-		source->timeUpdate(rtpTime, ntpTime);
-          }
-    	}
-#endif
-/////@hong.................................
 
     return 0;
 }
@@ -636,7 +609,6 @@ sp<ARTPSource> ARTPConnection::findSource(StreamInfo *info, uint32_t srcId) {
 
         source = new ARTPSource(
                 srcId, info->mSessionDesc, info->mIndex, info->mNotifyMsg);
-	  source->setLocalTimestamps(mLocalTimestamps);
 
         info->mSources.add(srcId, source);
     } else {

@@ -22,7 +22,7 @@
 #include <utils/threads.h>
 #include <utils/List.h>
 #include <utils/Errors.h>
-#include <media/IMediaPlayerClient.h>
+#include <media/IMediaRecorderClient.h>
 #include <media/IMediaDeathNotifier.h>
 
 namespace android {
@@ -44,7 +44,8 @@ enum audio_source {
     AUDIO_SOURCE_VOICE_CALL = 4,
     AUDIO_SOURCE_CAMCORDER = 5,
     AUDIO_SOURCE_VOICE_RECOGNITION = 6,
-    AUDIO_SOURCE_MAX = AUDIO_SOURCE_VOICE_RECOGNITION,
+    AUDIO_SOURCE_VOICE_COMMUNICATION = 7,
+    AUDIO_SOURCE_MAX = AUDIO_SOURCE_VOICE_COMMUNICATION,
 
     AUDIO_SOURCE_LIST_END  // must be last - used to validate audio source type
 };
@@ -157,7 +158,7 @@ public:
     virtual void notify(int msg, int ext1, int ext2) = 0;
 };
 
-class MediaRecorder : public BnMediaPlayerClient,
+class MediaRecorder : public BnMediaRecorderClient,
                       public virtual IMediaDeathNotifier
 {
 public:

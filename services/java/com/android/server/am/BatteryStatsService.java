@@ -18,12 +18,15 @@ package com.android.server.am;
 
 import android.bluetooth.BluetoothHeadset;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Process;
 import android.os.ServiceManager;
+import android.os.WorkSource;
 import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.util.Slog;
 
 import com.android.internal.app.IBatteryStats;
@@ -32,6 +35,7 @@ import com.android.internal.os.PowerProfile;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * All information we are collecting about things that can happen that impact
@@ -59,7 +63,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
     public void shutdown() {
         Slog.w("BatteryStats", "Writing battery stats before shutdown...");
         synchronized (mStats) {
-            mStats.writeLocked();
+            mStats.shutdownLocked();
         }
     }
     
@@ -93,45 +97,59 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
         return data;
     }
     
-    public void noteStartWakelock(int uid, String name, int type) {
+    public void noteStartWakelock(int uid, int pid, String name, int type) {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.getUidStatsLocked(uid).noteStartWakeLocked(name, type);
+            mStats.noteStartWakeLocked(uid, pid, name, type);
         }
     }
 
-    public void noteStopWakelock(int uid, String name, int type) {
+    public void noteStopWakelock(int uid, int pid, String name, int type) {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.getUidStatsLocked(uid).noteStopWakeLocked(name, type);
+            mStats.noteStopWakeLocked(uid, pid, name, type);
+        }
+    }
+
+    public void noteStartWakelockFromSource(WorkSource ws, int pid, String name, int type) {
+        enforceCallingPermission();
+        synchronized (mStats) {
+            mStats.noteStartWakeFromSourceLocked(ws, pid, name, type);
+        }
+    }
+
+    public void noteStopWakelockFromSource(WorkSource ws, int pid, String name, int type) {
+        enforceCallingPermission();
+        synchronized (mStats) {
+            mStats.noteStopWakeFromSourceLocked(ws, pid, name, type);
         }
     }
 
     public void noteStartSensor(int uid, int sensor) {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.getUidStatsLocked(uid).noteStartSensor(sensor);
+            mStats.noteStartSensorLocked(uid, sensor);
         }
     }
     
     public void noteStopSensor(int uid, int sensor) {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.getUidStatsLocked(uid).noteStopSensor(sensor);
+            mStats.noteStopSensorLocked(uid, sensor);
         }
     }
     
     public void noteStartGps(int uid) {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.noteStartGps(uid);
+            mStats.noteStartGpsLocked(uid);
         }
     }
     
     public void noteStopGps(int uid) {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.noteStopGps(uid);
+            mStats.noteStopGpsLocked(uid);
         }
     }
         
@@ -198,22 +216,23 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
 
     public void notePhoneState(int state) {
         enforceCallingPermission();
+        int simState = TelephonyManager.getDefault().getSimState();
         synchronized (mStats) {
-            mStats.notePhoneStateLocked(state);
+            mStats.notePhoneStateLocked(state, simState);
         }
     }
 
-    public void noteWifiOn(int uid) {
+    public void noteWifiOn() {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.noteWifiOnLocked(uid);
+            mStats.noteWifiOnLocked();
         }
     }
     
-    public void noteWifiOff(int uid) {
+    public void noteWifiOff() {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.noteWifiOffLocked(uid);
+            mStats.noteWifiOffLocked();
         }
     }
 
@@ -245,17 +264,24 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
         }
     }
 
-    public void noteWifiRunning() {
+    public void noteWifiRunning(WorkSource ws) {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.noteWifiRunningLocked();
+            mStats.noteWifiRunningLocked(ws);
         }
     }
 
-    public void noteWifiStopped() {
+    public void noteWifiRunningChanged(WorkSource oldWs, WorkSource newWs) {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.noteWifiStoppedLocked();
+            mStats.noteWifiRunningChangedLocked(oldWs, newWs);
+        }
+    }
+
+    public void noteWifiStopped(WorkSource ws) {
+        enforceCallingPermission();
+        synchronized (mStats) {
+            mStats.noteWifiStoppedLocked(ws);
         }
     }
 
@@ -317,18 +343,56 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
         }
     }
 
+    public void noteFullWifiLockAcquiredFromSource(WorkSource ws) {
+        enforceCallingPermission();
+        synchronized (mStats) {
+            mStats.noteFullWifiLockAcquiredFromSourceLocked(ws);
+        }
+    }
+
+    public void noteFullWifiLockReleasedFromSource(WorkSource ws) {
+        enforceCallingPermission();
+        synchronized (mStats) {
+            mStats.noteFullWifiLockReleasedFromSourceLocked(ws);
+        }
+    }
+
+    public void noteScanWifiLockAcquiredFromSource(WorkSource ws) {
+        enforceCallingPermission();
+        synchronized (mStats) {
+            mStats.noteScanWifiLockAcquiredFromSourceLocked(ws);
+        }
+    }
+
+    public void noteScanWifiLockReleasedFromSource(WorkSource ws) {
+        enforceCallingPermission();
+        synchronized (mStats) {
+            mStats.noteScanWifiLockReleasedFromSourceLocked(ws);
+        }
+    }
+
+    public void noteWifiMulticastEnabledFromSource(WorkSource ws) {
+        enforceCallingPermission();
+        synchronized (mStats) {
+            mStats.noteWifiMulticastEnabledFromSourceLocked(ws);
+        }
+    }
+
+    public void noteWifiMulticastDisabledFromSource(WorkSource ws) {
+        enforceCallingPermission();
+        synchronized (mStats) {
+            mStats.noteWifiMulticastDisabledFromSourceLocked(ws);
+        }
+    }
+
     public boolean isOnBattery() {
         return mStats.isOnBattery();
     }
     
-    public void setOnBattery(boolean onBattery, int level) {
+    public void setBatteryState(int status, int health, int plugType, int level,
+            int temp, int volt) {
         enforceCallingPermission();
-        mStats.setOnBattery(onBattery, level);
-    }
-    
-    public void recordCurrentLevel(int level) {
-        enforceCallingPermission();
-        mStats.recordCurrentLevel(level);
+        mStats.setBatteryState(status, health, plugType, level, temp, volt);
     }
     
     public long getAwakeTimeBattery() {
@@ -353,18 +417,28 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
     
     @Override
     protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-        synchronized (mStats) {
-            boolean isCheckin = false;
-            if (args != null) {
-                for (String arg : args) {
-                    if ("--checkin".equals(arg)) {
-                        isCheckin = true;
-                        break;
+        boolean isCheckin = false;
+        if (args != null) {
+            for (String arg : args) {
+                if ("--checkin".equals(arg)) {
+                    isCheckin = true;
+                } else if ("--reset".equals(arg)) {
+                    synchronized (mStats) {
+                        mStats.resetAllStatsLocked();
+                        pw.println("Battery stats reset.");
                     }
                 }
             }
-            if (isCheckin) mStats.dumpCheckinLocked(pw, args);
-            else mStats.dumpLocked(pw);
+        }
+        if (isCheckin) {
+            List<ApplicationInfo> apps = mContext.getPackageManager().getInstalledApplications(0);
+            synchronized (mStats) {
+                mStats.dumpCheckinLocked(pw, args, apps);
+            }
+        } else {
+            synchronized (mStats) {
+                mStats.dumpLocked(pw);
+            }
         }
     }
 }

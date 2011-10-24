@@ -1,4 +1,4 @@
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "StagefrightPlayer"
 #include <utils/Log.h>
 
@@ -68,8 +68,7 @@ status_t StagefrightPlayer::start() {
 status_t StagefrightPlayer::stop() {
     LOGV("stop");
 
-	return mPlayer->forceStop();
-    //return pause();  // what's the difference?
+    return pause();  // what's the difference?
 }
 
 status_t StagefrightPlayer::pause() {
@@ -180,11 +179,11 @@ status_t StagefrightPlayer::getMetadata(
     metadata.appendBool(
             Metadata::kSeekForwardAvailable,
             flags & MediaExtractor::CAN_SEEK_FORWARD);
-/*
+
     metadata.appendBool(
             Metadata::kSeekAvailable,
             flags & MediaExtractor::CAN_SEEK);
-*/
+
     return OK;
 }
 

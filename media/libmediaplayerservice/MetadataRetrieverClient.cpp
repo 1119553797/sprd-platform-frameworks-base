@@ -37,7 +37,6 @@
 #include <media/MediaPlayerInterface.h>
 #include <media/PVMetadataRetriever.h>
 #include <private/media/VideoFrame.h>
-#include "VorbisMetadataRetriever.h"
 #include "MidiMetadataRetriever.h"
 #include "MetadataRetrieverClient.h"
 #include "StagefrightMetadataRetriever.h"
@@ -66,7 +65,6 @@ MetadataRetrieverClient::MetadataRetrieverClient(pid_t pid)
     mThumbnail = NULL;
     mAlbumArt = NULL;
     mRetriever = NULL;
-    mMode = METADATA_MODE_FRAME_CAPTURE_AND_METADATA_RETRIEVAL;
 }
 
 MetadataRetrieverClient::~MetadataRetrieverClient()
@@ -81,7 +79,7 @@ status_t MetadataRetrieverClient::dump(int fd, const Vector<String16>& args) con
     char buffer[SIZE];
     String8 result;
     result.append(" MetadataRetrieverClient\n");
-    snprintf(buffer, 255, "  pid(%d) mode(%d)\n", mPid, mMode);
+    snprintf(buffer, 255, "  pid(%d)\n", mPid);
     result.append(buffer);
     write(fd, result.string(), result.size());
     write(fd, "\n", 1);
@@ -95,7 +93,6 @@ void MetadataRetrieverClient::disconnect()
     mRetriever.clear();
     mThumbnail.clear();
     mAlbumArt.clear();
-    mMode = METADATA_MODE_FRAME_CAPTURE_AND_METADATA_RETRIEVAL;
     IPCThreadState::self()->flushCommands();
 }
 
@@ -103,30 +100,17 @@ static sp<MediaMetadataRetrieverBase> createRetriever(player_type playerType)
 {
     sp<MediaMetadataRetrieverBase> p;
     switch (playerType) {
-#if BUILD_WITH_FULL_STAGEFRIGHT
         case STAGEFRIGHT_PLAYER:
         {
-            char value[PROPERTY_VALUE_MAX];
-            if (property_get("media.stagefright.enable-meta", value, NULL)
-                && (!strcmp(value, "1") || !strcasecmp(value, "true"))) {
-                LOGV("create StagefrightMetadataRetriever");
-                p = new StagefrightMetadataRetriever;
-                break;
-            }
-
-            // fall through
+            p = new StagefrightMetadataRetriever;
+            break;
         }
-#endif
 #ifndef NO_OPENCORE
         case PV_PLAYER:
             LOGV("create pv metadata retriever");
             p = new PVMetadataRetriever();
             break;
 #endif
-        case VORBIS_PLAYER:
-            LOGV("create vorbis metadata retriever");
-            p = new VorbisMetadataRetriever();
-            break;
         case SONIVOX_PLAYER:
             LOGV("create midi metadata retriever");
             p = new MidiMetadataRetriever();
@@ -154,10 +138,7 @@ status_t MetadataRetrieverClient::setDataSource(const char *url)
     LOGV("player type = %d", playerType);
     sp<MediaMetadataRetrieverBase> p = createRetriever(playerType);
     if (p == NULL) return NO_INIT;
-    status_t ret = p->setMode(mMode);
-    if (ret == NO_ERROR) {
-        ret = p->setDataSource(url);
-    }
+    status_t ret = p->setDataSource(url);
     if (ret == NO_ERROR) mRetriever = p;
     return ret;
 }
@@ -195,55 +176,22 @@ status_t MetadataRetrieverClient::setDataSource(int fd, int64_t offset, int64_t 
         ::close(fd);
         return NO_INIT;
     }
-    status_t status = p->setMode(mMode);
-    if (status == NO_ERROR) {
-        p->setDataSource(fd, offset, length);
-    }
+    status_t status = p->setDataSource(fd, offset, length);
     if (status == NO_ERROR) mRetriever = p;
     ::close(fd);
     return status;
 }
 
-status_t MetadataRetrieverClient::setMode(int mode)
+sp<IMemory> MetadataRetrieverClient::getFrameAtTime(int64_t timeUs, int option)
 {
-    LOGV("setMode");
-    Mutex::Autolock lock(mLock);
-    if (mode < METADATA_MODE_NOOP ||
-        mode > METADATA_MODE_FRAME_CAPTURE_AND_METADATA_RETRIEVAL) {
-        LOGE("invalid mode %d", mode);
-        return BAD_VALUE;
-    }
-    mMode = mode;
-    return NO_ERROR;
-}
-
-status_t MetadataRetrieverClient::getMode(int* mode) const
-{
-    LOGV("getMode");
-    Mutex::Autolock lock(mLock);
-
-    // TODO:
-    // This may not be necessary.
-    // If setDataSource() has not been called, return the cached value
-    // otherwise, return the value retrieved from the retriever
-    if (mRetriever == NULL) {
-        *mode = mMode;
-    } else {
-        mRetriever->getMode(mode);
-    }
-    return NO_ERROR;
-}
-
-sp<IMemory> MetadataRetrieverClient::captureFrame()
-{
-    LOGV("captureFrame");
+    LOGV("getFrameAtTime: time(%lld us) option(%d)", timeUs, option);
     Mutex::Autolock lock(mLock);
     mThumbnail.clear();
     if (mRetriever == NULL) {
         LOGE("retriever is not initialized");
         return NULL;
     }
-    VideoFrame *frame = mRetriever->captureFrame();
+    VideoFrame *frame = mRetriever->getFrameAtTime(timeUs, option);
     if (frame == NULL) {
         LOGE("failed to capture a video frame");
         return NULL;
@@ -267,6 +215,8 @@ sp<IMemory> MetadataRetrieverClient::captureFrame()
     frameCopy->mDisplayWidth = frame->mDisplayWidth;
     frameCopy->mDisplayHeight = frame->mDisplayHeight;
     frameCopy->mSize = frame->mSize;
+    frameCopy->mRotationAngle = frame->mRotationAngle;
+    LOGV("rotation: %d", frameCopy->mRotationAngle);
     frameCopy->mData = (uint8_t *)frameCopy + sizeof(VideoFrame);
     memcpy(frameCopy->mData, frame->mData, frame->mSize);
     delete frame;  // Fix memory leakage

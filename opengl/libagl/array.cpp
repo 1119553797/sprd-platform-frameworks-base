@@ -26,9 +26,6 @@
 #include "primitives.h"
 #include "texture.h"
 #include "BufferObjectManager.h"
-#ifdef LIBAGL_USE_GRALLOC_COPYBITS
-#include "copybit.h"
-#endif // LIBAGL_USE_GRALLOC_COPYBITS
 
 // ----------------------------------------------------------------------------
 
@@ -705,8 +702,8 @@ static void drawPrimitivesTriangleFanOrStrip(ogles_context_t* c,
             } while (num);
         }
         if (count) {
-            v0 = c->vc.vBuffer + 2 + num - 2;
-            v1 = c->vc.vBuffer + 2 + num - 1;
+            v0 = c->vc.vBuffer + 2 + vcs - 2;
+            v1 = c->vc.vBuffer + 2 + vcs - 1;
             if ((winding&2) == 0) {
                 // for strips copy back the two last compiled vertices
                 c->vc.vBuffer[0] = *v0;
@@ -724,12 +721,6 @@ void drawPrimitivesTriangleStrip(ogles_context_t* c,
 
 void drawPrimitivesTriangleFan(ogles_context_t* c,
         GLint first, GLsizei count) {
-#ifdef LIBAGL_USE_GRALLOC_COPYBITS
-    if (drawTriangleFanWithCopybit(c, first, count)) {
-        return;
-    }
-#endif // LIBAGL_USE_GRALLOC_COPYBITS
-
     drawPrimitivesTriangleFanOrStrip(c, first, count, 2);
 }
 

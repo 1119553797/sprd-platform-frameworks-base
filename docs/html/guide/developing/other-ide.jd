@@ -166,9 +166,10 @@ alias
 <p>Once you've created your project, you're ready to begin development.
 You can move your project folder wherever you want for development, but keep in mind
 that you must use the <a href="{@docRoot}guide/developing/tools/adb.html">Android Debug Bridge</a> 
-(adb) &mdash; located in the SDK <code>tools/</code> directory &mdash; to send your application 
+(adb) &mdash; located in the SDK <code>platform-tools/</code> directory &mdash; to send your
+application 
 to the emulator (discussed later). So you need access between your project solution and 
-the <code>tools/</code> folder.</p>
+the <code>platform-tools/</code> folder.</p>
 
 <p class="caution"><strong>Caution:</strong> You should refrain from moving the
 location of the SDK directory, because this will break the build scripts. (They
@@ -460,7 +461,7 @@ arguments:
   </li>
 
   <li><strong>Install your application</strong>
-    <p>From your SDK's <code>tools/</code> directory, install the {@code .apk} on the
+    <p>From your SDK's <code>platform-tools/</code> directory, install the {@code .apk} on the
 emulator:
     <pre>adb install <em>&lt;path_to_your_bin&gt;</em>.apk</pre>
     <p>Your APK file (signed with either a release or debug key) is in your project {@code bin/}
@@ -507,7 +508,7 @@ device:</p>
 Development</a> for more information.</p>
 
 <p>Once your device is set up and connected via USB, navigate to your
-SDK's <code>tools/</code> directory and install the <code>.apk</code> on the device:
+SDK's <code>platform-tools/</code> directory and install the <code>.apk</code> on the device:
     <pre>adb -d install <em>path/to/your/app</em>.apk</pre>
     <p>The {@code -d} flag specifies that you want to use the attached device (in case you also
 have an emulator running).</p>
@@ -555,11 +556,11 @@ which you could make use of library projects: </p>
 
 <ul>
 <li>If you are developing multiple related applications that use some of the
-same components, you move the redundant components out of their respective
+same components, you could move the redundant components out of their respective
 application projects and create a single, reuseable set of the same components
 in a library project. </li>
 <li>If you are creating an application that exists in both free and paid
-versions. You move the part of the application that is common to both versions
+versions, you could move the part of the application that is common to both versions
 into a library project. The two dependent projects, with their different package
 names, will reference the library project and provide only the difference
 between the two application versions.</li>
@@ -687,7 +688,7 @@ so that other applications can use it, you can do so by adding a the
 <p>A library project's manifest file must declare all of the shared components
 that it includes, just as would a standard Android application. For more
 information, see the documentation for <a
-href="{@docRoot}guide/manifest/manifest-intro.html">AndroidManifest.xml</a>.</p>
+href="{@docRoot}guide/topics/manifest/manifest-intro.html">AndroidManifest.xml</a>.</p>
 
 <p>For example, the <a
 href="{@docRoot}resources/samples/TicTacToeLib/AndroidManifest.html">TicTacToeLib</a>
@@ -700,7 +701,6 @@ example library project declares the Activity <code>GameActivity</code>: </p>
     &lt;activity android:name="GameActivity" /&gt;
     ...
   &lt;/application&gt;
-  ...
 &lt;/manifest&gt;</pre>
 
 <h4>Updating a library project</h4>
@@ -796,16 +796,16 @@ like this: </p>
     &lt;activity android:name="com.example.android.tictactoe.library.GameActivity" /&gt;
     ...
   &lt;/application&gt;
-  ...
 &lt;/manifest&gt;</pre>
 
-<p>For more information about the manifest file, see the documentation for <a href="{@docRoot}guide/manifest/manifest-intro.html">AndroidManifest.xml</a>.</p>
+<p>For more information about the manifest file, see the documentation for <a
+href="{@docRoot}guide/topics/manifest/manifest-intro.html">AndroidManifest.xml</a>.</p>
 
 <h3 id="depAppBuild">Building a dependent application</h3>
 
 <p>To build an application project that depends on one or more library projects,
 you can use the standard Ant build commands and compile modes, as described in
-<a href=#Building">Building Your Application</a>, earlier in this document. The
+<a href="#Building">Building Your Application</a>, earlier in this document. The
 tools compile and merge all libraries referenced by the application as part
 of compiling the dependent application project. No additional commands or steps
 are necessary. </p>
@@ -837,10 +837,6 @@ across all projects). </p>
 is because the library project is compiled by the main project to use the
 correct resource IDs.</p>
 
-<p><strong>One library project cannot reference another</strong></p>
-
-<p>A library cannot depend on another library.</p>
-
 <p><strong>A library project can include a JAR library</strong></p>
 
 <p>You can develop a library project that itself includes a JAR library. When
@@ -856,13 +852,6 @@ Google APIs Add-On). Note also that both the library project and the dependent
 application must declare the external library their manifest files, in a <a
 href="{@docRoot}guide/topics/manifest/uses-library-element.html"><code>&lt;uses-library&gt;</code></a>
 element. </p>
-
-<p><strong>Library project cannot include AIDL files</strong></p>
-
-<p>The tools do not support the use of <a
-href="{@docRoot}guide/developing/tools/aidl.html">AIDL</a> files in a library project.
-Any AIDL files used by an application must be stored in the application project
-itself.</p>
 
 <p><strong>Library project cannot include raw assets</strong></p>
 

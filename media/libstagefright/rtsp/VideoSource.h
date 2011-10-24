@@ -18,10 +18,6 @@
 
 #define VIDEO_SOURCE_H_
 
-//#define LOG_NDEBUG 0
-#define LOG_TAG "VideoSource"
-#include <utils/Log.h>
-
 #include <media/stagefright/MediaBufferGroup.h>
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MediaSource.h>
@@ -62,10 +58,7 @@ public:
             MediaBuffer **buffer, const MediaSource::ReadOptions *options) {
         if (mNumFramesOutput == kFramerate * 100) {
             // Stop returning data after 10 secs.
-	LOGI("###place to send ERROR_END_OF_STREAM\n");
-//by@hong change the state from ERROR_END_OF_STREAM to INFO_DISCONTINUITY
-            //return ERROR_END_OF_STREAM;
-	     return INFO_DISCONTINUITY;
+            return ERROR_END_OF_STREAM;
         }
 
         // printf("VideoSource::read\n");

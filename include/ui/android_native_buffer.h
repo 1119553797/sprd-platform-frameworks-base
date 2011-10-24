@@ -35,6 +35,15 @@ typedef struct android_native_buffer_t
 
         patch_scaling = 0;
     }
+
+    // Implement the methods that sp<android_native_buffer_t> expects so that it
+    // can be used to automatically refcount android_native_buffer_t's.
+    void incStrong(const void* id) const {
+        common.incRef(const_cast<android_native_base_t*>(&common));
+    }
+    void decStrong(const void* id) const {
+        common.decRef(const_cast<android_native_base_t*>(&common));
+    }
 #endif
 
     struct android_native_base_t common;
@@ -46,8 +55,12 @@ typedef struct android_native_buffer_t
     int stride;
     int format;
     int usage;
-    
-    void* reserved[2];
+
+    /* transformation as defined in hardware.h */
+    uint8_t transform;
+
+    uint8_t reserved_bytes[3];
+    void* reserved[1];
 
     buffer_handle_t handle;
 

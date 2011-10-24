@@ -42,11 +42,7 @@ LOCAL_SRC_FILES:=                         \
         Utils.cpp                         \
         WAVExtractor.cpp                  \
         avc_utils.cpp                     \
-        string.cpp			  \
-	CMMBExtractor.cpp		  \
-	VideoPhoneExtractor.cpp		  \
-	VideoPhoneWriter.cpp		  \
-        CharDeviceSource.cpp
+        string.cpp
 
 LOCAL_C_INCLUDES:= \
 	$(JNI_H_INCLUDE) \
@@ -63,7 +59,7 @@ LOCAL_SHARED_LIBRARIES := \
         libsonivox        \
         libvorbisidec     \
         libsurfaceflinger_client \
-        libcamera_client 
+        libcamera_client
 
 LOCAL_STATIC_LIBRARIES := \
         libstagefright_aacdec \
@@ -85,16 +81,7 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_httplive \
         libstagefright_rtsp \
         libstagefright_id3 \
-        libstagefright_g711dec
-	
-ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
-LOCAL_STATIC_LIBRARIES += \
-	libstagefright_aacdec_sprd \
-	libaacdec_sprd
-else
-LOCAL_LDFLAGS += $(TOP)/vendor/sprd/hsdroid/proprietary/stagefright/libstagefright_aacdec_sprd.a
-LOCAL_LDFLAGS += $(TOP)/vendor/sprd/hsdroid/proprietary/stagefright/libaacdec_sprd.a
-endif
+        libstagefright_g711dec \
 
 LOCAL_SHARED_LIBRARIES += \
         libstagefright_amrnb_common \
@@ -118,10 +105,6 @@ ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
 endif
 
 LOCAL_CFLAGS += -Wno-multichar
-
-#ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
-LOCAL_CFLAGS += -DBUILD_SPRD_AAC
-#endif
 
 LOCAL_MODULE:= libstagefright
 

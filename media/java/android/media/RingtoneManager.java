@@ -365,12 +365,9 @@ public class RingtoneManager {
         final Cursor internalCursor = getInternalRingtones();
         final Cursor drmCursor = mIncludeDrm ? getDrmRingtones() : null;
         final Cursor mediaCursor = getMediaRingtones();
-        
-     // ************Modify by luning 11-07-23 for CR<NEWMS00107065> begin************
-        final Cursor externalMusicCursor = getExternalMusics();          
-        return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor ,externalMusicCursor},
+             
+        return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor },
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-     // ************Modify by luning 11-07-23 for CR<NEWMS00107065> end************
     }
 
     /**
@@ -514,24 +511,6 @@ public class RingtoneManager {
                 : null;
     }
     
-    
- // ************Modify by luning 11-07-23 for CR<NEWMS00107065> begin************
-	private Cursor getExternalMusics() {
-		// Get the external media cursor. First check to see if it is mounted.
-		final String status = Environment.getExternalStorageState();
-		// filter
-		StringBuilder where = new StringBuilder();
-		where.append(MediaStore.Audio.Media.TITLE + " != ''");
-		where.append(" AND " + MediaStore.Audio.Media.IS_MUSIC + "=1");
-
-		return (status.equals(Environment.MEDIA_MOUNTED) || status
-				.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) ? query(
-				MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MEDIA_COLUMNS,
-				where.toString(), null,
-				MediaStore.Audio.Media.DEFAULT_SORT_ORDER) : null;
-	}
- // ************Modify by luning 11-07-23 for CR<NEWMS00107065> begin************
-      
     private void setFilterColumnsList(int type) {
         List<String> columns = mFilterColumns;
         columns.clear();

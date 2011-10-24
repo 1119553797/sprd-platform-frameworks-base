@@ -45,6 +45,11 @@ public interface RILConstants {
     int OP_NOT_ALLOWED_BEFORE_REG_NW = 9;     /* request is not allowed before device registers to
                                                  network */
     int SMS_SEND_FAIL_RETRY = 10;             /* send sms fail and need retry */
+    int SIM_ABSENT = 11;                      /* ICC card is absent */
+    int SUBSCRIPTION_NOT_AVAILABLE = 12;      /* fail to find CDMA subscription from specified
+                                                 location */
+    int MODE_NOT_SUPPORTED = 13;              /* HW does not support preferred network type */
+    int FDN_CHECK_FAILURE = 14;               /* send operation barred error when FDN is enabled */
     int ILLEGAL_SIM_OR_ME = 15;               /* network selection failure due
                                                  to wrong SIM/ME and no
                                                  retries needed */
@@ -79,7 +84,11 @@ public interface RILConstants {
     int NO_PHONE = 0;
     int GSM_PHONE = 1;
     int CDMA_PHONE = 2;
-    int TD_PHONE = 3;
+
+    int TD_PHONE = 4;
+
+    int SIP_PHONE  = 3;
+
 
     int CDM_TTY_MODE_DISABLED = 0;
     int CDM_TTY_MODE_ENABLED = 1;
@@ -91,10 +100,15 @@ public interface RILConstants {
     /* Setup a packet data connection. See ril.h RIL_REQUEST_SETUP_DATA_CALL */
     int SETUP_DATA_TECH_CDMA      = 0;
     int SETUP_DATA_TECH_GSM       = 1;
+
     int SETUP_DATA_AUTH_NONE      = 0;
     int SETUP_DATA_AUTH_PAP       = 1;
     int SETUP_DATA_AUTH_CHAP      = 2;
     int SETUP_DATA_AUTH_PAP_CHAP  = 3;
+
+    String SETUP_DATA_PROTOCOL_IP     = "IP";
+    String SETUP_DATA_PROTOCOL_IPV6   = "IPV6";
+    String SETUP_DATA_PROTOCOL_IPV4V6 = "IPV4V6";
 
 /*
 cat include/telephony/ril.h | \

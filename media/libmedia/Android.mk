@@ -12,12 +12,11 @@ LOCAL_SRC_FILES:= \
     mediaplayer.cpp \
     IMediaPlayerService.cpp \
     IMediaPlayerClient.cpp \
+    IMediaRecorderClient.cpp \
     IMediaPlayer.cpp \
     IMediaRecorder.cpp \
-    IMediaPhone.cpp \
     Metadata.cpp \
     mediarecorder.cpp \
-    mediaphone.cpp \
     IMediaMetadataRetriever.cpp \
     mediametadataretriever.cpp \
     ToneGenerator.cpp \
@@ -28,7 +27,12 @@ LOCAL_SRC_FILES:= \
     MediaScannerClient.cpp \
     autodetect.cpp \
     IMediaDeathNotifier.cpp \
-    MediaProfiles.cpp
+    MediaProfiles.cpp \
+    IEffect.cpp \
+    IEffectClient.cpp \
+    AudioEffect.cpp \
+    Visualizer.cpp \
+    fixedfft.cpp.arm
 
 LOCAL_SHARED_LIBRARIES := \
 	libui libcutils libutils libbinder libsonivox libicuuc libexpat libsurfaceflinger_client libcamera_client
@@ -46,12 +50,8 @@ endif
 LOCAL_C_INCLUDES := \
     $(JNI_H_INCLUDE) \
     $(call include-path-for, graphics corecg) \
-    $(TOP)/external/opencore/extern_libs_v2/khronos/openmax/include \
-    external/speex/include \
-    external/speex/libspeex \
+    $(TOP)/frameworks/base/include/media/stagefright/openmax \
     external/icu4c/common \
     external/expat/lib
-
-LOCAL_STATIC_LIBRARIES := libspeex
 
 include $(BUILD_SHARED_LIBRARY)

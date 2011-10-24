@@ -40,6 +40,8 @@ public class WspTypeDecoder {
     public static final int CONTENT_TYPE_B_PUSH_CO = 0x32;
     public static final int CONTENT_TYPE_B_MMS = 0x3e;
     public static final int CONTENT_TYPE_B_VND_DOCOMO_PF = 0x0310;
+    public static final int CONTENT_TYPE_B_SUPL_INIT = 0x312;
+    public static final int CONTENT_TYPE_B_PUSH_SYNCML_NOTI = 0x44;
 
     // Start liuhongxing 20110603     
     public static final int CONTENT_TYPE_B_DM_WBXML = 0x42;
@@ -56,6 +58,9 @@ public class WspTypeDecoder {
     public static final String CONTENT_MIME_TYPE_B_PUSH_CO = "application/vnd.wap.coc";
     public static final String CONTENT_MIME_TYPE_B_MMS = "application/vnd.wap.mms-message";
     public static final String CONTENT_MIME_TYPE_B_VND_DOCOMO_PF = "application/vnd.docomo.pf";
+    public static final String CONTENT_MIME_TYPE_B_SUPL_INIT = "application/vnd.omaloc-supl-init";
+    public static final String CONTENT_MIME_TYPE_B_PUSH_SYNCML_NOTI =
+            "application/vnd.syncml.notification";
 
     // Start liuhongxing 20110603
     public static final String CONTENT_MIME_TYPE_B_DM_WBXML        = "application/vnd.syncml.dm+wbxml";    // 1.5 0x42 
@@ -64,7 +69,6 @@ public class WspTypeDecoder {
     // End liu 20110603
     
     public static final int PARAMETER_ID_X_WAP_APPLICATION_ID = 0x2f;
-
 
     byte[] wspData;
     int    dataLength;

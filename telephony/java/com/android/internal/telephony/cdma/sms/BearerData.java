@@ -21,7 +21,6 @@ import static android.telephony.SmsMessage.MAX_USER_DATA_BYTES;
 import static android.telephony.SmsMessage.MAX_USER_DATA_BYTES_WITH_HEADER;
 
 import android.util.Log;
-import android.util.SparseIntArray;
 
 import android.telephony.SmsMessage;
 
@@ -30,12 +29,13 @@ import android.text.format.Time;
 import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.GsmAlphabet;
 import com.android.internal.telephony.SmsHeader;
-import com.android.internal.telephony.cdma.sms.UserData;
 import com.android.internal.telephony.SmsMessageBase.TextEncodingDetails;
 
-import com.android.internal.util.HexDump;
 import com.android.internal.util.BitwiseInputStream;
 import com.android.internal.util.BitwiseOutputStream;
+
+import android.content.res.Resources;
+
 
 
 /**
@@ -405,7 +405,8 @@ public final class BearerData {
     /**
      * Calculate the message text encoding length, fragmentation, and other details.
      *
-     * @param force ignore (but still count) illegal characters if true
+     * @param msg message text
+     * @param force7BitEncoding ignore (but still count) illegal characters if true
      * @return septet count, or -1 on failure
      */
     public static TextEncodingDetails calcTextEncodingDetails(CharSequence msg,
@@ -427,9 +428,10 @@ public final class BearerData {
                 ted.codeUnitCount = msg.length();
                 int octets = ted.codeUnitCount * 2;
                 if (octets > MAX_USER_DATA_BYTES) {
-                    ted.msgCount = (octets / MAX_USER_DATA_BYTES_WITH_HEADER) + 1;
-                    ted.codeUnitsRemaining = (MAX_USER_DATA_BYTES_WITH_HEADER
-                              - (octets % MAX_USER_DATA_BYTES_WITH_HEADER))/2;
+                    ted.msgCount = (octets + (MAX_USER_DATA_BYTES_WITH_HEADER - 1)) /
+                            MAX_USER_DATA_BYTES_WITH_HEADER;
+                    ted.codeUnitsRemaining = ((ted.msgCount *
+                            MAX_USER_DATA_BYTES_WITH_HEADER) - octets) / 2;
                 } else {
                     ted.msgCount = 1;
                     ted.codeUnitsRemaining = (MAX_USER_DATA_BYTES - octets)/2;
@@ -499,7 +501,7 @@ public final class BearerData {
              * stringToGsm7BitPacked, and potentially directly support
              * access to the main bitwise stream from encode/decode.
              */
-            byte[] fullData = GsmAlphabet.stringToGsm7BitPacked(msg, septetOffset, !force);
+            byte[] fullData = GsmAlphabet.stringToGsm7BitPacked(msg, septetOffset, !force, 0, 0);
             Gsm7bitCodingResult result = new Gsm7bitCodingResult();
             result.data = new byte[fullData.length - 1];
             System.arraycopy(fullData, 1, result.data, 0, fullData.length - 1);
@@ -802,9 +804,8 @@ public final class BearerData {
      * Create serialized representation for BearerData object.
      * (See 3GPP2 C.R1001-F, v1.0, section 4.5 for layout details)
      *
-     * @param bearerData an instance of BearerData.
-     *
-     * @return data byta array of raw encoded SMS bearer data.
+     * @param bData an instance of BearerData.
+     * @return byte array of raw encoded SMS bearer data.
      */
     public static byte[] encode(BearerData bData) {
         bData.hasUserDataHeader = ((bData.userData != null) &&
@@ -911,10 +912,20 @@ public final class BearerData {
         return true;
     }
 
+    private static String decodeUtf8(byte[] data, int offset, int numFields)
+        throws CodingException
+    {
+        try {
+            return new String(data, offset, numFields, "UTF-8");
+        } catch (java.io.UnsupportedEncodingException ex) {
+            throw new CodingException("UTF-8 decode failed: " + ex);
+        }
+    }
+
     private static String decodeUtf16(byte[] data, int offset, int numFields)
         throws CodingException
     {
-        // Start reading from the next 16-bit aligned boundry after offset.
+        // Start reading from the next 16-bit aligned boundary after offset.
         int padding = offset % 2;
         numFields -= (offset + padding) / 2;
         try {
@@ -960,12 +971,13 @@ public final class BearerData {
     private static String decode7bitGsm(byte[] data, int offset, int numFields)
         throws CodingException
     {
-        // Start reading from the next 7-bit aligned boundry after offset.
+        // Start reading from the next 7-bit aligned boundary after offset.
         int offsetBits = offset * 8;
         int offsetSeptets = (offsetBits + 6) / 7;
         numFields -= offsetSeptets;
         int paddingBits = (offsetSeptets * 7) - offsetBits;
-        String result = GsmAlphabet.gsm7BitPackedToString(data, offset, numFields, paddingBits);
+        String result = GsmAlphabet.gsm7BitPackedToString(data, offset, numFields, paddingBits,
+                0, 0);
         if (result == null) {
             throw new CodingException("7bit GSM decoding failed");
         }
@@ -995,9 +1007,15 @@ public final class BearerData {
         }
         switch (userData.msgEncoding) {
         case UserData.ENCODING_OCTET:
+            /*
+            *  Octet decoding depends on the carrier service.
+            */
+            boolean decodingtypeUTF8 = Resources.getSystem()
+                    .getBoolean(com.android.internal.R.bool.config_sms_utf8_support);
+
             // Strip off any padding bytes, meaning any differences between the length of the
-            // array and the target length specified by numFields.  This is to avoid any confusion
-            // by code elsewhere that only considers the payload array length.
+            // array and the target length specified by numFields.  This is to avoid any
+            // confusion by code elsewhere that only considers the payload array length.
             byte[] payload = new byte[userData.numFields];
             int copyLen = userData.numFields < userData.payload.length
                     ? userData.numFields : userData.payload.length;
@@ -1005,9 +1023,13 @@ public final class BearerData {
             System.arraycopy(userData.payload, 0, payload, 0, copyLen);
             userData.payload = payload;
 
-            // There are many devices in the market that send 8bit text sms (latin encoded) as
-            // octet encoded.
-            userData.payloadStr = decodeLatin(userData.payload, offset, userData.numFields);
+            if (!decodingtypeUTF8) {
+                // There are many devices in the market that send 8bit text sms (latin encoded) as
+                // octet encoded.
+                userData.payloadStr = decodeLatin(userData.payload, offset, userData.numFields);
+            } else {
+                userData.payloadStr = decodeUtf8(userData.payload, offset, userData.numFields);
+            }
             break;
         case UserData.ENCODING_IA5:
         case UserData.ENCODING_7BIT_ASCII:

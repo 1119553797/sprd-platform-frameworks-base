@@ -86,4 +86,6 @@ interface IConnectivityManager
     boolean isUsbRNDISStarted();
     boolean isUsbConnected();
     //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> end
+
+    void reportInetCondition(int networkType, int percentage);
 }

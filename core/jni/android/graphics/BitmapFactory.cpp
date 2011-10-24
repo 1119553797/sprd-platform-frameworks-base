@@ -1,33 +1,37 @@
 #define LOG_TAG "BitmapFactory"
 
+#include "BitmapFactory.h"
 #include "SkImageDecoder.h"
 #include "SkImageRef_ashmem.h"
 #include "SkImageRef_GlobalPool.h"
 #include "SkPixelRef.h"
 #include "SkStream.h"
-#include "GraphicsJNI.h"
 #include "SkTemplates.h"
 #include "SkUtils.h"
 #include "CreateJavaOutputStreamAdaptor.h"
+#include "AutoDecodeCancel.h"
+#include "Utils.h"
 
 #include <android_runtime/AndroidRuntime.h>
 #include <utils/Asset.h>
 #include <utils/ResourceTypes.h>
 #include <netinet/in.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 
-static jclass gOptions_class;
-static jfieldID gOptions_justBoundsFieldID;
-static jfieldID gOptions_sampleSizeFieldID;
-static jfieldID gOptions_configFieldID;
-static jfieldID gOptions_ditherFieldID;
-static jfieldID gOptions_purgeableFieldID;
-static jfieldID gOptions_shareableFieldID;
-static jfieldID gOptions_nativeAllocFieldID;
-static jfieldID gOptions_widthFieldID;
-static jfieldID gOptions_heightFieldID;
-static jfieldID gOptions_mimeFieldID;
-static jfieldID gOptions_mCancelID;
+jclass gOptions_class;
+jfieldID gOptions_justBoundsFieldID;
+jfieldID gOptions_sampleSizeFieldID;
+jfieldID gOptions_configFieldID;
+jfieldID gOptions_ditherFieldID;
+jfieldID gOptions_purgeableFieldID;
+jfieldID gOptions_shareableFieldID;
+jfieldID gOptions_nativeAllocFieldID;
+jfieldID gOptions_preferQualityOverSpeedFieldID;
+jfieldID gOptions_widthFieldID;
+jfieldID gOptions_heightFieldID;
+jfieldID gOptions_mimeFieldID;
+jfieldID gOptions_mCancelID;
 
 static jclass gFileDescriptor_class;
 static jfieldID gFileDescriptor_descriptor;
@@ -37,129 +41,6 @@ static jfieldID gFileDescriptor_descriptor;
 #else
     #define TRACE_BITMAP(code)
 #endif
-
-///////////////////////////////////////////////////////////////////////////////
-
-class AutoDecoderCancel {
-public:
-    AutoDecoderCancel(jobject options, SkImageDecoder* decoder);
-    ~AutoDecoderCancel();
-
-    static bool RequestCancel(jobject options);
-    
-private:
-    AutoDecoderCancel*  fNext;
-    AutoDecoderCancel*  fPrev;
-    jobject             fJOptions;  // java options object
-    SkImageDecoder*     fDecoder;
-    
-#ifdef SK_DEBUG
-    static void Validate();
-#else
-    static void Validate() {}
-#endif
-};
-
-static SkMutex  gAutoDecoderCancelMutex;
-static AutoDecoderCancel* gAutoDecoderCancel;
-#ifdef SK_DEBUG
-    static int gAutoDecoderCancelCount;
-#endif
-
-AutoDecoderCancel::AutoDecoderCancel(jobject joptions,
-                                       SkImageDecoder* decoder) {
-    fJOptions = joptions;
-    fDecoder = decoder;
-
-    if (NULL != joptions) {
-        SkAutoMutexAcquire ac(gAutoDecoderCancelMutex);
-
-        // Add us as the head of the list
-        fPrev = NULL;
-        fNext = gAutoDecoderCancel;
-        if (gAutoDecoderCancel) {
-            gAutoDecoderCancel->fPrev = this;
-        }
-        gAutoDecoderCancel = this;
-        
-        SkDEBUGCODE(gAutoDecoderCancelCount += 1;)
-        Validate();
-    }
-}
-
-AutoDecoderCancel::~AutoDecoderCancel() {
-    if (NULL != fJOptions) {
-        SkAutoMutexAcquire ac(gAutoDecoderCancelMutex);
-        
-        // take us out of the dllist
-        AutoDecoderCancel* prev = fPrev;
-        AutoDecoderCancel* next = fNext;
-        
-        if (prev) {
-            SkASSERT(prev->fNext == this);
-            prev->fNext = next;
-        } else {
-            SkASSERT(gAutoDecoderCancel == this);
-            gAutoDecoderCancel = next;
-        }
-        if (next) {
-            SkASSERT(next->fPrev == this);
-            next->fPrev = prev;
-        }
-
-        SkDEBUGCODE(gAutoDecoderCancelCount -= 1;)
-        Validate();
-    }
-}
-
-bool AutoDecoderCancel::RequestCancel(jobject joptions) {
-    SkAutoMutexAcquire ac(gAutoDecoderCancelMutex);
-
-    Validate();
-
-    AutoDecoderCancel* pair = gAutoDecoderCancel;
-    while (pair != NULL) {
-        if (pair->fJOptions == joptions) {
-            pair->fDecoder->cancelDecode();
-            return true;
-        }
-        pair = pair->fNext;
-    }
-    return false;
-}
-
-#ifdef SK_DEBUG
-// can only call this inside a lock on gAutoDecoderCancelMutex 
-void AutoDecoderCancel::Validate() {
-    const int gCount = gAutoDecoderCancelCount;
-
-    if (gCount == 0) {
-        SkASSERT(gAutoDecoderCancel == NULL);
-    } else {
-        SkASSERT(gCount > 0);
-        
-        AutoDecoderCancel* curr = gAutoDecoderCancel;
-        SkASSERT(curr);
-        SkASSERT(curr->fPrev == NULL);
-
-        int count = 0;
-        while (curr) {
-            count += 1;
-            SkASSERT(count <= gCount);
-            if (curr->fPrev) {
-                SkASSERT(curr->fPrev->fNext == curr);
-            }
-            if (curr->fNext) {
-                SkASSERT(curr->fNext->fPrev == curr);
-            }
-            curr = curr->fNext;
-        }
-        SkASSERT(count == gCount);
-    }
-}
-#endif
-
-///////////////////////////////////////////////////////////////////////////////
 
 using namespace android;
 
@@ -220,57 +101,6 @@ public:
     }
 };
 
-class AssetStreamAdaptor : public SkStream {
-public:
-    AssetStreamAdaptor(Asset* a) : fAsset(a) {}
-    
-    virtual bool rewind() {
-        off_t pos = fAsset->seek(0, SEEK_SET);
-        if (pos == (off_t)-1) {
-            SkDebugf("----- fAsset->seek(rewind) failed\n");
-            return false;
-        }
-        return true;
-    }
-    
-    virtual size_t read(void* buffer, size_t size) {
-        ssize_t amount;
-        
-        if (NULL == buffer) {
-            if (0 == size) {  // caller is asking us for our total length
-                return fAsset->getLength();
-            }
-            // asset->seek returns new total offset
-            // we want to return amount that was skipped
-
-            off_t oldOffset = fAsset->seek(0, SEEK_CUR);
-            if (-1 == oldOffset) {
-                SkDebugf("---- fAsset->seek(oldOffset) failed\n");
-                return 0;
-            }
-            off_t newOffset = fAsset->seek(size, SEEK_CUR);
-            if (-1 == newOffset) {
-                SkDebugf("---- fAsset->seek(%d) failed\n", size);
-                return 0;
-            }
-            amount = newOffset - oldOffset;
-        } else {
-            amount = fAsset->read(buffer, size);
-            if (amount <= 0) {
-                SkDebugf("---- fAsset->read(%d) returned %d\n", size, amount);
-            }
-        }
-        
-        if (amount < 0) {
-            amount = 0;
-        }
-        return amount;
-    }
-    
-private:
-    Asset*  fAsset;
-};
-
 ///////////////////////////////////////////////////////////////////////////////
 
 static inline int32_t validOrNeg1(bool isValid, int32_t value) {
@@ -279,7 +109,7 @@ static inline int32_t validOrNeg1(bool isValid, int32_t value) {
     return ((int32_t)isValid - 1) | value;
 }
 
-static jstring getMimeTypeString(JNIEnv* env, SkImageDecoder::Format format) {
+jstring getMimeTypeString(JNIEnv* env, SkImageDecoder::Format format) {
     static const struct {
         SkImageDecoder::Format fFormat;
         const char*            fMimeType;
@@ -322,12 +152,6 @@ static bool optionsReportSizeToVM(JNIEnv* env, jobject options) {
             !env->GetBooleanField(options, gOptions_nativeAllocFieldID);
 }
 
-static jobject nullObjectReturn(const char msg[]) {
-    if (msg) {
-        SkDebugf("--- %s\n", msg);
-    }
-    return NULL;
-}
 
 static SkPixelRef* installPixelRef(SkBitmap* bitmap, SkStream* stream,
                                    int sampleSize, bool ditherImage) {
@@ -340,6 +164,7 @@ static SkPixelRef* installPixelRef(SkBitmap* bitmap, SkStream* stream,
     }
     pr->setDitherImage(ditherImage);
     bitmap->setPixelRef(pr)->unref();
+    pr->isOpaque(bitmap);
     return pr;
 }
 
@@ -356,6 +181,7 @@ static jobject doDecode(JNIEnv* env, SkStream* stream, jobject padding,
     bool isPurgeable = forcePurgeable ||
                         (allowPurgeable && optionsPurgeable(env, options));
     bool reportSizeToVM = optionsReportSizeToVM(env, options);
+    bool preferQualityOverSpeed = false;
     
     if (NULL != options) {
         sampleSize = env->GetIntField(options, gOptions_sampleSizeFieldID);
@@ -370,6 +196,8 @@ static jobject doDecode(JNIEnv* env, SkStream* stream, jobject padding,
         jobject jconfig = env->GetObjectField(options, gOptions_configFieldID);
         prefConfig = GraphicsJNI::getNativeBitmapConfig(env, jconfig);
         doDither = env->GetBooleanField(options, gOptions_ditherFieldID);
+        preferQualityOverSpeed = env->GetBooleanField(options,
+                gOptions_preferQualityOverSpeedFieldID);
     }
 
     SkImageDecoder* decoder = SkImageDecoder::Factory(stream);
@@ -379,6 +207,7 @@ static jobject doDecode(JNIEnv* env, SkStream* stream, jobject padding,
     
     decoder->setSampleSize(sampleSize);
     decoder->setDitherImage(doDither);
+    decoder->setPreferQualityOverSpeed(preferQualityOverSpeed);
 
     NinePatchPeeker     peeker(decoder);
     JavaPixelAllocator  javaAllocator(env, reportSizeToVM);
@@ -477,7 +306,7 @@ static jobject nativeDecodeStream(JNIEnv* env, jobject clazz,
                                   jobject padding,
                                   jobject options) {  // BitmapFactory$Options
     jobject bitmap = NULL;
-    SkStream* stream = CreateJavaInputStreamAdaptor(env, is, storage);
+    SkStream* stream = CreateJavaInputStreamAdaptor(env, is, storage, 0);
 
     if (stream) {
         // for now we don't allow purgeable with java inputstreams
@@ -496,23 +325,6 @@ static ssize_t getFDSize(int fd) {
     ::lseek(fd, curr, SEEK_SET);
     return size;
 }
-
-/** Restore the file descriptor's offset in our destructor
- */
-class AutoFDSeek {
-public:
-    AutoFDSeek(int fd) : fFD(fd) {
-        fCurr = ::lseek(fd, 0, SEEK_CUR);
-    }
-    ~AutoFDSeek() {
-        if (fCurr >= 0) {
-            ::lseek(fFD, fCurr, SEEK_SET);
-        }
-    }
-private:
-    int     fFD;
-    off_t   fCurr;
-};
 
 static jobject nativeDecodeFileDescriptor(JNIEnv* env, jobject clazz,
                                           jobject fileDescriptor,
@@ -586,10 +398,8 @@ static jobject nativeDecodeAsset(JNIEnv* env, jobject clazz,
                                  jobject options) { // BitmapFactory$Options
     SkStream* stream;
     Asset* asset = reinterpret_cast<Asset*>(native_asset);
-    // assets can always be rebuilt, so force this
-    bool forcePurgeable = true;
-
-    if (forcePurgeable || optionsPurgeable(env, options)) {
+    bool forcePurgeable = optionsPurgeable(env, options);
+    if (forcePurgeable) {
         // if we could "ref/reopen" the asset, we may not need to copy it here
         // and we could assume optionsShareable, since assets are always RO
         stream = copyAssetToStream(asset);
@@ -746,6 +556,8 @@ int register_android_graphics_BitmapFactory(JNIEnv* env) {
     gOptions_purgeableFieldID = getFieldIDCheck(env, gOptions_class, "inPurgeable", "Z");
     gOptions_shareableFieldID = getFieldIDCheck(env, gOptions_class, "inInputShareable", "Z");
     gOptions_nativeAllocFieldID = getFieldIDCheck(env, gOptions_class, "inNativeAlloc", "Z");
+    gOptions_preferQualityOverSpeedFieldID = getFieldIDCheck(env, gOptions_class,
+            "inPreferQualityOverSpeed", "Z");
     gOptions_widthFieldID = getFieldIDCheck(env, gOptions_class, "outWidth", "I");
     gOptions_heightFieldID = getFieldIDCheck(env, gOptions_class, "outHeight", "I");
     gOptions_mimeFieldID = getFieldIDCheck(env, gOptions_class, "outMimeType", "Ljava/lang/String;");

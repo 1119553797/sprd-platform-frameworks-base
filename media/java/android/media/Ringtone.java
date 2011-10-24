@@ -248,11 +248,4 @@ public class Ringtone {
     void setTitle(String title) {
         mTitle = title;
     }
-    
-    public  void setLooping(boolean looping ) {
-        if (mAudio != null) {
-            mAudio.setLooping(looping);
-            Log.i("Ringtone","setLooping");
-        }
-    }
 }

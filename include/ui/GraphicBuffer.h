@@ -26,6 +26,8 @@
 #include <utils/Flattenable.h>
 #include <pixelflinger/pixelflinger.h>
 
+#include <hardware/hardware.h>
+
 struct android_native_buffer_t;
 
 namespace android {
@@ -63,6 +65,13 @@ public:
         USAGE_HW_MASK           = GRALLOC_USAGE_HW_MASK
     };
 
+    enum {
+        TRANSFORM_IDENTITY      = 0,
+        TRANSFORM_ROT_90        = HAL_TRANSFORM_ROT_90,
+        TRANSFORM_ROT_180       = HAL_TRANSFORM_ROT_180,
+        TRANSFORM_ROT_270       = HAL_TRANSFORM_ROT_270
+    };
+
     GraphicBuffer();
 
     // creates w * h buffer
@@ -79,6 +88,7 @@ public:
     uint32_t getHeight() const          { return height; }
     uint32_t getStride() const          { return stride; }
     uint32_t getUsage() const           { return usage; }
+    uint32_t getTransform() const       { return transform; }
     PixelFormat getPixelFormat() const  { return format; }
     Rect getBounds() const              { return Rect(width, height); }
     
@@ -88,15 +98,16 @@ public:
     status_t lock(uint32_t usage, const Rect& rect, void** vaddr);
     status_t lock(GGLSurface* surface, uint32_t usage);
     status_t unlock();
-    
+
     android_native_buffer_t* getNativeBuffer() const;
     
     void setIndex(int index);
     int getIndex() const;
-    void setVerticalStride(uint32_t vstride);
-    uint32_t getVerticalStride() const;
 
-protected:
+    // for debugging
+    static void dumpAllocationsToSystemLog();
+
+private:
     virtual ~GraphicBuffer();
 
     enum {
@@ -105,8 +116,12 @@ protected:
         ownData   = 2,
     };
 
-    inline const GraphicBufferMapper& getBufferMapper() const { return mBufferMapper; }
-    inline GraphicBufferMapper& getBufferMapper() { return mBufferMapper; }
+    inline const GraphicBufferMapper& getBufferMapper() const {
+        return mBufferMapper;
+    }
+    inline GraphicBufferMapper& getBufferMapper() {
+        return mBufferMapper;
+    }
     uint8_t mOwner;
 
 private:
@@ -134,7 +149,6 @@ private:
 
     GraphicBufferMapper& mBufferMapper;
     ssize_t mInitCheck;
-    uint32_t mVStride;
     int mIndex;
 };
 

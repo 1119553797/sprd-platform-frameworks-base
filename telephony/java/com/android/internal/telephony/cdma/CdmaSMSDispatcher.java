@@ -28,21 +28,21 @@ import android.database.SQLException;
 import android.os.AsyncResult;
 import android.os.Message;
 import android.os.SystemProperties;
+import android.preference.PreferenceManager;
 import android.provider.Telephony;
 import android.provider.Telephony.Sms.Intents;
-import android.preference.PreferenceManager;
-import android.util.Config;
-import android.util.Log;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage.MessageClass;
+import android.util.Config;
+import android.util.Log;
 
-import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsMessageBase;
-import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.telephony.SmsMessageBase.TextEncodingDetails;
-import com.android.internal.telephony.cdma.SmsMessage;
+import com.android.internal.telephony.TelephonyProperties;
+import com.android.internal.telephony.WspTypeDecoder;
 import com.android.internal.telephony.cdma.sms.SmsEnvelope;
 import com.android.internal.telephony.cdma.sms.UserData;
 import com.android.internal.util.HexDump;
@@ -51,20 +51,21 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.lang.Boolean;
+
+import android.content.res.Resources;
 
 
 final class CdmaSMSDispatcher extends SMSDispatcher {
     private static final String TAG = "CDMA";
 
-    private CDMAPhone mCdmaPhone;
-
     private byte[] mLastDispatchedSmsFingerprint;
     private byte[] mLastAcknowledgedSmsFingerprint;
 
+    private boolean mCheckForDuplicatePortsInOmadmWapPush = Resources.getSystem().getBoolean(
+            com.android.internal.R.bool.config_duplicate_port_omadm_wappush);
+
     CdmaSMSDispatcher(CDMAPhone phone) {
         super(phone);
-        mCdmaPhone = phone;
     }
 
     /**
@@ -129,10 +130,10 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
             Log.d(TAG, "Voicemail count=" + voicemailCount);
             // Store the voicemail count in preferences.
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(
-                    ((CDMAPhone) mPhone).getContext());
+                    mPhone.getContext());
             SharedPreferences.Editor editor = sp.edit();
             editor.putInt(CDMAPhone.VM_COUNT_CDMA, voicemailCount);
-            editor.commit();
+            editor.apply();
             ((CDMAPhone) mPhone).updateMessageWaitingIndicator(voicemailCount);
             handled = true;
         } else if (((SmsEnvelope.TELESERVICE_WMT == teleService) ||
@@ -176,7 +177,7 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
          * TODO(cleanup): Why are we using a getter method for this
          * (and for so many other sms fields)?  Trivial getters and
          * setters like this are direct violations of the style guide.
-         * If the purpose is to protect agaist writes (by not
+         * If the purpose is to protect against writes (by not
          * providing a setter) then any protection is illusory (and
          * hence bad) for cases where the values are not primitives,
          * such as this call for the header.  Since this is an issue
@@ -250,6 +251,13 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
             sourcePort |= 0xFF & pdu[index++];
             destinationPort = (0xFF & pdu[index++]) << 8;
             destinationPort |= 0xFF & pdu[index++];
+            // Some carriers incorrectly send duplicate port fields in omadm wap pushes.
+            // If configured, check for that here
+            if (mCheckForDuplicatePortsInOmadmWapPush) {
+                if (checkDuplicatePortOmadmWappush(pdu,index)) {
+                    index = index + 4; // skip duplicate port fields
+                }
+            }
         }
 
         // Lookup all other related parts
@@ -270,7 +278,7 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
             if (cursorCount != totalSegments - 1) {
                 // We don't have all the parts yet, store this one away
                 ContentValues values = new ContentValues();
-                values.put("date", new Long(0));
+                values.put("date", (long) 0);
                 values.put("pdu", HexDump.toHexString(pdu, index, pdu.length - index));
                 values.put("address", address);
                 values.put("reference_number", referenceNumber);
@@ -467,7 +475,7 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
     protected void sendSms(SmsTracker tracker) {
         HashMap map = tracker.mData;
 
-        byte smsc[] = (byte[]) map.get("smsc");
+        // byte smsc[] = (byte[]) map.get("smsc");  // unused for CDMA
         byte pdu[] = (byte[]) map.get("pdu");
 
         Message reply = obtainMessage(EVENT_SEND_SMS_COMPLETE, tracker);
@@ -500,19 +508,9 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
         }
     }
 
-    /** {@inheritDoc} */
-    protected void activateCellBroadcastSms(int activate, Message response) {
-        mCm.setCdmaBroadcastActivation((activate == 0), response);
-    }
-
-    /** {@inheritDoc} */
-    protected void getCellBroadcastSmsConfig(Message response) {
-        mCm.getCdmaBroadcastConfig(response);
-    }
-
-    /** {@inheritDoc} */
-    protected void setCellBroadcastConfig(int[] configValuesArray, Message response) {
-        mCm.setCdmaBroadcastConfig(configValuesArray, response);
+    protected void handleBroadcastSms(AsyncResult ar) {
+        // Not supported
+        Log.e(TAG, "Error! Not implemented for CDMA.");
     }
 
     private int resultToCause(int rc) {
@@ -529,5 +527,46 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
         default:
             return CommandsInterface.CDMA_SMS_FAIL_CAUSE_ENCODING_PROBLEM;
         }
+    }
+
+    /**
+     * Optional check to see if the received WapPush is an OMADM notification with erroneous
+     * extra port fields.
+     * - Some carriers make this mistake.
+     * ex: MSGTYPE-TotalSegments-CurrentSegment
+     *       -SourcePortDestPort-SourcePortDestPort-OMADM PDU
+     * @param origPdu The WAP-WDP PDU segment
+     * @param index Current Index while parsing the PDU.
+     * @return True if OrigPdu is OmaDM Push Message which has duplicate ports.
+     *         False if OrigPdu is NOT OmaDM Push Message which has duplicate ports.
+     */
+    private boolean checkDuplicatePortOmadmWappush(byte[] origPdu, int index) {
+        index += 4;
+        byte[] omaPdu = new byte[origPdu.length - index];
+        System.arraycopy(origPdu, index, omaPdu, 0, omaPdu.length);
+
+        WspTypeDecoder pduDecoder = new WspTypeDecoder(omaPdu);
+        int wspIndex = 2;
+
+        // Process header length field
+        if (pduDecoder.decodeUintvarInteger(wspIndex) == false) {
+            return false;
+        }
+
+        wspIndex += pduDecoder.getDecodedDataLength(); // advance to next field
+
+        // Process content type field
+        if (pduDecoder.decodeContentType(wspIndex) == false) {
+            return false;
+        }
+
+        String mimeType = pduDecoder.getValueString();
+        if (mimeType == null) {
+            int binaryContentType = (int)pduDecoder.getValue32();
+            if (binaryContentType == WspTypeDecoder.CONTENT_TYPE_B_PUSH_SYNCML_NOTI) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -72,8 +72,6 @@ public class AudioManager {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String RINGER_MODE_CHANGED_ACTION = "android.media.RINGER_MODE_CHANGED";
 
-    
-    
     /**
      * The new ringer mode.
      *
@@ -289,7 +287,7 @@ public class AudioManager {
      * @see #getRingerMode()
      */
     public static final int RINGER_MODE_NORMAL = 2;
-    
+
     /**
      * Vibrate type that corresponds to the ringer.
      *
@@ -692,61 +690,6 @@ public class AudioManager {
         }
      }
 
-    
- // ************Modify by luning at01-07-01 begin************
-    
-    
-    public void saveCurrProfilesMode(Context context,String currMode)
-    {
-    	Settings.System.putString(context.getContentResolver(), Settings.System.PHONE_PROFILES_MODE, currMode);	
-    }
-    
-    public String getCurrProfilesMode(Context context)
-    {
-    	String currMode = Settings.System.getString(context.getContentResolver(), Settings.System.PHONE_PROFILES_MODE);
-    	if(null == currMode || "".equals(currMode))
-    	{
-    		currMode = Settings.System.PROFILES_MODE_GENERAL;
-    	}
-    	return currMode;
-    }
-    
-    public void saveLastProfilesMode(Context context,String currMode)
-    {
-    	if(null != currMode && !currMode.equals(Settings.System.PROFILES_MODE_SILENT))
-    	{
-    		Settings.System.putString(context.getContentResolver(), Settings.System.PROFILES_LAST_MODE, currMode);
-    	}
-    }
-    
-    public String getLastProfilesMode(Context context)
-    {
-    	String lastMode = Settings.System.getString(context.getContentResolver(), Settings.System.PROFILES_LAST_MODE);
-    	if(null == lastMode || "".equals(lastMode))
-    	{
-    		lastMode = Settings.System.PROFILES_MODE_GENERAL;
-    	}
-    	return lastMode;
-    }
-    
-    public void saveProfilesVolume(Context context,String currMode,int volume)
-    {
-    	
-    	Settings.System.putInt(context.getContentResolver(), currMode + Settings.System.APPEND_FOR_VOLUME, volume);
-    }
-       
-    public int getProfilesVolume(Context context,String currMode ,int def)
-    {
-    	
-    	return Settings.System.getInt(context.getContentResolver(), currMode + Settings.System.APPEND_FOR_VOLUME , def);
-    }
-    
-    public void synPhoneVolume(Context context,int volume)
-    {
-    	Settings.System.putInt(context.getContentResolver(), Settings.System.VOLUME_RING, volume);
-    }
- // ************Modify by luning at01-07-01 end************ 
-    
     //====================================================================
     // Bluetooth SCO control
     /**
@@ -1023,9 +966,14 @@ public class AudioManager {
      */
     public static final int MODE_RINGTONE           = AudioSystem.MODE_RINGTONE;
     /**
-     * In call audio mode. A call is established.
+     * In call audio mode. A telephony call is established.
      */
     public static final int MODE_IN_CALL            = AudioSystem.MODE_IN_CALL;
+    /**
+     * @hide
+     * In communication audio mode. An audio/video chat or VoIP call is established.
+     */
+    public static final int MODE_IN_COMMUNICATION   = AudioSystem.MODE_IN_COMMUNICATION;
 
     /* Routing bits for setRouting/getRouting API */
     /**

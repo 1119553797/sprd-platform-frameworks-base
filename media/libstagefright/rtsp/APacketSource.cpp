@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "APacketSource"
 #include <utils/Log.h>
 
@@ -627,8 +627,7 @@ APacketSource::APacketSource(
 
         mFormat->setInt32(kKeyWidth, width);
         mFormat->setInt32(kKeyHeight, height);
-    } else if (!strncmp(desc.c_str(), "mpeg4-generic/", 14)
-               || !strncmp(desc.c_str(), "MPEG4-GENERIC/", 14)) {
+    } else if (!strncasecmp(desc.c_str(), "mpeg4-generic/", 14)) {
         AString val;
         if (!GetAttribute(params.c_str(), "mode", &val)
                 || (strcasecmp(val.c_str(), "AAC-lbr")
@@ -669,8 +668,6 @@ status_t APacketSource::start(MetaData *params) {
 }
 
 status_t APacketSource::stop() {
-     LOGE("stopping ");
-     signalEOS(ERROR_END_OF_STREAM);
     return OK;
 }
 
@@ -681,12 +678,11 @@ sp<MetaData> APacketSource::getFormat() {
 status_t APacketSource::read(
         MediaBuffer **out, const ReadOptions *) {
     *out = NULL;
-//	LOGE("read entering... ");
+
     Mutex::Autolock autoLock(mLock);
-    while (mEOSResult == OK && mBuffers.empty()) {  //@hong not check empty for unkown error.
+    while (mEOSResult == OK && mBuffers.empty()) {
         mCondition.wait(mLock);
     }
-//	LOGE("read ok..");
 
     if (!mBuffers.empty()) {
         const sp<ABuffer> buffer = *mBuffers.begin();
@@ -785,7 +781,7 @@ int64_t APacketSource::getQueueDurationUs(bool *eos) {
 
     const sp<ABuffer> first = *mBuffers.begin();
     const sp<ABuffer> last = *--mBuffers.end();
- 
+
     int64_t firstTimeUs;
     CHECK(first->meta()->findInt64("timeUs", &firstTimeUs));
 
@@ -795,54 +791,10 @@ int64_t APacketSource::getQueueDurationUs(bool *eos) {
     if (lastTimeUs < firstTimeUs) {
         LOGE("Huh? Time moving backwards? %lld > %lld",
              firstTimeUs, lastTimeUs);
-//@hong
-//	if (mBuffers.size() < 3) return 0;
 
-
-	int64_t secondUs;
-#if 0
-	List<sp<ABuffer> >::iterator it = --mBuffers.end();
-	while(it != mBuffers.begin())
-	{
-	 CHECK((*it)->meta()->findInt64("timeUs", &lastTimeUs));
-		if ( firstTimeUs > lastTimeUs ) 
-		{
-			LOGE("Huh?   remove: %lld", lastTimeUs);
-
-			mBuffers.erase(it);
-			it = --mBuffers.end();
-		}
-		else
-		break;
-	}
-#else
-	List<sp<ABuffer> >::iterator it = --mBuffers.end();
-	List<sp<ABuffer> >::iterator ita = mBuffers.begin();
-
-	while(it != mBuffers.begin())
-	{
-	 CHECK((*it)->meta()->findInt64("timeUs", &lastTimeUs));
-        CHECK((*ita)->meta()->findInt64("timeUs", &firstTimeUs));
-		if ( firstTimeUs > lastTimeUs ) 
-		{
-			LOGE("Huh?   remove: %lld", lastTimeUs);
-			ita = mBuffers.begin();
-			mBuffers.insert(ita, *it);
-			mBuffers.erase(it);
-			it = --mBuffers.end();
-			ita = mBuffers.begin();
-		}
-		else
-		break;
-	}
-	
-#endif
-	   LOGE("adjust ok duration time:%lld",
-             lastTimeUs - firstTimeUs); 	
-	 return lastTimeUs - firstTimeUs;
+        return 0;
     }
-   LOGE("duration time:%lld",
-             lastTimeUs - firstTimeUs); 
+
     return lastTimeUs - firstTimeUs;
 }
 

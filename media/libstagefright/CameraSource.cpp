@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "CameraSource"
 #include <utils/Log.h>
 
@@ -29,9 +29,6 @@
 #include <camera/CameraParameters.h>
 #include <utils/String8.h>
 #include <cutils/properties.h>
-
-#include <sys/ioctl.h>
-#include <linux/android_pmem.h>
 
 namespace android {
 
@@ -104,7 +101,7 @@ static int32_t getColorFormat(const char* colorFormat) {
 
 // static
 CameraSource *CameraSource::Create() {
-    sp<Camera> camera = Camera::connect();
+    sp<Camera> camera = Camera::connect(0);
 
     if (camera.get() == NULL) {
         return NULL;
@@ -151,11 +148,9 @@ CameraSource::CameraSource(const sp<Camera> &camera)
         mGlitchDurationThresholdUs = glitchDurationUs;
     }
 
-    //@zha
-    //const char *colorFormatStr = params.get(CameraParameters::KEY_VIDEO_FRAME_FORMAT);
-    //CHECK(colorFormatStr != NULL);
-    //int32_t colorFormat = getColorFormat(colorFormatStr);
-    int32_t colorFormat = OMX_COLOR_FormatYUV420SemiPlanar;
+    const char *colorFormatStr = params.get(CameraParameters::KEY_VIDEO_FRAME_FORMAT);
+    CHECK(colorFormatStr != NULL);
+    int32_t colorFormat = getColorFormat(colorFormatStr);
 
     // XXX: query camera for the stride and slice height
     // when the capability becomes available.
@@ -217,7 +212,7 @@ status_t CameraSource::stop() {
                 mFramesBeingEncoded.size());
         mFrameCompleteCondition.wait(mLock);
     }
-    mCamera.clear();
+    mCamera = NULL;
     IPCThreadState::self()->restoreCallingIdentity(token);
 
     if (mCollectStats) {
@@ -317,24 +312,11 @@ status_t CameraSource::read(
                 }
             } else {
                 mFramesBeingEncoded.push_back(frame);
-                //*buffer = new MediaBuffer(frame->pointer(), frame->size()*3/4);//@zha temporary modify for sprd camera output size error
-                *buffer = new MediaBuffer(frame->pointer(), frame->size());//@zha temporary modify for sprd camera output size error
-                LOGV("read: buffer.size() %d", (*buffer)->size());
+                *buffer = new MediaBuffer(frame->pointer(), frame->size());
                 (*buffer)->setObserver(this);
                 (*buffer)->add_ref();
                 (*buffer)->meta_data()->setInt64(kKeyTime, frameTime);
 
-		//added by jgdu to get physical address 
-		int32_t phy_addr;
-		ssize_t offset = 0;
-    		size_t size = 0;
-    		sp<IMemoryHeap> heap = frame->getMemory(&offset, &size);
-		int fd = heap->getHeapID();	
-	        struct pmem_region region;
-	        ::ioctl(fd,PMEM_GET_PHYS,&region);
-		phy_addr = region.offset+offset;								
-    		//LOGI("CameraSource::read: ID = %d, base = %p, offset = %p, size = %d pointer %p,phy addr %p", heap->getHeapID(), heap->base(), offset, size, frame->pointer(),phy_addr);
-		(*buffer)->meta_data()->setInt32(kKeyPlatformPrivate, phy_addr);
                 return OK;
             }
         }

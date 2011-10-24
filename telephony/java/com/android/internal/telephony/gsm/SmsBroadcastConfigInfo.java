@@ -30,11 +30,11 @@ package com.android.internal.telephony.gsm;
  * and 9.4.4.2.3 for UMTS.
  * All other values can be treated as empty CBM data coding scheme.
  *
- * selected false means message types specified in <fromServiceId, toServiceId>
- * and <fromCodeScheme, toCodeScheme>are not accepted, while true means accepted.
+ * selected false means message types specified in {@code <fromServiceId, toServiceId>}
+ * and {@code <fromCodeScheme, toCodeScheme>} are not accepted, while true means accepted.
  *
  */
-public class SmsBroadcastConfigInfo {
+public final class SmsBroadcastConfigInfo {
     private int fromServiceId;
     private int toServiceId;
     private int fromCodeScheme;
@@ -45,12 +45,21 @@ public class SmsBroadcastConfigInfo {
      * Initialize the object from rssi and cid.
      */
     public SmsBroadcastConfigInfo(int fromId, int toId, int fromScheme,
-            int toScheme, int selected) {
-        setFromServiceId(fromId);
-        setToServiceId(toId);
-        setFromCodeScheme(fromScheme);
-        setToCodeScheme(toScheme);
-        this.setSelected(selected);
+
+//            int toScheme, int selected) {
+  //      setFromServiceId(fromId);
+    //    setToServiceId(toId);
+   //     setFromCodeScheme(fromScheme);
+  //      setToCodeScheme(toScheme);
+  //      this.setSelected(selected);
+
+            int toScheme, boolean selected) {
+        fromServiceId = fromId;
+        toServiceId = toId;
+        fromCodeScheme = fromScheme;
+        toCodeScheme = toScheme;
+        this.selected = selected;
+
     }
 
     /**
@@ -126,7 +135,8 @@ public class SmsBroadcastConfigInfo {
     @Override
     public String toString() {
         return "SmsBroadcastConfigInfo: Id [" +
-            getFromServiceId() + "," + getToServiceId() + "] Code [" +
-            getFromCodeScheme() + "," + getToCodeScheme() + "] " + "enable"+ isSelected();
+                fromServiceId + ',' + toServiceId + "] Code [" +
+                fromCodeScheme + ',' + toCodeScheme + "] " +
+            (selected ? "ENABLED" : "DISABLED");
     }
 }

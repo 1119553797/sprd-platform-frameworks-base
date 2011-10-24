@@ -24,8 +24,7 @@
 #include "include/WAVExtractor.h"
 #include "include/OggExtractor.h"
 #include "include/MPEG2TSExtractor.h"
-#include "include/CMMBExtractor.h"
-#include "include/VideoPhoneExtractor.h"
+
 #include "matroska/MatroskaExtractor.h"
 
 #include <media/stagefright/foundation/AMessage.h>
@@ -34,10 +33,6 @@
 #include <media/stagefright/MediaExtractor.h>
 #include <media/stagefright/MetaData.h>
 #include <utils/String8.h>
-
-//added by innofidei begin
-#include "include/CMMBExtractor.h"
-//added by innofidei end
 
 namespace android {
 
@@ -84,12 +79,6 @@ sp<MediaExtractor> MediaExtractor::Create(
         return new MatroskaExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_MPEG2TS)) {
         return new MPEG2TSExtractor(source);
-    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_CMMB)) {
-        return new CMMBExtractor(source);
-    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263)) {
-        return new VideoPhoneExtractor(source, 1);
-    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_MPEG4)) {
-        return new VideoPhoneExtractor(source, 2);
     }
 
     return NULL;

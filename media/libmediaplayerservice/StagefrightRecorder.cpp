@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "StagefrightRecorder"
 #include <utils/Log.h>
 
@@ -26,10 +26,6 @@
 #include <media/stagefright/CameraSource.h>
 #include <media/stagefright/MPEG2TSWriter.h>
 #include <media/stagefright/MPEG4Writer.h>
-#include <media/stagefright/VideoPhoneWriter.h>
-#include <media/stagefright/DataSource.h>
-#include "../libstagefright/include/VideoPhoneExtractor.h"
-
 #include <media/stagefright/MediaDebug.h>
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MetaData.h>
@@ -208,13 +204,6 @@ status_t StagefrightRecorder::setCamera(const sp<ICamera> &camera) {
 status_t StagefrightRecorder::setPreviewSurface(const sp<ISurface> &surface) {
     LOGV("setPreviewSurface: %p", surface.get());
     mPreviewSurface = surface;
-    int64_t token = IPCThreadState::self()->clearCallingIdentity();
-    if ((mCamera != 0) && (mPreviewSurface != 0)) {
-		if (mCamera->previewEnabled()){
-			CHECK_EQ(OK, mCamera->setPreviewDisplay(mPreviewSurface));
-		}
-    }
-    IPCThreadState::self()->restoreCallingIdentity(token);
 
     return OK;
 }
@@ -241,7 +230,7 @@ status_t StagefrightRecorder::setOutputFile(int fd, int64_t offset, int64_t leng
     if (mOutputFd >= 0) {
         ::close(mOutputFd);
     }
-    mOutputFd = fd;//dup(fd);@jgdu for Bug1286
+    mOutputFd = dup(fd);
 
     return OK;
 }
@@ -633,7 +622,7 @@ status_t StagefrightRecorder::setParameters(const String8 &params) {
     return OK;
 }
 
-status_t StagefrightRecorder::setListener(const sp<IMediaPlayerClient> &listener) {
+status_t StagefrightRecorder::setListener(const sp<IMediaRecorderClient> &listener) {
     mListener = listener;
 
     return OK;
@@ -656,10 +645,7 @@ status_t StagefrightRecorder::start() {
         case OUTPUT_FORMAT_THREE_GPP:
         case OUTPUT_FORMAT_MPEG_4:
             return startMPEG4Recording();
-			
-	case OUTPUT_FORMAT_VIDEOPHONE:
-		return startVideoPhoneRecording();
-	
+
         case OUTPUT_FORMAT_AMR_NB:
         case OUTPUT_FORMAT_AMR_WB:
             return startAMRRecording();
@@ -946,7 +932,7 @@ status_t StagefrightRecorder::setupCameraSource() {
 
     int64_t token = IPCThreadState::self()->clearCallingIdentity();
     if (mCamera == 0) {
-        mCamera = Camera::connect();//@zha
+        mCamera = Camera::connect(mCameraId);
         if (mCamera == 0) {
             LOGE("Camera connection could not be established.");
             return -EBUSY;
@@ -1101,28 +1087,6 @@ status_t StagefrightRecorder::setupAudioEncoder(const sp<MediaWriter>& writer) {
     return OK;
 }
 
-status_t StagefrightRecorder::startVideoPhoneRecording()
-{
-    	status_t err = OK;
-    	sp<MediaWriter> writer 	= new VideoPhoneWriter(dup(mOutputFd));
-		
-	if (mVideoSource == VIDEO_SOURCE_DEFAULT
-            || mVideoSource == VIDEO_SOURCE_CAMERA) 
-	{
-        	sp<MediaSource> 	encoder;
-        	err = setupVideoEncoder(&encoder);
-        	if (err != OK) 
-			return err;
-        	writer->addSource(encoder);
-	}
-
-	sp<MetaData> meta 		= new MetaData;
-    	meta->setInt32(kKeyFileType, mOutputFormat);
-    	writer->setListener(mListener);
-    	mWriter = writer;
-	return mWriter->start(meta.get());
-}
-
 status_t StagefrightRecorder::startMPEG4Recording() {
     int32_t totalBitRate = 0;
     status_t err = OK;
@@ -1141,26 +1105,6 @@ status_t StagefrightRecorder::startMPEG4Recording() {
         if (err != OK) return err;
         writer->addSource(encoder);
         totalBitRate += mVideoBitRate;
-    }else if(mVideoSource == VIDEO_SOURCE_VIDEOPHONE_VIDEO_ES){
-        sp<MetaData> AVMeta = new MetaData();
-    	switch (mVideoEncoder) {
-        	case VIDEO_ENCODER_H263:
-	    	AVMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_H263);		
-                break;
-
-        case VIDEO_ENCODER_MPEG_4_SP:
-            	AVMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_MPEG4);
-            break;
-        default:
-            CHECK(!"Should not be here, unsupported video encoding.");
-            break;
-   	 }		
-	AVMeta->setInt32(kKeyWidth, mVideoWidth);
-	AVMeta->setInt32(kKeyHeight, mVideoHeight);
-	EsdsGenerator::generateEsds(AVMeta);
-    	sp<MediaSource> videoPhoneVideoES = new VideoPhoneSource(AVMeta,NULL);
-        writer->addSource(videoPhoneVideoES);
-        totalBitRate += mVideoBitRate;		 
     }
 
     if (mInterleaveDurationUs > 0) {

@@ -577,6 +577,10 @@ public class PhoneProxy extends Handler implements Phone {
         return mActivePhone.dial(dialString);
     }
 
+    public Connection dial(String dialString, UUSInfo uusInfo) throws CallStateException {
+        return mActivePhone.dial(dialString, uusInfo);
+    }
+
     public boolean handlePinMmi(String dialString) {
         return mActivePhone.handlePinMmi(dialString);
     }
@@ -716,6 +720,10 @@ public class PhoneProxy extends Handler implements Phone {
 
     public boolean getMute() {
         return mActivePhone.getMute();
+    }
+
+    public void setEchoSuppressionEnabled(boolean enabled) {
+        mActivePhone.setEchoSuppressionEnabled(enabled);
     }
 
     public void invokeOemRilRequestRaw(byte[] data, Message response) {

@@ -19,7 +19,35 @@
 
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Component to be used as the status bar service.  Must implement the IStatusBar
+         interface.  This name is in the ComponentName flattened format (package/class)  -->
+    <string name="config_statusBarComponent">com.android.systemui/com.android.systemui.statusbar.StatusBarService</string>
+
+    <!-- Do not translate. Defines the slots for the right-hand side icons.  That is to say, the
+         icons in the status bar that are not notifications. -->
+    <string-array name="config_statusBarIcons">
+       <item><xliff:g id="id">ime</xliff:g></item>
+       <item><xliff:g id="id">sync_failing</xliff:g></item>
+       <item><xliff:g id="id">sync_active</xliff:g></item>
+       <item><xliff:g id="id">gps</xliff:g></item>
+       <item><xliff:g id="id">bluetooth</xliff:g></item>
+       <item><xliff:g id="id">nfc</xliff:g></item>
+       <item><xliff:g id="id">tty</xliff:g></item>
+       <item><xliff:g id="id">speakerphone</xliff:g></item>
+       <item><xliff:g id="id">mute</xliff:g></item>
+       <item><xliff:g id="id">volume</xliff:g></item>
+       <item><xliff:g id="id">wifi</xliff:g></item>
+       <item><xliff:g id="id">cdma_eri</xliff:g></item>
+       <item><xliff:g id="id">data_connection</xliff:g></item>
+       <item><xliff:g id="id">phone_evdo_signal</xliff:g></item>
+       <item><xliff:g id="id">phone_signal</xliff:g></item>
+       <item><xliff:g id="id">battery</xliff:g></item>
+       <item><xliff:g id="id">alarm_clock</xliff:g></item>
+       <item><xliff:g id="id">secure</xliff:g></item>
+       <item><xliff:g id="id">clock</xliff:g></item>
+    </string-array>
+
     <!-- Flag indicating whether the surface flinger has limited
          alpha compositing functionality in hardware.  If set, the window
          manager will disable alpha trasformation in animations where not
@@ -43,6 +71,15 @@
     <!-- The duration (in milliseconds) that the radio will scan for a signal
          when there's no network connection. If the scan doesn't timeout, use zero -->
     <integer name="config_radioScanningTimeout">0</integer>
+
+    <!-- A product with no SD card == not removable. -->
+    <bool name="config_externalStorageRemovable" product="nosdcard">false</bool>
+    <!-- Configures whether the primary external storage device is
+         removable.  For example, if external storage is on an SD card,
+         it is removable; if it is built in to the device, it is not removable.
+         The default product has external storage on an SD card, which is
+         removable. -->
+    <bool name="config_externalStorageRemovable" product="default">true</bool>
 
     <!-- XXXXX NOTE THE FOLLOWING RESOURCES USE THE WRONG NAMING CONVENTION.
          Please don't copy them, copy anything else. -->
@@ -90,6 +127,7 @@
 
     <!-- Regex array of allowable upstream ifaces for tethering - for example if you want
          tethering on a new interface called "foo2" add <item>"foo\\d"</item> to the array -->
+    <!-- Interfaces will be prioritized according to the order listed -->
     <string-array translatable="false" name="config_tether_upstream_regexs">
             <item>"veth\\d"</item>
     </string-array>
@@ -115,6 +153,15 @@
     <!-- Flag indicating whether the we should enable the automatic brightness in Settings.
          Software implementation will be used if config_hardware_auto_brightness_available is not set -->
     <bool name="config_automatic_brightness_available">false</bool>
+
+    <!-- Don't name config resources like this.  It should look like config_annoyDianne -->
+    <bool name="config_annoy_dianne">true</bool>
+
+    <!-- If this is true, the screen will come on when you unplug usb/power/whatever. -->
+    <bool name="config_unplugTurnsOnScreen">false</bool>
+    
+    <!-- If this is true, the screen will fade off. -->
+    <bool name="config_animateScreenLights">true</bool>
     
     <!-- XXXXXX END OF RESOURCES USING WRONG NAMING CONVENTION -->
 
@@ -289,7 +336,14 @@
          from the touch driver. This code exists for one particular device,
          and should not be enabled for any others. -->
     <bool name="config_filterJumpyTouchEvents">false</bool>
-    
+
+    <!-- Specifies the amount of time to disable virtual keys after the screen is touched
+         in order to filter out accidental virtual key presses due to swiping gestures
+         or taps near the edge of the display.  May be 0 to disable the feature.
+         It is recommended that this value be no more than 250 ms.
+         This feature should be disabled for most devices. -->
+    <integer name="config_virtualKeyQuietTimeMillis">0</integer>
+
     <!-- Component name of the default wallpaper. This will be ImageWallpaper if not 
          specified -->
     <string name="default_wallpaper_component">@null</string>
@@ -320,4 +374,104 @@
     <!-- 2 means give warning -->
     <integer name="config_datause_notification_type">2</integer>
 
+    <!-- Enables SIP on WIFI only -->
+    <bool name="config_sip_wifi_only">true</bool>
+
+    <!-- Boolean indicating if restoring network selection should be skipped -->
+    <!-- The restoring is handled by modem if it is true-->
+    <bool translatable="false" name="skip_restoring_network_selection">false</bool>
+
+    <!-- Do not translate. Defines the slots is Two Digit Number for dialing normally not USSD -->
+    <string-array name="config_twoDigitNumberPattern">
+    </string-array>
+
+    <!-- The VoiceMail default value is displayed to my own number if it is true -->
+    <bool name="config_telephony_use_own_number_for_voicemail">false</bool>
+
+    <!-- If this value is true, Sms encoded as octet is decoded by utf8 decoder.
+         If false, decoded by Latin decoder. -->
+    <bool name="config_sms_utf8_support">false</bool>
+
+    <!-- If this value is true, The mms content-disposition field is supported correctly.
+         If false, Content-disposition fragments are ignored -->
+    <bool name="config_mms_content_disposition_support">true</bool>
+
+    <!-- If this value is true, the carrier supports sms delivery reports.
+         If false, sms delivery reports are not supported and the preference
+         option to enable/disable delivery reports is removed in the Messaging app. -->
+    <bool name="config_sms_delivery_reports_support">true</bool>
+
+    <!-- If this value is true, the carrier supports mms delivery reports.
+         If false, mms delivery reports are not supported and the preference
+         option to enable/disable delivery reports is removed in the Messaging app. -->
+    <bool name="config_mms_delivery_reports_support">true</bool>
+
+    <!-- If this value is true, the carrier supports mms read reports.
+         If false, mms read reports are not supported and the preference
+         option to enable/disable read reports is removed in the Messaging app. -->
+    <bool name="config_mms_read_reports_support">true</bool>
+
+    <!-- National Language Identifier codes for the following two config items.
+         (from 3GPP TS 23.038 V9.1.1 Table 6.2.1.2.4.1):
+          0  - reserved
+          1  - Turkish
+          2  - Spanish (single shift table only)
+          3  - Portuguese
+          4  - Bengali
+          5  - Gujarati
+          6  - Hindi
+          7  - Kannada
+          8  - Malayalam
+          9  - Oriya
+         10  - Punjabi
+         11  - Tamil
+         12  - Telugu
+         13  - Urdu
+         14+ - reserved -->
+
+    <!-- National language single shift tables to enable for SMS encoding.
+         Decoding is always enabled. 3GPP TS 23.038 states that this feature
+         should not be enabled until a formal request is issued by the relevant
+         national regulatory body. Array elements are codes from the table above.
+         Example 1: devices sold in Turkey must include table 1 to conform with
+           By-Law Number 27230. (http://www.btk.gov.tr/eng/pdf/2009/BY-LAW_SMS.pdf)
+         Example 2: devices sold in India should include tables 4 through 13
+           to enable use of the new Release 9 tables for Indic languages. -->
+    <integer-array name="config_sms_enabled_single_shift_tables"></integer-array>
+
+    <!-- National language locking shift tables to enable for SMS encoding.
+         Decoding is always enabled. 3GPP TS 23.038 states that this feature
+         should not be enabled until a formal request is issued by the relevant
+         national regulatory body. Array elements are codes from the table above.
+         Example 1: devices sold in Turkey must include table 1 after the
+           Turkish Telecommunication Authority requires locking shift encoding
+           to be enabled (est. July 2012). (http://www.btk.gov.tr/eng/pdf/2009/BY-LAW_SMS.pdf)
+           See also: http://www.mobitech.com.tr/tr/ersanozturkblog_en/index.php?entry=entry090223-160014
+         Example 2: devices sold in India should include tables 4 through 13
+         to enable use of the new Release 9 tables for Indic languages. -->
+    <integer-array name="config_sms_enabled_locking_shift_tables"></integer-array>
+
+    <!-- Set and Unsets WiMAX -->
+    <bool name="config_wimaxEnabled">false</bool>
+    <!-- Location of the wimax framwork jar location -->
+    <string name="config_wimaxServiceJarLocation"></string>
+    <!-- Location of the wimax native library locaiton -->
+    <string name="config_wimaxNativeLibLocation"></string>
+    <!-- Name of the wimax manager class -->
+    <string name="config_wimaxManagerClassname"></string>
+    <!-- Name of the wimax service class -->
+    <string name="config_wimaxServiceClassname"></string>
+    <!-- Name of the wimax state tracker clas -->
+    <string name="config_wimaxStateTrackerClassname"></string>
+
+    <!-- Set to true if the RSSI should always display CDMA signal strength
+         even on EVDO -->
+    <bool name="config_alwaysUseCdmaRssi">false</bool>
+
+    <!-- If this value is true, duplicate Source/Destination port fields
+         in WDP header of some carriers OMADM wap push are supported.
+         ex: MSGTYPE-TotalSegments-CurrentSegment
+             -SourcePortDestPort-SourcePortDestPort-OMADM PDU
+         If false, not supported. -->
+    <bool name="config_duplicate_port_omadm_wappush">false</bool>
 </resources>

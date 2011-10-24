@@ -31,11 +31,8 @@ template<typename T> class wp;
 
 // ---------------------------------------------------------------------------
 
-#define COMPARE(_op_)                                           \
+#define COMPARE_WEAK(_op_)                                      \
 inline bool operator _op_ (const sp<T>& o) const {              \
-    return m_ptr _op_ o.m_ptr;                                  \
-}                                                               \
-inline bool operator _op_ (const wp<T>& o) const {              \
     return m_ptr _op_ o.m_ptr;                                  \
 }                                                               \
 inline bool operator _op_ (const T* o) const {                  \
@@ -46,12 +43,18 @@ inline bool operator _op_ (const sp<U>& o) const {              \
     return m_ptr _op_ o.m_ptr;                                  \
 }                                                               \
 template<typename U>                                            \
-inline bool operator _op_ (const wp<U>& o) const {              \
+inline bool operator _op_ (const U* o) const {                  \
+    return m_ptr _op_ o;                                        \
+}
+
+#define COMPARE(_op_)                                           \
+COMPARE_WEAK(_op_)                                              \
+inline bool operator _op_ (const wp<T>& o) const {              \
     return m_ptr _op_ o.m_ptr;                                  \
 }                                                               \
 template<typename U>                                            \
-inline bool operator _op_ (const U* o) const {                  \
-    return m_ptr _op_ o;                                        \
+inline bool operator _op_ (const wp<U>& o) const {              \
+    return m_ptr _op_ o.m_ptr;                                  \
 }
 
 // ---------------------------------------------------------------------------
@@ -109,10 +112,23 @@ public:
         getWeakRefs()->trackMe(enable, retain); 
     }
 
+    // used to override the RefBase destruction.
+    class Destroyer {
+        friend class RefBase;
+    public:
+        virtual ~Destroyer();
+    private:
+        virtual void destroy(RefBase const* base) = 0;
+    };
+
+    // Make sure to never acquire a strong reference from this function. The
+    // same restrictions than for destructors apply.
+    void setDestroyer(Destroyer* destroyer);
+
 protected:
                             RefBase();
     virtual                 ~RefBase();
-    
+
     //! Flags for extendObjectLifetime()
     enum {
         OBJECT_LIFETIME_WEAK    = 0x0001,
@@ -274,13 +290,43 @@ public:
     inline  T* unsafe_get() const { return m_ptr; }
 
     // Operators
-        
-    COMPARE(==)
-    COMPARE(!=)
-    COMPARE(>)
-    COMPARE(<)
-    COMPARE(<=)
-    COMPARE(>=)
+
+    COMPARE_WEAK(==)
+    COMPARE_WEAK(!=)
+    COMPARE_WEAK(>)
+    COMPARE_WEAK(<)
+    COMPARE_WEAK(<=)
+    COMPARE_WEAK(>=)
+
+    inline bool operator == (const wp<T>& o) const {
+        return (m_ptr == o.m_ptr) && (m_refs == o.m_refs);
+    }
+    template<typename U>
+    inline bool operator == (const wp<U>& o) const {
+        return m_ptr == o.m_ptr;
+    }
+
+    inline bool operator > (const wp<T>& o) const {
+        return (m_ptr == o.m_ptr) ? (m_refs > o.m_refs) : (m_ptr > o.m_ptr);
+    }
+    template<typename U>
+    inline bool operator > (const wp<U>& o) const {
+        return (m_ptr == o.m_ptr) ? (m_refs > o.m_refs) : (m_ptr > o.m_ptr);
+    }
+
+    inline bool operator < (const wp<T>& o) const {
+        return (m_ptr == o.m_ptr) ? (m_refs < o.m_refs) : (m_ptr < o.m_ptr);
+    }
+    template<typename U>
+    inline bool operator < (const wp<U>& o) const {
+        return (m_ptr == o.m_ptr) ? (m_refs < o.m_refs) : (m_ptr < o.m_ptr);
+    }
+                         inline bool operator != (const wp<T>& o) const { return m_refs != o.m_refs; }
+    template<typename U> inline bool operator != (const wp<U>& o) const { return !operator == (o); }
+                         inline bool operator <= (const wp<T>& o) const { return !operator > (o); }
+    template<typename U> inline bool operator <= (const wp<U>& o) const { return !operator > (o); }
+                         inline bool operator >= (const wp<T>& o) const { return !operator < (o); }
+    template<typename U> inline bool operator >= (const wp<U>& o) const { return !operator < (o); }
 
 private:
     template<typename Y> friend class sp;
@@ -294,6 +340,7 @@ template <typename T>
 TextOutput& operator<<(TextOutput& to, const wp<T>& val);
 
 #undef COMPARE
+#undef COMPARE_WEAK
 
 // ---------------------------------------------------------------------------
 // No user serviceable parts below here.
@@ -333,9 +380,10 @@ sp<T>::~sp()
 
 template<typename T>
 sp<T>& sp<T>::operator = (const sp<T>& other) {
-    if (other.m_ptr) other.m_ptr->incStrong(this);
+    T* otherPtr(other.m_ptr);
+    if (otherPtr) otherPtr->incStrong(this);
     if (m_ptr) m_ptr->decStrong(this);
-    m_ptr = other.m_ptr;
+    m_ptr = otherPtr;
     return *this;
 }
 
@@ -351,9 +399,10 @@ sp<T>& sp<T>::operator = (T* other)
 template<typename T> template<typename U>
 sp<T>& sp<T>::operator = (const sp<U>& other)
 {
-    if (other.m_ptr) other.m_ptr->incStrong(this);
+    U* otherPtr(other.m_ptr);
+    if (otherPtr) otherPtr->incStrong(this);
     if (m_ptr) m_ptr->decStrong(this);
-    m_ptr = other.m_ptr;
+    m_ptr = otherPtr;
     return *this;
 }
 
@@ -466,10 +515,12 @@ wp<T>& wp<T>::operator = (T* other)
 template<typename T>
 wp<T>& wp<T>::operator = (const wp<T>& other)
 {
-    if (other.m_ptr) other.m_refs->incWeak(this);
+    weakref_type* otherRefs(other.m_refs);
+    T* otherPtr(other.m_ptr);
+    if (otherPtr) otherRefs->incWeak(this);
     if (m_ptr) m_refs->decWeak(this);
-    m_ptr = other.m_ptr;
-    m_refs = other.m_refs;
+    m_ptr = otherPtr;
+    m_refs = otherRefs;
     return *this;
 }
 
@@ -478,8 +529,9 @@ wp<T>& wp<T>::operator = (const sp<T>& other)
 {
     weakref_type* newRefs =
         other != NULL ? other->createWeak(this) : 0;
+    T* otherPtr(other.m_ptr);
     if (m_ptr) m_refs->decWeak(this);
-    m_ptr = other.get();
+    m_ptr = otherPtr;
     m_refs = newRefs;
     return *this;
 }
@@ -498,10 +550,12 @@ wp<T>& wp<T>::operator = (U* other)
 template<typename T> template<typename U>
 wp<T>& wp<T>::operator = (const wp<U>& other)
 {
-    if (other.m_ptr) other.m_refs->incWeak(this);
+    weakref_type* otherRefs(other.m_refs);
+    U* otherPtr(other.m_ptr);
+    if (otherPtr) otherRefs->incWeak(this);
     if (m_ptr) m_refs->decWeak(this);
-    m_ptr = other.m_ptr;
-    m_refs = other.m_refs;
+    m_ptr = otherPtr;
+    m_refs = otherRefs;
     return *this;
 }
 
@@ -510,8 +564,9 @@ wp<T>& wp<T>::operator = (const sp<U>& other)
 {
     weakref_type* newRefs =
         other != NULL ? other->createWeak(this) : 0;
+    U* otherPtr(other.m_ptr);
     if (m_ptr) m_refs->decWeak(this);
-    m_ptr = other.get();
+    m_ptr = otherPtr;
     m_refs = newRefs;
     return *this;
 }

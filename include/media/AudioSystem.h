@@ -156,6 +156,7 @@ public:
         MODE_NORMAL = 0,
         MODE_RINGTONE,
         MODE_IN_CALL,
+        MODE_IN_COMMUNICATION,
         NUM_MODES  // not a valid entry, denotes end-of-list
     };
 
@@ -166,6 +167,15 @@ public:
         NS_DISABLE    = 0,
         TX_IIR_ENABLE = 0x0004,
         TX_DISABLE    = 0
+    };
+
+    // special audio session values
+    enum audio_sessions {
+        SESSION_OUTPUT_STAGE = -1, // session for effects attached to a particular output stream
+                                   // (value must be less than 0)
+        SESSION_OUTPUT_MIX = 0,    // session for effects applied to output mix. These effects can
+                                   // be moved by audio policy manager to another output stream
+                                   // (value must be 0)
     };
 
     /* These are static methods to control the system-wide AudioFlinger
@@ -234,6 +244,8 @@ public:
     static status_t getRenderPosition(uint32_t *halFrames, uint32_t *dspFrames, int stream = DEFAULT);
 
     static unsigned int  getInputFramesLost(audio_io_handle_t ioHandle);
+
+    static int newAudioSessionId();
     //
     // AudioPolicyService interface
     //
@@ -354,8 +366,12 @@ public:
                                         uint32_t format = FORMAT_DEFAULT,
                                         uint32_t channels = CHANNEL_OUT_STEREO,
                                         output_flags flags = OUTPUT_FLAG_INDIRECT);
-    static status_t startOutput(audio_io_handle_t output, AudioSystem::stream_type stream);
-    static status_t stopOutput(audio_io_handle_t output, AudioSystem::stream_type stream);
+    static status_t startOutput(audio_io_handle_t output,
+                                AudioSystem::stream_type stream,
+                                int session = 0);
+    static status_t stopOutput(audio_io_handle_t output,
+                               AudioSystem::stream_type stream,
+                               int session = 0);
     static void releaseOutput(audio_io_handle_t output);
     static audio_io_handle_t getInput(int inputSource,
                                     uint32_t samplingRate = 0,
@@ -370,6 +386,16 @@ public:
                                       int indexMax);
     static status_t setStreamVolumeIndex(stream_type stream, int index);
     static status_t getStreamVolumeIndex(stream_type stream, int *index);
+
+    static uint32_t getStrategyForStream(stream_type stream);
+
+    static audio_io_handle_t getOutputForEffect(effect_descriptor_t *desc);
+    static status_t registerEffect(effect_descriptor_t *desc,
+                                    audio_io_handle_t output,
+                                    uint32_t strategy,
+                                    int session,
+                                    int id);
+    static status_t unregisterEffect(int id);
 
     static const sp<IAudioPolicyService>& get_audio_policy_service();
 
@@ -444,7 +470,7 @@ public:
     AudioParameter(const String8& keyValuePairs);
     virtual ~AudioParameter();
 
-    // reserved parameter keys for changeing standard parameters with setParameters() function.
+    // reserved parameter keys for changing standard parameters with setParameters() function.
     // Using these keys is mandatory for AudioFlinger to properly monitor audio output/input
     // configuration changes and act accordingly.
     //  keyRouting: to change audio routing, value is an int in AudioSystem::audio_devices
@@ -452,11 +478,14 @@ public:
     //  keyFormat: to change audio format, value is an int in AudioSystem::audio_format
     //  keyChannels: to change audio channel configuration, value is an int in AudioSystem::audio_channels
     //  keyFrameCount: to change audio output frame count, value is an int
+    //  keyInputSource: to change audio input source, value is an int in audio_source
+    //     (defined in media/mediarecorder.h)
     static const char *keyRouting;
     static const char *keySamplingRate;
     static const char *keyFormat;
     static const char *keyChannels;
     static const char *keyFrameCount;
+    static const char *keyInputSource;
 
     String8 toString();
 

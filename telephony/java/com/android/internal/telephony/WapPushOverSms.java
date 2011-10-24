@@ -156,6 +156,14 @@ public class WapPushOverSms {
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_NOTIFICATION;
                     break;        
                 // End liu 20110603
+
+                case WspTypeDecoder.CONTENT_TYPE_B_SUPL_INIT:
+                    mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_SUPL_INIT;
+                    break;
+                case WspTypeDecoder.CONTENT_TYPE_B_PUSH_SYNCML_NOTI:
+                    mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_PUSH_SYNCML_NOTI;
+                    break;
+
                 default:
                     if (Config.LOGD) {
                         Log.w(LOG_TAG,
@@ -178,6 +186,7 @@ public class WapPushOverSms {
                 binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_MMS;
             } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_VND_DOCOMO_PF)) {
                 binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_VND_DOCOMO_PF;
+
             // Start liuhongxing 20110603    
             } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_WBXML)) {
                 binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_DM_WBXML;
@@ -186,6 +195,12 @@ public class WapPushOverSms {
             } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_NOTIFICATION)) {
                 binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_DM_NOTIFICATION;           
             // End liu 20110603
+
+            } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_SUPL_INIT)) {
+                binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_SUPL_INIT;
+            } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_PUSH_SYNCML_NOTI)) {
+                binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_PUSH_SYNCML_NOTI;
+
             } else {
                 if (Config.LOGD) Log.w(LOG_TAG, "Received PDU. Unknown Content-Type = " + mimeType);
                 return Intents.RESULT_SMS_HANDLED;

@@ -158,7 +158,7 @@ It is not necessary to put external JARs in the assets folder.
 <ul>
     <li>Create an {@link android.app.Dialog app.Dialog} class </li>
     <li>Create an {@link android.app.AlertDialog app.AlertDialog} class </li>
-    <li>Set the {@link android.R.style#Theme_Dialog} <em>theme</em> attribute to <code>&#064;android:style/Theme.Dialog</code>
+    <li>Set the {@link android.R.style#Theme_Dialog} <em>theme</em> attribute to <code>&#64;android:style/Theme.Dialog</code>
         in your AndroidManifest.xml file. For example:    
     <pre>&lt;activity class=&quot;AddRssItem&quot; android:label=&quot;Add an item&quot; android:theme=&quot;&#064;android:style/Theme.Dialog&quot;/&gt;</pre></li>
 </ul>
@@ -655,7 +655,7 @@ and the {@link android.os.Handler} documentation.</p>
         and <code>STRIKE</code> (strikethrough).
         So, for example, in res/values/strings.xml you could declare this:<br />
         <code>&lt;resource&gt;<br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&lt;string&gt;id=&quot;@+id/styled_welcome_message&quot;&gt;We
+        &nbsp;&nbsp;&nbsp;&nbsp;&lt;string&nbsp;id=&quot;@+id/styled_welcome_message&quot;&gt;We
         are &lt;b&gt;&lt;i&gt;so&lt;/i&gt;&lt;/b&gt; glad to see you.&lt;/string&gt;<br />
         &lt;/resources&gt;</code></li>
     <li>To style text on the fly, or to add highlighting or more complex styling,

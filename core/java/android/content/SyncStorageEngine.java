@@ -95,7 +95,7 @@ public class SyncStorageEngine extends Handler {
 
     public static final long NOT_IN_BACKOFF_MODE = -1;
 
-    private static final Intent SYNC_CONNECTION_SETTING_CHANGED_INTENT =
+    public static final Intent SYNC_CONNECTION_SETTING_CHANGED_INTENT =
             new Intent("com.android.sync.SYNC_CONN_STATUS_CHANGED");
 
     // TODO: i18n -- grab these out of resources.
@@ -317,7 +317,9 @@ public class SyncStorageEngine extends Handler {
         if (sSyncStorageEngine != null) {
             return;
         }
-        File dataDir = Environment.getDataDirectory();
+        // This call will return the correct directory whether Encrypted File Systems is
+        // enabled or not.
+        File dataDir = Environment.getSecureDataDirectory();
         sSyncStorageEngine = new SyncStorageEngine(context, dataDir);
     }
 
@@ -409,7 +411,7 @@ public class SyncStorageEngine extends Handler {
     }
 
     public void setSyncAutomatically(Account account, String providerName, boolean sync) {
-        Log.d(TAG, "setSyncAutomatically: " + account + ", provider " + providerName
+        Log.d(TAG, "setSyncAutomatically: " + /*account +*/ ", provider " + providerName
                 + " -> " + sync);
         synchronized (mAuthorities) {
             AuthorityInfo authority = getOrCreateAuthorityLocked(account, providerName, -1, false);
@@ -523,6 +525,32 @@ public class SyncStorageEngine extends Handler {
         }
     }
 
+    public void clearAllBackoffs() {
+        boolean changed = false;
+        synchronized (mAuthorities) {
+            for (AccountInfo accountInfo : mAccounts.values()) {
+                for (AuthorityInfo authorityInfo : accountInfo.authorities.values()) {
+                    if (authorityInfo.backoffTime != NOT_IN_BACKOFF_MODE
+                            || authorityInfo.backoffDelay != NOT_IN_BACKOFF_MODE) {
+                        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                            Log.v(TAG, "clearAllBackoffs:"
+                                    + " authority:" + authorityInfo.authority
+                                    + " account:" + accountInfo.account.name
+                                    + " backoffTime was: " + authorityInfo.backoffTime
+                                    + " backoffDelay was: " + authorityInfo.backoffDelay);
+                        }
+                        authorityInfo.backoffTime = NOT_IN_BACKOFF_MODE;
+                        authorityInfo.backoffDelay = NOT_IN_BACKOFF_MODE;
+                        changed = true;
+                    }
+                }
+            }
+        }
+
+        if (changed) {
+            reportChange(ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS);
+        }
+    }
     public void setDelayUntilTime(Account account, String providerName, long delayUntil) {
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "setDelayUntil: " + account + ", provider " + providerName

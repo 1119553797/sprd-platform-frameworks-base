@@ -19,6 +19,7 @@ package android.database.sqlite;
 import com.google.android.collect.Maps;
 
 import android.app.ActivityThread;
+import android.app.AppGlobals;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -32,6 +33,8 @@ import android.util.Config;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Pair;
+
+import dalvik.system.BlockGuard;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -1134,7 +1137,8 @@ public class SQLiteDatabase extends SQLiteClosable {
      *
      * @param sql The raw SQL statement, may contain ? for unknown values to be
      *            bound later.
-     * @return a pre-compiled statement object.
+     * @return A pre-compiled {@link SQLiteStatement} object. Note that
+     * {@link SQLiteStatement}s are not synchronized, see the documentation for more details.
      */
     public SQLiteStatement compileStatement(String sql) throws SQLException {
         lock();
@@ -1175,7 +1179,8 @@ public class SQLiteDatabase extends SQLiteClosable {
      *            default sort order, which may be unordered.
      * @param limit Limits the number of rows returned by the query,
      *            formatted as LIMIT clause. Passing null denotes no LIMIT clause.
-     * @return A Cursor object, which is positioned before the first entry
+     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
+     * {@link Cursor}s are not synchronized, see the documentation for more details.
      * @see Cursor
      */
     public Cursor query(boolean distinct, String table, String[] columns,
@@ -1213,7 +1218,8 @@ public class SQLiteDatabase extends SQLiteClosable {
      *            default sort order, which may be unordered.
      * @param limit Limits the number of rows returned by the query,
      *            formatted as LIMIT clause. Passing null denotes no LIMIT clause.
-     * @return A Cursor object, which is positioned before the first entry
+     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
+     * {@link Cursor}s are not synchronized, see the documentation for more details.
      * @see Cursor
      */
     public Cursor queryWithFactory(CursorFactory cursorFactory,
@@ -1254,7 +1260,8 @@ public class SQLiteDatabase extends SQLiteClosable {
      * @param orderBy How to order the rows, formatted as an SQL ORDER BY clause
      *            (excluding the ORDER BY itself). Passing null will use the
      *            default sort order, which may be unordered.
-     * @return A {@link Cursor} object, which is positioned before the first entry
+     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
+     * {@link Cursor}s are not synchronized, see the documentation for more details.
      * @see Cursor
      */
     public Cursor query(String table, String[] columns, String selection,
@@ -1291,7 +1298,8 @@ public class SQLiteDatabase extends SQLiteClosable {
      *            default sort order, which may be unordered.
      * @param limit Limits the number of rows returned by the query,
      *            formatted as LIMIT clause. Passing null denotes no LIMIT clause.
-     * @return A {@link Cursor} object, which is positioned before the first entry
+     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
+     * {@link Cursor}s are not synchronized, see the documentation for more details.
      * @see Cursor
      */
     public Cursor query(String table, String[] columns, String selection,
@@ -1309,7 +1317,8 @@ public class SQLiteDatabase extends SQLiteClosable {
      * @param selectionArgs You may include ?s in where clause in the query,
      *     which will be replaced by the values from selectionArgs. The
      *     values will be bound as Strings.
-     * @return A {@link Cursor} object, which is positioned before the first entry
+     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
+     * {@link Cursor}s are not synchronized, see the documentation for more details.
      */
     public Cursor rawQuery(String sql, String[] selectionArgs) {
         return rawQueryWithFactory(null, sql, selectionArgs, null);
@@ -1324,7 +1333,8 @@ public class SQLiteDatabase extends SQLiteClosable {
      *     which will be replaced by the values from selectionArgs. The
      *     values will be bound as Strings.
      * @param editTable the name of the first table, which is editable
-     * @return A {@link Cursor} object, which is positioned before the first entry
+     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
+     * {@link Cursor}s are not synchronized, see the documentation for more details.
      */
     public Cursor rawQueryWithFactory(
             CursorFactory cursorFactory, String sql, String[] selectionArgs,
@@ -1332,6 +1342,7 @@ public class SQLiteDatabase extends SQLiteClosable {
         if (!isOpen()) {
             throw new IllegalStateException("database not open");
         }
+        BlockGuard.getThreadPolicy().onReadFromDisk();
         long timeStart = 0;
 
         if (Config.LOGV || mSlowQueryThreshold != -1) {
@@ -1379,7 +1390,8 @@ public class SQLiteDatabase extends SQLiteClosable {
      *     values will be bound as Strings.
      * @param initialRead set the initial count of items to read from the cursor
      * @param maxRead set the count of items to read on each iteration after the first
-     * @return A {@link Cursor} object, which is positioned before the first entry
+     * @return A {@link Cursor} object, which is positioned before the first entry. Note that
+     * {@link Cursor}s are not synchronized, see the documentation for more details.
      *
      * This work is incomplete and not fully tested or reviewed, so currently
      * hidden.
@@ -1397,9 +1409,13 @@ public class SQLiteDatabase extends SQLiteClosable {
      * Convenience method for inserting a row into the database.
      *
      * @param table the table to insert the row into
-     * @param nullColumnHack SQL doesn't allow inserting a completely empty row,
-     *            so if initialValues is empty this column will explicitly be
-     *            assigned a NULL value
+     * @param nullColumnHack optional; may be <code>null</code>.
+     *            SQL doesn't allow inserting a completely empty row without
+     *            naming at least one column name.  If your provided <code>values</code> is
+     *            empty, no column names are known and an empty row can't be inserted.
+     *            If not set to null, the <code>nullColumnHack</code> parameter
+     *            provides the name of nullable column name to explicitly insert a NULL into
+     *            in the case where your <code>values</code> is empty.
      * @param values this map contains the initial column values for the
      *            row. The keys should be the column names and the values the
      *            column values
@@ -1418,9 +1434,13 @@ public class SQLiteDatabase extends SQLiteClosable {
      * Convenience method for inserting a row into the database.
      *
      * @param table the table to insert the row into
-     * @param nullColumnHack SQL doesn't allow inserting a completely empty row,
-     *            so if initialValues is empty this column will explicitly be
-     *            assigned a NULL value
+     * @param nullColumnHack optional; may be <code>null</code>.
+     *            SQL doesn't allow inserting a completely empty row without
+     *            naming at least one column name.  If your provided <code>values</code> is
+     *            empty, no column names are known and an empty row can't be inserted.
+     *            If not set to null, the <code>nullColumnHack</code> parameter
+     *            provides the name of nullable column name to explicitly insert a NULL into
+     *            in the case where your <code>values</code> is empty.
      * @param values this map contains the initial column values for the
      *            row. The keys should be the column names and the values the
      *            column values
@@ -1436,11 +1456,15 @@ public class SQLiteDatabase extends SQLiteClosable {
      * Convenience method for replacing a row in the database.
      *
      * @param table the table in which to replace the row
-     * @param nullColumnHack SQL doesn't allow inserting a completely empty row,
-     *            so if initialValues is empty this row will explicitly be
-     *            assigned a NULL value
+     * @param nullColumnHack optional; may be <code>null</code>.
+     *            SQL doesn't allow inserting a completely empty row without
+     *            naming at least one column name.  If your provided <code>initialValues</code> is
+     *            empty, no column names are known and an empty row can't be inserted.
+     *            If not set to null, the <code>nullColumnHack</code> parameter
+     *            provides the name of nullable column name to explicitly insert a NULL into
+     *            in the case where your <code>initialValues</code> is empty.
      * @param initialValues this map contains the initial column values for
-     *   the row. The key
+     *   the row.
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
     public long replace(String table, String nullColumnHack, ContentValues initialValues) {
@@ -1457,9 +1481,13 @@ public class SQLiteDatabase extends SQLiteClosable {
      * Convenience method for replacing a row in the database.
      *
      * @param table the table in which to replace the row
-     * @param nullColumnHack SQL doesn't allow inserting a completely empty row,
-     *            so if initialValues is empty this row will explicitly be
-     *            assigned a NULL value
+     * @param nullColumnHack optional; may be <code>null</code>.
+     *            SQL doesn't allow inserting a completely empty row without
+     *            naming at least one column name.  If your provided <code>initialValues</code> is
+     *            empty, no column names are known and an empty row can't be inserted.
+     *            If not set to null, the <code>nullColumnHack</code> parameter
+     *            provides the name of nullable column name to explicitly insert a NULL into
+     *            in the case where your <code>initialValues</code> is empty.
      * @param initialValues this map contains the initial column values for
      *   the row. The key
      * @throws SQLException
@@ -1475,9 +1503,13 @@ public class SQLiteDatabase extends SQLiteClosable {
      * General method for inserting a row into the database.
      *
      * @param table the table to insert the row into
-     * @param nullColumnHack SQL doesn't allow inserting a completely empty row,
-     *            so if initialValues is empty this column will explicitly be
-     *            assigned a NULL value
+     * @param nullColumnHack optional; may be <code>null</code>.
+     *            SQL doesn't allow inserting a completely empty row without
+     *            naming at least one column name.  If your provided <code>initialValues</code> is
+     *            empty, no column names are known and an empty row can't be inserted.
+     *            If not set to null, the <code>nullColumnHack</code> parameter
+     *            provides the name of nullable column name to explicitly insert a NULL into
+     *            in the case where your <code>initialValues</code> is empty.
      * @param initialValues this map contains the initial column values for the
      *            row. The keys should be the column names and the values the
      *            column values
@@ -1489,6 +1521,7 @@ public class SQLiteDatabase extends SQLiteClosable {
      */
     public long insertWithOnConflict(String table, String nullColumnHack,
             ContentValues initialValues, int conflictAlgorithm) {
+        BlockGuard.getThreadPolicy().onWriteToDisk();
         if (!isOpen()) {
             throw new IllegalStateException("database not open");
         }
@@ -1580,6 +1613,7 @@ public class SQLiteDatabase extends SQLiteClosable {
      *         whereClause.
      */
     public int delete(String table, String whereClause, String[] whereArgs) {
+        BlockGuard.getThreadPolicy().onWriteToDisk();
         lock();
         if (!isOpen()) {
             throw new IllegalStateException("database not open");
@@ -1635,6 +1669,7 @@ public class SQLiteDatabase extends SQLiteClosable {
      */
     public int updateWithOnConflict(String table, ContentValues values,
             String whereClause, String[] whereArgs, int conflictAlgorithm) {
+        BlockGuard.getThreadPolicy().onWriteToDisk();
         if (values == null || values.size() == 0) {
             throw new IllegalArgumentException("Empty values");
         }
@@ -1711,12 +1746,13 @@ public class SQLiteDatabase extends SQLiteClosable {
 
     /**
      * Execute a single SQL statement that is not a query. For example, CREATE
-     * TABLE, DELETE, INSERT, etc. Multiple statements separated by ;s are not
-     * supported. it takes a write lock
+     * TABLE, DELETE, INSERT, etc. Multiple statements separated by semicolons are not
+     * supported.  Takes a write lock.
      *
-     * @throws SQLException If the SQL string is invalid for some reason
+     * @throws SQLException if the SQL string is invalid
      */
     public void execSQL(String sql) throws SQLException {
+        BlockGuard.getThreadPolicy().onWriteToDisk();
         long timeStart = SystemClock.uptimeMillis();
         lock();
         if (!isOpen()) {
@@ -1744,14 +1780,15 @@ public class SQLiteDatabase extends SQLiteClosable {
 
     /**
      * Execute a single SQL statement that is not a query. For example, CREATE
-     * TABLE, DELETE, INSERT, etc. Multiple statements separated by ;s are not
-     * supported. it takes a write lock,
+     * TABLE, DELETE, INSERT, etc. Multiple statements separated by semicolons are not
+     * supported.  Takes a write lock.
      *
      * @param sql
      * @param bindArgs only byte[], String, Long and Double are supported in bindArgs.
-     * @throws SQLException If the SQL string is invalid for some reason
+     * @throws SQLException if the SQL string is invalid
      */
     public void execSQL(String sql, Object[] bindArgs) throws SQLException {
+        BlockGuard.getThreadPolicy().onWriteToDisk();
         if (bindArgs == null) {
             throw new IllegalArgumentException("Empty bindArgs");
         }
@@ -1905,7 +1942,7 @@ public class SQLiteDatabase extends SQLiteClosable {
         // main thread, or when we are invoked via Binder (e.g. ContentProvider).
         // Hopefully the full path to the database will be informative enough.
 
-        String blockingPackage = ActivityThread.currentPackageName();
+        String blockingPackage = AppGlobals.getInitialPackage();
         if (blockingPackage == null) blockingPackage = "";
 
         EventLog.writeEvent(

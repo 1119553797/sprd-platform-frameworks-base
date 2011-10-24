@@ -26,15 +26,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.hardware.usb.UsbManager;
 import android.net.ConnectivityManager;
 import android.net.InterfaceConfiguration;
 import android.net.IConnectivityManager;
 import android.net.INetworkManagementEventObserver;
 import android.net.NetworkInfo;
 import android.net.NetworkUtils;
-import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.INetworkManagementService;
@@ -111,7 +112,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private boolean mUsbConnected;       // track the status of USB connection
 
     public Tethering(Context context, Looper looper) {
-        Log.d(TAG, "Tethering starting");
         mContext = context;
         mLooper = looper;
 
@@ -135,7 +135,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
 
         mStateReceiver = new StateReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        filter.addAction(UsbManager.ACTION_USB_STATE);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(Intent.ACTION_BOOT_COMPLETED);
         mContext.registerReceiver(mStateReceiver, filter);
@@ -424,10 +424,9 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private class StateReceiver extends BroadcastReceiver {
         public void onReceive(Context content, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
-                mUsbConnected = (intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)
-                        == BatteryManager.BATTERY_PLUGGED_USB);
-                Tethering.this.updateUsbStatus();
+            if (action.equals(UsbManager.ACTION_USB_STATE)) {
+                mUsbConnected = intent.getExtras().getBoolean(UsbManager.USB_CONNECTED);
+                updateUsbStatus();
             } else if (action.equals(Intent.ACTION_MEDIA_SHARED)) {
                 mUsbMassStorageOff = false;
                 updateUsbStatus();
@@ -436,7 +435,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                 mUsbMassStorageOff = true;
                 updateUsbStatus();
             } else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                Log.d(TAG, "Tethering got CONNECTIVITY_ACTION");
                 mTetherMasterSM.sendMessage(TetherMasterSM.CMD_UPSTREAM_CHANGED);
             } else if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
                 mBooted = true;
@@ -1297,20 +1295,20 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                     return null;
                 }
 
-                for (String iface : ifaces) {
-                    for (String regex : mUpstreamIfaceRegexs) {
+                for (String regex : mUpstreamIfaceRegexs) {
+                    for (String iface : ifaces) {
                         if (iface.matches(regex)) {
-                            // verify it is up!
+                            // verify it is active
                             InterfaceConfiguration ifcg = null;
                             try {
                                 ifcg = service.getInterfaceConfig(iface);
+                                if (ifcg.isActive()) {
+                                    return iface;
+                                }
                             } catch (Exception e) {
                                 Log.e(TAG, "Error getting iface config :" + e);
                                 // ignore - try next
                                 continue;
-                            }
-                            if (ifcg.interfaceFlags.contains("up")) {
-                                return iface;
                             }
                         }
                     }

@@ -7,25 +7,14 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:=               \
-    MediaPhoneClient.cpp        \
     MediaRecorderClient.cpp     \
     MediaPlayerService.cpp      \
     MetadataRetrieverClient.cpp \
     TestPlayerStub.cpp          \
-    VorbisPlayer.cpp            \
-    VorbisMetadataRetriever.cpp \
-    MidiMetadataRetriever.cpp 	\
-    MidiFile.cpp
-
-ifeq ($(BUILD_WITH_FULL_STAGEFRIGHT),true)
-
-LOCAL_SRC_FILES +=                      \
-    StagefrightPlayer.cpp               \
+    MidiMetadataRetriever.cpp   \
+    MidiFile.cpp                \
+    StagefrightPlayer.cpp       \
     StagefrightRecorder.cpp
-
-LOCAL_CFLAGS += -DBUILD_WITH_FULL_STAGEFRIGHT=1
-
-endif
 
 ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
 LOCAL_LDLIBS += -ldl -lpthread
@@ -38,7 +27,7 @@ LOCAL_SHARED_LIBRARIES :=     		\
 	libvorbisidec         			\
 	libsonivox            			\
 	libmedia              			\
-	libcamera_client                        \
+	libcamera_client      			\
 	libandroid_runtime    			\
 	libstagefright        			\
 	libstagefright_omx    			\
@@ -64,7 +53,7 @@ endif
 LOCAL_C_INCLUDES :=                                                 \
 	$(JNI_H_INCLUDE)                                                \
 	$(call include-path-for, graphics corecg)                       \
-	$(TOP)/external/opencore/extern_libs_v2/khronos/openmax/include \
+	$(TOP)/frameworks/base/include/media/stagefright/openmax \
 	$(TOP)/frameworks/base/media/libstagefright/include             \
 	$(TOP)/frameworks/base/media/libstagefright/rtsp                \
         $(TOP)/external/tremolo/Tremolo

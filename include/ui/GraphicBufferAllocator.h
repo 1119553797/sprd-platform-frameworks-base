@@ -68,14 +68,15 @@ public:
     status_t free(buffer_handle_t handle);
 
     void dump(String8& res) const;
+    static void dumpToSystemLog();
 
 private:
     struct alloc_rec_t {
         uint32_t w;
         uint32_t h;
+        uint32_t s;
         PixelFormat format;
         uint32_t usage;
-        void* vaddr;
         size_t size;
     };
     

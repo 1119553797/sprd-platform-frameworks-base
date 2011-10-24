@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "AudioPlayer"
 #include <utils/Log.h>
 
-#include <utils/threads.h>
-#include <cutils/sched_policy.h>
-#include <sys/prctl.h>
-#include <sys/time.h>
-#include <sys/resource.h>
 #include <binder/IPCThreadState.h>
 #include <media/AudioTrack.h>
 #include <media/stagefright/AudioPlayer.h>
@@ -133,7 +128,7 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
 
         mLatencyUs = (int64_t)mAudioSink->latency() * 1000;
         mFrameSize = mAudioSink->frameSize();
-        LOGI("mAudioSink->latency() %d ms",mAudioSink->latency());
+
         mAudioSink->start();
     } else {
         mAudioTrack = new AudioTrack(
@@ -161,7 +156,7 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
 
         mLatencyUs = (int64_t)mAudioTrack->latency() * 1000;
         mFrameSize = mAudioTrack->frameSize();
-        LOGI("mAudioTrack->latency() %d ms",mAudioTrack->latency());
+
         mAudioTrack->start();
     }
 
@@ -289,11 +284,7 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
     if (mNumFramesPlayed == 0) {
         LOGV("AudioCallback");
     }
-/*
-    if( ANDROID_PRIORITY_DISPLAY != getpriority(PRIO_PROCESS, 0)){
-	 setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_DISPLAY);//@jgdu
-    }
-*/	 
+
     if (mReachedEOS) {
         return 0;
     }
@@ -341,12 +332,7 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
             } else {
                 err = mSource->read(&mInputBuffer, &options);
             }
-            //innofidei added code begin
-            if(err == ERROR_NOT_CONNECTED)
-            {
-                return 0;
-            }
-            //innofidei added code end
+
             CHECK((err == OK && mInputBuffer != NULL)
                    || (err != OK && mInputBuffer == NULL));
 
@@ -370,9 +356,9 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
                     / mSampleRate;
 
             LOGV("buffer->size() = %d, "
-                 "mPositionTimeMediaUs=%lld mPositionTimeRealUs=%lld",
+                 "mPositionTimeMediaUs=%.2f mPositionTimeRealUs=%.2f",
                  mInputBuffer->range_length(),
-                 mPositionTimeMediaUs , mPositionTimeRealUs );
+                 mPositionTimeMediaUs / 1E6, mPositionTimeRealUs / 1E6);
         }
 
         if (mInputBuffer->range_length() == 0) {
@@ -407,10 +393,6 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
 int64_t AudioPlayer::getRealTimeUs() {
     Mutex::Autolock autoLock(mLock);
     return getRealTimeUsLocked();
-}
-
-int64_t AudioPlayer::getAudioLatencyUs() {
-    return mLatencyUs;
 }
 
 int64_t AudioPlayer::getRealTimeUsLocked() const {

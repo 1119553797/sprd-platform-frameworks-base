@@ -179,7 +179,7 @@ public class TelephonyManager {
 
     /**
      * Returns the unique device ID, for example, the IMEI for GSM and the MEID
-     * for CDMA phones. Return null if device ID is not available.
+     * or ESN for CDMA phones. Return null if device ID is not available.
      *
      * <p>Requires Permission:
      *   {@link android.Manifest.permission#READ_PHONE_STATE READ_PHONE_STATE}
@@ -393,6 +393,12 @@ public class TelephonyManager {
     public static final int NETWORK_TYPE_HSPA = 10;
     /** Current network is iDen */
     public static final int NETWORK_TYPE_IDEN = 11;
+    /** Current network is EVDO revision B*/
+    public static final int NETWORK_TYPE_EVDO_B = 12;
+    /** @hide */
+    public static final int NETWORK_TYPE_LTE = 13;
+    /** @hide */
+    public static final int NETWORK_TYPE_EHRPD = 14;
 
     /**
      * Returns a constant indicating the radio technology (network type)
@@ -409,6 +415,7 @@ public class TelephonyManager {
      * @see #NETWORK_TYPE_CDMA
      * @see #NETWORK_TYPE_EVDO_0
      * @see #NETWORK_TYPE_EVDO_A
+     * @see #NETWORK_TYPE_EVDO_B
      * @see #NETWORK_TYPE_1xRTT
      */
     public int getNetworkType() {
@@ -456,6 +463,8 @@ public class TelephonyManager {
                 return "CDMA - EvDo rev. 0";
             case NETWORK_TYPE_EVDO_A:
                 return "CDMA - EvDo rev. A";
+            case NETWORK_TYPE_EVDO_B:
+                return "CDMA - EvDo rev. B";
             case NETWORK_TYPE_1xRTT:
                 return "CDMA - 1xRTT";
             default:
@@ -652,6 +661,25 @@ public class TelephonyManager {
     public String getVoiceMailNumber() {
         try {
             return getSubscriberInfo().getVoiceMailNumber();
+        } catch (RemoteException ex) {
+            return null;
+        } catch (NullPointerException ex) {
+            // This could happen before phone restarts due to crashing
+            return null;
+        }
+    }
+
+    /**
+     * Returns the complete voice mail number. Return null if it is unavailable.
+     * <p>
+     * Requires Permission:
+     *   {@link android.Manifest.permission#CALL_PRIVILEGED CALL_PRIVILEGED}
+     *
+     * @hide
+     */
+    public String getCompleteVoiceMailNumber() {
+        try {
+            return getSubscriberInfo().getCompleteVoiceMailNumber();
         } catch (RemoteException ex) {
             return null;
         } catch (NullPointerException ex) {

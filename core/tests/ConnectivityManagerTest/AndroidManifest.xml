@@ -16,7 +16,8 @@
 
 <!-- package name must be unique so suffix with "tests" so package loader doesn't ignore us -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.connectivitymanagertest">
+  package="com.android.connectivitymanagertest"
+  android:sharedUserId="com.android.uid.test">
 
     <!-- We add an application tag here just so that we can indicate that
          this package needs to link against the android.test library,
@@ -24,21 +25,42 @@
     <application>
         <uses-library android:name="android.test.runner" />
         <activity android:name="ConnectivityManagerTestActivity"
-          android:label="CMTest">
+          android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.TEST" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
     <!--
     This declares that this app uses the instrumentation test runner targeting
-    the package of browserpowertest. To run the tests use the command:
-    "adb shell am instrument -w com.android.connectivitymanagertest/.ConnectivityManagerTestRunner"
+    the package of connectivitymanagertest. To run the tests use the command:
+    "adb shell am instrument -e ssid <SSID> -w
+      com.android.connectivitymanagertest/.ConnectivityManagerTestRunner",
+      the access point <SSID> should be an open AP.
     -->
     <instrumentation android:name=".ConnectivityManagerTestRunner"
         android:targetPackage="com.android.connectivitymanagertest"
         android:label="Test runner for Connectivity Manager Tests"
+    />
+
+    <!--
+     To run the unit tests use the command:
+     "adb shell am instrument -w
+     com.android.connectivitymanagertest/.ConnectivityManagerUnitTestRunner"
+    -->
+    <instrumentation android:name=".ConnectivityManagerUnitTestRunner"
+        android:targetPackage="com.android.connectivitymanagertest"
+        android.label="Test runner for unit tests"
+    />
+
+    <!-- run stress test suite:
+      "adb shell am instrument -e stressnum <200> -w
+      com.android.connectivitymanagertest/.ConnectivityManagerStressTestRunner"
+    -->
+    <instrumentation android:name=".ConnectivityManagerStressTestRunner"
+        android:targetPackage="com.android.connectivitymanagertest"
+        android:label="Test runner for Connectivity Manager Stress Tests"
     />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -46,5 +68,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DEVICE_POWER" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 </manifest>

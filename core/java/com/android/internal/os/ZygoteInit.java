@@ -66,10 +66,6 @@ public class ZygoteInit {
     /** when preloading, GC after allocating this many bytes */
     private static final int PRELOAD_GC_THRESHOLD = 50000;
 
-    /** throw on missing preload, only if this looks like a developer */
-    private static final boolean THROW_ON_MISSING_PRELOAD =
-            "1".equals(SystemProperties.get("persist.service.adb.enable"));
-
     public static final String USAGE_STRING =
             " <\"true\"|\"false\" for startSystemServer>";
 
@@ -287,7 +283,6 @@ public class ZygoteInit {
 
                 int count = 0;
                 String line;
-                String missingClasses = null;
                 while ((line = br.readLine()) != null) {
                     // Skip comments and blank lines.
                     line = line.trim();
@@ -311,12 +306,7 @@ public class ZygoteInit {
                         }
                         count++;
                     } catch (ClassNotFoundException e) {
-                        Log.e(TAG, "Class not found for preloading: " + line);
-                        if (missingClasses == null) {
-                            missingClasses = line;
-                        } else {
-                            missingClasses += " " + line;
-                        }
+                        Log.w(TAG, "Class not found for preloading: " + line);
                     } catch (Throwable t) {
                         Log.e(TAG, "Error preloading " + line + ".", t);
                         if (t instanceof Error) {
@@ -327,13 +317,6 @@ public class ZygoteInit {
                         }
                         throw new RuntimeException(t);
                     }
-                }
-
-                if (THROW_ON_MISSING_PRELOAD &&
-                    missingClasses != null) {
-                    throw new IllegalStateException(
-                            "Missing class(es) for preloading, update preloaded-classes ["
-                            + missingClasses + "]");
                 }
 
                 Log.i(TAG, "...preloaded " + count + " classes in "
@@ -508,18 +491,6 @@ public class ZygoteInit {
     private static void handleSystemServerProcess(
             ZygoteConnection.Arguments parsedArgs)
             throws ZygoteInit.MethodAndArgsCaller {
-        /*
-         * First, set the capabilities if necessary
-         */
-
-        if (parsedArgs.uid != 0) {
-            try {
-                setCapabilities(parsedArgs.permittedCapabilities,
-                                parsedArgs.effectiveCapabilities);
-            } catch (IOException ex) {
-                Log.e(TAG, "Error setting capabilities", ex);
-            }
-        }
 
         closeServerSocket();
 
@@ -540,7 +511,7 @@ public class ZygoteInit {
         String args[] = {
             "--setuid=1000",
             "--setgid=1000",
-            "--setgroups=1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,3001,3002,3003",
+            "--setgroups=1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1018,3001,3002,3003",
             "--capabilities=130104352,130104352",
             "--runtime-init",
             "--nice-name=system_server",
@@ -565,7 +536,9 @@ public class ZygoteInit {
             /* Request to fork the system server process */
             pid = Zygote.forkSystemServer(
                     parsedArgs.uid, parsedArgs.gid,
-                    parsedArgs.gids, debugFlags, null);
+                    parsedArgs.gids, debugFlags, null,
+                    parsedArgs.permittedCapabilities,
+                    parsedArgs.effectiveCapabilities);
         } catch (IllegalArgumentException ex) {
             throw new RuntimeException(ex);
         }
@@ -580,6 +553,8 @@ public class ZygoteInit {
 
     public static void main(String argv[]) {
         try {
+            VMRuntime.getRuntime().setMinimumHeapSize(5 * 1024 * 1024);
+
             // Start profiling the zygote initialization.
             SamplingProfilerIntegration.start();
 
@@ -592,12 +567,8 @@ public class ZygoteInit {
             EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_END,
                 SystemClock.uptimeMillis());
 
-            if (SamplingProfilerIntegration.isEnabled()) {
-                SamplingProfiler sp = SamplingProfiler.getInstance();
-                sp.pause();
-                SamplingProfilerIntegration.writeZygoteSnapshot();
-                sp.shutDown();
-            }
+            // Finish profiling the zygote initialization.
+            SamplingProfilerIntegration.writeZygoteSnapshot();
 
             // Do an initial gc to clean up after startup
             gc();

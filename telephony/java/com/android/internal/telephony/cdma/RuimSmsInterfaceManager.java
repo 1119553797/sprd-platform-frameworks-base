@@ -27,6 +27,7 @@ import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.IccSmsInterfaceManager;
 import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.PhoneProxy;
+import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.telephony.SmsRawData;
 
 import java.util.ArrayList;
@@ -81,9 +82,9 @@ public class RuimSmsInterfaceManager extends IccSmsInterfaceManager {
         }
     };
 
-    public RuimSmsInterfaceManager(CDMAPhone phone) {
+    public RuimSmsInterfaceManager(CDMAPhone phone, SMSDispatcher dispatcher) {
         super(phone);
-        mDispatcher = new CdmaSMSDispatcher(phone);
+        mDispatcher = dispatcher;
     }
 
     public void dispose() {
@@ -200,6 +201,30 @@ public class RuimSmsInterfaceManager extends IccSmsInterfaceManager {
             }
         }
         return mSms;
+    }
+
+    public boolean enableCellBroadcast(int messageIdentifier) {
+        // Not implemented
+        Log.e(LOG_TAG, "Error! Not implemented for CDMA.");
+        return false;
+    }
+
+    public boolean disableCellBroadcast(int messageIdentifier) {
+        // Not implemented
+        Log.e(LOG_TAG, "Error! Not implemented for CDMA.");
+        return false;
+    }
+
+    public boolean enableCellBroadcastRange(int startMessageId, int endMessageId) {
+        // Not implemented
+        Log.e(LOG_TAG, "Error! Not implemented for CDMA.");
+        return false;
+    }
+
+    public boolean disableCellBroadcastRange(int startMessageId, int endMessageId) {
+        // Not implemented
+        Log.e(LOG_TAG, "Error! Not implemented for CDMA.");
+        return false;
     }
 
     protected void log(String msg) {

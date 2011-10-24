@@ -34,7 +34,6 @@ public final class Bmgr {
 
     private String[] mArgs;
     private int mNextArg;
-    private String mCurArgData;
 
     public static void main(String[] args) {
         try {
@@ -175,6 +174,11 @@ public final class Bmgr {
     private void doTransport() {
         try {
             String which = nextArg();
+            if (which == null) {
+                showUsage();
+                return;
+            }
+
             String old = mBmgr.selectBackupTransport(which);
             if (old == null) {
                 System.out.println("Unknown transport '" + which
@@ -213,8 +217,7 @@ public final class Bmgr {
 
         // The rest of the 'list' options work with a restore session on the current transport
         try {
-            String curTransport = mBmgr.getCurrentTransport();
-            mRestore = mBmgr.beginRestoreSession(curTransport);
+            mRestore = mBmgr.beginRestoreSession(null, null);
             if (mRestore == null) {
                 System.err.println(BMGR_NOT_RUNNING_ERR);
                 return;
@@ -269,6 +272,10 @@ public final class Bmgr {
     }
 
     private void printRestoreSets(RestoreSet[] sets) {
+        if (sets == null || sets.length == 0) {
+            System.out.println("No restore sets");
+            return;
+        }
         for (RestoreSet s : sets) {
             System.out.println("  " + Long.toHexString(s.token) + " : " + s.name);
         }
@@ -318,6 +325,11 @@ public final class Bmgr {
 
     private void doRestore() {
         String arg = nextArg();
+        if (arg == null) {
+            showUsage();
+            return;
+        }
+
         if (arg.indexOf('.') >= 0) {
             // it's a package name
             doRestorePackage(arg);
@@ -336,8 +348,7 @@ public final class Bmgr {
 
     private void doRestorePackage(String pkg) {
         try {
-            String curTransport = mBmgr.getCurrentTransport();
-            mRestore = mBmgr.beginRestoreSession(curTransport);
+            mRestore = mBmgr.beginRestoreSession(pkg, null);
             if (mRestore == null) {
                 System.err.println(BMGR_NOT_RUNNING_ERR);
                 return;
@@ -365,8 +376,7 @@ public final class Bmgr {
 
         try {
             boolean didRestore = false;
-            String curTransport = mBmgr.getCurrentTransport();
-            mRestore = mBmgr.beginRestoreSession(curTransport);
+            mRestore = mBmgr.beginRestoreSession(null, null);
             if (mRestore == null) {
                 System.err.println(BMGR_NOT_RUNNING_ERR);
                 return;

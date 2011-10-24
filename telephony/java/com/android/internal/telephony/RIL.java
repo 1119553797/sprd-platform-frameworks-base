@@ -227,7 +227,15 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     private Context mContext;
     WakeLock mWakeLock;
     int mWakeLockTimeout;
+    // The number of requests pending to be sent out, it increases before calling
+    // EVENT_SEND and decreases while handling EVENT_SEND. It gets cleared while
+    // WAKE_LOCK_TIMEOUT occurs.
     int mRequestMessagesPending;
+    // The number of requests sent out but waiting for response. It increases while
+    // sending request and decreases while handling response. It should match
+    // mRequestList.size() unless there are requests no replied while
+    // WAKE_LOCK_TIMEOUT occurs.
+    int mRequestMessagesWaiting;
 
     // Is this the first radio state change?
     private boolean mInitialRadioStateChange = false;
@@ -310,16 +318,19 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
                         if (s == null) {
                             rr.onError(RADIO_NOT_AVAILABLE, null);
                             rr.release();
-                            mRequestMessagesPending--;
+                            if (mRequestMessagesPending > 0)
+                                mRequestMessagesPending--;
                             alreadySubtracted = true;
                             return;
                         }
 
                         synchronized (mRequestsList) {
                             mRequestsList.add(rr);
+                            mRequestMessagesWaiting++;
                         }
 
-                        mRequestMessagesPending--;
+                        if (mRequestMessagesPending > 0)
+                            mRequestMessagesPending--;
                         alreadySubtracted = true;
 
                         byte[] data;
@@ -363,7 +374,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
                         }
                     }
 
-                    if (!alreadySubtracted) {
+                    if (!alreadySubtracted && mRequestMessagesPending > 0) {
                         mRequestMessagesPending--;
                     }
 
@@ -372,28 +383,54 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
                 case EVENT_WAKE_LOCK_TIMEOUT:
                     // Haven't heard back from the last request.  Assume we're
                     // not getting a response and  release the wake lock.
-                    // TODO should we clean up mRequestList and mRequestPending
                     synchronized (mWakeLock) {
                         if (mWakeLock.isHeld()) {
-                            if (RILJ_LOGD) {
-                                synchronized (mRequestsList) {
-                                    int count = mRequestsList.size();
-                                    Log.d(LOG_TAG, "WAKE_LOCK_TIMEOUT " +
-                                        " mReqPending=" + mRequestMessagesPending +
-                                        " mRequestList=" + count);
+                            // The timer of WAKE_LOCK_TIMEOUT is reset with each
+                            // new send request. So when WAKE_LOCK_TIMEOUT occurs
+                            // all requests in mRequestList already waited at
+                            // least DEFAULT_WAKE_LOCK_TIMEOUT but no response.
+                            // Reset mRequestMessagesWaiting to enable
+                            // releaseWakeLockIfDone().
+                            //
+                            // Note: Keep mRequestList so that delayed response
+                            // can still be handled when response finally comes.
+                            if (mRequestMessagesWaiting != 0) {
+                                Log.d(LOG_TAG, "NOTE: mReqWaiting is NOT 0 but"
+                                        + mRequestMessagesWaiting + " at TIMEOUT, reset!"
+                                        + " There still msg waitng for response");
 
-                                    for (int i = 0; i < count; i++) {
-                                        rr = mRequestsList.get(i);
-                                        Log.d(LOG_TAG, i + ": [" + rr.mSerial + "] " +
-                                            requestToString(rr.mRequest));
+                                mRequestMessagesWaiting = 0;
 
+                                if (RILJ_LOGD) {
+                                    synchronized (mRequestsList) {
+                                        int count = mRequestsList.size();
+                                        Log.d(LOG_TAG, "WAKE_LOCK_TIMEOUT " +
+                                                " mRequestList=" + count);
+
+                                        for (int i = 0; i < count; i++) {
+                                            rr = mRequestsList.get(i);
+                                            Log.d(LOG_TAG, i + ": [" + rr.mSerial + "] "
+                                                    + requestToString(rr.mRequest));
+                                        }
                                     }
                                 }
+                            }
+                            // mRequestMessagesPending shows how many
+                            // requests are waiting to be sent (and before
+                            // to be added in request list) since star the
+                            // WAKE_LOCK_TIMEOUT timer. Since WAKE_LOCK_TIMEOUT
+                            // is the expected time to get response, all requests
+                            // should already sent out (i.e.
+                            // mRequestMessagesPending is 0 )while TIMEOUT occurs.
+                            if (mRequestMessagesPending != 0) {
+                                Log.e(LOG_TAG, "ERROR: mReqPending is NOT 0 but"
+                                        + mRequestMessagesPending + " at TIMEOUT, reset!");
+                                mRequestMessagesPending = 0;
+
                             }
                             mWakeLock.release();
                         }
                     }
-
                     break;
             }
         }
@@ -560,15 +597,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
                 RILRequest.resetSerial();
 
                 // Clear request list on close
-                synchronized (mRequestsList) {
-                    for (int i = 0, sz = mRequestsList.size() ; i < sz ; i++) {
-                        RILRequest rr = mRequestsList.get(i);
-                        rr.onError(RADIO_NOT_AVAILABLE, null);
-                        rr.release();
-                    }
-
-                    mRequestsList.clear();
-                }
+                clearRequestsList(RADIO_NOT_AVAILABLE, false);
             }} catch (Throwable tr) {
                 Log.e(LOG_TAG,"Uncaught exception", tr);
             }
@@ -616,6 +645,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         mWakeLockTimeout = SystemProperties.getInt(TelephonyProperties.PROPERTY_WAKE_LOCK_TIMEOUT,
                 DEFAULT_WAKE_LOCK_TIMEOUT);
         mRequestMessagesPending = 0;
+        mRequestMessagesWaiting = 0;
 
         mContext = context;
 
@@ -800,11 +830,25 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
 
     public void
     dial (String address, int clirMode, Message result) {
+        dial(address, clirMode, null, result);
+    }
+
+    public void
+    dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
 
         rr.mp.writeString(address);
         rr.mp.writeInt(clirMode);
         rr.mp.writeInt(0); // UUS information is absent
+
+        if (uusInfo == null) {
+            rr.mp.writeInt(0); // UUS information is absent
+        } else {
+            rr.mp.writeInt(1); // UUS information is present
+            rr.mp.writeInt(uusInfo.getType());
+            rr.mp.writeInt(uusInfo.getDcs());
+            rr.mp.writeByteArray(uusInfo.getUserData());
+        }
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
@@ -1269,7 +1313,8 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
                 : RILConstants.SETUP_DATA_AUTH_NONE;
 
         setupDataCall(Integer.toString(radioTechnology), profile, apn, user,
-                password, Integer.toString(authType), result);
+                password, Integer.toString(authType),
+                RILConstants.SETUP_DATA_PROTOCOL_IP, result);
 
     }
 
@@ -1281,18 +1326,14 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         deactivateDataCall(cid, result);
     }
 
-    /**
-     * The preferred new alternative to setupDefaultPDP that is
-     * CDMA-compatible.
-     *
-     */
     public void
     setupDataCall(String radioTechnology, String profile, String apn,
-            String user, String password, String authType, Message result) {
+            String user, String password, String authType, String protocol,
+            Message result) {
         RILRequest rr
                 = RILRequest.obtain(RIL_REQUEST_SETUP_DATA_CALL, result);
 
-        rr.mp.writeInt(6);
+        rr.mp.writeInt(7);
 
         rr.mp.writeString(radioTechnology);
         rr.mp.writeString(profile);
@@ -1300,11 +1341,12 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         rr.mp.writeString(user);
         rr.mp.writeString(password);
         rr.mp.writeString(authType);
+        rr.mp.writeString(protocol);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> "
                 + requestToString(rr.mRequest) + " " + radioTechnology + " "
                 + profile + " " + apn + " " + user + " "
-                + password + " " + authType);
+                + password + " " + authType + " " + protocol);
 
         send(rr);
     }
@@ -1983,7 +2025,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     /**
      * Holds a PARTIAL_WAKE_LOCK whenever
      * a) There is outstanding RIL request sent to RIL deamon and no replied
-     * b) There is a request waiting to be sent out.
+     * b) There is a request pending to be sent out.
      *
      * There is a WAKE_LOCK_TIMEOUT to release the lock, though it shouldn't
      * happen often.
@@ -2006,7 +2048,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         synchronized (mWakeLock) {
             if (mWakeLock.isHeld() &&
                 (mRequestMessagesPending == 0) &&
-                (mRequestsList.size() == 0)) {
+                (mRequestMessagesWaiting == 0)) {
                 mSender.removeMessages(EVENT_WAKE_LOCK_TIMEOUT);
                 mWakeLock.release();
             }
@@ -2039,13 +2081,45 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         releaseWakeLockIfDone();
     }
 
-    protected RILRequest findAndRemoveRequestFromList(int serial) {
+    /**
+     * Release each request in mReqeustsList then clear the list
+     * @param error is the RIL_Errno sent back
+     * @param loggable true means to print all requests in mRequestslist
+     */
+    private void clearRequestsList(int error, boolean loggable) {
+        RILRequest rr;
+        synchronized (mRequestsList) {
+            int count = mRequestsList.size();
+            if (RILJ_LOGD && loggable) {
+                Log.d(LOG_TAG, "WAKE_LOCK_TIMEOUT " +
+                        " mReqPending=" + mRequestMessagesPending +
+                        " mRequestList=" + count);
+            }
+
+            for (int i = 0; i < count ; i++) {
+                rr = mRequestsList.get(i);
+                if (RILJ_LOGD && loggable) {
+                    Log.d(LOG_TAG, i + ": [" + rr.mSerial + "] " +
+                            requestToString(rr.mRequest));
+                }
+                rr.onError(error, null);
+                rr.release();
+            }
+            mRequestsList.clear();
+            mRequestMessagesWaiting = 0;
+        }
+    }
+
+    private RILRequest findAndRemoveRequestFromList(int serial) {
+
         synchronized (mRequestsList) {
             for (int i = 0, s = mRequestsList.size() ; i < s ; i++) {
                 RILRequest rr = mRequestsList.get(i);
 
                 if (rr.mSerial == serial) {
                     mRequestsList.remove(i);
+                    if (mRequestMessagesWaiting > 0)
+                        mRequestMessagesWaiting--;
                     return rr;
                 }
             }
@@ -2878,10 +2952,21 @@ responseUnsolUssdStrings(Parcel p){
             dc.namePresentation = p.readInt();
             int uusInfoPresent = p.readInt();
             if (uusInfoPresent == 1) {
-                // TODO: Copy the data to dc to forward to the apps.
-                p.readInt();
-                p.readInt();
-                p.createByteArray();
+                dc.uusInfo = new UUSInfo();
+                dc.uusInfo.setType(p.readInt());
+                dc.uusInfo.setDcs(p.readInt());
+                byte[] userData = p.createByteArray();
+                dc.uusInfo.setUserData(userData);
+                Log
+                        .v(LOG_TAG, String.format("Incoming UUS : type=%d, dcs=%d, length=%d",
+                                dc.uusInfo.getType(), dc.uusInfo.getDcs(),
+                                dc.uusInfo.getUserData().length));
+                Log.v(LOG_TAG, "Incoming UUS : data (string)="
+                        + new String(dc.uusInfo.getUserData()));
+                Log.v(LOG_TAG, "Incoming UUS : data (hex): "
+                        + IccUtils.bytesToHexString(dc.uusInfo.getUserData()));
+            } else {
+                Log.v(LOG_TAG, "Incoming UUS : NOT present!");
             }
 
             // Make sure there's a leading + on addresses with a TOA of 145
@@ -2918,7 +3003,11 @@ responseUnsolUssdStrings(Parcel p){
             dataCall.active = p.readInt();
             dataCall.type = p.readString();
             dataCall.apn = p.readString();
-            dataCall.address = p.readString();
+            String address = p.readString();
+            if (address != null) {
+                address = address.split(" ")[0];
+            }
+            dataCall.address = address;
 
             response.add(dataCall);
         }

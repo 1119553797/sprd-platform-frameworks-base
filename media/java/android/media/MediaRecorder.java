@@ -145,6 +145,15 @@ public class MediaRecorder
         /** Microphone audio source tuned for voice recognition if available, behaves like
          *  {@link #DEFAULT} otherwise. */
         public static final int VOICE_RECOGNITION = 6;
+
+        /**
+         * @hide
+         * Microphone audio source tuned for voice communications such as VoIP. It
+         * will for instance take advantage of echo cancellation or automatic gain control
+         * if available. It otherwise behaves like {@link #DEFAULT} if no voice processing
+         * is available.
+         */
+        public static final int VOICE_COMMUNICATION = 7;
     }
 
     /**
@@ -178,16 +187,23 @@ public class MediaRecorder
 
         /** The following formats are audio only .aac or .amr formats **/
         /** @deprecated  Deprecated in favor of AMR_NB */
-        /** TODO: change link when AMR_NB is exposed. Deprecated in favor of MediaRecorder.OutputFormat.AMR_NB */
+        /** Deprecated in favor of MediaRecorder.OutputFormat.AMR_NB */
+        /** AMR NB file format */
         public static final int RAW_AMR = 3;
-        /** @hide AMR NB file format */
+        /** AMR NB file format */
         public static final int AMR_NB = 3;
-        /** @hide AMR WB file format */
+        /** AMR WB file format */
         public static final int AMR_WB = 4;
         /** @hide AAC ADIF file format */
         public static final int AAC_ADIF = 5;
         /** @hide AAC ADTS file format */
         public static final int AAC_ADTS = 6;
+
+        /** @hide Stream over a socket, limited to a single stream */
+        public static final int OUTPUT_FORMAT_RTP_AVP = 7;
+
+        /** @hide H.264/AAC data encapsulated in MPEG2/TS */
+        public static final int OUTPUT_FORMAT_MPEG2TS = 8;
     };
 
     /**
@@ -202,9 +218,9 @@ public class MediaRecorder
         public static final int DEFAULT = 0;
         /** AMR (Narrowband) audio codec */
         public static final int AMR_NB = 1;
-        /** @hide AMR (Wideband) audio codec */
+        /** AMR (Wideband) audio codec */
         public static final int AMR_WB = 2;
-        /** @hide AAC audio codec */
+        /** AAC audio codec */
         public static final int AAC = 3;
         /** @hide enhanced AAC audio codec */
         public static final int AAC_PLUS = 4;
@@ -276,6 +292,31 @@ public class MediaRecorder
         setAudioSamplingRate(profile.audioSampleRate);
         setVideoEncoder(profile.videoCodec);
         setAudioEncoder(profile.audioCodec);
+    }
+
+    /**
+     * Sets the orientation hint for output video playback.
+     * This method should be called before prepare(). This method will not
+     * trigger the source video frame to rotate during video recording, but to
+     * add a composition matrix containing the rotation angle in the output
+     * video if the output format is OutputFormat.THREE_GPP or
+     * OutputFormat.MPEG_4 so that a video player can choose the proper
+     * orientation for playback. Note that some video players may choose
+     * to ignore the compostion matrix in a video during playback.
+     *
+     * @param degrees the angle to be rotated clockwise in degrees.
+     * The supported angles are 0, 90, 180, and 270 degrees.
+     * @throws IllegalArgumentException if the angle is not supported.
+     *
+     */
+    public void setOrientationHint(int degrees) {
+        if (degrees != 0   &&
+            degrees != 90  &&
+            degrees != 180 &&
+            degrees != 270) {
+            throw new IllegalArgumentException("Unsupported angle: " + degrees);
+        }
+        setParameter(String.format("video-param-rotation-angle-degrees=%d", degrees));
     }
 
     /**

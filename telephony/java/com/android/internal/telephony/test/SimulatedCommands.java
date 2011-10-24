@@ -31,6 +31,7 @@ import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.DataCallState;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.gsm.CallFailCause;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
@@ -498,6 +499,23 @@ public abstract class SimulatedCommands extends BaseCommands
      *  retMsg.obj = AsyncResult ar
      *  ar.exception carries exception on failure
      *  ar.userObject contains the orignal value of result.obj
+     *  ar.result is null on success and failure
+     *
+     * CLIR_DEFAULT     == on "use subscription default value"
+     * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
+     * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
+     */
+    public void dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
+        simulatedCallState.onDial(address);
+
+        resultSuccess(result, null);
+    }
+
+    /**
+     *  returned message
+     *  retMsg.obj = AsyncResult ar
+     *  ar.exception carries exception on failure
+     *  ar.userObject contains the orignal value of result.obj
      *  ar.result is String containing IMSI on success
      */
     public void getIMSI(Message result) {
@@ -828,7 +846,6 @@ public abstract class SimulatedCommands extends BaseCommands
         ret[11] = null;
         ret[12] = null;
         ret[13] = null;
-        ret[14] = null;
 
         resultSuccess(result, ret);
     }
@@ -945,8 +962,9 @@ public abstract class SimulatedCommands extends BaseCommands
         unimplemented(result);
     }
 
-    public void setupDataCall(String radioTechnology, String profile, String apn, String user,
-            String password, String authType, Message result) {
+    public void setupDataCall(String radioTechnology, String profile,
+            String apn, String user, String password, String authType,
+            String protocol, Message result) {
         unimplemented(result);
     }
 
@@ -1387,23 +1405,28 @@ public abstract class SimulatedCommands extends BaseCommands
     }
 
     /**
-     *  Set the TTY mode for the CDMA phone
+     *  Set the TTY mode
      *
-     * @param enable is true to enable, false to disable
-     * @param serviceClass is a sum of SERVICE_CLASS_*
+     * @param ttyMode is one of the following:
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_OFF}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_FULL}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_HCO}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_VCO}
      * @param response is callback message
      */
     public void setTTYMode(int ttyMode, Message response) {
-        Log.w(LOG_TAG, "CDMA not implemented in SimulatedCommands");
+        Log.w(LOG_TAG, "Not implemented in SimulatedCommands");
         unimplemented(response);
     }
 
     /**
-     *  Query the TTY mode for the CDMA phone
+     *  Query the TTY mode
      * (AsyncResult)response.obj).result is an int[] with element [0] set to
-     * 0 for disabled, 1 for enabled.
-     *
-     * @param serviceClass is a sum of SERVICE_CLASS_*
+     * tty mode:
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_OFF}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_FULL}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_HCO}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_VCO}
      * @param response is callback message
      */
     public void queryTTYMode(Message response) {

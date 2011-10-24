@@ -303,7 +303,7 @@ public abstract class PhoneBase extends Handler implements Phone {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(DNS_SERVER_CHECK_DISABLED_KEY, b);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -532,6 +532,10 @@ public abstract class PhoneBase extends Handler implements Phone {
         mCM.unregisterForResendIncallMute(h);
     }
 
+    public void setEchoSuppressionEnabled(boolean enabled) {
+        // no need for regular phone
+    }
+
     /**
      * Subclasses of Phone probably want to replace this with a
      * version scoped to their packages
@@ -570,7 +574,7 @@ public abstract class PhoneBase extends Handler implements Phone {
     private void setPropertiesByCarrier() {
         String carrier = SystemProperties.get("ro.carrier");
 
-        if (null == carrier || 0 == carrier.length()) {
+        if (null == carrier || 0 == carrier.length() || "unknown".equals(carrier)) {
             return;
         }
 
@@ -720,13 +724,11 @@ public abstract class PhoneBase extends Handler implements Phone {
     }
 
     public void setTTYMode(int ttyMode, Message onComplete) {
-        // This function should be overridden by the class CDMAPhone. Not implemented in GSMPhone.
-        logUnexpectedCdmaMethodCall("setTTYMode");
+        mCM.setTTYMode(ttyMode, onComplete);
     }
 
     public void queryTTYMode(Message onComplete) {
-        // This function should be overridden by the class CDMAPhone. Not implemented in GSMPhone.
-        logUnexpectedCdmaMethodCall("queryTTYMode");
+        mCM.queryTTYMode(onComplete);
     }
 
     public void enableEnhancedVoicePrivacy(boolean enable, Message onComplete) {

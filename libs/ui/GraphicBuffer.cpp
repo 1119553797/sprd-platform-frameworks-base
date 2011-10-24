@@ -38,26 +38,28 @@ namespace android {
 
 GraphicBuffer::GraphicBuffer()
     : BASE(), mOwner(ownData), mBufferMapper(GraphicBufferMapper::get()),
-      mInitCheck(NO_ERROR),  mVStride(0), mIndex(-1)
+      mInitCheck(NO_ERROR), mIndex(-1)
 {
     width  = 
     height = 
     stride = 
     format = 
     usage  = 0;
+    transform = 0;
     handle = NULL;
 }
 
 GraphicBuffer::GraphicBuffer(uint32_t w, uint32_t h, 
         PixelFormat reqFormat, uint32_t reqUsage)
     : BASE(), mOwner(ownData), mBufferMapper(GraphicBufferMapper::get()),
-      mInitCheck(NO_ERROR),  mVStride(0), mIndex(-1)
+      mInitCheck(NO_ERROR), mIndex(-1)
 {
     width  = 
     height = 
     stride = 
     format = 
-    usage  = 0;
+    usage  =
+    transform = 0;
     handle = NULL;
     mInitCheck = initSize(w, h, reqFormat, reqUsage);
 }
@@ -67,13 +69,14 @@ GraphicBuffer::GraphicBuffer(uint32_t w, uint32_t h,
         uint32_t inStride, native_handle_t* inHandle, bool keepOwnership)
     : BASE(), mOwner(keepOwnership ? ownHandle : ownNone),
       mBufferMapper(GraphicBufferMapper::get()),
-      mInitCheck(NO_ERROR),  mVStride(0), mIndex(-1)
+      mInitCheck(NO_ERROR), mIndex(-1)
 {
     width  = w;
     height = h;
     stride = inStride;
     format = inFormat;
     usage  = inUsage;
+    transform = 0;
     handle = inHandle;
 }
 
@@ -99,6 +102,11 @@ status_t GraphicBuffer::initCheck() const {
     return mInitCheck;
 }
 
+void GraphicBuffer::dumpAllocationsToSystemLog()
+{
+    GraphicBufferAllocator::dumpToSystemLog();
+}
+
 android_native_buffer_t* GraphicBuffer::getNativeBuffer() const
 {
     return static_cast<android_native_buffer_t*>(
@@ -111,6 +119,9 @@ status_t GraphicBuffer::reallocate(uint32_t w, uint32_t h, PixelFormat f,
     if (mOwner != ownData)
         return INVALID_OPERATION;
 
+    if (handle && w==width && h==height && f==format && reqUsage==usage)
+        return NO_ERROR;
+
     if (handle) {
         GraphicBufferAllocator& allocator(GraphicBufferAllocator::get());
         allocator.free(handle);
@@ -122,9 +133,6 @@ status_t GraphicBuffer::reallocate(uint32_t w, uint32_t h, PixelFormat f,
 status_t GraphicBuffer::initSize(uint32_t w, uint32_t h, PixelFormat format,
         uint32_t reqUsage)
 {
-    if (format == PIXEL_FORMAT_RGBX_8888)
-        format = PIXEL_FORMAT_RGBA_8888;
-
     GraphicBufferAllocator& allocator = GraphicBufferAllocator::get();
     status_t err = allocator.alloc(w, h, format, reqUsage, &handle, &stride);
     if (err == NO_ERROR) {
@@ -132,7 +140,6 @@ status_t GraphicBuffer::initSize(uint32_t w, uint32_t h, PixelFormat format,
         this->height = h;
         this->format = format;
         this->usage  = reqUsage;
-        mVStride = 0;
     }
     return err;
 }
@@ -173,14 +180,15 @@ status_t GraphicBuffer::lock(GGLSurface* sur, uint32_t usage)
         sur->height = height;
         sur->stride = stride;
         sur->format = format;
-        sur->vstride = mVStride;
         sur->data = static_cast<GGLubyte*>(vaddr);
     }
     return res;
 }
 
+const int kFlattenFdsOffset = 9;
+
 size_t GraphicBuffer::getFlattenedSize() const {
-    return (8 + (handle ? handle->numInts : 0))*sizeof(int);
+    return (kFlattenFdsOffset + (handle ? handle->numInts : 0))*sizeof(int);
 }
 
 size_t GraphicBuffer::getFdCount() const {
@@ -205,13 +213,14 @@ status_t GraphicBuffer::flatten(void* buffer, size_t size,
     buf[5] = usage;
     buf[6] = 0;
     buf[7] = 0;
+    buf[8] = transform;
 
     if (handle) {
         buf[6] = handle->numFds;
         buf[7] = handle->numInts;
         native_handle_t const* const h = handle;
         memcpy(fds,     h->data,             h->numFds*sizeof(int));
-        memcpy(&buf[8], h->data + h->numFds, h->numInts*sizeof(int));
+        memcpy(&buf[kFlattenFdsOffset], h->data + h->numFds, h->numInts*sizeof(int));
     }
 
     return NO_ERROR;
@@ -220,7 +229,7 @@ status_t GraphicBuffer::flatten(void* buffer, size_t size,
 status_t GraphicBuffer::unflatten(void const* buffer, size_t size,
         int fds[], size_t count)
 {
-    if (size < 8*sizeof(int)) return NO_MEMORY;
+    if (size < kFlattenFdsOffset*sizeof(int)) return NO_MEMORY;
 
     int const* buf = static_cast<int const*>(buffer);
     if (buf[0] != 'GBFR') return BAD_TYPE;
@@ -228,7 +237,7 @@ status_t GraphicBuffer::unflatten(void const* buffer, size_t size,
     const size_t numFds  = buf[6];
     const size_t numInts = buf[7];
 
-    const size_t sizeNeeded = (8 + numInts) * sizeof(int);
+    const size_t sizeNeeded = (kFlattenFdsOffset + numInts) * sizeof(int);
     if (size < sizeNeeded) return NO_MEMORY;
 
     size_t fdCountNeeded = 0;
@@ -245,9 +254,10 @@ status_t GraphicBuffer::unflatten(void const* buffer, size_t size,
         stride = buf[3];
         format = buf[4];
         usage  = buf[5];
+        transform = buf[8];
         native_handle* h = native_handle_create(numFds, numInts);
         memcpy(h->data,          fds,     numFds*sizeof(int));
-        memcpy(h->data + numFds, &buf[8], numInts*sizeof(int));
+        memcpy(h->data + numFds, &buf[kFlattenFdsOffset], numInts*sizeof(int));
         handle = h;
     } else {
         width = height = stride = format = usage = 0;
@@ -265,14 +275,6 @@ void GraphicBuffer::setIndex(int index) {
 
 int GraphicBuffer::getIndex() const {
     return mIndex;
-}
-
-void GraphicBuffer::setVerticalStride(uint32_t vstride) {
-    mVStride = vstride;
-}
-
-uint32_t GraphicBuffer::getVerticalStride() const {
-    return mVStride;
 }
 
 // ---------------------------------------------------------------------------

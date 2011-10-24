@@ -206,7 +206,9 @@ public class WebSettings {
     private boolean         mSupportZoom = true;
     private boolean         mBuiltInZoomControls = false;
     private boolean         mAllowFileAccess = true;
+    private boolean         mAllowContentAccess = true;
     private boolean         mLoadWithOverviewMode = false;
+    private boolean         mUseWebViewBackgroundOverscrollBackground = true;
 
     // private WebSettings, not accessible by the host activity
     static private int      mDoubleTapToastCount = 3;
@@ -457,7 +459,9 @@ public class WebSettings {
     
     /**
      * Enable or disable file access within WebView. File access is enabled by
-     * default.
+     * default. Note that this enables or disables file system access only.
+     * Assets and resources are still accessible using file:///android_asset and
+     * file:///android_res.
      */
     public void setAllowFileAccess(boolean allow) {
         mAllowFileAccess = allow;
@@ -468,6 +472,24 @@ public class WebSettings {
      */
     public boolean getAllowFileAccess() {
         return mAllowFileAccess;
+    }
+
+    /**
+     * Enable or disable content url access within WebView.  Content url access
+     * allows WebView to load content from a content provider installed in the
+     * system.  The default is enabled.
+     * @hide
+     */
+    public void setAllowContentAccess(boolean allow) {
+        mAllowContentAccess = allow;
+    }
+
+    /**
+     * Returns true if this WebView supports content url access.
+     * @hide
+     */
+    public boolean getAllowContentAccess() {
+        return mAllowContentAccess;
     }
 
     /**
@@ -482,6 +504,23 @@ public class WebSettings {
      */
     public boolean getLoadWithOverviewMode() {
         return mLoadWithOverviewMode;
+    }
+
+    /**
+     * Set whether the WebView uses its background for over scroll background.
+     * If true, it will use the WebView's background. If false, it will use an
+     * internal pattern. Default is true.
+     */
+    public void setUseWebViewBackgroundForOverscrollBackground(boolean view) {
+        mUseWebViewBackgroundOverscrollBackground = view;
+    }
+
+    /**
+     * Returns true if this WebView uses WebView's background instead of
+     * internal pattern for over scroll background.
+     */
+    public boolean getUseWebViewBackgroundForOverscrollBackground() {
+        return mUseWebViewBackgroundOverscrollBackground;
     }
 
     /**
@@ -1011,6 +1050,7 @@ public class WebSettings {
      * @deprecated This method has been deprecated in favor of
      *             {@link #setPluginState}
      */
+    @Deprecated
     public synchronized void setPluginsEnabled(boolean flag) {
         setPluginState(PluginState.ON);
     }
@@ -1030,8 +1070,13 @@ public class WebSettings {
     }
 
     /**
-     * TODO: need to add @Deprecated
+     * Set a custom path to plugins used by the WebView. This method is
+     * obsolete since each plugin is now loaded from its own package.
+     * @param pluginsPath String path to the directory containing plugins.
+     * @deprecated This method is no longer used as plugins are loaded from
+     * their own APK via the system's package manager.
      */
+    @Deprecated
     public synchronized void setPluginsPath(String pluginsPath) {
     }
 
@@ -1188,6 +1233,7 @@ public class WebSettings {
      * @return True if plugins are enabled.
      * @deprecated This method has been replaced by {@link #getPluginState}
      */
+    @Deprecated
     public synchronized boolean getPluginsEnabled() {
         return mPluginState == PluginState.ON;
     }
@@ -1201,8 +1247,13 @@ public class WebSettings {
     }
 
     /**
-     * TODO: need to add @Deprecated
+     * Returns the directory that contains the plugin libraries. This method is
+     * obsolete since each plugin is now loaded from its own package.
+     * @return An empty string.
+     * @deprecated This method is no longer used as plugins are loaded from
+     * their own APK via the system's package manager.
      */
+    @Deprecated
     public synchronized String getPluginsPath() {
         return "";
     }

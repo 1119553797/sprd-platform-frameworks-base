@@ -128,4 +128,31 @@ public class NetworkUtils {
                 |  (addrBytes[0] & 0xff);
         return addr;
     }
+
+    public static int v4StringToInt(String str) {
+        int result = 0;
+        String[] array = str.split("\\.");
+        if (array.length != 4) return 0;
+        try {
+            result = Integer.parseInt(array[3]);
+            result = (result << 8) + Integer.parseInt(array[2]);
+            result = (result << 8) + Integer.parseInt(array[1]);
+            result = (result << 8) + Integer.parseInt(array[0]);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+        return result;
+    }
+
+    /**
+     * Start the DHCP renew service for wimax,
+     * This call blocks until it obtains a result (either success
+     * or failure) from the daemon.
+     * @param interfaceName the name of the interface to configure
+     * @param ipInfo if the request succeeds, this object is filled in with
+     * the IP address information.
+     * @return {@code true} for success, {@code false} for failure
+     * {@hide}
+     */
+    public native static boolean runDhcpRenew(String interfaceName, DhcpInfo ipInfo);
 }

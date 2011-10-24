@@ -166,6 +166,8 @@ public:
 
     mutable const ObjectBase * mObjHead;
 
+    bool ext_GL_IMG_texture_npot() const {return mGL.GL_IMG_texture_npot;}
+
 protected:
     Device *mDev;
 
@@ -190,6 +192,7 @@ protected:
         uint32_t mMajorVersion;
         uint32_t mMinorVersion;
 
+        bool GL_IMG_texture_npot;
     } mGL;
 
     uint32_t mWidth;

@@ -42,7 +42,7 @@ import android.text.TextUtils;
 public class MobileDataStateTracker extends NetworkStateTracker {
 
     private static final String TAG = "MobileDataStateTracker";
-    private static final boolean DBG = true;
+    private static final boolean DBG = false;
 
     private Phone.DataState mMobileDataState;
     private ITelephony mPhoneService;
@@ -52,6 +52,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     private String mApnName;
     private boolean mEnabled;
     private BroadcastReceiver mStateReceiver;
+
+    // DEFAULT and HIPRI are the same connection.  If we're one of these we need to check if
+    // the other is also disconnected before we reset sockets
+    private boolean mIsDefaultOrHipri = false;
 
     /**
      * Create a new MobileDataStateTracker
@@ -70,6 +74,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
             mApnTypeToWatchFor = Phone.APN_TYPE_DEFAULT;
         } else {
             mApnTypeToWatchFor = mApnType;
+        }
+        if (netType == ConnectivityManager.TYPE_MOBILE ||
+                netType == ConnectivityManager.TYPE_MOBILE_HIPRI) {
+            mIsDefaultOrHipri = true;
         }
 
         mPhoneService = null;
@@ -140,8 +148,14 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     }
 
     private class MobileDataStateReceiver extends BroadcastReceiver {
+        ConnectivityManager mConnectivityManager;
         public void onReceive(Context context, Intent intent) {
             synchronized(this) {
+                // update state and roaming before we set the state - only state changes are
+                // noticed
+                TelephonyManager tm = TelephonyManager.getDefault();
+                setRoamingStatus(tm.isNetworkRoaming());
+                setSubtype(tm.getNetworkType(), tm.getNetworkTypeName());
                 if (intent.getAction().equals(TelephonyIntents.
                         ACTION_ANY_DATA_CONNECTION_STATE_CHANGED)) {
                     Phone.DataState state = getMobileDataState(intent);
@@ -192,7 +206,26 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                                 }
 
                                 setDetailedState(DetailedState.DISCONNECTED, reason, apnName);
-                                if (mInterfaceName != null) {
+                                boolean doReset = true;
+                                if (mIsDefaultOrHipri == true) {
+                                    // both default and hipri must go down before we reset
+                                    int typeToCheck = (Phone.APN_TYPE_DEFAULT.equals(mApnType) ?
+                                            ConnectivityManager.TYPE_MOBILE_HIPRI :
+                                            ConnectivityManager.TYPE_MOBILE);
+                                    if (mConnectivityManager == null) {
+                                        mConnectivityManager =
+                                                (ConnectivityManager)context.getSystemService(
+                                                Context.CONNECTIVITY_SERVICE);
+                                    }
+                                    if (mConnectivityManager != null) {
+                                        NetworkInfo info = mConnectivityManager.getNetworkInfo(
+                                                    typeToCheck);
+                                        if (info != null && info.isConnected() == true) {
+                                            doReset = false;
+                                        }
+                                    }
+                                }
+                                if (doReset && mInterfaceName != null) {
                                     NetworkUtils.resetConnections(mInterfaceName);
                                 }
                                 // can't do this here - ConnectivityService needs it to clear stuff
@@ -214,6 +247,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                                 if (mInterfaceName == null) {
                                     Log.d(TAG, "CONNECTED event did not supply interface name.");
                                 }
+                                mDefaultGatewayAddr = intent.getIntExtra(Phone.DATA_GATEWAY_KEY, 0);
+                                if (mDefaultGatewayAddr == 0) {
+                                    Log.d(TAG, "CONNECTED event did not supply a default gateway.");
+                                }
                                 setDetailedState(DetailedState.CONNECTED, reason, apnName);
                                 break;
                         }
@@ -227,9 +264,6 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                             reason == null ? "" : "(" + reason + ")");
                     setDetailedState(DetailedState.FAILED, reason, apnName);
                 }
-                TelephonyManager tm = TelephonyManager.getDefault();
-                setRoamingStatus(tm.isNetworkRoaming());
-                setSubtype(tm.getNetworkType(), tm.getNetworkTypeName());
             }
         }
     }
@@ -312,6 +346,9 @@ public class MobileDataStateTracker extends NetworkStateTracker {
         case TelephonyManager.NETWORK_TYPE_EVDO_A:
             networkTypeStr = "evdo";
             break;
+        case TelephonyManager.NETWORK_TYPE_EVDO_B:
+            networkTypeStr = "evdo";
+            break;
         }
         return "net.tcp.buffersize." + networkTypeStr;
     }
@@ -352,6 +389,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 intent.putExtra(Phone.DATA_APN_KEY, mApnName);
                 intent.putExtra(Phone.DATA_IFACE_NAME_KEY, mInterfaceName);
                 intent.putExtra(Phone.NETWORK_UNAVAILABLE_KEY, false);
+                intent.putExtra(Phone.DATA_GATEWAY_KEY, mDefaultGatewayAddr);
                 if (mStateReceiver != null) mStateReceiver.onReceive(mContext, intent);
                 break;
             case Phone.APN_REQUEST_STARTED:

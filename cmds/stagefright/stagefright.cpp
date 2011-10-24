@@ -603,14 +603,14 @@ int main(int argc, char **argv) {
             sp<IMemory> mem = retriever->captureFrame();
 
             if (mem != NULL) {
-                printf("captureFrame(%s) => OK\n", filename);
+                printf("getFrameAtTime(%s) => OK\n", filename);
             } else {
                 mem = retriever->extractAlbumArt();
 
                 if (mem != NULL) {
                     printf("extractAlbumArt(%s) => OK\n", filename);
                 } else {
-                    printf("both captureFrame and extractAlbumArt "
+                    printf("both getFrameAtTime and extractAlbumArt "
                            "failed on file '%s'.\n", filename);
                 }
             }

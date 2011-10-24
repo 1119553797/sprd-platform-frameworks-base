@@ -691,6 +691,19 @@ public interface CommandsInterface extends SprdCommandsInterface{
      *  retMsg.obj = AsyncResult ar
      *  ar.exception carries exception on failure
      *  ar.userObject contains the orignal value of result.obj
+     *  ar.result is null on success and failure
+     *
+     * CLIR_DEFAULT     == on "use subscription default value"
+     * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
+     * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
+     */
+    void dial(String address, int clirMode, UUSInfo uusInfo, Message result);
+
+    /**
+     *  returned message
+     *  retMsg.obj = AsyncResult ar
+     *  ar.exception carries exception on failure
+     *  ar.userObject contains the orignal value of result.obj
      *  ar.result is String containing IMSI on success
      */
     void getIMSI(Message result);
@@ -1341,18 +1354,25 @@ public interface CommandsInterface extends SprdCommandsInterface{
     void setCdmaSubscription(int cdmaSubscriptionType, Message response);
 
     /**
-     *  Set the TTY mode for the CDMA phone
+     *  Set the TTY mode
      *
-     * @param enable is true to enable, false to disable
+     * @param ttyMode one of the following:
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_OFF}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_FULL}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_HCO}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_VCO}
      * @param response is callback message
      */
     void setTTYMode(int ttyMode, Message response);
 
     /**
-     *  Query the TTY mode for the CDMA phone
+     *  Query the TTY mode
      * (AsyncResult)response.obj).result is an int[] with element [0] set to
-     * 0 for disabled, 1 for enabled.
-     *
+     * tty mode:
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_OFF}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_FULL}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_HCO}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_VCO}
      * @param response is callback message
      */
     void queryTTYMode(Message response);
@@ -1379,11 +1399,15 @@ public interface CommandsInterface extends SprdCommandsInterface{
      *            the password for APN, or NULL
      * @param authType
      *            the PAP / CHAP auth type. Values is one of SETUP_DATA_AUTH_*
+     * @param protocol
+     *            one of the PDP_type values in TS 27.007 section 10.1.1.
+     *            For example, "IP", "IPV6", "IPV4V6", or "PPP".
      * @param result
      *            Callback message
      */
-    public void setupDataCall(String radioTechnology, String profile, String apn,
-            String user, String password, String authType, Message result);
+    public void setupDataCall(String radioTechnology, String profile,
+            String apn, String user, String password, String authType,
+            String protocol, Message result);
 
     /**
      * Deactivate packet data connection

@@ -166,12 +166,15 @@ public:
             void            notify(int msg, int ext1, int ext2);
     static  sp<IMemory>     decode(const char* url, uint32_t *pSampleRate, int* pNumChannels, int* pFormat);
     static  sp<IMemory>     decode(int fd, int64_t offset, int64_t length, uint32_t *pSampleRate, int* pNumChannels, int* pFormat);
-    static  int             snoop(short *data, int len, int kind);
             status_t        invoke(const Parcel& request, Parcel *reply);
             status_t        setMetadataFilter(const Parcel& filter);
             status_t        getMetadata(bool update_only, bool apply_filter, Parcel *metadata);
             status_t        suspend();
             status_t        resume();
+            status_t        setAudioSessionId(int sessionId);
+            int             getAudioSessionId();
+            status_t        setAuxEffectSendLevel(float level);
+            status_t        attachAuxEffect(int effectId);
 private:
             void            clear_l();
             status_t        seekTo_l(int msec);
@@ -198,6 +201,8 @@ private:
     float                       mRightVolume;
     int                         mVideoWidth;
     int                         mVideoHeight;
+    int                         mAudioSessionId;
+    float                       mSendLevel;
 };
 
 }; // namespace android

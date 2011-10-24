@@ -155,7 +155,9 @@ void ScriptCState::runCompiler(Context *rsc, ScriptC *s)
         ACCchar buf[4096];
         ACCsizei len;
         accGetScriptInfoLog(s->mAccScript, sizeof(buf), &len, buf);
-        LOGV(buf);
+        LOGE("%s", buf);
+        rsc->setError(RS_ERROR_BAD_SCRIPT, "Error compiling user script.");
+        return;
     }
 
     if (s->mProgram.mInit) {
@@ -332,7 +334,7 @@ void ScriptCState::appendTypes(const Context *rsc, String8 *str)
             s.append(e->getName());
             s.append("\n\n");
             if (rsc->props.mLogScripts) {
-                LOGV(s);
+                LOGV("%s", static_cast<const char*>(s));
             }
             str->append(s);
         }
@@ -379,7 +381,7 @@ void ScriptCState::appendTypes(const Context *rsc, String8 *str)
             s.append(mSlotNames[ct]);
             s.append(";\n");
             if (rsc->props.mLogScripts) {
-                LOGV(s);
+                LOGV("%s", static_cast<const char*>(s));
             }
             str->append(s);
         }

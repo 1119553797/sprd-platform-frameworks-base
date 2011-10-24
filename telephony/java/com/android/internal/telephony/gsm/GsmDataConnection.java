@@ -104,9 +104,19 @@ public class GsmDataConnection extends DataConnection {
             authType = (apn.user != null) ? RILConstants.SETUP_DATA_AUTH_PAP_CHAP :
                 RILConstants.SETUP_DATA_AUTH_NONE;
         }
-        phone.mCM.setupDataCall(Integer.toString(RILConstants.SETUP_DATA_TECH_GSM),
-                Integer.toString(RILConstants.DATA_PROFILE_DEFAULT), apn.apn, apn.user,
-                apn.password, Integer.toString(authType), msg);
+
+        String protocol;
+        if (phone.getServiceState().getRoaming()) {
+            protocol = apn.roamingProtocol;
+        } else {
+            protocol = apn.protocol;
+        }
+
+        phone.mCM.setupDataCall(
+                Integer.toString(RILConstants.SETUP_DATA_TECH_GSM),
+                Integer.toString(RILConstants.DATA_PROFILE_DEFAULT),
+                apn.apn, apn.user, apn.password, Integer.toString(authType),
+                protocol, msg);
     }
 
     @Override
@@ -134,7 +144,7 @@ public class GsmDataConnection extends DataConnection {
                 cause = FailCause.INSUFFICIENT_RESOURCES;
                 break;
             case PDP_FAIL_MISSING_UKNOWN_APN:
-                cause = FailCause.MISSING_UKNOWN_APN;
+                cause = FailCause.MISSING_UNKNOWN_APN;
                 break;
             case PDP_FAIL_UNKNOWN_PDP_ADDRESS_TYPE:
                 cause = FailCause.UNKNOWN_PDP_ADDRESS;

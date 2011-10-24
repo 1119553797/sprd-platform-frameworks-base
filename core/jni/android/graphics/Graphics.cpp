@@ -2,7 +2,6 @@
 
 #include "jni.h"
 #include "GraphicsJNI.h"
-#include "NIOBuffer.h"
 #include "SkPicture.h"
 #include "SkRegion.h"
 #include <android_runtime/AndroidRuntime.h>
@@ -44,6 +43,10 @@ void doThrowISE(JNIEnv* env, const char* msg) {
 
 void doThrowOOME(JNIEnv* env, const char* msg) {
     doThrow(env, "java/lang/OutOfMemoryError", msg);
+}
+
+void doThrowIOE(JNIEnv* env, const char* msg) {
+    doThrow(env, "java/io/IOException", msg);
 }
 
 bool GraphicsJNI::hasException(JNIEnv *env) {
@@ -164,6 +167,9 @@ static jmethodID gBitmap_allocBufferMethodID;
 
 static jclass   gBitmapConfig_class;
 static jfieldID gBitmapConfig_nativeInstanceID;
+
+static jclass   gBitmapRegionDecoder_class;
+static jmethodID gBitmapRegionDecoder_constructorMethodID;
 
 static jclass   gCanvas_class;
 static jfieldID gCanvas_nativeInstanceID;
@@ -371,6 +377,24 @@ jobject GraphicsJNI::createBitmap(JNIEnv* env, SkBitmap* bitmap, bool isMutable,
     return obj;
 }
 
+jobject GraphicsJNI::createBitmapRegionDecoder(JNIEnv* env, SkBitmapRegionDecoder* bitmap)
+{
+    SkASSERT(bitmap != NULL);
+
+    jobject obj = env->AllocObject(gBitmapRegionDecoder_class);
+    if (hasException(env)) {
+        obj = NULL;
+        return obj;
+    }
+    if (obj) {
+        env->CallVoidMethod(obj, gBitmapRegionDecoder_constructorMethodID, (jint)bitmap);
+        if (hasException(env)) {
+            obj = NULL;
+        }
+    }
+    return obj;
+}
+
 jobject GraphicsJNI::createRegion(JNIEnv* env, SkRegion* region)
 {
     SkASSERT(region != NULL);
@@ -494,10 +518,52 @@ bool GraphicsJNI::setJavaPixelRef(JNIEnv* env, SkBitmap* bitmap,
 ///////////////////////////////////////////////////////////////////////////////
 
 JavaPixelAllocator::JavaPixelAllocator(JNIEnv* env, bool reportSizeToVM)
-    : fEnv(env), fReportSizeToVM(reportSizeToVM) {}
+    : fReportSizeToVM(reportSizeToVM) {
+    if (env->GetJavaVM(&fVM) != JNI_OK) {
+        SkDebugf("------ [%p] env->GetJavaVM failed\n", env);
+        sk_throw();
+    }
+}
     
 bool JavaPixelAllocator::allocPixelRef(SkBitmap* bitmap, SkColorTable* ctable) {
-    return GraphicsJNI::setJavaPixelRef(fEnv, bitmap, ctable, fReportSizeToVM);
+    JNIEnv* env = vm2env(fVM);
+    return GraphicsJNI::setJavaPixelRef(env, bitmap, ctable, fReportSizeToVM);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+JavaMemoryUsageReporter::JavaMemoryUsageReporter(JNIEnv* env)
+    : fTotalSize(0) {
+    if (env->GetJavaVM(&fVM) != JNI_OK) {
+        SkDebugf("------ [%p] env->GetJavaVM failed\n", env);
+        sk_throw();
+    }
+}
+
+JavaMemoryUsageReporter::~JavaMemoryUsageReporter() {
+    JNIEnv* env = vm2env(fVM);
+    jlong jtotalSize = fTotalSize;
+    env->CallVoidMethod(gVMRuntime_singleton,
+            gVMRuntime_trackExternalFreeMethodID,
+            jtotalSize);
+}
+
+bool JavaMemoryUsageReporter::reportMemory(size_t memorySize) {
+    jlong jsize = memorySize;  // the VM wants longs for the size
+    JNIEnv* env = vm2env(fVM);
+    bool r = env->CallBooleanMethod(gVMRuntime_singleton,
+            gVMRuntime_trackExternalAllocationMethodID,
+            jsize);
+    if (GraphicsJNI::hasException(env)) {
+        return false;
+    }
+    if (!r) {
+        LOGE("VM won't let us allocate %zd bytes\n", memorySize);
+        doThrowOOME(env, "bitmap size exceeds VM budget");
+        return false;
+    }
+    fTotalSize += memorySize;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -547,6 +613,9 @@ int register_android_graphics_Graphics(JNIEnv* env)
     gBitmap_constructorMethodID = env->GetMethodID(gBitmap_class, "<init>",
                                             "(IZ[BI)V");
 
+    gBitmapRegionDecoder_class = make_globalref(env, "android/graphics/BitmapRegionDecoder");
+    gBitmapRegionDecoder_constructorMethodID = env->GetMethodID(gBitmapRegionDecoder_class, "<init>", "(I)V");
+
     gBitmapConfig_class = make_globalref(env, "android/graphics/Bitmap$Config");
     gBitmapConfig_nativeInstanceID = getFieldIDCheck(env, gBitmapConfig_class,
                                                      "nativeInt", "I");    
@@ -581,8 +650,5 @@ int register_android_graphics_Graphics(JNIEnv* env)
     gVMRuntime_trackExternalFreeMethodID =
                             env->GetMethodID(c, "trackExternalFree", "(J)V");
 
-    NIOBuffer::RegisterJNI(env);
-
     return 0;
 }
-

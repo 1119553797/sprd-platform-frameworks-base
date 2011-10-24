@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "MPEG4Writer"
 #include <utils/Log.h>
 
@@ -1711,8 +1711,6 @@ status_t MPEG4Writer::Track::threadEntry() {
     int64_t previousPausedDurationUs = 0;
     int64_t timestampUs;
 
-    LOGI("wxz: enter the track::threadEntry.");
-
     if (mIsAudio) {
         prctl(PR_SET_NAME, (unsigned long)"AudioTrackEncoding", 0, 0, 0);
     } else {
@@ -1724,7 +1722,6 @@ status_t MPEG4Writer::Track::threadEntry() {
     status_t err = OK;
     MediaBuffer *buffer;
     while (!mDone && (err = mSource->read(&buffer)) == OK) {
-    	LOGI("wxz: ok to read().");
         if (buffer->range_length() == 0) {
             buffer->release();
             buffer = NULL;
@@ -1769,8 +1766,6 @@ status_t MPEG4Writer::Track::threadEntry() {
             mGotAllCodecSpecificData = true;
             continue;
         }
-    	
-	LOGI("wxz: before the MediaBuffer.");
 
         // Make a deep copy of the MediaBuffer and Metadata and release
         // the original as soon as we can
@@ -1796,14 +1791,11 @@ status_t MPEG4Writer::Track::threadEntry() {
         // Max file size or duration handling
         mMdatSizeBytes += sampleSize;
         updateTrackSizeEstimate();
-    	
-	LOGI("wxz: before check the file size.");
 
         if (mOwner->exceedsFileSizeLimit()) {
             mOwner->notify(MEDIA_RECORDER_EVENT_INFO, MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED, 0);
             break;
         }
-    	LOGI("wxz: before check the file duration.");
         if (mOwner->exceedsFileDurationLimit()) {
             mOwner->notify(MEDIA_RECORDER_EVENT_INFO, MEDIA_RECORDER_INFO_MAX_DURATION_REACHED, 0);
             break;
@@ -1856,7 +1848,6 @@ status_t MPEG4Writer::Track::threadEntry() {
             previousPausedDurationUs += pausedDurationUs - lastDurationUs;
             mResumed = false;
         }
-    	LOGI("wxz: check timestamp.");
 
         timestampUs -= previousPausedDurationUs;
         CHECK(timestampUs >= 0);
@@ -1925,7 +1916,6 @@ status_t MPEG4Writer::Track::threadEntry() {
         if (isSync != 0) {
             addOneStssTableEntry(mNumSamples);
         }
-    	LOGI("wxz: after addOneStssTableEntry.");
 
         if (mTrackingProgressStatus) {
             if (mPreviousTrackTimeUs <= 0) {
@@ -1943,7 +1933,6 @@ status_t MPEG4Writer::Track::threadEntry() {
             copy = NULL;
             continue;
         }
-    	LOGI("wxz: before push_back(copy).");
 
         mChunkSamples.push_back(copy);
         if (interleaveDurationUs == 0) {
@@ -1967,7 +1956,6 @@ status_t MPEG4Writer::Track::threadEntry() {
         }
 
     }
-    LOGI("wxz: exit the while, err=%d", err);
 
     if (mSampleSizes.empty() ||                      // no samples written
         (!mIsAudio && mNumStssTableEntries == 0) ||  // no sync frames for video
@@ -1975,7 +1963,6 @@ status_t MPEG4Writer::Track::threadEntry() {
         err = ERROR_MALFORMED;
     }
     mOwner->trackProgressStatus(this, -1, err);
-    LOGI("wxz: after trackProgpressStatus.");
 
     // Last chunk
     if (mOwner->numTracks() == 1) {
@@ -1984,7 +1971,6 @@ status_t MPEG4Writer::Track::threadEntry() {
         addOneStscTableEntry(++nChunks, mChunkSamples.size());
         bufferChunk(timestampUs);
     }
-    LOGI("wxz: after addOneStscTableEntry.");
 
     // We don't really know how long the last frame lasts, since
     // there is no frame time after it, just repeat the previous
@@ -2119,9 +2105,6 @@ void MPEG4Writer::Track::writeTrackHeader(
     int32_t mvhdTimeScale = mOwner->getTimeScale();
     int64_t trakDurationUs = getDurationUs();
 
-    LOGV("%s track duration: %lld",
-        mIsAudio? "Audio": "Video", trakDurationUs);
-	
     mOwner->beginBox("trak");
 
       mOwner->beginBox("tkhd");

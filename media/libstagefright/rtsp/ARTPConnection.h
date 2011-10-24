@@ -33,7 +33,7 @@ struct ARTPConnection : public AHandler {
         kRegularlyRequestFIR = 2,
     };
 
-    ARTPConnection(uint32_t flags = 0);  
+    ARTPConnection(uint32_t flags = 0);
 
     void addStream(
             int rtpSocket, int rtcpSocket,
@@ -45,8 +45,6 @@ struct ARTPConnection : public AHandler {
 
     void injectPacket(int index, const sp<ABuffer> &buffer);
 
-	
-
     // Creates a pair of UDP datagram sockets bound to adjacent ports
     // (the rtpSocket is bound to an even port, the rtcpSocket to the
     // next higher port).
@@ -54,7 +52,7 @@ struct ARTPConnection : public AHandler {
             int *rtpSocket, int *rtcpSocket, unsigned *rtpPort);
 
     void fakeTimestamps();
-    void setlocalTimestamps(bool local);  //@hong
+
 protected:
     virtual ~ARTPConnection();
     virtual void onMessageReceived(const sp<AMessage> &msg);
@@ -76,7 +74,6 @@ private:
     List<StreamInfo> mStreams;
 
     bool mPollEventPending;
-    bool mLocalTimestamps; //@hong
     int64_t mLastReceiverReportTimeUs;
 
     void onAddStream(const sp<AMessage> &msg);

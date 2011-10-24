@@ -39,7 +39,7 @@ public class BitmapFactory {
          * the same result from the decoder as if null were passed.
          */
         public Options() {
-            inDither = true;
+            inDither = false;
             inScaled = true;
         }
 
@@ -69,8 +69,11 @@ public class BitmapFactory {
          * the decoder will try to pick the best matching config based on the
          * system's screen depth, and characteristics of the original image such
          * as if it has per-pixel alpha (requiring a config that also does).
+         * 
+         * Image are loaded with the {@link Bitmap.Config#ARGB_8888} config by
+         * default.
          */
-        public Bitmap.Config inPreferredConfig;
+        public Bitmap.Config inPreferredConfig = Bitmap.Config.ARGB_8888;
 
         /**
          * If dither is true, the decoder will attempt to dither the decoded
@@ -203,10 +206,20 @@ public class BitmapFactory {
         public boolean inNativeAlloc;
 
         /**
+         * If inPreferQualityOverSpeed is set to true, the decoder will try to
+         * decode the reconstructed image to a higher quality even at the
+         * expense of the decoding speed. Currently the field only affects JPEG
+         * decode, in the case of which a more accurate, but slightly slower,
+         * IDCT method will be used instead.
+         */
+        public boolean inPreferQualityOverSpeed;
+
+        /**
          * The resulting width of the bitmap, set independent of the state of
          * inJustDecodeBounds. However, if there is an error trying to decode,
          * outWidth will be set to -1.
          */
+
         public int outWidth;
 
         /**
@@ -452,10 +465,8 @@ public class BitmapFactory {
             // into is.read(...) This number is not related to the value passed
             // to mark(...) above.
             byte [] tempStorage = null;
-            if (opts != null)
-                tempStorage = opts.inTempStorage;
-            if (tempStorage == null)
-                tempStorage = new byte[16 * 1024];
+            if (opts != null) tempStorage = opts.inTempStorage;
+            if (tempStorage == null) tempStorage = new byte[16 * 1024];
             bm = nativeDecodeStream(is, tempStorage, outPadding, opts);
         }
 
@@ -474,8 +485,7 @@ public class BitmapFactory {
         
         bm.setDensity(density);
         final int targetDensity = opts.inTargetDensity;
-        if (targetDensity == 0 || density == targetDensity
-                || density == opts.inScreenDensity) {
+        if (targetDensity == 0 || density == targetDensity || density == opts.inScreenDensity) {
             return bm;
         }
         
@@ -591,4 +601,3 @@ public class BitmapFactory {
             int length, Options opts);
     private static native byte[] nativeScaleNinePatch(byte[] chunk, float scale, Rect pad);
 }
-

@@ -1,5 +1,5 @@
 <?cs if:!sdk.redirect ?>
-<ul><?cs 
+<ul><?cs
   if:android.whichdoc == "online" ?>
   <li>
     <h2>
@@ -35,7 +35,17 @@
         </a></li>
 
     </ul>
-  </li><?cs 
+  </li><?cs
+  /if ?>
+  <?cs
+  if:sdk.preview ?>
+  <li><h2>Android 3.0 Preview</h2>
+    <ul>
+      <li><a href="<?cs var:toroot ?>sdk/android-3.0-highlights.html">Platform Highlights</a> <span
+class="new">new!</span></li>
+      <li><a href="<?cs var:toroot ?>sdk/preview/index.html">SDK</a> <span class="new">new!</span></li>
+    </ul>
+  </li><?cs
   /if ?>
   <li>
     <h2>
@@ -61,13 +71,28 @@
       </li>
     </ul>
     <ul>
-      <li><a href="<?cs var:toroot ?>sdk/android-2.2.html">Android 2.2 Platform</a> <span class="new">new!</span></li>
+      <li class="toggle-list">
+      <div><a href="<?cs var:toroot ?>sdk/android-2.3.3.html">
+      <span class="en">Android 2.3.3 Platform</span></a>  <span class="new">new!</span></div>
+        <ul>
+          <li><a href="<?cs var:toroot ?>sdk/api_diff/10/changes.html">API Differences Report &raquo;</a></li> 
+        </ul>
+      </li>
+      <li class="toggle-list">
+      <div><a href="<?cs var:toroot ?>sdk/android-2.3.html">
+      <span class="en">Android 2.3 Platform</span></a></div>
+        <ul>
+          <li><a href="<?cs var:toroot ?>sdk/android-2.3-highlights.html">Platform Highlights</a></li> 
+          <li><a href="<?cs var:toroot ?>sdk/api_diff/9/changes.html">API Differences Report &raquo;</a></li> 
+        </ul>
+      </li>
+      <li><a href="<?cs var:toroot ?>sdk/android-2.2.html">Android 2.2 Platform</a></li>
       <li><a href="<?cs var:toroot ?>sdk/android-2.1.html">Android 2.1 Platform</a></li>
       <li><a href="<?cs var:toroot ?>sdk/android-1.6.html">Android 1.6 Platform</a></li>
       <li><a href="<?cs var:toroot ?>sdk/android-1.5.html">Android 1.5 Platform</a></li>
       <li class="toggle-list">
         <div><a href="#" onclick="toggle(this.parentNode.parentNode,true); return false;">Older Platforms</a></div>
-        <ul> 
+        <ul>
           <li><a href="<?cs var:toroot ?>sdk/android-2.0.1.html">Android 2.0.1 Platform</a></li>
           <li><a href="<?cs var:toroot ?>sdk/android-2.0.html">Android 2.0 Platform</a></li>
           <li><a href="<?cs var:toroot ?>sdk/android-1.1.html">Android 1.1 Platform</a></li>
@@ -75,10 +100,8 @@
       </li>
     </ul>
     <ul>
-      <li><a href="<?cs var:toroot ?>sdk/tools-notes.html">SDK Tools, r6</a> <span class="new">new!</span></li>
-      <li><a href="<?cs var:toroot ?>sdk/win-usb.html">USB Driver for
-      Windows, r3</a>
-      </li>
+      <li><a href="<?cs var:toroot ?>sdk/tools-notes.html">SDK Tools, r9</a> <span class="new">new!</span></li>
+      <li><a href="<?cs var:toroot ?>sdk/win-usb.html">Google USB Driver, r4</a></li>
     </ul>
   </li>
   <li>
@@ -93,7 +116,7 @@
       <span style="display:none" class="zh-TW"></span>
       </h2>
     <ul>
-      <li><a href="<?cs var:toroot ?>sdk/eclipse-adt.html">ADT 0.9.7
+      <li><a href="<?cs var:toroot ?>sdk/eclipse-adt.html">ADT 9.0.0
       <span style="display:none" class="de"></span>
       <span style="display:none" class="es"></span>
       <span style="display:none" class="fr"></span>
@@ -101,8 +124,7 @@
       <span style="display:none" class="ja"></span>
       <span style="display:none" class="zh-CN"></span>
       <span style="display:none" class="zh-TW"></span></a>
-        <span class="new">new!</span>
-      </li>
+      <span class="new">new!</span></li>
     </ul>
   </li>
   <li>
@@ -116,10 +138,12 @@
       <span style="display:none" class="zh-TW"></span>
     </h2>
     <ul>
-      <li><a href="<?cs var:toroot ?>sdk/ndk/index.html">Android NDK, r4</a>
-      <span class="new">new!</span></li>
+      <li><a href="<?cs var:toroot ?>sdk/ndk/index.html">Android NDK, r5b</a>
+        <span class="new">new!</span></li>
+      <li><a href="<?cs var:toroot ?>sdk/ndk/overview.html">What is the NDK?</a></li>
     </ul>
   </li>
+
   <li>
     <h2>
       <span class="en">More Information</span>
@@ -132,12 +156,11 @@
       <span style="display:none" class="zh-TW"></span>
     </h2>
     <ul>
+      <li><a href="<?cs var:toroot ?>sdk/oem-usb.html">
+        <span class="en">OEM USB Drivers</span>
+      </a></li>
       <li><a href="<?cs var:toroot ?>sdk/requirements.html">SDK System Requirements</a></li>
-      <li><a href="<?cs var:toroot ?>sdk/terms.html">SDK Terms and Conditions</a></li>
-      <!-- <li><a href="<?cs var:toroot ?>sdk/RELEASENOTES.html">SDK Release
-            Notes</a></li> -->
-      <li><a href="<?cs var:toroot ?>sdk/older_releases.html">SDK
-            Archives</a></li>
+      <li><a href="<?cs var:toroot ?>sdk/older_releases.html">SDK Archives</a></li>
 
     </ul>
   </li>

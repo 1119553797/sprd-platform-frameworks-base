@@ -24,7 +24,12 @@ import android.util.Log;
 
 import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
+
 import com.android.internal.telephony.gsm.TDPhone;
+
+import com.android.internal.telephony.sip.SipPhone;
+import com.android.internal.telephony.sip.SipPhoneFactory;
+
 
 /**
  * {@hide}
@@ -108,6 +113,7 @@ public class PhoneFactory {
                 //reads the system properties and makes commandsinterface
                 sCommandsInterface = new SprdRIL(context, networkMode, cdmaSubscription);
 
+
                 //int phoneType = getPhoneType(networkMode);
                 //if (phoneType == Phone.PHONE_TYPE_GSM) {
                     sProxyPhone = new PhoneProxy(new TDPhone(context,
@@ -118,6 +124,18 @@ public class PhoneFactory {
                             sCommandsInterface, sPhoneNotifier));
                     Log.i(LOG_TAG, "Creating CDMAPhone");
                 }*/
+
+ //               int phoneType = getPhoneType(networkMode);
+ //               if (phoneType == Phone.PHONE_TYPE_GSM) {
+  //                  Log.i(LOG_TAG, "Creating GSMPhone");
+  //                  sProxyPhone = new PhoneProxy(new GSMPhone(context,
+  //                          sCommandsInterface, sPhoneNotifier));
+    //            } else if (phoneType == Phone.PHONE_TYPE_CDMA) {
+    //                Log.i(LOG_TAG, "Creating CDMAPhone");
+   //                 sProxyPhone = new PhoneProxy(new CDMAPhone(context,
+  //                          sCommandsInterface, sPhoneNotifier));
+                }
+
 
                 sMadeDefaults = true;
             }
@@ -177,6 +195,7 @@ public class PhoneFactory {
             return phone;
         }
     }
+
 	
     public static CommandsInterface getDefaultCM() {
         if (sLooper != Looper.myLooper()) {
@@ -188,5 +207,15 @@ public class PhoneFactory {
             throw new IllegalStateException("Default CommandsInfterface haven't been made yet!");
         }
        return sCommandsInterface;
+
+
+    /**
+     * Makes a {@link SipPhone} object.
+     * @param sipUri the local SIP URI the phone runs on
+     * @return the {@code SipPhone} object or null if the SIP URI is not valid
+     */
+    public static SipPhone makeSipPhone(String sipUri) {
+        return SipPhoneFactory.makePhone(sipUri, sContext, sPhoneNotifier);
+
     }
 }

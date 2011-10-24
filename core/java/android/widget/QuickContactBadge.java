@@ -50,6 +50,7 @@ public class QuickContactBadge extends ImageView implements OnClickListener {
     private QueryHandler mQueryHandler;
     private Drawable mBadgeBackground;
     private Drawable mNoBadgeBackground;
+    private int mSelectedContactsAppTabIndex = -1;
 
     protected String[] mExcludeMimes = null;
 
@@ -141,6 +142,15 @@ public class QuickContactBadge extends ImageView implements OnClickListener {
     }
 	//end
 	
+    /**
+     * Sets the currently selected tab of the Contacts application. If not set, this is -1
+     * and therefore does not save a tab selection when a phone call is being made
+     * @hide
+     */
+    public void setSelectedContactsAppTabIndex(int value) {
+        mSelectedContactsAppTabIndex = value;
+    }
+
     private void onContactUriChanged() {
         if (mContactUri == null && mContactEmail == null && mContactPhone == null) {
             if (mNoBadgeBackground == null) {
@@ -229,7 +239,13 @@ public class QuickContactBadge extends ImageView implements OnClickListener {
     }
 
     private void trigger(Uri lookupUri) {
-        QuickContact.showQuickContact(getContext(), this, lookupUri, mMode, mExcludeMimes);
+        final Intent intent = QuickContact.getQuickContactIntent(getContext(), this, lookupUri,
+                mMode, mExcludeMimes);
+        if (mSelectedContactsAppTabIndex != -1) {
+            intent.putExtra(QuickContact.EXTRA_SELECTED_CONTACTS_APP_TAB_INDEX,
+                    mSelectedContactsAppTabIndex);
+        }
+        getContext().startActivity(intent);
     }
 	
 	//yeezone:jinwei
@@ -256,6 +272,7 @@ public class QuickContactBadge extends ImageView implements OnClickListener {
                         trigger = true;
                         createUri = Uri.fromParts("tel", (String)cookie, null);
 
+                        //$FALL-THROUGH$
                     case TOKEN_PHONE_LOOKUP: {
                         if (cursor != null && cursor.moveToFirst()) {
                             long contactId = cursor.getLong(PHONE_ID_COLUMN_INDEX);
@@ -269,12 +286,14 @@ public class QuickContactBadge extends ImageView implements OnClickListener {
                         trigger = true;
                         createUri = Uri.fromParts("mailto", (String)cookie, null);
 
+                        //$FALL-THROUGH$
                     case TOKEN_EMAIL_LOOKUP: {
                         if (cursor != null && cursor.moveToFirst()) {
                             long contactId = cursor.getLong(EMAIL_ID_COLUMN_INDEX);
                             String lookupKey = cursor.getString(EMAIL_LOOKUP_STRING_COLUMN_INDEX);
                             lookupUri = Contacts.getLookupUri(contactId, lookupKey);
                         }
+                        break;
                     }
 
                     case TOKEN_CONTACT_LOOKUP_AND_TRIGGER: {

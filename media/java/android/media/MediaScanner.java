@@ -402,6 +402,7 @@ public class MediaScanner
         private long mLastModified;
         private long mFileSize;
         private String mWriter;
+        private int mCompilation;
 
         public FileCacheEntry beginFile(String path, String mimeType, long lastModified, long fileSize) {
 
@@ -486,6 +487,7 @@ public class MediaScanner
             mPath = path;
             mLastModified = lastModified;
             mWriter = null;
+            mCompilation = 0;
 
             return entry;
         }
@@ -548,15 +550,6 @@ public class MediaScanner
         }
 
         public void handleStringTag(String name, String value) {
-            //CR 252050 Modify start
-            try{
-                if(value.equals(new String(value.getBytes("ISO8859_1"), "ISO8859_1"))) {
-                    String result = new String(value.getBytes("ISO8859_1"),"GBK");
-                    value = result;
-                } 
-            }catch(Exception e){}
-            //CR 252050 Modify end
-
             if (name.equalsIgnoreCase("title") || name.startsWith("title;")) {
                 // Don't trim() here, to preserve the special \001 character
                 // used to force sorting. The media provider will trim() before
@@ -605,6 +598,8 @@ public class MediaScanner
                 mDuration = parseSubstring(value, 0, 0);
             } else if (name.equalsIgnoreCase("writer") || name.startsWith("writer;")) {
                 mWriter = value.trim();
+            } else if (name.equalsIgnoreCase("compilation")) {
+                mCompilation = parseSubstring(value, 0, 0);
             }
         }
 
@@ -655,6 +650,7 @@ public class MediaScanner
                 }
                 map.put(Audio.Media.TRACK, mTrack);
                 map.put(Audio.Media.DURATION, mDuration);
+                map.put(Audio.Media.COMPILATION, mCompilation);
             }
             return map;
         }

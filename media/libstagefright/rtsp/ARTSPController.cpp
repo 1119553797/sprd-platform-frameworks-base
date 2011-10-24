@@ -40,8 +40,6 @@ ARTSPController::~ARTSPController() {
     mLooper->unregisterHandler(mReflector->id());
 }
 
-
-
 status_t ARTSPController::connect(const char *url) {
     Mutex::Autolock autoLock(mLock);
 
@@ -180,9 +178,8 @@ int64_t ARTSPController::getNormalPlayTimeUs() {
 
 int64_t ARTSPController::getQueueDurationUs(bool *eos) {
     *eos = true;
-   
+
     int64_t minQueuedDurationUs = 0;
-    LOGI("getQueueDurationUs");
     for (size_t i = 0; i < mHandler->countTracks(); ++i) {
         sp<APacketSource> source = mHandler->getPacketSource(i);
 
@@ -192,31 +189,13 @@ int64_t ARTSPController::getQueueDurationUs(bool *eos) {
         if (!newEOS) {
             *eos = false;
         }
-#if 0		
-        if (i == 0 || queuedDurationUs > minQueuedDurationUs) {  //@hong use max time for CMMB temply
-		if (minQueuedDurationUs > 100000ll || i==0) 
-		minQueuedDurationUs = queuedDurationUs;
-        }else if (queuedDurationUs < 100000ll) minQueuedDurationUs = queuedDurationUs;
-#endif
-		if (minQueuedDurationUs > queuedDurationUs || i==0) 
-		minQueuedDurationUs = queuedDurationUs;
-	
+
+        if (i == 0 || queuedDurationUs < minQueuedDurationUs) {
+            minQueuedDurationUs = queuedDurationUs;
+        }
     }
 
     return minQueuedDurationUs;
-}
-
-void  ARTSPController::stopSource() {  //@hong   
-
-    LOGI("stopSource");
-    for (size_t i = 0; i < mHandler->countTracks(); ++i) {
-        sp<APacketSource> source = mHandler->getPacketSource(i);
-
-        source->stop();
-
-    }
-
-    return;
 }
 
 }  // namespace android

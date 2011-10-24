@@ -106,6 +106,7 @@ public interface Phone extends SprdVideoPhone{
     static final String DATA_APN_KEY = "apn";
 
     static final String DATA_IFACE_NAME_KEY = "iface";
+    static final String DATA_GATEWAY_KEY = "gateway";
     static final String NETWORK_UNAVAILABLE_KEY = "networkUnvailable";
     static final String PHONE_IN_ECM_STATE = "phoneinECMState";
 
@@ -180,6 +181,7 @@ public interface Phone extends SprdVideoPhone{
     static final int PHONE_TYPE_NONE = RILConstants.NO_PHONE;
     static final int PHONE_TYPE_GSM = RILConstants.GSM_PHONE;
     static final int PHONE_TYPE_CDMA = RILConstants.CDMA_PHONE;
+    static final int PHONE_TYPE_SIP = RILConstants.SIP_PHONE;
 
     // Used for preferred network type
     // Note NT_* substitute RILConstants.NETWORK_MODE_* above the Phone
@@ -248,15 +250,14 @@ public interface Phone extends SprdVideoPhone{
     /**
      * Get the current DataState. No change notification exists at this
      * interface -- use
-     * {@link com.android.telephony.PhoneStateListener PhoneStateListener}
-     * instead.
+     * {@link android.telephony.PhoneStateListener} instead.
      */
     DataState getDataConnectionState();
 
     /**
      * Get the current DataActivityState. No change notification exists at this
      * interface -- use
-     * {@link TelephonyManager} instead.
+     * {@link android.telephony.TelephonyManager} instead.
      */
     DataActivityState getDataActivityState();
 
@@ -794,6 +795,19 @@ public interface Phone extends SprdVideoPhone{
     Connection dial(String dialString) throws CallStateException;
 
     /**
+     * Initiate a new voice connection with supplementary User to User
+     * Information. This happens asynchronously, so you cannot assume the audio
+     * path is connected (or a call index has been assigned) until
+     * PhoneStateChanged notification has occurred.
+     *
+     * @exception CallStateException if a new outgoing call is not currently
+     *                possible because no more call slots exist or a call exists
+     *                that is dialing, alerting, ringing, or waiting. Other
+     *                errors are handled asynchronously.
+     */
+    Connection dial(String dialString, UUSInfo uusInfo) throws CallStateException;
+
+    /**
      * Handles PIN MMI commands (PIN/PIN2/PUK/PUK2), which are initiated
      * without SEND (so <code>dial</code> is not appropriate).
      *
@@ -845,7 +859,7 @@ public interface Phone extends SprdVideoPhone{
      * @param dtmfString is string representing the dialing digit(s) in the active call
      * @param on the DTMF ON length in milliseconds, or 0 for default
      * @param off the DTMF OFF length in milliseconds, or 0 for default
-     * @param onCompelte is the callback message when the action is processed by BP
+     * @param onComplete is the callback message when the action is processed by BP
      *
      */
     void sendBurstDtmf(String dtmfString, int on, int off, Message onComplete);
@@ -992,7 +1006,7 @@ public interface Phone extends SprdVideoPhone{
      * ((AsyncResult)onComplete.obj) is an array of int, with a length of 2.
      *
      * @param onComplete a callback message when the action is completed.
-     *        @see com.android.internal.telephony.CommandsInterface.getCLIR for details.
+     *        @see com.android.internal.telephony.CommandsInterface#getCLIR for details.
      */
     void getOutgoingCallerIdDisplay(Message onComplete);
 
@@ -1014,7 +1028,7 @@ public interface Phone extends SprdVideoPhone{
      * ((AsyncResult)onComplete.obj) is an array of int, with a length of 1.
      *
      * @param onComplete a callback message when the action is completed.
-     *        @see com.android.internal.telephony.CommandsInterface.queryCallWaiting for details.
+     *        @see com.android.internal.telephony.CommandsInterface#queryCallWaiting for details.
      */
     void getCallWaiting(Message onComplete);
 
@@ -1165,6 +1179,11 @@ public interface Phone extends SprdVideoPhone{
      * @return true is muting, false is unmuting
      */
     boolean getMute();
+
+    /**
+     * Enables or disables echo suppression.
+     */
+    void setEchoSuppressionEnabled(boolean enabled);
 
     /**
      * Invokes RIL_REQUEST_OEM_HOOK_RAW on RIL implementation.
@@ -1456,9 +1475,11 @@ public interface Phone extends SprdVideoPhone{
     /**
      * setTTYMode
      * sets a TTY mode option.
-     *
-     * @param enable is a boolean representing the state that you are
-     *        requesting, true for enabled, false for disabled.
+     * @param ttyMode is a one of the following:
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_OFF}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_FULL}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_HCO}
+     * - {@link com.android.internal.telephony.Phone#TTY_MODE_VCO}
      * @param onComplete a callback message when the action is completed
      */
     void setTTYMode(int ttyMode, Message onComplete);

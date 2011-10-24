@@ -33,11 +33,9 @@
 namespace android {
 
 class IMediaRecorder;
-class IMediaPhone;
 class IMediaMetadataRetriever;
 class IOMX;
 class MediaRecorderClient;
-class MediaPhoneClient;
 
 #define CALLBACK_ANTAGONIZER 0
 #if CALLBACK_ANTAGONIZER
@@ -67,7 +65,7 @@ class MediaPlayerService : public BnMediaPlayerService
     class AudioOutput : public MediaPlayerBase::AudioSink
     {
     public:
-                                AudioOutput();
+                                AudioOutput(int sessionId);
         virtual                 ~AudioOutput();
 
         virtual bool            ready() const { return mTrack != NULL; }
@@ -79,6 +77,7 @@ class MediaPlayerService : public BnMediaPlayerService
         virtual uint32_t        latency() const;
         virtual float           msecsPerFrame() const;
         virtual status_t        getPosition(uint32_t *position);
+        virtual int             getSessionId();
 
         virtual status_t        open(
                 uint32_t sampleRate, int channelCount,
@@ -93,6 +92,8 @@ class MediaPlayerService : public BnMediaPlayerService
         virtual void            close();
                 void            setAudioStreamType(int streamType) { mStreamType = streamType; }
                 void            setVolume(float left, float right);
+                status_t        setAuxEffectSendLevel(float level);
+                status_t        attachAuxEffect(int effectId);
         virtual status_t        dump(int fd, const Vector<String16>& args) const;
 
         static bool             isOnEmulator();
@@ -110,13 +111,12 @@ class MediaPlayerService : public BnMediaPlayerService
         float                   mRightVolume;
         float                   mMsecsPerFrame;
         uint32_t                mLatency;
-
+        int                     mSessionId;
+        float                   mSendLevel;
+        int                     mAuxEffectId;
         static bool             mIsOnEmulator;
         static int              mMinBufferCount;  // 12 for emulator; otherwise 4
 
-        public: // visualization hack support
-        uint32_t                mNumFramesWritten;
-        void                    snoopWrite(const void*, size_t);
     };
 
     class AudioCache : public MediaPlayerBase::AudioSink
@@ -134,6 +134,7 @@ class MediaPlayerService : public BnMediaPlayerService
         virtual uint32_t        latency() const;
         virtual float           msecsPerFrame() const;
         virtual status_t        getPosition(uint32_t *position);
+        virtual int             getSessionId();
 
         virtual status_t        open(
                 uint32_t sampleRate, int channelCount, int format,
@@ -182,19 +183,16 @@ public:
     // IMediaPlayerService interface
     virtual sp<IMediaRecorder>  createMediaRecorder(pid_t pid);
     void    removeMediaRecorderClient(wp<MediaRecorderClient> client);
-    virtual sp<IMediaPhone>  createMediaPhone(pid_t pid);
-    void    removeMediaPhoneClient(wp<MediaPhoneClient> client);
     virtual sp<IMediaMetadataRetriever> createMetadataRetriever(pid_t pid);
 
     // House keeping for media player clients
     virtual sp<IMediaPlayer>    create(
             pid_t pid, const sp<IMediaPlayerClient>& client, const char* url,
-            const KeyedVector<String8, String8> *headers);
+            const KeyedVector<String8, String8> *headers, int audioSessionId);
 
-    virtual sp<IMediaPlayer>    create(pid_t pid, const sp<IMediaPlayerClient>& client, int fd, int64_t offset, int64_t length);
+    virtual sp<IMediaPlayer>    create(pid_t pid, const sp<IMediaPlayerClient>& client, int fd, int64_t offset, int64_t length, int audioSessionId);
     virtual sp<IMemory>         decode(const char* url, uint32_t *pSampleRate, int* pNumChannels, int* pFormat);
     virtual sp<IMemory>         decode(int fd, int64_t offset, int64_t length, uint32_t *pSampleRate, int* pNumChannels, int* pFormat);
-    virtual sp<IMemory>         snoop();
     virtual sp<IOMX>            getOMX();
 
     virtual status_t            dump(int fd, const Vector<String16>& args);
@@ -228,6 +226,8 @@ private:
                                             Parcel *reply);
         virtual status_t        suspend();
         virtual status_t        resume();
+        virtual status_t        setAuxEffectSendLevel(float level);
+        virtual status_t        attachAuxEffect(int effectId);
 
         sp<MediaPlayerBase>     createPlayer(player_type playerType);
 
@@ -241,12 +241,15 @@ private:
                 pid_t           pid() const { return mPid; }
         virtual status_t        dump(int fd, const Vector<String16>& args) const;
 
+                int             getAudioSessionId() { return mAudioSessionId; }
+
     private:
         friend class MediaPlayerService;
                                 Client( const sp<MediaPlayerService>& service,
                                         pid_t pid,
                                         int32_t connId,
-                                        const sp<IMediaPlayerClient>& client);
+                                        const sp<IMediaPlayerClient>& client,
+                                        int audioSessionId);
                                 Client();
         virtual                 ~Client();
 
@@ -275,6 +278,7 @@ private:
                     status_t                    mStatus;
                     bool                        mLoop;
                     int32_t                     mConnId;
+                    int                         mAudioSessionId;
 
         // Metadata filters.
         media::Metadata::Filter mMetadataAllow;  // protected by mLock
@@ -299,7 +303,6 @@ private:
     mutable     Mutex                       mLock;
                 SortedVector< wp<Client> >  mClients;
                 SortedVector< wp<MediaRecorderClient> > mMediaRecorderClients;
-                SortedVector< wp<MediaPhoneClient> > mMediaPhoneClients;
                 int32_t                     mNextConnId;
                 sp<IOMX>                    mOMX;
 };

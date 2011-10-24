@@ -422,7 +422,8 @@ public class PduPersister {
                     // Store simple string values directly in the database instead of an
                     // external file.  This makes the text searchable and retrieval slightly
                     // faster.
-                    if ("text/plain".equals(type) || "application/smil".equals(type)) {
+                    if (ContentType.TEXT_PLAIN.equals(type) || ContentType.APP_SMIL.equals(type)
+                            || ContentType.TEXT_HTML.equals(type)) {
                         String text = c.getString(PART_COLUMN_TEXT);
                         //======fixed CR<NEWMS00110183> by luning at 11-08-18 begin======
 						byte[] blob;
@@ -753,8 +754,10 @@ public class PduPersister {
 
         try {
             byte[] data = part.getData();
-            if ("text/plain".equals(contentType) || "application/smil".equals(contentType)) {
-                ContentValues cv = new ContentValues();            
+            if (ContentType.TEXT_PLAIN.equals(contentType)
+                    || ContentType.APP_SMIL.equals(contentType)
+                    || ContentType.TEXT_HTML.equals(contentType)) {
+                ContentValues cv = new ContentValues();
                 //======fixed CR<NEWMS00110183> by luning at 11-08-18 begin======
                 int charset = part.getCharset(); 
                 Log.d("lu", "PduPersister--->save text to database,use charset:"+charset);
