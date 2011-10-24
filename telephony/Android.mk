@@ -29,5 +29,8 @@ LOCAL_SRC_FILES := $(telephony_src_files)
 $(info $(LOCAL_SRC_FILES) ...telephony....)
 
 LOCAL_MODULE := telephony_sp
+
+LOCAL_MODULE_TAGS := optional
+
 include $(BUILD_JAVA_LIBRARY)
 
