@@ -31,7 +31,6 @@
 namespace android {
 
 class IMediaRecorder;
-class IMediaPhone;
 class IOMX;
 
 class IMediaPlayerService: public IInterface
@@ -40,7 +39,6 @@ public:
     DECLARE_META_INTERFACE(MediaPlayerService);
 
     virtual sp<IMediaRecorder>  createMediaRecorder(pid_t pid) = 0;
-    virtual sp<IMediaPhone>  createMediaPhone(pid_t pid) = 0;
     virtual sp<IMediaMetadataRetriever> createMetadataRetriever(pid_t pid) = 0;
     virtual sp<IMediaPlayer> create(pid_t pid, const sp<IMediaPlayerClient>& client,
             const char* url, const KeyedVector<String8, String8> *headers = NULL,

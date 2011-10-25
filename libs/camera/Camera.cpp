@@ -15,7 +15,7 @@
 ** limitations under the License.
 */
 
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #define LOG_TAG "Camera"
 #include <utils/Log.h>
 #include <utils/threads.h>
@@ -97,25 +97,6 @@ Camera::~Camera()
     // call disconnect() here if we are in the same process as mediaserver,
     // because we may be invoked by CameraService::Client::connect() and will
     // deadlock if we call any method of ICamera here.
-}
-int32_t Camera::getNumberOfCameras()
-{
-    const sp<ICameraService>& cs = getCameraService();
-    if (cs == 0) return 0;
-    return cs->getNumberOfCameras();
-}
-
-status_t Camera::getCameraInfo(int cameraId,
-                               struct CameraInfo* cameraInfo) {
-    const sp<ICameraService>& cs = getCameraService();
-    if (cs == 0) return UNKNOWN_ERROR;
-    return cs->getCameraInfo(cameraId, cameraInfo);
-}
-int32_t Camera::setCameraId(int cameraId)
-{
-    const sp<ICameraService>& cs = getCameraService();
-    if (cs == 0) return 0;
-    return cs->setCameraId(cameraId);
 }
 
 int32_t Camera::getNumberOfCameras()
@@ -251,7 +232,7 @@ void Camera::stopRecording()
 // release a recording frame
 void Camera::releaseRecordingFrame(const sp<IMemory>& mem)
 {
-    //LOGV("releaseRecordingFrame");
+    LOGV("releaseRecordingFrame");
     sp <ICamera> c = mCamera;
     if (c == 0) return;
     c->releaseRecordingFrame(mem);

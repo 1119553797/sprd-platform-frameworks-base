@@ -33,14 +33,6 @@ public:
         : BpInterface<ICameraService>(impl)
     {
     }
-    // get number of cameras available
-    virtual int32_t getNumberOfCameras()
-    {
-        Parcel data, reply;
-        data.writeInterfaceToken(ICameraService::getInterfaceDescriptor());
-        remote()->transact(BnCameraService::GET_NUMBER_OF_CAMERAS, data, &reply);
-        return reply.readInt32();
-    }
 
     // get number of cameras available
     virtual int32_t getNumberOfCameras()
@@ -62,15 +54,6 @@ public:
         cameraInfo->orientation = reply.readInt32();
         return reply.readInt32();
     }
-
-    virtual int32_t setCameraId(int cameraId)
-    {
-        Parcel data, reply;
-        data.writeInterfaceToken(ICameraService::getInterfaceDescriptor());
-	data.writeInt32(cameraId);
-        remote()->transact(BnCameraService::SET_CAMERA_ID, data, &reply);
-        return reply.readInt32();
-    }	
 
     // connect to camera service
     virtual sp<ICamera> connect(const sp<ICameraClient>& cameraClient, int cameraId)
@@ -106,14 +89,7 @@ status_t BnCameraService::onTransact(
             reply->writeInt32(cameraInfo.orientation);
             reply->writeInt32(result);
             return NO_ERROR;
-
-        } break;	
-        case SET_CAMERA_ID: {
-            CHECK_INTERFACE(ICameraService, data, reply);
-            reply->writeInt32(setCameraId(data.readInt32()));
-            return NO_ERROR;
-        } break;		
-
+        } break;
         case CONNECT: {
             CHECK_INTERFACE(ICameraService, data, reply);
             sp<ICameraClient> cameraClient = interface_cast<ICameraClient>(data.readStrongBinder());
