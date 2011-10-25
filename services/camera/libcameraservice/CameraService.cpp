@@ -102,17 +102,12 @@ int32_t CameraService::getNumberOfCameras() {
 
 status_t CameraService::getCameraInfo(int cameraId,
                                       struct CameraInfo* cameraInfo) {
-    int mNumberOfCameras = HAL_getNumberOfCameras();
     if (cameraId < 0 || cameraId >= mNumberOfCameras) {
         return BAD_VALUE;
     }
 
     HAL_getCameraInfo(cameraId, cameraInfo);
     return OK;
-}
-
-int32_t CameraService::setCameraId(int cameraId) {
-    return HAL_setCameraId(cameraId);
 }
 
 sp<ICamera> CameraService::connect(
@@ -644,7 +639,7 @@ status_t CameraService::Client::startCameraMode(camera_mode mode) {
         case CAMERA_RECORDING_MODE:
             if (mSurface == 0) {
                 LOGE("mSurface must be set before startRecordingMode.");
-                //return INVALID_OPERATION; //wxz20110913: delete it for VT. VT need to record even if surface is null in some case
+                return INVALID_OPERATION;
             }
             return startRecordingMode();
         default:
@@ -949,7 +944,7 @@ void CameraService::Client::notifyCallback(int32_t msgType, int32_t ext1,
 
 void CameraService::Client::dataCallback(int32_t msgType,
         const sp<IMemory>& dataPtr, void* user) {
-    //LOG2("dataCallback(%d)", msgType);
+    LOG2("dataCallback(%d)", msgType);
 
     sp<Client> client = getClientFromCookie(user);
     if (client == 0) return;
@@ -982,7 +977,7 @@ void CameraService::Client::dataCallback(int32_t msgType,
 
 void CameraService::Client::dataCallbackTimestamp(nsecs_t timestamp,
         int32_t msgType, const sp<IMemory>& dataPtr, void* user) {
-    //LOG2("dataCallbackTimestamp(%d)", msgType);
+    LOG2("dataCallbackTimestamp(%d)", msgType);
 
     sp<Client> client = getClientFromCookie(user);
     if (client == 0) return;
@@ -1060,7 +1055,7 @@ void CameraService::Client::handlePreviewData(const sp<IMemory>& mem) {
     // is callback enabled?
     if (!(flags & FRAME_CALLBACK_FLAG_ENABLE_MASK)) {
         // If the enable bit is off, the copy-out and one-shot bits are ignored
-        //LOG2("frame callback is disabled");
+        LOG2("frame callback is disabled");
         mLock.unlock();
         return;
     }

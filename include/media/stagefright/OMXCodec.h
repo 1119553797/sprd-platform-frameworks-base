@@ -44,9 +44,7 @@ struct OMXCodec : public MediaSource,
             const sp<MetaData> &meta, bool createEncoder,
             const sp<MediaSource> &source,
             const char *matchComponentName = NULL,
-            uint32_t flags = 0,
-            OMX_U32 bufferCountInput = 0,
-            OMX_U32 bufferCountOutput = 0);//sprd
+            uint32_t flags = 0);
 
     static void setComponentRole(
             const sp<IOMX> &omx, IOMX::node_id node, bool isEncoder,
@@ -171,20 +169,9 @@ private:
     List<size_t> mFilledBuffers;
     Condition mBufferFilled;
 
-	// Configure buffer count to speed up videophone downlink speed
-	OMX_U32 mBufferCountInput;
-	OMX_U32 mBufferCountOutput;
-
-	// Used to speed up videophone downlink speed
-	Vector<int> mEmptyBuffers; // store buffers returned by codec
-	bool mInitialRead; // whether firstly read
-	bool mWaitOutput;
-
     OMXCodec(const sp<IOMX> &omx, IOMX::node_id node, uint32_t quirks,
              bool isEncoder, const char *mime, const char *componentName,
-             const sp<MediaSource> &source, 
-             OMX_U32 bufferCountInput = 0,
-             OMX_U32 bufferCountOutput = 0);
+             const sp<MediaSource> &source);
 
     void addCodecSpecificData(const void *data, size_t size);
     void clearCodecSpecificData();
