@@ -134,7 +134,7 @@ public class PhoneFactory {
     //                Log.i(LOG_TAG, "Creating CDMAPhone");
    //                 sProxyPhone = new PhoneProxy(new CDMAPhone(context,
   //                          sCommandsInterface, sPhoneNotifier));
-                }
+               // }
 
 
                 sMadeDefaults = true;
@@ -207,7 +207,7 @@ public class PhoneFactory {
             throw new IllegalStateException("Default CommandsInfterface haven't been made yet!");
         }
        return sCommandsInterface;
-
+    }
 
     /**
      * Makes a {@link SipPhone} object.

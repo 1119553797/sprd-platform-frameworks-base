@@ -109,7 +109,7 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
 	                        if(DBG) log("[sms]get sim capacity fail");
 	                    }
 	                    mLock.notifyAll();
-
+                    }
                 case EVENT_SET_BROADCAST_ACTIVATION_DONE:
                 case EVENT_SET_BROADCAST_CONFIG_DONE:
                     ar = (AsyncResult) msg.obj;

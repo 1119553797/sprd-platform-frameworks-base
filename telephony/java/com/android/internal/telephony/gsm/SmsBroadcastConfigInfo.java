@@ -39,7 +39,7 @@ public final class SmsBroadcastConfigInfo {
     private int toServiceId;
     private int fromCodeScheme;
     private int toCodeScheme;
-    private int selected;
+    private boolean selected;
 
     /**
      * Initialize the object from rssi and cid.
@@ -121,14 +121,14 @@ public final class SmsBroadcastConfigInfo {
     /**
      * @param selected the selected to set
      */
-    public void setSelected(int selected) {
+    public void setSelected(boolean selected) {
         this.selected = selected;
     }
 
     /**
      * @return the selected
      */
-    public int isSelected() {
+    public boolean isSelected() {
         return selected;
     }
 

@@ -1437,6 +1437,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             }
         }
     }
+}
 
     private void createAllPdpList() {
         pdpList = new ArrayList<DataConnection>();
