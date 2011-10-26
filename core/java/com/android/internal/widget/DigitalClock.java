@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2008 The Android Open Source Project
  *
@@ -51,6 +52,7 @@ public class DigitalClock extends LinearLayout {
     private AmPm mAmPm;
     private ContentObserver mFormatChangeObserver;
     private int mAttached = 0; // for debugging - tells us whether attach/detach is unbalanced
+    private static final String TAG = "DigitalClock";
 
     /* called by system on minute ticks */
     private final Handler mHandler = new Handler();

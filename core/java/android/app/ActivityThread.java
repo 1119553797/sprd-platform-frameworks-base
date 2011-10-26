@@ -3579,13 +3579,8 @@ public final class ActivityThread {
                 }
             }
             if (localProvider != null) {
-                ProviderRecord localPr = new ProviderRecord(null, provider, localProvider);
-                try {
-                    provider.asBinder().linkToDeath(localPr, 0);
-                    mLocalProviders.put(provider.asBinder(),localPr);
-                } catch (RemoteException e) {
-                    return null;
-                }
+                mLocalProviders.put(provider.asBinder(),
+                        new ProviderClientRecord(null, provider, localProvider));
             }
         }
 

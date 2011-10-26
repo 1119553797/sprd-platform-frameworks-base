@@ -1874,7 +1874,7 @@ public final class Settings {
             SHOW_WEB_SUGGESTIONS,
             NOTIFICATION_LIGHT_PULSE,
             //add by niezhong for wifi proxy settings(NEWMS00107901) start
-            WIFI_CELLULAR_WLAN
+            WIFI_CELLULAR_WLAN,
             //add by niezhong for wifi proxy settings(NEWMS00107901) end
             SIP_CALL_OPTIONS,
             SIP_RECEIVE_CALLS,
