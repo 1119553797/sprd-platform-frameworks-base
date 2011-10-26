@@ -19,6 +19,7 @@
 #include "rsThreadIO.h"
 #include <ui/FramebufferNativeWindow.h>
 #include <ui/EGLUtils.h>
+#include <ui/egl/android_natives.h>
 
 #include <sys/types.h>
 #include <sys/resource.h>
@@ -28,6 +29,8 @@
 #include <EGL/eglext.h>
 #include <GLES/gl.h>
 #include <GLES/glext.h>
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
 
 #include <cutils/sched_policy.h>
 
