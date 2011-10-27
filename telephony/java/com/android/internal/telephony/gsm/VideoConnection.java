@@ -694,5 +694,12 @@ public class VideoConnection extends Connection {
     public int getNumberPresentation() {
         return numberPresentation;
     }
+
+    //TS for compile
+	@Override
+	public UUSInfo getUUSInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 

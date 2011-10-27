@@ -241,6 +241,13 @@ public class GsmAlphabet {
         System.arraycopy(header, 0, ret, 2, header.length);
         return ret;
     }
+    
+    //TS for compile
+    public static byte[] stringToGsm7BitPackedWithHeader(String data, byte[] header)
+    		throws EncodeException {
+    	return stringToGsm7BitPackedWithHeader(data, header, 0, 0);
+    }
+
 
     /**
      * Converts a String into a byte array containing

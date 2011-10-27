@@ -83,7 +83,7 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
     }
 
 
-	@Override
+    //TS for compile
 	public boolean saveMultipartText(String destinationAddress, String scAddress,
 			List<String> parts, boolean isOutbox, String timestring,
 			int savestatus) throws RemoteException {

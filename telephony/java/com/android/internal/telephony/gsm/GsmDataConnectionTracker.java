@@ -1426,7 +1426,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             if (preferredApn != null && !preferredApn.numeric.equals(operator)) {
 
                 preferredApn = null;
-                notifyNoData(GsmDataConnection.FailCause.MISSING_UKNOWN_APN);
+                //TS for compile
+                notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);//MISSING_UKNOWN_APN);
             } else {
                 preferredApn = getPreferredApn();
                 Log.d(LOG_TAG, "Get PreferredAPN");

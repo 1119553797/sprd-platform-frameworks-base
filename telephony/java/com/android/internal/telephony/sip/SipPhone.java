@@ -26,6 +26,8 @@ import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipSession;
 import android.os.AsyncResult;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
@@ -935,4 +937,216 @@ public class SipPhone extends SipPhoneBase {
             }
         }
     }
+
+    //TS for compile
+	@Override
+	public void changeBarringPassword(String facility, String oldPwd,
+			String newPwd, Message onComplete) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void queryFacilityLock(String facility, String password,
+			int serviceClass, Message onComplete) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setFacilityLock(String facility, boolean lockState,
+			String password, int serviceClass, Message onComplete) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String Mbbms_Gsm_Authenticate(String nonce) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String Mbbms_USim_Authenticate(String nonce, String autn) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void acceptFallBack() throws CallStateException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void codecVP(int type, Bundle param) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void controlAudio(boolean bEnable) throws CallStateException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void controlCamera(boolean bEnable) throws CallStateException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Connection dialVP(String dialString) throws CallStateException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void fallBack() throws CallStateException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getCallForwardingOption(int commandInterfaceCFReason,
+			int serviceClass, Message onComplete) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public CallType getCallType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[] getRegistrationState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getRemainTimes(int type) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getSimType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isVTCall() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerForNewRingingVideoCall(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerForPreciseVideoCallStateChanged(Handler h, int what,
+			Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerForRemoteCamera(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerForVideoCallCodec(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerForVideoCallDisconnect(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerForVideoCallFail(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerForVideoCallFallBack(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCallForwardingOption(int commandInterfaceCFAction,
+			int commandInterfaceCFReason, int serviceClass,
+			String dialingNumber, int timerSeconds, Message onComplete) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForIncomingRingVideoCall(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForNewRingingVideoCall(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForPreciseVideoCallStateChanged(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForRemoteCamera(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForVideoCallCodec(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForVideoCallDisconnect(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForVideoCallFail(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForVideoCallFallBack(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
 }

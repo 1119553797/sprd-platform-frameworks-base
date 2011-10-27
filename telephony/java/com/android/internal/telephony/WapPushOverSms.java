@@ -145,6 +145,7 @@ public class WapPushOverSms {
                 case WspTypeDecoder.CONTENT_TYPE_B_VND_DOCOMO_PF:
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_VND_DOCOMO_PF;
                     break;
+/*1026 for compile
                 // Start liuhongxing 20110603  
                 case WspTypeDecoder.CONTENT_TYPE_B_DM_WBXML:
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_WBXML;
@@ -156,7 +157,7 @@ public class WapPushOverSms {
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_NOTIFICATION;
                     break;        
                 // End liu 20110603
-
+*/
                 case WspTypeDecoder.CONTENT_TYPE_B_SUPL_INIT:
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_SUPL_INIT;
                     break;

@@ -17,6 +17,7 @@
 package com.android.internal.telephony.sip;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
@@ -234,6 +235,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     public void setNetworkSelectionModeAutomatic(Message response) {
     }
 
+    //TS for compile
     public void setNetworkSelectionModeManual(
             String operatorNumeric, Message response) {
     }
@@ -369,4 +371,284 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 
     public void exitEmergencyCallbackMode(Message response) {
     }
+
+	@Override
+	public void queryCOLP(Message response) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void queryCOLR(Message response) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setNetworkSelectionModeManual(String operatorNumeric, int act,
+			Message response) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void Mbbms_Gsm_Authenticate(String nonce, Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void Mbbms_USim_Authenticate(String nonce, String autn,
+			Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void acceptVP(Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void codecVP(int type, Bundle param, Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void controlVPAudio(boolean bEnable, Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void controlVPCamera(boolean bEnable, Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void controlVPLocalMedia(int datatype, int sw, boolean bReplaceImg,
+			Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dialVP(String address, String subAddress, int clirMode,
+			Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fallBackVP(Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getCurrentVideoCalls(Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getRemainTimes(int type, Message response) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getSimCapacity(Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getSimType(Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hangupVP(Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mmiEnterSim(String dailString, Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void recordVPAudio(boolean bStart, int mode, Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void recordVPVideo(boolean bStart, Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerForVideoCallStateChanged(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendVPString(String str, Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGprsAttach(Message response) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGprsDetach(Message response) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnStkStin(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnVPCodec(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnVPData(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnVPFail(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnVPFallBack(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnVPMMRing(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnVPRecordVideo(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnVPRemoteCamera(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnVPRemoteMedia(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOnVPString(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void testVP(int flag, int value, Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unSetOnVPCodec(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unSetOnVPData(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unSetOnVPFail(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unSetOnVPFallBack(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unSetOnVPMMRing(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unSetOnVPRecordVideo(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unSetOnVPRemoteCamera(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unSetOnVPRemoteMedia(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unSetOnVPString(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForVideoCallStateChanged(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unsetOnStkStin(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
 }

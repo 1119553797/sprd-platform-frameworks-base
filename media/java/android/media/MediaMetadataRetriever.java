@@ -316,6 +316,11 @@ public class MediaMetadataRetriever
      */
     public static final int OPTION_CLOSEST          = 0x03;
 
+
+    //TS for compile
+    public static final int MODE_GET_METADATA_ONLY  = 0x01;
+    public static final int MODE_CAPTURE_FRAME_ONLY = 0x02;
+
     /*
      * Do not change these metadata key values without updating their
      * counterparts in include/media/mediametadataretriever.h!

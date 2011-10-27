@@ -936,10 +936,10 @@ public class SmsCBMessage {
 			 
 			 Log.i(TAG, "parseUserData byteoffset  :" +dcs. byteOffset + "bitOffset : " +dcs.bitOffset + "7bit len " + len);
 			 
-			
+		//1026 for compile	
 			 mPage.content = GsmAlphabet.gsm7BitPackedToString(msg,
 			 dcs.byteOffset,len,// @???
-			 dcs.bitOffset);
+			 dcs.bitOffset, 0, 0);
 			break;
 
 		case ENCODING_16BIT:

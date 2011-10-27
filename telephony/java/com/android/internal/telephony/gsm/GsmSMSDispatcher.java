@@ -524,14 +524,14 @@ final class GsmSMSDispatcher extends SMSDispatcher {
 			
 		
 			
-           
+       		//TS for compile
 			config[j] =  new  SmsBroadcastConfigInfo(    
 			                    
 					configValuesArray[i],
 					configValuesArray[i+1],
 					configValuesArray[i+2],
 					configValuesArray[i+3],
-					configValuesArray[i+4]
+					false// configValuesArray[i+4]
 					 
 			);
 			j++;

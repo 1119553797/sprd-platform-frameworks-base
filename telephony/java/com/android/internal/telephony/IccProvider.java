@@ -917,81 +917,84 @@ public class IccProvider extends ContentProvider {
 		Log.d(TAG, "[IccProvider] " + msg);
 	}
 
-    private boolean
-    addIccRecordToEf(int efType, String name, String number, String[] emails, String pin2) {
-        if (DBG) log("addIccRecordToEf: efType=" + efType + ", name=" + name +
-                ", number=" + number + ", emails=" + emails);
+	//TS for compile
+//    private boolean
+//    addIccRecordToEf(int efType, String name, String number, String[] emails, String pin2) {
+//        if (DBG) log("addIccRecordToEf: efType=" + efType + ", name=" + name +
+//                ", number=" + number + ", emails=" + emails);
+//
+//        boolean success = false;
+//
+//        // TODO: do we need to call getAdnRecordsInEf() before calling
+//        // updateAdnRecordsInEfBySearch()? In any case, we will leave
+//        // the UI level logic to fill that prereq if necessary. But
+//        // hopefully, we can remove this requirement.
+//
+//        try {
+//            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+//                    ServiceManager.getService("simphonebook"));
+//            if (iccIpb != null) {
+//                success = iccIpb.updateAdnRecordsInEfBySearch(efType, "", "",
+//                        name, number, pin2);
+//            }
+//        } catch (RemoteException ex) {
+//            // ignore it
+//        } catch (SecurityException ex) {
+//            if (DBG) log(ex.toString());
+//        }
+//        if (DBG) log("addIccRecordToEf: " + success);
+//        return success;
+//    }
 
-        boolean success = false;
-
-        // TODO: do we need to call getAdnRecordsInEf() before calling
-        // updateAdnRecordsInEfBySearch()? In any case, we will leave
-        // the UI level logic to fill that prereq if necessary. But
-        // hopefully, we can remove this requirement.
-
-        try {
-            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
-                    ServiceManager.getService("simphonebook"));
-            if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfBySearch(efType, "", "",
-                        name, number, pin2);
-            }
-        } catch (RemoteException ex) {
-            // ignore it
-        } catch (SecurityException ex) {
-            if (DBG) log(ex.toString());
-        }
-        if (DBG) log("addIccRecordToEf: " + success);
-        return success;
-    }
-
-    private boolean
-    updateIccRecordInEf(int efType, String oldName, String oldNumber,
-            String newName, String newNumber, String pin2) {
-        if (DBG) log("updateIccRecordInEf: efType=" + efType +
-                ", oldname=" + oldName + ", oldnumber=" + oldNumber +
-                ", newname=" + newName + ", newnumber=" + newNumber);
-        boolean success = false;
-
-        try {
-            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
-                    ServiceManager.getService("simphonebook"));
-            if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfBySearch(efType,
-                        oldName, oldNumber, newName, newNumber, pin2);
-            }
-        } catch (RemoteException ex) {
-            // ignore it
-        } catch (SecurityException ex) {
-            if (DBG) log(ex.toString());
-        }
-        if (DBG) log("updateIccRecordInEf: " + success);
-        return success;
-    }
+	//TS for compile
+//    private boolean
+//    updateIccRecordInEf(int efType, String oldName, String oldNumber,
+//            String newName, String newNumber, String pin2) {
+//        if (DBG) log("updateIccRecordInEf: efType=" + efType +
+//                ", oldname=" + oldName + ", oldnumber=" + oldNumber +
+//                ", newname=" + newName + ", newnumber=" + newNumber);
+//        boolean success = false;
+//
+//        try {
+//            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+//                    ServiceManager.getService("simphonebook"));
+//            if (iccIpb != null) {
+//                success = iccIpb.updateAdnRecordsInEfBySearch(efType,
+//                        oldName, oldNumber, newName, newNumber, pin2);
+//            }
+//        } catch (RemoteException ex) {
+//            // ignore it
+//        } catch (SecurityException ex) {
+//            if (DBG) log(ex.toString());
+//        }
+//        if (DBG) log("updateIccRecordInEf: " + success);
+//        return success;
+//    }
 
 
-    private boolean deleteIccRecordFromEf(int efType, String name, String number, String[] emails,
-            String pin2) {
-        if (DBG) log("deleteIccRecordFromEf: efType=" + efType +
-                ", name=" + name + ", number=" + number + ", emails=" + emails + ", pin2=" + pin2);
-
-        boolean success = false;
-
-        try {
-            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
-                    ServiceManager.getService("simphonebook"));
-            if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfBySearch(efType,
-                        name, number, "", "", pin2);
-            }
-        } catch (RemoteException ex) {
-            // ignore it
-        } catch (SecurityException ex) {
-            if (DBG) log(ex.toString());
-        }
-        if (DBG) log("deleteIccRecordFromEf: " + success);
-        return success;
-    }
+	//TS for compile
+//    private boolean deleteIccRecordFromEf(int efType, String name, String number, String[] emails,
+//            String pin2) {
+//        if (DBG) log("deleteIccRecordFromEf: efType=" + efType +
+//                ", name=" + name + ", number=" + number + ", emails=" + emails + ", pin2=" + pin2);
+//
+//        boolean success = false;
+//
+//        try {
+//            IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
+//                    ServiceManager.getService("simphonebook"));
+//            if (iccIpb != null) {
+//                success = iccIpb.updateAdnRecordsInEfBySearch(efType,
+//                        name, number, "", "", pin2);
+//            }
+//        } catch (RemoteException ex) {
+//            // ignore it
+//        } catch (SecurityException ex) {
+//            if (DBG) log(ex.toString());
+//        }
+//        if (DBG) log("deleteIccRecordFromEf: " + success);
+//        return success;
+//    }
 
 
 }

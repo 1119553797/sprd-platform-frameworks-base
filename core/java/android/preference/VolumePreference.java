@@ -248,14 +248,15 @@ public class VolumePreference extends SeekBarPreference implements
 					
 					if (volume >= 0) {
 						mSeekBar.setProgress(volume);					
-						// ************Modify by luning at01-07-01 begin************
+/*1026 for compile
+                        // ************Modify by luning at01-07-01 begin************
 						if(mStreamType == AudioManager.STREAM_RING)
 						{
 							String currMode = mAudioManager.getCurrProfilesMode(mContext);
 							mAudioManager.saveProfilesVolume(mContext, currMode, volume);
 						}
 						// ************Modify by luning at01-07-01 end************
-					}
+*/					}
 
 				}
 			}
@@ -331,7 +332,7 @@ public class VolumePreference extends SeekBarPreference implements
 		}
 
 		public void run() {		
-			
+/*1026 for compile			
 			// ************Modify by luning at01-07-01 begin************
 			if(mStreamType == AudioManager.STREAM_RING)
 			{
@@ -341,7 +342,7 @@ public class VolumePreference extends SeekBarPreference implements
 				mAudioManager.synPhoneVolume(mContext,mLastProgress);
 			}
 			// ************Modify by luning at01-07-01 end************
-			
+*/			
 			mAudioManager.setStreamVolume(mStreamType, mLastProgress, 0);
 		}
 

@@ -255,6 +255,14 @@ public class SmsMessage extends SmsMessageBase{
         return getSubmitPdu(scAddress, destinationAddress, message, statusReportRequested, header,
                 ENCODING_UNKNOWN, 0, 0);
     }
+    
+    //TS for compile
+    public static SubmitPdu getSubmitPdu(String scAddress,
+            String destinationAddress, String message,
+            boolean statusReportRequested, byte[] header, int encoding) {
+        return getSubmitPdu(scAddress, destinationAddress, message, statusReportRequested, header,
+                ENCODING_UNKNOWN, 0, 0);
+    }
 
 
     /**

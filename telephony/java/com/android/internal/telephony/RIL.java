@@ -1930,7 +1930,8 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             rr.mp.writeInt(config[i].getToServiceId());
             rr.mp.writeInt(config[i].getFromCodeScheme());
             rr.mp.writeInt(config[i].getToCodeScheme());
-            rr.mp.writeInt(config[i].isSelected());
+            //TS for compile
+            rr.mp.writeValue(config[i].isSelected());
         }
 
         if (RILJ_LOGD) {
@@ -2110,7 +2111,8 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         }
     }
 
-    private RILRequest findAndRemoveRequestFromList(int serial) {
+    //TS for compile
+    protected RILRequest findAndRemoveRequestFromList(int serial) {
 
         synchronized (mRequestsList) {
             for (int i = 0, s = mRequestsList.size() ; i < s ; i++) {
