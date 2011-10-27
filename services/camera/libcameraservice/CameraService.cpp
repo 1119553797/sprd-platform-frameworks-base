@@ -145,7 +145,9 @@ sp<ICamera> CameraService::connect(
         return NULL;
     }
 
-    sp<CameraHardwareInterface> hardware = HAL_openCameraHardware(cameraId);
+    // TS for compile
+//  sp<CameraHardwareInterface> hardware = HAL_openCameraHardware(cameraId);
+    sp<CameraHardwareInterface> hardware = NULL;
     if (hardware == NULL) {
         LOGE("Fail to open camera hardware (id=%d)", cameraId);
         return NULL;

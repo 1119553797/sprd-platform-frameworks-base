@@ -373,7 +373,10 @@ public class NotificationManagerService extends INotificationManager.Stub
                     mBatteryFull = batteryFull;
                     updateLights();
                 }
-            } else if (action.equals(Intent.ACTION_UMS_CONNECTED)) {
+
+            }
+/*
+            else if (action.equals(Intent.ACTION_UMS_CONNECTED)) {
                 mUsbConnected = true;
                 //Add by liguxiang 07-08-11 for USB settings function begin
                 updateAdbNotification();
@@ -389,7 +392,10 @@ public class NotificationManagerService extends INotificationManager.Stub
                 updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
                 updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
               //Add by liguxiang 07-08-11 for USB settings function end
-            } else if (action.equals(UsbManager.ACTION_USB_STATE)) {
+
+            } 
+*/
+            else if (action.equals(UsbManager.ACTION_USB_STATE)) {
                 Bundle extras = intent.getExtras();
                 boolean usbConnected = extras.getBoolean(UsbManager.USB_CONNECTED);
                 boolean adbEnabled = (UsbManager.USB_FUNCTION_ENABLED.equals(
@@ -429,8 +435,10 @@ public class NotificationManagerService extends INotificationManager.Stub
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 mInCall = (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_OFFHOOK));
                 updateNotificationPulse();
+            }
+/*
 	    //add by liguxiang 10-07-11 for NEWMS00128631 begin
-            }else if(action.equals(Intent.ACTION_LOCALE_CHANGED)){
+            else if(action.equals(Intent.ACTION_LOCALE_CHANGED)){
             	mAdbNotification = null;
             	mAdbNotificationShown = false;
             	updateAdbNotification();
@@ -445,6 +453,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             	updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
             }
 	    //add by liguxiang 10-07-11 for NEWMS00128631 end
+*/
         }
     };
 
@@ -455,6 +464,7 @@ public class NotificationManagerService extends INotificationManager.Stub
 
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
+/*
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.ADB_ENABLED), false, this);
             
@@ -468,7 +478,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.MODEM_ENABLED), false, this);
             //Add by liguxiang 07-08-11 for USB settings function end
-            
+*/
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE), false, this);
             update();
@@ -480,6 +490,7 @@ public class NotificationManagerService extends INotificationManager.Stub
 
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
+/*
             boolean adbEnabled = Settings.Secure.getInt(resolver,
                         Settings.Secure.ADB_ENABLED, 0) != 0;
             
@@ -518,7 +529,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             	 updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
             }
             //Add by liguxiang 07-08-11 for USB settings function end
-            
+*/          
             boolean pulseEnabled = Settings.System.getInt(resolver,
                         Settings.System.NOTIFICATION_LIGHT_PULSE, 0) != 0;
             if (mNotificationPulseEnabled != pulseEnabled) {
@@ -1315,7 +1326,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             }
         }
     }
-    
+/*
     private void updateUsbNotification(UsbType usbtype,boolean usbEnabled,boolean usbNotificationShown) {
         if (usbEnabled && mUsbConnected) {
             if (!usbNotificationShown) {
@@ -1440,7 +1451,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             }
         }
     }
-
+*/
     private void updateNotificationPulse() {
         synchronized (mNotificationList) {
             updateLightsLocked();
