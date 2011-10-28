@@ -467,71 +467,24 @@ public class IccProvider extends ContentProvider {
 
 		String tag = "";
 		String number = "";
-		String[] emails = null;
+		String[] emails = new String[1];
 		String pin2 = null;
 		String anr = "";
+		
+	       if(whereArgs == null || whereArgs.length == 0){
 
-		String[] tokens = where.split("AND");
-		int n = tokens.length;
-
-		while (--n >= 0) {
-			String param = tokens[n];
-			if (DBG)
-				log("parsing '" + param + "'");
-
-			String[] pair = param.split("=");
-
-			if (DBG)
-				log("delete  pair length " + pair.length);
-			/*
-			 * if (pair.length != 2) { Log.e(TAG,
-			 * "resolve: bad whereClause parameter: " + param); continue; }
-			 */
-
-			String key = pair[0].trim();
-			String val = pair[1].trim();
-
-			if (STR_TAG.equals(key)) {
-				tag = normalizeValue(val);
-			} else if (STR_NUMBER.equals(key)) {
-				number = normalizeValue(val);
-			} else if (STR_EMAILS.equals(key)) {
-				// TODO(): Email is null.
-				emails = new String[1];
-				emails[0] = normalizeValue(val);
-				if (DBG)
-					log("delete  email " + emails[0]);
-			} else if (STR_PIN2.equals(key)) {
-				pin2 = normalizeValue(val);
-			} else if (STR_ANR.equals(key)) {
-				anr = normalizeValue(val);
-			}
+                  return 0;
 		}
+		tag = whereArgs[0];
+		number = whereArgs[1];
+             anr = whereArgs[2];
+		
+	       emails[0] = whereArgs[3];
+		   
+		if(whereArgs.length  == 5){   
 
-		/*
-		 * if (TextUtils.isEmpty(tag)) { return 0; }
-		 */
-
-		int delIndex = -1;
-		long delId = -1;
-		String[] pair = where.split("=");
-		if (DBG)
-			log("delete  pair length " + pair.length);
-		/*
-		 * (pair.length != 2) { Log.e(TAG, "resolve: bad whereClause: " +
-		 * where); return 0; }
-		 */
-		String key = pair[0].trim();
-		String val = pair[1].trim();
-             
-		/*if ("_id".equals(key)) {
-			delId = Long.parseLong(normalizeValue(val));
-			if (ArrayListCursor.mIdIndexMap.containsKey(delId)) {
-				delIndex = (int) (ArrayListCursor.mIdIndexMap.get(delId));
-			} else {
-				return 0;
-			}
-		}*/
+		      pin2 = whereArgs[4];
+		}
 
 		if (efType == FDN && TextUtils.isEmpty(pin2)) {
 			return 0;
