@@ -684,7 +684,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 			if (isUsim) {
 				return MF_SIM + DF_ADF;
 			}
-
+                   break;
 		case EF_MAILBOX_CPHS:
 		case EF_VOICE_MAIL_INDICATOR_CPHS:
 		case EF_CFF_CPHS:
