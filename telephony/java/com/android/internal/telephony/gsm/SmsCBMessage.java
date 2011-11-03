@@ -262,13 +262,13 @@ public class SmsCBMessage {
 
 		byte[] byteSn = new byte[2];
 		
-		byteSn[0] = (byte)(retSn.ret &0xff);
-		byteSn[1] = (byte)(retSn.ret>>0x8);
+		byteSn[1] = (byte)(retSn.ret &0xff);
+		byteSn[0] = (byte)(retSn.ret>>0x8);
 			
 		
 
 		mPage.gs = byteSn[0] >> 6 & 0x3;
-		mPage.messageCode = (byteSn[0] & 0x3F) | ((byteSn[1] >> 4) & 0xF);
+		mPage.messageCode = ((byteSn[0] & 0x3F) <<4)| ((byteSn[1] >> 4) & 0xF);
 		mPage.updateNum = byteSn[1] & 0xF;
 		
 		byte[] byteMsgId = new byte[2];
@@ -321,7 +321,7 @@ public class SmsCBMessage {
 			
 			
 		}
-		Log.v(TAG, "getOneSmsCBPage ENCODING_16BIT midDecodeData: " +midDecodeData );
+		Log.v(TAG, "getOneSmsCBPage  midDecodeData: " +midDecodeData );
 		
 		//byte[] byteDecodeData =  IccUtils.hexStringToBytes(midDecodeData);	
 		//Log.v(TAG, "getOneSmsCBPage ENCODING_16BIT byteDecodeData.length: " +byteDecodeData.length );
@@ -895,9 +895,9 @@ public class SmsCBMessage {
 	
 		mPage = new SmsCBPage();
 		mPage.gs = msg[0] >> 6 & 0x3;
-		mPage.messageCode = (msg[0] & 0x3F) | ((msg[1] >> 4) & 0xF);
+		mPage.messageCode =( (msg[0] & 0x3F) <<4) | ((msg[1] >> 4) & 0xF);
 		mPage.updateNum = msg[1] & 0xF;
-		mPage.msgId = msg[2] | (msg[3] << 8);
+		mPage.msgId = msg[2] <<8 | msg[3] ;
 		mPage.dcs = msg[4];
 		mPage.sequenceNum = (msg[5] >> 4) & 0x0F;
 		mPage.totalNum = msg[5] & 0x0F;
