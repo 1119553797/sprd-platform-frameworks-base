@@ -47,11 +47,6 @@ LOCAL_SRC_FILES := $(filter-out \
 			org/mobilecontrol/% \
 			,$(LOCAL_SRC_FILES))
 
-#LOCAL_SRC_FILES := $(filter-out \
-			telephony/java/com/android/internal/telephony/% \
-			,$(LOCAL_SRC_FILES))
-
-#$(info $(LOCAL_SRC_FILES) ....framework....)
 # Include a different set of source files when building a debug build.
 # TODO: Maybe build these into a separate .jar and put it on the classpath
 #       in front of framework.jar.
