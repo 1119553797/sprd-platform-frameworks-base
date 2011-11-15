@@ -83,6 +83,15 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_id3 \
         libstagefright_g711dec \
 
+ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
+LOCAL_STATIC_LIBRARIES += \
+	libstagefright_aacdec_sprd
+LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libaacdec_sprd.a
+else
+LOCAL_LDFLAGS += $(TOP)/3rdparty/products/${ANDROID_3RDPARTY_IMAGE_TAG}/proprietary/stagefright/libstagefright_aacdec_sprd.a
+LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libaacdec_sprd.a
+endif
+
 LOCAL_SHARED_LIBRARIES += \
         libstagefright_amrnb_common \
         libstagefright_enc_common \
@@ -105,6 +114,10 @@ ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
 endif
 
 LOCAL_CFLAGS += -Wno-multichar
+
+#ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
+LOCAL_CFLAGS += -DBUILD_SPRD_AAC
+#endif
 
 LOCAL_MODULE:= libstagefright
 
