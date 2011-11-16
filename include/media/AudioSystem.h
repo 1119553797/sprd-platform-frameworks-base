@@ -157,6 +157,7 @@ public:
         MODE_RINGTONE,
         MODE_IN_CALL,
         MODE_IN_COMMUNICATION,
+        MODE_WAITING, // we need waiting modem 1s to stable after end call
         NUM_MODES  // not a valid entry, denotes end-of-list
     };
 

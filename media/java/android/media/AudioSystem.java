@@ -107,7 +107,8 @@ public class AudioSystem
     public static final int MODE_RINGTONE           = 1;
     public static final int MODE_IN_CALL            = 2;
     public static final int MODE_IN_COMMUNICATION   = 3;
-    public static final int NUM_MODES               = 4;
+    public static final int MODE_WAITING            = 4; // 3; // we need waiting modem 1s to stable after end call
+    public static final int NUM_MODES               = 5; // 4;
 
 
     /* Routing bits for setRouting/getRouting API */
