@@ -399,7 +399,7 @@ public final class CallManager {
         if (audioManager.getMode() != mode) audioManager.setMode(mode);
     }
 
-    private Context getContext() {
+    public Context getContext() {
         Phone defaultPhone = getDefaultPhone();
         return ((defaultPhone == null) ? null : defaultPhone.getContext());
     }
