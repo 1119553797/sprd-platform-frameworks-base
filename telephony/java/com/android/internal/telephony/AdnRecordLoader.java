@@ -240,7 +240,7 @@ public class AdnRecordLoader extends Handler {
 	}
 
 	public void updateEFAnrToUsim(AdnRecord adn, ArrayList<Integer> anrefids,
-			int efid, ArrayList<Integer> anrNums, String pin2, Message response) {
+			int efid, int adnNum, ArrayList<Integer> anrNums, String pin2, Message response) {
 		this.anrefids = anrefids;
 		this.ef = efid;
 		this.adnNum = adnNum;
@@ -422,18 +422,22 @@ public class AdnRecordLoader extends Handler {
 					throw new RuntimeException("get EF record size failed",
 							ar.exception);
 				}
-
+                      
 				recordSize = (int[]) ar.result;
 				// recordSize is int[3] array
 				// int[0] is the record length
 				// int[1] is the total length of the EF file
 				// int[2] is the number of records in the EF file
 				// So int[0] * int[2] = int[1]
-				if (recordSize.length != 3 || adnNum > recordSize[2]) {
+       			 Log.d(LOG_TAG,
+						"EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE (1) :  adnNum " + adnNum + "number " + 	recordSize[2]				);
+				if (recordSize.length != 3/* || adnNum > recordSize[2]*/) {
 					throw new RuntimeException(
 							"get wrong EF record size format", ar.exception);
 				}
-				
+				   Log.d(LOG_TAG,
+						"EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE (2) :"
+								);
 				fileCount = 0;
 				for (int i = 0, size = emailEfids.size(); i < size; i++) {
 					Log.e("GSM", "efids.get(" + i + ") is " + emailEfids.get(i));
@@ -466,7 +470,9 @@ public class AdnRecordLoader extends Handler {
 							ar.exception);
 				}
 				recordSize = (int[]) ar.result;
-				if (recordSize.length != 3 || adnNum > recordSize[2]) {
+				 Log.d(LOG_TAG,
+						"EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE (1) :  adnNum " + adnNum + "number " + 	recordSize[2]				);
+				if (recordSize.length != 3 /*|| adnNum > recordSize[2]*/) {
 					throw new RuntimeException(
 							"get wrong EF record size format", ar.exception);
 				}

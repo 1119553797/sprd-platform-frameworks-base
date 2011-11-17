@@ -541,7 +541,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
 			}
 			if (type == UsimPhoneBookManager.USIM_SUBJCET_ANR) {
-				adnRecordLoader.updateEFAnrToUsim(newAdn, subjectEfids, efid,
+				adnRecordLoader.updateEFAnrToUsim(newAdn, subjectEfids, efid,index,
 						subjectNums, pin2, null);
 			}
 
@@ -587,13 +587,13 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 					adnRecordLoader = new AdnRecordLoader(mFh);
 					if (type == UsimPhoneBookManager.USIM_SUBJCET_EMAIL) {
 
-						adnRecordLoader.updateEFEmailToUsim(newAdn, subjectEfids, subjectNums,efid,
+						adnRecordLoader.updateEFEmailToUsim(newAdn, toUpefids, subjectNums,efid,
 						       index,inIapNums, pin2, null);
 
 					}
 					if (type == UsimPhoneBookManager.USIM_SUBJCET_ANR) {
 						adnRecordLoader.updateEFAnrToUsim(newAdn, toUpefids,
-								efid, subjectNums, pin2, null);
+								efid,index ,subjectNums, pin2, null);
 					}
 				}
 
@@ -602,7 +602,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		}
 	}
 
-	public void updateUSIMAdnBySearch(int efid, AdnRecord oldAdn,
+	public synchronized void updateUSIMAdnBySearch(int efid, AdnRecord oldAdn,
 			AdnRecord newAdn, String pin2, Message response) {
 
 		int extensionEF = 0;
@@ -662,7 +662,9 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
 				if (num > 0 ) {
 					mInsertId += mUsimPhoneBookManager.mAdnRecordSizeArray[num - 1];
+				
 				}
+				
 				Log.i(LOG_TAG, "updateUSIMAdnBySearch (3)");
 				Log.i(LOG_TAG, "mInsertId" + mInsertId);
 
