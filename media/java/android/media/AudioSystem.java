@@ -106,8 +106,14 @@ public class AudioSystem
     public static final int MODE_NORMAL             = 0;
     public static final int MODE_RINGTONE           = 1;
     public static final int MODE_IN_CALL            = 2;
-    public static final int MODE_IN_COMMUNICATION   = 3;
-    public static final int NUM_MODES               = 4;
+    public static final int MODE_WAITING            = 3; // we need waiting modem 1s to stable after end call
+                                                         // because our kernel driver use static value 3, so
+                                                         // here we must use 3 as our WAITING mode, as for
+                                                         // android 2.3.5 MODE_IN_COMMUNICATION, the same design
+                                                         // with our MODE_WAITING, but he will be used in system
+                                                         // path schedule, so we can't use it directly [luther.ge]
+    public static final int MODE_IN_COMMUNICATION   = 4; // 3;
+    public static final int NUM_MODES               = 5; // 4;
 
 
     /* Routing bits for setRouting/getRouting API */

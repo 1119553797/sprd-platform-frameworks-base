@@ -1642,11 +1642,6 @@ bool AudioFlinger::MixerThread::threadLoop()
             // enable changes in effect chain
             unlockEffectChains(effectChains);
             usleep(sleepTime);
-            // add by xiaguowu 2011-10-10 for Bug 1503 begin
-            mLock.lock();
-            mWaitWorkCV.waitRelative(mLock, microseconds(sleepTime));
-            mLock.unlock();
-            // add by xiaguowu 2011-10-10 for Bug 1503 end
         }
 
         // finally let go of all our tracks, without the lock held
