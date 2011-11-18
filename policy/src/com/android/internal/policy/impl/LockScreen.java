@@ -797,9 +797,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         @Override
         public void onServiceStateChanged(ServiceState state) {
-            mUpdateMonitor.setRadioType(state.getRadioTechnology());
-            updateLayout(mStatus);
-            
+            //modify by lvxg start
+            if(mUpdateMonitor!=null && state!=null){
+                mUpdateMonitor.setRadioType(state.getRadioTechnology());
+                updateLayout(mStatus);
+            }
+            //modify by lvxg end
         }
 
     };
