@@ -19,7 +19,6 @@
 #define TIME_SOURCE_H_
 
 #include <stdint.h>
-#include <utils/threads.h>
 
 namespace android {
 
@@ -46,30 +45,6 @@ private:
 
     int64_t mStartTimeUs;
 };
-
-//sprd
-class SystemTimeSourceForSync : public TimeSource {
-public:
-    SystemTimeSourceForSync();
-
-    virtual int64_t getRealTimeUs();
-    void pause();
-    void resume();
-    void reset();
-    void increaseRealTimeUs(int64_t deltaTime);
-
-private:
-    static int64_t GetSystemTimeUs();
-    int64_t getRealTimeUs_nolock();	
-
-    int64_t mStartTimeUs;
-    int64_t mPauseTimeUs;
-    int64_t mTotalPauseTimeUs;	
-    bool      mIsPaused;
-
-    Mutex mLock;	
-};
-
 
 }  // namespace android
 
