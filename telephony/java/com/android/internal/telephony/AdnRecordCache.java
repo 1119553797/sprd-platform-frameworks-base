@@ -428,6 +428,10 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 			int[][] anrTagMap; // efid ,numberInIap
 			anrTagMap = mUsimPhoneBookManager.getSubjectTagNumberInIap(type,
 					num);
+			if(anrTagMap == null){
+
+                         return;
+			}
 			updateRecordInIap = new int[anrTagMap.length];// UpdateIap
 			subjectNum = new int[anrTagMap.length];
 			int i = 0;
