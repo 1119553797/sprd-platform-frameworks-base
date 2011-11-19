@@ -47,6 +47,7 @@ enum {
     METADATA_KEY_ALBUMARTIST     = 13,
     METADATA_KEY_DISC_NUMBER     = 14,
     METADATA_KEY_COMPILATION     = 15,
+    METADATA_KEY_VIDEO_FORMAT    = 16,//sprd
     // Add more here...
 };
 

@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+//#define LOG_NDEBUG 0
+#define LOG_TAG "TimeSource"
+#include <utils/Log.h>
 
 #include <stddef.h>
 #include <sys/time.h>
@@ -37,5 +40,63 @@ int64_t SystemTimeSource::GetSystemTimeUs() {
     return (int64_t)tv.tv_sec * 1000000 + tv.tv_usec;
 }
 
+SystemTimeSourceForSync::SystemTimeSourceForSync()
+    : mStartTimeUs(GetSystemTimeUs()),mPauseTimeUs(-1),mTotalPauseTimeUs(0),mIsPaused(false) {
+}
+
+int64_t SystemTimeSourceForSync::getRealTimeUs() {
+    Mutex::Autolock autoLock(mLock);	
+    return getRealTimeUs_nolock();
+}
+
+int64_t SystemTimeSourceForSync::getRealTimeUs_nolock(){
+    if(mIsPaused){
+    	return mPauseTimeUs - mStartTimeUs -mTotalPauseTimeUs;	
+    }else{
+    	return GetSystemTimeUs() - mStartTimeUs - mTotalPauseTimeUs;
+    }	
+}
+void SystemTimeSourceForSync::increaseRealTimeUs(int64_t deltaTime)
+{
+    Mutex::Autolock autoLock(mLock);	
+    LOGI("SystemTimeSourceForSync::increase %d,%lld [%lld]",mIsPaused,deltaTime,getRealTimeUs_nolock());	
+    mStartTimeUs -= deltaTime;
+}
+	
+// static
+int64_t SystemTimeSourceForSync::GetSystemTimeUs() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    return (int64_t)tv.tv_sec * 1000000 + tv.tv_usec;
+}
+
+ void SystemTimeSourceForSync::pause(){
+        Mutex::Autolock autoLock(mLock);	
+	LOGI("SystemTimeSourceForSync::pause %d [%lld]",mIsPaused,getRealTimeUs_nolock());		
+ 	if(mIsPaused)
+		return;
+ 	mPauseTimeUs = GetSystemTimeUs();
+ 	mIsPaused = true;
+ }
+ 
+ void SystemTimeSourceForSync::resume(){
+        Mutex::Autolock autoLock(mLock);	
+	LOGI("SystemTimeSourceForSync::resume %d [%lld]",mIsPaused,getRealTimeUs_nolock());		
+ 	if(!mIsPaused)
+		return;
+ 	mTotalPauseTimeUs += GetSystemTimeUs() - mPauseTimeUs;
+ 	mIsPaused = false;
+ }
+ 
+void SystemTimeSourceForSync::reset(){
+        Mutex::Autolock autoLock(mLock);	
+	LOGI("SystemTimeSourceForSync::reset %d [%lld]",mIsPaused,getRealTimeUs_nolock());
+	mStartTimeUs = GetSystemTimeUs();
+	mPauseTimeUs = -1;
+	mTotalPauseTimeUs	 = 0;
+	mIsPaused = false;
+}
+	
 }  // namespace android
 

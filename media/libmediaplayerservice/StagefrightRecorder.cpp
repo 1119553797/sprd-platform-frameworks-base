@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "StagefrightRecorder"
 #include <utils/Log.h>
 
@@ -26,6 +26,10 @@
 #include <media/stagefright/CameraSource.h>
 #include <media/stagefright/MPEG2TSWriter.h>
 #include <media/stagefright/MPEG4Writer.h>
+#include <media/stagefright/VideoPhoneWriter.h> //sprd
+#include <media/stagefright/DataSource.h> //sprd
+#include "../libstagefright/include/VideoPhoneExtractor.h" //sprd
+
 #include <media/stagefright/MediaDebug.h>
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MetaData.h>
@@ -645,7 +649,10 @@ status_t StagefrightRecorder::start() {
         case OUTPUT_FORMAT_THREE_GPP:
         case OUTPUT_FORMAT_MPEG_4:
             return startMPEG4Recording();
-
+			
+	case OUTPUT_FORMAT_VIDEOPHONE://sprd
+		return startVideoPhoneRecording();
+	
         case OUTPUT_FORMAT_AMR_NB:
         case OUTPUT_FORMAT_AMR_WB:
             return startAMRRecording();
@@ -1087,6 +1094,28 @@ status_t StagefrightRecorder::setupAudioEncoder(const sp<MediaWriter>& writer) {
     return OK;
 }
 
+status_t StagefrightRecorder::startVideoPhoneRecording() //sprd
+{
+    	status_t err = OK;
+    	sp<MediaWriter> writer 	= new VideoPhoneWriter(dup(mOutputFd));
+		
+	if (mVideoSource == VIDEO_SOURCE_DEFAULT
+            || mVideoSource == VIDEO_SOURCE_CAMERA) 
+	{
+        	sp<MediaSource> 	encoder;
+        	err = setupVideoEncoder(&encoder);
+        	if (err != OK) 
+			return err;
+        	writer->addSource(encoder);
+	}
+
+	sp<MetaData> meta 		= new MetaData;
+    	meta->setInt32(kKeyFileType, mOutputFormat);
+    	writer->setListener(mListener);
+    	mWriter = writer;
+	return mWriter->start(meta.get());
+}
+
 status_t StagefrightRecorder::startMPEG4Recording() {
     int32_t totalBitRate = 0;
     status_t err = OK;
@@ -1105,6 +1134,26 @@ status_t StagefrightRecorder::startMPEG4Recording() {
         if (err != OK) return err;
         writer->addSource(encoder);
         totalBitRate += mVideoBitRate;
+    }else if(mVideoSource == VIDEO_SOURCE_VIDEOPHONE_VIDEO_ES){//sprd
+        sp<MetaData> AVMeta = new MetaData();
+    	switch (mVideoEncoder) {
+        	case VIDEO_ENCODER_H263:
+	    	AVMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_H263);		
+                break;
+
+        case VIDEO_ENCODER_MPEG_4_SP:
+            	AVMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_MPEG4);
+            break;
+        default:
+            CHECK(!"Should not be here, unsupported video encoding.");
+            break;
+   	 }		
+	AVMeta->setInt32(kKeyWidth, mVideoWidth);
+	AVMeta->setInt32(kKeyHeight, mVideoHeight);
+	EsdsGenerator::generateEsds(AVMeta);
+    	sp<MediaSource> videoPhoneVideoES = new VideoPhoneSource(AVMeta,NULL);
+        writer->addSource(videoPhoneVideoES);
+        totalBitRate += mVideoBitRate;		 
     }
 
     if (mInterleaveDurationUs > 0) {

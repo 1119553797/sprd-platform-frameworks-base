@@ -98,7 +98,9 @@ private:
     int32_t mFlags;
 
     MediaProfiles *mEncoderProfiles;
-
+	
+    status_t startVideoPhoneRecording();//sprd
+	
     status_t startMPEG4Recording();
     status_t startAMRRecording();
     status_t startAACRecording();

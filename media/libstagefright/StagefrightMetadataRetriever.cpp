@@ -278,6 +278,7 @@ VideoFrame *StagefrightMetadataRetriever::getFrameAtTime(
         return NULL;
     }
 
+    LOGI("extractVideoFrameWithSoftCodec\n");	//@jgdu
     VideoFrame *frame =
         extractVideoFrameWithCodecFlags(
                 &mClient, trackMeta, source, OMXCodec::kPreferSoftwareCodecs,
@@ -287,8 +288,9 @@ VideoFrame *StagefrightMetadataRetriever::getFrameAtTime(
         LOGV("Software decoder failed to extract thumbnail, "
              "trying hardware decoder.");
 
-        frame = extractVideoFrameWithCodecFlags(&mClient, trackMeta, source, 0,
-                        timeUs, option);
+    //LOGI("extractVideoFrameWithHWCodec\n");	
+    //    frame = extractVideoFrameWithCodecFlags(&mClient, trackMeta, source, 0,
+    //                    timeUs, option);
     }
 
     return frame;
@@ -363,6 +365,11 @@ void StagefrightMetadataRetriever::parseMetaData() {
         const char *value;
         if (meta->findCString(kMap[i].from, &value)) {
             mMetaData.add(kMap[i].to, String8(value));
+            //CR 247130 Modify start
+            if(kMap[i].to == METADATA_KEY_MIMETYPE) {
+                mMetaData.add(METADATA_KEY_VIDEO_FORMAT, String8(value));
+            }
+            //CR 247130 Modify end
         }
     }
 

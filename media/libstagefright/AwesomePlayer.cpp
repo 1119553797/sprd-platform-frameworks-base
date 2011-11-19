@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "AwesomePlayer"
 #include <utils/Log.h>
 
@@ -27,6 +27,7 @@
 #include "include/NuCachedSource2.h"
 #include "include/ThrottledSource.h"
 #include "include/MPEG2TSExtractor.h"
+#include "include/VideoPhoneExtractor.h"//sprd
 
 #include "ARTPSession.h"
 #include "APacketSource.h"
@@ -37,6 +38,7 @@
 #include <media/stagefright/AudioPlayer.h>
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/FileSource.h>
+#include <media/stagefright/CharDeviceSource.h>//sprd
 #include <media/stagefright/MediaBuffer.h>
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MediaExtractor.h>
@@ -49,6 +51,7 @@
 
 #include <media/stagefright/foundation/ALooper.h>
 
+#define _SYNC_USE_SYSTEM_TIME_
 namespace android {
 
 static int64_t kLowWaterMarkUs = 2000000ll;  // 2secs
@@ -242,12 +245,15 @@ AwesomePlayer::AwesomePlayer()
     : mQueueStarted(false),
       mTimeSource(NULL),
       mVideoRendererIsPreview(false),
+      mNewSurfaceIsSet(false),//sprd
       mAudioPlayer(NULL),
       mFlags(0),
       mExtractorFlags(0),
+      mCMMBLab(false),  //hong
       mLastVideoBuffer(NULL),
       mVideoBuffer(NULL),
-      mSuspensionState(NULL) {
+      mSuspensionState(NULL),
+      mIsVideoPhoneStream(false){
     CHECK_EQ(mClient.connect(), OK);
 
     DataSource::RegisterDefaultSniffers();
@@ -298,6 +304,7 @@ void AwesomePlayer::setListener(const wp<MediaPlayerBase> &listener) {
 
 status_t AwesomePlayer::setDataSource(
         const char *uri, const KeyedVector<String8, String8> *headers) {
+LOGV("setdatasource11 ");
     Mutex::Autolock autoLock(mLock);
     return setDataSource_l(uri, headers);
 }
@@ -321,6 +328,8 @@ status_t AwesomePlayer::setDataSource_l(
 
 status_t AwesomePlayer::setDataSource(
         int fd, int64_t offset, int64_t length) {
+	LOGV("setdatasource ");
+
     Mutex::Autolock autoLock(mLock);
 
     reset_l();
@@ -416,7 +425,9 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
 }
 
 void AwesomePlayer::reset() {
+    LOGV("reset");
     Mutex::Autolock autoLock(mLock);
+     LOGI("reset_l wait");
     reset_l();
 }
 
@@ -428,17 +439,19 @@ void AwesomePlayer::reset_l() {
             mConnectingDataSource->disconnect();
         }
     }
-
-    while (mFlags & PREPARING) {
+	LOGI("--reset_l wait");
+    while (mFlags & PREPARING) { 
+        LOGI("--prepare Condition.wait");
         mPreparedCondition.wait(mLock);
     }
 
+	LOGI("--cancel event");
     cancelPlayerEvents();
 
     mCachedSource.clear();
     mAudioTrack.clear();
     mVideoTrack.clear();
-
+LOGI("--cancel clear ok");
     // Shutdown audio first, so that the respone to the reset request
     // appears to happen instantaneously as far as the user is concerned
     // If we did this later, audio would continue playing while we
@@ -451,54 +464,64 @@ void AwesomePlayer::reset_l() {
         mAudioSource->stop();
     }
     mAudioSource.clear();
-
+LOGI("--cancel source ok");
     mTimeSource = NULL;
 
     delete mAudioPlayer;
     mAudioPlayer = NULL;
 
     mVideoRenderer.clear();
-
+LOGI("--mVideoRenderer clear ok");
     if (mLastVideoBuffer) {
         mLastVideoBuffer->release();
         mLastVideoBuffer = NULL;
     }
-
+LOGI("--mLastVideoBuffer release ok");
     if (mVideoBuffer) {
         mVideoBuffer->release();
         mVideoBuffer = NULL;
     }
+LOGI("--mVideoBuffer->release release ok");
 
     if (mRTSPController != NULL) {
         mRTSPController->disconnect();
         mRTSPController.clear();
     }
+LOGI("--mRTSPController->disconnect ok");
 
     mRTPPusher.clear();
     mRTCPPusher.clear();
     mRTPSession.clear();
+LOGI("--mRTP clear ok");
 
     if (mVideoSource != NULL) {
         mVideoSource->stop();
+LOGI("--mVideoSource stop ok");
 
         // The following hack is necessary to ensure that the OMX
         // component is completely released by the time we may try
         // to instantiate it again.
         wp<MediaSource> tmp = mVideoSource;
         mVideoSource.clear();
+LOGI("--mVideoSource.clear ok");
         while (tmp.promote() != NULL) {
             usleep(1000);
         }
+LOGI("--flushCommands");
+
         IPCThreadState::self()->flushCommands();
     }
-
+LOGI("--flushCommands ok");
     mDurationUs = -1;
     mFlags = 0;
     mExtractorFlags = 0;
     mVideoWidth = mVideoHeight = -1;
     mTimeSourceDeltaUs = 0;
     mVideoTimeUs = 0;
-
+#ifdef _SYNC_USE_SYSTEM_TIME_
+    mSystemTimeSourceForSync.reset();//@jgdu
+#endif	
+LOGI("--mSystemTimeSourceForSync reset ok");
     mSeeking = false;
     mSeekNotificationSent = false;
     mSeekTimeUs = 0;
@@ -507,11 +530,14 @@ void AwesomePlayer::reset_l() {
     mUriHeaders.clear();
 
     mFileSource.clear();
+LOGI("--mFileSource clear ok");
 
     delete mSuspensionState;
     mSuspensionState = NULL;
 
     mBitrate = -1;
+LOGI("--ok..reset");
+
 }
 
 void AwesomePlayer::notifyListener_l(int msg, int ext1, int ext2) {
@@ -563,6 +589,10 @@ void AwesomePlayer::onBufferingUpdate() {
     if (!mBufferingEventPending) {
         return;
     }
+
+   if (mFlags & CACHE_UNDERRUN)
+    LOGI("Buffering...");
+
     mBufferingEventPending = false;
 
     if (mCachedSource != NULL) {
@@ -667,9 +697,12 @@ void AwesomePlayer::partial_reset_l() {
         // to instantiate it again.
         wp<MediaSource> tmp = mVideoSource;
         mVideoSource.clear();
+	LOGV("partial_reset_l waiting...");
         while (tmp.promote() != NULL) {
             usleep(1000);
         }
+	LOGV("partial_reset_l waiting..ok.");
+	
         IPCThreadState::self()->flushCommands();
     }
 
@@ -736,6 +769,7 @@ void AwesomePlayer::onStreamDone() {
 }
 
 status_t AwesomePlayer::play() {
+	LOGV("play");
     Mutex::Autolock autoLock(mLock);
 
     mFlags &= ~CACHE_UNDERRUN;
@@ -792,7 +826,12 @@ status_t AwesomePlayer::play_l() {
             mAudioPlayer->resume();
         }
     }
-
+#ifdef _SYNC_USE_SYSTEM_TIME_
+    if(0== (mFlags & NOT_FIRST_PLAY))
+		mSystemTimeSourceForSync.reset();
+    mFlags |= 	NOT_FIRST_PLAY;
+    mSystemTimeSourceForSync.resume();//@jgdu
+#endif	
     if (mTimeSource == NULL && mAudioPlayer == NULL) {
         mTimeSource = &mSystemTimeSource;
     }
@@ -819,6 +858,7 @@ status_t AwesomePlayer::play_l() {
 
 status_t AwesomePlayer::initRenderer_l() {
     if (mISurface == NULL) {
+	 LOGI("mISurface == NULL");
         return OK;
     }
 
@@ -877,7 +917,18 @@ status_t AwesomePlayer::initRenderer_l() {
     return mVideoRenderer->initCheck();
 }
 
+status_t AwesomePlayer::forceStop(){
+    LOGV("forceStop");
+
+
+   
+	VideoPhoneDataDevice::getInstance().stop();
+	return pause();
+}
+
+
 status_t AwesomePlayer::pause() {
+    LOGV("pause");   	
     Mutex::Autolock autoLock(mLock);
 
     mFlags &= ~CACHE_UNDERRUN;
@@ -904,7 +955,9 @@ status_t AwesomePlayer::pause_l(bool at_eos) {
     }
 
     mFlags &= ~PLAYING;
-
+#ifdef _SYNC_USE_SYSTEM_TIME_
+    mSystemTimeSourceForSync.pause();//@jgdu
+#endif    
     return OK;
 }
 
@@ -914,12 +967,16 @@ bool AwesomePlayer::isPlaying() const {
 
 void AwesomePlayer::setISurface(const sp<ISurface> &isurface) {
     Mutex::Autolock autoLock(mLock);
-
+    bool inull;
     mISurface = isurface;
+	inull = (mISurface == NULL)?0:1;
+    LOGI("setISurface %d", inull);
+    mNewSurfaceIsSet = true;
 }
 
 void AwesomePlayer::setAudioSink(
         const sp<MediaPlayerBase::AudioSink> &audioSink) {
+    LOGV("setAudioSink");    
     Mutex::Autolock autoLock(mLock);
 
     mAudioSink = audioSink;
@@ -958,8 +1015,18 @@ status_t AwesomePlayer::getPosition(int64_t *positionUs) {
     } else if (mVideoSource != NULL) {
         Mutex::Autolock autoLock(mMiscStateLock);
         *positionUs = mVideoTimeUs;
+	 if(mFlags&VIDEO_AT_EOS){
+	 	if((mDurationUs>0)&&(mFlags&AT_EOS)){
+	 		*positionUs = mDurationUs;
+	 	}else if((mAudioPlayer != NULL)&&((mFlags&AUDIO_AT_EOS)==0)){
+	 		*positionUs = mAudioPlayer->getMediaTimeUs();
+	 	}
+	 }
     } else if (mAudioPlayer != NULL) {
         *positionUs = mAudioPlayer->getMediaTimeUs();
+	 if((mDurationUs>0)&&(mFlags&AT_EOS)){
+	 	*positionUs = mDurationUs;
+	 }		
     } else {
         *positionUs = 0;
     }
@@ -968,6 +1035,7 @@ status_t AwesomePlayer::getPosition(int64_t *positionUs) {
 }
 
 status_t AwesomePlayer::seekTo(int64_t timeUs) {
+    LOGV("seekTo %lld",timeUs);	
     if (mExtractorFlags & MediaExtractor::CAN_SEEK) {
         Mutex::Autolock autoLock(mLock);
         return seekTo_l(timeUs);
@@ -1040,6 +1108,7 @@ status_t AwesomePlayer::getVideoDimensions(
 }
 
 void AwesomePlayer::setAudioSource(sp<MediaSource> source) {
+    LOGV("setAudioSource");	
     CHECK(source != NULL);
 
     mAudioTrack = source;
@@ -1063,6 +1132,7 @@ status_t AwesomePlayer::initAudioDecoder() {
     if (mAudioSource != NULL) {
         int64_t durationUs;
         if (mAudioTrack->getFormat()->findInt64(kKeyDuration, &durationUs)) {
+	     LOGI("audio duration %lld",durationUs);	
             Mutex::Autolock autoLock(mMiscStateLock);
             if (mDurationUs < 0 || durationUs > mDurationUs) {
                 mDurationUs = durationUs;
@@ -1092,15 +1162,25 @@ void AwesomePlayer::setVideoSource(sp<MediaSource> source) {
 }
 
 status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
-    mVideoSource = OMXCodec::Create(
-            mClient.interface(), mVideoTrack->getFormat(),
-            false, // createEncoder
-            mVideoTrack,
-            NULL, flags);
+	LOGI("initVideoDecoder, mIsVideoPhoneStream: %d", mIsVideoPhoneStream);
+	if (mIsVideoPhoneStream){
+	    mVideoSource = OMXCodec::Create(
+	            mClient.interface(), mVideoTrack->getFormat(),
+	            false, // createEncoder
+	            mVideoTrack,
+	            NULL, flags, 2, 3);
+	} else {
+	    mVideoSource = OMXCodec::Create(
+	            mClient.interface(), mVideoTrack->getFormat(),
+	            false, // createEncoder
+	            mVideoTrack,
+	            NULL, flags);
+	}
 
     if (mVideoSource != NULL) {
         int64_t durationUs;
         if (mVideoTrack->getFormat()->findInt64(kKeyDuration, &durationUs)) {
+	     LOGI("video duration %lld",durationUs);
             Mutex::Autolock autoLock(mMiscStateLock);
             if (mDurationUs < 0 || durationUs > mDurationUs) {
                 mDurationUs = durationUs;
@@ -1120,6 +1200,13 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 
     return mVideoSource != NULL ? OK : UNKNOWN_ERROR;
 }
+
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
 
 void AwesomePlayer::finishSeekIfNecessary(int64_t videoTimeUs) {
     if (!mSeeking) {
@@ -1145,6 +1232,9 @@ void AwesomePlayer::finishSeekIfNecessary(int64_t videoTimeUs) {
     mFlags |= FIRST_FRAME;
     mSeeking = false;
     mSeekNotificationSent = false;
+#ifdef _SYNC_USE_SYSTEM_TIME_	
+    mSystemTimeSourceForSync.resume();//@jgdu
+#endif    
 }
 
 void AwesomePlayer::onVideoEvent() {
@@ -1203,6 +1293,7 @@ void AwesomePlayer::onVideoEvent() {
 
                     if (mVideoRenderer != NULL) {
                         mVideoRendererIsPreview = false;
+                        mNewSurfaceIsSet = false;
                         err = initRenderer_l();
 
                         if (err == OK) {
@@ -1224,6 +1315,8 @@ void AwesomePlayer::onVideoEvent() {
                 finishSeekIfNecessary(-1);
 
                 mFlags |= VIDEO_AT_EOS;
+		LOGV("video stream ended err2:%d !",err);
+
                 postStreamDoneEvent_l(err);
                 return;
             }
@@ -1252,7 +1345,15 @@ void AwesomePlayer::onVideoEvent() {
     bool wasSeeking = mSeeking;
     finishSeekIfNecessary(timeUs);
 
+#ifdef _SYNC_USE_SYSTEM_TIME_   
+    TimeSource *ts; //@jgdu
+    if(mFlags & AUDIO_AT_EOS)
+	ts =   &mSystemTimeSource;
+    else
+	ts =   &mSystemTimeSourceForSync;	
+#else   
     TimeSource *ts = (mFlags & AUDIO_AT_EOS) ? &mSystemTimeSource : mTimeSource;
+#endif
 
     if (mFlags & FIRST_FRAME) {
         mFlags &= ~FIRST_FRAME;
@@ -1266,22 +1367,38 @@ void AwesomePlayer::onVideoEvent() {
         mTimeSourceDeltaUs = realTimeUs - mediaTimeUs;
     }
 
-    int64_t nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs;
+#ifdef _SYNC_USE_SYSTEM_TIME_  
+   int64_t nowUs;//@jgdu
+   if((mAudioPlayer != NULL)&&(0==(mFlags & AUDIO_AT_EOS))){
+        int64_t  sysRealTimeUs =  ts->getRealTimeUs();  	
+	int64_t  AudioLatencyUs =  mAudioPlayer->getAudioLatencyUs();
+        if((realTimeUs-sysRealTimeUs)>max(500000,AudioLatencyUs*5/10))
+             mSystemTimeSourceForSync.increaseRealTimeUs(realTimeUs-sysRealTimeUs -max(500000,AudioLatencyUs*5/10)); 	  	
+	if((realTimeUs-sysRealTimeUs)<min(-300000,-AudioLatencyUs*3/10))	
+             mSystemTimeSourceForSync.increaseRealTimeUs(min(-300000,-AudioLatencyUs*3/10)); 		
+   	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs -AudioLatencyUs +400000;//assume display latency  400ms
+   }else{
+   	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs;
+   }
+#else
+   int64_t nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs;
+#endif
 
     int64_t latenessUs = nowUs - timeUs;
+    LOGI("video timestamp %lld,%lld:%lld,%lld,%lld",nowUs,timeUs,realTimeUs,mediaTimeUs,realTimeUs - mediaTimeUs);
 
     if (wasSeeking) {
         // Let's display the first frame after seeking right away.
         latenessUs = 0;
     }
 
-    if (mRTPSession != NULL) {
+    if ((mRTPSession != NULL) || mIsVideoPhoneStream) {
         // We'll completely ignore timestamps for gtalk videochat
         // and we'll play incoming video as fast as we get it.
         latenessUs = 0;
     }
 
-    if (latenessUs > 40000) {
+    if (latenessUs > 60000) {
         // We're more than 40ms late.
         LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
 
@@ -1299,15 +1416,16 @@ void AwesomePlayer::onVideoEvent() {
         return;
     }
 
-    if (mVideoRendererIsPreview || mVideoRenderer == NULL) {
+    if (mVideoRendererIsPreview || mVideoRenderer == NULL || mNewSurfaceIsSet) {
         mVideoRendererIsPreview = false;
-
+        mNewSurfaceIsSet = false;
         status_t err = initRenderer_l();
 
         if (err != OK) {
             finishSeekIfNecessary(-1);
 
             mFlags |= VIDEO_AT_EOS;
+		LOGV("video stream ended err1:%d !",err);			
             postStreamDoneEvent_l(err);
             return;
         }
@@ -1388,16 +1506,19 @@ void AwesomePlayer::onCheckAudioStatus() {
         mWatchForAudioEOS = false;
         mFlags |= AUDIO_AT_EOS;
         mFlags |= FIRST_FRAME;
+		LOGV("audio stream ended err:%d !",finalStatus);		
         postStreamDoneEvent_l(finalStatus);
     }
 }
 
 status_t AwesomePlayer::prepare() {
+   LOGV("prepare");
     Mutex::Autolock autoLock(mLock);
     return prepare_l();
 }
 
 status_t AwesomePlayer::prepare_l() {
+   LOGV("prepare_l");
     if (mFlags & PREPARED) {
         return OK;
     }
@@ -1412,15 +1533,17 @@ status_t AwesomePlayer::prepare_l() {
     if (err != OK) {
         return err;
     }
+LOGV("prepare_l waiting...");
 
     while (mFlags & PREPARING) {
         mPreparedCondition.wait(mLock);
     }
-
+LOGV("prepare_l waiting.ok..");
     return mPrepareResult;
 }
 
 status_t AwesomePlayer::prepareAsync() {
+   LOGV("prepareAsync");	
     Mutex::Autolock autoLock(mLock);
 
     if (mFlags & PREPARING) {
@@ -1448,6 +1571,20 @@ status_t AwesomePlayer::prepareAsync_l() {
     mQueue.postEvent(mAsyncPrepareEvent);
 
     return OK;
+}
+
+char* strsplit(const char* src, char c, char* dest)
+{
+	char *temp = strchr(src, c);
+	int len = 0;
+
+	if ((src == NULL)||(dest == NULL)) return NULL;
+	if (temp == NULL) return NULL;
+	
+	len = temp - src;
+	memcpy(dest, src, len);
+	LOGV("strsplit(%s, %c, %s)\n", src, c, dest);
+	return dest;
 }
 
 status_t AwesomePlayer::finishSetDataSource_l() {
@@ -1505,6 +1642,27 @@ status_t AwesomePlayer::finishSetDataSource_l() {
             LOGI("Prepare cancelled while waiting for initial cache fill.");
             return UNKNOWN_ERROR;
         }
+    }
+    else if (!strncasecmp(mUri.string(), "videophone://", 13)) 
+    {
+    	mIsVideoPhoneStream = true;
+    	char buf[30] = {0};
+		strsplit(mUri.string() + 13, ';', buf);
+        sp<DataSource> source = new CharDeviceSource(buf);
+        sp<MediaExtractor> extractor = NULL;
+		int nLen = strlen(mUri.string());
+		LOGV("mUri: %s, nLen: %d", mUri.string(), nLen);
+		if (!strncasecmp((mUri.string() + nLen - 5), "mpeg4", 5)){
+			LOGV("mpeg4");
+			extractor =
+            MediaExtractor::Create(source, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_MPEG4);
+		} else {
+			LOGV("3gpp");
+        	extractor =
+            MediaExtractor::Create(source, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263);
+		}
+        return setDataSource_l(extractor);
+
     } else if (!strncasecmp(mUri.string(), "httplive://", 11)) {
         String8 uri("http://");
         uri.append(mUri.string() + 11);
@@ -1791,10 +1949,11 @@ status_t AwesomePlayer::suspend() {
             mConnectingDataSource->disconnect();
         }
     }
-
+LOGV("suspend waiting...");
     while (mFlags & PREPARING) {
         mPreparedCondition.wait(mLock);
     }
+LOGV("suspend waiting over");
 
     SuspensionState *state = new SuspensionState;
     state->mUri = mUri;

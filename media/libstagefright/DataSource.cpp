@@ -25,6 +25,9 @@
 
 #include "matroska/MatroskaExtractor.h"
 
+#include "include/AACExtractor.h"
+
+
 #include <media/stagefright/foundation/AMessage.h>
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/FileSource.h>
@@ -104,6 +107,7 @@ void DataSource::RegisterDefaultSniffers() {
     RegisterSniffer(SniffAMR);
     RegisterSniffer(SniffMPEG2TS);
     RegisterSniffer(SniffMP3);
+    RegisterSniffer(SniffAAC);
 }
 
 // static

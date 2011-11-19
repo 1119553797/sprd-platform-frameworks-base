@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "MP3Extractor"
 #include <utils/Log.h>
 
@@ -307,11 +307,11 @@ static bool parse_xing_header(
 
 static bool Resync(
         const sp<DataSource> &source, uint32_t match_header,
-        off_t *inout_pos, uint32_t *out_header) {
+        off_t *inout_pos, uint32_t *out_header, uint32_t *reachEnd=NULL) {
     if (*inout_pos == 0) {
         // Skip an optional ID3 header if syncing at the very beginning
         // of the datasource.
-
+	 LOGV("Skip an optional ID3 header");
         for (;;) {
             uint8_t id3header[10];
             if (source->readAt(*inout_pos, id3header, sizeof(id3header))
@@ -354,6 +354,9 @@ static bool Resync(
     bool reachEOS = false;
     uint8_t *tmp = buf;
 
+    if(reachEnd){
+        *reachEnd = 0;
+    }
     do {
         if (pos >= *inout_pos + kMaxBytesChecked) {
             // Don't scan forever.
@@ -363,6 +366,9 @@ static bool Resync(
 
         if (remainingBytes < 4) {
             if (reachEOS) {
+		   if(reachEnd){
+       	       *reachEnd = 1;
+    		   }		
                 break;
             } else {
                 memcpy(buf, tmp, remainingBytes);
@@ -407,7 +413,7 @@ static bool Resync(
         }
 
         LOGV("found possible 1st frame at %ld (header = 0x%08x)", pos, header);
-
+	 LOGV("frame_size %d,sample_rate %d,num_channels %d,bitrate %d",frame_size,sample_rate,num_channels,bitrate);
         // We found what looks like a valid frame,
         // now find its successors.
 
@@ -501,6 +507,7 @@ MP3Extractor::MP3Extractor(
       mFirstFramePos(-1),
       mFixedHeader(0),
       mByteNumber(0) {
+    LOGV("MP3Extractor::MP3Extractor");      
     off_t pos = 0;
     uint32_t header;
     bool success;
@@ -709,16 +716,19 @@ status_t MP3Source::read(
         }
 
         // Lost sync.
-        LOGV("lost sync! header = 0x%08x, old header = 0x%08x\n", header, mFixedHeader);
+        LOGV("lost sync! header = 0x%08x, old header = 0x%08x, mCurrentPos = %ld, mByteNumber %d\n", header, mFixedHeader,mCurrentPos,mByteNumber);
 
         off_t pos = mCurrentPos;
-        if (!Resync(mDataSource, mFixedHeader, &pos, NULL)) {
+	 uint32_t reachEOS;	
+        if (!Resync(mDataSource, mFixedHeader, &pos, NULL,&reachEOS)) {
             LOGE("Unable to resync. Signalling end of stream.");
 
             buffer->release();
             buffer = NULL;
-
-            return ERROR_END_OF_STREAM;
+	     if(reachEOS)	
+		 	return ERROR_END_OF_STREAM;
+	     else	 
+	              return ERROR_MALFORMED;//for 00138861	
         }
 
         mCurrentPos = pos;
@@ -750,6 +760,7 @@ status_t MP3Source::read(
 }
 
 sp<MetaData> MP3Extractor::getMetaData() {
+    LOGV("MP3Source::getMetaData");	
     sp<MetaData> meta = new MetaData;
 
     if (mInitCheck != OK) {
@@ -820,6 +831,7 @@ bool SniffMP3(
         float *confidence, sp<AMessage> *meta) {
     off_t pos = 0;
     uint32_t header;
+    LOGV("SniffMP3");	
     if (!Resync(source, 0, &pos, &header)) {
         return false;
     }

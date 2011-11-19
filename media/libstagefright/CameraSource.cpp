@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "CameraSource"
 #include <utils/Log.h>
 
@@ -30,7 +30,14 @@
 #include <utils/String8.h>
 #include <cutils/properties.h>
 
+#include <sys/ioctl.h>
+#include <linux/android_pmem.h>
+#include <cutils/properties.h>
+
 namespace android {
+
+static bool s_bDebug = false;
+#define DEBUG_LOGD if(s_bDebug)LOGV
 
 struct CameraSourceListener : public CameraListener {
     CameraSourceListener(const sp<CameraSource> &source);
@@ -59,11 +66,11 @@ CameraSourceListener::~CameraSourceListener() {
 }
 
 void CameraSourceListener::notify(int32_t msgType, int32_t ext1, int32_t ext2) {
-    LOGV("notify(%d, %d, %d)", msgType, ext1, ext2);
+    LOGI("notify(%d, %d, %d)", msgType, ext1, ext2);
 }
 
 void CameraSourceListener::postData(int32_t msgType, const sp<IMemory> &dataPtr) {
-    LOGV("postData(%d, ptr:%p, size:%d)",
+    LOGI("postData(%d, ptr:%p, size:%d)",
          msgType, dataPtr->pointer(), dataPtr->size());
 }
 
@@ -130,6 +137,15 @@ CameraSource::CameraSource(const sp<Camera> &camera)
       mGlitchDurationThresholdUs(200000),
       mCollectStats(false),
       mStarted(false) {
+
+	char propBuf[PROPERTY_VALUE_MAX];  
+        property_get("debug.videophone", propBuf, "");	
+	LOGI("property_get: %s.", propBuf);
+	if (!strcmp(propBuf, "1")) {
+		s_bDebug = true;
+	} else {
+		s_bDebug = false;
+	}
 
     int64_t token = IPCThreadState::self()->clearCallingIdentity();
     String8 s = mCamera->getParameters();
@@ -198,7 +214,7 @@ status_t CameraSource::start(MetaData *meta) {
 }
 
 status_t CameraSource::stop() {
-    LOGV("stop");
+    LOGI("stop");
     Mutex::Autolock autoLock(mLock);
     mStarted = false;
     mFrameAvailableCondition.signal();
@@ -246,7 +262,7 @@ void CameraSource::releaseOneRecordingFrame(const sp<IMemory>& frame) {
 }
 
 void CameraSource::signalBufferReturned(MediaBuffer *buffer) {
-    LOGV("signalBufferReturned: %p", buffer->data());
+    DEBUG_LOGD("signalBufferReturned: %p", buffer->data());
     Mutex::Autolock autoLock(mLock);
     for (List<sp<IMemory> >::iterator it = mFramesBeingEncoded.begin();
          it != mFramesBeingEncoded.end(); ++it) {
@@ -266,7 +282,7 @@ void CameraSource::signalBufferReturned(MediaBuffer *buffer) {
 
 status_t CameraSource::read(
         MediaBuffer **buffer, const ReadOptions *options) {
-    LOGV("read");
+    DEBUG_LOGD("read");
 
     *buffer = NULL;
 
@@ -300,7 +316,7 @@ status_t CameraSource::read(
                 skipTimeUs = frameTime;
             }
             if (skipTimeUs > frameTime) {
-                LOGV("skipTimeUs: %lld us > frameTime: %lld us",
+                DEBUG_LOGD("skipTimeUs: %lld us > frameTime: %lld us",
                     skipTimeUs, frameTime);
                 releaseOneRecordingFrame(frame);
                 ++mNumFramesDropped;
@@ -313,10 +329,22 @@ status_t CameraSource::read(
             } else {
                 mFramesBeingEncoded.push_back(frame);
                 *buffer = new MediaBuffer(frame->pointer(), frame->size());
+                DEBUG_LOGD("read: buffer.size() %d", (*buffer)->size());
                 (*buffer)->setObserver(this);
                 (*buffer)->add_ref();
                 (*buffer)->meta_data()->setInt64(kKeyTime, frameTime);
 
+		//added by jgdu to get physical address 
+		int32_t phy_addr;
+		ssize_t offset = 0;
+    		size_t size = 0;
+    		sp<IMemoryHeap> heap = frame->getMemory(&offset, &size);
+		int fd = heap->getHeapID();	
+	        struct pmem_region region;
+	        ::ioctl(fd,PMEM_GET_PHYS,&region);
+		phy_addr = region.offset+offset;								
+    		//LOGI("CameraSource::read: ID = %d, base = %p, offset = %p, size = %d pointer %p,phy addr %p", heap->getHeapID(), heap->base(), offset, size, frame->pointer(),phy_addr);
+		(*buffer)->meta_data()->setInt32(kKeyPlatformPrivate, phy_addr);
                 return OK;
             }
         }
@@ -326,7 +354,7 @@ status_t CameraSource::read(
 
 void CameraSource::dataCallbackTimestamp(int64_t timestampUs,
         int32_t msgType, const sp<IMemory> &data) {
-    LOGV("dataCallbackTimestamp: timestamp %lld us", timestampUs);
+    DEBUG_LOGD("dataCallbackTimestamp: timestamp %lld us", timestampUs);
     Mutex::Autolock autoLock(mLock);
     if (!mStarted) {
         releaseOneRecordingFrame(data);
@@ -362,7 +390,7 @@ void CameraSource::dataCallbackTimestamp(int64_t timestampUs,
     mFramesReceived.push_back(data);
     int64_t timeUs = mStartTimeUs + (timestampUs - mFirstFrameTimeUs);
     mFrameTimes.push_back(timeUs);
-    LOGV("initial delay: %lld, current time stamp: %lld",
+    DEBUG_LOGD("initial delay: %lld, current time stamp: %lld",
         mStartTimeUs, timeUs);
     mFrameAvailableCondition.signal();
 }
