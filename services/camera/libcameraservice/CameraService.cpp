@@ -14,7 +14,7 @@
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
-
+#define LOG_NDEBUG 0
 #define LOG_TAG "CameraService"
 
 #include <stdio.h>
@@ -145,9 +145,7 @@ sp<ICamera> CameraService::connect(
         return NULL;
     }
 
-    // TS for compile
-//  sp<CameraHardwareInterface> hardware = HAL_openCameraHardware(cameraId);
-    sp<CameraHardwareInterface> hardware = NULL;
+    sp<CameraHardwareInterface> hardware = HAL_openCameraHardware(cameraId);
     if (hardware == NULL) {
         LOGE("Fail to open camera hardware (id=%d)", cameraId);
         return NULL;
