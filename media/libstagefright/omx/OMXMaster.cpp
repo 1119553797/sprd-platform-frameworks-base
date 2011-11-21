@@ -32,10 +32,10 @@ namespace android {
 
 OMXMaster::OMXMaster()
     : mVendorLibHandle(NULL) {
-    // addVendorPlugin();
+    addVendorPlugin();
 
 #ifndef NO_OPENCORE
-    addPlugin(new OMXPVCodecsPlugin);
+    //addPlugin(new OMXPVCodecsPlugin);
 #endif
 }
 
