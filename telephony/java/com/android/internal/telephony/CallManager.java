@@ -79,6 +79,14 @@ public final class CallManager {
     private static final int EVENT_SERVICE_STATE_CHANGED = 118;
     private static final int EVENT_POST_DIAL_CHARACTER = 119;
 
+    // add for video call
+    private static final int EVENT_NEW_RINGING_VIDEO_CALL = 200;
+    private static final int EVENT_PRECISE_VIDEO_CALL_STATE_CHANGED = 201;
+    private static final int EVENT_VIDEO_CALL_DISCONNECT = 202;
+    private static final int EVENT_INCOMING_RING_VIDEO_CALL = 203;
+    private static final int EVENT_VIDEO_CALL_FALL_BACK = 204;
+    private static final int EVENT_VIDEO_CALL_FAIL = 205;
+
     // Singleton instance
     private static final CallManager INSTANCE = new CallManager();
 
@@ -163,6 +171,26 @@ public final class CallManager {
 
     protected final RegistrantList mPostDialCharacterRegistrants
     = new RegistrantList();
+
+    // add for video phone start
+    protected final RegistrantList mNewRingingVideoCallRegistrants
+    = new RegistrantList();
+
+    protected final RegistrantList mPreciseVideoCallStateRegistrants
+    = new RegistrantList();
+
+    protected final RegistrantList mVideoCallDisconnectRegistrants
+    = new RegistrantList();
+
+    protected final RegistrantList mIncomingRingVideoCallRegistrants
+    = new RegistrantList();
+
+    protected final RegistrantList mVideoCallFallBackRegistrants
+    = new RegistrantList();
+
+    protected final RegistrantList mVideoCallFailRegistrants
+    = new RegistrantList();
+    // add for video phone end
 
     private CallManager() {
         mPhones = new ArrayList<Phone>();
@@ -435,6 +463,14 @@ public final class CallManager {
             phone.registerForCallWaiting(mHandler, EVENT_CALL_WAITING, null);
             phone.registerForEcmTimerReset(mHandler, EVENT_ECM_TIMER_RESET, null);
         }
+
+        // for events supported only by 3G Phone
+        phone.registerForNewRingingVideoCall(mHandler, EVENT_NEW_RINGING_VIDEO_CALL, null);
+        phone.registerForPreciseVideoCallStateChanged(mHandler, EVENT_PRECISE_VIDEO_CALL_STATE_CHANGED, null);
+        phone.registerForVideoCallDisconnect(mHandler, EVENT_VIDEO_CALL_DISCONNECT, null);
+        phone.registerForIncomingRingVideoCall(mHandler, EVENT_INCOMING_RING_VIDEO_CALL, null);
+        phone.registerForVideoCallFallBack(mHandler, EVENT_VIDEO_CALL_FALL_BACK, null);
+        phone.registerForVideoCallFail(mHandler, EVENT_VIDEO_CALL_FAIL, null);
     }
 
     private void unregisterForPhoneStates(Phone phone) {
@@ -1443,6 +1479,113 @@ public final class CallManager {
         mPostDialCharacterRegistrants.remove(h);
     }
 
+    // add for video phone start
+    /**
+     * Notifies when a voice connection has disconnected, either due to local
+     * or remote hangup or error.
+     *
+     *  Messages received from this will have the following members:<p>
+     *  <ul><li>Message.obj will be an AsyncResult</li>
+     *  <li>AsyncResult.userObj = obj</li>
+     *  <li>AsyncResult.result = a Connection object that is
+     *  no longer connected.</li></ul>
+     */
+    public void registerForVideoCallDisconnect(Handler h, int what, Object obj) {
+        mVideoCallDisconnectRegistrants.addUnique(h, what, obj);
+    }
+
+    /**
+     * Unregisters for voice disconnection notification.
+     * Extraneous calls are tolerated silently
+     */
+    public void unregisterForVideoCallDisconnect(Handler h){
+        mVideoCallDisconnectRegistrants.remove(h);
+    }
+
+    /**
+     * Register for getting notifications for change in the Call State {@link Call.State}
+     * This is called PreciseCallState because the call state is more precise than the
+     * {@link Phone.State} which can be obtained using the {@link PhoneStateListener}
+     *
+     * Resulting events will have an AsyncResult in <code>Message.obj</code>.
+     * AsyncResult.userData will be set to the obj argument here.
+     * The <em>h</em> parameter is held only by a weak reference.
+     */
+    public void registerForPreciseVideoCallStateChanged(Handler h, int what, Object obj){
+        mPreciseVideoCallStateRegistrants.addUnique(h, what, obj);
+    }
+
+    /**
+     * Unregisters for voice call state change notifications.
+     * Extraneous calls are tolerated silently.
+     */
+    public void unregisterForPreciseVideoCallStateChanged(Handler h){
+        mPreciseVideoCallStateRegistrants.remove(h);
+    }
+
+    /**
+     * Notifies when a new ringing or waiting connection has appeared.<p>
+     *
+     *  Messages received from this:
+     *  Message.obj will be an AsyncResult
+     *  AsyncResult.userObj = obj
+     *  AsyncResult.result = a Connection. <p>
+     *  Please check Connection.isRinging() to make sure the Connection
+     *  has not dropped since this message was posted.
+     *  If Connection.isRinging() is true, then
+     *   Connection.getCall() == Phone.getRingingCall()
+     */
+    public void registerForNewRingingVideoCall(Handler h, int what, Object obj){
+        mNewRingingVideoCallRegistrants.addUnique(h, what, obj);
+    }
+
+    /**
+     * Unregisters for new ringing connection notification.
+     * Extraneous calls are tolerated silently
+     */
+
+    public void unregisterForNewRingingVideoCall(Handler h){
+        mNewRingingVideoCallRegistrants.remove(h);
+    }
+
+    /**
+     * Notifies when an incoming call rings.<p>
+     *
+     *  Messages received from this:
+     *  Message.obj will be an AsyncResult
+     *  AsyncResult.userObj = obj
+     *  AsyncResult.result = a Connection. <p>
+     */
+    public void registerForIncomingRingVideoCall(Handler h, int what, Object obj){
+        mIncomingRingVideoCallRegistrants.addUnique(h, what, obj);
+    }
+
+    /**
+     * Unregisters for ring notification.
+     * Extraneous calls are tolerated silently
+     */
+
+    public void unregisterForIncomingRingVideoCall(Handler h){
+        mIncomingRingVideoCallRegistrants.remove(h);
+    }
+
+    public void registerForVideoCallFallBack(Handler h, int what, Object obj){
+        mVideoCallFallBackRegistrants.addUnique(h, what, obj);
+    }
+
+    public void unregisterForVideoCallFallBack(Handler h){
+        mVideoCallFallBackRegistrants.remove(h);
+    }
+
+    public void registerForVideoCallFail(Handler h, int what, Object obj){
+        mVideoCallFailRegistrants.addUnique(h, what, obj);
+    }
+
+    public void unregisterForVideoCallFail(Handler h){
+        mVideoCallFailRegistrants.remove(h);
+    }
+    // add for video phone end
+
     /* APIs to access foregroudCalls, backgroudCalls, and ringingCalls
      * 1. APIs to access list of calls
      * 2. APIs to check if any active call, which has connection other than
@@ -1783,6 +1926,24 @@ public final class CallManager {
                         notifyMsg.arg1 = msg.arg1;
                         notifyMsg.sendToTarget();
                     }
+                    break;
+                case EVENT_NEW_RINGING_VIDEO_CALL:
+                    mNewRingingVideoCallRegistrants.notifyRegistrants((AsyncResult) msg.obj);
+                    break;
+                case EVENT_PRECISE_VIDEO_CALL_STATE_CHANGED:
+                    mPreciseVideoCallStateRegistrants.notifyRegistrants((AsyncResult) msg.obj);
+                    break;
+                case EVENT_VIDEO_CALL_DISCONNECT:
+                    mVideoCallDisconnectRegistrants.notifyRegistrants((AsyncResult) msg.obj);
+                    break;
+                case EVENT_INCOMING_RING_VIDEO_CALL:
+                    mIncomingRingVideoCallRegistrants.notifyRegistrants((AsyncResult) msg.obj);
+                    break;
+                case EVENT_VIDEO_CALL_FALL_BACK:
+                    mVideoCallFallBackRegistrants.notifyRegistrants((AsyncResult) msg.obj);
+                    break;
+                case EVENT_VIDEO_CALL_FAIL:
+                    mVideoCallFailRegistrants.notifyRegistrants((AsyncResult) msg.obj);
                     break;
             }
         }
