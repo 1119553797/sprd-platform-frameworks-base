@@ -51,11 +51,15 @@
 
 #include <media/stagefright/foundation/ALooper.h>
 
+#include <ctype.h>//@hong
+#include <cutils/properties.h>//@hong
+
 #define _SYNC_USE_SYSTEM_TIME_
 namespace android {
 
-static int64_t kLowWaterMarkUs = 2000000ll;  // 2secs
-static int64_t kHighWaterMarkUs = 10000000ll;  // 10secs
+static int64_t kLowWaterMarkUs = 500000ll;  // 2secs @hong
+static int64_t kHighWaterMarkUs = 2500000ll;  // 10secs @hong
+static int64_t kStartLowWaterMarkUs = 80000ll; //@hong
 static const size_t kLowWaterMarkBytes = 40000;
 static const size_t kHighWaterMarkBytes = 200000;
 
@@ -269,7 +273,15 @@ AwesomePlayer::AwesomePlayer()
             this, &AwesomePlayer::onCheckAudioStatus);
 
     mAudioStatusEventPending = false;
-
+{
+    char value[16];//@hong
+    property_get("ro.hisense.cmcc.test", value, "Unknown");
+    if (!strcmp(value, "1") || !strcmp(value, "true"))
+    {
+	mCMMBLab = true;
+	LOGV("CMMB set to CMCC Test Mode");
+    }
+}
     reset();
 }
 
@@ -311,6 +323,11 @@ LOGV("setdatasource11 ");
 
 status_t AwesomePlayer::setDataSource_l(
         const char *uri, const KeyedVector<String8, String8> *headers) {
+{
+	    struct timeval tv;  //@hong add timecheck.
+	    gettimeofday(&tv, NULL);
+		LOGV("setdatasource 22 time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
+}		
     reset_l();
 
     mUri = uri;
@@ -322,7 +339,11 @@ status_t AwesomePlayer::setDataSource_l(
     // The actual work will be done during preparation in the call to
     // ::finishSetDataSource_l to avoid blocking the calling thread in
     // setDataSource for any significant time.
-
+{	
+	    struct timeval tv;  //@hong add timecheck.
+		gettimeofday(&tv, NULL);
+		LOGV("setdatasource 33 time:%d s",tv.tv_sec);
+}
     return OK;
 }
 
@@ -420,12 +441,26 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
     }
 
     mExtractorFlags = extractor->flags();
+	{
+		struct timeval tv;  //@hong add timecheck.
+		gettimeofday(&tv, NULL);
+		LOGV("setdatasource_l end time:%d s ",tv.tv_sec*1000 + tv.tv_usec/1000);
+	}
 
     return OK;
 }
 
 void AwesomePlayer::reset() {
     LOGV("reset");
+
+	 //@hong to handle stop failed. 2011-8-15
+    if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)) 
+    {
+       if (mFlags & PREPARING) {
+          abortPrepare(UNKNOWN_ERROR);
+	  	}
+    }
+   
     Mutex::Autolock autoLock(mLock);
      LOGI("reset_l wait");
     reset_l();
@@ -654,15 +689,18 @@ void AwesomePlayer::onBufferingUpdate() {
                  cachedDurationUs / 1E6);
             mFlags |= CACHE_UNDERRUN;
             pause_l();
-            notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);
-        } else if (eos || cachedDurationUs > kHighWaterMarkUs) {
-            if (mFlags & CACHE_UNDERRUN) {
+            notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);  //@hong
+        } else // if (eos || cachedDurationUs > kHighWaterMarkUs) 
+             {
+			 
+            if ((eos || cachedDurationUs > kHighWaterMarkUs) && (mFlags & CACHE_UNDERRUN)) { //@hong
                 LOGI("cache has filled up (%.2f secs), resuming.",
                      cachedDurationUs / 1E6);
                 mFlags &= ~CACHE_UNDERRUN;
                 play_l();
-                notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END);
-            } else if (mFlags & PREPARING) {
+                notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); //@hong
+            } else if ((eos || (mCMMBLab && cachedDurationUs > kStartLowWaterMarkUs) || (!mCMMBLab && cachedDurationUs > (kHighWaterMarkUs+kLowWaterMarkUs)/2) ) 
+                        && (mFlags & PREPARING)) { //@hong
                 LOGV("cache has filled up (%.2f secs), prepare is done",
                      cachedDurationUs / 1E6);
                 finishAsyncPrepare_l();
@@ -778,6 +816,12 @@ status_t AwesomePlayer::play() {
 }
 
 status_t AwesomePlayer::play_l() {
+	{
+	    struct timeval tv;  //@hong add timecheck.
+	    gettimeofday(&tv, NULL);
+		LOGV("play_l enter time:%d s",tv.tv_sec*1000+tv.tv_usec/1000);
+	}
+	
     if (mFlags & PLAYING) {
         return OK;
     }
@@ -920,7 +964,9 @@ status_t AwesomePlayer::initRenderer_l() {
 status_t AwesomePlayer::forceStop(){
     LOGV("forceStop");
 
-
+    if (mRTSPController != NULL) {  //@hong
+        mRTSPController->stopSource();
+   	}
    
 	VideoPhoneDataDevice::getInstance().stop();
 	return pause();
@@ -1355,9 +1401,18 @@ void AwesomePlayer::onVideoEvent() {
     TimeSource *ts = (mFlags & AUDIO_AT_EOS) ? &mSystemTimeSource : mTimeSource;
 #endif
 
+    int is_first_frame = 0; //@hong
+    uint32_t tmp_mFlags = mFlags;//@hong
+	
     if (mFlags & FIRST_FRAME) {
         mFlags &= ~FIRST_FRAME;
-
+		{//@hong
+	    	struct timeval tv;  //@hong add timecheck.
+	    	gettimeofday(&tv, NULL);
+			LOGV("First Frame time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
+			is_first_frame = 1;
+		}		
+	   
         mTimeSourceDeltaUs = ts->getRealTimeUs() - timeUs;
     }
 
@@ -1398,6 +1453,14 @@ void AwesomePlayer::onVideoEvent() {
         latenessUs = 0;
     }
 
+    if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)) //@Hong. SpeedupCMMB
+    {
+    	if(is_first_frame){
+    		latenessUs = 0;
+		LOGI("cmmb is_first_frame");
+    	}
+    }
+
     if (latenessUs > 60000) {
         // We're more than 40ms late.
         LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
@@ -1433,6 +1496,15 @@ void AwesomePlayer::onVideoEvent() {
 
     if (mVideoRenderer != NULL) {
         mVideoRenderer->render(mVideoBuffer);
+    }else{//@hong
+    	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)){ //@Hong. SpeedupCMMB	
+       	if(tmp_mFlags& FIRST_FRAME){
+	   		mFlags |= FIRST_FRAME;
+       	}
+	 	postVideoEvent_l(10000);
+        return;
+    	}
+    	LOGI("mVideoRenderer is NULL");	
     }
 
     if (mLastVideoBuffer) {
@@ -1469,7 +1541,7 @@ void AwesomePlayer::postBufferingEvent_l() {
         return;
     }
     mBufferingEventPending = true;
-    mQueue.postEventWithDelay(mBufferingEvent, 1000000ll);
+    mQueue.postEventWithDelay(mBufferingEvent, 500000ll); //@hong 1000000ll
 }
 
 void AwesomePlayer::postCheckAudioStatusEvent_l() {
@@ -1512,6 +1584,12 @@ void AwesomePlayer::onCheckAudioStatus() {
 }
 
 status_t AwesomePlayer::prepare() {
+	{
+	    struct timeval tv;  //@hong add timecheck.
+
+	    gettimeofday(&tv, NULL);
+		LOGV("prepare enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
+	}
    LOGV("prepare");
     Mutex::Autolock autoLock(mLock);
     return prepare_l();
@@ -1589,7 +1667,11 @@ char* strsplit(const char* src, char c, char* dest)
 
 status_t AwesomePlayer::finishSetDataSource_l() {
     sp<DataSource> dataSource;
-
+	{
+	    struct timeval tv;  //@hong add timecheck.
+	    gettimeofday(&tv, NULL);
+		LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
+	}
     if (!strncasecmp("http://", mUri.string(), 7)) {
         mConnectingDataSource = new NuHTTPDataSource;
 
@@ -1795,13 +1877,22 @@ status_t AwesomePlayer::finishSetDataSource_l() {
         if (mLooper == NULL) {
             mLooper = new ALooper;
             mLooper->setName("rtsp");
-            mLooper->start();
+ //           mLooper->start();
+ 	   mLooper->start(false /* runOnCallingThread */,
+                          false /* canCallJava */,
+                          ANDROID_PRIORITY_AUDIO); //@hong
+			
         }
         mRTSPController = new ARTSPController(mLooper);
         status_t err = mRTSPController->connect(mUri.string());
 
         LOGI("ARTSPController::connect returned %d", err);
-
+		{
+			struct timeval tv;  //@hong add timecheck.
+	    	gettimeofday(&tv, NULL);
+			LOGV("finishSetDataSource_l over time:%d s",tv.tv_sec);
+		}
+		
         if (err != OK) {
             mRTSPController.clear();
             return err;
@@ -1918,6 +2009,12 @@ void AwesomePlayer::finishAsyncPrepare_l() {
     mPrepareResult = OK;
     mFlags &= ~(PREPARING|PREPARE_CANCELLED);
     mFlags |= PREPARED;
+	{
+	    struct timeval tv;  //@hong add timecheck.
+	    gettimeofday(&tv, NULL);
+LOGV("prepare end time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
+		
+	}
     mAsyncPrepareEvent = NULL;
     mPreparedCondition.broadcast();
 }
