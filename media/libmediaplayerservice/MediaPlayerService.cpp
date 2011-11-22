@@ -17,7 +17,7 @@
 
 // Proxy for media player implementations
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "MediaPlayerService"
 #include <utils/Log.h>
 
@@ -52,6 +52,7 @@
 #include <media/AudioTrack.h>
 
 #include "MediaRecorderClient.h"
+#include "MediaPhoneClient.h" //sprd
 #include "MediaPlayerService.h"
 #include "MetadataRetrieverClient.h"
 
@@ -196,10 +197,12 @@ extmap FILE_EXTS [] =  {
         {".rtttl", SONIVOX_PLAYER},
         {".rtx", SONIVOX_PLAYER},
         {".ota", SONIVOX_PLAYER},
+#if 0   
 #ifndef NO_OPENCORE
         {".wma", PV_PLAYER},
         {".wmv", PV_PLAYER},
         {".asf", PV_PLAYER},
+#endif
 #endif
 };
 
@@ -233,11 +236,28 @@ sp<IMediaRecorder> MediaPlayerService::createMediaRecorder(pid_t pid)
     return recorder;
 }
 
+sp<IMediaPhone> MediaPlayerService::createMediaPhone(pid_t pid) //sprd
+{
+    sp<MediaPhoneClient> phone = new MediaPhoneClient(this, pid);
+    wp<MediaPhoneClient> w = phone;
+    Mutex::Autolock lock(mLock);
+    mMediaPhoneClients.add(w);
+    LOGV("Create new media recorder client from pid %d", pid);
+    return phone;
+}
+
 void MediaPlayerService::removeMediaRecorderClient(wp<MediaRecorderClient> client)
 {
     Mutex::Autolock lock(mLock);
     mMediaRecorderClients.remove(client);
     LOGV("Delete media recorder client");
+}
+
+void MediaPlayerService::removeMediaPhoneClient(wp<MediaPhoneClient> client) //sprd
+{
+    Mutex::Autolock lock(mLock);
+    mMediaPhoneClients.remove(client);
+    LOGV("Delete media phone client");
 }
 
 sp<IMediaMetadataRetriever> MediaPlayerService::createMetadataRetriever(pid_t pid)

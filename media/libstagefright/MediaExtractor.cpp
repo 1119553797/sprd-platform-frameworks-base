@@ -25,7 +25,9 @@
 #include "include/OggExtractor.h"
 #include "include/MPEG2TSExtractor.h"
 
+#include "include/VideoPhoneExtractor.h"//sprd
 #include "matroska/MatroskaExtractor.h"
+#include "include/AACExtractor.h"
 
 #include <media/stagefright/foundation/AMessage.h>
 #include <media/stagefright/DataSource.h>
@@ -79,6 +81,12 @@ sp<MediaExtractor> MediaExtractor::Create(
         return new MatroskaExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_MPEG2TS)) {
         return new MPEG2TSExtractor(source);
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263)) {
+        return new VideoPhoneExtractor(source, 1);
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_MPEG4)) {
+        return new VideoPhoneExtractor(source, 2);
+    } else if(!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AAC)) {
+        return new AACExtractor(source);
     }
 
     return NULL;

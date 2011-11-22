@@ -15,7 +15,7 @@
 ** limitations under the License.
 */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "MediaPlayer"
 #include <utils/Log.h>
 
@@ -296,6 +296,7 @@ status_t MediaPlayer::stop()
                     MEDIA_PLAYER_PAUSED | MEDIA_PLAYER_PLAYBACK_COMPLETE ) ) ) {
         status_t ret = mPlayer->stop();
         if (ret != NO_ERROR) {
+	LOGE("stop erro ret:%d",ret);
             mCurrentState = MEDIA_PLAYER_STATE_ERROR;
         } else {
             mCurrentState = MEDIA_PLAYER_STOPPED;

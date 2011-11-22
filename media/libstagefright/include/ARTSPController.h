@@ -43,7 +43,7 @@ struct ARTSPController : public MediaExtractor {
 
     int64_t getNormalPlayTimeUs();
     int64_t getQueueDurationUs(bool *eos);
-
+    void stopSource(); //@hong
     void onMessageReceived(const sp<AMessage> &msg);
 
     virtual uint32_t flags() const {

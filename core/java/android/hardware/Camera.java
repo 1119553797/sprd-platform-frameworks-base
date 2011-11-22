@@ -991,6 +991,8 @@ public class Camera {
         private static final String KEY_PREVIEW_FRAME_RATE = "preview-frame-rate";
         private static final String KEY_PREVIEW_FPS_RANGE = "preview-fps-range";
         private static final String KEY_PICTURE_SIZE = "picture-size";
+        private static final String KEY_BRIGHTNESS = "brightness";		
+        private static final String KEY_CONTRAST = "contrast";				
         private static final String KEY_PICTURE_FORMAT = "picture-format";
         private static final String KEY_JPEG_THUMBNAIL_SIZE = "jpeg-thumbnail-size";
         private static final String KEY_JPEG_THUMBNAIL_WIDTH = "jpeg-thumbnail-width";
@@ -998,6 +1000,7 @@ public class Camera {
         private static final String KEY_JPEG_THUMBNAIL_QUALITY = "jpeg-thumbnail-quality";
         private static final String KEY_JPEG_QUALITY = "jpeg-quality";
         private static final String KEY_ROTATION = "rotation";
+        private static final String KEY_SENSORROTATION = "sensorrotation";
         private static final String KEY_GPS_LATITUDE = "gps-latitude";
         private static final String KEY_GPS_LONGITUDE = "gps-longitude";
         private static final String KEY_GPS_ALTITUDE = "gps-altitude";
@@ -1725,6 +1728,30 @@ public class Camera {
             }
             return formats;
         }
+	public   void setBrightness(String value)
+	{
+		set(KEY_BRIGHTNESS, value);
+	}
+	public  String getBrightness() 
+	{	
+		return get(KEY_BRIGHTNESS);
+	}		
+        public List<String> getSupportedBrightness() {
+            String str = get(KEY_BRIGHTNESS + SUPPORTED_VALUES_SUFFIX);	    
+            return split(str);
+        }
+	public   void setContrast(String value)
+	{
+		set(KEY_CONTRAST, value);
+	}
+	public  String getContrast() 
+	{	
+		return get(KEY_CONTRAST);
+	}		
+        public List<String> getSupportedContrast() {
+            String str = get(KEY_CONTRAST + SUPPORTED_VALUES_SUFFIX);	    
+            return split(str);
+        }		
 
         private String cameraFormatForPixelFormat(int pixel_format) {
             switch(pixel_format) {
@@ -1819,6 +1846,15 @@ public class Camera {
             } else {
                 throw new IllegalArgumentException(
                         "Invalid rotation=" + rotation);
+            }
+        }
+        public void setSensorRotation(int rotation) {
+            if (rotation == 0 || rotation == 90 || rotation == 180
+                    || rotation == 270) {
+                set(KEY_SENSORROTATION, Integer.toString(rotation));
+            } else {
+                throw new IllegalArgumentException(
+                        "Invalid sensorrotation=" + rotation);
             }
         }
 

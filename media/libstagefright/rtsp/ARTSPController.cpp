@@ -198,4 +198,17 @@ int64_t ARTSPController::getQueueDurationUs(bool *eos) {
     return minQueuedDurationUs;
 }
 
+void  ARTSPController::stopSource() {  //@hong   
+
+    LOGI("stopSource");
+    for (size_t i = 0; i < mHandler->countTracks(); ++i) {
+        sp<APacketSource> source = mHandler->getPacketSource(i);
+
+        source->stop();
+
+    }
+
+    return;
+}
+
 }  // namespace android

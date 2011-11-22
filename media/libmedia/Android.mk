@@ -15,8 +15,10 @@ LOCAL_SRC_FILES:= \
     IMediaRecorderClient.cpp \
     IMediaPlayer.cpp \
     IMediaRecorder.cpp \
+    IMediaPhone.cpp \
     Metadata.cpp \
     mediarecorder.cpp \
+    mediaphone.cpp \
     IMediaMetadataRetriever.cpp \
     mediametadataretriever.cpp \
     ToneGenerator.cpp \

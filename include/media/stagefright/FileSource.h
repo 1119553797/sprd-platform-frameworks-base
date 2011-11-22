@@ -42,7 +42,6 @@ protected:
 
 private:
     FILE *mFile;
-    int mFd;
     int64_t mOffset;
     int64_t mLength;
     Mutex mLock;

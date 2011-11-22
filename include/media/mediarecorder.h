@@ -53,7 +53,7 @@ enum audio_source {
 enum video_source {
     VIDEO_SOURCE_DEFAULT = 0,
     VIDEO_SOURCE_CAMERA = 1,
-    VIDEO_SOURCE_VIDEOPHONE_VIDEO_ES = 2,//@jgdu
+    VIDEO_SOURCE_VIDEOPHONE_VIDEO_ES = 2,//sprd
     
     VIDEO_SOURCE_LIST_END  // must be last - used to validate audio source type
 };
@@ -81,7 +81,7 @@ enum output_format {
     /* H.264/AAC data encapsulated in MPEG2/TS */
     OUTPUT_FORMAT_MPEG2TS = 8,
 
-	OUTPUT_FORMAT_VIDEOPHONE = 9,
+	OUTPUT_FORMAT_VIDEOPHONE = 9,//sprd
     OUTPUT_FORMAT_LIST_END // must be last - used to validate format type
 };
 

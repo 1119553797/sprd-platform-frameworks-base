@@ -128,7 +128,7 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
 
         mLatencyUs = (int64_t)mAudioSink->latency() * 1000;
         mFrameSize = mAudioSink->frameSize();
-
+        LOGI("mAudioSink->latency() %d ms",mAudioSink->latency());
         mAudioSink->start();
     } else {
         mAudioTrack = new AudioTrack(
@@ -156,7 +156,7 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
 
         mLatencyUs = (int64_t)mAudioTrack->latency() * 1000;
         mFrameSize = mAudioTrack->frameSize();
-
+        LOGI("mAudioTrack->latency() %d ms",mAudioTrack->latency());
         mAudioTrack->start();
     }
 
@@ -393,6 +393,10 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
 int64_t AudioPlayer::getRealTimeUs() {
     Mutex::Autolock autoLock(mLock);
     return getRealTimeUsLocked();
+}
+
+int64_t AudioPlayer::getAudioLatencyUs() {
+    return mLatencyUs;
 }
 
 int64_t AudioPlayer::getRealTimeUsLocked() const {

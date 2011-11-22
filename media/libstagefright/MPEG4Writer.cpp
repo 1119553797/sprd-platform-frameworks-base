@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "MPEG4Writer"
 #include <utils/Log.h>
 
@@ -2105,6 +2105,9 @@ void MPEG4Writer::Track::writeTrackHeader(
     int32_t mvhdTimeScale = mOwner->getTimeScale();
     int64_t trakDurationUs = getDurationUs();
 
+    LOGV("%s track duration: %lld",
+        mIsAudio? "Audio": "Video", trakDurationUs);
+	
     mOwner->beginBox("trak");
 
       mOwner->beginBox("tkhd");

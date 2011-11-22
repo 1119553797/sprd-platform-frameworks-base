@@ -476,7 +476,11 @@ void ID3::Iterator::getString(String8 *id) const {
         // UTF-16 BE, no byte order mark.
         // API wants number of characters, not number of bytes...
         int len = n / 2;
-        const char16_t *framedata = (const char16_t *) (mFrameData + 1);
+        //const char16_t *framedata = (const char16_t *) (mFrameData + 1);
+        LOGD("mFrameData pointer = %p\n",mFrameData);
+        char* buff = new char[len*2];
+        memcpy(buff,mFrameData + 1,len*2);
+        const char16_t *framedata = (const char16_t *) buff;
         char16_t *framedatacopy = NULL;
 #if BYTE_ORDER == LITTLE_ENDIAN
         framedatacopy = new char16_t[len];
@@ -489,11 +493,16 @@ void ID3::Iterator::getString(String8 *id) const {
         if (framedatacopy != NULL) {
             delete[] framedatacopy;
         }
+        delete [] buff;
     } else {
         // UCS-2
         // API wants number of characters, not number of bytes...
         int len = n / 2;
-        const char16_t *framedata = (const char16_t *) (mFrameData + 1);
+        //const char16_t *framedata = (const char16_t *) (mFrameData + 1);
+        LOGD("mFrameData pointer = %p\n",mFrameData);
+        char* buff = new char[len*2];
+        memcpy(buff,mFrameData + 1,len*2);
+        const char16_t *framedata = (const char16_t *) buff;
         char16_t *framedatacopy = NULL;
         if (*framedata == 0xfffe) {
             // endianness marker doesn't match host endianness, convert
@@ -512,6 +521,7 @@ void ID3::Iterator::getString(String8 *id) const {
         if (framedatacopy != NULL) {
             delete[] framedatacopy;
         }
+        delete [] buff;
     }
 }
 

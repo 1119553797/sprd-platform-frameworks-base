@@ -42,7 +42,11 @@ LOCAL_SRC_FILES:=                         \
         Utils.cpp                         \
         WAVExtractor.cpp                  \
         avc_utils.cpp                     \
-        string.cpp
+        string.cpp                        \
+	VideoPhoneExtractor.cpp		  \
+	VideoPhoneWriter.cpp		  \
+        CharDeviceSource.cpp              \
+	AACExtractor.cpp                  
 
 LOCAL_C_INCLUDES:= \
 	$(JNI_H_INCLUDE) \

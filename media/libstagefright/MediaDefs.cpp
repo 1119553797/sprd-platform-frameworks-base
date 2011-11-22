@@ -29,7 +29,8 @@ const char *MEDIA_MIMETYPE_VIDEO_RAW = "video/raw";
 const char *MEDIA_MIMETYPE_AUDIO_AMR_NB = "audio/3gpp";
 const char *MEDIA_MIMETYPE_AUDIO_AMR_WB = "audio/amr-wb";
 const char *MEDIA_MIMETYPE_AUDIO_MPEG = "audio/mpeg";
-const char *MEDIA_MIMETYPE_AUDIO_AAC = "audio/mp4a-latm";
+const char *MEDIA_MIMETYPE_AUDIO_AAC = "audio/aac";
+const char *MEDIA_MIMETYPE_AUDIO_MP4A_LATM = "audio/mp4a-latm";//fixed CR<NEWMS00109311> by luning at 2011.11.14
 const char *MEDIA_MIMETYPE_AUDIO_QCELP = "audio/qcelp";
 const char *MEDIA_MIMETYPE_AUDIO_VORBIS = "audio/vorbis";
 const char *MEDIA_MIMETYPE_AUDIO_G711_ALAW = "audio/g711-alaw";
@@ -41,5 +42,10 @@ const char *MEDIA_MIMETYPE_CONTAINER_WAV = "audio/wav";
 const char *MEDIA_MIMETYPE_CONTAINER_OGG = "application/ogg";
 const char *MEDIA_MIMETYPE_CONTAINER_MATROSKA = "video/x-matroska";
 const char *MEDIA_MIMETYPE_CONTAINER_MPEG2TS = "video/mp2ts";
+
+const char *MEDIA_MIMETYPE_CONTAINER_CMMB		= "video/cmmb";
+const char *MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263	= "video/videophone/3gpp";
+const char *MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_MPEG4	= "video/videophone/mpeg4";
+
 
 }  // namespace android

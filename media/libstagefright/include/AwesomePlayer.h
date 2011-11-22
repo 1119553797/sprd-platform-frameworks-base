@@ -96,6 +96,8 @@ struct AwesomePlayer {
     void postAudioEOS();
     void postAudioSeekComplete();
 
+	status_t forceStop();//sprd
+
 private:
     friend struct AwesomeEvent;
 
@@ -111,6 +113,7 @@ private:
         AUDIO_AT_EOS        = 256,
         VIDEO_AT_EOS        = 512,
         AUTO_LOOPING        = 1024,
+        NOT_FIRST_PLAY     = 2048,//sprd
     };
 
     mutable Mutex mLock;
@@ -125,6 +128,7 @@ private:
     sp<MediaPlayerBase::AudioSink> mAudioSink;
 
     SystemTimeSource mSystemTimeSource;
+    SystemTimeSourceForSync	 mSystemTimeSourceForSync;//@jgdu
     TimeSource *mTimeSource;
 
     String8 mUri;
@@ -136,6 +140,8 @@ private:
     sp<MediaSource> mVideoSource;
     sp<AwesomeRenderer> mVideoRenderer;
     bool mVideoRendererIsPreview;
+    bool mNewSurfaceIsSet;//sprd
+    bool mCMMBLab;  //@hong
 
     sp<MediaSource> mAudioTrack;
     sp<MediaSource> mAudioSource;
@@ -172,6 +178,7 @@ private:
     bool mIsAsyncPrepare;
     status_t mPrepareResult;
     status_t mStreamDoneStatus;
+	bool mIsVideoPhoneStream;//sprd
 
     void postVideoEvent_l(int64_t delayUs = -1);
     void postBufferingEvent_l();

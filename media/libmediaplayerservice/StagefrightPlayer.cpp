@@ -1,4 +1,4 @@
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "StagefrightPlayer"
 #include <utils/Log.h>
 
@@ -68,7 +68,8 @@ status_t StagefrightPlayer::start() {
 status_t StagefrightPlayer::stop() {
     LOGV("stop");
 
-    return pause();  // what's the difference?
+	return mPlayer->forceStop(); //sprd
+    //return pause();
 }
 
 status_t StagefrightPlayer::pause() {
