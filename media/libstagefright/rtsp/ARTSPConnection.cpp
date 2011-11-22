@@ -35,7 +35,7 @@
 namespace android {
 
 // static
-const int64_t ARTSPConnection::kSelectTimeoutUs = 1000ll;
+const int64_t ARTSPConnection::kSelectTimeoutUs = 10000ll;//@hong
 
 ARTSPConnection::ARTSPConnection()
     : mState(DISCONNECTED),
@@ -43,6 +43,7 @@ ARTSPConnection::ARTSPConnection()
       mSocket(-1),
       mConnectionID(0),
       mNextCSeq(0),
+      mServerExceptionMsg(NULL),//@hong
       mReceiveResponseEventPending(false) {
 }
 
@@ -67,8 +68,14 @@ void ARTSPConnection::disconnect(const sp<AMessage> &reply) {
     msg->post();
 }
 
+void  ARTSPConnection::serverexception(const sp<AMessage> &reply)//@hong
+{
+	mServerExceptionMsg = reply;
+}
+
 void ARTSPConnection::sendRequest(
         const char *request, const sp<AMessage> &reply) {
+	LOGV("sendRequest...");
     sp<AMessage> msg = new AMessage(kWhatSendRequest, id());
     msg->setString("request", request);
     msg->setMessage("reply", reply);
@@ -362,6 +369,7 @@ void ARTSPConnection::onCompleteConnection(const sp<AMessage> &msg) {
 
 void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
     sp<AMessage> reply;
+//	LOGV("onSendRequest...");
     CHECK(msg->findMessage("reply", &reply));
 
     if (mState != CONNECTED) {
@@ -380,6 +388,8 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
     addAuthentication(&request);
 
     // Find the boundary between headers and the body.
+    ssize_t teardown = request.find("TEARDOWN");//@hong
+
     ssize_t i = request.find("\r\n\r\n");
     CHECK_GE(i, 0);
 
@@ -399,15 +409,16 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
             send(mSocket, request.c_str() + numBytesSent,
                  request.size() - numBytesSent, 0);
 
-        if (n == 0) {
+        if (n == 0 || teardown >= 0) {  //@hong hisense server close at first
             // Server closed the connection.
-            LOGE("Server unexpectedly closed the connection.");
+            LOGE("Server unexpectedly closed the connection1.");
 
             reply->setInt32("result", ERROR_IO);
             reply->post();
             return;
         } else if (n < 0) {
             if (errno == EINTR) {
+		LOGV("errno == EINTR");
                 continue;
             }
 
@@ -421,12 +432,14 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
     }
 
     mPendingRequests.add(cseq, reply);
+	LOGV("onSendRequest over");
 }
 
 void ARTSPConnection::onReceiveResponse() {
     mReceiveResponseEventPending = false;
-
+//	LOGV("onReceiveResponse entering...");
     if (mState != CONNECTED) {
+	LOGV("onReceiveResponse return for NOT CONNECTED..");
         return;
     }
 
@@ -450,12 +463,15 @@ void ARTSPConnection::onReceiveResponse() {
 
         if (!success) {
             // Something horrible, irreparable has happened.
+	    LOGV("onReceiveResponse receive fail");
             flushPendingRequests();
             return;
         }
+	LOGV("onReceiveResponse SUCCESS");
     }
 
     postReceiveReponseEvent();
+    LOGV("onReceiveResponse end...");
 }
 
 void ARTSPConnection::flushPendingRequests() {
@@ -475,7 +491,7 @@ void ARTSPConnection::postReceiveReponseEvent() {
     }
 
     sp<AMessage> msg = new AMessage(kWhatReceiveResponse, id());
-    msg->post();
+    msg->post(50000ll);//@hong
 
     mReceiveResponseEventPending = true;
 }
@@ -486,7 +502,14 @@ status_t ARTSPConnection::receive(void *data, size_t size) {
         ssize_t n = recv(mSocket, (uint8_t *)data + offset, size - offset, 0);
         if (n == 0) {
             // Server closed the connection.
-            LOGE("Server unexpectedly closed the connection.");
+            LOGE("Server unexpectedly closed the connection2.");
+
+		if (mServerExceptionMsg!= NULL)
+			{
+			mState = DISCONNECTED;  //@hong handle server exception.		
+			mServerExceptionMsg->post();
+			mServerExceptionMsg = NULL;
+			}
             return ERROR_IO;
         } else if (n < 0) {
             if (errno == EINTR) {

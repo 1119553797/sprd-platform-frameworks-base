@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "ARTPSource"
 #include <utils/Log.h>
 
@@ -34,6 +34,8 @@
 namespace android {
 
 static const uint32_t kSourceID = 0xdeadbeef;
+static const uint32_t kMininalTime =   10000;//@hong
+static const uint32_t kMaxiumTime = 3000000;//@hong
 
 ARTPSource::ARTPSource(
         uint32_t id,
@@ -43,15 +45,48 @@ ARTPSource::ARTPSource(
       mHighestSeqNumber(0),
       mNumBuffersReceived(0),
       mNumTimes(0),
+      myNumTimes(0),//@hong
+      mDeltaT(0),//@hong
       mLastNTPTime(0),
       mLastNTPTimeUpdateUs(0),
       mIssueFIRRequests(false),
+      mLocalTimestamps(false), //@hong
       mLastFIRRequestUs(-1),
       mNextFIRSeqNo((rand() * 256.0) / RAND_MAX) {
     unsigned long PT;
     AString desc;
     AString params;
     sessionDesc->getFormatType(index, &PT, &desc, &params);
+    char temp[10]={0};
+    const char *p  = NULL;
+	
+    p = strchr(desc.c_str(),'/');
+//zhangjl add for no rtcp sr message come so use des information for  streaming Ti
+	LOGE("p afte strchr %s",p);
+    if(p!= NULL)
+    {
+    	p++;
+        char *q = strchr(p,'/');
+        LOGE("q afte strchr %s",q);
+        if(q != NULL)
+        {
+        	for(int i =0 ; p < q; )
+            {
+            	temp[i++] = *p++;
+            }
+            LOGE("q afte temp %s",temp);
+            mHZ= atoi(temp);
+                                                               
+        }
+        else
+        {
+        	mHZ= atoi(p);
+        }
+    }
+    else
+    {
+    	mHZ = 90000 ;
+    }
 
     if (!strncmp(desc.c_str(), "H264/", 5)) {
         mAssembler = new AAVCAssembler(notify);
@@ -79,6 +114,11 @@ static uint32_t AbsDiff(uint32_t seq1, uint32_t seq2) {
     return seq1 > seq2 ? seq1 - seq2 : seq2 - seq1;
 }
 
+void ARTPSource::setLocalTimestamps(bool local) //@hong
+{
+	mLocalTimestamps = local;
+}
+    
 void ARTPSource::processRTPPacket(const sp<ABuffer> &buffer) {
     if (queuePacket(buffer)
             && mNumTimes == 2
@@ -88,7 +128,7 @@ void ARTPSource::processRTPPacket(const sp<ABuffer> &buffer) {
 }
 
 void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
-    LOGV("timeUpdate");
+    LOGV("timeUpdate %u 0x%llx", rtpTime, ntpTime);
 
     mLastNTPTime = ntpTime;
     mLastNTPTimeUpdateUs = ALooper::GetNowUs();
@@ -114,9 +154,105 @@ void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
     }
 }
 
+void ARTPSource::timeUpdate2(uint32_t rtpTime, uint64_t ntpTime) 
+{
+	if (myNumTimes == 0)
+	{
+ 		myRTPTime[myNumTimes] = rtpTime;
+		myNTPTime[myNumTimes] = ntpTime;
+		if (mNumTimes == 2 && mPeriodCheck >= kMaxiumTime)  //@hong 2011-10-31
+		mylocalBaseNTP = RTP2NTP(rtpTime);
+		else
+		mylocalBaseNTP = mNTPTime[0] + ((double) 0x600000000ll)
+            *((double)rtpTime - (double)mRTPTime[0])
+                / (double)(6*mHZ);		
+                
+		myBaseNTP = ntpTime;
+		myNumTimes++;
+		return ;
+	}
+	if (myNumTimes == 1)
+	{
+ 		myRTPTime[myNumTimes] = rtpTime;
+		myNTPTime[myNumTimes] = ntpTime;
+		timeUpdate(myRTPTime[0], mylocalBaseNTP);
+		timeUpdate(myRTPTime[1], mylocalBaseNTP+(ntpTime-myBaseNTP));
+		LOGI("timeUpdate2 established.....");
+		myNumTimes++;
+		return;
+	}
+	timeUpdate(rtpTime, mylocalBaseNTP+(ntpTime-myBaseNTP));	
+}
+
 bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
     uint32_t seqNum = (uint32_t)buffer->int32Data();
 
+/*        time establish..............*///@hong
+   if (mLocalTimestamps)
+   	{
+	    uint64_t  ntpTime = ALooper::GetNowUs();
+	   sp<AMessage> meta = buffer->meta();
+          bool updatetime = false;
+	   uint32_t rtpTime;
+	   uint64_t ntpTime1;
+	   uint64_t ntptime2;
+	 
+	        CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
+			
+		if (rtpTime == 0) return false; 
+			updatetime = false;
+	    if ((mLastNTPTimeUpdateUs == 0 ||
+			(ntpTime > (mLastNTPTimeUpdateUs + mPeriodCheck))) && (myNumTimes<2))
+	    	{
+	    	sp<AMessage> meta = buffer->meta();
+        	if (mLastNTPTimeUpdateUs ==0 || mNumTimes < 2) mPeriodCheck = kMininalTime;
+		else
+		  if (mPeriodCheck < kMaxiumTime)
+		  {
+		  	mPeriodCheck +=mPeriodCheck;
+		  }
+		
+		
+		 ntpTime1 =( ntpTime /1000000 ) << 32 | (((ntpTime%1000000ll) * 0x100000000ll) /1000000ll);
+
+		if (mNumTimes == 2 )
+		{
+		ntptime2 = RTP2NTP(rtpTime);
+		 }
+		 
+		if (mLastNTPTimeUpdateUs == 0 )
+			{
+			mStartingT = ntpTime1;
+			mStartRTP = rtpTime;
+			}
+		if (((AbsDiff(rtpTime, mRTPTime[0]) >= ((double)mPeriodCheck*mHZ/1000000) /* && AbsDiff(rtpTime, mRTPTime[1]) >= ((double)mPeriodCheck*mHZ/100) */)
+			&& mPeriodCheck == kMininalTime)
+			/*|| mPeriodCheck >= kMaxiumTime*/ || mLastNTPTimeUpdateUs==0)
+		{
+		timeUpdate(rtpTime, ntpTime1);
+		updatetime = true;
+		mDeltaT = 0;
+		}
+		else
+		if (/*mPeriodCheck > kMininalTime &&*/ mNumTimes == 2) mPeriodCheck = 2*kMininalTime; //mPeriodCheck/2;
+			
+	    	}
+	    if (myNumTimes == 2)
+	    	{
+		meta->setInt64("ntp-time", RTP2NTP(rtpTime));
+//		       LOGI("rtp:%u ntp:0x%llx ", rtpTime, ntpTime1);	    	
+	    	}		
+	    else
+	    	{
+		ntpTime1 = mNTPTime[0] + (double) 0x600000000ll
+            *(uint64_t)((rtpTime >= mRTPTime[0])? (rtpTime - mRTPTime[0]):((uint64_t)0x100000000ll - mRTPTime[0]+rtpTime))
+                / (double)(6*mHZ);
+		meta->setInt64("ntp-time", ntpTime1);
+//		       LOGI("rtp:%u ntp:0x%llx ", rtpTime, ntpTime1);
+	   	}
+   	}
+   	else
+/*         quick rtp time established..............*/
     if (mNumTimes == 2) {
         sp<AMessage> meta = buffer->meta();
 

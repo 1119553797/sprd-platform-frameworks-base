@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "ARTPConnection"
 #include <utils/Log.h>
 
@@ -49,7 +49,7 @@ static uint64_t u64at(const uint8_t *data) {
 }
 
 // static
-const int64_t ARTPConnection::kSelectTimeoutUs = 1000ll;
+const int64_t ARTPConnection::kSelectTimeoutUs = 10000ll; //@hong
 
 struct ARTPConnection::StreamInfo {
     int mRTPSocket;
@@ -69,12 +69,18 @@ struct ARTPConnection::StreamInfo {
 ARTPConnection::ARTPConnection(uint32_t flags)
     : mFlags(flags),
       mPollEventPending(false),
+      mLocalTimestamps(false),//@hong
       mLastReceiverReportTimeUs(-1) {
 }
 
 ARTPConnection::~ARTPConnection() {
 }
 
+void ARTPConnection::setlocalTimestamps(bool local)  //@hong
+ {
+ 	mLocalTimestamps = local;
+ }
+ 
 void ARTPConnection::addStream(
         int rtpSocket, int rtcpSocket,
         const sp<ASessionDescription> &sessionDesc,
@@ -585,7 +591,7 @@ status_t ARTPConnection::parseSR(
     uint64_t ntpTime = u64at(&data[8]);
     uint32_t rtpTime = u32at(&data[16]);
 
-#if 0
+#if 1
     LOGI("XXX timeUpdate: ssrc=0x%08x, rtpTime %u == ntpTime %.3f",
          id,
          rtpTime,
@@ -594,9 +600,29 @@ status_t ARTPConnection::parseSR(
 
     sp<ARTPSource> source = findSource(s, id);
 
-    if ((mFlags & kFakeTimestamps) == 0) {
-        source->timeUpdate(rtpTime, ntpTime);
+    if (mLocalTimestamps == false)  //@hong
+    {
+	    if ((mFlags & kFakeTimestamps) == 0) {
+	        source->timeUpdate(rtpTime, ntpTime);
+	    }
     }
+    else
+    {
+               source->timeUpdate2(rtpTime, ntpTime);
+    }
+/*  update all source timestamp */ //@hong
+#if 0
+ List<StreamInfo>::iterator it = mStreams.begin();
+    while (it != mStreams.end()) {
+        StreamInfo &info = *it++;
+
+        for (size_t j = 0; j < s->mSources.size(); ++j) {
+           sp<ARTPSource> source = s->mSources.valueAt(j);
+		source->timeUpdate(rtpTime, ntpTime);
+          }
+    	}
+#endif
+/////@hong.................................
 
     return 0;
 }
@@ -609,6 +635,7 @@ sp<ARTPSource> ARTPConnection::findSource(StreamInfo *info, uint32_t srcId) {
 
         source = new ARTPSource(
                 srcId, info->mSessionDesc, info->mIndex, info->mNotifyMsg);
+	  source->setLocalTimestamps(mLocalTimestamps);//@hong
 
         info->mSources.add(srcId, source);
     } else {

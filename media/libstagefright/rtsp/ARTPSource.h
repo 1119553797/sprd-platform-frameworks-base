@@ -39,6 +39,7 @@ struct ARTPSource : public RefBase {
 
     void processRTPPacket(const sp<ABuffer> &buffer);
     void timeUpdate(uint32_t rtpTime, uint64_t ntpTime);
+    void timeUpdate2(uint32_t rtpTime, uint64_t ntpTime);//@hong	
     void byeReceived();
 
     List<sp<ABuffer> > *queue() { return &mQueue; }
@@ -49,7 +50,9 @@ struct ARTPSource : public RefBase {
     bool timeEstablished() const {
         return mNumTimes == 2;
     }
-
+	
+    void setLocalTimestamps(bool local); //@hong
+	
 private:
     uint32_t mID;
     uint32_t mHighestSeqNumber;
@@ -64,7 +67,21 @@ private:
 
     uint64_t mLastNTPTime;
     int64_t mLastNTPTimeUpdateUs;
+	
+    bool mLocalTimestamps; //@hong
+    int64_t mDeltaT;
+    uint64_t mStartingT;
+    uint32_t mStartRTP;
+    uint64_t mPeriodCheck;
 
+    size_t myNumTimes;//@hong
+    int64_t mylocalBaseNTP;
+    int64_t myBaseNTP;
+    uint64_t myNTPTime[2];
+    uint32_t myRTPTime[2];
+    uint32_t mHZ;
+
+		
     bool mIssueFIRRequests;
     int64_t mLastFIRRequestUs;
     uint8_t mNextFIRSeqNo;

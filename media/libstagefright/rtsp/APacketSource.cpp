@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "APacketSource"
 #include <utils/Log.h>
 
@@ -668,6 +668,8 @@ status_t APacketSource::start(MetaData *params) {
 }
 
 status_t APacketSource::stop() {
+     LOGE("stopping ");
+     signalEOS(ERROR_END_OF_STREAM);
     return OK;
 }
 
