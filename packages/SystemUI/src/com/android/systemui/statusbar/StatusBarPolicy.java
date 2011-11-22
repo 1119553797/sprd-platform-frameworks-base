@@ -1317,19 +1317,19 @@ public class StatusBarPolicy {
                 int iconId = 0;
                 if(currMode .equals(Settings.System.PROFILES_MODE_SILENT))  //silent
                 {
-//                        iconId = R.drawable.stat_sys_profiles_silent;
+                    iconId = R.drawable.stat_sys_profiles_silent;
                 }
                 else if(currMode .equals(Settings.System.PROFILES_MODE_MEETING)) //meeting
                 {
-//                        iconId = R.drawable.stat_sys_profiles_meeting;
+                    iconId = R.drawable.stat_sys_profiles_meeting;
                 }
                 else if(currMode .equals(Settings.System.PROFILES_MODE_OUTDOOR))  //outdoor
                 {
-//                        iconId = R.drawable.stat_sys_profiles_outdoor;
+                    iconId = R.drawable.stat_sys_profiles_outdoor;
                 }
                 else if(currMode .equals(Settings.System.PROFILES_MODE_INDOOR))  //indoor
                 {
-//                        iconId = R.drawable.stat_sys_profiles_indoor;
+                    iconId = R.drawable.stat_sys_profiles_indoor;
                 }
                 // ************Modify by luning at 01-07-01 end************
 
