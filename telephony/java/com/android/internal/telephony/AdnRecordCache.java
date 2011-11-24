@@ -379,11 +379,14 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		int[] subjectNum = null;
 		boolean newAnr = false;
 		int[] updateSubjectFlag = null;
-		int[] updateRecordInIap = null;
+	
 
 		ArrayList<Integer> subjectEfids;
 		ArrayList<Integer> subjectNums;
 		ArrayList<Integer> inIapNums;
+		int m = 0,n =0 ;
+		int[][] anrTagMap; // efid ,numberInIap
+		int efids[] = mUsimPhoneBookManager.getSubjectEfids( type,  num);
 
 		Log.i(LOG_TAG, "updateSubjectOfAdn num =" + num + "adnNum " + adnNum + "index " + index);
 
@@ -397,15 +400,28 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		subjectNums = new ArrayList<Integer>();
              inIapNums =  new ArrayList<Integer>();
       
-             if(updateSubjectFlag == null){
-
+             if(updateSubjectFlag == null || efids == null ||efids.length == 0){
+                   
                    return;
 		}
-		if (mUsimPhoneBookManager.isSubjectRecordInIap(type, num)) {
 
+		anrTagMap = mUsimPhoneBookManager.getSubjectTagNumberInIap(type,
+					num);
+             
+         
+		subjectNum = new int[efids.length];
+             
+             for(m=0 ;m<efids.length;m++ ){
+
+		 subjectEfids.add(efids[m]);
+			 
+		if (mUsimPhoneBookManager.isSubjectRecordInIap(type, num, m)) {
+                   
 			Log.i(LOG_TAG, "updateSubjectOfAdn (1) in iap  ");
+			
 			byte[] record = null;
-
+                
+				   
 			try {
 				ArrayList<byte[]> mIapFileRecord = mUsimPhoneBookManager.getIapFileRecord(num);
 
@@ -413,10 +429,11 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 					record = mIapFileRecord.get(index-1);
 
 				} else {
-					Log
-							.i(LOG_TAG,
+					Log.i(LOG_TAG,
 									"updateSubjectOfAdn mIapFileRecord == null ");
-					return;
+                                subjectNums.add(0);
+        				n++;
+					continue;
 
 				}
 
@@ -425,103 +442,100 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 						.e(LOG_TAG,
 								"Error: Improper ICC card: No IAP record for ADN, continuing");
 			}
-			int[][] anrTagMap; // efid ,numberInIap
-			anrTagMap = mUsimPhoneBookManager.getSubjectTagNumberInIap(type,
-					num);
-			if(anrTagMap == null){
-
-                         return;
+		
+			if(anrTagMap == null ){
+				
+                         subjectNums.add(0);
+        			n++;
+                         continue;
 			}
-			updateRecordInIap = new int[anrTagMap.length];// UpdateIap
-			subjectNum = new int[anrTagMap.length];
-			int i = 0;
+			
+
 
 			if (record != null) {
 
-				for (i = 0; i < anrTagMap.length; i++) {
-					Log.i(LOG_TAG, "subjectNumberInIap =" + anrTagMap[i][1]);
-					subjectNum[i] = (int) (record[anrTagMap[i][1]] & 0xFF);
-					Log.i(LOG_TAG, "subjectNumber =" + subjectNum[i]);
-					subjectNum[i] = subjectNum[i] == 0xFF ? (-1)
-							: subjectNum[i];
-					Log.i(LOG_TAG, "subjectNum[i] =" + subjectNum[i]);
+				
+				Log.i(LOG_TAG, "subjectNumberInIap =" + anrTagMap[m][1]);
+				subjectNum[m] = (int) (record[anrTagMap[m][1]] & 0xFF);
+				Log.i(LOG_TAG, "subjectNumber =" + subjectNum[m]);
+				subjectNum[m] = subjectNum[m] == 0xFF ? (-1)
+							: subjectNum[m];
+				Log.i(LOG_TAG, "subjectNum[m] =" + subjectNum[m]);
 
-				}
+				
 
 			} else {
-				for (i = 0; i < anrTagMap.length; i++) {
+				
 
-					subjectNum[i] = -1;
-					Log.i(LOG_TAG, "subjectNum[i] =" + subjectNum[i]);
-					updateRecordInIap[i] = 1;
+				subjectNum[m] = -1;
+				Log.i(LOG_TAG, "subjectNum[m] =" + subjectNum[m]);
+			
 
-				}
+				
 
 			}
 			boolean isFull = false;
-			for (i = 0; i < anrTagMap.length; i++) {
+			{
                           
-				if (subjectNum[i] == -1 && updateSubjectFlag[i] == 1) {
-					{
-						subjectNum[i] = mUsimPhoneBookManager.getNewSubjectNumber(type, num,
-										anrTagMap[i][0], i, index, true);
+				if (subjectNum[m] == -1 && updateSubjectFlag[m] == 1) 
+				{
+					subjectNum[m] = mUsimPhoneBookManager.getNewSubjectNumber(type, num,
+										anrTagMap[m][0], n, index, true);
 
-						if (subjectNum[i] == -1) {
+					if (subjectNum[m] == -1) {
 
-							isFull = true;
+						isFull = true;
+						Log.i(LOG_TAG, "updateSubjectOfAdn   is full  ");
+                                       n++;
+						subjectNums.add(0);			   
+						continue;
 
-						}
 					}
 				}
+				
 				Log.i(LOG_TAG, "updateSubjectOfAdn   subjectNum  "
-						+ subjectNum[i]);
+						+ subjectNum[m]);
 
 			}
 
-			for (i = 0; i < anrTagMap.length; i++) {
+			
 
-				subjectNums.add(i, subjectNum[i]);
-				inIapNums.add(i,anrTagMap[i][1]);
-				Log.i(LOG_TAG, "updateSubjectOfAdn   updateSubjectFlag  "
-						+ updateSubjectFlag[i] + "subjectNum[i] "
-						+ subjectNum[i]);
+			inIapNums.add(anrTagMap[m][1]);
+			Log.i(LOG_TAG, "updateSubjectOfAdn   updateSubjectFlag  "
+						+ updateSubjectFlag[m] + "subjectNum[m] "
+						+ subjectNum[m]);
+                   
+			if (updateSubjectFlag[m] == 1 && subjectNum[m] != -1) {
+		
+		             subjectNums.add(subjectNum[m]);
+			}else{
 
-				if (updateSubjectFlag[i] == 1 && subjectNum[i] != -1) {
+                          subjectNums.add(0);
+			}
 
-					subjectEfids.add(i, anrTagMap[i][0]);
+			if (updateSubjectFlag[m] == 1) {
+
+				if (isCleanRecord(num,type, oldAdn, newAdn, m)) {
+						
+					Log.i(LOG_TAG, " clean anrTagMap[m][0]     "
+					+ anrTagMap[m][0]);
+						
+					mUsimPhoneBookManager.removeSubjectNumFromSet(type,
+							num, anrTagMap[m][0], n, subjectNum[m]);//
+					mUsimPhoneBookManager.setIapFileRecord(num,
+								index-1, (byte) 0xFF, anrTagMap[m][1]);
+					record[anrTagMap[m][1]] = (byte) 0xFF;
 
 				} else {
-
-					subjectEfids.add(i, anrTagMap[i][0]);
-
+					      	Log.i(LOG_TAG, "  anrTagMap[n][0]     "
+						+ anrTagMap[m][0]);
+						mUsimPhoneBookManager.setIapFileRecord(num,
+								index-1, (byte) (subjectNum[m] & 0xFF),
+								anrTagMap[m][1]);
+						record[anrTagMap[m][1]] = (byte) (subjectNum[m] & 0xFF);
 				}
 
-				if (updateSubjectFlag[i] == 1) {
-
-					if (isCleanRecord(num,type, oldAdn, newAdn, i)) {
-						
-						Log.i(LOG_TAG, " clean anrTagMap[i][0]     "
-						+ anrTagMap[i][0]);
-
-
-						mUsimPhoneBookManager.removeSubjectNumFromSet(type,
-								num, anrTagMap[i][0], i, subjectNum[i]);//
-						mUsimPhoneBookManager.setIapFileRecord(num,
-								index-1, (byte) 0xFF, anrTagMap[i][1]);
-						record[anrTagMap[i][1]] = (byte) 0xFF;
-
-					} else {
-					      	Log.i(LOG_TAG, "  anrTagMap[i][0]     "
-						+ anrTagMap[i][0]);
-
-
-						mUsimPhoneBookManager.setIapFileRecord(num,
-								index-1, (byte) (subjectNum[i] & 0xFF),
-								anrTagMap[i][1]);
-						record[anrTagMap[i][1]] = (byte) (subjectNum[i] & 0xFF);
-					}
-
-					if (anrTagMap[i][0] > 0) {
+				if (anrTagMap[m][0] > 0) {
 						Log.e(LOG_TAG, "begin to update IAP ---IAP id  "
 								+ adnNum + "iapEF " + iapEF);
 						adnRecordLoader = new AdnRecordLoader(mFh);
@@ -529,81 +543,59 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 								iapEF, index, record, pin2,
 
 								null);
-					}
-
 				}
+
+				
 			}
-			Log.e(LOG_TAG, "updateSubjectOfAdn updateSubjectOfAdn efids is "
-					+ subjectEfids);
 
-			adnRecordLoader = new AdnRecordLoader(mFh);
-
-			if (type == UsimPhoneBookManager.USIM_SUBJCET_EMAIL) {
-
-				adnRecordLoader.updateEFEmailToUsim(newAdn, subjectEfids, subjectNums,efid,
-						index,inIapNums, pin2, null);
-
-			}
-			if (type == UsimPhoneBookManager.USIM_SUBJCET_ANR) {
-				adnRecordLoader.updateEFAnrToUsim(newAdn, subjectEfids, efid,index,
-						subjectNums, pin2, null);
-			}
+			n++;
+		
 
 		} else {
-
-			if (mUsimPhoneBookManager.ishaveAnr ||mUsimPhoneBookManager.ishaveEmail) {
-				int efidsArr[] = mUsimPhoneBookManager.getSubjectEfids(type,
-						num);
-                          if(efidsArr == null){
-                                return;
-				}
-				ArrayList<Integer> toUpefids = new ArrayList<Integer>();
-			       Log.e(LOG_TAG, "updateSubjectOfAdn updateSubjectOfAdn efidsArr.length is "
-					+ efidsArr.length);
-				for (int i = 0; i < efidsArr.length; i++) {
-
-					if(updateSubjectFlag[i] == 1 ){
-					     if (mUsimPhoneBookManager.getNewSubjectNumber(type, num,
-							efidsArr[i], 0, index, false) == index) {
-						      subjectNums.add(i, index);
-						      toUpefids.add(i, efidsArr[i]);
-					     }else{
-                                             toUpefids.add(i, efidsArr[i]);
-							subjectNums.add(i, index);
-						       Log.e(LOG_TAG,
+	          
+			if(updateSubjectFlag[m] == 1 ){
+       		  
+			     if (mUsimPhoneBookManager.getNewSubjectNumber(type, num,
+						efids[m], 0, index, false) == index) {
+				     subjectNums.add(index);
+					    
+			     }else{
+			             
+                              subjectNums.add(0);	      
+			          Log.e(LOG_TAG,
 								"updateSubjectOfAdn fail to get  new subject ");
-
-					     }
-					}
-					else {
-                                      toUpefids.add(i, efidsArr[i]);
-					      subjectNums.add(i, index);
-						Log.e(LOG_TAG,
+                               
+					  }
+			 }else {
+                              subjectNums.add(0);	   
+				    Log.e(LOG_TAG,
 								"updateSubjectOfAdn don't need to update subject ");
-					}
+			 }
 
-				}
+		  }
 
-				Log.e(LOG_TAG, "updateSubjectOfAdn  subjectEfids is "
-						+ subjectEfids + "toUpefids  " + toUpefids);
+            }
 
-				if (toUpefids.size() > 0) {
-					adnRecordLoader = new AdnRecordLoader(mFh);
-					if (type == UsimPhoneBookManager.USIM_SUBJCET_EMAIL) {
+            	Log.e(LOG_TAG, "updateSubjectOfAdn updateSubjectOfAdn efids is "
+					+ subjectEfids  +  " subjectNums " + subjectNums);
+            if(subjectEfids.size() > 0){
+             ArrayList<Integer> toUpdateEfids = new ArrayList<Integer>(); 
+          
+		adnRecordLoader = new AdnRecordLoader(mFh);
 
-						adnRecordLoader.updateEFEmailToUsim(newAdn, toUpefids, subjectNums,efid,
-						       index,inIapNums, pin2, null);
+		if (type == UsimPhoneBookManager.USIM_SUBJCET_EMAIL) {
 
-					}
-					if (type == UsimPhoneBookManager.USIM_SUBJCET_ANR) {
-						adnRecordLoader.updateEFAnrToUsim(newAdn, toUpefids,
-								efid,index ,subjectNums, pin2, null);
-					}
-				}
-
-			}
+			adnRecordLoader.updateEFEmailToUsim(newAdn, subjectEfids, subjectNums,efid,
+						index,inIapNums, pin2, null);
 
 		}
+		if (type == UsimPhoneBookManager.USIM_SUBJCET_ANR) {
+			adnRecordLoader.updateEFAnrToUsim(newAdn, subjectEfids, efid,index,
+						subjectNums, pin2, null);
+		}
+
+            	}
+		
 	}
 
 	public synchronized void updateUSIMAdnBySearch(int efid, AdnRecord oldAdn,
@@ -820,11 +812,13 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		if (efid == EF_PBR) {
 			result = mUsimPhoneBookManager.loadEfFilesFromUsim();
 		} else {
+		      Log.i("AdnRecordCache"," requestLoadAllAdnLike efid " + efid );
 			result = getRecordsIfLoaded(efid);
 		}
 
 		// Have we already loaded this efid?
 		if (result != null) {
+			Log.i("AdnRecordCache"," result != null " );
 			if (response != null) {
 				AsyncResult.forMessage(response).result = result;
 				response.sendToTarget();
@@ -840,7 +834,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		if (waiters != null) {
 			// There's a pending request for this EF already
 			// just add ourselves to it
-
+                   Log.i("AdnRecordCache"," waiters != null " );
 			waiters.add(response);
 			return;
 		}
@@ -860,7 +854,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 						"EF is not known ADN-like EF:" + efid);
 				response.sendToTarget();
 			}
-
+                    Log.i("AdnRecordCache"," extensionEf < 0 " );
 			return;
 		}
 

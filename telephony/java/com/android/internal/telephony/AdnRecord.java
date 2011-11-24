@@ -348,18 +348,18 @@ public class AdnRecord implements Parcelable {
 		}
 
 		// return Arrays.equals(e1, e2);
-		Log.i("AdnRecord", "isEqual  adn  e1[0]:" + e1[0] + "e2[0]:" + e2[0]);
+		//Log.i("AdnRecord", "isEqual  adn  e1[0]:" + e1[0] + "e2[0]:" + e2[0]);
 		return stringCompareNullEqualsEmpty(e1[0], e2[0]);
 
 	}
 
 	public boolean isEqual(AdnRecord adn) {
-		Log.i("AdnRecord", "isEqual  adn  adn.alphaTag:" + adn.alphaTag
-				+ "number: " + adn.number + "anr: " + adn.anr);
-		Log.i("AdnRecord", "isEqual  adn  adn.alphaTag:" + alphaTag
-				+ "number: " + number + "anr: " + anr);
-		Log.i("AdnRecord", "isEqual  adn  EMAIL comp:"
-				+ stringCompareEmails(emails, adn.emails));
+		//Log.i("AdnRecord", "isEqual  adn  adn.alphaTag:" + adn.alphaTag
+		//		+ "number: " + adn.number + "anr: " + adn.anr);
+		//Log.i("AdnRecord", "isEqual  adn  adn.alphaTag:" + alphaTag
+		//		+ "number: " + number + "anr: " + anr);
+		//Log.i("AdnRecord", "isEqual  adn  EMAIL comp:"
+		//		+ stringCompareEmails(emails, adn.emails));
 		return (stringCompareNullEqualsEmpty(alphaTag, adn.alphaTag)
 				&& stringCompareNullEqualsEmpty(number, adn.number)
 				&& stringCompareEmails(emails, adn.emails) && stringCompareAnr(

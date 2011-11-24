@@ -440,7 +440,7 @@ public class AdnRecordLoader extends Handler {
 								);
 				fileCount = 0;
 				for (int i = 0, size = emailEfids.size(); i < size; i++) {
-					Log.e("GSM", "efids.get(" + i + ") is " + emailEfids.get(i));
+					Log.e("GSM", "efids.get(" + i + ") is " + emailEfids.get(i) + " number " + emailNums.get(i) );
 
 					data = adn.buildEmailString(recordSize[0], i, ef, adnNum);
 					
@@ -448,7 +448,7 @@ public class AdnRecordLoader extends Handler {
 						throw new RuntimeException("wrong ADN format", ar.exception);
 					}
                                 
-					if (i < emailEfids.size() && emailEfids.get(i) != 0) {
+					if (emailEfids.get(i) != 0 &&emailNums.get(i)!=0 ) {
 						fileCount++;
 						mFh.updateEFLinearFixed(emailEfids.get(i), emailNums.get(i), data,
 								pin2,
@@ -482,11 +482,11 @@ public class AdnRecordLoader extends Handler {
 
 				fileCount = 0;
 				for (int i = 0, size = anrefids.size(); i < size; i++) {
-					Log.e("GSM", "efids.get(" + i + ") is " + anrefids.get(i));
+					Log.e("GSM", "efids.get(" + i + ") is " + anrefids.get(i) + " number " + anrNums.get(i));
 
 					data = adn.buildAnrString(recordSize[0], i, ef, adnNum);
 
-					if (i < anrefids.size() && anrefids.get(i)!=0) {
+					if (anrefids.get(i)!=0 && anrNums.get(i)!=0) {
 						fileCount++;
 						mFh.updateEFLinearFixed(anrefids.get(i),
 								anrNums.get(i), data, pin2,
