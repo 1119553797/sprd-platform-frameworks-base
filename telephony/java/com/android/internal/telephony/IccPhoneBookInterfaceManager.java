@@ -42,6 +42,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 	protected int sim_index = 0; // yeezone:jinwei add sim manage
 	protected boolean success;
 	protected List<AdnRecord> records;
+	protected boolean readRecordSuccess = false;
 
 	protected static final boolean ALLOW_SIM_OP_IN_UI_THREAD = false;
 
@@ -90,13 +91,16 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 				ar = (AsyncResult) msg.obj;
 				synchronized (mLock) {
 					if (ar.exception == null) {
+						readRecordSuccess = true;
 						records = (List<AdnRecord>) ar.result;
 					} else {
+					       readRecordSuccess = false;
 						if (DBG)
-							logd("Cannot load ADN records");
-						if (records != null) {
-							records.clear();
-						}
+							logd("Cannot load ADN records   " );
+						//if (records != null) {
+							logd("Cannot load ADN records   size " + records.size() );
+							//records.clear();
+						//}
 					}
 					mLock.notifyAll();
 				}
@@ -304,6 +308,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 			logd("getAdnRecordsInEF: efid=" + efid);
 
 		synchronized (mLock) {
+			readRecordSuccess =  false;
 			checkThread();
 			Message response = mBaseHandler.obtainMessage(EVENT_LOAD_DONE);
 			adnCache.requestLoadAllAdnLike(efid, adnCache
@@ -314,6 +319,13 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 				logd("interrupted while trying to load from the SIM");
 			}
 		}
+		if (DBG)
+			logd("getAdnRecordsInEF: readRecordSuccess =" + readRecordSuccess);
+		if(!readRecordSuccess){
+
+                  return null;
+		}
+			
 		return records;
 	}
 

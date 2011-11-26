@@ -247,6 +247,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				// updatePhoneAdnRecord(i);
 				// add end
 			}
+			CheckRepeatType2Ef();
 			// All EF files are loaded, post the response.
 		}
 		return mPhoneBookRecords;
@@ -298,7 +299,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		     }
 		     int num = efids.length;
 		
-		      log( "getAnrNum " +  num);
+		      log( "getEmailNum " +  num);
 			
 			return num;
 		} else {
@@ -460,7 +461,114 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		}
 
 	}
-	public boolean isEfidRepeatMap(int type, int num, int efid){
+
+	public  Set<Integer>  getUsedNumSet( Set<Integer>  set1,  Set<Integer> set2, int count){
+
+            Set<Integer> totalSet =  set1 ;
+			
+	     for (int i = 1; i < count; i++) {
+			Integer subjectNum = new Integer(i);
+			Log.i(LOG_TAG, "getUsedNumSet  subjectNum (0)"
+						+ subjectNum);
+			if (!totalSet.contains(subjectNum) && set2.contains(subjectNum)) {
+			
+				Log.i(LOG_TAG, "getUsedNumSet  subjectNum(1) "
+							+ subjectNum);
+				totalSet.add(subjectNum);
+				
+				
+			}
+	     }
+	      
+           return totalSet;
+	      
+
+	}
+
+	public  Set<Integer> getRepeatUsedNumSet(LinkedList<SubjectIndexOfAdn> lst,int idx, int efid, Set<Integer> set, int count  ){
+            SubjectIndexOfAdn index = null;
+           
+	      Set<Integer> totalSet = set; 
+			
+            for(int m=idx+1; m<lst.size(); m++){
+
+                    index = lst.get(m);
+					
+			 if(index != null && index.recordNumInIap != null )
+                    {
+     			  	for(int k=0; k<index.recordNumInIap.size(); k++){
+
+		                  if(index.recordNumInIap.containsKey(efid)){
+
+                                     totalSet =  getUsedNumSet((Set<Integer>) index.usedSet[k],totalSet,count);
+                                           
+
+				      }
+                                          						
+			    }
+                  
+
+		       }
+
+
+			     
+		}
+
+             return totalSet;
+	}
+	private void SetRepeatUsedNumSet(int type,int efid, Set<Integer> totalSet){
+
+	     SubjectIndexOfAdn index = null;
+            LinkedList<SubjectIndexOfAdn> lst = null;
+	
+		switch (type) {
+
+		case USIM_SUBJCET_EMAIL:
+
+			lst = mEmailInfoFromPBR;
+			break;
+
+		case USIM_SUBJCET_ANR:
+
+			lst = mAnrInfoFromPBR;
+			break;
+		default:
+			break;
+		}
+
+		if(lst ==  null){
+                  return;
+ 
+		}
+				
+            for(int m=0; m<lst.size(); m++){
+
+                    index = lst.get(m);
+					
+			 if(index != null && index.recordNumInIap !=null)
+                    {
+     			       for(int k=0; k<index.recordNumInIap.size(); k++){
+
+		                  if(index.recordNumInIap.containsKey(efid)){
+                                     log(" SetRepeatUsedNumSet efid  " + efid + " index  " + m + " recordNumInIap " + k );
+                                     index.usedSet[k] = totalSet;
+                                     setSubjectIndex(type,m,index);
+					     break;
+
+					}
+                                          						
+			       }
+                  
+        
+
+		       }
+
+
+			     
+		}
+
+	}
+	private void SetMapOfRepeatEfid(int type, int efid){
 
              LinkedList<SubjectIndexOfAdn> lst = null;
 		SubjectIndexOfAdn index = null;
@@ -482,43 +590,41 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             
 		if (lst != null && lst.size() != 0) {
                    int i =0,j=0;
-                   int count = index.record.get(efid).size();
+                
                    Set<Integer> set ;
-			Log.i(LOG_TAG, "isEfidRepeatMap  "  + "count "
-			+ count );	   
+             	Set<Integer> totalSet ;
+		   
                    for(i=0; i<lst.size(); i++){
-                       
-                       if(i != num){
 
                              index = lst.get(i);
-				   efids = index.efids;
-				
-				   if(efids == null){
-                                 return false;
+
+				    if(index != null && index.recordNumInIap !=null && index.record != null ){	 
+				      	  int count = index.record.get(efid).size();
+			               Log.i(LOG_TAG, "SetMapOfRepeatEfid  "  + "count "	+ count );	
+
+					  for(int k=0; k<index.recordNumInIap.size(); k++){
+
+		                         if(index.recordNumInIap.containsKey(efid)){
+                                           
+                                           
+                                            set = (Set<Integer>) index.usedSet[k]; 
+
+						      totalSet = getRepeatUsedNumSet(lst,i+1,efid,set,count);
+        						SetRepeatUsedNumSet(type,efid,totalSet);
+			                   }
+					}
+				  
 				   }
-				   for(j=0; j< efids.length;j++){
-
-					 set = (Set<Integer>) index.usedSet[j];
-					 
-                                 
-					 if(efids[i] == efid &&set != null &&  count == set.size() ){
-					 	 Log.i(LOG_TAG, "isEfidRepeatMap  "  + "count == set.size()");
-                                       return true;
-					 }
-                                
-
-				   }
 
 
-			     }
+			     
                        
 			}			
 		
 
 		}
 
-		return false;
-
+		
 	}
 
 	public int getNewSubjectNumber(int type, int num, int efid, int index,
@@ -537,6 +643,9 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                    log("getNewSubjectNumber idx.record == null || !idx.record.containsKey(efid)  ");
                    return -1;
 		}
+            
+
+		
 		int count = idx.record.get(efid).size();
 
      		Log.i(LOG_TAG, "getNewSubjectNumber  count " + count + "adnNum "
@@ -557,6 +666,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 					set.add(subjectNum);
 					idx.usedSet[index] = set;
 					setSubjectIndex(type, num, idx);
+					SetRepeatUsedNumSet(type,efid,set);
 					break;
 				}
 			}
@@ -1195,7 +1305,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		    Set<Integer> set = (Set<Integer>) emailInfo.usedSet[index];
 
 		    set.add(new Integer(recNum));
-	  	    emailInfo.usedSet[index] = set;
+	  	    emailInfo.usedSet[index] = set;		    
 		    setSubjectIndex(USIM_SUBJCET_EMAIL,num,emailInfo);
 		}		
 		
@@ -1203,7 +1313,132 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		return emails;
 
 	}
+       private void CheckRepeatType2Ef(){
 
+            ArrayList<Integer> efs = getType2Ef(USIM_SUBJCET_EMAIL); 
+	      int i = 0;
+	      log("CheckRepeatType2Ef ");
+	      for( i=0 ; i<efs.size(); i++){
+                  
+                  SetMapOfRepeatEfid(USIM_SUBJCET_EMAIL,efs.get(i));
+
+	      }
+		  
+            efs = getType2Ef(USIM_SUBJCET_ANR); 
+	      for( i=0 ; i<efs.size(); i++){
+
+                  SetMapOfRepeatEfid(USIM_SUBJCET_ANR,efs.get(i));
+
+	      }
+
+	}
+ 
+       private  ArrayList<Integer>  getType2Ef(int type){
+
+            ArrayList<Integer> efs = new ArrayList<Integer>();
+	      LinkedList<SubjectIndexOfAdn> lst = null;
+		SubjectIndexOfAdn index = null;
+		switch (type) {
+
+		case USIM_SUBJCET_EMAIL:
+
+			lst = mEmailInfoFromPBR;
+			break;
+
+		case USIM_SUBJCET_ANR:
+
+			lst = mAnrInfoFromPBR;
+			break;
+		default:
+			break;
+		}
+
+            if (lst != null && lst.size() != 0) {
+                   log("setUsedNumOfEfid size " + lst.size() );
+			for(int i = 0; i<lst.size() ; i++){
+
+			     index = lst.get(i);
+				 
+                        if(index != null && index.efids != null&& index.recordNumInIap!= null && index.recordNumInIap.size()!=0 ){
+
+                     
+                             for(int j=0; j<index.efids.length; j++){
+									   	
+                                             if( index.recordNumInIap.containsKey(index.efids[j])   ){
+
+                                                    efs.add(index.efids[j]);			
+								 break;					
+
+							}
+
+				    }
+
+             
+                     }
+		    }
+
+            }
+		log("getType2Ef  type "+ type + " efs " +efs );
+		return efs;
+      }
+
+      	private void setUsedNumOfEfid(int type,int idx,  int efid, Object obj ) {
+
+	      LinkedList<SubjectIndexOfAdn> lst = null;
+		SubjectIndexOfAdn index = null;
+		switch (type) {
+
+		case USIM_SUBJCET_EMAIL:
+
+			lst = mEmailInfoFromPBR;
+			break;
+
+		case USIM_SUBJCET_ANR:
+
+			lst = mAnrInfoFromPBR;
+			break;
+		default:
+			break;
+		}
+
+		if (lst != null && lst.size() != 0) {
+                   log("setUsedNumOfEfid size " + lst.size() );
+			for(int i = 0; i<lst.size() ; i++){
+
+			     index = lst.get(i);
+				 
+                        if(index != null ){
+
+                              if(index.efids != null){
+
+                                       for(int j=0; j<index.efids.length; j++){
+									   	
+                                             if(index.efids[j] == efid){
+
+                                                    index.usedSet[idx] =  obj;
+								 setSubjectIndex(type,i,index);					
+								 break;					
+
+							}
+
+						}
+
+                               }
+                            
+
+
+
+			     }
+				 
+
+
+			} 
+			
+		}     
+
+          
+		
+	}
 	private void setSubjectUsedNum(int type, int num) {
 
 		SubjectIndexOfAdn index = getSubjectIndex(type, num);

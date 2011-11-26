@@ -94,6 +94,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 	 * SIMRecords.handleSimRefresh.
 	 */
 	public void reset() {
+	      Log.i("AdnRecordCache", "reset");
 		adnLikeFiles.clear();
 		mUsimPhoneBookManager.reset();
 
@@ -383,12 +384,12 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
 		ArrayList<Integer> subjectEfids;
 		ArrayList<Integer> subjectNums;
-		ArrayList<Integer> inIapNums;
+	
 		int m = 0,n =0 ;
 		int[][] anrTagMap; // efid ,numberInIap
 		int efids[] = mUsimPhoneBookManager.getSubjectEfids( type,  num);
 
-		Log.i(LOG_TAG, "updateSubjectOfAdn num =" + num + "adnNum " + adnNum + "index " + index);
+		Log.i(LOG_TAG, "Begin : updateSubjectOfAdn num =" + num + "adnNum " + adnNum + "index " + index);
 
 		if (compareSubject(type, oldAdn, newAdn)) {
 
@@ -398,7 +399,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		updateSubjectFlag = getUpdateSubjectFlag(num,type, oldAdn, newAdn);
 		subjectEfids = new ArrayList<Integer>();
 		subjectNums = new ArrayList<Integer>();
-             inIapNums =  new ArrayList<Integer>();
+      
       
              if(updateSubjectFlag == null || efids == null ||efids.length == 0){
                    
@@ -417,7 +418,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 			 
 		if (mUsimPhoneBookManager.isSubjectRecordInIap(type, num, m)) {
                    
-			Log.i(LOG_TAG, "updateSubjectOfAdn (1) in iap  ");
+			Log.i(LOG_TAG, "updateSubjectOfAdn  in iap  ");
 			
 			byte[] record = null;
                 
@@ -497,10 +498,8 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 						+ subjectNum[m]);
 
 			}
-
+		
 			
-
-			inIapNums.add(anrTagMap[m][1]);
 			Log.i(LOG_TAG, "updateSubjectOfAdn   updateSubjectFlag  "
 						+ updateSubjectFlag[m] + "subjectNum[m] "
 						+ subjectNum[m]);
@@ -518,7 +517,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 				if (isCleanRecord(num,type, oldAdn, newAdn, m)) {
 						
 					Log.i(LOG_TAG, " clean anrTagMap[m][0]     "
-					+ anrTagMap[m][0]);
+					+ Integer.toHexString(anrTagMap[m][0]));
 						
 					mUsimPhoneBookManager.removeSubjectNumFromSet(type,
 							num, anrTagMap[m][0], n, subjectNum[m]);//
@@ -527,8 +526,8 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 					record[anrTagMap[m][1]] = (byte) 0xFF;
 
 				} else {
-					      	Log.i(LOG_TAG, "  anrTagMap[n][0]     "
-						+ anrTagMap[m][0]);
+					      	Log.i(LOG_TAG, "  anrTagMap[m][0]     "
+						+ Integer.toHexString(anrTagMap[m][0]));
 						mUsimPhoneBookManager.setIapFileRecord(num,
 								index-1, (byte) (subjectNum[m] & 0xFF),
 								anrTagMap[m][1]);
@@ -537,7 +536,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
 				if (anrTagMap[m][0] > 0) {
 						Log.e(LOG_TAG, "begin to update IAP ---IAP id  "
-								+ adnNum + "iapEF " + iapEF);
+								+ adnNum + "iapEF " + Integer.toHexString(iapEF));
 						adnRecordLoader = new AdnRecordLoader(mFh);
 						adnRecordLoader.updateEFIapToUsim(newAdn,
 								iapEF, index, record, pin2,
@@ -576,25 +575,39 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
             }
 
-            	Log.e(LOG_TAG, "updateSubjectOfAdn updateSubjectOfAdn efids is "
+            	Log.e(LOG_TAG, " END :updateSubjectOfAdn  updateSubjectOfAdn efids is "
 					+ subjectEfids  +  " subjectNums " + subjectNums);
-            if(subjectEfids.size() > 0){
-             ArrayList<Integer> toUpdateEfids = new ArrayList<Integer>(); 
+        
+
+		for(int i=0; i<subjectEfids.size(); i++ ){	
+
+		    if(subjectNums.get(i) !=0){
+			    	
+                  ArrayList<Integer> toUpdateNums = new ArrayList<Integer>();    
+		     ArrayList<Integer> toUpdateIndex = new ArrayList<Integer>(); 
+                  ArrayList<Integer> toUpdateEfids = new ArrayList<Integer>(); 
+
+		     toUpdateEfids.add(subjectEfids.get(i));
+		     toUpdateIndex.add(i);
+		     toUpdateNums.add(subjectNums.get(i));
           
-		adnRecordLoader = new AdnRecordLoader(mFh);
+	           adnRecordLoader = new AdnRecordLoader(mFh);
 
-		if (type == UsimPhoneBookManager.USIM_SUBJCET_EMAIL) {
+		     if (type == UsimPhoneBookManager.USIM_SUBJCET_EMAIL) {
 
-			adnRecordLoader.updateEFEmailToUsim(newAdn, subjectEfids, subjectNums,efid,
-						index,inIapNums, pin2, null);
+			   adnRecordLoader.updateEFEmailToUsim(newAdn, toUpdateEfids, toUpdateNums,efid,
+						index,toUpdateIndex, pin2, null);
 
+		      }
+		     if (type == UsimPhoneBookManager.USIM_SUBJCET_ANR) {
+			      adnRecordLoader.updateEFAnrToUsim(newAdn, toUpdateEfids, efid,index,
+						toUpdateNums,toUpdateIndex ,pin2, null);
+		     }
+
+		     }	 
 		}
-		if (type == UsimPhoneBookManager.USIM_SUBJCET_ANR) {
-			adnRecordLoader.updateEFAnrToUsim(newAdn, subjectEfids, efid,index,
-						subjectNums, pin2, null);
-		}
 
-            	}
+            	
 		
 	}
 
@@ -812,7 +825,6 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		if (efid == EF_PBR) {
 			result = mUsimPhoneBookManager.loadEfFilesFromUsim();
 		} else {
-		      Log.i("AdnRecordCache"," requestLoadAllAdnLike efid " + efid );
 			result = getRecordsIfLoaded(efid);
 		}
 
@@ -826,7 +838,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
 			return;
 		}
-
+             Log.i("AdnRecordCache", "requestLoadAllAdnLike (2)efid " + efid);
 		// Have we already *started* loading this efid?
 
 		waiters = adnLikeWaiters.get(efid);
@@ -838,7 +850,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 			waiters.add(response);
 			return;
 		}
-
+             Log.i("AdnRecordCache", "requestLoadAllAdnLike (3)efid " + efid);
 		// Start loading efid
 
 		waiters = new ArrayList<Message>();
@@ -857,7 +869,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
                     Log.i("AdnRecordCache"," extensionEf < 0 " );
 			return;
 		}
-
+             Log.i("AdnRecordCache", "requestLoadAllAdnLike (4)efid " + efid);
 		/*
 		 * new AdnRecordLoader(phone).loadAllFromEF(efid, extensionEf,
 		 * obtainMessage(EVENT_LOAD_ALL_ADN_LIKE_DONE, efid, 0));
@@ -900,8 +912,9 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
 			waiters = adnLikeWaiters.get(efid);
 			adnLikeWaiters.delete(efid);
-
+                    Log.i("AdnRecordCache","EVENT_LOAD_ALL_ADN_LIKE_DONE efid " + efid +  " ar.exception " + ar.exception );
 			if (ar.exception == null) {
+			      Log.i("AdnRecordCache","size " + ((ArrayList<AdnRecord>) ar.result).size());
 				adnLikeFiles.put(efid, (ArrayList<AdnRecord>) ar.result);
 			}
 			notifyWaiters(waiters, ar);
