@@ -34,6 +34,7 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -57,7 +58,7 @@ public class Clock extends TextView {
     private static final int AM_PM_STYLE_SMALL   = 1;
     private static final int AM_PM_STYLE_GONE    = 2;
 
-    private static final int AM_PM_STYLE = AM_PM_STYLE_GONE;
+    private static final int AM_PM_STYLE = AM_PM_STYLE_NORMAL;
 
     public Clock(Context context) {
         this(context, null);
@@ -136,7 +137,6 @@ public class Clock extends TextView {
         } else {
             res = R.string.twelve_hour_time_format;
         }
-
         final char MAGIC1 = '\uEF00';
         final char MAGIC2 = '\uEF01';
 

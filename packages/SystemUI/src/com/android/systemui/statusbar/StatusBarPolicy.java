@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.systemui.statusbar.policy;
+package com.android.systemui.statusbar;
 
 import android.app.StatusBarManager;
 import android.app.AlertDialog;
@@ -42,6 +42,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.storage.StorageManager;
@@ -76,6 +77,7 @@ import com.android.internal.telephony.cdma.TtyIntent;
 import com.android.internal.telephony.PhoneStateIntentReceiver;
 //CR253162 Modify End
 import com.android.server.am.BatteryStatsService;
+//import com.android.server.status.IconData;
 
 import com.android.systemui.R;
 import android.net.wimax.WimaxManagerConstants;
@@ -531,8 +533,8 @@ public class StatusBarPolicy {
     private boolean mIsWimaxEnabled = false;
     private int mWimaxSignal = 0;
     private int mWimaxState = 0;
-    private int mWimaxExtraState = 0;
-
+    private int mWimaxExtraState = 0;    
+    
     // state of inet connection - 0 not connected, 100 connected
     private int mInetCondition = 0;
 
@@ -544,6 +546,7 @@ public class StatusBarPolicy {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            Log.i(TAG, "Receive intent ="+action);
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
                 updateBattery(intent);
             }
@@ -585,6 +588,20 @@ public class StatusBarPolicy {
             else if (action.equals(TtyIntent.TTY_ENABLED_CHANGE_ACTION)) {
                 updateTTY(intent);
             }
+            //Modify start on 2011-11-25 for bug 6187 
+            else if(action.equals(Intent.ACTION_HEADSET_PLUG))
+            {
+            	
+                int state = intent.getIntExtra("state", -1);
+                Log.i(TAG, "state of Intent.ACTION_HEADSET_PLUG is "+state);
+                if (state == 1) {
+                    updateHeadSet(true);
+                }
+                else {
+                    updateHeadSet(false);
+                }
+            }
+            //Modify start on 2011-11-25 for bug 6187 
             else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
                      action.equals(ConnectivityManager.INET_CONDITION_ACTION)) {
                 // TODO - stop using other means to get wifi/mobile info
@@ -631,7 +648,12 @@ public class StatusBarPolicy {
         // data_connection
         mService.setIcon("data_connection", R.drawable.stat_sys_data_connected_g, 0);
         mService.setIconVisibility("data_connection", false);
-
+                 
+        //Modify start on 2011-11-25 for bug 6187     
+        mService.setIcon("headset",com.android.internal.R.drawable.stat_sys_headset,0);
+        mService.setIconVisibility("headset",false);
+        //Modify end on 2011-11-25 for bug 6187       
+        
         // wifi
         mService.setIcon("wifi", sWifiSignalImages[0][0], 0);
         mService.setIconVisibility("wifi", false);
@@ -714,6 +736,9 @@ public class StatusBarPolicy {
         filter.addAction(WimaxManagerConstants.WIMAX_STATE_CHANGED_ACTION);
         filter.addAction(WimaxManagerConstants.SIGNAL_LEVEL_CHANGED_ACTION);
         filter.addAction(WimaxManagerConstants.WIMAX_ENABLED_STATUS_CHANGED);
+        //Modify start on 2011-11-25 for bug 6187
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
+        //Modify end   on 2011-11-25 for bug 6187
 
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
 
@@ -744,6 +769,13 @@ public class StatusBarPolicy {
         // Don't display sync failing icon: BUG 1297963 Set sync error timeout to "never"
         //mService.setIconVisibility("sync_failing", isFailing && !isActive);
     }
+    
+    //Modify start on 2011-11-25 for bug 6187
+    private final void updateHeadSet(boolean show) {
+        mService.setIconVisibility("headset", show);
+    }
+    //Modify end   on 2011-11-25 for bug 6187
+
 
     private final void updateBattery(Intent intent) {
         final int id = intent.getIntExtra("icon-small", 0);
