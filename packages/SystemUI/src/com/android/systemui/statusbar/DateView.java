@@ -25,7 +25,7 @@ import android.util.Slog;
 import android.widget.TextView;
 import android.view.MotionEvent;
 
-import java.text.DateFormat;
+import android.text.format.DateFormat;
 import java.util.Date;
 
 public final class DateView extends TextView {
@@ -67,7 +67,10 @@ public final class DateView extends TextView {
 
     private final void updateClock() {
         Date now = new Date();
-        setText(DateFormat.getDateInstance(DateFormat.LONG).format(now));
+        //setText(DateFormat.getDateInstance(DateFormat.LONG).format(now));
+        //Modify start on 2011-11-28 for bug 6378
+        setText(DateFormat.getDateFormat(mContext).format(now));
+        //Modify start on 2011-11-28 for bug 6378
     }
 
     void setUpdates(boolean update) {
