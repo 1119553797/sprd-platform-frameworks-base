@@ -52,7 +52,7 @@ struct ARTPConnection : public AHandler {
             int *rtpSocket, int *rtcpSocket, unsigned *rtpPort);
 
     void fakeTimestamps();
-
+    void setlocalTimestamps(bool local);  //@hong
 protected:
     virtual ~ARTPConnection();
     virtual void onMessageReceived(const sp<AMessage> &msg);
@@ -74,6 +74,7 @@ private:
     List<StreamInfo> mStreams;
 
     bool mPollEventPending;
+    bool mLocalTimestamps; //@hong
     int64_t mLastReceiverReportTimeUs;
 
     void onAddStream(const sp<AMessage> &msg);

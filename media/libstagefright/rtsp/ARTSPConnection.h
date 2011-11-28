@@ -37,6 +37,8 @@ struct ARTSPConnection : public AHandler {
 
     void connect(const char *url, const sp<AMessage> &reply);
     void disconnect(const sp<AMessage> &reply);
+	
+    void serverexception(const sp<AMessage> &reply);//@hong
 
     void sendRequest(const char *request, const sp<AMessage> &reply);
 
@@ -86,6 +88,7 @@ private:
     KeyedVector<int32_t, sp<AMessage> > mPendingRequests;
 
     sp<AMessage> mObserveBinaryMessage;
+    sp<AMessage> mServerExceptionMsg;  //@hong
 
     void onConnect(const sp<AMessage> &msg);
     void onDisconnect(const sp<AMessage> &msg);

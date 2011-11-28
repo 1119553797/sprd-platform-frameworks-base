@@ -18,7 +18,7 @@
 
 #define MY_HANDLER_H_
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "MyHandler"
 #include <utils/Log.h>
 
@@ -110,11 +110,16 @@ struct MyHandler : public AHandler {
           mTryFakeRTCP(false),
           mReceivedFirstRTCPPacket(false),
           mReceivedFirstRTPPacket(false),
+          mServerException(false),//@hong
           mSeekable(false) {
+          
+	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
+	mRTPConn->setlocalTimestamps(true);
+	
         mNetLooper->setName("rtsp net");
         mNetLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
-                          PRIORITY_HIGHEST);
+                          ANDROID_PRIORITY_AUDIO); //HIGHEST @hong
 
         // Strip any authentication info from the session url, we don't
         // want to transmit user/pass in cleartext.
@@ -149,11 +154,15 @@ struct MyHandler : public AHandler {
 
         sp<AMessage> reply = new AMessage('conn', id());
         mConn->connect(mOriginalSessionURL.c_str(), reply);
+	sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
+	mConn->serverexception(reply1);
+	
+	LOGI("connecting %s",mSessionURL.c_str());
     }
 
     void disconnect(const sp<AMessage> &doneMsg) {
         mDoneMsg = doneMsg;
-
+	LOGI("disconnect.enter...");
         (new AMessage('abor', id()))->post();
     }
 
@@ -344,13 +353,15 @@ struct MyHandler : public AHandler {
     }
 
     virtual void onMessageReceived(const sp<AMessage> &msg) {
+	AString ua;
         switch (msg->what()) {
             case 'conn':
             {
                 int32_t result;
                 CHECK(msg->findInt32("result", &result));
-
-                LOGI("connection request completed with result %d (%s)",
+	    struct timeval tv;  //@hong add timecheck.
+	    gettimeofday(&tv, NULL);
+                LOGI("connection request completed time %d with result %d (%s)", tv.tv_sec,
                      result, strerror(-result));
 
                 if (result == OK) {
@@ -359,6 +370,11 @@ struct MyHandler : public AHandler {
                     request.append(mSessionURL);
                     request.append(" RTSP/1.0\r\n");
                     request.append("Accept: application/sdp\r\n");
+
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+                    request.append("\r\n");
+
                     request.append("\r\n");
 
                     sp<AMessage> reply = new AMessage('desc', id());
@@ -385,6 +401,9 @@ struct MyHandler : public AHandler {
             {
                 int32_t result;
                 CHECK(msg->findInt32("result", &result));
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGI("describle time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
 
                 LOGI("DESCRIBE completed with result %d (%s)",
                      result, strerror(-result));
@@ -406,6 +425,11 @@ struct MyHandler : public AHandler {
                         request.append(mSessionURL);
                         request.append(" RTSP/1.0\r\n");
                         request.append("Accept: application/sdp\r\n");
+
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+	            request.append("\r\n");
+
                         request.append("\r\n");
 
                         sp<AMessage> reply = new AMessage('desc', id());
@@ -474,6 +498,9 @@ struct MyHandler : public AHandler {
             {
                 size_t index;
                 CHECK(msg->findSize("index", &index));
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGI("setup time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
 
                 TrackInfo *track = NULL;
                 size_t trackIndex;
@@ -557,6 +584,10 @@ struct MyHandler : public AHandler {
                     request.append(mSessionID);
                     request.append("\r\n");
 
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+	            request.append("\r\n");
+
                     request.append("\r\n");
 
                     sp<AMessage> reply = new AMessage('play', id());
@@ -572,7 +603,9 @@ struct MyHandler : public AHandler {
             {
                 int32_t result;
                 CHECK(msg->findInt32("result", &result));
-
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGI("play time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
                 LOGI("PLAY completed with result %d (%s)",
                      result, strerror(-result));
 
@@ -588,6 +621,9 @@ struct MyHandler : public AHandler {
                         parsePlayResponse(response);
 
                         sp<AMessage> timeout = new AMessage('tiou', id());
+			if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
+                        timeout->post(kStartupTimeoutUs/4);  //only use 2sec.
+			else			
                         timeout->post(kStartupTimeoutUs);
                     }
                 }
@@ -602,6 +638,7 @@ struct MyHandler : public AHandler {
 
             case 'abor':
             {
+		LOGI("abor received...");
                 for (size_t i = 0; i < mTracks.size(); ++i) {
                     TrackInfo *info = &mTracks.editItemAt(i);
 
@@ -642,15 +679,22 @@ struct MyHandler : public AHandler {
                 request.append(mSessionID);
                 request.append("\r\n");
 
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+	            request.append("\r\n");
+
+
                 request.append("\r\n");
 
                 mConn->sendRequest(request.c_str(), reply);
+		LOGI("abor over sending teardown...");
                 break;
             }
 
             case 'tear':
             {
                 int32_t result;
+		LOGI(" teardown enter...");
                 CHECK(msg->findInt32("result", &result));
 
                 LOGI("TEARDOWN completed with result %d (%s)",
@@ -664,6 +708,7 @@ struct MyHandler : public AHandler {
                 }
 
                 mConn->disconnect(reply);
+		LOGI(" teardown over");
                 break;
             }
 
@@ -683,10 +728,12 @@ struct MyHandler : public AHandler {
                 CHECK(msg->findInt32("generation", &generation));
                 if (generation != mCheckGeneration) {
                     // This is an outdated message. Ignore.
-                    break;
+                  //  break; //@hong not ignore the outdated msg.
                 }
 
-                if (mNumAccessUnitsReceived == 0) {
+                if (mNumAccessUnitsReceived == 0  && 
+		strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) {  
+                   // @hong not send abor signal. 
                     LOGI("stream ended? aborting.");
                     (new AMessage('abor', id()))->post();
                     break;
@@ -702,11 +749,20 @@ struct MyHandler : public AHandler {
                 int32_t first;
                 if (msg->findInt32("first-rtcp", &first)) {
                     mReceivedFirstRTCPPacket = true;
+			LOGI("accu received first rtcp");
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGI("accu firstrtcp time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
+			
                     break;
                 }
 
                 if (msg->findInt32("first-rtp", &first)) {
                     mReceivedFirstRTPPacket = true;
+			LOGI("accu received first rtp");
+	    struct timeval tv;
+	    gettimeofday(&tv, NULL);
+	LOGI("accu firstrtp time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
                     break;
                 }
 
@@ -740,12 +796,12 @@ struct MyHandler : public AHandler {
                 uint32_t seqNum = (uint32_t)accessUnit->int32Data();
 
                 if (mSeekPending) {
-                    LOGV("we're seeking, dropping stale packet.");
+                    LOGI("we're seeking, dropping stale packet.");
                     break;
                 }
 
                 if (seqNum < track->mFirstSeqNumInSegment) {
-                    LOGV("dropping stale access-unit (%d < %d)",
+                    LOGI("dropping stale access-unit (%d < %d)",
                          seqNum, track->mFirstSeqNumInSegment);
                     break;
                 }
@@ -761,7 +817,13 @@ struct MyHandler : public AHandler {
                 if (track->mNewSegment) {
                     track->mNewSegment = false;
 
-                    LOGV("first segment unit ntpTime=0x%016llx rtpTime=%u seq=%d",
+		if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB					
+		mReceivedFirstRTCPPacket = true;	//@hong
+//	    struct timeval tv;
+//	    gettimeofday(&tv, NULL);
+//	LOGI("first segment unit  time:%d ms", tv.tv_sec*1000+tv.tv_usec/1000);
+	
+                    LOGI("first segment unit ntpTime=0x%016llx rtpTime=%u seq=%d",
                          ntpTime, rtpTime, seqNum);
                 }
 
@@ -772,6 +834,7 @@ struct MyHandler : public AHandler {
 
                     mFirstAccessUnit = false;
                     mFirstAccessUnitNTP = ntpTime;
+			mConn->serverexception(NULL);  //@hong
                 }
 
                 if (ntpTime >= mFirstAccessUnitNTP) {
@@ -832,6 +895,11 @@ struct MyHandler : public AHandler {
                 request.append(mSessionID);
                 request.append("\r\n");
 
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+	            request.append("\r\n");
+
+
                 request.append("\r\n");
 
                 sp<AMessage> reply = new AMessage('see1', id());
@@ -854,6 +922,11 @@ struct MyHandler : public AHandler {
                 AString request = "PLAY ";
                 request.append(mSessionURL);
                 request.append(" RTSP/1.0\r\n");
+
+		    MakeUserAgentString(&ua); //@hong add useragent.
+		    request.append(ua.c_str());
+	            request.append("\r\n");
+
 
                 request.append("Session: ");
                 request.append(mSessionID);
@@ -955,7 +1028,15 @@ struct MyHandler : public AHandler {
                 }
                 break;
             }
-
+	    case 'expt':  //@hong server exception
+		LOGI("server exception error.");
+             if (mDoneMsg != NULL) {
+		LOGI("server exception error1.");
+                    mDoneMsg->setInt32("result", UNKNOWN_ERROR);
+                    mDoneMsg->post();
+                    mDoneMsg = NULL;
+                }
+		break;
             default:
                 TRESPASS();
                 break;
@@ -1023,10 +1104,10 @@ struct MyHandler : public AHandler {
         for (List<AString>::iterator it = streamInfos.begin();
              it != streamInfos.end(); ++it) {
             (*it).trim();
-            LOGV("streamInfo[%d] = %s", n, (*it).c_str());
+            LOGI("streamInfo[%d] = %s", n, (*it).c_str());
 
             CHECK(GetAttribute((*it).c_str(), "url", &val));
-
+		LOGI("streamInfo val = %s", val.c_str());
             size_t trackIndex = 0;
             while (trackIndex < mTracks.size()
                     && !(val == mTracks.editItemAt(trackIndex).mURL)) {
@@ -1047,7 +1128,7 @@ struct MyHandler : public AHandler {
 
             uint32_t rtpTime = strtoul(val.c_str(), &end, 10);
 
-            LOGV("track #%d: rtpTime=%u <=> ntp=%.2f", n, rtpTime, npt1);
+            LOGI("track #%d: rtpTime=%u <=> ntp=%.2f", n, rtpTime, npt1);
 
             info->mPacketSource->setNormalPlayTimeMapping(
                     rtpTime, (int64_t)(npt1 * 1E6));
@@ -1093,6 +1174,7 @@ private:
     bool mReceivedFirstRTPPacket;
     bool mSeekable;
 
+    bool mServerException;//@hong
     struct TrackInfo {
         AString mURL;
         int mRTPSocket;
@@ -1135,7 +1217,7 @@ private:
         info->mFirstSeqNumInSegment = 0;
         info->mNewSegment = true;
 
-        LOGV("track #%d URL=%s", mTracks.size(), trackURL.c_str());
+        LOGI("track #%d URL=%s", mTracks.size(), trackURL.c_str());
 
         AString request = "SETUP ";
         request.append(trackURL);
