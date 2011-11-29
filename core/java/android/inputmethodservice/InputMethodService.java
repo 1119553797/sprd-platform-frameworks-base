@@ -1606,6 +1606,10 @@ public class InputMethodService extends AbstractInputMethodService {
                 return true;
             }
             return false;
+        } else if (event.getKeyCode() == KeyEvent.KEYCODE_MENU) {
+            if (event.isLongPress()) {
+                return true;
+            }
         }
         return doMovementKey(keyCode, event, MOVEMENT_DOWN);
     }
