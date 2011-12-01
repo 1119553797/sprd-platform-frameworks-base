@@ -19,6 +19,8 @@ package com.android.internal.policy.impl;
 import com.android.internal.widget.LockPatternUtils;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.android.internal.telephony.IccCard;
 
 /**
@@ -54,9 +56,12 @@ public class LockPatternKeyguardViewProperties implements KeyguardViewProperties
     }
 
     private boolean isSimPinSecure() {
-        final IccCard.State simState = mUpdateMonitor.getSimState();
-        return (simState == IccCard.State.PIN_REQUIRED || simState == IccCard.State.PUK_REQUIRED
-            || simState == IccCard.State.ABSENT);
+    //Modify start on 2011-12-01 for bug 6504
+//        final IccCard.State simState = mUpdateMonitor.getSimState();
+//        return (simState == IccCard.State.PIN_REQUIRED || simState == IccCard.State.PUK_REQUIRED
+//            || simState == IccCard.State.ABSENT);
+    	return true;
+    //Modify end on 2011-12-01 for bug 6504
     }
 
 }
