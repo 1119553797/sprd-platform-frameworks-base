@@ -2403,6 +2403,13 @@
     <string name="modem_active_notification_title" >use modem debug mode</string>
     <string name="modem_active_notification_message" >modem debug mode enabled</string>
     <!--Add by liguxiang 07-08-11 for USB settings function end -->
+
+    <!--SPN chinese name start-->
+    <string name="china_mobile_numeric_values">China Mobile</string>
+    <string name="china_unicom_numeric_values">China Unicom</string>
+    <string name="china_telecom_numeric_values">China Telecom</string>
+    <!--SPN chinese name end-->
+
     <!--STK Add start-->
     <string name="stk_refresh_sim_init_message" >SIM card is updating</string>
     <string name="stk_refresh_sim_reset_message" >Phone will reboot</string>
