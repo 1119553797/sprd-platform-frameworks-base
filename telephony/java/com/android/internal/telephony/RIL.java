@@ -24,7 +24,7 @@ import static android.telephony.TelephonyManager.NETWORK_TYPE_UMTS;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSDPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSUPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSPA;
-
+import android.content.res.Resources;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +49,7 @@ import android.telephony.TelephonyManager;
 import android.util.Config;
 import android.util.Log;
 
+import com.android.internal.R;
 import com.android.internal.telephony.CallForwardInfo;
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.DataCallState;
@@ -266,6 +267,9 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     private static final int CDMA_BSI_NO_OF_INTS_STRUCT = 3;
 
     private static final int CDMA_BROADCAST_SMS_NO_OF_SERVICE_CATEGORIES = 31;
+    // the code values of opreator numeric
+    private static final String CHINA_MOBILE_NUMERIC_VALUES = "46000";
+    private static final String CHINA_UNICOM_NUMERIC_VALUES = "46001";
 
     BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -279,6 +283,27 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             }
         }
     };
+
+    protected Object responseOperatorString(Parcel p) {
+        String response[];
+        response = p.readStringArray();
+        response[0] = getCarrierNumericToChinese(response[2], response[0]);
+        Log.d(LOG_TAG, " responseOperatorString():response[0]=" + response[0] + "response[2]="
+                + response[2]);
+        return response;
+    }
+
+    private String getCarrierNumericToChinese(String numeric, String name) {
+        Resources r = Resources.getSystem();
+        Log.d(LOG_TAG, " getOperatorAlphaLongToChinese: old name= " + name+" numeric="+numeric);
+        if (CHINA_MOBILE_NUMERIC_VALUES.equals(numeric)) {
+           return ( r.getString(R.string.china_mobile_numeric_values));
+        }
+        if (CHINA_UNICOM_NUMERIC_VALUES.equals(numeric)) {
+            return ( r.getString(R.string.china_unicom_numeric_values));
+        }
+        return name;
+    }
 
     class RILSender extends Handler implements Runnable {
         public RILSender(Looper looper) {
@@ -2179,7 +2204,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_SIGNAL_STRENGTH: ret =  responseSignalStrength(p); break;
             case RIL_REQUEST_REGISTRATION_STATE: ret =  responseStrings(p); break;
             case RIL_REQUEST_GPRS_REGISTRATION_STATE: ret =  responseStrings(p); break;
-            case RIL_REQUEST_OPERATOR: ret =  responseStrings(p); break;
+            case RIL_REQUEST_OPERATOR: ret =  responseOperatorString(p); break;
             case RIL_REQUEST_RADIO_POWER: ret =  responseVoid(p); break;
             case RIL_REQUEST_DTMF: ret =  responseVoid(p); break;
             case RIL_REQUEST_SEND_SMS: ret =  responseSMS(p); break;
@@ -3033,7 +3058,7 @@ responseUnsolUssdStrings(Parcel p){
         for (int i = 0 ; i < strings.length ; i += 5) {
             ret.add (
                 new NetworkInfo(
-                    strings[i+0],
+                    getCarrierNumericToChinese(strings[i+2],strings[i+0]),
                     strings[i+1],
                     strings[i+2],
                     strings[i+3],

@@ -660,7 +660,7 @@ public final class SprdRIL extends RIL {
 				 case RIL_REQUEST_SIGNAL_STRENGTH: ret =  responseSignalStrength(p); break;
 				 case RIL_REQUEST_REGISTRATION_STATE: ret =  responseStrings(p); break;
 				 case RIL_REQUEST_GPRS_REGISTRATION_STATE: ret =  responseStrings(p); break;
-				 case RIL_REQUEST_OPERATOR: ret =  responseStrings(p); break;
+				 case RIL_REQUEST_OPERATOR: ret =  responseOperatorString(p); break;
 				 case RIL_REQUEST_RADIO_POWER: ret =  responseVoid(p); break;
 				 case RIL_REQUEST_DTMF: ret =  responseVoid(p); break;
 				 case RIL_REQUEST_SEND_SMS: ret =  responseSMS(p); break;
