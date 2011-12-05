@@ -76,7 +76,9 @@ public class StorageNotification extends StorageEventListener {
         HandlerThread thr = new HandlerThread("SystemUI StorageNotification");
         thr.start();
         mAsyncEventHandler = new Handler(thr.getLooper());
-
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_REMOVED)) {
+            onStorageStateChanged(null, null, Environment.MEDIA_REMOVED);
+        }
         onUsbMassStorageConnectionChanged(connected);
     }
 
