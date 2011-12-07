@@ -102,18 +102,37 @@ private:
     friend struct AwesomeEvent;
 
     enum {
-        PLAYING             = 1,
-        LOOPING             = 2,
-        FIRST_FRAME         = 4,
-        PREPARING           = 8,
-        PREPARED            = 16,
-        AT_EOS              = 32,
-        PREPARE_CANCELLED   = 64,
-        CACHE_UNDERRUN      = 128,
-        AUDIO_AT_EOS        = 256,
-        VIDEO_AT_EOS        = 512,
-        AUTO_LOOPING        = 1024,
-        NOT_FIRST_PLAY     = 2048,//sprd
+        PLAYING             = 0x01,
+        LOOPING             = 0x02,
+        FIRST_FRAME         = 0x04,
+        PREPARING           = 0x08,
+        PREPARED            = 0x10,
+        AT_EOS              = 0x20,
+        PREPARE_CANCELLED   = 0x40,
+        CACHE_UNDERRUN      = 0x80,
+        AUDIO_AT_EOS        = 0x0100,
+        VIDEO_AT_EOS        = 0x0200,
+        AUTO_LOOPING        = 0x0400,
+
+        // We are basically done preparing but are currently buffering
+        // sufficient data to begin playback and finish the preparation phase
+        // for good.
+        PREPARING_CONNECTED = 0x0800,
+
+        // We're triggering a single video event to display the first frame
+        // after the seekpoint.
+        SEEK_PREVIEW        = 0x1000,
+
+        AUDIO_RUNNING       = 0x2000,
+        AUDIOPLAYER_STARTED = 0x4000,
+
+        INCOGNITO           = 0x8000,
+
+        TEXT_RUNNING        = 0x10000,
+        TEXTPLAYER_STARTED  = 0x20000,
+
+        SLOW_DECODER_HACK   = 0x40000,
+        NOT_FIRST_PLAY 		= 0x80000,
     };
 
     mutable Mutex mLock;
@@ -158,6 +177,12 @@ private:
     bool mSeeking;
     bool mSeekNotificationSent;
     int64_t mSeekTimeUs;
+
+	int64_t mLowWaterMarkUs ;
+	int64_t mHighWaterMarkUs ;
+	int64_t mStartLowWaterMarkUs ;
+
+	bool mfromPause ;
 
     int64_t mBitrate;  // total bitrate of the file (in bps) or -1 if unknown.
 
@@ -263,6 +288,13 @@ private:
 
     static void OnRTSPSeekDoneWrapper(void *cookie);
     void onRTSPSeekDone();
+
+	static void OnRTSPPauseDoneWrapper(void *cookie);
+    void onRTSPPauseDone();
+
+
+	static void OnRTSPResumeDoneWrapper(void *cookie);
+	void onRTSPResumeDone();
 
     bool getBitrate(int64_t *bitrate);
 

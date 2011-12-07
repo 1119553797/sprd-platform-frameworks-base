@@ -409,7 +409,7 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
             send(mSocket, request.c_str() + numBytesSent,
                  request.size() - numBytesSent, 0);
 
-        if (n == 0 || teardown >= 0) {  //@hong hisense server close at first
+        if (n == 0 /*|| teardown >= 0*/) {  //@hong hisense server close at first
             // Server closed the connection.
             LOGE("Server unexpectedly closed the connection1.");
 
@@ -684,13 +684,17 @@ bool ARTSPConnection::receiveRTSPReponse() {
 
             if (n == 0) {
                 // Server closed the connection.
+                
+                LOGI("n == 0 Server closed the connection.");
                 TRESPASS();
+              
             } else if (n < 0) {
                 if (errno == EINTR) {
                     continue;
                 }
-
+				LOGI("n < 0 Server closed the connection.");
                 TRESPASS();
+          
             }
 
             numBytesRead += (size_t)n;

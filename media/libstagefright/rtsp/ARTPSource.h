@@ -50,7 +50,7 @@ struct ARTPSource : public RefBase {
     bool timeEstablished() const {
         return mNumTimes == 2;
     }
-	
+	uint32_t getSampeRate(){return mHZ ;};
     void setLocalTimestamps(bool local); //@hong
 	
 private:
@@ -87,6 +87,8 @@ private:
     uint8_t mNextFIRSeqNo;
 
     uint64_t RTP2NTP(uint32_t rtpTime) const;
+
+	sp<AMessage> mNotify;
 
     bool queuePacket(const sp<ABuffer> &buffer);
 

@@ -257,7 +257,9 @@ AwesomePlayer::AwesomePlayer()
       mLastVideoBuffer(NULL),
       mVideoBuffer(NULL),
       mSuspensionState(NULL),
-      mIsVideoPhoneStream(false){
+      mIsVideoPhoneStream(false),
+      mfromPause(false),
+      mSeeking (false){
     CHECK_EQ(mClient.connect(), OK);
 
     DataSource::RegisterDefaultSniffers();
@@ -472,6 +474,15 @@ void AwesomePlayer::reset_l() {
         if (mConnectingDataSource != NULL) {
             LOGI("interrupting the connection process");
             mConnectingDataSource->disconnect();
+        } else if (mConnectingRTSPController != NULL) {
+            LOGI("interrupting the connection process");
+            mConnectingRTSPController->disconnect();
+        }
+
+        if (mFlags & PREPARING_CONNECTED) {
+            // We are basically done preparing, we're just buffering
+            // enough data to start playback, we can safely interrupt that.
+            finishAsyncPrepare_l();
         }
     }
 	LOGI("--reset_l wait");
@@ -684,7 +695,7 @@ void AwesomePlayer::onBufferingUpdate() {
     bool eos;
     if (getCachedDuration_l(&cachedDurationUs, &eos)) {
         if ((mFlags & PLAYING) && !eos
-                && (cachedDurationUs < kLowWaterMarkUs)) {
+                && (cachedDurationUs < mLowWaterMarkUs)) {
             LOGI("cache is running low (%.2f secs) , pausing.",
                  cachedDurationUs / 1E6);
             mFlags |= CACHE_UNDERRUN;
@@ -693,13 +704,13 @@ void AwesomePlayer::onBufferingUpdate() {
         } else // if (eos || cachedDurationUs > kHighWaterMarkUs) 
              {
 			 
-            if ((eos || cachedDurationUs > kHighWaterMarkUs) && (mFlags & CACHE_UNDERRUN)) { //@hong
+            if ((eos || cachedDurationUs > mHighWaterMarkUs) && (mFlags & CACHE_UNDERRUN)) { //@hong
                 LOGI("cache has filled up (%.2f secs), resuming.",
                      cachedDurationUs / 1E6);
                 mFlags &= ~CACHE_UNDERRUN;
                 play_l();
                 notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); //@hong
-            } else if ((eos || (mCMMBLab && cachedDurationUs > kStartLowWaterMarkUs) || (!mCMMBLab && cachedDurationUs > (kHighWaterMarkUs+kLowWaterMarkUs)/2) ) 
+            } else if ((eos || (mCMMBLab && cachedDurationUs > mStartLowWaterMarkUs) || (!mCMMBLab && cachedDurationUs > (mHighWaterMarkUs+mLowWaterMarkUs)/2) ) 
                         && (mFlags & PREPARING)) { //@hong
                 LOGV("cache has filled up (%.2f secs), prepare is done",
                      cachedDurationUs / 1E6);
@@ -807,21 +818,31 @@ void AwesomePlayer::onStreamDone() {
 }
 
 status_t AwesomePlayer::play() {
-	LOGV("play");
+    LOGE("play ,mSeeking = %d",mSeeking);
+
     Mutex::Autolock autoLock(mLock);
 
-    mFlags &= ~CACHE_UNDERRUN;
+	mFlags &= ~CACHE_UNDERRUN;
+	 if (mRTSPController != NULL) {
+		 if(mfromPause||mSeeking)
+		 {
+			 if (mFlags & PLAYING) {
+				  return OK;
+			 }
+			 mRTSPController->playAsync(mVideoTimeUs, OnRTSPResumeDoneWrapper, this);
+			 mfromPause = false ;
+		 }
+	 }
+
 
     return play_l();
 }
 
 status_t AwesomePlayer::play_l() {
-	{
 	    struct timeval tv;  //@hong add timecheck.
 	    gettimeofday(&tv, NULL);
-		LOGV("play_l enter time:%d s",tv.tv_sec*1000+tv.tv_usec/1000);
-	}
-	
+LOGV("play_l enter time:%d s",tv.tv_sec*1000+tv.tv_usec/1000);
+
     if (mFlags & PLAYING) {
         return OK;
     }
@@ -834,9 +855,8 @@ status_t AwesomePlayer::play_l() {
         }
     }
 
-    mFlags |= PLAYING;
+	mFlags |= PLAYING;
     mFlags |= FIRST_FRAME;
-
     bool deferredAudioSeek = false;
 
     if (mAudioSource != NULL) {
@@ -868,6 +888,7 @@ status_t AwesomePlayer::play_l() {
             }
         } else {
             mAudioPlayer->resume();
+			postBufferingEvent_l();
         }
     }
 #ifdef _SYNC_USE_SYSTEM_TIME_
@@ -974,11 +995,16 @@ status_t AwesomePlayer::forceStop(){
 
 
 status_t AwesomePlayer::pause() {
-    LOGV("pause");   	
-    Mutex::Autolock autoLock(mLock);
-
+    LOGE("pause mSeeking = %d",mSeeking); 
+	Mutex::Autolock autoLock(mLock);
     mFlags &= ~CACHE_UNDERRUN;
 
+	if (mRTSPController != NULL) {
+		if (!(mFlags & PLAYING) || !mRTSPController->getSeekable()) {
+			  return OK;
+		 }
+  		 mRTSPController->pauseAsync(mVideoTimeUs, OnRTSPPauseDoneWrapper, this);
+	}
     return pause_l();
 }
 
@@ -1054,7 +1080,15 @@ status_t AwesomePlayer::getDuration(int64_t *durationUs) {
 
 status_t AwesomePlayer::getPosition(int64_t *positionUs) {
     if (mRTSPController != NULL) {
-        *positionUs = mRTSPController->getNormalPlayTimeUs();
+		if(mSeeking)
+		{
+			*positionUs = mSeekTimeUs;
+			 LOGE("AwesomePlayer::getPosition seeking %lld",mSeekTimeUs);	
+		}
+		else
+		{
+			*positionUs = mRTSPController->getNormalPlayTimeUs();	
+		}
     }
     else if (mSeeking) {
         *positionUs = mSeekTimeUs;
@@ -1081,10 +1115,11 @@ status_t AwesomePlayer::getPosition(int64_t *positionUs) {
 }
 
 status_t AwesomePlayer::seekTo(int64_t timeUs) {
-    LOGV("seekTo %lld",timeUs);	
+    LOGV("seekTo %lld, mSeekstate %d",timeUs,mSeeking);	
     if (mExtractorFlags & MediaExtractor::CAN_SEEK) {
         Mutex::Autolock autoLock(mLock);
-        return seekTo_l(timeUs);
+	
+   		return seekTo_l(timeUs);
     }
 
     return OK;
@@ -1096,12 +1131,64 @@ void AwesomePlayer::OnRTSPSeekDoneWrapper(void *cookie) {
 }
 
 void AwesomePlayer::onRTSPSeekDone() {
+
+	 mSeekNotificationSent = true; 
+     postBufferingEvent_l();
+
+	 notifyListener_l(MEDIA_SEEK_COMPLETE);
+	 LOGE("AwesomePlayer::onRTSPSeekDone mSeeking %d",mSeeking);
+}
+
+void AwesomePlayer::OnRTSPPauseDoneWrapper(void *cookie) {
+    static_cast<AwesomePlayer *>(cookie)->onRTSPPauseDone();
+
+}
+
+void AwesomePlayer::onRTSPPauseDone() {
+    LOGE("AwesomePlayer::onRTSPPauseDone mSeeking = %d,,mSeekTimeUs =%lld",mSeeking,mSeekTimeUs);
+	mfromPause = true ;
+}
+
+void AwesomePlayer::OnRTSPResumeDoneWrapper(void *cookie) {
+    static_cast<AwesomePlayer *>(cookie)->onRTSPResumeDone();
+}
+
+
+void AwesomePlayer::onRTSPResumeDone() {
+
+    LOGE("AwesomePlayer::onRTSPResumeDone mSeeking = %d,mSeekTimeUs =%lld",mSeeking,mSeekTimeUs);
+   	mfromPause = false ; 
     notifyListener_l(MEDIA_SEEK_COMPLETE);
     mSeekNotificationSent = true;
 }
 
 status_t AwesomePlayer::seekTo_l(int64_t timeUs) {
-    if (mRTSPController != NULL) {
+	if (mRTSPController != NULL) {
+
+		if (!mRTSPController->getSeekable())
+		{
+		   LOGE("liveing streaming ,so can not seek");  
+		   return OK;
+		}
+	 	mSeeking = true;
+		mSeekNotificationSent = false;
+   		mSeekTimeUs = timeUs;
+		mVideoTimeUs = timeUs ; 
+		if (mFlags & CACHE_UNDERRUN) {
+			mFlags &= ~CACHE_UNDERRUN;
+			play_l();
+		}
+		mQueue.cancelEvent(mBufferingEvent->eventID());
+        mBufferingEventPending = false;
+	    mAudioSource->pause();
+
+	   	if (mFlags &PLAYING){
+  		    if (mAudioPlayer != NULL) {
+              mAudioPlayer->pause();
+            }
+		}
+		mQueue.cancelEvent(mBufferingEvent->eventID());
+        mBufferingEventPending = false;
         mRTSPController->seekAsync(timeUs, OnRTSPSeekDoneWrapper, this);
         return OK;
     }
@@ -1264,11 +1351,13 @@ void AwesomePlayer::finishSeekIfNecessary(int64_t videoTimeUs) {
 
         // If we don't have a video time, seek audio to the originally
         // requested seek time instead.
-
-        mAudioPlayer->seekTo(videoTimeUs < 0 ? mSeekTimeUs : videoTimeUs);
-        mAudioPlayer->resume();
-        mWatchForAudioSeekComplete = true;
-        mWatchForAudioEOS = true;
+       if (mRTSPController == NULL)
+       {
+	       mAudioPlayer->seekTo(videoTimeUs < 0 ? mSeekTimeUs : videoTimeUs);
+		   mAudioPlayer->resume();
+       }
+	   mWatchForAudioSeekComplete = true;
+       mWatchForAudioEOS = true;
     } else if (!mSeekNotificationSent) {
         // If we're playing video only, report seek complete now,
         // otherwise audio player will notify us later.
@@ -1278,9 +1367,11 @@ void AwesomePlayer::finishSeekIfNecessary(int64_t videoTimeUs) {
     mFlags |= FIRST_FRAME;
     mSeeking = false;
     mSeekNotificationSent = false;
-#ifdef _SYNC_USE_SYSTEM_TIME_	
-    mSystemTimeSourceForSync.resume();//@jgdu
-#endif    
+   if (mRTSPController == NULL){
+	#ifdef _SYNC_USE_SYSTEM_TIME_	
+	mSystemTimeSourceForSync.resume();//@jgdu
+	#endif    
+   }
 }
 
 void AwesomePlayer::onVideoEvent() {
@@ -1322,7 +1413,7 @@ void AwesomePlayer::onVideoEvent() {
     if (!mVideoBuffer) {
         MediaSource::ReadOptions options;
         if (mSeeking) {
-            LOGV("seeking to %lld us (%.2f secs)", mSeekTimeUs, mSeekTimeUs / 1E6);
+            LOGE("seeking to %lld us (%.2f secs)", mSeekTimeUs, mSeekTimeUs / 1E6);
 
             options.setSeekTo(
                     mSeekTimeUs, MediaSource::ReadOptions::SEEK_CLOSEST_SYNC);
@@ -1356,7 +1447,7 @@ void AwesomePlayer::onVideoEvent() {
                 // a seek request pending that needs to be applied
                 // to the audio track.
                 if (mSeeking) {
-                    LOGV("video stream ended while seeking!");
+                    LOGE("video stream ended while seeking!");
                 }
                 finishSeekIfNecessary(-1);
 
@@ -1463,7 +1554,7 @@ void AwesomePlayer::onVideoEvent() {
 
     if (latenessUs > 60000) {
         // We're more than 40ms late.
-        LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
+        LOGI("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
 
         mVideoBuffer->release();
         mVideoBuffer = NULL;
@@ -1473,8 +1564,7 @@ void AwesomePlayer::onVideoEvent() {
     }
 
     if (latenessUs < -10000) {
-        // We're more than 10ms early.
-
+  		LOGI("we're early by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
         postVideoEvent_l(10000);
         return;
     }
@@ -1496,13 +1586,14 @@ void AwesomePlayer::onVideoEvent() {
 
     if (mVideoRenderer != NULL) {
         mVideoRenderer->render(mVideoBuffer);
-    }else{//@hong
-    	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)){ //@Hong. SpeedupCMMB	
-       	if(tmp_mFlags& FIRST_FRAME){
+    }else{
+    //	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35))
+	    { //@Hong. SpeedupCMMB	
+         if(tmp_mFlags& FIRST_FRAME){
 	   		mFlags |= FIRST_FRAME;
-       	}
-	 	postVideoEvent_l(10000);
-        return;
+         }
+	     postVideoEvent_l(10000);
+         return;
     	}
     	LOGI("mVideoRenderer is NULL");	
     }
@@ -1519,7 +1610,8 @@ void AwesomePlayer::onVideoEvent() {
 
 void AwesomePlayer::postVideoEvent_l(int64_t delayUs) {
     if (mVideoEventPending) {
-        return;
+		LOGI("AwesomePlayer::postVideoEvent_l mVideoEventPending so return"); 
+		return;
     }
 
     mVideoEventPending = true;
@@ -1569,8 +1661,10 @@ void AwesomePlayer::onCheckAudioStatus() {
             notifyListener_l(MEDIA_SEEK_COMPLETE);
             mSeekNotificationSent = true;
         }
-
-        mSeeking = false;
+		if (mRTSPController == NULL)
+		{
+   		  mSeeking = false;
+		}
     }
 
     status_t finalStatus;
@@ -1884,8 +1978,13 @@ status_t AwesomePlayer::finishSetDataSource_l() {
 			
         }
         mRTSPController = new ARTSPController(mLooper);
+	    mConnectingRTSPController = mRTSPController;
+		
+        mLock.unlock();
         status_t err = mRTSPController->connect(mUri.string());
+        mLock.lock();
 
+        mConnectingRTSPController.clear();
         LOGI("ARTSPController::connect returned %d", err);
 		{
 			struct timeval tv;  //@hong add timecheck.
@@ -1897,6 +1996,20 @@ status_t AwesomePlayer::finishSetDataSource_l() {
             mRTSPController.clear();
             return err;
         }
+		
+	   	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)) //@Hong. SpeedupCMMB
+			{
+				mLowWaterMarkUs = kLowWaterMarkUs;
+				mHighWaterMarkUs = kHighWaterMarkUs;
+				mStartLowWaterMarkUs =kStartLowWaterMarkUs ;
+			}
+			else
+			{
+				mLowWaterMarkUs = 2000000;
+				mHighWaterMarkUs = 10000000;
+				mStartLowWaterMarkUs = 8000000 ;
+				mCMMBLab = true ;
+			}
 
         sp<MediaExtractor> extractor = mRTSPController.get();
         return setDataSource_l(extractor);
@@ -1925,7 +2038,7 @@ void AwesomePlayer::abortPrepare(status_t err) {
     }
 
     mPrepareResult = err;
-    mFlags &= ~(PREPARING|PREPARE_CANCELLED);
+    mFlags &= ~(PREPARING|PREPARE_CANCELLED|PREPARING_CONNECTED);
     mAsyncPrepareEvent = NULL;
     mPreparedCondition.broadcast();
 }
@@ -1973,12 +2086,14 @@ void AwesomePlayer::onPrepareAsyncEvent() {
         }
     }
 
+	mFlags |= PREPARING_CONNECTED ;
     if (mCachedSource != NULL || mRTSPController != NULL) {
         postBufferingEvent_l();
     } else {
         finishAsyncPrepare_l();
     }
 }
+
 
 void AwesomePlayer::finishAsyncPrepare_l() {
     if (mIsAsyncPrepare) {
@@ -2007,7 +2122,7 @@ void AwesomePlayer::finishAsyncPrepare_l() {
     }
 
     mPrepareResult = OK;
-    mFlags &= ~(PREPARING|PREPARE_CANCELLED);
+    mFlags &= ~(PREPARING|PREPARE_CANCELLED|PREPARING_CONNECTED);
     mFlags |= PREPARED;
 	{
 	    struct timeval tv;  //@hong add timecheck.
@@ -2020,7 +2135,8 @@ LOGV("prepare end time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
 }
 
 status_t AwesomePlayer::suspend() {
-    LOGV("suspend");
+    LOGE("suspend");
+	//VideoPhoneDataDevice::getInstance().stop();
     Mutex::Autolock autoLock(mLock);
 
     if (mSuspensionState != NULL) {
@@ -2097,7 +2213,7 @@ LOGV("suspend waiting over");
 }
 
 status_t AwesomePlayer::resume() {
-    LOGV("resume");
+    LOGE("resume");
     Mutex::Autolock autoLock(mLock);
 
     if (mSuspensionState == NULL) {

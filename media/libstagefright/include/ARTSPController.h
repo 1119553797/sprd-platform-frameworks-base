@@ -34,12 +34,15 @@ struct ARTSPController : public MediaExtractor {
     void disconnect();
 
     void seekAsync(int64_t timeUs, void (*seekDoneCb)(void *), void *cookie);
+	void pauseAsync(int64_t timeUs, void (*seekDoneCb)(void *), void *cookie);
+	void playAsync(int64_t timeUs, void (*seekDoneCb)(void *), void *cookie);
 
     virtual size_t countTracks();
     virtual sp<MediaSource> getTrack(size_t index);
 
     virtual sp<MetaData> getTrackMetaData(
             size_t index, uint32_t flags);
+	bool 	getSeekable();
 
     int64_t getNormalPlayTimeUs();
     int64_t getQueueDurationUs(bool *eos);
@@ -51,7 +54,7 @@ struct ARTSPController : public MediaExtractor {
         // for rtsp, so let's not enable that.
         // The user can always use the seek bar.
 
-        return CAN_PAUSE | CAN_SEEK;
+        return CAN_PAUSE | CAN_SEEK |CAN_SEEK_BACKWARD | CAN_SEEK_FORWARD ;
     }
 
 protected:
@@ -62,6 +65,8 @@ private:
         kWhatConnectDone    = 'cdon',
         kWhatDisconnectDone = 'ddon',
         kWhatSeekDone       = 'sdon',
+        kWhatPauseDone		= 'pdon',
+        kWhatPlayDone		= 'rdon',
     };
 
     enum State {
@@ -81,8 +86,16 @@ private:
     sp<AHandlerReflector<ARTSPController> > mReflector;
 
     void (*mSeekDoneCb)(void *);
+	void (*mPauseDoneCb)(void *);
+	void (*mPlayDoneCb)(void *);
+	
     void *mSeekDoneCookie;
+    void *mPlayDoneCookie;
+    void *mPauseDoneCookie;
     int64_t mLastSeekCompletedTimeUs;
+	int64_t mLastPauseCompletedTimeUs ;
+	int64_t mLastPlayCompletedTimeUs ;
+	
 
     DISALLOW_EVIL_CONSTRUCTORS(ARTSPController);
 };

@@ -34,8 +34,9 @@
 namespace android {
 
 static const uint32_t kSourceID = 0xdeadbeef;
-static const uint32_t kMininalTime =   10000;//@hong
-static const uint32_t kMaxiumTime = 3000000;//@hong
+static const uint32_t kSmoothStep = 5;
+static const uint32_t kMininalTime =   10000;
+static const uint32_t kMaxiumTime = 3000000;
 
 ARTPSource::ARTPSource(
         uint32_t id,
@@ -52,6 +53,7 @@ ARTPSource::ARTPSource(
       mIssueFIRRequests(false),
       mLocalTimestamps(false), //@hong
       mLastFIRRequestUs(-1),
+      mNotify(notify),
       mNextFIRSeqNo((rand() * 256.0) / RAND_MAX) {
     unsigned long PT;
     AString desc;
@@ -120,8 +122,9 @@ void ARTPSource::setLocalTimestamps(bool local) //@hong
 }
     
 void ARTPSource::processRTPPacket(const sp<ABuffer> &buffer) {
-    if (queuePacket(buffer)
-            && mNumTimes == 2
+
+	if (queuePacket(buffer)
+            && ((mNumTimes == 2&&mLocalTimestamps) ||!mLocalTimestamps )   //@hong not check it.
             && mAssembler != NULL) {
         mAssembler->onPacketReceived(this);
     }
@@ -132,26 +135,38 @@ void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
 
     mLastNTPTime = ntpTime;
     mLastNTPTimeUpdateUs = ALooper::GetNowUs();
+    
+	if(mLocalTimestamps)
+	{
+	    if (mNumTimes == 2) {
+	        mNTPTime[0] = mNTPTime[1];
+	        mRTPTime[0] = mRTPTime[1];
+	        mNumTimes = 1;
+	    }
+	    mNTPTime[mNumTimes] = ntpTime;
+	    mRTPTime[mNumTimes++] = rtpTime;
 
-    if (mNumTimes == 2) {
-        mNTPTime[0] = mNTPTime[1];
-        mRTPTime[0] = mRTPTime[1];
-        mNumTimes = 1;
-    }
-    mNTPTime[mNumTimes] = ntpTime;
-    mRTPTime[mNumTimes++] = rtpTime;
+	    if (timeEstablished()) {
+	        for (List<sp<ABuffer> >::iterator it = mQueue.begin();
+	             it != mQueue.end(); ++it) {
+	            sp<AMessage> meta = (*it)->meta();
 
-    if (timeEstablished()) {
-        for (List<sp<ABuffer> >::iterator it = mQueue.begin();
-             it != mQueue.end(); ++it) {
-            sp<AMessage> meta = (*it)->meta();
+	            uint32_t rtpTime;
+	            CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
 
-            uint32_t rtpTime;
-            CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
-
-            meta->setInt64("ntp-time", RTP2NTP(rtpTime));
-        }
-    }
+	            meta->setInt64("ntp-time", RTP2NTP(rtpTime));
+	        }
+	    }
+	}
+	else
+	{
+	    sp<AMessage> notify = mNotify->dup();
+		notify->setInt32("time-update", true);
+		notify->setInt32("rtp-time", rtpTime);
+		notify->setInt64("ntp-time", ntpTime);
+		notify->post();
+	}
+		
 }
 
 void ARTPSource::timeUpdate2(uint32_t rtpTime, uint64_t ntpTime) 
@@ -253,13 +268,14 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
    	}
    	else
 /*         quick rtp time established..............*/
-    if (mNumTimes == 2) {
+    // if (mNumTimes == 2) 
+	{
         sp<AMessage> meta = buffer->meta();
 
         uint32_t rtpTime;
         CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
 
-        meta->setInt64("ntp-time", RTP2NTP(rtpTime));
+        meta->setInt64("ntp-time", rtpTime);
     }
 
     if (mNumBuffersReceived++ == 0) {

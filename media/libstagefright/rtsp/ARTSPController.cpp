@@ -29,8 +29,16 @@ ARTSPController::ARTSPController(const sp<ALooper> &looper)
     : mState(DISCONNECTED),
       mLooper(looper),
       mSeekDoneCb(NULL),
+      mPauseDoneCb(NULL),
+      mPlayDoneCb(NULL),
       mSeekDoneCookie(NULL),
-      mLastSeekCompletedTimeUs(-1) {
+      mPlayDoneCookie(NULL),
+      mPauseDoneCookie(NULL),
+      mLastSeekCompletedTimeUs(-1),
+      mLastPauseCompletedTimeUs(-1),
+      mLastPlayCompletedTimeUs(-1)
+      
+      {
     mReflector = new AHandlerReflector<ARTSPController>(this);
     looper->registerHandler(mReflector);
 }
@@ -69,7 +77,14 @@ status_t ARTSPController::connect(const char *url) {
 void ARTSPController::disconnect() {
     Mutex::Autolock autoLock(mLock);
 
-    if (mState != CONNECTED) {
+    if (mState == CONNECTING) {
+        mState = DISCONNECTED;
+        mConnectionResult = ERROR_IO;
+        mCondition.broadcast();
+
+        mHandler.clear();
+        return;
+    } else if (mState != CONNECTED) {
         return;
     }
 
@@ -89,8 +104,6 @@ void ARTSPController::seekAsync(
     Mutex::Autolock autoLock(mLock);
 
     CHECK(seekDoneCb != NULL);
-    CHECK(mSeekDoneCb == NULL);
-
     // Ignore seek requests that are too soon after the previous one has
     // completed, we don't want to swamp the server.
 
@@ -100,6 +113,7 @@ void ARTSPController::seekAsync(
 
     if (mState != CONNECTED || tooEarly) {
         (*seekDoneCb)(cookie);
+		LOGE("ARTSPController::seekAsync tooEarly so return") ;
         return;
     }
 
@@ -109,6 +123,62 @@ void ARTSPController::seekAsync(
     sp<AMessage> msg = new AMessage(kWhatSeekDone, mReflector->id());
     mHandler->seek(timeUs, msg);
 }
+
+
+void ARTSPController::pauseAsync(
+        int64_t timeUs,
+        void (*pauseDoneCb)(void *), void *cookie) {
+    Mutex::Autolock autoLock(mLock);
+
+    CHECK(pauseDoneCb != NULL);
+    // Ignore seek requests that are too soon after the previous one has
+    // completed, we don't want to swamp the server.
+
+    bool tooEarly =
+        mLastPauseCompletedTimeUs >= 0
+            && ALooper::GetNowUs() < mLastPauseCompletedTimeUs + 500000ll;
+
+    if (mState != CONNECTED || tooEarly) {
+        (*pauseDoneCb)(cookie);
+		LOGE("ARTSPController::pauseAsync tooEarly so return") ;
+		return;
+    }
+
+    mPauseDoneCb = pauseDoneCb;
+    mPauseDoneCookie = cookie;
+
+    sp<AMessage> msg = new AMessage(kWhatPauseDone, mReflector->id());
+	LOGE("ARTSPController::pauseAsync to time %lld",timeUs) ;
+    mHandler->pause(timeUs, msg);
+}
+
+void ARTSPController::playAsync(
+        int64_t timeUs,
+        void (*playDoneCb)(void *), void *cookie) {
+    Mutex::Autolock autoLock(mLock);
+
+    CHECK(playDoneCb != NULL);
+    // Ignore seek requests that are too soon after the previous one has
+    // completed, we don't want to swamp the server.
+
+    bool tooEarly =
+        mLastPlayCompletedTimeUs >= 0
+            && ALooper::GetNowUs() < mLastPlayCompletedTimeUs + 500000ll;
+
+    if (mState != CONNECTED || tooEarly) {
+        (*playDoneCb)(cookie);
+	    LOGE("ARTSPController::playAsync tooEarly so return") ;
+        return;
+    }
+
+    mPlayDoneCb = playDoneCb;
+    mPlayDoneCookie = cookie;
+
+    sp<AMessage> msg = new AMessage(kWhatPlayDone, mReflector->id());
+	LOGE("ARTSPController::playAsync to time %lld",timeUs) ;
+    mHandler->play(timeUs, msg);
+}
+
 
 size_t ARTSPController::countTracks() {
     if (mHandler == NULL) {
@@ -130,6 +200,14 @@ sp<MetaData> ARTSPController::getTrackMetaData(
 
     return mHandler->getPacketSource(index)->getFormat();
 }
+
+bool ARTSPController::getSeekable()
+{
+	   CHECK(mHandler != NULL);
+	   return mHandler->getSeekable();
+	   
+}
+
 
 void ARTSPController::onMessageReceived(const sp<AMessage> &msg) {
     switch (msg->what()) {
@@ -164,9 +242,37 @@ void ARTSPController::onMessageReceived(const sp<AMessage> &msg) {
             (*seekDoneCb)(mSeekDoneCookie);
             break;
         }
+		case kWhatPauseDone:
+        {
+            LOGE("ARTSPController PauseDone done");
+
+            mLastPauseCompletedTimeUs = ALooper::GetNowUs();
+        	void (*pauseDoneCb)(void *) = mPauseDoneCb;
+
+			mPauseDoneCb = NULL;
+		    (*pauseDoneCb)(mPauseDoneCookie);
+
+             break;
+        }
+
+		case kWhatPlayDone:
+        {
+            LOGE("ARTSPController PlayDone done");
+
+            mLastPlayCompletedTimeUs = ALooper::GetNowUs();
+
+  			void (*playDoneCb)(void *) = mPlayDoneCb;
+
+			mPlayDoneCb = NULL;
+					
+			(*playDoneCb)(mPlayDoneCookie);
+       			
+            break;
+        }
 
         default:
-            TRESPASS();
+            //TRESPASS();
+            LOGE("ARTSPController onMessageReceived no do process ");
             break;
     }
 }
@@ -180,6 +286,7 @@ int64_t ARTSPController::getQueueDurationUs(bool *eos) {
     *eos = true;
 
     int64_t minQueuedDurationUs = 0;
+    LOGI("getQueueDurationUs");
     for (size_t i = 0; i < mHandler->countTracks(); ++i) {
         sp<APacketSource> source = mHandler->getPacketSource(i);
 

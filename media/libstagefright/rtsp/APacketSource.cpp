@@ -778,22 +778,26 @@ int64_t APacketSource::getQueueDurationUs(bool *eos) {
     *eos = (mEOSResult != OK);
 
     if (mBuffers.size() < 2) {
-        return 0;
+
+		LOGE("mBuffers.size() < 2 so return 0");
+		return 0;
     }
 
     const sp<ABuffer> first = *mBuffers.begin();
     const sp<ABuffer> last = *--mBuffers.end();
-
+ 
     int64_t firstTimeUs;
     CHECK(first->meta()->findInt64("timeUs", &firstTimeUs));
 
     int64_t lastTimeUs;
     CHECK(last->meta()->findInt64("timeUs", &lastTimeUs));
-
+	
+    if (lastTimeUs == 0)  //2011-10-31
+	return 0;
+	
     if (lastTimeUs < firstTimeUs) {
         LOGE("Huh? Time moving backwards? %lld > %lld",
              firstTimeUs, lastTimeUs);
-
         return 0;
     }
 
