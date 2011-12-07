@@ -75,7 +75,7 @@ void  ARTSPConnection::serverexception(const sp<AMessage> &reply)//@hong
 
 void ARTSPConnection::sendRequest(
         const char *request, const sp<AMessage> &reply) {
-	LOGV("sendRequest...");
+	LOGE("sendRequest...%s",request);
     sp<AMessage> msg = new AMessage(kWhatSendRequest, id());
     msg->setString("request", request);
     msg->setMessage("reply", reply);

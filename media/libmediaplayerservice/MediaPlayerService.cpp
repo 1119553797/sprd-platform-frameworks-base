@@ -763,7 +763,7 @@ player_type getPlayerType(const char* url)
 	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",url,35) || 
 		!strncasecmp("rtsp://gtalk/",url,13))
 		{
-	//                 system("setprop media.stagefright.enable-rtsp true");
+			char value[PROPERTY_VALUE_MAX];
 			property_get("media.stagefright.enable-rtsp", value, 0);
 			LOGI("CMMB get media.stagefright.enable-rtsp is %s", value);
 

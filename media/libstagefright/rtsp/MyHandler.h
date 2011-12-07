@@ -295,7 +295,15 @@ struct MyHandler : public AHandler {
     }
 
     bool getSeekable() {
-      return mSeekable ;
+	   if (mSeekable &&!mTryTCPInterleaving)
+	   {
+		 return true;
+	   }
+	   else
+	   {
+		 return false ;
+	   }
+
     }
 	
     static void addRR(const sp<ABuffer> &buf) {
@@ -917,7 +925,7 @@ struct MyHandler : public AHandler {
                 }
 
                 ++mNumAccessUnitsReceived;
-                postAccessUnitTimeoutCheck();
+              //  postAccessUnitTimeoutCheck();
 
                 size_t trackIndex;
                 CHECK(msg->findSize("track-index", &trackIndex));
@@ -1081,7 +1089,7 @@ struct MyHandler : public AHandler {
 				mNTPAnchorUs = -1;
 		#endif		
 
-       
+       	    	LOGI("seek have paused thrn play ");
 
                 int64_t timeUs;
                 CHECK(msg->findInt64("time", &timeUs));
@@ -1116,11 +1124,11 @@ struct MyHandler : public AHandler {
                 int32_t result;
                 CHECK(msg->findInt32("result", &result));
 
-                LOGI("PLAY completed with result %d (%s)",
+                LOGI("seek PLAY completed with result %d (%s)",
                      result, strerror(-result));
 
                 mCheckPending = false;
-                postAccessUnitTimeoutCheck();
+               // postAccessUnitTimeoutCheck();
 
                 if (result == OK) {
                     sp<RefBase> obj;
