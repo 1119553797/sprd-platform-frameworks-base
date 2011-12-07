@@ -106,6 +106,13 @@ status_t TextureManager::initTexture(Image* pImage, int32_t format)
 bool TextureManager::isSupportedYuvFormat(int format)
 {
     switch (format) {
+    case HAL_PIXEL_FORMAT_YCbCr_422_SP:
+    case HAL_PIXEL_FORMAT_YCbCr_420_SP:
+    case HAL_PIXEL_FORMAT_YCbCr_422_P:
+    case HAL_PIXEL_FORMAT_YCbCr_420_P:
+    case HAL_PIXEL_FORMAT_YCbCr_422_I:
+    case HAL_PIXEL_FORMAT_YCbCr_420_I:
+    case HAL_PIXEL_FORMAT_YCrCb_420_SP:
     case HAL_PIXEL_FORMAT_YV12:
         return true;
     }
