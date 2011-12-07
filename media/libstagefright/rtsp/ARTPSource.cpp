@@ -120,8 +120,7 @@ void ARTPSource::setLocalTimestamps(bool local) //@hong
 {
 	mLocalTimestamps = local;
 }
-    
-void ARTPSource::processRTPPacket(const sp<ABuffer> &buffer) {
+    void ARTPSource::processRTPPacket(const sp<ABuffer> &buffer) {
 
 	if (queuePacket(buffer)
             && ((mNumTimes == 2&&mLocalTimestamps) ||!mLocalTimestamps )   //@hong not check it.

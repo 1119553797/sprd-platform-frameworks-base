@@ -219,6 +219,8 @@ private:
 
     sp<ALooper> mLooper;
     sp<ARTSPController> mRTSPController;
+    sp<ARTSPController> mConnectingRTSPController;
+	
     sp<ARTPSession> mRTPSession;
     sp<UDPPusher> mRTPPusher, mRTCPPusher;
 

@@ -923,7 +923,7 @@ struct MyHandler : public AHandler {
                 CHECK(msg->findSize("track-index", &trackIndex));
 
                 if (trackIndex >= mTracks.size()) {
-                    LOGV("late packets ignored.");
+                    LOGI("late packets ignored.");
                     break;
                 }
 
@@ -1136,14 +1136,17 @@ struct MyHandler : public AHandler {
                         LOGI("seek completed.");
                     }
                 }
+				sp<AMessage> doneMsg;
+                CHECK(msg->findMessage("doneMsg", &doneMsg));
 
                 if (result != OK) {
                     LOGE("seek failed, aborting.");
                     (new AMessage('abor', id()))->post();
+				   mSeekPending = false;
+			       doneMsg->post();
                 }
 
-				sp<AMessage> doneMsg;
-                CHECK(msg->findMessage("doneMsg", &doneMsg));
+		
 				if(mPauseed)
 			    {
 					mSeekPending = false;
