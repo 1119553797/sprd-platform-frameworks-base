@@ -638,7 +638,7 @@ public final class InputMethodManager {
             }
             
             mCompletions = completions;
-            if (mCurMethod != null) {
+            if (mActive && mCurMethod != null) {
                 try {
                     mCurMethod.displayCompletions(mCompletions);
                 } catch (RemoteException e) {
@@ -655,7 +655,7 @@ public final class InputMethodManager {
                 return;
             }
             
-            if (mCurMethod != null) {
+            if (mActive && mCurMethod != null) {
                 try {
                     mCurMethod.updateExtractedText(token, text);
                 } catch (RemoteException e) {
@@ -845,7 +845,7 @@ public final class InputMethodManager {
             if (mServedView == null || mServedView.getWindowToken() != windowToken) {
                 return;
             }
-            if (mCurMethod != null) {
+            if (mActive && mCurMethod != null) {
                 try {
                     mCurMethod.toggleSoftInput(showFlags, hideFlags);
                 } catch (RemoteException e) {
@@ -867,7 +867,7 @@ public final class InputMethodManager {
      * @hide
      */
     public void toggleSoftInput(int showFlags, int hideFlags) {
-        if (mCurMethod != null) {
+        if (mActive && mCurMethod != null) {
             try {
                 mCurMethod.toggleSoftInput(showFlags, hideFlags);
             } catch (RemoteException e) {
@@ -989,7 +989,7 @@ public final class InputMethodManager {
                         return;
                     }
                 }
-                if (mCurMethod != null && mCompletions != null) {
+                if (mActive && mCurMethod != null && mCompletions != null) {
                     try {
                         mCurMethod.displayCompletions(mCompletions);
                     } catch (RemoteException e) {
@@ -1170,7 +1170,7 @@ public final class InputMethodManager {
         synchronized (mH) {
             if ((mServedView != view && (mServedView == null
                         || !mServedView.checkInputConnectionProxy(view)))
-                    || mCurrentTextBoxAttribute == null || mCurMethod == null) {
+                    || mCurrentTextBoxAttribute == null || mCurMethod == null || !mActive ) {
                 return;
             }
             
@@ -1210,7 +1210,7 @@ public final class InputMethodManager {
         synchronized (mH) {
             if ((mServedView != view && (mServedView == null
                         || !mServedView.checkInputConnectionProxy(view)))
-                    || mCurrentTextBoxAttribute == null || mCurMethod == null) {
+                    || mCurrentTextBoxAttribute == null || mCurMethod == null || !mActive ) {
                 return;
             }
             
@@ -1245,7 +1245,7 @@ public final class InputMethodManager {
         synchronized (mH) {
             if ((mServedView != view && (mServedView == null
                         || !mServedView.checkInputConnectionProxy(view)))
-                    || mCurrentTextBoxAttribute == null || mCurMethod == null) {
+                    || mCurrentTextBoxAttribute == null || mCurMethod == null || !mActive ) {
                 return;
             }
             try {
@@ -1322,7 +1322,7 @@ public final class InputMethodManager {
         synchronized (mH) {
             if (DEBUG) Log.d(TAG, "dispatchKeyEvent");
     
-            if (mCurMethod == null) {
+            if (!mActive || mCurMethod == null) {
                 try {
                     callback.finishedEvent(seq, false);
                 } catch (RemoteException e) {
@@ -1360,7 +1360,7 @@ public final class InputMethodManager {
         synchronized (mH) {
             if (DEBUG) Log.d(TAG, "dispatchTrackballEvent");
     
-            if (mCurMethod == null || mCurrentTextBoxAttribute == null) {
+            if (!mActive || mCurMethod == null || mCurrentTextBoxAttribute == null) {
                 try {
                     callback.finishedEvent(seq, false);
                 } catch (RemoteException e) {
