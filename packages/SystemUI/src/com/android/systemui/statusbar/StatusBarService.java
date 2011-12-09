@@ -77,7 +77,6 @@ import java.util.HashMap;
 import java.util.Set;
 
 import com.android.systemui.R;
-import com.android.systemui.statusbar.policy.StatusBarPolicy;
 
 
 
