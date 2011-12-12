@@ -261,7 +261,7 @@ void ColorConverter::convertQCOMYUV420SemiPlanar(
             signed b2 = (tmp2 + u_b) / 256;
             signed g2 = (tmp2 + v_g + u_g) / 256;
             signed r2 = (tmp2 + v_r) / 256;
-
+/*NEWMS00148575
             uint32_t rgb1 =
                 ((kAdjustedClip[b1] >> 3) << 11)
                 | ((kAdjustedClip[g1] >> 2) << 5)
@@ -271,7 +271,16 @@ void ColorConverter::convertQCOMYUV420SemiPlanar(
                 ((kAdjustedClip[b2] >> 3) << 11)
                 | ((kAdjustedClip[g2] >> 2) << 5)
                 | (kAdjustedClip[r2] >> 3);
+*/
+            uint32_t rgb1 =
+                ((kAdjustedClip[r1] >> 3) << 11)
+                | ((kAdjustedClip[g1] >> 2) << 5)
+                | (kAdjustedClip[b1] >> 3);
 
+            uint32_t rgb2 =
+                ((kAdjustedClip[r2] >> 3) << 11)
+                | ((kAdjustedClip[g2] >> 2) << 5)
+                | (kAdjustedClip[b2] >> 3);
             dst_ptr[x / 2] = (rgb2 << 16) | rgb1;
         }
 
@@ -323,7 +332,7 @@ void ColorConverter::convertYUV420SemiPlanar(
             signed b2 = (tmp2 + u_b) / 256;
             signed g2 = (tmp2 + v_g + u_g) / 256;
             signed r2 = (tmp2 + v_r) / 256;
-
+/*NEWMS00148575
             uint32_t rgb1 =
                 ((kAdjustedClip[b1] >> 3) << 11)
                 | ((kAdjustedClip[g1] >> 2) << 5)
@@ -333,6 +342,16 @@ void ColorConverter::convertYUV420SemiPlanar(
                 ((kAdjustedClip[b2] >> 3) << 11)
                 | ((kAdjustedClip[g2] >> 2) << 5)
                 | (kAdjustedClip[r2] >> 3);
+*/
+            uint32_t rgb1 =
+                ((kAdjustedClip[r1] >> 3) << 11)
+                | ((kAdjustedClip[g1] >> 2) << 5)
+                | (kAdjustedClip[b1] >> 3);
+
+            uint32_t rgb2 =
+                ((kAdjustedClip[r2] >> 3) << 11)
+                | ((kAdjustedClip[g2] >> 2) << 5)
+                | (kAdjustedClip[b2] >> 3);
 
             dst_ptr[x / 2] = (rgb2 << 16) | rgb1;
         }
