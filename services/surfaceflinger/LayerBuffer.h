@@ -23,6 +23,8 @@
 #include "LayerBase.h"
 #include "TextureManager.h"
 
+#include "YUV2RGBShader.h"
+
 struct copybit_device_t;
 
 namespace android {
@@ -32,6 +34,7 @@ namespace android {
 class Buffer;
 class Region;
 class OverlayRef;
+class EGLUtils;
 
 // ---------------------------------------------------------------------------
 
@@ -120,6 +123,59 @@ private:
         bool                    mSupportsCopybit;
     };
 
+    class LightWeightSurface : 
+        public EGLNativeBase<android_native_window_t, 
+                             LightWeightSurface, 
+                             LightRefBase<LightWeightSurface> > {
+    public:
+        LightWeightSurface(const sp<GraphicBuffer> &buffer = NULL)  {
+            setBuffer(buffer);
+            android_native_window_t::setSwapInterval = setSwapInterval;
+            android_native_window_t::dequeueBuffer = dequeueBuffer;
+            android_native_window_t::lockBuffer = lockBuffer;
+            android_native_window_t::queueBuffer = queueBuffer;
+            android_native_window_t::query = query;
+            android_native_window_t::perform = perform;
+        }
+
+        ~LightWeightSurface() { 
+            mBuffer = NULL; 
+        }
+
+        void setBuffer(const sp<GraphicBuffer> &buffer) {
+            mBuffer = buffer;
+        }
+
+        sp<GraphicBuffer>& getBuffer() {
+            return mBuffer;
+        }
+
+        EGLNativeWindowType getNativeWindow() {
+            return (EGLNativeWindowType)this;
+        }
+
+    private:
+        friend class LightRefBase<LightWeightSurface>;
+
+        sp<GraphicBuffer> mBuffer;
+
+        static int setSwapInterval(android_native_window_t* window, int interval) {
+            return NO_ERROR;
+        }
+        static int lockBuffer(android_native_window_t* window, android_native_buffer_t* buffer) {
+            return NO_ERROR;
+        }
+        static int queueBuffer(android_native_window_t* window, android_native_buffer_t* buffer) {
+            return NO_ERROR;
+        }
+        static int perform(android_native_window_t* window, int operation, ...) {
+            return NO_ERROR;
+        }
+        static int query(android_native_window_t* window, int what, int* value);
+        static int dequeueBuffer(android_native_window_t* window, android_native_buffer_t** buffer);
+    }; 
+
+
     class BufferSource : public Source {
     public:
         BufferSource(LayerBuffer& layer, const ISurface::BufferHeap& buffers);
@@ -135,6 +191,27 @@ private:
         virtual void destroy() { }
     private:
         status_t initTempBuffer() const;
+
+        /*
+         * By: Hewei Fu
+         */
+        class EGLInitializer : 
+            public LightRefBase<EGLInitializer> 
+        {
+            SurfaceFlinger* flinger;
+            EGLContext*     context;
+        public:
+            EGLInitializer(
+                SurfaceFlinger* flinger, 
+                EGLContext *ctx,
+                EGLConfig  *config,
+                PixelFormat format);
+
+            ~EGLInitializer();
+        };
+        status_t get_yuv2rgb_dst_surf() const;
+        static void checkEglError(const char* , EGLBoolean);
+
         void clearTempBufferImage() const;
         mutable Mutex                   mBufferSourceLock;
         sp<Buffer>                      mBuffer;
@@ -144,6 +221,18 @@ private:
         mutable Texture                 mTexture;
         mutable NativeBuffer            mTempBuffer;
         mutable TextureManager          mTextureManager;
+
+        /*
+         * By: Hewei Fu
+         */
+        static const PixelFormat        mFormat = HAL_PIXEL_FORMAT_RGB_565;
+        sp<EGLInitializer>              mEGLInit;    
+        EGLContext                      mGLContext;
+        EGLConfig                       mGLConfig;
+        mutable sp<YUV2RGBShader>       mRefShader;
+        mutable YUV2RGBShader           *mShader;
+        mutable EGLSurface              mGLSurface;
+        mutable sp<LightWeightSurface>  mLWSurface;
     };
     
     class OverlaySource : public Source {

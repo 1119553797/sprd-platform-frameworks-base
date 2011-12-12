@@ -46,12 +46,15 @@ LOCAL_SHARED_LIBRARIES := \
 	libGLESv1_CM \
 	libbinder \
 	libui \
-	libsurfaceflinger_client
+	libsurfaceflinger_client \
+	libyuv2rgb_shader
 
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)
 
 LOCAL_C_INCLUDES += hardware/libhardware/modules/gralloc
+
+LOCAL_C_INCLUDES += hardware/sprd/hsdroid/libyuv2rgb_gpu/
 
 LOCAL_MODULE:= libsurfaceflinger
 
