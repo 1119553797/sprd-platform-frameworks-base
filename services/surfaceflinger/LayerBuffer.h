@@ -124,21 +124,24 @@ private:
     };
 
     class LightWeightSurface : 
-        public EGLNativeBase<android_native_window_t, 
+        public EGLNativeBase<ANativeWindow, 
                              LightWeightSurface, 
                              LightRefBase<LightWeightSurface> > {
     public:
         LightWeightSurface(const sp<GraphicBuffer> &buffer = NULL)  {
             setBuffer(buffer);
-            android_native_window_t::setSwapInterval = setSwapInterval;
-            android_native_window_t::dequeueBuffer = dequeueBuffer;
-            android_native_window_t::lockBuffer = lockBuffer;
-            android_native_window_t::queueBuffer = queueBuffer;
-            android_native_window_t::query = query;
-            android_native_window_t::perform = perform;
+            ANativeWindow::setSwapInterval = setSwapInterval;
+            ANativeWindow::dequeueBuffer = dequeueBuffer;
+            ANativeWindow::lockBuffer = lockBuffer;
+            ANativeWindow::queueBuffer = queueBuffer;
+            ANativeWindow::query = query;
+            ANativeWindow::perform = perform;
+            ANativeWindow::cancelBuffer = cancelBuffer;
         }
 
         ~LightWeightSurface() { 
+            fprintf(stderr, "fhw::~LightWeightSurface\n");
+            fflush(stderr);
             mBuffer = NULL; 
         }
 
@@ -159,20 +162,23 @@ private:
 
         sp<GraphicBuffer> mBuffer;
 
-        static int setSwapInterval(android_native_window_t* window, int interval) {
+        static int setSwapInterval(ANativeWindow* window, int interval) {
             return NO_ERROR;
         }
-        static int lockBuffer(android_native_window_t* window, android_native_buffer_t* buffer) {
+        static int lockBuffer(ANativeWindow* window, android_native_buffer_t* buffer) {
             return NO_ERROR;
         }
-        static int queueBuffer(android_native_window_t* window, android_native_buffer_t* buffer) {
+        static int queueBuffer(ANativeWindow* window, android_native_buffer_t* buffer) {
             return NO_ERROR;
         }
-        static int perform(android_native_window_t* window, int operation, ...) {
+        static int perform(ANativeWindow* window, int operation, ...) {
             return NO_ERROR;
         }
-        static int query(android_native_window_t* window, int what, int* value);
-        static int dequeueBuffer(android_native_window_t* window, android_native_buffer_t** buffer);
+        static int cancelBuffer(struct ANativeWindow* window, struct android_native_buffer_t* buffer) {
+            return NO_ERROR;
+        }
+        static int query(ANativeWindow* window, int what, int* value);
+        static int dequeueBuffer(ANativeWindow* window, android_native_buffer_t** buffer);
     }; 
 
 

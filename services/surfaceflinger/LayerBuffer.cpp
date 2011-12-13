@@ -331,7 +331,7 @@ void LayerBuffer::Source::unregisterBuffers() {
 //
 //------------------------------------------------------------------------------------------
 int
-LayerBuffer::LightWeightSurface::query(android_native_window_t* window,
+LayerBuffer::LightWeightSurface::query(ANativeWindow* window,
                                        int what, int* value) 
 {
     LightWeightSurface* self = getSelf(window);
@@ -352,7 +352,7 @@ LayerBuffer::LightWeightSurface::query(android_native_window_t* window,
 }
 
 int 
-LayerBuffer::LightWeightSurface::dequeueBuffer(android_native_window_t* window, 
+LayerBuffer::LightWeightSurface::dequeueBuffer(ANativeWindow* window, 
                                             android_native_buffer_t** buffer) 
 {
     LightWeightSurface *surface = getSelf(window);
@@ -744,7 +744,8 @@ LayerBuffer::BufferSource::EGLInitializer::EGLInitializer(
                                         PixelFormat format) 
     : flinger(flinger), context(ctx)
 {
-    EGLBoolean ret;
+    status_t ret;
+
     EGLint context_attribs[] = 
         { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE };
     EGLint s_configAttribs[] = {
@@ -781,6 +782,8 @@ LayerBuffer::BufferSource::EGLInitializer::~EGLInitializer()
 
     if (*context != EGL_NO_CONTEXT) {
         eglDestroyContext(dpy, *context);
+        fprintf(stderr, "fhw:####### eglDestroyContext #######\n");
+        fflush(stderr);
     }
 }
 
