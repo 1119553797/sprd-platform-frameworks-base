@@ -28,9 +28,7 @@
 #include <ui/FramebufferNativeWindow.h>
 #include <ui/Rect.h>
 #include <ui/Region.h>
-#include <ui/EGLUtils.h>
 
-#include <EGL/egl.h>
 #include <hardware/copybit.h>
 
 #include "LayerBuffer.h"
@@ -327,46 +325,12 @@ void LayerBuffer::Source::postBuffer(ssize_t offset) {
 void LayerBuffer::Source::unregisterBuffers() {
 }
 
-//------------------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------------------
-int
-LayerBuffer::LightWeightSurface::query(ANativeWindow* window,
-                                       int what, int* value) 
-{
-    LightWeightSurface* self = getSelf(window);
-    sp<GraphicBuffer> buffer = self->getBuffer();
-    switch (what) {
-        case NATIVE_WINDOW_WIDTH:
-            *value = (int)buffer->getWidth();
-            return NO_ERROR;
-        case NATIVE_WINDOW_HEIGHT:
-            *value = (int)buffer->getHeight();
-            return NO_ERROR;
-        case NATIVE_WINDOW_FORMAT:
-            *value = (int)buffer->getPixelFormat();
-            return NO_ERROR;
-    }
-    *value = 0;
-    return BAD_VALUE;
-}
-
-int 
-LayerBuffer::LightWeightSurface::dequeueBuffer(ANativeWindow* window, 
-                                            android_native_buffer_t** buffer) 
-{
-    LightWeightSurface *surface = getSelf(window);
-    *buffer = surface->getBuffer()->getNativeBuffer();
-    return NO_ERROR;
-}
-
 // ---------------------------------------------------------------------------
 
 LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
         const ISurface::BufferHeap& buffers)
     : Source(layer), mStatus(NO_ERROR), mBufferSize(0),
-      mLWSurface(NULL), mGLSurface(EGL_NO_SURFACE), 
-      mGLContext(EGL_NO_CONTEXT), mShader(NULL)
+      mShader(NULL)
 {
     if (buffers.heap == NULL) {
         // this is allowed, but in this case, it is illegal to receive
@@ -406,10 +370,9 @@ LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
     mBufferSize = info.getScanlineSize(buffers.hor_stride)*buffers.ver_stride;
     mLayer.forceVisibilityTransaction();
 
-    mLWSurface = new LightWeightSurface();
-    mEGLInit = new EGLInitializer(getFlinger(), 
-                        &mGLContext, &mGLConfig, mFormat);
-    mShader = new YUV2RGBShader(buffers.format);
+    mShader = new YUV2RGBShader(
+                    getFlinger()->graphicPlane(0).getEGLDisplay(), 
+                    buffers.format);
 }
 
 LayerBuffer::BufferSource::~BufferSource()
@@ -432,17 +395,9 @@ LayerBuffer::BufferSource::~BufferSource()
         getFlinger()->mEventQueue.postMessage(
                 new MessageDestroyTexture(getFlinger(), mTexture.name) );
     }
-
-    EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
-
     if (mTexture.image != EGL_NO_IMAGE_KHR) {
+        EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
         eglDestroyImageKHR(dpy, mTexture.image);
-    }
-    if (mGLSurface != EGL_NO_SURFACE) {
-        eglDestroySurface(dpy, mGLSurface);
-    }
-    if (mShader && !mRefShader.get()) {
-        delete mShader;
     }
 }
 
@@ -519,12 +474,7 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
             t.vstride= src.img.h;
             t.format = src.img.format;
             t.data = (GGLubyte*)src.img.base;
-            err = get_yuv2rgb_dst_surf();
-            if (err == NO_ERROR) {
-                GraphicBuffer* dst = mLWSurface->getBuffer().get();
-                mRefShader = mShader;
-                mRefShader->draw(t, dst->getWidth(), dst->getHeight());
-            }
+            err = yuv2rgbConvert(t);
             getFlinger()->graphicPlane(0).displayHardware().makeCurrent();
         }
         else {
@@ -573,24 +523,8 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
     mLayer.drawWithOpenGL(clip, mTexture);
 }
 
-void 
-LayerBuffer::BufferSource::checkEglError(const char* op, 
-                                    EGLBoolean returnVal = EGL_TRUE)  
-{
-    if (returnVal != EGL_TRUE) {
-        fprintf(stderr, "%s() returned %d\n", op, returnVal);
-    }
-
-    for (EGLint error = eglGetError(); error != EGL_SUCCESS; error
-            = eglGetError()) {
-        fprintf(stderr, "after %s() eglError %s (0x%x)\n", 
-                op, EGLUtils::strerror(error),
-                error);
-    }
-}
-
 status_t 
-LayerBuffer::BufferSource::get_yuv2rgb_dst_surf(void) const
+LayerBuffer::BufferSource::yuv2rgbConvert(GGLSurface &t) const
 {
     uint32_t w = mLayer.mTransformedBounds.width();
     uint32_t h = mLayer.mTransformedBounds.height();
@@ -601,15 +535,10 @@ LayerBuffer::BufferSource::get_yuv2rgb_dst_surf(void) const
         if (w != mTexture.width || h != mTexture.height) {
             // delete the EGLImage and texture
             clearTempBufferImage();
-            if (mGLSurface != EGL_NO_SURFACE) {
-                eglDestroySurface(dpy, mGLSurface); 
-                mGLSurface = EGL_NO_SURFACE;
-            }
-            mLWSurface->setBuffer(NULL);
         } else {
             // we're good, we have an EGLImageKHR and it's (still) the
             // right size
-            eglMakeCurrent(dpy, mGLSurface, mGLSurface, mGLContext);
+            mShader->draw(t);
             return NO_ERROR;
         }
     }
@@ -618,43 +547,24 @@ LayerBuffer::BufferSource::get_yuv2rgb_dst_surf(void) const
     // once the EGLImage has been created we don't need the
     // graphic buffer reference anymore.
     sp<GraphicBuffer> buffer = new GraphicBuffer(
-            w, h, mFormat,
+            w, h, HAL_PIXEL_FORMAT_RGB_565,
             GraphicBuffer::USAGE_HW_TEXTURE |
             GraphicBuffer::USAGE_HW_RENDER);
 
     status_t err = buffer->initCheck();
-    if (err == NO_ERROR) {
-        err = mTextureManager.initEglImage(&mTexture, dpy, buffer);
-
-        mLWSurface->setBuffer(buffer);
-        EGLNativeWindowType surface = mLWSurface->getNativeWindow();
-
-        mGLSurface = eglCreateWindowSurface(dpy, mGLConfig, surface, NULL);
-        if (mGLSurface == EGL_NO_SURFACE) {
-            fprintf(stderr, "gelCreateWindowSurface failed.\n");
-            goto err_1;
-        }
-
-        EGLBoolean ret;
-        ret = eglMakeCurrent(dpy, mGLSurface, mGLSurface, mGLContext);
-        checkEglError("eglMakeCurrent", ret);
-        if (ret != EGL_TRUE) {
-            fprintf(stderr, "eglMakeCurrent failed\n");
-            goto err_2;
-        }
-    }
-    else {
+    if (err != NO_ERROR) {
         fprintf(stderr, "YUV2RGB: dst buffer check failed, %x\n", err);
+        return err;
     }
-    return err;
 
-err_2:
-    eglDestroySurface(dpy, mGLSurface);
-    mGLSurface = EGL_NO_SURFACE;
-err_1:
-    mLWSurface->setBuffer(NULL);
-    clearTempBufferImage();
-    return UNKNOWN_ERROR;
+    err = mTextureManager.initEglImage(&mTexture, dpy, buffer);
+    if (err != NO_ERROR) {
+        fprintf(stderr, "Temp buffer bind to texture object failed, %x\n", err);
+        return err;
+    }
+
+    err = mShader->draw(t, buffer);
+    return err;
 }
 
 status_t LayerBuffer::BufferSource::initTempBuffer() const
@@ -734,57 +644,6 @@ void LayerBuffer::BufferSource::clearTempBufferImage() const
     glDeleteTextures(1, &mTexture.name);
     Texture defaultTexture;
     mTexture = defaultTexture;
-}
-
-// --------------------------------------------------------------------------
-LayerBuffer::BufferSource::EGLInitializer::EGLInitializer(
-                                        SurfaceFlinger* flinger, 
-                                        EGLContext *ctx,
-                                        EGLConfig  *config,
-                                        PixelFormat format) 
-    : flinger(flinger), context(ctx)
-{
-    status_t ret;
-
-    EGLint context_attribs[] = 
-        { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE };
-    EGLint s_configAttribs[] = {
-        EGL_SURFACE_TYPE,           EGL_WINDOW_BIT,
-        EGL_RENDERABLE_TYPE,        EGL_OPENGL_ES2_BIT,
-        EGL_RED_SIZE,               5,
-        EGL_GREEN_SIZE,             6,
-        EGL_BLUE_SIZE,              5,
-        EGL_ALPHA_SIZE,             0,
-        EGL_ALPHA_MASK_SIZE,        0,
-        EGL_DEPTH_SIZE,             0,
-        EGL_NONE };
-    
-    EGLDisplay dpy(flinger->graphicPlane(0).getEGLDisplay());
-
-    ret = EGLUtils::selectConfigForPixelFormat(dpy, 
-                        s_configAttribs, format, config);
-    if (ret != NO_ERROR) {
-        fprintf(stderr, "EGLUtils::selectConfigForPixelFormat() returned %d\n", 
-                ret);
-    }
-
-    *context = eglCreateContext(dpy, *config, 
-                                EGL_NO_CONTEXT, 
-                                context_attribs);
-    if (*context == EGL_NO_CONTEXT) {
-        fprintf(stderr, "eglCreateContext failed\n");
-    }
-}
-
-LayerBuffer::BufferSource::EGLInitializer::~EGLInitializer()
-{
-    EGLDisplay dpy(flinger->graphicPlane(0).getEGLDisplay());
-
-    if (*context != EGL_NO_CONTEXT) {
-        eglDestroyContext(dpy, *context);
-        fprintf(stderr, "fhw:####### eglDestroyContext #######\n");
-        fflush(stderr);
-    }
 }
 
 // ---------------------------------------------------------------------------
