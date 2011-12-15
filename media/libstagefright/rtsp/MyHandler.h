@@ -42,7 +42,7 @@
 
 // If no access units are received within 3 secs, assume that the rtp
 // stream has ended and signal end of stream.
-static int64_t kAccessUnitTimeoutUs = 3000000ll;
+static int64_t kAccessUnitTimeoutUs = 5000000ll;//andrew modify 3sec to 5sec
 
 // If no access units arrive for the first 10 secs after starting the
 // stream, assume none ever will and signal EOS or switch transports.
@@ -102,8 +102,6 @@ struct MyHandler : public AHandler {
           mSetupTracksSuccessful(false),
 
 	      mSeekPending(false),
-		  mPausePending(false),
-		  mResumePending(false),
 		  mPauseed (false) ,
 		  mPendingCmd(0),
           
@@ -115,12 +113,14 @@ struct MyHandler : public AHandler {
           mNumAccessUnitsReceived(0),
           mCheckPending(false),
           mCheckGeneration(0),
+          mGenCmd(0),
           mTryTCPInterleaving(false),
           mTryFakeRTCP(false),
           mReceivedFirstRTCPPacket(false),
           mReceivedFirstRTPPacket(false),
           mServerException(false),
           mSeekable(false),
+          mCmdSending(false),
           mlocalTimestamps(false){
           
 		if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
@@ -183,6 +183,8 @@ struct MyHandler : public AHandler {
         mDoneMsg = doneMsg;
 	LOGI("disconnect.enter...");
         (new AMessage('abor', id()))->post();
+		postCmdTimeoutCheck(doneMsg);
+		
     }
 
 	void processPendCmd()
@@ -214,20 +216,22 @@ struct MyHandler : public AHandler {
         sp<AMessage> msg = new AMessage('seek', id());
 
 		LOGI(" myhand seek to %lld",timeUs);
-	    if (!mSeekable || mTryTCPInterleaving ) {
+	    if (!mSeekable) {
             LOGI("This is a live stream, ignoring seek request.mSeekable %d :mTryTCPInterleaving %d",mSeekable,mTryTCPInterleaving);
             doneMsg->post();
             return ;
         }
 		
-	    if (mSeekPending || mPausePending || mResumePending){
-            LOGI("This is not correct state,so ignoring seek request.mSeekPending: %d,mPausePending :%d,mResumePending :%d",mSeekPending,mPausePending,mResumePending);
+	    if (mCmdSending){
+
+		    LOGI("mCmdSending....so pend cmd.");
 			mPendingCmd = 1;
 			mSeekingTime = timeUs ;
 			mPendDoneMsg = doneMsg;
 			return ;
         }
 		mSeekPending = true;
+	    postCmdTimeoutCheck(doneMsg);
 
 		for (size_t i = 0; i < mTracks.size(); ++i) {
             mTracks.editItemAt(i).mPacketSource->flushQueue();
@@ -242,22 +246,21 @@ struct MyHandler : public AHandler {
 
 	     LOGE("myhand pause.time %lld",timeUs);
 
-		 if (!mSeekable || mTryTCPInterleaving)
+		 if (!mSeekable)
 		 {
 		   LOGI("This is a live stream, ignoring pause request.");
 		   doneMsg->post();
 		   return ;
 	     }
 
-		 if (mSeekPending || mPausePending || mResumePending)
+		 if (mCmdSending)
 		 {
-	         LOGI("This is not correct state,so ignoring pause request.mSeekPending: %d,mPausePending :%d,mResumePending :%d",mSeekPending,mPausePending,mResumePending);
+			 LOGI("mCmdSending....so pend cmd.");
 			 mPendingCmd = 2;
 			 mPendDoneMsg = doneMsg;
 		     return ;  
 		 }
-
-		mPausePending =true ;
+        postCmdTimeoutCheck(doneMsg);
 		sp<AMessage> msg = new AMessage('pause', id());
         msg->setInt64("time", timeUs);
         msg->setMessage("doneMsg", doneMsg);
@@ -265,15 +268,15 @@ struct MyHandler : public AHandler {
     }
    void play(int64_t timeUs, const sp<AMessage> &doneMsg) {
 		    
-		 if (mSeekPending || mPausePending || mResumePending ||!mPauseed)
+		 if (mCmdSending)
 		 {
-	        LOGI("This is not correct state,so ignoring resume request.mSeekPending: %d,mPausePending :%d,mResumePending :%d",mSeekPending,mPausePending,mResumePending);
+		    LOGI("mCmdSending....so pend cmd.");
 			mPendingCmd = 3;
 			mResumeTime = timeUs ;
 			mPendDoneMsg = doneMsg;
 			return ;  
 		 }
-		mResumePending = true;	
+	    postCmdTimeoutCheck(doneMsg);
 	    sp<AMessage> msg = new AMessage('resume', id());
         msg->setInt64("time", timeUs);
         msg->setMessage("doneMsg", doneMsg);
@@ -295,7 +298,7 @@ struct MyHandler : public AHandler {
     }
 
     bool getSeekable() {
-	   if (mSeekable &&!mTryTCPInterleaving)
+	   if (mSeekable)
 	   {
 		 return true;
 	   }
@@ -785,6 +788,7 @@ struct MyHandler : public AHandler {
                 mTracks.clear();
                 mSetupTracksSuccessful = false;
                 mSeekPending = false;
+                mCheckPending = false ;
                 mFirstAccessUnit = true;
                 mNTPAnchorUs = -1;
                 mMediaAnchorUs = -1;
@@ -800,6 +804,10 @@ struct MyHandler : public AHandler {
                 if (msg->findInt32("reconnect", &reconnect) && reconnect) {
                     reply->setInt32("reconnect", true);
                 }
+				else
+				{
+				    mCheckPending = true;
+				}
 
                 AString request;
                 request = "TEARDOWN ";
@@ -824,7 +832,7 @@ struct MyHandler : public AHandler {
                 request.append("\r\n");
 
                 mConn->sendRequest(request.c_str(), reply);
-		LOGI("abor over sending teardown...");
+		    	LOGI("abor over sending teardown...");
                 break;
             }
 
@@ -833,6 +841,7 @@ struct MyHandler : public AHandler {
                 int32_t result;
 		LOGI(" teardown enter...");
                 CHECK(msg->findInt32("result", &result));
+				mCmdSending = false ;
 
                 LOGI("TEARDOWN completed with result %d (%s)",
                      result, strerror(-result));
@@ -856,6 +865,17 @@ struct MyHandler : public AHandler {
                     mDoneMsg->post();
                     mDoneMsg = NULL;
                 }
+				else
+				{
+					sp<AMessage> doneMsg = NULL;
+					msg->findMessage("doneMsg", &doneMsg);
+					if(doneMsg != NULL)
+					{
+				  		doneMsg->setInt32("result", ERROR_IO);
+						mDoneMsg->post();
+	                    mDoneMsg = NULL;
+					}
+				}
                 break;
             }
 
@@ -865,18 +885,14 @@ struct MyHandler : public AHandler {
                 CHECK(msg->findInt32("generation", &generation));
                 if (generation != mCheckGeneration) {
                     // This is an outdated message. Ignore.
-                   if(strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35))
-                   {
-                      break; //@hong not ignore the outdated msg.
-                   }
+                    break; //@hong not ignore the outdated msg.
                 }
 
-                if (mNumAccessUnitsReceived == 0  && 
-		strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) {  
+                if (mNumAccessUnitsReceived == 0  && strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) {  
 
                    // @hong not send abor signal. 
                     LOGI("stream ended? aborting.");
-                    (new AMessage('abor', id()))->post();
+                  //  (new AMessage('abor', id()))->post();
                     break;
                 }
 
@@ -884,6 +900,33 @@ struct MyHandler : public AHandler {
                 msg->post(kAccessUnitTimeoutUs);
                 break;
             }
+			
+			case 'chekcmd':
+			{	 
+			   int32_t gencmd;
+
+			   if(!mCmdSending)
+			   {
+				   LOGW("mCmdSending. return.");
+				   return ;
+			   }
+			   CHECK(msg->findInt32("gencmd", &gencmd));
+               if (gencmd != mGenCmd) {
+                    // This is an outdated message. Ignore.
+                    LOGW("This is an outdated message. Ignore.");
+                    break;
+               }
+			   LOGW("cmdtiou, disconnecting.");
+			   sp<AMessage> doneMsg = NULL;
+               msg->findMessage("doneMsg", &doneMsg); 
+			   sp<AMessage> reply = new AMessage('disc', id());
+               if(doneMsg != NULL)
+               {
+			   	reply->setMessage("doneMsg", doneMsg);
+               }
+               mConn->disconnect(reply);
+			   return ;
+			}
 
             case 'accu':
             {
@@ -1088,8 +1131,7 @@ struct MyHandler : public AHandler {
                 } 
 				mNTPAnchorUs = -1;
 		#endif		
-
-       	    	LOGI("seek have paused thrn play ");
+       	    	LOGI("seek have paused then play ");
 
                 int64_t timeUs;
                 CHECK(msg->findInt64("time", &timeUs));
@@ -1109,12 +1151,12 @@ struct MyHandler : public AHandler {
                 request.append("\r\n");
 
                 sp<AMessage> doneMsg;
-                CHECK(msg->findMessage("doneMsg", &doneMsg));
+                CHECK(msg->findMessage("doneMsg", &doneMsg)); 
 
                 sp<AMessage> reply = new AMessage('see2', id());
                 reply->setMessage("doneMsg", doneMsg);
                 mConn->sendRequest(request.c_str(), reply);
-                break;
+			    break;
             }
 
             case 'see2':
@@ -1126,9 +1168,8 @@ struct MyHandler : public AHandler {
 
                 LOGI("seek PLAY completed with result %d (%s)",
                      result, strerror(-result));
-
-                mCheckPending = false;
-               // postAccessUnitTimeoutCheck();
+	            mCheckPending = false;
+                postAccessUnitTimeoutCheck();
 
                 if (result == OK) {
                     sp<RefBase> obj;
@@ -1148,16 +1189,15 @@ struct MyHandler : public AHandler {
                 CHECK(msg->findMessage("doneMsg", &doneMsg));
 
                 if (result != OK) {
-                    LOGE("seek failed, aborting.");
-                    (new AMessage('abor', id()))->post();
-				   mSeekPending = false;
-			       doneMsg->post();
+                       LOGE("seek failed, aborting.");
+               		   disconnect(doneMsg);
+		     		   mSeekPending = false;
+					   return ;
                 }
-
+			
 		
 				if(mPauseed)
 			    {
-					mSeekPending = false;
 					pause(-1,doneMsg);
 				    LOGI("seek completed. to pause according pre state");
 					
@@ -1166,9 +1206,9 @@ struct MyHandler : public AHandler {
 				{
 			      LOGI("seek completed. processPendCmd %d",mPendingCmd);
 				  mSeekPending = false;
-				  mPausePending = false ;
-				  mResumePending = false ;
-                  doneMsg->post();
+				  mCmdSending = false ;
+				  doneMsg->setInt32("result", NO_ERROR);
+		          doneMsg->post();
 				  if(mPendingCmd != 0)
 				  {
 				     processPendCmd();
@@ -1220,28 +1260,26 @@ struct MyHandler : public AHandler {
                 sp<AMessage> reply = new AMessage('pause1', id());
                 reply->setInt64("time", timeUs);
                 reply->setMessage("doneMsg", doneMsg);
-                mConn->sendRequest(request.c_str(), reply);
-                break;
+				mConn->sendRequest(request.c_str(), reply);
+	            break;
 			 }
 
 			 case 'pause1':
 			 {
 				 int32_t result;
-				 CHECK(mPausePending);
-      			 CHECK(msg->findInt32("result", &result));
+				 CHECK(msg->findInt32("result", &result));
       
       			 LOGE("pause1 completed with result %d (%s) mPendingCmd %d",
       				  result, strerror(-result),mPendingCmd);
 
-				 mPausePending = false;
+			     mCmdSending = false ;
 				 mPauseed = true ;
+				 mSeekPending = false;
 				 sp<AMessage> doneMsg;
       			 CHECK(msg->findMessage("doneMsg", &doneMsg));
+				 doneMsg->setInt32("result", NO_ERROR);
 				 doneMsg->post();
-				 mSeekPending = false;
-				 mPausePending = false ;
-				 mResumePending = false ;
-
+		
 				 if(mPendingCmd != 0)
 				 {
 				   processPendCmd();
@@ -1288,18 +1326,22 @@ struct MyHandler : public AHandler {
                 sp<AMessage> reply = new AMessage('resume1', id());
                 reply->setMessage("doneMsg", doneMsg);
                 mConn->sendRequest(request.c_str(), reply);
+			
                 break;
 			 }
 			 case 'resume1':
 			 {
-			 	CHECK(mResumePending);
-
                 int32_t result;
                 CHECK(msg->findInt32("result", &result));
 
                 LOGE("resume PLAY completed with result %d (%s)",
                      result, strerror(-result));
-		       if (result == OK) {
+				mCmdSending = false;
+			    mCheckPending = false;
+            	mSeekPending = false;
+				mPauseed = false ;
+
+			    if (result == OK) {
                     sp<RefBase> obj;
                     CHECK(msg->findObject("response", &obj));
                     sp<ARTSPResponse> response =
@@ -1313,15 +1355,16 @@ struct MyHandler : public AHandler {
                         LOGI("resume completed.");
                     }
                 }
-        		mPauseed = false ;
-
-				sp<AMessage> doneMsg;
+			    sp<AMessage> doneMsg;
                 CHECK(msg->findMessage("doneMsg", &doneMsg));
 
-                doneMsg->post();
-				mSeekPending = false;
-			    mPausePending = false ;
-			    mResumePending = false ;
+				if (result != OK) {
+                   	  LOGE("resume1 fail, aborting.");
+                 	  disconnect(doneMsg);
+		              break;
+                }
+			    doneMsg->setInt32("result", NO_ERROR);
+			    doneMsg->post();
 			    if(mPendingCmd != 0)
 				{
 				   processPendCmd();
@@ -1362,14 +1405,15 @@ struct MyHandler : public AHandler {
                         sp<AMessage> msg = new AMessage('abor', id());
                         msg->setInt32("reconnect", true);
                         msg->post();
+					    postCmdTimeoutCheck(mDoneMsg);
                     } else {
                         LOGW("Never received any data, disconnecting.");
-                        (new AMessage('abor', id()))->post();
+					    disconnect(mDoneMsg);
                     }
                 }
                 break;
             }
-	    case 'expt':  //@hong server exception
+	   case 'expt':  //@hong server exception
 		LOGI("server exception error.");
              if (mDoneMsg != NULL) {
 		LOGI("server exception error1.");
@@ -1392,6 +1436,17 @@ struct MyHandler : public AHandler {
         mCheckPending = true;
         sp<AMessage> check = new AMessage('chek', id());
         check->setInt32("generation", mCheckGeneration);
+        check->post(kAccessUnitTimeoutUs);
+    }
+
+    void postCmdTimeoutCheck(const sp<AMessage> &dnoeMsg) {
+
+		mCmdSending = true ;
+		mGenCmd++;
+        sp<AMessage> check = new AMessage('chekcmd', id());
+		check->setInt32("gencmd", mGenCmd);
+		check->setMessage("doneMsg",dnoeMsg);
+		
         check->post(kAccessUnitTimeoutUs);
     }
 
@@ -1524,8 +1579,6 @@ private:
     bool mSetupTracksSuccessful;
 
 	bool mSeekPending;
-    bool mPausePending;
-	bool mResumePending ;
     int64_t mResumeTime;
 
 	bool mPauseed;
@@ -1543,7 +1596,9 @@ private:
     uint64_t mFirstAccessUnitNTP;
     int64_t mNumAccessUnitsReceived;
     bool mCheckPending;
+	bool mCmdSending ;
     int32_t mCheckGeneration;
+	int32_t mGenCmd;
     bool mTryTCPInterleaving;
     bool mTryFakeRTCP;
     bool mReceivedFirstRTCPPacket;

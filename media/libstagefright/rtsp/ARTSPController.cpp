@@ -100,7 +100,7 @@ void ARTSPController::disconnect() {
 
 void ARTSPController::seekAsync(
         int64_t timeUs,
-        void (*seekDoneCb)(void *), void *cookie) {
+        void (*seekDoneCb)(void *,int32_t), void *cookie) {
     Mutex::Autolock autoLock(mLock);
 
     CHECK(seekDoneCb != NULL);
@@ -112,7 +112,7 @@ void ARTSPController::seekAsync(
             && ALooper::GetNowUs() < mLastSeekCompletedTimeUs + 500000ll;
 
     if (mState != CONNECTED || tooEarly) {
-        (*seekDoneCb)(cookie);
+        (*seekDoneCb)(cookie,0);
 		LOGE("ARTSPController::seekAsync tooEarly so return") ;
         return;
     }
@@ -127,7 +127,7 @@ void ARTSPController::seekAsync(
 
 void ARTSPController::pauseAsync(
         int64_t timeUs,
-        void (*pauseDoneCb)(void *), void *cookie) {
+        void (*pauseDoneCb)(void *,int32_t), void *cookie) {
     Mutex::Autolock autoLock(mLock);
 
     CHECK(pauseDoneCb != NULL);
@@ -139,7 +139,7 @@ void ARTSPController::pauseAsync(
             && ALooper::GetNowUs() < mLastPauseCompletedTimeUs + 500000ll;
 
     if (mState != CONNECTED || tooEarly) {
-        (*pauseDoneCb)(cookie);
+        (*pauseDoneCb)(cookie,0);
 		LOGE("ARTSPController::pauseAsync tooEarly so return") ;
 		return;
     }
@@ -154,7 +154,7 @@ void ARTSPController::pauseAsync(
 
 void ARTSPController::playAsync(
         int64_t timeUs,
-        void (*playDoneCb)(void *), void *cookie) {
+        void (*playDoneCb)(void *,int32_t), void *cookie) {
     Mutex::Autolock autoLock(mLock);
 
     CHECK(playDoneCb != NULL);
@@ -166,7 +166,7 @@ void ARTSPController::playAsync(
             && ALooper::GetNowUs() < mLastPlayCompletedTimeUs + 500000ll;
 
     if (mState != CONNECTED || tooEarly) {
-        (*playDoneCb)(cookie);
+        (*playDoneCb)(cookie,0);
 	    LOGE("ARTSPController::playAsync tooEarly so return") ;
         return;
     }
@@ -234,23 +234,27 @@ void ARTSPController::onMessageReceived(const sp<AMessage> &msg) {
         {
             LOGI("seek done");
 
+			int32_t status = -1;
+            CHECK(msg->findInt32("result", &status));
+
             mLastSeekCompletedTimeUs = ALooper::GetNowUs();
 
-            void (*seekDoneCb)(void *) = mSeekDoneCb;
+            void (*seekDoneCb)(void *,int32_t) = mSeekDoneCb;
             mSeekDoneCb = NULL;
 
-            (*seekDoneCb)(mSeekDoneCookie);
+            (*seekDoneCb)(mSeekDoneCookie,status);
             break;
         }
 		case kWhatPauseDone:
         {
             LOGE("ARTSPController PauseDone done");
-
+			int32_t status = -1;
+			CHECK(msg->findInt32("result", &status));
             mLastPauseCompletedTimeUs = ALooper::GetNowUs();
-        	void (*pauseDoneCb)(void *) = mPauseDoneCb;
+        	void (*pauseDoneCb)(void *,int32_t) = mPauseDoneCb;
 
 			mPauseDoneCb = NULL;
-		    (*pauseDoneCb)(mPauseDoneCookie);
+		    (*pauseDoneCb)(mPauseDoneCookie,status);
 
              break;
         }
@@ -258,14 +262,16 @@ void ARTSPController::onMessageReceived(const sp<AMessage> &msg) {
 		case kWhatPlayDone:
         {
             LOGE("ARTSPController PlayDone done");
+			int32_t status = -1;
+			CHECK(msg->findInt32("result", &status));
 
             mLastPlayCompletedTimeUs = ALooper::GetNowUs();
 
-  			void (*playDoneCb)(void *) = mPlayDoneCb;
+  			void (*playDoneCb)(void *,int32_t) = mPlayDoneCb;
 
 			mPlayDoneCb = NULL;
 					
-			(*playDoneCb)(mPlayDoneCookie);
+			(*playDoneCb)(mPlayDoneCookie,status);
        			
             break;
         }

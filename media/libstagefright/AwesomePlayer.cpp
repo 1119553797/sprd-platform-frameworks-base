@@ -259,6 +259,7 @@ AwesomePlayer::AwesomePlayer()
       mSuspensionState(NULL),
       mIsVideoPhoneStream(false),
       mfromPause(false),
+      mforceStop(false),
       mSeeking (false){
     CHECK_EQ(mClient.connect(), OK);
 
@@ -990,6 +991,7 @@ status_t AwesomePlayer::forceStop(){
    	}
    
 	VideoPhoneDataDevice::getInstance().stop();
+	mforceStop = true ;
 	return pause();
 }
 
@@ -999,7 +1001,7 @@ status_t AwesomePlayer::pause() {
 	Mutex::Autolock autoLock(mLock);
     mFlags &= ~CACHE_UNDERRUN;
 
-	if (mRTSPController != NULL) {
+	if (mRTSPController != NULL &&!mforceStop) {
 		if (!(mFlags & PLAYING) || !mRTSPController->getSeekable()) {
 			  return OK;
 		 }
@@ -1126,39 +1128,54 @@ status_t AwesomePlayer::seekTo(int64_t timeUs) {
 }
 
 // static
-void AwesomePlayer::OnRTSPSeekDoneWrapper(void *cookie) {
-    static_cast<AwesomePlayer *>(cookie)->onRTSPSeekDone();
+void AwesomePlayer::OnRTSPSeekDoneWrapper(void *cookie,int32_t status) {
+    static_cast<AwesomePlayer *>(cookie)->onRTSPSeekDone(status);
 }
 
-void AwesomePlayer::onRTSPSeekDone() {
+void AwesomePlayer::onRTSPSeekDone(int32_t status) {
 
+	 LOGE("AwesomePlayer::onRTSPSeekDone status =%d,mSeeking %d",status,mSeeking);
+	 if(status != OK )
+	 {
+	 	notifyListener_l(MEDIA_ERROR, MEDIA_ERROR_UNKNOWN, status);
+		return ;
+	 }
 	 mSeekNotificationSent = true; 
      postBufferingEvent_l();
 
 	 notifyListener_l(MEDIA_SEEK_COMPLETE);
-	 LOGE("AwesomePlayer::onRTSPSeekDone mSeeking %d",mSeeking);
-}
-
-void AwesomePlayer::OnRTSPPauseDoneWrapper(void *cookie) {
-    static_cast<AwesomePlayer *>(cookie)->onRTSPPauseDone();
 
 }
 
-void AwesomePlayer::onRTSPPauseDone() {
-    LOGE("AwesomePlayer::onRTSPPauseDone mSeeking = %d,,mSeekTimeUs =%lld",mSeeking,mSeekTimeUs);
-	mfromPause = true ;
+void AwesomePlayer::OnRTSPPauseDoneWrapper(void *cookie,int32_t status) {
+    static_cast<AwesomePlayer *>(cookie)->onRTSPPauseDone(status);
+
 }
 
-void AwesomePlayer::OnRTSPResumeDoneWrapper(void *cookie) {
-    static_cast<AwesomePlayer *>(cookie)->onRTSPResumeDone();
+void AwesomePlayer::onRTSPPauseDone(int32_t status) {
+     LOGE("AwesomePlayer::onRTSPPauseDone status =%d mSeeking = %d,,mSeekTimeUs =%lld",status,mSeeking,mSeekTimeUs);
+	 mfromPause = true ;
+     if(status != OK )
+	 {
+	 	notifyListener_l(MEDIA_ERROR, MEDIA_ERROR_UNKNOWN, status);
+		return ;
+	 }
+}
+
+void AwesomePlayer::OnRTSPResumeDoneWrapper(void *cookie,int32_t status) {
+    static_cast<AwesomePlayer *>(cookie)->onRTSPResumeDone(status);
 }
 
 
-void AwesomePlayer::onRTSPResumeDone() {
+void AwesomePlayer::onRTSPResumeDone(int32_t status) {
 
-    LOGE("AwesomePlayer::onRTSPResumeDone mSeeking = %d,mSeekTimeUs =%lld",mSeeking,mSeekTimeUs);
-   	mfromPause = false ; 
-    notifyListener_l(MEDIA_SEEK_COMPLETE);
+    LOGE("AwesomePlayer::onRTSPResumeDone ,status = %d ,mSeeking = %d,mSeekTimeUs =%lld",status,mSeeking,mSeekTimeUs);
+	if(status != OK )
+	{
+	   notifyListener_l(MEDIA_ERROR, MEDIA_ERROR_UNKNOWN, status);
+	   return ;
+	}
+	mfromPause = false ; 
     mSeekNotificationSent = true;
 }
 

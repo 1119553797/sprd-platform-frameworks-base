@@ -33,9 +33,9 @@ struct ARTSPController : public MediaExtractor {
     status_t connect(const char *url);
     void disconnect();
 
-    void seekAsync(int64_t timeUs, void (*seekDoneCb)(void *), void *cookie);
-	void pauseAsync(int64_t timeUs, void (*seekDoneCb)(void *), void *cookie);
-	void playAsync(int64_t timeUs, void (*seekDoneCb)(void *), void *cookie);
+    void seekAsync(int64_t timeUs, void (*seekDoneCb)(void *,int32_t), void *cookie);
+	void pauseAsync(int64_t timeUs, void (*seekDoneCb)(void *,int32_t), void *cookie);
+	void playAsync(int64_t timeUs, void (*seekDoneCb)(void *,int32_t), void *cookie);
 
     virtual size_t countTracks();
     virtual sp<MediaSource> getTrack(size_t index);
@@ -85,9 +85,9 @@ private:
     sp<MyHandler> mHandler;
     sp<AHandlerReflector<ARTSPController> > mReflector;
 
-    void (*mSeekDoneCb)(void *);
-	void (*mPauseDoneCb)(void *);
-	void (*mPlayDoneCb)(void *);
+    void (*mSeekDoneCb)(void *,int32_t);
+	void (*mPauseDoneCb)(void *,int32_t);
+	void (*mPlayDoneCb)(void *,int32_t );
 	
     void *mSeekDoneCookie;
     void *mPlayDoneCookie;

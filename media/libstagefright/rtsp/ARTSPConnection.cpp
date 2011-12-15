@@ -369,7 +369,8 @@ void ARTSPConnection::onCompleteConnection(const sp<AMessage> &msg) {
 
 void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
     sp<AMessage> reply;
-//	LOGV("onSendRequest...");
+
+	LOGI("onSendRequest...mState:%d",mState );
     CHECK(msg->findMessage("reply", &reply));
 
     if (mState != CONNECTED) {
@@ -418,7 +419,7 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
             return;
         } else if (n < 0) {
             if (errno == EINTR) {
-		LOGV("errno == EINTR");
+		LOGI("errno == EINTR");
                 continue;
             }
 
@@ -439,7 +440,7 @@ void ARTSPConnection::onReceiveResponse() {
     mReceiveResponseEventPending = false;
 //	LOGV("onReceiveResponse entering...");
     if (mState != CONNECTED) {
-	LOGV("onReceiveResponse return for NOT CONNECTED..");
+	    LOGV("onReceiveResponse return for NOT CONNECTED..");
         return;
     }
 
@@ -463,7 +464,7 @@ void ARTSPConnection::onReceiveResponse() {
 
         if (!success) {
             // Something horrible, irreparable has happened.
-	    LOGV("onReceiveResponse receive fail");
+	 		LOGI("onReceiveResponse receive fail");
             flushPendingRequests();
             return;
         }

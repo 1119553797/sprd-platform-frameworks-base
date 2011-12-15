@@ -183,6 +183,7 @@ private:
 	int64_t mStartLowWaterMarkUs ;
 
 	bool mfromPause ;
+	bool mforceStop;
 
     int64_t mBitrate;  // total bitrate of the file (in bps) or -1 if unknown.
 
@@ -288,15 +289,15 @@ private:
 
     static bool ContinuePreparation(void *cookie);
 
-    static void OnRTSPSeekDoneWrapper(void *cookie);
-    void onRTSPSeekDone();
+    static void OnRTSPSeekDoneWrapper(void *cookie,int32_t status);
+    void onRTSPSeekDone(int32_t status);
 
-	static void OnRTSPPauseDoneWrapper(void *cookie);
-    void onRTSPPauseDone();
+	static void OnRTSPPauseDoneWrapper(void *cookie,int32_t status);
+    void onRTSPPauseDone(int32_t status);
 
 
-	static void OnRTSPResumeDoneWrapper(void *cookie);
-	void onRTSPResumeDone();
+	static void OnRTSPResumeDoneWrapper(void *cookie,int32_t status);
+	void onRTSPResumeDone(int32_t status);
 
     bool getBitrate(int64_t *bitrate);
 
