@@ -267,6 +267,16 @@ status_t SurfaceFlinger::readyToRun()
 
    LayerDim::initDimmer(this, w, h);
 
+   {
+        sp<GraphicBuffer> buffer = new GraphicBuffer(
+                480, 320, HAL_PIXEL_FORMAT_RGB_565,
+                GraphicBuffer::USAGE_HW_TEXTURE |
+                GraphicBuffer::USAGE_HW_RENDER);
+        YUV2RGBConvertor& convertor(YUV2RGBConvertor::getInstance());
+        convertor.init(plane.getEGLDisplay(), buffer);
+        hw.makeCurrent();
+   }
+
     mReadyToRunBarrier.open();
 
     /*

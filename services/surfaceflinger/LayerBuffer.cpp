@@ -329,8 +329,7 @@ void LayerBuffer::Source::unregisterBuffers() {
 
 LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
         const ISurface::BufferHeap& buffers)
-    : Source(layer), mStatus(NO_ERROR), mBufferSize(0),
-      mShader(NULL)
+    : Source(layer), mStatus(NO_ERROR), mBufferSize(0) 
 {
     if (buffers.heap == NULL) {
         // this is allowed, but in this case, it is illegal to receive
@@ -370,9 +369,8 @@ LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
     mBufferSize = info.getScanlineSize(buffers.hor_stride)*buffers.ver_stride;
     mLayer.forceVisibilityTransaction();
 
-    mShader = new YUV2RGBShader(
-                    getFlinger()->graphicPlane(0).getEGLDisplay(), 
-                    buffers.format);
+    YUV2RGBConvertor& convertor(YUV2RGBConvertor::getInstance());
+    mYUV2RGBConvertHandle = convertor.createHandle();
 }
 
 LayerBuffer::BufferSource::~BufferSource()
@@ -380,11 +378,17 @@ LayerBuffer::BufferSource::~BufferSource()
     class MessageDestroyTexture : public MessageBase {
         SurfaceFlinger* flinger;
         GLuint name;
+        YUV2RGBConvertHandle convertHandle;
     public:
         MessageDestroyTexture(
-                SurfaceFlinger* flinger, GLuint name)
-            : flinger(flinger), name(name) { }
+                SurfaceFlinger* flinger, 
+                GLuint name, 
+                YUV2RGBConvertHandle convertHandle)
+            : flinger(flinger), name(name), convertHandle(convertHandle) { }
         virtual bool handler() {
+            YUV2RGBConvertor& convertor(YUV2RGBConvertor::getInstance());
+            convertor.deleteHandle(convertHandle);
+            flinger->graphicPlane(0).displayHardware().makeCurrent();
             glDeleteTextures(1, &name);
             return true;
         }
@@ -393,7 +397,9 @@ LayerBuffer::BufferSource::~BufferSource()
     if (mTexture.name != -1U) {
         // GL textures can only be destroyed from the GL thread
         getFlinger()->mEventQueue.postMessage(
-                new MessageDestroyTexture(getFlinger(), mTexture.name) );
+                new MessageDestroyTexture(getFlinger(), 
+                                          mTexture.name, 
+                                          mYUV2RGBConvertHandle));
     }
     if (mTexture.image != EGL_NO_IMAGE_KHR) {
         EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
@@ -465,7 +471,8 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
     if (GLExtensions::getInstance().haveDirectTexture()) {
         err = INVALID_OPERATION;
         // Try GPU shader processing 
-        if (mShader->isSupport()) {
+        YUV2RGBConvertor& convertor(YUV2RGBConvertor::getInstance());
+        if (convertor.isSupport(src.img.format)) {
             GGLSurface t;
             t.version = sizeof(GGLSurface);
             t.width  = src.crop.r;
@@ -529,6 +536,7 @@ LayerBuffer::BufferSource::yuv2rgbConvert(GGLSurface &t) const
     uint32_t w = mLayer.mTransformedBounds.width();
     uint32_t h = mLayer.mTransformedBounds.height();
     EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
+    YUV2RGBConvertor& convertor(YUV2RGBConvertor::getInstance());
 
     if (mTexture.image != EGL_NO_IMAGE_KHR) {
         // we have an EGLImage, make sure the needed size didn't change
@@ -538,7 +546,7 @@ LayerBuffer::BufferSource::yuv2rgbConvert(GGLSurface &t) const
         } else {
             // we're good, we have an EGLImageKHR and it's (still) the
             // right size
-            mShader->draw(t);
+            convertor.draw(mYUV2RGBConvertHandle, t);
             return NO_ERROR;
         }
     }
@@ -563,7 +571,7 @@ LayerBuffer::BufferSource::yuv2rgbConvert(GGLSurface &t) const
         return err;
     }
 
-    err = mShader->draw(t, buffer);
+    err = convertor.draw(mYUV2RGBConvertHandle, t, mTexture.image, w, h);
     return err;
 }
 

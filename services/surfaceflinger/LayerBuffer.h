@@ -23,7 +23,7 @@
 #include "LayerBase.h"
 #include "TextureManager.h"
 
-#include "YUV2RGBShader.h"
+#include "YUV2RGBConvertor.h"
 
 struct copybit_device_t;
 
@@ -149,7 +149,7 @@ private:
         mutable NativeBuffer            mTempBuffer;
         mutable TextureManager          mTextureManager;
 
-        mutable sp<YUV2RGBShader>       mShader;
+        mutable YUV2RGBConvertHandle    mYUV2RGBConvertHandle;
         status_t yuv2rgbConvert(GGLSurface &t) const;
     };
     
