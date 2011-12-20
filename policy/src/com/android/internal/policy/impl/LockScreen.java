@@ -53,7 +53,7 @@ import java.io.File;
 class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateMonitor.InfoCallback,
         KeyguardUpdateMonitor.SimStateCallback, SlidingTab.OnTriggerListener {
 
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
     private static final String TAG = "LockScreen";
     private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
 
@@ -644,7 +644,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
                 // layout
                 mScreenLocked.setVisibility(View.VISIBLE);
-                mSelector.setVisibility(View.GONE); // cannot unlock
+                mSelector.setVisibility(View.VISIBLE); // cannot unlock
                 mEmergencyCallText.setVisibility(View.VISIBLE);
                 mEmergencyCallButton.setVisibility(View.VISIBLE);
                 break;
@@ -670,7 +670,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
                 // layout
                 mScreenLocked.setVisibility(View.VISIBLE);
-                mSelector.setVisibility(View.GONE); // cannot unlock
+                mSelector.setVisibility(View.VISIBLE); // cannot unlock
                 mEmergencyCallText.setVisibility(View.VISIBLE);
                 mEmergencyCallButton.setVisibility(View.VISIBLE);
                 //PUK Input Add Start

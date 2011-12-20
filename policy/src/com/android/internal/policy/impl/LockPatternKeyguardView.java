@@ -69,7 +69,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
     // intent action for launching emergency dialer activity.
     static final String ACTION_EMERGENCY_DIAL = "com.android.phone.EmergencyDialer.DIAL";
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final String TAG = "LockPatternKeyguardView";
 
     private final KeyguardUpdateMonitor mUpdateMonitor;
