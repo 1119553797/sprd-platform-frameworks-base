@@ -61,7 +61,7 @@ import java.util.ArrayList;
 public class KeyguardUpdateMonitor {
 
     static private final String TAG = "KeyguardUpdateMonitor";
-    static private final boolean DEBUG = false;
+    static private final boolean DEBUG = true;
 
     private static final int LOW_BATTERY_THRESHOLD = 20;
 
