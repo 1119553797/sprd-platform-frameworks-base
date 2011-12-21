@@ -21,6 +21,7 @@ import com.android.internal.telephony.sip.SipPhone;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.AsyncResult;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RegistrantList;
@@ -86,6 +87,7 @@ public final class CallManager {
     private static final int EVENT_INCOMING_RING_VIDEO_CALL = 203;
     private static final int EVENT_VIDEO_CALL_FALL_BACK = 204;
     private static final int EVENT_VIDEO_CALL_FAIL = 205;
+    private static final int EVENT_VIDEO_CALL_CODEC  = 206;
 
     // Singleton instance
     private static final CallManager INSTANCE = new CallManager();
@@ -189,6 +191,9 @@ public final class CallManager {
     = new RegistrantList();
 
     protected final RegistrantList mVideoCallFailRegistrants
+    = new RegistrantList();
+	
+    protected final RegistrantList mVideoCallCodecRegistrants
     = new RegistrantList();
     // add for video phone end
 
@@ -471,6 +476,7 @@ public final class CallManager {
         phone.registerForIncomingRingVideoCall(mHandler, EVENT_INCOMING_RING_VIDEO_CALL, null);
         phone.registerForVideoCallFallBack(mHandler, EVENT_VIDEO_CALL_FALL_BACK, null);
         phone.registerForVideoCallFail(mHandler, EVENT_VIDEO_CALL_FAIL, null);
+        phone.registerForVideoCallCodec(mHandler, EVENT_VIDEO_CALL_CODEC, null);
     }
 
     private void unregisterForPhoneStates(Phone phone) {
@@ -504,6 +510,15 @@ public final class CallManager {
             phone.unregisterForCallWaiting(mHandler);
             phone.unregisterForEcmTimerReset(mHandler);
         }
+		
+        // for events supported only by 3G Phone
+        phone.unregisterForNewRingingVideoCall(mHandler);
+        phone.unregisterForPreciseVideoCallStateChanged(mHandler);
+        phone.unregisterForVideoCallDisconnect(mHandler);
+        phone.unregisterForIncomingRingVideoCall(mHandler);
+        phone.unregisterForVideoCallFallBack(mHandler);
+        phone.unregisterForVideoCallFail(mHandler);
+        phone.unregisterForVideoCallCodec(mHandler);
     }
 
     /**
@@ -1584,6 +1599,14 @@ public final class CallManager {
     public void unregisterForVideoCallFail(Handler h){
         mVideoCallFailRegistrants.remove(h);
     }
+
+    public void registerForVideoCallCodec(Handler h, int what, Object obj){
+        mVideoCallCodecRegistrants.addUnique(h, what, obj);
+    }
+
+    public void unregisterForVideoCallCodec(Handler h){
+        mVideoCallCodecRegistrants.remove(h);
+    }
     // add for video phone end
 
     /* APIs to access foregroudCalls, backgroudCalls, and ringingCalls
@@ -1820,6 +1843,10 @@ public final class CallManager {
         return false;
     }
 
+    public void  codecVP(int type, Bundle param) {
+		mDefaultPhone.codecVP(type, param);
+    }
+
     private Handler mHandler = new Handler() {
 
         @Override
@@ -1928,22 +1955,32 @@ public final class CallManager {
                     }
                     break;
                 case EVENT_NEW_RINGING_VIDEO_CALL:
+                    if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_NEW_RINGING_VIDEO_CALL)");
                     mNewRingingVideoCallRegistrants.notifyRegistrants((AsyncResult) msg.obj);
                     break;
                 case EVENT_PRECISE_VIDEO_CALL_STATE_CHANGED:
+                    if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_PRECISE_VIDEO_CALL_STATE_CHANGED)");
                     mPreciseVideoCallStateRegistrants.notifyRegistrants((AsyncResult) msg.obj);
                     break;
                 case EVENT_VIDEO_CALL_DISCONNECT:
+                    if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_VIDEO_CALL_DISCONNECT)");
                     mVideoCallDisconnectRegistrants.notifyRegistrants((AsyncResult) msg.obj);
                     break;
                 case EVENT_INCOMING_RING_VIDEO_CALL:
+                    if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_INCOMING_RING_VIDEO_CALL)");
                     mIncomingRingVideoCallRegistrants.notifyRegistrants((AsyncResult) msg.obj);
                     break;
                 case EVENT_VIDEO_CALL_FALL_BACK:
+                    if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_VIDEO_CALL_FALL_BACK)");
                     mVideoCallFallBackRegistrants.notifyRegistrants((AsyncResult) msg.obj);
                     break;
                 case EVENT_VIDEO_CALL_FAIL:
+                    if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_VIDEO_CALL_FAIL)");
                     mVideoCallFailRegistrants.notifyRegistrants((AsyncResult) msg.obj);
+                    break;
+                case EVENT_VIDEO_CALL_CODEC:
+                    if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_VIDEO_CALL_CODEC)");
+                    mVideoCallCodecRegistrants.notifyRegistrants((AsyncResult) msg.obj);
                     break;
             }
         }

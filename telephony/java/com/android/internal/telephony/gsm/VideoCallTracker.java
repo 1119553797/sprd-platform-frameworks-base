@@ -53,7 +53,7 @@ import java.util.ArrayList;
 /**
  * {@hide}
  */
-public final class VideoCallTracker extends CallTracker implements syncLock.syncCallBack {
+public final class VideoCallTracker extends CallTracker {
     static final String LOG_TAG = "VideoCallTracker";
     private static final boolean REPEAT_POLLING = false;
 
@@ -61,7 +61,7 @@ public final class VideoCallTracker extends CallTracker implements syncLock.sync
 
     //***** Constants
 
-    static final int MAX_CONNECTIONS = 1;   // only 7 connections allowed in GSM
+    static final int MAX_CONNECTIONS = 7;   // only 7 connections allowed in GSM
     static final int MAX_CONNECTIONS_PER_CALL = 1; // only 5 connections allowed per call
     
     protected static final int EVENT_FALLBACK = 100;
@@ -438,7 +438,7 @@ public final class VideoCallTracker extends CallTracker implements syncLock.sync
 			if ((dc != null) && (dc.isVoice))
 			{
 				if (DBG_POLL) log("not video call, return");
-				return;
+				continue;
 			}
 			
             if (conn == null && dc != null) {
@@ -465,6 +465,13 @@ public final class VideoCallTracker extends CallTracker implements syncLock.sync
                         return;
                     }
                 } else {
+                	log("phone.isInCall(): " + phone.isInCall());
+		    if (phone.isInCall()) {
+			if (DBG_POLL) log("new incoming voice call during call, need hangup: " + dc);
+			//cm.hangupConnection (dc.index, obtainCompleteMessage());
+			cm.hangupWaitingOrBackground(obtainCompleteMessage());
+			break;
+		    }
                     connections[i] = new VideoConnection(phone.getContext(), dc, this, i);
 
                     // it's a ringing call
@@ -725,19 +732,6 @@ public final class VideoCallTracker extends CallTracker implements syncLock.sync
         }
         return Phone.SuppService.UNKNOWN;
     }
-	
-    public Object onSyncCallBack(Object obj){ 
-	   log("onSyncCallBack");
-	    for (int i = 0, s =  droppedDuringPoll.size(); i < s ; i++) {
-	        VideoConnection conn = droppedDuringPoll.get(i);
-	        conn.onRemoteDisconnect((Integer)obj);
-	    }
-
-	    updatePhoneState();
-            phone.notifyPreciseVideoCallStateChanged();
-            droppedDuringPoll.clear();
-	    return null;
-    }
 
     //****** Overridden from Handler
 
@@ -803,7 +797,15 @@ public final class VideoCallTracker extends CallTracker implements syncLock.sync
                             causeCode, loc != null ? loc.getCid() : -1,
                             TelephonyManager.getDefault().getNetworkType());
                 }
-		  syncLock.syncCall(this, (Integer)causeCode);
+				
+		for (int i = 0, s =  droppedDuringPoll.size(); i < s ; i++) {
+	        VideoConnection conn = droppedDuringPoll.get(i);
+	        conn.onRemoteDisconnect((Integer)causeCode);
+	    }
+
+	    updatePhoneState();
+            phone.notifyPreciseVideoCallStateChanged();
+            droppedDuringPoll.clear();
             break;
 
             case EVENT_REPOLL_AFTER_DELAY:
@@ -855,7 +857,7 @@ public final class VideoCallTracker extends CallTracker implements syncLock.sync
 		}catch (IllegalStateException ex) {
 	        // Ignore "connection not found"
 	        // Call may have hung up already
-	        Log.w(LOG_TAG,"Mediaphone disconnect failed");
+	        Log.w(LOG_TAG,"internaleHangup failed");
 	    }
 	}
 

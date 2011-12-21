@@ -186,8 +186,8 @@ static void setRemoteSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz
     jobject surface = env->GetObjectField(thiz, fields.remote_surface);
     if (surface != NULL) {
         const sp<Surface> native_surface = get_surface(env, surface);
-        LOGV("setRemoteSurface: surface=%p (isValid=%d)",
-             native_surface.get(), native_surface->isValid());
+        LOGV("setRemoteSurface: surface=%p (id=%d)",
+             native_surface.get(), native_surface->getIdentity());
         mp->setRemoteSurface(native_surface);
     } else {
 	    LOGV("setRemoteSurface: surface=NULL");
@@ -200,8 +200,8 @@ static void setLocalSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz)
     jobject surface = env->GetObjectField(thiz, fields.local_surface);
     if (surface != NULL) {
         const sp<Surface> native_surface = get_surface(env, surface);
-        LOGV("setLocalSurface: surface=%p (isValid=%d)",
-             native_surface.get(), native_surface->isValid());
+        LOGV("setLocalSurface: surface=%p (id=%d)",
+             native_surface.get(), native_surface->getIdentity());
         mp->setLocalSurface(native_surface);
     } else {
     	LOGV("setLocalSurface: surface=NULL");
@@ -580,9 +580,9 @@ android_media_MediaPhone_native_init(JNIEnv *env)
         return;
     }
 
-    fields.surface_native = env->GetFieldID(surface, "mSurface", "I");
+    fields.surface_native = env->GetFieldID(surface, "mNativeSurface", "I");
     if (fields.surface_native == NULL) {
-        jniThrowException(env, "java/lang/RuntimeException", "Can't find Surface.mSurface");
+        jniThrowException(env, "java/lang/RuntimeException", "Can't find Surface.mNativeSurface");
         return;
     }
 
