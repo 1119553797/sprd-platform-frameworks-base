@@ -584,7 +584,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
      */
     private void updateLayout(Status status) {
         // The emergency call button no longer appears on this screen.
-        if (DBG) Log.d(TAG, "updateLayout: status=" + status);
+        if (DBG) Log.i(TAG, "updateLayout: status=" + status+",mCarrier= "
+        +getSprdCarrierString(mUpdateMonitor.getTelephonyPlmn(),mUpdateMonitor.getTelephonySpn())
+        +",radioType="+mUpdateMonitor.getRadioType());
 
         mEmergencyCallButton.setVisibility(View.VISIBLE); // in almost all cases
         //PUK Input Add Start

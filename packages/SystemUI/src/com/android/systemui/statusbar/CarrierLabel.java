@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.provider.Telephony;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Slog;
 import android.view.View;
 import android.widget.TextView;
@@ -91,6 +92,13 @@ public class CarrierLabel extends TextView {
             Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn);
         }
+        
+        if(true)
+        {
+            Log.i("StatusBar CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
+                   + " showPlmn=" + showPlmn + " plmn=" + plmn);
+        }
+
         StringBuilder str = new StringBuilder();
         boolean something = false;
         if (showPlmn && plmn != null) {
