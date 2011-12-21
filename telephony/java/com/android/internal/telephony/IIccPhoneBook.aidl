@@ -107,6 +107,8 @@ interface IIccPhoneBook {
   
     int getInsertIndex();
     
+
+    
     //add multi record and email in usim
     //yeezone:jinwei Add a new contact in SimCard.
      /**Add newAdn in ADN-like record in EF	 
@@ -143,6 +145,7 @@ interface IIccPhoneBook {
      */
     boolean updateAdnRecordsInEfByIndex(int efid, String newTag, String newPhoneNumber,
 				in List<String> newEmailList,String newAnr,String newAas, String newSne,String newGrp, String      newGas,  int index, String pin2);
-
+   int[] getAvalibleEmailCount(String name, String number,in String[] emails, String anr, in int[] emailNums);
+   int [] getAvalibleAnrCount(String name, String number,in String[] emails, String anr, in int[] anrNums);
     
 }

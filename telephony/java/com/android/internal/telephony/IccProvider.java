@@ -375,6 +375,7 @@ public class IccProvider extends ContentProvider {
 		
 		//int simIndex = addIccRecordToEf(efType, tag, number, emails, anr, aas,
 		//		sne, grp, gas, pin2);
+	
 		
 		boolean success = addIccRecordToEf(efType, tag, number, emails, anr, aas,
 				sne, grp, gas, pin2);
@@ -467,72 +468,55 @@ public class IccProvider extends ContentProvider {
 
 		String tag = "";
 		String number = "";
-		String[] emails = null;
+		String[] emails = new String[1];
 		String pin2 = null;
 		String anr = "";
+		
+           if(whereArgs == null || whereArgs.length == 0){
+            String[] tokens = where.split("AND");
+            int n = tokens.length;
+            while (--n >= 0) {
+                String param = tokens[n];
+                if (DBG) log("parsing '" + param + "'");
 
-		String[] tokens = where.split("AND");
-		int n = tokens.length;
+                String[] pair = param.split("=");
 
-		while (--n >= 0) {
-			String param = tokens[n];
-			if (DBG)
-				log("parsing '" + param + "'");
+                if (pair.length != 2) {
+                    Log.e(TAG, "resolve: bad whereClause parameter: " + param);
+                    continue;
+                }
 
-			String[] pair = param.split("=");
+                String key = pair[0].trim();
+                String val = pair[1].trim();
 
-			if (DBG)
-				log("delete  pair length " + pair.length);
-			/*
-			 * if (pair.length != 2) { Log.e(TAG,
-			 * "resolve: bad whereClause parameter: " + param); continue; }
-			 */
+                if (STR_TAG.equals(key)) {
+                    tag = normalizeValue(val);
+                } else if (STR_NUMBER.equals(key)) {
+                    number = normalizeValue(val);
+                } else if (STR_EMAILS.equals(key)) {
+                    // TODO(): Email is null.
+                    emails[0] = normalizeValue(val);
+                    if (DBG)
+                        log("delete emails[0] " + emails[0]);
+                } else if (STR_PIN2.equals(key)) {
+                    pin2 = normalizeValue(val);
+                } else if (STR_ANR.equals(key)) {
+                    anr = normalizeValue(val);
+                }
+            }
+        	
+             }else{
+		tag = whereArgs[0];
+		number = whereArgs[1];
+             anr = whereArgs[2];
+		
+	       emails[0] = whereArgs[3];
+		   
+		if(whereArgs.length  == 5){   
 
-			String key = pair[0].trim();
-			String val = pair[1].trim();
-
-			if (STR_TAG.equals(key)) {
-				tag = normalizeValue(val);
-			} else if (STR_NUMBER.equals(key)) {
-				number = normalizeValue(val);
-			} else if (STR_EMAILS.equals(key)) {
-				// TODO(): Email is null.
-				emails = new String[1];
-				emails[0] = normalizeValue(val);
-				if (DBG)
-					log("delete  email " + emails[0]);
-			} else if (STR_PIN2.equals(key)) {
-				pin2 = normalizeValue(val);
-			} else if (STR_ANR.equals(key)) {
-				anr = normalizeValue(val);
-			}
+		      pin2 = whereArgs[4];
 		}
-
-		/*
-		 * if (TextUtils.isEmpty(tag)) { return 0; }
-		 */
-
-		int delIndex = -1;
-		long delId = -1;
-		String[] pair = where.split("=");
-		if (DBG)
-			log("delete  pair length " + pair.length);
-		/*
-		 * (pair.length != 2) { Log.e(TAG, "resolve: bad whereClause: " +
-		 * where); return 0; }
-		 */
-		String key = pair[0].trim();
-		String val = pair[1].trim();
-             
-		/*if ("_id".equals(key)) {
-			delId = Long.parseLong(normalizeValue(val));
-			if (ArrayListCursor.mIdIndexMap.containsKey(delId)) {
-				delIndex = (int) (ArrayListCursor.mIdIndexMap.get(delId));
-			} else {
-				return 0;
-			}
-		}*/
-
+        	}
 		if (efType == FDN && TextUtils.isEmpty(pin2)) {
 			return 0;
 		}
@@ -647,6 +631,51 @@ public class IccProvider extends ContentProvider {
 
 
 		boolean success = false;
+
+
+             //test
+             try {
+			IIccPhoneBook iccIpb = IIccPhoneBook.Stub
+					.asInterface(ServiceManager.getService("simphonebook"));
+			if (iccIpb != null) {
+
+		///test begin
+		           int[] emailNums = {1};
+                        int[] ret =  iccIpb.getAvalibleEmailCount(tag,number,emails,anr,emailNums);
+			     if(ret != null){
+
+                              for(int i=0; i< ret.length; i++){
+
+                                    	if (DBG)
+			                        log("getAvalibleEmailCount: ret []" +  ret[i]);
+				     }
+			     }
+		             
+                        int[] anrNums = {1,0,1};
+                        int[] ret1 =  iccIpb.getAvalibleAnrCount(tag,number,emails,anr,anrNums); 
+                        if(ret1 != null){
+
+                              for(int i=0; i< ret1.length; i++){
+
+                                    	if (DBG)
+			                        log("getAvalibleAnrCount: ret1 []" +  ret1[i]);
+				     }
+			     }
+				}
+			
+		} catch (RemoteException ex) {
+			// ignore it
+		} catch (SecurityException ex) {
+			if (DBG)
+				log(ex.toString());
+		}
+
+
+
+
+
+		//test
+		
 	
 
 		success = updateIccRecordInEf(efType, tag, number, emails, anr, newTag,
@@ -714,7 +743,31 @@ public class IccProvider extends ContentProvider {
 			IIccPhoneBook iccIpb = IIccPhoneBook.Stub
 					.asInterface(ServiceManager.getService("simphonebook"));
 			if (iccIpb != null) {
-				success = iccIpb.updateAdnRecordsInEfBySearch(efType, "", "",
+
+		///test begin
+		           int[] emailNums = {1};
+                        int[] ret =  iccIpb.getAvalibleEmailCount("","",null,"",emailNums);
+			     if(ret != null){
+
+                              for(int i=0; i< ret.length; i++){
+
+                                    	if (DBG)
+			                        log("getAvalibleEmailCount: ret []" +  ret[i]);
+				     }
+			     }
+		             
+                        int[] anrNums = {1,0,1};
+                        int[] ret1 =  iccIpb.getAvalibleAnrCount("","",null,"",anrNums); 
+                        if(ret1 != null){
+
+                              for(int i=0; i< ret1.length; i++){
+
+                                    	if (DBG)
+			                        log("getAvalibleAnrCount: ret1 []" +  ret1[i]);
+				     }
+			     }
+		///test end
+			      success = iccIpb.updateAdnRecordsInEfBySearch(efType, "", "",
 						null, "", name, number, emails, anr, aas, sne, grp,
 						gas, pin2);
 			}

@@ -140,6 +140,54 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
 		return 0;
 	}
 
+	public int [] getAvalibleEmailCount(String name, String number,
+			String[] emails, String anr, int[] emailNums){
+			
+	     	int[] record = null;
+		if (phone.getIccCard().isApplicationOnIcc(
+				IccCardApplication.AppType.APPTYPE_USIM)) {
+			if (adnCache == null) {
+				return null;
+			}
+			UsimPhoneBookManager mUsimPhoneBookManager = adnCache
+					.getUsimPhoneBookManager();
+			if (mUsimPhoneBookManager == null) {
+				return null;
+			}
+
+			return mUsimPhoneBookManager.getAvalibleEmailCount(name,number,emails,anr,emailNums);
+
+		}
+
+		return null;
+
+
+      }
+	  
+      public  int [] getAvalibleAnrCount(String name, String number,
+			String[] emails, String anr, int[] anrNums){
+
+             int[] record = null;
+		if (phone.getIccCard().isApplicationOnIcc(
+				IccCardApplication.AppType.APPTYPE_USIM)) {
+			if (adnCache == null) {
+				return null;
+			}
+			UsimPhoneBookManager mUsimPhoneBookManager = adnCache
+					.getUsimPhoneBookManager();
+			if (mUsimPhoneBookManager == null) {
+				return null;
+			}
+
+			return mUsimPhoneBookManager.getAvalibleAnrCount(name,number,emails,anr,anrNums);
+
+		}
+
+		return null;
+
+
+     }
+
 	public int getAnrNum() {
 		if (phone.getIccCard().isApplicationOnIcc(
 				IccCardApplication.AppType.APPTYPE_USIM)) {
