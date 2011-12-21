@@ -88,7 +88,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 	private static final int EVENT_GRP_LOAD_DONE = 8;
 	private static final int EVENT_GAS_LOAD_DONE = 9;
 	private static final int EVENT_ANR_LOAD_DONE = 10;
-	private int mAnrNum = 0;
+	
 	// add end
 
 	private ArrayList<byte[]> mAnrFileRecord;
@@ -139,7 +139,8 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 	public class SubjectIndexOfAdn {
 
-		public int[] type;
+             public int adnEfid;
+ 		public int[] type;
 		// <efid, record >
 		public Map<Integer, Integer> recordNumInIap;
 		// map <efid,ArrayList<byte[]>fileRecord >
@@ -306,6 +307,191 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 			return 0;
 		}
+
+	}
+public int[] getValidNumToMatch(AdnRecord adn,int type, int[] subjectNums)
+{
+           int []  ret = null;
+	     int  efid = 0;
+
+           for (int num = 0; num < getNumRecs(); num++) {
+
+			efid = findEFInfo(num);			
+
+			if (efid < 0 ) {
+			
+				return null;
+			}
+			Log.i(LOG_TAG, "getEfIdToMatch ");
+			ArrayList<AdnRecord> oldAdnList;
+
+			Log.e(LOG_TAG, "efid is " + efid);
+
+			oldAdnList = mAdnCache.getRecordsIfLoaded(efid);
+			if (oldAdnList == null) {
+				
+				return null;
+			}
+			Log.i(LOG_TAG, "getEfIdToMatch (2)");
+
+                   
+
+			int count = 1;
+			int adnIndex = 0;
+		
+			for (Iterator<AdnRecord> it = oldAdnList.iterator(); it.hasNext();) {
+				if (adn.isEqual(it.next())) {
+					Log.i(LOG_TAG, "we got the index " + count);
+                                adnIndex = count;
+					
+                                ret = getAvalibleSubjectCount(num, type,efid,adnIndex,subjectNums);
+					if(ret != null){
+
+						return ret;
+
+					}
+
+					
+				}
+				count++;
+			}
+
+
+
+	        }
+
+		  return null;
+
+      	}
+private int getAvalibleAdnCount(){
+
+       List<AdnRecord> adnRecords = mPhoneBookRecords;
+       int totalCount = 0;
+	 int count = 0;
+	 if(mPhoneBookRecords == null){
+
+              return 0;
+	 }
+
+       totalCount = mPhoneBookRecords.size();
+       AdnRecord adnRecord; 
+	 for(int i=0; i< totalCount; i++){
+            adnRecord =  mPhoneBookRecords.get(i);
+            if(adnRecord.isEmpty()){
+
+                 count++;
+	     }              
+
+
+	 }
+       
+
+       return count;
+
+}
+public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, int[] subjectNums){
+
+  
+	     SubjectIndexOfAdn index = null;
+            int count = 0;
+	     int avalibleNum = 0;
+	     int[] ret = null;
+	     int n = 0;
+	
+		 
+	     log("getAvalibleSubjectCount efid " +  efid + " num " +num );		 
+	     log("getAvalibleSubjectCount  " +  " type " + type + " adnNum " + adnNum + "  subjectNums " + subjectNums);
+		 
+	     index = getSubjectIndex( type,  num);
+
+		if (index == null ) {
+			
+		     return null;
+		}
+		
+             ret = new int [subjectNums.length];
+		log("getAvalibleSubjectCount adnEfid " + index.adnEfid);
+	
+		if(index != null  && index.adnEfid == efid &&index.record != null && index.efids!= null && index.type!= null){
+
+		  
+		     for(int j=0; j< index.efids.length ;j++){
+
+                     log("getAvalibleSubjectCount efid " +  index.efids[j] );
+					 
+			  for(int l=0; l<subjectNums.length; l++){
+
+        	              log("getAvalibleSubjectCount efid " +  subjectNums[l]  );
+                           if(subjectNums[l] == 1 && index.record.containsKey(index.efids[j]) &&index.record.get(index.efids[j])!= null ){
+						   
+				        count = index.record.get(index.efids[j]).size();
+					  // log("getAvalibleSubjectCount index.type[j] " +  index.type[j]  ); 	
+                                  if(index.type[j] == USIM_TYPE1_TAG ){
+
+						 ret[n] = getAvalibleAdnCount();
+						 n++;
+						 break;
+
+					  }else if(index.type[j] == USIM_TYPE2_TAG ){
+
+						       int idx = getUsedNumSetIndex( index.efids[j],  index);
+							 log("getAvalibleSubjectCount idx " +  idx ); 	
+
+                                             if(idx >=0 ){
+								Set<Integer> usedSet =  (Set<Integer>) index.usedSet[idx];
+                                                   avalibleNum =  count -usedSet.size(); 
+								ret[n] =  avalibleNum;
+						             n++;
+        							
+                                                   break;
+						       }
+
+						
+
+					  }
+					 
+				      
+                                  
+			             }
+				  }
+			    }
+		 }
+
+             log("getAvalibleSubjectCount  n " +  n  );
+	       if( n == 0){
+
+		       ret = null;
+			 return ret;
+
+		}
+		for(int i= 0; i<ret.length; i++ ){
+
+                   log("getAvalibleSubjectCount  ret[] " +  ret[i]  );
+		}   
+             return ret;
+
+	}
+
+	
+	public  int [] getAvalibleAnrCount(String name, String number,
+			String[] emails, String anr, int[] anrNums){
+
+
+              AdnRecord   adn  = new AdnRecord(name, number, emails,
+						anr,"","","","" );
+
+              return getValidNumToMatch(adn,USIM_SUBJCET_ANR,anrNums);
+
+	}
+
+	public int [] getAvalibleEmailCount(String name, String number,
+			String[] emails, String anr, int[] emailNums){
+
+
+            AdnRecord   adn  = new AdnRecord(name, number, emails,
+						anr,"","","","" );
+
+            return getValidNumToMatch(adn,USIM_SUBJCET_EMAIL,emailNums);
 
 	}
 
@@ -494,25 +680,23 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
                     index = lst.get(m);
 					
-			 if(index != null && index.recordNumInIap != null )
+			 if(index != null  )
                     {
-     			  	for(int k=0; k<index.recordNumInIap.size(); k++){
-
-		                  if(index.recordNumInIap.containsKey(efid)){
-
-                                     totalSet =  getUsedNumSet((Set<Integer>) index.usedSet[k],totalSet,count);
+		                 int num = getUsedNumSetIndex( efid,  index);
+                              if(num >=0){
+                              totalSet =  getUsedNumSet((Set<Integer>) index.usedSet[num],totalSet,count);
                                            
-
-				      }
+                              }
+				     
                                           						
-			    }
+			   }
                   
 
-		       }
+		 }
 
 
 			     
-		}
+		
 
              return totalSet;
 	}
@@ -547,13 +731,13 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 					
 			 if(index != null && index.recordNumInIap !=null)
                     {
-     			       for(int k=0; k<index.recordNumInIap.size(); k++){
-
-		                  if(index.recordNumInIap.containsKey(efid)){
-                                     log(" SetRepeatUsedNumSet efid  " + efid + " index  " + m + " recordNumInIap " + k );
-                                     index.usedSet[k] = totalSet;
+     			      
+                               int num = getUsedNumSetIndex( efid,  index);
+		                  if(num >= 0){
+                                     log(" SetRepeatUsedNumSet efid  " + efid + " num  " + num   + "  totalSet.size  " + totalSet.size());
+                                     index.usedSet[num] = totalSet;
                                      setSubjectIndex(type,m,index);
-					     break;
+					     
 
 					}
                                           						
@@ -565,7 +749,31 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 
 			     
-		}
+		
+
+	}
+	private int getUsedNumSetIndex(int efid, SubjectIndexOfAdn index){
+             int count = -1;
+
+             if(index != null && index.efids != null ){	 
+
+			for(int k=0; k<index.efids.length; k++){
+				log("getUsedNumSetIndex index.type[k] " + index.type[k]);
+
+		             if( index.type[k] == USIM_TYPE2_TAG ){
+                                 count++;          
+                                 if(index.efids[k] == efid ){
+	                                 log("getUsedNumSetIndex count " + count);
+
+                                        return count;
+					 }           
+                                           
+			       }
+		     }
+
+             }
+
+	       return -1;
 
 	}
 	private void SetMapOfRepeatEfid(int type, int efid){
@@ -573,6 +781,8 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
              LinkedList<SubjectIndexOfAdn> lst = null;
 		SubjectIndexOfAdn index = null;
 		int efids[];
+       	Set<Integer> set ;
+             Set<Integer> totalSet = new HashSet<Integer>() ;
 		switch (type) {
 
 		case USIM_SUBJCET_EMAIL:
@@ -591,27 +801,25 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		if (lst != null && lst.size() != 0) {
                    int i =0,j=0;
                 
-                   Set<Integer> set ;
-             	Set<Integer> totalSet ;
+                 
 		   
                    for(i=0; i<lst.size(); i++){
 
                              index = lst.get(i);
 
-				    if(index != null && index.recordNumInIap !=null && index.record != null ){	 
+				    if(index != null && index.recordNumInIap !=null && index.record != null && index.record.containsKey(efid) ){	 
 				      	  int count = index.record.get(efid).size();
 			               Log.i(LOG_TAG, "SetMapOfRepeatEfid  "  + "count "	+ count );	
 
-					  for(int k=0; k<index.recordNumInIap.size(); k++){
+					  int num = getUsedNumSetIndex( efid,  index);
 
-		                         if(index.recordNumInIap.containsKey(efid)){
-                                           
-                                           
-                                            set = (Set<Integer>) index.usedSet[k]; 
-
-						      totalSet = getRepeatUsedNumSet(lst,i+1,efid,set,count);
-        						SetRepeatUsedNumSet(type,efid,totalSet);
-			                   }
+					  if(num >= 0){
+                                      set = (Set<Integer>) index.usedSet[num]; 
+						if(set != null){
+                                           log("SetMapOfRepeatEfid  size " + set.size() );
+						}				          
+        				      totalSet = getUsedNumSet(totalSet,set,count);
+					   }   
 					}
 				  
 				   }
@@ -621,8 +829,10 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                        
 			}			
 		
-
-		}
+                   if(totalSet != null){
+                         log("SetMapOfRepeatEfid  size " + totalSet.size() );
+		      }
+		      SetRepeatUsedNumSet(type,efid,totalSet);
 
 		
 	}
@@ -654,10 +864,10 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		if (isInIap) {
 
 			Set<Integer> set = (Set<Integer>) idx.usedSet[index];
-			for (int i = 1; i < count; i++) {
+			for (int i = 1; i <= count; i++) {
 				Integer subjectNum = new Integer(i);
-				Log.i(LOG_TAG, "getNewSubjectNumber  subjectNum (0)"
-						+ subjectNum);
+				//Log.i(LOG_TAG, "getNewSubjectNumber  subjectNum (0)"
+				//		+ subjectNum);
 				if (!set.contains(subjectNum)) {
 
 					newSubjectNum = subjectNum;
@@ -1262,14 +1472,10 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
                    return emails;
 		}
-             for(int i=0; i<emailInfo.recordNumInIap.size(); i++){
 
-		     if(emailInfo.recordNumInIap.containsKey(efid)){
-                         index = i;
-			      break;
-			}
-                  
-		}
+
+		index = getUsedNumSetIndex(efid,emailInfo );
+          
 
 		if(index == -1){
 
@@ -1277,10 +1483,10 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		}
 	
 		mEmailTagNumberInIap = emailInfo.recordNumInIap.get(efid);
-            log(" getType2Email mEmailTagNumberInIap "
-				+ mEmailTagNumberInIap);
+            //log(" getType2Email mEmailTagNumberInIap "
+		//		+ mEmailTagNumberInIap);
 	      mEmailFileRecord = emailInfo.record.get(efid);
-             log("getType2Email size " +  mEmailFileRecord.size());
+             //log("getType2Email size " +  mEmailFileRecord.size());
 		if (mEmailFileRecord == null) {
 
 	              return emails;
@@ -1303,9 +1509,10 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			  return null;
 		    }
 		    Set<Integer> set = (Set<Integer>) emailInfo.usedSet[index];
-
+                 log("getType2Email  size (0)" +  set.size()  + " index " + index);
 		    set.add(new Integer(recNum));
-	  	    emailInfo.usedSet[index] = set;		    
+	  	    emailInfo.usedSet[index] = set;
+		    log("getType2Email  size (1)" +  set.size());	
 		    setSubjectIndex(USIM_SUBJCET_EMAIL,num,emailInfo);
 		}		
 		
@@ -1338,6 +1545,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
             ArrayList<Integer> efs = new ArrayList<Integer>();
 	      LinkedList<SubjectIndexOfAdn> lst = null;
 		SubjectIndexOfAdn index = null;
+		boolean isAdd = false;
 		switch (type) {
 
 		case USIM_SUBJCET_EMAIL:
@@ -1354,22 +1562,33 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		}
 
             if (lst != null && lst.size() != 0) {
-                   log("setUsedNumOfEfid size " + lst.size() );
+                   log("getType2Ef size " + lst.size() );
 			for(int i = 0; i<lst.size() ; i++){
 
 			     index = lst.get(i);
 				 
-                        if(index != null && index.efids != null&& index.recordNumInIap!= null && index.recordNumInIap.size()!=0 ){
+                        if(index != null && index.efids != null&& index.type != null ){
 
                      
                              for(int j=0; j<index.efids.length; j++){
 									   	
-                                             if( index.recordNumInIap.containsKey(index.efids[j])   ){
+                                  if(index.type[j] == USIM_TYPE2_TAG ){
+                                        isAdd = true;
+						  for(int k=0; k<efs.size();k++){
 
-                                                    efs.add(index.efids[j]);			
-								 break;					
+                                             if(efs.get(k) == index.efids[j]){
 
+                                                    isAdd = false;
 							}
+          
+						  }
+
+                                        if(isAdd){
+                                             efs.add(index.efids[j]);  
+                                        }
+						 			
+
+		       		   }
 
 				    }
 
@@ -1407,23 +1626,18 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 			     index = lst.get(i);
 				 
-                        if(index != null ){
-
-                              if(index.efids != null){
-
-                                       for(int j=0; j<index.efids.length; j++){
+                        if(index != null && index.efids != null ){
+                             for(int j=0; j<index.efids.length; j++){
 									   	
-                                             if(index.efids[j] == efid){
+                                 if(index.efids[j] == efid){
 
                                                     index.usedSet[idx] =  obj;
 								 setSubjectIndex(type,i,index);					
 								 break;					
+            				}
 
-							}
-
-						}
-
-                               }
+				}
+        
                             
 
 
@@ -1480,14 +1694,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
                    return anr;
 		}
 
-             for(int i=0; i<anrInfo.recordNumInIap.size(); i++){
-
-		     if(anrInfo.recordNumInIap.containsKey(efid)){
-                         index = i;
-        		      break;
-			}
-                 
-		}
+             index = getUsedNumSetIndex( efid, anrInfo);
              if(index == -1){
 
                    return anr;
@@ -1569,11 +1776,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		int anrTagNumberInIap;
 		ArrayList<byte[]> anrFileRecord;
 		byte[] anrRec;
-		
-		//boolean isSet = false;
-
-		//log("getType1Anr, num " + num + "adnNum " + adnNum);
-		
+	
 
 		
 		anrFileRecord = anrInfo.record.get(efid);
@@ -1582,7 +1785,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 			return anr;
 		}
-		//log( "getType1Anr, size " + anrFileRecord.size());
+	
 		if (adnNum < anrFileRecord.size()) {
 			anrRec = anrFileRecord.get(adnNum);
 			anr = PhoneNumberUtils.calledPartyBCDToString(anrRec, 2,
@@ -1596,7 +1799,6 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		
 	
 		
-		//log("getType1Anr anr:" + anr);
 		return anr;
 
 	}
@@ -2100,7 +2302,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			tlvList = new ArrayList<SimTlv>();
 			SimTlv recTlv;
 			int recNum = 0;
-			mAnrNum = 0;
+			
 			for (byte[] record : records) {
 				log("before making TLVs, data is "
 						+ IccUtils.bytesToHexString(record));
@@ -2241,7 +2443,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			}
 			  
 			mFileIds.put(recNum, val);
-			Log.i(LOG_TAG, "parseTag mAnrNum" + mAnrNum);
+			
 		}
 
 		void parseEf(SimTlv tlv, Map<Integer, Integer> val, int parentTag, 
@@ -2270,6 +2472,12 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 					data = tlv.getData();
 
 					int efid = ((data[0] & 0xFF) << 8) | (data[1] & 0xFF);
+					if(tag == USIM_EFADN_TAG ){
+
+						emailInfo.adnEfid = efid;
+						anrInfo.adnEfid = efid;
+
+					}
 
 					if (parentTag == USIM_TYPE2_TAG && tag == USIM_EFEMAIL_TAG) {
 						mEmailPresentInIap = true;
@@ -2290,7 +2498,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 					}
 
 					if (tag == USIM_EFANR_TAG) {
-						mAnrNum++;
+						
 						
 						log("parseEf   ANR  efid " +efid +" TAG  " + parentTag + "tagNumberWithinParentTag " +tagNumberWithinParentTag);
 						if (parentTag == USIM_TYPE2_TAG) {
@@ -2365,7 +2573,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 					}
 
 					if (tag == USIM_EFANR_TAG) {
-						mAnrNum++;
+						
 						hasAnr = true;
 
 						Log.i(LOG_TAG, "parseEf   ANR  TAG  " + parentTag);

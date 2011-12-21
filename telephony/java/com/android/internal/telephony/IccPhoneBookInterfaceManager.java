@@ -98,7 +98,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 						if (DBG)
 							logd("Cannot load ADN records   " );
 						//if (records != null) {
-							logd("Cannot load ADN records   size " + records.size() );
+						//	logd("Cannot load ADN records   size " + records.size() );
 							//records.clear();
 						//}
 					}
@@ -237,8 +237,12 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 	
 	
 
-
-
+      public abstract int [] getAvalibleEmailCount(String name, String number,
+			String[] emails, String anr, int[] emailNums);
+	  
+      public abstract int [] getAvalibleAnrCount(String name, String number,
+			String[] emails, String anr, int[] anrNums);
+	  
 	public abstract int[] getEmailRecordsSize();
 
 	public abstract int[] getAnrRecordsSize();

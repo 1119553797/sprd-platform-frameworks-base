@@ -70,10 +70,23 @@ public class RuimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager 
         return recordSize;
     }
 
+    public int[] getAvalibleAnrCount(String name, String number,
+			String[] emails, String anr, int[] anrNums) {
+
+         return null;
+    }
+
+    public int[] getAvalibleEmailCount(String name, String number,
+			String[] emails, String anr, int[] emailNums) {
+
+         return null;
+    }
     public  int[] getEmailRecordsSize(){
            int[] temp = new int [4];
           return temp;
     }
+
+  
 
     public  int getAnrNum(){
          
