@@ -310,7 +310,7 @@ public class AdnRecord implements Parcelable {
 		return TextUtils.isEmpty(alphaTag)
 				&& TextUtils.isEmpty(number)
 				&& emails == null
-				&& isEmptyAnr(anr) ;
+				&& (isEmptyAnr(anr));
 	}
 
 	public boolean hasExtendedRecord() {

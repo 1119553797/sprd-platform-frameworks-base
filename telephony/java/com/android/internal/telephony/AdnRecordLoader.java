@@ -52,8 +52,12 @@ public class AdnRecordLoader extends Handler {
 	int emailNumInIap;
 	int emailTagInIap;
 	int aasNum;
+	byte[] iapRec;
 	ArrayList<Integer> anrefids;
-
+	ArrayList<Integer> anrNums;
+	ArrayList<Integer> emailEfids;
+	ArrayList<Integer> emailNums;
+      	ArrayList<Integer> emailTagInIaps;
 	// add multi record and email in usim end
 
 	// For "load one"
@@ -195,6 +199,7 @@ public class AdnRecordLoader extends Handler {
 	public void updateEFEmailToUsim(AdnRecord adn, int emailEF, int emailNum,
 			int efid, int adnNum, int emailTagInIap, String pin2,
 			Message response) {
+		
 		this.emailEF = emailEF;
 		this.emailNum = emailNum;
 		this.ef = efid;
@@ -203,6 +208,21 @@ public class AdnRecordLoader extends Handler {
 		this.userResponse = response;
 		this.pin2 = pin2;
 		mFh.getEFLinearRecordSize(emailEF, obtainMessage(
+				EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE, adn));
+
+	}
+       public void updateEFEmailToUsim(AdnRecord adn, ArrayList<Integer> emailEfids,
+			 ArrayList<Integer> emailNums,int efid,int adnNum,ArrayList<Integer> emailTagInIaps, String pin2,Message response) {
+             Log.i("AdnRecordLoader ","updateEFEmailToUsim  emailEfids " +emailEfids + "emailNums "+emailNums + "emailTagInIaps " + emailTagInIaps);
+		this.emailEfids = emailEfids;
+		this.emailNums = emailNums;
+		this.ef = efid;
+		this.adnNum = adnNum;
+	
+		this.emailTagInIaps = emailTagInIaps;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(emailEfids.get(0), obtainMessage(
 				EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE, adn));
 
 	}
@@ -219,6 +239,17 @@ public class AdnRecordLoader extends Handler {
 
 	}
 
+	public void updateEFAnrToUsim(AdnRecord adn, ArrayList<Integer> anrefids,
+			int efid, ArrayList<Integer> anrNums, String pin2, Message response) {
+		this.anrefids = anrefids;
+		this.ef = efid;
+		this.adnNum = adnNum;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		this.anrNums = anrNums;
+		mFh.getEFLinearRecordSize(anrefids.get(0), obtainMessage(
+				EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE, adn));
+	 }
 
 
 	public void updateEFIapToUsim(AdnRecord adn, int iapEF, int adnNum,
@@ -226,6 +257,19 @@ public class AdnRecordLoader extends Handler {
 		this.iapEF = iapEF;
 		this.adnNum = adnNum;
 		this.emailNumInIap = emailNumInIap;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(iapEF, obtainMessage(
+				EVENT_EF_PBR_IAP_LINEAR_RECORD_SIZE_DONE, adn));
+
+	}
+
+	public void updateEFIapToUsim(AdnRecord adn, int iapEF, int adnNum,
+			byte[] record, String pin2, Message response) {
+		 Log.i("AdnRecordLoader ","updateEFIapToUsim  iapEF " +iapEF );
+		this.iapEF = iapEF;
+		this.adnNum = adnNum;
+		this.iapRec = record;
 		this.userResponse = response;
 		this.pin2 = pin2;
 		mFh.getEFLinearRecordSize(iapEF, obtainMessage(
@@ -370,7 +414,7 @@ public class AdnRecordLoader extends Handler {
 			case EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE:
 				Log.d(LOG_TAG,
 						"EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE emailNum :"
-								+ emailNum);
+								+ emailNums);
 				ar = (AsyncResult) (msg.obj);
 				adn = (AdnRecord) (ar.userObj);
 
@@ -385,20 +429,28 @@ public class AdnRecordLoader extends Handler {
 				// int[1] is the total length of the EF file
 				// int[2] is the number of records in the EF file
 				// So int[0] * int[2] = int[1]
-				if (recordSize.length != 3 || emailNum > recordSize[2]) {
+				if (recordSize.length != 3 || adnNum > recordSize[2]) {
 					throw new RuntimeException(
 							"get wrong EF record size format", ar.exception);
 				}
+				
+				fileCount = 0;
+				for (int i = 0, size = emailEfids.size(); i < size; i++) {
+					Log.e("GSM", "efids.get(" + i + ") is " + emailEfids.get(i));
 
-				data = adn.buildEmailString(recordSize[0], emailTagInIap, ef,
-						adnNum);
-
-				if (data == null) {
-					throw new RuntimeException("wrong ADN format", ar.exception);
+					data = adn.buildEmailString(recordSize[0], i, ef, adnNum);
+					
+					if (data == null) {
+						throw new RuntimeException("wrong ADN format", ar.exception);
+					}
+                                
+					if (i < emailEfids.size() && emailEfids.get(i) != 0) {
+						fileCount++;
+						mFh.updateEFLinearFixed(emailEfids.get(i), emailNums.get(i), data,
+								pin2,
+								obtainMessage(EVENT_UPDATE_RECORD_DONE));
+					}
 				}
-
-				mFh.updateEFLinearFixed(emailEF, emailNum, data, pin2,
-						obtainMessage(EVENT_UPDATE_RECORD_DONE));
 
 				pendingExtLoads = 1;
 
@@ -428,10 +480,10 @@ public class AdnRecordLoader extends Handler {
 
 					data = adn.buildAnrString(recordSize[0], i, ef, adnNum);
 
-					if (i < anrefids.size()) {
+					if (i < anrefids.size() && anrefids.get(i)!=0) {
 						fileCount++;
-						mFh.updateEFLinearFixed(anrefids.get(i), adnNum, data,
-								pin2,
+						mFh.updateEFLinearFixed(anrefids.get(i),
+								anrNums.get(i), data, pin2,
 								obtainMessage(EVENT_UPDATE_ANR_RECORD_DONE));
 					}
 				}
@@ -460,11 +512,13 @@ public class AdnRecordLoader extends Handler {
 					throw new RuntimeException(
 							"get wrong EF record size format", ar.exception);
 				}
-				if (adn.emails == null) {
-					emailNumInIap = -1;
-				}
-				data = adn.buildIapString(recordSize[0], emailNumInIap);
+				if (this.iapRec != null) {
 
+					data = this.iapRec;
+				} else {
+
+					data = adn.buildIapString(recordSize[0], 0xff);
+				}
 				if (data == null) {
 					throw new RuntimeException("worong ADN format",
 							ar.exception);
