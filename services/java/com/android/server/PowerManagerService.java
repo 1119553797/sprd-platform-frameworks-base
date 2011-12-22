@@ -2502,8 +2502,14 @@ class PowerManagerService extends IPowerManager.Stub
                 // use maximum light sensor value seen since screen went on for LCD to avoid flicker
                 // we only do this if we are undocked, since lighting should be stable when
                 // stationary in a dock.
+
+				//replace mIsDocked with true by yunlong.wang
+				//brightness level only increase but not decrease if use mIsDocked,
+				//because mIsDocked is always flase.
+				//after modification, brightness autosets according to sensor value,
+				//not only use mHighestLightSensorValue
                 int lcdValue = getAutoBrightnessValue(
-                        (mIsDocked ? value : mHighestLightSensorValue),
+                        (true ? value : mHighestLightSensorValue),
                         mLcdBacklightValues);
                 int buttonValue = getAutoBrightnessValue(value, mButtonBacklightValues);
                 int keyboardValue;
