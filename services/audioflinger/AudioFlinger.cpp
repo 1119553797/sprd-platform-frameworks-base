@@ -3556,10 +3556,11 @@ void AudioFlinger::PlaybackThread::OutputTrack::clearBufferQueue()
 AudioFlinger::Client::Client(const sp<AudioFlinger>& audioFlinger, pid_t pid)
     :   RefBase(),
         mAudioFlinger(audioFlinger),
-        mMemoryDealer(new MemoryDealer(1024*1024, "AudioFlinger::Client")),
+        mMemoryDealer(new MemoryDealer(4*1024*1024, "AudioFlinger::Client")),
         mPid(pid)
 {
     // 1 MB of address space is good for 32 tracks, 8 buffers each, 4 KB/buffer
+    // change to 4MB by Binary,because some games need more heap size create track
 }
 
 // Client destructor must be called with AudioFlinger::mLock held
