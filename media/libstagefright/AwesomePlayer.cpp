@@ -260,6 +260,7 @@ AwesomePlayer::AwesomePlayer()
       mIsVideoPhoneStream(false),
       mfromPause(false),
       mforceStop(false),
+      mbeginPlay(false),
       mSeeking (false){
     CHECK_EQ(mClient.connect(), OK);
 
@@ -834,9 +835,8 @@ status_t AwesomePlayer::play() {
 			 mfromPause = false ;
 		 }
 	 }
-
-
-    return play_l();
+	 mbeginPlay = true ;
+     return play_l();
 }
 
 status_t AwesomePlayer::play_l() {
@@ -1186,26 +1186,29 @@ status_t AwesomePlayer::seekTo_l(int64_t timeUs) {
 		{
 		   LOGE("liveing streaming ,so can not seek");  
 		   return OK;
-		}
-	 	mSeeking = true;
-		mSeekNotificationSent = false;
-   		mSeekTimeUs = timeUs;
-		mVideoTimeUs = timeUs ; 
-		if (mFlags & CACHE_UNDERRUN) {
-			mFlags &= ~CACHE_UNDERRUN;
-			play_l();
-		}
-		mQueue.cancelEvent(mBufferingEvent->eventID());
-        mBufferingEventPending = false;
-	    mAudioSource->pause();
+		}	
+		if (mbeginPlay)
+		{
+		 	mSeeking = true;
+			mSeekNotificationSent = false;
+	   		mSeekTimeUs = timeUs;
+			mVideoTimeUs = timeUs ; 
+			if (mFlags & CACHE_UNDERRUN) {
+				mFlags &= ~CACHE_UNDERRUN;
+				play_l();
+			}
+			mQueue.cancelEvent(mBufferingEvent->eventID());
+	        mBufferingEventPending = false;
+		    mAudioSource->pause();
 
-	   	if (mFlags &PLAYING){
-  		    if (mAudioPlayer != NULL) {
-              mAudioPlayer->pause();
-            }
+		   	if (mFlags &PLAYING){
+	  		    if (mAudioPlayer != NULL) {
+	              mAudioPlayer->pause();
+	            }
+			}
+			mQueue.cancelEvent(mBufferingEvent->eventID());
+	        mBufferingEventPending = false;
 		}
-		mQueue.cancelEvent(mBufferingEvent->eventID());
-        mBufferingEventPending = false;
         mRTSPController->seekAsync(timeUs, OnRTSPSeekDoneWrapper, this);
         return OK;
     }
@@ -1549,7 +1552,12 @@ void AwesomePlayer::onVideoEvent() {
 
     int64_t latenessUs = nowUs - timeUs;
     LOGI("video timestamp %lld,%lld:%lld,%lld,%lld",nowUs,timeUs,realTimeUs,mediaTimeUs,realTimeUs - mediaTimeUs);
-
+	
+    if(latenessUs > 2000000 || latenessUs< -2000000){//jgdu 2s
+	LOGI("onVideoEvent time info:mTimeSourceDeltaUs:%lld realTimeUs:%lld mediaTimeUs:%lld", mTimeSourceDeltaUs, realTimeUs, mediaTimeUs);
+	LOGI("onVideoEvent time info2:getRealTimeUs:%lld nowUs:%lld latenessUs:%lld timeUs:%lld", ts->getRealTimeUs(), nowUs,latenessUs, timeUs);	
+    }
+	
     if (wasSeeking) {
         // Let's display the first frame after seeking right away.
         latenessUs = 0;
@@ -1991,7 +1999,7 @@ status_t AwesomePlayer::finishSetDataSource_l() {
  //           mLooper->start();
  	   mLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
-                          ANDROID_PRIORITY_AUDIO); //@hong
+                          ANDROID_PRIORITY_DISPLAY); //@hong
 			
         }
         mRTSPController = new ARTSPController(mLooper);

@@ -240,10 +240,9 @@ void ARTSPController::onMessageReceived(const sp<AMessage> &msg) {
             mLastSeekCompletedTimeUs = ALooper::GetNowUs();
 
             void (*seekDoneCb)(void *,int32_t) = mSeekDoneCb;
-            mSeekDoneCb = NULL;
-
             (*seekDoneCb)(mSeekDoneCookie,status);
-            break;
+
+			break;
         }
 		case kWhatPauseDone:
         {
@@ -253,8 +252,7 @@ void ARTSPController::onMessageReceived(const sp<AMessage> &msg) {
             mLastPauseCompletedTimeUs = ALooper::GetNowUs();
         	void (*pauseDoneCb)(void *,int32_t) = mPauseDoneCb;
 
-			mPauseDoneCb = NULL;
-		    (*pauseDoneCb)(mPauseDoneCookie,status);
+	       (*pauseDoneCb)(mPauseDoneCookie,status);
 
              break;
         }
@@ -268,9 +266,7 @@ void ARTSPController::onMessageReceived(const sp<AMessage> &msg) {
             mLastPlayCompletedTimeUs = ALooper::GetNowUs();
 
   			void (*playDoneCb)(void *,int32_t) = mPlayDoneCb;
-
-			mPlayDoneCb = NULL;
-					
+				
 			(*playDoneCb)(mPlayDoneCookie,status);
        			
             break;

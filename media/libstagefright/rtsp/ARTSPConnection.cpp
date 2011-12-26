@@ -35,7 +35,7 @@
 namespace android {
 
 // static
-const int64_t ARTSPConnection::kSelectTimeoutUs = 10000ll;//@hong
+const int64_t ARTSPConnection::kSelectTimeoutUs = 10000ll;
 
 ARTSPConnection::ARTSPConnection()
     : mState(DISCONNECTED),
@@ -68,7 +68,7 @@ void ARTSPConnection::disconnect(const sp<AMessage> &reply) {
     msg->post();
 }
 
-void  ARTSPConnection::serverexception(const sp<AMessage> &reply)//@hong
+void  ARTSPConnection::serverexception(const sp<AMessage> &reply)
 {
 	mServerExceptionMsg = reply;
 }
@@ -389,7 +389,7 @@ void ARTSPConnection::onSendRequest(const sp<AMessage> &msg) {
     addAuthentication(&request);
 
     // Find the boundary between headers and the body.
-    ssize_t teardown = request.find("TEARDOWN");//@hong
+    ssize_t teardown = request.find("TEARDOWN");
 
     ssize_t i = request.find("\r\n\r\n");
     CHECK_GE(i, 0);
@@ -466,6 +466,12 @@ void ARTSPConnection::onReceiveResponse() {
             // Something horrible, irreparable has happened.
 	 		LOGI("onReceiveResponse receive fail");
             flushPendingRequests();
+		    if (mServerExceptionMsg!= NULL)
+			{
+				mState = DISCONNECTED;  //@andrew handle server exception.
+				mServerExceptionMsg->post();
+				mServerExceptionMsg = NULL;
+			}
             return;
         }
 	LOGV("onReceiveResponse SUCCESS");
