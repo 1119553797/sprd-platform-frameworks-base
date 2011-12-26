@@ -77,6 +77,8 @@ public class MediaPhone extends Handler
     private PowerManager.WakeLock mWakeLock = null;
     private boolean mScreenOnWhilePlaying;
     private boolean mStayAwake;
+    private boolean mbCameraLock = false;
+    private final Object mCameraLock = new Object();
 
     private CommandsInterface mCm;	
     private Message msgTracker = null;
@@ -509,6 +511,36 @@ public class MediaPhone extends Handler
 		}
     }
 
+    public boolean lockCamera() {
+	Log.d(TAG, "lockCamera() E");
+	synchronized(mCameraLock) {
+		if (mbCameraLock) {
+			Log.e(TAG, "lockCamera() fail, already locked");
+			return false;
+		}
+		if (mCodecState != CodecState.CODEC_START) {
+			Log.e(TAG, "lockCamera() fail, mCodecState: " + mCodecState);
+			return false;		
+		}
+		mbCameraLock = true;
+	}
+	Log.d(TAG, "lockCamera() X");
+	return true;
+    }
+
+    public boolean unlockCamera() {
+	Log.d(TAG, "unlockCamera() E");
+	synchronized(mCameraLock) {
+		if (!mbCameraLock) {
+			Log.e(TAG, "lockCamera() fail, already unlocked");
+			return false;
+		}
+		mbCameraLock = false;
+		mCameraLock.notify();
+	}
+	Log.d(TAG, "unlockCamera() X");
+	return true;
+    }
     private native void _release();
 
     /**
@@ -863,6 +895,15 @@ public class MediaPhone extends Handler
             break;
 
         case CODEC_CLOSE:
+	    synchronized(mCameraLock) {
+		    if (mbCameraLock) {
+			try {
+				mCameraLock.wait();
+			} catch (InterruptedException e) {
+				Log.d(TAG,"interrupted while trying to get mCameraLock");
+			}
+		    }
+	    }
             try {
                 stop();
 		mCodecState = CodecState.CODEC_CLOSE;

@@ -50,6 +50,18 @@ public final class SprdRIL extends RIL {
 	protected RegistrantList mVideoCallStateRegistrants = new RegistrantList();
     protected Registrant mStkStinRegistrant;
 
+	private final class DSCIInfo {
+		int id;
+		int idr;
+		int stat;
+		int type;
+		int mpty;
+		String number;
+		int num_type;
+		int bs_type;
+		int cause;
+	}
+
 	//***** Constructors
 	public
 	SprdRIL(Context context) {
@@ -868,7 +880,7 @@ public final class SprdRIL extends RIL {
 				case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: ret = responseInts(p); break;
 				case RIL_UNSOL_VIDEOPHONE_MM_RING: ret = responseInts(p); break;
 				case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: ret = responseInts(p); break;
-				case RIL_UNSOL_VIDEOPHONE_DSCI: ret = responseInts(p); break;
+				case RIL_UNSOL_VIDEOPHONE_DSCI: ret = responseDSCI(p); break;
 				case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:ret =  responseVoid(p); break;
 				case RIL_UNSOL_ON_STIN:ret = responseInts(p); break;
 				case RIL_UNSOL_SIM_SMS_READY:ret = responseVoid(p); break;
@@ -1279,7 +1291,7 @@ public final class SprdRIL extends RIL {
 				case RIL_UNSOL_VIDEOPHONE_DSCI:{		
 								       if (RILJ_LOGD) unsljLogRet(response, ret);
 
-								       int[] params = (int[])ret;
+								      /* int[] params = (int[])ret;
 								       if (params.length >= 4){
 									       if (params[3] == 1){
 										       if (params.length == 9){
@@ -1303,8 +1315,23 @@ public final class SprdRIL extends RIL {
 								       } else {
 									       if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_DSCI ERROR with wrong length "
 											       + params.length);
-								       }
+								       }*/
+									   
+								       DSCIInfo info = (DSCIInfo)ret;
+								       if (info.cause > 0) {
+									       if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_DSCI number: " + info.number + ", cause: " + info.cause);
+									       if ((info.cause == 47) || (info.cause == 57) || (info.cause == 58) || (info.cause == 88)) {
+										       if (mVPFallBackRegistrant != null) {
+											       mVPFallBackRegistrant.notifyRegistrant(new AsyncResult(null, new AsyncResult(info.number, info.cause, null), null));
+										       }
+									       } else {
+										       if (mVPFailRegistrant != null) {
+											       mVPFailRegistrant.notifyRegistrant(new AsyncResult(null, new AsyncResult(info.number, info.cause, null), null));
+										       }
+									       }
+								       	}
 								       break;
+								       
 							       }	
 				case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:
 							       if (RILJ_LOGD) unsljLog(response);
@@ -1357,6 +1384,28 @@ public final class SprdRIL extends RIL {
 		 }
 	 }
  
+	protected Object
+	responseDSCI(Parcel p) {
+	    DSCIInfo info = new DSCIInfo();
+	
+	    info.id = p.readInt();//id
+	    info.idr = p.readInt();//idr
+	    info.stat = p.readInt();//stat
+	    if (info.stat == 6) {		
+		    info.type = p.readInt();//type
+		    info.mpty = p.readInt();//mpty
+		    info.number = p.readString();//number
+		    info.num_type = p.readInt();//num_type
+		    info.bs_type = p.readInt();//bs_type
+		    if (info.type == 1) {
+			info.cause = p.readInt();
+		    }
+	    }
+	    riljLog("responseDSCI(), number: " + info.number + ", status: " + info.stat + ", type: " + info.type + ", cause: " + info.cause);
+
+	    return info;
+	}
+	
 	 protected String
 	 responseToString(int request)
 	 {

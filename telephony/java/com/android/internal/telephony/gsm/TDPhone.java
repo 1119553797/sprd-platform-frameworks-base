@@ -89,22 +89,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-class syncLock{
-	static final String LOG_TAG = "syncLock";
-
-	interface syncCallBack{
-		Object onSyncCallBack(Object obj);
-	}
-	public synchronized static Object syncCall(syncCallBack callBack, Object obj){
-		Log.d(LOG_TAG, "syncLock.sync() --- " + Thread.currentThread().getName());
-		return callBack.onSyncCallBack(obj);
-	}
-}
-
 /**
  * {@hide}
  */
-public final class TDPhone extends GSMPhone implements syncLock.syncCallBack {
+public final class TDPhone extends GSMPhone {
     // NOTE that LOG_TAG here is "TD", which means that log messages
     // from this file will go into the radio log rather than the main
     // log.  (Use "adb logcat -b radio" to see them.)
@@ -139,7 +127,6 @@ public final class TDPhone extends GSMPhone implements syncLock.syncCallBack {
 
     // Instance Variables
 	VideoCallTracker mVideoCT;
-	HandlerThread mVideoCTTread;
 	CallType callType;
 	
     protected static final int EVENT_CONTROL_CAMERA_DONE       = 100;
@@ -163,22 +150,7 @@ public final class TDPhone extends GSMPhone implements syncLock.syncCallBack {
 		
 	final Object syncObj = new Object();
 	final TDPhone phone = this;
-        mVideoCTTread = new HandlerThread("VideoCallTracker"){					
-		protected void onLooperPrepared() {
-			synchronized(syncObj) {
-				mVideoCT = new VideoCallTracker(phone);
-				syncObj.notifyAll();
-			}
-		}
-        };
-        mVideoCTTread.start();
-	synchronized(syncObj) {
-		try{
-			syncObj.wait();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+	mVideoCT = new VideoCallTracker(phone);
 
         if (ci instanceof SimulatedRadioControl) {
             mSimulatedRadioControl = (SimulatedRadioControl) ci;
@@ -206,18 +178,14 @@ public final class TDPhone extends GSMPhone implements syncLock.syncCallBack {
     protected void finalize() {
         if(LOCAL_DEBUG) Log.d(LOG_TAG, "TDPhone finalized");
     }
-
-    public Object onSyncCallBack(Object obj){	
-		Log.d(LOG_TAG, "onSyncCallBack");
+	
+    public Phone.State getState() {
+		if (LOCAL_DEBUG) Log.d(LOG_TAG, "VideoCT: "+ mVideoCT.state + " CT: " + mCT.state);
+		
 		if (mVideoCT.isAlive())
 			return mVideoCT.state;
 		else
 			return mCT.state;
-    }
-	
-    public Phone.State getState() {
-		if (LOCAL_DEBUG) Log.d(LOG_TAG, "VideoCT: "+ mVideoCT.state + " CT: " + mCT.state);
-		return (Phone.State)syncLock.syncCall(this, null);
     }
 
     public String getPhoneName() {
@@ -646,34 +614,41 @@ public final class TDPhone extends GSMPhone implements syncLock.syncCallBack {
     }
 
      void notifyPreciseVideoCallStateChanged() {
+	Log.d(LOG_TAG, " notifyPreciseVideoCallStateChanged");
         AsyncResult ar = new AsyncResult(null, this, null);
         mPreciseVideoCallStateRegistrants.notifyRegistrants(ar);
     }
 	
      void notifyNewRingingVideoCall(Connection cn) {
+	Log.d(LOG_TAG, " notifyNewRingingVideoCall");
         AsyncResult ar = new AsyncResult(null, cn, null);
         mNewRingingVideoCallRegistrants.notifyRegistrants(ar);
     }
 
     void notifyIncomingRingVideoCall() {
+	Log.d(LOG_TAG, " notifyVideoCallCodec");
         AsyncResult ar = new AsyncResult(null, this, null);
         mIncomingRingVideoCallRegistrants.notifyRegistrants(ar);
     }
 	
 	void notifyVideoCallDisconnect(Connection cn) {
+	Log.d(LOG_TAG, " notifyVideoCallDisconnect");
         AsyncResult ar = new AsyncResult(null, cn, null);
         mVideoCallDisconnectRegistrants.notifyRegistrants(ar);
     }
 	
 	void notifyVideoCallFallBack(AsyncResult ar){
+	Log.d(LOG_TAG, " notifyVideoCallFallBack");
         mVideoCallFallBackRegistrants.notifyRegistrants(ar);
     }
 	
 	void notifyVideoCallFail(AsyncResult ar){
+	Log.d(LOG_TAG, " notifyVideoCallFail");
         mVideoCallFailRegistrants.notifyRegistrants(ar);
     }
 	
 	void notifyVideoCallCodec(AsyncResult ar){
+	Log.d(LOG_TAG, " notifyVideoCallCodec");
         mVideoCallCodecRegistrants.notifyRegistrants(ar);
     }
 
@@ -915,27 +890,24 @@ public final class TDPhone extends GSMPhone implements syncLock.syncCallBack {
 		return mSimType;
 	}
 	
-	public String[] getRegistrationState() {
-	    Log.d(LOG_TAG, "getRegistrationState");
-		
-		synchronized(mLock) {
+    public String[] getRegistrationState() {
+        Log.d(LOG_TAG, "getRegistrationState");
+        
+        synchronized(mLock) {
             Message response = mHandler.obtainMessage(EVENT_GET_REGISTRATION_STATE_DONE);
             mCM.getRegistrationState(response);
             try {
                 mLock.wait();
             } catch (InterruptedException e) {
-            	Log.d(LOG_TAG,"interrupted while trying to get registration state");
+                Log.d(LOG_TAG,"interrupted while trying to get registration state");
             }
         }
-		
-		Log.d(LOG_TAG, "getRegistrationState:"+mRegistrationState);
-		return mRegistrationState;	
-	}
-	
-	public boolean isVTCall() {
-		return (getCallType() == CallType.VIDEO? true:false);
-	}
-		
+        
+        Log.d(LOG_TAG, "getRegistrationState:"+mRegistrationState);
+        return mRegistrationState;
+    }
+
+
 	public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete) {
 		if (isValidCommandInterfaceCFReason(commandInterfaceCFReason)) {
 			if (LOCAL_DEBUG) Log.d(LOG_TAG, "requesting call forwarding query.");
@@ -948,7 +920,11 @@ public final class TDPhone extends GSMPhone implements syncLock.syncCallBack {
 			mCM.queryCallForwardStatus(commandInterfaceCFReason,serviceClass,null,resp);
 		}
 	}
-
+	
+	public boolean isVTCall() {
+		return (getCallType() == CallType.VIDEO? true:false);
+	}
+	
 	public void setCallForwardingOption(int commandInterfaceCFAction,
 			int commandInterfaceCFReason,
 			int serviceClass,

@@ -542,6 +542,12 @@ final class GsmSMSDispatcher extends SMSDispatcher {
 
 
 		 Log.i(TAG, "setCellBroadcastConfig! config.length"+config.length);
+
+              for(int i=0; i<config.length; i++){
+
+                     Log.i(TAG, "setCellBroadcastConfig! config. "+config[i].toString());
+
+		 }        
 			
 		mCm.setGsmBroadcastConfig(config, response);
 	 }

@@ -515,8 +515,10 @@ struct MyHandler : public AHandler {
                 int32_t reconnect;
                 if (msg->findInt32("reconnect", &reconnect) && reconnect) {
                     sp<AMessage> reply = new AMessage('conn', id());
+			        LOGI("dic for reconnect");
                     mConn->connect(mOriginalSessionURL.c_str(), reply);
                 } else {
+                	 LOGI("dic for quit ");
                     (new AMessage('quit', id()))->post();
                 }
                 break;
@@ -861,8 +863,9 @@ struct MyHandler : public AHandler {
             case 'quit':
             {
                 if (mDoneMsg != NULL) {
+					LOGI("quit done  for UNKNOWN_ERROR");
                     mDoneMsg->setInt32("result", UNKNOWN_ERROR);
-                    mDoneMsg->post();
+                    mDoneMsg->post(4000000ll);
                     mDoneMsg = NULL;
                 }
 				else
@@ -871,8 +874,9 @@ struct MyHandler : public AHandler {
 					msg->findMessage("doneMsg", &doneMsg);
 					if(doneMsg != NULL)
 					{
-				  		doneMsg->setInt32("result", ERROR_IO);
-						mDoneMsg->post();
+					    LOGI("quit done  for ERROR_IO");
+						doneMsg->setInt32("result", ERROR_IO);
+						mDoneMsg->post(4000000ll);
 	                    mDoneMsg = NULL;
 					}
 				}

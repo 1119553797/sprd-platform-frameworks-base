@@ -293,7 +293,7 @@ status_t SampleIterator::findSampleTime(
 
     while (sampleIndex >= mTTSSampleIndex + mTTSCount) {
         if (mTimeToSampleIndex == mTable->mTimeToSampleCount) {
-            return ERROR_OUT_OF_RANGE;
+          //  return ERROR_OUT_OF_RANGE;
         }
 
         mTTSSampleIndex += mTTSCount;

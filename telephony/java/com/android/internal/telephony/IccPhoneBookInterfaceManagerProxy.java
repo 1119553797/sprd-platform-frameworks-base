@@ -71,6 +71,14 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
 		return mIccPhoneBookInterfaceManager.getAdnRecordsSize(efid);
 	}
 
+	public int[] getAvalibleEmailCount(String name, String number,
+			String[] emails, String anr, int[] emailNums) throws android.os.RemoteException {
+		return mIccPhoneBookInterfaceManager.getAvalibleEmailCount(name,number,emails,anr,emailNums );
+	}
+	public int[] getAvalibleAnrCount(String name, String number,
+			String[] emails, String anr, int[] anrNums) throws android.os.RemoteException {
+		return mIccPhoneBookInterfaceManager.getAvalibleAnrCount(name,number,emails,anr,anrNums);
+	}
 	public int[] getEmailRecordsSize() throws android.os.RemoteException {
 		return mIccPhoneBookInterfaceManager.getEmailRecordsSize();
 	}
