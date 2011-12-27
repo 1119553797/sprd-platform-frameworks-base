@@ -99,7 +99,7 @@ private:
 
     MediaProfiles *mEncoderProfiles;
 	
-    status_t startVideoPhoneRecording();//sprd
+    status_t startVideoPhoneRecording();//sprd vt must
 	
     status_t startMPEG4Recording();
     status_t startAMRRecording();

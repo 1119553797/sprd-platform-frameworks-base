@@ -22,7 +22,7 @@
 #include <binder/IMemory.h>
 #include <media/IMediaPlayerService.h>
 #include <media/IMediaRecorder.h>
-#include <media/IMediaPhone.h> //sprd
+#include <media/IMediaPhone.h> //sprd vt must
 #include <media/IOMX.h>
 
 #include <utils/Errors.h>  // for status_t
@@ -37,7 +37,7 @@ enum {
     CREATE_MEDIA_RECORDER,
     CREATE_METADATA_RETRIEVER,
     GET_OMX,
-    CREATE_MEDIA_PHONE//sprd
+    CREATE_MEDIA_PHONE//sprd vt must
 };
 
 class BpMediaPlayerService: public BpInterface<IMediaPlayerService>
@@ -92,7 +92,7 @@ public:
         return interface_cast<IMediaRecorder>(reply.readStrongBinder());
     }
 
-    virtual sp<IMediaPhone> createMediaPhone(pid_t pid)//sprd
+    virtual sp<IMediaPhone> createMediaPhone(pid_t pid)//sprd vt must
     {
         Parcel data, reply;
         data.writeInterfaceToken(IMediaPlayerService::getInterfaceDescriptor());
@@ -229,7 +229,7 @@ status_t BnMediaPlayerService::onTransact(
             reply->writeStrongBinder(recorder->asBinder());
             return NO_ERROR;
         } break;
-        case CREATE_MEDIA_PHONE: {//sprd
+        case CREATE_MEDIA_PHONE: {//sprd vt must
             CHECK_INTERFACE(IMediaPlayerService, data, reply);
             pid_t pid = data.readInt32();
             sp<IMediaPhone> phone = createMediaPhone(pid);

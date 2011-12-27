@@ -46,7 +46,7 @@ struct OMXCodec : public MediaSource,
             const char *matchComponentName = NULL,
             uint32_t flags = 0,
             OMX_U32 bufferCountInput = 0,
-            OMX_U32 bufferCountOutput = 0);//sprd
+            OMX_U32 bufferCountOutput = 0);//sprd vt
 
     static void setComponentRole(
             const sp<IOMX> &omx, IOMX::node_id node, bool isEncoder,
@@ -175,7 +175,7 @@ private:
 	OMX_U32 mBufferCountInput;
 	OMX_U32 mBufferCountOutput;
 
-	// sprd Used to speed up videophone downlink speed
+	// sprd vt Used to speed up videophone downlink speed
 	Vector<int> mEmptyBuffers; // store buffers returned by codec
 	bool mInitialRead; // whether firstly read
 	bool mWaitOutput;
@@ -184,7 +184,7 @@ private:
              bool isEncoder, const char *mime, const char *componentName,
              const sp<MediaSource> &source, 
              OMX_U32 bufferCountInput = 0,
-             OMX_U32 bufferCountOutput = 0);//sprd
+             OMX_U32 bufferCountOutput = 0);//sprd vt
 
     void addCodecSpecificData(const void *data, size_t size);
     void clearCodecSpecificData();

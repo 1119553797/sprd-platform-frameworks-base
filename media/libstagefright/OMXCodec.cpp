@@ -513,7 +513,7 @@ sp<MediaSource> OMXCodec::Create(
         const char *matchComponentName,
         uint32_t flags,
         OMX_U32 bufferCountInput,
-        OMX_U32 bufferCountOutput) {//sprd
+        OMX_U32 bufferCountOutput) {//sprd vt
     const char *mime;
     bool success = meta->findCString(kKeyMIMEType, &mime);
     CHECK(success);
@@ -569,7 +569,7 @@ sp<MediaSource> OMXCodec::Create(
             sp<OMXCodec> codec = new OMXCodec(
                     omx, node, quirks,
                     createEncoder, mime, componentName,
-                    source, bufferCountInput, bufferCountOutput);//sprd
+                    source, bufferCountInput, bufferCountOutput);//sprd vt
 
             observer->setCodec(codec);
 
@@ -1462,7 +1462,7 @@ OMXCodec::OMXCodec(
         const char *componentName,
         const sp<MediaSource> &source,
         OMX_U32 bufferCountInput,
-        OMX_U32 bufferCountOutput)//sprd
+        OMX_U32 bufferCountOutput)//sprd vt
     : mOMX(omx),
       mOMXLivesLocally(omx->livesLocally(getpid())),
       mNode(node),
@@ -1474,8 +1474,8 @@ OMXCodec::OMXCodec(
       mCodecSpecificDataIndex(0),
       mState(LOADED),
       mInitialBufferSubmit(true),
-      mInitialRead(true),//sprd
-      mWaitOutput(false),//sprd
+      mInitialRead(true),//sprd vt
+      mWaitOutput(false),//sprd vt
       mSignalledEOS(false),
       mNoMoreOutputData(false),
       mOutputPortSettingsHaveChanged(false),
@@ -1485,8 +1485,8 @@ OMXCodec::OMXCodec(
       mSkipTimeUs(-1),
       mLeftOverBuffer(NULL),
       mPaused(false),
-      mBufferCountInput(bufferCountInput),//sprd
-      mBufferCountOutput(bufferCountOutput) {//sprd
+      mBufferCountInput(bufferCountInput),//sprd vt
+      mBufferCountOutput(bufferCountOutput) {//sprd vt
     mPortStatus[kPortIndexInput] = ENABLED;
     mPortStatus[kPortIndexOutput] = ENABLED;
 
@@ -1646,7 +1646,7 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
     CODEC_LOGI("allocating %lu buffers of size %lu on %s port",
             def.nBufferCountActual, def.nBufferSize,
             portIndex == kPortIndexInput ? "input" : "output");
-//sprd begin
+//sprd vt begin
 	CODEC_LOGI("allocateBuffersOnPort, mBufferCountInput: %d, mBufferCountOutput: %d", 
 			mBufferCountInput, mBufferCountOutput);
 	
@@ -1686,7 +1686,7 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
             def.nBufferCountActual, def.nBufferSize,
             portIndex == kPortIndexInput ? "input" : "output");
 	}
-//sprd end
+//sprd vt end
     size_t totalSize = def.nBufferCountActual * def.nBufferSize;
     mDealer[portIndex] = new MemoryDealer(totalSize, "OMXCodec");
 
@@ -1802,7 +1802,7 @@ void OMXCodec::on_message(const omx_message &msg) {
                     info->mMediaBuffer = NULL;
                 }
             }
-#ifdef FEATURE_MINIMUM_BUFFER //sprd
+#ifdef FEATURE_MINIMUM_BUFFER //sprd vt
 			if (!mWaitOutput && (mBufferCountOutput > 0)){
 				CODEC_LOGV("mEmptyBuffers.push(%d)", i);
 				mEmptyBuffers.push(i);
@@ -1979,7 +1979,7 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
         case OMX_EventError:
         {
             CODEC_LOGE("ERROR(0x%08lx, %ld)", data1, data2);
-			mWaitOutput = true;//sprd
+			mWaitOutput = true;//sprd vt
 
 	    if(data1!=OMX_ErrorStreamCorrupt){//@jgdu
 		setState(ERROR);
@@ -2328,7 +2328,7 @@ status_t OMXCodec::freeBuffersOnPort(
 
     CHECK(onlyThoseWeOwn || buffers->isEmpty());
 
-	mEmptyBuffers.clear();//sprd
+	mEmptyBuffers.clear();//sprd vt
 
     return stickyErr;
 }
@@ -3055,8 +3055,8 @@ status_t OMXCodec::start(MetaData *meta) {
 
     mCodecSpecificDataIndex = 0;
     mInitialBufferSubmit = true;
-	mInitialRead = true;//sprd
-	mWaitOutput = false;//sprd
+	mInitialRead = true;//sprd vt
+	mWaitOutput = false;//sprd vt
     mSignalledEOS = false;
     mNoMoreOutputData = false;
     mOutputPortSettingsHaveChanged = false;
@@ -3066,7 +3066,7 @@ status_t OMXCodec::start(MetaData *meta) {
     mFilledBuffers.clear();
     mPaused = false;
 
-	if (mBufferCountOutput > 0) { //sprd
+	if (mBufferCountOutput > 0) { //sprd vt
 		OMX_PARAM_DEBLOCKINGTYPE DeBlock;
 		CONFIG_SIZE_AND_VERSION(DeBlock);
 		
@@ -3231,7 +3231,7 @@ status_t OMXCodec::read(
         }
     }
 	
-#ifdef FEATURE_MINIMUM_BUFFER //sprd
+#ifdef FEATURE_MINIMUM_BUFFER //sprd vt
 	CODEC_LOGV("mInitialRead: %d", mInitialRead);
 	if (mInitialRead){
 		mInitialRead = false;

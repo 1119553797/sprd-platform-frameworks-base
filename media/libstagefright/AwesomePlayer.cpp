@@ -27,7 +27,7 @@
 #include "include/NuCachedSource2.h"
 #include "include/ThrottledSource.h"
 #include "include/MPEG2TSExtractor.h"
-#include "include/VideoPhoneExtractor.h"//sprd
+#include "include/VideoPhoneExtractor.h"//sprd vt must
 
 #include "ARTPSession.h"
 #include "APacketSource.h"
@@ -38,7 +38,7 @@
 #include <media/stagefright/AudioPlayer.h>
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/FileSource.h>
-#include <media/stagefright/CharDeviceSource.h>//sprd
+#include <media/stagefright/CharDeviceSource.h>//sprd vt must
 #include <media/stagefright/MediaBuffer.h>
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MediaExtractor.h>
@@ -257,7 +257,7 @@ AwesomePlayer::AwesomePlayer()
       mLastVideoBuffer(NULL),
       mVideoBuffer(NULL),
       mSuspensionState(NULL),
-      mIsVideoPhoneStream(false),
+      mIsVideoPhoneStream(false),//sprd vt must
       mfromPause(false),
       mforceStop(false),
       mbeginPlay(false),
@@ -1316,7 +1316,7 @@ void AwesomePlayer::setVideoSource(sp<MediaSource> source) {
 
 status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 	LOGI("initVideoDecoder, mIsVideoPhoneStream: %d", mIsVideoPhoneStream);
-	if (mIsVideoPhoneStream){
+	if (mIsVideoPhoneStream){//sprd vt
 	    mVideoSource = OMXCodec::Create(
 	            mClient.interface(), mVideoTrack->getFormat(),
 	            false, // createEncoder
@@ -1563,7 +1563,7 @@ void AwesomePlayer::onVideoEvent() {
         latenessUs = 0;
     }
 
-    if ((mRTPSession != NULL) || mIsVideoPhoneStream) {
+    if ((mRTPSession != NULL) || mIsVideoPhoneStream) {//sprd vt must
         // We'll completely ignore timestamps for gtalk videochat
         // and we'll play incoming video as fast as we get it.
         latenessUs = 0;
@@ -1844,7 +1844,7 @@ status_t AwesomePlayer::finishSetDataSource_l() {
             return UNKNOWN_ERROR;
         }
     }
-    else if (!strncasecmp(mUri.string(), "videophone://", 13)) 
+    else if (!strncasecmp(mUri.string(), "videophone://", 13)) //sprd vt must
     {
     	mIsVideoPhoneStream = true;
     	char buf[30] = {0};
