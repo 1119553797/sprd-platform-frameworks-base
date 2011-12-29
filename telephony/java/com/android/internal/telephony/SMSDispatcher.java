@@ -160,6 +160,8 @@ public abstract class SMSDispatcher extends Handler {
 
     protected boolean mStorageAvailable = true;
     protected boolean mReportMemoryStatusPending = false;
+    /*delete for CR<NEWMS00146275> by luning at 2011.12.02*/
+//    private static String NEW_SMS_RECEIVED_ACTION = "com.sprd.NEW_SMS_RECEIVED_ACTION";/*fixed CR<NEWMS00142299> by luning at 2011.11.21*/
 
     protected static int mRemainingMessages = -1;
 
@@ -314,6 +316,10 @@ public abstract class SMSDispatcher extends Handler {
                     boolean handled = (result == Intents.RESULT_SMS_HANDLED);
                     notifyAndAcknowledgeLastIncomingSms(handled, result, null);
                 }
+                /*delete for CR<NEWMS00146275> by luning at 2011.12.02*/
+//                else {
+//                    mContext.sendBroadcast(new Intent(NEW_SMS_RECEIVED_ACTION));/*fixed CR<NEWMS00142299> by luning at 2011.11.21*/
+//                }
             } catch (RuntimeException ex) {
                 Log.e(TAG, "Exception dispatching message", ex);
                 notifyAndAcknowledgeLastIncomingSms(false, Intents.RESULT_SMS_GENERIC_ERROR, null);
@@ -612,8 +618,20 @@ public abstract class SMSDispatcher extends Handler {
         try {
             cursor = mResolver.query(mRawUri, RAW_PROJECTION, where.toString(), whereArgs, null);
             int cursorCount = cursor.getCount();
+            Log.d(TAG," processMessagePart() msgCount"+concatRef.msgCount+" cursorCount:"+cursorCount);
             if (cursorCount != concatRef.msgCount - 1) {
                 // We don't have all the parts yet, store this one away
+                // ignore the sms part if it already received
+                int sequenceColumn = cursor.getColumnIndex("sequence");
+                for (int i = 0; i < cursorCount; i++) {
+                    cursor.moveToNext();
+                    int cursorSequence = (int) cursor.getLong(sequenceColumn);
+                    if (cursorSequence == concatRef.seqNumber) {
+                        Log.d(TAG, "processMessagePart() seqNumber=" + cursorSequence
+                                + " is already received!");
+                        return Intents.RESULT_SMS_HANDLED;
+                    }
+                }
                 ContentValues values = new ContentValues();
                 values.put("date", new Long(sms.getTimestampMillis()));
                 values.put("pdu", HexDump.toHexString(sms.getPdu()));
@@ -641,6 +659,18 @@ public abstract class SMSDispatcher extends Handler {
             }
             // This one isn't in the DB, so add it
             pdus[concatRef.seqNumber - 1] = sms.getPdu();
+            boolean nullflg = false;
+            for ( int i = 0; i < pdus.length; i++ ) {
+                if ( pdus[i] == null ) {
+                    nullflg = true;
+                    Log.d(TAG," pdus["+i+"]:null");
+                } else {
+                    Log.d(TAG," pdus["+i+"]:"+HexDump.toHexString(pdus[i]));
+                }
+            }
+            if ( nullflg ) {
+                return Intents.RESULT_SMS_GENERIC_ERROR;
+            }
 
             // Remove the parts from the database
             mResolver.delete(mRawUri, where.toString(), whereArgs);

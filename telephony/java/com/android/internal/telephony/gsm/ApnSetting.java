@@ -17,6 +17,7 @@
 package com.android.internal.telephony.gsm;
 
 import com.android.internal.telephony.*;
+import android.util.Log;
 /**
  * This class represents a apn setting for create PDP link
  */
@@ -156,6 +157,7 @@ public class ApnSetting {
     public boolean canHandleType(String type) {
         for (String t : types) {
             // DEFAULT handles all, and HIPRI is handled by DEFAULT
+             Log.d("ApnSetting", "canHandleType t: "+t+" type:"+type);
             if (t.equals(type) || t.equals(Phone.APN_TYPE_ALL) ||
                     (t.equals(Phone.APN_TYPE_DEFAULT) &&
                     type.equals(Phone.APN_TYPE_HIPRI))) {

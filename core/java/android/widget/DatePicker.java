@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.InputFilter;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
@@ -48,7 +49,7 @@ import java.util.Locale;
 public class DatePicker extends FrameLayout {
 
     private static final int DEFAULT_START_YEAR = 1900;
-    private static final int DEFAULT_END_YEAR = 2100;
+    private static final int DEFAULT_END_YEAR = 2100;//add by yangqingan for 146983 at 2011-12-07
 
     // This ignores Undecimber, but we only support real Gregorian calendars.
     private static final int NUMBER_OF_MONTHS = 12;
@@ -102,6 +103,7 @@ public class DatePicker extends FrameLayout {
 
         mDayPicker = (NumberPicker) findViewById(R.id.day);
         mDayPicker.setFormatter(NumberPicker.TWO_DIGIT_FORMATTER);
+        mDayPicker.addFilter(new InputFilter.LengthFilter(2));//add by wangxiaobin for CR135501 at 2011-11-17
         mDayPicker.setSpeed(100);
         mDayPicker.setOnChangeListener(new OnChangedListener() {
             public void onChanged(NumberPicker picker, int oldVal, int newVal) {
@@ -119,7 +121,8 @@ public class DatePicker extends FrameLayout {
          * consistency with the other fields.
          */
         if (months[0].startsWith("1")) {
-            for (int i = 0; i < months.length; i++) {
+//          for (int i = 0; i < months.length; i++) {
+            for (int i = 0; i < 12; i++) {//add by wangxiaobin for 135501 at 11-14
                 months[i] = String.valueOf(i + 1);
             }
             mMonthPicker.setRange(1, NUMBER_OF_MONTHS);

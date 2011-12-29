@@ -38,6 +38,9 @@ import com.android.internal.telephony.MccTable;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccCardApplication;
 import com.android.internal.telephony.IccConstants;
+import com.android.internal.telephony.TelephonyIntents;
+import com.android.internal.telephony.gsm.stk.AppInterface;
+
 import java.util.ArrayList;
 import android.telephony.PhoneNumberUtils;
 import android.content.BroadcastReceiver;
@@ -495,7 +498,11 @@ public final class SIMRecords extends IccRecords {
             // A future optimization would be to inspect fileList and
             // only reload those files that we care about.  For now,
             // just re-fetch all SIM records that we cache.
+            Log.d(LOG_TAG,"[stk]SIMRecords  onRefresh");
+            adnCache.reset();
             fetchSimRecords();
+            Intent intent = new Intent(TelephonyIntents.ACTION_STK_REFRESH_SIM_CONTACTS);
+            mContext.sendBroadcast(intent);
         }
     }
 
@@ -1460,12 +1467,12 @@ public final class SIMRecords extends IccRecords {
      * If the SPN is not found on the SIM, the rule is always PLMN_ONLY.
      */
     protected int getDisplayRule(String plmn) {
-        int rule = 0;
+        int rule;
         if (spn == null || spnDisplayCondition == -1) {
             // EF_SPN was not found on the SIM, or not yet loaded.  Just show ONS.
             rule = SPN_RULE_SHOW_PLMN;
         } else if (isOnMatchingPlmn(plmn)) {
-            //rule = SPN_RULE_SHOW_SPN;
+            rule = SPN_RULE_SHOW_SPN;
             if ((spnDisplayCondition & 0x01) == 0x01) {
                 // ONS required when registered to HPLMN or PLMN in EF_SPDI
                 rule |= SPN_RULE_SHOW_PLMN;
@@ -1473,7 +1480,7 @@ public final class SIMRecords extends IccRecords {
             	rule |= SPN_RULE_SHOW_SPN;
             }
         } else {
-            //rule = SPN_RULE_SHOW_PLMN;
+            rule = SPN_RULE_SHOW_PLMN;
             if ((spnDisplayCondition & 0x02) == 0x00) {
                 // SPN required if not registered to HPLMN or PLMN in EF_SPDI
                 rule |= SPN_RULE_SHOW_SPN;

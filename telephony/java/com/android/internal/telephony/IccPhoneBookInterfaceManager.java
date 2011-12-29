@@ -82,6 +82,8 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 					if (success) {
 						// sim_index = Integer.valueOf(ar.result.toString());
 						sim_index = getInsertIndex();
+					}else {
+						Log.e("yqa", "", ar.exception);
 					}
 					// end
 					mLock.notifyAll();

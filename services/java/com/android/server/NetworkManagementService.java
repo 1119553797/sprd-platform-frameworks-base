@@ -76,6 +76,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
         public static final int UsbGserStatusResult      = 220;
         public static final int UsbVserStatusResult      = 221;
         public static final int UsbUdcpowerStatusResult  = 222;
+        public static final int UsbConnectStatusResult  = 223;
 
         public static final int InterfaceChange           = 600;
     }
@@ -686,6 +687,25 @@ class NetworkManagementService extends INetworkManagementService.Stub {
             int code = Integer.parseInt(tok[0]);
             if (code == NetdResponseCode.UsbVserStatusResult) {
                 if (tok[3].equals("started"))
+                    return true;
+                return false;
+            } else {
+                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+            }
+        }
+        throw new IllegalStateException("Got an empty response");
+    }
+    
+    public boolean isUsbConnected() throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
+        ArrayList<String> rsp = mConnector.doCommand("usb status");
+
+        for (String line : rsp) {
+            String []tok = line.split(" ");
+            int code = Integer.parseInt(tok[0]);
+            if (code == NetdResponseCode.UsbConnectStatusResult) {
+                if (tok[3].equals("connected"))
                     return true;
                 return false;
             } else {

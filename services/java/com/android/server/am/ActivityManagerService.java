@@ -6251,7 +6251,10 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         retrieveSettings();
 
-        if (goingCallback != null) goingCallback.run();
+        //if (goingCallback != null) goingCallback.run();
+        if (goingCallback != null) {
+            new Thread(goingCallback).start();
+        }
         
         synchronized (this) {
             if (mFactoryTest != SystemServer.FACTORY_TEST_LOW_LEVEL) {

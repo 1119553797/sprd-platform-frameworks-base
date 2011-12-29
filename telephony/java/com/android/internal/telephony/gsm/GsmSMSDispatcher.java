@@ -63,7 +63,8 @@ final class GsmSMSDispatcher extends SMSDispatcher {
     private static final String TAG = "GSM";
 
     private GSMPhone mGsmPhone;
-
+    
+    
     GsmSMSDispatcher(GSMPhone phone) {
         super(phone);
         mGsmPhone = phone;

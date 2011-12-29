@@ -792,7 +792,7 @@ public interface Phone extends SprdVideoPhone{
      * dialing, alerting, ringing, or waiting.  Other errors are
      * handled asynchronously.
      */
-    Connection dial(String dialString) throws CallStateException;
+    Connection dial(String dialString, boolean isStkCall) throws CallStateException;
 
     /**
      * Initiate a new voice connection with supplementary User to User

@@ -168,6 +168,8 @@ class RilMessageDecoder extends HierarchicalStateMachine {
                 decodingStarted = true;
             } catch (ResultException e) {
                 // send to Service for proper RIL communication.
+                StkLog.d(this, "[stk]mCmdParamsFactory.make Exception = " + e);
+                mCurrentRilMessage.mId = StkService.MSG_ID_SESSION_END;
                 mCurrentRilMessage.mResCode = e.result();
                 sendCmdForExecution(mCurrentRilMessage);
                 decodingStarted = false;

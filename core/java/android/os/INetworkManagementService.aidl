@@ -252,5 +252,7 @@ interface INetworkManagementService
      * Check the status of USB Vser support
      */
     boolean isUsbVserStarted();
+
+    boolean isUsbConnected();
     //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> end
 }

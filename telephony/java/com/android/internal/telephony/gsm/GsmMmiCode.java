@@ -105,6 +105,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
     static final int EVENT_SET_CFF_COMPLETE     = 6;
     static final int EVENT_USSD_CANCEL_COMPLETE = 7;
     static final int EVENT_QUERY_LI_COMPLETE    = 8;
+    static final int EVENT_QUERY_CLIP_COMPLETE  = 9;
 
     //***** Instance Variables
 
@@ -589,7 +590,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                 Log.d(LOG_TAG, "is CLIP");
                 if (isInterrogate()) {
                     phone.mCM.queryCLIP(
-                            obtainMessage(EVENT_QUERY_COMPLETE, this));
+                            obtainMessage(EVENT_QUERY_CLIP_COMPLETE, this));
                 } else {
                     throw new RuntimeException ("Invalid or Unsupported MMI Code");
                 }
@@ -662,7 +663,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                         ((cfAction == CommandsInterface.CF_ACTION_ENABLE) ||
                                 (cfAction == CommandsInterface.CF_ACTION_REGISTRATION)) ? 1 : 0;
 
-                    if ((cfAction == CommandsInterface.CF_ACTION_ENABLE) &&//golden
+                    if ((cfAction == CommandsInterface.CF_ACTION_ENABLE) &&
                         (dialingNumber != null && dialingNumber.length() != 0)) {
                         cfAction = CommandsInterface.CF_ACTION_REGISTRATION;
                     }
@@ -909,6 +910,11 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                 onQueryComplete(ar);
             break;
 
+            case EVENT_QUERY_CLIP_COMPLETE:
+                ar = (AsyncResult) (msg.obj);
+                onQueryClipComplete(ar);
+            break;
+
             case EVENT_USSD_COMPLETE:
                 ar = (AsyncResult) (msg.obj);
 
@@ -949,7 +955,25 @@ public final class GsmMmiCode extends Handler implements MmiCode {
     private CharSequence getScString() {
         if (sc != null) {
             if (isServiceCodeCallBarring(sc)) {
-                return context.getText(com.android.internal.R.string.BaMmi);
+                if (sc.equals(SC_BAOC)) {
+                    return context.getText(com.android.internal.R.string.BaocMmi);
+                } else if (sc.equals(SC_BAOIC)) {
+                    return context.getText(com.android.internal.R.string.BaoicMmi);
+                } else if (sc.equals(SC_BAOICxH)) {
+                    return context.getText(com.android.internal.R.string.BaoicxhMmi);
+                } else if (sc.equals(SC_BAIC)) {
+                    return context.getText(com.android.internal.R.string.BaicMmi);
+                } else if (sc.equals(SC_BAICr)) {
+                    return context.getText(com.android.internal.R.string.BaicrMmi);
+                } else if (sc.equals(SC_BA_ALL)) {
+                    return context.getText(com.android.internal.R.string.BaallMmi);
+                } else if (sc.equals(SC_BA_MO)) {
+                    return context.getText(com.android.internal.R.string.BamoMmi);
+                } else if (sc.equals(SC_BA_MT)) {
+                    return context.getText(com.android.internal.R.string.BamtMmi);
+                } else {
+                    return context.getText(com.android.internal.R.string.BaMmi);
+                }
             } else if (isServiceCodeCallForwarding(sc)) {
                 if (sc.equals(SC_CFU)) {
                     return context.getText(com.android.internal.R.string.UnConditionCfMmi);
@@ -1205,12 +1229,17 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             (info.reason == CommandsInterface.CF_REASON_NO_REPLY);
 
         if (info.status == 1) {
-            if (needTimeTemplate) {
+            if (isEmptyOrNull(info.number)){
                 template = context.getText(
-                        com.android.internal.R.string.cfTemplateForwardedTime);
-            } else {
-                template = context.getText(
-                        com.android.internal.R.string.cfTemplateForwarded);
+                            com.android.internal.R.string.cfTemplateNotForwarded);
+            } else { 
+                if (needTimeTemplate) {
+                    template = context.getText(
+                            com.android.internal.R.string.cfTemplateForwardedTime);
+                } else {
+                    template = context.getText(
+                            com.android.internal.R.string.cfTemplateForwarded);
+                }
             }
         } else if (info.status == 0 && isEmptyOrNull(info.number)) {
             template = context.getText(
@@ -1317,6 +1346,36 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                 if (ints[0] == 0) {  
                     sb.append(context.getText(com.android.internal.R.string.serviceDisabled));
                 } else if (ints[0] == 1) {
+                    sb.append(context.getText(com.android.internal.R.string.serviceEnabled));
+                } else {
+                    sb.append(context.getText(com.android.internal.R.string.mmiError));
+                }
+            } else {
+                sb.append(context.getText(com.android.internal.R.string.mmiError));
+            }
+
+            state = State.COMPLETE;
+        }
+
+        message = sb;
+        phone.onMMIDone(this);
+    }
+
+    private void
+    onQueryClipComplete(AsyncResult ar) {
+        StringBuilder sb = new StringBuilder(getScString());
+        sb.append("\n");
+
+        if (ar.exception != null) {
+            state = State.FAILED;
+            sb.append(context.getText(com.android.internal.R.string.mmiError));
+        } else {
+            int[] ints = (int[])ar.result;
+
+            if (ints.length != 0) {
+                if (ints[1] == 0) {  
+                    sb.append(context.getText(com.android.internal.R.string.serviceDisabled));
+                } else if (ints[1] == 1) {
                     sb.append(context.getText(com.android.internal.R.string.serviceEnabled));
                 } else {
                     sb.append(context.getText(com.android.internal.R.string.mmiError));

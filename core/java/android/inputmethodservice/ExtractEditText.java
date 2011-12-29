@@ -17,9 +17,11 @@
 package android.inputmethodservice;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.AttributeSet;
 import android.view.inputmethod.ExtractedText;
 import android.widget.EditText;
+import android.view.inputmethod.EditorInfo;
 
 /***
  * Specialization of {@link EditText} for showing and interacting with the
@@ -28,17 +30,18 @@ import android.widget.EditText;
 public class ExtractEditText extends EditText {
     private InputMethodService mIME;
     private int mSettingExtractedText;
+    private int contextMenuClickedId;//add by yangqingan 2011-11-27 for NEWMS00144928
     
     public ExtractEditText(Context context) {
-        super(context, null);
+        this(context, null);
     }
 
     public ExtractEditText(Context context, AttributeSet attrs) {
-        super(context, attrs, com.android.internal.R.attr.editTextStyle);
+    	this(context, attrs, com.android.internal.R.attr.editTextStyle);
     }
 
     public ExtractEditText(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    	super(context, attrs, defStyle);
     }
     
     void setIME(InputMethodService ime) {
@@ -69,8 +72,16 @@ public class ExtractEditText extends EditText {
      */
     @Override public void setExtractedText(ExtractedText text) {
         try {
+        	//add by yangqingan 2011-11-27 for NEWMS00144928 begin
+        	CharSequence oldText = text.text;
+        	if(contextMenuClickedId == ID_START_SELECTING_TEXT || contextMenuClickedId == ID_STOP_SELECTING_TEXT){
+        		text.text = null;
+            }
             mSettingExtractedText++;
             super.setExtractedText(text);
+            contextMenuClickedId = 0;
+            text.text = oldText;
+          //add by yangqingan 2011-11-27 for NEWMS00144928 end
         } finally {
             mSettingExtractedText--;
         }
@@ -98,6 +109,7 @@ public class ExtractEditText extends EditText {
     }
     
     @Override public boolean onTextContextMenuItem(int id) {
+    	contextMenuClickedId = id;
         // Horrible hack: select word option has to be handled by original view to work.
         if (mIME != null && id != android.R.id.startSelectingText) {
             if (mIME.onExtractTextContextMenuItem(id)) {
@@ -145,4 +157,47 @@ public class ExtractEditText extends EditText {
     @Override public boolean hasFocus() {
         return this.isEnabled();
     }
+  //add by yangqingan 2011-11-26 for NEWMS00144694 begin
+    @Override
+    protected boolean isVisiblePasswordInputType(int inputType) {
+    	Log.d("yqa", "==========isVisiblePasswordInputType======" + inputType);
+        final int variation = inputType & (EditorInfo.TYPE_MASK_CLASS
+                | EditorInfo.TYPE_MASK_VARIATION);
+//        return variation
+//        == (EditorInfo.TYPE_CLASS_TEXT
+//                | EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        boolean b = variation
+        == (EditorInfo.TYPE_CLASS_TEXT
+                | EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) || variation
+                == (EditorInfo.TYPE_CLASS_NUMBER
+                        | EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        Log.d("yqa", "==========isPasswordInputType======" + b);
+        return b;
+    }
+    @Override
+    protected boolean isPasswordInputType(int inputType) {
+    	//add by yangqingan 2011-11-26 for NEWMS00144694 begin
+//    	if(password){
+//    		return true;
+//    	}
+    	Log.d("yqa", "==========isPasswordInputType==inputType====" + inputType);
+        final int variation = inputType & (EditorInfo.TYPE_MASK_CLASS
+                | EditorInfo.TYPE_MASK_VARIATION);
+//        final int variation = inputType & EditorInfo.TYPE_TEXT_VARIATION_PASSWORD;
+//        return variation
+//        == (EditorInfo.TYPE_CLASS_TEXT
+//                | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+        boolean b = variation
+        == (EditorInfo.TYPE_CLASS_TEXT
+                | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) || variation
+                == (EditorInfo.TYPE_CLASS_NUMBER
+                        | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+        Log.d("yqa", "==========isPasswordInputType======" + b);
+        return b;
+//        return variation
+//                == (EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+      //add by yangqingan 2011-11-26 for NEWMS00144694 end
+      
+    }
+  //add by yangqingan 2011-11-26 for NEWMS00144694 end
 }

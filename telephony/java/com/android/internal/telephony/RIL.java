@@ -854,12 +854,12 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     }
 
     public void
-    dial (String address, int clirMode, Message result) {
-        dial(address, clirMode, null, result);
+    dial (String address, int clirMode, boolean isStkCall, Message result) {
+        dial(address, clirMode, null, isStkCall, result);
     }
 
     public void
-    dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
+    dial(String address, int clirMode, UUSInfo uusInfo, boolean isStkCall, Message result) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
 
         rr.mp.writeString(address);
@@ -874,6 +874,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             rr.mp.writeInt(uusInfo.getDcs());
             rr.mp.writeByteArray(uusInfo.getUserData());
         }
+        rr.mp.writeInt(isStkCall ? 1:0);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
@@ -1688,8 +1689,15 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
                             + " " + ussdString);
-
-        rr.mp.writeString(ussdString);
+        byte[] ussdByte = null;
+        try {
+            ussdByte = GsmAlphabet.stringToGsm8BitPacked(ussdString);
+        } catch (Exception e) {
+            Log.d(LOG_TAG, "Exception e = " + e);
+        }
+        String sendData = IccUtils.bytesToHexString(ussdByte);
+        Log.d(LOG_TAG, "USSD sendData = " + sendData);
+        rr.mp.writeString(sendData);
 
         send(rr);
     }

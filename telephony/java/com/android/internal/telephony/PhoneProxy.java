@@ -573,8 +573,8 @@ public class PhoneProxy extends Handler implements Phone {
         return mActivePhone.getRingingCall();
     }
 
-    public Connection dial(String dialString) throws CallStateException {
-        return mActivePhone.dial(dialString);
+    public Connection dial(String dialString, boolean isStkCall) throws CallStateException {
+        return mActivePhone.dial(dialString, isStkCall);
     }
 
     public Connection dial(String dialString, UUSInfo uusInfo) throws CallStateException {

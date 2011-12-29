@@ -745,11 +745,13 @@ public class SmsMessage extends SmsMessageBase{
         String getSCAddress() {
             int len;
             String ret;
+            Log.d(LOG_TAG, "SMS getSCAddress");
 
             // length of SC Address
             len = getByte();
 
             if (len == 0) {
+                Log.d(LOG_TAG, "SMS getSCAddress no sc address");
                 // no SC address
                 ret = null;
             } else {
@@ -1105,7 +1107,7 @@ public class SmsMessage extends SmsMessageBase{
         mPdu = pdu;
         // Log.d(LOG_TAG, "raw sms message:");
         // Log.d(LOG_TAG, s);
-
+        Log.d(LOG_TAG, "SMS parsePdu");
         PduParser p = new PduParser(pdu);
 
         scAddress = p.getSCAddress();

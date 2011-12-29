@@ -62,6 +62,14 @@
     <string name="ConditionCfMmi" msgid="">"所有条件来电转接"</string>
     <string name="CwMmi" msgid="9129678056795016867">"来电等待"</string>
     <string name="BaMmi" msgid="455193067926770581">"呼叫限制"</string>
+    <string name="BaocMmi" msgid="">"所有呼出限制"</string>
+    <string name="BaoicMmi" msgid="">"所有国际呼出限制"</string>
+    <string name="BaoicxhMmi" msgid="">"除本国外所有国际呼出限制"</string>
+    <string name="BaicMmi" msgid="">"所有呼入限制"</string>
+    <string name="BaicrMmi" msgid="">"漫游时所有呼入限制"</string>
+    <string name="BaallMmi" msgid="">"所有限制服务"</string>
+    <string name="BamoMmi" msgid="">"所有呼出限制服务"</string>
+    <string name="BamtMmi" msgid="">"所有呼入限制服务"</string>
     <string name="ActiveUnconCf" msgid="">"无条件呼叫转移启动"</string>
     <string name="ActiveConCf" msgid="">"有条件呼叫转移启动"</string>
     <string name="CallForwarded" msgid="">"呼叫已转移"</string>
@@ -93,7 +101,7 @@
     <string name="CLIRDefaultOffNextCallOn" msgid="6179425182856418465">"默认显示本机号码，但在下一次通话中不显示"</string>
     <string name="CLIRDefaultOffNextCallOff" msgid="2567998633124408552">"默认显示本机号码，在下一次通话中也显示"</string>
     <string name="serviceNotProvisioned" msgid="8614830180508686666">"未提供服务。"</string>
-    <string name="CLIRPermanent" msgid="5460892159398802465">"本机号码显示设置无法更改。"</string>
+    <string name="CLIRPermanent" msgid="5460892159398802465">"本机号码显示设置为永久模式，无法更改。"</string>
     <string name="RestrictedChangedTitle" msgid="5592189398956187498">"访问受限情况已发生变化"</string>
     <string name="RestrictedOnData" msgid="8653794784690065540">"数据服务已禁用。"</string>
     <string name="RestrictedOnEmergency" msgid="6581163779072833665">"紧急服务已禁用。"</string>
@@ -590,6 +598,7 @@
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"没有 SIM 卡"</string>
     <string name="lockscreen_missing_sim_message" msgid="2186920585695169078">"手机中无 SIM 卡"</string>
     <string name="lockscreen_missing_sim_instructions" msgid="8874620818937719067">"请插入 SIM 卡"</string>
+    <string name="lockscreen_blocked_sim_message_short" msgid="7381499217732227295">"SIM卡 PUK锁定"</string>
     <string name="emergency_calls_only" msgid="6733978304386365407">"只能使用紧急呼叫"</string>
     <string name="lockscreen_network_locked_message" msgid="143389224986028501">"网络已锁定"</string>
     <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"SIM 卡已用 PUK 码锁定"</string>
@@ -985,4 +994,17 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"某台计算机正在使用 USB 存储设备。"</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"目前有计算机正在使用 SD 卡。"</string>
     <string name="media_unknown_state" msgid="729192782197290385">"外部媒体处于未知状态。"</string>
+	
+	<!-- add by luning 2011.11.17 for NEWMS00109311 -->
+	<string name="audio_play_failed">"很抱歉，无法播放此音频。正在使用默认铃音"</string>
+	<!-- add by lino 2011.12.05 for when no space for sms  -->
+	<string name="sms_full_title">"信息内存已满"</string>
+	<string name="sms_full_body">"存储空间已满，无法接收传入的信息，请删除旧信息。"</string>
+	<!-- lino add 2012-12-08 begin for NEWMS00148531 -->
+	<string name="dialog_warning">警告</string>
+    <string name="internal_memory_low">SD 卡存储将用完! 请删除一些文件来腾出空间。</string>
+    <string name="button_close">关闭</string>
+<!-- add by yangqingan 2011-12-27 for NEWMS00155219 begin -->
+	<string name="unlock_screen_pin_error">Pin码错误!</string>
+	<!-- add by yangqingan 2011-12-27 for NEWMS00155219 end -->
 </resources>

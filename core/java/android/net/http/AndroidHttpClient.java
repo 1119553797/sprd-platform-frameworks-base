@@ -108,8 +108,8 @@ public final class AndroidHttpClient implements HttpClient {
         HttpConnectionParams.setStaleCheckingEnabled(params, false);
 
         // Default connection and socket timeout of 20 seconds.  Tweak to taste.
-        HttpConnectionParams.setConnectionTimeout(params, 60 * 1000);
-        HttpConnectionParams.setSoTimeout(params, 60 * 1000);
+        HttpConnectionParams.setConnectionTimeout(params, 60 * 1000);  //set default timeout.@hong
+        HttpConnectionParams.setSoTimeout(params, 60 * 1000); //@hong
         HttpConnectionParams.setSocketBufferSize(params, 8192);
 
         // Don't handle redirects -- return them to the caller.  Our code
@@ -125,7 +125,7 @@ public final class AndroidHttpClient implements HttpClient {
         schemeRegistry.register(new Scheme("http",
                 PlainSocketFactory.getSocketFactory(), 80));
         schemeRegistry.register(new Scheme("https",
-                SSLCertificateSocketFactory.getHttpSocketFactory(30 * 1000, sessionCache), 443));
+                SSLCertificateSocketFactory.getHttpSocketFactory(60 * 1000, sessionCache), 443));
 
         ClientConnectionManager manager =
                 new ThreadSafeClientConnManager(params, schemeRegistry);

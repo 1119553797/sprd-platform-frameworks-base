@@ -268,8 +268,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     public void updateEFLinearFixed(int fileid, int recordNum, byte[] data,
             String pin2, Message onComplete, int pathNum) {
 
-	 String path = (pathNum == 0) ?  getEFPath(fileid): getEFPathAgain(fileid);
-        phone.mCM.iccIO(COMMAND_UPDATE_RECORD, fileid, path,
+        phone.mCM.iccIO(COMMAND_UPDATE_RECORD, fileid, getEFPath(fileid),
                         recordNum, READ_RECORD_MODE_ABSOLUTE, data.length,
                         IccUtils.bytesToHexString(data), pin2, onComplete);
 	 
@@ -562,7 +561,9 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     }
 
     protected abstract String getEFPath(int efid);
-    protected abstract String getEFPathAgain(int efid);
+
+    public abstract void addDualMapFile(int efid);
+    
     protected abstract void logd(String s);
 
     protected abstract void loge(String s);

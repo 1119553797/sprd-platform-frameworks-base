@@ -101,6 +101,8 @@ public abstract class CallTracker extends Handler {
     protected Message
     obtainNoPollCompleteMessage(int what) {
         pendingOperations++;
+        log("checkNoOperationsPending: pendingOperations=" +
+                pendingOperations + " what=" + what);
         lastRelevantPoll = null;
         return obtainMessage(what);
     }
@@ -111,7 +113,7 @@ public abstract class CallTracker extends Handler {
      */
     protected boolean
     checkNoOperationsPending() {
-        if (DBG_POLL) log("checkNoOperationsPending: pendingOperations=" +
+        log("checkNoOperationsPending: pendingOperations=" +
                 pendingOperations);
         return pendingOperations == 0;
     }

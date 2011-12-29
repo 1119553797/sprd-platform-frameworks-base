@@ -275,7 +275,7 @@ public final class ShutdownThread extends Thread {
             Log.e(TAG, "RemoteException during radio shutdown", ex);
             radioOff = true;
         }
-
+/*
         Log.i(TAG, "Waiting for Bluetooth and Radio...");
         
         // Wait a max of 32 seconds for clean shutdown
@@ -303,7 +303,7 @@ public final class ShutdownThread extends Thread {
             }
             SystemClock.sleep(PHONE_STATE_POLL_SLEEP_MSEC);
         }
-
+*/
         // Shutdown MountService to ensure media is in a safe state
         IMountShutdownObserver observer = new IMountShutdownObserver.Stub() {
             public void onShutDownComplete(int statusCode) throws RemoteException {
@@ -337,6 +337,33 @@ public final class ShutdownThread extends Thread {
                 } catch (InterruptedException e) {
                 }
             }
+        }
+
+        Log.i(TAG, "Waiting for Bluetooth and Radio...");
+        // Wait a max of 32 seconds for clean shutdown
+        for (int i = 0; i < MAX_NUM_PHONE_STATE_READS; i++) {
+            if (!bluetoothOff) {
+                try {
+                    bluetoothOff =
+                            bluetooth.getBluetoothState() == BluetoothAdapter.STATE_OFF;
+                } catch (RemoteException ex) {
+                    Log.e(TAG, "RemoteException during bluetooth shutdown", ex);
+                    bluetoothOff = true;
+                }
+            }
+            if (!radioOff) {
+                try {
+                    radioOff = !phone.isRadioOn();
+                } catch (RemoteException ex) {
+                    Log.e(TAG, "RemoteException during radio shutdown", ex);
+                    radioOff = true;
+                }
+            }
+            if (radioOff && bluetoothOff) {
+                Log.i(TAG, "Radio and Bluetooth shutdown complete.");
+                break;
+            }
+            SystemClock.sleep(PHONE_STATE_POLL_SLEEP_MSEC);
         }
 
         rebootOrShutdown(mReboot, mRebootReason);

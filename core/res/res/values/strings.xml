@@ -114,6 +114,14 @@
     <string name="CwMmi">Call waiting</string>
     <!-- Displayed as the title for a success/failure report enabling/disabling call barring. -->
     <string name="BaMmi">Call barring</string>
+    <string name="BaocMmi" msgid="">"Barring of All outgoing calls"</string>
+    <string name="BaoicMmi" msgid="">"Barring of All outgoing international calls"</string>
+    <string name="BaoicxhMmi" msgid="">"Barring of All outgoing international calls except home country"</string>
+    <string name="BaicMmi" msgid="">"Barring of All incoming calls"</string>
+    <string name="BaicrMmi" msgid="">"Barring of All incoming calls when roaming"</string>
+    <string name="BaallMmi" msgid="">"All barring for All Basic Services"</string>
+    <string name="BamoMmi" msgid="">"All outgoing for All Basic Services"</string>
+    <string name="BamtMmi" msgid="">"All incoming for All Basic Services"</string>
     <!-- Displayed as the title for a MO call status in call forwarding. -->
     <string name="ActiveUnconCf">Call forwarded unconditional</string>
     <!-- Displayed as the title for a MO call status in call forwarding. -->
@@ -162,7 +170,7 @@
     <!-- Displayed to tell the user that caller ID is not provisioned for their SIM. -->
     <string name="serviceNotProvisioned">Service not provisioned.</string>
     <!-- Displayed to tell the user that they cannot change the caller ID setting. -->
-    <string name="CLIRPermanent">The caller ID setting cannot be changed.</string>
+    <string name="CLIRPermanent">The caller ID setting provisioned in permanent mode cannot be changed.</string>
 
     <!-- Notification title to tell the user that restricted state is changed by access control. -->
     <string name="RestrictedChangedTitle">Restricted access changed</string>
@@ -1529,6 +1537,9 @@
        *** touch based lock / unlock ***
                                           --> <skip />
 
+    <!-- Shown in the lock screen when there RUIM card is blocked. -->
+    <string name="lockscreen_blocked_ruim_message_short">RUIM card is blocked.</string>
+
     <!-- On the keyguard screen, it shows the carrier the phone is connected to.  This is displayed if the phone is not connected to a carrier.-->
     <string name="lockscreen_carrier_default">(No service)</string>
 
@@ -1571,6 +1582,8 @@
     <string name="lockscreen_missing_sim_message">No SIM card in phone.</string>
     <!-- Shown in the lock screen to ask the user to insert a SIM card. -->
     <string name="lockscreen_missing_sim_instructions">Please insert a SIM card.</string>
+    <!-- Shown in the lock screen when SIM card is blocked. -->
+    <string name="lockscreen_blocked_sim_message_short">SIM card is blocked.</string>
 
     <!-- Shown in the lock screen when there is emergency calls only mode. -->
     <string name="emergency_calls_only" msgid="2485604591272668370">Emergency calls only</string>
@@ -2466,5 +2479,16 @@
     <string name="media_shared" product="default">SD card is currently in use by a computer.</string>
     <!-- Text for message for an unknown external media state [CHAR LIMIT=NONE] -->
     <string name="media_unknown_state">External media in unknown state.</string>
-
+	<!-- add by luning 2011.11.17 for NEWMS00109311  -->
+	<string name="audio_play_failed">Sorry,this audio cannot be played,using the default ringtone</string>
+	<!-- add by lino 2011.12.05 for when no space for sms  -->
+	<string name="sms_full_title">Text message memory full</string>
+	<string name="sms_full_body">Incoming message rejected due to full memory. Please delete old messages.</string>
+	<!-- lino add 2012-12-08 begin for NEWMS00148531 -->
+	<string name="dialog_warning">Warning</string>
+    <string name="internal_memory_low">SD card storage is nearly full! Please delete some files to free space.</string>
+    <string name="button_close">Close</string>
+<!-- add by yangqingan 2011-12-27 for NEWMS00155219 begin -->
+	<string name="unlock_screen_pin_error">The pin is error!</string>
+	<!-- add by yangqingan 2011-12-27 for NEWMS00155219 end -->
 </resources>

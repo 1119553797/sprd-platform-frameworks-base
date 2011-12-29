@@ -153,6 +153,8 @@ class MountService extends IMountService.Stub
     private boolean                               mBooted = false;
     private boolean                               mReady = false;
     private boolean                               mSendUmsConnectedOnBoot = false;
+    private ConnectivityService                   mCs = null;
+    private boolean                               mUmsConnected = false;
 
     /**
      * Private hash of currently mounted secure containers.
@@ -272,7 +274,13 @@ class MountService extends IMountService.Stub
     private static final int H_UNMOUNT_PM_DONE = 2;
     private static final int H_UNMOUNT_MS = 3;
     private static final int RETRY_UNMOUNT_DELAY = 30; // in ms
-    private static final int MAX_UNMOUNT_RETRIES = 4;
+    //private static final int MAX_UNMOUNT_RETRIES = 4;
+    private static final int MAX_UNMOUNT_RETRIES = 0;
+    //add by liguxiang 10-21-11 for NEWMS00128630 begin
+    private static boolean mVolumeShared = false;
+    private static boolean mUsbStatusChanged = false;
+    //add by liguxiang 10-21-11 for NEWMS00128630 end
+	private static int mCode = 0;
 
     class UnmountCallBack {
         final String path;
@@ -302,6 +310,10 @@ class MountService extends IMountService.Stub
         @Override
         void handleFinished() {
             super.handleFinished();
+            if(!mCs.isUsbConnected() && mUmsConnected){
+            	Log.d(TAG," return 4");
+            	return;
+            }
             doShareUnshareVolume(path, method, true);
         }
     }
@@ -338,6 +350,10 @@ class MountService extends IMountService.Stub
             switch (msg.what) {
                 case H_UNMOUNT_PM_UPDATE: {
                     if (DEBUG_UNMOUNT) Slog.i(TAG, "H_UNMOUNT_PM_UPDATE");
+                    if(!mCs.isUsbConnected() && mUmsConnected){
+                    	Log.d(TAG,"return 1 ");
+                    	return;
+                    }
                     UnmountCallBack ucb = (UnmountCallBack) msg.obj;
                     mForceUnmounts.add(ucb);
                     if (DEBUG_UNMOUNT) Slog.i(TAG, " registered = " + mUpdatingStatus);
@@ -352,6 +368,10 @@ class MountService extends IMountService.Stub
                 case H_UNMOUNT_PM_DONE: {
                     if (DEBUG_UNMOUNT) Slog.i(TAG, "H_UNMOUNT_PM_DONE");
                     if (DEBUG_UNMOUNT) Slog.i(TAG, "Updated status. Processing requests");
+                    if(!mCs.isUsbConnected() && mUmsConnected){
+                    	Log.d(TAG,"return 2 ");
+                    	return;
+                    }
                     mUpdatingStatus = false;
                     int size = mForceUnmounts.size();
                     int sizeArr[] = new int[size];
@@ -404,6 +424,10 @@ class MountService extends IMountService.Stub
                 }
                 case H_UNMOUNT_MS : {
                     if (DEBUG_UNMOUNT) Slog.i(TAG, "H_UNMOUNT_MS");
+                    if(!mCs.isUsbConnected() && mUmsConnected){
+                    	Log.d(TAG,"return 3 ");
+                    	return;
+                    }
                     UnmountCallBack ucb = (UnmountCallBack) msg.obj;
                     ucb.handleFinished();
                     break;
@@ -413,6 +437,11 @@ class MountService extends IMountService.Stub
     };
     final private HandlerThread mHandlerThread;
     final private Handler mHandler;
+
+    // thread used to notify the others that volume state has been changed
+    private HandlerThread mVolumeStatusNotifyThread = null;
+    // handler bind to mVolumeStatusNotifyThread
+    private Handler mVolumeStatusNotifier = null;
 
     private void waitForReady() {
         while (mReady == false) {
@@ -496,16 +525,44 @@ class MountService extends IMountService.Stub
 
     private void doShareUnshareVolume(String path, String method, boolean enable) {
         // TODO: Add support for multiple share methods
+    	Log.d(TAG,"********************** doShareUnshareVolume");
         if (!method.equals("ums")) {
             throw new IllegalArgumentException(String.format("Method %s not supported", method));
         }
+        //add by liguxiang 10-21-11 for NEWMS00128630 begin
+        if(enable){
+        	mVolumeShared = true;
+        }
+        //add by liguxiang 10-21-11 for NEWMS00128630 end
 
         try {
             mConnector.doCommand(String.format(
                     "volume %sshare %s %s", (enable ? "" : "un"), path, method));
+
+            //add by liguxiang 10-21-11 for NEWMS00128630 begin
+            Log.d(TAG,"***********************doShareUnshareVolume mUsbStatusChanged = " + mUsbStatusChanged);
+            if(mUsbStatusChanged && !mCs.isUsbConnected()){
+            	enable = false;
+            	mConnector.doCommand(String.format(
+                        "volume %sshare %s %s", (enable ? "" : "un"), path, method));
+            	mVolumeShared = false;
+            	mUsbStatusChanged = false;
+            }
+            //add by liguxiang 10-21-11 for NEWMS00128630 end
         } catch (NativeDaemonConnectorException e) {
             Slog.e(TAG, "Failed to share/unshare", e);
+            mContext.sendBroadcast(
+                    new Intent(Intent.ACTION_SPRD_UMS_OPERATOR_ERROR));
         }
+    }
+
+    private void notifyVolumeStateChange(final String label, final String path, final int oldState, final int newState) {
+        // start notification in another thread. cause the following actions may cause an deadlock with socket recieve thread
+        mVolumeStatusNotifier.post(new Runnable() {
+            public void run() {
+                 notifyVolumeStateChangeInner(label, path, oldState, newState);
+            }
+        });
     }
 
     private void updatePublicVolumeState(String path, String state) {
@@ -519,7 +576,7 @@ class MountService extends IMountService.Stub
             return;
         }
 
-        if (Environment.MEDIA_UNMOUNTED.equals(state)) {
+        if (Environment.MEDIA_UNMOUNTED.equals(state) || Environment.MEDIA_IDLE.equals(state)) {
             // Tell the package manager the media is gone.
             mPms.updateExternalMediaStatus(false, false);
 
@@ -625,7 +682,7 @@ class MountService extends IMountService.Stub
      */
     public boolean onEvent(int code, String raw, String[] cooked) {
         Intent in = null;
-        Log.d("ligx----------","code = " + code);
+        mCode = code;
         if (DEBUG_EVENTS) {
             StringBuilder builder = new StringBuilder();
             builder.append("onEvent::");
@@ -659,7 +716,14 @@ class MountService extends IMountService.Stub
 	    boolean avail = false;
 	    if(cooked[3].equals("available")){
 		avail = true;
+		//add by liguxiang 10-21-11 for NEWMS00128630 begin
+	    }else{
+	    	if(mVolumeShared){
+	    		mUsbStatusChanged = true;
+	    	}
 	    }
+	    //add by liguxiang 10-21-11 for NEWMS00128630 end
+	    
 	    notifyUsbAvailabilityChange(avail);
 	 //add by liguxiang 09-15-11 for whether usb available end
         }else if ((code == VoldResponseCode.VolumeDiskInserted) ||
@@ -734,7 +798,7 @@ class MountService extends IMountService.Stub
         return true;
     }
 
-    private void notifyVolumeStateChange(String label, String path, int oldState, int newState) {
+    private void notifyVolumeStateChangeInner(String label, String path, int oldState, int newState) {
         String vs = getVolumeState(path);
         if (DEBUG_EVENTS) Slog.i(TAG, "notifyVolumeStateChanged::" + vs);
 
@@ -754,12 +818,14 @@ class MountService extends IMountService.Stub
              * Don't notify if we're in BAD_REMOVAL, NOFS, UNMOUNTABLE, or
              * if we're in the process of enabling UMS
              */
+        	Log.d(TAG,"getUmsEnabling() = " + getUmsEnabling());
             if (!vs.equals(
                     Environment.MEDIA_BAD_REMOVAL) && !vs.equals(
                             Environment.MEDIA_NOFS) && !vs.equals(
                                     Environment.MEDIA_UNMOUNTABLE) && !getUmsEnabling()) {
                 if (DEBUG_EVENTS) Slog.i(TAG, "updating volume state for media bad removal nofs and unmountable");
-                updatePublicVolumeState(path, Environment.MEDIA_UNMOUNTED);
+                //updatePublicVolumeState(path, Environment.MEDIA_UNMOUNTED);
+                updatePublicVolumeState(path, Environment.MEDIA_IDLE);
                 in = new Intent(Intent.ACTION_MEDIA_UNMOUNTED, Uri.parse("file://" + path));
             }
         } else if (newState == VolumeState.Pending) {
@@ -776,6 +842,11 @@ class MountService extends IMountService.Stub
             in = new Intent(Intent.ACTION_MEDIA_EJECT, Uri.parse("file://" + path));
         } else if (newState == VolumeState.Formatting) {
         } else if (newState == VolumeState.Shared) {
+        	//add by liguxiang 10-21-11 for NEWMS00128630 begin
+        	if(mCs.isUsbConnected()){
+        		mVolumeShared = false;
+        	}
+        	//add by liguxiang 10-21-11 for NEWMS00128630 end
             if (DEBUG_EVENTS) Slog.i(TAG, "Updating volume state media mounted");
             /* Send the media unmounted event first */
             updatePublicVolumeState(path, Environment.MEDIA_UNMOUNTED);
@@ -783,6 +854,7 @@ class MountService extends IMountService.Stub
             mContext.sendBroadcast(in);
 
             if (DEBUG_EVENTS) Slog.i(TAG, "Updating media shared");
+            mUmsEnabling = false;
             updatePublicVolumeState(path, Environment.MEDIA_SHARED);
             in = new Intent(Intent.ACTION_MEDIA_SHARED, Uri.parse("file://" + path));
             if (LOCAL_LOGD) Slog.d(TAG, "Sending ACTION_MEDIA_SHARED intent");
@@ -839,7 +911,9 @@ class MountService extends IMountService.Stub
 
         if (DEBUG_EVENTS) Slog.i(TAG, "doMountVolume: Mouting " + path);
         try {
+        	Log.d(TAG,"doMountVolume --------------------------- begin");
             mConnector.doCommand(String.format("volume mount %s", path));
+            Log.d(TAG,"doMountVolume ----------------------------- end");
         } catch (NativeDaemonConnectorException e) {
             /*
              * Mount failed for some reason
@@ -907,9 +981,21 @@ class MountService extends IMountService.Stub
         // Redundant probably. But no harm in updating state again.
         mPms.updateExternalMediaStatus(false, false);
         try {
+        	if(!mCs.isUsbConnected() && mUmsConnected){
+        		Log.d(TAG,"return 5");
+        		return -1;
+        	}
+        	Log.d(TAG,"doUnmountVolume ----------------------------begin");
             mConnector.doCommand(String.format(
                     "volume unmount %s%s", path, (force ? " force" : "")));
             // We unmounted the volume. None of the asec containers are available now.
+            Log.d(TAG,"doUnmountVolume ----------------------------- end");
+            
+            //add by liguxiang 10-21-11 for NEWMS00128630 begin
+            if(!mCs.isUsbConnected() && mUmsConnected){
+            	doMountVolume(path);
+            }
+            //add by liguxiang 10-21-11 for NEWMS00128630 end
             synchronized (mAsecMountSet) {
                 mAsecMountSet.clear();
             }
@@ -1042,7 +1128,7 @@ class MountService extends IMountService.Stub
     }
 
     private void sendUsbIntent(boolean c){
-	 Log.d("ligx----------","sendUsbIntent");
+	 Log.d(TAG,"send usb intent wiht action : " + (c ? Intent.ACTION_SPRD_USB_AVAILABLE : Intent.ACTION_SPRD_USB_UNAVAILABLE));
 	 mContext.sendBroadcast(
 	 	new Intent((c ? Intent.ACTION_SPRD_USB_AVAILABLE : Intent.ACTION_SPRD_USB_UNAVAILABLE)));
     }
@@ -1064,6 +1150,7 @@ class MountService extends IMountService.Stub
 
         // XXX: This will go away soon in favor of IMountServiceObserver
         mPms = (PackageManagerService) ServiceManager.getService("package");
+        mCs = (ConnectivityService) ServiceManager.getService("connectivity");
 
         mContext.registerReceiver(mBroadcastReceiver,
                 new IntentFilter(Intent.ACTION_BOOT_COMPLETED), null, null);
@@ -1074,6 +1161,10 @@ class MountService extends IMountService.Stub
 
         // Add OBB Action Handler to MountService thread.
         mObbActionHandler = new ObbActionHandler(mHandlerThread.getLooper());
+
+        mVolumeStatusNotifyThread = new HandlerThread("VolumeNotifier");
+        mVolumeStatusNotifyThread.start();
+        mVolumeStatusNotifier= new Handler(mVolumeStatusNotifyThread.getLooper());
 
         /*
          * Vold does not run in the simulator, so pretend the connector thread
@@ -1131,6 +1222,8 @@ class MountService extends IMountService.Stub
 
         String path = Environment.getExternalStorageDirectory().getPath();
         String state = getVolumeState(path);
+        
+        Slog.i(TAG, "Volume state is " + state );
 
         if (state.equals(Environment.MEDIA_SHARED)) {
             /*
@@ -1164,6 +1257,8 @@ class MountService extends IMountService.Stub
 
         if (state.equals(Environment.MEDIA_MOUNTED)) {
             // Post a unmount message.
+        	mUmsConnected = mCs.isUsbConnected();
+        	Log.d(TAG,"shutdown mUmsConnected = " + mUmsConnected);
             ShutdownCallBack ucb = new ShutdownCallBack(path, observer);
             mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, ucb));
         }
@@ -1202,13 +1297,20 @@ class MountService extends IMountService.Stub
         String path = Environment.getExternalStorageDirectory().getPath();
         String vs = getVolumeState(path);
         String method = "ums";
-        if (enable && vs.equals(Environment.MEDIA_MOUNTED)) {
+        Log.d(TAG,"********************** current vs = " + vs);
+        if (enable && ((vs.equals(Environment.MEDIA_MOUNTED)) || (vs.equals(Environment.MEDIA_IDLE)))) {
             // Override for isUsbMassStorageEnabled()
+        	mUmsConnected = mCs.isUsbConnected();
+        	Log.d(TAG,"setUsbMassStorageEnabled mUmsConnected = " + mUmsConnected);
             setUmsEnabling(enable);
             UmsEnableCallBack umscb = new UmsEnableCallBack(path, method, true);
             mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, umscb));
             // Clear override
             setUmsEnabling(false);
+        //in case set usb mass storage enabled when vs is checking......
+        }else if(enable){
+        	mContext.sendBroadcast(
+                    new Intent(Intent.ACTION_SPRD_UMS_OPERATOR_ERROR));
         }
         /*
          * If we disabled UMS then mount the volume
@@ -1258,6 +1360,8 @@ class MountService extends IMountService.Stub
     public void unmountVolume(String path, boolean force) {
         validatePermission(android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS);
         waitForReady();
+        mUmsConnected = mCs.isUsbConnected();
+        Log.d(TAG,"unmountVolume mUmsConnected = " + mUmsConnected);
 
         String volState = getVolumeState(path);
         if (DEBUG_UNMOUNT) Slog.i(TAG, "Unmounting " + path + " force = " + force);
@@ -1317,6 +1421,10 @@ class MountService extends IMountService.Stub
         warnOnNotMounted();
 
         try {
+            Log.d(TAG,"***************** mCode = " + mCode);
+            if(mCode == VoldResponseCode.VolumeBadRemoval){
+        	return mConnector.doListCommand("asec active", VoldResponseCode.AsecListResult);
+            }
             return mConnector.doListCommand("asec list", VoldResponseCode.AsecListResult);
         } catch (NativeDaemonConnectorException e) {
             return new String[0];
@@ -1513,12 +1621,15 @@ class MountService extends IMountService.Stub
             ArrayList<String> rsp = mConnector.doCommand(String.format("asec path %s", id));
             String []tok = rsp.get(0).split(" ");
             int code = Integer.parseInt(tok[0]);
+	    Log.d(TAG, "************ code: " + code);
             if (code != VoldResponseCode.AsecPathResult) {
                 throw new IllegalStateException(String.format("Unexpected response code %d", code));
             }
+	    Log.d(TAG, "************ tok[1]: " + tok[1]);
             return tok[1];
         } catch (NativeDaemonConnectorException e) {
             int code = e.getCode();
+	    Log.d(TAG, "************ catch NativeDaemonConnectorException code: " + code);
             if (code == VoldResponseCode.OpFailedStorageNotFound) {
                 throw new IllegalArgumentException(String.format("Container '%s' not found", id));
             } else {

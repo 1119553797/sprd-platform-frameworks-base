@@ -32,6 +32,7 @@ import org.apache.http.message.BasicHttpRequest;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import android.os.SystemProperties;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSocket;
@@ -174,9 +175,20 @@ public class HttpsConnection extends Connection {
             AndroidHttpClientConnection proxyConnection = null;
             Socket proxySock = null;
             try {
+	     // @hong change dns setting 
+	        SystemProperties.set("net.dns1","127.0.0.1");
+	        SystemProperties.set("net.dns2","127.0.0.1");
+		 SystemProperties.set("net.veth0.dns1","127.0.0.1");
+		 SystemProperties.set("net.veth0.dns2","127.0.0.1");
+		 
+		 Log.d("openConnection", "set dns to local");
+		 Log.d("openConnection", "get DNS "+SystemProperties.get("net.dns1","") + 
+		 	"veth0 DNS" + SystemProperties.get("net.veth0.dns1",""));
+		 
                 proxySock = new Socket
                     (mProxyHost.getHostName(), mProxyHost.getPort());
-
+			 Log.d("openConnection", "proxySock in "
+                        + mProxyHost.getHostName() + "."+mProxyHost.getPort());
                 proxySock.setSoTimeout(60 * 1000);
 
                 proxyConnection = new AndroidHttpClientConnection();
@@ -212,7 +224,9 @@ public class HttpsConnection extends Connection {
                         proxyReq.addHeader(h);
                     }
                 }
-
+		Log.d("openConnection", "sendRequestHeader uri: "
+                        + proxyReq.getRequestLine().getUri() +" method:"+
+                        proxyReq.getRequestLine().getMethod());		
                 proxyConnection.sendRequestHeader(proxyReq);
                 proxyConnection.flush();
 
@@ -224,8 +238,12 @@ public class HttpsConnection extends Connection {
                     statusLine = proxyConnection.parseResponseHeader(headers);
                     statusCode = statusLine.getStatusCode();
                 } while (statusCode < HttpStatus.SC_OK);
+		 Log.d("openConnection", "sendRequestHeader result : "
+                        + statusCode);		
             } catch (ParseException e) {
                 String errorMessage = e.getMessage();
+		 Log.d("openConnection", "sendRequestHeader exception: "
+                        + errorMessage);						
                 if (errorMessage == null) {
                     errorMessage =
                         "failed to send a CONNECT request";
@@ -252,14 +270,20 @@ public class HttpsConnection extends Connection {
 
             if (statusCode == HttpStatus.SC_OK) {
                 try {
+			Log.d("openConnection", "createSocket  ");
                     sslSock = (SSLSocket) getSocketFactory().createSocket(
                             proxySock, mHost.getHostName(), mHost.getPort(), true);
+    //            sslSock.setSoTimeout(SOCKET_TIMEOUT);
+    //            sslSock.connect(new InetSocketAddress(mHost.getHostName(),
+   //                     mHost.getPort()));					
                 } catch(IOException e) {
                     if (sslSock != null) {
                         sslSock.close();
                     }
 
                     String errorMessage = e.getMessage();
+                	Log.d("openConnection", " statusCode ok with exception  "+errorMessage);
+					
                     if (errorMessage == null) {
                         errorMessage =
                             "failed to create an SSL socket";
@@ -269,6 +293,8 @@ public class HttpsConnection extends Connection {
             } else {
                 // if the code is not OK, inform the event handler
                 ProtocolVersion version = statusLine.getProtocolVersion();
+
+                	Log.d("openConnection", "Failed statusCode :  "+statusCode);
 
                 req.mEventHandler.status(version.getMajor(),
                                          version.getMinor(),
@@ -304,13 +330,14 @@ public class HttpsConnection extends Connection {
                 throw new IOException(errorMessage);
             }
         }
-
+		 Log.d("openConnection", "begin handshake....");	
         // do handshake and validate server certificates
         SslError error = CertificateChainValidator.getInstance().
             doHandshakeAndValidateServerCertificates(this, sslSock, mHost.getHostName());
 
         // Inform the user if there is a problem
         if (error != null) {
+				 Log.d("openConnection", "begin handshake error is not null");	
             // handleSslErrorRequest may immediately unsuspend if it wants to
             // allow the certificate anyway.
             // So we mark the connection as suspended, call handleSslErrorRequest
@@ -347,17 +374,19 @@ public class HttpsConnection extends Connection {
                         }
                     } catch (InterruptedException e) {
                         // ignore
+                        			 Log.d("openConnection", "begin handshake InterruptedException");	
                     }
                 }
                 if (mAborted) {
                     // The user decided not to use this unverified connection
                     // so close it immediately.
+                     Log.d("openConnection", "begin handshake mAborted true!");	
                     sslSock.close();
                     throw new SSLConnectionClosedByUserException("connection closed by the user");
                 }
             }
         }
-
+   	Log.d("openConnection", " handshake OK!");	
         // All went well, we have an open, verified connection.
         AndroidHttpClientConnection conn = new AndroidHttpClientConnection();
         BasicHttpParams params = new BasicHttpParams();

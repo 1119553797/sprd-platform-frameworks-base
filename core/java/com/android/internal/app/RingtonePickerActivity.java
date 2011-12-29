@@ -33,6 +33,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * The {@link RingtonePickerActivity} allows the user to choose one from all of the
@@ -106,7 +107,6 @@ public final class RingtonePickerActivity extends AlertActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mHandler = new Handler();
 
         Intent intent = getIntent();
@@ -165,6 +165,15 @@ public final class RingtonePickerActivity extends AlertActivity implements
         }
         
         setupAlert();
+    }
+    
+    public void onResume(){
+    	super.onResume();
+    	//add by yangqingan 2011-11-22 for NEWMS00132817 start
+        Intent musicIntent = new Intent("com.android.music.musicservicecommand");
+        musicIntent.putExtra("command", "pause");
+        this.sendBroadcast(musicIntent);
+      //add by yangqingan 2011-11-22 for NEWMS00132817 end
     }
 
     public void onPrepareListView(ListView listView) {
@@ -309,8 +318,21 @@ public final class RingtonePickerActivity extends AlertActivity implements
         }
         
         if (ringtone != null) {
+//        	if(null != mAlert){/*fixed CR<NEWMS00109311> by luning at 2011.11.17*/
+//        		mAlert.getButton(BUTTON_POSITIVE).setEnabled(true);
+//        	}
+            /* ===== fixed CR<NEWMS00109311> by luning at 2011.11.17 begin =====*/
+            if(ringtone.isError()){
+                Toast.makeText(this, com.android.internal.R.string.audio_play_failed, Toast.LENGTH_LONG).show();
+            }
+            /* ===== fixed CR<NEWMS00109311> by luning at 2011.11.17 end =====*/
             ringtone.play();
         }
+//        else {
+//        	if(null != mAlert){/*fixed CR<NEWMS00109311> by luning at 2011.11.17*/
+//        		mAlert.getButton(BUTTON_POSITIVE).setEnabled(false);
+//        	}
+//        }
     }
 
     @Override
@@ -323,6 +345,11 @@ public final class RingtonePickerActivity extends AlertActivity implements
     protected void onPause() {
         super.onPause();
         stopAnyPlayingRingtone();
+      //add by yangqingan 2011-11-22 for NEWMS00132817 start
+        Intent intent = new Intent("com.android.music.musicservicecommand");
+        intent.putExtra("command", "play");
+        this.sendBroadcast(intent);
+      //add by yangqingan 2011-11-22 for NEWMS00132817 end
     }
 
     private void stopAnyPlayingRingtone() {

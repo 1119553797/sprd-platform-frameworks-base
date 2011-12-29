@@ -115,6 +115,9 @@ class ComprehensionTlv {
             int temp = data[curIndex++] & 0xff;
             switch (temp) {
             case 0:
+                tag = 0;
+                cr = false;
+                break;
             case 0xff:
             case 0x80:
                 throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);

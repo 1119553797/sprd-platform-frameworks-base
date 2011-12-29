@@ -129,6 +129,7 @@ public class CallerInfo {
         info.cachedPhoto = null;
         info.isCachedPhotoCurrent = false;
         info.contactExists = false;
+        info.numberPresentation = 1;//Default value for CR153888
 
         if (VDBG) Log.v(TAG, "construct callerInfo from cursor");
 
@@ -158,10 +159,20 @@ public class CallerInfo {
                     int typeColumnIndex = cursor.getColumnIndex(PhoneLookup.TYPE);
                     if (typeColumnIndex != -1) {
                         info.numberType = cursor.getInt(typeColumnIndex);
+                        //modify by dory.zheng for NEWMS00135252 begin
+                        int sim_index =  cursor.getInt(cursor.getColumnIndex(RawContacts.SIM_INDEX));
+                        if(sim_index > 0){
+                        	info.numberType = 0;
+                        }
                         info.numberLabel = cursor.getString(columnIndex);
                         info.phoneLabel = Phone.getDisplayLabel(context,
                                 info.numberType, info.numberLabel)
                                 .toString();
+                        if(info.numberType == 0){
+                        	info.phoneLabel = "";
+                        }
+                        Log.d(TAG,"info.numberType == " + info.numberType + "  info.numberLabel == " + info.numberLabel + "  info.phoneLabel == " + info.phoneLabel);
+                        //modify by dory.zheng for NEWMS00135252 end
                     }
                 }
 

@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import android.util.Log;
+
 public class PduBody {
     private Vector<PduPart> mParts = null;
 
@@ -187,5 +189,13 @@ public class PduBody {
      */
     public PduPart getPartByFileName(String filename) {
         return mPartMapByFileName.get(filename);
+    }
+    
+    /**
+     * fixed CR<NEWMS00133151,NEWMS00144166> by luning at 2011.12.06 
+     * @return
+     */
+    public Vector<PduPart> getParts(){
+        return mParts;
     }
 }

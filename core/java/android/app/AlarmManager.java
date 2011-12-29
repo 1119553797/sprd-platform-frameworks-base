@@ -279,6 +279,22 @@ public class AlarmManager
     }
 
     /**
+     * Remove any power off alarms.
+     * Any alarm, of any type, whose Intent matches this one (as defined by
+     * {@link Intent#filterEquals}), will be canceled.
+     *
+     * @param operation IntentSender which matches a previously added
+     * IntentSender.
+     *
+     * @see #set
+     */
+    public void cancelAlarm(PendingIntent operation) {
+        try {
+            mService.removeAlarm(operation);
+        } catch (RemoteException ex) {
+        }
+    }
+    /**
      * Set the system wall clock time.
      * Requires the permission android.permission.SET_TIME.
      *

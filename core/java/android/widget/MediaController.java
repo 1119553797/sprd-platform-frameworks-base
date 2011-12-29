@@ -147,7 +147,7 @@ public class MediaController extends FrameLayout {
     private OnTouchListener mTouchListener = new OnTouchListener() {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                if (mShowing) {
+                if (mShowing && mPlayer!=null&& mPlayer.isPlaying()) {
                     hide();
                 }
             }
@@ -364,6 +364,11 @@ public class MediaController extends FrameLayout {
         // paused with the progress bar showing the user hits play.
         mHandler.sendEmptyMessage(SHOW_PROGRESS);
 
+        if(mPlayer==null ||!mPlayer.isPlaying()) {
+            mHandler.removeMessages(FADE_OUT);
+            return ;
+         }
+            
         Message msg = mHandler.obtainMessage(FADE_OUT);
         if (timeout != 0) {
             mHandler.removeMessages(FADE_OUT);
@@ -381,7 +386,8 @@ public class MediaController extends FrameLayout {
     public void hide() {
         if (mAnchor == null)
             return;
-
+        
+        
         if (mShowing) {
             try {
                 mHandler.removeMessages(SHOW_PROGRESS);

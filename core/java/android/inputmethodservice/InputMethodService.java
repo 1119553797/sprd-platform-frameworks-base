@@ -997,14 +997,22 @@ public class InputMethodService extends AbstractInputMethodService {
      * it is hidden.
      */
     public void setCandidatesViewShown(boolean shown) {
-        updateCandidatesVisibility(shown);
+	// Log.e("sunway","InputMethodService:setCandidatesViewShow: "+shown);
+	// Log.e("sunway","InputMethodService:mShowInputRequested: "+mShowInputRequested+" mWindowVisible: "+mWindowVisible);
+	// Log.e("sunway","mInputViewStarted: "+mInputViewStarted+" mCandidatesViewStarted: "+mCandidatesViewStarted);
+	if (!mInputViewStarted) {
+	    return;
+	}
+	updateCandidatesVisibility(shown);
         if (!mShowInputRequested && mWindowVisible != shown) {
             // If we are being asked to show the candidates view while the app
             // has not asked for the input view to be shown, then we need
             // to update whether the window is shown.
             if (shown) {
+		// Log.e("sunway","showWindow");
                 showWindow(false);
             } else {
+		// Log.e("sunway","hideWindow");
                 hideWindow();
             }
         }
@@ -1344,13 +1352,18 @@ public class InputMethodService extends AbstractInputMethodService {
     }
     
     public void hideWindow() {
+	// Log.e("sunway","InputMethodService:hideWindow");
         if (mInputViewStarted) {
+	    // Log.e("sunway","CALL: onFinishInputView");
             if (DEBUG) Log.v(TAG, "CALL: onFinishInputView");
             onFinishInputView(false);
         } else if (mCandidatesViewStarted) {
+	    // Log.e("sunway","CALL: onFinishCandidatesView");
             if (DEBUG) Log.v(TAG, "CALL: onFinishCandidatesView");
             onFinishCandidatesView(false);
         }
+	// Log.e("sunway","CALL2: onFinishCandidatesView");
+	// onFinishCandidatesView(false);
         mInputViewStarted = false;
         mCandidatesViewStarted = false;
         if (mWindowVisible) {
@@ -2021,6 +2034,7 @@ public class InputMethodService extends AbstractInputMethodService {
     }
     
     void startExtractingText(boolean inputChanged) {
+    	
         final ExtractEditText eet = mExtractEditText;
         if (eet != null && getCurrentInputStarted()
                 && isFullscreenMode()) {
@@ -2044,12 +2058,15 @@ public class InputMethodService extends AbstractInputMethodService {
                 onUpdateExtractingVisibility(ei);
                 onUpdateExtractingViews(ei);
                 int inputType = ei.inputType;
-                if ((inputType&EditorInfo.TYPE_MASK_CLASS)
-                        == EditorInfo.TYPE_CLASS_TEXT) {
-                    if ((inputType&EditorInfo.TYPE_TEXT_FLAG_IME_MULTI_LINE) != 0) {
-                        inputType |= EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE;
-                    }
+                eet.password = ei.password;//add by yangqingan 2011-11-26 for NEWMS00144694
+              //add by yangqingan 2011-12-09 for NEWMS00144694 begin
+                if ((eet.password && ((inputType&EditorInfo.TYPE_MASK_CLASS)
+                        == EditorInfo.TYPE_CLASS_TEXT || (inputType&EditorInfo.TYPE_MASK_CLASS)
+                        == EditorInfo.TYPE_CLASS_NUMBER))) {
+                  	inputType = (inputType)
+                        | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD;
                 }
+              //add by yangqingan 2011-12-09 for NEWMS00144694 end
                 eet.setInputType(inputType);
                 eet.setHint(ei.hintText);
                 if (mExtractedText != null) {

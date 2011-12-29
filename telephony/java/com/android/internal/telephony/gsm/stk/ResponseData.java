@@ -21,6 +21,7 @@ import com.android.internal.telephony.GsmAlphabet;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 
 abstract class ResponseData {
     /**
@@ -142,5 +143,81 @@ class GetInkeyInputResponseData extends ResponseData {
         }
     }
 }
+
+class LanguageResponseData extends ResponseData {
+    //local info type
+    private String mlangCode ;
+
+    public LanguageResponseData(String langCode) {
+        super();
+        this.mlangCode = langCode;
+    }
+
+    @Override
+    public void format(ByteArrayOutputStream buf) {
+        // Item identifier object
+        int tag = 0x80 | ComprehensionTlvTag.LANGUAGE.value();
+        buf.write(tag); // tag
+
+        StkLog.d(this, "mlangCode: " + mlangCode);
+        buf.write(2); // length
+        buf.write(mlangCode.charAt(0));
+        buf.write(mlangCode.charAt(1));
+
+    }
+}
+
+class DateTimeResponseData extends ResponseData {
+    //local info type
+    private byte[] mDateTime ;
+
+    public DateTimeResponseData() {
+        super();
+        Calendar rightNow = Calendar.getInstance();
+
+        byte[] data = new byte[7];
+
+        data[0] = (byte) ((rightNow.get(Calendar.YEAR) - 1900) % 100);
+        data[1] = (byte) (rightNow.get(Calendar.MONTH) + 1);
+        data[2] = (byte) (rightNow.get(Calendar.DATE));
+        data[3] = (byte) (rightNow.get(Calendar.HOUR_OF_DAY));
+        data[4] = (byte) (rightNow.get(Calendar.MINUTE));
+        data[5] = (byte) (rightNow.get(Calendar.SECOND));
+
+        int tmp = rightNow.getTimeZone().getOffset(rightNow.getTimeInMillis());
+        data[6] = (byte)(tmp / 1000 / 900); // quarters
+
+        for (int i = 0; i < 6; i++) {
+            data[i] = (byte) (((data[i] / 10) & 0xF) | ((data[i] % 10) << 4));
+        }
+
+        tmp = Math.abs(data[6]);
+        tmp = ((tmp / 10) & 0xF) | ((tmp % 10) << 4);
+        if (data[6] < 0) {
+            tmp |= 0x8;
+        }
+        data[6] = (byte)tmp;
+
+        mDateTime = data;
+        //StkLog.d(this, "mDateTime: " + IccUtils.bytesToHexString(mDateTime));
+    }
+
+    @Override
+    public void format(ByteArrayOutputStream buf) {
+        // Item identifier object
+        int tag = 0x80 | ComprehensionTlvTag.DATE_TIME_TIMEZONE.value();
+        buf.write(tag); // tag
+        buf.write(7); // length
+
+        for (byte b : mDateTime) {
+            buf.write(b);
+        }
+
+        // byte[] rawData = buf.toByteArray();
+        // String hexString = IccUtils.bytesToHexString(rawData);
+        // StkLog.d(this, "format: " + hexString);
+    }
+}
+
 
 

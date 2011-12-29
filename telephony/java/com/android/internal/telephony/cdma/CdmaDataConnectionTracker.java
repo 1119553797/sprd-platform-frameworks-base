@@ -266,7 +266,13 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
         }
         return false;
     }
-
+    
+    @Override
+    protected boolean isApnTypeFilters(String type) {
+    
+        Log.d(LOG_TAG, " ApnActiveTypeFilter  return false");
+        return false;
+    }
     protected String[] getActiveApnTypes() {
         String[] result;
         if (mActiveApn != null) {

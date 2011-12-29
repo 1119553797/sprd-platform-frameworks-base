@@ -82,6 +82,8 @@ public final class GsmCallTracker extends CallTracker {
 
     boolean desiredMute = false;    // false = mute off
 
+    boolean mIsStkCall = false;    // true = call from STK
+
     Phone.State state = Phone.State.IDLE;
 
 
@@ -213,8 +215,9 @@ public final class GsmCallTracker extends CallTracker {
         } else {
             // Always unmute when initiating a new call
             setMute(false);
-
-            cm.dial(pendingMO.address, clirMode, uusInfo, obtainCompleteMessage());
+            boolean isStkCall = getStkCall();
+            log("GsmCallTracker dial: isStkCall=" + isStkCall);
+            cm.dial(pendingMO.address, clirMode, isStkCall, obtainCompleteMessage());
         }
 
         updatePhoneState();
@@ -447,11 +450,11 @@ public final class GsmCallTracker extends CallTracker {
             if (DBG_POLL) log("poll["+ this + "]: conn[i=" + i + "]=" +
                     conn+", dc=" + dc);
 
-			/*if ((dc != null) && (!dc.isVoice))
+			if ((dc != null) && (!dc.isVoice))
 			{
 				if (DBG_POLL) log("not voice call, return");
-				return;
-			}*/
+				continue;
+			}
 
             if (conn == null && dc != null) {
                 // Connection appeared in CLCC response that we don't know about
@@ -481,6 +484,13 @@ public final class GsmCallTracker extends CallTracker {
                         return;
                     }
                 } else {
+                    TDPhone tdphone = (TDPhone)phone;
+		    if (tdphone.isVTCall()) {
+			if (DBG_POLL) log("new incoming voice call during vt, need hangup: " + dc);
+			//cm.hangupConnection (dc.index, obtainCompleteMessage());
+			cm.hangupWaitingOrBackground(obtainCompleteMessage());
+			break;
+		    }
                     connections[i] = new GsmConnection(phone.getContext(), dc, this, i);
 
                     // it's a ringing call
@@ -922,6 +932,14 @@ public final class GsmCallTracker extends CallTracker {
                 handleRadioNotAvailable();
             break;
         }
+    }
+
+    void setStkCall(boolean isStkcall) {
+        mIsStkCall = isStkcall;
+    }
+
+    boolean getStkCall() {
+        return mIsStkCall;
     }
 
     protected void log(String msg) {

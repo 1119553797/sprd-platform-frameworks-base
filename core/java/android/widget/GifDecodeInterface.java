@@ -4,9 +4,8 @@ import java.io.InputStream;
 import java.util.Vector;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.Bitmap.Config;
-import android.util.Log;
+
 
 
 
@@ -62,7 +61,8 @@ public interface GifDecodeInterface {
 	    	}
 	    	if(delay <= 0)
 	    	{
-	    		delay = 20;
+//	    		delay = 20;//add by yangqingan 2011-12-02 for NEWMS00146766
+	    		delay = 100;//add by yangqingan 2011-12-02 for NEWMS00146766
 	    	}
 	    	return delay;  	
 		}
@@ -187,7 +187,12 @@ public interface GifDecodeInterface {
     	}
 
     	private int[] getSrcPixels() {
-    		int[] dest = new int[width * height];
+    		int[] dest = null;
+			if (null == lastPixels) {/*fixed CR<NEWMS00140787> by luning at 2011.11.16*/
+				dest = new int[width * height];
+			} else {
+				dest = lastPixels;
+			}
     		// fill in starting image contents based on last image's dispose code
     		if (lastDispose > 0) {
     			if (lastDispose == 3) {
@@ -200,11 +205,9 @@ public interface GifDecodeInterface {
     				}
     			}
     			if (lastImage != null) {
-    				if(null == lastPixels){
-    				    lastImage.getPixels(dest, 0, width, 0, 0, width, height);
-    				}else{
-    					dest = lastPixels; 					
-    				}
+					if (null == lastPixels)
+						lastImage
+								.getPixels(dest, 0, width, 0, 0, width, height);
     				// copy pixels
     				if (lastDispose == 2) {
     					// fill last image rect area with background color
@@ -268,6 +271,7 @@ public interface GifDecodeInterface {
     				}
     			}
     		}
+    		lastPixels = null;/*fixed CR<NEWMS00140787> by luning at 2011.11.16*/
     		return dest;
     	}
 
@@ -280,13 +284,26 @@ public interface GifDecodeInterface {
     	}
 
     	public Bitmap next() {
-    		frameindex++;
-    		if (frameindex > frames.size() - 1) {
-    			frameindex = 0;
-    		}
-    		GifFrame currFrame = frames.elementAt(frameindex);
-    		delay = currFrame.delay;
-    		return currFrame.image;
+    	    /*modify by luning at 2011.12.20 begin*/
+//            frameindex++;
+//            if (frameindex > frames.size() - 1) {
+//                frameindex = 0;
+//            }
+//            GifFrame currFrame = frames.elementAt(frameindex);
+//            delay = currFrame.delay;
+//            return currFrame.image;
+
+            frameindex++;
+            if (frameindex > frameCount - 1) {
+                frameindex = 0;
+            }
+            if (frameindex >= 0 && frameindex < frameCount) {
+                GifFrame currFrame = frames.elementAt(frameindex);
+                delay = currFrame.delay;
+                return currFrame.image;
+            }
+            return null;
+            /*modify by luning at 2011.12.20 end*/
     	}
 
     	public int read(InputStream is) {
@@ -606,9 +623,9 @@ public interface GifDecodeInterface {
     		int[] src = getSrcPixels();
     		int[] dest;
     		// save lastPixels
-    		lastPixels = new int[src.length];
-    		System.arraycopy(src, 0, lastPixels, 0, src.length);
+    		lastPixels = src;
     		if(width > FRAME_BOUNDS_LIMIT){//need resize   			
+    			// scale pixels
 				float scale =  ((float)FRAME_BOUNDS_LIMIT/width);
 				int rY = (int) (height * scale);
 				dest = resizePixels(FRAME_BOUNDS_LIMIT, rY, width, height, src);		
@@ -718,3 +735,4 @@ public interface GifDecodeInterface {
     	public int delay;
     }  
 }
+

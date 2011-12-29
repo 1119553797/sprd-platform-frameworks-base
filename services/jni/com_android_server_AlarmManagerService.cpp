@@ -93,6 +93,21 @@ static void android_server_AlarmManagerService_set(JNIEnv* env, jobject obj, jin
 #endif
 }
 
+static void android_server_AlarmManagerService_clear(JNIEnv* env, jobject obj, jint fd, jint type)
+{
+#if HAVE_ANDROID_OS
+    struct timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = 0;
+    
+	int result = ioctl(fd, ANDROID_ALARM_CLEAR(type), &ts);
+	if (result < 0)
+	{
+        LOGE("Unable to clear alarm: %s\n", strerror(errno));
+    }
+#endif
+}
+
 static jint android_server_AlarmManagerService_waitForAlarm(JNIEnv* env, jobject obj, jint fd)
 {
 #if HAVE_ANDROID_OS
@@ -118,6 +133,7 @@ static JNINativeMethod sMethods[] = {
 	{"init", "()I", (void*)android_server_AlarmManagerService_init},
 	{"close", "(I)V", (void*)android_server_AlarmManagerService_close},
 	{"set", "(IIJJ)V", (void*)android_server_AlarmManagerService_set},
+	{"clear", "(II)V", (void*)android_server_AlarmManagerService_clear},
     {"waitForAlarm", "(I)I", (void*)android_server_AlarmManagerService_waitForAlarm},
     {"setKernelTimezone", "(II)I", (void*)android_server_AlarmManagerService_setKernelTimezone},
 };

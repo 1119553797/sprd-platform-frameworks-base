@@ -848,13 +848,25 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                     break;
             }
         }
-
+      //add by yangqingan 2011-11-26 for NEWMS00144694 begin
         if (password && (mInputType&EditorInfo.TYPE_MASK_CLASS)
                 == EditorInfo.TYPE_CLASS_TEXT) {
             mInputType = (mInputType & ~(EditorInfo.TYPE_MASK_VARIATION))
                 | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD;
         }
-
+        
+//        if (password && ((mInputType&EditorInfo.TYPE_MASK_CLASS)
+//                == EditorInfo.TYPE_CLASS_TEXT || (mInputType&EditorInfo.TYPE_MASK_CLASS)
+//                == EditorInfo.TYPE_CLASS_NUMBER)) {
+//            mInputType = (mInputType & ~(EditorInfo.TYPE_MASK_VARIATION))
+//                | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD;
+//        }
+        
+//        if (password) {
+//            mInputType = (mInputType & ~(EditorInfo.TYPE_MASK_VARIATION))
+//                | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD;
+//        }
+      //add by yangqingan 2011-11-26 for NEWMS00144694 end
         if (selectallonfocus) {
             mSelectAllOnFocus = true;
 
@@ -959,10 +971,11 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         setFocusable(focusable);
         setClickable(clickable);
         setLongClickable(longClickable);
+        this.password = password;//add by yangqingan 2011-11-26 for NEWMS00144694
 
         prepareCursorControllers();
     }
-
+    public boolean password;//add by yangqingan 2011-11-26 for NEWMS00144694
     private void setTypefaceByIndex(int typefaceIndex, int styleIndex) {
         Typeface tf = null;
         switch (typefaceIndex) {
@@ -1127,7 +1140,12 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         } else {
             mInputType = EditorInfo.TYPE_NULL;
         }
-
+      //add by yangqingan 2011-11-26 for NEWMS00144694 begin
+        if(mTransformation != null && mTransformation instanceof PasswordTransformationMethod){
+//        	mInputType |= EditorInfo.TYPE_TEXT_VARIATION_PASSWORD;
+        	password = true;
+        }
+      //add by yangqingan 2011-11-26 for NEWMS00144694 end
         InputMethodManager imm = InputMethodManager.peekInstance();
         if (imm != null) imm.restartInput(this);
     }
@@ -1200,6 +1218,12 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
      * @attr ref android.R.styleable#TextView_singleLine
      */
     public final void setTransformationMethod(TransformationMethod method) {
+    	//add by yangqingan 2011-11-26 for NEWMS00144694 begin
+    	if(method != null && method instanceof PasswordTransformationMethod){
+    		password = true;
+//    		mInputType = mInputType | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD;
+    	}
+    	//add by yangqingan 2011-11-26 for NEWMS00144694 end
         if (method == mTransformation) {
             // Avoid the setText() below if the transformation is
             // the same.
@@ -2981,20 +3005,41 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         return mTransformation instanceof PasswordTransformationMethod;
     }
 
-    private boolean isPasswordInputType(int inputType) {
+    protected boolean isPasswordInputType(int inputType) {
+    	//add by yangqingan 2011-11-26 for NEWMS00144694 begin
+//    	if(password){
+//    		return true;
+//    	}
+    	
         final int variation = inputType & (EditorInfo.TYPE_MASK_CLASS
                 | EditorInfo.TYPE_MASK_VARIATION);
+//        final int variation = inputType & EditorInfo.TYPE_TEXT_VARIATION_PASSWORD;
         return variation
-                == (EditorInfo.TYPE_CLASS_TEXT
-                        | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+        == (EditorInfo.TYPE_CLASS_TEXT
+                | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+//        return variation
+//        == (EditorInfo.TYPE_CLASS_TEXT
+//                | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) || variation
+//                == (EditorInfo.TYPE_CLASS_NUMBER
+//                        | EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+//        return variation
+//                == (EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+      //add by yangqingan 2011-11-26 for NEWMS00144694 end
+      
     }
-
-    private boolean isVisiblePasswordInputType(int inputType) {
+    
+    protected boolean isVisiblePasswordInputType(int inputType) {
         final int variation = inputType & (EditorInfo.TYPE_MASK_CLASS
                 | EditorInfo.TYPE_MASK_VARIATION);
         return variation
-                == (EditorInfo.TYPE_CLASS_TEXT
-                        | EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        == (EditorInfo.TYPE_CLASS_TEXT
+                | EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        
+//        return variation
+//                == (EditorInfo.TYPE_CLASS_TEXT
+//                        | EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) || variation
+//                        == (EditorInfo.TYPE_CLASS_NUMBER
+//                                | EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
     }
 
     /**
@@ -4592,6 +4637,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     }
     
     @Override public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+    	outAttrs.password = password;
         if (onCheckIsTextEditor()) {
             if (mInputMethodState == null) {
                 mInputMethodState = new InputMethodState();
@@ -7510,6 +7556,8 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     
     // Context menu entries
     private static final int ID_SELECT_ALL = android.R.id.selectAll;
+    protected static final int ID_START_SELECTING_TEXT = android.R.id.startSelectingText;//add by yangqingan 2011-11-27 for NEWMS00144928
+    protected static final int ID_STOP_SELECTING_TEXT = android.R.id.stopSelectingText;//add by yangqingan 2011-11-27 for NEWMS00144928
     private static final int ID_START_SELECTING_TEXT = android.R.id.startSelectingText;
     private static final int ID_CUT = android.R.id.cut;
     private static final int ID_COPY = android.R.id.copy;

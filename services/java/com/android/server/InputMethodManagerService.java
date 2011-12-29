@@ -333,7 +333,14 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             }
         }
     }
-
+  //add by yangqingan 2011-12-03 for change inputmethod display error begin
+    class InputMethodShownReceiver extends android.content.BroadcastReceiver{
+    	@Override
+        public void onReceive(Context context, Intent intent) {
+    		SET_ANIM_SCALE_HANDLER.sendEmptyMessage(SET_OLD_ANIM);
+        }
+    }
+  //add by yangqingan 2011-12-03 for change inputmethod display error end
     class MyPackageMonitor extends PackageMonitor {
         
         @Override
@@ -465,6 +472,9 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         screenOnOffFilt.addAction(Intent.ACTION_SCREEN_OFF);
         screenOnOffFilt.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         mContext.registerReceiver(new ScreenOnOffReceiver(), screenOnOffFilt);
+        IntentFilter inputMethodShownFilt = new IntentFilter();
+        inputMethodShownFilt.addAction(Intent.ACTION_INPUTMETHOD_WINDOW_SHOWN);
+        mContext.registerReceiver(new InputMethodShownReceiver(), inputMethodShownFilt);
 
         mStatusBar = statusBar;
         statusBar.setIconVisibility("ime", false);
@@ -980,7 +990,26 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             unbindCurrentMethodLocked(true);
         }
     }
-
+  //add by yangqingan 2011-12-03 for change inputmethod display error begin
+    private float[] animAcales;
+    private float[] NO_ANIM = new float[]{0, 0};
+    private static final int SET_OLD_ANIM = 1;
+    private final Handler SET_ANIM_SCALE_HANDLER = new Handler(){
+    	public void handleMessage(Message msg){
+    		switch(msg.what){
+    		case SET_OLD_ANIM:
+    			if(animAcales != null){
+	    			try {
+                		mIWindowManager.setAnimationScales(animAcales);
+                		animAcales = null;
+	                } catch (RemoteException e) {
+	                }
+    			}
+    			break;
+    		}
+    	}
+    };
+  //add by yangqingan 2011-12-03 for change inputmethod display error end
     void setInputMethodLocked(String id) {
         InputMethodInfo info = mMethodMap.get(id);
         if (info == null) {
@@ -990,7 +1019,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         if (id.equals(mCurMethodId)) {
             return;
         }
-
+        
         final long ident = Binder.clearCallingIdentity();
         try {
             mCurMethodId = id;
@@ -1070,7 +1099,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             mContext.unbindService(this);
             mContext.bindService(mCurIntent, this, Context.BIND_AUTO_CREATE);
         }
-
+        
         return res;
     }
 
@@ -1412,7 +1441,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         return (inputMethod.getServiceInfo().applicationInfo.flags
                 & ApplicationInfo.FLAG_SYSTEM) != 0;
     }
-
+    
     private boolean chooseNewDefaultIMELocked() {
         List<InputMethodInfo> enabled = getEnabledInputMethodListLocked();
         if (enabled != null && enabled.size() > 0) {
@@ -1495,9 +1524,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             }
         }
     }
-
+    
     // ----------------------------------------------------------------------
-
     void showInputMethodMenu() {
         if (DEBUG) Slog.v(TAG, "Show switching menu");
 
@@ -1573,19 +1601,36 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                                 InputMethodInfo im = mIms[which];
                                 hideInputMethodMenu();
                                 if (im != null) {
-                                    setInputMethodLocked(im.getId());
+                                	//add by yangqingan 2011-12-03 for change inputmethod display error begin
+                                	String id = im.getId();
+                                	if(!id.equals(mCurMethodId)){
+                                		try {
+                                        	animAcales = mIWindowManager.getAnimationScales();
+                                        	if(animAcales != null){
+                                        		mIWindowManager.setAnimationScales(NO_ANIM);
+                                        		SET_ANIM_SCALE_HANDLER.sendEmptyMessageDelayed(SET_OLD_ANIM, 1000);
+                                        	}
+                                        } catch (RemoteException e) {
+                                        }
+                                	}
+                                	//add by yangqingan 2011-12-03 for change inputmethod display error end
+                                    setInputMethodLocked(id);
                                 }
                             }
                         }
                     });
 
             mSwitchingDialog = mDialogBuilder.create();
-            mSwitchingDialog.getWindow().setType(
-                    WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG);
+	    Log.e("sunway","InputMethodManagerService:showInputMethodMenu");
+	    WindowManager.LayoutParams lp = mSwitchingDialog.getWindow().getAttributes();
+	    lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
+            lp.token = mCurFocusedWindow;
+	    lp.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+            // mSwitchingDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG);
             mSwitchingDialog.show();
         }
     }
-
+    
     void hideInputMethodMenu() {
         synchronized (mMethodMap) {
             hideInputMethodMenuLocked();

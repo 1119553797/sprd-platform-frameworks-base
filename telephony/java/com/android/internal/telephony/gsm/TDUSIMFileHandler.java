@@ -33,6 +33,8 @@ import com.android.internal.telephony.IccFileTypeMismatch;
 import com.android.internal.telephony.IccIoResult;
 import com.android.internal.telephony.gsm.SIMFileHandler;
 import com.android.internal.telephony.gsm.UsimPhoneBookManager;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * s {@hide}
@@ -62,8 +64,9 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 
 	//private final int mDualMapFile[]  ={EF_ADN,EF_ARR,EF_FDN,EF_SMS,EF_MSISDN,
 	//	EF_SMSP,EF_SMSS,EF_SMSR,EF_SDN,EF_EXT2,EF_EXT3,EF_EXT4,EF_BDN,EF_TEST}; 
-	private final int mDualMapFile[]  ={EF_SMS}; 
-   
+	private final int mDualMapFile[]  ={EF_SMS,EF_PBR}; 
+	private Map<Integer, String> mDualMapFileList;
+       private ArrayList<Integer> mFileList; 
   
 
 	// ***** Instance Variables
@@ -90,10 +93,82 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 	TDUSIMFileHandler(GSMPhone phone) {
 		super(phone);
 		mPhone = phone;
+		initDualMapFileSet();
+		
 	}
 
+      private void initDualMapFileSet(){
+
+            mDualMapFileList =  new HashMap<Integer, String>();
+		mFileList =  new ArrayList<Integer>();
+
+            mDualMapFileList.put(mDualMapFile[0],MF_SIM+DF_ADF);
+            mDualMapFileList.put(mDualMapFile[1],MF_SIM+DF_TELECOM+DF_PHONEBOOK);
+	      
+
+	}
+
+	private void clearDualMapFileSet(){
+             if(mFileList != null){
+
+                   mFileList= null;
+             }
+
+		if(mDualMapFileList != null){
+                 mDualMapFileList.clear();
+		     mDualMapFileList =  null;
+		}
+
+	}
+
+      	@Override
+	public void addDualMapFile(int efid){
+           boolean isExist = false;
+           if(mFileList != null ){
+
+                  for(int i= 0; i<mFileList.size(); i++){
+
+                          if(mFileList.get(i) == efid){
+
+					isExist = true;
+					break;
+				}
+				
+                  }
+
+		     if(!isExist){
+
+                         mFileList.add(efid);
+		     }
+
+                 
+			
+           }
+
+	
+
+	}
+
+     private void UpdatePathOfDualMapFile(int efid, String path){
+
+               loge("UpdatePathOfDualMapFile  efid " +efid + " path " +path );
+			   
+               if(mDualMapFileList != null){
+                      
+                    mDualMapFileList.put(efid,path); 
+		
+	        }
+
+
+
+
+	}
+
+		
 	public void dispose() {
+		
 		super.dispose();
+		clearDualMapFileSet();
 	}
 
 	protected void finalize() {
@@ -123,15 +198,18 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 
     private boolean isDualMapFile(int fileId){
 
-         Log.i(LOG_TAG,"isDualMapFile  fileId "+ fileId);
+         Log.i(LOG_TAG,"isDualMapFile  fileId "+ fileId + " mDualMapFileList "  + mDualMapFileList);
+	   if(mDualMapFileList ==  null){
 
-	   for(int i=0; i < mDualMapFile.length; i++){
-
-                // if(fileId == mDualMapFile[i] || ((fileId >>8)& 0xff) == 0x4f ){
-                 if(fileId == mDualMapFile[i]){
+                 return false;
+	   }
+         
+	
+         if(mDualMapFileList.containsKey(fileId) ){
+		 	
                        return true;
-		    }
-	    }
+         }
+	    
 
            return false;
     }
@@ -158,9 +236,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 	    return true;
 
     }
-    protected String getEFPathAgain(int efid ){
-          return getEFPathofUsim(efid);
-    }
+ 
     protected String getEFPathofUsim(int efid ){
            String oldPath = getEFPath(efid);
            IccCard card = phone.getIccCard();
@@ -170,16 +246,16 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 	    }
 	     if(!isUsim){
 		 	
-                return oldPath;
+                return null;
 	    }
 
 	     String pathFirst="";
 	     String pathSecond ="";
 	     String pathLast  ="";
 	 
-	     //Log.i(LOG_TAG,"getEFPathofUsim  try again oldPath" + oldPath + "length "+oldPath.length()  );
+	
 	     if(oldPath.length() <8){
-                     return oldPath;					 
+                     return null;					 
 		 }else{
 
 			 pathFirst = oldPath.substring(0,4); 
@@ -190,25 +266,25 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 			 }
 		 }	
 
-		// Log.i(LOG_TAG,"getEFPathofUsim false , try again pathFirst " + pathFirst + "pathSecond " +pathSecond + "pathLast " +pathLast);
+		 Log.i(LOG_TAG,"getEFPathofUsim false , try again pathFirst " + pathFirst + "pathSecond " +pathSecond + "pathLast " +pathLast);
               if(pathSecond.equals(DF_ADF)){
 			  	
                     pathSecond = DF_TELECOM;
+			 
                    
-		 }
-              // if(pathSecond.equals(DF_TELECOM)){
+		 }else  if(pathSecond.equals(DF_TELECOM)){
 			  	
-                 //   pathSecond = DF_ADF;
-                   
-		 //}           
+                    pathSecond = DF_ADF;
+                  
+		 }           
 		  else{
 
                   
-                    return oldPath;
+                    return null;
 		 } 
 
 		 String newPath = pathFirst+pathSecond+pathLast;
-
+              UpdatePathOfDualMapFile(efid,newPath);
 		 return newPath;
 
     }
@@ -216,7 +292,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 
     public boolean loadFileAgain(int fileId, int pathNum , int event,Object obj){
 
-	  Log.i(LOG_TAG,"loadFileAgain  "  + "event " +event );
+	
 	  IccCard card = phone.getIccCard();
 	  boolean isUsim =false;
 	  if (card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)){
@@ -227,25 +303,24 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 		 	
                 return false;
 	  }
-         Log.i(LOG_TAG,"loadFileAgain is Usim"  );
+  
 
         if(isFinishLoadFile(fileId, pathNum)){
-              // Log.i(LOG_TAG,"isFinishLoadFile true");
+              
                return false;
 	 }else{
 
 
               String newPath = getEFPathofUsim(fileId);
+              if(newPath ==  null){
 
-		 if(newPath.equals(getEFPath(fileId))){
-
-                    return false;
+                   return false;
 		 }
-		
+	
               Message response = obtainMessage(event,
                         fileId, 1, obj);
 			
-		 Log.i(LOG_TAG,"isFinishLoadFile false , try again newPath   " + newPath);	
+		 Log.i(LOG_TAG,"isFinishLoadFile  try again newPath   " + newPath);	
               phone.mCM.iccIO(COMMAND_GET_RESPONSE, fileId,newPath,
                     0, 0, GET_RESPONSE_EF_SIZE_BYTES, null, null, response);
 	 }
@@ -491,7 +566,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 					lc.results = new ArrayList<byte[]>(lc.countRecords);
 				}
 				
-				path = (pathNum == 0) ? getEFPath(lc.efid) : getEFPathofUsim(lc.efid);
+				path =  getEFPath(lc.efid);
 				loge("EVENT_GET_RECORD_SIZE_DONE path " + path);
 				phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid,
 						path, lc.recordNum,
@@ -545,7 +620,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
 						+ (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
 				
-				path = (pathNum == 0) ? getEFPath(fileid) : getEFPathofUsim(fileid);
+				path =  getEFPath(fileid);
 				loge("EVENT_GET_BINARY_SIZE_DONE path " + path); 
 
 				
@@ -584,7 +659,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 						sendResult(response, lc.results, null);
 					} else {
 					   
-				             path = (pathNum == 0) ? getEFPath(lc.efid) : getEFPathofUsim(lc.efid);
+				             path = getEFPath(lc.efid) ;
 						phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid,
 										path, lc.recordNum,
 										READ_RECORD_MODE_ABSOLUTE,
@@ -626,7 +701,52 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 		}
 	}
 
-   
+     private String getEfPathFromList(int efid){
+	 	
+          String path = null;
+	   if(mDualMapFileList ==  null){
+
+                 return null;
+	   }
+
+	   if(mDualMapFileList.containsKey(efid)){
+
+                 path = mDualMapFileList.get(efid);
+
+		    if(path != null){
+
+                       return path;
+		    }
+	    }
+
+	   if(mFileList == null){
+
+               return null;
+	   }
+         
+	   for(int i=0; i < mFileList.size(); i++){
+                
+                 if(mFileList.get(i) ==  efid){
+				 	
+			    path = mDualMapFileList.get(EF_PBR); 
+				
+                       if( path != null){
+
+                              return  path ;
+			    }else{
+
+                              break;
+			    }
+		    }
+	    }
+
+	 
+
+           return null;
+
+
+    }
+	 
      private String getCommonIccEFPathOfUsim(int efid) {
         switch(efid) {
         case EF_ADN:
@@ -636,6 +756,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
         case EF_EXT1:
         case EF_EXT2:
         case EF_EXT3:
+	  
             //return MF_SIM + DF_ADF;
             return MF_SIM + DF_TELECOM;
 
@@ -651,9 +772,20 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 	protected String getEFPath(int efid) {
 		IccCard card = phone.getIccCard();
 		boolean isUsim = false;
+		String path = null;
+
+		
              if (card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)) {
 			isUsim = true;
+			path = getEfPathFromList(efid);
+			
+		       if(path != null){
+                          //loge("getEFPath  path  "  + path );
+                          return path;
+			}
 		}
+
+		
 		
 		switch (efid) {
 		case EF_SMS:
@@ -697,11 +829,9 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 			// we only support global phonebook.
 			return MF_SIM + DF_TELECOM + DF_PHONEBOOK;
 		}
-		String path = null;
-     
-			 
-		path = getCommonIccEFPath(efid);
-	
+     	 
+		 path = getCommonIccEFPath(efid);
+		
 		if (path == null) {
 			// The EFids in USIM phone book entries are decided by the card
 			// manufacturer.

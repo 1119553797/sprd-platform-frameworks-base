@@ -16,16 +16,23 @@
 
 package com.android.server;
 
+import java.io.File;
+
 import com.android.server.am.ActivityManagerService;
+
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.IPackageDataObserver;
 import android.content.pm.IPackageManager;
 import android.os.Binder;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
@@ -34,10 +41,14 @@ import android.os.ServiceManager;
 import android.os.StatFs;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.storage.StorageEventListener;
+import android.os.storage.StorageManager;
 import android.provider.Settings;
 import android.util.Config;
 import android.util.EventLog;
+import android.util.Log;
 import android.util.Slog;
+import android.view.WindowManager;
 import android.provider.Settings;
 
 /**
@@ -97,11 +108,19 @@ class DeviceStorageMonitorService extends Binder {
     private long mMemLowThreshold;
     private int mMemFullThreshold;
 
+    private static final int NO_MEMORY_SMS_NOTIFICATION_ID = 100;
+    
     /**
      * This string is used for ServiceManager access to this class.
      */
     static final String SERVICE = "devicestoragemonitor";
-
+  //lino add 2012-12-08 begin for NEWMS00148531
+    private boolean bootCompleted = false;
+    private StorageManager mStorageManager = null;
+    private String saveOldState = "";
+    private String saveNewState = "";
+    private static final int INTERNAL_MEMORY_THRESHOLD = 10;
+  //lino add 2012-12-08 end for NEWMS00148531
     /**
     * Handler that checks the amount of disk space on the device and sends a
     * notification if the device runs low on disk space
@@ -117,7 +136,20 @@ class DeviceStorageMonitorService extends Binder {
             checkMemory(msg.arg1 == _TRUE);
         }
     };
+    //lino add 2012-12-08 begin for NEWMS00148531
+    private final BroadcastReceiver bootCompletedReceiver = new BroadcastReceiver(){
 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
+            {
+                bootCompleted = true;
+            }
+        }
+
+    };
+  //lino add 2012-12-08 end for NEWMS00148531
     class CachePackageDataObserver extends IPackageDataObserver.Stub {
         public void onRemoveCompleted(String packageName, boolean succeeded) {
             mClearSucceeded = succeeded;
@@ -352,6 +384,17 @@ class DeviceStorageMonitorService extends Binder {
         notification.setLatestEventInfo(mContext, title, details, intent);
         mNotificationMgr.notify(LOW_MEMORY_NOTIFICATION_ID, notification);
         mContext.sendStickyBroadcast(mStorageLowIntent);
+      //lino add 201-12-05 for when no space sms
+        PendingIntent smsintent = PendingIntent.getActivity(mContext, 0,  new Intent(), 0);
+        Notification smsnotification = new Notification();
+        smsnotification.icon = com.android.internal.R.drawable.stat_notify_disk_full;
+        smsnotification.tickerText = mContext.getText(
+                com.android.internal.R.string.sms_full_title);
+        smsnotification.flags |= Notification.FLAG_NO_CLEAR;
+        smsnotification.setLatestEventInfo(mContext, mContext.getText(
+                com.android.internal.R.string.sms_full_title), mContext.getText(
+                com.android.internal.R.string.sms_full_body), smsintent);
+        mNotificationMgr.notify(NO_MEMORY_SMS_NOTIFICATION_ID, smsnotification);
     }
 
     /**
@@ -367,6 +410,8 @@ class DeviceStorageMonitorService extends Binder {
 
         mContext.removeStickyBroadcast(mStorageLowIntent);
         mContext.sendBroadcast(mStorageOkIntent);
+      //lino add 201-12-05 for when no space sms
+        mNotificationMgr.cancel(NO_MEMORY_SMS_NOTIFICATION_ID);
     }
 
     /**
@@ -394,4 +439,65 @@ class DeviceStorageMonitorService extends Binder {
         // force an early check
         postCheckMemoryMsg(true, 0);
     }
+  //lino add 2012-12-08 begin for NEWMS00148531
+    StorageEventListener mStorageListener = new StorageEventListener() {
+
+        public void onStorageStateChanged(String path, String oldState, String newState) {
+	    Log.i(TAG, "path:" + path);
+            Log.i(TAG, "bootCompleted:" + bootCompleted);
+            Log.i(TAG, "android sd-card directory:" + Environment.getExternalStorageDirectory());
+            Log.i(TAG, "Received storage state changed notification that " +
+                    path + " changed state from " + oldState +
+                    " to " + newState);
+
+            if (bootCompleted && path.equals(Environment.getExternalStorageDirectory().toString())) {
+                Log.i(TAG, " saveOldState:" + saveOldState + " saveNewState:" + saveNewState);
+                if (((saveOldState != oldState) || (saveNewState != newState)) &&
+                    oldState.equals(Environment.MEDIA_CHECKING) &&
+                    newState.equals(Environment.MEDIA_MOUNTED)) {
+                        Log.i(TAG, "sd-card is mounted.");
+                        updateInternalMemoryState();
+                }
+                saveOldState = oldState;
+                saveNewState = newState;
+            }
+        }
+    };
+
+    private void updateInternalMemoryState() {
+
+        try {
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+            long totalBlocks = stat.getBlockCount();
+            long availableBlocks = stat.getAvailableBlocks();
+            long threadshold = (totalBlocks*INTERNAL_MEMORY_THRESHOLD)/100;
+
+            if (availableBlocks < threadshold)
+            {
+                Log.w(TAG, "SD card is nearly full. availableBlocks=" + availableBlocks
+                       + " threshold=" + threadshold);
+
+                // Show available sd-card memory
+                CharSequence levelText = mContext.getString(
+                        com.android.internal.R.string.internal_memory_low);
+
+                AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+
+                b.setTitle(com.android.internal.R.string.dialog_warning);
+                b.setMessage(levelText);
+                b.setNegativeButton(com.android.internal.R.string.button_close, null);
+
+                AlertDialog d = b.create();
+                d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                d.show();
+            }
+
+        } catch (IllegalArgumentException e) {
+            // this can occur if the SD card is removed, but we haven't received the
+            // ACTION_MEDIA_REMOVED Intent yet.
+            Log.e(TAG, "Can not get InternalMemory size.");
+        }
+    }
+  //lino add 2012-12-08 end for NEWMS00148531
 }

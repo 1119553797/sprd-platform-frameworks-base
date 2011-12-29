@@ -374,6 +374,8 @@ public class Environment {
      * media is corrupted. 
      */
     public static final String MEDIA_UNMOUNTABLE = "unmountable";
+    
+    public static final String MEDIA_IDLE = "idle";
 
     /**
      * Gets the current state of the primary "external" storage device.
