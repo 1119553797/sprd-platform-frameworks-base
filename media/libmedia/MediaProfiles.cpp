@@ -446,11 +446,57 @@ MediaProfiles::createDefaultCamcorderLowProfile()
     return profile;
 }
 
+/*mm09: fix the bug 7703, 7647 in 2011.12.30*****/
+/*static*/ MediaProfiles::CamcorderProfile*
+MediaProfiles::createFrontCamcorderHighProfile()
+{
+    LOGE("chenhb: createDefaultCamcorderBackProfile");
+    MediaProfiles::VideoCodec *videoCodec =
+        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 360000, 352, 288, 20);
+
+    AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
+    CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
+    profile->mCameraId = 1;
+    profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+    profile->mQuality = CAMCORDER_QUALITY_HIGH;
+    profile->mDuration = 60;
+    profile->mVideoCodec = videoCodec;
+    profile->mAudioCodec = audioCodec;
+    return profile;
+}
+
+
+/*static*/ MediaProfiles::CamcorderProfile*
+MediaProfiles::createFrontCamcorderLowProfile()
+{
+	LOGE("chenhb: createDefaultCamcorderFrontProfile");
+	MediaProfiles::VideoCodec *videoCodec =
+		new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 192000, 176, 144, 20);
+	
+	MediaProfiles::AudioCodec *audioCodec =
+	    new MediaProfiles::AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
+	
+	MediaProfiles::CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
+	profile->mCameraId = 1;
+	profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+	profile->mQuality = CAMCORDER_QUALITY_LOW;
+	profile->mDuration = 30;
+	profile->mVideoCodec = videoCodec;
+	profile->mAudioCodec = audioCodec;
+	return profile;
+
+}
+/*****mm09: fix the bug 7703, 7647 in 2011.12.30*/
+
 /*static*/ void
 MediaProfiles::createDefaultCamcorderProfiles(MediaProfiles *profiles)
 {
     profiles->mCamcorderProfiles.add(createDefaultCamcorderHighProfile());
     profiles->mCamcorderProfiles.add(createDefaultCamcorderLowProfile());
+	/*mm09: fix the bug 7703, 7647 in 2011.12.30*****/
+	profiles->mCamcorderProfiles.add(createFrontCamcorderHighProfile());
+    profiles->mCamcorderProfiles.add(createFrontCamcorderLowProfile());
+	/*****mm09: fix the bug 7703, 7647 in 2011.12.30*/
 }
 
 /*static*/ void
@@ -672,9 +718,8 @@ int MediaProfiles::getCamcorderProfileParamByName(const char *name,
                                                   int cameraId,
                                                   camcorder_quality quality) const
 {
-    LOGV("getCamcorderProfileParamByName: %s for camera %d, quality %d",
-         name, cameraId, quality);
-
+    LOGV("getCamcorderProfileParamByName: %s for camera %d, quality %d, size %d ",
+         name, cameraId, quality, mCamcorderProfiles.size());
     int index = -1;
     for (size_t i = 0, n = mCamcorderProfiles.size(); i < n; ++i) {
         if (mCamcorderProfiles[i]->mCameraId == cameraId &&
