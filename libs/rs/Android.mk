@@ -96,9 +96,11 @@ LOCAL_SRC_FILES:= \
 	rsScript.cpp \
 	rsScriptC.cpp \
 	rsScriptC_Lib.cpp \
+        rsShaderCache.cpp \
 	rsSimpleMesh.cpp \
 	rsThreadIO.cpp \
-	rsType.cpp
+	rsType.cpp \
+	rsVertexArray.cpp
 
 ifeq ($(TARGET_BOARD_PLATFORM), s5pc110)
 	LOCAL_CFLAGS += -DHAS_CONTEXT_PRIORITY
@@ -111,5 +113,9 @@ LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
 
+# include the java examples
+include $(addprefix $(LOCAL_PATH)/,$(addsuffix /Android.mk,\
+    java \
+    ))
 
 endif #simulator
