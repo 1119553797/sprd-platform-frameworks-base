@@ -745,7 +745,12 @@ public final class GsmCallTracker extends CallTracker {
                 }
                 hangup((GsmConnection)(call.getConnections().get(0)));
             } else {
-                hangupForegroundResumeBackground();
+                if (phone.getState() == Phone.State.RINGING) {
+                    log("(foregnd) hangup active remain ringing...");
+                    hangup((GsmConnection)(call.getConnections().get(0)));
+                } else {
+                    hangupForegroundResumeBackground();
+                }
             }
         } else if (call == backgroundCall) {
             if (ringingCall.isRinging()) {
