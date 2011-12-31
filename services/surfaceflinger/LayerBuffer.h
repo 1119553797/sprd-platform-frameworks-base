@@ -23,8 +23,6 @@
 #include "LayerBase.h"
 #include "TextureManager.h"
 
-#include "YUV2RGBConvertor.h"
-
 struct copybit_device_t;
 
 namespace android {
@@ -34,7 +32,6 @@ namespace android {
 class Buffer;
 class Region;
 class OverlayRef;
-class EGLUtils;
 
 // ---------------------------------------------------------------------------
 
@@ -138,7 +135,6 @@ private:
         virtual void destroy() { }
     private:
         status_t initTempBuffer() const;
-
         void clearTempBufferImage() const;
         mutable Mutex                   mBufferSourceLock;
         sp<Buffer>                      mBuffer;
@@ -153,9 +149,6 @@ private:
         mutable Condition mBufCondition;	
 	 mutable bool mInComposing;
 	 bool mIsSync;
-	 
-        mutable YUV2RGBConvertHandle    mYUV2RGBConvertHandle;
-        status_t yuv2rgbConvert(GGLSurface &t) const;
     };
     
     class OverlaySource : public Source {

@@ -282,13 +282,17 @@ LayerBuffer::Buffer::Buffer(const ISurface::BufferHeap& buffers,
 
     gralloc_module_t const * module = LayerBuffer::getGrallocModule();
     if (module && module->perform) {
-        int err = module->perform(module,
-                GRALLOC_MODULE_PERFORM_CREATE_HANDLE_FROM_BUFFER,
-                buffers.heap->heapID(), bufferSize,
-                offset, buffers.heap->base(),
-                &src.img.handle);
+        int err;
+        int size;
+        PixelFormatInfo info;
 
-        // we can fail here is the passed buffer is purely software
+        getPixelFormatInfo(buffers.format, &info);
+        size = info.getScanlineSize(src.img.w) * src.img.h;
+        err = module->perform(module,
+                    GRALLOC_MODULE_PERFORM_CREATE_HANDLE_FROM_BUFFER,
+                    buffers.heap->heapID(), size,
+                    offset, buffers.heap->base(),
+                    &src.img.handle);
         mSupportsCopybit = (err == NO_ERROR);
     }
  }
@@ -296,7 +300,12 @@ LayerBuffer::Buffer::Buffer(const ISurface::BufferHeap& buffers,
 LayerBuffer::Buffer::~Buffer()
 {
     NativeBuffer& src(mNativeBuffer);
+
     if (src.img.handle) {
+        gralloc_module_t const * module = LayerBuffer::getGrallocModule();
+        module->perform(module, 
+                        GRALLOC_MODULE_PERFORM_FREE_HANDLE,
+                        &src.img.handle);
         native_handle_delete(src.img.handle);
     }
 }
@@ -374,9 +383,6 @@ LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
     mLayer.setNeedsBlending((info.h_alpha - info.l_alpha) > 0);    
     mBufferSize = info.getScanlineSize(buffers.hor_stride)*buffers.ver_stride;
     mLayer.forceVisibilityTransaction();
-
-    YUV2RGBConvertor& convertor(YUV2RGBConvertor::getInstance());
-    mYUV2RGBConvertHandle = convertor.createHandle();
 }
 
 LayerBuffer::BufferSource::~BufferSource()
@@ -384,17 +390,11 @@ LayerBuffer::BufferSource::~BufferSource()
     class MessageDestroyTexture : public MessageBase {
         SurfaceFlinger* flinger;
         GLuint name;
-        YUV2RGBConvertHandle convertHandle;
     public:
         MessageDestroyTexture(
-                SurfaceFlinger* flinger, 
-                GLuint name, 
-                YUV2RGBConvertHandle convertHandle)
-            : flinger(flinger), name(name), convertHandle(convertHandle) { }
+                SurfaceFlinger* flinger, GLuint name)
+            : flinger(flinger), name(name) { }
         virtual bool handler() {
-            YUV2RGBConvertor& convertor(YUV2RGBConvertor::getInstance());
-            convertor.deleteHandle(convertHandle);
-            flinger->graphicPlane(0).displayHardware().makeCurrent();
             glDeleteTextures(1, &name);
             return true;
         }
@@ -403,9 +403,7 @@ LayerBuffer::BufferSource::~BufferSource()
     if (mTexture.name != -1U) {
         // GL textures can only be destroyed from the GL thread
         getFlinger()->mEventQueue.postMessage(
-                new MessageDestroyTexture(getFlinger(), 
-                                          mTexture.name, 
-                                          mYUV2RGBConvertHandle));
+                new MessageDestroyTexture(getFlinger(), mTexture.name) );
     }
     if (mTexture.image != EGL_NO_IMAGE_KHR) {
         EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
@@ -492,39 +490,22 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
 
 #if defined(EGL_ANDROID_image_native_buffer)
     if (GLExtensions::getInstance().haveDirectTexture()) {
-        err = INVALID_OPERATION;
-        // Try GPU shader processing 
-        YUV2RGBConvertor& convertor(YUV2RGBConvertor::getInstance());
-        if (convertor.isSupport(src.img.format)) {
-            GGLSurface t;
-            t.version = sizeof(GGLSurface);
-            t.width  = src.crop.r;
-            t.height = src.crop.b;
-            t.stride = src.img.w;
-            t.vstride= src.img.h;
-            t.format = src.img.format;
-            t.data = (GGLubyte*)src.img.base;
-            err = yuv2rgbConvert(t);
-            getFlinger()->graphicPlane(0).displayHardware().makeCurrent();
-        }
-        else {
-            if (ourBuffer->supportsCopybit()) {
-                copybit_device_t* copybit = mLayer.mBlitEngine;
-                if (copybit && err != NO_ERROR) {
-                    // create our EGLImageKHR the first time
-                    err = initTempBuffer();
-                    if (err == NO_ERROR) {
-                        // NOTE: Assume the buffer is allocated with the proper USAGE flags
-                        const NativeBuffer& dst(mTempBuffer);
-                        region_iterator clip(Region(Rect(dst.crop.r, dst.crop.b)));
-                        copybit->set_parameter(copybit, COPYBIT_TRANSFORM, 0);
-                        copybit->set_parameter(copybit, COPYBIT_PLANE_ALPHA, 0xFF);
-                        copybit->set_parameter(copybit, COPYBIT_DITHER, COPYBIT_ENABLE);
-                        err = copybit->stretch(copybit, &dst.img, &src.img,
-                                &dst.crop, &src.crop, &clip);
-                        if (err != NO_ERROR) {
-                            clearTempBufferImage();
-                        }
+        if (ourBuffer->supportsCopybit()) {
+            copybit_device_t* copybit = mLayer.mBlitEngine;
+            if (copybit) {
+                // create our EGLImageKHR the first time
+                err = initTempBuffer();
+                if (err == NO_ERROR) {
+                    // NOTE: Assume the buffer is allocated with the proper USAGE flags
+                    const NativeBuffer& dst(mTempBuffer);
+                    region_iterator clip(Region(Rect(dst.crop.r, dst.crop.b)));
+                    copybit->set_parameter(copybit, COPYBIT_TRANSFORM, 0);
+                    copybit->set_parameter(copybit, COPYBIT_PLANE_ALPHA, 0xFF);
+                    copybit->set_parameter(copybit, COPYBIT_DITHER, COPYBIT_ENABLE);
+                    err = copybit->stretch(copybit, &dst.img, &src.img,
+                            &dst.crop, &src.crop, &clip);
+                    if (err != NO_ERROR) {
+                        clearTempBufferImage();
                     }
                 }
             }
@@ -557,51 +538,6 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
     	mInComposing = false;
     	mBufCondition.signal();    
     }	
-}
-
-status_t 
-LayerBuffer::BufferSource::yuv2rgbConvert(GGLSurface &t) const
-{
-    uint32_t w = mLayer.mTransformedBounds.width();
-    uint32_t h = mLayer.mTransformedBounds.height();
-    EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
-    YUV2RGBConvertor& convertor(YUV2RGBConvertor::getInstance());
-
-    if (mTexture.image != EGL_NO_IMAGE_KHR) {
-        // we have an EGLImage, make sure the needed size didn't change
-        if (w != mTexture.width || h != mTexture.height) {
-            // delete the EGLImage and texture
-            clearTempBufferImage();
-        } else {
-            // we're good, we have an EGLImageKHR and it's (still) the
-            // right size
-            convertor.draw(mYUV2RGBConvertHandle, t);
-            return NO_ERROR;
-        }
-    }
-
-    // Allocate a temporary buffer and create the corresponding EGLImageKHR
-    // once the EGLImage has been created we don't need the
-    // graphic buffer reference anymore.
-    sp<GraphicBuffer> buffer = new GraphicBuffer(
-            w, h, HAL_PIXEL_FORMAT_RGB_565,
-            GraphicBuffer::USAGE_HW_TEXTURE |
-            GraphicBuffer::USAGE_HW_RENDER);
-
-    status_t err = buffer->initCheck();
-    if (err != NO_ERROR) {
-        fprintf(stderr, "YUV2RGB: dst buffer check failed, %x\n", err);
-        return err;
-    }
-
-    err = mTextureManager.initEglImage(&mTexture, dpy, buffer);
-    if (err != NO_ERROR) {
-        fprintf(stderr, "Temp buffer bind to texture object failed, %x\n", err);
-        return err;
-    }
-
-    err = convertor.draw(mYUV2RGBConvertHandle, t, mTexture.image, w, h);
-    return err;
 }
 
 status_t LayerBuffer::BufferSource::initTempBuffer() const
