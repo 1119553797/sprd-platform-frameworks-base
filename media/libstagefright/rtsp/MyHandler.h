@@ -231,7 +231,7 @@ struct MyHandler : public AHandler {
 			return ;
         }
 		mSeekPending = true;
-	    postCmdTimeoutCheck(doneMsg);
+	    //postCmdTimeoutCheck(doneMsg);
 
 		for (size_t i = 0; i < mTracks.size(); ++i) {
             mTracks.editItemAt(i).mPacketSource->flushQueue();
@@ -877,7 +877,15 @@ struct MyHandler : public AHandler {
                 if (mDoneMsg != NULL) {
 					LOGI("quit done  for UNKNOWN_ERROR");
                     mDoneMsg->setInt32("result", UNKNOWN_ERROR);
-                    mDoneMsg->post(4000000ll);
+                    if(mlocalTimestamps)
+					{
+					   mDoneMsg->post();
+					}
+					else
+					{
+  					   mDoneMsg->post(4000000ll);
+					}               
+                 
                     mDoneMsg = NULL;
                 }
 				else
@@ -888,7 +896,14 @@ struct MyHandler : public AHandler {
 					{
 					    LOGI("quit done  for ERROR_IO");
 						doneMsg->setInt32("result", ERROR_IO);
-						doneMsg->post(4000000ll);
+						if(mlocalTimestamps)
+						{
+						   doneMsg->post();
+						}
+						else
+						{
+	  					   doneMsg->post(4000000ll);
+						}               
 	                    doneMsg = NULL;
 					}
 				}
@@ -999,7 +1014,7 @@ struct MyHandler : public AHandler {
                 int32_t eos;
                 if (msg->findInt32("eos", &eos)) {
                     LOGI("received BYE on track index %d", trackIndex);
-#if 1
+#if 0
                     track->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
 #endif
                     return;
@@ -1053,7 +1068,6 @@ struct MyHandler : public AHandler {
                     mDoneMsg->setInt32("result", OK);
                     mDoneMsg->post();
                     mDoneMsg = NULL;
-
                     mFirstAccessUnit = false;
                     mFirstAccessUnitNTP = ntpTime;
 		            mConn->serverexception(NULL);  //@hong

@@ -491,6 +491,8 @@ APacketSource::APacketSource(
       mFormat(new MetaData),
       mEOSResult(OK),
       mIsAVC(false),
+      mIsMpeg4(false),
+      mIsH263(false),
       mScanForIDR(true),
       mRTPTimeBase(0),
       mNormalPlayTimeBaseUs(0),
@@ -552,6 +554,7 @@ APacketSource::APacketSource(
             mInitCheck = ERROR_UNSUPPORTED;
             return;
         }
+		mIsH263 = true ;
 
         mFormat->setInt32(kKeyWidth, width);
         mFormat->setInt32(kKeyHeight, height);
@@ -624,7 +627,7 @@ APacketSource::APacketSource(
             mInitCheck = ERROR_UNSUPPORTED;
             return;
         }
-
+        mIsMpeg4 = true ;
         mFormat->setInt32(kKeyWidth, width);
         mFormat->setInt32(kKeyHeight, height);
     } else if (!strncasecmp(desc.c_str(), "mpeg4-generic/", 14)) {
@@ -678,33 +681,53 @@ sp<MetaData> APacketSource::getFormat() {
 }
 
 status_t APacketSource::read(
-        MediaBuffer **out, const ReadOptions *) {
+        MediaBuffer **out, const ReadOptions *options) {
     *out = NULL;
-
+//	LOGE("read entering... ");
     Mutex::Autolock autoLock(mLock);
-    while (mEOSResult == OK && mBuffers.empty()) {
+
+    int64_t skipTimeUs;
+    if (options && options->getSkipFrame(&skipTimeUs)) {
+        mSkipTimeUs = skipTimeUs;
+    } else {
+        mSkipTimeUs = -1;
+    }
+
+   while(1){
+    while (mEOSResult == OK && mBuffers.empty()) {  //@hong not check empty for unkown error.
         mCondition.wait(mLock);
     }
+//	LOGE("read ok..");
 
     if (!mBuffers.empty()) {
         const sp<ABuffer> buffer = *mBuffers.begin();
 
         updateNormalPlayTime_l(buffer);
-
-        MediaBuffer *mediaBuffer = new MediaBuffer(buffer->size());
+		
+        mBuffers.erase(mBuffers.begin());
 
         int64_t timeUs;
         CHECK(buffer->meta()->findInt64("timeUs", &timeUs));
+	 if(mSkipTimeUs>=0){
+	 	if(timeUs<mSkipTimeUs){
+			LOGI("skip timeUs %lld,%lld",timeUs,mSkipTimeUs);
+			continue;
+	 	}else{
+			LOGI("not skip timeUs %lld,%lld",timeUs,mSkipTimeUs);	 		
+	 	}
+	 }	
+        MediaBuffer *mediaBuffer = new MediaBuffer(buffer->size());
 
         mediaBuffer->meta_data()->setInt64(kKeyTime, timeUs);
 
         memcpy(mediaBuffer->data(), buffer->data(), buffer->size());
         *out = mediaBuffer;
-
-        mBuffers.erase(mBuffers.begin());
+		
         return OK;
+    }else{
+    	 break;
     }
-
+   }
     return mEOSResult;
 }
 
@@ -725,17 +748,26 @@ void APacketSource::queueAccessUnit(const sp<ABuffer> &buffer) {
         return;
     }
 
-    if (mScanForIDR && mIsAVC) {
+    if (mScanForIDR) {
         // This pretty piece of code ensures that the first access unit
         // fed to the decoder after stream-start or seek is guaranteed to
         // be an IDR frame. This is to workaround limitations of a certain
         // hardware h.264 decoder that requires this to be the case.
 
-        if (!IsIDR(buffer)) {
+        if (mIsAVC &&!IsIDR(buffer)) {
             LOGV("skipping AU while scanning for next IDR frame.");
             return;
         }
-
+		if(mIsMpeg4 &&!IskeyFrame(buffer,1))
+		{
+		    LOGV("skipping AU while scanning for next mpeg4 Keyframe");
+            return;
+		}
+		if(mIsH263 &&!IskeyFrame(buffer,0))
+		{
+		    LOGV("skipping AU while scanning for next H263 Keyframe");
+            return;
+		}
         mScanForIDR = false;
     }
 
@@ -778,9 +810,7 @@ int64_t APacketSource::getQueueDurationUs(bool *eos) {
     *eos = (mEOSResult != OK);
 
     if (mBuffers.size() < 2) {
-
-		LOGE("mBuffers.size() < 2 so return 0");
-		return 0;
+        return 0;
     }
 
     const sp<ABuffer> first = *mBuffers.begin();

@@ -298,5 +298,31 @@ bool IsIDR(const sp<ABuffer> &buffer) {
     return foundIDR;
 }
 
+bool IskeyFrame(const sp<ABuffer> &buffer,int32_t mpegtype)
+{
+    const uint8_t *data = buffer->data();
+    size_t size = buffer->size();
+    bool foundKeyFrame = false;
+	
+    LOGI("start code is  (%x:%x:%x)", data[2],data[3],data[4]);
+	if(mpegtype ==1)//mpeg4
+	{
+		if((data[4]&(uint8_t)0xc0) == 0x00)
+		{
+			foundKeyFrame = true ;
+		}
+	}
+	if(mpegtype ==0)//H263
+	{
+		if((data[4]&(uint8_t)0x02) == 0x00)
+		{
+			foundKeyFrame = true ;
+		}
+	}
+    return 	foundKeyFrame ;
+
+}
+
+
 }  // namespace android
 

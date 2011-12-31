@@ -161,6 +161,7 @@ private:
     bool mVideoRendererIsPreview;
     bool mNewSurfaceIsSet;//sprd
     bool mCMMBLab;  //@hong
+    int64_t mSkipTimeUs;
 
     sp<MediaSource> mAudioTrack;
     sp<MediaSource> mAudioSource;
