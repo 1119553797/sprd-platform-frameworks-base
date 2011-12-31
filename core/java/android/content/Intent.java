@@ -1919,6 +1919,11 @@ public class Intent implements Parcelable, Cloneable {
     */
     public static String ACTION_SPRD_UMS_UNSHARED = "com.sprd.android.action.UMS_UNSHARED";
     
+    //add by liguxiang 09-27-11 for usb settings begin
+    /**
+     * @hide 
+    */
+    public static String ACTION_SPRD_UMS_OPERATOR = "com.sprd.android.action.UMS_OPERATOR";
     /**
      * @hide 
     */

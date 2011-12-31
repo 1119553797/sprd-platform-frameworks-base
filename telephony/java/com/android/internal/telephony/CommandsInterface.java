@@ -697,7 +697,7 @@ public interface CommandsInterface extends SprdCommandsInterface{
      * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
      * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
      */
-    void dial(String address, int clirMode, UUSInfo uusInfo, Message result);
+    void dial(String address, int clirMode, UUSInfo uusInfo, boolean isStkCall, Message result);
 
     /**
      *  returned message

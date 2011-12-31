@@ -7558,7 +7558,6 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     private static final int ID_SELECT_ALL = android.R.id.selectAll;
     protected static final int ID_START_SELECTING_TEXT = android.R.id.startSelectingText;//add by yangqingan 2011-11-27 for NEWMS00144928
     protected static final int ID_STOP_SELECTING_TEXT = android.R.id.stopSelectingText;//add by yangqingan 2011-11-27 for NEWMS00144928
-    private static final int ID_START_SELECTING_TEXT = android.R.id.startSelectingText;
     private static final int ID_CUT = android.R.id.cut;
     private static final int ID_COPY = android.R.id.copy;
     private static final int ID_PASTE = android.R.id.paste;

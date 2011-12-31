@@ -684,6 +684,25 @@ public class GsmAlphabet {
         }
         return count;
     }
+    /**
+     * Returns the count of 7-bit GSM alphabet characters
+     * needed to represent this string.
+     * @param throwsException If true, throws EncodeException if unencodable
+     * char. Otherwise, counts invalid char as 1 septet
+     */
+    public static int
+    countGsmSeptets(CharSequence s, boolean throwsException, boolean dummy) throws EncodeException {
+        int charIndex = 0;
+        int sz = s.length();
+        int count = 0;
+
+        while (charIndex < sz) {
+            count += countGsmSeptets(s.charAt(charIndex), throwsException);
+            charIndex++;
+        }
+
+        return count;
+    }
 
     /**
      * Returns the count of 7-bit GSM alphabet characters

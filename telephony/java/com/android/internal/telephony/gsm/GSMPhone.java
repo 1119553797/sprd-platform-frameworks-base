@@ -716,6 +716,10 @@ public abstract class GSMPhone extends PhoneBase {
                 backgroundCallState.isAlive() ||
                 ringingCallState.isAlive());
     }
+    public Connection
+    dial (String dialString) throws CallStateException {
+        return dial(dialString, false);
+    }
 
     public Connection
     dial (String dialString, boolean isStkCall) throws CallStateException {
@@ -724,6 +728,11 @@ public abstract class GSMPhone extends PhoneBase {
 
     public Connection
     dial (String dialString, UUSInfo uusInfo) throws CallStateException {
+        return dial(dialString, uusInfo, false);
+    	}
+
+    public Connection
+    dial (String dialString, UUSInfo uusInfo, boolean isStkCall) throws CallStateException {
         // Need to make sure dialString gets parsed properly
         String newDialString = PhoneNumberUtils.stripSeparators(dialString);
 

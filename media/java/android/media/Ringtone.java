@@ -66,6 +66,7 @@ public class Ringtone {
     private AudioManager mAudioManager;
 
     private Context mContext;
+    private boolean isError;
 
     Ringtone(Context context) {
         mContext = context;
@@ -167,8 +168,20 @@ public class Ringtone {
     
     private void openMediaPlayer() throws IOException {
         mAudio = new MediaPlayer();
-        if (mUri != null) {
-            mAudio.setDataSource(mContext, mUri);
+        if (mUri != null) {   
+            try {
+                mAudio.setDataSource(mContext, mUri);
+            } catch (IOException e) {/* ===== fixed CR<NEWMS00109311> by luning at 2011.11.18 begin =====*/
+                isError = true;
+                if (mStreamType == AudioManager.STREAM_RING
+                        || mStreamType == AudioManager.STREAM_NOTIFICATION
+                        || mStreamType == AudioManager.STREAM_ALARM) {
+                    Uri uri = new RingtoneManager(mContext).getDefaultUri();
+                    mAudio.setDataSource(mContext, uri);
+                } else {//cound not handle this stream,throw it.
+                    throw e;
+                }
+            }
         } else if (mFileDescriptor != null) {
             mAudio.setDataSource(mFileDescriptor);
         } else if (mAssetFileDescriptor != null) {
@@ -187,6 +200,10 @@ public class Ringtone {
         }
         mAudio.setAudioStreamType(mStreamType);
         mAudio.prepare();
+    }
+
+    public boolean isError() {
+        return isError;
     }
 
     void open(FileDescriptor fd) throws IOException {

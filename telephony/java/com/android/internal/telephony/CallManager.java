@@ -743,6 +743,20 @@ public final class CallManager {
      * handled asynchronously.
      */
     public Connection dial(Phone phone, String dialString) throws CallStateException {
+    	return dial(phone, dialString, false);
+    }
+
+    /**
+     * Initiate a new voice connection. This happens asynchronously, so you
+     * cannot assume the audio path is connected (or a call index has been
+     * assigned) until PhoneStateChanged notification has occurred.
+     *
+     * @exception CallStateException if a new outgoing call is not currently
+     * possible because no more call slots exist or a call exists that is
+     * dialing, alerting, ringing, or waiting.  Other errors are
+     * handled asynchronously.
+     */
+    public Connection dial(Phone phone, String dialString, boolean isStkCall) throws CallStateException {
         Phone basePhone = getPhoneBase(phone);
         Connection result;
 
@@ -774,7 +788,7 @@ public final class CallManager {
             }
         }
 
-        result = basePhone.dial(dialString);
+        result = basePhone.dial(dialString,isStkCall);
 
         if (VDBG) {
             Log.d(LOG_TAG, "End dial(" + basePhone + ", "+ dialString + ")");

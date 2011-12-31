@@ -63,6 +63,7 @@ import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.text.TextUtils;
 import android.util.EventLog;
+import android.util.Log;
 import android.util.Slog;
 import android.util.PrintWriterPrinter;
 import android.util.Printer;

@@ -217,7 +217,7 @@ public final class GsmCallTracker extends CallTracker {
             setMute(false);
             boolean isStkCall = getStkCall();
             log("GsmCallTracker dial: isStkCall=" + isStkCall);
-            cm.dial(pendingMO.address, clirMode, isStkCall, obtainCompleteMessage());
+            cm.dial(pendingMO.address, clirMode, uusInfo, isStkCall, obtainCompleteMessage());
         }
 
         updatePhoneState();

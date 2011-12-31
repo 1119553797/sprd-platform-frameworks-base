@@ -938,6 +938,17 @@ public class SipPhone extends SipPhoneBase {
         }
     }
 
+    //
+    public Connection
+    dial (String dialString, boolean isStkCall) throws CallStateException {
+		return dial(dialString, false);
+    }
+
+    public Connection
+    dial (String dialString, UUSInfo uusInfo, boolean isStkCall) throws CallStateException {
+		return dial(dialString, uusInfo, false);
+    }
+
     //TS for compile
 	@Override
 	public void changeBarringPassword(String facility, String oldPwd,

@@ -572,6 +572,10 @@ public class PhoneProxy extends Handler implements Phone {
     public Call getRingingCall() {
         return mActivePhone.getRingingCall();
     }
+	
+    public Connection dial(String dialString) throws CallStateException {
+        return mActivePhone.dial(dialString);
+    }
 
     public Connection dial(String dialString, boolean isStkCall) throws CallStateException {
         return mActivePhone.dial(dialString, isStkCall);
@@ -579,6 +583,10 @@ public class PhoneProxy extends Handler implements Phone {
 
     public Connection dial(String dialString, UUSInfo uusInfo) throws CallStateException {
         return mActivePhone.dial(dialString, uusInfo);
+    }
+
+    public Connection dial(String dialString, UUSInfo uusInfo, boolean isStkCal) throws CallStateException {
+        return mActivePhone.dial(dialString, uusInfo, isStkCal);
     }
 
     public boolean handlePinMmi(String dialString) {
