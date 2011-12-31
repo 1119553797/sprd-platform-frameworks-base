@@ -51,15 +51,15 @@
 
 #include <media/stagefright/foundation/ALooper.h>
 
-#include <ctype.h>//@hong
-#include <cutils/properties.h>//@hong
+#include <ctype.h>
+#include <cutils/properties.h>
 
 #define _SYNC_USE_SYSTEM_TIME_
 namespace android {
 
 static int64_t kLowWaterMarkUs = 500000ll;  // 2secs @hong
 static int64_t kHighWaterMarkUs = 2500000ll;  // 10secs @hong
-static int64_t kStartLowWaterMarkUs = 80000ll; //@hong
+static int64_t kStartLowWaterMarkUs = 80000ll;
 static const size_t kLowWaterMarkBytes = 40000;
 static const size_t kHighWaterMarkBytes = 200000;
 
@@ -249,11 +249,12 @@ AwesomePlayer::AwesomePlayer()
     : mQueueStarted(false),
       mTimeSource(NULL),
       mVideoRendererIsPreview(false),
-      mNewSurfaceIsSet(false),//sprd
+      mNewSurfaceIsSet(false),
       mAudioPlayer(NULL),
       mFlags(0),
       mExtractorFlags(0),
       mCMMBLab(false),  //hong
+      mSkipTimeUs(-1),
       mLastVideoBuffer(NULL),
       mVideoBuffer(NULL),
       mSuspensionState(NULL),
@@ -277,15 +278,15 @@ AwesomePlayer::AwesomePlayer()
             this, &AwesomePlayer::onCheckAudioStatus);
 
     mAudioStatusEventPending = false;
-{
-    char value[16];//@hong
+
+    char value[16];
     property_get("ro.hisense.cmcc.test", value, "Unknown");
     if (!strcmp(value, "1") || !strcmp(value, "true"))
     {
 	mCMMBLab = true;
 	LOGV("CMMB set to CMCC Test Mode");
     }
-}
+
     reset();
 }
 
@@ -327,11 +328,9 @@ LOGV("setdatasource11 ");
 
 status_t AwesomePlayer::setDataSource_l(
         const char *uri, const KeyedVector<String8, String8> *headers) {
-{
 	    struct timeval tv;  //@hong add timecheck.
 	    gettimeofday(&tv, NULL);
-		LOGV("setdatasource 22 time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
-}		
+LOGV("setdatasource 22 time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
     reset_l();
 
     mUri = uri;
@@ -343,11 +342,8 @@ status_t AwesomePlayer::setDataSource_l(
     // The actual work will be done during preparation in the call to
     // ::finishSetDataSource_l to avoid blocking the calling thread in
     // setDataSource for any significant time.
-{	
-	    struct timeval tv;  //@hong add timecheck.
-		gettimeofday(&tv, NULL);
-		LOGV("setdatasource 33 time:%d s",tv.tv_sec);
-}
+	    gettimeofday(&tv, NULL);
+LOGV("setdatasource 33 time:%d s",tv.tv_sec);
     return OK;
 }
 
@@ -387,7 +383,7 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
     // Attempt to approximate overall stream bitrate by summing all
     // tracks' individual bitrates, if not all of them advertise bitrate,
     // we have to fail.
-
+struct timeval tv;  //@hong add timecheck.
     int64_t totalBitRate = 0;
 
     for (size_t i = 0; i < extractor->countTracks(); ++i) {
@@ -445,11 +441,10 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
     }
 
     mExtractorFlags = extractor->flags();
-	{
-		struct timeval tv;  //@hong add timecheck.
-		gettimeofday(&tv, NULL);
-		LOGV("setdatasource_l end time:%d s ",tv.tv_sec*1000 + tv.tv_usec/1000);
-	}
+
+	    gettimeofday(&tv, NULL);
+
+	LOGV("setdatasource_l end time:%d s ",tv.tv_sec*1000 + tv.tv_usec/1000);
 
     return OK;
 }
@@ -856,7 +851,7 @@ LOGV("play_l enter time:%d s",tv.tv_sec*1000+tv.tv_usec/1000);
         }
     }
 
-	mFlags |= PLAYING;
+    mFlags |= PLAYING;
     mFlags |= FIRST_FRAME;
     bool deferredAudioSeek = false;
 
@@ -1186,7 +1181,7 @@ status_t AwesomePlayer::seekTo_l(int64_t timeUs) {
 		{
 		   LOGE("liveing streaming ,so can not seek");  
 		   return OK;
-		}	
+		}
 		if (mbeginPlay)
 		{
 		 	mSeeking = true;
@@ -1316,7 +1311,7 @@ void AwesomePlayer::setVideoSource(sp<MediaSource> source) {
 
 status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 	LOGI("initVideoDecoder, mIsVideoPhoneStream: %d", mIsVideoPhoneStream);
-	if (mIsVideoPhoneStream){//sprd vt
+	if (mIsVideoPhoneStream){
 	    mVideoSource = OMXCodec::Create(
 	            mClient.interface(), mVideoTrack->getFormat(),
 	            false, // createEncoder
@@ -1387,7 +1382,8 @@ void AwesomePlayer::finishSeekIfNecessary(int64_t videoTimeUs) {
     mFlags |= FIRST_FRAME;
     mSeeking = false;
     mSeekNotificationSent = false;
-   if (mRTSPController == NULL){
+   if (mRTSPController == NULL)
+   {
 	#ifdef _SYNC_USE_SYSTEM_TIME_	
 	mSystemTimeSourceForSync.resume();//@jgdu
 	#endif    
@@ -1433,11 +1429,15 @@ void AwesomePlayer::onVideoEvent() {
     if (!mVideoBuffer) {
         MediaSource::ReadOptions options;
         if (mSeeking) {
-            LOGE("seeking to %lld us (%.2f secs)", mSeekTimeUs, mSeekTimeUs / 1E6);
+            LOGV("seeking to %lld us (%.2f secs)", mSeekTimeUs, mSeekTimeUs / 1E6);
 
             options.setSeekTo(
                     mSeekTimeUs, MediaSource::ReadOptions::SEEK_CLOSEST_SYNC);
         }
+        if (mSkipTimeUs >= 0) {//jgdu
+            options.setSkipFrame(mSkipTimeUs);
+	     mSkipTimeUs = -1;
+        }		
         for (;;) {
             status_t err = mVideoSource->read(&mVideoBuffer, &options);
             options.clearSeekTo();
@@ -1512,17 +1512,15 @@ void AwesomePlayer::onVideoEvent() {
     TimeSource *ts = (mFlags & AUDIO_AT_EOS) ? &mSystemTimeSource : mTimeSource;
 #endif
 
-    int is_first_frame = 0; //@hong
-    uint32_t tmp_mFlags = mFlags;//@hong
-	
+    int is_first_frame = 0;
+    uint32_t tmp_mFlags = mFlags;
     if (mFlags & FIRST_FRAME) {
         mFlags &= ~FIRST_FRAME;
-		{//@hong
-	    	struct timeval tv;  //@hong add timecheck.
-	    	gettimeofday(&tv, NULL);
-			LOGV("First Frame time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
-			is_first_frame = 1;
-		}		
+		
+	    struct timeval tv;  //@hong add timecheck.
+	    gettimeofday(&tv, NULL);
+	LOGV("First Frame time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
+	is_first_frame = 1;	
 	   
         mTimeSourceDeltaUs = ts->getRealTimeUs() - timeUs;
     }
@@ -1551,8 +1549,9 @@ void AwesomePlayer::onVideoEvent() {
 #endif
 
     int64_t latenessUs = nowUs - timeUs;
-    LOGI("video timestamp %lld,%lld:%lld,%lld,%lld",nowUs,timeUs,realTimeUs,mediaTimeUs,realTimeUs - mediaTimeUs);
-	
+    if(latenessUs > 60000 || latenessUs< -60000){
+    	LOGI("video timestamp %lld,%lld,%lld:%lld,%lld,%lld",nowUs,timeUs,latenessUs,realTimeUs,mediaTimeUs,realTimeUs - mediaTimeUs);
+    }
     if(latenessUs > 2000000 || latenessUs< -2000000){//jgdu 2s
 	LOGI("onVideoEvent time info:mTimeSourceDeltaUs:%lld realTimeUs:%lld mediaTimeUs:%lld", mTimeSourceDeltaUs, realTimeUs, mediaTimeUs);
 	LOGI("onVideoEvent time info2:getRealTimeUs:%lld nowUs:%lld latenessUs:%lld timeUs:%lld", ts->getRealTimeUs(), nowUs,latenessUs, timeUs);	
@@ -1561,6 +1560,10 @@ void AwesomePlayer::onVideoEvent() {
     if (wasSeeking) {
         // Let's display the first frame after seeking right away.
         latenessUs = 0;
+		if(mRTSPController != NULL)
+		{
+			mSystemTimeSourceForSync.reset();
+		}
     }
 
     if ((mRTPSession != NULL) || mIsVideoPhoneStream) {//sprd vt must
@@ -1575,11 +1578,17 @@ void AwesomePlayer::onVideoEvent() {
     		latenessUs = 0;
 		LOGI("cmmb is_first_frame");
     	}
+	if((latenessUs - kLowWaterMarkUs) > 1000000){
+		mSkipTimeUs = timeUs + (latenessUs - kLowWaterMarkUs);
+		LOGI("mSkipTimeUs %lld,timeUs %lld",mSkipTimeUs,timeUs);
+	}else{
+		mSkipTimeUs = -1;
+	}
     }
 
     if (latenessUs > 60000) {
         // We're more than 40ms late.
-        LOGI("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
+        LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
 
         mVideoBuffer->release();
         mVideoBuffer = NULL;
@@ -1612,13 +1621,12 @@ void AwesomePlayer::onVideoEvent() {
     if (mVideoRenderer != NULL) {
         mVideoRenderer->render(mVideoBuffer);
     }else{
-    //	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35))
-	    { //@Hong. SpeedupCMMB	
-         if(tmp_mFlags& FIRST_FRAME){
+    	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mUri.string(),35)){ //@Hong. SpeedupCMMB	
+       	if(tmp_mFlags& FIRST_FRAME){
 	   		mFlags |= FIRST_FRAME;
-         }
-	     postVideoEvent_l(10000);
-         return;
+       	}
+	 postVideoEvent_l(10000);
+        return;
     	}
     	LOGI("mVideoRenderer is NULL");	
     }
@@ -1697,18 +1705,17 @@ void AwesomePlayer::onCheckAudioStatus() {
         mWatchForAudioEOS = false;
         mFlags |= AUDIO_AT_EOS;
         mFlags |= FIRST_FRAME;
-		LOGV("audio stream ended err:%d !",finalStatus);		
+		LOGV("audio stream ended err:%x !",finalStatus);		
         postStreamDoneEvent_l(finalStatus);
     }
 }
 
 status_t AwesomePlayer::prepare() {
-	{
 	    struct timeval tv;  //@hong add timecheck.
 
 	    gettimeofday(&tv, NULL);
-		LOGV("prepare enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
-	}
+LOGV("prepare enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
+	
    LOGV("prepare");
     Mutex::Autolock autoLock(mLock);
     return prepare_l();
@@ -1786,11 +1793,10 @@ char* strsplit(const char* src, char c, char* dest)
 
 status_t AwesomePlayer::finishSetDataSource_l() {
     sp<DataSource> dataSource;
-	{
 	    struct timeval tv;  //@hong add timecheck.
 	    gettimeofday(&tv, NULL);
-		LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
-	}
+LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
+
     if (!strncasecmp("http://", mUri.string(), 7)) {
         mConnectingDataSource = new NuHTTPDataSource;
 
@@ -1863,8 +1869,8 @@ status_t AwesomePlayer::finishSetDataSource_l() {
             MediaExtractor::Create(source, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263);
 		}
         return setDataSource_l(extractor);
-
-    } else if (!strncasecmp(mUri.string(), "httplive://", 11)) {
+    }
+	else if (!strncasecmp(mUri.string(), "httplive://", 11)) {
         String8 uri("http://");
         uri.append(mUri.string() + 11);
 
@@ -2011,12 +2017,9 @@ status_t AwesomePlayer::finishSetDataSource_l() {
 
         mConnectingRTSPController.clear();
         LOGI("ARTSPController::connect returned %d", err);
-		{
-			struct timeval tv;  //@hong add timecheck.
-	    	gettimeofday(&tv, NULL);
-			LOGV("finishSetDataSource_l over time:%d s",tv.tv_sec);
-		}
-		
+	    gettimeofday(&tv, NULL);
+	LOGV("finishSetDataSource_l over time:%d s",tv.tv_sec);
+
         if (err != OK) {
             mRTSPController.clear();
             return err;

@@ -38,6 +38,7 @@ struct MetaData;
 sp<MetaData> MakeAVCCodecSpecificData(const sp<ABuffer> &accessUnit);
 
 bool IsIDR(const sp<ABuffer> &accessUnit);
+bool IskeyFrame(const sp<ABuffer> &accessUnit,int32_t mpegtype);
 
 }  // namespace android
 

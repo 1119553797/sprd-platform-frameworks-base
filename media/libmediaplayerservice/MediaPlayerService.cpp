@@ -759,35 +759,14 @@ player_type getPlayerType(const char* url)
 
     // Use PV_PLAYER for rtsp for now
     if (!strncasecmp(url, "rtsp://", 7)) {
-     //@hong differ the CMMB from RTSP 
-	if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",url,35) || 
-		!strncasecmp("rtsp://gtalk/",url,13))
+ 		if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",url,35) || 
+			!strncasecmp("rtsp://gtalk/",url,13))
 		{
-			char value[PROPERTY_VALUE_MAX];
-			property_get("media.stagefright.enable-rtsp", value, 0);
-			LOGI("CMMB get media.stagefright.enable-rtsp is %s", value);
-
-			property_set("stream.sprd.useragent","true");
-			property_set("media.stagefright.enable-rtsp","true");
 			LOGI("CMMB set to stagefright to work");
-
-			property_get("media.stagefright.enable-rtsp", value, 0);
-			LOGI("CMMB set to true and get media.stagefright.enable-rtsp is %s", value);
 		}
 	    else
 		{
 			char value[PROPERTY_VALUE_MAX];
-			property_get("media.stagefright.enable-rtsp", value, 0);
-			LOGI("normal streamming  get media.stagefright.enable-rtsp is %s", value);
-#if 0
-			property_set("stream.sprd.useragent","false");
-
-			property_set("media.stagefright.enable-rtsp","false");
-			LOGI("RTSP set to opencore to work");
-#endif
-			property_get("media.stagefright.enable-rtsp", value, 0);
-			LOGI("CMMB get media.stagefright.enable-rtsp is %s", value);
-		
 		    if (property_get("media.stagefright.enable-rtsp", value, NULL)
 				   && (!strcmp(value, "1") || !strcasecmp(value, "true"))) {
 				   // For now, we're going to use PV for rtsp-based playback

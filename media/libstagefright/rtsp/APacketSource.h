@@ -66,6 +66,8 @@ private:
     status_t mEOSResult;
 
     bool mIsAVC;
+	bool mIsH263;
+	bool mIsMpeg4 ;
     bool mScanForIDR;
 
     uint32_t mClockRate;
@@ -74,7 +76,7 @@ private:
     int64_t mNormalPlayTimeBaseUs;
 
     int64_t mLastNormalPlayTimeUs;
-
+    int64_t mSkipTimeUs;
     void updateNormalPlayTime_l(const sp<ABuffer> &buffer);
 
     DISALLOW_EVIL_CONSTRUCTORS(APacketSource);
