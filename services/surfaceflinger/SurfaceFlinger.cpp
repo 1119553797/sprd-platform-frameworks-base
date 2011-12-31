@@ -54,8 +54,6 @@
 
 #include "DisplayHardware/DisplayHardware.h"
 
-#include "YUV2RGBConvertor.h"
-
 /* ideally AID_GRAPHICS would be in a semi-public header
  * or there would be a way to map a user/group name to its id
  */
@@ -268,15 +266,6 @@ status_t SurfaceFlinger::readyToRun()
     glOrthof(0, w, h, 0, 0, 1);
 
    LayerDim::initDimmer(this, w, h);
-
-   {
-        sp<GraphicBuffer> buffer = new GraphicBuffer(
-                1, 1, HAL_PIXEL_FORMAT_RGB_565,
-                GraphicBuffer::USAGE_HW_TEXTURE |
-                GraphicBuffer::USAGE_HW_RENDER);
-        YUV2RGBConvertor& convertor(YUV2RGBConvertor::getInstance());
-        convertor.init(plane.getEGLDisplay(), buffer);
-   }
 
     mReadyToRunBarrier.open();
 
