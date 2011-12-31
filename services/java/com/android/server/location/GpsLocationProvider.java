@@ -477,7 +477,9 @@ public class GpsLocationProvider implements LocationProviderInterface {
     }
 
     public void updateNetworkState(int state, NetworkInfo info) {
-        sendMessage(UPDATE_NETWORK_STATE, state, info);
+	 if (mEnabled){	
+        	sendMessage(UPDATE_NETWORK_STATE, state, info);
+	 }
     }
 
     private void handleUpdateNetworkState(int state, NetworkInfo info) {
