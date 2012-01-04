@@ -62,6 +62,11 @@ void ScriptC::setupScript()
 
 uint32_t ScriptC::run(Context *rsc, uint32_t launchIndex)
 {
+    if (mProgram.mScript == NULL) {
+        rsc->setError(RS_ERROR_BAD_SCRIPT, "Attempted to run bad script");
+        return 0;
+    }
+
     Context::ScriptTLSStruct * tls =
     (Context::ScriptTLSStruct *)pthread_getspecific(Context::gThreadTLSKey);
     rsAssert(tls);
@@ -137,7 +142,6 @@ void ScriptCState::runCompiler(Context *rsc, ScriptC *s)
 
     rsc->appendNameDefines(&tmp);
     appendDecls(&tmp);
-    rsc->appendVarDefines(&tmp);
     appendVarDefines(rsc, &tmp);
     appendTypes(rsc, &tmp);
     tmp.append("#line 1\n");
@@ -155,10 +159,9 @@ void ScriptCState::runCompiler(Context *rsc, ScriptC *s)
         ACCchar buf[4096];
         ACCsizei len;
         accGetScriptInfoLog(s->mAccScript, sizeof(buf), &len, buf);
-        LOGV("%s", buf);
-//      LOGE("%s", buf);
-//      rsc->setError(RS_ERROR_BAD_SCRIPT, "Error compiling user script.");
-//      return;
+        LOGE("%s", buf);
+        rsc->setError(RS_ERROR_BAD_SCRIPT, "Error compiling user script.");
+        return;
     }
 
     if (s->mProgram.mInit) {
@@ -273,12 +276,12 @@ void ScriptCState::runCompiler(Context *rsc, ScriptC *s)
 static void appendElementBody(String8 *s, const Element *e)
 {
     s->append(" {\n");
-    for (size_t ct2=0; ct2 < e->getComponentCount(); ct2++) {
-        const Component *c = e->getComponent(ct2);
+    for (size_t ct2=0; ct2 < e->getFieldCount(); ct2++) {
+        const Element *c = e->getField(ct2);
         s->append("    ");
         s->append(c->getCType());
         s->append(" ");
-        s->append(c->getComponentName());
+        s->append(e->getFieldName(ct2));
         s->append(";\n");
     }
     s->append("}");
@@ -314,9 +317,15 @@ void ScriptCState::appendTypes(const Context *rsc, String8 *str)
     char buf[256];
     String8 tmp;
 
-    str->append("struct vec2_s {float x; float y;};");
-    str->append("struct vec3_s {float x; float y; float z;};");
-    str->append("struct vec4_s {float x; float y; float z; float w;};");
+    str->append("struct vecF32_2_s {float x; float y;};\n");
+    str->append("struct vecF32_3_s {float x; float y; float z;};\n");
+    str->append("struct vecF32_4_s {float x; float y; float z; float w;};\n");
+    str->append("struct vecU8_4_s {char r; char g; char b; char a;};\n");
+    str->append("#define vecF32_2_t struct vecF32_2_s\n");
+    str->append("#define vecF32_3_t struct vecF32_3_s\n");
+    str->append("#define vecF32_4_t struct vecF32_4_s\n");
+    str->append("#define vecU8_4_t struct vecU8_4_s\n");
+    str->append("#define vecI8_4_t struct vecU8_4_s\n");
 
     for (size_t ct=0; ct < MAX_SCRIPT_BANKS; ct++) {
         const Type *t = mConstantBufferTypes[ct].get();
@@ -324,11 +333,12 @@ void ScriptCState::appendTypes(const Context *rsc, String8 *str)
             continue;
         }
         const Element *e = t->getElement();
-        if (e->getName() && (e->getComponentCount() > 1)) {
+        if (e->getName() && (e->getFieldCount() > 1)) {
             String8 s("struct struct_");
             s.append(e->getName());
-            appendElementBody(&s, e);
+            s.append(e->getCStructBody());
             s.append(";\n");
+
             s.append("#define ");
             s.append(e->getName());
             s.append("_t struct struct_");
@@ -340,45 +350,25 @@ void ScriptCState::appendTypes(const Context *rsc, String8 *str)
             str->append(s);
         }
 
-        if (t->getName()) {
-            for (size_t ct2=0; ct2 < e->getComponentCount(); ct2++) {
-                const Component *c = e->getComponent(ct2);
-                tmp.setTo("#define OFFSETOF_");
-                tmp.append(t->getName());
-                tmp.append("_");
-                tmp.append(c->getComponentName());
-                sprintf(buf, " %i\n", ct2);
-                tmp.append(buf);
-                if (rsc->props.mLogScripts) {
-                    LOGV("%s", tmp);
-                }
-                str->append(tmp);
-            }
-        }
-
         if (mSlotNames[ct].length() > 0) {
             String8 s;
-            if (e->getComponentCount() > 1) {
-                if (e->getName()) {
-                    // Use the named struct
-                    s.setTo(e->getName());
-                    s.append("_t *");
-                } else {
-                    // create an struct named from the slot.
-                    s.setTo("struct ");
-                    s.append(mSlotNames[ct]);
-                    s.append("_s");
-                    appendElementBody(&s, e);
-                    s.append(";\n");
-                    s.append("struct ");
-                    s.append(mSlotNames[ct]);
-                    s.append("_s * ");
-                }
+            if (e->getName()) {
+                // Use the named struct
+                s.setTo(e->getName());
             } else {
-                // Just make an array
-                s.setTo(e->getComponent(0)->getCType());
-                s.append("_t *");
+                // create an struct named from the slot.
+                s.setTo("struct ");
+                s.append(mSlotNames[ct]);
+                s.append("_s");
+                s.append(e->getCStructBody());
+                //appendElementBody(&s, e);
+                s.append(";\n");
+                s.append("struct ");
+                s.append(mSlotNames[ct]);
+                s.append("_s");
             }
+
+            s.append(" * ");
             s.append(mSlotNames[ct]);
             s.append(";\n");
             if (rsc->props.mLogScripts) {

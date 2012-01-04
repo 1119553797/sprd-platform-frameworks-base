@@ -96,7 +96,7 @@ struct AwesomePlayer {
     void postAudioEOS();
     void postAudioSeekComplete();
 
-	status_t forceStop();//sprd
+	status_t forceStop();//sprd vt must
 
 private:
     friend struct AwesomeEvent;
@@ -184,6 +184,7 @@ private:
 
 	bool mfromPause ;
 	bool mforceStop;
+	bool mbeginPlay;
 
     int64_t mBitrate;  // total bitrate of the file (in bps) or -1 if unknown.
 
@@ -204,7 +205,7 @@ private:
     bool mIsAsyncPrepare;
     status_t mPrepareResult;
     status_t mStreamDoneStatus;
-	bool mIsVideoPhoneStream;//sprd
+	bool mIsVideoPhoneStream;//sprd vt must
 
     void postVideoEvent_l(int64_t delayUs = -1);
     void postBufferingEvent_l();

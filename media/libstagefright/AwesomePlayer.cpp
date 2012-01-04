@@ -27,7 +27,7 @@
 #include "include/NuCachedSource2.h"
 #include "include/ThrottledSource.h"
 #include "include/MPEG2TSExtractor.h"
-#include "include/VideoPhoneExtractor.h"//sprd
+#include "include/VideoPhoneExtractor.h"//sprd vt must
 
 #include "ARTPSession.h"
 #include "APacketSource.h"
@@ -38,7 +38,7 @@
 #include <media/stagefright/AudioPlayer.h>
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/FileSource.h>
-#include <media/stagefright/CharDeviceSource.h>//sprd
+#include <media/stagefright/CharDeviceSource.h>//sprd vt must
 #include <media/stagefright/MediaBuffer.h>
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MediaExtractor.h>
@@ -257,9 +257,10 @@ AwesomePlayer::AwesomePlayer()
       mLastVideoBuffer(NULL),
       mVideoBuffer(NULL),
       mSuspensionState(NULL),
-      mIsVideoPhoneStream(false),
+      mIsVideoPhoneStream(false),//sprd vt must
       mfromPause(false),
       mforceStop(false),
+      mbeginPlay(false),
       mSeeking (false){
     CHECK_EQ(mClient.connect(), OK);
 
@@ -834,9 +835,8 @@ status_t AwesomePlayer::play() {
 			 mfromPause = false ;
 		 }
 	 }
-
-
-    return play_l();
+	 mbeginPlay = true ;
+     return play_l();
 }
 
 status_t AwesomePlayer::play_l() {
@@ -1186,26 +1186,29 @@ status_t AwesomePlayer::seekTo_l(int64_t timeUs) {
 		{
 		   LOGE("liveing streaming ,so can not seek");  
 		   return OK;
-		}
-	 	mSeeking = true;
-		mSeekNotificationSent = false;
-   		mSeekTimeUs = timeUs;
-		mVideoTimeUs = timeUs ; 
-		if (mFlags & CACHE_UNDERRUN) {
-			mFlags &= ~CACHE_UNDERRUN;
-			play_l();
-		}
-		mQueue.cancelEvent(mBufferingEvent->eventID());
-        mBufferingEventPending = false;
-	    mAudioSource->pause();
+		}	
+		if (mbeginPlay)
+		{
+		 	mSeeking = true;
+			mSeekNotificationSent = false;
+	   		mSeekTimeUs = timeUs;
+			mVideoTimeUs = timeUs ; 
+			if (mFlags & CACHE_UNDERRUN) {
+				mFlags &= ~CACHE_UNDERRUN;
+				play_l();
+			}
+			mQueue.cancelEvent(mBufferingEvent->eventID());
+	        mBufferingEventPending = false;
+		    mAudioSource->pause();
 
-	   	if (mFlags &PLAYING){
-  		    if (mAudioPlayer != NULL) {
-              mAudioPlayer->pause();
-            }
+		   	if (mFlags &PLAYING){
+	  		    if (mAudioPlayer != NULL) {
+	              mAudioPlayer->pause();
+	            }
+			}
+			mQueue.cancelEvent(mBufferingEvent->eventID());
+	        mBufferingEventPending = false;
 		}
-		mQueue.cancelEvent(mBufferingEvent->eventID());
-        mBufferingEventPending = false;
         mRTSPController->seekAsync(timeUs, OnRTSPSeekDoneWrapper, this);
         return OK;
     }
@@ -1313,7 +1316,7 @@ void AwesomePlayer::setVideoSource(sp<MediaSource> source) {
 
 status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 	LOGI("initVideoDecoder, mIsVideoPhoneStream: %d", mIsVideoPhoneStream);
-	if (mIsVideoPhoneStream){
+	if (mIsVideoPhoneStream){//sprd vt
 	    mVideoSource = OMXCodec::Create(
 	            mClient.interface(), mVideoTrack->getFormat(),
 	            false, // createEncoder
@@ -1549,13 +1552,18 @@ void AwesomePlayer::onVideoEvent() {
 
     int64_t latenessUs = nowUs - timeUs;
     LOGI("video timestamp %lld,%lld:%lld,%lld,%lld",nowUs,timeUs,realTimeUs,mediaTimeUs,realTimeUs - mediaTimeUs);
-
+	
+    if(latenessUs > 2000000 || latenessUs< -2000000){//jgdu 2s
+	LOGI("onVideoEvent time info:mTimeSourceDeltaUs:%lld realTimeUs:%lld mediaTimeUs:%lld", mTimeSourceDeltaUs, realTimeUs, mediaTimeUs);
+	LOGI("onVideoEvent time info2:getRealTimeUs:%lld nowUs:%lld latenessUs:%lld timeUs:%lld", ts->getRealTimeUs(), nowUs,latenessUs, timeUs);	
+    }
+	
     if (wasSeeking) {
         // Let's display the first frame after seeking right away.
         latenessUs = 0;
     }
 
-    if ((mRTPSession != NULL) || mIsVideoPhoneStream) {
+    if ((mRTPSession != NULL) || mIsVideoPhoneStream) {//sprd vt must
         // We'll completely ignore timestamps for gtalk videochat
         // and we'll play incoming video as fast as we get it.
         latenessUs = 0;
@@ -1836,7 +1844,7 @@ status_t AwesomePlayer::finishSetDataSource_l() {
             return UNKNOWN_ERROR;
         }
     }
-    else if (!strncasecmp(mUri.string(), "videophone://", 13)) 
+    else if (!strncasecmp(mUri.string(), "videophone://", 13)) //sprd vt must
     {
     	mIsVideoPhoneStream = true;
     	char buf[30] = {0};
@@ -1991,7 +1999,7 @@ status_t AwesomePlayer::finishSetDataSource_l() {
  //           mLooper->start();
  	   mLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
-                          ANDROID_PRIORITY_AUDIO); //@hong
+                          ANDROID_PRIORITY_DISPLAY); //@hong
 			
         }
         mRTSPController = new ARTSPController(mLooper);

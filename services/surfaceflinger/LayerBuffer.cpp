@@ -329,8 +329,13 @@ void LayerBuffer::Source::unregisterBuffers() {
 
 LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
         const ISurface::BufferHeap& buffers)
-    : Source(layer), mStatus(NO_ERROR), mBufferSize(0) 
+    : Source(layer), mStatus(NO_ERROR), mBufferSize(0),mInComposing(false),mIsSync(false) 
 {
+    if((buffers.transform>>24)==0x12){//jgdu push buffer sync
+        mIsSync = true;
+    }
+    LOGI("mIsSync is %d @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",mIsSync);
+	
     if (buffers.heap == NULL) {
         // this is allowed, but in this case, it is illegal to receive
         // postBuffer(). The surface just erases the framebuffer with
@@ -365,6 +370,7 @@ LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
     }
 
     mBufferHeap = buffers;
+    mBufferHeap.transform = buffers.transform&0x00ffffff;//jgdu push buffer sync	
     mLayer.setNeedsBlending((info.h_alpha - info.l_alpha) > 0);    
     mBufferSize = info.getScanlineSize(buffers.hor_stride)*buffers.ver_stride;
     mLayer.forceVisibilityTransaction();
@@ -428,9 +434,26 @@ void LayerBuffer::BufferSource::postBuffer(ssize_t offset)
     if (buffers.heap != 0) {
         buffer = new LayerBuffer::Buffer(buffers, offset, mBufferSize);
         if (buffer->getStatus() != NO_ERROR)
-            buffer.clear();
+            buffer.clear();		
         setBuffer(buffer);
+	 if(mIsSync){//jgdu push buffer sync
+	 	Mutex::Autolock autoLock(mBufLock);
+	 	mInComposing = true;
+        }		
         mLayer.invalidate();
+	 if(mIsSync){//jgdu push buffer sync
+		Mutex::Autolock autoLock(mBufLock);
+		int count = 0;
+		while(mInComposing){
+			mBufCondition.waitRelative(mBufLock,100000000);
+			count++;
+			if(count>=2){
+				mInComposing = false;
+				LOGI("video rendering timeout");
+				break;
+			}
+		}
+	 }		
     }
 }
 
@@ -528,6 +551,12 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
 
     mLayer.setBufferTransform(mBufferHeap.transform);
     mLayer.drawWithOpenGL(clip, mTexture);
+    
+    if(mIsSync){//jgdu push buffer sync
+    	Mutex::Autolock autoLock(mBufLock);
+    	mInComposing = false;
+    	mBufCondition.signal();    
+    }	
 }
 
 status_t 

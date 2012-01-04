@@ -149,6 +149,11 @@ private:
         mutable NativeBuffer            mTempBuffer;
         mutable TextureManager          mTextureManager;
 
+    	 mutable Mutex mBufLock;//jgdu push buffer sync
+        mutable Condition mBufCondition;	
+	 mutable bool mInComposing;
+	 bool mIsSync;
+	 
         mutable YUV2RGBConvertHandle    mYUV2RGBConvertHandle;
         status_t yuv2rgbConvert(GGLSurface &t) const;
     };

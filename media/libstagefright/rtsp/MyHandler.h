@@ -236,6 +236,9 @@ struct MyHandler : public AHandler {
 		for (size_t i = 0; i < mTracks.size(); ++i) {
             mTracks.editItemAt(i).mPacketSource->flushQueue();
         }
+		sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
+		reply1->setMessage("doneMsg", doneMsg);
+		mConn->serverexception(reply1);
 
 		msg->setInt64("time", timeUs);
         msg->setMessage("doneMsg", doneMsg);
@@ -262,6 +265,11 @@ struct MyHandler : public AHandler {
 		 }
         postCmdTimeoutCheck(doneMsg);
 		sp<AMessage> msg = new AMessage('pause', id());
+		
+		sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
+		reply1->setMessage("doneMsg", doneMsg);
+		mConn->serverexception(reply1);
+		
         msg->setInt64("time", timeUs);
         msg->setMessage("doneMsg", doneMsg);
         msg->post();
@@ -278,6 +286,10 @@ struct MyHandler : public AHandler {
 		 }
 	    postCmdTimeoutCheck(doneMsg);
 	    sp<AMessage> msg = new AMessage('resume', id());
+		
+		sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
+		reply1->setMessage("doneMsg", doneMsg);
+		mConn->serverexception(reply1);
         msg->setInt64("time", timeUs);
         msg->setMessage("doneMsg", doneMsg);
         msg->post();
@@ -876,8 +888,8 @@ struct MyHandler : public AHandler {
 					{
 					    LOGI("quit done  for ERROR_IO");
 						doneMsg->setInt32("result", ERROR_IO);
-						mDoneMsg->post(4000000ll);
-	                    mDoneMsg = NULL;
+						doneMsg->post(4000000ll);
+	                    doneMsg = NULL;
 					}
 				}
                 break;
@@ -987,7 +999,7 @@ struct MyHandler : public AHandler {
                 int32_t eos;
                 if (msg->findInt32("eos", &eos)) {
                     LOGI("received BYE on track index %d", trackIndex);
-#if 0
+#if 1
                     track->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
 #endif
                     return;
@@ -1420,12 +1432,42 @@ struct MyHandler : public AHandler {
 	   case 'expt':  //@hong server exception
 		LOGI("server exception error.");
              if (mDoneMsg != NULL) {
-		LOGI("server exception error1.");
+					LOGI("server exception error1.");
                     mDoneMsg->setInt32("result", UNKNOWN_ERROR);
                     mDoneMsg->post();
                     mDoneMsg = NULL;
                 }
-		break;
+			    else
+				{
+					sp<AMessage> doneMsg = NULL;
+					if( mCmdSending )
+					{
+						msg->findMessage("doneMsg", &doneMsg);
+						if(doneMsg != NULL)
+						{
+						    LOGI("quit done  for ERROR_IO");
+							doneMsg->setInt32("result", ERROR_IO);
+							doneMsg->post();
+		                    doneMsg = NULL;
+						}
+						else
+						{
+						   for (size_t i = 0; i < mTracks.size(); ++i) {
+                              TrackInfo *info = &mTracks.editItemAt(i);
+                              info->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
+    	                   }
+						}
+					}
+					else
+					{
+				       for (size_t i = 0; i < mTracks.size(); ++i) {
+                          TrackInfo *info = &mTracks.editItemAt(i);
+                          info->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
+    	               }
+					}
+				}
+    	    
+			break;
             default:
                 TRESPASS();
                 break;

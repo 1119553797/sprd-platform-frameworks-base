@@ -33,11 +33,11 @@
 namespace android {
 
 class IMediaRecorder;
-class IMediaPhone; //sprd
+class IMediaPhone; //sprd vt must
 class IMediaMetadataRetriever;
 class IOMX;
 class MediaRecorderClient;
-class MediaPhoneClient; //sprd
+class MediaPhoneClient; //sprd vt must
 
 #define CALLBACK_ANTAGONIZER 0
 #if CALLBACK_ANTAGONIZER
@@ -185,8 +185,8 @@ public:
     // IMediaPlayerService interface
     virtual sp<IMediaRecorder>  createMediaRecorder(pid_t pid);
     void    removeMediaRecorderClient(wp<MediaRecorderClient> client);
-    virtual sp<IMediaPhone>  createMediaPhone(pid_t pid); //sprd
-    void    removeMediaPhoneClient(wp<MediaPhoneClient> client); //sprd
+    virtual sp<IMediaPhone>  createMediaPhone(pid_t pid); //sprd vt must
+    void    removeMediaPhoneClient(wp<MediaPhoneClient> client); //sprd vt must
     virtual sp<IMediaMetadataRetriever> createMetadataRetriever(pid_t pid);
 
     // House keeping for media player clients
@@ -307,7 +307,7 @@ private:
     mutable     Mutex                       mLock;
                 SortedVector< wp<Client> >  mClients;
                 SortedVector< wp<MediaRecorderClient> > mMediaRecorderClients;
-                SortedVector< wp<MediaPhoneClient> > mMediaPhoneClients;//sprd
+                SortedVector< wp<MediaPhoneClient> > mMediaPhoneClients;//sprd vt must
                 int32_t                     mNextConnId;
                 sp<IOMX>                    mOMX;
 };

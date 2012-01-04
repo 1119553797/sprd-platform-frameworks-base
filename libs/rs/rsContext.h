@@ -19,8 +19,6 @@
 
 #include "rsUtils.h"
 
-#include <surfaceflinger/Surface.h>
-
 #include "rsThreadIO.h"
 #include "rsType.h"
 #include "rsMatrix.h"
@@ -37,19 +35,23 @@
 #include "rsProgramFragmentStore.h"
 #include "rsProgramRaster.h"
 #include "rsProgramVertex.h"
+#include "rsShaderCache.h"
+#include "rsVertexArray.h"
 
 #include "rsgApiStructs.h"
 #include "rsLocklessFifo.h"
 
+#include <ui/egl/android_natives.h>
 
 // ---------------------------------------------------------------------------
 namespace android {
+
 namespace renderscript {
 
 class Context
 {
 public:
-    Context(Device *, bool useDepth);
+    Context(Device *, bool isGraphics, bool useDepth);
     ~Context();
 
     static pthread_key_t gThreadTLSKey;
@@ -72,8 +74,10 @@ public:
     ProgramRasterState mStateRaster;
     ProgramVertexState mStateVertex;
     LightState mStateLight;
+    VertexArrayState mStateVertexArray;
 
     ScriptCState mScriptC;
+    ShaderCache mShaderCache;
 
     void swapBuffers();
     void setRootScript(Script *);
@@ -89,19 +93,18 @@ public:
     const ProgramRaster * getRaster() {return mRaster.get();}
     const ProgramVertex * getVertex() {return mVertex.get();}
 
-    void setupCheck();
-    void allocationCheck(const Allocation *);
+    bool setupCheck();
+    bool checkDriver() const {return mEGL.mSurface != 0;}
 
     void pause();
     void resume();
-    void setSurface(uint32_t w, uint32_t h, Surface *sur);
+    void setSurface(uint32_t w, uint32_t h, ANativeWindow *sur);
     void setPriority(int32_t p);
 
     void assignName(ObjectBase *obj, const char *name, uint32_t len);
     void removeName(ObjectBase *obj);
     ObjectBase * lookupName(const char *name) const;
     void appendNameDefines(String8 *str) const;
-    void appendVarDefines(String8 *str) const;
 
     uint32_t getMessageToClient(void *data, size_t *receiveLen, size_t bufferLen, bool wait);
     bool sendMessageToClient(void *data, uint32_t cmdID, size_t len, bool waitForSpace);
@@ -121,14 +124,6 @@ public:
     }
     ProgramRaster * getDefaultProgramRaster() const {
         return mStateRaster.mDefault.get();
-    }
-
-    void addInt32Define(const char* name, int32_t value) {
-        mInt32Defines.add(String8(name), value);
-    }
-
-    void addFloatDefine(const char* name, float value) {
-        mFloatDefines.add(String8(name), value);
     }
 
     uint32_t getWidth() const {return mEGL.mWidth;}
@@ -160,12 +155,17 @@ public:
         bool mLogTimes;
         bool mLogScripts;
         bool mLogObjects;
+        bool mLogShaders;
     } props;
 
     void dumpDebug() const;
+    void checkError(const char *) const;
+    const char * getError(RsError *);
+    void setError(RsError e, const char *msg);
 
     mutable const ObjectBase * mObjHead;
 
+    bool ext_OES_texture_npot() const {return mGL.OES_texture_npot;}
     bool ext_GL_IMG_texture_npot() const {return mGL.GL_IMG_texture_npot;}
 
 protected:
@@ -192,17 +192,31 @@ protected:
         uint32_t mMajorVersion;
         uint32_t mMinorVersion;
 
+        int32_t mMaxVaryingVectors;
+        int32_t mMaxTextureImageUnits;
+
+        int32_t mMaxFragmentTextureImageUnits;
+        int32_t mMaxFragmentUniformVectors;
+
+        int32_t mMaxVertexAttribs;
+        int32_t mMaxVertexUniformVectors;
+        int32_t mMaxVertexTextureUnits;
+
+        bool OES_texture_npot;
         bool GL_IMG_texture_npot;
     } mGL;
 
     uint32_t mWidth;
     uint32_t mHeight;
     int32_t mThreadPriority;
+    bool mIsGraphicsContext;
 
     bool mRunning;
     bool mExit;
     bool mUseDepth;
     bool mPaused;
+    RsError mError;
+    const char *mErrorMsg;
 
     pthread_t mThreadId;
     pid_t mNativeThreadId;
@@ -227,18 +241,16 @@ protected:
 private:
     Context();
 
-    void initEGL();
+    void initEGL(bool useGL2);
     void deinitEGL();
 
     uint32_t runRootScript();
 
     static void * threadProc(void *);
 
-    Surface *mWndSurface;
+    ANativeWindow *mWndSurface;
 
     Vector<ObjectBase *> mNames;
-    KeyedVector<String8,int> mInt32Defines;
-    KeyedVector<String8,float> mFloatDefines;
 
     uint64_t mTimers[_RS_TIMER_TOTAL];
     Timers mTimerActive;

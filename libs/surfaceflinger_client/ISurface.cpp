@@ -119,7 +119,8 @@ public:
         Parcel data, reply;
         data.writeInterfaceToken(ISurface::getInterfaceDescriptor());
         data.writeInt32(offset);
-        remote()->transact(POST_BUFFER, data, &reply, IBinder::FLAG_ONEWAY);
+        //remote()->transact(POST_BUFFER, data, &reply, IBinder::FLAG_ONEWAY);
+        remote()->transact(POST_BUFFER, data, &reply);//jgdu push buffer sync		
     }
 
     virtual void unregisterBuffers()
@@ -194,6 +195,7 @@ status_t BnSurface::onTransact(
             CHECK_INTERFACE(ISurface, data, reply);
             ssize_t offset = data.readInt32();
             postBuffer(offset);
+	     reply->writeInt32(0);//jgdu push buffer sync			
             return NO_ERROR;
         } break;
         case CREATE_OVERLAY: {

@@ -270,7 +270,6 @@ bool ARTPSource::queuePacket(const sp<ABuffer> &buffer) {
     // if (mNumTimes == 2) 
 	{
         sp<AMessage> meta = buffer->meta();
-
         uint32_t rtpTime;
         CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
 
