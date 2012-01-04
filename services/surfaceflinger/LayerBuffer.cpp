@@ -490,9 +490,10 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
 
 #if defined(EGL_ANDROID_image_native_buffer)
     if (GLExtensions::getInstance().haveDirectTexture()) {
+        err = INVALID_OPERATION;
         if (ourBuffer->supportsCopybit()) {
             copybit_device_t* copybit = mLayer.mBlitEngine;
-            if (copybit) {
+            if (copybit && err != NO_ERROR) {
                 // create our EGLImageKHR the first time
                 err = initTempBuffer();
                 if (err == NO_ERROR) {
@@ -611,7 +612,6 @@ void LayerBuffer::BufferSource::clearTempBufferImage() const
     // delete the image
     EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
     eglDestroyImageKHR(dpy, mTexture.image);
-    mTexture.image = EGL_NO_IMAGE_KHR;
 
     // and the associated texture (recreate a name)
     glDeleteTextures(1, &mTexture.name);
