@@ -40,18 +40,23 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.hardware.usb.UsbManager;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.INetworkManagementService;
 import android.os.Message;
 import android.os.Power;
 import android.os.Process;
 import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Vibrator;
+import android.os.storage.IMountService;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -146,6 +151,8 @@ public class NotificationManagerService extends INotificationManager.Stub
     private boolean mBatteryLow;
     private boolean mBatteryFull;
     private NotificationRecord mLedNotification;
+    
+    private static boolean mBootComplete = false;
 
     private static final int BATTERY_LOW_ARGB = 0xFFFF0000; // Charging Low - red solid on
     private static final int BATTERY_MEDIUM_ARGB = 0xFFFFFF00;    // Charging - orange solid on
@@ -388,12 +395,21 @@ public class NotificationManagerService extends INotificationManager.Stub
                 mUsbConnected = false;
               //Add by liguxiang 07-08-11 for USB settings function begin
                 updateAdbNotification();
-                updateUsbNotification(UsbType.CHARGE,mAdbEnabled,mAdbNotificationShown);
+                if(Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.REMEMBER_USB_CHOICE,0) != 0){
+                	updateUsbNotification(UsbType.CHARGE,mChargeEnabled,true);
+                }else{
+                	updateUsbNotification(UsbType.CHARGE,mChargeEnabled,mChargeNotificationShown);
+                }
                 updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
                 updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
               //Add by liguxiang 07-08-11 for USB settings function end
 
-            } 
+            } else if (action.equals(Intent.ACTION_SPRD_USB_UNAVAILABLE)) {
+					SystemClock.sleep(2000);
+					mContext.sendBroadcast(new Intent(
+							Intent.ACTION_SPRD_USB_DISCONNECT));
+
+				}
 */
             else if (action.equals(UsbManager.ACTION_USB_STATE)) {
                 Bundle extras = intent.getExtras();
@@ -453,6 +469,14 @@ public class NotificationManagerService extends INotificationManager.Stub
             	updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
             }
 	    //add by liguxiang 10-07-11 for NEWMS00128631 end
+		
+		else if(action.equals(Intent.ACTION_BOOT_COMPLETED)){
+            	mBootComplete = true;
+            	mChargeEnabled = Settings.Secure.getInt(mContext.getContentResolver(),
+            			Settings.Secure.CHARGE_ONLY, 0) != 0;
+            	Log.d(TAG,"mChargeEnabled = " + mChargeEnabled);
+            	updateUsbNotification(UsbType.CHARGE,mChargeEnabled,mChargeNotificationShown);
+            }
 */
         }
     };
@@ -514,7 +538,8 @@ public class NotificationManagerService extends INotificationManager.Stub
             }
             
             //Add by liguxiang 07-08-11 for USB settings function begin
-            if (mChargeEnabled != chargeEnabled) {
+            Log.d(TAG,"mBootComplete = " + mBootComplete);
+            if ((mChargeEnabled != chargeEnabled) && mBootComplete) {
             	mChargeEnabled = chargeEnabled;
                 updateUsbNotification(UsbType.CHARGE,mChargeEnabled,mChargeNotificationShown);
             }
@@ -579,8 +604,12 @@ public class NotificationManagerService extends INotificationManager.Stub
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(UsbManager.ACTION_USB_STATE);
+		        filter.addAction(Intent.ACTION_UMS_CONNECTED);
+        filter.addAction(Intent.ACTION_UMS_DISCONNECTED);
+        filter.addAction(Intent.ACTION_SPRD_USB_UNAVAILABLE);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
+	    filter.addAction(Intent.ACTION_BOOT_COMPLETED);
         filter.addAction(Intent.ACTION_LOCALE_CHANGED);  //add by liguxiang 10-07-11 for NEWMS00128631
         filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
         mContext.registerReceiver(mIntentReceiver, filter);
@@ -1274,7 +1303,9 @@ public class NotificationManagerService extends INotificationManager.Stub
             if ("0".equals(SystemProperties.get("persist.adb.notify"))) {
                 return;
             }
-            if (!mAdbNotificationShown) {
+            if (!mAdbNotificationShown 
+            		&& ((ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).isUsbConnected()//lino add 2011-12-07
+            		) {
                 NotificationManager notificationManager = (NotificationManager) mContext
                         .getSystemService(Context.NOTIFICATION_SERVICE);
                 if (notificationManager != null) {
@@ -1328,6 +1359,16 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 /*
     private void updateUsbNotification(UsbType usbtype,boolean usbEnabled,boolean usbNotificationShown) {
+    	if(usbtype == UsbType.CHARGE){
+    		IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+            INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+            try {
+				mUsbConnected = service.isUsbConnected();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
         if (usbEnabled && mUsbConnected) {
             if (!usbNotificationShown) {
                 NotificationManager notificationManager = (NotificationManager) mContext

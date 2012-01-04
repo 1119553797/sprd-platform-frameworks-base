@@ -761,6 +761,10 @@ public class PduPersister {
                 //======fixed CR<NEWMS00110183> by luning at 11-08-18 begin======
                 int charset = part.getCharset(); 
                 Log.d("lu", "PduPersister--->save text to database,use charset:"+charset);
+                if(null == data){/* fixed CR<NEWMS00148067> by luning at 2011.12.12*/
+                    Log.w(TAG, "The data of this part is none");
+                    return;
+                }
                 cv.put(Telephony.Mms.Part.TEXT, new EncodedStringValue(charset,data).getString());
                 //======fixed CR<NEWMS00110183> by luning at 11-08-18 end======
                 if (mContentResolver.update(uri, cv, null, null) != 1) {

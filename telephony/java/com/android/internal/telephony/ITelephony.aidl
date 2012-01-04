@@ -72,6 +72,8 @@ interface ITelephony {
      */
     boolean endCall();
 
+    void holdCall();
+
     /**
      * Answer the currently-ringing call.
      *
@@ -289,5 +291,9 @@ interface ITelephony {
     boolean setApnActivePdpFilter(String apntype,boolean filterenable);
     
     boolean getApnActivePdpFilter(String apntype);
+    
+    String[] getActiveApnTypes();
+
+    String getActiveApn();
 }
 

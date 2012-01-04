@@ -38,6 +38,7 @@ struct OMXCodec : public MediaSource,
         // The client wants to access the output buffer's video
         // data for example for thumbnail extraction.
         kClientNeedsFramebuffer  = 4,
+        kMetadataRetriever = 8
     };
     static sp<MediaSource> Create(
             const sp<IOMX> &omx,

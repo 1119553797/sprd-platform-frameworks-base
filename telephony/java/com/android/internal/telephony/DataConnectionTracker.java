@@ -404,6 +404,8 @@ public abstract class DataConnectionTracker extends Handler {
     protected abstract boolean isApnTypeActive(String type);
 
     protected abstract boolean isApnTypeAvailable(String type);
+    
+    protected abstract boolean isApnTypeFilters(String type);
 
     protected abstract String[] getActiveApnTypes();
 
@@ -455,6 +457,12 @@ public abstract class DataConnectionTracker extends Handler {
             if (DBG) Log.d(LOG_TAG, "type not available");
             return Phone.APN_TYPE_NOT_AVAILABLE;
         }
+
+        if (isApnTypeFilters(type)) {
+            if (DBG) Log.d(LOG_TAG, "type is fiters");
+            return Phone.APN_TYPE_NOT_AVAILABLE;
+        }
+
 
         // just because it's active doesn't mean we had it explicitly requested before
         // (a broad default may handle many types).  make sure we mark it enabled
@@ -515,13 +523,17 @@ public abstract class DataConnectionTracker extends Handler {
                     ", enabledCount = " + enabledCount +
                     ", isApnTypeActive = " + isApnTypeActive(apnIdToType(apnId)));
         }
+
+        Log.d(LOG_TAG, "onEnableApn: " + apnId + ", " + enabled);
+            
         if (enabled == ENABLED) {
             if (!dataEnabled[apnId]) {
                 dataEnabled[apnId] = true;
                 enabledCount++;
             }
             String type = apnIdToType(apnId);
-            if (!isApnTypeActive(type)) {
+            if (!isApnTypeActive(type) || state == State.DISCONNECTING) {
+                Log.d(LOG_TAG, "type:" + type+"mRequestedApnType:"+mRequestedApnType);
                 mRequestedApnType = type;
                 onEnableNewApn();
             }
@@ -533,9 +545,12 @@ public abstract class DataConnectionTracker extends Handler {
                 if (enabledCount == 0) {
                     onCleanUpConnection(true, Phone.REASON_DATA_DISABLED);
                 } else if (dataEnabled[APN_DEFAULT_ID] == true &&
-                        !isApnTypeActive(Phone.APN_TYPE_DEFAULT)) {
+                        !isApnTypeActive(Phone.APN_TYPE_DEFAULT)
+                        ||!mRequestedApnType.equals( Phone.APN_TYPE_DEFAULT)) {
+                    Log.d(LOG_TAG, "type:" + apnIdToType(apnId)+"mRequestedApnType:"+mRequestedApnType);
                     mRequestedApnType = Phone.APN_TYPE_DEFAULT;
                     onEnableNewApn();
+                    
                 }
             }
         }

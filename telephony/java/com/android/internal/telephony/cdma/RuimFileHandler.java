@@ -66,9 +66,7 @@ public final class RuimFileHandler extends IccFileHandler {
 
         super.handleMessage(msg);
     }
-     protected String getEFPathAgain(int efid) {
-          return getEFPath(efid);
-    }
+
     protected String getEFPath(int efid) {
         switch(efid) {
         case EF_SMS:
@@ -78,7 +76,12 @@ public final class RuimFileHandler extends IccFileHandler {
         }
         return getCommonIccEFPath(efid);
     }
+    public  void addDualMapFile(int efid){
 
+
+
+
+    }
     protected void logd(String msg) {
         Log.d(LOG_TAG, "[RuimFileHandler] " + msg);
     }

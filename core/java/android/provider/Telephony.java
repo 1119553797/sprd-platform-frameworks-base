@@ -1879,5 +1879,8 @@ public final class Telephony {
         public static final String EXTRA_PLMN       = "plmn";
         public static final String EXTRA_SHOW_SPN   = "showSpn";
         public static final String EXTRA_SPN        = "spn";
+        
+        public static final String NETWORK_UPDATE_ACTION =
+            "android.provider.Telephony.NETWORK_UPDATE";  //add by liguxiang 11-10-11 for NEWMS00139124
     }
 }

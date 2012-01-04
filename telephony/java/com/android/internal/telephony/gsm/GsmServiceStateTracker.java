@@ -171,6 +171,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_LOCALE_CHANGED)) {
                 // update emergency string whenever locale changed
+            	Log.v(LOG_TAG, "GsmServiceStateTracker.java---Intent.ACTION_LOCALE_CHANGED");
                 updateSpnDisplay();
             }
         }
@@ -474,6 +475,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 break;
 
             case EVENT_SIM_RECORDS_LOADED:
+            	Log.v(LOG_TAG, "GsmServiceStateTracker.java---EVENT_SIM_RECORDS_LOADED");
                 updateSpnDisplay();
                 break;
 
@@ -628,7 +630,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         int rule = phone.mSIMRecords.getDisplayRule(ss.getOperatorNumeric());
         String spn = phone.mSIMRecords.getServiceProviderName();
         String plmn = ss.getOperatorAlphaLong();
-
+        Log.v(LOG_TAG, "GsmServiceStateTracker.java----updateSpnDisplay---rule=="+rule+"--curSpnRule=="+curSpnRule
+        		+"---spn=="+(spn==null?"null":spn)+"---curSpn=="+(curSpn==null?"null":curSpn)+"---plmn=="+(plmn==null?"null":plmn)+"---curPlmn=="+(curPlmn==null?"null":curPlmn));
         // For emergency calls only, pass the EmergencyCallsOnly string via EXTRA_PLMN
         if (mEmergencyOnly && cm.getRadioState().isOn()) {
             plmn = Resources.getSystem().
@@ -643,7 +646,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             spn = plmnDisplay(spn);
             //add by liguxiang 08-19-11 for custom plmn display end
             boolean showSpn = !mEmergencyOnly
-                && (rule & SIMRecords.SPN_RULE_SHOW_SPN) == SIMRecords.SPN_RULE_SHOW_SPN;
+                && (rule & SIMRecords.SPN_RULE_SHOW_SPN) == SIMRecords.SPN_RULE_SHOW_SPN
+                && (ss.getState() != ServiceState.STATE_OUT_OF_SERVICE);
             boolean showPlmn =
                 (rule & SIMRecords.SPN_RULE_SHOW_PLMN) == SIMRecords.SPN_RULE_SHOW_PLMN;
             Log.d(LOG_TAG,"curSpn = " + curSpn + "  showSpn = " + showSpn 
@@ -706,6 +710,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     int cid = -1;
                     int regState = -1;
                     int psc = -1;
+                    int type = 0;
                     if (states.length > 0) {
                         try {
                             regState = Integer.parseInt(states[0]);
@@ -721,6 +726,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                                 if (states[14] != null && states[14].length() > 0) {
                                     psc = Integer.parseInt(states[14], 16);
                                 }
+                            }
+                            if (states.length >= 4 && states[3] != null) {
+                                type = Integer.parseInt(states[3]);
                             }
                         } catch (NumberFormatException ex) {
                             Log.w(LOG_TAG, "error parsing RegistrationState: " + ex);
@@ -739,12 +747,14 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     // LAC and CID are -1 if not avail
                     newCellLoc.setLacAndCid(lac, cid);
                     newCellLoc.setPsc(psc);
+                    newNetworkType = type;
+                    newSS.setRadioTechnology(type);
                 break;
 
                 case EVENT_POLL_STATE_GPRS:
                     states = (String[])ar.result;
 
-                    int type = 0;
+                    type = 0;
                     regState = -1;
                     if (states.length > 0) {
                         try {
@@ -760,8 +770,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     }
                     newGPRSState = regCodeToServiceState(regState);
                     mDataRoaming = regCodeIsRoaming(regState);
-                    newNetworkType = type;
-                    newSS.setRadioTechnology(type);
                 break;
 
                 case EVENT_POLL_STATE_OPERATOR:
@@ -920,7 +928,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 " oldType=" + networkTypeToString(networkType) +
                 " newType=" + networkTypeToString(newNetworkType));
         }
-
+        
         boolean hasRegistered =
             ss.getState() != ServiceState.STATE_IN_SERVICE
             && newSS.getState() == ServiceState.STATE_IN_SERVICE;
@@ -990,9 +998,20 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         if (hasRegistered) {
             networkAttachedRegistrants.notifyRegistrants();
         }
-
+        Log.v(LOG_TAG, "GsmServiceStateTracker.java---pollStateDone----hasChanged=="+hasChanged+"--ss.getState()=="+ss.getState());
         if (hasChanged) {
             String operatorNumeric;
+            
+            //add by liguxiang 11-10-11 for NEWMS00139124 begin
+            //updateSpnDisplay();
+            Log.d(LOG_TAG,"ss state = " + ss.getState());
+            if(ss.getState() == ServiceState.STATE_IN_SERVICE){
+            	updateSpnDisplay();
+            }else if(ss.getState() == ServiceState.STATE_OUT_OF_SERVICE || ss.getState() == ServiceState.STATE_POWER_OFF){
+            	Intent intent = new Intent(Intents.NETWORK_UPDATE_ACTION);
+                phone.getContext().sendStickyBroadcast(intent);
+            }
+            //add by liguxiang 11-10-11 for NEWMS00139124 end
 
             phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ALPHA,
                 ss.getOperatorAlphaLong());

@@ -21,7 +21,7 @@ import com.android.internal.util.XmlUtils;
 import com.google.android.collect.Maps;
 
 import org.xmlpull.v1.XmlPullParserException;
-
+import android.util.DisplayMetrics;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -54,7 +54,8 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
-import android.content.pm.PackageParser.Package;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PackageParser;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
@@ -2548,10 +2549,64 @@ class ContextImpl extends Context {
         public CharSequence getApplicationLabel(ApplicationInfo info) {
             return info.loadLabel(this);
         }
-
+      //add by yangqingan 2011-11-16 for NEWMS00140181 begin
+        /*
+         * Utility method to get package information for a given packageURI
+         */
+        private static  PackageParser.Package getPackageInfo(Uri packageURI) {
+            final String archiveFilePath = packageURI.getPath();
+            PackageParser packageParser = new PackageParser(archiveFilePath);
+            File sourceFile = new File(archiveFilePath);
+            DisplayMetrics metrics = new DisplayMetrics();
+            metrics.setToDefaults();
+            PackageParser.Package pkg =  packageParser.parsePackage(sourceFile,
+                    archiveFilePath, metrics, 0);
+            // Nuke the parser reference.
+            packageParser = null;
+            return pkg;
+        }
+        private static final long MINI_FLASH = 10 * 1024 * 1024;
+        //add by yangqingan 2011-11-16 for NEWMS00140181 end
         @Override
         public void installPackage(Uri packageURI, IPackageInstallObserver observer, int flags,
                 String installerPackageName) {
+        	//add by yangqingan 2011-11-16 for NEWMS00140181 begin
+        	PackageParser.Package pkg = getPackageInfo(packageURI);
+        	String pkgName = null;
+        	if(pkg != null){
+        		pkgName = pkg.packageName;
+        	}
+        	
+        	File f = new File(packageURI.toString());
+        	if(f.exists()){
+        		long fileLength = f.length();
+        		File path = Environment.getDataDirectory();
+                StatFs stat = new StatFs(path.getPath());
+                long blockSize = stat.getBlockSize();
+                long curAppLength = 0;
+                long availableBlocks = stat.getAvailableBlocks();
+                if(pkgName != null){
+	                try {
+		                PackageInfo pi = this.getPackageInfo(pkgName, PackageManager.GET_UNINSTALLED_PACKAGES);
+		                if(pi != null){
+		                	curAppLength = new File(pi.applicationInfo.publicSourceDir).length();
+		                }
+	                }catch (NameNotFoundException e) {
+	        			// TODO Auto-generated catch block
+//	                	Log.e(TAG, "", e);
+	        		}
+                }
+                long len = blockSize * availableBlocks - (fileLength - curAppLength);
+        		if(len < MINI_FLASH){
+        			try{
+    	    			observer.packageInstalled(installerPackageName, PackageManager.INSTALL_FAILED_INSUFFICIENT_STORAGE);
+    	    			return;
+        			}catch(android.os.RemoteException e){
+        				Log.e(TAG, "", e);
+        			}
+        		}
+        	}
+        	//add by yangqingan 2011-11-16 for NEWMS00140181 end
             try {
                 mPM.installPackage(packageURI, observer, flags, installerPackageName);
             } catch (RemoteException e) {

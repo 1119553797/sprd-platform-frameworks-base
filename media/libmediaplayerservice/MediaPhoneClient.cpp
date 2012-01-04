@@ -77,6 +77,15 @@ status_t MediaPhoneClient::setComm(const char *urlIn, const char *urlOut)
     }
     strcpy(mUrlIn, urlIn);
     strcpy(mUrlOut, urlOut);
+	// read out all the residual data of last call
+	{
+		int fd = open(mUrlIn + strlen("videophone://"), O_RDONLY|O_NONBLOCK);
+		char data[10000] = {0};
+		if (fd > 0) {
+			LOGV("setComm(), read residual data of last call: %d", read(fd, data, 10000));
+			close(fd);
+		}
+	}
     return OK;
 }
 
@@ -200,7 +209,7 @@ status_t MediaPhoneClient::preparePlayer()
         mAudioOutput = new AudioOutput();
         static_cast<MediaPlayerInterface*>(mPlayer.get())->setAudioSink(mAudioOutput);
     }*/
-	static char dest[30] = {0};
+	static char dest[MAX_URL_LEN] = {0};
 	memset(dest, 0, sizeof(dest)/sizeof(dest[0]));
     CHECK_RT(mPlayer->setDataSource(getUrlIn(dest, mUrlIn, mDecodeType), NULL));
     CHECK_RT(mPlayer->prepareAsync());

@@ -877,8 +877,9 @@ public class MediaPhone extends Handler
 				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_SET_PARAM_DECODER, null);
 				startPlayer();
 			} else {
-				mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_SET_PARAM_ENCODER, null);
-				startRecorder();
+				if (mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_SET_PARAM_ENCODER, null)) {
+					startRecorder();
+				}
 			}
 		}
             	if (mCodecState != CodecState.CODEC_START) { 

@@ -861,6 +861,8 @@ public class PduComposer {
 
         // content-type parameter: start
         PduBody body = ((SendReq) mPdu).getBody();
+        
+  
         if (null == body || body.getPartsNum() == 0) {
             // empty message
             appendUintvarInteger(0);

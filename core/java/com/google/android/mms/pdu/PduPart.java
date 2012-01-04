@@ -103,6 +103,9 @@ public class PduPart {
      public static final int P_DISPOSITION_FROM_DATA  = 0x80;
      public static final int P_DISPOSITION_ATTACHMENT = 0x81;
      public static final int P_DISPOSITION_INLINE     = 0x82;
+     
+     public boolean findBySmil;/* fixed CR<NEWMS00133151,NEWMS00144166> by luning at 2011.12.06 */
+     
 
      /**
       * Header of part.

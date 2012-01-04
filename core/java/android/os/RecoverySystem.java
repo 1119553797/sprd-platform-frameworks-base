@@ -49,26 +49,27 @@ import org.apache.harmony.security.pkcs7.SignerInfo;
 import org.apache.harmony.security.provider.cert.X509CertImpl;
 
 /**
- * RecoverySystem contains methods for interacting with the Android
- * recovery system (the separate partition that can be used to install
- * system updates, wipe user data, etc.)
+ * RecoverySystem contains methods for interacting with the Android recovery
+ * system (the separate partition that can be used to install system updates,
+ * wipe user data, etc.)
  */
 public class RecoverySystem {
     private static final String TAG = "RecoverySystem";
 
     /**
-     * Default location of zip file containing public keys (X509
-     * certs) authorized to sign OTA updates.
+     * Default location of zip file containing public keys (X509 certs)
+     * authorized to sign OTA updates.
      */
-    private static final File DEFAULT_KEYSTORE =
-        new File("/system/etc/security/otacerts.zip");
+    private static final File DEFAULT_KEYSTORE = new File("/system/etc/security/otacerts.zip");
 
     /** Send progress to listeners no more often than this (in ms). */
     private static final long PUBLISH_PROGRESS_INTERVAL_MS = 500;
 
-    /** Used to communicate with recovery.  See bootable/recovery/recovery.c. */
+    /** Used to communicate with recovery. See bootable/recovery/recovery.c. */
     private static File RECOVERY_DIR = new File("/cache/recovery");
+
     private static File COMMAND_FILE = new File(RECOVERY_DIR, "command");
+
     private static File LOG_FILE = new File(RECOVERY_DIR, "log");
     private static String LAST_LOG_FILENAME = "last_log";
 
@@ -82,17 +83,16 @@ public class RecoverySystem {
     public interface ProgressListener {
         /**
          * Called periodically as the verification progresses.
-         *
-         * @param progress  the approximate percentage of the
-         *        verification that has been completed, ranging from 0
-         *        to 100 (inclusive).
+         * 
+         * @param progress the approximate percentage of the verification that
+         *            has been completed, ranging from 0 to 100 (inclusive).
          */
         public void onProgress(int progress);
     }
 
     /** @return the set of certs that can be used to sign an OTA package. */
-    private static HashSet<Certificate> getTrustedCerts(File keystore)
-        throws IOException, GeneralSecurityException {
+    private static HashSet<Certificate> getTrustedCerts(File keystore) throws IOException,
+            GeneralSecurityException {
         HashSet<Certificate> trusted = new HashSet<Certificate>();
         if (keystore == null) {
             keystore = DEFAULT_KEYSTORE;
@@ -112,36 +112,30 @@ public class RecoverySystem {
     }
 
     /**
-     * Verify the cryptographic signature of a system update package
-     * before installing it.  Note that the package is also verified
-     * separately by the installer once the device is rebooted into
-     * the recovery system.  This function will return only if the
-     * package was successfully verified; otherwise it will throw an
-     * exception.
-     *
-     * Verification of a package can take significant time, so this
-     * function should not be called from a UI thread.  Interrupting
-     * the thread while this function is in progress will result in a
-     * SecurityException being thrown (and the thread's interrupt flag
-     * will be cleared).
-     *
-     * @param packageFile  the package to be verified
-     * @param listener     an object to receive periodic progress
-     * updates as verification proceeds.  May be null.
-     * @param deviceCertsZipFile  the zip file of certificates whose
-     * public keys we will accept.  Verification succeeds if the
-     * package is signed by the private key corresponding to any
-     * public key in this file.  May be null to use the system default
-     * file (currently "/system/etc/security/otacerts.zip").
-     *
-     * @throws IOException if there were any errors reading the
-     * package or certs files.
+     * Verify the cryptographic signature of a system update package before
+     * installing it. Note that the package is also verified separately by the
+     * installer once the device is rebooted into the recovery system. This
+     * function will return only if the package was successfully verified;
+     * otherwise it will throw an exception. Verification of a package can take
+     * significant time, so this function should not be called from a UI thread.
+     * Interrupting the thread while this function is in progress will result in
+     * a SecurityException being thrown (and the thread's interrupt flag will be
+     * cleared).
+     * 
+     * @param packageFile the package to be verified
+     * @param listener an object to receive periodic progress updates as
+     *            verification proceeds. May be null.
+     * @param deviceCertsZipFile the zip file of certificates whose public keys
+     *            we will accept. Verification succeeds if the package is signed
+     *            by the private key corresponding to any public key in this
+     *            file. May be null to use the system default file (currently
+     *            "/system/etc/security/otacerts.zip").
+     * @throws IOException if there were any errors reading the package or certs
+     *             files.
      * @throws GeneralSecurityException if verification failed
      */
-    public static void verifyPackage(File packageFile,
-                                     ProgressListener listener,
-                                     File deviceCertsZipFile)
-        throws IOException, GeneralSecurityException {
+    public static void verifyPackage(File packageFile, ProgressListener listener,
+            File deviceCertsZipFile) throws IOException, GeneralSecurityException {
         long fileLen = packageFile.length();
 
         RandomAccessFile raf = new RandomAccessFile(packageFile, "r");
@@ -156,14 +150,14 @@ public class RecoverySystem {
             byte[] footer = new byte[6];
             raf.readFully(footer);
 
-            if (footer[2] != (byte)0xff || footer[3] != (byte)0xff) {
+            if (footer[2] != (byte) 0xff || footer[3] != (byte) 0xff) {
                 throw new SignatureException("no signature in file (no footer)");
             }
 
             int commentSize = (footer[4] & 0xff) | ((footer[5] & 0xff) << 8);
             int signatureStart = (footer[0] & 0xff) | ((footer[1] & 0xff) << 8);
-            Log.v(TAG, String.format("comment size %d; signature start %d",
-                                     commentSize, signatureStart));
+            Log.v(TAG, String.format("comment size %d; signature start %d", commentSize,
+                    signatureStart));
 
             byte[] eocd = new byte[commentSize + 22];
             raf.seek(fileLen - (commentSize + 22));
@@ -171,27 +165,27 @@ public class RecoverySystem {
 
             // Check that we have found the start of the
             // end-of-central-directory record.
-            if (eocd[0] != (byte)0x50 || eocd[1] != (byte)0x4b ||
-                eocd[2] != (byte)0x05 || eocd[3] != (byte)0x06) {
+            if (eocd[0] != (byte) 0x50 || eocd[1] != (byte) 0x4b || eocd[2] != (byte) 0x05
+                    || eocd[3] != (byte) 0x06) {
                 throw new SignatureException("no signature in file (bad footer)");
             }
 
-            for (int i = 4; i < eocd.length-3; ++i) {
-                if (eocd[i  ] == (byte)0x50 && eocd[i+1] == (byte)0x4b &&
-                    eocd[i+2] == (byte)0x05 && eocd[i+3] == (byte)0x06) {
+            for (int i = 4; i < eocd.length - 3; ++i) {
+                if (eocd[i] == (byte) 0x50 && eocd[i + 1] == (byte) 0x4b
+                        && eocd[i + 2] == (byte) 0x05 && eocd[i + 3] == (byte) 0x06) {
                     throw new SignatureException("EOCD marker found after start of EOCD");
                 }
             }
 
             // The following code is largely copied from
-            // JarUtils.verifySignature().  We could just *call* that
+            // JarUtils.verifySignature(). We could just *call* that
             // method here if that function didn't read the entire
             // input (ie, the whole OTA package) into memory just to
             // compute its message digest.
 
-            BerInputStream bis = new BerInputStream(
-                new ByteArrayInputStream(eocd, commentSize+22-signatureStart, signatureStart));
-            ContentInfo info = (ContentInfo)ContentInfo.ASN1.decode(bis);
+            BerInputStream bis = new BerInputStream(new ByteArrayInputStream(eocd, commentSize + 22
+                    - signatureStart, signatureStart));
+            ContentInfo info = (ContentInfo) ContentInfo.ASN1.decode(bis);
             SignedData signedData = info.getSignedData();
             if (signedData == null) {
                 throw new IOException("signedData is null");
@@ -205,7 +199,7 @@ public class RecoverySystem {
             Iterator it = encCerts.iterator();
             X509Certificate cert = null;
             if (it.hasNext()) {
-                cert = new X509CertImpl((org.apache.harmony.security.x509.Certificate)it.next());
+                cert = new X509CertImpl((org.apache.harmony.security.x509.Certificate) it.next());
             } else {
                 throw new SignatureException("signature contains no certificates");
             }
@@ -213,7 +207,7 @@ public class RecoverySystem {
             List sigInfos = signedData.getSignerInfos();
             SignerInfo sigInfo;
             if (!sigInfos.isEmpty()) {
-                sigInfo = (SignerInfo)sigInfos.get(0);
+                sigInfo = (SignerInfo) sigInfos.get(0);
             } else {
                 throw new IOException("no signer infos!");
             }
@@ -221,8 +215,8 @@ public class RecoverySystem {
             // Check that the public key of the certificate contained
             // in the package equals one of our trusted public keys.
 
-            HashSet<Certificate> trusted = getTrustedCerts(
-                deviceCertsZipFile == null ? DEFAULT_KEYSTORE : deviceCertsZipFile);
+            HashSet<Certificate> trusted = getTrustedCerts(deviceCertsZipFile == null ? DEFAULT_KEYSTORE
+                    : deviceCertsZipFile);
 
             PublicKey signatureKey = cert.getPublicKey();
             boolean verified = false;
@@ -236,12 +230,12 @@ public class RecoverySystem {
                 throw new SignatureException("signature doesn't match any trusted key");
             }
 
-            // The signature cert matches a trusted key.  Now verify that
+            // The signature cert matches a trusted key. Now verify that
             // the digest in the cert matches the actual file data.
 
             // The verifier in recovery *only* handles SHA1withRSA
-            // signatures.  SignApk.java always uses SHA1withRSA, no
-            // matter what the cert says to use.  Ignore
+            // signatures. SignApk.java always uses SHA1withRSA, no
+            // matter what the cert says to use. Ignore
             // cert.getSigAlgName(), and instead use whatever
             // algorithm is used by the signature (which should be
             // SHA1withRSA).
@@ -268,10 +262,11 @@ public class RecoverySystem {
             boolean interrupted = false;
             while (soFar < toRead) {
                 interrupted = Thread.interrupted();
-                if (interrupted) break;
+                if (interrupted)
+                    break;
                 int size = buffer.length;
                 if (soFar + size > toRead) {
-                    size = (int)(toRead - soFar);
+                    size = (int) (toRead - soFar);
                 }
                 int read = raf.read(buffer, 0, size);
                 sig.update(buffer, 0, read);
@@ -279,9 +274,8 @@ public class RecoverySystem {
 
                 if (listener != null) {
                     long now = System.currentTimeMillis();
-                    int p = (int)(soFar * 100 / toRead);
-                    if (p > lastPercent &&
-                        now - lastPublishTime > PUBLISH_PROGRESS_INTERVAL_MS) {
+                    int p = (int) (soFar * 100 / toRead);
+                    if (p > lastPercent && now - lastPublishTime > PUBLISH_PROGRESS_INTERVAL_MS) {
                         lastPercent = p;
                         lastPublishTime = now;
                         listener.onProgress(lastPercent);
@@ -400,8 +394,8 @@ public class RecoverySystem {
 
     /**
      * Called after booting to process and remove recovery-related files.
+     * 
      * @return the log file from recovery, or null if none was found.
-     *
      * @hide
      */
     public static String handleAftermath() {
@@ -430,5 +424,29 @@ public class RecoverySystem {
         return log;
     }
 
-    private void RecoverySystem() { }  // Do not instantiate
+    private void RecoverySystem() {
+    } // Do not instantiate
+
+    private static void cleanCache(String filepath) throws IOException {
+        File f = new File(filepath);
+        if (f.exists() && f.isDirectory()) {
+            if (f.listFiles().length == 0) {
+                f.delete();
+            } else {
+                File delFile[] = f.listFiles();
+                int i = f.listFiles().length;
+                for (int j = 0; j < i; j++) {
+                    if (delFile[j].isDirectory()) {
+                        try {
+                            cleanCache(delFile[j].getAbsolutePath());
+                        } catch (Exception e) {
+                            Log.v(TAG, "cant delete directory for security" + delFile[j]);
+                            continue;
+                        }
+                    }
+                    delFile[j].delete();
+                }
+            }
+        }
+    }
 }

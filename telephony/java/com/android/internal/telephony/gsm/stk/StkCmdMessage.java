@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony.gsm.stk;
 
+import com.android.internal.telephony.gsm.stk.AppInterface.EventListType;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -37,6 +39,7 @@ public class StkCmdMessage implements Parcelable {
     //Deal With DTMF Message Start
     private DtmfMessage mDtmfMessage;
     //Deal With DTMF Message End
+    private EventListType[] mEventList = null;
 
     /*
      * Container for Launch Browser command settings.
@@ -99,7 +102,7 @@ public class StkCmdMessage implements Parcelable {
             mCallSettings.calladdress = ((CallSetupParams) cmdParams).calladdress;
             break;
         case SET_UP_EVENT_LIST:
-            mEventType = ((EventListParams) cmdParams).eventType;
+            mEventList = ((EventListParams) cmdParams).eventList;
             break;
         }
     }
@@ -201,8 +204,8 @@ public class StkCmdMessage implements Parcelable {
         return mCallSettings;
     }
 
-    public AppInterface.EventListType getEventType() {
-        return mEventType;
+    public AppInterface.EventListType[] getEventList() {
+        return mEventList;
     }
 
     public CommandDetails getCmdDet() {

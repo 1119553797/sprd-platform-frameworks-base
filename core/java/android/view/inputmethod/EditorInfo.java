@@ -239,6 +239,8 @@ public class EditorInfo implements InputType, Parcelable {
      */
     public Bundle extras;
     
+    public boolean password;//add by yangqingan 2011-11-26 for NEWMS00144694
+    
     /**
      * Write debug output of this object.
      */
@@ -281,6 +283,7 @@ public class EditorInfo implements InputType, Parcelable {
         dest.writeInt(fieldId);
         dest.writeString(fieldName);
         dest.writeBundle(extras);
+        dest.writeInt(password ? 1 : 0);//add by yangqingan 2011-11-26 for NEWMS00144694
     }
 
     /**
@@ -303,6 +306,7 @@ public class EditorInfo implements InputType, Parcelable {
             res.fieldId = source.readInt();
             res.fieldName = source.readString();
             res.extras = source.readBundle();
+            res.password = source.readInt() == 1 ? true : false;//add by yangqingan 2011-11-26 for NEWMS00144694
             return res;
         }
 

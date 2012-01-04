@@ -247,4 +247,14 @@ public class TelephonyIntents {
      */
     public static final String ACTION_IS_SIM_SMS_READY
             = "android.intent.action.ACTION_IS_SIM_SMS_READY";
+
+    /**
+     * <p>Broadcast Action: It indicates the STK perform the refresh operation
+     * <p class="note">.
+     * This is a notice to application that the SIM contacts need to be reloaded.
+     * 
+     * <p class="note">
+     */
+    public static final String ACTION_STK_REFRESH_SIM_CONTACTS
+            = "android.intent.action.ACTION_STK_REFRESH_SIM_CONTACTS";
 }

@@ -607,10 +607,12 @@ public class TelephonyManager {
         try {
             return getSubscriberInfo().getSubscriberId();
         } catch (RemoteException ex) {
-            return null;
+        Log.d("TelephonyManager","getSubscriberId Exception!!! ");
+            return "";
         } catch (NullPointerException ex) {
             // This could happen before phone restarts due to crashing
-            return null;
+            Log.d("TelephonyManager","getSubscriberId get NullPointerException!!! ");
+            return "";
         }
     }
 

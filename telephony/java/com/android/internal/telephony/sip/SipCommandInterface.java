@@ -75,11 +75,10 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     public void getDataCallList(Message result) {
     }
 
-    public void dial(String address, int clirMode, Message result) {
+    public void dial(String address, int clirMode, boolean isStkCall, Message result) {
     }
 
-    public void dial(String address, int clirMode, UUSInfo uusInfo,
-            Message result) {
+    public void dial(String address, int clirMode, UUSInfo uusInfo, boolean isStkCall, Message result) {
     }
 
     public void getIMSI(Message result) {

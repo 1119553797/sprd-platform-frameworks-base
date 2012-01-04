@@ -18,6 +18,7 @@ package com.android.internal.telephony.gsm.stk;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -31,12 +32,14 @@ import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.gsm.SimCard;
 import com.android.internal.telephony.gsm.SIMFileHandler;
 import com.android.internal.telephony.gsm.SIMRecords;
+import com.android.internal.telephony.gsm.stk.AppInterface.EventListType;
 
 
 import com.android.internal.telephony.ITelephony;
 
 
 import android.util.Config;
+import android.view.IWindowManager;
 
 import java.io.ByteArrayOutputStream;
 
@@ -65,6 +68,7 @@ enum ComprehensionTlvTag {
   EVENT_LIST(0x19),
   ICON_ID(0x1e),
   ITEM_ICON_ID_LIST(0x1f),
+  DATE_TIME_TIMEZONE(0x26),
   IMMEDIATE_RESPONSE(0x2b),
   LANGUAGE(0x2d),
   URL(0x31),
@@ -152,7 +156,10 @@ public class StkService extends Handler implements AppInterface {
 
     //Deal With DTMF Message Start
     private static final int MSG_ID_SEND_SECOND_DTMF = 30;
-    private static final int SEND_DTMF_INTERVAL = 3*1000;
+
+    private static final int MSG_ID_EVENT_DOWNLOAD = 40;
+
+    private static final int SEND_DTMF_INTERVAL = 2*1000;
     //Deal With DTMF Message End
     private static final int DEV_ID_KEYPAD      = 0x01;
     private static final int DEV_ID_DISPLAY     = 0x02;
@@ -160,6 +167,12 @@ public class StkService extends Handler implements AppInterface {
     private static final int DEV_ID_UICC        = 0x81;
     private static final int DEV_ID_TERMINAL    = 0x82;
     private static final int DEV_ID_NETWORK     = 0x83;
+
+    private static final int BROWER_TERMINATION_USER     = 0;
+    private static final int BROWER_TERMINATION_ERROR    = 1;
+
+    private static final int EVENT_NUMBER = 11;
+    private boolean[] mEventList = null;
 
     /* Intentionally private for singleton */
     private StkService(CommandsInterface ci, SIMRecords sr, Context context,
@@ -189,6 +202,10 @@ public class StkService extends Handler implements AppInterface {
         // Register for SIM ready event.
         //mSimRecords.registerForRecordsLoaded(this, MSG_ID_SIM_LOADED, null);
 
+        mEventList = new boolean[EVENT_NUMBER];
+        for (int i = 0; i < EVENT_NUMBER; i++) {
+            mEventList[i] = false;
+        }
         //mCmdIf.reportStkServiceIsRunning(null);
         StkLog.d(this, "StkService: is running");
     }
@@ -211,17 +228,21 @@ public class StkService extends Handler implements AppInterface {
 
     private void handleRilMsg(RilMessage rilMsg) {
         if (rilMsg == null) {
+            StkLog.d(this, "rilMsg is null");
             return;
         }
 
         // dispatch messages
         CommandParams cmdParams = null;
+        StkLog.d(this, "handleRilMsg rilMsg.mId = " + rilMsg.mId + " mResCode = " + rilMsg.mResCode );
         switch (rilMsg.mId) {
         case MSG_ID_EVENT_NOTIFY:
             if (rilMsg.mResCode == ResultCode.OK) {
                 cmdParams = (CommandParams) rilMsg.mData;
                 if (cmdParams != null) {
                     handleProactiveCommand(cmdParams);
+                } else {
+                    StkLog.d(this, "MSG_ID_EVENT_NOTIFY: cmdParams is null");
                 }
             }
             break;
@@ -307,6 +328,23 @@ public class StkService extends Handler implements AppInterface {
             DtmfMessage dtmf = cmdMsg.getDtmfMessage();
             retrieveDtmfString(cmdParams,dtmf.mdtmfString);
         break;
+        case PROVIDE_LOCAL_INFORMATION:
+            ResponseData resp;
+            switch (cmdParams.cmdDet.commandQualifier) {
+                case 0x3:// date time and timezone
+                    resp = new DateTimeResponseData();
+                    sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, resp);
+                    break;
+                case 0x4:// language setting
+                    Configuration config = mContext.getResources().getConfiguration();
+                    String langCode = config.locale.getLanguage();
+                    resp = new LanguageResponseData(langCode);
+                    sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, resp);
+                    break;
+                default:
+                    break;
+            }
+        return;
         //Deal With DTMF Message Start
         case LAUNCH_BROWSER:
         case SELECT_ITEM:
@@ -317,37 +355,44 @@ public class StkService extends Handler implements AppInterface {
         case SEND_USSD:
         case PLAY_TONE:
         case SET_UP_CALL:
-        case REFRESH:
             // nothing to do on telephony!
             break;
+        case REFRESH:
+            sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
+                    0, null);
+            break;
         case SET_UP_EVENT_LIST:
-            AppInterface.EventListType eventType = cmdMsg.getEventType();
-            StkLog.d(this, "[stk] handleProactiveCommand: eventType = " + eventType);
-            switch (eventType) {
-            case Event_MTCall:
-            case Event_CallConnected:
-            case Event_CallDisconnected:
-            case Event_LocationStatus:
-            case Event_CardReaderStatus:
-                StkLog.d(this, "[stk] SET_UP_EVENT_LIST");
-                sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
-                        0, null);
-                break;
-            case Event_UserActivity:
-            case Event_IdleScreenAvailable:
-            case Event_LanguageSelection:
-            case Event_BrowserTermination:
-            case Event_DataAvailable:
-            case Event_ChannelStatus:
-                //TODO event neet Anrdoid to deal with
-                sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
-                        0, null);
-                break;
-            default:
-                sendTerminalResponse(cmdParams.cmdDet, ResultCode.CMD_TYPE_NOT_UNDERSTOOD,
-                        false, 0, null);
-                break;
+            AppInterface.EventListType[] eventList = cmdMsg.getEventList();
+            StkLog.d(this, "[stk] handleProactiveCommand: SET_UP_EVENT_LIST");
+
+            for (int i = 0; i < EVENT_NUMBER; i++) {
+                setEventEnabled(i, false);
             }
+            if (eventList != null) {
+                for (int i = 0; i < eventList.length; i++) {
+                    setEventEnabled(eventList[i].value(), true);
+                }
+//                IWindowManager wm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
+//                if(isValidEvent(AppInterface.EventListType.Event_UserActivity.value())) {
+//                    try {
+//                        wm.setEventUserActivityNeeded(true);
+//                    } catch (RemoteException e) {
+//                        StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+//                    } catch (NullPointerException e2) {
+//                          StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+//                    }
+//                }
+//                if(isValidEvent(AppInterface.EventListType.Event_IdleScreenAvailable.value())) {
+//                    try {
+//                        wm.setEventIdleScreenNeeded(true);
+//                    } catch (RemoteException e) {
+//                        StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+//                    } catch (NullPointerException e2) {
+//                          StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+//                    }
+//                }
+            }
+            sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, null);
             return;
         default:
             StkLog.d(this, "Unsupported command");
@@ -468,7 +513,7 @@ public class StkService extends Handler implements AppInterface {
     }
 
     private void eventDownload(int event, int sourceId, int destinationId,
-            byte[] additionalInfo, boolean oneShot) {
+            byte[] additionalInfo) {
 
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
 
@@ -599,6 +644,8 @@ public class StkService extends Handler implements AppInterface {
            retrieveDtmfString(cmdParams,str);
            break;
         //Deal With DTMF Message End
+        case MSG_ID_EVENT_DOWNLOAD:
+            handleEventDownload((StkResponseMessage)msg.obj);
         case MSG_ID_REFRESH_STIN:
             StkLog.d(this, "[stk]MSG_ID_REFRESH_STIN" );
             int result = 1;
@@ -611,7 +658,7 @@ public class StkService extends Handler implements AppInterface {
                     if (0 == result) {
                         mSimRecords.onRefresh(true, null);
                     }
-                    handleRefreshCmdResponse(result);
+                    //handleRefreshCmdResponse(result);
                 }
             }
             break;
@@ -629,9 +676,20 @@ public class StkService extends Handler implements AppInterface {
         msg.sendToTarget();
     }
 
+    public synchronized void onEventResponse(StkResponseMessage resMsg) {
+        if (resMsg == null) {
+            return;
+        }
+        // queue a event message.
+        Message msg = this.obtainMessage(MSG_ID_EVENT_DOWNLOAD, resMsg);
+        msg.sendToTarget();
+    }
+
     private boolean validateResponse(StkResponseMessage resMsg) {
         if (mCurrntCmd != null) {
             return (resMsg.cmdDet.compareTo(mCurrntCmd.mCmdDet));
+        } else {
+            StkLog.d(this, "[stk] validateResponse mCurrntCmd is null");
         }
         return false;
     }
@@ -647,6 +705,109 @@ public class StkService extends Handler implements AppInterface {
         }
         return false;
     }
+    private boolean isValidEvent(int type) {
+        if (type >= 0 && type < EVENT_NUMBER) {
+            return mEventList[type];
+        }
+        return false;
+    }
+
+    private void setEventEnabled(int type, boolean value) {
+        if (type >= 0 && type < EVENT_NUMBER) {
+            mEventList[type] = value;
+        }
+    }
+
+    private IWindowManager getWindowInterface() {
+        return IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
+    }
+
+    private void handleEventDownload(StkResponseMessage resMsg) {
+        EventListType type = resMsg.event;
+        if (!isValidEvent(type.value())) {
+            StkLog.d(this, "handleEventDownload is inValid Event");
+            return;
+        }
+
+        StkLog.d(this, "handleEventDownload event = " + type);
+        int sourceId = DEV_ID_TERMINAL;
+        int destinationId = DEV_ID_UICC;
+        byte[] additionalInfo = null;
+        boolean oneShot = false;
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        int tag;
+        IWindowManager wm = getWindowInterface();
+
+        switch(type) {
+            case Event_LanguageSelection:
+                Configuration config = mContext.getResources().getConfiguration();
+                String langCode = config.locale.getLanguage();
+                tag = ComprehensionTlvTag.LANGUAGE.value();
+                buf.write(tag); // tag
+                buf.write(2); // length
+                buf.write(langCode.charAt(0));
+                buf.write(langCode.charAt(1));
+                additionalInfo = buf.toByteArray();
+                break;
+            case Event_UserActivity:
+                oneShot = true;
+//                try {
+//                    wm.setEventUserActivityNeeded(false);
+//                } catch (RemoteException e) {
+//                    StkLog.d(this, "Exception when set EventDownloadNeeded flag in WindowManager");
+//                } catch (NullPointerException e2) {
+//                    StkLog.d(this, "wm is null");
+//                }
+                break;
+            case Event_IdleScreenAvailable:
+                oneShot = true;
+                sourceId = DEV_ID_DISPLAY;
+//                try {
+//                    wm.setEventIdleScreenNeeded(false);
+//                } catch (RemoteException e) {
+//                    StkLog.d(this, "Exception when set EventDownloadNeeded flag in WindowManager");
+//                } catch (NullPointerException e2) {
+//                    StkLog.d(this, "wm is null");
+//                }
+                break;
+            case Event_BrowserTermination:
+                tag = 0x80 | ComprehensionTlvTag.BROWSER_TERMINATION_CAUSE.value();
+                buf.write(tag); // tag
+                buf.write(1); // length
+                buf.write(BROWER_TERMINATION_USER);
+                additionalInfo = buf.toByteArray();
+                break;
+            case Event_DataAvailable:
+//                tag = 0x80 | ComprehensionTlvTag.CHANNEL_STATUS.value();
+//                buf.write(tag); // tag
+//                buf.write(2); // length
+//                buf.write(resMsg.ChannelId | (resMsg.LinkStatus ? 0x80 : 0));
+//                buf.write(resMsg.mMode);
+//                tag = 0x80 | ComprehensionTlvTag.CHANNEL_DATA_LENGTH.value();
+//                buf.write(tag);
+//                buf.write(1);
+//                buf.write(resMsg.channelDataLen);
+//                additionalInfo = buf.toByteArray();
+                break;
+            case Event_ChannelStatus:
+//                tag = 0x80 | ComprehensionTlvTag.CHANNEL_STATUS.value();
+//                buf.write(tag); // tag
+//                buf.write(2); // length
+//                buf.write(resMsg.ChannelId | (resMsg.LinkStatus ? 0x80 : 0));
+//                buf.write(resMsg.mMode);
+//                additionalInfo = buf.toByteArray();
+                break;
+            default:
+                StkLog.d(this, "unknown event");
+                return;
+        }
+
+        eventDownload(type.value(), sourceId, destinationId, additionalInfo);
+
+        if (oneShot) {
+            setEventEnabled(type.value(), false);
+        }
+    }
 
     private void handleCmdResponse(StkResponseMessage resMsg) {
         // Make sure the response details match the last valid command. An invalid
@@ -660,10 +821,26 @@ public class StkService extends Handler implements AppInterface {
         // the same command's result again to the StkService and can cause it to
         // get out of sync with the SIM.
         if (!validateResponse(resMsg)) {
+            StkLog.d(this, "[stk] validateResponse fail!! ");
+            if (mCurrntCmd != null) {
+                StkLog.d(this, "[stk] mCurrntCmd = " +
+                         AppInterface.CommandType.fromInt(mCurrntCmd.mCmdDet.typeOfCommand));
+            }
+            if (resMsg != null) {
+                AppInterface.CommandType type = AppInterface.CommandType.fromInt(resMsg.cmdDet.typeOfCommand);
+                StkLog.d(this, "[stk] resMsg cmd = " + type);
+
+                if (type == AppInterface.CommandType.SET_UP_MENU && mCurrntCmd == null) {
+                    StkLog.d(this, "Warning: force mCurrntCmd to mMenuCmd!!");
+                    mCurrntCmd = mMenuCmd;
+                }
+            }
             return;
         }
         ResponseData resp = null;
         boolean helpRequired = false;
+        int additionalInfo = 0;
+        boolean AddInfo = false;
         CommandDetails cmdDet = resMsg.getCmdDetails();
 
         switch (resMsg.resCode) {
@@ -721,10 +898,18 @@ public class StkService extends Handler implements AppInterface {
         case BACKWARD_MOVE_BY_USER:
             resp = null;
             break;
+        case TERMINAL_CRNTLY_UNABLE_TO_PROCESS:
+            switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
+            case SET_UP_CALL:
+                StkLog.d(this, "[stk] SET_UP_CALL set additionalInfo");
+                AddInfo = true;
+                additionalInfo = 2;  // ME currently busy on call;
+            }
+            break;
         default:
             return;
         }
-        sendTerminalResponse(cmdDet, resMsg.resCode, false, 0, resp);
+        sendTerminalResponse(cmdDet, resMsg.resCode, AddInfo, additionalInfo, resp);
         mCurrntCmd = null;
     }
 

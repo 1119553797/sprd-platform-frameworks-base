@@ -167,6 +167,10 @@ class CommandParamsFactory extends Handler {
              case SET_UP_EVENT_LIST:
                 processSetUpEventList(cmdDet, ctlvs);
                 break;
+             case PROVIDE_LOCAL_INFORMATION:
+                 cmdPending = false;
+                 mCmdParams = new CommandParams(cmdDet);
+                 break;
             default:
                 // unsupported proactive commands
                 mCmdParams = new CommandParams(cmdDet);
@@ -467,6 +471,15 @@ class CommandParamsFactory extends Handler {
         input.packed = (cmdDet.commandQualifier & 0x08) != 0;
         input.helpAvailable = (cmdDet.commandQualifier & 0x80) != 0;
 
+        if (input.ucs2 == true) {
+            if (input.minLen != 1) {
+                input.minLen = (input.minLen / 2);
+            }
+            if (input.maxLen != 1) {
+                input.maxLen = (input.maxLen / 2);
+            }
+        }
+
         mCmdParams = new GetInputParams(cmdDet, input);
 
         if (iconId != null) {
@@ -708,22 +721,31 @@ class CommandParamsFactory extends Handler {
             List<ComprehensionTlv> ctlvs) {
 
         StkLog.d(this, "processSetUpEventList");
-        AppInterface.EventListType eventType = AppInterface.EventListType.Event_Unknown;
+        AppInterface.EventListType[] eventList = null;
 
          ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.EVENT_LIST, ctlvs);
          if (ctlv != null) {
              try {
                  byte[] rawValue = ctlv.getRawValue();
                  int valueIndex = ctlv.getValueIndex();
-                 eventType = AppInterface.EventListType.fromInt(rawValue[valueIndex] & 0xff);
-                 StkLog.d(this, "processSetUpEventList:eventtype = " + eventType);
+                 int valueLen = ctlv.getLength();
+                 StkLog.d(this, "processSetUpEventList valueLen = " + valueLen);
+                 if (valueLen > 0) {
+                     eventList = new AppInterface.EventListType[valueLen];
+                     for (int i = 0;i < valueLen;i ++) {
+                         eventList[i] = AppInterface.EventListType.fromInt(rawValue[valueIndex+i] & 0xff);
+                         StkLog.d(this, "processSetUpEventList:eventtype = " + eventList[i]);
+                     }
+                 } else {
+                     StkLog.d(this, "processSetUpEventList empty list");
+                 }
              } catch (IndexOutOfBoundsException e) {
-                 StkLog.d(this, "Failed to processSetUpEventList");
+                 StkLog.d(this, "ProcessSetUpEventList exception = " + e);
              }
          } else {
              StkLog.d(this, "processSetUpEventList:get ctlv Failed");
          }
-         mCmdParams = new EventListParams(cmdDet, eventType);
+         mCmdParams = new EventListParams(cmdDet, eventList);
         return true;
     }
 

@@ -66,6 +66,7 @@ public class ContentType {
     public static final String VIDEO_3G2         = "video/3gpp2";
     public static final String VIDEO_H263        = "video/h263";
     public static final String VIDEO_MP4         = "video/mp4";
+    public static final String VIDEO_AVI         = "video/x-msvideo";//add by wangxiaobin at 2011-10-19 for MSNEW00121490
 
     public static final String APP_SMIL          = "application/smil";
     public static final String APP_WAP_XHTML     = "application/vnd.wap.xhtml+xml";
@@ -155,6 +156,7 @@ public class ContentType {
         sSupportedVideoTypes.add(VIDEO_3G2);
         sSupportedVideoTypes.add(VIDEO_H263);
         sSupportedVideoTypes.add(VIDEO_MP4);
+        sSupportedVideoTypes.add(VIDEO_AVI);//add by wangxiaobin at 2011-10-19 for MSNEW00121490
     }
 
     // This class should never be instantiated.
@@ -186,7 +188,8 @@ public class ContentType {
     }
 
     public static boolean isAudioType(String contentType) {
-        return (null != contentType) && contentType.startsWith("audio/");
+        return (null != contentType)
+                && (contentType.startsWith("audio/") || AUDIO_OGG.equals(contentType));/* fixed CR<NEWMS00144166> by luning at 2011.11.28 begin*/
     }
 
     public static boolean isVideoType(String contentType) {
@@ -222,4 +225,8 @@ public class ContentType {
     public static ArrayList<String> getSupportedTypes() {
         return (ArrayList<String>) sSupportedContentTypes.clone();
     }
+    
+    /* fixed CR<NEWMS00144166> by luning at 2011.11.28 begin*/
+    public static final String FILE_UNSPECIFIED = "*/*";
+    /* fixed CR<NEWMS00144166> by luning at 2011.11.28 end*/
 }

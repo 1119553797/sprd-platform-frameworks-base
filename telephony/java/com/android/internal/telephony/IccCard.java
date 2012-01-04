@@ -58,6 +58,8 @@ public abstract class IccCard {
     static public final String INTENT_VALUE_ICC_ABSENT = "ABSENT";
     /* LOCKED means ICC is locked by pin or by network */
     static public final String INTENT_VALUE_ICC_LOCKED = "LOCKED";
+    /* BLOCKED means ICC is blocked */
+    static public final String INTENT_VALUE_ICC_BLOCKED = "BLOCKED";
     /* READY means ICC is ready to access */
     static public final String INTENT_VALUE_ICC_READY = "READY";
     /* IMSI means ICC IMSI is ready in property */
@@ -97,7 +99,8 @@ public abstract class IccCard {
         PUK_REQUIRED,
         NETWORK_LOCKED,
         READY,
-        NOT_READY;
+        NOT_READY,
+        BLOCKED;
 
         public boolean isPinLocked() {
             return ((this == PIN_REQUIRED) || (this == PUK_REQUIRED));
@@ -393,6 +396,7 @@ public abstract class IccCard {
         boolean transitionedIntoPinLocked;
         boolean transitionedIntoAbsent;
         boolean transitionedIntoNetworkLocked;
+        boolean transitionedIntoIccBlocked;
 
         State oldState, newState;
 
@@ -409,6 +413,7 @@ public abstract class IccCard {
         transitionedIntoAbsent = (oldState != State.ABSENT && newState == State.ABSENT);
         transitionedIntoNetworkLocked = (oldState != State.NETWORK_LOCKED
                 && newState == State.NETWORK_LOCKED);
+        transitionedIntoIccBlocked = (oldState != State.BLOCKED && newState == State.BLOCKED);
 
         if (transitionedIntoPinLocked) {
             if(mDbg) log("Notify SIM pin or puk locked.");
@@ -425,7 +430,10 @@ public abstract class IccCard {
             mNetworkLockedRegistrants.notifyRegistrants();
             broadcastIccStateChangedIntent(INTENT_VALUE_ICC_LOCKED,
                   INTENT_VALUE_LOCKED_NETWORK);
-        }else if(mState == State.READY){
+        } else if (transitionedIntoIccBlocked) {
+            if(mDbg) log("Notify ICC blocked.");
+            broadcastIccStateChangedIntent(INTENT_VALUE_ICC_BLOCKED, null);
+        } else if(mState == State.READY){
 
             broadcastGetIccStatusDoneIntent();
 	  }
@@ -651,6 +659,9 @@ public abstract class IccCard {
             }
             if (app.app_state.isPukRequired()) {
                 return IccCard.State.PUK_REQUIRED;
+            }
+            if (app.app_state.isIccBlocked()) {
+                return IccCard.State.BLOCKED;
             }
             if (app.app_state.isSubscriptionPersoEnabled()) {
                 return IccCard.State.NETWORK_LOCKED;

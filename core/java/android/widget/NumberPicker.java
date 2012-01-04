@@ -210,7 +210,17 @@ public class NumberPicker extends LinearLayout {
             setEnabled(false);
         }
     }
-
+    //add by wangxiaobin for CR135501 at 2011-11-17 begin
+    public void addFilter(InputFilter inputFilter){
+        InputFilter[] filters = mText.getFilters();
+        InputFilter[] reFilters = new InputFilter[filters.length+1];
+        for(int i=0;i<filters.length;i++){
+            reFilters[i] = filters[i];
+        }
+        reFilters[reFilters.length-1] = inputFilter;
+        mText.setFilters(reFilters);
+    }
+    //add by wangxiaobin for CR135501 at 2011-11-17 end
     /**
      * Set the enabled state of this view. The interpretation of the enabled
      * state varies by subclass.

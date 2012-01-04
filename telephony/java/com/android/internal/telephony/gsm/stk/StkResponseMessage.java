@@ -23,9 +23,14 @@ public class StkResponseMessage {
         String usersInput  = null;
         boolean usersYesNoSelection = false;
         boolean usersConfirm = false;
+        AppInterface.EventListType event;
 
         public StkResponseMessage(StkCmdMessage cmdMsg) {
             this.cmdDet = cmdMsg.mCmdDet;
+        }
+
+        public StkResponseMessage(AppInterface.EventListType event){
+            this.event = event;
         }
 
         public void setResultCode(ResultCode resCode) {

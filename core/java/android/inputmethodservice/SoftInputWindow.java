@@ -18,11 +18,15 @@ package android.inputmethodservice;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
 import android.content.pm.ActivityInfo;
 import android.os.IBinder;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.WindowManager;
+import android.content.Intent;
+import android.util.Log;
 
 /**
  * A SoftInputWindow is a Dialog that is intended to be used for a top-level input
@@ -31,6 +35,7 @@ import android.view.WindowManager;
  * always visible.
  */
 class SoftInputWindow extends Dialog {
+	private static final Intent SHOWN_INTENT = new Intent(Intent.ACTION_INPUTMETHOD_WINDOW_SHOWN);//add by yangqingan 2011-12-03 for change inputmethod display error
     final KeyEvent.DispatcherState mDispatcherState;
     
     public void setToken(IBinder token) {
@@ -54,6 +59,15 @@ class SoftInputWindow extends Dialog {
     public SoftInputWindow(Context context, int theme,
             KeyEvent.DispatcherState dispatcherState) {
         super(context, theme);
+      //add by yangqingan 2011-12-03 for change inputmethod display error begin
+        this.setOnShowListener(new OnShowListener(){
+
+			@Override
+			public void onShow(DialogInterface dialog) {
+				// TODO Auto-generated method stub
+				SoftInputWindow.this.getContext().sendBroadcast(SHOWN_INTENT);
+			}});
+      //add by yangqingan 2011-12-03 for change inputmethod display error end
         mDispatcherState = dispatcherState;
         initDockWindow();
     }

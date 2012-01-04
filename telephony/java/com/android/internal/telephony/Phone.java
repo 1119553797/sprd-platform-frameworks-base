@@ -781,7 +781,7 @@ public interface Phone extends SprdVideoPhone{
      * java.lang.Object) registerForPreciseCallStateChanged()}.
      */
     Call getRingingCall();
-
+	
     /**
      * Initiate a new voice connection. This happens asynchronously, so you
      * cannot assume the audio path is connected (or a call index has been
@@ -795,6 +795,18 @@ public interface Phone extends SprdVideoPhone{
     Connection dial(String dialString) throws CallStateException;
 
     /**
+     * Initiate a new voice connection. This happens asynchronously, so you
+     * cannot assume the audio path is connected (or a call index has been
+     * assigned) until PhoneStateChanged notification has occurred.
+     *
+     * @exception CallStateException if a new outgoing call is not currently
+     * possible because no more call slots exist or a call exists that is
+     * dialing, alerting, ringing, or waiting.  Other errors are
+     * handled asynchronously.
+     */
+    Connection dial(String dialString, boolean isStkCall) throws CallStateException;
+	
+    /**
      * Initiate a new voice connection with supplementary User to User
      * Information. This happens asynchronously, so you cannot assume the audio
      * path is connected (or a call index has been assigned) until
@@ -806,6 +818,19 @@ public interface Phone extends SprdVideoPhone{
      *                errors are handled asynchronously.
      */
     Connection dial(String dialString, UUSInfo uusInfo) throws CallStateException;
+
+    /**
+     * Initiate a new voice connection with supplementary User to User
+     * Information. This happens asynchronously, so you cannot assume the audio
+     * path is connected (or a call index has been assigned) until
+     * PhoneStateChanged notification has occurred.
+     *
+     * @exception CallStateException if a new outgoing call is not currently
+     *                possible because no more call slots exist or a call exists
+     *                that is dialing, alerting, ringing, or waiting. Other
+     *                errors are handled asynchronously.
+     */
+    Connection dial(String dialString, UUSInfo uusInfo, boolean isStkCall) throws CallStateException;
 
     /**
      * Handles PIN MMI commands (PIN/PIN2/PUK/PUK2), which are initiated

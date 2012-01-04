@@ -191,11 +191,11 @@ class GetInputParams extends CommandParams {
 }
 
 class EventListParams extends CommandParams {
-    EventListType eventType;
+    EventListType[] eventList;
 
-    EventListParams(CommandDetails cmdDet, EventListType eventtype) {
+    EventListParams(CommandDetails cmdDet, EventListType[] list) {
         super(cmdDet);
-        this.eventType = eventtype;
+        this.eventList = list;
     }
 }
 

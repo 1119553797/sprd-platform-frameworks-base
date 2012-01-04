@@ -53,6 +53,9 @@ public class Watchdog extends Thread {
     // Set this to true to have the watchdog record kernel thread stacks when it fires
     static final boolean RECORD_KERNEL_THREADS = true;
 
+    // Set this to true to check memory
+    static final boolean CHECK_MEMORY_FLAG = false;
+
     static final int MONITOR = 2718;
 
     static final int TIME_TO_RESTART = DB ? 15*1000 : 60*1000;
@@ -79,7 +82,7 @@ public class Watchdog extends Thread {
     AlarmManagerService mAlarm;
     ActivityManagerService mActivity;
     boolean mCompleted;
-    boolean mForceKillSystem;
+    boolean mForceKillSystem = false;
     Monitor mCurrentMonitor;
 
     int mPhonePid;
@@ -108,6 +111,30 @@ public class Watchdog extends Thread {
     final class HeartbeatHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
+            if (false == CHECK_MEMORY_FLAG) {
+                if (MONITOR == msg.what) {
+                    if (localLOGV) Slog.v(TAG, " **** 1-CHECK ALL MONITORS BEGIN ! **** ");
+
+                    final int size = mMonitors.size();
+                    for (int i = 0 ; i < size ; i++) {
+                        mCurrentMonitor = mMonitors.get(i);
+                        mCurrentMonitor.monitor();
+                    }
+                    if (localLOGV) Slog.v(TAG, " **** 2-CHECK ALL MONITORS FINISHED ! **** ");
+
+                    synchronized (Watchdog.this) {
+                        mCompleted = true;
+                        mCurrentMonitor = null;
+                    }
+                    if (localLOGV) Slog.v(TAG, " **** 3-SYNC Watchdog.THIS FINISHED ! ****");
+                    if (localLOGV) Slog.v(TAG, " ");
+
+                } else {
+                    if (localLOGV) Slog.v(TAG,"*** 4-THIS IS IMPOSSIBLE!! ***");
+                }
+                return;
+            }
+
             switch (msg.what) {
                 case MONITOR: {
                     // See if we should force a reboot.

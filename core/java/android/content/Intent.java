@@ -578,6 +578,8 @@ import java.util.Set;
  * of all possible flags.
  */
 public class Intent implements Parcelable, Cloneable {
+	public static final String ACTION_INPUTMETHOD_WINDOW_SHOWN = "android.intent.action.inputmethodshown";//add by yangqingan 2011-12-03 for change inputmethod display error
+	
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent activity actions (see action variable).
@@ -1689,6 +1691,8 @@ public class Intent implements Parcelable, Cloneable {
      */
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_MEDIA_EJECT = "android.intent.action.MEDIA_EJECT";
+    
+    public static final String ACTION_MEDIA_IDLE = "android.intent.action.MEDIA_IDLE";
 
     /**
      * Broadcast Action:  The media scanner has started scanning a directory.
@@ -1908,7 +1912,22 @@ public class Intent implements Parcelable, Cloneable {
     /**
      * @hide 
     */
+    public static String ACTION_SPRD_UMS_SHARED = "com.sprd.android.action.UMS_SHARED";
+    
+    /**
+     * @hide 
+    */
+    public static String ACTION_SPRD_UMS_UNSHARED = "com.sprd.android.action.UMS_UNSHARED";
+    
+    //add by liguxiang 09-27-11 for usb settings begin
+    /**
+     * @hide 
+    */
     public static String ACTION_SPRD_UMS_OPERATOR = "com.sprd.android.action.UMS_OPERATOR";
+    /**
+     * @hide 
+    */
+    public static String ACTION_SPRD_UMS_OPERATOR_ERROR = "com.sprd.android.action.UMS_OPERATOR_ERROR";
     
     /**
      * @hide 
@@ -1919,7 +1938,11 @@ public class Intent implements Parcelable, Cloneable {
      * @hide 
     */
     public static String ACTION_SPRD_USB_UNAVAILABLE = "com.sprd.android.action.USB_UNAVAILABLE";
+    
+    public static String ACTION_SPRD_USB_DISCONNECT = "com.sprd.android.action.USB_DISCONNECT";
     //add by liguxiang 09-27-11 for usb settings end
+    
+    public static String ACTION_SPRD_POWER_CONTROL_UPDATE = "com.sprd.android.action.POWER_CONTROL_UPDATE";  //add by liguxiang 11-22-11 for NEWMS143107
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------

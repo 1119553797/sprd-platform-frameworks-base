@@ -159,7 +159,7 @@
      android:layout_height="wrap_content"
      android:layout_centerInParent="true"
      android:layout_alignParentBottom="true"
-     android:layout_marginBottom="80dip"
+     android:layout_marginBottom="10dip"
      android:drawablePadding="8dip"
      >
     <Button

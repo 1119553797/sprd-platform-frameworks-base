@@ -373,9 +373,11 @@ public class MobileDataStateTracker extends NetworkStateTracker {
      */
     public boolean reconnect() {
         setTeardownRequested(false);
+        if (DBG) Log.d(TAG,  " reconnect :setEnableApn"+ mApnType );
         switch (setEnableApn(mApnType, true)) {
             case Phone.APN_ALREADY_ACTIVE:
                 // TODO - remove this when we get per-apn notifications
+                 if (DBG) Log.d(TAG,  " reconnect :setEnableApn return  APN_ALREADY_ACTIVE" );
                 mEnabled = true;
                 // need to set self to CONNECTING so the below message is handled.
                 mMobileDataState = Phone.DataState.CONNECTING;
@@ -395,8 +397,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
             case Phone.APN_REQUEST_STARTED:
                 mEnabled = true;
                 // no need to do anything - we're already due some status update intents
+                if (DBG) Log.d(TAG,  " reconnect :setEnableApn return  APN_REQUEST_STARTED" );
                 break;
             case Phone.APN_REQUEST_FAILED:
+                if (DBG) Log.d(TAG,  " reconnect :setEnableApn return  APN_REQUEST_FAILED" );
                 if (mPhoneService == null && mApnType == Phone.APN_TYPE_DEFAULT) {
                     // on startup we may try to talk to the phone before it's ready
                     // since the phone will come up enabled, go with that.
@@ -409,6 +413,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 }
                 // else fall through
             case Phone.APN_TYPE_NOT_AVAILABLE:
+                 if (DBG) Log.d(TAG,  " reconnect :setEnableApn return  APN_TYPE_NOT_AVAILABLE" );
                 // Default is always available, but may be off due to
                 // AirplaneMode or E-Call or whatever..
                 if (mApnType != Phone.APN_TYPE_DEFAULT) {

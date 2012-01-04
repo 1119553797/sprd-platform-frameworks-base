@@ -390,6 +390,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
         return true;
     }
 
+
     @Override
     protected boolean isApnTypeActive(String type) {
         // TODO: support simultaneous with List instead
@@ -399,7 +400,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                 return ((mActiveApn != null) && (dunApn.toString().equals(mActiveApn.toString())));
             }
         }
-        return mActiveApn != null && mActiveApn.canHandleType(type);
+         if (DBG) log("isApnTypeActive:result :" +(mActiveApn != null && mActiveApn.canHandleType(type) )+"getActiveApnTypes:"+getActiveApnTypes()[0]+"Apn:"+getActiveApnString());
+         return mActiveApn != null && mActiveApn.canHandleType(type);
     }
 
     @Override
@@ -664,7 +666,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                }
            }
            
-           Log.d(LOG_TAG, " getApnActivePdpFilter  apntypes:"+apntype+"filterenable:"+filterenable);
+           Log.d(LOG_TAG, " getApnActivePdpFilter  apntypes:"+apntype+"  filterenable:"+filterenable);
            
            return filterenable;
        }
@@ -672,31 +674,17 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
        return false;
    }
 	
-  private boolean ApnActivePdpFilter(ApnSetting apn) 
-  {
-      if(ApnFilters != null&& apn!= null )
+
+    @Override
+    protected boolean isApnTypeFilters(String type) {
+    
+      if(ApnFilters != null&& type!= null )
       {
-          String apntype = apn.types[0];
-          Boolean filterenable= false;
-          Log.d(LOG_TAG, " ApnActivePdpFilter  apntypes"+apntype);
-          
-          if(getApnActivePdpFilter(Phone.APN_TYPE_ALL))  return true;
-          
-          if(apntype == null 
-            || apntype.equals(Phone.APN_TYPE_ALL))
-          {
-              if(Patterns.IP_ADDRESS.matcher(apn.mmsProxy).matches())
-              {
-                  apntype = Phone.APN_TYPE_MMS;
-              }
-          }
-          
-          return getApnActivePdpFilter(apntype);
+           return  getApnActivePdpFilter(type) ;
       }
-      
-      return false;
-      
-  }
+        Log.d(LOG_TAG, " ApnActiveTypeFilter  return false");
+        return false;
+    }
 
     private boolean setupData(String reason) {
         ApnSetting apn;
@@ -704,7 +692,6 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
 
         apn = getNextApn();
         if (apn == null) return false;
-        if(ApnActivePdpFilter(apn)) return false;
         pdp = findFreePdp();
         if (pdp == null) {
             if (DBG) log("setupData: No free GsmDataConnection found!");
@@ -712,7 +699,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
         }
         mActiveApn = apn;
         mActivePdp = pdp;
-
+        
+        if (DBG) log("setupData: mActiveApn"+mActiveApn.toString());
+        
         Message msg = obtainMessage();
         msg.what = EVENT_DATA_SETUP_COMPLETE;
         msg.obj = reason;
@@ -1260,11 +1249,12 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             // everything is setup
             if (isApnTypeActive(Phone.APN_TYPE_DEFAULT)) {
                 SystemProperties.set("gsm.defaultpdpcontext.active", "true");
-                        if (canSetPreferApn && preferredApn == null) {
-                            Log.d(LOG_TAG, "PREFERRED APN is null");
-                            preferredApn = mActiveApn;
-                            setPreferredApn(preferredApn.id);
-                        }
+                if(DBG) log("onDataSetupComplete  mActiveApn.id: " + mActiveApn.id+" mActiveApn.apn:"+mActiveApn.apn);
+                if (canSetPreferApn && preferredApn == null) {
+                    Log.d(LOG_TAG, "PREFERED APN is null");
+                    preferredApn = mActiveApn;
+                    setPreferredApn(preferredApn.id);
+                }
             } else {
                 SystemProperties.set("gsm.defaultpdpcontext.active", "false");
             }
@@ -1277,7 +1267,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
         } else {
             GsmDataConnection.FailCause cause;
             cause = (GsmDataConnection.FailCause) (ar.result);
-            if(DBG) log("PDP setup failed " + cause);
+            if(DBG) log("onDataSetupComplete PDP setup failed " + cause);
                     // Log this failure to the Event Logs.
             if (cause.isEventLoggable()) {
                 GsmCellLocation loc = ((GsmCellLocation)phone.getCellLocation());
@@ -1493,6 +1483,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                     apnList.add(preferredApn);
                     return apnList;
                 } else {
+                    Log.i(LOG_TAG, "preferredApn.numeric not equals operator");
                     setPreferredApn(-1);
                     preferredApn = null;
                 }
@@ -1501,7 +1492,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
 
         synchronized (allApnsLock){
             if (allApns != null) {
+                Log.i(LOG_TAG, "buildWaitingApns: search the apnlist matched "+mRequestedApnType);
                 for (ApnSetting apn : allApns) {
+                        Log.i(LOG_TAG, "allApns: t :"+apn.types[0]+" apn:"+apn.apn+" id:"+apn.id);
                     if (apn.canHandleType(mRequestedApnType)) {
                         apnList.add(apn);
                     }
@@ -1554,6 +1547,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             ContentValues values = new ContentValues();
             values.put(APN_ID, pos);
             resolver.insert(PREFERAPN_URI, values);
+            Log.d(LOG_TAG,"setPreferredApn pos "+pos);
         }
     }
 
@@ -1577,7 +1571,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             int pos;
             cursor.moveToFirst();
             pos = cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers._ID));
+            Log.d(LOG_TAG,"getPreferredApn mRequestedApnType "+mRequestedApnType);
             for(ApnSetting p:allApns) {
+                 Log.d(LOG_TAG,"getPreferredApn p.id: "+p.id +" pos:"+pos +" canHandleType:"+p.canHandleType(mRequestedApnType));
                 if (p.id == pos && p.canHandleType(mRequestedApnType)) {
                     cursor.close();
                     return p;

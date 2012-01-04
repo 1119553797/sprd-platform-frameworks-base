@@ -274,9 +274,11 @@ public class ContactHeaderWidget extends FrameLayout implements View.OnClickList
                             bindContactInfo(cursor);
 							//yeezone:jinwei
                             Log.d("", "-----------ContactheaderWidget::mSimIndex = " + mSimIndex);
-                            if(mSimIndex != 0){
+                          //modify by dory.zheng for KF48634 begin
+//                            if(mSimIndex != 0){
                                 mPhotoView.assignContactsSimIndex(mSimIndex);
-                            }
+//                            }
+                              //modify by dory.zheng for KF48634 end
                             mContactId=cursor.getLong(ContactQuery._ID);
 							//end
                             Uri lookupUri = Contacts.getLookupUri(cursor.getLong(ContactQuery._ID),
