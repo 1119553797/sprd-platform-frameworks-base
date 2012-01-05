@@ -62,6 +62,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private static final int RTC_MASK = 1 << AlarmManager.RTC;
     private static final int ELAPSED_REALTIME_WAKEUP_MASK = 1 << AlarmManager.ELAPSED_REALTIME_WAKEUP; 
     private static final int ELAPSED_REALTIME_MASK = 1 << AlarmManager.ELAPSED_REALTIME;
+    private static final int POWER_OFF_WAKEUP_MASK = 1 << AlarmManager.POWER_OFF_WAKEUP;
     private static final int TIME_CHANGED_MASK = 1 << 16;
     
     private static final String TAG = "AlarmManager";
@@ -81,6 +82,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private final ArrayList<Alarm> mRtcAlarms = new ArrayList<Alarm>();
     private final ArrayList<Alarm> mElapsedRealtimeWakeupAlarms = new ArrayList<Alarm>();
     private final ArrayList<Alarm> mElapsedRealtimeAlarms = new ArrayList<Alarm>();
+    private final ArrayList<Alarm> mPoweroffAlarms = new ArrayList<Alarm>();
     private final IncreasingTimeOrder mIncreasingTimeOrder = new IncreasingTimeOrder();
     
     // slots corresponding with the inexact-repeat interval buckets,
@@ -301,6 +303,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     
     public void removeLocked(PendingIntent operation) {
         removeLocked(mRtcWakeupAlarms, operation);
+        removeLocked(mPoweroffAlarms, operation);
         removeLocked(mRtcAlarms, operation);
         removeLocked(mElapsedRealtimeWakeupAlarms, operation);
         removeLocked(mElapsedRealtimeAlarms, operation);
@@ -322,9 +325,38 @@ class AlarmManagerService extends IAlarmManager.Stub {
             }
         }
     }
+    public void removeAlarm(PendingIntent operation) {
+        if (operation == null) {
+            return;
+        }
+        synchronized (mLock) {
+            removeAlarmLocked(operation);
+        }
+    }
+    public void removeAlarmLocked(PendingIntent operation) {
+		ArrayList<Alarm> alarmList = mPoweroffAlarms;
+		if (alarmList.size() <= 0) {
+			return;
+		}
+
+        // iterator over the list removing any it where the intent match
+        Iterator<Alarm> it = alarmList.iterator();
+
+        while (it.hasNext()) {
+            Alarm alarm = it.next();
+			Slog.v(TAG, "remove" + alarm);
+			it.remove();
+		}
+		if (alarmList.size() <= 0) {
+			Slog.v(TAG, "Power off alarmList is empty");
+			clear(mDescriptor, AlarmManager.POWER_OFF_WAKEUP);
+			return;
+        }
+    }
     
     public void removeLocked(String packageName) {
         removeLocked(mRtcWakeupAlarms, packageName);
+        removeLocked(mPoweroffAlarms, packageName);
         removeLocked(mRtcAlarms, packageName);
         removeLocked(mElapsedRealtimeWakeupAlarms, packageName);
         removeLocked(mElapsedRealtimeAlarms, packageName);
@@ -351,7 +383,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
         return lookForPackageLocked(mRtcWakeupAlarms, packageName)
                 || lookForPackageLocked(mRtcAlarms, packageName)
                 || lookForPackageLocked(mElapsedRealtimeWakeupAlarms, packageName)
-                || lookForPackageLocked(mElapsedRealtimeAlarms, packageName);
+                || lookForPackageLocked(mElapsedRealtimeAlarms, packageName)
+				|| lookForPackageLocked(mPoweroffAlarms, packageName);
     }
 
     private boolean lookForPackageLocked(ArrayList<Alarm> alarmList, String packageName) {
@@ -369,6 +402,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
             case AlarmManager.RTC:                     return mRtcAlarms;
             case AlarmManager.ELAPSED_REALTIME_WAKEUP: return mElapsedRealtimeWakeupAlarms;
             case AlarmManager.ELAPSED_REALTIME:        return mElapsedRealtimeAlarms;
+			case AlarmManager.POWER_OFF_WAKEUP:          return mPoweroffAlarms;
         }
         
         return null;
@@ -405,7 +439,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
         long nextAlarm = Long.MAX_VALUE;
         synchronized (mLock) {
             for (int i=AlarmManager.RTC_WAKEUP;
-                    i<=AlarmManager.ELAPSED_REALTIME; i++) {
+                    i<=AlarmManager.POWER_OFF_WAKEUP; i++) {
                 ArrayList<Alarm> alarmList = getAlarmList(i);
                 if (alarmList.size() > 0) {
                     Alarm a = alarmList.get(0);
@@ -457,7 +491,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
         
         synchronized (mLock) {
             pw.println("Current Alarm Manager state:");
-            if (mRtcWakeupAlarms.size() > 0 || mRtcAlarms.size() > 0) {
+            if (mRtcWakeupAlarms.size() > 0 || mRtcAlarms.size() > 0 || mPoweroffAlarms.size() > 0) {
                 final long now = System.currentTimeMillis();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 pw.println(" ");
@@ -468,6 +502,9 @@ class AlarmManagerService extends IAlarmManager.Stub {
                 }
                 if (mRtcAlarms.size() > 0) {
                     dumpAlarmList(pw, mRtcAlarms, "  ", "RTC", now);
+                }
+                if (mPoweroffAlarms.size() > 0) {
+                    dumpAlarmList(pw, mPoweroffAlarms, "  ", "POWER_OFF_WAKEUP", now);
                 }
             }
             if (mElapsedRealtimeWakeupAlarms.size() > 0 || mElapsedRealtimeAlarms.size() > 0) {
@@ -517,6 +554,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private native int init();
     private native void close(int fd);
     private native void set(int fd, int type, long seconds, long nanoseconds);
+    private native void clear(int fd, int type);
     private native int waitForAlarm(int fd);
     private native int setKernelTimezone(int fd, int minuteswest);
 
@@ -675,6 +713,9 @@ class AlarmManagerService extends IAlarmManager.Stub {
                     
                     if ((result & ELAPSED_REALTIME_MASK) != 0)
                         triggerAlarmsLocked(mElapsedRealtimeAlarms, triggerList, nowELAPSED);
+
+                    if ((result & POWER_OFF_WAKEUP_MASK) != 0)
+                        triggerAlarmsLocked(mPoweroffAlarms, triggerList, nowRTC);
                     
                     // now trigger the alarms
                     Iterator<Alarm> it = triggerList.iterator();
@@ -700,7 +741,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
                                 bs.nesting++;
                             }
                             if (alarm.type == AlarmManager.ELAPSED_REALTIME_WAKEUP
-                                    || alarm.type == AlarmManager.RTC_WAKEUP) {
+                                    || alarm.type == AlarmManager.RTC_WAKEUP
+                                    || alarm.type == AlarmManager.POWER_OFF_WAKEUP) {
                                 bs.numWakeup++;
                                 ActivityManagerNative.noteWakeupAlarm(
                                         alarm.operation);
@@ -737,6 +779,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
                     triggerAlarmsLocked(mRtcAlarms, triggerList, nowRTC);
                     triggerAlarmsLocked(mElapsedRealtimeWakeupAlarms, triggerList, nowRTC);
                     triggerAlarmsLocked(mElapsedRealtimeAlarms, triggerList, nowRTC);
+                    triggerAlarmsLocked(mPoweroffAlarms, triggerList, nowRTC);
                 }
                 
                 // now trigger the alarms without the lock held

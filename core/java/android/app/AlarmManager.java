@@ -81,6 +81,12 @@ public class AlarmManager
      * wakes up.
      */
     public static final int ELAPSED_REALTIME = 3;
+    /**
+     * Alarm time in {@link System#currentTimeMillis System.currentTimeMillis()}
+     * (wall clock time in UTC), which will wake up the device when
+     * it goes off.
+     */
+    public static final int POWER_OFF_WAKEUP = 4;
 
     private final IAlarmManager mService;
 
@@ -278,6 +284,22 @@ public class AlarmManager
         }
     }
 
+    /**
+     * Remove any power off alarms.
+     * Any alarm, of any type, whose Intent matches this one (as defined by
+     * {@link Intent#filterEquals}), will be canceled.
+     *
+     * @param operation IntentSender which matches a previously added
+     * IntentSender.
+     *
+     * @see #set
+     */
+    public void cancelAlarm(PendingIntent operation) {
+        try {
+            mService.removeAlarm(operation);
+        } catch (RemoteException ex) {
+        }
+    }
     /**
      * Set the system wall clock time.
      * Requires the permission android.permission.SET_TIME.
