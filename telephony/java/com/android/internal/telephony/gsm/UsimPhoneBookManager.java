@@ -69,12 +69,15 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 	public int[] mAdnRecordSizeArray;
 	private int[] mEmailRecordSizeArray;
 	private int[] mIapRecordSizeArray;
+	protected int mTotalSize[] = null;
+	protected int recordSize[] = new int[3];
+	
 	// add end
 	private ArrayList<byte[]> mEmailFileRecord;
 	private Map<Integer, ArrayList<String>> mEmailsForAdnRec;
-	private int mAdnCount = 0;
-	private int mAdnSize = 0;
-	protected int recordSize[] = new int[3];
+	
+	
+
 
 	private static final int EVENT_PBR_LOAD_DONE = 1;
 	private static final int EVENT_USIM_ADN_LOAD_DONE = 2;
@@ -172,6 +175,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		ishaveSne = false;
 		ishaveGrp = false;
 		ishaveGas = false;
+		mTotalSize = null;
 		// add end
 		mLock = cache.getLock();
 	}
@@ -197,6 +201,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		anrFileCount = 0;
 		mAnrInfoFromPBR = null;
 		mEmailInfoFromPBR = null;
+		mTotalSize = null;
 		// add end
 	}
 
@@ -233,7 +238,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 			// add end
 
-			mAdnCount = 0;
+			
 			mDoneAdnCount = 0;
 			Log.i("UsimPhoneBookManager", "loadEfFilesFromUsim" + numRecs);
 			for (int i = 0; i < numRecs; i++) {
@@ -1069,35 +1074,70 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 
 	public int[] getAdnRecordsSize() {
 		int size[] = new int[3];
+		
 
 		Log.i("UsimPhoneBookManager", "getEFLinearRecordSize");
 
-		size[2] = mPhoneBookRecords.size();
-		Log.i("UsimPhoneBookManager", "getEFLinearRecordSize size" + size[2]);
+		//size[2] = mPhoneBookRecords.size();
+		//Log.i("UsimPhoneBookManager", "getEFLinearRecordSize size" + size[2]);
+             if(mTotalSize != null){
 
-		/*
-		 * * synchronized (mLock) {
-		 * 
-		 * if (mPbrFile == null) { readPbrFileAndWait(); }
-		 * 
-		 * if (mPbrFile == null) return null;
-		 * 
-		 * int numRecs = mPbrFile.mFileIds.size(); Log.i("UsimPhoneBookManager"
-		 * ,"loadEfFilesFromUsim" +numRecs); mAdnCount = 0; mAdnSize = 0; for
-		 * (int i = 0; i < numRecs; i++) { readAdnFileSizeAndWait(i);
-		 * 
-		 * } // All EF files are loaded, post the response. }
-		 */
-		return size;
+                    return mTotalSize;
+		 }
+		
+		 synchronized (mLock) {
+		 
+		  if (mPbrFile == null)  { 
+
+			readPbrFileAndWait(); 
+
+		  }
+		  
+		  if (mPbrFile == null) return null;
+		  
+		  int numRecs = mPbrFile.mFileIds.size();
+
+		  Log.i("UsimPhoneBookManager" ,"loadEfFilesFromUsim" +numRecs); 
+		
+		  for  (int i = 0; i < numRecs; i++) 
+		  {
+
+		      size = readAdnFileSizeAndWait(i);
+
+			if(mTotalSize == null){
+
+			     mTotalSize = new int[3];
+
+			}
+			if(size != null){
+			     mTotalSize[0] = size[0];
+			     mTotalSize[1] += size[1];
+			     mTotalSize[2] += size[2];
+			
+			}
+		  } // All EF files are loaded, post the response. }
+
+		 }
+		return mTotalSize;
 	}
 
-	private int readAdnFileSizeAndWait(int recNum) {
+	private int[] readAdnFileSizeAndWait(int recNum) {
+	     synchronized (mLock) {
+			if (mPbrFile == null) {
+				readPbrFileAndWait();
+			}
+		}
+		if (mPbrFile == null) {
+			Log.e(LOG_TAG, "Error: Pbr file is empty");
+			return null;
+		}
 		Map<Integer, Integer> fileIds;
+		
 		fileIds = mPbrFile.mFileIds.get(recNum);
 		Log.i("UsimPhoneBookManager", "recNum" + recNum);
 
 		if (fileIds == null || fileIds.isEmpty())
-			return 0;
+			return null;
 
 		mPhone.getIccFileHandler().getEFLinearRecordSize(
 				fileIds.get(USIM_EFADN_TAG),
@@ -1107,8 +1147,8 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 		} catch (InterruptedException e) {
 			Log.e(LOG_TAG, "Interrupted Exception in readAdnFileAndWait");
 		}
-		Log.i("UsimPhoneBookManager", "mAdnCount" + mAdnCount);
-		return mAdnCount;
+		
+		return recordSize;
 	}
 
 	public int[] getEfFilesFromUsim() {
@@ -2211,7 +2251,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 			}
 			// add by liguxiang 10-24-11 for NEWMS00132125 end
 			log("EVENT_USIM_ADN_LOAD_DONE size" + size);
-			mAdnCount += size;
+			
 			if (ar.exception == null) {
 				mPhoneBookRecords.addAll((ArrayList<AdnRecord>) ar.result);
 			}
@@ -2281,11 +2321,9 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 					Log.i(LOG_TAG, "EVENT_ADN_RECORD_COUNT Size "
 							+ recordSize[0] + " total " + recordSize[1]
 							+ " #record " + recordSize[2]);
-					mAdnCount += recordSize[2];
-					mAdnSize += recordSize[1];
-					recordSize[2] = mAdnCount;
-					recordSize[1] = mAdnSize;
-					mLock.notifyAll();
+				
+					
+					
 				}
 			}
 			break;
