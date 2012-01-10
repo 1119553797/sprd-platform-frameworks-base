@@ -310,6 +310,14 @@ public final class TDPhone extends GSMPhone {
 		else
 	        return mCT.foregroundCall;
     }
+	
+    public ArrayList<Call>
+    getForegroundCalls() {
+    	ArrayList<Call> foregroundCalls = new ArrayList<Call>();
+    	foregroundCalls.add(mCT.foregroundCall);
+    	foregroundCalls.add(mVideoCT.foregroundCall);
+	return foregroundCalls;
+    }
 
     public Call
     getBackgroundCall() {
@@ -321,6 +329,14 @@ public final class TDPhone extends GSMPhone {
 	        return mCT.backgroundCall;
 	}
     }
+	
+    public ArrayList<Call>
+    getBackgroundCalls() {
+    	ArrayList<Call> backgroundCalls = new ArrayList<Call>();
+    	backgroundCalls.add(mCT.backgroundCall);
+    	backgroundCalls.add(mVideoCT.backgroundCall);
+	return backgroundCalls;
+    }
 
     public Call
     getRingingCall() {
@@ -328,6 +344,14 @@ public final class TDPhone extends GSMPhone {
 			return mVideoCT.ringingCall;
 		else
 	        return mCT.ringingCall;
+    }
+	
+    public ArrayList<Call>
+    getRingingCalls() {
+    	ArrayList<Call> ringingCalls = new ArrayList<Call>();
+    	ringingCalls.add(mCT.ringingCall);
+    	ringingCalls.add(mVideoCT.ringingCall);
+	return ringingCalls;
     }
 	
     boolean isInCall() {

@@ -15,7 +15,7 @@
  */
 
 package com.android.internal.telephony;
-
+import com.android.internal.telephony.gsm.TDPhone;
 import com.android.internal.telephony.sip.SipPhone;
 
 import android.content.Context;
@@ -334,9 +334,25 @@ public final class CallManager {
                 mDefaultPhone = basePhone;
             }
             mPhones.add(basePhone);
+	    if (basePhone instanceof TDPhone) {
+			TDPhone tdPhone = (TDPhone)basePhone;
+			ArrayList<Call> calls = tdPhone.getRingingCalls();
+			for (Call call : calls) {
+            			mRingingCalls.add(call);				
+			}
+			calls = tdPhone.getBackgroundCalls();
+			for (Call call : calls) {
+            			mBackgroundCalls.add(call);				
+			}
+			calls = tdPhone.getForegroundCalls();
+			for (Call call : calls) {
+            			mForegroundCalls.add(call);				
+			}
+	    } else {
             mRingingCalls.add(basePhone.getRingingCall());
             mBackgroundCalls.add(basePhone.getBackgroundCall());
             mForegroundCalls.add(basePhone.getForegroundCall());
+	    }
             registerForPhoneStates(basePhone);
             return true;
         }
