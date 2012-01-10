@@ -162,6 +162,8 @@ private:
     int64_t mSkipTimeUs;
 
     MediaBuffer *mLeftOverBuffer;
+    MediaBuffer *mTempSrcBuffer;//cmmb
+    status_t mLastreadError;//cmmb
 
     Mutex mLock;
     Condition mAsyncCompletion;

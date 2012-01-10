@@ -46,6 +46,7 @@
 #include <media/stagefright/MediaSource.h>
 #include <media/stagefright/MetaData.h>
 #include <media/stagefright/OMXCodec.h>
+#include <media/stagefright/CmmbUriSource.h>//cmmb
 
 #include <surfaceflinger/ISurface.h>
 
@@ -1462,7 +1463,11 @@ void AwesomePlayer::onVideoEvent() {
                         continue;
                     }
                 }
-
+                if (err == ERROR_TIMEOUT) {//cmmb
+                    LOGI("====================onVideoEvent ERROR_TIMEOUT");
+                    postVideoEvent_l();
+                    return;
+                }
                 // So video playback is complete, but we may still have
                 // a seek request pending that needs to be applied
                 // to the audio track.
@@ -2041,7 +2046,30 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
 
         sp<MediaExtractor> extractor = mRTSPController.get();
         return setDataSource_l(extractor);
-    } else {
+    }//cmmb
+    else if(!strncasecmp("cmmb-audio://", mUri.string(), 13)) {
+              sp<CmmbUriSource> uriSource;
+              uriSource = new CmmbUriSource(mUri.string());
+    		sp<MediaExtractor> extractor = MediaExtractor::Create(uriSource, "audio/cmmb");
+    		if (extractor == NULL) {
+    			return UNKNOWN_ERROR;
+    		}
+    		LOGV("Create CMMBExtractor DRA successful");
+    		return setDataSource_l(extractor);
+    	}
+    else if(!strncasecmp("cmmb://", mUri.string(), 7)) {
+        sp<CmmbUriSource> uriSource;
+         uriSource = new CmmbUriSource(mUri.string());
+		LOGI("================Create CMMBExtractor successful");
+		sp<MediaExtractor> extractor = MediaExtractor::Create(uriSource, "video/cmmb");
+		if (extractor == NULL) {
+			return UNKNOWN_ERROR;
+		}
+		LOGV("Create CMMBExtractor successful");
+		return setDataSource_l(extractor);
+        }
+//added by innofidei end
+	else {
         dataSource = DataSource::CreateFromURI(mUri.string(), &mUriHeaders);
     }
 

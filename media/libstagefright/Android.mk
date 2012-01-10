@@ -13,6 +13,7 @@ LOCAL_SRC_FILES:=                         \
         DataSource.cpp                    \
         ESDS.cpp                          \
         FileSource.cpp                    \
+        CmmbUriSource.cpp            \
         HTTPStream.cpp                    \
         JPEGSource.cpp                    \
         MP3Extractor.cpp                  \
@@ -86,6 +87,7 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_rtsp \
         libstagefright_id3 \
         libstagefright_g711dec \
+		libstagefright_cmmb 
 
 ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
 LOCAL_STATIC_LIBRARIES += \

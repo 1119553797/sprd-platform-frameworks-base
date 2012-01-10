@@ -1484,6 +1484,8 @@ OMXCodec::OMXCodec(
       mTargetTimeUs(-1),
       mSkipTimeUs(-1),
       mLeftOverBuffer(NULL),
+      mTempSrcBuffer(NULL), //cmmb
+      mLastreadError(OK),//cmmb
       mPaused(false),
       mBufferCountInput(bufferCountInput),//sprd vt
       mBufferCountOutput(bufferCountOutput) {//sprd vt
@@ -2510,7 +2512,14 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
             mSeekMode = ReadOptions::SEEK_CLOSEST_SYNC;
             mBufferFilled.signal();
 
-            err = mSource->read(&srcBuffer, &options);
+            if(mTempSrcBuffer) {//cmmb
+                err = OK;
+                srcBuffer = mTempSrcBuffer;
+                mTempSrcBuffer = NULL;
+            }
+            else {
+                err = mSource->read(&srcBuffer, &options);
+            }
 
             if (err == OK) {
                 int64_t targetTimeUs;
@@ -2528,10 +2537,19 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
 
             err = OK;
         } else {
-            err = mSource->read(&srcBuffer, &options);
+            if(mTempSrcBuffer) {//cmmb
+                err = OK;
+                srcBuffer = mTempSrcBuffer;
+                mTempSrcBuffer = NULL;
+            }
+            else {
+                err = mSource->read(&srcBuffer, &options);
+            }
         }
 
         if (err != OK) {
+            LOGI("=====================================omxcodec read error ----");
+            mLastreadError = err;//cmmb
             signalEOS = true;
             mFinalStatus = err;
             mSignalledEOS = true;
@@ -3143,6 +3161,10 @@ status_t OMXCodec::stop() {
         mLeftOverBuffer = NULL;
     }
 
+    if (mTempSrcBuffer) {//cmmb
+            mTempSrcBuffer->release();
+            mTempSrcBuffer = NULL;
+    }
     mSource->stop();
 
     CODEC_LOGV("stopped");
@@ -3165,6 +3187,23 @@ status_t OMXCodec::read(
     if (mState != EXECUTING && mState != RECONFIGURING) {
         return UNKNOWN_ERROR;
     }
+//cmmb
+    if(mTempSrcBuffer == NULL) {
+      //  LOGI("1=====================================mTempSrcBuffer read ----");
+        status_t err = mSource->read(&mTempSrcBuffer, options);
+        if(err != OK) {
+            LOGI("2=====================================mTempSrcBuffer read error ----%d", err);
+            return err;
+        }
+    }
+    else {
+    //    LOGI("3=====================================mTempSrcBuffer read");
+        if(mLastreadError != OK && mLastreadError != ERROR_TIMEOUT) {
+            LOGI("4=====================================mTempSrcBuffer last read error %d", mLastreadError);
+            return mLastreadError;
+        }
+    }
+  //  LOGI("5=====================================mTempSrcBuffer read over ----%d", mTempSrcBuffer->range_length());
 
     bool seeking = false;
     int64_t seekTimeUs;

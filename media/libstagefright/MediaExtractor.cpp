@@ -24,7 +24,7 @@
 #include "include/WAVExtractor.h"
 #include "include/OggExtractor.h"
 #include "include/MPEG2TSExtractor.h"
-
+#include "include/CMMBExtractor.h"//cmmb
 #include "include/VideoPhoneExtractor.h"//sprd vt must
 #include "matroska/MatroskaExtractor.h"
 #include "include/AACExtractor.h"
@@ -81,6 +81,8 @@ sp<MediaExtractor> MediaExtractor::Create(
         return new MatroskaExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_MPEG2TS)) {
         return new MPEG2TSExtractor(source);
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_CMMB)) {//cmmb
+        return new CMMBExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263)) {//sprd vt must
         return new VideoPhoneExtractor(source, 1);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_MPEG4)) {//sprd vt must

@@ -762,11 +762,15 @@ player_type getPlayerType(const char* url)
  		if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",url,35) || 
 			!strncasecmp("rtsp://gtalk/",url,13))
 		{
+			property_set("stream.sprd.useragent","true");
 			LOGI("CMMB set to stagefright to work");
 		}
 	    else
 		{
 			char value[PROPERTY_VALUE_MAX];
+
+			property_set("stream.sprd.useragent","false");
+
 		    if (property_get("media.stagefright.enable-rtsp", value, NULL)
 				   && (!strcmp(value, "1") || !strcasecmp(value, "true"))) {
 				   // For now, we're going to use PV for rtsp-based playback

@@ -332,7 +332,12 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
             } else {
                 err = mSource->read(&mInputBuffer, &options);
             }
-
+            //innofidei added code begin
+            if(err == ERROR_TIMEOUT)//cmmb
+            {
+                return 0;
+            }
+            //innofidei added code end
             CHECK((err == OK && mInputBuffer != NULL)
                    || (err != OK && mInputBuffer == NULL));
 
