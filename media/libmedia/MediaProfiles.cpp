@@ -677,8 +677,11 @@ int MediaProfiles::getCamcorderProfileParamByName(const char *name,
 
     int index = -1;
     for (size_t i = 0, n = mCamcorderProfiles.size(); i < n; ++i) {
-        if (mCamcorderProfiles[i]->mCameraId == cameraId &&
-            mCamcorderProfiles[i]->mQuality == quality) {
+	//wxz20120111: the video recorder has no different between the back camera and the front camera.
+	//So no check the camera id.
+        //if (mCamcorderProfiles[i]->mCameraId == cameraId &&
+        //    mCamcorderProfiles[i]->mQuality == quality) {
+	if (mCamcorderProfiles[i]->mQuality == quality) {
             index = i;
             break;
         }
