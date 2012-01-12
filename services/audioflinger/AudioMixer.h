@@ -40,7 +40,7 @@ public:
 
                             ~AudioMixer();
 
-    static const uint32_t MAX_NUM_TRACKS = 32;
+    static const uint32_t MAX_NUM_TRACKS = 6;
     static const uint32_t MAX_NUM_CHANNELS = 2;
 
     static const uint16_t UNITY_GAIN = 0x1000;
