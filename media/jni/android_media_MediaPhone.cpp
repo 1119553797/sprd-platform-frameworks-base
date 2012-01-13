@@ -32,7 +32,6 @@
 #include <cutils/properties.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h> 
 #include <errno.h>
 
 #include "jni.h"
@@ -55,6 +54,7 @@ struct fields_t {
     jfieldID    local_surface;
     /* actually in android.view.Surface XXX */
     jfieldID    surface_native;
+    jfieldID stopWaitRequestForAT;
 
     jmethodID   post_event;
 };
@@ -542,6 +542,76 @@ android_media_MediaPhone_setCameraParam(JNIEnv *env, jobject thiz, jstring key, 
 	env->ReleaseStringUTFChars(key, temp_key);
 }
 
+const int AT_NONE = 0;
+const int AT_TIMEOUT = -1;
+const int AT_SELECT_ERR = -2;
+const int AT_REPORT_IFRAME = 1;
+const int AT_REQUEST_IFRAME = 2;
+const int AT_BOTH_IFRAME = 3;
+#define MAX(a,b) ((a)>(b) ? (a):(b))
+
+static int
+android_media_MediaPhone_native_waitRequestForAT(JNIEnv *env, jobject thiz)
+{
+	int retval = AT_NONE;
+	int vt_pipe_request_iframe = -1;
+	int vt_pipe_report_iframe = -1;
+	if (vt_pipe_request_iframe < 0) vt_pipe_request_iframe = open("/dev/pipe/ril.vt.1", O_RDWR);
+	if (vt_pipe_report_iframe < 0) vt_pipe_report_iframe = open("/dev/pipe/ril.vt.2", O_RDWR);
+	if ((vt_pipe_request_iframe > 0) && (vt_pipe_request_iframe > 0)){
+		do {
+			struct timeval tv = {0};
+			tv.tv_sec = 0;
+		        tv.tv_usec = 200 * 1000;
+			fd_set rfds;
+			FD_ZERO(&rfds);
+			FD_SET(vt_pipe_report_iframe, &rfds);
+			FD_SET(vt_pipe_request_iframe, &rfds);
+
+			retval = select(MAX(vt_pipe_report_iframe, vt_pipe_request_iframe) + 1, &rfds, NULL, NULL, &tv);
+			if (retval == -1) {
+				LOGE("select err");
+				retval = AT_SELECT_ERR;
+			} else if (retval > 0) {
+				ssize_t len = 0;
+				char buf[128];
+				//LOGV("read vt_pipe, retval: %d", retval);
+				if (FD_ISSET(vt_pipe_request_iframe, &rfds)) {
+					len = read(vt_pipe_request_iframe, buf, sizeof(buf) - 1);
+					LOGV("read vt_pipe_request_iframe, len: %d", len);
+					retval = AT_REQUEST_IFRAME;
+				}
+				if (FD_ISSET(vt_pipe_report_iframe, &rfds)) {
+					len = read(vt_pipe_report_iframe, buf, sizeof(buf) - 1);
+					LOGV("read vt_pipe_report_iframe, len: %d", len);
+					if (retval == AT_REQUEST_IFRAME) {
+						retval = AT_BOTH_IFRAME;
+					} else {
+						retval = AT_REPORT_IFRAME;
+					}
+				}
+				break;
+			} else {
+				//LOGE("select timeout");
+				retval = AT_TIMEOUT;
+			}
+			bool  bStop = (bool*)env->GetBooleanField(thiz, fields.stopWaitRequestForAT);
+			if (bStop) {
+				LOGE("bStop");
+				break;
+			}
+		} while (1);
+	}
+	if (vt_pipe_report_iframe > 0) {
+		close(vt_pipe_report_iframe);
+	}
+	if (vt_pipe_request_iframe > 0) {
+		close(vt_pipe_request_iframe);
+	}
+	return retval;
+}
+
+
 // This function gets some field IDs, which in turn causes class initialization.
 // It is called from a static block in MediaPhone, which won't run until the
 // first time an instance of this class is used.
@@ -583,6 +653,12 @@ android_media_MediaPhone_native_init(JNIEnv *env)
     fields.surface_native = env->GetFieldID(surface, "mNativeSurface", "I");
     if (fields.surface_native == NULL) {
         jniThrowException(env, "java/lang/RuntimeException", "Can't find Surface.mNativeSurface");
+        return;
+    }
+	
+    fields.stopWaitRequestForAT = env->GetFieldID(clazz, "mStopWaitRequestForAT", "Z");
+    if (fields.stopWaitRequestForAT == NULL) {
+        jniThrowException(env, "java/lang/RuntimeException", "Can't find MediaPhone.mStopWaitRequestForAT");
         return;
     }
 
@@ -650,6 +726,7 @@ static JNINativeMethod gMethods[] = {
     {"stopDownLink",         "()V",                           	(void *)android_media_MediaPhone_stopDownLink},
     {"getFrameAt",           "(I)Landroid/graphics/Bitmap;",    (void *)android_media_MediaPhone_getFrameAt},
     {"setCameraParam",       "(Ljava/lang/String;I)V",          (void *)android_media_MediaPhone_setCameraParam},
+    {"native_waitRequestForAT",       "()I",          (void *)android_media_MediaPhone_native_waitRequestForAT},
     {"native_init",          "()V",                             (void *)android_media_MediaPhone_native_init},
     {"native_setup",         "(Ljava/lang/Object;)V",           (void *)android_media_MediaPhone_native_setup},
     {"native_finalize",      "()V",                             (void *)android_media_MediaPhone_native_finalize},

@@ -302,6 +302,19 @@ public final class SprdRIL extends RIL {
 
         send(rr);
     }
+	
+	public void controlIFrame(boolean isIFrame, boolean needIFrame,Message result){
+        RILRequest rr = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_CONTROL_IFRAME, result);
+		
+		// count ints		
+		rr.mp.writeInt(2);	
+		rr.mp.writeInt(isIFrame?1:0);
+		rr.mp.writeInt(needIFrame?1:0);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + sprdRequestToString(rr.mRequest));
+
+        send(rr);
+    }
 
 
     public void setOnVPData(Handler h, int what, Object obj) {
@@ -767,6 +780,7 @@ public final class SprdRIL extends RIL {
 				 case RIL_REQUEST_VIDEOPHONE_RECORD_AUDIO: ret = responseVoid(p); break;
 				 case RIL_REQUEST_VIDEOPHONE_TEST: ret = responseVoid(p); break;
 				 case RIL_REQUEST_GET_CURRENT_VIDEOCALLS: ret =  responseCallList(p); break;
+				 case RIL_REQUEST_VIDEOPHONE_CONTROL_IFRAME: ret = responseVoid(p); break;
 				 case RIL_REQUEST_MBBMS_GSM_AUTHEN: ret = responseString(p); break;
 				 case RIL_REQUEST_MBBMS_USIM_AUTHEN: ret = responseString(p); break;
 				 case RIL_REQUEST_MBBMS_SIM_TYPE: ret = responseString(p); break;
@@ -1373,6 +1387,7 @@ public final class SprdRIL extends RIL {
 			 case RIL_REQUEST_VIDEOPHONE_TEST: return "VIDEOPHONE_TEST";			 
 			 case RIL_REQUEST_GET_CURRENT_VIDEOCALLS: return "GET_CURRENT_VIDEOCALLS";
 			 case RIL_REQUEST_VIDEOPHONE_CONTROL_AUDIO: return "VIDEOPHONE_CONTROL_AUDIO";
+			 case RIL_REQUEST_VIDEOPHONE_CONTROL_IFRAME: return "VIDEOPHONE_CONTROL_IFRAME";
 			 case RIL_REQUEST_MBBMS_GSM_AUTHEN: return "MBBMS_GSM_AUTHEN";
 			 case RIL_REQUEST_MBBMS_USIM_AUTHEN: return "MBBMS_USIM_AUTHEN";
 			 case RIL_REQUEST_MBBMS_SIM_TYPE: return "MBBMS_SIM_TYPE";

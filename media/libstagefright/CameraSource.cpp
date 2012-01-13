@@ -230,7 +230,7 @@ status_t CameraSource::stop() {
                 mFramesBeingEncoded.size());
         mFrameCompleteCondition.wait(mLock);
     }
-    mCamera = NULL;
+    mCamera.clear();
     IPCThreadState::self()->restoreCallingIdentity(token);
 
     if (mCollectStats) {
@@ -330,7 +330,7 @@ status_t CameraSource::read(
                 }
             } else {
                 mFramesBeingEncoded.push_back(frame);
-                *buffer = new MediaBuffer(frame->pointer(), frame->size());
+                *buffer = new MediaBuffer(frame->pointer(), frame->size());//@zha temporary modify for sprd camera output size error
                 DEBUG_LOGD("read: buffer.size() %d", (*buffer)->size());
                 (*buffer)->setObserver(this);
                 (*buffer)->add_ref();
