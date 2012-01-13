@@ -13,6 +13,7 @@
 
 #include <time.h>
 #include <stdio.h>
+#include <fcntl.h>
 
 #define SAFE_DELETE(p) if ( (p) != NULL) {delete (p); (p) =NULL;}
 #define	SAFE_FREE(p)	if ( (p) != NULL) {free(p); (p) =NULL;}
@@ -480,7 +481,15 @@ success:
 		ret =get_video_stream_info(&streambuf,&is_I_vop);
 		if((ret==0)&&(is_I_vop==1)){
 			//LOGV("VideoPhoneSource::read find I vop");
-			pMediaBuffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);		
+			pMediaBuffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);
+			// report i-frame to modem		
+			int vt_pipe = -1;
+			if (vt_pipe < 0) vt_pipe = open("/dev/pipe/ril.vt.2", O_RDWR);
+			if (vt_pipe > 0) {
+				ssize_t size = ::write(vt_pipe, "0", 2);
+				LOGV("write vt_pipe, size: %d", size);
+				close(vt_pipe);
+			}
 		}
 		if(m_nNum ==0)
 			pMediaBuffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);			

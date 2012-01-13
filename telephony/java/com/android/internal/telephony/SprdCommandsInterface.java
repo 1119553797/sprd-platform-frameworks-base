@@ -23,6 +23,7 @@ public interface SprdCommandsInterface {
 	public void getCurrentVideoCalls (Message result);
 	public void controlVPCamera (boolean bEnable, Message result);
 	public void controlVPAudio(boolean bEnable, Message result);
+	public void controlIFrame(boolean isIFrame, boolean needIFrame,Message result);
 	
 	public void setOnVPData(Handler h, int what, Object obj);
 	public void unSetOnVPData(Handler h);

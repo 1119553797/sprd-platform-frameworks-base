@@ -108,6 +108,9 @@ public class MediaPhone extends Handler
 
 	
    private CodecState mCodecState = CodecState.CODEC_IDLE;
+
+   
+   private Thread mThread;
     /**
      * Default constructor. Consider using one of the create() methods for
      * synchronously instantiating a MediaPhone from a Uri or resource.
@@ -131,6 +134,33 @@ public class MediaPhone extends Handler
          * It's easier to create it here than in C++.
          */
         native_setup(new WeakReference<MediaPhone>(this));
+
+	mThread = new Thread(new Runnable() {
+			public void run() {
+        			Log.d(TAG, "mThread E");
+				do {
+					int ret = native_waitRequestForAT();
+	        			Log.d(TAG, "vt_pipe ret: " + ret);
+					switch (ret) {
+						case AT_REPORT_IFRAME:
+							mCm.controlIFrame(true, false, null);
+							break;
+						case AT_REQUEST_IFRAME:
+							mCm.controlIFrame(false, true, null);
+							break;
+						case AT_BOTH_IFRAME:
+							mCm.controlIFrame(true, true, null);
+							break;
+					}
+					if (mStopWaitRequestForAT) {
+        					Log.d(TAG, "mStopWaitRequestForAT");
+						break;
+					}
+				} while(true);
+        			Log.d(TAG, "mThread X");
+			}
+		});
+		mThread.start();
     }
 
     /**
@@ -479,6 +509,7 @@ public class MediaPhone extends Handler
     public void release() {
         Log.d(TAG, "release");
         stayAwake(false);
+	mStopWaitRequestForAT = true;
         mOnErrorListener = null;
         mOnMediaInfoListener = null;
 		mOnCallEventListener = null;
@@ -616,6 +647,15 @@ public class MediaPhone extends Handler
     private static native final void native_init();
     private native final void native_setup(Object mediaphone_this);
     private native final void native_finalize();
+
+    private static final int AT_NONE = 0;
+    private static final int AT_TIMEOUT = -1;
+    private static final int AT_SELECT_ERR = -2;
+    private static final int AT_REPORT_IFRAME = 1;
+    private static final int AT_REQUEST_IFRAME = 2;
+    private static final int AT_BOTH_IFRAME = 3;
+    private native final int native_waitRequestForAT();
+    private boolean mStopWaitRequestForAT = false;
 
     @Override
     protected void finalize() { native_finalize(); }
