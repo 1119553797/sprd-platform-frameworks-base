@@ -283,6 +283,8 @@ private:
     static MediaProfiles* createDefaultInstance();
     static CamcorderProfile *createDefaultCamcorderLowProfile();
     static CamcorderProfile *createDefaultCamcorderHighProfile();
+	static CamcorderProfile *createFrontCamcorderLowProfile();
+	static CamcorderProfile *createFrontCamcorderHighProfile();
     static void createDefaultCamcorderProfiles(MediaProfiles *profiles);
     static void createDefaultVideoEncoders(MediaProfiles *profiles);
     static void createDefaultAudioEncoders(MediaProfiles *profiles);

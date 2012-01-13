@@ -936,7 +936,8 @@ public class TelephonyManager {
 			Log.d(TAG, "baseband = "+baseBand);
 			modemValue =  baseBand.split("\\|")[1];
 			Log.d(TAG, "modemValue = "+modemValue);
-			if(modemValue.equals("sc8810_modem") || modemValue.equals("sc8810_modem")){
+			//if(modemValue.equals("sc8805_sp8805")){//fix bug 7294 close
+			if(modemValue.equals("sc8810_modem")){//fix bug 7294 add
 				return MODEM_TYPE_TDSCDMA;
 			}else if(modemValue.equals("sc6810_sp6810")){
 				return MODEM_TYPE_GSM;
