@@ -41,6 +41,7 @@
 #include <binder/IServiceManager.h>
 #include <binder/MemoryDealer.h>
 #include <binder/ProcessState.h>
+#include <fcntl.h>
 #include <media/IMediaPlayerService.h>
 #include <media/stagefright/MediaBuffer.h>
 #include <media/stagefright/MediaBufferGroup.h>
@@ -1985,6 +1986,15 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
 
 	    if(data1!=OMX_ErrorStreamCorrupt){//@jgdu
 		setState(ERROR);
+	    }
+		//sprd begin for request i-frame when codec fail
+	    int vt_pipe = -1;
+	    if (vt_pipe < 0) vt_pipe = open("/dev/pipe/ril.vt.1", O_RDWR);
+	    if (vt_pipe > 0) {
+		ssize_t size = write(vt_pipe, "0", 2);
+		CODEC_LOGE("write vt_pipe, size: %d", size);
+		close(vt_pipe);
+		//sprd end
 	    }
             break;
         }

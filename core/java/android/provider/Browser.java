@@ -71,7 +71,10 @@ public class Browser {
         BookmarkColumns._ID, BookmarkColumns.URL, BookmarkColumns.VISITS,
         BookmarkColumns.DATE, BookmarkColumns.BOOKMARK, BookmarkColumns.TITLE,
         BookmarkColumns.FAVICON, BookmarkColumns.THUMBNAIL,
-        BookmarkColumns.TOUCH_ICON, BookmarkColumns.USER_ENTERED };
+// ------------------ begin mocorsmart modify ------------------
+        //BookmarkColumns.TOUCH_ICON, BookmarkColumns.USER_ENTERED };
+        BookmarkColumns.TOUCH_ICON, BookmarkColumns.USER_ENTERED, BookmarkColumns.CATALOG};
+// ------------------ end   mocorsmart modify ------------------
 
     /* these indices dependent on HISTORY_PROJECTION */
     public static final int HISTORY_PROJECTION_ID_INDEX = 0;
@@ -253,6 +256,47 @@ public class Browser {
         return cr.query(BOOKMARKS_URI, HISTORY_PROJECTION,
                 whereClause.toString(), null, null);
     }
+
+// ------------------ begin mocorsmart add ------------------
+    public static final Cursor getVisitedLike(ContentResolver cr, String url, int catalogid) {
+        boolean secure = false;
+        String compareString = url;
+        if (compareString.startsWith("http://")) {
+            compareString = compareString.substring(7);
+        } else if (compareString.startsWith("https://")) {
+            compareString = compareString.substring(8);
+            secure = true;
+        }
+        if (compareString.startsWith("www.")) {
+            compareString = compareString.substring(4);
+        }
+        StringBuilder whereClause = null;
+        if (secure) {
+            whereClause = new StringBuilder(BookmarkColumns.URL + " = ");
+            DatabaseUtils.appendEscapedSQLString(whereClause,
+                    "https://" + compareString);
+            addOrUrlEquals(whereClause);
+            DatabaseUtils.appendEscapedSQLString(whereClause,
+                    "https://www." + compareString);
+        } else {
+            whereClause = new StringBuilder(BookmarkColumns.URL + " = ");
+            DatabaseUtils.appendEscapedSQLString(whereClause,
+                    compareString);
+            addOrUrlEquals(whereClause);
+            String wwwString = "www." + compareString;
+            DatabaseUtils.appendEscapedSQLString(whereClause,
+                    wwwString);
+            addOrUrlEquals(whereClause);
+            DatabaseUtils.appendEscapedSQLString(whereClause,
+                    "http://" + compareString);
+            addOrUrlEquals(whereClause);
+            DatabaseUtils.appendEscapedSQLString(whereClause,
+                    "http://" + wwwString);
+        }
+        return cr.query(BOOKMARKS_URI, HISTORY_PROJECTION,
+                "("+whereClause.toString()+") AND " + BookmarkColumns.CATALOG + " = " + catalogid, null, null);
+    }
+// ------------------ end   mocorsmart add ------------------
 
     /**
      *  Update the visited history to acknowledge that a site has been
@@ -610,6 +654,12 @@ public class Browser {
          * @hide
          */
         public static final String USER_ENTERED = "user_entered";
+// ------------------ begin mocorsmart add ------------------
+        /**
+         * @hide
+         */
+        public static final String CATALOG = "catalog";
+// ------------------ end   mocorsmart add ------------------
     }
 
     public static class SearchColumns implements BaseColumns {

@@ -249,8 +249,8 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                 } else {
                     //PIN Remain times Modify start
                     remainTimes = remainTimes - 1;
-                    String headerText = mContext.getResources().getString(R.string.keyguard_password_enter_pin_code)
-                                      + "(" + remainTimes + ")";
+                    String headerText = mContext.getResources().getString(R.string.keyguard_password_wrong_pin_code)
+                                         + mContext.getResources().getString(R.string.pinpuk_attempts) + "(" + remainTimes + ")";
                     mHeaderText.setText(headerText);
                     //PIN Remain times Modify end
                     mPinText.setText("");

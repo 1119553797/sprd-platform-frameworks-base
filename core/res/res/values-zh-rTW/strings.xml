@@ -580,6 +580,7 @@
     <string name="keyguard_password_enter_pin_code" msgid="3731488827218876115">"輸入 PIN 碼"</string>
     <string name="keyguard_password_enter_password_code" msgid="9138158344813213754">"輸入密碼即可解鎖"</string>
     <string name="keyguard_password_wrong_pin_code" msgid="1295984114338107718">"PIN 碼錯誤！"</string>
+    <string name="pinpuk_attempts">\n還可以嘗試次數:</string>
     <string name="keyguard_label_text" msgid="861796461028298424">"如要解鎖，請按 Menu 鍵，然後按 0。"</string>
     <string name="emergency_call_dialog_number_for_display" msgid="696192103195090970">"緊急電話號碼"</string>
     <string name="lockscreen_carrier_default" msgid="8812714795156374435">"(沒有服務)"</string>

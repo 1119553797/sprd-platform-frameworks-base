@@ -419,6 +419,10 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 	public void controlVPAudio(boolean bEnable, Message result) {
 		// TODO Auto-generated method stub
 		
+	}	
+	
+	public void controlIFrame(boolean isIFrame, boolean needIFrame,Message result){
+		// TODO Auto-generated method stub
 	}
 
 	@Override
