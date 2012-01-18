@@ -109,6 +109,7 @@ public class TimePicker extends FrameLayout {
 
         // hour
         mHourPicker = (NumberPicker) findViewById(R.id.hour);
+		mHourPicker.setMaxLengthFilter(2);
         mHourPicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
             public void onChanged(NumberPicker spinner, int oldVal, int newVal) {
                 mCurrentHour = newVal;
@@ -129,6 +130,7 @@ public class TimePicker extends FrameLayout {
 
         // digits of minute
         mMinutePicker = (NumberPicker) findViewById(R.id.minute);
+		mMinutePicker.setMaxLengthFilter(2);
         mMinutePicker.setRange(0, 59);
         mMinutePicker.setSpeed(100);
         mMinutePicker.setFormatter(NumberPicker.TWO_DIGIT_FORMATTER);
