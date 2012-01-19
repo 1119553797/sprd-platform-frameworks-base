@@ -2225,7 +2225,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_SET_CLIR: ret =  responseVoid(p); break;
             case RIL_REQUEST_QUERY_CALL_FORWARD_STATUS: ret =  responseCallForward(p); break;
             case RIL_REQUEST_SET_CALL_FORWARD: ret =  responseVoid(p); break;
-            case RIL_REQUEST_QUERY_CALL_WAITING: ret =  responseInts(p); break;
+            case RIL_REQUEST_QUERY_CALL_WAITING: ret =  responseCallWaiting(p); break;
             case RIL_REQUEST_SET_CALL_WAITING: ret =  responseVoid(p); break;
             case RIL_REQUEST_SMS_ACKNOWLEDGE: ret =  responseVoid(p); break;
             case RIL_REQUEST_GET_IMEI: ret =  responseString(p); break;
@@ -2788,6 +2788,24 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             infos[i].toa = p.readInt();
             infos[i].number = p.readString();
             infos[i].timeSeconds = p.readInt();
+        }
+
+        return infos;
+    }
+
+    protected Object
+    responseCallWaiting(Parcel p) {
+        int numInfos;
+        CallWaitingInfo infos[];
+
+        numInfos = p.readInt();
+
+        infos = new CallWaitingInfo[numInfos];
+
+        for (int i = 0 ; i < numInfos ; i++) {
+            infos[i] = new CallWaitingInfo();
+            infos[i].status = p.readInt();
+            infos[i].serviceClass = p.readInt();
         }
 
         return infos;

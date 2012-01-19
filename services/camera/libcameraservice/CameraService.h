@@ -24,7 +24,7 @@
 #include <camera/CameraHardwareInterface.h>
 
 /* This needs to be increased if we can have more cameras */
-#define MAX_CAMERAS 2
+#define MAX_CAMERAS 3 // 2 //wxz20120119: support the fake camera.
 
 namespace android {
 
