@@ -134,7 +134,7 @@ public class MediaPhone extends Handler
          * It's easier to create it here than in C++.
          */
         native_setup(new WeakReference<MediaPhone>(this));
-
+/*
 	mThread = new Thread(new Runnable() {
 			public void run() {
         			Log.d(TAG, "mThread E");
@@ -160,7 +160,7 @@ public class MediaPhone extends Handler
         			Log.d(TAG, "mThread X");
 			}
 		});
-		mThread.start();
+		mThread.start();*/
     }
 
     /**
