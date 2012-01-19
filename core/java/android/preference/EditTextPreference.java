@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -57,6 +58,14 @@ public class EditTextPreference extends DialogPreference {
         
         // Give it an ID so it can be saved/restored
         mEditText.setId(com.android.internal.R.id.edit);
+        
+        //set max size by luyc@spreadst.com
+        InputFilter[] filters = new InputFilter[1];
+        filters[0] = new InputFilter.LengthFilter(2048);
+        mEditText.setFilters(filters);
+        
+      
+        
         
         /*
          * The preference framework and view framework both have an 'enabled'
