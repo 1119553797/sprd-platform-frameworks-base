@@ -205,7 +205,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		// add end
 	}
 
-	public ArrayList<AdnRecord> loadEfFilesFromUsim() {
+	public synchronized ArrayList<AdnRecord> loadEfFilesFromUsim() {
 		synchronized (mLock) {
 			if (!mPhoneBookRecords.isEmpty())
 				return mPhoneBookRecords;
@@ -238,12 +238,20 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 
 			// add end
 
-			
+            mTotalSize = null;
 			mDoneAdnCount = 0;
 			Log.i("UsimPhoneBookManager", "loadEfFilesFromUsim" + numRecs);
 			for (int i = 0; i < numRecs; i++) {
 				readAdnFileAndWait(i);
-
+                int[] size = readAdnFileSizeAndWait(i);
+                if (mTotalSize == null) {
+                    mTotalSize = new int[3];
+                }
+                if (size != null) {
+                    mTotalSize[0] = size[0];
+                    mTotalSize[1] += size[1];
+                    mTotalSize[2] += size[2];
+                }
 				readIapFile(i);
 				readEmailFileAndWait(i);
 
@@ -1181,7 +1189,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 		}
 	}
 
-	private void readAdnFileAndWait(int recNum) {
+	private int[] readAdnFileAndWait(int recNum) {
 		Log.i("UsimPhoneBookManager", "readAdnFileAndWait");
 		synchronized (mLock) {
 			if (mPbrFile == null) {
@@ -1190,13 +1198,13 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 		}
 		if (mPbrFile == null) {
 			Log.e(LOG_TAG, "Error: Pbr file is empty");
-			return;
+			return null;
 		}
 		// END 20110413
 		Map<Integer, Integer> fileIds;
 		fileIds = mPbrFile.mFileIds.get(recNum);
 		if (fileIds == null || fileIds.isEmpty())
-			return;
+			return null;
 
 		int extEf = 0;
 		// Only call fileIds.get while EFEXT1_TAG is available
@@ -1211,6 +1219,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 		} catch (InterruptedException e) {
 			Log.e(LOG_TAG, "Interrupted Exception in readAdnFileAndWait");
 		}
+		return recordSize;
 	}
 
 	private void readIapFile(int recNum) {
@@ -2325,6 +2334,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 					
 					
 				}
+				mLock.notify();
 			}
 			break;
 		}
