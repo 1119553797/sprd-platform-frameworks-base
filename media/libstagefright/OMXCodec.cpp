@@ -62,6 +62,8 @@
 
 #define FEATURE_MINIMUM_BUFFER
 
+//#define INNOFIDEI_CMMB
+
 namespace android {
 
 static const int OMX_QCOM_COLOR_FormatYVU420SemiPlanar = 0x7FA30C00;
@@ -1988,14 +1990,14 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
 		setState(ERROR);
 	    }
 		//sprd begin for request i-frame when codec fail
-	    int vt_pipe = -1;
+	    /*int vt_pipe = -1;
 	    if (vt_pipe < 0) vt_pipe = open("/dev/pipe/ril.vt.1", O_RDWR);
 	    if (vt_pipe > 0) {
 		ssize_t size = write(vt_pipe, "0", 2);
 		CODEC_LOGE("write vt_pipe, size: %d", size);
 		close(vt_pipe);
 		//sprd end
-	    }
+	    }*/
             break;
         }
 
@@ -2521,7 +2523,7 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
             mSeekTimeUs = -1;
             mSeekMode = ReadOptions::SEEK_CLOSEST_SYNC;
             mBufferFilled.signal();
-
+#ifdef INNOFIDEI_CMMB
             if(mTempSrcBuffer) {//cmmb
                 err = OK;
                 srcBuffer = mTempSrcBuffer;
@@ -2530,7 +2532,9 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
             else {
                 err = mSource->read(&srcBuffer, &options);
             }
-
+#else
+                err = mSource->read(&srcBuffer, &options);
+#endif
             if (err == OK) {
                 int64_t targetTimeUs;
                 if (srcBuffer->meta_data()->findInt64(
@@ -2547,6 +2551,7 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
 
             err = OK;
         } else {
+#ifdef INNOFIDEI_CMMB        
             if(mTempSrcBuffer) {//cmmb
                 err = OK;
                 srcBuffer = mTempSrcBuffer;
@@ -2555,6 +2560,9 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
             else {
                 err = mSource->read(&srcBuffer, &options);
             }
+#else
+                err = mSource->read(&srcBuffer, &options);
+#endif
         }
 
         if (err != OK) {
@@ -3171,10 +3179,12 @@ status_t OMXCodec::stop() {
         mLeftOverBuffer = NULL;
     }
 
+#ifdef INNOFIDEI_CMMB
     if (mTempSrcBuffer) {//cmmb
             mTempSrcBuffer->release();
             mTempSrcBuffer = NULL;
     }
+#endif	
     mSource->stop();
 
     CODEC_LOGV("stopped");
@@ -3197,6 +3207,8 @@ status_t OMXCodec::read(
     if (mState != EXECUTING && mState != RECONFIGURING) {
         return UNKNOWN_ERROR;
     }
+
+#ifdef INNOFIDEI_CMMB	
 //cmmb
     if(mTempSrcBuffer == NULL) {
       //  LOGI("1=====================================mTempSrcBuffer read ----");
@@ -3214,6 +3226,7 @@ status_t OMXCodec::read(
         }
     }
   //  LOGI("5=====================================mTempSrcBuffer read over ----%d", mTempSrcBuffer->range_length());
+#endif
 
     bool seeking = false;
     int64_t seekTimeUs;

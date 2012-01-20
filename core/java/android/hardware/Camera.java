@@ -1001,6 +1001,10 @@ public class Camera {
         private static final String KEY_JPEG_QUALITY = "jpeg-quality";
         private static final String KEY_ROTATION = "rotation";
         private static final String KEY_SENSORROTATION = "sensorrotation";
+	//wxz20120118: add the keys for the auto focus function. --start--
+        private static final String KEY_AUTOFOCUSZONES = "autofocuszones";
+        private static final String KEY_AUTOFOCUSVIEWSIZE = "autofocusviewsize";		
+	//wxz20120118: add the interfaces for the auto focus function. --end--
         private static final String KEY_GPS_LATITUDE = "gps-latitude";
         private static final String KEY_GPS_LONGITUDE = "gps-longitude";
         private static final String KEY_GPS_ALTITUDE = "gps-altitude";
@@ -1175,6 +1179,8 @@ public class Camera {
          * #autoFocus(AutoFocusCallback)} to start the focus in this mode.
          */
         public static final String FOCUS_MODE_AUTO = "auto";
+	//wxz20120118: and the FOCUS_MODE_AUTO_MULTI for the multiy zones of auto focus.
+        public static final String FOCUS_MODE_AUTO_MULTI = "auto-multi";	
 
         /**
          * Focus is set at infinity. Applications should not call
@@ -1857,6 +1863,26 @@ public class Camera {
                         "Invalid sensorrotation=" + rotation);
             }
         }
+
+	//wxz20120118: add the interfaces for the auto focus function. --start--
+	public void setAutoFocusZones(List<Size> Zones){	
+		String str = "";
+		Size tmpSize;
+		for(int i = 0; i < Zones.size(); i++){
+			tmpSize = Zones.get(i);
+			str += tmpSize.width + "x" + tmpSize.height;
+			if(i != (Zones.size() - 1)){
+				str += ",";
+			}
+		}
+		set(KEY_AUTOFOCUSZONES, str);
+	}
+	public void setAutoFocusViewSize(Size viewsize){	
+		String str = viewsize.width + "x" + viewsize.height;
+		set(KEY_AUTOFOCUSVIEWSIZE, str);
+	}
+	//wxz20120118: add the interfaces for the auto focus function. --end--
+
 
         /**
          * Sets GPS latitude coordinate. This will be stored in JPEG EXIF
