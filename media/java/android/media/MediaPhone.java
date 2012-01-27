@@ -643,6 +643,8 @@ public class MediaPhone extends Handler
 	public native void setEncodeType(int type);
 
 	public native void setCameraParam(String key, int value);
+	
+	public native int getCameraParam(String key);
 
     private static native final void native_init();
     private native final void native_setup(Object mediaphone_this);

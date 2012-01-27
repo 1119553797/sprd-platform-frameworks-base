@@ -110,6 +110,7 @@ public:
     virtual     status_t    startDownLink();
     virtual     status_t    stopDownLink();
     virtual     status_t    setCameraParam(const char *key, int value);
+    virtual     status_t    getCameraParam(const char *key, int* value);
 
     static      void        notify(void* cookie, int msg, int ext1, int ext2);
 

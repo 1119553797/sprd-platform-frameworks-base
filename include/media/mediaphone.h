@@ -112,6 +112,7 @@ public:
     status_t    startDownLink();
     status_t    stopDownLink();
 	status_t	setCameraParam(const char *key, int value);
+	status_t	getCameraParam(const char *key, int* value);
     void        notify(int msg, int ext1, int ext2);
 
 private:

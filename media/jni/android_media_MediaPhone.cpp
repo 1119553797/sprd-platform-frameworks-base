@@ -542,6 +542,24 @@ android_media_MediaPhone_setCameraParam(JNIEnv *env, jobject thiz, jstring key, 
 	env->ReleaseStringUTFChars(key, temp_key);
 }
 
+static int
+android_media_MediaPhone_getCameraParam(JNIEnv *env, jobject thiz, jstring key)
+{
+	int value = -1;
+    LOGV("getCameraParam()");
+	const char *temp_key = env->GetStringUTFChars(key, NULL);
+    if (temp_key == NULL) {  // Out of memory
+        jniThrowException(env, "java/lang/RuntimeException", "Out of memory");
+        return value;
+    }
+	
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
+	process_media_phone_call(env, thiz, mp->getCameraParam(temp_key, &value), NULL, NULL);
+	LOGV("getCameraParam: key %s, value %d", temp_key, value);
+	env->ReleaseStringUTFChars(key, temp_key);
+	return value;
+}
+
 const int AT_NONE = 0;
 const int AT_TIMEOUT = -1;
 const int AT_SELECT_ERR = -2;
@@ -726,6 +744,7 @@ static JNINativeMethod gMethods[] = {
     {"stopDownLink",         "()V",                           	(void *)android_media_MediaPhone_stopDownLink},
     {"getFrameAt",           "(I)Landroid/graphics/Bitmap;",    (void *)android_media_MediaPhone_getFrameAt},
     {"setCameraParam",       "(Ljava/lang/String;I)V",          (void *)android_media_MediaPhone_setCameraParam},
+    {"getCameraParam",       "(Ljava/lang/String;)I",          (void *)android_media_MediaPhone_getCameraParam},
     {"native_waitRequestForAT",       "()I",          (void *)android_media_MediaPhone_native_waitRequestForAT},
     {"native_init",          "()V",                             (void *)android_media_MediaPhone_native_init},
     {"native_setup",         "(Ljava/lang/Object;)V",           (void *)android_media_MediaPhone_native_setup},
