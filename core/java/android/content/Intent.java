@@ -1815,6 +1815,12 @@ public class Intent implements Parcelable, Cloneable {
     public static final String ACTION_HEADSET_PLUG =
             "android.intent.action.HEADSET_PLUG";
 
+
+	/**
+     *add FM
+     */
+    public static final String ACTION_FM = "android.intent.action.FM";
+
     /**
      * Broadcast Action: An outgoing call is about to be placed.
      *
