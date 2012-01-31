@@ -505,12 +505,12 @@ public final class TDPhone extends GSMPhone {
 
             case EVENT_GET_CALL_FORWARD_DONE:
                 break;
-*/
+
 
 
             case EVENT_SET_CLIR_COMPLETE:
                 break;
-				
+*/				
 			case EVENT_CALL_RING:
 				if (mVideoCT.isAlive())
 				{
