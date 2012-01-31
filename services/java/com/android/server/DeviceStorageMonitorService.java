@@ -49,6 +49,7 @@ import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
 import android.view.WindowManager;
+import android.widget.Toast;
 import android.provider.Settings;
 import android.content.pm.ParceledListSlice;
 import java.util.ArrayList;
@@ -385,6 +386,15 @@ class DeviceStorageMonitorService extends Binder {
         // cache storage thresholds
         mMemLowThreshold = getMemThreshold();
         mMemFullThreshold = getMemFullThreshold();
+        // bug 9315 begin
+		if (mStorageManager == null) {
+            mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+            if (mStorageManager != null) {
+                Log.i(TAG, "Succeed to get StorageManager");
+                mStorageManager.registerListener(mStorageListener);
+            }
+        }
+		// bug 9315 end
         checkMemory(true);
     }
 
@@ -700,6 +710,9 @@ class DeviceStorageMonitorService extends Binder {
                 CharSequence levelText = mContext.getString(
                         com.android.internal.R.string.internal_memory_low);
 
+                Toast.makeText(mContext, levelText,
+                	     Toast.LENGTH_LONG).show();
+                /*
                 AlertDialog.Builder b = new AlertDialog.Builder(mContext);
 
                 b.setTitle(com.android.internal.R.string.dialog_warning);
@@ -709,6 +722,7 @@ class DeviceStorageMonitorService extends Binder {
                 AlertDialog d = b.create();
                 d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
                 d.show();
+                */
             }
 
         } catch (IllegalArgumentException e) {
