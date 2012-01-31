@@ -1538,6 +1538,8 @@ uint32_t AudioPolicyManagerBase::getNewDevice(audio_io_handle_t output, bool fro
         device = getDeviceForStrategy(STRATEGY_SONIFICATION, fromCache);
     } else if (outputDesc->isUsedByStrategy(STRATEGY_MEDIA)) {
         device = getDeviceForStrategy(STRATEGY_MEDIA, fromCache);
+    } else if (outputDesc->isUsedByStrategy(STRATEGY_FM)) {
+        device = getDeviceForStrategy(STRATEGY_FM, fromCache);
     } else if (outputDesc->isUsedByStrategy(STRATEGY_DTMF)) {
         device = getDeviceForStrategy(STRATEGY_DTMF, fromCache);
     }
