@@ -382,40 +382,43 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
 
             }
-/*
-            else if (action.equals(Intent.ACTION_UMS_CONNECTED)) {
+
+/*            else if (action.equals(Intent.ACTION_UMS_CONNECTED)) {
                 mUsbConnected = true;
                 //Add by liguxiang 07-08-11 for USB settings function begin
-                updateAdbNotification();
-                updateUsbNotification(UsbType.CHARGE,mAdbEnabled,mAdbNotificationShown);
-                updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
-                updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
+                //updateAdbNotification(mUsbConnected && mAdbEnabled);
+                //updateUsbNotification(UsbType.CHARGE,mAdbEnabled,mAdbNotificationShown);
+                //updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
+                //updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
               //Add by liguxiang 07-08-11 for USB settings function end
             } else if (action.equals(Intent.ACTION_UMS_DISCONNECTED)) {
                 mUsbConnected = false;
               //Add by liguxiang 07-08-11 for USB settings function begin
-                updateAdbNotification();
-                if(Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.REMEMBER_USB_CHOICE,0) != 0){
-                	updateUsbNotification(UsbType.CHARGE,mChargeEnabled,true);
-                }else{
-                	updateUsbNotification(UsbType.CHARGE,mChargeEnabled,mChargeNotificationShown);
-                }
-                updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
-                updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
+               //updateAdbNotification(mUsbConnected && mAdbEnabled);
+                //if(Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.REMEMBER_USB_CHOICE,0) != 0){
+                //	updateUsbNotification(UsbType.CHARGE,mChargeEnabled,true);
+                //}else{
+                //	updateUsbNotification(UsbType.CHARGE,mChargeEnabled,mChargeNotificationShown);
+                //}
+                //updateUsbNotification(UsbType.UMS,mUmsEnabled,mUmsNotificationShown);
+                //updateUsbNotification(UsbType.MODEM,mModemEnabled,mModemNotificationShown);
               //Add by liguxiang 07-08-11 for USB settings function end
 
-            } else if (action.equals(Intent.ACTION_SPRD_USB_UNAVAILABLE)) {
+            } */
+            else if (action.equals(Intent.ACTION_SPRD_USB_UNAVAILABLE)) {
 					SystemClock.sleep(2000);
 					mContext.sendBroadcast(new Intent(
 							Intent.ACTION_SPRD_USB_DISCONNECT));
 
 				}
-*/
+
+
             else if (action.equals(UsbManager.ACTION_USB_STATE)) {
                 Bundle extras = intent.getExtras();
                 boolean usbConnected = extras.getBoolean(UsbManager.USB_CONNECTED);
                 boolean adbEnabled = (UsbManager.USB_FUNCTION_ENABLED.equals(
                                     extras.getString(UsbManager.USB_FUNCTION_ADB)));
+                Log.i(TAG,"--xj--usbConnected=" + usbConnected + " adbEnabled=" + adbEnabled);
                 updateAdbNotification(usbConnected && adbEnabled);
             } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)
                     || action.equals(Intent.ACTION_PACKAGE_RESTARTED)
@@ -488,10 +491,10 @@ public class NotificationManagerService extends INotificationManager.Stub
 
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
-/*
+
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.ADB_ENABLED), false, this);
-            
+/*            
             //Add by liguxiang 07-08-11 for USB settings function begin
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.CHARGE_ONLY), false, this);
@@ -514,10 +517,10 @@ public class NotificationManagerService extends INotificationManager.Stub
 
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
-/*
-            boolean adbEnabled = Settings.Secure.getInt(resolver,
+
+/*            boolean adbEnabled = Settings.Secure.getInt(resolver,
                         Settings.Secure.ADB_ENABLED, 0) != 0;
-            
+
             //Add by liguxiang 07-08-11 for USB settings function begin
             boolean chargeEnabled = Settings.Secure.getInt(resolver,
                     Settings.Secure.CHARGE_ONLY, 0) != 0;
@@ -527,16 +530,16 @@ public class NotificationManagerService extends INotificationManager.Stub
             
             boolean modemEnabled = Settings.Secure.getInt(resolver,
                     Settings.Secure.MODEM_ENABLED, 0) != 0;
-            
+
             //Add by liguxiang 07-08-11 for USB settings function end
             
             if (mAdbEnabled != adbEnabled) {
                 mAdbEnabled = adbEnabled;
                 //Modify by liguxiang 07-08-11 for USB settings function begin
-                updateAdbNotification();
+                updateAdbNotification(mUsbConnected && mAdbEnabled);
                 //Modify by liguxiang 07-08-11 for USB settings function end
             }
-            
+
             //Add by liguxiang 07-08-11 for USB settings function begin
             Log.d(TAG,"mBootComplete = " + mBootComplete);
             if ((mChargeEnabled != chargeEnabled) && mBootComplete) {
@@ -604,8 +607,6 @@ public class NotificationManagerService extends INotificationManager.Stub
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(UsbManager.ACTION_USB_STATE);
-		        filter.addAction(Intent.ACTION_UMS_CONNECTED);
-        filter.addAction(Intent.ACTION_UMS_DISCONNECTED);
         filter.addAction(Intent.ACTION_SPRD_USB_UNAVAILABLE);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -1304,7 +1305,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                 return;
             }
             if (!mAdbNotificationShown 
-            		&& ((ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).isUsbConnected()//lino add 2011-12-07
+            	//	&& ((ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).isUsbConnected()//lino add 2011-12-07
             		) {
                 NotificationManager notificationManager = (NotificationManager) mContext
                         .getSystemService(Context.NOTIFICATION_SERVICE);

@@ -559,6 +559,29 @@ status_t MediaPhone::setCameraParam(const char *key, int value)
     return ret;
 }
 
+status_t MediaPhone::getCameraParam(const char *key, int* value)
+{
+	LOGV("getCameraParam");
+    if (mMediaPhone == NULL) {
+        LOGE("media phone is not initialized yet");
+        return INVALID_OPERATION;
+    }
+	
+    /*if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+        LOGE("stopUpLink called in an invalid state: %d", mCurrentState);
+        return INVALID_OPERATION;
+    }*/
+    
+
+    status_t ret = mMediaPhone->getCameraParam(key, value);
+    if (OK != ret) {
+        LOGE("getCameraParam failed: %d", ret);
+//        mCurrentState = MEDIA_PHONE_ERROR;
+        return ret;
+    }
+    return ret;
+}
+
 void MediaPhone::notify(int msg, int ext1, int ext2)
 {
     LOGV("message received msg=%d, ext1=%d, ext2=%d", msg, ext1, ext2);

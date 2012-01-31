@@ -584,7 +584,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
      */
     private void updateLayout(Status status) {
         // The emergency call button no longer appears on this screen.
-        if (DBG) Log.i(TAG, "updateLayout: status=" + status+",mCarrier= "
+        if (true) Log.i(TAG, "updateLayout: status=" + status+",mCarrier= "
         +getSprdCarrierString(mUpdateMonitor.getTelephonyPlmn(),mUpdateMonitor.getTelephonySpn())
         +",radioType="+mUpdateMonitor.getRadioType());
 
@@ -614,11 +614,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             case NetworkLocked:
                 // The carrier string shows both sim card status (i.e. No Sim Card) and
                 // carrier's name and/or "Emergency Calls Only" status
-                mCarrier.setText(
-                		getSprdCarrierString(
-                                mUpdateMonitor.getTelephonyPlmn(),
-                                getContext().getText(R.string.lockscreen_network_locked_message)));
-                mScreenLocked.setText(R.string.lockscreen_instructions_when_pattern_disabled);
+           
+                //Modify start on 2012-01-17
+//                mCarrier.setText(
+//                		getSprdCarrierString(
+//                                mUpdateMonitor.getTelephonyPlmn(),
+//                                getContext().getText(R.string.lockscreen_network_locked_message)));
+                mCarrier.setText(getContext().getText(R.string.lockscreen_network_locked_message));
+                //Modify end on 2012-01-17
 
                 // layout
                 mScreenLocked.setVisibility(View.VISIBLE);
@@ -638,10 +641,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 break;
             case SimMissingLocked:
                 // text
-                mCarrier.setText(
-                		getSprdCarrierString(
-                                mUpdateMonitor.getTelephonyPlmn(),
-                                getContext().getText(R.string.lockscreen_missing_sim_message_short)));
+                //Modify start on 2012-01-17
+//                mCarrier.setText(
+//                		getSprdCarrierString(
+//                                mUpdateMonitor.getTelephonyPlmn(),
+//                                getContext().getText(R.string.lockscreen_missing_sim_message_short)));
+            	mCarrier.setText(getContext().getText(R.string.lockscreen_missing_sim_message_short));
+                //Modify end on 2012-01-17
+
                 mScreenLocked.setText(R.string.lockscreen_missing_sim_instructions);
 
                 // layout
@@ -652,10 +659,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 break;
             case SimLocked:
                 // text
-                mCarrier.setText(
-                		getSprdCarrierString(
-                                mUpdateMonitor.getTelephonyPlmn(),
-                                getContext().getText(R.string.lockscreen_sim_locked_message)));
+            	
+                //Modify start on 2012-01-17
+//                mCarrier.setText(
+//                		getSprdCarrierString(
+//                                mUpdateMonitor.getTelephonyPlmn(),
+//                                getContext().getText(R.string.lockscreen_sim_locked_message)));
+                mCarrier.setText(getContext().getText(R.string.lockscreen_sim_locked_message));
+                //Modify end on 2012-01-17
 
                 // layout
                 mScreenLocked.setVisibility(View.INVISIBLE);
@@ -664,10 +675,15 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 break;
             case SimPukLocked:
                 // text
-                mCarrier.setText(
-                		getSprdCarrierString(
-                                mUpdateMonitor.getTelephonyPlmn(),
-                                getContext().getText(R.string.lockscreen_sim_puk_locked_message)));
+
+            	//Modify start on 2012-01-17
+//                mCarrier.setText(
+//                		getSprdCarrierString(
+//                                mUpdateMonitor.getTelephonyPlmn(),
+//                                getContext().getText(R.string.lockscreen_sim_puk_locked_message)));
+                mCarrier.setText(getContext().getText(R.string.lockscreen_sim_puk_locked_message));
+                //Modify end on 2012-01-17
+
                 mScreenLocked.setText(R.string.lockscreen_sim_puk_locked_instructions);
 
                 // layout
@@ -697,21 +713,38 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     
     //add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen begin
     public  CharSequence getSprdCarrierString(CharSequence telephonyPlmn, CharSequence telephonySpn) {
-    	CharSequence radioType = mUpdateMonitor.getRadioType();
+        CharSequence radioType = mUpdateMonitor.getRadioType();
+        Log.i(TAG, "getSprdCarrierString:"+" telephonyPlmn="+telephonyPlmn+" telephonySpn="+telephonySpn+" radioType="+radioType);
+
         if (telephonyPlmn != null && telephonySpn == null) {
-        	if(radioType != null){
-        		telephonyPlmn = telephonyPlmn.toString() + " " + radioType;
-        	}
+//       	if(radioType != null){
+//       		telephonyPlmn = telephonyPlmn.toString() + " " + radioType;
+//        	}
+            if(radioType != null){
+                telephonyPlmn = telephonyPlmn.toString() + " " + radioType;
+            }
+
             return telephonyPlmn;
         } else if (telephonyPlmn != null && telephonySpn != null) {
-        	if(radioType != null){
-        		telephonySpn = telephonySpn.toString() + radioType;
-        	}
-            return telephonyPlmn + "|" + telephonySpn;
+        	//if(radioType != null){
+        		//telephonySpn = telephonySpn.toString() + radioType;
+        	//}
+               // return telephonyPlmn + "|" + telephonySpn;
+            if(radioType != null){
+                telephonyPlmn = telephonyPlmn.toString() + radioType;
+            }
+            //Modify start on 2012-01-16 for 8930/8932
+            //return telephonyPlmn + "|" + telephonySpn;
+            return telephonyPlmn;
+            //Modify end on 2012-01-16 for 8930/8932
         } else if (telephonyPlmn == null && telephonySpn != null) {
-        	if(radioType != null){
-        		telephonySpn = telephonySpn.toString() + " " + radioType;
-        	}
+        	//if(radioType != null){
+        		//telephonySpn = telephonySpn.toString() + " " + radioType;
+        	//}
+            //return telephonySpn;
+            if(radioType != null){
+                telephonySpn = telephonySpn.toString() + " " + radioType;
+            }
             return telephonySpn;
         } else {
             return "";

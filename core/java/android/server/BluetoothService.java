@@ -620,7 +620,7 @@ public class BluetoothService extends IBluetooth.Stub {
               mBondState.isAutoPairingAttemptsInProgress(address)) {
             pairingAttempt(address, result);
         } else {
-            setBondState(address, BluetoothDevice.BOND_NONE, result);
+            mBondState.setBondState(address, BluetoothDevice.BOND_NONE, result);
             if (mBondState.isAutoPairingAttemptsInProgress(address)) {
                 mBondState.clearPinAttempts(address);
             }

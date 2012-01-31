@@ -392,14 +392,14 @@ MediaProfiles::getInstance()
 MediaProfiles::createDefaultH263VideoEncoderCap()
 {
     return new MediaProfiles::VideoEncoderCap(
-        VIDEO_ENCODER_H263, 192000, 420000, 176, 352, 144, 288, 1, 20);
+        VIDEO_ENCODER_H263, 192000, 1536000, 176, 720, 144, 576, 1, 25);
 }
 
 /*static*/ MediaProfiles::VideoEncoderCap*
 MediaProfiles::createDefaultM4vVideoEncoderCap()
 {
     return new MediaProfiles::VideoEncoderCap(
-        VIDEO_ENCODER_MPEG_4_SP, 192000, 420000, 176, 352, 144, 288, 1, 20);
+        VIDEO_ENCODER_MPEG_4_SP, 192000, 1536000, 176, 720, 144, 576, 1, 25);
 }
 
 
@@ -414,7 +414,7 @@ MediaProfiles::createDefaultVideoEncoders(MediaProfiles *profiles)
 MediaProfiles::createDefaultCamcorderHighProfile()
 {
     MediaProfiles::VideoCodec *videoCodec =
-        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 360000, 352, 288, 20);
+        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 1024000, 352, 288, 25);
 
     AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
     CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
@@ -431,7 +431,7 @@ MediaProfiles::createDefaultCamcorderHighProfile()
 MediaProfiles::createDefaultCamcorderLowProfile()
 {
     MediaProfiles::VideoCodec *videoCodec =
-        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 192000, 176, 144, 20);
+        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 192000, 176, 144, 25);
 
     MediaProfiles::AudioCodec *audioCodec =
         new MediaProfiles::AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
@@ -452,7 +452,7 @@ MediaProfiles::createFrontCamcorderHighProfile()
 {
     LOGE("chenhb: createDefaultCamcorderBackProfile");
     MediaProfiles::VideoCodec *videoCodec =
-        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 360000, 352, 288, 20);
+        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 1024000, 352, 288, 20);
 
     AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
     CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;

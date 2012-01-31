@@ -2136,6 +2136,13 @@ void InputDispatcher::notifyMotion(nsecs_t eventTime, int32_t deviceId, int32_t 
                 pointerCoords[i].orientation);
     }
 #endif
+    if (action != AMOTION_EVENT_ACTION_MOVE) {
+        LOGD("notifyMotion , deviceId=0x%x, policyFlags=0x%x, "
+                "action=0x%x, flags=0x%x, metaState=0x%x, edgeFlags=0x%x, "
+               "xPrecision=%f, yPrecision=%f",
+            deviceId,  policyFlags, action, flags, metaState, edgeFlags,
+            xPrecision, yPrecision);
+    }
     if (! validateMotionEvent(action, pointerCount, pointerIds)) {
         return;
     }

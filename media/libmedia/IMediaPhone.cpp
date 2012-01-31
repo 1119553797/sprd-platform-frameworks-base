@@ -48,7 +48,8 @@ enum {
     STOP_UPLINK,
     START_DOWNLINK,
     STOP_DOWNLINK,
-    SET_CAMERA_PARAM
+    SET_CAMERA_PARAM,
+    GET_CAMERA_PARAM
 };
 
 class BpMediaPhone: public BpInterface<IMediaPhone>
@@ -275,6 +276,18 @@ public:
         remote()->transact(SET_CAMERA_PARAM, data, &reply);
         return reply.readInt32();
     }
+	
+    status_t getCameraParam(const char *key, int* value)
+    {
+        LOGV("getCameraParam()");
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPhone::getInterfaceDescriptor());
+        data.writeCString(key);
+        remote()->transact(GET_CAMERA_PARAM, data, &reply);
+	status_t retVal = reply.readInt32();
+	*value = reply.readInt32();
+        return retVal;
+    }
 };
 
 IMPLEMENT_META_INTERFACE(MediaPhone, "android.media.IMediaPhone");
@@ -423,9 +436,17 @@ status_t BnMediaPhone::onTransact(
             return NO_ERROR;
         } break;
         case SET_CAMERA_PARAM: {
-            LOGV("STOP_DOWNLINK");
+            LOGV("SET_CAMERA_PARAM");
             CHECK_INTERFACE(IMediaPhone, data, reply);
             reply->writeInt32(setCameraParam(data.readCString(), data.readInt32()));
+            return NO_ERROR;
+        } break;
+        case GET_CAMERA_PARAM: {
+            LOGV("GET_CAMERA_PARAM");
+            CHECK_INTERFACE(IMediaPhone, data, reply);
+	    int value = -1;
+            reply->writeInt32(getCameraParam(data.readCString(), &value));
+            reply->writeInt32(value);
             return NO_ERROR;
         } break;
         default:

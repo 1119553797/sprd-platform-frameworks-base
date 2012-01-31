@@ -395,6 +395,8 @@ public:
     // Auto-focus mode. Applications should call
     // CameraHardwareInterface.autoFocus to start the focus in this mode.
     static const char FOCUS_MODE_AUTO[];
+    //wxz20120118: and the FOCUS_MODE_AUTO_MULTI for the multiy zones of auto focus.
+    static const char FOCUS_MODE_AUTO_MULTI[];	
     // Focus is set at infinity. Applications should not call
     // CameraHardwareInterface.autoFocus in this mode.
     static const char FOCUS_MODE_INFINITY[];

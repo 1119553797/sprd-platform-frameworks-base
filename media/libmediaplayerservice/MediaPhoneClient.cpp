@@ -475,6 +475,25 @@ status_t MediaPhoneClient::setCameraParam(const char *key, int value)
     return OK;
 }
 
+status_t MediaPhoneClient::getCameraParam(const char *key, int* value)
+{
+    LOGV("getCameraParam, key: %s", key);
+	
+	if (mCamera == NULL){
+		LOGE("camera is NULL");
+        return NO_INIT;
+	}
+	
+    int64_t token = IPCThreadState::self()->clearCallingIdentity();
+	
+    // Set the actual video recording frame size
+    CameraParameters params(mCamera->getParameters());
+    *value = atoi(params.get(key));
+	LOGV("getCameraParam, key: %s, value: %d", key, *value);
+    IPCThreadState::self()->restoreCallingIdentity(token);
+    return OK;
+}
+
 // TODO: Find real cause of Audio/Video delay in PV framework and remove this workaround
 /* static */ int MediaPhoneClient::AudioOutput::mMinBufferCount = 4;
 /* static */ bool MediaPhoneClient::AudioOutput::mIsOnEmulator = false;

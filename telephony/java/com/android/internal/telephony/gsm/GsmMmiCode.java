@@ -106,6 +106,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
     static final int EVENT_USSD_CANCEL_COMPLETE = 7;
     static final int EVENT_QUERY_LI_COMPLETE    = 8;
     static final int EVENT_QUERY_CLIP_COMPLETE  = 9;
+    static final int EVENT_QUERY_CW_COMPLETE    = 10;
 
     //***** Instance Variables
 
@@ -745,7 +746,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                             obtainMessage(EVENT_SET_COMPLETE, this));
                 } else if (isInterrogate()) {
                     phone.mCM.queryCallWaiting(serviceClass,
-                            obtainMessage(EVENT_QUERY_COMPLETE, this));
+                            obtainMessage(EVENT_QUERY_CW_COMPLETE, this));
                 } else {
                     throw new RuntimeException ("Invalid or Unsupported MMI Code");
                 }
@@ -913,6 +914,11 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             case EVENT_QUERY_CLIP_COMPLETE:
                 ar = (AsyncResult) (msg.obj);
                 onQueryClipComplete(ar);
+            break;
+
+            case EVENT_QUERY_CW_COMPLETE:
+                ar = (AsyncResult) (msg.obj);
+                onQueryCwComplete(ar);
             break;
 
             case EVENT_USSD_COMPLETE:
@@ -1392,26 +1398,62 @@ public final class GsmMmiCode extends Handler implements MmiCode {
     }
 
     private void
+    onQueryCwComplete(AsyncResult ar) {
+        StringBuilder sb = new StringBuilder(getScString());
+        sb.append("\n");
+
+        if (ar.exception != null) {
+            state = State.FAILED;
+            sb.append(context.getText(com.android.internal.R.string.mmiError));
+        } else {
+            CallWaitingInfo infos[];
+
+            infos = (CallWaitingInfo[]) ar.result;
+
+            if (infos.length == 0) {
+                // Assume the default is not active
+                sb.append(context.getText(com.android.internal.R.string.serviceDisabled));
+            } else {
+                if (infos[0].status == 0) {
+                    sb.append(context.getText(com.android.internal.R.string.serviceDisabled));
+                } else {
+                    sb.append(context.getText(com.android.internal.R.string.serviceEnabledFor));
+                    for (int i = 0, s = infos.length; i < s ; i++) {
+                        for (int classMask = 1
+                            ; classMask <= SERVICE_CLASS_MAX
+                            ; classMask <<= 1
+                        ) {
+                            if ((classMask & infos[i].serviceClass) != 0) {
+                                sb.append("\n");
+                                sb.append(serviceClassToCFString(classMask & infos[i].serviceClass));
+                            }
+                        }
+                    }
+                }
+            }
+
+            state = State.COMPLETE;
+        }
+
+        message = sb;
+        phone.onMMIDone(this);
+    }
+
+
+    private void
     onQueryComplete(AsyncResult ar) {
         StringBuilder sb = new StringBuilder(getScString());
         sb.append("\n");
 
         if (ar.exception != null) {
             state = State.FAILED;
-            if (isServiceCodeCallBarring(sc) || sc.equals(SC_WAIT)) {
-                sb.append(context.getText(com.android.internal.R.string.RequestPending));
-            } else {
-                sb.append(context.getText(com.android.internal.R.string.mmiError));
-            }
+            sb.append(context.getText(com.android.internal.R.string.mmiError));
         } else {
             int[] ints = (int[])ar.result;
 
             if (ints.length != 0) {
                 if (ints[0] == 0) {
                     sb.append(context.getText(com.android.internal.R.string.serviceDisabled));
-                } else if (sc.equals(SC_WAIT)) {
-                    // Call Waiting includes additional data in the response.
-                    sb.append(createQueryCallWaitingResultMessage(ints[1]));
                 } else if (isServiceCodeCallBarring(sc)) {
                     // ints[0] for Call Barring is a bit vector of services
                     sb.append(createQueryCallBarringResultMessage(ints[1]));

@@ -1394,6 +1394,18 @@
                 android:excludeFromRecents="true">
         </activity>
 
+        <activity android:name="com.android.server.ShowStorage"
+                android:configChanges="orientation|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:excludeFromRecents="false">
+        </activity>
+
+        <activity android:name="com.android.server.AppManage"
+                android:configChanges="orientation|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:excludeFromRecents="false">
+        </activity>
+
         <service android:name="com.android.server.LoadAverageService"
                 android:exported="true" />
 

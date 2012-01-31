@@ -483,13 +483,13 @@ success:
 			//LOGV("VideoPhoneSource::read find I vop");
 			pMediaBuffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);
 			// report i-frame to modem		
-			int vt_pipe = -1;
+			/*int vt_pipe = -1;
 			if (vt_pipe < 0) vt_pipe = open("/dev/pipe/ril.vt.2", O_RDWR);
 			if (vt_pipe > 0) {
 				ssize_t size = ::write(vt_pipe, "0", 2);
 				LOGV("write vt_pipe, size: %d", size);
 				close(vt_pipe);
-			}
+			}*/
 		}
 		if(m_nNum ==0)
 			pMediaBuffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);			

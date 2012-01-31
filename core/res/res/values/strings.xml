@@ -1526,7 +1526,7 @@
     <!-- Instructions telling the user that they entered the wrong pin while trying
          to unlock the keyguard.  Displayed in one line in a large font.  -->
     <string name="keyguard_password_wrong_pin_code">Incorrect PIN code!</string>
-
+    <string name="pinpuk_attempts">\nAttempts Remaining :</string>
     <!-- Instructions telling the user how to unlock the phone. -->
     <string name="keyguard_label_text">To unlock, press Menu then 0.</string>
 
@@ -2404,6 +2404,25 @@
     <!-- Shown when the users bandwidth is reduced because of excessive data use -->
     <string name="throttled_notification_title">Mobile data limit exceeded</string>
     <string name="throttled_notification_message">Touch to learn more about mobile data use</string>
+
+    <!-- Strings for ShowStorage Activity-->
+    <string name="Low_Memory_Alert">Phone storage space is going low. Please remove some data to ensure the stability of the phone.</string>
+    <string name="Low_Memory_Free">Free</string>
+    <string name="Low_Memory_Application">Applications</string>
+    <string name="Low_Memory_Mail">Mail</string>
+    <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+    <string name="Low_Memory_System">System</string>
+    <string name="Btn_Select_Clear">Select / Clear</string>
+
+    <!-- Strings for AppManage Activity -->
+    <string name="myAppTip">Select applications to handle</string>
+    <string name="myApp_Start_Btn">Start</string>
+    <string name="myApp_Move2Sd_ChkBox">MoveToSD</string>
+    <string name="myApp_ClearData_ChkBox">ClearData</string>
+    <string name="myApp_Uninstall_ChkBox">Uninstall</string>
+    <string name="myAppLoading">loading\u2026</string>
+    <string name="myAppProcessing">processing\u2026</string>
+
     <!--PUK Input Add start-->
     <string name="keyguard_password_enter_puk_code" >Enter PUK Code</string>
     <string name="keyguard_password_enter_new_pin_first_code" >Enter New PIN Code</string>

@@ -103,6 +103,7 @@ public class DatePicker extends FrameLayout {
 
         mDayPicker = (NumberPicker) findViewById(R.id.day);
         mDayPicker.setFormatter(NumberPicker.TWO_DIGIT_FORMATTER);
+		mDayPicker.setMaxLengthFilter(2);
         mDayPicker.addFilter(new InputFilter.LengthFilter(2));//add by wangxiaobin for CR135501 at 2011-11-17
         mDayPicker.setSpeed(100);
         mDayPicker.setOnChangeListener(new OnChangedListener() {
@@ -146,6 +147,7 @@ public class DatePicker extends FrameLayout {
         });
         mYearPicker = (NumberPicker) findViewById(R.id.year);
         mYearPicker.setSpeed(100);
+		mYearPicker.setMaxLengthFilter(4);
         mYearPicker.setOnChangeListener(new OnChangedListener() {
             public void onChanged(NumberPicker picker, int oldVal, int newVal) {
                 mYear = newVal;

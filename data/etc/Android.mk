@@ -17,28 +17,32 @@
 LOCAL_PATH := $(my-dir)
 
 ########################
+########################
+########################
+########################
+
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := platform.xml
+LOCAL_MODULE := handheld_core_hardware.xml 
 
-LOCAL_MODULE_TAGS := user
-
+LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := ETC
 
 # This will install the file in /system/etc/permissions
-#
+
 LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/permissions
 
 LOCAL_SRC_FILES := $(LOCAL_MODULE)
 
 include $(BUILD_PREBUILT)
-
-########################
-
-# Install the features available on this device.
 PRODUCT_COPY_FILES += \
 frameworks/base/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
+frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
+frameworks/base/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
+frameworks/base/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
 frameworks/base/data/etc/android.hardware.touchscreen.xml:system/etc/permissions/android.hardware.touchscreen.xml \
 frameworks/base/data/etc/android.hardware.touchscreen.multitouch.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.xml \
-frameworks/base/data/etc/platform.xml:system/etc/permissions/platform.xml
-
+frameworks/base/data/etc/platform.xml:system/etc/permissions/platform.xml \
+frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml

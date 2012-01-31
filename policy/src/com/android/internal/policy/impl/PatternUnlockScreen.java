@@ -253,12 +253,44 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         mCarrier.setSelected(true);
         mCarrier.setTextColor(0xffffffff);
 
-        // until we get an update...
-        mCarrier.setText(
-                LockScreen.getCarrierString(
+
+         // until we get an update...
+         //Modify start on 2012-01-16 for 8930/8932
+         //mCarrier.setText(
+         //LockScreen.getCarrierString(
+         //mUpdateMonitor.getTelephonyPlmn(),
+         //mUpdateMonitor.getTelephonySpn()));
+         mCarrier.setText(
+                this.getSprdCarrierString(
                         mUpdateMonitor.getTelephonyPlmn(),
                         mUpdateMonitor.getTelephonySpn()));
+        //Modify start on 2012-01-16 for 8930/8932
     }
+
+ 
+    //Add start on 2012-01-16 for 8930/8932
+    public  CharSequence getSprdCarrierString(CharSequence telephonyPlmn, CharSequence telephonySpn) {
+        CharSequence radioType = mUpdateMonitor.getRadioType();
+        if (telephonyPlmn != null && telephonySpn == null) {
+            if(radioType != null){
+                telephonyPlmn = telephonyPlmn.toString() + " " + radioType;
+            }
+            return telephonyPlmn;
+        } else if (telephonyPlmn != null && telephonySpn != null) {
+            if(radioType != null){
+                telephonyPlmn = telephonyPlmn.toString() + radioType;
+            }
+             return telephonyPlmn;
+        } else if (telephonyPlmn == null && telephonySpn != null) {
+            if(radioType != null){
+                telephonySpn = telephonySpn.toString() + " " + radioType;
+            }
+            return telephonySpn;
+        } else {
+            return "";
+        }
+    }
+    //Add end on 2012-01-16 for 8930/8932
 
     private void refreshEmergencyButtonText() {
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyAlone);
@@ -384,7 +416,10 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     /** {@inheritDoc} */
     public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
-        mCarrier.setText(LockScreen.getCarrierString(plmn, spn));
+        //Modify start 2012-01-16 for 8930/8932
+        //mCarrier.setText(LockScreen.getCarrierString(plmn, spn));
+        mCarrier.setText(this.getSprdCarrierString(plmn,spn));
+        //End start 2012-01-16 for 8930/8932
     }
 
     /** {@inheritDoc} */

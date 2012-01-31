@@ -267,10 +267,11 @@ public final class ShutdownThread extends Thread {
 
         try {
             radioOff = phone == null || !phone.isRadioOn();
-            if (!radioOff) {
+            //if (!radioOff) {
                 Log.w(TAG, "Turning off radio...");
-                phone.setRadio(false);
-            }
+                android.os.SystemProperties.set("sys.power.off", "true");
+		phone.setRadio(false);
+            //}
         } catch (RemoteException ex) {
             Log.e(TAG, "RemoteException during radio shutdown", ex);
             radioOff = true;

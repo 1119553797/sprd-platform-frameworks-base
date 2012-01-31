@@ -30,7 +30,7 @@ namespace android {
 // Maximum cumulated timeout milliseconds before restarting audioflinger thread
 #define MAX_STARTUP_TIMEOUT_MS  3000    // Longer timeout period at startup to cope with A2DP init time
 #define MAX_RUN_TIMEOUT_MS      1000
-#define WAIT_PERIOD_MS          50
+#define WAIT_PERIOD_MS          10
 
 #define CBLK_UNDERRUN_MSK       0x0001
 #define CBLK_UNDERRUN_ON        0x0001  // underrun (out) or overrrun (in) indication

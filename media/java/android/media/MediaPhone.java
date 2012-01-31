@@ -134,7 +134,7 @@ public class MediaPhone extends Handler
          * It's easier to create it here than in C++.
          */
         native_setup(new WeakReference<MediaPhone>(this));
-
+/*
 	mThread = new Thread(new Runnable() {
 			public void run() {
         			Log.d(TAG, "mThread E");
@@ -160,7 +160,7 @@ public class MediaPhone extends Handler
         			Log.d(TAG, "mThread X");
 			}
 		});
-		mThread.start();
+		mThread.start();*/
     }
 
     /**
@@ -643,6 +643,8 @@ public class MediaPhone extends Handler
 	public native void setEncodeType(int type);
 
 	public native void setCameraParam(String key, int value);
+	
+	public native int getCameraParam(String key);
 
     private static native final void native_init();
     private native final void native_setup(Object mediaphone_this);

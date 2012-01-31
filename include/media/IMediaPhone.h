@@ -53,6 +53,7 @@ public:
     virtual status_t    startDownLink() = 0;
     virtual status_t    stopDownLink() = 0;
     virtual status_t    setCameraParam(const char *key, int value) = 0;
+    virtual status_t    getCameraParam(const char *key, int* value) = 0;
 };
 
 // ----------------------------------------------------------------------------

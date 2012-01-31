@@ -27,11 +27,8 @@ import android.util.Slog;
 import android.view.View;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.TimeZone;
-
-import com.android.internal.R;
+import com.android.internal.telephony.IccCard;
+import com.android.internal.telephony.TelephonyIntents;
 
 /**
  * This widget display an analogic clock with two hands for hours and
@@ -39,6 +36,8 @@ import com.android.internal.R;
  */
 public class CarrierLabel extends TextView {
     private boolean mAttached;
+    boolean  mSimMissed = false;
+    boolean  mSimBlocked = false;
 
     public CarrierLabel(Context context) {
         this(context, null);
@@ -61,6 +60,7 @@ public class CarrierLabel extends TextView {
             mAttached = true;
             IntentFilter filter = new IntentFilter();
             filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION);
+            filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
             getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
         }
     }
@@ -84,8 +84,44 @@ public class CarrierLabel extends TextView {
                         intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN, false),
                         intent.getStringExtra(Telephony.Intents.EXTRA_PLMN));
             }
+
+           //Added  start on 2012-01-17
+	    else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
+		String stateExtra = intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE);
+		Log.i("CarrierLabel", "Receive "+intent.getAction() + " IccCard is "+stateExtra);
+            	if (IccCard.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
+            		mSimMissed = true;
+            		updateForSimCardChanged(com.android.internal.R.string.lockscreen_missing_sim_message_short);
+            	}
+            	else if (IccCard.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)){
+            		mSimBlocked = true;
+            		updateForSimCardChanged(com.android.internal.R.string.lockscreen_sim_locked_message);
+            		
+            	}
+            	else if (IccCard.INTENT_VALUE_ICC_BLOCKED.equals(stateExtra)) {
+            		updateForSimCardChanged(com.android.internal.R.string.lockscreen_blocked_sim_message_short);
+            		
+            	}
+            	else if (IccCard.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
+            		mSimMissed = false;
+           		mSimBlocked = false;
+            	}
+            	
+            	
+            }
+            //Added  end on 2012-01-17
+           
         }
+
+       
     };
+
+
+    void updateForSimCardChanged(int message){
+	 setVisibility(View.VISIBLE);
+	 setText(message);
+    }
+	
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
         if (false) {
@@ -99,24 +135,65 @@ public class CarrierLabel extends TextView {
                    + " showPlmn=" + showPlmn + " plmn=" + plmn);
         }
 
-        StringBuilder str = new StringBuilder();
-        boolean something = false;
-        if (showPlmn && plmn != null) {
-            str.append(plmn);
-            something = true;
-        }
-        if (showSpn && spn != null) {
-            if (something) {
-                str.append('\n');
-            }
-            str.append(spn);
-            something = true;
-        }
-        if (something) {
-            setText(str.toString());
-        } else {
-            setText(com.android.internal.R.string.lockscreen_carrier_default);
-        }
+     	        // Modify start on 2012-01-16 for 8930/8932
+		// StringBuilder str = new StringBuilder();
+		// boolean something = false;
+		// if (showPlmn && plmn != null) {
+		// str.append(plmn);
+		// something = true;
+		// }
+		// if (showSpn && spn != null) {
+		// if (something) {
+		// str.append('\n');
+		// }
+		// str.append(spn);
+		// something = true;
+		// }
+		// if (something) {
+		// setText(str.toString());
+		// } else {
+		// setText(com.android.internal.R.string.lockscreen_carrier_default);
+		//
+		
+		if (!showSpn && !showPlmn) {
+			setText(com.android.internal.R.string.lockscreen_carrier_default);
+		} 
+		if(showSpn && !showPlmn){
+			if(spn != null){
+				setText(spn);
+			}
+			else{
+				setText(com.android.internal.R.string.lockscreen_carrier_default);
+			}
+		}
+		if(!showSpn && showPlmn){
+			if(plmn != null){
+				setText(plmn);
+			}
+			else{
+				setText(com.android.internal.R.string.lockscreen_carrier_default);
+			}
+		}
+		if(showSpn && showPlmn){
+			if(spn != null && plmn != null){
+				setText(plmn);
+			}
+			if(spn == null && plmn != null){
+				setText(plmn);
+			}
+			if(spn == null && plmn == null){
+				setText(com.android.internal.R.string.lockscreen_carrier_default);
+			}
+		}
+		if(mSimMissed){
+	        	setVisibility(View.VISIBLE);
+	        	setText(com.android.internal.R.string.lockscreen_missing_sim_message_short);
+	        }
+	        if(mSimBlocked){
+	        	setVisibility(View.VISIBLE);
+	        	setText(com.android.internal.R.string.lockscreen_blocked_sim_message_short);
+	        }
+      // Modify end on 2012-01-16 for 8930/8932
     }
 
     

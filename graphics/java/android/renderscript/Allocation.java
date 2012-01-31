@@ -346,7 +346,7 @@ public class Allocation extends BaseObj {
             }
             return new Allocation(allocationId, rs, null);
         } catch (Exception e) {
-            // Ignore
+            Log.e("Allocation","create Allocation is error:" + e + " id:" + id);
         } finally {
             if (is != null) {
                 try {

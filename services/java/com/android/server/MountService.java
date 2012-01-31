@@ -824,8 +824,8 @@ class MountService extends IMountService.Stub
                             Environment.MEDIA_NOFS) && !vs.equals(
                                     Environment.MEDIA_UNMOUNTABLE) && !getUmsEnabling()) {
                 if (DEBUG_EVENTS) Slog.i(TAG, "updating volume state for media bad removal nofs and unmountable");
-                //updatePublicVolumeState(path, Environment.MEDIA_UNMOUNTED);
-                updatePublicVolumeState(path, Environment.MEDIA_IDLE);
+                updatePublicVolumeState(path, Environment.MEDIA_UNMOUNTED);//this google code, 
+                //updatePublicVolumeState(path, Environment.MEDIA_IDLE);//who did this???
                 in = new Intent(Intent.ACTION_MEDIA_UNMOUNTED, Uri.parse("file://" + path));
             }
         } else if (newState == VolumeState.Pending) {

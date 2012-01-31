@@ -232,16 +232,28 @@ public class NumberPicker extends LinearLayout {
         super.setEnabled(enabled);
         mIncrementButton.setEnabled(enabled);
         mDecrementButton.setEnabled(enabled);
-        mText.setEnabled(enabled);
-    }
+		mText.setEnabled(enabled);
+	}
 
-    /**
-     * Set the callback that indicates the number has been adjusted by the user.
-     * @param listener the callback, should not be null.
-     */
-    public void setOnChangeListener(OnChangedListener listener) {
-        mListener = listener;
-    }
+	/**
+
+	  set max length
+
+	 **/
+
+	public void setMaxLengthFilter(int length){
+		mText.setFilters(new InputFilter[] {new NumberPickerInputFilter(),new InputFilter.LengthFilter(length)});
+	}
+
+
+
+	/**
+	 * Set the callback that indicates the number has been adjusted by the user.
+	 * @param listener the callback, should not be null.
+	 */
+	public void setOnChangeListener(OnChangedListener listener) {
+		mListener = listener;
+	}
 
     /**
      * Set the formatter that will be used to format the number for presentation

@@ -339,17 +339,6 @@ public final class Settings {
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_APPLICATION_SPRD_USB_SETTINGS =
             "android.settings.APPLICATION_SPRD_USB_SETTINGS";  //Add by liguxiang 07-08-11 for USB settings function
-    
-    /**
-     * Activity Action: Show settings to allow configuration of quick launch shortcuts.
-     * <p>
-     * In some cases, a matching Activity may not exist, so ensure you
-     * safeguard against this.
-     * <p>
-     * Input: Nothing.
-     * <p>
-     * Output: Nothing.
-     */
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_QUICK_LAUNCH_SETTINGS =
             "android.settings.QUICK_LAUNCH_SETTINGS";
@@ -749,13 +738,11 @@ public final class Settings {
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_COUNT);
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_DELAY_MS);
             MOVED_TO_SECURE.add(Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS);
-            //add by liguxiang 08-29-11 for spreadtrum usb settings <udcpower && gser && vser> begin
             MOVED_TO_SECURE.add(Secure.CHARGE_ONLY);  
             MOVED_TO_SECURE.add(Secure.RNDIS_ENABLED);
             MOVED_TO_SECURE.add(Secure.UMS_MOUNTED);  
             MOVED_TO_SECURE.add(Secure.MODEM_ENABLED);
             MOVED_TO_SECURE.add(Secure.REMEMBER_USB_CHOICE);  
-            //add by liguxiang 08-29-11 for spreadtrum usb settings <udcpower && gser && vser> end
         }
 
         /**
@@ -1123,8 +1110,7 @@ public final class Settings {
         public static final String RADIO_CELL = "cell";
 
         /**
-         * Constant for use in AIRPLANE_MODE_RADIOS to specify WiMAX radio.
-         * @hide
+         * Constant for use in AIRPLANE_MODE_RADIOS to specify Fm radio.
          */
         public static final String RADIO_WIMAX = "wimax";
 
@@ -1391,6 +1377,7 @@ public final class Settings {
          */
         public static final String VOLUME_MUSIC = "volume_music";
 
+        public static final String VOLUME_FM = "volume_fm";
         /**
          * Alarm volume. This is used internally, changing this
          * value will not change the volume. See AudioManager.
@@ -1436,7 +1423,6 @@ public final class Settings {
          */
         public static final String VIBRATE_IN_SILENT = "vibrate_in_silent";
 
-        
      // ************Modify by luning at01-07-01 begin************
         public static final String PHONE_PROFILES_MODE = "phone_profiles_mode";
         public static final String PROFILES_LAST_MODE = "profiles_last_mode";
@@ -1455,23 +1441,16 @@ public final class Settings {
          * @hide
          */
         public static final String SMS_VALIDITY = "sms_validity";
-      //====== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ======
-        
-        
-        
-        
-        //add by niezhong for cellular->WLAN 08-20-11 NEWMS00110041 start
         public static final String WIFI_CELLULAR_WLAN = "wifi_cellular_wlan";
         public static final int CELLULAR_WALN_AUTO = 0;
         public static final int CELLULAR_WALN_MANUAL = 1;
         public static final int CELLULAR_WALN_ALWAYS = 2;
-        //add by niezhong for cellular->WLAN 08-20-11 NEWMS00110041 end
         /**
          * The mapping of stream type (integer) to its setting.
          */
         public static final String[] VOLUME_SETTINGS = {
             VOLUME_VOICE, VOLUME_SYSTEM, VOLUME_RING, VOLUME_MUSIC,
-            VOLUME_ALARM, VOLUME_NOTIFICATION, VOLUME_BLUETOOTH_SCO
+            VOLUME_ALARM, VOLUME_NOTIFICATION, VOLUME_BLUETOOTH_SCO,VOLUME_FM
         };
 
         /**
@@ -1873,9 +1852,7 @@ public final class Settings {
             LOCKSCREEN_SOUNDS_ENABLED,
             SHOW_WEB_SUGGESTIONS,
             NOTIFICATION_LIGHT_PULSE,
-            //add by niezhong for wifi proxy settings(NEWMS00107901) start
             WIFI_CELLULAR_WLAN,
-            //add by niezhong for wifi proxy settings(NEWMS00107901) end
             SIP_CALL_OPTIONS,
             SIP_RECEIVE_CALLS,
         };
@@ -1888,7 +1865,7 @@ public final class Settings {
          */
         @Deprecated
         public static final String ADB_ENABLED = Secure.ADB_ENABLED;
-        
+
         /**
          * @deprecated Use {@link android.provider.Settings.Secure#ANDROID_ID} instead
          */
@@ -2006,7 +1983,6 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON =
             Secure.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON;
-        
         @Deprecated
         public static final String WIFI_AUTO_CONNECT = Secure.WIFI_AUTO_CONNECT;  //add by liguxiang 08-17-11 for wifi autoconnect control
 
@@ -2377,11 +2353,7 @@ public final class Settings {
          * Whether ADB is enabled.
          */
         public static final String ADB_ENABLED = "adb_enabled";
-        
-        //add by liguxiang 08-29-11 for spreadtrum usb settings <udcpower && gser && vser> begin
-        /**
-         * Whether CHARGE_ONLY is enabled.
-         */
+
         public static final String CHARGE_ONLY = "charge_only"; 
         
         /**
@@ -2403,8 +2375,6 @@ public final class Settings {
          * Whether remember choice for usb.
          */
         public static final String REMEMBER_USB_CHOICE = "remember_usb_choice"; 
-        //add by liguxiang 08-29-11 for spreadtrum usb settings <udcpower && gser && vser> end
-        
         /**
          * Setting to allow mock locations and location provider status to be injected into the
          * LocationManager service for testing purposes during application development.  These
@@ -2441,6 +2411,14 @@ public final class Settings {
          */
         public static final String getBluetoothA2dpSinkPriorityKey(String address) {
             return ("bluetooth_a2dp_sink_priority_" + address.toUpperCase());
+        }
+
+        /**
+         * Get the key that retrieves a bluetooth HID Device's priority.
+         * @hide
+         */
+        public static final String getBluetoothHidDevicePriorityKey(String address) {
+            return ("bluetooth_hid_device_priority_" + address.toUpperCase());
         }
 
         /**
@@ -2653,7 +2631,6 @@ public final class Settings {
          */
         public static final String WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON =
                 "wifi_networks_available_notification_on";
-        
         public static final String WIFI_AUTO_CONNECT = "wifi_auto_connect";  //add by liguxiang 08-17-11 for wifi autoconnect control
 
         /**
@@ -2662,12 +2639,6 @@ public final class Settings {
          */
         public static final String WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY =
                 "wifi_networks_available_repeat_delay";
-
-        /**
-         * Whether to nofity the user of WiMAX network.
-         * If WiMAX is connected or disconnected, we will put this notification up.
-         * @hide
-         */
         public static final String WIMAX_NETWORKS_AVAILABLE_NOTIFICATION_ON =
                 "wimax_networks_available_notification_on";
 
@@ -2697,6 +2668,27 @@ public final class Settings {
          * @hide
          */
         public static final String WIFI_SAVED_STATE = "wifi_saved_state";
+
+        /**
+         * AP SSID
+         *
+         * @hide
+         */
+        public static final String WIFI_AP_SSID = "wifi_ap_ssid";
+
+        /**
+         * AP security
+         *
+         * @hide
+         */
+        public static final String WIFI_AP_SECURITY = "wifi_ap_security";
+
+        /**
+         * AP passphrase
+         *
+         * @hide
+         */
+        public static final String WIFI_AP_PASSWD = "wifi_ap_passwd";
 
         /**
          * The acceptable packet loss percentage (range 0 - 100) before trying
@@ -2785,11 +2777,6 @@ public final class Settings {
          */
         public static final String WIFI_MOBILE_DATA_TRANSITION_WAKELOCK_TIMEOUT_MS =
             "wifi_mobile_data_transition_wakelock_timeout_ms";
-
-        /**
-         * Whether the Wimax should be on.  Only the WiMAX service should touch this.
-         * @hide
-         */
         public static final String WIMAX_ON = "wimax_on";
 
         /**
@@ -3859,7 +3846,6 @@ public final class Settings {
     public static String getGTalkDeviceId(long androidId) {
         return "android-" + Long.toHexString(androidId);
     }
-    
     //add by niezhong for wifi proxy settings(NEWMS00107901) start
     public static final class Proxy implements BaseColumns {
     	public static final Uri CONTENT_URI =

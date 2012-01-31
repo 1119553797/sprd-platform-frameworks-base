@@ -133,10 +133,18 @@ public class StorageNotification extends StorageEventListener {
                 "Media {%s} state changed from {%s} -> {%s}", path, oldState, newState));
         //add by liguxiang 09-07-11 for spreadtrum usb settings begin
         if(oldState != null && newState != null){
-                if((oldState.equals(Environment.MEDIA_CHECKING) && newState.equals(Environment.MEDIA_MOUNTED))
-                                || (oldState.equals(Environment.MEDIA_UNMOUNTED) && newState.equals(Environment.MEDIA_SHARED))){
+                //if((oldState.equals(Environment.MEDIA_CHECKING) && newState.equals(Environment.MEDIA_MOUNTED))
+                //                || (oldState.equals(Environment.MEDIA_UNMOUNTED) && newState.equals(Environment.MEDIA_SHARED))){
+                //Log.d(TAG,"send usbIntent");
+                //Intent usbIntent = new Intent(Intent.ACTION_SPRD_UMS_OPERATOR);
+                //mContext.sendBroadcast(usbIntent);
+                //}
+            if (oldState.equals(Environment.MEDIA_UNMOUNTED) && newState.equals(Environment.MEDIA_SHARED)) {
                 Log.d(TAG,"send usbIntent");
-                Intent usbIntent = new Intent(Intent.ACTION_SPRD_UMS_OPERATOR);
+                Intent usbIntent = new Intent(Intent.ACTION_SPRD_UMS_SHARED);
+                mContext.sendBroadcast(usbIntent);
+            } else if (oldState.equals(Environment.MEDIA_CHECKING) && newState.equals(Environment.MEDIA_MOUNTED)) {
+                Intent usbIntent = new Intent(Intent.ACTION_SPRD_UMS_UNSHARED);
                 mContext.sendBroadcast(usbIntent);
             }
         }
