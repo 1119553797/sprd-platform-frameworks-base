@@ -42,9 +42,10 @@ public:
         ALARM            = 4,
         NOTIFICATION     = 5,
         BLUETOOTH_SCO    = 6,
-        ENFORCED_AUDIBLE = 7, // Sounds that cannot be muted by user and must be routed to speaker
+        FM               = 7,
         DTMF             = 8,
         TTS              = 9,
+        ENFORCED_AUDIBLE = 10, // Sounds that cannot be muted by user and must be routed to speaker
         NUM_STREAM_TYPES
     };
 
@@ -268,7 +269,7 @@ public:
         DEVICE_OUT_FM_SPEAKER = 0x1000,
         DEVICE_OUT_DEFAULT = 0x8000,
         DEVICE_OUT_ALL = (DEVICE_OUT_EARPIECE | DEVICE_OUT_SPEAKER | DEVICE_OUT_WIRED_HEADSET |
-                DEVICE_OUT_WIRED_HEADPHONE | DEVICE_OUT_BLUETOOTH_SCO | DEVICE_OUT_BLUETOOTH_SCO_HEADSET |
+                DEVICE_OUT_WIRED_HEADPHONE | DEVICE_OUT_FM_HEADSET | DEVICE_OUT_FM_SPEAKER | DEVICE_OUT_BLUETOOTH_SCO | DEVICE_OUT_BLUETOOTH_SCO_HEADSET |
                 DEVICE_OUT_BLUETOOTH_SCO_CARKIT | DEVICE_OUT_BLUETOOTH_A2DP | DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
                 DEVICE_OUT_BLUETOOTH_A2DP_SPEAKER | DEVICE_OUT_AUX_DIGITAL | DEVICE_OUT_DEFAULT | DEVICE_OUT_FM_HEADSET |
                 DEVICE_OUT_FM_SPEAKER),

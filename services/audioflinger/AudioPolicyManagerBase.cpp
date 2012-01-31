@@ -20,6 +20,8 @@
 #include <hardware_legacy/AudioPolicyManagerBase.h>
 #include <media/mediarecorder.h>
 
+#define WITH_FM
+
 namespace android {
 
 
@@ -34,6 +36,26 @@ status_t AudioPolicyManagerBase::setDeviceConnectionState(AudioSystem::audio_dev
 {
 
     LOGV("setDeviceConnectionState() device: %x, state %d, address %s", device, state, device_address);
+
+    bool force4fm = false;
+#ifdef WITH_FM
+    if(device == AudioSystem::DEVICE_OUT_FM_HEADSET ||
+       device == AudioSystem::DEVICE_OUT_FM_SPEAKER) {
+       ssize_t index = mOutputs.indexOfKey(mHardwareOutput);
+       if (index < 0) {
+           LOGE("startOutput() unknow output %d", mHardwareOutput);
+           return BAD_VALUE;
+       }
+       AudioOutputDescriptor *outputDesc = mOutputs.valueAt(index);
+
+       if(state == AudioSystem::DEVICE_STATE_AVAILABLE) {
+           outputDesc->changeRefCount(AudioSystem::FM, 1);
+       } else {
+           outputDesc->changeRefCount(AudioSystem::FM, -1);
+           force4fm = true;
+       }
+    }
+#endif
 
     // connect/disconnect only 1 device at a time
     if (AudioSystem::popCount(device) != 1) return BAD_VALUE;
@@ -81,6 +103,12 @@ status_t AudioPolicyManagerBase::setDeviceConnectionState(AudioSystem::audio_dev
                     LOGV("setDeviceConnectionState() BT SCO  device, address %s", device_address);
                     // keep track of SCO device address
                     mScoDeviceAddress = String8(device_address, MAX_DEVICE_ADDRESS_LEN);
+#ifdef WITH_A2DP
+                    if (mA2dpOutput != 0 &&
+                        mPhoneState != AudioSystem::MODE_NORMAL) {
+                        mpClientInterface->suspendOutput(mA2dpOutput);
+                    }
+#endif
                 }
             }
             break;
@@ -109,6 +137,12 @@ status_t AudioPolicyManagerBase::setDeviceConnectionState(AudioSystem::audio_dev
             {
                 if (AudioSystem::isBluetoothScoDevice(device)) {
                     mScoDeviceAddress = "";
+#ifdef WITH_A2DP
+                    if (mA2dpOutput != 0 &&
+                        mPhoneState != AudioSystem::MODE_NORMAL) {
+                        mpClientInterface->restoreOutput(mA2dpOutput);
+                    }
+#endif
                 }
             }
             } break;
@@ -129,7 +163,7 @@ status_t AudioPolicyManagerBase::setDeviceConnectionState(AudioSystem::audio_dev
         checkA2dpSuspend();
 #endif
         updateDeviceForStrategy();
-        setOutputDevice(mHardwareOutput, newDevice);
+        setOutputDevice(mHardwareOutput, newDevice, force4fm);
 
         if (device == AudioSystem::DEVICE_OUT_WIRED_HEADSET) {
             device = AudioSystem::DEVICE_IN_WIRED_HEADSET;
@@ -1504,6 +1538,8 @@ uint32_t AudioPolicyManagerBase::getNewDevice(audio_io_handle_t output, bool fro
         device = getDeviceForStrategy(STRATEGY_SONIFICATION, fromCache);
     } else if (outputDesc->isUsedByStrategy(STRATEGY_MEDIA)) {
         device = getDeviceForStrategy(STRATEGY_MEDIA, fromCache);
+    } else if (outputDesc->isUsedByStrategy(STRATEGY_FM)) {
+        device = getDeviceForStrategy(STRATEGY_FM, fromCache);
     } else if (outputDesc->isUsedByStrategy(STRATEGY_DTMF)) {
         device = getDeviceForStrategy(STRATEGY_DTMF, fromCache);
     }
@@ -1538,6 +1574,8 @@ AudioPolicyManagerBase::routing_strategy AudioPolicyManagerBase::getStrategy(
     case AudioSystem::TTS:
     case AudioSystem::MUSIC:
         return STRATEGY_MEDIA;
+    case AudioSystem::FM:
+        return STRATEGY_FM;
     }
 }
 
@@ -1665,6 +1703,39 @@ uint32_t AudioPolicyManagerBase::getDeviceForStrategy(routing_strategy strategy,
         if (device == 0) {
             LOGE("getDeviceForStrategy() speaker device not found");
         }
+        // Do not play media stream if in call and the requested device would change the hardware
+        // output routing
+        if (mPhoneState == AudioSystem::MODE_IN_CALL &&
+            !AudioSystem::isA2dpDevice((AudioSystem::audio_devices)device) &&
+            device != getDeviceForStrategy(STRATEGY_PHONE)) {
+            device = 0;
+            LOGV("getDeviceForStrategy() incompatible media and phone devices");
+        }
+		//CFW1 fix FM relate bug
+		if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
+			if(device&0x8){
+				device-=4;
+			}	
+			device |= AudioSystem::DEVICE_OUT_FM_HEADSET;
+		}
+	
+	    if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER){
+			if(device&0x8){
+				device-=4;
+			}	
+			device |= AudioSystem::DEVICE_OUT_FM_SPEAKER;
+	    }
+		
+        } break;
+
+    case STRATEGY_FM: {
+        if (device == 0) {
+            device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET;
+        }
+
+        if (device == 0) {
+            device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER;
+        }
         } break;
 
     default:
@@ -1715,10 +1786,13 @@ void AudioPolicyManagerBase::setOutputDevice(audio_io_handle_t output, uint32_t 
 
     outputDesc->mDevice = device;
     // mute media streams if both speaker and headset are selected
-    if (output == mHardwareOutput && AudioSystem::popCount(device) == 2) {
-        setStrategyMute(STRATEGY_MEDIA, true, output);
-        // wait for the PCM output buffers to empty before proceeding with the rest of the command
-        usleep(outputDesc->mLatency*2*1000);
+    // CFW fix bug 5856 by cpf
+	uint32_t tempDevice = (device & (~AudioSystem::DEVICE_OUT_FM_HEADSET)) & (~AudioSystem::DEVICE_OUT_FM_SPEAKER);
+	LOGV("tempdevices1 output %d device %x delayMs %d", output, tempDevice, delayMs);
+    if (output == mHardwareOutput && AudioSystem::popCount(tempDevice) == 2) {
+        	setStrategyMute(STRATEGY_MEDIA, true, output);
+        	// wait for the PCM output buffers to empty before proceeding with the rest of the command
+        	usleep(outputDesc->mLatency*2*1000);
     }
 
     // do the routing
@@ -1728,8 +1802,20 @@ void AudioPolicyManagerBase::setOutputDevice(audio_io_handle_t output, uint32_t 
     // update stream volumes according to new device
     applyStreamVolumes(output, device, delayMs);
 
-    // if changing from a combined headset + speaker route, unmute media streams
-    if (output == mHardwareOutput && AudioSystem::popCount(prevDevice) == 2) {
+#ifdef WITH_A2DP
+    // if disconnecting SCO device, restore A2DP output
+    if (AudioSystem::isBluetoothScoDevice((AudioSystem::audio_devices)prevDevice)) {
+         if (mA2dpOutput != 0) {
+             LOGV("restore A2DP output");
+             mpClientInterface->restoreOutput(mA2dpOutput);
+         }
+    }
+#endif
+    // if changing from a combined headset + speaker route, unmute media streams 
+    // CFW fix bug 5856 by cpf
+	tempDevice = (prevDevice & (~AudioSystem::DEVICE_OUT_FM_HEADSET)) & (~AudioSystem::DEVICE_OUT_FM_SPEAKER);
+	LOGV("tempdevices1 output %d device %x delayMs %d", output, tempDevice, delayMs);
+    if (output == mHardwareOutput && AudioSystem::popCount(tempDevice) == 2 ) {
         setStrategyMute(STRATEGY_MEDIA, false, output, delayMs);
     }
 }

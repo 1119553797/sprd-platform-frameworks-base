@@ -74,6 +74,7 @@
                 android:paddingRight="6dip"
                 android:drawablePadding="2dip"
                 android:singleLine="true"
+		android:maxLength="4096"
                 android:ellipsize="end"
                 android:selectAllOnFocus="true"
                 android:inputType="text|textAutoComplete"

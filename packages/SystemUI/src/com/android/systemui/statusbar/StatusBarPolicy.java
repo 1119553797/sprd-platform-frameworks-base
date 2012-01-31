@@ -1344,26 +1344,56 @@ public class StatusBarPolicy {
         // ************Modify by luning at 01-07-01 end************
 
         // ************Modify by luning at 01-07-01 begin************
-                String currMode = audioManager.getCurrProfilesMode(mContext);
-                boolean visible = !currMode.equals(Settings.System.PROFILES_MODE_GENERAL); //general icon invisible
-                int iconId = 0;
-                if(currMode .equals(Settings.System.PROFILES_MODE_SILENT))  //silent
-                {
-                    iconId = R.drawable.stat_sys_profiles_silent;
-                }
-                else if(currMode .equals(Settings.System.PROFILES_MODE_MEETING)) //meeting
-                {
-                    iconId = R.drawable.stat_sys_profiles_meeting;
-                }
-                else if(currMode .equals(Settings.System.PROFILES_MODE_OUTDOOR))  //outdoor
-                {
-                    iconId = R.drawable.stat_sys_profiles_outdoor;
-                }
-                else if(currMode .equals(Settings.System.PROFILES_MODE_INDOOR))  //indoor
-                {
-                    iconId = R.drawable.stat_sys_profiles_indoor;
-                }
+//                String currMode = audioManager.getCurrProfilesMode(mContext);
+//                boolean visible = !currMode.equals(Settings.System.PROFILES_MODE_GENERAL); //general icon invisible
+//                int iconId = 0;
+//                if(currMode .equals(Settings.System.PROFILES_MODE_SILENT))  //silent
+//                {
+//                    iconId = R.drawable.stat_sys_profiles_silent;
+//                }
+//                else if(currMode .equals(Settings.System.PROFILES_MODE_MEETING)) //meeting
+//                {
+//                    iconId = R.drawable.stat_sys_profiles_meeting;
+//                }
+//                else if(currMode .equals(Settings.System.PROFILES_MODE_OUTDOOR))  //outdoor
+//                {
+//                    iconId = R.drawable.stat_sys_profiles_outdoor;
+//                }
+//                else if(currMode .equals(Settings.System.PROFILES_MODE_INDOOR))  //indoor
+//                {
+//                    iconId = R.drawable.stat_sys_profiles_indoor;
+//                }
                 // ************Modify by luning at 01-07-01 end************
+
+        //Get ringerMode value
+        final int ringerMode = audioManager.getRingerMode();
+        boolean visible = ringerMode == AudioManager.RINGER_MODE_SILENT ||ringerMode == AudioManager.RINGER_MODE_VIBRATE
+                        || ringerMode == AudioManager.RINGER_MODE_NORMAL;
+        //Get the value of the vibration ring type
+        final int vibrate = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+        //Determine whether there ringtones
+        final boolean isNormal = ringerMode == AudioManager.RINGER_MODE_NORMAL;
+        //set iconId value
+        final int iconId;
+        if (vibrate != AudioManager.VIBRATE_SETTING_OFF) {
+            if (isNormal) {
+                iconId = R.drawable.stat_sys_profiles_outdoor;
+            }else{
+                iconId = R.drawable.stat_sys_profiles_meeting;
+            }
+
+        }else{
+            if (isNormal) {
+                iconId = 0;
+                // Modify start on 2011-12-12 for bug6618,6937
+                // In Normal Condition,Remove the voice icon don't show and
+                // taking the position
+                visible = false;
+                // Modify end on 2011-12-12 for bug6618,6937
+            }else{
+                iconId = R.drawable.stat_sys_profiles_silent;
+            }
+        }
 
         if (visible) {
             mService.setIcon("volume", iconId, 0);
