@@ -716,7 +716,7 @@ public class SearchDialog extends Dialog implements OnItemClickListener, OnItemS
             String inputText = mSearchAutoComplete.getText().toString();
             if(inputText.length()>=4096){
                 Toast toast = Toast.makeText(mActivityContext, com.android.internal.R.string.address_length, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 200, 500);
+                toast.setGravity(Gravity.CENTER_VERTICAL, 120, 300);
                 toast.show();
             }
             if (mSearchable.autoUrlDetect() && !mSearchAutoComplete.isPerformingCompletion()) {
