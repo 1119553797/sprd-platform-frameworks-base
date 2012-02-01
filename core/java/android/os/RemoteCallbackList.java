@@ -111,6 +111,16 @@ public class RemoteCallbackList<E extends IInterface> {
             }
             IBinder binder = callback.asBinder();
             try {
+                //BEGIN Added by liwd@spreadst.com
+                //Must unlinkToDeath the removed Callback object, or else 
+                //there'll be memory leak.
+                //There is a bug 8883 in 6820 have the same problem.
+                Callback oldCb = mCallbacks.get(binder);
+                if (oldCb != null) {
+                    mCallbacks.remove(binder);
+                    oldCb.mCallback.asBinder().unlinkToDeath(oldCb, 0);
+                }
+                //END
                 Callback cb = new Callback(callback, cookie);
                 binder.linkToDeath(cb, 0);
                 mCallbacks.put(binder, cb);
