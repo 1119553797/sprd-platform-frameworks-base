@@ -332,7 +332,11 @@ public class AnimatedRotateDrawable extends Drawable implements Drawable.Callbac
 
         public boolean canConstantState() {
             if (!mCheckedConstantState) {
-                mCanConstantState = mDrawable.getConstantState() != null;
+//                mCanConstantState = mDrawable.getConstantState() != null;
+            	if(mDrawable == null) // modify for bug 9199 on 8810
+            		mCanConstantState = false;
+            	else
+            		mCanConstantState = mDrawable.getConstantState() != null;
                 mCheckedConstantState = true;
             }
 
