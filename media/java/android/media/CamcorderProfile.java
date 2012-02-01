@@ -56,7 +56,9 @@ public class CamcorderProfile
      */
     public static final int QUALITY_LOW  = 0;
     public static final int QUALITY_HIGH = 1;
-
+    /**mm09: fix the bug9239 in 2012.02.01 begin**/
+    public static final int QUALITY_SUPERHIGH = 2;
+    /**mm09: fix the bug9239 in 2012.02.01 end**/
     /**
      * Default recording duration in seconds before the session is terminated.
      * This is useful for applications like MMS has limited file size requirement.
@@ -146,7 +148,9 @@ public class CamcorderProfile
      * @param quality the target quality level for the camcorder profile
      */
     public static CamcorderProfile get(int cameraId, int quality) {
-        if (quality < QUALITY_LOW || quality > QUALITY_HIGH) {
+       /**mm09: fix the bug9239 in 2012.02.01 begin**/
+        if (quality < QUALITY_LOW || quality > QUALITY_SUPERHIGH) {
+       /**mm09: fix the bug9239 in 2012.02.01 end**/
             String errMessage = "Unsupported quality level: " + quality;
             throw new IllegalArgumentException(errMessage);
         }

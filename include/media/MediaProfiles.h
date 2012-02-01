@@ -25,7 +25,10 @@ namespace android {
 
 enum camcorder_quality {
     CAMCORDER_QUALITY_LOW  = 0,
-    CAMCORDER_QUALITY_HIGH = 1
+    CAMCORDER_QUALITY_HIGH = 1,
+    /*mm09: fix the bug9239 in 2012.02.01.begin*/
+    CAMCORDER_QUALITY_SUPERHIGH = 2
+    /*mm09: fix the bug9239 in 2012.02.01.end*/
 };
 
 enum video_decoder {
@@ -283,6 +286,7 @@ private:
     static MediaProfiles* createDefaultInstance();
     static CamcorderProfile *createDefaultCamcorderLowProfile();
     static CamcorderProfile *createDefaultCamcorderHighProfile();
+	static CamcorderProfile *createDefaultCamcorderSuperHighProfile();
 	static CamcorderProfile *createFrontCamcorderLowProfile();
 	static CamcorderProfile *createFrontCamcorderHighProfile();
     static void createDefaultCamcorderProfiles(MediaProfiles *profiles);
