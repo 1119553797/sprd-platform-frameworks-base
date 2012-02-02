@@ -62,8 +62,6 @@
 
 #define FEATURE_MINIMUM_BUFFER
 
-//#define INNOFIDEI_CMMB
-
 namespace android {
 
 static const int OMX_QCOM_COLOR_FormatYVU420SemiPlanar = 0x7FA30C00;
@@ -2523,7 +2521,7 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
             mSeekTimeUs = -1;
             mSeekMode = ReadOptions::SEEK_CLOSEST_SYNC;
             mBufferFilled.signal();
-#ifdef INNOFIDEI_CMMB
+
             if(mTempSrcBuffer) {//cmmb
                 err = OK;
                 srcBuffer = mTempSrcBuffer;
@@ -2532,9 +2530,7 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
             else {
                 err = mSource->read(&srcBuffer, &options);
             }
-#else
-                err = mSource->read(&srcBuffer, &options);
-#endif
+
             if (err == OK) {
                 int64_t targetTimeUs;
                 if (srcBuffer->meta_data()->findInt64(
@@ -2551,7 +2547,6 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
 
             err = OK;
         } else {
-#ifdef INNOFIDEI_CMMB        
             if(mTempSrcBuffer) {//cmmb
                 err = OK;
                 srcBuffer = mTempSrcBuffer;
@@ -2560,9 +2555,6 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
             else {
                 err = mSource->read(&srcBuffer, &options);
             }
-#else
-                err = mSource->read(&srcBuffer, &options);
-#endif
         }
 
         if (err != OK) {
@@ -3179,12 +3171,10 @@ status_t OMXCodec::stop() {
         mLeftOverBuffer = NULL;
     }
 
-#ifdef INNOFIDEI_CMMB
     if (mTempSrcBuffer) {//cmmb
             mTempSrcBuffer->release();
             mTempSrcBuffer = NULL;
     }
-#endif	
     mSource->stop();
 
     CODEC_LOGV("stopped");
@@ -3207,26 +3197,26 @@ status_t OMXCodec::read(
     if (mState != EXECUTING && mState != RECONFIGURING) {
         return UNKNOWN_ERROR;
     }
+    int32_t cmmb;
 
-#ifdef INNOFIDEI_CMMB	
-//cmmb
-    if(mTempSrcBuffer == NULL) {
-      //  LOGI("1=====================================mTempSrcBuffer read ----");
-        status_t err = mSource->read(&mTempSrcBuffer, options);
-        if(err != OK) {
-            LOGI("2=====================================mTempSrcBuffer read error ----%d", err);
-            return err;
+    if (mSource->getFormat()->findInt32(kKeyIsCmmbData, &cmmb) && cmmb) {
+        if(mTempSrcBuffer == NULL) {
+          //  LOGI("1=====================================mTempSrcBuffer read ----");
+            status_t err = mSource->read(&mTempSrcBuffer, options);
+            if(err != OK) {
+                LOGI("2=====================================mTempSrcBuffer read error ----%d", err);
+                return err;
+            }
         }
-    }
-    else {
-    //    LOGI("3=====================================mTempSrcBuffer read");
-        if(mLastreadError != OK && mLastreadError != ERROR_TIMEOUT) {
-            LOGI("4=====================================mTempSrcBuffer last read error %d", mLastreadError);
-            return mLastreadError;
+        else {
+        //    LOGI("3=====================================mTempSrcBuffer read");
+            if(mLastreadError != OK && mLastreadError != ERROR_TIMEOUT) {
+                LOGI("4=====================================mTempSrcBuffer last read error %d", mLastreadError);
+                return mLastreadError;
+            }
         }
+      //  LOGI("5=====================================mTempSrcBuffer read over ----%d", mTempSrcBuffer->range_length());
     }
-  //  LOGI("5=====================================mTempSrcBuffer read over ----%d", mTempSrcBuffer->range_length());
-#endif
 
     bool seeking = false;
     int64_t seekTimeUs;
