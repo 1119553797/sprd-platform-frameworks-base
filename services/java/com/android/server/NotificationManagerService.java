@@ -405,12 +405,12 @@ public class NotificationManagerService extends INotificationManager.Stub
               //Add by liguxiang 07-08-11 for USB settings function end
 
             } */
-            else if (action.equals(Intent.ACTION_SPRD_USB_UNAVAILABLE)) {
+           /* else if (action.equals(Intent.ACTION_SPRD_USB_UNAVAILABLE)) {
 					SystemClock.sleep(2000);
 					mContext.sendBroadcast(new Intent(
 							Intent.ACTION_SPRD_USB_DISCONNECT));
 
-				}
+				} */
 
 
             else if (action.equals(UsbManager.ACTION_USB_STATE)) {
@@ -1305,7 +1305,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                 return;
             }
             if (!mAdbNotificationShown 
-            	//	&& ((ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).isUsbConnected()//lino add 2011-12-07
+                && ((ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).isUsbConnected()//lino add 2011-12-07
             		) {
                 NotificationManager notificationManager = (NotificationManager) mContext
                         .getSystemService(Context.NOTIFICATION_SERVICE);
