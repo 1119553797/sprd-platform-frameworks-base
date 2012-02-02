@@ -49,7 +49,7 @@ public class CarrierLabel extends TextView {
 
     public CarrierLabel(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        updateNetworkName(false, null, false, null);
+        updateNetworkName(false, null, false, null,"");
     }
 
     @Override
@@ -82,7 +82,8 @@ public class CarrierLabel extends TextView {
                 updateNetworkName(intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN, false),
                         intent.getStringExtra(Telephony.Intents.EXTRA_SPN),
                         intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN, false),
-                        intent.getStringExtra(Telephony.Intents.EXTRA_PLMN));
+                        intent.getStringExtra(Telephony.Intents.EXTRA_PLMN),
+                        intent.getStringExtra(Telephony.Intents.EXTRA_NETWORK_TYPE));
             }
 
            //Added  start on 2012-01-17
@@ -123,7 +124,7 @@ public class CarrierLabel extends TextView {
     }
 	
 
-    void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
+    void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn,String networkType) {
         if (false) {
             Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn);
@@ -132,7 +133,7 @@ public class CarrierLabel extends TextView {
         if(true)
         {
             Log.i("StatusBar CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
-                   + " showPlmn=" + showPlmn + " plmn=" + plmn);
+                   + " showPlmn=" + showPlmn + " plmn=" + plmn+" networkType="+networkType);
         }
 
      	        // Modify start on 2012-01-16 for 8930/8932
@@ -160,7 +161,7 @@ public class CarrierLabel extends TextView {
 		} 
 		if(showSpn && !showPlmn){
 			if(spn != null){
-				setText(spn);
+				setText(spn+networkType);
 			}
 			else{
 				setText(com.android.internal.R.string.lockscreen_carrier_default);
@@ -168,7 +169,7 @@ public class CarrierLabel extends TextView {
 		}
 		if(!showSpn && showPlmn){
 			if(plmn != null){
-				setText(plmn);
+				setText(plmn+networkType);
 			}
 			else{
 				setText(com.android.internal.R.string.lockscreen_carrier_default);
@@ -176,10 +177,10 @@ public class CarrierLabel extends TextView {
 		}
 		if(showSpn && showPlmn){
 			if(spn != null && plmn != null){
-				setText(plmn);
+				setText(plmn+networkType);
 			}
 			if(spn == null && plmn != null){
-				setText(plmn);
+				setText(plmn+networkType);
 			}
 			if(spn == null && plmn == null){
 				setText(com.android.internal.R.string.lockscreen_carrier_default);
