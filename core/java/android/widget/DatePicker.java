@@ -48,8 +48,8 @@ import java.util.Locale;
 @Widget
 public class DatePicker extends FrameLayout {
 
-    private static final int DEFAULT_START_YEAR = 1900;
-    private static final int DEFAULT_END_YEAR = 2100;//add by yangqingan for 146983 at 2011-12-07
+    private static final int DEFAULT_START_YEAR = 1970;
+    private static final int DEFAULT_END_YEAR = 2036;//add by yangqingan for 146983 at 2011-12-07
 
     // This ignores Undecimber, but we only support real Gregorian calendars.
     private static final int NUMBER_OF_MONTHS = 12;
@@ -57,7 +57,7 @@ public class DatePicker extends FrameLayout {
     /* UI Components */
     private final NumberPicker mDayPicker;
     private final NumberPicker mMonthPicker;
-    private final NumberPicker mYearPicker;
+    private final DateYearNumberPicker mYearPicker;
 
     /**
      * How we notify users the date has changed.
@@ -145,7 +145,7 @@ public class DatePicker extends FrameLayout {
                 updateDaySpinner();
             }
         });
-        mYearPicker = (NumberPicker) findViewById(R.id.year);
+        mYearPicker = (DateYearNumberPicker) findViewById(R.id.year);
         mYearPicker.setSpeed(100);
 		mYearPicker.setMaxLengthFilter(4);
         mYearPicker.setOnChangeListener(new OnChangedListener() {
