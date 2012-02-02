@@ -483,6 +483,7 @@ static void android_hardware_Camera_takePicture(JNIEnv *env, jobject thiz)
         jniThrowException(env, "java/lang/RuntimeException", "takePicture failed");
         return;
     }
+	LOGV("takePicture X");
 }
 
 static void android_hardware_Camera_setParameters(JNIEnv *env, jobject thiz, jstring params)

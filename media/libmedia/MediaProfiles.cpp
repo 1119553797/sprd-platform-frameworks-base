@@ -427,6 +427,25 @@ MediaProfiles::createDefaultCamcorderHighProfile()
     return profile;
 }
 
+/**mm09: fix the bug9397 in 2012.02.01 begin**/
+/*static*/ MediaProfiles::CamcorderProfile*
+MediaProfiles::createDefaultCamcorderSuperHighProfile()
+{
+    MediaProfiles::VideoCodec *videoCodec =
+        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 153600, 720, 576, 25);
+
+    AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
+    CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
+    profile->mCameraId = 0;
+    profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+    profile->mQuality = CAMCORDER_QUALITY_SUPERHIGH;
+    profile->mDuration = 60;
+    profile->mVideoCodec = videoCodec;
+    profile->mAudioCodec = audioCodec;
+    return profile;
+}
+/**mm09: fix the bug9397 in 2012.02.01 end**/
+
 /*static*/ MediaProfiles::CamcorderProfile*
 MediaProfiles::createDefaultCamcorderLowProfile()
 {
@@ -493,6 +512,10 @@ MediaProfiles::createDefaultCamcorderProfiles(MediaProfiles *profiles)
 {
     profiles->mCamcorderProfiles.add(createDefaultCamcorderHighProfile());
     profiles->mCamcorderProfiles.add(createDefaultCamcorderLowProfile());
+	/*mm09: fix the bug 9397 in 2011.02.01.begin**/
+    profiles->mCamcorderProfiles.add(createDefaultCamcorderSuperHighProfile());
+	/*mm09: fix the bug 9397 in 2011.02.01.end*/
+
 	/*mm09: fix the bug 7703, 7647 in 2011.12.30*****/
 	profiles->mCamcorderProfiles.add(createFrontCamcorderHighProfile());
     profiles->mCamcorderProfiles.add(createFrontCamcorderLowProfile());

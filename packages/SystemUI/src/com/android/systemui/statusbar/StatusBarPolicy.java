@@ -71,6 +71,7 @@ import android.widget.TextView;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.TelephonyIntents;
+import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.cdma.EriInfo;
 import com.android.internal.telephony.cdma.TtyIntent;
 //CR253162 Modify Start
@@ -85,7 +86,7 @@ import android.net.wimax.WimaxManagerConstants;
 import android.media.MediaPlayer;
 import java.io.IOException;
 //add by zhaoming 2011-09-06 <NEWMS00120155> and <NEWMS00119919> end
-
+import android.os.SystemProperties;
 /**
  * This class contains all of the policy about which icons are installed in the status
  * bar at boot time.  It goes through the normal API for icons, even though it probably
@@ -160,6 +161,20 @@ public class StatusBarPolicy {
           R.drawable.stat_sys_r_signal_3_fully,
           R.drawable.stat_sys_r_signal_4_fully }
     };
+    // 2012-01-31 add for bug9243 begin
+    private static final int[][] sSignalImages_3g = {
+        { R.drawable.stat_sys_3g_signal_0,
+          R.drawable.stat_sys_3g_signal_1,
+          R.drawable.stat_sys_3g_signal_2,
+          R.drawable.stat_sys_3g_signal_3,
+          R.drawable.stat_sys_3g_signal_4 },
+        { R.drawable.stat_sys_3g_signal_0_fully,
+          R.drawable.stat_sys_3g_signal_1_fully,
+          R.drawable.stat_sys_3g_signal_2_fully,
+          R.drawable.stat_sys_3g_signal_3_fully,
+          R.drawable.stat_sys_3g_signal_4_fully }
+    };
+    // 2012-01-31 add for bug9243 end
     private static final int[] sRoamingIndicatorImages_cdma = new int[] {
         R.drawable.stat_sys_roaming_cdma_0, //Standard Roaming Indicator
         // 1 is Standard Roaming Indicator OFF
@@ -999,7 +1014,7 @@ public class StatusBarPolicy {
         int connectionStatus = intent.getIntExtra(ConnectivityManager.EXTRA_INET_CONDITION, 0);
 
         int inetCondition = (connectionStatus > INET_CONDITION_THRESHOLD ? 1 : 0);
-
+        Log.i(TAG, "connectionStatus is "+connectionStatus+" info.getType() is:"+info.getType());
         switch (info.getType()) {
         case ConnectivityManager.TYPE_MOBILE:
             mInetCondition = inetCondition;
@@ -1164,7 +1179,14 @@ public class StatusBarPolicy {
             if (mPhone.isNetworkRoaming()) {
                 iconList = sSignalImages_r[mInetCondition];
             } else {
-                iconList = sSignalImages[mInetCondition];
+                // 2012-01-31 add for bug9243 begin
+				if (is3GSignal()) {
+					iconList = sSignalImages_3g[mInetCondition];
+				} else {
+					iconList = sSignalImages[mInetCondition];
+				}
+//                iconList = sSignalImages[mInetCondition];
+                // 2012-01-31 add for bug9243 end
             }
         } else {
             iconList = sSignalImages[mInetCondition];
@@ -1185,6 +1207,18 @@ public class StatusBarPolicy {
         mPhoneSignalIconId = iconList[iconLevel];
         mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
     }
+    // 2012-01-31 add for bug9243 begin
+	private boolean is3GSignal() {
+		String networkType = SystemProperties.get(
+				TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE, "");
+		if (networkType.equals("UMTS") || networkType.equals("HSDPA")
+				|| networkType.equals("HSUPA") || networkType.equals("HSPA")
+				|| networkType.equals("EVDO_0") || networkType.equals("EVDO_A")) {
+			return true;
+		}
+		return false;
+	}
+    // 2012-01-31 add for bug9243 end
 
     private int getCdmaLevel() {
         final int cdmaDbm = mSignalStrength.getCdmaDbm();

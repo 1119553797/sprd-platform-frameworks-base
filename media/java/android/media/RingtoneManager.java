@@ -176,7 +176,9 @@ public class RingtoneManager {
             "android.intent.extra.ringtone.PICKED_URI";
     
     // Make sure the column ordering and then ..._COLUMN_INDEX are in sync
-    
+    public static final String EXTRA_RINGTONE_INCLUDE_EXTERNAL =
+            "android.intent.extra.ringtone.INCLUDE_EXTERNAL";
+
     private static final String[] INTERNAL_COLUMNS = new String[] {
         MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
         "\"" + MediaStore.Audio.Media.INTERNAL_CONTENT_URI + "\"",
@@ -230,7 +232,8 @@ public class RingtoneManager {
     private Ringtone mPreviousRingtone;
 
     private boolean mIncludeDrm;
-    
+    private boolean mIncludeExternal;
+
     /**
      * Constructs a RingtoneManager. This constructor is recommended as its
      * constructed instance manages cursor(s).
@@ -343,6 +346,15 @@ public class RingtoneManager {
     }
 
     /**
+     * Sets whether to include External ringtones.
+     *
+     * @param includeDrm Whether to include External ringtones.
+     */
+    public void setIncludeExternal(boolean includeExternal) {
+        mIncludeExternal = includeExternal;
+    }
+
+    /**
      * Returns a {@link Cursor} of all the ringtones available. The returned
      * cursor will be the same cursor returned each time this method is called,
      * so do not {@link Cursor#close()} the cursor. The cursor can be
@@ -365,8 +377,8 @@ public class RingtoneManager {
         final Cursor internalCursor = getInternalRingtones();
         final Cursor drmCursor = mIncludeDrm ? getDrmRingtones() : null;
         final Cursor mediaCursor = getMediaRingtones();
-             
-        return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor },
+        final Cursor externalMusicCursor = (!mIncludeExternal || mType == TYPE_NOTIFICATION) ? null : getExternalMusics();
+        return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor ,externalMusicCursor},
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
     }
 
@@ -510,7 +522,33 @@ public class RingtoneManager {
                     MediaStore.Audio.Media.DEFAULT_SORT_ORDER)
                 : null;
     }
-    
+    private Cursor getExternalMusics() {
+        // Get the external media cursor. First check to see if it is mounted.
+        final String status = Environment.getExternalStorageState();
+        // filter
+        StringBuilder where = new StringBuilder();
+        where.append(MediaStore.Audio.Media.TITLE + " != ''");
+        where.append(" AND " + MediaStore.Audio.Media.IS_MUSIC + "=1");
+        
+        /*cfw fix bug 8010*/
+        boolean hasExternalRingtone = false;
+        for (int i = mFilterColumns.size() - 1; i >= 0; i--) {
+            if(mFilterColumns.get(i).equals(
+                MediaStore.Audio.AudioColumns.IS_RINGTONE)) {
+                hasExternalRingtone = true;
+                break;
+            }
+        }
+        if (hasExternalRingtone) {
+            where.append(" AND " + MediaStore.Audio.Media.IS_RINGTONE + "=0");
+        }
+
+        return (status.equals(Environment.MEDIA_MOUNTED) || status
+                .equals(Environment.MEDIA_MOUNTED_READ_ONLY)) ? query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MEDIA_COLUMNS,
+                where.toString(), null,
+                MediaStore.Audio.Media.DEFAULT_SORT_ORDER) : null;
+    }
     private void setFilterColumnsList(int type) {
         List<String> columns = mFilterColumns;
         columns.clear();

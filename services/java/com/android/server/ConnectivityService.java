@@ -712,7 +712,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         // TODO - move this into the MobileDataStateTracker
         int usedNetworkType = networkType;
         if(networkType == ConnectivityManager.TYPE_MOBILE) {
-            if (!getMobileDataEnabled()) {
+            //if type is MMS,continue setup data call
+            Slog.d(TAG, "if type is MMS,continue setup data call");
+            if (!getMobileDataEnabled() && !TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
                 if (DBG) Slog.d(TAG, "requested special network with data disabled - rejected");
                 return Phone.APN_TYPE_NOT_AVAILABLE;
             }
