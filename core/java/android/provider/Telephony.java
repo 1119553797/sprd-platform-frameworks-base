@@ -839,6 +839,12 @@ public final class Telephony {
         public static final String MESSAGE_SIZE = "m_size";
 
         /**
+         * (20120202) The service center (SC) 
+         * <P>Type: TEXT</P>
+         */
+        public static final String SERVICE_CENTER = "service_center";
+
+        /**
          * The priority of the message.
          * <P>Type: TEXT</P>
          */
