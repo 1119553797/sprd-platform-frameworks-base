@@ -15,7 +15,7 @@
  */
 
 #define LOG_TAG "AudioPolicyService"
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 
 #undef __STRICT_ANSI__
 #define __STDINT_LIMITS
@@ -91,6 +91,8 @@ AudioPolicyService::AudioPolicyService()
     // load properties
     property_get("ro.camera.sound.forced", value, "0");
     mpPolicyManager->setSystemProperty("ro.camera.sound.forced", value);
+	LOGV("create  audio policy service ok");
+	
 }
 
 AudioPolicyService::~AudioPolicyService()
