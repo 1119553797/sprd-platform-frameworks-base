@@ -348,7 +348,7 @@ public class RingtoneManager {
     /**
      * Sets whether to include External ringtones.
      *
-     * @param includeDrm Whether to include External ringtones.
+     * @param includeExternal Whether to include External ringtones.
      */
     public void setIncludeExternal(boolean includeExternal) {
         mIncludeExternal = includeExternal;
