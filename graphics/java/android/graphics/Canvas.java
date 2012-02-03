@@ -22,6 +22,8 @@ import android.text.SpannableString;
 import android.text.GraphicsOperations;
 import android.util.DisplayMetrics;
 
+import android.util.Log;
+
 import javax.microedition.khronos.opengles.GL;
 
 /**
@@ -1307,7 +1309,11 @@ public class Canvas {
         }
         else {
             char[] buf = TemporaryBuffer.obtain(end - start);
-            TextUtils.getChars(text, start, end, buf, 0);
+            try{
+            	TextUtils.getChars(text, start, end, buf, 0);
+            } catch(Exception e ){
+            	Log.e("Canvas", "TextUtils.getChars fails, exception=" + e );
+            }
             drawText(buf, 0, end - start, x, y, paint);
             TemporaryBuffer.recycle(buf);
         }
