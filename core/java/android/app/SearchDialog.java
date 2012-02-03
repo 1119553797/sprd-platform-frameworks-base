@@ -67,6 +67,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Toast;
 
 /**
  * Search dialog. This is controlled by the 
@@ -711,6 +712,11 @@ public class SearchDialog extends Dialog implements OnItemClickListener, OnItemS
         public void afterTextChanged(Editable s) {
             if (mSearchable == null) {
                 return;
+            }
+            String inputText = mSearchAutoComplete.getText().toString();
+            if(inputText.length()>=4096){
+                Toast toast = Toast.makeText(mActivityContext, com.android.internal.R.string.address_length, Toast.LENGTH_LONG);
+                toast.show();
             }
             if (mSearchable.autoUrlDetect() && !mSearchAutoComplete.isPerformingCompletion()) {
                 // The user changed the query, check if it is a URL and if so change the search

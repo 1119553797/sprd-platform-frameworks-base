@@ -71,6 +71,7 @@ import android.widget.TextView;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.TelephonyIntents;
+import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.cdma.EriInfo;
 import com.android.internal.telephony.cdma.TtyIntent;
 //CR253162 Modify Start
@@ -85,7 +86,7 @@ import android.net.wimax.WimaxManagerConstants;
 import android.media.MediaPlayer;
 import java.io.IOException;
 //add by zhaoming 2011-09-06 <NEWMS00120155> and <NEWMS00119919> end
-
+import android.os.SystemProperties;
 /**
  * This class contains all of the policy about which icons are installed in the status
  * bar at boot time.  It goes through the normal API for icons, even though it probably
@@ -160,6 +161,20 @@ public class StatusBarPolicy {
           R.drawable.stat_sys_r_signal_3_fully,
           R.drawable.stat_sys_r_signal_4_fully }
     };
+    // 2012-01-31 add for bug9243 begin
+    private static final int[][] sSignalImages_3g = {
+        { R.drawable.stat_sys_3g_signal_0,
+          R.drawable.stat_sys_3g_signal_1,
+          R.drawable.stat_sys_3g_signal_2,
+          R.drawable.stat_sys_3g_signal_3,
+          R.drawable.stat_sys_3g_signal_4 },
+        { R.drawable.stat_sys_3g_signal_0_fully,
+          R.drawable.stat_sys_3g_signal_1_fully,
+          R.drawable.stat_sys_3g_signal_2_fully,
+          R.drawable.stat_sys_3g_signal_3_fully,
+          R.drawable.stat_sys_3g_signal_4_fully }
+    };
+    // 2012-01-31 add for bug9243 end
     private static final int[] sRoamingIndicatorImages_cdma = new int[] {
         R.drawable.stat_sys_roaming_cdma_0, //Standard Roaming Indicator
         // 1 is Standard Roaming Indicator OFF
@@ -999,7 +1014,7 @@ public class StatusBarPolicy {
         int connectionStatus = intent.getIntExtra(ConnectivityManager.EXTRA_INET_CONDITION, 0);
 
         int inetCondition = (connectionStatus > INET_CONDITION_THRESHOLD ? 1 : 0);
-
+        Log.i(TAG, "connectionStatus is "+connectionStatus+" info.getType() is:"+info.getType());
         switch (info.getType()) {
         case ConnectivityManager.TYPE_MOBILE:
             mInetCondition = inetCondition;
@@ -1164,7 +1179,14 @@ public class StatusBarPolicy {
             if (mPhone.isNetworkRoaming()) {
                 iconList = sSignalImages_r[mInetCondition];
             } else {
-                iconList = sSignalImages[mInetCondition];
+                // 2012-01-31 add for bug9243 begin
+				if (is3GSignal()) {
+					iconList = sSignalImages_3g[mInetCondition];
+				} else {
+					iconList = sSignalImages[mInetCondition];
+				}
+//                iconList = sSignalImages[mInetCondition];
+                // 2012-01-31 add for bug9243 end
             }
         } else {
             iconList = sSignalImages[mInetCondition];
@@ -1185,6 +1207,18 @@ public class StatusBarPolicy {
         mPhoneSignalIconId = iconList[iconLevel];
         mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
     }
+    // 2012-01-31 add for bug9243 begin
+	private boolean is3GSignal() {
+		String networkType = SystemProperties.get(
+				TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE, "");
+		if (networkType.equals("UMTS") || networkType.equals("HSDPA")
+				|| networkType.equals("HSUPA") || networkType.equals("HSPA")
+				|| networkType.equals("EVDO_0") || networkType.equals("EVDO_A")) {
+			return true;
+		}
+		return false;
+	}
+    // 2012-01-31 add for bug9243 end
 
     private int getCdmaLevel() {
         final int cdmaDbm = mSignalStrength.getCdmaDbm();
@@ -1344,26 +1378,56 @@ public class StatusBarPolicy {
         // ************Modify by luning at 01-07-01 end************
 
         // ************Modify by luning at 01-07-01 begin************
-                String currMode = audioManager.getCurrProfilesMode(mContext);
-                boolean visible = !currMode.equals(Settings.System.PROFILES_MODE_GENERAL); //general icon invisible
-                int iconId = 0;
-                if(currMode .equals(Settings.System.PROFILES_MODE_SILENT))  //silent
-                {
-                    iconId = R.drawable.stat_sys_profiles_silent;
-                }
-                else if(currMode .equals(Settings.System.PROFILES_MODE_MEETING)) //meeting
-                {
-                    iconId = R.drawable.stat_sys_profiles_meeting;
-                }
-                else if(currMode .equals(Settings.System.PROFILES_MODE_OUTDOOR))  //outdoor
-                {
-                    iconId = R.drawable.stat_sys_profiles_outdoor;
-                }
-                else if(currMode .equals(Settings.System.PROFILES_MODE_INDOOR))  //indoor
-                {
-                    iconId = R.drawable.stat_sys_profiles_indoor;
-                }
+//                String currMode = audioManager.getCurrProfilesMode(mContext);
+//                boolean visible = !currMode.equals(Settings.System.PROFILES_MODE_GENERAL); //general icon invisible
+//                int iconId = 0;
+//                if(currMode .equals(Settings.System.PROFILES_MODE_SILENT))  //silent
+//                {
+//                    iconId = R.drawable.stat_sys_profiles_silent;
+//                }
+//                else if(currMode .equals(Settings.System.PROFILES_MODE_MEETING)) //meeting
+//                {
+//                    iconId = R.drawable.stat_sys_profiles_meeting;
+//                }
+//                else if(currMode .equals(Settings.System.PROFILES_MODE_OUTDOOR))  //outdoor
+//                {
+//                    iconId = R.drawable.stat_sys_profiles_outdoor;
+//                }
+//                else if(currMode .equals(Settings.System.PROFILES_MODE_INDOOR))  //indoor
+//                {
+//                    iconId = R.drawable.stat_sys_profiles_indoor;
+//                }
                 // ************Modify by luning at 01-07-01 end************
+
+        //Get ringerMode value
+        final int ringerMode = audioManager.getRingerMode();
+        boolean visible = ringerMode == AudioManager.RINGER_MODE_SILENT ||ringerMode == AudioManager.RINGER_MODE_VIBRATE
+                        || ringerMode == AudioManager.RINGER_MODE_NORMAL;
+        //Get the value of the vibration ring type
+        final int vibrate = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+        //Determine whether there ringtones
+        final boolean isNormal = ringerMode == AudioManager.RINGER_MODE_NORMAL;
+        //set iconId value
+        final int iconId;
+        if (vibrate != AudioManager.VIBRATE_SETTING_OFF) {
+            if (isNormal) {
+                iconId = R.drawable.stat_sys_profiles_outdoor;
+            }else{
+                iconId = R.drawable.stat_sys_profiles_meeting;
+            }
+
+        }else{
+            if (isNormal) {
+                iconId = 0;
+                // Modify start on 2011-12-12 for bug6618,6937
+                // In Normal Condition,Remove the voice icon don't show and
+                // taking the position
+                visible = false;
+                // Modify end on 2011-12-12 for bug6618,6937
+            }else{
+                iconId = R.drawable.stat_sys_profiles_silent;
+            }
+        }
 
         if (visible) {
             mService.setIcon("volume", iconId, 0);

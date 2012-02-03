@@ -162,6 +162,7 @@ CMMBExtractor::Track::Track(uint32_t trackType)
     	meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_DRA);
     }
 
+    meta->setInt32(kKeyIsCmmbData, true);
     mTrackType = trackType;
     LOGV("Initialize CMMBExtractor::Track(%s) successful!\n",(trackType == VideoTrack)?"Video":(trackType == AudioTrack)?"Audio":"Data");
 }
