@@ -304,6 +304,8 @@ public class WebSettings {
             + " Mobile/7A341 Safari/528.16";
     private static Locale sLocale;
     private static Object sLockForLocaleSettings;
+    private static String mUAProf = "http://www.spreadtrum.com/wap/8801H_240X320_UAProfile.xml";
+
     
     /**
      * Package constructor to prevent clients from creating a new settings
@@ -427,6 +429,21 @@ public class WebSettings {
         return mNavDump;
     }
 
+    //add for ChinaMobile UA spec 20120204 add
+    /**
+     * Returns the UAProf url.
+     */
+    public String getUAProf() {
+        return mUAProf;
+    }
+
+    /**
+     * Set the UAProf url.
+     */
+    public void setUAProf(String uaprof) {
+        mUAProf = uaprof;
+    }
+    //add for ChinaMobile UA spec 20120204 end
     /**
      * Set whether the WebView supports zoom
      */
