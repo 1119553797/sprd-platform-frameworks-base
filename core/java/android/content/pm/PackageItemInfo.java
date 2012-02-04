@@ -22,6 +22,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Printer;
 
 import java.text.Collator;
@@ -138,10 +139,12 @@ public class PackageItemInfo {
     public Drawable loadIcon(PackageManager pm) {
         if (icon != 0) {
             Drawable dr = pm.getDrawable(packageName, icon, getApplicationInfo());
+            Log.i("PackageItemInfo", "loadIcon and packageName is  "+packageName);
             if (dr != null) {
                 return dr;
             }
         }
+        Log.i("PackageItemInfo", "loadIcon and ready to load default icon");
         return loadDefaultIcon(pm);
     }
     
