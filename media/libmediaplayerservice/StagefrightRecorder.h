@@ -130,6 +130,7 @@ private:
     status_t setParamMaxFileDurationUs(int64_t timeUs);
     status_t setParamMaxFileSizeBytes(int64_t bytes);
     status_t setParamMovieTimeScale(int32_t timeScale);
+    status_t setParamVideoZoom(int32_t zoomValue);
     void clipVideoBitRate();
     void clipVideoFrameRate();
     void clipVideoFrameWidth();

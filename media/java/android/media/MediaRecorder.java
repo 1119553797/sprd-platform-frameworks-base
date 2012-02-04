@@ -486,6 +486,19 @@ public class MediaRecorder
     }
 
     /**
+     * wxz20120203: bug 9213. 
+     * Sets the zoom value when recording. 
+     *
+     * @param zoomValue the zoom value.
+     */
+    public void setRecordingZoonValue(int zoomValue) {
+        if (zoomValue < 0) {
+            throw new IllegalArgumentException("Recording zoom value is not positive");
+        }
+        setParameter(String.format("video-param-zoom=%d", zoomValue));
+    }	
+
+    /**
      * Pass in the file descriptor of the file to be written. Call this after
      * setOutputFormat() but before prepare().
      *

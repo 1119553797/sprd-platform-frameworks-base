@@ -367,7 +367,7 @@ status_t MediaRecorder::setParameters(const String8& params) {
 
     bool isInvalidState = (mCurrentState &
                            (MEDIA_RECORDER_PREPARED |
-                            MEDIA_RECORDER_RECORDING |
+                            //MEDIA_RECORDER_RECORDING | //wxz20120203: delete the status for setting param when recording.
                             MEDIA_RECORDER_ERROR));
     if (isInvalidState) {
         LOGE("setParameters is called in an invalid state: %d", mCurrentState);
