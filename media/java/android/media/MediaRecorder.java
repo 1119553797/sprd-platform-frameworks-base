@@ -499,6 +499,26 @@ public class MediaRecorder
     }	
 
     /**
+     * wxz20120204. 
+     * pause recording. 
+     *
+     * @param 
+     */
+    public void pauseRecording() {
+        Log.w(TAG, "wxz: pauseRecording().");
+        setParameter(String.format("video-param-pause-recording=1"));
+    }		
+    /**
+     * wxz20120204. 
+     * resume recording. 
+     *
+     * @param 
+     */
+    public void resumeRecording() {
+    	 Log.w(TAG, "wxz: resumeRecording().");
+        setParameter(String.format("video-param-resume-recording=1"));
+    }
+    /**
      * Pass in the file descriptor of the file to be written. Call this after
      * setOutputFormat() but before prepare().
      *

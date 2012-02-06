@@ -367,7 +367,7 @@ int64_t MPEG4Writer::estimateMoovBoxSize(int32_t bitRate) {
     return factor * size;
 }
 
-status_t MPEG4Writer::start(MetaData *param) {
+status_t MPEG4Writer::start(MetaData *param) {	
     if (mFile == NULL) {
         return UNKNOWN_ERROR;
     }
@@ -1278,6 +1278,7 @@ status_t MPEG4Writer::Track::start(MetaData *params) {
 
 status_t MPEG4Writer::Track::pause() {
     mPaused = true;
+    mResumed = false; //wxz20120206: add the resume for pause/resume recording function.
     return OK;
 }
 
@@ -1728,15 +1729,26 @@ status_t MPEG4Writer::Track::threadEntry() {
             ++nZeroLengthFrames;
             continue;
         }
-
+	
         // If the codec specific data has not been received yet, delay pause.
         // After the codec specific data is received, discard what we received
         // when the track is to be paused.
         if (mPaused && !mResumed) {
             buffer->release();
-            buffer = NULL;
+            buffer = NULL;	     
             continue;
         }
+	 //wxz20120206: find the I frame after resume.
+	 if(mResumed && !mIsAudio){
+ 	        int32_t isIFrame = false;			
+	        buffer->meta_data()->findInt32(kKeyIsSyncFrame, &isIFrame);
+		 LOGV("wxz: check the IFrame after resume. isIFrame: %d.", isIFrame);
+		 if(!isIFrame){
+            		buffer->release();
+            		buffer = NULL;
+		 	continue;
+		 }
+	 }	
 
         ++count;
 
