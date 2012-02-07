@@ -188,4 +188,9 @@ status_t StagefrightPlayer::getMetadata(
     return OK;
 }
 
+void StagefrightPlayer::clearRender() {
+    LOGV("clearRender");
+    return mPlayer->clearRender();
+}
+
 }  // namespace android
