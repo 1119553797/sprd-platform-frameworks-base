@@ -432,14 +432,15 @@ status_t MediaPhoneClient::startDownLink()
 	mCamera->setPreviewDisplay(mPreviewSurface);
     	IPCThreadState::self()->restoreCallingIdentity(token);
     }
-    CHECK_RT(mPlayer->resume());
+    CHECK_RT(mPlayer->start());
     return OK;
 }
 
 status_t MediaPhoneClient::stopDownLink()
 {
     LOGV("stopDownLink");
-    CHECK_RT(mPlayer->suspend());
+    CHECK_RT(mPlayer->pause());
+	((StagefrightPlayer*)mPlayer.get())->clearRender();
 	
     int64_t token = IPCThreadState::self()->clearCallingIdentity();
 	mCamera->stopPreview();

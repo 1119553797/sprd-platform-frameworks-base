@@ -485,6 +485,28 @@ status_t StagefrightRecorder::setParamVideoTimeScale(int32_t timeScale) {
     return OK;
 }
 
+//wxz20120203: bug 9213. send the zoom value to camera service.
+status_t StagefrightRecorder::setParamVideoZoom(int32_t zoomValue) {
+    LOGV("setParamVideoZoom: %d", zoomValue);    
+
+    if (mCamera != 0) {
+	    int64_t token = IPCThreadState::self()->clearCallingIdentity();
+	    // Set the zoom value when recording
+	    CameraParameters params(mCamera->getParameters());
+	    params.set("zoom", zoomValue);   
+	    String8 s = params.flatten();
+	    if (OK != mCamera->setParameters(s)) {
+	        LOGE("Could not change settings."
+	             " Someone else is using camera %d?", mCameraId);
+		 IPCThreadState::self()->restoreCallingIdentity(token);
+	        return -EBUSY;
+	    }
+	    IPCThreadState::self()->restoreCallingIdentity(token);	
+    }    
+	
+    return OK;
+}	
+
 status_t StagefrightRecorder::setParamAudioTimeScale(int32_t timeScale) {
     LOGV("setParamAudioTimeScale: %d", timeScale);
 
@@ -585,7 +607,18 @@ status_t StagefrightRecorder::setParameter(
         if (safe_strtoi32(value.string(), &timeScale)) {
             return setParamVideoTimeScale(timeScale);
         }
-    } else {
+    } else if (key == "video-param-zoom") { //wxz20120203: bug 9213. add the zoom parameter for zoom in recording.
+        int32_t zoomValue;
+        if (safe_strtoi32(value.string(), &zoomValue)) {
+            return setParamVideoZoom(zoomValue);
+        }
+    } else if (key == "video-param-pause-recording") { //wxz20120203: add the pause parameter for pause in recording.
+       LOGI("wxz: video-param-pause-recording: pause recording.");
+       return pause();
+    } 	else if (key == "video-param-resume-recording") { //wxz20120203: add the resume parameter for resume in recording.
+       LOGI("wxz: video-param-resume-recording: resume recording.");    
+       return mWriter->start();
+    } 	else {    
         LOGE("setParameter: failed to find key %s", key.string());
     }
     return BAD_VALUE;

@@ -807,6 +807,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     /** {@inheritDoc} */
     public void onResume() {
+	mSelector.reset(false);//clear animate when press canell button 2012-2-7
         resetStatusInfo(mUpdateMonitor);
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
     }

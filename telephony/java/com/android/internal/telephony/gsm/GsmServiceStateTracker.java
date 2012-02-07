@@ -40,6 +40,7 @@ import android.provider.Settings.SettingNotFoundException;
 import android.provider.Telephony.Intents;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.text.TextUtils;
 import android.util.Config;
@@ -626,6 +627,20 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     }
     //add by liguxiang 08-19-11 for custom spn display end 
 
+   public String setRadioType(int type){
+       Log.d(LOG_TAG,"RadioType = " + type);
+       switch (type) {
+       case TelephonyManager.NETWORK_TYPE_UMTS:
+       case TelephonyManager.NETWORK_TYPE_HSDPA:
+       case TelephonyManager.NETWORK_TYPE_HSUPA:
+       case TelephonyManager.NETWORK_TYPE_HSPA:
+       case TelephonyManager.NETWORK_TYPE_EVDO_0: //fall through
+       case TelephonyManager.NETWORK_TYPE_EVDO_A:
+               return "3G";
+       default:
+          return "";
+      }
+   }
     protected void updateSpnDisplay() {
         int rule = phone.mSIMRecords.getDisplayRule(ss.getOperatorNumeric());
         String spn = phone.mSIMRecords.getServiceProviderName();
@@ -651,7 +666,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             boolean showPlmn =
                 (rule & SIMRecords.SPN_RULE_SHOW_PLMN) == SIMRecords.SPN_RULE_SHOW_PLMN;
             Log.d(LOG_TAG,"curSpn = " + curSpn + "  showSpn = " + showSpn 
-            		+ "  curPlmn = " + curPlmn + "  showPlmn = " + showPlmn);
+                    + "  curPlmn = " + curPlmn + "  showPlmn = " + showPlmn+" mNetworkType "+networkType);
 
             Intent intent = new Intent(Intents.SPN_STRINGS_UPDATED_ACTION);
             intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
@@ -659,6 +674,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             intent.putExtra(Intents.EXTRA_SPN, spn);
             intent.putExtra(Intents.EXTRA_SHOW_PLMN, showPlmn);
             intent.putExtra(Intents.EXTRA_PLMN, plmn);
+            intent.putExtra(Intents.EXTRA_NETWORK_TYPE, setRadioType(networkType));
             phone.getContext().sendStickyBroadcast(intent);
         }
 
@@ -770,6 +786,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     }
                     newGPRSState = regCodeToServiceState(regState);
                     mDataRoaming = regCodeIsRoaming(regState);
+                    newNetworkType = type;
+                    newSS.setRadioTechnology(type);
                 break;
 
                 case EVENT_POLL_STATE_OPERATOR:

@@ -357,6 +357,8 @@ class FrameLoader {
         }
         
         mHeaders.put("User-Agent", mSettings.getUserAgentString());
+        //add for ChinaMobile UA spec 20120204 add
+        mHeaders.put("x-wap-profile", mSettings.getUAProf());
     }
 
     /**

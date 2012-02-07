@@ -217,7 +217,7 @@ public class WapPushOverSms {
                 dispatchedByApplication = true;
                 break;
             case WspTypeDecoder.CONTENT_TYPE_B_MMS:
-                dispatchWapPdu_MMS(pdu, transactionId, pduType, headerStartIndex, headerLength);
+                dispatchWapPdu_MMS(pdus, pdu, transactionId, pduType, headerStartIndex, headerLength);
                 dispatchedByApplication = true;
                 break;
             default:
@@ -276,7 +276,7 @@ public class WapPushOverSms {
         mSmsDispatcher.dispatch(intent, "android.permission.RECEIVE_WAP_PUSH");
     }
 
-    private void dispatchWapPdu_MMS(byte[] pdu, int transactionId, int pduType,
+    private void dispatchWapPdu_MMS(byte[][] pdus, byte[] pdu, int transactionId, int pduType,
                                     int headerStartIndex, int headerLength) {
         byte[] header = new byte[headerLength];
         System.arraycopy(pdu, headerStartIndex, header, 0, header.length);
@@ -290,6 +290,7 @@ public class WapPushOverSms {
         intent.putExtra("pduType", pduType);
         intent.putExtra("header", header);
         intent.putExtra("data", data);
+        intent.putExtra("pdus", pdus);
 
         mSmsDispatcher.dispatch(intent, "android.permission.RECEIVE_MMS");
     }

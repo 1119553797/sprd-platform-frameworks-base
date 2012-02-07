@@ -487,24 +487,31 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                 && (phone.getState() == Phone.State.IDLE || mGsmPhone.mSST.isConcurrentVoiceAndData())
                 && isDataAllowed()
                 && !mIsPsRestricted
-                && desiredPowerState ) {
+                && desiredPowerState) {
 
+            if (mRequestedApnType == Phone.APN_TYPE_DEFAULT && mIsWifiConnected) {
+                // if WIFI is connected, ignore the GPRS (default type)
+                // data setup
+                log("Ignore default type datacall setup because WIFI is connected.");
+                return false;
+            }
             if (state == State.IDLE) {
                 waitingApns = buildWaitingApns();
                 waitingApnsPermanentFailureCountDown = waitingApns.size();
                 if (waitingApns.isEmpty()) {
-                    if (DBG) log("No APN found");
+                    if (DBG)
+                        log("No APN found");
                     notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);
                     return false;
                 } else {
-                    synchronized (allApnsLock){
-                        log ("Create from allApns : " + apnListToString(allApns));
+                    synchronized (allApnsLock) {
+                        log("Create from allApns : " + apnListToString(allApns));
                     }
                 }
             }
 
             if (DBG) {
-                log ("Setup waitngApns : " + apnListToString(waitingApns));
+                log("Setup waitngApns : " + apnListToString(waitingApns));
             }
             return setupData(reason);
         } else {

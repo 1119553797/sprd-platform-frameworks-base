@@ -52,6 +52,7 @@ public:
     virtual void setAudioSink(const sp<AudioSink> &audioSink);
     virtual status_t suspend();
     virtual status_t resume();
+    virtual void clearRender();
 
     virtual status_t getMetadata(
             const media::Metadata::Filter& ids, Parcel *records);

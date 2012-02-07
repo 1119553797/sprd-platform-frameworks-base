@@ -624,6 +624,11 @@ bool AudioFlinger::isStreamActive(int stream) const
             return true;
         }
     }
+
+    if (mFmOn && stream == AudioSystem::FM) {
+        return true;
+    }
+
     return false;
 }
 
@@ -660,6 +665,20 @@ status_t AudioFlinger::setParameters(int ioHandle, const String8& keyValuePairs)
         }
     }
 #endif
+
+    AudioParameter param = AudioParameter(keyValuePairs);
+    String8 key = String8(AudioParameter::keyRouting);
+    int device;
+
+    //mFmOn should be changed only for audio output path
+    //ioHandle == 1 means the parameters are for audio output path
+    if (ioHandle == 1 && param.getInt(key, device) == NO_ERROR) {
+        if(((device & AudioSystem::DEVICE_OUT_FM_HEADSET) || (device & AudioSystem::DEVICE_OUT_FM_SPEAKER)) && mFmOn == false){
+            mFmOn=true;
+         } else if (mFmOn == true && !(device & AudioSystem::DEVICE_OUT_FM_HEADSET) && !(device & AudioSystem::DEVICE_OUT_FM_SPEAKER)){
+            mFmOn=false;
+         }
+    }
 
     // ioHandle == 0 means the parameters are global to the audio hardware interface
     if (ioHandle == 0) {

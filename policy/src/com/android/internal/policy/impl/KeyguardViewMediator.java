@@ -265,7 +265,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DELAYED_KEYGUARD_ACTION);
-        filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
+        //fix bug 9863
+//        filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
         context.registerReceiver(mBroadCastReceiver, filter);
         mAlarmManager = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);
@@ -791,6 +792,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
      * @see #handleKeyguardDone
      */
     public void keyguardDone(boolean authenticated) {
+	mKeyguardViewManager.hide();//hide unlock view before check pin sucess 2012-2-7
         keyguardDone(authenticated, true);
     }
 

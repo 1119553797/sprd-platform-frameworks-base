@@ -102,6 +102,7 @@ enum {
     kKeyValidSamples      = 'valD',  // int32_t
 
     kKeyIsUnreadable      = 'unre',  // bool (int32_t)
+    kKeyIsCmmbData       = 'cmmb',  // bool (int32_t)
 };
 
 enum {

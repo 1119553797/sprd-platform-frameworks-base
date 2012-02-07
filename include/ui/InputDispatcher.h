@@ -563,6 +563,8 @@ private:
         inline bool isSplit() const {
             return targetFlags & InputTarget::FLAG_SPLIT;
         }
+
+
     };
 
     // A command entry captures state and behavior for an action to be performed in the
@@ -982,6 +984,8 @@ private:
     nsecs_t mInputTargetWaitTimeoutTime;
     bool mInputTargetWaitTimeoutExpired;
 
+    class NotifyThread *mNotifyThread;//wong
+	
     // Finding targets for input events.
     void resetTargetsLocked();
     void commitTargetsLocked();
@@ -1076,6 +1080,20 @@ private:
     virtual bool threadLoop();
 
     sp<InputDispatcherInterface> mDispatcher;
+};
+
+
+class NotifyThread : public Thread {
+public:
+    explicit NotifyThread(void);
+    ~NotifyThread();
+    bool notify(void);
+private:
+    virtual bool threadLoop();
+	Mutex           mLock;
+    Condition    mThreadExitedCondition;
+    int mfd;
+	int mRunning;
 };
 
 } // namespace android
