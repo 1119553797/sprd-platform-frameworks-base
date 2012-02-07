@@ -432,7 +432,7 @@ MediaProfiles::createDefaultCamcorderHighProfile()
 MediaProfiles::createDefaultCamcorderSuperHighProfile()
 {
     MediaProfiles::VideoCodec *videoCodec =
-        new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 153600, 720, 576, 25);
+        new MediaProfiles::VideoCodec(VIDEO_ENCODER_MPEG_4_SP, 153600, 720, 576, 25);//wxz20120207: must be VIDEO_ENCODER_MPEG_4_SP if it's 720x576.
 
     AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
     CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;

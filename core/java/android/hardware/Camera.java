@@ -825,6 +825,9 @@ public class Camera {
      */
     public native final void setDisplayOrientation(int degrees);
 
+    //wxz20120207: add the native function to start flash.
+    public native final void startFlash();
+
     /**
      * Callback interface for zoom changes during a smooth zoom operation.
      *

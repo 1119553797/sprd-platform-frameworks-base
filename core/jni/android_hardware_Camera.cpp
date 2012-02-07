@@ -585,6 +585,17 @@ static void android_hardware_Camera_setDisplayOrientation(JNIEnv *env, jobject t
         jniThrowException(env, "java/lang/RuntimeException", "set display orientation failed");
     }
 }
+//wxz20120207: add the function to start the flash.
+static void android_hardware_Camera_startFlash(JNIEnv *env, jobject thiz)
+{
+    LOGV("startFlash");
+    sp<Camera> camera = get_native_camera(env, thiz, NULL);
+    if (camera == 0) return;
+
+    if (camera->sendCommand(CAMERA_CMD_START_FLASH, 0, 0) != NO_ERROR) {
+        jniThrowException(env, "java/lang/RuntimeException", "start flash failed");
+    }
+}
 
 //-------------------------------------------------
 
@@ -652,6 +663,9 @@ static JNINativeMethod camMethods[] = {
   { "setDisplayOrientation",
     "(I)V",
     (void *)android_hardware_Camera_setDisplayOrientation },
+  { "startFlash",
+    "()V",
+    (void *)android_hardware_Camera_startFlash},    
 };
 
 struct field {
