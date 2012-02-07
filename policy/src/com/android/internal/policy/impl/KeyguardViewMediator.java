@@ -792,6 +792,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
      * @see #handleKeyguardDone
      */
     public void keyguardDone(boolean authenticated) {
+	mKeyguardViewManager.hide();//hide unlock view before check pin sucess 2012-2-7
         keyguardDone(authenticated, true);
     }
 

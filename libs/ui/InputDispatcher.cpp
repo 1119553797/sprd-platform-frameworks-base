@@ -46,6 +46,12 @@
 #include <errno.h>
 #include <limits.h>
 
+//wong
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+//wong
+
 #define INDENT "  "
 #define INDENT2 "    "
 
@@ -182,11 +188,13 @@ InputDispatcher::InputDispatcher(const sp<InputDispatcherPolicyInterface>& polic
     mInboundQueue.tailSentinel.eventTime = LONG_LONG_MAX;
 
     mKeyRepeatState.lastKeyEntry = NULL;
-
+    
+	mNotifyThread = new NotifyThread( );//wong
+	mNotifyThread->run("NotifyThread", PRIORITY_URGENT_DISPLAY);//wong
+	
     int32_t maxEventsPerSecond = policy->getMaxEventsPerSecond();
     mThrottleState.minTimeBetweenEvents = 1000000000LL / maxEventsPerSecond;
     mThrottleState.lastDeviceId = -1;
-
 #if DEBUG_THROTTLING
     mThrottleState.originalSampleCount = 0;
     LOGD("Throttling - Max events per second = %d", maxEventsPerSecond);
@@ -205,6 +213,7 @@ InputDispatcher::~InputDispatcher() {
     while (mConnectionsByReceiveFd.size() != 0) {
         unregisterInputChannel(mConnectionsByReceiveFd.valueAt(0)->inputChannel);
     }
+
 }
 
 void InputDispatcher::dispatchOnce() {
@@ -1743,6 +1752,8 @@ void InputDispatcher::startDispatchCycleLocked(nsecs_t currentTime,
         // Remember the next motion sample that we could not dispatch, in case we ran out
         // of space in the shared memory buffer.
         dispatchEntry->tailMotionSample = nextMotionSample;
+//wong		
+        mNotifyThread->notify();
         break;
     }
 
@@ -3524,4 +3535,36 @@ bool InputDispatcherThread::threadLoop() {
     return true;
 }
 
+
+// --- NotifyThread ---
+
+NotifyThread::NotifyThread(void) :Thread(/*canCallJava*/ false){
+    mfd = open("/sys/devices/system/cpu/cpu0/cpufreq/input_event", O_RDWR);//wong;
+    
+}
+
+NotifyThread::~NotifyThread() {
+	close(mfd);
+}
+
+bool NotifyThread::threadLoop() {
+    do{
+	  mThreadExitedCondition.wait(mLock);
+	  mRunning = 1;
+      char buffer = '1';
+	  //LOGD("write /sys/devices/system/cpu/cpu0/cpufreq/input_event");
+	  write(mfd, &buffer, 1);
+	  sleep(1);
+	  mRunning = 0;
+   }while(1);
+
+   return true;	
+   
+}
+
+bool NotifyThread::notify(){
+	if(!mRunning)
+      mThreadExitedCondition.signal( );
+	return true;
+}
 } // namespace android

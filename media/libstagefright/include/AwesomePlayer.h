@@ -97,7 +97,7 @@ struct AwesomePlayer {
     void postAudioSeekComplete();
 
 	status_t forceStop();//sprd vt must
-
+	void clearRender();//sprd vt must
 private:
     friend struct AwesomeEvent;
 

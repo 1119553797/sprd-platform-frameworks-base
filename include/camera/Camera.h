@@ -96,6 +96,7 @@ enum {
     // or CAMERA_MSG_COMPRESSED_IMAGE. This is not allowed to be set during
     // preview.
     CAMERA_CMD_SET_DISPLAY_ORIENTATION = 3,
+    CAMERA_CMD_START_FLASH = 4, //wxz20120207: add cmd to start the flash
 };
 
 // camera fatal errors
