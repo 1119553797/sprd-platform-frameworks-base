@@ -991,7 +991,10 @@ status_t AwesomePlayer::forceStop(){
 	return pause();
 }
 
-
+void AwesomePlayer::clearRender(){
+	Mutex::Autolock autoLock(mLock);
+	 mVideoRenderer.clear();
+}
 status_t AwesomePlayer::pause() {
     LOGE("pause mSeeking = %d",mSeeking); 
 	Mutex::Autolock autoLock(mLock);
