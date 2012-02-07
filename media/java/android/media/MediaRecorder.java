@@ -498,22 +498,13 @@ public class MediaRecorder
         setParameter(String.format("video-param-zoom=%d", zoomValue));
     }	
 
-    /**
-     * wxz20120204. 
-     * pause recording. 
-     *
-     * @param 
-     */
+    //wxz20120204: pause recording. 
     public void pauseRecording() {
         Log.w(TAG, "wxz: pauseRecording().");
         setParameter(String.format("video-param-pause-recording=1"));
     }		
-    /**
-     * wxz20120204. 
-     * resume recording. 
-     *
-     * @param 
-     */
+
+    //wxz20120204: resume recording. 
     public void resumeRecording() {
     	 Log.w(TAG, "wxz: resumeRecording().");
         setParameter(String.format("video-param-resume-recording=1"));
