@@ -94,7 +94,7 @@ LOCAL_STATIC_LIBRARIES += \
 	libstagefright_aacdec_sprd
 LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libaacdec_sprd.a
 else
-LOCAL_LDFLAGS += $(TOP)/3rdparty/products/${ANDROID_3RDPARTY_IMAGE_TAG}/proprietary/stagefright/libstagefright_aacdec_sprd.a
+LOCAL_LDFLAGS += $(TOP)/customize/customer_cfg/${ANDROID_3RDPARTY_IMAGE_TAG}/proprietary/stagefright/libstagefright_aacdec_sprd.a
 LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libaacdec_sprd.a
 endif
 
