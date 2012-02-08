@@ -98,7 +98,7 @@ static  int aac_parse_header(const sp<DataSource> &source, size_t offset, int  *
     	return -1;
 		
     int num_aac_frames = (header2>>8)&0x3;
-    num_aac_frames += 1;
+    //num_aac_frames += 1;
 
     int samples = (num_aac_frames+1)*1024;
 
