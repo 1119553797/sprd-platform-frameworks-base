@@ -1185,20 +1185,20 @@
       the background data usage setting.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessWifiState">view Wi-Fi state</string>
+    <string name="permlab_accessWifiState">view WLAN state</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_accessWifiState">Allows an application to view
-      the information about the state of Wi-Fi.</string>
+      the information about the state of WLAN.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_changeWifiState">change Wi-Fi state</string>
+    <string name="permlab_changeWifiState">change WLAN state</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changeWifiState">Allows an application to connect
-      to and disconnect from Wi-Fi access points, and to make changes to
-      configured Wi-Fi networks.</string>
+      to and disconnect from WLAN access points, and to make changes to
+      configured WLAN networks.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_changeWifiMulticastState">allow Wi-Fi Multicast
+    <string name="permlab_changeWifiMulticastState">allow WLAN Multicast
       reception</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changeWifiMulticastState">Allows an application to
@@ -2111,13 +2111,13 @@
 
     <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's title. -->
     <plurals name="wifi_available">
-        <item quantity="one">Wi-Fi network available</item>
-        <item quantity="other">Wi-Fi networks available</item>
+        <item quantity="one">WLAN network available</item>
+        <item quantity="other">WLAN networks available</item>
     </plurals>
     <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's message. -->
     <plurals name="wifi_available_detailed">
-        <item quantity="one">Open Wi-Fi network available</item>
-        <item quantity="other">Open Wi-Fi networks available</item>
+        <item quantity="one">Open WLAN network available</item>
+        <item quantity="other">Open WLAN networks available</item>
     </plurals>
     <!-- Do not translate. Default access point SSID used for tethering -->
     <string name="wifi_tether_configure_ssid_default" translatable="false">AndroidAP</string>

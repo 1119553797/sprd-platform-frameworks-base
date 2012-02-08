@@ -429,11 +429,11 @@
     <string name="permdesc_changeTetherState" msgid="8905815579146349568">"允许应用程序更改绑定网络连接的状态。"</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"更改背景数据使用设置"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="1001482853266638864">"允许应用程序更改背景数据使用设置。"</string>
-    <string name="permlab_accessWifiState" msgid="8100926650211034400">"查看 Wi-Fi 状态"</string>
-    <string name="permdesc_accessWifiState" msgid="485796529139236346">"允许应用程序查看有关 Wi-Fi 状态的信息。"</string>
-    <string name="permlab_changeWifiState" msgid="7280632711057112137">"更改 Wi-Fi 状态"</string>
-    <string name="permdesc_changeWifiState" msgid="2950383153656873267">"允许应用程序连接到 Wi-Fi 接入点以及与 Wi-Fi 接入点断开连接，并对配置的 Wi-Fi 网络进行更改。"</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允许接收 Wi-Fi 多播"</string>
+    <string name="permlab_accessWifiState" msgid="8100926650211034400">"查看 WLAN 状态"</string>
+    <string name="permdesc_accessWifiState" msgid="485796529139236346">"允许应用程序查看有关 WLAN 状态的信息。"</string>
+    <string name="permlab_changeWifiState" msgid="7280632711057112137">"更改 WLAN 状态"</string>
+    <string name="permdesc_changeWifiState" msgid="2950383153656873267">"允许应用程序连接到 WLAN 接入点以及与 WLAN 接入点断开连接，并对配置的 WLAN 网络进行更改。"</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允许接收 WLAN 多播"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"允许应用程序接收并非直接向您的设备发送的数据包。这样在查找附近提供的服务时很有用。这种操作所耗电量大于非多播模式。"</string>
     <string name="permlab_accessWimaxState" msgid="2800410363171809280">"查看 WiMAX 状态"</string>
     <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"允许应用程序查看有关 WiMAX 状态的信息。"</string>
@@ -821,12 +821,12 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"铃声"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"未知铃声"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"有可用的 Wi-Fi 网络"</item>
-    <item quantity="other" msgid="4192424489168397386">"有可用的 Wi-Fi 网络"</item>
+    <item quantity="one" msgid="6654123987418168693">"有可用的 WLAN 网络"</item>
+    <item quantity="other" msgid="4192424489168397386">"有可用的 WLAN 网络"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"打开可用的 Wi-Fi 网络"</item>
-    <item quantity="other" msgid="7915895323644292768">"打开可用的 Wi-Fi 网络"</item>
+    <item quantity="one" msgid="1634101450343277345">"打开可用的 WLAN 网络"</item>
+    <item quantity="other" msgid="7915895323644292768">"打开可用的 WLAN 网络"</item>
   </plurals>
     <string name="select_character" msgid="3365550120617701745">"插入字符"</string>
     <string name="sms_control_default_app_name" msgid="7630529934366549163">"未知的应用程序"</string>
