@@ -28,6 +28,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -698,7 +699,15 @@ public class AudioManager {
     
     public void saveCurrProfilesMode(Context context,String currMode)
     {
-    	Settings.System.putString(context.getContentResolver(), Settings.System.PHONE_PROFILES_MODE, currMode);	
+     	Settings.System.putString(context.getContentResolver(), Settings.System.PHONE_PROFILES_MODE, currMode);	
+        Log.d(TAG, "persist.sys.profile.silent :"+android.os.SystemProperties.get("persist.sys.profile.silent"));
+        if (currMode.equals(Settings.System.PROFILES_MODE_SILENT) 
+               || currMode.equals(Settings.System.PROFILES_MODE_MEETING) ) {
+            android.os.SystemProperties.set("persist.sys.profile.silent", "1");
+        }
+        else {
+            android.os.SystemProperties.set("persist.sys.profile.silent", "0");
+        } 
     }
     
     public String getCurrProfilesMode(Context context)
