@@ -94,6 +94,7 @@ public class MediaController extends FrameLayout {
     private ImageButton         mNextButton;
     private ImageButton         mPrevButton;
     private ImageButton         mStopButton;
+    private int                 startLiveTime = -1;
 	
 
     public MediaController(Context context, AttributeSet attrs) {
@@ -439,6 +440,9 @@ public class MediaController extends FrameLayout {
         }
         int position = mPlayer.getCurrentPosition();
         int duration = mPlayer.getDuration();
+        if(startLiveTime == -1){
+            startLiveTime = position;
+        }
         if (mProgress != null) {
             if (duration > 0) {
                 // use long to avoid overflow
@@ -452,7 +456,11 @@ public class MediaController extends FrameLayout {
         if (mEndTime != null)
             mEndTime.setText(stringForTime(duration));
         if (mCurrentTime != null)
-            mCurrentTime.setText(stringForTime(position));
+            if(duration != 0){
+                 mCurrentTime.setText(stringForTime(position));
+            }else{
+                 mCurrentTime.setText(stringForTime(position - startLiveTime));
+            }
 
         return position;
     }
@@ -598,10 +606,12 @@ public class MediaController extends FrameLayout {
             }
 
             long duration = mPlayer.getDuration();
-            long newposition = (duration * progress) / 1000L;
-            mPlayer.seekTo( (int) newposition);
-            if (mCurrentTime != null)
-                mCurrentTime.setText(stringForTime( (int) newposition));
+            if(duration!=0){
+                 long newposition = (duration * progress) / 1000L;
+                 mPlayer.seekTo( (int) newposition);
+                 if (mCurrentTime != null)
+                     mCurrentTime.setText(stringForTime( (int) newposition));
+            }
         }
 
         public void onStopTrackingTouch(SeekBar bar) {
