@@ -146,5 +146,6 @@
             file="/system/framework/android.test.runner.jar" />
     <library name="javax.obex"
             file="/system/framework/javax.obex.jar"/>
-
+    <library name="com.google.android.maps"
+            file="/system/framework/com.google.android.maps.jar"/>
 </permissions>
