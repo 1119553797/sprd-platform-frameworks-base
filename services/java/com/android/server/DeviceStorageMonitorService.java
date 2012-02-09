@@ -131,7 +131,7 @@ class DeviceStorageMonitorService extends Binder {
     private boolean mUpdateMemory = false;
 
     private static final int NO_MEMORY_SMS_NOTIFICATION_ID = 100;
-    
+
     /**
      * This string is used for ServiceManager access to this class.
      */
@@ -387,14 +387,14 @@ class DeviceStorageMonitorService extends Binder {
         mMemLowThreshold = getMemThreshold();
         mMemFullThreshold = getMemFullThreshold();
         // bug 9315 begin
-		if (mStorageManager == null) {
+        if (mStorageManager == null) {
             mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
             if (mStorageManager != null) {
                 Log.i(TAG, "Succeed to get StorageManager");
                 mStorageManager.registerListener(mStorageListener);
             }
         }
-		// bug 9315 end
+        // bug 9315 end
         checkMemory(true);
     }
 
@@ -430,17 +430,6 @@ class DeviceStorageMonitorService extends Binder {
         notification.setLatestEventInfo(mContext, title, details, intent);
         mNotificationMgr.notify(LOW_MEMORY_NOTIFICATION_ID, notification);
         mContext.sendStickyBroadcast(mStorageLowIntent);
-      //lino add 201-12-05 for when no space sms
-        PendingIntent smsintent = PendingIntent.getActivity(mContext, 0,  new Intent(), 0);
-        Notification smsnotification = new Notification();
-        smsnotification.icon = com.android.internal.R.drawable.stat_notify_disk_full;
-        smsnotification.tickerText = mContext.getText(
-                com.android.internal.R.string.sms_full_title);
-        smsnotification.flags |= Notification.FLAG_NO_CLEAR;
-        smsnotification.setLatestEventInfo(mContext, mContext.getText(
-                com.android.internal.R.string.sms_full_title), mContext.getText(
-                com.android.internal.R.string.sms_full_body), smsintent);
-        mNotificationMgr.notify(NO_MEMORY_SMS_NOTIFICATION_ID, smsnotification);
     }
 
     /**
@@ -671,7 +660,7 @@ class DeviceStorageMonitorService extends Binder {
     StorageEventListener mStorageListener = new StorageEventListener() {
 
         public void onStorageStateChanged(String path, String oldState, String newState) {
-	    Log.i(TAG, "path:" + path);
+        Log.i(TAG, "path:" + path);
             Log.i(TAG, "bootCompleted:" + bootCompleted);
             Log.i(TAG, "android sd-card directory:" + Environment.getExternalStorageDirectory());
             Log.i(TAG, "Received storage state changed notification that " +
@@ -711,7 +700,7 @@ class DeviceStorageMonitorService extends Binder {
                         com.android.internal.R.string.internal_memory_low);
 
                 Toast.makeText(mContext, levelText,
-                	     Toast.LENGTH_LONG).show();
+                         Toast.LENGTH_LONG).show();
                 /*
                 AlertDialog.Builder b = new AlertDialog.Builder(mContext);
 
