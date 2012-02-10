@@ -117,6 +117,8 @@ class CommandParamsFactory extends Handler {
         AppInterface.CommandType cmdType = AppInterface.CommandType
                 .fromInt(cmdDet.typeOfCommand);
         if (cmdType == null) {
+            // send a terminal response to modem
+            mCmdParams = new CommandParams(cmdDet);
             sendCmdParams(ResultCode.CMD_TYPE_NOT_UNDERSTOOD);
             return;
         }
@@ -472,11 +474,13 @@ class CommandParamsFactory extends Handler {
         input.helpAvailable = (cmdDet.commandQualifier & 0x80) != 0;
 
         if (input.ucs2 == true) {
-            if (input.minLen != 1) {
-                input.minLen = (input.minLen / 2);
+            // the max text length should be less than 120 usc2 characters as the whole terminal
+            // response data length is less than 255 and the header may has 15 bytes.
+            if (input.minLen > 120) {
+                input.minLen = 120;
             }
-            if (input.maxLen != 1) {
-                input.maxLen = (input.maxLen / 2);
+            if (input.maxLen > 120) {
+                input.maxLen = 120;
             }
         }
 
