@@ -1009,4 +1009,5 @@
 <!-- add by yangqingan 2011-12-27 for NEWMS00155219 begin -->
 	<string name="unlock_screen_pin_error">Pin码错误!</string>
 	<!-- add by yangqingan 2011-12-27 for NEWMS00155219 end -->
+    <string name="ap_disconnected"> 断开</string>
 </resources>
