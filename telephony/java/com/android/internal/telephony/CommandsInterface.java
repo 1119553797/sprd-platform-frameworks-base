@@ -931,6 +931,15 @@ public interface CommandsInterface extends SprdCommandsInterface{
      */
     void sendBurstDtmf(String dtmfString, int on, int off, Message result);
 
+
+    /**
+     * clirMode is one of the CLIR_* constants above
+     *
+     * response.obj is null
+     */
+
+    void setCMMS(int status, Message response);
+
     /**
      * smscPDU is smsc address in PDU form GSM BCD format prefixed
      *      by a length byte (as expected by TS 27.005) or NULL for default SMSC

@@ -303,6 +303,11 @@ final class GsmSMSDispatcher extends SMSDispatcher {
             SmsMessage.SubmitPdu pdus = SmsMessage.getSubmitPdu(scAddress, destinationAddress,
                     parts.get(i), deliveryIntent != null, SmsHeader.toByteArray(smsHeader),
                     encoding, smsHeader.languageTable, smsHeader.languageShiftTable);
+            if (i == 0) {
+                mCm.setCMMS(1,null);
+            } else if (i == (msgCount - 1)) {
+                mCm.setCMMS(0,null);
+            }
 
             sendRawPdu(pdus.encodedScAddress, pdus.encodedMessage, sentIntent, deliveryIntent);
         }
@@ -440,6 +445,12 @@ final class GsmSMSDispatcher extends SMSDispatcher {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("smsc", pdus.encodedScAddress);
             map.put("pdu", pdus.encodedMessage);
+
+            if (i == 0) {
+                mCm.setCMMS(1,null);
+            } else if (i == (msgCount - 1)) {
+                mCm.setCMMS(0,null);
+            }
 
             SmsTracker tracker = SmsTrackerFactory(map, sentIntent, deliveryIntent);
             sendSms(tracker);

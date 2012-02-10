@@ -789,6 +789,7 @@ public final class SprdRIL extends RIL {
 				 case RIL_REQUEST_GET_REMAIN_TIMES: ret =  responseInts(p); break;
 				 case RIL_REQUEST_GET_SIM_CAPACITY: ret =  responseStrings(p); break;
 				 case RIL_REQUEST_MMI_ENTER_SIM: ret =	responseInts(p); break;
+                 case RIL_REQUEST_SET_CMMS: ret =  responseVoid(p); break;
 				 default:
 				 	throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
 							       //break;
