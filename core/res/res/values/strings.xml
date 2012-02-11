@@ -2511,4 +2511,5 @@
 <!-- add by yangqingan 2011-12-27 for NEWMS00155219 begin -->
 	<string name="unlock_screen_pin_error">The pin is error!</string>
 	<!-- add by yangqingan 2011-12-27 for NEWMS00155219 end -->
+	<string name="ap_disconnected"> disconnected</string>
 </resources>

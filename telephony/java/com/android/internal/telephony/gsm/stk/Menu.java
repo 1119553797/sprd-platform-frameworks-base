@@ -44,7 +44,7 @@ public class Menu implements Parcelable {
         items = new ArrayList<Item>();
         title = null;
         titleAttrs = null;
-        defaultItem = 0;
+        defaultItem = -1;
         softKeyPreferred = false;
         helpAvailable = false;
         titleIconSelfExplanatory = false;
