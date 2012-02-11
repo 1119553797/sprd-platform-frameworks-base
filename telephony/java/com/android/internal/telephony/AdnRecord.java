@@ -29,11 +29,11 @@ import java.util.Arrays;
 import com.android.internal.telephony.IccUtils;
 
 /**
- * 
+ *
  * Used to load or store ADNs (Abbreviated Dialing Numbers).
- * 
+ *
  * {@hide}
- * 
+ *
  */
 public class AdnRecord implements Parcelable {
 	static final String LOG_TAG = "GSM";
@@ -267,7 +267,7 @@ public class AdnRecord implements Parcelable {
 	}
 
 	public boolean isEmptyAnr(String s) {
-		
+
 		if (TextUtils.isEmpty(s)) {
 
 			return true;
@@ -285,7 +285,7 @@ public class AdnRecord implements Parcelable {
 	}
 
 	public boolean stringCompareAnr(String s1, String s2) {
-	
+
 		String[] pair;
 		if (TextUtils.isEmpty(s1) || isEmptyAnr(s1)) {
 
@@ -299,7 +299,7 @@ public class AdnRecord implements Parcelable {
 
 		}
 
-	
+
 
 		return stringCompareNullEqualsEmpty(s1, s2);
 
@@ -392,7 +392,7 @@ public class AdnRecord implements Parcelable {
 	/**
 	 * Build adn hex byte array based on record size The format of byte array is
 	 * defined in 51.011 10.5.1
-	 * 
+	 *
 	 * @param recordSize
 	 *            is the size X of EF record
 	 * @return hex byte[recordSize] to be written to EF record return nulll for
@@ -415,21 +415,25 @@ public class AdnRecord implements Parcelable {
 		if (TextUtils.isEmpty(number) && TextUtils.isEmpty(alphaTag)) {
 			Log.w(LOG_TAG, "[buildAdnString] Empty dialing number");
 			return adnString; // return the empty record (for delete)
-		} else if (!TextUtils.isEmpty(number)
-				&& number.length() > (ADN_DAILING_NUMBER_END
-						- ADN_DAILING_NUMBER_START + 1) * 2) {
-			Log.w(LOG_TAG,
-					"[buildAdnString] Max length of dialing number is 20");
-			return null;
-		} else if (alphaTag != null && alphaTag.length() > footerOffset) {
-			Log.w(LOG_TAG, "[buildAdnString] Max length of tag is "
-					+ footerOffset);
-			return null;
+//		} else if (!TextUtils.isEmpty(number)
+//				&& number.length() > (ADN_DAILING_NUMBER_END
+//						- ADN_DAILING_NUMBER_START + 1) * 2) {
+//			Log.w(LOG_TAG,
+//					"[buildAdnString] Max length of dialing number is 20");
+//			return null;
+//		} else if (alphaTag != null && alphaTag.length() > footerOffset) {
+//			Log.w(LOG_TAG, "[buildAdnString] Max length of tag is "
+//					+ footerOffset);
+//			return null;
 		} else {
 
 			if (!TextUtils.isEmpty(number)) {
 
 				bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(number);
+                if (bcdNumber.length > (ADN_DAILING_NUMBER_END
+                        - ADN_DAILING_NUMBER_START + 1) + 1) {
+                    return null;
+                }
 
 				System.arraycopy(bcdNumber, 0, adnString, footerOffset
 						+ ADN_TON_AND_NPI, bcdNumber.length);
@@ -571,7 +575,7 @@ public class AdnRecord implements Parcelable {
 		}
 	}
 
-	
+
 	// a end
 	public byte[] buildIapString(int recordSize, int recNum) {
 		// byte[] byteTag;
