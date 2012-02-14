@@ -531,7 +531,7 @@ draw:
     { //jgdu push buffer sync
         //Mutex::Autolock autoLock(mBufLock);
     	mInComposing = false;
-    	mBufCondition.signal();    
+    	//mBufCondition.signal();    
     }	
 }
 
