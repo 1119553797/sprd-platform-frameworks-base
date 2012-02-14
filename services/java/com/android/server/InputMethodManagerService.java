@@ -1622,13 +1622,17 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     });
 
             mSwitchingDialog = mDialogBuilder.create();
-	    Log.e("sunway","InputMethodManagerService:showInputMethodMenu");
-	    WindowManager.LayoutParams lp = mSwitchingDialog.getWindow().getAttributes();
-	    lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
-            lp.token = mCurFocusedWindow;
-	    lp.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+		    Log.e("sunway","InputMethodManagerService:showInputMethodMenu");
+		    WindowManager.LayoutParams lp = mSwitchingDialog.getWindow().getAttributes();
+		    lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
+	            lp.token = mCurFocusedWindow;
+		    lp.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
             // mSwitchingDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG);
-            mSwitchingDialog.show();
+		    try{
+	            mSwitchingDialog.show();
+		    } catch ( Exception e ){
+		    	Log.e(TAG,"showInputMethodMenu, show dialog fail, exception=" + e );
+		    }
         }
     }
     
