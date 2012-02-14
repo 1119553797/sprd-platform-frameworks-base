@@ -460,79 +460,73 @@ void LayerBuffer::BufferSource::setBuffer(const sp<LayerBuffer::Buffer>& buffer)
 
 void LayerBuffer::BufferSource::onDraw(const Region& clip) const 
 {
-    sp<Buffer> ourBuffer;
     bool composed;
-    {
+    do {
         Mutex::Autolock autoLock(mBufLock);
-        ourBuffer = getBuffer();
         composed = !mInComposing;
-    }
-    if (UNLIKELY(ourBuffer == 0))  {
-        // nothing to do, we don't have a buffer
-        mLayer.clearWithOpenGL(clip);
-        return;
-    }
+        if (composed) {
+            break;
+        }
 
-    status_t err = NO_ERROR;
-    NativeBuffer src(ourBuffer->getBuffer());
-    const Rect transformedBounds(mLayer.getTransformedBounds());
+        sp<Buffer> ourBuffer = getBuffer();
+        if (UNLIKELY(ourBuffer == 0))  {
+            // nothing to do, we don't have a buffer
+            mLayer.clearWithOpenGL(clip);
+            return;
+        }
 
-    if (composed) {
-        goto draw;
-    }
+        status_t err = NO_ERROR;
+        NativeBuffer src(ourBuffer->getBuffer());
+        const Rect transformedBounds(mLayer.getTransformedBounds());
+
 #if defined(EGL_ANDROID_image_native_buffer)
-    if (GLExtensions::getInstance().haveDirectTexture()) {
-        err = INVALID_OPERATION;
-        if (ourBuffer->supportsCopybit()) {
-            copybit_device_t* copybit = mLayer.mBlitEngine;
-            if (copybit && err != NO_ERROR) {
-                // create our EGLImageKHR the first time
-                err = initTempBuffer();
-                if (err == NO_ERROR) {
-                    // NOTE: Assume the buffer is allocated with the proper USAGE flags
-                    const NativeBuffer& dst(mTempBuffer);
-                    region_iterator clip(Region(Rect(dst.crop.r, dst.crop.b)));
-                    copybit->set_parameter(copybit, COPYBIT_TRANSFORM, 0);
-                    copybit->set_parameter(copybit, COPYBIT_PLANE_ALPHA, 0xFF);
-                    copybit->set_parameter(copybit, COPYBIT_DITHER, COPYBIT_ENABLE);
-                    err = copybit->stretch(copybit, &dst.img, &src.img,
-                            &dst.crop, &src.crop, &clip);
-                    if (err != NO_ERROR) {
-                        clearTempBufferImage();
+        if (GLExtensions::getInstance().haveDirectTexture()) {
+            err = INVALID_OPERATION;
+            if (ourBuffer->supportsCopybit()) {
+                copybit_device_t* copybit = mLayer.mBlitEngine;
+                if (copybit && err != NO_ERROR) {
+                    // create our EGLImageKHR the first time
+                    err = initTempBuffer();
+                    if (err == NO_ERROR) {
+                        // NOTE: Assume the buffer is allocated with the proper USAGE flags
+                        const NativeBuffer& dst(mTempBuffer);
+                        region_iterator clip(Region(Rect(dst.crop.r, dst.crop.b)));
+                        copybit->set_parameter(copybit, COPYBIT_TRANSFORM, 0);
+                        copybit->set_parameter(copybit, COPYBIT_PLANE_ALPHA, 0xFF);
+                        copybit->set_parameter(copybit, COPYBIT_DITHER, COPYBIT_ENABLE);
+                        err = copybit->stretch(copybit, &dst.img, &src.img,
+                                &dst.crop, &src.crop, &clip);
+                        if (err != NO_ERROR) {
+                            clearTempBufferImage();
+                        }
                     }
                 }
             }
         }
-    }
 #endif
-    else {
-        err = INVALID_OPERATION;
-    }
+        else {
+            err = INVALID_OPERATION;
+        }
 
-    if (err != NO_ERROR) {
-        // slower fallback
-        GGLSurface t;
-        t.version = sizeof(GGLSurface);
-        t.width  = src.crop.r;
-        t.height = src.crop.b;
-        t.stride = src.img.w;
-        t.vstride= src.img.h;
-        t.format = src.img.format;
-        t.data = (GGLubyte*)src.img.base;
-        const Region dirty(Rect(t.width, t.height));
-        mTextureManager.loadTexture(&mTexture, dirty, t);
-    }
+        if (err != NO_ERROR) {
+            // slower fallback
+            GGLSurface t;
+            t.version = sizeof(GGLSurface);
+            t.width  = src.crop.r;
+            t.height = src.crop.b;
+            t.stride = src.img.w;
+            t.vstride= src.img.h;
+            t.format = src.img.format;
+            t.data = (GGLubyte*)src.img.base;
+            const Region dirty(Rect(t.width, t.height));
+            mTextureManager.loadTexture(&mTexture, dirty, t);
+        }
 
-draw:
+    	mInComposing = false;
+    } while(0);
+
     mLayer.setBufferTransform(mBufferHeap.transform);
     mLayer.drawWithOpenGL(clip, mTexture);
-    
-    if (!composed)
-    { //jgdu push buffer sync
-        //Mutex::Autolock autoLock(mBufLock);
-    	mInComposing = false;
-    	//mBufCondition.signal();    
-    }	
 }
 
 status_t LayerBuffer::BufferSource::initTempBuffer() const
