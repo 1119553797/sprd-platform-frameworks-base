@@ -880,6 +880,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
 
         rr.mp.writeString(address);
         rr.mp.writeInt(clirMode);
+        rr.mp.writeInt(isStkCall ? 1:0);
         rr.mp.writeInt(0); // UUS information is absent
 
         if (uusInfo == null) {
@@ -890,9 +891,9 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             rr.mp.writeInt(uusInfo.getDcs());
             rr.mp.writeByteArray(uusInfo.getUserData());
         }
-        rr.mp.writeInt(isStkCall ? 1:0);
 
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                + " isStkCall = " + isStkCall);
 
         send(rr);
     }

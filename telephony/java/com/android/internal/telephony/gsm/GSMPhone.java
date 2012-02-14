@@ -730,7 +730,7 @@ public abstract class GSMPhone extends PhoneBase {
 
     public Connection
     dial (String dialString, boolean isStkCall) throws CallStateException {
-        return dial(dialString, null);
+        return dial(dialString, null, isStkCall);
     }
 
     public Connection
