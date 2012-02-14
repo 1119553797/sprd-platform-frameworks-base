@@ -44,4 +44,9 @@
     <string name="mobile_data_connect_enable">连接</string>
     <string name="network_disconnect_title">通知</string>
     <string name="network_disconnect_message">WLAN网络已经断开。通过3G网络进行连接? 如果您没有订购数据业务套餐，这将产生一些费用</string>
+
+    <!-- Message  and title for wifi signal being too weak -->
+    <string name="weak_signal_title">信号弱</string>
+    <string name="weak_signal_message">当前WLAN的信号较弱，建议您选择信号较好的接入点</string>
+    <string name="auto_connect">不再询问，总是自动连接其他信任接入点</string>
 </resources>

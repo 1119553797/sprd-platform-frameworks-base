@@ -469,7 +469,6 @@ MediaProfiles::createDefaultCamcorderLowProfile()
 /*static*/ MediaProfiles::CamcorderProfile*
 MediaProfiles::createFrontCamcorderHighProfile()
 {
-    LOGE("chenhb: createDefaultCamcorderBackProfile");
     MediaProfiles::VideoCodec *videoCodec =
         new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 1024000, 352, 288, 20);
 
@@ -488,7 +487,6 @@ MediaProfiles::createFrontCamcorderHighProfile()
 /*static*/ MediaProfiles::CamcorderProfile*
 MediaProfiles::createFrontCamcorderLowProfile()
 {
-	LOGE("chenhb: createDefaultCamcorderFrontProfile");
 	MediaProfiles::VideoCodec *videoCodec =
 		new MediaProfiles::VideoCodec(VIDEO_ENCODER_H263, 192000, 176, 144, 20);
 	

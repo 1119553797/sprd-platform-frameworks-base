@@ -304,7 +304,7 @@ public class WebSettings {
             + " Mobile/7A341 Safari/528.16";
     private static Locale sLocale;
     private static Object sLockForLocaleSettings;
-    private static String mUAProf = "http://www.spreadtrum.com/wap/8801H_240X320_UAProfile.xml";
+    private static String mUAProf = "http://www.spreadtrum.com/wap/8810G_UAProfile.xml";
 
     
     /**

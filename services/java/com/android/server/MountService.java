@@ -1262,6 +1262,20 @@ class MountService extends IMountService.Stub
             ShutdownCallBack ucb = new ShutdownCallBack(path, observer);
             mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, ucb));
         }
+        // add by luyongchao
+        else {
+        	// the media isn't mount 
+        	 if(LOCAL_LOGD)
+                 Slog.d(TAG, "Current media state isn't mounted or removable, try notify ShutdownThread.");
+             
+             if (observer != null) {
+                 try {
+                     observer.onShutDownComplete(0);
+                 } catch (RemoteException e) {
+                     Slog.w(TAG, "RemoteException when shutting down");
+                 }
+             }
+        }
     }
 
     private boolean getUmsEnabling() {

@@ -841,7 +841,7 @@ bool SniffMP3(
     (*meta)->setInt32("header", header);
 
     *mimeType = MEDIA_MIMETYPE_AUDIO_MPEG;
-    *confidence = 0.2f;
+    *confidence = 0.3001f;
 
     return true;
 }

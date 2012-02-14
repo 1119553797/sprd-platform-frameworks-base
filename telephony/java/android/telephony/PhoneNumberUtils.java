@@ -993,7 +993,7 @@ public class PhoneNumberUtils
         boolean hasPlus = number.indexOf('+') != -1;
         if (hasPlus) numberLenEffective--;
 
-        if (numberLenEffective == 0) return null;
+//        if (numberLenEffective == 0) return null;
 
         int resultLen = (numberLenEffective + 1) / 2;  // Encoded numbers require only 4 bits each.
         int extraBytes = 1;                            // Prepended TOA byte.
@@ -1323,7 +1323,7 @@ public class PhoneNumberUtils
         // retrieve the list of ecc in sim card
         String eccList = SystemProperties.get("ril.sim.ecclist");
 	  log("emergency eccList: " + eccList);
-	
+
         StringBuilder builder = new StringBuilder("000,08,110,999,118,119");
         if (!TextUtils.isEmpty(eccList)) {
             builder.append(",").append(eccList);
