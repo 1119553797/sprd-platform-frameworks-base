@@ -338,13 +338,8 @@ void LayerBuffer::Source::unregisterBuffers() {
 
 LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
         const ISurface::BufferHeap& buffers)
-    : Source(layer), mStatus(NO_ERROR), mBufferSize(0),mInComposing(false),mIsSync(false) 
+    : Source(layer), mStatus(NO_ERROR), mBufferSize(0),mInComposing(false),mIsSync(true) 
 {
-    if((buffers.transform>>24)==0x12){//jgdu push buffer sync
-        mIsSync = true;
-    }
-    LOGI("mIsSync is %d @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",mIsSync);
-	
     if (buffers.heap == NULL) {
         // this is allowed, but in this case, it is illegal to receive
         // postBuffer(). The surface just erases the framebuffer with
@@ -433,25 +428,13 @@ void LayerBuffer::BufferSource::postBuffer(ssize_t offset)
         buffer = new LayerBuffer::Buffer(buffers, offset, mBufferSize);
         if (buffer->getStatus() != NO_ERROR)
             buffer.clear();		
-        setBuffer(buffer);
-	 if(mIsSync){//jgdu push buffer sync
+	{ //jgdu push buffer sync
 	 	Mutex::Autolock autoLock(mBufLock);
+                setBuffer(buffer);
 	 	mInComposing = true;
         }		
         mLayer.invalidate();
-	 if(mIsSync){//jgdu push buffer sync
-		Mutex::Autolock autoLock(mBufLock);
-		int count = 0;
-		while(mInComposing){
-			mBufCondition.waitRelative(mBufLock,100000000);
-			count++;
-			if(count>=2){
-				mInComposing = false;
-				LOGI("video rendering timeout");
-				break;
-			}
-		}
-	 }		
+	while(mInComposing) {}; 
     }
 }
 
@@ -477,7 +460,13 @@ void LayerBuffer::BufferSource::setBuffer(const sp<LayerBuffer::Buffer>& buffer)
 
 void LayerBuffer::BufferSource::onDraw(const Region& clip) const 
 {
-    sp<Buffer> ourBuffer(getBuffer());
+    sp<Buffer> ourBuffer;
+    bool composed;
+    {
+        Mutex::Autolock autoLock(mBufLock);
+        ourBuffer = getBuffer();
+        composed = !mInComposing;
+    }
     if (UNLIKELY(ourBuffer == 0))  {
         // nothing to do, we don't have a buffer
         mLayer.clearWithOpenGL(clip);
@@ -488,6 +477,9 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
     NativeBuffer src(ourBuffer->getBuffer());
     const Rect transformedBounds(mLayer.getTransformedBounds());
 
+    if (composed) {
+        goto draw;
+    }
 #if defined(EGL_ANDROID_image_native_buffer)
     if (GLExtensions::getInstance().haveDirectTexture()) {
         err = INVALID_OPERATION;
@@ -531,11 +523,13 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
         mTextureManager.loadTexture(&mTexture, dirty, t);
     }
 
+draw:
     mLayer.setBufferTransform(mBufferHeap.transform);
     mLayer.drawWithOpenGL(clip, mTexture);
     
-    if(mIsSync){//jgdu push buffer sync
-    	Mutex::Autolock autoLock(mBufLock);
+    if (!composed)
+    { //jgdu push buffer sync
+        //Mutex::Autolock autoLock(mBufLock);
     	mInComposing = false;
     	mBufCondition.signal();    
     }	
