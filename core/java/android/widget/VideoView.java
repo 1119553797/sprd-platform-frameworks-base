@@ -250,6 +250,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         // TODO: these constants need to be published somewhere in the framework.
         Intent i = new Intent("com.android.music.musicservicecommand");
         i.putExtra("command", "pause");
+	i.putExtra("fm_stop", "stop");
         mContext.sendBroadcast(i);
 
         // we shouldn't clear the target state, because somebody might have
