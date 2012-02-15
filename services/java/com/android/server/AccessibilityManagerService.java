@@ -283,8 +283,10 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
 					@Override
 					public void binderDied() {
 						// TODO Auto-generated method stub
-						addedClient.asBinder().unlinkToDeath(this, 0);
-						mClients.remove(addedClient);
+						synchronized (mLock) {
+							addedClient.asBinder().unlinkToDeath(this, 0);
+							mClients.remove(addedClient);
+						}
 					}
 				}, 0 );
             } catch (RemoteException re) {
