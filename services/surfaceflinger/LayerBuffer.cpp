@@ -434,10 +434,12 @@ void LayerBuffer::BufferSource::postBuffer(ssize_t offset)
 	 	mInComposing = true;
         }
         mLayer.invalidate();
-	Mutex::Autolock autoLock(mBufLock);
-	while(mInComposing) {
-	    mBufCondition.waitRelative(mBufLock, 100000000);
-        };
+        {
+	    Mutex::Autolock autoLock(mBufLock);
+	    while(mInComposing) {
+	        mBufCondition.waitRelative(mBufLock, 100000000);
+            };
+        }
     }
 }
 
@@ -463,14 +465,11 @@ void LayerBuffer::BufferSource::setBuffer(const sp<LayerBuffer::Buffer>& buffer)
 
 void LayerBuffer::BufferSource::onDraw(const Region& clip) const 
 {
-    bool composed;
     do {
         Mutex::Autolock autoLock(mBufLock);
-        composed = !mInComposing;
-        if (composed) {
+        if(!mInComposing) {
             break;
         }
-
         sp<Buffer> ourBuffer = getBuffer();
         if (UNLIKELY(ourBuffer == 0))  {
             // nothing to do, we don't have a buffer
