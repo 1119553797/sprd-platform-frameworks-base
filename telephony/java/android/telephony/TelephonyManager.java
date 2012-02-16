@@ -508,6 +508,20 @@ public class TelephonyManager {
             return false;
         }
     }
+    /**
+     * @return true if a IccFdn enabled
+     */
+    public boolean getIccFdnEnabled() {
+        try {
+            return getITelephony().getIccFdnEnabled();
+        } catch (RemoteException ex) {
+            // Assume no ICC card if remote exception which shouldn't happen
+            return false;
+        } catch (NullPointerException ex) {
+            // This could happen before phone restarts due to crashing
+            return false;
+        }
+    }
 
     /**
      * Returns a constant indicating the state of the
