@@ -86,6 +86,12 @@ class GsmCall extends Call {
     hangup() throws CallStateException {
         owner.hangup(this);
     }
+    
+    //add by liguxiang 10-14-11 for NEWMS00128207 begin
+    public void sprdHangupAll() throws CallStateException {
+    	owner.sprdHangupAll(this);
+    }
+    //add by liguxiang 10-14-11 for NEWMS00128207 end
 
     public String
     toString() {

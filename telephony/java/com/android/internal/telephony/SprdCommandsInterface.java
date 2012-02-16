@@ -47,6 +47,7 @@ public interface SprdCommandsInterface {
 	public void registerForVideoCallStateChanged(Handler h, int what, Object obj);
 	public void unregisterForVideoCallStateChanged(Handler h);
 
+    	public int getPhoneId();
 	public void  Mbbms_Gsm_Authenticate(String nonce, Message result);
 	public void  Mbbms_USim_Authenticate(String nonce, String autn, Message result);   
 	public void  getSimType(Message result);

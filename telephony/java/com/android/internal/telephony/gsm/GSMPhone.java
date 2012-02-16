@@ -64,6 +64,7 @@ import com.android.internal.telephony.IccSmsInterfaceManager;
 import com.android.internal.telephony.MmiCode;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneBase;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.PhoneNotifier;
 import com.android.internal.telephony.PhoneProxy;
 import com.android.internal.telephony.PhoneSubInfo;
@@ -206,7 +207,9 @@ public abstract class GSMPhone extends PhoneBase {
         }
 
         //Change the system property
-        SystemProperties.set(TelephonyProperties.CURRENT_ACTIVE_PHONE,
+        String currentActivePhoneProperty = PhoneFactory.getProperty(
+                TelephonyProperties.CURRENT_ACTIVE_PHONE, getPhoneId());
+        SystemProperties.set(currentActivePhoneProperty,
                 new Integer(Phone.PHONE_TYPE_GSM).toString());
     }
 
@@ -822,7 +825,7 @@ public abstract class GSMPhone extends PhoneBase {
     private void storeVoiceMailNumber(String number) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(VM_NUMBER, number);
+        editor.putString(PhoneFactory.getSetting(VM_NUMBER, getPhoneId()), number);
         editor.apply();
         setVmSimImsi(getSubscriberId());
     }
@@ -832,20 +835,20 @@ public abstract class GSMPhone extends PhoneBase {
         String number = mSIMRecords.getVoiceMailNumber();
         if (TextUtils.isEmpty(number)) {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-            number = sp.getString(VM_NUMBER, null);
+            number = sp.getString(PhoneFactory.getSetting(VM_NUMBER, getPhoneId()), null);
         }
         return number;
     }
 
     private String getVmSimImsi() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-        return sp.getString(VM_SIM_IMSI, null);
+        return sp.getString(PhoneFactory.getSetting(VM_SIM_IMSI, getPhoneId()), null);
     }
 
     private void setVmSimImsi(String imsi) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(VM_SIM_IMSI, imsi);
+        editor.putString(PhoneFactory.getSetting(VM_SIM_IMSI, getPhoneId()), imsi);
         editor.apply();
     }
 
@@ -1519,7 +1522,7 @@ public abstract class GSMPhone extends PhoneBase {
     boolean updateCurrentCarrierInProvider() {
         if (mSIMRecords != null) {
             try {
-                Uri uri = Uri.withAppendedPath(Telephony.Carriers.CONTENT_URI, "current");
+                Uri uri = Uri.withAppendedPath(Telephony.Carriers.getContentUri(getPhoneId()), "current");
                 ContentValues map = new ContentValues();
                 map.put(Telephony.Carriers.NUMERIC, mSIMRecords.getSIMOperatorNumeric());
                 mContext.getContentResolver().insert(uri, map);
@@ -1556,9 +1559,9 @@ public abstract class GSMPhone extends PhoneBase {
         // nsm.operatorNumeric is "" if we're in automatic.selection.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(NETWORK_SELECTION_KEY, nsm.operatorNumeric);
-        editor.putString(NETWORK_SELECTION_NAME_KEY, nsm.operatorAlphaLong);
-        editor.putInt(NETWORK_SELECTION_ACT_KEY, nsm.operatorAct);
+        editor.putString(PhoneFactory.getSetting(NETWORK_SELECTION_KEY, getPhoneId()), nsm.operatorNumeric);
+        editor.putString(PhoneFactory.getSetting(NETWORK_SELECTION_NAME_KEY, getPhoneId()), nsm.operatorAlphaLong);
+        editor.putInt(PhoneFactory.getSetting(NETWORK_SELECTION_ACT_KEY, getPhoneId()), nsm.operatorAct);
 
         // commit and log the result.
         if (! editor.commit()) {

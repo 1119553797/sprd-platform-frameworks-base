@@ -601,6 +601,12 @@ public class SipPhone extends SipPhoneBase {
             if (connections.isEmpty()) return null;
             return ((SipConnection) connections.get(0)).getAudioGroup();
         }
+
+		@Override
+		public void sprdHangupAll() throws CallStateException {
+			// TODO Auto-generated method stub
+			
+		}
     }
 
     private class SipConnection extends SipConnectionBase {

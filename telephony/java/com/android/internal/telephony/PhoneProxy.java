@@ -17,34 +17,29 @@
 package com.android.internal.telephony;
 
 
+import java.util.List;
+
 import android.app.ActivityManagerNative;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
-import android.preference.PreferenceManager;
 import android.telephony.CellLocation;
-import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.util.Log;
-import android.view.SurfaceHolder;
 
 import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
 import com.android.internal.telephony.gsm.NetworkInfo;
-import com.android.internal.telephony.gsm.GsmDataConnection;
 import com.android.internal.telephony.test.SimulatedRadioControl;
-
-import java.util.List;
 
 public class PhoneProxy extends Handler implements Phone {
     public final static Object lockForRadioTechnologyChange = new Object();
 
-    private Phone mActivePhone;
+    protected Phone mActivePhone;
     private String mOutgoingPhone;
     private CommandsInterface mCommandsInterface;
     private IccSmsInterfaceManagerProxy mIccSmsInterfaceManagerProxy;

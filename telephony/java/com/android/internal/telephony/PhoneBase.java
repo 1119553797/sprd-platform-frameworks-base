@@ -448,7 +448,7 @@ public abstract class PhoneBase extends Handler implements Phone {
     private String getSavedNetworkSelection() {
         // open the shared preferences and search with our key.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-        return sp.getString(NETWORK_SELECTION_KEY, "");
+        return sp.getString(PhoneFactory.getSetting(NETWORK_SELECTION_KEY, getPhoneId()), "");
     }
 
     /**
@@ -457,7 +457,7 @@ public abstract class PhoneBase extends Handler implements Phone {
     private int getSavedNetworkSelectionAct() {
         // open the shared preferences and search with our key.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-        return sp.getInt(NETWORK_SELECTION_ACT_KEY, NetworkInfo.ACT_GSM);
+        return sp.getInt(PhoneFactory.getSetting(NETWORK_SELECTION_ACT_KEY, getPhoneId()), NetworkInfo.ACT_GSM);
     }
 
     /**

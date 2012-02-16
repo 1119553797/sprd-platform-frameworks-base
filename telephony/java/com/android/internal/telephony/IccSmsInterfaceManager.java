@@ -235,5 +235,9 @@ public abstract class IccSmsInterfaceManager extends ISms.Stub {
     }
 
     protected abstract void log(String msg);
+    
+    int getPhoneId(){
+        return mPhone.getPhoneId();
+    }
 
 }
