@@ -83,16 +83,16 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 						// sim_index = Integer.valueOf(ar.result.toString());
 						sim_index = getInsertIndex();
 					}else {
-						Log.e("yqa", "", ar.exception);
-					}
-					// end
-					mLock.notifyAll();
-				}
-				break;
-			case EVENT_LOAD_DONE:
-				ar = (AsyncResult) msg.obj;
-				synchronized (mLock) {
-					if (ar.exception == null) {
+						Log.e("IccPhoneBookInterface", "[EVENT_UPDATE_DONE]", ar.exception);
+                    }
+                    // end
+                    mLock.notifyAll();
+                }
+                break;
+            case EVENT_LOAD_DONE:
+                ar = (AsyncResult) msg.obj;
+                synchronized (mLock) {
+                    if (ar.exception == null) {
 						readRecordSuccess = true;
 						records = (List<AdnRecord>) ar.result;
 					} else {
@@ -356,4 +356,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 		}
 		return efid;
 	}
+    int getPhoneId(){
+        return phone.getPhoneId();
+    }
 }

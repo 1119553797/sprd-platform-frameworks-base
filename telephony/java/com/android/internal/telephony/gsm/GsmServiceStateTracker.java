@@ -58,6 +58,7 @@ import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.ServiceStateTracker;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
+import com.android.internal.telephony.PhoneFactory;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -70,7 +71,7 @@ import java.util.TimeZone;
 final class GsmServiceStateTracker extends ServiceStateTracker {
     static final String LOG_TAG = "GSM";
     static final boolean DBG = true;
-
+    private boolean isNeedCheckCF = true;
     GSMPhone phone;
     GsmCellLocation cellLoc;
     GsmCellLocation newCellLoc;
@@ -79,6 +80,12 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     private int gprsState = ServiceState.STATE_OUT_OF_SERVICE;
     private int newGPRSState = ServiceState.STATE_OUT_OF_SERVICE;
+
+    /**
+     *  save all cm to power on one phone only when no sim card is inserted
+     *  on a multi-sim headset
+     */
+    private static CommandsInterface[] mCmArray = new CommandsInterface[PhoneFactory.getPhoneCount()];
 
     /**
      *  Values correspond to ServiceStateTracker.DATA_ACCESS_ definitions.
@@ -167,13 +174,21 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     static final int MAX_NUM_DATA_STATE_READS = 20;
 
+    private boolean mLocalLanguageChange = false;// local Language change,true
+                                                 // if change
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            Log.d(LOG_TAG, "BroadcastReceiver:phoneid="+phone.getPhoneId()+" intent=" + intent.getAction());
+
             if (intent.getAction().equals(Intent.ACTION_LOCALE_CHANGED)) {
                 // update emergency string whenever locale changed
-            	Log.v(LOG_TAG, "GsmServiceStateTracker.java---Intent.ACTION_LOCALE_CHANGED");
+                mLocalLanguageChange = true;
+                pollState();
                 updateSpnDisplay();
+            }else{
+                mLocalLanguageChange = false;
             }
         }
     };
@@ -191,6 +206,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
         this.phone = phone;
         cm = phone.mCM;
+        mCmArray[phone.getPhoneId()] = phone.mCM;
         ss = new ServiceState();
         newSS = new ServiceState();
         cellLoc = new GsmCellLocation();
@@ -211,12 +227,15 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         cm.setOnRestrictedStateChanged(this, EVENT_RESTRICTED_STATE_CHANGED, null);
         cm.registerForSIMReady(this, EVENT_SIM_READY, null);
         cm.setOnSimSmsReady(this, EVENT_SIM_SMS_READY, null);
-
+        cm.registerForSIMReadyRadioOn(this, EVENT_SIM_READY, null);
         // system setting property AIRPLANE_MODE_ON is set in Settings.
         int airplaneMode = Settings.System.getInt(
                 phone.getContext().getContentResolver(),
                 Settings.System.AIRPLANE_MODE_ON, 0);
-        mDesiredPowerState = ! (airplaneMode > 0);
+        boolean isStandby = Settings.System.getInt(cr,PhoneFactory.getSetting(
+                Settings.System.SIM_STANDBY, phone.getPhoneId()), 1) == 1;
+        boolean isNotSelected = Settings.System.getInt(cr,Settings.System.POWER_ON_STANDBY_SELECT, 0) == 0;
+        mDesiredPowerState = ! (airplaneMode > 0) && isStandby && isNotSelected;
 
         cr = phone.getContext().getContentResolver();
         cr.registerContentObserver(
@@ -370,14 +389,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                             EVENT_SIM_RECORDS_LOADED, null);
                     mNeedToRegForSimLoaded = false;
                 }
-
-                boolean skipRestoringSelection = phone.getContext().getResources().getBoolean(
-                        com.android.internal.R.bool.skip_restoring_network_selection);
-
-                if (!skipRestoringSelection) {
-                    // restore the previous network selection.
-                    phone.restoreSavedNetworkSelection(null);
-                }
+                // restore the previous network selection.
+                //Modem has done this
+                //phone.restoreSavedNetworkSelection(null);
                 pollState();
                 // Signal strength polling stops when radio is off
                 queueNextSignalStrengthPoll();
@@ -559,6 +573,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     protected void setPowerStateToDesired() {
         // If we want it on and it's off, turn it on
+        Log.i(LOG_TAG, "setPowerStateToDesired: phone_"+phone.getPhoneId()+"mDesiredPowerState= " + mDesiredPowerState + "cm.getRadioState() = "+cm.getRadioState());
         if (mDesiredPowerState
             && cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF) {
             cm.setRadioPower(true, null);
@@ -579,6 +594,15 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     @Override
     protected void powerOffRadioSafely() {
+        // hang up all active voice calls first, modem can deactivate data call
+        // when no active voice call.
+        //if (phone.isInCall()) {
+            phone.mCT.ringingCall.hangupIfAlive();
+            phone.mCT.backgroundCall.hangupIfAlive();
+            phone.mCT.foregroundCall.hangupIfAlive();
+        //}
+        SystemClock.sleep(DATA_STATE_POLL_SLEEP_MS);
+
         // clean data connection
         DataConnectionTracker dcTracker = phone.mDataConnection;
         Message msg = dcTracker.obtainMessage(DataConnectionTracker.EVENT_CLEAN_UP_CONNECTION);
@@ -644,22 +668,28 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     protected void updateSpnDisplay() {
         int rule = phone.mSIMRecords.getDisplayRule(ss.getOperatorNumeric());
         String spn = phone.mSIMRecords.getServiceProviderName();
-        String plmn = ss.getOperatorAlphaLong();
-        Log.v(LOG_TAG, "GsmServiceStateTracker.java----updateSpnDisplay---rule=="+rule+"--curSpnRule=="+curSpnRule
-        		+"---spn=="+(spn==null?"null":spn)+"---curSpn=="+(curSpn==null?"null":curSpn)+"---plmn=="+(plmn==null?"null":plmn)+"---curPlmn=="+(curPlmn==null?"null":curPlmn));
+        String plmn = ss.getOperatorAlphaShort();
+        if(plmn == null || plmn.length() == 0) {
+            plmn = ss.getOperatorAlphaLong();
+        }
+        if(plmn == null || plmn.length() == 0) {
+            plmn = ss.getOperatorNumeric();
+        }
+		int phoneId = phone.getPhoneId();
+
         // For emergency calls only, pass the EmergencyCallsOnly string via EXTRA_PLMN
         if (mEmergencyOnly && cm.getRadioState().isOn()) {
             plmn = Resources.getSystem().
                 getText(com.android.internal.R.string.emergency_calls_only).toString();
         }
-
+        Log.v(LOG_TAG, "GsmServiceStateTracker.java----updateSpnDisplay---rule=="+rule+"--curSpnRule=="+curSpnRule
+                 +"---spn ="+spn+"---curSpn=="+curSpn+"---plmn=="+plmn+"---curPlmn=="+curPlmn);
         if (rule != curSpnRule
                 || !TextUtils.equals(spn, curSpn)
-                || !TextUtils.equals(plmn, curPlmn)) {
-        	//add by liguxiang 08-19-11 for custom plmn display begin
+                || !TextUtils.equals(plmn, curPlmn)||mLocalLanguageChange) {
+
             plmn = plmnDisplay(plmn);  
             spn = plmnDisplay(spn);
-            //add by liguxiang 08-19-11 for custom plmn display end
             boolean showSpn = !mEmergencyOnly
                 && (rule & SIMRecords.SPN_RULE_SHOW_SPN) == SIMRecords.SPN_RULE_SHOW_SPN
                 && (ss.getState() != ServiceState.STATE_OUT_OF_SERVICE);
@@ -674,6 +704,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             intent.putExtra(Intents.EXTRA_SPN, spn);
             intent.putExtra(Intents.EXTRA_SHOW_PLMN, showPlmn);
             intent.putExtra(Intents.EXTRA_PLMN, plmn);
+            intent.putExtra(Intents.EXTRA_PHONE_ID, phoneId);
             intent.putExtra(Intents.EXTRA_NETWORK_TYPE, setRadioType(networkType));
             phone.getContext().sendStickyBroadcast(intent);
         }
@@ -940,7 +971,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     private void pollStateDone() {
         if (DBG) {
-            Log.d(LOG_TAG, "Poll ServiceState done: " +
+            Log.d(LOG_TAG, "[" + phone.getPhoneId() + "]Poll ServiceState done: " +
                 " oldSS=[" + ss + "] newSS=[" + newSS +
                 "] oldGprs=" + gprsState + " newGprs=" + newGPRSState +
                 " oldType=" + networkTypeToString(networkType) +
@@ -1009,7 +1040,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         newSS.setStateOutOfService(); // clean slate for next time
 
         if (hasNetworkTypeChanged) {
-            phone.setSystemProperty(TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE,
+            String dataNetworkTypeProperty = PhoneFactory.getProperty(
+                    TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE, phone.getPhoneId());
+            phone.setSystemProperty(dataNetworkTypeProperty,
                     networkTypeToString(networkType));
         }
 
@@ -1019,9 +1052,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         Log.v(LOG_TAG, "GsmServiceStateTracker.java---pollStateDone----hasChanged=="+hasChanged+"--ss.getState()=="+ss.getState());
         if (hasChanged) {
             String operatorNumeric;
-            
-            //add by liguxiang 11-10-11 for NEWMS00139124 begin
-            //updateSpnDisplay();
+
+            String operatorAlphaProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_OPERATOR_ALPHA, phone.getPhoneId());
+            phone.setSystemProperty(operatorAlphaProperty, ss.getOperatorAlphaLong());
             Log.d(LOG_TAG,"ss state = " + ss.getState());
             if(ss.getState() == ServiceState.STATE_IN_SERVICE){
             	updateSpnDisplay();
@@ -1029,16 +1063,15 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             	Intent intent = new Intent(Intents.NETWORK_UPDATE_ACTION);
                 phone.getContext().sendStickyBroadcast(intent);
             }
-            //add by liguxiang 11-10-11 for NEWMS00139124 end
-
-            phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ALPHA,
-                ss.getOperatorAlphaLong());
-
             operatorNumeric = ss.getOperatorNumeric();
-            phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_NUMERIC, operatorNumeric);
+            String operatorNumericProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_OPERATOR_NUMERIC, phone.getPhoneId());
+            phone.setSystemProperty(operatorNumericProperty, operatorNumeric);
 
             if (operatorNumeric == null) {
-                phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, "");
+                String operatorIsoCountryProperty = PhoneFactory.getProperty(
+                        TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, phone.getPhoneId());
+                phone.setSystemProperty(operatorIsoCountryProperty, "");
             } else {
                 String iso = "";
                 try{
@@ -1050,7 +1083,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     Log.w(LOG_TAG, "countryCodeForMcc error" + ex);
                 }
 
-                phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, iso);
+                String operatorIsoCountryProperty = PhoneFactory.getProperty(
+                        TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, phone.getPhoneId());
+                phone.setSystemProperty(operatorIsoCountryProperty, iso);
                 mGotCountryCode = true;
 
                 if (mNeedFixZone) {
@@ -1093,11 +1128,21 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 }
             }
 
-            phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ISROAMING,
+            String operatorIsRoamingProperty = PhoneFactory.getProperty(
+                    TelephonyProperties.PROPERTY_OPERATOR_ISROAMING, phone.getPhoneId());
+            phone.setSystemProperty(operatorIsRoamingProperty,
                 ss.getRoaming() ? "true" : "false");
 
             phone.notifyServiceStateChanged(ss);
             updateSpnDisplay();
+            // modify by wangxiaobin for MSNEW00130772 2011-11-03 begin
+            int cf = SystemProperties.getInt("persist.sys.callforwarding", 1);
+            Log.v(LOG_TAG, "pollStateDone call forward state=" + cf);
+            if (cf == 1) {
+                initCallForwardSet();
+                //initCallForwardSet();
+            }
+            // modify by wangxiaobin for MSNEW00130772 2011-11-03 end
         }
 
         if (hasGprsAttached) {
@@ -1109,7 +1154,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         }
 
         if (hasNetworkTypeChanged) {
-            phone.notifyDataConnection(null);
+            if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+                phone.notifyDataConnection(null);
+            }
         }
 
         if (hasRoamingOn) {
@@ -1150,6 +1197,24 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     private boolean isGprsConsistent(int gprsState, int serviceState) {
         return !((serviceState == ServiceState.STATE_IN_SERVICE) &&
                 (gprsState != ServiceState.STATE_IN_SERVICE));
+    }
+
+    private void initCallForwardSet() {
+        if (isNeedCheckCF&&ss.getState() == ServiceState.STATE_IN_SERVICE) {
+            initReasonCF(CommandsInterface.CF_REASON_UNCONDITIONAL);
+//            initReasonCF(CommandsInterface.CF_REASON_BUSY);
+//            initReasonCF(CommandsInterface.CF_REASON_NO_REPLY);
+//            initReasonCF(CommandsInterface.CF_REASON_NOT_REACHABLE);
+            isNeedCheckCF = false;
+        }
+    }
+
+    private void initReasonCF(int reason) {
+        if (DBG) {
+            Log.d(LOG_TAG, "init checkCF setCallForwardSetting(sim:"+phone.getPhoneId()+",reason:"+reason+",value:-1");
+        }
+        TelephonyManager.setCallForwardSetting(phone.getContext(),phone.getPhoneId(),-1,reason);
+        phone.getCallForwardingOption(reason,1,null);
     }
 
     /**
@@ -1383,7 +1448,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
      * @return true for roaming state set
      */
     private boolean isRoamingBetweenOperators(boolean gsmRoaming, ServiceState s) {
-        String spn = SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA, "empty");
+        String iccOperatorAlphaProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA, phone.getPhoneId());
+        String spn = SystemProperties.get(iccOperatorAlphaProperty, "empty");
 
         String onsl = s.getOperatorAlphaLong();
         String onss = s.getOperatorAlphaShort();
@@ -1391,8 +1458,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         boolean equalsOnsl = onsl != null && spn.equals(onsl);
         boolean equalsOnss = onss != null && spn.equals(onss);
 
+        String iccOperatorNumericProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC, phone.getPhoneId());
         String simNumeric = SystemProperties.get(
-                TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC, "");
+                iccOperatorNumericProperty, "");
         String  operatorNumeric = s.getOperatorNumeric();
 
         boolean equalsMcc = true;
@@ -1535,7 +1604,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 zone = TimeZone.getTimeZone( tzname );
             }
 
-            String iso = SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY);
+            String operatorIsoCountryProperty = PhoneFactory.getProperty(
+                    TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, phone.getPhoneId());
+            String iso = SystemProperties.get(operatorIsoCountryProperty);
 
             if (zone == null) {
 
@@ -1752,6 +1823,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     }
 
     private void log(String s) {
-        Log.d(LOG_TAG, "[GsmServiceStateTracker] " + s);
+        Log.d(LOG_TAG, "[GsmServiceStateTracker-phoneId" + phone.getPhoneId() + "] " + s);
     }
 }

@@ -29,8 +29,10 @@ public class PhoneSubInfoProxy extends IPhoneSubInfo.Stub {
 
     public PhoneSubInfoProxy(PhoneSubInfo phoneSubInfo) {
         mPhoneSubInfo = phoneSubInfo;
-        if(ServiceManager.getService("iphonesubinfo") == null) {
-            ServiceManager.addService("iphonesubinfo", this);
+        int phoneId =this.mPhoneSubInfo.getPhoneId();
+        String serviceName = PhoneFactory.getServiceName("iphonesubinfo", phoneId);
+        if(ServiceManager.getService(serviceName) == null) {
+            ServiceManager.addService(serviceName, this);
         }
     }
 

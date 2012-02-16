@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import android.content.Intent;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
@@ -37,6 +38,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 	// ***** Instance Variables
 	static String LOG_TAG = "AdnRecordCache";
 	private IccFileHandler mFh;
+    private String adnCacheStateProperty;
 	public UsimPhoneBookManager mUsimPhoneBookManager;
 	PhoneBase phone;
 
@@ -81,6 +83,8 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		this.phone = phone;
 		mFh = phone.getIccFileHandler();
 		mUsimPhoneBookManager = new UsimPhoneBookManager(phone, mFh, this);
+        adnCacheStateProperty = PhoneFactory.getProperty(
+                TelephonyProperties.ADNCACHE_LOADED_STATE, phone.getPhoneId());
 	}
 
 	public Object getLock() {
@@ -126,7 +130,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 	 * @return List of AdnRecords for efid if we've already loaded them this
 	 *         radio session, or null if we haven't
 	 */
-	public ArrayList<AdnRecord> getRecordsIfLoaded(int efid) {
+	public synchronized ArrayList<AdnRecord> getRecordsIfLoaded(int efid) {
 		return adnLikeFiles.get(efid);
 	}
 
@@ -380,11 +384,11 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		int[] subjectNum = null;
 		boolean newAnr = false;
 		int[] updateSubjectFlag = null;
-	
+        int[] updateRecordInIap = null;
 
 		ArrayList<Integer> subjectEfids;
 		ArrayList<Integer> subjectNums;
-	
+        ArrayList<Integer> inIapNums;
 		int m = 0,n =0 ;
 		int[][] anrTagMap; // efid ,numberInIap
 		int efids[] = mUsimPhoneBookManager.getSubjectEfids( type,  num);
@@ -399,7 +403,7 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		updateSubjectFlag = getUpdateSubjectFlag(num,type, oldAdn, newAdn);
 		subjectEfids = new ArrayList<Integer>();
 		subjectNums = new ArrayList<Integer>();
-      
+             inIapNums =  new ArrayList<Integer>();
       
              if(updateSubjectFlag == null || efids == null ||efids.length == 0){
                    
@@ -473,7 +477,6 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 			
 
 				
-
 			}
 			boolean isFull = false;
 			{
@@ -827,6 +830,11 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 			result = mUsimPhoneBookManager.loadEfFilesFromUsim();
 		} else {
 			result = getRecordsIfLoaded(efid);
+            if(result != null){
+                if(result.size() == 0){
+                result = null;
+            }
+          }
 		}
 
 		// Have we already loaded this efid?
@@ -839,6 +847,10 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
 			return;
 		}
+        if(efid == EF_ADN){
+            // mark sim card
+            markAdnRecordLoaded(false);
+        }
              Log.i("AdnRecordCache", "requestLoadAllAdnLike (2)efid " + efid);
 		// Have we already *started* loading this efid?
 
@@ -879,6 +891,13 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 				obtainMessage(EVENT_LOAD_ALL_ADN_LIKE_DONE, efid, 0));
 	}
 
+    public void broadcastForAdnRecordLoaded(String value, String reason) {
+        Log.d("AdnRecordCache", "AdnRecordCache is loaded and send broadcast");
+        Intent intent = new Intent(TelephonyIntents.SIM_ADNCACHE_LOADED);
+        intent.putExtra(IccCard.INTENT_KEY_PHONE_ID, phone.getPhoneId());
+        phone.getContext().sendBroadcast(intent, null);
+    }
+
 	// ***** Private methods
 
 	private void notifyWaiters(ArrayList<Message> waiters, AsyncResult ar) {
@@ -895,7 +914,17 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		}
 	}
 
+    public void markAdnRecordLoaded(boolean loaded){
+        String flag = loaded ? "1" : "0";
+        phone.setSystemProperty(adnCacheStateProperty,flag);
+        Log.d("AdnRecordCache", "set value of " + adnCacheStateProperty + " : " + flag);
+        if(loaded){
+            broadcastForAdnRecordLoaded(null,null);
+        }
+    }
+
 	// ***** Overridden from Handler
+
 
 	public void handleMessage(Message msg) {
 		AsyncResult ar;
@@ -917,7 +946,11 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 			if (ar.exception == null) {
 			      Log.i("AdnRecordCache","size " + ((ArrayList<AdnRecord>) ar.result).size());
 				adnLikeFiles.put(efid, (ArrayList<AdnRecord>) ar.result);
-			}
+			    if(efid == EF_ADN){
+                    //mark sim card
+                    markAdnRecordLoaded(true);
+                }
+            }
 			notifyWaiters(waiters, ar);
 			break;
 		case EVENT_UPDATE_ADN_DONE:
