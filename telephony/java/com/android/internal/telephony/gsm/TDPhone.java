@@ -993,5 +993,9 @@ public final class TDPhone extends GSMPhone {
 		return mRemainTimes;
 	}
 
+    public int getPhoneId() {
+        return mCM.getPhoneId();
+    }
+
 }
 

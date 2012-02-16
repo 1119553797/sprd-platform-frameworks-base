@@ -29,6 +29,7 @@ import android.provider.ContactsContract.CommonDataKinds.SipAddress;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -366,9 +367,21 @@ public class CallerInfoAsyncQuery {
         cw.listener = listener;
         cw.cookie = cookie;
         cw.number = number;
-
+        int phoneCount = PhoneFactory.getPhoneCount();
+        int phoneId = -1;
+        if (context != null) {
+            for (int i = 0; i < phoneCount; i++) {
+                int callstate = ((TelephonyManager) context.getSystemService(PhoneFactory
+                        .getServiceName(Context.TELEPHONY_SERVICE, i))).getCallState();
+                boolean phoneIsIdle = (callstate == TelephonyManager.CALL_STATE_IDLE);
+                if (!phoneIsIdle) {
+                    phoneId = i;
+                    break;
+                }
+            }
+        }
         // check to see if these are recognized numbers, and use shortcuts if we can.
-        if (PhoneNumberUtils.isEmergencyNumber(number)) {
+        if (PhoneNumberUtils.isSimEmergencyNumber(number, phoneId)) {
             cw.event = EVENT_EMERGENCY_NUMBER;
         } else if (PhoneNumberUtils.isVoiceMailNumber(number)) {
             cw.event = EVENT_VOICEMAIL_NUMBER;

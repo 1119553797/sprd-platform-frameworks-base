@@ -81,6 +81,25 @@ public class SmsMessage {
      */
     public SmsMessageBase mWrappedSmsMessage;
 
+    /**
+     * {@hide}
+     */
+    private int phoneId;
+
+    /**
+     * {@hide}
+     */
+    public int getPhoneId() {
+        return phoneId;
+    }
+
+    /**
+     * {@hide}
+     */
+    public void setPhoneId(int phoneId) {
+        this.phoneId = phoneId;
+    }
+
     public static class SubmitPdu {
 
         public byte[] encodedScAddress; // Null if not applicable.

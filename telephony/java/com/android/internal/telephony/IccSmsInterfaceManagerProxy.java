@@ -29,8 +29,10 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
     public IccSmsInterfaceManagerProxy(IccSmsInterfaceManager
             iccSmsInterfaceManager) {
         this.mIccSmsInterfaceManager = iccSmsInterfaceManager;
-        if(ServiceManager.getService("isms") == null) {
-            ServiceManager.addService("isms", this);
+        int phoneId =this.mIccSmsInterfaceManager.getPhoneId();       
+        String serviceName = PhoneFactory.getServiceName("isms", phoneId);
+        if(ServiceManager.getService(serviceName) == null) {
+            ServiceManager.addService(serviceName, this);
         }
     }
 

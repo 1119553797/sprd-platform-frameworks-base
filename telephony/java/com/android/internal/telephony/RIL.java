@@ -232,6 +232,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     // EVENT_SEND and decreases while handling EVENT_SEND. It gets cleared while
     // WAKE_LOCK_TIMEOUT occurs.
     int mRequestMessagesPending;
+    int mPhoneId;
     // The number of requests sent out but waiting for response. It increases while
     // sending request and decreases while handling response. It should match
     // mRequestList.size() unless there are requests no replied while
@@ -258,7 +259,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     static final int RESPONSE_SOLICITED = 0;
     static final int RESPONSE_UNSOLICITED = 1;
 
-    static final String SOCKET_NAME_RIL = "rild";
+    protected String SOCKET_NAME_RIL = "rild";
 
     static final int SOCKET_OPEN_RETRY_MILLIS = 4 * 1000;
 
@@ -639,9 +640,20 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     }
 
     public RIL(Context context, int networkMode, int cdmaSubscription) {
+    	this(context, networkMode, cdmaSubscription, PhoneFactory.DEFAULT_PHONE_ID);
+    }
+
+    public RIL(Context context, int networkMode, int cdmaSubscription, int phoneId) {
+    // zhanglj modify end
         super(context);
         mCdmaSubscription  = cdmaSubscription;
         mNetworkMode = networkMode;
+        // zhanglj add begin 2011-05-20
+        mPhoneId = phoneId;
+        if (mPhoneId != PhoneFactory.DEFAULT_PHONE_ID){
+            SOCKET_NAME_RIL = SOCKET_NAME_RIL + phoneId;
+        }
+        // zhanglj add end
         //At startup mPhoneType is first set from networkMode
         switch(networkMode) {
             case RILConstants.NETWORK_MODE_WCDMA_PREF:
@@ -1402,6 +1414,12 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
                 requestToString(rr.mRequest) + " " + cid);
 
         send(rr);
+    }
+
+    private boolean
+    isAutoAttach() {
+        int dataPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+        return dataPhoneId == mPhoneId;
     }
 
     public void
@@ -3119,8 +3137,10 @@ responseUnsolUssdStrings(Parcel p){
        response = new ArrayList<NeighboringCellInfo>();
 
        // Determine the radio access type
+       String dataNetworkTypeProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE, mPhoneId);
        String radioString = SystemProperties.get(
-               TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE, "unknown");
+               dataNetworkTypeProperty, "unknown");
        int radioType;
        if (radioString.equals("GPRS")) {
            radioType = NETWORK_TYPE_GPRS;

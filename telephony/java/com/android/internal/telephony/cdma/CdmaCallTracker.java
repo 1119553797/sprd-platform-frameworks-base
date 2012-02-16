@@ -805,6 +805,18 @@ public final class CdmaCallTracker extends CallTracker {
         call.onHangupLocal();
         phone.notifyPreciseCallStateChanged();
     }
+    
+    //add by liguxiang 10-14-11 for NEWMS00128207 begin
+    /* package */
+    void sprdHangupAll(CdmaCall call) throws CallStateException {
+    	if (call.getConnections().size() == 0) {
+            throw new CallStateException("no connections in call");
+        }
+    	hangupAllConnections(call);
+    	call.onHangupLocal();
+        phone.notifyPreciseCallStateChanged();
+    }
+    //add by liguxiang 10-14-11 for NEWMS00128207 end
 
     /* package */
     void hangupWaitingOrBackground() {

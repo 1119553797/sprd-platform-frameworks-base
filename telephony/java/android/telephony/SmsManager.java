@@ -20,10 +20,12 @@ import android.app.PendingIntent;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.text.TextUtils;
+import android.text.format.Time;
 import android.util.Log;
 
 import com.android.internal.telephony.ISms;
 import com.android.internal.telephony.IccConstants;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsRawData;
@@ -45,6 +47,7 @@ import java.util.List;
  */
 public final class SmsManager {
     private static SmsManager sInstance;
+    private static final String TAG = "SmsManager";
 
     /**
      * Send a text based SMS.
@@ -624,4 +627,362 @@ public final class SmsManager {
     static public final int RESULT_ERROR_LIMIT_EXCEEDED     = 5;
     /** Failed because FDN is enabled. {@hide} */
     static public final int RESULT_ERROR_FDN_CHECK_FAILURE  = 6;
+
+    /**
+     * Send a text based SMS.
+     *
+     * @param destinationAddress the address to send the message to
+     * @param scAddress is the service center address or null to use
+     *  the current default SMSC
+     * @param text the body of the message to send
+     * @param sentIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is sucessfully sent, or failed.
+     *  The result code will be <code>Activity.RESULT_OK<code> for success,
+     *  or one of these errors:<br>
+     *  <code>RESULT_ERROR_GENERIC_FAILURE</code><br>
+     *  <code>RESULT_ERROR_RADIO_OFF</code><br>
+     *  <code>RESULT_ERROR_NULL_PDU</code><br>
+     *  For <code>RESULT_ERROR_GENERIC_FAILURE</code> the sentIntent may include
+     *  the extra "errorCode" containing a radio technology specific value,
+     *  generally only useful for troubleshooting.<br>
+     *  The per-application based SMS control checks sentIntent. If sentIntent
+     *  is NULL the caller will be checked against all unknown applications,
+     *  which cause smaller number of SMS to be sent in checking period.
+     * @param deliveryIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is delivered to the recipient.  The
+     *  raw pdu of the status report is in the extended data ("pdu").
+     *
+     * @throws IllegalArgumentException if destinationAddress or text are empty
+     * {@hide}
+     */
+    public void sendTextMessage(
+            String destinationAddress, String scAddress, String text,
+            PendingIntent sentIntent, PendingIntent deliveryIntent, int phoneId) {
+        if (TextUtils.isEmpty(destinationAddress)) {
+            throw new IllegalArgumentException("Invalid destinationAddress");
+        }
+
+        if (TextUtils.isEmpty(text)) {
+            throw new IllegalArgumentException("Invalid message body");
+        }
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", phoneId)));
+            if (iccISms != null) {
+                iccISms.sendText(destinationAddress, scAddress, text, sentIntent, deliveryIntent);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+            Log.d(TAG,"sendTextMessage() exception",ex);
+        }
+    }
+
+    /**
+     * Send a multi-part text based SMS.  The callee should have already
+     * divided the message into correctly sized parts by calling
+     * <code>divideMessage</code>.
+     *
+     * @param destinationAddress the address to send the message to
+     * @param scAddress is the service center address or null to use
+     *   the current default SMSC
+     * @param parts an <code>ArrayList</code> of strings that, in order,
+     *   comprise the original message
+     * @param sentIntents if not null, an <code>ArrayList</code> of
+     *   <code>PendingIntent</code>s (one for each message part) that is
+     *   broadcast when the corresponding message part has been sent.
+     *   The result code will be <code>Activity.RESULT_OK<code> for success,
+     *   or one of these errors:<br>
+     *   <code>RESULT_ERROR_GENERIC_FAILURE</code><br>
+     *   <code>RESULT_ERROR_RADIO_OFF</code><br>
+     *   <code>RESULT_ERROR_NULL_PDU</code><br>
+     *   For <code>RESULT_ERROR_GENERIC_FAILURE</code> each sentIntent may include
+     *   the extra "errorCode" containing a radio technology specific value,
+     *   generally only useful for troubleshooting.<br>
+     *   The per-application based SMS control checks sentIntent. If sentIntent
+     *   is NULL the caller will be checked against all unknown applicaitons,
+     *   which cause smaller number of SMS to be sent in checking period.
+     * @param deliveryIntents if not null, an <code>ArrayList</code> of
+     *   <code>PendingIntent</code>s (one for each message part) that is
+     *   broadcast when the corresponding message part has been delivered
+     *   to the recipient.  The raw pdu of the status report is in the
+     *   extended data ("pdu").
+     *
+     * @throws IllegalArgumentException if destinationAddress or data are empty
+     * {@hide}
+     */
+    public void sendMultipartTextMessage(
+            String destinationAddress, String scAddress, ArrayList<String> parts,
+            ArrayList<PendingIntent> sentIntents, ArrayList<PendingIntent> deliveryIntents, int phoneId) {
+        if (TextUtils.isEmpty(destinationAddress)) {
+            throw new IllegalArgumentException("Invalid destinationAddress");
+        }
+        if (parts == null || parts.size() < 1) {
+            throw new IllegalArgumentException("Invalid message body");
+        }
+
+        if (parts.size() > 1) {
+            try {
+                ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms",phoneId)));
+                if (iccISms != null) {
+                    iccISms.sendMultipartText(destinationAddress, scAddress, parts,
+                            sentIntents, deliveryIntents);
+                }
+            } catch (RemoteException ex) {
+                // ignore it
+            }
+        } else {
+            PendingIntent sentIntent = null;
+            PendingIntent deliveryIntent = null;
+            if (sentIntents != null && sentIntents.size() > 0) {
+                sentIntent = sentIntents.get(0);
+            }
+            if (deliveryIntents != null && deliveryIntents.size() > 0) {
+                deliveryIntent = deliveryIntents.get(0);
+            }
+            sendTextMessage(destinationAddress, scAddress, parts.get(0),
+                    sentIntent, deliveryIntent, phoneId);
+        }
+    }
+
+    /**
+     * Send a data based SMS to a specific application port.
+     *
+     * @param destinationAddress the address to send the message to
+     * @param scAddress is the service center address or null to use
+     *  the current default SMSC
+     * @param destinationPort the port to deliver the message to
+     * @param data the body of the message to send
+     * @param sentIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is sucessfully sent, or failed.
+     *  The result code will be <code>Activity.RESULT_OK<code> for success,
+     *  or one of these errors:<br>
+     *  <code>RESULT_ERROR_GENERIC_FAILURE</code><br>
+     *  <code>RESULT_ERROR_RADIO_OFF</code><br>
+     *  <code>RESULT_ERROR_NULL_PDU</code><br>
+     *  For <code>RESULT_ERROR_GENERIC_FAILURE</code> the sentIntent may include
+     *  the extra "errorCode" containing a radio technology specific value,
+     *  generally only useful for troubleshooting.<br>
+     *  The per-application based SMS control checks sentIntent. If sentIntent
+     *  is NULL the caller will be checked against all unknown applicaitons,
+     *  which cause smaller number of SMS to be sent in checking period.
+     * @param deliveryIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is delivered to the recipient.  The
+     *  raw pdu of the status report is in the extended data ("pdu").
+     *
+     * @throws IllegalArgumentException if destinationAddress or data are empty
+     * {@hide}
+     */
+    public void sendDataMessage(
+            String destinationAddress, String scAddress, short destinationPort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent, int phoneId) {
+        if (TextUtils.isEmpty(destinationAddress)) {
+            throw new IllegalArgumentException("Invalid destinationAddress");
+        }
+
+        if (data == null || data.length == 0) {
+            throw new IllegalArgumentException("Invalid message data");
+        }
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms",phoneId)));
+            if (iccISms != null) {
+                iccISms.sendData(destinationAddress, scAddress, destinationPort & 0xFFFF,
+                        data, sentIntent, deliveryIntent);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+    }
+
+    /**
+     * Copy a raw SMS PDU to the ICC.
+     * ICC (Integrated Circuit Card) is the card of the device.
+     * For example, this can be the SIM or USIM for GSM.
+     *
+     * @param smsc the SMSC for this message, or NULL for the default SMSC
+     * @param pdu the raw PDU to store
+     * @param status message status (STATUS_ON_ICC_READ, STATUS_ON_ICC_UNREAD,
+     *               STATUS_ON_ICC_SENT, STATUS_ON_ICC_UNSENT)
+     * @return true for success
+     *
+     * {@hide}
+     */
+    public boolean copyMessageToIcc(byte[] smsc, byte[] pdu, int status, int phoneId) {
+        boolean success = false;
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms",phoneId)));
+            if (iccISms != null) {
+                success = iccISms.copyMessageToIccEf(status, pdu, smsc);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return success;
+    }
+
+    /**
+     * Copy a raw SMS PDU to the ICC.
+     * ICC (Integrated Circuit Card) is the card of the device.
+     * For example, this can be the SIM or USIM for GSM.
+     *
+     * @param smsc the SMSC for this message, or NULL for the default SMSC
+     * @param pdu the raw PDU to store
+     * @param status message status (STATUS_ON_ICC_READ, STATUS_ON_ICC_UNREAD,
+     *               STATUS_ON_ICC_SENT, STATUS_ON_ICC_UNSENT)
+     * @return true for success
+     *
+     * {@hide}
+     */
+    public String copyMessageToIccEfWithResult(byte[] smsc, byte[] pdu, int status, int phoneId) {
+        String exception = null;
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms",phoneId)));
+            if (iccISms != null) {
+                exception = iccISms.copyMessageToIccEfWithResult(status, pdu, smsc);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+            Log.d("SmsManager", "RemoteException hanppend when call copyMessageToIccEfWithResult method!!",ex);
+        }
+
+        return exception;
+    }
+
+    /**
+     * Delete the specified message from the ICC.
+     * ICC (Integrated Circuit Card) is the card of the device.
+     * For example, this can be the SIM or USIM for GSM.
+     *
+     * @param messageIndex is the record index of the message on ICC
+     * @return true for success
+     *
+     * {@hide}
+     */
+    public boolean
+    deleteMessageFromIcc(int messageIndex, int phoneId) {
+        boolean success = false;
+        byte[] pdu = new byte[IccConstants.SMS_RECORD_LENGTH-1];
+        Arrays.fill(pdu, (byte)0xff);
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms",phoneId)));
+            if (iccISms != null) {
+                success = iccISms.updateMessageOnIccEf(messageIndex, STATUS_ON_ICC_FREE, pdu);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return success;
+    }
+
+    /**
+     * Update the specified message on the ICC.
+     * ICC (Integrated Circuit Card) is the card of the device.
+     * For example, this can be the SIM or USIM for GSM.
+     *
+     * @param messageIndex record index of message to update
+     * @param newStatus new message status (STATUS_ON_ICC_READ,
+     *                  STATUS_ON_ICC_UNREAD, STATUS_ON_ICC_SENT,
+     *                  STATUS_ON_ICC_UNSENT, STATUS_ON_ICC_FREE)
+     * @param pdu the raw PDU to store
+     * @return true for success
+     *
+     * {@hide}
+     */
+    public boolean updateMessageOnIcc(int messageIndex, int newStatus, byte[] pdu, int phoneId) {
+        boolean success = false;
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms",phoneId)));
+            if (iccISms != null) {
+                success = iccISms.updateMessageOnIccEf(messageIndex, newStatus, pdu);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return success;
+    }
+
+    /**
+     * Retrieves all messages currently stored on ICC.
+     * ICC (Integrated Circuit Card) is the card of the device.
+     * For example, this can be the SIM or USIM for GSM.
+     *
+     * @return <code>ArrayList</code> of <code>SmsMessage</code> objects
+     *
+     * {@hide}
+     */
+    public ArrayList<SmsMessage> getAllMessagesFromIcc(int phoneId) {
+        List<SmsRawData> records = null;
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms",phoneId)));
+            if (iccISms != null) {
+                records = iccISms.getAllMessagesFromIccEf();
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return createMessageListFromRawRecords(records);
+   }
+
+    public boolean copyMessageToIcc(String scAddr, String destAddr, String message,
+            boolean statusRe, int status) {
+        SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(scAddr, destAddr, message, statusRe);
+
+        return copyMessageToIcc(null, pdu.encodedMessage, status);
+    }
+
+    //fix for bug 4197
+    public String copyMessageToIccEfWithResult(String scAddr, String destAddr, String message,
+            boolean statusRe, int status) {
+        SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(scAddr, destAddr, message, statusRe);
+
+        return copyMessageToIccEfWithResult(null, pdu.encodedMessage, status, 0);
+    }
+
+    public boolean copyMessageToIcc(String scAddr, String destAddr, String message,
+            boolean statusRe, int status,int phoneId) {
+        SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(scAddr, destAddr, message, statusRe);
+
+        return copyMessageToIcc(null, pdu.encodedMessage, status,phoneId);
+    }
+
+    //fix for bug 4197 
+    public String copyMessageToIccEfWithResult(String scAddr, String destAddr, String message,
+            boolean statusRe, int status,int phoneId) {
+        SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(scAddr, destAddr, message, statusRe);
+
+        return copyMessageToIccEfWithResult(null, pdu.encodedMessage, status,phoneId);
+    }
+
+    //add by TS  for the received message copy to Icc should save the received time
+    public boolean copyMessageToIcc(String scAddr, String destAddr, String message, int status ,long time ,int phoneId) {
+        Time time1 = new Time();
+        time1.set(time);
+        byte[] data = SmsMessage.getReceivedPdu(destAddr,message,status,time1);
+        if(data == null){
+            return false;
+        }
+        return copyMessageToIcc(null,data,status,phoneId);
+    }
+    //fix for bug 4197
+    //add by TS  for the received message copy to Icc should save the received time
+    public String copyMessageToIccEfWithResult(String scAddr, String destAddr, String message, int status ,long time ,int phoneId) {
+        Time time1 = new Time();
+        time1.set(time);
+        byte[] data = SmsMessage.getReceivedPdu(destAddr,message,status,time1);
+        if(data == null){
+            Log.d("SmsManager", "copyMessageToIccEfWithResult ===> data is null ! ");
+            return null;
+        }
+        return copyMessageToIccEfWithResult(null,data,status,phoneId);
+    }
+
 }
