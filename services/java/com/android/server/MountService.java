@@ -1208,6 +1208,10 @@ class MountService extends IMountService.Stub
         synchronized (mListeners) {
             for(MountServiceBinderListener bl : mListeners) {
                 if (bl.mListener == listener) {
+                	/*add by yinjie@spreadst.com
+                	 * unlinkToDeath for listener, so the global reference for bl could be released.
+                	 * */
+                	listener.asBinder().unlinkToDeath(bl, 0);
                     mListeners.remove(mListeners.indexOf(bl));
                     return;
                 }

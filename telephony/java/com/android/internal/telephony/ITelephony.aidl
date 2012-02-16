@@ -266,7 +266,10 @@ interface ITelephony {
      * Return true if an ICC card is present
      */
     boolean hasIccCard();
-    
+    /**
+     * @return true if a IccFdn enabled
+     */
+    boolean getIccFdnEnabled();
     /**
      * Return gam Authenticate
      */
