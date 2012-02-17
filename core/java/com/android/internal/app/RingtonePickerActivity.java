@@ -202,7 +202,7 @@ public final class RingtonePickerActivity extends AlertActivity implements
             mClickedPos = getListPosition(mRingtoneManager.getRingtonePosition(mExistingUri));
             //add by bug 10729 start 2012-2-17
             if(mClickedPos == -1){
-               mClickedPos = mRingtoneManager.getDefaultRingtonePosition();
+               mClickedPos = getListPosition(mRingtoneManager.getDefaultRingtonePosition());
             }
             //add by bug 10729 end 2012-2-17
         }
