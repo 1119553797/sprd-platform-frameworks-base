@@ -694,7 +694,8 @@ public abstract class SMSDispatcher extends Handler {
 
         // Dispatch the PDUs to applications
         if (portAddrs != null) {
-            if (portAddrs.destPort == SmsHeader.PORT_WAP_PUSH) {
+            if (portAddrs.destPort == SmsHeader.PORT_WAP_PUSH ||
+                    portAddrs.destPort == SmsHeader.PORT_WAP_OTA) {
                 // Build up the data stream
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
                 for (int i = 0; i < concatRef.msgCount; i++) {

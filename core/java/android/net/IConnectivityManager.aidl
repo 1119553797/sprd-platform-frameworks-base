@@ -72,6 +72,10 @@ interface IConnectivityManager
     String[] getTetherableUsbRegexs();
 
     String[] getTetherableWifiRegexs();
+
+    boolean getMobileDataEnabledByPhoneId(int phoneId);
+
+    void setMobileDataEnabledByPhoneId(int phoneId, boolean enabled);
     
     //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> begin
     boolean enableUdcpower(boolean enabled);

@@ -42,7 +42,6 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mOffOrNotAvailRegistrants = new RegistrantList();
     protected RegistrantList mNotAvailRegistrants = new RegistrantList();
     protected RegistrantList mSIMReadyRegistrants = new RegistrantList();
-    protected RegistrantList mSIMReadyRadioOnRegistrants = new RegistrantList();
     protected RegistrantList mSIMLockedRegistrants = new RegistrantList();
     protected RegistrantList mRUIMReadyRegistrants = new RegistrantList();
     protected RegistrantList mRUIMLockedRegistrants = new RegistrantList();
@@ -209,24 +208,6 @@ public abstract class BaseCommands implements CommandsInterface {
     public void unregisterForSIMReady(Handler h) {
         synchronized (mStateMonitor) {
             mSIMReadyRegistrants.remove(h);
-        }
-    }
-
-    public void registerForSIMReadyRadioOn(Handler h, int what, Object obj) {
-        Registrant r = new Registrant (h, what, obj);
-
-        synchronized (mStateMonitor) {
-            mSIMReadyRadioOnRegistrants.add(r);
-
-            if (mState.isSIMReadyRadioOn()) {
-                r.notifyRegistrant(new AsyncResult(null, null, null));
-            }
-        }
-    }
-
-    public void unregisterForSIMReadyRadioOn(Handler h) {
-        synchronized (mStateMonitor) {
-            mSIMReadyRadioOnRegistrants.remove(h);
         }
     }
 
@@ -664,14 +645,7 @@ public abstract class BaseCommands implements CommandsInterface {
                 mSIMReadyRegistrants.notifyRegistrants();
             }
 
-            if (mState.isSIMReadyRadioOn() && !oldState.isSIMReadyRadioOn()) {
-                Log.d(LOG_TAG,"Notifying: SIM ready Radio On");
-                mSIMReadyRadioOnRegistrants.notifyRegistrants();
-            }
-
-            //if (mState == RadioState.SIM_LOCKED_OR_ABSENT) {
-            if (mState == RadioState.SIM_LOCKED || mState == RadioState.SIM_LOCKED_RADIO_OFF
-                    || mState == RadioState.SIM_ABSENT || mState == RadioState.SIM_ABSENT_RADIO_OFF) {
+            if (mState == RadioState.SIM_LOCKED_OR_ABSENT) {
                 Log.d(LOG_TAG,"Notifying: SIM locked or absent");
                 mSIMLockedRegistrants.notifyRegistrants();
             }

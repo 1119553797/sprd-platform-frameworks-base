@@ -21,6 +21,7 @@ import android.app.ActivityManagerNative;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
@@ -132,6 +133,18 @@ public class SprdPhoneProxy extends PhoneProxy {
 		}
 	}
 
+	public void registerForVideoCallCodec(Handler h, int what, Object obj){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
+			mActivePhone.registerForVideoCallCodec(h, what, obj);
+		}
+	}
+
+	public void unregisterForVideoCallCodec(Handler h){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
+			mActivePhone.unregisterForVideoCallCodec(h);
+		}
+	}
+
     public void registerForGprsAttached(Handler h,int what, Object obj) {
         mActivePhone.registerForGprsAttached(h, what, obj);
     }
@@ -174,7 +187,13 @@ public class SprdPhoneProxy extends PhoneProxy {
 			mActivePhone.controlAudio(bEnable);
 		}
 	}
-
+	
+	public void codecVP(int type, Bundle param){
+		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
+			mActivePhone.codecVP(type, param);
+		}
+	}
+	
 	public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete){
 		mActivePhone.getCallForwardingOption(commandInterfaceCFReason, serviceClass, onComplete);
 	}
@@ -185,19 +204,8 @@ public class SprdPhoneProxy extends PhoneProxy {
 			timerSeconds, onComplete);
 	}
 
-    public void setIccCard(boolean turnOn) {
-        mActivePhone.setIccCard(turnOn);
-    }
-
     public int getPhoneId() {
         return mActivePhone.getPhoneId();
     }
-    //added for 6058 phone_01
-    /**
-     *  use this method to synchronize card using state between framework and  upper levels
-     *  An extreme situation this method needed is that one card create MO and the other has MT at the sametime
-     */
-    public void recordPhoneState(Phone.State state){
-        mActivePhone.recordPhoneState(state);
-    }
+
 }

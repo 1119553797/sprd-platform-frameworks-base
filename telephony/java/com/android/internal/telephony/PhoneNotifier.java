@@ -33,8 +33,6 @@ public interface PhoneNotifier {
 
     public void notifyCallForwardingChanged(Phone sender);
 
-    public void notifyDataConnection(String apnType,Phone sender, String reason);
-
     public void notifyDataConnection(Phone sender, String reason);
 
     public void notifyDataConnectionFailed(Phone sender, String reason);

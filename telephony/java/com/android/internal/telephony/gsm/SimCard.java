@@ -31,7 +31,6 @@ public final class SimCard extends IccCard {
         mPhone.mCM.registerForSIMLockedOrAbsent(mHandler, EVENT_ICC_LOCKED_OR_ABSENT, null);
         mPhone.mCM.registerForOffOrNotAvailable(mHandler, EVENT_RADIO_OFF_OR_NOT_AVAILABLE, null);
         mPhone.mCM.registerForSIMReady(mHandler, EVENT_ICC_READY, null);
-        mPhone.mCM.registerForIccStatusChanged(mHandler, EVENT_ICC_STATUS_CHANGED, null);
         updateStateProperty();
     }
 
@@ -41,7 +40,6 @@ public final class SimCard extends IccCard {
         mPhone.mCM.unregisterForSIMLockedOrAbsent(mHandler);
         mPhone.mCM.unregisterForOffOrNotAvailable(mHandler);
         mPhone.mCM.unregisterForSIMReady(mHandler);
-        mPhone.mCM.unregisterForIccStatusChanged(mHandler);
     }
 
     @Override

@@ -398,6 +398,10 @@ public abstract class GSMPhone extends PhoneBase {
         mSuppServiceFailedRegistrants.notifyResult(code);
     }
 
+    void notifySuppServiceSucc(SuppService code) {
+        mSuppServiceSuccRegistrants.notifyResult(code);
+    }
+
     /*package*/ void
     notifyServiceStateChanged(ServiceState ss) {
         super.notifyServiceStateChangedP(ss);
@@ -1387,14 +1391,15 @@ public abstract class GSMPhone extends PhoneBase {
                         break;
                      /* case SuppServiceNotification.MT_CODE_CUG_CALL:
                         cs = mContext.getText(com.android.internal.R.string.CugCall);
-                        break;
+                        break;*/
+                        //Fix Bug 4182 phone_01
                         case SuppServiceNotification.MT_CODE_CALL_ON_HOLD:
                         cs = mContext.getText(com.android.internal.R.string.CallHold);
                         break;
                         case SuppServiceNotification.MT_CODE_CALL_RETRIEVED:
                         cs = mContext.getText(com.android.internal.R.string.CallRetrieved);
                         break;
-                        case SuppServiceNotification.MT_CODE_MULTI_PARTY_CALL:
+                     /* case SuppServiceNotification.MT_CODE_MULTI_PARTY_CALL:
                         cs = mContext.getText(com.android.internal.R.string.MultiCall);
                         break;
                         case SuppServiceNotification.MT_CODE_ON_HOLD_CALL_RELEASED:
@@ -1668,5 +1673,15 @@ public abstract class GSMPhone extends PhoneBase {
         
           response.sendToTarget();        
 
+    }
+
+    public void registerForGprsAttached(Handler h,int what, Object obj) {
+        Log.i(LOG_TAG, " This registerForGprsAttached for GSM.");
+        mSST.registerForGprsAttached(h, what, obj);
+    }
+
+    public void unregisterForGprsAttached(Handler h) {
+        Log.i(LOG_TAG, " This unregisterForGprsAttached for GSM.");
+        mSST.unregisterForGprsAttached(h);
     }
 }

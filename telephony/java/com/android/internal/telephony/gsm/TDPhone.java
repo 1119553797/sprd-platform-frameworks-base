@@ -156,7 +156,7 @@ public final class TDPhone extends GSMPhone {
             mSimulatedRadioControl = (SimulatedRadioControl) ci;
         }
 
-        mDataConnection = new GsmDataConnectionTracker (this);
+        mDataConnection = MsmsGsmDataConnectionTrackerProxy.getTrackerInstance(this);
         //mCM.setPhoneType(Phone.PHONE_TYPE_TD);
 
         //Change the system property
@@ -500,17 +500,6 @@ public final class TDPhone extends GSMPhone {
         Message onComplete;
 
         switch (msg.what) {
-            /*case EVENT_SET_CALL_FORWARD_DONE:
-                break;
-
-            case EVENT_GET_CALL_FORWARD_DONE:
-                break;
-
-
-
-            case EVENT_SET_CLIR_COMPLETE:
-                break;
-*/				
 			case EVENT_CALL_RING:
 				if (mVideoCT.isAlive())
 				{

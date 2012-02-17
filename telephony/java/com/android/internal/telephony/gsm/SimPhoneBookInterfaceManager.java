@@ -16,10 +16,6 @@
 
 package com.android.internal.telephony.gsm;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.os.Message;
 import android.util.Log;
 
@@ -33,56 +29,41 @@ import com.android.internal.telephony.IccPhoneBookInterfaceManager;
  */
 
 public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
-	static final String LOG_TAG = "SimPhoneBookInterfaceManager";
-    private Map<Integer, Object>  mRecordSize ;
+    static final String LOG_TAG = "SimPhoneBookInterfaceManager";
 
-	public SimPhoneBookInterfaceManager(GSMPhone phone) {
-		super(phone);
-		adnCache = phone.mSIMRecords.getAdnCache();
-		// NOTE service "simphonebook" added by IccSmsInterfaceManagerProxy
-		mLock = adnCache.getLock();
-        mRecordSize = new HashMap<Integer, Object>();
-	}
+    public SimPhoneBookInterfaceManager(GSMPhone phone) {
+        super(phone);
+        adnCache = phone.mSIMRecords.getAdnCache();
+        // NOTE service "simphonebook" added by IccSmsInterfaceManagerProxy
+        mLock = adnCache.getLock();
+    }
 
-	public void dispose() {
-		super.dispose();
-	}
+    public void dispose() {
+        super.dispose();
+    }
 
-	protected void finalize() {
-		try {
-			super.finalize();
-		} catch (Throwable throwable) {
-			Log.e(LOG_TAG, "Error while finalizing:", throwable);
-		}
-		if (DBG)
-			Log.d(LOG_TAG, "SimPhoneBookInterfaceManager finalized");
-	}
+    protected void finalize() {
+        try {
+            super.finalize();
+        } catch (Throwable throwable) {
+            Log.e(LOG_TAG, "Error while finalizing:", throwable);
+        }
+        if (DBG)
+            Log.d(LOG_TAG, "SimPhoneBookInterfaceManager finalized");
+    }
 
 
-	public int[] getAdnRecordsSize(int efid) {
+    public int[] getAdnRecordsSize(int efid) {
              Log.i(LOG_TAG,"getAdnRecordsSize");
-		if (phone.getIccCard().isApplicationOnIcc(
-				IccCardApplication.AppType.APPTYPE_USIM)
-				&& (efid == IccConstants.EF_ADN)) {
-			return getUsimAdnRecordsSize();
-		} else {
-			return getRecordsSize(efid);
-		}
-
-	}
-
-    public int[] getRecordsSize(int efid) {
-        Log.i(LOG_TAG,"getSimAdnRecordsSize ,efid:"+efid);
-        if (mRecordSize != null && mRecordSize.get(efid) != null) {
-
-            return (int[]) mRecordSize.get(efid);
+        if (phone.getIccCard().isApplicationOnIcc(
+                IccCardApplication.AppType.APPTYPE_USIM)
+                && (efid == IccConstants.EF_ADN)) {
+            return getUsimAdnRecordsSize();
+        } else {
+            return getRecordsSize(efid);
         }
 
-        int[] recordSize = super.getRecordsSize(efid);
-        mRecordSize.put(efid, recordSize);
-        Log.i(LOG_TAG,"getSimAdnRecordsSize ,recordSize:"+recordSize);
-        return recordSize;
-    }
+	}
 
 	private int[] getUsimAdnRecordsSize() {
 		Log.i(LOG_TAG,"getUsimAdnRecordsSize");

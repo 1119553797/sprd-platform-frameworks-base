@@ -109,6 +109,7 @@ import android.accounts.AccountManager;
 import android.accounts.IAccountManager;
 import android.app.admin.DevicePolicyManager;
 import com.android.internal.os.IDropBoxManagerService;
+import com.android.internal.telephony.PhoneFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -168,7 +169,10 @@ class ContextImpl extends Context {
     private final static String TAG = "ApplicationContext";
     private final static boolean DEBUG = false;
     private final static boolean DEBUG_ICONS = false;
-
+	
+	private final static int DEFAULT_PHONE_COUNT = PhoneFactory.DEFAULT_PHONE_COUNT;
+	private final static int DEFAULT_PHONE_ID = PhoneFactory.DEFAULT_PHONE_ID;
+	
     private static final Object sSync = new Object();
     private static AlarmManager sAlarmManager;
     private static PowerManager sPowerManager;
@@ -200,7 +204,7 @@ class ContextImpl extends Context {
     private Vibrator mVibrator = null;
     private LayoutInflater mLayoutInflater = null;
     private StatusBarManager mStatusBarManager = null;
-    private TelephonyManager mTelephonyManager = null;
+    private TelephonyManager []mTelephonyManager = new TelephonyManager[DEFAULT_PHONE_COUNT];
     private ClipboardManager mClipboardManager = null;
     private boolean mRestricted;
     private AccountManager mAccountManager; // protected by mSync
@@ -973,8 +977,15 @@ class ContextImpl extends Context {
             }
         } else if (AUDIO_SERVICE.equals(name)) {
             return getAudioManager();
-        } else if (TELEPHONY_SERVICE.equals(name)) {
-            return getTelephonyManager();
+        } else if (name.startsWith(TELEPHONY_SERVICE)) {
+        	        	
+        	if(TELEPHONY_SERVICE.length() == name.length()){
+        		return getTelephonyManager();
+        	}else if(TELEPHONY_SERVICE.length() < name.length()){
+        		return getTelephonyManager(Integer.parseInt(name.substring(
+        				TELEPHONY_SERVICE.length(), TELEPHONY_SERVICE.length() + 1)));
+        	}
+            
         } else if (CLIPBOARD_SERVICE.equals(name)) {
             return getClipboardManager();
         } else if (WALLPAPER_SERVICE.equals(name)) {
@@ -1096,11 +1107,20 @@ class ContextImpl extends Context {
 
     private TelephonyManager getTelephonyManager() {
         synchronized (mSync) {
-            if (mTelephonyManager == null) {
-                mTelephonyManager = new TelephonyManager(getOuterContext());
+            if (mTelephonyManager[DEFAULT_PHONE_ID] == null) {
+                mTelephonyManager[DEFAULT_PHONE_ID] = new TelephonyManager(getOuterContext());
             }
         }
-        return mTelephonyManager;
+        return mTelephonyManager[DEFAULT_PHONE_ID];
+    }
+    
+    private TelephonyManager getTelephonyManager(int phoneId) {
+        synchronized (mSync) {
+            if (mTelephonyManager[phoneId] == null) {
+                mTelephonyManager[phoneId] = new TelephonyManager(getOuterContext(), phoneId);
+            }
+        }
+        return mTelephonyManager[phoneId];
     }
 
     private ClipboardManager getClipboardManager() {

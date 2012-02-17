@@ -272,6 +272,10 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     private static final String CHINA_MOBILE_NUMERIC_VALUES = "46000";
     private static final String CHINA_UNICOM_NUMERIC_VALUES = "46001";
 
+    // ussd format type
+    private static final int GSM_TYPE = 15;
+    private static final int UCS2_TYPE = 72;
+
     BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -2892,22 +2896,22 @@ responseUnsolUssdStrings(Parcel p){
     response = p.readStringArray();
     if (response.length > 2) {
         int num = Integer.parseInt(response[2]);
-        if (num == 15) {
+        if (num == GSM_TYPE) {
             byte[] dataUssd = IccUtils.hexStringToBytes(response[1]);
-            String tmpString = new String(dataUssd);
-            response[1] = tmpString;
-	} else if (num == 72) {
-	    byte[] bytes = new byte[response[1].length()/2];
-	    for (int i=0; i<response[1].length(); i+=2) {
-		bytes[i/2] = (byte)(Integer.parseInt(response[1].substring(i,i+2),16));
-	    }
-	    try{
-	        String utfString = new String(bytes,"UTF-16");
-	        response[1] = utfString;
-	    }catch(Exception e){
+            int ussdLength = dataUssd.length;
+            response[1] = GsmAlphabet.gsm8BitUnpackedToString(dataUssd, 0, ussdLength);
+        } else if (num == UCS2_TYPE) {
+            byte[] bytes = new byte[response[1].length()/2];
+            for (int i=0; i<response[1].length(); i+=2) {
+                bytes[i/2] = (byte)(Integer.parseInt(response[1].substring(i,i+2),16));
+            }
+            try{
+                String utfString = new String(bytes,"UTF-16");
+                response[1] = utfString;
+            }catch(Exception e){
 
-	    }
-	}
+            }
+        }
     }
     
     return response;
@@ -3512,27 +3516,27 @@ responseUnsolUssdStrings(Parcel p){
     }
 
     protected void riljLog(String msg) {
-        Log.d(LOG_TAG, msg);
+        Log.d(LOG_TAG,"[" + getPhoneId() + "]"+ msg);
     }
 
     protected void riljLogv(String msg) {
-        Log.v(LOG_TAG, msg);
+        Log.v(LOG_TAG, "[" + getPhoneId() + "]"+ msg);
     }
 
     protected void unsljLog(int response) {
-        riljLog("[UNSL]< " + responseToString(response));
+        riljLog("[UNSL]< " + "[" + getPhoneId() + "]"+ responseToString(response));
     }
 
     protected void unsljLogMore(int response, String more) {
-        riljLog("[UNSL]< " + responseToString(response) + " " + more);
+        riljLog("[UNSL]< " + "[" + getPhoneId() + "]"+ responseToString(response) + " " + more);
     }
 
     protected void unsljLogRet(int response, Object ret) {
-        riljLog("[UNSL]< " + responseToString(response) + " " + retToString(response, ret));
+        riljLog("[UNSL]< " + "[" + getPhoneId() + "]"+ responseToString(response) + " " + retToString(response, ret));
     }
 
     protected void unsljLogvRet(int response, Object ret) {
-        riljLogv("[UNSL]< " + responseToString(response) + " " + retToString(response, ret));
+        riljLogv("[UNSL]< " + "[" + getPhoneId() + "]"+ responseToString(response) + " " + retToString(response, ret));
     }
 
 

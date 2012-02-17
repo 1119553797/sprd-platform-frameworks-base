@@ -46,8 +46,9 @@ import java.util.List;
  * Get this object by calling the static method SmsManager.getDefault().
  */
 public final class SmsManager {
-    private static SmsManager sInstance;
+    private static SmsManager[] sInstance;
     private static final String TAG = "SmsManager";
+    private int mPhoneId;
 
     /**
      * Send a text based SMS.
@@ -87,7 +88,7 @@ public final class SmsManager {
         }
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 iccISms.sendText(destinationAddress, scAddress, text, sentIntent, deliveryIntent);
             }
@@ -152,7 +153,7 @@ public final class SmsManager {
 
         if (parts.size() > 1) {
             try {
-                ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+                ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
                 if (iccISms != null) {
                     iccISms.sendMultipartText(destinationAddress, scAddress, parts,
                             sentIntents, deliveryIntents);
@@ -189,7 +190,7 @@ public final class SmsManager {
             if (parts.size() > 1) {
                 //result = SmsMessage.saveMultipartText(destinationAddress, null, parts, isOutbox, timestring);
                 try {
-                    ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+                    ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
                     if (iccISms != null) {
                         result = iccISms.saveMultipartText(destinationAddress, null, parts, isOutbox, timestring, savestatus);
                     } else {
@@ -207,7 +208,7 @@ public final class SmsManager {
             if (parts.size() > 1) {
                 //result = SmsMessage.saveMultipartText(destinationAddress, null, parts, isOutbox, null);
                 try {
-                    ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+                    ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
                     if (iccISms != null) {
                         result = iccISms.saveMultipartText(destinationAddress, null, parts, isOutbox, timestring, savestatus);
                     } else {
@@ -264,7 +265,7 @@ public final class SmsManager {
         }
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 iccISms.sendData(destinationAddress, scAddress, destinationPort & 0xFFFF,
                         data, sentIntent, deliveryIntent);
@@ -288,7 +289,7 @@ public final class SmsManager {
         }
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 iccISms.sendDmData(destinationAddress, scAddress, destinationPort & 0xFFFF,
                         sourcePort & 0xFFFF,
@@ -307,14 +308,21 @@ public final class SmsManager {
      * @return the default instance of the SmsManager
      */
     public static SmsManager getDefault() {
-        if (sInstance == null) {
-            sInstance = new SmsManager();
-        }
-        return sInstance;
+        return getDefault(PhoneFactory.DEFAULT_PHONE_ID);
     }
 
-    private SmsManager() {
-        //nothing
+    public static SmsManager getDefault(int phoneId) {
+        if (sInstance == null) {
+            sInstance = new SmsManager[PhoneFactory.getPhoneCount()];
+            for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                sInstance[i] = new SmsManager(i);
+            }
+        }
+        return sInstance[phoneId];
+    }
+
+    private SmsManager(int phoneId) {
+        mPhoneId = phoneId;
     }
 
     /**
@@ -334,7 +342,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.copyMessageToIccEf(status, pdu, smsc);
             }
@@ -356,7 +364,7 @@ public final class SmsManager {
         String simCapacity = new String("0:0");
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 simCapacity = iccISms.getSimCapacity();
             }
@@ -384,7 +392,7 @@ public final class SmsManager {
         Arrays.fill(pdu, (byte)0xff);
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.updateMessageOnIccEf(messageIndex, STATUS_ON_ICC_FREE, pdu);
             }
@@ -413,7 +421,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.updateMessageOnIccEf(messageIndex, newStatus, pdu);
             }
@@ -437,7 +445,7 @@ public final class SmsManager {
         List<SmsRawData> records = null;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 records = iccISms.getAllMessagesFromIccEf();
             }
@@ -467,7 +475,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.enableCellBroadcast(messageIdentifier);
             }
@@ -497,7 +505,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.disableCellBroadcast(messageIdentifier);
             }
@@ -528,7 +536,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.enableCellBroadcastRange(startMessageId, endMessageId);
             }
@@ -559,7 +567,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.disableCellBroadcastRange(startMessageId, endMessageId);
             }

@@ -410,7 +410,7 @@ public class PhoneFactory {
      * @return the {@code SipPhone} object or null if the SIP URI is not valid
      */
     public static SipPhone makeSipPhone(String sipUri) {
-        return SipPhoneFactory.makePhone(sipUri, sContext, sPhoneNotifier);
+        return SipPhoneFactory.makePhone(sipUri, sContext, sPhoneNotifier[DEFAULT_PHONE_ID]);
 
     }
 }

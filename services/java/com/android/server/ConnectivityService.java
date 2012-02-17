@@ -427,13 +427,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                                   mTethering.getTetherableWifiRegexs().length != 0) &&
                                  mTethering.getUpstreamIfaceRegexs().length != 0);
 
-        if (DBG) {
-            mInetLog = new ArrayList();
-        }
-        ContentResolver cr = mContext.getContentResolver();
-        cr.registerContentObserver(
-                Settings.System.getUriFor(Settings.System.MULTI_SIM_DATA_CALL), true,
-                mDefaultDataPhoneIdObserver);
     }
 
     private NetworkStateTracker makeWimaxStateTracker() {
@@ -853,8 +846,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         mNetRequestersPids[usedNetworkType].add(currentPid);
                     }
                 }
-                mHandler.sendMessageDelayed(mHandler.obtainMessage(
-                        NetworkStateTracker.EVENT_RESTORE_DEFAULT_NETWORK,
+                mHandler.sendMessageDelayed(mHandler.obtainMessage(EVENT_RESTORE_DEFAULT_NETWORK,
                         f), getRestoreDefaultNetworkDelay());
 
                 if (DBG) Slog.d(TAG, "ni.isConnectedOrConnecting()="+ni.isConnectedOrConnecting());
@@ -892,8 +884,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 synchronized(this) {
                     mFeatureUsers.add(f);
                 }
-                mHandler.sendMessageDelayed(mHandler.obtainMessage(
-                        NetworkStateTracker.EVENT_RESTORE_DEFAULT_NETWORK,
+                mHandler.sendMessageDelayed(mHandler.obtainMessage(EVENT_RESTORE_DEFAULT_NETWORK,
                         f), getRestoreDefaultNetworkDelay());
 
                 return network.startUsingNetworkFeature(feature,
@@ -1529,8 +1520,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
         if (mNetTrackers[netType].getNetworkInfo().isConnected()) {
             if (mNetAttributes[netType].isDefault()) {
-                //mNetTrackers[netType].addDefaultRoute();
-                mNetTrackers[netType].addDefaultRouteByInterface();
+                mNetTrackers[netType].addDefaultRoute();
             } else {
                 // many radios add a default route even when we don't want one.
                 // remove the default interface unless we need it for our active network
@@ -1545,8 +1535,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             }
         } else {
             if (mNetAttributes[netType].isDefault()) {
-                //mNetTrackers[netType].removeDefaultRoute();
-				mNetTrackers[netType].removeDefaultRouteByInterface();
+                mNetTrackers[netType].removeDefaultRoute();
             } else {
                 mNetTrackers[netType].removePrivateDnsRoutes();
             }
@@ -2129,24 +2118,4 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         sendInetConditionBroadcast(networkInfo);
         return;
     }
-    private ContentObserver mDefaultDataPhoneIdObserver = new ContentObserver(new Handler()) {
-        @Override
-        public void onChange(boolean selfChange) {
-            Slog.d(TAG,"Default Data Phone Id is changed  ---------");
-            int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
-            if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
-                if(mNetTrackers[ConnectivityManager.TYPE_MOBILE].isTeardownRequested()){
-                    Slog.w(TAG, "mTeardownRequested is true, do nothing " );
-                }else{
-                    if(getMobileDataEnabledByPhoneId(defaultDataPhoneId)){
-                        if (DBG) Slog.d(TAG, "setDataEnable(true) " );
-                        mNetTrackers[ConnectivityManager.TYPE_MOBILE].setDataEnable(true);
-                    }else{
-                        if (DBG) Slog.d(TAG, "setDataEnable(false) " );
-                        mNetTrackers[ConnectivityManager.TYPE_MOBILE].setDataEnable(false);
-                    }
-                }
-            }
-        }
-    };
 }

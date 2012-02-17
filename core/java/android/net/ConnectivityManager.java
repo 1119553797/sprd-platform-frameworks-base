@@ -20,6 +20,7 @@ import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.os.Binder;
 import android.os.RemoteException;
+import com.android.internal.telephony.PhoneFactory;
 
 /**
  * Class that answers queries about the state of network connectivity. It also
@@ -221,7 +222,7 @@ public class ConnectivityManager
     /** {@hide} TODO: Need to adjust this for WiMAX. */
     public static final int MAX_RADIO_TYPE   = TYPE_ETHERNET;
     /** {@hide} TODO: Need to adjust this for WiMAX. */
-    public static final int MAX_NETWORK_TYPE = TYPE_ETHERNET;
+    public static final int MAX_NETWORK_TYPE = TYPE_ETHERNET + PhoneFactory.getPhoneCount() - 1;
 
     public static final int DEFAULT_NETWORK_PREFERENCE = TYPE_WIFI;
 
@@ -663,4 +664,66 @@ public class ConnectivityManager
         } catch (RemoteException e) {
         }
     }
+
+    /**
+     * {@hide}
+     */
+    public static int getMmsTypeByPhoneId(int phoneId) {
+        int MmsType;
+        if (phoneId == 0) {
+            MmsType = TYPE_MOBILE_MMS;
+        } else if (phoneId < PhoneFactory.getPhoneCount()) {
+            MmsType = TYPE_MOBILE_HIPRI + phoneId;
+        } else {
+            throw new IllegalArgumentException(
+                "phoneId is not leagal!");
+        }
+        return MmsType;
+    }
+
+    /**
+     * {@hide}
+     */
+    public static boolean isMmsType(int type) {
+        boolean isMmsType = false;
+        for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+            if (type == getMmsTypeByPhoneId(i)) {
+                isMmsType = true;
+                break;
+            }
+        }
+        return isMmsType;
+    }
+    
+    /**
+     * Gets the value of the setting for enabling Mobile data.
+     *
+     * @param phoneId which phone
+     *
+     * @return Whether mobile data is enabled.
+     * @hide
+     */
+    public boolean getMobileDataEnabledByPhoneId(int phoneId) {
+        try {
+            return mService.getMobileDataEnabledByPhoneId(phoneId);
+        } catch (RemoteException e) {
+            return true;
+        }
+    }
+
+    /**
+     * Sets the persisted value for enabling/disabling Mobile data.
+     *
+     * @param phoneId which phone
+     * @param enabled Whether the mobile data connection should be
+     *            used or not.
+     * @hide
+     */
+    public void setMobileDataEnabledByPhoneId(int phoneId, boolean enabled) {
+        try {
+            mService.setMobileDataEnabledByPhoneId(phoneId, enabled);
+        } catch (RemoteException e) {
+        }
+    }
+
 }

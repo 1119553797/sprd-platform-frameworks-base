@@ -555,6 +555,9 @@ public interface Phone extends SprdVideoPhone{
      */
     void unregisterForSuppServiceFailed(Handler h);
 
+    void registerForSuppServiceSucc(Handler h, int what, Object obj);
+    void unregisterForSuppServiceSucc(Handler h);
+
     /**
      * Register for notifications when a sInCall VoicePrivacy is enabled
      *

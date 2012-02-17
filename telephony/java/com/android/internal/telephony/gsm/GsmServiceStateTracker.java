@@ -71,7 +71,7 @@ import java.util.TimeZone;
 final class GsmServiceStateTracker extends ServiceStateTracker {
     static final String LOG_TAG = "GSM";
     static final boolean DBG = true;
-    private boolean isNeedCheckCF = true;
+
     GSMPhone phone;
     GsmCellLocation cellLoc;
     GsmCellLocation newCellLoc;
@@ -80,12 +80,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     private int gprsState = ServiceState.STATE_OUT_OF_SERVICE;
     private int newGPRSState = ServiceState.STATE_OUT_OF_SERVICE;
-
-    /**
-     *  save all cm to power on one phone only when no sim card is inserted
-     *  on a multi-sim headset
-     */
-    private static CommandsInterface[] mCmArray = new CommandsInterface[PhoneFactory.getPhoneCount()];
 
     /**
      *  Values correspond to ServiceStateTracker.DATA_ACCESS_ definitions.
@@ -206,7 +200,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
         this.phone = phone;
         cm = phone.mCM;
-        mCmArray[phone.getPhoneId()] = phone.mCM;
         ss = new ServiceState();
         newSS = new ServiceState();
         cellLoc = new GsmCellLocation();
@@ -227,7 +220,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         cm.setOnRestrictedStateChanged(this, EVENT_RESTRICTED_STATE_CHANGED, null);
         cm.registerForSIMReady(this, EVENT_SIM_READY, null);
         cm.setOnSimSmsReady(this, EVENT_SIM_SMS_READY, null);
-        cm.registerForSIMReadyRadioOn(this, EVENT_SIM_READY, null);
+
         // system setting property AIRPLANE_MODE_ON is set in Settings.
         int airplaneMode = Settings.System.getInt(
                 phone.getContext().getContentResolver(),
@@ -389,9 +382,14 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                             EVENT_SIM_RECORDS_LOADED, null);
                     mNeedToRegForSimLoaded = false;
                 }
-                // restore the previous network selection.
-                //Modem has done this
-                //phone.restoreSavedNetworkSelection(null);
+
+                boolean skipRestoringSelection = phone.getContext().getResources().getBoolean(
+                        com.android.internal.R.bool.skip_restoring_network_selection);
+
+                if (!skipRestoringSelection) {
+                    // restore the previous network selection.
+                    phone.restoreSavedNetworkSelection(null);
+                }
                 pollState();
                 // Signal strength polling stops when radio is off
                 queueNextSignalStrengthPoll();
@@ -573,7 +571,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     protected void setPowerStateToDesired() {
         // If we want it on and it's off, turn it on
-        Log.i(LOG_TAG, "setPowerStateToDesired: phone_"+phone.getPhoneId()+"mDesiredPowerState= " + mDesiredPowerState + "cm.getRadioState() = "+cm.getRadioState());
         if (mDesiredPowerState
             && cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF) {
             cm.setRadioPower(true, null);
@@ -619,13 +616,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 break;
             }
             SystemClock.sleep(DATA_STATE_POLL_SLEEP_MS);
-        }
-
-        // hang up all active voice calls
-        if (phone.isInCall()) {
-            phone.mCT.ringingCall.hangupIfAlive();
-            phone.mCT.backgroundCall.hangupIfAlive();
-            phone.mCT.foregroundCall.hangupIfAlive();
         }
 
         cm.setRadioPower(false, null);
@@ -785,7 +775,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     mGsmRoaming = regCodeIsRoaming(regState);
                     newSS.setState (regCodeToServiceState(regState));
 
-                    if (regState == 10 || regState == 12 || regState == 13 || regState == 14) {
+                    if (regState == 3 || regState == 6 || regState == 10 || regState == 12 || regState == 13 || regState == 14) {
                         mEmergencyOnly = true;
                     } else {
                         mEmergencyOnly = false;
@@ -1135,14 +1125,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
             phone.notifyServiceStateChanged(ss);
             updateSpnDisplay();
-            // modify by wangxiaobin for MSNEW00130772 2011-11-03 begin
-            int cf = SystemProperties.getInt("persist.sys.callforwarding", 1);
-            Log.v(LOG_TAG, "pollStateDone call forward state=" + cf);
-            if (cf == 1) {
-                initCallForwardSet();
-                //initCallForwardSet();
-            }
-            // modify by wangxiaobin for MSNEW00130772 2011-11-03 end
         }
 
         if (hasGprsAttached) {
@@ -1154,9 +1136,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         }
 
         if (hasNetworkTypeChanged) {
-            if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
-                phone.notifyDataConnection(null);
-            }
+            phone.notifyDataConnection(null);
         }
 
         if (hasRoamingOn) {
@@ -1197,24 +1177,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     private boolean isGprsConsistent(int gprsState, int serviceState) {
         return !((serviceState == ServiceState.STATE_IN_SERVICE) &&
                 (gprsState != ServiceState.STATE_IN_SERVICE));
-    }
-
-    private void initCallForwardSet() {
-        if (isNeedCheckCF&&ss.getState() == ServiceState.STATE_IN_SERVICE) {
-            initReasonCF(CommandsInterface.CF_REASON_UNCONDITIONAL);
-//            initReasonCF(CommandsInterface.CF_REASON_BUSY);
-//            initReasonCF(CommandsInterface.CF_REASON_NO_REPLY);
-//            initReasonCF(CommandsInterface.CF_REASON_NOT_REACHABLE);
-            isNeedCheckCF = false;
-        }
-    }
-
-    private void initReasonCF(int reason) {
-        if (DBG) {
-            Log.d(LOG_TAG, "init checkCF setCallForwardSetting(sim:"+phone.getPhoneId()+",reason:"+reason+",value:-1");
-        }
-        TelephonyManager.setCallForwardSetting(phone.getContext(),phone.getPhoneId(),-1,reason);
-        phone.getCallForwardingOption(reason,1,null);
     }
 
     /**
@@ -1411,6 +1373,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             case 2: // 2 is "searching"
             case 3: // 3 is "registration denied"
             case 4: // 4 is "unknown" no vaild in current baseband
+            case 6: // 6 is "emergencyonly"
             case 10:// same as 0, but indicates that emergency call is possible.
             case 12:// same as 2, but indicates that emergency call is possible.
             case 13:// same as 3, but indicates that emergency call is possible.

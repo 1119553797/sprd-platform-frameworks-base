@@ -37,6 +37,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneFactory;
 
 /**

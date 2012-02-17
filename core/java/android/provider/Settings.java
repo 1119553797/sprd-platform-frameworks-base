@@ -1094,6 +1094,15 @@ public final class Settings {
          */
         public static final String AIRPLANE_MODE_ON = "airplane_mode_on";
 
+        public static final String SIM_STANDBY = "sim_standby";
+
+        /**
+         * Whether Standby_Select is show,ever.
+         */
+        public static final String Standby_Select_Card_Show = "Is_Standby_Select_Card_Show";
+
+		public static final String POWER_ON_STANDBY_SELECT = "power_on_standby_select";
+
         /**
          * Constant for use in AIRPLANE_MODE_RADIOS to specify Bluetooth radio.
          */
@@ -2196,6 +2205,65 @@ public final class Settings {
         }
 
         /**
+         * Convenience function for retrieving a single secure settings value
+         * as an integer.  Note that internally setting values are always
+         * stored as strings which are seperated by ","; this function converts
+         * the string to an integer for you.  The default value will be returned
+         * if the setting is not defined or not an integer.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to retrieve.
+         * @param index The index of the seperated part
+         * @param def Value to return if the setting is not defined.
+         *
+         * @return The setting's current value, or 'def' if it is not defined
+         * or not a valid integer.
+         * {@hide}
+         */
+        public static int getIntAtIndex(ContentResolver cr, String name, int index, int def) {
+            try {
+                return getIntAtIndex(cr, name, index);
+            } catch (SettingNotFoundException e) {
+                return def;
+            }
+        }
+
+        /**
+         * Convenience function for retrieving a single secure settings value
+         * as an integer.  Note that internally setting values are always
+         * stored as strings which are seperated by ","; this function converts
+         * the string to an integer for you.
+         * <p>
+         * This version does not take a default value.  If the setting has not
+         * been set, or the string value is not valid,
+         * it throws {@link SettingNotFoundException}.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to retrieve.
+         * @param index The index of the seperated part
+         *
+         * @throws SettingNotFoundException Thrown if a setting by the given
+         * name can't be found or the setting value is not an integer.
+         *
+         * @return The setting's current value.
+         * {@hide}
+         */
+        public static int getIntAtIndex(ContentResolver cr, String name, int index)
+                throws SettingNotFoundException {
+            String v = getString(cr, name);
+            try {
+                String[] valArray = v.split(",");
+                return Integer.parseInt(valArray[index]);
+            } catch (NumberFormatException e) {
+                throw new SettingNotFoundException(name);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new SettingNotFoundException(name);
+            } catch (NullPointerException e) {
+                throw new SettingNotFoundException(name);
+            }
+        }
+
+        /**
          * Convenience function for updating a single settings value as an
          * integer. This will either create a new entry in the table if the
          * given name does not exist, or modify the value of the existing row
@@ -2210,6 +2278,51 @@ public final class Settings {
          */
         public static boolean putInt(ContentResolver cr, String name, int value) {
             return putString(cr, name, Integer.toString(value));
+        }
+
+        /**
+         * Convenience function for updating a single settings value as an
+         * integer. This will either create a new entry in the table if the
+         * given name does not exist, or modify the value of the existing row
+         * with that name.  Note that internally setting values are always
+         * stored as strings, so this function converts the given value to a
+         * string before storing it.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to modify.
+         * @param index The index of the seperated part
+         * @param value The new value for the setting.
+         * @return true if the value was set, false on database errors
+         * {@hide}
+         */
+        public static boolean putIntAtIndex(ContentResolver cr, String name, int index, int value) {
+            String v = getString(cr, name);
+            Log.d(TAG, "putIntAtIndex:" + v);
+            String[] valArray;
+            if (v != null) {
+                valArray = v.split(",");
+            } else {
+                valArray = new String[index + 1];
+                for (int i = 0; i < valArray.length; i++) {
+                    valArray[i] = "";
+                }
+            }
+            if (index >= valArray.length) {
+                String[] array = new String[index + 1];
+                for (int i = 0; i < valArray.length; i++) {
+                    array[i] = valArray[i];
+                }
+                valArray = array;
+                for (int i = valArray.length; i < index + 1; i++) {
+                    valArray[i] = "";
+                }
+            }
+            valArray[index] = Integer.toString(value);
+            StringBuilder s = new StringBuilder(valArray[0]);
+            for (int i = 1; i < valArray.length; i++) {
+                s.append(",").append(valArray[i]);
+            }
+            return putString(cr, name, s.toString());
         }
 
         /**

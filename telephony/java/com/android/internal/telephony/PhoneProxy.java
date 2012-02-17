@@ -22,7 +22,6 @@ import java.util.List;
 import android.app.ActivityManagerNative;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
@@ -36,7 +35,7 @@ import com.android.internal.telephony.gsm.GSMPhone;
 import com.android.internal.telephony.gsm.NetworkInfo;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 
-public class PhoneProxy extends Handler implements Phone {
+public abstract class PhoneProxy extends Handler implements Phone {
     public final static Object lockForRadioTechnologyChange = new Object();
 
     protected Phone mActivePhone;
@@ -252,157 +251,6 @@ public class PhoneProxy extends Handler implements Phone {
         mActivePhone.unregisterForDisconnect(h);
     }
 
-//----------------------------- add for videocall ----------------------------
-
-	public void registerForPreciseVideoCallStateChanged(Handler h, int what, Object obj) {
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.registerForPreciseVideoCallStateChanged(h, what, obj);
-		}
-	}
-
-	public void unregisterForPreciseVideoCallStateChanged(Handler h) {
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.unregisterForPreciseVideoCallStateChanged(h);
-		}
-	}
-
-	public void registerForNewRingingVideoCall(Handler h, int what, Object obj) {
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.registerForNewRingingVideoCall(h, what, obj);
-		}
-	}
-
-	public void unregisterForNewRingingVideoCall(Handler h) {
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.unregisterForNewRingingVideoCall(h);
-		}
-	}
-
-	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj) {
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.registerForIncomingRingVideoCall(h, what, obj);
-		}
-	}
-
-	public void unregisterForIncomingRingVideoCall(Handler h) {
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.unregisterForIncomingRingVideoCall(h);
-		}
-	}
-
-	public void registerForVideoCallDisconnect(Handler h, int what, Object obj) {
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.registerForVideoCallDisconnect(h, what, obj);
-		}
-	}
-
-	public void unregisterForVideoCallDisconnect(Handler h) {
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.unregisterForVideoCallDisconnect(h);
-		}
-	}
-
-	public void registerForVideoCallFallBack(Handler h, int what, Object obj){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.registerForVideoCallFallBack(h, what, obj);
-		}
-	}
-
-	public void unregisterForVideoCallFallBack(Handler h){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.unregisterForVideoCallFallBack(h);
-		}
-	}
-
-	public void registerForVideoCallFail(Handler h, int what, Object obj){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.registerForVideoCallFail(h, what, obj);
-		}
-	}
-
-	public void unregisterForVideoCallFail(Handler h){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.unregisterForVideoCallFail(h);
-		}
-	}
-	
-	public void registerForRemoteCamera(Handler h, int what, Object obj){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.registerForRemoteCamera(h, what, obj);
-		}
-	}
-
-	public void unregisterForRemoteCamera(Handler h){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.unregisterForRemoteCamera(h);
-		}
-	}
-
-	public void registerForVideoCallCodec(Handler h, int what, Object obj){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.registerForVideoCallCodec(h, what, obj);
-		}
-	}
-
-	public void unregisterForVideoCallCodec(Handler h){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.unregisterForVideoCallCodec(h);
-		}
-	}
-
-	public CallType getCallType() {
-		return mActivePhone.getCallType();
-	}
-	
-	public Connection  dialVP(String dialString) throws CallStateException{
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			return mActivePhone.dialVP(dialString);
-		}
-	//	return null;
-	}
-
-	
-	public void  fallBack() throws CallStateException{
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.fallBack();
-		}
-	}
-	
-	public void  acceptFallBack() throws CallStateException{
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.acceptFallBack();
-		}
-	}
-
-	public void  controlCamera(boolean bEnable) throws CallStateException{
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.controlCamera(bEnable);
-		}
-	}
-
-	public void  controlAudio(boolean bEnable) throws CallStateException{
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.controlAudio(bEnable);
-		}
-	}
-	
-	public void codecVP(int type, Bundle param){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.codecVP(type, param);
-		}
-	}
-	
-	public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete){
-		mActivePhone.getCallForwardingOption(commandInterfaceCFReason, serviceClass, onComplete);
-	}
-	
-	public void setCallForwardingOption(int commandInterfaceCFAction, int commandInterfaceCFReason, int serviceClass,
-				String dialingNumber, int timerSeconds, Message onComplete){
-		mActivePhone.setCallForwardingOption(commandInterfaceCFAction, commandInterfaceCFReason, serviceClass, dialingNumber,
-			timerSeconds, onComplete);
-	}
-
-//----------------------------- end add for videocall ------------------------
 
     public void registerForMmiInitiate(Handler h, int what, Object obj) {
         mActivePhone.registerForMmiInitiate(h, what, obj);
@@ -450,6 +298,14 @@ public class PhoneProxy extends Handler implements Phone {
 
     public void unregisterForSuppServiceFailed(Handler h) {
         mActivePhone.unregisterForSuppServiceFailed(h);
+    }
+
+    public void registerForSuppServiceSucc(Handler h, int what, Object obj) {
+        mActivePhone.registerForSuppServiceSucc(h, what, obj);
+    }
+
+    public void unregisterForSuppServiceSucc(Handler h) {
+        mActivePhone.unregisterForSuppServiceSucc(h);
     }
 
     public void registerForInCallVoicePrivacyOn(Handler h, int what, Object obj){

@@ -24,6 +24,7 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.provider.Telephony.Intents;
 import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
@@ -62,6 +63,8 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     private final Context mContext;
+	
+	private final int mPhoneId;
 
     private final ArrayList<Record> mRecords = new ArrayList();
 
@@ -111,7 +114,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     // calls go through a oneway interface and local calls going through a
     // handler before they get to app code.
 
-    TelephonyRegistry(Context context) {
+    TelephonyRegistry(Context context, int phoneId) {
         CellLocation  location = CellLocation.getEmpty();
 
         // Note that location can be null for non-phone builds like
@@ -120,6 +123,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             location.fillInNotifierBundle(mCellLocation);
         }
         mContext = context;
+		mPhoneId = phoneId;
         mBatteryStats = BatteryStatsService.getService();
     }
 
@@ -471,6 +475,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             pw.println("  mDataConnectionInterfaceName=" + mDataConnectionInterfaceName);
             pw.println("  mCellLocation=" + mCellLocation);
             pw.println("registrations: count=" + recordCount);
+			pw.println(" mPhoneId=" + mPhoneId);
             for (int i = 0; i < recordCount; i++) {
                 Record r = mRecords.get(i);
                 pw.println("  " + r.pkgForDebug + " 0x" + Integer.toHexString(r.events));
@@ -497,6 +502,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         Bundle data = new Bundle();
         state.fillInNotifierBundle(data);
         intent.putExtras(data);
+        intent.putExtra(Intents.EXTRA_PHONE_ID, mPhoneId);
         mContext.sendStickyBroadcast(intent);
     }
 
@@ -515,6 +521,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         Bundle data = new Bundle();
         signalStrength.fillInNotifierBundle(data);
         intent.putExtras(data);
+        intent.putExtra(Intents.EXTRA_PHONE_ID, mPhoneId);
         mContext.sendStickyBroadcast(intent);
     }
 
@@ -538,6 +545,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         if (!TextUtils.isEmpty(incomingNumber)) {
             intent.putExtra(TelephonyManager.EXTRA_INCOMING_NUMBER, incomingNumber);
         }
+        intent.putExtra(Intents.EXTRA_PHONE_ID, mPhoneId);
         mContext.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
     }
 
@@ -571,6 +579,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             gatewayAddr = NetworkUtils.v4StringToInt(gateway);
         }
         intent.putExtra(Phone.DATA_GATEWAY_KEY, gatewayAddr);
+        intent.putExtra(Intents.EXTRA_PHONE_ID, mPhoneId);
 
         mContext.sendStickyBroadcast(intent);
     }
@@ -579,6 +588,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         Intent intent = new Intent(TelephonyIntents.ACTION_DATA_CONNECTION_FAILED);
         intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra(Phone.FAILURE_REASON_KEY, reason);
+        intent.putExtra(Intents.EXTRA_PHONE_ID, mPhoneId);
         mContext.sendStickyBroadcast(intent);
     }
 

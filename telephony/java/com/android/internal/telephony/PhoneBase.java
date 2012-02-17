@@ -164,6 +164,9 @@ public abstract class PhoneBase extends Handler implements Phone {
     protected final RegistrantList mSuppServiceFailedRegistrants
             = new RegistrantList();
 
+    protected final RegistrantList mSuppServiceSuccRegistrants
+            = new RegistrantList();
+
     protected Looper mLooper; /* to insure registrants are in correct thread*/
 
     protected Context mContext;
@@ -234,7 +237,7 @@ public abstract class PhoneBase extends Handler implements Phone {
 
         // DataConnectionTracker running in a seperate thread
         // due to cannot deactivate connection before radio off when set radio off
-        HandlerThread thread = new HandlerThread("RILSender");
+        HandlerThread thread = new HandlerThread("DataConnectionTracker");
         thread.start();
 
         mDataConnectionLooper = thread.getLooper();
@@ -414,6 +417,18 @@ public abstract class PhoneBase extends Handler implements Phone {
     // Inherited documentation suffices.
     public void unregisterForSuppServiceFailed(Handler h) {
         mSuppServiceFailedRegistrants.remove(h);
+    }
+
+    // Inherited documentation suffices.
+    public void registerForSuppServiceSucc(Handler h, int what, Object obj) {
+        checkCorrectThread(h);
+
+        mSuppServiceSuccRegistrants.addUnique(h, what, obj);
+    }
+
+    // Inherited documentation suffices.
+    public void unregisterForSuppServiceSucc(Handler h) {
+        mSuppServiceSuccRegistrants.remove(h);
     }
 
     // Inherited documentation suffices.

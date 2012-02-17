@@ -141,7 +141,10 @@ class ServerThread extends Thread {
             context = ActivityManagerService.main(factoryTest);
 
             Slog.i(TAG, "Telephony Registry");
-            ServiceManager.addService("telephony.registry", new TelephonyRegistry(context));
+            for(int i = 0; i < PhoneFactory.getPhoneCount(); i++){
+                ServiceManager.addService(PhoneFactory.getServiceName("telephony.registry", i), 
+                    new TelephonyRegistry(context, i));
+            }
 
             AttributeCache.init(context);
 

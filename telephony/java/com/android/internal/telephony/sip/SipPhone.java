@@ -1166,4 +1166,22 @@ public class SipPhone extends SipPhoneBase {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void registerForGprsAttached(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForGprsAttached(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getPhoneId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

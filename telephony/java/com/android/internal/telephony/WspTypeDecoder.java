@@ -46,8 +46,9 @@ public class WspTypeDecoder {
     // Start liuhongxing 20110603     
     public static final int CONTENT_TYPE_B_DM_WBXML = 0x42;
     public static final int CONTENT_TYPE_B_DM_XML = 0x43;
-    public static final int CONTENT_TYPE_B_DM_NOTIFICATION = 0x44;
+    public static final int CONTENT_TYPE_B_DM_NOTIFICATION = 0x45; //TODO: check the const
     // End liu 20110603
+    public static final int CONTENT_TYPE_B_OTA_OMA = 0x36;
 
     public static final String CONTENT_MIME_TYPE_B_DRM_RIGHTS_XML =
             "application/vnd.oma.drm.rights+xml";
@@ -67,6 +68,9 @@ public class WspTypeDecoder {
     public static final String CONTENT_MIME_TYPE_B_DM_XML          = "application/vnd.syncml.dm+xml";      // 1.5 0x43
     public static final String CONTENT_MIME_TYPE_B_DM_NOTIFICATION = "application/vnd.syncml.notification";// 1.5 0x44 
     // End liu 20110603
+    public static final String CONTENT_MIME_TYPE_B_OTA_OMA = "application/vnd.wap.connectivity-wbxml";
+    public static final String CONTENT_MIME_TYPE_B_OTA_NOKIA_SETTINGS = "application/x-wap-prov.browser-settings";
+    public static final String CONTENT_MIME_TYPE_B_OTA_NOKIA_BOOKMARKS = "application/x-wap-prov.browser-bookmarks";
     
     public static final int PARAMETER_ID_X_WAP_APPLICATION_ID = 0x2f;
 

@@ -283,9 +283,7 @@ public abstract class DataConnectionTracker extends Handler {
                 if (msg.obj instanceof String) {
                     reason = (String)msg.obj;
                 }
-                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
-                    onTrySetupData(reason);
-                }
+                onTrySetupData(reason);
                 break;
 
             case EVENT_ROAMING_OFF:
@@ -296,9 +294,7 @@ public abstract class DataConnectionTracker extends Handler {
                 break;
 
             case EVENT_ROAMING_ON:
-                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
-                    onRoamingOn();
-                }
+                onRoamingOn();
                 break;
 
             case EVENT_RADIO_AVAILABLE:
@@ -306,9 +302,7 @@ public abstract class DataConnectionTracker extends Handler {
                 break;
 
             case EVENT_RADIO_OFF_OR_NOT_AVAILABLE:
-                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
-                    onRadioOffOrNotAvailable();
-                }
+                onRadioOffOrNotAvailable();
                 break;
 
             case EVENT_DATA_SETUP_COMPLETE:
@@ -330,9 +324,7 @@ public abstract class DataConnectionTracker extends Handler {
 
             case EVENT_CLEAN_UP_CONNECTION:
                 boolean tearDown = (msg.arg1 == 0) ? false : true;
-                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
-                    onCleanUpConnection(tearDown, (String) msg.obj);
-                }
+                onCleanUpConnection(tearDown, (String) msg.obj);
                 break;
 
             case EVENT_SET_MASTER_DATA_ENABLE:

@@ -1295,6 +1295,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
         destinations[1] = PhoneNumberUtils.stringFromStringAndTOA(info.number, info.toa);
         destinations[2] = Integer.toString(info.timeSeconds);
 
+        int reason = scToCallForwardReason(sc);
         if (reason == CommandsInterface.CF_REASON_UNCONDITIONAL &&
                 (info.serviceClass & serviceClassMask)
                         == CommandsInterface.SERVICE_CLASS_VOICE) {
