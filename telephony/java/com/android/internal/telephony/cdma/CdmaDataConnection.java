@@ -50,10 +50,11 @@ public class CdmaDataConnection extends DataConnection {
      * @return CdmaDataConnection that was created.
      */
     static CdmaDataConnection makeDataConnection(CDMAPhone phone) {
+    	int phoneId = phone.getPhoneId();
         synchronized (mCountLock) {
-            mCount += 1;
+            mCount[phoneId] += 1;
         }
-        CdmaDataConnection cdmaDc = new CdmaDataConnection(phone, "CdmaDataConnection-" + mCount);
+        CdmaDataConnection cdmaDc = new CdmaDataConnection(phone, "CdmaDataConnection-" + mCount[phoneId]+", phoneId"+phoneId);
         cdmaDc.start();
         if (DBG) cdmaDc.log("Made " + cdmaDc.getName());
         return cdmaDc;
