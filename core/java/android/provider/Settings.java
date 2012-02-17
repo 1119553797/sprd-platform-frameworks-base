@@ -1482,6 +1482,12 @@ public final class Settings {
         public static final Uri DEFAULT_RINGTONE_URI = getUriFor(RINGTONE);
 
         /**
+         * Persistent store for system-wide default data SIM id
+         * {@hide}
+         */
+        public static final String MULTI_SIM_DATA_CALL = "multi_sim_data_call";
+
+        /**
          * Persistent store for the system-wide default notification sound.
          *
          * @see #RINGTONE
