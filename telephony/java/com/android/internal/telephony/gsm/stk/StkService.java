@@ -16,9 +16,9 @@
 
 package com.android.internal.telephony.gsm.stk;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -27,16 +27,25 @@ import android.os.Bundle;
 
 import android.os.RemoteException;
 import android.os.ServiceManager;
+//Language Setting Add Start
+import android.app.ActivityManager.RunningTaskInfo;
+import android.app.backup.BackupManager;
+import android.app.IActivityManager;
+import android.content.res.Configuration;
+
+import java.util.List;
+import java.util.Locale;
+import android.app.ActivityManagerNative;
+import android.os.RemoteException;
+//Language Setting Add End
 import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.CommandsInterface;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.gsm.SimCard;
 import com.android.internal.telephony.gsm.SIMFileHandler;
 import com.android.internal.telephony.gsm.SIMRecords;
-import com.android.internal.telephony.gsm.stk.AppInterface.EventListType;
-
 
 import com.android.internal.telephony.ITelephony;
-
 
 import android.util.Config;
 import android.view.IWindowManager;
@@ -65,18 +74,27 @@ enum ComprehensionTlvTag {
   FILE_LIST(0x12),
   HELP_REQUEST(0x15),
   DEFAULT_TEXT(0x17),
+  NEXT_ACTION_INDICATOR(0x18),
   EVENT_LIST(0x19),
   ICON_ID(0x1e),
   ITEM_ICON_ID_LIST(0x1f),
   DATE_TIME_TIMEZONE(0x26),
   IMMEDIATE_RESPONSE(0x2b),
+  //Deal With DTMF Message Start
+  DTMF(0x2c),
+  //Deal With DTMF Message End
   LANGUAGE(0x2d),
   URL(0x31),
   BROWSER_TERMINATION_CAUSE(0x34),
-  TEXT_ATTRIBUTE(0x50),
-  //Deal With DTMF Message Start
-  DTMF(0x2c);
-  //Deal With DTMF Message End
+  BEARER_DESCRIPTION(0x35),
+  CHANNEL_DATA(0x36),
+  CHANNEL_DATA_LENGTH(0x37),
+  CHANNEL_STATUS(0x38),
+  BUFFER_SIZE(0x39),
+  TRANSPORT_LEVEL(0x3c),
+  OTHER_ADDRESS(0x3e),
+  NETWORK_ACCESS_NAME(0x47),
+  TEXT_ATTRIBUTE(0x50);
 
     private int mValue;
 
@@ -139,6 +157,8 @@ public class StkService extends Handler implements AppInterface {
     private StkCmdMessage mMenuCmd = null;
 
     private RilMessageDecoder mMsgDecoder = null;
+    private int mPhoneId;
+    private boolean mStkActive = false;
 
     // Service constants.
     static final int MSG_ID_SESSION_END              = 1;
@@ -156,10 +176,12 @@ public class StkService extends Handler implements AppInterface {
 
     //Deal With DTMF Message Start
     private static final int MSG_ID_SEND_SECOND_DTMF = 30;
+    //Deal With Serial Message Start
+    private static final int MSG_ID_SEND_SERIAL_DTMF = 31;
 
     private static final int MSG_ID_EVENT_DOWNLOAD = 40;
 
-    private static final int SEND_DTMF_INTERVAL = 2*1000;
+    private static final int SEND_DTMF_INTERVAL = 2500;
     //Deal With DTMF Message End
     private static final int DEV_ID_KEYPAD      = 0x01;
     private static final int DEV_ID_DISPLAY     = 0x02;
@@ -173,6 +195,7 @@ public class StkService extends Handler implements AppInterface {
 
     private static final int EVENT_NUMBER = 11;
     private boolean[] mEventList = null;
+    private Configuration mConfigBak = null;
 
     /* Intentionally private for singleton */
     private StkService(CommandsInterface ci, SIMRecords sr, Context context,
@@ -182,6 +205,8 @@ public class StkService extends Handler implements AppInterface {
             throw new NullPointerException(
                     "Service: Input parameters must not be null");
         }
+        mPhoneId = 0;
+        StkLog.d(this, "StkService: mPhoneId=" + mPhoneId);
         mCmdIf = ci;
         mContext = context;
 
@@ -207,7 +232,7 @@ public class StkService extends Handler implements AppInterface {
             mEventList[i] = false;
         }
         //mCmdIf.reportStkServiceIsRunning(null);
-        StkLog.d(this, "StkService: is running");
+        StkLog.d(this, "<" + mPhoneId + ">" + "StkService: is running");
     }
 
     public void dispose() {
@@ -223,18 +248,18 @@ public class StkService extends Handler implements AppInterface {
     }
 
     protected void finalize() {
-        StkLog.d(this, "Service finalized");
+        StkLog.d(this,  "<" + mPhoneId + ">" + "Service finalized");
     }
 
     private void handleRilMsg(RilMessage rilMsg) {
         if (rilMsg == null) {
-            StkLog.d(this, "rilMsg is null");
+            StkLog.d(this,  "<" + mPhoneId + ">" + "rilMsg is null");
             return;
         }
 
         // dispatch messages
         CommandParams cmdParams = null;
-        StkLog.d(this, "handleRilMsg rilMsg.mId = " + rilMsg.mId + " mResCode = " + rilMsg.mResCode );
+        StkLog.d(this,  "<" + mPhoneId + ">" + "handleRilMsg rilMsg.mId = " + rilMsg.mId + " mResCode = " + rilMsg.mResCode );
         switch (rilMsg.mId) {
         case MSG_ID_EVENT_NOTIFY:
             if (rilMsg.mResCode == ResultCode.OK) {
@@ -242,14 +267,16 @@ public class StkService extends Handler implements AppInterface {
                 if (cmdParams != null) {
                     handleProactiveCommand(cmdParams);
                 } else {
-                    StkLog.d(this, "MSG_ID_EVENT_NOTIFY: cmdParams is null");
+                    StkLog.d(this,  "<" + mPhoneId + ">" + "MSG_ID_EVENT_NOTIFY: cmdParams is null");
                 }
             }
             break;
         case MSG_ID_PROACTIVE_COMMAND:
             cmdParams = (CommandParams) rilMsg.mData;
             if (cmdParams != null) {
-                if (rilMsg.mResCode == ResultCode.OK) {
+                if (rilMsg.mResCode == ResultCode.OK ||
+                    // ignore icon problem
+                    rilMsg.mResCode == ResultCode.PRFRMD_ICON_NOT_DISPLAYED) {
                     handleProactiveCommand(cmdParams);
                 } else {
                     // for proactive commands that couldn't be decoded
@@ -272,13 +299,13 @@ public class StkService extends Handler implements AppInterface {
         case MSG_ID_CALL_SETUP:
             // prior event notify command supplied all the information
             // needed for set up call processing.
-            StkLog.d(this, "[stk] MSG_ID_CALL_SETUP rescode = "+rilMsg.mResCode);
+            StkLog.d(this,  "<" + mPhoneId + ">" + "[stk] MSG_ID_CALL_SETUP rescode = "+rilMsg.mResCode);
             if (rilMsg.mResCode == ResultCode.OK) {
                 cmdParams = (CommandParams) rilMsg.mData;
                 if (cmdParams != null) {
                     handleProactiveCommand(cmdParams);
                 } else {
-                    StkLog.d(this, "[stk] cmdParams is NULL");
+                    StkLog.d(this,  "<" + mPhoneId + ">" + "[stk] cmdParams is NULL");
                 }
             }
             break;
@@ -291,9 +318,10 @@ public class StkService extends Handler implements AppInterface {
      *
      */
     private void handleProactiveCommand(CommandParams cmdParams) {
-        StkLog.d(this, cmdParams.getCommandType().name());
+        StkLog.d(this,  "<" + mPhoneId + ">" + cmdParams.getCommandType().name());
 
         StkCmdMessage cmdMsg = new StkCmdMessage(cmdParams);
+        DeviceIdentities deviceIdentities = null;
         switch (cmdParams.getCommandType()) {
         case SET_UP_MENU:
             if (removeMenu(cmdMsg.getMenu())) {
@@ -301,6 +329,7 @@ public class StkService extends Handler implements AppInterface {
             } else {
                 mMenuCmd = cmdMsg;
             }
+
             sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0,
                     null);
             break;
@@ -311,23 +340,27 @@ public class StkService extends Handler implements AppInterface {
                 sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
                         0, null);
             }
+            if (cmdMsg.geTextMessage().isHighPriority == false) {
+                StkLog.d(this,  "<" + mPhoneId + ">" + "[stk] DISPLAY_TEXT is normal Priority");
+                boolean display_flag = isCurrentCanDisplayText();
+                StkLog.d(this,  "<" + mPhoneId + ">" + "[stkapp]display_flag = " + display_flag);
+                if (!display_flag) {
+                    sendTerminalResponse(cmdParams.cmdDet, ResultCode.TERMINAL_CRNTLY_UNABLE_TO_PROCESS,
+                                         true, AddinfoMeProblem.SCREEN_BUSY.value(), null);
+                    return;
+                }
+            }
             break;
-//        case REFRESH:
-            // ME side only handles refresh commands which meant to remove IDLE
-            // MODE TEXT.
-//            cmdParams.cmdDet.typeOfCommand = CommandType.SET_UP_IDLE_MODE_TEXT
-//                    .value();
-//            break;
         case SET_UP_IDLE_MODE_TEXT:
             sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
                     0, null);
             break;
-
         //Deal With DTMF Message Start
         case SEND_DTMF:
             DtmfMessage dtmf = cmdMsg.getDtmfMessage();
             retrieveDtmfString(cmdParams,dtmf.mdtmfString);
-        break;
+            break;
+        //Deal With DTMF Message End
         case PROVIDE_LOCAL_INFORMATION:
             ResponseData resp;
             switch (cmdParams.cmdDet.commandQualifier) {
@@ -344,8 +377,42 @@ public class StkService extends Handler implements AppInterface {
                 default:
                     break;
             }
+	    	return;
+        //Language Setting Add Start
+        case LANGUAGE_NOTIFACTION:
+            System.out.println("LANGUAGE_NOTIFACTION start");
+            String language = cmdMsg.getLanguageMessage().languageString;
+            String country = StkLanguageDecoder.getInstance().getCountryFromLanguage(language);
+            try {
+                IActivityManager am = ActivityManagerNative.getDefault();
+                Configuration config = am.getConfiguration();
+                if(country != null) {
+                    //wangls
+                    mConfigBak = new Configuration(config);
+                    //wangsl
+                    Locale locale = new Locale(language,country);
+                    config.locale = locale;
+                    config.userSetLocale = true;
+                    StkLog.d(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION country = " + country + " locale = " + locale);
+                } else {
+                    StkLog.d(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION country is null");
+                    if (mConfigBak != null) {
+                        config = mConfigBak;
+                        StkLog.d(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION use backup config. locale = " + config.locale);
+                    } else {
+                        StkLog.d(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION mConfigBak is null, do nothing");
+                    }
+                }
+                am.updateConfiguration(config);
+                BackupManager.dataChanged("com.android.providers.settings");
+            }catch(RemoteException e) {
+                StkLog.d(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION exception: " + e);
+                System.out.println("LANGUAGE_NOTIFACTION exception");
+            }
+            sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0,
+                    null);
         return;
-        //Deal With DTMF Message Start
+        //Language Setting Add End
         case LAUNCH_BROWSER:
         case SELECT_ITEM:
         case GET_INPUT:
@@ -355,15 +422,15 @@ public class StkService extends Handler implements AppInterface {
         case SEND_USSD:
         case PLAY_TONE:
         case SET_UP_CALL:
-            // nothing to do on telephony!
-            break;
         case REFRESH:
-            sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
-                    0, null);
+        case OPEN_CHANNEL:
+        case RECEIVE_DATA:
+        case GET_CHANNEL_STATUS:
+            // nothing to do on telephony!
             break;
         case SET_UP_EVENT_LIST:
             AppInterface.EventListType[] eventList = cmdMsg.getEventList();
-            StkLog.d(this, "[stk] handleProactiveCommand: SET_UP_EVENT_LIST");
+            StkLog.d(this,  "<" + mPhoneId + ">" + "[stk] handleProactiveCommand: SET_UP_EVENT_LIST");
 
             for (int i = 0; i < EVENT_NUMBER; i++) {
                 setEventEnabled(i, false);
@@ -394,13 +461,48 @@ public class StkService extends Handler implements AppInterface {
             }
             sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, null);
             return;
+        case CLOSE_CHANNEL:
+            StkLog.d(this, "<" + mPhoneId + ">" + "handleProactiveCommand: CLOSE_CHANNEL");
+            deviceIdentities = cmdMsg.getDeviceIdentities();
+            if (deviceIdentities != null) {
+                int channelId = deviceIdentities.destinationId & 0x0f;
+                StkLog.d(this, "<" + mPhoneId + ">" + "CLOSE_CHANNEL channelId = " + channelId);
+                if (channelId != AppInterface.DEFAULT_CHANNELID) {
+                    StkLog.d(this, "<" + mPhoneId + ">" + "CLOSE_CHANNEL CHANNEL_ID_INVALID");
+                    sendTerminalResponse(cmdParams.cmdDet, ResultCode.BIP_ERROR, true,
+                            AddinfoBIPProblem.CHANNEL_ID_INVALID.value(), null);
+                    return;
+                }
+            } else {
+                StkLog.d(this, "<" + mPhoneId + ">" + "deviceIdentities is null, send CHANNEL_ID_INVALID");
+                sendTerminalResponse(cmdParams.cmdDet, ResultCode.BIP_ERROR, true,
+                        AddinfoBIPProblem.CHANNEL_ID_INVALID.value(), null);
+                return;
+            }
+            break;
+        case SEND_DATA:
+            StkLog.d(this, "<" + mPhoneId + ">" + "handleProactiveCommand: SEND_DATA");
+            deviceIdentities = cmdMsg.getDeviceIdentities();
+            if (deviceIdentities != null) {
+                int channelId = deviceIdentities.destinationId & 0x0f;
+                StkLog.d(this, "<" + mPhoneId + ">" + "SEND_DATA channelId = " + channelId);
+                if (channelId != AppInterface.DEFAULT_CHANNELID) {
+                    sendTerminalResponse(cmdParams.cmdDet, ResultCode.BIP_ERROR, true,
+                            AddinfoBIPProblem.CHANNEL_ID_INVALID.value(), null);
+                    return;
+                }
+            } else {
+                StkLog.d(this, "<" + mPhoneId + ">" + "deviceIdentities is null, do nothing");
+            }
+            break;
         default:
-            StkLog.d(this, "Unsupported command");
+            StkLog.d(this, "<" + mPhoneId + ">" + "Unsupported command");
             return;
         }
         mCurrntCmd = cmdMsg;
         Intent intent = new Intent(AppInterface.STK_CMD_ACTION);
         intent.putExtra("STK CMD", cmdMsg);
+        intent.putExtra("phone_id", mPhoneId);
         mContext.sendBroadcast(intent);
     }
 
@@ -409,10 +511,11 @@ public class StkService extends Handler implements AppInterface {
      *
      */
     private void handleSessionEnd() {
-        StkLog.d(this, "SESSION END");
+        StkLog.d(this, "<" + mPhoneId + ">" + "SESSION END");
 
         mCurrntCmd = mMenuCmd;
         Intent intent = new Intent(AppInterface.STK_SESSION_END_ACTION);
+        intent.putExtra("phone_id", mPhoneId);
         mContext.sendBroadcast(intent);
     }
 
@@ -463,7 +566,7 @@ public class StkService extends Handler implements AppInterface {
         byte[] rawData = buf.toByteArray();
         String hexString = IccUtils.bytesToHexString(rawData);
         if (Config.LOGD) {
-            StkLog.d(this, "TERMINAL RESPONSE: " + hexString);
+            StkLog.d(this, "<" + mPhoneId + ">" + "TERMINAL RESPONSE: " + hexString);
         }
 
         mCmdIf.sendTerminalResponse(hexString, null);
@@ -610,8 +713,7 @@ public class StkService extends Handler implements AppInterface {
         case MSG_ID_EVENT_NOTIFY:
         case MSG_ID_REFRESH:
         case MSG_ID_CALL_SETUP:
-//            StkLog.d(this, "ril message arrived");
-            StkLog.d(this, "[stk]ril message arrived = " + msg.what);
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk]ril message arrived = " + msg.what);
             String data = null;
             if (msg.obj != null) {
                 AsyncResult ar = (AsyncResult) msg.obj;
@@ -629,7 +731,13 @@ public class StkService extends Handler implements AppInterface {
 //            mMsgDecoder.sendStartDecodingMessageParams(new RilMessage(msg.what, null));
 //            break;
         case MSG_ID_SIM_LOADED:
-            mCmdIf.reportStkServiceIsRunning(null);
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
+            if (!mStkActive) {
+                mStkActive = true;
+                mCmdIf.reportStkServiceIsRunning(null);
+            } else {
+                StkLog.d(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
+            }
             break;
         case MSG_ID_RIL_MSG_DECODED:
             handleRilMsg((RilMessage) msg.obj);
@@ -646,15 +754,27 @@ public class StkService extends Handler implements AppInterface {
         //Deal With DTMF Message End
         case MSG_ID_EVENT_DOWNLOAD:
             handleEventDownload((StkResponseMessage)msg.obj);
+			break;
+        //CR120717 Modify Start
+        case MSG_ID_SEND_SERIAL_DTMF:
+           AsyncResult dtmfAr = (AsyncResult) msg.obj;
+
+           Message msgAr = (Message)dtmfAr.userObj;
+           CommandParams cmdParamAr = (CommandParams)msgAr.obj;
+           String arStr = msgAr.getData().getString("dtmf");
+
+           retrieveDtmfString(cmdParamAr,arStr);
+           break;
+        //CR120717 Modify end
         case MSG_ID_REFRESH_STIN:
-            StkLog.d(this, "[stk]MSG_ID_REFRESH_STIN" );
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk]MSG_ID_REFRESH_STIN" );
             int result = 1;
             if (msg.obj != null) {
                 AsyncResult ar = (AsyncResult) msg.obj;
                 if (ar != null && ar.result != null) {
                     int[] params = (int[])ar.result;
                     result = params[0];
-                    StkLog.d(this, "[stk]MSG_ID_REFRESH_STIN result = " + result);
+                    StkLog.d(this, "<" + mPhoneId + ">" + "[stk]MSG_ID_REFRESH_STIN result = " + result);
                     if (0 == result) {
                         mSimRecords.onRefresh(true, null);
                     }
@@ -689,7 +809,7 @@ public class StkService extends Handler implements AppInterface {
         if (mCurrntCmd != null) {
             return (resMsg.cmdDet.compareTo(mCurrntCmd.mCmdDet));
         } else {
-            StkLog.d(this, "[stk] validateResponse mCurrntCmd is null");
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk] validateResponse mCurrntCmd is null");
         }
         return false;
     }
@@ -700,11 +820,12 @@ public class StkService extends Handler implements AppInterface {
                 return true;
             }
         } catch (NullPointerException e) {
-            StkLog.d(this, "Unable to get Menu's items size");
+            StkLog.d(this, "<" + mPhoneId + ">" + "Unable to get Menu's items size");
             return true;
         }
         return false;
     }
+
     private boolean isValidEvent(int type) {
         if (type >= 0 && type < EVENT_NUMBER) {
             return mEventList[type];
@@ -725,11 +846,11 @@ public class StkService extends Handler implements AppInterface {
     private void handleEventDownload(StkResponseMessage resMsg) {
         EventListType type = resMsg.event;
         if (!isValidEvent(type.value())) {
-            StkLog.d(this, "handleEventDownload is inValid Event");
+            StkLog.d(this, "<" + mPhoneId + ">" + "handleEventDownload is inValid Event");
             return;
         }
 
-        StkLog.d(this, "handleEventDownload event = " + type);
+        StkLog.d(this, "<" + mPhoneId + ">" + "handleEventDownload event = " + type);
         int sourceId = DEV_ID_TERMINAL;
         int destinationId = DEV_ID_UICC;
         byte[] additionalInfo = null;
@@ -754,9 +875,9 @@ public class StkService extends Handler implements AppInterface {
 //                try {
 //                    wm.setEventUserActivityNeeded(false);
 //                } catch (RemoteException e) {
-//                    StkLog.d(this, "Exception when set EventDownloadNeeded flag in WindowManager");
+//                    StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
 //                } catch (NullPointerException e2) {
-//                    StkLog.d(this, "wm is null");
+//                    StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
 //                }
                 break;
             case Event_IdleScreenAvailable:
@@ -765,9 +886,9 @@ public class StkService extends Handler implements AppInterface {
 //                try {
 //                    wm.setEventIdleScreenNeeded(false);
 //                } catch (RemoteException e) {
-//                    StkLog.d(this, "Exception when set EventDownloadNeeded flag in WindowManager");
+//                    StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
 //                } catch (NullPointerException e2) {
-//                    StkLog.d(this, "wm is null");
+//                    StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
 //                }
                 break;
             case Event_BrowserTermination:
@@ -778,27 +899,27 @@ public class StkService extends Handler implements AppInterface {
                 additionalInfo = buf.toByteArray();
                 break;
             case Event_DataAvailable:
-//                tag = 0x80 | ComprehensionTlvTag.CHANNEL_STATUS.value();
-//                buf.write(tag); // tag
-//                buf.write(2); // length
-//                buf.write(resMsg.ChannelId | (resMsg.LinkStatus ? 0x80 : 0));
-//                buf.write(resMsg.mMode);
-//                tag = 0x80 | ComprehensionTlvTag.CHANNEL_DATA_LENGTH.value();
-//                buf.write(tag);
-//                buf.write(1);
-//                buf.write(resMsg.channelDataLen);
-//                additionalInfo = buf.toByteArray();
+                tag = 0x80 | ComprehensionTlvTag.CHANNEL_STATUS.value();
+                buf.write(tag); // tag
+                buf.write(2); // length
+                buf.write(resMsg.ChannelId | (resMsg.LinkStatus ? 0x80 : 0));
+                buf.write(resMsg.mMode);
+                tag = 0x80 | ComprehensionTlvTag.CHANNEL_DATA_LENGTH.value();
+                buf.write(tag);
+                buf.write(1);
+                buf.write(resMsg.channelDataLen);
+                additionalInfo = buf.toByteArray();
                 break;
             case Event_ChannelStatus:
-//                tag = 0x80 | ComprehensionTlvTag.CHANNEL_STATUS.value();
-//                buf.write(tag); // tag
-//                buf.write(2); // length
-//                buf.write(resMsg.ChannelId | (resMsg.LinkStatus ? 0x80 : 0));
-//                buf.write(resMsg.mMode);
-//                additionalInfo = buf.toByteArray();
+                tag = 0x80 | ComprehensionTlvTag.CHANNEL_STATUS.value();
+                buf.write(tag); // tag
+                buf.write(2); // length
+                buf.write(resMsg.ChannelId | (resMsg.LinkStatus ? 0x80 : 0));
+                buf.write(resMsg.mMode);
+                additionalInfo = buf.toByteArray();
                 break;
             default:
-                StkLog.d(this, "unknown event");
+                StkLog.d(this, "<" + mPhoneId + ">" + "unknown event");
                 return;
         }
 
@@ -821,17 +942,17 @@ public class StkService extends Handler implements AppInterface {
         // the same command's result again to the StkService and can cause it to
         // get out of sync with the SIM.
         if (!validateResponse(resMsg)) {
-            StkLog.d(this, "[stk] validateResponse fail!! ");
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk] validateResponse fail!! ");
             if (mCurrntCmd != null) {
-                StkLog.d(this, "[stk] mCurrntCmd = " +
+                StkLog.d(this, "<" + mPhoneId + ">" + "[stk] mCurrntCmd = " +
                          AppInterface.CommandType.fromInt(mCurrntCmd.mCmdDet.typeOfCommand));
             }
             if (resMsg != null) {
                 AppInterface.CommandType type = AppInterface.CommandType.fromInt(resMsg.cmdDet.typeOfCommand);
-                StkLog.d(this, "[stk] resMsg cmd = " + type);
+                StkLog.d(this, "<" + mPhoneId + ">" + "[stk] resMsg cmd = " + type);
 
                 if (type == AppInterface.CommandType.SET_UP_MENU && mCurrntCmd == null) {
-                    StkLog.d(this, "Warning: force mCurrntCmd to mMenuCmd!!");
+                    StkLog.d(this, "<" + mPhoneId + ">" + "Warning: force mCurrntCmd to mMenuCmd!!");
                     mCurrntCmd = mMenuCmd;
                 }
             }
@@ -883,8 +1004,25 @@ public class StkService extends Handler implements AppInterface {
             case DISPLAY_TEXT:
             case LAUNCH_BROWSER:
                 break;
+            case OPEN_CHANNEL:
+                StkLog.d(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL RES OK");
+                resp = new OpenChannelResponseData(resMsg.BearerType, resMsg.BearerParam,
+                        resMsg.bufferSize, resMsg.ChannelId, resMsg.LinkStatus);
+                break;
+            case SEND_DATA:
+                StkLog.d(this, "<" + mPhoneId + ">" + "SEND_DATA RES OK");
+                resp = new SendDataResponseData(resMsg.channelDataLen);
+                break;
+            case RECEIVE_DATA:
+                StkLog.d(this, "<" + mPhoneId + ">" + "RECEIVE_DATA RES OK");
+                resp = new ReceiveDataResponseData(resMsg.channelDataLen, resMsg.channelData);
+                break;
+            case GET_CHANNEL_STATUS:
+                StkLog.d(this, "<" + mPhoneId + ">" + "GET_CHANNEL_STATUS RES OK");
+                resp = new ChannelStatusResponseData(resMsg.ChannelId, resMsg.LinkStatus);
+                break;
             case SET_UP_CALL:
-                StkLog.d(this, "[stk] handleCmdResponse MSG_ID_CALL_SETUP");
+                StkLog.d(this, "<" + mPhoneId + ">" + "[stk] handleCmdResponse MSG_ID_CALL_SETUP");
                 mCmdIf.handleCallSetupRequestFromSim(resMsg.usersConfirm, null);
                 // No need to send terminal response for SET UP CALL. The user's
                 // confirmation result is send back using a dedicated ril message
@@ -901,9 +1039,65 @@ public class StkService extends Handler implements AppInterface {
         case TERMINAL_CRNTLY_UNABLE_TO_PROCESS:
             switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
             case SET_UP_CALL:
-                StkLog.d(this, "[stk] SET_UP_CALL set additionalInfo");
+                StkLog.d(this, "<" + mPhoneId + ">" + "SET_UP_CALL TERMINAL_CRNTLY_UNABLE_TO_PROCESS");
                 AddInfo = true;
-                additionalInfo = 2;  // ME currently busy on call;
+                additionalInfo = AddinfoMeProblem.BUSY_ON_CALL.value();
+                break;
+            case OPEN_CHANNEL:
+                StkLog.d(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL TERMINAL_CRNTLY_UNABLE_TO_PROCESS");
+                AddInfo = true;
+                additionalInfo = AddinfoMeProblem.BUSY_ON_CALL.value();
+                resp = new OpenChannelResponseData(resMsg.BearerType, resMsg.BearerParam,
+                        resMsg.bufferSize, resMsg.ChannelId, resMsg.LinkStatus);
+                break;
+            }
+            break;
+        case NETWORK_CRNTLY_UNABLE_TO_PROCESS:
+            switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
+            case SET_UP_CALL:
+                StkLog.d(this, "<" + mPhoneId + ">" + "[stk] SET_UP_CALL NETWORK_CRNTLY_UNABLE_TO_PROCESS");
+            }
+            break;
+        case BEYOND_TERMINAL_CAPABILITY:
+            switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
+            case OPEN_CHANNEL:
+                StkLog.d(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL BEYOND_TERMINAL_CAPABILITY");
+                resp = new OpenChannelResponseData(resMsg.BearerType, resMsg.BearerParam,
+                        resMsg.bufferSize, resMsg.ChannelId, resMsg.LinkStatus);
+                break;
+            case SEND_DATA:
+                StkLog.d(this, "<" + mPhoneId + ">" + "SEND_DATA BEYOND_TERMINAL_CAPABILITY");
+                AddInfo = true;
+                additionalInfo = AddinfoBIPProblem.TRANSPORT_LEVEL_NOT_AVAILABLE.value();
+                break;
+            case RECEIVE_DATA:
+                StkLog.d(this, "<" + mPhoneId + ">" + "RECEIVE_DATA BEYOND_TERMINAL_CAPABILITY");
+                AddInfo = true;
+                additionalInfo = AddinfoBIPProblem.NO_SPECIFIC_CAUSE.value();
+                break;
+            }
+            break;
+        case BIP_ERROR:
+            switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
+            case SEND_DATA:
+                StkLog.d(this, "<" + mPhoneId + ">" + "SEND_DATA BIP_ERROR");
+                AddInfo = true;
+                additionalInfo = AddinfoBIPProblem.CHANNEL_ID_INVALID.value();
+                break;
+            case CLOSE_CHANNEL:
+                StkLog.d(this, "<" + mPhoneId + ">" + "CLOSE_CHANNEL BIP_ERROR");
+                AddInfo = true;
+                additionalInfo = AddinfoBIPProblem.CHANNEL_CLOSED.value();
+                break;
+            }
+            break;
+        case USER_NOT_ACCEPT:
+            switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
+            case OPEN_CHANNEL:
+                StkLog.d(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL USER_NOT_ACCEPT");
+                resp = new OpenChannelResponseData(resMsg.BearerType, resMsg.BearerParam,
+                        resMsg.bufferSize, resMsg.ChannelId, resMsg.LinkStatus);
+                break;
             }
             break;
         default:
@@ -913,53 +1107,39 @@ public class StkService extends Handler implements AppInterface {
         mCurrntCmd = null;
     }
 
-    private void handleRefreshCmdResponse(int result) {
-        if (mCurrntCmd == null) {
-            StkLog.d(this, "[stk]handleRefreshCmdResponse mCurrntCmd is NULL" );
-            return;
-        }
-        CommandDetails cmdDet = mCurrntCmd.getCmdDet();
-
-        switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
-        case REFRESH:
-            ResultCode resCode = (0 == result) ? ResultCode.OK : ResultCode.TERMINAL_CRNTLY_UNABLE_TO_PROCESS;
-            sendTerminalResponse(cmdDet, resCode, false, 0, null);
-            mCurrntCmd = null;
-            break;
-        default:
-            StkLog.d(this, "[stk]handleRefreshCmdResponse CommandType is wrong" );
-            return;
-        }
-    }
     //Deal With DTMF Message Start
     private void retrieveDtmfString(CommandParams cmdParams,String dtmf) {
         if(!isInCall()) {
-            sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, true,
-                    20, null);
+            //CR120728 Modify Start
+            sendTerminalResponse(cmdParams.cmdDet, ResultCode.TERMINAL_CRNTLY_UNABLE_TO_PROCESS, true,
+                    7, null);
+            //CR120728 Modify End
         } else {
             String dtmfTemp = new String(dtmf);
-            while(dtmfTemp.length() != 0) {
+            if(dtmfTemp != null && dtmfTemp.length() > 0) {
                 String firstStr = dtmfTemp.substring(0,1);
-        
+       
+                Message msg = new Message();
+                Bundle bundle = new Bundle();
+                
+                bundle.putString("dtmf", dtmf.substring(1, dtmf.length()));
+                msg.what = MSG_ID_SEND_SECOND_DTMF;
+                msg.obj = cmdParams;
+                msg.setData(bundle);
                 if(firstStr.equals("P")) {
-                    
-                    Message msg = new Message();
-                    Bundle bundle = new Bundle();
-            
-                    bundle.putString("dtmf", dtmf.substring(1, dtmf.length()));
-                    msg.what = MSG_ID_SEND_SECOND_DTMF;
-                    msg.obj = cmdParams;
-                    msg.setData(bundle);
-            
                     this.sendMessageDelayed(msg, SEND_DTMF_INTERVAL);
                     return;
                 }else {
-                    mCmdIf.sendDtmf(firstStr.charAt(0),null);
-                    dtmfTemp = dtmfTemp.substring(1,dtmfTemp.length());
+                    //CR120717 Modify Start
+                    mCmdIf.sendDtmf(firstStr.charAt(0),obtainMessage(
+                        MSG_ID_SEND_SERIAL_DTMF, msg));
+                    //dtmfTemp = dtmfTemp.substring(1,dtmfTemp.length());
+                    //CR120717 Modify End
                 }
-            }
-            sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
+            }else {
+                sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
                     0, null);
+            }
         }
     }
 
@@ -978,4 +1158,53 @@ public class StkService extends Handler implements AppInterface {
         return ITelephony.Stub.asInterface(ServiceManager.checkService(Context.TELEPHONY_SERVICE));
     }
     //Deal With DTMF Message End
+
+    private void handleRefreshCmdResponse(int result) {
+        if (mCurrntCmd == null) {
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk]handleRefreshCmdResponse mCurrntCmd is NULL" );
+            return;
+        }
+        CommandDetails cmdDet = mCurrntCmd.getCmdDet();
+
+        switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
+        case REFRESH:
+            ResultCode resCode = (0 == result) ? ResultCode.OK : ResultCode.TERMINAL_CRNTLY_UNABLE_TO_PROCESS;
+            sendTerminalResponse(cmdDet, resCode, false, 0, null);
+            mCurrntCmd = null;
+            break;
+        default:
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk]handleRefreshCmdResponse CommandType is wrong" );
+            return;
+        }
+    }
+
+    private boolean isInIdleScreen() {
+        boolean ret = false;
+        IWindowManager wm = getWindowInterface();
+//        try {
+//            ret = wm.isInIdleScreen();
+//        } catch (RemoteException e) {
+//            // no fallback; do nothing.
+//        }
+        return ret;
+    }
+
+    private boolean isCurrentCanDisplayText() {
+        try {
+            List<RunningTaskInfo> mRunningTaskInfoList = (List<RunningTaskInfo>)ActivityManagerNative.getDefault().getTasks(1, 0, null);
+            int mListSize = mRunningTaskInfoList.size();
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText trace mListSize = " + mListSize);
+            if(mListSize > 0) {
+                ComponentName cn = mRunningTaskInfoList.get(0).topActivity;
+                StkLog.d(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText cn is " + cn);
+                boolean result = ((cn.getClassName().indexOf("com.android.stk") != -1))
+                        || (cn.getClassName().equals("com.android.launcher2.Launcher"))
+                        || isInIdleScreen();
+                return result;
+            }
+        } catch (RemoteException e) {
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText exception");
+        }
+        return false;
+    }
 }
