@@ -105,7 +105,7 @@ abstract class ValueParser {
      * @return An Item
      * @throws ResultException
      */
-    static Item retrieveItem(ComprehensionTlv ctlv) throws ResultException {
+    static Item retrieveItem(ComprehensionTlv ctlv, String naistr) throws ResultException {
         Item item = null;
 
         byte[] rawValue = ctlv.getRawValue();
@@ -119,7 +119,15 @@ abstract class ValueParser {
                 int id = rawValue[valueIndex] & 0xff;
                 String text = IccUtils.adnStringFieldToString(rawValue,
                         valueIndex + 1, textLen);
-                item = new Item(id, text);
+
+                if (naistr != null) {
+                    int idx = text.length() + 1;
+                    text = text + "\n" + naistr;
+                    StkLog.d("retrieveItem", "<idx>"+idx+"<text>"+ text);
+                    item = new Item(id, text, idx);
+                }else{
+                    item = new Item(id, text);
+                }
             } catch (IndexOutOfBoundsException e) {
                 throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
             }
@@ -333,7 +341,6 @@ abstract class ValueParser {
             throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
         }
     }
-
     //Deal With DTMF Message Start
     static String retrieveDTMF(ComprehensionTlv ctlv) throws ResultException {
 
@@ -352,4 +359,40 @@ abstract class ValueParser {
         return null;
     }
     //Deal With DTMF Message Start
+
+    static byte[] retrieveByteArray(ComprehensionTlv ctlv, int offset) throws ResultException {
+
+        byte[] ret;
+        byte[] rawValue = ctlv.getRawValue();
+        int valueIndex = ctlv.getValueIndex();
+        int length = ctlv.getLength();
+        if (length != 0 && length > offset) {
+            try {
+                ret = new byte[length - offset];
+                System.arraycopy(rawValue, valueIndex + offset, ret, 0, ret.length);
+                return ret;
+            } catch (IndexOutOfBoundsException e) {
+                throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
+            }
+        }
+        return null;
+    }
+
+    //Language Setting Add Start
+    static String retrieveLanguage(ComprehensionTlv ctlv) throws ResultException {
+
+        byte[] rawValue = ctlv.getRawValue();
+        int valueIndex = ctlv.getValueIndex();
+        int length = ctlv.getLength();
+
+        if (length != 0) {
+            System.out.println("retrieveLanguage valueIndex = " + valueIndex);
+            System.out.println("retrieveLanguage rawValue[valueIndex] = " + rawValue[valueIndex]);
+            System.out.println("retrieveLanguage rawValue[valueIndex + 1] = " + rawValue[valueIndex + 1]);
+            byte[] temp = {rawValue[valueIndex],rawValue[valueIndex + 1]};
+            return new String(temp);
+        }
+        return null;
+    }
+    //Language Setting Add End
 }

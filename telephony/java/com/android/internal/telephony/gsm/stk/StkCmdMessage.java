@@ -35,11 +35,19 @@ public class StkCmdMessage implements Parcelable {
     private BrowserSettings mBrowserSettings = null;
     private ToneSettings mToneSettings = null;
     private CallSettings mCallSettings = null;
-    private AppInterface.EventListType mEventType;
-    //Deal With DTMF Message Start
+   //Deal With DTMF Message Start
     private DtmfMessage mDtmfMessage;
     //Deal With DTMF Message End
     private EventListType[] mEventList = null;
+    //Language Setting Add Start
+    private LanguageMessage mLanguageMessage;
+    //Language Setting Add End
+    private OpenChannelData mOpenChannel;
+    private CloseChannelData mCloseChannel;
+    private ReceiveChannelData mReceiveData;
+    private SendChannelData mSendData;
+    private GetChannelStatus mChannelStatus;
+    private DeviceIdentities mDeviceIdentities = null;
 
     /*
      * Container for Launch Browser command settings.
@@ -104,6 +112,29 @@ public class StkCmdMessage implements Parcelable {
         case SET_UP_EVENT_LIST:
             mEventList = ((EventListParams) cmdParams).eventList;
             break;
+        //Language Setting Add Start
+        case LANGUAGE_NOTIFACTION:
+            mLanguageMessage = new LanguageMessage();
+            mLanguageMessage.languageString = ((LanguageParams)cmdParams).languageString;
+            break;
+        //Language Setting Add End
+        case OPEN_CHANNEL:
+            mOpenChannel = ((OpenChannelDataParams) cmdParams).openchanneldata;
+            break;
+        case CLOSE_CHANNEL:
+            mCloseChannel = ((CloseChannelDataParams) cmdParams).closechanneldata;
+            mDeviceIdentities = ((CloseChannelDataParams) cmdParams).deviceIdentities;
+            break;
+        case RECEIVE_DATA:
+            mReceiveData = ((ReceiveChannelDataParams) cmdParams).receivedata;
+            break;
+        case SEND_DATA:
+            mSendData = ((SendChannelDataParams) cmdParams).senddata;
+            mDeviceIdentities = ((SendChannelDataParams) cmdParams).deviceIdentities;
+            break;
+        case GET_CHANNEL_STATUS:
+            mChannelStatus = ((GetChannelStatusParams) cmdParams).channelstatus;
+            break;
         }
     }
 
@@ -132,6 +163,26 @@ public class StkCmdMessage implements Parcelable {
             mDtmfMessage = in.readParcelable(null);
             break;
         //Deal With DTMF Message End
+        //Language Setting Add Start
+        case LANGUAGE_NOTIFACTION:
+            mLanguageMessage = in.readParcelable(null);
+            break;
+        //Language Setting Add End
+        case OPEN_CHANNEL:
+            mOpenChannel = in.readParcelable(null);
+            break;
+        case CLOSE_CHANNEL:
+            mCloseChannel = in.readParcelable(null);
+            break;
+        case RECEIVE_DATA:
+            mReceiveData = in.readParcelable(null);
+            break;
+        case SEND_DATA:
+            mSendData = in.readParcelable(null);
+            break;
+        case GET_CHANNEL_STATUS:
+            mChannelStatus = in.readParcelable(null);
+            break;
         }
     }
 
@@ -158,6 +209,26 @@ public class StkCmdMessage implements Parcelable {
             dest.writeParcelable(mDtmfMessage, 0);
             break;
         //Deal With DTMF Message End
+        //Language Setting Add Start
+        case LANGUAGE_NOTIFACTION:
+            dest.writeParcelable(mLanguageMessage, 0);
+            break;
+        //Language Setting Add End
+        case OPEN_CHANNEL:
+            dest.writeParcelable(mOpenChannel, 0);
+            break;
+        case CLOSE_CHANNEL:
+            dest.writeParcelable(mCloseChannel, 0);
+            break;
+        case RECEIVE_DATA:
+            dest.writeParcelable(mReceiveData, 0);
+            break;
+        case SEND_DATA:
+            dest.writeParcelable(mSendData, 0);
+            break;
+        case GET_CHANNEL_STATUS:
+            dest.writeParcelable(mChannelStatus, 0);
+            break;
         }
     }
 
@@ -203,6 +274,11 @@ public class StkCmdMessage implements Parcelable {
     public CallSettings getCallSettings() {
         return mCallSettings;
     }
+    //Deal With DTMF Message Start
+    public DtmfMessage getDtmfMessage() {
+        return mDtmfMessage;
+    }
+    //Deal With DTMF Message Start
 
     public AppInterface.EventListType[] getEventList() {
         return mEventList;
@@ -211,10 +287,33 @@ public class StkCmdMessage implements Parcelable {
     public CommandDetails getCmdDet() {
         return mCmdDet;
     }
-
-    //Deal With DTMF Message Start
-    public DtmfMessage getDtmfMessage() {
-        return mDtmfMessage;
+    //Language Setting Add Start
+    public LanguageMessage getLanguageMessage() {
+        return mLanguageMessage;
     }
-    //Deal With DTMF Message Start
+    //Language Setting Add End
+
+    public OpenChannelData getOpenChannelData() {
+        return mOpenChannel;
+    }
+
+    public CloseChannelData getCloseChannelData() {
+        return mCloseChannel;
+    }
+
+    public ReceiveChannelData getReceiveChannelData() {
+        return mReceiveData;
+    }
+
+    public SendChannelData getSendChannelData() {
+        return mSendData;
+    }
+
+    public GetChannelStatus getChannelStatus() {
+        return mChannelStatus;
+    }
+
+    public DeviceIdentities getDeviceIdentities() {
+        return mDeviceIdentities;
+    }
 }
