@@ -635,4 +635,56 @@ public final class SmsManager {
     static public final int RESULT_ERROR_LIMIT_EXCEEDED     = 5;
     /** Failed because FDN is enabled. {@hide} */
     static public final int RESULT_ERROR_FDN_CHECK_FAILURE  = 6;
+
+    /**
+     * Delete the specified message from the ICC.
+     * ICC (Integrated Circuit Card) is the card of the device.
+     * For example, this can be the SIM or USIM for GSM.
+     *
+     * @param messageIndex is the record index of the message on ICC
+     * @return true for success
+     *
+     * {@hide}
+     */
+    public boolean
+    deleteMessageFromIcc(int messageIndex, int phoneId) {
+        boolean success = false;
+        byte[] pdu = new byte[IccConstants.SMS_RECORD_LENGTH-1];
+        Arrays.fill(pdu, (byte)0xff);
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms",phoneId)));
+            if (iccISms != null) {
+                success = iccISms.updateMessageOnIccEf(messageIndex, STATUS_ON_ICC_FREE, pdu);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return success;
+    }
+
+    /**
+     * Retrieves all messages currently stored on ICC.
+     * ICC (Integrated Circuit Card) is the card of the device.
+     * For example, this can be the SIM or USIM for GSM.
+     *
+     * @return <code>ArrayList</code> of <code>SmsMessage</code> objects
+     *
+     * {@hide}
+     */
+    public ArrayList<SmsMessage> getAllMessagesFromIcc(int phoneId) {
+        List<SmsRawData> records = null;
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms",phoneId)));
+            if (iccISms != null) {
+                records = iccISms.getAllMessagesFromIccEf();
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return createMessageListFromRawRecords(records);
+   }
 }
