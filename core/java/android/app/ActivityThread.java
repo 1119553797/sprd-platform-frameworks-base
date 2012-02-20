@@ -2164,6 +2164,11 @@ public final class ActivityThread {
                 WindowManager.LayoutParams l = r.window.getAttributes();
                 a.mDecor = decor;
                 l.type = WindowManager.LayoutParams.TYPE_BASE_APPLICATION;
+                if (r.intent.hasCategory(Intent.CATEGORY_HOME)) {
+                    l.idleScreenAvailable = true;
+                } else {
+                    l.idleScreenAvailable = false;
+                }
                 l.softInputMode |= forwardBit;
                 if (a.mVisibleFromClient) {
                     a.mWindowAdded = true;

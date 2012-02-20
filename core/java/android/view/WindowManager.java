@@ -630,6 +630,12 @@ public interface WindowManager extends ViewManager {
          * {@hide} */
         public static final int FLAG_SYSTEM_ERROR = 0x40000000;
 
+        /** Idle screen flag: if Home activity's TYPE_BASE_APPLICATON screen
+         * show, the value will be true, other situation will be false.
+         * To support STK Event_IdleScreenAvailable.
+         *{@hide} */
+        public boolean idleScreenAvailable = false;
+
         /**
          * Given a particular set of window manager flags, determine whether
          * such a window may be a target for an input method when it has
