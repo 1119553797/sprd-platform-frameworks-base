@@ -949,6 +949,32 @@ public class GsmAlphabet {
     }
 
     /**
+     * Return a prefer ecoding of a String
+     *
+     * @param data string
+     * @return usc2 or gsm, default gsm
+     */
+    public static String getStringPreferEncode(String data) {
+        int length;
+        int ret;
+
+        length = data.length();
+
+        for (int i = 0; i < length; i++) {
+            char c = data.charAt(i);
+
+            ret = sCharsToGsmTables[0].get(c, -1);
+            if (ret == -1) {
+                ret = sCharsToShiftTables[0].get(c, -1);
+                if (ret == -1) {
+                    return "ucs2";
+                }
+            }
+        }
+        return "gsm";
+    }
+
+    /**
      * Return the array of enabled national language single shift tables for SMS
      * encoding. This is used for unit testing. The returned array is not a copy, so
      * the caller should be careful not to modify it.

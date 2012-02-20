@@ -76,9 +76,6 @@ class IconLoader extends Handler {
     }
 
     static IconLoader getInstance(Handler caller, SIMFileHandler fh) {
-        if (sLoader != null) {
-            return sLoader;
-        }
         if (fh != null) {
             HandlerThread thread = new HandlerThread("Stk Icon Loader");
             thread.start();
