@@ -603,6 +603,7 @@ public class PduPersister {
         }
 
         GenericPdu pdu = null;
+        Log.d(TAG, "(2)track for the bug 10688: msgType==>"+msgType);
         switch (msgType) {
             case PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND:
                 pdu = new NotificationInd(headers);
