@@ -156,4 +156,21 @@ interface IWindowManager
      * calls back when it changes.
      */
     int watchRotation(IRotationWatcher watcher);
+
+    /**
+     * For StkService use to set mUserActivityEventNeeded flag when StkService's mEventList change.
+     */
+    void setEventUserActivityNeeded(boolean bEventNeeded);
+
+    /**
+     * For StkService use to set mIdleScreenEventNeeded flag when StkService's mEventList change.
+     */
+    void setEventIdleScreenNeeded(boolean bEventNeeded);
+    boolean isEventIdleScreenNeeded();
+
+    /**
+     * To see if the current window is in idle screen
+     */
+    void setInIdleScreen(boolean isIdleScreen);
+    boolean isInIdleScreen();
 }
