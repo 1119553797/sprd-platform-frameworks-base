@@ -200,13 +200,7 @@ public class VolumePanel extends Handler
 
             case AudioManager.STREAM_FM: {
                 message = FM_VOLUME_TEXT;
-                if (mAudioManager.isBluetoothA2dpOn()) {
-                    additionalMessage =
-                        com.android.internal.R.string.volume_music_hint_playing_through_bluetooth;
-                    setLargeIcon(com.android.internal.R.drawable.ic_volume_bluetooth_ad2p);
-                } else {
-                    setSmallIcon(index);
-                }
+                setSmallIcon(index);
                 break;
             }
 
