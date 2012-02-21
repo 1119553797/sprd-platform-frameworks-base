@@ -1756,7 +1756,7 @@ void AudioPolicyManagerBase::updateDeviceForStrategy()
 
 void AudioPolicyManagerBase::setOutputDevice(audio_io_handle_t output, uint32_t device, bool force, int delayMs)
 {
-    LOGV("setOutputDevice() output %d device %x delayMs %d", output, device, delayMs);
+    LOGI("setOutputDevice() output %d device %x delayMs %d", output, device, delayMs);
     AudioOutputDescriptor *outputDesc = mOutputs.valueFor(output);
 
 
