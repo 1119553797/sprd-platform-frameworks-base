@@ -640,7 +640,7 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
             mMusicStopTime = systemTime();
         }
 
-        setOutputDevice(output, getNewDevice(output));
+        setOutputDevice(output, getNewDevice(output), false, 150);
 
 #ifdef WITH_A2DP
         if (mA2dpOutput != 0 && !a2dpUsedForSonification() &&
