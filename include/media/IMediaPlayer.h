@@ -21,6 +21,12 @@
 #include <binder/IInterface.h>
 #include <binder/Parcel.h>
 
+#define USE_GETFRAME
+
+#ifdef USE_GETFRAME
+#include <binder/IMemory.h>
+#endif
+
 namespace android {
 
 class Parcel;
@@ -44,6 +50,9 @@ public:
     virtual status_t        getDuration(int* msec) = 0;
     virtual status_t        reset() = 0;
     virtual status_t        setAudioStreamType(int type) = 0;
+#ifdef USE_GETFRAME
+    virtual sp<IMemory>   getFrameAt(int msec) = 0;
+#endif
     virtual status_t        setLooping(int loop) = 0;
     virtual status_t        setVolume(float leftVolume, float rightVolume) = 0;
     virtual status_t        suspend() = 0;

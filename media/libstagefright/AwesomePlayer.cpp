@@ -54,6 +54,9 @@
 
 #include <ctype.h>
 #include <cutils/properties.h>
+#ifdef USE_GETFRAME
+#include <private/media/VideoFrame.h>
+#endif
 
 #define _SYNC_USE_SYSTEM_TIME_
 namespace android {
@@ -263,6 +266,9 @@ AwesomePlayer::AwesomePlayer()
       mfromPause(false),
       mforceStop(false),
       mbeginPlay(false),
+#ifdef USE_GETFRAME
+      mVideoFrame(NULL), 
+#endif
       mSeeking (false){
     CHECK_EQ(mClient.connect(), OK);
 
@@ -995,6 +1001,66 @@ void AwesomePlayer::clearRender(){
 	Mutex::Autolock autoLock(mLock);
 	 mVideoRenderer.clear();
 }
+#ifdef USE_GETFRAME
+#define RGB565(r,g,b)       ((unsigned short)((((unsigned char)(r)>>3)|((unsigned short)(((unsigned char)(g)>>2))<<5))|(((unsigned short)((unsigned char)(b>>3)))<<11)))
+void yuv420_to_rgb565(int width, int height, unsigned char *src, unsigned short *dst)
+{
+    int frameSize = width * height;
+    unsigned char *yuv420sp = src;
+    for (int j = 0, yp = 0; j < height; j++) {
+        int uvp = frameSize + (j >> 1) * width, u = 0, v = 0;
+        for (int i = 0; i < width; i++, yp++) {
+            int y = (0xff & ((int) yuv420sp[yp])) - 16;
+            if (y < 0) y = 0;
+            if ((i & 1) == 0) {
+                v = (0xff & yuv420sp[uvp++]) - 128;
+                u = (0xff & yuv420sp[uvp++]) - 128;
+            }
+
+            int y1192 = 1192 * y;
+            int r = (y1192 + 1634 * v);
+            int g = (y1192 - 833 * v - 400 * u);
+            int b = (y1192 + 2066 * u);
+
+            if (r < 0) r = 0; else if (r > 262143) r = 262143;
+            if (g < 0) g = 0; else if (g > 262143) g = 262143;
+            if (b < 0) b = 0; else if (b > 262143) b = 262143;
+
+            //int rgb[yp] = 0xff000000 | ((r << 6) & 0xff0000) | ((g >> 2) & 0xff00) | ((b >> 10) & 0xff);
+            dst[yp] = RGB565((((r << 6) & 0xff0000)>>16), (((g >> 2) & 0xff00)>>8), (((b >> 10) & 0xff)));
+        }
+    } 
+}
+
+status_t AwesomePlayer::getFrameAt(int msec, VideoFrame** pvframe)
+{
+    if(!mLastVideoBuffer)
+        return UNKNOWN_ERROR;
+    if(!mVideoFrame)
+        mVideoFrame = new VideoFrame();
+    if (!mVideoFrame) {
+       LOGE("failed to allocate memory for a VideoFrame object");
+       return UNKNOWN_ERROR;
+    }
+    mVideoFrame->mWidth = mVideoWidth;
+    mVideoFrame->mHeight = mVideoWidth;
+        
+    mVideoFrame->mDisplayWidth  = mVideoWidth;
+    mVideoFrame->mDisplayHeight = mVideoHeight;
+    mVideoFrame->mSize = mVideoFrame->mWidth * mVideoFrame->mHeight* 2;//RGB 565
+    
+    mVideoFrame->mData = new unsigned char[mVideoFrame->mSize];
+    if (!mVideoFrame->mData) {
+       LOGE("cannot allocate buffer to hold SkBitmap pixels");
+       delete mVideoFrame; mVideoFrame = NULL;
+       return UNKNOWN_ERROR;
+    }
+    yuv420_to_rgb565(mVideoWidth, mVideoHeight, (unsigned char *)mLastVideoBuffer->data(), (unsigned short *)mVideoFrame->mData);
+    *pvframe = mVideoFrame;
+    LOGI("====================AwesomePlayer::getFrameAt OK");
+    return OK;
+}
+#endif
 status_t AwesomePlayer::pause() {
     LOGE("pause mSeeking = %d",mSeeking); 
 	Mutex::Autolock autoLock(mLock);
