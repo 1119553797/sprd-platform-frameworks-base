@@ -439,25 +439,25 @@ public class StkService extends Handler implements AppInterface {
                 for (int i = 0; i < eventList.length; i++) {
                     setEventEnabled(eventList[i].value(), true);
                 }
-//                IWindowManager wm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
-//                if(isValidEvent(AppInterface.EventListType.Event_UserActivity.value())) {
-//                    try {
-//                        wm.setEventUserActivityNeeded(true);
-//                    } catch (RemoteException e) {
-//                        StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
-//                    } catch (NullPointerException e2) {
-//                          StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
-//                    }
-//                }
-//                if(isValidEvent(AppInterface.EventListType.Event_IdleScreenAvailable.value())) {
-//                    try {
-//                        wm.setEventIdleScreenNeeded(true);
-//                    } catch (RemoteException e) {
-//                        StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
-//                    } catch (NullPointerException e2) {
-//                          StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
-//                    }
-//                }
+                IWindowManager wm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
+                if(isValidEvent(AppInterface.EventListType.Event_UserActivity.value())) {
+                    try {
+                        wm.setEventUserActivityNeeded(true);
+                    } catch (RemoteException e) {
+                        StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+                    } catch (NullPointerException e2) {
+                          StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+                    }
+                }
+                if(isValidEvent(AppInterface.EventListType.Event_IdleScreenAvailable.value())) {
+                    try {
+                        wm.setEventIdleScreenNeeded(true);
+                    } catch (RemoteException e) {
+                        StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+                    } catch (NullPointerException e2) {
+                          StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+                    }
+                }
             }
             sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, null);
             return;
@@ -872,24 +872,24 @@ public class StkService extends Handler implements AppInterface {
                 break;
             case Event_UserActivity:
                 oneShot = true;
-//                try {
-//                    wm.setEventUserActivityNeeded(false);
-//                } catch (RemoteException e) {
-//                    StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
-//                } catch (NullPointerException e2) {
-//                    StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
-//                }
+                try {
+                    wm.setEventUserActivityNeeded(false);
+                } catch (RemoteException e) {
+                    StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+                } catch (NullPointerException e2) {
+                    StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+                }
                 break;
             case Event_IdleScreenAvailable:
                 oneShot = true;
                 sourceId = DEV_ID_DISPLAY;
-//                try {
-//                    wm.setEventIdleScreenNeeded(false);
-//                } catch (RemoteException e) {
-//                    StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
-//                } catch (NullPointerException e2) {
-//                    StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
-//                }
+                try {
+                    wm.setEventIdleScreenNeeded(false);
+                } catch (RemoteException e) {
+                    StkLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+                } catch (NullPointerException e2) {
+                    StkLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+                }
                 break;
             case Event_BrowserTermination:
                 tag = 0x80 | ComprehensionTlvTag.BROWSER_TERMINATION_CAUSE.value();
@@ -1181,11 +1181,11 @@ public class StkService extends Handler implements AppInterface {
     private boolean isInIdleScreen() {
         boolean ret = false;
         IWindowManager wm = getWindowInterface();
-//        try {
-//            ret = wm.isInIdleScreen();
-//        } catch (RemoteException e) {
-//            // no fallback; do nothing.
-//        }
+        try {
+            ret = wm.isInIdleScreen();
+        } catch (RemoteException e) {
+            // no fallback; do nothing.
+        }
         return ret;
     }
 
