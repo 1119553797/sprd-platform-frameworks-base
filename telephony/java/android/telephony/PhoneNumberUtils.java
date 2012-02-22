@@ -903,7 +903,9 @@ public class PhoneNumberUtils
             return 0xc;
         } else if (c == WILD) {
             return 0xd;
-        } else {
+        } else if(c == WAIT){
+            return 0xe;
+        }else {
             throw new RuntimeException ("invalid char for BCD " + c);
         }
     }
