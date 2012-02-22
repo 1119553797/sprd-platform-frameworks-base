@@ -170,9 +170,6 @@ class ContextImpl extends Context {
     private final static boolean DEBUG = false;
     private final static boolean DEBUG_ICONS = false;
 	
-	private final static int DEFAULT_PHONE_COUNT = PhoneFactory.DEFAULT_PHONE_COUNT;
-	private final static int DEFAULT_PHONE_ID = PhoneFactory.DEFAULT_PHONE_ID;
-	
     private static final Object sSync = new Object();
     private static AlarmManager sAlarmManager;
     private static PowerManager sPowerManager;
@@ -204,7 +201,7 @@ class ContextImpl extends Context {
     private Vibrator mVibrator = null;
     private LayoutInflater mLayoutInflater = null;
     private StatusBarManager mStatusBarManager = null;
-    private TelephonyManager []mTelephonyManager = new TelephonyManager[DEFAULT_PHONE_COUNT];
+    private TelephonyManager []mTelephonyManager = new TelephonyManager[PhoneFactory.getPhoneCount()];
     private ClipboardManager mClipboardManager = null;
     private boolean mRestricted;
     private AccountManager mAccountManager; // protected by mSync
@@ -1107,11 +1104,11 @@ class ContextImpl extends Context {
 
     private TelephonyManager getTelephonyManager() {
         synchronized (mSync) {
-            if (mTelephonyManager[DEFAULT_PHONE_ID] == null) {
-                mTelephonyManager[DEFAULT_PHONE_ID] = new TelephonyManager(getOuterContext());
+            if (mTelephonyManager[PhoneFactory.DEFAULT_PHONE_ID] == null) {
+                mTelephonyManager[PhoneFactory.DEFAULT_PHONE_ID] = new TelephonyManager(getOuterContext());
             }
         }
-        return mTelephonyManager[DEFAULT_PHONE_ID];
+        return mTelephonyManager[PhoneFactory.DEFAULT_PHONE_ID];
     }
     
     private TelephonyManager getTelephonyManager(int phoneId) {

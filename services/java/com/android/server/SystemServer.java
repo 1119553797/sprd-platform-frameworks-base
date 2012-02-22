@@ -21,6 +21,7 @@ import com.android.server.usb.UsbService;
 import com.android.internal.app.ShutdownThread;
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.SamplingProfilerIntegration;
+import com.android.internal.telephony.PhoneFactory;
 
 import dalvik.system.VMRuntime;
 import dalvik.system.Zygote;
