@@ -60,7 +60,7 @@ public class PhoneFactory {
     static final int preferredCdmaSubscription = RILConstants.PREFERRED_CDMA_SUBSCRIPTION;
     
     // zhanglj add 2011-05-20
-    public static final int DEFAULT_PHONE_COUNT = 2;
+    private static final int DEFAULT_PHONE_COUNT = 1;
     public static final int DEFAULT_PHONE_ID = 0;
 
     private static boolean isCard1ok = false;
