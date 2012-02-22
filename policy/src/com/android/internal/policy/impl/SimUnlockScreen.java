@@ -29,6 +29,7 @@ import com.android.internal.telephony.ITelephony;
 import com.android.internal.widget.LockPatternUtils;
 
 import android.text.Editable;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,6 +116,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mOkButton.setOnClickListener(this);
 
         setFocusableInTouchMode(true);
+        mUpdateMonitor.registerInfoCallback(this);
     }
 
     /** {@inheritDoc} */
