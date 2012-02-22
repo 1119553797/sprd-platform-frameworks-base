@@ -39,7 +39,7 @@ public class AdnRecord implements Parcelable {
 	static final String LOG_TAG = "GSM";
 
 	// ***** Instance Variables
-
+	public static final String ANR_SPLIT_FLG = ":";
 	String alphaTag = null;
 	String number = null;
 	String[] emails = null;
@@ -273,9 +273,8 @@ public class AdnRecord implements Parcelable {
 			return true;
 		}
 		for (int i = 0; i < s.length(); i++) {
-
-			if (s.charAt(i) != ';') {
-
+		    final char split_flg = AdnRecord.ANR_SPLIT_FLG.charAt(0);
+			if (s.charAt(i) != split_flg) {
 				return false;
 			}
 		}
@@ -536,14 +535,14 @@ public class AdnRecord implements Parcelable {
 		for (int i = 0; i < recordSize; i++) {
 			anrString[i] = (byte) 0xFF;
 		}
-		if (TextUtils.isEmpty(anr) || anr.equals(";") || anr.equals(";;")) {
+		if (TextUtils.isEmpty(anr) || anr.equals(ANR_SPLIT_FLG) || anr.equals(ANR_SPLIT_FLG + ANR_SPLIT_FLG)) {
 			Log.e(LOG_TAG, "[buildAnrString] anr number is empty. ");
 			return anrString;
 		} else {
 			Log.e(LOG_TAG, "anr = " + anr);
 			String[] ret = null;
 			if (!TextUtils.isEmpty(anr)) {
-				ret = (anr + "1").split(";");
+				ret = (anr + "1").split(ANR_SPLIT_FLG);
 				ret[ret.length - 1] = ret[ret.length - 1].substring(0,
 						ret[ret.length - 1].length() - 1);
 			}
