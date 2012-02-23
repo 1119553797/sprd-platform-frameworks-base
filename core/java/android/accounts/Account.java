@@ -28,7 +28,7 @@ import android.text.TextUtils;
 public class Account implements Parcelable {
     public final String name;
     public final String type;
-    public static final String SIM_ACCOUNT_TYPE = "com.thundersoft.sim";
+    public static final String SIM_ACCOUNT_TYPE = "com.spreadtrum.sim";
     public static final String SIM1_ACCOUNT_NAME = "SIM1";
     public static final String SIM2_ACCOUNT_NAME = "SIM2";
 
