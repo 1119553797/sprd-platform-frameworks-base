@@ -1529,6 +1529,11 @@ public final class GsmMmiCode extends Handler implements MmiCode {
         return sb;
     }
 
+    @Override
+    public Phone getPhone() {
+        return ((Phone) phone);
+    }
+
     /***
      * TODO: It would be nice to have a method here that can take in a dialstring and
      * figure out if there is an MMI code embedded within it.  This code would replace
