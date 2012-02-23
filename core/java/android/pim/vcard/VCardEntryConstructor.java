@@ -188,8 +188,13 @@ public class VCardEntryConstructor implements VCardInterpreter {
 
         if (encoding != null) {
             if (encoding.equals("BASE64") || encoding.equals("B")) {
-                mCurrentProperty.setPropertyBytes(Base64.decode(value.getBytes(), Base64.DEFAULT));
-                return value;
+                try {
+                    mCurrentProperty.setPropertyBytes(Base64.decode(value.getBytes(), Base64.DEFAULT));
+                    return value;
+                } catch (IllegalArgumentException e) {
+                    return VCardUtils.parseQuotedPrintable(
+                            value, mStrictLineBreaking, sourceCharset, targetCharset);
+                }
             } else if (encoding.equals("QUOTED-PRINTABLE")) {
                 return VCardUtils.parseQuotedPrintable(
                         value, mStrictLineBreaking, sourceCharset, targetCharset);
