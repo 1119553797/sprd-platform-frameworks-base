@@ -29,7 +29,7 @@ public class MsmsConstants {
 
     public static final int MAX_PHONE_COUNT_DS   = 2;
 
-    public static final String SUBSCRIPTION_KEY  = "subscription";
+    public static final String SUBSCRIPTION_KEY  = Phone.PHONE_ID;
 
     public static final int SUB1 = 0;
     public static final int SUB2 = 1;
