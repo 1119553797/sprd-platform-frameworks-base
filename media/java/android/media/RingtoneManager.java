@@ -17,6 +17,7 @@
 package android.media;
 
 import com.android.internal.database.SortCursor;
+import com.android.internal.telephony.PhoneFactory;
 
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
@@ -664,6 +665,15 @@ public class RingtoneManager {
         final String uriString = Settings.System.getString(context.getContentResolver(), setting);
         return uriString != null ? Uri.parse(uriString) : null;
     }
+
+    public static Uri getActualDefaultRingtoneUri(Context context, int type, int phoneId) {
+        String setting = getSettingForType(type, phoneId);
+        if (setting == null) return null;
+        final String uriString = Settings.System.getString(context.getContentResolver(), setting);
+        return uriString != null ? Uri.parse(uriString) : null;
+    }
+
+
     
     /**
      * Sets the {@link Uri} of the default sound for a given sound type.
@@ -681,10 +691,21 @@ public class RingtoneManager {
         Settings.System.putString(context.getContentResolver(), setting,
                 ringtoneUri != null ? ringtoneUri.toString() : null);
     }
+
+    public static void setActualDefaultRingtoneUri(Context context, int type, Uri ringtoneUri, int phoneId) {
+        String setting = getSettingForType(type, phoneId);
+        if (setting == null) return;
+        Settings.System.putString(context.getContentResolver(), setting,
+                ringtoneUri != null ? ringtoneUri.toString() : null);
+    }
     
     private static String getSettingForType(int type) {
+		return getSettingForType(type, PhoneFactory.DEFAULT_PHONE_ID);
+    }
+
+    private static String getSettingForType(int type, int phoneId) {
         if ((type & TYPE_RINGTONE) != 0) {
-            return Settings.System.RINGTONE;
+            return PhoneFactory.getSetting(Settings.System.RINGTONE,phoneId);
         } else if ((type & TYPE_NOTIFICATION) != 0) {
             return Settings.System.NOTIFICATION_SOUND;
         } else if ((type & TYPE_ALARM) != 0) {
@@ -759,4 +780,19 @@ public class RingtoneManager {
         return null;
     }
     /* ===== fixed CR<NEWMS00109311> by luning at 2011.11.18 end =====*/
+
+    public static int getRingtonePhoneId(Uri uri) {
+		int phoneId;
+        if(uri == null){
+			return PhoneFactory.DEFAULT_PHONE_ID;
+        }
+        String uriStr = uri.toString();
+        String ringtoneUriStr = Settings.System.DEFAULT_RINGTONE_URI.toString();
+        if(uriStr.startsWith((ringtoneUriStr))
+            && uriStr.length() !=  ringtoneUriStr.length()){
+			return Integer.parseInt(uriStr.substring(ringtoneUriStr.length(), ringtoneUriStr.length()+1));
+        }
+		return PhoneFactory.DEFAULT_PHONE_ID;
+    }
+    
 }
