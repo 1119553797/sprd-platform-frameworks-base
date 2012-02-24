@@ -149,6 +149,11 @@ private:
         mutable Condition mBufCondition;
         volatile mutable bool mInComposing;
         bool mIsSync;
+
+        mutable float                   mOnDrawCounter;
+        mutable float                   mPostCounter;
+        mutable DurationTimer           mDrawDurTime;
+        mutable DurationTimer           mPostDurTime;
     };
     
     class OverlaySource : public Source {
