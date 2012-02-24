@@ -36,6 +36,10 @@
 #include "android_util_Binder.h"
 #include <binder/Parcel.h>
 #include <surfaceflinger/Surface.h>
+#ifdef USE_GETFRAME
+#include <core/SkBitmap.h>
+#include <private/media/VideoFrame.h>
+#endif
 
 // ----------------------------------------------------------------------------
 
@@ -50,6 +54,10 @@ struct fields_t {
     jfieldID    surface_native;
 
     jmethodID   post_event;
+#ifdef USE_GETFRAME
+    jclass bitmapClazz;
+    jmethodID bitmapConstructor;
+#endif
 };
 static fields_t fields;
 
@@ -527,7 +535,60 @@ android_media_MediaPlayer_setVolume(JNIEnv *env, jobject thiz, float leftVolume,
 static jobject
 android_media_MediaPlayer_getFrameAt(JNIEnv *env, jobject thiz, jint msec)
 {
+#ifdef USE_GETFRAME
+    LOGI("========================getFrameAt");
+    
+    sp<MediaPlayer> mp = getMediaPlayer(env, thiz);
+    if (mp == NULL ) {
+    LOGI("2========================getFrameAt");
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return NULL;
+    }
+
+    // Call native method to retrieve a video frame
+    VideoFrame *videoFrame = NULL;
+    sp<IMemory> frameMemory = mp->getFrameAt(msec);
+    if (frameMemory != 0) {  // cast the shared structure to a VideoFrame object
+        videoFrame = static_cast<VideoFrame *>(frameMemory->pointer());
+    }
+    if (videoFrame == NULL) {
+        LOGE("captureCurrentFrame: videoFrame is a NULL pointer");
+        return NULL;
+    }
+
+    // Create a SkBitmap to hold the pixels
+    SkBitmap *bitmap = new SkBitmap();
+    if (bitmap == NULL) {
+        LOGE("captureCurrentFrame: cannot instantiate a SkBitmap object.");
+        return NULL;
+    }
+    bitmap->setConfig(SkBitmap::kRGB_565_Config, videoFrame->mDisplayWidth, videoFrame->mDisplayHeight);
+    if (!bitmap->allocPixels()) {
+        delete bitmap;
+        LOGE("failed to allocate pixel buffer");
+        return NULL;
+    }
+    {
+       uint8_t *dst = (uint8_t*)bitmap->getPixels();
+       uint8_t *src = (uint8_t*)videoFrame + sizeof(VideoFrame);
+       
+       for(int i=0; i<videoFrame->mDisplayHeight; i++)
+       {
+           memcpy(dst, src, videoFrame->mDisplayWidth*2);//RGB565
+           
+           src += (videoFrame->mWidth*2);
+           dst += (videoFrame->mWidth*2);
+       }
+    }
+
+    LOGI("1========================getFrameAt");
+    // Since internally SkBitmap uses reference count to manage the reference to
+    // its pixels, it is important that the pixels (along with SkBitmap) be
+    // available after creating the Bitmap is returned to Java app.
+    return env->NewObject(fields.bitmapClazz, fields.bitmapConstructor, (int) bitmap, true, NULL, -1);
+#else
     return NULL;
+#endif
 }
 
 
@@ -641,6 +702,19 @@ android_media_MediaPlayer_native_init(JNIEnv *env)
         jniThrowException(env, "java/lang/RuntimeException", "Can't find Surface.mSurface");
         return;
     }
+#ifdef USE_GETFRAME
+    fields.bitmapClazz = env->FindClass("android/graphics/Bitmap");
+    if (fields.bitmapClazz == NULL) {
+        jniThrowException(env, "java/lang/RuntimeException", "Can't find android/graphics/Bitmap");
+        return;
+    }
+
+    fields.bitmapConstructor = env->GetMethodID(fields.bitmapClazz, "<init>", "(IZ[BI)V");
+    if (fields.bitmapConstructor == NULL) {
+        jniThrowException(env, "java/lang/RuntimeException", "Can't find Bitmap constructor");
+        return;
+    }
+#endif
 }
 
 static void

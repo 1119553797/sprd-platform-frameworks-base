@@ -160,6 +160,9 @@ public:
             status_t        getDuration(int *msec);
             status_t        reset();
             status_t        setAudioStreamType(int type);
+#ifdef USE_GETFRAME
+            sp<IMemory>     getFrameAt(int msec);
+#endif
             status_t        setLooping(int loop);
             bool            isLooping();
             status_t        setVolume(float leftVolume, float rightVolume);

@@ -472,6 +472,18 @@ status_t MediaPlayer::setAudioStreamType(int type)
     return OK;
 }
 
+#ifdef USE_GETFRAME
+sp<IMemory> MediaPlayer::getFrameAt(int msec)
+{
+    LOGV("getFrameAt");
+    Mutex::Autolock _l(mLock);
+    if (mPlayer != 0) {
+         return mPlayer->getFrameAt(msec);
+    }
+    LOGV("getFrameAt: no active player");
+    return NULL;
+}
+#endif
 status_t MediaPlayer::setLooping(int loop)
 {
     LOGV("MediaPlayer::setLooping");

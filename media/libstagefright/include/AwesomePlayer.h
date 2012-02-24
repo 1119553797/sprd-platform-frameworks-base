@@ -98,6 +98,10 @@ struct AwesomePlayer {
 
 	status_t forceStop();//sprd vt must
 	void clearRender();//sprd vt must
+#ifdef USE_GETFRAME
+    status_t    getFrameAt(int msec, VideoFrame** pvframe);
+    VideoFrame *mVideoFrame;
+#endif
 private:
     friend struct AwesomeEvent;
 

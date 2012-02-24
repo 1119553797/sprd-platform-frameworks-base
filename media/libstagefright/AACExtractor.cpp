@@ -321,7 +321,7 @@ bool SniffAAC(
 	return false;
 
     *mimeType = MEDIA_MIMETYPE_AUDIO_AAC;
-    *confidence = 0.5;
+    *confidence = 0.2;
     return true;
 }
 

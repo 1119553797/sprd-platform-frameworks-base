@@ -37,6 +37,9 @@ using android::sp;
 using android::status_t;
 using android::String8;
 using android::KeyedVector;
+#ifdef USE_GETFRAME
+using android::VideoFrame;
+#endif
 
 // This file contains a test player that is loaded via the
 // TestPlayerStub class.  The player contains various implementation
@@ -81,6 +84,9 @@ class Player: public MediaPlayerBase
     virtual status_t    setLooping(int loop) {return OK;}
     virtual player_type playerType() {return TEST_PLAYER;}
     virtual status_t    invoke(const Parcel& request, Parcel *reply);
+#ifdef USE_GETFRAME
+    virtual status_t    getFrameAt(int msec, VideoFrame** pvframe){return 0;}
+#endif
 
   private:
     // Take a request, copy it to the reply.
