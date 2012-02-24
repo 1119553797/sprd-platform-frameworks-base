@@ -502,10 +502,11 @@ public abstract class IccCard {
     }
 
     public void broadcastIccStateChangedIntent(String value, String reason) {
-        Intent intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED, mPhone.getPhoneId()));
+        Intent intent = new Intent(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra(Phone.PHONE_NAME_KEY, mPhone.getPhoneName());
         intent.putExtra(INTENT_KEY_ICC_STATE, value);
+        intent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
         intent.putExtra(INTENT_KEY_LOCKED_REASON, reason);
         if(mDbg) log("Broadcasting intent ACTION_SIM_STATE_CHANGED " +  value
                 + " reason " + reason + " phoneid " + mPhone.getPhoneId());
