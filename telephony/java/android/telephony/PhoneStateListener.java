@@ -146,8 +146,16 @@ public class PhoneStateListener {
      * @see #onSignalStrengthsChanged
      */
     public static final int LISTEN_SIGNAL_STRENGTHS                         = 0x00000100;
+    
+    public int mSubscription = 0;
 
     public PhoneStateListener() {
+
+		mSubscription = 0;//FIXME
+    }
+    
+    public PhoneStateListener(int subscription) {
+        mSubscription = subscription;
     }
 
     /**

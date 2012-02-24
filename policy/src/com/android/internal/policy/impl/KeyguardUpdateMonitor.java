@@ -32,6 +32,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.provider.Telephony;
+import static android.provider.Telephony.Intents.EXTRA_PHONE_ID;
 import static android.provider.Telephony.Intents.EXTRA_PLMN;
 import static android.provider.Telephony.Intents.EXTRA_SHOW_PLMN;
 import static android.provider.Telephony.Intents.EXTRA_SHOW_SPN;
@@ -67,7 +68,7 @@ public class KeyguardUpdateMonitor {
 
     private final Context mContext;
 
-    private IccCard.State mSimState = IccCard.State.READY;
+    private IccCard.State[]  mSimState =new IccCard.State[2];;
 
     private boolean mKeyguardBypassEnabled;
 
@@ -77,8 +78,8 @@ public class KeyguardUpdateMonitor {
 
     private int mBatteryStatus;
 
-    private CharSequence mTelephonyPlmn;
-    private CharSequence mTelephonySpn;
+    private CharSequence[] mTelephonyPlmn =new CharSequence[2];
+    private CharSequence[] mTelephonySpn =new CharSequence[2];
     private CharSequence mRadioType = null;  //add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen
 
     private int mFailedAttempts = 0;
@@ -108,11 +109,14 @@ public class KeyguardUpdateMonitor {
     private static class SimArgs {
 
         public final IccCard.State simState;
+        
+        public final int phoneId ;
 
         private SimArgs(Intent intent) {
             if (!TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(intent.getAction())) {
                 throw new IllegalArgumentException("only handles intent ACTION_SIM_STATE_CHANGED");
             }
+            phoneId = intent.getIntExtra(IccCard.INTENT_KEY_PHONE_ID,0);
             String stateExtra = intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE);
             if (IccCard.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
                 this.simState = IccCard.State.ABSENT;
@@ -154,7 +158,7 @@ public class KeyguardUpdateMonitor {
                         handleBatteryUpdate(msg.arg1,  msg.arg2);
                         break;
                     case MSG_CARRIER_INFO_UPDATE:
-                        handleCarrierInfoUpdate();
+                        handleCarrierInfoUpdate(msg.arg1);
                         break;
                     case MSG_SIM_STATE_CHANGE:
                         handleSimStateChange((SimArgs) msg.obj);
@@ -204,11 +208,15 @@ public class KeyguardUpdateMonitor {
         }
 
         // take a guess to start
-        mSimState = IccCard.State.READY;
+        
         mBatteryStatus = BATTERY_STATUS_FULL;
         mBatteryLevel = 100;
-
-        mTelephonyPlmn = getDefaultPlmn();
+        
+		int numPhones = TelephonyManager.getPhoneCount();
+		for (int i = 0; i < numPhones; i++) {
+			mTelephonyPlmn[i] = getDefaultPlmn();
+			mSimState[i] = IccCard.State.READY;
+		}
 
         // setup receiver
         final IntentFilter filter = new IntentFilter();
@@ -231,9 +239,12 @@ public class KeyguardUpdateMonitor {
                         || Intent.ACTION_TIMEZONE_CHANGED.equals(action)) {
                     mHandler.sendMessage(mHandler.obtainMessage(MSG_TIME_UPDATE));
                 } else if (SPN_STRINGS_UPDATED_ACTION.equals(action)) {
-                    mTelephonyPlmn = getTelephonyPlmnFrom(intent);
-                    mTelephonySpn = getTelephonySpnFrom(intent);
-                    mHandler.sendMessage(mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE));
+					int phoneID = intent.getIntExtra(EXTRA_PHONE_ID, 0);
+					mTelephonyPlmn[phoneID] = getTelephonyPlmnFrom(intent);
+					mTelephonySpn[phoneID] = getTelephonySpnFrom(intent);
+					Message m = mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE);
+					m.arg1 = phoneID;
+					mHandler.sendMessage(m);
                 } else if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
                     final int pluggedInStatus = intent
                             .getIntExtra("status", BATTERY_STATUS_UNKNOWN);
@@ -301,12 +312,12 @@ public class KeyguardUpdateMonitor {
     /**
      * Handle {@link #MSG_CARRIER_INFO_UPDATE}
      */
-    private void handleCarrierInfoUpdate() {
+    private void handleCarrierInfoUpdate(int phoneId) {
         if (DEBUG) Log.d(TAG, "handleCarrierInfoUpdate: plmn = " + mTelephonyPlmn
             + ", spn = " + mTelephonySpn);
 
         for (int i = 0; i < mInfoCallbacks.size(); i++) {
-            mInfoCallbacks.get(i).onRefreshCarrierInfo(mTelephonyPlmn, mTelephonySpn);
+            mInfoCallbacks.get(i).onRefreshCarrierInfo(mTelephonyPlmn[phoneId], mTelephonySpn[phoneId], phoneId);
         }
     }
 
@@ -321,10 +332,10 @@ public class KeyguardUpdateMonitor {
                     + "state resolved to " + state.toString());
         }
 
-        if (state != IccCard.State.UNKNOWN && state != mSimState) {
-            mSimState = state;
+        if (state != IccCard.State.UNKNOWN && state != mSimState[simArgs.phoneId]) {
+            mSimState[simArgs.phoneId]= state;
             for (int i = 0; i < mSimStateCallbacks.size(); i++) {
-                mSimStateCallbacks.get(i).onSimStateChanged(state);
+                mSimStateCallbacks.get(i).onSimStateChanged(state,simArgs.phoneId);
             }
         }
     }
@@ -426,7 +437,7 @@ public class KeyguardUpdateMonitor {
          *   be displayed.
          * @param spn The service provider name.  May be null if it shouldn't be displayed.
          */
-        void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn);
+        void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn,int phoneId);
 
         /**
          * Called when the ringer mode changes.
@@ -448,7 +459,7 @@ public class KeyguardUpdateMonitor {
      * Callback to notify of sim state change.
      */
     interface SimStateCallback {
-        void onSimStateChanged(IccCard.State simState);
+        void onSimStateChanged(IccCard.State simState,int phoneId);
     }
 
     /**
@@ -476,8 +487,8 @@ public class KeyguardUpdateMonitor {
         }
     }
 
-    public IccCard.State getSimState() {
-        return mSimState;
+    public IccCard.State getSimState(int phoneId) {
+        return mSimState[phoneId];
     }
 
     /**
@@ -485,8 +496,8 @@ public class KeyguardUpdateMonitor {
      * have the information earlier than waiting for the intent
      * broadcast from the telephony code.
      */
-    public void reportSimPinUnlocked() {
-        mSimState = IccCard.State.READY;
+    public void reportSimPinUnlocked(int phoneId) {
+        mSimState[phoneId] = IccCard.State.READY;
     }
 
     public boolean isKeyguardBypassEnabled() {
@@ -510,12 +521,12 @@ public class KeyguardUpdateMonitor {
         return isPluggedIn(mBatteryStatus) || isBatteryLow(mBatteryLevel);
     }
 
-    public CharSequence getTelephonyPlmn() {
-        return mTelephonyPlmn;
+    public CharSequence getTelephonyPlmn(int phoneId) {
+        return mTelephonyPlmn[phoneId];
     }
 
-    public CharSequence getTelephonySpn() {
-        return mTelephonySpn;
+    public CharSequence getTelephonySpn(int phoneId) {
+        return mTelephonySpn[phoneId];
     }
 
     //add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen begin

@@ -1545,8 +1545,96 @@
        *** touch based lock / unlock ***
                                           --> <skip />
 
+    <!-- cienetadd Edison 2011-6-16 -->
+
+	<!-- Shown in lock screen when the user inserts a SIM card which is network subset locked. -->
+    <string name="lockscreen_sim_network_subset_locked_message">Phone is SIM Network Subset locked</string>
+
+	<!-- Shown in lock screen when the user inserts a SIM card which is corporate locked. -->
+    <string name="lockscreen_sim_corporate_locked_message">Phone is SIM Corporate locked</string>
+
+    <!-- Shown in lock screen when the user inserts a SIM card which is service provider locked. -->
+    <string name="lockscreen_sim_service_provider_locked_message">Phone is SIM Service Provider locked</string>
+
+	<!-- Shown in lock screen when the user inserts a SIM card which is SIM locked. -->
+    <string name="lockscreen_sim_sim_locked_message">Phone is SIM locked</string>
+
+	<!-- Shown in lock screen when the user inserts a RUIM card which is network1 locked. -->
+    <string name="lockscreen_ruim_network1_locked_message">Phone is RUIM Network1 locked</string>
+
+ 	<!-- Shown in lock screen when the user inserts a RUIM card which is network2 locked. -->
+    <string name="lockscreen_ruim_network2_locked_message">Phone is RUIM Network2 locked</string>
+
+	<!-- Shown in lock screen when the user inserts a RUIM card which is hrpd locked. -->
+    <string name="lockscreen_ruim_hrpd_locked_message">Phone is RUIM hrpd locked</string>
+
+	<!-- Shown in lock screen when the user inserts a RUIM card which is corporate locked. -->
+    <string name="lockscreen_ruim_corporate_locked_message">Phone is RUIM Corporate locked</string>
+
+	<!-- Shown in lock screen when the user inserts a RUIM card which is service provider locked. -->
+    <string name="lockscreen_ruim_service_provider_locked_message">Phone is RUIM Service Provider locked</string>
+
+    <!-- Shown in lock screen when the user inserts a RUIM card which is RUIM locked. -->
+    <string name="lockscreen_ruim_ruim_locked_message">Phone is RUIM locked</string>
+
+    <!-- Shown in the lock screen when there is SIM card error. -->
+    <string name="lockscreen_sim_error_message">SIM card is Invalid.</string>
+
+    <!-- Shown in the lock screen to tell the user that their SIM/RUIM is locked and they must unlock it. -->
+    <string name="lockscreen_pin_locked_message">SIM/RUIM card is locked.</string>
+
+    <!-- Shown in the lock screen when there is SIM card IO error. -->
+    <string name="lockscreen_sim_error_message_short">Invalid Card.</string>
+
+	<!-- When the user inserts a sim card from an unsupported network, it becomes network
+         locked -->
+    <string name="lockscreen_sim_network_locked_message">Phone is SIM Network locked</string>
+
+    <!-- When the user enters a wrong ruim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+    <string name="lockscreen_ruim_puk_locked_message">RUIM card is PUK-locked.</string>
+
+    <!-- Shown in the lock screen when the RUIM has become PUK locked and the user must call customer care to unlock it. -->
+    <string name="lockscreen_ruim_puk_locked_instructions">PIN1 Blocked. Enter PUK1 to unblock PIN1.\nOR\nPlease see the User Guide\contact Customer Care.</string>
+
+    <!-- Shown in the lock screen when there is no RUIM card. -->
+    <string name="lockscreen_missing_ruim_message">No RUIM card in phone.</string>
+
+    <!-- Shown in the lock screen to ask the user to insert a RUIM card. -->
+    <string name="lockscreen_missing_ruim_instructions">Please insert a RUIM card.</string>
+
+    <!-- Shown in the lock screen when there is RUIM card error. -->
+    <string name="lockscreen_ruim_error_message">RUIM card is Invalid.</string>
+
+    <!-- Shown in the lock screen when there is no RUIM card. -->
+    <string name="lockscreen_missing_ruim_message_short">No RUIM card.</string>
+
     <!-- Shown in the lock screen when there RUIM card is blocked. -->
     <string name="lockscreen_blocked_ruim_message_short">RUIM card is blocked.</string>
+
+    <!-- Shown in the lock screen when there is RUIM card IO error. -->
+    <string name="lockscreen_ruim_error_message_short">Invalid Card.</string>
+
+    <!-- When the user inserts a ruim card from an unsupported network, it becomes network
+         locked -->
+    <string name="lockscreen_ruim_network_locked_message">Network locked</string>
+
+    <string name="sim1_puk_requried">SIM1 PIN blocked, Enter PUK to unblock</string>
+    <string name="sim2_puk_requried">SIM2 PIN blocked, Enter PUK to unblock</string>
+    <string name="sim_puk_requried">SIM PIN blocked, Enter PUK to unblock</string>
+    <string name="keyguard_password_enter_sim1_pin_code">Enter Sim1 PIN code</string>
+    <string name="keyguard_password_enter_sim2_pin_code">Enter Sim2 PIN code</string>
+    <string name="keyguard_password_enter_sim_pin_code">Enter Sim PIN code</string>
+    <string name="keyguard_sim1_pin_accepted">Sim1 Pin Unlock Success</string>
+    <string name="keyguard_sim2_pin_accepted">Sim2 Pin Unlock Success</string>
+    <string name="keyguard_sim_pin_accepted">Sim Pin Unlock Success</string>
+    <string name="puk_accept">PUK is accepted</string>
+    <string name="unblocking_fail">Unblocking failed, reenter the PUK</string>
+    <string name="keyguard_password_wrong_puk_code">Incorrect PUK code!</string>
+    <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
+    <string name="new_pin">Enter a new PIN</string>
+    <string name="reenter">Reenter the PIN</string>
+	<!-- cienetend Edison -->
 
     <!-- On the keyguard screen, it shows the carrier the phone is connected to.  This is displayed if the phone is not connected to a carrier.-->
     <string name="lockscreen_carrier_default">(No service)</string>
@@ -2435,7 +2523,6 @@
     <string name="keyguard_password_enter_puk_code" >Enter PUK Code</string>
     <string name="keyguard_password_enter_new_pin_first_code" >Enter New PIN Code</string>
     <string name="keyguard_password_enter_new_pin_second_code" >Enter New PIN Code Again</string>
-    <string name="keyguard_password_wrong_puk_code">Wrong PUK Code</string>
     <!--PUK Input Add end-->
     
     <!--Add by liguxiang 07-08-11 for USB settings function begin -->

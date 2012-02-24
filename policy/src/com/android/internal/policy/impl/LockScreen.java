@@ -18,6 +18,7 @@ package com.android.internal.policy.impl;
 
 import com.android.internal.R;
 import com.android.internal.telephony.IccCard;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.SlidingTab;
 
@@ -57,13 +58,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private static final String TAG = "LockScreen";
     private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
 
-    private Status mStatus = Status.Normal;
+    private Status[] mStatus = new Status[2];
 
     private LockPatternUtils mLockPatternUtils;
     private KeyguardUpdateMonitor mUpdateMonitor;
     private KeyguardScreenCallback mCallback;
 
-    private TextView mCarrier;
+//    private TextView mCarrier;
+    private TextView[] mCarrier;
     private SlidingTab mSelector;
     private TextView mTime;
     private TextView mDate;
@@ -99,9 +101,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private String mDateFormatString;
     private java.text.DateFormat mTimeFormat;
     private boolean mEnableMenuKeyInLockScreen;
+    private int[] mResId = new int[]{R.id.carrier, R.id.carrier_sub2};
     
  // ************Modify by luning at01-07-01 begin************
     private Context mContext;
+    private IccText mSimText;
+    private IccText mRuimText;
+    private IccText mIccText;
+    private PhoneStateListener[] mPhoneStateListener;
  // ************Modify by luning at01-07-01 end************
     
     /**
@@ -212,10 +219,21 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
         }
 
-        mCarrier = (TextView) findViewById(R.id.carrier);
-        // Required for Marquee to work
-        mCarrier.setSelected(true);
-        mCarrier.setTextColor(0xffffffff);
+//        mCarrier = (TextView) findViewById(R.id.carrier);
+//        // Required for Marquee to work
+//        mCarrier.setSelected(true);
+//        mCarrier.setTextColor(0xffffffff);
+        int numPhones=TelephonyManager.getPhoneCount();
+        // Sim States for the subscription
+        mCarrier = new TextView[numPhones];
+        for (int i = 0; i < numPhones; i++) {
+            mCarrier[i] = (TextView) findViewById(mResId[i]);
+            // Required for Marquee to work
+            mCarrier[i].setSelected(true);
+            mCarrier[i].setTextColor(0xffffffff);
+			mStatus[i] = Status.Normal;
+        }
+        
 
         mDate = (TextView) findViewById(R.id.date);
         mStatus1 = (TextView) findViewById(R.id.status1);
@@ -269,10 +287,17 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
         resetStatusInfo(updateMonitor);
         
-        // register for phone state notifications.
-        ((TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE))
-                .listen(mPhoneStateListener,
-                          PhoneStateListener.LISTEN_SERVICE_STATE);  //add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen
+        mPhoneStateListener = new PhoneStateListener[numPhones];
+        
+		for (int i = 0; i < numPhones; i++) {
+			// register for phone state notifications.
+			mPhoneStateListener[i] = getPhoneStateListener(i);
+			((TelephonyManager) mContext
+					.getSystemService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i))).listen(
+					mPhoneStateListener[i],
+					PhoneStateListener.LISTEN_SERVICE_STATE);
+		}
+        
     }
 
     private boolean isSilentMode() {
@@ -299,9 +324,13 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mShowingBatteryInfo = updateMonitor.shouldShowBatteryInfo();
         mPluggedIn = updateMonitor.isDevicePluggedIn();
         mBatteryLevel = updateMonitor.getBatteryLevel();
-
-        mStatus = getCurrentStatus(updateMonitor.getSimState());
-        updateLayout(mStatus);
+//        mStatus = getCurrentStatus(updateMonitor.getSimState());
+//        updateLayout(mStatus);
+        
+        for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+            mStatus[i] = getCurrentStatus(updateMonitor.getSimState(i));
+            updateLayout(mStatus[i], i);
+        }
 
         refreshBatteryStringAndIcon();
         refreshAlarmDisplay();
@@ -514,8 +543,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
 
     private void updateStatusLines() {
-        if (!mStatus.showStatusLines()
-                || (mCharging == null && mNextAlarm == null)) {
+        if ((mCharging == null && mNextAlarm == null)) {
             mStatus1.setVisibility(View.INVISIBLE);
             mStatus2.setVisibility(View.INVISIBLE);
         } else if (mCharging != null && mNextAlarm == null) {
@@ -545,9 +573,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
 
     /** {@inheritDoc} */
-    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
+    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int phoneId) {
         if (DBG) Log.d(TAG, "onRefreshCarrierInfo(" + plmn + ", " + spn + ")");
-        updateLayout(mStatus);
+        updateLayout(mStatus[phoneId],phoneId);
     }
 
     /**
@@ -582,26 +610,37 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     /**
      * Update the layout to match the current status.
      */
-    private void updateLayout(Status status) {
+    private void updateLayout(Status status,int phoneId) {
         // The emergency call button no longer appears on this screen.
         if (true) Log.i(TAG, "updateLayout: status=" + status+",mCarrier= "
-        +getSprdCarrierString(mUpdateMonitor.getTelephonyPlmn(),mUpdateMonitor.getTelephonySpn())
+        +getSprdCarrierString(mUpdateMonitor.getTelephonyPlmn(phoneId),mUpdateMonitor.getTelephonySpn(phoneId))
         +",radioType="+mUpdateMonitor.getRadioType());
 
         mEmergencyCallButton.setVisibility(View.VISIBLE); // in almost all cases
         //PUK Input Add Start
         mPukButton.setVisibility(View.GONE);
         //PUK Input Add End
-
+        mIccText = getCurrentText(phoneId);
         //modify by liguxiang 08-25-11 for display radiotype(3G) on LockScreen begin
         //change getCarrierString to getSprdCarrierString
+        int subscription = phoneId;
         switch (status) {
             case Normal:
                 // text
-                mCarrier.setText(
-                		getSprdCarrierString(
-                                mUpdateMonitor.getTelephonyPlmn(),
-                                mUpdateMonitor.getTelephonySpn()));
+//                mCarrier.setText(
+//                		getSprdCarrierString(
+//                                mUpdateMonitor.getTelephonyPlmn(),
+//                                mUpdateMonitor.getTelephonySpn()));
+				CharSequence carrierText = getCarrierString(
+						mUpdateMonitor.getTelephonyPlmn(subscription),
+						mUpdateMonitor.getTelephonySpn(subscription));
+				if ("".equals(carrierText)) {
+					mCarrier[subscription].setText(mContext
+							.getResources().getText(
+									R.string.lockscreen_carrier_default));
+				} else {
+					mCarrier[subscription].setText(carrierText);
+				}
 
                 // Empty now, but used for sliding tab feedback
                 mScreenLocked.setText("");
@@ -620,7 +659,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 //                		getSprdCarrierString(
 //                                mUpdateMonitor.getTelephonyPlmn(),
 //                                getContext().getText(R.string.lockscreen_network_locked_message)));
-                mCarrier.setText(getContext().getText(R.string.lockscreen_network_locked_message));
+            	//mCarrier.setText(getContext().getText(R.string.lockscreen_network_locked_message));
+            	mCarrier[subscription].setText(mIccText.networkLockedMessage);
                 //Modify end on 2012-01-17
 
                 // layout
@@ -630,7 +670,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 break;
             case SimMissing:
                 // text
-                mCarrier.setText(R.string.lockscreen_missing_sim_message_short);
+                //mCarrier.setText(R.string.lockscreen_missing_sim_message_short);
+            	mCarrier[subscription].setText(mIccText.iccMissingMessageShort);
                 mScreenLocked.setText(R.string.lockscreen_missing_sim_instructions);
 
                 // layout
@@ -646,7 +687,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 //                		getSprdCarrierString(
 //                                mUpdateMonitor.getTelephonyPlmn(),
 //                                getContext().getText(R.string.lockscreen_missing_sim_message_short)));
-            	mCarrier.setText(getContext().getText(R.string.lockscreen_missing_sim_message_short));
+            	//mCarrier.setText(getContext().getText(R.string.lockscreen_missing_sim_message_short));
+            	mCarrier[subscription].setText(mIccText.iccMissingMessageShort);
                 //Modify end on 2012-01-17
 
                 mScreenLocked.setText(R.string.lockscreen_missing_sim_instructions);
@@ -665,7 +707,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 //                		getSprdCarrierString(
 //                                mUpdateMonitor.getTelephonyPlmn(),
 //                                getContext().getText(R.string.lockscreen_sim_locked_message)));
-                mCarrier.setText(getContext().getText(R.string.lockscreen_sim_locked_message));
+            	//mCarrier.setText(getContext().getText(R.string.lockscreen_sim_locked_message));
+            	mCarrier[subscription].setText(mIccText.iccPinLockedMessage);
                 //Modify end on 2012-01-17
 
                 // layout
@@ -681,7 +724,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 //                		getSprdCarrierString(
 //                                mUpdateMonitor.getTelephonyPlmn(),
 //                                getContext().getText(R.string.lockscreen_sim_puk_locked_message)));
-                mCarrier.setText(getContext().getText(R.string.lockscreen_sim_puk_locked_message));
+                //mCarrier.setText(getContext().getText(R.string.lockscreen_sim_puk_locked_message));
+            	mCarrier[subscription].setText(mIccText.iccPukLockedMessage);
                 //Modify end on 2012-01-17
 
                 mScreenLocked.setText(R.string.lockscreen_sim_puk_locked_instructions);
@@ -752,10 +796,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
     //add by liguxiang 08-25-11 for display radio type on LockScreen end
 
-    public void onSimStateChanged(IccCard.State simState) {
+    public void onSimStateChanged(IccCard.State simState,int phoneId) {
         if (DBG) Log.d(TAG, "onSimStateChanged(" + simState + ")");
-        mStatus = getCurrentStatus(simState);
-        updateLayout(mStatus);
+        mStatus[phoneId] = getCurrentStatus(simState);
+        updateLayout(mStatus[phoneId],phoneId);
         updateStatusLines();
     }
 
@@ -829,22 +873,94 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
     }
     
-    //add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen begin
-    private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-        @Override
-        public void onServiceStateChanged(ServiceState state) {
-            //modify by lvxg start
-            if(mUpdateMonitor!=null && state!=null){
-                mUpdateMonitor.setRadioType(state.getRadioTechnology());
-                updateLayout(mStatus);
-            }
-            //modify by lvxg end
-        }
-
-    };
-    //add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen end
+    private PhoneStateListener getPhoneStateListener(int subscription) {
+    	//add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen begin
+    	return new PhoneStateListener(subscription) {
+    		@Override
+    		public void onServiceStateChanged(ServiceState state) {
+    			if(mUpdateMonitor!=null && state!=null){
+    				mUpdateMonitor.setRadioType(state.getRadioTechnology());
+    				updateLayout(mStatus[mSubscription],mSubscription);
+    			}
+    		}
+    		
+    	};
+    	//add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen end
+    }
 
     public void onPhoneStateChanged(String newState) {
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
     }
+
+    //add start
+    private class IccText {
+        int iccPukLockedMessage;
+        int iccPukLockedInstructions;
+        int iccMissingMessage;
+        int iccMissingInstructions;
+        int iccErrorMessage;
+        int iccInstructionsWhenPatternEnabled;
+        int iccInstructionsWhenPatternDisabled;
+        int iccPinLockedMessage;
+        int iccMissingMessageShort;
+        int iccErrorMessageShort;
+        int networkLockedMessage;
+        int iccBlockMessageShort;
+    }
+    private IccText createSimText() {
+        IccText simText = new IccText();
+        simText.iccPukLockedMessage = R.string.lockscreen_sim_puk_locked_message;
+        simText.iccPukLockedInstructions = R.string.lockscreen_sim_puk_locked_instructions;
+        simText.iccMissingMessage = R.string.lockscreen_missing_sim_message;
+        simText.iccMissingInstructions = R.string.lockscreen_missing_sim_instructions;
+        simText.iccErrorMessage = R.string.lockscreen_sim_error_message;
+        simText.iccInstructionsWhenPatternEnabled = R.string.lockscreen_instructions_when_pattern_enabled;
+        simText.iccInstructionsWhenPatternDisabled = R.string.lockscreen_instructions_when_pattern_disabled;
+        simText.iccPinLockedMessage = R.string.lockscreen_pin_locked_message;
+        simText.iccMissingMessageShort = R.string.lockscreen_missing_sim_message_short;
+        simText.iccErrorMessageShort = R.string.lockscreen_sim_error_message_short;
+        simText.networkLockedMessage = R.string.lockscreen_sim_network_locked_message;
+        simText.iccBlockMessageShort = R.string.lockscreen_blocked_sim_message_short;
+        return simText;
+    }
+
+    private IccText createRuimText() {
+        IccText ruimText = new IccText();
+        ruimText.iccPukLockedMessage = R.string.lockscreen_ruim_puk_locked_message;
+        ruimText.iccPukLockedInstructions = R.string.lockscreen_ruim_puk_locked_instructions;
+        ruimText.iccMissingMessage = R.string.lockscreen_missing_ruim_message;
+        ruimText.iccMissingInstructions = R.string.lockscreen_missing_ruim_instructions;
+        ruimText.iccErrorMessage = R.string.lockscreen_ruim_error_message;
+        ruimText.iccInstructionsWhenPatternEnabled = R.string.lockscreen_instructions_when_pattern_enabled;
+        ruimText.iccInstructionsWhenPatternDisabled = R.string.lockscreen_instructions_when_pattern_disabled;
+        ruimText.iccPinLockedMessage = R.string.lockscreen_pin_locked_message;
+        ruimText.iccMissingMessageShort = R.string.lockscreen_missing_ruim_message_short;
+        ruimText.iccErrorMessageShort = R.string.lockscreen_ruim_error_message_short;
+        ruimText.networkLockedMessage = R.string.lockscreen_ruim_network_locked_message;
+        ruimText.iccBlockMessageShort = R.string.lockscreen_blocked_ruim_message_short;
+        return ruimText;
+    }
+    private IccText getCurrentText(int subscription) {
+        int activePhoneType;
+        try {
+            activePhoneType = TelephonyManager.getDefault(subscription).getPhoneType();
+        } catch (Exception e) {
+            Log.e(TAG, "Exception occured while trying to get the phone.");
+            activePhoneType = TelephonyManager.getDefault().getPhoneType();
+        }
+        boolean isGsm = TelephonyManager.PHONE_TYPE_GSM == activePhoneType;
+        Log.d(TAG, "Updating Lock Screen text to " + (isGsm ? "Sim" : "Ruim"));
+        if (isGsm) {
+            if (mSimText == null) {
+                mSimText = createSimText();
+            }
+            return mSimText;
+        } else {
+            if (mRuimText == null) {
+                mRuimText = createRuimText();
+            }
+            return mRuimText;
+        }
+    }
+    //add end
 }

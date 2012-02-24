@@ -22,6 +22,8 @@ import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarIconList;
 import com.android.internal.statusbar.StatusBarNotification;
+import com.android.internal.telephony.IccCard;
+import com.android.internal.telephony.TelephonyIntents;
 
 import android.app.ActivityManagerNative;
 import android.app.Dialog;
@@ -46,7 +48,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ServiceManager;
 import android.os.SystemClock;
-import android.os.SystemProperties;
+import android.provider.Telephony;
 import android.text.TextUtils;
 import android.util.Slog;
 import android.util.Log;
@@ -121,6 +123,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     // top bar
     TextView mNoNotificationsTitle;
     TextView mClearButton;
+    // carrierlabels
+    CarrierLabel[] mCarrierLabels = new CarrierLabel[2];
     // drag bar
     CloseDragHandle mCloseView;
     // ongoing
@@ -212,6 +216,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
         // Set up the initial icon state
         int N = iconList.size();
+        Log.d("lile", "iconList.size(): "+N);
         int viewIndex = 0;
         for (int i=0; i<N; i++) {
             StatusBarIcon icon = iconList.getIcon(i);
@@ -289,6 +294,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mLatestTitle = (TextView)expanded.findViewById(R.id.latestTitle);
         mLatestItems = (LinearLayout)expanded.findViewById(R.id.latestItems);
         mNoNotificationsTitle = (TextView)expanded.findViewById(R.id.noNotificationsTitle);
+        mCarrierLabels[0] = (CarrierLabel)expanded.findViewById(R.id.carrierlabel_spn0);
+        mCarrierLabels[1] = (CarrierLabel)expanded.findViewById(R.id.carrierlabel_spn1);
         mClearButton = (TextView)expanded.findViewById(R.id.clear_all_button);
         mClearButton.setOnClickListener(mClearButtonListener);
         mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
@@ -319,6 +326,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION);
+        filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         context.registerReceiver(mBroadcastReceiver, filter);
     }
 
@@ -1435,18 +1444,56 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         }
     };
 
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)
-                    || Intent.ACTION_SCREEN_OFF.equals(action)) {
-                animateCollapse();
-            }
-            else if (Intent.ACTION_CONFIGURATION_CHANGED.equals(action)) {
-                updateResources();
-            }
-        }
-    };
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			int phoneId = 0;
+			if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)
+					|| Intent.ACTION_SCREEN_OFF.equals(action)) {
+				animateCollapse();
+			} else if (Intent.ACTION_CONFIGURATION_CHANGED.equals(action)) {
+				updateResources();
+			} else if (Telephony.Intents.SPN_STRINGS_UPDATED_ACTION
+					.equals(action)) {
+				phoneId = intent.getIntExtra(Telephony.Intents.EXTRA_PHONE_ID,
+						0);
+				mCarrierLabels[phoneId].updateNetworkName(intent
+						.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN,
+								false), intent
+						.getStringExtra(Telephony.Intents.EXTRA_SPN), intent
+						.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN,
+								false), intent
+						.getStringExtra(Telephony.Intents.EXTRA_PLMN), intent
+						.getStringExtra(Telephony.Intents.EXTRA_NETWORK_TYPE));
+			}
+
+			else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
+				String stateExtra = intent
+						.getStringExtra(IccCard.INTENT_KEY_ICC_STATE);
+				Log.i("CarrierLabel", "Receive " + intent.getAction()
+						+ " IccCard is " + stateExtra);
+				phoneId = intent.getIntExtra(IccCard.INTENT_KEY_PHONE_ID, 0);
+				if (IccCard.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
+					mCarrierLabels[phoneId].mSimMissed = true;
+					mCarrierLabels[phoneId]
+							.updateForSimCardChanged(com.android.internal.R.string.lockscreen_missing_sim_message_short);
+				} else if (IccCard.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
+					mCarrierLabels[phoneId].mSimBlocked = true;
+					mCarrierLabels[phoneId]
+							.updateForSimCardChanged(com.android.internal.R.string.lockscreen_sim_locked_message);
+
+				} else if (IccCard.INTENT_VALUE_ICC_BLOCKED.equals(stateExtra)) {
+					mCarrierLabels[phoneId]
+							.updateForSimCardChanged(com.android.internal.R.string.lockscreen_blocked_sim_message_short);
+
+				} else if (IccCard.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
+					mCarrierLabels[phoneId].mSimMissed = false;
+					mCarrierLabels[phoneId].mSimBlocked = false;
+				}
+
+			}
+		}
+	};
 
     //add by liguxiang 08-30-11 for NEWMS00117967 begin
     private String getRadioType(String type){
@@ -1509,4 +1556,5 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             vibrate();
         }
     };
+    
 }
