@@ -1036,7 +1036,11 @@
 	<string name="unlock_screen_pin_error">Pin码错误!</string>
 	<!-- add by yangqingan 2011-12-27 for NEWMS00155219 end -->
     <string name="ap_disconnected"> 断开</string>
+
     <!--add by locksecreen start  2012-02-24-->
     <string name="lockscreen_pin_locked_message">SIM/RUIM 卡已锁定</string>
     <!--add by locksecreen end-->
+
+    <string name="choose_sim">选择SIM卡</string>
+
 </resources>
