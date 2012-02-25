@@ -161,7 +161,7 @@ public abstract class GSMPhone extends PhoneBase {
             mSimSmsIntManager = new SimSmsInterfaceManager(this, mSMS);
             mSubInfo = new PhoneSubInfo(this);
         }
-        mStkService = StkService.getInstance(mCM, mSIMRecords, mContext,
+        mStkService = StkServiceProxy.getInstance(mCM, mSIMRecords, mContext,
                 (SIMFileHandler)mIccFileHandler, mSimCard);
 
         mCM.registerForAvailable(this, EVENT_RADIO_AVAILABLE, null);

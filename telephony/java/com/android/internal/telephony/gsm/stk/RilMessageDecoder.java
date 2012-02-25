@@ -51,13 +51,15 @@ class RilMessageDecoder extends HierarchicalStateMachine {
      * @param fh
      * @return RilMesssageDecoder
      */
-    public static synchronized RilMessageDecoder getInstance(Handler caller, SIMFileHandler fh) {
+    // zhanglj delete begin 2011-05-25 for cancel single instance
+/*    public static synchronized RilMessageDecoder getInstance(Handler caller, SIMFileHandler fh) {
         if (sInstance == null) {
             sInstance = new RilMessageDecoder(caller, fh);
             sInstance.start();
         }
         return sInstance;
-    }
+    }*/
+    // zhanglj delete end
 
     /**
      * Start decoding the message parameters,
@@ -90,7 +92,7 @@ class RilMessageDecoder extends HierarchicalStateMachine {
         msg.sendToTarget();
     }
 
-    private RilMessageDecoder(Handler caller, SIMFileHandler fh) {
+    public RilMessageDecoder(Handler caller, SIMFileHandler fh, int phoneId) {
         super("RilMessageDecoder");
 
         addState(mStateStart);
@@ -98,7 +100,7 @@ class RilMessageDecoder extends HierarchicalStateMachine {
         setInitialState(mStateStart);
 
         mCaller = caller;
-        mCmdParamsFactory = CommandParamsFactory.getInstance(this, fh);
+        mCmdParamsFactory = new CommandParamsFactory(this, fh ,phoneId);
     }
 
     private class StateStart extends HierarchicalState {

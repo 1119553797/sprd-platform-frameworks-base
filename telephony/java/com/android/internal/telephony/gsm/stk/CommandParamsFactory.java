@@ -41,6 +41,7 @@ class CommandParamsFactory extends Handler {
     private CommandParams mCmdParams = null;
     private int mIconLoadState = LOAD_NO_ICON;
     private RilMessageDecoder mCaller = null;
+    private int mPhoneId;
 
     // constants
     static final int MSG_ID_LOAD_ICON_DONE = 1;
@@ -57,7 +58,8 @@ class CommandParamsFactory extends Handler {
     static final int REFRESH_NAA_INIT                       = 0x03;
     static final int REFRESH_UICC_RESET                     = 0x04;
 
-    static synchronized CommandParamsFactory getInstance(RilMessageDecoder caller,
+    // zhanglj delete begin 2011-05-25 for cancel single instance
+/*    static synchronized CommandParamsFactory getInstance(RilMessageDecoder caller,
             SIMFileHandler fh) {
         if (sInstance != null) {
             return sInstance;
@@ -66,11 +68,13 @@ class CommandParamsFactory extends Handler {
             return new CommandParamsFactory(caller, fh);
         }
         return null;
-    }
+    }*/
+    // zhanglj delete end
 
-    private CommandParamsFactory(RilMessageDecoder caller, SIMFileHandler fh) {
+    public CommandParamsFactory(RilMessageDecoder caller, SIMFileHandler fh, int phoneId) {
         mCaller = caller;
-        mIconLoader = IconLoader.getInstance(this, fh);
+        mIconLoader = IconLoaderProxy.getInstance(this, fh,phoneId);
+        mPhoneId = phoneId;
     }
 
     private CommandDetails processCommandDetails(List<ComprehensionTlv> ctlvs) {
