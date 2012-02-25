@@ -71,6 +71,7 @@ import com.android.internal.telephony.PhoneSubInfo;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.gsm.stk.StkService;
+import com.android.internal.telephony.gsm.stk.StkServiceProxy;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.IccVmNotSupportedException;
 import com.android.internal.telephony.gsm.SuppServiceNotification;

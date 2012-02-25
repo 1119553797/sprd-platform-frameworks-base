@@ -22,6 +22,7 @@ import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR;
 import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
 
+import com.android.internal.telephony.gsm.stk.AppInterface;
 import com.android.internal.view.BaseSurfaceHolder;
 import com.android.internal.view.RootViewSurfaceTaker;
 import com.android.internal.view.menu.ContextMenuBuilder;
@@ -78,6 +79,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import android.view.IWindowManager;
+import android.os.ServiceManager;
 
 /**
  * Android-specific Window.
