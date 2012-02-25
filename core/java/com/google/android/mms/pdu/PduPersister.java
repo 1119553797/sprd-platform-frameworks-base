@@ -829,6 +829,13 @@ public class PduPersister {
         persistAddress(msgId, type, array);
     }
 
+    public void updateHeaders(Uri uri, SendReq sendReq, int phoneId) {
+	updateHeaders(uri,sendReq);
+        ContentValues values = new ContentValues();
+	values.put(Mms.PHONE_ID,phoneId);
+        SqliteWrapper.update(mContext, mContentResolver, uri, values, null, null);
+    }
+    
     /**
      * Update headers of a SendReq.
      *
