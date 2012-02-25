@@ -157,7 +157,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
         mEmergencyCallButton.setOnClickListener(this);
         mOkButton.setOnClickListener(this);
-
+        mUpdateMonitor.registerInfoCallback(this);
         setFocusableInTouchMode(true);
     }
 
