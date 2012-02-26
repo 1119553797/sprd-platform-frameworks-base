@@ -301,7 +301,7 @@ MediaRecorderClient::MediaRecorderClient(const sp<MediaPlayerService>& service, 
     } else
 #ifndef NO_OPENCORE
     {
-        mRecorder = new PVMediaRecorder();
+    //    mRecorder = new PVMediaRecorder();
     }
 #else
     {

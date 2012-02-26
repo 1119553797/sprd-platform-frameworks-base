@@ -715,7 +715,7 @@ player_type getPlayerType(int fd, int64_t offset, int64_t length)
     if (ident == 0x75b22630) {
         // The magic number for .asf files, i.e. wmv and wma content.
         // These are not currently supported through stagefright.
-        return PV_PLAYER;
+        //return PV_PLAYER;
     }
 #endif
 
@@ -770,7 +770,7 @@ player_type getPlayerType(const char* url)
 			char value[PROPERTY_VALUE_MAX];
 
 			property_set("stream.sprd.useragent","false");
-
+/*
 		    if (property_get("media.stagefright.enable-rtsp", value, NULL)
 				   && (!strcmp(value, "1") || !strcasecmp(value, "true"))) {
 				   // For now, we're going to use PV for rtsp-based playback
@@ -782,6 +782,8 @@ player_type getPlayerType(const char* url)
 			{
 			  return PV_PLAYER;
 			}
+*/			
+			return PV_PLAYER;
 		}
     }
 
