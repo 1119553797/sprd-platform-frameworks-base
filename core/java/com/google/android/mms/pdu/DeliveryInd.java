@@ -45,6 +45,15 @@ public class DeliveryInd extends GenericPdu {
         super(headers);
     }
 
+    public DeliveryInd(int phoneId) throws InvalidHeaderValueException {
+        super(phoneId);
+        setMessageType(PduHeaders.MESSAGE_TYPE_DELIVERY_IND);
+    }
+
+    DeliveryInd(PduHeaders headers, int phoneId) {
+        super(headers, phoneId);
+    }
+
     /**
      * Get Date value.
      *

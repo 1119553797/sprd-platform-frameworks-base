@@ -48,6 +48,19 @@ public class AcknowledgeInd extends GenericPdu {
     AcknowledgeInd(PduHeaders headers) {
         super(headers);
     }
+    
+    public AcknowledgeInd(int mmsVersion, byte[] transactionId, int phoneId)
+            throws InvalidHeaderValueException {
+        super(phoneId);
+
+        setMessageType(PduHeaders.MESSAGE_TYPE_ACKNOWLEDGE_IND);
+        setMmsVersion(mmsVersion);
+        setTransactionId(transactionId);
+    }
+    
+    AcknowledgeInd(PduHeaders headers, int phoneId) {
+        super(headers, phoneId);
+    }
 
     /**
      * Get X-Mms-Report-Allowed field value.
