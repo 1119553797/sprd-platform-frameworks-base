@@ -74,6 +74,10 @@ public abstract class IccCard {
     static public final String INTENT_VALUE_LOCKED_ON_PUK = "PUK";
     /* NETWORK means ICC is locked on NETWORK PERSONALIZATION */
     static public final String INTENT_VALUE_LOCKED_NETWORK = "NETWORK";
+    /* REFRESH means ICC is refreshed */
+    static public final String INTENT_VALUE_ICC_REFRESH= "REFRESH";
+
+
 
     protected static final int EVENT_ICC_LOCKED_OR_ABSENT = 1;
     private static final int EVENT_GET_ICC_STATUS_DONE = 2;
@@ -495,6 +499,22 @@ public abstract class IccCard {
         if(mDbg) log("Broadcasting intent ACTION_SIM_GET_STATUS_DONE ");
 		
         ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
+    }
+
+
+    public void queryFacilityFdnDone() {
+        Log.e(mLogTag, "IccCard  queryFacilityFdnDone");
+        int serviceClassX = CommandsInterface.SERVICE_CLASS_VOICE +
+                            CommandsInterface.SERVICE_CLASS_DATA +
+                            CommandsInterface.SERVICE_CLASS_FAX;
+
+        Message msg = mHandler.obtainMessage(EVENT_QUERY_FACILITY_FDN_DONE);
+        mPhone.mCM.queryFacilityLock (
+                            CommandsInterface.CB_FACILITY_BA_FD, "", serviceClassX,
+                            msg);
+
+        Log.e(mLogTag,"queryFacilityFdnDone sendBroadcast SIM_STATE_CHANGED");
+        broadcastIccStateChangedIntent(INTENT_VALUE_ICC_REFRESH, null);
     }
 
     protected Handler mHandler = new Handler() {
