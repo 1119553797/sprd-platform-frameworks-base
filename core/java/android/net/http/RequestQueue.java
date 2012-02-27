@@ -71,7 +71,8 @@ public class RequestQueue implements RequestFeeder {
 	//add by niezhong 08-21-11 for wifiProxy(NEWMS00107910) start
     private boolean isContain = false;
     private boolean setProxy = false;
-    private String mSsid = "";
+    //delect by spreadst_LC_WIFI
+    //private String mSsid = "";
  
 	//add by niezhong 08-21-11 for wifiProxy(NEWMS00107910) end
     /**
@@ -270,10 +271,13 @@ public class RequestQueue implements RequestFeeder {
      * synchronize setting the proxy
      */
     private synchronized void setProxyConfig() {
+        Log.d("niezhong", "in setProxyConfig");
         NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
         if (info != null && info.getType() == ConnectivityManager.TYPE_WIFI) {
+        Log.d("niezhong", "is used wifi");
 		//add by niezhong 08-21-11 for wifiProxy(NEWMS00107910) start
         	String tmpPorxyPort = getProxyPort(mContext);
+            Log.d("niezhong", "getProxyPort="+ tmpPorxyPort);
         	if(tmpPorxyPort == null) {
         		mProxyHost = null;
         	}
@@ -281,6 +285,7 @@ public class RequestQueue implements RequestFeeder {
         		String hostname = getWifiProxy(tmpPorxyPort);
         		int port = getWifiPort(tmpPorxyPort);
         		mActivePool.disablePersistence();
+                Log.d("niezhong", "setProxyConfig used WIFI, hostname=" + hostname + " port=" + port );
         		mProxyHost = new HttpHost(hostname,port,"http");
         		setProxy = true;
 		        isContain =false;
@@ -580,7 +585,8 @@ public class RequestQueue implements RequestFeeder {
     				new String[]{"1"}, null);
     		if((c != null)&& c.moveToNext()) {
     			proxyPortStr = c.getString(c.getColumnIndex(Settings.Proxy.VALUE));
-    			mSsid = c.getString(c.getColumnIndex(Settings.Proxy.NAME));
+                //delete by spreadst_LC_WIFI
+    			//mSsid = c.getString(c.getColumnIndex(Settings.Proxy.NAME));
     		}else{
     			return null;
     		}
@@ -619,12 +625,16 @@ public class RequestQueue implements RequestFeeder {
     private boolean isContainUrl(String curUrl) {
     	Log.d("niezhong", "the access url = " + curUrl);
     	boolean flag = false;
-    	if(mSsid == null || "".equals(mSsid) || mContext==null) {
+        //delete by spreadst_LC_WIFI
+    	/*if(mSsid == null || "".equals(mSsid) || mContext==null) {
     		flag = false;
     	}
-    	else {
+    	else {*/
+            //delete by spreadst_LC_WIFI
+    		//Cursor c = mContext.getContentResolver().query(Settings.ProxyList.CONTENT_URI, null, 
+    		//		 "name=? and '"+curUrl+"' like proxyfilter", new String[]{mSsid}, null);
     		Cursor c = mContext.getContentResolver().query(Settings.ProxyList.CONTENT_URI, null, 
-    				 "name=? and '"+curUrl+"' like proxyfilter", new String[]{mSsid}, null);
+    				 "'"+curUrl+"' like proxyfilter", null, null);
     		if(c != null && c.moveToNext()) {
     			flag = true;
     		}
@@ -634,7 +644,7 @@ public class RequestQueue implements RequestFeeder {
     		if(c != null) {
     			c.close();
     		}
-    	}
+    	//}
     	Log.d("niezhong", "the result of filter = " + flag);
     	return flag;
     }

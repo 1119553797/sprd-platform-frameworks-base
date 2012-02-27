@@ -202,6 +202,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
     }
 
+    public int getCurrentState(){
+           return mCurrentState;
+    }
+
     private void startVideo() {
         if (mUri == null || mSurfaceHolder == null) {
             // not ready for playback just yet, will try again later
@@ -544,7 +548,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             mSurfaceHolder = null;
             if (mMediaController != null) mMediaController.hide();
             if (mCurrentState != STATE_SUSPEND) {
-                release(true);
+           //     release(true);
+              mTargetState  = STATE_IDLE;
             }
         }
     };
