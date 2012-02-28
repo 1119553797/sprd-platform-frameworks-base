@@ -341,7 +341,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             } else {
                 mCanPause = mCanSeekBack = mCanSeekForward = true;
             }
-
+            //added by MMz01 fix bug 10261
+            if(mp.getDuration() == 0 || mp.getDuration() == -1){
+                mCanPause = mCanSeekBack = mCanSeekForward = false;
+            }
             if (mOnPreparedListener != null) {
                 mOnPreparedListener.onPrepared(mMediaPlayer);
             }
