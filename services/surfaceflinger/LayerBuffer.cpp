@@ -432,12 +432,9 @@ void LayerBuffer::BufferSource::postBuffer(ssize_t offset)
 	 	Mutex::Autolock autoLock(mBufLock);
                 setBuffer(buffer);
 	 	mInComposing = true;
-        }
+        }		
         mLayer.invalidate();
-	Mutex::Autolock autoLock(mBufLock);
-	while(mInComposing) {
-	    mBufCondition.waitRelative(mBufLock, 100000000);
-        };
+	while(mInComposing) {}; 
     }
 }
 
@@ -526,7 +523,6 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
         }
 
     	mInComposing = false;
-        mBufCondition.signal();
     } while(0);
 
     mLayer.setBufferTransform(mBufferHeap.transform);
