@@ -428,23 +428,16 @@ void LayerBuffer::BufferSource::postBuffer(ssize_t offset)
         buffer = new LayerBuffer::Buffer(buffers, offset, mBufferSize);
         if (buffer->getStatus() != NO_ERROR)
             buffer.clear();		
-	    { //jgdu push buffer sync
-	     	Mutex::Autolock autoLock(mBufLock);
-            setBuffer(buffer);
-	     	mInComposing = true;
-        }		
+	{ //jgdu push buffer sync
+	 	Mutex::Autolock autoLock(mBufLock);
+                setBuffer(buffer);
+	 	mInComposing = true;
+        }
         mLayer.invalidate();
-
-        { //jgdu push buffer sync
-	        Mutex::Autolock autoLock(mBufLock);
-            int count = 0;
-	        while(mInComposing) {
-	            mBufCondition.waitRelative(mBufLock, 100000000);
-                count ++;
-                if (count >= 5) {
-                    LOGD("postBuffer sync cost too long\n");
-                    break;
-                }
+        {
+	    Mutex::Autolock autoLock(mBufLock);
+	    while(mInComposing) {
+	        mBufCondition.waitRelative(mBufLock, 100000000);
             };
         }
     }
@@ -474,38 +467,9 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
 {
     do {
         Mutex::Autolock autoLock(mBufLock);
-
         if(!mInComposing) {
-            // it's ugly!!
-            const ISurface::BufferHeap& buffers(mBufferHeap);
-            uint32_t w = mLayer.mTransformedBounds.width();
-            uint32_t h = mLayer.mTransformedBounds.height();
-            if (buffers.w * h != buffers.h * w) {
-                int t = w; w = h; h = t;
-            }
-        
-            // we're in the copybit case, so make sure we can handle this blit
-            // we don't have to keep the aspect ratio here
-            copybit_device_t* copybit = mLayer.mBlitEngine;
-            if (copybit) {
-                const int down = copybit->get(copybit, COPYBIT_MINIFICATION_LIMIT);
-                const int up = copybit->get(copybit, COPYBIT_MAGNIFICATION_LIMIT);
-                if (buffers.w > w*down)     w = buffers.w / down;
-                else if (w > buffers.w*up)  w = buffers.w*up;
-                if (buffers.h > h*down)     h = buffers.h / down;
-                else if (h > buffers.h*up)  h = buffers.h*up;
-            }
-        
-            if (mTexture.image != EGL_NO_IMAGE_KHR) {
-                // we have an EGLImage, make sure the needed size didn't change
-                if (w==mTexture.width && h==mTexture.height) {
-                    // we're good, we have an EGLImageKHR and it's (still) the
-                    // right size
-                    break;
-                }
-            }
+            break;
         }
-
         sp<Buffer> ourBuffer = getBuffer();
         if (UNLIKELY(ourBuffer == 0))  {
             // nothing to do, we don't have a buffer
@@ -559,6 +523,7 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
             const Region dirty(Rect(t.width, t.height));
             mTextureManager.loadTexture(&mTexture, dirty, t);
         }
+
     	mInComposing = false;
         mBufCondition.signal();
     } while(0);
