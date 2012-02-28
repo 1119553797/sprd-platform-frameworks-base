@@ -536,6 +536,7 @@ public class MediaController extends FrameLayout {
     private View.OnClickListener mStopListener = new View.OnClickListener() {
         public void onClick(View v) {
             doStop();
+            mPauseButton.setEnabled(true);
             show(sDefaultTimeout);
         }
     };
