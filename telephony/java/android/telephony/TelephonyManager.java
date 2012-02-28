@@ -1369,7 +1369,7 @@ public class TelephonyManager {
             // rescan phoneId for imsi
             for (int i = 0; i < getPhoneCount(); ++i) {
                 TelephonyManager tmp = getDefault(i);
-                if (tmp != null && tmp.hasIccCard() && tmp.getSubscriberId().equals(imsi)) {
+                if (tmp != null && tmp.hasIccCard() && imsi.equals(tmp.getSubscriberId())) {
                     phoneId = i;
                     break;
                 } else {
