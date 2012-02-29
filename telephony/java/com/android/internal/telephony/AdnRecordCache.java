@@ -70,7 +70,11 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 	}
 
 	public UsimPhoneBookManager getUsimPhoneBookManager() {
-		return mUsimPhoneBookManager;
+		if(phone.getIccCard().isApplicationOnIcc(
+				IccCardApplication.AppType.APPTYPE_USIM)){
+			return mUsimPhoneBookManager;
+		}
+		return null;
 	}
 
 	// add multi record and email in usim end
