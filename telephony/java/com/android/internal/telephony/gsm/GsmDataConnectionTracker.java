@@ -286,7 +286,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         boolean dataEnabledSetting = true;
         try {
             dataEnabledSetting = IConnectivityManager.Stub.asInterface(ServiceManager.
-                getService(Context.CONNECTIVITY_SERVICE)).getMobileDataEnabled();
+                    getService(Context.CONNECTIVITY_SERVICE)).getMobileDataEnabledByPhoneId(p.getPhoneId());
         } catch (Exception e) {
             // nothing to do - use the old behavior and leave data on
         }
