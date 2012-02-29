@@ -639,7 +639,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 							.getResources().getText(
 									R.string.lockscreen_carrier_default));
 				} else {
-					mCarrier[subscription].setText(carrierText);
+					mCarrier[subscription].setText(carrierText+mUpdateMonitor.getNetworkType(subscription).toString());
 				}
 
                 // Empty now, but used for sliding tab feedback

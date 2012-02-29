@@ -38,6 +38,7 @@ import static android.provider.Telephony.Intents.EXTRA_SHOW_PLMN;
 import static android.provider.Telephony.Intents.EXTRA_SHOW_SPN;
 import static android.provider.Telephony.Intents.EXTRA_SPN;
 import static android.provider.Telephony.Intents.SPN_STRINGS_UPDATED_ACTION;
+import static android.provider.Telephony.Intents.EXTRA_NETWORK_TYPE;
 
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.TelephonyIntents;
@@ -80,6 +81,7 @@ public class KeyguardUpdateMonitor {
 
     private CharSequence[] mTelephonyPlmn =new CharSequence[2];
     private CharSequence[] mTelephonySpn =new CharSequence[2];
+    private CharSequence[] networkType = new CharSequence[2];
     private CharSequence mRadioType = null;  //add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen
 
     private int mFailedAttempts = 0;
@@ -242,6 +244,7 @@ public class KeyguardUpdateMonitor {
 					int phoneID = intent.getIntExtra(EXTRA_PHONE_ID, 0);
 					mTelephonyPlmn[phoneID] = getTelephonyPlmnFrom(intent);
 					mTelephonySpn[phoneID] = getTelephonySpnFrom(intent);
+					networkType[phoneID] = getTelephonyNetworkType(intent);
 					Message m = mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE);
 					m.arg1 = phoneID;
 					mHandler.sendMessage(m);
@@ -413,6 +416,14 @@ public class KeyguardUpdateMonitor {
         }
         return null;
     }
+    
+	private CharSequence getTelephonyNetworkType(Intent intent) {
+		final String networkType = intent.getStringExtra(EXTRA_NETWORK_TYPE);
+		if (networkType != null) {
+			return networkType;
+		}
+		return "";
+	}
 
     /**
      * Remove the given observer from being registered from any of the kinds
@@ -528,6 +539,14 @@ public class KeyguardUpdateMonitor {
     public CharSequence getTelephonySpn(int phoneId) {
         return mTelephonySpn[phoneId];
     }
+    
+	public CharSequence getNetworkType(int phoneId) {
+		if (networkType[phoneId] == null) {
+
+			return "";
+		}
+		return networkType[phoneId];
+	}
 
     //add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen begin
     public void setRadioType(int type){
