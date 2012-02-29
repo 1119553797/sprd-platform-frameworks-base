@@ -1173,6 +1173,12 @@ public final class Telephony {
          * <P>Type: TEXT</P>
          */
         public static final String META_DATA = "meta_data";
+
+        /**
+         * Wap push flag
+         * <P>Type: INTEGER</P>
+         */
+        public static final String WAP_PUSH = "wap_push";
     }
 
     /**
