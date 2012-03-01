@@ -26,6 +26,7 @@ import android.os.ServiceManager;
 import android.os.SystemProperties;
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import android.net.NetworkInfo.DetailedState;
 import android.telephony.TelephonyManager;
@@ -52,7 +53,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     private String mApnName;
     private boolean mEnabled;
     private BroadcastReceiver mStateReceiver;
-
+    private int mNetType;
     // DEFAULT and HIPRI are the same connection.  If we're one of these we need to check if
     // the other is also disconnected before we reset sockets
     private boolean mIsDefaultOrHipri = false;
@@ -69,6 +70,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
         super(context, target, netType,
                 TelephonyManager.getDefault().getNetworkType(), tag,
                 TelephonyManager.getDefault().getNetworkTypeName());
+        mNetType = netType;
         mApnType = networkTypeToApnType(netType);
         if (TextUtils.equals(mApnType, Phone.APN_TYPE_HIPRI)) {
             mApnTypeToWatchFor = Phone.APN_TYPE_DEFAULT;
@@ -173,7 +175,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
 
                     // set this regardless of the apnTypeList.  It's all the same radio/network
                     // underneath
-                    Log.d(TAG, "setIsAvailable=" + !unavailable);
+                    Log.d(TAG, "[type=" + mNetType + "]setIsAvailable=" + !unavailable);
                     mNetworkInfo.setIsAvailable(!unavailable);
 
                     if (isApnTypeIncluded(apnTypeList)) {
@@ -274,9 +276,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     }
 
     private void getPhoneService(boolean forceRefresh) {
-        if ((mPhoneService == null) || forceRefresh) {
-            mPhoneService = ITelephony.Stub.asInterface(ServiceManager.getService("phone"));
-        }
+        //if ((mPhoneService == null) || forceRefresh) {
+        mPhoneService = ITelephony.Stub.asInterface(ServiceManager.getService(PhoneFactory
+                .getServiceName("phone", getPhoneId())));
+        //}
     }
 
     /**
@@ -584,6 +587,26 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 Log.e(TAG, "Error mapping networkType " + netType + " to apnType.");
                 return null;
         }
+    }
+    private int getPhoneId() {
+        int phoneId = PhoneFactory.DEFAULT_PHONE_ID;
+        switch(mNetType) {
+            case ConnectivityManager.TYPE_MOBILE:
+            case ConnectivityManager.TYPE_MOBILE_SUPL:
+            case ConnectivityManager.TYPE_MOBILE_DUN:
+            case ConnectivityManager.TYPE_MOBILE_HIPRI:
+                phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+                break;
+            default:
+                for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                    if (mNetType == ConnectivityManager.getMmsTypeByPhoneId(i)) {
+                        phoneId = i;
+                        break;
+                    }
+                }
+                break;
+        }
+        return phoneId;
     }
     public void setDataEnable(boolean mEnabled){
         this.mEnabled = mEnabled;

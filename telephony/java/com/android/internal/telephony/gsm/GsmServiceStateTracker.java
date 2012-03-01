@@ -807,8 +807,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     }
                     newGPRSState = regCodeToServiceState(regState);
                     mDataRoaming = regCodeIsRoaming(regState);
-                    newNetworkType = type;
-                    newSS.setRadioTechnology(type);
+                    //newNetworkType = type;
+                    //newSS.setRadioTechnology(type);
                 break;
 
                 case EVENT_POLL_STATE_OPERATOR:

@@ -3469,6 +3469,8 @@ responseUnsolUssdStrings(Parcel p){
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: return "RIL_REQUEST_REPORT_SMS_MEMORY_STATUS";
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: return "RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING";
             case RIL_REQUEST_SET_CMMS: return "SET_CMMS";
+            case RIL_REQUEST_GPRS_ATTACH: return "GPRS_ATTACH";
+            case RIL_REQUEST_GPRS_DETACH: return "GPRS_DETACH";
             default: return "<unknown request>";
         }
     }
