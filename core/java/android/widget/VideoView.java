@@ -31,11 +31,13 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.MediaController.MediaPlayerControl;
 
 import java.io.IOException;
@@ -80,6 +82,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private MediaPlayer mMediaPlayer = null;
     private int         mVideoWidth;
     private int         mVideoHeight;
+    private int         mWinWidth;
+    private int         mWinHeight;
+    private int         mTargetWidth;
+    private int         mTargetHeight;
     private int         mSurfaceWidth;
     private int         mSurfaceHeight;
     private MediaController mMediaController;
@@ -92,6 +98,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private boolean     mCanPause;
     private boolean     mCanSeekBack;
     private boolean     mCanSeekForward;
+    private boolean     mIsFullScreen = true;
     private int         mStateWhenSuspended;  //state before calling suspend()
 
     public VideoView(Context context) {
@@ -111,23 +118,35 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        //Log.i("@@@@", "onMeasure");
+/*        // Log.i("@@@@", "onMeasure");
         int width = getDefaultSize(mVideoWidth, widthMeasureSpec);
         int height = getDefaultSize(mVideoHeight, heightMeasureSpec);
         if (mVideoWidth > 0 && mVideoHeight > 0) {
-            if ( mVideoWidth * height  > width * mVideoHeight ) {
-                //Log.i("@@@", "image too tall, correcting");
+            if (mVideoWidth * height > width * mVideoHeight) {
+                // Log.i("@@@", "image too tall, correcting");
                 height = width * mVideoHeight / mVideoWidth;
-            } else if ( mVideoWidth * height  < width * mVideoHeight ) {
-                //Log.i("@@@", "image too wide, correcting");
+            } else if (mVideoWidth * height < width * mVideoHeight) {
+                // Log.i("@@@", "image too wide, correcting");
                 width = height * mVideoWidth / mVideoHeight;
             } else {
-                //Log.i("@@@", "aspect ratio is correct: " +
-                        //width+"/"+height+"="+
-                        //mVideoWidth+"/"+mVideoHeight);
+                // Log.i("@@@", "aspect ratio is correct: " +
+                // width+"/"+height+"="+
+                // mVideoWidth+"/"+mVideoHeight);
             }
         }
-        //Log.i("@@@@@@@@@@", "setting size: " + width + 'x' + height);
+        // Log.i("@@@@@@@@@@", "setting size: " + width + 'x' + height);
+        setMeasuredDimension(width, height);*/
+        int width = mTargetWidth;
+        int height = mTargetHeight;
+        if (width == 0 || height == 0) {
+            if (mVideoWidth > 0 && mVideoHeight > 0) {
+                width = mVideoWidth;
+                height = mVideoHeight;
+            }else{
+                width = getDefaultSize(mVideoWidth, widthMeasureSpec);
+                height = getDefaultSize(mVideoHeight, heightMeasureSpec);
+            }
+        }
         setMeasuredDimension(width, height);
     }
 
@@ -168,6 +187,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         setFocusable(true);
         setFocusableInTouchMode(true);
         requestFocus();
+        Display display = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        mWinWidth = display.getWidth();
+        mWinHeight = display.getHeight();
         mCurrentState = STATE_IDLE;
         mTargetState  = STATE_IDLE;
     }
@@ -211,7 +233,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             // not ready for playback just yet, will try again later
             return;
         }
-  
+
         try {
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
@@ -244,7 +266,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             return;
         }
     }
-    
+
     private void openVideo() {
         if (mUri == null || mSurfaceHolder == null) {
             // not ready for playback just yet, will try again later
@@ -318,7 +340,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 mVideoWidth = mp.getVideoWidth();
                 mVideoHeight = mp.getVideoHeight();
                 if (mVideoWidth != 0 && mVideoHeight != 0) {
-                    getHolder().setFixedSize(mVideoWidth, mVideoHeight);
+                   // getHolder().setFixedSize(mVideoWidth, mVideoHeight);
+                    resize(mIsFullScreen);
                 }
             }
     };
@@ -360,8 +383,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             }
             if (mVideoWidth != 0 && mVideoHeight != 0) {
                 //Log.i("@@@@", "video size: " + mVideoWidth +"/"+ mVideoHeight);
-                getHolder().setFixedSize(mVideoWidth, mVideoHeight);
-                if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
+                resize(mIsFullScreen);
+                //getHolder().setFixedSize(mVideoWidth, mVideoHeight);
+                //if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
                     // We didn't actually change the size (it was already at the size
                     // we need), so we won't get a "surface changed" callback, so
                     // start the video here instead of in the callback.
@@ -377,7 +401,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                            // Show the media controls when we're paused into a video and make 'em stick.
                            mMediaController.show(0);
                        }
-                   }
+                //   }
                 }
             } else {
                 // We don't know the video size yet, but should start anyway.
@@ -493,8 +517,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     {
         mStateCallback = l;
     }
-    
-    
+
+
     /**
      * Register a callback to be invoked when an error occurs
      * during playback or setup.  If no listener is specified,
@@ -522,7 +546,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                     seekTo(mSeekWhenPrepared);
                 }
                 start();
-                // not  show when activity resume 
+                // not  show when activity resume
                 /*if (mMediaController != null) {
                     if (mMediaController.isShowing()) {
                         // ensure the controller will get repositioned later
@@ -653,7 +677,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
         mTargetState = STATE_PAUSED;
     }
-    
+
     public void  stop()
     {
         Log.w(TAG, "stop release");
@@ -661,7 +685,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         mCanSeekBack = mCanSeekForward = false;
         MediaPlayerStateCallback(mCurrentState,mTargetState);
     }
-    
+
     public void suspend() {
         if (isInPlaybackState()) {
             if (mMediaPlayer.suspend()) {
@@ -741,7 +765,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 mCurrentState != STATE_IDLE &&
                 mCurrentState != STATE_PREPARING);
     }
-  
+
 
     public boolean canPause() {
         return mCanPause;
@@ -754,14 +778,42 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public boolean canSeekForward() {
         return mCanSeekForward;
     }
-    
+
     public void MediaPlayerStateCallback(int mCurrentState ,int mTargetState) {
         if(mStateCallback!=null)
-        {  
+        {
             Message msg = Message.obtain();
             msg.arg1= mCurrentState ;
             msg.arg2= mTargetState ;
             mStateCallback.handleMessage(msg);
         }
+    }
+
+    //added by MMz01 fix bug 11839
+    public void resize(boolean isFit) {
+        // TODO Auto-generated method stub
+        if(mMediaPlayer == null){
+            return;
+        }
+        mIsFullScreen = isFit;
+        int targetWidth = mMediaPlayer.getVideoWidth();
+        int targetHeight = mMediaPlayer.getVideoHeight();
+        if (isFit) {
+            float widRate = (float) mWinWidth / targetWidth;
+            float heiRate = (float) mWinHeight / targetHeight;
+            if (widRate > heiRate) {
+                targetWidth = (int) (targetWidth * heiRate);
+                targetHeight = mWinHeight;
+            } else if (widRate < heiRate) {
+                targetWidth = mWinWidth;
+                targetHeight = (int) (targetHeight * widRate);
+            } else {
+                targetWidth = mWinWidth;
+                targetHeight = mWinHeight;
+            }
+        }
+        getHolder().setFixedSize(targetWidth, targetHeight);
+        mTargetWidth = targetWidth;
+        mTargetHeight = targetHeight;
     }
 }
