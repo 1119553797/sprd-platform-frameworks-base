@@ -1227,7 +1227,7 @@ public class SmsMessage extends SmsMessageBase{
         Log.i(LOG_TAG,"parseSmsSubmit,sprdroid ====== parseSmsSubmit" + firstByte);
 
         validityPeriodFormat = ((firstByte>>3) & 0x3);
-        Log.v("parseSmsSubmit", "validityPeriodFormat" +validityPeriodFormat);
+        Log.d(LOG_TAG, "parseSmsSubmit validityPeriodFormat" +validityPeriodFormat);
         //TP-RP b refer. Layout of SMS-SUBMIT
         replyPathPresent = (firstByte & 0x80) == 0x80;
         // TP-MR I
@@ -1236,20 +1236,32 @@ public class SmsMessage extends SmsMessageBase{
         originatingAddress= p.getAddress();
 
         if (originatingAddress != null) {
-            Log.v("parseSmsSubmit", "SMS destinationAddress: "
+            Log.d(LOG_TAG, "parseSmsSubmit SMS destinationAddress: "
                     + originatingAddress.address);
         }
         // TP-PID o
         protocolIdentifier = p.getByte();
         // TP-DCS o
         dataCodingScheme = p.getByte();
-        Log.v("parseSmsSubmit", "SMS TP-PID:" + protocolIdentifier
+        Log.d(LOG_TAG, "parseSmsSubmit SMS TP-PID:" + protocolIdentifier
                     + " data coding scheme: " + (dataCodingScheme & 0xff));
 
-        if (validityPeriodFormat != 0) {
-            // TP-VP
+        // TP-VP
+        switch (validityPeriodFormat) {
+        case 1:// enhanced format: 7 bytes
+        case 3:// absolute format: 7 bytes
+            for (int i = 0; i < 7; i ++) {
+                p.getByte();
+            }
+            break;
+        case 2:
+            // relative format: 1 byte
             int Validityperiod = p.getByte();
-            Log.v("parseSmsSubmit", "validityPeriodFormat" + validityPeriodFormat);
+            Log.d(LOG_TAG, "parseSmsSubmit validityPeriodFormat" + validityPeriodFormat);
+            break;
+        default:
+            Log.d(LOG_TAG, "parseSmsSubmit non TP-VP,do nothing");
+            break;
         }
         // TP-UD
         boolean hasUserDataHeader = (firstByte & 0x40) == 0x40;
