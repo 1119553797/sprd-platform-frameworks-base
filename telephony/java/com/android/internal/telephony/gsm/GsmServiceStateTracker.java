@@ -621,7 +621,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         cm.setRadioPower(false, null);
     }
 
-   //add by liguxiang 08-19-11 for custom spn display begin 
+   //add by liguxiang 08-19-11 for custom spn display begin
    private String plmnDisplay(String plmn) {
         String displayPlmn;
         if (plmn == null) {
@@ -639,7 +639,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         }
         return  displayPlmn;
     }
-    //add by liguxiang 08-19-11 for custom spn display end 
+    //add by liguxiang 08-19-11 for custom spn display end
 
    public String setRadioType(int type){
        Log.d(LOG_TAG,"RadioType = " + type);
@@ -678,14 +678,14 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 || !TextUtils.equals(spn, curSpn)
                 || !TextUtils.equals(plmn, curPlmn)||mLocalLanguageChange) {
 
-            plmn = plmnDisplay(plmn);  
+            plmn = plmnDisplay(plmn);
             spn = plmnDisplay(spn);
             boolean showSpn = !mEmergencyOnly
                 && (rule & SIMRecords.SPN_RULE_SHOW_SPN) == SIMRecords.SPN_RULE_SHOW_SPN
                 && (ss.getState() != ServiceState.STATE_OUT_OF_SERVICE);
             boolean showPlmn =
                 (rule & SIMRecords.SPN_RULE_SHOW_PLMN) == SIMRecords.SPN_RULE_SHOW_PLMN;
-            Log.d(LOG_TAG,"curSpn = " + curSpn + "  showSpn = " + showSpn 
+            Log.d(LOG_TAG,"curSpn = " + curSpn + "  showSpn = " + showSpn
                     + "  curPlmn = " + curPlmn + "  showPlmn = " + showPlmn+" mNetworkType "+networkType);
 
             Intent intent = new Intent(Intents.SPN_STRINGS_UPDATED_ACTION);
@@ -967,7 +967,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 " oldType=" + networkTypeToString(networkType) +
                 " newType=" + networkTypeToString(newNetworkType));
         }
-        
+
         boolean hasRegistered =
             ss.getState() != ServiceState.STATE_IN_SERVICE
             && newSS.getState() == ServiceState.STATE_IN_SERVICE;
@@ -1136,7 +1136,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         }
 
         if (hasNetworkTypeChanged) {
-            phone.notifyDataConnection(null);
+            if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+                phone.notifyDataConnection(null);
+            }
         }
 
         if (hasRoamingOn) {

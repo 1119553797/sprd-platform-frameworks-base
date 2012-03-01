@@ -1682,7 +1682,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 break;
 
             case EVENT_GPRS_DETACHED:
-                onGprsDetached();
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+                    onGprsDetached();
+                }
                 break;
 
             case EVENT_GPRS_ATTACHED:

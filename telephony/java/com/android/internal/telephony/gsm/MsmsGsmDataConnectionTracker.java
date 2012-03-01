@@ -64,8 +64,21 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
             log("Default Data Phone Id is changed");
             int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(phone.getContext());
 
-            if (defaultDataPhoneId != phone.getPhoneId() && dataEnabled[APN_DEFAULT_ID] == true) {
-                disableApnType(Phone.APN_TYPE_DEFAULT);
+            if (DBG) log("defaultDataPhoneId=" +defaultDataPhoneId+" dataEnabled[APN_DEFAULT_ID]="+dataEnabled[APN_DEFAULT_ID]);
+            if (defaultDataPhoneId != phone.getPhoneId()) {
+                if (dataEnabled[APN_DEFAULT_ID] == true) {
+                    disableApnType(Phone.APN_TYPE_DEFAULT);
+                } else {
+                    if (!isApnTypeActive(Phone.APN_TYPE_DEFAULT)) {
+                        // check if we need to switch phone.
+                        MsmsGsmDataConnectionTrackerProxy.checkAndSwitchPhone(phone.getPhoneId(),
+                        phone.getContext());
+                    } else {
+                        log("WARNING: isApnTypeActive(Phone.APN_TYPE_DEFAULT)="
+                            + isApnTypeActive(Phone.APN_TYPE_DEFAULT));
+                        disableApnType(Phone.APN_TYPE_DEFAULT);
+                    }
+                }
             }
 
             if (defaultDataPhoneId == phone.getPhoneId()) {
@@ -145,7 +158,7 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
     }
 
     @Override
-    protected void cleanUpConnection(boolean tearDown, String reason) {
+    protected synchronized void cleanUpConnection(boolean tearDown, String reason) {
         if (DBG) log("Clean up connection due to " + reason);
 
         // Clear the reconnect alarm, if set.
@@ -206,8 +219,10 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
             mReregisterOnReconnectFailure = false;
             // in case data setup was attempted when we were on a voice call
             //trySetupData(Phone.REASON_VOICE_CALL_ENDED);
-            MsmsGsmDataConnectionTrackerProxy.trySetupData(phone.getPhoneId(),
-                  Phone.REASON_VOICE_CALL_ENDED);
+            //MsmsGsmDataConnectionTrackerProxy.trySetupData(phone.getPhoneId(),
+            //      Phone.REASON_VOICE_CALL_ENDED);
+            MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
+                    .getRequestPhoneIdBeforeVoiceCallEnd());
         }
     }
 
@@ -264,6 +279,9 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
         return phone.getState();
     }
 
+    public int getCurrentGprsState() {
+        return mGsmPhone.mSST.getCurrentGprsState();
+    }
     /*
     protected synchronized void onEnableApn(int apnId, int enabled) {
         if (DBG) {

@@ -283,7 +283,9 @@ public abstract class DataConnectionTracker extends Handler {
                 if (msg.obj instanceof String) {
                     reason = (String)msg.obj;
                 }
-                onTrySetupData(reason);
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+                    onTrySetupData(reason);
+                }
                 break;
 
             case EVENT_ROAMING_OFF:
@@ -302,7 +304,9 @@ public abstract class DataConnectionTracker extends Handler {
                 break;
 
             case EVENT_RADIO_OFF_OR_NOT_AVAILABLE:
-                onRadioOffOrNotAvailable();
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+                    onRadioOffOrNotAvailable();
+                }
                 break;
 
             case EVENT_DATA_SETUP_COMPLETE:
@@ -324,7 +328,9 @@ public abstract class DataConnectionTracker extends Handler {
 
             case EVENT_CLEAN_UP_CONNECTION:
                 boolean tearDown = (msg.arg1 == 0) ? false : true;
-                onCleanUpConnection(tearDown, (String) msg.obj);
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+                    onCleanUpConnection(tearDown, (String) msg.obj);
+                }
                 break;
 
             case EVENT_SET_MASTER_DATA_ENABLE:
@@ -405,7 +411,7 @@ public abstract class DataConnectionTracker extends Handler {
     protected abstract boolean isApnTypeActive(String type);
 
     protected abstract boolean isApnTypeAvailable(String type);
-    
+
     protected abstract boolean isApnTypeFilters(String type);
 
     protected abstract String[] getActiveApnTypes();
@@ -425,9 +431,9 @@ public abstract class DataConnectionTracker extends Handler {
     protected abstract void setState(State s);
 
     public abstract  boolean setApnActivePdpFilter(String apntype,boolean filterenable);
-	
+
     public abstract boolean getApnActivePdpFilter(String apntype) ;
-	
+
     protected synchronized boolean isEnabled(int id) {
         if (id != APN_INVALID_ID) {
             return dataEnabled[id];
@@ -526,7 +532,7 @@ public abstract class DataConnectionTracker extends Handler {
         }
 
         Log.d(LOG_TAG, "onEnableApn: " + apnId + ", " + enabled);
-            
+
         if (enabled == ENABLED) {
             if (!dataEnabled[apnId]) {
                 dataEnabled[apnId] = true;
@@ -556,7 +562,7 @@ public abstract class DataConnectionTracker extends Handler {
                         !isApnTypeActive(Phone.APN_TYPE_DEFAULT)&&!mIsWifiConnected) {
                     mRequestedApnType = Phone.APN_TYPE_DEFAULT;
                     onEnableNewApn();
-                    
+
                 }
             }
         }

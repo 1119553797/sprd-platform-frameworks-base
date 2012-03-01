@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.content.res.Resources;
@@ -426,7 +427,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                                  (mTethering.getTetherableUsbRegexs().length != 0 ||
                                   mTethering.getTetherableWifiRegexs().length != 0) &&
                                  mTethering.getUpstreamIfaceRegexs().length != 0);
-
+        ContentResolver cr = mContext.getContentResolver();
+        cr.registerContentObserver(
+               Settings.System.getUriFor(Settings.System.MULTI_SIM_DATA_CALL), true,
+               mDefaultDataPhoneIdObserver);
     }
 
     private NetworkStateTracker makeWimaxStateTracker() {
@@ -1863,36 +1867,36 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             return ConnectivityManager.TETHER_ERROR_UNSUPPORTED;
         }
     }
-    
+
     //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> begin
     public boolean enableUdcpower(boolean enabled){
     	return mTethering.enableUsbUdcpower(enabled);
     }
-    
+
     public boolean isUsbUdcpowerStarted(){
     	return mTethering.isUsbUdcpowerStarted();
     }
-    
+
     public boolean enableGser(boolean enabled){
     	return mTethering.enableUsbGser(enabled);
     }
-    
+
     public boolean isUsbGserStarted(){
     	return mTethering.isUsbGserStarted();
     }
-    
+
     public boolean enableVser(boolean enabled){
     	return mTethering.enableUsbVser(enabled);
     }
-    
+
     public boolean isUsbVserStarted(){
     	return mTethering.isUsbVserStarted();
     }
-    
+
     public boolean isUsbRNDISStarted(){
     	return mTethering.isUsbRNDISStarted();
     }
-    
+
     public boolean isUsbConnected(){
     	return mTethering.isUsbConnected();
     }
@@ -2118,4 +2122,24 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         sendInetConditionBroadcast(networkInfo);
         return;
     }
+    private ContentObserver mDefaultDataPhoneIdObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            Slog.d(TAG,"Default Data Phone Id is changed  ---------");
+            int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+            if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
+            if(mNetTrackers[ConnectivityManager.TYPE_MOBILE].isTeardownRequested()){
+                Slog.w(TAG, "mTeardownRequested is true, do nothing " );
+            }else{
+                if(getMobileDataEnabledByPhoneId(defaultDataPhoneId)){
+                    if (DBG) Slog.d(TAG, "setDataEnable(true) " );
+                        mNetTrackers[ConnectivityManager.TYPE_MOBILE].setDataEnable(true);
+                    }else{
+                        if (DBG) Slog.d(TAG, "setDataEnable(false) " );
+                            mNetTrackers[ConnectivityManager.TYPE_MOBILE].setDataEnable(false);
+                    }
+                }
+            }
+        }
+    };
 }

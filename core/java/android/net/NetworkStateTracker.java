@@ -214,7 +214,7 @@ public abstract class NetworkStateTracker extends Handler {
     /**
      * Writes TCP buffer sizes to /sys/kernel/ipv4/tcp_[r/w]mem_[min/def/max]
      * which maps to /proc/sys/net/ipv4/tcp_rmem and tcpwmem
-     * 
+     *
      * @param bufferSizes in the format of "readMin, readInitial, readMax,
      *        writeMin, writeInitial, writeMax"
      */
@@ -240,7 +240,7 @@ public abstract class NetworkStateTracker extends Handler {
 
     /**
      * Writes string to file. Basically same as "echo -n $string > $filename"
-     * 
+     *
      * @param filename
      * @param string
      * @throws IOException
@@ -411,6 +411,8 @@ public abstract class NetworkStateTracker extends Handler {
     public void interpretScanResultsAvailable() {
     }
 
+    public void setDataEnable(boolean mEnabled){
+    }
     public String getInterfaceName() {
         return mInterfaceName;
     }

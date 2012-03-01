@@ -158,6 +158,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 setSubtype(tm.getNetworkType(), tm.getNetworkTypeName());
                 if (intent.getAction().equals(TelephonyIntents.
                         ACTION_ANY_DATA_CONNECTION_STATE_CHANGED)) {
+                    int phoneId = intent.getIntExtra(Phone.PHONE_ID, -1);
+                    Log.d(TAG, "["
+                            + "]receive ACTION_ANY_DATA_CONNECTION_STATE_CHANGED with phoneid:"
+                            + phoneId);
                     Phone.DataState state = getMobileDataState(intent);
                     String reason = intent.getStringExtra(Phone.STATE_CHANGE_REASON_KEY);
                     String apnName = intent.getStringExtra(Phone.DATA_APN_KEY);
@@ -169,6 +173,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
 
                     // set this regardless of the apnTypeList.  It's all the same radio/network
                     // underneath
+                    Log.d(TAG, "setIsAvailable=" + !unavailable);
                     mNetworkInfo.setIsAvailable(!unavailable);
 
                     if (isApnTypeIncluded(apnTypeList)) {
@@ -401,7 +406,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 break;
             case Phone.APN_REQUEST_FAILED:
                 if (DBG) Log.d(TAG,  " reconnect :setEnableApn return  APN_REQUEST_FAILED" );
-                if (mPhoneService == null && mApnType == Phone.APN_TYPE_DEFAULT) {
+                if (mPhoneService == null && mApnType.equals(Phone.APN_TYPE_DEFAULT)) {
                     // on startup we may try to talk to the phone before it's ready
                     // since the phone will come up enabled, go with that.
                     // TODO - this also comes up on telephony crash: if we think mobile data is
@@ -416,8 +421,9 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                  if (DBG) Log.d(TAG,  " reconnect :setEnableApn return  APN_TYPE_NOT_AVAILABLE" );
                 // Default is always available, but may be off due to
                 // AirplaneMode or E-Call or whatever..
-                if (mApnType != Phone.APN_TYPE_DEFAULT) {
+                 if (!mApnType.equals(Phone.APN_TYPE_DEFAULT)) {
                     mEnabled = false;
+                    return false;
                 }
                 break;
             default:
@@ -578,5 +584,8 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 Log.e(TAG, "Error mapping networkType " + netType + " to apnType.");
                 return null;
         }
+    }
+    public void setDataEnable(boolean mEnabled){
+        this.mEnabled = mEnabled;
     }
 }

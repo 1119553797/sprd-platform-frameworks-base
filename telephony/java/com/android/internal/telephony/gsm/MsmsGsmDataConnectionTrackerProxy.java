@@ -27,6 +27,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -53,6 +54,10 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
     private static int sRequestConnectPhoneId = INVALID_PHONE_ID;
     private static int sActivePhoneId = INVALID_PHONE_ID;
 
+    // sRequestPhoneIdBeforeVoiceCallEnd is used to record
+    // sRequestConnectPhoneId when voiceCall Started and setup dataCall after
+    // voiceCall ended.
+    private static int sRequestPhoneIdBeforeVoiceCallEnd = INVALID_PHONE_ID;
     public static MsmsGsmDataConnectionTrackerProxy getInstance() {
         //if (sInstance == null) {
         //	sInstance = new MsmsGsmDataConnectionTrackerProxy();
@@ -165,7 +170,12 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
             }
 */
             log("onEnableNewApn(" + phoneId + ") activePhoneId:" + sActivePhoneId);
+            if (phoneId == INVALID_PHONE_ID) {
+                log("phoneId is invalid,onEnableNewApn out!!!");
+                return;
+            }
             sRequestConnectPhoneId = phoneId;
+            sRequestPhoneIdBeforeVoiceCallEnd = sRequestConnectPhoneId;
             //if (sActivePhoneId == phoneId) {
                 // current phone is in an "activate" state, enable new apn directly
                 //log("onEnableNewApn: switch Apn on the same phone" + phoneId);
@@ -177,12 +187,36 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                 //        "switchConnection");
             //}
             if (sActivePhoneId != INVALID_PHONE_ID) {
-                sTracker[sActivePhoneId].onEnableNewApnInternal();
+                if(sRequestConnectPhoneId!=sActivePhoneId){
+                    sTracker[sActivePhoneId].cleanupConnections(true, Phone.REASON_DATA_DISABLED);
+                    //if (sTracker[sActivePhoneId].isAllPdpDisconnectDone()) {
+                    if (true) {
+                        checkAndSwitchPhone(sActivePhoneId, null);
+                    } else {
+                        sTracker[sActivePhoneId].cleanupConnections(true,
+                        Phone.REASON_DATA_DISABLED);
+                    }
+                }else{
+                    sTracker[sActivePhoneId].onEnableNewApnInternal();
+                }
             } else {
                 //sTracker[sRequestConnectPhoneId].trySetupData("switchConnection");
-                sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
-                sActivePhoneId = sRequestConnectPhoneId;
+                //sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
+                //sActivePhoneId = sRequestConnectPhoneId;
                 //sTracker[sRequestConnectPhoneId].onEnableNewApnInternal();
+                // sTracker[sRequestConnectPhoneId].trySetupData("switchConnection");
+                if (sTracker[sRequestConnectPhoneId].getCurrentGprsState() == ServiceState.STATE_IN_SERVICE) {
+                    sTracker[sRequestConnectPhoneId].trySetupData(Phone.REASON_APN_SWITCHED);
+                    sActivePhoneId = sRequestConnectPhoneId;
+                } else {
+                    sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
+                    sActivePhoneId = sRequestConnectPhoneId;
+                    // sTracker[sRequestConnectPhoneId].onEnableNewApnInternal();
+                }
+            }
+            if(phoneId == sActivePhoneId){
+                // do not need to switch phone, so we initialize sRequestConnectPhoneId.
+                sRequestConnectPhoneId=INVALID_PHONE_ID;
             }
             log("onEnableNewApn out");
         }
@@ -232,6 +266,13 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
             //	log("set activePhoneId to default when startup");
             //	sActivePhoneId = TelephonyManager.getDefaultDataPhoneId(context);
             //}
+            log("onDisconnectDone(" + phoneId + ") activePhoneId=" + sActivePhoneId
+                      + " RequestConnectPhoneId=" + sRequestConnectPhoneId);
+            if (sActivePhoneId != phoneId) {
+                log("sActivePhoneId should equal to phoneId!!!");
+                log("onDisconnectDone out");
+                return;
+            }
             if (sRequestConnectPhoneId == INVALID_PHONE_ID) {
                 String reason = null;
                 if (ar.userObj instanceof String) {
@@ -242,10 +283,12 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                     log("set RequestConnectPhoneId to active when pdp lost/reset");
                     sRequestConnectPhoneId = sActivePhoneId;
                 } else {
-                    log("set RequestConnectPhoneId to default when it is not specified");
                     sRequestConnectPhoneId = TelephonyManager.getDefaultDataPhoneId(context);
+                    log("set RequestConnectPhoneId to default when it is not specified:RequestConnectPhoneId="
+                        + sRequestConnectPhoneId);
                 }
             }
+            /*
             log("onDisconnectDone(" + phoneId + ") activePhoneId=" + sActivePhoneId
                     + " RequestConnectPhoneId=" + sRequestConnectPhoneId);
             if (sActivePhoneId != phoneId) {
@@ -253,6 +296,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                 log("onDisconnectDone out");
                 return;
             }
+            */
             if (sActivePhoneId != sRequestConnectPhoneId) {
                 // switch connection
                 if (sActivePhoneId != INVALID_PHONE_ID) {
@@ -277,6 +321,54 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
 		}
 	}
 
+	public static boolean checkAndSwitchPhone(int phoneId, Context context) {
+	    synchronized (sInstance) {
+	        log("checkAndSwitchPhone: sActivePhoneId=" + sActivePhoneId
+	                + " sRequestConnectPhoneId=" + sRequestConnectPhoneId);
+	        if (sActivePhoneId != INVALID_PHONE_ID && sActivePhoneId != phoneId) {
+	            log("sActivePhoneId should be INVALID_PHONE_ID or equal to phoneId " + phoneId);
+	            return false;
+	        }
+	        if (sRequestConnectPhoneId == INVALID_PHONE_ID && context != null) {
+	            sRequestConnectPhoneId = TelephonyManager.getDefaultDataPhoneId(context);
+	            log("set RequestConnectPhoneId to default when it is not specified:RequestConnectPhoneId="
+	                    + sRequestConnectPhoneId);
+	             }
+	        if (sActivePhoneId != sRequestConnectPhoneId) {
+	            // switch connection
+	            if (sActivePhoneId != INVALID_PHONE_ID) {
+	                //if (sTracker[sActivePhoneId].isAllPdpDisconnectDone()) {
+	                if(true) {
+	                    detachGprs(sTracker[sActivePhoneId].mGsmPhone);
+	                } else {
+	                    log("isAllPdpDisconnectDone==false, return false");
+	                    return false;
+	                }
+	                // SystemClock.sleep(2000);
+	            } else {
+	                //if (sTracker[phoneId].isAllPdpDisconnectDone()) {
+	                if(true) {
+	                    detachGprs(sTracker[phoneId].mGsmPhone);
+	                } else {
+	                    log("isAllPdpDisconnectDone==false, return false");
+	                    return false;
+	                }
+	            }
+
+	            log("checkAndSwitchPhone: switch Apn from phone" + sActivePhoneId + " to phone"
+	                    + sRequestConnectPhoneId);
+	            // sTracker[sRequestConnectPhoneId].trySetupData("switchConnection");
+	            sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
+	            sActivePhoneId = sRequestConnectPhoneId;
+	            sRequestConnectPhoneId = INVALID_PHONE_ID;
+	            return true;
+	        } else {
+	            log("checkAndSwitchPhone: same phone, return false");
+	            sRequestConnectPhoneId = INVALID_PHONE_ID;
+	            return false;
+	        }
+	    }
+	}
     static boolean trySetupData(int phoneId, String reason) {
         log("trySetupData: sActivePhoneId=" + sActivePhoneId + " sRequestConnectPhoneId="
                 + sRequestConnectPhoneId + " phoneId=" + phoneId + " reason:" + reason);
@@ -287,15 +379,33 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
     }
 
     static void onVoiceCallEnded(int phoneId) {
+        /*
         for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
             sTracker[i].onVoiceCallEndedInternal();
         }
+        */
+        sTracker[phoneId].onVoiceCallEndedInternal();
     }
 
     static void setActivePhoneId(int phoneId) {
+        log("active phone id is changed:sActivePhoneId=" + sActivePhoneId + ",phoneId=" + phoneId);
         sActivePhoneId = phoneId;
     }
-
+    public static int getActivePhoneId() {
+        if (sActivePhoneId != INVALID_PHONE_ID) {
+            return sActivePhoneId;
+        } else {
+            return INVALID_PHONE_ID;
+        }
+    }
+    public static boolean isActivePhoneId(int phoneId) {
+        sActivePhoneId = ((sActivePhoneId != INVALID_PHONE_ID) ? sActivePhoneId : INVALID_PHONE_ID);
+        if (sActivePhoneId == phoneId) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 /*
     public void handleMessage(Message msg) {
     	switch (msg.what) {
@@ -399,6 +509,16 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
 
     private static void log(String s) {
         Log.d(LOG_TAG, "[MsmsDataConnectionTrackerProxy]" + s);
+    }
+    public static int getRequestPhoneIdBeforeVoiceCallEnd() {
+        if (sRequestPhoneIdBeforeVoiceCallEnd == INVALID_PHONE_ID) {
+            sRequestPhoneIdBeforeVoiceCallEnd = sActivePhoneId;
+        }
+        return sRequestPhoneIdBeforeVoiceCallEnd;
+    }
+
+    public static void resetRequestPhoneIdBeforeVoiceCallEnd() {
+        sRequestPhoneIdBeforeVoiceCallEnd = INVALID_PHONE_ID;
     }
 }
 
