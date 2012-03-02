@@ -57,7 +57,7 @@ import java.util.ArrayList;
  * 
  * @hide
  */
-public class SimChooserDialog extends Dialog implements OnItemClickListener {
+public class SimChooserDialog extends AlertDialog implements OnItemClickListener {
     public interface OnSimPickedListener {
 	void onSimPicked(int phoneId) ;
     }
@@ -71,18 +71,8 @@ public class SimChooserDialog extends Dialog implements OnItemClickListener {
     
     public SimChooserDialog(Context context) {
 	super(context);
-    }
-
-    public void setListener(OnSimPickedListener listener) {
-	mListener=listener;
-    }
-    
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-	setContentView(com.android.internal.R.layout.list_content);
-	setTitle("choose sim card");
-	mList = (ListView)findViewById(com.android.internal.R.id.list);
+	setTitle(com.android.internal.R.string.sim_chooser_title);
+	mList=new ListView(context);
 	mTelephonyManager = (TelephonyManager)getContext().getSystemService(Context.TELEPHONY_SERVICE);
 	int phoneCount=mTelephonyManager.getPhoneCount();
 	
@@ -98,8 +88,13 @@ public class SimChooserDialog extends Dialog implements OnItemClickListener {
 	mAdapter=new ArrayAdapter<String>(getContext(),com.android.internal.R.layout.simple_list_item_1,mPhoneNames);
 	mList.setAdapter(mAdapter);
 	mList.setOnItemClickListener(this);
+	setView(mList);
     }
 
+    public void setListener(OnSimPickedListener listener) {
+	mListener=listener;
+    }
+    
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 	this.dismiss();
