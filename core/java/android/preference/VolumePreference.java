@@ -245,8 +245,9 @@ public class VolumePreference extends SeekBarPreference implements
 							System.VOLUME_SETTINGS[mStreamType], -1);
 					// Works around an atomicity problem with volume updates
 					// TODO: Fix the actual issue, probably in AudioService
-					
-					if (volume >= 0) {
+					if (volume >= 0
+							&& volume == mAudioManager
+									.getStreamVolume(mStreamType)) {
 						mSeekBar.setProgress(volume);					
 /*1026 for compile
                         // ************Modify by luning at01-07-01 begin************
