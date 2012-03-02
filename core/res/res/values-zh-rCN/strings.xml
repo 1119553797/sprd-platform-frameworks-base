@@ -1042,5 +1042,5 @@
     <!--add by locksecreen end-->
 
     <string name="choose_sim">选择SIM卡</string>
-
+    <string name="sim_chooser_title">选择SIM卡</string>
 </resources>
