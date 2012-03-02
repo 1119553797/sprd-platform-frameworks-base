@@ -639,8 +639,8 @@ status_t CameraService::Client::startCameraMode(camera_mode mode) {
             return startPreviewMode();
         case CAMERA_RECORDING_MODE:
             if (mSurface == 0) {
-                LOGE("mSurface must be set before startRecordingMode.");
-                return INVALID_OPERATION;
+                //LOGE("mSurface must be set before startRecordingMode.");
+                //return INVALID_OPERATION;
             }
             return startRecordingMode();
         default:
