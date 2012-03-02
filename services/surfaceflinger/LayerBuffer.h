@@ -145,15 +145,10 @@ private:
         mutable NativeBuffer            mTempBuffer;
         mutable TextureManager          mTextureManager;
 
-        mutable Mutex mBufLock;//jgdu push buffer sync
-        mutable Condition mBufCondition;
-        volatile mutable bool mInComposing;
-        bool mIsSync;
-
-        mutable float                   mOnDrawCounter;
-        mutable float                   mPostCounter;
-        mutable DurationTimer           mDrawDurTime;
-        mutable DurationTimer           mPostDurTime;
+    	 mutable Mutex mBufLock;//jgdu push buffer sync
+        mutable Condition mBufCondition;	
+	 mutable bool mInComposing;
+	 bool mIsSync;
     };
     
     class OverlaySource : public Source {

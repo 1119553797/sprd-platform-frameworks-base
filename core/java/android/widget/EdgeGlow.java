@@ -21,6 +21,7 @@ import android.graphics.drawable.Drawable;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.util.Log;
 
 /**
  * This class performs the glow effect used at the edges of scrollable widgets.
@@ -244,6 +245,10 @@ public class EdgeGlow {
     public boolean draw(Canvas canvas) {
         update();
 
+        if (mGlow == null || mEdge == null) {
+            Log.e(TAG,"mGlow or mEdge is null");
+            return mState != STATE_IDLE;
+        }
         final int edgeHeight = mEdge.getIntrinsicHeight();
         final int glowHeight = mGlow.getIntrinsicHeight();
 

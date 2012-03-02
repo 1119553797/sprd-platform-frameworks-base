@@ -22,7 +22,6 @@
 #include <utils/Errors.h>
 #include <utils/Log.h>
 #include <utils/StopWatch.h>
-#include <utils/Timers.h>
 
 #include <ui/GraphicBuffer.h>
 #include <ui/PixelFormat.h>
@@ -339,9 +338,13 @@ void LayerBuffer::Source::unregisterBuffers() {
 
 LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
         const ISurface::BufferHeap& buffers)
-    : Source(layer), mStatus(NO_ERROR), mBufferSize(0),mInComposing(false),mIsSync(true),
-      mOnDrawCounter(0.0f), mPostCounter(0.0f)
+    : Source(layer), mStatus(NO_ERROR), mBufferSize(0),mInComposing(false),mIsSync(false) 
 {
+    if((buffers.transform>>24)==0x12){//jgdu push buffer sync
+        mIsSync = true;
+    }
+    LOGI("mIsSync is %d @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",mIsSync);
+	
     if (buffers.heap == NULL) {
         // this is allowed, but in this case, it is illegal to receive
         // postBuffer(). The surface just erases the framebuffer with
@@ -380,13 +383,6 @@ LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
     mLayer.setNeedsBlending((info.h_alpha - info.l_alpha) > 0);    
     mBufferSize = info.getScanlineSize(buffers.hor_stride)*buffers.ver_stride;
     mLayer.forceVisibilityTransaction();
-
-#if 0
-    if (buffers.transform == ISurface::BufferHeap::ROT_90) {
-        mDrawDurTime.start();
-        mPostDurTime.start();
-    }
-#endif
 }
 
 LayerBuffer::BufferSource::~BufferSource()
@@ -437,38 +433,26 @@ void LayerBuffer::BufferSource::postBuffer(ssize_t offset)
         buffer = new LayerBuffer::Buffer(buffers, offset, mBufferSize);
         if (buffer->getStatus() != NO_ERROR)
             buffer.clear();		
-	    {
-	     	Mutex::Autolock autoLock(mBufLock);
-            setBuffer(buffer);
-	     	mInComposing = true;
+        setBuffer(buffer);
+	 if(mIsSync){//jgdu push buffer sync
+	 	Mutex::Autolock autoLock(mBufLock);
+	 	mInComposing = true;
         }		
         mLayer.invalidate();
-
-        {
-	        Mutex::Autolock autoLock(mBufLock);
-            int count = 0;
-	        while(mInComposing) {
-	            mBufCondition.waitRelative(mBufLock, 100000000);
-                count ++;
-                if (count >= 5) {
-                    LOGD("postBuffer sync cost too long\n");
-                    break;
-                }
-            }
-        }
+	 if(mIsSync){//jgdu push buffer sync
+		Mutex::Autolock autoLock(mBufLock);
+		int count = 0;
+		while(mInComposing){
+			mBufCondition.waitRelative(mBufLock,100000000);
+			count++;
+			if(count>=2){
+				mInComposing = false;
+				LOGI("video rendering timeout");
+				break;
+			}
+		}
+	 }		
     }
-
-#if 0
-    if (buffers.transform == ISurface::BufferHeap::ROT_90) {
-        mPostCounter = mPostCounter + 1.0;
-        if (mPostCounter >= 60.0) {
-            mPostDurTime.stop();
-            LOGD("fhw::postBuffer fps: %f\n", mPostCounter/(mPostDurTime.durationUsecs()/1000000.0));
-            mPostDurTime.start();
-            mPostCounter = 0.0;
-        }
-    }
-#endif
 }
 
 void LayerBuffer::BufferSource::unregisterBuffers()
@@ -493,84 +477,68 @@ void LayerBuffer::BufferSource::setBuffer(const sp<LayerBuffer::Buffer>& buffer)
 
 void LayerBuffer::BufferSource::onDraw(const Region& clip) const 
 {
-    {
-        Mutex::Autolock autoLock(mBufLock);
+    sp<Buffer> ourBuffer(getBuffer());
+    if (UNLIKELY(ourBuffer == 0))  {
+        // nothing to do, we don't have a buffer
+        mLayer.clearWithOpenGL(clip);
+        return;
+    }
 
-        sp<Buffer> ourBuffer(getBuffer());
-        if (UNLIKELY(ourBuffer == 0))  {
-            // nothing to do, we don't have a buffer
-            mInComposing = false;
-            mBufCondition.signal();
-            mLayer.clearWithOpenGL(clip);
-            return;
-        }
-        if(mInComposing) {
-            status_t err = NO_ERROR;
-            NativeBuffer src(ourBuffer->getBuffer());
-            const Rect transformedBounds(mLayer.getTransformedBounds());
-    
+    status_t err = NO_ERROR;
+    NativeBuffer src(ourBuffer->getBuffer());
+    const Rect transformedBounds(mLayer.getTransformedBounds());
+
 #if defined(EGL_ANDROID_image_native_buffer)
-            if (GLExtensions::getInstance().haveDirectTexture()) {
-                err = INVALID_OPERATION;
-                if (ourBuffer->supportsCopybit()) {
-                    copybit_device_t* copybit = mLayer.mBlitEngine;
-                    if (copybit && err != NO_ERROR) {
-                        // create our EGLImageKHR the first time
-                        err = initTempBuffer();
-                        if (err == NO_ERROR) {
-                            // NOTE: Assume the buffer is allocated with the proper USAGE flags
-                            const NativeBuffer& dst(mTempBuffer);
-                            region_iterator clip(Region(Rect(dst.crop.r, dst.crop.b)));
-                            copybit->set_parameter(copybit, COPYBIT_TRANSFORM, 0);
-                            copybit->set_parameter(copybit, COPYBIT_PLANE_ALPHA, 0xFF);
-                            copybit->set_parameter(copybit, COPYBIT_DITHER, COPYBIT_ENABLE);
-                            err = copybit->stretch(copybit, &dst.img, &src.img,
-                                    &dst.crop, &src.crop, &clip);
-                            if (err != NO_ERROR) {
-                                clearTempBufferImage();
-                            }
-                        }
+    if (GLExtensions::getInstance().haveDirectTexture()) {
+        err = INVALID_OPERATION;
+        if (ourBuffer->supportsCopybit()) {
+            copybit_device_t* copybit = mLayer.mBlitEngine;
+            if (copybit && err != NO_ERROR) {
+                // create our EGLImageKHR the first time
+                err = initTempBuffer();
+                if (err == NO_ERROR) {
+                    // NOTE: Assume the buffer is allocated with the proper USAGE flags
+                    const NativeBuffer& dst(mTempBuffer);
+                    region_iterator clip(Region(Rect(dst.crop.r, dst.crop.b)));
+                    copybit->set_parameter(copybit, COPYBIT_TRANSFORM, 0);
+                    copybit->set_parameter(copybit, COPYBIT_PLANE_ALPHA, 0xFF);
+                    copybit->set_parameter(copybit, COPYBIT_DITHER, COPYBIT_ENABLE);
+                    err = copybit->stretch(copybit, &dst.img, &src.img,
+                            &dst.crop, &src.crop, &clip);
+                    if (err != NO_ERROR) {
+                        clearTempBufferImage();
                     }
                 }
             }
-#endif
-            else {
-                err = INVALID_OPERATION;
-            }
-
-            if (err != NO_ERROR) {
-                // slower fallback
-                GGLSurface t;
-                t.version = sizeof(GGLSurface);
-                t.width  = src.crop.r;
-                t.height = src.crop.b;
-                t.stride = src.img.w;
-                t.vstride= src.img.h;
-                t.format = src.img.format;
-                t.data = (GGLubyte*)src.img.base;
-                const Region dirty(Rect(t.width, t.height));
-                mTextureManager.loadTexture(&mTexture, dirty, t);
-            }
-
-#if 0
-            if (mBufferHeap.transform == ISurface::BufferHeap::ROT_90) {
-                mOnDrawCounter = mOnDrawCounter + 1.0;
-                if (mOnDrawCounter >= 60.0) {
-                    mDrawDurTime.stop();
-                    LOGD("fhw::onDraw fps: %f\n", mOnDrawCounter/(mDrawDurTime.durationUsecs()/1000000.0));
-                    mDrawDurTime.start();
-                    mOnDrawCounter = 0.0;
-                }
-            }
-#endif
-
-    	    mInComposing = false;
-            mBufCondition.signal();
         }
+    }
+#endif
+    else {
+        err = INVALID_OPERATION;
+    }
+
+    if (err != NO_ERROR) {
+        // slower fallback
+        GGLSurface t;
+        t.version = sizeof(GGLSurface);
+        t.width  = src.crop.r;
+        t.height = src.crop.b;
+        t.stride = src.img.w;
+        t.vstride= src.img.h;
+        t.format = src.img.format;
+        t.data = (GGLubyte*)src.img.base;
+        const Region dirty(Rect(t.width, t.height));
+        mTextureManager.loadTexture(&mTexture, dirty, t);
     }
 
     mLayer.setBufferTransform(mBufferHeap.transform);
     mLayer.drawWithOpenGL(clip, mTexture);
+    
+    if(mIsSync){//jgdu push buffer sync
+    	Mutex::Autolock autoLock(mBufLock);
+    	mInComposing = false;
+    	mBufCondition.signal();    
+    }	
 }
 
 status_t LayerBuffer::BufferSource::initTempBuffer() const

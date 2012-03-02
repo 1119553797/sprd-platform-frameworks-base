@@ -164,7 +164,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                         onLoaded));
 
         // TODO(): Verify when path changes are done.
-        phone.mCM.iccIO(COMMAND_GET_RESPONSE, IccConstants.EF_IMG, "img",
+        phone.mCM.iccIO(COMMAND_GET_RESPONSE, IccConstants.EF_IMG, getEFPath(IccConstants.EF_IMG),
                 recordNum, READ_RECORD_MODE_ABSOLUTE,
                 GET_RESPONSE_EF_IMG_SIZE_BYTES, null, null, response);
     }
@@ -236,7 +236,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
         Message response = obtainMessage(EVENT_READ_ICON_DONE, fileid, 0,
                 onLoaded);
 
-        phone.mCM.iccIO(COMMAND_READ_BINARY, fileid, "img", highOffset, lowOffset,
+        phone.mCM.iccIO(COMMAND_READ_BINARY, fileid, getEFPath(IccConstants.EF_IMG), highOffset, lowOffset,
                 length, null, null, response);
     }
 

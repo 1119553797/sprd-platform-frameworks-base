@@ -1369,12 +1369,12 @@ public class StatusBarPolicy {
     private final void updateVolume() {
         AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
           // ************Modify by luning at 01-07-01 begin************
-//        final int ringerMode = audioManager.getRingerMode();
-//        final boolean visible = ringerMode == AudioManager.RINGER_MODE_SILENT ||
-//                ringerMode == AudioManager.RINGER_MODE_VIBRATE;
-//        final int iconId = (ringerMode == AudioManager.RINGER_MODE_VIBRATE)
-//                ? com.android.internal.R.drawable.stat_sys_ringer_vibrate
-//                : com.android.internal.R.drawable.stat_sys_ringer_silent;
+        final int ringerMode = audioManager.getRingerMode();
+        final boolean visible = ringerMode == AudioManager.RINGER_MODE_SILENT ||
+                ringerMode == AudioManager.RINGER_MODE_VIBRATE;
+        final int iconId = (ringerMode == AudioManager.RINGER_MODE_VIBRATE)
+                ? R.drawable.stat_sys_ringer_vibrate
+                : R.drawable.stat_sys_ringer_silent;
         // ************Modify by luning at 01-07-01 end************
 
         // ************Modify by luning at 01-07-01 begin************
@@ -1399,35 +1399,35 @@ public class StatusBarPolicy {
 //                }
                 // ************Modify by luning at 01-07-01 end************
 
-        //Get ringerMode value
-        final int ringerMode = audioManager.getRingerMode();
-        boolean visible = ringerMode == AudioManager.RINGER_MODE_SILENT ||ringerMode == AudioManager.RINGER_MODE_VIBRATE
-                        || ringerMode == AudioManager.RINGER_MODE_NORMAL;
-        //Get the value of the vibration ring type
-        final int vibrate = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
-        //Determine whether there ringtones
-        final boolean isNormal = ringerMode == AudioManager.RINGER_MODE_NORMAL;
-        //set iconId value
-        final int iconId;
-        if (vibrate != AudioManager.VIBRATE_SETTING_OFF) {
-            if (isNormal) {
-                iconId = R.drawable.stat_sys_profiles_outdoor;
-            }else{
-                iconId = R.drawable.stat_sys_profiles_meeting;
-            }
-
-        }else{
-            if (isNormal) {
-                iconId = 0;
-                // Modify start on 2011-12-12 for bug6618,6937
-                // In Normal Condition,Remove the voice icon don't show and
-                // taking the position
-                visible = false;
-                // Modify end on 2011-12-12 for bug6618,6937
-            }else{
-                iconId = R.drawable.stat_sys_profiles_silent;
-            }
-        }
+//        //Get ringerMode value
+//        final int ringerMode = audioManager.getRingerMode();
+//        boolean visible = ringerMode == AudioManager.RINGER_MODE_SILENT ||ringerMode == AudioManager.RINGER_MODE_VIBRATE
+//                        || ringerMode == AudioManager.RINGER_MODE_NORMAL;
+//        //Get the value of the vibration ring type
+//        final int vibrate = audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+//        //Determine whether there ringtones
+//        final boolean isNormal = ringerMode == AudioManager.RINGER_MODE_NORMAL;
+//        //set iconId value
+//        final int iconId;
+//        if (vibrate != AudioManager.VIBRATE_SETTING_OFF) {
+//            if (isNormal) {
+//                iconId = R.drawable.stat_sys_profiles_outdoor;
+//            }else{
+//                iconId = R.drawable.stat_sys_profiles_meeting;
+//            }
+//
+//        }else{
+//            if (isNormal) {
+//                iconId = 0;
+//                // Modify start on 2011-12-12 for bug6618,6937
+//                // In Normal Condition,Remove the voice icon don't show and
+//                // taking the position
+//                visible = false;
+//                // Modify end on 2011-12-12 for bug6618,6937
+//            }else{
+//                iconId = R.drawable.stat_sys_profiles_silent;
+//            }
+//        }
 
         if (visible) {
             mService.setIcon("volume", iconId, 0);

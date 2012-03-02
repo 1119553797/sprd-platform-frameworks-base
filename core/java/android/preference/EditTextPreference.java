@@ -59,9 +59,9 @@ public class EditTextPreference extends DialogPreference {
         // Give it an ID so it can be saved/restored
         mEditText.setId(com.android.internal.R.id.edit);
         
-        //set max size by luyc@spreadst.com
+        //set max size by luyc@spreadst.com change 1024 
         InputFilter[] filters = new InputFilter[1];
-        filters[0] = new InputFilter.LengthFilter(2048);
+        filters[0] = new InputFilter.LengthFilter(1024);
         mEditText.setFilters(filters);
         
       

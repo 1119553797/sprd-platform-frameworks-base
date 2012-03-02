@@ -337,8 +337,19 @@ const char *StagefrightMetadataRetriever::extractMetadata(int keyCode) {
 }
 
 void StagefrightMetadataRetriever::parseMetaData() {
+
+    if (mExtractor == NULL) {
+        LOGE("no extractor.");
+        return;
+    }
+	
     sp<MetaData> meta = mExtractor->getMetaData();
 
+    if (meta == NULL) {
+        LOGE("extractor doesn't publish metadata, failed to initialize?");
+        return;
+    }
+	
     struct Map {
         int from;
         int to;
