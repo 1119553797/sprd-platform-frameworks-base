@@ -273,11 +273,11 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         createAllPdpList();
         initApnActivePdpFilter();
 
-		//add by liguxiang 08-26-11 for Cellular network to WLAN begin
+        //add by liguxiang 08-26-11 for Cellular network to WLAN begin
         if(mWifiManager == null){
-        	mWifiManager = (WifiManager) phone.getContext().getSystemService(Context.WIFI_SERVICE);
+            mWifiManager = (WifiManager) phone.getContext().getSystemService(Context.WIFI_SERVICE);
         }
-		//add by liguxiang 08-26-11 for Cellular network to WLAN end
+        //add by liguxiang 08-26-11 for Cellular network to WLAN end
 
 
         // This preference tells us 1) initial condition for "dataEnabled",
@@ -812,15 +812,17 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         // TODO: It'd be nice to only do this if the changed entrie(s)
         // match the current operator.
         createAllApnList();
-		if (state != State.DISCONNECTING) {
-			cleanUpConnection(isConnected, Phone.REASON_APN_CHANGED);
-			if (!isConnected) {
-				// reset reconnect timer
-				mRetryMgr.resetRetryCount();
-				mReregisterOnReconnectFailure = false;
-				trySetupData(Phone.REASON_APN_CHANGED);
-			}
-		}
+        if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+            if (state != State.DISCONNECTING) {
+                cleanUpConnection(isConnected, Phone.REASON_APN_CHANGED);
+                if (!isConnected) {
+                    // reset reconnect timer
+                    mRetryMgr.resetRetryCount();
+                    mReregisterOnReconnectFailure = false;
+                    trySetupData(Phone.REASON_APN_CHANGED);
+                }
+            }
+        }
     }
 
     /**
@@ -950,7 +952,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             //add by liguxiang 08-26-11 for Cellular network to WLAN begin
             SystemProperties.set("gsm.gprs.attached", "true");
             mWifiManager.setGprsConnectState(true);
-			//add by liguxiang 08-26-11 for Cellular network to WLAN end
+            //add by liguxiang 08-26-11 for Cellular network to WLAN end
             mPollNetStat.run();
         }
     }
@@ -960,7 +962,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         //add by liguxiang 08-26-11 for Cellular network to WLAN begin
         SystemProperties.set("gsm.gprs.attached", "false");
         mWifiManager.setGprsConnectState(false);
-		//add by liguxiang 08-26-11 for Cellular network to WLAN end
+        //add by liguxiang 08-26-11 for Cellular network to WLAN end
         removeCallbacks(mPollNetStat);
         Log.d(LOG_TAG, "[DataConnection] Stop poll NetStat");
     }
@@ -1688,7 +1690,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 break;
 
             case EVENT_GPRS_ATTACHED:
-                onGprsAttached();
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+                    onGprsAttached();
+                }
                 break;
 
             case EVENT_DATA_STATE_CHANGED:
@@ -1747,13 +1751,11 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                     trySetupData(Phone.REASON_PS_RESTRICT_ENABLED);
                 }
                 break;
-/*
             case EVENT_SWITCH_PHONE:
                 Log.d(LOG_TAG, "EVENT_SWITCH_PHONE");
                 MsmsGsmDataConnectionTrackerProxy.checkAndSwitchPhone(phone.getPhoneId(),
                         phone.getContext());
                 break;
-*/
             default:
                 // handle the message in the super class DataConnectionTracker
                 super.handleMessage(msg);
@@ -1786,5 +1788,17 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     }
     public  DisconnectData getDisconnectData(){
         return new DisconnectData(null,null);
+    }
+    public boolean isAllPdpDisconnectDone(){
+        if((mActivePdp!=null) && mActivePdp.isInactive()){
+            mActivePdp=null;
+            log("warning!!!  mActivePdp is Inactivatestate, need reset to NULL");
+        }
+        if(mActivePdp!=null){
+            log("isAllPdpDisconnectDone is false");
+            return false;
+        }
+        log("isAllPdpDisconnectDone is true");
+        return true;
     }
 }

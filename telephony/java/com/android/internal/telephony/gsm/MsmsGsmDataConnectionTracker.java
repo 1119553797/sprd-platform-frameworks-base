@@ -37,7 +37,7 @@ import com.android.internal.telephony.DataConnectionTracker.State;
 
 public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
 
-	MsmsGsmDataConnectionTracker(GSMPhone p) {
+    MsmsGsmDataConnectionTracker(GSMPhone p) {
         super(p);
 //        mMasterDataEnabled = TelephonyManager.getDefaultDataPhoneId(phone.getContext()) == phone
 //                .getPhoneId();
@@ -51,12 +51,12 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
         if (dataEnabled[APN_DEFAULT_ID]) {
             MsmsGsmDataConnectionTrackerProxy.setActivePhoneId(phone.getPhoneId());
         }
-	}
+    }
 
-	public void dispose() {
+    public void dispose() {
         ContentResolver cr = phone.getContext().getContentResolver();
         cr.unregisterContentObserver(mDefaultDataPhoneIdObserver);
-	}
+    }
 
     private ContentObserver mDefaultDataPhoneIdObserver = new ContentObserver(new Handler()) {
         @Override
@@ -66,18 +66,14 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
 
             if (DBG) log("defaultDataPhoneId=" +defaultDataPhoneId+" dataEnabled[APN_DEFAULT_ID]="+dataEnabled[APN_DEFAULT_ID]);
             if (defaultDataPhoneId != phone.getPhoneId()) {
-                if (dataEnabled[APN_DEFAULT_ID] == true) {
-                    disableApnType(Phone.APN_TYPE_DEFAULT);
+                if (isAllPdpDisconnectDone()) {
+                    // check if we need to switch phone.
+                    setDataDisabledOfDefaultAPN();
+                    sendMessage(obtainMessage(EVENT_SWITCH_PHONE));
                 } else {
-                    if (!isApnTypeActive(Phone.APN_TYPE_DEFAULT)) {
-                        // check if we need to switch phone.
-                        MsmsGsmDataConnectionTrackerProxy.checkAndSwitchPhone(phone.getPhoneId(),
-                        phone.getContext());
-                    } else {
-                        log("WARNING: isApnTypeActive(Phone.APN_TYPE_DEFAULT)="
+                    log("isApnTypeActive(Phone.APN_TYPE_DEFAULT)="
                             + isApnTypeActive(Phone.APN_TYPE_DEFAULT));
-                        disableApnType(Phone.APN_TYPE_DEFAULT);
-                    }
+                    disableApnType(Phone.APN_TYPE_DEFAULT);
                 }
             }
 
@@ -232,7 +228,12 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
             enabledCount++;
         }
     }
-
+    public synchronized void setDataDisabledOfDefaultAPN() {
+        if (dataEnabled[APN_DEFAULT_ID]) {
+            dataEnabled[APN_DEFAULT_ID] = false;
+            enabledCount--;
+        }
+    }
     @Override
     protected void onEnableNewApn() {
         MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(phone.getPhoneId());
@@ -281,6 +282,9 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
 
     public int getCurrentGprsState() {
         return mGsmPhone.mSST.getCurrentGprsState();
+    }
+    protected void log(String s) {
+        Log.d(LOG_TAG, "[MsmGsmDataConnectionTracker-phoneId" + mGsmPhone.getPhoneId() + "] " + s);
     }
     /*
     protected synchronized void onEnableApn(int apnId, int enabled) {
