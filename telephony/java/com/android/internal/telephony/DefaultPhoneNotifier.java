@@ -101,7 +101,7 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     public void notifyDataConnection(Phone sender, String reason) {
-        TelephonyManager telephony = TelephonyManager.getDefault();
+        TelephonyManager telephony = TelephonyManager.getDefault(sender.getPhoneId());
         try {
             mRegistry.notifyDataConnection(
                     convertDataState(sender.getDataConnectionState()),
