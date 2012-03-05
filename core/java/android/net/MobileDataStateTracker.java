@@ -584,8 +584,13 @@ public class MobileDataStateTracker extends NetworkStateTracker {
             case ConnectivityManager.TYPE_MOBILE_HIPRI:
                 return Phone.APN_TYPE_HIPRI;
             default:
-                Log.e(TAG, "Error mapping networkType " + netType + " to apnType.");
-                return null;
+            	// Msms MMS netType @zha
+                if (ConnectivityManager.isNetworkTypeValid(netType)) {
+                    return Phone.APN_TYPE_MMS;
+            	} else {
+                    Log.e(TAG, "Error mapping networkType " + netType + " to apnType.");
+                    return null;
+            	}
         }
     }
     private int getPhoneId() {

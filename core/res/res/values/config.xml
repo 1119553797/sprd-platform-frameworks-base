@@ -95,6 +95,7 @@
         <item>"wifi,1,1,1"</item>
         <item>"mobile,0,0,0"</item>
         <item>"mobile_mms,2,0,2"</item>
+	<item>"mobile_mms2,10,0,2"</item>
         <item>"mobile_supl,3,0,2"</item>
         <item>"mobile_hipri,5,0,3"</item>
     </string-array>

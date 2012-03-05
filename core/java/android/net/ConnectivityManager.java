@@ -673,7 +673,7 @@ public class ConnectivityManager
         if (phoneId == 0) {
             MmsType = TYPE_MOBILE_MMS;
         } else if (phoneId < PhoneFactory.getPhoneCount()) {
-            MmsType = TYPE_MOBILE_HIPRI + phoneId;
+            MmsType = TYPE_ETHERNET + phoneId;
         } else {
             throw new IllegalArgumentException(
                 "phoneId is not leagal!");

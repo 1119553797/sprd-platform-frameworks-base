@@ -629,9 +629,13 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         enforceAccessPermission();
         if (ConnectivityManager.isNetworkTypeValid(networkType)) {
             NetworkStateTracker t = mNetTrackers[networkType];
-            if (t != null)
+            if (t != null) {
                 return t.getNetworkInfo();
+	    } else {
+		Slog.e ("sunway","NetworkStateTracker is null");
+	    }
         }
+	Slog.e ("sunway","getNetworkInfo returns null");
         return null;
     }
 
