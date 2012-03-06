@@ -1219,11 +1219,12 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
         // TODO:  To support simultaneous PDP contexts, this should really only call
         // cleanUpConnection if it needs to free up a GsmDataConnection.
-        //cleanUpConnection(true, Phone.REASON_APN_SWITCHED);
+        log("onEnableNewApn REASON_APN_SWITCHED");
+        cleanUpConnection(true, Phone.REASON_APN_SWITCHED);
         // here we try to setup a new pdp connection
-        String reason =Phone.REASON_APN_SWITCHED;
-        Log.i(LOG_TAG, "***********************try to setup new pdp Connection");
-        trySetupData(reason);
+        //String reason =Phone.REASON_APN_SWITCHED;
+        //Log.i(LOG_TAG, "***********************try to setup new pdp Connection");
+        //trySetupData(reason);
     }
 
     protected boolean onTrySetupData(String reason) {
