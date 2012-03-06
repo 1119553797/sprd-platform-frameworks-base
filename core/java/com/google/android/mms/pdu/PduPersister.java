@@ -340,6 +340,12 @@ public class PduPersister {
         }
         return null;
     }
+    private byte[] getByteArrayFromPartColumn_Encode(Cursor c, int columnIndex){
+        if (!c.isNull(columnIndex)) {
+            return new EncodedStringValue(c.getString(columnIndex)).getTextString();
+        }
+        return null;
+    }
 
     private PduPart[] loadParts(long msgId) throws MmsException {
         Cursor c = SqliteWrapper.query(mContext, mContentResolver,
@@ -399,7 +405,9 @@ public class PduPersister {
                     part.setFilename(fileName);
                 }
 
-                byte[] name = getByteArrayFromPartColumn(
+//                byte[] name = getByteArrayFromPartColumn(
+//                        c, PART_COLUMN_NAME);
+                byte[] name = getByteArrayFromPartColumn_Encode(
                         c, PART_COLUMN_NAME);
                 if (name != null) {
                     part.setName(name);
