@@ -29,6 +29,7 @@ public abstract class Connection {
     public static int PRESENTATION_PAYPHONE = 4;   // show pay phone info
 
     private static String LOG_TAG = "TelephonyConnection";
+    boolean mIsStkCall = false;    // true = call from STK
 
     public enum DisconnectCause {
         NOT_DISCONNECTED,               /* has not yet disconnected */
@@ -306,5 +307,13 @@ public abstract class Connection {
                 .append(" state: " + getState())
                 .append(" post dial state: " + getPostDialState());
         return str.toString();
+    }
+
+    public void setStkCall(boolean isStkcall) {
+        mIsStkCall = isStkcall;
+    }
+
+    public boolean getStkCall() {
+        return mIsStkCall;
     }
 }
