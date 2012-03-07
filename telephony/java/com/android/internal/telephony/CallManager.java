@@ -503,12 +503,18 @@ public final class CallManager {
 
         // for events supported only by 3G Phone
         phone.registerForNewRingingVideoCall(mHandler, EVENT_NEW_RINGING_VIDEO_CALL, null);
-        phone.registerForPreciseVideoCallStateChanged(mHandler, EVENT_PRECISE_VIDEO_CALL_STATE_CHANGED, null);
-        phone.registerForVideoCallDisconnect(mHandler, EVENT_VIDEO_CALL_DISCONNECT, null);
-        phone.registerForIncomingRingVideoCall(mHandler, EVENT_INCOMING_RING_VIDEO_CALL, null);
-        phone.registerForVideoCallFallBack(mHandler, EVENT_VIDEO_CALL_FALL_BACK, null);
-        phone.registerForVideoCallFail(mHandler, EVENT_VIDEO_CALL_FAIL, null);
-        phone.registerForVideoCallCodec(mHandler, EVENT_VIDEO_CALL_CODEC, null);
+        
+        int phoneId = phone.getPhoneId();
+        Log.d(LOG_TAG, "registerForPhoneStates(): phoneId: " + phoneId);
+        if (phoneId == PhoneFactory.DEFAULT_PHONE_ID) {
+            phone.registerForPreciseVideoCallStateChanged(mHandler, EVENT_PRECISE_VIDEO_CALL_STATE_CHANGED, null);
+            phone.registerForVideoCallDisconnect(mHandler, EVENT_VIDEO_CALL_DISCONNECT, null);
+            phone.registerForIncomingRingVideoCall(mHandler, EVENT_INCOMING_RING_VIDEO_CALL, null);
+            phone.registerForVideoCallFallBack(mHandler, EVENT_VIDEO_CALL_FALL_BACK, null);
+            phone.registerForVideoCallFail(mHandler, EVENT_VIDEO_CALL_FAIL, null);
+            phone.registerForVideoCallCodec(mHandler, EVENT_VIDEO_CALL_CODEC, null);
+        }
+
     }
 
     private void unregisterForPhoneStates(Phone phone) {
