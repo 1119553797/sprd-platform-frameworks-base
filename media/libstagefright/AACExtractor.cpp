@@ -282,7 +282,8 @@ status_t AACSource::read(
     if (err != OK) {
         return err;
     }
-	
+
+    int framesize0 = size;	
     frameSize = size;	
     n = mDataSource->readAt(mOffset, buffer->data(), frameSize);
 	
@@ -299,7 +300,23 @@ status_t AACSource::read(
 
     mOffset += size;
     mCurrentTimeUs = (int64_t)mOffset*8*1000000/mBitrate;
+//for latm test	
+/*
+    size = aac_parse_header(mDataSource,mOffset,NULL,NULL,NULL);
+    frameSize = size;	
+    LOGI("framesize0 %d,%d",framesize0,framesize0+frameSize-7);
+    n = mDataSource->readAt(mOffset+7, (void *)((uint8_t *)buffer->data()+framesize0), frameSize-7);
+	
+    if (n != (ssize_t)frameSize-7) {
+        buffer->release();
+        buffer = NULL;
 
+        return ERROR_IO;
+    }
+    buffer->set_range(0, framesize0+frameSize-7);	
+    mOffset += size;
+    mCurrentTimeUs = (int64_t)mOffset*8*1000000/mBitrate;
+*/	
     //LOGI("mCurrentTimeUs %lld,mOffset %d",mCurrentTimeUs,mOffset);
 	 
     *out = buffer;
