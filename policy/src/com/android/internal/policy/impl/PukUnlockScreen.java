@@ -202,7 +202,7 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             try {
 
                 final boolean result = ITelephony.Stub.asInterface(ServiceManager
-                          .checkService("phone")).supplyPuk(mPuk,mPin);
+                          .checkService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, mSub))).supplyPuk(mPuk,mPin);
                 post(new Runnable() {
                     public void run() {
                         onSimLockChangedResponse(result);
