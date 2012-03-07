@@ -254,7 +254,12 @@ public final class GsmCallTracker extends CallTracker {
             cm.acceptCall(obtainCompleteMessage());
         } else if (ringingCall.getState() == GsmCall.State.WAITING) {
             setMute(false);
-            switchWaitingOrHoldingAndActive();
+            //for bug 11040,12353
+            if (!foregroundCall.getState().isAlive()) {
+                cm.acceptCall(obtainCompleteMessage());
+            }else {
+                switchWaitingOrHoldingAndActive();
+            }
         } else {
             throw new CallStateException("phone not ringing");
         }
@@ -755,12 +760,8 @@ public final class GsmCallTracker extends CallTracker {
                 }
                 hangup((GsmConnection)(call.getConnections().get(0)));
             } else {
-                if (phone.getState() == Phone.State.RINGING) {
-                    log("(foregnd) hangup active remain ringing...");
-                    hangup((GsmConnection)(call.getConnections().get(0)));
-                } else {
-                    hangupForegroundResumeBackground();
-                }
+              //for bug 11040,12353
+                hangupForegroundResumeBackground();
             }
         } else if (call == backgroundCall) {
             if (ringingCall.isRinging()) {
