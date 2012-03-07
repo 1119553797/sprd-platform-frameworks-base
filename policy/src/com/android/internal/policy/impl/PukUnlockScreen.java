@@ -21,6 +21,7 @@ import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.widget.LockPatternUtils;
 
 import android.text.Editable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -102,7 +103,9 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             new TouchInput();
         }
 
-        mTelePhoneManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+		mTelePhoneManager = (TelephonyManager) mContext
+				.getSystemService(PhoneFactory.getServiceName(
+						Context.TELEPHONY_SERVICE, mSub));
 
         mHeaderText = (TextView) findViewById(R.id.headerText);
         mPukText = (TextView) findViewById(R.id.pinDisplay);
@@ -267,6 +270,7 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                     } else {
                     	if(!checkPukLength()){
                     		checkPuk();
+                    		mCurrentStatus = STATUS_INPUT_PUK;
                     	}
                     }
                 break;
@@ -340,9 +344,10 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 						attemptsRemaining = ITelephony.Stub.asInterface(
 		                        ServiceManager.getService(PhoneFactory.getServiceName(
 		                                Context.TELEPHONY_SERVICE, mSub)))
-						                .getRemainTimes(TelephonyManager.UNLOCK_PIN);
+						                .getRemainTimes(TelephonyManager.UNLOCK_PUK);
 						if (attemptsRemaining >= 1) {
 							// clearDigits();
+							remainTimes = attemptsRemaining;
 							String displayMessage = getContext().getString(
 									R.string.keyguard_password_wrong_puk_code)
 									+ getContext().getString(

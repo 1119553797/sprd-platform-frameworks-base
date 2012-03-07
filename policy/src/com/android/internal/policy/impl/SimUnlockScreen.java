@@ -111,7 +111,9 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mOkButton = (TextView) findViewById(R.id.ok);
 
         //PIN Remain times Modify start
-        mTelePhoneManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+		mTelePhoneManager = (TelephonyManager) mContext
+				.getSystemService(PhoneFactory.getServiceName(
+						Context.TELEPHONY_SERVICE, mSub));
         remainTimes = mTelePhoneManager.getRemainTimes(TelephonyManager.UNLOCK_PIN);
 //        String headerText = mContext.getResources().getString(R.string.keyguard_password_enter_pin_code)
 //                          + "(" + remainTimes + ")";
