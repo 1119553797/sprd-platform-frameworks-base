@@ -192,5 +192,11 @@ void StagefrightPlayer::clearRender() {
     LOGV("clearRender");
     return mPlayer->clearRender();
 }
+#ifdef USE_GETFRAME
+status_t    StagefrightPlayer::getFrameAt(int msec, VideoFrame** pvframe)
+{
+    return mPlayer->getFrameAt(msec, pvframe);
+}
+#endif
 
 }  // namespace android

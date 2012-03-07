@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "MediaExtractor"
 #include <utils/Log.h>
 
@@ -23,6 +23,7 @@
 #include "include/MPEG4Extractor.h"
 #include "include/WAVExtractor.h"
 #include "include/OggExtractor.h"
+#include "include/AVIExtractor.h"
 #include "include/MPEG2TSExtractor.h"
 #include "include/CMMBExtractor.h"//cmmb
 #include "include/VideoPhoneExtractor.h"//sprd vt must
@@ -79,6 +80,8 @@ sp<MediaExtractor> MediaExtractor::Create(
         return new OggExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_MATROSKA)) {
         return new MatroskaExtractor(source);
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_AVI)) {
+        return new AVIExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_MPEG2TS)) {
         return new MPEG2TSExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_CMMB)) {//cmmb

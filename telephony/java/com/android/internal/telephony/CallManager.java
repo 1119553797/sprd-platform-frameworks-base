@@ -803,7 +803,7 @@ public final class CallManager {
                 }
             }
         }
-
+        Log.d(LOG_TAG, "dial: isStkCall = " + isStkCall);
         result = basePhone.dial(dialString,isStkCall);
 
         if (VDBG) {

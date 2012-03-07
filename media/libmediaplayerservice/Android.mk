@@ -42,7 +42,7 @@ LOCAL_STATIC_LIBRARIES := \
 ifneq ($(BUILD_WITHOUT_PV),true)
 LOCAL_SHARED_LIBRARIES += \
 	libopencore_player    \
-	libopencore_author
+#	libopencore_author
 else
 LOCAL_CFLAGS += -DNO_OPENCORE
 endif

@@ -271,9 +271,24 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
 
     public void addClient(IAccessibilityManagerClient client) {
         synchronized (mLock) {
+        	final IAccessibilityManagerClient addedClient = client;
             try {
                 client.setEnabled(mIsEnabled);
-                mClients.add(client);
+                mClients.add(addedClient);
+                /*add by yinjie@spreadst.com
+                 * so client could be removed from mClients, and global reference for WeakReference won't grow larger abnormally.
+                 * */
+                client.asBinder().linkToDeath( new IBinder.DeathRecipient() {
+					
+					@Override
+					public void binderDied() {
+						// TODO Auto-generated method stub
+						synchronized (mLock) {
+							addedClient.asBinder().unlinkToDeath(this, 0);
+							mClients.remove(addedClient);
+						}
+					}
+				}, 0 );
             } catch (RemoteException re) {
                 Slog.w(LOG_TAG, "Dead AccessibilityManagerClient: " + client, re);
             }

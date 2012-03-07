@@ -22,6 +22,7 @@ import com.android.internal.telephony.GsmAlphabet;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
+import com.android.internal.telephony.IccUtils;
 
 abstract class ResponseData {
     /**
@@ -219,5 +220,170 @@ class DateTimeResponseData extends ResponseData {
     }
 }
 
+class OpenChannelResponseData extends ResponseData {
+    private byte mBearerType = 0;
+    private String mBearerParam = null;
+    private int mBufferSize = 0;
+    private int mChannelId = 0;
+    private boolean mLinkStatus = false;
 
 
+    public OpenChannelResponseData(byte type, String param, int size, int id, boolean status) {
+        super();
+        this.mBearerType = type;
+        this.mBearerParam = param;
+        this.mBufferSize = size;
+        this.mChannelId = id;
+        this.mLinkStatus = status;
+}
+
+    @Override
+    public void format(ByteArrayOutputStream buf) {
+        if (buf == null) {
+            StkLog.d(this, "OpenChannelResponseData buf is null");
+            return;
+        }
+        int tag;
+        // Channel status object
+        StkLog.d(this, "[stk] ChannelStatusResponseData mLinkStatus = " + mLinkStatus);
+        if (mLinkStatus) {
+            tag = 0x80 | ComprehensionTlvTag.CHANNEL_STATUS.value();
+            buf.write(tag);
+            // length
+            buf.write(2);
+            // channel id & link status
+            buf.write(mChannelId | 0x80);
+            // channel status
+            buf.write(0x00);
+        }
+        // Bearer Description object
+        tag = 0x80 | ComprehensionTlvTag.BEARER_DESCRIPTION.value();
+        buf.write(tag); // tag
+
+        byte[] data = null;
+        if (mBearerParam != null && mBearerParam.length() > 0) {
+            data = IccUtils.hexStringToBytes(mBearerParam);
+        } else {
+            data = new byte[0];
+        }
+        buf.write(data.length + 1); // length
+        buf.write(mBearerType);     // Bearer Type
+        for (byte b : data) {       // Bearer param
+            buf.write(b);
+        }
+        // Buffer Size object
+        tag = 0x80 | ComprehensionTlvTag.BUFFER_SIZE.value();
+        buf.write(tag);
+        // length
+        buf.write(2);
+        // Buffer Size
+        buf.write((mBufferSize & 0xff00) >> 8);
+        buf.write(mBufferSize & 0x00ff);
+    }
+}
+
+class ChannelStatusResponseData extends ResponseData {
+    private int mChannelId = 0;
+    private boolean mLinkStatus = false;
+
+
+    public ChannelStatusResponseData(int id, boolean status) {
+        super();
+        this.mChannelId = id;
+        this.mLinkStatus = status;
+    }
+
+    @Override
+    public void format(ByteArrayOutputStream buf) {
+        if (buf == null) {
+            StkLog.d(this, "ChannelStatusResponseData buf is null");
+            return;
+        }
+        int tag;
+        // Channel status object
+        StkLog.d(this, "[stk] ChannelStatusResponseData mLinkStatus = " + mLinkStatus);
+        tag = 0x80 | ComprehensionTlvTag.CHANNEL_STATUS.value();
+        buf.write(tag);
+        // length
+        buf.write(2);
+        // channel id & link status
+        buf.write(mChannelId | (mLinkStatus ? 0x80 : 0));
+        // channel status
+        buf.write(0x00);
+    }
+}
+
+class SendDataResponseData extends ResponseData {
+    private int mChannelLen = 0;
+
+    public SendDataResponseData(int len) {
+        super();
+        this.mChannelLen = len;
+    }
+
+    @Override
+    public void format(ByteArrayOutputStream buf) {
+        if (buf == null) {
+            StkLog.d(this, "SendDataResponseData buf is null");
+            return;
+        }
+        int tag;
+        // Channel data length object
+        StkLog.d(this, "[stk] SendDataResponseData mChannelLen = " + mChannelLen);
+        tag = 0x80 | ComprehensionTlvTag.CHANNEL_DATA_LENGTH.value();
+        buf.write(tag);
+        // length
+        buf.write(1);
+        // channel data length
+        buf.write(mChannelLen);
+    }
+}
+
+class ReceiveDataResponseData extends ResponseData {
+    private int mDataLen = 0;
+    private String mDataStr = null;
+
+    public ReceiveDataResponseData(int len, String str) {
+        super();
+        this.mDataLen = len;
+        this.mDataStr = str;
+    }
+
+    @Override
+    public void format(ByteArrayOutputStream buf) {
+        if (buf == null) {
+            StkLog.d(this, "ReceiveDataResponseData buf is null");
+            return;
+        }
+        int tag;
+        // Channel data object
+        StkLog.d(this, "[stk] ReceiveDataResponseData mDataLen = " + mDataLen +
+                        " mDataStr = " + mDataStr);
+        tag = 0x80 | ComprehensionTlvTag.CHANNEL_DATA.value();
+        buf.write(tag);
+        // length
+        byte[] data = null;
+        if (mDataStr != null && mDataStr.length() > 0) {
+            data = IccUtils.hexStringToBytes(mDataStr);
+        } else {
+            data = new byte[0];
+        }
+        if (data.length < 0x80) {
+            buf.write(data.length);
+        } else {
+            buf.write(0x81);
+            buf.write(data.length);
+        }
+        // channel data
+        for (byte b : data) {
+            buf.write(b);
+        }
+        // Channel data length object
+        tag = 0x80 | ComprehensionTlvTag.CHANNEL_DATA_LENGTH.value();
+        buf.write(tag);
+        // length
+        buf.write(1);
+        // channel data length
+        buf.write(mDataLen);
+    }
+}

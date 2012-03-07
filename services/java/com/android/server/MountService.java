@@ -1208,6 +1208,10 @@ class MountService extends IMountService.Stub
         synchronized (mListeners) {
             for(MountServiceBinderListener bl : mListeners) {
                 if (bl.mListener == listener) {
+                	/*add by yinjie@spreadst.com
+                	 * unlinkToDeath for listener, so the global reference for bl could be released.
+                	 * */
+                	listener.asBinder().unlinkToDeath(bl, 0);
                     mListeners.remove(mListeners.indexOf(bl));
                     return;
                 }
@@ -1261,6 +1265,20 @@ class MountService extends IMountService.Stub
         	Log.d(TAG,"shutdown mUmsConnected = " + mUmsConnected);
             ShutdownCallBack ucb = new ShutdownCallBack(path, observer);
             mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, ucb));
+        }
+        // add by luyongchao
+        else {
+        	// the media isn't mount 
+        	 if(LOCAL_LOGD)
+                 Slog.d(TAG, "Current media state isn't mounted or removable, try notify ShutdownThread.");
+             
+             if (observer != null) {
+                 try {
+                     observer.onShutDownComplete(0);
+                 } catch (RemoteException e) {
+                     Slog.w(TAG, "RemoteException when shutting down");
+                 }
+             }
         }
     }
 

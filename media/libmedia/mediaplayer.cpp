@@ -313,7 +313,7 @@ status_t MediaPlayer::pause()
     Mutex::Autolock _l(mLock);
     if (mCurrentState & (MEDIA_PLAYER_PAUSED|MEDIA_PLAYER_PLAYBACK_COMPLETE))
         return NO_ERROR;
-    if ((mPlayer != 0)&& (mSeekPosition < 0)&& (mCurrentState & MEDIA_PLAYER_STARTED)) {
+    if ((mPlayer != 0)&& (mCurrentState & MEDIA_PLAYER_STARTED)) {
         status_t ret = mPlayer->pause();
         if (ret != NO_ERROR) {
             mCurrentState = MEDIA_PLAYER_STATE_ERROR;
@@ -472,6 +472,18 @@ status_t MediaPlayer::setAudioStreamType(int type)
     return OK;
 }
 
+#ifdef USE_GETFRAME
+sp<IMemory> MediaPlayer::getFrameAt(int msec)
+{
+    LOGV("getFrameAt");
+    Mutex::Autolock _l(mLock);
+    if (mPlayer != 0) {
+         return mPlayer->getFrameAt(msec);
+    }
+    LOGV("getFrameAt: no active player");
+    return NULL;
+}
+#endif
 status_t MediaPlayer::setLooping(int loop)
 {
     LOGV("MediaPlayer::setLooping");

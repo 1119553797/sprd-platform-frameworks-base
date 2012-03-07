@@ -117,8 +117,10 @@ status_t MediaPhone::setLocalSurface(const sp<Surface>& surface)
 
     status_t ret = OK;
 	if (surface != NULL) {
+        mIsLocalSurfaceSet = true;
 		ret = mMediaPhone->setLocalSurface(surface->getISurface());
 	} else {
+	    mIsLocalSurfaceSet = false;
 		ret = mMediaPhone->setLocalSurface(NULL);
 	}
     if (OK != ret) {
@@ -282,6 +284,7 @@ MediaPhone::MediaPhone()
 
     mPrepareSync = false;
 	mIsRecording = false;
+    mIsLocalSurfaceSet = false;
     mPrepareStatus = NO_ERROR;
 
     do {
@@ -490,16 +493,27 @@ status_t MediaPhone::startDownLink()
         LOGE("media phone is not initialized yet");
         return INVALID_OPERATION;
     }
-    if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
-        LOGE("startUpLink called in an invalid state: %d", mCurrentState);
-        return INVALID_OPERATION;
-    }
-    if (!mIsDownLinkStopped) {
-        LOGI("alreading started DownLink");
-        return OK;
+    status_t ret = INVALID_OPERATION;
+    if (mCurrentState & MEDIA_PHONE_PREPARED) {
+        ret = mMediaPhone->startDownLink();
+        if (ret == OK) {
+            mCurrentState = MEDIA_PHONE_STARTED;
+            mIsRecording = false;
+            mIsUpLinkStopped = false;
+        	mIsDownLinkStopped = false; 
+        }
+    } else {
+        if (!(mCurrentState & MEDIA_PHONE_STARTED)) {
+            LOGE("startUpLink called in an invalid state: %d", mCurrentState);
+            return INVALID_OPERATION;
+        }
+        if (!mIsDownLinkStopped) {
+            LOGI("alreading started DownLink");
+            return OK;
+        }
+        ret = mMediaPhone->startDownLink();
     }
 
-    status_t ret = mMediaPhone->startDownLink();
     if (OK != ret) {
         LOGE("startDownLink failed: %d, %s", ret, strerror(ret));
 //        mCurrentState = MEDIA_PHONE_ERROR;
@@ -590,7 +604,10 @@ void MediaPhone::notify(int msg, int ext1, int ext2)
     case MEDIA_PHONE_EVENT_PREPARED:
         LOGV("prepared");
         mCurrentState = MEDIA_PHONE_PREPARED;
-		internal_startPlayer();
+        if (mIsLocalSurfaceSet) {
+            LOGE("local surface is null, don't start player");
+		    internal_startPlayer();
+        }
         if (mPrepareSync) {
             LOGV("signal application thread");
             mPrepareSync = false;

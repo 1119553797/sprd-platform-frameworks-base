@@ -640,7 +640,7 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
             mMusicStopTime = systemTime();
         }
 
-        setOutputDevice(output, getNewDevice(output));
+        setOutputDevice(output, getNewDevice(output), false, 150);
 
 #ifdef WITH_A2DP
         if (mA2dpOutput != 0 && !a2dpUsedForSonification() &&
@@ -1756,7 +1756,7 @@ void AudioPolicyManagerBase::updateDeviceForStrategy()
 
 void AudioPolicyManagerBase::setOutputDevice(audio_io_handle_t output, uint32_t device, bool force, int delayMs)
 {
-    LOGV("setOutputDevice() output %d device %x delayMs %d", output, device, delayMs);
+    LOGI("setOutputDevice() output %d device %x delayMs %d", output, device, delayMs);
     AudioOutputDescriptor *outputDesc = mOutputs.valueFor(output);
 
 

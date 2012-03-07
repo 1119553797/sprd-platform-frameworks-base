@@ -597,6 +597,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mDockMode = intent.getIntExtra(Intent.EXTRA_DOCK_STATE,
                     Intent.EXTRA_DOCK_STATE_UNDOCKED);
         }
+
+
+		//add  by luyongchao ,disable orintation when shutdown
+		IntentFilter shutdownDialogFilter = new IntentFilter();
+		shutdownDialogFilter.addAction(Intent.ACTION_SHUTDOWN);
+		context.registerReceiver(shutdownDisableOrintationReceiver, shutdownDialogFilter);
+		//
+
+
+
+
+
+
         mVibrator = new Vibrator();
         mLongPressVibePattern = getLongIntArray(mContext.getResources(),
                 com.android.internal.R.array.config_longPressVibePattern);
@@ -1974,9 +1987,28 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     BroadcastReceiver mBroadcastDone = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            mBroadcastWakeLock.release();
-        }
-    };
+			mBroadcastWakeLock.release();
+		}
+	};
+
+
+	//add by luyongchao
+	BroadcastReceiver shutdownDisableOrintationReceiver = new BroadcastReceiver() {
+		public void onReceive(Context context, Intent intent) {
+			if (Intent.ACTION_SHUTDOWN.equals(intent.getAction())) {
+				Log.e(TAG,"\t\t\t Should disable the sensor listener ...");
+				mOrientationListener.disable();
+				mOrientationSensorEnabled = false;
+			} else {
+				Log.e(TAG,"other broadcast coming....");
+			}
+
+		}
+	}; 
+
+
+
+
 
     BroadcastReceiver mDockReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {

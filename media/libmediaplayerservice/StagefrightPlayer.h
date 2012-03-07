@@ -56,6 +56,9 @@ public:
 
     virtual status_t getMetadata(
             const media::Metadata::Filter& ids, Parcel *records);
+#ifdef USE_GETFRAME
+    virtual status_t    getFrameAt(int msec, VideoFrame** pvframe);
+#endif
 
 private:
     AwesomePlayer *mPlayer;

@@ -1173,6 +1173,12 @@ public final class Telephony {
          * <P>Type: TEXT</P>
          */
         public static final String META_DATA = "meta_data";
+
+        /**
+         * Wap push flag
+         * <P>Type: INTEGER</P>
+         */
+        public static final String WAP_PUSH = "wap_push";
     }
 
     /**
@@ -1832,6 +1838,7 @@ public final class Telephony {
          * For example, "IP", "IPV6", "IPV4V6", or "PPP".
          */
         public static final String PROTOCOL = "protocol";
+        public static final String PRELOAD = "preload";
 
         /**
           * The protocol to be used to connect to this APN when roaming.

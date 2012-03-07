@@ -39,6 +39,7 @@ import static android.view.WindowManager.LayoutParams.TYPE_WALLPAPER;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.policy.PolicyManager;
 import com.android.internal.policy.impl.PhoneWindowManager;
+import com.android.internal.telephony.gsm.stk.AppInterface;
 import com.android.internal.view.IInputContext;
 import com.android.internal.view.IInputMethodClient;
 import com.android.internal.view.IInputMethodManager;
@@ -379,6 +380,9 @@ public class WindowManagerService extends IWindowManager.Stub
     boolean mSafeMode;
     boolean mDisplayEnabled = false;
     boolean mSystemBooted = false;
+    boolean mUserActivityEventNeeded = false;
+    boolean mIdleScreenEventNeeded = false;
+    boolean mIsInIdleScreen = false;
     int mInitialDisplayWidth = 0;
     int mInitialDisplayHeight = 0;
     int mRotation = 0;
@@ -3249,6 +3253,28 @@ public class WindowManagerService extends IWindowManager.Stub
                 Binder.restoreCallingIdentity(origId);
             }
         }
+    }
+
+    public void setEventUserActivityNeeded(boolean bEventNeeded) {
+        mUserActivityEventNeeded = bEventNeeded;
+    }
+
+    public void setEventIdleScreenNeeded(boolean bEventNeeded) {
+        mIdleScreenEventNeeded = bEventNeeded;
+    }
+
+    public boolean isEventIdleScreenNeeded() {
+        return mIdleScreenEventNeeded;
+    }
+
+    // set if current window is idlescreen window
+    public void setInIdleScreen(boolean isInIdleScreen) {
+        mIsInIdleScreen = isInIdleScreen;
+    }
+
+    // see if current window is in idlescreen window now
+    public boolean isInIdleScreen() {
+        return mIsInIdleScreen;
     }
 
     public void prepareAppTransition(int transit) {
@@ -9809,6 +9835,7 @@ public class WindowManagerService extends IWindowManager.Stub
                         pids[i] = pidCandidates.keyAt(i);
                     }
                     try {
+                    	Log.e(TAG, "Kill processes to Free memory. (ActivityManager.killPids)");
                         if (mActivityManager.killPids(pids, "Free memory")) {
                             killedApps = true;
                         }

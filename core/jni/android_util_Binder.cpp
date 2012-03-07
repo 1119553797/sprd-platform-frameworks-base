@@ -103,7 +103,7 @@ static struct binderproxy_offsets_t
     // Object state.
     jfieldID mObject;
     jfieldID mSelf;
-
+    jfieldID mDesc;
 } gBinderProxyOffsets;
 
 // ----------------------------------------------------------------------------
@@ -478,6 +478,14 @@ jobject javaObjectForIBinder(JNIEnv* env, const sp<IBinder>& val)
         // Note that a new object reference has been created.
         android_atomic_inc(&gNumProxyRefs);
         incRefsCreated(env);
+
+        // Add by liwd to init the mDesc in java object.
+        IBinder* target = (IBinder*) env->GetIntField(object, gBinderProxyOffsets.mObject);
+		if (target != NULL) {
+			const String16& desc = target->getInterfaceDescriptor();
+			jstring str = env->NewString(desc.string(), desc.size());
+			env->SetObjectField(object, gBinderProxyOffsets.mDesc, str);
+		}
     }
 
     return object;
@@ -1089,6 +1097,11 @@ static int int_register_android_os_BinderProxy(JNIEnv* env)
     gBinderProxyOffsets.mSelf
         = env->GetFieldID(clazz, "mSelf", "Ljava/lang/ref/WeakReference;");
     assert(gBinderProxyOffsets.mSelf);
+
+    // Add by liwd
+    gBinderProxyOffsets.mDesc
+            = env->GetFieldID(clazz, "mDesc", "Ljava/lang/String;");
+	assert(gBinderProxyOffsets.mDesc);
 
     return AndroidRuntime::registerNativeMethods(
         env, kBinderProxyPathName,

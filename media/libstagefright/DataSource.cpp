@@ -19,6 +19,7 @@
 #include "include/MPEG4Extractor.h"
 #include "include/WAVExtractor.h"
 #include "include/OggExtractor.h"
+#include "include/AVIExtractor.h"
 #include "include/MPEG2TSExtractor.h"
 #include "include/NuCachedSource2.h"
 #include "include/NuHTTPDataSource.h"
@@ -105,6 +106,7 @@ void DataSource::RegisterDefaultSniffers() {
     RegisterSniffer(SniffOgg);
     RegisterSniffer(SniffWAV);
     RegisterSniffer(SniffAMR);
+    RegisterSniffer(SniffAVI);
     RegisterSniffer(SniffMPEG2TS);
     RegisterSniffer(SniffMP3);
     RegisterSniffer(SniffAAC);

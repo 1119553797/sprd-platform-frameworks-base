@@ -369,6 +369,7 @@ public class MimeTypeMap {
             sMimeTypeMap.loadEntry("application/x-xfig", "fig");
             sMimeTypeMap.loadEntry("application/xhtml+xml", "xhtml");
             sMimeTypeMap.loadEntry("audio/3gpp", "3gpp");
+	    sMimeTypeMap.loadEntry("audio/amr", "amr");
             sMimeTypeMap.loadEntry("audio/basic", "snd");
             sMimeTypeMap.loadEntry("audio/midi", "mid");
             sMimeTypeMap.loadEntry("audio/midi", "midi");

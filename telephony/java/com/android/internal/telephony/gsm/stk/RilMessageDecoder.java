@@ -158,7 +158,7 @@ class RilMessageDecoder extends HierarchicalStateMachine {
                 }
             } catch (Exception e) {
                 // zombie messages are dropped
-                StkLog.d(this, "decodeMessageParams dropping zombie messages");
+                StkLog.d(this, "[stk] decodemessage Exception e:" + e);
                 decodingStarted = false;
                 break;
             }

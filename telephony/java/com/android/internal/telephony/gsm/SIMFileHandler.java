@@ -84,6 +84,10 @@ public class SIMFileHandler extends IccFileHandler implements IccConstants {
         case EF_INFO_CPHS:
             return MF_SIM + DF_GSM;
 
+        //Icon Display Add Start
+        case EF_IMG:
+            return DF_GRAPHICS;
+        //Icon Display Add End
         case EF_PBR:
             // we only support global phonebook.
             return MF_SIM + DF_TELECOM + DF_PHONEBOOK;

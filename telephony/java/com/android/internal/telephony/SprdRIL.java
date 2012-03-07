@@ -893,7 +893,7 @@ public final class SprdRIL extends RIL {
 				case RIL_UNSOL_VIDEOPHONE_CODEC: ret = responseInts(p); break;
 				case RIL_UNSOL_VIDEOPHONE_STRING: ret = responseString(p); break;
 				case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: ret = responseInts(p); break;
-				case RIL_UNSOL_VIDEOPHONE_MM_RING: ret = responseInts(p); break;
+				case RIL_UNSOL_VIDEOPHONE_RELEASING: ret = responseString(p); break;
 				case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: ret = responseInts(p); break;
 				case RIL_UNSOL_VIDEOPHONE_DSCI: ret = responseDSCI(p); break;
 				case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:ret =  responseVoid(p); break;
@@ -1271,19 +1271,12 @@ public final class SprdRIL extends RIL {
 										}
 										break;
 									}
-				case RIL_UNSOL_VIDEOPHONE_MM_RING: {
+				case RIL_UNSOL_VIDEOPHONE_RELEASING: {
 									   if (RILJ_LOGD) unsljLogRet(response, ret);
-
-									   int[] params = (int[])ret;
-
-									   if(params.length == 1) {
-										   if (mVPMMRingRegistrant != null) {
-											   mVPMMRingRegistrant
-												   .notifyRegistrant(new AsyncResult(null, params, null));
-										   }
-									   } else {
-										   if (RILJ_LOGD) riljLog(" RIL_UNSOL_VIDEOPHONE_MM_RING ERROR with wrong length "
-												   + params.length);
+									   
+									   String str = (String)ret;
+									   if (mVPFailRegistrant != null) {
+										       mVPFailRegistrant.notifyRegistrant(new AsyncResult(null, new AsyncResult(str, 1000, null), null));
 									   }
 									   break;
 								   }
@@ -1437,7 +1430,7 @@ public final class SprdRIL extends RIL {
 		            case RIL_UNSOL_VIDEOPHONE_DSCI: return "UNSOL_VIDEOPHONE_DSCI";
 		            case RIL_UNSOL_VIDEOPHONE_STRING: return "UNSOL_VIDEOPHONE_STRING";
 		            case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: return "UNSOL_VIDEOPHONE_REMOTE_MEDIA";
-		            case RIL_UNSOL_VIDEOPHONE_MM_RING: return "UNSOL_VIDEOPHONE_MM_RING";
+		            case RIL_UNSOL_VIDEOPHONE_RELEASING: return "RIL_UNSOL_VIDEOPHONE_RELEASING";
 		            case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: return "UNSOL_VIDEOPHONE_RECORD_VIDEO";
 			     case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED: return "UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED";
 			     case RIL_UNSOL_SIM_SMS_READY: return "UNSOL_SIM_SMS_READY";

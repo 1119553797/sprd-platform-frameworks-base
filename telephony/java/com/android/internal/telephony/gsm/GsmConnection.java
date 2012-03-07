@@ -137,7 +137,7 @@ public class GsmConnection extends Connection {
 
     /** This is an MO call, created when dialing */
     /*package*/
-    GsmConnection (Context context, String dialString, GsmCallTracker ct, GsmCall parent) {
+    GsmConnection (Context context, String dialString, GsmCallTracker ct, GsmCall parent, boolean isStkCall) {
         createWakeLock(context);
         acquireWakeLock();
 
@@ -147,7 +147,14 @@ public class GsmConnection extends Connection {
         this.dialString = dialString;
 
         this.address = PhoneNumberUtils.extractNetworkPortionAlt(dialString);
-        this.postDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
+        log("GsmConnection: isStkCall=" + isStkCall);
+        super.setStkCall(isStkCall);
+        if (!isStkCall) {
+            this.postDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
+        } else {
+            this.postDialString = "";
+        }
+        log("[dtmf]GsmConnection postDialString = " + this.postDialString);
 
         index = -1;
 
@@ -535,6 +542,7 @@ public class GsmConnection extends Connection {
     private boolean
     processPostDialChar(char c) {
         if (PhoneNumberUtils.is12Key(c)) {
+            log("[dtmf]processPostDialChar c = " + c);
             owner.cm.sendDtmf(c, h.obtainMessage(EVENT_DTMF_DONE));
         } else if (c == PhoneNumberUtils.PAUSE) {
             // From TS 22.101:
@@ -618,6 +626,7 @@ public class GsmConnection extends Connection {
 
             c = postDialString.charAt(nextPostDialChar++);
 
+            log("[dtmf]processNextPostDialChar postDialString = " + postDialString);
             isValid = processPostDialChar(c);
 
             if (!isValid) {

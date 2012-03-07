@@ -384,9 +384,17 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				response = lc.onLoaded;
 
 				iccException = result.getException();
+                //Icon Display Start
 				if (iccException != null) {
 					sendResult(response, result.payload, ar.exception);
+                } else {
+                    phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid, getEFPath(lc.efid),
+                                    lc.recordNum,
+                                    READ_RECORD_MODE_ABSOLUTE,
+                                    lc.recordSize, null, null,
+                                    obtainMessage(EVENT_READ_RECORD_DONE, lc));
 				}
+                //Icon Display End
 				break;
 			case EVENT_READ_ICON_DONE:
 				ar = (AsyncResult) msg.obj;
@@ -394,9 +402,12 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				result = (IccIoResult) ar.result;
 
 				iccException = result.getException();
+                //Icon Display Start
 				if (iccException != null) {
 					sendResult(response, result.payload, ar.exception);
-				}
+                } else {
+                    sendResult(response, result.payload, null);                }
+                //Icon Display End
 				break;
 			case EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE:
 				ar = (AsyncResult) msg.obj;

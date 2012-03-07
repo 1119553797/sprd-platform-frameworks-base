@@ -33,7 +33,9 @@ namespace android {
 
 class Parcel;
 class ISurface;
-
+#ifdef USE_GETFRAME
+class VideoFrame;
+#endif
 template<typename T> class SortedVector;
 
 enum player_type {
@@ -145,6 +147,9 @@ public:
     };
 
     virtual void        sendEvent(int msg, int ext1=0, int ext2=0) { if (mNotify) mNotify(mCookie, msg, ext1, ext2); }
+#ifdef USE_GETFRAME
+    virtual status_t    getFrameAt(int msec, VideoFrame** pvframe) = 0;
+#endif
 
 protected:
     void*               mCookie;
@@ -157,6 +162,9 @@ class MediaPlayerInterface : public MediaPlayerBase
 public:
     virtual             ~MediaPlayerInterface() { }
     virtual bool        hardwareOutput() { return false; }
+#ifdef USE_GETFRAME
+    virtual status_t    getFrameAt(int msec, VideoFrame** pvframe){return 0;}
+#endif
     virtual void        setAudioSink(const sp<AudioSink>& audioSink) { mAudioSink = audioSink; }
 protected:
     sp<AudioSink>       mAudioSink;

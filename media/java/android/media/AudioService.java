@@ -2200,6 +2200,7 @@ public class AudioService extends IAudioService.Stub {
             synchronized(mAudioFocusLock) {
                 Log.w(TAG, "  AudioFocus   audio focus client died");
                 removeFocusStackEntryForClient(mCb);
+                mCb.unlinkToDeath(this, 0);
             }
         }
 

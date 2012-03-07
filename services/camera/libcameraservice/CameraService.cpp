@@ -79,7 +79,8 @@ CameraService::CameraService()
         mNumberOfCameras = MAX_CAMERAS;
     }
 
-    for (int i = 0; i < mNumberOfCameras; i++) {
+    //for (int i = 0; i < mNumberOfCameras; i++) {
+    for (int i = 0; i < MAX_CAMERAS; i++) {
         setCameraFree(i);
     }
 
@@ -103,7 +104,10 @@ int32_t CameraService::getNumberOfCameras() {
 status_t CameraService::getCameraInfo(int cameraId,
                                       struct CameraInfo* cameraInfo) {
     if (cameraId < 0 || cameraId >= mNumberOfCameras) {
-        return BAD_VALUE;
+        //wxz20120302: add the update for the VT.
+        mNumberOfCameras = HAL_getNumberOfCameras();  
+        if (cameraId < 0 || cameraId >= mNumberOfCameras)
+            return BAD_VALUE;
     }
 
     HAL_getCameraInfo(cameraId, cameraInfo);
@@ -639,8 +643,8 @@ status_t CameraService::Client::startCameraMode(camera_mode mode) {
             return startPreviewMode();
         case CAMERA_RECORDING_MODE:
             if (mSurface == 0) {
-                LOGE("mSurface must be set before startRecordingMode.");
-                return INVALID_OPERATION;
+                //LOGE("mSurface must be set before startRecordingMode.");
+                //return INVALID_OPERATION;
             }
             return startRecordingMode();
         default:

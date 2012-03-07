@@ -759,4 +759,10 @@ public class RingtoneManager {
         return null;
     }
     /* ===== fixed CR<NEWMS00109311> by luning at 2011.11.18 end =====*/
+
+    //add by bug 10729 start 2012-2-17
+    public int getDefaultRingtonePosition(){
+        return getRingtonePosition(getDefaultUri());
+    }
+    //add by bug 10729 end 2012-2-17
 }

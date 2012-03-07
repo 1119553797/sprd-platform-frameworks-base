@@ -566,16 +566,21 @@ class DeviceStorageMonitorService extends Binder {
             return GET_MEMORY_ERROR;
         }
 
-        try {
+//        try {
+        	/*
             String lastread = null;
             ParceledListSlice<PackageInfo> slice = myPm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES, lastread);
             final List<PackageInfo> packages = new ArrayList<PackageInfo>();
             slice.populateList(packages, PackageInfo.CREATOR);
-
+        	*/ 
+        //bug#12297
+        	final List<PackageInfo> packages = getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
             int count = packages.size();
 
             for (int p = 0; p < count; p++) {
                 PackageInfo info = packages.get(p);
+                
+                if(DEBUG)Log.w(TAG, "package:["+info.packageName+"]");
 
                 if ((info.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0) {
                     continue;
@@ -592,28 +597,27 @@ class DeviceStorageMonitorService extends Binder {
                     // Process the package statistics
                     myPackageStats = mSizeObserver.stats;
                     boolean succeeded = mSizeObserver.succeeded;
-
                     if (succeeded && myPackageStats == null) {
                         return GET_MEMORY_ERROR;
                     }
 
                     if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-                        if (info.packageName == mMAILPACKAGE) {
+                        if ( mMAILPACKAGE.equals(info.packageName)) {
                             myMailSize += myPackageStats.dataSize;
                             continue;
                         }
-                        if (info.packageName == mMMSPACKAGE) {
+                        if (mMMSPACKAGE.equals(info.packageName)) {
                             mySmsMmsSize += myPackageStats.dataSize;
                             continue;
                         }
                         myApplicationSize += myPackageStats.dataSize;
 
                     } else {
-                        if (info.packageName == mMAILPACKAGE) {
+                        if (mMAILPACKAGE.equals(info.packageName)) {
                             myMailSize += myPackageStats.dataSize + myPackageStats.codeSize;
                             continue;
                         }
-                        if (info.packageName == mMMSPACKAGE) {
+                        if (mMMSPACKAGE.equals(info.packageName)) {
                             mySmsMmsSize += myPackageStats.dataSize + myPackageStats.codeSize;
                             continue;
                         }
@@ -622,14 +626,33 @@ class DeviceStorageMonitorService extends Binder {
                     }
                 }
             }
-        } catch (RemoteException e) {
-            Slog.e(TAG, "PM service is not running");
-        }
+//        } catch (RemoteException e) {
+//            Slog.e(TAG, "PM service is not running");
+//        }
         final int mKiloSize = 1024;
         myApplicationMemory = myApplicationSize / mKiloSize;
         myMailMemory = myMailSize / mKiloSize;
         mySmsMmsMemory = mySmsMmsSize / mKiloSize;
+        if(DEBUG)Log.w(TAG, "myMailMemory :"+myMailMemory+" KB , mySmsMmsMemory :"+mySmsMmsMemory+" KB");
         return GET_MEMORY_SUCCUESS;
+    }
+    
+    public List<PackageInfo> getInstalledPackages(int flags) {
+        try {
+            final List<PackageInfo> packageInfos = new ArrayList<PackageInfo>();
+            PackageInfo lastItem = null;
+            ParceledListSlice<PackageInfo> slice;
+
+            do {
+                final String lastKey = lastItem != null ? lastItem.packageName : null;
+                slice = myPm.getInstalledPackages(flags, lastKey);
+                lastItem = slice.populateList(packageInfos, PackageInfo.CREATOR);
+            } while (!slice.isLastSlice());
+
+            return packageInfos;
+        } catch (RemoteException e) {
+            throw new RuntimeException("Package manager has died", e);
+        }
     }
 
     public long[] callOK() {
