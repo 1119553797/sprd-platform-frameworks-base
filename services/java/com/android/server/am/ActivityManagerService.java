@@ -2831,7 +2831,9 @@ public final class ActivityManagerService extends ActivityManagerNative
             try {
                 // 0 == continue, -1 = kill process immediately
                 int res = mController.appEarlyNotResponding(app.processName, app.pid, annotation);
-                if (res < 0 && app.pid != MY_PID) Process.killProcess(app.pid);
+                if (res < 0 && app.pid != MY_PID) 
+                	Process.killProcess(app.pid, TAG, "appNotResponding (first position:2835)");
+                	//Process.killProcess(app.pid); //Mondified by liwd@spreadst.com
             } catch (RemoteException e) {
                 mController = null;
             }
@@ -2931,7 +2933,9 @@ public final class ActivityManagerService extends ActivityManagerNative
                 // 0 == show dialog, 1 = keep waiting, -1 = kill process immediately
                 int res = mController.appNotResponding(app.processName, app.pid, info.toString());
                 if (res != 0) {
-                    if (res < 0 && app.pid != MY_PID) Process.killProcess(app.pid);
+                    if (res < 0 && app.pid != MY_PID) 
+                    	Process.killProcess(app.pid, TAG, "appNotResponding (second position:2937)");
+//                    	Process.killProcess(app.pid); //Mondified by liwd@spreadst.com
                     return;
                 }
             } catch (RemoteException e) {
@@ -2945,7 +2949,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         
         synchronized (this) {
             if (!showBackground && !app.isInterestingToUserLocked() && app.pid != MY_PID) {
-                Process.killProcess(app.pid);
+            	Process.killProcess(app.pid, TAG, "appNotResponding (third position:2952)");
+//                Process.killProcess(app.pid);//Mondified by liwd@spreadst.com
                 return;
             }
     
@@ -3354,7 +3359,8 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
             handleAppDiedLocked(app, true);
             mLruProcesses.remove(app);
-            Process.killProcess(pid);
+            Process.killProcess(pid, TAG, "removeProcessLocked, porcessName = " + name);
+//            Process.killProcess(pid);//Mondified by liwd@spreadst.com
             
             if (app.persistent) {
                 if (!callerWillRestart) {
@@ -3403,7 +3409,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                     bringDownServiceLocked(sr, true);
                 }
             }
-            Process.killProcess(pid);
+            Process.killProcess(pid, TAG, "processStartTimedOutLocked, processName = " + app.processName);
+//            Process.killProcess(pid);//Mondified by liwd@spreadst.com
             if (mBackupTarget != null && mBackupTarget.app.pid == pid) {
                 Slog.w(TAG, "Unattached app died before backup, skipping");
                 try {
@@ -3449,7 +3456,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                     + " (IApplicationThread " + thread + "); dropping process");
             EventLog.writeEvent(EventLogTags.AM_DROP_PROCESS, pid);
             if (pid > 0 && pid != MY_PID) {
-                Process.killProcess(pid);
+            	Process.killProcess(pid, TAG, "attachApplicationLocked, process is null");
+//                Process.killProcess(pid);//Mondified by liwd@spreadst.com
             } else {
                 try {
                     thread.scheduleExit();
@@ -5949,7 +5957,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (worstType < EMPTY_APP_ADJ && worstType > HIDDEN_APP_MIN_ADJ) {
                 worstType = HIDDEN_APP_MIN_ADJ;
             }
-            Slog.w(TAG, "Killing processes " + reason + " at adjustment " + worstType);
+            Slog.e(TAG, "Killing processes " + reason + " at adjustment " + worstType);
             for (int i=0; i<pids.length; i++) {
                 ProcessRecord proc = mPidsSelfLocked.get(pids[i]);
                 if (proc == null) {
@@ -5957,7 +5965,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
                 int adj = proc.setAdj;
                 if (adj >= worstType && !proc.killedBackground) {
-                    Slog.w(TAG, "Killing " + proc + " (adj " + adj + "): " + reason);
+                    Slog.e(TAG, "Killing " + proc + " (adj " + adj + "): " + reason);
                     EventLog.writeEvent(EventLogTags.AM_KILL, proc.pid,
                             proc.processName, adj, reason);
                     killed = true;
@@ -6357,7 +6365,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
             if (app.pid > 0 && app.pid != MY_PID) {
                 handleAppCrashLocked(app);
-                Slog.i(ActivityManagerService.TAG, "Killing "
+                Slog.e(ActivityManagerService.TAG, "Killing "
                         + app.processName + " (pid=" + app.pid + "): user's request");
                 EventLog.writeEvent(EventLogTags.AM_KILL, app.pid,
                         app.processName, app.setAdj, "user's request after error");
@@ -6879,7 +6887,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     int pid = r != null ? r.pid : Binder.getCallingPid();
                     if (!mController.appCrashed(name, pid,
                             shortMsg, longMsg, timeMillis, crashInfo.stackTrace)) {
-                        Slog.w(TAG, "Force-killing crashed app " + name
+                        Slog.e(TAG, "Force-killing crashed app " + name
                                 + " at watcher's request");
                         Process.killProcess(pid);
                         return;
@@ -8228,7 +8236,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (!capp.persistent && capp.thread != null
                     && capp.pid != 0
                     && capp.pid != MY_PID) {
-                Slog.i(TAG, "Kill " + capp.processName
+                Slog.e(TAG, "Kill " + capp.processName
                         + " (pid " + capp.pid + "): provider " + cpr.info.name
                         + " in dying process " + proc.processName);
                 EventLog.writeEvent(EventLogTags.AM_KILL, capp.pid,
@@ -12001,7 +12009,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         stats.reportExcessiveWakeLocked(app.info.uid, app.processName,
                                 realtimeSince, wtimeUsed);
                     }
-                    Slog.w(TAG, "Excessive wake lock in " + app.processName
+                    Slog.e(TAG, "Excessive wake lock in " + app.processName
                             + " (pid " + app.pid + "): held " + wtimeUsed
                             + " during " + realtimeSince);
                     EventLog.writeEvent(EventLogTags.AM_KILL, app.pid,
@@ -12013,7 +12021,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         stats.reportExcessiveCpuLocked(app.info.uid, app.processName,
                                 uptimeSince, cputimeUsed);
                     }
-                    Slog.w(TAG, "Excessive CPU in " + app.processName
+                    Slog.e(TAG, "Excessive CPU in " + app.processName
                             + " (pid " + app.pid + "): used " + cputimeUsed
                             + " during " + uptimeSince);
                     EventLog.writeEvent(EventLogTags.AM_KILL, app.pid,
@@ -12185,7 +12193,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     if (!app.killedBackground) {
                         numHidden++;
                         if (numHidden > MAX_HIDDEN_APPS) {
-                            Slog.i(TAG, "No longer want " + app.processName
+                            Slog.e(TAG, "No longer want " + app.processName
                                     + " (pid " + app.pid + "): hidden #" + numHidden);
                             EventLog.writeEvent(EventLogTags.AM_KILL, app.pid,
                                     app.processName, app.setAdj, "too many background");
@@ -12221,7 +12229,11 @@ public final class ActivityManagerService extends ActivityManagerNative
                         + (app.thread != null ? app.thread.asBinder() : null)
                         + ")\n");
                     if (app.pid > 0 && app.pid != MY_PID) {
-                        Process.killProcess(app.pid);
+                    	Process.killProcess(app.pid, TAG, "trimApplications, Exiting empty application process "
+                                + app.processName + " ("
+                                + (app.thread != null ? app.thread.asBinder() : null)
+                                + ")\n");
+//                        Process.killProcess(app.pid);//Modified by liwd@spreadst.com
                     } else {
                         try {
                             app.thread.scheduleExit();
@@ -12287,7 +12299,11 @@ public final class ActivityManagerService extends ActivityManagerNative
                             + (app.thread != null ? app.thread.asBinder() : null)
                             + ")\n");
                         if (app.pid > 0 && app.pid != MY_PID) {
-                            Process.killProcess(app.pid);
+                        	Process.killProcess(app.pid, TAG, "trimApplications, Exiting empty application process "
+                                    + app.processName + " ("
+                                    + (app.thread != null ? app.thread.asBinder() : null)
+                                    + ")\n");
+//                            Process.killProcess(app.pid);//Modified by liwd@spreadst.com
                         } else {
                             try {
                                 app.thread.scheduleExit();
@@ -12344,7 +12360,11 @@ public final class ActivityManagerService extends ActivityManagerNative
                               + (app.thread != null ? app.thread.asBinder() : null)
                               + ")\n");
                         if (app.pid > 0 && app.pid != MY_PID) {
-                            Process.killProcess(app.pid);
+                        	Process.killProcess(app.pid, TAG, "trimApplications, Exiting application process "
+                              + app.processName + " ("
+                              + (app.thread != null ? app.thread.asBinder() : null)
+                              + ")\n");
+//                            Process.killProcess(app.pid);//Modified by liwd@spreadst.com
                         } else {
                             try {
                                 app.thread.scheduleExit();

@@ -9835,6 +9835,7 @@ public class WindowManagerService extends IWindowManager.Stub
                         pids[i] = pidCandidates.keyAt(i);
                     }
                     try {
+                    	Log.e(TAG, "Kill processes to Free memory. (ActivityManager.killPids)");
                         if (mActivityManager.killPids(pids, "Free memory")) {
                             killedApps = true;
                         }

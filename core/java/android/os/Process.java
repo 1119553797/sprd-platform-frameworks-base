@@ -748,6 +748,12 @@ public class Process {
         sendSignal(pid, SIGNAL_KILL);
     }
 
+    //Add by liwd@spreadst.com to log more infomation when process is killed
+    public static final void killProcess(int pid, String tag, String reason) {
+    	if (tag != null) Log.e(tag, "Kill process [" + pid + "] because : " + reason);
+    	sendSignal(pid, SIGNAL_KILL);
+    }
+    
     /** @hide */
     public static final native int setUid(int uid);
 
@@ -772,6 +778,12 @@ public class Process {
         sendSignalQuiet(pid, SIGNAL_KILL);
     }
 
+    //Add by liwd@spreadst.com to log more infomation when process is killed
+    public static final void killProcessQuiet(int pid, String tag, String reason) {
+    	if (tag != null) Log.e(tag, "Kill process [" + pid + "] because : " + reason);
+        sendSignalQuiet(pid, SIGNAL_KILL);
+    }
+    
     /**
      * @hide
      * Private impl for avoiding a log message...  DO NOT USE without doing
