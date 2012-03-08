@@ -2080,7 +2080,7 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
  //           mLooper->start();
  	   mLooper->start(false /* runOnCallingThread */,
                           false /* canCallJava */,
-                        ANDROID_PRIORITY_DISPLAY); //@hong ANDROID_PRIORITY_DISPLAY ANDROID_PRIORITY_HIGHEST 
+                          ANDROID_PRIORITY_DISPLAY); //@hong
 			
         }
         mRTSPController = new ARTSPController(mLooper);
