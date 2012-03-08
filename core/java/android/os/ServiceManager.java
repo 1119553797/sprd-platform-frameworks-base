@@ -52,6 +52,9 @@ public final class ServiceManager {
             if (service != null) {
                 return service;
             } else {
+//                return getIServiceManager().getService(name);
+            	if(getIServiceManager() == null) // fix bug 11381 on 8810
+            		return null;
                 return getIServiceManager().getService(name);
             }
         } catch (RemoteException e) {

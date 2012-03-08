@@ -30,6 +30,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.telephony.IccCard;
 import android.text.Editable;
 import android.view.Gravity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -161,6 +162,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mOkButton.setOnClickListener(this);
         mUpdateMonitor.registerInfoCallback(this);
         setFocusableInTouchMode(true);
+        mUpdateMonitor.registerInfoCallback(this);
     }
 
     /** {@inheritDoc} */

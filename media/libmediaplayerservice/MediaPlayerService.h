@@ -29,6 +29,9 @@
 #include <media/IMediaPlayerService.h>
 #include <media/MediaPlayerInterface.h>
 #include <media/Metadata.h>
+#ifdef USE_GETFRAME
+#include <binder/MemoryDealer.h>
+#endif
 
 namespace android {
 
@@ -221,6 +224,9 @@ private:
         virtual status_t        getDuration(int* msec);
         virtual status_t        reset();
         virtual status_t        setAudioStreamType(int type);
+#ifdef USE_GETFRAME
+        virtual sp<IMemory>   getFrameAt(int msec);
+#endif
         virtual status_t        setLooping(int loop);
         virtual status_t        setVolume(float leftVolume, float rightVolume);
         virtual status_t        invoke(const Parcel& request, Parcel *reply);
@@ -296,6 +302,10 @@ private:
 
 #if CALLBACK_ANTAGONIZER
                     Antagonizer*                mAntagonizer;
+#endif
+#ifdef USE_GETFRAME
+        sp<MemoryDealer>                       mVideoFrameDealer;
+        sp<IMemory>                            mVideoFrame;
 #endif
     };
 

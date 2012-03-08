@@ -107,9 +107,13 @@ public class VCardEntry {
             return String.format("type: %d, data: %s, label: %s, isPrimary: %s",
                     type, data, label, isPrimary);
         }
+
+        public boolean isEmpty(){
+             return TextUtils.isEmpty(data);
+        }
     }
 
-    public static class EmailData {
+    static public class EmailData {
         public final int type;
         public final String data;
         // Used only when TYPE is TYPE_CUSTOM.
@@ -137,11 +141,15 @@ public class VCardEntry {
             return String.format("type: %d, data: %s, label: %s, isPrimary: %s",
                     type, data, label, isPrimary);
         }
+
+        public boolean isEmpty(){
+            return TextUtils.isEmpty(data);
+        }
     }
 
-    public static class PostalData {
-        // Determined by vCard specification.
-        // - PO Box, Extended Addr, Street, Locality, Region, Postal Code, Country Name
+    static public class PostalData {
+        // Determined by vCard spec.
+        // PO Box, Extended Addr, Street, Locality, Region, Postal Code, Country Name
         public static final int ADDR_MAX_DATA_SIZE = 7;
         private final String[] dataArray;
         public final String pobox;
@@ -244,6 +252,13 @@ public class VCardEntry {
             return String.format("type: %d, label: %s, isPrimary: %s",
                     type, label, isPrimary);
         }
+        public boolean isEmpty(){
+            if(dataArray != null && dataArray.length > 0){
+                List<String> al = (List<String>) Arrays.asList(dataArray);
+                return !listIsValid(al);
+            }
+            return true;
+        }
     }
 
     public static class OrganizationData {
@@ -313,9 +328,13 @@ public class VCardEntry {
                     "type: %d, company: %s, department: %s, title: %s, isPrimary: %s",
                     type, companyName, departmentName, titleName, isPrimary);
         }
+
+        public boolean isEmpty(){
+        	return TextUtils.isEmpty(companyName) && TextUtils.isEmpty(departmentName);
+        }
     }
 
-    public static class ImData {
+    static public class ImData {
         public final int protocol;
         public final String customProtocol;
         public final int type;
@@ -350,6 +369,10 @@ public class VCardEntry {
                     "type: %d, protocol: %d, custom_protcol: %s, data: %s, isPrimary: %s",
                     type, protocol, customProtocol, data, isPrimary);
         }
+
+        public boolean isEmpty(){
+        	return TextUtils.isEmpty(data);
+        }
     }
 
     public static class PhotoData {
@@ -383,6 +406,10 @@ public class VCardEntry {
         public String toString() {
             return String.format("type: %d, format: %s: size: %d, isPrimary: %s",
                     type, formatName, photoBytes.length, isPrimary);
+        }
+
+        public boolean isEmpty(){
+        	return photoBytes == null || photoBytes.length <= 0;
         }
     }
 
@@ -513,8 +540,10 @@ public class VCardEntry {
             final int formattingType = VCardUtils.getPhoneNumberFormat(mVCardType);
             formattedNumber = PhoneNumberUtils.formatNumber(builder.toString(), formattingType);
         }
-        PhoneData phoneData = new PhoneData(type, formattedNumber, label, isPrimary);
-        mPhoneList.add(phoneData);
+        if(!TextUtils.isEmpty(formattedNumber)){
+            PhoneData phoneData = new PhoneData(type, formattedNumber, label, isPrimary);
+            mPhoneList.add(phoneData);
+        }
     }
 
     private void addNickName(final String nickName) {
@@ -1511,5 +1540,104 @@ public class VCardEntry {
             constructDisplayName();
         }
         return mDisplayName;
+    }
+
+
+    /**
+     * to judge the data of VCard is valid.
+     * when all member is empty or null return false; or return true
+     * @return
+     */
+    public boolean isValid(){
+    	if(!TextUtils.isEmpty(mFamilyName)){
+    		return true;
+    	}
+    	if(!TextUtils.isEmpty(mGivenName)){
+    		return true;
+    	}
+    	if(!TextUtils.isEmpty(mMiddleName)){
+    		return true;
+    	}
+    	if(!TextUtils.isEmpty(mFormattedName)){
+    		return true;
+    	}
+    	if(!TextUtils.isEmpty(mPhoneticFamilyName)){
+    		return true;
+    	}
+    	if(!TextUtils.isEmpty(mPhoneticGivenName)){
+    		return true;
+    	}
+    	if(!TextUtils.isEmpty(mPhoneticFullName)){
+    		return true;
+    	}
+    	if(listIsValid(mNickNameList)){
+    		return true;
+    	}
+    	if(listIsValid(mNoteList)){
+    		return true;
+    	}
+    	if(listIsValid(mPhoneList)){
+    		return true;
+    	}
+    	if(listIsValid(mEmailList)){
+    		return true;
+    	}
+    	if(listIsValid(mPostalList)){
+    		return true;
+    	}
+    	if(listIsValid(mOrganizationList)){
+    		return true;
+    	}
+    	if(listIsValid(mImList)){
+    		return true;
+    	}
+    	if(listIsValid(mPhotoList)){
+    		return true;
+    	}
+    	if(listIsValid(mWebsiteList)){
+    		return true;
+    	}
+    	if(listIsValid(mAndroidCustomPropertyList)){
+    		return true;
+    	}
+    	return false;
+    }
+
+    private static boolean listIsValid(List list){
+    	if(list == null){
+    		return false;
+    	}
+    	boolean allItemIsEmpty = true;
+    	for(Object obj : list){
+    		if(obj != null){
+    			if(obj instanceof String){
+    				allItemIsEmpty = TextUtils.isEmpty((String)obj);
+    			}else if (obj instanceof PhoneData){
+    				PhoneData data = (PhoneData) obj;
+    				allItemIsEmpty = data.isEmpty();
+    			}else if(obj instanceof EmailData){
+    				EmailData data = (EmailData) obj;
+    				allItemIsEmpty = data.isEmpty();
+    			}else if(obj instanceof PostalData){
+    				PostalData data = (PostalData) obj;
+    				allItemIsEmpty = data.isEmpty();
+    			}else if(obj instanceof ImData){
+    				ImData data = (ImData) obj;
+    				allItemIsEmpty = data.isEmpty();
+    			}else if(obj instanceof OrganizationData){
+    				OrganizationData data = (OrganizationData) obj;
+    				allItemIsEmpty = data.isEmpty();
+    			}else if(obj instanceof List){
+    				List l = (List) obj;
+    				allItemIsEmpty = listIsValid(l);
+    			}else{
+    				allItemIsEmpty = false;
+    			}
+    			if(!allItemIsEmpty){
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
     }
 }

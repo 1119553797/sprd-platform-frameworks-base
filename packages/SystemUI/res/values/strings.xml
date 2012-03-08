@@ -72,6 +72,12 @@
     <!-- Checkbox label for USB accessory dialogs.  [CHAR LIMIT=50] -->
     <string name="always_use_accessory">Use by default for this USB accessory</string>
 
+    <!-- add by spreadst_fw -->
+    <string name="mobile_data_connect_disable">Disconnet</string>
+    <string name="mobile_data_connect_enable">Connect</string>
+    <string name="network_disconnect_title">Notice</string>
+    <string name="network_disconnect_message">WLAN network is disconnected. \nConnect via 3G? \nIf you do net have data plan, it may incur additional charges.</string>
+
     <!-- Message  and title for wifi signal being too weak -->
     <string name="weak_signal_title">WEAK SIGNAL</string>
     <string name="weak_signal_message">The current WLAN signal is very weak, recommend that you select a better one</string>

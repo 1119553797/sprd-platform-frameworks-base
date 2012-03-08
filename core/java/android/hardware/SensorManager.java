@@ -22,6 +22,7 @@ import android.os.RemoteException;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -526,7 +527,19 @@ public class SensorManager
                             break;
                     }
 
-                    mSensorEventListener.onSensorChanged(t);
+					boolean isAcceleSensor = t.sensor.getType() == Sensor.TYPE_ACCELEROMETER;
+					// see setting in engineering mode
+					int enable = SystemProperties.getInt(
+							"persist.sys.acce_enable", 1);
+					if (isAcceleSensor) {
+						if (enable == 1) {
+							mSensorEventListener.onSensorChanged(t);
+						} else {
+							Log.d(TAG,"Cannot call onSensorChanged,accelerometer_rotation_enable = "+ enable);
+						}
+					} else {
+						mSensorEventListener.onSensorChanged(t);
+					}
                     returnToPool(t);
                 }
             };

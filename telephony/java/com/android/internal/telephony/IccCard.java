@@ -538,6 +538,7 @@ public abstract class IccCard {
         intent.putExtra(INTENT_KEY_FDN_STAUS, getIccFdnEnabled());
         intent.putExtra(INTENT_KEY_FDN_SIM_REFRESH, INTENT_VALUE_ICC_REFRESH);
         mPhone.getContext().sendBroadcast(intent);
+        broadcastIccStateChangedIntent(INTENT_VALUE_ICC_REFRESH, null);
     }
 
     protected Handler mHandler = new Handler() {

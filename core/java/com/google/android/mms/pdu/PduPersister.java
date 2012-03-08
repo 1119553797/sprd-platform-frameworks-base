@@ -344,6 +344,12 @@ public class PduPersister {
         }
         return null;
     }
+    private byte[] getByteArrayFromPartColumn_Encode(Cursor c, int columnIndex){
+        if (!c.isNull(columnIndex)) {
+            return new EncodedStringValue(c.getString(columnIndex)).getTextString();
+        }
+        return null;
+    }
 
     private PduPart[] loadParts(long msgId) throws MmsException {
         Cursor c = SqliteWrapper.query(mContext, mContentResolver,
@@ -403,7 +409,9 @@ public class PduPersister {
                     part.setFilename(fileName);
                 }
 
-                byte[] name = getByteArrayFromPartColumn(
+//                byte[] name = getByteArrayFromPartColumn(
+//                        c, PART_COLUMN_NAME);
+                byte[] name = getByteArrayFromPartColumn_Encode(
                         c, PART_COLUMN_NAME);
                 if (name != null) {
                     part.setName(name);
@@ -609,6 +617,7 @@ public class PduPersister {
         }
 
         GenericPdu pdu = null;
+        Log.d(TAG, "(2)track for the bug 10688: msgType==>"+msgType);
         switch (msgType) {
             case PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND:
                 pdu = new NotificationInd(headers, phoneId);
@@ -1291,6 +1300,7 @@ public class PduPersister {
      * Find all messages to be sent or downloaded before certain time.
      */
     public Cursor getPendingMessages(long dueTime, int phoneId) {
+        Cursor cursor = null;
         Uri.Builder uriBuilder = PendingMessages.CONTENT_URI.buildUpon();
         uriBuilder.appendQueryParameter("protocol", "mms");
 
@@ -1303,10 +1313,15 @@ public class PduPersister {
                 String.valueOf(dueTime),
                 String.valueOf(phoneId),
         };
-
-        return SqliteWrapper.query(mContext, mContentResolver,
-                uriBuilder.build(), null, selection, selectionArgs,
-                PendingMessages.DUE_TIME);
+        try {
+            cursor = SqliteWrapper.query(mContext, mContentResolver,
+                    uriBuilder.build(), null, selection, selectionArgs,
+                    PendingMessages.DUE_TIME);
+        } catch(IllegalStateException e) {
+            Log.e(TAG, "getPendingMessages(): IllegalStateException!!!");
+            cursor = null;
+        }
+        return cursor;
     }
 
     // newly add for msms

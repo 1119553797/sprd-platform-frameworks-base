@@ -47,6 +47,9 @@ enum {
     RESUME,
     SET_AUX_EFFECT_SEND_LEVEL,
     ATTACH_AUX_EFFECT
+#ifdef USE_GETFRAME
+,    CAPTURE_FRAME 
+#endif
 };
 
 class BpMediaPlayer: public BpInterface<IMediaPlayer>
@@ -159,6 +162,20 @@ public:
         return reply.readInt32();
     }
 
+#ifdef USE_GETFRAME
+    sp<IMemory> getFrameAt(int msec)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPlayer::getInterfaceDescriptor());
+        data.writeInt32(msec);
+        remote()->transact(CAPTURE_FRAME, data, &reply);
+        status_t ret = reply.readInt32();
+        if (ret != NO_ERROR) {
+            return NULL;
+        }
+        return interface_cast<IMemory>(reply.readStrongBinder());
+    }
+#endif
     status_t setLooping(int loop)
     {
         Parcel data, reply;
@@ -321,6 +338,19 @@ status_t BnMediaPlayer::onTransact(
             reply->writeInt32(setAudioStreamType(data.readInt32()));
             return NO_ERROR;
         } break;
+#ifdef USE_GETFRAME
+        case CAPTURE_FRAME: {
+            CHECK_INTERFACE(IMediaPlayer, data, reply);
+            sp<IMemory> bitmap = getFrameAt(data.readInt32());
+            if (bitmap != 0) {  // Don't send NULL across the binder interface
+                reply->writeInt32(NO_ERROR);
+                reply->writeStrongBinder(bitmap->asBinder());
+            } else {
+                reply->writeInt32(UNKNOWN_ERROR);
+            }
+            return NO_ERROR;
+        } break;
+#endif
         case SET_LOOPING: {
             CHECK_INTERFACE(IMediaPlayer, data, reply);
             reply->writeInt32(setLooping(data.readInt32()));

@@ -701,7 +701,7 @@ public final class BluetoothDeviceProfileState extends HierarchicalStateMachine 
                     deferMessage(m);
                     if (mHeadsetService.getPriority(mDevice) ==
                         BluetoothHeadset.PRIORITY_AUTO_CONNECT) {
-                        mHeadsetService.setPriority(mDevice, BluetoothHeadset.PRIORITY_ON);
+                        mHeadsetService.setPriority(mDevice, BluetoothHeadset.PRIORITY_AUTO_CONNECT);
                     }
                     return mHeadsetService.disconnectHeadsetInternal(mDevice);
                 }

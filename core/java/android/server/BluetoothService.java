@@ -322,7 +322,6 @@ public class BluetoothService extends IBluetooth.Stub {
      */
     public synchronized boolean disable(boolean saveSetting) {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM, "Need BLUETOOTH_ADMIN permission");
-
         switch (mBluetoothState) {
         case BluetoothAdapter.STATE_OFF:
             return true;
@@ -341,7 +340,7 @@ public class BluetoothService extends IBluetooth.Stub {
         // TODO: Introduce a callback mechanism so that each profile can notify
         // BluetoothService when it is done shutting down
         mHandler.sendMessageDelayed(
-                mHandler.obtainMessage(MESSAGE_FINISH_DISABLE, saveSetting ? 1 : 0, 0), 3000);
+                mHandler.obtainMessage(MESSAGE_FINISH_DISABLE, saveSetting ? 1 : 0, 0), 1000);
         return true;
     }
 

@@ -133,6 +133,7 @@
     <!-- Interfaces will be prioritized according to the order listed -->
     <string-array translatable="false" name="config_tether_upstream_regexs">
             <item>"veth\\d"</item>
+            <item>"wlan\\d"</item>
     </string-array>
 
     <!-- Boolean indicating if we require the use of DUN on mobile for tethering.
@@ -396,7 +397,7 @@
 
     <!-- Boolean indicating if restoring network selection should be skipped -->
     <!-- The restoring is handled by modem if it is true-->
-    <bool translatable="false" name="skip_restoring_network_selection">false</bool>
+    <bool translatable="false" name="skip_restoring_network_selection">true</bool>
 
     <!-- Do not translate. Defines the slots is Two Digit Number for dialing normally not USSD -->
     <string-array name="config_twoDigitNumberPattern">

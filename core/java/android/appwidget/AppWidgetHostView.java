@@ -232,8 +232,14 @@ public class AppWidgetHostView extends FrameLayout {
                 return ;
             }
             Log.w(TAG, "updateAppWidget couldn't find any view, using error view", exception);
-            content = getErrorView();
-            mViewMode = VIEW_MODE_ERROR;
+			try {
+				System.gc();
+				content = getErrorView();
+				mViewMode = VIEW_MODE_ERROR;
+			}catch(OutOfMemoryError ome){
+				Log.w(TAG,"updateAppWidget error "+ome);
+				return;
+            }
         }
         
         if (!recycled) {

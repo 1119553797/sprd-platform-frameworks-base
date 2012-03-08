@@ -200,6 +200,11 @@ public final class RingtonePickerActivity extends AlertActivity implements
 
         if (mClickedPos == -1) {
             mClickedPos = getListPosition(mRingtoneManager.getRingtonePosition(mExistingUri));
+            //add by bug 10729 start 2012-2-17
+            if(mClickedPos == -1){
+               mClickedPos = getListPosition(mRingtoneManager.getDefaultRingtonePosition());
+            }
+            //add by bug 10729 end 2012-2-17
         }
         
         // Put a checkmark next to an item.

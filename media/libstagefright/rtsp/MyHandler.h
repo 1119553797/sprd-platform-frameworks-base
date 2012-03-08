@@ -54,8 +54,8 @@ static int64_t kDefaultKeepAliveTimeoutUs = 60000000ll;
 namespace android {
 
 static void MakeUserAgentString(AString *s) { //@hong change the prop of useragent.
-//    s->setTo("stagefright/1.1 (Linux;Android ");
-      s->setTo("HUAWEI T2011_TD/1.0");
+      s->setTo("stagefright/1.1 (Linux;Android ");
+      // s->setTo("HUAWEI T2011_TD/1.0");
 #if (PROPERTY_VALUE_MAX < 8)
 #error "PROPERTY_VALUE_MAX must be at least 8"
 #endif

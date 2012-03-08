@@ -60,6 +60,7 @@ private:
     status_t mInitCheck;
     int64_t  mNumDecodedBuffers;
 
+    int mSbr_present_flag;
     MediaBuffer *mInputBuffer;
 
     status_t initCheck();

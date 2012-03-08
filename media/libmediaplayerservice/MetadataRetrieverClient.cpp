@@ -106,10 +106,10 @@ static sp<MediaMetadataRetrieverBase> createRetriever(player_type playerType)
             break;
         }
 #ifndef NO_OPENCORE
-        case PV_PLAYER:
-            LOGV("create pv metadata retriever");
-            p = new PVMetadataRetriever();
-            break;
+        //case PV_PLAYER:
+        //    LOGV("create pv metadata retriever");
+        //    p = new PVMetadataRetriever();
+        //    break;
 #endif
         case SONIVOX_PLAYER:
             LOGV("create midi metadata retriever");

@@ -776,7 +776,7 @@ public class StkService extends Handler implements AppInterface {
                     if (0 == result) {
                         mSimRecords.onRefresh(true, null);
                     }
-                    //handleRefreshCmdResponse(result);
+                    handleRefreshCmdResponse(result);
                 }
             }
             break;

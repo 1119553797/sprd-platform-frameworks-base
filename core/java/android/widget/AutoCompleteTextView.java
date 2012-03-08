@@ -1451,8 +1451,10 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
 
     private class ResizePopupRunnable implements Runnable {
         public void run() {
-            mPopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NOT_NEEDED);
-            showDropDown();
+            if(mPopup != null && mPopup.getContentView() != null) {
+                mPopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NOT_NEEDED);
+                showDropDown();
+            }
         }
     }
 

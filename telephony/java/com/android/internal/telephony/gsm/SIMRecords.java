@@ -532,6 +532,7 @@ public final class SIMRecords extends IccRecords {
             ((GSMPhone) phone).mSimCard.queryFacilityFdnDone();
             Intent intent = new Intent(TelephonyIntents.ACTION_STK_REFRESH_SIM_CONTACTS);
             mContext.sendBroadcast(intent);
+            ((GSMPhone) phone).mSimCard.queryFacilityFdnDone();
         }
     }
 

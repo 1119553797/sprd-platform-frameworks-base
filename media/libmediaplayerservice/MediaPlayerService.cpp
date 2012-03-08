@@ -715,7 +715,7 @@ player_type getPlayerType(int fd, int64_t offset, int64_t length)
     if (ident == 0x75b22630) {
         // The magic number for .asf files, i.e. wmv and wma content.
         // These are not currently supported through stagefright.
-        return PV_PLAYER;
+        //return PV_PLAYER;
     }
 #endif
 
@@ -770,7 +770,7 @@ player_type getPlayerType(const char* url)
 			char value[PROPERTY_VALUE_MAX];
 
 			property_set("stream.sprd.useragent","false");
-
+/*
 		    if (property_get("media.stagefright.enable-rtsp", value, NULL)
 				   && (!strcmp(value, "1") || !strcasecmp(value, "true"))) {
 				   // For now, we're going to use PV for rtsp-based playback
@@ -782,6 +782,8 @@ player_type getPlayerType(const char* url)
 			{
 			  return PV_PLAYER;
 			}
+*/			
+			return PV_PLAYER;
 		}
     }
 
@@ -1119,6 +1121,48 @@ status_t MediaPlayerService::Client::setAudioStreamType(int type)
     return NO_ERROR;
 }
 
+#ifdef USE_GETFRAME
+sp<IMemory> MediaPlayerService::Client::getFrameAt(int msec)
+{
+    LOGV("captureCurrentFrame");
+    sp<MediaPlayerBase> p = getPlayer();
+    if (p == NULL) {
+        LOGE("media player is not initialized");
+        return NULL;
+    }
+    Mutex::Autolock lock(mLock);
+    mVideoFrame.clear();
+    mVideoFrameDealer.clear();
+
+    VideoFrame *frame = NULL;
+    p->getFrameAt(msec, &frame);
+    if (frame == NULL) {
+        LOGE("failed to capture a video frame");
+        return NULL;
+    }
+    size_t size = sizeof(VideoFrame) + frame->mSize;
+    mVideoFrameDealer = new MemoryDealer(size);
+    if (mVideoFrameDealer == NULL) {
+        LOGE("failed to create MemoryDealer");
+        return NULL;
+    }
+    mVideoFrame = mVideoFrameDealer->allocate(size);
+    if (mVideoFrame == NULL) {
+        LOGE("not enough memory for VideoFrame size=%u", size);
+        mVideoFrameDealer.clear();
+        return NULL;
+    }
+    VideoFrame *frameCopy = static_cast<VideoFrame *>(mVideoFrame->pointer());
+    frameCopy->mWidth = frame->mWidth;
+    frameCopy->mHeight = frame->mHeight;
+    frameCopy->mDisplayWidth = frame->mDisplayWidth;
+    frameCopy->mDisplayHeight = frame->mDisplayHeight;
+    frameCopy->mSize = frame->mSize;
+    frameCopy->mData = (uint8_t *)frameCopy + sizeof(VideoFrame);
+    memcpy(frameCopy->mData, frame->mData, frame->mSize);
+    return mVideoFrame;
+}
+#endif
 status_t MediaPlayerService::Client::setLooping(int loop)
 {
     LOGV("[%d] setLooping(%d)", mConnId, loop);
