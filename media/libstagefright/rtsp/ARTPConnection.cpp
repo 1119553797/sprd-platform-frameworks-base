@@ -194,13 +194,7 @@ void ARTPConnection::onAddStream(const sp<AMessage> &msg) {
 
     int32_t s;
     CHECK(msg->findInt32("rtp-socket", &s));
-	int32_t bufsize = 4*65536;
     info->mRTPSocket = s;
-    if (setsockopt(info->mRTPSocket,SOL_SOCKET,SO_RCVBUF,(uint8_t*)&bufsize, sizeof(int32_t)) !=-1)
-    {
-       LOGI("onAddStream set RCVBUF fail");
-	}
-	
     CHECK(msg->findInt32("rtcp-socket", &s));
     info->mRTCPSocket = s;
 
@@ -364,7 +358,7 @@ status_t ARTPConnection::receive(StreamInfo *s, bool receiveRTP) {
 
     CHECK(!s->mIsInjected);
 
-    sp<ABuffer> buffer = new ABuffer(4*65536);
+    sp<ABuffer> buffer = new ABuffer(65536);
 
     socklen_t remoteAddrLen =
         (!receiveRTP && s->mNumRTCPPacketsReceived == 0)

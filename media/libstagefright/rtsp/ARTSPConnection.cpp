@@ -466,7 +466,7 @@ void ARTSPConnection::onReceiveResponse() {
             // Something horrible, irreparable has happened.
 	 		LOGI("onReceiveResponse receive fail");
             flushPendingRequests();
-		    return;
+            return;
         }
 	LOGV("onReceiveResponse SUCCESS");
     }
