@@ -54,6 +54,7 @@ public:
     virtual status_t    getCurrentPosition(int *msec);
     virtual status_t    getDuration(int *msec);
     virtual status_t    reset();
+	virtual status_t    switchtransport();
     virtual status_t    setLooping(int loop);
     virtual player_type playerType() { return PV_PLAYER; }
     virtual status_t    invoke(const Parcel& request, Parcel *reply);

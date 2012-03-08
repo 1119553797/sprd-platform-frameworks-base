@@ -770,20 +770,18 @@ player_type getPlayerType(const char* url)
 			char value[PROPERTY_VALUE_MAX];
 
 			property_set("stream.sprd.useragent","false");
-/*
+
 		    if (property_get("media.stagefright.enable-rtsp", value, NULL)
 				   && (!strcmp(value, "1") || !strcasecmp(value, "true"))) {
 				   // For now, we're going to use PV for rtsp-based playback
 				   // by default until we can clear up a few more issues.
 			  //  property_set("stream.sprd.useragent","true");
-			    return STAGEFRIGHT_PLAYER;
+			    return PV_PLAYER;
 		    }
 			else
 			{
-			  return PV_PLAYER;
+			  return STAGEFRIGHT_PLAYER ;
 			}
-*/			
-			return PV_PLAYER;
 		}
     }
 

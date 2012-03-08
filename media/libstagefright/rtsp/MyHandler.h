@@ -145,7 +145,7 @@ struct MyHandler : public AHandler {
 		    mNetLooper->setName("rtsp net");
 	        mNetLooper->start(false /* runOnCallingThread */,
 	                          false /* canCallJava */,
-	                          PRIORITY_HIGHEST); //HIGHEST @hong
+	                          ANDROID_PRIORITY_AUDIO); //HIGHEST @hong
 		}
         // Strip any authentication info from the session url, we don't
         // want to transmit user/pass in cleartext.
@@ -1149,6 +1149,15 @@ struct MyHandler : public AHandler {
                     LOGI("first segment unit ntpTime=0x%016llx rtpTime=%u seq=%d",
                          ntpTime, rtpTime, seqNum);
                 }
+
+#if 1
+                int32_t damaged;
+                if (accessUnit->meta()->findInt32("damaged", &damaged)
+                        && damaged != 0) {
+                    LOGI("ignoring damaged AU");
+					break ;
+                }
+#endif
 			    
                 if(!mlocalTimestamps)
 				{
@@ -1174,13 +1183,6 @@ struct MyHandler : public AHandler {
 
                 accessUnit->meta()->setInt64("timeUs", timeUs);
 
-#if 0
-                int32_t damaged;
-                if (accessUnit->meta()->findInt32("damaged", &damaged)
-                        && damaged != 0) {
-                    LOGI("ignoring damaged AU");
-                } else
-#endif
                 {
                     TrackInfo *track = &mTracks.editItemAt(trackIndex);
                     track->mPacketSource->queueAccessUnit(accessUnit);
@@ -1580,31 +1582,36 @@ struct MyHandler : public AHandler {
     }
 
 	void postKeepAlive() {
+	#if 0	
 		  sp<AMessage> msg = new AMessage('aliv', id());
 		  msg->setInt32("generation", mKeepAliveGeneration);
 		  msg->post((mKeepAliveTimeoutUs * 9) / 10);
+    #endif		  
 	  }
 
     void postAccessUnitTimeoutCheck() {
         if (mCheckPending) {
             return;
         }
-
+#if 0
         mCheckPending = true;
         sp<AMessage> check = new AMessage('chek', id());
         check->setInt32("generation", mCheckGeneration);
         check->post(kAccessUnitTimeoutUs);
+#endif		
     }
 
     void postCmdTimeoutCheck(const sp<AMessage> &dnoeMsg) {
 
 		mCmdSending = true ;
+	#if 0	
 		mGenCmd++;
         sp<AMessage> check = new AMessage('chekcmd', id());
 		check->setInt32("gencmd", mGenCmd);
 		check->setMessage("doneMsg",dnoeMsg);
 		
         check->post(kAccessUnitTimeoutUs);
+	#endif	
     }
 
     static void SplitString(
