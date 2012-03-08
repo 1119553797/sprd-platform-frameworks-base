@@ -948,6 +948,8 @@ status_t AwesomePlayer::initRenderer_l() {
 
     mVideoRenderer.clear();
 
+    LOGI("rotationDegrees = %d",rotationDegrees);
+	
     // Must ensure that mVideoRenderer's destructor is actually executed
     // before creating a new one.
     IPCThreadState::self()->flushCommands();
@@ -1318,7 +1320,6 @@ status_t AwesomePlayer::getVideoDimensions(
     if (mVideoWidth < 0 || mVideoHeight < 0) {
         return UNKNOWN_ERROR;
     }
-
     *width = mVideoWidth;
     *height = mVideoHeight;
 
@@ -2231,7 +2232,7 @@ void AwesomePlayer::finishAsyncPrepare_l() {
                 rotationDegrees = 0;
             }
 
-#if 1
+#if 0
             if (rotationDegrees == 90 || rotationDegrees == 270) {
                 notifyListener_l(
                         MEDIA_SET_VIDEO_SIZE, mVideoHeight, mVideoWidth);

@@ -103,6 +103,9 @@ enum {
 
     kKeyIsUnreadable      = 'unre',  // bool (int32_t)
     kKeyIsCmmbData       = 'cmmb',  // bool (int32_t)
+
+    kKeyAACFormat = 'aacf',//cstring	
+    kKeyAACProfile = 'aacp',//cstring
 };
 
 enum {
