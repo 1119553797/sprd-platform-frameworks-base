@@ -108,6 +108,8 @@ public class NetworkInfo implements Parcelable {
     private String mExtraInfo;
     private boolean mIsFailover;
     private boolean mIsRoaming;
+    private int mSubId;
+    
     /**
      * Indicates whether network connectivity is possible:
      */
@@ -133,6 +135,7 @@ public class NetworkInfo implements Parcelable {
         mState = State.UNKNOWN;
         mIsAvailable = false; // until we're told otherwise, assume unavailable
         mIsRoaming = false;
+        mSubId = 0;
     }
 
     /**
@@ -317,7 +320,8 @@ public class NetworkInfo implements Parcelable {
                 append(", extra: ").append(mExtraInfo == null ? "(none)" : mExtraInfo).
                 append(", roaming: ").append(mIsRoaming).
                 append(", failover: ").append(mIsFailover).
-                append(", isAvailable: ").append(mIsAvailable);
+                append(", isAvailable: ").append(mIsAvailable).
+                append(", subscription: ").append(mSubId);
         return builder.toString();
     }
 
@@ -345,8 +349,16 @@ public class NetworkInfo implements Parcelable {
         dest.writeInt(mIsRoaming ? 1 : 0);
         dest.writeString(mReason);
         dest.writeString(mExtraInfo);
+        dest.writeInt(mSubId);
     }
 
+    public int getSubId() {
+        return mSubId;
+    }
+
+    void setSubId(int subId) {
+        mSubId = subId;
+    }    
     /**
      * Implement the Parcelable interface.
      * @hide
@@ -366,6 +378,7 @@ public class NetworkInfo implements Parcelable {
                 netInfo.mIsRoaming = in.readInt() != 0;
                 netInfo.mReason = in.readString();
                 netInfo.mExtraInfo = in.readString();
+                netInfo.mSubId = in.readInt();
                 return netInfo;
             }
 

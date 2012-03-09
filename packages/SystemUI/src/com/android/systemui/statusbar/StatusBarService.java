@@ -49,6 +49,7 @@ import android.os.Message;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.provider.Telephony;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Slog;
 import android.util.Log;
@@ -124,7 +125,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     TextView mNoNotificationsTitle;
     TextView mClearButton;
     // carrierlabels
-    CarrierLabel[] mCarrierLabels = new CarrierLabel[2];
+    CarrierLabel[] mCarrierLabels; 
     // drag bar
     CloseDragHandle mCloseView;
     // ongoing
@@ -174,6 +175,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
     // for disabling the status bar
     int mDisabled = 0;
+    
+    private int[] mResId = new int[]{R.id.carrierlabel_spn0,R.id.carrierlabel_spn1};
 
     private class ExpandedDialog extends Dialog {
         ExpandedDialog(Context context) {
@@ -216,7 +219,6 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
         // Set up the initial icon state
         int N = iconList.size();
-        Log.d("lile", "iconList.size(): "+N);
         int viewIndex = 0;
         for (int i=0; i<N; i++) {
             StatusBarIcon icon = iconList.getIcon(i);
@@ -294,8 +296,14 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mLatestTitle = (TextView)expanded.findViewById(R.id.latestTitle);
         mLatestItems = (LinearLayout)expanded.findViewById(R.id.latestItems);
         mNoNotificationsTitle = (TextView)expanded.findViewById(R.id.noNotificationsTitle);
-        mCarrierLabels[0] = (CarrierLabel)expanded.findViewById(R.id.carrierlabel_spn0);
-        mCarrierLabels[1] = (CarrierLabel)expanded.findViewById(R.id.carrierlabel_spn1);
+        
+        int numPhones = TelephonyManager.getPhoneCount();
+        mCarrierLabels= new CarrierLabel[numPhones];
+		for (int i = 0; i < numPhones; i++) {
+			mCarrierLabels[i] = (CarrierLabel) expanded
+					.findViewById(mResId[i]);
+			mCarrierLabels[i].setVisibility(View.VISIBLE);
+		}
         mClearButton = (TextView)expanded.findViewById(R.id.clear_all_button);
         mClearButton.setOnClickListener(mClearButtonListener);
         mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);

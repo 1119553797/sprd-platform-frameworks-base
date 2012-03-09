@@ -339,6 +339,10 @@ public abstract class NetworkStateTracker extends Handler {
         }
     }
 
+    protected void setSubId(int subId) {   	
+        mNetworkInfo.setSubId(subId);
+    }
+    
     public abstract void startMonitoring();
 
     /**

@@ -781,7 +781,6 @@ public class RingtoneManager {
     }
     /* ===== fixed CR<NEWMS00109311> by luning at 2011.11.18 end =====*/
 
-<<<<<<< HEAD
     public static int getRingtonePhoneId(Uri uri) {
 		int phoneId;
         if(uri == null){
@@ -796,11 +795,9 @@ public class RingtoneManager {
 		return PhoneFactory.DEFAULT_PHONE_ID;
     }
     
-=======
     //add by bug 10729 start 2012-2-17
     public int getDefaultRingtonePosition(){
         return getRingtonePosition(getDefaultUri());
     }
     //add by bug 10729 end 2012-2-17
->>>>>>> sprdroid2.3.5_vlx
 }

@@ -58,7 +58,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private static final String TAG = "LockScreen";
     private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
 
-    private Status[] mStatus = new Status[2];
+    private Status[] mStatus;
 
     private LockPatternUtils mLockPatternUtils;
     private KeyguardUpdateMonitor mUpdateMonitor;
@@ -226,11 +226,13 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         int numPhones=TelephonyManager.getPhoneCount();
         // Sim States for the subscription
         mCarrier = new TextView[numPhones];
+        mStatus = new Status[numPhones];
         for (int i = 0; i < numPhones; i++) {
             mCarrier[i] = (TextView) findViewById(mResId[i]);
             // Required for Marquee to work
             mCarrier[i].setSelected(true);
             mCarrier[i].setTextColor(0xffffffff);
+            mCarrier[i].setVisibility(View.VISIBLE);
 			mStatus[i] = Status.Normal;
         }
         
@@ -747,7 +749,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (telephonyPlmn != null && telephonySpn == null) {
             return telephonyPlmn;
         } else if (telephonyPlmn != null && telephonySpn != null) {
-            return telephonyPlmn + "|" + telephonySpn;
+            return telephonyPlmn;
         } else if (telephonyPlmn == null && telephonySpn != null) {
             return telephonySpn;
         } else {
@@ -846,25 +848,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     /** {@inheritDoc} */
     public void onPause() {
-    	if(false) 
-    		Log.i(TAG,"onPause, don't listen for phone state notifications.");
-    	
-    	//add by yinjie@spreadst.com
-    	//don't listen for phone state notifications, avoid memory leak    	
-        ((TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE)).listen(mPhoneStateListener, 0);
+
     }
 
     /** {@inheritDoc} */
     public void onResume() {
-    	if(false) 
-    		Log.i(TAG,"onResume, will listen phone state notifications.");
-    	
-    	//add by yinjie@spreadst.com
-    	//listen for phone state notifications.
-        ((TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE)).listen(mPhoneStateListener,
-                  PhoneStateListener.LISTEN_SERVICE_STATE);
-    	
-    	mSelector.reset(false);//clear animate when press canell button 2012-2-7
+	mSelector.reset(false);//clear animate when press canell button 2012-2-7
         resetStatusInfo(mUpdateMonitor);
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
     }

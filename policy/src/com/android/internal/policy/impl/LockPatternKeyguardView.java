@@ -717,7 +717,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
      */
     private UnlockMode getUnlockMode() {
         final IccCard.State simState = mUpdateMonitor.getSimState(0);
-        final IccCard.State simState2 = mUpdateMonitor.getSimState(1);
+        final IccCard.State simState2 = TelephonyManager.getPhoneCount() > 1 ? mUpdateMonitor
+				.getSimState(1) : IccCard.State.ABSENT;
         UnlockMode currentMode;
        
         // PUK Input Add Start

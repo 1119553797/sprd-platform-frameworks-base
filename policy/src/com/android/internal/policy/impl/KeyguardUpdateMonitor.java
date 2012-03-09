@@ -69,7 +69,7 @@ public class KeyguardUpdateMonitor {
 
     private final Context mContext;
 
-    private IccCard.State[]  mSimState =new IccCard.State[2];;
+    private IccCard.State[]  mSimState;
 
     private boolean mKeyguardBypassEnabled;
 
@@ -79,9 +79,9 @@ public class KeyguardUpdateMonitor {
 
     private int mBatteryStatus;
 
-    private CharSequence[] mTelephonyPlmn =new CharSequence[2];
-    private CharSequence[] mTelephonySpn =new CharSequence[2];
-    private CharSequence[] networkType = new CharSequence[2];
+    private CharSequence[] mTelephonyPlmn;
+    private CharSequence[] mTelephonySpn;
+    private CharSequence[] networkType;
     private CharSequence mRadioType = null;  //add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen
 
     private int mFailedAttempts = 0;
@@ -215,6 +215,10 @@ public class KeyguardUpdateMonitor {
         mBatteryLevel = 100;
         
 		int numPhones = TelephonyManager.getPhoneCount();
+		mTelephonyPlmn = new CharSequence[numPhones];
+		mTelephonySpn = new CharSequence[numPhones];
+		networkType = new CharSequence[numPhones];
+		mSimState = new IccCard.State[numPhones];
 		for (int i = 0; i < numPhones; i++) {
 			mTelephonyPlmn[i] = getDefaultPlmn();
 			mSimState[i] = IccCard.State.READY;

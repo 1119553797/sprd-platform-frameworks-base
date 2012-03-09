@@ -46,7 +46,6 @@
 	        	android:id="@+id/carrierlabel_spn0"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
 	            android:layout_marginTop="1dp"
 	            android:layout_marginLeft="5dp"
 	            android:layout_gravity="center_vertical"
@@ -59,7 +58,6 @@
 	         	android:id="@+id/carrierlabel_spn1"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
 	            android:layout_marginTop="1dp"
 	            android:layout_marginLeft="5dp"
 	            android:layout_gravity="center_vertical"
@@ -67,6 +65,7 @@
 	            android:paddingLeft="4dp"
 	            android:textAppearance="?android:attr/textAppearanceLarge"
 	            android:textColor="#ffdfdfdf"
+	            android:visibility="gone"
 	            />
         </LinearLayout>
         <TextView android:id="@+id/clear_all_button"

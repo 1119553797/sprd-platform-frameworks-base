@@ -1295,7 +1295,10 @@ public class PduPersister {
         Uri uri = Uri.parse(TEMPORARY_DRM_OBJECT_URI);
         SqliteWrapper.delete(mContext, mContentResolver, uri, null, null);
     }
-
+    
+    public Cursor getPendingMessages(long dueTime) {
+    	return getPendingMessages(dueTime, 0);
+    }
     /**
      * Find all messages to be sent or downloaded before certain time.
      */

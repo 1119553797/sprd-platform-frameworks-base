@@ -155,9 +155,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
             synchronized(this) {
                 // update state and roaming before we set the state - only state changes are
                 // noticed
-                TelephonyManager tm = TelephonyManager.getDefault();
+                TelephonyManager tm = TelephonyManager.getDefault(getPhoneId());
                 setRoamingStatus(tm.isNetworkRoaming());
                 setSubtype(tm.getNetworkType(), tm.getNetworkTypeName());
+                setSubId(getPhoneId());
                 if (intent.getAction().equals(TelephonyIntents.
                         ACTION_ANY_DATA_CONNECTION_STATE_CHANGED)) {
                     int phoneId = intent.getIntExtra(Phone.PHONE_ID, -1);
