@@ -111,26 +111,26 @@ public class Watchdog extends Thread {
     final class HeartbeatHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            if (false == CHECK_MEMORY_FLAG) {
+            if (!CHECK_MEMORY_FLAG) {
                 if (MONITOR == msg.what) {
-                    if (localLOGV) Slog.v(TAG, " **** 1-CHECK ALL MONITORS BEGIN ! **** ");
+                    Slog.v(TAG, " **** 1-CHECK ALL MONITORS BEGIN ! **** ");
 
                     final int size = mMonitors.size();
                     for (int i = 0 ; i < size ; i++) {
                         mCurrentMonitor = mMonitors.get(i);
                         mCurrentMonitor.monitor();
                     }
-                    if (localLOGV) Slog.v(TAG, " **** 2-CHECK ALL MONITORS FINISHED ! **** ");
+                    Slog.v(TAG, " **** 2-CHECK ALL MONITORS FINISHED ! **** ");
 
                     synchronized (Watchdog.this) {
                         mCompleted = true;
                         mCurrentMonitor = null;
                     }
-                    if (localLOGV) Slog.v(TAG, " **** 3-SYNC Watchdog.THIS FINISHED ! ****");
-                    if (localLOGV) Slog.v(TAG, " ");
+                    Slog.v(TAG, " **** 3-SYNC Watchdog.THIS FINISHED ! ****");
+                    Slog.v(TAG, " ");
 
                 } else {
-                    if (localLOGV) Slog.v(TAG,"*** 4-THIS IS IMPOSSIBLE!! ***");
+                    Slog.v(TAG,"*** 4-THIS IS IMPOSSIBLE!! ***");
                 }
                 return;
             }
@@ -412,7 +412,9 @@ public class Watchdog extends Thread {
         boolean waitedHalf = false;
         while (true) {
             mCompleted = false;
-            mHandler.sendEmptyMessage(MONITOR);
+            if (mHandler.sendEmptyMessage(MONITOR)) {
+                Slog.v(TAG,"*** Watchdog MSG SENT!! ***");
+            }
 
             synchronized (this) {
                 long timeout = TIME_TO_WAIT;
