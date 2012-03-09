@@ -84,6 +84,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -3685,7 +3686,38 @@ public final class ActivityThread {
                     LogPrinter(Log.DEBUG, "ActivityThread"));
         }
 
-        Looper.loop();
+        try {
+        	Looper.loop();
+        } catch (OutOfMemoryError e) {
+        	String file = "/data/data/";
+        	String pname = thread.getProcessName();
+        	File dir = new File(file + pname + "/");
+        	if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
+        		File[] files = dir.listFiles();
+        		for (File f : files) {
+        			if (f.isFile() && f.getPath().endsWith("hprof")) {
+        				f.delete();
+        			}
+        		}
+        		int pid = Process.myPid();
+        		Date d = new Date();
+        		String date = d.getDate() + "-" + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
+        		file += pname + "/oom_" + pname +  "_" + pid + "_" + date + ".hprof";
+
+        		try {
+        			android.os.Debug.dumpHprofData(file);
+        		} catch (IOException e1) {
+        			e1.printStackTrace();
+        		}
+        	}
+        	
+//        	String fileName = "/data/misc/";
+//        	int pid = Process.myPid();
+//        	String pname = thread.getProcessName();
+//        	fileName += "oom_" + pname + "_" + pid + "_" + date + ".hprof";
+        	
+			throw e;
+        }
 
         if (Process.supportsProcesses()) {
             throw new RuntimeException("Main thread loop unexpectedly exited");
