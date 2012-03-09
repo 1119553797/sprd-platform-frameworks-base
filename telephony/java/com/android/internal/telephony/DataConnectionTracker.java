@@ -110,7 +110,8 @@ public abstract class DataConnectionTracker extends Handler {
     protected static final int APN_SUPL_ID = 2;
     protected static final int APN_DUN_ID = 3;
     protected static final int APN_HIPRI_ID = 4;
-    protected static final int APN_NUM_TYPES = 5;
+    protected static final int APN_DM_ID = 5;
+    protected static final int APN_NUM_TYPES = 6;
 
     protected static final int DISABLED = 0;
     protected static final int ENABLED = 1;
@@ -378,6 +379,8 @@ public abstract class DataConnectionTracker extends Handler {
             return APN_DUN_ID;
         } else if (TextUtils.equals(type, Phone.APN_TYPE_HIPRI)) {
             return APN_HIPRI_ID;
+        } else if (TextUtils.equals(type, Phone.APN_TYPE_DM)) {
+            return APN_DM_ID;
         } else {
             return APN_INVALID_ID;
         }
@@ -395,6 +398,8 @@ public abstract class DataConnectionTracker extends Handler {
             return Phone.APN_TYPE_DUN;
         case APN_HIPRI_ID:
             return Phone.APN_TYPE_HIPRI;
+        case APN_DM_ID:
+            return Phone.APN_TYPE_DM;
         default:
             Log.e(LOG_TAG, "Unknown id (" + id + ") in apnIdToType");
             return Phone.APN_TYPE_DEFAULT;

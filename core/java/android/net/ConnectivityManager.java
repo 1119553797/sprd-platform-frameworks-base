@@ -208,16 +208,17 @@ public class ConnectivityManager
      * will use this connection by default.  Should not coexist with other
      * default connections.
      */
-    public static final int TYPE_WIMAX       = 6;
+    public static final int TYPE_MOBILE_DM = 6;
+    public static final int TYPE_WIMAX       = 7;
     /**
      * Bluetooth data connection.
      * @hide
      */
-    public static final int TYPE_BLUETOOTH   = 7;
+    public static final int TYPE_BLUETOOTH   = 8;
     /** {@hide} */
-    public static final int TYPE_DUMMY       = 8;
+    public static final int TYPE_DUMMY       = 9;
     /** {@hide} */
-    public static final int TYPE_ETHERNET    = 9;
+    public static final int TYPE_ETHERNET    = 10;
     /** {@hide} TODO: Need to adjust this for WiMAX. */
     public static final int MAX_RADIO_TYPE   = TYPE_ETHERNET;
     /** {@hide} TODO: Need to adjust this for WiMAX. */

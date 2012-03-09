@@ -129,12 +129,15 @@ public interface Phone extends SprdVideoPhone{
     static final String APN_TYPE_DUN = "dun";
     /** APN type for HiPri traffic */
     static final String APN_TYPE_HIPRI = "hipri";
+    /** APN type for DM traffic */
+    static final String APN_TYPE_DM = "dm";
 
     // "Features" accessible through the connectivity manager
     static final String FEATURE_ENABLE_MMS = "enableMMS";
     static final String FEATURE_ENABLE_SUPL = "enableSUPL";
     static final String FEATURE_ENABLE_DUN = "enableDUN";
     static final String FEATURE_ENABLE_HIPRI = "enableHIPRI";
+    static final String FEATURE_ENABLE_DM = "enableDM";
 
     /**
      * Return codes for <code>enableApnType()</code>

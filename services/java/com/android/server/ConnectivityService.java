@@ -726,9 +726,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 usedNetworkType = ConnectivityManager.TYPE_MOBILE_DUN;
             } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
                 usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
+            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
+                usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
             }
         }
         NetworkStateTracker network = mNetTrackers[usedNetworkType];
+        if (DBG) Slog.d(TAG, "network = " + network);
         if (network != null) {
             if (usedNetworkType != networkType) {
                 Integer currentPid = new Integer(getCallingPid());
@@ -873,6 +876,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_DUN;
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
+                } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
+                    usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
                 }
             }
             tracker =  mNetTrackers[usedNetworkType];

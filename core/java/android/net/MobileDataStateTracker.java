@@ -574,6 +574,8 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 return Phone.APN_TYPE_DUN;
             case ConnectivityManager.TYPE_MOBILE_HIPRI:
                 return Phone.APN_TYPE_HIPRI;
+            case ConnectivityManager.TYPE_MOBILE_DM:
+                return Phone.APN_TYPE_DM;
             default:
                 Log.e(TAG, "Error mapping networkType " + netType + " to apnType.");
                 return null;
