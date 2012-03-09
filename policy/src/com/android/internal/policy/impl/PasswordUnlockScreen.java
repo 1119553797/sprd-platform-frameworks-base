@@ -257,7 +257,7 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
 
     }
 
-    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
+    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int phoneId) {
 
     }
 

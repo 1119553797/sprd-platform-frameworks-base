@@ -55,6 +55,19 @@ public class MultimediaMessagePdu extends GenericPdu{
         super(headers);
     }
 
+    public MultimediaMessagePdu(int phoneId) {
+        super(phoneId);
+    }
+
+    public MultimediaMessagePdu(PduHeaders header, PduBody body, int phoneId) {
+        super(header, phoneId);
+        mMessageBody = body;
+    }
+
+    MultimediaMessagePdu(PduHeaders headers, int phoneId) {
+        super(headers, phoneId);
+    }
+
     /**
      * Get body of the PDU.
      *

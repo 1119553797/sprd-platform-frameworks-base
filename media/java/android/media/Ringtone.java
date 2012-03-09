@@ -126,7 +126,7 @@ public class Ringtone {
             if (Settings.AUTHORITY.equals(authority)) {
                 if (followSettingsUri) {
                     Uri actualUri = RingtoneManager.getActualDefaultRingtoneUri(context,
-                            RingtoneManager.getDefaultType(uri));
+                            RingtoneManager.getDefaultType(uri), RingtoneManager.getRingtonePhoneId(uri));
                     String actualTitle = getTitle(context, actualUri, false);
                     title = context
                             .getString(com.android.internal.R.string.ringtone_default_with_actual,

@@ -22,7 +22,9 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.content.pm.PackageManager;
+import android.database.ContentObserver;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.net.ConnectivityManager;
@@ -41,10 +43,13 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Slog;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneFactory;
+
 import com.android.server.connectivity.Tethering;
 import dalvik.system.DexClassLoader;
 import java.io.FileDescriptor;
@@ -171,6 +176,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     // list of DeathRecipients used to make sure features are turned off when
     // a process dies
     private List mFeatureUsers;
+    private List mMmsFeatureRequest;
+
+    //private String mMmsFeatureStopping;
+    enum FeatureState {
+        IDLE,
+        CONNECTING,
+        DISCONNECTING
+    }
+    FeatureState mMmsFeatureState; // state of the fist feature in mMmsFeatureRequest
 
     private boolean mSystemReady;
     private Intent mInitialBroadcast;
@@ -351,6 +365,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
 
         mFeatureUsers = new ArrayList();
+        mMmsFeatureRequest = new ArrayList();
+        //mMmsFeatureStopping = null;
+        mMmsFeatureState = FeatureState.IDLE;
 
         mNumDnsEntries = 0;
 
@@ -363,7 +380,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
          * the number of different network types is not going
          * to change very often.
          */
-        boolean noMobileData = !getMobileDataEnabled();
+        boolean noMobileData = !getMobileDataEnabledByPhoneId(TelephonyManager
+                .getDefaultDataPhoneId(mContext));
         for (int netType : mPriorityList) {
             switch (mNetAttributes[netType].mRadio) {
             case ConnectivityManager.TYPE_WIFI:
@@ -409,10 +427,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                                  (mTethering.getTetherableUsbRegexs().length != 0 ||
                                   mTethering.getTetherableWifiRegexs().length != 0) &&
                                  mTethering.getUpstreamIfaceRegexs().length != 0);
-
-        if (DBG) {
-            mInetLog = new ArrayList();
-        }
+        ContentResolver cr = mContext.getContentResolver();
+        cr.registerContentObserver(
+               Settings.System.getUriFor(Settings.System.MULTI_SIM_DATA_CALL), true,
+               mDefaultDataPhoneIdObserver);
     }
 
     private NetworkStateTracker makeWimaxStateTracker() {
@@ -523,6 +541,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         return preference;
     }
 
+    private void persistNetworkPreference(int networkPreference) {
+        final ContentResolver cr = mContext.getContentResolver();
+        Settings.Secure.putInt(cr, Settings.Secure.NETWORK_PREFERENCE,
+                networkPreference);
+    }
+
     private void handleSetNetworkPreference(int preference) {
         if (ConnectivityManager.isNetworkTypeValid(preference) &&
                 mNetAttributes[preference] != null &&
@@ -605,9 +629,13 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         enforceAccessPermission();
         if (ConnectivityManager.isNetworkTypeValid(networkType)) {
             NetworkStateTracker t = mNetTrackers[networkType];
-            if (t != null)
+            if (t != null) {
                 return t.getNetworkInfo();
+	    } else {
+		Slog.e ("sunway","NetworkStateTracker is null");
+	    }
         }
+	Slog.e ("sunway","getNetworkInfo returns null");
         return null;
     }
 
@@ -701,6 +729,79 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             Slog.d(TAG, "startUsingNetworkFeature for net " + networkType +
                     ": " + feature);
         }
+        // avoid the case in which the second startUsingNetworkFeature call is started very soon
+        // after the first one, thus the detach caused by first call is not finished, it will cause
+        // the disconnect done message cased by second call is immediately received.
+        boolean isAlreadyConnecting = false;
+        synchronized(this) {
+            if (isMmsFeature(feature)) {
+                if (mMmsFeatureRequest.isEmpty()) {
+                    // current data connection is default
+                    mMmsFeatureRequest.add(new FeatureUser(networkType, feature, binder));
+                    mMmsFeatureState = FeatureState.CONNECTING;
+                    if (DBG) {
+                        Slog.d(TAG, "startUsing Mms Feature");
+                    }
+                    /*
+                    if (mMmsFeatureStopping == null) {
+                        if (DBG) {
+                            Slog.d(TAG, "startUsing Mms Feature");
+                        }
+                    } else {
+                        if (DBG) {
+                            Slog.d(TAG, "startUsing Mms Feature but stopping is not finished");
+                        }
+                        return Phone.APN_REQUEST_STARTED;
+                    }*/
+                } else {
+                    // current data connection is mms
+                    FeatureUser f = (FeatureUser)mMmsFeatureRequest.get(0);
+                    if (TextUtils.equals(f.mFeature, feature) && mMmsFeatureState != FeatureState.DISCONNECTING) {
+                        if (mMmsFeatureState == FeatureState.CONNECTING) {
+                             isAlreadyConnecting = true;
+                        }
+                        if (DBG) {
+                            Slog.d(TAG, "startUsing same Mms Feature as current mMmsFeatureState=" + mMmsFeatureState);
+                        }
+                        mMmsFeatureState = FeatureState.CONNECTING;
+                        /*
+                        if (mMmsFeatureStopping == null) {
+                            if (DBG) {
+                                Slog.d(TAG, "startUsing same Mms Feature as current");
+                            }
+                            isAlreadyConnecting = true; // network is connecting in this case
+                        } else {
+                            if (DBG) {
+                                Slog.d(TAG, "startUsing same Mms Feature as current but stopping is not finished:"
+                                        + mMmsFeatureStopping);
+                            }
+                            return Phone.APN_REQUEST_STARTED;
+                        }
+                        */
+                    } else {
+                        boolean found = false;
+                        for (int i = 0; i < mMmsFeatureRequest.size(); i++) {
+                            FeatureUser u = (FeatureUser)mMmsFeatureRequest.get(i);
+                            if (TextUtils.equals(feature, u.mFeature)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            if (DBG) {
+                                Slog.d(TAG, "startUsing Mms pending " + feature);
+                            }
+                            mMmsFeatureRequest.add(new FeatureUser(networkType, feature, binder));
+                        } else {
+                            if (DBG) {
+                                Slog.d(TAG, "startUsing duplicate Mms pending " + feature);
+                            }
+                        }
+                        return Phone.APN_REQUEST_STARTED;
+                    }
+                }
+            }
+        }
         enforceChangePermission();
         if (!ConnectivityManager.isNetworkTypeValid(networkType) ||
                 mNetAttributes[networkType] == null) {
@@ -709,17 +810,21 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
         FeatureUser f = new FeatureUser(networkType, feature, binder);
 
+        boolean skipAvailableCheck = false;
         // TODO - move this into the MobileDataStateTracker
         int usedNetworkType = networkType;
         if(networkType == ConnectivityManager.TYPE_MOBILE) {
             //if type is MMS,continue setup data call
             Slog.d(TAG, "if type is MMS,continue setup data call");
-            if (!getMobileDataEnabled() && !TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
+            if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature)) &&
+                    !(feature.indexOf(Phone.FEATURE_ENABLE_MMS)!=-1)) {
+            //if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature))) {
                 if (DBG) Slog.d(TAG, "requested special network with data disabled - rejected");
                 return Phone.APN_TYPE_NOT_AVAILABLE;
             }
-            if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_MMS;
+            if (TextUtils.equals(feature.substring(0, Phone.FEATURE_ENABLE_MMS.length()), Phone.FEATURE_ENABLE_MMS)) {
+                skipAvailableCheck = true;
+                usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
             } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_SUPL)) {
                 usedNetworkType = ConnectivityManager.TYPE_MOBILE_SUPL;
             } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN)) {
@@ -739,7 +844,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 NetworkStateTracker radio = mNetTrackers[networkType];
                 NetworkInfo ni = network.getNetworkInfo();
 
-                if (ni.isAvailable() == false) {
+                // TODO: using serviceState to check is better for Msms
+                if (!skipAvailableCheck && ni.isAvailable() == false) {
                     if (DBG) Slog.d(TAG, "special network not available");
                     return Phone.APN_TYPE_NOT_AVAILABLE;
                 }
@@ -754,6 +860,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 mHandler.sendMessageDelayed(mHandler.obtainMessage(EVENT_RESTORE_DEFAULT_NETWORK,
                         f), getRestoreDefaultNetworkDelay());
 
+                if (DBG) Slog.d(TAG, "ni.isConnectedOrConnecting()="+ni.isConnectedOrConnecting());
 
                 if ((ni.isConnectedOrConnecting() == true) &&
                         !network.isTeardownRequested()) {
@@ -770,8 +877,19 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 // check if the radio in play can make another contact
                 // assume if cannot for now
 
-                if (DBG) Slog.d(TAG, "reconnecting to special network");
-                network.reconnect();
+                if (!isAlreadyConnecting) {
+                    if (DBG) Slog.d(TAG, "reconnecting to special network");
+                    if(!network.reconnect()){
+                        //if the mms apn is not available, remove the request from mMmsFeatureRequest
+                        //if not remove it, the othe mms send request will be pending.
+                        if (isMmsFeature(feature) && mMmsFeatureRequest.size() > 0) {
+                            mMmsFeatureRequest.remove(0);
+                        }
+                        return Phone.APN_TYPE_NOT_AVAILABLE;
+                    }
+                } else {
+                    if (DBG) Slog.d(TAG, "already reconnecting to special network");
+                }
                 return Phone.APN_REQUEST_STARTED;
             } else {
                 synchronized(this) {
@@ -868,8 +986,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             // TODO - move to MobileDataStateTracker
             int usedNetworkType = networkType;
             if (networkType == ConnectivityManager.TYPE_MOBILE) {
-                if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
-                    usedNetworkType = ConnectivityManager.TYPE_MOBILE_MMS;
+                if (TextUtils.equals(feature.subSequence(0, Phone.FEATURE_ENABLE_MMS.length()), Phone.FEATURE_ENABLE_MMS)) {
+                    usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_SUPL)) {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_SUPL;
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN)) {
@@ -895,6 +1013,20 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     return 1;
                 }
                 callTeardown = true;
+            }
+
+            if (callTeardown) {
+                if (isMmsFeature(feature) && !mMmsFeatureRequest.isEmpty()) {
+                    FeatureUser f = (FeatureUser) mMmsFeatureRequest.get(0);
+                    if (DBG) Slog.d(TAG, "stopUsing " + feature + " first is " + f.mFeature);
+                    if (TextUtils.equals(f.mFeature, feature)) {
+                        mMmsFeatureRequest.remove(f);
+                        //mMmsFeatureStopping = f.mFeature;
+                        mMmsFeatureState = FeatureState.DISCONNECTING;
+                    } else {
+                            Slog.e(TAG, "stoping feature is not the first one in the list!");
+                    }
+                }
             }
         }
         if (DBG) Slog.d(TAG, "Doing network teardown");
@@ -968,8 +1100,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      */
     public boolean getMobileDataEnabled() {
         enforceAccessPermission();
-        boolean retVal = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.MOBILE_DATA, 1) == 1;
+        boolean retVal = Settings.Secure.getIntAtIndex(mContext.getContentResolver(),
+                Settings.Secure.MOBILE_DATA, PhoneFactory.DEFAULT_PHONE_ID, 1) == 1;
         if (DBG) Slog.d(TAG, "getMobileDataEnabled returning " + retVal);
         return retVal;
     }
@@ -988,9 +1120,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private void handleSetMobileData(boolean enabled) {
         if (getMobileDataEnabled() == enabled) return;
 
-        Settings.Secure.putInt(mContext.getContentResolver(),
-                Settings.Secure.MOBILE_DATA, enabled ? 1 : 0);
-
+        Settings.Secure.putIntAtIndex(mContext.getContentResolver(), Settings.Secure.MOBILE_DATA,
+                PhoneFactory.DEFAULT_PHONE_ID, enabled ? 1 : 0);
         if (enabled) {
             if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
                 if (DBG) {
@@ -1086,6 +1217,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
 
         Intent intent = new Intent(ConnectivityManager.CONNECTIVITY_ACTION);
+        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra(ConnectivityManager.EXTRA_NETWORK_INFO, info);
         if (info.isFailover()) {
             intent.putExtra(ConnectivityManager.EXTRA_IS_FAILOVER, true);
@@ -1121,6 +1253,50 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         if (mActiveDefaultNetwork != -1) {
             sendConnectedBroadcast(mNetTrackers[mActiveDefaultNetwork].getNetworkInfo());
         }
+
+        synchronized(this) {
+            for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                if (prevNetType == ConnectivityManager.getMmsTypeByPhoneId(i)) {
+                    Slog.d(TAG, "prevNetType " + prevNetType);
+                    //if (mMmsFeatureStopping != null) {
+                    if (mMmsFeatureState == FeatureState.DISCONNECTING) {
+                        if (!mMmsFeatureRequest.isEmpty()) {
+                            FeatureUser f = (FeatureUser) mMmsFeatureRequest.get(0);
+                            if (getPhoneIdByFeature(f.mFeature) != i) {
+                                Slog.e(TAG, "disconnected mms is " + i + " but stopping is "
+                                        + f.mFeature);
+                            } else {
+                                Slog.d(TAG, "remove disconnect " + f.mFeature);
+                                // mMmsFeatureStopping = null;
+                                mMmsFeatureRequest.remove(0);
+                                mMmsFeatureState = FeatureState.IDLE;
+                            }
+                        }
+                    } else {
+                        // disconnect by network
+                        Slog.d(TAG, "mms disconnect by network");
+                        if (!mMmsFeatureRequest.isEmpty()) {
+                            FeatureUser f = (FeatureUser) mMmsFeatureRequest.get(0);
+                            if (getPhoneIdByFeature(f.mFeature) != i) {
+                                Slog.e(TAG, "disconnected mms is " + i + " but first is "
+                                        + f.mFeature);
+                            } else {
+                                Slog.d(TAG, "remove disconnect " + f.mFeature);
+                                mMmsFeatureRequest.remove(0);
+                                mMmsFeatureState = FeatureState.IDLE;
+                            }
+                        }
+                    }
+                    if (!mMmsFeatureRequest.isEmpty()) {
+                        FeatureUser f = (FeatureUser)mMmsFeatureRequest.get(0);
+                        if (DBG) {
+                            Slog.d(TAG, "trying to enable " + f.mFeature + " due to mms disconnect");
+                        }
+                        startUsingNetworkFeature(f.mNetworkType, f.mFeature, f.mBinder);
+                    }
+                }
+            }
+        }
     }
 
     private void tryFailover(int prevNetType) {
@@ -1133,7 +1309,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 mActiveDefaultNetwork = -1;
             }
 
-            boolean noMobileData = !getMobileDataEnabled();
+            int newType = -1;
+            int newPriority = -1;
+            boolean noMobileData = !getMobileDataEnabledByPhoneId(TelephonyManager
+                    .getDefaultDataPhoneId(mContext));
             for (int checkType=0; checkType <= ConnectivityManager.MAX_NETWORK_TYPE; checkType++) {
                 if (checkType == prevNetType) continue;
                 if (mNetAttributes[checkType] == null) continue;
@@ -1206,6 +1385,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         Slog.e(TAG, "Attempt to connect to " + info.getTypeName() + " failed" + reasonText);
 
         Intent intent = new Intent(ConnectivityManager.CONNECTIVITY_ACTION);
+        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra(ConnectivityManager.EXTRA_NETWORK_INFO, info);
         if (getActiveNetworkInfo() == null) {
             intent.putExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, true);
@@ -1454,7 +1634,18 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                             Slog.d(TAG, "adding dns " + dns + " for " +
                                     nt.getNetworkInfo().getTypeName());
                         }
-                        SystemProperties.set("net.dns" + j++, dns);
+                        String value = SystemProperties.get("net.gprs.http-proxy");
+                        if (DBG)
+                            Slog.d(TAG, "get net.gprs.http-proxy value=" + value);
+                        //We still need to add dns when dataconnection change from wap to wifi.
+                        if (TextUtils.isEmpty(value)
+                            || nt.getNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI) {
+                            SystemProperties.set("net.dns" + j++, dns);
+                        } else {
+                            if (DBG)
+                                Slog.d(TAG, "erasing net.dns as apn is wap!");
+                            SystemProperties.set("net.dns" + j++, "");
+                        }
                     }
                 }
                 for (int k=j ; k<mNumDnsEntries; k++) {
@@ -1685,36 +1876,36 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             return ConnectivityManager.TETHER_ERROR_UNSUPPORTED;
         }
     }
-    
+
     //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> begin
     public boolean enableUdcpower(boolean enabled){
     	return mTethering.enableUsbUdcpower(enabled);
     }
-    
+
     public boolean isUsbUdcpowerStarted(){
     	return mTethering.isUsbUdcpowerStarted();
     }
-    
+
     public boolean enableGser(boolean enabled){
     	return mTethering.enableUsbGser(enabled);
     }
-    
+
     public boolean isUsbGserStarted(){
     	return mTethering.isUsbGserStarted();
     }
-    
+
     public boolean enableVser(boolean enabled){
     	return mTethering.enableUsbVser(enabled);
     }
-    
+
     public boolean isUsbVserStarted(){
     	return mTethering.isUsbVserStarted();
     }
-    
+
     public boolean isUsbRNDISStarted(){
     	return mTethering.isUsbRNDISStarted();
     }
-    
+
     public boolean isUsbConnected(){
     	return mTethering.isUsbConnected();
     }
@@ -1777,6 +1968,81 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 Settings.Secure.TETHER_SUPPORTED, defaultVal) != 0);
         return tetherEnabledInSettings && mTetheringConfigValid;
     }
+
+
+    private boolean isMmsFeature(String feature) {
+        return (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS +"1"));
+    }
+
+    private int getPhoneIdByFeature(String feature) {
+        int phoneId;
+        if (isMmsFeature(feature)) {
+            if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
+                phoneId = PhoneFactory.DEFAULT_PHONE_ID;
+            } else if (feature.length() > Phone.FEATURE_ENABLE_MMS.length()){
+                phoneId = Integer.parseInt(feature.substring(Phone.FEATURE_ENABLE_MMS.length()));
+            } else {
+                throw new IllegalArgumentException("Illeagal Feature: " + feature);
+            }
+        } else {
+            phoneId = PhoneFactory.DEFAULT_PHONE_ID;
+        }
+        return phoneId;
+    }
+
+    private int getPhoneIdByNetworkType(int netType) {
+        if (netType <= ConnectivityManager.TYPE_MOBILE_HIPRI) {
+            return TelephonyManager.getDefaultDataPhoneId(mContext);
+        } else {
+            return netType - ConnectivityManager.TYPE_MOBILE_HIPRI;
+        }
+    }
+
+    /**
+     * @see ConnectivityManager#getMobileDataEnabledByPhoneId(int)
+     */
+    public boolean getMobileDataEnabledByPhoneId(int phoneId) {
+        enforceAccessPermission();
+        boolean retVal = Settings.Secure.getIntAtIndex(mContext.getContentResolver(),
+                Settings.Secure.MOBILE_DATA, phoneId, 1) == 1;
+        if (DBG) Slog.d(TAG, "getMobileDataEnabled[" + phoneId + "] returning " + retVal);
+        return retVal;
+    }
+
+    /**
+     * @see ConnectivityManager#setMobileDataEnabledByPhoneId(int, boolean)
+     */
+    public synchronized void setMobileDataEnabledByPhoneId(int phoneId, boolean enabled) {
+        enforceChangePermission();
+        if (DBG) Slog.d(TAG, "setMobileDataEnabled(" + phoneId + "," + enabled + ")");
+
+        if (getMobileDataEnabledByPhoneId(phoneId) == enabled) return;
+
+        Settings.Secure.putIntAtIndex(mContext.getContentResolver(),
+                Settings.Secure.MOBILE_DATA, phoneId, enabled ? 1 : 0);
+
+        int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+        if (enabled) {
+            if (phoneId == defaultDataPhoneId) {
+                if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
+                    if (DBG) Slog.d(TAG, "starting up " + mNetTrackers[ConnectivityManager.TYPE_MOBILE]);
+                    mNetTrackers[ConnectivityManager.TYPE_MOBILE].reconnect();
+                }
+            }
+        } else {
+            for (NetworkStateTracker nt : mNetTrackers) {
+                if (nt == null) continue;
+                int netType = nt.getNetworkInfo().getType();
+                if (getPhoneIdByNetworkType(netType) != phoneId) continue;
+                if (mNetAttributes[netType].mRadio == ConnectivityManager.TYPE_MOBILE) {
+                    if (DBG) Slog.d(TAG, "tearing down " + nt);
+                    nt.teardown();
+                }
+            }
+        }
+    }
+
 
     // 100 percent is full good, 0 is full bad.
     public void reportInetCondition(int networkType, int percentage) {
@@ -1865,4 +2131,24 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         sendInetConditionBroadcast(networkInfo);
         return;
     }
+    private ContentObserver mDefaultDataPhoneIdObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            Slog.d(TAG,"Default Data Phone Id is changed  ---------");
+            int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+            if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
+            if(mNetTrackers[ConnectivityManager.TYPE_MOBILE].isTeardownRequested()){
+                Slog.w(TAG, "mTeardownRequested is true, do nothing " );
+            }else{
+                if(getMobileDataEnabledByPhoneId(defaultDataPhoneId)){
+                    if (DBG) Slog.d(TAG, "setDataEnable(true) " );
+                        mNetTrackers[ConnectivityManager.TYPE_MOBILE].setDataEnable(true);
+                    }else{
+                        if (DBG) Slog.d(TAG, "setDataEnable(false) " );
+                            mNetTrackers[ConnectivityManager.TYPE_MOBILE].setDataEnable(false);
+                    }
+                }
+            }
+        }
+    };
 }

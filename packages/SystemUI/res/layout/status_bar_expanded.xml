@@ -33,21 +33,44 @@
         android:paddingRight="3dp"
         android:background="@drawable/title_bar_portrait"
         >
-        <com.android.systemui.statusbar.CarrierLabel
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:layout_marginTop="1dp"
             android:layout_marginLeft="5dp"
-            android:layout_gravity="center_vertical"
-            android:paddingBottom="1dp"
-            android:paddingLeft="4dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#ffdfdfdf"
-            />
+            >
+	        <com.android.systemui.statusbar.CarrierLabel
+	        	android:id="@+id/carrierlabel_spn0"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="1dp"
+	            android:layout_marginLeft="5dp"
+	            android:layout_gravity="center_vertical"
+	            android:paddingBottom="1dp"
+	            android:paddingLeft="4dp"
+	            android:textAppearance="?android:attr/textAppearanceLarge"
+	            android:textColor="#ffdfdfdf"
+	            />
+	         <com.android.systemui.statusbar.CarrierLabel
+	         	android:id="@+id/carrierlabel_spn1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="1dp"
+	            android:layout_marginLeft="5dp"
+	            android:layout_gravity="center_vertical"
+	            android:paddingBottom="1dp"
+	            android:paddingLeft="4dp"
+	            android:textAppearance="?android:attr/textAppearanceLarge"
+	            android:textColor="#ffdfdfdf"
+	            android:visibility="gone"
+	            />
+        </LinearLayout>
         <TextView android:id="@+id/clear_all_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="90dp"
+            android:layout_height="35dp"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="1dp"

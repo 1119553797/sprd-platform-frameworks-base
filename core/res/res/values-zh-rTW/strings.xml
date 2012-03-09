@@ -45,11 +45,18 @@
     <string name="passwordChange" msgid="">"密碼已改。"</string>
     <string name="mmiComplete" msgid="8232527495411698359">"MMI 完成。"</string>
     <string name="badPin" msgid="5085454289896032547">"您輸入的舊 PIN 不正確。"</string>
+    <string name="badPin2" msgid="">"您輸入的舊 PIN2 不正確。"</string>
     <string name="badPuk" msgid="5702522162746042460">"您輸入的 PUK 不正確。"</string>
+    <string name="badPuk2" msgid="">"您輸入的 PUK2 不正確。"</string>
     <string name="mismatchPin" msgid="3695902225843339274">"您輸入的 PIN 不符合。"</string>
+    <string name="mismatchPin2" msgid="">"您輸入的 PIN2 不符合。"</string>
+    <string name="mismatchPuk" msgid="">"您輸入的 PUK 不符合。"</string>
+    <string name="mismatchPuk2" msgid="">"您輸入的 PUK2 不符合。"</string>
     <string name="invalidPin" msgid="3850018445187475377">"輸入 4~8 個數字的 PIN。"</string>
+    <string name="invalidPuk" msgid="8761456210898036513">"輸入 8 位數以上的 PUK。"</string>
     <string name="needPuk" msgid="919668385956251611">"SIM 卡的 PUK 已鎖定。請輸入 PUK 碼解除鎖定。"</string>
     <string name="needPuk2" msgid="4526033371987193070">"請輸入 PUK2 以解鎖 SIM 卡。"</string>
+    <string name="needPinLock" msgid="1850318435787415347">"SIM卡PIN 碼未開啟，請先開啟PIN 鎖定。"</string>
     <string name="ClipMmi" msgid="6952821216480289285">"來電顯示"</string>
     <string name="ClirMmi" msgid="7784673673446833091">"本機號碼"</string>
     <string name="ColpMmi" msgid="">"顯示實際接聽號碼"</string>
@@ -87,10 +94,11 @@
     <string name="ConnectingEct" msgid="">"正在連接的遠端多方通話"</string>
     <string name="ConnectedEct" msgid="">"連接的遠端多方通話"</string>
     <string name="IncomingCallForwarded" msgid="">"來電被轉移"</string>
-    <string name="RequestPending" msgid="">"請求未完成"</string>
-    <string name="OprNotComplete" msgid="">"操作未完成"</string>
     <string name="PwdMmi" msgid="7043715687905254199">"變更密碼"</string>
     <string name="PinMmi" msgid="3113117780361190304">"PIN 已變更"</string>
+    <string name="Pin2Mmi" msgid="">"PIN2 已變更"</string>
+    <string name="PukMmi" msgid="">"解鎖PIN"</string>
+    <string name="Puk2Mmi" msgid="">"解鎖PIN2"</string>
     <string name="CnipMmi" msgid="3110534680557857162">"顯示來電號碼"</string>
     <string name="CnirMmi" msgid="3062102121430548731">"隱藏發話號碼"</string>
     <string name="ThreeWCMmi" msgid="9051047170321190368">"三方通話"</string>
@@ -102,7 +110,7 @@
     <string name="CLIRDefaultOffNextCallOn" msgid="6179425182856418465">"預設顯示本機號碼，但下一通電話不顯示。"</string>
     <string name="CLIRDefaultOffNextCallOff" msgid="2567998633124408552">"預設顯示本機號碼，下一通電話也繼續顯示。"</string>
     <string name="serviceNotProvisioned" msgid="8614830180508686666">"無法提供此服務。"</string>
-    <string name="CLIRPermanent" msgid="5460892159398802465">"本機號碼顯示設定為永久模式,無法變更。"</string>
+    <string name="CLIRPermanent" msgid="5460892159398802465">"本機號碼顯示設定無法變更。"</string>
     <string name="RestrictedChangedTitle" msgid="5592189398956187498">"受限存取已變更"</string>
     <string name="RestrictedOnData" msgid="8653794784690065540">"已封鎖數據傳輸服務。"</string>
     <string name="RestrictedOnEmergency" msgid="6581163779072833665">"已封鎖緊急服務。"</string>

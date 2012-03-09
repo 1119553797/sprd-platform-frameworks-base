@@ -1,0 +1,1027 @@
+diff --cc telephony/java/com/android/internal/telephony/gsm/MsmsGsmDataConnectionTracker.java
+index 35c44bf,f5aa6a0..0000000
+mode 100644,100755..100644
+--- a/telephony/java/com/android/internal/telephony/gsm/MsmsGsmDataConnectionTracker.java
++++ b/telephony/java/com/android/internal/telephony/gsm/MsmsGsmDataConnectionTracker.java
+@@@ -124,35 -109,22 +109,22 @@@ public class MsmsGsmDataConnectionTrack
+                  && isDataAllowed()
+                  && !mIsPsRestricted
+                  && desiredPowerState ) {
+-             for (int i = 0; i < dataEnabled.length; i++) {
+-                 log("dataEnabled[" + i + "]=" + dataEnabled[i] + " PDP=" + dataServiceTable[i]);
+-                 if (dataEnabled[i] == true && dataServiceTable[i] == null) {
+-                     mRequestedApnType = apnIdToType(i);
+-                     if (mRequestedApnType == Phone.APN_TYPE_DEFAULT && mIsWifiConnected) {
+-                         // if WIFI is connected, ignore the GPRS (default type)
+-                         // data setup
+-                         log("Ignore default type datacall setup because WIFI is connected.");
+-                         continue;
+-                     }
+-                     waitingApns = buildWaitingApns();
+-                     if (waitingApns.isEmpty()) {
+-                         if (DBG)
+-                             log("No APN found");
+-                         if (!isAnyPdpActive()) {
+-                             notifyNoData(GsmDataConnection.FailCause.MISSING_UKNOWN_APN);
+-                         }
+-                         continue;
+-                     } else {
+-                         log("Create from allApns : " + apnListToString(allApns));
+-                     }
+-                     if (DBG) {
+-                         log("Setup waitngApns : " + apnListToString(waitingApns));
+-                     }
+-                     return setupData(reason);
++ 
++             if (state == State.IDLE) {
++                 waitingApns = buildWaitingApns();
++                 if (waitingApns.isEmpty()) {
++                     if (DBG) log("No APN found");
+ -                    notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);
+++                    notifyNoData(GsmDataConnection.FailCause.MISSING_UKNOWN_APN);
++                     return false;
++                 } else {
++                     log ("Create from allApns : " + apnListToString(allApns));
+                  }
+              }
+-             log("Not found any service to setup.");
+-             return true;
++ 
++             if (DBG) {
++                 log ("Setup waitngApns : " + apnListToString(waitingApns));
++             }
++             return setupData(reason);
+          } else {
+              if (DBG)
+                  log("trySetupData: Not ready for data: " +
+@@@ -173,9 -145,7 +145,7 @@@
+      }
+  
+      @Override
+-     protected  synchronized void cleanUpConnection(boolean tearDown, String reason) {
+-         boolean closeAll = false;
+- 
+ -    protected synchronized void cleanUpConnection(boolean tearDown, String reason) {
+++    protected void cleanUpConnection(boolean tearDown, String reason) {
+          if (DBG) log("Clean up connection due to " + reason);
+  
+          // Clear the reconnect alarm, if set.
+@@@ -397,5 -308,5 +308,4 @@@
+          }
+      }
+       */
+- 
+  }
+ -
+diff --git a/telephony/java/com/android/internal/telephony/cdma/CdmaDataConnection.java b/telephony/java/com/android/internal/telephony/cdma/CdmaDataConnection.java
+index 66f35e4..c24444d 100644
+--- a/telephony/java/com/android/internal/telephony/cdma/CdmaDataConnection.java
++++ b/telephony/java/com/android/internal/telephony/cdma/CdmaDataConnection.java
+@@ -50,10 +50,11 @@ public class CdmaDataConnection extends DataConnection {
+      * @return CdmaDataConnection that was created.
+      */
+     static CdmaDataConnection makeDataConnection(CDMAPhone phone) {
++    	int phoneId = phone.getPhoneId();
+         synchronized (mCountLock) {
+-            mCount += 1;
++            mCount[phoneId] += 1;
+         }
+-        CdmaDataConnection cdmaDc = new CdmaDataConnection(phone, "CdmaDataConnection-" + mCount);
++        CdmaDataConnection cdmaDc = new CdmaDataConnection(phone, "CdmaDataConnection-" + mCount[phoneId]+", phoneId"+phoneId);
+         cdmaDc.start();
+         if (DBG) cdmaDc.log("Made " + cdmaDc.getName());
+         return cdmaDc;
+diff --git a/telephony/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java b/telephony/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java
+index c38494f..caa8085 100644
+--- a/telephony/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java
++++ b/telephony/java/com/android/internal/telephony/gsm/GsmDataConnectionTracker.java
+@@ -17,6 +17,7 @@
+ package com.android.internal.telephony.gsm;
+ 
+ import android.app.AlarmManager;
++import android.app.NotificationManager;
+ import android.app.PendingIntent;
+ import android.content.BroadcastReceiver;
+ import android.content.ContentResolver;
+@@ -45,6 +46,7 @@ import android.provider.Telephony;
+ import android.telephony.ServiceState;
+ import android.telephony.TelephonyManager;
+ import android.telephony.gsm.GsmCellLocation;
++import android.text.TextUtils;
+ import android.util.EventLog;
+ import android.util.Log;
+ import android.util.Patterns;
+@@ -54,21 +56,27 @@ import com.android.internal.telephony.DataCallState;
+ import com.android.internal.telephony.DataConnection;
+ import com.android.internal.telephony.DataConnectionTracker;
+ import com.android.internal.telephony.Phone;
++import com.android.internal.telephony.PhoneFactory;
+ import com.android.internal.telephony.RetryManager;
+ import com.android.internal.telephony.EventLogTags;
+ import com.android.internal.telephony.DataConnection.FailCause;
++import com.android.internal.telephony.Phone.DataState;
+ 
++
++import java.io.BufferedReader;
+ import java.io.IOException;
++import java.io.InputStreamReader;
+ import java.util.ArrayList;
+ import java.util.HashMap;
++import java.util.Hashtable;
+ 
+ /**
+  * {@hide}
+  */
+-public final class GsmDataConnectionTracker extends DataConnectionTracker {
++public class GsmDataConnectionTracker extends DataConnectionTracker {
+     protected final String LOG_TAG = "GSM";
+-
+-    private GSMPhone mGsmPhone;
++    private boolean apnChangeFlag=true;
++    protected GSMPhone mGsmPhone;
+     private WifiManager mWifiManager;  //add by liguxiang 08-26-11 for Cellular network to WLAN
+ 
+     private ArrayList<HashMap<String,Boolean>> ApnFilters = null;
+@@ -91,16 +99,19 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+ 
+         @Override
+         public void onChange(boolean selfChange) {
+-            sendMessage(obtainMessage(EVENT_APN_CHANGED));
++            if(apnChangeFlag){
++                sendMessage(obtainMessage(EVENT_APN_CHANGED));
++            }
++            apnChangeFlag=true;
+         }
+     }
+ 
+     //***** Instance Variables
+ 
+     // Indicates baseband will not auto-attach
+-    private boolean noAutoAttach = false;
++    protected boolean noAutoAttach = false;
+ 
+-    private boolean mReregisterOnReconnectFailure = false;
++    protected boolean mReregisterOnReconnectFailure = false;
+     private ContentResolver mResolver;
+ 
+     private boolean mPingTestActive = false;
+@@ -121,7 +132,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+      *
+      * Create once after simcard info is loaded
+      */
+-    private ArrayList<ApnSetting> allApns = null;
++    protected ArrayList<ApnSetting> allApns = null;
+ 
+     /**
+      * spreadtrum don't support muti-channel, so need protect
+@@ -134,7 +145,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+      *
+      * It is a subset of allApns and has the same format
+      */
+-    private ArrayList<ApnSetting> waitingApns = null;
++    protected ArrayList<ApnSetting> waitingApns = null;
+     private int waitingApnsPermanentFailureCountDown = 0;
+     private ApnSetting preferredApn = null;
+ 
+@@ -144,13 +155,13 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+     /**
+      * pdpList holds all the PDP connection, i.e. IP Link in GPRS
+      */
+-    private ArrayList<DataConnection> pdpList;
++    protected ArrayList<DataConnection> pdpList;
+ 
+     /** Currently active DataConnection */
+     private GsmDataConnection mActivePdp;
+ 
+     /** Is packet service restricted by network */
+-    private boolean mIsPsRestricted = false;
++    protected boolean mIsPsRestricted = false;
+ 
+     //***** Constants
+ 
+@@ -167,7 +178,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+     private static final String INTENT_RECONNECT_ALARM_EXTRA_REASON = "reason";
+ 
+     static final Uri PREFERAPN_URI = Uri.parse("content://telephony/carriers/preferapn");
++    static final Uri PREFERAPN_URI_SIM2 = Uri.parse("content://telephony_sim2/carriers/preferapn");
+     static final String APN_ID = "apn_id";
++    static final String APN_ID_SIM2 = "apn_id_sim2";
+     private boolean canSetPreferApn = false;
+ 
+     // for tracking retries on the default APN
+@@ -255,18 +268,18 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+ 
+         apnObserver = new ApnChangeObserver();
+         p.getContext().getContentResolver().registerContentObserver(
+-                Telephony.Carriers.CONTENT_URI, true, apnObserver);
++                Telephony.Carriers.getContentUri(p.getPhoneId()), true, apnObserver);
+ 
+         createAllPdpList();
+         initApnActivePdpFilter();
+-        
++
+ 		//add by liguxiang 08-26-11 for Cellular network to WLAN begin
+         if(mWifiManager == null){
+         	mWifiManager = (WifiManager) phone.getContext().getSystemService(Context.WIFI_SERVICE);
+         }
+ 		//add by liguxiang 08-26-11 for Cellular network to WLAN end
+-     
+-        
++
++
+         // This preference tells us 1) initial condition for "dataEnabled",
+         // and 2) whether the RIL will setup the baseband to auto-PS attach.
+         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(phone.getContext());
+@@ -277,12 +290,16 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         } catch (Exception e) {
+             // nothing to do - use the old behavior and leave data on
+         }
++        int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(p.getContext());
+         dataEnabled[APN_DEFAULT_ID] = !sp.getBoolean(GSMPhone.DATA_DISABLED_ON_BOOT_KEY, false) &&
+-                dataEnabledSetting;
++                dataEnabledSetting && (defaultDataPhoneId == phone.getPhoneId());
+         if (dataEnabled[APN_DEFAULT_ID]) {
+             enabledCount++;
+         }
+         noAutoAttach = !dataEnabled[APN_DEFAULT_ID];
++        noAutoAttach = false;
++        Log.d(LOG_TAG, "[" + phone.getPhoneId() + "]dataEnabled[APN_DEFAULT_ID]="
++                + dataEnabled[APN_DEFAULT_ID] + " enabledCount=" + enabledCount);
+ 
+         if (!mRetryMgr.configure(SystemProperties.get("ro.gsm.data_retry_config"))) {
+             if (!mRetryMgr.configure(DEFAULT_DATA_RETRY_CONFIG)) {
+@@ -430,7 +447,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         return pdps;
+     }
+ 
+-    private boolean isDataAllowed() {
++    protected boolean isDataAllowed() {
+         boolean roaming = phone.getServiceState().getRoaming();
+         return getAnyDataEnabled() && (!roaming || getDataOnRoamingEnabled()) &&
+                 mMasterDataEnabled;
+@@ -463,7 +480,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         }
+     }
+ 
+-    private boolean trySetupData(String reason) {
++    protected boolean trySetupData(String reason) {
++        /* SHOULD NOT ENTER */
+         if (DBG) log("***trySetupData due to " + (reason == null ? "(unspecified)" : reason));
+ 
+         Log.d(LOG_TAG, "[DSAC DEB] " + "trySetupData with mIsPsRestricted=" + mIsPsRestricted);
+@@ -542,7 +560,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+      * disconnected.
+      * @param reason reason for the clean up.
+      */
+-    private void cleanUpConnection(boolean tearDown, String reason) {
++    protected void cleanUpConnection(boolean tearDown, String reason) {
+         if (DBG) log("Clean up connection due to " + reason);
+ 
+         // Clear the reconnect alarm, if set.
+@@ -571,7 +589,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+ 
+         if (!notificationDeferred) {
+             if (DBG) log("cleanupConnection: !notificationDeferred");
+-            gotoIdleAndNotifyDataConnection(reason);
++            //gotoIdleAndNotifyDataConnection(reason);
++			gotoNotifyDataConnection(reason);
+         }
+     }
+ 
+@@ -630,7 +649,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         return null;
+     }
+ 
+-    private void initApnActivePdpFilter() 
++    private void initApnActivePdpFilter()
+     {
+         if(ApnFilters == null){
+             ApnFilters = new ArrayList<HashMap<String,Boolean>>();
+@@ -642,7 +661,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+             }
+         }
+     }
+-    public boolean setApnActivePdpFilter(String apntype,boolean filterenable) 
++    public boolean setApnActivePdpFilter(String apntype,boolean filterenable)
+    {
+         if(ApnFilters != null&& apntype != null )
+         {
+@@ -658,12 +677,12 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         return false ;
+    }
+ 
+-   public  boolean getApnActivePdpFilter(String apntype) 
++   public  boolean getApnActivePdpFilter(String apntype)
+    {
+        if(ApnFilters != null&& apntype!= null )
+        {
+            Boolean filterenable= false;
+- 
++
+            for(HashMap<String,Boolean> ApnTypesFilter : ApnFilters)
+            {
+                if(ApnTypesFilter.containsKey(apntype))
+@@ -672,19 +691,19 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+                    break;
+                }
+            }
+-           
++
+            Log.d(LOG_TAG, " getApnActivePdpFilter  apntypes:"+apntype+"  filterenable:"+filterenable);
+-           
++
+            return filterenable;
+        }
+-        
++
+        return false;
+    }
+-	
++
+ 
+     @Override
+     protected boolean isApnTypeFilters(String type) {
+-    
++
+       if(ApnFilters != null&& type!= null )
+       {
+            return  getApnActivePdpFilter(type) ;
+@@ -693,10 +712,15 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         return false;
+     }
+ 
+-    private boolean setupData(String reason) {
++    protected boolean setupData(String reason) {
+         ApnSetting apn;
+         GsmDataConnection pdp;
+-
++        //if now a pdp's state is connecting,another setupdata request should not be supported
++        if(mActivePdp!=null&&mActivePdp.isActiving()){
++            if (DBG)
++                log("*** setupData: a pdp is setup now,another setup request is not supported!!!");
++            return false;
++        }
+         apn = getNextApn();
+         if (apn == null) return false;
+         pdp = findFreePdp();
+@@ -706,9 +730,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         }
+         mActiveApn = apn;
+         mActivePdp = pdp;
+-        
++
+         if (DBG) log("setupData: mActiveApn"+mActiveApn.toString());
+-        
++
+         Message msg = obtainMessage();
+         msg.what = EVENT_DATA_SETUP_COMPLETE;
+         msg.obj = reason;
+@@ -789,13 +813,15 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         // TODO: It'd be nice to only do this if the changed entrie(s)
+         // match the current operator.
+         createAllApnList();
+-        if (state != State.DISCONNECTING) {
+-            cleanUpConnection(isConnected, Phone.REASON_APN_CHANGED);
+-            if (!isConnected) {
+-                // reset reconnect timer
+-                mRetryMgr.resetRetryCount();
+-                mReregisterOnReconnectFailure = false;
+-                trySetupData(Phone.REASON_APN_CHANGED);
++        if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
++            if (state != State.DISCONNECTING) {
++                cleanUpConnection(isConnected, Phone.REASON_APN_CHANGED);
++                if (!isConnected) {
++                    // reset reconnect timer
++                    mRetryMgr.resetRetryCount();
++                    mReregisterOnReconnectFailure = false;
++                    trySetupData(Phone.REASON_APN_CHANGED);
++                }
+             }
+         }
+     }
+@@ -837,7 +863,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+                         loc != null ? loc.getCid() : -1,
+                         TelephonyManager.getDefault().getNetworkType());
+ 
+-                cleanUpConnection(true, null);
++                cleanUpConnection(true, Phone.REASON_PDP_LOST);
+                 return;
+             } else if (!pdpStatesHasActiveCID(pdpStates, cidActive)) {
+                 // Here, we only consider this authoritative if we asked for the
+@@ -858,7 +884,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+                             loc != null ? loc.getCid() : -1,
+                             TelephonyManager.getDefault().getNetworkType());
+ 
+-                    cleanUpConnection(true, null);
++                    cleanUpConnection(true, Phone.REASON_PDP_LOST);
+                 }
+             }
+         }
+@@ -873,7 +899,20 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         mReregisterOnReconnectFailure = false;
+     }
+ 
+-    private void gotoIdleAndNotifyDataConnection(String reason) {
++    public void notifyDataConnection(String type,String reason){
++        //setState(State.CONNECTED);
++        phone.notifyDataConnection(type,reason);
++        startNetStatPoll();
++        // reset reconnect timer
++        mRetryMgr.resetRetryCount();
++        mReregisterOnReconnectFailure = false;
++    }
++    protected void gotoNotifyDataConnection(String reason) {
++        if (DBG) log("gotoNotifyDataConnection: reason=" + reason);
++        phone.notifyDataConnection(reason);
++       // mActiveApn= null;
++    }
++    protected void gotoIdleAndNotifyDataConnection(String reason) {
+         if (DBG) log("gotoIdleAndNotifyDataConnection: reason=" + reason);
+         setState(State.IDLE);
+         phone.notifyDataConnection(reason);
+@@ -892,7 +931,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         sendMessageDelayed(obtainMessage(EVENT_POLL_PDP), POLL_PDP_MILLIS);
+     }
+ 
+-    private void resetPollStats() {
++    protected void resetPollStats() {
+         txPkts = -1;
+         rxPkts = -1;
+         sentSinceLastRecv = 0;
+@@ -1115,60 +1154,62 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+     private boolean retryAfterDisconnected(String reason) {
+         boolean retry = true;
+ 
+-        if ( Phone.REASON_RADIO_TURNED_OFF.equals(reason) ) {
++        if ( Phone.REASON_RADIO_TURNED_OFF.equals(reason)
++                || Phone.REASON_DATA_DISABLED.equals(reason)
++                || state == State.DISCONNECTING) {
+             retry = false;
+         }
+         return retry;
+     }
+ 
+     private void reconnectAfterFail(FailCause lastFailCauseCode, String reason) {
+-        if (state == State.FAILED) {
+-            if (!mRetryMgr.isRetryNeeded()) {
+-                if (!mRequestedApnType.equals(Phone.APN_TYPE_DEFAULT)) {
+-                    // if no more retries on a secondary APN attempt, tell the world and revert.
+-                    phone.notifyDataConnection(Phone.REASON_APN_FAILED);
++        // if (state == State.FAILED) {
++        if (!mRetryMgr.isRetryNeeded()) {
++            if (!mRequestedApnType.equals(Phone.APN_TYPE_DEFAULT)) {
++                // if no more retries on a secondary APN attempt, tell the world
++                // and revert.
++                phone.notifyDataConnection(mRequestedApnType, Phone.REASON_APN_FAILED);
++                if (apnTypeToId(mRequestedApnType) != APN_INVALID_ID) {
+                     onEnableApn(apnTypeToId(mRequestedApnType), DISABLED);
+-                    return;
+-                }
+-                if (mReregisterOnReconnectFailure) {
+-                    // We've re-registerd once now just retry forever.
+-                    mRetryMgr.retryForeverUsingLastTimeout();
+-                } else {
+-                    // Try to re-register to the network.
+-                    Log.d(LOG_TAG, "PDP activate failed, Reregistering to the network");
+-                    mReregisterOnReconnectFailure = true;
+-                    mGsmPhone.mSST.reRegisterNetwork(null);
+-                    mRetryMgr.resetRetryCount();
+-                    return;
+                 }
++                return;
+             }
+-
+-            int nextReconnectDelay = mRetryMgr.getRetryTimer();
+-            Log.d(LOG_TAG, "PDP activate failed. Scheduling next attempt for "
+-                    + (nextReconnectDelay / 1000) + "s");
+-
+-            AlarmManager am =
+-                (AlarmManager) phone.getContext().getSystemService(Context.ALARM_SERVICE);
+-            Intent intent = new Intent(INTENT_RECONNECT_ALARM);
+-            intent.putExtra(INTENT_RECONNECT_ALARM_EXTRA_REASON, reason);
+-            mReconnectIntent = PendingIntent.getBroadcast(
+-                    phone.getContext(), 0, intent, 0);
+-            am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+-                    SystemClock.elapsedRealtime() + nextReconnectDelay,
+-                    mReconnectIntent);
+-
+-            mRetryMgr.increaseRetryCount();
+-
+-            if (!shouldPostNotification(lastFailCauseCode)) {
+-                Log.d(LOG_TAG,"NOT Posting GPRS Unavailable notification "
+-                                + "-- likely transient error");
++            if (mReregisterOnReconnectFailure) {
++                // We've re-registerd once now just retry forever.
++                mRetryMgr.retryForeverUsingLastTimeout();
+             } else {
+-                notifyNoData(lastFailCauseCode);
++                // Try to re-register to the network.
++                Log.d(LOG_TAG, "PDP activate failed, Reregistering to the network");
++                mReregisterOnReconnectFailure = true;
++                mGsmPhone.mSST.reRegisterNetwork(null);
++                mRetryMgr.resetRetryCount();
++                return;
+             }
+         }
++
++        int nextReconnectDelay = mRetryMgr.getRetryTimer();
++        Log.d(LOG_TAG, "PDP activate failed. Scheduling next attempt for "
++                + (nextReconnectDelay / 1000) + "s");
++
++        AlarmManager am = (AlarmManager) phone.getContext().getSystemService(Context.ALARM_SERVICE);
++        Intent intent = new Intent(INTENT_RECONNECT_ALARM);
++        intent.putExtra(INTENT_RECONNECT_ALARM_EXTRA_REASON, reason);
++        mReconnectIntent = PendingIntent.getBroadcast(phone.getContext(), 0, intent, 0);
++        am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()
++                + nextReconnectDelay, mReconnectIntent);
++
++        mRetryMgr.increaseRetryCount();
++
++        if (!shouldPostNotification(lastFailCauseCode)) {
++            Log.d(LOG_TAG, "NOT Posting GPRS Unavailable notification "
++                    + "-- likely transient error");
++        } else {
++            notifyNoData(lastFailCauseCode);
++        }
++        // }
+     }
+ 
+-    private void notifyNoData(GsmDataConnection.FailCause lastFailCauseCode) {
++    protected void notifyNoData(GsmDataConnection.FailCause lastFailCauseCode) {
+         setState(State.FAILED);
+     }
+ 
+@@ -1192,7 +1233,11 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+ 
+         // TODO:  To support simultaneous PDP contexts, this should really only call
+         // cleanUpConnection if it needs to free up a GsmDataConnection.
+-        cleanUpConnection(true, Phone.REASON_APN_SWITCHED);
++        //cleanUpConnection(true, Phone.REASON_APN_SWITCHED);
++        // here we try to setup a new pdp connection
++        String reason =Phone.REASON_APN_SWITCHED;
++        Log.i(LOG_TAG, "***********************try to setup new pdp Connection");
++        trySetupData(reason);
+     }
+ 
+     protected boolean onTrySetupData(String reason) {
+@@ -1202,6 +1247,14 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+     @Override
+     protected void onRoamingOff() {
+         trySetupData(Phone.REASON_ROAMING_OFF);
++        setNotification(GsmServiceStateTracker.PS_NOTIFICATION);
++    }
++
++    private void setNotification(int notificationId) {
++        Log.i(LOG_TAG, "gmsdataconnectiontracker onroamingoff setnotification");
++        NotificationManager notificationManager = (NotificationManager) this.phone.getContext()
++                .getSystemService(Context.NOTIFICATION_SERVICE);
++        notificationManager.cancel(notificationId);
+     }
+ 
+     @Override
+@@ -1240,9 +1293,14 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+             // FIXME  this can be improved
+             Log.i(LOG_TAG, "We're on the simulator; assuming radio off is meaningless");
+         } else {
+-            if (DBG) log("Radio is off and clean up all connection");
+-            // TODO: Should we reset mRequestedApnType to "default"?
+-            cleanUpConnection(false, Phone.REASON_RADIO_TURNED_OFF);
++            if (DBG)
++                log("Radio is off and clean up all connection");
++            if (state != State.IDLE) {
++                cleanUpConnection(true, Phone.REASON_RADIO_TURNED_OFF);
++            } else {
++                // TODO: Should we reset mRequestedApnType to "default"?
++                cleanUpConnection(false, Phone.REASON_RADIO_TURNED_OFF);
++            }
+         }
+     }
+ 
+@@ -1261,6 +1319,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+                     Log.d(LOG_TAG, "PREFERED APN is null");
+                     preferredApn = mActiveApn;
+                     setPreferredApn(preferredApn.id);
++                    apnChangeFlag=false;
+                 }
+             } else {
+                 SystemProperties.set("gsm.defaultpdpcontext.active", "false");
+@@ -1392,7 +1451,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+                 String selection = "numeric = '" + operator + "'";
+ 
+                 Cursor cursor = phone.getContext().getContentResolver().query(
+-                        Telephony.Carriers.CONTENT_URI, null, selection, null, null);
++                        Telephony.Carriers.getContentUri(phone.getPhoneId()), null, selection, null, null);
+ 
+                 if (cursor != null) {
+                     if (cursor.getCount() > 0) {
+@@ -1426,6 +1485,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+                 //TS for compile
+                 notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);//MISSING_UKNOWN_APN);
+             } else {
++                Log.d(LOG_TAG, "All APNs:" + allApns);
+                 preferredApn = getPreferredApn();
+                 Log.d(LOG_TAG, "Get PreferredAPN");
+                 if (preferredApn != null && !preferredApn.numeric.equals(operator)) {
+@@ -1470,7 +1530,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+      * @return waitingApns list to be used to create PDP
+      *          error when waitingApns.isEmpty()
+      */
+-    private ArrayList<ApnSetting> buildWaitingApns() {
++    protected ArrayList<ApnSetting> buildWaitingApns() {
+         ArrayList<ApnSetting> apnList = new ArrayList<ApnSetting>();
+ 
+         if (mRequestedApnType.equals(Phone.APN_TYPE_DUN)) {
+@@ -1527,7 +1587,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         return apn;
+     }
+ 
+-    private String apnListToString (ArrayList<ApnSetting> apns) {
++    protected String apnListToString (ArrayList<ApnSetting> apns) {
+         StringBuilder result = new StringBuilder();
+         for (int i = 0, size = apns.size(); i < size; i++) {
+             result.append('[')
+@@ -1538,34 +1598,55 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+     }
+ 
+     private void startDelayedRetry(GsmDataConnection.FailCause cause, String reason) {
+-        notifyNoData(cause);
++        //notifyNoData(cause);
+         reconnectAfterFail(cause, reason);
+     }
+ 
++    private Uri getPreferApnUriByPhoneId(int phoneId) {
++        switch (phoneId) {
++            default:
++            case 0:
++                return PREFERAPN_URI;
++            case 1:
++                return PREFERAPN_URI_SIM2;
++        }
++    }
++
++    private String getApnIdByPhoneId(int phoneId) {
++        switch (phoneId) {
++            default:
++            case 0:
++                return APN_ID;
++            case 1:
++                return APN_ID_SIM2;
++        }
++    }
++
+     private void setPreferredApn(int pos) {
+         if (!canSetPreferApn) {
+             return;
+         }
+ 
++        Uri preferapn_uri = getPreferApnUriByPhoneId(phone.getPhoneId());
+         ContentResolver resolver = phone.getContext().getContentResolver();
+-        resolver.delete(PREFERAPN_URI, null, null);
++        resolver.delete(preferapn_uri, null, null);
+ 
+         if (pos >= 0) {
+             ContentValues values = new ContentValues();
+-            values.put(APN_ID, pos);
+-            resolver.insert(PREFERAPN_URI, values);
+-            Log.d(LOG_TAG,"setPreferredApn pos "+pos);
++            values.put(getApnIdByPhoneId(phone.getPhoneId()), pos);
++            resolver.insert(preferapn_uri, values);
+         }
+     }
+ 
+     private ApnSetting getPreferredApn() {
+-        //synchronized (allApnsLock){
++        synchronized (allApnsLock){
+         if (allApns.isEmpty()) {
+             return null;
+         }
+ 
++        Uri preferapn_uri = getPreferApnUriByPhoneId(phone.getPhoneId());
+         Cursor cursor = phone.getContext().getContentResolver().query(
+-                PREFERAPN_URI, new String[] { "_id", "name", "apn" },
++                preferapn_uri, new String[] { "_id", "name", "apn" },
+                 null, null, Telephony.Carriers.DEFAULT_SORT_ORDER);
+ 
+         if (cursor != null) {
+@@ -1593,11 +1674,11 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+         }
+ 
+         return null;
+-        //}
++        }
+     }
+ 
+     public void handleMessage (Message msg) {
+-        if (DBG) Log.d(LOG_TAG,"GSMDataConnTrack handleMessage "+msg);
++        if (DBG) Log.d(LOG_TAG,"GSMDataConnTrack["+ phone.getPhoneId() +"] handleMessage "+msg);
+ 
+         if (!mGsmPhone.mIsTheCurrentActivePhone) {
+             Log.d(LOG_TAG, "Ignore GSM msgs since GSM phone is inactive");
+@@ -1617,7 +1698,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+                 break;
+ 
+             case EVENT_GPRS_DETACHED:
+-                onGprsDetached();
++                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
++                    onGprsDetached();
++                }
+                 break;
+ 
+             case EVENT_GPRS_ATTACHED:
+@@ -1681,6 +1764,12 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+                 }
+                 break;
+ 
++            case EVENT_SWITCH_PHONE:
++                Log.d(LOG_TAG, "EVENT_SWITCH_PHONE");
++                MsmsGsmDataConnectionTrackerProxy.checkAndSwitchPhone(phone.getPhoneId(),
++                        phone.getContext());
++                break;
++
+             default:
+                 // handle the message in the super class DataConnectionTracker
+                 super.handleMessage(msg);
+@@ -1689,6 +1778,29 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
+     }
+ 
+     protected void log(String s) {
+-        Log.d(LOG_TAG, "[GsmDataConnectionTracker] " + s);
++        Log.d(LOG_TAG, "[GsmDataConnectionTracker-phoneId" + mGsmPhone.getPhoneId() + "] " + s);
++    }
++    public  class DisconnectData{
++        private GsmDataConnection dc;
++        private String reason;
++        public DisconnectData(GsmDataConnection dc,String reason){
++            this.dc=dc;
++            this.reason=reason;
++        }
++        public GsmDataConnection getGsmDataConnection(){
++            return this.dc;
++        }
++        public String getReason(){
++            return this.reason;
++        }
++        public void setGsmDataConnection(GsmDataConnection dc){
++            this.dc=dc;
++        }
++        public void setReason(String reason){
++            this.reason=reason;
++        }
++    }
++    public  DisconnectData getDisconnectData(){
++        return new DisconnectData(null,null);
+     }
+ }
+diff --git a/telephony/java/com/android/internal/telephony/gsm/MsmsGsmDataConnectionTrackerProxy.java b/telephony/java/com/android/internal/telephony/gsm/MsmsGsmDataConnectionTrackerProxy.java
+index 148d861..49ae514 100644
+--- a/telephony/java/com/android/internal/telephony/gsm/MsmsGsmDataConnectionTrackerProxy.java
++++ b/telephony/java/com/android/internal/telephony/gsm/MsmsGsmDataConnectionTrackerProxy.java
+@@ -27,7 +27,6 @@ import android.os.Looper;
+ import android.os.Message;
+ import android.os.SystemClock;
+ import android.provider.Settings;
+-import android.telephony.ServiceState;
+ import android.telephony.TelephonyManager;
+ import android.text.TextUtils;
+ import android.util.Log;
+@@ -37,7 +36,6 @@ import com.android.internal.telephony.DataConnectionTracker;
+ import com.android.internal.telephony.Phone;
+ import com.android.internal.telephony.PhoneBase;
+ import com.android.internal.telephony.PhoneFactory;
+-import com.android.internal.telephony.gsm.GsmDataConnectionTracker.DisconnectData;
+ 
+ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
+     private static final String LOG_TAG = "GSM";
+@@ -50,14 +48,11 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
+ 
+     private static MsmsGsmDataConnectionTrackerProxy sInstance = new MsmsGsmDataConnectionTrackerProxy();
+     private static MsmsGsmDataConnectionTracker[] sTracker;
+-    
++
+     //private static int sRequestDisconnectPhoneId = INVALID_PHONE_ID;
+     private static int sRequestConnectPhoneId = INVALID_PHONE_ID;
+     private static int sActivePhoneId = INVALID_PHONE_ID;
+-    // sRequestPhoneIdBeforeVoiceCallEnd is used to record
+-    // sRequestConnectPhoneId when voiceCall Started and setup dataCall after
+-    // voiceCall ended.
+-    private static int sRequestPhoneIdBeforeVoiceCallEnd = INVALID_PHONE_ID;
++
+     public static MsmsGsmDataConnectionTrackerProxy getInstance() {
+         //if (sInstance == null) {
+         //	sInstance = new MsmsGsmDataConnectionTrackerProxy();
+@@ -81,7 +76,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
+     }
+ 
+ 	/** ensure only one or none connection state is not idle
+-	 * 
++	 *
+ 	 * @return
+ 	 */
+ 	private static boolean checkAllConnectionState() {
+@@ -170,37 +165,24 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
+             }
+ */
+             log("onEnableNewApn(" + phoneId + ") activePhoneId:" + sActivePhoneId);
+-            if (phoneId == INVALID_PHONE_ID) {
+-                log("phoneId is invalid,onEnableNewApn out!!!");
+-                return;
+-            }
+             sRequestConnectPhoneId = phoneId;
+-            sRequestPhoneIdBeforeVoiceCallEnd = sRequestConnectPhoneId;
++            //if (sActivePhoneId == phoneId) {
++                // current phone is in an "activate" state, enable new apn directly
++                //log("onEnableNewApn: switch Apn on the same phone" + phoneId);
++            //} else {
++                // disconnect the "activate" phone, enable request apn later
++                //log("disableData(" + sActivePhoneId + ")");
++                //sTracker[sActivePhoneId].setDataEnabled(false);
++                //sTracker[sActivePhoneId].cleanupConnections(true,
++                //        "switchConnection");
++            //}
+             if (sActivePhoneId != INVALID_PHONE_ID) {
+-                if(sRequestConnectPhoneId!=sActivePhoneId){
+-                    if (sTracker[sActivePhoneId].isAllPdpDisconnectDone()) {
+-                        checkAndSwitchPhone(sActivePhoneId, null);
+-                    } else {
+-                        sTracker[sActivePhoneId].cleanupConnections(true,
+-                                Phone.REASON_DATA_DISABLED);
+-                    }
+-                }else{
+-                    sTracker[sActivePhoneId].onEnableNewApnInternal();
+-                }
++                sTracker[sActivePhoneId].onEnableNewApnInternal();
+             } else {
+-                // sTracker[sRequestConnectPhoneId].trySetupData("switchConnection");
+-                if (sTracker[sRequestConnectPhoneId].getCurrentGprsState() == ServiceState.STATE_IN_SERVICE) {
+-                    sTracker[sRequestConnectPhoneId].trySetupData(Phone.REASON_APN_SWITCHED);
+-                    sActivePhoneId = sRequestConnectPhoneId;
+-                } else {
+-                    sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
+-                    sActivePhoneId = sRequestConnectPhoneId;
+-                    // sTracker[sRequestConnectPhoneId].onEnableNewApnInternal();
+-                }
+-            }
+-            if(phoneId == sActivePhoneId){
+-                // do not need to switch phone, so we initialize sRequestConnectPhoneId.
+-                sRequestConnectPhoneId=INVALID_PHONE_ID;
++                //sTracker[sRequestConnectPhoneId].trySetupData("switchConnection");
++                sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
++                sActivePhoneId = sRequestConnectPhoneId;
++                //sTracker[sRequestConnectPhoneId].onEnableNewApnInternal();
+             }
+             log("onEnableNewApn out");
+         }
+@@ -250,37 +232,35 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
+             //	log("set activePhoneId to default when startup");
+             //	sActivePhoneId = TelephonyManager.getDefaultDataPhoneId(context);
+             //}
+-            DisconnectData cd=null;
+             if (sRequestConnectPhoneId == INVALID_PHONE_ID) {
+-//                String reason = null;
+-//                if (ar.userObj instanceof String) {
+-//                   reason = (String) ar.userObj;
+-//                }
+-                if(ar.userObj  instanceof DisconnectData){
+-                    cd=(DisconnectData)ar.userObj;
++                String reason = null;
++                if (ar.userObj instanceof String) {
++                   reason = (String) ar.userObj;
+                 }
+-                if (TextUtils.equals(cd.getReason(), Phone.REASON_PDP_LOST)
+-                        || TextUtils.equals(cd.getReason(), Phone.REASON_PDP_RESET)) {
++                if (TextUtils.equals(reason, Phone.REASON_PDP_LOST)
++                        || TextUtils.equals(reason, Phone.REASON_PDP_RESET)) {
+                     log("set RequestConnectPhoneId to active when pdp lost/reset");
+                     sRequestConnectPhoneId = sActivePhoneId;
+                 } else {
++                    log("set RequestConnectPhoneId to default when it is not specified");
+                     sRequestConnectPhoneId = TelephonyManager.getDefaultDataPhoneId(context);
+-                    log("set RequestConnectPhoneId to default when it is not specified:RequestConnectPhoneId="
+-                            + sRequestConnectPhoneId);
+                 }
+             }
++            log("onDisconnectDone(" + phoneId + ") activePhoneId=" + sActivePhoneId
++                    + " RequestConnectPhoneId=" + sRequestConnectPhoneId);
++            if (sActivePhoneId != phoneId) {
++                log("sActivePhoneId should equal to phoneId!!!");
++                log("onDisconnectDone out");
++                return;
++            }
+             if (sActivePhoneId != sRequestConnectPhoneId) {
+                 // switch connection
+                 if (sActivePhoneId != INVALID_PHONE_ID) {
+-                    sTracker[sActivePhoneId].onDisconnectDoneInternal(ar);
+-                    if (sTracker[sActivePhoneId].isAllPdpDisconnectDone()) {
+-                        detachGprs(sTracker[sActivePhoneId].mGsmPhone);
+-                    }else{
+-                        log("isAllPdpDisconnectDone==false, waiting...");
+-                        return;
+-                    }
++                    sTracker[sActivePhoneId].onDisconnectDoneInternalWithoutRetry(ar);
++                    detachGprs(sTracker[sActivePhoneId].mGsmPhone);
+                     //SystemClock.sleep(2000);
+                 }
++
+                 log("onDisconnectDone: switch Apn from phone" + sActivePhoneId
+                         + " to phone" + sRequestConnectPhoneId);
+                 //sTracker[sRequestConnectPhoneId].trySetupData("switchConnection");
+@@ -297,53 +277,6 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
+ 		}
+ 	}
+ 
+-    public static boolean checkAndSwitchPhone(int phoneId, Context context) {
+-        synchronized (sInstance) {
+-            log("checkAndSwitchPhone: sActivePhoneId=" + sActivePhoneId
+-                    + " sRequestConnectPhoneId=" + sRequestConnectPhoneId);
+-            if (sActivePhoneId != INVALID_PHONE_ID && sActivePhoneId != phoneId) {
+-                log("sActivePhoneId should be INVALID_PHONE_ID or equal to phoneId " + phoneId);
+-                return false;
+-            }
+-            if (sRequestConnectPhoneId == INVALID_PHONE_ID && context != null) {
+-                sRequestConnectPhoneId = TelephonyManager.getDefaultDataPhoneId(context);
+-                log("set RequestConnectPhoneId to default when it is not specified:RequestConnectPhoneId="
+-                        + sRequestConnectPhoneId);
+-            }
+-            if (sActivePhoneId != sRequestConnectPhoneId) {
+-                // switch connection
+-                if (sActivePhoneId != INVALID_PHONE_ID) {
+-                    if (sTracker[sActivePhoneId].isAllPdpDisconnectDone()) {
+-                        detachGprs(sTracker[sActivePhoneId].mGsmPhone);
+-                    } else {
+-                        log("isAllPdpDisconnectDone==false, return false");
+-                        return false;
+-                    }
+-                    // SystemClock.sleep(2000);
+-                } else {
+-                    if (sTracker[phoneId].isAllPdpDisconnectDone()) {
+-                        detachGprs(sTracker[phoneId].mGsmPhone);
+-                    } else {
+-                        log("isAllPdpDisconnectDone==false, return false");
+-                        return false;
+-                    }
+-                }
+-
+-                log("checkAndSwitchPhone: switch Apn from phone" + sActivePhoneId + " to phone"
+-                        + sRequestConnectPhoneId);
+-                // sTracker[sRequestConnectPhoneId].trySetupData("switchConnection");
+-                sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
+-                sActivePhoneId = sRequestConnectPhoneId;
+-                sRequestConnectPhoneId = INVALID_PHONE_ID;
+-                return true;
+-            } else {
+-                log("checkAndSwitchPhone: same phone, return false");
+-                sRequestConnectPhoneId = INVALID_PHONE_ID;
+-                return false;
+-            }
+-        }
+-    }
+-
+     static boolean trySetupData(int phoneId, String reason) {
+         log("trySetupData: sActivePhoneId=" + sActivePhoneId + " sRequestConnectPhoneId="
+                 + sRequestConnectPhoneId + " phoneId=" + phoneId + " reason:" + reason);
+@@ -354,25 +287,15 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
+     }
+ 
+     static void onVoiceCallEnded(int phoneId) {
+-        //for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+-            sTracker[phoneId].onVoiceCallEndedInternal();
+-        //}
++        for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
++            sTracker[i].onVoiceCallEndedInternal();
++        }
+     }
+ 
+     static void setActivePhoneId(int phoneId) {
+-        log("active phone id is changed:sActivePhoneId=" + sActivePhoneId + ",phoneId=" + phoneId);
+         sActivePhoneId = phoneId;
+     }
+ 
+-    public static boolean isActivePhoneId(int phoneId) {
+-        sActivePhoneId = ((sActivePhoneId != INVALID_PHONE_ID) ? sActivePhoneId : INVALID_PHONE_ID);
+-        if (sActivePhoneId == phoneId) {
+-            return true;
+-        } else {
+-            return false;
+-        }
+-    }
+-
+ /*
+     public void handleMessage(Message msg) {
+     	switch (msg.what) {
+@@ -477,15 +400,5 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
+     private static void log(String s) {
+         Log.d(LOG_TAG, "[MsmsDataConnectionTrackerProxy]" + s);
+     }
+-
+-    public static int getRequestPhoneIdBeforeVoiceCallEnd() {
+-        if (sRequestPhoneIdBeforeVoiceCallEnd == INVALID_PHONE_ID) {
+-            sRequestPhoneIdBeforeVoiceCallEnd = sActivePhoneId;
+-        }
+-        return sRequestPhoneIdBeforeVoiceCallEnd;
+-    }
+-
+-    public static void resetRequestPhoneIdBeforeVoiceCallEnd() {
+-        sRequestPhoneIdBeforeVoiceCallEnd = INVALID_PHONE_ID;
+-    }
+ }
++

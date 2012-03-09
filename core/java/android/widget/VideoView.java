@@ -186,7 +186,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         setFocusable(true);
         setFocusableInTouchMode(true);
-        requestFocus();
+//        requestFocus();
         Display display = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         mWinWidth = display.getWidth();
         mWinHeight = display.getHeight();
@@ -392,15 +392,15 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                     if (mTargetState == STATE_PLAYING) {
                         Log.w(TAG, "OnPreparedListener  start");
                         start();
-                        if (mMediaController != null) {
-                            mMediaController.show();
-                        }
+//                        if (mMediaController != null) {
+//                            mMediaController.show();
+//                        }
                     } else if (!isPlaying() &&
                                (seekToPosition != 0 || getCurrentPosition() > 0)) {
-                       if (mMediaController != null) {
-                           // Show the media controls when we're paused into a video and make 'em stick.
-                           mMediaController.show(0);
-                       }
+//                       if (mMediaController != null) {
+//                           // Show the media controls when we're paused into a video and make 'em stick.
+//                           mMediaController.show(0);
+//                       }
                 //   }
                 }
             } else {

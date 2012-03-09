@@ -64,10 +64,12 @@ public class GsmDataConnection extends DataConnection {
      * @return GsmDataConnection that was created.
      */
     static GsmDataConnection makeDataConnection(GSMPhone phone) {
+		int phoneId = phone.getPhoneId();
+
         synchronized (mCountLock) {
-            mCount += 1;
+            mCount[phoneId] += 1;
         }
-        GsmDataConnection gsmDc = new GsmDataConnection(phone, "GsmDataConnection-" + mCount);
+        GsmDataConnection gsmDc = new GsmDataConnection(phone, "GsmDataConnection-" + mCount[phoneId]+", phoneId"+phoneId);
         gsmDc.start();
         if (DBG) gsmDc.log("Made " + gsmDc.getName());
         return gsmDc;
@@ -89,8 +91,15 @@ public class GsmDataConnection extends DataConnection {
                 + "' APN: '" + apn.apn
                 + "' proxy: '" + apn.proxy + "' port: '" + apn.port);
 
-        setHttpProxy (apn.proxy, apn.port);
-
+        if (apn.canHandleType(Phone.APN_TYPE_DEFAULT)) {
+            setHttpProxy(apn.proxy, apn.port);
+        } else if (apn.canHandleType(Phone.APN_TYPE_MMS)) {
+            // do nothing even though proxy is set
+        } else {
+            if (apn.proxy != null && apn.proxy.length() > 0) {
+                setHttpProxy(apn.proxy, apn.port);
+            }
+        }
         createTime = -1;
         lastFailTime = -1;
         lastFailCause = FailCause.NONE;

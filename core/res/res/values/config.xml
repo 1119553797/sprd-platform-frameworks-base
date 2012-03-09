@@ -42,6 +42,7 @@
        <item><xliff:g id="id">data_connection</xliff:g></item>
        <item><xliff:g id="id">phone_evdo_signal</xliff:g></item>
        <item><xliff:g id="id">phone_signal</xliff:g></item>
+       <item><xliff:g id="id">phone_signal_second_sub</xliff:g></item>
        <item><xliff:g id="id">battery</xliff:g></item>
        <item><xliff:g id="id">alarm_clock</xliff:g></item>
        <item><xliff:g id="id">secure</xliff:g></item>
@@ -94,6 +95,7 @@
         <item>"wifi,1,1,1"</item>
         <item>"mobile,0,0,0"</item>
         <item>"mobile_mms,2,0,2"</item>
+	<item>"mobile_mms2,10,0,2"</item>
         <item>"mobile_supl,3,0,2"</item>
         <item>"mobile_hipri,5,0,3"</item>
         <item>"mobile_dm,6,0,3"</item>

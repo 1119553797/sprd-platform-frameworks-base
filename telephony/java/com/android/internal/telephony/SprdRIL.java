@@ -72,6 +72,11 @@ public final class SprdRIL extends RIL {
 	public SprdRIL(Context context, int networkMode, int cdmaSubscription) {
 		super(context, networkMode, cdmaSubscription);
 	}
+	// zhanglj add begin 2010-05-20
+	public SprdRIL(Context context, int networkMode, int cdmaSubscription, int phoneId) {
+		super(context, networkMode, cdmaSubscription, phoneId);
+	}
+	// zhanglj add end
 	
     public void
     queryFacilityLock (String facility, String password, int serviceClass,
@@ -1438,6 +1443,10 @@ public final class SprdRIL extends RIL {
 		 }
 	 }
 
+    // zhanglj add 2010-05-24
+    public int getPhoneId(){
+        return mPhoneId;
+    }
 	 public void  Mbbms_Gsm_Authenticate(String nonce, Message result) {
 		 RILRequest rr = RILRequest.obtain(RIL_REQUEST_MBBMS_GSM_AUTHEN, result);
 			

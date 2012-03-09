@@ -119,6 +119,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
     String poundString;         // Entire MMI string up to and including #
     String dialingNumber;
     String pwd;                 // For password registration
+    String dialingString;
 
     /** Set to true in processCode, not at newFromDialString time */
     private boolean isPendingUSSD;
@@ -192,6 +193,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             ret.sic = makeEmptyNull(m.group(MATCH_GROUP_SIC));
             ret.pwd = makeEmptyNull(m.group(MATCH_GROUP_PWD_CONFIRM));
             ret.dialingNumber = makeEmptyNull(m.group(MATCH_GROUP_DIALING_NUMBER));
+            ret.dialingString = dialString;
 
         } else if (dialString.endsWith("#")) {
             // TS 22.030 sec 6.5.3.2
@@ -585,8 +587,13 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                 // These just get treated as USSD.
                 sendUssd(dialingNumber);
             } else if (dialingNumber != null) {
+                if (poundString != null && dialingString != null) {
+                    Log.d(LOG_TAG, " dialingString = " + dialingString);
+                    sendUssd(dialingString);
+                } else {
                 // We should have no dialing numbers here
                 throw new RuntimeException ("Invalid or Unsupported MMI Code");
+                }
             } else if (sc != null && sc.equals(SC_CLIP)) {
                 Log.d(LOG_TAG, "is CLIP");
                 if (isInterrogate()) {
@@ -610,7 +617,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                     throw new RuntimeException ("Invalid or Unsupported MMI Code");
                 }
             } else if (sc != null && sc.equals(SC_COLP)) {
-                Log.d(LOG_TAG, "------ is COLP");
+                Log.d(LOG_TAG, "is COLP");
                 if (isInterrogate()) {
                     phone.mCM.queryCOLP(
                             obtainMessage(EVENT_QUERY_LI_COMPLETE , this));
@@ -619,7 +626,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                 }
 
             } else if (sc != null && sc.equals(SC_COLR)) {
-                Log.d(LOG_TAG, "------ is COLR");
+                Log.d(LOG_TAG, "is COLR");
                 if (isInterrogate()) {
                     phone.mCM.queryCOLR(
                             obtainMessage(EVENT_QUERY_LI_COMPLETE , this));
@@ -760,7 +767,15 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                 if (isRegister()) {
                     if (!newPin.equals(sic)) {
                         // password mismatch; return error
-                        handlePasswordError(com.android.internal.R.string.mismatchPin);
+                        if (sc.equals(SC_PIN)) {
+                            handlePasswordError(com.android.internal.R.string.mismatchPin);
+                        } else if (sc.equals(SC_PIN2)) {
+                            handlePasswordError(com.android.internal.R.string.mismatchPin2);
+                        } else if (sc.equals(SC_PUK)) {
+                            handlePasswordError(com.android.internal.R.string.mismatchPuk);
+                        } else if (sc.equals(SC_PUK2)) {
+                            handlePasswordError(com.android.internal.R.string.mismatchPuk2);
+                        }
                     } else if (pinLen < 4 || pinLen > 8 ) {
                         // invalid length
                         handlePasswordError(com.android.internal.R.string.invalidPin);
@@ -768,7 +783,9 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                                phone.mSimCard.getState() == SimCard.State.PUK_REQUIRED ) {
                         // Sim is puk-locked
                         handlePasswordError(com.android.internal.R.string.needPuk);
-                    } else {
+                    } else if (sc.equals(SC_PIN)&&!phone.getIccCard().getIccLockEnabled()) {
+                        handlePasswordError(com.android.internal.R.string.needPinLock);
+                    }else {
                         // pre-checks OK
                         if (sc.equals(SC_PIN)) {
                             phone.mCM.mmiEnterSim(poundString,
@@ -1005,7 +1022,15 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             } else if (sc.equals(SC_WAIT)) {
                 return context.getText(com.android.internal.R.string.CwMmi);
             } else if (isPinCommand()) {
-                return context.getText(com.android.internal.R.string.PinMmi);
+                if (sc.equals(SC_PIN)) {
+                    return context.getText(com.android.internal.R.string.PinMmi);
+                } else if (sc.equals(SC_PIN2)) {
+                    return context.getText(com.android.internal.R.string.Pin2Mmi);
+                } else if (sc.equals(SC_PUK)) {
+                    return context.getText(com.android.internal.R.string.PukMmi);
+                } else if (sc.equals(SC_PUK2)) {
+                    return context.getText(com.android.internal.R.string.Puk2Mmi);
+                }
             } else if (sc.equals(SC_COLP)) {
                 return context.getText(com.android.internal.R.string.ColpMmi);
 	        } else if (sc.equals(SC_COLR)) {
@@ -1029,12 +1054,18 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                     if (isPinCommand()) {
                         // look specifically for the PUK commands and adjust
                         // the message accordingly.
-                        if (sc.equals(SC_PUK) || sc.equals(SC_PUK2)) {
+                        if (sc.equals(SC_PUK)) {
                             sb.append(context.getText(
                                     com.android.internal.R.string.badPuk));
-                        } else {
+                        } else if (sc.equals(SC_PUK2)){
+                            sb.append(context.getText(
+                                    com.android.internal.R.string.badPuk2));
+                        } else if (sc.equals(SC_PIN)){
                             sb.append(context.getText(
                                     com.android.internal.R.string.badPin));
+                        } else if (sc.equals(SC_PIN2)){
+                            sb.append(context.getText(
+                                    com.android.internal.R.string.badPin2));
                         }
                     } else {
                         sb.append(context.getText(
@@ -1042,21 +1073,10 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                     }
                 } else if (err == CommandException.Error.SIM_PUK2) {
                     sb.append(context.getText(
-                            com.android.internal.R.string.badPin));
+                            com.android.internal.R.string.badPin2));
                     sb.append("\n");
                     sb.append(context.getText(
                             com.android.internal.R.string.needPuk2));
-
-                } else if (err == CommandException.Error.GENERIC_FAILURE) {
-                    if (isServiceCodeCallBarring(sc) || sc.equals(SC_WAIT) ||
-                        isServiceCodeCallForwarding(sc) || sc.equals(SC_PWD)) {
-                        sb.append(context.getText(
-                                com.android.internal.R.string.OprNotComplete));
-                    } else {
-                        sb.append(context.getText(
-                                com.android.internal.R.string.mmiError));
-                    }
-
                 } else if (err == CommandException.Error.FDN_CHECK_FAILURE) {
                     Log.i(LOG_TAG, "FDN_CHECK_FAILURE");
                     sb.append(context.getText(com.android.internal.R.string.mmiFdnError));
@@ -1093,6 +1113,9 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             } else {
                 sb.append(context.getText(
                         com.android.internal.R.string.serviceRegistered));
+                if (sc.equals(SC_PUK)&&!phone.getIccCard().getIccLockEnabled()) {
+                    phone.getIccCard().setIccLockEnabled(true);
+                }
             }
         } else if (isErasure()) {
             state = State.COMPLETE;
@@ -1272,7 +1295,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
         destinations[1] = PhoneNumberUtils.stringFromStringAndTOA(info.number, info.toa);
         destinations[2] = Integer.toString(info.timeSeconds);
 
-	int reason = scToCallForwardReason(sc);
+        int reason = scToCallForwardReason(sc);
         if (reason == CommandsInterface.CF_REASON_UNCONDITIONAL &&
                 (info.serviceClass & serviceClassMask)
                         == CommandsInterface.SERVICE_CLASS_VOICE) {
@@ -1447,7 +1470,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
 
         if (ar.exception != null) {
             state = State.FAILED;
-            sb.append(context.getText(com.android.internal.R.string.mmiError));
+            sb.append(getErrorMessage(ar));
         } else {
             int[] ints = (int[])ar.result;
 
@@ -1504,6 +1527,11 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             }
         }
         return sb;
+    }
+
+    @Override
+    public Phone getPhone() {
+        return ((Phone) phone);
     }
 
     /***

@@ -52,6 +52,7 @@ public interface IccConstants {
     static final int EF_SPN_CPHS = 0x6f14;
     static final int EF_SPN_SHORT_CPHS = 0x6f18;
     static final int EF_INFO_CPHS = 0x6f16;
+    static final int EF_CSP_CPHS = 0x6f15;
 
     static final int EF_ECC = 0x6FB7;
 

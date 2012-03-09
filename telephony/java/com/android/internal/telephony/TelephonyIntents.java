@@ -257,4 +257,6 @@ public class TelephonyIntents {
      */
     public static final String ACTION_STK_REFRESH_SIM_CONTACTS
             = "android.intent.action.ACTION_STK_REFRESH_SIM_CONTACTS";
+    public static final String ACTION_GET_ICC_STATUS_DONE = "android.intent.action.GET_ICC_STATUS_DONE";
+    public static final String SIM_ADNCACHE_LOADED = "android.intent.action.SIM_ADNCACHE_LOADED";
 }

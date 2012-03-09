@@ -21,6 +21,7 @@ import com.android.server.usb.UsbService;
 import com.android.internal.app.ShutdownThread;
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.SamplingProfilerIntegration;
+import com.android.internal.telephony.PhoneFactory;
 
 import dalvik.system.VMRuntime;
 import dalvik.system.Zygote;
@@ -141,7 +142,10 @@ class ServerThread extends Thread {
             context = ActivityManagerService.main(factoryTest);
 
             Slog.i(TAG, "Telephony Registry");
-            ServiceManager.addService("telephony.registry", new TelephonyRegistry(context));
+            for(int i = 0; i < PhoneFactory.getPhoneCount(); i++){
+                ServiceManager.addService(PhoneFactory.getServiceName("telephony.registry", i), 
+                    new TelephonyRegistry(context, i));
+            }
 
             AttributeCache.init(context);
 

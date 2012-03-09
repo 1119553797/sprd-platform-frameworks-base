@@ -247,7 +247,22 @@ public class CallerInfo {
         // Change the callerInfo number ONLY if it is an emergency number
         // or if it is the voicemail number.  If it is either, take a
         // shortcut and skip the query.
-        if (PhoneNumberUtils.isEmergencyNumber(number)) {
+        int phoneCount = PhoneFactory.getPhoneCount();
+        int phoneId = -1;
+        if (context != null) {
+            for (int i = 0; i < phoneCount; i++) {
+                int callstate = ((TelephonyManager) context.getSystemService(PhoneFactory
+                        .getServiceName(Context.TELEPHONY_SERVICE, i))).getCallState();
+                boolean phoneIsIdle = (callstate == TelephonyManager.CALL_STATE_IDLE);
+                Log.d(TAG, "getCallerInfo callstate:" + callstate + "phoneIsIdle:"+phoneIsIdle);
+                if (!phoneIsIdle) {
+                    phoneId = i;
+                    break;
+                }
+            }
+        }
+        Log.d(TAG, "getCallerInfo phoneId:" + phoneId);
+        if (PhoneNumberUtils.isSimEmergencyNumber(number, phoneId)) {
             return new CallerInfo().markAsEmergency(context);
         } else if (PhoneNumberUtils.isVoiceMailNumber(number)) {
             return new CallerInfo().markAsVoiceMail();

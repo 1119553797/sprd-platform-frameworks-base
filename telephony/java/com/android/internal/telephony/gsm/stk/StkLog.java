@@ -27,8 +27,14 @@ public abstract class StkLog {
         }
 
         String className = caller.getClass().getName();
-        Log.d("STK", className.substring(className.lastIndexOf('.') + 1) + ": "
-                + msg);
+
+        if (className.contains("com.android.stk1")) {
+            Log.d("STK", "<1>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
+        } else if(className.contains("com.android.stk")) {
+            Log.d("STK", "<0>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
+        }else{
+            Log.d("STK", className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
+        }
     }
 
     public static void d(String caller, String msg) {

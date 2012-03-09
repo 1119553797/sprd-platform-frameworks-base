@@ -18,6 +18,7 @@ package com.android.internal.policy.impl;
 
 import com.android.internal.R;
 import com.android.internal.telephony.IccCard;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.widget.LockPatternUtils;
 
 import android.accounts.Account;
@@ -114,12 +115,14 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
          * Unlock by entering a sim pin.
          */
         SimPin,
+        Sim2Pin,
 
         //PUK Input Add Start
         /**
          * Unlock by entering a sim pin.
          */
         SimPuk,
+        Sim2Puk,
         //PUK Input Add End
 		
         /**
@@ -175,9 +178,19 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
      *   missing.
      */
     private boolean stuckOnLockScreenBecauseSimMissing() {
-        return mRequiresSim
-                && (!mUpdateMonitor.isDeviceProvisioned())
-                && (mUpdateMonitor.getSimState() == IccCard.State.ABSENT);
+//        return mRequiresSim
+//                && (!mUpdateMonitor.isDeviceProvisioned())
+//                && (mUpdateMonitor.getSimState() == IccCard.State.ABSENT);
+        
+        //--------------------------
+		if (PhoneFactory.getPhoneCount() > 1) {
+			return mRequiresSim && (!mUpdateMonitor.isDeviceProvisioned())
+					&& (mUpdateMonitor.getSimState(0) == IccCard.State.ABSENT)
+					&& (mUpdateMonitor.getSimState(1) == IccCard.State.ABSENT);
+		} else {
+			return mRequiresSim && (!mUpdateMonitor.isDeviceProvisioned())
+					&& (mUpdateMonitor.getSimState(0) == IccCard.State.ABSENT);
+		}
     }
 
     /**
@@ -221,7 +234,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
             }
 
             public void goToUnlockScreen() {
-                final IccCard.State simState = mUpdateMonitor.getSimState();
+                //final IccCard.State simState = mUpdateMonitor.getSimState();
                 if (stuckOnLockScreenBecauseSimMissing()
                          /*PUK Input Add  || (simState == IccCard.State.PUK_REQUIRED)*/){
                     // stuck on lock screen when sim missing or puk'd
@@ -517,11 +530,19 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 break;
             //PUK Input Add Start
             case SimPin:
-                secure = mUpdateMonitor.getSimState() == IccCard.State.PIN_REQUIRED;
+                secure = mUpdateMonitor.getSimState(0) == IccCard.State.PIN_REQUIRED;
+                break;
+                
+            case Sim2Pin:
+                secure = mUpdateMonitor.getSimState(1) == IccCard.State.PIN_REQUIRED;
                 break;
 
             case SimPuk:
-                secure = mUpdateMonitor.getSimState() == IccCard.State.PUK_REQUIRED;
+                secure = mUpdateMonitor.getSimState(0) == IccCard.State.PUK_REQUIRED;
+                break;
+                
+            case Sim2Puk:
+                secure = mUpdateMonitor.getSimState(1) == IccCard.State.PUK_REQUIRED;
                 break;
             //PUK Input Add End
             case Account:
@@ -609,7 +630,14 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                     mConfiguration,
                     mUpdateMonitor,
                     mKeyguardScreenCallback,
-                    mLockPatternUtils);
+                    mLockPatternUtils,0);
+        } else if (unlockMode == UnlockMode.Sim2Pin) {
+            unlockView = new SimUnlockScreen(
+                    mContext,
+                    mConfiguration,
+                    mUpdateMonitor,
+                    mKeyguardScreenCallback,
+                    mLockPatternUtils,1);
         //PUK Input Add Start
 		}else if(unlockMode == UnlockMode.SimPuk) {
             unlockView = new PukUnlockScreen(
@@ -617,7 +645,14 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                     mConfiguration,
                     mUpdateMonitor,
                     mKeyguardScreenCallback,
-                    mLockPatternUtils);
+                    mLockPatternUtils,0);
+		}else if(unlockMode == UnlockMode.Sim2Puk) {
+            unlockView = new PukUnlockScreen(
+                    mContext,
+                    mConfiguration,
+                    mUpdateMonitor,
+                    mKeyguardScreenCallback,
+                    mLockPatternUtils,1);
         //PUK Input Add End
         } else if (unlockMode == UnlockMode.Account) {
             try {
@@ -661,7 +696,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
      * the lock screen (lock or unlock).
      */
     private Mode getInitialMode() {
-        final IccCard.State simState = mUpdateMonitor.getSimState();
+//        final IccCard.State simState = mUpdateMonitor.getSimState();
         //wangsl
         if (stuckOnLockScreenBecauseSimMissing() /*PUK Input Add || (simState == IccCard.State.PUK_REQUIRED)*/) {
             return Mode.LockScreen;
@@ -681,14 +716,20 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
      * Given the current state of things, what should the unlock screen be?
      */
     private UnlockMode getUnlockMode() {
-        final IccCard.State simState = mUpdateMonitor.getSimState();
+        final IccCard.State simState = mUpdateMonitor.getSimState(0);
+        final IccCard.State simState2 = TelephonyManager.getPhoneCount() > 1 ? mUpdateMonitor
+				.getSimState(1) : IccCard.State.ABSENT;
         UnlockMode currentMode;
        
         // PUK Input Add Start
         if (simState == IccCard.State.PIN_REQUIRED ) {
             currentMode = UnlockMode.SimPin;
-        }else if(simState == IccCard.State.PUK_REQUIRED) {
-            currentMode = UnlockMode.SimPuk;
+        }else if(simState2 == IccCard.State.PIN_REQUIRED ){
+        	currentMode = UnlockMode.Sim2Pin;
+        }else if(simState == IccCard.State.PUK_REQUIRED ){
+        	currentMode = UnlockMode.SimPuk;
+        }else if(simState2 == IccCard.State.PUK_REQUIRED) {
+            currentMode = UnlockMode.Sim2Puk;
         // PUK Input Add End
         } else {
             final int mode = mLockPatternUtils.getKeyguardStoredPasswordQuality();

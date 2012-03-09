@@ -704,6 +704,13 @@ public final class VideoCallTracker extends CallTracker {
         call.onHangupLocal();
         phone.notifyPreciseVideoCallStateChanged();
     }
+    
+    //add by liguxiang 10-14-11 for NEWMS00128207 begin
+    /* package */
+    void sprdHangupAll(VideoCall call) throws CallStateException {
+
+    }
+    //add by liguxiang 10-14-11 for NEWMS00128207 end
 
     /* package */
     VideoConnection getConnectionByIndex(VideoCall call, int index)

@@ -46,7 +46,7 @@ public class LockPatternKeyguardViewTest extends AndroidTestCase {
         }
 
         @Override
-        public IccCard.State getSimState() {
+        public IccCard.State getSimState(int phoneId) {
             return simState;
         }
     }

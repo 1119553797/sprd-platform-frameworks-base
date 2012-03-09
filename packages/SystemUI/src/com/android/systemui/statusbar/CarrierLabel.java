@@ -56,66 +56,66 @@ public class CarrierLabel extends TextView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        if (!mAttached) {
-            mAttached = true;
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION);
-            filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
-            getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
-        }
+//        if (!mAttached) {
+//            mAttached = true;
+//            IntentFilter filter = new IntentFilter();
+//            filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION);
+//            filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
+//            getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
+//        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mAttached) {
-            getContext().unregisterReceiver(mIntentReceiver);
-            mAttached = false;
-        }
+//        if (mAttached) {
+//            getContext().unregisterReceiver(mIntentReceiver);
+//            mAttached = false;
+//        }
     }
 
-    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (Telephony.Intents.SPN_STRINGS_UPDATED_ACTION.equals(action)) {
-                updateNetworkName(intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN, false),
-                        intent.getStringExtra(Telephony.Intents.EXTRA_SPN),
-                        intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN, false),
-                        intent.getStringExtra(Telephony.Intents.EXTRA_PLMN),
-                        intent.getStringExtra(Telephony.Intents.EXTRA_NETWORK_TYPE));
-            }
-
-           //Added  start on 2012-01-17
-	    else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
-		String stateExtra = intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE);
-		Log.i("CarrierLabel", "Receive "+intent.getAction() + " IccCard is "+stateExtra);
-            	if (IccCard.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
-            		mSimMissed = true;
-            		updateForSimCardChanged(com.android.internal.R.string.lockscreen_missing_sim_message_short);
-            	}
-            	else if (IccCard.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)){
-            		mSimBlocked = true;
-            		updateForSimCardChanged(com.android.internal.R.string.lockscreen_sim_locked_message);
-            		
-            	}
-            	else if (IccCard.INTENT_VALUE_ICC_BLOCKED.equals(stateExtra)) {
-            		updateForSimCardChanged(com.android.internal.R.string.lockscreen_blocked_sim_message_short);
-            		
-            	}
-            	else if (IccCard.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
-            		mSimMissed = false;
-           		mSimBlocked = false;
-            	}
-            	
-            	
-            }
-            //Added  end on 2012-01-17
-           
-        }
-
-       
-    };
+//    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            String action = intent.getAction();
+//            if (Telephony.Intents.SPN_STRINGS_UPDATED_ACTION.equals(action)) {
+//                updateNetworkName(intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN, false),
+//                        intent.getStringExtra(Telephony.Intents.EXTRA_SPN),
+//                        intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN, false),
+//                        intent.getStringExtra(Telephony.Intents.EXTRA_PLMN),
+//                        intent.getStringExtra(Telephony.Intents.EXTRA_NETWORK_TYPE));
+//            }
+//
+//           //Added  start on 2012-01-17
+//	    else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
+//		String stateExtra = intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE);
+//		Log.i("CarrierLabel", "Receive "+intent.getAction() + " IccCard is "+stateExtra);
+//            	if (IccCard.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
+//            		mSimMissed = true;
+//            		updateForSimCardChanged(com.android.internal.R.string.lockscreen_missing_sim_message_short);
+//            	}
+//            	else if (IccCard.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)){
+//            		mSimBlocked = true;
+//            		updateForSimCardChanged(com.android.internal.R.string.lockscreen_sim_locked_message);
+//            		
+//            	}
+//            	else if (IccCard.INTENT_VALUE_ICC_BLOCKED.equals(stateExtra)) {
+//            		updateForSimCardChanged(com.android.internal.R.string.lockscreen_blocked_sim_message_short);
+//            		
+//            	}
+//            	else if (IccCard.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
+//            		mSimMissed = false;
+//           		mSimBlocked = false;
+//            	}
+//            	
+//            	
+//            }
+//            //Added  end on 2012-01-17
+//           
+//        }
+//
+//       
+//    };
 
 
     void updateForSimCardChanged(int message){

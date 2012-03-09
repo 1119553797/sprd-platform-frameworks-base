@@ -22,21 +22,25 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-
+import com.android.internal.telephony.PhoneFactory;
 import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.widget.LockPatternUtils;
-
+import com.android.internal.telephony.IccCard;
 import android.text.Editable;
+import android.view.Gravity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.android.internal.R;
 
 /**
@@ -73,15 +77,19 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     private TelephonyManager mTelePhoneManager;
     private Context mContext;
     private int remainTimes;
-
+    
+    private static final int STATE_PIN = 0;
+    private final int MIN_PIN_LENGTH = 4;
+    private int mSub;
+    private int mState = STATE_PIN;
     public SimUnlockScreen(Context context, Configuration configuration,
             KeyguardUpdateMonitor updateMonitor, KeyguardScreenCallback callback,
-            LockPatternUtils lockpatternutils) {
+            LockPatternUtils lockpatternutils, int sub) {
         super(context);
         mContext = context;
         mUpdateMonitor = updateMonitor;
         mCallback = callback;
-
+        mSub = sub;
         mCreationOrientation = configuration.orientation;
         mKeyboardHidden = configuration.hardKeyboardHidden;
         mLockPatternUtils = lockpatternutils;
@@ -104,17 +112,55 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mOkButton = (TextView) findViewById(R.id.ok);
 
         //PIN Remain times Modify start
-        mTelePhoneManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+		mTelePhoneManager = (TelephonyManager) mContext
+				.getSystemService(PhoneFactory.getServiceName(
+						Context.TELEPHONY_SERVICE, mSub));
         remainTimes = mTelePhoneManager.getRemainTimes(TelephonyManager.UNLOCK_PIN);
-        String headerText = mContext.getResources().getString(R.string.keyguard_password_enter_pin_code)
-                          + "(" + remainTimes + ")";
-        mHeaderText.setText(headerText);
+//        String headerText = mContext.getResources().getString(R.string.keyguard_password_enter_pin_code)
+//                          + "(" + remainTimes + ")";
+//        mHeaderText.setText(headerText);
+        //-----------------------------------
+        if (mUpdateMonitor.getSimState(mSub) == IccCard.State.PIN_REQUIRED) {
+
+            mState = STATE_PIN;
+            try {
+                int attemptsRemaining = ITelephony.Stub.asInterface(
+                        ServiceManager.getService(PhoneFactory.getServiceName(
+                                Context.TELEPHONY_SERVICE, mSub))).getRemainTimes(TelephonyManager.UNLOCK_PIN);
+                String headerText = "";
+                if (attemptsRemaining >= 1) {
+                    if (TelephonyManager.getPhoneCount() < 2) {
+                        headerText = getContext().getString(
+                                R.string.keyguard_password_enter_sim_pin_code)
+                                + getContext().getString(R.string.pinpuk_attempts)
+                                + attemptsRemaining;
+                    } else {
+                        if (1 == mSub) {
+                            headerText = getContext().getString(
+                                    R.string.keyguard_password_enter_sim2_pin_code)
+                                    + getContext().getString(R.string.pinpuk_attempts)
+                                    + attemptsRemaining;
+                        } else {
+                            headerText = getContext().getString(
+                                    R.string.keyguard_password_enter_sim1_pin_code)
+                                    + getContext().getString(R.string.pinpuk_attempts)
+                                    + attemptsRemaining;
+                        }
+                    }
+                }
+                mHeaderText.setText(headerText);
+            } catch (Exception e) {
+                mHeaderText.setText(R.string.keyguard_password_wrong_puk_code);
+            }
+        }        
+        //----------------------------------
+        
         //PIN Remain times Modify end
         mPinText.setFocusable(false);
 
         mEmergencyCallButton.setOnClickListener(this);
         mOkButton.setOnClickListener(this);
-
+        mUpdateMonitor.registerInfoCallback(this);
         setFocusableInTouchMode(true);
         mUpdateMonitor.registerInfoCallback(this);
     }
@@ -173,8 +219,12 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         @Override
         public void run() {
             try {
-                final boolean result = ITelephony.Stub.asInterface(ServiceManager
-                        .checkService("phone")).supplyPin(mPin);
+//                final boolean result = ITelephony.Stub.asInterface(ServiceManager
+//                        .checkService("phone")).supplyPin(mPin);
+                final boolean result = ITelephony.Stub.asInterface(
+                        ServiceManager.getService(PhoneFactory.getServiceName(
+                                Context.TELEPHONY_SERVICE, mSub))).supplyPin(mPin);
+                
                 post(new Runnable() {
                     public void run() {
                         onSimLockChangedResponse(result);
@@ -202,7 +252,9 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         } else if (v == mEmergencyCallButton) {
             mCallback.takeEmergencyCallAction();
         } else if (v == mOkButton) {
-            checkPin();
+            if(!checkPinLength()){
+            	checkPin();
+            }
         }
     }
 
@@ -225,43 +277,100 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         return mSimUnlockProgressDialog;
     }
 
-    private void checkPin() {
+	private void checkPin() {
+		// make sure that the pin is at least 4 digits long.
+		if (mEnteredDigits < 4) {
+			// otherwise, display a message to the user, and don't submit.
+			mHeaderText.setText(R.string.invalidPin);
+			mPinText.setText("");
+			mEnteredDigits = 0;
+			mCallback.pokeWakelock();
+			return;
+		}
+		getSimUnlockProgressDialog().show();
 
-        // make sure that the pin is at least 4 digits long.
-        if (mEnteredDigits < 4) {
-            // otherwise, display a message to the user, and don't submit.
-            mHeaderText.setText(R.string.invalidPin);
-            mPinText.setText("");
-            mEnteredDigits = 0;
-            mCallback.pokeWakelock();
-            return;
-        }
-        getSimUnlockProgressDialog().show();
+		new CheckSimPin(mPinText.getText().toString()) {
+			void onSimLockChangedResponse(boolean success) {
+				if (mSimUnlockProgressDialog != null) {
+					mSimUnlockProgressDialog.hide();
+				}
+				if (success) {
+					// ----------------------
+					LayoutInflater inflater = LayoutInflater.from(mContext);
+					View layout = inflater.inflate(
+							R.layout.transient_notification,
+							(ViewGroup) findViewById(R.id.toast_layout_root));
 
-        new CheckSimPin(mPinText.getText().toString()) {
-            void onSimLockChangedResponse(boolean success) {
-                if (mSimUnlockProgressDialog != null) {
-                    mSimUnlockProgressDialog.hide();
-                }
-                if (success) {
-                    // before closing the keyguard, report back that
-                    // the sim is unlocked so it knows right away
-                    mUpdateMonitor.reportSimPinUnlocked();
-                    mCallback.goToUnlockScreen();
-                } else {
-                    //PIN Remain times Modify start
-                    remainTimes = remainTimes - 1;
-                    String headerText = mContext.getResources().getString(R.string.keyguard_password_wrong_pin_code)
-                                         + mContext.getResources().getString(R.string.pinpuk_attempts) + "(" + remainTimes + ")";
-                    mHeaderText.setText(headerText);
-                    //PIN Remain times Modify end
-                    mPinText.setText("");
-                    mEnteredDigits = 0;
-                }
-                mCallback.pokeWakelock();
-            }
-        }.start();
-    }
+					TextView text = (TextView) layout
+							.findViewById(R.id.message);
+					// text.setText(R.string.keyguard_pin_accepted);
+					if (TelephonyManager.getPhoneCount() < 2) {
+						text.setText(R.string.keyguard_sim_pin_accepted);
+					} else {
+						if (mSub == 1) {
+							text.setText(R.string.keyguard_sim2_pin_accepted);
+						} else {
+							text.setText(R.string.keyguard_sim1_pin_accepted);
+						}
+					}
+
+					Toast toast = new Toast(mContext);
+					toast.setDuration(Toast.LENGTH_LONG);
+					toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+					toast.setView(layout);
+					toast.show();
+					// ----------------------
+
+					// before closing the keyguard, report back that
+					// the sim is unlocked so it knows right away
+					mUpdateMonitor.reportSimPinUnlocked(mSub);
+					mCallback.goToUnlockScreen();
+				} else {
+//					// PIN Remain times Modify start
+//					remainTimes = remainTimes - 1;
+//					String headerText = mContext.getResources().getString(
+//							R.string.keyguard_password_wrong_pin_code)
+//							+ mContext.getResources().getString(
+//									R.string.pinpuk_attempts)
+//							+ "("
+//							+ remainTimes + ")";
+//					mHeaderText.setText(headerText);
+//					// PIN Remain times Modify end
+//					mPinText.setText("");
+//					mEnteredDigits = 0;
+					// ---------------------
+					try {
+						// Displays No. of attempts remaining to unlock PIN1 in
+						// case of wrong entry.
+						int attemptsRemaining = ITelephony.Stub
+								.asInterface(
+										ServiceManager.getService(PhoneFactory
+												.getServiceName(
+														Context.TELEPHONY_SERVICE,
+														mSub)))
+								.getRemainTimes(TelephonyManager.UNLOCK_PIN);
+						if (attemptsRemaining >= 1) {
+							clearDigits();
+							String displayMessage = getContext().getString(
+									R.string.keyguard_password_wrong_pin_code)
+									+ getContext().getString(
+											R.string.pinpuk_attempts)
+									+ attemptsRemaining;
+							mHeaderText.setText(displayMessage);
+						} else {
+							mHeaderText
+									.setText(R.string.keyguard_password_wrong_pin_code);
+						}
+					} catch (Exception ex) {
+						mHeaderText
+								.setText(R.string.keyguard_password_wrong_pin_code);
+					}
+					// ----------------------
+				}
+				mCallback.pokeWakelock();
+			}
+		}.start();
+	}
 
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -432,7 +541,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
     }
 
-    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
+    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int phoneId) {
 
     }
 
@@ -443,4 +552,28 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     public void onTimeChanged() {
 
     }
+    
+    //--------------
+	private boolean checkPinLength() {
+		// make sure that the pin is at least 4 digits long.
+		if (mEnteredDigits < MIN_PIN_LENGTH) {
+			// otherwise, display a message to the user, and don't submit.
+			mHeaderText.setText(R.string.invalidPin);
+			mPinText.setText("");
+			mEnteredDigits = 0;
+			mCallback.pokeWakelock();
+			return true;
+		}
+		return false;
+
+	}
+    private void clearDigits() {
+        final Editable digits = mPinText.getEditableText();
+        final int len = digits.length();
+        if (len > 0) {
+            digits.delete(0, len);
+            mEnteredDigits = 0;
+        }
+    }
+    //--------------
 }

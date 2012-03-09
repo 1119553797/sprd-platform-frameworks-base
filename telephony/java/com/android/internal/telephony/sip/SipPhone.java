@@ -601,6 +601,12 @@ public class SipPhone extends SipPhoneBase {
             if (connections.isEmpty()) return null;
             return ((SipConnection) connections.get(0)).getAudioGroup();
         }
+
+		@Override
+		public void sprdHangupAll() throws CallStateException {
+			// TODO Auto-generated method stub
+			
+		}
     }
 
     private class SipConnection extends SipConnectionBase {
@@ -1159,5 +1165,23 @@ public class SipPhone extends SipPhoneBase {
 	public void unregisterForVideoCallFallBack(Handler h) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void registerForGprsAttached(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregisterForGprsAttached(Handler h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getPhoneId() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

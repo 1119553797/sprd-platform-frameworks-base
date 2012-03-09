@@ -211,6 +211,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 				return mPhoneBookRecords;
 			if (!mIsPbrPresent)
 				return null;
+            mAdnCache.markAdnRecordLoaded(false);
 			mAnrInfoFromPBR = new LinkedList<SubjectIndexOfAdn>();
 			mEmailInfoFromPBR = new LinkedList<SubjectIndexOfAdn>();
 			// Check if the PBR file is present in the cache, if not read it
@@ -264,6 +265,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			CheckRepeatType2Ef();
 			// All EF files are loaded, post the response.
 		}
+        mAdnCache.markAdnRecordLoaded(true);
 		return mPhoneBookRecords;
 	}
 
@@ -482,30 +484,21 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
                    log("getAvalibleSubjectCount  ret[] " +  ret[i]  );
 		}
              return ret;
-
 	}
 
 
 	public  int [] getAvalibleAnrCount(String name, String number,
 			String[] emails, String anr, int[] anrNums){
-
-
               AdnRecord   adn  = new AdnRecord(name, number, emails,
 						anr,"","","","" );
-
               return getValidNumToMatch(adn,USIM_SUBJCET_ANR,anrNums);
-
 	}
 
 	public int [] getAvalibleEmailCount(String name, String number,
 			String[] emails, String anr, int[] emailNums){
-
-
             AdnRecord   adn  = new AdnRecord(name, number, emails,
 						anr,"","","","" );
-
             return getValidNumToMatch(adn,USIM_SUBJCET_EMAIL,emailNums);
-
 	}
 
 	public ArrayList<byte[]> getIapFileRecord(int recNum) {
@@ -515,9 +508,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 		if (efid < 0) {
 			return null;
 		}
-
 		return (ArrayList<byte[]>) mIapFileRecordArray[recNum];
-
 	}
 
 	public PbrFile getPbrFile() {
@@ -1680,28 +1671,14 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 
                                  if(index.efids[j] == efid){
 
-                                                    index.usedSet[idx] =  obj;
-								 setSubjectIndex(type,i,index);
-								 break;
+                                 index.usedSet[idx] =  obj;
+								 setSubjectIndex(type,i,index);					
+								 break;					
             				}
-
-				}
-
-
-
-
-
-			     }
-
-
-
+				   }
+			   }
 			}
-
-		}
-
-
-
-	}
+	}}
 	private void setSubjectUsedNum(int type, int num) {
 
 		SubjectIndexOfAdn index = getSubjectIndex(type, num);
@@ -1743,10 +1720,10 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
                    return anr;
 		}
 
-             index = getUsedNumSetIndex( efid, anrInfo);
-             if(index == -1){
+        index = getUsedNumSetIndex( efid, anrInfo);
+        if(index == -1){
 
-                   return anr;
+               return anr;
 		}
 
 
@@ -1825,9 +1802,6 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 		int anrTagNumberInIap;
 		ArrayList<byte[]> anrFileRecord;
 		byte[] anrRec;
-
-
-
 		anrFileRecord = anrInfo.record.get(efid);
 
 		if (anrFileRecord == null) {
@@ -1914,9 +1888,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 	}
 	private String  getAnr(int num, SubjectIndexOfAdn anrInfo, byte[] record,int adnNum){
 
-
              log( "getAnr adnNum: " + adnNum + "num " + num);
-
 
              String anrGroup = null;
 		String anr = null;
@@ -1941,7 +1913,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
                          anr = getType2Anr( num,  anrInfo, record,  adnNum, anrInfo.efids[i]);
 
 			}
-                   if (i == 0) {
+            if (i == 0) {
 				anrGroup = anr;
 			} else {
 				anrGroup = anrGroup + AdnRecord.ANR_SPLIT_FLG + anr;
@@ -1951,15 +1923,11 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
              }
 
 	       return anrGroup;
-
-
-
-
-
 	}
 
       private  String[] getEmail(int num, SubjectIndexOfAdn emailInfo,
 			byte[] record, int adnNum){
+			 
 
              log( "getEmail adnNum: " + adnNum + "num " + num);
 
@@ -1970,7 +1938,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 		if(emailInfo.efids == null ||emailInfo.efids.length == 0){
 
 			log( "getEmail emailInfo.efids == null ||emailInfo.efids.length == 0 ");
-                   return null;
+            return null;
 		}
 
 		emails = new String[emailInfo.efids.length];
@@ -2330,10 +2298,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 					Log.i(LOG_TAG, "EVENT_ADN_RECORD_COUNT Size "
 							+ recordSize[0] + " total " + recordSize[1]
 							+ " #record " + recordSize[2]);
-
-
-
-				}
+			}
 				mLock.notify();
 			}
 			break;
@@ -2469,12 +2434,12 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
         		      log("parseTag email ef " +emailEfs + " types " +emailType );
 			}
 			 if(anrEfs.size() > 0){
-
+					
                          anrInfo.efids = new int[anrEfs.size()];
     			      anrInfo.type = new int[anrEfs.size()];
 
 			      for(i=0;i<anrEfs.size();i++){
-
+                 
                               anrInfo.efids[i] = anrEfs.get(i);
               		    anrInfo.type[i] = anrType.get(i);
 

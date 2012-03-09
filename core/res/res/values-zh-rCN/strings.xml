@@ -45,11 +45,18 @@
     <string name="passwordChange" msgid="7612208839450128715">"密码已改。"</string>
     <string name="mmiComplete" msgid="8232527495411698359">"MMI 码已完成。"</string>
     <string name="badPin" msgid="5085454289896032547">"您输入的旧 PIN 不正确。"</string>
+    <string name="badPin2" msgid="">"您输入的旧 PIN2 不正确。"</string>
     <string name="badPuk" msgid="5702522162746042460">"您输入的 PUK 码不正确。"</string>
+    <string name="badPuk2" msgid="">"您输入的 PUK2 码不正确。"</string>
     <string name="mismatchPin" msgid="3695902225843339274">"您输入的 PIN 码不一致。"</string>
+    <string name="mismatchPin2" msgid="">"您输入的 PIN2 码不一致。"</string>
+    <string name="mismatchPuk" msgid="">"您输入的 PUK 码不一致。"</string>
+    <string name="mismatchPuk2" msgid="">"您输入的 PUK2 码不一致。"</string>
     <string name="invalidPin" msgid="3850018445187475377">"输入一个 4 至 8 位数的 PIN 码。"</string>
+    <string name="invalidPuk" msgid="8761456210898036513">"请键入至少 8 位数字的 PUK 码。"</string>
     <string name="needPuk" msgid="919668385956251611">"已对 SIM 卡进行 PUK 码锁定。键入 PUK 码将其解锁。"</string>
     <string name="needPuk2" msgid="4526033371987193070">"输入 PUK2 码以解锁 SIM 卡。"</string>
+    <string name="needPinLock" msgid="1850318435787415347">"SIM卡 PIN 码未开启，请先开启 PIN 锁定。"</string>
     <string name="ClipMmi" msgid="6952821216480289285">"来电显示"</string>
     <string name="ClirMmi" msgid="7784673673446833091">"本机号码"</string>
     <string name="ColpMmi" msgid="">"显示实际接听号码"</string>
@@ -87,10 +94,11 @@
     <string name="ConnectingEct" msgid="">"正在连接的远端多方通话"</string>
     <string name="ConnectedEct" msgid="">"连接的远端多方通话"</string>
     <string name="IncomingCallForwarded" msgid="">"来电被转移"</string>
-    <string name="RequestPending" msgid="">"请求未完成"</string>
-    <string name="OprNotComplete" msgid="">"操作未完成"</string>
     <string name="PwdMmi" msgid="7043715687905254199">"密码更改"</string>
     <string name="PinMmi" msgid="3113117780361190304">"PIN 码更改"</string>
+    <string name="Pin2Mmi" msgid="">"PIN2 码更改"</string>
+    <string name="PukMmi" msgid="">"解锁PIN码"</string>
+    <string name="Puk2Mmi" msgid="">"解锁PIN2码"</string>
     <string name="CnipMmi" msgid="3110534680557857162">"显示号码"</string>
     <string name="CnirMmi" msgid="3062102121430548731">"来电显示受限制"</string>
     <string name="ThreeWCMmi" msgid="9051047170321190368">"三方通话"</string>
@@ -102,7 +110,7 @@
     <string name="CLIRDefaultOffNextCallOn" msgid="6179425182856418465">"默认显示本机号码，但在下一次通话中不显示"</string>
     <string name="CLIRDefaultOffNextCallOff" msgid="2567998633124408552">"默认显示本机号码，在下一次通话中也显示"</string>
     <string name="serviceNotProvisioned" msgid="8614830180508686666">"未提供服务。"</string>
-    <string name="CLIRPermanent" msgid="5460892159398802465">"本机号码显示设置为永久模式，无法更改。"</string>
+    <string name="CLIRPermanent" msgid="5460892159398802465">"本机号码显示设置无法更改。"</string>
     <string name="RestrictedChangedTitle" msgid="5592189398956187498">"访问受限情况已发生变化"</string>
     <string name="RestrictedOnData" msgid="8653794784690065540">"数据服务已禁用。"</string>
     <string name="RestrictedOnEmergency" msgid="6581163779072833665">"紧急服务已禁用。"</string>
@@ -579,8 +587,15 @@
     <string name="contact_status_update_attribution" msgid="5112589886094402795">"通过 <xliff:g id="SOURCE">%1$s</xliff:g>"</string>
     <string name="contact_status_update_attribution_with_date" msgid="5945386376369979909">"时间：<xliff:g id="DATE">%1$s</xliff:g>，方式：<xliff:g id="SOURCE">%2$s</xliff:g>"</string>
     <string name="keyguard_password_enter_pin_code" msgid="3731488827218876115">"输入 PIN 码"</string>
+    <string name="keyguard_password_enter_sim1_pin_code">"输入 Sim1 PIN 码"</string>
+    <string name="keyguard_password_enter_sim2_pin_code">"输入 Sim2 PIN 码"</string>
+    <string name="keyguard_password_enter_sim_pin_code">"输入 Sim PIN 码"</string>
+    <string name="keyguard_sim1_pin_accepted">Sim1 Pin码解锁成功</string>
+    <string name="keyguard_sim2_pin_accepted">Sim2 Pin码解锁成功</string>
+    <string name="keyguard_sim_pin_accepted">Sim Pin码解锁成功</string>
     <string name="keyguard_password_enter_password_code" msgid="9138158344813213754">"输入密码进行解锁"</string>
     <string name="keyguard_password_wrong_pin_code" msgid="1295984114338107718">"PIN 码不正确！"</string>
+    <string name="keyguard_password_wrong_puk_code" msgid="1295984114338107719">"PUK 码不正确！"</string>   
     <string name="pinpuk_attempts">"\n还可以尝试次数:"</string>
     <string name="keyguard_label_text" msgid="861796461028298424">"要解锁，请先按 MENU 再按 0。"</string>
     <string name="emergency_call_dialog_number_for_display" msgid="696192103195090970">"急救或报警电话"</string>
@@ -939,11 +954,22 @@
     <string name="throttle_warning_notification_message" msgid="2609734763845705708">"轻触以了解有关手机流量详情"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"已超出手机数据上限"</string>
     <string name="throttled_notification_message" msgid="4712369856601275146">"轻触以了解有关手机流量详情"</string>
+
+    <string name="sim1_puk_requried">"SIM1 PIN码已被锁，输入PUK码解锁"</string>
+    <string name="sim2_puk_requried">"SIM2 PIN码已被锁，输入PUK码解锁"</string>
+    <string name="sim_puk_requried">"SIM PIN码已被锁，输入PUK码解锁"</string>
+    <string name="new_pin">输入新PIN码</string>
+    <string name="reenter">再输入一次</string>
+    <string name="puk_accept">PUK码被接受</string>
+    <string name="unblocking_fail">解锁失败,重新输入PUK码</string>
+    <string name="sim_not_standby">"SIM卡设置为不待机"</string>
+    <string name="sim1_not_standby">"SIM1设置为不待机"</string>
+    <string name="sim2_not_standby">"SIM2设置为不待机"</string>
+
     <!--PUK Input Add start-->
     <string name="keyguard_password_enter_puk_code" >"输入 PUK 码"</string>
     <string name="keyguard_password_enter_new_pin_first_code" >"输入新的 PIN 码"</string>
     <string name="keyguard_password_enter_new_pin_second_code" >"再输入一次 PIN 码"</string>
-    <string name="keyguard_password_wrong_puk_code">"PUK 码不正确！"</string>
     <!--PUK Input Add end-->
     
     <!--Add by liguxiang 07-08-11 for USB settings function begin -->
@@ -1012,6 +1038,12 @@
 	<!-- add by yangqingan 2011-12-27 for NEWMS00155219 end -->
     <string name="ap_disconnected"> 断开</string>
 
+    <!--add by locksecreen start  2012-02-24-->
+    <string name="lockscreen_pin_locked_message">SIM/RUIM 卡已锁定</string>
+    <!--add by locksecreen end-->
+
+    <string name="choose_sim">选择SIM卡</string>
+    <string name="sim_chooser_title">选择SIM卡</string>
     <!-- Strings for ShowStorage Activity-->
     <string name="Low_Memory_Alert">手机存储空间即将告罄，您必须删除某些数据以确保手机的稳定</string>
     <string name="Low_Memory_Free">空闲</string>

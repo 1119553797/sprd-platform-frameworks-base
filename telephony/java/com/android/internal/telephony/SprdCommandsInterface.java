@@ -43,10 +43,13 @@ public interface SprdCommandsInterface {
 	public void unSetOnVPFail(Handler h);
 	public void setOnVPRemoteCamera(Handler h, int what, Object obj);
 	public void unSetOnVPRemoteCamera(Handler h);
+    public void registerForIccStatusChanged(Handler h, int what, Object obj);
+    public void unregisterForIccStatusChanged(Handler h);
 	
 	public void registerForVideoCallStateChanged(Handler h, int what, Object obj);
 	public void unregisterForVideoCallStateChanged(Handler h);
 
+    public int getPhoneId();
 	public void  Mbbms_Gsm_Authenticate(String nonce, Message result);
 	public void  Mbbms_USim_Authenticate(String nonce, String autn, Message result);   
 	public void  getSimType(Message result);

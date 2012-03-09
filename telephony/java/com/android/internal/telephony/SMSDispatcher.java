@@ -452,6 +452,7 @@ public abstract class SMSDispatcher extends Handler {
     private void handleIccFull(){
         // broadcast SIM_FULL intent
         Intent intent = new Intent(Intents.SIM_FULL_ACTION);
+        intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
         mWakeLock.acquire(WAKE_LOCK_TIMEOUT);
         mContext.sendBroadcast(intent, "android.permission.RECEIVE_SMS");
     }
@@ -693,7 +694,8 @@ public abstract class SMSDispatcher extends Handler {
 
         // Dispatch the PDUs to applications
         if (portAddrs != null) {
-            if (portAddrs.destPort == SmsHeader.PORT_WAP_PUSH) {
+            if (portAddrs.destPort == SmsHeader.PORT_WAP_PUSH ||
+                    portAddrs.destPort == SmsHeader.PORT_WAP_OTA) {
                 // Build up the data stream
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
                 for (int i = 0; i < concatRef.msgCount; i++) {
@@ -724,6 +726,7 @@ public abstract class SMSDispatcher extends Handler {
     protected void dispatchPdus(byte[][] pdus) {
         Intent intent = new Intent(Intents.SMS_RECEIVED_ACTION);
         intent.putExtra("pdus", pdus);
+        intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
         dispatch(intent, "android.permission.RECEIVE_SMS");
     }
 
@@ -738,6 +741,7 @@ public abstract class SMSDispatcher extends Handler {
         Log.i("SMSDispatcher","dispatchSmsCB");
         Intent intent = new Intent(Intents.SMSCB_RECEIVED_ACTION);
         intent.putExtra("pages", pages);
+        intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
         dispatch(intent, "android.permission.RECEIVE_SMSCB");
     }
     /**
@@ -750,6 +754,7 @@ public abstract class SMSDispatcher extends Handler {
         Uri uri = Uri.parse("sms://localhost:" + port);
         Intent intent = new Intent(Intents.DATA_SMS_RECEIVED_ACTION, uri);
         intent.putExtra("pdus", pdus);
+        intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
         dispatch(intent, "android.permission.RECEIVE_SMS");
     }
 
@@ -973,6 +978,7 @@ public abstract class SMSDispatcher extends Handler {
         if (!success) {
             // broadcast SMS_REJECTED_ACTION intent
             Intent intent = new Intent(Intents.SMS_REJECTED_ACTION);
+            intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
             intent.putExtra("result", result);
             mWakeLock.acquire(WAKE_LOCK_TIMEOUT);
             mContext.sendBroadcast(intent, "android.permission.RECEIVE_SMS");

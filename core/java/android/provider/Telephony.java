@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.android.internal.telephony.PhoneFactory;
 
 /**
  * The Telephony provider contains data related to phone operation.
@@ -111,6 +112,11 @@ public final class Telephony {
          * been received
          */
         public static final String STATUS = "status";
+        
+        /**
+         * The Phone Id for multi-sim multi-standby
+         */
+        public static final String PHONE_ID = "phone_id";
 
         public static final int STATUS_NONE = -1;
         public static final int STATUS_COMPLETE = 0;
@@ -212,9 +218,16 @@ public final class Telephony {
          */
         public static Uri addMessageToUri(ContentResolver resolver,
                 Uri uri, String address, String body, String subject,
+                Long date, boolean read, boolean deliveryReport, int phoneId) {
+            return addMessageToUri(resolver, uri, address, body, subject,
+                    date, read, deliveryReport, -1L, phoneId);
+        }
+        
+        public static Uri addMessageToUri(ContentResolver resolver,
+                Uri uri, String address, String body, String subject,
                 Long date, boolean read, boolean deliveryReport) {
             return addMessageToUri(resolver, uri, address, body, subject,
-                    date, read, deliveryReport, -1L);
+                    date, read, deliveryReport, -1L, PhoneFactory.DEFAULT_PHONE_ID);
         }
 
         /**
@@ -234,7 +247,15 @@ public final class Telephony {
         public static Uri addMessageToUri(ContentResolver resolver,
                 Uri uri, String address, String body, String subject,
                 Long date, boolean read, boolean deliveryReport, long threadId) {
-            ContentValues values = new ContentValues(7);
+            
+            return addMessageToUri(resolver, uri, address, body, subject, 
+            		date, read, deliveryReport, threadId, PhoneFactory.DEFAULT_PHONE_ID);
+        }
+        
+        public static Uri addMessageToUri(ContentResolver resolver,
+                Uri uri, String address, String body, String subject,
+                Long date, boolean read, boolean deliveryReport, long threadId, int phoneId) {
+            ContentValues values = new ContentValues(8);
 
             values.put(ADDRESS, address);
             if (date != null) {
@@ -243,6 +264,7 @@ public final class Telephony {
             values.put(READ, read ? Integer.valueOf(1) : Integer.valueOf(0));
             values.put(SUBJECT, subject);
             values.put(BODY, body);
+            values.put(PHONE_ID, phoneId);
             if (deliveryReport) {
                 values.put(STATUS, STATUS_PENDING);
             }
@@ -342,6 +364,14 @@ public final class Telephony {
                 return addMessageToUri(resolver, CONTENT_URI, address, body,
                         subject, date, read, false);
             }
+            //gerry.li 20111020
+            //support dual sim-card
+            public static Uri addMessage(ContentResolver resolver,
+                    String address, String body, String subject, Long date,
+                    boolean read, int phoneID) {
+                return addMessageToUri(resolver, CONTENT_URI, address, body,
+                        subject, date, read, false, phoneID);
+            }
         }
                /**
          * Contains all text based SMS messages in the SMS app's inbox.
@@ -405,6 +435,15 @@ public final class Telephony {
                     String address, String body, String subject, Long date) {
                 return addMessageToUri(resolver, CONTENT_URI, address, body,
                         subject, date, true, false);
+            }
+			
+            //gerry.li 20111020
+            //support dual sim-card
+            public static Uri addMessage(ContentResolver resolver,
+                    String address, String body, String subject, Long date,
+                    int phoneID) {
+                return addMessageToUri(resolver, CONTENT_URI, address, body,
+                        subject, date, true, false, phoneID);
             }
         }
 
@@ -487,6 +526,13 @@ public final class Telephony {
                     boolean deliveryReport, long threadId) {
                 return addMessageToUri(resolver, CONTENT_URI, address, body,
                         subject, date, true, deliveryReport, threadId);
+            }
+            
+            public static Uri addMessage(ContentResolver resolver,
+                    String address, String body, String subject, Long date,
+                    boolean deliveryReport, long threadId, int phoneId) {
+                return addMessageToUri(resolver, CONTENT_URI, address, body,
+                        subject, date, true, deliveryReport, threadId, phoneId);
             }
         }
 
@@ -702,6 +748,7 @@ public final class Telephony {
             public static SmsMessage[] getMessagesFromIntent(
                     Intent intent) {
                 Object[] messages = (Object[]) intent.getSerializableExtra("pdus");
+                int phoneId = intent.getIntExtra(PHONE_ID, 0);
                 byte[][] pduObjs = new byte[messages.length][];
 
                 for (int i = 0; i < messages.length; i++) {
@@ -713,6 +760,7 @@ public final class Telephony {
                 for (int i = 0; i < pduCount; i++) {
                     pdus[i] = pduObjs[i];
                     msgs[i] = SmsMessage.createFromPdu(pdus[i]);
+                    msgs[i].setPhoneId(phoneId);
                 }
                 return msgs;
             }
@@ -1175,7 +1223,13 @@ public final class Telephony {
         public static final String META_DATA = "meta_data";
 
         /**
-         * Wap push flag
+         * The Phone ID of the message
+         * <P>Type: INTEGER</P>
+         */
+        public static final String PHONE_ID = "phone_id";
+        
+	/*
+	 * Wap push flag
          * <P>Type: INTEGER</P>
          */
         public static final String WAP_PUSH = "wap_push";
@@ -1267,6 +1321,12 @@ public final class Telephony {
          * <P>Type: INTEGER</P>
          */
         public static final String HAS_ATTACHMENT = "has_attachment";
+
+        /**
+         * The Phone ID of the message
+         * <P>Type: INTEGER</P>
+         */
+        public static final String PHONE_ID = "phone_id";
     }
 
     /**
@@ -1779,6 +1839,11 @@ public final class Telephony {
              * The time we last tried to send or download the message.
              */
             public static final String LAST_TRY = "last_try";
+            /**
+             * The Phone ID of the message
+             * <P>Type: INTEGER</P>
+             */
+            public static final String PHONE_ID = "phone_id";
         }
 
         public static final class WordsTable {
@@ -1795,6 +1860,9 @@ public final class Telephony {
          */
         public static final Uri CONTENT_URI =
             Uri.parse("content://telephony/carriers");
+
+        public static final Uri CONTENT_URI_SIM2 =
+            Uri.parse("content://telephony_sim2/carriers");
 
         /**
          * The default sort order for this table
@@ -1848,6 +1916,16 @@ public final class Telephony {
         public static final String ROAMING_PROTOCOL = "roaming_protocol";
 
         public static final String CURRENT = "current";
+
+        public static Uri getContentUri(int phoneId) {
+            if (phoneId == 0) {
+                return CONTENT_URI;
+            } else if (phoneId == 1) {
+                return CONTENT_URI_SIM2;
+            } else {
+                return Uri.parse("content://telephony_sim" + phoneId + "/carriers"); 
+            }
+        }
     }
 
     public static final class Intents {
@@ -1895,5 +1973,6 @@ public final class Telephony {
         public static final String EXTRA_NETWORK_TYPE="network_type";
         public static final String NETWORK_UPDATE_ACTION =
             "android.provider.Telephony.NETWORK_UPDATE";  //add by liguxiang 11-10-11 for NEWMS00139124
+		public static final String EXTRA_PHONE_ID   = "phone_id";
     }
 }

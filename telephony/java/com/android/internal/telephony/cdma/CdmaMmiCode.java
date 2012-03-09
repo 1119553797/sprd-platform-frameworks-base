@@ -20,6 +20,7 @@ import android.content.Context;
 
 import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.MmiCode;
+import com.android.internal.telephony.Phone;
 
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -291,6 +292,11 @@ public final class CdmaMmiCode  extends Handler implements MmiCode {
 
         message = sb;
         phone.onMMIDone(this);
+    }
+
+    @Override
+    public Phone getPhone() {
+        return ((Phone) phone);
     }
 
 }

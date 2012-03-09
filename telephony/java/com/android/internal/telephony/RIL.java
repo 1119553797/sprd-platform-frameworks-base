@@ -232,6 +232,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     // EVENT_SEND and decreases while handling EVENT_SEND. It gets cleared while
     // WAKE_LOCK_TIMEOUT occurs.
     int mRequestMessagesPending;
+    int mPhoneId;
     // The number of requests sent out but waiting for response. It increases while
     // sending request and decreases while handling response. It should match
     // mRequestList.size() unless there are requests no replied while
@@ -258,7 +259,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     static final int RESPONSE_SOLICITED = 0;
     static final int RESPONSE_UNSOLICITED = 1;
 
-    static final String SOCKET_NAME_RIL = "rild";
+    protected String SOCKET_NAME_RIL = "rild";
 
     static final int SOCKET_OPEN_RETRY_MILLIS = 4 * 1000;
 
@@ -270,6 +271,10 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     // the code values of opreator numeric
     private static final String CHINA_MOBILE_NUMERIC_VALUES = "46000";
     private static final String CHINA_UNICOM_NUMERIC_VALUES = "46001";
+
+    // ussd format type
+    private static final int GSM_TYPE = 15;
+    private static final int UCS2_TYPE = 72;
 
     BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -639,9 +644,20 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     }
 
     public RIL(Context context, int networkMode, int cdmaSubscription) {
+    	this(context, networkMode, cdmaSubscription, PhoneFactory.DEFAULT_PHONE_ID);
+    }
+
+    public RIL(Context context, int networkMode, int cdmaSubscription, int phoneId) {
+    // zhanglj modify end
         super(context);
         mCdmaSubscription  = cdmaSubscription;
         mNetworkMode = networkMode;
+        // zhanglj add begin 2011-05-20
+        mPhoneId = phoneId;
+        if (mPhoneId != PhoneFactory.DEFAULT_PHONE_ID){
+            SOCKET_NAME_RIL = SOCKET_NAME_RIL + phoneId;
+        }
+        // zhanglj add end
         //At startup mPhoneType is first set from networkMode
         switch(networkMode) {
             case RILConstants.NETWORK_MODE_WCDMA_PREF:
@@ -1405,6 +1421,12 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         send(rr);
     }
 
+    private boolean
+    isAutoAttach() {
+        int dataPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+        return dataPhoneId == mPhoneId;
+    }
+
     public void
     setRadioPower(boolean on, Message result) {
         //if radio is OFF set preferred NW type and cmda subscription
@@ -1434,8 +1456,9 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         RILRequest rr
                 = RILRequest.obtain(RIL_REQUEST_RADIO_POWER, result);
 
-        rr.mp.writeInt(1);
+        rr.mp.writeInt(2);
         rr.mp.writeInt(on ? 1 : 0);
+        rr.mp.writeInt(isAutoAttach() ? 1 : 0);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
@@ -2875,22 +2898,22 @@ responseUnsolUssdStrings(Parcel p){
     response = p.readStringArray();
     if (response.length > 2) {
         int num = Integer.parseInt(response[2]);
-        if (num == 15) {
+        if (num == GSM_TYPE) {
             byte[] dataUssd = IccUtils.hexStringToBytes(response[1]);
-            String tmpString = new String(dataUssd);
-            response[1] = tmpString;
-	} else if (num == 72) {
-	    byte[] bytes = new byte[response[1].length()/2];
-	    for (int i=0; i<response[1].length(); i+=2) {
-		bytes[i/2] = (byte)(Integer.parseInt(response[1].substring(i,i+2),16));
-	    }
-	    try{
-	        String utfString = new String(bytes,"UTF-16");
-	        response[1] = utfString;
-	    }catch(Exception e){
+            int ussdLength = dataUssd.length;
+            response[1] = GsmAlphabet.gsm8BitUnpackedToString(dataUssd, 0, ussdLength);
+        } else if (num == UCS2_TYPE) {
+            byte[] bytes = new byte[response[1].length()/2];
+            for (int i=0; i<response[1].length(); i+=2) {
+                bytes[i/2] = (byte)(Integer.parseInt(response[1].substring(i,i+2),16));
+            }
+            try{
+                String utfString = new String(bytes,"UTF-16");
+                response[1] = utfString;
+            }catch(Exception e){
 
-	    }
-	}
+            }
+        }
     }
     
     return response;
@@ -3120,8 +3143,10 @@ responseUnsolUssdStrings(Parcel p){
        response = new ArrayList<NeighboringCellInfo>();
 
        // Determine the radio access type
+       String dataNetworkTypeProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE, mPhoneId);
        String radioString = SystemProperties.get(
-               TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE, "unknown");
+               dataNetworkTypeProperty, "unknown");
        int radioType;
        if (radioString.equals("GPRS")) {
            radioType = NETWORK_TYPE_GPRS;
@@ -3444,6 +3469,8 @@ responseUnsolUssdStrings(Parcel p){
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: return "RIL_REQUEST_REPORT_SMS_MEMORY_STATUS";
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: return "RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING";
             case RIL_REQUEST_SET_CMMS: return "SET_CMMS";
+            case RIL_REQUEST_GPRS_ATTACH: return "GPRS_ATTACH";
+            case RIL_REQUEST_GPRS_DETACH: return "GPRS_DETACH";
             default: return "<unknown request>";
         }
     }
@@ -3493,27 +3520,27 @@ responseUnsolUssdStrings(Parcel p){
     }
 
     protected void riljLog(String msg) {
-        Log.d(LOG_TAG, msg);
+        Log.d(LOG_TAG,"[" + getPhoneId() + "]"+ msg);
     }
 
     protected void riljLogv(String msg) {
-        Log.v(LOG_TAG, msg);
+        Log.v(LOG_TAG, "[" + getPhoneId() + "]"+ msg);
     }
 
     protected void unsljLog(int response) {
-        riljLog("[UNSL]< " + responseToString(response));
+        riljLog("[UNSL]< " + "[" + getPhoneId() + "]"+ responseToString(response));
     }
 
     protected void unsljLogMore(int response, String more) {
-        riljLog("[UNSL]< " + responseToString(response) + " " + more);
+        riljLog("[UNSL]< " + "[" + getPhoneId() + "]"+ responseToString(response) + " " + more);
     }
 
     protected void unsljLogRet(int response, Object ret) {
-        riljLog("[UNSL]< " + responseToString(response) + " " + retToString(response, ret));
+        riljLog("[UNSL]< " + "[" + getPhoneId() + "]"+ responseToString(response) + " " + retToString(response, ret));
     }
 
     protected void unsljLogvRet(int response, Object ret) {
-        riljLogv("[UNSL]< " + responseToString(response) + " " + retToString(response, ret));
+        riljLogv("[UNSL]< " + "[" + getPhoneId() + "]"+ responseToString(response) + " " + retToString(response, ret));
     }
 
 

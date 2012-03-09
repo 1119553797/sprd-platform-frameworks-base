@@ -267,7 +267,7 @@ public final class RingtonePickerActivity extends AlertActivity implements
 
         getWindow().getDecorView().post(new Runnable() {
             public void run() {
-                mCursor.deactivate();
+                mCursor.close();
             }
         });
 

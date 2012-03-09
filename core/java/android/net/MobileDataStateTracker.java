@@ -26,6 +26,7 @@ import android.os.ServiceManager;
 import android.os.SystemProperties;
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import android.net.NetworkInfo.DetailedState;
 import android.telephony.TelephonyManager;
@@ -52,7 +53,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     private String mApnName;
     private boolean mEnabled;
     private BroadcastReceiver mStateReceiver;
-
+    private int mNetType;
     // DEFAULT and HIPRI are the same connection.  If we're one of these we need to check if
     // the other is also disconnected before we reset sockets
     private boolean mIsDefaultOrHipri = false;
@@ -69,6 +70,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
         super(context, target, netType,
                 TelephonyManager.getDefault().getNetworkType(), tag,
                 TelephonyManager.getDefault().getNetworkTypeName());
+        mNetType = netType;
         mApnType = networkTypeToApnType(netType);
         if (TextUtils.equals(mApnType, Phone.APN_TYPE_HIPRI)) {
             mApnTypeToWatchFor = Phone.APN_TYPE_DEFAULT;
@@ -153,11 +155,16 @@ public class MobileDataStateTracker extends NetworkStateTracker {
             synchronized(this) {
                 // update state and roaming before we set the state - only state changes are
                 // noticed
-                TelephonyManager tm = TelephonyManager.getDefault();
+                TelephonyManager tm = TelephonyManager.getDefault(getPhoneId());
                 setRoamingStatus(tm.isNetworkRoaming());
                 setSubtype(tm.getNetworkType(), tm.getNetworkTypeName());
+                setSubId(getPhoneId());
                 if (intent.getAction().equals(TelephonyIntents.
                         ACTION_ANY_DATA_CONNECTION_STATE_CHANGED)) {
+                    int phoneId = intent.getIntExtra(Phone.PHONE_ID, -1);
+                    Log.d(TAG, "["
+                            + "]receive ACTION_ANY_DATA_CONNECTION_STATE_CHANGED with phoneid:"
+                            + phoneId);
                     Phone.DataState state = getMobileDataState(intent);
                     String reason = intent.getStringExtra(Phone.STATE_CHANGE_REASON_KEY);
                     String apnName = intent.getStringExtra(Phone.DATA_APN_KEY);
@@ -169,6 +176,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
 
                     // set this regardless of the apnTypeList.  It's all the same radio/network
                     // underneath
+                    Log.d(TAG, "[type=" + mNetType + "]setIsAvailable=" + !unavailable);
                     mNetworkInfo.setIsAvailable(!unavailable);
 
                     if (isApnTypeIncluded(apnTypeList)) {
@@ -269,9 +277,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     }
 
     private void getPhoneService(boolean forceRefresh) {
-        if ((mPhoneService == null) || forceRefresh) {
-            mPhoneService = ITelephony.Stub.asInterface(ServiceManager.getService("phone"));
-        }
+        //if ((mPhoneService == null) || forceRefresh) {
+        mPhoneService = ITelephony.Stub.asInterface(ServiceManager.getService(PhoneFactory
+                .getServiceName("phone", getPhoneId())));
+        //}
     }
 
     /**
@@ -401,7 +410,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 break;
             case Phone.APN_REQUEST_FAILED:
                 if (DBG) Log.d(TAG,  " reconnect :setEnableApn return  APN_REQUEST_FAILED" );
-                if (mPhoneService == null && mApnType == Phone.APN_TYPE_DEFAULT) {
+                if (mPhoneService == null && mApnType.equals(Phone.APN_TYPE_DEFAULT)) {
                     // on startup we may try to talk to the phone before it's ready
                     // since the phone will come up enabled, go with that.
                     // TODO - this also comes up on telephony crash: if we think mobile data is
@@ -416,8 +425,9 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                  if (DBG) Log.d(TAG,  " reconnect :setEnableApn return  APN_TYPE_NOT_AVAILABLE" );
                 // Default is always available, but may be off due to
                 // AirplaneMode or E-Call or whatever..
-                if (mApnType != Phone.APN_TYPE_DEFAULT) {
+                 if (!mApnType.equals(Phone.APN_TYPE_DEFAULT)) {
                     mEnabled = false;
+                    return false;
                 }
                 break;
             default:
@@ -577,8 +587,36 @@ public class MobileDataStateTracker extends NetworkStateTracker {
             case ConnectivityManager.TYPE_MOBILE_DM:
                 return Phone.APN_TYPE_DM;
             default:
-                Log.e(TAG, "Error mapping networkType " + netType + " to apnType.");
-                return null;
+            	// Msms MMS netType @zha
+                if (ConnectivityManager.isNetworkTypeValid(netType)) {
+                    return Phone.APN_TYPE_MMS;
+            	} else {
+                    Log.e(TAG, "Error mapping networkType " + netType + " to apnType.");
+                    return null;
+            	}
         }
+    }
+    private int getPhoneId() {
+        int phoneId = PhoneFactory.DEFAULT_PHONE_ID;
+        switch(mNetType) {
+            case ConnectivityManager.TYPE_MOBILE:
+            case ConnectivityManager.TYPE_MOBILE_SUPL:
+            case ConnectivityManager.TYPE_MOBILE_DUN:
+            case ConnectivityManager.TYPE_MOBILE_HIPRI:
+                phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+                break;
+            default:
+                for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                    if (mNetType == ConnectivityManager.getMmsTypeByPhoneId(i)) {
+                        phoneId = i;
+                        break;
+                    }
+                }
+                break;
+        }
+        return phoneId;
+    }
+    public void setDataEnable(boolean mEnabled){
+        this.mEnabled = mEnabled;
     }
 }

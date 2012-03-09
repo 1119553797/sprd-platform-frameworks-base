@@ -21,6 +21,11 @@ public interface SprdVideoPhone {
         NONE, VOICE, VIDEO;
     };
 
+    /**
+	 * used in intent extra field
+	 */
+    public static final String PHONE_ID = "phone_id";
+
 
 	public void registerForPreciseVideoCallStateChanged(Handler h, int what, Object obj);
 
@@ -49,6 +54,10 @@ public interface SprdVideoPhone {
 	public void registerForRemoteCamera(Handler h, int what, Object obj);
 
 	public void unregisterForRemoteCamera(Handler h);
+
+    public void registerForGprsAttached(Handler h, int what, Object obj);
+
+    public void unregisterForGprsAttached(Handler h);
 
 	public void registerForVideoCallCodec(Handler h, int what, Object obj);
 
@@ -98,6 +107,8 @@ public interface SprdVideoPhone {
 	public void notifyVideoCallFail();*/
 	
 	public int getRemainTimes(int type);
+
+    int getPhoneId();
 
 }
 

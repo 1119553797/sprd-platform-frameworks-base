@@ -19,10 +19,15 @@ package android.telephony;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.content.Context;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 
@@ -32,6 +37,7 @@ import com.android.internal.telephony.ITelephonyRegistry;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.RILConstants;
+import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 
 import java.util.List;
@@ -59,23 +65,50 @@ public class TelephonyManager {
 
     private Context mContext;
     private ITelephonyRegistry mRegistry;
+    private int mPhoneId;
+
+    private static final String dualCardDefaultPhone = "com.android.dualcard_settings_preferences";
+    private static final String simCardFavoritekey = "sim_card_favorite";
+    private static final String simCardForwardSettingKey = "sim_forward_setting";
+    private static final String sharedActivityName = "com.android.phone";
 
     /** @hide */
     public TelephonyManager(Context context) {
         mContext = context;
         mRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
                     "telephony.registry"));
+        mPhoneId = PhoneFactory.DEFAULT_PHONE_ID;
     }
 
     /** @hide */
-    private TelephonyManager() {
+    public TelephonyManager(Context context, int phoneId) {
+        mContext = context;
+        mRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
+                    PhoneFactory.getServiceName("telephony.registry", phoneId)));
+        mPhoneId = phoneId;
     }
 
-    private static TelephonyManager sInstance = new TelephonyManager();
+    /** @hide */
+    private TelephonyManager(int phoneId) {
+    	mPhoneId = phoneId;
+    }
 
+    private static TelephonyManager[] sInstance;
+
+    static {
+    	sInstance = new TelephonyManager[PhoneFactory.getPhoneCount()];
+        for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+            sInstance[i] = new TelephonyManager(i);    
+        }
+    }
     /** @hide */
     public static TelephonyManager getDefault() {
-        return sInstance;
+        return sInstance[PhoneFactory.DEFAULT_PHONE_ID];
+    }
+
+    /** @hide */
+    public static TelephonyManager getDefault(int phoneId) {
+        return sInstance[phoneId];
     }
 
 
@@ -304,8 +337,10 @@ public class TelephonyManager {
 
 
     private int getPhoneTypeFromProperty() {
+        String currentActivePhoneProperty = PhoneFactory.getProperty(
+                TelephonyProperties.CURRENT_ACTIVE_PHONE, mPhoneId);
         int type =
-            SystemProperties.getInt(TelephonyProperties.CURRENT_ACTIVE_PHONE,
+            SystemProperties.getInt(currentActivePhoneProperty,
                     getPhoneTypeFromNetworkType());
         return type;
     }
@@ -333,7 +368,9 @@ public class TelephonyManager {
      * on a CDMA network).
      */
     public String getNetworkOperatorName() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ALPHA);
+        String operatorAlphaProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_OPERATOR_ALPHA, mPhoneId);
+        return SystemProperties.get(operatorAlphaProperty);
     }
 
     /**
@@ -344,7 +381,9 @@ public class TelephonyManager {
      * on a CDMA network).
      */
     public String getNetworkOperator() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_NUMERIC);
+        String operatorNumericProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_OPERATOR_NUMERIC, mPhoneId);
+        return SystemProperties.get(operatorNumericProperty);
     }
 
     /**
@@ -354,7 +393,9 @@ public class TelephonyManager {
      * Availability: Only when user registered to a network.
      */
     public boolean isNetworkRoaming() {
-        return "true".equals(SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ISROAMING));
+        String operatorIsRoamingProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_OPERATOR_ISROAMING, mPhoneId);
+        return "true".equals(SystemProperties.get(operatorIsRoamingProperty));
     }
 
     /**
@@ -366,7 +407,9 @@ public class TelephonyManager {
      * on a CDMA network).
      */
     public String getNetworkCountryIso() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY);
+        String operatorIsoCountryProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, mPhoneId);
+        return SystemProperties.get(operatorIsoCountryProperty);
     }
 
     /** Network type is unknown */
@@ -535,7 +578,9 @@ public class TelephonyManager {
      * @see #SIM_STATE_READY
      */
     public int getSimState() {
-        String prop = SystemProperties.get(TelephonyProperties.PROPERTY_SIM_STATE);
+        String simStateProperty = PhoneFactory.getProperty(TelephonyProperties.PROPERTY_SIM_STATE,
+                mPhoneId);
+        String prop = SystemProperties.get(simStateProperty);
         if ("ABSENT".equals(prop)) {
             return SIM_STATE_ABSENT;
         }
@@ -565,7 +610,9 @@ public class TelephonyManager {
      * @see #getSimState
      */
     public String getSimOperator() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC);
+        String iccOperatorNumericProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC, mPhoneId);
+        return SystemProperties.get(iccOperatorNumericProperty);
     }
 
     /**
@@ -576,14 +623,18 @@ public class TelephonyManager {
      * @see #getSimState
      */
     public String getSimOperatorName() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA);
+        String iccOperatorAlphaProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA, mPhoneId);
+        return SystemProperties.get(iccOperatorAlphaProperty);
     }
 
     /**
      * Returns the ISO country code equivalent for the SIM provider's country code.
      */
     public String getSimCountryIso() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY);
+        String iccOperatorIsoCountryProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY, mPhoneId);
+        return SystemProperties.get(iccOperatorIsoCountryProperty);
     }
 
     /**
@@ -742,7 +793,7 @@ public class TelephonyManager {
 
     private IPhoneSubInfo getSubscriberInfo() {
         // get it each time because that process crashes a lot
-        return IPhoneSubInfo.Stub.asInterface(ServiceManager.getService("iphonesubinfo"));
+        return IPhoneSubInfo.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("iphonesubinfo", mPhoneId)));
     }
 
 
@@ -845,7 +896,7 @@ public class TelephonyManager {
     }
 
     private ITelephony getITelephony() {
-        return ITelephony.Stub.asInterface(ServiceManager.getService(Context.TELEPHONY_SERVICE));
+        return ITelephony.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, mPhoneId)));
     }
 
     //
@@ -937,6 +988,10 @@ public class TelephonyManager {
         } catch (NullPointerException ex) {
             return null;
         }
+    }
+
+    public static int getPhoneCount(){
+        return PhoneFactory.getPhoneCount();
     }
 
    	/**
@@ -1036,12 +1091,80 @@ public class TelephonyManager {
          }	
     }
     
+    public int getAdnCachestate() {
+        String adnCacheStateProperty = PhoneFactory.getProperty(
+                TelephonyProperties.ADNCACHE_LOADED_STATE, mPhoneId);
+        return Integer.valueOf(SystemProperties.get(adnCacheStateProperty,"0"));
+    }
     public static final int UNLOCK_PIN   = 0;
     public static final int UNLOCK_PIN2   = 1;
     public static final int UNLOCK_PUK   = 2;
     public static final int UNLOCK_PUK2   = 3;
-    
-    // return -1 if invalid
+
+    public static int getDefaultDataPhoneId(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.MULTI_SIM_DATA_CALL, PhoneFactory.DEFAULT_PHONE_ID);
+    }
+
+    public static boolean setDefaultDataPhoneId(Context context, int phoneId) {
+        return Settings.System.putInt(context.getContentResolver(),
+                Settings.System.MULTI_SIM_DATA_CALL, phoneId);
+    }
+
+    public static int getSettingPhoneId(Context context) {
+        SharedPreferences settings = getPhoneSetting(context);
+        int setPhoneId = settings.getInt(simCardFavoritekey, -1);
+        if (setPhoneId == -1) {
+            setPhoneId = TelephonyManager.getDefaultDataPhoneId(context);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(simCardFavoritekey, setPhoneId);
+            editor.commit();
+        }
+        return setPhoneId;
+    }
+
+    public static void setAutoDefaultPhoneId(Context context, int setPhoneId) {
+        SharedPreferences settings = getPhoneSetting(context);
+
+        int DefaultId = settings.getInt(simCardFavoritekey, -1);
+        if (setPhoneId != DefaultId) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(simCardFavoritekey, setPhoneId);
+            editor.commit();
+        }
+    }
+
+    public static int getCallForwardSetting(Context context,int phoneId,int reason) {
+        SharedPreferences settings = getPhoneSetting(context);
+        String setKey = simCardForwardSettingKey+"_"+phoneId+"_"+reason;
+        return settings.getInt(setKey, -1);
+    }
+
+    public static void setCallForwardSetting(Context context,int phoneId,int value,int reason) {
+        SharedPreferences settings = getPhoneSetting(context);
+        String setKey = simCardForwardSettingKey+"_"+phoneId+"_"+reason;
+        int DefaultValue = settings.getInt(setKey, -1);
+        if (value != DefaultValue) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(setKey, value);
+            editor.commit();
+        }
+    }
+
+    private static SharedPreferences getPhoneSetting(Context context) {
+        Context aimContext = null;
+        try {
+            aimContext = context.createPackageContext(sharedActivityName,
+                    Context.CONTEXT_IGNORE_SECURITY);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return aimContext.getSharedPreferences(dualCardDefaultPhone,
+                Context.MODE_WORLD_READABLE + Context.MODE_WORLD_WRITEABLE);
+    }
+
+// return -1 if invalid
     public int getRemainTimes(int type) {
         try {
         	return getITelephony().getRemainTimes(type);
@@ -1074,7 +1197,201 @@ public class TelephonyManager {
         } catch (NullPointerException ex) {
             return false;
         }  
-   }
+    }
 
+//    remove
+//    public static final int MODE_TEL=0;
+//    public static final int MODE_MMS=1;
+//    public static final int MODE_VTEL=2;
+//    public static final String ACTION_GET_DEFAULT_SIM="com.sprd.intent.action.get_default_sim";
+//
+//    public static final String KEY_INTENT="intent";
+//    public static final String KEY_PHONE_ID="phone_id";
+//
+//    public void setDefaultSim(Context context,int mode,int phoneId) {
+//	String imsi="";
+//	if (phoneId>=0) {
+//	    TelephonyManager tm=(TelephonyManager)context.getSystemService(
+//		PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,phoneId));
+//	    imsi=tm.getSubscriberId();
+//	} 
+//
+//	String phoneIdKey="";
+//	String imsiKey="";
+//	switch (mode) {
+//	    case MODE_TEL:
+//		phoneIdKey="dual_sim_tel_id";
+//		imsiKey="dual_sim_tel_imsi";
+//		break;
+//	    case MODE_MMS:
+//		phoneIdKey="dual_sim_mms_id";
+//		imsiKey="dual_sim_mms_imsi";
+//		break;
+//	    case MODE_VTEL:
+//		phoneIdKey="dual_sim_vtel_id";
+//		imsiKey="dual_sim_vtel_imsi";
+//		break;
+//	    default:
+//		break;
+//	}
+//	
+//	Settings.System.putInt(context.getContentResolver(),phoneIdKey,phoneId);
+//	Settings.System.putString(context.getContentResolver(),imsiKey,imsi);
+//    }
+//    
+//    public Bundle getDefaultSim(Context context, int mode) {
+//	ContentResolver cr=context.getContentResolver();
+//	Bundle ret=new Bundle();
+//	int phoneId=-1;
+//	String imsi="";
+//	switch (mode) {
+//	    case MODE_TEL: {
+//		phoneId=Settings.System.getInt(cr,"dual_sim_tel_id",-1);
+//		imsi=Settings.System.getString(cr,"dual_sim_tel_imsi");
+//		break;
+//	    }
+//	    case MODE_MMS:
+//		phoneId=Settings.System.getInt(cr,"dual_sim_mms_id",-1);
+//		imsi=Settings.System.getString(cr,"dual_sim_mms_imsi");
+//		break;
+//	    case MODE_VTEL:
+//		phoneId=Settings.System.getInt(cr,"dual_sim_vtel_id",-1);
+//		imsi=Settings.System.getString(cr,"dual_sim_vtel_imsi");
+//		break;
+//	    default:
+//		break;
+//	}
+//	imsi=(imsi==null?"":imsi);
+//
+//	boolean alwaysAsk=false;
+//	if (phoneId==-1) {
+//	    alwaysAsk=true;
+//	} else {
+//	    TelephonyManager tm=(TelephonyManager)context.getSystemService(
+//		PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,phoneId));
+//	    boolean foundPhoneId=true;
+//	    if (!tm.hasIccCard() || (tm.hasIccCard() && !tm.getSubscriberId().equals(imsi))) {
+//		foundPhoneId=false;
+//		// rescan phoneId for imsi
+//		int phoneCount=getPhoneCount();
+//		for (int i=0;i<phoneCount;++i) {
+//		    TelephonyManager tmp=(TelephonyManager)context.getSystemService(
+//			PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i));
+//		    if (tmp.hasIccCard() && tmp.getSubscriberId().equals(imsi)) {
+//			phoneId=i;
+//			foundPhoneId=true;
+//			break;
+//		    } 
+//		} 
+//	    }
+//	    if (!foundPhoneId) {
+//		alwaysAsk=true;
+//	    }
+//	}
+//	if (alwaysAsk) {
+//	    // Intent intent=new Intent(ACTION_GET_DEFAULT_SIM);
+//	    // ret.putParcelable(KEY_INTENT,intent);
+//	    ret.putInt(KEY_PHONE_ID,-1);
+//	} else {
+//	    ret.putInt(KEY_PHONE_ID,phoneId);
+//	}
+//	return ret;
+//    }
+
+    //About default sim card setting for vioce,video,mms
+    public static final int MODE_TEL = 0;
+    public static final int MODE_MMS = 1;
+    public static final int MODE_VTEL = 2;
+    public static final int PHONE_ID_INVALID = -1;
+    private static final String DUAL_SIM_VOICE_ID_KEY = "dual_sim_tel_id";
+    private static final String DUAL_SIM_VOICE_IMSI_KEY = "dual_sim_tel_imsi";
+    private static final String DUAL_SIM_VIDEO_ID_KEY = "dual_sim_vtel_id";
+    private static final String DUAL_SIM_VIDEO_IMSI_KEY = "dual_sim_vtel_imsi";
+    private static final String DUAL_SIM_MMS_ID_KEY = "dual_sim_mms_id";
+    private static final String DUAL_SIM_MMS_IMSI_KEY = "dual_sim_mms_imsi";
+
+    /**
+     * Set default sim card for vioce,video, mms
+     *
+     * @param context
+     * @param mode
+     * @param phoneId
+     */
+    public static void setDefaultSim(Context context, int mode, int phoneId) {
+        // get imsi
+        String imsi = "";
+        if (phoneId >= 0) {
+            TelephonyManager tm = getDefault(phoneId);
+            imsi = tm.getSubscriberId();
+        }
+
+        // get imsiKey and phoneIdKey
+        String phoneIdKey = "";
+        String imsiKey = "";
+        switch (mode) {
+            case MODE_TEL:
+                phoneIdKey = DUAL_SIM_VOICE_ID_KEY;
+                imsiKey = DUAL_SIM_VOICE_IMSI_KEY;
+                break;
+            case MODE_MMS:
+                phoneIdKey = DUAL_SIM_MMS_ID_KEY;
+                imsiKey = DUAL_SIM_MMS_IMSI_KEY;
+                break;
+            case MODE_VTEL:
+                phoneIdKey = DUAL_SIM_VIDEO_ID_KEY;
+                imsiKey = DUAL_SIM_VIDEO_IMSI_KEY;
+                break;
+            default:
+                break;
+        }
+        // set the value into the database
+        Settings.System.putInt(context.getContentResolver(), phoneIdKey, phoneId);
+        Settings.System.putString(context.getContentResolver(), imsiKey, imsi);
+    }
+
+    /**
+     * Get default sim card for vioce,video, mms,return -1 if null
+     *
+     * @param context
+     * @param mode
+     * @return default phoneId
+     */
+    public static int getDefaultSim(Context context, int mode) {
+        ContentResolver cr = context.getContentResolver();
+        int phoneId = PHONE_ID_INVALID;
+        String imsi = "";
+        switch (mode) {
+            case MODE_TEL: {
+                phoneId = Settings.System.getInt(cr, DUAL_SIM_VOICE_ID_KEY, PHONE_ID_INVALID);
+                imsi = Settings.System.getString(cr, DUAL_SIM_VOICE_IMSI_KEY);
+                break;
+            }
+            case MODE_MMS:
+                phoneId = Settings.System.getInt(cr, DUAL_SIM_MMS_ID_KEY, PHONE_ID_INVALID);
+                imsi = Settings.System.getString(cr, DUAL_SIM_MMS_IMSI_KEY);
+                break;
+            case MODE_VTEL:
+                phoneId = Settings.System.getInt(cr, DUAL_SIM_VIDEO_ID_KEY, PHONE_ID_INVALID);
+                imsi = Settings.System.getString(cr, DUAL_SIM_VIDEO_IMSI_KEY);
+                break;
+            default:
+                break;
+        }
+        imsi = (imsi == null ? "" : imsi);
+
+        if (phoneId != PHONE_ID_INVALID) {
+            // rescan phoneId for imsi
+            for (int i = 0; i < getPhoneCount(); ++i) {
+                TelephonyManager tmp = getDefault(i);
+                if (tmp != null && tmp.hasIccCard() && imsi.equals(tmp.getSubscriberId())) {
+                    phoneId = i;
+                    break;
+                } else {
+                    phoneId = PHONE_ID_INVALID;
+                }
+            }
+        }
+        return phoneId;
+    }
 }
 

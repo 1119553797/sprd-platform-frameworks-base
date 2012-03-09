@@ -657,4 +657,10 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public int getPhoneId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

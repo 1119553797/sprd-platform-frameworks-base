@@ -143,6 +143,11 @@ public class PhoneSubInfo extends IPhoneSubInfo.Stub {
         pw.println("Phone Subscriber Info:");
         pw.println("  Phone Type = " + mPhone.getPhoneName());
         pw.println("  Device ID = " + mPhone.getDeviceId());
+		pw.println("  Phone ID = "+ mPhone.getPhoneId());
+    }
+
+    int getPhoneId(){
+        return mPhone.getPhoneId();
     }
 
 }

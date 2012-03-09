@@ -93,7 +93,7 @@ public abstract class DataConnection extends HierarchicalStateMachine {
     protected static final boolean DBG = true;
 
     protected static Object mCountLock = new Object();
-    protected static int mCount;
+    protected static int[] mCount = new int[PhoneFactory.getPhoneCount()];
 
     /**
      * Class returned by onSetupConnectionCompleted.
@@ -184,7 +184,7 @@ public abstract class DataConnection extends HierarchicalStateMachine {
             return (this == OPERATOR_BARRED) || (this == MISSING_UNKNOWN_APN) ||
                    (this == UNKNOWN_PDP_ADDRESS) || (this == USER_AUTHENTICATION) ||
                    (this == ACTIVATION_REJECT_GGSN) || (this == ACTIVATION_REJECT_UNSPECIFIED) ||
-                   (this == SERVICE_OPTION_NOT_SUPPORTED) ||
+                   (this == SERVICE_OPTION_NOT_SUPPORTED) || (this == SERVICE_OPTION_OUT_OF_ORDER) ||
                    (this == SERVICE_OPTION_NOT_SUBSCRIBED) || (this == NSAPI_IN_USE) ||
                    (this == PROTOCOL_ERRORS);
         }
@@ -877,6 +877,15 @@ public abstract class DataConnection extends HierarchicalStateMachine {
         return retVal;
     }
 
+    public boolean isActiving(){
+        boolean retVal = getCurrentState() == mActivatingState;
+        return retVal;
+    }
+
+    public boolean isDisconnecting() {
+        boolean retVal = (getCurrentState() == mDisconnectingState || getCurrentState() == mDisconnectingBadDnsState);
+        return retVal;
+    }
     /**
      * @return the interface name as a string.
      */

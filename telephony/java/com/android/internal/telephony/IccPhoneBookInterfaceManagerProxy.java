@@ -35,13 +35,15 @@ import java.util.List;
 public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
 	private IccPhoneBookInterfaceManager mIccPhoneBookInterfaceManager;
 
-	public IccPhoneBookInterfaceManagerProxy(
-			IccPhoneBookInterfaceManager iccPhoneBookInterfaceManager) {
-		mIccPhoneBookInterfaceManager = iccPhoneBookInterfaceManager;
-		if (ServiceManager.getService("simphonebook") == null) {
-			ServiceManager.addService("simphonebook", this);
-		}
-	}
+    public IccPhoneBookInterfaceManagerProxy(IccPhoneBookInterfaceManager
+            iccPhoneBookInterfaceManager) {
+        mIccPhoneBookInterfaceManager = iccPhoneBookInterfaceManager;
+        int phoneId = mIccPhoneBookInterfaceManager.getPhoneId();
+        String serviceName = PhoneFactory.getServiceName("simphonebook", phoneId);
+        if(ServiceManager.getService(serviceName) == null) {
+            ServiceManager.addService(serviceName, this);
+        }
+    }
 
 	public void setmIccPhoneBookInterfaceManager(
 			IccPhoneBookInterfaceManager iccPhoneBookInterfaceManager) {

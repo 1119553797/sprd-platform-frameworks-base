@@ -26,10 +26,12 @@ import android.view.ViewGroup;
 import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.TextView;
+import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 import android.text.TextUtils;
 import android.util.Log;
 import com.android.internal.R;
+import com.android.internal.policy.impl.LockScreen.Status;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.widget.LinearLayoutWithDefaultTouchRecepient;
 import com.android.internal.widget.LockPatternUtils;
@@ -77,7 +79,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     private String mDateFormatString;
 
-    private TextView mCarrier;
+    private TextView[] mCarrier;
     private TextView mDate;
 
     // are we showing battery information?
@@ -101,6 +103,9 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     private ViewGroup mFooterNormal;
     private ViewGroup mFooterForgotPattern;
+    
+    private Status[] mStatus = new Status[2];
+    private int[] mResId = {R.id.carrier, R.id.carrier_sub2};
 
     /**
      * Keeps track of the last time we poked the wake lock during dispatching
@@ -186,7 +191,25 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
             inflater.inflate(R.layout.keyguard_screen_unlock_landscape, this, true);
         }
 
-        mCarrier = (TextView) findViewById(R.id.carrier);
+        //mCarrier = (TextView) findViewById(R.id.carrier);
+        
+        int numPhones = TelephonyManager.getPhoneCount();
+        // Sim States for the subscription
+        mStatus = new Status[numPhones];
+        mCarrier = new TextView[numPhones];
+        for (int i = 0; i < numPhones; i++) {
+            mStatus[i] = Status.Normal;
+            mCarrier[i] = (TextView) findViewById(mResId[i]);
+            // Required for Marquee to work
+            mCarrier[i].setSelected(true);
+            mCarrier[i].setTextColor(0xffffffff);
+            mCarrier[i].setText(
+                    this.getSprdCarrierString(
+                            mUpdateMonitor.getTelephonyPlmn(i),
+                            mUpdateMonitor.getTelephonySpn(i)));
+        }
+        
+        
         mDate = (TextView) findViewById(R.id.date);
 
         mDateFormatString = getContext().getString(R.string.full_wday_month_day_no_year);
@@ -250,8 +273,8 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         setFocusableInTouchMode(true);
 
         // Required to get Marquee to work.
-        mCarrier.setSelected(true);
-        mCarrier.setTextColor(0xffffffff);
+//        mCarrier.setSelected(true);
+//        mCarrier.setTextColor(0xffffffff);
 
 
          // until we get an update...
@@ -260,10 +283,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
          //LockScreen.getCarrierString(
          //mUpdateMonitor.getTelephonyPlmn(),
          //mUpdateMonitor.getTelephonySpn()));
-         mCarrier.setText(
-                this.getSprdCarrierString(
-                        mUpdateMonitor.getTelephonyPlmn(),
-                        mUpdateMonitor.getTelephonySpn()));
+
         //Modify start on 2012-01-16 for 8930/8932
     }
 
@@ -415,10 +435,10 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     }
 
     /** {@inheritDoc} */
-    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
+    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int phoneId) {
         //Modify start 2012-01-16 for 8930/8932
         //mCarrier.setText(LockScreen.getCarrierString(plmn, spn));
-        mCarrier.setText(this.getSprdCarrierString(plmn,spn));
+        mCarrier[phoneId].setText(this.getSprdCarrierString(plmn,spn));
         //End start 2012-01-16 for 8930/8932
     }
 
@@ -430,7 +450,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     // ---------- SimStateCallback
 
     /** {@inheritDoc} */
-    public void onSimStateChanged(IccCard.State simState) {
+    public void onSimStateChanged(IccCard.State simState,int phoneId) {
     }
 
     @Override

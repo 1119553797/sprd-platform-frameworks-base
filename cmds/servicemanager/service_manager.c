@@ -45,6 +45,12 @@ static struct {
     { AID_RADIO, "isms" },
     { AID_RADIO, "iphonesubinfo" },
     { AID_RADIO, "simphonebook" },
+// zhanglj add begin for add new multicard service permission
+	{ AID_RADIO, "phone1"},
+	{ AID_RADIO, "isms1"},
+	{ AID_RADIO, "iphonesubinfo1" },
+	{ AID_RADIO, "simphonebook1" },
+// zhanglj add end 
 };
 
 void *svcmgr_handle;

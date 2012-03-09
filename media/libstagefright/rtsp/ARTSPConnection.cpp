@@ -466,12 +466,6 @@ void ARTSPConnection::onReceiveResponse() {
             // Something horrible, irreparable has happened.
 	 		LOGI("onReceiveResponse receive fail");
             flushPendingRequests();
-		    if (mServerExceptionMsg!= NULL)
-			{
-				mState = DISCONNECTED;  //@andrew handle server exception.
-				mServerExceptionMsg->post();
-				mServerExceptionMsg = NULL;
-			}
             return;
         }
 	LOGV("onReceiveResponse SUCCESS");
@@ -498,7 +492,8 @@ void ARTSPConnection::postReceiveReponseEvent() {
     }
 
     sp<AMessage> msg = new AMessage(kWhatReceiveResponse, id());
-    msg->post(50000ll);//@hong
+     // msg->post(50000ll);//@hong
+     msg->post() ;
 
     mReceiveResponseEventPending = true;
 }

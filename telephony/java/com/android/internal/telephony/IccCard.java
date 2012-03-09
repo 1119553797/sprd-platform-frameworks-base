@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.android.internal.telephony.PhoneBase;
@@ -77,6 +78,11 @@ public abstract class IccCard {
     /* REFRESH means ICC is refreshed */
     static public final String INTENT_VALUE_ICC_REFRESH= "REFRESH";
 
+    static public final String INTENT_KEY_PHONE_ID = "phone_id";
+
+    static public final String INTENT_KEY_FDN_STAUS = "fdn_status";
+
+    static public final String INTENT_KEY_FDN_SIM_REFRESH = "fdn_sim_refresh";
 
 
     protected static final int EVENT_ICC_LOCKED_OR_ABSENT = 1;
@@ -90,6 +96,8 @@ public abstract class IccCard {
     private static final int EVENT_CHANGE_ICC_PASSWORD_DONE = 9;
     private static final int EVENT_QUERY_FACILITY_FDN_DONE = 10;
     private static final int EVENT_CHANGE_FACILITY_FDN_DONE = 11;
+    protected static final int EVENT_ICC_STATUS_CHANGED = 12;
+
 
     /*
       UNKNOWN is a transient state, for example, after uesr inputs ICC pin under
@@ -264,6 +272,13 @@ public abstract class IccCard {
      }
 
     /**
+     * Set ICC pin lock
+     */
+    public void setIccLockEnabled(boolean enabled) {
+        mIccPinLocked = enabled;
+     }
+
+    /**
      * Check whether ICC fdn (fixed dialing number) is enabled
      * This is a sync call which returns the cached pin enabled state
      *
@@ -383,7 +398,9 @@ public abstract class IccCard {
     public abstract String getServiceProviderName();
 
     protected void updateStateProperty() {
-        mPhone.setSystemProperty(TelephonyProperties.PROPERTY_SIM_STATE, getState().toString());
+        String simStateProperty = PhoneFactory.getProperty(TelephonyProperties.PROPERTY_SIM_STATE,
+                mPhone.getPhoneId());
+        mPhone.setSystemProperty(simStateProperty, getState().toString());
     }
 
     private void getIccCardStatusDone(AsyncResult ar) {
@@ -408,6 +425,8 @@ public abstract class IccCard {
         mIccCardStatus = newCardStatus;
         newState = getIccCardState();
         mState = newState;
+
+        PhoneFactory.autoSetDefaultPhoneId(true, mPhone.getPhoneId());
 
         updateStateProperty();
 
@@ -487,20 +506,20 @@ public abstract class IccCard {
         intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra(Phone.PHONE_NAME_KEY, mPhone.getPhoneName());
         intent.putExtra(INTENT_KEY_ICC_STATE, value);
+        intent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
         intent.putExtra(INTENT_KEY_LOCKED_REASON, reason);
         if(mDbg) log("Broadcasting intent ACTION_SIM_STATE_CHANGED " +  value
-                + " reason " + reason);
+                + " reason " + reason + " phoneid " + mPhone.getPhoneId());
         ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
     }
 
     public void broadcastGetIccStatusDoneIntent() {
-        Intent intent = new Intent("android.intent.action.SIM_GET_STATUS_DONE");
+        Intent intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE, mPhone.getPhoneId()));
      
-        if(mDbg) log("Broadcasting intent ACTION_SIM_GET_STATUS_DONE ");
+        if(mDbg) log("Broadcasting intent ACTION_GET_ICC_STATUS_DONE , phoneid is " + mPhone.getPhoneId());
 		
         ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
     }
-
 
     public void queryFacilityFdnDone() {
         Log.e(mLogTag, "IccCard  queryFacilityFdnDone");
@@ -513,7 +532,12 @@ public abstract class IccCard {
                             CommandsInterface.CB_FACILITY_BA_FD, "", serviceClassX,
                             msg);
 
-        Log.e(mLogTag,"queryFacilityFdnDone sendBroadcast SIM_STATE_CHANGED");
+        Log.e(mLogTag," queryFacilityFdnDone sendBroadcast FDN_STATE_CHANGED");
+        Intent intent = new Intent("android.intent.action.FDN_STATE_CHANGED"+ mPhone.getPhoneId());
+        intent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
+        intent.putExtra(INTENT_KEY_FDN_STAUS, getIccFdnEnabled());
+        intent.putExtra(INTENT_KEY_FDN_SIM_REFRESH, INTENT_VALUE_ICC_REFRESH);
+        mPhone.getContext().sendBroadcast(intent);
         broadcastIccStateChangedIntent(INTENT_VALUE_ICC_REFRESH, null);
     }
 
@@ -622,6 +646,10 @@ public abstract class IccCard {
                                                         = ar.exception;
                     ((Message)ar.userObj).sendToTarget();
                     break;
+                case EVENT_ICC_STATUS_CHANGED:
+                    Log.d(mLogTag, "Received EVENT_ICC_STATUS_CHANGED, calling getIccCardStatus");
+                    mPhone.mCM.getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE));
+                    break;
                 default:
                     Log.e(mLogTag, "[IccCard] Unknown Event " + msg.what);
             }
@@ -718,6 +746,9 @@ public abstract class IccCard {
         boolean isIccPresent;
 
         Log.i("hasIccCard",mPhone.getPhoneName());
+        if (mIccCardStatus==null) {
+            return false;
+        }
         if (mPhone.getPhoneName().equals("GSM") || mPhone.getPhoneName().equals("TD")) {
             return mIccCardStatus.getCardState().isCardPresent();
         }else {

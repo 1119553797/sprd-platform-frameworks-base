@@ -15,17 +15,24 @@ import android.os.ServiceManager;
 import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.IccCard;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.widget.LockPatternUtils;
 
 import android.text.Editable;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.android.internal.R;
 
 /**
@@ -70,13 +77,19 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     private int mCurrentStatus;
     private Context mContext;
     private TelephonyManager mTelePhoneManager; 
+    
+    private static final int STATE_PUK = 1;
+    private final int MAX_PUK_LENGTH = 8;
+    private int mSub;
+    private int mState = STATE_PUK;
     public PukUnlockScreen(Context context, Configuration configuration,
             KeyguardUpdateMonitor updateMonitor, KeyguardScreenCallback callback,
-            LockPatternUtils lockpatternutils) {
+            LockPatternUtils lockpatternutils, int sub) {
         super(context);
         mContext = context;
         mUpdateMonitor = updateMonitor;
         mCallback = callback;
+        mSub = sub;
 
         mCreationOrientation = configuration.orientation;
         mKeyboardHidden = configuration.hardKeyboardHidden;
@@ -90,7 +103,9 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             new TouchInput();
         }
 
-        mTelePhoneManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+		mTelePhoneManager = (TelephonyManager) mContext
+				.getSystemService(PhoneFactory.getServiceName(
+						Context.TELEPHONY_SERVICE, mSub));
 
         mHeaderText = (TextView) findViewById(R.id.headerText);
         mPukText = (TextView) findViewById(R.id.pinDisplay);
@@ -103,8 +118,21 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
         //PUK Code Remain times modify start
         remainTimes = mTelePhoneManager.getRemainTimes(TelephonyManager.UNLOCK_PUK);
-        String headerText = mContext.getResources().getString(R.string.keyguard_password_enter_puk_code);
-        mHeaderText.setText(headerText + "(" + remainTimes + ")");
+        //String headerText = mContext.getResources().getString(R.string.keyguard_password_enter_puk_code);
+        //mHeaderText.setText(headerText + "(" + remainTimes + ")");
+      //-----------------------------------
+		if (mUpdateMonitor.getSimState(mSub) == IccCard.State.PUK_REQUIRED) {
+			mState = STATE_PUK;
+
+			if (TelephonyManager.getPhoneCount() < 2) {
+				mHeaderText.setText(R.string.sim_puk_requried);
+			} else {
+				mHeaderText.setText((mSub == 0) ? R.string.sim1_puk_requried
+						: R.string.sim2_puk_requried);
+			}
+		}    
+        //----------------------------------
+        
         //PUK Code Remain times modify end
         mPukText.setFocusable(false);
 
@@ -174,7 +202,7 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             try {
 
                 final boolean result = ITelephony.Stub.asInterface(ServiceManager
-                          .checkService("phone")).supplyPuk(mPuk,mPin);
+                          .checkService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, mSub))).supplyPuk(mPuk,mPin);
                 post(new Runnable() {
                     public void run() {
                         onSimLockChangedResponse(result);
@@ -240,7 +268,10 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                         mHeaderText.setText(title);
                         mPukText.setText("");
                     } else {
-                        checkPuk();
+                    	if(!checkPukLength()){
+                    		checkPuk();
+                    		mCurrentStatus = STATUS_INPUT_PUK;
+                    	}
                     }
                 break;
             }
@@ -273,25 +304,66 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                 if (mPukUnlockProgressDialog != null) {
                     mPukUnlockProgressDialog.hide();
                 }
+                LayoutInflater inflater = LayoutInflater.from(mContext);
+                View layout = inflater.inflate(R.layout.transient_notification,
+                                   (ViewGroup) findViewById(R.id.toast_layout_root));
+
+                TextView text = (TextView) layout.findViewById(R.id.message);
+
+                Toast toast = new Toast(mContext);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.setView(layout);
                 if (success) {
+                    text.setText(R.string.puk_accept);
+                    toast.show(); 
                     // before closing the keyguard, report back that
                     // the sim is unlocked so it knows right away
-                    mUpdateMonitor.reportSimPinUnlocked();
+                    mUpdateMonitor.reportSimPinUnlocked(mSub);
                     mCallback.goToUnlockScreen();
                     //add by niezhong for NEWMS00118673 09-17-11 begin
                     mContext.sendBroadcast(new Intent(TelephonyIntents.ACTION_SIM_STATE_CHANGED));
                   //add by niezhong for NEWMS00118673 09-17-11 end
                 } else {
-                    mCurrentStatus = STATUS_INPUT_PUK;
-                    //PUK Code Remain times modify start
-                    remainTimes = remainTimes - 1;
-                    String title = mContext.getResources().getString(R.string.keyguard_password_wrong_puk_code)
-                                 + mContext.getResources().getString(R.string.keyguard_password_enter_puk_code)
-								 + "(" + remainTimes + ")";
-                    mHeaderText.setText(title);
-                    //PUK Code Remain times modify end
-                    mPukText.setText("");
-                    mEnteredDigits = 0;
+//                    mCurrentStatus = STATUS_INPUT_PUK;
+//                    //PUK Code Remain times modify start
+//                    remainTimes = remainTimes - 1;
+//                    String title = mContext.getResources().getString(R.string.keyguard_password_wrong_puk_code)
+//                                 + mContext.getResources().getString(R.string.keyguard_password_enter_puk_code)
+//								 + "(" + remainTimes + ")";
+//                    mHeaderText.setText(title);
+//                    //PUK Code Remain times modify end
+//                    mPukText.setText("");
+//                    mEnteredDigits = 0;
+                	int attemptsRemaining = 1;
+					text.setText(R.string.unblocking_fail);
+					toast.show();
+					mState = STATE_PUK;
+					clearDigits();
+					try {
+						attemptsRemaining = ITelephony.Stub.asInterface(
+		                        ServiceManager.getService(PhoneFactory.getServiceName(
+		                                Context.TELEPHONY_SERVICE, mSub)))
+						                .getRemainTimes(TelephonyManager.UNLOCK_PUK);
+						if (attemptsRemaining >= 1) {
+							// clearDigits();
+							remainTimes = attemptsRemaining;
+							String displayMessage = getContext().getString(
+									R.string.keyguard_password_wrong_puk_code)
+									+ getContext().getString(
+											R.string.pinpuk_attempts)
+									+ attemptsRemaining;
+							mHeaderText.setText(displayMessage);
+						} else {
+							mOkButton.setEnabled(false);
+							String displayMessage = getContext().getString(
+									R.string.lockscreen_sim_puk_locked_message);
+							mHeaderText.setText(displayMessage);
+						}
+					} catch (Exception e) {
+						mHeaderText
+								.setText(R.string.keyguard_password_wrong_puk_code);
+					}
                 }
                 mCallback.pokeWakelock();
             }
@@ -467,7 +539,7 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
     }
 
-    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
+    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int phoneId) {
 
     }
 
@@ -478,4 +550,25 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     public void onTimeChanged() {
 
     }
+    //--------------
+	private boolean checkPukLength() {
+		// make sure that the pin is at least 4 digits long.
+        if (mEnteredDigits < MAX_PUK_LENGTH) {
+            mHeaderText.setText(R.string.invalidPuk);
+            mPukText.setText("");
+            mEnteredDigits = 0;
+            mCallback.pokeWakelock();
+            return true;
+        }
+        return false;
+	}
+    private void clearDigits() {
+        final Editable digits = mPukText.getEditableText();
+        final int len = digits.length();
+        if (len > 0) {
+            digits.delete(0, len);
+            mEnteredDigits = 0;
+        }
+    }
+    //------------------------
 }

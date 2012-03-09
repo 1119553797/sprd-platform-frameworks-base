@@ -32,11 +32,19 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     static final String LOG_TAG = "GSM";
     private static final boolean DBG = true;
     private ITelephonyRegistry mRegistry;
+	private int mPhoneId;
 
     /*package*/
     DefaultPhoneNotifier() {
+	    mPhoneId = PhoneFactory.DEFAULT_PHONE_ID;
         mRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
                     "telephony.registry"));
+    }
+
+    DefaultPhoneNotifier(int phoneId) {
+	    mPhoneId = phoneId;
+        mRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
+                    PhoneFactory.getServiceName("telephony.registry", phoneId)));
     }
 
     public void notifyPhoneState(Phone sender) {
@@ -93,7 +101,7 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     public void notifyDataConnection(Phone sender, String reason) {
-        TelephonyManager telephony = TelephonyManager.getDefault();
+        TelephonyManager telephony = TelephonyManager.getDefault(sender.getPhoneId());
         try {
             mRegistry.notifyDataConnection(
                     convertDataState(sender.getDataConnectionState()),

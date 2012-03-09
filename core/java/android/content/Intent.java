@@ -2343,6 +2343,11 @@ public class Intent implements Parcelable, Cloneable {
     public static final String EXTRA_CLIENT_INTENT =
             "android.intent.extra.client_intent";
 
+    /**
+     * simcard status changed send action
+     */
+    public static final String ACTION_DEFAULT_PHONE_CHANGE =
+            "android.intent.action.DEFAULT_PHONE_CHANGE_ACTION";
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Intent flags (see mFlags variable).

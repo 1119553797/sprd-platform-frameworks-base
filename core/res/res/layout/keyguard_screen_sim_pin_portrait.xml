@@ -36,15 +36,28 @@
 	-->
         <TextView android:id="@+id/headerText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             android:gravity="center"
+            android:singleLine="false"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <!-- Carrier info -->
         <TextView android:id="@+id/carrier"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dip"
+            android:layout_marginTop="2dip"
+            android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <!-- Carrier info for second subscription-->
+        <TextView android:id="@+id/carrier_sub2"
+        	android:visibility="gone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/carrier"
+            android:layout_marginTop="2dip"
             android:gravity="center"
             android:singleLine="true"
             android:ellipsize="marquee"
@@ -88,7 +101,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/topDisplayGroup"
-        android:layout_marginTop="10dip"
+        android:layout_marginTop="4dip"
     />
 
     <!-- spacer below keypad -->
@@ -96,7 +109,7 @@
         android:id="@+id/spacerBottom"
         android:layout_width="match_parent"
         android:layout_height="1dip"
-        android:layout_marginTop="6dip"
+        android:layout_marginTop="2dip"
         android:layout_above="@id/emergencyCall"
         android:background="@android:drawable/divider_horizontal_dark"
     />

@@ -543,9 +543,19 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             final boolean requireSim = !SystemProperties.getBoolean("keyguard.no_require_sim",
                     false);
             final boolean provisioned = mUpdateMonitor.isDeviceProvisioned();
-            final IccCard.State state = mUpdateMonitor.getSimState();
-            final boolean lockedOrMissing = state.isPinLocked()
-                    || ((state == IccCard.State.ABSENT) && requireSim);
+//            final boolean lockedOrMissing = state.isPinLocked()
+//            || ((state == IccCard.State.ABSENT) && requireSim);
+//            final IccCard.State state = mUpdateMonitor.getSimState();
+            
+            final IccCard.State[] state;
+            int numPhones = TelephonyManager.getPhoneCount();
+            state = new IccCard.State[numPhones];
+            boolean lockedOrMissing = false;
+            for (int i = 0; i < numPhones; i++) {
+                state[i] = mUpdateMonitor.getSimState(i);
+                lockedOrMissing = lockedOrMissing || isLockedOrMissing(state[i]);
+                if (lockedOrMissing) break;
+            }
 
             if (!lockedOrMissing && !provisioned) {
                 if (DEBUG) Log.d(TAG, "doKeyguard: not showing because device isn't provisioned"
@@ -642,7 +652,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
     }
 
     /** {@inheritDoc} */
-    public void onSimStateChanged(IccCard.State simState) {
+    public void onSimStateChanged(IccCard.State simState,int phoneId) {
         if (DEBUG) Log.d(TAG, "onSimStateChanged: " + simState);
 
         switch (simState) {
@@ -1132,6 +1142,12 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             if (DEBUG) Log.d(TAG, "handleNotifyScreenOn");
             mKeyguardViewManager.onScreenTurnedOn();
         }
+    }
+    
+    boolean isLockedOrMissing(IccCard.State state) {
+        final boolean requireSim = !SystemProperties.getBoolean("keyguard.no_require_sim",
+                    false);
+        return (state.isPinLocked() || (state == IccCard.State.ABSENT && requireSim));
     }
 }
 

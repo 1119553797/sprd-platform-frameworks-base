@@ -38,6 +38,7 @@ public class WapPushOverSms {
     private final Context mContext;
     private WspTypeDecoder pduDecoder;
     private SMSDispatcher mSmsDispatcher;
+    private int mPhoneId;
 
     /**
      * Hold the wake lock for 5 seconds, which should be enough time for
@@ -47,6 +48,7 @@ public class WapPushOverSms {
 
     public WapPushOverSms(Phone phone, SMSDispatcher smsDispatcher) {
         mSmsDispatcher = smsDispatcher;
+        mPhoneId = phone.getPhoneId();
         mContext = phone.getContext();
     }
 
@@ -145,7 +147,6 @@ public class WapPushOverSms {
                 case WspTypeDecoder.CONTENT_TYPE_B_VND_DOCOMO_PF:
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_VND_DOCOMO_PF;
                     break;
-/*1026 for compile
                 // Start liuhongxing 20110603  
                 case WspTypeDecoder.CONTENT_TYPE_B_DM_WBXML:
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_WBXML;
@@ -157,7 +158,9 @@ public class WapPushOverSms {
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_DM_NOTIFICATION;
                     break;        
                 // End liu 20110603
-*/
+                case WspTypeDecoder.CONTENT_TYPE_B_OTA_OMA:
+                    mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_OTA_OMA;
+                    break;
                 case WspTypeDecoder.CONTENT_TYPE_B_SUPL_INIT:
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_SUPL_INIT;
                     break;
@@ -202,6 +205,12 @@ public class WapPushOverSms {
             } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_PUSH_SYNCML_NOTI)) {
                 binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_PUSH_SYNCML_NOTI;
 
+            } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_OTA_OMA)){
+                binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_OTA_OMA;
+            } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_OTA_NOKIA_SETTINGS)){
+                binaryContentType = -1;
+            } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_OTA_NOKIA_BOOKMARKS)){
+                binaryContentType = -1;
             } else {
                 if (Config.LOGD) Log.w(LOG_TAG, "Received PDU. Unknown Content-Type = " + mimeType);
                 return Intents.RESULT_SMS_HANDLED;
@@ -220,17 +229,45 @@ public class WapPushOverSms {
                 dispatchWapPdu_MMS(pdus, pdu, transactionId, pduType, headerStartIndex, headerLength);
                 dispatchedByApplication = true;
                 break;
+            case WspTypeDecoder.CONTENT_TYPE_B_OTA_OMA:
+                dispatchWapPdu_OTA(pdus, pdu, transactionId, pduType, headerStartIndex, headerLength,mimeType);
+                dispatchedByApplication = true;
+                break;
             default:
                 break;
         }
         if (dispatchedByApplication == false) {
-            Log.d(LOG_TAG, "dispatch default");
-            dispatchWapPdu_default(pdus, pdu, transactionId, pduType, mimeType,
-                                   headerStartIndex, headerLength, number /* Add liuhongxing 20110603 */);
+            if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_OTA_NOKIA_SETTINGS)) {
+                dispatchWapPdu_OTA(pdus, pdu, transactionId, pduType, headerStartIndex, headerLength,mimeType);
+            } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_OTA_NOKIA_BOOKMARKS)) {
+                dispatchWapPdu_OTA(pdus, pdu, transactionId, pduType, headerStartIndex, headerLength,mimeType);
+            } else {
+                Log.d(LOG_TAG, "dispatch default");
+                dispatchWapPdu_default(pdus, pdu, transactionId, pduType, mimeType,
+                                       headerStartIndex, headerLength, number /* Add liuhongxing 20110603 */);
+            }
         }
         return Activity.RESULT_OK;
     }
 
+    private void dispatchWapPdu_OTA(byte[][] pdus, byte[] pdu, int transactionId, int pduType,
+            int headerStartIndex, int headerLength,String mimeType) {
+        byte[] header = new byte[headerLength];
+        System.arraycopy(pdu, headerStartIndex, header, 0, header.length);
+        int dataIndex = headerStartIndex + headerLength;
+        byte[] data = new byte[pdu.length - dataIndex];
+        System.arraycopy(pdu, dataIndex, data, 0, data.length);
+
+        Intent intent = new Intent(Intents.WAP_PUSH_RECEIVED_ACTION);
+        intent.setType(mimeType);
+        intent.putExtra("transactionId", transactionId);
+        intent.putExtra("pduType", pduType);
+        intent.putExtra("header", header);
+        intent.putExtra("mimeType", mimeType);
+        intent.putExtra("data", data);
+        intent.putExtra(Phone.PHONE_ID, mPhoneId);
+        mSmsDispatcher.dispatch(intent, "android.permission.RECEIVE_WAP_PUSH");
+    }
     private void dispatchWapPdu_default(byte[][] pdus, byte[] pdu, int transactionId, int pduType,
                                         String mimeType, int headerStartIndex, int headerLength, String number /* Add liuhongxing 20110603 */) {
         byte[] header = new byte[headerLength];
@@ -250,6 +287,7 @@ public class WapPushOverSms {
         intent.putExtra("header", header);
         intent.putExtra("data", data);
         intent.putExtra("pdus", pdus);
+        intent.putExtra(Phone.PHONE_ID, mPhoneId);
         // Start liuhongxing 20110603
         if (!TextUtils.isEmpty(number))
         {
@@ -272,6 +310,7 @@ public class WapPushOverSms {
         intent.putExtra("header", header);
         intent.putExtra("data", pdu);
         intent.putExtra("pdus", pdus);
+        intent.putExtra(Phone.PHONE_ID, mPhoneId);
 
         mSmsDispatcher.dispatch(intent, "android.permission.RECEIVE_WAP_PUSH");
     }
@@ -291,6 +330,7 @@ public class WapPushOverSms {
         intent.putExtra("header", header);
         intent.putExtra("data", data);
         intent.putExtra("pdus", pdus);
+        intent.putExtra(Phone.PHONE_ID, mPhoneId);
 
         mSmsDispatcher.dispatch(intent, "android.permission.RECEIVE_MMS");
     }

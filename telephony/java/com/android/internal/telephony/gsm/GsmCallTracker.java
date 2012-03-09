@@ -59,7 +59,10 @@ public final class GsmCallTracker extends CallTracker {
 
     static final int MAX_CONNECTIONS = 7;   // only 7 connections allowed in GSM
     static final int MAX_CONNECTIONS_PER_CALL = 5; // only 5 connections allowed per call
-
+    //for bug6837 by phone_01 s
+    static Phone.State phoneState_0 = Phone.State.IDLE;
+    static Phone.State phoneState_1 = Phone.State.IDLE;
+    //for bug6837 by phone_01 e
     //***** Instance Variables
     GsmConnection connections[] = new GsmConnection[MAX_CONNECTIONS];
     RegistrantList voiceCallEndedRegistrants = new RegistrantList();
@@ -780,6 +783,18 @@ public final class GsmCallTracker extends CallTracker {
         call.onHangupLocal();
         phone.notifyPreciseCallStateChanged();
     }
+    
+    //add by liguxiang 10-14-11 for NEWMS00128207 begin
+    /* package */
+    void sprdHangupAll(GsmCall call) throws CallStateException {
+    	if (call.getConnections().size() == 0) {
+            throw new CallStateException("no connections in call");
+        }
+    	hangupAllConnections(call);
+    	call.onHangupLocal();
+        phone.notifyPreciseCallStateChanged();
+    }
+    //add by liguxiang 10-14-11 for NEWMS00128207 end
 
     /* package */
     void hangupWaitingOrBackground() {
@@ -926,10 +941,14 @@ public final class GsmCallTracker extends CallTracker {
             break;
 
             case EVENT_REPOLL_AFTER_DELAY:
-            case EVENT_CALL_STATE_CHANGE:
                 pollCallsWhenSafe();
             break;
-
+            //we need to ensure the other card is not in RINGING/OFFHOOK state
+            //this may Seldom happens when SIM1 has MO and an incoming MT for SIM2 reaches the modem at the same time.
+            case EVENT_CALL_STATE_CHANGE:
+                if (verifyEnable()) pollCallsWhenSafe();
+            break;
+            //change for bug6837 by phone_01 e
             case EVENT_RADIO_AVAILABLE:
                 handleRadioAvailable();
             break;
@@ -949,6 +968,35 @@ public final class GsmCallTracker extends CallTracker {
     }
 
     protected void log(String msg) {
-        Log.d(LOG_TAG, "[GsmCallTracker] " + msg);
+        Log.d(LOG_TAG, "[GsmCallTracker-phoneId" + phone.getPhoneId() + "] " + msg);
     }
+
+    //for bug6837 by phone_01 s
+    public void recordPhoneState(Phone.State newState){
+
+        if (TelephonyManager.getPhoneCount() <= 1) return;
+        if (DBG_POLL) log("recordPhoneState newState:" + newState);
+        int phoneId = phone.getPhoneId();
+        if (phoneId == 0){
+            phoneState_0 = newState;
+        }else if (phoneId == 1){
+            phoneState_1 = newState;
+        }
+    }
+    private boolean verifyEnable(){
+        boolean isThisPhoneIDEnabled = true;
+
+        if(TelephonyManager.getPhoneCount() > 1){
+            if (DBG_POLL) log("verify if the other phone is idle!");
+            int targetId = (phone.getPhoneId() == 0)?1:0;
+            if (targetId == 0){
+                isThisPhoneIDEnabled = (phoneState_0 == Phone.State.IDLE)?true:false;
+            }else{
+                isThisPhoneIDEnabled = (phoneState_1 == Phone.State.IDLE)?true:false;
+            }
+            if (isThisPhoneIDEnabled == false && DBG_POLL) log("The other card is in use, operation quit!!");
+        }
+        return isThisPhoneIDEnabled;
+    }
+    //for bug6837 by phone_01 e
 }

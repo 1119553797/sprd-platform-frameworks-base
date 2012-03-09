@@ -74,11 +74,11 @@ public class GrantCredentialsPermissionActivity extends Activity implements View
         }
 
         final String accountTypeLabel = accountManagerService.getAccountLabel(mAccount.type);
-
+		String authTokenLabel = extras.getString(EXTRAS_AUTH_TOKEN_LABEL);
 
         final TextView authTokenTypeView = (TextView) findViewById(R.id.authtoken_type);
         authTokenTypeView.setVisibility(View.GONE);
-
+final 
         /** Handles the responses from the AccountManager */
         IAccountManagerResponse response = new IAccountManagerResponse.Stub() {
             public void onResult(Bundle bundle) {
@@ -108,6 +108,7 @@ public class GrantCredentialsPermissionActivity extends Activity implements View
 
         LinearLayout packagesListView = (LinearLayout) findViewById(R.id.packages_list);
 
+
         for (String pkg : packages) {
             String packageLabel;
             try {
@@ -120,6 +121,13 @@ public class GrantCredentialsPermissionActivity extends Activity implements View
 
         ((TextView) findViewById(R.id.account_name)).setText(mAccount.name);
         ((TextView) findViewById(R.id.account_type)).setText(accountTypeLabel);
+//add for dual sim begin
+        if (TextUtils.isEmpty(authTokenLabel)) {
+            authTokenTypeView.setVisibility(View.GONE);
+        } else {
+            authTokenTypeView.setText(authTokenLabel);
+        }
+//add for dual sim end
     }
 
     private View newPackageView(String packageLabel) {
@@ -129,6 +137,7 @@ public class GrantCredentialsPermissionActivity extends Activity implements View
     }
 
     public void onClick(View v) {
+        final AccountManagerService accountManagerService = AccountManagerService.getSingleton();
         switch (v.getId()) {
             case R.id.allow_button:
                 accountManagerService.grantAppPermission(mAccount, mAuthTokenType, mUid);
