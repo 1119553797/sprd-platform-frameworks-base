@@ -537,6 +537,7 @@ public class MediaController extends FrameLayout {
         public void onClick(View v) {
             doStop();
             mPauseButton.setEnabled(true);
+            mPlayer.setCanPause(true);
             show(sDefaultTimeout);
         }
     };
@@ -655,7 +656,7 @@ public class MediaController extends FrameLayout {
     private View.OnClickListener mRewListener = new View.OnClickListener() {
         public void onClick(View v) {
             int pos = mPlayer.getCurrentPosition();
-            pos -= 5000; // milliseconds
+            pos -= 10000; // milliseconds
             mPlayer.seekTo(pos);
             setProgress();
 
@@ -715,5 +716,6 @@ public class MediaController extends FrameLayout {
         boolean canPause();
         boolean canSeekBackward();
         boolean canSeekForward();
+        void setCanPause(boolean canPause);
     }
 }
