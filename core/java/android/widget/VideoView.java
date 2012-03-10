@@ -100,6 +100,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private boolean     mCanSeekForward;
     private boolean     mIsFullScreen = true;
     private int         mStateWhenSuspended;  //state before calling suspend()
+    private boolean     mWasStopWhenDestrory = false;
 
     public VideoView(Context context) {
         super(context);
@@ -251,6 +252,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             // we don't set the target state here either, but preserve the
             // target state that was there before.
             mCurrentState = STATE_PREPARING;
+            mWasStopWhenDestrory = false;
             MediaPlayerStateCallback(mCurrentState,mTargetState);
         } catch (IOException ex) {
             Log.w(TAG, "Unable to open content: " + mUri, ex);
@@ -299,6 +301,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             // we don't set the target state here either, but preserve the
             // target state that was there before.
             mCurrentState = STATE_PREPARING;
+            mWasStopWhenDestrory = false;
             MediaPlayerStateCallback(mCurrentState,mTargetState);
             attachMediaController();
         } catch (IOException ex) {
@@ -565,7 +568,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 mMediaPlayer.setDisplay(mSurfaceHolder);
                 resume();
             } else {
-                openVideo();
+                if (!mWasStopWhenDestrory) {
+                    openVideo();
+                }
             }
         }
 
@@ -577,6 +582,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             if (mCurrentState != STATE_SUSPEND) {
            //     release(true);
               mTargetState  = STATE_IDLE;
+            }
+            if(mCurrentState == STATE_IDLE && mTargetState == STATE_IDLE){
+                mWasStopWhenDestrory = true;
             }
         }
     };
@@ -766,7 +774,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 mCurrentState != STATE_PREPARING);
     }
 
-
+    public void setCanPause(boolean canPause){
+        mCanPause = canPause;
+    }
     public boolean canPause() {
         return mCanPause;
     }

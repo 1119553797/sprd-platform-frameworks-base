@@ -537,6 +537,7 @@ public class MediaController extends FrameLayout {
         public void onClick(View v) {
             doStop();
             mPauseButton.setEnabled(true);
+            mPlayer.setCanPause(true);
             show(sDefaultTimeout);
         }
     };
@@ -715,5 +716,6 @@ public class MediaController extends FrameLayout {
         boolean canPause();
         boolean canSeekBackward();
         boolean canSeekForward();
+        void setCanPause(boolean canPause);
     }
 }
