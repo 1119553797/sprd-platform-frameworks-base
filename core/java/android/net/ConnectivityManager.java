@@ -209,21 +209,21 @@ public class ConnectivityManager
      * will use this connection by default.  Should not coexist with other
      * default connections.
      */
-    public static final int TYPE_MOBILE_DM = 6;
-    public static final int TYPE_WIMAX       = 7;
+    public static final int TYPE_WIMAX       = 6;
     /**
      * Bluetooth data connection.
      * @hide
      */
-    public static final int TYPE_BLUETOOTH   = 8;
+    public static final int TYPE_BLUETOOTH   = 7;
     /** {@hide} */
-    public static final int TYPE_DUMMY       = 9;
+    public static final int TYPE_DUMMY       = 8;
     /** {@hide} */
-    public static final int TYPE_ETHERNET    = 10;
+    public static final int TYPE_ETHERNET    = 9;
+    public static final int TYPE_MOBILE_DM = 10;
     /** {@hide} TODO: Need to adjust this for WiMAX. */
-    public static final int MAX_RADIO_TYPE   = TYPE_ETHERNET;
+    public static final int MAX_RADIO_TYPE   = TYPE_MOBILE_DM;
     /** {@hide} TODO: Need to adjust this for WiMAX. */
-    public static final int MAX_NETWORK_TYPE = TYPE_ETHERNET + PhoneFactory.getPhoneCount() - 1;
+    public static final int MAX_NETWORK_TYPE = TYPE_MOBILE_DM + PhoneFactory.getPhoneCount() - 1;
 
     public static final int DEFAULT_NETWORK_PREFERENCE = TYPE_WIFI;
 
@@ -674,7 +674,7 @@ public class ConnectivityManager
         if (phoneId == 0) {
             MmsType = TYPE_MOBILE_MMS;
         } else if (phoneId < PhoneFactory.getPhoneCount()) {
-            MmsType = TYPE_ETHERNET + phoneId;
+            MmsType = TYPE_MOBILE_DM + phoneId;
         } else {
             throw new IllegalArgumentException(
                 "phoneId is not leagal!");
