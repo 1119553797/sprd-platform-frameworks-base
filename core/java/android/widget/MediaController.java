@@ -69,6 +69,7 @@ import java.util.Locale;
 public class MediaController extends FrameLayout {
 
     private MediaPlayerControl  mPlayer;
+    private SetCanPause         mPause;
     private Context             mContext;
     private View                mAnchor;
     private View                mRoot;
@@ -161,6 +162,9 @@ public class MediaController extends FrameLayout {
         updatePausePlay();
     }
 
+    public void setMediaCanPause(SetCanPause canPause) {
+        mPause = canPause;
+    }
     /**
      * Set the view that acts as the anchor for the control view.
      * This can for example be a VideoView, or your Activity's main view.
@@ -537,7 +541,7 @@ public class MediaController extends FrameLayout {
         public void onClick(View v) {
             doStop();
             mPauseButton.setEnabled(true);
-            mPlayer.setCanPause(true);
+            mPause.setCanPause(true);
             show(sDefaultTimeout);
         }
     };
@@ -716,6 +720,8 @@ public class MediaController extends FrameLayout {
         boolean canPause();
         boolean canSeekBackward();
         boolean canSeekForward();
-        void setCanPause(boolean canPause);
+    }
+    public interface SetCanPause{
+        public void setCanPause(boolean canPause);
     }
 }

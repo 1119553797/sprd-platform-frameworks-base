@@ -39,7 +39,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.MediaController.MediaPlayerControl;
-
+import android.widget.MediaController.SetCanPause;
 import java.io.IOException;
 import java.util.Map;
 import android.os.Handler;
@@ -50,7 +50,7 @@ import android.os.Handler;
  * it can be used in any layout manager, and provides various display options
  * such as scaling and tinting.
  */
-public class VideoView extends SurfaceView implements MediaPlayerControl {
+public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCanPause{
     private String TAG = "VideoView";
     // settable by the client
     private Uri         mUri;
@@ -330,6 +330,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private void attachMediaController() {
         if (mMediaPlayer != null && mMediaController != null) {
             mMediaController.setMediaPlayer(this);
+            mMediaController.setMediaCanPause(this);
             View anchorView = this.getParent() instanceof View ?
                     (View)this.getParent() : this;
             mMediaController.setAnchorView(anchorView);
