@@ -572,6 +572,7 @@ static const char *GetMIMETypeForHandler(uint32_t handler) {
         case FOURCC('x', 'v', 'i', 'd'):
         case FOURCC('X', 'V', 'I', 'X'):
         case FOURCC('f', 'f', 'd', 's'):
+        case FOURCC('y','v','1','2'):
             return MEDIA_MIMETYPE_VIDEO_MPEG4;
 
         // from http://wiki.multimedia.cx/index.php?title=H264
@@ -1144,7 +1145,7 @@ status_t AVIExtractor::getSampleInfo(
 
     *isKey = info.mIsKey;
 
-    if (track.mBytesPerSample > 0) {
+    if ((1==trackIndex)&&(track.mBytesPerSample > 0)) {
         size_t sampleStartInBytes;
         if (sampleIndex == 0) {
             sampleStartInBytes = 0;
