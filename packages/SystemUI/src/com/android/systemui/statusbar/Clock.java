@@ -52,7 +52,7 @@ public class Clock extends TextView {
     private boolean mAttached;
     private Calendar mCalendar;
     private String mClockFormatString;
-    private SimpleDateFormat mClockFormat;
+    private DateFormat mClockFormat;
 
     private static final int AM_PM_STYLE_NORMAL  = 0;
     private static final int AM_PM_STYLE_SMALL   = 1;
@@ -111,12 +111,15 @@ public class Clock extends TextView {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            Log.d("lile", "action: "+action);
             if (action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
                 String tz = intent.getStringExtra("time-zone");
+                Log.d("lile", "tz: "+tz);
                 mCalendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
-                if (mClockFormat != null) {
-                    mClockFormat.setTimeZone(mCalendar.getTimeZone());
-                }
+                Log.d("lile", "tzTimeZone.getTimeZone(tz): "+TimeZone.getTimeZone(tz)+" mCalendar.getTimeZone(): "+mCalendar.getTimeZone());
+//                if (mClockFormat != null) {
+//                    mClockFormat.setTimeZone(mCalendar.getTimeZone());
+//                }
             }
             updateClock();
         }
@@ -140,8 +143,9 @@ public class Clock extends TextView {
         final char MAGIC1 = '\uEF00';
         final char MAGIC2 = '\uEF01';
 
-        SimpleDateFormat sdf;
+        DateFormat sdf;
         String format = context.getString(res);
+        Log.d("lile", "format: "+format);
         if (!format.equals(mClockFormatString)) {
             /*
              * Search for an unquoted "a" in the format string, so we can
@@ -174,12 +178,12 @@ public class Clock extends TextView {
                 }
             }
 
-            mClockFormat = sdf = new SimpleDateFormat(format);
+            mClockFormat = sdf = new DateFormat();
             mClockFormatString = format;
         } else {
             sdf = mClockFormat;
         }
-        String result = sdf.format(mCalendar.getTime());
+        String result = (String) sdf.format(format,mCalendar.getTime());
 
         if (AM_PM_STYLE != AM_PM_STYLE_NORMAL) {
             int magic1 = result.indexOf(MAGIC1);
@@ -201,6 +205,7 @@ public class Clock extends TextView {
             }
         }
  
+        Log.d("lile", "result: "+result);
         return result;
 
     }
