@@ -3277,6 +3277,17 @@ public class WindowManagerService extends IWindowManager.Stub
         return mIsInIdleScreen;
     }
 
+    public void notifyStkUserActivity() {
+        // For STK User activity event down load.
+        if (mSystemBooted && mUserActivityEventNeeded) {
+            Log.d(TAG, "notify Stk user activity");
+			Intent intent = new Intent(AppInterface.STK_CMD_EVENT);
+            intent.putExtra("event_type", AppInterface.EventListType.Event_UserActivity.value());
+            mContext.sendBroadcast(intent);
+        }
+
+    }
+
     public void prepareAppTransition(int transit) {
         if (!checkCallingPermission(android.Manifest.permission.MANAGE_APP_TOKENS,
                 "prepareAppTransition()")) {
@@ -5288,8 +5299,10 @@ public class WindowManagerService extends IWindowManager.Stub
                 int action, int flags, int keyCode, int scanCode, int metaState, int repeatCount,
                 int policyFlags) {
             WindowState windowState = getWindowStateForInputChannel(focus);
-            return mPolicy.interceptKeyBeforeDispatching(windowState, action, flags,
+            boolean ret = mPolicy.interceptKeyBeforeDispatching(windowState, action, flags,
                     keyCode, scanCode, metaState, repeatCount, policyFlags);
+            notifyStkUserActivity();
+            return ret;
         }
         
         /* Called when the current input focus changes.
