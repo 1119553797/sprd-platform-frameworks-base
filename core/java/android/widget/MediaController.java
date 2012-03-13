@@ -541,7 +541,9 @@ public class MediaController extends FrameLayout {
         public void onClick(View v) {
             doStop();
             mPauseButton.setEnabled(true);
-            mPause.setCanPause(true);
+            if (mPause != null) {
+                mPause.setCanPause(true);
+            }
             show(sDefaultTimeout);
         }
     };

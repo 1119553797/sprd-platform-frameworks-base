@@ -827,4 +827,22 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
         mTargetWidth = targetWidth;
         mTargetHeight = targetHeight;
     }
+
+    // added by MMz01
+    public void setRightVolume(int rightVolume) {
+        float volumeRate = (float) (rightVolume * 1.0 / 15);
+        mMediaPlayer.setVolume(0, volumeRate);
+    }
+
+    //added by MMz01
+    public void setLeftVolume(int leftVolume){
+        float volumeRate = (float) (leftVolume * 1.0 / 15);
+        mMediaPlayer.setVolume(volumeRate, 0);
+    }
+
+    //added by MMz01
+    public void setBothVolume(int volume){
+        float volumeRate = (float) (volume * 1.0 / 15);
+        mMediaPlayer.setVolume(volumeRate, volumeRate);
+    }
 }
