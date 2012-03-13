@@ -1391,6 +1391,21 @@ public class TelephonyManager {
                 }
             }
         }
+
+	if (phoneId==PHONE_ID_INVALID) {
+	    int iccCount=0;
+	    for (int i = 0; i < getPhoneCount(); ++i) {
+		TelephonyManager tmp = getDefault(i);
+		if (tmp != null && tmp.hasIccCard()) {
+		    iccCount++;
+		    phoneId=i;
+		} 
+	    }
+	    if (iccCount>1) {
+		phoneId=PHONE_ID_INVALID;
+	    } 
+	}
+
         return phoneId;
     }
 }
