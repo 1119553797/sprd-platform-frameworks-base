@@ -28,12 +28,17 @@
 namespace android {
 
 static const size_t kMaxQueueSize = 2;
+#define TIMEOUT_NS 2000000000
 
-ThreadedSource::ThreadedSource(const sp<MediaSource> &source)
+ThreadedSource::ThreadedSource(const sp<MediaSource> &source, size_t MaxQueueSize)
     : mSource(source),
       mReflector(new AHandlerReflector<ThreadedSource>(this)),
       mLooper(new ALooper),
-      mStarted(false) {
+      mStarted(false){
+    if(0==MaxQueueSize)
+        mMaxQueueSize = kMaxQueueSize;
+    else
+        mMaxQueueSize = MaxQueueSize;
     mLooper->registerHandler(mReflector);
 }
 
@@ -103,12 +108,21 @@ status_t ThreadedSource::read(
         msg->post();
 
         while (!seekComplete) {
-            mCondition.wait(mLock);
+            //mCondition.wait(mLock);
+            status_t err = mCondition.waitRelative(mLock,TIMEOUT_NS);
+	     if(err!=NO_ERROR){
+		  LOGI("ThreadedSource seek timeout");
+	         return ERROR_TIMEOUT;
+	     }
         }
     }
 
     while (mQueue.empty() && mFinalResult == OK) {
-        mCondition.wait(mLock);
+        //mCondition.wait(mLock);
+        status_t err = mCondition.waitRelative(mLock,TIMEOUT_NS);
+	 if(err!=NO_ERROR){
+	     return ERROR_TIMEOUT;
+	 }        
     }
 
     if (!mQueue.empty()) {
@@ -156,7 +170,7 @@ void ThreadedSource::onMessageReceived(const sp<AMessage> &msg) {
                 Mutex::Autolock autoLock(mLock);
                 mDecodePending = false;
 
-                if (mQueue.size() == kMaxQueueSize) {
+                if (mQueue.size() == mMaxQueueSize) {
                     break;
                 }
             }
@@ -176,7 +190,7 @@ void ThreadedSource::onMessageReceived(const sp<AMessage> &msg) {
             } else {
                 mQueue.push_back(buffer);
 
-                if (mQueue.size() < kMaxQueueSize) {
+                if (mQueue.size() < mMaxQueueSize) {
                     postDecodeMore_l();
                 }
             }

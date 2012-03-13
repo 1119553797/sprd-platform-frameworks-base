@@ -27,7 +27,7 @@
 namespace android {
 
 struct ThreadedSource : public MediaSource {
-    ThreadedSource(const sp<MediaSource> &source);
+    ThreadedSource(const sp<MediaSource> &source, size_t MaxQueueSize=0);
 
     virtual status_t start(MetaData *params);
     virtual status_t stop();
@@ -61,6 +61,8 @@ private:
 
     int64_t mSeekTimeUs;
     ReadOptions::SeekMode mSeekMode;
+
+    size_t mMaxQueueSize;	
 
     void postDecodeMore_l();
     void clearQueue_l();
