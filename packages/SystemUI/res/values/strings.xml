@@ -73,8 +73,8 @@
     <string name="always_use_accessory">Use by default for this USB accessory</string>
 
     <!-- add by spreadst_fw -->
-    <string name="mobile_data_connect_disable">Disconnet</string>
-    <string name="mobile_data_connect_enable">Connect</string>
+    <string name="mobile_data_connect_disable">No</string>
+    <string name="mobile_data_connect_enable">Yes</string>
     <string name="network_disconnect_title">Notice</string>
     <string name="network_disconnect_message">WLAN network is disconnected. \nConnect via 3G? \nIf you do net have data plan, it may incur additional charges.</string>
 
