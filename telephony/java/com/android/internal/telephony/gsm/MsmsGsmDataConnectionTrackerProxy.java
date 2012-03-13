@@ -291,7 +291,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
             if (sActivePhoneId != sRequestConnectPhoneId) {
                 // switch connection
                 if (sActivePhoneId != INVALID_PHONE_ID) {
-                    sTracker[sActivePhoneId].onDisconnectDoneInternal(ar);
+                    sTracker[sActivePhoneId].onDisconnectDoneInternalWithoutRetry(ar);
                     if (sTracker[sActivePhoneId].isAllPdpDisconnectDone()) {
                         detachGprs(sTracker[sActivePhoneId].mGsmPhone);
                     }else{
