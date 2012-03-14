@@ -893,6 +893,8 @@ public final class GsmCallTracker extends CallTracker {
                 ar = (AsyncResult)msg.obj;
                 if (ar.exception != null) {
                     phone.notifySuppServiceFailed(getFailedService(msg.what));
+                } else {
+                    phone.notifySuppServiceSucc(getFailedService(msg.what));
                 }
                 operationComplete();
             break;
