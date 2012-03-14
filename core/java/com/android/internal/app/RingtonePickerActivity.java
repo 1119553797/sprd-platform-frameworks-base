@@ -19,6 +19,7 @@ package com.android.internal.app;
 import com.android.internal.app.AlertActivity;
 import com.android.internal.app.AlertController;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,8 +28,11 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.storage.StorageEventListener;
+import android.os.storage.StorageManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -87,7 +91,9 @@ public final class RingtonePickerActivity extends AlertActivity implements
      * manage the default ringtone for us, so we should stop this one manually.
      */
     private Ringtone mDefaultRingtone;
-    
+
+    private StorageManager mStorageManager = null;
+
     private DialogInterface.OnClickListener mRingtoneClickListener =
             new DialogInterface.OnClickListener() {
 
@@ -168,6 +174,10 @@ public final class RingtonePickerActivity extends AlertActivity implements
         }
         
         setupAlert();
+		if (mStorageManager == null) {
+            mStorageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
+            mStorageManager.registerListener(mStorageListener);
+        }
     }
     
     public void onResume(){
@@ -359,6 +369,13 @@ public final class RingtonePickerActivity extends AlertActivity implements
         this.sendBroadcast(intent);
       //add by yangqingan 2011-11-22 for NEWMS00132817 end
     }
+	@Override
+    protected void onDestroy() {
+        if (mStorageManager != null && mStorageListener != null) {
+            mStorageManager.unregisterListener(mStorageListener);
+        }
+        super.onDestroy();
+    }
 
     private void stopAnyPlayingRingtone() {
 
@@ -383,4 +400,14 @@ public final class RingtonePickerActivity extends AlertActivity implements
         return ringtoneManagerPos + mStaticItemCount;
     }
     
+    StorageEventListener mStorageListener = new StorageEventListener() {
+
+        @Override
+        public void onStorageStateChanged(String path, String oldState, String newState) {
+            Log.i(TAG, "Received storage state changed notification that " +
+                    path + " changed state from " + oldState +
+                    " to " + newState);
+            finish();
+        }
+    };
 }
