@@ -47,6 +47,8 @@ import android.view.accessibility.AccessibilityEvent;
 
 import java.lang.ref.WeakReference;
 
+import android.util.Log;
+
 /**
  * Base class for Dialogs.
  * 
@@ -72,6 +74,7 @@ public class Dialog implements DialogInterface, Window.Callback,
         KeyEvent.Callback, OnCreateContextMenuListener {
     private Activity mOwnerActivity;
     
+    static final String TAG = "Dialog";
     final Context mContext;
     final WindowManager mWindowManager;
     Window mWindow;
@@ -262,14 +265,19 @@ public class Dialog implements DialogInterface, Window.Callback,
      * that in {@link #onStop}.
      */
     public void dismiss() {
+        Log.w(TAG, "dismiss E");
         if (Thread.currentThread() != mUiThread) {
+            Log.w(TAG, "dismiss 1");
             mHandler.post(mDismissAction);
         } else {
+            Log.w(TAG, "dismiss 2");
             mDismissAction.run();
         }
+        Log.w(TAG, "dismiss X");
     }
 
     private void dismissDialog() {
+        Log.w(TAG, "dismissDialog E");
         if (mDecor == null || !mShowing) {
             return;
         }
@@ -284,13 +292,17 @@ public class Dialog implements DialogInterface, Window.Callback,
             
             sendDismissMessage();
         }
+        Log.w(TAG, "dismissDialog X");
     }
 
     private void sendDismissMessage() {
+        Log.w(TAG, "sendDismissMessage E");
         if (mDismissMessage != null) {
+            Log.w(TAG, "sendDismissMessage 1");
             // Obtain a new message so this dialog can be re-used
             Message.obtain(mDismissMessage).sendToTarget();
         }
+        Log.w(TAG, "sendDismissMessage X");
     }
 
     private void sendShowMessage() {
@@ -1044,6 +1056,7 @@ public class Dialog implements DialogInterface, Window.Callback,
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case DISMISS:
+                    Log.w(TAG, "handleMessage DISMISS");
                     ((OnDismissListener) msg.obj).onDismiss(mDialog.get());
                     break;
                 case CANCEL:
