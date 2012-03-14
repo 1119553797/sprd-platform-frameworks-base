@@ -349,11 +349,6 @@ public class IccProvider extends ContentProvider {
 		}
 
 		String tag = initialValues.getAsString("newTag"); // yeezone:jinwei
-															// tag->newTag
-		if (tag == null) {
-			Log.e(TAG, "error, no name input");
-			return null;
-		}
 		String number = initialValues.getAsString("newNumber"); // yeezone:jinwei
 																// number->newNumber
 		// TODO(): Read email instead of sending null.
