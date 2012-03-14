@@ -1383,7 +1383,7 @@ status_t AVIExtractor::getSampleInfo(
 
     *isKey = info.mIsKey;
 
-    if ((1==trackIndex)&&(track->mBytesPerSample > 0)) {
+    if ( (Track::AUDIO==track->mKind)&&(track->mBytesPerSample > 0) ) {
         size_t sampleStartInBytes;
         if (sampleIndex == 0) {
             sampleStartInBytes = 0;
