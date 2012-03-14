@@ -110,6 +110,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private IccText mIccText;
     private PhoneStateListener[] mPhoneStateListener;
  // ************Modify by luning at01-07-01 end************
+    private int numPhones = 0;
     
     /**
      * The status of this lock screen.
@@ -223,7 +224,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 //        // Required for Marquee to work
 //        mCarrier.setSelected(true);
 //        mCarrier.setTextColor(0xffffffff);
-        int numPhones=TelephonyManager.getPhoneCount();
+        numPhones=TelephonyManager.getPhoneCount();
         // Sim States for the subscription
         mCarrier = new TextView[numPhones];
         mStatus = new Status[numPhones];
@@ -848,11 +849,23 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     /** {@inheritDoc} */
     public void onPause() {
-
+    	for (int i = 0; i < numPhones; i++) {
+			((TelephonyManager) mContext
+					.getSystemService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i))).listen(
+					mPhoneStateListener[i],
+					PhoneStateListener.LISTEN_NONE);
+		}
     }
 
     /** {@inheritDoc} */
     public void onResume() {
+    	for (int i = 0; i < numPhones; i++) {
+			// register for phone state notifications.
+			((TelephonyManager) mContext
+					.getSystemService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i))).listen(
+					mPhoneStateListener[i],
+					PhoneStateListener.LISTEN_SERVICE_STATE);
+		}
 	mSelector.reset(false);//clear animate when press canell button 2012-2-7
         resetStatusInfo(mUpdateMonitor);
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
@@ -860,6 +873,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     /** {@inheritDoc} */
     public void cleanUp() {
+    	for (int i = 0; i < numPhones; i++) {
+			((TelephonyManager) mContext
+					.getSystemService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i))).listen(
+					mPhoneStateListener[i],
+					PhoneStateListener.LISTEN_NONE);
+		}
         mUpdateMonitor.removeCallback(this); // this must be first
         mLockPatternUtils = null;
         mUpdateMonitor = null;

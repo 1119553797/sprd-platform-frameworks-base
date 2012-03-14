@@ -57,6 +57,9 @@ public class Clock extends TextView {
     private static final int AM_PM_STYLE_NORMAL  = 0;
     private static final int AM_PM_STYLE_SMALL   = 1;
     private static final int AM_PM_STYLE_GONE    = 2;
+    
+    private final static String M12 = "h:mm a";
+    private final static String M24 = "kk:mm";
 
     private static final int AM_PM_STYLE = AM_PM_STYLE_NORMAL;
 
@@ -111,12 +114,9 @@ public class Clock extends TextView {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            Log.d("lile", "action: "+action);
             if (action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
                 String tz = intent.getStringExtra("time-zone");
-                Log.d("lile", "tz: "+tz);
                 mCalendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
-                Log.d("lile", "tzTimeZone.getTimeZone(tz): "+TimeZone.getTimeZone(tz)+" mCalendar.getTimeZone(): "+mCalendar.getTimeZone());
 //                if (mClockFormat != null) {
 //                    mClockFormat.setTimeZone(mCalendar.getTimeZone());
 //                }
@@ -133,19 +133,18 @@ public class Clock extends TextView {
     private final CharSequence getSmallTime() {
         Context context = getContext();
         boolean b24 = DateFormat.is24HourFormat(context);
-        int res;
-
-        if (b24) {
-            res = R.string.twenty_four_hour_time_format;
-        } else {
-            res = R.string.twelve_hour_time_format;
-        }
+//        int res;
+//
+//        if (b24) {
+//            res = R.string.twenty_four_hour_time_format;
+//        } else {
+//            res = R.string.twelve_hour_time_format;
+//        }
         final char MAGIC1 = '\uEF00';
         final char MAGIC2 = '\uEF01';
 
         DateFormat sdf;
-        String format = context.getString(res);
-        Log.d("lile", "format: "+format);
+        String format = b24 ? M24 : M12;
         if (!format.equals(mClockFormatString)) {
             /*
              * Search for an unquoted "a" in the format string, so we can
@@ -183,7 +182,7 @@ public class Clock extends TextView {
         } else {
             sdf = mClockFormat;
         }
-        String result = (String) sdf.format(format,mCalendar.getTime());
+        String result = (String) sdf.format(format,mCalendar);
 
         if (AM_PM_STYLE != AM_PM_STYLE_NORMAL) {
             int magic1 = result.indexOf(MAGIC1);
@@ -205,7 +204,6 @@ public class Clock extends TextView {
             }
         }
  
-        Log.d("lile", "result: "+result);
         return result;
 
     }
