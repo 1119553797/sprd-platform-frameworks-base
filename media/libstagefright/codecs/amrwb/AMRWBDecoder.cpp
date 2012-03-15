@@ -175,6 +175,8 @@ status_t AMRWBDecoder::read(
     int16 mode = ((inputPtr[0] >> 3) & 0x0f);
     size_t frameSize = getFrameSize(mode);
     if(mInputBuffer->range_length() < frameSize){
+        buffer->release();
+        buffer = NULL;
         return ERROR_END_OF_STREAM;
     }
 
