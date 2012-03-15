@@ -907,6 +907,9 @@ public class VCardExporterTests extends VCardTestsBase {
                 .put(Im.PROTOCOL, Im.PROTOCOL_JABBER)
                 .put(Im.DATA, "jabber");
         entry.addContentValues(Im.CONTENT_ITEM_TYPE)
+                .put(Im.PROTOCOL, Im.PROTOCOL_NETMEETING)
+                .put(Im.DATA, "netmeeting");
+        entry.addContentValues(Im.CONTENT_ITEM_TYPE)
                 .put(Im.PROTOCOL, Im.PROTOCOL_OTHER)
                 .put(Im.DATA, "other");
 
@@ -919,7 +922,7 @@ public class VCardExporterTests extends VCardTestsBase {
                 .addExpectedNode("X-SKYPE-USERNAME", "skype")
                 .addExpectedNode("X-YAHOO", "yahoo")
                 .addExpectedNode("X-MSN", "msn")
-                .addExpectedNode("X-OTHER", "other")
+                .addExpectedNode("X-NETMEETING", "netmeeting")
                 .addExpectedNode("X-AIM", "aim");
     }
 

@@ -72,6 +72,7 @@ public class VCardConstants {
     public static final String PROPERTY_X_SKYPE_USERNAME = "X-SKYPE-USERNAME";
     // Properties only ContactsStruct has. We alse use this.
     public static final String PROPERTY_X_QQ = "X-QQ";
+    public static final String PROPERTY_X_NETMEETING = "X-NETMEETING";
     public static final String PROPERTY_X_OTHER = "X-OTHER";
 
     // Phone number for Skype, available as usual phone.

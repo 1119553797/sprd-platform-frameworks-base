@@ -4181,6 +4181,7 @@ public final class ContactsContract {
          * <li>{@link #PROTOCOL_GOOGLE_TALK}</li>
          * <li>{@link #PROTOCOL_ICQ}</li>
          * <li>{@link #PROTOCOL_JABBER}</li>
+         * <li>{@link #PROTOCOL_NETMEETING}</li>
          * <li>{@link #PROTOCOL_OTHER}</li>
          * </ul>
          * </p>
@@ -4229,7 +4230,8 @@ public final class ContactsContract {
             public static final int PROTOCOL_GOOGLE_TALK = 5;
             public static final int PROTOCOL_ICQ = 6;
             public static final int PROTOCOL_JABBER = 7;
-            public static final int PROTOCOL_OTHER = 8;
+            public static final int PROTOCOL_NETMEETING = 8;
+            public static final int PROTOCOL_OTHER = 9;
 
             /**
              * Return the string resource that best describes the given
@@ -4273,6 +4275,7 @@ public final class ContactsContract {
                     case PROTOCOL_GOOGLE_TALK: return com.android.internal.R.string.imProtocolGoogleTalk;
                     case PROTOCOL_ICQ: return com.android.internal.R.string.imProtocolIcq;
                     case PROTOCOL_JABBER: return com.android.internal.R.string.imProtocolJabber;
+                    case PROTOCOL_NETMEETING: return com.android.internal.R.string.imProtocolNetMeeting;
                     case PROTOCOL_OTHER: return com.android.internal.R.string.imTypeOther;
                     default: return com.android.internal.R.string.imProtocolCustom;
                 }
