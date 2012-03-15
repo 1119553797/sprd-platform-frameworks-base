@@ -377,7 +377,8 @@ void AudioPolicyManagerBase::setForceUse(AudioSystem::force_use usage, AudioSyst
         break;
     case AudioSystem::FOR_MEDIA:
         if (config != AudioSystem::FORCE_HEADPHONES && config != AudioSystem::FORCE_BT_A2DP &&
-            config != AudioSystem::FORCE_WIRED_ACCESSORY && config != AudioSystem::FORCE_NONE) {
+            config != AudioSystem::FORCE_WIRED_ACCESSORY && config != AudioSystem::FORCE_NONE &&
+            config != AudioSystem::FORCE_SPEAKER) {
             LOGW("setForceUse() invalid config %d for FOR_MEDIA", config);
             return;
         }
@@ -1672,6 +1673,12 @@ uint32_t AudioPolicyManagerBase::getDeviceForStrategy(routing_strategy strategy,
 
     case STRATEGY_MEDIA: {
         uint32_t device2 = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_AUX_DIGITAL;
+	     switch (mForceUse[AudioSystem::FOR_MEDIA]) {
+	     case AudioSystem::FORCE_SPEAKER:
+	          if (device2 == 0) {
+		          device2 = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
+	          }
+	     }
         if (device2 == 0) {
             device2 = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADPHONE;
         }

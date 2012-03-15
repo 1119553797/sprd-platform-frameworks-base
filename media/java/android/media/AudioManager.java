@@ -694,6 +694,16 @@ public class AudioManager {
         }
      }
 
+    // ******** Add by wuzj and fix 12037********
+    public void setSpeakerMediaOn(boolean on) {
+        IAudioService service = getService();
+        try {
+            service.setSpeakerMediaOn(on);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Dead object in setSpeakerMediaOn", e);
+        }
+    }
+
  // ************Modify by luning at01-07-01 begin************
     
     

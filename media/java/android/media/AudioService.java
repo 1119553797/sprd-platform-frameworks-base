@@ -936,6 +936,17 @@ public class AudioService extends IAudioService.Stub {
         }
     }
 
+    // ****** Add by wzj for fix bug 12037******
+    public void setSpeakerMediaOn(boolean on) {
+        if (on) {
+            AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_SPEAKER);
+            mForcedUseForComm = AudioSystem.FORCE_SPEAKER;
+        } else {
+            AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
+            mForcedUseForComm = AudioSystem.FORCE_NONE;
+        }
+    }
+
     /** @see AudioManager#setBluetoothScoOn() */
     public void setBluetoothScoOn(boolean on){
         if (!checkAudioSettingsPermission("setBluetoothScoOn()")) {
