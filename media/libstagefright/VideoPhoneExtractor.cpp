@@ -158,6 +158,7 @@ VideoPhoneSource::VideoPhoneSource(
         const sp<DataSource> &dataSource)
     : m_Format(format),
       m_DataSource(dataSource),
+      m_bDataAvailable(false),
       m_bStarted(false),
       m_bForeStop(false),
       m_pGroup(NULL),
@@ -433,7 +434,7 @@ status_t VideoPhoneSource::read(
         MediaBuffer **out, const ReadOptions *options) 
 {
     Mutex::Autolock autoLock(m_Lock);
-	//LOGV("[%p]VideoPhoneSource::read START nNum = %d",this, m_nNum);	
+	DEBUG_LOGD("[%p]VideoPhoneSource::read START nNum = %d",this, m_nNum);	
 	
 	uint32_t	nStart = 0;
 	uint32_t	nEnd;
@@ -463,8 +464,8 @@ status_t VideoPhoneSource::read(
 
 success:
 	
-	//LOGV("[%p]VideoPhoneSource::read:  nNum = %d nStart = %d  nEnd = %d  nPts = %d   type = %d  mime = %s",
-		//this, m_nNum,nStart,nEnd,nPts,type,m_strMime);
+	DEBUG_LOGD("[%p]VideoPhoneSource::read:  nNum = %d nStart = %d  nEnd = %d  nPts = %d   type = %d  mime = %s",
+		this, m_nNum,nStart,nEnd,nPts,type,m_strMime);
 
 	pMediaBuffer->set_range(nStart, nEnd);
 	pMediaBuffer->meta_data()->clear();
@@ -613,6 +614,7 @@ int	VideoPhoneSource::writeRingBuffer(char* data,int nLen)
 		m_nDataStart = m_nDataEnd;
 
 	//LOGV("signal");
+	m_bDataAvailable = true;
 	m_GetBuffer.signal();
 	
 	return nLen;	
@@ -694,7 +696,8 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 	{
 		nEnd	= nNext;
 		nNext = (nNext + 1) % m_nRingBufferSize;
-		
+
+wait_again:		
 		if (nNext == m_nDataEnd)
 		{
 			//LOGV("[%p]wait 1", this);
@@ -704,6 +707,12 @@ int	VideoPhoneSource::readRingBuffer(MediaBuffer *pMediaBuffer)
 		
 		if ((!m_bStarted) || m_bForeStop)
 			return 0;
+
+        if (!m_bDataAvailable){
+            LOGV("[%p]VideoPhoneSource::readRingBuffer goto wait_again", this);  
+            m_bDataAvailable = false;
+            goto wait_again;
+        }
 
 		if (m_RingBuffer[nEnd] == 0x00 && 
 			m_RingBuffer[(nEnd + 1) % m_nRingBufferSize] == 0x00)
@@ -893,6 +902,15 @@ void VideoPhoneDataDevice::stop()
 	stopThread();
 }
 
+void VideoPhoneDataDevice::stopClient(int index)
+{
+    LOGI("stopClient %d", index);
+    Mutex::Autolock autoLock(m_Lock);
+    if (index < mClients.size()) {
+        static_cast<VideoPhoneSourceInterface *>(mClients[index])->stopCB();
+    }
+}
+
 status_t VideoPhoneDataDevice::registerClient(VideoPhoneSourceInterface *client, sp<DataSource> dataSource)
 {
     Mutex::Autolock autoLock(m_Lock);
@@ -968,6 +986,7 @@ status_t VideoPhoneDataDevice::threadFunc()
 #else
 			//LOGV("read nothing, mStarted: %d, nLen: %d, error: %s", mStarted, nLen, strerror(errno));
 			if (mStarted){
+                m_Lock.unlock();
 				usleep(1000);
 				continue;
 			} else {

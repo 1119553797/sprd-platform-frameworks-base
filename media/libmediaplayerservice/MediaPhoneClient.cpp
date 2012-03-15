@@ -41,6 +41,8 @@
 #include <media/AudioTrack.h>
 #include <media/mediaphone.h>
 
+#include "../libstagefright/include/VideoPhoneExtractor.h"//sprd vt must
+
 #include "MediaPhoneClient.h"
 #include "MediaPlayerService.h"
 
@@ -390,6 +392,7 @@ status_t MediaPhoneClient::enableRecord(bool isEnable, int type, int fd)
         return OK;
     } else {
         if (mRecordRecorder != NULL) {
+            VideoPhoneDataDevice::getInstance().stopClient(VideoPhoneDataDevice::RECORD_CLIENT);
             CHECK_RT(mRecordRecorder->stop());
             delete mRecordRecorder;
             mRecordRecorder = NULL;

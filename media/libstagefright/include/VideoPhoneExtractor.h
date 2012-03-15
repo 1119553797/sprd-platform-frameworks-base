@@ -70,6 +70,7 @@ private:
 	//bool				m_bFirstGet;
 	
     	Mutex 			m_Lock;
+    bool                m_bDataAvailable;
 		
 	Condition 		m_DataGet;
 	
@@ -148,10 +149,15 @@ private:
 class VideoPhoneDataDevice : public Singleton<VideoPhoneDataDevice>
 {
 public:
+    enum {
+        DISPLAY_CLIENT = 0,
+        RECORD_CLIENT = 1
+    };
     FILE* m_fAVStream;
     status_t registerClient(VideoPhoneSourceInterface *client, sp<DataSource> dataSource);
     void unregisterClient(VideoPhoneSourceInterface *client);
 	void stop();
+    void stopClient(int index);
 	status_t start();
 
 private:
