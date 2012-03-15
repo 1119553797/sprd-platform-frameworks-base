@@ -1605,7 +1605,7 @@ public class VCardBuilder {
                 break;
             }
             case Phone.TYPE_OTHER: {
-                parameterList.add(VCardConstants.PARAM_TYPE_VOICE);
+                parameterList.add(VCardConstants.PARAM_PHONE_EXTRA_TYPE_OTHER);
                 break;
             }
             case Phone.TYPE_CAR: {
