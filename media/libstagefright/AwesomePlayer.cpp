@@ -27,6 +27,7 @@
 #include "include/NuCachedSource2.h"
 #include "include/ThrottledSource.h"
 #include "include/MPEG2TSExtractor.h"
+#include "include/ThreadedSource.h"
 #include "include/VideoPhoneExtractor.h"//sprd vt must
 
 #include "ARTPSession.h"
@@ -1383,11 +1384,11 @@ void AwesomePlayer::setVideoSource(sp<MediaSource> source) {
 status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 	LOGI("initVideoDecoder, mIsVideoPhoneStream: %d", mIsVideoPhoneStream);
 	if (mIsVideoPhoneStream){
-	    mVideoSource = OMXCodec::Create(
+	    mVideoSource = new ThreadedSource(OMXCodec::Create(
 	            mClient.interface(), mVideoTrack->getFormat(),
 	            false, // createEncoder
 	            mVideoTrack,
-	            NULL, flags, 2, 3);
+	            NULL, flags, 2, 3));
 	} else {
 	    mVideoSource = OMXCodec::Create(
 	            mClient.interface(), mVideoTrack->getFormat(),
