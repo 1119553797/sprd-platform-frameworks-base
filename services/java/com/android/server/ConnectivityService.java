@@ -822,7 +822,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 if (DBG) Slog.d(TAG, "requested special network with data disabled - rejected");
                 return Phone.APN_TYPE_NOT_AVAILABLE;
             }
-            if (TextUtils.equals(feature.substring(0, Phone.FEATURE_ENABLE_MMS.length()), Phone.FEATURE_ENABLE_MMS)) {
+            if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
+                usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
+            } else if (TextUtils.equals(feature.substring(0, Phone.FEATURE_ENABLE_MMS.length()), Phone.FEATURE_ENABLE_MMS)) {
                 skipAvailableCheck = true;
                 usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
             } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_SUPL)) {
@@ -831,8 +833,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 usedNetworkType = ConnectivityManager.TYPE_MOBILE_DUN;
             } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
                 usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
             }
         }
         NetworkStateTracker network = mNetTrackers[usedNetworkType];
@@ -986,7 +986,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             // TODO - move to MobileDataStateTracker
             int usedNetworkType = networkType;
             if (networkType == ConnectivityManager.TYPE_MOBILE) {
-                if (TextUtils.equals(feature.subSequence(0, Phone.FEATURE_ENABLE_MMS.length()), Phone.FEATURE_ENABLE_MMS)) {
+                if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
+                    usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
+                } else if (TextUtils.equals(feature.subSequence(0, Phone.FEATURE_ENABLE_MMS.length()), Phone.FEATURE_ENABLE_MMS)) {
                     usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_SUPL)) {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_SUPL;
@@ -994,8 +996,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_DUN;
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
-                } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
-                    usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
                 }
             }
             tracker =  mNetTrackers[usedNetworkType];
