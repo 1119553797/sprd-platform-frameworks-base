@@ -76,6 +76,7 @@ public class VCardEntry {
         sImMap.put(VCardConstants.PROPERTY_X_GOOGLE_TALK, Im.PROTOCOL_GOOGLE_TALK);
         sImMap.put(VCardConstants.ImportOnly.PROPERTY_X_GOOGLE_TALK_WITH_SPACE,
                 Im.PROTOCOL_GOOGLE_TALK);
+        sImMap.put(VCardConstants.PROPERTY_X_OTHER, Im.PROTOCOL_OTHER);
     }
 
     public static class PhoneData {

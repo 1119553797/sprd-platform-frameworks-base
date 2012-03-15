@@ -97,7 +97,7 @@ public class VCardUtils {
         sKnownImPropNameMap_ItoS.put(Im.PROTOCOL_ICQ, VCardConstants.PROPERTY_X_ICQ);
         sKnownImPropNameMap_ItoS.put(Im.PROTOCOL_JABBER, VCardConstants.PROPERTY_X_JABBER);
         sKnownImPropNameMap_ItoS.put(Im.PROTOCOL_QQ, VCardConstants.PROPERTY_X_QQ);
-        sKnownImPropNameMap_ItoS.put(Im.PROTOCOL_NETMEETING, VCardConstants.PROPERTY_X_NETMEETING);
+        sKnownImPropNameMap_ItoS.put(Im.PROTOCOL_OTHER, VCardConstants.PROPERTY_X_OTHER);
 
         // \u643A\u5E2F\u96FB\u8A71 = Full-width Hiragana "Keitai-Denwa" (mobile phone)
         // \u643A\u5E2F = Full-width Hiragana "Keitai" (mobile phone)
