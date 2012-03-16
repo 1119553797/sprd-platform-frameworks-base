@@ -57,7 +57,7 @@ public final class CacheManager {
     private static final String MAX_AGE = "max-age";
     private static final String MANIFEST_MIME = "text/cache-manifest";
 
-    private static long CACHE_THRESHOLD = 6 * 1024 * 1024;
+    private static long CACHE_THRESHOLD = 10 * 1024 * 1024;
     private static long CACHE_TRIM_AMOUNT = 2 * 1024 * 1024;
 
     // Limit the maximum cache file size to half of the normal capacity
