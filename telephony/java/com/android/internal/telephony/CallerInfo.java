@@ -265,7 +265,11 @@ public class CallerInfo {
         if (PhoneNumberUtils.isSimEmergencyNumber(number, phoneId)) {
             return new CallerInfo().markAsEmergency(context);
         } else if (PhoneNumberUtils.isVoiceMailNumber(number)) {
-            return new CallerInfo().markAsVoiceMail();
+            //return new CallerInfo().markAsVoiceMail();
+            CallerInfo info = new CallerInfo().markAsVoiceMail();
+            info.name = info.phoneNumber;
+            info.phoneNumber = number;
+            return info;
         }
 
         Uri contactUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
