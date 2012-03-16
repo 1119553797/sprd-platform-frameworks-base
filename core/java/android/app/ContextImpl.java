@@ -1112,7 +1112,11 @@ class ContextImpl extends Context {
     }
     
     private TelephonyManager getTelephonyManager(int phoneId) {
-        synchronized (mSync) {
+		synchronized (mSync) {
+			if (mTelephonyManager.length <= phoneId || phoneId < 0) {
+				// to check whether phoneId is invalid
+				return null;
+			}
             if (mTelephonyManager[phoneId] == null) {
                 mTelephonyManager[phoneId] = new TelephonyManager(getOuterContext(), phoneId);
             }
