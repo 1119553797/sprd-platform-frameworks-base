@@ -168,13 +168,14 @@ public abstract class NetworkStateTracker extends Handler {
     }
 
     public void removeDefaultRoute() {
-        if (mInterfaceName != null) {
-            if (DBG) {
-                Log.d(TAG, "removeDefaultRoute for " + mNetworkInfo.getTypeName() + " (" +
-                        mInterfaceName + ")");
-            }
-            NetworkUtils.removeDefaultRoute(mInterfaceName);
-        }
+        Log.d(TAG,"do nothing since add is replacing");
+//        if (mInterfaceName != null) {
+//            if (DBG) {
+//                Log.d(TAG, "removeDefaultRoute for " + mNetworkInfo.getTypeName() + " (" +
+//                        mInterfaceName + ")");
+//            }
+//            NetworkUtils.removeDefaultRoute(mInterfaceName);
+//        }
     }
 
     /**
