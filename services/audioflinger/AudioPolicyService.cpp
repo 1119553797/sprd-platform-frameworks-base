@@ -237,6 +237,7 @@ status_t AudioPolicyService::startOutput(audio_io_handle_t output,
     }
     LOGV("startOutput() tid %d", gettid());
     Mutex::Autolock _l(mLock);
+    LOGV("startOutput() got lock");
     return mpPolicyManager->startOutput(output, stream, session);
 }
 
@@ -249,6 +250,7 @@ status_t AudioPolicyService::stopOutput(audio_io_handle_t output,
     }
     LOGV("stopOutput() tid %d", gettid());
     Mutex::Autolock _l(mLock);
+    LOGV("stopOutput() got lock");
     return mpPolicyManager->stopOutput(output, stream, session);
 }
 
@@ -259,6 +261,7 @@ void AudioPolicyService::releaseOutput(audio_io_handle_t output)
     }
     LOGV("releaseOutput() tid %d", gettid());
     Mutex::Autolock _l(mLock);
+    LOGV("releaseOutput() got lock");
     mpPolicyManager->releaseOutput(output);
 }
 
@@ -691,7 +694,7 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                     }break;
                 case SET_VOLUME: {
                     VolumeData *data = (VolumeData *)command->mParam;
-                    LOGV("AudioCommandThread() processing set volume stream %d, \
+                    //LOGV("AudioCommandThread() processing set volume stream %d, \
                             volume %f, output %d", data->mStream, data->mVolume, data->mIO);
                     command->mStatus = AudioSystem::setStreamVolume(data->mStream,
                                                                     data->mVolume,
@@ -738,9 +741,9 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
         if (mName != "" && mAudioCommands.isEmpty()) {
             release_wake_lock(mName.string());
         }
-        LOGV("AudioCommandThread() going to sleep");
+        //LOGV("AudioCommandThread() going to sleep");
         mWaitWorkCV.waitRelative(mLock, waitTime);
-        LOGV("AudioCommandThread() waking up");
+        //LOGV("AudioCommandThread() waking up");
     }
     mLock.unlock();
     return false;
@@ -856,6 +859,7 @@ status_t AudioPolicyService::AudioCommandThread::parametersCommand(int ioHandle,
     } else {
         command->mWaitStatus = false;
     }
+    LOGV("AudioCommandThread::parametersCommand() tid %d", gettid());
     Mutex::Autolock _l(mLock);
     insertCommand_l(command, delayMs);
     LOGV("AudioCommandThread() adding set parameter string %s, io %d ,delay %d",
