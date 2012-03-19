@@ -67,7 +67,7 @@ public class MsmsIccProvider extends IccProvider {
     private static final String STR_SNE = "sne";
     private static final String STR_GRP = "grp";
     private static final String STR_GAS = "gas";
-    
+
     private static final int  PHONE_COUNT = PhoneFactory.getPhoneCount();
     private static final int  MAX_MATCH_TYPE = 8;
 
@@ -215,43 +215,43 @@ public class MsmsIccProvider extends IccProvider {
                         "Cannot insert into URL: " + url);
         }
 
-        String tag = initialValues.getAsString("tag");
+        String tag = initialValues.getAsString("newTag");
         if (tag == null) {
             Log.e(TAG, "error, no name input");
             return null;
         }
-        String number = initialValues.getAsString("number");
+        String number = initialValues.getAsString("newNumber");
         // TODO(): Read email instead of sending null.
 
-        String mEmail = initialValues.getAsString("email");
+        String mEmail = initialValues.getAsString("newEmail");
         String[] emails = null;
         if (mEmail != null) {
             emails = new String[1];
             emails[0] = mEmail;
         }
 
-        String anr = initialValues.getAsString("anr");
+        String anr = initialValues.getAsString("newAnr");
         String aas = initialValues.getAsString("aas");
         String sne = initialValues.getAsString("sne");
         String grp = initialValues.getAsString("grp");
         String gas = initialValues.getAsString("gas");
-		
+
         if (DBG)
             log("insert tag: " + tag + ",number : " + number + ",anr : " + anr
                     + ",aas : " + aas + ",sne : " + sne + ",grp : " + grp
                     + ",gas :" + gas + ",Email  :" + (emails == null ? "null":emails[0]));
-			
+
 
         // yeezone:jinwei return sim index after add a new contact in SimCard.
-        
+
         //int simIndex = addIccRecordToEf(efType, tag, number, emails, anr, aas,
         //        sne, grp, gas, pin2);
 
-		
-        
+
+
         boolean success = addIccRecordToEf(efType, tag, number, emails, anr, aas,
                 sne, grp, gas, pin2, phoneId);
-        
+
         if (!success) {
             return null;
         }
@@ -271,13 +271,13 @@ public class MsmsIccProvider extends IccProvider {
         // yeezone:jinwei
         // buf.append(0);
         //buf.append(simIndex);
-        // end    
+        // end
         /*synchronized (ArrayListCursor.mIdIndexMap) {
             ArrayListCursor.mMaxId++;
             ArrayListCursor.mIdIndexMap.put(ArrayListCursor.mMaxId, simIndex);
         }
         if (DBG)
-            log("GSM insert: ID: " + ArrayListCursor.mMaxId 
+            log("GSM insert: ID: " + ArrayListCursor.mMaxId
             +  ",Map size: "
                     + ArrayListCursor.mIdIndexMap.size());*/
         resultUri = Uri.parse(buf.toString());
@@ -331,7 +331,7 @@ public class MsmsIccProvider extends IccProvider {
          * if(where.equals("sim_index=?")){ int sim_index =
          * Integer.valueOf(whereArgs[0]); success =
          * deleteIccRecordFromEfByIndex(efType, sim_index,null); //end }else{
-         * 
+         *
          * }
          */
 
@@ -341,7 +341,7 @@ public class MsmsIccProvider extends IccProvider {
         String[] emails = new String[1];;
         String pin2 = null;
         String anr = "";
-        
+
         if(whereArgs == null || whereArgs.length == 0){
             String[] tokens = where.split("AND");
             int n = tokens.length;
@@ -374,24 +374,24 @@ public class MsmsIccProvider extends IccProvider {
                     anr = normalizeValue(val);
                 }
             }
-        	
+
         } else {
     		if(isFdn){
             	tag = whereArgs[0];
-            	number = whereArgs[1]; 
+            	number = whereArgs[1];
     		    pin2 = whereArgs[2];
-    		    
+
     		}else{
             	tag = whereArgs[0];
-            	number = whereArgs[1];  	
+            	number = whereArgs[1];
             	anr = whereArgs[2];
-            	emails[0] = whereArgs[3];    			
+            	emails[0] = whereArgs[3];
 				if(whereArgs.length  == 5){
 					pin2 = whereArgs[4];
     			}
     		}
         }
-    
+
         /*
          * if (TextUtils.isEmpty(tag)) { return 0; }
          */
@@ -399,7 +399,7 @@ public class MsmsIccProvider extends IccProvider {
          * (pair.length != 2) { Log.e(TAG, "resolve: bad whereClause: " +
          * where); return 0; }
          */
-             
+
         /*if ("_id".equals(key)) {
             delId = Long.parseLong(normalizeValue(val));
             if (ArrayListCursor.mIdIndexMap.containsKey(delId)) {
@@ -415,9 +415,9 @@ public class MsmsIccProvider extends IccProvider {
 
         if (DBG)
             log("delete tag: " + tag + ",number : " + number + ",anr : " + anr + ",Email  :" + emails[0]);
-			          
-        success = deleteIccRecordFromEf(efType, tag, number, emails, anr, pin2, phoneId); 
-             
+
+        success = deleteIccRecordFromEf(efType, tag, number, emails, anr, pin2, phoneId);
+
         if (DBG)
             log("delete  success " + success);
 
@@ -511,8 +511,8 @@ public class MsmsIccProvider extends IccProvider {
          * Log.e("TAG","wangtong0: pair_.length is   " + pair.length); if
          * (pair.length != 2) { Log.e(TAG, "resolve: bad whereClause: " +
          * where); return 0; }
-         * 
-         * 
+         *
+         *
          * String key = pair[0].trim(); String val = pair[1].trim(); if
          * ("_id".equals(key)) { updateId = Long.parseLong(normalizeValue(val));
          * if(ArrayListCursor.mIdIndexMap.containsKey(updateId)) { updateIndex =
@@ -521,7 +521,7 @@ public class MsmsIccProvider extends IccProvider {
          */
 
         boolean success = false;
-    
+
         success = updateIccRecordInEf(efType, tag, number, emails, anr, newTag,
                 newNumber, newemails, newanr, newaas, newsne, newgrp, newgas,
                 pin2, phoneId);
@@ -608,7 +608,7 @@ public class MsmsIccProvider extends IccProvider {
             log("addIccRecordToEf: efType=" + efType + ", name=" + name
                     + ", number=" + number + ",anr= "+anr+", emails=" + emails);
         boolean success = false;
-    
+
         try {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub
                     .asInterface(ServiceManager.getService(PhoneFactory.getServiceName("simphonebook", phoneId)));
@@ -617,7 +617,7 @@ public class MsmsIccProvider extends IccProvider {
                         null, "", name, number, emails, anr, aas, sne, grp,
                         gas, pin2);
             }
-            
+
         } catch (RemoteException ex) {
             // ignore it
         } catch (SecurityException ex) {
@@ -694,7 +694,7 @@ public class MsmsIccProvider extends IccProvider {
         if (DBG)
             log("deleteIccRecordFromEf: efType=" + efType + ", name=" + name
                     + ", number=" + number +",anr=" + anr + ", pin2=" + pin2);
-        
+
         boolean success = false;
 
         try {
@@ -807,16 +807,16 @@ public class MsmsIccProvider extends IccProvider {
     private void log(String msg) {
         Log.d(TAG, "[IccProvider] " + msg);
     }
-    
-    
+
+
     private int getPhoneId(int compoundMatch){
-    	return compoundMatch / MAX_MATCH_TYPE;	
+    	return compoundMatch / MAX_MATCH_TYPE;
     }
-    
+
     private int getMatch(int compoundMatch){
     	return  compoundMatch % MAX_MATCH_TYPE;
     }
-    
+
 
     private static int getCompoundMatchValue(int phoneId, int match)
 	{
@@ -824,16 +824,16 @@ public class MsmsIccProvider extends IccProvider {
 	}
 
     private static String getIccName(int phoneId){
-    	
+
     	if(phoneId == PhoneFactory.DEFAULT_PHONE_ID){
-    		return "icc"; 		
+    		return "icc";
     	}
     	return "icc"+phoneId;
-    	
+
     }
-    
-    
-    
-    
+
+
+
+
 
 }
