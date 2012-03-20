@@ -1872,7 +1872,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         break;
                     }
 					
-                    if (isFmActive() && (result & ACTION_PASS_TO_USER) == 0) {
+                    if (isFmActive()) {
                         // If FM is playing but we decided not to pass the key to the
                         // application, handle the volume change here.
                         handleVolumeKey(AudioManager.STREAM_FM, keyCode);

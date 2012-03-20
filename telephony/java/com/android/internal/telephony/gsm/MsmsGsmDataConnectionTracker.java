@@ -167,7 +167,7 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
 
         setState(State.DISCONNECTING);
 
-        if (!MsmsGsmDataConnectionTrackerProxy.isAllPhoneIdle()) {
+        if (!MsmsGsmDataConnectionTrackerProxy.isAllPhoneIdle() && !mGsmPhone.mSST.isConcurrentVoiceAndData()) {
             if (DBG) log("CleanUpConnection: Not ready for disconnect");
             return;
         }
