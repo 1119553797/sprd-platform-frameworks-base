@@ -1088,6 +1088,7 @@ void ToneGenerator::audioCallback(int event, void* user, void *info) {
 
     if (buffer->size == 0) return;
 
+    unsigned int lGenSmptotal = 0;
 
     // Clear output buffer: WaveGenerator accumulates into lpOut buffer
     memset(lpOut, 0, buffer->size);
@@ -1251,6 +1252,7 @@ void ToneGenerator::audioCallback(int event, void* user, void *info) {
 
         lNumSmp -= lReqSmp;
         lpOut += lReqSmp;
+	lGenSmptotal += lReqSmp;
 
 audioCallback_EndLoop:
 
@@ -1303,6 +1305,7 @@ audioCallback_EndLoop:
             lpToneGen->mWaitCbkCond.signal();
         lpToneGen->mLock.unlock();
     }
+    buffer->size =  lGenSmptotal * sizeof(short);
 }
 
 
