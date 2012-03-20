@@ -1786,10 +1786,15 @@ void AudioPolicyManagerBase::setOutputDevice(audio_io_handle_t output, uint32_t 
     //  - the requestede device is 0
     //  - the requested device is the same as current device and force is not specified.
     // Doing this check here allows the caller to call setOutputDevice() without conditions
-    if ((device == 0 || device == prevDevice) && !force) {
-        LOGV("setOutputDevice() setting same device %x or null device for output %d", device, output);
-        return;
+    if ( device == 0 || ( ( device == prevDevice ) && !force ) )  { //add to make it always return when device == 0
+        LOGV("setOutputDevice() wsetting same device %x or null device for output %d", device, output);
+        if (force && ((prevDevice & AudioSystem::DEVICE_OUT_FM_HEADSET) || (prevDevice & AudioSystem::DEVICE_OUT_FM_SPEAKER))) {
+            device = AudioSystem::DEVICE_OUT_WIRED_HEADSET;
+        } else {
+            return;
+        }
     }
+
 
     outputDesc->mDevice = device;
     // mute media streams if both speaker and headset are selected
