@@ -1357,6 +1357,9 @@ public class TelephonyManager {
      * @return default phoneId
      */
     public static int getDefaultSim(Context context, int mode) {
+	if (getPhoneCount()==1) {
+	    return 0;
+	} 
         ContentResolver cr = context.getContentResolver();
         int phoneId = PHONE_ID_INVALID;
         String imsi = "";
