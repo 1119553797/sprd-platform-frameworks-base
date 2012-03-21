@@ -22,10 +22,15 @@ import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.SlidingTab;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.ColorStateList;
+import android.database.ContentObserver;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -35,13 +40,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.FontMetrics;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.media.AudioManager;
 import android.os.BatteryManager;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.provider.BaseColumns;
+import android.provider.CallLog;
 import android.provider.Settings;
+import android.provider.Telephony.Sms;
 
 import java.util.Date;
 import java.io.File;
@@ -111,6 +129,25 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private PhoneStateListener[] mPhoneStateListener;
  // ************Modify by luning at01-07-01 end************
     private int numPhones = 0;
+    
+	private static final String INTENT_MISSMMS = "android.intent.action.missMms";
+	private static final String INTENT_MISSPHONE = "com.android.phone.action.RECENT_CALLS";
+	
+	private boolean hasMissPhone =false;
+	private boolean hasMissMms =false;
+	
+	private CObserver smsObserver;
+	private CObserver callObserver;
+
+   	private static Paint mPaint = new Paint();
+   	private static final String INFINITY_UNICODE = "\u221e";
+   	private static final int MAX_SIZE=100;
+   	private static float mFewTextSize;
+   	private static float mManytextSize;
+   	private static final int mOffsetY = 3;
+   	private static final Canvas sCanvas = new Canvas();
+   	private Bitmap mLeftBitmap;
+   	private Bitmap mRightBitmap;
     
     /**
      * The status of this lock screen.
@@ -278,13 +315,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         mSilentMode = isSilentMode();
 
-        mSelector.setLeftTabResources(
-                R.drawable.ic_jog_dial_unlock,
-                R.drawable.jog_tab_target_green,
-                R.drawable.jog_tab_bar_left_unlock,
-                R.drawable.jog_tab_left_unlock);
-
-        updateRightTabResources();
+        resetSlidingTab();
+        registerObserver();
 
         mSelector.setOnTriggerListener(this);
 
@@ -300,7 +332,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 					mPhoneStateListener[i],
 					PhoneStateListener.LISTEN_SERVICE_STATE);
 		}
-        
+		//add by longhai
+		initValues();
     }
 
     private boolean isSilentMode() {
@@ -308,6 +341,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
 
     private void updateRightTabResources() {
+    	if(hasMissPhone||hasMissMms){
+    		return;
+    	}
         boolean vibe = mSilentMode
             && (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE);
 
@@ -356,7 +392,28 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     public void onTrigger(View v, int whichHandle) {
         if (whichHandle == SlidingTab.OnTriggerListener.LEFT_HANDLE) {
             mCallback.goToUnlockScreen();
+			if (hasMissPhone && hasMissMms) {
+				Intent it = new Intent(Intent.ACTION_VIEW);
+                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                it.setType("vnd.android.cursor.dir/calls");
+                mContext.startActivity(it);
+			}
         } else if (whichHandle == SlidingTab.OnTriggerListener.RIGHT_HANDLE) {
+        	if(hasMissMms){
+        		mCallback.goToUnlockScreen();
+                Intent it = new Intent(INTENT_MISSMMS);
+                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(it);
+        		return;
+        	}else if(hasMissPhone){
+        		mCallback.goToUnlockScreen();
+        		Intent it = new Intent(Intent.ACTION_VIEW);
+                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                it.setType("vnd.android.cursor.dir/calls");
+                mContext.startActivity(it);
+        		return;
+        	}
+        	
             // toggle silent mode
             mSilentMode = !mSilentMode;
             
@@ -440,11 +497,17 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     
     /** {@inheritDoc} */
     public void onGrabbedStateChange(View v, int grabbedState) {
+    	if(hasMissPhone||hasMissMms){
+    		return;
+    	}
         if (grabbedState == SlidingTab.OnTriggerListener.RIGHT_HANDLE) {
             mSilentMode = isSilentMode();
             mSelector.setRightHintText(mSilentMode ? R.string.lockscreen_sound_on_label
                     : R.string.lockscreen_sound_off_label);
         }
+//        if(grabbedState == SlidingTab.OnTriggerListener.LEFT_HANDLE){
+//        	 mSelector.setLeftHintText(R.string.lockscreen_unlock_label);
+//        }
         if (grabbedState != SlidingTab.OnTriggerListener.NO_HANDLE) {
             mCallback.pokeWakelock();
         }
@@ -869,10 +932,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 	mSelector.reset(false);//clear animate when press canell button 2012-2-7
         resetStatusInfo(mUpdateMonitor);
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
+        updateSlidingTab();
     }
 
     /** {@inheritDoc} */
     public void cleanUp() {
+    	if(DBG){
+    		Log.d(TAG, "cleanUp....");
+    	}
     	for (int i = 0; i < numPhones; i++) {
 			((TelephonyManager) mContext
 					.getSystemService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i))).listen(
@@ -883,6 +950,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mLockPatternUtils = null;
         mUpdateMonitor = null;
         mCallback = null;
+        unregisterObserver();
+        if (mLeftBitmap != null && !mLeftBitmap.isRecycled()) {
+            mLeftBitmap.recycle();
+        } else if (mRightBitmap != null && !mRightBitmap.isRecycled()) {
+            mRightBitmap.recycle();
+        }
     }
 
     /** {@inheritDoc} */
@@ -984,4 +1057,177 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
     }
     //add end
+	private class CObserver extends ContentObserver {
+		
+		public CObserver(){
+			super(new Handler());
+		}
+		 @Override
+		public void onChange(boolean selfChange) {
+			if (DBG) {
+				Log.d(TAG, "ContentObserver onChange...");
+			}
+			updateSlidingTab();
+		}
+	};
+	
+	private void registerObserver() {
+		smsObserver = new CObserver();
+		callObserver = new CObserver();
+		mContext.getContentResolver().registerContentObserver(
+				Sms.Inbox.CONTENT_URI, true, smsObserver);
+		mContext.getContentResolver().registerContentObserver(
+				CallLog.Calls.CONTENT_URI, true, callObserver);
+	}
+	
+	private void unregisterObserver() {
+		if (smsObserver != null) {
+			mContext.getContentResolver()
+					.unregisterContentObserver(smsObserver);
+		}
+		if (callObserver != null) {
+			mContext.getContentResolver()
+					.unregisterContentObserver(smsObserver);
+		}
+	}
+	
+	
+	private void updateSlidingTab() {
+		int missPhoneCount = getMissCallCount();
+		int missMmsCount = getUnReadMmsCount();
+		hasMissPhone = missPhoneCount > 0;
+		hasMissMms = missMmsCount > 0;
+		if (DBG) {
+			Log.d(TAG, "hasMissPhone=" + hasMissPhone + " hasMissMms="
+					+ hasMissMms);
+		}
+		if (hasMissPhone && hasMissMms) {
+			mSelector.setLeftHintText(R.string.lockscreen_miss_phone);
+			mSelector.setRightHintText(R.string.lockscreen_miss_mms);
+			mSelector.setRightIcon(createBitmap(false,
+					R.drawable.ic_message_dial_unlock, missMmsCount));
+			mSelector.setLeftIcon(createBitmap(true,
+					R.drawable.ic_phone_dial_unlock, missPhoneCount));
+		} else if (hasMissMms) {
+			mSelector.setRightHintText(R.string.lockscreen_miss_mms);
+			mSelector.setRightIcon(createBitmap(false,
+					R.drawable.ic_message_dial_unlock, missMmsCount));
+		} else if (hasMissPhone) {
+			mSelector.setRightHintText(R.string.lockscreen_miss_phone);
+			mSelector.setRightIcon(createBitmap(false,
+					R.drawable.ic_phone_dial_unlock, missPhoneCount));
+		} else {
+			resetSlidingTab();
+		}
+
+	}
+	
+	private void resetSlidingTab() {
+		mSelector.setLeftTabResources(R.drawable.ic_jog_dial_unlock,
+				R.drawable.jog_tab_target_green,
+				R.drawable.jog_tab_bar_left_unlock,
+				R.drawable.jog_tab_left_unlock);
+
+		updateRightTabResources();
+	}
+	
+    private void initValues() {
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(Color.WHITE);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        final float density = metrics.density;
+        mFewTextSize = 14 * density;
+        mManytextSize = 12 * density;
+    }
+
+    private Bitmap createBitmap(boolean isLeft ,int resId,int count) {
+//        if (isLeft && mLeftBitmap != null && !mLeftBitmap.isRecycled()) {
+//            mLeftBitmap.recycle();
+//        } else if (mRightBitmap != null && !mRightBitmap.isRecycled()) {
+//            mRightBitmap.recycle();
+//        }
+        Bitmap iconBitmap = BitmapFactory.decodeResource(getResources(), resId).copy(Bitmap.Config.ARGB_8888, true);
+        Canvas cv = new Canvas(iconBitmap);
+        Bitmap countBp =  drawSubBitmap(getContext(),count);
+        cv.drawBitmap(countBp, iconBitmap.getWidth() - countBp.getWidth(), 0, mPaint);
+        if(isLeft){
+            mLeftBitmap = iconBitmap;
+        }else {
+            mRightBitmap = iconBitmap;
+        }
+        countBp.recycle();
+        return iconBitmap;
+    }
+
+    private Bitmap drawSubBitmap(Context context, int drawText) {
+        String endstr = drawText < MAX_SIZE ? ("" + drawText) : INFINITY_UNICODE;
+        if (drawText < MAX_SIZE) {
+            mPaint.setTextSize(mFewTextSize);
+        } else {
+            mPaint.setTextSize(mManytextSize);
+        }
+        Drawable mIcon = getResources().getDrawable(R.drawable.ic_count_dial_unlock);
+
+        int width = mIcon.getIntrinsicWidth();
+        int height = mIcon.getIntrinsicHeight();
+
+        int textWidth = (int) mPaint.measureText(endstr, 0, endstr.length());
+        if (textWidth > width) {
+            width = textWidth + 6;
+        }
+
+        final Bitmap thumb = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        final Canvas canvas = sCanvas;
+        canvas.setBitmap(thumb);
+        Rect r = new Rect(0, 0, width, height);
+        mIcon.setBounds(r);
+        mIcon.draw(canvas);
+        int x = (int) ((width - textWidth) * 0.5);
+        FontMetrics fm = mPaint.getFontMetrics();
+        int y = (int) ((height - (fm.descent - fm.ascent)) * 0.5 - fm.ascent);
+        canvas.drawText(endstr, x, y-mOffsetY, mPaint);
+        return thumb;
+    }
+    
+    private int getMissCallCount() {
+		Cursor cur = null;
+		int unRead = 3;
+		int black = unRead + 1;
+		try {
+			ContentResolver cr = mContext.getContentResolver();
+			cur = cr.query(CallLog.Calls.CONTENT_URI, new String[] {
+					CallLog.Calls.NUMBER, CallLog.Calls.CACHED_NAME,
+					CallLog.Calls.DATE, CallLog.Calls.NEW }, "(type = "
+					+ unRead + " AND new = 1)", null, "calls.date desc");// limit
+			// ?distinct?
+
+			return cur.getCount();
+		} catch (SQLiteException ex) {
+			Log.d("SQLiteException in getMissCallCount", ex.getMessage());
+		} finally {
+			if (cur != null && !cur.isClosed()) {
+				cur.close();
+			}
+		}
+		return 0;
+	}
+
+    private int getUnReadMmsCount() {
+		String selection = "(read=0 OR seen=0)";
+		Cursor cur = null;
+		try {
+			ContentResolver cr = mContext.getContentResolver();
+			cur = cr.query(Sms.Inbox.CONTENT_URI, new String[] {
+					BaseColumns._ID, Sms.ADDRESS, Sms.PERSON, Sms.BODY,
+					Sms.DATE }, selection, null, "date desc");// limit
+			return cur.getCount();
+		} catch (SQLiteException ex) {
+			Log.e(TAG, "SQLiteException in getUnReadSmsCount" + ex.getMessage());
+		} finally {
+			if (cur != null && !cur.isClosed()) {
+				cur.close();
+			}
+		}
+		return 0;
+	}
 }

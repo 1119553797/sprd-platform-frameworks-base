@@ -38,6 +38,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
+import android.graphics.Bitmap;
 import com.android.internal.R;
 
 /**
@@ -218,7 +219,9 @@ public class SlidingTab extends ViewGroup {
         void setIcon(int iconId) {
             tab.setImageResource(iconId);
         }
-
+        void setIcon(Bitmap bp){
+            tab.setImageBitmap(bp);
+        }
         void setTabBackgroundResource(int tabId) {
             tab.setBackgroundResource(tabId);
         }
@@ -754,7 +757,9 @@ public class SlidingTab extends ViewGroup {
         mLeftSlider.setTabBackgroundResource(tabId);
         mLeftSlider.updateDrawableStates();
     }
-
+    public void setLeftIcon(Bitmap iconBp){
+        mLeftSlider.setIcon(iconBp);
+    }
     /**
      * Sets the left handle hint text to a given resource string.
      *
@@ -784,7 +789,9 @@ public class SlidingTab extends ViewGroup {
         mRightSlider.setTabBackgroundResource(tabId);
         mRightSlider.updateDrawableStates();
     }
-
+    public void setRightIcon(Bitmap iconBp){
+        mRightSlider.setIcon(iconBp);
+    }
     /**
      * Sets the left handle hint text to a given resource string.
      *

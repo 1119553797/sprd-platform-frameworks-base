@@ -1062,4 +1062,7 @@
     <string name="myApp_Uninstall_ChkBox">卸载应用</string>
     <string name="myAppLoading">加载中\u2026</string>
     <string name="myAppProcessing">处理中\u2026</string>
+    
+    <string name="lockscreen_miss_phone">未接电话</string>
+	<string name="lockscreen_miss_mms">未读短信</string>
 </resources>

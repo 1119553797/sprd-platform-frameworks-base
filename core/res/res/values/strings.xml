@@ -2609,4 +2609,7 @@
 	<!-- add by yangqingan 2011-12-27 for NEWMS00155219 end -->
 	<string name="ap_disconnected"> disconnected</string>
 	<string name="sim_chooser_title">Choose SIM</string>
+	
+	<string name="lockscreen_miss_phone">miss phone</string>
+	<string name="lockscreen_miss_mms">miss sms</string>
 </resources>
