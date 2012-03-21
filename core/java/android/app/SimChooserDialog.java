@@ -17,6 +17,7 @@
 package android.app;
 
 import com.android.internal.telephony.PhoneFactory;
+import com.android.internal.telephony.IccCard;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -79,16 +80,27 @@ public class SimChooserDialog extends AlertDialog implements OnItemClickListener
 	for (int i=0;i<phoneCount;++i) {
 	    TelephonyManager tm=(TelephonyManager)getContext().getSystemService(
 		PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i));
-	    if (tm.hasIccCard()) {
+
+	    if (tm.hasIccCard()
+		&& tm.getSimState()==TelephonyManager.SIM_STATE_READY
+		) {
 		String simName= "SIM "+(i+1)+" "+tm.getNetworkOperatorName();
 		mPhoneIds.add(i);
 		mPhoneNames.add(simName);
 	    } 
 	}
-	mAdapter=new ArrayAdapter<String>(getContext(),com.android.internal.R.layout.simple_list_item_1,mPhoneNames);
-	mList.setAdapter(mAdapter);
-	mList.setOnItemClickListener(this);
-	setView(mList);
+
+	if (mPhoneIds.isEmpty()) {
+	    setMessage(getContext().getResources().getText(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+	    if (mListener!=null) {
+		mListener.onSimPicked(-1);
+	    } 
+	} else {
+	    mAdapter=new ArrayAdapter<String>(getContext(),com.android.internal.R.layout.simple_list_item_1,mPhoneNames);
+	    mList.setAdapter(mAdapter);
+	    mList.setOnItemClickListener(this);
+	    setView(mList);
+	}
     }
 
     public void setListener(OnSimPickedListener listener) {

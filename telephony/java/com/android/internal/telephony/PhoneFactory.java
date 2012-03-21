@@ -309,11 +309,12 @@ public class PhoneFactory {
 			return false;
 		}
 	}
-	/**
+    /**
      * get simCard state
      * @param phoneId
      * @return
      */
+    // wish it works!
     public static State getSimState(int phoneId) {
         if (sProxyPhone!=null&&phoneId<sProxyPhone.length) {
             return sProxyPhone[phoneId].getIccCard().mState;
