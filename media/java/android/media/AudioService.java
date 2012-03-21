@@ -50,6 +50,7 @@ import android.view.VolumePanel;
 import android.os.SystemProperties;
 
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.PhoneFactory;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -316,9 +317,15 @@ public class AudioService extends IAudioService.Stub {
         context.registerReceiver(mMediaButtonReceiver, intentFilter);
 
         // Register for phone state monitoring
-        TelephonyManager tmgr = (TelephonyManager)
-                context.getSystemService(Context.TELEPHONY_SERVICE);
-        tmgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+//        TelephonyManager tmgr = (TelephonyManager)
+//                context.getSystemService(Context.TELEPHONY_SERVICE);
+//        tmgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+            String telephonyService = PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, i);
+            TelephonyManager tmgr = (TelephonyManager)
+                    context.getSystemService(telephonyService);
+            tmgr.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
     }
 
     private void createAudioSystemThread() {
@@ -2041,6 +2048,7 @@ public class AudioService extends IAudioService.Stub {
     private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
+            Log.d(TAG, "mPhoneStateListener");
             if (state == TelephonyManager.CALL_STATE_RINGING) {
                 //Log.v(TAG, " CALL_STATE_RINGING");
                 synchronized(mRingingLock) {
