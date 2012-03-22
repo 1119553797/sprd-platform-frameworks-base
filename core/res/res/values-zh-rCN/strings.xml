@@ -949,6 +949,7 @@
     <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"已启用车载模式"</string>
     <string name="car_mode_disable_notification_message" msgid="668663626721675614">"选择退出车载模式"</string>
     <string name="tethered_notification_title" msgid="3146694234398202601">"USB 绑定或热点已启用"</string>
+    <string name="cta_tethered_notification_title">"USB 绑定"</string>
     <string name="tethered_notification_message" msgid="3067108323903048927">"触摸可进行配置"</string>
     <string name="throttle_warning_notification_title" msgid="4890894267454867276">"手机流量过多"</string>
     <string name="throttle_warning_notification_message" msgid="2609734763845705708">"轻触以了解有关手机流量详情"</string>

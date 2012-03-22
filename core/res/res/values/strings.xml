@@ -2491,6 +2491,7 @@
     <!-- Strings for tethered notification -->
     <!-- Shown when the device is tethered -->
     <string name="tethered_notification_title">Tethering or hotspot active</string>
+    <string name="cta_tethered_notification_title">Tethering</string>
     <string name="tethered_notification_message">Touch to configure</string>
 
     <!-- Strings for throttling notification -->
