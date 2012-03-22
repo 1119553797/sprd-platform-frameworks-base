@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony.gsm;
 
+import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC;
@@ -42,6 +43,7 @@ import com.android.internal.telephony.IccCardApplication;
 import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.gsm.stk.AppInterface;
+import com.android.internal.telephony.gsm.TDPhone;
 
 import java.util.ArrayList;
 import android.telephony.PhoneNumberUtils;
@@ -71,6 +73,7 @@ public final class SIMRecords extends IccRecords {
 
     String imsi;
     boolean callForwardingEnabled;
+    boolean videoCallForwardingEnabled;
     private Context mContext; 
 
     /**
@@ -515,6 +518,27 @@ public final class SIMRecords extends IccRecords {
 
         }
     }
+
+    public boolean getCallForwardingFlag(int serviceClass) {
+        if ((serviceClass & SERVICE_CLASS_VOICE) != 0) {
+            return callForwardingEnabled;
+        } else if (TDPhone.SERVICE_CLASS_VIDEO == serviceClass) {
+            return videoCallForwardingEnabled;
+        }
+        return false;
+    }
+
+    public boolean getVideoCallForwardingFlag() {
+        return videoCallForwardingEnabled;
+    }
+
+    public void setVideoCallForwardingFlag(int line, boolean enable) {
+        if (line != 1) return; // only line 1 is supported
+
+        videoCallForwardingEnabled = enable;
+
+        ((TDPhone) phone).notifyCallForwardingIndicator(TDPhone.SERVICE_CLASS_VIDEO);
+}
 
     /**
      * Called by STK Service when REFRESH is received.
