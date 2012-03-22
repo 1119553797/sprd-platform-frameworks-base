@@ -1190,10 +1190,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
                     + " VALUES(?,?);");
-    
-            loadBooleanSetting(stmt, Settings.Secure.BLUETOOTH_ON,
-                    R.bool.def_bluetooth_on);
-    
+
+            if (!SystemProperties.getBoolean("ro.device.support.bt", true)) {
+                Log.d(TAG, "bt not support");
+                loadSetting(stmt, Settings.Secure.BLUETOOTH_ON, "0");
+            } else {
+                Log.d(TAG, "bt support");
+                loadBooleanSetting(stmt, Settings.Secure.BLUETOOTH_ON,
+                        R.bool.def_bluetooth_on);
+            }
+
             // Data roaming default, based on build
             loadSetting(stmt, Settings.Secure.DATA_ROAMING,
                     "true".equalsIgnoreCase(
@@ -1202,24 +1208,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
             loadBooleanSetting(stmt, Settings.Secure.INSTALL_NON_MARKET_APPS,
                     R.bool.def_install_non_market_apps);
-    
-            loadStringSetting(stmt, Settings.Secure.LOCATION_PROVIDERS_ALLOWED,
-                    R.string.def_location_providers_allowed);
-    
-            loadBooleanSetting(stmt, Settings.Secure.ASSISTED_GPS_ENABLED,
-                    R.bool.assisted_gps_enabled);
+
+            if (!SystemProperties.getBoolean("ro.device.support.gps", true)) {
+                Log.d(TAG, "gps not support");
+                loadSetting(stmt, Settings.Secure.LOCATION_PROVIDERS_ALLOWED, "");
+                loadSetting(stmt, Settings.Secure.ASSISTED_GPS_ENABLED, "0");
+            } else {
+                Log.d(TAG, "gps support");
+                loadStringSetting(stmt, Settings.Secure.LOCATION_PROVIDERS_ALLOWED,
+                        R.string.def_location_providers_allowed);
+
+                loadBooleanSetting(stmt, Settings.Secure.ASSISTED_GPS_ENABLED,
+                        R.bool.assisted_gps_enabled);
+            }
     
             loadIntegerSetting(stmt, Settings.Secure.NETWORK_PREFERENCE,
                     R.integer.def_network_preference);
     
             loadBooleanSetting(stmt, Settings.Secure.USB_MASS_STORAGE_ENABLED,
                     R.bool.def_usb_mass_storage_enabled);
-    
-            loadBooleanSetting(stmt, Settings.Secure.WIFI_ON,
-                    R.bool.def_wifi_on);
-            loadBooleanSetting(stmt, Settings.Secure.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON,
-                    R.bool.def_networks_available_notification_on);
-    
+            if (!SystemProperties.getBoolean("ro.device.support.wifi", true)) {
+                Log.d(TAG, "wifi not support");
+                loadSetting(stmt, Settings.Secure.WIFI_ON,"0");
+                loadSetting(stmt, Settings.Secure.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON,"0");
+            } else {
+                Log.d(TAG, "wifi support");
+                loadBooleanSetting(stmt, Settings.Secure.WIFI_ON,
+                        R.bool.def_wifi_on);
+                loadBooleanSetting(stmt, Settings.Secure.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON,
+                        R.bool.def_networks_available_notification_on);
+            }
+
             String wifiWatchList = SystemProperties.get("ro.com.android.wifi-watchlist");
             if (!TextUtils.isEmpty(wifiWatchList)) {
                 loadSetting(stmt, Settings.Secure.WIFI_WATCHDOG_WATCH_LIST, wifiWatchList);
