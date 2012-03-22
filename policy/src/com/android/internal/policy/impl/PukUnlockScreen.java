@@ -73,7 +73,7 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
     private String mPukString;
     private String mNewPinString;
-   
+    private int mPhoneCount=1;
     private int mCurrentStatus;
     private Context mContext;
     private TelephonyManager mTelePhoneManager; 
@@ -94,7 +94,7 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mCreationOrientation = configuration.orientation;
         mKeyboardHidden = configuration.hardKeyboardHidden;
         mLockPatternUtils = lockpatternutils;
-
+        mPhoneCount= TelephonyManager.getPhoneCount();
         LayoutInflater inflater = LayoutInflater.from(context);
         if (mKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
             inflater.inflate(R.layout.keyguard_screen_sim_pin_landscape, this, true);
@@ -124,12 +124,12 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 		if (mUpdateMonitor.getSimState(mSub) == IccCard.State.PUK_REQUIRED) {
 			mState = STATE_PUK;
 
-			if (TelephonyManager.getPhoneCount() < 2) {
-				mHeaderText.setText(R.string.sim_puk_requried);
-			} else {
-				mHeaderText.setText((mSub == 0) ? R.string.sim1_puk_requried
-						: R.string.sim2_puk_requried);
-			}
+			//if (TelephonyManager.getPhoneCount() < 2) {
+				mHeaderText.setText(updatePukRemainningTimes(true));
+			//} else {
+			//	mHeaderText.setText((mSub == 0) ? R.string.sim1_puk_requried
+			//			: R.string.sim2_puk_requried);
+		//	}
 		}    
         //----------------------------------
         
@@ -157,8 +157,8 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     public void onResume() {
         // start fresh
         //PUK Code Remain times modify start
-        String headerText = mContext.getResources().getString(R.string.keyguard_password_enter_puk_code);
-        mHeaderText.setText(headerText + "(" + remainTimes + ")");
+        //String headerText = mContext.getResources().getString(R.string.keyguard_password_enter_puk_code);
+        mHeaderText.setText(updatePukRemainningTimes(true));
         //PUK Code Remain times modify end
 
         mCurrentStatus = STATUS_INPUT_PUK;
@@ -170,7 +170,33 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
     }
-
+    /**
+     * update puk remainningTimes tip information
+     * @return
+     */
+    private String updatePukRemainningTimes(boolean successfull) {
+        Log.d("PukUnlockScreen", "phone id="+mSub + " successfull = "+successfull);
+        String headerText = "";
+        if (mPhoneCount < 2) {
+            headerText = getContext().getString(
+                    (successfull ? R.string.sim_puk_requried
+                            : R.string.keyguard_password_wrong_puk_code))
+                    + getContext().getString(R.string.pinpuk_attempts) + remainTimes;
+        } else {
+            if (1 == mSub) {
+                headerText = getContext().getString(
+                        (successfull ? R.string.sim2_puk_requried
+                                : R.string.keyguard_password_wrong_puk_code))
+                        + getContext().getString(R.string.pinpuk_attempts) + remainTimes;
+            } else {
+                headerText = getContext().getString(
+                        (successfull ? R.string.sim1_puk_requried
+                                : R.string.keyguard_password_wrong_puk_code))
+                        + getContext().getString(R.string.pinpuk_attempts) + remainTimes;
+            }
+        }
+        return headerText;
+    }
     /** {@inheritDoc} */
     public void cleanUp() {
         // hide the dialog.
@@ -230,54 +256,67 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         } else if (v == mEmergencyCallButton) {
             mCallback.takeEmergencyCallAction();
         } else if (v == mOkButton) {
-            switch(mCurrentStatus) {
-                case STATUS_INPUT_PUK:
-                    mPukString = mPukText.getText().toString();
-                    mCurrentStatus = STATUS_INPUT_PIN_1;
-                    mHeaderText.setText(R.string.keyguard_password_enter_new_pin_first_code);
-                    mPukText.setText("");
-                break;
-
-                case STATUS_INPUT_PIN_1:
-                    mNewPinString = mPukText.getText().toString();
-                    if(mNewPinString == null || mNewPinString.length() < 4 || mNewPinString.length() > 8) {
-                        String title = mContext.getResources().getString(R.string.invalidPin) + "\r\n"
-                                     + mContext.getResources().getString(R.string.keyguard_password_enter_new_pin_second_code);
-                        mHeaderText.setText(title);
-                    }else {
-                        mCurrentStatus = STATUS_INPUT_PIN_2;
-                        mHeaderText.setText(R.string.keyguard_password_enter_new_pin_second_code);
-                    }
-                    mPukText.setText("");
-                break;
-
-                case STATUS_INPUT_PIN_2:
-                    String mCurrentPinText = mPukText.getText().toString();
-                    if(mCurrentPinText == null || mCurrentPinText.length() < 4 || mCurrentPinText.length() > 8) {
-                        String title = mContext.getResources().getString(R.string.invalidPin) + "\n"
-                                     + mContext.getResources().getString(R.string.keyguard_password_enter_new_pin_second_code);
-                        mHeaderText.setText(title);
-                        mPukText.setText("");
-                        break;
-                    }
-
-                    if(!mNewPinString.equals(mCurrentPinText)) {
-                        mCurrentStatus = STATUS_INPUT_PIN_1;
-                        String title = mContext.getResources().getString(R.string.mismatchPin) + "\n"
-                                     + mContext.getResources().getString(R.string.keyguard_password_enter_new_pin_first_code);
-                        mHeaderText.setText(title);
-                        mPukText.setText("");
-                    } else {
-                    	if(!checkPukLength()){
-                    		checkPuk();
-                    		mCurrentStatus = STATUS_INPUT_PUK;
-                    	}
-                    }
-                break;
+            if(!checkPukLength()){
+                updateState();
             }
         }
     }
 
+    private void updateState() {
+        switch (mCurrentStatus) {
+            case STATUS_INPUT_PUK:
+                mPukString = mPukText.getText().toString();
+                mCurrentStatus = STATUS_INPUT_PIN_1;
+                mHeaderText.setText(R.string.keyguard_password_enter_new_pin_first_code);
+                mPukText.setText("");
+                break;
+
+            case STATUS_INPUT_PIN_1:
+                mNewPinString = mPukText.getText().toString();
+                if (mNewPinString == null || mNewPinString.length() < 4
+                        || mNewPinString.length() > 8) {
+                    String title = mContext.getResources().getString(R.string.invalidPin)
+                            + "\r\n"
+                            + mContext.getResources().getString(
+                                    R.string.keyguard_password_enter_new_pin_second_code);
+                    mHeaderText.setText(title);
+                } else {
+                    mCurrentStatus = STATUS_INPUT_PIN_2;
+                    mHeaderText.setText(R.string.keyguard_password_enter_new_pin_second_code);
+                }
+                mPukText.setText("");
+                break;
+
+            case STATUS_INPUT_PIN_2:
+                String mCurrentPinText = mPukText.getText().toString();
+                if (mCurrentPinText == null || mCurrentPinText.length() < 4
+                        || mCurrentPinText.length() > 8) {
+                    String title = mContext.getResources().getString(R.string.invalidPin)
+                            + "\n"
+                            + mContext.getResources().getString(
+                                    R.string.keyguard_password_enter_new_pin_second_code);
+                    mHeaderText.setText(title);
+                    mPukText.setText("");
+                    break;
+                }
+
+                if (!mNewPinString.equals(mCurrentPinText)) {
+                    mCurrentStatus = STATUS_INPUT_PIN_1;
+                    String title = mContext.getResources().getString(R.string.mismatchPin)
+                            + "\n"
+                            + mContext.getResources().getString(
+                                    R.string.keyguard_password_enter_new_pin_first_code);
+                    mHeaderText.setText(title);
+                    mPukText.setText("");
+                } else {
+                    if (!checkPukLength()) {
+                        checkPuk();
+                        mCurrentStatus = STATUS_INPUT_PUK;
+                    }
+                }
+                break;
+        }
+    }
     private Dialog getSimUnlockProgressDialog() {
         if (mPukUnlockProgressDialog == null) {
             mPukUnlockProgressDialog = new ProgressDialog(mContext);
@@ -325,16 +364,6 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                     mContext.sendBroadcast(new Intent(TelephonyIntents.ACTION_SIM_STATE_CHANGED));
                   //add by niezhong for NEWMS00118673 09-17-11 end
                 } else {
-//                    mCurrentStatus = STATUS_INPUT_PUK;
-//                    //PUK Code Remain times modify start
-//                    remainTimes = remainTimes - 1;
-//                    String title = mContext.getResources().getString(R.string.keyguard_password_wrong_puk_code)
-//                                 + mContext.getResources().getString(R.string.keyguard_password_enter_puk_code)
-//								 + "(" + remainTimes + ")";
-//                    mHeaderText.setText(title);
-//                    //PUK Code Remain times modify end
-//                    mPukText.setText("");
-//                    mEnteredDigits = 0;
                 	int attemptsRemaining = 1;
 					text.setText(R.string.unblocking_fail);
 					toast.show();
@@ -348,12 +377,7 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 						if (attemptsRemaining >= 1) {
 							// clearDigits();
 							remainTimes = attemptsRemaining;
-							String displayMessage = getContext().getString(
-									R.string.keyguard_password_wrong_puk_code)
-									+ getContext().getString(
-											R.string.pinpuk_attempts)
-									+ attemptsRemaining;
-							mHeaderText.setText(displayMessage);
+							mHeaderText.setText(updatePukRemainningTimes(false));
 						} else {
 							mOkButton.setEnabled(false);
 							String displayMessage = getContext().getString(
