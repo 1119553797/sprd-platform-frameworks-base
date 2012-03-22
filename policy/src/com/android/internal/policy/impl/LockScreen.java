@@ -1137,7 +1137,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         final float density = metrics.density;
         mFewTextSize = 14 * density;
-        mManytextSize = 12 * density;
+        mManytextSize = 18 * density;
     }
 
     private Bitmap createBitmap(boolean isLeft ,int resId,int count) {
