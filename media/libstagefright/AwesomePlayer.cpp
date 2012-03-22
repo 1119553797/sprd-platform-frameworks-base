@@ -1625,9 +1625,9 @@ void AwesomePlayer::onVideoEvent() {
 #endif
 
     int64_t latenessUs = nowUs - timeUs;
-    if(latenessUs > 60000 || latenessUs< -60000){
+    //if(latenessUs > 60000 || latenessUs< -60000){
     	LOGI("video timestamp %lld,%lld,%lld:%lld,%lld,%lld",nowUs,timeUs,latenessUs,realTimeUs,mediaTimeUs,realTimeUs - mediaTimeUs);
-    }
+    //}
     if(latenessUs > 2000000 || latenessUs< -2000000){//jgdu 2s
 	LOGI("onVideoEvent time info:mTimeSourceDeltaUs:%lld realTimeUs:%lld mediaTimeUs:%lld", mTimeSourceDeltaUs, realTimeUs, mediaTimeUs);
 	LOGI("onVideoEvent time info2:getRealTimeUs:%lld nowUs:%lld latenessUs:%lld timeUs:%lld", ts->getRealTimeUs(), nowUs,latenessUs, timeUs);	
