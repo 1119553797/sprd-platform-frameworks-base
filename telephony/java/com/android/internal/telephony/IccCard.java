@@ -420,9 +420,9 @@ public abstract class IccCard {
         boolean transitionedIntoIccBlocked;
 
         State oldState, newState;
-
         oldState = mState;
         mIccCardStatus = newCardStatus;
+        Log.d(mLogTag,mPhone.getPhoneName()+" phone= "+mPhone.getPhoneId()+" mIccCardStatus="+mIccCardStatus.getCardState().toString());
         newState = getIccCardState();
         mState = newState;
 
@@ -463,6 +463,31 @@ public abstract class IccCard {
 	  
     }
 
+    /**
+     * a interface ,to indicate which type of your sim card .if current card
+     * app_type is USIM card or TD card,return is true else false
+     * @return
+     */
+    public boolean isUsimCard() {
+        if (mIccCardStatus == null){
+            Log.d(mLogTag,
+                    "isUsimCard: " + mPhone.getPhoneName() + " phone= " + mPhone.getPhoneId()
+                            + "IccCardstatus is null,please check your card");
+            return false;
+        }
+        for (int i = 0; i < mIccCardStatus.getNumApplications(); i++) {
+            IccCardApplication app = mIccCardStatus.getApplication(i);
+            if (app != null && (IccCardApplication.AppType.APPTYPE_USIM == app.app_type)) {
+                Log.d(mLogTag,
+                        "isUsimCard: " + mPhone.getPhoneName() + " phone= " + mPhone.getPhoneId()
+                                + "mIccCardStatus="
+                                + mIccCardStatus.getApplication(i).app_type.toString());
+                return true;
+            }
+        }
+        return false;
+
+    }
     /**
      * Interperate EVENT_QUERY_FACILITY_LOCK_DONE
      * @param ar is asyncResult of Query_Facility_Locked
@@ -745,10 +770,11 @@ public abstract class IccCard {
     public boolean hasIccCard() {
         boolean isIccPresent;
 
-        Log.i("hasIccCard",mPhone.getPhoneName());
+        Log.i("hasIccCard",mPhone.getPhoneName()+" phone= "+mPhone.getPhoneId());
         if (mIccCardStatus==null) {
             return false;
         }
+        Log.i("hasIccCard",mPhone.getPhoneName()+" phone= "+mPhone.getPhoneId()+"   card state="+mIccCardStatus.getCardState().toString());
         if (mPhone.getPhoneName().equals("GSM") || mPhone.getPhoneName().equals("TD")) {
             return mIccCardStatus.getCardState().isCardPresent();
         }else {

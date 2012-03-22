@@ -267,6 +267,10 @@ interface ITelephony {
      */
     boolean hasIccCard();
     /**
+     * Return true if an ICC card is USIM/TD
+     */
+    boolean isUsimCard();
+    /**
      * @return true if a IccFdn enabled
      */
     boolean getIccFdnEnabled();

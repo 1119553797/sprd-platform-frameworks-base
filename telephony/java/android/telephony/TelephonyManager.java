@@ -565,7 +565,19 @@ public class TelephonyManager {
             return false;
         }
     }
+    /**
+     * @return true if sim card is USIM/TD
+     */
+    public boolean isUsimCard() {
+        try {
+            return getITelephony().isUsimCard();
+        } catch (RemoteException ex) {
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }
 
+    }
     /**
      * Returns a constant indicating the state of the
      * device SIM card.
@@ -896,6 +908,7 @@ public class TelephonyManager {
     }
 
     private ITelephony getITelephony() {
+        Log.d(TAG,"phone "+mPhoneId+"services"+ServiceManager.getService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, mPhoneId)));
         return ITelephony.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, mPhoneId)));
     }
 
