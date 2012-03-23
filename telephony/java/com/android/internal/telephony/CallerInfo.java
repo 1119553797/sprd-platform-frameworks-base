@@ -264,7 +264,7 @@ public class CallerInfo {
         Log.d(TAG, "getCallerInfo phoneId:" + phoneId);
         if (PhoneNumberUtils.isSimEmergencyNumber(number, phoneId)) {
             return new CallerInfo().markAsEmergency(context);
-        } else if (PhoneNumberUtils.isVoiceMailNumber(number)) {
+        } else if (PhoneNumberUtils.isVoiceMailNumber(phoneId,number)) {
             //return new CallerInfo().markAsVoiceMail();
             CallerInfo info = new CallerInfo().markAsVoiceMail();
             info.name = info.phoneNumber;
