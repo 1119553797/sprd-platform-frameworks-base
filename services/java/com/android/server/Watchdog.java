@@ -53,9 +53,6 @@ public class Watchdog extends Thread {
     // Set this to true to have the watchdog record kernel thread stacks when it fires
     static final boolean RECORD_KERNEL_THREADS = true;
 
-    // Set this to true to check memory
-    static final boolean CHECK_MEMORY_FLAG = false;
-
     static final int MONITOR = 2718;
 
     static final int TIME_TO_RESTART = DB ? 15*1000 : 60*1000;
@@ -111,32 +108,9 @@ public class Watchdog extends Thread {
     final class HeartbeatHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            if (!CHECK_MEMORY_FLAG) {
-                if (MONITOR == msg.what) {
-                    Slog.v(TAG, " **** 1-CHECK ALL MONITORS BEGIN ! **** ");
-
-                    final int size = mMonitors.size();
-                    for (int i = 0 ; i < size ; i++) {
-                        mCurrentMonitor = mMonitors.get(i);
-                        mCurrentMonitor.monitor();
-                    }
-                    Slog.v(TAG, " **** 2-CHECK ALL MONITORS FINISHED ! **** ");
-
-                    synchronized (Watchdog.this) {
-                        mCompleted = true;
-                        mCurrentMonitor = null;
-                    }
-                    Slog.v(TAG, " **** 3-SYNC Watchdog.THIS FINISHED ! ****");
-                    Slog.v(TAG, " ");
-
-                } else {
-                    Slog.v(TAG,"*** 4-THIS IS IMPOSSIBLE!! ***");
-                }
-                return;
-            }
-
             switch (msg.what) {
                 case MONITOR: {
+                    Slog.v(TAG, " **** 0-CHECK IF FORCE A REBOOT ! **** ");
                     // See if we should force a reboot.
                     int rebootInterval = mReqRebootInterval >= 0
                             ? mReqRebootInterval : Settings.Secure.getInt(
@@ -149,16 +123,24 @@ public class Watchdog extends Thread {
                         checkReboot(false);
                     }
 
+                    Slog.v(TAG, " **** 1-CHECK ALL MONITORS BEGIN ! **** ");
                     final int size = mMonitors.size();
                     for (int i = 0 ; i < size ; i++) {
                         mCurrentMonitor = mMonitors.get(i);
                         mCurrentMonitor.monitor();
                     }
 
+                    Slog.v(TAG, " **** 2-CHECK ALL MONITORS FINISHED ! **** ");
                     synchronized (Watchdog.this) {
                         mCompleted = true;
                         mCurrentMonitor = null;
                     }
+                    Slog.v(TAG, " **** 3-SYNC Watchdog.THIS FINISHED ! ****");
+                    Slog.v(TAG, " ");
+                } break;
+                default: {
+                    Slog.v(TAG,"*** 4-THIS IS IMPOSSIBLE!! ***");
+                    Slog.v(TAG, " ");
                 } break;
             }
         }
@@ -413,7 +395,7 @@ public class Watchdog extends Thread {
         while (true) {
             mCompleted = false;
             if (mHandler.sendEmptyMessage(MONITOR)) {
-                Slog.v(TAG,"*** Watchdog MSG SENT!! ***");
+                Slog.v(TAG,"**** -1-Watchdog MSG SENT! ****");
             }
 
             synchronized (this) {
