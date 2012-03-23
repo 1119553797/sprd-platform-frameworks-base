@@ -51,9 +51,11 @@ import android.provider.Settings;
 import com.android.internal.policy.PolicyManager;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.view.BaseInputHandler;
 import com.android.internal.widget.PointerLocationView;
 
+import android.telephony.TelephonyManager;
 import android.util.Config;
 import android.util.EventLog;
 import android.util.Log;
@@ -1087,8 +1089,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
     
     static ITelephony getTelephonyService() {
+        return getTelephonyService(0);
+    }
+
+    static ITelephony getTelephonyService(int subId) {
+        if(TelephonyManager.getPhoneCount() < 2 && subId > 0){
+            return null;
+        }
         ITelephony telephonyService = ITelephony.Stub.asInterface(
-                ServiceManager.checkService(Context.TELEPHONY_SERVICE));
+                ServiceManager.checkService(
+                        PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,subId)));
         if (telephonyService == null) {
             Log.w(TAG, "Unable to find ITelephony interface.");
         }
@@ -1865,6 +1875,30 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         }
                     }
 
+                    // for dual sim
+                    ITelephony telephonyService2 = getTelephonyService(1);
+                    if (telephonyService2 != null) {
+                        try {
+                            if (telephonyService2.isRinging()) {
+                                Log.i(TAG, "interceptKeyBeforeQueueing for sim2:"
+                                      + " VOLUME key-down while ringing: Silence ringer!");
+
+                                telephonyService2.silenceRinger();
+
+                                result &= ~ACTION_PASS_TO_USER;
+                                break;
+                            }
+                            if (telephonyService2.isOffhook()
+                                    && (result & ACTION_PASS_TO_USER) == 0) {
+                                handleVolumeKey(AudioManager.STREAM_VOICE_CALL, keyCode);
+                                break;
+                            }
+                        } catch (RemoteException ex) {
+                            Log.w(TAG, "ITelephony threw RemoteException", ex);
+                        }
+                    }
+                    // end for dual sim
+
                     if (isMusicActive() && (result & ACTION_PASS_TO_USER) == 0) {
                         // If music is playing but we decided not to pass the key to the
                         // application, handle the volume change here.
@@ -1895,6 +1929,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             Log.w(TAG, "ITelephony threw RemoteException", ex);
                         }
                     }
+                    // for dual sim
+                    ITelephony telephonyService2 = getTelephonyService(1);
+                    if (telephonyService2 != null) {
+                        try {
+                            hungUp = telephonyService2.endCall();
+                        } catch (RemoteException ex) {
+                            Log.w(TAG, "ITelephony threw RemoteException", ex);
+                        }
+                    }
+                    // end for dual sim
+
                     interceptPowerKeyDown(!isScreenOn || hungUp);
                 } else {
                     if (interceptPowerKeyUp(canceled)) {
@@ -1935,6 +1980,23 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             Log.w(TAG, "ITelephony threw RemoteException", ex);
                         }
                     }
+
+                    // for dual sim
+                    ITelephony telephonyService2 = getTelephonyService(1);
+                    if (telephonyService2 != null) {
+                        try {
+                            if (telephonyService2.isRinging()) {
+                                telephonyService2.silenceRinger();
+                            } else if ((mIncallPowerBehavior
+                                    & Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR_HANGUP) != 0
+                                    && telephonyService2.isOffhook()) {
+                                hungUp = telephonyService2.endCall();
+                            }
+                        } catch (RemoteException ex) {
+                            Log.w(TAG, "ITelephony threw RemoteException", ex);
+                        }
+                    }
+                    // end for dual sim
                     interceptPowerKeyDown(!isScreenOn || hungUp);
                 } else {
                     if (interceptPowerKeyUp(canceled)) {
@@ -1982,6 +2044,26 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             Log.w(TAG, "ITelephony threw RemoteException", ex);
                         }
                     }
+
+                    // for dual sim
+                    ITelephony telephonyService2 = getTelephonyService(1);
+                    if (telephonyService2 != null) {
+                        try {
+                            if (telephonyService2.isRinging()) {
+                                Log.i(TAG, "interceptKeyBeforeQueueing:"
+                                      + " CALL key-down while ringing: Answer the call!");
+                                telephonyService2.answerRingingCall();
+
+                                // And *don't* pass this key thru to the current activity
+                                // (which is presumably the InCallScreen.)
+                                result &= ~ACTION_PASS_TO_USER;
+                            }
+                        } catch (RemoteException ex) {
+                            Log.w(TAG, "ITelephony threw RemoteException", ex);
+                        }
+                    }
+
+                    // end for dual sim
                 }
                 break;
             }
