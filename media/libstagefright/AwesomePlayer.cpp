@@ -2406,10 +2406,12 @@ uint32_t AwesomePlayer::flags() const {
 }
 
 void AwesomePlayer::postAudioEOS() {
+    LOGI("postAudioEOS %d",mAudioStatusEventPending);
     postCheckAudioStatusEvent_l();
 }
 
 void AwesomePlayer::postAudioSeekComplete() {
+    LOGI("postAudioSeekComplete %d",mAudioStatusEventPending);	
     postCheckAudioStatusEvent_l();
 }
 
