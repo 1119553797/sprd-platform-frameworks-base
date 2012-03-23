@@ -36,6 +36,7 @@ public class MessageQueue {
     private IdleHandler[] mPendingIdleHandlers;
     private boolean mQuiting;
     boolean mQuitAllowed = true;
+	private final static int Watchdog_MONITOR = 2718;
 
     // Indicates whether next() is blocked waiting in pollOnce() with a non-zero timeout.
     private boolean mBlocked;
@@ -201,7 +202,15 @@ public class MessageQueue {
                 mQuiting = true;
             }
 
-            msg.when = when;
+            //anshaoyan add for killing  watchdog-null-restart bug
+            if (Watchdog_MONITOR == msg.what) { //watchdog-msg first
+                when = 0;
+                msg.when = 0;
+                Log.v("MessageQueue", "**** Watchdog MEG ENQUEUE: " + msg + " ****");
+            } else {
+                msg.when = when;
+            }
+            //anshaoyan add for killing watchdog-null-retart bug end
             //Log.d("MessageQueue", "Enqueing: " + msg);
             Message p = mMessages;
             if (p == null || when == 0 || when < p.when) {
