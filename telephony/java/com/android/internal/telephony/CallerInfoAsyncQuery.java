@@ -48,6 +48,7 @@ public class CallerInfoAsyncQuery {
     private static final int EVENT_VOICEMAIL_NUMBER = 5;
 
     private CallerInfoAsyncQueryHandler mHandler;
+    public static final String SIM_INDEX = "sim_index ASC";
 
     /**
      * Interface for a CallerInfoAsyncQueryHandler result return.
@@ -286,7 +287,7 @@ public class CallerInfoAsyncQuery {
         cw.cookie = cookie;
         cw.event = EVENT_NEW_QUERY;
 
-        c.mHandler.startQuery(token, cw, contactRef, null, null, null, null);
+        c.mHandler.startQuery(token, cw, contactRef, null, null, null, SIM_INDEX);
 
         return c;
     }
@@ -395,7 +396,7 @@ public class CallerInfoAsyncQuery {
                               null,  // projection
                               selection,  // selection
                               selectionArgs,  // selectionArgs
-                              null);  // orderBy
+                              SIM_INDEX);  // orderBy
         return c;
     }
 
