@@ -134,6 +134,7 @@ public class CallerInfo {
         if (VDBG) Log.v(TAG, "construct callerInfo from cursor");
 
         if (cursor != null) {
+          try {
             if (cursor.moveToFirst()) {
                 // TODO: photo_id is always available but not taken
                 // care of here. Maybe we should store it in the
@@ -205,7 +206,11 @@ public class CallerInfo {
                         ((cursor.getInt(columnIndex)) == 1);
                 info.contactExists = true;
             }
-            cursor.close();
+          } catch (android.database.sqlite.SQLiteDiskIOException sqlioe) {
+              Log.e(TAG,"getCallerInfo error:SQLiteDiskIOException:" + sqlioe.getLocalizedMessage());
+          } finally{
+              cursor.close();
+          }
         }
 
         info.needUpdate = false;
