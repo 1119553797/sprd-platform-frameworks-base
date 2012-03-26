@@ -53,17 +53,17 @@ static int64_t kDefaultKeepAliveTimeoutUs = 60000000ll;
 
 namespace android {
 
-static void MakeUserAgentString(AString *s) { //@hong change the prop of useragent.
-      s->setTo("stagefright/1.1 (Linux;Android ");
-      // s->setTo("HUAWEI T2011_TD/1.0");
+static void MakeUserAgentString(AString *s) {
+    s->setTo("stagefright/1.1 (Linux;Android ");
+
 #if (PROPERTY_VALUE_MAX < 8)
 #error "PROPERTY_VALUE_MAX must be at least 8"
 #endif
 
-//    char value[PROPERTY_VALUE_MAX];
-//    property_get("ro.build.version.release", value, "Unknown");
-//    s->append(value);
-//    s->append(")");
+    char value[PROPERTY_VALUE_MAX];
+    property_get("ro.build.version.release", value, "Unknown");
+    s->append(value);
+    s->append(")");
 }
 
 static bool GetAttribute(const char *s, const char *key, AString *value) {
@@ -190,8 +190,6 @@ struct MyHandler : public AHandler {
         mDoneMsg = doneMsg;
 	LOGI("disconnect.enter...");
         (new AMessage('abor', id()))->post();
-		postCmdTimeoutCheck(doneMsg);
-		
     }
 
 	void processPendCmd()
@@ -238,7 +236,6 @@ struct MyHandler : public AHandler {
 			return ;
         }
 		mSeekPending = true;
-	    //postCmdTimeoutCheck(doneMsg);
 
 		for (size_t i = 0; i < mTracks.size(); ++i) {
             mTracks.editItemAt(i).mPacketSource->flushQueue();
@@ -256,13 +253,6 @@ struct MyHandler : public AHandler {
 
 	     LOGE("myhand pause.time %lld",timeUs);
 
-		 if (!mSeekable)
-		 {
-		   LOGI("This is a live stream, ignoring pause request.");
-		   doneMsg->post();
-		   return ;
-	     }
-
 		 if (mCmdSending)
 		 {
 			 LOGI("mCmdSending....so pend cmd.");
@@ -270,7 +260,7 @@ struct MyHandler : public AHandler {
 			 mPendDoneMsg = doneMsg;
 		     return ;  
 		 }
-        postCmdTimeoutCheck(doneMsg);
+		mCmdSending = true ;
 		sp<AMessage> msg = new AMessage('pause', id());
 		
 		sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
@@ -291,7 +281,9 @@ struct MyHandler : public AHandler {
 			mPendDoneMsg = doneMsg;
 			return ;  
 		 }
-	    postCmdTimeoutCheck(doneMsg);
+		 
+		mCmdSending = true ;
+		
 	    sp<AMessage> msg = new AMessage('resume', id());
 		
 		sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
@@ -849,7 +841,6 @@ struct MyHandler : public AHandler {
 				   reply->setInt32("generation", mKeepAliveGeneration);
 				   mConn->sendRequest(request.c_str(), reply);
 				   
-				   postCmdTimeoutCheck(mDoneMsg);
 				   break;
 			   }
 			
@@ -880,8 +871,9 @@ struct MyHandler : public AHandler {
 		LOGI("abor received...");
                 for (size_t i = 0; i < mTracks.size(); ++i) {
                     TrackInfo *info = &mTracks.editItemAt(i);
-
+				    if (!mFirstAccessUnit) {
                     info->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
+				    }
 
                     if (!info->mUsingInterleavedTCP) {
                         mRTPConn->removeStream(info->mRTPSocket, info->mRTCPSocket);
@@ -1203,6 +1195,8 @@ struct MyHandler : public AHandler {
                 CHECK(msg->findInt64("time", &timeUs));
                // Disable the access unit timeout until we resumed
                 // playback again.
+                 mSeekPending = true;
+			   
                  mCheckPending = true;
                 ++mCheckGeneration;
 
@@ -1235,6 +1229,7 @@ struct MyHandler : public AHandler {
 				else
 				{
 					LOGI("seek when pause.first play rtsp to %lld",timeUs);
+				    reply->setInt32("result", OK);
 					reply->post();
 				}
 				
@@ -1253,9 +1248,31 @@ struct MyHandler : public AHandler {
 				mNTPAnchorUs = -1;
 		#endif		
        	    	LOGI("seek have paused then play ");
-
-                int64_t timeUs;
+                   int32_t result;
+			   CHECK(msg->findInt32("result", &result));
+      
+      			 LOGE("pause1 completed with result %d (%s) mPendingCmd %d",
+      				  result, strerror(-result),mPendingCmd);
+			    int64_t timeUs;
                 CHECK(msg->findInt64("time", &timeUs));
+				if(timeUs == -1)
+				{
+					sp<AMessage> doneMsg;
+				    CHECK(msg->findMessage("doneMsg", &doneMsg)); 
+
+				   mSeekPending = false;
+				   mCmdSending = false ;
+				   doneMsg->setInt32("result", NO_ERROR);
+		           doneMsg->post();
+				   if(mPendingCmd != 0)
+				   {
+				      processPendCmd();
+				   }
+				   return ;
+				}
+
+                CHECK(msg->findInt64("time", &timeUs));
+				
 
                 AString request = "PLAY ";
                 request.append(mSessionURL);
@@ -1319,8 +1336,24 @@ struct MyHandler : public AHandler {
 		
 				if(mPauseed)
 			    {
-					pause(-1,doneMsg);
 				    LOGI("seek completed. to pause according pre state");
+			        AString request = "PAUSE ";
+	                request.append(mSessionURL);
+	                request.append(" RTSP/1.0\r\n");
+
+	                request.append("Session: ");
+	                request.append(mSessionID);
+	                request.append("\r\n");
+
+	                request.append("\r\n");
+					sp<AMessage> doneMsg;
+                    CHECK(msg->findMessage("doneMsg", &doneMsg)); 
+
+              		sp<AMessage> reply = new AMessage('see1', id());
+					reply->setMessage("doneMsg", doneMsg);
+            		reply->setInt64("time", -1);
+					mConn->sendRequest(request.c_str(), reply);
+					return ;
 					
 				}
 				else
@@ -1526,7 +1559,6 @@ struct MyHandler : public AHandler {
                         sp<AMessage> msg = new AMessage('abor', id());
                         msg->setInt32("reconnect", true);
                         msg->post();
-					    postCmdTimeoutCheck(mDoneMsg);
                     } else {
                         LOGW("Never received any data, disconnecting.");
 					    disconnect(mDoneMsg);
@@ -1593,17 +1625,6 @@ struct MyHandler : public AHandler {
         mCheckPending = true;
         sp<AMessage> check = new AMessage('chek', id());
         check->setInt32("generation", mCheckGeneration);
-        check->post(kAccessUnitTimeoutUs);
-    }
-
-    void postCmdTimeoutCheck(const sp<AMessage> &dnoeMsg) {
-
-		mCmdSending = true ;
-		mGenCmd++;
-        sp<AMessage> check = new AMessage('chekcmd', id());
-		check->setInt32("gencmd", mGenCmd);
-		check->setMessage("doneMsg",dnoeMsg);
-		
         check->post(kAccessUnitTimeoutUs);
     }
 
@@ -1682,10 +1703,10 @@ struct MyHandler : public AHandler {
             uint32_t rtpTime = strtoul(val.c_str(), &end, 10);
 
             LOGI("track #%d: rtpTime=%u <=> ntp=%.2f", n, rtpTime, npt1);
-
-            info->mPacketSource->setNormalPlayTimeMapping(
+            if (!mFirstAccessUnit) {
+               info->mPacketSource->setNormalPlayTimeMapping(
                     rtpTime, (int64_t)(npt1 * 1E6));
-
+            }
             ++n;
         }
 
@@ -1817,7 +1838,7 @@ private:
         request.append(trackURL);
         request.append(" RTSP/1.0\r\n");
 
-        if (mTryTCPInterleaving) {
+        if (!mTryTCPInterleaving) {
             size_t interleaveIndex = 2 * (mTracks.size() - 1);
             info->mUsingInterleavedTCP = true;
             info->mRTPSocket = interleaveIndex;
@@ -1890,12 +1911,12 @@ private:
 
     void fakeTimestamps() {
         for (size_t i = 0; i < mTracks.size(); ++i) {
-            onTimeUpdate(i, 0, 0ll);
+           onTimeUpdate(i, 0, 0ll);
         }
     }
 
     void onTimeUpdate(int32_t trackIndex, uint32_t rtpTime, uint64_t ntpTime) {
-        LOGV("onTimeUpdate track %d, rtpTime = 0x%08x, ntpTime = 0x%016llx",
+        LOGV("onTimeUpdate track %d, rtpTime = %d, ntpTime = %lld",
              trackIndex, rtpTime, ntpTime);
 
         int64_t ntpTimeUs = (int64_t)(ntpTime * 1E6 / (1ll << 32));
@@ -1907,7 +1928,7 @@ private:
 
         if (mNTPAnchorUs < 0) {
             mNTPAnchorUs = ntpTimeUs;
-            mMediaAnchorUs = mLastMediaTimeUs;
+		    mMediaAnchorUs = mLastMediaTimeUs;
         }
     }
 
@@ -1919,7 +1940,14 @@ private:
             mDoneMsg->setInt32("result", OK);
             mDoneMsg->post();
             mDoneMsg = NULL;
-
+			
+			if (mSeekable) {
+				for (size_t i = 0; i < mTracks.size(); ++i) {
+				   TrackInfo *info = &mTracks.editItemAt(i);
+					  info->mPacketSource->setNormalPlayTimeMapping(							
+								info->mRTPAnchor, info->mNTPAnchorUs);
+			    }
+			}
             mFirstAccessUnit = false;
         }
 
