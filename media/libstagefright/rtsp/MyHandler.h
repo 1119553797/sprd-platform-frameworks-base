@@ -904,6 +904,7 @@ struct MyHandler : public AHandler {
 				else
 				{
 				    mCheckPending = true;
+					mCheckGeneration++ ;
 				}
 
                 AString request;
@@ -998,15 +999,13 @@ struct MyHandler : public AHandler {
                 int32_t generation;
                 CHECK(msg->findInt32("generation", &generation));
                 if (generation != mCheckGeneration) {
-                    // This is an outdated message. Ignore.
-                    break; //@hong not ignore the outdated msg.
+                     break;
                 }
 
-                if (mNumAccessUnitsReceived == 0  && strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) {  
+                if (mNumAccessUnitsReceived == 0 ){  
 
-                   // @hong not send abor signal. 
                     LOGI("stream ended? aborting.");
-                  //  (new AMessage('abor', id()))->post();
+                   (new AMessage('abor', id()))->post();
                     break;
                 }
 
@@ -1014,35 +1013,7 @@ struct MyHandler : public AHandler {
                 msg->post(kAccessUnitTimeoutUs);
                 break;
             }
-			
-			case 'chekcmd':
-			{	 
-			   int32_t gencmd;
-
-			   if(!mCmdSending)
-			   {
-				   LOGW("mCmdSending. return.");
-				   return ;
-			   }
-			   CHECK(msg->findInt32("gencmd", &gencmd));
-               if (gencmd != mGenCmd) {
-                    // This is an outdated message. Ignore.
-                    LOGW("This is an outdated message. Ignore.");
-                    break;
-               }
-			   LOGW("cmdtiou, disconnecting.");
-			   sp<AMessage> doneMsg = NULL;
-               msg->findMessage("doneMsg", &doneMsg); 
-			   sp<AMessage> reply = new AMessage('disc', id());
-               if(doneMsg != NULL)
-               {
-			   	reply->setMessage("doneMsg", doneMsg);
-               }
-               mConn->disconnect(reply);
-			   return ;
-			}
-
-            case 'accu':
+		    case 'accu':
             {
                 int32_t timeUpdate;
                 if (msg->findInt32("time-update", &timeUpdate) && timeUpdate) {
@@ -1054,7 +1025,7 @@ struct MyHandler : public AHandler {
                     CHECK(msg->findInt32("rtp-time", (int32_t *)&rtpTime));
                     CHECK(msg->findInt64("ntp-time", (int64_t *)&ntpTime));
 
-                    onTimeUpdate(trackIndex, rtpTime, ntpTime);
+                  //  onTimeUpdate(trackIndex, rtpTime, ntpTime);
                     break;
                 }
 
@@ -1082,7 +1053,7 @@ struct MyHandler : public AHandler {
                 }
 
                 ++mNumAccessUnitsReceived;
-              //  postAccessUnitTimeoutCheck();
+                postAccessUnitTimeoutCheck();
 
                 size_t trackIndex;
                 CHECK(msg->findSize("track-index", &trackIndex));
@@ -1491,9 +1462,11 @@ struct MyHandler : public AHandler {
                 LOGE("resume PLAY completed with result %d (%s)",
                      result, strerror(-result));
 				mCmdSending = false;
-			    mCheckPending = false;
-            	mSeekPending = false;
+			   	mSeekPending = false;
+
 				mPauseed = false ;
+				mCheckPending = false;
+                postAccessUnitTimeoutCheck();
 
 			    if (result == OK) {
                     sp<RefBase> obj;
@@ -1703,11 +1676,10 @@ struct MyHandler : public AHandler {
             uint32_t rtpTime = strtoul(val.c_str(), &end, 10);
 
             LOGI("track #%d: rtpTime=%u <=> ntp=%.2f", n, rtpTime, npt1);
-            if (!mFirstAccessUnit) {
-               info->mPacketSource->setNormalPlayTimeMapping(
+            info->mPacketSource->setNormalPlayTimeMapping(
                     rtpTime, (int64_t)(npt1 * 1E6));
-            }
             ++n;
+			onTimeUpdate(trackIndex,rtpTime,(int64_t)(npt1 * 1E6));
         }
 
         mSeekable = true;
@@ -1818,7 +1790,7 @@ private:
         info->mFirstSeqNumInSegment = 0;
         info->mNewSegment = true;
         info->mRTPAnchor = 0;
-        info->mNTPAnchorUs = -1;
+        info->mNTPAnchorUs = 0;
 
         unsigned long PT;
         AString formatDesc;
@@ -1941,14 +1913,13 @@ private:
             mDoneMsg->post();
             mDoneMsg = NULL;
 			
-			if (mSeekable) {
-				for (size_t i = 0; i < mTracks.size(); ++i) {
-				   TrackInfo *info = &mTracks.editItemAt(i);
-					  info->mPacketSource->setNormalPlayTimeMapping(							
-								info->mRTPAnchor, info->mNTPAnchorUs);
-			    }
-			}
-            mFirstAccessUnit = false;
+		
+		   for (size_t i = 0; i < mTracks.size(); ++i) {
+		      TrackInfo *info = &mTracks.editItemAt(i);
+				info->mPacketSource->setNormalPlayTimeMapping(							
+						info->mRTPAnchor, info->mNTPAnchorUs);
+		   }
+           mFirstAccessUnit = false;
         }
 
         TrackInfo *track = &mTracks.editItemAt(trackIndex);

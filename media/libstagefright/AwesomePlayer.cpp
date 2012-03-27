@@ -1149,7 +1149,8 @@ status_t AwesomePlayer::getDuration(int64_t *durationUs) {
 }
 
 status_t AwesomePlayer::getPosition(int64_t *positionUs) {
-    if (mRTSPController != NULL) {
+#if 0
+	if (mRTSPController != NULL) {
 		if(mSeeking)
 		{
 			*positionUs = mSeekTimeUs;
@@ -1160,7 +1161,9 @@ status_t AwesomePlayer::getPosition(int64_t *positionUs) {
 			*positionUs = mRTSPController->getNormalPlayTimeUs();	
 		}
     }
-    else if (mSeeking) {
+    else
+#endif		
+	if (mSeeking) {
         *positionUs = mSeekTimeUs;
     } else if (mVideoSource != NULL) {
         Mutex::Autolock autoLock(mMiscStateLock);
