@@ -1481,7 +1481,9 @@ public class PhoneNumberUtils
         for (int i = 0; i < len; i++) {
             char c = out[i];
             // If this char isn't in KEYPAD_MAP at all, just leave it alone.
-            out[i] = (char) KEYPAD_MAP.get(c, c);
+			if ('p' != c && 'P' != c && 'w' != c && 'W' != c) {
+				out[i] = (char) KEYPAD_MAP.get(c, c);
+			}
         }
 
         return new String(out);
