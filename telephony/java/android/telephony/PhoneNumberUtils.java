@@ -895,6 +895,7 @@ public class PhoneNumberUtils
             case 0xb: return '#';
             case 0xc: return PAUSE;
             case 0xd: return WILD;
+            case 0xe: return WAIT;
 
             default: return 0;
         }
