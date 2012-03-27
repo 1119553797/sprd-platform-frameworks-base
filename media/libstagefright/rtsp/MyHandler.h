@@ -1025,7 +1025,7 @@ struct MyHandler : public AHandler {
                     CHECK(msg->findInt32("rtp-time", (int32_t *)&rtpTime));
                     CHECK(msg->findInt64("ntp-time", (int64_t *)&ntpTime));
 
-                  //  onTimeUpdate(trackIndex, rtpTime, ntpTime);
+                   // onTimeUpdate(trackIndex, rtpTime, ntpTime);
                     break;
                 }
 
@@ -1822,7 +1822,7 @@ private:
             request.append(interleaveIndex + 1);
         } else {
             unsigned rtpPort;
-            ARTPConnection::MakePortPair(
+            ARTPConnection::MakePortPair( 
                     &info->mRTPSocket, &info->mRTCPSocket, &rtpPort);
 
             request.append("Transport: RTP/AVP/UDP;unicast;client_port=");
@@ -1918,6 +1918,11 @@ private:
 		      TrackInfo *info = &mTracks.editItemAt(i);
 				info->mPacketSource->setNormalPlayTimeMapping(							
 						info->mRTPAnchor, info->mNTPAnchorUs);
+				
+		     if(!mSeekable)
+		     {
+			  onTimeUpdate(i,0,0);
+		     }
 		   }
            mFirstAccessUnit = false;
         }
@@ -1945,11 +1950,15 @@ private:
     }
 
     bool addMediaTimestamp(
-            int32_t trackIndex, const TrackInfo *track,
+            int32_t trackIndex, TrackInfo *track,
             const sp<ABuffer> &accessUnit) {
         uint32_t rtpTime;
         CHECK(accessUnit->meta()->findInt32(
                     "rtp-time", (int32_t *)&rtpTime));
+	    if(track->mRTPAnchor == 0 )
+		{
+		  track->mRTPAnchor	= rtpTime ;
+		}
 
         int64_t relRtpTimeUs =
             (((int64_t)rtpTime - (int64_t)track->mRTPAnchor) * 1000000ll)
