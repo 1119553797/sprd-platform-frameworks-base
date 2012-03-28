@@ -64,6 +64,7 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
     private CountDownTimer mCountdownTimer;
     private TextView mTitle;
 
+    private int mCallSub;
     // To avoid accidental lockout due to events while the device in in the pocket, ignore
     // any passwords with length less than or equal to this length.
     private static final int MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT = 3;
@@ -155,7 +156,7 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
 
     public void onClick(View v) {
         if (v == mEmergencyCallButton) {
-            mCallback.takeEmergencyCallAction();
+            mCallback.takeEmergencyCallAction(mCallSub);
         }
         mCallback.pokeWakelock();
     }
@@ -249,8 +250,9 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
         return false;
     }
 
-    public void onPhoneStateChanged(String newState) {
-        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
+    public void onPhoneStateChanged(String newState,int sub) {
+    	mCallSub = sub;
+        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton,sub);
     }
 
     public void onRefreshBatteryInfo(boolean showBatteryInfo, boolean pluggedIn, int batteryLevel) {
@@ -268,5 +270,11 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
     public void onTimeChanged() {
 
     }
+
+	@Override
+	public void onPhoneStateChanged(String newState) {
+		// TODO Auto-generated method stub
+		mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
+	}
 
 }

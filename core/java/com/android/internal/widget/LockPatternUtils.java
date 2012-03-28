@@ -32,6 +32,8 @@ import android.widget.Button;
 
 import com.android.internal.R;
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.PhoneFactory;
+
 import com.google.android.collect.Lists;
 
 import java.io.File;
@@ -672,7 +674,30 @@ public class LockPatternUtils {
      * @param button the button to update
      */
     public void updateEmergencyCallButtonState(Button button) {
-        int newState = TelephonyManager.getDefault().getCallState();
+        int textId=0;
+        boolean flg=false;
+		for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+			if (TelephonyManager.getDefault(i).getCallState() == TelephonyManager.CALL_STATE_OFFHOOK) {
+				// show "return to call" text and show phone icon
+				textId = R.string.lockscreen_return_to_call;
+				int phoneCallIcon = R.drawable.stat_sys_phone_call;
+				button.setCompoundDrawablesWithIntrinsicBounds(phoneCallIcon,
+						0, 0, 0);
+				flg=true;
+                break;
+			}
+		}
+
+        if(!flg){
+            textId = R.string.lockscreen_emergency_call;
+            int emergencyIcon = R.drawable.ic_emergency;
+            button.setCompoundDrawablesWithIntrinsicBounds(emergencyIcon, 0, 0, 0);
+        }
+        button.setText(textId);
+    }
+    
+    public void updateEmergencyCallButtonState(Button button,int callSub) {
+        int newState = TelephonyManager.getDefault(callSub).getCallState();
         int textId;
         if (newState == TelephonyManager.CALL_STATE_OFFHOOK) {
             // show "return to call" text and show phone icon
@@ -704,4 +729,21 @@ public class LockPatternUtils {
         }
         return false;
     }
+
+	public boolean resumeCall(int sub) {
+		// ITelephony phone =
+		// ITelephony.Stub.asInterface(ServiceManager.checkService("phone"));
+		ITelephony phone = ITelephony.Stub.asInterface(ServiceManager
+				.getService(PhoneFactory.getServiceName(
+						Context.TELEPHONY_SERVICE, sub)));
+
+		try {
+			if (phone != null && phone.showCallScreen()) {
+				return true;
+			}
+		} catch (RemoteException e) {
+			// What can we do?
+		}
+		return false;
+	}
 }

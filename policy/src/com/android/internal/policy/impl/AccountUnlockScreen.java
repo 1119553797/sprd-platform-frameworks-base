@@ -328,8 +328,8 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
         return mCheckingDialog;
     }
 
-    public void onPhoneStateChanged(String newState) {
-        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCall);
+    public void onPhoneStateChanged(String newState,int sub) {
+        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCall,sub);
     }
 
     public void onRefreshBatteryInfo(boolean showBatteryInfo, boolean pluggedIn, int batteryLevel) {
@@ -347,4 +347,10 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
     public void onTimeChanged() {
 
     }
+
+	@Override
+	public void onPhoneStateChanged(String newState) {
+		mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCall);
+		
+	}
 }
