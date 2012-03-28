@@ -595,7 +595,12 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
      */
     private void release(boolean cleartargetstate) {
         if (mMediaPlayer != null) {
+            try{
             mMediaPlayer.reset();
+            }catch (Exception e) {
+                Log.e(TAG,"VideoView reset exception");
+                mMediaPlayer.reset();
+            }
             mMediaPlayer.release();
             mMediaPlayer = null;
             mCurrentState = STATE_IDLE;
