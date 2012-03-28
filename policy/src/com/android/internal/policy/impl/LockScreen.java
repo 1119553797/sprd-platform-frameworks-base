@@ -1090,7 +1090,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 		}
 		if (callObserver != null) {
 			mContext.getContentResolver()
-					.unregisterContentObserver(smsObserver);
+					.unregisterContentObserver(callObserver);
 		}
 	}
 	
