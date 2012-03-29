@@ -332,8 +332,17 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
             } else {
                 err = mSource->read(&mInputBuffer, &options);
             }
-            //innofidei added code begin
+	     if(err!=OK){
+		 	LOGI("mSource->read err %d",err);
+	     }
+		 	
             if(err == ERROR_TIMEOUT)//cmmb
+            {
+            	  LOGI("audio player read timeout");
+                return 0;
+            }			
+            //innofidei added code begin
+            if(err == ERROR_NOT_CONNECTED)
             {
                 return 0;
             }

@@ -117,6 +117,12 @@ status_t ThreadedSource::read(
         }
     }
 
+    if(mFinalResult==INFO_FORMAT_CHANGED){
+	LOGI("mFinalResult %d",mFinalResult);	
+	mFinalResult = OK;
+	postDecodeMore_l();        		
+    }
+	
     while (mQueue.empty() && mFinalResult == OK) {
         //mCondition.wait(mLock);
         status_t err = mCondition.waitRelative(mLock,TIMEOUT_NS);
