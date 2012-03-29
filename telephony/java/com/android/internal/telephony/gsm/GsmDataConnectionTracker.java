@@ -146,7 +146,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
      * It is a subset of allApns and has the same format
      */
     protected ArrayList<ApnSetting> waitingApns = null;
-
+    private int waitingApnsPermanentFailureCountDown = 0;
     private ApnSetting preferredApn = null;
 
     /* Currently active APN */
@@ -515,6 +515,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             }
             if (state == State.IDLE) {
                 waitingApns = buildWaitingApns();
+                waitingApnsPermanentFailureCountDown = waitingApns.size();
                 if (waitingApns.isEmpty()) {
                     if (DBG)
                         log("No APN found");
@@ -1328,12 +1329,25 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                         TelephonyManager.getDefault().getNetworkType());
             }
 
+            // Count permanent failures and remove the APN we just tried
+            waitingApnsPermanentFailureCountDown -= cause.isPermanentFail() ? 1 : 0;
             if (waitingApns!=null&&!waitingApns.isEmpty()) {
                 waitingApns.remove(0);
             }
+            if (DBG) log(String.format("onDataSetupComplete: waitingApns.size=%d" +
+                            " waitingApnsPermanenatFailureCountDown=%d",
+                            waitingApns.size(), waitingApnsPermanentFailureCountDown));
+
             // See if there are more APN's to try
             if (waitingApns.isEmpty()) {
-                startDelayedRetry(cause, reason);
+                if (waitingApnsPermanentFailureCountDown == 0) {
+                    if (DBG) log("onDataSetupComplete: Permanent failures stop retrying");
+                    notifyNoData(cause);
+                    phone.notifyDataConnection(Phone.REASON_APN_FAILED);
+                } else {
+                    if (DBG) log("onDataSetupComplete: Not all permanent failures, retry");
+                    startDelayedRetry(cause, reason);
+                }
             } else {
                 if (DBG) log("onDataSetupComplete: Try next APN");
                 setState(State.SCANNING);
