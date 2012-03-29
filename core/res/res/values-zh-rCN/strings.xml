@@ -1040,7 +1040,7 @@
     <string name="ap_disconnected"> 断开</string>
 
     <!--add by locksecreen start  2012-02-24-->
-    <string name="lockscreen_pin_locked_message">SIM/RUIM 卡已锁定</string>
+    <string name="lockscreen_pin_locked_message">SIM/USIM 卡已锁定</string>
     <!--add by locksecreen end-->
 
     <string name="choose_sim">选择SIM卡</string>
