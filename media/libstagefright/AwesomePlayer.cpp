@@ -1211,8 +1211,13 @@ void AwesomePlayer::onRTSPSeekDone(int32_t status) {
 	 	notifyListener_l(MEDIA_ERROR, MEDIA_ERROR_UNKNOWN, status);
 		return ;
 	 }
+	 mSeeking = true;
+	 
 	 mSeekNotificationSent = true; 
-     postBufferingEvent_l();
+	 if (mFlags & PLAYING) {
+       postBufferingEvent_l();
+     }
+ 
 
 	 notifyListener_l(MEDIA_SEEK_COMPLETE);
 
@@ -1246,8 +1251,7 @@ void AwesomePlayer::onRTSPResumeDone(int32_t status) {
 	   notifyListener_l(MEDIA_ERROR, MEDIA_ERROR_UNKNOWN, status);
 	   return ;
 	}
-	mfromPause = false ; 
-    mSeekNotificationSent = true;
+	mfromPause = false ;
 }
 
 status_t AwesomePlayer::seekTo_l(int64_t timeUs) {
@@ -1262,8 +1266,6 @@ status_t AwesomePlayer::seekTo_l(int64_t timeUs) {
 		{
 		 	mSeeking = true;
 			mSeekNotificationSent = false;
-	   		mSeekTimeUs = timeUs;
-			mVideoTimeUs = timeUs ; 
 			if (mFlags & CACHE_UNDERRUN) {
 				mFlags &= ~CACHE_UNDERRUN;
 				play_l();
@@ -1280,6 +1282,8 @@ status_t AwesomePlayer::seekTo_l(int64_t timeUs) {
 			mQueue.cancelEvent(mBufferingEvent->eventID());
 	        mBufferingEventPending = false;
 		}
+	    mSeekTimeUs = timeUs;
+	    mVideoTimeUs = timeUs ; 
         mRTSPController->seekAsync(timeUs, OnRTSPSeekDoneWrapper, this);
         return OK;
     }
@@ -1346,10 +1350,19 @@ status_t AwesomePlayer::initAudioDecoder() {
     if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_RAW)) {
         mAudioSource = mAudioTrack;
     } else {
-        mAudioSource = OMXCodec::Create(
+    
+	if (!strncasecmp("rtsp://", mUri.string(), 7)){
+	  mAudioSource = new ThreadedSource(OMXCodec::Create(
+			   mClient.interface(), mAudioTrack->getFormat(),
+			   false, // createEncoder
+			   mAudioTrack),1);
+	}else{
+
+		mAudioSource = OMXCodec::Create(
                 mClient.interface(), mAudioTrack->getFormat(),
                 false, // createEncoder
                 mAudioTrack);
+		}
     }
 
     if (mAudioSource != NULL) {
@@ -1393,11 +1406,22 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 	            mVideoTrack,
 	            NULL, flags, 2, 3));
 	} else {
-	    mVideoSource = OMXCodec::Create(
+
+		if (!strncasecmp("rtsp://", mUri.string(), 7)){
+				mVideoSource = new ThreadedSource(OMXCodec::Create(
+					mClient.interface(), mVideoTrack->getFormat(),
+					false, // createEncoder
+					mVideoTrack,
+					NULL, flags),1);
+			}
+		    else
+			{
+			mVideoSource = OMXCodec::Create(
 	            mClient.interface(), mVideoTrack->getFormat(),
 	            false, // createEncoder
 	            mVideoTrack,
 	            NULL, flags);
+			}
 	}
 
     if (mVideoSource != NULL) {
@@ -1628,9 +1652,9 @@ void AwesomePlayer::onVideoEvent() {
 #endif
 
     int64_t latenessUs = nowUs - timeUs;
-    //if(latenessUs > 60000 || latenessUs< -60000){
+    if(latenessUs > 60000 || latenessUs< -60000){
     	LOGI("video timestamp %lld,%lld,%lld:%lld,%lld,%lld",nowUs,timeUs,latenessUs,realTimeUs,mediaTimeUs,realTimeUs - mediaTimeUs);
-    //}
+    }
     if(latenessUs > 2000000 || latenessUs< -2000000){//jgdu 2s
 	LOGI("onVideoEvent time info:mTimeSourceDeltaUs:%lld realTimeUs:%lld mediaTimeUs:%lld", mTimeSourceDeltaUs, realTimeUs, mediaTimeUs);
 	LOGI("onVideoEvent time info2:getRealTimeUs:%lld nowUs:%lld latenessUs:%lld timeUs:%lld", ts->getRealTimeUs(), nowUs,latenessUs, timeUs);	
@@ -1745,7 +1769,7 @@ void AwesomePlayer::postBufferingEvent_l() {
         return;
     }
     mBufferingEventPending = true;
-    mQueue.postEventWithDelay(mBufferingEvent, 500000ll); //@hong 1000000ll
+    mQueue.postEventWithDelay(mBufferingEvent, 1000000ll);
 }
 
 void AwesomePlayer::postCheckAudioStatusEvent_l() {
@@ -2409,12 +2433,10 @@ uint32_t AwesomePlayer::flags() const {
 }
 
 void AwesomePlayer::postAudioEOS() {
-    LOGI("postAudioEOS %d",mAudioStatusEventPending);
     postCheckAudioStatusEvent_l();
 }
 
 void AwesomePlayer::postAudioSeekComplete() {
-    LOGI("postAudioSeekComplete %d",mAudioStatusEventPending);	
     postCheckAudioStatusEvent_l();
 }
 

@@ -116,6 +116,7 @@ struct MyHandler : public AHandler {
           mNumAccessUnitsReceived(0),
           mCheckPending(false),
           mCheckGeneration(0),
+          mGenCmd(0),
           mTryTCPInterleaving(false),
           mTryFakeRTCP(false),
           mReceivedFirstRTCPPacket(false),
@@ -187,7 +188,7 @@ struct MyHandler : public AHandler {
 
     void disconnect(const sp<AMessage> &doneMsg) {
         mDoneMsg = doneMsg;
-	LOGI("disconnect.enter...");
+    	LOGI("disconnect.enter...");
         (new AMessage('abor', id()))->post();
     }
 
@@ -931,7 +932,8 @@ struct MyHandler : public AHandler {
 					}
 					else
 					{
-  					   mDoneMsg->post(4000000ll);
+  					  // mDoneMsg->post(4000000ll);
+  					    mDoneMsg->post();
 					}               
                  
                     mDoneMsg = NULL;
@@ -958,7 +960,35 @@ struct MyHandler : public AHandler {
                 msg->post(kAccessUnitTimeoutUs);
                 break;
             }
-		    case 'accu':
+			
+			case 'chekcmd':
+			{	 
+			   int32_t gencmd;
+
+			   if(!mCmdSending)
+			   {
+				   LOGW("mCmdSending. return.");
+				   return ;
+			   }
+			   CHECK(msg->findInt32("gencmd", &gencmd));
+               if (gencmd != mGenCmd) {
+                    // This is an outdated message. Ignore.
+                    LOGW("This is an outdated message. Ignore.");
+                    break;
+               }
+			   LOGW("cmdtiou, disconnecting.");
+			   sp<AMessage> doneMsg = NULL;
+               msg->findMessage("doneMsg", &doneMsg); 
+			   sp<AMessage> reply = new AMessage('disc', id());
+               if(doneMsg != NULL)
+               {
+			   	reply->setMessage("doneMsg", doneMsg);
+               }
+               mConn->disconnect(reply);
+			   return ;
+			}
+
+            case 'accu':
             {
                 int32_t timeUpdate;
                 if (msg->findInt32("time-update", &timeUpdate) && timeUpdate) {
@@ -1141,6 +1171,7 @@ struct MyHandler : public AHandler {
 			       LOGI("seeking when pause ,seek fake");
 				   
 				   mSeekPending = false;
+				   mCmdSending = false ;
              	   doneMsg->setInt32("result", NO_ERROR);
 		           doneMsg->post();
 				   if(mPendingCmd != 0)
@@ -1317,7 +1348,7 @@ struct MyHandler : public AHandler {
 				 sp<AMessage> doneMsg;
 			     CHECK(msg->findMessage("doneMsg", &doneMsg));
 
-                if (!mSeekable) {
+                if (!mSeekable ||!mPauseed) {
                     LOGE("This is a live stream, ignoring seek request.");
 				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
@@ -1492,6 +1523,15 @@ struct MyHandler : public AHandler {
         check->setInt32("generation", mCheckGeneration);
         check->post(kAccessUnitTimeoutUs);
     }
+    void postCmdTimeoutCheck(const sp<AMessage> &dnoeMsg) {
+
+		mGenCmd++;
+        sp<AMessage> check = new AMessage('chekcmd', id());
+		check->setInt32("gencmd", mGenCmd);
+		check->setMessage("doneMsg",dnoeMsg);
+		
+        check->post(kAccessUnitTimeoutUs);
+    }
 
     static void SplitString(
             const AString &s, const char *separator, List<AString> *items) {
@@ -1634,6 +1674,7 @@ private:
 	bool mPauseed;
 	int32_t mPendingCmd;
 	int64_t mSeekingTime;
+	bool   mdisconnecting;
 
 	sp<AMessage> mPendDoneMsg ;
 
@@ -1648,6 +1689,7 @@ private:
     bool mCheckPending;
 	bool mCmdSending ;
     int32_t mCheckGeneration;
+	int32_t mGenCmd;
     bool mTryTCPInterleaving;
     bool mTryFakeRTCP;
     bool mReceivedFirstRTCPPacket;

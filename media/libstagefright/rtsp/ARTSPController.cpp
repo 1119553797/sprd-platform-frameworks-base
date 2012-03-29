@@ -85,7 +85,7 @@ void ARTSPController::disconnect() {
         mHandler.clear();
         return;
     } else if (mState != CONNECTED) {
-       //  return;
+        return;
     }
 
     sp<AMessage> msg = new AMessage(kWhatDisconnectDone, mReflector->id());
