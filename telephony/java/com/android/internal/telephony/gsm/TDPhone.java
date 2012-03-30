@@ -223,6 +223,10 @@ public final class TDPhone extends GSMPhone {
 							|| (mVideoCT.state != Phone.State.IDLE))
                             && !mSST.isConcurrentVoiceAndData()) {
                         ret = DataState.SUSPENDED;
+                    } else if (mCT.state == Phone.State.IDLE && mVideoCT.state == Phone.State.IDLE
+                                  && MsmsGsmDataConnectionTrackerProxy.isAnotherCardVoiceing(getPhoneId())
+                                  && !MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()) {
+                        ret = DataState.SUSPENDED;
                     } else {
                         ret = DataState.CONNECTED;
                     }
