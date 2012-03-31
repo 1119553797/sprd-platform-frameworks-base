@@ -1060,7 +1060,7 @@ status_t AwesomePlayer::getFrameAt(int msec, VideoFrame** pvframe)
     }
     yuv420_to_rgb565(mVideoWidth, mVideoHeight, (unsigned char *)mLastVideoBuffer->data(), (unsigned short *)mVideoFrame->mData);
     *pvframe = mVideoFrame;
-    LOGI("====================AwesomePlayer::getFrameAt OK");
+    LOGI("[INNO/socketinterface/AwesomePlayer.cpp] AwesomePlayer::getFrameAt OK");
     return OK;
 }
 #endif
@@ -1562,7 +1562,7 @@ void AwesomePlayer::onVideoEvent() {
                     }
                 }
                 if (err == ERROR_TIMEOUT) {//cmmb
-                    LOGI("====================onVideoEvent ERROR_TIMEOUT");
+                    LOGI("[INNO/socketinterface/AwesomePlayer.cpp] onVideoEvent ERROR_TIMEOUT");
                     postVideoEvent_l();
                     return;
                 }
@@ -2158,12 +2158,12 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
     else if(!strncasecmp("cmmb://", mUri.string(), 7)) {
         sp<CmmbUriSource> uriSource;
          uriSource = new CmmbUriSource(mUri.string());
-		LOGI("================Create CMMBExtractor successful");
+		
 		sp<MediaExtractor> extractor = MediaExtractor::Create(uriSource, "video/cmmb");
 		if (extractor == NULL) {
 			return UNKNOWN_ERROR;
 		}
-		LOGV("Create CMMBExtractor successful");
+		LOGI("[INNO/socketinterface/AwesomePlayer.cpp] Create CMMBExtractor successful");
 		return setDataSource_l(extractor);
         }
 //added by innofidei end

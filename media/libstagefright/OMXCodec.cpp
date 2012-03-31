@@ -3201,21 +3201,27 @@ status_t OMXCodec::read(
 
     if (mSource->getFormat()->findInt32(kKeyIsCmmbData, &cmmb) && cmmb) {
         if(mTempSrcBuffer == NULL) {
-          //  LOGI("1=====================================mTempSrcBuffer read ----");
+          
             status_t err = mSource->read(&mTempSrcBuffer, options);
             if(err != OK) {
-                LOGI("2=====================================mTempSrcBuffer read error ----%d", err);
+                LOGI("[INNO/socketinterface/OMXCodec] mTempSrcBuffer read error %d", err);
                 return err;
             }
         }
         else {
-        //    LOGI("3=====================================mTempSrcBuffer read");
+        
             if(mLastreadError != OK && mLastreadError != ERROR_TIMEOUT) {
-                LOGI("4=====================================mTempSrcBuffer last read error %d", mLastreadError);
+                LOGI("[INNO/socketinterface/OMXCodec] mTempSrcBuffer last read error %d", mLastreadError);
                 return mLastreadError;
+            } 
+            // innofidei fixed 3.30 begin
+            else if (mLastreadError == ERROR_TIMEOUT){
+            	
+            	mLastreadError = OK;
+            	mFinalStatus = OK;
             }
+            // innofidei fixed 3.30 end
         }
-      //  LOGI("5=====================================mTempSrcBuffer read over ----%d", mTempSrcBuffer->range_length());
     }
 
     bool seeking = false;

@@ -1,5 +1,5 @@
 
-#define LOG_TAG "CMMBExtractor"
+#define LOG_TAG "INNO/CMMBExtractor/CMMBExtractor.cpp"
 #define LOG_NDEBUG	0
 #include <utils/Log.h>
 
