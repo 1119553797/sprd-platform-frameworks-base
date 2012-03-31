@@ -594,12 +594,18 @@ status_t MPEG4Writer::stop() {
 
     stopWriterThread();
 
+    LOGV("err = %d, maxDurationUs = %lld", err, maxDurationUs);
+
     // Do not write out movie header on error.
     if (err != OK) {
         fflush(mFile);
         fclose(mFile);
         mFile = NULL;
         mStarted = false;
+        if(maxDurationUs < 500000ll) { // max duration less than 500ms
+            LOGV("set err to OK when duration is 0s");
+            err = OK;
+        }
         return err;
     }
 
