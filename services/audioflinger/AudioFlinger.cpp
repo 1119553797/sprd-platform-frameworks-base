@@ -2733,7 +2733,7 @@ void AudioFlinger::DuplicatingThread::updateWaitTime()
     for (size_t i = 0; i < mOutputTracks.size(); i++) {
         sp<ThreadBase> strong = mOutputTracks[i]->thread().promote();
         if (strong != NULL) {
-            uint32_t waitTimeMs = (strong->frameCount() * 2 * 1000) / strong->sampleRate();
+            uint32_t waitTimeMs = (strong->frameCount() * 6 * 1000) / strong->sampleRate();
             if (waitTimeMs < mWaitTimeMs) {
                 mWaitTimeMs = waitTimeMs;
             }

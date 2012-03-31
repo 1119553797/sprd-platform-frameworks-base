@@ -85,7 +85,7 @@ void ARTSPController::disconnect() {
         mHandler.clear();
         return;
     } else if (mState != CONNECTED) {
-       //  return;
+        return;
     }
 
     sp<AMessage> msg = new AMessage(kWhatDisconnectDone, mReflector->id());
@@ -106,12 +106,7 @@ void ARTSPController::seekAsync(
     CHECK(seekDoneCb != NULL);
     // Ignore seek requests that are too soon after the previous one has
     // completed, we don't want to swamp the server.
-
-    bool tooEarly =
-        mLastSeekCompletedTimeUs >= 0
-            && ALooper::GetNowUs() < mLastSeekCompletedTimeUs + 500000ll;
-
-    if (mState != CONNECTED || tooEarly) {
+    if (mState != CONNECTED ) {
         (*seekDoneCb)(cookie,0);
 		LOGE("ARTSPController::seekAsync tooEarly so return") ;
         return;
@@ -133,12 +128,7 @@ void ARTSPController::pauseAsync(
     CHECK(pauseDoneCb != NULL);
     // Ignore seek requests that are too soon after the previous one has
     // completed, we don't want to swamp the server.
-
-    bool tooEarly =
-        mLastPauseCompletedTimeUs >= 0
-            && ALooper::GetNowUs() < mLastPauseCompletedTimeUs + 500000ll;
-
-    if (mState != CONNECTED || tooEarly) {
+    if (mState != CONNECTED) {
         (*pauseDoneCb)(cookie,0);
 		LOGE("ARTSPController::pauseAsync tooEarly so return") ;
 		return;
@@ -160,12 +150,7 @@ void ARTSPController::playAsync(
     CHECK(playDoneCb != NULL);
     // Ignore seek requests that are too soon after the previous one has
     // completed, we don't want to swamp the server.
-
-    bool tooEarly =
-        mLastPlayCompletedTimeUs >= 0
-            && ALooper::GetNowUs() < mLastPlayCompletedTimeUs + 500000ll;
-
-    if (mState != CONNECTED || tooEarly) {
+    if (mState != CONNECTED) {
         (*playDoneCb)(cookie,0);
 	    LOGE("ARTSPController::playAsync tooEarly so return") ;
         return;

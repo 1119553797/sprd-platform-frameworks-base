@@ -1,5 +1,5 @@
 #define LOG_NDEBUG 0
-#define LOG_TAG "SockChannel"
+#define LOG_TAG "[INNO/SockChannel/SockChannel.cpp]"
 
 #include <utils/Log.h>
 

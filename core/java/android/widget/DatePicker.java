@@ -48,8 +48,8 @@ import java.util.Locale;
 @Widget
 public class DatePicker extends FrameLayout {
 
-    private static final int DEFAULT_START_YEAR = 2000;
-    private static final int DEFAULT_END_YEAR = 2037;//add by yangqingan for 146983 at 2011-12-07
+    private static final int DEFAULT_START_YEAR = 1900;
+    private static final int DEFAULT_END_YEAR = 2100;
 
     // This ignores Undecimber, but we only support real Gregorian calendars.
     private static final int NUMBER_OF_MONTHS = 12;

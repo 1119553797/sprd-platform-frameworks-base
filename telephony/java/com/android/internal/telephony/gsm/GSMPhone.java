@@ -326,6 +326,10 @@ public abstract class GSMPhone extends PhoneBase {
                     if ( mCT.state != Phone.State.IDLE
                             && !mSST.isConcurrentVoiceAndData()) {
                         ret = DataState.SUSPENDED;
+                    } else if (mCT.state == Phone.State.IDLE
+                                  && MsmsGsmDataConnectionTrackerProxy.isAnotherCardVoiceing(getPhoneId())
+                                  && !MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()) {
+                        ret = DataState.SUSPENDED;
                     } else {
                         ret = DataState.CONNECTED;
                     }

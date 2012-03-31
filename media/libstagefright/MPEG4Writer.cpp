@@ -1969,11 +1969,15 @@ status_t MPEG4Writer::Track::threadEntry() {
 
     }
 
-    if (mSampleSizes.empty() ||                      // no samples written
-        (!mIsAudio && mNumStssTableEntries == 0) ||  // no sync frames for video
+    if ((!mIsAudio && mNumStssTableEntries == 0) ||  // no sync frames for video
         (OK != checkCodecSpecificData())) {          // no codec specific data
         err = ERROR_MALFORMED;
     }
+
+    if (mSampleSizes.empty()) {                      // no samples written
+        err = ERROR_END_OF_STREAM;
+    }
+
     mOwner->trackProgressStatus(this, -1, err);
 
     // Last chunk
