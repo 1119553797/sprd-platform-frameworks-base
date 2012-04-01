@@ -381,9 +381,9 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 							remainTimes = attemptsRemaining;
 							mHeaderText.setText(updatePukRemainningTimes(false));
 						} else {
-							mOkButton.setEnabled(false);
+							//mOkButton.setEnabled(false);
 							String displayMessage = getContext().getString(
-									R.string.lockscreen_sim_puk_locked_message);
+							        R.string.unblocking_fail);
 							mHeaderText.setText(displayMessage);
 						}
 					} catch (Exception e) {

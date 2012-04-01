@@ -275,6 +275,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
             if (sActivePhoneId != phoneId) {
                 log("sActivePhoneId should equal to phoneId!!!");
                 log("onDisconnectDone out");
+                sTracker[phoneId].onDisconnectDoneInternalWithoutRetry(ar);
                 return;
             }
             if (sRequestConnectPhoneId == INVALID_PHONE_ID) {
