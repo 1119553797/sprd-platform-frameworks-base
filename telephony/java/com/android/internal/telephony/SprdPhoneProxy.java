@@ -204,6 +204,10 @@ public class SprdPhoneProxy extends PhoneProxy {
 			timerSeconds, onComplete);
 	}
 
+	public boolean getCallForwardingIndicator(int serviceClass) {
+        return mActivePhone.getCallForwardingIndicator(serviceClass);
+    }
+
     public int getPhoneId() {
         return mActivePhone.getPhoneId();
     }

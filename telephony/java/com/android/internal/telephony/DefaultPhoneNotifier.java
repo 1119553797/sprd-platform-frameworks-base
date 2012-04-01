@@ -23,6 +23,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.android.internal.telephony.ITelephonyRegistry;
+import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
 
 /**
  * broadcast intents
@@ -85,8 +86,12 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     public void notifyCallForwardingChanged(Phone sender) {
+        notifyCallForwardingChanged(sender, SERVICE_CLASS_VOICE);
+    }
+
+    public void notifyCallForwardingChanged(Phone sender, int serviceClass) {
         try {
-            mRegistry.notifyCallForwardingChanged(sender.getCallForwardingIndicator());
+            mRegistry.notifyCallForwardingChangedByServiceClass(sender.getCallForwardingIndicator(serviceClass), serviceClass);
         } catch (RemoteException ex) {
             // system process is dead
         }

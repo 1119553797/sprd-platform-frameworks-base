@@ -136,6 +136,7 @@ public final class TDPhone extends GSMPhone {
     protected static final int EVENT_GET_SIM_TYPE_DONE       = 104;
     protected static final int EVENT_GET_REGISTRATION_STATE_DONE       = 105;
     protected static final int EVENT_GET_REMIAN_TIMES_DONE       = 106;
+    public static final int SERVICE_CLASS_VIDEO = 16;
 
     // Constructors
 
@@ -222,6 +223,10 @@ public final class TDPhone extends GSMPhone {
 							|| (mVideoCT.state != Phone.State.IDLE))
                             && !mSST.isConcurrentVoiceAndData()) {
                         ret = DataState.SUSPENDED;
+                    } else if (mCT.state == Phone.State.IDLE && mVideoCT.state == Phone.State.IDLE
+                                  && MsmsGsmDataConnectionTrackerProxy.isAnotherCardVoiceing(getPhoneId())
+                                  && !MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()) {
+                        ret = DataState.SUSPENDED;
                     } else {
                         ret = DataState.CONNECTED;
                     }
@@ -239,8 +244,8 @@ public final class TDPhone extends GSMPhone {
     }
 
     public void
-    notifyCallForwardingIndicator() {
-        mNotifier.notifyCallForwardingChanged(this);
+    notifyCallForwardingIndicator(int serviceClass) {
+        mNotifier.notifyCallForwardingChanged(this, serviceClass);
     }
 
     public void
@@ -450,7 +455,7 @@ public final class TDPhone extends GSMPhone {
             Message resp;
             if (commandInterfaceCFReason == CF_REASON_UNCONDITIONAL) {
                 resp = obtainMessage(EVENT_SET_CALL_FORWARD_DONE,
-                        isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, onComplete);
+                        isCfEnable(commandInterfaceCFAction) ? 1 : 0, CommandsInterface.SERVICE_CLASS_VOICE, onComplete);
             } else {
                 resp = onComplete;
             }
@@ -538,6 +543,35 @@ public final class TDPhone extends GSMPhone {
 			case EVENT_CONTROL_CAMERA_DONE:
 			case EVENT_CONTROL_AUDIO_DONE:
 				break;
+
+            case EVENT_SET_CALL_FORWARD_DONE:
+                ar = (AsyncResult)msg.obj;
+                if (ar.exception == null) {
+                    if ((msg.arg2 & SERVICE_CLASS_VOICE) != 0) {
+                        mSIMRecords.setVoiceCallForwardingFlag(1, msg.arg1 == 1);
+                    } else if (SERVICE_CLASS_VIDEO == msg.arg2) {
+                        mSIMRecords.setVideoCallForwardingFlag(1, msg.arg1 == 1);
+                    }
+                }
+                onComplete = (Message) ar.userObj;
+                if (onComplete != null) {
+                    AsyncResult.forMessage(onComplete, ar.result, ar.exception);
+                    onComplete.sendToTarget();
+                }
+                break;
+
+            case EVENT_GET_CALL_FORWARD_DONE:
+                ar = (AsyncResult)msg.obj;
+                if (ar.exception == null) {
+                    handleCfuQueryResult((CallForwardInfo[])ar.result);
+                }
+                onComplete = (Message) ar.userObj;
+                if (onComplete != null) {
+                    AsyncResult.forMessage(onComplete, ar.result, ar.exception);
+                    onComplete.sendToTarget();
+                }
+                break;
+
 			default:
 				super.handleMessage(msg);
 
@@ -950,7 +984,7 @@ public final class TDPhone extends GSMPhone {
 			Message resp;
 			if (commandInterfaceCFReason == CF_REASON_UNCONDITIONAL) {
 				resp = obtainMessage(EVENT_SET_CALL_FORWARD_DONE,
-						isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, onComplete);
+						isCfEnable(commandInterfaceCFAction) ? 1 : 0, serviceClass, onComplete);
 			} else {
 				resp = onComplete;
 			}
@@ -963,6 +997,31 @@ public final class TDPhone extends GSMPhone {
 		}
 	}
 	
+
+    private void handleCfuQueryResult(CallForwardInfo[] infos) {
+        if (infos == null || infos.length == 0) {
+            // Assume the default is not active
+            // Set unconditional CFF in SIM to false
+            mSIMRecords.setVoiceCallForwardingFlag(1, false);
+            mSIMRecords.setVideoCallForwardingFlag(1, false);
+        } else {
+            for (int i = 0, s = infos.length; i < s; i++) {
+                if ((infos[i].serviceClass & SERVICE_CLASS_VOICE) != 0) {
+                    mSIMRecords.setVoiceCallForwardingFlag(1, (infos[i].status == 1));
+                    // should only have the one
+                    break;
+                } else if (SERVICE_CLASS_VIDEO == infos[i].serviceClass) {
+                    mSIMRecords.setVideoCallForwardingFlag(1, (infos[i].status == 1));
+                    break;
+                }
+            }
+        }
+    }
+
+    public boolean getCallForwardingIndicator(int serviceClass) {
+        return mSIMRecords.getCallForwardingFlag(serviceClass);
+    }
+
 	public int getRemainTimes(int type) {	
 		Log.d(LOG_TAG, "getRemainTimes type:"+type);
 		

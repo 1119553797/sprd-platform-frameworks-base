@@ -515,6 +515,9 @@ public class MimeTypeMap {
             sMimeTypeMap.loadEntry("video/x-sgi-movie", "movie");
             sMimeTypeMap.loadEntry("x-conference/x-cooltalk", "ice");
             sMimeTypeMap.loadEntry("x-epoc/x-sisx-app", "sisx");
+            sMimeTypeMap.loadEntry("application/unknown", "test");
+            sMimeTypeMap.loadEntry("application/unknown", "itest");
+            sMimeTypeMap.loadEntry("application/unknown", "adp");
         }
 
         return sMimeTypeMap;

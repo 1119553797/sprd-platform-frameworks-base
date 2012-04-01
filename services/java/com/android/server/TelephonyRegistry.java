@@ -44,6 +44,7 @@ import com.android.internal.telephony.DefaultPhoneNotifier;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.server.am.BatteryStatsService;
+import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
 
 /**
  * Since phone process can be restarted, this class provides a centralized place
@@ -81,6 +82,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     private boolean mMessageWaiting = false;
 
     private boolean mCallForwarding = false;
+    private int mServiceClass = SERVICE_CLASS_VOICE;
 
     private int mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
 
@@ -177,7 +179,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                     }
                     if ((events & PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR) != 0) {
                         try {
-                            r.callback.onCallForwardingIndicatorChanged(mCallForwarding);
+                            r.callback.onCallForwardingIndicatorChangedByServiceClass(mCallForwarding, mServiceClass);
                         } catch (RemoteException ex) {
                             remove(r.binder);
                         }
@@ -328,6 +330,27 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 if ((r.events & PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR) != 0) {
                     try {
                         r.callback.onCallForwardingIndicatorChanged(cfi);
+                    } catch (RemoteException ex) {
+                        remove(r.binder);
+                    }
+                }
+            }
+        }
+    }
+
+    public void notifyCallForwardingChangedByServiceClass(boolean cfi, int sc) {
+        if (!checkNotifyPermission("notifyCallForwardingChangedByServiceClass()")) {
+            return;
+        }
+        Slog.i(TAG, "notifyCallForwardingChangedByServiceClass: " + cfi + "serviceClass:" + sc);
+        synchronized (mRecords) {
+            mCallForwarding = cfi;
+            mServiceClass = sc;//for video call forward
+            for (int i = mRecords.size() - 1; i >= 0; i--) {
+                Record r = mRecords.get(i);
+                if ((r.events & PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR) != 0) {
+                    try {
+                        r.callback.onCallForwardingIndicatorChangedByServiceClass(cfi, sc);
                     } catch (RemoteException ex) {
                         remove(r.binder);
                     }

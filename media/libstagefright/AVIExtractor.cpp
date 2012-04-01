@@ -675,6 +675,10 @@ static const char *GetMIMETypeForHandler(uint32_t handler) {
         case FOURCC('v', 's', 's', 'h'):
             return MEDIA_MIMETYPE_VIDEO_AVC;
 
+        case FOURCC('h', '2', '6', '3'):
+        case FOURCC('H', '2', '6', '3'):
+            return MEDIA_MIMETYPE_VIDEO_H263;
+
         default:
             return NULL;
     }
@@ -797,10 +801,22 @@ status_t AVIExtractor::parseStreamFormat(off64_t offset, size_t size) {
 
     const uint8_t *data = buffer->data();
 
-    if (isVideo) {
+    if (isVideo) {        
+        const char *mime = NULL;
         uint32_t width = U32LE_AT(&data[4]);
         uint32_t height = U32LE_AT(&data[8]);
+        uint32_t handler = U32_AT(&data[16]);
 
+        mime = GetMIMETypeForHandler(handler);
+        if ((!mime)||(mime && strncasecmp(mime, "video/", 6))) {
+            LOGW("strh Unsupported video format '%c%c%c%c'",
+                 (char)(handler >> 24),
+                 (char)((handler >> 16) & 0xff),
+                 (char)((handler >> 8) & 0xff),
+                 (char)(handler & 0xff));
+        }else{
+            track->mMeta->setCString(kKeyMIMEType, mime);
+        }
         track->mMeta->setInt32(kKeyWidth, width);
         track->mMeta->setInt32(kKeyHeight, height);
     } else {

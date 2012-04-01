@@ -106,6 +106,14 @@ public interface SprdVideoPhone {
 	public void notifyVideoCallFallBack();
 	public void notifyVideoCallFail();*/
 	
+
+    /**
+     * Get voice call forwarding or video call forwarding indicator status
+     * @param serviceClass
+     * @return true if there is a voice call forwarding or a video call forwarding
+     */
+    boolean getCallForwardingIndicator(int serviceClass);
+
 	public int getRemainTimes(int type);
 
     int getPhoneId();

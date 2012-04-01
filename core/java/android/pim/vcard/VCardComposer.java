@@ -607,6 +607,7 @@ public class VCardComposer {
                     .appendEmails(contentValuesListMap.get(Email.CONTENT_ITEM_TYPE))
                     .appendPostals(contentValuesListMap.get(StructuredPostal.CONTENT_ITEM_TYPE))
                     .appendOrganizations(contentValuesListMap.get(Organization.CONTENT_ITEM_TYPE))
+                    .appendOrganizations(contentValuesListMap.get(Event.CONTENT_ITEM_TYPE))
                     .appendWebsites(contentValuesListMap.get(Website.CONTENT_ITEM_TYPE));
             if ((mVCardType & VCardConfig.FLAG_REFRAIN_IMAGE_EXPORT) == 0) {
                 builder.appendPhotos(contentValuesListMap.get(Photo.CONTENT_ITEM_TYPE));            

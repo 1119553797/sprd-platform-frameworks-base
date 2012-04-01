@@ -895,6 +895,7 @@ public class PhoneNumberUtils
             case 0xb: return '#';
             case 0xc: return PAUSE;
             case 0xd: return WILD;
+            case 0xe: return WAIT;
 
             default: return 0;
         }
@@ -1480,7 +1481,9 @@ public class PhoneNumberUtils
         for (int i = 0; i < len; i++) {
             char c = out[i];
             // If this char isn't in KEYPAD_MAP at all, just leave it alone.
-            out[i] = (char) KEYPAD_MAP.get(c, c);
+			if ('p' != c && 'P' != c && 'w' != c && 'W' != c) {
+				out[i] = (char) KEYPAD_MAP.get(c, c);
+			}
         }
 
         return new String(out);

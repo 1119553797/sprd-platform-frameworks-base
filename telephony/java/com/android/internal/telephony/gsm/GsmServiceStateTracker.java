@@ -557,7 +557,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 break;
 
             case EVENT_SIM_SMS_READY:
-                intent = new Intent(TelephonyIntents.ACTION_IS_SIM_SMS_READY);
+                intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_IS_SIM_SMS_READY, phone.getPhoneId()));
                 intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
                 intent.putExtra("isReady", true);
                 phone.getContext().sendStickyBroadcast(intent);
@@ -631,7 +631,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         if (plmn.equals("CMCC") || plmn.equals("CHINA MOBILE") ) {
              displayPlmn = Resources.getSystem().getText(
                     com.android.internal.R.string.custom_china_mobile).toString();
-        }else if (plmn.equals("CHN-CUGSM") || plmn.equals("CHN-UNICOM") || plmn.equals("China Unicom") || plmn.equals("UNICOM")) {
+        }else if (plmn.equals("CHN-CUGSM") || plmn.equals("CU-GSM")|| plmn.equals("CHN-UNICOM") || plmn.equals("China Unicom") || plmn.equals("UNICOM")) {
              displayPlmn = Resources.getSystem().getText(
                     com.android.internal.R.string.custom_china_unicom).toString();
         }else {

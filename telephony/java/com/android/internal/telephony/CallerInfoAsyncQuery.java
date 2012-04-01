@@ -48,6 +48,7 @@ public class CallerInfoAsyncQuery {
     private static final int EVENT_VOICEMAIL_NUMBER = 5;
 
     private CallerInfoAsyncQueryHandler mHandler;
+    public static final String SIM_INDEX = "sim_index ASC";
 
     /**
      * Interface for a CallerInfoAsyncQueryHandler result return.
@@ -286,7 +287,7 @@ public class CallerInfoAsyncQuery {
         cw.cookie = cookie;
         cw.event = EVENT_NEW_QUERY;
 
-        c.mHandler.startQuery(token, cw, contactRef, null, null, null, null);
+        c.mHandler.startQuery(token, cw, contactRef, null, null, null, SIM_INDEX);
 
         return c;
     }
@@ -383,7 +384,7 @@ public class CallerInfoAsyncQuery {
         // check to see if these are recognized numbers, and use shortcuts if we can.
         if (PhoneNumberUtils.isSimEmergencyNumber(number, phoneId)) {
             cw.event = EVENT_EMERGENCY_NUMBER;
-        } else if (PhoneNumberUtils.isVoiceMailNumber(number)) {
+        } else if (PhoneNumberUtils.isVoiceMailNumber(phoneId,number)) {
             cw.event = EVENT_VOICEMAIL_NUMBER;
         } else {
             cw.event = EVENT_NEW_QUERY;
@@ -395,7 +396,7 @@ public class CallerInfoAsyncQuery {
                               null,  // projection
                               selection,  // selection
                               selectionArgs,  // selectionArgs
-                              null);  // orderBy
+                              SIM_INDEX);  // orderBy
         return c;
     }
 

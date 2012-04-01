@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.provider.Settings.System;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -42,6 +43,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.internal.R;
 import com.android.internal.app.ShutdownThread;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 import com.google.android.collect.Lists;
@@ -69,19 +71,23 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private ToggleAction mAirplaneModeOn;
 
     private MyAdapter mAdapter;
-
+    private TelephonyManager[] mTelephonyManagers;
     private boolean mKeyguardShowing = false;
     private boolean mDeviceProvisioned = false;
     private ToggleAction.State mAirplaneState = ToggleAction.State.Off;
     private boolean mIsWaitingForEcmExit = false;
 
+    private boolean[] isStandby;
+    private int mPhoneCount = 1;
     /**
      * @param context everything needs a context :(
      */
     public GlobalActions(Context context) {
         mContext = context;
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-
+        mPhoneCount = PhoneFactory.getPhoneCount();
+        mTelephonyManagers = new TelephonyManager[mPhoneCount];
+        isStandby=new boolean[mPhoneCount];
         // receive broadcasts
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
@@ -94,9 +100,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         context.registerReceiver(mBroadcastReceiver, filter);
 
         // get notified of phone state changes
-        TelephonyManager telephonyManager =
-                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+        for (int i = 0; i <mPhoneCount; i++) {
+            mTelephonyManagers[i] = (TelephonyManager) mContext.getSystemService(PhoneFactory
+                    .getServiceName(Context.TELEPHONY_SERVICE, i));
+            mTelephonyManagers[i].listen(mPhoneStateListener(i), PhoneStateListener.LISTEN_SERVICE_STATE);
+        }
     }
 
     /**
@@ -114,6 +122,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         mStatusBar.disable(StatusBarManager.DISABLE_EXPAND);
         mDialog.show();
+        mDialog.getListView().setFocusable(false);
     }
 
     /**
@@ -230,6 +239,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                         SystemProperties.get(TelephonyProperties.PROPERTY_INECM_MODE)))) {
                     mState = buttonOn ? State.TurningOn : State.TurningOff;
                     mAirplaneState = mState;
+                    Log.d(TAG, " mAirplaneState="+mAirplaneState.inTransition()+" mState="+mState);
                 }
             }
 
@@ -585,6 +595,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         public void updateState(State state) {
             mState = state;
+            Log.d(TAG, " updateState:mState="+mState.inTransition());
         }
         // add by niezhong 0907 for NEWMS00120274 begin
         public void setSimState(String state) {
@@ -621,22 +632,32 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             // add by niezhong 0907 for NEWMS00120274 end
         }
     };
+    private  boolean isAirplaneModeOn(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+    }
 
-    PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-        @Override
-        public void onServiceStateChanged(ServiceState serviceState) {
-            final boolean inAirplaneMode = serviceState.getState() == ServiceState.STATE_POWER_OFF;
-            mAirplaneState = inAirplaneMode ? ToggleAction.State.On : ToggleAction.State.Off;
-            mAirplaneModeOn.updateState(mAirplaneState);
-            mAdapter.notifyDataSetChanged();
-        }
-    };
-
+    private boolean isCardDisabled(int phoneid) {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                PhoneFactory.getSetting(Settings.System.SIM_STANDBY, phoneid), 1) == 0;
+    }
+    private PhoneStateListener mPhoneStateListener(int phoneId) {
+        PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onServiceStateChanged(ServiceState serviceState) {
+                final boolean inAirplaneMode = serviceState.getState() == ServiceState.STATE_POWER_OFF
+                        && isAirplaneModeOn(mContext);
+                updateAirplaneState(inAirplaneMode);
+            }
+        };
+        return mPhoneStateListener;
+    }
     private static final int MESSAGE_DISMISS = 0;
     // add by niezhong 0907 for NEWMS00120274 begin
     private static final int SIM_OPERATE_END = 1;
     
     private static final int SIM_OPERATE_START = 2 ;
+    private static final int MESSAGE_REFLUSH_AIRPLANE_STATE =3 ;
     // add by niezhong 0907 for NEWMS00120274 end
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -651,8 +672,10 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             }
             else if(msg.what == SIM_OPERATE_START) {
             	setAirViewTrue(false);
+            }else if(msg.what == MESSAGE_REFLUSH_AIRPLANE_STATE){
+                boolean airplane=(Boolean)msg.obj;
+              updateAirplaneState(airplane);
             }
-            // add by niezhong 0907 for NEWMS00120274 end
         }
     };
 
@@ -668,6 +691,16 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra("state", on);
         mContext.sendBroadcast(intent);
+        for(int i=0;i<mPhoneCount;i++){
+            isStandby[i]=isCardDisabled(i);
+        }
+        if(mPhoneCount == 1 && isStandby[0] || (mPhoneCount > 1 && isStandby[0] && isStandby[1] )){
+            mHandler.removeMessages(MESSAGE_REFLUSH_AIRPLANE_STATE);
+            Message message=new Message();
+            message.what=MESSAGE_REFLUSH_AIRPLANE_STATE;
+            message.obj=on;
+            mHandler.sendMessageDelayed(message, 5000);
+        }
     }
  // add by niezhong 0907 for NEWMS00120274 begin
     private void setAirViewTrue(boolean operate) {
@@ -676,4 +709,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     	}	
     }
  // add by niezhong 0907 for NEWMS00120274 end
+    private void updateAirplaneState(boolean airplane){
+        mAirplaneState = airplane ? ToggleAction.State.On : ToggleAction.State.Off;
+        mAirplaneModeOn.updateState(mAirplaneState);
+        mAdapter.notifyDataSetChanged();
+    }
 }

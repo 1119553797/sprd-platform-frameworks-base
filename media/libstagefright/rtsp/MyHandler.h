@@ -53,17 +53,17 @@ static int64_t kDefaultKeepAliveTimeoutUs = 60000000ll;
 
 namespace android {
 
-static void MakeUserAgentString(AString *s) { //@hong change the prop of useragent.
-      s->setTo("stagefright/1.1 (Linux;Android ");
-      // s->setTo("HUAWEI T2011_TD/1.0");
+static void MakeUserAgentString(AString *s) {
+    s->setTo("stagefright/1.1 (Linux;Android ");
+
 #if (PROPERTY_VALUE_MAX < 8)
 #error "PROPERTY_VALUE_MAX must be at least 8"
 #endif
 
-//    char value[PROPERTY_VALUE_MAX];
-//    property_get("ro.build.version.release", value, "Unknown");
-//    s->append(value);
-//    s->append(")");
+    char value[PROPERTY_VALUE_MAX];
+    property_get("ro.build.version.release", value, "Unknown");
+    s->append(value);
+    s->append(")");
 }
 
 static bool GetAttribute(const char *s, const char *key, AString *value) {
@@ -126,8 +126,9 @@ struct MyHandler : public AHandler {
           
           mKeepAliveTimeoutUs(kDefaultKeepAliveTimeoutUs),
           mKeepAliveGeneration(0),
-          
+          mSeekingTime(0),
           mCmdSending(false),
+          mDiscting(false),
           mlocalTimestamps(false){
           
 		if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
@@ -188,10 +189,9 @@ struct MyHandler : public AHandler {
 
     void disconnect(const sp<AMessage> &doneMsg) {
         mDoneMsg = doneMsg;
-	LOGI("disconnect.enter...");
+		mDiscting = true ;
+    	LOGI("disconnect.enter...");
         (new AMessage('abor', id()))->post();
-		postCmdTimeoutCheck(doneMsg);
-		
     }
 
 	void processPendCmd()
@@ -223,12 +223,7 @@ struct MyHandler : public AHandler {
         sp<AMessage> msg = new AMessage('seek', id());
 
 		LOGI(" myhand seek to %lld",timeUs);
-	    if (!mSeekable) {
-            LOGI("This is a live stream, ignoring seek request.mSeekable %d :mTryTCPInterleaving %d",mSeekable,mTryTCPInterleaving);
-            doneMsg->post();
-            return ;
-        }
-		
+		mSeekingTime = timeUs ;
 	    if (mCmdSending){
 
 		    LOGI("mCmdSending....so pend cmd.");
@@ -237,8 +232,7 @@ struct MyHandler : public AHandler {
 			mPendDoneMsg = doneMsg;
 			return ;
         }
-		mSeekPending = true;
-	    //postCmdTimeoutCheck(doneMsg);
+		mCmdSending = true;
 
 		for (size_t i = 0; i < mTracks.size(); ++i) {
             mTracks.editItemAt(i).mPacketSource->flushQueue();
@@ -249,19 +243,12 @@ struct MyHandler : public AHandler {
 
 		msg->setInt64("time", timeUs);
         msg->setMessage("doneMsg", doneMsg);
-        msg->post();
+        msg->post(200000ll);
     }
 
     void pause(int64_t timeUs, const sp<AMessage> &doneMsg) {
 
 	     LOGE("myhand pause.time %lld",timeUs);
-
-		 if (!mSeekable)
-		 {
-		   LOGI("This is a live stream, ignoring pause request.");
-		   doneMsg->post();
-		   return ;
-	     }
 
 		 if (mCmdSending)
 		 {
@@ -270,7 +257,7 @@ struct MyHandler : public AHandler {
 			 mPendDoneMsg = doneMsg;
 		     return ;  
 		 }
-        postCmdTimeoutCheck(doneMsg);
+		mCmdSending = true ;
 		sp<AMessage> msg = new AMessage('pause', id());
 		
 		sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
@@ -279,7 +266,7 @@ struct MyHandler : public AHandler {
 		
         msg->setInt64("time", timeUs);
         msg->setMessage("doneMsg", doneMsg);
-        msg->post();
+        msg->post(200000ll);
     }
    void play(int64_t timeUs, const sp<AMessage> &doneMsg) {
 		    
@@ -291,7 +278,9 @@ struct MyHandler : public AHandler {
 			mPendDoneMsg = doneMsg;
 			return ;  
 		 }
-	    postCmdTimeoutCheck(doneMsg);
+		 
+		mCmdSending = true ;
+		
 	    sp<AMessage> msg = new AMessage('resume', id());
 		
 		sp<AMessage> reply1 = new AMessage('expt', id());  //@handle server exception.
@@ -299,7 +288,7 @@ struct MyHandler : public AHandler {
 		mConn->serverexception(reply1);
         msg->setInt64("time", timeUs);
         msg->setMessage("doneMsg", doneMsg);
-        msg->post();
+        msg->post(200000ll);
     }
 
     int64_t getNormalPlayTimeUs() {
@@ -511,13 +500,7 @@ struct MyHandler : public AHandler {
                     request.append(mSessionURL);
                     request.append(" RTSP/1.0\r\n");
                     request.append("Accept: application/sdp\r\n");
-			    if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
-				{
-		            MakeUserAgentString(&ua); //@hong add useragent.
-		            request.append(ua.c_str());
-                    request.append("\r\n");
-			    }
-				
+					
 
                     request.append("\r\n");
 
@@ -573,15 +556,6 @@ struct MyHandler : public AHandler {
                         request.append(mSessionURL);
                         request.append(" RTSP/1.0\r\n");
                         request.append("Accept: application/sdp\r\n");
-
-			if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
-			{
-
-						MakeUserAgentString(&ua); //@hong add useragent.
-						request.append(ua.c_str());
-								request.append("\r\n");
-			}
-
 
                         request.append("\r\n");
 
@@ -769,15 +743,7 @@ struct MyHandler : public AHandler {
                     request.append("Session: ");
                     request.append(mSessionID);
                     request.append("\r\n");
-					if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
-					{
-
-								MakeUserAgentString(&ua); //@hong add useragent.
-								request.append(ua.c_str());
-										request.append("\r\n");
-					}
-
-
+			
                     request.append("\r\n");
 
                     sp<AMessage> reply = new AMessage('play', id());
@@ -849,7 +815,6 @@ struct MyHandler : public AHandler {
 				   reply->setInt32("generation", mKeepAliveGeneration);
 				   mConn->sendRequest(request.c_str(), reply);
 				   
-				   postCmdTimeoutCheck(mDoneMsg);
 				   break;
 			   }
 			
@@ -880,8 +845,9 @@ struct MyHandler : public AHandler {
 		LOGI("abor received...");
                 for (size_t i = 0; i < mTracks.size(); ++i) {
                     TrackInfo *info = &mTracks.editItemAt(i);
-
+				    if (!mFirstAccessUnit) {
                     info->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
+				    }
 
                     if (!info->mUsingInterleavedTCP) {
                         mRTPConn->removeStream(info->mRTPSocket, info->mRTCPSocket);
@@ -897,6 +863,7 @@ struct MyHandler : public AHandler {
                 mFirstAccessUnit = true;
                 mNTPAnchorUs = -1;
                 mMediaAnchorUs = -1;
+				mSeekingTime = 0 ;
                 mFirstAccessUnitNTP = 0;
                 mNumAccessUnitsReceived = 0;
                 mReceivedFirstRTCPPacket = false;
@@ -912,6 +879,7 @@ struct MyHandler : public AHandler {
 				else
 				{
 				    mCheckPending = true;
+					mCheckGeneration++ ;
 				}
 
                 AString request;
@@ -925,19 +893,18 @@ struct MyHandler : public AHandler {
                 request.append(mSessionID);
                 request.append("\r\n");
 
-				if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@zhangjl modify for only cmmb use UserAgent 
-				{
-						MakeUserAgentString(&ua); //@hong add useragent.
-						request.append(ua.c_str());
-								request.append("\r\n");
-				}	
-
-
-
+		
                 request.append("\r\n");
 
                 mConn->sendRequest(request.c_str(), reply);
+                if(mDiscting)
+                {
+				  mConn->disconnect(reply);
+			  	  mDoneMsg->post();
+				  LOGI("fast disc");
+                }
 		    	LOGI("abor over sending teardown...");
+				
                 break;
             }
 
@@ -974,31 +941,13 @@ struct MyHandler : public AHandler {
 					}
 					else
 					{
-  					   mDoneMsg->post(4000000ll);
+  					  // mDoneMsg->post(4000000ll);
+  					    mDoneMsg->post();
 					}               
                  
                     mDoneMsg = NULL;
                 }
-				else
-				{
-					sp<AMessage> doneMsg = NULL;
-					msg->findMessage("doneMsg", &doneMsg);
-					if(doneMsg != NULL)
-					{
-					    LOGI("quit done  for ERROR_IO");
-						doneMsg->setInt32("result", ERROR_IO);
-						if(mlocalTimestamps)
-						{
-						   doneMsg->post();
-						}
-						else
-						{
-	  					   doneMsg->post(4000000ll);
-						}               
-	                    doneMsg = NULL;
-					}
-				}
-                break;
+			    break;
             }
 
             case 'chek':
@@ -1006,15 +955,13 @@ struct MyHandler : public AHandler {
                 int32_t generation;
                 CHECK(msg->findInt32("generation", &generation));
                 if (generation != mCheckGeneration) {
-                    // This is an outdated message. Ignore.
-                    break; //@hong not ignore the outdated msg.
+                     break;
                 }
 
-                if (mNumAccessUnitsReceived == 0  && strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) {  
+                if (mNumAccessUnitsReceived == 0 ){  
 
-                   // @hong not send abor signal. 
                     LOGI("stream ended? aborting.");
-                  //  (new AMessage('abor', id()))->post();
+                   (new AMessage('abor', id()))->post();
                     break;
                 }
 
@@ -1062,7 +1009,7 @@ struct MyHandler : public AHandler {
                     CHECK(msg->findInt32("rtp-time", (int32_t *)&rtpTime));
                     CHECK(msg->findInt64("ntp-time", (int64_t *)&ntpTime));
 
-                    onTimeUpdate(trackIndex, rtpTime, ntpTime);
+                   // onTimeUpdate(trackIndex, rtpTime, ntpTime);
                     break;
                 }
 
@@ -1090,7 +1037,7 @@ struct MyHandler : public AHandler {
                 }
 
                 ++mNumAccessUnitsReceived;
-              //  postAccessUnitTimeoutCheck();
+                postAccessUnitTimeoutCheck();
 
                 size_t trackIndex;
                 CHECK(msg->findSize("track-index", &trackIndex));
@@ -1195,6 +1142,7 @@ struct MyHandler : public AHandler {
 
                 if (!mSeekable) {
                     LOGI("This is a live stream, ignoring seek request.");
+				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
                     break;
                 }
@@ -1203,6 +1151,8 @@ struct MyHandler : public AHandler {
                 CHECK(msg->findInt64("time", &timeUs));
                // Disable the access unit timeout until we resumed
                 // playback again.
+                 mSeekPending = true;
+			   
                  mCheckPending = true;
                 ++mCheckGeneration;
 
@@ -1213,16 +1163,9 @@ struct MyHandler : public AHandler {
                 request.append("Session: ");
                 request.append(mSessionID);
                 request.append("\r\n");
-		if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
-		{					MakeUserAgentString(&ua); //@hong add useragent.
-							request.append(ua.c_str());
-									request.append("\r\n");
-
-        }
-
-
                 request.append("\r\n");
 
+      
                 sp<AMessage> reply = new AMessage('see1', id());
                 reply->setInt64("time", timeUs);
                 reply->setMessage("doneMsg", doneMsg);
@@ -1234,8 +1177,17 @@ struct MyHandler : public AHandler {
 				}
 				else
 				{
-					LOGI("seek when pause.first play rtsp to %lld",timeUs);
-					reply->post();
+			       LOGI("seeking when pause ,seek fake");
+				   
+				   mSeekPending = false;
+				   mCmdSending = false ;
+             	   doneMsg->setInt32("result", NO_ERROR);
+		           doneMsg->post();
+				   if(mPendingCmd != 0)
+				   {
+				      processPendCmd();
+				   }
+				   
 				}
 				
                 break;
@@ -1253,10 +1205,14 @@ struct MyHandler : public AHandler {
 				mNTPAnchorUs = -1;
 		#endif		
        	    	LOGI("seek have paused then play ");
-
-                int64_t timeUs;
+                   int32_t result;
+			   CHECK(msg->findInt32("result", &result));
+      
+      			 LOGE("pause1 completed with result %d (%s) mPendingCmd %d",
+      				  result, strerror(-result),mPendingCmd);
+			    int64_t timeUs;
                 CHECK(msg->findInt64("time", &timeUs));
-
+			
                 AString request = "PLAY ";
                 request.append(mSessionURL);
                 request.append(" RTSP/1.0\r\n");
@@ -1311,20 +1267,12 @@ struct MyHandler : public AHandler {
 
                 if (result != OK) {
                        LOGE("seek failed, aborting.");
-               		   disconnect(doneMsg);
+               	       mDoneMsg = doneMsg;
+	                  (new AMessage('abor', id()))->post();
 		     		   mSeekPending = false;
 					   return ;
                 }
-			
-		
-				if(mPauseed)
 			    {
-					pause(-1,doneMsg);
-				    LOGI("seek completed. to pause according pre state");
-					
-				}
-				else
-				{
 			      LOGI("seek completed. processPendCmd %d",mPendingCmd);
 				  mSeekPending = false;
 				  mCmdSending = false ;
@@ -1347,6 +1295,7 @@ struct MyHandler : public AHandler {
 				// Session is paused now.
 		        if (!mSeekable) {
                     LOGE("This is a live stream, ignoring seek request.");
+				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
                     break;
                 }
@@ -1364,13 +1313,6 @@ struct MyHandler : public AHandler {
                 AString request = "PAUSE ";
                 request.append(mSessionURL);
                 request.append(" RTSP/1.0\r\n");
-
-
-#if 0
-						MakeUserAgentString(&ua); //@hong add useragent.
-						request.append(ua.c_str());
-								request.append("\r\n");
-#endif	
 
                 request.append("Session: ");
                 request.append(mSessionID);
@@ -1398,6 +1340,13 @@ struct MyHandler : public AHandler {
 				 mSeekPending = false;
 				 sp<AMessage> doneMsg;
       			 CHECK(msg->findMessage("doneMsg", &doneMsg));
+				 
+				 if (result != OK) {
+                   	  LOGE("pause1 fail, aborting.");
+                 	  mDoneMsg = doneMsg;
+	                 (new AMessage('abor', id()))->post();
+					  break;
+                 }
 				 doneMsg->setInt32("result", NO_ERROR);
 				 doneMsg->post();
 		
@@ -1416,8 +1365,9 @@ struct MyHandler : public AHandler {
 				 sp<AMessage> doneMsg;
 			     CHECK(msg->findMessage("doneMsg", &doneMsg));
 
-                if (!mSeekable) {
+                if (!mSeekable ||!mPauseed) {
                     LOGE("This is a live stream, ignoring seek request.");
+				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
                     break;
                 }
@@ -1427,12 +1377,6 @@ struct MyHandler : public AHandler {
                 AString request = "PLAY ";
                 request.append(mSessionURL);
                 request.append(" RTSP/1.0\r\n");
-#if 0
-										MakeUserAgentString(&ua); //@hong add useragent.
-										request.append(ua.c_str());
-												request.append("\r\n");
-#endif	
-
 				
                 request.append("Session: ");
                 request.append(mSessionID);
@@ -1458,9 +1402,11 @@ struct MyHandler : public AHandler {
                 LOGE("resume PLAY completed with result %d (%s)",
                      result, strerror(-result));
 				mCmdSending = false;
-			    mCheckPending = false;
-            	mSeekPending = false;
+			   	mSeekPending = false;
+
 				mPauseed = false ;
+				mCheckPending = false;
+                postAccessUnitTimeoutCheck();
 
 			    if (result == OK) {
                     sp<RefBase> obj;
@@ -1481,8 +1427,9 @@ struct MyHandler : public AHandler {
 
 				if (result != OK) {
                    	  LOGE("resume1 fail, aborting.");
-                 	  disconnect(doneMsg);
-		              break;
+                 	  mDoneMsg = doneMsg;
+	                 (new AMessage('abor', id()))->post();
+					  break;
                 }
 			    doneMsg->setInt32("result", NO_ERROR);
 			    doneMsg->post();
@@ -1526,54 +1473,22 @@ struct MyHandler : public AHandler {
                         sp<AMessage> msg = new AMessage('abor', id());
                         msg->setInt32("reconnect", true);
                         msg->post();
-					    postCmdTimeoutCheck(mDoneMsg);
                     } else {
                         LOGW("Never received any data, disconnecting.");
-					    disconnect(mDoneMsg);
+					    sp<AMessage> msg = new AMessage('abor', id());
+                        msg->post();
                     }
                 }
                 break;
             }
 	   case 'expt':  //@hong server exception
-		LOGI("server exception error.");
-             if (mDoneMsg != NULL) {
-					LOGI("server exception error1.");
-                    mDoneMsg->setInt32("result", UNKNOWN_ERROR);
-                    mDoneMsg->post();
-                    mDoneMsg = NULL;
-                }
-			    else
-				{
-					sp<AMessage> doneMsg = NULL;
-					if( mCmdSending )
-					{
-						msg->findMessage("doneMsg", &doneMsg);
-						if(doneMsg != NULL)
-						{
-						    LOGI("quit done  for ERROR_IO");
-							doneMsg->setInt32("result", ERROR_IO);
-							doneMsg->post();
-		                    doneMsg = NULL;
-						}
-						else
-						{
-						   for (size_t i = 0; i < mTracks.size(); ++i) {
-                              TrackInfo *info = &mTracks.editItemAt(i);
-                              info->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
-    	                   }
-						}
-					}
-					else
-					{
-				       for (size_t i = 0; i < mTracks.size(); ++i) {
-                          TrackInfo *info = &mTracks.editItemAt(i);
-                          info->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
-    	               }
-					}
-				}
-    	    
-			break;
-            default:
+	   		{
+			 LOGI("server exception error.");
+             sp<AMessage> msg = new AMessage('abor', id());
+             msg->post();
+    	     break;
+	   		}
+	        default:
                 TRESPASS();
                 break;
         }
@@ -1595,10 +1510,8 @@ struct MyHandler : public AHandler {
         check->setInt32("generation", mCheckGeneration);
         check->post(kAccessUnitTimeoutUs);
     }
-
     void postCmdTimeoutCheck(const sp<AMessage> &dnoeMsg) {
 
-		mCmdSending = true ;
 		mGenCmd++;
         sp<AMessage> check = new AMessage('chekcmd', id());
 		check->setInt32("gencmd", mGenCmd);
@@ -1681,12 +1594,19 @@ struct MyHandler : public AHandler {
 
             uint32_t rtpTime = strtoul(val.c_str(), &end, 10);
 
-            LOGI("track #%d: rtpTime=%u <=> ntp=%.2f", n, rtpTime, npt1);
-
+			LOGI("track #%d: rtpTime=%u <=> npt=%.2f,mFirstSeqNumInSegment %d", n, rtpTime, npt1,info->mFirstSeqNumInSegment);
             info->mPacketSource->setNormalPlayTimeMapping(
                     rtpTime, (int64_t)(npt1 * 1E6));
-
             ++n;
+			if(mSeekingTime > npt1 * 1E6)
+			{
+				onTimeUpdate(trackIndex,rtpTime,mSeekingTime);
+			}
+			else
+			{
+			    onTimeUpdate(trackIndex,rtpTime,(int64_t)(npt1 * 1E6));
+			}
+		
         }
 
         mSeekable = true;
@@ -1741,6 +1661,7 @@ private:
 	bool mPauseed;
 	int32_t mPendingCmd;
 	int64_t mSeekingTime;
+	bool   mdisconnecting;
 
 	sp<AMessage> mPendDoneMsg ;
 
@@ -1768,6 +1689,8 @@ private:
     Vector<TrackInfo> mTracks;
 
     sp<AMessage> mDoneMsg;
+
+	bool mDiscting;
 
     void setupTrack(size_t index) {
         sp<APacketSource> source =
@@ -1797,7 +1720,7 @@ private:
         info->mFirstSeqNumInSegment = 0;
         info->mNewSegment = true;
         info->mRTPAnchor = 0;
-        info->mNTPAnchorUs = -1;
+        info->mNTPAnchorUs = 0;
 
         unsigned long PT;
         AString formatDesc;
@@ -1817,7 +1740,7 @@ private:
         request.append(trackURL);
         request.append(" RTSP/1.0\r\n");
 
-        if (mTryTCPInterleaving) {
+        if (!mTryTCPInterleaving) {
             size_t interleaveIndex = 2 * (mTracks.size() - 1);
             info->mUsingInterleavedTCP = true;
             info->mRTPSocket = interleaveIndex;
@@ -1829,7 +1752,7 @@ private:
             request.append(interleaveIndex + 1);
         } else {
             unsigned rtpPort;
-            ARTPConnection::MakePortPair(
+            ARTPConnection::MakePortPair( 
                     &info->mRTPSocket, &info->mRTCPSocket, &rtpPort);
 
             request.append("Transport: RTP/AVP/UDP;unicast;client_port=");
@@ -1890,24 +1813,24 @@ private:
 
     void fakeTimestamps() {
         for (size_t i = 0; i < mTracks.size(); ++i) {
-            onTimeUpdate(i, 0, 0ll);
+           onTimeUpdate(i, 0, 0ll);
         }
     }
 
     void onTimeUpdate(int32_t trackIndex, uint32_t rtpTime, uint64_t ntpTime) {
-        LOGV("onTimeUpdate track %d, rtpTime = 0x%08x, ntpTime = 0x%016llx",
-             trackIndex, rtpTime, ntpTime);
+        LOGI("onTimeUpdate track %d, rtpTime = %d, ntpTime = %lld,mNTPAnchorUs =%lld",
+             trackIndex, rtpTime, ntpTime,mNTPAnchorUs);
 
-        int64_t ntpTimeUs = (int64_t)(ntpTime * 1E6 / (1ll << 32));
+       // int64_t ntpTimeUs = (int64_t)(ntpTime * 1E6 / (1ll << 32));
 
         TrackInfo *track = &mTracks.editItemAt(trackIndex);
 
         track->mRTPAnchor = rtpTime;
-        track->mNTPAnchorUs = ntpTimeUs;
+        track->mNTPAnchorUs = ntpTime;
 
         if (mNTPAnchorUs < 0) {
-            mNTPAnchorUs = ntpTimeUs;
-            mMediaAnchorUs = mLastMediaTimeUs;
+            mNTPAnchorUs = ntpTime;
+		    mMediaAnchorUs = mLastMediaTimeUs;
         }
     }
 
@@ -1919,8 +1842,19 @@ private:
             mDoneMsg->setInt32("result", OK);
             mDoneMsg->post();
             mDoneMsg = NULL;
-
-            mFirstAccessUnit = false;
+			
+		
+		   for (size_t i = 0; i < mTracks.size(); ++i) {
+		      TrackInfo *info = &mTracks.editItemAt(i);
+				info->mPacketSource->setNormalPlayTimeMapping(							
+						info->mRTPAnchor, info->mNTPAnchorUs);
+				
+		     if(!mSeekable)
+		     {
+			  onTimeUpdate(i,0,0);
+		     }
+		   }
+           mFirstAccessUnit = false;
         }
 
         TrackInfo *track = &mTracks.editItemAt(trackIndex);
@@ -1946,11 +1880,18 @@ private:
     }
 
     bool addMediaTimestamp(
-            int32_t trackIndex, const TrackInfo *track,
+            int32_t trackIndex, TrackInfo *track,
             const sp<ABuffer> &accessUnit) {
         uint32_t rtpTime;
         CHECK(accessUnit->meta()->findInt32(
                     "rtp-time", (int32_t *)&rtpTime));
+	    if(track->mRTPAnchor == 0 )
+		{
+		  track->mRTPAnchor	= rtpTime ;
+		}
+
+	    LOGI("addMediaTimestamp track %d, rtpTime = %d, track->mNTPAnchorUs = %lld,mNTPAnchorUs =%lld,mMediaAnchorUs =%lld",
+             trackIndex, rtpTime, track->mNTPAnchorUs,mNTPAnchorUs,mMediaAnchorUs);
 
         int64_t relRtpTimeUs =
             (((int64_t)rtpTime - (int64_t)track->mRTPAnchor) * 1000000ll)

@@ -47,6 +47,8 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     private static final int STATUS_INPUT_PIN_1 = 1;
     private static final int STATUS_INPUT_PIN_2 = 2;
 
+    private int mCallSub;
+    
     private final KeyguardUpdateMonitor mUpdateMonitor;
     private final KeyguardScreenCallback mCallback;
 
@@ -138,7 +140,7 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
         mEmergencyCallButton.setOnClickListener(this);
         mOkButton.setOnClickListener(this);
-
+        mUpdateMonitor.registerInfoCallback(this);
         mCurrentStatus = STATUS_INPUT_PUK;
         setFocusableInTouchMode(true);
     }
@@ -254,7 +256,7 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             }
             mCallback.pokeWakelock();
         } else if (v == mEmergencyCallButton) {
-            mCallback.takeEmergencyCallAction();
+            mCallback.takeEmergencyCallAction(mCallSub);
         } else if (v == mOkButton) {
             if(!checkPukLength()){
                 updateState();
@@ -379,9 +381,9 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 							remainTimes = attemptsRemaining;
 							mHeaderText.setText(updatePukRemainningTimes(false));
 						} else {
-							mOkButton.setEnabled(false);
+							//mOkButton.setEnabled(false);
 							String displayMessage = getContext().getString(
-									R.string.lockscreen_sim_puk_locked_message);
+							        R.string.unblocking_fail);
 							mHeaderText.setText(displayMessage);
 						}
 					} catch (Exception e) {
@@ -554,9 +556,15 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             return digit;
         }
     }
+    
+    public void onPhoneStateChanged(String newState){
+    	
+    	mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
+    }
 
-    public void onPhoneStateChanged(String newState) {
-        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
+    public void onPhoneStateChanged(String newState,int sub) {
+		mCallSub = sub;
+        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton,sub);
     }
 
     public void onRefreshBatteryInfo(boolean showBatteryInfo, boolean pluggedIn, int batteryLevel) {

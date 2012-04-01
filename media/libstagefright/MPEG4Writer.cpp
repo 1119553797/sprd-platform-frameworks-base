@@ -67,6 +67,8 @@ public:
     void addChunkOffset(off_t offset);
     status_t dump(int fd, const Vector<String16>& args) const;
 
+    size_t getNumSamples();
+
 private:
     MPEG4Writer *mOwner;
     sp<MetaData> mMeta;
@@ -282,6 +284,10 @@ status_t MPEG4Writer::Track::dump(
     result.append(buffer);
     ::write(fd, result.string(), result.size());
     return OK;
+}
+
+size_t MPEG4Writer::Track::getNumSamples() {
+    return mNumSamples;
 }
 
 status_t MPEG4Writer::addSource(const sp<MediaSource> &source) {
@@ -582,7 +588,7 @@ status_t MPEG4Writer::stop() {
     for (List<Track *>::iterator it = mTracks.begin();
          it != mTracks.end(); ++it) {
         status_t status = (*it)->stop();
-        if (err == OK && status != OK) {
+        if (err == OK && status != OK && ((*it)->getNumSamples() != 0)) {
             err = status;
         }
 
@@ -594,12 +600,18 @@ status_t MPEG4Writer::stop() {
 
     stopWriterThread();
 
+    LOGV("err = %d, maxDurationUs = %lld", err, maxDurationUs);
+
     // Do not write out movie header on error.
     if (err != OK) {
         fflush(mFile);
         fclose(mFile);
         mFile = NULL;
         mStarted = false;
+        if(maxDurationUs < 500000ll) { // max duration less than 500ms
+            LOGV("set err to OK when duration is 0s");
+            err = OK;
+        }
         return err;
     }
 
@@ -1969,11 +1981,15 @@ status_t MPEG4Writer::Track::threadEntry() {
 
     }
 
-    if (mSampleSizes.empty() ||                      // no samples written
-        (!mIsAudio && mNumStssTableEntries == 0) ||  // no sync frames for video
+    if ((!mIsAudio && mNumStssTableEntries == 0) ||  // no sync frames for video
         (OK != checkCodecSpecificData())) {          // no codec specific data
         err = ERROR_MALFORMED;
     }
+
+    if (mSampleSizes.empty()) {                      // no samples written
+        err = ERROR_END_OF_STREAM;
+    }
+
     mOwner->trackProgressStatus(this, -1, err);
 
     // Last chunk

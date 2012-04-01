@@ -25,6 +25,7 @@ oneway interface IPhoneStateListener {
     void onSignalStrengthChanged(int asu);
     void onMessageWaitingIndicatorChanged(boolean mwi);
     void onCallForwardingIndicatorChanged(boolean cfi);
+    void onCallForwardingIndicatorChangedByServiceClass(boolean cfi, int serviceClass);
 
     // we use bundle here instead of CellLocation so it can get the right subclass
     void onCellLocationChanged(in Bundle location);

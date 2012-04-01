@@ -7721,12 +7721,18 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             if (!canSelectText() || !requestFocus()) {
                 return;
             }
+            if(mLayout == null){
+                Log.w(LOG_TAG, "mLayout == null when startTextSelectionMode");
+                return;
+            }
 
             selectCurrentWord();
             getSelectionController().show();
             final InputMethodManager imm = (InputMethodManager)
                     getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(this, 0, null);
+            if (!(android.text.InputType.TYPE_NULL == this.getInputType())) {
+                imm.showSoftInput(this, 0, null);
+            }
             mIsInTextSelectionMode = true;
         }
     }
