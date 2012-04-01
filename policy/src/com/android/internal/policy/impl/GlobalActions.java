@@ -122,6 +122,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         mStatusBar.disable(StatusBarManager.DISABLE_EXPAND);
         mDialog.show();
+        mDialog.getListView().setFocusable(false);
     }
 
     /**
