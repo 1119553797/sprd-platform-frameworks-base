@@ -43,6 +43,7 @@
     <!--  0 == mobile, 1 == wifi. -->
     <integer name="def_network_preference">1</integer>
     <integer name="def_wifi_sleep_policy">2</integer>
+    <integer name="def_wifi_cellular_wlan">2</integer>
     <bool name="def_usb_mass_storage_enabled">true</bool>
     <bool name="def_wifi_on">false</bool>
     <bool name="def_networks_available_notification_on">true</bool>
