@@ -203,12 +203,10 @@ struct MyHandler : public AHandler {
 				seek(mSeekingTime,mPendDoneMsg);
 				break;
 			case 2:
-				mSeekPending = false;
 				if(!mPauseed)
 			      pause(-1,mPendDoneMsg);
 			    break;
 			case 3:
-				mSeekPending = false;
 				if(mPauseed)
 				{
 			    	play(mResumeTime,mPendDoneMsg);
@@ -306,16 +304,8 @@ struct MyHandler : public AHandler {
     }
 
     bool getSeekable() {
-	   if (mSeekable)
-	   {
 		 return true;
-	   }
-	   else
-	   {
-		 return false ;
-	   }
-
-    }
+	}
 	
     static void addRR(const sp<ABuffer> &buf) {
         uint8_t *ptr = buf->data() + buf->size();
@@ -834,8 +824,6 @@ struct MyHandler : public AHandler {
 					   LOGI("OPTIONS obsolete event.");
 					   break;
 				   }
-				   mCmdSending = false ;
-			
 				   postKeepAlive();
 				   break;
 			   }
@@ -1272,9 +1260,20 @@ struct MyHandler : public AHandler {
 		     		   mSeekPending = false;
 					   return ;
                 }
-			    {
+
+				sp<AMessage> seedMess = new AMessage('seeD', id());  //@handle server exception.
+				seedMess->setMessage("doneMsg", doneMsg);
+			    mSeekPending = false;
+				seedMess->post(6000000ll);
+			    break;
+            }
+			
+			case 'seeD':
+			{
 			      LOGI("seek completed. processPendCmd %d",mPendingCmd);
-				  mSeekPending = false;
+				  sp<AMessage> doneMsg;
+				  CHECK(msg->findMessage("doneMsg", &doneMsg));
+				  //mSeekPending = false;
 				  mCmdSending = false ;
 				  doneMsg->setInt32("result", NO_ERROR);
 		          doneMsg->post();
@@ -1282,9 +1281,9 @@ struct MyHandler : public AHandler {
 				  {
 				     processPendCmd();
 				  }
-				}
-			    break;
-            }
+				  break ;
+			}
+				
 
 			
 
@@ -1337,7 +1336,6 @@ struct MyHandler : public AHandler {
 
 			     mCmdSending = false ;
 				 mPauseed = true ;
-				 mSeekPending = false;
 				 sp<AMessage> doneMsg;
       			 CHECK(msg->findMessage("doneMsg", &doneMsg));
 				 
@@ -1367,6 +1365,7 @@ struct MyHandler : public AHandler {
 
                 if (!mSeekable ||!mPauseed) {
                     LOGE("This is a live stream, ignoring seek request.");
+				    mCmdSending = false ;
 				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
                     break;
@@ -1402,7 +1401,6 @@ struct MyHandler : public AHandler {
                 LOGE("resume PLAY completed with result %d (%s)",
                      result, strerror(-result));
 				mCmdSending = false;
-			   	mSeekPending = false;
 
 				mPauseed = false ;
 				mCheckPending = false;
