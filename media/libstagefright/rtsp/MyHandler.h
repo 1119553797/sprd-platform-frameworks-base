@@ -1128,10 +1128,16 @@ struct MyHandler : public AHandler {
                 sp<AMessage> doneMsg;
                 CHECK(msg->findMessage("doneMsg", &doneMsg));
 
-                if (!mSeekable) {
-                    LOGI("This is a live stream, ignoring seek request.");
+                if (!mSeekable || mPauseed) {
+                    LOGI("This is a live stream or stream mPauseed , seek fake.mPauseed ",mPauseed);
+				 	mSeekPending = false;
+				    mCmdSending = false ;
 				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
+				    if(mPendingCmd != 0)
+				    {
+				      processPendCmd();
+				    }
                     break;
                 }
 
@@ -1264,7 +1270,7 @@ struct MyHandler : public AHandler {
 				sp<AMessage> seedMess = new AMessage('seeD', id());  //@handle server exception.
 				seedMess->setMessage("doneMsg", doneMsg);
 			    mSeekPending = false;
-				seedMess->post(6000000ll);
+				seedMess->post(4000000ll);
 			    break;
             }
 			
@@ -1292,10 +1298,14 @@ struct MyHandler : public AHandler {
 			    sp<AMessage> doneMsg;
                 CHECK(msg->findMessage("doneMsg", &doneMsg));
 				// Session is paused now.
-		        if (!mSeekable) {
-                    LOGE("This is a live stream, ignoring seek request.");
+		        if (!mSeekable || mPauseed ) {
+                    LOGE("This is a live stream or stream paused, pause fake mPauseed %d",mPauseed);
 				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
+	                if(mPendingCmd != 0)
+				    {
+				     processPendCmd();
+				    }
                     break;
                 }
 
@@ -1364,10 +1374,15 @@ struct MyHandler : public AHandler {
 			     CHECK(msg->findMessage("doneMsg", &doneMsg));
 
                 if (!mSeekable ||!mPauseed) {
-                    LOGE("This is a live stream, ignoring seek request.");
+                    LOGE("This is a live stream or stream not paused, resume fake mPauseed %d",mPauseed);
 				    mCmdSending = false ;
 				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
+				    if(mPendingCmd != 0)
+					{
+				 	  processPendCmd();
+					}
+					
                     break;
                 }
 
@@ -1897,7 +1912,7 @@ private:
 
         int64_t ntpTimeUs = track->mNTPAnchorUs + relRtpTimeUs;
 
-        int64_t mediaTimeUs = mMediaAnchorUs + ntpTimeUs - mNTPAnchorUs;
+        int64_t mediaTimeUs = mMediaAnchorUs + ntpTimeUs ;//- mNTPAnchorUs;
 
         if (mediaTimeUs > mLastMediaTimeUs) {
             mLastMediaTimeUs = mediaTimeUs;

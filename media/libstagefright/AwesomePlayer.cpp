@@ -697,27 +697,42 @@ void AwesomePlayer::onBufferingUpdate() {
     int64_t cachedDurationUs;
     bool eos;
     if (getCachedDuration_l(&cachedDurationUs, &eos)) {
+
+		 int percentage = 100.0 * cachedDurationUs/((mHighWaterMarkUs+mLowWaterMarkUs)/2);
+		 if (percentage > 100 ||eos ) {
+		   percentage = 100;
+		 }
+
+		 if(mFlags&CACHE_UNDERRUN)
+         {
+		   notifyListener_l(MEDIA_BUFFERING_UPDATE,percentage);
+         }
         if ((mFlags & PLAYING) && !eos
                 && (cachedDurationUs < mLowWaterMarkUs)) {
             LOGI("cache is running low (%.2f secs) , pausing.",
                  cachedDurationUs / 1E6);
             mFlags |= CACHE_UNDERRUN;
             pause_l();
-            notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);  //@hong
-        } else // if (eos || cachedDurationUs > kHighWaterMarkUs) 
+		    notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START); 
+			notifyListener_l(MEDIA_BUFFERING_UPDATE, 0);
+   
+          } else // if (eos || cachedDurationUs > kHighWaterMarkUs) 
              {
 			 
-            if ((eos || cachedDurationUs > mHighWaterMarkUs) && (mFlags & CACHE_UNDERRUN)) { //@hong
+            if ((eos || cachedDurationUs > mHighWaterMarkUs) && (mFlags & CACHE_UNDERRUN)) { 
                 LOGI("cache has filled up (%.2f secs), resuming.",
                      cachedDurationUs / 1E6);
                 mFlags &= ~CACHE_UNDERRUN;
                 play_l();
-                notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); //@hong
-            } else if ((eos || (mCMMBLab && cachedDurationUs > mStartLowWaterMarkUs) || (!mCMMBLab && cachedDurationUs > (mHighWaterMarkUs+mLowWaterMarkUs)/2) ) 
-                        && (mFlags & PREPARING)) { //@hong
+				notifyListener_l(MEDIA_BUFFERING_UPDATE, 100);
+	            notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); 
+            } else if ((eos ||(cachedDurationUs > mStartLowWaterMarkUs) || (!mCMMBLab && cachedDurationUs > (mHighWaterMarkUs+mLowWaterMarkUs)/2) ) 
+                        && (mFlags & PREPARING)) { 
                 LOGV("cache has filled up (%.2f secs), prepare is done",
                      cachedDurationUs / 1E6);
-                finishAsyncPrepare_l();
+                // finishAsyncPrepare_l();// remove for fast prepare
+			     notifyListener_l(MEDIA_BUFFERING_UPDATE,percentage);
+                 finishAsyncPrepare_l();
             }
         }
     }
@@ -891,6 +906,7 @@ LOGV("play_l enter time:%d s",tv.tv_sec*1000+tv.tv_usec/1000);
             }
         } else {
             mAudioPlayer->resume();
+			mBufferingEventPending = false;
 			postBufferingEvent_l();
         }
     }
@@ -1206,7 +1222,7 @@ void AwesomePlayer::OnRTSPSeekDoneWrapper(void *cookie,int32_t status) {
 }
 
 void AwesomePlayer::onRTSPSeekDone(int32_t status) {
-	 LOGI("onRTSPSeekDone %d",status);  
+	 LOGI("onRTSPSeekDone %d,playing %d",status,mFlags & PLAYING);  
 	 if(status != OK )
 	 {
 	 	notifyListener_l(MEDIA_ERROR, MEDIA_ERROR_UNKNOWN, status);
@@ -1221,7 +1237,8 @@ void AwesomePlayer::onRTSPSeekDone(int32_t status) {
 		mFlags |=	 NOT_FIRST_PLAY;
 		mSystemTimeSourceForSync.resume();//@jgdu
 #endif	
-		postBufferingEvent_l();
+		mBufferingEventPending = false;
+	    postBufferingEvent_l();
 		postVideoEvent_l();
 	 }
 	 mSeeking = true;
@@ -2164,7 +2181,7 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
 			{
 				mLowWaterMarkUs = 2000000;
 				mHighWaterMarkUs = 10000000;
-				mStartLowWaterMarkUs = 8000000 ;
+				mStartLowWaterMarkUs = 6000000 ;
 				mCMMBLab = true ;
 			}
 
