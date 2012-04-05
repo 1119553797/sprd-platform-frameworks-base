@@ -132,6 +132,7 @@ public interface Phone extends SprdVideoPhone{
     static final String FEATURE_ENABLE_DUN = "enableDUN";
     static final String FEATURE_ENABLE_HIPRI = "enableHIPRI";
     static final String FEATURE_ENABLE_DM = "enableDM";
+    static final String FEATURE_ENABLE_WAP = "enableWAP";
 
     /**
      * Return codes for <code>enableApnType()</code>

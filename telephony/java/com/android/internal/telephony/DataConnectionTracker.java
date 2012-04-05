@@ -560,8 +560,18 @@ public abstract class DataConnectionTracker extends Handler {
             if (dataEnabled[apnId]) {
                 dataEnabled[apnId] = false;
                 enabledCount--;
-
-                onCleanUpConnection(true, Phone.REASON_APN_SWITCHED);
+                boolean isCleanupNeeded = true;
+                if (enabledCount > 0) {
+                    for (int i =0;i< APN_NUM_TYPES;i++) {
+                        if (dataEnabled[i] && isApnTypeActive(apnIdToType(i))) {
+                            isCleanupNeeded = false;
+                            break;
+                        }
+                    }
+                }
+                if (isCleanupNeeded) {
+                    onCleanUpConnection(true, Phone.REASON_APN_SWITCHED);
+                }
                 //if (enabledCount == 0) {
                 //    onCleanUpConnection(true, Phone.REASON_DATA_DISABLED);
                 //} else
