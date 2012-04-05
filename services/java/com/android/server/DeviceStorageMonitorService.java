@@ -16,7 +16,7 @@
 
 package com.android.server;
 
-import java.io.File;
+
 
 import com.android.server.am.ActivityManagerService;
 
@@ -59,6 +59,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
 import android.content.pm.IPackageStatsObserver;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -167,10 +170,65 @@ class DeviceStorageMonitorService extends Binder {
             if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
             {
                 bootCompleted = true;
+                
+                createTempFile();
             }
         }
 
     };
+
+    //create temp file
+    private final void createTempFile(){
+    	long size = getUserSpace();
+		File f = new File("/data/data/.space.temp");
+		int defaultSize = 1024 * 1024 * 5; //default space 5M
+		double fileSize = size * 0.8;
+		if(fileSize > defaultSize){
+			fileSize = defaultSize;
+		}
+		Log.i(TAG,"Temporary files size "+fileSize/1024 +" kB");
+		if((!f.exists()) || f.length() < fileSize){
+			final int fSize = (int)fileSize;
+    	new Thread(
+    			new Runnable(){
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+							String str = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+										+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+							int count = fSize / str.getBytes().length;
+							FileOutputStream file = null;
+							try{
+								long time = System.currentTimeMillis();
+								file = new FileOutputStream(new File("/data/data/.space.temp"));
+								byte[]bytes = str.getBytes();
+								for(int i = 0 ; i < count ; i++){
+									file.write(bytes);	
+									if(i > 10 && i % 10 == 0){
+										file.flush();				
+									}		
+								}
+								Log.i(TAG,"end time "+(System.currentTimeMillis()-time)/1000 + " m");
+								Log.i(TAG,"Temporary files created !");
+							}catch(Exception e){
+								Log.i(TAG,"create temp file exception!");
+								e.printStackTrace();
+							}
+						}
+    			}
+    	).start();
+		}else{
+			Log.i(TAG,"Temporary file do not need to create");
+		}
+    }
+    private final long getUserSpace(){
+    	File path = Environment.getDataDirectory();
+    	StatFs stat = new StatFs(path.getPath());
+    	long blockSize = stat.getBlockSize();
+    	long availableBlocks = stat.getAvailableBlocks();
+    	return blockSize * availableBlocks;
+    }
   //lino add 2012-12-08 end for NEWMS00148531
     class CachePackageDataObserver extends IPackageDataObserver.Stub {
         public void onRemoveCompleted(String packageName, boolean succeeded) {

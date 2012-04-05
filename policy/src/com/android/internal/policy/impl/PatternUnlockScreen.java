@@ -72,6 +72,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     private KeyguardUpdateMonitor mUpdateMonitor;
     private KeyguardScreenCallback mCallback;
 
+    private int mCallSub;
     /**
      * whether there is a fallback option available when the pattern is forgotten.
      */
@@ -230,7 +231,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         // emergency call buttons
         final OnClickListener emergencyClick = new OnClickListener() {
             public void onClick(View v) {
-                mCallback.takeEmergencyCallAction();
+                mCallback.takeEmergencyCallAction(mCallSub);
             }
         };
 
@@ -315,6 +316,11 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     private void refreshEmergencyButtonText() {
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyAlone);
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyTogether);
+    }
+    
+    private void refreshEmergencyButtonText(int sub) {
+        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyAlone,sub);
+        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyTogether,sub);
     }
 
     public void setEnableFallback(boolean state) {
@@ -632,7 +638,13 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         }.start();
     }
 
-    public void onPhoneStateChanged(String newState) {
-        refreshEmergencyButtonText();
+    public void onPhoneStateChanged(String newState,int sub) {
+    	mCallSub = sub;
+        refreshEmergencyButtonText(sub);
     }
+
+	@Override
+	public void onPhoneStateChanged(String newState) {
+		refreshEmergencyButtonText();
+	}
 }

@@ -54,6 +54,8 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     private final KeyguardUpdateMonitor mUpdateMonitor;
     private final KeyguardScreenCallback mCallback;
 
+    private int mCallSub;
+    
     private TextView mHeaderText;
     private TextView mPinText;
 
@@ -128,7 +130,6 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
         mEmergencyCallButton.setOnClickListener(this);
         mOkButton.setOnClickListener(this);
-        mUpdateMonitor.registerInfoCallback(this);
         setFocusableInTouchMode(true);
         mUpdateMonitor.registerInfoCallback(this);
     }
@@ -237,7 +238,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             }
             mCallback.pokeWakelock();
         } else if (v == mEmergencyCallButton) {
-            mCallback.takeEmergencyCallAction();
+            mCallback.takeEmergencyCallAction(mCallSub);
         } else if (v == mOkButton) {
             if(!checkPinLength()){
             	checkPin();
@@ -504,9 +505,15 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             return digit;
         }
     }
+    
+    public void onPhoneStateChanged(String newState){
+    	
+    	mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
+    }
 
-    public void onPhoneStateChanged(String newState) {
-        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
+    public void onPhoneStateChanged(String newState,int sub) {
+    	mCallSub = sub;
+        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton,sub);
     }
 
     public void onRefreshBatteryInfo(boolean showBatteryInfo, boolean pluggedIn, int batteryLevel) {

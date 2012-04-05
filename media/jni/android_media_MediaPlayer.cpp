@@ -536,11 +536,11 @@ static jobject
 android_media_MediaPlayer_getFrameAt(JNIEnv *env, jobject thiz, jint msec)
 {
 #ifdef USE_GETFRAME
-    LOGI("========================getFrameAt");
+    LOGI("[INNO/socketinterface/android_media_MediaPlayer.cpp] android_media_MediaPlayer_getFrameAt");
     
     sp<MediaPlayer> mp = getMediaPlayer(env, thiz);
     if (mp == NULL ) {
-    LOGI("2========================getFrameAt");
+    	LOGE("[INNO/socketinterface/android_media_MediaPlayer.cpp] getFrameAt mp == NULL");
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return NULL;
     }
@@ -581,7 +581,7 @@ android_media_MediaPlayer_getFrameAt(JNIEnv *env, jobject thiz, jint msec)
        }
     }
 
-    LOGI("1========================getFrameAt");
+    LOGI("[INNO/socketinterface/android_media_MediaPlayer.cpp] android_media_MediaPlayer_getFrameAt end");
     // Since internally SkBitmap uses reference count to manage the reference to
     // its pixels, it is important that the pixels (along with SkBitmap) be
     // available after creating the Bitmap is returned to Java app.

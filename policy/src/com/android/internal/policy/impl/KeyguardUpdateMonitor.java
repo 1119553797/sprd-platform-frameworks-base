@@ -169,7 +169,7 @@ public class KeyguardUpdateMonitor {
                         handleRingerModeChange(msg.arg1);
                         break;
                     case MSG_PHONE_STATE_CHANGED:
-                        handlePhoneStateChanged((String)msg.obj);
+                        handlePhoneStateChanged((String)msg.obj,msg.arg1);
                         break;
                 }
             }
@@ -270,16 +270,17 @@ public class KeyguardUpdateMonitor {
                             intent.getIntExtra(AudioManager.EXTRA_RINGER_MODE, -1), 0));
                 } else if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(action)) {
                     String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-                    mHandler.sendMessage(mHandler.obtainMessage(MSG_PHONE_STATE_CHANGED, state));
+                    int sub=intent.getIntExtra(EXTRA_PHONE_ID, 0);
+                    mHandler.sendMessage(mHandler.obtainMessage(MSG_PHONE_STATE_CHANGED,sub,0,state));
                 }
             }
         }, filter);
     }
 
-    protected void handlePhoneStateChanged(String newState) {
+    protected void handlePhoneStateChanged(String newState,int sub) {
         if (DEBUG) Log.d(TAG, "handlePhoneStateChanged(" + newState + ")");
         for (int i = 0; i < mInfoCallbacks.size(); i++) {
-            mInfoCallbacks.get(i).onPhoneStateChanged(newState);
+            mInfoCallbacks.get(i).onPhoneStateChanged(newState, sub);
         }
     }
 
@@ -467,6 +468,8 @@ public class KeyguardUpdateMonitor {
          * {@link TelephonyManager@EXTRA_STATE_RINGING}
          * {@link TelephonyManager#EXTRA_STATE_OFFHOOK
          */
+        void onPhoneStateChanged(String newState,int sub);
+        
         void onPhoneStateChanged(String newState);
     }
 

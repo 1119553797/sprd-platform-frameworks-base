@@ -833,6 +833,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 usedNetworkType = ConnectivityManager.TYPE_MOBILE_DUN;
             } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
                 usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
+            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_WAP)) {
+                usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
             }
         }
         NetworkStateTracker network = mNetTrackers[usedNetworkType];
@@ -996,6 +998,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_DUN;
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
+                } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_WAP)) {
+                    usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
                 }
             }
             tracker =  mNetTrackers[usedNetworkType];
@@ -1986,6 +1990,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 throw new IllegalArgumentException("Illeagal Feature: " + feature);
             }
         } else {
+            if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_WAP)) {
+                return TelephonyManager.getDefaultDataPhoneId(mContext);
+            }
             phoneId = PhoneFactory.DEFAULT_PHONE_ID;
         }
         return phoneId;

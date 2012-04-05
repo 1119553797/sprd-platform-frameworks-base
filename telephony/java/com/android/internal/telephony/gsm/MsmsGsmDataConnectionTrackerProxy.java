@@ -45,6 +45,8 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
 
     private static final int INVALID_PHONE_ID = -1;
 
+    private static final boolean MULTI_MODEM_SUPPORT = false;
+
     private static final Object sLock = new Object();
     public static int mPhoneID=-1;
     private static MsmsGsmDataConnectionTrackerProxy sInstance = new MsmsGsmDataConnectionTrackerProxy();
@@ -58,6 +60,8 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
     // sRequestConnectPhoneId when voiceCall Started and setup dataCall after
     // voiceCall ended.
     private static int sRequestPhoneIdBeforeVoiceCallEnd = INVALID_PHONE_ID;
+    private static int sVoicePhoneId = INVALID_PHONE_ID;
+
     public static MsmsGsmDataConnectionTrackerProxy getInstance() {
         //if (sInstance == null) {
         //    sInstance = new MsmsGsmDataConnectionTrackerProxy();
@@ -271,6 +275,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
             if (sActivePhoneId != phoneId) {
                 log("sActivePhoneId should equal to phoneId!!!");
                 log("onDisconnectDone out");
+                sTracker[phoneId].onDisconnectDoneInternalWithoutRetry(ar);
                 return;
             }
             if (sRequestConnectPhoneId == INVALID_PHONE_ID) {
@@ -372,13 +377,37 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
         return false;
     }
 
-    static void onVoiceCallEnded(int phoneId) {
-        /*
-        for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
-            sTracker[i].onVoiceCallEndedInternal();
+    static boolean isSupportMultiModem() {
+        return MULTI_MODEM_SUPPORT;
+    }
+
+    static boolean isAnotherCardVoiceing(int phoneId) {
+        boolean ret = false;
+
+        if((sVoicePhoneId == INVALID_PHONE_ID) || (sVoicePhoneId == phoneId)) {
+            ret = false;
+        } else {
+            ret = true;
         }
-        */
-        sTracker[phoneId].onVoiceCallEndedInternal();
+        log("isAnotherCardVoiceing phoneId: "+phoneId+" sVoicePhoneId: " + sVoicePhoneId +" result: " + ret);
+        return ret;
+    }
+
+    static void onVoiceCallStart(int phoneId) {
+        log("onVoiceCallStart sVoicePhoneId=" + phoneId);
+        sVoicePhoneId = phoneId;
+        for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+            sTracker[i].onVoiceCallStartInternal(phoneId);
+        }
+        //sTracker[phoneId].onVoiceCallStartInternal(phoneId);
+    }
+
+    static void onVoiceCallEnded(int phoneId) {
+        sVoicePhoneId = INVALID_PHONE_ID;
+        for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+            sTracker[i].onVoiceCallEndedInternal(phoneId);
+        }
+        //sTracker[phoneId].onVoiceCallEndedInternal();
     }
 
     static void setActivePhoneId(int phoneId) {

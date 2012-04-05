@@ -378,7 +378,7 @@ public class RingtoneManager {
         final Cursor internalCursor = getInternalRingtones();
         final Cursor drmCursor = mIncludeDrm ? getDrmRingtones() : null;
         final Cursor mediaCursor = getMediaRingtones();
-        final Cursor externalMusicCursor = (!mIncludeExternal || mType == TYPE_NOTIFICATION) ? null : getExternalMusics();
+        final Cursor externalMusicCursor = (!mIncludeExternal) ? null : getExternalMusics();
         return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor ,externalMusicCursor},
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
     }

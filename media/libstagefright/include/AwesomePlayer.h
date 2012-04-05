@@ -173,6 +173,7 @@ private:
     int64_t mDurationUs;
 
     uint32_t mFlags;
+	uint32_t mSeekPrePlaying;
     uint32_t mExtractorFlags;
 
     int32_t mVideoWidth, mVideoHeight;
@@ -187,9 +188,6 @@ private:
 	int64_t mHighWaterMarkUs ;
 	int64_t mStartLowWaterMarkUs ;
 
-	bool mfromPause ;
-	bool mforceStop;
-	bool mbeginPlay;
 
     int64_t mBitrate;  // total bitrate of the file (in bps) or -1 if unknown.
 

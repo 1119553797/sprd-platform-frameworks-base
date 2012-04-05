@@ -266,6 +266,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             mTargetState = STATE_ERROR;
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
             return;
+        } catch (NullPointerException ex) {
+            Log.w(TAG, "Stop when open: " + mUri, ex);
+            return;
         }
     }
 
@@ -315,6 +318,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             mCurrentState = STATE_ERROR;
             mTargetState = STATE_ERROR;
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
+            return;
+        } catch (NullPointerException ex) {
+            Log.w(TAG, "Stop when open: " + mUri, ex);
             return;
         }
     }
@@ -595,7 +601,12 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
      */
     private void release(boolean cleartargetstate) {
         if (mMediaPlayer != null) {
+            try{
             mMediaPlayer.reset();
+            }catch (Exception e) {
+                Log.e(TAG,"VideoView reset exception");
+                mMediaPlayer.reset();
+            }
             mMediaPlayer.release();
             mMediaPlayer = null;
             mCurrentState = STATE_IDLE;

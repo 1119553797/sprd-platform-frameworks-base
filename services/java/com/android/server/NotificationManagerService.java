@@ -418,7 +418,6 @@ public class NotificationManagerService extends INotificationManager.Stub
                 boolean usbConnected = extras.getBoolean(UsbManager.USB_CONNECTED);
                 boolean adbEnabled = (UsbManager.USB_FUNCTION_ENABLED.equals(
                                     extras.getString(UsbManager.USB_FUNCTION_ADB)));
-                Log.i(TAG,"--xj--usbConnected=" + usbConnected + " adbEnabled=" + adbEnabled);
                 updateAdbNotification(usbConnected && adbEnabled);
             } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)
                     || action.equals(Intent.ACTION_PACKAGE_RESTARTED)
@@ -454,6 +453,8 @@ public class NotificationManagerService extends INotificationManager.Stub
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 mInCall = (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_OFFHOOK));
                 updateNotificationPulse();
+            } else if (action.equals(Intent.ACTION_LOCALE_CHANGED)) {
+                mAdbNotification = null;
             }
 /*
 	    //add by liguxiang 10-07-11 for NEWMS00128631 begin

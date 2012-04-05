@@ -82,6 +82,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private KeyguardUpdateMonitor mUpdateMonitor;
     private KeyguardScreenCallback mCallback;
 
+    private int mCallSub;
+    
 //    private TextView mCarrier;
     private TextView[] mCarrier;
     private SlidingTab mSelector;
@@ -291,7 +293,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
         mEmergencyCallButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mCallback.takeEmergencyCallAction();
+                mCallback.takeEmergencyCallAction(mCallSub);
             }
         });
 
@@ -982,8 +984,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     	//add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen end
     }
 
-    public void onPhoneStateChanged(String newState) {
-        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
+    public void onPhoneStateChanged(String newState,int sub) {
+		mCallSub = sub;
+        mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton,sub);
     }
 
     //add start
@@ -1087,7 +1090,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 		}
 		if (callObserver != null) {
 			mContext.getContentResolver()
-					.unregisterContentObserver(smsObserver);
+					.unregisterContentObserver(callObserver);
 		}
 	}
 	
@@ -1229,5 +1232,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 			}
 		}
 		return 0;
+	}
+
+	@Override
+	public void onPhoneStateChanged(String newState) {
+		// TODO Auto-generated method stub
+		mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
 	}
 }

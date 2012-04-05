@@ -26,6 +26,7 @@ import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * SimPhoneBookInterfaceManager to provide an inter-process communication to
@@ -68,8 +69,8 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 						logd("GET_RECORD_SIZE Size " + recordSize[0]
 								+ " total " + recordSize[1] + " #record "
 								+ recordSize[2]);
-						mLock.notifyAll();
 					}
+                    notifyPending(ar);
 				}
 				break;
 			case EVENT_UPDATE_DONE:
@@ -86,7 +87,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 						Log.e("IccPhoneBookInterface", "[EVENT_UPDATE_DONE]", ar.exception);
                     }
                     // end
-                    mLock.notifyAll();
+                    notifyPending(ar);
                 }
                 break;
             case EVENT_LOAD_DONE:
@@ -99,15 +100,16 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 					       readRecordSuccess = false;
 						if (DBG)
 							logd("Cannot load ADN records   " );
-						//if (records != null) {
-						//	logd("Cannot load ADN records   size " + records.size() );
-							//records.clear();
-						//}
+						if (records != null) {
+							logd("Cannot load ADN records   size " + records.size() );
+							records.clear();
+						}
 					}
-					mLock.notifyAll();
+					notifyPending(ar);
 				}
 				break;
 			}
+
 		}
 	};
 
@@ -169,7 +171,8 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 		synchronized (mLock) {
 			checkThread();
 		       success = false;
-			Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE);
+            AtomicBoolean status = new AtomicBoolean(false);
+			Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, status);
 			AdnRecord oldAdn = null;
 			AdnRecord newAdn = null;
 			
@@ -191,12 +194,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 				adnCache.updateAdnBySearch(newid, oldAdn, newAdn, pin2,
 						response);
 			}
-			try {
-				mLock.wait();
-			} catch (InterruptedException e) {
-				logd("interrupted while trying to update by search");
-			}
-
+            waitForResult(status);
 		}
              Log.i("IccPhoneBookInterfaceManager","updateAdnRecordsInEfBySearch end "+success );
 		return success;
@@ -273,19 +271,14 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 		synchronized (mLock) {
 			checkThread();
 			recordSize = new int[3];
-
+            AtomicBoolean status = new AtomicBoolean(false);
 			// Using mBaseHandler, no difference in EVENT_GET_SIZE_DONE handling
-			Message response = mBaseHandler.obtainMessage(EVENT_GET_SIZE_DONE);
+			Message response = mBaseHandler.obtainMessage(EVENT_GET_SIZE_DONE, status);
 
 		
                   
 			phone.getIccFileHandler().getEFLinearRecordSize(efid, response);
-			try {
-				 Log.i("IccPhoneBookInterfaceManager", "getRecordsSize wait lock" );
-				mLock.wait();
-			} catch (InterruptedException e) {
-				logd("interrupted while trying to load from the SIM");
-			}
+		    waitForResult(status);
 		}
 
 		return recordSize;
@@ -316,14 +309,11 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 		synchronized (mLock) {
 			readRecordSuccess =  false;
 			checkThread();
-			Message response = mBaseHandler.obtainMessage(EVENT_LOAD_DONE);
+            AtomicBoolean status = new AtomicBoolean(false);
+			Message response = mBaseHandler.obtainMessage(EVENT_LOAD_DONE, status);
 			adnCache.requestLoadAllAdnLike(efid, adnCache
 					.extensionEfForEf(efid), response);
-			try {
-				mLock.wait();
-			} catch (InterruptedException e) {
-				logd("interrupted while trying to load from the SIM");
-			}
+            waitForResult(status);
 		}
 		if (DBG)
 			logd("getAdnRecordsInEF: readRecordSuccess =" + readRecordSuccess);
@@ -345,6 +335,25 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 			}
 		}
 	}
+
+    protected void waitForResult(AtomicBoolean status) {
+        while (!status.get()) {
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                logd("interrupted while trying to update by search");
+            }
+        }
+    }
+
+    private void notifyPending(AsyncResult ar) {
+        if (ar.userObj == null) {
+            return;
+        }
+        AtomicBoolean status = (AtomicBoolean) ar.userObj;
+        status.set(true);
+        mLock.notifyAll();
+    }
 
 	private int updateEfForIccType(int efid) {
 		// Check if we are trying to read ADN records

@@ -279,6 +279,24 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                     getContext().startActivity(intent);
                 }
             }
+            
+			public void takeEmergencyCallAction(int callSub) {
+				pokeWakelock(EMERGENCY_CALL_TIMEOUT);
+				boolean flg = false;
+				for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+					if (TelephonyManager.getDefault(i).getCallState() == TelephonyManager.CALL_STATE_OFFHOOK) {
+						mLockPatternUtils.resumeCall(i);
+						flg = true;
+						break;
+					}
+				}
+				if (!flg) {
+					Intent intent = new Intent(ACTION_EMERGENCY_DIAL);
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+							| Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+					getContext().startActivity(intent);
+				}
+			}
 
             public void pokeWakelock() {
                 getCallback().pokeWakelock();
