@@ -20,11 +20,12 @@
         android:layout_weight ="1"
         android:paddingBottom="3dip"
         android:padding="4dip"/>
-
+<!--
     <CheckBox android:id="@+id/auto_connect"
         style="?android:attr/textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/auto_connect" />
+-->
 </LinearLayout>
     
