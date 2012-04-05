@@ -128,6 +128,7 @@ struct MyHandler : public AHandler {
           mKeepAliveGeneration(0),
           mSeekingTime(0),
           mCmdSending(false),
+          mDiscting(false),
           mlocalTimestamps(false){
           
 		if (!strncasecmp("rtsp://127.0.0.1:8554/CMMBAudioVideo",mSessionURL.c_str(),35)) //@Hong. SpeedupCMMB
@@ -188,6 +189,7 @@ struct MyHandler : public AHandler {
 
     void disconnect(const sp<AMessage> &doneMsg) {
         mDoneMsg = doneMsg;
+		mDiscting = true ;
     	LOGI("disconnect.enter...");
         (new AMessage('abor', id()))->post();
     }
@@ -201,12 +203,10 @@ struct MyHandler : public AHandler {
 				seek(mSeekingTime,mPendDoneMsg);
 				break;
 			case 2:
-				mSeekPending = false;
 				if(!mPauseed)
 			      pause(-1,mPendDoneMsg);
 			    break;
 			case 3:
-				mSeekPending = false;
 				if(mPauseed)
 				{
 			    	play(mResumeTime,mPendDoneMsg);
@@ -304,16 +304,8 @@ struct MyHandler : public AHandler {
     }
 
     bool getSeekable() {
-	   if (mSeekable)
-	   {
 		 return true;
-	   }
-	   else
-	   {
-		 return false ;
-	   }
-
-    }
+	}
 	
     static void addRR(const sp<ABuffer> &buf) {
         uint8_t *ptr = buf->data() + buf->size();
@@ -832,8 +824,6 @@ struct MyHandler : public AHandler {
 					   LOGI("OPTIONS obsolete event.");
 					   break;
 				   }
-				   mCmdSending = false ;
-			
 				   postKeepAlive();
 				   break;
 			   }
@@ -895,7 +885,14 @@ struct MyHandler : public AHandler {
                 request.append("\r\n");
 
                 mConn->sendRequest(request.c_str(), reply);
+                if(mDiscting)
+                {
+				  mConn->disconnect(reply);
+			  	  mDoneMsg->post();
+				  LOGI("fast disc");
+                }
 		    	LOGI("abor over sending teardown...");
+				
                 break;
             }
 
@@ -1131,10 +1128,16 @@ struct MyHandler : public AHandler {
                 sp<AMessage> doneMsg;
                 CHECK(msg->findMessage("doneMsg", &doneMsg));
 
-                if (!mSeekable) {
-                    LOGI("This is a live stream, ignoring seek request.");
+                if (!mSeekable || mPauseed) {
+                    LOGI("This is a live stream or stream mPauseed , seek fake.mPauseed ",mPauseed);
+				 	mSeekPending = false;
+				    mCmdSending = false ;
 				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
+				    if(mPendingCmd != 0)
+				    {
+				      processPendCmd();
+				    }
                     break;
                 }
 
@@ -1258,13 +1261,25 @@ struct MyHandler : public AHandler {
 
                 if (result != OK) {
                        LOGE("seek failed, aborting.");
-               		   disconnect(doneMsg);
+               	       mDoneMsg = doneMsg;
+	                  (new AMessage('abor', id()))->post();
 		     		   mSeekPending = false;
 					   return ;
                 }
-			    {
+
+				sp<AMessage> seedMess = new AMessage('seeD', id());  //@handle server exception.
+				seedMess->setMessage("doneMsg", doneMsg);
+			    mSeekPending = false;
+				seedMess->post(4000000ll);
+			    break;
+            }
+			
+			case 'seeD':
+			{
 			      LOGI("seek completed. processPendCmd %d",mPendingCmd);
-				  mSeekPending = false;
+				  sp<AMessage> doneMsg;
+				  CHECK(msg->findMessage("doneMsg", &doneMsg));
+				  //mSeekPending = false;
 				  mCmdSending = false ;
 				  doneMsg->setInt32("result", NO_ERROR);
 		          doneMsg->post();
@@ -1272,9 +1287,9 @@ struct MyHandler : public AHandler {
 				  {
 				     processPendCmd();
 				  }
-				}
-			    break;
-            }
+				  break ;
+			}
+				
 
 			
 
@@ -1283,10 +1298,14 @@ struct MyHandler : public AHandler {
 			    sp<AMessage> doneMsg;
                 CHECK(msg->findMessage("doneMsg", &doneMsg));
 				// Session is paused now.
-		        if (!mSeekable) {
-                    LOGE("This is a live stream, ignoring seek request.");
+		        if (!mSeekable || mPauseed ) {
+                    LOGE("This is a live stream or stream paused, pause fake mPauseed %d",mPauseed);
 				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
+	                if(mPendingCmd != 0)
+				    {
+				     processPendCmd();
+				    }
                     break;
                 }
 
@@ -1327,9 +1346,15 @@ struct MyHandler : public AHandler {
 
 			     mCmdSending = false ;
 				 mPauseed = true ;
-				 mSeekPending = false;
 				 sp<AMessage> doneMsg;
       			 CHECK(msg->findMessage("doneMsg", &doneMsg));
+				 
+				 if (result != OK) {
+                   	  LOGE("pause1 fail, aborting.");
+                 	  mDoneMsg = doneMsg;
+	                 (new AMessage('abor', id()))->post();
+					  break;
+                 }
 				 doneMsg->setInt32("result", NO_ERROR);
 				 doneMsg->post();
 		
@@ -1349,9 +1374,15 @@ struct MyHandler : public AHandler {
 			     CHECK(msg->findMessage("doneMsg", &doneMsg));
 
                 if (!mSeekable ||!mPauseed) {
-                    LOGE("This is a live stream, ignoring seek request.");
+                    LOGE("This is a live stream or stream not paused, resume fake mPauseed %d",mPauseed);
+				    mCmdSending = false ;
 				    doneMsg->setInt32("result", NO_ERROR);
                     doneMsg->post();
+				    if(mPendingCmd != 0)
+					{
+				 	  processPendCmd();
+					}
+					
                     break;
                 }
 
@@ -1385,7 +1416,6 @@ struct MyHandler : public AHandler {
                 LOGE("resume PLAY completed with result %d (%s)",
                      result, strerror(-result));
 				mCmdSending = false;
-			   	mSeekPending = false;
 
 				mPauseed = false ;
 				mCheckPending = false;
@@ -1410,8 +1440,9 @@ struct MyHandler : public AHandler {
 
 				if (result != OK) {
                    	  LOGE("resume1 fail, aborting.");
-                 	  disconnect(doneMsg);
-		              break;
+                 	  mDoneMsg = doneMsg;
+	                 (new AMessage('abor', id()))->post();
+					  break;
                 }
 			    doneMsg->setInt32("result", NO_ERROR);
 			    doneMsg->post();
@@ -1457,51 +1488,20 @@ struct MyHandler : public AHandler {
                         msg->post();
                     } else {
                         LOGW("Never received any data, disconnecting.");
-					    disconnect(mDoneMsg);
+					    sp<AMessage> msg = new AMessage('abor', id());
+                        msg->post();
                     }
                 }
                 break;
             }
 	   case 'expt':  //@hong server exception
-		LOGI("server exception error.");
-             if (mDoneMsg != NULL) {
-					LOGI("server exception error1.");
-                    mDoneMsg->setInt32("result", UNKNOWN_ERROR);
-                    mDoneMsg->post();
-                    mDoneMsg = NULL;
-                }
-			    else
-				{
-					sp<AMessage> doneMsg = NULL;
-					if( mCmdSending )
-					{
-						msg->findMessage("doneMsg", &doneMsg);
-						if(doneMsg != NULL)
-						{
-						    LOGI("quit done  for ERROR_IO");
-							doneMsg->setInt32("result", ERROR_IO);
-							doneMsg->post();
-		                    doneMsg = NULL;
-						}
-						else
-						{
-						   for (size_t i = 0; i < mTracks.size(); ++i) {
-                              TrackInfo *info = &mTracks.editItemAt(i);
-                              info->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
-    	                   }
-						}
-					}
-					else
-					{
-				       for (size_t i = 0; i < mTracks.size(); ++i) {
-                          TrackInfo *info = &mTracks.editItemAt(i);
-                          info->mPacketSource->signalEOS(ERROR_END_OF_STREAM);
-    	               }
-					}
-				}
-    	    
-			break;
-            default:
+	   		{
+			 LOGI("server exception error.");
+             sp<AMessage> msg = new AMessage('abor', id());
+             msg->post();
+    	     break;
+	   		}
+	        default:
                 TRESPASS();
                 break;
         }
@@ -1702,6 +1702,8 @@ private:
     Vector<TrackInfo> mTracks;
 
     sp<AMessage> mDoneMsg;
+
+	bool mDiscting;
 
     void setupTrack(size_t index) {
         sp<APacketSource> source =
@@ -1910,7 +1912,7 @@ private:
 
         int64_t ntpTimeUs = track->mNTPAnchorUs + relRtpTimeUs;
 
-        int64_t mediaTimeUs = mMediaAnchorUs + ntpTimeUs - mNTPAnchorUs;
+        int64_t mediaTimeUs = mMediaAnchorUs + ntpTimeUs ;//- mNTPAnchorUs;
 
         if (mediaTimeUs > mLastMediaTimeUs) {
             mLastMediaTimeUs = mediaTimeUs;

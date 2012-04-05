@@ -1142,17 +1142,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if ((keyCode == KeyEvent.KEYCODE_HOME) && !down) {
             mHandler.removeCallbacks(mHomeLongPress);
         }
-
         // If the HOME button is currently being held, then we do special
         // chording with it.
         if (mHomePressed) {
-            
             // If we have released the home key, and didn't do anything else
             // while it was pressed, then it is time to go home!
             if (keyCode == KeyEvent.KEYCODE_HOME) {
                 if (!down) {
                     mHomePressed = false;
-                    
                     if (!canceled) {
                         // If an incoming call is ringing, HOME is totally disabled.
                         // (The user is already on the InCallScreen at this point,
@@ -1166,7 +1163,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         } catch (RemoteException ex) {
                             Log.w(TAG, "RemoteException from getPhoneInterface()", ex);
                         }
-        
+
+                        if(!incomingRinging){
+	                        try {
+	                            ITelephony telephonyService2 = getTelephonyService(1);
+	                            if (telephonyService2 != null) {
+	                                incomingRinging = telephonyService2.isRinging();
+	                            }
+	                        } catch (RemoteException ex) {
+	                            Log.w(TAG, "RemoteException fromgetPhoneInterface()", ex);
+	                        }
+                        }
+
                         if (incomingRinging) {
                             Log.i(TAG, "Ignoring HOME; there's a ringing incoming call.");
                         } else {

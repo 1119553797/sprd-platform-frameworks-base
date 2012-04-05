@@ -1331,7 +1331,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
             // Count permanent failures and remove the APN we just tried
             waitingApnsPermanentFailureCountDown -= cause.isPermanentFail() ? 1 : 0;
-            waitingApns.remove(0);
+            if (waitingApns!=null&&!waitingApns.isEmpty()) {
+                waitingApns.remove(0);
+            }
             if (DBG) log(String.format("onDataSetupComplete: waitingApns.size=%d" +
                             " waitingApnsPermanenatFailureCountDown=%d",
                             waitingApns.size(), waitingApnsPermanentFailureCountDown));

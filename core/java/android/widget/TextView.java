@@ -7721,6 +7721,10 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             if (!canSelectText() || !requestFocus()) {
                 return;
             }
+            if(mLayout == null){
+                Log.w(LOG_TAG, "mLayout == null when startTextSelectionMode");
+                return;
+            }
 
             selectCurrentWord();
             getSelectionController().show();

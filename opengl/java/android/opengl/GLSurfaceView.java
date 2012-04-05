@@ -975,13 +975,18 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
             mEglSurface = mEGLWindowSurfaceFactory.createWindowSurface(mEgl,
                     mEglDisplay, mEglConfig, holder);
 
-            if (mEglSurface == null || mEglSurface == EGL10.EGL_NO_SURFACE) {
+            if (mEglSurface == null) {
                 int error = mEgl.eglGetError();
                 if (error == EGL10.EGL_BAD_NATIVE_WINDOW) {
                     Log.e("EglHelper", "createWindowSurface returned EGL_BAD_NATIVE_WINDOW.");
                     return null;
                 }
                 throwEglException("createWindowSurface", error);
+            }
+
+            if (mEglSurface == EGL10.EGL_NO_SURFACE){
+                Log.e("EglHelper", "createWindowSurface returned EGL_NO_SURFACE.");
+                return null;
             }
 
             /*

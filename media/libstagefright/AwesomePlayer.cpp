@@ -59,7 +59,7 @@
 #include <private/media/VideoFrame.h>
 #endif
 
-#define _SYNC_USE_SYSTEM_TIME_
+//#define _SYNC_USE_SYSTEM_TIME_
 namespace android {
 
 static int64_t kLowWaterMarkUs = 500000ll;  // 2secs @hong
@@ -264,12 +264,10 @@ AwesomePlayer::AwesomePlayer()
       mVideoBuffer(NULL),
       mSuspensionState(NULL),
       mIsVideoPhoneStream(false),//sprd vt must
-      mfromPause(false),
-      mforceStop(false),
-      mbeginPlay(false),
 #ifdef USE_GETFRAME
       mVideoFrame(NULL), 
 #endif
+
       mSeeking (false){
     CHECK_EQ(mClient.connect(), OK);
 
@@ -699,27 +697,42 @@ void AwesomePlayer::onBufferingUpdate() {
     int64_t cachedDurationUs;
     bool eos;
     if (getCachedDuration_l(&cachedDurationUs, &eos)) {
+
+		 int percentage = 100.0 * cachedDurationUs/((mHighWaterMarkUs+mLowWaterMarkUs)/2);
+		 if (percentage > 100 ||eos ) {
+		   percentage = 100;
+		 }
+
+		 if(mFlags&CACHE_UNDERRUN)
+         {
+		   notifyListener_l(MEDIA_BUFFERING_UPDATE,percentage);
+         }
         if ((mFlags & PLAYING) && !eos
                 && (cachedDurationUs < mLowWaterMarkUs)) {
             LOGI("cache is running low (%.2f secs) , pausing.",
                  cachedDurationUs / 1E6);
             mFlags |= CACHE_UNDERRUN;
             pause_l();
-            notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);  //@hong
-        } else // if (eos || cachedDurationUs > kHighWaterMarkUs) 
+		    notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START); 
+			notifyListener_l(MEDIA_BUFFERING_UPDATE, 0);
+   
+          } else // if (eos || cachedDurationUs > kHighWaterMarkUs) 
              {
 			 
-            if ((eos || cachedDurationUs > mHighWaterMarkUs) && (mFlags & CACHE_UNDERRUN)) { //@hong
+            if ((eos || cachedDurationUs > mHighWaterMarkUs) && (mFlags & CACHE_UNDERRUN)) { 
                 LOGI("cache has filled up (%.2f secs), resuming.",
                      cachedDurationUs / 1E6);
                 mFlags &= ~CACHE_UNDERRUN;
                 play_l();
-                notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); //@hong
-            } else if ((eos || (mCMMBLab && cachedDurationUs > mStartLowWaterMarkUs) || (!mCMMBLab && cachedDurationUs > (mHighWaterMarkUs+mLowWaterMarkUs)/2) ) 
-                        && (mFlags & PREPARING)) { //@hong
+				notifyListener_l(MEDIA_BUFFERING_UPDATE, 100);
+	            notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); 
+            } else if ((eos ||(cachedDurationUs > mStartLowWaterMarkUs) || (!mCMMBLab && cachedDurationUs > (mHighWaterMarkUs+mLowWaterMarkUs)/2) ) 
+                        && (mFlags & PREPARING)) { 
                 LOGV("cache has filled up (%.2f secs), prepare is done",
                      cachedDurationUs / 1E6);
-                finishAsyncPrepare_l();
+                // finishAsyncPrepare_l();// remove for fast prepare
+			     notifyListener_l(MEDIA_BUFFERING_UPDATE,percentage);
+                 finishAsyncPrepare_l();
             }
         }
     }
@@ -743,7 +756,7 @@ void AwesomePlayer::partial_reset_l() {
         mVideoBuffer = NULL;
     }
 
-    {
+    if (mVideoSource != NULL){
         mVideoSource->stop();
 
         // The following hack is necessary to ensure that the OMX
@@ -756,9 +769,8 @@ void AwesomePlayer::partial_reset_l() {
             usleep(1000);
         }
 	LOGV("partial_reset_l waiting..ok.");
-	
-        IPCThreadState::self()->flushCommands();
     }
+    IPCThreadState::self()->flushCommands();
 
     CHECK_EQ(OK, initVideoDecoder(OMXCodec::kIgnoreCodecSpecificData));
 }
@@ -781,10 +793,13 @@ void AwesomePlayer::onStreamDone() {
 
         LOGV("INFO_DISCONTINUITY");
 
-        CHECK(mVideoSource != NULL);
+       // CHECK(mVideoSource != NULL);
 
         partial_reset_l();
-        postVideoEvent_l();
+	   
+	    if (mVideoSource != NULL) {
+            postVideoEvent_l();
+	    }
         return;
     } else if (mStreamDoneStatus != ERROR_END_OF_STREAM) {
         LOGV("MEDIA_ERROR %d", mStreamDoneStatus);
@@ -829,16 +844,14 @@ status_t AwesomePlayer::play() {
 
 	mFlags &= ~CACHE_UNDERRUN;
 	 if (mRTSPController != NULL) {
-		 if(mfromPause||mSeeking)
 		 {
 			 if (mFlags & PLAYING) {
+			 	  LOGE("play correct status 835"); 
 				  return OK;
 			 }
 			 mRTSPController->playAsync(mVideoTimeUs, OnRTSPResumeDoneWrapper, this);
-			 mfromPause = false ;
 		 }
 	 }
-	 mbeginPlay = true ;
      return play_l();
 }
 
@@ -848,7 +861,8 @@ status_t AwesomePlayer::play_l() {
 LOGV("play_l enter time:%d s",tv.tv_sec*1000+tv.tv_usec/1000);
 
     if (mFlags & PLAYING) {
-        return OK;
+	   LOGE("play_l correct status850"); 
+       return OK;
     }
 
     if (!(mFlags & PREPARED)) {
@@ -892,6 +906,7 @@ LOGV("play_l enter time:%d s",tv.tv_sec*1000+tv.tv_usec/1000);
             }
         } else {
             mAudioPlayer->resume();
+			mBufferingEventPending = false;
 			postBufferingEvent_l();
         }
     }
@@ -996,7 +1011,6 @@ status_t AwesomePlayer::forceStop(){
    	}
    
 	VideoPhoneDataDevice::getInstance().stop();
-	mforceStop = true ;
 	return pause();
 }
 
@@ -1060,7 +1074,7 @@ status_t AwesomePlayer::getFrameAt(int msec, VideoFrame** pvframe)
     }
     yuv420_to_rgb565(mVideoWidth, mVideoHeight, (unsigned char *)mLastVideoBuffer->data(), (unsigned short *)mVideoFrame->mData);
     *pvframe = mVideoFrame;
-    LOGI("====================AwesomePlayer::getFrameAt OK");
+    LOGI("[INNO/socketinterface/AwesomePlayer.cpp] AwesomePlayer::getFrameAt OK");
     return OK;
 }
 #endif
@@ -1069,17 +1083,21 @@ status_t AwesomePlayer::pause() {
 	Mutex::Autolock autoLock(mLock);
     mFlags &= ~CACHE_UNDERRUN;
 
-	if (mRTSPController != NULL &&!mforceStop) {
-		if (!(mFlags & PLAYING) || !mRTSPController->getSeekable()) {
-			  return OK;
-		 }
-  		 mRTSPController->pauseAsync(mVideoTimeUs, OnRTSPPauseDoneWrapper, this);
+	if (mRTSPController != NULL) {
+
+		if (!(mFlags & PLAYING))
+		{
+			LOGE("pause correct status1074"); 
+            return OK;
+		}
+  		mRTSPController->pauseAsync(mVideoTimeUs, OnRTSPPauseDoneWrapper, this);
 	}
     return pause_l();
 }
 
 status_t AwesomePlayer::pause_l(bool at_eos) {
     if (!(mFlags & PLAYING)) {
+		LOGE("pause correct status1084"); 
         return OK;
     }
 
@@ -1104,7 +1122,7 @@ status_t AwesomePlayer::pause_l(bool at_eos) {
 }
 
 bool AwesomePlayer::isPlaying() const {
-    return (mFlags & PLAYING) || (mFlags & CACHE_UNDERRUN);
+        return (mFlags & PLAYING) || (mFlags & CACHE_UNDERRUN);
 }
 
 void AwesomePlayer::setISurface(const sp<ISurface> &isurface) {
@@ -1204,23 +1222,28 @@ void AwesomePlayer::OnRTSPSeekDoneWrapper(void *cookie,int32_t status) {
 }
 
 void AwesomePlayer::onRTSPSeekDone(int32_t status) {
-
-	 LOGE("AwesomePlayer::onRTSPSeekDone status =%d,mSeeking %d",status,mSeeking);
+	 LOGI("onRTSPSeekDone %d,playing %d",status,mFlags & PLAYING);  
 	 if(status != OK )
 	 {
 	 	notifyListener_l(MEDIA_ERROR, MEDIA_ERROR_UNKNOWN, status);
 		return ;
 	 }
+	 if(mFlags & PLAYING)
+	 {
+		mAudioPlayer->resume();
+#ifdef _SYNC_USE_SYSTEM_TIME_
+		if(0== (mFlags & NOT_FIRST_PLAY))
+				 mSystemTimeSourceForSync.reset();
+		mFlags |=	 NOT_FIRST_PLAY;
+		mSystemTimeSourceForSync.resume();//@jgdu
+#endif	
+		mBufferingEventPending = false;
+	    postBufferingEvent_l();
+		postVideoEvent_l();
+	 }
 	 mSeeking = true;
-	 
 	 mSeekNotificationSent = true; 
-	 if (mFlags & PLAYING) {
-       postBufferingEvent_l();
-     }
- 
-
 	 notifyListener_l(MEDIA_SEEK_COMPLETE);
-
 }
 
 void AwesomePlayer::OnRTSPPauseDoneWrapper(void *cookie,int32_t status) {
@@ -1230,7 +1253,6 @@ void AwesomePlayer::OnRTSPPauseDoneWrapper(void *cookie,int32_t status) {
 
 void AwesomePlayer::onRTSPPauseDone(int32_t status) {
      LOGE("AwesomePlayer::onRTSPPauseDone status =%d mSeeking = %d,,mSeekTimeUs =%lld",status,mSeeking,mSeekTimeUs);
-	 mfromPause = true ;
      if(status != OK )
 	 {
 	 	notifyListener_l(MEDIA_ERROR, MEDIA_ERROR_UNKNOWN, status);
@@ -1251,7 +1273,6 @@ void AwesomePlayer::onRTSPResumeDone(int32_t status) {
 	   notifyListener_l(MEDIA_ERROR, MEDIA_ERROR_UNKNOWN, status);
 	   return ;
 	}
-	mfromPause = false ;
 }
 
 status_t AwesomePlayer::seekTo_l(int64_t timeUs) {
@@ -1262,26 +1283,25 @@ status_t AwesomePlayer::seekTo_l(int64_t timeUs) {
 		   LOGE("liveing streaming ,so can not seek");  
 		   return OK;
 		}
-		if (mbeginPlay)
-		{
-		 	mSeeking = true;
-			mSeekNotificationSent = false;
-			if (mFlags & CACHE_UNDERRUN) {
-				mFlags &= ~CACHE_UNDERRUN;
-				play_l();
-			}
-			mQueue.cancelEvent(mBufferingEvent->eventID());
-	        mBufferingEventPending = false;
-		    mAudioSource->pause();
-
-		   	if (mFlags &PLAYING){
-	  		    if (mAudioPlayer != NULL) {
-	              mAudioPlayer->pause();
-	            }
-			}
-			mQueue.cancelEvent(mBufferingEvent->eventID());
-	        mBufferingEventPending = false;
+		if (mFlags & CACHE_UNDERRUN) {
+			mFlags &= ~CACHE_UNDERRUN;
+			play_l();
 		}
+	   int32_t mSeekingflag = ((mFlags & PLAYING) || (mFlags & CACHE_UNDERRUN));
+	    LOGE("seekTo_l mSeekingflag %d",mSeekingflag);
+        if(mSeekingflag)
+        {
+			//pause_l();
+			mFlags &= ~CACHE_UNDERRUN;
+			cancelPlayerEvents(false/* keepBufferingGoing */);
+
+			if (mAudioPlayer != NULL) {
+	             mAudioPlayer->pause();
+	        }
+	       #ifdef _SYNC_USE_SYSTEM_TIME_
+	           mSystemTimeSourceForSync.pause();//@jgdu
+	       #endif    
+        }
 	    mSeekTimeUs = timeUs;
 	    mVideoTimeUs = timeUs ; 
         mRTSPController->seekAsync(timeUs, OnRTSPSeekDoneWrapper, this);
@@ -1399,6 +1419,14 @@ void AwesomePlayer::setVideoSource(sp<MediaSource> source) {
 
 status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 	LOGI("initVideoDecoder, mIsVideoPhoneStream: %d", mIsVideoPhoneStream);
+	
+	sp<MetaData> meta = mVideoTrack->getFormat();
+	
+	 const char *mime;
+	 CHECK(meta->findCString(kKeyMIMEType, &mime));
+
+	 LOGI("initVideoDecoder, mime %s",mime);
+	 
 	if (mIsVideoPhoneStream){
 	    mVideoSource = new ThreadedSource(OMXCodec::Create(
 	            mClient.interface(), mVideoTrack->getFormat(),
@@ -1436,6 +1464,21 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyWidth, &mVideoWidth));
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyHeight, &mVideoHeight));
+
+		if (!strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_AVC))
+		{
+			int32_t profile ;
+
+			mVideoTrack->getFormat()->findInt32(kKeyVideoProfile, &profile);
+
+			LOGI("avc profile 0x%x",profile);
+			
+			if(profile > 0x4d)
+			{
+			  mVideoSource.clear();
+			  return OK;
+			}
+		}
 
         status_t err = mVideoSource->start();
 
@@ -1562,15 +1605,15 @@ void AwesomePlayer::onVideoEvent() {
                     }
                 }
                 if (err == ERROR_TIMEOUT) {//cmmb
-                    LOGI("====================onVideoEvent ERROR_TIMEOUT");
-                    postVideoEvent_l();
+                    LOGI("[INNO/socketinterface/AwesomePlayer.cpp] onVideoEvent ERROR_TIMEOUT");
+                    postVideoEvent_l(100000ll);
                     return;
                 }
                 // So video playback is complete, but we may still have
                 // a seek request pending that needs to be applied
                 // to the audio track.
                 if (mSeeking) {
-                    LOGE("video stream ended while seeking!");
+                    LOGE("video stream ended while seeking!err %d",err);
                 }
                 finishSeekIfNecessary(-1);
 
@@ -2138,7 +2181,7 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
 			{
 				mLowWaterMarkUs = 2000000;
 				mHighWaterMarkUs = 10000000;
-				mStartLowWaterMarkUs = 8000000 ;
+				mStartLowWaterMarkUs = 6000000 ;
 				mCMMBLab = true ;
 			}
 
@@ -2158,12 +2201,12 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
     else if(!strncasecmp("cmmb://", mUri.string(), 7)) {
         sp<CmmbUriSource> uriSource;
          uriSource = new CmmbUriSource(mUri.string());
-		LOGI("================Create CMMBExtractor successful");
+		
 		sp<MediaExtractor> extractor = MediaExtractor::Create(uriSource, "video/cmmb");
 		if (extractor == NULL) {
 			return UNKNOWN_ERROR;
 		}
-		LOGV("Create CMMBExtractor successful");
+		LOGI("[INNO/socketinterface/AwesomePlayer.cpp] Create CMMBExtractor successful");
 		return setDataSource_l(extractor);
         }
 //added by innofidei end

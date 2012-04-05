@@ -1581,7 +1581,7 @@
     <string name="lockscreen_sim_error_message">SIM card is Invalid.</string>
 
     <!-- Shown in the lock screen to tell the user that their SIM/RUIM is locked and they must unlock it. -->
-    <string name="lockscreen_pin_locked_message">SIM/RUIM card is locked.</string>
+    <string name="lockscreen_pin_locked_message">SIM/USIM card is locked.</string>
 
     <!-- Shown in the lock screen when there is SIM card IO error. -->
     <string name="lockscreen_sim_error_message_short">Invalid Card.</string>
