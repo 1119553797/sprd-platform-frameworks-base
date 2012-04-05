@@ -1626,7 +1626,7 @@
     <string name="keyguard_password_enter_sim2_pin_code">Enter SIM2 PIN code</string>
     <string name="keyguard_password_enter_sim_pin_code">Enter SIM PIN code</string>
     <string name="keyguard_sim1_pin_accepted">SIM1 PIN Unlock Success</string>
-    <string name="keyguard_sim2_pin_accepted">SIM2 PIn Unlock Success</string>
+    <string name="keyguard_sim2_pin_accepted">SIM2 PIN Unlock Success</string>
     <string name="keyguard_sim_pin_accepted">SIM PIN Unlock Success</string>
     <string name="puk_accept">PUK is accepted</string>
     <string name="unblocking_fail">Unblocking failed, reenter the PUK</string>
