@@ -100,10 +100,11 @@ class GetInkeyInputResponseData extends ResponseData {
                 if (mIsUcs2) {
                     data = mInData.getBytes("UTF-16BE");
                 } else if (mIsPacked) {
-                    int size = mInData.length();
-
                     byte[] tempData = GsmAlphabet
                             .stringToGsm7BitPacked(mInData, 0, 0);
+
+                    int size = tempData.length - 1;
+
                     data = new byte[size];
                     // Since stringToGsm7BitPacked() set byte 0 in the
                     // returned byte array to the count of septets used...
