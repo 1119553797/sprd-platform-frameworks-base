@@ -265,6 +265,15 @@ public class PhoneNumberUtils
 
         for (int i = 0; i < len; i++) {
             char c = phoneNumber.charAt(i);
+
+			if (c == 'p' || c == 'P') {
+				c = PAUSE;
+			}
+
+			if (c == 'w' || c == 'W') {
+				c = WAIT;
+			}
+
             if (isNonSeparator(c)) {
                 ret.append(c);
             }

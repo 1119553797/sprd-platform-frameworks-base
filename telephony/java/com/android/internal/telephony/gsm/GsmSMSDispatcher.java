@@ -330,7 +330,10 @@ final class GsmSMSDispatcher extends SMSDispatcher {
                 encoding = details.codeUnitSize;
             }
         }
-    	SmsManager smsManager = SmsManager.getDefault();
+    	//SmsManager smsManager = SmsManager.getDefault();
+
+	Log.i("huibin","mGsmPhone.getPhoneId() is"+mGsmPhone.getPhoneId());
+	SmsManager smsManager = SmsManager.getDefault(mGsmPhone.getPhoneId());
 
         for (int i = 0; i < msgCount; i++) {
             SmsHeader.ConcatRef concatRef = new SmsHeader.ConcatRef();

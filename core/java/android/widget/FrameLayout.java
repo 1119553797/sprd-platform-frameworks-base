@@ -23,6 +23,7 @@ import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
@@ -289,6 +290,10 @@ public class FrameLayout extends ViewGroup {
         
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
+            if (child == null) {
+                Log.e("FrameLayout","child is null,FrameLayout ID =" + this.getId() + " i=" + i);
+                continue;
+            }
             if (child.getVisibility() != GONE) {
                 final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
