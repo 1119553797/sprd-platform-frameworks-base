@@ -108,7 +108,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     private RegistrantList gprsDetachedRegistrants = new RegistrantList();
     private RegistrantList psRestrictEnabledRegistrants = new RegistrantList();
     private RegistrantList psRestrictDisabledRegistrants = new RegistrantList();
-
     /**
      * Sometimes we get the NITZ time before we know what country we
      * are in. Keep the time zone information from the NITZ string so
@@ -153,7 +152,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     /** waiting period before recheck gprs and voice registration. */
     static final int DEFAULT_GPRS_CHECK_PERIOD_MILLIS = 60 * 1000;
-
+    protected static final int EVENT_ICC_STATUS_CHANGED = 39;
     /** Notification type. */
     static final int PS_ENABLED = 1001;            // Access Control blocks data service
     static final int PS_DISABLED = 1002;           // Access Control enables data service
@@ -181,6 +180,11 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 mLocalLanguageChange = true;
                 pollState();
                 updateSpnDisplay();
+            }else if(TelephonyIntents.SIM_CARD_PRESENT.equals(intent.getAction())){
+                mLocalLanguageChange = false;
+                Message msg=new Message();
+                msg.what=EVENT_ICC_STATUS_CHANGED;
+                GsmServiceStateTracker.this.handleMessage(msg);
             }else{
                 mLocalLanguageChange = false;
             }
@@ -220,7 +224,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         cm.setOnRestrictedStateChanged(this, EVENT_RESTRICTED_STATE_CHANGED, null);
         cm.registerForSIMReady(this, EVENT_SIM_READY, null);
         cm.setOnSimSmsReady(this, EVENT_SIM_SMS_READY, null);
-
         // system setting property AIRPLANE_MODE_ON is set in Settings.
         int airplaneMode = Settings.System.getInt(
                 phone.getContext().getContentResolver(),
@@ -240,6 +243,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         // Monitor locale change
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_LOCALE_CHANGED);
+        filter.addAction(TelephonyIntents.SIM_CARD_PRESENT);
         phone.getContext().registerReceiver(mIntentReceiver, filter);
     }
 
@@ -394,12 +398,18 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 // Signal strength polling stops when radio is off
                 queueNextSignalStrengthPoll();
                 break;
-
+            case EVENT_ICC_STATUS_CHANGED:
             case EVENT_RADIO_STATE_CHANGED:
                 // This will do nothing in the radio not
                 // available case
+                Log.v(LOG_TAG, "GsmServiceStateTracker.java---EVENT_RADIO_STATE_CHANGED");
             	if(SystemProperties.get("sys.power.off").equals("true"))
             		break;
+                if(phone.getIccCard().getIccCardState() == IccCard.State.ABSENT || phone.getIccCard().getIccCardState() == IccCard.State.UNKNOWN){
+                    Log.v(LOG_TAG, "GsmServiceStateTracker.java---card "+phone.getPhoneId()+"is absent");
+                    return;
+                }
+                Log.v(LOG_TAG, "GsmServiceStateTracker.java---card "+phone.getPhoneId()+" is ready");
                 setPowerStateToDesired();
                 pollState();
                 break;
@@ -570,10 +580,11 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     }
 
     protected void setPowerStateToDesired() {
+        Log.d(LOG_TAG, "setPowerStateToDesired " + "phone="+phone.getPhoneId()+" mDesiredPowerState="+mDesiredPowerState+" cm.getRadioState().isOn="+cm.getRadioState().isOn());
         // If we want it on and it's off, turn it on
         if (mDesiredPowerState
             && cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF) {
-            cm.setRadioPower(true, null);
+                   cm.setRadioPower(true, null);
         } else if (!mDesiredPowerState && cm.getRadioState().isOn()) {
             DataConnectionTracker dcTracker = phone.mDataConnection;
             if (! dcTracker.isDataConnectionAsDesired()) {
