@@ -127,6 +127,7 @@ bool TextureManager::isYuvFormat(int format)
     // Legacy/deprecated YUV formats
     case HAL_PIXEL_FORMAT_YCbCr_422_SP:
     case HAL_PIXEL_FORMAT_YCrCb_420_SP:
+    case HAL_PIXEL_FORMAT_YCbCr_420_SP:
     case HAL_PIXEL_FORMAT_YCbCr_422_I:
         return true;
     }

@@ -671,6 +671,10 @@ void Layer::unlockPageFlip(
     }
 }
 
+void Layer::finishPageFlip()
+{
+}
+
 void Layer::dump(String8& result, char* buffer, size_t SIZE) const
 {
     LayerBaseClient::dump(result, buffer, SIZE);
