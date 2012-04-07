@@ -130,7 +130,7 @@ public abstract class SMSDispatcher extends Handler {
     protected final Uri mRawUri = Uri.withAppendedPath(Telephony.Sms.CONTENT_URI, "raw");
 
     /** Maximum number of times to retry sending a failed SMS. */
-    public static int maxSendRetries;
+    private static int maxSendRetries;
     /** Delay before next send attempt on a failed SMS, in milliseconds. */
     private static final int SEND_RETRY_DELAY = 2000;
     /** single part SMS */
