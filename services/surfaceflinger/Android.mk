@@ -46,17 +46,12 @@ LOCAL_SHARED_LIBRARIES := \
 	libGLESv1_CM \
 	libbinder \
 	libui \
-	libsurfaceflinger_client \
-	libmali_wrapper
+	libsurfaceflinger_client
 
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)
 
 LOCAL_C_INCLUDES += hardware/libhardware/modules/gralloc
-LOCAL_C_INCLUDES += bionic/libc/private
-LOCAL_C_INCLUDES += frameworks/base/opengl/libs
-LOCAL_C_INCLUDES += hardware/sprd/hsdroid/libmali_wrapper
- 
 
 LOCAL_MODULE:= libsurfaceflinger
 
