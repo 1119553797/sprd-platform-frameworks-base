@@ -584,7 +584,7 @@ status_t LayerBuffer::BufferSource::fixYUV420Plane(copybit_image_t const *img, u
     mali_egl_img = egl_get_image_for_current_context(mTexture.image);
     status = mw.getStatus();
     if (NO_ERROR == status) {
-        mali_egl_image *internal_image = mw.lock_ptr(mali_egl_img);
+        mali_wrapper::EGLImageMALI* internal_image = mw.lock_ptr(mali_egl_img);
         if (internal_image) {
             void *internal_mali_data = NULL;
             gralloc_module_t const * module = LayerBuffer::getGrallocModule();
