@@ -484,6 +484,13 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 					break;
 				}
 
+                //NEWMS00170745
+                if(data == null){
+                    Log.i(LOG_TAG, "data == null");
+                    throw new IccFileTypeMismatch();
+                }
+
+
 				if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]
 						|| EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
 					throw new IccFileTypeMismatch();
