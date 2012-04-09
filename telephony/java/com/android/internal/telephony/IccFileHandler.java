@@ -166,7 +166,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
         // TODO(): Verify when path changes are done.
         phone.mCM.iccIO(COMMAND_GET_RESPONSE, IccConstants.EF_IMG, getEFPath(IccConstants.EF_IMG),
                 recordNum, READ_RECORD_MODE_ABSOLUTE,
-                GET_RESPONSE_EF_IMG_SIZE_BYTES, null, null, response);
+                GET_RESPONSE_EF_SIZE_BYTES, null, null, response);
     }
 
     /**
@@ -542,6 +542,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
      * @return root path of the file.
      */
     protected String getCommonIccEFPath(int efid) {
+        logd("iccfilehandler efid = " + efid);
         switch(efid) {
         case EF_ADN:
         case EF_FDN:
