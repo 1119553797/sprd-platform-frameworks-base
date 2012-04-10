@@ -2181,7 +2181,19 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
         case MotionEvent.ACTION_MOVE: {
             final int pointerIndex = ev.findPointerIndex(mActivePointerId);
-            final int y = (int) ev.getY(pointerIndex);
+            //changed for bug
+            //final int y = (int) ev.getY(pointerIndex);
+            int y = 0;
+
+            try {
+                y = (int) ev.getY(pointerIndex);
+            } catch (Exception e) {
+                //ArrayIndexOutOfBoundsException
+                Log.e("AbsListView","getY outofBounds.mActivePointerId=" + mActivePointerId + " pointerIndex=" + pointerIndex +
+                        " mNumPointers=" + ev.getPointerCount());
+                return true;
+            }
+
             deltaY = y - mMotionY;
             switch (mTouchMode) {
             case TOUCH_MODE_DOWN:
