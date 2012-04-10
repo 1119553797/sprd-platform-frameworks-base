@@ -26,6 +26,7 @@ import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccCardApplication;
 import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.IccFileHandler;
+import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.Phone;
 
 import com.android.internal.telephony.IccException;
@@ -383,17 +384,44 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				result = (IccIoResult) ar.result;
 				response = lc.onLoaded;
 
+                if (ar.exception != null) {
+                    Log.d(LOG_TAG, "EVENT_READ_IMG_DONE ar fail");
+                    sendResult(response, null, ar.exception);
+                    break;
+                }
 				iccException = result.getException();
                 //Icon Display Start
 				if (iccException != null) {
-					sendResult(response, result.payload, ar.exception);
-                } else {
-                    phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid, getEFPath(lc.efid),
-                                    lc.recordNum,
-                                    READ_RECORD_MODE_ABSOLUTE,
-                                    lc.recordSize, null, null,
-                                    obtainMessage(EVENT_READ_RECORD_DONE, lc));
-				}
+                    Log.d(LOG_TAG, "EVENT_READ_IMG_DONE icc fail");
+                    sendResult(response, null, iccException);
+                    break;
+                }
+                data = result.payload;
+                fileid = lc.efid;
+                recordNum = lc.recordNum;
+                Log.d(LOG_TAG, "data = " + IccUtils.bytesToHexString(data) +
+                        " fileid = " + fileid + " recordNum = " + recordNum);
+                if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
+                    Log.d(LOG_TAG, "EVENT_READ_IMG_DONE TYPE_EF mismatch");
+                    throw new IccFileTypeMismatch();
+                }
+                if (EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
+                    Log.d(LOG_TAG, "EVENT_READ_IMG_DONE EF_TYPE_LINEAR_FIXED mismatch");
+                    throw new IccFileTypeMismatch();
+                }
+                lc.recordSize = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
+                size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
+                       + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
+                lc.countRecords = size / lc.recordSize;
+                if (lc.loadAll) {
+                    lc.results = new ArrayList<byte[]>(lc.countRecords);
+                }
+                Log.d(LOG_TAG, "recordsize:" + lc.recordSize + "counts:" + lc.countRecords);
+                phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid, getEFPath(lc.efid),
+                                lc.recordNum,
+                                READ_RECORD_MODE_ABSOLUTE,
+                                lc.recordSize, null, null,
+                                obtainMessage(EVENT_READ_RECORD_DONE, lc));
                 //Icon Display End
 				break;
 			case EVENT_READ_ICON_DONE:
@@ -483,6 +511,13 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 					sendResult(response, null, iccException);
 					break;
 				}
+
+                //NEWMS00170745
+                if(data == null){
+                    Log.i(LOG_TAG, "data == null");
+                    throw new IccFileTypeMismatch();
+                }
+
 
 				if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]
 						|| EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
@@ -669,10 +704,9 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 					if (lc.recordNum > lc.countRecords) {
 						sendResult(response, lc.results, null);
 					} else {
-					   
-				             path = getEFPath(lc.efid) ;
-						phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid,
-										path, lc.recordNum,
+                        //path = getEFPath(lc.efid) ;
+						phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid, getEFPath(lc.efid),
+                                        lc.recordNum,
 										READ_RECORD_MODE_ABSOLUTE,
 										lc.recordSize, null, null,
 										obtainMessage(EVENT_READ_RECORD_DONE,0,pathNum,
@@ -797,6 +831,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 		}
 
 		
+        Log.d(LOG_TAG, "tdusimfilehandler efid = " + efid);
 		
 		switch (efid) {
 		case EF_SMS:

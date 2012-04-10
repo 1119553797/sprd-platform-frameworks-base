@@ -354,8 +354,20 @@ public class StkService extends Handler implements AppInterface {
             }
             break;
         case SET_UP_IDLE_MODE_TEXT:
-            sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
-                    0, null);
+            StkLog.d(this,  "<" + mPhoneId + ">" +
+                    "icon = "                 + ((DisplayTextParams)cmdParams).textMsg.icon +
+                    " iconSelfExplanatory = " + ((DisplayTextParams)cmdParams).textMsg.iconSelfExplanatory +
+                    " text = "                + ((DisplayTextParams)cmdParams).textMsg.text);
+            if(((DisplayTextParams)cmdParams).textMsg.icon != null
+                    && ((DisplayTextParams)cmdParams).textMsg.iconSelfExplanatory == false
+                    && ((DisplayTextParams)cmdParams).textMsg.text == null){
+                sendTerminalResponse(cmdParams.cmdDet, ResultCode.CMD_DATA_NOT_UNDERSTOOD, false,
+                        0, null);
+                return;
+            } else {
+                sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false,
+                        0, null);
+            }
             break;
         //Deal With DTMF Message Start
         case SEND_DTMF:

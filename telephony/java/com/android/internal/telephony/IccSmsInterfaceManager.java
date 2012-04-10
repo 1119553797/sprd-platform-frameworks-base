@@ -138,6 +138,10 @@ public abstract class IccSmsInterfaceManager extends ISms.Stub {
         mDispatcher.sendText(destAddr, scAddr, text, sentIntent, deliveryIntent);
     }
 
+    public void setMaxSendRetries(int smsRetryTimes) {
+        mDispatcher.setMaxSendRetries(smsRetryTimes);
+    }
+
     /**
      * Send a multi-part text based SMS.
      *

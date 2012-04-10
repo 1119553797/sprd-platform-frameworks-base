@@ -235,6 +235,5 @@ interface ISms {
      * @see #enableCellBroadcastRange(int, int)
      */
     boolean disableCellBroadcastRange(int startMessageId, int endMessageId);
-
-
+    void setMaxSendRetries(int smsRetryTimes);
 }
