@@ -127,9 +127,10 @@ final class GsmSMSDispatcher extends SMSDispatcher {
      */
     protected  void handleSmsCB(AsyncResult ar){
        String pduString = (String) ar.result;
-       Log.i(TAG,"handleSmsCB pduString"+pduString);
+       Log.i(TAG,"handleSmsCB pduString :"+pduString + "PhoneId: " + mGsmPhone.getPhoneId());
 
-       byte[][]  bytePages = SmsCBMessage.getSmsCBPage(pduString,pduString.length(),mGsmPhone.getContext(),mResolver);
+       //byte[][]  bytePages = SmsCBMessage.getSmsCBPage(pduString,pduString.length(),mGsmPhone.getContext(),mResolver);
+	   byte[][]  bytePages = SmsCBMessage.getSmsCBPage(pduString,pduString.length(),mGsmPhone.getContext(),mResolver,mGsmPhone.getPhoneId());
 
      //  processSmsCBPage(page);     
        Log.i(TAG,"handleSmsCB bytePages");

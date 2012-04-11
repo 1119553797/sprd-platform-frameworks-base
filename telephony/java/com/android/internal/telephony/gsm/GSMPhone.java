@@ -1667,8 +1667,7 @@ public abstract class GSMPhone extends PhoneBase {
 
         Log.i(LOG_TAG, "! This functionality is not implemented for GSM.");
         mSMS.getCellBroadcastSmsConfig(response);
-        response.sendToTarget();
-   
+        //response.sendToTarget();
  }
 
     public void setCellBroadcastSmsConfig(int[] configValuesArray, Message response){
@@ -1676,8 +1675,7 @@ public abstract class GSMPhone extends PhoneBase {
 	Log.i(LOG_TAG, " This setCellBroadcastSmsConfig  is  implemented for GSM.");
          mSMS.setCellBroadcastConfig(configValuesArray,response);
         
-          response.sendToTarget();        
-
+          //response.sendToTarget();        
     }
 
     public void registerForGprsAttached(Handler h,int what, Object obj) {
