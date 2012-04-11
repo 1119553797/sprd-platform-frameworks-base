@@ -89,6 +89,7 @@ LOCAL_SRC_FILES:= \
 	android/graphics/DrawFilter.cpp \
 	android/graphics/CreateJavaOutputStreamAdaptor.cpp \
 	android/graphics/Graphics.cpp \
+	android/graphics/HarfbuzzSkia.cpp \
 	android/graphics/Interpolator.cpp \
 	android/graphics/LayerRasterizer.cpp \
 	android/graphics/MaskFilter.cpp \
@@ -107,6 +108,8 @@ LOCAL_SRC_FILES:= \
 	android/graphics/Rasterizer.cpp \
 	android/graphics/Region.cpp \
 	android/graphics/Shader.cpp \
+	android/graphics/TextLayout.cpp \
+	android/graphics/TextLayoutCache.cpp \
 	android/graphics/Typeface.cpp \
 	android/graphics/Utils.cpp \
 	android/graphics/Xfermode.cpp \
@@ -164,6 +167,8 @@ LOCAL_C_INCLUDES += \
 	external/icu4c/i18n \
 	external/icu4c/common \
 	external/jpeg \
+	external/harfbuzz/contrib \
+	external/harfbuzz/src \
 	frameworks/opt/emoji
 
 LOCAL_SHARED_LIBRARIES := \
@@ -195,6 +200,7 @@ LOCAL_SHARED_LIBRARIES := \
 	libmedia \
 	libwpa_client \
 	libjpeg \
+	libharfbuzz \
 	libnfc_ndef
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)

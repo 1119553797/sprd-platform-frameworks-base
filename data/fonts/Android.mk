@@ -18,7 +18,8 @@ include $(CLEAR_VARS)
 copy_from :=                \
     DroidSans.ttf           \
     DroidSans-Bold.ttf      \
-    DroidSansArabic.ttf     \
+    DroidKufi-Regular.ttf     \
+    DroidNaskh-Regular.ttf     \
     DroidSansHebrew.ttf     \
     DroidSansThai.ttf       \
     DroidSerif-Regular.ttf  \
@@ -26,6 +27,8 @@ copy_from :=                \
     DroidSerif-Italic.ttf   \
     DroidSerif-BoldItalic.ttf   \
     DroidSansMono.ttf        \
+    Lohit-Bengali.ttf        \
+    hindi.ttf               \
     Clockopia.ttf
 
 ifneq ($(NO_FALLBACK_FONT),true)
