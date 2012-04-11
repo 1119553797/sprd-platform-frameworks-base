@@ -19,9 +19,11 @@ package com.android.internal.app;
 import com.android.internal.app.AlertActivity;
 import com.android.internal.app.AlertController;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -93,7 +95,6 @@ public final class RingtonePickerActivity extends AlertActivity implements
     private Ringtone mDefaultRingtone;
 
     private StorageManager mStorageManager = null;
-
     private DialogInterface.OnClickListener mRingtoneClickListener =
             new DialogInterface.OnClickListener() {
 
@@ -178,6 +179,9 @@ public final class RingtonePickerActivity extends AlertActivity implements
             mStorageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
             mStorageManager.registerListener(mStorageListener);
         }
+
+		IntentFilter filter = new IntentFilter(Intent.ACTION_UMS_CONNECTED);
+		registerReceiver(usbReceiver, filter);
     }
     
     public void onResume(){
@@ -368,6 +372,7 @@ public final class RingtonePickerActivity extends AlertActivity implements
         intent.putExtra("command", "play");
         this.sendBroadcast(intent);
       //add by yangqingan 2011-11-22 for NEWMS00132817 end
+        unregisterReceiver(usbReceiver);
     }
 	@Override
     protected void onDestroy() {
@@ -410,4 +415,16 @@ public final class RingtonePickerActivity extends AlertActivity implements
             finish();
         }
     };
+
+    BroadcastReceiver usbReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.d(TAG, "UsbRecever---onReceive = " + intent.getAction());
+			if (intent.getAction().equals(Intent.ACTION_UMS_CONNECTED)) {
+				finish();
+			}
+		}
+    };
+
 }
