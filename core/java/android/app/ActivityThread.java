@@ -3689,20 +3689,26 @@ public final class ActivityThread {
         try {
         	Looper.loop();
         } catch (OutOfMemoryError e) {
-        	String file = "/data/data/";
         	String pname = thread.getProcessName();
-        	File dir = new File(file + pname + "/");
+        	String file = "/data/misc/hprofs/";
+        	File dir = new File(file);
+        	if (!dir.exists() || !dir.isDirectory() || !dir.canWrite()) {
+        		file = "/data/data/" + pname + "/";
+        		dir = new File(file);
+        	}
+        	
         	if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
         		File[] files = dir.listFiles();
         		for (File f : files) {
-        			if (f.isFile() && f.getPath().endsWith("hprof")) {
+        			String p = f.getPath();
+        			if (f.isFile() && p.contains(pname) && p.endsWith("hprof")) {
         				f.delete();
         			}
         		}
         		int pid = Process.myPid();
         		Date d = new Date();
         		String date = d.getDate() + "-" + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
-        		file += pname + "/oom_" + pname +  "_" + pid + "_" + date + ".hprof";
+        		file += pname +  "_" + pid + "_" + date + ".hprof";
 
         		try {
         			android.os.Debug.dumpHprofData(file);
@@ -3710,11 +3716,6 @@ public final class ActivityThread {
         			e1.printStackTrace();
         		}
         	}
-        	
-//        	String fileName = "/data/misc/";
-//        	int pid = Process.myPid();
-//        	String pname = thread.getProcessName();
-//        	fileName += "oom_" + pname + "_" + pid + "_" + date + ".hprof";
         	
 			throw e;
         }

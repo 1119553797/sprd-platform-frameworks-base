@@ -288,7 +288,7 @@ public class AdnRecord implements Parcelable {
 		String[] pair;
 		if (TextUtils.isEmpty(s1) || isEmptyAnr(s1)) {
 
-			s1 = "";
+		    s1 = "";
 
 		}
 
@@ -297,13 +297,23 @@ public class AdnRecord implements Parcelable {
 			s2 = "";
 
 		}
-
-
+        s1=parseAnrFormat(s1);
+        s2=parseAnrFormat(s2);
 
 		return stringCompareNullEqualsEmpty(s1, s2);
 
 	}
 
+    public String parseAnrFormat(String str) {
+        String tmpStr[] = str.split(AdnRecord.ANR_SPLIT_FLG);
+        str = "";
+        for (int i = 0; i < tmpStr.length; i++) {
+            if (!TextUtils.isEmpty(tmpStr[i])) {
+                str = str + tmpStr[i];
+            }
+        }
+        return str;
+    }
 
 	public boolean isEmpty() {
 		return TextUtils.isEmpty(alphaTag)
@@ -359,6 +369,7 @@ public class AdnRecord implements Parcelable {
 		//		+ "number: " + number + "anr: " + anr);
 		//Log.i("AdnRecord", "isEqual  adn  EMAIL comp:"
 		//		+ stringCompareEmails(emails, adn.emails));
+        Log.i("AdnRecord", "anr="+stringCompareAnr(anr, adn.anr));
 		return (stringCompareNullEqualsEmpty(alphaTag, adn.alphaTag)
 				&& stringCompareNullEqualsEmpty(number, adn.number)
 				&& stringCompareEmails(emails, adn.emails) && stringCompareAnr(

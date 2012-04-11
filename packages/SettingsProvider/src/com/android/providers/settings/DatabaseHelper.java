@@ -1097,6 +1097,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //                    R.string.airplane_mode_toggleable_radios);
             loadIntegerSetting(stmt, Settings.System.WIFI_SLEEP_POLICY,
                     R.integer.def_wifi_sleep_policy);
+            loadIntegerSetting(stmt, Settings.System.WIFI_CELLULAR_WLAN,
+                    R.integer.def_wifi_cellular_wlan);
     
             loadBooleanSetting(stmt, Settings.System.AUTO_TIME,
                     R.bool.def_auto_time); // Sync time to NITZ

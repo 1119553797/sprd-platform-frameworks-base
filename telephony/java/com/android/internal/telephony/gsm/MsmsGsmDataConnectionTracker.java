@@ -193,13 +193,31 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
     }
 
     @Override
+    protected void onVoiceCallStarted() {
+        MsmsGsmDataConnectionTrackerProxy.onVoiceCallStart(phone.getPhoneId());
+    }
+    public void onVoiceCallStartInternal(int phoneId) {
+        log("onVoiceCallStartInternal[" + phone.getPhoneId() + "]: state=" + state +" phoneId="+phoneId);
+        if(phoneId == phone.getPhoneId()) {
+            if (state == State.CONNECTED && ! mGsmPhone.mSST.isConcurrentVoiceAndData()) {
+                stopNetStatPoll();
+                phone.notifyDataConnection(Phone.REASON_VOICE_CALL_STARTED);
+            }
+        } else if(!MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()){
+            if (state == State.CONNECTED) {
+                stopNetStatPoll();
+                phone.notifyDataConnection(Phone.REASON_VOICE_CALL_STARTED);
+            }
+        }
+    }
+    @Override
     protected void onVoiceCallEnded() {
         MsmsGsmDataConnectionTrackerProxy.onVoiceCallEnded(phone.getPhoneId());
     }
 
-    public void onVoiceCallEndedInternal() {
-        log("onVoiceCallEndedInternal[" + phone.getPhoneId() + "]: state=" + state);
-        if (state == State.CONNECTED) {
+    public void onVoiceCallEndedInternal(int phoneId) {
+        log("onVoiceCallEndedInternal[" + phone.getPhoneId() + "]: state=" + state +" phoneId="+phoneId);
+        if (state == State.CONNECTED && phoneId == phone.getPhoneId()) {
             if (!mGsmPhone.mSST.isConcurrentVoiceAndData()) {
                 startNetStatPoll();
                 phone.notifyDataConnection(Phone.REASON_VOICE_CALL_ENDED);
@@ -207,9 +225,12 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
                 // clean slate after call end.
                 resetPollStats();
             }
+        } else if (state == State.CONNECTED && !MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()) {
+            startNetStatPoll();
+            phone.notifyDataConnection(Phone.REASON_VOICE_CALL_ENDED);
         } else if (state == State.DISCONNECTING) {
             cleanUpConnection(true, Phone.REASON_VOICE_CALL_ENDED);
-        } else {
+        } else if(MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
             // reset reconnect timer
             mRetryMgr.resetRetryCount();
             mReregisterOnReconnectFailure = false;

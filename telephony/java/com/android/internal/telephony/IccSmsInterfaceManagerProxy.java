@@ -111,4 +111,8 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
         return mIccSmsInterfaceManager.disableCellBroadcastRange(startMessageId, endMessageId);
     }
 
+    public void setMaxSendRetries(int smsRetryTimes) {
+        mIccSmsInterfaceManager.setMaxSendRetries(smsRetryTimes);
+    }
+
 }

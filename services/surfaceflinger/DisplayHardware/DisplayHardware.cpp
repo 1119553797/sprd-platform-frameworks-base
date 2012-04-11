@@ -328,10 +328,11 @@ void DisplayHardware::flip(const Region& dirty) const
     
     if (mFlags & PARTIAL_UPDATES) {
         //overlord : IC regin requirement make us do this ,maybe better way ,try to fix me
-        const Region newDirty(dirty.intersect(bounds()));
-        const Rect b(newDirty.getBounds());
-        eglSetSwapRectangleANDROID(dpy, surface,
-                b.left, b.top, b.width(), b.height());
+        //const Region newDirty(dirty.intersect(bounds()));
+        //const Rect b(newDirty.getBounds());
+        //eglSetSwapRectangleANDROID(dpy, surface,
+        //        b.left, b.top, b.width(), b.height());
+
         //overlord : IC regin requirement make us do this ,maybe better way ,try to fix me
 
         mNativeWindow->setUpdateRectangle(dirty.getBounds());

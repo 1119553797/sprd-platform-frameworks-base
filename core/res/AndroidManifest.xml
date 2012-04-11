@@ -1341,6 +1341,7 @@
         </activity>
         <activity android:name="com.android.internal.app.RingtonePickerActivity"
                 android:theme="@style/Theme.Dialog.Alert"
+                android:configChanges="orientation|keyboardHidden"
                 android:excludeFromRecents="true"
                 android:multiprocess="true">
             <intent-filter>

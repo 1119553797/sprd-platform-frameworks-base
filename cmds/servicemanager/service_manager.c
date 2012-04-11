@@ -7,6 +7,7 @@
 #include <fcntl.h>
 
 #include <private/android_filesystem_config.h>
+#include <sys/reboot.h>
 
 #include "binder.h"
 
@@ -55,6 +56,15 @@ static struct {
 
 void *svcmgr_handle;
 
+int isImportmantServices(uint16_t *name)
+{
+	if (str16eq(name, "SurfaceFlinger") || str16eq(name, "media.audio_flinger") ||
+        str16eq(name, "media.player") || str16eq(name, "media.camera") || str16eq(name, "media.audio_policy")) {
+		return 1;
+	}
+
+	return 0;
+}
 const char *str8(uint16_t *x)
 {
     static char buf[128];
@@ -234,8 +244,13 @@ int svcmgr_handler(struct binder_state *bs,
     case SVC_MGR_ADD_SERVICE:
         s = bio_get_string16(msg, &len);
         ptr = bio_get_ref(msg);
-        if (do_add_service(bs, s, len, ptr, txn->sender_euid))
-            return -1;
+		if (do_add_service(bs, s, len, ptr, txn->sender_euid)) {
+			if (isImportmantServices(s)) {
+				LOGE("Import Services Cause Exception,Need Reboot !!!");
+				reboot(RB_AUTOBOOT);
+			}
+		    return -1;
+		}
         break;
 
     case SVC_MGR_LIST_SERVICES: {

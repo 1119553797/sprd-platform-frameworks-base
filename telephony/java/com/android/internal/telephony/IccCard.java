@@ -43,7 +43,6 @@ public abstract class IccCard {
     private RegistrantList mAbsentRegistrants = new RegistrantList();
     private RegistrantList mPinLockedRegistrants = new RegistrantList();
     private RegistrantList mNetworkLockedRegistrants = new RegistrantList();
-
     private boolean mDesiredPinLocked;
     private boolean mDesiredFdnEnabled;
     private boolean mIccPinLocked = true; // Default to locked
@@ -418,7 +417,7 @@ public abstract class IccCard {
         boolean transitionedIntoAbsent;
         boolean transitionedIntoNetworkLocked;
         boolean transitionedIntoIccBlocked;
-
+        boolean transitionedIntoCardPresent;
         State oldState, newState;
         oldState = mState;
         mIccCardStatus = newCardStatus;
@@ -437,7 +436,7 @@ public abstract class IccCard {
         transitionedIntoNetworkLocked = (oldState != State.NETWORK_LOCKED
                 && newState == State.NETWORK_LOCKED);
         transitionedIntoIccBlocked = (oldState != State.BLOCKED && newState == State.BLOCKED);
-
+        transitionedIntoCardPresent =  !transitionedIntoAbsent;
         if (transitionedIntoPinLocked) {
             if(mDbg) log("Notify SIM pin or puk locked.");
             mPinLockedRegistrants.notifyRegistrants();
@@ -457,8 +456,11 @@ public abstract class IccCard {
             if(mDbg) log("Notify ICC blocked.");
             broadcastIccStateChangedIntent(INTENT_VALUE_ICC_BLOCKED, null);
         } else if(mState == State.READY){
-
+            if(mDbg) log("Notify SIM ready.");
             broadcastGetIccStatusDoneIntent();
+	  }else if(transitionedIntoCardPresent){
+	      if(mDbg) log("Notify SIM present.");
+	      broadcastIccCardPresentIntent();
 	  }
 	  
     }
@@ -545,7 +547,12 @@ public abstract class IccCard {
 		
         ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
     }
-
+    public void broadcastIccCardPresentIntent() {
+        Intent intent = new Intent(TelephonyIntents.SIM_CARD_PRESENT);
+        intent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
+        if(mDbg) log("Broadcasting intent SIM_CARD_PRESENT , phoneid is " + mPhone.getPhoneId());
+        ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
+    }
     public void queryFacilityFdnDone() {
         Log.e(mLogTag, "IccCard  queryFacilityFdnDone");
         int serviceClassX = CommandsInterface.SERVICE_CLASS_VOICE +

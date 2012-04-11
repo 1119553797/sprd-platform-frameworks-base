@@ -97,6 +97,17 @@ public final class SmsManager {
         }
     }
 
+    public void setMaxSendRetries(int smsRetryTimes) {
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
+            if (iccISms != null) {
+                iccISms.setMaxSendRetries(smsRetryTimes);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+    }
+
     /**
      * Divide a message text into several fragments, none bigger than
      * the maximum SMS message size.

@@ -876,7 +876,8 @@ void SurfaceFlinger::handleRepaint()
             // (pushed to the framebuffer).
             // This is needed because PARTIAL_UPDATES only takes one
             // rectangle instead of a region (see DisplayHardware::flip())
-            mDirtyRegion.set(mInvalidRegion.bounds());
+            //mDirtyRegion.set(mInvalidRegion.bounds());
+            mDirtyRegion.set(hw.bounds());
         } else {
             // we need to redraw everything (the whole screen)
             mDirtyRegion.set(hw.bounds());
