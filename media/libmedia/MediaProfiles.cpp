@@ -567,6 +567,13 @@ MediaProfiles::createDefaultImageEncodingQualityLevels(MediaProfiles *profiles)
     levels->mLevels.add(80);
     levels->mLevels.add(90);
     profiles->mImageEncodingQualityLevels.add(levels);
+
+    levels = new ImageEncodingQualityLevels();
+    levels->mCameraId = 1;
+    levels->mLevels.add(70);
+    levels->mLevels.add(80);
+    levels->mLevels.add(90);
+    profiles->mImageEncodingQualityLevels.add(levels);
 }
 
 /*static*/ MediaProfiles*
