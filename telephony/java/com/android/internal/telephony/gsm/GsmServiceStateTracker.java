@@ -567,9 +567,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 break;
 
             case EVENT_SIM_SMS_READY:
-                intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_IS_SIM_SMS_READY, phone.getPhoneId()));
+                intent = new Intent(TelephonyIntents.ACTION_IS_SIM_SMS_READY);
                 intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
                 intent.putExtra("isReady", true);
+                intent.putExtra("phoneid", phone.getPhoneId());
                 phone.getContext().sendStickyBroadcast(intent);
                 break;
 
@@ -652,8 +653,11 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     }
     //add by liguxiang 08-19-11 for custom spn display end
 
-   public String setRadioType(int type){
+   public String setRadioType(int type,boolean airplane){
        Log.d(LOG_TAG,"RadioType = " + type);
+       if(airplane){
+           type=TelephonyManager.NETWORK_TYPE_UNKNOWN;
+       }
        switch (type) {
        case TelephonyManager.NETWORK_TYPE_UMTS:
        case TelephonyManager.NETWORK_TYPE_HSDPA:
@@ -677,7 +681,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             plmn = ss.getOperatorNumeric();
         }
 		int phoneId = phone.getPhoneId();
-
+        boolean airplaneMode = Settings.System.getInt(phone.getContext().getContentResolver(),
+                Settings.System.AIRPLANE_MODE_ON, 0) != 0;
         // For emergency calls only, pass the EmergencyCallsOnly string via EXTRA_PLMN
         if (mEmergencyOnly && cm.getRadioState().isOn()) {
             plmn = Resources.getSystem().
@@ -693,11 +698,11 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             spn = plmnDisplay(spn);
             boolean showSpn = !mEmergencyOnly
                 && (rule & SIMRecords.SPN_RULE_SHOW_SPN) == SIMRecords.SPN_RULE_SHOW_SPN
-                && (ss.getState() != ServiceState.STATE_OUT_OF_SERVICE);
+                && (ss.getState() != ServiceState.STATE_OUT_OF_SERVICE) && !airplaneMode;
             boolean showPlmn =
-                (rule & SIMRecords.SPN_RULE_SHOW_PLMN) == SIMRecords.SPN_RULE_SHOW_PLMN;
-            Log.d(LOG_TAG,"curSpn = " + curSpn + "  showSpn = " + showSpn
-                    + "  curPlmn = " + curPlmn + "  showPlmn = " + showPlmn+" mNetworkType "+networkType);
+                (rule & SIMRecords.SPN_RULE_SHOW_PLMN) == SIMRecords.SPN_RULE_SHOW_PLMN && !airplaneMode;
+            Log.d(LOG_TAG,"spn = " + spn + "  showSpn = " + showSpn
+                    + "  plmn = " + plmn + "  showPlmn = " + showPlmn+" mNetworkType "+setRadioType(networkType,airplaneMode));
 
             Intent intent = new Intent(Intents.SPN_STRINGS_UPDATED_ACTION);
             intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
@@ -706,7 +711,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             intent.putExtra(Intents.EXTRA_SHOW_PLMN, showPlmn);
             intent.putExtra(Intents.EXTRA_PLMN, plmn);
             intent.putExtra(Intents.EXTRA_PHONE_ID, phoneId);
-            intent.putExtra(Intents.EXTRA_NETWORK_TYPE, setRadioType(networkType));
+            intent.putExtra(Intents.EXTRA_NETWORK_TYPE, setRadioType(networkType,airplaneMode));
             phone.getContext().sendStickyBroadcast(intent);
         }
 

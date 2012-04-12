@@ -127,9 +127,10 @@ final class GsmSMSDispatcher extends SMSDispatcher {
      */
     protected  void handleSmsCB(AsyncResult ar){
        String pduString = (String) ar.result;
-       Log.i(TAG,"handleSmsCB pduString"+pduString);
+       Log.i(TAG,"handleSmsCB pduString :"+pduString + "PhoneId: " + mGsmPhone.getPhoneId());
 
-       byte[][]  bytePages = SmsCBMessage.getSmsCBPage(pduString,pduString.length(),mGsmPhone.getContext(),mResolver);
+       //byte[][]  bytePages = SmsCBMessage.getSmsCBPage(pduString,pduString.length(),mGsmPhone.getContext(),mResolver);
+	   byte[][]  bytePages = SmsCBMessage.getSmsCBPage(pduString,pduString.length(),mGsmPhone.getContext(),mResolver,mGsmPhone.getPhoneId());
 
      //  processSmsCBPage(page);     
        Log.i(TAG,"handleSmsCB bytePages");
@@ -531,10 +532,11 @@ final class GsmSMSDispatcher extends SMSDispatcher {
         // Unless CBS is implemented for GSM, this point should be unreachable.
         Log.i(TAG, "setCellBroadcastConfig! The functionality cell broadcast sms is  implemented for GSM.");
 
-	 int count = 5 ;//NO_OF_INTS_STRUCT_1 ,see in class CellBroadcastSmsSettingActivity
+	 int count = 4;//NO_OF_INTS_STRUCT_1 ,see in class CellBroadcastSmsSettingActivity
 	 Log.i(TAG, "setCellBroadcastConfig! The functionality cell configValuesArray[0] "+configValuesArray[0]+ "mCm" + mCm);
 	 if(mCm != null){
 	SmsBroadcastConfigInfo[]  config = new SmsBroadcastConfigInfo[configValuesArray.length/count];	
+	Log.i(TAG,"configValuesArray.length:"+configValuesArray.length);
 	int j =0;
        	for(int i= 0;i<configValuesArray.length;i+=count){
 			
@@ -561,7 +563,7 @@ final class GsmSMSDispatcher extends SMSDispatcher {
 
               for(int i=0; i<config.length; i++){
 
-                     Log.i(TAG, "setCellBroadcastConfig! config. "+config[i].toString());
+                     Log.i(TAG, "setCellBroadcastConfig! config["+i+"]:"+config[i].toString());
 
 		 }        
 			

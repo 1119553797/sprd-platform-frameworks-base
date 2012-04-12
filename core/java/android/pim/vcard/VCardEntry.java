@@ -1136,6 +1136,257 @@ public class VCardEntry {
         }
     }
 
+    public void pushIntoContentResolverByApplyBatch(ContentResolver resolver,
+            ArrayList<ContentProviderOperation> operationList, int rawContactsResultIndex) {
+
+        // After applying the batch the first result's Uri is returned so it is important that
+        // the RawContact is the first operation that gets inserted into the list
+        ContentProviderOperation.Builder builder =
+            ContentProviderOperation.newInsert(RawContacts.CONTENT_URI);
+        String myGroupsId = null;
+        if (mAccount != null) {
+            builder.withValue(RawContacts.ACCOUNT_NAME, mAccount.name);
+            builder.withValue(RawContacts.ACCOUNT_TYPE, mAccount.type);
+
+            // Assume that caller side creates this group if it does not exist.
+            if (ACCOUNT_TYPE_GOOGLE.equals(mAccount.type)) {
+                final Cursor cursor = resolver.query(Groups.CONTENT_URI, new String[] {
+                        Groups.SOURCE_ID },
+                        Groups.TITLE + "=?", new String[] {
+                        GOOGLE_MY_CONTACTS_GROUP }, null);
+                try {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        myGroupsId = cursor.getString(0);
+                    }
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+            }
+        } else {
+            builder.withValue(RawContacts.ACCOUNT_NAME, null);
+            builder.withValue(RawContacts.ACCOUNT_TYPE, null);
+        }
+        operationList.add(builder.build());
+
+        if (!nameFieldsAreEmpty()) {
+            builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+            builder.withValueBackReference(StructuredName.RAW_CONTACT_ID, rawContactsResultIndex);
+            builder.withValue(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE);
+
+            builder.withValue(StructuredName.GIVEN_NAME, mGivenName);
+            builder.withValue(StructuredName.FAMILY_NAME, mFamilyName);
+            builder.withValue(StructuredName.MIDDLE_NAME, mMiddleName);
+            builder.withValue(StructuredName.PREFIX, mPrefix);
+            builder.withValue(StructuredName.SUFFIX, mSuffix);
+
+            if (!(TextUtils.isEmpty(mPhoneticGivenName)
+                    && TextUtils.isEmpty(mPhoneticFamilyName)
+                    && TextUtils.isEmpty(mPhoneticMiddleName))) {
+                builder.withValue(StructuredName.PHONETIC_GIVEN_NAME, mPhoneticGivenName);
+                builder.withValue(StructuredName.PHONETIC_FAMILY_NAME, mPhoneticFamilyName);
+                builder.withValue(StructuredName.PHONETIC_MIDDLE_NAME, mPhoneticMiddleName);
+            } else if (!TextUtils.isEmpty(mPhoneticFullName)) {
+                builder.withValue(StructuredName.PHONETIC_GIVEN_NAME, mPhoneticFullName);
+            }
+
+            builder.withValue(StructuredName.DISPLAY_NAME, getDisplayName());
+            operationList.add(builder.build());
+        }
+
+        if (mNickNameList != null && mNickNameList.size() > 0) {
+            for (String nickName : mNickNameList) {
+                builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+                builder.withValueBackReference(Nickname.RAW_CONTACT_ID, rawContactsResultIndex);
+                builder.withValue(Data.MIMETYPE, Nickname.CONTENT_ITEM_TYPE);
+                builder.withValue(Nickname.TYPE, Nickname.TYPE_DEFAULT);
+                builder.withValue(Nickname.NAME, nickName);
+                operationList.add(builder.build());
+            }
+        }
+
+        if (mPhoneList != null) {
+            for (PhoneData phoneData : mPhoneList) {
+                builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+                builder.withValueBackReference(Phone.RAW_CONTACT_ID, rawContactsResultIndex);
+                builder.withValue(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
+
+                builder.withValue(Phone.TYPE, phoneData.type);
+                if (phoneData.type == Phone.TYPE_CUSTOM) {
+                    builder.withValue(Phone.LABEL, phoneData.label);
+                }
+                builder.withValue(Phone.NUMBER, phoneData.data);
+                if (phoneData.isPrimary) {
+                    builder.withValue(Phone.IS_PRIMARY, 1);
+                }
+                operationList.add(builder.build());
+            }
+        }
+
+        if (mOrganizationList != null) {
+            for (OrganizationData organizationData : mOrganizationList) {
+                builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+                builder.withValueBackReference(Organization.RAW_CONTACT_ID, rawContactsResultIndex);
+                builder.withValue(Data.MIMETYPE, Organization.CONTENT_ITEM_TYPE);
+                builder.withValue(Organization.TYPE, organizationData.type);
+                if (organizationData.companyName != null) {
+                    builder.withValue(Organization.COMPANY, organizationData.companyName);
+                }
+                if (organizationData.departmentName != null) {
+                    builder.withValue(Organization.DEPARTMENT, organizationData.departmentName);
+                }
+                if (organizationData.titleName != null) {
+                    builder.withValue(Organization.TITLE, organizationData.titleName);
+                }
+                if (organizationData.phoneticName != null) {
+                    builder.withValue(Organization.PHONETIC_NAME, organizationData.phoneticName);
+                }
+                if (organizationData.isPrimary) {
+                    builder.withValue(Organization.IS_PRIMARY, 1);
+                }
+                operationList.add(builder.build());
+            }
+        }
+
+        if (mEmailList != null) {
+            for (EmailData emailData : mEmailList) {
+                builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+                builder.withValueBackReference(Email.RAW_CONTACT_ID, rawContactsResultIndex);
+                builder.withValue(Data.MIMETYPE, Email.CONTENT_ITEM_TYPE);
+
+                builder.withValue(Email.TYPE, emailData.type);
+                if (emailData.type == Email.TYPE_CUSTOM) {
+                    builder.withValue(Email.LABEL, emailData.label);
+                }
+                builder.withValue(Email.DATA, emailData.data);
+                if (emailData.isPrimary) {
+                    builder.withValue(Data.IS_PRIMARY, 1);
+                }
+                operationList.add(builder.build());
+            }
+        }
+
+        if (mPostalList != null) {
+            for (PostalData postalData : mPostalList) {
+                builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+                VCardUtils.insertStructuredPostalDataUsingContactsStruct(
+                        mVCardType, builder, postalData);
+                operationList.add(builder.build());
+            }
+        }
+
+        if (mImList != null) {
+            for (ImData imData : mImList) {
+                builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+                builder.withValueBackReference(Im.RAW_CONTACT_ID, rawContactsResultIndex);
+                builder.withValue(Data.MIMETYPE, Im.CONTENT_ITEM_TYPE);
+                builder.withValue(Im.TYPE, imData.type);
+                builder.withValue(Im.PROTOCOL, imData.protocol);
+                builder.withValue(Im.DATA, imData.data);
+                if (imData.protocol == Im.PROTOCOL_CUSTOM) {
+                    builder.withValue(Im.CUSTOM_PROTOCOL, imData.customProtocol);
+                }
+                if (imData.isPrimary) {
+                    builder.withValue(Data.IS_PRIMARY, 1);
+                }
+                operationList.add(builder.build());
+            }
+        }
+
+        if (mNoteList != null) {
+            for (String note : mNoteList) {
+                builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+                builder.withValueBackReference(Note.RAW_CONTACT_ID, rawContactsResultIndex);
+                builder.withValue(Data.MIMETYPE, Note.CONTENT_ITEM_TYPE);
+                builder.withValue(Note.NOTE, note);
+                operationList.add(builder.build());
+            }
+        }
+
+        if (mPhotoList != null) {
+            for (PhotoData photoData : mPhotoList) {
+                builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+                builder.withValueBackReference(Photo.RAW_CONTACT_ID, rawContactsResultIndex);
+                builder.withValue(Data.MIMETYPE, Photo.CONTENT_ITEM_TYPE);
+                builder.withValue(Photo.PHOTO, photoData.photoBytes);
+                if (photoData.isPrimary) {
+                    builder.withValue(Photo.IS_PRIMARY, 1);
+                }
+                operationList.add(builder.build());
+            }
+        }
+
+        if (mWebsiteList != null) {
+            for (String website : mWebsiteList) {
+                builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+                builder.withValueBackReference(Website.RAW_CONTACT_ID, rawContactsResultIndex);
+                builder.withValue(Data.MIMETYPE, Website.CONTENT_ITEM_TYPE);
+                builder.withValue(Website.URL, website);
+                // There's no information about the type of URL in vCard.
+                // We use TYPE_HOMEPAGE for safety.
+                builder.withValue(Website.TYPE, Website.TYPE_HOMEPAGE);
+                operationList.add(builder.build());
+            }
+        }
+
+        if (!TextUtils.isEmpty(mBirthday)) {
+            builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+            builder.withValueBackReference(Event.RAW_CONTACT_ID, rawContactsResultIndex);
+            builder.withValue(Data.MIMETYPE, Event.CONTENT_ITEM_TYPE);
+            builder.withValue(Event.START_DATE, mBirthday);
+            builder.withValue(Event.TYPE, Event.TYPE_BIRTHDAY);
+            operationList.add(builder.build());
+        }
+
+        if (!TextUtils.isEmpty(mAnniversary)) {
+            builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+            builder.withValueBackReference(Event.RAW_CONTACT_ID, rawContactsResultIndex);
+            builder.withValue(Data.MIMETYPE, Event.CONTENT_ITEM_TYPE);
+            builder.withValue(Event.START_DATE, mAnniversary);
+            builder.withValue(Event.TYPE, Event.TYPE_ANNIVERSARY);
+            operationList.add(builder.build());
+        }
+
+        if (mAndroidCustomPropertyList != null) {
+            for (List<String> customPropertyList : mAndroidCustomPropertyList) {
+                int size = customPropertyList.size();
+                if (size < 2 || TextUtils.isEmpty(customPropertyList.get(0))) {
+                    continue;
+                } else if (size > VCardConstants.MAX_DATA_COLUMN + 1) {
+                    size = VCardConstants.MAX_DATA_COLUMN + 1;
+                    customPropertyList =
+                        customPropertyList.subList(0, VCardConstants.MAX_DATA_COLUMN + 2);
+                }
+
+                int i = 0;
+                for (final String customPropertyValue : customPropertyList) {
+                    if (i == 0) {
+                        final String mimeType = customPropertyValue;
+                        builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+                        builder.withValueBackReference(GroupMembership.RAW_CONTACT_ID, rawContactsResultIndex);
+                        builder.withValue(Data.MIMETYPE, mimeType);
+                    } else {  // 1 <= i && i <= MAX_DATA_COLUMNS
+                        if (!TextUtils.isEmpty(customPropertyValue)) {
+                            builder.withValue("data" + i, customPropertyValue);
+                        }
+                    }
+
+                    i++;
+                }
+                operationList.add(builder.build());
+            }
+        }
+
+        if (myGroupsId != null) {
+            builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
+            builder.withValueBackReference(GroupMembership.RAW_CONTACT_ID, rawContactsResultIndex);
+            builder.withValue(Data.MIMETYPE, GroupMembership.CONTENT_ITEM_TYPE);
+            builder.withValue(GroupMembership.GROUP_SOURCE_ID, myGroupsId);
+            operationList.add(builder.build());
+        }
+    }
+
     public Uri pushIntoContentResolver(ContentResolver resolver) {
         ArrayList<ContentProviderOperation> operationList =
             new ArrayList<ContentProviderOperation>();

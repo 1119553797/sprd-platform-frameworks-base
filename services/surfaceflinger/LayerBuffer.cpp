@@ -35,6 +35,9 @@
 #include "SurfaceFlinger.h"
 #include "DisplayHardware/DisplayHardware.h"
 
+#include "mali_wrapper.h"
+#include "egl_impl.h"
+
 namespace android {
 
 // ---------------------------------------------------------------------------
@@ -46,15 +49,12 @@ gralloc_module_t const* LayerBuffer::sGrallocModule = 0;
 LayerBuffer::LayerBuffer(SurfaceFlinger* flinger, DisplayID display,
         const sp<Client>& client)
     : LayerBaseClient(flinger, display, client),
-      mNeedsBlending(false), mBlitEngine(0)
+      mNeedsBlending(false)
 {
 }
 
 LayerBuffer::~LayerBuffer()
 {
-    if (mBlitEngine) {
-        copybit_close(mBlitEngine);
-    }
 }
 
 void LayerBuffer::onFirstRef()
@@ -70,10 +70,6 @@ void LayerBuffer::onFirstRef()
         if (hw_get_module(GRALLOC_HARDWARE_MODULE_ID, &module) == 0) {
             sGrallocModule = (gralloc_module_t const *)module;
         }
-    }
-
-    if (hw_get_module(COPYBIT_HARDWARE_MODULE_ID, &module) == 0) {
-        copybit_open(module, &mBlitEngine);
     }
 }
 
@@ -94,6 +90,14 @@ bool LayerBuffer::needsBlending() const {
 
 void LayerBuffer::setNeedsBlending(bool blending) {
     mNeedsBlending = blending;
+}
+
+void LayerBuffer::finishPageFlip()
+{
+    sp<Source> source(getSource());
+    if (LIKELY(source != 0)) {
+        source->finishPageFlip();
+    }
 }
 
 void LayerBuffer::postBuffer(ssize_t offset)
@@ -333,12 +337,15 @@ void LayerBuffer::Source::postBuffer(ssize_t offset) {
 }
 void LayerBuffer::Source::unregisterBuffers() {
 }
+void LayerBuffer::Source::finishPageFlip() {
+}
 
 // ---------------------------------------------------------------------------
 
 LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
         const ISurface::BufferHeap& buffers)
-    : Source(layer), mStatus(NO_ERROR), mBufferSize(0),mInComposing(false),mIsSync(false) 
+    : Source(layer), mStatus(NO_ERROR), mBufferSize(0),mInComposing(false),mIsSync(false),
+      mUseEGLImageDirectly(true) 
 {
     if((buffers.transform>>24)==0x12){//jgdu push buffer sync
         mIsSync = true;
@@ -492,28 +499,42 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
     if (GLExtensions::getInstance().haveDirectTexture()) {
         err = INVALID_OPERATION;
         if (ourBuffer->supportsCopybit()) {
-            copybit_device_t* copybit = mLayer.mBlitEngine;
-            if (copybit && err != NO_ERROR) {
-                // create our EGLImageKHR the first time
-                err = initTempBuffer();
+            if (mUseEGLImageDirectly) {
+                sp<GraphicBuffer> buffer = new GraphicBuffer(
+                                src.crop.r, src.crop.b, src.img.format,
+                                GraphicBuffer::USAGE_HW_TEXTURE,
+                                src.img.w, src.img.handle, false);
+                EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
+                mTexture.dirty = true;
+                err = mTextureManager.initEglImage(&mTexture, dpy, buffer);
                 if (err == NO_ERROR) {
-                    // NOTE: Assume the buffer is allocated with the proper USAGE flags
-                    const NativeBuffer& dst(mTempBuffer);
-                    region_iterator clip(Region(Rect(dst.crop.r, dst.crop.b)));
-                    copybit->set_parameter(copybit, COPYBIT_TRANSFORM, 0);
-                    copybit->set_parameter(copybit, COPYBIT_PLANE_ALPHA, 0xFF);
-                    copybit->set_parameter(copybit, COPYBIT_DITHER, COPYBIT_ENABLE);
-                    err = copybit->stretch(copybit, &dst.img, &src.img,
-                            &dst.crop, &src.crop, &clip);
-                    if (err != NO_ERROR) {
-                        clearTempBufferImage();
+                    uint32_t offset = 0;
+                    bool base_need_bias = false;
+                    gralloc_module_t const* module = LayerBuffer::getGrallocModule();
+                    if (module && module->perform) {
+                        status_t status = module->perform(module,
+                                        GRALLOC_MODULE_GET_MALI_INTERNAL_BUF_OFF,
+                                        &offset,
+                                        src.img.handle);
+                        if (!status) {
+                            base_need_bias = !!offset;
+                        }
                     }
+                    if (mBufferHeap.format == HAL_PIXEL_FORMAT_YCbCr_420_SP
+                        && (base_need_bias || src.crop.b != src.img.h)) { 
+                        // there are constraints on buffers used by the GPU             
+                        err = fixYUV420Plane(&src.img, offset);
+                    }
+                }
+                if (err != NO_ERROR) {
+                    mUseEGLImageDirectly = false;
                 }
             }
         }
     }
+    else 
 #endif
-    else {
+    {
         err = INVALID_OPERATION;
     }
 
@@ -533,90 +554,95 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
 
     mLayer.setBufferTransform(mBufferHeap.transform);
     mLayer.drawWithOpenGL(clip, mTexture);
-    
-    if(mIsSync){//jgdu push buffer sync
-    	Mutex::Autolock autoLock(mBufLock);
-    	mInComposing = false;
-    	mBufCondition.signal();    
-    }	
 }
 
-status_t LayerBuffer::BufferSource::initTempBuffer() const
+void LayerBuffer::BufferSource::finishPageFlip()
 {
-    // figure out the size we need now
-    const ISurface::BufferHeap& buffers(mBufferHeap);
-    uint32_t w = mLayer.mTransformedBounds.width();
-    uint32_t h = mLayer.mTransformedBounds.height();
-    if (buffers.w * h != buffers.h * w) {
-        int t = w; w = h; h = t;
+    if (mIsSync) {//jgdu push buffer sync
+        // in fact, the compositeComplete handler already can sync it
+        glFinish(); 
+        Mutex::Autolock autoLock(mBufLock);
+        mInComposing = false;
+        mBufCondition.signal();
     }
+}
 
-    // we're in the copybit case, so make sure we can handle this blit
-    // we don't have to keep the aspect ratio here
-    copybit_device_t* copybit = mLayer.mBlitEngine;
-    const int down = copybit->get(copybit, COPYBIT_MINIFICATION_LIMIT);
-    const int up = copybit->get(copybit, COPYBIT_MAGNIFICATION_LIMIT);
-    if (buffers.w > w*down)     w = buffers.w / down;
-    else if (w > buffers.w*up)  w = buffers.w*up;
-    if (buffers.h > h*down)     h = buffers.h / down;
-    else if (h > buffers.h*up)  h = buffers.h*up;
+// here the caller mush be assure the native image is the image attached to
+// mTexture.image
+status_t LayerBuffer::BufferSource::fixYUV420Plane(copybit_image_t const *img, uint32_t offset) const
+{
+    status_t status = INVALID_OPERATION;
+    EGLImageKHR mali_egl_img;
+    mali_wrapper mw;
 
-    if (mTexture.image != EGL_NO_IMAGE_KHR) {
-        // we have an EGLImage, make sure the needed size didn't change
-        if (w!=mTexture.width || h!= mTexture.height) {
-            // delete the EGLImage and texture
-            clearTempBufferImage();
-        } else {
-            // we're good, we have an EGLImageKHR and it's (still) the
-            // right size
-            return NO_ERROR;
+    if (img->format != HAL_PIXEL_FORMAT_YCbCr_420_SP) {
+        return status;
+    }
+    if (mTexture.image == EGL_NO_IMAGE_KHR) {
+        return status;
+    }
+    mali_egl_img = egl_get_image_for_current_context(mTexture.image);
+    status = mw.getStatus();
+    if (NO_ERROR == status) {
+        mali_wrapper::EGLImageMALI* internal_image = mw.lock_ptr(mali_egl_img);
+        if (internal_image) {
+            void *internal_mali_data = NULL;
+            gralloc_module_t const * module = LayerBuffer::getGrallocModule();
+
+            status = INVALID_OPERATION;
+            if (module && module->perform) {
+                status = module->perform(module, GRALLOC_MODULE_PERFORM_GET_MALI_DATA, 
+                            &internal_mali_data, img->handle);
+                if (!status) {
+                    if (offset) {
+                        EGLint attrs_y[] = {
+                            MALI_EGL_IMAGE_PLANE,   MALI_EGL_IMAGE_PLANE_Y,
+                            MALI_EGL_IMAGE_MIPLEVEL,0,
+                            EGL_NONE,               EGL_NONE
+                        };
+                        if (EGL_FALSE == mw.set_data(internal_image,
+                                    attrs_y, offset, internal_mali_data))
+                        {
+                            LOGE("In fixYUV420Plane %s failed, "
+                                 "while set Y plane buffer "
+                                 "error code 0x%08x\n",
+                                 "mali_egl_image_set_data",
+                                 mw.get_error());
+                            status = -EINVAL;
+                        }
+                    }
+                    if (!status) {
+                        EGLint attrs_uv[] = {
+                            MALI_EGL_IMAGE_PLANE,   MALI_EGL_IMAGE_PLANE_UV,
+                            MALI_EGL_IMAGE_MIPLEVEL,0,
+                            EGL_NONE,               EGL_NONE
+                        };
+                        EGLint uv_ofs = img->w * img->h;
+                        if (EGL_FALSE == mw.set_data(internal_image,
+                                    attrs_uv, uv_ofs+offset, internal_mali_data))
+                        {
+                            LOGE("In fixYUV420Plane %s failed, "
+                                 "while set UV plane buffer "
+                                 "error code 0x%08x\n",
+                                 "mali_egl_image_set_data",
+                                 mw.get_error());
+                            status = -EINVAL;
+                        }
+                    }
+                }
+            }
+            if (EGL_FALSE == mw.unlock_ptr(mali_egl_img)) {
+                LOGE("fixYUV420Plane() failed, error code 0x%08x\n", 
+                    mw.get_error());
+                status = INVALID_OPERATION;
+            }
         }
     }
-
-    // figure out if we need linear filtering
-    if (buffers.w * h == buffers.h * w) {
-        // same pixel area, don't use filtering
-        mLayer.mNeedsFiltering = false;
+    else {
+        LOGE("mali_wrapper open failed\n");
     }
 
-    // Allocate a temporary buffer and create the corresponding EGLImageKHR
-    // once the EGLImage has been created we don't need the
-    // graphic buffer reference anymore.
-    sp<GraphicBuffer> buffer = new GraphicBuffer(
-            w, h, HAL_PIXEL_FORMAT_RGB_565,
-            GraphicBuffer::USAGE_HW_TEXTURE |
-            GraphicBuffer::USAGE_HW_2D);
-
-    status_t err = buffer->initCheck();
-    if (err == NO_ERROR) {
-        NativeBuffer& dst(mTempBuffer);
-        dst.img.w = buffer->getStride();
-        dst.img.h = h;
-        dst.img.format = buffer->getPixelFormat();
-        dst.img.handle = (native_handle_t *)buffer->handle;
-        dst.img.base = 0;
-        dst.crop.l = 0;
-        dst.crop.t = 0;
-        dst.crop.r = w;
-        dst.crop.b = h;
-
-        EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
-        err = mTextureManager.initEglImage(&mTexture, dpy, buffer);
-    }
-
-    return err;
-}
-
-void LayerBuffer::BufferSource::clearTempBufferImage() const
-{
-    // delete the image
-    EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
-    eglDestroyImageKHR(dpy, mTexture.image);
-
-    // and the associated texture (recreate a name)
-    glDeleteTextures(1, &mTexture.name);
-    Texture defaultTexture;
-    mTexture = defaultTexture;
+    return status;
 }
 
 // ---------------------------------------------------------------------------

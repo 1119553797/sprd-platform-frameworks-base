@@ -89,11 +89,13 @@ public class SmsCBMessage {
 	private static SmsCBDcs mDcs;
 	private static SmsCBPage mPage;
 	private static ParseValue mRet;
+	private static int mPhoneID;
 	private static final char COMMA = ',';
 	private static final char SEMICOLON = ';';
 	private static final char CR = '\n';
 	private static final char LF = '\t';
 	private static boolean mIsPdu = true;
+	private static final char CARRIAGE_RETURN = 0x0d;
 
 	public SmsCBMessage(Context context, ContentResolver contentResolver) {
 		mContext = context;
@@ -422,6 +424,70 @@ public class SmsCBMessage {
 		return processSmsCBPage(mPage);
 
 	}
+
+/*
+	 * get page information in pdu mode ,see TS 23.041 9.4.1.2
+	 */
+	public static byte[][] getSmsCBPage(String msg, int length,Context context, ContentResolver contentResolver, int phoneID) {
+
+		Log.i(TAG, "getSmsCBPage length" + length);
+
+
+		boolean isPdu = mIsPdu;
+
+		mContext = context;
+		mContentResolver = contentResolver;
+                mPhoneID =  phoneID;
+		
+		if (isPdu == false) {
+			getOneSmsCBPage(msg, msg.length());
+		} else {
+						
+			byte[] pages = msg.getBytes();
+			
+			
+			
+			int contentPos = 0;
+			for(int i= 0; i<pages.length-1; i++){
+				
+				if (pages[i] == CR && pages[i + 1] == LF) {
+
+					contentPos = i + 2;
+					break;
+				}
+				
+			}
+			
+			Log.i(TAG, "getSmsCBPage contentPos" + contentPos);
+			
+			int dataLen =  pages.length -contentPos;
+			int j=0;
+			byte contentPages[] = new byte[dataLen];
+			
+			for (int i=contentPos; i<pages.length; i++)
+			{
+				contentPages[j] = pages[i];
+				
+				//Log.i(TAG, "getSmsCBPage contentPages" + contentPages[j]);
+				j++;
+			}
+			
+			String atString = new String(contentPages);
+			Log.i(TAG, "getSmsCBPage atString" + atString);
+			byte atContentData[] = IccUtils.hexStringToBytes(atString);	
+	
+
+			mDcs = decodeSmsCBCds(atContentData[4], atContentData, true);
+			
+			Log.i(TAG, "getSmsCBPage mDcs" + mDcs.toString());
+	
+			
+			
+			parseUserData(atContentData, atContentData.length, mDcs);
+		}
+		return processSmsCBPage(mPage,phoneID);
+
+	}
 	
 	public static void setSmsCBMode(boolean isPdu){
 		
@@ -646,6 +712,182 @@ public class SmsCBMessage {
 				values.put("sequence", page.sequenceNum);
 				values.put("langId", page.langId);
 				values.put("content", page.content);
+
+				Uri insertedUri = SqliteWrapper.insert(mContext,
+						mContentResolver, RawUri, values);
+				Log.i(TAG, " processSmsCBPage page number " + page.sequenceNum);
+				return null;
+			}
+		
+
+		} catch (SQLException e) {
+			Log.e(TAG, "Can't access multipart SMS database", e);
+			// TODO: Would OUT_OF_MEMORY be more appropriate?
+			return null;
+		} finally {
+			if (cursor != null)
+				cursor.close();
+		}
+
+		return null;
+	}
+
+public static byte[][] processSmsCBPage(SmsCBPage page, int phoneID) {
+		Uri RawUri = Uri.parse("content://sms/cbsmsraw");
+
+		String[] CB_RAW_PROJECTION = new String[] { "gs", "message_code",
+				"update_num", "message_id", "dcs", "count", "sequence","langId",
+				"content","phone_id" };
+
+		SmsCBPage[] pages;
+
+		// Lookup all other related parts
+		StringBuilder where = new StringBuilder("gs =");
+		where.append(page.gs);
+	
+		where.append(" AND message_code=");
+		where.append(page.messageCode);
+	
+		where.append(" AND message_id=");
+		where.append(page.msgId);
+		
+                where.append(" AND phone_id=");
+		where.append(mPhoneID);
+		/*StringBuilder whereArgs = new StringBuilder(page.msgId);
+		
+	    String [] ww = new String[]{whereArgs.toString()}; */
+		Cursor cursor = null;
+		int cursorCount = 0;
+		boolean isNew = true;
+		int i = 0;
+
+		if(page.content == null){
+			
+			Log.v(TAG, "processSmsCBPage SMS message body is null !!! ");
+			return null;
+			
+		}
+		
+		try {
+			if (page.totalNum > 1) {
+
+				cursor = SqliteWrapper.query(mContext, mContentResolver,
+						RawUri, CB_RAW_PROJECTION, where.toString(), null, null);//ww
+				//cursor = SqliteWrapper.query(mContext, mContentResolver,
+				//		RawUri, CB_RAW_PROJECTION, null, null, null);
+
+				if (cursor != null ) {
+					cursorCount = cursor.getCount();
+					
+					Log.i(TAG, "processSmsCBPage cursorCount " + cursorCount + "page.totalNum "+page.totalNum);
+					pages = new SmsCBPage[cursorCount + 1];
+
+
+					for (i = 0; i < cursorCount; i++) {
+						cursor.moveToNext();
+						pages[i] = new SmsCBPage();
+
+						int gsColumn = cursor.getColumnIndex("gs");
+
+						int messageCodeColumn = cursor
+								.getColumnIndex("message_code");
+
+						int updateNumColumn = cursor.getColumnIndex("update_num");
+
+						int messageColumn = cursor.getColumnIndex("message_id");
+
+						int dcsColumn = cursor.getColumnIndex("dcs");
+
+						int countColumn = cursor.getColumnIndex("count");
+
+						int sequenceColumn = cursor.getColumnIndex("sequence");
+						int langColumn = cursor.getColumnIndex("langId");
+						int contentColumn = cursor.getColumnIndex("content");
+						
+						pages[i].gs = (byte) cursor.getInt(gsColumn);
+						pages[i].messageCode = (byte) cursor
+								.getInt(messageCodeColumn);
+						pages[i].updateNum = (byte) cursor
+								.getInt(updateNumColumn);
+						pages[i].msgId = cursor.getInt(messageColumn);
+						pages[i].totalNum = cursor.getInt(countColumn);
+						pages[i].sequenceNum = cursor.getInt(sequenceColumn);
+						pages[i].decodedData = (cursor.getString(contentColumn))
+								.getBytes();
+						pages[i].dcs = cursor.getInt(dcsColumn);
+						pages[i].langId = cursor.getInt(langColumn);
+						pages[i].content = cursor.getString(contentColumn);
+						if (pages[i].gs == page.gs
+								&& pages[i].messageCode == page.messageCode
+								&& pages[i].updateNum == page.updateNum
+								&& pages[i].msgId == page.msgId && pages[i].sequenceNum == page.sequenceNum) {
+
+							isNew = false;
+							return null;
+						}
+
+					}
+					Log.i(TAG, "convertToBytes i " + i);
+					pages[i] = new SmsCBPage();
+					pages[i].gs = page.gs;
+					pages[i].messageCode = page.messageCode;
+					pages[i].updateNum = page.updateNum;
+					pages[i].msgId = page.msgId;
+					pages[i].totalNum = page.totalNum;
+					pages[i].sequenceNum = page.sequenceNum;
+					pages[i].decodedData = page.decodedData;
+					pages[i].content = page.content;
+					pages[i].langId = page.langId;
+					
+					
+					if (cursorCount + 1 == page.totalNum) {
+						
+						
+						SqliteWrapper
+						.delete(mContext, mContentResolver, RawUri, where.toString(), null);// 
+						return convertToBytes(pages, cursorCount + 1);
+					}
+
+				}else{
+					
+					
+					
+					
+				}
+			} else {
+				pages = new SmsCBPage[1];
+				pages[0] = new SmsCBPage();
+				pages[0].gs = page.gs;
+				pages[0].messageCode = page.messageCode;
+				pages[0].updateNum = page.updateNum;
+				pages[0].msgId = page.msgId;
+				pages[0].totalNum = page.totalNum;
+				pages[0].sequenceNum = page.sequenceNum;
+				pages[0].decodedData = page.decodedData;
+				pages[0].langId = page.langId;				
+				pages[0].content = page.content;
+				Log.i(TAG, "convertToBytes input " + "page.content :"
+						+ page.content);
+				Log.v(TAG, "processSmsCBPage SMS message count  "+ cursorCount);
+				
+			
+				
+				return convertToBytes(pages, 1);
+			}
+            
+			if (isNew && cursorCount != page.totalNum) {
+				// We don't have all the parts yet, store this one away
+				ContentValues values = new ContentValues();
+				values.put("gs", page.gs);
+				values.put("message_code", page.messageCode);
+				values.put("update_num", page.updateNum);
+				values.put("message_id", page.msgId);
+				values.put("dcs", page.dcs);
+				values.put("count", page.totalNum);
+				values.put("sequence", page.sequenceNum);
+				values.put("langId", page.langId);
+				values.put("content", page.content);
+                                values.put("phone_id", phoneID);
 
 				Uri insertedUri = SqliteWrapper.insert(mContext,
 						mContentResolver, RawUri, values);

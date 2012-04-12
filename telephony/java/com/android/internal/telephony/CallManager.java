@@ -878,7 +878,7 @@ public final class CallManager {
         Call.State fgCallState = getActiveFgCallState();
 
         return (serviceState != ServiceState.STATE_POWER_OFF
-                && !hasRingingCall
+                //&& !hasRingingCall
                 && !allLinesTaken
                 && ((fgCallState == Call.State.ACTIVE)
                     || (fgCallState == Call.State.IDLE)
