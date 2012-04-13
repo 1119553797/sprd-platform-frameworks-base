@@ -162,8 +162,12 @@ private:
     int64_t mSkipTimeUs;
 
     MediaBuffer *mLeftOverBuffer;
-    MediaBuffer *mTempSrcBuffer;//cmmb
-    status_t mLastreadError;//cmmb
+    
+    //innofidei remove this code segment
+	//MediaBuffer *mTempSrcBuffer;
+    
+ 
+    status_t mLastreadError;
 
     Mutex mLock;
     Condition mAsyncCompletion;
