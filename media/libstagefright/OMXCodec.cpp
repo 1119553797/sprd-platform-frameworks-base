@@ -1485,7 +1485,10 @@ OMXCodec::OMXCodec(
       mTargetTimeUs(-1),
       mSkipTimeUs(-1),
       mLeftOverBuffer(NULL),
-      mTempSrcBuffer(NULL), //cmmb
+      //innofidei remove this code segment
+	  /*
+      mTempSrcBuffer(NULL),
+      */ 
       mLastreadError(OK),//cmmb
       mPaused(false),
       mBufferCountInput(bufferCountInput),//sprd vt
@@ -2522,15 +2525,19 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
             mSeekMode = ReadOptions::SEEK_CLOSEST_SYNC;
             mBufferFilled.signal();
 
-            if(mTempSrcBuffer) {//cmmb
+//innofidei remove this code segment
+/*
+            if(mTempSrcBuffer) {
                 err = OK;
                 srcBuffer = mTempSrcBuffer;
                 mTempSrcBuffer = NULL;
             }
             else {
+*/
                 err = mSource->read(&srcBuffer, &options);
+/*
             }
-
+*/
             if (err == OK) {
                 int64_t targetTimeUs;
                 if (srcBuffer->meta_data()->findInt64(
@@ -2547,14 +2554,19 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
 
             err = OK;
         } else {
-            if(mTempSrcBuffer) {//cmmb
+//innofidei remove this code segment
+/*
+            if(mTempSrcBuffer) {
                 err = OK;
                 srcBuffer = mTempSrcBuffer;
                 mTempSrcBuffer = NULL;
             }
             else {
+*/
                 err = mSource->read(&srcBuffer, &options);
+/*
             }
+*/
         }
 
         if (err != OK) {
@@ -3170,11 +3182,15 @@ status_t OMXCodec::stop() {
         mLeftOverBuffer->release();
         mLeftOverBuffer = NULL;
     }
+    
+    //innofidei remove this code segment
+	/*
 
-    if (mTempSrcBuffer) {//cmmb
+    if (mTempSrcBuffer) {
             mTempSrcBuffer->release();
             mTempSrcBuffer = NULL;
     }
+    */
     mSource->stop();
 
     CODEC_LOGV("stopped");
@@ -3197,6 +3213,8 @@ status_t OMXCodec::read(
     if (mState != EXECUTING && mState != RECONFIGURING) {
         return UNKNOWN_ERROR;
     }
+//innofidei remove this code segment
+/*
     int32_t cmmb;
 
     if (mSource->getFormat()->findInt32(kKeyIsCmmbData, &cmmb) && cmmb) {
@@ -3204,25 +3222,18 @@ status_t OMXCodec::read(
           
             status_t err = mSource->read(&mTempSrcBuffer, options);
             if(err != OK) {
-                LOGI("[INNO/socketinterface/OMXCodec] mTempSrcBuffer read error %d", err);
+                LOGI("[INNO/socketinterface/OMXCodec.cpp] mTempSrcBuffer read error %d", err);
                 return err;
             }
         }
         else {
         
             if(mLastreadError != OK && mLastreadError != ERROR_TIMEOUT) {
-                LOGI("[INNO/socketinterface/OMXCodec] mTempSrcBuffer last read error %d", mLastreadError);
+                LOGI("[INNO/socketinterface/OMXCodec.cpp] mTempSrcBuffer last read error %d", mLastreadError);
                 return mLastreadError;
-            } 
-            // innofidei fixed 3.30 begin
-            else if (mLastreadError == ERROR_TIMEOUT){
-            	
-            	mLastreadError = OK;
-            	mFinalStatus = OK;
             }
-            // innofidei fixed 3.30 end
         }
-    }
+    }*/
 
     bool seeking = false;
     int64_t seekTimeUs;

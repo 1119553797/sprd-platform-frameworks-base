@@ -173,7 +173,6 @@ private:
     int64_t mDurationUs;
 
     uint32_t mFlags;
-	uint32_t mSeekPrePlaying;
     uint32_t mExtractorFlags;
 
     int32_t mVideoWidth, mVideoHeight;
