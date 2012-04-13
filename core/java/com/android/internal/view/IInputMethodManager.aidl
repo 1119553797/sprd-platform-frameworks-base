@@ -54,5 +54,6 @@ interface IInputMethodManager {
     void updateStatusIcon(in IBinder token, String packageName, int iconId);
     
     boolean setInputMethodEnabled(String id, boolean enabled);
+    boolean getServiceConnFlag();
 }
 
