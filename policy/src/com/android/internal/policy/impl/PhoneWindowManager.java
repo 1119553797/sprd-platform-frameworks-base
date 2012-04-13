@@ -1948,7 +1948,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                     // end for dual sim
 
-                    interceptPowerKeyDown(!isScreenOn || hungUp);
+//                    interceptPowerKeyDown(!isScreenOn || hungUp);
                 } else {
                     if (interceptPowerKeyUp(canceled)) {
                         if ((mEndcallBehavior
