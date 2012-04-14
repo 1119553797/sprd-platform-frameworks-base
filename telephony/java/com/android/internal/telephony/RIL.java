@@ -2000,8 +2000,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             rr.mp.writeInt(config[i].getToServiceId());
             rr.mp.writeInt(config[i].getFromCodeScheme());
             rr.mp.writeInt(config[i].getToCodeScheme());
-            //TS for compile
-            rr.mp.writeValue(config[i].isSelected());
+            rr.mp.writeInt(config[i].isSelected() ? 1 : 0);
         }
 
         if (RILJ_LOGD) {
