@@ -181,6 +181,9 @@ public final class GsmCallTracker extends CallTracker {
             throw new CallStateException("cannot dial in current state");
         }
 
+        boolean isStkCall = getStkCall();
+        log("GsmCallTracker dial: isStkCall=" + isStkCall);
+
         // The new call must be assigned to the foreground call.
         // That call must be idle, so place anything that's
         // there on hold
@@ -189,7 +192,13 @@ public final class GsmCallTracker extends CallTracker {
             // but the dial might fail before this happens
             // and we need to make sure the foreground call is clear
             // for the newly dialed connection
-            switchWaitingOrHoldingAndActive();
+            // for NEWMS00173088  start
+            if (!isStkCall) {
+                switchWaitingOrHoldingAndActive();
+            } else {
+                log("GsmCallTracker dial: StkCall!! So don't call switchWaitingOrHoldingAndActive()");
+            }
+            // for NEWMS00173088  end
 
             // Fake local state so that
             // a) foregroundCall is empty for the newly dialed connection
@@ -203,8 +212,6 @@ public final class GsmCallTracker extends CallTracker {
             throw new CallStateException("cannot dial in current state");
         }
 
-        boolean isStkCall = getStkCall();
-        log("GsmCallTracker dial: isStkCall=" + isStkCall);
         pendingMO = new GsmConnection(phone.getContext(), dialString, this, foregroundCall, isStkCall);
         hangupPendingMO = false;
 
