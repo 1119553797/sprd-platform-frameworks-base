@@ -69,7 +69,7 @@ final class GsmSMSDispatcher extends SMSDispatcher {
         super(phone);
         mGsmPhone = phone;
 
-        ((BaseCommands)mCm).setOnNewGsmBroadcastSms(this, EVENT_NEW_BROADCAST_SMS, null);
+        //((BaseCommands)mCm).setOnNewGsmBroadcastSms(this, EVENT_NEW_BROADCAST_SMS, null);
     }
 
     /**
