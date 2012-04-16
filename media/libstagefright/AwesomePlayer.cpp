@@ -59,7 +59,7 @@
 #include <private/media/VideoFrame.h>
 #endif
 
-//#define _SYNC_USE_SYSTEM_TIME_
+#define _SYNC_USE_SYSTEM_TIME_
 namespace android {
 
 static int64_t kLowWaterMarkUs = 500000ll;  // 2secs @hong
@@ -704,7 +704,7 @@ void AwesomePlayer::onBufferingUpdate() {
 		 }
 
 		 if(mFlags&CACHE_UNDERRUN)
-         {
+		 {
 		   notifyListener_l(MEDIA_BUFFERING_UPDATE,percentage);
          }
         if ((mFlags & PLAYING) && !eos
@@ -1240,6 +1240,11 @@ void AwesomePlayer::onRTSPSeekDone(int32_t status) {
 		mBufferingEventPending = false;
 	    postBufferingEvent_l();
 		postVideoEvent_l();
+		
+	    notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START); 
+	 	notifyListener_l(MEDIA_BUFFERING_UPDATE, 100);
+	    notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_END); 
+		
 	 }
 	 mSeeking = true;
 	 mSeekNotificationSent = true; 

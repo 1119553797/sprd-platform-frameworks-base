@@ -255,7 +255,7 @@ public class SmsMessage extends SmsMessageBase{
         return getSubmitPdu(scAddress, destinationAddress, message, statusReportRequested, header,
                 ENCODING_UNKNOWN, 0, 0);
     }
-    
+
     //TS for compile
     public static SubmitPdu getSubmitPdu(String scAddress,
             String destinationAddress, String message,
@@ -349,7 +349,10 @@ public class SmsMessage extends SmsMessageBase{
             }
             // TP-Data-Coding-Scheme
             // Class 3, UCS-2 encoding, uncompressed
-            bo.write(0x0b);
+            //bo.write(0x0b);
+
+            //0x08 : Class 0
+            bo.write(0x08);//fix for bug 14583,
         }
 
         // TP-Validity-Period
@@ -359,7 +362,7 @@ public class SmsMessage extends SmsMessageBase{
 			Log.d("lu", "SmsMessage --> write into TP-VP:" + validity);
 		}
 		//=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
-     
+
         bo.write(userData, 0, userData.length);
         ret.encodedMessage = bo.toByteArray();
         return ret;
@@ -524,8 +527,8 @@ public class SmsMessage extends SmsMessageBase{
 
         ret.encodedMessage = bo.toByteArray();
         return ret;
-    }	
-	/* End liu 20110602 */    
+    }
+	/* End liu 20110602 */
 
     /**
      * Create the beginning of a SUBMIT PDU.  This is the part of the
@@ -552,15 +555,15 @@ public class SmsMessage extends SmsMessageBase{
             ret.encodedScAddress = PhoneNumberUtils.networkPortionToCalledPartyBCDWithLength(
                     scAddress);
         }
-        
+
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
-        //TP-Validity-Period-Format   
+        //TP-Validity-Period-Format
         if (validity != 0){
         	mtiByte |= 0x10;
         	Log.d("lu", "SmsMessage --> TP-VPF = 0x10");
         }
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 end ===
-         
+
         // TP-Message-Type-Indicator (and friends)
         if (statusReportRequested) {
             // Set TP-Status-Report-Request bit.
@@ -968,7 +971,7 @@ public class SmsMessage extends SmsMessageBase{
             return ret;
         }
         // End liu 20110603
-        
+
         /**
          * Interprets the user data payload as UCS2 characters, and
          * decodes them into a String.
@@ -1130,6 +1133,9 @@ public class SmsMessage extends SmsMessageBase{
             parseSmsSubmit(p, firstByte);
             break;
         case 0:
+        case 3:
+            //GSM 03.40 9.2.3.1: MTI == 3 is Reserved.
+            //This should be processed in the same way as MTI == 0 (Deliver)
             parseSmsDeliver(p, firstByte);
             break;
         case 2:
@@ -1416,7 +1422,7 @@ public class SmsMessage extends SmsMessageBase{
         return messageClass;
     }
 
-    //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin === 	
+    //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
 	private static int validity;
 	public static void getSmsValidity(Context context) {
 		if (null != context) {

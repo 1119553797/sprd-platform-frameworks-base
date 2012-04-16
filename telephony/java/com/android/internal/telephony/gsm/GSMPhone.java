@@ -1647,15 +1647,10 @@ public abstract class GSMPhone extends PhoneBase {
      * @param response Callback message is empty on completion
      */
     public void activateCellBroadcastSms(int activate, Message response) {
-
         Log.i(LOG_TAG, " This functionality is  implemented for GSM.");
         mSMS.activateCellBroadcastSms(activate,response);
-        
-        
-
         Log.e(LOG_TAG, "[GSMPhone] activateCellBroadcastSms() is obsolete; use SmsManager");
-        response.sendToTarget();
-
+        //response.sendToTarget();
     }
 
     /**
@@ -1664,18 +1659,16 @@ public abstract class GSMPhone extends PhoneBase {
      * @param response Callback message is empty on completion
      */
     public void getCellBroadcastSmsConfig(Message response) {
-
         Log.i(LOG_TAG, "! This functionality is not implemented for GSM.");
         mSMS.getCellBroadcastSmsConfig(response);
         //response.sendToTarget();
- }
+    }
 
     public void setCellBroadcastSmsConfig(int[] configValuesArray, Message response){
 
 	Log.i(LOG_TAG, " This setCellBroadcastSmsConfig  is  implemented for GSM.");
-         mSMS.setCellBroadcastConfig(configValuesArray,response);
-        
-          //response.sendToTarget();        
+        mSMS.setCellBroadcastConfig(configValuesArray,response);
+        //response.sendToTarget();        
     }
 
     public void registerForGprsAttached(Handler h,int what, Object obj) {

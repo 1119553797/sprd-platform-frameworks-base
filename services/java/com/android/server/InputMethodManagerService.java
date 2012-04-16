@@ -289,6 +289,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
      */
     boolean mScreenOn = true;
 
+    boolean mServiceConnFlag = false;
+
     AlertDialog.Builder mDialogBuilder;
     AlertDialog mSwitchingDialog;
     InputMethodInfo[] mIms;
@@ -857,6 +859,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 }
             }
         }
+        mServiceConnFlag = true;
     }
 
     void onSessionCreated(IInputMethod method, IInputMethodSession session) {
@@ -938,6 +941,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 mLastBindTime = SystemClock.uptimeMillis();
                 mShowRequested = mInputShown;
                 mInputShown = false;
+                mServiceConnFlag = false;
                 if (mCurClient != null) {
                     executeOrSendMessage(mCurClient.client, mCaller.obtainMessageIO(
                             MSG_UNBIND_METHOD, mCurSeq, mCurClient.client));
@@ -1676,6 +1680,10 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         }
     }
     
+    public boolean getServiceConnFlag() {
+        return mServiceConnFlag;
+    }
+
     boolean setInputMethodEnabledLocked(String id, boolean enabled) {
         // Make sure this is a valid input method.
         InputMethodInfo imm = mMethodMap.get(id);

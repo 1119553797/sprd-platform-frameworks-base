@@ -347,8 +347,12 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
     MediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
         new MediaPlayer.OnVideoSizeChangedListener() {
             public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+            try {
                 mVideoWidth = mp.getVideoWidth();
                 mVideoHeight = mp.getVideoHeight();
+            } catch (IllegalStateException e) {
+                Log.d(TAG,"onVideoSizeChanged IllegalStateException");
+            }
                 if (mVideoWidth != 0 && mVideoHeight != 0) {
                    // getHolder().setFixedSize(mVideoWidth, mVideoHeight);
                     resize(mIsFullScreen);

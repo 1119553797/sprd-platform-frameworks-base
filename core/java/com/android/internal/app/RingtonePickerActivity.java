@@ -180,8 +180,6 @@ public final class RingtonePickerActivity extends AlertActivity implements
             mStorageManager.registerListener(mStorageListener);
         }
 
-		IntentFilter filter = new IntentFilter(Intent.ACTION_UMS_CONNECTED);
-		registerReceiver(usbReceiver, filter);
     }
     
     public void onResume(){
@@ -191,6 +189,8 @@ public final class RingtonePickerActivity extends AlertActivity implements
         musicIntent.putExtra("command", "pause");
         this.sendBroadcast(musicIntent);
       //add by yangqingan 2011-11-22 for NEWMS00132817 end
+        IntentFilter filter = new IntentFilter(Intent.ACTION_UMS_CONNECTED);
+        registerReceiver(usbReceiver, filter);
     }
 
     public void onPrepareListView(ListView listView) {
