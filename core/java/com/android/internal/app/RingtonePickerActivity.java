@@ -86,7 +86,8 @@ public final class RingtonePickerActivity extends AlertActivity implements
     
     /** The Uri to play when the 'Default' item is clicked. */
     private Uri mUriForDefaultItem;
-    
+
+    private Intent ChannelChangeListenerIntent = null;
     /**
      * A Ringtone for the default ringtone. In most cases, the RingtoneManager
      * will stop the previous ringtone. However, the RingtoneManager doesn't
@@ -190,7 +191,9 @@ public final class RingtonePickerActivity extends AlertActivity implements
         this.sendBroadcast(musicIntent);
       //add by yangqingan 2011-11-22 for NEWMS00132817 end
         IntentFilter filter = new IntentFilter(Intent.ACTION_UMS_CONNECTED);
-        registerReceiver(usbReceiver, filter);
+        if (ChannelChangeListenerIntent == null) {
+            ChannelChangeListenerIntent = registerReceiver(usbReceiver, filter);
+        }
     }
 
     public void onPrepareListView(ListView listView) {
@@ -372,7 +375,10 @@ public final class RingtonePickerActivity extends AlertActivity implements
         intent.putExtra("command", "play");
         this.sendBroadcast(intent);
       //add by yangqingan 2011-11-22 for NEWMS00132817 end
-        unregisterReceiver(usbReceiver);
+        if (ChannelChangeListenerIntent != null) {
+            unregisterReceiver(usbReceiver);
+            ChannelChangeListenerIntent = null;
+        }
     }
 	@Override
     protected void onDestroy() {
