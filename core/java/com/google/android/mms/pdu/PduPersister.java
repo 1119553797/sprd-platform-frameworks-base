@@ -947,7 +947,7 @@ public class PduPersister {
             }
         }
 
-        long threadId = Threads.getOrCreateThreadId(mContext, recipients);
+        long threadId = Threads.getOrCreateThreadId(mContext, recipients, new HashSet<String>());
         values.put(Mms.THREAD_ID, threadId);
 
         SqliteWrapper.update(mContext, mContentResolver, uri, values, null, null);
@@ -1173,7 +1173,7 @@ public class PduPersister {
                     }
                 }
             }
-            threadId = Threads.getOrCreateThreadId(mContext, recipients);
+            threadId = Threads.getOrCreateThreadId(mContext, recipients, new HashSet<String>());
         }
         values.put(Mms.THREAD_ID, threadId);
 

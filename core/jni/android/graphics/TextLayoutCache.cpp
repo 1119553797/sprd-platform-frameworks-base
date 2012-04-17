@@ -365,8 +365,8 @@ void TextLayoutCacheValue::drawGlyphCustom(FuncTypeDrawGlyphs doDrawGlyphs, SkCa
 		else if (textAlign == SkPaint::kRight_Align)
 			x_start = x + (x_offset - (mTotalAdvance - mClusterAdvances[i]));
 #if DEBUG_GLYPHS
-		LOGD("drawGlyphCustom -- %d/%d, doDrawGlyphs(start:%d, count:%d, textAlign:%d, x_start:%f, y:%f), typeface:%08x, advance:%f",
-			 i, mClusterCount, start, count, textAlign, x_start, y, mClusterTypefaces[i], mClusterAdvances[i]);
+		LOGD("drawGlyphCustom -- %d/%d, doDrawGlyphs(start:%d, count:%d, textAlign:%d, x_start:%f, y:%f), typeface:%08x, advance:%f, mTotalAdvance:%f",
+			 i, mClusterCount, start, count, textAlign, x_start, y, mClusterTypefaces[i], mClusterAdvances[i], mTotalAdvance);
 		for (int j = start; j < start + count; j++)
 			LOGD("         -- glyphs[%d] = %d ", j, glyphs[j]);
 #endif
@@ -831,7 +831,6 @@ void TextLayoutCacheValue::computeRunValuesWithHarfbuzz(HB_ShaperItem& shaperIte
 											startRun, lengthRun, isRTL,
 											outAdvances, &runTotalAdvance, outGlyphs);
 
-			mClusterAdvances.add(runTotalAdvance);
 			*outTotalAdvance += runTotalAdvance;
 		}while(start_pos < start + count);
 	}
@@ -947,6 +946,7 @@ void TextLayoutCacheValue::computeRunValuesWithHarfbuzzSub(HB_ShaperItem& shaper
     }
 #endif
 #endif
+	mClusterAdvances.add(totalAdvance);
 
     // Get Glyphs and reverse them in place if RTL
     if (outGlyphs) {

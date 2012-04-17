@@ -77,14 +77,14 @@ public class SimChooserDialog extends AlertDialog implements OnItemClickListener
 	mTelephonyManager = (TelephonyManager)getContext().getSystemService(Context.TELEPHONY_SERVICE);
 	int phoneCount=mTelephonyManager.getPhoneCount();
 	
+	String Unknown = getContext().getResources().getString(com.android.internal.R.string.unknownName);
+	
 	for (int i=0;i<phoneCount;++i) {
 	    TelephonyManager tm=(TelephonyManager)getContext().getSystemService(
 		PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i));
-
 	    if (tm.hasIccCard()
-		&& tm.getSimState()==TelephonyManager.SIM_STATE_READY
-		) {
-		String simName= "SIM "+(i+1)+" "+tm.getNetworkOperatorName();
+		&& tm.getSimState()==TelephonyManager.SIM_STATE_READY) {
+		String simName= "SIM "+(i+1)+" "+(tm.getNetworkOperatorName() != null ? tm.getNetworkOperatorName() : Unknown);
 		mPhoneIds.add(i);
 		mPhoneNames.add(simName);
 	    } 

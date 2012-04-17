@@ -113,6 +113,7 @@ import android.view.WindowManagerImpl;
 import android.view.WindowManagerPolicy;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.media.IAudioService;
 import android.media.AudioManager;
 
@@ -183,6 +184,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     Context mContext;
     IWindowManager mWindowManager;
     LocalPowerManager mPowerManager;
+    InputMethodManager mInputmethodManager;
     Vibrator mVibrator; // Vibrator for giving feedback of orientation changes
 
     // Vibrator pattern for haptic feedback of a long press.
@@ -213,6 +215,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     RecentApplicationsDialog mRecentAppsDialog;
     Handler mHandler;
     
+    boolean mInputmethodServiceConn = false;
     boolean mSystemReady;
     boolean mLidOpen;
     int mUiMode = Configuration.UI_MODE_TYPE_NORMAL;
@@ -1248,6 +1251,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
         } else if (keyCode == KeyEvent.KEYCODE_SEARCH) {
+            // fix bug:if Inputmethod service not connected,ignoring the key event.
+            if (mInputmethodManager == null) {
+                mInputmethodManager = (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            }
+            if (!mInputmethodServiceConn && mInputmethodManager != null) {
+                mInputmethodServiceConn = mInputmethodManager.getServiceConnFlag();
+            }
+            if (!mInputmethodServiceConn) {
+                 Log.d(TAG,"inputmethod service not connected,ignoring the SEARCH key event");
+                 return true;
+            }
+
             if (down) {
                 if (repeatCount == 0) {
                     mSearchKeyPressed = true;
@@ -1948,7 +1963,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                     // end for dual sim
 
-                    interceptPowerKeyDown(!isScreenOn || hungUp);
+//                    interceptPowerKeyDown(!isScreenOn || hungUp);
                 } else {
                     if (interceptPowerKeyUp(canceled)) {
                         if ((mEndcallBehavior

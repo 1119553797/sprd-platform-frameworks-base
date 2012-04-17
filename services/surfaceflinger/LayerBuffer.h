@@ -23,8 +23,6 @@
 #include "LayerBase.h"
 #include "TextureManager.h"
 
-struct copybit_device_t;
-
 namespace android {
 
 // ---------------------------------------------------------------------------
@@ -48,6 +46,7 @@ class LayerBuffer : public LayerBaseClient
         virtual void postBuffer(ssize_t offset);
         virtual void unregisterBuffers();
         virtual void destroy() { }
+        virtual void finishPageFlip();
         SurfaceFlinger* getFlinger() const { return mLayer.mFlinger.get(); }
     protected:
         LayerBuffer& mLayer;
@@ -68,6 +67,7 @@ public:
     virtual void drawForSreenShot() const;
     virtual uint32_t doTransaction(uint32_t flags);
     virtual void unlockPageFlip(const Transform& planeTransform, Region& outDirtyRegion);
+    virtual void finishPageFlip();
     virtual void validateVisibility(const Transform& globalTransform);
 
     status_t registerBuffers(const ISurface::BufferHeap& buffers);
@@ -133,9 +133,10 @@ private:
         virtual void postBuffer(ssize_t offset);
         virtual void unregisterBuffers();
         virtual void destroy() { }
+        virtual void finishPageFlip();
     private:
-        status_t initTempBuffer() const;
-        void clearTempBufferImage() const;
+        status_t fixYUV420Plane(copybit_image_t const *, uint32_t) const;
+        mutable bool mUseEGLImageDirectly;
         mutable Mutex                   mBufferSourceLock;
         sp<Buffer>                      mBuffer;
         status_t                        mStatus;
@@ -219,7 +220,6 @@ private:
     sp<Surface>     mSurface;
     bool            mInvalidate;
     bool            mNeedsBlending;
-    copybit_device_t* mBlitEngine;
 };
 
 // ---------------------------------------------------------------------------

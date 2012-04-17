@@ -1327,6 +1327,18 @@ public final class Telephony {
          * <P>Type: INTEGER</P>
          */
         public static final String PHONE_ID = "phone_id";
+
+        /**
+         * The Recipient addresses of the message
+         * <P> Type: INTEGER </P>
+         */
+        public static final String RECIPIENT_ADDRESSES = "recipient_addresses";
+
+        /**
+         * The Recipient names of the message
+         * <P> Type: INTEGER </P>
+         */
+        public static final String RECIPIENT_NAMES = "recipient_names";
     }
 
     /**
@@ -1354,11 +1366,13 @@ public final class Telephony {
          * getOrCreateThreadId.  It's convenient for use with SMS
          * messages.
          */
-        public static long getOrCreateThreadId(Context context, String recipient) {
+        public static long getOrCreateThreadId(Context context, String recipient, String name) {
             Set<String> recipients = new HashSet<String>();
-
             recipients.add(recipient);
-            return getOrCreateThreadId(context, recipients);
+
+            Set<String> names = new HashSet<String>();
+            names.add(name);
+            return getOrCreateThreadId(context, recipients, names);
         }
 
         /**
@@ -1372,15 +1386,18 @@ public final class Telephony {
          * is found, return it.  Otherwise, return a unique thread ID.
          */
         public static long getOrCreateThreadId(
-                Context context, Set<String> recipients) {
+                Context context, Set<String> recipients, Set<String> recipientNames) {
             Uri.Builder uriBuilder = THREAD_ID_CONTENT_URI.buildUpon();
 
             for (String recipient : recipients) {
                 if (Mms.isEmailAddress(recipient)) {
                     recipient = Mms.extractAddrSpec(recipient);
                 }
-
                 uriBuilder.appendQueryParameter("recipient", recipient);
+            }
+
+            for (String name : recipientNames) {
+                uriBuilder.appendQueryParameter("recipientNames", name);
             }
 
             Uri uri = uriBuilder.build();

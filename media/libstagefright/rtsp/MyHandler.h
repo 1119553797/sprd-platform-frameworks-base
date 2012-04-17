@@ -42,7 +42,7 @@
 
 // If no access units are received within 3 secs, assume that the rtp
 // stream has ended and signal end of stream.
-static int64_t kAccessUnitTimeoutUs = 5000000ll;//andrew modify 3sec to 5sec
+static int64_t kAccessUnitTimeoutUs = 10000000ll;//andrew modify 3sec to 10sec
 
 // If no access units arrive for the first 10 secs after starting the
 // stream, assume none ever will and signal EOS or switch transports.

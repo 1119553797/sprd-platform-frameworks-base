@@ -1391,6 +1391,15 @@ public final class InputMethodManager {
         }
     }
 
+    public boolean getServiceConnFlag() {
+        try {
+            return mService.getServiceConnFlag();
+        } catch (RemoteException e) {
+            Log.w(TAG, "getServiceConnFlag error",  e);
+            return false;
+        }
+    }
+
     void doDump(FileDescriptor fd, PrintWriter fout, String[] args) {
         final Printer p = new PrintWriterPrinter(fout);
         p.println("Input method client state for " + this + ":");

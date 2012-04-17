@@ -199,7 +199,8 @@ public class PowerManager
 
         Runnable mReleaser = new Runnable() {
             public void run() {
-                release();
+                if (isHeld())
+                   release();
             }
         };
 	
