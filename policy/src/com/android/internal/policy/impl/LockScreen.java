@@ -420,61 +420,68 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mSilentMode = !mSilentMode;
             
          // ************Modify by luning at01-07-01 begin************
-//            if (mSilentMode) {
+            if (mSilentMode) {
 //                final boolean vibe = (Settings.System.getInt(
 //                    getContext().getContentResolver(),
 //                    Settings.System.VIBRATE_IN_SILENT, 1) == 1);
 //
 //                mAudioManager.setRingerMode(vibe
 //                    ? AudioManager.RINGER_MODE_VIBRATE
-//                    : AudioManager.RINGER_MODE_SILENT);      
-//            } else {
-//                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-//            }
+//                    : AudioManager.RINGER_MODE_SILENT);
+                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                if (mAudioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER) == AudioManager.VIBRATE_SETTING_ON) {
+                    mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
+                            AudioManager.VIBRATE_SETTING_OFF);
+                  mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
+                          AudioManager.VIBRATE_SETTING_OFF);
+                }
+            } else {
+                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            }
                       
-            if(mSilentMode)
-        	{
-        		//change to profiles mode:silent
-        		String currMode = mAudioManager.getCurrProfilesMode(mContext);
-        		mAudioManager.saveLastProfilesMode(mContext,currMode);           		
-        		mAudioManager.saveCurrProfilesMode(mContext, Settings.System.PROFILES_MODE_SILENT);
-    			mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-        	}
-        	else
-        	{
-        		//restore last profiles mode
-        		String lastMode = mAudioManager.getLastProfilesMode(mContext);
-        		String currMode = mAudioManager.getCurrProfilesMode(mContext);
-        		mAudioManager.saveCurrProfilesMode(mContext, lastMode);
-        		mAudioManager.saveLastProfilesMode(mContext,currMode);
-           	
-        		//restore last vibrateSetting
-        		int callsVibrateSetting;
-        		if(lastMode.equals(Settings.System.PROFILES_MODE_OUTDOOR)||lastMode.equals(Settings.System.PROFILES_MODE_MEETING))
-        		{
-        		
-            		callsVibrateSetting = AudioManager.VIBRATE_SETTING_ON;
-        		}
-        		else
-        		{
-        			callsVibrateSetting = AudioManager.VIBRATE_SETTING_OFF;
-        		}
-        		mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-        				callsVibrateSetting);
-        		mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
-        				callsVibrateSetting);
-        	
-        		
-        		//restore last phone volume     		       	
-        		int lastVolume = mAudioManager.getProfilesVolume(mContext, lastMode, 5);
-        		mAudioManager.setStreamVolume(AudioManager.STREAM_RING, lastVolume, 0);
-        		
-        		//sync phone call volume
-        		mAudioManager.synPhoneVolume(mContext,lastVolume);
-       		
-        		//restore last ring mode     
-        		mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);      		
-        	}
+//            if(mSilentMode)
+//        	{
+//        		//change to profiles mode:silent
+//        		String currMode = mAudioManager.getCurrProfilesMode(mContext);
+//        		mAudioManager.saveLastProfilesMode(mContext,currMode);
+//        		mAudioManager.saveCurrProfilesMode(mContext, Settings.System.PROFILES_MODE_SILENT);
+//    			mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+//        	}
+//        	else
+//        	{
+//        		//restore last profiles mode
+//        		String lastMode = mAudioManager.getLastProfilesMode(mContext);
+//        		String currMode = mAudioManager.getCurrProfilesMode(mContext);
+//        		mAudioManager.saveCurrProfilesMode(mContext, lastMode);
+//        		mAudioManager.saveLastProfilesMode(mContext,currMode);
+//
+//        		//restore last vibrateSetting
+//        		int callsVibrateSetting;
+//        		if(lastMode.equals(Settings.System.PROFILES_MODE_OUTDOOR)||lastMode.equals(Settings.System.PROFILES_MODE_MEETING))
+//        		{
+//
+//            		callsVibrateSetting = AudioManager.VIBRATE_SETTING_ON;
+//        		}
+//        		else
+//        		{
+//        			callsVibrateSetting = AudioManager.VIBRATE_SETTING_OFF;
+//        		}
+//        		mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
+//        				callsVibrateSetting);
+//        		mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
+//        				callsVibrateSetting);
+//
+//
+//        		//restore last phone volume
+//        		int lastVolume = mAudioManager.getProfilesVolume(mContext, lastMode, 5);
+//        		mAudioManager.setStreamVolume(AudioManager.STREAM_RING, lastVolume, 0);
+//
+//        		//sync phone call volume
+//        		mAudioManager.synPhoneVolume(mContext,lastVolume);
+//
+//        		//restore last ring mode
+//        		mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+//        	}
              		
          // ************Modify by luning at01-07-01 end************   
     		
