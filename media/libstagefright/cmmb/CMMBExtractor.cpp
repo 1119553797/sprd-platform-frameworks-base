@@ -1,5 +1,5 @@
 
-#define LOG_TAG "INNO/CMMBExtractor/CMMBExtractor"
+#define LOG_TAG "INNO/CMMBExtractor/CMMBExtractor.cpp"
 #define LOG_NDEBUG	0
 #include <utils/Log.h>
 
@@ -208,8 +208,7 @@ status_t CMMBExtractor::initialize() {
     mFd = open(dumpfile, O_RDWR | O_CREAT | O_TRUNC);
     LOGD("dump to %s",  dumpfile);   
 #endif
-    LOGI("CMMBExtractor ver 2.0.2");
-	
+
     mVideoSock = NULL;
     mAudioSock = NULL;
     LOGI("===============CMMBExtractor:initialize() is called");
@@ -275,9 +274,6 @@ status_t CMMBExtractor::initialize() {
 //        LOGI("Initial wait %d ms for buffer in cmmbserver", MEDIA_SERVICE_BUFFER_INITIAL_WAIT_MS);
 //        usleep(MEDIA_SERVICE_BUFFER_INITIAL_WAIT_MS * 1000);
  */
-     LOGI("Initial wait %d ms for buffer in cmmbserver", 1500);
-
-     usleep(1500* 1000);
 
     return OK;
 }
