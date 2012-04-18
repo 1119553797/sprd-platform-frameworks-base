@@ -527,4 +527,29 @@ public class StorageManager
 
         return null;
     }
+
+    //Add for share cdrom start
+    public void enableShareCDRom() {
+        try {
+            mMountService.setShareUnshareCDRom(true);
+        } catch (RemoteException rex) {
+            Log.e(TAG, "Failed to set UMS enable state", rex);
+        }
+    }
+
+    public void disableShareCDRom() {
+        try {
+            mMountService.setShareUnshareCDRom(false);
+        } catch (RemoteException rex) {
+            Log.e(TAG, "Failed to set UMS enable state", rex);
+       }
+    }
+
+    public void resetUsb() {
+        try {
+            mMountService.resetUsb();
+        } catch (RemoteException rex) {
+            Log.e(TAG, "Failed to set UMS enable state", rex);
+       }
+    }
 }
