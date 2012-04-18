@@ -908,7 +908,6 @@ public class TelephonyManager {
     }
 
     private ITelephony getITelephony() {
-        Log.d(TAG,"phone "+mPhoneId+"services"+ServiceManager.getService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, mPhoneId)));
         return ITelephony.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, mPhoneId)));
     }
 
@@ -1212,105 +1211,6 @@ public class TelephonyManager {
         }  
     }
 
-//    remove
-//    public static final int MODE_TEL=0;
-//    public static final int MODE_MMS=1;
-//    public static final int MODE_VTEL=2;
-//    public static final String ACTION_GET_DEFAULT_SIM="com.sprd.intent.action.get_default_sim";
-//
-//    public static final String KEY_INTENT="intent";
-//    public static final String KEY_PHONE_ID="phone_id";
-//
-//    public void setDefaultSim(Context context,int mode,int phoneId) {
-//	String imsi="";
-//	if (phoneId>=0) {
-//	    TelephonyManager tm=(TelephonyManager)context.getSystemService(
-//		PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,phoneId));
-//	    imsi=tm.getSubscriberId();
-//	} 
-//
-//	String phoneIdKey="";
-//	String imsiKey="";
-//	switch (mode) {
-//	    case MODE_TEL:
-//		phoneIdKey="dual_sim_tel_id";
-//		imsiKey="dual_sim_tel_imsi";
-//		break;
-//	    case MODE_MMS:
-//		phoneIdKey="dual_sim_mms_id";
-//		imsiKey="dual_sim_mms_imsi";
-//		break;
-//	    case MODE_VTEL:
-//		phoneIdKey="dual_sim_vtel_id";
-//		imsiKey="dual_sim_vtel_imsi";
-//		break;
-//	    default:
-//		break;
-//	}
-//	
-//	Settings.System.putInt(context.getContentResolver(),phoneIdKey,phoneId);
-//	Settings.System.putString(context.getContentResolver(),imsiKey,imsi);
-//    }
-//    
-//    public Bundle getDefaultSim(Context context, int mode) {
-//	ContentResolver cr=context.getContentResolver();
-//	Bundle ret=new Bundle();
-//	int phoneId=-1;
-//	String imsi="";
-//	switch (mode) {
-//	    case MODE_TEL: {
-//		phoneId=Settings.System.getInt(cr,"dual_sim_tel_id",-1);
-//		imsi=Settings.System.getString(cr,"dual_sim_tel_imsi");
-//		break;
-//	    }
-//	    case MODE_MMS:
-//		phoneId=Settings.System.getInt(cr,"dual_sim_mms_id",-1);
-//		imsi=Settings.System.getString(cr,"dual_sim_mms_imsi");
-//		break;
-//	    case MODE_VTEL:
-//		phoneId=Settings.System.getInt(cr,"dual_sim_vtel_id",-1);
-//		imsi=Settings.System.getString(cr,"dual_sim_vtel_imsi");
-//		break;
-//	    default:
-//		break;
-//	}
-//	imsi=(imsi==null?"":imsi);
-//
-//	boolean alwaysAsk=false;
-//	if (phoneId==-1) {
-//	    alwaysAsk=true;
-//	} else {
-//	    TelephonyManager tm=(TelephonyManager)context.getSystemService(
-//		PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,phoneId));
-//	    boolean foundPhoneId=true;
-//	    if (!tm.hasIccCard() || (tm.hasIccCard() && !tm.getSubscriberId().equals(imsi))) {
-//		foundPhoneId=false;
-//		// rescan phoneId for imsi
-//		int phoneCount=getPhoneCount();
-//		for (int i=0;i<phoneCount;++i) {
-//		    TelephonyManager tmp=(TelephonyManager)context.getSystemService(
-//			PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i));
-//		    if (tmp.hasIccCard() && tmp.getSubscriberId().equals(imsi)) {
-//			phoneId=i;
-//			foundPhoneId=true;
-//			break;
-//		    } 
-//		} 
-//	    }
-//	    if (!foundPhoneId) {
-//		alwaysAsk=true;
-//	    }
-//	}
-//	if (alwaysAsk) {
-//	    // Intent intent=new Intent(ACTION_GET_DEFAULT_SIM);
-//	    // ret.putParcelable(KEY_INTENT,intent);
-//	    ret.putInt(KEY_PHONE_ID,-1);
-//	} else {
-//	    ret.putInt(KEY_PHONE_ID,phoneId);
-//	}
-//	return ret;
-//    }
-
     //About default sim card setting for vioce,video,mms
     public static final int MODE_TEL = 0;
     public static final int MODE_MMS = 1;
@@ -1370,9 +1270,9 @@ public class TelephonyManager {
      * @return default phoneId
      */
     public static int getDefaultSim(Context context, int mode) {
-	if (getPhoneCount()==1) {
-	    return 0;
-	} 
+        if (getPhoneCount() == 1) {
+            return 0;
+        }
         ContentResolver cr = context.getContentResolver();
         int phoneId = PHONE_ID_INVALID;
         String imsi = "";
@@ -1408,20 +1308,19 @@ public class TelephonyManager {
             }
         }
 
-	if (phoneId==PHONE_ID_INVALID) {
-	    int iccCount=0;
-	    for (int i = 0; i < getPhoneCount(); ++i) {
-		TelephonyManager tmp = getDefault(i);
-		if (tmp != null && tmp.hasIccCard()) {
-		    iccCount++;
-		    phoneId=i;
-		} 
-	    }
-	    if (iccCount>1) {
-		phoneId=PHONE_ID_INVALID;
-	    } 
-	}
-
+        if (phoneId == PHONE_ID_INVALID) {
+            int iccCount = 0;
+            for (int i = 0; i < getPhoneCount(); ++i) {
+                TelephonyManager tmp = getDefault(i);
+                if (tmp != null && tmp.hasIccCard()) {
+                    iccCount++;
+                    phoneId = i;
+                }
+            }
+            if (iccCount > 1) {
+                phoneId = PHONE_ID_INVALID;
+            }
+        }
         return phoneId;
     }
 }
