@@ -32,6 +32,12 @@
 
 namespace android {
 
+/***
+* There are three profiles identified in the MPEG-2 AAC standard.
+* A two bit field indicates the profile :main profile(0), LC(1),
+* SSR(2), Reserved(3). sprd decoder only support LC profile now.
+***/
+#define AAC_PROFILE_LC   (1)
 #define AAC_ADTS_HEADER_SIZE 7
 #define FRAME_NUM_BITRATE 100
 #define SYNC_COUNT 1000
@@ -86,6 +92,11 @@ static  int aac_parse_header(const sp<DataSource> &source, size_t offset, int  *
     if((header1&kMask)!=kMask)
         return -1;
 
+    //Check the profile, only support LC.
+    if ((header1&0xFF00)>>14 != AAC_PROFILE_LC) {
+        LOGE("Profile unsupported!(%d)", (header1&0xFF00)>>14);
+        return -1;
+    }
     int  sampling_index = (header1>>10)&0xf;
     int  sample_rate = mpeg4audio_sample_rates[sampling_index];
     if(!sample_rate)
