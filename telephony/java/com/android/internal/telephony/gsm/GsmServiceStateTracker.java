@@ -688,8 +688,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             plmn = Resources.getSystem().
                 getText(com.android.internal.R.string.emergency_calls_only).toString();
         }
-        Log.v(LOG_TAG, "GsmServiceStateTracker.java----updateSpnDisplay---rule=="+rule+"--curSpnRule=="+curSpnRule
-                 +"---spn ="+spn+"---curSpn=="+curSpn+"---plmn=="+plmn+"---curPlmn=="+curPlmn);
+        Log.v(LOG_TAG, "GsmServiceStateTracker.java----updateSpnDisplay---new rule=="+rule+"--curSpnRule=="+curSpnRule
+                 +"---new spn ="+spn+"---curSpn=="+curSpn+"---new plmn=="+plmn+"---curPlmn=="+curPlmn);
         if (rule != curSpnRule
                 || !TextUtils.equals(spn, curSpn)
                 || !TextUtils.equals(plmn, curPlmn)||mLocalLanguageChange) {
@@ -701,7 +701,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 && (ss.getState() != ServiceState.STATE_OUT_OF_SERVICE) && !airplaneMode;
             boolean showPlmn =
                 (rule & SIMRecords.SPN_RULE_SHOW_PLMN) == SIMRecords.SPN_RULE_SHOW_PLMN && !airplaneMode;
-            Log.d(LOG_TAG,"spn = " + spn + "  showSpn = " + showSpn
+            Log.d(LOG_TAG,"phoneId = "+phoneId+"spn = " + spn + "  showSpn = " + showSpn
                     + "  plmn = " + plmn + "  showPlmn = " + showPlmn+" mNetworkType "+setRadioType(networkType,airplaneMode));
 
             Intent intent = new Intent(Intents.SPN_STRINGS_UPDATED_ACTION);

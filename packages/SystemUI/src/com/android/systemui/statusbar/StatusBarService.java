@@ -1497,6 +1497,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 				} else if (IccCard.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
 					mCarrierLabels[phoneId].mSimMissed = false;
 					mCarrierLabels[phoneId].mSimBlocked = false;
+					mCarrierLabels[phoneId]
+                                   .updateForSimCardChanged(com.android.internal.R.string.lockscreen_carrier_default);
 				}
 
 			}
