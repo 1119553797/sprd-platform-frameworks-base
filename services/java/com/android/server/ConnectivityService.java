@@ -733,11 +733,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         // after the first one, thus the detach caused by first call is not finished, it will cause
         // the disconnect done message cased by second call is immediately received.
         boolean isAlreadyConnecting = false;
+        FeatureUser f = new FeatureUser(networkType, feature, binder);
         synchronized(this) {
             if (isMmsFeature(feature)) {
                 if (mMmsFeatureRequest.isEmpty()) {
                     // current data connection is default
-                    mMmsFeatureRequest.add(new FeatureUser(networkType, feature, binder));
+                    mMmsFeatureRequest.add(f);
                     mMmsFeatureState = FeatureState.CONNECTING;
                     if (DBG) {
                         Slog.d(TAG, "startUsing Mms Feature");
@@ -755,8 +756,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     }*/
                 } else {
                     // current data connection is mms
-                    FeatureUser f = (FeatureUser)mMmsFeatureRequest.get(0);
-                    if (TextUtils.equals(f.mFeature, feature) && mMmsFeatureState != FeatureState.DISCONNECTING) {
+                    FeatureUser k = (FeatureUser)mMmsFeatureRequest.get(0);
+                    if (TextUtils.equals(k.mFeature, feature) && mMmsFeatureState != FeatureState.DISCONNECTING) {
                         if (mMmsFeatureState == FeatureState.CONNECTING) {
                              isAlreadyConnecting = true;
                         }
@@ -791,7 +792,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                             if (DBG) {
                                 Slog.d(TAG, "startUsing Mms pending " + feature);
                             }
-                            mMmsFeatureRequest.add(new FeatureUser(networkType, feature, binder));
+                            mMmsFeatureRequest.add(f);
                         } else {
                             if (DBG) {
                                 Slog.d(TAG, "startUsing duplicate Mms pending " + feature);
@@ -808,7 +809,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             return Phone.APN_REQUEST_FAILED;
         }
 
-        FeatureUser f = new FeatureUser(networkType, feature, binder);
 
         boolean skipAvailableCheck = false;
         // TODO - move this into the MobileDataStateTracker
