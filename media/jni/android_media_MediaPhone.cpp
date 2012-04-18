@@ -297,30 +297,9 @@ android_media_MediaPhone_prepare(JNIEnv *env, jobject thiz)
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return;
     }
-    jobject surface = env->GetObjectField(thiz, fields.remote_surface);
-    if (surface != NULL) {
-        const sp<Surface> native_surface = get_surface(env, surface);
-        LOGV("setRemote: surface=%p (id=%d)",
-             native_surface.get(), native_surface->getIdentity());
-        mp->setRemoteSurface(native_surface);
-    }
-    surface = env->GetObjectField(thiz, fields.local_surface);
-    if (surface != NULL) {
-        const sp<Surface> native_surface = get_surface(env, surface);
-
-        // The application may misbehave and
-        // the preview surface becomes unavailable
-        if (native_surface.get() == 0) {
-            LOGE("Application lost the surface");
-            jniThrowException(env, "java/io/IOException", "invalid preview surface");
-            return;
-        }
-
-        LOGI("setLocal: surface=%p (identity=%d)", native_surface.get(), native_surface->getIdentity());
-        if (process_media_phone_call(env, thiz, mp->setLocalSurface(native_surface), "java/lang/RuntimeException", "setPreviewSurface failed.")) {
-            return;
-        }
-    }
+    
+    setRemoteSurface(mp, env, thiz);
+	setLocalSurface(mp, env, thiz);
     
     process_media_phone_call( env, thiz, mp->prepare(), "java/io/IOException", "Prepare Async failed.");
 }
@@ -619,7 +598,9 @@ android_media_MediaPhone_native_waitRequestForAT(JNIEnv *env, jobject thiz)
 				break;
 			}
 		} while (1);
-	}
+	}else {
+	    LOGE("vt_pipe_report_iframe: %d, vt_pipe_request_iframe: %d", vt_pipe_report_iframe, vt_pipe_request_iframe);
+    }
 	if (vt_pipe_report_iframe > 0) {
 		close(vt_pipe_report_iframe);
 	}

@@ -445,6 +445,8 @@ public class MimeTypeMap {
             sMimeTypeMap.loadEntry("text/h323", "323");
             sMimeTypeMap.loadEntry("text/iuls", "uls");
             sMimeTypeMap.loadEntry("text/mathml", "mml");
+            //add for wml
+            sMimeTypeMap.loadEntry("text/vnd.wap.wml", "wml");
             // add it first so it will be the default for ExtensionFromMimeType
             sMimeTypeMap.loadEntry("text/plain", "txt");
             sMimeTypeMap.loadEntry("text/plain", "asc");

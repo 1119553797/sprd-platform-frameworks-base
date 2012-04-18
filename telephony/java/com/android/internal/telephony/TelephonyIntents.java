@@ -248,6 +248,9 @@ public class TelephonyIntents {
     public static final String ACTION_IS_SIM_SMS_READY
             = "android.intent.action.ACTION_IS_SIM_SMS_READY";
 
+    public static final String ACTION_IS_SIM_SMS_READY1
+            = "android.intent.action.ACTION_IS_SIM_SMS_READY1";
+
     /**
      * <p>Broadcast Action: It indicates the STK perform the refresh operation
      * <p class="note">.

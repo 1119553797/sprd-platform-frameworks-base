@@ -603,6 +603,7 @@ public final class SIMRecords extends IccRecords {
 
         // Length = length of MCC + length of MNC
         // length of mcc = 3 (TS 23.003 Section 2.2)
+        Log.d(LOG_TAG, "getSIMOperatorNumeric:imsi= "+imsi +" mncLength ="+mncLength);
         return imsi.substring(0, 3 + mncLength);
     }
 
@@ -928,6 +929,7 @@ public final class SIMRecords extends IccRecords {
                     if (imsi != null && mncLength != UNKNOWN) {
                         // finally have both imsi and the length of the mnc and can parse
                         // the imsi properly
+                        Log.d(LOG_TAG, "SIMRecords:imsi= "+imsi +" mncLength ="+mncLength);
                         MccTable.updateMccMncConfiguration(phone, imsi.substring(0, 3 + mncLength));
                     }
                 }

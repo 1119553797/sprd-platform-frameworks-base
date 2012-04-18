@@ -1091,8 +1091,44 @@ public final class GsmMmiCode extends Handler implements MmiCode {
             }
         } else if (isActivate()) {
             state = State.COMPLETE;
-            sb.append(context.getText(
-                    com.android.internal.R.string.serviceEnabled));
+            CallForwardInfo infos[];
+            infos = (CallForwardInfo[]) ar.result;
+
+            if (infos == null) {
+                Log.i(LOG_TAG, " infos == null ");
+                sb.append(context.getText(
+                        com.android.internal.R.string.serviceEnabled));
+            } else {
+                if (infos.length == 0) {
+                    // Assume the default is not active
+                    sb.append(context.getText(com.android.internal.R.string.serviceDisabled));
+
+                    // Set unconditional CFF in SIM to false
+                    phone.mSIMRecords.setVoiceCallForwardingFlag(1, false);
+                } else {
+                    SpannableStringBuilder tb = new SpannableStringBuilder();
+
+                    // Each bit in the service class gets its own result line
+                    // The service classes may be split up over multiple
+                    // CallForwardInfos. So, for each service class, find out
+                    // which CallForwardInfo represents it and then build
+                    // the response text based on that
+
+                    for (int serviceClassMask = 1
+                               ; serviceClassMask <= SERVICE_CLASS_MAX
+                               ; serviceClassMask <<= 1
+                    ) {
+                        for (int i = 0, s = infos.length; i < s ; i++) {
+                            if ((serviceClassMask & infos[i].serviceClass) != 0) {
+                                tb.append(makeCFQueryResultMessage(infos[i],
+                                                serviceClassMask));
+                                tb.append("\n");
+                            }
+                        }
+                    }
+                    sb.append(tb);
+                }
+            }
             // Record CLIR setting
             if (sc.equals(SC_CLIR)) {
                 phone.saveClirSetting(CommandsInterface.CLIR_INVOCATION);
