@@ -533,7 +533,6 @@ public class MediaPhone extends Handler
 	            try {
 					_enableRecord(isEnable, type, fos.getFD());
 	            } finally {
-	            	Log.e(TAG, "enableRecord fail");
 	                fos.close();
 	            }
 	        }
