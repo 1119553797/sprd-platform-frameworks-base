@@ -1345,7 +1345,9 @@ public class PhoneNumberUtils
 
         boolean isEmergency = false;
         for (int j = 0; j < phoneCount; j++ ) {
-            isEmergency = isEmergency || PhoneFactory.isCardExist(j);
+//            isEmergency = isEmergency || PhoneFactory.isCardExist(j);
+            log("sim"+phoneId+" hasIccCard " + TelephonyManager.getDefault(j).hasIccCard());
+            isEmergency = isEmergency || TelephonyManager.getDefault(j).hasIccCard();
         }
 
         if(!isEmergency) {
