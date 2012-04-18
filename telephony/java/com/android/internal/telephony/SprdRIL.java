@@ -702,7 +702,8 @@ public final class SprdRIL extends RIL {
 				 case RIL_REQUEST_GET_CLIR: ret =  responseInts(p); break;
 				 case RIL_REQUEST_SET_CLIR: ret =  responseVoid(p); break;
 				 case RIL_REQUEST_QUERY_CALL_FORWARD_STATUS: ret =	responseCallForward(p); break;
-				 case RIL_REQUEST_SET_CALL_FORWARD: ret =  responseVoid(p); break;
+				 //case RIL_REQUEST_SET_CALL_FORWARD: ret =  responseVoid(p); break;
+				 case RIL_REQUEST_SET_CALL_FORWARD: ret =  responseCallForward(p); break;
 				 case RIL_REQUEST_QUERY_CALL_WAITING: ret =  responseCallWaiting(p); break;
 				 case RIL_REQUEST_SET_CALL_WAITING: ret =  responseVoid(p); break;
 				 case RIL_REQUEST_SMS_ACKNOWLEDGE: ret =  responseVoid(p); break;
