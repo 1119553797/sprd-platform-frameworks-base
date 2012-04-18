@@ -89,7 +89,7 @@ AudioPolicyService::AudioPolicyService()
 #endif
 
     // load properties
-    property_get("ro.camera.sound.forced", value, "0");
+    property_get("ro.camera.sound.forced", value, "1");
     mpPolicyManager->setSystemProperty("ro.camera.sound.forced", value);
 	LOGV("create  audio policy service ok");
 	

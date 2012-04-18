@@ -567,6 +567,39 @@ public interface IMountService extends IInterface {
                 }
                 return _result;
             }
+
+            /**
+             * Mount cdrom to PC
+             */
+            public void setShareUnshareCDRom(boolean enable) throws android.os.RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    _data.writeInt(((enable) ? (1) : (0)));
+                    mRemote.transact(Stub.TRANSACTION_setShareUnshareCDRom,_data, _reply, 0);
+                    _reply.readException();
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+            }
+
+            /**
+             * Restart the usb connection
+             */
+            public void resetUsb() throws android.os.RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    mRemote.transact(Stub.TRANSACTION_resetUsb, _data, _reply,0);
+                    _reply.readException();
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+            }
         }
 
         private static final String DESCRIPTOR = "IMountService";
@@ -620,6 +653,10 @@ public interface IMountService extends IInterface {
         static final int TRANSACTION_isObbMounted = IBinder.FIRST_CALL_TRANSACTION + 23;
 
         static final int TRANSACTION_getMountedObbPath = IBinder.FIRST_CALL_TRANSACTION + 24;
+
+        static final int TRANSACTION_setShareUnshareCDRom = (android.os.IBinder.FIRST_CALL_TRANSACTION + 25);
+
+        static final int TRANSACTION_resetUsb = (android.os.IBinder.FIRST_CALL_TRANSACTION + 26);
 
         /**
          * Cast an IBinder object into an IMountService interface, generating a
@@ -895,6 +932,20 @@ public interface IMountService extends IInterface {
                     reply.writeString(mountedPath);
                     return true;
                 }
+                case TRANSACTION_setShareUnshareCDRom: {
+                    data.enforceInterface(DESCRIPTOR);
+                    boolean _arg0;
+                    _arg0 = (0 != data.readInt());
+                    this.setShareUnshareCDRom(_arg0);
+                    reply.writeNoException();
+                    return true;
+                }
+                case TRANSACTION_resetUsb: {
+                    data.enforceInterface(DESCRIPTOR);
+                    this.resetUsb();
+                    reply.writeNoException();
+                    return true;
+                }
             }
             return super.onTransact(code, data, reply, flags);
         }
@@ -1049,4 +1100,14 @@ public interface IMountService extends IInterface {
      * Unregisters an IMountServiceListener
      */
     public void unregisterListener(IMountServiceListener listener) throws RemoteException;
+
+    /**
+     * Mount cdrom to PC
+     */
+    public void setShareUnshareCDRom(boolean enable) throws android.os.RemoteException;
+
+    /**
+     * Restart the usb connection
+     */
+    public void resetUsb() throws android.os.RemoteException;
 }

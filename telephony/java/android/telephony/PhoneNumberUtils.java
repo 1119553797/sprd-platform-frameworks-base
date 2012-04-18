@@ -265,15 +265,6 @@ public class PhoneNumberUtils
 
         for (int i = 0; i < len; i++) {
             char c = phoneNumber.charAt(i);
-
-			if (c == 'p' || c == 'P') {
-				c = PAUSE;
-			}
-
-			if (c == 'w' || c == 'W') {
-				c = WAIT;
-			}
-
             if (isNonSeparator(c)) {
                 ret.append(c);
             }
@@ -1354,7 +1345,9 @@ public class PhoneNumberUtils
 
         boolean isEmergency = false;
         for (int j = 0; j < phoneCount; j++ ) {
-            isEmergency = isEmergency || PhoneFactory.isCardExist(j);
+//            isEmergency = isEmergency || PhoneFactory.isCardExist(j);
+            log("sim"+phoneId+" hasIccCard " + TelephonyManager.getDefault(j).hasIccCard());
+            isEmergency = isEmergency || TelephonyManager.getDefault(j).hasIccCard();
         }
 
         if(!isEmergency) {
@@ -1490,9 +1483,7 @@ public class PhoneNumberUtils
         for (int i = 0; i < len; i++) {
             char c = out[i];
             // If this char isn't in KEYPAD_MAP at all, just leave it alone.
-			if ('p' != c && 'P' != c && 'w' != c && 'W' != c) {
-				out[i] = (char) KEYPAD_MAP.get(c, c);
-			}
+		    out[i] = (char) KEYPAD_MAP.get(c, c);
         }
 
         return new String(out);

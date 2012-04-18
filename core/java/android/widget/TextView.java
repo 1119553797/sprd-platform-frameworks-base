@@ -6354,8 +6354,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         if (mListeners == null) {
             mListeners = new ArrayList<TextWatcher>();
         }
-
-        mListeners.add(watcher);
+        if(watcher != null) {
+            mListeners.add(watcher);
+        }
     }
 
     /**
@@ -6379,7 +6380,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             final ArrayList<TextWatcher> list = mListeners;
             final int count = list.size();
             for (int i = 0; i < count; i++) {
-                list.get(i).beforeTextChanged(text, start, before, after);
+                if(list.get(i) != null) {
+                    list.get(i).beforeTextChanged(text, start, before, after);
+                }
             }
         }
     }
@@ -6394,7 +6397,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             final ArrayList<TextWatcher> list = mListeners;
             final int count = list.size();
             for (int i = 0; i < count; i++) {
-                list.get(i).onTextChanged(text, start, before, after);
+                if(list.get(i) != null) {
+                    list.get(i).onTextChanged(text, start, before, after);
+                }
             }
         }
     }
@@ -6408,7 +6413,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             final ArrayList<TextWatcher> list = mListeners;
             final int count = list.size();
             for (int i = 0; i < count; i++) {
-                list.get(i).afterTextChanged(text);
+                if(list.get(i) != null) {
+                    list.get(i).afterTextChanged(text);
+                }
             }
         }
     }
