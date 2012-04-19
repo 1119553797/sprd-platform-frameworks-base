@@ -1321,7 +1321,7 @@ class MountService extends IMountService.Stub
         String vs = getVolumeState(path);
         String method = "ums";
         Log.d(TAG,"********************** current vs = " + vs);
-        if (enable && ((vs.equals(Environment.MEDIA_MOUNTED)) || (vs.equals(Environment.MEDIA_IDLE)))) {
+        if (enable && ((vs.equals(Environment.MEDIA_MOUNTED)) || (vs.equals(Environment.MEDIA_UNMOUNTED)) || (vs.equals(Environment.MEDIA_IDLE)))) {
             // Override for isUsbMassStorageEnabled()
         	mUmsConnected = mCs.isUsbConnected();
         	Log.d(TAG,"setUsbMassStorageEnabled mUmsConnected = " + mUmsConnected);

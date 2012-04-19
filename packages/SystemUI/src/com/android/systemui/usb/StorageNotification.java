@@ -164,6 +164,7 @@ public class StorageNotification extends StorageEventListener {
 //                    com.android.internal.R.string.usb_storage_stop_notification_message,
 //                    com.android.internal.R.drawable.stat_sys_warning, false, true, pi);
                 //Add by liguxiang 07-08-11 for USB settings function end
+            setMediaStorageNotification(0, 0, 0, false, false, null);
         } else if (newState.equals(Environment.MEDIA_CHECKING)) {
             /*
              * Storage is now checking. Update media notification and disable
