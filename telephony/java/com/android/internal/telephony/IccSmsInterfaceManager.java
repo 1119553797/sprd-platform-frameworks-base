@@ -23,6 +23,7 @@ import android.util.Log;
 import com.android.internal.util.HexDump;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static android.telephony.SmsManager.STATUS_ON_ICC_FREE;
@@ -224,16 +225,18 @@ public abstract class IccSmsInterfaceManager extends ISms.Stub {
      */
     protected byte[] makeSmsRecordData(int status, byte[] pdu) {
         byte[] data = new byte[IccConstants.SMS_RECORD_LENGTH];
+        Arrays.fill(data, (byte)0xff);
 
         // Status bits for this record.  See TS 51.011 10.5.3
         data[0] = (byte)(status & 7);
 
-        System.arraycopy(pdu, 0, data, 1, pdu.length);
+        //System.arraycopy(pdu, 0, data, 1, pdu.length);
+        System.arraycopy(pdu, 1, data, 1, (pdu.length - 1));
 
         // Pad out with 0xFF's.
-        for (int j = pdu.length+1; j < IccConstants.SMS_RECORD_LENGTH; j++) {
-            data[j] = -1;
-        }
+        //for (int j = pdu.length+1; j < IccConstants.SMS_RECORD_LENGTH; j++) {
+        //    data[j] = -1;
+        //}
 
         return data;
     }

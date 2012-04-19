@@ -119,6 +119,9 @@ class MountService extends IMountService.Stub
         public static final int ShareStatusResult              = 210;
         public static final int AsecPathResult                 = 211;
         public static final int ShareEnabledResult             = 212;
+        //Add for share cdrom start
+        public static final int ShareChangeResult              = 214;
+        //Add for share cdrom end
 
         /*
          * 400 series - Command was accepted, but the requested action
@@ -155,7 +158,9 @@ class MountService extends IMountService.Stub
     private boolean                               mSendUmsConnectedOnBoot = false;
     private ConnectivityService                   mCs = null;
     private boolean                               mUmsConnected = false;
-
+    //Add for share cdrom start
+    private boolean                               mCdromShared = false;
+    //Add for share cdrom start
     /**
      * Private hash of currently mounted secure containers.
      * Used as a lock in methods to manipulate secure containers.
@@ -2254,5 +2259,73 @@ class MountService extends IMountService.Stub
             }
         }
     }
+
+    // Add for share sdrom start
+    public void resetUsb(){
+        try {
+            mConnector.doCommand("volume resetusb");
+        } catch (NativeDaemonConnectorException e) {
+            Slog.e(TAG, "Failed to reset usb", e);
+        }
+    }
+
+    private void enableSharedCDRom(boolean enable) {
+        mCdromShared = enable;
+    }
+
+    public void setShareUnshareCDRom(boolean enable) {
+        doShareUnshareCDRom("ums", enable);
+        setCDRomShareStatus();
+    }
+
+    private void doShareUnshareCDRom(String method, boolean enable) {
+        if (!method.equals("ums")) {
+            throw new IllegalArgumentException(String.format("Method %s not supported", method));
+        }
+        // we wait for the storage status change to unshare
+        int delay = 3;
+        final String path = Environment.getExternalStorageDirectory().getPath();
+        while ((getVolumeState(path).equals(Environment.MEDIA_SHARED)) && (delay--) > 0) {
+            SystemClock.sleep(100);
+        }
+
+        try {
+            mConnector.doCommand(String.format("volume cdrom share %s %s", method,
+                                 (enable ? "true" : "false")));
+        } catch (NativeDaemonConnectorException e) {
+            Slog.e(TAG, "Failed to share cdrom", e);
+        }
+    }
+
+    private boolean isCDRomShared(String method) {
+        String cmd = String.format("volume isShared cdrom %s", method);
+        ArrayList<String> rsp = mConnector.doCommand(cmd);
+
+        for (String line : rsp) {
+            String[] tok = line.split(" ");
+            int code;
+            try {
+                code = Integer.parseInt(tok[0]);
+            } catch (NumberFormatException nfe) {
+                Slog.e(TAG, String.format("Error parsing code %s", tok[0]));
+                return false;
+            }
+            if (code == VoldResponseCode.ShareChangeResult) {
+                if (tok[2].equals("shared"))
+                    return true;
+                return false;
+            } else {
+                Slog.e(TAG, String.format("Unexpected response code %d", code));
+                return false;
+            }
+        }
+        Slog.e(TAG, "Got an empty response");
+        return false;
+    }
+
+    private void setCDRomShareStatus() {
+        mCdromShared = isCDRomShared("ums");
+    }
+    // Add for share sdrom end
 }
 

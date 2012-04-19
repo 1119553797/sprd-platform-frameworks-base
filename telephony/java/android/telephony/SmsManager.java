@@ -26,6 +26,7 @@ import android.util.Log;
 import com.android.internal.telephony.ISms;
 import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.PhoneFactory;
+import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsRawData;
@@ -606,8 +607,18 @@ public final class SmsManager {
                 // List contains all records, including "free" records (null)
                 if (data != null) {
                     SmsMessage sms = SmsMessage.createFromEfRecord(i+1, data.getBytes());
+
                     if (sms != null) {
                         messages.add(sms);
+                        // Update STATUS_ON_ICC_READ status
+                        byte status = (byte) (data.getBytes()[0] & 0x07);
+                        Log.d("GSM", "createMessageListFromRawRecords: status = " + status);
+                        if (status == STATUS_ON_ICC_UNREAD) {
+                            Log.d("GSM", "createMessageListFromRawRecords update pdu = " +
+                                  IccUtils.bytesToHexString(data.getBytes()));
+                            boolean result = updateMessageOnIcc(i+1, STATUS_ON_ICC_READ, data.getBytes());
+                            Log.d("GSM", "createMessageListFromRawRecords: update result = " + result);
+                        }
                     }
                 }
             }
