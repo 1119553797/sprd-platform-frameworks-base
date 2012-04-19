@@ -40,6 +40,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -78,6 +79,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
 
     private View mLockScreen;
     private View mUnlockScreen;
+    
+    private Context mContext;
 
     private boolean mScreenOn = false;
     private boolean mEnableFallback = false; // assume no fallback UI until we know better
@@ -207,6 +210,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
             KeyguardWindowController controller) {
         super(context);
 
+		mContext = context;
+        
         mConfiguration = context.getResources().getConfiguration();
         mEnableFallback = false;
 
@@ -241,8 +246,10 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                     return;
                 }
                 if (!isSecure()) {
+                	Log.d("lile", "1111111111111");
                     getCallback().keyguardDone(true);
                 } else {
+                	Log.d("lile", "2222222222222");
                     updateScreen(Mode.UnlockScreen);
                 }
             }
@@ -541,6 +548,9 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
 
     private boolean isSecure() {
         UnlockMode unlockMode = getUnlockMode();
+		boolean isAirPlaneMode = Settings.System.getInt(
+				mContext.getContentResolver(),
+				Settings.System.AIRPLANE_MODE_ON, 0) != 0;
         boolean secure = false;
         switch (unlockMode) {
             case Pattern:
@@ -548,19 +558,19 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 break;
             //PUK Input Add Start
             case SimPin:
-                secure = mUpdateMonitor.getSimState(0) == IccCard.State.PIN_REQUIRED;
+                secure = mUpdateMonitor.getSimState(0) == IccCard.State.PIN_REQUIRED && !isAirPlaneMode;
                 break;
                 
             case Sim2Pin:
-                secure = mUpdateMonitor.getSimState(1) == IccCard.State.PIN_REQUIRED;
+                secure = mUpdateMonitor.getSimState(1) == IccCard.State.PIN_REQUIRED && !isAirPlaneMode;
                 break;
 
             case SimPuk:
-                secure = mUpdateMonitor.getSimState(0) == IccCard.State.PUK_REQUIRED;
+                secure = mUpdateMonitor.getSimState(0) == IccCard.State.PUK_REQUIRED && !isAirPlaneMode;
                 break;
                 
             case Sim2Puk:
-                secure = mUpdateMonitor.getSimState(1) == IccCard.State.PUK_REQUIRED;
+                secure = mUpdateMonitor.getSimState(1) == IccCard.State.PUK_REQUIRED && !isAirPlaneMode;
                 break;
             //PUK Input Add End
             case Account:
@@ -738,15 +748,18 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
         final IccCard.State simState2 = TelephonyManager.getPhoneCount() > 1 ? mUpdateMonitor
 				.getSimState(1) : IccCard.State.ABSENT;
         UnlockMode currentMode;
-       
+        
+        boolean isAirPlaneMode = Settings.System.getInt(
+				mContext.getContentResolver(),
+				Settings.System.AIRPLANE_MODE_ON, 0) != 0;
         // PUK Input Add Start
-        if (simState == IccCard.State.PIN_REQUIRED ) {
+        if (simState == IccCard.State.PIN_REQUIRED && !isAirPlaneMode) {
             currentMode = UnlockMode.SimPin;
-        }else if(simState2 == IccCard.State.PIN_REQUIRED ){
+        }else if(simState2 == IccCard.State.PIN_REQUIRED && !isAirPlaneMode ){
         	currentMode = UnlockMode.Sim2Pin;
-        }else if(simState == IccCard.State.PUK_REQUIRED ){
+        }else if(simState == IccCard.State.PUK_REQUIRED && !isAirPlaneMode){
         	currentMode = UnlockMode.SimPuk;
-        }else if(simState2 == IccCard.State.PUK_REQUIRED) {
+        }else if(simState2 == IccCard.State.PUK_REQUIRED && !isAirPlaneMode) {
             currentMode = UnlockMode.Sim2Puk;
         // PUK Input Add End
         } else {

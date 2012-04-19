@@ -18,8 +18,13 @@ package com.android.internal.policy.impl;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.os.Handler;
+import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import com.android.internal.telephony.PhoneFactory;
@@ -84,6 +89,12 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     private final int MIN_PIN_LENGTH = 4;
     private int mSub;
     private int mState = STATE_PIN;
+    
+    private IntentFilter filter = new IntentFilter();
+    private BroadcastReceiver mBroadcastReceiver;
+    
+    private Handler mHandler;
+    
     public SimUnlockScreen(Context context, Configuration configuration,
             KeyguardUpdateMonitor updateMonitor, KeyguardScreenCallback callback,
             LockPatternUtils lockpatternutils, int sub) {
@@ -132,6 +143,28 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mOkButton.setOnClickListener(this);
         setFocusableInTouchMode(true);
         mUpdateMonitor.registerInfoCallback(this);
+        
+        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        mHandler= new Handler();
+		mBroadcastReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				String action = intent.getAction();
+				if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(action)) {
+					boolean isAirPlaneMode = intent.getBooleanExtra("state",
+							false);
+					if (isAirPlaneMode) {
+						mHandler.post(new Runnable() {
+							public void run() {
+								mCallback.goToUnlockScreen(); 
+							}
+						});
+					}
+				}
+			}
+		};
+		
     }
 
     /** {@inheritDoc} */
@@ -153,6 +186,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mPinText.setText("");
         mEnteredDigits = 0;
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
+        mContext.registerReceiver(mBroadcastReceiver, filter);
     }
 
     /**
@@ -189,6 +223,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             mSimUnlockProgressDialog.hide();
         }
         mUpdateMonitor.removeCallback(this);
+    	mContext.unregisterReceiver(mBroadcastReceiver);
     }
 
 
