@@ -246,10 +246,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                     return;
                 }
                 if (!isSecure()) {
-                	Log.d("lile", "1111111111111");
                     getCallback().keyguardDone(true);
                 } else {
-                	Log.d("lile", "2222222222222");
                     updateScreen(Mode.UnlockScreen);
                 }
             }
