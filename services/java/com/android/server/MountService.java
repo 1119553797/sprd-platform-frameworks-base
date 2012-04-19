@@ -2261,13 +2261,13 @@ class MountService extends IMountService.Stub
     }
 
     // Add for share sdrom start
-    public void resetUsb(){
+    /*public void resetUsb(){
         try {
             mConnector.doCommand("volume resetusb");
         } catch (NativeDaemonConnectorException e) {
             Slog.e(TAG, "Failed to reset usb", e);
         }
-    }
+    }*/
 
     private void enableSharedCDRom(boolean enable) {
         mCdromShared = enable;

@@ -588,7 +588,7 @@ public interface IMountService extends IInterface {
             /**
              * Restart the usb connection
              */
-            public void resetUsb() throws android.os.RemoteException {
+            /*public void resetUsb() throws android.os.RemoteException {
                 android.os.Parcel _data = android.os.Parcel.obtain();
                 android.os.Parcel _reply = android.os.Parcel.obtain();
                 try {
@@ -599,7 +599,7 @@ public interface IMountService extends IInterface {
                     _reply.recycle();
                     _data.recycle();
                 }
-            }
+            }*/
         }
 
         private static final String DESCRIPTOR = "IMountService";
@@ -656,7 +656,7 @@ public interface IMountService extends IInterface {
 
         static final int TRANSACTION_setShareUnshareCDRom = (android.os.IBinder.FIRST_CALL_TRANSACTION + 25);
 
-        static final int TRANSACTION_resetUsb = (android.os.IBinder.FIRST_CALL_TRANSACTION + 26);
+        //static final int TRANSACTION_resetUsb = (android.os.IBinder.FIRST_CALL_TRANSACTION + 26);
 
         /**
          * Cast an IBinder object into an IMountService interface, generating a
@@ -940,12 +940,12 @@ public interface IMountService extends IInterface {
                     reply.writeNoException();
                     return true;
                 }
-                case TRANSACTION_resetUsb: {
+                /*case TRANSACTION_resetUsb: {
                     data.enforceInterface(DESCRIPTOR);
                     this.resetUsb();
                     reply.writeNoException();
                     return true;
-                }
+                }*/
             }
             return super.onTransact(code, data, reply, flags);
         }
@@ -1109,5 +1109,5 @@ public interface IMountService extends IInterface {
     /**
      * Restart the usb connection
      */
-    public void resetUsb() throws android.os.RemoteException;
+    //public void resetUsb() throws android.os.RemoteException;
 }

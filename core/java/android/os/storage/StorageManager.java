@@ -545,11 +545,11 @@ public class StorageManager
        }
     }
 
-    public void resetUsb() {
+    /*public void resetUsb() {
         try {
             mMountService.resetUsb();
         } catch (RemoteException rex) {
             Log.e(TAG, "Failed to set UMS enable state", rex);
        }
-    }
+    }*/
 }
