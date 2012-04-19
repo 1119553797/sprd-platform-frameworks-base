@@ -225,7 +225,7 @@ public abstract class ServiceStateTracker extends Handler {
     setRadioPower(boolean power) {
         mDesiredPowerState = power;
 
-        setPowerStateToDesired();
+        setPowerStateToDesired(true);
     }
 
     /**
@@ -271,7 +271,7 @@ public abstract class ServiceStateTracker extends Handler {
 
     protected abstract void handlePollStateResult(int what, AsyncResult ar);
     protected abstract void updateSpnDisplay();
-    protected abstract void setPowerStateToDesired();
+    protected abstract void setPowerStateToDesired(boolean force);
 
     /**
      * Clean up existing voice and data connection then turn off radio power.

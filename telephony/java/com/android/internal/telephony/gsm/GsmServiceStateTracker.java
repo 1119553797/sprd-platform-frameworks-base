@@ -405,12 +405,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 Log.v(LOG_TAG, "GsmServiceStateTracker.java---EVENT_RADIO_STATE_CHANGED");
             	if(SystemProperties.get("sys.power.off").equals("true"))
             		break;
-                if(phone.getIccCard().getIccCardState() == IccCard.State.ABSENT || phone.getIccCard().getIccCardState() == IccCard.State.UNKNOWN){
-                    Log.v(LOG_TAG, "GsmServiceStateTracker.java---card "+phone.getPhoneId()+"is absent");
-                    return;
-                }
-                Log.v(LOG_TAG, "GsmServiceStateTracker.java---card "+phone.getPhoneId()+" is ready");
-                setPowerStateToDesired();
+                setPowerStateToDesired(false);
                 pollState();
                 break;
 
@@ -579,12 +574,15 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         }
     }
 
-    protected void setPowerStateToDesired() {
+    protected void setPowerStateToDesired(boolean force) {
         Log.d(LOG_TAG, "setPowerStateToDesired " + "phone="+phone.getPhoneId()+" mDesiredPowerState="+mDesiredPowerState+" cm.getRadioState().isOn="+cm.getRadioState().isOn());
         // If we want it on and it's off, turn it on
         if (mDesiredPowerState
-            && cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF) {
-                   cm.setRadioPower(true, null);
+            && (cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF)) {
+            if(force || phone.getIccCard().getIccCardState() != IccCard.State.ABSENT && phone.getIccCard().getIccCardState() != IccCard.State.UNKNOWN){
+                cm.setRadioPower(true, null);
+                Log.v(LOG_TAG, "GsmServiceStateTracker.java---card "+phone.getPhoneId()+"RadioPower true.");
+            }
         } else if (!mDesiredPowerState && cm.getRadioState().isOn()) {
             DataConnectionTracker dcTracker = phone.mDataConnection;
             if (! dcTracker.isDataConnectionAsDesired()) {
