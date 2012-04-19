@@ -1210,8 +1210,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 					CallLog.Calls.DATE, CallLog.Calls.NEW }, "(type = "
 					+ unRead + " AND new = 1)", null, "calls.date desc");// limit
 			// ?distinct?
-
-			return cur.getCount();
+			if (cur != null) {
+				return cur.getCount();
+			}
 		} catch (SQLiteException ex) {
 			Log.d("SQLiteException in getMissCallCount", ex.getMessage());
 		} finally {
@@ -1230,7 +1231,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 			cur = cr.query(Sms.Inbox.CONTENT_URI, new String[] {
 					BaseColumns._ID, Sms.ADDRESS, Sms.PERSON, Sms.BODY,
 					Sms.DATE }, selection, null, "date desc");// limit
-			return cur.getCount();
+			if (cur != null) {
+				return cur.getCount();
+			}
 		} catch (SQLiteException ex) {
 			Log.e(TAG, "SQLiteException in getUnReadSmsCount" + ex.getMessage());
 		} finally {

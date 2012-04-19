@@ -329,7 +329,7 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
 
         case EVENT_RADIO_STATE_CHANGED:
             // This will do nothing in the 'radio not available' case.
-            setPowerStateToDesired();
+            setPowerStateToDesired(false);
             pollState();
             break;
 
@@ -533,7 +533,7 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
     //***** Private Instance Methods
 
     @Override
-    protected void setPowerStateToDesired() {
+    protected void setPowerStateToDesired(boolean force) {
         // If we want it on and it's off, turn it on
         if (mDesiredPowerState
             && cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF) {

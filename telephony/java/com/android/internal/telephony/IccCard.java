@@ -430,8 +430,8 @@ public abstract class IccCard {
         updateStateProperty();
 
         transitionedIntoPinLocked = (
-                 (oldState != State.PIN_REQUIRED && newState == State.PIN_REQUIRED)
-              || (oldState != State.PUK_REQUIRED && newState == State.PUK_REQUIRED));
+                 ( newState == State.PIN_REQUIRED)
+              || ( newState == State.PUK_REQUIRED));
         transitionedIntoAbsent = (oldState != State.ABSENT && newState == State.ABSENT);
         transitionedIntoNetworkLocked = (oldState != State.NETWORK_LOCKED
                 && newState == State.NETWORK_LOCKED);
