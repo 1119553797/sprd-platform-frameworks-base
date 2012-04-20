@@ -340,7 +340,7 @@ public class KeyguardUpdateMonitor {
                     + "state resolved to " + state.toString());
         }
 
-        if (state != IccCard.State.UNKNOWN && state != mSimState[simArgs.phoneId]) {
+        if (state != IccCard.State.UNKNOWN /**&& state != mSimState[simArgs.phoneId]**/) {
             mSimState[simArgs.phoneId]= state;
             for (int i = 0; i < mSimStateCallbacks.size(); i++) {
                 mSimStateCallbacks.get(i).onSimStateChanged(state,simArgs.phoneId);
