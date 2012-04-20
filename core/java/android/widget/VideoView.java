@@ -399,7 +399,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
                 //Log.i("@@@@", "video size: " + mVideoWidth +"/"+ mVideoHeight);
                 resize(mIsFullScreen);
                 //getHolder().setFixedSize(mVideoWidth, mVideoHeight);
-                if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
+                //if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
                     // We didn't actually change the size (it was already at the size
                     // we need), so we won't get a "surface changed" callback, so
                     // start the video here instead of in the callback.
@@ -415,7 +415,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
 //                           // Show the media controls when we're paused into a video and make 'em stick.
 //                           mMediaController.show(0);
 //                       }
-                   }
+                  // }
                 }
             } else {
                 // We don't know the video size yet, but should start anyway.
@@ -679,6 +679,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
 
     public void start() {
         if (isInPlaybackState()) {
+            Log.d(TAG, "VideoView start");
             mMediaPlayer.start();
             mCurrentState = STATE_PLAYING;
         }
