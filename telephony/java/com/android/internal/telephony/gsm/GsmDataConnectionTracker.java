@@ -146,7 +146,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
      * It is a subset of allApns and has the same format
      */
     protected ArrayList<ApnSetting> waitingApns = null;
-    private int waitingApnsPermanentFailureCountDown = 0;
+    protected int waitingApnsPermanentFailureCountDown = 0;
     private ApnSetting preferredApn = null;
 
     /* Currently active APN */
