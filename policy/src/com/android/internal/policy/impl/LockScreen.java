@@ -150,6 +150,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
    	private static final Canvas sCanvas = new Canvas();
    	private Bitmap mLeftBitmap;
    	private Bitmap mRightBitmap;
+
+	private static final int ON_KEYDOWN_TIMEOUT_MS = 3600000;
     
     /**
      * The status of this lock screen.
@@ -506,6 +508,13 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     
     /** {@inheritDoc} */
     public void onGrabbedStateChange(View v, int grabbedState) {
+
+		if (grabbedState != SlidingTab.OnTriggerListener.NO_HANDLE) {
+			mCallback.pokeWakelock(ON_KEYDOWN_TIMEOUT_MS);
+		} else {
+			mCallback.pokeWakelock();
+		}
+
     	if(hasMissPhone||hasMissMms){
     		return;
     	}
@@ -517,9 +526,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 //        if(grabbedState == SlidingTab.OnTriggerListener.LEFT_HANDLE){
 //        	 mSelector.setLeftHintText(R.string.lockscreen_unlock_label);
 //        }
-        if (grabbedState != SlidingTab.OnTriggerListener.NO_HANDLE) {
-            mCallback.pokeWakelock();
-        }
+
     }
 
     /**
