@@ -349,6 +349,7 @@ public class VolumePreference extends SeekBarPreference implements
 		private void sample() {
 			onSampleStarting(this);
 			mRingtone.play();
+			mRingtone.setLooping(true);
 		}
 
 		public void stopSample() {
