@@ -1562,6 +1562,9 @@ public final class SIMRecords extends IccRecords {
             if ((spnDisplayCondition & 0x01) == 0x01) {
                 // ONS required when registered to HPLMN or PLMN in EF_SPDI
                 rule |= SPN_RULE_SHOW_PLMN;
+            }else if(spnDisplayCondition == 0x00){
+                //EF_SPN required did't show spn
+                rule = SPN_RULE_SHOW_PLMN;
             }else{
             	rule |= SPN_RULE_SHOW_SPN;
             }
@@ -1569,7 +1572,7 @@ public final class SIMRecords extends IccRecords {
             rule = SPN_RULE_SHOW_PLMN;
             if ((spnDisplayCondition & 0x02) == 0x00) {
                 // SPN required if not registered to HPLMN or PLMN in EF_SPDI
-                rule |= SPN_RULE_SHOW_SPN;
+                rule = SPN_RULE_SHOW_PLMN;
             }else{
             	rule |= SPN_RULE_SHOW_PLMN;
             }
@@ -1642,7 +1645,6 @@ public final class SIMRecords extends IccRecords {
                     data = (byte[]) ar.result;
                     spnDisplayCondition = 0xff & data[0];
                     spn = IccUtils.adnStringFieldToString(data, 1, data.length - 1);
-
                     if (DBG) log("Load EF_SPN: " + spn
                             + " spnDisplayCondition: " + spnDisplayCondition);
                     String iccOperatorAlphaProperty = PhoneFactory.getProperty(
