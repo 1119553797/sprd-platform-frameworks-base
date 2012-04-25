@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Config;
 import android.util.Log;
 import android.os.Looper;
 import com.android.internal.telephony.IccUtils;
@@ -340,7 +341,11 @@ public class AdnRecordLoader extends Handler {
 
 				adn = new AdnRecord(ef, recordNumber, data);
 				result = adn;
-
+                    if (adn.number.length() <= 20) {
+                        if (Config.LOGD)
+                        Log.d(LOG_TAG, "an adn number is less than 20.so did't read ext");
+                        break;
+                    }
 				if (adn.hasExtendedRecord()) {
 					// If we have a valid value in the ext record field,
 					// we're not done yet: we need to read the corresponding
@@ -394,7 +399,11 @@ public class AdnRecordLoader extends Handler {
 				for (int i = 0, s = datas.size(); i < s; i++) {
 					adn = new AdnRecord(ef, 1 + i, datas.get(i));
 					adns.add(adn);
-
+                        if (adn.number.length() <= 20) {
+                            if (Config.LOGD)
+                            Log.d(LOG_TAG, "an adn number is less than 20.so dii't read ext");
+                            break;
+                        }
 					if (adn.hasExtendedRecord()) {
 						// If we have a valid value in the ext record field,
 						// we're not done yet: we need to read the corresponding
