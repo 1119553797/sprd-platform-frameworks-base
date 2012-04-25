@@ -330,4 +330,6 @@ cat include/telephony/ril.h | \
 	int RIL_UNSOL_ON_STIN = 1040;
 	
 	int RIL_UNSOL_SIM_SMS_READY = 1041;
+    //for confirm when in call
+    int RIL_UNSOL_SYNC_IND = 1042;
 }
