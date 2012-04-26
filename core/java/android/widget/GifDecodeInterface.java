@@ -297,7 +297,7 @@ public interface GifDecodeInterface {
             if (frameindex > frameCount - 1) {
                 frameindex = 0;
             }
-            if (frameindex >= 0 && frameindex < frameCount) {
+            if (frameindex >= 0 && frameindex < frameCount && frames.size() > 0 ) {
                 GifFrame currFrame = frames.elementAt(frameindex);
                 delay = currFrame.delay;
                 return currFrame.image;

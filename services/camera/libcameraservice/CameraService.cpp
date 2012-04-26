@@ -98,6 +98,7 @@ CameraService::~CameraService() {
 }
 
 int32_t CameraService::getNumberOfCameras() {
+	LOG1("CameraService getNumberOfCameras (mNumberOfCameras=%d)", mNumberOfCameras);
     return mNumberOfCameras;
 }
 

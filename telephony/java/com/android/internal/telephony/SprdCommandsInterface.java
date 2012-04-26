@@ -65,6 +65,7 @@ public interface SprdCommandsInterface {
     
    
     public void mmiEnterSim(String dailString, Message result);
+    public void setSIMPower(boolean on, Message result);
 
 
 }

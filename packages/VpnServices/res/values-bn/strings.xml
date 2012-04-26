@@ -1,0 +1,8 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">VPN সেবা</string>
+    <string name="vpn_notification_title_connected"><xliff:g id="profilename">%s</xliff:g> VPN সংযুক্ত</string>
+    <string name="vpn_notification_title_disconnected"><xliff:g id="profilename">%s</xliff:g> VPN সংযোগ বিচ্ছিন্ন</string>
+    <string name="vpn_notification_hint_disconnected">একটি VPN থেকে ক্রমাগত সংযোগ স্থাপনের স্পর্শ.</string>
+</resources>

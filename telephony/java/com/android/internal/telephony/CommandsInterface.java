@@ -246,6 +246,10 @@ public interface CommandsInterface extends SprdCommandsInterface{
     void registerForInCallVoicePrivacyOff(Handler h, int what, Object obj);
     void unregisterForInCallVoicePrivacyOff(Handler h);
 
+    //add for confirm when in call
+    void registerForSycnInd(Handler h, int what, Object obj);
+    void unregisterForSycnInd(Handler h);
+
     /**
      * Fires on any transition into RUIM_READY
      * Fires immediately if if currently in that state

@@ -1180,6 +1180,12 @@ public class SipPhone extends SipPhoneBase {
 	}
 
 	@Override
+    public void setIccCard(boolean turnOn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public int getPhoneId() {
 		// TODO Auto-generated method stub
 		return 0;

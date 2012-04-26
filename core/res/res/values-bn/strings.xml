@@ -188,7 +188,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permgroupdesc_developmentTools">"বৈশিষ্ট্যগুলি কেবলমাত্র জন্য প্রয়োজন
          অ্যাপ্লিকেশন ডেভেলপার. "</string>
     <string name="permgrouplab_storage">সংগ্রহস্থল</string>
-    <string name="permgroupdesc_storage">SD  কার্ড এক্সেস.</string>
+
     <string name="permlab_statusBar"> নিষ্ক্রিয় অথবা পরিবর্তন করুন অবস্থা বার </string>
     <string name="permdesc_statusBar">অ্যাপ্লিকেশন থেকে স্ট্যাটাস বার অথবা নিষ্ক্রিয় করা এবং যোগ সিস্টেম আইকন অথবা অপসারণ করতে পারবেন.</string>
     <string name="permlab_expandStatusBar">সম্প্রসারণ/ পতন  অবস্থা বার </string>
@@ -454,8 +454,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_readDictionary">একটি অ্যাপলিকেশন যে কোনো প্রাইভেট শব্দ, নাম এবং বাক্যাংশ  পড়তে অনুমতি দেয় ,যেটি ব্যবহারকারীর নির্দিষ্ট সংরক্ষিত অভিধানে সংরক্ষিত আছে .</string>
     <string name="permlab_writeDictionary">ব্যবহারকারী নির্ধারিত ডিরেক্টরি থেকে লিখুন</string>
     <string name="permdesc_writeDictionary">একটি অ্যাপলিকেশন ব্যবহারকারী শব্দভাণ্ডারে নতুন শব্দ লেখতে অনুমোদন করে.</string>
-    <string name="permlab_sdcardWrite">SD কার্ড বিষয়বস্তু vপরিবর্তন/মুছে ফেলা  </string>
-    <string name="permdesc_sdcardWrite">একটি অ্যাপলিকেশন SD কার্ডে লেখতে অনুমোদন করে.</string>
+
+
     <string name="permlab_cache_filesystem">ক্যাশে ফাইল সিস্টেম এক্সেস </string>
     <string name="permdesc_cache_filesystem">একটি অ্যাপলিকেশন ক্যাশ ফাইল   সিস্টেম পড়তে এবং লিখতে অনুমোদন করে.</string>
     <string name="policylab_limitPassword">পাসওয়ার্ড সীমা</string>
@@ -472,45 +472,45 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
          আপনার তথ্য সমস্ত ছাড়া কোনো নিশ্চিতকরণ. "</string>
     <string-array name="phoneTypes">
         <item>বাসা</item>
-        <item> </item>
+        <item>মোবাইল</item>
         <item>কাজ</item>
         <item>ফ্যাক্স কাজ</item>
         <item>বাড়ির ফ্যাক্স</item>
         <item>পেজার</item>
-        <item> </item>
+        <item>অন্যান্য</item>
         <item>কাস্টম</item>
     </string-array>
     <string-array name="emailAddressTypes">
         <item>বাসা</item>
         <item>কাজ</item>
-        <item></item>
+        <item>অন্যান্য</item>
         <item>কাস্টম</item>
     </string-array>
     <string-array name="postalAddressTypes">
         <item>বাসা</item>
         <item>কাজ</item>
-        <item></item>
+        <item>অন্যান্য</item>
         <item>কাস্টম</item>
     </string-array>
     <string-array name="imAddressTypes">
         <item>বাসা</item>
         <item>কাজ</item>
-        <item></item>
+        <item>অন্যান্য</item>
         <item>কাস্টম</item>
     </string-array>
     <string-array name="organizationTypes">
         <item>কাজ</item>
-        <item></item>
+        <item>অন্যান্য</item>
         <item>কাস্টম</item>
     </string-array>
     <string-array name="imProtocols">
-        <item></item>
+        <item>AIM এর</item>
         <item>Windows Live</item>
         <item>Yahoo</item>
-        <item></item>
-        <item></item>
+        <item>স্কাইপ</item>
+        <item>QQ</item>
         <item>Google টক</item>
-        <item></item>
+        <item>ICQ</item>
         <item>"Jabber"</item>
     </string-array>
     <string name="phoneTypeCustom">কাস্টম</string>
@@ -656,65 +656,65 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="beforeOneMonthDurationPast">এক মাস আগে</string>
     <plurals name="num_seconds_ago">
         <item quantity="one">১ সে. আগে</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> সেকেন্ড আগে</item>
     </plurals>
     <plurals name="num_minutes_ago">
         <item quantity="one">১ মিনিট আগে</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> মিনিট আগে</item>
     </plurals>
     <plurals name="num_hours_ago">
         <item quantity="one">১ ঘন্টা আগে</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ঘন্টা আগে</item>
     </plurals>
     <string name="last_month">গত মাসে</string>
     <string name="older">পুরাতন</string>
     <plurals name="num_days_ago">
         <item quantity="one">গতকাল</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> দিন আগে</item>
     </plurals>
     <plurals name="in_num_seconds">
         <item quantity="one">১ দ্বিতীয়</item>
-        <item quantity="other"></item>
+        <item quantity="other">এ <xliff:g id="count">%d</xliff:g> সেকেন্ড</item>
     </plurals>
     <plurals name="in_num_minutes">
         <item quantity="one">১ মিনিটে</item>
-        <item quantity="other"></item>
+        <item quantity="other">এ <xliff:g id="count">%d</xliff:g>  মিনিট</item>
     </plurals>
     <plurals name="in_num_hours">
         <item quantity="one">১ ঘন্টা</item>
-        <item quantity="other"></item>
+        <item quantity="other">এ <xliff:g id="count">%d</xliff:g> ঘন্টা</item>
     </plurals>
     <plurals name="in_num_days">
         <item quantity="one">আগামীকাল</item>
-        <item quantity="other"></item>
+        <item quantity="other">এ <xliff:g id="count">%d</xliff:g>  দিন</item>
     </plurals>
     <plurals name="abbrev_num_seconds_ago">
         <item quantity="one">১ সে. আগে</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> সেকেন্ড আগে</item>
     </plurals>
     <plurals name="abbrev_num_minutes_ago">
         <item quantity="one">১ মিনিট আগে</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> মিনিট আগে</item>
     </plurals>
     <plurals name="abbrev_num_hours_ago">
         <item quantity="one">১ ঘন্টা আগে</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ঘন্টা আগে </item>
     </plurals>
     <plurals name="abbrev_num_days_ago">
         <item quantity="one">গতকাল</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> দিন আগে</item>
     </plurals>
     <plurals name="abbrev_in_num_minutes">
         <item quantity="one">১ কমপক্ষে</item>
-        <item quantity="other"></item>
+        <item quantity="other">এ <xliff:g id="count">%d</xliff:g>  মিনিট</item>
     </plurals>
     <plurals name="abbrev_in_num_hours">
         <item quantity="one">১ ঘন্টা</item>
-        <item quantity="other"></item>
+        <item quantity="other">এ <xliff:g id="count">%d</xliff:g> ঘন্টা</item>
     </plurals>
     <plurals name="abbrev_in_num_days">
         <item quantity="one">আগামীকাল</item>
-        <item quantity="other"></item>
+        <item quantity="other">এ <xliff:g id="count">%d</xliff:g>  দিন</item>
     </plurals>
     <string name="day">দিন</string>
     <string name="days">দিন</string>
@@ -779,39 +779,31 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="no_permissions">কোন প্রয়োজন অনুমতি নেই</string>
     <string name="usb_storage_activity_title">USB মাস স্টোরেজ</string>
     <string name="usb_storage_title">USB-এর সাথে সংযুক্ত</string>
-    <string name="usb_storage_message">আপনি আপনার কম্পিউটার থেকে USB দ্বারা আপনার ফোন সংযুক্ত. নিচের বোতামটি নির্বাচন করুন আপনি যদি আপনার কম্পিউটারে এবং আপনার অ্যান্ড্রয়েড \u2018s SD কার্ড মধ্যে ফাইল কপি করতে চান.</string>
+
     <string name="usb_storage_button_mount">USB স্টোরেজ চালু করুন</string>
-    <string name="usb_storage_error_message">একটি সমস্যা USB স্টোরেজ জন্য আপনার SD কার্ড ব্যবহার করে আছে.</string>
+
     <string name="usb_storage_notification_title">USB-এর সাথে সংযুক্ত</string>
     <string name="usb_storage_notification_message">ফাইলগুলি তে/ থেকে আপনার কম্পিউটারে কপি নির্বাচন করুন.</string>
     <string name="usb_storage_stop_notification_title">USB স্টোরেজ বন্ধ</string>
     <string name="usb_storage_stop_notification_message">থেকে USB স্টোরেজ বন্ধ নির্বাচন করুন.</string>
     <string name="usb_storage_stop_title">ব্যবহার USB স্টোরেজ</string>
-    <string name="usb_storage_stop_message">বন্ধ ইউএসবি সংরক্ষণাগার বদলার পূর্বে, আপনাকে আনমাউন্ট নিশ্চিত করেছেন (\u201cejected\u201d) আপনার গণক যন্ত্র থেকে আপনার Android\u2018s SD কার্ড।</string>
+
     <string name="usb_storage_stop_button_mount">USB স্টোরেজ বন্ধ</string>
     <string name="usb_storage_stop_error_message">একটি সমস্যা বাঁক USB স্টোরেজ বন্ধ ছিল. নিশ্চিত আপনি USB হোস্ট করেছেন আনমাউটেড পরীক্ষা করুন, তারপরে আবার চেষ্টা করুন.</string>
     <string name="dlg_confirm_kill_storage_users_title">USB স্টোরেজ চালু করুন</string>
     <string name="dlg_confirm_kill_storage_users_text">যদি আপনি USB স্টোরেজ বন্ধ, কিছু অ্যাপ্লিকেশন ব্যবহার করা হয় এবং অপ্রাপ্য পর্যন্ত আপনি USB স্টোরেজ বন্ধ হতে পারে বন্ধ হবে.</string>
     <string name="dlg_error_title">USB অপারেশন ব্যর্থ</string>
-    <string name="extmedia_format_message">আপনি কি নিশ্চিত যে আপনি SD কার্ড ফরম্যাট করতে চান? আপনার কার্ড সমস্ত ডাটা হারিয়ে যাবে.</string>
+
     <string name="extmedia_format_button_format">বিন্যাস</string>
     <string name="adb_active_notification_title">USB ডিবাগ সংযুক্ত</string>
     <string name="adb_active_notification_message">USB-এর ডিবাগ নিষ্ক্রিয় নির্বাচন করুন.</string>
     <string name="select_input_method">ইনপুট পদ্ধতি নির্বাচন করুন</string>
     <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
-    <string name="ext_media_checking_notification_title">SD কার্ড প্রস্তুতি</string>
+
     <string name="ext_media_checking_notification_message">ত্রুটি জন্য চেক করা হচ্ছে.</string>
-    <string name="ext_media_nofs_notification_title">ফাঁকা SD কার্ড</string>
-    <string name="ext_media_nofs_notification_message">SD কার্ড ফাঁকা অথবা অসমর্থিত ফাইল সিস্টেম আছে.</string>
-    <string name="ext_media_unmountable_notification_title">ক্ষতিগ্রস্ত SD কার্ড</string>
-    <string name="ext_media_unmountable_notification_message">SDকার্ড ক্ষতিগ্রস্ত. আপনি এটা  রিফরমেট থাকতে পারে.</string>
-    <string name="ext_media_badremoval_notification_title">SD কার্ড অপ্রত্যাশিতভাবে মুছে ফেলা</string>
-    <string name="ext_media_badremoval_notification_message">আনমাউন্ট থেকে ডাটা এড়ানোর মুছে ফেলার পূর্বে SD কার্ড.</string>
-    <string name="ext_media_safe_unmount_notification_title">SD কার্ড অপসারণের জন্য নিরাপদ</string>
-    <string name="ext_media_safe_unmount_notification_message">আপনি নিশ্চিন্তে SD কার্ড অপসারণ করতে পারেন.</string>
-    <string name="ext_media_nomedia_notification_title">অপসারিত SD কার্ড</string>
-    <string name="ext_media_nomedia_notification_message">SD কার্ড মুছে ফেলা. একটি নতুন ঢোকান.</string>
+
+
     <string name="activity_list_empty">মিলে যাওয়া কোন কাজকর্ম পাওয়া যায় নেই</string>
     <string name="permlab_pkgUsageStats">কম্পোনেন্ট ব্যবহার পরিসংখ্যান আপডেট</string>
     <string name="permdesc_pkgUsageStats">সংগৃহীত উপাদান ব্যবহারের রীতি-নীতি পরিসংখ্যানের অনুমোদন করে পরিমার্জন। স্বাভাবিক অ্যাপলিকেশনের মধ্যে ব্যবহারের জন্য না।</string>
@@ -879,4 +871,230 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="charge_active_notification_message">শুধুমাত্র মোড সক্রিয় চার্জ</string>
     <string name="charge_active_notification_title">শুধুমাত্র যখন USB সংযুক্ত চার্জ ব্যবহার</string>
     <string name="CallHold" msgid="">"কল হোল্ড করা হলো"</string>
+    <string name="address_length">ঠিকানা সর্বাধিক দৈর্ঘ্য পৌছয়</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
+    <string name="mmiFdnError">নির্দিষ্ট ডায়ালিং শুধুমাত্র নম্বর অপারেশন সীমাবদ্ধ রাখা হয়.</string>
+    <string name="serviceClassSMS">SMS</string>
+    <string name="serviceClassPAD">PAD</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: ফরোয়ার্ড করা যাচ্ছে না</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> আগে <xliff:g id="time_delay">{2}</xliff:g> সেকন্ড</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: ফরোয়ার্ড করা যাচ্ছে না</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: ফরোয়ার্ড করা যাচ্ছে না</string>
+    <string name="httpErrorOk">ঠিক আছে</string>
+    <string name="notification_title">সাইন ইন ত্রুটির জন্য <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+    <string name="contentServiceTooManyDeletesNotificationDesc">অনেকগুলি <xliff:g id="content_type">%s</xliff:g> মুছে ফেলা হবে.</string>
+    <string name="me">আমাকে</string>
+    <string name="permgroupdesc_storage" product="nosdcard">USB স্টোরেজ একসেস.</string>
+    <string name="permgroupdesc_storage" product="default">এসডি কার্ড একসেস.</string>
+    <string name="permlab_statusBarService">স্ট্যাটাস বার</string>
+    <string name="permdesc_statusBarService">আবেদন স্ট্যাটাস বার হতে করতে পারবেন.</string>
+    <string name="permlab_receiveSmsCB">SMSCB প্রাপ্ত</string>
+    <string name="permlab_receiveEmergencyBroadcast">জরুরী সম্প্রচার প্রাপ্ত</string>
+    <string name="permdesc_receiveEmergencyBroadcast">আবেদন গ্রহণ করার অনুমতি দেয়
+       এবং প্রক্রিয়া জরুরী ব্রডকাস্ট বার্তা. এই অনুমতি শুধুমাত্র উপলভ্য
+       সিস্টেমের জন্য অ্যাপ্লিকেশন.</string>
+    <string name="permdesc_broadcastWapPush">একটি অ্যাপ্লিকেশন একটি বিজ্ঞপ্তি যে একটি WAP পুশ বার্তা হয়েছে প্রাপ্তি থেকে সম্প্রচার করতে সহায়তা করে. অনিষ্টকারী অ্যাপ্লিকেশনের জন্য MMS বার্তা প্রাপ্তি অথবা কামারশালা থেকে চুপি চুপি কোনো অনিষ্টকারী রূপগুলো সঙ্গে ওয়েব পৃষ্ঠার বিষয়বস্তু প্রতিস্থাপন এই ব্যবহার করতে পারেন.</string>
+    <string name="permdesc_diagnostic">একটি অ্যাপ্লিকেশন এবং পড়তে কোনো সম্পদ diag গ্রুপ দ্বারা মালিকানাধীন লিখতে সুযোগ দেয়; উদাহরণস্বরূপ dev মধ্যে, ফাইল. এর ফলে সম্ভাব্য আপনার সিস্টেম অধিক স্থায়ী এবং নিরাপত্তা প্রভাবিত করতে পারে. শুধুমাত্র হার্ডওয়্যার নির্দিষ্ট নিদানবিদ্যা জন্য উচিত হবে নির্মাতা অথবা অপারেটর দ্বারা ব্যবহৃত.</string>
+    <string name="permdesc_changeComponentState">একটি আবেদন কিনা অন্য অ্যাপ্লিকেশনে একটি কম্পোনেন্ট বা সক্রিয় করা হয় না পরিবর্তন করা যাবে. অনিষ্টকারী অ্যাপ্লিকেশনের ক্ষেত্রে গুরুত্বপূর্ণ ফোন ক্ষমতা নিষ্ক্রিয় এই ব্যবহার করতে পারেন. অনুমতি সঙ্গে সেবা, ব্যবহৃত হবে হিসাবে এটি একটি অব্যবহারযোগ্য, অসঙ্গত, বা পরিবর্তনশীল দশায় আবেদন উপাদান পাওয়া সম্ভব হবে.</string>
+    <string name="permdesc_installLocationProvider">পরীক্ষার জন্য উপহাস অবস্থান উত্স. নির্মাণ অনিষ্টকারী অ্যাপ্লিকেশনের জন্য অবস্থান এবং অবস্থা বা বাস্তব যেমন GPS বা নেটওয়ার্ক প্রদানকারী হিসাবে অথবা এবং নিরীক্ষণের জন্য একটি বহিরাগত উত্স আপনার অবস্থান রিপোর্ট অবস্থান উত্স দ্বারা ফিরে অগ্রাহ্য করা এই ব্যবহার করতে পারেন.</string>
+    <string name="permlab_manageUsb">পছন্দ USB যন্ত্রগুলির জন্য এবং অনুমতি পরিচালনা</string>
+    <string name="permdesc_manageUsb">আবেদন পছন্দ USB যন্ত্রগুলির জন্য এবং অনুমতি পরিচালনা করতে পারবেন.</string>
+    <string name="permdesc_readPhoneState">আবেদন ডিভাইসের ফোন বৈশিষ্ট্য অ্যাক্সেসের অনুমতি দেয়. এই অনুমতি দিয়ে একটি আবেদনপত্র ফোন নম্বর এবং এই ফোন এর ক্রমিক সংখ্যা নির্ধারণ করা যাবে কিনা একটি কল সক্রিয়, সংখ্যা এবং মত কল সংযুক্ত করা হয়.</string>
+    <string name="permlab_setTime">সময় নির্ধারণ</string>
+    <string name="permlab_accessWimaxState">WiMAX অবস্থা প্রদর্শন</string>
+    <string name="permdesc_accessWimaxState">একটি আবেদন দেখার জন্য করতে পারবেন
+       WiMAX অবস্থা সম্পর্কে তথ্য.</string>
+    <string name="permlab_changeWimaxState">WiMAX অবস্থা পরিবর্তন</string>
+    <string name="permdesc_changeWimaxState">একটি আবেদন সংযোগ স্থাপন করতে সক্ষম
+       এবং WiMAX নেটওয়ার্ক থেকে বিযুক্ত করা.</string>
+    <string name="permlab_nfc">"নিয়ার ফিল্ড কমিউনিকেশন 'নিয়ন্ত্রণ"</string>
+    <string name="permdesc_nfc">একটি আবেদন যোগাযোগ করতে সক্ষম হবেন
+       সঙ্গে নিয়ার ফিল্ড কমিউনিকেশন (NFC) ট্যাগ, কার্ড, এবং পাঠকদের.</string>
+    <string name="permdesc_disableKeyguard">একটি আবেদন কীলক এবং সংযুক্ত পাসওয়ার্ড নিরাপত্তা নিষ্ক্রিয় করতে পারবেন. এই বৈধ উদাহরণ হল ফোন কীলক  নিষ্ক্রিয় যখন একটি অন্তর্মুখী ফোন, তারপর কীলক  যখন কল সমাপ্ত হয় পুনরায় সক্রিয় গ্রহণ.</string>
+    <string name="permlab_sdcardWrite" product="nosdcard">পরিবর্তন / মুছে USB স্টোরেজ বিষয়বস্তু</string>
+    <string name="permlab_sdcardWrite" product="default">পরিবর্তন/এসডি কার্ড বিষয়বস্তু মুছে ফেলা</string>
+    <string name="permdesc_sdcardWrite" product="nosdcard">একটি আবেদন USB স্টোরেজ লিখতে করতে সক্ষম হবেন.</string>
+    <string name="permdesc_sdcardWrite" product="default">একটি আবেদন এসডি কার্ড লিখতে করতে সক্ষম হবেন.</string>
+    <string name="permlab_use_sip">গঠন/ গ্রহণ করা ইন্টারনেট কল </string>
+    <string name="permdesc_use_sip">একটি আবেদন SIP সেবা করার জন্য / করা ইন্টারনেট কল পেতে ব্যবহার করতে পারবেন.</string>
+    <string name="phoneTypeMobile">মোবাইল</string>
+    <string name="phoneTypeOther">অন্যান্য</string>
+    <string name="phoneTypeIsdn">ISDN</string>
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
+    <string name="phoneTypeMms">MMS</string>
+    <string name="emailTypeOther">অন্যান্য</string>
+    <string name="emailTypeMobile">মোবাইল</string>
+    <string name="postalTypeOther">অন্যান্য</string>
+    <string name="imTypeOther">অন্যান্য</string>
+    <string name="imProtocolAim">AIM এর</string>
+    <string name="imProtocolSkype">স্কাইপ</string>
+    <string name="imProtocolQq">QQ</string>
+    <string name="imProtocolIcq">ICQ</string>
+    <string name="orgTypeOther">অন্যান্য</string>
+    <string name="sipAddressTypeCustom">কাস্টম</string>
+    <string name="sipAddressTypeHome">বাসা</string>
+    <string name="sipAddressTypeWork">কাজ</string>
+    <string name="sipAddressTypeOther">অন্যান্য</string>
+    <string name="contact_status_update_attribution">ভায়া <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> ভায়া <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="sim_puk_requried">সিম পিন ব্লক, PUK থেকে আনব্লক লিখুন</string>
+    <string name="keyguard_password_enter_sim_pin_code">সিম পিন কোড লিখুন</string>
+    <string name="keyguard_sim_pin_accepted">সিম পিন আনলক সাফল্য</string>
+    <string name="lockscreen_plugged_in">চার্জিং(<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">আপনি ভুল করেছেন আপনার আনলক প্যাটার্ন টানা <xliff:g id="number">%d</xliff:g>সময়.
+        \n\nআবার চেষ্টা করুন<xliff:g id="number">%d</xliff:g> সেকেন্ড.</string>
+    <string name="lockscreen_failed_attempts_almost_glogin">আপনি ভুল করেছেন আপনার আনলক প্যাটার্ন টানা <xliff:g id="number">%d</xliff:g> বার.
+       এর পর <xliff:g id="number">%d</xliff:g>আরও ব্যর্থ প্রচেষ্টা, আপনাকে আপনার ফোন আপনার গুগুল সাইন ইন ব্যবহার উদ্ঘাটন করা হবে.\n\nআবার চেষ্টা করুন <xliff:g id="number">%d</xliff:g>সেকেন্ড.</string>
+    <string name="lockscreen_too_many_failed_attempts_countdown">আবার চেষ্টা করুন <xliff:g id="number">%d</xliff:g> সেকেন্ড.</string>
+    <string name="lockscreen_glogin_password_hint">পাসওয়ার্ড</string>
+    <string name="password_keyboard_label_symbol_key">\?123</string>
+    <string name="password_keyboard_label_alpha_key">ABC</string>
+    <string name="password_keyboard_label_alt_key">ALT</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+    <string name="js_dialog_title">পৃষ্ঠা \'<xliff:g id="title">%s</xliff:g>\' বলছে:</string>
+    <string name="js_dialog_before_unload">এই পৃষ্ঠা থেকে দূরে চলাচল?\n\n<xliff:g id="message">%s</xliff:g>\n\nঠিক আছে নির্বাচন করে, অগ্রসর হতে হলে অথবা বর্তমান পৃষ্ঠায় থাকার জন্য বাতিল.</string>
+    <string name="permlab_setAlarm">অ্যালার্মঘড়ি মধ্যে বিপদাশঙ্কা সেট</string>
+    <string name="permdesc_setAlarm">অ্যাপ্লিকেশনে এলার্ম থেকে সেট করতে সাহায্য করে
+       একটি ইনস্টল অ্যালার্মঘড়ি অ্যাপ্লিকেশন. কিছু অ্যালার্মঘড়ি অ্যাপ্লিকেশন হতে পারে
+        বাস্তবায়নের জন্য এই বৈশিষ্ট্য না. "</string>
+    <string name="save_password_remember">মনে রাখা</string>
+    <string name="menu_delete_shortcut_label">মুছে ফেলা</string>
+    <plurals name="last_num_days">
+        <item quantity="other">শেষ <xliff:g id="count">%d</xliff:g> দিন</item>
+    </plurals>
+    <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">1 সেকেন্ড এ</item>
+        <item quantity="other">এ <xliff:g id="count">%d</xliff:g> সেকেন্ড</item>
+    </plurals>
+    <string name="preposition_for_date">উপর <xliff:g id="date" example="May 29">%s</xliff:g></string>
+    <string name="preposition_for_time">তে <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+    <string name="preposition_for_year">এ <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="hours">ঘন্টা</string>
+    <string name="minute">কমপক্ষে</string>
+    <string name="weeks">সপ্তাহ গুলি</string>
+    <string name="years">বৎসর গুলি</string>
+    <string name="VideoView_error_button">ঠিক আছে</string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="Noon">"মধ্যাহ্ণ"</string>
+    <string name="Midnight">"মধ্যরাত্রি"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="selectAll">সব নির্বাচন করুন</string>
+    <string name="cut">কাটা</string>
+    <string name="copy">কপি</string>
+    <string name="addToDictionary">"যোগ করুন \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" অভিধান</string>
+    <string name="ok">ঠিক আছে</string>
+    <string name="cancel">বাতিল</string>
+    <string name="yes">ঠিক আছে</string>
+    <string name="no">বাতিল</string>
+    <string name="dialog_alert_title">মনোযোগ</string>
+    <string name="capital_off">বন্ধ করুন</string>
+    <string name="chooseUsbActivity">USB ডিভাইস জন্য একটি প্রয়োগ নির্বাচন করুন</string>
+    <string name="aerr_application">আবেদন <xliff:g id="application">%1$s</xliff:g>
+        (প্রক্রিয়া <xliff:g id="process">%2$s</xliff:g>)অপ্রত্যাশিতভাবে বন্ধ হয়েছে. আবার চেষ্টা করুন.</string>
+    <string name="aerr_process">আবেদন <xliff:g id="process">%1$s</xliff:g> অপ্রত্যাশিতভাবে বন্ধ হয়েছে. আবার চেষ্টা করুন.</string>
+    <string name="anr_activity_application">কার্যকলাপ <xliff:g id="activity">%1$s</xliff:g> (আবেদন <xliff:g id="application">%2$s</xliff:g>) এই বার্তাটির প্রত্যুত্তর প্রাপ্ত না হচ্ছে না.</string>
+    <string name="anr_activity_process">কার্যকলাপ <xliff:g id="activity">%1$s</xliff:g> (প্রক্রিয়া <xliff:g id="process">%2$s</xliff:g>) এই বার্তাটির প্রত্যুত্তর প্রাপ্ত না হচ্ছে না.</string>
+    <string name="anr_application_process">আবেদন <xliff:g id="application">%1$s</xliff:g> (প্রক্রিয়া <xliff:g id="process">%2$s</xliff:g>)এই বার্তাটির প্রত্যুত্তর প্রাপ্ত না হচ্ছে না..</string>
+    <string name="anr_process">প্রক্রিয়া <xliff:g id="process">%1$s</xliff:g> এই বার্তাটির প্রত্যুত্তর প্রাপ্ত না হচ্ছে না.</string>
+    <string name="launch_warning_title">আবেদন রিডাইরেক্ট</string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> বর্তমানে চলমান.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> মূলত চালু ছিল.</string>
+    <string name="smv_application">আবেদন <xliff:g id="application">%1$s</xliff:g>
+        (প্রক্রিয়া <xliff:g id="process">%2$s</xliff:g>)তার স্ব - জারি যথাযথ মোড নীতি লঙ্ঘন করেছে.</string>
+    <string name="smv_process">প্রক্রিয়া <xliff:g id="process">%1$s</xliff:g> তার স্ব - জারি যথাযথ মোড নীতি লঙ্ঘন করেছে.</string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> চলমান</string>
+    <string name="heavy_weight_notification_detail">অ্যাপ্লিকেশনটি পরিবর্তনকালে তা নির্বাচন করুন</string>
+    <string name="heavy_weight_switcher_title">অ্যাপ্লিকেশন সুইচ?</string>
+    <string name="heavy_weight_switcher_text">ইতিমধ্যেই অন্য অ্যাপ্লিকেশন চলমান যে বন্ধ করার পূর্বে আপনি একটি নতুন এক আরম্ভ করা সম্ভব হবে.</string>
+    <string name="old_app_action">প্রত্যাবর্তন <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="old_app_description">কি নতুন অ্যাপ্লিকেশন আরম্ভ করেন না.</string>
+    <string name="new_app_action">আরম্ভ <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="new_app_description">সঞ্চয় ছাড়া পুরানো অ্যাপ্লিকেশন বন্ধ করুন.</string>
+    <string name="ringtone_default_with_actual">ডিফল্ট রিংটোন (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
+    <string name="ringtone_picker_title">রিংটোন</string>
+    <string name="sms_control_yes">ঠিক আছে</string>
+    <string name="sms_control_no">বাতিল</string>
+    <string name="default_permission_group">ডিফল্ট</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="perms_hide"><b>দেখিও না</b></string>
+    <string name="perms_show_all"><b> সবদেখাও </b></string>
+    <string name="usb_storage_message" product="nosdcard">আপনি আপনার কম্পিউটার থেকে USB দ্বারা আপনার ফোন সংযুক্ত. নিচের বোতামটি নির্বাচন করুন আপনি যদি আপনার কম্পিউটারে এবং আপনার অ্যান্ড্রয়েড\u2018s USB স্টোরেজ মধ্যে ফাইল কপি করতে চান.</string>
+    <string name="usb_storage_message" product="default">আপনি আপনার কম্পিউটার থেকে USB দ্বারা আপনার ফোন সংযুক্ত. নিচের বোতামটি নির্বাচন করুন আপনি যদি আপনার কম্পিউটারে এবং আপনার অ্যান্ড্রয়েড \u2018s এসডি কার্ড মধ্যে ফাইল কপি করতে চান.</string>
+    <string name="usb_storage_error_message" product="nosdcard">একটি সমস্যা USB মাস স্টোরেজ জন্য আপনার USB স্টোরেজ ব্যবহার আছে.</string>
+    <string name="usb_storage_error_message" product="default">একটি সমস্যা USB মাস স্টোরেজ জন্য আপনার এসডি কার্ড ব্যবহার করে আছে.</string>
+    <string name="usb_storage_stop_message" product="nosdcard">বাঁক USB স্টোরেজ বন্ধ করার পূর্বে নিশ্চিত আপনি আনমাউন্ট (\u201cejected\u201d) আপনার অ্যান্ড্রয়েড\u2018s আপনার কম্পিউটার থেকে USB স্টোরেজ আছে করা.</string>
+    <string name="usb_storage_stop_message" product="default">বাঁক USB স্টোরেজ বন্ধ করার পূর্বে নিশ্চিত আপনি আনমাউন্ট (\u201cejected\u201d) আপনার অ্যান্ড্রয়েড \u2018s আপনার কম্পিউটার থেকে এসডি কার্ড আছে করা.</string>
+    <string name="dlg_ok">ঠিক আছে</string>
+    <string name="extmedia_format_title" product="nosdcard">বিন্যাস USB স্টোরেজ</string>
+    <string name="extmedia_format_title" product="default">বিন্যাস এসডি কার্ড</string>
+    <string name="extmedia_format_message" product="nosdcard">বিন্যাস USB স্টোরেজ, সমস্ত সংরক্ষিত আছে ফাইল নষ্ট করা? এক্সন পরিস্থিতি পরিবর্তন করা যাবে না!</string>
+    <string name="extmedia_format_message" product="default">আপনি কি নিশ্চিত যে আপনি এসডি কার্ড ফরম্যাট করতে চান? আপনার কার্ড সমস্ত ডাটা হারিয়ে যাবে.</string>
+    <string name="locale_replacement">""</string>
+    <string name="candidates_style"><u> প্রার্থী </u></string>
+    <string name="ext_media_checking_notification_title" product="nosdcard">USB স্টোরেজ প্রস্তুতি</string>
+    <string name="ext_media_checking_notification_title" product="default">এসডি কার্ড প্রস্তুতি</string>
+    <string name="ext_media_nofs_notification_title" product="nosdcard">ফাঁকা USB স্টোরেজ</string>
+    <string name="ext_media_nofs_notification_title" product="default">ফাঁকা এসডি কার্ড</string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard">USB স্টোরেজ ফাঁকা অথবা অসমর্থিত ফাইল সিস্টেম আছে.</string>
+    <string name="ext_media_nofs_notification_message" product="default">এসডি কার্ড ফাঁকা অথবা অসমর্থিত ফাইল সিস্টেম আছে.</string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">ধ্বংসপ্রাপ্ত USB স্টোরেজ</string>
+    <string name="ext_media_unmountable_notification_title" product="default">ক্ষতিগ্রস্ত এসডি কার্ড</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">USB স্টোরেজ ক্ষতিগ্রস্ত. আপনি পুনরায় ফরম্যাট থাকতে পারে.</string>
+    <string name="ext_media_unmountable_notification_message" product="default">এসডি কার্ড ক্ষতিগ্রস্ত. আপনি পুনরায় ফরম্যাট থাকতে পারে.</string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">USB স্টোরেজ অপ্রত্যাশিতভাবে মুছে ফেলা</string>
+    <string name="ext_media_badremoval_notification_title" product="default">এসডি কার্ড অপ্রত্যাশিতভাবে মুছে ফেলা</string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">আনমাউন্ট থেকে ডাটা এড়ানোর মুছে ফেলার পূর্বে USB স্টোরেজ.</string>
+    <string name="ext_media_badremoval_notification_message" product="default">আনমাউন্ট থেকে ডাটা এড়ানোর মুছে ফেলার পূর্বে এসডি কার্ড.</string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">USB স্টোরেজ থেকে সরিয়ে নিরাপদ</string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">এসডি কার্ড অপসারণের জন্য নিরাপদ</string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">আপনি নিশ্চিন্তে USB স্টোরেজ মুছে ফেলতে পারবেন.</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">আপনি নিশ্চিন্তে এসডি কার্ড অপসারণ করতে পারেন.</string>
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">অপসারিত USB স্টোরেজ</string>
+    <string name="ext_media_nomedia_notification_title" product="default">অপসারিত এসডি কার্ড</string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">USB স্টোরেজ মুছে ফেলা. নতুন মিডিয়া ঢোকান.</string>
+    <string name="ext_media_nomedia_notification_message" product="default">এসডি কার্ড মুছে ফেলা. একটি নতুন ঢোকান.</string>
+    <string name="ime_action_go">যাত্তয়া</string>
+    <string name="ime_action_next">পরবর্তী</string>
+    <string name="ime_action_done">কৃত</string>
+    <string name="dial_number_using">নম্বর ডায়াল করুন\nব্যবহার  করুন<xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="create_contact_using">যোগাযোগ তৈরি করুন\nব্যবহার করুন <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="allow">অনুমতি প্রদান করা হবে</string>
+    <string name="permission_request_notification_with_subtitle">অনুমতি অনুরোধ\nএকাউন্ট এর জন্য <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="alternate_eri_file">/ডাটা/eri.xml</string>
+    <string name="reset">পুন: স্থাপন করা</string>
+    <string name="cta_tethered_notification_title">Tethering</string>
+    <string name="myApp_Start_Btn">আরম্ভ</string>
+    <string name="myApp_Move2Sd_ChkBox">এসডি সরাও</string>
+    <string name="myAppLoading"> লোড\u2026</string>
+    <string name="custom_china_mobile">চীন মোবাইল</string>
+    <string name="custom_china_unicom">চীন Unicom</string>
+    <string name="shutdown_after_seconds">ফোন বন্ধ করবে <xliff:g id="NUMBER">%d</xliff:g> সেকেন্ড:</string>
+    <string name="lockscreen_password_error">পাসওয়ার্ড ত্রুটি, আবার চেষ্টা করুন!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">আপনার আপনার আনলক পাসওয়ার্ড ভুল ইনপুট <xliff:g id="number">%d</xliff:g>বার.   \n\nআবার চেষ্টা করুন<xliff:g id="number">%d</xliff:g> সেকন্ড.</string>
+    <string name="progress_unmounting" product="nosdcard">আনমাউন্ট USB স্টোরেজ ...</string>
+    <string name="progress_unmounting" product="default">আনমাউন্ট এসডি কার্ড ...</string>
+    <string name="progress_erasing" product="nosdcard">USB স্টোরেজ নিশ্চিহ্ন ...</string>
+    <string name="progress_erasing" product="default">এসডি কার্ড নিশ্চিহ্ন ...</string>
+    <string name="format_error" product="nosdcard">থেকে USB স্টোরেজ নিশ্চিহ্ন করতে ব্যর্থ.</string>
+    <string name="format_error" product="default">থেকে এসডি কার্ড নিশ্চিহ্ন করতে ব্যর্থ.</string>
+    <string name="media_bad_removal">এসডি কার্ড হচ্ছে আনমাউন্ট পূর্বে মুছে ফেলা হয়েছিল.</string>
+    <string name="media_checking" product="nosdcard">USB স্টোরেজ বর্তমানে চেক করা হচ্ছে.</string>
+    <string name="media_checking" product="default">এসডি কার্ড বর্তমানে চেক করা হচ্ছে.</string>
+    <string name="media_removed">এসডি কার্ড সরিয়ে ফেলা হয়েছে.</string>
+    <string name="media_shared" product="nosdcard">USB স্টোরেজ কম্পিউটার ব্যবহারের মধ্যে বর্তমানে.</string>
+    <string name="media_shared" product="default">এসডি কার্ড একটি কম্পিউটার দ্বারা ব্যবহার বর্তমানে.</string>
+    <string name="media_unknown_state">অজানা রাজ্যের বাইরের মিডিয়া.</string>
+    <string name="audio_play_failed">দুঃখিত, এই অডিও অভিনয়, করা যাবে না ডিফল্ট রিংটোন ব্যবহার</string>
+    <string name="sms_full_title">টেক্সট বার্তা মেমরি পূর্ণ</string>
+    <string name="sms_full_body">ইনকামিং বার্তা প্রত্যাখ্যাত কারণে পুরো মেমরি থেকে. পুরোনো মেসেজগুলিকে মুছে দিন দয়া করে.</string>
+    <string name="unlock_screen_pin_error">পিন হল ত্রুটি!</string>
+    <string name="ap_disconnected">সংযোগহীন</string>
+    <string name="sim_chooser_title">সিম চয়ন করুন</string>
+    <string name="lockscreen_miss_phone">ফোন ফসকান</string>
+    <string name="lockscreen_miss_mms">পালান sms</string>
 </resources>
