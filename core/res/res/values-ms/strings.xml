@@ -1,6 +1,7 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="address_length">Alamat mencecah panjang maksimum</string>
     <string name="byteShort">B</string>
     <string name="kilobyteShort">KB</string>
     <string name="megabyteShort">MB</string>
@@ -15,6 +16,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="defaultVoiceMailAlphaTag">Mel suara</string>
     <string name="defaultMsisdnAlphaTag">"MSISDN1"</string>
     <string name="mmiError">"Masalah sambungan atau kod MMI tidak sah"</string>
+    <string name="mmiFdnError">Operasi dihadkan kepada nombor dailan tetap sahaja.</string>
     <string name="serviceEnabled">Perkhidmatan telah didayakan.</string>
     <string name="serviceEnabledFor">Perkhidmatan didayakan untuk:</string>
     <string name="serviceDisabled">"Perkhidmatan telah dilumpuhkan."</string>
@@ -32,9 +34,10 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="mismatchPuk">PUK yang anda masukkan tidak sama.</string>
     <string name="mismatchPuk2">PUK2 yang anda masukkan tidak sama.</string>
     <string name="invalidPin">"Taipkan PIN yang mengandungi 4 hingga 8 nombor."</string>
-    <string name="needPinLock">Menukar PIN memerlukan tetapan PIN dikunci.</string>
+    <string name="invalidPuk">"Taipkan PUK yang mempunyai 8 nombor atau lebih panjang."</string>
     <string name="needPuk">"Kad SIM anda dikunci PUK. Taipkan kod PUK untuk membuka kuncinya."</string>
     <string name="needPuk2">"Taipkan PUK2 untuk menyahsekat kad SIM."</string>
+    <string name="needPinLock">Menukar PIN memerlukan tetapan PIN dikunci.</string>
     <string name="ClipMmi">"ID Pemanggil Masuk"</string>
     <string name="ClirMmi">"ID Pemanggil Keluar"</string>
     <string name="ColpMmi">Penyerahan pengenalpastian talian bersambung</string>
@@ -126,7 +129,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="cfTemplateRegisteredTime">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: Tidak dimajukan"</string>
     <string name="fcComplete">"Kod ciri selesai."</string>
     <string name="fcError">"Masalah sambungan atau kod ciri tidak sah."</string>
-    <string name="httpErrorOk">"OK"</string>
+    <string name="httpErrorOk">OK</string>
     <string name="httpError">"Ralat rangkaian berlaku."</string>
     <string name="httpErrorLookup">"URL tidak ditemui."</string>
     <string name="httpErrorUnsupportedAuthScheme">"Skema pengesahan tapak tidak disokong."</string>
@@ -147,9 +150,6 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="contentServiceSyncNotificationTitle">"Penyegerakan"</string>
     <string name="contentServiceTooManyDeletesNotificationDesc">"Terlalu banyak pemadaman <xliff:g id="CONTENT_TYPE">%s</xliff:g>."</string>
     <string name="low_memory">Storan telefon penuh! Hapuskan beberapa fail untuk kosongkan ruang.</string>
-    <string name="dialog_warning">Amaran</string>
-    <string name="internal_memory_low">Storan kad SD hampir penuh! Sila hapuskan beberapa fail untuk kosongkan ruang.</string>
-    <string name="button_close">Tutup</string>
     <string name="me">"Saya"</string>
     <string name="power_dialog">Pilihan telefon</string>
     <string name="silent_mode">Mod senyap</string>
@@ -193,18 +193,24 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permgrouplab_developmentTools">"Alatan pembangunan"</string>
     <string name="permgroupdesc_developmentTools">"Ciri hanya diperlukan untuk pembangun aplikasi."</string>
     <string name="permgrouplab_storage">Penstoran</string>
-    <string name="permgroupdesc_storage">Akses Kad SD.</string>
+    <string name="permgroupdesc_storage" product="nosdcard">Akses storan USB.</string>
+    <string name="permgroupdesc_storage" product="default">Akses kad SD.</string>
     <string name="permlab_statusBar">"lumpuhkan atau ubah suai bar status"</string>
     <string name="permdesc_statusBar">"Membenarkan aplikasi melumpuhkan bar status atau menambah dan mengalih keluar ikon sistem."</string>
+    <string name="permlab_statusBarService">bar status</string>
+    <string name="permdesc_statusBarService">Benarkan aplikasi menjadi bar status.</string>
     <string name="permlab_expandStatusBar">"kembangkan/runtuhkan bar status"</string>
     <string name="permdesc_expandStatusBar">"Membenarkan aplikasi mengembangkan atau meruntuhkan bar status."</string>
     <string name="permlab_processOutgoingCalls">"sekat panggilan keluar"</string>
     <string name="permdesc_processOutgoingCalls">"Membenarkan aplikasi memproses panggilan keluar dan menukar nombor yang hendak didail. Aplikasi berniat jahat boleh memantau, mengubah hala atau menghalang panggilan keluar."</string>
     <string name="permlab_receiveSms">"menerima SMS"</string>
     <string name="permdesc_receiveSms">"Membolehkan aplikasi untuk menerima dan memproses mesej SMS. aplikasi berbahaya boleh memantau mesej atau memadamkannya tanpa menunjukkan kepada anda."</string>
+    <string name="permlab_receiveSmsCB">terima SMSCB</string>
     <string name="permdesc_receiveSmsCB">Membenarkan aplikasi menerima dan memproses mesej SMSCB. Aplikasi berniat jahat boleh memantau mesej anda atau menghapuskannya tanpa menujukkan mesej kepada anda.</string>
     <string name="permlab_receiveMms">"terima MMS"</string>
     <string name="permdesc_receiveMms">"Membenarkan aplikasi menerima dan memproses mesej MMS. Aplikasi berniat jahat mungkin memantau mesej anda atau memadamkannya tanpa menunjukkan kepada anda."</string>
+    <string name="permlab_receiveEmergencyBroadcast">terima siaran kecemasan</string>
+    <string name="permdesc_receiveEmergencyBroadcast">Benarkan aplikasi menerima dan memproses pesanan siaran kecemasan. Kebenaran ini hanya tersedia untuk aplikasi sistem.</string>
     <string name="permlab_sendSms">"hantar mesej SMS"</string>
     <string name="permdesc_sendSms">"Membolehkan aplikasi menghantar mesej SMS. Aplikasi berniat jahat boleh merugikan wang anda dengan menghantar mesej tanpa pengesahan anda."</string>
     <string name="permlab_readSms">"baca SMS atau MMS"</string>
@@ -296,6 +302,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permlab_diagnostic">"baca/tulis ke sumber yang dimiliki oleh diag"</string>
     <string name="permdesc_diagnostic">"Membenarkan aplikasi membaca dan menulis ke sebarang sumber yang dimiliki oleh kumpulan diag; contohnya, fail dalam /dev. Hal ini berpotensi untuk menjejaskan kestabilan dan keselamatan sistem. Perkara ini harus hanya digunakan untuk diagnosis khusus per</string>
     <string name="permlab_changeComponentState">"dayakan atau lumpuhkan komponen aplikasi"</string>
+    <string name="permdesc_changeComponentState">Benarkan aplikasi mengubah sama ada komponen aplikasi lain dibolehkan atau tidak. Aplikasi berniat jahat boleh menggunakan kebenaran ini untuk melumpuhkan kebolehan penting telefon. Kebenaran mesti digunakan dengan berhati-hati, kerana komponen aplikasi boleh menjadi tidak boleh digunakan, tidak konsisten, atau tidak stabil.</string>
     <string name="permlab_setPreferredApplications">"tetapkan aplikasi keutamaan"</string>
     <string name="permdesc_setPreferredApplications">"Membenarkan aplikasi mengubah aplikasi keutamaan anda. Hal ini boleh membenarkan aplikasi berniat jahat mengubah aplikasi yang sedang dijalankan secara senyap-senyap, menipu aplikasi sedia ada bagi mengumpul data peribadi daripada anda."</string>
     <string name="permlab_writeSettings">"mengubah suai tetapan sistem global"</string>
@@ -312,10 +319,6 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_readContacts">Membenarkan aplikasi membaca semua data kenalan (alamat) yang disimpan di dalam telefon anda. Aplikasi berniat jahat boleh menggunakannya untuk menghantar data anda kepada orang lain.</string>
     <string name="permlab_writeContacts">"tulis data kenalan"</string>
     <string name="permdesc_writeContacts">Membenarkan aplikasi mengubah suai data kenalan (alamat) yang disimpan di dalam telefon anda. Aplikasi berniat jahat boleh menggunakannya untuk memadamkan atau mengubah suai data kenalan anda.</string>
-    <string name="permlab_writeOwnerData">tulis data pemilik</string>
-    <string name="permdesc_writeOwnerData">Membenarkan aplikasi mengubah suai data pemilik telefon yang disimpan di dalam telefon anda. Aplikasi berniat jahat boleh menggunakannya untuk memadam atau mengubah suai data pemilik.</string>
-    <string name="permlab_readOwnerData">baca data pemilik</string>
-    <string name="permdesc_readOwnerData">Membenarkan aplikasi membaca data pemilik telefon yang disimpan di dalam telefon anda. Aplikasi berniat jahat boleh menggunakannya untuk membaca data pemilik telefon.</string>
     <string name="permlab_readCalendar">"baca acara kalendar serta maklumat sulit"</string>
     <string name="permdesc_readCalendar">Membenarkan aplikasi membaca semua acara kalendar yang disimpan di dalam telefon anda. Aplikasi berniat jahat boleh menggunakannya untuk menghantar acara kalendar anda kepada orang lain.</string>
     <string name="permlab_writeCalendar">"tambah atau ubah suai acara kalendar dan hantar e-mel kepada tetamu tanpa pengetahuan pemilik"</string>
@@ -362,6 +365,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_vibrate">"Membenarkan aplikasi mengawal penggetar."</string>
     <string name="permlab_flashlight">"mengawal lampu suluh"</string>
     <string name="permdesc_flashlight">"Membenarkan aplikasi mengawal lampu suluh."</string>
+    <string name="permlab_manageUsb">uruskan pilihan dan kebenaran untuk peranti USB</string>
+    <string name="permdesc_manageUsb">Benarkan aplikasi menguruskan pilihan dan kebenaran untuk peranti USB.</string>
     <string name="permlab_hardware_test">"uji perkakasan"</string>
     <string name="permdesc_hardware_test">"Membenarkan aplikasi mengawal pelbagai persisian untuk tujuan pengujian perkakasan."</string>
     <string name="permlab_callPhone">"panggil terus nombor telefon"</string>
@@ -424,10 +429,16 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_changeWifiState">"Membenarkan aplikasi menyambung ke dan memutuskan sambungan dari titik capaian Wi-Fi dan membuat perubahan pada rangkaian Wi-Fi yang telah dikonfigurasikan."</string>
     <string name="permlab_changeWifiMulticastState">"benarkan penerimaan Wi-Fi Multisiar"</string>
     <string name="permdesc_changeWifiMulticastState">"Membenarkan aplikasi menerima bingkisan yang tidak ditujukan secara langsung ke peranti anda. Hal ini boleh menjadi berguna apabila menemui perkhidmatan yang ditawarkan di kawasan berdekatan. Ia menggunakan lebih banyak kuasa daripada mod bukan multisiar."</string>
+    <string name="permlab_accessWimaxState">lihat keadaan WiMAX</string>
+    <string name="permdesc_accessWimaxState">Benarkan aplikasi melihat maklumat tentang keadaan WiMAX.</string>
+    <string name="permlab_changeWimaxState">tukar keadaan WiMAX</string>
+    <string name="permdesc_changeWimaxState">Benarkan aplikasi menyambung dan memutuskan sambungan rangkaian WiMAX.</string>
     <string name="permlab_bluetoothAdmin">"pentadbiran bluetooth"</string>
     <string name="permdesc_bluetoothAdmin">Benarkan aplikasi mengkonfigurasi telefon Bluetooth setempat, dan untuk mencari dan berpasang dengan peranti jauh.</string>
     <string name="permlab_bluetooth">"buat sambungan Bluetooth"</string>
     <string name="permdesc_bluetooth">Membenarkan aplikasi melihat konfigurasi telefon Bluetooth setempat dan membuat serta menerima sambungan dengan peranti berpasangan.</string>
+    <string name="permlab_nfc">kawal Komunikasi Lapangan Hampir</string>
+    <string name="permdesc_nfc">Benarkan aplikasi berkomunikasi dengan teg, kad dan pembaca Komunikasi Lapangan Hampir (NFC).</string>
     <string name="permlab_disableKeyguard">"lumpuhkan kunci kekunci"</string>
     <string name="permdesc_disableKeyguard">"Membenarkan aplikasi melumpuhkan kunci kekunci anda dan sebarang keselamatan kata laluan yang berkaitan. Contoh yang berkaitan adalah telefon melumpuhkan kunci kekunci apabila menerima panggilan telefon masuk kemudian mendayakan semula kunci kekunci apab</string>
     <string name="permlab_readSyncSettings">"membaca tetapan penyegerakan"</string>
@@ -444,10 +455,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_readDictionary">"Membenarkan aplikasi membaca sebarang kata-kata peribadi, nama dan frasa yang mungkin telah disimpan oleh pengguna dalam kamus pengguna."</string>
     <string name="permlab_writeDictionary">"tulis ke kamus yang ditakrifkan pengguna"</string>
     <string name="permdesc_writeDictionary">"Membenarkan aplikasi menulis perkataan baru ke dalam kamus pengguna."</string>
-    <string name="permlab_sdcardWrite">ubah suai/hapuskan kandungan kad SD</string>
-    <string name="permdesc_sdcardWrite">Membenarkan aplikasi menulis kepada kad SD.</string>
+    <string name="permlab_sdcardWrite" product="nosdcard">ubah suai/hapuskan kandungan storan USB</string>
+    <string name="permlab_sdcardWrite" product="default">ubah suai/hapuskan kandungan kad SD</string>
+    <string name="permdesc_sdcardWrite" product="nosdcard">Benarkan aplikasi menulis ke storan USB.</string>
+    <string name="permdesc_sdcardWrite" product="default">Benarkan aplikasi menulis ke kad SD.</string>
     <string name="permlab_cache_filesystem">"akses sistem fail cache"</string>
     <string name="permdesc_cache_filesystem">"Membenarkan aplikasi membaca dan menulis cache sistem fail."</string>
+    <string name="permlab_use_sip">membuat/menerima panggilan Internet</string>
+    <string name="permdesc_use_sip">Benarkan aplikasi menggunakan perkhidmatan SIP untuk membuat/menerima panggilan Internet.</string>
     <string name="policylab_limitPassword">"Tetapkan peraturan kata laluan"</string>
     <string name="policydesc_limitPassword">"Mengawal panjang dan aksara yang dibenarkan dalam kata laluan buka kunci skrin"</string>
     <string name="policylab_watchLogin">"Memantau percubaan buka kunci skrin"</string>
@@ -551,9 +566,16 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="orgTypeWork">"Kerja"</string>
     <string name="orgTypeOther">"Lain-lain"</string>
     <string name="orgTypeCustom">Peribadi</string>
+    <string name="sipAddressTypeCustom">Diperibadikan</string>
+    <string name="sipAddressTypeHome">Laman Utama</string>
+    <string name="sipAddressTypeWork">Kerja</string>
+    <string name="sipAddressTypeOther">Lain-lain</string>
+    <string name="contact_status_update_attribution">melalui <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> melalui <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
     <string name="keyguard_password_enter_pin_code">"Masukkan kod PIN"</string>
     <string name="keyguard_password_enter_password_code">"Masukkan kata laluan untuk membuka kunci"</string>
     <string name="keyguard_password_wrong_pin_code">"Kod PIN salah!"</string>
+    <string name="pinpuk_attempts">\n Baki Bilangan Percubaan:</string>
     <string name="keyguard_label_text">"Untuk membuka kunci, tekan Menu, kemudian 0."</string>
     <string name="emergency_call_dialog_number_for_display">"Nombor kecemasan"</string>
     <string name="lockscreen_sim_network_subset_locked_message">Telefon dikunci Subset Rangkaian SIM</string>
@@ -581,14 +603,16 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_ruim_network_locked_message">Network dikunci</string>
     <string name="sim1_puk_requried">PIN SIM1 disekat, Masukkan PUK untuk buka</string>
     <string name="sim2_puk_requried">PIN SIM2 disekat, Masukkan PUK untuk buka</string>
+    <string name="sim_puk_requried">PIN SIM disekat, masukkan PUK untuk nyahsekat</string>
     <string name="keyguard_password_enter_sim1_pin_code">Masukkan kod PIN SIM1</string>
     <string name="keyguard_password_enter_sim2_pin_code">Masukkan kod PIN SIM2</string>
+    <string name="keyguard_password_enter_sim_pin_code">Masukkan kod PIN SIM</string>
     <string name="keyguard_sim1_pin_accepted">Buka kunci Pin Sim1 Berjaya</string>
     <string name="keyguard_sim2_pin_accepted">Buka kunci Pin Sim2 Berjaya</string>
+    <string name="keyguard_sim_pin_accepted">PIN SIM berjaya dibuka</string>
     <string name="puk_accept">PUK diterima</string>
     <string name="unblocking_fail">Buka sekatan gagal, masukkan semula PUK</string>
     <string name="keyguard_password_wrong_puk_code">Kod PUK salah!</string>
-    <string name="pinpuk_attempts">\n Baki Bilangan Percubaan:</string>
     <string name="new_pin">Masukkan PIN baru</string>
     <string name="reenter">Masukkan semula PIN</string>
     <string name="lockscreen_carrier_default">"Tiada perkhidmatan."</string>
@@ -615,6 +639,12 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_sim_locked_message">"Kad SIM dikunci."</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message">"Membuka kunci kad SIM..."</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message">"Anda telah melukis corak buka kunci anda dengan salah sebanyak <xliff:g id="NUMBER_0">%d</xliff:g> kali. "\n\n"Sila cuba lagi dalam <xliff:g id="NUMBER_1">%d</xliff:g> saat."</string>
+    <string name="lockscreen_failed_attempts_almost_glogin">
+        Anda telah silap melukis corak buka kunci anda <xliff:g id="number">%d</xliff:g> kali.
+       Selepas <xliff:g id="number">%d</xliff:g> kali percubaan tidak berjaya lagi,
+       anda akan diminta membuka kunci telefon anda menggunakan daftar masuk Google anda.\n\n
+       Sila cuba lagi dalam <xliff:g id="number">%d</xliff:g> saat.
+    </string>
     <string name="lockscreen_too_many_failed_attempts_countdown">"Cuba lagi dalam <xliff:g id="NUMBER">%d</xliff:g> saat."</string>
     <string name="lockscreen_forgot_pattern_button_text">"Lupa corak?"</string>
     <string name="lockscreen_glogin_forgot_pattern">"Buka akaun"</string>
@@ -633,14 +663,6 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="password_keyboard_label_alt_key">"ALT"</string>
     <string name="hour_ampm">"<xliff:g id="HOUR">%-l</xliff:g><xliff:g id="AMPM">%P</xliff:g>"</string>
     <string name="hour_cap_ampm">"<xliff:g id="HOUR">%-l</xliff:g><xliff:g id="AMPM">%p</xliff:g>"</string>
-    <string name="status_bar_clear_all_button">"Padam bersih"</string>
-    <string name="status_bar_no_notifications_title">Tiada pemberitahuan</string>
-    <string name="status_bar_ongoing_events_title">Sedang dijalankan</string>
-    <string name="status_bar_latest_events_title">"Pemberitahuan"</string>
-    <string name="battery_status_charging">Mengecas \u2026</string>
-    <string name="battery_low_title">Sila sambung pengecas</string>
-    <string name="battery_low_subtitle">Bateri semakin lemah:</string>
-    <string name="battery_low_why">Penggunaan bateri</string>
     <string name="factorytest_failed">"Ujian kilang gagal"</string>
     <string name="factorytest_not_system">"Tindakan FACTORY_TEST hanya disokong untuk pakej yang dipasangkan dalam /system/app."</string>
     <string name="factorytest_no_action">"Tiada pakej yang menyediakan tindakan FACTORY_TEST ditemui."</string>
@@ -654,6 +676,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_readHistoryBookmarks">"Membenarkan aplikasi membaca semua URL yang telah dilawati oleh Penyemak Imbas dan semua penanda halaman Penyemak Imbas."</string>
     <string name="permlab_writeHistoryBookmarks">"tulis sejarah dan penanda halaman Penyemak Imbas"</string>
     <string name="permdesc_writeHistoryBookmarks">Membenarkan aplikasi mengubah suai sejarah atau penanda buku Penyemak Imbas yang disimpan di dalam telefon anda. Aplikasi berniat jahat boleh menggunakannya untuk memadamkan atau mengubah suai data Penyemak Imbas anda.</string>
+    <string name="permlab_setAlarm">Tetapkan penggera di dalam jam loceng</string>
+    <string name="permdesc_setAlarm">Benarkan aplikasi menetapkan penggera di dalam aplikasi jam loceng yang dipasang. Beberapa aplikasi jam loceng mungkin tidak melaksanakan ciri ini.</string>
     <string name="permlab_writeGeolocationPermissions">"Ubah suai kebenaran geolokasi Penyemak Imbas"</string>
     <string name="permdesc_writeGeolocationPermissions">"Membenarkan aplikasi mengubah suai kebenaran geolokasi Penyemak Imbas. Aplikasi berniat jahat boleh menggunakannya untuk membenarkan penghantaran maklumat lokasi ke sembarangan tapak web."</string>
     <string name="save_password_message">"Adakah anda mahu penyemak imbas mengingati kata laluan ini?"</string>
@@ -757,7 +781,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="VideoView_error_title">"Tidak boleh memainkan video"</string>
     <string name="VideoView_error_text_invalid_progressive_playback">"Maaf, video ini tidak sah untuk penstriman ke peranti ini."</string>
     <string name="VideoView_error_text_unknown">"Maaf, video ini tidak boleh dimainkan."</string>
-    <string name="VideoView_error_button">"OK"</string>
+    <string name="VideoView_error_button">OK</string>
     <string name="relative_time">"<xliff:g id="DATE">%1$s</xliff:g>, <xliff:g id="TIME">%2$s</xliff:g>"</string>
     <string name="noon">"tengah hari"</string>
     <string name="Noon">"Tengah hari"</string>
@@ -767,10 +791,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="elapsed_time_short_format_h_mm_ss">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
     <string name="selectAll">"Pilih semua"</string>
     <string name="selectText">Pilih teks</string>
-    <string name="stopSelectingText">Berhenti memilih teks</string>
     <string name="cut">"Potong"</string>
     <string name="copy">"Salin"</string>
-    <string name="copyAll">Salin semua</string>
     <string name="paste">Tampal</string>
     <string name="copyUrl">"Salin URL"</string>
     <string name="inputMethod">"Kaedah input"</string>
@@ -778,7 +800,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="editTextMenuTitle">"Tindakan teks"</string>
     <string name="low_internal_storage_view_title">"Kekurangan ruang"</string>
     <string name="low_internal_storage_view_text">Ruang storan telefon semakin sedikit.</string>
-    <string name="ok">"OK"</string>
+    <string name="ok">OK</string>
     <string name="cancel">Batalkan</string>
     <string name="yes">"OK"</string>
     <string name="no">Batalkan</string>
@@ -789,6 +811,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="alwaysUse">"Gunakannya secara lalai untuk tindakan ini."</string>
     <string name="clearDefaultHintMsg">"Padam bersih lalai dalam Tetapan Halaman Utama &gt; Aplikasi &gt; Urus aplikasi."</string>
     <string name="chooseActivity">"Pilih tindakan"</string>
+    <string name="chooseUsbActivity">Pilih aplikasi untuk peranti USB</string>
     <string name="noApplications">"Tiada aplikasi yang boleh menjalankan tindakan ini."</string>
     <string name="aerr_title">Maaf!</string>
     <string name="aerr_application">"Malangnya, <xliff:g id="APPLICATION">%1$s</xliff:g> telah berhenti."</string>
@@ -801,6 +824,20 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="force_close">"Paksa tutup"</string>
     <string name="report">"Laporkan"</string>
     <string name="wait">Tunggu</string>
+    <string name="launch_warning_title">Aplikasi diubah haluan</string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> beroperasi sekarang.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> dilancarkan pada asalnya.</string>
+    <string name="smv_application">Aplikasi <xliff:g id="application">%1$s</xliff:g>
+        (proses <xliff:g id="process">%2$s</xliff:g>) telah melanggar polisi Mod Tegasnya yang dikuat kuasa sendiri.</string>
+    <string name="smv_process">Proses <xliff:g id="process">%1$s</xliff:g> telah melanggar polisi Mod Tegasnya yang dikuat kuasa sendiri.</string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> beroperasi</string>
+    <string name="heavy_weight_notification_detail">Pilih untuk bertukar ke aplikasi</string>
+    <string name="heavy_weight_switcher_title">Tukar aplikasi?</string>
+    <string name="heavy_weight_switcher_text">Aplikasi lain telah beroperasi yang mesti dihentikan sebelum anda boleh memulakan aplikasi baru.</string>
+    <string name="old_app_action">Kembali ke <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="old_app_description">Jangan mulakan aplikasi baru.</string>
+    <string name="new_app_action">Mulakan <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="new_app_description">Hentikan aplikasi lama tanpa menyimpan.</string>
     <string name="sendText">"Pilih tindakan untuk teks"</string>
     <string name="volume_ringtone">Kenyaringan deringan</string>
     <string name="volume_music">"Kelantangan media"</string>
@@ -829,53 +866,69 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sms_control_default_app_name">"Aplikasi tidak dikenali"</string>
     <string name="sms_control_title">"Menghantar mesej SMS"</string>
     <string name="sms_control_message">"Sejumlah besar mesej SMS sedang dihantar. Pilih \"OK\" untuk meneruskan atau \"Batal\" untuk menghentikan penghantaran."</string>
-    <string name="sms_control_yes">"OK"</string>
+    <string name="sms_control_yes">OK</string>
     <string name="sms_control_no">Batalkan</string>
     <string name="date_time_set">Tetapkan</string>
     <string name="default_permission_group">"Lalai"</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
     <string name="no_permissions">"Tiada kebenaran diperlukan"</string>
     <string name="perms_hide"><b>"Sembunyikan"</b></string>
     <string name="perms_show_all"><b>"Tunjukkan semua"</b></string>
     <string name="usb_storage_activity_title">"Storan Massa USB"</string>
     <string name="usb_storage_title">"sambungan USB"</string>
-    <string name="usb_storage_message">Telefon anda telah disambung ke komputer anda dengan USB. Pilih butang di bawah jika anda mahu salin fail antara komputer dengan kad SD Android anda.</string>
+    <string name="usb_storage_message" product="nosdcard">Anda telah menyambung telefon anda ke komputer anda melalui USB. Pilih butang di bawah jika anda mahu menyalin fail di antara komputer anda dengan storan USB Android anda.</string>
+    <string name="usb_storage_message" product="default">Anda telah menyambung telefon anda ke komputer anda melalui USB. Pilih butang di bawah jika anda mahu menyalin fail di antara komputer anda dengan kad SD Android anda.</string>
     <string name="usb_storage_button_mount">"Hidupkan storan USB"</string>
-    <string name="usb_storage_error_message">Ada masalah menggunakan kad SD anda untuk storan USB.</string>
+    <string name="usb_storage_error_message" product="nosdcard">Terdapat masalah menggunakan storan USB anda sebagai storan massa USB.</string>
+    <string name="usb_storage_error_message" product="default">Terdapat masalah menggunakan kad SD anda sebagai storan massa USB.</string>
     <string name="usb_storage_notification_title">"sambungan USB"</string>
     <string name="usb_storage_notification_message">"Pilih untuk menyalin fail ke/dari komputer anda."</string>
     <string name="usb_storage_stop_notification_title">"Matikan storan USB"</string>
     <string name="usb_storage_stop_notification_message">"Pilih untuk mematikan storan USB."</string>
     <string name="usb_storage_stop_title">"Storan USB sedang digunakan"</string>
-    <string name="usb_storage_stop_message">Sebelum mematikan storan USB, pastikan anda menyahlekapkan (\u201cmengeluarkan\u201d) kad SD Android anda daripada komputer anda.</string>
+    <string name="usb_storage_stop_message" product="nosdcard">Sebelum mematikan storan USB, pastikan anda telah menyahlekap (\u201cmemecat\u201d) storan USB Android anda daripada komputer anda.</string>
+    <string name="usb_storage_stop_message" product="default">Sebelum mematikan storan USB, pastikan anda telah menyahlekap (\u201cmemecat\u201d) kad SD Android anda daripada komputer anda.</string>
     <string name="usb_storage_stop_button_mount">"Matikan storan USB"</string>
     <string name="usb_storage_stop_error_message">"Terdapat masalah mematikan storan USB. Semak untuk memastikan anda sudah menyahlekap hos USB, kemudian cuba lagi."</string>
     <string name="dlg_confirm_kill_storage_users_title">"Hidupkan storan USB"</string>
     <string name="dlg_confirm_kill_storage_users_text">"Jika anda menghidupkan storan USB, sesetengah aplikasi yang anda sedang gunakan akan terhenti dan mungkin tidak akan tersedia sehingga anda memadamkan storan USB."</string>
     <string name="dlg_error_title">"Operasi USB tidak berjaya"</string>
-    <string name="dlg_ok">"OK"</string>
-    <string name="extmedia_format_title">Format kad SD</string>
-    <string name="extmedia_format_message">Formatkan kad SD? Semua data di dalam kad anda akan hilang.</string>
+    <string name="dlg_ok">OK</string>
+    <string name="extmedia_format_title" product="nosdcard">Format storan USB</string>
+    <string name="extmedia_format_title" product="default">Format kad SD</string>
+    <string name="extmedia_format_message" product="nosdcard">Format storan USB, memadamkan semua fail yang disimpan? Tindakan ini tidak boleh disongsangkan!</string>
+    <string name="extmedia_format_message" product="default">Mahu format kad SD? Semua data pada kad anda akan hilang.</string>
     <string name="extmedia_format_button_format">Format</string>
     <string name="adb_active_notification_title">"Penyahpepijatan USB disambungkan"</string>
     <string name="adb_active_notification_message">"Pilih untuk melumpuhkan penyahpepijatan USB."</string>
-    <string name="locale_replacement"> </string>
-    <string name="auto_replace" msgid="6199184757891937822">"Autoganti"</string>
+    <string name="locale_replacement">""</string>
     <string name="select_input_method">"Pilih kaedah input"</string>
     <string name="fast_scroll_alphabet">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="candidates_style"><u>"calon"</u></string>
-    <string name="ext_media_checking_notification_title">Menyediakan kad SD</string>
+    <string name="ext_media_checking_notification_title" product="nosdcard">Menyediakan storan USB</string>
+    <string name="ext_media_checking_notification_title" product="default">Menyediakan kad SD</string>
     <string name="ext_media_checking_notification_message">"Menyemak untuk mengesan ralat."</string>
-    <string name="ext_media_nofs_notification_title">Kad SD kosong</string>
-    <string name="ext_media_nofs_notification_message">Kad SD kosong atau mempunyai sistem fail tidak disokong.</string>
-    <string name="ext_media_unmountable_notification_title">Kad SD rosak</string>
-    <string name="ext_media_unmountable_notification_message">Kad SD rosak. Formatnya semula.</string>
-    <string name="ext_media_badremoval_notification_title">Kad SD dikeluarkan dengan tiba-tiba</string>
-    <string name="ext_media_badremoval_notification_message">Nyahlekap kad SD sebelum mengeluarkannya bagi mengelak kehilangan data.</string>
-    <string name="ext_media_safe_unmount_notification_title">Selamat untuk keluarkan kad SD</string>
-    <string name="ext_media_safe_unmount_notification_message">Kad SD boleh dikeluarkan dengan selamat.</string>
-    <string name="ext_media_nomedia_notification_title">Kad SD dialih keluar</string>
-    <string name="ext_media_nomedia_notification_message">Kad SD dikeluarkan. Masukkan kad baru.</string>
+    <string name="ext_media_nofs_notification_title" product="nosdcard">Storan USB kosong</string>
+    <string name="ext_media_nofs_notification_title" product="default">Kad SD kosong</string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard">Storan USB kosong atau mempunyai sistem fail tidak disokong.</string>
+    <string name="ext_media_nofs_notification_message" product="default">Kad SD kosong atau mempunyai sistem fail tidak disokong.</string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">Storan USB rosak</string>
+    <string name="ext_media_unmountable_notification_title" product="default">Kad SD rosak</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">Storan USB rosak. Anda mungkin kena formatnya semula.</string>
+    <string name="ext_media_unmountable_notification_message" product="default">Kad SD rosak. Anda mungkin kena formatnya semula.</string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">Storan USB ditanggalkan dengan tiba-tiba</string>
+    <string name="ext_media_badremoval_notification_title" product="default">Kad SD ditanggalkan dengan tiba-tiba</string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">Nyahlekap storan USB sebelum menanggalkannya untuk mengelakkan kehilangan data.</string>
+    <string name="ext_media_badremoval_notification_message" product="default">Nyahlekap kad SD sebelum menanggalkannya untuk mengelakkan kehilangan data.</string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">Storan USB selamat untuk ditanggalkan</string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">Kad SD selamat untuk ditanggalkan</string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">Anda boleh menanggalkan storan USB dengan selamat.</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">Anda boleh menanggalkan kad SD dengan selamat.</string>
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">Storan USB ditanggalkan</string>
+    <string name="ext_media_nomedia_notification_title" product="default">Kad SD ditanggalkan</string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">Storan USB ditanggalkan. Sisipkan media baru.</string>
+    <string name="ext_media_nomedia_notification_message" product="default">Kad SD ditanggalkan. Sisipkan kad baru.</string>
     <string name="activity_list_empty">"Tiada aktiviti yang sepadan ditemui"</string>
     <string name="permlab_pkgUsageStats">"kemas kini statistik penggunaan komponen"</string>
     <string name="permdesc_pkgUsageStats">"Membenarkan pengubahsuaian statistik penggunaan komponen yang dikumpulkan. Bukan untuk kegunaan aplikasi biasa."</string>
@@ -905,6 +958,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="accessibility_binding_label">Pengaksesan</string>
     <string name="wallpaper_binding_label">Kertas hias dinding</string>
     <string name="chooser_wallpaper">Tukar kertas dinding</string>
+    <string name="alternate_eri_file">/data/eri.xml</string>
     <string name="pptp_vpn_description">Protokol Penorowongan Titik-ke-Titik</string>
     <string name="l2tp_vpn_description">Protokol Penorowongan Lapisan 2</string>
     <string name="l2tp_ipsec_psk_vpn_description">VPN L2TP/IPSec berasaskan kunci pra-kongsi</string>
@@ -916,14 +970,12 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="car_mode_disable_notification_title">"Mod kereta didayakan"</string>
     <string name="car_mode_disable_notification_message">"Pilih untuk keluar daripada mod kereta."</string>
     <string name="tethered_notification_title">"Penambatan atau kawasan khas aktif"</string>
+    <string name="cta_tethered_notification_title">Penambatan</string>
     <string name="tethered_notification_message">"Sentuh untuk mengkonfigurasikan"</string>
     <string name="throttle_warning_notification_title">"Penggunaan tinggi data mudah alih"</string>
     <string name="throttle_warning_notification_message">"Sentuh untuk mengetahui lebih lanjut mengenai penggunaan data"</string>
     <string name="throttled_notification_title">"Melebihi had data mudah alih"</string>
     <string name="throttled_notification_message">"Sentuh untuk mengetahui lebih lanjut mengenai penggunaan data"</string>
-    <string name="sim_not_standby">Kad SIM tidak tunggu sedia.</string>
-    <string name="sim1_not_standby">SIM1 tidak tunggu sedia.</string>
-    <string name="sim2_not_standby">SIM2 tidak tunggu sedia.</string>
     <string name="Low_Memory_Alert">Ruang storan telefon semakin sedikit. Sila buang beberapa data bagi memastikan kestabilan telefon.</string>
     <string name="Low_Memory_Free">Percuma</string>
     <string name="Low_Memory_Application">Aplikasi</string>
@@ -932,14 +984,15 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="Low_Memory_System">Sistem</string>
     <string name="Btn_Select_Clear">Pilih / Bersihkan</string>
     <string name="myAppTip">Pilih aplikasi untuk dikendalikan</string>
+    <string name="myApp_Start_Btn">Mula</string>
+    <string name="myApp_Move2Sd_ChkBox">PindahKeSD</string>
     <string name="myApp_ClearData_ChkBox">Padam bersih data</string>
     <string name="myApp_Uninstall_ChkBox">Nyahpasang</string>
+    <string name="myAppLoading">memuat\u2026</string>
     <string name="myAppProcessing">memproses\u2026</string>
     <string name="keyguard_password_enter_puk_code">"Masukkan PUK dan kod PIN baru"</string>
     <string name="keyguard_password_enter_new_pin_first_code">Masukkan Kod PIN Baru</string>
     <string name="keyguard_password_enter_new_pin_second_code">Masukkan Kod PIN Baru Sekali Lagi</string>
-    <string name="keyguard_password_enter_new_pin_not_equal">PIN baru tidak sama. Sila cuba lagi</string>
-    <string name="invalidPuk">"Taipkan PUK yang mempunyai 8 nombor atau lebih panjang."</string>
     <string name="ums_active_notification_message">storan massa usb didayakan</string>
     <string name="modem_active_notification_title">gunakan mod nyahpepijat modem</string>
     <string name="modem_active_notification_message">mod nyahpepijat modem didayakan</string>
@@ -948,7 +1001,37 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="china_telecom_numeric_values">China Telecom</string>
     <string name="stk_refresh_sim_init_message">Kad SIM dikemas kini</string>
     <string name="stk_refresh_sim_reset_message">Telefon akan but semula</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicom</string>
     <string name="charge_active_notification_message">Mod mengecas sahaja didayakan</string>
     <string name="charge_active_notification_title">Guna Mengecas sahaja apabila usb disambung</string>
-    <string name="CallHold" msgid="">"panggilan dipegang"</string>
+    <string name="shutdown_after_seconds">Telefon akan ditutup selepas <xliff:g id="NUMBER">%d</xliff:g> saat</string>
+    <string name="lockscreen_password_error">Kata laluan salah, cuba lagi!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">
+		Anda telah masukkan kata laluan buka kunci yang salah <xliff:g id="number">%d</xliff:g> kali.
+        \n\nSila cuba lagi dalam <xliff:g id="number">%d</xliff:g> saat.</string>
+    <string name="progress_unmounting" product="nosdcard">Menyahlekap storan USB...</string>
+    <string name="progress_unmounting" product="default">Menyahlekap kad SD...</string>
+    <string name="progress_erasing" product="nosdcard">Memadamkan storan USB...</string>
+    <string name="progress_erasing" product="default">Memadamkan kad SD...</string>
+    <string name="format_error" product="nosdcard">Gagal memadamkan storan USB.</string>
+    <string name="format_error" product="default">Gagal memadamkan kad SD.</string>
+    <string name="media_bad_removal">Kad SD ditanggalkan sebelum dinyahlekapkan.</string>
+    <string name="media_checking" product="nosdcard">Storan USB sedang diperiksa.</string>
+    <string name="media_checking" product="default">Kad SD sedang diperiksa.</string>
+    <string name="media_removed">Kad SD telah ditanggalkan.</string>
+    <string name="media_shared" product="nosdcard">Storan USB sedang digunakan oleh komputer.</string>
+    <string name="media_shared" product="default">Kad SD sedang digunakan oleh komputer.</string>
+    <string name="media_unknown_state">Media luaran dalam keadaan yang tidak diketahui.</string>
+    <string name="audio_play_failed">Maaf, audio ini tidak boleh dimainkan, guna nada dering lalai</string>
+    <string name="sms_full_title">Memori pesanan teks penuh</string>
+    <string name="sms_full_body">Pesanan masuk ditolak kerana memori penuh. Sila hapuskan pesanan lama.</string>
+    <string name="dialog_warning">Amaran</string>
+    <string name="internal_memory_low">Storan kad SD hampir penuh! Sila hapuskan beberapa fail untuk kosongkan ruang.</string>
+    <string name="button_close">Tutup</string>
+    <string name="unlock_screen_pin_error">PIN salah!</string>
+    <string name="ap_disconnected">diputuskan</string>
+    <string name="sim_chooser_title">Pilih SIM</string>
+    <string name="lockscreen_miss_phone">telefon terlepas</string>
+    <string name="lockscreen_miss_mms">SMS terlepas</string>
 </resources>
