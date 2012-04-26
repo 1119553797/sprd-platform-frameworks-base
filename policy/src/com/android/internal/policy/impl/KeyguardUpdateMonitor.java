@@ -565,6 +565,8 @@ public class KeyguardUpdateMonitor {
         case TelephonyManager.NETWORK_TYPE_HSPA:
         case TelephonyManager.NETWORK_TYPE_EVDO_0: //fall through
         case TelephonyManager.NETWORK_TYPE_EVDO_A:
+        case TelephonyManager.NETWORK_TYPE_IDEN:
+            
                 mRadioType = "3G";
             break;
         default:
