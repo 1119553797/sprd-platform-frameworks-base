@@ -140,7 +140,12 @@ public class MediaPhone extends Handler
         			Log.d(TAG, "mThread E");
 				do {
 					int ret = native_waitRequestForAT();
+                    if(ret == AT_NONE){
+	        			Log.d(TAG, "vt_pipe ret error, exit thread");
+                        break;
+                    } else {
 	        			Log.d(TAG, "vt_pipe ret: " + ret);
+                    }
 					switch (ret) {
 						case AT_REPORT_IFRAME:
 							mCm.controlIFrame(true, false, null);
