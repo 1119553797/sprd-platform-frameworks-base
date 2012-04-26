@@ -167,6 +167,9 @@ public abstract class PhoneBase extends Handler implements Phone {
     protected final RegistrantList mSuppServiceSuccRegistrants
             = new RegistrantList();
 
+    protected final RegistrantList mSycnIndRegistrants
+            = new RegistrantList();
+
     protected Looper mLooper; /* to insure registrants are in correct thread*/
 
     protected Context mContext;
@@ -335,6 +338,24 @@ public abstract class PhoneBase extends Handler implements Phone {
     protected void notifyPreciseCallStateChangedP() {
         AsyncResult ar = new AsyncResult(null, this, null);
         mPreciseCallStateRegistrants.notifyRegistrants(ar);
+    }
+
+    //add for confirm when in call
+    public void registerForSycnInd(Handler h, int what, Object obj) {
+        checkCorrectThread(h);
+
+        mSycnIndRegistrants.addUnique(h, what, obj);
+    }
+
+    //add for confirm when in call
+    public void unregisterForSycnInd(Handler h) {
+        mSycnIndRegistrants.remove(h);
+    }
+
+    //add for confirm when in call
+    protected void notifySycnIndP() {
+        AsyncResult ar = new AsyncResult(null, this, null);
+        mSycnIndRegistrants.notifyRegistrants(ar);
     }
 
     // Inherited documentation suffices.

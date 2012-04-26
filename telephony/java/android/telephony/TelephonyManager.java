@@ -250,6 +250,43 @@ public class TelephonyManager {
     }
 
     /**
+     * Returns the airplane mode state.
+     * Return true if airplane mode is on
+     */
+    public boolean getAirplaneModeState() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+    }
+
+    /**
+     * Returns the card activated state when user set at dualSimSetting . Return
+     * true if card is activited.
+     */
+    public boolean getIccCardActivited(int phoneid) {
+        int phoneNum = PhoneFactory.getPhoneCount();
+        boolean hasIccCard[] = new boolean[phoneNum];
+        try {
+            for (int i = 0; i < phoneNum; i++) {
+                hasIccCard[i] = sInstance[i].getITelephony().hasIccCard();
+            }
+            if (phoneNum > 1) {
+                if (hasIccCard[0] || hasIccCard[1]) {
+                    return Settings.System.getInt(mContext.getContentResolver(),
+                            PhoneFactory.getSetting(Settings.System.SIM_STANDBY, phoneid), 1) == 1;
+                }
+            } else {
+                if (hasIccCard[0]) {
+                    return Settings.System.getInt(mContext.getContentResolver(),
+                            PhoneFactory.getSetting(Settings.System.SIM_STANDBY, phoneid), 1) == 1;
+                }
+            }
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+    /**
      * Enables location update notifications.  {@link PhoneStateListener#onCellLocationChanged
      * PhoneStateListener.onCellLocationChanged} will be called on location updates.
      *
@@ -420,28 +457,30 @@ public class TelephonyManager {
     public static final int NETWORK_TYPE_EDGE = 2;
     /** Current network is UMTS */
     public static final int NETWORK_TYPE_UMTS = 3;
-    /** Current network is CDMA: Either IS95A or IS95B*/
+    /** Current network is CDMA:  IS95A */
     public static final int NETWORK_TYPE_CDMA = 4;
-    /** Current network is EVDO revision 0*/
-    public static final int NETWORK_TYPE_EVDO_0 = 5;
-    /** Current network is EVDO revision A*/
-    public static final int NETWORK_TYPE_EVDO_A = 6;
+    /** Current network is CDMA:  IS95B*/
+    public static final int NETWORK_TYPE_IS95B = 5;
     /** Current network is 1xRTT*/
-    public static final int NETWORK_TYPE_1xRTT = 7;
+    public static final int NETWORK_TYPE_1xRTT = 6;
+    /** Current network is EVDO revision 0*/
+    public static final int NETWORK_TYPE_EVDO_0 = 7;
+    /** Current network is EVDO revision A*/
+    public static final int NETWORK_TYPE_EVDO_A = 8;
     /** Current network is HSDPA */
-    public static final int NETWORK_TYPE_HSDPA = 8;
+    public static final int NETWORK_TYPE_HSDPA = 9;
     /** Current network is HSUPA */
-    public static final int NETWORK_TYPE_HSUPA = 9;
+    public static final int NETWORK_TYPE_HSUPA = 10;
     /** Current network is HSPA */
-    public static final int NETWORK_TYPE_HSPA = 10;
-    /** Current network is iDen */
-    public static final int NETWORK_TYPE_IDEN = 11;
+    public static final int NETWORK_TYPE_HSPA = 11;
     /** Current network is EVDO revision B*/
     public static final int NETWORK_TYPE_EVDO_B = 12;
+    /** Current network is iDen */
+    public static final int NETWORK_TYPE_IDEN = 13;
     /** @hide */
-    public static final int NETWORK_TYPE_LTE = 13;
+    public static final int NETWORK_TYPE_LTE = 14;
     /** @hide */
-    public static final int NETWORK_TYPE_EHRPD = 14;
+    public static final int NETWORK_TYPE_EHRPD = 15;
 
     /**
      * Returns a constant indicating the radio technology (network type)

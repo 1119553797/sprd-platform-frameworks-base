@@ -384,6 +384,10 @@ public abstract class GSMPhone extends PhoneBase {
         super.notifyPreciseCallStateChangedP();
     }
 
+    /*package*/ void notifySycnInd() {
+        super.notifySycnIndP();
+    }
+
     /*package*/ void
     notifyNewRingingConnection(Connection c) {
         /* we'd love it if this was package-scoped*/

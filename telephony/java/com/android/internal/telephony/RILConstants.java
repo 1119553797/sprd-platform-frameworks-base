@@ -281,6 +281,7 @@ cat include/telephony/ril.h | \
 	
 	int RIL_REQUEST_MMI_ENTER_SIM = 126;
     int RIL_REQUEST_SET_CMMS = 127;
+    int RIL_REQUEST_SIM_POWER = 128;
 
     int RIL_UNSOL_RESPONSE_BASE = 1000;
     int RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED = 1000;
@@ -330,4 +331,6 @@ cat include/telephony/ril.h | \
 	int RIL_UNSOL_ON_STIN = 1040;
 	
 	int RIL_UNSOL_SIM_SMS_READY = 1041;
+    //for confirm when in call
+    int RIL_UNSOL_SYNC_IND = 1042;
 }

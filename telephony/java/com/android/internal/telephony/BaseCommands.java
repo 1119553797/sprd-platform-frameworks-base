@@ -65,6 +65,7 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mT53AudCntrlInfoRegistrants = new RegistrantList();
     protected RegistrantList mRingbackToneRegistrants = new RegistrantList();
     protected RegistrantList mResendIncallMuteRegistrants = new RegistrantList();
+    protected RegistrantList mSycnIndRegistrants = new RegistrantList();
 
     protected Registrant mSMSRegistrant;
     protected Registrant mNITZTimeRegistrant;
@@ -293,6 +294,16 @@ public abstract class BaseCommands implements CommandsInterface {
 
     public void unregisterForCallStateChanged(Handler h) {
         mCallStateRegistrants.remove(h);
+    }
+
+    public void registerForSycnInd(Handler h, int what, Object obj) {
+        Registrant r = new Registrant (h, what, obj);
+
+        mSycnIndRegistrants.add(r);
+    }
+
+    public void unregisterForSycnInd(Handler h) {
+        mSycnIndRegistrants.remove(h);
     }
 
     public void registerForNetworkStateChanged(Handler h, int what, Object obj) {
