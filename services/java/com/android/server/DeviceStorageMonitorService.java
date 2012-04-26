@@ -214,6 +214,15 @@ class DeviceStorageMonitorService extends Binder {
 							}catch(Exception e){
 								Log.i(TAG,"create temp file exception!");
 								e.printStackTrace();
+							}finally{
+								if(file != null){
+									try{
+										file.close();
+									}catch(Exception e){
+										//nothing
+									}
+									
+								}
 							}
 						}
     			}
