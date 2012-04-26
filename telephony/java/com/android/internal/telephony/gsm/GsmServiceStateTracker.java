@@ -658,6 +658,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
        case TelephonyManager.NETWORK_TYPE_HSPA:
        case TelephonyManager.NETWORK_TYPE_EVDO_0: //fall through
        case TelephonyManager.NETWORK_TYPE_EVDO_A:
+       case TelephonyManager.NETWORK_TYPE_IDEN:
                return "3G";
        default:
           return "";
