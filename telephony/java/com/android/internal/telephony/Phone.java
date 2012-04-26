@@ -356,6 +356,15 @@ public interface Phone extends SprdVideoPhone{
      */
     void unregisterForPreciseCallStateChanged(Handler h);
 
+    /**
+     * Register for confirm when in call
+     */
+    void registerForSycnInd(Handler h, int what, Object obj);
+
+    /**
+     * Unregister for confirm when in call
+     */
+    void unregisterForSycnInd(Handler h);
 
     /**
      * Notifies when a new ringing or waiting connection has appeared.<p>

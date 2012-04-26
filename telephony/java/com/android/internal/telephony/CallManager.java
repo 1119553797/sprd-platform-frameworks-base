@@ -88,6 +88,7 @@ public final class CallManager {
     private static final int EVENT_VIDEO_CALL_FALL_BACK = 204;
     private static final int EVENT_VIDEO_CALL_FAIL = 205;
     private static final int EVENT_VIDEO_CALL_CODEC  = 206;
+    private static final int EVENT_SYNC_IND  = 207;
 
     // Singleton instance
     private static final CallManager INSTANCE = new CallManager();
@@ -196,6 +197,9 @@ public final class CallManager {
     protected final RegistrantList mVideoCallCodecRegistrants
     = new RegistrantList();
     // add for video phone end
+    //add for confirm
+    protected final RegistrantList mSycnIndRegistrants
+    = new RegistrantList();
 
     private CallManager() {
         mPhones = new ArrayList<Phone>();
@@ -514,6 +518,8 @@ public final class CallManager {
             phone.registerForVideoCallFail(mHandler, EVENT_VIDEO_CALL_FAIL, null);
             phone.registerForVideoCallCodec(mHandler, EVENT_VIDEO_CALL_CODEC, null);
         }
+        //add for confirm when in call
+        phone.registerForSycnInd(mHandler, EVENT_SYNC_IND, null);
 
     }
 
@@ -557,6 +563,7 @@ public final class CallManager {
         phone.unregisterForVideoCallFallBack(mHandler);
         phone.unregisterForVideoCallFail(mHandler);
         phone.unregisterForVideoCallCodec(mHandler);
+        phone.unregisterForSycnInd(mHandler);
     }
 
     /**
@@ -1162,6 +1169,20 @@ public final class CallManager {
      */
     public void unregisterForPreciseCallStateChanged(Handler h){
         mPreciseCallStateRegistrants.remove(h);
+    }
+
+    /**
+     * Register for confirm when in call.
+     */
+    public void registerForSycnInd(Handler h, int what, Object obj){
+        mSycnIndRegistrants.addUnique(h, what, obj);
+    }
+
+    /**
+     * Unregister for confirm when in call.
+     */
+    public void unregisterForSycnInd(Handler h){
+        mSycnIndRegistrants.remove(h);
     }
 
     /**
@@ -2033,6 +2054,10 @@ public final class CallManager {
                 case EVENT_VIDEO_CALL_CODEC:
                     if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_VIDEO_CALL_CODEC)");
                     mVideoCallCodecRegistrants.notifyRegistrants((AsyncResult) msg.obj);
+                    break;
+                case EVENT_SYNC_IND:
+                    if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_SYNC_IND)");
+                    mSycnIndRegistrants.notifyRegistrants((AsyncResult) msg.obj);
                     break;
             }
         }

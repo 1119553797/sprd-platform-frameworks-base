@@ -220,7 +220,8 @@ public class HttpsConnection extends Connection {
                 // add all 'proxy' headers from the original request
                 for (Header h : req.mHttpRequest.getAllHeaders()) {
                     String headerName = h.getName().toLowerCase();
-                    if (headerName.startsWith("proxy") || headerName.equals("keep-alive")) {
+                    if (headerName.startsWith("proxy") || headerName.equals("keep-alive") ||
+			headerName.equals("host") || headerName.equals("user-agent")) {
                         proxyReq.addHeader(h);
                     }
                 }
