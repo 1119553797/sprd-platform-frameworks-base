@@ -998,7 +998,7 @@ status_t AVIExtractor::parseIdx1(off64_t offset, size_t size) {
 
             double avgChunkSize = 0;
             size_t j;
-            for (j = 0; j <= numSamplesToAverage; ++j) {
+            for (j = 0; j < numSamplesToAverage; ++j) {
                 off64_t offset;
                 size_t size;
                 bool isKey;
