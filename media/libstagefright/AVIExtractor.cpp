@@ -822,7 +822,7 @@ status_t AVIExtractor::parseStreamFormat(off64_t offset, size_t size) {
     } else {
         uint32_t format = U16LE_AT(data);
 
-        if (format == 0x55) {
+        if ((format == 0x55) || (format == 0x50)) {
             track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_MPEG);
         } else if (format == 0x01) {
             track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_RAW);
