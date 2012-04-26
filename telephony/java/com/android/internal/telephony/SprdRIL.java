@@ -270,7 +270,20 @@ public final class SprdRIL extends RIL {
 
 		send(rr);
 	}
-	
+
+    public void
+    setSIMPower(boolean on, Message result) {
+        RILRequest rr
+            = RILRequest.obtain(RIL_REQUEST_SIM_POWER, result);
+
+        rr.mp.writeInt(1);
+        rr.mp.writeInt(on ? 1 : 0);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + sprdRequestToString(rr.mRequest));
+
+        send(rr);
+    }
+
 	public void codecVP(int type, Bundle param, Message result){
 		 RILRequest rr
 				 = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_CODEC, result);
@@ -796,6 +809,7 @@ public final class SprdRIL extends RIL {
 				 case RIL_REQUEST_GET_SIM_CAPACITY: ret =  responseStrings(p); break;
 				 case RIL_REQUEST_MMI_ENTER_SIM: ret =	responseInts(p); break;
                  case RIL_REQUEST_SET_CMMS: ret =  responseVoid(p); break;
+                 case RIL_REQUEST_SIM_POWER: ret =  responseVoid(p); break;
 				 default:
 				 	throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
 							       //break;

@@ -118,5 +118,10 @@ public interface SprdVideoPhone {
 
     int getPhoneId();
 
+    /**
+     * Set the iccCard to on or off
+     */
+    public void setIccCard(boolean turnOn);
+
 }
 

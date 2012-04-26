@@ -123,6 +123,12 @@ interface ITelephony {
     boolean isIdle();
 
     /**
+     * Check to see if the iccCard is on or not.
+     * @return returns true if the radio is on.
+     */
+    boolean isIccCardOn();
+
+    /**
      * Check to see if the radio is on or not.
      * @return returns true if the radio is on.
      */
@@ -161,6 +167,11 @@ interface ITelephony {
      * @return true if MMI command is executed.
      */
     boolean handlePinMmi(String dialString);
+
+    /**
+     * Set the iccCard to on or off
+     */
+    boolean setIccCard(boolean turnOn);
 
     /**
      * Toggles the radio on or off.

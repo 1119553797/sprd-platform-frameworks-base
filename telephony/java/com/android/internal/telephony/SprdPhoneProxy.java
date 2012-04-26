@@ -212,4 +212,8 @@ public class SprdPhoneProxy extends PhoneProxy {
         return mActivePhone.getPhoneId();
     }
 
+    public void setIccCard(boolean turnOn) {
+        mActivePhone.setIccCard(turnOn);
+    }
+
 }
