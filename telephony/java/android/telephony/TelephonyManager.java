@@ -250,43 +250,6 @@ public class TelephonyManager {
     }
 
     /**
-     * Returns the airplane mode state.
-     * Return true if airplane mode is on
-     */
-    public boolean getAirplaneModeState() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.AIRPLANE_MODE_ON, 0) != 0;
-    }
-
-    /**
-     * Returns the card activated state when user set at dualSimSetting . Return
-     * true if card is activited.
-     */
-    public boolean getIccCardActivited(int phoneid) {
-        int phoneNum = PhoneFactory.getPhoneCount();
-        boolean hasIccCard[] = new boolean[phoneNum];
-        try {
-            for (int i = 0; i < phoneNum; i++) {
-                hasIccCard[i] = sInstance[i].getITelephony().hasIccCard();
-            }
-            if (phoneNum > 1) {
-                if (hasIccCard[0] || hasIccCard[1]) {
-                    return Settings.System.getInt(mContext.getContentResolver(),
-                            PhoneFactory.getSetting(Settings.System.SIM_STANDBY, phoneid), 1) == 1;
-                }
-            } else {
-                if (hasIccCard[0]) {
-                    return Settings.System.getInt(mContext.getContentResolver(),
-                            PhoneFactory.getSetting(Settings.System.SIM_STANDBY, phoneid), 1) == 1;
-                }
-            }
-        } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return false;
-    }
-    /**
      * Enables location update notifications.  {@link PhoneStateListener#onCellLocationChanged
      * PhoneStateListener.onCellLocationChanged} will be called on location updates.
      *
