@@ -28,7 +28,6 @@
 #include "include/ThrottledSource.h"
 #include "include/MPEG2TSExtractor.h"
 #include "include/ThreadedSource.h"
-#include "include/VideoPhoneExtractor.h"//sprd vt must
 
 #include "ARTPSession.h"
 #include "APacketSource.h"
@@ -1001,17 +1000,6 @@ status_t AwesomePlayer::initRenderer_l() {
     }
 
     return mVideoRenderer->initCheck();
-}
-
-status_t AwesomePlayer::forceStop(){
-    LOGV("forceStop");
-
-    if (mRTSPController != NULL) {  //@hong
-        mRTSPController->stopSource();
-   	}
-   
-	VideoPhoneDataDevice::getInstance().stop();
-	return pause();
 }
 
 void AwesomePlayer::clearRender(){
@@ -2338,7 +2326,6 @@ LOGV("prepare end time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
 
 status_t AwesomePlayer::suspend() {
     LOGE("suspend");
-	//VideoPhoneDataDevice::getInstance().stop();
     Mutex::Autolock autoLock(mLock);
 
     if (mSuspensionState != NULL) {
