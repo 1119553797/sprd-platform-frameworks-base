@@ -345,7 +345,7 @@ public class AdnRecordLoader extends Handler {
                                        if (adn.number.length() <= 20) {
                                               if (Config.LOGD)
                                                      Log.d(LOG_TAG, "an adn number is less than 20.so did't read ext");
-                                                     break;
+                                                     continue;
                                        }
                                 }
 				if (adn.hasExtendedRecord()) {
@@ -405,7 +405,7 @@ public class AdnRecordLoader extends Handler {
                                                if (adn.number.length() <= 20) {
                                                        if (Config.LOGD)
                                                               Log.d(LOG_TAG, "an adn number is less than 20.so dii't read ext");
-                                                              break;
+                                                              continue;
                                                }
                                         }
 					if (adn.hasExtendedRecord()) {
