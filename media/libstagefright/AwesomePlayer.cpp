@@ -1679,7 +1679,7 @@ void AwesomePlayer::onVideoEvent() {
              mSystemTimeSourceForSync.increaseRealTimeUs(realTimeUs-sysRealTimeUs -max(500000,AudioLatencyUs*5/10)); 	  	
 	if((realTimeUs-sysRealTimeUs)<min(-300000,-AudioLatencyUs*3/10))	
              mSystemTimeSourceForSync.increaseRealTimeUs(min(-300000,-AudioLatencyUs*3/10)); 		
-   	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs -AudioLatencyUs - 200000 ; //+400000 -> -2000000 for syn;//assume display latency  400ms
+   	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs -AudioLatencyUs + 40000 ; //+400000 -> 40000 for syn;//assume display latency  400ms
    }else{
    	nowUs = ts->getRealTimeUs() - mTimeSourceDeltaUs;
    }
