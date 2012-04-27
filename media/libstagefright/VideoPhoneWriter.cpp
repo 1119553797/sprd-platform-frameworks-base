@@ -200,7 +200,7 @@ status_t VideoPhoneWriter::threadFunc()
 		int retval = -1;
 
 		// synchronized with at command (SPDVTDATA=0)
-		if (vt_pipe < 0) vt_pipe = open("/dev/pipe/ril.vt.0", O_RDWR);
+		if (vt_pipe < 0) vt_pipe = open("/dev/rpipe/ril.vt.0", O_RDWR);
 		if (vt_pipe > 0) {
 			do {
 				struct timeval tv = {0};
@@ -223,7 +223,10 @@ status_t VideoPhoneWriter::threadFunc()
 				}
 			} while (1);
 			if (!m_bStarted ) break;
-		}
+		}else {
+		    LOGE("open vt_pipe failed: %d", vt_pipe);
+            LOGE("vt_pipe errno: %d, %s", errno, strerror(errno));
+        }
 				
 		//LOGV("before read");
 		err = m_MediaSource->read(&buffer);

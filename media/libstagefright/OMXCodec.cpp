@@ -1989,12 +1989,14 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
 	    }
 		//sprd begin for request i-frame when codec fail
 	    int vt_pipe = -1;
-	    if (vt_pipe < 0) vt_pipe = open("/dev/pipe/ril.vt.1", O_RDWR);
+	    if (vt_pipe < 0) vt_pipe = open("/dev/rpipe/ril.vt.1", O_RDWR);
 	    if (vt_pipe > 0) {
-		ssize_t size = write(vt_pipe, "0", 2);
-		CODEC_LOGE("write vt_pipe, size: %d", size);
-		close(vt_pipe);
-	    }
+    		ssize_t size = write(vt_pipe, "0", 2);
+    		CODEC_LOGE("write vt_pipe, size: %d", size);
+    		close(vt_pipe);
+	    } else {
+		    CODEC_LOGE("open vt_pipe failed: %d", vt_pipe);
+        }
 		//sprd end
             break;
         }
