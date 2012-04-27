@@ -253,6 +253,7 @@ status_t MediaPhoneClient::stop()
         return NO_INIT;
     }
     mRecorder->stop();
+	VideoPhoneDataDevice::getInstance().stop();
     mPlayer->stop();
     mCamera.clear();
     return OK;

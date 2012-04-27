@@ -96,7 +96,6 @@ struct AwesomePlayer {
     void postAudioEOS();
     void postAudioSeekComplete();
 
-	status_t forceStop();//sprd vt must
 	void clearRender();//sprd vt must
 #ifdef USE_GETFRAME
     status_t    getFrameAt(int msec, VideoFrame** pvframe);
