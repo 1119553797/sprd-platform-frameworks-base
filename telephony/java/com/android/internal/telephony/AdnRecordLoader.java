@@ -341,13 +341,6 @@ public class AdnRecordLoader extends Handler {
 
 				adn = new AdnRecord(ef, recordNumber, data);
 				result = adn;
-                                if(adn.number != null){
-                                       if (adn.number.length() <= 20) {
-                                              if (Config.LOGD)
-                                                     Log.d(LOG_TAG, "an adn number is less than 20.so did't read ext");
-                                                     break;
-                                       }
-                                }
 				if (adn.hasExtendedRecord()) {
 					// If we have a valid value in the ext record field,
 					// we're not done yet: we need to read the corresponding
