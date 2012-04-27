@@ -417,7 +417,7 @@ public final class ShutdownThread extends Thread {
                 break;
             }
             SystemClock.sleep(PHONE_STATE_POLL_SLEEP_MSEC);
-        }/*
+        }*/
 
         rebootOrShutdown(mReboot, mRebootReason);
     }
