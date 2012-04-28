@@ -1442,6 +1442,8 @@ public class PhoneNumberUtils
     public static boolean isVoiceMailNumber(int phoneId, String number) {
         String vmNumber;
 
+        if (phoneId < 0 || phoneId >= PhoneFactory.getPhoneCount()) return false;
+
         try {
             vmNumber = TelephonyManager.getDefault(phoneId).getVoiceMailNumber();
         } catch (SecurityException ex) {
