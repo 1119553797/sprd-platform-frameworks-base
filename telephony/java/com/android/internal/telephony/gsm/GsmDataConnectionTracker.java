@@ -1589,7 +1589,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     }
 
     private void startDelayedRetry(GsmDataConnection.FailCause cause, String reason) {
-        //notifyNoData(cause);
+        notifyNoData(cause);
         reconnectAfterFail(cause, reason);
     }
 
