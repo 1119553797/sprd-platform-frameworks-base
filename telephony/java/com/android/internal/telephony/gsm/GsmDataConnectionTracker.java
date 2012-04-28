@@ -1311,6 +1311,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             } else {
                 SystemProperties.set("gsm.defaultpdpcontext.active", "false");
             }
+            MsmsGsmDataConnectionTrackerProxy.resetRequestPhoneIdBeforeVoiceCallEnd();
+            MsmsGsmDataConnectionTrackerProxy.setActivePhoneId(phone.getPhoneId());
             notifyDefaultData(reason);
 
             // TODO: For simultaneous PDP support, we need to build another
