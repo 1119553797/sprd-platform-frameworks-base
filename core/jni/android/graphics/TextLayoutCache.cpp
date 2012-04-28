@@ -174,7 +174,11 @@ sp<TextLayoutCacheValue> TextLayoutCache::getValue(SkPaint* paint,
                         start, count, contextCount, size, mMaxSize - mSize, endTime,
                         String8(text, count).string());
             }
-            value.clear();
+			/*
+			 * modified by liujk@spreadst.com
+			 * fixed bug which layout error when contextCount or count is too long caused.
+			 */
+            //value.clear();
         }
     } else {
         // This is a cache hit, just log timestamp and user infos
@@ -319,8 +323,8 @@ void TextLayoutCacheValue::computeValues(SkPaint* paint, const UChar* chars,
     LOGD("computeValues -- chars[0]:%04x, start:%d, count:%d, dirFlags:%d.", chars[0], start, count, dirFlags);
 #endif
     // Give a hint for advances, glyphs and log clusters vectors size
-    mAdvances.setCapacity(contextCount);
-    mGlyphs.setCapacity(contextCount);
+    mAdvances.setCapacity(count/*contextCount*/);
+    mGlyphs.setCapacity(count/*contextCount*/);
 	mClusterCount = 0;
 
     computeValuesWithHarfbuzz(paint, chars, start, count, contextCount, dirFlags,
@@ -387,7 +391,7 @@ size_t TextLayoutCacheValue::getSize() {
 }
 
 void TextLayoutCacheValue::initShaperItem(HB_ShaperItem& shaperItem, HB_FontRec* font,
-        FontData* fontData, SkPaint* paint, const UChar* chars, size_t contextCount) {
+        FontData* fontData, SkPaint* paint, const UChar* chars, size_t count, size_t contextCount) {
     // Zero the Shaper struct
     memset(&shaperItem, 0, sizeof(shaperItem));
 
@@ -429,7 +433,7 @@ void TextLayoutCacheValue::initShaperItem(HB_ShaperItem& shaperItem, HB_FontRec*
     // will produce. We take a guess that script runs will not produce more
     // than twice as many glyphs as there are code points plus a bit of
     // padding and fallback if we find that we are wrong.
-    createGlyphArrays(shaperItem, (contextCount + 2) * 2);
+    createGlyphArrays(shaperItem, (count/*contextCount*/ + 2) * 2);
 
     // Set the string properties
     shaperItem.string = chars;
@@ -681,7 +685,7 @@ void TextLayoutCacheValue::computeValuesWithHarfbuzz(SkPaint* paint, const UChar
         FontData fontData;
 
         // Initialize Harfbuzz Shaper
-        initShaperItem(shaperItem, &font, &fontData, paint, chars, contextCount);
+        initShaperItem(shaperItem, &font, &fontData, paint, chars, count, contextCount);
 
         bool useSingleRun = false;
         bool isRTL = forceRTL;
