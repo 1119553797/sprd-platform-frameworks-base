@@ -1517,7 +1517,12 @@ status_t AVIExtractor::getSampleIndexAtTime(
         case MediaSource::ReadOptions::SEEK_CLOSEST_SYNC:
         {
             if (prevSyncSampleIndex < 0 && nextSyncSampleIndex >= numSamples) {
-                return UNKNOWN_ERROR;
+                if (closestSampleIndex >= 0 && closestSampleIndex < numSamples) {
+                    *sampleIndex = closestSampleIndex; // seek to closestSampleIndex
+                    return OK;
+                } else {
+                    return UNKNOWN_ERROR;
+                }
             }
 
             if (prevSyncSampleIndex < 0) {
