@@ -985,7 +985,7 @@ status_t AVIExtractor::parseIdx1(off64_t offset, size_t size) {
     for (size_t i = 0; i < mTracks.size(); ++i) {
         Track *track = &mTracks.editItemAt(i);
 
-        if (track->mBytesPerSample > 0) {
+        if ((Track::AUDIO==track->mKind)&&(track->mBytesPerSample > 0)) {
             // Assume all chunks are roughly the same size for now.
 
             // Compute the avg. size of the first 128 chunks (if there are
@@ -1440,7 +1440,7 @@ status_t AVIExtractor::getSampleIndexAtTime(
 
     ssize_t closestSampleIndex;
 
-    if (track.mBytesPerSample > 0) {
+    if ((Track::AUDIO==track.mKind)&&(track.mBytesPerSample > 0)) {
         size_t closestByteOffset =
             (timeUs * track.mBytesPerSample)
                 / track.mRate * track.mScale / 1000000ll;
