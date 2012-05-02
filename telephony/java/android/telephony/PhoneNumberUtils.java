@@ -1340,27 +1340,12 @@ public class PhoneNumberUtils
         // Strip the separators from the number before comparing it
         // to the list.
         number = extractNetworkPortionAlt(number);
-        // modified emergency number logic 2011-9-30 start
+
         String numbers = "";
 
-        boolean isEmergency = false;
-        for (int j = 0; j < phoneCount; j++ ) {
-//            isEmergency = isEmergency || PhoneFactory.isCardExist(j);
-            log("sim"+phoneId+" hasIccCard " + TelephonyManager.getDefault(j).hasIccCard());
-            isEmergency = isEmergency || TelephonyManager.getDefault(j).hasIccCard();
-        }
+        numbers += "000,08,110,999,118,119";
 
-        if(!isEmergency) {
-            numbers += "000,08,110,999,118,119";
-        }
-
-        if ( PhoneFactory.isCardExist(phoneId)) {
-//            Phone[] phones = PhoneFactory.getPhones();
-//            if(phones[phoneId].getServiceState().isEmergencyOnly()){
-//                numbers = "000,08,110,999,118,119";
-//            }
-            // modified by phone_03 for bug 2686 end
-
+        if (PhoneFactory.isCardExist(phoneId)) {
             // retrieve the list of emergency numbers
             // check read-write ecclist property first
             String tmpnumbers = SystemProperties.get("ril.ecclist");
@@ -1386,9 +1371,7 @@ public class PhoneNumberUtils
             // searches through the comma-separated list for a match,
             // return true if one is found.
             for (String emergencyNum : numbers.split(",")) {
-		   if (DBG) log("emergencyNum  " + emergencyNum);
                 if (emergencyNum.equals(number)) {
-			 if (DBG) log("the number is  emergencyNum");
                     return true;
                 }
             }
