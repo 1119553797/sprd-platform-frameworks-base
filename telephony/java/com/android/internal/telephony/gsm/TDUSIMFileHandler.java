@@ -124,30 +124,19 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 
       	@Override
 	public void addDualMapFile(int efid){
-           boolean isExist = false;
-           if(mFileList != null ){
-
-                  for(int i= 0; i<mFileList.size(); i++){
-
-                          if(mFileList.get(i) == efid){
-
-					isExist = true;
-					break;
-				}
-				
-                  }
-
-		     if(!isExist){
-
-                         mFileList.add(efid);
-		     }
-
-                 
-			
-           }
-
-	
-
+        Log.d(LOG_TAG, "addDualMapFile efid = " + efid);
+        boolean isExist = false;
+        if (mFileList != null ) {
+            for (int i= 0; i<mFileList.size(); i++) {
+                if (mFileList.get(i) == efid) {
+                    isExist = true;
+                    break;
+                }
+            }
+            if (!isExist) {
+                mFileList.add(efid);
+            }
+        }
 	}
 
      private void UpdatePathOfDualMapFile(int efid, String path){

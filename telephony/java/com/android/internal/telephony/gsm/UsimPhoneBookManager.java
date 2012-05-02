@@ -2485,6 +2485,8 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 					data = tlv.getData();
 
 					int efid = ((data[0] & 0xFF) << 8) | (data[1] & 0xFF);
+                    mPhone.getIccFileHandler().addDualMapFile(efid);
+
 					if(tag == USIM_EFADN_TAG ){
 
 						emailInfo.adnEfid = efid;
