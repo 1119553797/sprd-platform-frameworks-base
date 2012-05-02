@@ -179,7 +179,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                     }
                     if ((events & PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR) != 0) {
                         try {
-                            r.callback.onCallForwardingIndicatorChangedByServiceClass(mCallForwarding, mServiceClass);
+                            r.callback.onCallForwardingIndicatorChanged(mCallForwarding);
                         } catch (RemoteException ex) {
                             remove(r.binder);
                         }

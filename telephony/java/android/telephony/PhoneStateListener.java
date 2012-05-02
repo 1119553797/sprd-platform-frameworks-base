@@ -195,7 +195,7 @@ public class PhoneStateListener {
      * Callback invoked when the call-forwarding indicator changes.
      */
     public void onCallForwardingIndicatorChanged(boolean cfi) {
-        onCallForwardingIndicatorChangedByServiceClass(cfi,SERVICE_CLASS_VOICE);
+        // default implementation empty
     }
 
     /**
@@ -330,6 +330,7 @@ public class PhoneStateListener {
                     PhoneStateListener.this.onMessageWaitingIndicatorChanged(msg.arg1 != 0);
                     break;
                 case LISTEN_CALL_FORWARDING_INDICATOR:
+                    PhoneStateListener.this.onCallForwardingIndicatorChanged(msg.arg1 != 0);
                     PhoneStateListener.this.onCallForwardingIndicatorChangedByServiceClass(msg.arg1 != 0, msg.arg2);
                     break;
                 case LISTEN_CELL_LOCATION:
