@@ -47,6 +47,7 @@ public final class SprdRIL extends RIL {
 	protected Registrant mVPFallBackRegistrant;
 	protected Registrant mVPFailRegistrant;
 	protected Registrant mVPRemoteCameraRegistrant;
+    protected Registrant mVPMediaStartRegistrant;
 	protected RegistrantList mVideoCallStateRegistrants = new RegistrantList();
     protected Registrant mStkStinRegistrant;
 
@@ -408,7 +409,15 @@ public final class SprdRIL extends RIL {
 	   public void unSetOnVPRemoteCamera(Handler h){
         mVPRemoteCameraRegistrant.clear();
     }
-	   
+
+    public void setOnVPMediaStart(Handler h, int what, Object obj) {
+        mVPMediaStartRegistrant = new Registrant (h, what, obj);
+    }
+
+    public void unSetOnVPMediaStart(Handler h) {
+        mVPMediaStartRegistrant.clear();
+    }
+
 	   public void registerForVideoCallStateChanged(Handler h, int what, Object obj) {
 		   Registrant r = new Registrant (h, what, obj);
 	   
@@ -916,6 +925,7 @@ public final class SprdRIL extends RIL {
 				case RIL_UNSOL_VIDEOPHONE_RELEASING: ret = responseString(p); break;
 				case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: ret = responseInts(p); break;
 				case RIL_UNSOL_VIDEOPHONE_DSCI: ret = responseDSCI(p); break;
+                case RIL_UNSOL_VIDEOPHONE_MEDIA_START: ret = responseInts(p); break;
 				case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:ret =  responseVoid(p); break;
 				case RIL_UNSOL_ON_STIN:ret = responseInts(p); break;
 				case RIL_UNSOL_SIM_SMS_READY:ret = responseVoid(p); break;
@@ -1362,6 +1372,18 @@ public final class SprdRIL extends RIL {
 								       break;
 								       
 							       }	
+	            case RIL_UNSOL_VIDEOPHONE_MEDIA_START:
+	                if (RILJ_LOGD)
+	                    unsljLog(response);
+
+	                if (mVPMediaStartRegistrant != null) {
+	                    int[] params = (int[]) ret;
+	                    if (params[0] == 1) {
+	                        mVPMediaStartRegistrant.notifyRegistrant(new AsyncResult(null, params, null));
+	                    }
+	                }
+	                break;
+                
 				case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:
 							       if (RILJ_LOGD) unsljLog(response);
 
@@ -1460,6 +1482,7 @@ public final class SprdRIL extends RIL {
 		            case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: return "UNSOL_VIDEOPHONE_REMOTE_MEDIA";
 		            case RIL_UNSOL_VIDEOPHONE_RELEASING: return "RIL_UNSOL_VIDEOPHONE_RELEASING";
 		            case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: return "UNSOL_VIDEOPHONE_RECORD_VIDEO";
+            case RIL_UNSOL_VIDEOPHONE_MEDIA_START: return "UNSOL_VIDEOPHONE_MEDIA_START";
 			     case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED: return "UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED";
 			     case RIL_UNSOL_SIM_SMS_READY: return "UNSOL_SIM_SMS_READY";
                  case RIL_UNSOL_SYNC_IND: return "UNSOL_SYNC_IND";
