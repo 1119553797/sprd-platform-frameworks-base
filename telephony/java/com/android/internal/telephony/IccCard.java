@@ -790,6 +790,13 @@ public abstract class IccCard {
         }
     }
 
+    /**
+     * @return true if ICC card is on
+     */
+    public boolean isIccCardOn() {
+        return mPhone.mCM.getRadioState() != RadioState.RADIO_UNAVAILABLE;
+    }
+
     private void log(String msg) {
         Log.d(mLogTag, "[IccCard] " + msg);
     }

@@ -68,8 +68,7 @@ status_t StagefrightPlayer::start() {
 status_t StagefrightPlayer::stop() {
     LOGV("stop");
 
-	return mPlayer->forceStop(); //sprd vt must
-    //return pause();
+    return pause();
 }
 
 status_t StagefrightPlayer::pause() {

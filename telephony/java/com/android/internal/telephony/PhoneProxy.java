@@ -227,6 +227,16 @@ public abstract class PhoneProxy extends Handler implements Phone {
         mActivePhone.unregisterForPreciseCallStateChanged(h);
     }
 
+    //add for confirm when in call
+    public void registerForSycnInd(Handler h, int what, Object obj) {
+        mActivePhone.registerForSycnInd(h, what, obj);
+    }
+
+    //add for confirm when in call
+    public void unregisterForSycnInd(Handler h) {
+        mActivePhone.unregisterForSycnInd(h);
+    }
+
     public void registerForNewRingingConnection(Handler h, int what, Object obj) {
         mActivePhone.registerForNewRingingConnection(h, what, obj);
     }

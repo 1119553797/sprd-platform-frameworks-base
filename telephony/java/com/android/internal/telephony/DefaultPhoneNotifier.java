@@ -86,7 +86,11 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     }
 
     public void notifyCallForwardingChanged(Phone sender) {
-        notifyCallForwardingChanged(sender, SERVICE_CLASS_VOICE);
+        try {
+            mRegistry.notifyCallForwardingChanged(sender.getCallForwardingIndicator());
+        } catch (RemoteException ex) {
+            // system process is dead
+        }
     }
 
     public void notifyCallForwardingChanged(Phone sender, int serviceClass) {

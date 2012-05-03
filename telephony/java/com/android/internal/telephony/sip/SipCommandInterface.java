@@ -491,6 +491,12 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 	}
 
 	@Override
+    public void setSIMPower(boolean on, Message result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void recordVPAudio(boolean bStart, int mode, Message result) {
 		// TODO Auto-generated method stub
 		
@@ -585,6 +591,11 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 		// TODO Auto-generated method stub
 		
 	}
+	
+    public void setOnVPMediaStart(Handler h, int what, Object obj) {
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public void testVP(int flag, int value, Message result) {
@@ -644,6 +655,11 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 	public void unSetOnVPString(Handler h) {
 		// TODO Auto-generated method stub
 		
+	}
+
+    public void unSetOnVPMediaStart(Handler h) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

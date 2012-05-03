@@ -822,7 +822,7 @@ status_t AVIExtractor::parseStreamFormat(off64_t offset, size_t size) {
     } else {
         uint32_t format = U16LE_AT(data);
 
-        if (format == 0x55) {
+        if ((format == 0x55) || (format == 0x50)) {
             track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_MPEG);
         } else if (format == 0x01) {
             track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_RAW);
@@ -985,7 +985,7 @@ status_t AVIExtractor::parseIdx1(off64_t offset, size_t size) {
     for (size_t i = 0; i < mTracks.size(); ++i) {
         Track *track = &mTracks.editItemAt(i);
 
-        if (track->mBytesPerSample > 0) {
+        if ((Track::AUDIO==track->mKind)&&(track->mBytesPerSample > 0)) {
             // Assume all chunks are roughly the same size for now.
 
             // Compute the avg. size of the first 128 chunks (if there are
@@ -998,7 +998,7 @@ status_t AVIExtractor::parseIdx1(off64_t offset, size_t size) {
 
             double avgChunkSize = 0;
             size_t j;
-            for (j = 0; j <= numSamplesToAverage; ++j) {
+            for (j = 0; j < numSamplesToAverage; ++j) {
                 off64_t offset;
                 size_t size;
                 bool isKey;
@@ -1440,7 +1440,7 @@ status_t AVIExtractor::getSampleIndexAtTime(
 
     ssize_t closestSampleIndex;
 
-    if (track.mBytesPerSample > 0) {
+    if ((Track::AUDIO==track.mKind)&&(track.mBytesPerSample > 0)) {
         size_t closestByteOffset =
             (timeUs * track.mBytesPerSample)
                 / track.mRate * track.mScale / 1000000ll;
@@ -1517,7 +1517,12 @@ status_t AVIExtractor::getSampleIndexAtTime(
         case MediaSource::ReadOptions::SEEK_CLOSEST_SYNC:
         {
             if (prevSyncSampleIndex < 0 && nextSyncSampleIndex >= numSamples) {
-                return UNKNOWN_ERROR;
+                if (closestSampleIndex >= 0 && closestSampleIndex < numSamples) {
+                    *sampleIndex = closestSampleIndex; // seek to closestSampleIndex
+                    return OK;
+                } else {
+                    return UNKNOWN_ERROR;
+                }
             }
 
             if (prevSyncSampleIndex < 0) {

@@ -406,6 +406,7 @@ status_t BnMediaPhone::onTransact(
 	            int fd = dup(oldfd);
 	            LOGV("ENABLE_RECORD, oldfd: %d, fd: %d", oldfd, fd);
             	reply->writeInt32(enableRecord(bEnable, type, fd));
+                ::close(fd);
 			} else {
             	reply->writeInt32(enableRecord(bEnable, type, 0));
 			}

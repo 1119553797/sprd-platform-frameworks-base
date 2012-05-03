@@ -553,8 +553,8 @@ android_media_MediaPhone_native_waitRequestForAT(JNIEnv *env, jobject thiz)
 	int retval = AT_NONE;
 	int vt_pipe_request_iframe = -1;
 	int vt_pipe_report_iframe = -1;
-	if (vt_pipe_request_iframe < 0) vt_pipe_request_iframe = open("/dev/pipe/ril.vt.1", O_RDWR);
-	if (vt_pipe_report_iframe < 0) vt_pipe_report_iframe = open("/dev/pipe/ril.vt.2", O_RDWR);
+	if (vt_pipe_request_iframe < 0) vt_pipe_request_iframe = open("/dev/rpipe/ril.vt.1", O_RDWR);
+	if (vt_pipe_report_iframe < 0) vt_pipe_report_iframe = open("/dev/rpipe/ril.vt.2", O_RDWR);
 	if ((vt_pipe_request_iframe > 0) && (vt_pipe_request_iframe > 0)){
 		do {
 			struct timeval tv = {0};
@@ -599,7 +599,8 @@ android_media_MediaPhone_native_waitRequestForAT(JNIEnv *env, jobject thiz)
 			}
 		} while (1);
 	}else {
-	    LOGE("vt_pipe_report_iframe: %d, vt_pipe_request_iframe: %d", vt_pipe_report_iframe, vt_pipe_request_iframe);
+	    LOGE("vt_pipe_report_iframe: %d, vt_pipe_request_iframe: %d", vt_pipe_report_iframe, vt_pipe_request_iframe);        
+        LOGE("vt_pipe errno: %d, %s", errno, strerror(errno));
     }
 	if (vt_pipe_report_iframe > 0) {
 		close(vt_pipe_report_iframe);

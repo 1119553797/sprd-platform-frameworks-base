@@ -1,0 +1,27 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">Bar Status</string>
+    <string name="status_bar_clear_all_button">Kosong</string>
+    <string name="status_bar_no_notifications_title">Tiada pemberitahuan</string>
+    <string name="status_bar_ongoing_events_title">Berterusan</string>
+    <string name="status_bar_latest_events_title">Pemberitahuan</string>
+    <string name="battery_low_title">Sila sambung pengecas</string>
+    <string name="battery_low_subtitle">Bateri semakin kurang:</string>
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g> atau kurang yang tinggal.</string>
+    <string name="battery_low_why">Penggunaan bateri</string>
+    <string name="usb_accessory_permission_prompt">Benarkan aplikasi %1$s mengakses aksesori USB?</string>
+    <string name="usb_device_confirm_prompt">Buka %1$s apabila peranti USB ini disambung?</string>
+    <string name="usb_accessory_confirm_prompt">Buka %1$s apabila aksesori USB ini disambung?</string>
+    <string name="usb_accessory_uri_prompt">Tiada aplikasi yang dipasang berfungsi dengan aksesori USB ini. Ketahui dengan lebih lanjut tentang aksesori ini di <xliff:g id="url">%1$s</xliff:g></string>
+    <string name="title_usb_accessory">Aksesori USB</string>
+    <string name="label_view">Lihat</string>
+    <string name="always_use_accessory">Guna secara lalai untuk aksesori USB ini</string>
+    <string name="mobile_data_connect_disable">Tidak</string>
+    <string name="mobile_data_connect_enable">Ya</string>
+    <string name="network_disconnect_title">Notis</string>
+    <string name="network_disconnect_message">Rangkaian WLAN diputuskan. \nSambung melalui 3G? \nAnda mungkin dikenakan bayaran tambahan jika tiada plan data.</string>
+    <string name="weak_signal_title">ISYARAT LEMAH</string>
+    <string name="weak_signal_message">Isyarat WLAN kini sangat lemah, anda disarankan memilih isyarat yang lebih kuat</string>
+    <string name="auto_connect">Jangan tanya dan sambung ke AP lain yang dipercayai secara automatik</string>
+</resources>

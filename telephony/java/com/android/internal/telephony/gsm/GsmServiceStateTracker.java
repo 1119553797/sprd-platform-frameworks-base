@@ -403,8 +403,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 // This will do nothing in the radio not
                 // available case
                 Log.v(LOG_TAG, "GsmServiceStateTracker.java---EVENT_RADIO_STATE_CHANGED");
-            	if(SystemProperties.get("sys.power.off").equals("true"))
-            		break;
+                //if(SystemProperties.get("sys.power.off").equals("true"))
+                //break;
                 setPowerStateToDesired(false);
                 pollState();
                 break;
@@ -591,10 +591,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             }
             // If it's on and available and we want it off gracefully
             powerOffRadioSafely();
-        } // Otherwise, we're in the desired state
-        else if (!mDesiredPowerState && !cm.getRadioState().isOn() && SystemProperties.get("sys.power.off").equals("true")) {
-        	// power off when the airplane mode is enabled for 3G Phone
-        	cm.setRadioPower(false, null);
         }
     }
 
@@ -662,6 +658,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
        case TelephonyManager.NETWORK_TYPE_HSPA:
        case TelephonyManager.NETWORK_TYPE_EVDO_0: //fall through
        case TelephonyManager.NETWORK_TYPE_EVDO_A:
+       case TelephonyManager.NETWORK_TYPE_IDEN:
                return "3G";
        default:
           return "";

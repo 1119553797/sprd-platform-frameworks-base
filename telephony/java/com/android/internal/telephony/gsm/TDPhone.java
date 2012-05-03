@@ -1045,5 +1045,9 @@ public final class TDPhone extends GSMPhone {
         return mCM.getPhoneId();
     }
 
+    public void setIccCard(boolean turnOn) {
+        mCM.setSIMPower(turnOn, null);
+    }
+
 }
 

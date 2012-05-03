@@ -1366,6 +1366,10 @@ public final class Telephony {
          * getOrCreateThreadId.  It's convenient for use with SMS
          * messages.
          */
+        public static long getOrCreateThreadId(Context context, String recipient) {
+            return getOrCreateThreadId(context, recipient, "");
+        }
+
         public static long getOrCreateThreadId(Context context, String recipient, String name) {
             Set<String> recipients = new HashSet<String>();
             recipients.add(recipient);
@@ -1385,6 +1389,11 @@ public final class Telephony {
          * any order, without any additions). If one
          * is found, return it.  Otherwise, return a unique thread ID.
          */
+        public static long getOrCreateThreadId(
+                Context context, Set<String> recipients) {
+            return getOrCreateThreadId(context, recipients, new HashSet<String>());
+        }
+
         public static long getOrCreateThreadId(
                 Context context, Set<String> recipients, Set<String> recipientNames) {
             Uri.Builder uriBuilder = THREAD_ID_CONTENT_URI.buildUpon();

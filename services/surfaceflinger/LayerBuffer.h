@@ -23,6 +23,8 @@
 #include "LayerBase.h"
 #include "TextureManager.h"
 
+struct copybit_device_t;
+
 namespace android {
 
 // ---------------------------------------------------------------------------
@@ -135,6 +137,8 @@ private:
         virtual void destroy() { }
         virtual void finishPageFlip();
     private:
+        status_t initTempBuffer() const;
+        void clearTempBufferImage() const;
         status_t fixYUV420Plane(copybit_image_t const *, uint32_t) const;
         mutable bool mUseEGLImageDirectly;
         mutable Mutex                   mBufferSourceLock;
@@ -220,6 +224,7 @@ private:
     sp<Surface>     mSurface;
     bool            mInvalidate;
     bool            mNeedsBlending;
+    copybit_device_t* mBlitEngine;
 };
 
 // ---------------------------------------------------------------------------

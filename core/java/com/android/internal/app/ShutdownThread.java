@@ -39,6 +39,7 @@ import android.os.storage.IMountService;
 import android.os.storage.IMountShutdownObserver;
 
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.PhoneFactory;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -190,8 +191,9 @@ public final class ShutdownThread extends Thread {
      * Shuts off power regardless of radio and bluetooth state if the alloted time has passed.
      */
     public void run() {
+        int phoneCount = PhoneFactory.getPhoneCount();
         boolean bluetoothOff;
-        boolean radioOff;
+        boolean []radioOff = new boolean[phoneCount];
 
         BroadcastReceiver br = new BroadcastReceiver() {
             @Override public void onReceive(Context context, Intent intent) {
@@ -242,9 +244,13 @@ public final class ShutdownThread extends Thread {
             } catch (RemoteException e) {
             }
         }
-        
-        final ITelephony phone =
-                ITelephony.Stub.asInterface(ServiceManager.checkService("phone"));
+
+        final ITelephony[] phoneArray = new ITelephony[phoneCount];
+        for(int i = 0; i < phoneCount; i++ ){
+            phoneArray[i] = ITelephony.Stub.asInterface(ServiceManager.
+                checkService(PhoneFactory.getServiceName("phone", i)));
+        }
+
         final IBluetooth bluetooth =
                 IBluetooth.Stub.asInterface(ServiceManager.checkService(
                         BluetoothAdapter.BLUETOOTH_SERVICE));
@@ -264,22 +270,6 @@ public final class ShutdownThread extends Thread {
             Log.e(TAG, "RemoteException during bluetooth shutdown", ex);
             bluetoothOff = true;
         }
-
-        try {
-            radioOff = phone == null || !phone.isRadioOn();
-            //if (!radioOff) {
-                Log.w(TAG, "Turning off radio...");
-                android.os.SystemProperties.set("sys.power.off", "true");
-		phone.setRadio(false);
-            //}
-        } catch (RemoteException ex) {
-            Log.e(TAG, "RemoteException during radio shutdown", ex);
-            radioOff = true;
-        }
-/*
-        Log.i(TAG, "Waiting for Bluetooth and Radio...");
-        
-        // Wait a max of 32 seconds for clean shutdown
         for (int i = 0; i < MAX_NUM_PHONE_STATE_READS; i++) {
             if (!bluetoothOff) {
                 try {
@@ -290,21 +280,83 @@ public final class ShutdownThread extends Thread {
                     bluetoothOff = true;
                 }
             }
-            if (!radioOff) {
-                try {
-                    radioOff = !phone.isRadioOn();
-                } catch (RemoteException ex) {
-                    Log.e(TAG, "RemoteException during radio shutdown", ex);
-                    radioOff = true;
-                }
-            }
-            if (radioOff && bluetoothOff) {
-                Log.i(TAG, "Radio and Bluetooth shutdown complete.");
+            if (bluetoothOff) {
+                Log.i(TAG, "Bluetooth shutdown complete.");
                 break;
             }
             SystemClock.sleep(PHONE_STATE_POLL_SLEEP_MSEC);
         }
-*/
+
+        for (int i = 0; i < phoneCount; i++) {
+            try {
+                radioOff[i] = phoneArray[i] == null || !phoneArray[i].isRadioOn();
+                if (!radioOff[i]) {
+                    phoneArray[i].setRadio(false);
+                }
+            } catch (RemoteException ex) {
+                Log.e(TAG, "RemoteException during radio shutdown", ex);
+                radioOff[i] = true;
+            }
+            for (int j = 0; j < MAX_NUM_PHONE_STATE_READS; j++) {
+                if (!radioOff[i]) {
+                        try {
+                            radioOff[i] = !phoneArray[i].isRadioOn();
+                        } catch (RemoteException ex) {
+                            Log.e(TAG, "RemoteException during radio shutdown", ex);
+                            radioOff[i] = true;
+                        }
+                }
+                if (radioOff[i]) {
+                    Log.i(TAG, "Radio shutdown complete.");
+                    break;
+                }
+                SystemClock.sleep(PHONE_STATE_POLL_SLEEP_MSEC);
+           }
+        }
+
+        boolean iccOff[] = new boolean[phoneCount];
+        int numCount;
+        for (int i = 0; i < phoneCount; i++) {
+            try {
+                iccOff[i] = phoneArray[i] == null || !phoneArray[i].isIccCardOn();
+                if (!iccOff[i]) {
+                    phoneArray[i].setIccCard(false);
+                }
+            } catch (RemoteException ex) {
+                Log.e(TAG, "RemoteException during radio shutdown", ex);
+                iccOff[i] = true;
+            }
+            if (!iccOff[i]) {
+                try {
+                    if(phoneArray[i].hasIccCard()) {
+                        numCount = MAX_NUM_PHONE_STATE_READS;
+                    } else {
+                        numCount = 4;
+                    }
+                } catch (RemoteException ex) {
+                    Log.e(TAG, "RemoteException during radio shutdown", ex);
+                    numCount = MAX_NUM_PHONE_STATE_READS;
+                }
+            } else {
+                numCount = 1;
+            }
+            for (int j = 0; j < numCount; j++) {
+                if (!iccOff[i]) {
+                        try {
+                            iccOff[i] = !phoneArray[i].isIccCardOn();
+                        } catch (RemoteException ex) {
+                            Log.e(TAG, "RemoteException during iccCard shutdown", ex);
+                            iccOff[i] = true;
+                        }
+                }
+                if (iccOff[i]) {
+                    Log.i(TAG, "IccCard shutdown complete.");
+                    break;
+                }
+                SystemClock.sleep(PHONE_STATE_POLL_SLEEP_MSEC);
+           }
+        }
+
         // Shutdown MountService to ensure media is in a safe state
         IMountShutdownObserver observer = new IMountShutdownObserver.Stub() {
             public void onShutDownComplete(int statusCode) throws RemoteException {
@@ -340,7 +392,7 @@ public final class ShutdownThread extends Thread {
             }
         }
 
-        Log.i(TAG, "Waiting for Bluetooth and Radio...");
+        /*Log.i(TAG, "Waiting for Bluetooth and Radio...");
         // Wait a max of 32 seconds for clean shutdown
         for (int i = 0; i < MAX_NUM_PHONE_STATE_READS; i++) {
             if (!bluetoothOff) {
@@ -365,7 +417,7 @@ public final class ShutdownThread extends Thread {
                 break;
             }
             SystemClock.sleep(PHONE_STATE_POLL_SLEEP_MSEC);
-        }
+        }*/
 
         rebootOrShutdown(mReboot, mRebootReason);
     }

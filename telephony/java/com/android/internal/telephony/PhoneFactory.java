@@ -362,16 +362,14 @@ public class PhoneFactory {
         int defaultPhoneId = TelephonyManager.getDefaultDataPhoneId(sContext);
         int settingPhoneId = -1;
         if (phoneId == 0) {
-            isCard1ok = true;
+            isCard1ok = checkSimFinish(phoneId);
         }
         if (phoneId == 1) {
-            isCard2ok = true;
+            isCard2ok = checkSimFinish(phoneId);
         }
         if (isCard1ok && isCard2ok) {
-            boolean hasCard1 = (PhoneFactory.isCardReady(0))
-                    && (PhoneFactory.getSimState(0) == State.READY);
-            boolean hasCard2 = (PhoneFactory.isCardReady(1))
-                    && (PhoneFactory.getSimState(1) == State.READY);
+            boolean hasCard1 = canHandleDataCall(0);
+            boolean hasCard2 = canHandleDataCall(1);
             Log.i(LOG_TAG, "autoSetDefaultPhoneId,hasCard1=" + hasCard1 + ",hasCard2="
                     + hasCard2 + ",defaultPhoneId=" + defaultPhoneId);
             if (hasCard1 && !hasCard2) {
@@ -413,5 +411,28 @@ public class PhoneFactory {
     public static SipPhone makeSipPhone(String sipUri) {
         return SipPhoneFactory.makePhone(sipUri, sContext, sPhoneNotifier[DEFAULT_PHONE_ID]);
 
+    }
+    public static boolean checkSimFinish(int phoneId) {
+        if (sProxyPhone!=null&&phoneId<sProxyPhone.length) {
+            Log.i(LOG_TAG, "checkSimFinish state["+phoneId+"]=" + sProxyPhone[phoneId].getIccCard().mState);
+            if((sProxyPhone[phoneId].getIccCard().mState == State.PIN_REQUIRED) ||
+               (sProxyPhone[phoneId].getIccCard().mState == State.PUK_REQUIRED) ||
+               (sProxyPhone[phoneId].getIccCard().mState == State.NETWORK_LOCKED) ||
+               (sProxyPhone[phoneId].getIccCard().mState == State.READY) ||
+               (sProxyPhone[phoneId].getIccCard().mState == State.ABSENT)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean canHandleDataCall(int phoneId) {
+        if (sProxyPhone!=null&&phoneId<sProxyPhone.length) {
+            if(PhoneFactory.isCardReady(phoneId)) {
+                if(sProxyPhone[phoneId].getIccCard().mState == State.READY) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

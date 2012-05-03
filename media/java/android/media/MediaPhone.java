@@ -140,7 +140,12 @@ public class MediaPhone extends Handler
         			Log.d(TAG, "mThread E");
 				do {
 					int ret = native_waitRequestForAT();
+                    if(ret == AT_NONE){
+	        			Log.d(TAG, "vt_pipe ret error, exit thread");
+                        break;
+                    } else {
 	        			Log.d(TAG, "vt_pipe ret: " + ret);
+                    }
 					switch (ret) {
 						case AT_REPORT_IFRAME:
 							mCm.controlIFrame(true, false, null);
@@ -255,6 +260,7 @@ public class MediaPhone extends Handler
             mp.mCm.setOnVPRemoteMedia(mp.mEventHandler, MEDIA_UNSOL_REMOTE_VIDEO, null);
             mp.mCm.setOnVPMMRing(mp.mEventHandler, MEDIA_UNSOL_MM_RING, null);
             mp.mCm.setOnVPRecordVideo(mp.mEventHandler, MEDIA_UNSOL_RECORD_VIDEO, null);
+            mp.mCm.setOnVPMediaStart(mp.mEventHandler, MEDIA_UNSOL_MEDIA_START, null);
             return mp;
         } catch (IOException ex) {
             Log.d(TAG, "create failed:", ex);
@@ -521,6 +527,7 @@ public class MediaPhone extends Handler
         mCm.unSetOnVPRemoteMedia(mEventHandler);
         mCm.unSetOnVPMMRing(mEventHandler);
         mCm.unSetOnVPRecordVideo(mEventHandler);
+        mCm.unSetOnVPMediaStart(mEventHandler);
         _release();
     }
 
@@ -687,6 +694,7 @@ public class MediaPhone extends Handler
     private static final int MEDIA_UNSOL_REMOTE_VIDEO = 23;
     private static final int MEDIA_UNSOL_MM_RING = 24;
     private static final int MEDIA_UNSOL_RECORD_VIDEO = 25;
+    private static final int MEDIA_UNSOL_MEDIA_START = 26;
 
     // codec request type
     public static final int CODEC_OPEN = 1;
@@ -864,6 +872,11 @@ public class MediaPhone extends Handler
             case MEDIA_UNSOL_RECORD_VIDEO: {
                 int[] params = (int[])ar.result;
                 int indication = params[0];
+                return;
+            }
+
+            case MEDIA_UNSOL_MEDIA_START: {				
+				mOnCallEventListener.onCallEvent(mMediaPhone, MEDIA_CALLEVENT_MEDIA_START, null);
                 return;
             }
 
@@ -1132,6 +1145,7 @@ public class MediaPhone extends Handler
 	public static final int MEDIA_CALLEVENT_CODEC_SET_PARAM_ENCODER = 105;
 	public static final int MEDIA_CALLEVENT_CODEC_START = 106;
 	public static final int MEDIA_CALLEVENT_CODEC_CLOSE = 107;
+	public static final int MEDIA_CALLEVENT_MEDIA_START = 108;
 	
     /**
      * Interface definition of a callback to be invoked to communicate some

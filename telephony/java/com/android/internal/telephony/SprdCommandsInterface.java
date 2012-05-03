@@ -43,6 +43,8 @@ public interface SprdCommandsInterface {
 	public void unSetOnVPFail(Handler h);
 	public void setOnVPRemoteCamera(Handler h, int what, Object obj);
 	public void unSetOnVPRemoteCamera(Handler h);
+	public void setOnVPMediaStart(Handler h, int what, Object obj);
+	public void unSetOnVPMediaStart(Handler h);
     public void registerForIccStatusChanged(Handler h, int what, Object obj);
     public void unregisterForIccStatusChanged(Handler h);
 	
@@ -65,6 +67,7 @@ public interface SprdCommandsInterface {
     
    
     public void mmiEnterSim(String dailString, Message result);
+    public void setSIMPower(boolean on, Message result);
 
 
 }

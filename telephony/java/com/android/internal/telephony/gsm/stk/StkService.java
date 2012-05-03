@@ -219,7 +219,7 @@ public class StkService extends Handler implements AppInterface {
         mCmdIf.setOnStkProactiveCmd(this, MSG_ID_PROACTIVE_COMMAND, null);
         mCmdIf.setOnStkEvent(this, MSG_ID_EVENT_NOTIFY, null);
         mCmdIf.setOnStkCallSetUp(this, MSG_ID_CALL_SETUP, null);
-        mCmdIf.registerForSIMReady(this, MSG_ID_SIM_LOADED, null);
+        //mCmdIf.registerForSIMReady(this, MSG_ID_SIM_LOADED, null);
         mCmdIf.setOnStkStin(this, MSG_ID_REFRESH_STIN, null);
        //mCmdIf.setOnSimRefresh(this, MSG_ID_REFRESH, null);
 
@@ -233,7 +233,14 @@ public class StkService extends Handler implements AppInterface {
             mEventList[i] = false;
         }
 
-        //mCmdIf.reportStkServiceIsRunning(null);
+        StkLog.d(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
+        if (!mStkActive) {
+            mStkActive = true;
+            mCmdIf.reportStkServiceIsRunning(null);
+        } else {
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
+        }
+
         StkLog.d(this, "<" + mPhoneId + ">" + "StkService: is running");
     }
 
@@ -699,7 +706,14 @@ public class StkService extends Handler implements AppInterface {
 //            mSimRecords = sr;
 //            mSimRecords.registerForRecordsLoaded(sInstance, MSG_ID_SIM_LOADED, null);
             mCmdIf = ci;
-            mCmdIf.registerForSIMReady(sInstance, MSG_ID_SIM_LOADED, null);
+            //mCmdIf.registerForSIMReady(sInstance, MSG_ID_SIM_LOADED, null);
+            StkLog.d(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
+            if (!mStkActive) {
+                mStkActive = true;
+                mCmdIf.reportStkServiceIsRunning(null);
+            } else {
+                StkLog.d(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
+            }
             StkLog.d(sInstance, "<" + mPhoneId + ">" + "sr changed reinitialize and return current sInstance");
 
     	}

@@ -195,31 +195,26 @@ public class CallerInfo {
                 // in the database.
 					columnIndex = cursor
 							.getColumnIndex(PhoneLookup.CUSTOM_RINGTONE);// first lookup contact's ringtone
-					Log.d(TAG,
-							"get custom ringtone, column index = "
-									+ columnIndex + " URI string = "
-									+ cursor.getString(columnIndex));
+					Log.d(TAG,"get custom ringtone, column index = " + columnIndex);
 					if ((columnIndex != -1)
 							&& (cursor.getString(columnIndex) != null)) {
 						info.contactRingtoneUri = Uri.parse(cursor
 								.getString(columnIndex));
+						Log.d(TAG,"get custom ringtone, URI string = " + cursor.getString(columnIndex));
 					} else {
 						columnIndex = cursor
 								.getColumnIndex(CUSTOM_GROUP_RINGTONE);// then lookup group's ringtone
-						Log.d(TAG,
-								"get custom group ringtone column index = "
-										+ +columnIndex + " URI string = "
-										+ cursor.getString(columnIndex));
+						Log.d(TAG,"get custom group, ringtone column index = "+ columnIndex);
 						if ((columnIndex != -1)
 								&& (cursor.getString(columnIndex) != null)) {
 							info.contactRingtoneUri = Uri.parse(cursor
 									.getString(columnIndex));
+							Log.d(TAG,"get custom group ringtone, URI string = " + cursor.getString(columnIndex));
 						} else {
 							info.contactRingtoneUri = null;// at last, used defaultringtone
 						}
 					}
-					Log.d(TAG, "get caller info contact ring tone URI is : "
-							+ info.contactRingtoneUri);
+					Log.d(TAG, "get caller info contact ring tone URI is : " + info.contactRingtoneUri);
 
                 // look for the send to voicemail flag, set it to true only
                 // under certain circumstances.

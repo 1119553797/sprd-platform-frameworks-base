@@ -146,7 +146,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
      * It is a subset of allApns and has the same format
      */
     protected ArrayList<ApnSetting> waitingApns = null;
-    private int waitingApnsPermanentFailureCountDown = 0;
+    protected int waitingApnsPermanentFailureCountDown = 0;
     private ApnSetting preferredApn = null;
 
     /* Currently active APN */
@@ -1311,6 +1311,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             } else {
                 SystemProperties.set("gsm.defaultpdpcontext.active", "false");
             }
+            MsmsGsmDataConnectionTrackerProxy.resetRequestPhoneIdBeforeVoiceCallEnd();
+            MsmsGsmDataConnectionTrackerProxy.setActivePhoneId(phone.getPhoneId());
             notifyDefaultData(reason);
 
             // TODO: For simultaneous PDP support, we need to build another
@@ -1587,7 +1589,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     }
 
     private void startDelayedRetry(GsmDataConnection.FailCause cause, String reason) {
-        //notifyNoData(cause);
+        notifyNoData(cause);
         reconnectAfterFail(cause, reason);
     }
 

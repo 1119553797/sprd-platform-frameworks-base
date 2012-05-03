@@ -202,7 +202,7 @@ private:
             Vector<jchar>* const outGlyphs);
 
     /*static*/ void initShaperItem(HB_ShaperItem& shaperItem, HB_FontRec* font, FontData* fontData,
-            SkPaint* paint, const UChar* chars, size_t contextCount);
+            SkPaint* paint, const UChar* chars, size_t count, size_t contextCount);
 
     /*static*/ void freeShaperItem(HB_ShaperItem& shaperItem);
 	

@@ -129,8 +129,6 @@ public abstract class SMSDispatcher extends Handler {
 
     protected final Uri mRawUri = Uri.withAppendedPath(Telephony.Sms.CONTENT_URI, "raw");
 
-    /** Maximum number of times to retry sending a failed SMS. */
-    private static int maxSendRetries;
     /** Delay before next send attempt on a failed SMS, in milliseconds. */
     private static final int SEND_RETRY_DELAY = 2000;
     /** single part SMS */
@@ -525,7 +523,8 @@ public abstract class SMSDispatcher extends Handler {
                 handleNotInService(ss, tracker);
             } else if ((((CommandException)(ar.exception)).getCommandError()
                     == CommandException.Error.SMS_FAIL_RETRY) &&
-                   tracker.mRetryCount < maxSendRetries) {
+                   tracker.mRetryCount < Integer.parseInt(System.getProperty("sms.send.retry.time", "3"))) {
+                Log.d(TAG, "sms.send.retry.time:"+System.getProperty("sms.send.retry.time"));
                 // Retry after a delay if needed.
                 // TODO: According to TS 23.040, 9.2.3.6, we should resend
                 //       with the same TP-MR as the failed message, and
@@ -1083,6 +1082,6 @@ public abstract class SMSDispatcher extends Handler {
     }
 
     public void setMaxSendRetries(int smsRetryTimes) {
-        maxSendRetries = smsRetryTimes;
+        System.setProperty("sms.send.retry.time", String.valueOf(smsRetryTimes));
     }
 }

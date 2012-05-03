@@ -16,7 +16,6 @@
 
 package com.android.internal.policy.impl;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
@@ -29,7 +28,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
 import android.provider.Settings;
-import android.provider.Settings.System;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -78,6 +76,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private boolean mIsWaitingForEcmExit = false;
 
     private boolean[] isStandby;
+    private boolean[] hasCardReady;
     private int mPhoneCount = 1;
     /**
      * @param context everything needs a context :(
@@ -88,6 +87,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         mPhoneCount = PhoneFactory.getPhoneCount();
         mTelephonyManagers = new TelephonyManager[mPhoneCount];
         isStandby=new boolean[mPhoneCount];
+        hasCardReady=new boolean[mPhoneCount];
         // receive broadcasts
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
@@ -242,11 +242,28 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             @Override
             protected void changeStateFromPress(boolean buttonOn) {
                 // In ECM mode airplane state cannot be changed
-                if (!(Boolean.parseBoolean(
-                        SystemProperties.get(TelephonyProperties.PROPERTY_INECM_MODE)))) {
-                    mState = buttonOn ? State.TurningOn : State.TurningOff;
-                    mAirplaneState = mState;
-                    Log.d(TAG, " mAirplaneState="+mAirplaneState.inTransition()+" mState="+mState);
+                if (!(Boolean.parseBoolean(SystemProperties
+                        .get(TelephonyProperties.PROPERTY_INECM_MODE)))) {
+                    if (isCardExist()) {
+                        if (isCardActivated()) {
+                            mState = buttonOn ? State.TurningOn : State.TurningOff;
+                            mAirplaneState = mState;
+                            if(mHandler.hasMessages(MESSAGE_REFLUSH_AIRPLANE_STATE)){
+                                mHandler.removeMessages(MESSAGE_REFLUSH_AIRPLANE_STATE);
+                            }
+                            Message msg=mHandler.obtainMessage(MESSAGE_REFLUSH_AIRPLANE_STATE, buttonOn);
+                            mHandler.sendMessageDelayed(msg, 2000);
+                        } else {
+                            mState = buttonOn ? State.On : State.Off;
+                            mAirplaneState = mState;
+                           // updateAirplaneState(isAirplaneModeOn(mContext));
+                        }
+                    } else {
+                        mState = buttonOn ? State.On : State.Off;
+                        mAirplaneState = mState;
+                    }
+                    Log.d(TAG, " mAirplaneState=" + mAirplaneState.inTransition() + " mState="
+                            + buttonOn);
                 }
             }
 
@@ -636,7 +653,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             else if("com.android.contacts.SIM_OPERATE_START_PUT".equals(action)) {
             	mHandler.sendEmptyMessage(SIM_OPERATE_START);
             }
-            // add by niezhong 0907 for NEWMS00120274 end
         }
     };
     private  boolean isAirplaneModeOn(Context context) {
@@ -652,9 +668,14 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
             @Override
             public void onServiceStateChanged(ServiceState serviceState) {
-                final boolean inAirplaneMode = serviceState.getState() == ServiceState.STATE_POWER_OFF
-                        && isAirplaneModeOn(mContext);
-                updateAirplaneState(inAirplaneMode);
+                Log.d(TAG, "serviceState:" + serviceState + " airplane="
+                        + isAirplaneModeOn(mContext));
+                final boolean inAirplaneMode = serviceState.getState() == ServiceState.STATE_POWER_OFF;
+                if (isAirplaneModeOn(mContext) && inAirplaneMode) {
+                    updateAirplaneState(inAirplaneMode);
+                } else if (!isAirplaneModeOn(mContext) && !inAirplaneMode) {
+                    updateAirplaneState(inAirplaneMode);
+                }
             }
         };
         return mPhoneStateListener;
@@ -698,16 +719,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra("state", on);
         mContext.sendBroadcast(intent);
-        for(int i=0;i<mPhoneCount;i++){
-            isStandby[i]=isCardDisabled(i);
-        }
-        if(mPhoneCount == 1 && isStandby[0] || (mPhoneCount > 1 && isStandby[0] && isStandby[1] )){
-            mHandler.removeMessages(MESSAGE_REFLUSH_AIRPLANE_STATE);
-            Message message=new Message();
-            message.what=MESSAGE_REFLUSH_AIRPLANE_STATE;
-            message.obj=on;
-            mHandler.sendMessageDelayed(message, 5000);
-        }
     }
  // add by niezhong 0907 for NEWMS00120274 begin
     private void setAirViewTrue(boolean operate) {
@@ -720,5 +731,37 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         mAirplaneState = airplane ? ToggleAction.State.On : ToggleAction.State.Off;
         mAirplaneModeOn.updateState(mAirplaneState);
         mAdapter.notifyDataSetChanged();
+    }
+    private boolean isCardExist(){
+        for(int i=0;i<mPhoneCount;i++){
+            hasCardReady[i]=mTelephonyManagers[i].hasIccCard();
+            Log.d(TAG, " isCardExist:hasCardReady["+i+"]="+hasCardReady[i]);
+        }
+        if(mPhoneCount>1){
+           if(!hasCardReady[0] && !hasCardReady[1]) {
+               return false;
+           }
+        }else{
+            if(!hasCardReady[0]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean isCardActivated(){
+        for(int i=0;i<mPhoneCount;i++){
+            isStandby[i]=isCardDisabled(i);
+            Log.d(TAG, " isCardActivated:isCardDisabled["+i+"]="+isStandby[i]);
+        }
+        if(mPhoneCount>1){
+           if(isStandby[0] && isStandby[1]) {
+               return false;
+           }
+        }else{
+            if(isStandby[0]) {
+                return false;
+            }
+        }
+        return true;
     }
 }

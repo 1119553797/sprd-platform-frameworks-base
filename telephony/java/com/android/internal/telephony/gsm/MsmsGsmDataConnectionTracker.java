@@ -121,6 +121,7 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
 
             if (state == State.IDLE) {
                 waitingApns = buildWaitingApns();
+                waitingApnsPermanentFailureCountDown = waitingApns.size();
                 if (waitingApns.isEmpty()) {
                     if (DBG) log("No APN found");
                     notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);

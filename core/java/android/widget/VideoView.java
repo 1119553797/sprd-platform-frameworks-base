@@ -91,6 +91,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
     private MediaController mMediaController;
     private OnCompletionListener mOnCompletionListener;
     private MediaPlayer.OnPreparedListener mOnPreparedListener;
+    private MediaPlayer.OnSeekCompleteListener mOnSeekCompleteListener; 
     private Handler.Callback mStateCallback;
     private int         mCurrentBufferPercentage;
     private OnErrorListener mOnErrorListener;
@@ -101,6 +102,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
     private boolean     mIsFullScreen = true;
     private int         mStateWhenSuspended;  //state before calling suspend()
     private boolean     mWasStopWhenDestrory = false;
+    private boolean mIsStream=false;
 
     public VideoView(Context context) {
         super(context);
@@ -208,6 +210,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
      */
     public void setVideoURI(Uri uri, Map<String, String> headers) {
         mUri = uri;
+        mIsStream=isStream();
         mHeaders = headers;
         mSeekWhenPrepared = 0;
         openVideo();
@@ -242,6 +245,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             mDuration = -1;
             mMediaPlayer.setOnCompletionListener(mCompletionListener);
             mMediaPlayer.setOnErrorListener(mErrorListener);
+            mMediaPlayer.setOnSeekCompleteListener(mSeekCompleteListener);
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             mCurrentBufferPercentage = 0;
             mMediaPlayer.setDataSource(mContext, mUri, mHeaders);
@@ -294,6 +298,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             mDuration = -1;
             mMediaPlayer.setOnCompletionListener(mCompletionListener);
             mMediaPlayer.setOnErrorListener(mErrorListener);
+            mMediaPlayer.setOnSeekCompleteListener(mSeekCompleteListener);
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             mCurrentBufferPercentage = 0;
             mMediaPlayer.setDataSource(mContext, mUri, mHeaders);
@@ -399,13 +404,15 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
                 //Log.i("@@@@", "video size: " + mVideoWidth +"/"+ mVideoHeight);
                 resize(mIsFullScreen);
                 //getHolder().setFixedSize(mVideoWidth, mVideoHeight);
-                if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
+                //if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
                     // We didn't actually change the size (it was already at the size
                     // we need), so we won't get a "surface changed" callback, so
                     // start the video here instead of in the callback.
                     if (mTargetState == STATE_PLAYING && mCurrentState != STATE_PLAYING) {
-                        Log.w(TAG, "OnPreparedListener  start");
-                        start();
+                        if(!mIsStream ||seekToPosition==0){
+                            Log.w(TAG, "OnPreparedListener  start");
+                            start();
+                        }
 //                        if (mMediaController != null) {
 //                            mMediaController.show();
 //                        }
@@ -415,13 +422,15 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
 //                           // Show the media controls when we're paused into a video and make 'em stick.
 //                           mMediaController.show(0);
 //                       }
-                   }
+                  // }
                 }
             } else {
                 // We don't know the video size yet, but should start anyway.
                 // The video size might be reported to us later.
                 if (mTargetState == STATE_PLAYING) {
-                    start();
+                    if(!mIsStream ||seekToPosition==0){
+                        start();
+                    }
                 }
             }
         }
@@ -679,6 +688,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
 
     public void start() {
         if (isInPlaybackState()) {
+            Log.d(TAG, "VideoView start");
             mMediaPlayer.start();
             mCurrentState = STATE_PLAYING;
         }
@@ -687,6 +697,11 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
         {
             Log.w(TAG, "start startVideo");
             startVideo();
+            postDelayed(new Runnable() {
+                public void run() {
+                   mMediaController.hide();
+                }
+            },  50);
         }
         mTargetState = STATE_PLAYING;
         MediaPlayerStateCallback(mCurrentState,mTargetState);
@@ -868,5 +883,38 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
         }
         float volumeRate = (float) (volume * 1.0 / 15);
         mMediaPlayer.setVolume(volumeRate, volumeRate);
+    }
+
+    //added by MMz01
+    private boolean isStream(){
+        if ("http".equalsIgnoreCase(mUri.getScheme()) || "rtsp".equalsIgnoreCase(mUri.getScheme())) {
+            Log.d(TAG,"isStream");
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //added by MMz01
+    MediaPlayer.OnSeekCompleteListener mSeekCompleteListener = new MediaPlayer.OnSeekCompleteListener() {
+
+        public void onSeekComplete(MediaPlayer mp) {
+            Log.d(TAG,"onSeekComplete");
+            if (mOnSeekCompleteListener != null) {
+                mOnSeekCompleteListener.onSeekComplete(mMediaPlayer);
+            }
+            if(mIsStream){
+                if (mTargetState == STATE_PLAYING && mCurrentState != STATE_PLAYING) {
+                    Log.d(TAG,"onSeekComplete and start()");
+                    start();
+                }
+            }
+        }
+    };
+
+    //added by MMz01
+    public void setOnSeekCompleteListener(MediaPlayer.OnSeekCompleteListener l)
+    {
+        mOnSeekCompleteListener = l;
     }
 }

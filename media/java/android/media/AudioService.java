@@ -2157,13 +2157,12 @@ public class AudioService extends IAudioService.Stub {
         } else {
             // focus is abandoned by a client that's not at the top of the stack,
             // no need to update focus.
-            Iterator<FocusStackEntry> stackIterator = mFocusStack.iterator();
-            while(stackIterator.hasNext()) {
+            for (Iterator<FocusStackEntry> stackIterator = mFocusStack.iterator(); stackIterator.hasNext();) {
                 FocusStackEntry fse = (FocusStackEntry)stackIterator.next();
                 if(fse.mClientId.equals(clientToRemove)) {
                     Log.i(TAG, " AudioFocus  abandonAudioFocus(): removing entry for "
                             + fse.mClientId);
-                    mFocusStack.remove(fse);
+                    stackIterator.remove();
                 }
             }
         }
@@ -2177,13 +2176,12 @@ public class AudioService extends IAudioService.Stub {
         // is the owner of the audio focus part of the client to remove?
         boolean isTopOfStackForClientToRemove = !mFocusStack.isEmpty() &&
                 mFocusStack.peek().mSourceRef.equals(cb);
-        Iterator<FocusStackEntry> stackIterator = mFocusStack.iterator();
-        while(stackIterator.hasNext()) {
+        for (Iterator<FocusStackEntry> stackIterator = mFocusStack.iterator(); stackIterator.hasNext();) {
             FocusStackEntry fse = (FocusStackEntry)stackIterator.next();
             if(fse.mSourceRef.equals(cb)) {
                 Log.i(TAG, " AudioFocus  abandonAudioFocus(): removing entry for "
                         + fse.mClientId);
-                mFocusStack.remove(fse);
+                stackIterator.remove();
             }
         }
         if (isTopOfStackForClientToRemove) {
@@ -2407,11 +2405,10 @@ public class AudioService extends IAudioService.Stub {
         if (!mRCStack.empty() && mRCStack.peek().mReceiverComponent.equals(newReceiver)) {
             return;
         }
-        Iterator<RemoteControlStackEntry> stackIterator = mRCStack.iterator();
-        while(stackIterator.hasNext()) {
+        for (Iterator<RemoteControlStackEntry> stackIterator = mRCStack.iterator(); stackIterator.hasNext();) {
             RemoteControlStackEntry rcse = (RemoteControlStackEntry)stackIterator.next();
             if(rcse.mReceiverComponent.equals(newReceiver)) {
-                mRCStack.remove(rcse);
+                stackIterator.remove();
                 break;
             }
         }
@@ -2423,11 +2420,10 @@ public class AudioService extends IAudioService.Stub {
      * Remove the remote control receiver from the RC focus stack
      */
     private void removeMediaButtonReceiver(ComponentName newReceiver) {
-        Iterator<RemoteControlStackEntry> stackIterator = mRCStack.iterator();
-        while(stackIterator.hasNext()) {
+        for (Iterator<RemoteControlStackEntry> stackIterator = mRCStack.iterator(); stackIterator.hasNext();) {
             RemoteControlStackEntry rcse = (RemoteControlStackEntry)stackIterator.next();
             if(rcse.mReceiverComponent.equals(newReceiver)) {
-                mRCStack.remove(rcse);
+                stackIterator.remove();
                 break;
             }
         }

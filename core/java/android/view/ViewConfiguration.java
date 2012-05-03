@@ -99,7 +99,7 @@ public class ViewConfiguration {
     /**
      * Distance a touch can wander before we think the user is scrolling in pixels
      */
-    private static final int TOUCH_SLOP = 20;
+    private static final int TOUCH_SLOP = 16;
     
     /**
      * Distance a touch can wander before we think the user is attempting a paged scroll

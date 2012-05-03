@@ -3475,6 +3475,7 @@ responseUnsolUssdStrings(Parcel p){
             case RIL_REQUEST_SET_CMMS: return "SET_CMMS";
             case RIL_REQUEST_GPRS_ATTACH: return "GPRS_ATTACH";
             case RIL_REQUEST_GPRS_DETACH: return "GPRS_DETACH";
+            case RIL_REQUEST_SIM_POWER: return "SIM_POWER";
             default: return "<unknown request>";
         }
     }
