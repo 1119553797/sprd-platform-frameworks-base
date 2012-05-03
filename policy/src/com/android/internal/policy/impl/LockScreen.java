@@ -437,8 +437,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                   mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
                           AudioManager.VIBRATE_SETTING_OFF);
                 }
+                android.os.SystemProperties.set("persist.sys.profile.silent", "1");
             } else {
                 mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                android.os.SystemProperties.set("persist.sys.profile.silent", "0");
             }
                       
 //            if(mSilentMode)
