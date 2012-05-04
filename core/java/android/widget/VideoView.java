@@ -698,8 +698,12 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             Log.w(TAG, "start startVideo");
             startVideo();
             postDelayed(new Runnable() {
-                public void run() {
-                   mMediaController.hide();
+				public void run() {
+					// MMz03 - Fixed bug 16692 - NPE
+					if (mMediaController != null) {
+						mMediaController.hide();
+					}
+					// MMz03 - End
                 }
             },  50);
         }
