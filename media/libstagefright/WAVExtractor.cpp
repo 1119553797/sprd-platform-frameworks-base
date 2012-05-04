@@ -60,11 +60,13 @@ struct WAVSource : public MediaSource {
     virtual status_t read(
             MediaBuffer **buffer, const ReadOptions *options = NULL);
 
+    static void setMaxFrameSize(size_t maxFrameSize);
+
 protected:
     virtual ~WAVSource();
 
 private:
-    static const size_t kMaxFrameSize;
+    static size_t kMaxFrameSize; // Modify for bug 14625
 
     sp<DataSource> mDataSource;
     sp<MetaData> mMeta;
@@ -234,6 +236,13 @@ status_t WAVExtractor::init() {
 
                 mTrackMeta->setInt64(kKeyDuration, durationUs);
 
+                // Modify for bug 14625
+                if (durationUs < 10000000) { // Less than 10s is short duration
+                    WAVSource::setMaxFrameSize(8192); // Change default 32k to 8k for short wav playing that the seekbar can move normally
+                } else {
+                    WAVSource::setMaxFrameSize(32768); // 32k
+                }
+
                 return OK;
             }
         }
@@ -244,7 +253,7 @@ status_t WAVExtractor::init() {
     return NO_INIT;
 }
 
-const size_t WAVSource::kMaxFrameSize = 32768;
+size_t WAVSource::kMaxFrameSize = 32768;
 
 WAVSource::WAVSource(
         const sp<DataSource> &dataSource,
@@ -410,6 +419,10 @@ status_t WAVSource::read(
     *out = buffer;
 
     return OK;
+}
+
+void WAVSource::setMaxFrameSize(size_t maxFrameSize) {
+    kMaxFrameSize = maxFrameSize;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
