@@ -112,6 +112,18 @@ status_t MP3Decoder::stop() {
 }
 
 sp<MetaData> MP3Decoder::getFormat() {
+	int32_t channel_data = 0 ;
+	int32_t channel_data_old = 0 ;	
+
+	sp<MetaData> srcFormat = mSource->getFormat();
+	srcFormat->findInt32(kKeyChannelCount, &channel_data);
+	mMeta->findInt32(kKeyChannelCount, &channel_data_old);
+
+	 if ( channel_data_old != channel_data)
+	{
+		mMeta->setInt32(kKeyChannelCount, channel_data);
+	}
+
     return mMeta;
 }
 

@@ -69,6 +69,7 @@ struct AVIExtractor::MP3Splitter : public RefBase {
     void clear();
     void append(MediaBuffer *buffer);
     status_t read(MediaBuffer **buffer);
+    status_t readparam(int type, int16_t &param_value);
 
 protected:
     virtual ~MP3Splitter();
@@ -77,6 +78,7 @@ private:
     bool mFindSync;
     int64_t mBaseTimeUs;
     int64_t mNumSamplesRead;
+    int16_t nChannelnum;
     sp<ABuffer> mBuffer;
 
     bool resync();
@@ -164,6 +166,15 @@ status_t AVIExtractor::AVISource::read(
             status_t err = mSplitter->read(buffer);
 
             if (err == OK) {
+		int16_t channel_data = 0 ;
+		int32_t channel_data_old = 0 ;	
+		mSplitter->readparam(0 , channel_data);
+
+		mTrack.mMeta->findInt32(kKeyChannelCount, &channel_data_old);
+		if ( channel_data_old != channel_data)
+		{
+			mTrack.mMeta->setInt32(kKeyChannelCount, channel_data);
+		}
                 break;
             } else if (err != -EAGAIN) {
                 return err;
@@ -343,10 +354,12 @@ status_t AVIExtractor::MP3Splitter::read(MediaBuffer **out) {
     size_t frameSize;
     int sampleRate;
     int numSamples;
+    int channel_mode;
     if (!GetMPEGAudioFrameSize(
-                header, &frameSize, &sampleRate, NULL, NULL, &numSamples)) {
+                header, &frameSize, &sampleRate, &channel_mode, NULL, &numSamples)) {
         return ERROR_MALFORMED;
     }
+   nChannelnum = channel_mode ;
 
     if (mBuffer->size() < frameSize) {
         return -EAGAIN;
@@ -366,6 +379,14 @@ status_t AVIExtractor::MP3Splitter::read(MediaBuffer **out) {
     *out = mbuf;
 
     return OK;
+}
+
+status_t AVIExtractor::MP3Splitter::readparam(int type,int16_t & param_value)
+{
+    param_value = nChannelnum;
+
+   return	OK;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
