@@ -1389,8 +1389,8 @@ public final class Telephony {
          * any order, without any additions). If one
          * is found, return it.  Otherwise, return a unique thread ID.
          */
-        public static long getOrCreateThreadId(
-                Context context, Set<String> recipients) {
+
+        public static long getOrCreateThreadId(Context context, Set<String> recipients) {
             return getOrCreateThreadId(context, recipients, new HashSet<String>());
         }
 
