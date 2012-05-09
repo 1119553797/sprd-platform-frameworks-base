@@ -38,6 +38,7 @@ import android.util.Log;
 import com.android.internal.telephony.BaseCommands;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccUtils;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsMessageBase;
@@ -690,7 +691,7 @@ final class GsmSMSDispatcher extends SMSDispatcher {
             }
 
             SmsCbHeader header = new SmsCbHeader(receivedPdu);
-            String plmn = SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_NUMERIC);
+            String plmn = SystemProperties.get(PhoneFactory.getProperty(TelephonyProperties.PROPERTY_OPERATOR_NUMERIC, mPhone.getPhoneId()));
             GsmCellLocation cellLocation = (GsmCellLocation)mGsmPhone.getCellLocation();
             int lac = cellLocation.getLac();
             int cid = cellLocation.getCid();

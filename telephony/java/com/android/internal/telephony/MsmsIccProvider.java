@@ -75,7 +75,7 @@ public class MsmsIccProvider extends IccProvider {
                             new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-    	for(int i = 0;i < PHONE_COUNT; i++){
+    	for(int i = 0;i <= PHONE_COUNT; i++){
     			URL_MATCHER.addURI(getIccName(i), "adn", getCompoundMatchValue(i, ADN));
                 URL_MATCHER.addURI(getIccName(i), "fdn", getCompoundMatchValue(i, FDN));
                 URL_MATCHER.addURI(getIccName(i), "sdn", getCompoundMatchValue(i, SDN));
@@ -823,17 +823,14 @@ public class MsmsIccProvider extends IccProvider {
 	    return phoneId * MAX_MATCH_TYPE + match;
 	}
 
-    private static String getIccName(int phoneId){
-
-    	if(phoneId == PhoneFactory.DEFAULT_PHONE_ID){
-    		return "icc";
-    	}
-    	return "icc"+phoneId;
-
+    private static String getIccName(int phoneId) {
+        if (PhoneFactory.isMultiSim()) {
+            if (phoneId == PhoneFactory.getPhoneCount()) {
+                return "icc";
+            }
+            return "icc" + phoneId;
+        } else {
+            return "icc";
+        }
     }
-
-
-
-
-
 }

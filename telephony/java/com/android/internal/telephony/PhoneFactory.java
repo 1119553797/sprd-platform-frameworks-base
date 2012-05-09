@@ -61,8 +61,8 @@ public class PhoneFactory {
     
     // zhanglj add 2011-05-20
     private static final int DEFAULT_PHONE_COUNT = 1;
-    public static final int DEFAULT_PHONE_ID = 0;
-
+    public static final int RAW_DEFAULT_PHONE_ID = 0;
+//    public static final int DEFAULT_PHONE_ID = 0;
     private static boolean isCard1ok = false;
     private static boolean isCard2ok = false;
 
@@ -149,6 +149,17 @@ public class PhoneFactory {
                 
                 }
                 // zhanglj modify end
+                IccSmsInterfaceManagerProxy[] mIccSmsInterfaceManagerProxy = new IccSmsInterfaceManagerProxy[phoneCount];
+                IccPhoneBookInterfaceManagerProxy[] mIccPhoneBookInterfaceManagerProxy = new IccPhoneBookInterfaceManagerProxy[phoneCount];
+                PhoneSubInfoProxy[] mPhoneSubInfoProxy = new PhoneSubInfoProxy[phoneCount];
+                for (int i = 0; i < phoneCount; i++) {
+                    mIccSmsInterfaceManagerProxy[i] = ((SprdPhoneProxy)sProxyPhone[i]).getIccSmsInterfaceManagerProxy();
+                    mIccPhoneBookInterfaceManagerProxy[i] = ((SprdPhoneProxy)sProxyPhone[i]).getIccPhoneBookInterfaceManagerProxy();
+                    mPhoneSubInfoProxy[i] = ((SprdPhoneProxy)sProxyPhone[i]).getPhoneSubInfoProxy();
+                }
+                new CompositeIccSmsInterfaceManagerProxy(mIccSmsInterfaceManagerProxy);
+                new CompositeIccPhoneBookInterfaceManagerProxy(mIccPhoneBookInterfaceManagerProxy);
+                new CompositePhoneSubInfoProxy(mPhoneSubInfoProxy);
 
                 sMadeDefaults = true;
             }
@@ -191,7 +202,7 @@ public class PhoneFactory {
         if (!sMadeDefaults) {
             throw new IllegalStateException("Default phones haven't been made yet!");
         }
-       return sProxyPhone[DEFAULT_PHONE_ID];
+       return sProxyPhone[getDefaultPhoneId()];
     }
 
     public static Phone[] getPhones() {
@@ -216,7 +227,7 @@ public class PhoneFactory {
 
     public static Phone getGsmPhone() {
         synchronized(PhoneProxy.lockForRadioTechnologyChange) {
-            Phone phone = new TDPhone(sContext, sCommandsInterface[DEFAULT_PHONE_ID], sPhoneNotifier[DEFAULT_PHONE_ID]);
+            Phone phone = new TDPhone(sContext, sCommandsInterface[getDefaultPhoneId()], sPhoneNotifier[getDefaultPhoneId()]);
             return phone;
         }
     }
@@ -228,73 +239,81 @@ public class PhoneFactory {
                 "PhoneFactory.getDefaultCM must be called from Looper thread");
         }
 
-        if (null == sCommandsInterface[DEFAULT_PHONE_ID]) {
+        if (null == sCommandsInterface[getDefaultPhoneId()]) {
             throw new IllegalStateException("Default CommandsInfterface haven't been made yet!");
         }
-       return sCommandsInterface[DEFAULT_PHONE_ID];
+       return sCommandsInterface[getDefaultPhoneId()];
     }
     // zhanglj add begin 2011-05-20
     public static int getPhoneCount() {
     	return SystemProperties.getInt("persist.msms.phone_count", DEFAULT_PHONE_COUNT);  	
     }
-    
-    public static String getServiceName(String defaultServiceName, int phoneId){
-    	if(phoneId == DEFAULT_PHONE_ID){
-    		return defaultServiceName; 		
-    	}
-    	return defaultServiceName + phoneId;
-    }
-    
-    public static Uri getUri(Uri defaultUri, int phoneId){
-    	String uriName = defaultUri.getPath();
-    	if(phoneId == DEFAULT_PHONE_ID){
-    		return defaultUri; 		
-    	}
-    	return Uri.parse(uriName + phoneId);
+
+    public static boolean isMultiSim() {
+        return getPhoneCount() > 1;
     }
 
-    // supported uri
-    //     content://authority/path/morepath
-    // unsupported uri
-    //     content://authority/path/morepath/#
-    public static Uri getUri2(Uri defaultUri, int phoneId) {
-        Uri.Builder builder = defaultUri.buildUpon();
-
-        List<String> paths = defaultUri.getPathSegments();
-        builder.path("");
-        builder.appendPath((String)paths.get(0) + phoneId);
-        for (int i = 1; i < paths.size(); i++) {
-            builder.appendPath(paths.get(i));
+    public static String getServiceName(String defaultServiceName, int phoneId) {
+        if (isMultiSim()) {
+            if (phoneId == getPhoneCount()) {
+                return defaultServiceName;
+            }
+            return defaultServiceName + phoneId;
+        } else {
+            return defaultServiceName;
         }
-        return builder.build();
+    }
+
+    public static Uri getUri(Uri defaultUri, int phoneId){
+        String uriName = defaultUri.getPath();
+        if (phoneId == getPhoneCount()) {
+            return defaultUri;
+        }
+        return Uri.parse(uriName + phoneId);
     }
     
     public static String getFeature(String defaultFeature, int phoneId){
-    	if(phoneId == DEFAULT_PHONE_ID){
-    		return defaultFeature; 		
-    	}
-    	return defaultFeature + phoneId;
+        if (isMultiSim()) {
+            if (phoneId == getPhoneCount()) {
+                return defaultFeature;
+            }
+            return defaultFeature + phoneId;
+        } else {
+            return defaultFeature;
+        }
     }
 	
 	public static String getProperty(String defaultProperty, int phoneId){
-    	if(phoneId == DEFAULT_PHONE_ID){
-    		return defaultProperty; 		
-    	}
-    	return defaultProperty + phoneId;
+        if (isMultiSim()) {
+            if (phoneId == getPhoneCount()) {
+                return defaultProperty;
+            }
+            return defaultProperty + phoneId;
+        } else {
+            return defaultProperty;
+        }
     }
 
 	public static String getSetting(String defaultSetting, int phoneId){
-    	if(phoneId == DEFAULT_PHONE_ID){
-    		return defaultSetting; 		
-    	}
-    	return defaultSetting + phoneId;
+        if (isMultiSim()) {
+            if (phoneId == getPhoneCount()) {
+                return defaultSetting;
+            }
+            return defaultSetting + phoneId;
+        } else {
+            return defaultSetting;
+        }
     }
 	
 	public static String getAction(String defaultAction, int phoneId){
-    	if(phoneId == DEFAULT_PHONE_ID){
-    		return defaultAction; 		
-    	}
-    	return defaultAction + phoneId;
+        if (isMultiSim()) {
+            if (phoneId == getPhoneCount()) {
+                return defaultAction;
+            }
+            return defaultAction + phoneId;
+        } else {
+            return defaultAction;
+        }
     }
 
 	/**
@@ -409,7 +428,7 @@ public class PhoneFactory {
      * @return the {@code SipPhone} object or null if the SIP URI is not valid
      */
     public static SipPhone makeSipPhone(String sipUri) {
-        return SipPhoneFactory.makePhone(sipUri, sContext, sPhoneNotifier[DEFAULT_PHONE_ID]);
+        return SipPhoneFactory.makePhone(sipUri, sContext, sPhoneNotifier[getDefaultPhoneId()]);
 
     }
     public static boolean checkSimFinish(int phoneId) {
@@ -434,5 +453,9 @@ public class PhoneFactory {
             }
         }
         return false;
+    }
+    
+    public static int getDefaultPhoneId() {
+        return SystemProperties.getInt("persist.msms.phone_default", RAW_DEFAULT_PHONE_ID);
     }
 }

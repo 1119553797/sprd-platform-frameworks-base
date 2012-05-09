@@ -397,9 +397,7 @@ public abstract class IccCard {
     public abstract String getServiceProviderName();
 
     protected void updateStateProperty() {
-        String simStateProperty = PhoneFactory.getProperty(TelephonyProperties.PROPERTY_SIM_STATE,
-                mPhone.getPhoneId());
-        mPhone.setSystemProperty(simStateProperty, getState().toString());
+        mPhone.setSystemProperty(TelephonyProperties.PROPERTY_SIM_STATE, getState().toString());
     }
 
     private void getIccCardStatusDone(AsyncResult ar) {

@@ -277,15 +277,9 @@ public final class SIMRecords extends IccRecords {
 
         //adnCache.reset();
 
-        String iccOperatorNumericProperty = PhoneFactory.getProperty(PROPERTY_ICC_OPERATOR_NUMERIC,
-                phone.getPhoneId());
-        phone.setSystemProperty(iccOperatorNumericProperty, null);
-        String iccOperatorAlphaProperty = PhoneFactory.getProperty(PROPERTY_ICC_OPERATOR_ALPHA,
-                phone.getPhoneId());
-        phone.setSystemProperty(iccOperatorAlphaProperty, null);
-        String iccOperatorIsoCountryProperty = PhoneFactory.getProperty(
-                PROPERTY_ICC_OPERATOR_ISO_COUNTRY, phone.getPhoneId());
-        phone.setSystemProperty(iccOperatorIsoCountryProperty, null);
+        phone.setSystemProperty(PROPERTY_ICC_OPERATOR_NUMERIC, null);
+        phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ALPHA, null);
+        phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, null);
 
         // recordsRequested is set to false indicating that the SIM
         // read requests made so far are not valid. This is set to
@@ -1392,14 +1386,10 @@ public final class SIMRecords extends IccRecords {
 
         // Some fields require more than one SIM record to set
 
-        String iccOperatorNumericProperty = PhoneFactory.getProperty(PROPERTY_ICC_OPERATOR_NUMERIC,
-                phone.getPhoneId());
-        phone.setSystemProperty(iccOperatorNumericProperty, operator);
+        phone.setSystemProperty(PROPERTY_ICC_OPERATOR_NUMERIC, operator);
 
         if (imsi != null) {
-            String iccOperatorIsoCountryProperty = PhoneFactory.getProperty(
-                    PROPERTY_ICC_OPERATOR_ISO_COUNTRY, phone.getPhoneId());
-            phone.setSystemProperty(iccOperatorIsoCountryProperty,
+            phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ISO_COUNTRY,
                     MccTable.countryCodeForMcc(Integer.parseInt(imsi.substring(0,3))));
         }
         else {
@@ -1647,9 +1637,7 @@ public final class SIMRecords extends IccRecords {
                     spn = IccUtils.adnStringFieldToString(data, 1, data.length - 1);
                     if (DBG) log("Load EF_SPN: " + spn
                             + " spnDisplayCondition: " + spnDisplayCondition);
-                    String iccOperatorAlphaProperty = PhoneFactory.getProperty(
-                            PROPERTY_ICC_OPERATOR_ALPHA, phone.getPhoneId());
-                    phone.setSystemProperty(iccOperatorAlphaProperty, spn);
+                    phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ALPHA, spn);
 
                     spnState = Get_Spn_Fsm_State.IDLE;
                 } else {

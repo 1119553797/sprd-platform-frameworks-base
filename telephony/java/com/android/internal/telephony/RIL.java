@@ -644,7 +644,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     }
 
     public RIL(Context context, int networkMode, int cdmaSubscription) {
-    	this(context, networkMode, cdmaSubscription, PhoneFactory.DEFAULT_PHONE_ID);
+    	this(context, networkMode, cdmaSubscription, PhoneFactory.getDefaultPhoneId());
     }
 
     public RIL(Context context, int networkMode, int cdmaSubscription, int phoneId) {
@@ -654,7 +654,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         mNetworkMode = networkMode;
         // zhanglj add begin 2011-05-20
         mPhoneId = phoneId;
-        if (mPhoneId != PhoneFactory.DEFAULT_PHONE_ID){
+        if (mPhoneId != PhoneFactory.RAW_DEFAULT_PHONE_ID){
             SOCKET_NAME_RIL = SOCKET_NAME_RIL + phoneId;
         }
         // zhanglj add end

@@ -47,6 +47,10 @@ static struct {
     { AID_RADIO, "iphonesubinfo" },
     { AID_RADIO, "simphonebook" },
 // zhanglj add begin for add new multicard service permission
+	{ AID_RADIO, "phone0"},
+	{ AID_RADIO, "isms0"},
+	{ AID_RADIO, "iphonesubinfo0" },
+	{ AID_RADIO, "simphonebook0" },
 	{ AID_RADIO, "phone1"},
 	{ AID_RADIO, "isms1"},
 	{ AID_RADIO, "iphonesubinfo1" },

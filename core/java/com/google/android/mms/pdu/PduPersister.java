@@ -1225,7 +1225,7 @@ public class PduPersister {
     }
 
     public Uri persist(GenericPdu pdu, Uri uri) throws MmsException {
-        return persist(pdu, uri, PhoneFactory.DEFAULT_PHONE_ID);
+        return persist(pdu, uri, PhoneFactory.getDefaultPhoneId());
     }
 
     /**

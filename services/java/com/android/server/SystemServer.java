@@ -142,9 +142,18 @@ class ServerThread extends Thread {
             context = ActivityManagerService.main(factoryTest);
 
             Slog.i(TAG, "Telephony Registry");
-            for(int i = 0; i < PhoneFactory.getPhoneCount(); i++){
-                ServiceManager.addService(PhoneFactory.getServiceName("telephony.registry", i), 
-                    new TelephonyRegistry(context, i));
+            if (PhoneFactory.isMultiSim()) {
+                TelephonyRegistry[] telephonyRegistry = new TelephonyRegistry[PhoneFactory.getPhoneCount()];
+                for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                    telephonyRegistry[i] = new TelephonyRegistry(context, i);
+                    ServiceManager.addService(PhoneFactory.getServiceName("telephony.registry", i),
+                            telephonyRegistry[i]);
+                }
+                ServiceManager.addService("telephony.registry",
+                        new CompositeTelephonyRegistry(context, telephonyRegistry));
+            } else {
+                ServiceManager.addService("telephony.registry",
+                        new TelephonyRegistry(context, 0));
             }
 
             AttributeCache.init(context);

@@ -38,7 +38,6 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 	// ***** Instance Variables
 	static String LOG_TAG = "AdnRecordCache";
 	private IccFileHandler mFh;
-    private String adnCacheStateProperty;
 	public UsimPhoneBookManager mUsimPhoneBookManager;
 	PhoneBase phone;
 
@@ -87,8 +86,6 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 		this.phone = phone;
 		mFh = phone.getIccFileHandler();
 		mUsimPhoneBookManager = new UsimPhoneBookManager(phone, mFh, this);
-        adnCacheStateProperty = PhoneFactory.getProperty(
-                TelephonyProperties.ADNCACHE_LOADED_STATE, phone.getPhoneId());
 	}
 
 	public Object getLock() {
@@ -917,8 +914,8 @@ public final class AdnRecordCache extends Handler implements IccConstants {
 
     public void markAdnRecordLoaded(boolean loaded){
         String flag = loaded ? "1" : "0";
-        phone.setSystemProperty(adnCacheStateProperty,flag);
-        Log.d("AdnRecordCache", "set value of " + adnCacheStateProperty + " : " + flag);
+        phone.setSystemProperty(TelephonyProperties.ADNCACHE_LOADED_STATE,flag);
+        Log.d("AdnRecordCache", "set value of " + TelephonyProperties.ADNCACHE_LOADED_STATE + " : " + flag);
         if(loaded){
             broadcastForAdnRecordLoaded(null,null);
         }

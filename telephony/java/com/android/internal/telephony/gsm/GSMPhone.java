@@ -208,9 +208,7 @@ public abstract class GSMPhone extends PhoneBase {
         }
 
         //Change the system property
-        String currentActivePhoneProperty = PhoneFactory.getProperty(
-                TelephonyProperties.CURRENT_ACTIVE_PHONE, getPhoneId());
-        SystemProperties.set(currentActivePhoneProperty,
+        setSystemProperty(TelephonyProperties.CURRENT_ACTIVE_PHONE,
                 new Integer(Phone.PHONE_TYPE_GSM).toString());
     }
 

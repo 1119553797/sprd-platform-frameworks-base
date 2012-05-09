@@ -597,7 +597,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
         }
     }
     private int getPhoneId() {
-        int phoneId = PhoneFactory.DEFAULT_PHONE_ID;
+        int phoneId = PhoneFactory.getDefaultPhoneId();
         switch(mNetType) {
             case ConnectivityManager.TYPE_MOBILE:
             case ConnectivityManager.TYPE_MOBILE_SUPL:

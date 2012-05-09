@@ -315,21 +315,31 @@ public final class SmsManager {
 
 /* End liu 20110602 */
 
+    static {
+        if (PhoneFactory.isMultiSim()) {
+            sInstance = new SmsManager[PhoneFactory.getPhoneCount() + 1];
+            for (int i = 0; i <= PhoneFactory.getPhoneCount(); i++) {
+                sInstance[i] = new SmsManager(i);
+            }
+        } else {
+            sInstance = new SmsManager[1];
+            sInstance[0] = new SmsManager(0);
+        }
+    }
+    
     /**
      * Get the default instance of the SmsManager
      *
      * @return the default instance of the SmsManager
      */
     public static SmsManager getDefault() {
-        return getDefault(PhoneFactory.DEFAULT_PHONE_ID);
+        int phoneId = PhoneFactory.getPhoneCount();
+        return getDefault(phoneId);
     }
 
     public static SmsManager getDefault(int phoneId) {
-        if (sInstance == null) {
-            sInstance = new SmsManager[PhoneFactory.getPhoneCount()];
-            for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
-                sInstance[i] = new SmsManager(i);
-            }
+        if(phoneId > PhoneFactory.getPhoneCount()){
+            throw new IllegalArgumentException("phoneId exceeds phoneCount");
         }
         return sInstance[phoneId];
     }

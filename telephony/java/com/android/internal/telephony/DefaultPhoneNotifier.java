@@ -37,9 +37,7 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
 
     /*package*/
     DefaultPhoneNotifier() {
-	    mPhoneId = PhoneFactory.DEFAULT_PHONE_ID;
-        mRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
-                    "telephony.registry"));
+        this(PhoneFactory.getDefaultPhoneId());
     }
 
     DefaultPhoneNotifier(int phoneId) {

@@ -936,4 +936,15 @@ public abstract class PhoneProxy extends Handler implements Phone {
 		
     }
 
+    public IccSmsInterfaceManagerProxy getIccSmsInterfaceManagerProxy() {
+        return mIccSmsInterfaceManagerProxy;
+    }
+
+    public IccPhoneBookInterfaceManagerProxy getIccPhoneBookInterfaceManagerProxy() {
+        return mIccPhoneBookInterfaceManagerProxy;
+    }
+    
+    public PhoneSubInfoProxy getPhoneSubInfoProxy() {
+        return mPhoneSubInfoProxy;
+    }
 }

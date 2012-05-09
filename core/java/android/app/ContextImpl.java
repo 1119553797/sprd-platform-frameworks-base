@@ -201,7 +201,7 @@ class ContextImpl extends Context {
     private Vibrator mVibrator = null;
     private LayoutInflater mLayoutInflater = null;
     private StatusBarManager mStatusBarManager = null;
-    private TelephonyManager []mTelephonyManager = new TelephonyManager[PhoneFactory.getPhoneCount()];
+    private TelephonyManager []mTelephonyManager = null;
     private ClipboardManager mClipboardManager = null;
     private boolean mRestricted;
     private AccountManager mAccountManager; // protected by mSync
@@ -1103,18 +1103,21 @@ class ContextImpl extends Context {
     }
 
     private TelephonyManager getTelephonyManager() {
-        synchronized (mSync) {
-            if (mTelephonyManager[PhoneFactory.DEFAULT_PHONE_ID] == null) {
-                mTelephonyManager[PhoneFactory.DEFAULT_PHONE_ID] = new TelephonyManager(getOuterContext());
-            }
-        }
-        return mTelephonyManager[PhoneFactory.DEFAULT_PHONE_ID];
+        int phoneId = PhoneFactory.getPhoneCount();
+        return getTelephonyManager(phoneId);
     }
     
     private TelephonyManager getTelephonyManager(int phoneId) {
 		synchronized (mSync) {
+		    if(mTelephonyManager == null){
+		        if(PhoneFactory.isMultiSim()){
+		            mTelephonyManager = new TelephonyManager[PhoneFactory.getPhoneCount() + 1];
+		        }else{
+		            mTelephonyManager = new TelephonyManager[PhoneFactory.getPhoneCount()];
+		        }
+		    }
 			if (mTelephonyManager.length <= phoneId || phoneId < 0) {
-				// to check whether phoneId is invalid
+			    Log.e(TAG, "Failed to get TelephonyManager by phoneId = " + phoneId);
 				return null;
 			}
             if (mTelephonyManager[phoneId] == null) {
