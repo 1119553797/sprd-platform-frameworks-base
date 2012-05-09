@@ -898,7 +898,7 @@ LOGV("play_l enter time:%d s",tv.tv_sec*1000+tv.tv_usec/1000);
 
                 mTimeSource = mAudioPlayer;
 
-                deferredAudioSeek = true;
+                deferredAudioSeek = false;//true; // Modify for taking picture the click shutter sounds twice
 
                 mWatchForAudioSeekComplete = false;
                 mWatchForAudioEOS = true;

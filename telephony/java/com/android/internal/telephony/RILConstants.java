@@ -329,9 +329,9 @@ cat include/telephony/ril.h | \
 	int RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED = 1040;
 
     // for STK
-	int RIL_UNSOL_ON_STIN = 1050;
+	int RIL_UNSOL_ON_STIN = 1041;
 	
-	int RIL_UNSOL_SIM_SMS_READY = 1051;
+	int RIL_UNSOL_SIM_SMS_READY = 1042;
     //for confirm when in call
-    int RIL_UNSOL_SYNC_IND = 1052;
+    int RIL_UNSOL_SYNC_IND = 1043;
 }

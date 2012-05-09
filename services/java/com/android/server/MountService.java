@@ -78,7 +78,7 @@ class MountService extends IMountService.Stub
         implements INativeDaemonConnectorCallbacks {
     private static final boolean LOCAL_LOGD = false;
     private static final boolean DEBUG_UNMOUNT = false;
-    private static final boolean DEBUG_EVENTS = false;
+    private static final boolean DEBUG_EVENTS = true;
     private static final boolean DEBUG_OBB = false;
 
     private static final String TAG = "MountService";
@@ -715,7 +715,14 @@ class MountService extends IMountService.Stub
             if (cooked[5].equals("available")) {
                 avail = true;
             }
-            notifyShareAvailabilityChange(cooked[3], avail);
+            final boolean flag = avail;
+            final String method = cooked[3];
+    	    new Thread(){
+    	    	public void run(){
+    	    		notifyShareAvailabilityChange(method, flag);
+    	    	}
+    	    }.start();
+//            notifyShareAvailabilityChange(cooked[3], avail);
         //add by liguxiang 09-15-11 for whether usb available begin
 	 } else if(code == VoldResponseCode.UsbAvailabilityChange){
 	    boolean avail = false;
@@ -728,8 +735,13 @@ class MountService extends IMountService.Stub
 	    	}
 	    }
 	    //add by liguxiang 10-21-11 for NEWMS00128630 end
-	    
-	    notifyUsbAvailabilityChange(avail);
+	   final boolean flag = avail;
+	    new Thread(){
+	    	public void run(){
+	    		 notifyUsbAvailabilityChange(flag);
+	    	}
+	    }.start();
+	   
 	 //add by liguxiang 09-15-11 for whether usb available end
         }else if ((code == VoldResponseCode.VolumeDiskInserted) ||
                    (code == VoldResponseCode.VolumeDiskRemoved) ||
@@ -1136,6 +1148,7 @@ class MountService extends IMountService.Stub
 	 Log.d(TAG,"send usb intent wiht action : " + (c ? Intent.ACTION_SPRD_USB_AVAILABLE : Intent.ACTION_SPRD_USB_UNAVAILABLE));
 	 mContext.sendBroadcast(
 	 	new Intent((c ? Intent.ACTION_SPRD_USB_AVAILABLE : Intent.ACTION_SPRD_USB_UNAVAILABLE)));
+	 Log.d(TAG," usb intent  end");
     }
     //add by liguxiang 09-15-11 for whether usb available end
     
