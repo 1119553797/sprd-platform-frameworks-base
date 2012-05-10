@@ -180,7 +180,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 mLocalLanguageChange = true;
                 pollState();
                 updateSpnDisplay();
-            }else if(TelephonyIntents.SIM_CARD_PRESENT.equals(intent.getAction())){
+            }else if(TelephonyIntents.SIM_CARD_PRESENT.equals(intent.getAction()) && intent.
+            		getIntExtra("phone_id",-1)==phone.getPhoneId()){
+            	Log.d(LOG_TAG, " intent.getIntExtra(phone_id,-1)=" + intent.getIntExtra("phone_id",-1));
                 mLocalLanguageChange = false;
                 Message msg=new Message();
                 msg.what=EVENT_ICC_STATUS_CHANGED;

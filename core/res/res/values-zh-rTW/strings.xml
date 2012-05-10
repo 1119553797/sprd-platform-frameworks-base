@@ -957,5 +957,5 @@
     <string name="media_shared" product="default" msgid="5706130568133540435">"電腦目前正在使用 SD 卡。"</string>
     <string name="media_unknown_state" msgid="729192782197290385">"外部媒體狀態不明。"</string>
     <string name="china_mobile_numeric_values">中國移動</string>
-    <string name="custom_china_mobile">中國聯通</string>
+    <string name="custom_china_mobile">中國移動</string>
 </resources>
