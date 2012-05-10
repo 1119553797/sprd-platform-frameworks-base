@@ -333,7 +333,10 @@ public final class SmsManager {
      * @return the default instance of the SmsManager
      */
     public static SmsManager getDefault() {
-        int phoneId = PhoneFactory.getPhoneCount();
+        int phoneId = PhoneFactory.RAW_DEFAULT_PHONE_ID;
+        if(PhoneFactory.isMultiSim()){
+            phoneId = PhoneFactory.getPhoneCount();
+        }
         return getDefault(phoneId);
     }
 
