@@ -32,7 +32,7 @@ public class GenericPdu {
      */
     public GenericPdu() {
         mPduHeaders = new PduHeaders();
-        mPhoneId = PhoneFactory.DEFAULT_PHONE_ID;
+        mPhoneId = PhoneFactory.getDefaultPhoneId();
     }
 
     /**
@@ -42,7 +42,7 @@ public class GenericPdu {
      */
     GenericPdu(PduHeaders headers) {
         mPduHeaders = headers;
-        mPhoneId = PhoneFactory.DEFAULT_PHONE_ID;
+        mPhoneId = PhoneFactory.getDefaultPhoneId();
     }
 
     public GenericPdu(int phoneId) {

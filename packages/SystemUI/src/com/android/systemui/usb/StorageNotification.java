@@ -143,7 +143,8 @@ public class StorageNotification extends StorageEventListener {
                 Log.d(TAG,"send usbIntent");
                 Intent usbIntent = new Intent(Intent.ACTION_SPRD_UMS_SHARED);
                 mContext.sendBroadcast(usbIntent);
-            } else if (oldState.equals(Environment.MEDIA_CHECKING) && newState.equals(Environment.MEDIA_MOUNTED)) {
+            } else if (oldState.equals(Environment.MEDIA_CHECKING) && newState.equals(Environment.MEDIA_MOUNTED)
+                      || oldState.equals(Environment.MEDIA_UNMOUNTED) && newState.equals(Environment.MEDIA_NOFS)) {
                 Intent usbIntent = new Intent(Intent.ACTION_SPRD_UMS_UNSHARED);
                 mContext.sendBroadcast(usbIntent);
             }

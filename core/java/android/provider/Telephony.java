@@ -227,7 +227,7 @@ public final class Telephony {
                 Uri uri, String address, String body, String subject,
                 Long date, boolean read, boolean deliveryReport) {
             return addMessageToUri(resolver, uri, address, body, subject,
-                    date, read, deliveryReport, -1L, PhoneFactory.DEFAULT_PHONE_ID);
+                    date, read, deliveryReport, -1L, PhoneFactory.getDefaultPhoneId());
         }
 
         /**
@@ -249,7 +249,7 @@ public final class Telephony {
                 Long date, boolean read, boolean deliveryReport, long threadId) {
             
             return addMessageToUri(resolver, uri, address, body, subject, 
-            		date, read, deliveryReport, threadId, PhoneFactory.DEFAULT_PHONE_ID);
+            		date, read, deliveryReport, threadId, PhoneFactory.getDefaultPhoneId());
         }
         
         public static Uri addMessageToUri(ContentResolver resolver,

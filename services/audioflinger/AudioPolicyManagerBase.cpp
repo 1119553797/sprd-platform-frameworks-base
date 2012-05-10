@@ -586,6 +586,9 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
         LOGW("startOutput() unknow output %d", output);
         return BAD_VALUE;
     }
+    if (stream == AudioSystem::NOTIFICATION) {
+        setStreamMute(AudioSystem::ALARM, true, output);
+    }
 
     AudioOutputDescriptor *outputDesc = mOutputs.valueAt(index);
     routing_strategy strategy = getStrategy((AudioSystem::stream_type)stream);
@@ -623,6 +626,9 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
     if (index < 0) {
         LOGW("stopOutput() unknow output %d", output);
         return BAD_VALUE;
+    }
+    if (stream == AudioSystem::NOTIFICATION) {
+        setStreamMute(AudioSystem::ALARM, false, output, 300);
     }
 
     AudioOutputDescriptor *outputDesc = mOutputs.valueAt(index);

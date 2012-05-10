@@ -438,6 +438,7 @@ public class Watchdog extends Thread {
 
             final String name = (mCurrentMonitor != null) ?
                     mCurrentMonitor.getClass().getName() : "null";
+            Slog.w(TAG, "*** WATCHDOG IS GOING TO KILL SYSTEM PROCESS: " + name);
             EventLog.writeEvent(EventLogTags.WATCHDOG, name);
 
             ArrayList<Integer> pids = new ArrayList<Integer>();

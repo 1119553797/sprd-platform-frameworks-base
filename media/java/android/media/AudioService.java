@@ -1218,8 +1218,10 @@ public class AudioService extends IAudioService.Stub {
     private int getActiveStreamType(int suggestedStreamType) {
         boolean isOffhook = false;
         try {
-            ITelephony phone1 = ITelephony.Stub.asInterface(ServiceManager.checkService("phone"));
-            ITelephony phone2 = ITelephony.Stub.asInterface(ServiceManager.checkService("phone1"));
+            ITelephony phone1 = ITelephony.Stub.asInterface(ServiceManager
+                    .checkService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, 0)));
+            ITelephony phone2 = ITelephony.Stub.asInterface(ServiceManager
+                    .checkService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, 1)));
             if (phone1 != null) isOffhook = isOffhook || phone1.isOffhook();
             if (phone2 != null) isOffhook = isOffhook || phone2.isOffhook();
         } catch (RemoteException e) {

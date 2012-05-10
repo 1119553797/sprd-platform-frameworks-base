@@ -129,12 +129,18 @@ public abstract class PhoneBase extends Handler implements Phone {
     /**
      * Set a system property, unless we're in unit test mode
      */
-    public void
-    setSystemProperty(String property, String value) {
+    public void setSystemProperty(String property, String value) {
         if(getUnitTestMode()) {
             return;
         }
-        SystemProperties.set(property, value);
+        if (PhoneFactory.isMultiSim()) {
+            SystemProperties.set(PhoneFactory.getProperty(property, getPhoneId()), value);
+            if (getPhoneId() == PhoneFactory.getDefaultPhoneId()) {
+                SystemProperties.set(property, value);
+            }
+        } else {
+            SystemProperties.set(property, value);
+        }
     }
 
     protected final RegistrantList mPreciseCallStateRegistrants

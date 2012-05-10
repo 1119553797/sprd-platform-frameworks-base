@@ -71,13 +71,15 @@ public class TelephonyManager {
     private static final String simCardFavoritekey = "sim_card_favorite";
     private static final String simCardForwardSettingKey = "sim_forward_setting";
     private static final String sharedActivityName = "com.android.phone";
+    
+    public static final int UNLOCK_PIN   = 0;
+    public static final int UNLOCK_PIN2   = 1;
+    public static final int UNLOCK_PUK   = 2;
+    public static final int UNLOCK_PUK2   = 3;
 
     /** @hide */
     public TelephonyManager(Context context) {
-        mContext = context;
-        mRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
-                    "telephony.registry"));
-        mPhoneId = PhoneFactory.DEFAULT_PHONE_ID;
+        this(context,PhoneFactory.getPhoneCount());
     }
 
     /** @hide */
@@ -96,18 +98,32 @@ public class TelephonyManager {
     private static TelephonyManager[] sInstance;
 
     static {
-    	sInstance = new TelephonyManager[PhoneFactory.getPhoneCount()];
-        for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
-            sInstance[i] = new TelephonyManager(i);    
+        if (PhoneFactory.isMultiSim()) {
+            sInstance = new TelephonyManager[PhoneFactory.getPhoneCount() + 1];
+            for (int i = 0; i <= PhoneFactory.getPhoneCount(); i++) {
+                sInstance[i] = new TelephonyManager(i);
+            }
+        } else {
+            sInstance = new TelephonyManager[1];
+            sInstance[0] = new TelephonyManager(0);
         }
     }
+
     /** @hide */
     public static TelephonyManager getDefault() {
-        return sInstance[PhoneFactory.DEFAULT_PHONE_ID];
+        if (PhoneFactory.isMultiSim()) {
+            return sInstance[PhoneFactory.getPhoneCount()];
+        } else {
+            return sInstance[0];
+        }
     }
 
     /** @hide */
     public static TelephonyManager getDefault(int phoneId) {
+        if (phoneId > PhoneFactory.getPhoneCount()) {
+            //phoneId can equal to getPhoneCount
+            throw new IllegalArgumentException("phoneId exceeds phoneCount");
+        }
         return sInstance[phoneId];
     }
 
@@ -1009,8 +1025,10 @@ public class TelephonyManager {
    	/**
      * {@hide}
      */
-    public static int getModemType(){
-		String baseBand = SystemProperties.get(TelephonyProperties.PROPERTY_BASEBAND_VERSION, "");
+    public int getModemType(){
+        String baseBand = SystemProperties.get(
+                PhoneFactory.getProperty(TelephonyProperties.PROPERTY_BASEBAND_VERSION, mPhoneId),
+                "");
 		String modemValue = null;
 
 		if(baseBand != null && !baseBand.equals("")){
@@ -1108,73 +1126,6 @@ public class TelephonyManager {
                 TelephonyProperties.ADNCACHE_LOADED_STATE, mPhoneId);
         return Integer.valueOf(SystemProperties.get(adnCacheStateProperty,"0"));
     }
-    public static final int UNLOCK_PIN   = 0;
-    public static final int UNLOCK_PIN2   = 1;
-    public static final int UNLOCK_PUK   = 2;
-    public static final int UNLOCK_PUK2   = 3;
-
-    public static int getDefaultDataPhoneId(Context context) {
-        return Settings.System.getInt(context.getContentResolver(),
-                Settings.System.MULTI_SIM_DATA_CALL, PhoneFactory.DEFAULT_PHONE_ID);
-    }
-
-    public static boolean setDefaultDataPhoneId(Context context, int phoneId) {
-        return Settings.System.putInt(context.getContentResolver(),
-                Settings.System.MULTI_SIM_DATA_CALL, phoneId);
-    }
-
-    public static int getSettingPhoneId(Context context) {
-        SharedPreferences settings = getPhoneSetting(context);
-        int setPhoneId = settings.getInt(simCardFavoritekey, -1);
-        if (setPhoneId == -1) {
-            setPhoneId = TelephonyManager.getDefaultDataPhoneId(context);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putInt(simCardFavoritekey, setPhoneId);
-            editor.commit();
-        }
-        return setPhoneId;
-    }
-
-    public static void setAutoDefaultPhoneId(Context context, int setPhoneId) {
-        SharedPreferences settings = getPhoneSetting(context);
-
-        int DefaultId = settings.getInt(simCardFavoritekey, -1);
-        if (setPhoneId != DefaultId) {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putInt(simCardFavoritekey, setPhoneId);
-            editor.commit();
-        }
-    }
-
-    public static int getCallForwardSetting(Context context,int phoneId,int reason) {
-        SharedPreferences settings = getPhoneSetting(context);
-        String setKey = simCardForwardSettingKey+"_"+phoneId+"_"+reason;
-        return settings.getInt(setKey, -1);
-    }
-
-    public static void setCallForwardSetting(Context context,int phoneId,int value,int reason) {
-        SharedPreferences settings = getPhoneSetting(context);
-        String setKey = simCardForwardSettingKey+"_"+phoneId+"_"+reason;
-        int DefaultValue = settings.getInt(setKey, -1);
-        if (value != DefaultValue) {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putInt(setKey, value);
-            editor.commit();
-        }
-    }
-
-    private static SharedPreferences getPhoneSetting(Context context) {
-        Context aimContext = null;
-        try {
-            aimContext = context.createPackageContext(sharedActivityName,
-                    Context.CONTEXT_IGNORE_SECURITY);
-        } catch (NameNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return aimContext.getSharedPreferences(dualCardDefaultPhone,
-                Context.MODE_WORLD_READABLE + Context.MODE_WORLD_WRITEABLE);
-    }
 
 // return -1 if invalid
     public int getRemainTimes(int type) {
@@ -1209,6 +1160,54 @@ public class TelephonyManager {
         } catch (NullPointerException ex) {
             return false;
         }  
+    }
+    
+    
+    public static int getDefaultDataPhoneId(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.MULTI_SIM_DATA_CALL, PhoneFactory.getDefaultPhoneId());
+    }
+
+    public static boolean setDefaultDataPhoneId(Context context, int phoneId) {
+        SystemProperties.set("persist.msms.phone_default", String.valueOf(phoneId));
+        return Settings.System.putInt(context.getContentResolver(),
+                Settings.System.MULTI_SIM_DATA_CALL, phoneId);
+    }
+
+    public static int getSettingPhoneId(Context context) {
+        SharedPreferences settings = getPhoneSetting(context);
+        int setPhoneId = settings.getInt(simCardFavoritekey, -1);
+        if (setPhoneId == -1) {
+            setPhoneId = TelephonyManager.getDefaultDataPhoneId(context);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(simCardFavoritekey, setPhoneId);
+            editor.commit();
+        }
+        return setPhoneId;
+    }
+
+    public static void setAutoDefaultPhoneId(Context context, int setPhoneId) {
+        SharedPreferences settings = getPhoneSetting(context);
+
+        int DefaultId = settings.getInt(simCardFavoritekey, -1);
+        if (setPhoneId != DefaultId) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(simCardFavoritekey, setPhoneId);
+            editor.commit();
+        }
+    }
+
+    private static SharedPreferences getPhoneSetting(Context context) {
+        Context aimContext = null;
+        try {
+            aimContext = context.createPackageContext(sharedActivityName,
+                    Context.CONTEXT_IGNORE_SECURITY);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return aimContext.getSharedPreferences(dualCardDefaultPhone,
+                Context.MODE_WORLD_READABLE + Context.MODE_WORLD_WRITEABLE);
     }
 
     //About default sim card setting for vioce,video,mms

@@ -845,8 +845,8 @@ status_t AVIExtractor::parseStreamFormat(off64_t offset, size_t size) {
 
         if ((format == 0x55) || (format == 0x50)) {
             track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_MPEG);
-        } else if (format == 0x01) {
-            track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_RAW);
+//        } else if (format == 0x01) {
+//            track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_RAW);
         } else {
             LOGW("Unsupported audio format = 0x%04x", format);
         }

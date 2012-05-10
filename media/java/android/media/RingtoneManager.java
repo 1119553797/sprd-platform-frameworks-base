@@ -700,7 +700,7 @@ public class RingtoneManager {
     }
     
     private static String getSettingForType(int type) {
-		return getSettingForType(type, PhoneFactory.DEFAULT_PHONE_ID);
+		return getSettingForType(type, PhoneFactory.RAW_DEFAULT_PHONE_ID);
     }
 
     private static String getSettingForType(int type, int phoneId) {
@@ -784,7 +784,7 @@ public class RingtoneManager {
     public static int getRingtonePhoneId(Uri uri) {
 		int phoneId;
         if(uri == null){
-			return PhoneFactory.DEFAULT_PHONE_ID;
+			return PhoneFactory.getDefaultPhoneId();
         }
         String uriStr = uri.toString();
         String ringtoneUriStr = Settings.System.DEFAULT_RINGTONE_URI.toString();
@@ -792,7 +792,7 @@ public class RingtoneManager {
             && uriStr.length() !=  ringtoneUriStr.length()){
 			return Integer.parseInt(uriStr.substring(ringtoneUriStr.length(), ringtoneUriStr.length()+1));
         }
-		return PhoneFactory.DEFAULT_PHONE_ID;
+		return PhoneFactory.RAW_DEFAULT_PHONE_ID;
     }
     
     //add by bug 10729 start 2012-2-17

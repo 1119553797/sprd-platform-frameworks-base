@@ -1042,9 +1042,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         newSS.setStateOutOfService(); // clean slate for next time
 
         if (hasNetworkTypeChanged) {
-            String dataNetworkTypeProperty = PhoneFactory.getProperty(
-                    TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE, phone.getPhoneId());
-            phone.setSystemProperty(dataNetworkTypeProperty,
+            phone.setSystemProperty(TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE,
                     networkTypeToString(networkType));
         }
 
@@ -1055,9 +1053,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         if (hasChanged) {
             String operatorNumeric;
 
-            String operatorAlphaProperty = PhoneFactory.getProperty(
-                TelephonyProperties.PROPERTY_OPERATOR_ALPHA, phone.getPhoneId());
-            phone.setSystemProperty(operatorAlphaProperty, ss.getOperatorAlphaLong());
+            phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ALPHA, ss.getOperatorAlphaLong());
             Log.d(LOG_TAG,"ss state = " + ss.getState());
             if(ss.getState() == ServiceState.STATE_IN_SERVICE){
             	updateSpnDisplay();
@@ -1066,14 +1062,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 phone.getContext().sendStickyBroadcast(intent);
             }
             operatorNumeric = ss.getOperatorNumeric();
-            String operatorNumericProperty = PhoneFactory.getProperty(
-                TelephonyProperties.PROPERTY_OPERATOR_NUMERIC, phone.getPhoneId());
-            phone.setSystemProperty(operatorNumericProperty, operatorNumeric);
+            phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_NUMERIC, operatorNumeric);
 
             if (operatorNumeric == null) {
-                String operatorIsoCountryProperty = PhoneFactory.getProperty(
-                        TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, phone.getPhoneId());
-                phone.setSystemProperty(operatorIsoCountryProperty, "");
+                phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, "");
             } else {
                 String iso = "";
                 try{
@@ -1084,10 +1076,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 } catch ( StringIndexOutOfBoundsException ex) {
                     Log.w(LOG_TAG, "countryCodeForMcc error" + ex);
                 }
-
-                String operatorIsoCountryProperty = PhoneFactory.getProperty(
-                        TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, phone.getPhoneId());
-                phone.setSystemProperty(operatorIsoCountryProperty, iso);
+                phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, iso);
                 mGotCountryCode = true;
 
                 if (mNeedFixZone) {
@@ -1130,9 +1119,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 }
             }
 
-            String operatorIsRoamingProperty = PhoneFactory.getProperty(
-                    TelephonyProperties.PROPERTY_OPERATOR_ISROAMING, phone.getPhoneId());
-            phone.setSystemProperty(operatorIsRoamingProperty,
+            phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ISROAMING,
                 ss.getRoaming() ? "true" : "false");
 
             phone.notifyServiceStateChanged(ss);

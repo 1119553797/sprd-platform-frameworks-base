@@ -175,7 +175,7 @@ public abstract class CDMAPhone extends PhoneBase {
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,LOG_TAG);
 
         //Change the system setting
-        SystemProperties.set(TelephonyProperties.CURRENT_ACTIVE_PHONE,
+        setSystemProperty(TelephonyProperties.CURRENT_ACTIVE_PHONE,
                 new Integer(Phone.PHONE_TYPE_CDMA).toString());
 
         // This is needed to handle phone process crashes

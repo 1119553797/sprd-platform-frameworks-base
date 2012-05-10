@@ -1105,7 +1105,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     public boolean getMobileDataEnabled() {
         enforceAccessPermission();
         boolean retVal = Settings.Secure.getIntAtIndex(mContext.getContentResolver(),
-                Settings.Secure.MOBILE_DATA, PhoneFactory.DEFAULT_PHONE_ID, 1) == 1;
+                Settings.Secure.MOBILE_DATA, PhoneFactory.getDefaultPhoneId(), 1) == 1;
         if (DBG) Slog.d(TAG, "getMobileDataEnabled returning " + retVal);
         return retVal;
     }
@@ -1125,7 +1125,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         if (getMobileDataEnabled() == enabled) return;
 
         Settings.Secure.putIntAtIndex(mContext.getContentResolver(), Settings.Secure.MOBILE_DATA,
-                PhoneFactory.DEFAULT_PHONE_ID, enabled ? 1 : 0);
+                PhoneFactory.getDefaultPhoneId(), enabled ? 1 : 0);
         if (enabled) {
             if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
                 if (DBG) {
@@ -1969,6 +1969,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     private boolean isMmsFeature(String feature) {
         return (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS +"0"))
                 || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS +"1"));
     }
 
@@ -1976,7 +1977,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         int phoneId;
         if (isMmsFeature(feature)) {
             if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
-                phoneId = PhoneFactory.DEFAULT_PHONE_ID;
+                phoneId = PhoneFactory.getDefaultPhoneId();
             } else if (feature.length() > Phone.FEATURE_ENABLE_MMS.length()){
                 phoneId = Integer.parseInt(feature.substring(Phone.FEATURE_ENABLE_MMS.length()));
             } else {
@@ -1986,7 +1987,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_WAP)) {
                 return TelephonyManager.getDefaultDataPhoneId(mContext);
             }
-            phoneId = PhoneFactory.DEFAULT_PHONE_ID;
+            phoneId = PhoneFactory.getDefaultPhoneId();
         }
         return phoneId;
     }

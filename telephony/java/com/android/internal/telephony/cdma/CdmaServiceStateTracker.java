@@ -47,6 +47,7 @@ import com.android.internal.telephony.DataConnectionTracker;
 import com.android.internal.telephony.EventLogTags;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.MccTable;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.ServiceStateTracker;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
@@ -1324,7 +1325,9 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
      */
     private
     boolean isRoamingBetweenOperators(boolean cdmaRoaming, ServiceState s) {
-        String spn = SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA, "empty");
+        String iccOperatorAlphaProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA, phone.getPhoneId());
+        String spn = SystemProperties.get(iccOperatorAlphaProperty, "empty");
 
         // NOTE: in case of RUIM we should completely ignore the ERI data file and
         // mOperatorAlphaLong is set from RIL_REQUEST_OPERATOR response 0 (alpha ONS)
@@ -1635,8 +1638,9 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
      */
     String getImsi() {
         // TODO: When RUIM is enabled, IMSI will come from RUIM not build-time props.
-        String operatorNumeric = SystemProperties.get(
-                TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC, "");
+        String operatorNumericProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC, phone.getPhoneId());
+        String operatorNumeric = SystemProperties.get(operatorNumericProperty, "");
 
         if (!TextUtils.isEmpty(operatorNumeric) && getCdmaMin() != null) {
             return (operatorNumeric + getCdmaMin());
