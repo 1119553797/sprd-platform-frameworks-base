@@ -696,7 +696,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         // The emergency call button no longer appears on this screen.
         if (true) Log.i(TAG, "updateLayout: status=" + status+",mCarrier= "
         +getSprdCarrierString(mUpdateMonitor.getTelephonyPlmn(phoneId),mUpdateMonitor.getTelephonySpn(phoneId))
-        +",radioType="+mUpdateMonitor.getRadioType());
+        +",radioType="+mUpdateMonitor.getRadioType()+",phoneId="+phoneId);
 
         mEmergencyCallButton.setVisibility(View.VISIBLE); // in almost all cases
         //PUK Input Add Start
@@ -713,6 +713,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 //                		getSprdCarrierString(
 //                                mUpdateMonitor.getTelephonyPlmn(),
 //                                mUpdateMonitor.getTelephonySpn()));
+			mCarrier[subscription].setVisibility(View.VISIBLE);
 				CharSequence carrierText = getCarrierString(
 						mUpdateMonitor.getTelephonyPlmn(subscription),
 						mUpdateMonitor.getTelephonySpn(subscription));
@@ -742,6 +743,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 //                                mUpdateMonitor.getTelephonyPlmn(),
 //                                getContext().getText(R.string.lockscreen_network_locked_message)));
             	//mCarrier.setText(getContext().getText(R.string.lockscreen_network_locked_message));
+			mCarrier[subscription].setVisibility(View.VISIBLE);
             	mCarrier[subscription].setText(mIccText.networkLockedMessage);
                 //Modify end on 2012-01-17
 
@@ -757,9 +759,27 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 mScreenLocked.setText(R.string.lockscreen_missing_sim_instructions);
 
                 // layout
-                mScreenLocked.setVisibility(View.VISIBLE);
                 mSelector.setVisibility(View.VISIBLE);
-                mEmergencyCallText.setVisibility(View.VISIBLE);
+                mCarrier[subscription].setVisibility(View.VISIBLE);
+				mScreenLocked.setVisibility(View.VISIBLE);
+				mEmergencyCallText.setVisibility(View.VISIBLE);
+				if (numPhones > 1) {
+					Log.d(TAG, "mStatus[0]="+mStatus[0]+"  mStatus[1]="+mStatus[1]);
+					if (mStatus[0] == status.Normal || mStatus[1] == status.Normal) {
+						mCarrier[subscription].setVisibility(View.GONE);
+						mScreenLocked.setVisibility(View.GONE);
+						mEmergencyCallText.setVisibility(View.GONE);
+					} else if (mStatus[0] != status.SimMissing
+							|| mStatus[1] != status.SimMissing) {
+						mCarrier[subscription].setVisibility(View.GONE);
+						mScreenLocked.setVisibility(View.GONE);
+					}else {
+						mCarrier[0].setVisibility(View.VISIBLE);
+						mCarrier[1].setVisibility(View.VISIBLE);
+						mScreenLocked.setVisibility(View.VISIBLE);
+						mEmergencyCallText.setVisibility(View.VISIBLE);
+					}
+				}
                 // do not need to show the e-call button; user may unlock
                 break;
             case SimMissingLocked:
@@ -796,7 +816,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 // layout
                 mScreenLocked.setVisibility(View.INVISIBLE);
                 mSelector.setVisibility(View.VISIBLE);
-                mEmergencyCallText.setVisibility(View.GONE);
+                mEmergencyCallText.setVisibility(View.VISIBLE);
+                if (numPhones > 1) {
+                	if (mStatus[0] == status.Normal || mStatus[1] == status.Normal) {
+						mEmergencyCallText.setVisibility(View.GONE);
+					}
+                }
                 break;
             case SimPukLocked:
                 // text
@@ -820,6 +845,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 //PUK Input Add Start
                 mPukButton.setVisibility(View.VISIBLE);
                 //PUK Input Add End
+                if (numPhones > 1) {
+                	if (mStatus[0] == status.Normal || mStatus[1] == status.Normal) {
+						mEmergencyCallText.setVisibility(View.GONE);
+					}
+                }
                 break;
         }
         //modify by liguxiang 08-25-11 for display radiotype(3G) on LockScreen end
