@@ -700,7 +700,7 @@ public class RingtoneManager {
     }
     
     private static String getSettingForType(int type) {
-		return getSettingForType(type, PhoneFactory.getDefaultPhoneId());
+		return getSettingForType(type, PhoneFactory.RAW_DEFAULT_PHONE_ID);
     }
 
     private static String getSettingForType(int type, int phoneId) {
