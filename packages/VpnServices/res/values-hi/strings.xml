@@ -2,5 +2,7 @@
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">VPN सेवाएं</string>
+    <string name="vpn_notification_title_connected"><xliff:g id="profilename">%s</xliff:g> वीपीएन कनेक्ट हो गया है </string>
+    <string name="vpn_notification_title_disconnected"><xliff:g id="profilename">%s</xliff:g> वीपीएन डिस्कनेक्ट हो गया है </string>
     <string name="vpn_notification_hint_disconnected">VPN से रीकनेक्ट करने हेतु टच.</string>
 </resources>

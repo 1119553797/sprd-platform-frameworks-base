@@ -1,6 +1,7 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="address_length">पता अधिकतम लंबाई तक पहुँच गया है</string>
     <string name="byteShort">B</string>
     <string name="kilobyteShort">केबी</string>
     <string name="megabyteShort">MB</string>
@@ -15,6 +16,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="defaultVoiceMailAlphaTag">वाक् संश्लेषण हेतु वॉइस पहले से ही ठीक तरह से इंस्टाल करने की आवश्यकता है</string>
     <string name="defaultMsisdnAlphaTag">"MSISDN1"</string>
     <string name="mmiError">कनेक्‍शन समस्‍या या अमान्‍य MMI कोड.</string>
+    <string name="mmiFdnError">कार्य संचालन केवल फिक्स्ड डायलिंग नंबरों तक सीमित है। </string>
     <string name="serviceEnabled">सेवा अक्षम थी.</string>
     <string name="serviceEnabledFor">सेवा इसके लिए सक्षम की गई थी:</string>
     <string name="serviceDisabled">सेवा अक्षम कर दी गई है.</string>
@@ -192,17 +194,24 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permgrouplab_developmentTools">डेवलपमेंट टूल</string>
     <string name="permgroupdesc_developmentTools">सुविधाएं केवल एप्‍लिकेशन डेवलपर के लिए आवश्‍यक है.</string>
     <string name="permgrouplab_storage">भंडारण</string>
+    <string name="permgroupdesc_storage" product="nosdcard">यूएसबी भंडारण को एक्सेस करें। </string>
+    <string name="permgroupdesc_storage" product="default">एसडी कार्ड को एक्सेस करें। </string>
     <string name="permlab_statusBar">स्‍थिति बार अक्षम या संशोधित करें</string>
     <string name="permdesc_statusBar">एप्‍लिकेशन को स्‍थिति बार अक्षम करने की या सिस्‍टम आइकन जोड़ने और निकालने की अनुमति देता है.</string>
+    <string name="permlab_statusBarService">स्टेटस बार</string>
+    <string name="permdesc_statusBarService">ऐप्लिकेशन को स्टेटस बार बनने की अनुमति देता है। </string>
     <string name="permlab_expandStatusBar">स्‍थिति बार विस्‍तृत/संक्षिप्त करें</string>
     <string name="permdesc_expandStatusBar">स्‍थिति बार विस्‍तृत या संक्षिप्त करने की अनुमति एप्‍लिकेशन को देता है.</string>
     <string name="permlab_processOutgoingCalls">आउटगोइंग कॉल बीच में रोकें</string>
     <string name="permdesc_processOutgoingCalls">एप्‍लिकेशन को आउटगोइंग कॉल संसाधित करने और डायल किए गए नंबर को बदलने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आउटगोइंग कॉल पर नज़र रख सकती हैं, रीडायरेक्‍ट कर सकती या रोक सकती हैं.</string>
     <string name="permlab_receiveSms">SMS प्राप्त करें</string>
     <string name="permdesc_receiveSms">एप्‍लिकेशन को SMS संदेशों को प्राप्त करने और संसाधित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके संदेशों पर नज़र रख सकती हैं या आपको बिना दिखाए उन्‍हें हटा सकती हैं.</string>
+    <string name="permlab_receiveSmsCB">एसएमएससीबी प्राप्त करें </string>
     <string name="permdesc_receiveSmsCB">एप्लिकेशन SMSCB संदेश प्राप्त और संसाधित करने की अनुमति प्रदान करता है. दूषित एप्लिकेशन आपको संदेश की देखभाल कर सकता है या हटा सकता है.</string>
     <string name="permlab_receiveMms">MMS प्राप्त करें</string>
     <string name="permdesc_receiveMms">एप्‍लिकेशन को MMS संदेशों को प्राप्त करने और संसाधित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके संदेशों पर नज़र रख सकते हैं या आपको बिना दिखाए उन्‍हें हटा सकते हैं.</string>
+    <string name="permlab_receiveEmergencyBroadcast">आपातकालीन प्रसारण प्राप्त करें </string>
+    <string name="permdesc_receiveEmergencyBroadcast">ऐप्लिकेशन को आपातकालीन प्रसारण संदेशों को प्राप्त करने और उन्हें प्रसंस्कृत करने की अनुमति देता है। यह अनुमति केवल सिस्टम ऐप्लिकेशनों के लिए उपलब्ध है। </string>
     <string name="permlab_sendSms">SMS संदेश भेजें</string>
     <string name="permdesc_sendSms">एप्‍लिकेशन को SMS संदेश भेजने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन बिना आपकी पुष्टि के संदेश भेजकर आपका धन खर्च कर सकती हैं.</string>
     <string name="permlab_readSms">SMS या MMS पढ़ें</string>
@@ -295,6 +304,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permlab_diagnostic">निदान के स्‍वामित्‍व वाले संसाधनों को पढ़ें/लिखें</string>
     <string name="permdesc_diagnostic">"एप्‍लिकेशन को निदान समूह के स्‍वामित्‍व वाले किसी स्रोत को पढ़ने और लिखने की अनुमति देता है; उदाहरण के लिए,  /dev में फ़ाइलें. यह सिस्‍टम की स्‍थिरता और सुरक्षा को संभावित रूप से प्रभावित कर सकता है. इसका उपयोग निर्माता या ऑपरेटर द्वारा केवल हार्डवेयर-वि</string>
     <string name="permlab_changeComponentState">एप्‍लिकेशन घटकों के सक्षम या अक्षम करें</string>
+    <string name="permdesc_changeComponentState">एक ऐप्लिकेशन को बदलने की अनुमति देता है चाहे किसी दूसरे ऐप्लिकेशन का घटक सक्षम हो या नहीं। दुर्भावनापूर्ण ऐप्लिकेशन इसका उपयोग महत्वपूर्ण फोन क्षमताओं को अक्षम करने के लिए कर सकते हैं। अनुमति के साथ ध्यान का उपयोग किया जाना चाहिए क्योंकि एक बेकार, असंगत या अस्थिर स्थिति में ऐप्लिकेशन घटक प्राप्त होने की संभावना है। </string>
     <string name="permlab_setPreferredApplications">पसंदीदा एप्‍लिकेशन सेट करें.</string>
     <string name="permdesc_setPreferredApplications">किसी एप्‍लिकेशन को आपकी पसंदीदा एप्‍लिकेशन संशोधित करने की अनुमति देता है. यह दुर्भावनापूर्ण एप्‍लिकेशन को आपसे निजी डेटा एकत्र करने के लिए आपकी मौजूदा एप्‍लिकेशन को चकमा देते हुए ऐसी एप्‍लिकेशन को मौन रूप से बदलने की अनुमति देता है जो चल रही हों.</string>
     <string name="permlab_writeSettings">वैश्विक सिस्‍टम सेटिंग संशोधित करें</string>
@@ -363,6 +373,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_vibrate">एप्‍लिकेशन को कपंनकर्त्ता को नियंत्रित करने की अनुमति देता है.</string>
     <string name="permlab_flashlight">फ़्लैशलाइट नियंत्रित करें</string>
     <string name="permdesc_flashlight">एप्‍लिकेशन को फ़्लैशलाइट नियंत्रित करने की अनुमति देता है.</string>
+    <string name="permlab_manageUsb">यूएसबी उपकरणों के लिए वरीयताओं और अनुमतियों को प्रबंधित करें </string>
+    <string name="permdesc_manageUsb">ऐप्लिकेशनों को यूएसबी उपकरणों के लिए वरीयताओं और अनुमतियों को प्रबंधित करने की अनुमति देता है। </string>
     <string name="permlab_hardware_test">"परीक्षण हार्डवेयर"</string>
     <string name="permdesc_hardware_test">किसी एप्‍लिकेशन को हार्डवेयर परीक्षण के लिए विविध पेरिफ़ेरल नियंत्रित करने की अनुमति देता है.</string>
     <string name="permlab_callPhone">फ़ोन नंबर पर सीधे कॉल करें</string>
@@ -427,10 +439,16 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_changeWifiState">किसी एप्‍लिकेशन को Wi-Fi पहुंच बिंदु से कनेक्‍ट और डिस्‍कनेक्‍ट करने और कॉन्‍फ़िगर किए हुए Wi-Fi नेटवर्क में परिवर्तन करने की अनुमति देता है.</string>
     <string name="permlab_changeWifiMulticastState">Wi-Fi मल्‍टीकास्‍ट प्राप्ति को अनुमति दें</string>
     <string name="permdesc_changeWifiMulticastState">किसी एप्‍लिकेशन को ऐसे पैकेट प्राप्त करने की अनुमति देता है जो सीधे आपके उपकरण के लिए संबोधित ना हो. आस-पास प्रस्‍तावित सेवाओं का पता चलने पर यह उपयोगी हो सकता है. यह ग़ैर-मल्‍टीकास्‍ट मोड से अधिक पावर का उपयोग करता है.</string>
+    <string name="permlab_accessWimaxState">वाइमैक्स स्थिति देखें</string>
+    <string name="permdesc_accessWimaxState">एक ऐप्लिकेशन को वाईमैक्स की स्थिति से संबंधित जानकारी देखने की अनुमति देता है। </string>
+    <string name="permlab_changeWimaxState">वाईमैक्स की स्थिति में परिवर्तन करें </string>
+    <string name="permdesc_changeWimaxState">एक ऐप्लिकेशन को वाईमैक्स नेटवर्क से कनेक्ट और डिस्कनेक्ट करने की अनुमति देता है। </string>
     <string name="permlab_bluetoothAdmin">bluetooth व्‍यवस्‍थापन</string>
     <string name="permdesc_bluetoothAdmin">इस एप्लिकेशन के द्वारा स्थानीय Bluetooth फोन को कॉन्फिगर किया जा सकता है और किसी दूरस्थ मौजूद डिवाइसों को खोज व जोड़ा स्थापित कर सकता है.</string>
     <string name="permlab_bluetooth">Bluetooth कनेक्‍शन स्थापित करें</string>
     <string name="permdesc_bluetooth">यह एप्लिकेशन सिस्टम की विभिन्न लॉग फाइलों को पढ़ने की अनुमति प्रदान करता है. इससे यह साधारण जानकारी का भी पता लग जाता है कि आप क्या कर रहे हैं लेकिन उनमें कोई व्यक्तिगत या गोपनीय जानकारी नहीं रखनी चाहिए.</string>
+    <string name="permlab_nfc">निकटवर्ती क्षेत्र संचार को नियंत्रित करें </string>
+    <string name="permdesc_nfc">एक ऐप्लिकेशन को निकटवर्ती क्षेत्र संचार (एनएफसी) टैगों, कार्डों, और रीडरों के साथ संचार करने की अनुमति देता है। </string>
     <string name="permlab_disableKeyguard">कीलॉक अक्षम करें</string>
     <string name="permdesc_disableKeyguard">"किसी एप्‍लिकेशन को कीलॉक और संबद्ध पासवर्ड सुरक्षा को अक्षम करने की अनुमति देता है. एक विधिक उदाहरण यह है कि फ़ोन कीलॉक तब अक्षम करता है जब इनकमिंग फ़ोन कॉल प्राप्त हो रहा हो, फ़िर कॉल समाप्त हो जाने के बाद कीलॉक पुन: सक्षम करता है."</string>
     <string name="permlab_readSyncSettings">सिंक सेटिंग पढ़ें</string>
@@ -447,8 +465,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_readDictionary">किसी एप्‍लिकेशन को ऐसे निजी शब्‍दों, नामों या पदबंधों को पढ़ने की अनुमति देता है जो संभवत: उपयोगकर्ता द्वारा उपयोगकर्ता निर्देशिका में संग्रहीत किए गए हों.</string>
     <string name="permlab_writeDictionary">"उपयोगकर्ता निर्धारित शब्‍दकोष में लिखें"</string>
     <string name="permdesc_writeDictionary">किसी एप्‍लिकेशन को उपयोगकर्ता शब्‍दकोष में नए शब्‍द लिखने की अनुमति देता है.</string>
+    <string name="permlab_sdcardWrite" product="nosdcard">यूएसबी भंडारण सामग्रियों को संशोधित करें / मिटाएँ </string>
+    <string name="permlab_sdcardWrite" product="default">एसडी कार्ड सामग्रियों को संशोधित करें / मिटाएँ </string>
+    <string name="permdesc_sdcardWrite" product="nosdcard">एक ऐप्लिकेशन को यूएसबी भंडारण में लिखने की अनुमति देता है। </string>
+    <string name="permdesc_sdcardWrite" product="default">एक ऐप्लिकेशन को एसडी कार्ड में लिखने की अनुमति देता है। </string>
     <string name="permlab_cache_filesystem">कैश फ़ाइल सिस्‍टम में पहंचे</string>
     <string name="permdesc_cache_filesystem">किसी एप्‍लिकेशन को कैश फ़ाइल सिस्‍टम पढ़ने और लिखने की अनुमति देता है.</string>
+    <string name="permlab_use_sip">इंटरनेट कॉल करें / प्राप्त करें </string>
+    <string name="permdesc_use_sip">एक ऐप्लिकेशन को इंटरनेट कॉल करने या प्राप्त करने के लिए एसआईपी सेवा का उपयोग करने की अनुमति देता है। </string>
     <string name="policylab_limitPassword">पासवर्ड नियम सेट करें</string>
     <string name="policydesc_limitPassword">स्‍क्रीन-अनलॉक पासवर्ड में अनुमति प्राप्त लंबाई और वर्णों को नियंत्रित करें</string>
     <string name="policylab_watchLogin">"स्‍क्रीन-अनलॉक के प्रयासों पर निगरानी रखें"</string>
@@ -556,6 +580,12 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="orgTypeWork">"कार्यालय"</string>
     <string name="orgTypeOther">"अन्य"</string>
     <string name="orgTypeCustom">कस्टम</string>
+    <string name="sipAddressTypeCustom">कस्टम</string>
+    <string name="sipAddressTypeHome">होम </string>
+    <string name="sipAddressTypeWork">कार्य</string>
+    <string name="sipAddressTypeOther">अन्य</string>
+    <string name="contact_status_update_attribution">  </string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="source" example="Google Talk">%2$s</xliff:g> के माध्यम से <xliff:g id="date" example="3 hours ago">%1$s</xliff:g> </string>
     <string name="keyguard_password_enter_pin_code">PIN कोड दर्ज करें</string>
     <string name="keyguard_password_enter_password_code">अनलॉक करने के लिए पासवर्ड दर्ज करें</string>
     <string name="keyguard_password_wrong_pin_code">गलत PIN कोड!</string>
@@ -587,10 +617,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_ruim_network_locked_message">नेटमास्क लॉक्ड</string>
     <string name="sim1_puk_requried">SIM1 PIN ब्लॉक है, अनलॉक करने के लिए PUK दर्ज करें</string>
     <string name="sim2_puk_requried">SIM2 PIN ब्लॉक है, अनलॉक करने के लिए PUK दर्ज करें</string>
+    <string name="sim_puk_requried">सिम पिन अवरुद्ध, लॉक खोलने के लिए पीयूके प्रविष्ट करें </string>
     <string name="keyguard_password_enter_sim1_pin_code">SIM1 पिन कोड दर्ज करें</string>
     <string name="keyguard_password_enter_sim2_pin_code">SIM2 पिन कोड दर्ज करें</string>
+    <string name="keyguard_password_enter_sim_pin_code">सिम पिन कोड प्रविष्ट करें </string>
     <string name="keyguard_sim1_pin_accepted">SIM1 PIN अनलॉक सफलता</string>
     <string name="keyguard_sim2_pin_accepted">SIM2 PIN अनलॉक सफलता</string>
+    <string name="keyguard_sim_pin_accepted">सिम पिन का लॉक खोलने में सफल </string>
     <string name="puk_accept">PUK स्वीकारीय है</string>
     <string name="unblocking_fail">अनब्लॉकिंग विफल, PUK पुनः दर्ज करें</string>
     <string name="keyguard_password_wrong_puk_code">गलत PUK कोड!</string>
@@ -620,6 +653,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_sim_locked_message">SIM कार्ड लॉक किया गया है.</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message">"SIM कार्ड अनलॉक कर रहा है..."</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message">"आपने अपना अनलॉक वर्तमान में <xliff:g id="NUMBER_0">%d</xliff:g> बार गलत आरेखित किया है. "\n\n"कृपया <xliff:g id="NUMBER_1">%d</xliff:g> सेकंड में पुन: प्रयास करें."</string>
+    <string name="lockscreen_failed_attempts_almost_glogin">        आपने <xliff:g id="number">%d</xliff:g> बार गलत ढंग से अपना अनलॉक पैटर्न बनाया है। <xliff:g id="number">%d</xliff:g> और असफल प्रयासों के बाद, आपको अपने गूगल साइन-इन का उपयोग करके अपने फोन को अनलॉक करने के लिए कहा जाएगा।\n\n कृपया <xliff:g id="number">%d</xliff:g> सेकंड में पुनः प्रयास करें। </string>
     <string name="lockscreen_too_many_failed_attempts_countdown">"<xliff:g id="NUMBER">%d</xliff:g> सेकंड में पुन: प्रयास करें."</string>
     <string name="lockscreen_forgot_pattern_button_text">प्रतिमान भूल गए?</string>
     <string name="lockscreen_glogin_forgot_pattern">खाता अनलॉक</string>
@@ -651,6 +685,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_readHistoryBookmarks">एप्लिकेशन को ब्राउज़र द्वारा विज़िट किए गए सभी URL और ब्राउज़र के सभी बुकमार्क को पढ़ने की अनुमति देता है.</string>
     <string name="permlab_writeHistoryBookmarks">"ब्राउज़र का इतिहास और बुकमार्क लिखें"</string>
     <string name="permdesc_writeHistoryBookmarks">आपके फोन पर संग्रहीत ब्राउज़र इतिहास या बुकमार्क्स को संशोधित करने की अनुमति प्रदान करता है. दूषित एप्लिकेशनों का उपयोग आपके ब्राउज़र के डेटा को हटाने या संशोधित करने के लिए किया जा सकता है.</string>
+    <string name="permlab_setAlarm">अलार्म घड़ी में अलार्म सेट करें </string>
+    <string name="permdesc_setAlarm">ऐप्लिकेशन को एक इंस्टाल्ड अलार्म घड़ी ऐप्लिकेशन में एक अलार्म सेट करने की अनुमति देता है। कुछ अलार्म घड़ी ऐप्लिकेशन इस सुविधा को कार्यान्वित नहीं कर सकते हैं। </string>
     <string name="permlab_writeGeolocationPermissions">ब्राउज़र भौगोलिक-स्थान अनुमतियों को संशोधित करें</string>
     <string name="permdesc_writeGeolocationPermissions">किसी एप्‍लिकेशन को ब्राउज़र के भौगोलिक स्‍थान की अनुमतियों को संशोधित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग स्‍वेच्‍छाचारी वेब साइट को स्‍थान जानकारी भेजने की अनुमति देने में कर सकती हैं.</string>
     <string name="save_password_message">क्‍या आप चाहते हैं कि ब्राउज़र पासवर्ड को याद रखे?</string>
@@ -784,6 +820,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="alwaysUse">"इस क्रिया के लिए डिफ़ॉल्‍ट रूप से उपयोग करें."</string>
     <string name="clearDefaultHintMsg">होम सेटिंग &gt; एप्‍लिकेशन &gt; एप्‍लिकेशन प्रबंधित करें में डिफ़ॉल्‍ट साफ़ करें.</string>
     <string name="chooseActivity">किसी क्रिया का चयन करें</string>
+    <string name="chooseUsbActivity">यूएसबी उपकरण के लिए एक ऐप्लिकेशन का चयन करें</string>
     <string name="noApplications">कोई एप्‍लिकेशन इस क्रिया को निष्‍पादित नहीं कर सकती.</string>
     <string name="aerr_title">क्षमा करें!</string>
     <string name="aerr_application">"दुर्भाग्‍यवश, <xliff:g id="APPLICATION">%1$s</xliff:g> रुक गया है."</string>
@@ -796,6 +833,19 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="force_close">बंद करें बाध्य करें</string>
     <string name="report">रिपोर्ट करें</string>
     <string name="wait">प्रतीक्षा करें</string>
+    <string name="launch_warning_title">ऐप्लिकेशन को पुनः प्रेषित किया गया </string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> अभी चल रहा है। </string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> को मूलतः शुरू किया गया। </string>
+    <string name="smv_application">ऐप्लिकेशन <xliff:g id="application">%1$s</xliff:g> (प्रोसेस <xliff:g id="process">%2$s</xliff:g>) ने अपनी स्व-लागू सख्त मोड नीति का उल्लंघन किया है। </string>
+    <string name="smv_process">प्रोसेस <xliff:g id="process">%1$s</xliff:g> ने अपनी स्व-लागू सख्त मोड नीति का उल्लंघन किया है। </string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> चल रहा है </string>
+    <string name="heavy_weight_notification_detail">ऐप्लिकेशन में स्विच करने के लिए चयन करें </string>
+    <string name="heavy_weight_switcher_title">ऐप्लिकेशनों को स्विच करें?</string>
+    <string name="heavy_weight_switcher_text">कोई अन्य ऐप्लिकेशन पहले से चल रहा है जिसे एक नया ऐप्लिकेशन शुरू करने से पहले बंद करना होगा। </string>
+    <string name="old_app_action"><xliff:g id="old_app">%1$s</xliff:g> में वापस लौटें</string>
+    <string name="old_app_description">नए ऐप्लिकेशन को शुरू न करें। </string>
+    <string name="new_app_action"><xliff:g id="old_app">%1$s</xliff:g> को शुरू करें </string>
+    <string name="new_app_description">बिना सहेजे पुराने ऐप्लिकेशन को बंद कर दें। </string>
     <string name="sendText">पाठ के लिए क्रिया का चयन करें</string>
     <string name="volume_ringtone">रिंगर वॉल्यूम</string>
     <string name="volume_music">मीडिया वॉल्‍यूम</string>
@@ -828,32 +878,65 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sms_control_no">"रद्द करें"</string>
     <string name="date_time_set">सेट करें</string>
     <string name="default_permission_group">"डिफ़ॉल्ट"</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
     <string name="no_permissions">किसी अनुमति की आवश्‍यकता नहीं है</string>
     <string name="perms_hide"><b>"छुपाएं"</b></string>
     <string name="perms_show_all"><b>"सभी दिखाएं"</b></string>
     <string name="usb_storage_activity_title">"USB विशाल संग्रहण"</string>
     <string name="usb_storage_title">"USB कनेक्ट किया गया"</string>
+    <string name="usb_storage_message" product="nosdcard">आपने यूएसबी के माध्यम से अपने कंप्यूटर से अपने फोन को कनेक्ट कर इया है। यदि आप अपने कंप्यूटर और अपने एंड्रॉयड के यूएसबी भंडारण के बीच फाइलों को कॉपी करना चाहते हैं तो नीचे दिए गए बटन का चयन करें। </string>
+    <string name="usb_storage_message" product="default">आपने यूएसबी के माध्यम से अपने कंप्यूटर से अपने फोन को कनेक्ट कर इया है। यदि आप अपने कंप्यूटर और अपने एंड्रॉयड के एसडी कार्ड के बीच फाइलों को कॉपी करना चाहते हैं तो नीचे दिए गए बटन का चयन करें। </string>
     <string name="usb_storage_button_mount">"USB संग्रहण चालू करें"</string>
+    <string name="usb_storage_error_message" product="nosdcard">यूएसबी विपुल भंडारण के लिए आपके यूएसबी भंडारण का उपयोग करने में एक समस्या है। </string>
+    <string name="usb_storage_error_message" product="default">यूएसबी विपुल भंडारण के लिए आपके एसडी कार्ड का उपयोग करने में एक समस्या है। </string>
     <string name="usb_storage_notification_title">"USB कनेक्ट किया गया"</string>
     <string name="usb_storage_notification_message">आपके कंप्‍यूटर में/से फ़ाइल की प्रतिलिपि बनाने के लिए चयन करें.</string>
     <string name="usb_storage_stop_notification_title">"USB संग्रहण बंद करें"</string>
     <string name="usb_storage_stop_notification_message">USB संग्रहण बंद करने के लिए चयन करें.</string>
     <string name="usb_storage_stop_title">"USB संग्रहण उपयोग में है"</string>
+    <string name="usb_storage_stop_message" product="nosdcard">यूएसबी भंडारण को बंद करने से पहले सुनिश्चित करें कि आपने अपने कंप्यूटर से अपने एंड्रॉयड के यूएसबी भंडारण को अनमाउंट (\u201cइजेक्ट\u201d) कर लिया है। </string>
+    <string name="usb_storage_stop_message" product="default">यूएसबी भंडारण को बंद करने से पहले सुनिश्चित करें कि आपने अपने कंप्यूटर से अपने एंड्रॉयड के एसडी कार्ड को अनमाउंट (\u201cइजेक्ट\u201d) कर लिया है। </string>
     <string name="usb_storage_stop_button_mount">"USB संग्रहण बंद करें"</string>
     <string name="usb_storage_stop_error_message">"USB संग्रहण को बंद करने में समस्‍या थी. यह सुनिश्चित करने के लिए चेक करें कि आपने USB होस्‍ट को अनमाउंट किया है या नहीं, फिर पुन: प्रयास करें."</string>
     <string name="dlg_confirm_kill_storage_users_title">"USB संग्रहण चालू करें"</string>
     <string name="dlg_confirm_kill_storage_users_text">यदि आप USB संग्रहण चालू करते हैं, तो आपके द्वारा उपयोग की जारी कुछ एप्‍लिकेशन बंद हो जाएंगी और जब तक आप USB संग्रहण बंद नहीं करते तब तक संभवत: अनुपलब्‍ध रहेंगी.</string>
     <string name="dlg_error_title">"USB कार्यवाही विफल"</string>
     <string name="dlg_ok">"ठीक"</string>
+    <string name="extmedia_format_title" product="nosdcard">यूएसबी भंडारण को फॉर्मेट करें </string>
+    <string name="extmedia_format_title" product="default">एसडी कार्ड को फॉर्मेट करें </string>
+    <string name="extmedia_format_message" product="nosdcard">यूएसबी भंडारण में भंडारित सभी फाइलों को मिटाकर उसे फॉर्मेट करें?   इस कार्य को पलटा नहीं जा सकता! </string>
+    <string name="extmedia_format_message" product="default">क्या आप वाकई एसडी कार्ड को फॉर्मेट करना चाहते हैं? आपके कार्ड का सभी डेटा खो जाएगा। </string>
     <string name="extmedia_format_button_format">फ़ॉर्मैट</string>
     <string name="adb_active_notification_title">"USB डीबग करना कनेक्ट किया गया"</string>
     <string name="adb_active_notification_message">USB डीबग करना अक्षम करने के लिए चयन करें.</string>
-    <string name="locale_replacement"> </string>
+    <string name="locale_replacement">""</string>
     <string name="select_input_method">इनपुट विधि का चयन करें</string>
     <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="candidates_style"><u>"उम्‍मीदवार"</u></string>
+    <string name="ext_media_checking_notification_title" product="nosdcard">यूएसबी भंडारण को तैयार किया जा रहा है </string>
+    <string name="ext_media_checking_notification_title" product="default">एसडी कार्ड को तैयार किया जा रहा है </string>
     <string name="ext_media_checking_notification_message">त्रुटियों की जांच कर रहा है.</string>
+    <string name="ext_media_nofs_notification_title" product="nosdcard">यूएसबी भंडारण को खाली करें </string>
+    <string name="ext_media_nofs_notification_title" product="default">एसडी कार्ड को खाली करें </string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard">यूएसबी भंडारण खाली है या उसमें असमर्थित फ़ाइल सिस्टम है। </string>
+    <string name="ext_media_nofs_notification_message" product="default">एसडी कार्ड खाली है या उसमें असमर्थित फ़ाइल सिस्टम है। </string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">क्षतिग्रस्त यूएसबी भंडारण</string>
+    <string name="ext_media_unmountable_notification_title" product="default">क्षतिग्रस्त एसडी कार्ड</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">यूएसबी भंडारण क्षतिग्रस्त है। आपको इसे पुनः फॉर्मेट करना पड़ सकता है। </string>
+    <string name="ext_media_unmountable_notification_message" product="default">एसडी कार्ड क्षतिग्रस्त है। आपको इसे पुनः फॉर्मेट करना पड़ सकता है। </string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">यूएसबी भंडारण को अप्रत्याशित रूप से हटा दिया गया है </string>
+    <string name="ext_media_badremoval_notification_title" product="default">एसडी कार्ड को अप्रत्याशित रूप से हटा दिया गया है </string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">डेटा हानि से बचने के लिए यूएसबी भंडारण को हटाने से पहले उसे अनमाउंट करें। </string>
+    <string name="ext_media_badremoval_notification_message" product="default">डेटा हानि से बचने के लिए एसडी कार्ड को हटाने से पहले उसे अनमाउंट करें। </string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">यूएसबी भंडारण को हटाना सुरक्षित है </string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">एसडी कार्ड को हटाना सुरक्षित है </string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">आप यूएसबी भंडारण को सुरक्षित ढंग से हटा सकते हैं। </string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">आप एसडी को सुरक्षित ढंग से हटा सकते हैं। </string>
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">यूएसबी भंडारण को हटा दिया गया है </string>
+    <string name="ext_media_nomedia_notification_title" product="default">एसडी कार्ड को हटा दिया गया है </string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">यूएसबी भंडारण को हटा दिया गया है। नई मीडिया समाविष्ट करें।</string>
+    <string name="ext_media_nomedia_notification_message" product="default">एसडी कार्ड को हटा दिया गया है। नया एसडी कार्ड समाविष्ट करें। </string>
     <string name="activity_list_empty">कोई मिलती जुलती गतिविधि नहीं मिली</string>
     <string name="permlab_pkgUsageStats">"घटक उपयोग आंकड़े अपडेट करें"</string>
     <string name="permdesc_pkgUsageStats">संकलित घटक उपयोग आंकड़ो के संशोधन की अनुमति देता है. सामान्‍य एप्‍लिकेशन द्वारा उपयोग किए जाने के लिए नहीं है.</string>
@@ -895,6 +978,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="car_mode_disable_notification_title">कार मोड सक्षम किया गया</string>
     <string name="car_mode_disable_notification_message">कार मोड से बाहर निकलने के लिए चयन करें.</string>
     <string name="tethered_notification_title">"टीथरिंग या हॉटस्‍पॉट सक्रिय"</string>
+    <string name="cta_tethered_notification_title">टेदरिंग</string>
     <string name="tethered_notification_message">"कॉन्‍फ़िगर करने के लिए स्‍पर्श करें"</string>
     <string name="throttle_warning_notification_title">उच्‍च मोबाइल डेटा उपयोग</string>
     <string name="throttle_warning_notification_message">"मोबाइल डेटा उपयोग के बारे में अधिक जानने के लिए स्‍पर्श करें"</string>
@@ -908,8 +992,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="Low_Memory_System">सिस्टम</string>
     <string name="Btn_Select_Clear">चयन करें / साफ करें</string>
     <string name="myAppTip">संभालने के लिए एप्लिकेशनों का चयन करें</string>
+    <string name="myApp_Start_Btn">शुरू करें </string>
+    <string name="myApp_Move2Sd_ChkBox">एसडी में ले जाएँ </string>
     <string name="myApp_ClearData_ChkBox">डेटा साफ करें</string>
     <string name="myApp_Uninstall_ChkBox">स्थापना रद्द करें</string>
+    <string name="myAppLoading">लोड हो रहा है \u2026</string>
     <string name="myAppProcessing">प्रोसेसिंग\u2026</string>
     <string name="keyguard_password_enter_puk_code">PUK और नया पिन कोड लिखें</string>
     <string name="keyguard_password_enter_new_pin_first_code">नया PIN कोड दर्ज करें</string>
@@ -922,9 +1009,36 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="china_telecom_numeric_values">चाइना टेलीकॉम</string>
     <string name="stk_refresh_sim_init_message">SIM कार्ड अपडेट हो रहा है</string>
     <string name="stk_refresh_sim_reset_message">फोन रीबूट हो जाएगा</string>
+    <string name="custom_china_mobile">चाइना मोबाइल</string>
+    <string name="custom_china_unicom">चाइना यूनिकॉम </string>
     <string name="charge_active_notification_message">केवल चार्ज करें मोड सक्षम</string>
     <string name="charge_active_notification_title">USB कनेक्ट होने पर केवल चार्ज मोड का उपयोग करें</string>
+    <string name="shutdown_after_seconds"><xliff:g id="NUMBER">%d</xliff:g> सेकंड के बाद फोन बंद हो जाएगा </string>
+    <string name="lockscreen_password_error">पासवर्ड गलत है, कृपया पुनः प्रयास करें!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">आपने <xliff:g id="number">%d</xliff:g> बार गलत तरीके से अपना अनलॉक पासवर्ड डाला है। 
+        \n\nकृपया <xliff:g id="number">%d</xliff:g> सेकंड में पुनः प्रयास करें। </string>
+    <string name="progress_unmounting" product="nosdcard">यूएसबी भंडारण को अनमाउंट किया जा रहा है...</string>
+    <string name="progress_unmounting" product="default">एसडी कार्ड को अनमाउंट किया जा रहा है...</string>
+    <string name="progress_erasing" product="nosdcard">यूएसबी भंडारण को मिटाया जा रहा है...</string>
+    <string name="progress_erasing" product="default">एसडी कार्ड को मिटाया जा रहा है...</string>
+    <string name="format_error" product="nosdcard">यूएसबी भंडारण को मिटाने में विफल। </string>
+    <string name="format_error" product="default">एसडी कार्ड को मिटाने में विफल। </string>
+    <string name="media_bad_removal">एसडी कार्ड को अनमाउंट करने से पहले हटा दिया गया। </string>
+    <string name="media_checking" product="nosdcard">फ़िलहाल यूएसबी भंडारण की जाँच की जा रही है। </string>
+    <string name="media_checking" product="default">फ़िलहाल एसडी कार्ड की जाँच की जा रही है। </string>
+    <string name="media_removed">एसडी कार्ड को निकल लिया गया है। </string>
+    <string name="media_shared" product="nosdcard">फ़िलहाल एक कंप्यूटर द्वारा यूएसबी भंडारण का उपयोग किया जा रहा है। </string>
+    <string name="media_shared" product="default">फ़िलहाल एक कंप्यूटर द्वारा एसडी कार्ड का उपयोग किया जा रहा है। </string>
+    <string name="media_unknown_state">बाहरी मीडिया अज्ञात स्थिति में है। </string>
+    <string name="audio_play_failed">क्षमा करें, इस ऑडियो को नहीं बजाया जा सकता, डिफॉल्ट रिंगटोन का उपयोग किया जा रहा है </string>
+    <string name="sms_full_title">पाठ संदेश मेमोरी भर गई है </string>
+    <string name="sms_full_body">मेमोरी भरी होने की वजह से इनकमिंग संदेश को अस्वीकृत कर दिया गया। कृपया पुराने संदेशों को मिटा दें। </string>
     <string name="dialog_warning">चेतावनी</string>
     <string name="internal_memory_low">SD कार्ड स्टोरेज लगभग पूर्ण! कृपया खाली जगह करने के लिए कुछ फाइलें हटाएं.</string>
     <string name="button_close">बंद करें</string>
+    <string name="unlock_screen_pin_error">पिन गलत है!</string>
+    <string name="ap_disconnected">डिस्कनेक्ट हो गया </string>
+    <string name="sim_chooser_title">सिम चुनें</string>
+    <string name="lockscreen_miss_phone">फोन छूट गया </string>
+    <string name="lockscreen_miss_mms">एसएमएस छूट गया </string>
 </resources>
