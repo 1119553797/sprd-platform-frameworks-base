@@ -19,6 +19,8 @@
 #include <utils/Log.h>
 #include <hardware_legacy/AudioPolicyManagerBase.h>
 #include <media/mediarecorder.h>
+#include <fcntl.h>
+#include <stdlib.h>
 
 #define WITH_FM
 
@@ -589,6 +591,26 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
     if (stream == AudioSystem::NOTIFICATION) {
         setStreamMute(AudioSystem::ALARM, true, output);
     }
+    if(preferStartupSound) {
+        char buf[12] = {'\0'};
+        const char* headsetStatePath = "/sys/class/switch/h2w/state";
+        int fd = open(headsetStatePath,O_RDONLY);
+        if(fd < 0) {
+            LOGD("open failed %s ",strerror(errno));
+        } else {
+            if(read(fd,(char*)buf,12) >0) {
+                LOGV("headsets type = %s",(char*)buf);
+                int value = atoi((char*)buf);
+                if(value == 1)
+                    mAvailableOutputDevices |= AudioSystem::DEVICE_OUT_WIRED_HEADSET;
+                if(value == 2)
+                    mAvailableOutputDevices |= AudioSystem::DEVICE_OUT_WIRED_HEADPHONE;
+            }
+            updateDeviceForStrategy();
+            close(fd);
+        }
+        preferStartupSound = false;
+    }
 
     AudioOutputDescriptor *outputDesc = mOutputs.valueAt(index);
     routing_strategy strategy = getStrategy((AudioSystem::stream_type)stream);
@@ -1047,7 +1069,7 @@ AudioPolicyManagerBase::AudioPolicyManagerBase(AudioPolicyClientInterface *clien
     mPhoneState(AudioSystem::MODE_NORMAL), mRingerMode(0),
     mMusicStopTime(0), mLimitRingtoneVolume(false), mLastVoiceVolume(-1.0f),
     mTotalEffectsCpuLoad(0), mTotalEffectsMemory(0),
-    mA2dpSuspended(false)
+    mA2dpSuspended(false), preferStartupSound(true)
 {
     mpClientInterface = clientInterface;
 
