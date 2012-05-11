@@ -419,7 +419,8 @@ MediaProfiles::createDefaultCamcorderHighProfile()
     AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
     CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
     profile->mCameraId = 0;
-    profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+    // profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+    profile->mFileFormat = OUTPUT_FORMAT_MPEG_4;
     profile->mQuality = CAMCORDER_QUALITY_HIGH;
     profile->mDuration = 60;
     profile->mVideoCodec = videoCodec;
@@ -437,7 +438,8 @@ MediaProfiles::createDefaultCamcorderSuperHighProfile()
     AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
     CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
     profile->mCameraId = 0;
-    profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+    // profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+    profile->mFileFormat = OUTPUT_FORMAT_MPEG_4;
     profile->mQuality = CAMCORDER_QUALITY_SUPERHIGH;
     profile->mDuration = 60;
     profile->mVideoCodec = videoCodec;
@@ -457,7 +459,8 @@ MediaProfiles::createDefaultCamcorderLowProfile()
 
     MediaProfiles::CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
     profile->mCameraId = 0;
-    profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+    // profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+    profile->mFileFormat = OUTPUT_FORMAT_MPEG_4;
     profile->mQuality = CAMCORDER_QUALITY_LOW;
     profile->mDuration = 30;
     profile->mVideoCodec = videoCodec;
@@ -475,7 +478,8 @@ MediaProfiles::createFrontCamcorderHighProfile()
     AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
     CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
     profile->mCameraId = 1;
-    profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+    // profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+    profile->mFileFormat = OUTPUT_FORMAT_MPEG_4;
     profile->mQuality = CAMCORDER_QUALITY_HIGH;
     profile->mDuration = 60;
     profile->mVideoCodec = videoCodec;
@@ -495,7 +499,8 @@ MediaProfiles::createFrontCamcorderLowProfile()
 	
 	MediaProfiles::CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
 	profile->mCameraId = 1;
-	profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+        // profile->mFileFormat = OUTPUT_FORMAT_THREE_GPP;
+        profile->mFileFormat = OUTPUT_FORMAT_MPEG_4;
 	profile->mQuality = CAMCORDER_QUALITY_LOW;
 	profile->mDuration = 30;
 	profile->mVideoCodec = videoCodec;
