@@ -446,6 +446,10 @@ public class MediaController extends FrameLayout {
         if (mPlayer == null || mDragging) {
             return 0;
         }
+        if(mPause.isMediaplayerNull()){
+            hide();
+            return 0;
+        }
         int position = mPlayer.getCurrentPosition();
         int duration = mPlayer.getDuration();
         if(startLiveTime == -1){
@@ -616,7 +620,10 @@ public class MediaController extends FrameLayout {
                 // the progress bar's position.
                 return;
             }
-
+            if(mPause.isMediaplayerNull()){
+                hide();
+                return;
+            }
             long duration = mPlayer.getDuration();
             if(duration!=0){
                  long newposition = (duration * progress) / 1000L;
@@ -727,7 +734,10 @@ public class MediaController extends FrameLayout {
         boolean canSeekBackward();
         boolean canSeekForward();
     }
+
+    //added by MMz01
     public interface SetCanPause{
         public void setCanPause(boolean canPause);
+        boolean isMediaplayerNull();
     }
 }
