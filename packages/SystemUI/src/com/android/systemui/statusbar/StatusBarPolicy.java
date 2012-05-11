@@ -38,6 +38,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.NetworkInfo.DetailedState;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
@@ -68,8 +69,28 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+//add by spreadst_fw for new feature start
+import android.widget.CheckBox;
+import android.database.Cursor;
+import android.content.ContentValues;
+import android.net.NetworkInfo.DetailedState;
+import android.net.wifi.WifiInfo;
+import java.util.List;
+import android.net.wifi.WifiConfiguration;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.net.wifi.WifiConfiguration.Status;
+import android.net.wifi.ScanResult;
+import java.util.ArrayList;
+import android.provider.Downloads;
+//add by spreadst_fw for new feature end
+
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.telephony.IccCard;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.cdma.EriInfo;
@@ -116,6 +137,9 @@ public class StatusBarPolicy {
     private final Handler mHandler = new StatusBarHandler();
     private final IBatteryStats mBatteryStats;
 
+    //add by spreadst_fw
+    private ConnectivityManager mConnectivityManager;
+
     // storage
     private StorageManager mStorageManager;
 
@@ -133,7 +157,7 @@ public class StatusBarPolicy {
 
     // phone
     private TelephonyManager mPhone;
-    private int mPhoneSignalIconId;
+    private int[] mPhoneSignalIconId;
 
     //***** Signal strength icons
     //GSM/UMTS
@@ -491,12 +515,14 @@ public class StatusBarPolicy {
 
     // Assume it's all good unless we hear otherwise.  We don't always seem
     // to get broadcasts that it *is* there.
-    IccCard.State mSimState = IccCard.State.READY;
+    IccCard.State[] mSimState;
     int mPhoneState = TelephonyManager.CALL_STATE_IDLE;
-    int mDataState = TelephonyManager.DATA_DISCONNECTED;
+    int mDataState[];
     int mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
-    ServiceState mServiceState;
-    SignalStrength mSignalStrength;
+    ServiceState[] mServiceState;
+    SignalStrength[] mSignalStrength;
+    String[] mSignalIcon = {"phone_signal", "phone_signal_second_sub"};
+    private PhoneStateListener[] mPhoneStateListener;
 
     // flag for signal strength behavior
     private boolean mAlwaysUseCdmaRssi;
@@ -556,6 +582,18 @@ public class StatusBarPolicy {
     // sync state
     // If sync is active the SyncActive icon is displayed. If sync is not active but
     // sync is failing the SyncFailing icon is displayed. Otherwise neither are displayed.
+
+    //add by spreadst_fw for new feature start
+    public static final String TRUSTED_LIST_CONTENT = "content://settings/trusted_list";
+    public static final Uri TRUSTED_LIST_URI = Uri.parse(TRUSTED_LIST_CONTENT);
+    private String[] mSSIDs;
+    private int mIndex = 0;
+    private WifiManager mWifiManager;
+    //private boolean alwaysAutoConnect = false;
+    private boolean isConnected = false;
+    private AlertDialog weakSignalDialog = null;
+    private int numPhones=1;
+    //add by spreadst_fw for new feature end
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -627,13 +665,28 @@ public class StatusBarPolicy {
                      action.equals(WimaxManagerConstants.WIMAX_STATE_CHANGED_ACTION)) {
                 updateWiMAX(intent);
             }
+            else if (action.equals("interruptforfaraway")) {
+                String mLastSsid = intent.getStringExtra("wifi_last_ssid");
+                if (Settings.Secure.getInt(mContext.getContentResolver(),Settings.Secure.WIFI_AUTO_CONNECT,0) == 0) {
+                    showDialog(mLastSsid);
+                } else {
+                    autoConnectOtherTrustAp(mLastSsid);
+                }
+                if (beforeShowDisconnDialog(mLastSsid)) {
+                    showWifiDisconnDialog();
+                }
+            }else if(Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(action)){
+                for(int i = 0;i < numPhones;i++){
+                    updateSignalStrength(i);
+                }
+            }
         }
     };
 
     public StatusBarPolicy(Context context) {
         mContext = context;
         mService = (StatusBarManager)context.getSystemService(Context.STATUS_BAR_SERVICE);
-        mSignalStrength = new SignalStrength();
+        
         mBatteryStats = BatteryStatsService.getService();
 
         // storage
@@ -644,21 +697,42 @@ public class StatusBarPolicy {
         // battery
         mService.setIcon("battery", com.android.internal.R.drawable.stat_sys_battery_unknown, 0);
 
+        //add by spreadst_fw
+        mConnectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        
+		 numPhones = TelephonyManager.getPhoneCount();
+		mSignalStrength = new SignalStrength[numPhones];
+		mServiceState = new ServiceState[numPhones];
+		mSimState = new IccCard.State[numPhones];
+		mPhoneSignalIconId = new int[numPhones];
+		mPhoneStateListener = new PhoneStateListener[numPhones];
+		mDataState = new int[numPhones];
+
         // phone_signal
         mPhone = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
-        mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
         mAlwaysUseCdmaRssi = mContext.getResources().getBoolean(
             com.android.internal.R.bool.config_alwaysUseCdmaRssi);
+        
+        Log.d(TAG, "numPhones: "+numPhones);
 
-        // register for phone state notifications.
-        ((TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE))
-                .listen(mPhoneStateListener,
-                          PhoneStateListener.LISTEN_SERVICE_STATE
-                        | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS
-                        | PhoneStateListener.LISTEN_CALL_STATE
-                        | PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
-                        | PhoneStateListener.LISTEN_DATA_ACTIVITY);
+		for (int i = 0; i < numPhones; i++) {
+			mSignalStrength[i] = new SignalStrength();
+			mSimState[i] = IccCard.State.READY;
+			mPhoneSignalIconId[i] = R.drawable.stat_sys_signal_null;
+			mService.setIcon(mSignalIcon[i], mPhoneSignalIconId[i], 0);
+			mPhoneStateListener[i] = getPhoneStateListener(i);
+			mDataState[i] = TelephonyManager.DATA_DISCONNECTED;
+			// register for phone state notifications.
+			((TelephonyManager) mContext
+					.getSystemService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i))).listen(
+					mPhoneStateListener[i],
+					PhoneStateListener.LISTEN_SERVICE_STATE
+							| PhoneStateListener.LISTEN_SIGNAL_STRENGTHS
+							| PhoneStateListener.LISTEN_CALL_STATE
+							| PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
+							| PhoneStateListener.LISTEN_DATA_ACTIVITY);
+		}
 
         // data_connection
         mService.setIcon("data_connection", R.drawable.stat_sys_data_connected_g, 0);
@@ -742,6 +816,7 @@ public class StatusBarPolicy {
         filter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
+        filter.addAction("interruptforfaraway");
         filter.addAction(LocationManager.GPS_ENABLED_CHANGE_ACTION);
         filter.addAction(LocationManager.GPS_FIX_CHANGE_ACTION);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
@@ -751,6 +826,7 @@ public class StatusBarPolicy {
         filter.addAction(WimaxManagerConstants.WIMAX_STATE_CHANGED_ACTION);
         filter.addAction(WimaxManagerConstants.SIGNAL_LEVEL_CHANGED_ACTION);
         filter.addAction(WimaxManagerConstants.WIMAX_ENABLED_STATUS_CHANGED);
+        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         //Modify start on 2011-11-25 for bug 6187
         filter.addAction(Intent.ACTION_HEADSET_PLUG);
         //Modify end   on 2011-11-25 for bug 6187
@@ -1014,13 +1090,14 @@ public class StatusBarPolicy {
         int connectionStatus = intent.getIntExtra(ConnectivityManager.EXTRA_INET_CONDITION, 0);
 
         int inetCondition = (connectionStatus > INET_CONDITION_THRESHOLD ? 1 : 0);
+        int subscription  = info.getSubId();
         Log.i(TAG, "connectionStatus is "+connectionStatus+" info.getType() is:"+info.getType());
         switch (info.getType()) {
         case ConnectivityManager.TYPE_MOBILE:
             mInetCondition = inetCondition;
             updateDataNetType(info.getSubtype());
-            updateDataIcon();
-            updateSignalStrength(); // apply any change in connectionStatus
+            updateDataIcon(subscription); //FIXME
+            updateSignalStrength(subscription); // apply any change in connectionStatus//FIXME
             break;
         case ConnectivityManager.TYPE_WIFI:
             mInetCondition = inetCondition;
@@ -1035,16 +1112,21 @@ public class StatusBarPolicy {
                 mService.setIcon("wifi", iconId, 0);
                 // Show the icon since wi-fi is connected
                 mService.setIconVisibility("wifi", true);
+                mService.setIconVisibility("data_connection", false);
             } else {
                 mLastWifiSignalLevel = -1;
                 mIsWifiConnected = false;
-                int iconId = sWifiSignalImages[0][0];
-
+                //modify start by spreadst_fw for show the wifi icon when turn on wifi
+                //int iconId = sWifiSignalImages[0][0];
+                int iconId = sWifiTemporarilyNotConnectedImage;
+                //modify end
                 mService.setIcon("wifi", iconId, 0);
                 // Hide the icon since we're not connected
-                mService.setIconVisibility("wifi", false);
+                //delete start by spreadst_fw for show the wifi icon when turn on wifi
+                //mService.setIconVisibility("wifi", false);
+                //delete end 
             }
-            updateSignalStrength(); // apply any change in mInetCondition
+            updateSignalStrength(0); // apply any change in mInetCondition//FIXME
             break;
         case ConnectivityManager.TYPE_WIMAX:
             mInetCondition = inetCondition;
@@ -1053,86 +1135,133 @@ public class StatusBarPolicy {
         }
     }
 
-    private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-        @Override
-        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-            mSignalStrength = signalStrength;
-            updateSignalStrength();
-        }
-
-        @Override
-        public void onServiceStateChanged(ServiceState state) {
-            mServiceState = state;
-            updateSignalStrength();
-            updateCdmaRoamingIcon(state);
-            updateDataIcon();
-        }
-
-        @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
-            updateCallState(state);
-            // In cdma, if a voice call is made, RSSI should switch to 1x.
-            if (isCdma()) {
-                updateSignalStrength();
+//    private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+//        @Override
+//        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+//            mSignalStrength = signalStrength;
+//            updateSignalStrength();
+//        }
+//
+//        @Override
+//        public void onServiceStateChanged(ServiceState state) {
+//            mServiceState = state;
+//            updateSignalStrength();
+//            updateCdmaRoamingIcon(state);
+//            updateDataIcon();
+//        }
+//
+//        @Override
+//        public void onCallStateChanged(int state, String incomingNumber) {
+//            updateCallState(state);
+//            // In cdma, if a voice call is made, RSSI should switch to 1x.
+//            if (isCdma()) {
+//                updateSignalStrength();
+//            }
+//        }
+//
+//        @Override
+//        public void onDataConnectionStateChanged(int state, int networkType) {
+//            mDataState = state;
+//            updateDataNetType(networkType);
+//            updateDataIcon();
+//        }
+//
+//        @Override
+//        public void onDataActivity(int direction) {
+//            mDataActivity = direction;
+//            updateDataIcon();
+//        }
+//    };
+    
+    private PhoneStateListener getPhoneStateListener(int subscription) {
+        PhoneStateListener phoneStateListener = new PhoneStateListener(subscription) {
+            @Override
+            public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+                // mSubscription is a data member of PhoneStateListener class.
+                Slog.d(TAG, "onSignalStrengthsChanged:" + signalStrength
+                        + " for subscription" + mSubscription);
+                mSignalStrength[mSubscription] = signalStrength;
+                updateSignalStrength(mSubscription);
             }
-        }
 
-        @Override
-        public void onDataConnectionStateChanged(int state, int networkType) {
-            mDataState = state;
-            updateDataNetType(networkType);
-            updateDataIcon();
-        }
+            public void onServiceStateChanged(ServiceState state) {
+                Slog.d(TAG, "onServiceStateChanged:" + state + "for subscription :" + mSubscription);
+                mServiceState[mSubscription] = state;
+                updateSignalStrength(mSubscription);
+                updateDataIcon(mSubscription);
+            }
 
-        @Override
-        public void onDataActivity(int direction) {
-            mDataActivity = direction;
-            updateDataIcon();
-        }
-    };
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                Slog.e(TAG, "onCallStateChanged Received on subscription :" + mSubscription);
+                updateCallState(state);
+                // In cdma, if a voice call is made, RSSI should switch to 1x.
+                updateSignalStrength(mSubscription);
+            }
+
+            @Override
+            public void onDataConnectionStateChanged(int state, int networkType) {
+                Slog.d(TAG, "StatusBarPolicy onDataConnectionStateChanged to " + state
+                        + "for nw : " + networkType + "on subscription : " + mSubscription);
+				mDataState[mSubscription] = state;
+                updateDataNetType(networkType);
+                updateDataIcon(mSubscription);
+            }
+
+            @Override
+            public void onDataActivity(int direction) {
+                mDataActivity = direction;
+                updateDataIcon(mSubscription);
+            }
+        };
+        return phoneStateListener;
+    }
 
     private final void updateSimState(Intent intent) {
+    	IccCard.State simState;
         String stateExtra = intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE);
+        int sub = intent.getIntExtra(IccCard.INTENT_KEY_PHONE_ID, 0);
         if (IccCard.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
-            mSimState = IccCard.State.ABSENT;
+        	simState = IccCard.State.ABSENT;
         }
         else if (IccCard.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
-            mSimState = IccCard.State.READY;
+        	simState = IccCard.State.READY;
         }
         else if (IccCard.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
             final String lockedReason = intent.getStringExtra(IccCard.INTENT_KEY_LOCKED_REASON);
             if (IccCard.INTENT_VALUE_LOCKED_ON_PIN.equals(lockedReason)) {
-                mSimState = IccCard.State.PIN_REQUIRED;
+            	simState = IccCard.State.PIN_REQUIRED;
             }
             else if (IccCard.INTENT_VALUE_LOCKED_ON_PUK.equals(lockedReason)) {
-                mSimState = IccCard.State.PUK_REQUIRED;
+            	simState = IccCard.State.PUK_REQUIRED;
             }
             else {
-                mSimState = IccCard.State.NETWORK_LOCKED;
+            	simState = IccCard.State.NETWORK_LOCKED;
             }
         } else {
-            mSimState = IccCard.State.UNKNOWN;
+        	simState = IccCard.State.UNKNOWN;
         }
-        updateDataIcon();
+        mSimState[sub] = simState;
+        updateDataIcon(sub);
     }
 
-    private boolean isCdma() {
-        return (mSignalStrength != null) && !mSignalStrength.isGsm();
+    private boolean isCdma(int subscription) {
+        return (mSignalStrength != null) && !mSignalStrength[subscription].isGsm();
     }
 
-    private boolean isEvdo() {
-        return ( (mServiceState != null)
-                 && ((mServiceState.getRadioTechnology()
+    private boolean isEvdo(int subscription) {
+        return ( (mServiceState[subscription] != null)
+                 && ((mServiceState[subscription].getRadioTechnology()
                         == ServiceState.RADIO_TECHNOLOGY_EVDO_0)
-                     || (mServiceState.getRadioTechnology()
+                     || (mServiceState[subscription].getRadioTechnology()
                         == ServiceState.RADIO_TECHNOLOGY_EVDO_A)
-                     || (mServiceState.getRadioTechnology()
+                     || (mServiceState[subscription].getRadioTechnology()
                         == ServiceState.RADIO_TECHNOLOGY_EVDO_B)));
     }
 
-    private boolean hasService() {
-        if (mServiceState != null) {
-            switch (mServiceState.getState()) {
+    private boolean hasService(int subscription) {
+        if (mServiceState[subscription] != null) {
+            switch (mServiceState[subscription].getState()) {
                 case ServiceState.STATE_OUT_OF_SERVICE:
                 case ServiceState.STATE_POWER_OFF:
                     return false;
@@ -1143,27 +1272,41 @@ public class StatusBarPolicy {
             return false;
         }
     }
-
-    private final void updateSignalStrength() {
+    private boolean isCardDisabled(int phoneid) {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                PhoneFactory.getSetting(Settings.System.SIM_STANDBY, phoneid), 1) == 0;
+    }
+    private final void updateSignalStrength(int subscription) {
         int iconLevel = -1;
         int[] iconList;
-        if (mServiceState == null) return;
-
-        // Display signal strength while in "emergency calls only" mode
-        if (mServiceState == null || (!hasService() && !mServiceState.isEmergencyOnly())) {
-            //Slog.d(TAG, "updateSignalStrength: no service");
-            if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
-                mPhoneSignalIconId = R.drawable.stat_sys_signal_flightmode;
-            } else {
-                mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
+        boolean airplane=Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.AIRPLANE_MODE_ON, 0) == 1;
+        Log.d(TAG, mServiceState[subscription]+"....."+!hasService(subscription)+"...."+subscription+" airplane="+airplane);
+        if(airplane){
+            if(numPhones>1){
+                mService.setIconVisibility(mSignalIcon[0], false);
+                mPhoneSignalIconId[1] = R.drawable.stat_sys_signal_flightmode;
+                mService.setIcon(mSignalIcon[1], mPhoneSignalIconId[1], 0);
+            }else{
+                mPhoneSignalIconId[subscription] = R.drawable.stat_sys_signal_flightmode;
+                mService.setIcon(mSignalIcon[subscription], mPhoneSignalIconId[subscription], 0);
             }
-            mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
+            return;
+        }
+        // Display signal strength while in "emergency calls only" mode
+        if (mServiceState[subscription] == null || (!hasService(subscription) && !mServiceState[subscription].isEmergencyOnly())) {
+            //Slog.d(TAG, "updateSignalStrength: no service");
+            if (airplane) {
+                mPhoneSignalIconId[subscription] = R.drawable.stat_sys_signal_flightmode;
+            } else {
+                mPhoneSignalIconId[subscription] = R.drawable.stat_sys_signal_null;
+            }
+            mService.setIcon(mSignalIcon[subscription], mPhoneSignalIconId[subscription], 0);
             return;
         }
 
-        if (!isCdma()) {
-            int asu = mSignalStrength.getGsmSignalStrength();
+        if (!isCdma(subscription)) {
+            int asu = mSignalStrength[subscription].getGsmSignalStrength();
 
             // ASU ranges from 0 to 31 - TS 27.007 Sec 8.5
             // asu = 0 (-113dB or less) is very weak
@@ -1180,7 +1323,7 @@ public class StatusBarPolicy {
                 iconList = sSignalImages_r[mInetCondition];
             } else {
                 // 2012-01-31 add for bug9243 begin
-				if (is3GSignal()) {
+				if (is3GSignal(subscription)) {
 					iconList = sSignalImages_3g[mInetCondition];
 				} else {
 					iconList = sSignalImages[mInetCondition];
@@ -1194,35 +1337,53 @@ public class StatusBarPolicy {
             // If 3G(EV) and 1x network are available than 3G should be
             // displayed, displayed RSSI should be from the EV side.
             // If a voice call is made then RSSI should switch to 1x.
-            if ((mPhoneState == TelephonyManager.CALL_STATE_IDLE) && isEvdo()
+            if ((mPhoneState == TelephonyManager.CALL_STATE_IDLE) && isEvdo(subscription)
                 && !mAlwaysUseCdmaRssi) {
-                iconLevel = getEvdoLevel();
+                iconLevel = getEvdoLevel(subscription);
                 if (false) {
-                    Slog.d(TAG, "use Evdo level=" + iconLevel + " to replace Cdma Level=" + getCdmaLevel());
+                    Slog.d(TAG, "use Evdo level=" + iconLevel + " to replace Cdma Level=" + getCdmaLevel(subscription));
                 }
             } else {
-                iconLevel = getCdmaLevel();
+                iconLevel = getCdmaLevel(subscription);
             }
         }
-        mPhoneSignalIconId = iconList[iconLevel];
-        mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
+        mPhoneSignalIconId[subscription] = iconList[iconLevel];
+        mService.setIconVisibility(mSignalIcon[subscription], true);
+        mService.setIcon(mSignalIcon[subscription], mPhoneSignalIconId[subscription], 0);
     }
     // 2012-01-31 add for bug9243 begin
-	private boolean is3GSignal() {
-		String networkType = SystemProperties.get(
-				TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE, "");
-		if (networkType.equals("UMTS") || networkType.equals("HSDPA")
-				|| networkType.equals("HSUPA") || networkType.equals("HSPA")
-				|| networkType.equals("EVDO_0") || networkType.equals("EVDO_A")) {
-			return true;
+	private boolean is3GSignal(int subscription) {
+		// String networkType = SystemProperties.get(
+		// TelephonyProperties.PROPERTY_DATA_NETWORK_TYPE, "");
+		// if (networkType.equals("UMTS") || networkType.equals("HSDPA")
+		// || networkType.equals("HSUPA") || networkType.equals("HSPA")
+		// || networkType.equals("EVDO_0") || networkType.equals("EVDO_A")) {
+		// return true;
+		// }
+		if (mServiceState[subscription] != null) {
+
+			int networkType = mServiceState[subscription].getRadioTechnology();
+			Log.d(TAG, "subscription: " + subscription + " networkId: "
+					+ networkType);
+			if (networkType == ServiceState.RADIO_TECHNOLOGY_UMTS
+					|| networkType == ServiceState.RADIO_TECHNOLOGY_HSDPA
+					|| networkType == ServiceState.RADIO_TECHNOLOGY_HSUPA
+					|| networkType == ServiceState.RADIO_TECHNOLOGY_HSPA
+					|| networkType == ServiceState.RADIO_TECHNOLOGY_EVDO_0
+					|| networkType == ServiceState.RADIO_TECHNOLOGY_EVDO_A) {
+
+				return true;
+
+			}
+
 		}
 		return false;
 	}
     // 2012-01-31 add for bug9243 end
 
-    private int getCdmaLevel() {
-        final int cdmaDbm = mSignalStrength.getCdmaDbm();
-        final int cdmaEcio = mSignalStrength.getCdmaEcio();
+    private int getCdmaLevel(int subscription) {
+        final int cdmaDbm = mSignalStrength[subscription].getCdmaDbm();
+        final int cdmaEcio = mSignalStrength[subscription].getCdmaEcio();
         int levelDbm = 0;
         int levelEcio = 0;
 
@@ -1242,9 +1403,9 @@ public class StatusBarPolicy {
         return (levelDbm < levelEcio) ? levelDbm : levelEcio;
     }
 
-    private int getEvdoLevel() {
-        int evdoDbm = mSignalStrength.getEvdoDbm();
-        int evdoSnr = mSignalStrength.getEvdoSnr();
+    private int getEvdoLevel(int subscription) {
+        int evdoDbm = mSignalStrength[subscription].getEvdoDbm();
+        int evdoSnr = mSignalStrength[subscription].getEvdoSnr();
         int levelEvdoDbm = 0;
         int levelEvdoSnr = 0;
 
@@ -1298,14 +1459,26 @@ public class StatusBarPolicy {
         }
     }
 
-    private final void updateDataIcon() {
+    private final void updateDataIcon(int subscription) {
+    	
         int iconId;
         boolean visible = true;
 
-        if (!isCdma()) {
+        if (TelephonyManager.getPhoneCount() > 1) {
+            int dds = TelephonyManager.getDefaultDataPhoneId(mContext);
+            if (dds < 0||(mSimState[0]==IccCard.State.ABSENT && mSimState[1]==IccCard.State.ABSENT)) {
+                iconId = R.drawable.stat_sys_no_sim;
+                mService.setIconVisibility("data_connection", visible);
+                mService.setIcon("data_connection", iconId, 0);
+                return;
+            }
+        } else {
+            subscription = 0;
+        }
+        if (!isCdma(subscription)) {
             // GSM case, we have to check also the sim state
-            if (mSimState == IccCard.State.READY || mSimState == IccCard.State.UNKNOWN) {
-                if (hasService() && mDataState == TelephonyManager.DATA_CONNECTED) {
+            if (mSimState[subscription] == IccCard.State.READY || mSimState[subscription]  == IccCard.State.UNKNOWN) {
+                if (hasService(subscription) && mDataState[subscription] == TelephonyManager.DATA_CONNECTED) {
                     switch (mDataActivity) {
                         case TelephonyManager.DATA_ACTIVITY_IN:
                             iconId = mDataIconList[1];
@@ -1322,7 +1495,16 @@ public class StatusBarPolicy {
                     }
                     mService.setIcon("data_connection", iconId, 0);
                 } else {
-                    visible = false;
+                    if (TelephonyManager.getPhoneCount() > 1) {
+                        if (mDataState[0] != TelephonyManager.DATA_CONNECTED
+                                && mDataState[1] != TelephonyManager.DATA_CONNECTED) {
+                            visible = false;
+                        }
+                    } else {
+                        if (mDataState[0] != TelephonyManager.DATA_CONNECTED) {
+                            visible = false;
+                        }
+                    }
                 }
             } else {
                 iconId = R.drawable.stat_sys_no_sim;
@@ -1330,7 +1512,7 @@ public class StatusBarPolicy {
             }
         } else {
             // CDMA case, mDataActivity can be also DATA_ACTIVITY_DORMANT
-            if (hasService() && mDataState == TelephonyManager.DATA_CONNECTED) {
+            if (hasService(subscription) && mDataState[subscription] == TelephonyManager.DATA_CONNECTED) {
                 switch (mDataActivity) {
                     case TelephonyManager.DATA_ACTIVITY_IN:
                         iconId = mDataIconList[1];
@@ -1348,7 +1530,16 @@ public class StatusBarPolicy {
                 }
                 mService.setIcon("data_connection", iconId, 0);
             } else {
-                visible = false;
+                if (TelephonyManager.getPhoneCount() > 1) {
+                    if (mDataState[0] != TelephonyManager.DATA_CONNECTED
+                            && mDataState[1] != TelephonyManager.DATA_CONNECTED) {
+                        visible = false;
+                    }
+                } else {
+                    if (mDataState[0] != TelephonyManager.DATA_CONNECTED) {
+                        visible = false;
+                    }
+                }
             }
         }
 
@@ -1473,21 +1664,36 @@ public class StatusBarPolicy {
     private final void updateWifi(Intent intent) {
         final String action = intent.getAction();
         if (action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
-
             final boolean enabled = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
                     WifiManager.WIFI_STATE_UNKNOWN) == WifiManager.WIFI_STATE_ENABLED;
 
             if (!enabled) {
                 // If disabled, hide the icon. (We show icon when connected.)
                 mService.setIconVisibility("wifi", false);
+                isConnected = false;
+                //add by spreadst_fw
+                if (mIsWifiConnected) {
+                    //showWifiDisconnDialog();
+                }
             }
+            //add start by spreadst_fw for show the wifi icon when turn on wifi
+            else {
+                int iconId = sWifiTemporarilyNotConnectedImage;
+                mService.setIcon("wifi", iconId, 0);
+                mService.setIconVisibility("wifi", true);
+            }
+            //add end by spreadst_fw
+
 
         } else if (action.equals(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)) {
             final boolean enabled = intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED,
                                                            false);
-            if (!enabled) {
-                mService.setIconVisibility("wifi", false);
-            }
+            if (!enabled) isConnected = false;
+            //delete start by spreadst_fw for show the wifi icon when turn on wifi
+            //if (!enabled) {
+            //    mService.setIconVisibility("wifi", false);
+            //}
+            //delete end by spreadst_fw
         } else if (action.equals(WifiManager.RSSI_CHANGED_ACTION)) {
             int iconId;
             final int newRssi = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, -200);
@@ -1502,7 +1708,127 @@ public class StatusBarPolicy {
                 }
                 mService.setIcon("wifi", iconId, 0);
             }
+
+        // add by spreadst_fw for new feature start
+            if (newRssi <= -85 && isConnected ) {
+                String mLastSsid = intent.getStringExtra("wifi_last_ssid");
+                if (Settings.Secure.getInt(mContext.getContentResolver(),Settings.Secure.WIFI_AUTO_CONNECT,0) == 0) {
+                    showDialog(mLastSsid);
+                } else {
+                    setCurrentApLowest(mLastSsid);
+                    autoConnectOtherTrustAp(mLastSsid);
+                }
+            } else if (weakSignalDialog != null && newRssi > -85) {
+                weakSignalDialog.dismiss();
+            }
+        } else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
+            DetailedState state = ((NetworkInfo) intent.getParcelableExtra(
+                    WifiManager.EXTRA_NETWORK_INFO)).getDetailedState();
+            if (DetailedState.CONNECTED == state) {
+                isConnected = true;
+            } else {
+                isConnected = false;
+            }
         }
+        // add by spreadst_fw  for new feature end
+    }
+
+    private void showDialog(String mLastSsid) {
+        /*if (alwaysAutoConnect) {
+            setCurrentApLowest(mLastSsid);
+            autoConnectOtherTrustAp(mLastSsid);
+        } else {*/
+            if(getListData() <= 0) return;
+            final String []otherTrustSsids = filterNoRssiAps(mSSIDs,mLastSsid);
+            if(otherTrustSsids == null) return;
+            View warningView = View.inflate(mContext, R.xml.weak_signal_warning, null);
+
+            //final CheckBox autoConnect = (CheckBox)warningView.findViewById(R.id.auto_connect);
+            //autoConnect.setOnClickListener(null);
+
+            final ListView mList = (ListView)warningView.findViewById(R.id.trusted_list);
+            mList.setOnItemClickListener(new OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position,
+                        long id) {
+                    mIndex = position;
+                }
+            });
+
+            ArrayAdapter mArrayAdapter = new ArrayAdapter(mContext,
+                    android.R.layout.simple_list_item_single_choice,
+                    android.R.id.text1, otherTrustSsids);
+            mList.setAdapter(mArrayAdapter);
+            mList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            mList.setItemChecked(mIndex, true);
+
+            AlertDialog.Builder weakSignalDialogBuilder = new AlertDialog.Builder(mContext);
+            weakSignalDialogBuilder.setCancelable(true);
+            weakSignalDialogBuilder.setView(warningView);
+            weakSignalDialogBuilder.setTitle(R.string.weak_signal_title);
+            weakSignalDialogBuilder.setIcon(android.R.drawable.ic_dialog_alert);
+            weakSignalDialogBuilder.setPositiveButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        enableSelectedNework(otherTrustSsids[mIndex]);
+                        //if(autoConnect.isChecked())
+                        //    alwaysAutoConnect = true;
+                    }
+            });
+            weakSignalDialogBuilder.setNegativeButton(android.R.string.cancel, null);
+            weakSignalDialog = weakSignalDialogBuilder.create();
+            weakSignalDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+            weakSignalDialog.show();
+        //}
+    }
+    private void showWifiDisconnDialog() {
+        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+        b.setCancelable(true);
+        b.setTitle(R.string.network_disconnect_title);
+        b.setMessage(R.string.network_disconnect_message);
+        b.setPositiveButton(R.string.mobile_data_connect_enable,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    mConnectivityManager.setMobileDataEnabled(true);
+                }
+        });
+        b.setNegativeButton(R.string.mobile_data_connect_disable,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    mContext.sendBroadcast(new Intent("android.download.spstoptask"));
+                }
+        });
+        AlertDialog d = b.create();
+        d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        d.show();
+    }
+    private boolean beforeShowDisconnDialog(String mLastSsid) {
+        boolean isDownload = false;
+        getListData();
+        final String []otherTrustSsids = filterNoRssiAps(mSSIDs,mLastSsid);
+        if(otherTrustSsids != null) return false;
+
+        Cursor cursor = mContext.getContentResolver().query(Downloads.Impl.CONTENT_URI,null,
+                Downloads.COLUMN_STATUS + "=?",new String[]{""+Downloads.Impl.STATUS_RUNNING},null);
+        if(cursor != null) {
+            if(cursor.moveToNext()) {
+                isDownload = true;
+            }
+            cursor.close();
+        }
+        if (isDownload) return true;
+
+        isDownload = false;
+        cursor = mContext.getContentResolver().query(Downloads.Impl.CONTENT_URI,null,
+                Downloads.COLUMN_STATUS + "=?",new String[]{""+Downloads.Impl.STATUS_WAITING_TO_RETRY},null);
+        if(cursor != null) {
+            if(cursor.moveToNext()) {
+                isDownload = true;
+            }
+            cursor.close();
+        }
+        if (isDownload) return true;
+        return false;
     }
 
     private final void updateWiMAX(Intent intent) {
@@ -1581,13 +1907,13 @@ public class StatusBarPolicy {
         }
     }
 
-    private final void updateCdmaRoamingIcon(ServiceState state) {
-        if (!hasService()) {
+    private final void updateCdmaRoamingIcon(ServiceState state,int subscription) {
+        if (!hasService(subscription)) {
             mService.setIconVisibility("cdma_eri", false);
             return;
         }
 
-        if (!isCdma()) {
+        if (!isCdma(subscription)) {
             mService.setIconVisibility("cdma_eri", false);
             return;
         }
@@ -1627,7 +1953,7 @@ public class StatusBarPolicy {
                 break;
 
         }
-        mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
+        mService.setIcon(mSignalIcon[subscription], mPhoneSignalIconId[subscription], 0);
     }
 
     private class StatusBarHandler extends Handler {
@@ -1641,10 +1967,169 @@ public class StatusBarPolicy {
                 break;
             //CR253162 Modify Start
             case EVENT_AIRPLANE_MODE:
-                updateSignalStrength();
+				int numPhones = TelephonyManager.getPhoneCount();
+				for (int i = 0; i < numPhones; i++) {
+					updateSignalStrength(i);
+				}
                 break;
             //CR253162 Modify End
             }
         }
     }
+
+// add by spreadst_fw for new feature start
+
+    // add
+    private void addPriority(String ssid, int priority) {
+            if (null == ssid || ssid.length() == 0) {
+                    return;
+            }
+            ContentValues values = new ContentValues();
+            values.put("ssid", ssid);
+            values.put("priority", new Integer(priority));
+            mContext.getContentResolver().insert(TRUSTED_LIST_URI, values);
+            mWifiManager.setTrustListPriority(ssid, priority);
+    }
+
+    // delete
+    private void deletePriority(String ssid) {
+            if (null == ssid || ssid.length() == 0) {
+                    return;
+            }
+            mContext.getContentResolver().delete(TRUSTED_LIST_URI, "ssid=?",
+                            new String[] { ssid });
+    }
+
+    // set current ap lowest priority
+    private void setCurrentApLowest(String ssid) {
+        int num = getListData();
+        deletePriority(ssid);
+        addPriority(ssid , num);
+        updateTrustedList();
+    }
+
+    // set
+    private int setPriority(String ssid, int priority) {
+            if (null == ssid || ssid.length() == 0) {
+                    return -1;
+            }
+            ContentValues values = new ContentValues();
+            values.put("priority", new Integer(priority));
+            return mContext.getContentResolver().update(TRUSTED_LIST_URI, values, "ssid=?",
+                            new String[] { ssid });
+    }
+
+    // init
+    private int getListData() {
+        Cursor cursor = mContext.getContentResolver().query(TRUSTED_LIST_URI, null,
+                        null, null, "priority ASC");
+        int num = 0;
+        try {
+                num = cursor.getCount();
+                int i = 0;
+                int ssidColumnIndex = cursor.getColumnIndex("ssid");
+                mSSIDs = new String[num];
+                while (cursor.moveToNext()) {
+                        mSSIDs[i] = cursor.getString(ssidColumnIndex);
+                        i++;
+                }
+        } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+        }
+        return num;
+    }
+
+    private void updateTrustedList() {
+        // init list data
+        int mListSize = getListData();
+        // add default trusted AP
+        if (mListSize == 0) {
+            mSSIDs = new String[2];
+            mSSIDs[0] = "CMCC";
+            mSSIDs[1] = "CMCC-EDU";
+            addPriority(mSSIDs[0], 0);
+            addPriority(mSSIDs[1], 1);
+            mListSize = 2;
+        }
+        // after delete action,we need update priority for the list
+        for (int i = 0; i < mListSize; i++) {
+            setPriority(mSSIDs[i], i);
+        }
+        // pass the trusted list
+        mWifiManager.setTrustListPriority("whole", -1);
+        for (int i = 0; i < mListSize; i++) {
+             mWifiManager.setTrustListPriority(mSSIDs[i], i);
+        }
+        mWifiManager.setTrustListPriority("whole", -2);
+    }
+
+    private void autoConnectOtherTrustAp(String ssid) {
+        if(getListData() <= 0) return;
+        String []otherTrustSsids = filterNoRssiAps(mSSIDs,ssid);
+        if(otherTrustSsids == null) return;
+        List<WifiConfiguration> configs = mWifiManager.getConfiguredNetworks();
+        if (configs != null) {
+            for (WifiConfiguration config : configs) {
+                String mSsid = (config.SSID == null ? "" : removeDoubleQuotes(config.SSID));
+                if (mSsid.equals(otherTrustSsids[0])) {
+                    mWifiManager.enableNetwork(config.networkId, false);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void enableSelectedNework(String ssid) {
+        List<WifiConfiguration> configs = mWifiManager.getConfiguredNetworks();
+        if (configs != null) {
+            for (WifiConfiguration config : configs) {
+                String mSsid = (config.SSID == null ? "" : removeDoubleQuotes(config.SSID));
+                if (mSsid.equals(ssid)) {
+                    mWifiManager.enableNetwork(config.networkId, true);
+                    mWifiManager.reconnectAP();
+                    break;
+                }
+            }
+        }
+    }
+
+    static String removeDoubleQuotes(String string) {
+        int length = string.length();
+        if ((length > 1) && (string.charAt(0) == '"')
+                && (string.charAt(length - 1) == '"')) {
+            return string.substring(1, length - 1);
+        }
+        return string;
+    }
+
+    private String[] filterNoRssiAps(String[] ssids, String delSsid) {
+        String mDelSsid = (delSsid == null ? null : removeDoubleQuotes(delSsid));
+        List<ScanResult> results = mWifiManager.getScanResults();
+        if (results == null || results.size() == 0) return null;
+        List<String> listSsids = new ArrayList<String> ();
+        int length = ssids.length;
+        for (int i = 0; i < length; i++) {
+            for (ScanResult result : results) {
+                if (ssids[i].equals(result.SSID)) {
+                    if (!ssids[i].equals(mDelSsid)) {
+                        listSsids.add(ssids[i]);
+                        break;
+                    }
+                }
+            }
+        }
+        if (listSsids.size() <= 0) return null;
+        String[] filterSsids = new String[listSsids.size()];
+        int num = 0;
+        for (String listSsid : listSsids) {
+            filterSsids[num++] = listSsid;
+        }
+
+        return filterSsids;
+    }
+
+// add by spreadst_fw for new feature end
+
 }
