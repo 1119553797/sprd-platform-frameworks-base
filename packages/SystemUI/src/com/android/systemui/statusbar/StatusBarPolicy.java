@@ -664,17 +664,6 @@ public class StatusBarPolicy {
                      action.equals(WimaxManagerConstants.SIGNAL_LEVEL_CHANGED_ACTION) ||
                      action.equals(WimaxManagerConstants.WIMAX_STATE_CHANGED_ACTION)) {
                 updateWiMAX(intent);
-            }
-            else if (action.equals("interruptforfaraway")) {
-                String mLastSsid = intent.getStringExtra("wifi_last_ssid");
-                if (Settings.Secure.getInt(mContext.getContentResolver(),Settings.Secure.WIFI_AUTO_CONNECT,0) == 0) {
-                    showDialog(mLastSsid);
-                } else {
-                    autoConnectOtherTrustAp(mLastSsid);
-                }
-                if (beforeShowDisconnDialog(mLastSsid)) {
-                    showWifiDisconnDialog();
-                }
             }else if(Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(action)){
                 for(int i = 0;i < numPhones;i++){
                     updateSignalStrength(i);
@@ -816,7 +805,6 @@ public class StatusBarPolicy {
         filter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
-        filter.addAction("interruptforfaraway");
         filter.addAction(LocationManager.GPS_ENABLED_CHANGE_ACTION);
         filter.addAction(LocationManager.GPS_FIX_CHANGE_ACTION);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
@@ -1710,17 +1698,6 @@ public class StatusBarPolicy {
             }
 
         // add by spreadst_fw for new feature start
-            if (newRssi <= -85 && isConnected ) {
-                String mLastSsid = intent.getStringExtra("wifi_last_ssid");
-                if (Settings.Secure.getInt(mContext.getContentResolver(),Settings.Secure.WIFI_AUTO_CONNECT,0) == 0) {
-                    showDialog(mLastSsid);
-                } else {
-                    setCurrentApLowest(mLastSsid);
-                    autoConnectOtherTrustAp(mLastSsid);
-                }
-            } else if (weakSignalDialog != null && newRssi > -85) {
-                weakSignalDialog.dismiss();
-            }
         } else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
             DetailedState state = ((NetworkInfo) intent.getParcelableExtra(
                     WifiManager.EXTRA_NETWORK_INFO)).getDetailedState();
@@ -1731,104 +1708,6 @@ public class StatusBarPolicy {
             }
         }
         // add by spreadst_fw  for new feature end
-    }
-
-    private void showDialog(String mLastSsid) {
-        /*if (alwaysAutoConnect) {
-            setCurrentApLowest(mLastSsid);
-            autoConnectOtherTrustAp(mLastSsid);
-        } else {*/
-            if(getListData() <= 0) return;
-            final String []otherTrustSsids = filterNoRssiAps(mSSIDs,mLastSsid);
-            if(otherTrustSsids == null) return;
-            View warningView = View.inflate(mContext, R.xml.weak_signal_warning, null);
-
-            //final CheckBox autoConnect = (CheckBox)warningView.findViewById(R.id.auto_connect);
-            //autoConnect.setOnClickListener(null);
-
-            final ListView mList = (ListView)warningView.findViewById(R.id.trusted_list);
-            mList.setOnItemClickListener(new OnItemClickListener(){
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position,
-                        long id) {
-                    mIndex = position;
-                }
-            });
-
-            ArrayAdapter mArrayAdapter = new ArrayAdapter(mContext,
-                    android.R.layout.simple_list_item_single_choice,
-                    android.R.id.text1, otherTrustSsids);
-            mList.setAdapter(mArrayAdapter);
-            mList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            mList.setItemChecked(mIndex, true);
-
-            AlertDialog.Builder weakSignalDialogBuilder = new AlertDialog.Builder(mContext);
-            weakSignalDialogBuilder.setCancelable(true);
-            weakSignalDialogBuilder.setView(warningView);
-            weakSignalDialogBuilder.setTitle(R.string.weak_signal_title);
-            weakSignalDialogBuilder.setIcon(android.R.drawable.ic_dialog_alert);
-            weakSignalDialogBuilder.setPositiveButton(android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        enableSelectedNework(otherTrustSsids[mIndex]);
-                        //if(autoConnect.isChecked())
-                        //    alwaysAutoConnect = true;
-                    }
-            });
-            weakSignalDialogBuilder.setNegativeButton(android.R.string.cancel, null);
-            weakSignalDialog = weakSignalDialogBuilder.create();
-            weakSignalDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-            weakSignalDialog.show();
-        //}
-    }
-    private void showWifiDisconnDialog() {
-        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
-        b.setCancelable(true);
-        b.setTitle(R.string.network_disconnect_title);
-        b.setMessage(R.string.network_disconnect_message);
-        b.setPositiveButton(R.string.mobile_data_connect_enable,
-            new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    mConnectivityManager.setMobileDataEnabled(true);
-                }
-        });
-        b.setNegativeButton(R.string.mobile_data_connect_disable,
-            new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    mContext.sendBroadcast(new Intent("android.download.spstoptask"));
-                }
-        });
-        AlertDialog d = b.create();
-        d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        d.show();
-    }
-    private boolean beforeShowDisconnDialog(String mLastSsid) {
-        boolean isDownload = false;
-        getListData();
-        final String []otherTrustSsids = filterNoRssiAps(mSSIDs,mLastSsid);
-        if(otherTrustSsids != null) return false;
-
-        Cursor cursor = mContext.getContentResolver().query(Downloads.Impl.CONTENT_URI,null,
-                Downloads.COLUMN_STATUS + "=?",new String[]{""+Downloads.Impl.STATUS_RUNNING},null);
-        if(cursor != null) {
-            if(cursor.moveToNext()) {
-                isDownload = true;
-            }
-            cursor.close();
-        }
-        if (isDownload) return true;
-
-        isDownload = false;
-        cursor = mContext.getContentResolver().query(Downloads.Impl.CONTENT_URI,null,
-                Downloads.COLUMN_STATUS + "=?",new String[]{""+Downloads.Impl.STATUS_WAITING_TO_RETRY},null);
-        if(cursor != null) {
-            if(cursor.moveToNext()) {
-                isDownload = true;
-            }
-            cursor.close();
-        }
-        if (isDownload) return true;
-        return false;
     }
 
     private final void updateWiMAX(Intent intent) {
@@ -1976,160 +1855,4 @@ public class StatusBarPolicy {
             }
         }
     }
-
-// add by spreadst_fw for new feature start
-
-    // add
-    private void addPriority(String ssid, int priority) {
-            if (null == ssid || ssid.length() == 0) {
-                    return;
-            }
-            ContentValues values = new ContentValues();
-            values.put("ssid", ssid);
-            values.put("priority", new Integer(priority));
-            mContext.getContentResolver().insert(TRUSTED_LIST_URI, values);
-            mWifiManager.setTrustListPriority(ssid, priority);
-    }
-
-    // delete
-    private void deletePriority(String ssid) {
-            if (null == ssid || ssid.length() == 0) {
-                    return;
-            }
-            mContext.getContentResolver().delete(TRUSTED_LIST_URI, "ssid=?",
-                            new String[] { ssid });
-    }
-
-    // set current ap lowest priority
-    private void setCurrentApLowest(String ssid) {
-        int num = getListData();
-        deletePriority(ssid);
-        addPriority(ssid , num);
-        updateTrustedList();
-    }
-
-    // set
-    private int setPriority(String ssid, int priority) {
-            if (null == ssid || ssid.length() == 0) {
-                    return -1;
-            }
-            ContentValues values = new ContentValues();
-            values.put("priority", new Integer(priority));
-            return mContext.getContentResolver().update(TRUSTED_LIST_URI, values, "ssid=?",
-                            new String[] { ssid });
-    }
-
-    // init
-    private int getListData() {
-        Cursor cursor = mContext.getContentResolver().query(TRUSTED_LIST_URI, null,
-                        null, null, "priority ASC");
-        int num = 0;
-        try {
-                num = cursor.getCount();
-                int i = 0;
-                int ssidColumnIndex = cursor.getColumnIndex("ssid");
-                mSSIDs = new String[num];
-                while (cursor.moveToNext()) {
-                        mSSIDs[i] = cursor.getString(ssidColumnIndex);
-                        i++;
-                }
-        } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-        }
-        return num;
-    }
-
-    private void updateTrustedList() {
-        // init list data
-        int mListSize = getListData();
-        // add default trusted AP
-        if (mListSize == 0) {
-            mSSIDs = new String[2];
-            mSSIDs[0] = "CMCC";
-            mSSIDs[1] = "CMCC-EDU";
-            addPriority(mSSIDs[0], 0);
-            addPriority(mSSIDs[1], 1);
-            mListSize = 2;
-        }
-        // after delete action,we need update priority for the list
-        for (int i = 0; i < mListSize; i++) {
-            setPriority(mSSIDs[i], i);
-        }
-        // pass the trusted list
-        mWifiManager.setTrustListPriority("whole", -1);
-        for (int i = 0; i < mListSize; i++) {
-             mWifiManager.setTrustListPriority(mSSIDs[i], i);
-        }
-        mWifiManager.setTrustListPriority("whole", -2);
-    }
-
-    private void autoConnectOtherTrustAp(String ssid) {
-        if(getListData() <= 0) return;
-        String []otherTrustSsids = filterNoRssiAps(mSSIDs,ssid);
-        if(otherTrustSsids == null) return;
-        List<WifiConfiguration> configs = mWifiManager.getConfiguredNetworks();
-        if (configs != null) {
-            for (WifiConfiguration config : configs) {
-                String mSsid = (config.SSID == null ? "" : removeDoubleQuotes(config.SSID));
-                if (mSsid.equals(otherTrustSsids[0])) {
-                    mWifiManager.enableNetwork(config.networkId, false);
-                    break;
-                }
-            }
-        }
-    }
-
-    private void enableSelectedNework(String ssid) {
-        List<WifiConfiguration> configs = mWifiManager.getConfiguredNetworks();
-        if (configs != null) {
-            for (WifiConfiguration config : configs) {
-                String mSsid = (config.SSID == null ? "" : removeDoubleQuotes(config.SSID));
-                if (mSsid.equals(ssid)) {
-                    mWifiManager.enableNetwork(config.networkId, true);
-                    mWifiManager.reconnectAP();
-                    break;
-                }
-            }
-        }
-    }
-
-    static String removeDoubleQuotes(String string) {
-        int length = string.length();
-        if ((length > 1) && (string.charAt(0) == '"')
-                && (string.charAt(length - 1) == '"')) {
-            return string.substring(1, length - 1);
-        }
-        return string;
-    }
-
-    private String[] filterNoRssiAps(String[] ssids, String delSsid) {
-        String mDelSsid = (delSsid == null ? null : removeDoubleQuotes(delSsid));
-        List<ScanResult> results = mWifiManager.getScanResults();
-        if (results == null || results.size() == 0) return null;
-        List<String> listSsids = new ArrayList<String> ();
-        int length = ssids.length;
-        for (int i = 0; i < length; i++) {
-            for (ScanResult result : results) {
-                if (ssids[i].equals(result.SSID)) {
-                    if (!ssids[i].equals(mDelSsid)) {
-                        listSsids.add(ssids[i]);
-                        break;
-                    }
-                }
-            }
-        }
-        if (listSsids.size() <= 0) return null;
-        String[] filterSsids = new String[listSsids.size()];
-        int num = 0;
-        for (String listSsid : listSsids) {
-            filterSsids[num++] = listSsid;
-        }
-
-        return filterSsids;
-    }
-
-// add by spreadst_fw for new feature end
-
 }
