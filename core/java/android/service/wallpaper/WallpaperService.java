@@ -138,12 +138,14 @@ public abstract class WallpaperService extends Service {
         boolean mSurfaceCreated;
         boolean mIsCreating;
         boolean mDrawingAllowed;
+
         int mWidth;
         int mHeight;
         int mFormat;
         int mType;
-        int mCurWidth;
-        int mCurHeight;
+
+        protected int mCurWidth;
+        protected int mCurHeight;
         int mWindowFlags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         int mCurWindowFlags = mWindowFlags;
         final Rect mVisibleInsets = new Rect();

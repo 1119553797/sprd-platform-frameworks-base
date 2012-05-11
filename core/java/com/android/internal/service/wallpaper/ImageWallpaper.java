@@ -138,13 +138,14 @@ public class ImageWallpaper extends WallpaperService {
         
         void drawFrame() {
             SurfaceHolder sh = getSurfaceHolder();
-            Canvas c = sh.lockCanvas();
+            Rect dirty = new Rect(0,0,super.mCurWidth,super.mCurHeight);
+            Canvas c = sh.lockCanvas(dirty);;
             if (c != null) {
-                final Rect frame = sh.getSurfaceFrame();
+                //final Rect frame = sh.getSurfaceFrame();
                 synchronized (mLock) {
                     final Drawable background = mBackground;
-                    final int dw = frame.width();
-                    final int dh = frame.height();
+                    final int dw = super.mCurWidth;
+                    final int dh = super.mCurHeight;
                     final int bw = background != null ? background.getIntrinsicWidth() : 0;
                     final int bh = background != null ? background.getIntrinsicHeight() : 0;
                     final int availw = dw-bw;

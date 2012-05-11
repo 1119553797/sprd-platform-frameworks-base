@@ -921,4 +921,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
     {
         mOnSeekCompleteListener = l;
     }
+
+    //added by MMz01
+    public boolean isMediaplayerNull(){
+        return mMediaPlayer==null;
+    }
 }
