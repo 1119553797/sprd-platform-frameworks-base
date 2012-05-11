@@ -926,4 +926,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
     public boolean isMediaplayerNull(){
         return mMediaPlayer==null;
     }
+
+    //added by MMz01
+    public boolean isNotStopState(){
+        return mCurrentState != STATE_IDLE;
+    }
 }

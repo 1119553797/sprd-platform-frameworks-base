@@ -96,7 +96,7 @@ public class MediaController extends FrameLayout {
     private ImageButton         mPrevButton;
     private ImageButton         mStopButton;
     private int                 startLiveTime = -1;
-	
+    private boolean isStopped = false;
 
     public MediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -446,7 +446,8 @@ public class MediaController extends FrameLayout {
         if (mPlayer == null || mDragging) {
             return 0;
         }
-        if(mPause.isMediaplayerNull()){
+        if(mPause.isNotStopState()) isStopped=false;
+        if(mPause.isMediaplayerNull() && !isStopped){
             hide();
             return 0;
         }
@@ -581,6 +582,7 @@ public class MediaController extends FrameLayout {
     private void doStop() {
         
        mPlayer.stop();
+       isStopped =true;
        resetProgress();    
        Log.i("MediaController", "doStop");
        updatePausePlay();
@@ -620,7 +622,8 @@ public class MediaController extends FrameLayout {
                 // the progress bar's position.
                 return;
             }
-            if(mPause.isMediaplayerNull()){
+            if(mPause.isNotStopState()) isStopped=false;
+            if(mPause.isMediaplayerNull() && !isStopped){
                 hide();
                 return;
             }
@@ -739,5 +742,6 @@ public class MediaController extends FrameLayout {
     public interface SetCanPause{
         public void setCanPause(boolean canPause);
         boolean isMediaplayerNull();
+        boolean isNotStopState();
     }
 }
