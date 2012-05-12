@@ -368,6 +368,12 @@ void AudioTrack::stop()
     }
 
     if (android_atomic_and(~1, &mActive) == 1) {
+        if (t != 0) {
+            t->requestExit();
+            usleep(2000); // 2ms for thread exit, just enough.
+        } else {
+            setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_NORMAL);
+        }
         mCblk->cv.signal();
         mAudioTrack->stop();
         // Cancel loops (If we are in the middle of a loop, playback
@@ -380,11 +386,6 @@ void AudioTrack::stop()
         // will not stop before end of buffer is reached.
         if (mSharedBuffer != 0) {
             flush();
-        }
-        if (t != 0) {
-            t->requestExit();
-        } else {
-            setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_NORMAL);
         }
     }
 
