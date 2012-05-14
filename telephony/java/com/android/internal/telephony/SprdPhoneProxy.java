@@ -72,7 +72,12 @@ public class SprdPhoneProxy extends PhoneProxy {
 			mActivePhone.unregisterForNewRingingVideoCall(h);
 		}
 	}
-
+    public void registerForDataGprsAttached(Handler h, int what, Object obj){
+    	mActivePhone.registerForDataGprsAttached(h,what,obj);
+    }
+    public void unregisterForDataGprsAttached(Handler h){
+    	mActivePhone.unregisterForDataGprsAttached(h);
+    }
 	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj) {
 		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.registerForIncomingRingVideoCall(h, what, obj);

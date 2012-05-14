@@ -812,7 +812,7 @@ public final class SprdRIL extends RIL {
 				 case RIL_REQUEST_MBBMS_GSM_AUTHEN: ret = responseString(p); break;
 				 case RIL_REQUEST_MBBMS_USIM_AUTHEN: ret = responseString(p); break;
 				 case RIL_REQUEST_MBBMS_SIM_TYPE: ret = responseString(p); break;
-				 case RIL_REQUEST_GPRS_ATTACH: ret = responseVoid(p); break;
+				 case RIL_REQUEST_GPRS_ATTACH: ret = responseGprsAttached(p); break;
 				 case RIL_REQUEST_GPRS_DETACH: ret = responseVoid(p); break;
 				 case RIL_REQUEST_GET_REMAIN_TIMES: ret =  responseInts(p); break;
 				 case RIL_REQUEST_GET_SIM_CAPACITY: ret =  responseStrings(p); break;

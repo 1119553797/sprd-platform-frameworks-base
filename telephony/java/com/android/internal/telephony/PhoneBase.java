@@ -398,17 +398,21 @@ public abstract class PhoneBase extends Handler implements Phone {
     public void unregisterForInCallVoicePrivacyOn(Handler h){
         mCM.unregisterForInCallVoicePrivacyOn(h);
     }
-
     // Inherited documentation suffices.
     public void registerForInCallVoicePrivacyOff(Handler h, int what, Object obj){
         mCM.registerForInCallVoicePrivacyOff(h,what,obj);
     }
-
     // Inherited documentation suffices.
     public void unregisterForInCallVoicePrivacyOff(Handler h){
         mCM.unregisterForInCallVoicePrivacyOff(h);
     }
 
+    public void registerForDataGprsAttached(Handler h, int what, Object obj){
+        mCM.registerForDataGprsAttached(h,what,obj);
+    }
+    public void unregisterForDataGprsAttached(Handler h){
+        mCM.unregisterForDataGprsAttached(h);
+    }
     // Inherited documentation suffices.
     public void registerForIncomingRing(
             Handler h, int what, Object obj) {

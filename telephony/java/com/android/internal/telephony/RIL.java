@@ -2807,7 +2807,10 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     responseVoid(Parcel p) {
         return null;
     }
-
+    protected Object responseGprsAttached(Parcel p){
+    	mGprsAttachedOnRegistrants.notifyRegistrants();
+    	return null;
+    }
     protected Object
     responseCallForward(Parcel p) {
         int numInfos;

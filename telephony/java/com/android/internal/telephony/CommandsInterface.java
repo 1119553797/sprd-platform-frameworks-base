@@ -247,7 +247,8 @@ public interface CommandsInterface extends SprdCommandsInterface{
     void unregisterForInCallVoicePrivacyOn(Handler h);
     void registerForInCallVoicePrivacyOff(Handler h, int what, Object obj);
     void unregisterForInCallVoicePrivacyOff(Handler h);
-
+    void registerForDataGprsAttached(Handler h, int what, Object obj);
+    void unregisterForDataGprsAttached(Handler h);
     //add for confirm when in call
     void registerForSycnInd(Handler h, int what, Object obj);
     void unregisterForSycnInd(Handler h);

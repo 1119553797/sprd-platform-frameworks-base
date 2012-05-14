@@ -586,7 +586,8 @@ public interface Phone extends SprdVideoPhone{
      * @param h Handler to be removed from the registrant list.
      */
     void unregisterForInCallVoicePrivacyOn(Handler h);
-
+    void registerForDataGprsAttached(Handler h, int what, Object obj);
+    void unregisterForDataGprsAttached(Handler h);
     /**
      * Register for notifications when a sInCall VoicePrivacy is disabled
      *

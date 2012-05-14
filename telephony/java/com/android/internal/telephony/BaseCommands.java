@@ -52,6 +52,7 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mRadioTechnologyChangedRegistrants = new RegistrantList();
     protected RegistrantList mIccStatusChangedRegistrants = new RegistrantList();
     protected RegistrantList mVoicePrivacyOnRegistrants = new RegistrantList();
+    protected RegistrantList mGprsAttachedOnRegistrants = new RegistrantList();
     protected RegistrantList mVoicePrivacyOffRegistrants = new RegistrantList();
     protected Registrant mUnsolOemHookRawRegistrant;
     protected RegistrantList mOtaProvisionRegistrants = new RegistrantList();
@@ -480,11 +481,16 @@ public abstract class BaseCommands implements CommandsInterface {
         Registrant r = new Registrant (h, what, obj);
         mVoicePrivacyOnRegistrants.add(r);
     }
-
     public void unregisterForInCallVoicePrivacyOn(Handler h){
         mVoicePrivacyOnRegistrants.remove(h);
     }
-
+    public void registerForDataGprsAttached(Handler h, int what, Object obj) {
+        Registrant r = new Registrant (h, what, obj);
+        mGprsAttachedOnRegistrants.add(r);
+    }
+    public void unregisterForDataGprsAttached(Handler h){
+    	mGprsAttachedOnRegistrants.remove(h);
+    }
     public void registerForInCallVoicePrivacyOff(Handler h, int what, Object obj) {
         Registrant r = new Registrant (h, what, obj);
         mVoicePrivacyOffRegistrants.add(r);
