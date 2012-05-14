@@ -42,7 +42,9 @@ LOCAL_SRC_FILES:=                         \
         TimeSource.cpp                    \
         TimedEventQueue.cpp               \
         Utils.cpp                         \
+        VBRISeeker.cpp                    \
         WAVExtractor.cpp                  \
+        XINGSeeker.cpp                    \
         avc_utils.cpp                     \
         string.cpp                        \
 	VideoPhoneExtractor.cpp		  \
@@ -78,7 +80,6 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_avcenc \
         libstagefright_m4vh263dec \
         libstagefright_m4vh263enc \
-        libstagefright_mp3dec \
         libstagefright_vorbisdec \
         libstagefright_matroska \
         libstagefright_vpxdec \
@@ -92,8 +93,10 @@ LOCAL_STATIC_LIBRARIES := \
 
 ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
 LOCAL_STATIC_LIBRARIES += \
-	libstagefright_aacdec_sprd
+	libstagefright_aacdec_sprd \
+        libstagefright_mp3dec_sprd
 LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libaacdec_sprd.a
+LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libmp3dec_sprd.a
 else
 LOCAL_LDFLAGS += $(TOP)/customize/customer_cfg/${ANDROID_3RDPARTY_IMAGE_TAG}/proprietary/stagefright/libstagefright_aacdec_sprd.a
 LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libaacdec_sprd.a

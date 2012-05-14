@@ -608,11 +608,17 @@ bool GetMPEGAudioFrameSize(
             *out_bitrate = bitrate;
         }
 
-        if (version == 3 /* V1 */) {
+        if (1 == layer) {
+            //layer III
+            if (version == 3 /* V1 */) {
+                *frame_size = 144000 * bitrate / sampling_rate + padding;
+            } else {
+                // V2 or V2.5
+                *frame_size = 72000 * bitrate / sampling_rate + padding;
+            }
+        }else{
+            //layer II
             *frame_size = 144000 * bitrate / sampling_rate + padding;
-        } else {
-            // V2 or V2.5
-            *frame_size = 72000 * bitrate / sampling_rate + padding;
         }
     }
 
