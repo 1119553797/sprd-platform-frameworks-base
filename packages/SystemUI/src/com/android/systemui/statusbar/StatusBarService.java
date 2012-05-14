@@ -1486,9 +1486,22 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 					mCarrierLabels[phoneId]
 							.updateForSimCardChanged(com.android.internal.R.string.lockscreen_missing_sim_message_short);
 				} else if (IccCard.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
-					mCarrierLabels[phoneId].mSimBlocked = true;
-					mCarrierLabels[phoneId]
-							.updateForSimCardChanged(com.android.internal.R.string.lockscreen_sim_locked_message);
+					final String lockedReason = intent
+                    .getStringExtra(IccCard.INTENT_KEY_LOCKED_REASON);
+					Log.i("CarrierLabel", "lockedReason " + lockedReason);
+					if(IccCard.INTENT_VALUE_LOCKED_ON_PIN.equals(lockedReason)){
+						mCarrierLabels[phoneId].mSimBlocked = true;
+						mCarrierLabels[phoneId]
+								.updateForSimCardChanged(com.android.internal.R.string.lockscreen_sim_locked_message);
+					}else if(IccCard.INTENT_VALUE_LOCKED_NETWORK.equals(lockedReason)){
+						mCarrierLabels[phoneId].mNetworkLocked = true;
+						mCarrierLabels[phoneId]
+								.updateForSimCardChanged(com.android.internal.R.string.lockscreen_sim_network_locked_message);
+					}else if(IccCard.INTENT_VALUE_LOCKED_SIM.equals(lockedReason)){
+						mCarrierLabels[phoneId].mCardLocked = true;
+						mCarrierLabels[phoneId]
+								.updateForSimCardChanged(com.android.internal.R.string.lockscreen_sim_card_locked_message);
+					}
 
 				} else if (IccCard.INTENT_VALUE_ICC_BLOCKED.equals(stateExtra)) {
 					mCarrierLabels[phoneId]

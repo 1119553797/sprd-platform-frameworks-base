@@ -45,9 +45,13 @@ public abstract class IccCard {
     private RegistrantList mNetworkLockedRegistrants = new RegistrantList();
     private boolean mDesiredPinLocked;
     private boolean mDesiredFdnEnabled;
+    private boolean mDesiredNetworkEnabled;
+    private boolean mDesiredSimLockEnabled;
     private boolean mIccPinLocked = true; // Default to locked
     private boolean mIccFdnEnabled = false; // Default to disabled.
                                             // Will be updated when SIM_READY.
+    private boolean mIccSimEnabled = false;
+    private boolean mIccNetworkEnabled = false;
 
 
     /* The extra data for broacasting intent INTENT_ICC_STATE_CHANGE */
@@ -74,6 +78,7 @@ public abstract class IccCard {
     static public final String INTENT_VALUE_LOCKED_ON_PUK = "PUK";
     /* NETWORK means ICC is locked on NETWORK PERSONALIZATION */
     static public final String INTENT_VALUE_LOCKED_NETWORK = "NETWORK";
+    static public final String INTENT_VALUE_LOCKED_SIM = "SIM";
     /* REFRESH means ICC is refreshed */
     static public final String INTENT_VALUE_ICC_REFRESH= "REFRESH";
 
@@ -95,6 +100,10 @@ public abstract class IccCard {
     private static final int EVENT_CHANGE_ICC_PASSWORD_DONE = 9;
     private static final int EVENT_QUERY_FACILITY_FDN_DONE = 10;
     private static final int EVENT_CHANGE_FACILITY_FDN_DONE = 11;
+    private static final int EVENT_QUERY_FACILITY_NETWORK_DONE = 13;
+    private static final int EVENT_CHANGE_FACILITY_NETWORK_DONE = 14;
+    private static final int EVENT_QUERY_FACILITY_SIM_DONE = 15;
+    private static final int EVENT_CHANGE_FACILITY_SIM_DONE = 16;
     protected static final int EVENT_ICC_STATUS_CHANGED = 12;
 
 
@@ -111,7 +120,8 @@ public abstract class IccCard {
         NETWORK_LOCKED,
         READY,
         NOT_READY,
-        BLOCKED;
+        BLOCKED,
+        SIM_LOCKED;
 
         public boolean isPinLocked() {
             return ((this == PIN_REQUIRED) || (this == PUK_REQUIRED));
@@ -276,7 +286,24 @@ public abstract class IccCard {
     public void setIccLockEnabled(boolean enabled) {
         mIccPinLocked = enabled;
      }
-
+    /*
+     * add for sim card lock
+     */
+    public boolean getIccSimEnabled(){
+        return mIccSimEnabled;
+    }
+    public void setIccSimEnabled(boolean enabled){
+        mIccSimEnabled = enabled;
+    }
+    /*
+     * add for network lock
+     */
+    public boolean getIccNetworkEnabled(){
+        return mIccNetworkEnabled;
+    }
+    public void setIccNetworkEnabled(boolean enabled){
+        mIccNetworkEnabled = enabled;
+    }
     /**
      * Check whether ICC fdn (fixed dialing number) is enabled
      * This is a sync call which returns the cached pin enabled state
@@ -339,6 +366,22 @@ public abstract class IccCard {
                  mHandler.obtainMessage(EVENT_CHANGE_FACILITY_FDN_DONE, onComplete));
      }
 
+     public void setSimCardLockEnabled (boolean enabled,
+             String password, Message onComplete) {
+         int serviceClassX = 0;
+         mDesiredSimLockEnabled = enabled;
+         mPhone.mCM.setFacilityLock(CommandsInterface.CB_FACILITY_BA_PS,
+                 enabled, password, serviceClassX,
+                 mHandler.obtainMessage(EVENT_CHANGE_FACILITY_SIM_DONE, onComplete));
+     }
+     public void setNetworkLockEnabled (boolean enabled,
+             String password, Message onComplete) {
+         int serviceClassX = 0;
+         mDesiredNetworkEnabled = enabled;
+         mPhone.mCM.setFacilityLock(CommandsInterface.CB_FACILITY_BA_PN,
+                 enabled, password, serviceClassX,
+                 mHandler.obtainMessage(EVENT_CHANGE_FACILITY_NETWORK_DONE, onComplete));
+     }
      /**
       * Change the ICC password used in ICC pin lock
       * When the operation is complete, onComplete will be sent to its handler
@@ -415,6 +458,7 @@ public abstract class IccCard {
         boolean transitionedIntoAbsent;
         boolean transitionedIntoNetworkLocked;
         boolean transitionedIntoIccBlocked;
+        boolean transitionedIntoSimBlocked;
         boolean transitionedIntoCardPresent;
         State oldState, newState;
         oldState = mState;
@@ -434,13 +478,14 @@ public abstract class IccCard {
         transitionedIntoNetworkLocked = (oldState != State.NETWORK_LOCKED
                 && newState == State.NETWORK_LOCKED);
         transitionedIntoIccBlocked = (oldState != State.BLOCKED && newState == State.BLOCKED);
+        transitionedIntoSimBlocked = (oldState != State.SIM_LOCKED && newState == State.SIM_LOCKED);
         transitionedIntoCardPresent =  !transitionedIntoAbsent;
         if (transitionedIntoPinLocked) {
             if(mDbg) log("Notify SIM pin or puk locked.");
             mPinLockedRegistrants.notifyRegistrants();
             broadcastIccStateChangedIntent(INTENT_VALUE_ICC_LOCKED,
                     (newState == State.PIN_REQUIRED) ?
-                       INTENT_VALUE_LOCKED_ON_PIN : INTENT_VALUE_LOCKED_ON_PUK);
+                            INTENT_VALUE_LOCKED_ON_PIN : INTENT_VALUE_LOCKED_ON_PUK);
         } else if (transitionedIntoAbsent) {
             if(mDbg) log("Notify SIM missing.");
             mAbsentRegistrants.notifyRegistrants();
@@ -453,10 +498,13 @@ public abstract class IccCard {
         } else if (transitionedIntoIccBlocked) {
             if(mDbg) log("Notify ICC blocked.");
             broadcastIccStateChangedIntent(INTENT_VALUE_ICC_BLOCKED, null);
-        } else if(mState == State.READY){
+        } else if (transitionedIntoSimBlocked){
+            if(mDbg) log("Notify SIM locked.");
+            broadcastIccStateChangedIntent(INTENT_VALUE_ICC_LOCKED, INTENT_VALUE_LOCKED_SIM);
+	    } else if(mState == State.READY){
             if(mDbg) log("Notify SIM ready.");
             broadcastGetIccStatusDoneIntent();
-	  }else if(transitionedIntoCardPresent){
+	    } else if(transitionedIntoCardPresent){
 	      if(mDbg) log("Notify SIM present.");
 	      broadcastIccCardPresentIntent();
 	  }
@@ -507,6 +555,34 @@ public abstract class IccCard {
         }
     }
 
+    private void onQuerySimEnabled(AsyncResult ar) {
+        if(ar.exception != null) {
+            if(mDbg) log("Error in querying sim lock:" + ar.exception);
+            return;
+        }
+
+        int[] ints = (int[])ar.result;
+        if(ints.length != 0) {
+            mIccSimEnabled = (0!=ints[0]);
+            if(mDbg) log("Query sim lock : "  + mIccSimEnabled);
+        } else {
+            Log.e(mLogTag, "[IccCard] Bogus sim lock response");
+        }
+    }
+    private void onQueryNetworkEnabled(AsyncResult ar) {
+        if(ar.exception != null) {
+            if(mDbg) log("Error in querying Network lock:" + ar.exception);
+            return;
+        }
+
+        int[] ints = (int[])ar.result;
+        if(ints.length != 0) {
+            mIccNetworkEnabled = (0!=ints[0]);
+            if(mDbg) log("Query Network lock : "  + mIccNetworkEnabled);
+        } else {
+            Log.e(mLogTag, "[IccCard] Bogus network lock response");
+        }
+    }
     /**
      * Interperate EVENT_QUERY_FACILITY_LOCK_DONE
      * @param ar is asyncResult of Query_Facility_Locked
@@ -596,12 +672,24 @@ public abstract class IccCard {
                     mPhone.mCM.queryFacilityLock (
                             CommandsInterface.CB_FACILITY_BA_FD, "", serviceClassX,
                             obtainMessage(EVENT_QUERY_FACILITY_FDN_DONE));
+                    mPhone.mCM.queryFacilityLock (
+                            CommandsInterface.CB_FACILITY_BA_PS, "", 0,
+                            obtainMessage(EVENT_QUERY_FACILITY_SIM_DONE));
+                    mPhone.mCM.queryFacilityLock (
+                            CommandsInterface.CB_FACILITY_BA_PN, "", 0,
+                            obtainMessage(EVENT_QUERY_FACILITY_NETWORK_DONE));
                     break;
                 case EVENT_ICC_LOCKED_OR_ABSENT:
                     mPhone.mCM.getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE));
                     mPhone.mCM.queryFacilityLock (
                             CommandsInterface.CB_FACILITY_BA_SIM, "", serviceClassX,
                             obtainMessage(EVENT_QUERY_FACILITY_LOCK_DONE));
+                    mPhone.mCM.queryFacilityLock (
+                            CommandsInterface.CB_FACILITY_BA_PS, "", 0,
+                            obtainMessage(EVENT_QUERY_FACILITY_SIM_DONE));
+                    mPhone.mCM.queryFacilityLock (
+                            CommandsInterface.CB_FACILITY_BA_PN, "", 0,
+                            obtainMessage(EVENT_QUERY_FACILITY_NETWORK_DONE));
                     break;
                 case EVENT_GET_ICC_STATUS_DONE:
                     ar = (AsyncResult)msg.obj;
@@ -637,6 +725,14 @@ public abstract class IccCard {
                     ar = (AsyncResult)msg.obj;
                     onQueryFdnEnabled(ar);
                     break;
+                case EVENT_QUERY_FACILITY_SIM_DONE:
+                    ar = (AsyncResult)msg.obj;
+                    onQuerySimEnabled(ar);
+                    break;
+                case EVENT_QUERY_FACILITY_NETWORK_DONE:
+                    ar = (AsyncResult)msg.obj;
+                    onQueryNetworkEnabled(ar);
+                    break;
                 case EVENT_CHANGE_FACILITY_LOCK_DONE:
                     ar = (AsyncResult)msg.obj;
                     if (ar.exception == null) {
@@ -665,6 +761,36 @@ public abstract class IccCard {
                     AsyncResult.forMessage(((Message)ar.userObj)).exception
                                                         = ar.exception;
                     ((Message)ar.userObj).sendToTarget();
+                    break;
+                case EVENT_CHANGE_FACILITY_NETWORK_DONE:
+                    ar = (AsyncResult)msg.obj;
+
+                    if (ar.exception == null) {
+                        mIccNetworkEnabled = mDesiredNetworkEnabled;
+                        if (mDbg) log("EVENT_CHANGE_FACILITY_FDN_DONE: " +
+                                "mIccNetworkEnabled=" + mIccNetworkEnabled);
+                    } else {
+                        Log.e(mLogTag, "Error change facility network with exception "
+                                + ar.exception);
+                    }
+                    AsyncResult.forMessage(((Message)ar.userObj)).exception
+                                                        = ar.exception;
+                    ((Message)ar.userObj).sendToTarget();
+                    break;
+                case EVENT_CHANGE_FACILITY_SIM_DONE:
+                    AsyncResult arc = (AsyncResult)msg.obj;
+                    log( "EVENT_QUERY_FACILITY_SIM_DONE arc " + arc);
+                    if (arc.exception == null) {
+                        mIccSimEnabled = mDesiredSimLockEnabled;
+                        if (mDbg) log("EVENT_CHANGE_FACILITY_SIM_DONE: " +
+                                "mIccSimEnabled=" + mIccSimEnabled);
+                    } else {
+                        Log.e(mLogTag, "Error change facility sim lock with exception "
+                                + arc.exception);
+                    }
+                    AsyncResult.forMessage(((Message)arc.userObj)).exception
+                                                        = arc.exception;
+                    ((Message)arc.userObj).sendToTarget();
                     break;
                 case EVENT_CHANGE_ICC_PASSWORD_DONE:
                     ar = (AsyncResult)msg.obj;
@@ -749,6 +875,9 @@ public abstract class IccCard {
             }
             if (app.app_state.isAppNotReady()) {
                 return IccCard.State.NOT_READY;
+            }
+            if (app.app_state.isSimBlocked()) {
+                return IccCard.State.SIM_LOCKED;
             }
             return IccCard.State.NOT_READY;
         }

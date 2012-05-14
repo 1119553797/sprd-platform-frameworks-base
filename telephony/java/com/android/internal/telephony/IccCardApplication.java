@@ -38,7 +38,8 @@ public class IccCardApplication {
         APPSTATE_PUK,
         APPSTATE_SUBSCRIPTION_PERSO,
         APPSTATE_READY,
-        APPSTATE_BLOCKED;
+        APPSTATE_BLOCKED,
+        APPSTATE_SIM_BLOCKED;
 
         boolean isPinRequired() {
             return this == APPSTATE_PIN;
@@ -63,6 +64,9 @@ public class IccCardApplication {
         boolean isAppNotReady() {
             return this == APPSTATE_UNKNOWN  ||
                    this == APPSTATE_DETECTED;
+        }
+        boolean isSimBlocked(){
+            return this == APPSTATE_SIM_BLOCKED;
         }
     };
 
@@ -138,6 +142,7 @@ public class IccCardApplication {
             case 4: newState = AppState.APPSTATE_SUBSCRIPTION_PERSO; break;
             case 5: newState = AppState.APPSTATE_READY; break;
             case 6: newState = AppState.APPSTATE_BLOCKED; break;
+            case 7: newState = AppState.APPSTATE_SIM_BLOCKED; break;
             default:
                 throw new RuntimeException(
                             "Unrecognized RIL_AppState: " +state);

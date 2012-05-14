@@ -1066,4 +1066,6 @@
     
     <string name="lockscreen_miss_phone">未接电话</string>
 	<string name="lockscreen_miss_mms">未读短信</string>
+    <string name="lockscreen_sim_card_locked_message">sim卡已锁</string>
+    <string name="lockscreen_sim_network_locked_message">网络已锁</string>
 </resources>

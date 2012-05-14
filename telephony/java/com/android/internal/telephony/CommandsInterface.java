@@ -116,6 +116,8 @@ public interface CommandsInterface extends SprdCommandsInterface{
     static final String CB_FACILITY_BA_MT        = "AC";
     static final String CB_FACILITY_BA_SIM       = "SC";
     static final String CB_FACILITY_BA_FD        = "FD";
+    static final String CB_FACILITY_BA_PS        = "PS";
+    static final String CB_FACILITY_BA_PN        = "PN";
 
     static final int CB_REASON_AO    = 0;
     static final int CB_REASON_OI    = 1;

@@ -131,12 +131,16 @@ public class KeyguardUpdateMonitor {
                     this.simState = IccCard.State.PIN_REQUIRED;
                 } else if (IccCard.INTENT_VALUE_LOCKED_ON_PUK.equals(lockedReason)) {
                     this.simState = IccCard.State.PUK_REQUIRED;
-                } else {
+                } else if (IccCard.INTENT_VALUE_LOCKED_NETWORK.equals(lockedReason)) {
+                    this.simState = IccCard.State.NETWORK_LOCKED;
+                } else if (IccCard.INTENT_VALUE_LOCKED_SIM.equals(lockedReason)) {
+                    this.simState = IccCard.State.SIM_LOCKED;
+                }else {
                     this.simState = IccCard.State.UNKNOWN;
                 }
-            } else if (IccCard.INTENT_VALUE_LOCKED_NETWORK.equals(stateExtra)) {
+            }/* else if (IccCard.INTENT_VALUE_LOCKED_NETWORK.equals(stateExtra)) {
                 this.simState = IccCard.State.NETWORK_LOCKED;
-            } else {
+            }*/ else {
                 this.simState = IccCard.State.UNKNOWN;
             }
         }

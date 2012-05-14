@@ -958,4 +958,6 @@
     <string name="media_unknown_state" msgid="729192782197290385">"外部媒體狀態不明。"</string>
     <string name="china_mobile_numeric_values">中國移動</string>
     <string name="custom_china_mobile">中國移動</string>
+    <string name="lockscreen_sim_card_locked_message">sim卡已鎖</string>
+    <string name="lockscreen_sim_network_locked_message">網路已鎖</string>
 </resources>

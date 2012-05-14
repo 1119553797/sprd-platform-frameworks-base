@@ -187,8 +187,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         /**
          * The sim card is locked.
          */
-        SimLocked(true);
-
+        SimLocked(true),
+        /*
+         * The card is locked
+         */
+        CardLocked(true);
         private final boolean mShowStatusLines;
 
         Status(boolean mShowStatusLines) {
@@ -676,13 +679,15 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             case ABSENT:
                 return Status.SimMissing;
             case NETWORK_LOCKED:
-                return Status.SimMissingLocked;
+                return Status.NetworkLocked;
             case NOT_READY:
                 return Status.SimMissing;
             case PIN_REQUIRED:
                 return Status.SimLocked;
             case PUK_REQUIRED:
                 return Status.SimPukLocked;
+            case SIM_LOCKED:
+                return Status.CardLocked;
             case READY:
                 return Status.Normal;
             case UNKNOWN:
@@ -852,6 +857,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 						mEmergencyCallText.setVisibility(View.GONE);
 					}
                 }
+                break;
+            case CardLocked:
+                mCarrier[subscription].setVisibility(View.VISIBLE);
+                mCarrier[subscription].setText(mIccText.iccSimCardLockedMessage);
+                mScreenLocked.setVisibility(View.VISIBLE);
+                mSelector.setVisibility(View.VISIBLE);
+                mEmergencyCallText.setVisibility(View.VISIBLE);
+                mEmergencyCallButton.setVisibility(View.VISIBLE);
                 break;
         }
         //modify by liguxiang 08-25-11 for display radiotype(3G) on LockScreen end
@@ -1049,6 +1062,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         int iccErrorMessageShort;
         int networkLockedMessage;
         int iccBlockMessageShort;
+        int iccSimCardLockedMessage;
     }
     private IccText createSimText() {
         IccText simText = new IccText();
@@ -1064,6 +1078,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         simText.iccErrorMessageShort = R.string.lockscreen_sim_error_message_short;
         simText.networkLockedMessage = R.string.lockscreen_sim_network_locked_message;
         simText.iccBlockMessageShort = R.string.lockscreen_blocked_sim_message_short;
+        simText.iccSimCardLockedMessage = R.string.lockscreen_sim_card_locked_message;
         return simText;
     }
 

@@ -38,7 +38,8 @@ public class CarrierLabel extends TextView {
     private boolean mAttached;
     boolean  mSimMissed = false;
     boolean  mSimBlocked = false;
-
+    boolean  mCardLocked = false;
+    boolean  mNetworkLocked = false;
     public CarrierLabel(Context context) {
         this(context, null);
     }
@@ -193,6 +194,14 @@ public class CarrierLabel extends TextView {
 	        if(mSimBlocked){
 	        	setVisibility(View.VISIBLE);
 	        	setText(com.android.internal.R.string.lockscreen_blocked_sim_message_short);
+	        }
+	        if(mCardLocked){
+	        	setVisibility(View.VISIBLE);
+	        	setText(com.android.internal.R.string.lockscreen_sim_card_locked_message);
+	        }
+            if(mNetworkLocked){
+            	setVisibility(View.VISIBLE);
+            	setText(com.android.internal.R.string.lockscreen_sim_network_locked_message);
 	        }
       // Modify end on 2012-01-16 for 8930/8932
     }
