@@ -512,7 +512,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 		if (grabbedState != SlidingTab.OnTriggerListener.NO_HANDLE) {
 			mCallback.pokeWakelock(ON_KEYDOWN_TIMEOUT_MS);
 		} else {
-			mCallback.pokeWakelock();
+			if (mCallback != null) {
+				mCallback.pokeWakelock();
+			}
 		}
 
     	if(hasMissPhone||hasMissMms){
