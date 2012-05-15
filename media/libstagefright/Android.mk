@@ -100,6 +100,9 @@ LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libmp3dec_sp
 else
 LOCAL_LDFLAGS += $(TOP)/customize/customer_cfg/${ANDROID_3RDPARTY_IMAGE_TAG}/proprietary/stagefright/libstagefright_aacdec_sprd.a
 LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libaacdec_sprd.a
+
+LOCAL_LDFLAGS += $(TOP)/customize/customer_cfg/${ANDROID_3RDPARTY_IMAGE_TAG}/proprietary/stagefright/libstagefright_mp3dec_sprd.a
+LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libmp3dec_sprd.a
 endif
 
 LOCAL_SHARED_LIBRARIES += \
