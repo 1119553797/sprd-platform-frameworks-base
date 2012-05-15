@@ -97,6 +97,8 @@ public class MediaController extends FrameLayout {
     private ImageButton         mStopButton;
     private int                 startLiveTime = -1;
     private boolean isStopped = false;
+    public boolean isSeeking = false;
+    private long clickTime=0;
 
     public MediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -541,6 +543,10 @@ public class MediaController extends FrameLayout {
 
     private View.OnClickListener mPauseListener = new View.OnClickListener() {
         public void onClick(View v) {
+            if(isSeeking) return;
+            long currentTime = System.currentTimeMillis();
+            if(currentTime - clickTime <700) return;
+            clickTime = currentTime;
             doPauseResume();
             show(sDefaultTimeout);
         }
@@ -627,6 +633,7 @@ public class MediaController extends FrameLayout {
                 hide();
                 return;
             }
+            if(isSeeking) return;
             long duration = mPlayer.getDuration();
             if(duration!=0){
                  long newposition = (duration * progress) / 1000L;
@@ -675,6 +682,7 @@ public class MediaController extends FrameLayout {
 
     private View.OnClickListener mRewListener = new View.OnClickListener() {
         public void onClick(View v) {
+            if(isSeeking) return;
             int pos = mPlayer.getCurrentPosition();
             pos -= 10000; // milliseconds
             mPlayer.seekTo(pos);
@@ -686,6 +694,7 @@ public class MediaController extends FrameLayout {
 
     private View.OnClickListener mFfwdListener = new View.OnClickListener() {
         public void onClick(View v) {
+            if(isSeeking) return;
             int pos = mPlayer.getCurrentPosition();
             pos += 15000; // milliseconds
             mPlayer.seekTo(pos);

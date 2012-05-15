@@ -223,6 +223,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
+            mMediaController.isSeeking = false;
             mCurrentState = STATE_IDLE;
             mTargetState  = STATE_IDLE;
         }
@@ -622,6 +623,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             }
             mMediaPlayer.release();
             mMediaPlayer = null;
+            mMediaController.isSeeking = false;
             mCurrentState = STATE_IDLE;
             if (cleartargetstate) {
                 mTargetState  = STATE_IDLE;
@@ -784,6 +786,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
 
     public void seekTo(int msec) {
         if (isInPlaybackState()) {
+            if (mIsStream) {
+                mMediaController.isSeeking = true;
+            }
             mMediaPlayer.seekTo(msec);
             mSeekWhenPrepared = 0;
         } else {
@@ -904,6 +909,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
 
         public void onSeekComplete(MediaPlayer mp) {
             Log.d(TAG,"onSeekComplete");
+            mMediaController.isSeeking = false;
             if (mOnSeekCompleteListener != null) {
                 mOnSeekCompleteListener.onSeekComplete(mMediaPlayer);
             }
