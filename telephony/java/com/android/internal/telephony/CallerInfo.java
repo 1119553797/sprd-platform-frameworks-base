@@ -197,7 +197,7 @@ public class CallerInfo {
 							.getColumnIndex(PhoneLookup.CUSTOM_RINGTONE);// first lookup contact's ringtone
 					Log.d(TAG,"get custom ringtone, column index = " + columnIndex);
 					if ((columnIndex != -1)
-							&& (cursor.getString(columnIndex) != null)) {
+							&& !TextUtils.isEmpty(cursor.getString(columnIndex))) {
 						info.contactRingtoneUri = Uri.parse(cursor
 								.getString(columnIndex));
 						Log.d(TAG,"get custom ringtone, URI string = " + cursor.getString(columnIndex));
@@ -206,7 +206,7 @@ public class CallerInfo {
 								.getColumnIndex(CUSTOM_GROUP_RINGTONE);// then lookup group's ringtone
 						Log.d(TAG,"get custom group, ringtone column index = "+ columnIndex);
 						if ((columnIndex != -1)
-								&& (cursor.getString(columnIndex) != null)) {
+								&& !TextUtils.isEmpty(cursor.getString(columnIndex))) {
 							info.contactRingtoneUri = Uri.parse(cursor
 									.getString(columnIndex));
 							Log.d(TAG,"get custom group ringtone, URI string = " + cursor.getString(columnIndex));
