@@ -730,7 +730,12 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
             // Show LockScreen first for any screen other than Pattern unlock.
             final boolean usingLockPattern = mLockPatternUtils.getKeyguardStoredPasswordQuality()
                     == DevicePolicyManager.PASSWORD_QUALITY_SOMETHING;
-            if (isSecure() && usingLockPattern) {
+            UnlockMode unlockMode = getUnlockMode();
+			boolean isShowSimLock = unlockMode == UnlockMode.SimPin
+					|| unlockMode == UnlockMode.Sim2Pin
+					|| unlockMode == UnlockMode.SimPuk
+					|| unlockMode == UnlockMode.Sim2Puk;
+            if (isSecure() && (usingLockPattern || isShowSimLock)) {
                 return Mode.UnlockScreen;
             } else {
                 return Mode.LockScreen;
