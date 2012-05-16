@@ -163,4 +163,10 @@ public class ApnSetting {
         }
         return false;
     }
+    public boolean isValidMMSType() {
+        if((mmsc != null) && !mmsc.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
 }
