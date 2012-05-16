@@ -1114,4 +1114,8 @@ public abstract class PhoneBase extends Handler implements Phone {
 	return mDataConnection.getApnActivePdpFilter(apntype);
 		
     }
+    public void hangupAllCalls(){
+
+    }
+
 }

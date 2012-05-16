@@ -1554,7 +1554,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 for (ApnSetting apn : allApns) {
                         Log.i(LOG_TAG, "allApns: t :"+apn.types[0]+" apn:"+apn.apn+" id:"+apn.id);
                     if (apn.canHandleType(mRequestedApnType)) {
-                        apnList.add(apn);
+                        if (!mRequestedApnType.equals(Phone.APN_TYPE_MMS) || apn.isValidMMSType()) {
+                            apnList.add(apn);
+                        }
                     }
                 }
             }

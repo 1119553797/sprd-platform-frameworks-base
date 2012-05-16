@@ -528,18 +528,35 @@ status_t CameraService::Client::setPreviewDisplay(const sp<ISurface>& surface) {
 
 status_t CameraService::Client::registerPreviewBuffers() {
     int w, h;
+    status_t result = NO_ERROR;
     CameraParameters params(mHardware->getParameters());
     params.getPreviewSize(&w, &h);
 
-    // FIXME: don't use a hardcoded format here.
-    ISurface::BufferHeap buffers(w, h, w, h,
-				 //wxz20111020: change the YUV format from YCrCb to YCbCr. Because the YUV data from camera hardware is YCbCr.
-                                 HAL_PIXEL_FORMAT_YCbCr_420_SP,/*HAL_PIXEL_FORMAT_YCrCb_420_SP,*/
-                                 mOrientation,
-                                 0,
-                                 mHardware->getPreviewHeap());
+    int videodatatype = params.getInt("videodatatype");
+    LOGD("registerPreviewBuffers: videodatatype: %d.", videodatatype);
 
-    status_t result = mSurface->registerBuffers(buffers);
+    if(1 == videodatatype){
+	    // don't use a hardcoded format here
+	    ISurface::BufferHeap buffers(w, h, w, h,
+					//wxz20111020: change the YUV format from YCrCb to YCbCr. Because the YUV data from camera hardware is YCbCr.
+	                                 HAL_PIXEL_FORMAT_YCbCr_420_SP,/*HAL_PIXEL_FORMAT_YCrCb_420_SP,*/
+	                                 mOrientation,
+	                                 0,
+	                                 mHardware->getPreviewHeap());
+	    result = mSurface->registerBuffers(buffers);
+    }
+    else{
+	    // don't use a hardcoded format here
+	    ISurface::BufferHeap buffers(w, h, w, h,
+					     HAL_PIXEL_FORMAT_YCrCb_420_SP,
+	                                 mOrientation,
+	                                 0,
+	                                 mHardware->getPreviewHeap());		
+	    result = mSurface->registerBuffers(buffers);
+    }
+
+
+    //status_t result = mSurface->registerBuffers(buffers);
     if (result != NO_ERROR) {
         LOGE("registerBuffers failed with status %d", result);
     }

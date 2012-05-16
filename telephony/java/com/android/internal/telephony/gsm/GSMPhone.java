@@ -478,7 +478,9 @@ public abstract class GSMPhone extends PhoneBase {
     public boolean canConference() {
         return mCT.canConference();
     }
-
+    public void hangupAllCalls() {
+        mCT.hangupAllCalls();
+    }
     public boolean canDial() {
         return mCT.canDial();
     }

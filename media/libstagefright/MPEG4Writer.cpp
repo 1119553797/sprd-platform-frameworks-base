@@ -298,14 +298,19 @@ status_t MPEG4Writer::addSource(const sp<MediaSource> &source) {
 }
 
 status_t MPEG4Writer::startTracks(MetaData *params) {
-    for (List<Track *>::iterator it = mTracks.begin();
-         it != mTracks.end(); ++it) {
-        status_t err = (*it)->start(params);
+    /* Modify for bug 17438
+     * Becase in StagefrightRecorder::startMPEG4Recording() method first added audio track,
+     * so if first start audio track recording. It willl record the video record sound when clicked the record button to file under some conditions.
+     * Modify to start video track first, then start audio track.
+     */
+    for (List<Track *>::iterator it = mTracks.end();
+	it != mTracks.begin(); ) {
+        status_t err = (*--it)->start(params);
 
         if (err != OK) {
-            for (List<Track *>::iterator it2 = mTracks.begin();
-                 it2 != it; ++it2) {
-                (*it2)->stop();
+            for (List<Track *>::iterator it2 = mTracks.end();
+                 it2 != it; ) {
+                (*--it2)->stop();
             }
 
             return err;

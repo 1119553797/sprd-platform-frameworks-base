@@ -755,7 +755,13 @@ public interface CommandsInterface extends SprdCommandsInterface{
      *  ar.result is null on success and failure
      */
     void hangupWaitingOrBackground (Message result);
-
+    /**
+     *  "Releases all calls."
+     *  ar.exception carries exception on failure
+     *  ar.userObject contains the orignal value of result.obj
+     *  ar.result is null on success and failure
+     */
+    void hangupAllCalls (Message result);
     /**
      * 3GPP 22.030 6.5.5
      * "Releases all active calls (if any exist) and accepts

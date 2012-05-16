@@ -804,7 +804,10 @@ public final class GsmCallTracker extends CallTracker {
         phone.notifyPreciseCallStateChanged();
     }
     //add by liguxiang 10-14-11 for NEWMS00128207 end
-
+	void hangupAllCalls() {
+		if (Phone.DEBUG_PHONE)log("hangupAllCalls");
+		cm.hangupAllCalls(obtainCompleteMessage());
+	}
     /* package */
     void hangupWaitingOrBackground() {
         if (Phone.DEBUG_PHONE) log("hangupWaitingOrBackground");

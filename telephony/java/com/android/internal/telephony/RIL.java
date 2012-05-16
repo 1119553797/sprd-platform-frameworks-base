@@ -965,6 +965,13 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         send(rr);
     }
 
+	public void hangupAllCalls(Message result) {
+		RILRequest rr = RILRequest.obtain(RIL_REQUEST_HANGUP_ALL_CALLS, result);
+		if (RILJ_LOGD)
+			riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+		send(rr);
+	}
     public void
     switchWaitingOrHoldingAndActive (Message result) {
         RILRequest rr
