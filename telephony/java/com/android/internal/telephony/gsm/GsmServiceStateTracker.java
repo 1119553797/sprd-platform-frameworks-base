@@ -700,7 +700,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             Log.d(LOG_TAG,"phoneId = "+phoneId+"spn = " + spn + "  showSpn = " + showSpn
                     + "  plmn = " + plmn + "  showPlmn = " + showPlmn+" mNetworkType "+setRadioType(networkType,airplaneMode));
 
-            Intent intent = new Intent(Intents.SPN_STRINGS_UPDATED_ACTION);
+            Intent intent = new Intent(PhoneFactory.getAction(Intents.SPN_STRINGS_UPDATED_ACTION,phoneId));
             intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
             intent.putExtra(Intents.EXTRA_SHOW_SPN, showSpn);
             intent.putExtra(Intents.EXTRA_SPN, spn);

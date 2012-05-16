@@ -334,7 +334,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-        filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION);
+        filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION + "0");
+        filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION + "1");
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         context.registerReceiver(mBroadcastReceiver, filter);
     }
@@ -1461,8 +1462,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 				animateCollapse();
 			} else if (Intent.ACTION_CONFIGURATION_CHANGED.equals(action)) {
 				updateResources();
-			} else if (Telephony.Intents.SPN_STRINGS_UPDATED_ACTION
-					.equals(action)) {
+			} else if ((Telephony.Intents.SPN_STRINGS_UPDATED_ACTION + "0").equals(action) || (Telephony.Intents.SPN_STRINGS_UPDATED_ACTION + "1").equals(action)) {
 				phoneId = intent.getIntExtra(Telephony.Intents.EXTRA_PHONE_ID,
 						0);
 				mCarrierLabels[phoneId].updateNetworkName(intent
