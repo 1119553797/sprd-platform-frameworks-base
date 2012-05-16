@@ -1634,15 +1634,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         String value = SystemProperties.get("net.gprs.http-proxy");
                         if (DBG)
                             Slog.d(TAG, "get net.gprs.http-proxy value=" + value);
-                        //We still need to add dns when dataconnection change from wap to wifi.
-                        if (TextUtils.isEmpty(value)
-                            || nt.getNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI) {
-                            SystemProperties.set("net.dns" + j++, dns);
-                        } else {
-                            if (DBG)
-                                Slog.d(TAG, "erasing net.dns as apn is wap!");
-                            SystemProperties.set("net.dns" + j++, "");
-                        }
+                        SystemProperties.set("net.dns" + j++, dns);
                     }
                 }
                 for (int k=j ; k<mNumDnsEntries; k++) {
