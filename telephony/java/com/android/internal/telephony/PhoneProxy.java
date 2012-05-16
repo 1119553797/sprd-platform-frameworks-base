@@ -401,7 +401,9 @@ public abstract class PhoneProxy extends Handler implements Phone {
     public void conference() throws CallStateException {
         mActivePhone.conference();
     }
-
+    public void hangupAllCalls(){
+        mActivePhone.hangupAllCalls();
+    }
     public void enableEnhancedVoicePrivacy(boolean enable, Message onComplete) {
         mActivePhone.enableEnhancedVoicePrivacy(enable, onComplete);
     }

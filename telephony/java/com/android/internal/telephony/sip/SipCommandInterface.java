@@ -96,7 +96,8 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 
     public void hangupWaitingOrBackground (Message result) {
     }
-
+    public void hangupAllCalls (Message result) {
+    }
     public void hangupForegroundResumeBackground (Message result) {
     }
 

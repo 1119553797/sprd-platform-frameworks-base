@@ -1768,5 +1768,7 @@ public interface Phone extends SprdVideoPhone{
      boolean setApnActivePdpFilter(String apntype,boolean filterenable);
 
      boolean  getApnActivePdpFilter(String apntype);
-	
+
+    void hangupAllCalls();
+
 }
