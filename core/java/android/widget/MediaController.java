@@ -448,10 +448,13 @@ public class MediaController extends FrameLayout {
         if (mPlayer == null || mDragging) {
             return 0;
         }
-        if(mPause.isNotStopState()) isStopped=false;
-        if(mPause.isMediaplayerNull() && !isStopped){
-            hide();
-            return 0;
+        if (mPause != null) {
+            if (mPause.isNotStopState())
+                isStopped = false;
+            if (mPause.isMediaplayerNull() && !isStopped) {
+                hide();
+                return 0;
+            }
         }
         int position = mPlayer.getCurrentPosition();
         int duration = mPlayer.getDuration();
@@ -628,10 +631,13 @@ public class MediaController extends FrameLayout {
                 // the progress bar's position.
                 return;
             }
-            if(mPause.isNotStopState()) isStopped=false;
-            if(mPause.isMediaplayerNull() && !isStopped){
-                hide();
-                return;
+            if (mPause != null) {
+                if (mPause.isNotStopState())
+                    isStopped = false;
+                if (mPause.isMediaplayerNull() && !isStopped) {
+                    hide();
+                    return;
+                }
             }
             if(isSeeking) return;
             long duration = mPlayer.getDuration();
