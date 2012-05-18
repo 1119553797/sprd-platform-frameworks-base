@@ -155,7 +155,7 @@ public class PduComposer {
         /* make the message */
         switch (type) {
             case PduHeaders.MESSAGE_TYPE_SEND_REQ:
-                if (makeSendReqPdu() != PDU_COMPOSE_SUCCESS) {
+                if (makeSendReqPdu(type) != PDU_COMPOSE_SUCCESS) {
                     return null;
                 }
                 break;
@@ -171,6 +171,11 @@ public class PduComposer {
                 break;
             case PduHeaders.MESSAGE_TYPE_READ_REC_IND:
                 if (makeReadRecInd() != PDU_COMPOSE_SUCCESS) {
+                    return null;
+                }
+                break;
+            case PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF:
+                if (makeSendReqPdu(type) != PDU_COMPOSE_SUCCESS) {
                     return null;
                 }
                 break;
@@ -757,7 +762,7 @@ public class PduComposer {
     /**
      * Make Send.req.
      */
-    private int makeSendReqPdu() {
+    private int makeSendReqPdu(int type) {
         if (mMessage == null) {
             mMessage = new ByteArrayOutputStream();
             mPosition = 0;
@@ -765,7 +770,11 @@ public class PduComposer {
 
         // X-Mms-Message-Type
         appendOctet(PduHeaders.MESSAGE_TYPE);
-        appendOctet(PduHeaders.MESSAGE_TYPE_SEND_REQ);
+        if (type == 128) {
+            appendOctet(PduHeaders.MESSAGE_TYPE_SEND_REQ);
+        } else {
+            appendOctet(PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF);
+        }
 
         // X-Mms-Transaction-ID
         appendOctet(PduHeaders.TRANSACTION_ID);
@@ -835,7 +844,7 @@ public class PduComposer {
         appendOctet(PduHeaders.CONTENT_TYPE);
 
         //  Message body
-        makeMessageBody();
+        makeMessageBody(type);
 
         return PDU_COMPOSE_SUCCESS;  // Composing the message is OK
     }
@@ -843,7 +852,7 @@ public class PduComposer {
     /**
      * Make message body.
      */
-    private int makeMessageBody() {
+    private int makeMessageBody(int type) {
         // 1. add body informations
         mStack.newbuf();  // Switching buffer because we need to
 
@@ -860,7 +869,12 @@ public class PduComposer {
         appendShortInteger(contentTypeIdentifier.intValue());
 
         // content-type parameter: start
-        PduBody body = ((SendReq) mPdu).getBody();
+        PduBody body;
+        if (type == 128) {
+            body = ((SendReq) mPdu).getBody();
+        } else {
+            body = ((RetrieveConf) mPdu).getBody();
+        }
         
   
         if (null == body || body.getPartsNum() == 0) {
@@ -930,24 +944,25 @@ public class PduComposer {
              * Just one of them is enough for this PDU.
              */
             byte[] name = part.getName();
-
-            if (null == name) {
-                name = part.getFilename();
-
+            
+            if (type == 128) {
                 if (null == name) {
-                    name = part.getContentLocation();
+                    name = part.getFilename();
 
                     if (null == name) {
-                        /* at lease one of name, filename, Content-location
-                         * should be available.
-                         */
-                        return PDU_COMPOSE_CONTENT_ERROR;
+                        name = part.getContentLocation();
+
+                        if (null == name) {
+                            /* at lease one of name, filename, Content-location
+                             * should be available.
+                             */
+                            return PDU_COMPOSE_CONTENT_ERROR;
+                        }
                     }
                 }
+                appendOctet(PduPart.P_DEP_NAME);
+                appendTextString(name);
             }
-            appendOctet(PduPart.P_DEP_NAME);
-            appendTextString(name);
-
             // content-type parameter : charset
             int charset = part.getCharset();
             if (charset != 0) {
