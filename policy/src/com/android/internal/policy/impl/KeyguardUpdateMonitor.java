@@ -237,6 +237,8 @@ public class KeyguardUpdateMonitor {
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
         filter.addAction(SPN_STRINGS_UPDATED_ACTION);
+        filter.addAction(SPN_STRINGS_UPDATED_ACTION + "0");
+        filter.addAction(SPN_STRINGS_UPDATED_ACTION + "1");
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         context.registerReceiver(new BroadcastReceiver() {
 
@@ -248,7 +250,9 @@ public class KeyguardUpdateMonitor {
                         || Intent.ACTION_TIME_CHANGED.equals(action)
                         || Intent.ACTION_TIMEZONE_CHANGED.equals(action)) {
                     mHandler.sendMessage(mHandler.obtainMessage(MSG_TIME_UPDATE));
-                } else if (SPN_STRINGS_UPDATED_ACTION.equals(action)) {
+				} else if (SPN_STRINGS_UPDATED_ACTION.equals(action)
+						|| (SPN_STRINGS_UPDATED_ACTION + "0").equals(action)
+						|| (SPN_STRINGS_UPDATED_ACTION + "1").equals(action)) {
 					int phoneID = intent.getIntExtra(EXTRA_PHONE_ID, 0);
 					mTelephonyPlmn[phoneID] = getTelephonyPlmnFrom(intent);
 					mTelephonySpn[phoneID] = getTelephonySpnFrom(intent);
