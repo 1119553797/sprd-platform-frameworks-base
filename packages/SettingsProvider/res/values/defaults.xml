@@ -76,7 +76,7 @@
     <bool name="def_notifications_use_ring_volume">true</bool>
 
     <!-- Default for Settings.System.VIBRATE_IN_SILENT -->
-    <bool name="def_vibrate_in_silent">true</bool>
+    <bool name="def_vibrate_in_silent">false</bool>
     
     <!-- Modify by luning at01-07-01 -->
     <string name="def_phone_profiles_mode" translatable="false">general</string>
