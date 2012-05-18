@@ -699,8 +699,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 (rule & SIMRecords.SPN_RULE_SHOW_PLMN) == SIMRecords.SPN_RULE_SHOW_PLMN && !airplaneMode;
             Log.d(LOG_TAG,"phoneId = "+phoneId+"spn = " + spn + "  showSpn = " + showSpn
                     + "  plmn = " + plmn + "  showPlmn = " + showPlmn+" mNetworkType "+setRadioType(networkType,airplaneMode));
-
-            Intent intent = new Intent(PhoneFactory.getAction(Intents.SPN_STRINGS_UPDATED_ACTION,phoneId));
+            //Intents.SPN_STRINGS_UPDATED_ACTION
+            Intent intent = new Intent();
             intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
             intent.putExtra(Intents.EXTRA_SHOW_SPN, showSpn);
             intent.putExtra(Intents.EXTRA_SPN, spn);
@@ -708,9 +708,18 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             intent.putExtra(Intents.EXTRA_PLMN, plmn);
             intent.putExtra(Intents.EXTRA_PHONE_ID, phoneId);
             intent.putExtra(Intents.EXTRA_NETWORK_TYPE, setRadioType(networkType,airplaneMode));
-            phone.getContext().sendStickyBroadcast(intent);
+            if(PhoneFactory.getDefaultPhoneId() == phoneId){
+                intent.setAction(Intents.SPN_STRINGS_UPDATED_ACTION);
+                phone.getContext().sendStickyBroadcast(intent);
+            }else{
+                if(PhoneFactory.isMultiSim()){
+                    intent.setAction(PhoneFactory.getAction(Intents.SPN_STRINGS_UPDATED_ACTION,phoneId));
+                    phone.getContext().sendStickyBroadcast(intent);
+                }else{
+                    log("Error phoneId : " + phoneId);
+                }
+            }
         }
-
         curSpnRule = rule;
         curSpn = spn;
         curPlmn = plmn;
