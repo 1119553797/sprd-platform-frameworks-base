@@ -65,6 +65,7 @@ public class ContentType {
 
     public static final String VIDEO_UNSPECIFIED = "video/*";
     public static final String VIDEO_3GPP        = "video/3gpp";
+    public static final String VIDEO_3GP         = "video/3gp";
     public static final String VIDEO_3G2         = "video/3gpp2";
     public static final String VIDEO_H263        = "video/h263";
     public static final String VIDEO_MP4         = "video/mp4";
@@ -160,6 +161,7 @@ public class ContentType {
 
         // add supported video types
         sSupportedVideoTypes.add(VIDEO_3GPP);
+        sSupportedVideoTypes.add(VIDEO_3GP);
         sSupportedVideoTypes.add(VIDEO_3G2);
         sSupportedVideoTypes.add(VIDEO_H263);
         sSupportedVideoTypes.add(VIDEO_MP4);
