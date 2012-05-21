@@ -325,6 +325,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
         mSilentModeToggle.updateState(
                 silentModeOn ? ToggleAction.State.On : ToggleAction.State.Off);
+        final boolean inNoAirplaneMode =  !isAirplaneModeOn(mContext);
+        if (inNoAirplaneMode) {
+            mAirplaneState = ToggleAction.State.Off;
+        }
+        Log.d(TAG, " prepareDialog mAirplaneState=" + mAirplaneState);
         mAirplaneModeOn.updateState(mAirplaneState);
         mAdapter.notifyDataSetChanged();
         if (mKeyguardShowing) {
