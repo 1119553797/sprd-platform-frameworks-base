@@ -902,6 +902,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
 
     //added by MMz01
     private boolean isStream(){
+        if(mUri == null) return false;
         if ("http".equalsIgnoreCase(mUri.getScheme()) || "rtsp".equalsIgnoreCase(mUri.getScheme())) {
             Log.d(TAG,"isStream");
             return true;
