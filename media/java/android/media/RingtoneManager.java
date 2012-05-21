@@ -772,10 +772,12 @@ public class RingtoneManager {
     /* ===== fixed CR<NEWMS00109311> by luning at 2011.11.18 begin =====*/
     public Uri getDefaultUri() {
         Cursor internalCursor = getInternalRingtones();
-        if (internalCursor.moveToFirst()) {
-            return ContentUris.withAppendedId(
-                    Uri.parse(internalCursor.getString(URI_COLUMN_INDEX)), internalCursor
-                            .getLong(ID_COLUMN_INDEX));
+        if (internalCursor != null) {
+            if (internalCursor.moveToFirst()) {
+                return ContentUris.withAppendedId(
+                        Uri.parse(internalCursor.getString(URI_COLUMN_INDEX)), internalCursor
+                                .getLong(ID_COLUMN_INDEX));
+            }
         }
         return null;
     }
