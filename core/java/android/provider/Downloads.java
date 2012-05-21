@@ -1056,6 +1056,12 @@ public final class Downloads {
          * connection to proceed.
          */
         public static final int STATUS_QUEUED_FOR_WIFI = 196;
+        
+       // add for manually pause and resume a download.
+        /**
+         * This download has been paused by user
+         */
+        public static final int STATUS_PAUSED_BY_USER = 197;
 
         /**
          * This download has successfully completed.

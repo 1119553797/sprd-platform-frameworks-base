@@ -167,6 +167,11 @@ public class DownloadManager {
      */
     public final static int STATUS_FAILED = 1 << 4;
 
+    // add for manually pause and resume a download.
+    /**
+     * Value of {@link #COLUMN_STATUS} when the download has been paused by user.
+     */
+    public final static int STATUS_USER_PAUSED = 1 << 5;
 
     /**
      * Value of COLUMN_ERROR_CODE when the download has completed with an error that doesn't fit
@@ -787,6 +792,38 @@ public class DownloadManager {
         }
         return mResolver.delete(mBaseUri, getWhereClauseForIds(ids), getWhereArgsForIds(ids));
     }
+    
+    /**
+     * Pause downloads, Each download will be paused if it was running.
+     *
+     * @param ids the IDs of the downloads to remove
+     * @return the number of downloads actually paused
+     */
+    public int pauseDownload(long... ids) {
+        if (ids == null || ids.length == 0) {
+            // called with nothing to remove!
+            throw new IllegalArgumentException("input param 'ids' can't be null");
+        }
+        ContentValues values = new ContentValues();
+        values.put(Downloads.Impl.COLUMN_STATUS, Downloads.Impl.STATUS_PAUSED_BY_USER);
+        return mResolver.update(mBaseUri, values, getWhereClauseForIds(ids), getWhereArgsForIds(ids));
+    }
+    
+    /**
+     * Resume downloads, Each download will be resumed if it was paused by user.
+     *
+     * @param ids the IDs of the downloads to remove
+     * @return the number of downloads actually paused
+     */
+    public int resumeDownload(long... ids) {
+        if (ids == null || ids.length == 0) {
+            // called with nothing to remove!
+            throw new IllegalArgumentException("input param 'ids' can't be null");
+        }
+        ContentValues values = new ContentValues();
+        values.put(Downloads.Impl.COLUMN_STATUS, Downloads.Impl.STATUS_PENDING);
+        return mResolver.update(mBaseUri, values, getWhereClauseForIds(ids), getWhereArgsForIds(ids));
+    }
 
     /**
      * Query the download manager about downloads that have been requested.
@@ -1125,6 +1162,9 @@ public class DownloadManager {
 
                 case Downloads.STATUS_SUCCESS:
                     return STATUS_SUCCESSFUL;
+                 // add for manually pause and resume a download.
+                case Downloads.Impl.STATUS_PAUSED_BY_USER:
+                    return STATUS_USER_PAUSED;
 
                 default:
                     assert Downloads.isStatusError(status);
