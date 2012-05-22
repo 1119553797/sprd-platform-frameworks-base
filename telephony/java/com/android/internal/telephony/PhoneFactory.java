@@ -380,11 +380,9 @@ public class PhoneFactory {
     public synchronized static int autoSetDefaultPhoneId(boolean isUpdate, int phoneId) {
         int defaultPhoneId = TelephonyManager.getDefaultDataPhoneId(sContext);
         int settingPhoneId = -1;
-        if (phoneId == 0) {
-            isCard1ok = checkSimFinish(phoneId);
-        }
-        if (phoneId == 1) {
-            isCard2ok = checkSimFinish(phoneId);
+        isCard1ok = checkSimFinish(0);
+        if (TelephonyManager.getPhoneCount() > 1) {
+            isCard2ok = checkSimFinish(1);
         }
         if (isCard1ok && isCard2ok) {
             boolean hasCard1 = canHandleDataCall(0);
