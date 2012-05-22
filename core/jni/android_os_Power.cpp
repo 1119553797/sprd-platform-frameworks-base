@@ -15,12 +15,15 @@
 ** limitations under the License.
 */
 
+#define LAST_SHUTDOWN_FILE "/data/last_shutdown_flag"
+
 #include "JNIHelp.h"
 #include "jni.h"
 #include "android_runtime/AndroidRuntime.h"
 #include <utils/misc.h>
 #include <hardware_legacy/power.h>
 #include <sys/reboot.h>
+#include <utils/Log.h>
 
 namespace android
 {
@@ -75,9 +78,24 @@ setScreenState(JNIEnv *env, jobject clazz, jboolean on)
     return set_screen_state(on);
 }
 
+//del /system/last_shutdown_flag :as normallly shutdown
+void delFlag()
+{
+    if (access(LAST_SHUTDOWN_FILE, F_OK) == -1)
+    {
+        LOGD( " %s is not exsit.\n", LAST_SHUTDOWN_FILE);
+        return;
+    }
+
+    int res = remove(LAST_SHUTDOWN_FILE);
+    LOGD( " del %s.res= %d \n", LAST_SHUTDOWN_FILE, res);
+    return;
+}
+
 static void android_os_Power_shutdown(JNIEnv *env, jobject clazz)
 {
     sync();
+    delFlag();
 #ifdef HAVE_ANDROID_OS
     reboot(RB_POWER_OFF);
 #endif
@@ -86,6 +104,7 @@ static void android_os_Power_shutdown(JNIEnv *env, jobject clazz)
 static void android_os_Power_reboot(JNIEnv *env, jobject clazz, jstring reason)
 {
     sync();
+    delFlag();
 #ifdef HAVE_ANDROID_OS
     if (reason == NULL) {
         reboot(RB_AUTOBOOT);

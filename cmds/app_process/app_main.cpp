@@ -6,6 +6,9 @@
  */
 
 #define LOG_TAG "appproc"
+#define LAST_SHUTDOWN_FILE "/data/last_shutdown_flag"
+#define DEXPREOPT_PATH "/data/dalvik-cache"
+#define LOG_PATH "/data/last_shutdown_check_log"
 
 #include <binder/IPCThreadState.h>
 #include <binder/ProcessState.h>
@@ -16,6 +19,13 @@
 
 #include <stdio.h>
 #include <unistd.h>
+
+#include <stdlib.h>
+#include <dirent.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <string.h>
 
 namespace android {
 
@@ -115,6 +125,76 @@ static void setArgv0(const char *argv0, const char *newArgv0)
     strlcpy(const_cast<char *>(argv0), newArgv0, strlen(argv0));
 }
 
+FILE *fpLog;
+
+//this method is just for last_shutdown_check
+void sprintLog(const char* output)
+{
+    if ((fpLog = fopen(LOG_PATH, "a+")) != NULL)
+    {
+        fputs(output, fpLog);
+        fputs("\n", fpLog);
+        fflush(fpLog);
+    }
+}
+
+//delete files in /data/dalvik-cache dir
+void doDelCache()
+{
+    char file_path[PATH_MAX];
+    DIR *d;
+    struct dirent *file;
+    if (access(DEXPREOPT_PATH, F_OK) == -1)
+    {
+        sprintLog("/data/dalvik-cache is not exist.");
+        return;
+    }
+    if(!(d = opendir(DEXPREOPT_PATH)))
+    {
+        sprintLog("/data/dalvik-cache could not open.");
+        return;
+    }
+
+    while ((file = readdir(d)) != NULL)
+    {
+        if (strncmp(file->d_name, ".", 1) == 0 || strncmp(file->d_name, "..", 1) == 0)
+            continue;
+
+        strcpy(file_path, DEXPREOPT_PATH);
+        strcat(file_path, "/");
+        strcat(file_path, file->d_name);
+
+        remove(file_path);
+        sprintLog(file_path);
+    }
+}
+
+void doLastShutDownCheck()
+{
+    FILE *fp;
+
+    if (access(LOG_PATH, F_OK) != -1)
+    {
+        remove(LOG_PATH);
+        sprintLog("remove logfile.");
+    }
+    // check whether the file exist
+    if (access(LAST_SHUTDOWN_FILE, F_OK) == -1)
+    {//last shutdown normal.last_shutdown_file is deleted in anroid_os_Power.
+        sprintLog("last_shutdown_flag is not exist.");
+        if ((fp = fopen(LAST_SHUTDOWN_FILE, "w+")) != NULL)
+        {
+            fputs("This is a flag for last shutdown check.Please dont del me!!!", fp);
+        }
+        fclose(fp);
+    } else { //last shutdown unnormal .
+        sprintLog("last_shutdown_flag is exist.");
+        doDelCache();
+    }
+
+    fclose(fpLog);
+}
+
 int main(int argc, const char* const argv[])
 {
     // These are global variables in ProcessState.cpp
@@ -155,6 +235,8 @@ int main(int argc, const char* const argv[])
                     strcmp(argv[i], "--start-system-server") == 0 : false;
             setArgv0(argv0, "zygote");
             set_process_name("zygote");
+            // do last shutdown check
+            doLastShutDownCheck();
             runtime.start("com.android.internal.os.ZygoteInit",
                 startSystemServer);
         } else {
