@@ -276,6 +276,11 @@ public final class MediaStore {
                 String filePath = c.getString(1);
                 thumbUri = ContentUris.withAppendedId(baseUri, thumbId);
                 ParcelFileDescriptor pfdInput = cr.openFileDescriptor(thumbUri, "r");
+                // add for bug 17488 NullPointerException start
+                if(pfdInput == null){
+                    return null;
+                }
+                // add for bug 17488 NullPointerException end
                 bitmap = BitmapFactory.decodeFileDescriptor(
                         pfdInput.getFileDescriptor(), null, options);
                 pfdInput.close();
