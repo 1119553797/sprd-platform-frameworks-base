@@ -1307,7 +1307,7 @@ public class StatusBarPolicy {
             else iconLevel = 1;
 
             // Though mPhone is a Manager, this call is not an IPC
-            if (mPhone.isNetworkRoaming()) {
+            if (isNetworkRoaming(subscription)) {
                 iconList = sSignalImages_r[mInetCondition];
             } else {
                 // 2012-01-31 add for bug9243 begin
@@ -1855,4 +1855,14 @@ public class StatusBarPolicy {
             }
         }
     }
+
+	private boolean isNetworkRoaming(int subscription) {
+		boolean isNetworkRoaming = ((TelephonyManager) mContext
+				.getSystemService(PhoneFactory.getServiceName(
+						Context.TELEPHONY_SERVICE, subscription)))
+				.isNetworkRoaming();
+		Slog.d(TAG, "the sim" + subscription + " NetworkRoaming is "
+				+ isNetworkRoaming);
+		return isNetworkRoaming;
+	}
 }
