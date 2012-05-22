@@ -1746,21 +1746,24 @@ uint32_t AudioPolicyManagerBase::getDeviceForStrategy(routing_strategy strategy,
             device = 0;
             LOGV("getDeviceForStrategy() incompatible media and phone devices");
         }
-		//CFW1 fix FM relate bug
-		if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
-			if(device&0x8){
-				device-=4;
-			}	
-			device |= AudioSystem::DEVICE_OUT_FM_HEADSET;
-		}
-	
-	    if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER){
-			if(device&0x8){
-				device-=4;
-			}	
-			device |= AudioSystem::DEVICE_OUT_FM_SPEAKER;
-	    }
-		
+
+        if (mPhoneState != AudioSystem::MODE_RINGTONE) {
+            //CFW1 fix FM relate bug
+            if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
+                if(device&0x8){
+                    device-=4;
+                }
+                device |= AudioSystem::DEVICE_OUT_FM_HEADSET;
+            }
+
+            if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER){
+                if(device&0x8){
+                    device-=4;
+                }
+                device |= AudioSystem::DEVICE_OUT_FM_SPEAKER;
+            }
+        }
+
         } break;
 
     case STRATEGY_FM: {
