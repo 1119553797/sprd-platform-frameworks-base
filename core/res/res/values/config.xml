@@ -493,4 +493,18 @@
              -SourcePortDestPort-SourcePortDestPort-OMADM PDU
          If false, not supported. -->
     <bool name="config_duplicate_port_omadm_wappush">false</bool>
+
+        <string-array name="config_sntp_server_list">
+        <item>132.163.4.101</item>
+        <item>132.163.4.102</item>
+        <item>132.163.4.103</item>
+        <item>210.72.145.8</item>
+        <item>192.43.244.18</item>
+        <item>129.6.15.28</item>
+        <item>129.6.15.29</item>
+        <item>128.138.140.44</item>
+        <item>131.107.1.10</item>
+        <item>216.200.93.8</item>
+    </string-array>
+
 </resources>
