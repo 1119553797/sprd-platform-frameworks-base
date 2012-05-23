@@ -450,7 +450,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				{
 			            int fileId = lc.efid;
                             
-                                if(iccException!= null){
+                                if(iccException!= null|| (fileId==EF_PBR && !isDataValid(data))){
 						  Log.i(LOG_TAG, "EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE pathNum "+ pathNum);
 
 						if(!loadFileAgain(fileId, pathNum , msg.what,lc)){
@@ -531,13 +531,16 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 					sendResult(response, null, ar.exception);
 					break;
 				}
+                data = result.payload;
+                fileid = lc.efid;
+                recordNum = lc.recordNum;
 				iccException = result.getException();
 				
 				if(isUsim)                  
 				{
 			             int fileId = lc.efid;
                                
-                                if(iccException != null ){                           
+                                if(iccException != null || (fileId==EF_PBR && !isDataValid(data))){
                                   
 						if(!loadFileAgain(fileId, pathNum ,msg.what,lc)){
 							sendResult(response, null, iccException);
@@ -552,9 +555,6 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 					sendResult(response, null, iccException);
 					break;
 				}
-				data = result.payload;
-				fileid = lc.efid;
-				recordNum = lc.recordNum;
 
 				logbyte(data);
 				Log.d(LOG_TAG,"FCP:"
@@ -876,7 +876,8 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 
 			if (isUsim) {
 				//return MF_SIM + DF_ADF + DF_PHONEBOOK;
-				return MF_SIM + DF_TELECOM + DF_PHONEBOOK;
+				//return MF_SIM + DF_TELECOM + DF_PHONEBOOK;
+			    return mDualMapFileList.get(EF_PBR);
 			}
 			Log.e(LOG_TAG, "Error: EF Path being returned in null");
 		}
@@ -901,4 +902,16 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 			Log.d(LOG_TAG, "payload:" + test);
 		}
 	}
+    protected boolean isDataValid(byte data[]) {
+        boolean isValid = false;
+        for (int i = 0; i < data.length; i++) {
+            if(data[i]!=0xFF){
+                isValid = true;
+                break;
+            }
+        }
+
+        Log.d(LOG_TAG, "isDataValid:" + isValid);
+        return isValid;
+    }
 }
