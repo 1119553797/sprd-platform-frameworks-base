@@ -1412,15 +1412,7 @@ void AwesomePlayer::setVideoSource(sp<MediaSource> source) {
 
 status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 	LOGI("initVideoDecoder, mIsVideoPhoneStream: %d", mIsVideoPhoneStream);
-	
-	sp<MetaData> meta = mVideoTrack->getFormat();
-	
-	 const char *mime;
-	 CHECK(meta->findCString(kKeyMIMEType, &mime));
-
-	 LOGI("initVideoDecoder, mime %s",mime);
-	 
-	if (mIsVideoPhoneStream){
+    if (mIsVideoPhoneStream){
 	    mVideoSource = new ThreadedSource(OMXCodec::Create(
 	            mClient.interface(), mVideoTrack->getFormat(),
 	            false, // createEncoder
@@ -1447,6 +1439,11 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 
     if (mVideoSource != NULL) {
         int64_t durationUs;
+	    const char *mime;
+		sp<MetaData> meta = mVideoTrack->getFormat();
+		CHECK(meta->findCString(kKeyMIMEType, &mime));
+	    LOGI("initVideoDecoder, mime %s",mime);
+		
         if (mVideoTrack->getFormat()->findInt64(kKeyDuration, &durationUs)) {
 	     LOGI("video duration %lld",durationUs);
             Mutex::Autolock autoLock(mMiscStateLock);
@@ -1487,7 +1484,7 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 
 			LOGI("avc profile 0x%x",profile);
 			
-			if(profile != 0x4d && profile != 0x42)
+			if(profile > 0x4d)
 			{
 			  mVideoSource.clear();
 			  return OK;
