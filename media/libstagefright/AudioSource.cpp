@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 #define LOG_TAG "AudioSource"
 #include <utils/Log.h>
 
@@ -68,6 +68,7 @@ status_t AudioSource::initCheck() const {
 }
 
 status_t AudioSource::start(MetaData *params) {
+    LOGI("start");			
     if (mStarted) {
         return UNKNOWN_ERROR;
     }
@@ -98,11 +99,12 @@ status_t AudioSource::start(MetaData *params) {
 
         mStarted = true;
     }
-
+    LOGI("start X");		
     return err;
 }
 
 status_t AudioSource::stop() {
+    LOGI("stop");			
     if (!mStarted) {
         return UNKNOWN_ERROR;
     }
@@ -122,7 +124,7 @@ status_t AudioSource::stop() {
         LOGI("Total lost audio frames: %lld",
             mTotalLostFrames + (mPrevLostBytes >> 1));
     }
-
+    LOGI("stop X");
     return OK;
 }
 

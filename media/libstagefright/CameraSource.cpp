@@ -192,6 +192,7 @@ CameraSource::~CameraSource() {
 }
 
 status_t CameraSource::start(MetaData *meta) {
+    LOGI("start");	
     CHECK(!mStarted);
 
     char value[PROPERTY_VALUE_MAX];
@@ -212,6 +213,7 @@ status_t CameraSource::start(MetaData *meta) {
     IPCThreadState::self()->restoreCallingIdentity(token);
 
     mStarted = true;
+    LOGI("start X");		
     return OK;
 }
 
@@ -240,6 +242,7 @@ status_t CameraSource::stop() {
     }
 
     CHECK_EQ(mNumFramesReceived, mNumFramesEncoded + mNumFramesDropped);
+    LOGI("stop X");			
     return OK;
 }
 
