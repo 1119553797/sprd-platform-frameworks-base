@@ -106,6 +106,7 @@ public abstract class DataConnectionTracker extends Handler {
     protected static final int EVENT_SET_MASTER_DATA_ENABLE = 37;
     protected static final int EVENT_RESET_DONE = 38;
     protected static final int EVENT_SWITCH_PHONE = 100;    // self-defined event for phone switching
+    protected static final int EVENT_UPDATE_SNTP_TIME = 200;    // self-defined event
 
     /***** Constants *****/
 

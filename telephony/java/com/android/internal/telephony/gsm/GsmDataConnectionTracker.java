@@ -183,6 +183,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     static final String APN_ID_SIM2 = "apn_id_sim2";
     private boolean canSetPreferApn = false;
 
+    private boolean isFirstUpdateTime = true;
+    private int updateTimeCount = 5;
+
     // for tracking retries on the default APN
     private RetryManager mDefaultRetryManager;
     // for tracking retries on a secondary APN
@@ -1314,6 +1317,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             MsmsGsmDataConnectionTrackerProxy.resetRequestPhoneIdBeforeVoiceCallEnd();
             MsmsGsmDataConnectionTrackerProxy.setActivePhoneId(phone.getPhoneId());
             notifyDefaultData(reason);
+            GsmDataConnectionTracker.this.sendEmptyMessageDelayed(EVENT_UPDATE_SNTP_TIME, 10000);
 
             // TODO: For simultaneous PDP support, we need to build another
             // trigger another TRY_SETUP_DATA for the next APN type.  (Note
@@ -1762,6 +1766,25 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 Log.d(LOG_TAG, "EVENT_SWITCH_PHONE");
                 MsmsGsmDataConnectionTrackerProxy.checkAndSwitchPhone(phone.getPhoneId(),
                         phone.getContext());
+                break;
+            case EVENT_UPDATE_SNTP_TIME:
+                if(isFirstUpdateTime && updateTimeCount > 0) {
+                    Log.d(LOG_TAG, "GSMDataConnTrack trace1");
+                    if (Settings.System.getInt(mGsmPhone.getContext().getContentResolver(),
+                            Settings.System.AUTO_TIME, 0) == 0) {
+                        Log.d(LOG_TAG, "GSMDataConnTrack trace2");
+                        isFirstUpdateTime = false;
+                        updateTimeCount = 0;
+                        return;
+                    }
+                    if(!mGsmPhone.mSST.updateTime()) {
+                        GsmDataConnectionTracker.this.sendEmptyMessageDelayed(EVENT_UPDATE_SNTP_TIME, 10000);
+                        updateTimeCount--;
+                    }else {
+                        updateTimeCount = 5;
+                        isFirstUpdateTime = true;
+                    }
+                }
                 break;
             default:
                 // handle the message in the super class DataConnectionTracker

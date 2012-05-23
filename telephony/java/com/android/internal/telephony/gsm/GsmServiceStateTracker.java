@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.net.SntpClient;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
@@ -1717,12 +1718,18 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra("time", time);
         phone.getContext().sendStickyBroadcast(intent);
+        Intent timeChanged = new Intent(Intent.ACTION_TIME_CHANGED);
+        phone.getContext().sendBroadcast(timeChanged);
     }
 
-    private void revertToNitz() {
+	public boolean updateTime() {
+		return revertToNitz();
+	}
+
+    private boolean revertToNitz() {
         if (Settings.System.getInt(phone.getContext().getContentResolver(),
                 Settings.System.AUTO_TIME, 0) == 0) {
-            return;
+            return false;
         }
         Log.d(LOG_TAG, "Reverting to NITZ: tz='" + mSavedTimeZone
                 + "' mSavedTime=" + mSavedTime
@@ -1731,7 +1738,26 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             setAndBroadcastNetworkSetTimeZone(mSavedTimeZone);
             setAndBroadcastNetworkSetTime(mSavedTime
                     + (SystemClock.elapsedRealtime() - mSavedAtTime));
+            return true;
         }
+
+        String []sntpList = phone.getContext().getResources().getStringArray(com.android.internal.R.array.config_sntp_server_list);
+        SntpClient client = new SntpClient();
+		for (String sntp : sntpList) {
+			Log.d(LOG_TAG, "sntp is" + sntp);
+			if (client.requestTime(sntp, 10000)) {
+				long cachedNtp = client.getNtpTime();
+				// long cachedNtpTimestamp = SystemClock.elapsedRealtime();
+
+				Log.i(LOG_TAG, "Sntp NtpTime = " + cachedNtp);
+
+				setAndBroadcastNetworkSetTime(cachedNtp
+						+ (SystemClock.elapsedRealtime() - client
+								.getNtpTimeReference()));
+				return true;
+			}
+		}
+        return false;
     }
 
     /**
