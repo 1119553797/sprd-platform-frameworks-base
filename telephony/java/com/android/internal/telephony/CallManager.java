@@ -1912,7 +1912,7 @@ public final class CallManager {
     }
 
     public void  codecVP(int type, Bundle param) {
-		mDefaultPhone.codecVP(type, param);
+		getActiveFgCall().getPhone().codecVP(type, param);
     }
 
     private Handler mHandler = new Handler() {
