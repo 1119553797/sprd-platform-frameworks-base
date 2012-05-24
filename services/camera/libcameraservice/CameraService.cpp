@@ -289,7 +289,7 @@ void CameraService::playSound(sound_kind kind) {
         int index;
         AudioSystem::getStreamVolumeIndex(AudioSystem::ENFORCED_AUDIBLE, &index);
         if (index != 0) {
-            player->seekTo(0);
+            //player->seekTo(0);
             player->start();
         }
     }
