@@ -951,7 +951,11 @@ public class NotificationManagerService extends INotificationManager.Stub
                     (notification.defaults & Notification.DEFAULT_SOUND) != 0;
                 if (useDefaultSound || notification.sound != null) {
                     Uri uri;
-                    if (useDefaultSound) {
+                    // If sd card is unavailable using defalut sound. Modify for bug 18127
+                    if (useDefaultSound ||
+                         (notification.sound.toString().startsWith("content://media/external/") &&
+                         !(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED) ||
+                           android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED_READ_ONLY)) )) {
                         uri = Settings.System.DEFAULT_NOTIFICATION_URI;
                     } else {
                         uri = notification.sound;
