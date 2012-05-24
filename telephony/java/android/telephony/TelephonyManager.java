@@ -28,6 +28,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.provider.Settings.System;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 
@@ -63,7 +64,7 @@ import java.util.List;
 public class TelephonyManager {
     private static final String TAG = "TelephonyManager";
 
-    private Context mContext;
+    private static Context mContext;
     private ITelephonyRegistry mRegistry;
     private int mPhoneId;
 
@@ -88,6 +89,7 @@ public class TelephonyManager {
         mRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
                     PhoneFactory.getServiceName("telephony.registry", phoneId)));
         mPhoneId = phoneId;
+        isStandby=new boolean[2];
     }
 
     /** @hide */
@@ -1222,6 +1224,7 @@ public class TelephonyManager {
     private static final String DUAL_SIM_MMS_ID_KEY = "dual_sim_mms_id";
     private static final String DUAL_SIM_MMS_IMSI_KEY = "dual_sim_mms_imsi";
 
+    private static boolean isStandby[];
     /**
      * Set default sim card for vioce,video, mms
      *
@@ -1231,11 +1234,11 @@ public class TelephonyManager {
      */
     public static void setDefaultSim(Context context, int mode, int phoneId) {
         // get imsi
-        String imsi = "";
-        if (phoneId >= 0) {
-            TelephonyManager tm = getDefault(phoneId);
-            imsi = tm.getSubscriberId();
-        }
+//        String imsi = "";
+//        if (phoneId >= 0) {
+//            TelephonyManager tm = getDefault(phoneId);
+//            imsi = tm.getSubscriberId();
+//        }
 
         // get imsiKey and phoneIdKey
         String phoneIdKey = "";
@@ -1256,9 +1259,10 @@ public class TelephonyManager {
             default:
                 break;
         }
+        Log.d(TAG, "setDefaultSim:phoneIdKey "+phoneIdKey +" phoneId "+phoneId);
         // set the value into the database
         Settings.System.putInt(context.getContentResolver(), phoneIdKey, phoneId);
-        Settings.System.putString(context.getContentResolver(), imsiKey, imsi);
+//        Settings.System.putString(context.getContentResolver(), imsiKey, imsi);
     }
 
     /**
@@ -1292,20 +1296,21 @@ public class TelephonyManager {
             default:
                 break;
         }
-        imsi = (imsi == null ? "" : imsi);
-
-        if (phoneId != PHONE_ID_INVALID) {
-            // rescan phoneId for imsi
-            for (int i = 0; i < getPhoneCount(); ++i) {
-                TelephonyManager tmp = getDefault(i);
-                if (tmp != null && tmp.hasIccCard() && imsi.equals(tmp.getSubscriberId())) {
-                    phoneId = i;
-                    break;
-                } else {
-                    phoneId = PHONE_ID_INVALID;
-                }
-            }
-        }
+        //imsi = (imsi == null ? "" : imsi);
+        Log.d(TAG, "getDefaultSim :phoneId" + phoneId);
+//        if (phoneId != PHONE_ID_INVALID) {
+//            for (int i = 0; i < getPhoneCount(); ++i) {
+//                TelephonyManager tmp = getDefault(i);
+//                 isStandby[i] = System.getInt(mContext.getContentResolver(),
+//                        PhoneFactory.getSetting(System.SIM_STANDBY, i), 1) == 1;
+//                if (tmp != null && tmp.hasIccCard()&&isStandby[i]) {
+//                    phoneId = i;
+//                    break;
+//                } else {
+//                    phoneId = PHONE_ID_INVALID;
+//                }
+//            }
+//        }
 
         if (phoneId == PHONE_ID_INVALID) {
             int iccCount = 0;
