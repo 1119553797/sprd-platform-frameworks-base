@@ -1570,7 +1570,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             tzOffset = (sign ? 1 : -1) * tzOffset * 15 * 60 * 1000;
 
             TimeZone    zone = null;
-
             // As a special extension, the Android emulator appends the name of
             // the host computer's timezone to the nitz string. this is zoneinfo
             // timezone name of the form Area!Location or Area!Location!SubLocation
@@ -1579,52 +1578,49 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 String  tzname = nitzSubs[8].replace('!','/');
                 zone = TimeZone.getTimeZone( tzname );
             }
-
             String operatorIsoCountryProperty = PhoneFactory.getProperty(
                     TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, phone.getPhoneId());
             String iso = SystemProperties.get(operatorIsoCountryProperty);
-
+            Log.i(LOG_TAG, "NITZ: zone="+zone +",mGotCountryCode"+mGotCountryCode);
             if (zone == null) {
-
                 if (mGotCountryCode) {
                     if (iso != null && iso.length() > 0) {
                         zone = TimeUtils.getTimeZone(tzOffset, dst != 0,
                                 c.getTimeInMillis(),
                                 iso);
+                        Log.i(LOG_TAG, "NITZ:1 zone="+zone );
                     } else {
                         // We don't have a valid iso country code.  This is
                         // most likely because we're on a test network that's
                         // using a bogus MCC (eg, "001"), so get a TimeZone
                         // based only on the NITZ parameters.
                         zone = getNitzTimeZone(tzOffset, (dst != 0), c.getTimeInMillis());
+                        Log.i(LOG_TAG, "NITZ:2 zone="+zone );
                     }
                 }
             }
-
             if (zone == null) {
                 // We got the time before the country, so we don't know
                 // how to identify the DST rules yet.  Save the information
                 // and hope to fix it up later.
-
                 mNeedFixZone = true;
                 mZoneOffset  = tzOffset;
                 mZoneDst     = dst != 0;
                 mZoneTime    = c.getTimeInMillis();
             }
-
             if (zone != null) {
                 if (getAutoTime()) {
                     setAndBroadcastNetworkSetTimeZone(zone.getID());
                 }
                 saveNitzTimeZone(zone.getID());
+                Log.i(LOG_TAG, "NITZ: zone="+zone+" zone.getID()="+zone.getID());
             }
-
             String ignore = SystemProperties.get("gsm.ignore-nitz");
+            Log.i(LOG_TAG, "NITZ:3 ignore="+ignore );
             if (ignore != null && ignore.equals("yes")) {
                 Log.i(LOG_TAG, "NITZ: Not setting clock because gsm.ignore-nitz is set");
                 return;
             }
-
             try {
                 mWakeLock.acquire();
 

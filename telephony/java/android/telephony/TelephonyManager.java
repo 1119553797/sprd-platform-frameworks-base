@@ -1298,35 +1298,29 @@ public class TelephonyManager {
             default:
                 break;
         }
-        //imsi = (imsi == null ? "" : imsi);
-        Log.d(TAG, "getDefaultSim :phoneId" + phoneId);
-//        if (phoneId != PHONE_ID_INVALID) {
-//            for (int i = 0; i < getPhoneCount(); ++i) {
-//                TelephonyManager tmp = getDefault(i);
-//                 isStandby[i] = System.getInt(mContext.getContentResolver(),
-//                        PhoneFactory.getSetting(System.SIM_STANDBY, i), 1) == 1;
-//                if (tmp != null && tmp.hasIccCard()&&isStandby[i]) {
-//                    phoneId = i;
-//                    break;
-//                } else {
-//                    phoneId = PHONE_ID_INVALID;
-//                }
-//            }
-//        }
 
-        if (phoneId == PHONE_ID_INVALID) {
-            int iccCount = 0;
-            for (int i = 0; i < getPhoneCount(); ++i) {
-                TelephonyManager tmp = getDefault(i);
-                if (tmp != null && tmp.hasIccCard()) {
-                    iccCount++;
-                    phoneId = i;
-                }
-            }
-            if (iccCount > 1) {
-                phoneId = PHONE_ID_INVALID;
+        Log.d(TAG, "getDefaultSim :phoneId" + phoneId);
+
+        int iccCount =0;//count card numbers
+        int avtivedPhone=-1;//find available card
+        for (int i = 0; i < getPhoneCount(); ++i) {
+            TelephonyManager tmp = getDefault(i);
+            if (tmp != null && tmp.hasIccCard()) {
+                iccCount++;
+                avtivedPhone=i;
             }
         }
+        if (PHONE_ID_INVALID == phoneId&& iccCount > 1) {
+            return PHONE_ID_INVALID;
+        }
+        if (iccCount == 1) {
+            phoneId = avtivedPhone;
+            TelephonyManager.setDefaultSim(mContext, TelephonyManager.MODE_MMS, phoneId);
+            TelephonyManager.setDefaultSim(mContext, TelephonyManager.MODE_TEL, phoneId);
+            TelephonyManager.setDefaultSim(mContext, TelephonyManager.MODE_VTEL, phoneId);
+        }
+        Log.d(TAG, "getDefaultSim :avtivedPhone " + phoneId);
+
         return phoneId;
     }
 }
