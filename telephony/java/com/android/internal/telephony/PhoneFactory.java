@@ -431,13 +431,21 @@ public class PhoneFactory {
     }
     public static boolean checkSimFinish(int phoneId) {
         if (sProxyPhone!=null&&phoneId<sProxyPhone.length) {
-            Log.i(LOG_TAG, "checkSimFinish state["+phoneId+"]=" + sProxyPhone[phoneId].getIccCard().mState);
-            if((sProxyPhone[phoneId].getIccCard().mState == State.PIN_REQUIRED) ||
-               (sProxyPhone[phoneId].getIccCard().mState == State.PUK_REQUIRED) ||
-               (sProxyPhone[phoneId].getIccCard().mState == State.NETWORK_LOCKED) ||
-               (sProxyPhone[phoneId].getIccCard().mState == State.READY) ||
-               (sProxyPhone[phoneId].getIccCard().mState == State.ABSENT)) {
+            State state = sProxyPhone[phoneId].getIccCard().getIccCardState();
+            Log.i(LOG_TAG, "checkSimFinish state["+phoneId+"]=" + state);
+            if((state == State.PIN_REQUIRED) ||
+               (state == State.PUK_REQUIRED) ||
+               (state == State.NETWORK_LOCKED) ||
+               (state == State.READY) ||
+               (state == State.ABSENT)) {
                 return true;
+            } else {
+                boolean isAirplaneModeOn = Settings.System.getInt(sContext.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+                boolean isStandby = Settings.System.getInt(sContext.getContentResolver(),getSetting(
+                        Settings.System.SIM_STANDBY, phoneId), 1) == 1;
+                if(isAirplaneModeOn || !isStandby) {
+                    return true;
+                }
             }
         }
         return false;
