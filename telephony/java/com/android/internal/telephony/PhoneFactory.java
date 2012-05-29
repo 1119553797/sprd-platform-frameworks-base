@@ -453,7 +453,7 @@ public class PhoneFactory {
     public static boolean canHandleDataCall(int phoneId) {
         if (sProxyPhone!=null&&phoneId<sProxyPhone.length) {
             if(PhoneFactory.isCardReady(phoneId)) {
-                if(sProxyPhone[phoneId].getIccCard().mState == State.READY) {
+                if(sProxyPhone[phoneId].getIccCard().getIccCardState() == State.READY) {
                     return true;
                 }
             }
