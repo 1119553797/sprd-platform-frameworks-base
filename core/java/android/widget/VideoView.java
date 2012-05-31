@@ -464,7 +464,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             }
 
             /* If an error handler has been supplied, use it and finish. */
-            if (mOnErrorListener != null) {
+            if (mOnErrorListener != null && mIsStream) {
                 if (mOnErrorListener.onError(mMediaPlayer, framework_err, impl_err)) {
                     return true;
                 }
