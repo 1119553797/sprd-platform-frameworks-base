@@ -488,6 +488,21 @@ public class SmsMessage {
         return new DeliverPdu(spb);
     }
 
+    public static SubmitPdu getFromDbPdu(String scAddress,
+            String destinationAddress, String message, boolean statusReportRequested) {
+        SubmitPduBase spb;
+        int activePhone = TelephonyManager.getDefault().getPhoneType();
+
+        if (PHONE_TYPE_CDMA == activePhone) {
+            spb = com.android.internal.telephony.cdma.SmsMessage.getSubmitPdu(scAddress,
+                    destinationAddress, message, statusReportRequested, null);
+        } else {
+            spb = com.android.internal.telephony.gsm.SmsMessage.getFromDbPdu(scAddress,
+                    destinationAddress, message, statusReportRequested);
+        }
+
+        return new SubmitPdu(spb);
+    }
     /**
 
      * Get an SMS-SUBMIT PDU for a data message to a destination address &amp; port.

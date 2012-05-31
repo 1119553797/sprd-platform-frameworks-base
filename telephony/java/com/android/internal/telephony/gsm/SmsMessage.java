@@ -256,6 +256,12 @@ public class SmsMessage extends SmsMessageBase{
                 ENCODING_UNKNOWN, 0, 0);
     }
 
+    public static SubmitPdu getFromDbPdu(String scAddress,
+            String destinationAddress, String message,
+            boolean statusReportRequested, byte[] header) {
+        return getFromDbPdu(scAddress, destinationAddress, message, statusReportRequested, header,
+                ENCODING_UNKNOWN, 0, 0);
+    }
     //TS for compile
     public static SubmitPdu getSubmitPdu(String scAddress,
             String destinationAddress, String message,
@@ -368,6 +374,89 @@ public class SmsMessage extends SmsMessageBase{
         return ret;
     }
 
+    public static SubmitPdu getFromDbPdu(String scAddress,
+            String destinationAddress, String message,
+            boolean statusReportRequested, byte[] header, int encoding,
+            int languageTable, int languageShiftTable) {
+
+        // Perform null parameter checks.
+        if (message == null || destinationAddress == null) {
+            return null;
+        }
+
+        SubmitPdu ret = new SubmitPdu();
+        // MTI = SMS-SUBMIT, UDHI = header != null
+        byte mtiByte = (byte)(0x01 | (header != null ? 0x40 : 0x00));
+        ByteArrayOutputStream bo = getSubmitPduHead(
+                scAddress, destinationAddress, mtiByte,
+                statusReportRequested, ret);
+        // User Data (and length)
+        byte[] userData;
+        if (encoding == ENCODING_UNKNOWN) {
+            // First, try encoding it with the GSM alphabet
+            encoding = ENCODING_7BIT;
+        }
+        try {
+            if (encoding == ENCODING_7BIT) {
+                userData = GsmAlphabet.stringToGsm7BitPackedWithHeader(message, header,
+                        languageTable, languageShiftTable);
+            } else { //assume UCS-2
+                try {
+                    userData = encodeUCS2(message, header);
+                } catch(UnsupportedEncodingException uex) {
+                    Log.e(LOG_TAG,
+                            "Implausible UnsupportedEncodingException ",
+                            uex);
+                    return null;
+                }
+            }
+        } catch (EncodeException ex) {
+            // Encoding to the 7-bit alphabet failed. Let's see if we can
+            // send it as a UCS-2 encoded message
+            try {
+                userData = encodeUCS2(message, header);
+                encoding = ENCODING_16BIT;
+            } catch(UnsupportedEncodingException uex) {
+                Log.e(LOG_TAG,
+                        "Implausible UnsupportedEncodingException ",
+                        uex);
+                return null;
+            }
+        }
+
+        if (encoding == ENCODING_7BIT) {
+            if ((0xff & userData[0]) > MAX_USER_DATA_SEPTETS) {
+                // Message too long
+                return null;
+            }
+            // TP-Data-Coding-Scheme
+            // Default encoding, uncompressed
+            // To test writing messages to the SIM card, change this value 0x00
+            // to 0x12, which means "bits 1 and 0 contain message class, and the
+            // class is 2". Note that this takes effect for the sender. In other
+            // words, messages sent by the phone with this change will end up on
+            // the receiver's SIM card. You can then send messages to yourself
+            // (on a phone with this change) and they'll end up on the SIM card.
+            bo.write(0x00);
+        } else { //assume UCS-2
+            // TP-Data-Coding-Scheme
+            // Class 3, UCS-2 encoding, uncompressed
+            bo.write(0x0b);
+        }
+
+        // TP-Validity-Period
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+        if (validity != 0) {
+            bo.write(validity);
+            Log.d("lu", "SmsMessage --> write into TP-VP:" + validity);
+        }
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
+
+        bo.write(userData, 0, userData.length);
+        ret.encodedMessage = bo.toByteArray();
+        return ret;
+    }
+
     /**
      * Packs header and UCS-2 encoded message. Includes TP-UDL & TP-UDHL if necessary
      *
@@ -409,6 +498,13 @@ public class SmsMessage extends SmsMessageBase{
             boolean statusReportRequested) {
 
         return getSubmitPdu(scAddress, destinationAddress, message, statusReportRequested, null);
+    }
+
+    public static SubmitPdu getFromDbPdu(String scAddress,
+            String destinationAddress, String message,
+            boolean statusReportRequested) {
+
+        return getFromDbPdu(scAddress, destinationAddress, message, statusReportRequested, null);
     }
 
     /**
