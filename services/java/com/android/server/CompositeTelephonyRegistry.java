@@ -34,6 +34,12 @@ public class CompositeTelephonyRegistry extends ITelephonyRegistry.Stub {
     @Override
     public void listen(String pkg, IPhoneStateListener callback, int events, boolean notifyNow)
             throws RemoteException {
+        if (events == 0) {
+            for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                mTelephonyRegistry[i].listen(pkg, callback, events, notifyNow);
+            }
+            return;
+        }
         if ((events & PhoneStateListener.LISTEN_SERVICE_STATE) != 0) {
             mTelephonyRegistry[getSimplePolicyPhoneId()].listen(pkg, callback, events, notifyNow);
         }
