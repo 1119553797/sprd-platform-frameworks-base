@@ -25,6 +25,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -519,7 +520,16 @@ public class ScrollView extends FrameLayout {
                 if (mIsBeingDragged) {
                     // Scroll to follow the motion event
                     final int activePointerIndex = ev.findPointerIndex(mActivePointerId);
-                    final float y = ev.getY(activePointerIndex);
+                    float y = 0;
+                    try {
+                       y = ev.getY(activePointerIndex);
+                    } catch(Exception e) {
+                       //ArrayIndexOutOfBoundsException
+                       Log.e("ScrollView","getY outofBounds.mActivePointerId=" + mActivePointerId +
+                             " pointerIndex=" + activePointerIndex + " mNumPointers=" + ev.getPointerCount());
+                       return true;
+                    }
+
                     final int deltaY = (int) (mLastMotionY - y);
                     mLastMotionY = y;
 
