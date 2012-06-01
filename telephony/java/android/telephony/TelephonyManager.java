@@ -1042,6 +1042,8 @@ public class TelephonyManager {
 				return MODEM_TYPE_TDSCDMA;
 			}else if(modemValue.equals("sc6810_sp6810")){
 				return MODEM_TYPE_GSM;
+			} else if (modemValue.equals("sc6820_sp6820")) {
+			    return MODEM_TYPE_GSM;
 			}
 		}
 		Log.d(TAG, "can not get the baseband version");
