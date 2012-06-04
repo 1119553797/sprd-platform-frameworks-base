@@ -25,6 +25,7 @@ import android.provider.ContactsContract.CommonDataKinds.Organization;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.Photo;
 import android.provider.ContactsContract.CommonDataKinds.Relation;
+import android.provider.ContactsContract.CommonDataKinds.SipAddress;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.provider.ContactsContract.CommonDataKinds.Website;
@@ -74,7 +75,7 @@ public class VCardBuilder {
     private static final Set<String> sAllowedAndroidPropertySet =
             Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
                     Nickname.CONTENT_ITEM_TYPE, Event.CONTENT_ITEM_TYPE,
-                    Relation.CONTENT_ITEM_TYPE)));
+                    Relation.CONTENT_ITEM_TYPE, SipAddress.CONTENT_ITEM_TYPE)));
 
     public static final int DEFAULT_PHONE_TYPE = Phone.TYPE_HOME;
     public static final int DEFAULT_POSTAL_TYPE = StructuredPostal.TYPE_HOME;
@@ -810,6 +811,19 @@ public class VCardBuilder {
                 } else {
                     appendLineWithCharsetAndQPDetection(VCardConstants.PROPERTY_NICKNAME, nickname);
                 }
+            }
+        }
+        return this;
+    }
+
+    public VCardBuilder appendSipAddress(final List<ContentValues> contentValuesList) {
+        if (contentValuesList != null) {
+            for (ContentValues contentValues : contentValuesList) {
+                final String sipAddress = contentValues.getAsString(SipAddress.SIP_ADDRESS);
+                if (TextUtils.isEmpty(sipAddress)) {
+                    continue;
+                }
+                appendAndroidSpecificProperty(SipAddress.CONTENT_ITEM_TYPE, contentValues);
             }
         }
         return this;

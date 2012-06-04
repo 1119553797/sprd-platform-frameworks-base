@@ -34,6 +34,7 @@ import android.provider.ContactsContract.CommonDataKinds.Organization;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.Photo;
 import android.provider.ContactsContract.CommonDataKinds.Relation;
+import android.provider.ContactsContract.CommonDataKinds.SipAddress;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.provider.ContactsContract.CommonDataKinds.Website;
@@ -607,6 +608,7 @@ public class VCardComposer {
                     .appendEmails(contentValuesListMap.get(Email.CONTENT_ITEM_TYPE))
                     .appendPostals(contentValuesListMap.get(StructuredPostal.CONTENT_ITEM_TYPE))
                     .appendOrganizations(contentValuesListMap.get(Organization.CONTENT_ITEM_TYPE))
+                    .appendSipAddress(contentValuesListMap.get(SipAddress.CONTENT_ITEM_TYPE))
                     .appendWebsites(contentValuesListMap.get(Website.CONTENT_ITEM_TYPE));
             if ((mVCardType & VCardConfig.FLAG_REFRAIN_IMAGE_EXPORT) == 0) {
                 builder.appendPhotos(contentValuesListMap.get(Photo.CONTENT_ITEM_TYPE));            
