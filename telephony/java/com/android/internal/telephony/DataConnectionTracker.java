@@ -580,9 +580,8 @@ public abstract class DataConnectionTracker extends Handler {
                         + ",isApnTypeActive(Phone.APN_TYPE_DEFAULT)="
                         + isApnTypeActive(Phone.APN_TYPE_DEFAULT) + ",mIsWifiConnected="
                         + mIsWifiConnected);
-                if ((dataEnabled[APN_DEFAULT_ID] == true &&
-                        !isApnTypeActive(Phone.APN_TYPE_DEFAULT) ||
-                        !mRequestedApnType.equals( Phone.APN_TYPE_DEFAULT))
+                if (dataEnabled[APN_DEFAULT_ID] == true &&
+                        !isApnTypeActive(Phone.APN_TYPE_DEFAULT)
                         &&!mIsWifiConnected) {
                     log2("type:  " + apnIdToType(apnId)+"mRequestedApnType:"+mRequestedApnType);
                     mRequestedApnType = Phone.APN_TYPE_DEFAULT;
