@@ -689,7 +689,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                  +"---new spn ="+spn+"---curSpn=="+curSpn+"---new plmn=="+plmn+"---curPlmn=="+curPlmn);
         if (rule != curSpnRule
                 || !TextUtils.equals(spn, curSpn)
-                || !TextUtils.equals(plmn, curPlmn)||mLocalLanguageChange) {
+                || !TextUtils.equals(plmn, curPlmn)
+                ||mLocalLanguageChange
+                ||ss.getRadioTechnology()!=newSS.getRadioTechnology()) {
 
             plmn = plmnDisplay(plmn);
             spn = plmnDisplay(spn);
