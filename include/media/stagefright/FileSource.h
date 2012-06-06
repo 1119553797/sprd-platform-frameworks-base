@@ -46,6 +46,8 @@ private:
     int64_t mLength;
     Mutex mLock;
 
+    int mFd;
+	
     FileSource(const FileSource &);
     FileSource &operator=(const FileSource &);
 };

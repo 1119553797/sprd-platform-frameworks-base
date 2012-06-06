@@ -16,6 +16,9 @@
 
 #include <media/stagefright/FileSource.h>
 #include <media/stagefright/MediaDebug.h>
+#include <fcntl.h>
+
+#define LOG_TAG "FileSource"
 
 namespace android {
 
@@ -23,6 +26,8 @@ FileSource::FileSource(const char *filename)
     : mFile(fopen(filename, "rb")),
       mOffset(0),
       mLength(-1) {
+      mFd = open(filename,O_RDONLY);
+	  LOGI("fd = %d", mFd);
 }
 
 FileSource::FileSource(int fd, int64_t offset, int64_t length)
@@ -31,12 +36,17 @@ FileSource::FileSource(int fd, int64_t offset, int64_t length)
       mLength(length) {
     CHECK(offset >= 0);
     CHECK(length >= 0);
+	mFd = dup(fd);
 }
 
 FileSource::~FileSource() {
     if (mFile != NULL) {
         fclose(mFile);
         mFile = NULL;
+    }
+
+    if(mFd>=0){
+		close(mFd);
     }
 }
 
@@ -61,13 +71,15 @@ ssize_t FileSource::readAt(off_t offset, void *data, size_t size) {
         }
     }
 
-    int err = fseeko(mFile, offset + mOffset, SEEK_SET);
+    //int err = fseeko(mFile, offset + mOffset, SEEK_SET);
+    int err = lseek(mFd, offset + mOffset, SEEK_SET);
     if (err < 0) {
         LOGE("seek to %lld failed", offset + mOffset);
         return UNKNOWN_ERROR;
     }
 
-    return fread(data, 1, size, mFile);
+    //return fread(data, 1, size, mFile);
+    return read(mFd,data,size);
 }
 
 status_t FileSource::getSize(off_t *size) {
