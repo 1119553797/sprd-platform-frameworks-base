@@ -974,13 +974,21 @@ public class StkService extends Handler implements AppInterface {
             if (resMsg != null) {
                 AppInterface.CommandType type = AppInterface.CommandType.fromInt(resMsg.cmdDet.typeOfCommand);
                 StkLog.d(this, "<" + mPhoneId + ">" + "[stk] resMsg cmd = " + type);
-
-                if (type == AppInterface.CommandType.SET_UP_MENU && mCurrntCmd == null) {
+                if (mCurrntCmd != null) {
+                    AppInterface.CommandType curType = AppInterface.CommandType.fromInt(mCurrntCmd.mCmdDet.typeOfCommand);
+                    if (curType == AppInterface.CommandType.SET_UP_MENU &&
+                           type == AppInterface.CommandType.DISPLAY_TEXT) {
+                        StkLog.d(this, "<" + mPhoneId + ">" + "[stk] ignore display_text cmd check!! ");
+                    }
+                } else if (type == AppInterface.CommandType.SET_UP_MENU && mCurrntCmd == null) {
                     StkLog.d(this, "<" + mPhoneId + ">" + "Warning: force mCurrntCmd to mMenuCmd!!");
                     mCurrntCmd = mMenuCmd;
+                    return;
                 }
+            } else {
+                StkLog.d(this, "<" + mPhoneId + ">" + "[stk] resMsg is null, Return!! ");
+                return;
             }
-            return;
         }
         ResponseData resp = null;
         boolean helpRequired = false;
