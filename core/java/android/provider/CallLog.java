@@ -25,14 +25,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * The CallLog provider contains information about placed and received calls.
  */
 public class CallLog {
     public static final String AUTHORITY = "call_log";
-    private static final String TAG = "CallLogProvider";
     /**
      * The content:// style URL for this provider
      */
@@ -257,14 +255,9 @@ public class CallLog {
             if ((ci != null) && (ci.person_id > 0)) {
                 ContactsContract.Contacts.markAsContacted(resolver, ci.person_id);
             }
-            Uri result = null;
-            try{
-                result = resolver.insert(CONTENT_URI, values);
+            Uri result = resolver.insert(CONTENT_URI, values);
 
-                removeExpiredEntries(context);
-            }catch(android.database.sqlite.SQLiteDiskIOException sdioe){
-                Log.e(TAG,"addCall error " + sdioe.getLocalizedMessage());
-            }
+            removeExpiredEntries(context);
 
             return result;
         }
@@ -322,14 +315,9 @@ public class CallLog {
                 ContactsContract.Contacts.markAsContacted(resolver, ci.person_id);
             }
 
-            Uri result = null;
-            try{
-                result = resolver.insert(CONTENT_URI, values);
+            Uri result = resolver.insert(CONTENT_URI, values);
 
-                removeExpiredEntries(context);
-            }catch(android.database.sqlite.SQLiteDiskIOException sdioe){
-                Log.e(TAG,"addCall error " + sdioe.getLocalizedMessage());
-            }
+            removeExpiredEntries(context);
 
             return result;
         }
