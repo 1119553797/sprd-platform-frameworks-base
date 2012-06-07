@@ -584,6 +584,7 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
 {
     LOGV("startOutput() output %d, stream %d, session %d", output, stream, session);
     ssize_t index = mOutputs.indexOfKey(output);
+    uint32_t device = 0;
     if (index < 0) {
         LOGW("startOutput() unknow output %d", output);
         return BAD_VALUE;
@@ -625,8 +626,25 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
     // NOTE that the usage count is the same for duplicated output and hardware output which is
     // necassary for a correct control of hardware output routing by startOutput() and stopOutput()
     outputDesc->changeRefCount(stream, 1);
+    device = getNewDevice(output);
+    if(stream == AudioSystem::SYSTEM) {
+        //CFW1 fix FM relate bug
+        if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
+            if(device&0x8){
+                device-=4;
+            }
+            device |= AudioSystem::DEVICE_OUT_FM_HEADSET;
+        }
 
-    setOutputDevice(output, getNewDevice(output));
+        if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER){
+            if(device&0x8){
+                device-=4;
+            }
+            device |= AudioSystem::DEVICE_OUT_FM_SPEAKER;
+        }
+    }
+
+    setOutputDevice(output, device);
 
     // handle special case for sonification while in call
     if (isInCall()) {
@@ -645,6 +663,7 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
 {
     LOGV("stopOutput() output %d, stream %d, session %d", output, stream, session);
     ssize_t index = mOutputs.indexOfKey(output);
+    uint32_t device = 0;
     if (index < 0) {
         LOGW("stopOutput() unknow output %d", output);
         return BAD_VALUE;
@@ -668,8 +687,25 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
         if (stream == AudioSystem::MUSIC) {
             mMusicStopTime = systemTime();
         }
+        device = getNewDevice(output);
+        if(stream == AudioSystem::SYSTEM) {
+            //CFW1 fix FM relate bug
+            if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
+                if(device&0x8){
+                    device-=4;
+                }
+                device |= AudioSystem::DEVICE_OUT_FM_HEADSET;
+            }
 
-        setOutputDevice(output, getNewDevice(output), false, 150);
+            if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER){
+                if(device&0x8){
+                    device-=4;
+                }
+                device |= AudioSystem::DEVICE_OUT_FM_SPEAKER;
+            }
+        }
+
+        setOutputDevice(output, device, false, 150);
 
 #ifdef WITH_A2DP
         if (mA2dpOutput != 0 && !a2dpUsedForSonification() &&
@@ -1746,24 +1782,6 @@ uint32_t AudioPolicyManagerBase::getDeviceForStrategy(routing_strategy strategy,
             device = 0;
             LOGV("getDeviceForStrategy() incompatible media and phone devices");
         }
-
-        if (mPhoneState != AudioSystem::MODE_RINGTONE) {
-            //CFW1 fix FM relate bug
-            if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
-                if(device&0x8){
-                    device-=4;
-                }
-                device |= AudioSystem::DEVICE_OUT_FM_HEADSET;
-            }
-
-            if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER){
-                if(device&0x8){
-                    device-=4;
-                }
-                device |= AudioSystem::DEVICE_OUT_FM_SPEAKER;
-            }
-        }
-
         } break;
 
     case STRATEGY_FM: {
