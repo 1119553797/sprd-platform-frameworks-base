@@ -308,6 +308,9 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
     protected void log(String s) {
         Log.d(LOG_TAG, "[MsmGsmDataConnectionTracker-phoneId" + mGsmPhone.getPhoneId() + "] " + s);
     }
+    public int getDefaultDataPhoneId() {
+        return TelephonyManager.getDefaultDataPhoneId(phone.getContext());
+    }
     /*
     protected synchronized void onEnableApn(int apnId, int enabled) {
         if (DBG) {

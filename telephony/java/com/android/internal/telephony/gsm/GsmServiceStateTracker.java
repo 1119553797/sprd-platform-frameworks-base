@@ -1147,7 +1147,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         }
 
         if (hasNetworkTypeChanged) {
-            if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+            if (MsmsGsmDataConnectionTrackerProxy.isActiveOrDefaultPhoneId(phone.getPhoneId())) {
                 phone.notifyDataConnection(null);
             }
         }

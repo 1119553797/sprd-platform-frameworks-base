@@ -429,6 +429,19 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
             return false;
         }
     }
+    public static boolean isActiveOrDefaultPhoneId(int phoneId) {
+        int defaultPhoneId = INVALID_PHONE_ID;
+        if(sTracker[0] != null) {
+            defaultPhoneId = sTracker[0].getDefaultDataPhoneId();
+        }
+        log("isActiveOrDefaultPhoneId sActivePhoneId=" + sActivePhoneId + ", defaultPhoneId="+defaultPhoneId+", phoneId=" + phoneId);
+        if(sActivePhoneId != INVALID_PHONE_ID) {
+            return (sActivePhoneId == phoneId);
+        } else if(defaultPhoneId != INVALID_PHONE_ID){
+            return (defaultPhoneId == phoneId);
+        }
+        return false;
+    }
 /*
     public void handleMessage(Message msg) {
         switch (msg.what) {
