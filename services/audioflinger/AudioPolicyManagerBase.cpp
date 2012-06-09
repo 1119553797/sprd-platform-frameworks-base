@@ -627,8 +627,10 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
     // necassary for a correct control of hardware output routing by startOutput() and stopOutput()
     outputDesc->changeRefCount(stream, 1);
     device = getNewDevice(output);
-    if(stream == AudioSystem::SYSTEM) {
-        //CFW1 fix FM relate bug
+    uint32_t refCountSystem = outputDesc->getRefCount(AudioSystem::SYSTEM);
+    uint32_t refCount = outputDesc->refCount() - outputDesc->getRefCount(AudioSystem::FM) - refCountSystem;
+    if(refCountSystem != 0 && refCount == 0) {
+        //fix FM relate bug, that key sound interrupt fm.
         if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
             if(device&0x8){
                 device-=4;
@@ -644,6 +646,14 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
         }
     }
 
+    if (stream == AudioSystem::FM) {
+        //special strategy for stream fm,  in sound setting interface.
+        if (outputDesc->device() & (AudioSystem::DEVICE_OUT_FM_SPEAKER
+            | AudioSystem::DEVICE_OUT_FM_HEADSET)) {
+        } else {
+            device = getDeviceForStrategy(STRATEGY_SONIFICATION,true);
+        }
+    }
     setOutputDevice(output, device);
 
     // handle special case for sonification while in call
@@ -688,8 +698,10 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
             mMusicStopTime = systemTime();
         }
         device = getNewDevice(output);
-        if(stream == AudioSystem::SYSTEM) {
-            //CFW1 fix FM relate bug
+        uint32_t refCountSystem = outputDesc->getRefCount(AudioSystem::SYSTEM);
+        uint32_t refCount = outputDesc->refCount() - outputDesc->getRefCount(AudioSystem::FM) - refCountSystem;
+        if(refCountSystem != 0 && refCount == 0) {
+            //fix FM relate bug, that key sound interrupt fm.
             if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
                 if(device&0x8){
                     device-=4;
@@ -2182,6 +2194,10 @@ void AudioPolicyManagerBase::AudioOutputDescriptor::changeRefCount(AudioSystem::
     }
     mRefCount[stream] += delta;
     LOGV("changeRefCount() stream %d, count %d", stream, mRefCount[stream]);
+}
+uint32_t AudioPolicyManagerBase::AudioOutputDescriptor::getRefCount(AudioSystem::stream_type stream)
+{
+    return mRefCount[stream];
 }
 
 uint32_t AudioPolicyManagerBase::AudioOutputDescriptor::refCount()
