@@ -840,7 +840,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             //if type is MMS,continue setup data call
             Slog.d(TAG, "if type is MMS,continue setup data call");
             if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature)) &&
-                    !(feature.indexOf(Phone.FEATURE_ENABLE_MMS)!=-1)) {
+                    !(feature.indexOf(Phone.FEATURE_ENABLE_MMS)!=-1) &&
+                    !(feature.indexOf(Phone.FEATURE_ENABLE_WAP)!=-1)) {
             //if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature))) {
                 if (DBG) Slog.d(TAG, "requested special network with data disabled - rejected");
                 return Phone.APN_TYPE_NOT_AVAILABLE;
