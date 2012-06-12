@@ -70,7 +70,6 @@ public class TelephonyManager {
 
     private static final String dualCardDefaultPhone = "com.android.dualcard_settings_preferences";
     private static final String simCardFavoritekey = "sim_card_favorite";
-    private static final String simCardForwardSettingKey = "sim_forward_setting";
     private static final String sharedActivityName = "com.android.phone";
     
     public static final int UNLOCK_PIN   = 0;
@@ -1166,18 +1165,35 @@ public class TelephonyManager {
         }  
     }
     
-    
+    /**
+     * Set phoneId which Data connection attach on now.
+     * <p>
+     * May be it is better named getCurrentDataAttachOn
+     * </p>
+     * @see #setDefaultDataPhoneId(Context, int)
+     */
     public static int getDefaultDataPhoneId(Context context) {
         return Settings.System.getInt(context.getContentResolver(),
                 Settings.System.MULTI_SIM_DATA_CALL, PhoneFactory.getDefaultPhoneId());
     }
 
+    /**
+     * Get phoneId which Data connection attach on in current state.
+     * <p>
+     * May be it is better named setCurrentDataAttachOn
+     * </p>
+     * @see #getDefaultDataPhoneId(Context)
+     */
     public static boolean setDefaultDataPhoneId(Context context, int phoneId) {
         SystemProperties.set("persist.msms.phone_default", String.valueOf(phoneId));
         return Settings.System.putInt(context.getContentResolver(),
                 Settings.System.MULTI_SIM_DATA_CALL, phoneId);
     }
 
+    /**
+     * Get phoneId which User have set in settings that data connection should attach on default.
+     * @see #setAutoDefaultPhoneId(Context, int)
+     */
     public static int getSettingPhoneId(Context context) {
         SharedPreferences settings = getPhoneSetting(context);
         int setPhoneId = settings.getInt(simCardFavoritekey, -1);
@@ -1190,6 +1206,10 @@ public class TelephonyManager {
         return setPhoneId;
     }
 
+    /**
+     * Set phoneId which data connection should attach on default
+     * @see #getSettingPhoneId(Context)
+     */
     public static void setAutoDefaultPhoneId(Context context, int setPhoneId) {
         SharedPreferences settings = getPhoneSetting(context);
 

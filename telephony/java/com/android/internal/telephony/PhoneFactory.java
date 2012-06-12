@@ -368,9 +368,7 @@ public class PhoneFactory {
     public static int autoSetDefaultPhoneId(boolean isUpdate) {
         return autoSetDefaultPhoneId(isUpdate, -1);
     }
-    /**
-     * send simcard status changed broadcast
-     */
+
     /**
      * set system default PhoneId
      *
@@ -462,6 +460,12 @@ public class PhoneFactory {
     }
     
     public static int getDefaultPhoneId() {
-        return SystemProperties.getInt("persist.msms.phone_default", RAW_DEFAULT_PHONE_ID);
+        int phoneId = SystemProperties.getInt("persist.msms.phone_default", -1);
+        if(phoneId == -1){
+            Log.d(LOG_TAG, "It is a clear system,now to set property : persist.msms.phone_default = 0");
+            phoneId = RAW_DEFAULT_PHONE_ID;
+            SystemProperties.set("persist.msms.phone_default", String.valueOf(phoneId));
+        }
+        return phoneId;
     }
 }
