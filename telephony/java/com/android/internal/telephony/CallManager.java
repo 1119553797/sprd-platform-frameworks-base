@@ -512,7 +512,7 @@ public final class CallManager {
         phone.registerForIncomingRingVideoCall(mHandler, EVENT_INCOMING_RING_VIDEO_CALL, null);
         phone.registerForVideoCallFallBack(mHandler, EVENT_VIDEO_CALL_FALL_BACK, null);
         phone.registerForVideoCallFail(mHandler, EVENT_VIDEO_CALL_FAIL, null);
-        phone.registerForVideoCallCodec(mHandler, EVENT_VIDEO_CALL_CODEC, null);
+        phone.registerForVideoCallCodec(mHandler, EVENT_VIDEO_CALL_CODEC, phone);
         //add for confirm when in call
         phone.registerForSycnInd(mHandler, EVENT_SYNC_IND, null);
 
@@ -1911,8 +1911,14 @@ public final class CallManager {
         return false;
     }
 
-    public void  codecVP(int type, Bundle param) {
-		getActiveFgCall().getPhone().codecVP(type, param);
+    public void  codecVP(Phone phone, int type, Bundle param) {
+        if (phone == null) {
+            Log.d(LOG_TAG, "codeVP(), phone is null, so use default phone");
+            mDefaultPhone.codecVP(type, param);
+            return;
+        }
+        Log.d(LOG_TAG, "codecVP(), phoneid: " + phone.getPhoneId());
+		phone.codecVP(type, param);
     }
 
     private Handler mHandler = new Handler() {
@@ -2048,7 +2054,7 @@ public final class CallManager {
                     break;
                 case EVENT_VIDEO_CALL_CODEC:
                     if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_VIDEO_CALL_CODEC)");
-                    mVideoCallCodecRegistrants.notifyRegistrants((AsyncResult) msg.obj);
+                    mVideoCallCodecRegistrants.notifyRegistrants(new AsyncResult(null, (AsyncResult)msg.obj, null));
                     break;
                 case EVENT_SYNC_IND:
                     if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_SYNC_IND)");
