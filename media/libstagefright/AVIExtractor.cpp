@@ -1130,6 +1130,8 @@ status_t AVIExtractor::parseIndx(off64_t offset, size_t size) {
 
     if(indextype == AVI_INDEX_OF_CHUNKS)
     {
+        double avgChunkSize = 0;
+
         for(size_t i=0; i<entriesInUse; i++)
         {
             track->mSamples.push();
@@ -1147,7 +1149,15 @@ status_t AVIExtractor::parseIndx(off64_t offset, size_t size) {
             }
 
             data += sizePerIndexEntry;
+            if (i == 0) {
+                track->mFirstChunkSize = size;
+                continue;
+            }
+            avgChunkSize += chunkSize;
         }
+
+        avgChunkSize /= entriesInUse;
+        track->mAvgChunkSize = avgChunkSize;
     }
     else if(indextype == AVI_INDEX_OF_INDEXES)
     {
