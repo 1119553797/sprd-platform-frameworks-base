@@ -197,6 +197,8 @@ public class StkService extends Handler implements AppInterface {
     private boolean[] mEventList = null;
     private Configuration mConfigBak = null;
 
+    private String lastCmd = null;
+
     /* Intentionally private for singleton */
     private StkService(CommandsInterface ci, SIMRecords sr, Context context,
             SIMFileHandler fh, SimCard sc) {
@@ -749,6 +751,17 @@ public class StkService extends Handler implements AppInterface {
                     }
                 }
             }
+            // ignore invalid duplicate commands, NEWMS00210093
+            if (lastCmd != null && data != null && lastCmd.equals(data)) {
+                StkLog.d(this, "<" + mPhoneId + ">" + "duplicate command, ignored !!");
+                break;
+            }
+            if (data != null) {
+                lastCmd = new String(data);
+            } else {
+                lastCmd = null;
+            }
+
             mMsgDecoder.sendStartDecodingMessageParams(new RilMessage(msg.what, data));
             break;
 //        case MSG_ID_CALL_SETUP:
