@@ -35,6 +35,8 @@ class AudioPolicyService: public BnAudioPolicyService, public AudioPolicyClientI
 public:
     static  void        instantiate();
 
+    virtual status_t    shutDownSpeaker();
+
     virtual status_t    dump(int fd, const Vector<String16>& args);
 
     //
@@ -156,7 +158,8 @@ private:
             STOP_TONE,
             SET_VOLUME,
             SET_PARAMETERS,
-            SET_VOICE_VOLUME
+            SET_VOICE_VOLUME,
+            SET_SPEAKERSHUTDOWN
         };
 
         AudioCommandThread (String8 name);
@@ -174,6 +177,7 @@ private:
                     status_t    volumeCommand(int stream, float volume, int output, int delayMs = 0);
                     status_t    parametersCommand(int ioHandle, const String8& keyValuePairs, int delayMs = 0);
                     status_t    voiceVolumeCommand(float volume, int delayMs = 0);
+                    status_t    shutDownSpeakerCommand();
                     void        insertCommand_l(AudioCommand *command, int delayMs = 0);
 
     private:

@@ -107,6 +107,10 @@ AudioPolicyService::~AudioPolicyService()
     }
 }
 
+status_t AudioPolicyService::shutDownSpeaker() {
+    mAudioCommandThread->shutDownSpeakerCommand();
+    return NO_ERROR;
+}
 
 status_t AudioPolicyService::setDeviceConnectionState(AudioSystem::audio_devices device,
                                                   AudioSystem::device_connection_state state,
@@ -695,7 +699,7 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                 case SET_VOLUME: {
                     VolumeData *data = (VolumeData *)command->mParam;
                     //LOGV("AudioCommandThread() processing set volume stream %d, \
-                            volume %f, output %d", data->mStream, data->mVolume, data->mIO);
+                    //      volume %f, output %d", data->mStream, data->mVolume, data->mIO);
                     command->mStatus = AudioSystem::setStreamVolume(data->mStream,
                                                                     data->mVolume,
                                                                     data->mIO);
@@ -726,6 +730,10 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                         mWaitWorkCV.wait(mLock);
                     }
                     delete data;
+                    }break;
+                case SET_SPEAKERSHUTDOWN: {
+                    LOGI("%s shutdown speaker!", __FUNCTION__);
+                    system("alsa_amixer cset -c sprdphone name=\"Speaker Playback Switch\" 0");
                     }break;
                 default:
                     LOGW("AudioCommandThread() unknown command %d", command->mCommand);
@@ -897,6 +905,14 @@ status_t AudioPolicyService::AudioCommandThread::voiceVolumeCommand(float volume
         mWaitWorkCV.signal();
     }
     return status;
+}
+
+status_t AudioPolicyService::AudioCommandThread::shutDownSpeakerCommand() {
+    AudioCommand *command = new AudioCommand();
+    command->mCommand = SET_SPEAKERSHUTDOWN;
+    insertCommand_l(command, 100);
+    mWaitWorkCV.signal();
+    return NO_ERROR;
 }
 
 // insertCommand_l() must be called with mLock held

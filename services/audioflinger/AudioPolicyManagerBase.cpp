@@ -32,6 +32,29 @@ namespace android {
 // ----------------------------------------------------------------------------
 
 
+void AudioPolicyManagerBase::updateSpeakerStatus()
+{
+    Mutex::Autolock _l(mLock);
+    AudioOutputDescriptor *hwOutputDesc = mOutputs.valueFor(mHardwareOutput);
+    uint32_t refCountNonMedia = hwOutputDesc->refCount() - hwOutputDesc->getRefCount(AudioSystem::MUSIC);
+    uint32_t device = hwOutputDesc->mDevice;
+    LOGI("refCountNonMedia == %d,  mStreams[AudioSystem::MUSIC].mIndexCur == %d, isInCall() == %d, poff == %d"
+        , refCountNonMedia, mStreams[AudioSystem::MUSIC].mIndexCur, isInCall(), poff);
+    if(refCountNonMedia == 0 && mStreams[AudioSystem::MUSIC].mIndexCur == 0 && !isInCall()){
+       if (!poff) {
+           LOGI("%s shutdown speaker!", __FUNCTION__);
+           system("alsa_amixer cset -c sprdphone name=\"Speaker Playback Switch\" 0");
+           poff = true;
+       }
+    }else {
+       if(poff && (device & AudioSystem::DEVICE_OUT_SPEAKER)) {
+           LOGI("%s power on speaker!", __FUNCTION__);
+           system("alsa_amixer cset -c sprdphone name=\"Speaker Playback Switch\" 1");
+           poff = false;
+       }
+    }
+}
+
 status_t AudioPolicyManagerBase::setDeviceConnectionState(AudioSystem::audio_devices device,
                                                   AudioSystem::device_connection_state state,
                                                   const char *device_address)
@@ -120,8 +143,6 @@ status_t AudioPolicyManagerBase::setDeviceConnectionState(AudioSystem::audio_dev
                 LOGW("setDeviceConnectionState() device not connected: %x", device);
                 return INVALID_OPERATION;
             }
-
-
             LOGV("setDeviceConnectionState() disconnecting device %x", device);
             // remove device from available output devices
             mAvailableOutputDevices &= ~device;
@@ -282,6 +303,8 @@ void AudioPolicyManagerBase::setPhoneState(int state)
     int oldState = mPhoneState;
     mPhoneState = state;
     bool force = false;
+    LOGI("%s updateSpeakerStatus!", __FUNCTION__);
+    updateSpeakerStatus();
 
     // are we entering or starting a call
     if (!isStateInCall(oldState) && isStateInCall(state)) {
@@ -627,8 +650,9 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
     // necassary for a correct control of hardware output routing by startOutput() and stopOutput()
     outputDesc->changeRefCount(stream, 1);
     device = getNewDevice(output);
-    uint32_t refCountSystem = outputDesc->getRefCount(AudioSystem::SYSTEM);
-    uint32_t refCount = outputDesc->refCount() - outputDesc->getRefCount(AudioSystem::FM) - refCountSystem;
+    AudioOutputDescriptor *hwOutputDesc = mOutputs.valueFor(mHardwareOutput);
+    uint32_t refCountSystem = hwOutputDesc->getRefCount(AudioSystem::SYSTEM);
+    uint32_t refCount = hwOutputDesc->refCount() - outputDesc->getRefCount(AudioSystem::FM) - refCountSystem;
     if(refCountSystem != 0 && refCount == 0) {
         //fix FM relate bug, that key sound interrupt fm.
         if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
@@ -648,13 +672,15 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
 
     if (stream == AudioSystem::FM) {
         //special strategy for stream fm,  in sound setting interface.
-        if (outputDesc->device() & (AudioSystem::DEVICE_OUT_FM_SPEAKER
+        if (hwOutputDesc->mDevice& (AudioSystem::DEVICE_OUT_FM_SPEAKER
             | AudioSystem::DEVICE_OUT_FM_HEADSET)) {
         } else {
             device = getDeviceForStrategy(STRATEGY_SONIFICATION,true);
         }
     }
     setOutputDevice(output, device);
+    LOGI("%s updateSpeakerStatus!", __FUNCTION__);
+    updateSpeakerStatus();
 
     // handle special case for sonification while in call
     if (isInCall()) {
@@ -663,6 +689,13 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
 
     // apply volume rules for current stream and device if necessary
     checkAndSetVolume(stream, mStreams[stream].mIndexCur, output, outputDesc->device());
+    uint32_t refCountNonMedia = hwOutputDesc->refCount() - hwOutputDesc->getRefCount(AudioSystem::MUSIC);
+    if(stream == AudioSystem::MUSIC && refCountNonMedia == 0 && mStreams[AudioSystem::MUSIC].mIndexCur == 0 && !isInCall()){
+        uint32_t device = hwOutputDesc->mDevice;
+        if((device & AudioSystem::DEVICE_OUT_SPEAKER)) {
+            mpClientInterface->shutDownSpeaker();
+        }
+    }
 
     return NO_ERROR;
 }
@@ -698,8 +731,9 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
             mMusicStopTime = systemTime();
         }
         device = getNewDevice(output);
-        uint32_t refCountSystem = outputDesc->getRefCount(AudioSystem::SYSTEM);
-        uint32_t refCount = outputDesc->refCount() - outputDesc->getRefCount(AudioSystem::FM) - refCountSystem;
+        AudioOutputDescriptor *hwOutputDesc = mOutputs.valueFor(mHardwareOutput);
+        uint32_t refCountSystem = hwOutputDesc->getRefCount((AudioSystem::stream_type)AudioSystem::SYSTEM);
+        uint32_t refCount = hwOutputDesc->refCount() - hwOutputDesc->getRefCount(AudioSystem::FM) - refCountSystem;
         if(refCountSystem != 0 && refCount == 0) {
             //fix FM relate bug, that key sound interrupt fm.
             if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
@@ -731,6 +765,8 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
         if (output != mHardwareOutput) {
             setOutputDevice(mHardwareOutput, getNewDevice(mHardwareOutput), true);
         }
+        LOGI("%s updateSpeakerStatus!", __FUNCTION__);
+        updateSpeakerStatus();
         return NO_ERROR;
     } else {
         LOGW("stopOutput() refcount is already 0 for output %d", output);
@@ -924,6 +960,10 @@ status_t AudioPolicyManagerBase::setStreamVolumeIndex(AudioSystem::stream_type s
 
     LOGV("setStreamVolumeIndex() stream %d, index %d", stream, index);
     mStreams[stream].mIndexCur = index;
+    if(stream == AudioSystem::MUSIC) {
+        LOGI("%s updateSpeakerStatus!", __FUNCTION__);
+        updateSpeakerStatus();
+    }
 
     // compute and apply stream volume on all outputs according to connected device
     status_t status = NO_ERROR;
