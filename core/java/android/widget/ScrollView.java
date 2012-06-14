@@ -427,7 +427,15 @@ public class ScrollView extends FrameLayout {
                 }
 
                 final int pointerIndex = ev.findPointerIndex(activePointerId);
-                final float y = ev.getY(pointerIndex);
+                float y = 0;
+                try {
+                   y = ev.getY(pointerIndex);
+                } catch(Exception e) {
+                   //ArrayIndexOutOfBoundsException
+                   Log.e("ScrollView","getY outofBounds.mActivePointerId=" + mActivePointerId +
+                         " pointerIndex=" + pointerIndex + " mNumPointers=" + ev.getPointerCount());
+                   return true;
+                }
                 final int yDiff = (int) Math.abs(y - mLastMotionY);
                 if (yDiff > mTouchSlop) {
                     mIsBeingDragged = true;
@@ -628,7 +636,14 @@ public class ScrollView extends FrameLayout {
             // active pointer and adjust accordingly.
             // TODO: Make this decision more intelligent.
             final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-            mLastMotionY = ev.getY(newPointerIndex);
+            try{
+            	mLastMotionY = ev.getY(newPointerIndex);
+            }catch(Exception e){
+            	//ArrayIndexOutOfBoundsException
+                Log.e("ScrollView","getY outofBounds.mActivePointerId=" + mActivePointerId +
+                      " pointerIndex=" + newPointerIndex + " mNumPointers=" + ev.getPointerCount());
+                return;
+            }
             mActivePointerId = ev.getPointerId(newPointerIndex);
             if (mVelocityTracker != null) {
                 mVelocityTracker.clear();

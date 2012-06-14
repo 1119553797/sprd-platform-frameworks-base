@@ -430,7 +430,15 @@ public class HorizontalScrollView extends FrameLayout {
                 }
 
                 final int pointerIndex = ev.findPointerIndex(activePointerId);
-                final float x = ev.getX(pointerIndex);
+                float x = 0;
+                try {
+                   x = ev.getX(pointerIndex);
+                } catch(Exception e) {
+                   //ArrayIndexOutOfBoundsException
+                   Log.e("HorizontalScrollView","getX outofBounds.mActivePointerId=" + mActivePointerId +
+                         " pointerIndex=" + pointerIndex + " mNumPointers=" + ev.getPointerCount());
+                   return true;
+                }
                 final int xDiff = (int) Math.abs(x - mLastMotionX);
                 if (xDiff > mTouchSlop) {
                     mIsBeingDragged = true;
@@ -524,7 +532,15 @@ public class HorizontalScrollView extends FrameLayout {
                 if (mIsBeingDragged) {
                     // Scroll to follow the motion event
                     final int activePointerIndex = ev.findPointerIndex(mActivePointerId);
-                    final float x = ev.getX(activePointerIndex);
+                    float x = 0;
+                    try {
+                       x = ev.getX(activePointerIndex);
+                    } catch(Exception e) {
+                       //ArrayIndexOutOfBoundsException
+                       Log.e("HorizontalScrollView","getX outofBounds.mActivePointerId=" + mActivePointerId +
+                             " pointerIndex=" + activePointerIndex + " mNumPointers=" + ev.getPointerCount());
+                       return true;
+                    }
                     final int deltaX = (int) (mLastMotionX - x);
                     mLastMotionX = x;
 
@@ -623,7 +639,14 @@ public class HorizontalScrollView extends FrameLayout {
             // active pointer and adjust accordingly.
             // TODO: Make this decision more intelligent.
             final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-            mLastMotionX = ev.getX(newPointerIndex);
+            try{
+            	mLastMotionX = ev.getX(newPointerIndex);
+            }catch(Exception e){
+            	//ArrayIndexOutOfBoundsException
+                Log.e("HorizontalScrollView","getX outofBounds.mActivePointerId=" + mActivePointerId +
+                      " pointerIndex=" + newPointerIndex + " mNumPointers=" + ev.getPointerCount());
+                return;
+            }
             mActivePointerId = ev.getPointerId(newPointerIndex);
             if (mVelocityTracker != null) {
                 mVelocityTracker.clear();
