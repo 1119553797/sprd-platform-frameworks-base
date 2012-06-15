@@ -960,11 +960,11 @@ public class MediaPhone extends Handler
 		    }
 	    }
             try {
+                mCodecState = CodecState.CODEC_CLOSE;
                 stop();
-		mCodecState = CodecState.CODEC_CLOSE;
-		if (mOnCallEventListener != null){
-			mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_CLOSE, null);
-		}
+        		if (mOnCallEventListener != null){
+        			mOnCallEventListener.onCallEvent(this, MEDIA_CALLEVENT_CODEC_CLOSE, null);
+        		}
             } catch (IllegalStateException ex) {
                 Log.d(TAG, "stop fail " + ex);
             }

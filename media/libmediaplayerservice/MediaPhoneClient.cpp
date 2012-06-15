@@ -286,6 +286,7 @@ MediaPhoneClient::MediaPhoneClient(const sp<MediaPlayerService>& service, pid_t 
 	mRecordRecorder = NULL;
     mMediaPlayerService = service;
     mPlayer->setNotifyCallback(this, notify);
+	VideoPhoneDataDevice::getInstance().clearClients();
 }
 
 MediaPhoneClient::~MediaPhoneClient()
