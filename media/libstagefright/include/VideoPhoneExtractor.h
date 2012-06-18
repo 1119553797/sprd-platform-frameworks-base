@@ -28,6 +28,8 @@ class VideoPhoneSourceInterface
 public:
     virtual int write(char* data, int nLen) = 0;
 	virtual void stopCB() = 0;
+    virtual void setID(int id) = 0;
+    virtual int getID() = 0;
     VideoPhoneSourceInterface() {};
     virtual ~VideoPhoneSourceInterface() {};
 };
@@ -51,6 +53,8 @@ public:
 
 		int write(char* data, int nLen);
 		void stopCB();
+		void setID(int id);
+        int getID();
 protected:
 	
     	virtual ~VideoPhoneSource();
@@ -68,7 +72,7 @@ private:
 private:
 	friend class EsdsGenerator;
 	//bool				m_bFirstGet;
-	
+	int             m_id;
     	Mutex 			m_Lock;
     bool                m_bDataAvailable;
 		
@@ -157,7 +161,8 @@ public:
     status_t registerClient(VideoPhoneSourceInterface *client, sp<DataSource> dataSource);
     void unregisterClient(VideoPhoneSourceInterface *client);
 	void stop();
-    void stopClient(int index);
+    void clearClients();
+    void stopClient(int id);
 	status_t start();
 
 private:

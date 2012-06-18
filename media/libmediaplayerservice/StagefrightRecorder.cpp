@@ -1180,11 +1180,15 @@ status_t StagefrightRecorder::startMPEG4Recording() {
         default:
             CHECK(!"Should not be here, unsupported video encoding.");
             break;
-   	 }		
-	AVMeta->setInt32(kKeyWidth, mVideoWidth);
-	AVMeta->setInt32(kKeyHeight, mVideoHeight);
-	EsdsGenerator::generateEsds(AVMeta);
-    	sp<MediaSource> videoPhoneVideoES = new VideoPhoneSource(AVMeta,NULL);
+        }		
+        AVMeta->setInt32(kKeyWidth, mVideoWidth);
+        AVMeta->setInt32(kKeyHeight, mVideoHeight);
+        EsdsGenerator::generateEsds(AVMeta);
+        VideoPhoneSource* pSource = new VideoPhoneSource(AVMeta,NULL);
+        if (NULL != pSource) {
+            pSource->setID(VideoPhoneDataDevice::RECORD_CLIENT);
+        }
+    	sp<MediaSource> videoPhoneVideoES = pSource;
         writer->addSource(videoPhoneVideoES);
         totalBitRate += mVideoBitRate;		 
     }

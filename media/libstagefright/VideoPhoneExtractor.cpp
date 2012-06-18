@@ -135,8 +135,14 @@ sp<MediaSource> VideoPhoneExtractor::getTrack(size_t index)
 	if (index > 1)
 		goto fail;
 
-    	return new VideoPhoneSource(m_AVMeta, mDataSource);
-
+    {
+        VideoPhoneSource* pSource = new VideoPhoneSource(m_AVMeta, mDataSource);
+        if (NULL != pSource) {
+            pSource->setID(VideoPhoneDataDevice::DISPLAY_CLIENT);
+        }
+        return pSource;
+    }
+    
 fail:
 	
 	LOGE("VideoPhoneExtractor::getTrack FAIL");
@@ -840,6 +846,19 @@ void VideoPhoneSource::stopCB()
 	m_GetBuffer.signal();
 }
 
+void VideoPhoneSource::setID(int id)
+{
+	LOGI("[%p]setID, id: %d", this, id);
+	
+	m_id = id;
+}
+
+int VideoPhoneSource::getID()
+{
+	LOGI("[%p]getID, id: %d", this, m_id);
+	return m_id;
+}
+
 /////////////////////////////////////////////////////////////////////
 #undef LOG_TAG
 #define LOG_TAG "VideoPhoneDataDevice"
@@ -847,21 +866,22 @@ void VideoPhoneSource::stopCB()
 ANDROID_SINGLETON_STATIC_INSTANCE(VideoPhoneDataDevice);
 
 VideoPhoneDataDevice::VideoPhoneDataDevice()
-    : mDataSource(NULL)
+    : mDataSource(NULL),
+      mStarted(false)
 {
     mClients.clear();
-    LOGI("VideoPhoneDataDevice created");
+    LOGI("[%p]VideoPhoneDataDevice created", this);
 }
 
 VideoPhoneDataDevice::~VideoPhoneDataDevice()
 {
-    LOGI("VideoPhoneDataDevice destroyed");
+    LOGI("[%p]VideoPhoneDataDevice destroyed", this);
 }
 
 status_t VideoPhoneDataDevice::start()
 {
 	if (mStarted){
-		LOGI("VideoPhoneDataDevice already started");
+		LOGI("[%p]VideoPhoneDataDevice already started", this);
 		return OK;
 	} else {
 		return startThread();
@@ -895,23 +915,39 @@ status_t VideoPhoneDataDevice::startThread()
 
 void VideoPhoneDataDevice::stopThread()
 {
-    LOGI("stopThread");
+    LOGI("[%p]stopThread", this);
     mStarted = false;
 }
 
 void VideoPhoneDataDevice::stop()
 {
-    LOGI("stop");
+    LOGI("[%p]stop", this);
 	stopThread();
 }
 
-void VideoPhoneDataDevice::stopClient(int index)
+void VideoPhoneDataDevice::clearClients()
 {
-    LOGI("stopClient %d", index);
     Mutex::Autolock autoLock(m_Lock);
-    if (index < mClients.size()) {
-        static_cast<VideoPhoneSourceInterface *>(mClients[index])->stopCB();
+    LOGI("[%p]clearClients", this);
+    if (mStarted){
+		LOGI("[%p]Cann't clear clients during running", this);
+	} else {
+	    // now device is stopped, so needn't stop clients, just directly clear them.
+        mClients.clear();
+	}
+}
+
+void VideoPhoneDataDevice::stopClient(int id)
+{
+    Mutex::Autolock autoLock(m_Lock);
+    LOGI("[%p]stopClient %d", this, id);
+    for (int i=0; i < mClients.size(); i++) {
+        if (mClients[i]->getID() == id) {
+            static_cast<VideoPhoneSourceInterface *>(mClients[i])->stopCB();
+            return;
+        }
     }
+    LOGE("[%p]stopClient, cann't find %d", id);
 }
 
 status_t VideoPhoneDataDevice::registerClient(VideoPhoneSourceInterface *client, sp<DataSource> dataSource)
@@ -931,7 +967,7 @@ status_t VideoPhoneDataDevice::registerClient(VideoPhoneSourceInterface *client,
         startThread();
     }
     mClients.add(client);
-    LOGI("register Client %p", client);
+    LOGI("[%p]register Client %p", this, client);
     return OK;
 }
 
@@ -939,7 +975,7 @@ void VideoPhoneDataDevice::unregisterClient(VideoPhoneSourceInterface *client)
 {
     Mutex::Autolock autoLock(m_Lock);
     mClients.remove(client);
-    LOGI("unregister Client %p", client);
+    LOGI("[%p]unregister Client %p", this, client);
     if (mClients.size() == 0) {
         stopThread();
     }
@@ -957,7 +993,7 @@ status_t VideoPhoneDataDevice::threadFunc()
     char cTempbuffer[BUFFER_SIZE];	
     int nLen;
 	
-    LOGI("enter threadFunc");
+    LOGI("[%p]enter threadFunc", this);
     while (mStarted) 
     {
         Mutex::Autolock autoLock(m_Lock);
@@ -1013,7 +1049,7 @@ status_t VideoPhoneDataDevice::threadFunc()
     for (int i = 0, n = mClients.size(); i < n; ++i) {
         static_cast<VideoPhoneSourceInterface *>(mClients[i])->stopCB();
     }
-    LOGI("exit threadFunc");
+    LOGI("[%p]exit threadFunc", this);
 	
     if (err == ERROR_END_OF_STREAM)
         err = OK;
