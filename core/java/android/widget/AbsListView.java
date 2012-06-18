@@ -2683,6 +2683,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             switch (mTouchMode) {
             case TOUCH_MODE_DOWN:
                 final int pointerIndex = ev.findPointerIndex(mActivePointerId);
+                if(pointerIndex == INVALID_POINTER){
+                    break;
+                }
                 final int y = (int) ev.getY(pointerIndex);
                 if (startScrollIfNeeded(y - mMotionY)) {
                     return true;
