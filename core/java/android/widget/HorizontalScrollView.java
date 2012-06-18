@@ -19,6 +19,7 @@ package android.widget;
 import com.android.internal.R;
 
 import android.util.AttributeSet;
+import android.util.Log;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
