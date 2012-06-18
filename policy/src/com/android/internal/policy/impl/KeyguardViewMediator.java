@@ -231,6 +231,10 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
 
     private boolean mScreenOn = false;
 
+    //fix bug 20057
+    private static final String PHONE_FOREGROUND_ACTIVITY = "com.android.phone.PHONE_FOREGROUND";
+    private boolean mPhoneIsForegroundActivity = false;
+
     // last known state of the cellular connection
     private String mPhoneState = TelephonyManager.EXTRA_STATE_IDLE;
 
@@ -265,8 +269,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DELAYED_KEYGUARD_ACTION);
-        //fix bug 9863
-//        filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
+        filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
+        filter.addAction(PHONE_FOREGROUND_ACTIVITY);
         context.registerReceiver(mBroadCastReceiver, filter);
         mAlarmManager = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);
@@ -533,6 +537,11 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
                 return;
             }
 
+            if (!TelephonyManager.EXTRA_STATE_IDLE.equals(mPhoneState) && mPhoneIsForegroundActivity) {
+                Log.d(TAG, "doKeyguard: not showing because it is incall now");
+                return;
+            }
+
             // if the keyguard is already showing, don't bother
             if (mKeyguardViewManager.isShowing()) {
                 if (DEBUG) Log.d(TAG, "doKeyguard: not showing because it is already showing");
@@ -723,8 +732,10 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
                     // flicker while turning back on the screen and disabling the keyguard again).
                     if (DEBUG) Log.d(TAG, "screen is off and call ended, let's make sure the "
                             + "keyguard is showing");
-                    doKeyguard();
+                    // doKeyguard();
                 }
+            } else if (action.equals(PHONE_FOREGROUND_ACTIVITY)){
+                mPhoneIsForegroundActivity = intent.getBooleanExtra("isforeground", false);
             }
         }
     };
