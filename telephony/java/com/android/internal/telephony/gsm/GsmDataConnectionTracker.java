@@ -1205,7 +1205,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     protected void onRecordsLoaded() {
         createAllApnList();
         if (state == State.FAILED) {
-            cleanUpConnection(false, null);
+            if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+                cleanUpConnection(false, null);
+            }
         }
         sendMessage(obtainMessage(EVENT_TRY_SETUP_DATA, Phone.REASON_SIM_LOADED));
     }
