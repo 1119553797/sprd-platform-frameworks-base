@@ -47,6 +47,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 	static protected final byte TYPE_FCP = 0x62;
 	static protected final byte RESPONSE_DATA_FCP_FLAG = 0;
 	static protected final byte TYPE_FILE_DES = (byte) 0x82;
+	static protected final byte TYPE_FCP_SIZE = (byte) 0x80;
 	static protected final byte RESPONSE_DATA_FILE_DES_FLAG = 2;
 	static protected final byte RESPONSE_DATA_FILE_DES_LEN_FLAG = 3;
 	static protected final byte TYPE_FILE_DES_LEN = 5;
@@ -57,7 +58,8 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 	static private final byte USIM_RECORD_SIZE_1 = 4;
 	static private final byte USIM_RECORD_SIZE_2 = 5;
 	static private final byte USIM_RECORD_COUNT = 6;
-
+   static private final int USIM_DATA_OFFSET_2 = 2;
+   static private final int USIM_DATA_OFFSET_3 = 3;
 	static private final int EVENT_GET_USIM_ECC_DONE = 0x10;
 	static final String LOG_TAG = "TD-SCDMA";
 	private Phone mPhone;
@@ -326,7 +328,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
     public void loadEFTransparent(int fileid, Message onLoaded) {
        
        IccCard card = phone.getIccCard();
-       Log.i(LOG_TAG,"loadEFTransparent fileid " + fileid);
+       Log.i(LOG_TAG,"loadEFTransparent fileid " + Integer.toHexString(fileid));
        if (card != null && card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM) && fileid == EF_ECC){
            Log.i(LOG_TAG,"loadEFTransparent is usim card");
 	  
@@ -620,7 +622,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 
 				iccException = result.getException();
 
-				if(isUsim)                  
+				if(isUsim)
 				{
 			           
                                   int fileId = msg.arg1;
@@ -632,37 +634,62 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 					      break;
 					}
 				}
+               if (iccException != null) {
+                   loge("EVENT_GET_BINARY_SIZE_DONE iccException");
+                   sendResult(response, null, iccException);
+                   break;
+               }
+               data = result.payload;
+               logbyte(data);
+               fileid = msg.arg1;
+               if (TYPE_FCP == data[RESPONSE_DATA_FCP_FLAG]) {
+                   Log.i(LOG_TAG,"EVENT_GET_BINARY_SIZE_DONE fileid "+ Integer.toHexString(fileid));
+                   for (int i = 0;i < data.length; i++) {
+                      if (data[i] == TYPE_FILE_DES) {
 
-				
-				if (iccException != null) {
-					loge("EVENT_GET_BINARY_SIZE_DONE iccException");
-					sendResult(response, null, iccException);
-					break;
-				}
+                           index = i;
+                           break;
+                       }
 
-				data = result.payload;
+                   }
+                   Log.i(LOG_TAG,"TYPE_FILE_DES index "+ index);
 
-				fileid = msg.arg1;
+                   if((data[index + RESPONSE_DATA_FILE_DES_FLAG] & 0x01) != 1){
+                       Log.i(LOG_TAG,"EVENT_GET_BINARY_SIZE_DONE the efid "+Integer.toHexString(fileid)+" is not transparent file");
+                       throw new IccFileTypeMismatch();
+                   }
+                   for (int i = index ; i < data.length ; i++) {
+                       if (data[i] == TYPE_FCP_SIZE) {
+                           index = i;
+                          break;
+                       }else{
+                           i+=(data[i+1]+1);
+                       }
+                   }
+                   Log.i(LOG_TAG,"TYPE_FCP_SIZE index "+index);
 
-				if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
-					throw new IccFileTypeMismatch();
-				}
+                  size = ((data[index + USIM_DATA_OFFSET_2] & 0xff) << 8)
+                   + (data[index + USIM_DATA_OFFSET_3] & 0xff);
+               } else {
+                   if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
+                      throw new IccFileTypeMismatch();
+                  }
 
-				if (EF_TYPE_TRANSPARENT != data[RESPONSE_DATA_STRUCTURE]) {
-					throw new IccFileTypeMismatch();
-				}
+                  if (EF_TYPE_TRANSPARENT != data[RESPONSE_DATA_STRUCTURE]) {
+                       throw new IccFileTypeMismatch();
+                   }
 
-				size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
-						+ (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
-				
-				path =  getEFPath(fileid);
-				loge("EVENT_GET_BINARY_SIZE_DONE path " + path); 
+                   size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
+                   + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
+               }
 
-				
-				phone.mCM.iccIO(COMMAND_READ_BINARY, fileid, path,
-						0, 0, size, null, null, obtainMessage(
-								EVENT_READ_BINARY_DONE, fileid, pathNum, response));
-				break;
+               path =  getEFPath(fileid);
+               loge("EVENT_GET_BINARY_SIZE_DONE path " + path);
+
+               phone.mCM.iccIO(COMMAND_READ_BINARY, fileid, path,
+                       0, 0, size, null, null, obtainMessage(
+                               EVENT_READ_BINARY_DONE, fileid, pathNum, response));
+              break;
 
 			case EVENT_READ_RECORD_DONE:
 

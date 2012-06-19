@@ -75,6 +75,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 	// add end
 	private ArrayList<byte[]> mEmailFileRecord;
 	private Map<Integer, ArrayList<String>> mEmailsForAdnRec;
+	private ArrayList<byte[]> mPbcFileRecord;
 
 
 
@@ -91,7 +92,10 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 	private static final int EVENT_GRP_LOAD_DONE = 8;
 	private static final int EVENT_GAS_LOAD_DONE = 9;
 	private static final int EVENT_ANR_LOAD_DONE = 10;
-
+	private static final int EVENT_PBC_LOAD_DONE = 11;
+	private static final int EVENT_EF_CC_LOAD_DONE = 12;
+	private static final int EVENT_UPDATE_RECORD_DONE = 13;
+	private static final int EVENT_LOAD_EF_PBC_RECORD_DONE = 14;
 	// add end
 
 	private ArrayList<byte[]> mAnrFileRecord;
@@ -184,6 +188,7 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 		mPhoneBookRecords.clear();
 		mIapFileRecord = null;
 		mEmailFileRecord = null;
+		mPbcFileRecord = null;
 		mPbrFile = null;
 		mIsPbrPresent = true;
 		// add begin for add multi record and email in usim
@@ -266,10 +271,54 @@ public class UsimPhoneBookManager extends Handler implements IccConstants {
 			// All EF files are loaded, post the response.
 		}
         mAdnCache.markAdnRecordLoaded(true);
+        // for cta case8.1.1,update the EFpbc&Efcc
+        updatePbcAndCc();
 		return mPhoneBookRecords;
 	}
 
-	// add begin for add multi record and email in usim
+   private void updatePbcAndCc() {
+        Log.i(LOG_TAG, "update EFpbcbegin");
+        Map<Integer, Integer> fileIds;
+        fileIds = mPbrFile.mFileIds.get(0);
+        if (fileIds == null || fileIds.isEmpty())
+            return;
+        Integer efPbcId = fileIds.get(USIM_EFPBC_TAG);
+        Log.i(LOG_TAG, " USIM_EFPBC_TAG = "
+                + Integer.toHexString(efPbcId));
+        if (efPbcId == null)
+            return;
+        int changeCounter = 0;
+        mFh.loadEFLinearFixedAll(efPbcId,obtainMessage(EVENT_LOAD_EF_PBC_RECORD_DONE));
+        try {
+            mLock.wait();
+        } catch (InterruptedException e) {
+            Log.e(LOG_TAG, "Interrupted Exception in readAdnFileAndWait");
+        }
+        for (int i = 0; i < mPbcFileRecord.size(); i++) {
+            byte[] temp = null;
+            temp = mPbcFileRecord.get(i);
+            if (temp != null && ((temp[0]&0xFF) == 0x01)) {
+                changeCounter++;
+                byte[] data = new byte[2];
+                data[0] = (byte) 0x00;
+                data[1] = (byte) 0x00;
+                //udpate EF pbc
+                mFh.updateEFLinearFixed(efPbcId, i + 1, data, null,
+                        obtainMessage(EVENT_UPDATE_RECORD_DONE));
+           }
+
+       }
+        Log.i(LOG_TAG, "update EFpbc end, validAdnCount " + changeCounter);
+        // update EFcc
+       if (changeCounter > 0) {
+           // get Change Counter
+            mFh.loadEFTransparent(IccConstants.EF_CC,
+                    obtainMessage(EVENT_EF_CC_LOAD_DONE, changeCounter));
+        }
+        return;
+    }
+
+    // add begin for add multi record and email in usim
 	public int getNumRecs() {
 		// add begin 2010-11-25 for reload the pbr file when the pbr
 		// file is null
@@ -2206,7 +2255,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 	@Override
 	public void handleMessage(Message msg) {
 		AsyncResult ar;
-
+		byte data[];
 		switch (msg.what) {
 		case EVENT_PBR_LOAD_DONE:
 			ar = (AsyncResult) msg.obj;
@@ -2302,7 +2351,53 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
 				mLock.notify();
 			}
 			break;
-		}
+		case EVENT_LOAD_EF_PBC_RECORD_DONE:
+		    Log.i(LOG_TAG, "Loading EVENT_LOAD_EF_PBC_RECORD_DONE");
+		    ar = (AsyncResult)(msg.obj);
+		    if (ar.exception == null) {
+                //if (mEmailFileRecord == null) {
+                mPbcFileRecord = new ArrayList<byte[]>();
+                //}
+                mPbcFileRecord.addAll((ArrayList<byte[]>) ar.result);
+                log("Loading USIM PBC records done size "+ mPbcFileRecord.size());
+            }
+		    synchronized (mLock) {
+                mLock.notify();
+            }
+		    break;
+        case EVENT_EF_CC_LOAD_DONE:
+               ar = (AsyncResult)(msg.obj);
+                data = (byte[])(ar.result);
+                int temp = (Integer)(ar.userObj);
+                if (ar.exception != null) {
+                    Log.i(LOG_TAG,"EVENT_EF_CC_LOAD_DONE has exception " + ar.exception);
+                    throw new RuntimeException("load failed", ar.exception);
+                }
+                Log.i(LOG_TAG,"EVENT_EF_CC_LOAD_DONE "+ IccUtils.bytesToHexString(data));
+                // update EFcc
+                byte[] counter = new byte[2];
+                int cc = (data[0]<<8)+data[1];
+                cc+=temp;
+               if (cc > 0xFFFF) {
+                   counter[0] = (byte) 0x00;
+                    counter[1] = (byte) 0x01;
+               }else{
+                   counter[0] = (byte)(cc>>8 & 0xFF);
+                    counter[1] = (byte)(cc & 0xFF);
+
+               }
+               Log.i(LOG_TAG,"EVENT_EF_CC_LOAD_DONE "+ IccUtils.bytesToHexString(counter));
+                mFh.updateEFTransparent(IccConstants.EF_CC, counter, obtainMessage(EVENT_UPDATE_RECORD_DONE));
+               break;
+           case EVENT_UPDATE_RECORD_DONE:
+                ar = (AsyncResult) (msg.obj);
+               if (ar.exception != null) {
+                   throw new RuntimeException("update EF records failed",
+                           ar.exception);
+                }
+                Log.i(LOG_TAG,"update_record_success");
+               break;
+	    }
 	}
 
 	public class PbrFile {
