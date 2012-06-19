@@ -544,7 +544,22 @@ public class PduPersister {
         if (cacheEntry != null) {
             return cacheEntry.getPdu();
         }
+        return loadFromDB(uri, cacheEntry);
+    }
 
+    /**
+     * Backup Mms Pdu to storage by given Uri.
+     *
+     * @param uri The Uri of the PDU to be loaded.
+     * @return A generic PDU object, it may be cast to dedicated PDU.
+     * @throws MmsException Failed to load some fields of a PDU.
+     */
+    public GenericPdu loadForBackupMms(Uri uri) throws MmsException {
+        return loadFromDB(uri, null);
+    }
+
+    private GenericPdu loadFromDB(Uri uri, PduCacheEntry cacheEntry)
+            throws MmsException {
         Cursor c = SqliteWrapper.query(mContext, mContentResolver, uri,
                         PDU_PROJECTION, null, null, null);
         PduHeaders headers = new PduHeaders();
@@ -666,9 +681,10 @@ public class PduPersister {
                 throw new MmsException(
                         "Unrecognized PDU type: " + Integer.toHexString(msgType));
         }
-
-        cacheEntry = new PduCacheEntry(pdu, msgBox, threadId);
-        PDU_CACHE_INSTANCE.put(uri, cacheEntry);
+        if (cacheEntry != null) {
+            cacheEntry = new PduCacheEntry(pdu, msgBox, threadId);
+            PDU_CACHE_INSTANCE.put(uri, cacheEntry);
+        }
         return pdu;
     }
 
