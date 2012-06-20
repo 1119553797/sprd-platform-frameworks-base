@@ -170,12 +170,23 @@ void SurfaceFlinger::bootFinished()
 {
     const nsecs_t now = systemTime();
     const nsecs_t duration = now - mBootTime;
+
+    char value[PROPERTY_VALUE_MAX];
+
     LOGI("Boot is finished (%ld ms)", long(ns2ms(duration)) );  
     mBootFinished = true;
     if (property_set("ctl.stop", "bootanim") != 0) {
         LOGI("Stopping bootanim failed!");
     }
-    property_set("ctl.start","startupsound");
+
+    property_get("persist.sys.profile.silent", value, "0");
+    if (atoi(value)== 0){
+        LOGI("stop:persist.sys.profile.silent is soundable");
+        property_set("ctl.stop","startupsound");
+    }
+    else {
+        LOGI("stop:persist.sys.profile.silent is silent");
+    }
 }
 
 void SurfaceFlinger::onFirstRef()
@@ -275,7 +286,19 @@ status_t SurfaceFlinger::readyToRun()
 
     // start boot animation
     property_set("ctl.start", "bootanim");
-    
+    {
+        char value[PROPERTY_VALUE_MAX];
+        int ivalue = 0;
+
+        property_get("persist.sys.profile.silent", value, "0");
+        if (atoi(value)== 0){
+            LOGI("start:persist.sys.profile.silent is soundable");
+            property_set("ctl.start","startupsound");
+        }
+        else {
+            LOGI("start:persist.sys.profile.silent is silent");
+        }
+    }
     return NO_ERROR;
 }
 
@@ -402,9 +425,10 @@ bool SurfaceFlinger::threadLoop()
         logger.log(GraphicLog::SF_COMPOSITION_COMPLETE, index);
         hw.compositionComplete();
 
+        unlockClients();
+                
         logger.log(GraphicLog::SF_SWAP_BUFFERS, index);
         postFramebuffer();
-
         logger.log(GraphicLog::SF_REPAINT_DONE, index);
     } else {
         // pretend we did the post
@@ -890,6 +914,17 @@ void SurfaceFlinger::handleRepaint()
 
     // clear the dirty regions
     mDirtyRegion.clear();
+}
+
+void SurfaceFlinger::unlockClients()
+{
+    const LayerVector& drawingLayers(mDrawingState.layersSortedByZ);
+    const size_t count = drawingLayers.size();
+    sp<LayerBase> const* const layers = drawingLayers.array();
+    for (size_t i=0 ; i<count ; ++i) {
+        const sp<LayerBase>& layer = layers[i];
+        layer->finishPageFlip();
+    }
 }
 
 void SurfaceFlinger::composeSurfaces(const Region& dirty)
@@ -1628,14 +1663,14 @@ status_t SurfaceFlinger::renderScreenToTextureLocked(DisplayID dpy,
     GLuint name, tname;
     glGenTextures(1, &tname);
     glBindTexture(GL_TEXTURE_2D, tname);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-            hw_w, hw_h, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+            hw_w, hw_h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     if (glGetError() != GL_NO_ERROR) {
         while ( glGetError() != GL_NO_ERROR ) ;
         GLint tw = (2 << (31 - clz(hw_w)));
         GLint th = (2 << (31 - clz(hw_h)));
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-                tw, th, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+                tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
         u = GLfloat(hw_w) / tw;
         v = GLfloat(hw_h) / th;
     }
@@ -1748,7 +1783,7 @@ status_t SurfaceFlinger::electronBeamOffAnimationImplLocked()
     };
 
     // the full animation is 24 frames
-    const int nbFrames = 12;
+    const int nbFrames = 8;
     s_curve_interpolator itr(nbFrames, 7.5f);
     s_curve_interpolator itg(nbFrames, 8.0f);
     s_curve_interpolator itb(nbFrames, 8.5f);
