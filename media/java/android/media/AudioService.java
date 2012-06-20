@@ -2059,12 +2059,13 @@ public class AudioService extends IAudioService.Stub {
                     mIsRinging = true;
                 }
                 int ringVolume = AudioService.this.getStreamVolume(AudioManager.STREAM_RING);
-                if (ringVolume > 0) {
+             // MMz02 fix bug 18863 Adjust the phone to vibration mode to play MP3 in-process calls, the MP3 continues to play
+//                if (ringVolume > 0) {
                     requestAudioFocus(AudioManager.STREAM_RING,
                                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT,
                                 null, null /* both allowed to be null only for this clientId */,
                                 IN_VOICE_COMM_FOCUS_ID /*clientId*/);
-                }
+//                }
             } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                 //Log.v(TAG, " CALL_STATE_OFFHOOK");
                 synchronized(mRingingLock) {
