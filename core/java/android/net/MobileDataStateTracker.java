@@ -29,6 +29,9 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import android.net.NetworkInfo.DetailedState;
+import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
+import com.android.internal.telephony.gsm.MsmsGsmDataConnectionTrackerProxy;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.text.TextUtils;
@@ -58,6 +61,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     // the other is also disconnected before we reset sockets
     private boolean mIsDefaultOrHipri = false;
 
+    private PhoneStateListener mPhoneStateListener;
     /**
      * Create a new MobileDataStateTracker
      * @param context the application context of the caller
@@ -105,6 +109,39 @@ public class MobileDataStateTracker extends NetworkStateTracker {
 
     }
 
+    private PhoneStateListener getPhoneStateListener(int subscription) {
+        PhoneStateListener phoneStateListener = new PhoneStateListener(subscription) {
+            public void onServiceStateChanged(ServiceState state) {
+                boolean bSet = false;
+                boolean available = true;
+                int mmsPhoneId = networkTypeToMMSPhoneId(mNetworkInfo.getType());
+
+                Log.d(TAG, "ListenServiceState: available:"+mNetworkInfo.isAvailable()+ " newState:"+
+                        state.getState()+" subscription:" + mSubscription+" mmsPhoneId="+mmsPhoneId);
+                if((mmsPhoneId >= 0) && (mSubscription == mmsPhoneId)) {
+                    boolean bActivate = MsmsGsmDataConnectionTrackerProxy.isActiveOrDefaultPhoneId(mmsPhoneId);
+
+                    if(bActivate) {
+                        return;
+                    }
+                    if((mNetworkInfo.isAvailable() && (state.getState() != ServiceState.STATE_IN_SERVICE)) ||
+                       (!mNetworkInfo.isAvailable() && (state.getState() == ServiceState.STATE_IN_SERVICE))){
+                        bSet = true;
+                    }
+                    if(bSet) {
+                        if(state.getState() == ServiceState.STATE_IN_SERVICE) {
+                            available = true;
+                        } else {
+                            available = false;
+                        }
+                        Log.d(TAG, "Listen [type=" + mNetType + "]setIsAvailable="+available);
+                        mNetworkInfo.setIsAvailable(available);
+                    }
+                }
+            }
+        };
+        return phoneStateListener;
+    }
     /**
      * Begin monitoring mobile data connectivity.
      */
@@ -120,6 +157,16 @@ public class MobileDataStateTracker extends NetworkStateTracker {
             mMobileDataState = getMobileDataState(intent);
         else
             mMobileDataState = Phone.DataState.DISCONNECTED;
+
+        int mmsPhoneId = networkTypeToMMSPhoneId(mNetType);
+        if(mmsPhoneId >=0) {
+            mPhoneStateListener = getPhoneStateListener(mmsPhoneId);
+            // register for phone state notifications.
+            ((TelephonyManager) mContext
+                    .getSystemService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,mmsPhoneId))).listen(
+                    mPhoneStateListener,
+                    PhoneStateListener.LISTEN_SERVICE_STATE);
+        }
     }
 
     private Phone.DataState getMobileDataState(Intent intent) {
@@ -173,11 +220,19 @@ public class MobileDataStateTracker extends NetworkStateTracker {
 
                     boolean unavailable = intent.getBooleanExtra(Phone.NETWORK_UNAVAILABLE_KEY,
                             false);
-
+                    int mmsPhoneId = networkTypeToMMSPhoneId(mNetworkInfo.getType());
                     // set this regardless of the apnTypeList.  It's all the same radio/network
                     // underneath
-                    Log.d(TAG, "[type=" + mNetType + "]setIsAvailable=" + !unavailable);
-                    mNetworkInfo.setIsAvailable(!unavailable);
+                    if(mmsPhoneId < 0) {
+                        Log.d(TAG, "[type=" + mNetType + "]setIsAvailable=" + !unavailable);
+                        mNetworkInfo.setIsAvailable(!unavailable);
+                    } else {
+                        boolean bActivate = MsmsGsmDataConnectionTrackerProxy.isActiveOrDefaultPhoneId(mmsPhoneId);
+                        Log.d(TAG, "[type=" + mNetType + "]setIsAvailable=" + !unavailable+" mmsPhoneId["+mmsPhoneId+"] activate is "+bActivate);
+                        if(bActivate) {
+                            mNetworkInfo.setIsAvailable(!unavailable);
+                        }
+                    }
 
                     if (isApnTypeIncluded(apnTypeList)) {
                         if (mEnabled == false) {
@@ -618,5 +673,14 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     }
     public void setDataEnable(boolean mEnabled){
         this.mEnabled = mEnabled;
+    }
+    public static int networkTypeToMMSPhoneId(int netType) {
+        if(netType == ConnectivityManager.TYPE_MOBILE_MMS) {
+            return 0;
+        } else if(netType == ConnectivityManager.MAX_NETWORK_TYPE) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 }
