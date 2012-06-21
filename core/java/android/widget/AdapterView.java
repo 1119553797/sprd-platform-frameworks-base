@@ -584,8 +584,6 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
         } catch (ClassCastException e) {
             // We made it up to the window without find this list view
             return INVALID_POSITION;
-        } catch (NullPointerException e) {
-            return INVALID_POSITION;
         }
 
         // Search the children for the list item
