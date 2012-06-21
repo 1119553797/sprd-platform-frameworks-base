@@ -65,7 +65,9 @@ public class PhoneFactory {
 //    public static final int DEFAULT_PHONE_ID = 0;
     private static boolean isCard1ok = false;
     private static boolean isCard2ok = false;
-
+    private static final int SIM_STATUS_READY = 0;
+    private static final int SIM_STATUS_PIN_LOCK = 1;
+    private static final int SIM_STATUS_OTHER = 2;
     //***** Class Methods
 
     public static void makeDefaultPhones(Context context) {
@@ -369,6 +371,32 @@ public class PhoneFactory {
         return autoSetDefaultPhoneId(isUpdate, -1);
     }
 
+    public static int checkDataCall(int card1Status, int card2Status,boolean isUpdate) {
+        int settingPhoneId = -1;
+        int defaultPhoneId = TelephonyManager.getDefaultDataPhoneId(sContext);
+        int readySimNO;
+        int notReadySimStatus;
+
+        if(card1Status == SIM_STATUS_READY) {
+            readySimNO = 0;
+            notReadySimStatus = card2Status;
+        } else {
+            readySimNO = 1;
+            notReadySimStatus = card1Status;
+        }
+
+        if(readySimNO == defaultPhoneId) {
+            settingPhoneId = defaultPhoneId;
+            TelephonyManager.setAutoDefaultPhoneId(sContext,defaultPhoneId);
+        } else {
+            if(notReadySimStatus == SIM_STATUS_PIN_LOCK) {
+                settingPhoneId = defaultPhoneId;
+            } else {
+                settingPhoneId = readySimNO;
+            }
+        }
+        return settingPhoneId;
+    }
     /**
      * set system default PhoneId
      *
@@ -383,15 +411,15 @@ public class PhoneFactory {
             isCard2ok = checkSimFinish(1);
         }
         if (isCard1ok && isCard2ok) {
-            boolean hasCard1 = canHandleDataCall(0);
-            boolean hasCard2 = canHandleDataCall(1);
+            int hasCard1 = canHandleDataCall(0);
+            int hasCard2 = canHandleDataCall(1);
             Log.i(LOG_TAG, "autoSetDefaultPhoneId,hasCard1=" + hasCard1 + ",hasCard2="
                     + hasCard2 + ",defaultPhoneId=" + defaultPhoneId);
-            if (hasCard1 && !hasCard2) {
-                settingPhoneId = 0;
-            } else if (!hasCard1 && hasCard2) {
-                settingPhoneId = 1;
-            } else if (!hasCard1 && !hasCard2) {
+            if ((hasCard1 == SIM_STATUS_READY) && (hasCard2 != SIM_STATUS_READY)) {
+                settingPhoneId = checkDataCall(hasCard1,hasCard2,isUpdate);
+            } else if ((hasCard1 != SIM_STATUS_READY) && (hasCard2 == SIM_STATUS_READY)) {
+                settingPhoneId = checkDataCall(hasCard1,hasCard2,isUpdate);
+            } else if ((hasCard1 != SIM_STATUS_READY) && (hasCard2 != SIM_STATUS_READY)) {
                 return settingPhoneId;
             }
             if (settingPhoneId == -1) {
@@ -448,15 +476,19 @@ public class PhoneFactory {
         }
         return false;
     }
-    public static boolean canHandleDataCall(int phoneId) {
+    public static int canHandleDataCall(int phoneId) {
         if (sProxyPhone!=null&&phoneId<sProxyPhone.length) {
-            if(PhoneFactory.isCardReady(phoneId)) {
-                if(sProxyPhone[phoneId].getIccCard().getIccCardState() == State.READY) {
-                    return true;
-                }
+            State state = sProxyPhone[phoneId].getIccCard().getIccCardState();
+            if((state == State.PIN_REQUIRED) ||
+               (state == State.PUK_REQUIRED)) {
+                return SIM_STATUS_PIN_LOCK;
+            } else if(state == State.READY) {
+                return SIM_STATUS_READY;
+            } else {
+                return SIM_STATUS_OTHER;
             }
         }
-        return false;
+        return SIM_STATUS_OTHER;
     }
     
     public static int getDefaultPhoneId() {
