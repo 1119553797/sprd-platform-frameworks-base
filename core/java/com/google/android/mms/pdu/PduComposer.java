@@ -151,11 +151,20 @@ public class PduComposer {
     public byte[] make() {
         // Get Message-type.
         int type = mPdu.getMessageType();
+        return makeMessage(type,false);
+    }
 
+    public byte[] makeForBackupMms() {
+        // Get Message-type.
+        int type = mPdu.getMessageType();
+        return makeMessage(type,true);
+    }
+
+    private byte[] makeMessage(int type,boolean forBackup) {
         /* make the message */
         switch (type) {
             case PduHeaders.MESSAGE_TYPE_SEND_REQ:
-                if (makeSendReqPdu(type) != PDU_COMPOSE_SUCCESS) {
+                if (makeSendReqPdu(type, forBackup) != PDU_COMPOSE_SUCCESS) {
                     return null;
                 }
                 break;
@@ -175,14 +184,13 @@ public class PduComposer {
                 }
                 break;
             case PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF:
-                if (makeSendReqPdu(type) != PDU_COMPOSE_SUCCESS) {
+                if (makeSendReqPdu(type, forBackup) != PDU_COMPOSE_SUCCESS) {
                     return null;
                 }
                 break;
             default:
                 return null;
         }
-
         return mMessage.toByteArray();
     }
 
@@ -762,7 +770,7 @@ public class PduComposer {
     /**
      * Make Send.req.
      */
-    private int makeSendReqPdu(int type) {
+    private int makeSendReqPdu(int type, boolean forBackup) {
         if (mMessage == null) {
             mMessage = new ByteArrayOutputStream();
             mPosition = 0;
@@ -776,16 +784,21 @@ public class PduComposer {
             appendOctet(PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF);
         }
 
-        // X-Mms-Transaction-ID
-        appendOctet(PduHeaders.TRANSACTION_ID);
-
         byte[] trid = mPduHeader.getTextString(PduHeaders.TRANSACTION_ID);
-        if (trid == null) {
-            // Transaction-ID should be set(by Transaction) before make().
-            throw new IllegalArgumentException("Transaction-ID is null.");
-        }
-        appendTextString(trid);
 
+        // X-Mms-Transaction-ID
+        if (forBackup && trid != null) {
+            appendOctet(PduHeaders.TRANSACTION_ID);
+            appendTextString(trid);
+        }
+        if(!forBackup) {
+            appendOctet(PduHeaders.TRANSACTION_ID);
+            if (trid == null) {
+                // Transaction-ID should be set(by Transaction) before make().
+                throw new IllegalArgumentException("Transaction-ID is null.");
+            }
+            appendTextString(trid);
+        }
         //  X-Mms-MMS-Version
         if (appendHeader(PduHeaders.MMS_VERSION) != PDU_COMPOSE_SUCCESS) {
             return PDU_COMPOSE_CONTENT_ERROR;
