@@ -430,10 +430,8 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
         }
     }
     public static boolean isActiveOrDefaultPhoneId(int phoneId) {
-        int defaultPhoneId = INVALID_PHONE_ID;
-        if(sTracker[0] != null) {
-            defaultPhoneId = sTracker[0].getDefaultDataPhoneId();
-        }
+        int defaultPhoneId = PhoneFactory.getDefaultPhoneId();
+
         log("isActiveOrDefaultPhoneId sActivePhoneId=" + sActivePhoneId + ", defaultPhoneId="+defaultPhoneId+", phoneId=" + phoneId);
         if(sActivePhoneId != INVALID_PHONE_ID) {
             return (sActivePhoneId == phoneId);
