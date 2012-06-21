@@ -999,7 +999,24 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_WAP)) {
-                    usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
+                    if(PhoneFactory.getPhoneCount() < 2) {
+                        usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
+                    } else {
+                        Integer currentPid = new Integer(pid);
+                        int mmsType;
+
+                        mmsType = ConnectivityManager.getMmsTypeByPhoneId(0);
+                        if(mNetRequestersPids[mmsType].contains(currentPid)) {
+                            usedNetworkType = mmsType;
+                        } else {
+                            mmsType = ConnectivityManager.getMmsTypeByPhoneId(1);
+                            if(mNetRequestersPids[mmsType].contains(currentPid)) {
+                                usedNetworkType = mmsType;
+                            } else {
+                                usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
+                            }
+                        }
+                    }
                 }
             }
             tracker =  mNetTrackers[usedNetworkType];
