@@ -247,6 +247,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                                         intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY) +
                                         " for " + mApnType);
                                 mInterfaceName = intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY);
+                            }  else {
+                                if((mmsPhoneId >= 0) && (phoneId >= 0) && (mmsPhoneId != phoneId)) {
+                                    return;
+                                }
                             }
                             return;
                         }
