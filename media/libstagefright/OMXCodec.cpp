@@ -1397,6 +1397,9 @@ status_t OMXCodec::setVideoOutputFormat(
         CHECK(format.eColorFormat == OMX_COLOR_FormatYUV420Planar
                || format.eColorFormat == OMX_COLOR_FormatYUV420SemiPlanar
                || format.eColorFormat == OMX_COLOR_FormatCbYCrY
+               || format.eColorFormat == OMX_SPRD_COLOR_FormatYUV420SemiPlanar
+               || format.eColorFormat == OMX_SPRDMP4V_COLOR_FormatYUV420Planar
+               || format.eColorFormat == OMX_SPRDH264_COLOR_FormatYUV420Planar
                || format.eColorFormat == OMX_QCOM_COLOR_FormatYVU420SemiPlanar);
 
         err = mOMX->setParameter(

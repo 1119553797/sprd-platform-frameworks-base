@@ -65,6 +65,8 @@ status_t getPixelFormatInfo(PixelFormat format, PixelFormatInfo* info)
     case HAL_PIXEL_FORMAT_YCrCb_420_SP:
     case HAL_PIXEL_FORMAT_YCbCr_420_SP://jgdu
     case HAL_PIXEL_FORMAT_YV12:
+    case HAL_PIXEL_FORMAT_YCbCr_420_P_MP4V:
+    case HAL_PIXEL_FORMAT_YCbCr_420_P_H264:
         info->bitsPerPixel = 12;
      done:
         info->format = format;

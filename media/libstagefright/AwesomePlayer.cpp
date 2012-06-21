@@ -1456,26 +1456,6 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyHeight, &mVideoHeight));
 
 		LOGI("mVideoWidth =%d mVideoHeight =%d ",mVideoWidth,mVideoHeight);
-		
-		bool videooutsize = false ;
-
-		if (mVideoWidth > mVideoHeight )
-		{
-			if (mVideoWidth > 720 ||mVideoHeight > 576 )
-				 videooutsize = true ;
-		}
-		else 
-		{
-			if (mVideoWidth > 576 ||mVideoHeight > 720 )
-				 videooutsize = true ;
-		}
-		if (videooutsize)
-		{
-		   LOGI("vide size is not susport play audio only ");
-		   mVideoSource.clear();
-		   return OK;
-		}
-
 		if (!strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_AVC))
 		{
 			int32_t profile ;
