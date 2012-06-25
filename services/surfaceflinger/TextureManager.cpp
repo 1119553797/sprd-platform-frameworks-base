@@ -62,6 +62,7 @@ status_t TextureManager::initTexture(Texture* texture)
     texture->name = textureName;
     texture->width = 0;
     texture->height = 0;
+    texture->target = Texture::TEXTURE_2D;
 
     const GLenum target = GL_TEXTURE_2D;
     glBindTexture(target, textureName);
@@ -106,14 +107,15 @@ status_t TextureManager::initTexture(Image* pImage, int32_t format)
 bool TextureManager::isSupportedYuvFormat(int format)
 {
     switch (format) {
+    case HAL_PIXEL_FORMAT_YV12:
     case HAL_PIXEL_FORMAT_YCbCr_422_SP:
-    case HAL_PIXEL_FORMAT_YCbCr_420_SP:
     case HAL_PIXEL_FORMAT_YCbCr_422_P:
+    case HAL_PIXEL_FORMAT_YCbCr_420_SP:
     case HAL_PIXEL_FORMAT_YCbCr_420_P:
+    case HAL_PIXEL_FORMAT_YCrCb_420_SP:
+    case HAL_PIXEL_FORMAT_YCrCb_420_P:
     case HAL_PIXEL_FORMAT_YCbCr_422_I:
     case HAL_PIXEL_FORMAT_YCbCr_420_I:
-    case HAL_PIXEL_FORMAT_YCrCb_420_SP:
-    case HAL_PIXEL_FORMAT_YV12:
         return true;
     }
     return false;
@@ -126,8 +128,10 @@ bool TextureManager::isYuvFormat(int format)
     case HAL_PIXEL_FORMAT_YV12:
     // Legacy/deprecated YUV formats
     case HAL_PIXEL_FORMAT_YCbCr_422_SP:
-    case HAL_PIXEL_FORMAT_YCrCb_420_SP:
     case HAL_PIXEL_FORMAT_YCbCr_420_SP:
+    case HAL_PIXEL_FORMAT_YCbCr_420_P:
+    case HAL_PIXEL_FORMAT_YCrCb_420_SP:
+    case HAL_PIXEL_FORMAT_YCrCb_420_P:
     case HAL_PIXEL_FORMAT_YCbCr_422_I:
         return true;
     }
@@ -165,7 +169,8 @@ status_t TextureManager::initEglImage(Image* pImage,
 
     if (pImage->image != EGL_NO_IMAGE_KHR) {
         if (pImage->name == -1UL) {
-            initTexture(pImage, buffer->format);
+            err = initTexture(pImage, buffer->format);
+            LOGE_IF(err, "initEglImage failed in initTexture (%s)", strerror(err));
         }
         const GLenum target = getTextureTarget(pImage);
         glBindTexture(target, pImage->name);
@@ -194,7 +199,6 @@ status_t TextureManager::loadTexture(Texture* texture,
     if (texture->name == -1UL) {
         status_t err = initTexture(texture);
         LOGE_IF(err, "loadTexture failed in initTexture (%s)", strerror(err));
-        return err;
     }
 
     if (texture->target != Texture::TEXTURE_2D)

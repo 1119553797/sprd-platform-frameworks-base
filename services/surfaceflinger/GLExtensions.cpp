@@ -82,7 +82,7 @@ void GLExtensions::initWithGLStrings(
 #warning "EGL_ANDROID_image_native_buffer not supported"
 #endif
 
-    if (hasExtension("GL_ARB_texture_non_power_of_two")) {
+    if (hasExtension("GL_ARB_texture_non_power_of_two") || hasExtension("GL_OES_texture_npot")) {
         mHaveNpot = true;
     }
 

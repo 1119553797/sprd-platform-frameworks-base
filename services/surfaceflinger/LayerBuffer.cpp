@@ -140,7 +140,7 @@ void LayerBuffer::unlockPageFlip(const Transform& planeTransform,
     sp<Source> source(getSource());
     if (source != 0)
         source->onVisibilityResolved(planeTransform);
-    LayerBase::unlockPageFlip(planeTransform, outDirtyRegion);    
+    LayerBase::unlockPageFlip(planeTransform, outDirtyRegion);
 }
 
 void LayerBuffer::validateVisibility(const Transform& globalTransform)
@@ -191,7 +191,7 @@ status_t LayerBuffer::registerBuffers(const ISurface::BufferHeap& buffers)
         mSource = source;
     }
     return result;
-}    
+}
 
 /**
  * This creates an "overlay" source for this surface
@@ -280,14 +280,38 @@ LayerBuffer::Buffer::Buffer(const ISurface::BufferHeap& buffers,
     : mBufferHeap(buffers), mSupportsCopybit(false)
 {
     NativeBuffer& src(mNativeBuffer);
-    src.crop.l = 0;
-    src.crop.t = 0;
-    src.crop.r = buffers.w;
-    src.crop.b = buffers.h;
+    switch(buffers.format)
+    {
+    case HAL_PIXEL_FORMAT_YCbCr_420_P_MP4V:
+        src.crop.l = 16;
+        src.crop.t = 16;
+        src.crop.r = 16 + buffers.w;
+        src.crop.b = 16 + buffers.h;
 
-    src.img.w       = buffers.hor_stride ?: buffers.w;
-    src.img.h       = buffers.ver_stride ?: buffers.h;
-    src.img.format  = buffers.format;
+        src.img.w       = buffers.hor_stride;
+        src.img.h       = buffers.ver_stride;
+        src.img.format  = HAL_PIXEL_FORMAT_YCbCr_420_P;
+        break;
+    case HAL_PIXEL_FORMAT_YCrCb_420_P_H264:
+        src.crop.l = 24;
+        src.crop.t = 24;
+        src.crop.r = 24 + buffers.w;
+        src.crop.b = 24 + buffers.h;
+
+        src.img.w       = buffers.hor_stride;
+        src.img.h       = buffers.ver_stride;
+        src.img.format  = HAL_PIXEL_FORMAT_YCrCb_420_P;
+        break;
+    default:
+        src.crop.l = 0;
+        src.crop.t = 0;
+        src.crop.r = buffers.w;
+        src.crop.b = buffers.h;
+
+        src.img.w       = buffers.hor_stride ?: buffers.w;
+        src.img.h       = buffers.ver_stride ?: buffers.h;
+        src.img.format  = buffers.format;
+    }
     src.img.base    = (void*)(intptr_t(buffers.heap->base()) + offset);
     src.img.handle  = 0;
 
@@ -314,7 +338,7 @@ LayerBuffer::Buffer::~Buffer()
 
     if (src.img.handle) {
         gralloc_module_t const * module = LayerBuffer::getGrallocModule();
-        module->perform(module, 
+        module->perform(module,
                         GRALLOC_MODULE_PERFORM_FREE_HANDLE,
                         &src.img.handle);
         native_handle_delete(src.img.handle);
@@ -329,9 +353,9 @@ LayerBuffer::Buffer::~Buffer()
 
 LayerBuffer::Source::Source(LayerBuffer& layer)
     : mLayer(layer)
-{    
+{
 }
-LayerBuffer::Source::~Source() {    
+LayerBuffer::Source::~Source() {
 }
 void LayerBuffer::Source::onDraw(const Region& clip) const {
 }
@@ -352,13 +376,13 @@ void LayerBuffer::Source::finishPageFlip() {
 LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
         const ISurface::BufferHeap& buffers)
     : Source(layer), mStatus(NO_ERROR), mBufferSize(0),mInComposing(false),mIsSync(false),
-      mUseEGLImageDirectly(true) 
+      mUseEGLImageDirectly(true)
 {
     if((buffers.transform>>24)==0x12){//jgdu push buffer sync
         mIsSync = true;
     }
     LOGI("mIsSync is %d @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",mIsSync);
-	
+
     if (buffers.heap == NULL) {
         // this is allowed, but in this case, it is illegal to receive
         // postBuffer(). The surface just erases the framebuffer with
@@ -374,7 +398,7 @@ LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
         mStatus = err;
         return;
     }
-    
+
     PixelFormatInfo info;
     err = getPixelFormatInfo(buffers.format, &info);
     if (err != NO_ERROR) {
@@ -386,21 +410,21 @@ LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
 
     if (buffers.hor_stride<0 || buffers.ver_stride<0) {
         LOGE("LayerBuffer::BufferSource: invalid parameters "
-             "(w=%d, h=%d, xs=%d, ys=%d)", 
+             "(w=%d, h=%d, xs=%d, ys=%d)",
              buffers.w, buffers.h, buffers.hor_stride, buffers.ver_stride);
         mStatus = BAD_VALUE;
         return;
     }
 
     mBufferHeap = buffers;
-    mBufferHeap.transform = buffers.transform&0x00ffffff;//jgdu push buffer sync	
-    mLayer.setNeedsBlending((info.h_alpha - info.l_alpha) > 0);    
+    mBufferHeap.transform = buffers.transform&0x00ffffff;//jgdu push buffer sync
+    mLayer.setNeedsBlending((info.h_alpha - info.l_alpha) > 0);
     mBufferSize = info.getScanlineSize(buffers.hor_stride)*buffers.ver_stride;
     mLayer.forceVisibilityTransaction();
 }
 
 LayerBuffer::BufferSource::~BufferSource()
-{    
+{
     class MessageDestroyTexture : public MessageBase {
         SurfaceFlinger* flinger;
         GLuint name;
@@ -426,7 +450,7 @@ LayerBuffer::BufferSource::~BufferSource()
 }
 
 void LayerBuffer::BufferSource::postBuffer(ssize_t offset)
-{    
+{
     ISurface::BufferHeap buffers;
     { // scope for the lock
         Mutex::Autolock _l(mBufferSourceLock);
@@ -446,26 +470,26 @@ void LayerBuffer::BufferSource::postBuffer(ssize_t offset)
     if (buffers.heap != 0) {
         buffer = new LayerBuffer::Buffer(buffers, offset, mBufferSize);
         if (buffer->getStatus() != NO_ERROR)
-            buffer.clear();		
+            buffer.clear();
         setBuffer(buffer);
-	 if(mIsSync){//jgdu push buffer sync
-	 	Mutex::Autolock autoLock(mBufLock);
-	 	mInComposing = true;
-        }		
+    	if(mIsSync) {//jgdu push buffer sync
+    	 	Mutex::Autolock autoLock(mBufLock);
+    	 	mInComposing = true;
+        }
         mLayer.invalidate();
-	 if(mIsSync){//jgdu push buffer sync
-		Mutex::Autolock autoLock(mBufLock);
-		int count = 0;
-		while(mInComposing){
-			mBufCondition.waitRelative(mBufLock,100000000);
-			count++;
-			if(count>=2){
-				mInComposing = false;
-				LOGI("video rendering timeout");
-				break;
-			}
-		}
-	 }		
+    	if(mIsSync) {//jgdu push buffer sync
+    		Mutex::Autolock autoLock(mBufLock);
+    		int count = 0;
+    		while(mInComposing) {
+    			mBufCondition.waitRelative(mBufLock,100000000);
+    			count++;
+    			if(count>=2) {
+    				mInComposing = false;
+    				LOGI("video rendering timeout");
+    				break;
+    			}
+    		}
+    	}
     }
 }
 
@@ -489,7 +513,7 @@ void LayerBuffer::BufferSource::setBuffer(const sp<LayerBuffer::Buffer>& buffer)
     mBuffer = buffer;
 }
 
-void LayerBuffer::BufferSource::onDraw(const Region& clip) const 
+void LayerBuffer::BufferSource::onDraw(const Region& clip) const
 {
     sp<Buffer> ourBuffer(getBuffer());
     if (UNLIKELY(ourBuffer == 0))  {
@@ -502,15 +526,21 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
     NativeBuffer src(ourBuffer->getBuffer());
     const Rect transformedBounds(mLayer.getTransformedBounds());
 
+    Rect crop;
+    crop.left   = src.crop.l;
+    crop.top    = src.crop.t;
+    crop.right  = src.crop.r;
+    crop.bottom = src.crop.b;
+
 #if defined(EGL_ANDROID_image_native_buffer)
     if (GLExtensions::getInstance().haveDirectTexture()) {
         err = INVALID_OPERATION;
         if (ourBuffer->supportsCopybit()) {
             if (mUseEGLImageDirectly) {
                 sp<GraphicBuffer> buffer = new GraphicBuffer(
-                                src.crop.r, src.crop.b, src.img.format,
-                                GraphicBuffer::USAGE_HW_TEXTURE,
-                                src.img.w, src.img.handle, false);
+                                    src.img.w, src.img.h, src.img.format,
+                                    GraphicBuffer::USAGE_HW_TEXTURE,
+                                    src.img.w, src.img.handle, false);
                 EGLDisplay dpy(getFlinger()->graphicPlane(0).getEGLDisplay());
                 mTexture.dirty = true;
                 err = mTextureManager.initEglImage(&mTexture, dpy, buffer);
@@ -527,10 +557,24 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
                             base_need_bias = !!offset;
                         }
                     }
-                    if (mBufferHeap.format == HAL_PIXEL_FORMAT_YCbCr_420_SP
-                        && (base_need_bias || src.crop.b != src.img.h)) { 
-                        // there are constraints on buffers used by the GPU             
-                        err = fixYUV420Plane(&src.img, offset);
+                    switch(mBufferHeap.format)
+                    {
+                    case HAL_PIXEL_FORMAT_YCbCr_420_SP:
+                        if (base_need_bias) {
+                        // there are constraints on buffers used by the GPU
+                            err = fixYUV420SP(&src.img, offset);
+                        }
+                        break;
+                    case HAL_PIXEL_FORMAT_YCbCr_420_P_MP4V:
+                        if (base_need_bias) {
+                            err = fixYUV420P(&src.img, offset);
+                        }
+                        break;
+                    case HAL_PIXEL_FORMAT_YCrCb_420_P_H264:
+                        if (base_need_bias) {
+                            err = fixYVU420P(&src.img, offset);
+                        }
+                        break;
                     }
                 }
                 if (err != NO_ERROR) {
@@ -554,11 +598,18 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
                     if (err != NO_ERROR) {
                         clearTempBufferImage();
                     }
+                    else
+                    {
+                        crop.left   = dst.crop.l;
+                        crop.top    = dst.crop.t;
+                        crop.right  = dst.crop.r;
+                        crop.bottom = dst.crop.b;
+                    }
                 }
             }
         }
     }
-    else 
+    else
 #endif
     {
         err = INVALID_OPERATION;
@@ -578,6 +629,7 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
         mTextureManager.loadTexture(&mTexture, dirty, t);
     }
 
+    mLayer.setBufferCrop(crop);
     mLayer.setBufferTransform(mBufferHeap.transform);
     mLayer.drawWithOpenGL(clip, mTexture);
 
@@ -585,7 +637,7 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
         if(mIsSync){//jgdu push buffer sync
         	Mutex::Autolock autoLock(mBufLock);
         	mInComposing = false;
-        	mBufCondition.signal();    
+        	mBufCondition.signal();
         }
     }
 }
@@ -667,13 +719,13 @@ void LayerBuffer::BufferSource::clearTempBufferImage() const
     Texture defaultTexture;
     mTexture = defaultTexture;
 }
- 
+
 void LayerBuffer::BufferSource::finishPageFlip()
 {
     if (mUseEGLImageDirectly) {
         if (mIsSync) {//jgdu push buffer sync
             // in fact, the compositeComplete handler already can sync it
-            glFinish(); 
+            glFinish();
             Mutex::Autolock autoLock(mBufLock);
             mInComposing = false;
             mBufCondition.signal();
@@ -683,15 +735,12 @@ void LayerBuffer::BufferSource::finishPageFlip()
 
 // here the caller mush be assure the native image is the image attached to
 // mTexture.image
-status_t LayerBuffer::BufferSource::fixYUV420Plane(copybit_image_t const *img, uint32_t offset) const
+status_t LayerBuffer::BufferSource::fixYUV420SP(copybit_image_t const *img, uint32_t offset) const
 {
     status_t status = INVALID_OPERATION;
     EGLImageKHR mali_egl_img;
     mali_wrapper mw;
 
-    if (img->format != HAL_PIXEL_FORMAT_YCbCr_420_SP) {
-        return status;
-    }
     if (mTexture.image == EGL_NO_IMAGE_KHR) {
         return status;
     }
@@ -705,7 +754,7 @@ status_t LayerBuffer::BufferSource::fixYUV420Plane(copybit_image_t const *img, u
 
             status = INVALID_OPERATION;
             if (module && module->perform) {
-                status = module->perform(module, GRALLOC_MODULE_PERFORM_GET_MALI_DATA, 
+                status = module->perform(module, GRALLOC_MODULE_PERFORM_GET_MALI_DATA,
                             &internal_mali_data, img->handle);
                 if (!status) {
                     if (offset) {
@@ -717,7 +766,7 @@ status_t LayerBuffer::BufferSource::fixYUV420Plane(copybit_image_t const *img, u
                         if (EGL_FALSE == mw.set_data(internal_image,
                                     attrs_y, offset, internal_mali_data))
                         {
-                            LOGE("In fixYUV420Plane %s failed, "
+                            LOGE("In fixYUV420SP %s failed, "
                                  "while set Y plane buffer "
                                  "error code 0x%08x\n",
                                  "mali_egl_image_set_data",
@@ -735,7 +784,7 @@ status_t LayerBuffer::BufferSource::fixYUV420Plane(copybit_image_t const *img, u
                         if (EGL_FALSE == mw.set_data(internal_image,
                                     attrs_uv, uv_ofs+offset, internal_mali_data))
                         {
-                            LOGE("In fixYUV420Plane %s failed, "
+                            LOGE("In fixYUV420SP %s failed, "
                                  "while set UV plane buffer "
                                  "error code 0x%08x\n",
                                  "mali_egl_image_set_data",
@@ -746,7 +795,195 @@ status_t LayerBuffer::BufferSource::fixYUV420Plane(copybit_image_t const *img, u
                 }
             }
             if (EGL_FALSE == mw.unlock_ptr(mali_egl_img)) {
-                LOGE("fixYUV420Plane() failed, error code 0x%08x\n", 
+                LOGE("fixYUV420SP() failed, error code 0x%08x\n",
+                    mw.get_error());
+                status = INVALID_OPERATION;
+            }
+        }
+    }
+    else {
+        LOGE("mali_wrapper open failed\n");
+    }
+
+    return status;
+}
+
+
+// here the caller mush be assure the native image is the image attached to
+// mTexture.image
+status_t LayerBuffer::BufferSource::fixYUV420P(copybit_image_t const *img, uint32_t offset) const
+{
+    status_t status = INVALID_OPERATION;
+    EGLImageKHR mali_egl_img;
+    mali_wrapper mw;
+    if (mTexture.image == EGL_NO_IMAGE_KHR) {
+        return status;
+    }
+    mali_egl_img = egl_get_image_for_current_context(mTexture.image);
+    status = mw.getStatus();
+    if (NO_ERROR == status) {
+        mali_wrapper::EGLImageMALI* internal_image = mw.lock_ptr(mali_egl_img);
+        if (internal_image) {
+            void *internal_mali_data = NULL;
+            gralloc_module_t const * module = LayerBuffer::getGrallocModule();
+
+            status = INVALID_OPERATION;
+            if (module && module->perform) {
+                status = module->perform(module, GRALLOC_MODULE_PERFORM_GET_MALI_DATA,
+                            &internal_mali_data, img->handle);
+                if (!status) {
+                    if (!status) {
+                        EGLint attrs_y[] = {
+                            MALI_EGL_IMAGE_PLANE,   MALI_EGL_IMAGE_PLANE_Y,
+                            MALI_EGL_IMAGE_MIPLEVEL,0,
+                            EGL_NONE,               EGL_NONE
+                        };
+                        EGLint y_ofs = 0;
+                        if (EGL_FALSE == mw.set_data(internal_image,
+                                    attrs_y, y_ofs+offset, internal_mali_data))
+                        {
+                            LOGE("In fixYUV420P %s failed, "
+                                 "while set Y plane buffer "
+                                 "error code 0x%08x\n",
+                                 "mali_egl_image_set_data",
+                                 mw.get_error());
+                            status = -EINVAL;
+                        }
+                    }
+                    if (!status) {
+                        EGLint attrs_u[] = {
+                            MALI_EGL_IMAGE_PLANE,   MALI_EGL_IMAGE_PLANE_U,
+                            MALI_EGL_IMAGE_MIPLEVEL,0,
+                            EGL_NONE,               EGL_NONE
+                        };
+                        EGLint u_ofs = img->w*img->h;
+                        if (EGL_FALSE == mw.set_data(internal_image,
+                                    attrs_u, u_ofs+offset, internal_mali_data))
+                        {
+                            LOGE("In fixYUV420P %s failed, "
+                                 "while set U plane buffer "
+                                 "error code 0x%08x\n",
+                                 "mali_egl_image_set_data",
+                                 mw.get_error());
+                            status = -EINVAL;
+                        }
+                    }
+                    if (!status) {
+                        EGLint attrs_v[] = {
+                            MALI_EGL_IMAGE_PLANE,   MALI_EGL_IMAGE_PLANE_V,
+                            MALI_EGL_IMAGE_MIPLEVEL,0,
+                            EGL_NONE,               EGL_NONE
+                        };
+                        EGLint v_ofs = img->w*img->h*5/4;
+                        if (EGL_FALSE == mw.set_data(internal_image,
+                                    attrs_v, v_ofs+offset, internal_mali_data))
+                        {
+                            LOGE("In fixYUV420P %s failed, "
+                                 "while set V plane buffer "
+                                 "error code 0x%08x\n",
+                                 "mali_egl_image_set_data",
+                                 mw.get_error());
+                            status = -EINVAL;
+                        }
+                    }
+                }
+            }
+            if (EGL_FALSE == mw.unlock_ptr(mali_egl_img)) {
+                LOGE("fixYUV420P() failed, error code 0x%08x\n",
+                    mw.get_error());
+                status = INVALID_OPERATION;
+            }
+        }
+    }
+    else {
+        LOGE("mali_wrapper open failed\n");
+    }
+
+    return status;
+}
+
+
+// here the caller mush be assure the native image is the image attached to
+// mTexture.image
+status_t LayerBuffer::BufferSource::fixYVU420P(copybit_image_t const *img, uint32_t offset) const
+{
+    status_t status = INVALID_OPERATION;
+    EGLImageKHR mali_egl_img;
+    mali_wrapper mw;
+    if (mTexture.image == EGL_NO_IMAGE_KHR) {
+        return status;
+    }
+    mali_egl_img = egl_get_image_for_current_context(mTexture.image);
+    status = mw.getStatus();
+    if (NO_ERROR == status) {
+        mali_wrapper::EGLImageMALI* internal_image = mw.lock_ptr(mali_egl_img);
+        if (internal_image) {
+            void *internal_mali_data = NULL;
+            gralloc_module_t const * module = LayerBuffer::getGrallocModule();
+
+            status = INVALID_OPERATION;
+            if (module && module->perform) {
+                status = module->perform(module, GRALLOC_MODULE_PERFORM_GET_MALI_DATA,
+                            &internal_mali_data, img->handle);
+                if (!status) {
+                    if (!status) {
+                        EGLint attrs_y[] = {
+                            MALI_EGL_IMAGE_PLANE,   MALI_EGL_IMAGE_PLANE_Y,
+                            MALI_EGL_IMAGE_MIPLEVEL,0,
+                            EGL_NONE,               EGL_NONE
+                        };
+                        EGLint y_ofs = 0;
+                        if (EGL_FALSE == mw.set_data(internal_image,
+                                    attrs_y, y_ofs+offset, internal_mali_data))
+                        {
+                            LOGE("In fixYUV420P %s failed, "
+                                 "while set Y plane buffer "
+                                 "error code 0x%08x\n",
+                                 "mali_egl_image_set_data",
+                                 mw.get_error());
+                            status = -EINVAL;
+                        }
+                    }
+                    if (!status) {
+                        EGLint attrs_v[] = {
+                            MALI_EGL_IMAGE_PLANE,   MALI_EGL_IMAGE_PLANE_V,
+                            MALI_EGL_IMAGE_MIPLEVEL,0,
+                            EGL_NONE,               EGL_NONE
+                        };
+                        EGLint v_ofs = img->w*img->h;
+                        if (EGL_FALSE == mw.set_data(internal_image,
+                                    attrs_v, v_ofs+offset, internal_mali_data))
+                        {
+                            LOGE("In fixYVU420P %s failed, "
+                                 "while set V plane buffer "
+                                 "error code 0x%08x\n",
+                                 "mali_egl_image_set_data",
+                                 mw.get_error());
+                            status = -EINVAL;
+                        }
+                    }
+                    if (!status) {
+                        EGLint attrs_u[] = {
+                            MALI_EGL_IMAGE_PLANE,   MALI_EGL_IMAGE_PLANE_U,
+                            MALI_EGL_IMAGE_MIPLEVEL,0,
+                            EGL_NONE,               EGL_NONE
+                        };
+                        EGLint u_ofs = img->w*img->h*5/4;
+                        if (EGL_FALSE == mw.set_data(internal_image,
+                                    attrs_u, u_ofs+offset, internal_mali_data))
+                        {
+                            LOGE("In fixYVU420P %s failed, "
+                                 "while set U plane buffer "
+                                 "error code 0x%08x\n",
+                                 "mali_egl_image_set_data",
+                                 mw.get_error());
+                            status = -EINVAL;
+                        }
+                    }
+                }
+            }
+            if (EGL_FALSE == mw.unlock_ptr(mali_egl_img)) {
+                LOGE("fixYVU420P() failed, error code 0x%08x\n",
                     mw.get_error());
                 status = INVALID_OPERATION;
             }
@@ -762,7 +999,7 @@ status_t LayerBuffer::BufferSource::fixYUV420Plane(copybit_image_t const *img, u
 // ---------------------------------------------------------------------------
 
 LayerBuffer::OverlaySource::OverlaySource(LayerBuffer& layer,
-        sp<OverlayRef>* overlayRef, 
+        sp<OverlayRef>* overlayRef,
         uint32_t w, uint32_t h, int32_t format, int32_t orientation)
     : Source(layer), mVisibilityChanged(false),
     mOverlay(0), mOverlayHandle(0), mOverlayDevice(0), mOrientation(orientation)
@@ -781,19 +1018,19 @@ LayerBuffer::OverlaySource::OverlaySource(LayerBuffer& layer,
     }
 
     // enable dithering...
-    overlay_dev->setParameter(overlay_dev, overlay, 
+    overlay_dev->setParameter(overlay_dev, overlay,
             OVERLAY_DITHER, OVERLAY_ENABLE);
 
     mOverlay = overlay;
     mWidth = overlay->w;
     mHeight = overlay->h;
-    mFormat = overlay->format; 
+    mFormat = overlay->format;
     mWidthStride = overlay->w_stride;
     mHeightStride = overlay->h_stride;
     mInitialized = false;
 
     mOverlayHandle = overlay->getHandleRef(overlay);
-    
+
     sp<OverlayChannel> channel = new OverlayChannel( &layer );
 
     *overlayRef = new OverlayRef(mOverlayHandle, channel,
@@ -846,7 +1083,7 @@ void LayerBuffer::OverlaySource::onVisibilityResolved(
             int y = bounds.top;
             int w = bounds.width();
             int h = bounds.height();
-            
+
             // we need a lock here to protect "destroy"
             Mutex::Autolock _l(mOverlaySourceLock);
             if (mOverlay) {

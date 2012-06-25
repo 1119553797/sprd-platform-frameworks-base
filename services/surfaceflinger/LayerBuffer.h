@@ -139,7 +139,9 @@ private:
     private:
         status_t initTempBuffer() const;
         void clearTempBufferImage() const;
-        status_t fixYUV420Plane(copybit_image_t const *, uint32_t) const;
+        status_t fixYUV420SP(copybit_image_t const *, uint32_t) const;
+        status_t fixYUV420P(copybit_image_t const *, uint32_t) const;
+        status_t fixYVU420P(copybit_image_t const *, uint32_t) const;
         mutable bool mUseEGLImageDirectly;
         mutable Mutex                   mBufferSourceLock;
         sp<Buffer>                      mBuffer;
