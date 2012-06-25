@@ -2376,7 +2376,7 @@ public int[] getAvalibleSubjectCount(int num, int type, int efid ,int adnNum, in
                 Log.i(LOG_TAG,"EVENT_EF_CC_LOAD_DONE "+ IccUtils.bytesToHexString(data));
                 // update EFcc
                 byte[] counter = new byte[2];
-                int cc = (data[0]<<8)+data[1];
+                int cc = ((data[0] & 0xFF)<<8)+(data[1] & 0xFF);
                 cc+=temp;
                if (cc > 0xFFFF) {
                    counter[0] = (byte) 0x00;
