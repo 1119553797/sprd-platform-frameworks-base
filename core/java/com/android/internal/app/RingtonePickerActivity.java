@@ -93,6 +93,7 @@ public final class RingtonePickerActivity extends AlertActivity implements
      * manage the default ringtone for us, so we should stop this one manually.
      */
     private Ringtone mDefaultRingtone;
+    
 
     private StorageManager mStorageManager = null;
     private DialogInterface.OnClickListener mRingtoneClickListener =
@@ -345,10 +346,14 @@ public final class RingtonePickerActivity extends AlertActivity implements
 //        	}
             /* ===== fixed CR<NEWMS00109311> by luning at 2011.11.17 begin =====*/
             if(ringtone.isError()){
-                Toast.makeText(this, com.android.internal.R.string.audio_play_failed, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, com.android.internal.R.string.audio_play_failed, Toast.LENGTH_LONG).show();   
+                mAlert.getButton(BUTTON_POSITIVE).setEnabled(false);
+            }else{
+            	 mAlert.getButton(BUTTON_POSITIVE).setEnabled(true);
+            	 ringtone.play();
             }
             /* ===== fixed CR<NEWMS00109311> by luning at 2011.11.17 end =====*/
-            ringtone.play();
+           
         }
 //        else {
 //        	if(null != mAlert){/*fixed CR<NEWMS00109311> by luning at 2011.11.17*/
