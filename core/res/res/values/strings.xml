@@ -2597,7 +2597,7 @@
     <!-- Text for message for an unknown external media state [CHAR LIMIT=NONE] -->
     <string name="media_unknown_state">External media in unknown state.</string>
 	<!-- add by luning 2011.11.17 for NEWMS00109311  -->
-	<string name="audio_play_failed">Sorry,this audio cannot be played,using the default ringtone</string>
+	<string name="audio_play_failed">Sorry,this audio cannot be played. Don\'t set this ringtone.</string>
 	<!-- add by lino 2011.12.05 for when no space for sms  -->
 	<string name="sms_full_title">Text message memory full</string>
 	<string name="sms_full_body">Incoming message rejected due to full memory. Please delete old messages.</string>

@@ -1026,7 +1026,7 @@
     <string name="media_unknown_state" msgid="729192782197290385">"外部媒体处于未知状态。"</string>
 	
 	<!-- add by luning 2011.11.17 for NEWMS00109311 -->
-	<string name="audio_play_failed">"很抱歉，无法播放此音频。正在使用默认铃音"</string>
+	<string name="audio_play_failed">"很抱歉，无法播放此音频。不能设置该铃音"</string>
 	<!-- add by lino 2011.12.05 for when no space for sms  -->
 	<string name="sms_full_title">"信息内存已满"</string>
 	<string name="sms_full_body">"存储空间已满，无法接收传入的信息，请删除旧信息。"</string>
