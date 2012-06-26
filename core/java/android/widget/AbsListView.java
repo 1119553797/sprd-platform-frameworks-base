@@ -668,6 +668,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
      */
     private boolean contentFits() {
         final int childCount = getChildCount();
+        if (childCount == 0) return true;
         if (childCount != mItemCount) {
             return false;
         }
