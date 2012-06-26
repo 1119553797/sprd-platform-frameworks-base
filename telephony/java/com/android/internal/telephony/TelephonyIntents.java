@@ -188,7 +188,10 @@ public class TelephonyIntents {
      */
     public static final String ACTION_SIM_STATE_CHANGED
             = "android.intent.action.SIM_STATE_CHANGED";
-
+    public static final String ACTION_SIM_STATE_CHANGED0
+    = "android.intent.action.SIM_STATE_CHANGED0";
+    public static final String ACTION_SIM_STATE_CHANGED1
+    = "android.intent.action.SIM_STATE_CHANGED1";
 
     /**
      * Broadcast Action: The time was set by the carrier (typically by the NITZ string).

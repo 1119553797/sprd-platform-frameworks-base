@@ -612,6 +612,18 @@ public abstract class IccCard {
         if(mDbg) log("Broadcasting intent ACTION_SIM_STATE_CHANGED " +  value
                 + " reason " + reason + " phoneid " + mPhone.getPhoneId());
         ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
+
+        String simAction = TelephonyIntents.ACTION_SIM_STATE_CHANGED + mPhone.getPhoneId();
+        Intent simintent = new Intent(simAction);
+        simintent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+        simintent.putExtra(Phone.PHONE_NAME_KEY, mPhone.getPhoneName());
+        simintent.putExtra(INTENT_KEY_ICC_STATE, value);
+        simintent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
+        simintent.putExtra(INTENT_KEY_LOCKED_REASON, reason);
+        if (mDbg)
+            log("Broadcasting intent " + simAction + "  " + value + " reason " + reason
+                    + " phoneid " + mPhone.getPhoneId());
+        ActivityManagerNative.broadcastStickyIntent(simintent, READ_PHONE_STATE);
     }
 
     public void broadcastGetIccStatusDoneIntent() {
