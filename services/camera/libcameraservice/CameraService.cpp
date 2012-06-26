@@ -1141,6 +1141,10 @@ void CameraService::Client::handleRawPicture(const sp<IMemory>& mem) {
         mSurface->postBuffer(offset);
     }
 
+    if (1 == mHardware->getParameters().getInt("capture-other-pic")) {
+        mCameraService->playSound(SOUND_SHUTTER);
+    }
+
     sp<ICameraClient> c = mCameraClient;
     mLock.unlock();
     if (c != 0) {
