@@ -95,7 +95,7 @@ public class NotificationPlayer implements OnCompletionListener {
                                     AudioManager.AUDIOFOCUS_GAIN);
                         } else {
                             audioManager.requestAudioFocus(null, mCmd.stream,
-                                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+                                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
                         }
                     }
                     player.setOnCompletionListener(NotificationPlayer.this);
