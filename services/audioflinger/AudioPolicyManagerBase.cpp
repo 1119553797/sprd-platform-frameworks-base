@@ -615,7 +615,8 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
     if (stream == AudioSystem::NOTIFICATION) {
         setStreamMute(AudioSystem::ALARM, true, output);
     }
-    if(preferStartupSound) {
+    //for 20275, unplug headsets when startup sound is playing, then video and audio playing are silent.
+    if(mHeadsetStateReadTimes) {
         char buf[12] = {'\0'};
         const char* headsetStatePath = "/sys/class/switch/h2w/state";
         int fd = open(headsetStatePath,O_RDONLY);
@@ -625,6 +626,10 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
             if(read(fd,(char*)buf,12) >0) {
                 LOGV("headsets type = %s",(char*)buf);
                 int value = atoi((char*)buf);
+                if(value == 0) {
+                    mAvailableOutputDevices &= ~(AudioSystem::DEVICE_OUT_WIRED_HEADSET
+                        | AudioSystem::DEVICE_OUT_WIRED_HEADPHONE);
+                }
                 if(value == 1)
                     mAvailableOutputDevices |= AudioSystem::DEVICE_OUT_WIRED_HEADSET;
                 if(value == 2)
@@ -633,7 +638,7 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
             updateDeviceForStrategy();
             close(fd);
         }
-        preferStartupSound = false;
+        mHeadsetStateReadTimes--;
     }
 
     AudioOutputDescriptor *outputDesc = mOutputs.valueAt(index);
@@ -1157,7 +1162,7 @@ AudioPolicyManagerBase::AudioPolicyManagerBase(AudioPolicyClientInterface *clien
     mPhoneState(AudioSystem::MODE_NORMAL), mRingerMode(0),
     mMusicStopTime(0), mLimitRingtoneVolume(false), mLastVoiceVolume(-1.0f),
     mTotalEffectsCpuLoad(0), mTotalEffectsMemory(0),
-    mA2dpSuspended(false), preferStartupSound(true)
+    mA2dpSuspended(false), mHeadsetStateReadTimes(2)
 {
     mpClientInterface = clientInterface;
 
