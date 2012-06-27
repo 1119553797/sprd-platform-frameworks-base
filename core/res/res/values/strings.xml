@@ -2111,6 +2111,13 @@
          activity chooser. See the "Select an action" title. -->
     <string name="noApplications">No applications can perform this action.</string>
     <!-- Title of the alert when an application has crashed. -->
+    <string name="crash_title">Sorry!</string>
+    <!-- Text of the alert that is displayed when an application has crashed. -->
+    <string name="crash_application">The application <xliff:g id="application">%1$s</xliff:g>
+        (process <xliff:g id="process">%2$s</xliff:g>) has stopped unexpectedly. System failed to repair the error. Please use other software.</string>
+    <!-- Text of the alert that is displayed when an application has crashed. -->
+    <string name="crash_process">The process <xliff:g id="process">%1$s</xliff:g> has stopped unexpectedly. System failed to repair the error. Please use other software.</string>
+    <!-- Title of the alert when an application has crashed. -->
     <string name="aerr_title">Sorry!</string>
     <!-- Text of the alert that is displayed when an application has crashed. -->
     <string name="aerr_application">The application <xliff:g id="application">%1$s</xliff:g>
@@ -2129,6 +2136,7 @@
     <!-- Text of the alert that is displayed when an application is not responding. -->
     <string name="anr_process">Process <xliff:g id="process">%1$s</xliff:g> is not responding.</string>
     <!-- Button allowing the user to close an application that is not responding. This will kill the application. -->
+    <string name="crash_close">ok</string>
     <string name="force_close">Force close</string>
     <!-- Button allowing the user to send a bug report for application which has encountered an error. -->
     <string name="report">Report</string>
