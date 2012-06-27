@@ -399,7 +399,7 @@ MediaProfiles::createDefaultH263VideoEncoderCap()
 MediaProfiles::createDefaultM4vVideoEncoderCap()
 {
     return new MediaProfiles::VideoEncoderCap(
-        VIDEO_ENCODER_MPEG_4_SP, 192000, 1536000, 176, 720, 144, 480, 1, 25);
+        VIDEO_ENCODER_MPEG_4_SP, 256000, 4096000, 176, 720, 144, 480, 1, 30);
 }
 
 
@@ -414,7 +414,7 @@ MediaProfiles::createDefaultVideoEncoders(MediaProfiles *profiles)
 MediaProfiles::createDefaultCamcorderHighProfile()
 {
     MediaProfiles::VideoCodec *videoCodec =
-        new MediaProfiles::VideoCodec(VIDEO_ENCODER_MPEG_4_SP, 1024000, 352, 288, 30);
+        new MediaProfiles::VideoCodec(VIDEO_ENCODER_MPEG_4_SP, 1536000, 352, 288, 30);
 
     AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
     CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
@@ -433,7 +433,7 @@ MediaProfiles::createDefaultCamcorderHighProfile()
 MediaProfiles::createDefaultCamcorderSuperHighProfile()
 {
     MediaProfiles::VideoCodec *videoCodec =
-        new MediaProfiles::VideoCodec(VIDEO_ENCODER_MPEG_4_SP, 153600, 720, 480, 30);//wxz20120207: must be VIDEO_ENCODER_MPEG_4_SP if it's 720x576.
+        new MediaProfiles::VideoCodec(VIDEO_ENCODER_MPEG_4_SP, 4096000, 720, 480, 30);//wxz20120207: must be VIDEO_ENCODER_MPEG_4_SP if it's 720x576.
 
     AudioCodec *audioCodec = new AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
     CamcorderProfile *profile = new MediaProfiles::CamcorderProfile;
@@ -452,7 +452,7 @@ MediaProfiles::createDefaultCamcorderSuperHighProfile()
 MediaProfiles::createDefaultCamcorderLowProfile()
 {
     MediaProfiles::VideoCodec *videoCodec =
-        new MediaProfiles::VideoCodec(VIDEO_ENCODER_MPEG_4_SP, 192000, 176, 144, 30);
+        new MediaProfiles::VideoCodec(VIDEO_ENCODER_MPEG_4_SP, 256000, 176, 144, 30);
 
     MediaProfiles::AudioCodec *audioCodec =
         new MediaProfiles::AudioCodec(AUDIO_ENCODER_AMR_NB, 12200, 8000, 1);
