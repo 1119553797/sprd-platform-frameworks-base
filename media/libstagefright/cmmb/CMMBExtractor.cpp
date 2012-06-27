@@ -58,6 +58,15 @@ int sock_checkReadble(void *ph);
 	#define CMMB_LOGICAL_CHANNEL_ID 2
 #endif
 
+///////////////lg add 2012-06-13////////
+int64_t lastTimeVideo = 0;
+int64_t baseTimeVideo = 0;
+int64_t lastTimeAudio = 0;
+int64_t baseTimeAudio = 0;
+int64_t maxTimeVideo = 0;
+int countVideo = 0;
+/////////////////////////////////////////
+
 class ProcessState;
 
 #ifdef DUMP_MFS_FILE
@@ -202,16 +211,28 @@ status_t CMMBExtractor::initialize() {
 	//cmmb system
 //    ProcessState::self()->startThreadPool(); 
 
+///////////////lg add 2012-06-13////////
+	lastTimeVideo = 0;
+	baseTimeVideo = 0;
+	lastTimeAudio = 0;
+	baseTimeAudio = 0;
+	maxTimeVideo = 0;
+	countVideo = 0;
+/////////////////////////////////////////
+
 #ifdef DUMP_MFS_FILE
     const char* dumpfile = "/data/data/dump.mfs";
     mFd = -1;
     mFd = open(dumpfile, O_RDWR | O_CREAT | O_TRUNC);
     LOGD("dump to %s",  dumpfile);   
 #endif
-    LOGI("CMMBExtractor ver 2.0.2");
-	
+
     mVideoSock = NULL;
     mAudioSock = NULL;
+
+ 	LOGI("=============CMMBExtractor ver2.0.4================");
+	
+	
     LOGI("===============CMMBExtractor:initialize() is called");
     CmmbUriSource *cms = (CmmbUriSource *)mDataSource.get();
     LOGI("==0=============CMMBExtractor:initialize() is called %x", (int)cms);
@@ -275,9 +296,9 @@ status_t CMMBExtractor::initialize() {
 //        LOGI("Initial wait %d ms for buffer in cmmbserver", MEDIA_SERVICE_BUFFER_INITIAL_WAIT_MS);
 //        usleep(MEDIA_SERVICE_BUFFER_INITIAL_WAIT_MS * 1000);
  */
-     LOGI("Initial wait %d ms for buffer in cmmbserver", 1500);
 
-     usleep(1500* 1000);
+	LOGI("Initial wait %d ms for buffer in cmmbserver", MEDIA_SERVICE_BUFFER_INITIAL_WAIT_MS);
+    usleep(MEDIA_SERVICE_BUFFER_INITIAL_WAIT_MS * 1000);
 
     return OK;
 }
@@ -804,7 +825,41 @@ RETRY:
         else {
             len = sock_readVideoData(mAVSock, &pdata, &pid, &ts, &flag);
         }
-        timeStamp = (int64_t)ts;
+      // timeStamp = (int64_t)ts;//lg delete
+	/////////////////////////////////lg add 2012-06-13///////////////////////////
+	
+		if(mTrackType == CMMBExtractor::AudioTrack || mTrackType == CMMBExtractor::DraAudioTrack){
+
+			timeStamp = (int64_t)ts;
+			timeStamp = timeStamp + baseTimeAudio;	
+			lastTimeAudio = timeStamp;
+			
+		}
+
+		else{
+			timeStamp = (int64_t)ts;	
+			if( (timeStamp + baseTimeVideo) < lastTimeVideo ){
+				maxTimeVideo = lastTimeVideo;
+				LOGI(" ===============timeStamp<lastTimeStampVideo========");
+				LOGI(" ===============maxTimeVideo========%llx", maxTimeVideo);
+			}
+			if((timeStamp + baseTimeVideo)  < maxTimeVideo){
+				countVideo++;
+				LOGI(" ===============countVideo========%d", countVideo);
+			}
+			if(countVideo >= 3){
+				baseTimeVideo = maxTimeVideo - timeStamp ;
+				baseTimeAudio = baseTimeVideo;
+				countVideo = 0;
+				LOGI(" ===============baseTimeVideo========%llx", baseTimeVideo);
+			}
+			timeStamp = timeStamp + baseTimeVideo;	
+			lastTimeVideo = timeStamp;
+			LOGI(" ===============lastTimeVideo========%llx", lastTimeVideo);
+			
+		}
+		 
+	/////////////////////////////////////////////////////////////////////////////
         pucData = (uint8_t *)pdata;
 
         if (len < 0) {            
