@@ -654,6 +654,7 @@ public class InputMethodService extends AbstractInputMethodService {
             if (showingInput) {
                 // If we were last showing the soft keyboard, try to do so again.
                 if (onShowInputRequested(showFlags, true)) {
+                    mWindow.getWindow().closePanel(Window.FEATURE_CONTEXT_MENU);
                     showWindow(true);
                     if (completions != null) {
                         mCurCompletions = completions;
