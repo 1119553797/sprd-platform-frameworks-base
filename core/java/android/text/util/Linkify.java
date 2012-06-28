@@ -210,7 +210,7 @@ public class Linkify {
         ArrayList<LinkSpec> links = new ArrayList<LinkSpec>();
 
         if ((mask & WEB_URLS) != 0) {
-            gatherLinks(links, text, Patterns.WEB_URL,
+            gatherLinks(links, text, Patterns.WEB_URL_FOR_TEXTVIEW,
                 new String[] { "http://", "https://", "rtsp://" },
                 sUrlMatchFilter, null);
         }
@@ -259,7 +259,7 @@ public class Linkify {
         ArrayList<LinkSpec> links = new ArrayList<LinkSpec>();
 
         if ((mask & WEB_URLS) != 0) {
-        	gatherMyLinks(links, text, Patterns.WEB_URL,
+        	gatherMyLinks(links, text, Patterns.WEB_URL_FOR_TEXTVIEW,
                 new String[] { "http://", "https://", "rtsp://"},
                 sUrlMatchFilter, null);
         }
