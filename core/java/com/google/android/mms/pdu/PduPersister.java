@@ -383,13 +383,17 @@ public class PduPersister {
                     part.setContentDisposition(contentDisposition);
                 }
 
-                byte[] contentId = getByteArrayFromPartColumn(
+//                byte[] contentId = getByteArrayFromPartColumn(
+//                        c, PART_COLUMN_CONTENT_ID);
+                byte[] contentId = getByteArrayFromPartColumn_Encode(
                         c, PART_COLUMN_CONTENT_ID);
                 if (contentId != null) {
                     part.setContentId(contentId);
                 }
 
-                byte[] contentLocation = getByteArrayFromPartColumn(
+//                byte[] contentLocation = getByteArrayFromPartColumn(
+//                        c, PART_COLUMN_CONTENT_LOCATION);
+                byte[] contentLocation = getByteArrayFromPartColumn_Encode(
                         c, PART_COLUMN_CONTENT_LOCATION);
                 if (contentLocation != null) {
                     part.setContentLocation(contentLocation);
@@ -403,7 +407,9 @@ public class PduPersister {
                     throw new MmsException("Content-Type must be set.");
                 }
 
-                byte[] fileName = getByteArrayFromPartColumn(
+//                byte[] fileName = getByteArrayFromPartColumn(
+//                        c, PART_COLUMN_FILENAME);
+                byte[] fileName = getByteArrayFromPartColumn_Encode(
                         c, PART_COLUMN_FILENAME);
                 if (fileName != null) {
                     part.setFilename(fileName);
@@ -742,13 +748,17 @@ public class PduPersister {
         }
 
         if (part.getContentId() != null) {
-            value = toIsoString(part.getContentId());
-            values.put(Part.CONTENT_ID, (String) value);
+//            value = toIsoString(part.getContentId());
+//            values.put(Part.CONTENT_ID, (String) value);
+            String contentId = new String(part.getContentId());
+            values.put(Part.CONTENT_ID, contentId);
         }
 
         if (part.getContentLocation() != null) {
-            value = toIsoString(part.getContentLocation());
-            values.put(Part.CONTENT_LOCATION, (String) value);
+//            value = toIsoString(part.getContentLocation());
+//            values.put(Part.CONTENT_LOCATION, (String) value);
+            String contentLocation = new String(part.getContentLocation());
+            values.put(Part.CONTENT_LOCATION, contentLocation);
         }
 
         Uri res = SqliteWrapper.insert(mContext, mContentResolver, uri, values);
@@ -790,7 +800,7 @@ public class PduPersister {
                     || ContentType.TEXT_HTML.equals(contentType)) {
                 ContentValues cv = new ContentValues();
                 //======fixed CR<NEWMS00110183> by luning at 11-08-18 begin======
-                int charset = part.getCharset(); 
+                int charset = part.getCharset();
                 Log.d("lu", "PduPersister--->save text to database,use charset:"+charset);
                 if(null == data){/* fixed CR<NEWMS00148067> by luning at 2011.12.12*/
                     Log.w(TAG, "The data of this part is none");
@@ -866,7 +876,7 @@ public class PduPersister {
 	values.put(Mms.PHONE_ID,phoneId);
         SqliteWrapper.update(mContext, mContentResolver, uri, values, null, null);
     }
-    
+
     /**
      * Update headers of a SendReq.
      *
@@ -1002,13 +1012,17 @@ public class PduPersister {
         }
 
         if (part.getContentId() != null) {
-            value = toIsoString(part.getContentId());
-            values.put(Part.CONTENT_ID, (String) value);
+//            value = toIsoString(part.getContentId());
+//            values.put(Part.CONTENT_ID, (String) value);
+            String contentId = new String(part.getContentId());
+            values.put(Part.CONTENT_ID, contentId);
         }
 
         if (part.getContentLocation() != null) {
-            value = toIsoString(part.getContentLocation());
-            values.put(Part.CONTENT_LOCATION, (String) value);
+//          value = toIsoString(part.getContentLocation());
+//          values.put(Part.CONTENT_LOCATION, (String) value);
+            String contentLocation = new String(part.getContentLocation());
+            values.put(Part.CONTENT_LOCATION, contentLocation);
         }
 
         SqliteWrapper.update(mContext, mContentResolver, uri, values, null, null);
@@ -1311,7 +1325,7 @@ public class PduPersister {
         Uri uri = Uri.parse(TEMPORARY_DRM_OBJECT_URI);
         SqliteWrapper.delete(mContext, mContentResolver, uri, null, null);
     }
-    
+
     public Cursor getPendingMessages(long dueTime) {
     	return getPendingMessages(dueTime, 0);
     }
