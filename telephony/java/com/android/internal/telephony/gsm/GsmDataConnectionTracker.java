@@ -1833,4 +1833,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         log("isAllPdpDisconnectDone is true");
         return true;
     }
+
+	protected boolean isConVoiceAndData() {
+		return mGsmPhone.mSST.isConcurrentVoiceAndData();
+	}
 }

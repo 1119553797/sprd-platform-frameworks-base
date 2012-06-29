@@ -1047,4 +1047,8 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
    {
            return false;
    }
+
+	protected boolean isConVoiceAndData() {
+		return false;
+	}
 }

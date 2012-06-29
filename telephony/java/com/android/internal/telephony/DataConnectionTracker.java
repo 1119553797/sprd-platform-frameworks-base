@@ -446,6 +446,8 @@ public abstract class DataConnectionTracker extends Handler {
 
     public abstract boolean getApnActivePdpFilter(String apntype) ;
 
+    protected abstract boolean isConVoiceAndData();
+
     protected synchronized boolean isEnabled(int id) {
         if (id != APN_INVALID_ID) {
             return dataEnabled[id];
@@ -488,7 +490,7 @@ public abstract class DataConnectionTracker extends Handler {
         // so if the default is disabled we keep the connection for others
         setEnabled(id, true);
 
-        if (isApnTypeActive(type)) {
+        if (isApnTypeActive(type) && (phone.getState() == Phone.State.IDLE || isConVoiceAndData())) {
             if (state == State.INITING) return Phone.APN_REQUEST_STARTED;
             else if (state == State.CONNECTED) return Phone.APN_ALREADY_ACTIVE;
         }
