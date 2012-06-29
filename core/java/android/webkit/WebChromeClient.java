@@ -337,5 +337,9 @@ public class WebChromeClient {
      */
     public void onSelectionDone(WebView view) {
     }
+    
+    public void onSavePageDone(String title, String file){
+        
+    }
 
 }

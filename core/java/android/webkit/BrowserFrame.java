@@ -1015,4 +1015,12 @@ class BrowserFrame extends Handler {
     private native HashMap getFormTextData();
 
     private native void nativeOrientationChanged(int orientation);
+
+    public void savePage(String[] path) {
+        Log.d(LOGTAG,"save page:" + path[0]);
+        String file = nativeSavePage(path[1]);
+        mCallbackProxy.finishedSavePage(path[0], file);
+    }
+    
+    public native String nativeSavePage(String path);
 }

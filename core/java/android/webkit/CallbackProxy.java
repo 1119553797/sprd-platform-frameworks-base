@@ -112,6 +112,7 @@ class CallbackProxy extends Handler {
     private static final int ADD_HISTORY_ITEM                    = 135;
     private static final int HISTORY_INDEX_CHANGED               = 136;
     private static final int AUTH_CREDENTIALS                    = 137;
+    private static final int SAVE_PAGE                           = 138;
 
     // Message triggered by the client to resume execution
     private static final int NOTIFY                              = 200;
@@ -754,6 +755,12 @@ class CallbackProxy extends Handler {
                 mWebView.setHttpAuthUsernamePassword(
                         host, realm, username, password);
                 break;
+            case SAVE_PAGE:
+                if (mWebChromeClient != null) {
+                    String[] str = (String[])msg.obj;
+                    mWebChromeClient.onSavePageDone(str[0], str[1]);
+                }
+
         }
     }
 
@@ -1485,6 +1492,12 @@ class CallbackProxy extends Handler {
             return;
         }
         Message msg = obtainMessage(HISTORY_INDEX_CHANGED, index, 0, item);
+        sendMessage(msg);
+    }
+
+    public void finishedSavePage(String title, String file) {
+        Log.d(LOGTAG,"save page:" + title + ", "+ file);
+        Message msg = obtainMessage(SAVE_PAGE, new String[]{title, file});
         sendMessage(msg);
     }
 }

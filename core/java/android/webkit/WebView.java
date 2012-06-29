@@ -1293,7 +1293,7 @@ public class WebView extends AbsoluteLayout
         clearTextEntry(false);
         selectionDone();
     }
-
+    
     /**
      * Destroy the internal state of the WebView. This method should be called
      * after the WebView has been removed from the view system. No other
@@ -1714,6 +1714,14 @@ public class WebView extends AbsoluteLayout
         // STOP_LOADING?
         switchOutDrawHistory();
         mWebViewCore.sendMessage(EventHub.STOP_LOADING);
+    }
+    
+    //add for save web page
+    /**
+     * save current web page
+     */
+    public void savePage(String path){
+        mWebViewCore.sendMessage(EventHub.SAVE_PAGE, new String[]{getTitle(),path});
     }
 
     /**

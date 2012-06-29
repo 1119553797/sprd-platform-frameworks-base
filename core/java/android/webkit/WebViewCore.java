@@ -1379,6 +1379,10 @@ final class WebViewCore {
                             BrowserFrame.sJavaBridge.removePackageName(
                                     (String) msg.obj);
                             break;
+                        case SAVE_PAGE:
+                            if(mBrowserFrame != null){
+                                mBrowserFrame.savePage((String[]) msg.obj);
+                            }
                     }
                 }
             };
