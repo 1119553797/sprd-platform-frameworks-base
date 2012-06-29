@@ -108,7 +108,7 @@ class AppWidgetService extends IAppWidgetService.Stub
     }
 
     Context mContext;
-    Locale mLocale;
+    Locale mLocale = Locale.getDefault();
     PackageManager mPackageManager;
     AlarmManager mAlarmManager;
     ArrayList<Provider> mInstalledProviders = new ArrayList<Provider>();
