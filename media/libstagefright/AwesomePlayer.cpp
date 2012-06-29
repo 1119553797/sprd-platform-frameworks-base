@@ -1464,7 +1464,7 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
 
 			LOGI("avc profile 0x%x",profile);
 			
-			if(profile > 0x4d)
+			if(profile > 0x64)
 			{
 			  mVideoSource.clear();
 			  return OK;
