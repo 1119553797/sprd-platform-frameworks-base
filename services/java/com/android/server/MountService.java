@@ -279,8 +279,8 @@ class MountService extends IMountService.Stub
     private static final int H_UNMOUNT_PM_DONE = 2;
     private static final int H_UNMOUNT_MS = 3;
     private static final int RETRY_UNMOUNT_DELAY = 30; // in ms
-    //private static final int MAX_UNMOUNT_RETRIES = 4;
-    private static final int MAX_UNMOUNT_RETRIES = 0;
+    private static final int MAX_UNMOUNT_RETRIES = 4;
+    //private static final int MAX_UNMOUNT_RETRIES = 0;
     //add by liguxiang 10-21-11 for NEWMS00128630 begin
     private static boolean mVolumeShared = false;
     private static boolean mUsbStatusChanged = false;
@@ -315,10 +315,10 @@ class MountService extends IMountService.Stub
         @Override
         void handleFinished() {
             super.handleFinished();
-            if(!mCs.isUsbConnected() && mUmsConnected){
+            /*if(!mCs.isUsbConnected() && mUmsConnected){
             	Log.d(TAG," return 4");
             	return;
-            }
+            }*/
             doShareUnshareVolume(path, method, true);
         }
     }
@@ -355,10 +355,10 @@ class MountService extends IMountService.Stub
             switch (msg.what) {
                 case H_UNMOUNT_PM_UPDATE: {
                     if (DEBUG_UNMOUNT) Slog.i(TAG, "H_UNMOUNT_PM_UPDATE");
-                    if(!mCs.isUsbConnected() && mUmsConnected){
+                    /*if(!mCs.isUsbConnected() && mUmsConnected){
                     	Log.d(TAG,"return 1 ");
                     	return;
-                    }
+                    }*/
                     UnmountCallBack ucb = (UnmountCallBack) msg.obj;
                     mForceUnmounts.add(ucb);
                     if (DEBUG_UNMOUNT) Slog.i(TAG, " registered = " + mUpdatingStatus);
@@ -373,10 +373,10 @@ class MountService extends IMountService.Stub
                 case H_UNMOUNT_PM_DONE: {
                     if (DEBUG_UNMOUNT) Slog.i(TAG, "H_UNMOUNT_PM_DONE");
                     if (DEBUG_UNMOUNT) Slog.i(TAG, "Updated status. Processing requests");
-                    if(!mCs.isUsbConnected() && mUmsConnected){
+                    /*if(!mCs.isUsbConnected() && mUmsConnected){
                     	Log.d(TAG,"return 2 ");
                     	return;
-                    }
+                    }*/
                     mUpdatingStatus = false;
                     int size = mForceUnmounts.size();
                     int sizeArr[] = new int[size];
@@ -429,10 +429,10 @@ class MountService extends IMountService.Stub
                 }
                 case H_UNMOUNT_MS : {
                     if (DEBUG_UNMOUNT) Slog.i(TAG, "H_UNMOUNT_MS");
-                    if(!mCs.isUsbConnected() && mUmsConnected){
+                    /*if(!mCs.isUsbConnected() && mUmsConnected){
                     	Log.d(TAG,"return 3 ");
                     	return;
-                    }
+                    }*/
                     UnmountCallBack ucb = (UnmountCallBack) msg.obj;
                     ucb.handleFinished();
                     break;
@@ -998,10 +998,10 @@ class MountService extends IMountService.Stub
         // Redundant probably. But no harm in updating state again.
         mPms.updateExternalMediaStatus(false, false);
         try {
-        	if(!mCs.isUsbConnected() && mUmsConnected){
+        	/*if(!mCs.isUsbConnected() && mUmsConnected){
         		Log.d(TAG,"return 5");
         		return -1;
-        	}
+        	}*/
         	Log.d(TAG,"doUnmountVolume ----------------------------begin");
             mConnector.doCommand(String.format(
                     "volume unmount %s%s", path, (force ? " force" : "")));
