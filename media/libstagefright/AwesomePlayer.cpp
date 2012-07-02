@@ -2294,7 +2294,7 @@ void AwesomePlayer::finishAsyncPrepare_l() {
                 rotationDegrees = 0;
             }
 
-#if 0
+#if 1
             if (rotationDegrees == 90 || rotationDegrees == 270) {
                 notifyListener_l(
                         MEDIA_SET_VIDEO_SIZE, mVideoHeight, mVideoWidth);
