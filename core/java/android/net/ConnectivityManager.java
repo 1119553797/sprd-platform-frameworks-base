@@ -223,7 +223,7 @@ public class ConnectivityManager
     /** {@hide} TODO: Need to adjust this for WiMAX. */
     public static final int MAX_RADIO_TYPE   = TYPE_MOBILE_DM;
     /** {@hide} TODO: Need to adjust this for WiMAX. */
-    public static final int MAX_NETWORK_TYPE = TYPE_MOBILE_DM + PhoneFactory.getPhoneCount() - 1;
+    public static final int MAX_NETWORK_TYPE = TYPE_MOBILE_DM + PhoneFactory.getPhoneCount();
 
     public static final int DEFAULT_NETWORK_PREFERENCE = TYPE_WIFI;
 
@@ -671,10 +671,10 @@ public class ConnectivityManager
      */
     public static int getMmsTypeByPhoneId(int phoneId) {
         int MmsType;
-        if (phoneId == 0) {
+        if (phoneId == PhoneFactory.getPhoneCount()) {
             MmsType = TYPE_MOBILE_MMS;
         } else if (phoneId < PhoneFactory.getPhoneCount()) {
-            MmsType = TYPE_MOBILE_DM + phoneId;
+            MmsType = TYPE_MOBILE_DM + phoneId + 1;
         } else {
             throw new IllegalArgumentException(
                 "phoneId is not leagal!");

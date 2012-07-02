@@ -625,8 +625,31 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         return null;
     }
 
+    /**
+     * used for get mainsim info in multisim version
+     * mainsim could be any slot but called with the same network type
+     * for 3rdparty app.
+     */
+    private int getRealNetworkType(int networkType) {
+        if (networkType == ConnectivityManager.TYPE_MOBILE_MMS) {
+            networkType = ConnectivityManager.getMmsTypeByPhoneId(TelephonyManager
+                    .getDefaultDataPhoneId(mContext));
+        }
+        return networkType;
+    }
+
+    private NetworkInfo getRealNetworkInfo(NetworkStateTracker t) {
+        NetworkInfo info = t.getNetworkInfo();
+        if (info.getType() == ConnectivityManager.TYPE_MOBILE_MMS) {
+            info = mNetTrackers[getRealNetworkType(ConnectivityManager.TYPE_MOBILE_MMS)]
+                    .getNetworkInfo();
+        }
+        return info;
+    }
+
     public NetworkInfo getNetworkInfo(int networkType) {
         enforceAccessPermission();
+        networkType = getRealNetworkType(networkType);
         if (ConnectivityManager.isNetworkTypeValid(networkType)) {
             NetworkStateTracker t = mNetTrackers[networkType];
             if (t != null) {
@@ -644,7 +667,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         NetworkInfo[] result = new NetworkInfo[mNetworksDefined];
         int i = 0;
         for (NetworkStateTracker t : mNetTrackers) {
-            if(t != null) result[i++] = t.getNetworkInfo();
+            if(t != null) result[i++] = getRealNetworkInfo(t);
         }
         return result;
     }
@@ -2002,10 +2025,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     private int getPhoneIdByNetworkType(int netType) {
-        if (netType <= ConnectivityManager.TYPE_MOBILE_HIPRI) {
+        if (netType <= ConnectivityManager.TYPE_MOBILE_DM) {
             return TelephonyManager.getDefaultDataPhoneId(mContext);
         } else {
-            return netType - ConnectivityManager.TYPE_MOBILE_HIPRI;
+            return netType - ConnectivityManager.TYPE_MOBILE_DM - 1;
         }
     }
 

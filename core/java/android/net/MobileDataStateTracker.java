@@ -659,6 +659,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
         int phoneId = PhoneFactory.getDefaultPhoneId();
         switch(mNetType) {
             case ConnectivityManager.TYPE_MOBILE:
+            case ConnectivityManager.TYPE_MOBILE_MMS:
             case ConnectivityManager.TYPE_MOBILE_SUPL:
             case ConnectivityManager.TYPE_MOBILE_DUN:
             case ConnectivityManager.TYPE_MOBILE_HIPRI:
@@ -678,11 +679,12 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     public void setDataEnable(boolean mEnabled){
         this.mEnabled = mEnabled;
     }
-    public static int networkTypeToMMSPhoneId(int netType) {
+    private int networkTypeToMMSPhoneId(int netType) {
         if(netType == ConnectivityManager.TYPE_MOBILE_MMS) {
-            return 0;
-        } else if(netType == ConnectivityManager.MAX_NETWORK_TYPE) {
-            return 1;
+            return TelephonyManager.getDefaultDataPhoneId(mContext);
+        } else if (netType > ConnectivityManager.TYPE_MOBILE_DM
+                && netType <= ConnectivityManager.MAX_NETWORK_TYPE) {
+            return netType - ConnectivityManager.TYPE_MOBILE_DM - 1;
         } else {
             return -1;
         }
