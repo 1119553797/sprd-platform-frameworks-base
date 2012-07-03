@@ -51,7 +51,7 @@
         />
 
     <!-- Year -->
-    <DateYearNumberPicker
+    <NumberPicker
         android:id="@+id/year"
         android:layout_width="100dip"
         android:layout_height="wrap_content"

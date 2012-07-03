@@ -90,7 +90,7 @@ public class NumberPicker extends LinearLayout {
     };
 
     private final EditText mText;
-    protected InputFilter mNumberInputFilter;
+    private final InputFilter mNumberInputFilter;
 
     private String[] mDisplayedValues;
 
@@ -492,7 +492,7 @@ public class NumberPicker extends LinearLayout {
         }
     }
 
-    protected int getSelectedPos(String str) {
+    private int getSelectedPos(String str) {
         if (mDisplayedValues == null) {
             try {
                 return Integer.parseInt(str);

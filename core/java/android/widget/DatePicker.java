@@ -57,7 +57,7 @@ public class DatePicker extends FrameLayout {
     /* UI Components */
     private final NumberPicker mDayPicker;
     private final NumberPicker mMonthPicker;
-    private final DateYearNumberPicker mYearPicker;
+    private final NumberPicker mYearPicker;
 
     /**
      * How we notify users the date has changed.
@@ -145,7 +145,7 @@ public class DatePicker extends FrameLayout {
                 updateDaySpinner();
             }
         });
-        mYearPicker = (DateYearNumberPicker) findViewById(R.id.year);
+        mYearPicker = (NumberPicker) findViewById(R.id.year);
         mYearPicker.setSpeed(100);
 		mYearPicker.setMaxLengthFilter(4);
         mYearPicker.setOnChangeListener(new OnChangedListener() {
