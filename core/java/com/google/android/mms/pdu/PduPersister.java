@@ -448,19 +448,21 @@ public class PduPersister {
 						if(null == text){
 							text = "";
 						}
-						Log.d("lu", "PduPersister--->get text from database,text decode use charset:"+part.getCharset());
-						if (part.getCharset() != CharacterSets.ANY_CHARSET) {
-							try {
-								blob = text.getBytes(CharacterSets.getMimeName(part.getCharset()));
-							} catch (UnsupportedEncodingException e) {
-								blob = new EncodedStringValue(text).getTextString();
-							}
-						} else {
+                        Log.d(TAG, "PduPersister--->get text from database,text decode use charset:"+part.getCharset());
+                        Log.d(TAG, "PduPersister--->get text from database,text == "+text);
+                        Log.d(TAG, "PduPersister--->get text from database,text EncodedStringValue == "+new EncodedStringValue(text).getString());
+//						if (part.getCharset() != CharacterSets.ANY_CHARSET) {
+//							try {
+//								blob = text.getBytes(CharacterSets.getMimeName(part.getCharset()));
+//							} catch (UnsupportedEncodingException e) {
+//								blob = new EncodedStringValue(text).getTextString();
+//							}
+//						} else {
 							//I noticed that when MediaModelFactory create TextModel,
 							//the default way is to use ISO_8859_1 to decode the data
 							//maybe something wrong at here!
 							blob = new EncodedStringValue(text).getTextString();
-						}
+//						}
 						//======fixed CR<NEWMS00110183> by luning at 11-08-18 end======
                         baos.write(blob, 0, blob.length);
                     } else {
@@ -801,12 +803,14 @@ public class PduPersister {
                 ContentValues cv = new ContentValues();
                 //======fixed CR<NEWMS00110183> by luning at 11-08-18 begin======
                 int charset = part.getCharset();
-                Log.d("lu", "PduPersister--->save text to database,use charset:"+charset);
+                Log.d(TAG, "PduPersister--->save text to database,use charset:"+charset);
+                Log.d(TAG, "PduPersister--->save text from database, text == "+new EncodedStringValue(data).getString());
+                Log.d(TAG, "PduPersister--->save text from database,(text + charset) == "+new EncodedStringValue(charset,data).getString());
                 if(null == data){/* fixed CR<NEWMS00148067> by luning at 2011.12.12*/
                     Log.w(TAG, "The data of this part is none");
                     return;
                 }
-                cv.put(Telephony.Mms.Part.TEXT, new EncodedStringValue(charset,data).getString());
+                cv.put(Telephony.Mms.Part.TEXT, new EncodedStringValue(/*charset,*/data).getString());
                 //======fixed CR<NEWMS00110183> by luning at 11-08-18 end======
                 if (mContentResolver.update(uri, cv, null, null) != 1) {
                     throw new MmsException("unable to update " + uri.toString());
