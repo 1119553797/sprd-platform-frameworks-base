@@ -62,7 +62,9 @@ status_t ThreadedSource::start(MetaData *params) {
     mDecodePending = false;
 
     Mutex::Autolock autoLock(mLock);
-    postDecodeMore_l();
+    if (1 != mMaxQueueSize) {   // don't do pre-reading, if only 1 buffer
+        postDecodeMore_l();
+    }
 
     CHECK_EQ(mLooper->start(), (status_t)OK);
 
@@ -122,7 +124,11 @@ status_t ThreadedSource::read(
 	mFinalResult = OK;
 	postDecodeMore_l();        		
     }
-	
+
+    if (1 == mMaxQueueSize) { // do buffer-reading here, if only 1 buffer
+        clearQueue_l();
+    	postDecodeMore_l();  
+    }
     while (mQueue.empty() && mFinalResult == OK) {
         //mCondition.wait(mLock);
         status_t err = mCondition.waitRelative(mLock,TIMEOUT_NS);
@@ -136,7 +142,9 @@ status_t ThreadedSource::read(
         mQueue.erase(mQueue.begin());
 
         if (mFinalResult == OK) {
-            postDecodeMore_l();
+            if (1 != mMaxQueueSize) {
+                postDecodeMore_l();
+            }
         }
 
         return OK;
@@ -197,7 +205,9 @@ void ThreadedSource::onMessageReceived(const sp<AMessage> &msg) {
                 mQueue.push_back(buffer);
 
                 if (mQueue.size() < mMaxQueueSize) {
-                    postDecodeMore_l();
+                    if (1 != mMaxQueueSize) {
+                        postDecodeMore_l();
+                    }
                 }
             }
 
