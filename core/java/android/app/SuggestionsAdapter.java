@@ -203,6 +203,14 @@ class SuggestionsAdapter extends ResourceCursorAdapter {
         updateSpinnerState(getCursor());
     }
 
+    @Override
+    protected void onContentChanged() {
+        Bundle b = mSearchDialog.onSaveInstanceState();
+        super.onContentChanged();
+        notifyDataSetChanged();
+        mSearchDialog.onRestoreInstanceState(b);
+    }
+
     private void updateSpinnerState(Cursor cursor) {
         Bundle extras = cursor != null ? cursor.getExtras() : null;
         if (DBG) {
