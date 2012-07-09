@@ -177,7 +177,7 @@ private:
                     status_t    volumeCommand(int stream, float volume, int output, int delayMs = 0);
                     status_t    parametersCommand(int ioHandle, const String8& keyValuePairs, int delayMs = 0);
                     status_t    voiceVolumeCommand(float volume, int delayMs = 0);
-                    status_t    shutDownSpeakerCommand();
+                    status_t    shutDownSpeakerCommand(AudioPolicyInterface* mAudioPolicyInterface);
                     void        insertCommand_l(AudioCommand *command, int delayMs = 0);
 
     private:
