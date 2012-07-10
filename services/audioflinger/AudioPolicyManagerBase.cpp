@@ -55,6 +55,12 @@ void AudioPolicyManagerBase::updateSpeakerStatus()
     }
 }
 
+bool AudioPolicyManagerBase::isSpeakerOn()
+{
+    Mutex::Autolock _l(mLock);
+    return poff;
+}
+
 status_t AudioPolicyManagerBase::setDeviceConnectionState(AudioSystem::audio_devices device,
                                                   AudioSystem::device_connection_state state,
                                                   const char *device_address)
