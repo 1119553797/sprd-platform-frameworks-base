@@ -872,9 +872,15 @@ final class WebViewCore {
         static final int ADD_PACKAGE_NAMES = 184;
         static final int ADD_PACKAGE_NAME = 185;
         static final int REMOVE_PACKAGE_NAME = 186;
+        
+        //add save web page
+        static final int SAVE_PAGE = 190;
 
         // private message ids
         private static final int DESTROY =     200;
+        
+        //add by LC
+        static final int RELOAD_WITH_OVERRIDE_ENCODING = 191;
 
         // Private handler for WebCore messages.
         private Handler mHandler;
@@ -1011,6 +1017,14 @@ final class WebViewCore {
                             mBrowserFrame.reload(false);
                             break;
 
+                        // ---------------- add by LC begin ----------------
+                        case RELOAD_WITH_OVERRIDE_ENCODING:
+                            String encoding = (String) msg.obj;
+                            mBrowserFrame.reloadWithOverrideEncoding(encoding);
+                        	Log.d("LC", "==RELOAD_WITH_OVERRIDE_ENCODING is:"+RELOAD_WITH_OVERRIDE_ENCODING);
+                            break;
+                        // ---------------- add by LC end ----------------
+                            
                         case KEY_DOWN:
                             key((KeyEvent) msg.obj, true);
                             break;

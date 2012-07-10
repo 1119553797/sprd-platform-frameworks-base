@@ -931,6 +931,10 @@ class BrowserFrame extends Handler {
      */
     private native void nativeGoBackOrForward(int steps);
 
+ // ---------------- add by LC begin ----------------
+    public native void reloadWithOverrideEncoding(String encoding);
+// ---------------- add by LC end ----------------
+
     /**
      * stringByEvaluatingJavaScriptFromString will execute the
      * JS passed in in the context of this browser frame.
