@@ -1278,7 +1278,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 	}
 
     private int getUnReadMmsCount() {
-		String selection = "(read=0 OR seen=0)";
+		String selection = "(read=0 AND m_type != 134)";
 		Cursor cur = null;
 		try {
 			ContentResolver cr = mContext.getContentResolver();
