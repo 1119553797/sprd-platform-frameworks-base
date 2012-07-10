@@ -651,6 +651,10 @@ public abstract class WallpaperService extends Service {
             
             mInitializing = false;
             updateSurface(false, false, false);
+            if(isPreview()){
+                Intent previewFinishedIntent = new Intent("android.intent.action.PEVIEW_FINISHED");
+                getBaseContext().sendBroadcast(previewFinishedIntent);
+            }
         }
         
         void doDesiredSizeChanged(int desiredWidth, int desiredHeight) {
