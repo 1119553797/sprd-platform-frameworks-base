@@ -1725,6 +1725,14 @@ public class WebView extends AbsoluteLayout
         mWebViewCore.sendMessage(EventHub.RELOAD);
     }
 
+ // ---------------- add by LC begin ----------------
+    public void reloadWithOverrideEncoding(String encoding) {
+        clearTextEntry(false);
+        switchOutDrawHistory();
+        mWebViewCore.sendMessage(EventHub.RELOAD_WITH_OVERRIDE_ENCODING, encoding);
+    }
+// ---------------- add by LC end ----------------
+
     /**
      * Return true if this WebView has a back history item.
      * @return True iff this WebView has a back history item.
