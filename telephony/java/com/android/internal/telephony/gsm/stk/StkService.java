@@ -992,6 +992,9 @@ public class StkService extends Handler implements AppInterface {
                     if (curType == AppInterface.CommandType.SET_UP_MENU &&
                            type == AppInterface.CommandType.DISPLAY_TEXT) {
                         StkLog.d(this, "<" + mPhoneId + ">" + "[stk] ignore display_text cmd check!! ");
+                    } else {
+                        StkLog.d(this, "<" + mPhoneId + ">" + "[stk] validateResponse fail, return! ");
+                        return;
                     }
                 } else if (type == AppInterface.CommandType.SET_UP_MENU && mCurrntCmd == null) {
                     StkLog.d(this, "<" + mPhoneId + ">" + "Warning: force mCurrntCmd to mMenuCmd!!");
