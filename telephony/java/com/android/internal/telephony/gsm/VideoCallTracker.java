@@ -242,7 +242,7 @@ public final class VideoCallTracker extends CallTracker {
         // AT+CHLD=0 means "release held or UDUB"
         // so if the phone isn't ringing, this could hang up held
         if (ringingCall.getState().isRinging()) {
-            internaleHangup();
+            internalHangup();
         } else {
             throw new CallStateException("phone not ringing");
         }
@@ -654,7 +654,7 @@ public final class VideoCallTracker extends CallTracker {
             if (Phone.DEBUG_PHONE) log("hangup: set hangupPendingMO to true");
             hangupPendingMO = true;
         } else {
-			internaleHangup();
+			internalHangup();
         }
 
         conn.onHangupLocal();
@@ -698,8 +698,12 @@ public final class VideoCallTracker extends CallTracker {
         if (call.getConnections().size() == 0) {
             throw new CallStateException("no connections in call");
         }
-		
-		internaleHangup();
+        Log.w(LOG_TAG, "fhy: call.isRinging():" + call.isRinging());
+		if (call.isRinging()) {
+            internalHangupWithReason(17);
+        } else {
+    		internalHangup();
+        }
 
         call.onHangupLocal();
         phone.notifyPreciseVideoCallStateChanged();
@@ -847,7 +851,7 @@ public final class VideoCallTracker extends CallTracker {
 	void hangupConnection(VideoConnection conn)
 	{
 		Log.w(LOG_TAG,"hangupConnection");
-        internaleHangup();
+        internalHangup();
 	}
 
 	public boolean isAlive(){
@@ -858,9 +862,19 @@ public final class VideoCallTracker extends CallTracker {
 		//return (foregroundCall.getState().isAlive() || ringingCall.getState().isAlive());
 	};
 
-	private void internaleHangup(){
+	private void internalHangup(){
 		try{
-			cm.hangupVP(obtainCompleteMessage());	
+			cm.hangupVP(obtainCompleteMessage(), -1);	
+		}catch (IllegalStateException ex) {
+	        // Ignore "connection not found"
+	        // Call may have hung up already
+	        Log.w(LOG_TAG,"internaleHangup failed");
+	    }
+	}
+
+	private void internalHangupWithReason(int reason){
+		try{
+			cm.hangupVP(obtainCompleteMessage(), reason);	
 		}catch (IllegalStateException ex) {
 	        // Ignore "connection not found"
 	        // Call may have hung up already

@@ -480,7 +480,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 	}
 
 	@Override
-	public void hangupVP(Message result) {
+	public void hangupVP(Message result, int reason) {
 		// TODO Auto-generated method stub
 		
 	}

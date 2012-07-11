@@ -139,10 +139,12 @@ public final class SprdRIL extends RIL {
 	 }
 	
 	 public void
-	 hangupVP(Message result) {
+	 hangupVP(Message result, int reason) {
 		 RILRequest rr = RILRequest.obtain(
 						 RIL_REQUEST_VIDEOPHONE_HANGUP,
 										 result);
+         rr.mp.writeInt(1);
+		 rr.mp.writeInt(reason);
 		 if (RILJ_LOGD) riljLog(rr.serialString() + "> " + sprdRequestToString(rr.mRequest));
 	
 		 send(rr);

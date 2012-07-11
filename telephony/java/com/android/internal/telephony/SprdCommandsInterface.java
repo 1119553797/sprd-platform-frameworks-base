@@ -11,7 +11,7 @@ import android.os.Registrant;
  */
 public interface SprdCommandsInterface {
     public void dialVP(String address, String sub_address, int clirMode, Message result);
-    public void hangupVP(Message result);
+    public void hangupVP(Message result, int reason);
 	public void acceptVP(Message result);
 	public void fallBackVP(Message result);
 	public void sendVPString(String str, Message result);
