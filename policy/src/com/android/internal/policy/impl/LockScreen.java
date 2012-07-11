@@ -59,6 +59,7 @@ import android.os.SystemProperties;
 import android.provider.BaseColumns;
 import android.provider.CallLog;
 import android.provider.Settings;
+import android.provider.Telephony.Mms;
 import android.provider.Telephony.Sms;
 
 import java.util.Date;
@@ -140,6 +141,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 	
 	private CObserver smsObserver;
 	private CObserver callObserver;
+	private CObserver mmsObserver;
 
    	private static Paint mPaint = new Paint();
    	private static final String INFINITY_UNICODE = "\u221e";
@@ -1137,9 +1139,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 	
 	private void registerObserver() {
 		smsObserver = new CObserver();
+		mmsObserver = new CObserver();
 		callObserver = new CObserver();
 		mContext.getContentResolver().registerContentObserver(
 				Sms.Inbox.CONTENT_URI, true, smsObserver);
+		mContext.getContentResolver().registerContentObserver(
+				Mms.Inbox.CONTENT_URI, true, mmsObserver);
 		mContext.getContentResolver().registerContentObserver(
 				CallLog.Calls.CONTENT_URI, true, callObserver);
 	}
@@ -1153,12 +1158,16 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 			mContext.getContentResolver()
 					.unregisterContentObserver(callObserver);
 		}
+		if (mmsObserver != null) {
+			mContext.getContentResolver()
+					.unregisterContentObserver(mmsObserver);
+		}
 	}
 	
 	
 	private void updateSlidingTab() {
 		int missPhoneCount = getMissCallCount();
-		int missMmsCount = getUnReadMmsCount();
+		int missMmsCount = getUnReadSmsCount()+getUnReadMmsCount();
 		hasMissPhone = missPhoneCount > 0;
 		hasMissMms = missMmsCount > 0;
 		if (DBG) {
@@ -1279,6 +1288,26 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private int getUnReadMmsCount() {
 		String selection = "(read=0 AND m_type != 134)";
+		Cursor cur = null;
+		try {
+			ContentResolver cr = mContext.getContentResolver();
+			cur = cr.query(Mms.Inbox.CONTENT_URI, new String[] {
+					BaseColumns._ID,Mms.DATE }, selection, null, "date desc");// limit
+			if (cur != null) {
+				return cur.getCount();
+			}
+		} catch (SQLiteException ex) {
+			Log.e(TAG, "SQLiteException in getUnReadMmsCount" + ex.getMessage());
+		} finally {
+			if (cur != null && !cur.isClosed()) {
+				cur.close();
+			}
+		}
+		return 0;
+	}
+
+    private int getUnReadSmsCount() {
+		String selection = "(read=0 OR seen=0)";
 		Cursor cur = null;
 		try {
 			ContentResolver cr = mContext.getContentResolver();
