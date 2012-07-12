@@ -1185,11 +1185,13 @@ public class TelephonyManager {
      * @see #getDefaultDataPhoneId(Context)
      */
     public static boolean setDefaultDataPhoneId(Context context, int phoneId) {
-        SystemProperties.set("persist.msms.phone_default", String.valueOf(phoneId));
+        setPropertyDataPhoneId(phoneId);
         return Settings.System.putInt(context.getContentResolver(),
                 Settings.System.MULTI_SIM_DATA_CALL, phoneId);
     }
-
+    public static void setPropertyDataPhoneId(int phoneId) {
+        SystemProperties.set("persist.msms.phone_default", String.valueOf(phoneId));
+    }
     /**
      * Get phoneId which User have set in settings that data connection should attach on default.
      * @see #setAutoDefaultPhoneId(Context, int)

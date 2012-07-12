@@ -70,6 +70,8 @@ public class PhoneFactory {
     private static final int SIM_STATUS_OTHER = 2;
     //***** Class Methods
 
+    private static final int MAX_RETRY_COUNT = 5;
+
     public static void makeDefaultPhones(Context context) {
         makeDefaultPhone(context);
     }
@@ -426,7 +428,9 @@ public class PhoneFactory {
                 settingPhoneId = TelephonyManager.getSettingPhoneId(sContext);
             }
             if (isUpdate && settingPhoneId != defaultPhoneId) {
-                updateDefaultPhoneId(settingPhoneId);
+                if(!updateDefaultPhoneId(settingPhoneId)){
+                    TelephonyManager.setPropertyDataPhoneId(defaultPhoneId);
+                }
             }
         } else {
             Log.i(LOG_TAG, "autoSetDefaultPhoneId,defaultPhoneId=" + defaultPhoneId
@@ -436,10 +440,28 @@ public class PhoneFactory {
         return settingPhoneId;
     }
 
-    public static void updateDefaultPhoneId(int settingPhoneId) {
-        Log.i(LOG_TAG, "updateDefaultPhoneId=" + settingPhoneId);
-        TelephonyManager.setDefaultDataPhoneId(sContext, settingPhoneId);
-        sContext.sendBroadcast(new Intent(Intent.ACTION_DEFAULT_PHONE_CHANGE));
+    public static boolean updateDefaultPhoneId(int settingPhoneId) {
+        int nCount = 0;
+        try {
+            while(nCount < MAX_RETRY_COUNT) {
+                Log.i(LOG_TAG, "updateDefaultPhoneId=" + settingPhoneId + " retry time="+nCount);
+                TelephonyManager.setDefaultDataPhoneId(sContext, settingPhoneId);
+                if(TelephonyManager.getDefaultDataPhoneId(sContext) != settingPhoneId) {
+                    Log.i(LOG_TAG, "updateDefaultPhoneId write default phone id failed!");
+                    Thread.currentThread().sleep(500);
+                    nCount++;
+                    continue;
+                }
+                break;
+            }
+            if(nCount < MAX_RETRY_COUNT) {
+                sContext.sendBroadcast(new Intent(Intent.ACTION_DEFAULT_PHONE_CHANGE));
+                return true;
+            }
+        }catch(Exception e){
+            Log.i(LOG_TAG, "updateDefaultPhoneId error="+e.getMessage());
+        }
+        return false;
     }
 
     public static Phone getPhone(int phoneId) {
