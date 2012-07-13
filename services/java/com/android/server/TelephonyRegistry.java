@@ -86,7 +86,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
 
     private int mDataActivity = TelephonyManager.DATA_ACTIVITY_NONE;
 
-    private int mDataConnectionState = TelephonyManager.DATA_CONNECTED;
+    private int mDataConnectionState = TelephonyManager.DATA_DISCONNECTED;
 
     private boolean mDataConnectionPossible = false;
 
