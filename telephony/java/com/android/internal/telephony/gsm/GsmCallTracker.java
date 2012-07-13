@@ -772,8 +772,19 @@ public final class GsmCallTracker extends CallTracker {
                 }
                 hangup((GsmConnection)(call.getConnections().get(0)));
             } else {
-              //for bug 11040,12353
-                hangupForegroundResumeBackground();
+
+				log("(ringing) hangup active1");
+				if (phone.getState() == Phone.State.RINGING) {
+
+					if (Phone.DEBUG_PHONE)
+						log("(ringing) hangup active");
+
+					hangup((GsmConnection) (call.getConnections().get(0)));
+
+				} else {
+					// for bug 11040,12353
+					hangupForegroundResumeBackground();
+				}
             }
         } else if (call == backgroundCall) {
             if (ringingCall.isRinging()) {
