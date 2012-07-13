@@ -1126,7 +1126,8 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
 
         LocationProviderInterface p = mProvidersByName.get(provider);
         if (p == null) {
-            throw new IllegalArgumentException("provider=" + provider);
+            //throw new IllegalArgumentException("provider=" + provider);
+            return;
         }
 
         checkPermissionsSafe(provider);
