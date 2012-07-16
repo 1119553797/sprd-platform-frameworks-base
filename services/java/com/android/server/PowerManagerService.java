@@ -258,8 +258,8 @@ class PowerManagerService extends IPowerManager.Stub
     private int mTouchCycles;
 
     // could be either static or controllable at runtime
-    private static final boolean mSpew = false;
-    private static final boolean mDebugProximitySensor = (false || mSpew);
+    private static final boolean mSpew = true;
+    private static final boolean mDebugProximitySensor = (true || mSpew);
     private static final boolean mDebugLightSensor = (false || mSpew);
     
     private native void nativeInit();
@@ -1646,6 +1646,9 @@ class PowerManagerService extends IPowerManager.Stub
                     if (err != 0) {
                         Slog.w(TAG, "preventScreenOn: error from setScreenStateLocked(): " + err);
                     }
+                } else if (mProximitySensorActive && (mPowerState & SCREEN_ON_BIT) != 0) {//fix bug
+                    Slog.i(TAG,"ProximitySensor is active,set screen off to adjust the state.");
+                    setPowerState(SCREEN_OFF, false, WindowManagerPolicy.OFF_BECAUSE_OF_USER);
                 }
 
                 // Release the partial wake lock that we held during the
