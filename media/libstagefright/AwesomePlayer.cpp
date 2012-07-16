@@ -48,6 +48,10 @@
 #include <media/stagefright/OMXCodec.h>
 #include <media/stagefright/CmmbUriSource.h>//cmmb
 
+
+#include "MxdCMMBExtractor.h"
+
+
 #include <surfaceflinger/ISurface.h>
 
 #include <media/stagefright/foundation/ALooper.h>
@@ -2179,6 +2183,17 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
         sp<MediaExtractor> extractor = mRTSPController.get();
         return setDataSource_l(extractor);
     }//cmmb
+    else if(!strncasecmp("cmmb://mxd", mUri.string(), 10)) {
+	LOGI("Create MxdCMMBExtractor");
+	MxdCMMBExtractor* tmpEx = 	new MxdCMMBExtractor(mUri.string());
+	sp<MediaExtractor> extractor = tmpEx;
+	if (extractor == NULL) {
+		return UNKNOWN_ERROR;
+	}
+	LOGI(" Create MxdCMMBExtractor successful");
+	return setDataSource_l(extractor);
+    }//cmmb
+
     else if(!strncasecmp("cmmb-audio://", mUri.string(), 13)) {
               sp<CmmbUriSource> uriSource;
               uriSource = new CmmbUriSource(mUri.string());

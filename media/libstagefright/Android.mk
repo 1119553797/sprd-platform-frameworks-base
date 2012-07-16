@@ -56,7 +56,10 @@ LOCAL_C_INCLUDES:= \
 	$(JNI_H_INCLUDE) \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
         $(TOP)/external/tremolo \
-        $(TOP)/frameworks/base/media/libstagefright/rtsp
+	$(TOP)/external/skia/include/images \
+	$(TOP)/external/skia/include/core \
+        $(TOP)/frameworks/base/media/libstagefright/rtsp\
+	$(TOP)/frameworks/base/media/libstagefright/cmmbmxd
 
 LOCAL_SHARED_LIBRARIES := \
         libbinder         \
@@ -89,7 +92,8 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_rtsp \
         libstagefright_id3 \
         libstagefright_g711dec \
-		libstagefright_cmmb 
+	libstagefright_cmmb \
+	libstagefright_cmmb_mxd
 
 ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
 LOCAL_STATIC_LIBRARIES += \
