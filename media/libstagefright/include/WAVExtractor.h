@@ -47,6 +47,7 @@ private:
     uint16_t mWaveFormat;
     uint16_t mNumChannels;
     uint32_t mSampleRate;
+    uint16_t mBlockAlign;
     uint16_t mBitsPerSample;
     off_t mDataOffset;
     size_t mDataSize;
