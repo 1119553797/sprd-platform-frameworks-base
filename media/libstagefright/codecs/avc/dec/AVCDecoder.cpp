@@ -289,7 +289,9 @@ status_t AVCDecoder::read(
     if (options && options->getSeekTo(&seekTimeUs, &mode)) {
         LOGV("seek requested to %lld us (%.2f secs)", seekTimeUs, seekTimeUs / 1E6);
 
-        CHECK(seekTimeUs >= 0);
+      //  CHECK(seekTimeUs >= 0);
+        if (seekTimeUs < 0)
+			seekTimeUs = 0 ; 
         mPendingSeekTimeUs = seekTimeUs;
         mPendingSeekMode = mode;
 
