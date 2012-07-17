@@ -1,0 +1,6 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">VPN சேவைகள்</string>
+    <string name="vpn_notification_hint_disconnected">ஒரு VPNக்கு மறு இணைப்பு செய்ய, தொடவும்.</string>
+</resources>

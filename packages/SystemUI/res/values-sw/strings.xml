@@ -1,0 +1,27 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">Nguzo ya Hadhi</string>
+    <string name="status_bar_clear_all_button">Tandua</string>
+    <string name="status_bar_no_notifications_title">Hakuna taarifa</string>
+    <string name="status_bar_ongoing_events_title">Kinachotoka</string>
+    <string name="status_bar_latest_events_title">Tafuta</string>
+    <string name="battery_low_title">Tafadhali unganisha na chaja</string>
+    <string name="battery_low_subtitle">Betri inaelekea kuisha:</string>
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g> au yaliyobakia kidogo.                                                                                                                                                                                               </string>
+    <string name="battery_low_why">Matumizi ya Betri</string>
+    <string name="usb_accessory_permission_prompt">Ruhusu matumizi ya  %1$s ili kupata vifaa vya USB?</string>
+    <string name="usb_device_confirm_prompt">Fungua %1$s wakati kifaa hiki cha  USB kimeunganishwa?</string>
+    <string name="usb_accessory_confirm_prompt">Fungua %1$s wakati kifaa hiki cha  USB kimeunganishwa?</string>
+    <string name="usb_accessory_uri_prompt">Hakuna maombi yaliyofungwa yanayofanya kazi na vifaa vya USB hii.Jifunze zaidi kuhusu vifaa hivi kwa <xliff:g id="url">%1$s</xliff:g></string>
+    <string name="title_usb_accessory">Vifaa vya USB</string>
+    <string name="label_view">Angalia</string>
+    <string name="always_use_accessory">Tumia kwa defaulti kifaa hiki cha USB</string>
+    <string name="mobile_data_connect_disable">La</string>
+    <string name="mobile_data_connect_enable">Ndio</string>
+    <string name="network_disconnect_title">Tangazo</string>
+    <string name="network_disconnect_message">Mtandao umeunganuka. \nUnganisha kupitia 3G?\nIkiwa una mpango wa data za mtandao,inaweza kuhitaji gharama zaidi.</string>
+    <string name="weak_signal_title">MAWIMBI HAFIFU</string>
+    <string name="weak_signal_message">Mawimbi ya sasa ya WLAN ni hafifu,inapendekezwa kwako wewe kuchagua yaliyo bora</string>
+    <string name="auto_connect">Usiulize na kwa kiotomatiki unganisha na vifaa vyengine unavyoviamini</string>
+</resources>
