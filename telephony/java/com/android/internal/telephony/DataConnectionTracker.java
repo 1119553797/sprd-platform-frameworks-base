@@ -566,13 +566,14 @@ public abstract class DataConnectionTracker extends Handler {
                 boolean isCleanupNeeded = true;
                 if (enabledCount > 0) {
                     for (int i =0;i< APN_NUM_TYPES;i++) {
-                        if (dataEnabled[i] && isApnTypeActive(apnIdToType(i))) {
+                        if (dataEnabled[i] && isApnTypeActive(apnIdToType(i)) && mRequestedApnType.equals( Phone.APN_TYPE_DEFAULT)) {
                             isCleanupNeeded = false;
                             break;
                         }
                     }
                 }
                 if (isCleanupNeeded) {
+                    mRequestedApnType = Phone.APN_TYPE_DEFAULT;
                     onCleanUpConnection(true, Phone.REASON_APN_SWITCHED);
                 }
                 //if (enabledCount == 0) {
