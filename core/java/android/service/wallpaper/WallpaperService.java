@@ -669,6 +669,7 @@ public abstract class WallpaperService extends Service {
         }
         
         void doVisibilityChanged(boolean visible) {
+            if (DEBUG) Log.v(TAG, "doVisibilityChanged(" + visible + "): " + this);
             if (!mDestroyed) {
                 mVisible = visible;
                 reportVisibility();

@@ -122,6 +122,8 @@ interface IWindowSession {
      * how big the increment is from one screen to another.
      */
     void setWallpaperPosition(IBinder windowToken, float x, float y, float xstep, float ystep);
+
+    void updateWallpaperVisibleLocked(boolean flag); // Used to stop or start the drawing of wallpaper
     
     void wallpaperOffsetsComplete(IBinder window);
     

@@ -1693,6 +1693,7 @@ public class WindowManagerService extends IWindowManager.Stub
         return changed;
     }
 
+
     void wallpaperOffsetsComplete(IBinder window) {
         synchronized (mWindowMap) {
             if (mWaitingOnWallpaper != null &&
@@ -5794,6 +5795,42 @@ public class WindowManagerService extends IWindowManager.Stub
                     Binder.restoreCallingIdentity(ident);
                 }
             }
+        }
+
+        /**
+          * Used to control the wallpaper and render state ,need not concern the
+          * hierarchey of drawing and some the state of an object,
+          * such as
+          * #isWallpaperVisible(boolean)
+          * #WindowToken.hidden
+          * #mLayoutNeeded
+          * #WindowState.mWallpaperVisible
+          * because this is just a temporary modifications
+          */
+        public void updateWallpaperVisibleLocked(boolean flag){
+            int curTokenIndex = mWallpaperTokens.size();
+
+
+            if (DEBUG_WALLPAPER) Slog.i(TAG, "wallpaper token size : " + curTokenIndex);
+
+            while (curTokenIndex > 0) {
+                curTokenIndex--;
+                WindowToken token = mWallpaperTokens.get(curTokenIndex);
+	
+                int curWallpaperIndex = token.windows.size();
+
+                if (DEBUG_WALLPAPER) Slog.i(TAG, "wallpaper windows size : " + curWallpaperIndex);
+
+                while (curWallpaperIndex > 0) {
+                    curWallpaperIndex--;
+                    WindowState wallpaper = token.windows.get(curWallpaperIndex);
+                    try {
+                        wallpaper.mClient.dispatchAppVisibility(flag);
+                    } catch (RemoteException e) {
+                        Slog.i(TAG,"updateWallpaperVisible err:" + e);
+                    }	
+                }
+	    }
         }
 
         public void wallpaperCommandComplete(IBinder window, Bundle result) {
