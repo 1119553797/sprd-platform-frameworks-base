@@ -253,6 +253,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         p.mSST.registerForRoamingOff(this, EVENT_ROAMING_OFF, null);
         p.mSST.registerForPsRestrictedEnabled(this, EVENT_PS_RESTRICT_ENABLED, null);
         p.mSST.registerForPsRestrictedDisabled(this, EVENT_PS_RESTRICT_DISABLED, null);
+        p.mSST.registerForNetworkChanged(this, EVENT_NETWORK_TYPE_CHANGED, null);
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(INTENT_RECONNECT_ALARM);
@@ -341,6 +342,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         mGsmPhone.mSST.unregisterForRoamingOff(this);
         mGsmPhone.mSST.unregisterForPsRestrictedEnabled(this);
         mGsmPhone.mSST.unregisterForPsRestrictedDisabled(this);
+        mGsmPhone.mSST.unregisterForNetworkChanged(this);
 
         phone.getContext().unregisterReceiver(this.mIntentReceiver);
         phone.getContext().getContentResolver().unregisterContentObserver(this.apnObserver);
@@ -1788,6 +1790,11 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                     }
                 }
                 break;
+            case EVENT_NETWORK_TYPE_CHANGED:
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(phone.getPhoneId())) {
+                    onNetworkTypeChanged((AsyncResult) msg.obj);
+                }
+                break;
             default:
                 // handle the message in the super class DataConnectionTracker
                 super.handleMessage(msg);
@@ -1837,4 +1844,17 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 	protected boolean isConVoiceAndData() {
 		return mGsmPhone.mSST.isConcurrentVoiceAndData();
 	}
+    protected boolean allPhoneIdle() {
+        return (phone.getState() == Phone.State.IDLE);
+    }
+    protected void onNetworkTypeChanged(AsyncResult ar) {
+        log("onNetworkTypeChanged state="+state+",allPhoneIdle="+allPhoneIdle()+
+            ",isConcurrentVoiceAndData="+mGsmPhone.mSST.isConcurrentVoiceAndData());
+        if (state != State.CONNECTED) {
+            if(!allPhoneIdle() &&
+                mGsmPhone.mSST.isConcurrentVoiceAndData()) {
+                trySetupData(Phone.REASON_NETWORK_TYPE_CHANGED);
+            }
+        }
+    }
 }

@@ -109,6 +109,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     private RegistrantList gprsDetachedRegistrants = new RegistrantList();
     private RegistrantList psRestrictEnabledRegistrants = new RegistrantList();
     private RegistrantList psRestrictDisabledRegistrants = new RegistrantList();
+    private RegistrantList networkChangeRegistrants = new RegistrantList();
     /**
      * Sometimes we get the NITZ time before we know what country we
      * are in. Keep the time zone information from the NITZ string so
@@ -338,6 +339,14 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     void unregisterForPsRestrictedEnabled(Handler h) {
         psRestrictEnabledRegistrants.remove(h);
+    }
+    void registerForNetworkChanged(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        networkChangeRegistrants.add(r);
+    }
+
+    void unregisterForNetworkChanged(Handler h) {
+        networkChangeRegistrants.remove(h);
     }
 
     /**
@@ -1149,6 +1158,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         if (hasNetworkTypeChanged) {
             if (MsmsGsmDataConnectionTrackerProxy.isActiveOrDefaultPhoneId(phone.getPhoneId())) {
                 phone.notifyDataConnection(null);
+            }
+            if(!hasGprsAttached && (gprsState == ServiceState.STATE_IN_SERVICE) && !hasRoamingOn && !hasRoamingOff) {
+                networkChangeRegistrants.notifyResult(new Integer(networkType));
             }
         }
 
