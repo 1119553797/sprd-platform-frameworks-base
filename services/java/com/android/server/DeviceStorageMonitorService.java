@@ -494,6 +494,7 @@ class DeviceStorageMonitorService extends Binder {
         notification.icon = com.android.internal.R.drawable.stat_notify_disk_full;
         notification.tickerText = title;
         notification.flags |= Notification.FLAG_NO_CLEAR;
+        notification.flags |= Notification.FLAG_ONGOING_EVENT;
         notification.setLatestEventInfo(mContext, title, details, intent);
         mNotificationMgr.notify(LOW_MEMORY_NOTIFICATION_ID, notification);
         mContext.sendStickyBroadcast(mStorageLowIntent);
