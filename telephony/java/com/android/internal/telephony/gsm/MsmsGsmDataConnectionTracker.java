@@ -311,6 +311,10 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
     public int getDefaultDataPhoneId() {
         return TelephonyManager.getDefaultDataPhoneId(phone.getContext());
     }
+    @Override
+    protected boolean allPhoneIdle() {
+        return (MsmsGsmDataConnectionTrackerProxy.isAllPhoneIdle());
+    }
     /*
     protected synchronized void onEnableApn(int apnId, int enabled) {
         if (DBG) {

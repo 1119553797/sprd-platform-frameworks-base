@@ -166,6 +166,7 @@ public interface Phone extends SprdVideoPhone{
     static final String REASON_PS_RESTRICT_DISABLED = "psRestrictDisabled";
     static final String REASON_SIM_LOADED = "simLoaded";
     static final String REASON_PDP_LOST = "pdpLost";
+    static final String REASON_NETWORK_TYPE_CHANGED = "networkTypeChanged";
 
     // Used for band mode selection methods
     static final int BM_UNSPECIFIED = 0; // selected by baseband automatically
