@@ -35,6 +35,13 @@
 
 namespace android {
 
+enum {
+    WAVE_FORMAT_PCM = 1,
+    WAVE_FORMAT_ALAW = 6,
+    WAVE_FORMAT_MULAW = 7,
+    WAVE_FORMAT_IMAADPCM = 0x11
+};
+
 struct AVIExtractor::AVISource : public MediaSource {
     AVISource(const sp<AVIExtractor> &extractor, size_t trackIndex);
 
@@ -842,17 +849,49 @@ status_t AVIExtractor::parseStreamFormat(off64_t offset, size_t size) {
         track->mMeta->setInt32(kKeyHeight, height);
     } else {
         uint32_t format = U16LE_AT(data);
-
-        if ((format == 0x55) || (format == 0x50)) {
-            track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_MPEG);
-//        } else if (format == 0x01) {
-//            track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_RAW);
-        } else {
-            LOGW("Unsupported audio format = 0x%04x", format);
-        }
-
         uint32_t numChannels = U16LE_AT(&data[2]);
         uint32_t sampleRate = U32LE_AT(&data[4]);
+        uint32_t blockAlign = U16LE_AT(&data[12]);
+        uint32_t bitsPerSample = U16LE_AT(&data[14]);
+
+        switch(format){
+            case 0x55:
+            case 0x50:
+                track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_MPEG);
+                break;
+            case WAVE_FORMAT_PCM:
+                if(16 == bitsPerSample){
+                    track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_RAW);
+                }else{
+                    LOGW("Unsupported WAVE_FORMAT_PCM but wrong bits = %d", bitsPerSample);
+                }
+                break;
+            case WAVE_FORMAT_ALAW:
+                if(8 == bitsPerSample){
+                    track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_G711_ALAW);
+                 }else{
+                    LOGW("Unsupported WAVE_FORMAT_ALAW but wrong bits = %d", bitsPerSample);
+                }
+                break;
+            case WAVE_FORMAT_MULAW:
+                if(8 == bitsPerSample){
+                    track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_G711_MLAW);
+                }else{
+                    LOGW("Unsupported WAVE_FORMAT_MULAW but wrong bits = %d", bitsPerSample);
+                }
+                break;
+            case WAVE_FORMAT_IMAADPCM:
+                if(4 == bitsPerSample){
+                    track->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_IMAADPCM);
+                    track->mMeta->setInt32(kKeyBlockAlign, blockAlign);
+                }else{
+                    LOGW("Unsupported WAVE_FORMAT_IMAADPCM but wrong bits = 0x%04x", bitsPerSample);
+                }
+                break;
+             default:
+                LOGW("Unsupported audio format = 0x%04x", format);
+                break;
+        };
 
         track->mMeta->setInt32(kKeyChannelCount, numChannels);
         track->mMeta->setInt32(kKeySampleRate, sampleRate);
@@ -917,7 +956,6 @@ status_t AVIExtractor::parseIdx1(off64_t offset, size_t size) {
     if (n < (ssize_t)size) {
         //return n < 0 ? (status_t)n : ERROR_MALFORMED;
     }
-
     const uint8_t *data = buffer->data();
 
     while (n >= 16) {
@@ -1043,7 +1081,9 @@ status_t AVIExtractor::parseIdx1(off64_t offset, size_t size) {
                 avgChunkSize += size;
             }
 
-            avgChunkSize /= numSamplesToAverage;
+            if (numSamplesToAverage > 1) {
+                avgChunkSize /= (numSamplesToAverage - 1);
+            }
 
             track->mAvgChunkSize = avgChunkSize;
         }else{
@@ -1156,7 +1196,9 @@ status_t AVIExtractor::parseIndx(off64_t offset, size_t size) {
             avgChunkSize += chunkSize;
         }
 
-        avgChunkSize /= entriesInUse;
+        if (entriesInUse > 1) {
+            avgChunkSize /= entriesInUse;
+        }
         track->mAvgChunkSize = avgChunkSize;
     }
     else if(indextype == AVI_INDEX_OF_INDEXES)
@@ -1341,7 +1383,6 @@ status_t AVIExtractor::getSampleInfo(
 
     Track *track = &mTracks.editItemAt(trackIndex);
     uint32_t chunkType;
-
     if (sampleIndex >= track->mSamples.size()) {
         if(mIndexType == NO_INDEX)//parse movi data to get index info
         {

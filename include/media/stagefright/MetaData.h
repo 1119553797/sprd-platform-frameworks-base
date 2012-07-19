@@ -39,6 +39,7 @@ enum {
     kKeyChannelCount      = '#chn',  // int32_t
     kKeySampleRate        = 'srte',  // int32_t (also video frame rate)
     kKeyBitRate           = 'brte',  // int32_t (bps)
+	kKeyBlockAlign		  = 'blka',  // int32_t
     kKeyESDS              = 'esds',  // raw data
     kKeyAVCC              = 'avcc',  // raw data
     kKeyVorbisInfo        = 'vinf',  // raw data

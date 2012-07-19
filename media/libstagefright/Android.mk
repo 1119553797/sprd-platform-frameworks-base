@@ -91,6 +91,7 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_httplive \
         libstagefright_rtsp \
         libstagefright_id3 \
+        libstagefright_imaadpcm \
         libstagefright_g711dec \
 	libstagefright_cmmb \
 	libstagefright_cmmb_mxd
