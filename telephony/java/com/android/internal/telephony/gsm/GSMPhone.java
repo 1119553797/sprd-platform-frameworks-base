@@ -1158,9 +1158,7 @@ public abstract class GSMPhone extends PhoneBase {
     public boolean isDataConnectivityPossible() {
         // TODO: Currently checks if any GPRS connection is active. Should it only
         // check for "default"?
-        boolean noData = mDataConnection.getDataEnabled() &&
-            getDataConnectionState() == DataState.DISCONNECTED;
-        return !noData && getIccCard().getState() == SimCard.State.READY &&
+        return getIccCard().getState() == SimCard.State.READY &&
                 getServiceState().getState() == ServiceState.STATE_IN_SERVICE &&
             (mDataConnection.getDataOnRoamingEnabled() || !getServiceState().getRoaming());
     }
