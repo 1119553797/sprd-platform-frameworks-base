@@ -233,6 +233,7 @@ status_t WAVExtractor::init() {
                     case WAVE_FORMAT_IMAADPCM:
                         mTrackMeta->setCString(
                                 kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_IMAADPCM);
+                        mTrackMeta->setInt32(kKeyBlockAlign, mBlockAlign);
                         break;
                     case WAVE_FORMAT_ALAW:
                         mTrackMeta->setCString(
@@ -248,16 +249,17 @@ status_t WAVExtractor::init() {
                 mTrackMeta->setInt32(kKeyChannelCount, mNumChannels);
                 mTrackMeta->setInt32(kKeySampleRate, mSampleRate);
 
-                size_t bytesPerSample = mBitsPerSample >> 3;
-
-                int64_t durationUs =
-                    1000000LL * (mDataSize / (mNumChannels * bytesPerSample))
-                        / mSampleRate;
-
+                int64_t durationUs;
                 if (mWaveFormat == WAVE_FORMAT_IMAADPCM) {
                     int samples_per_frame = ((mBlockAlign / mNumChannels - 4) << 1) + 1;
                     durationUs = 1000000LL * (mDataSize / mBlockAlign) * samples_per_frame
                         / mSampleRate;
+                } else {
+                    size_t bytesPerSample = mBitsPerSample >> 3;
+
+                    durationUs =
+                        1000000LL * (mDataSize / (mNumChannels * bytesPerSample))
+                            / mSampleRate;
                 }
 
                 mTrackMeta->setInt64(kKeyDuration, durationUs);
@@ -445,12 +447,6 @@ status_t WAVSource::read(
         }
     }
 
-    size_t bytesPerSample = mBitsPerSample >> 3;
-
-    buffer->meta_data()->setInt64(
-            kKeyTime,
-            1000000LL * (mCurrentPos - mOffset)
-                / (mNumChannels * bytesPerSample) / mSampleRate);
     if (mWaveFormat == WAVE_FORMAT_IMAADPCM)
     {
         int samples_per_frame = ((mBlockAlign / mNumChannels - 4) << 1) + 1;
@@ -458,6 +454,13 @@ status_t WAVSource::read(
                 kKeyTime,
                 1000000LL * ((mCurrentPos - mOffset) / mBlockAlign) * samples_per_frame
                      / mSampleRate);
+    } else {
+        size_t bytesPerSample = mBitsPerSample >> 3;
+
+        buffer->meta_data()->setInt64(
+                kKeyTime,
+                1000000LL * (mCurrentPos - mOffset)
+                    / (mNumChannels * bytesPerSample) / mSampleRate);
     }
 
     buffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);

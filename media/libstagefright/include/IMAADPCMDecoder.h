@@ -47,7 +47,7 @@ private:
     MediaBufferGroup *mBufferGroup;
 
     // return samples decoded
-    static int DecodeIMAADPCM(int16_t *out, const uint8_t *in, int channels, size_t inSize);
+    static void DecodeIMAADPCM(int16_t *out, const uint8_t *in, int channels, size_t inSize);
 
     IMAADPCMDecoder(const IMAADPCMDecoder &);
     IMAADPCMDecoder &operator=(const IMAADPCMDecoder &);

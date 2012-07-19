@@ -26,7 +26,7 @@
 #include <media/stagefright/MediaErrors.h>
 #include <media/stagefright/MetaData.h>
 
-static const size_t kMaxNumSamplesPerFrame = 16384;
+static const size_t kMaxNumSamplesPerFrame = 32768*4;
 
 namespace android {
 
@@ -55,7 +55,7 @@ status_t IMAADPCMDecoder::start(MetaData *params) {
 
     mBufferGroup = new MediaBufferGroup;
     mBufferGroup->add_buffer(
-            new MediaBuffer(kMaxNumSamplesPerFrame * sizeof(int16_t)));
+            new MediaBuffer(kMaxNumSamplesPerFrame * sizeof(int16_t) * 2));
 
     mSource->start();
 
@@ -82,9 +82,13 @@ sp<MetaData> IMAADPCMDecoder::getFormat() {
 
     int32_t numChannels;
     int32_t sampleRate;
+    int32_t blockAlign;
 
     CHECK(srcFormat->findInt32(kKeyChannelCount, &numChannels));
     CHECK(srcFormat->findInt32(kKeySampleRate, &sampleRate));
+    if (srcFormat->findInt32(kKeyBlockAlign, &blockAlign)) {
+        CHECK(blockAlign%(numChannels*4)==0);
+    }
 
     sp<MetaData> meta = new MetaData;
     meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_RAW);
@@ -122,7 +126,21 @@ status_t IMAADPCMDecoder::read(
         return err;
     }
 
-    if (inBuffer->range_length() > kMaxNumSamplesPerFrame) {
+    sp<MetaData> srcFormat = mSource->getFormat();
+    int32_t numChannels;
+    int32_t blockAlign;
+    int samples_per_frame;
+    CHECK(srcFormat->findInt32(kKeyChannelCount, &numChannels));
+    if (!srcFormat->findInt32(kKeyBlockAlign, &blockAlign)) {
+        blockAlign = inBuffer->range_length();
+    }
+    samples_per_frame = ((blockAlign / numChannels - 4) << 1) + 1;
+
+    if (inBuffer->range_length()%blockAlign != 0) {
+        LOGW("WARNING! input buffer corrupt, len=%d, ba=%d", inBuffer->range_length(), blockAlign);
+    }
+    
+    if (inBuffer->range_length()/blockAlign*samples_per_frame > kMaxNumSamplesPerFrame) {
         LOGE("input buffer too large (%d).", inBuffer->range_length());
 
         inBuffer->release();
@@ -136,19 +154,23 @@ status_t IMAADPCMDecoder::read(
 
     const uint8_t *inputPtr =
         (const uint8_t *)inBuffer->data() + inBuffer->range_offset();
+    int inputLength = inBuffer->range_length();
 
     MediaBuffer *outBuffer;
     CHECK_EQ(mBufferGroup->acquire_buffer(&outBuffer), OK);
 
+    int16_t *outputPtr =
+        static_cast<int16_t *>(outBuffer->data());
     int frames = 0;
-    int32_t numChannels;
-    //if (mFormat==IMAADPCM)
+    while (inputLength > 0)
     {
-        CHECK(mSource->getFormat()->findInt32(kKeyChannelCount, &numChannels));
-
-        frames = DecodeIMAADPCM(
-                static_cast<int16_t *>(outBuffer->data()),
-                inputPtr, numChannels, inBuffer->range_length());
+        DecodeIMAADPCM(
+                outputPtr,
+                inputPtr, numChannels, blockAlign);
+        inputLength -= blockAlign;
+        inputPtr += blockAlign;
+        outputPtr += samples_per_frame * numChannels;
+        frames += samples_per_frame;
     }
 
     // Each 8-bit byte is converted into a 16-bit sample.
@@ -172,14 +194,13 @@ static void _adpcm_decode_frame(int16_t **dst_ptrs,
 			  );
 
 // static
-int IMAADPCMDecoder::DecodeIMAADPCM(
+void IMAADPCMDecoder::DecodeIMAADPCM(
         int16_t *out, const uint8_t *in, int channels, size_t inSize) {
         int frames = ((inSize / channels - 4) << 1) + 1;
         int16_t *dst[2];
         dst[0] = out;
         dst[1] = out+1;
         _adpcm_decode_frame(dst, channels, in, frames, channels);
-        return frames;
 }
 
 /* First table lookup for Ima-ADPCM quantizer */
