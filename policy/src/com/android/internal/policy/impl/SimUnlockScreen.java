@@ -276,7 +276,9 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             mCallback.takeEmergencyCallAction(mCallSub);
         } else if (v == mOkButton) {
             if(!checkPinLength()){
-            	checkPin();
+                 Log.d("SimUnlockScreen", "on click ok Button ");
+                 getSimUnlockProgressDialog().show();
+                 checkPin();
             }
         }
     }
@@ -310,8 +312,6 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 			mCallback.pokeWakelock();
 			return;
 		}
-		getSimUnlockProgressDialog().show();
-
 		new CheckSimPin(mPinText.getText().toString()) {
 			void onSimLockChangedResponse(boolean success) {
 				if (mSimUnlockProgressDialog != null) {
