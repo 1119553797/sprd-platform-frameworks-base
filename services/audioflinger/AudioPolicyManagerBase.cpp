@@ -700,8 +700,10 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
 
     // apply volume rules for current stream and device if necessary
     checkAndSetVolume(stream, mStreams[stream].mIndexCur, output, outputDesc->device());
-    uint32_t refCountNonMedia = hwOutputDesc->refCount() - hwOutputDesc->getRefCount(AudioSystem::MUSIC);
-    if(stream == AudioSystem::MUSIC && refCountNonMedia == 0 && mStreams[AudioSystem::MUSIC].mIndexCur == 0 && !isInCall()){
+//    uint32_t refCountNonMedia = hwOutputDesc->refCount() - hwOutputDesc->getRefCount(AudioSystem::MUSIC);
+    uint32_t refCountMedia = hwOutputDesc->getRefCount(AudioSystem::MUSIC);
+    uint32_t refCountNonMedia = hwOutputDesc->refCount() - refCountMedia;
+    if(stream == AudioSystem::MUSIC && refCountNonMedia == 0 && mStreams[AudioSystem::MUSIC].mIndexCur == 0 && !isInCall() && refCountMedia == 1){
         uint32_t device = hwOutputDesc->mDevice;
         if((device & AudioSystem::DEVICE_OUT_SPEAKER)) {
             mpClientInterface->shutDownSpeaker();
@@ -1935,7 +1937,7 @@ void AudioPolicyManagerBase::setOutputDevice(audio_io_handle_t output, uint32_t 
          }
     }
 #endif
-    // if changing from a combined headset + speaker route, unmute media streams 
+    // if changing from a combined headset + speaker route, unmute media streams
     // CFW fix bug 5856 by cpf
 	tempDevice = (prevDevice & (~AudioSystem::DEVICE_OUT_FM_HEADSET)) & (~AudioSystem::DEVICE_OUT_FM_SPEAKER);
 	LOGV("tempdevices1 output %d device %x delayMs %d", output, tempDevice, delayMs);
