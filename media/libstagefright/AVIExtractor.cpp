@@ -1275,11 +1275,24 @@ status_t AVIExtractor::addMPEG4CodecSpecificData(size_t trackIndex) {
     size_t size;
     bool isKey;
     int64_t timeUs;
-    status_t err =
-        getSampleInfo(trackIndex, 0, &offset, &size, &isKey, &timeUs);
 
-    if (err != OK) {
-        return err;
+    size_t sampleIndex = 0;
+    for (;;)
+    {
+        status_t err = getSampleInfo(trackIndex, sampleIndex, &offset, &size, &isKey, &timeUs);
+
+        if (err != OK) {
+            return err;
+        }
+
+        if (size <= 0)
+        {
+            sampleIndex ++;
+        }
+        else
+        {
+            break;
+        }
     }
 
     sp<ABuffer> buffer = new ABuffer(size);
