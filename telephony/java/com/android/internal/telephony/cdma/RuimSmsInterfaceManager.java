@@ -168,6 +168,9 @@ public class RuimSmsInterfaceManager extends IccSmsInterfaceManager {
         return mSuccess;
     }
 
+    public int copyMessageToIccEfReturnIndex(int status, byte[] pdu, byte[] smsc) {
+        return 0;
+    }
     /**
      * Get Sim card capacity.
      *

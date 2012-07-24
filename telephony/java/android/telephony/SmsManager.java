@@ -380,6 +380,34 @@ public final class SmsManager {
     }
 
     /**
+     * Copy a raw SMS PDU to the ICC.
+     * ICC (Integrated Circuit Card) is the card of the device.
+     * For example, this can be the SIM or USIM for GSM.
+     *
+     * @param smsc the SMSC for this message, or NULL for the default SMSC
+     * @param pdu the raw PDU to store
+     * @param status message status (STATUS_ON_ICC_READ, STATUS_ON_ICC_UNREAD,
+     *               STATUS_ON_ICC_SENT, STATUS_ON_ICC_UNSENT)
+     * @return -1 for fail,otherwise for saved index
+     *
+     * {@hide}
+     */
+    public int copyMessageToIccReturnIndex(byte[] smsc, byte[] pdu, int status) {
+        int index = -1;
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
+            if (iccISms != null) {
+                index = iccISms.copyMessageToIccEfReturnIndex(status, pdu, smsc);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return index;
+    }
+
+    /**
      * Get Sim card capacity.
      *
      * @return success or not

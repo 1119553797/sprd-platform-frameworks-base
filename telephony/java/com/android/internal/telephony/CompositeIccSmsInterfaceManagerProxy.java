@@ -41,6 +41,12 @@ public class CompositeIccSmsInterfaceManagerProxy extends ISms.Stub {
     }
 
     @Override
+    public int copyMessageToIccEfReturnIndex(int status, byte[] pdu, byte[] smsc) throws RemoteException {
+        return mIccSmsInterfaceManager[getSimplePolicyPhoneId()].copyMessageToIccEfReturnIndex(status, pdu,
+                smsc);
+    }
+
+    @Override
     public String getSimCapacity() throws RemoteException {
         return mIccSmsInterfaceManager[getSimplePolicyPhoneId()].getSimCapacity();
     }

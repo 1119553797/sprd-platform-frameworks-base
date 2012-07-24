@@ -67,6 +67,17 @@ interface ISms {
     boolean copyMessageToIccEf(int status, in byte[] pdu, in byte[] smsc);
 
     /**
+     * Copy a raw SMS PDU to the ICC.
+     *
+     * @param pdu the raw PDU to store
+     * @param status message status (STATUS_ON_ICC_READ, STATUS_ON_ICC_UNREAD,
+     *               STATUS_ON_ICC_SENT, STATUS_ON_ICC_UNSENT)
+     * @return -1 fail or saved index
+     *
+     */
+    int copyMessageToIccEfReturnIndex(int status, in byte[] pdu, in byte[] smsc);
+
+    /**
      * Get Sim card capacity.
      *
      * @return Sim capacity string.

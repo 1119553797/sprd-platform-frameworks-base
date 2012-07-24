@@ -50,6 +50,11 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
         return mIccSmsInterfaceManager.copyMessageToIccEf(status, pdu, smsc);
     }
 
+    public int copyMessageToIccEfReturnIndex(int status, byte[] pdu,
+            byte[] smsc) throws android.os.RemoteException {
+        return mIccSmsInterfaceManager.copyMessageToIccEfReturnIndex(status, pdu, smsc);
+    }
+
     public String getSimCapacity() throws android.os.RemoteException {
         return mIccSmsInterfaceManager.getSimCapacity();
     }

@@ -49,6 +49,7 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
 
     private final Object mLock = new Object();
     private boolean mSuccess;
+    private int mIndex;
     private List<SmsRawData> mSms;
     private String simCapacity;
 
@@ -62,6 +63,7 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
 
     private static final int EVENT_SET_BROADCAST_ACTIVATION_DONE = 5;
     private static final int EVENT_SET_BROADCAST_CONFIG_DONE = 4;
+    private static final int EVENT_UPDATE_DONE_WITH_INDEX = 6;
     private static final int SMS_CB_CODE_SCHEME_MIN = 0;
     private static final int SMS_CB_CODE_SCHEME_MAX = 255;
 
@@ -77,6 +79,18 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
                     ar = (AsyncResult) msg.obj;
                     synchronized (mLock) {
                         mSuccess = (ar.exception == null);
+                        mLock.notifyAll();
+                    }
+                    break;
+                case EVENT_UPDATE_DONE_WITH_INDEX:
+                    ar = (AsyncResult) msg.obj;
+                    synchronized (mLock) {
+                        if (ar.exception == null) {
+                            mIndex = ((int[])ar.result)[0];
+                        } else {
+                            if(DBG) log("EVENT_UPDATE_DONE_WITH_INDEX failed");
+                            mIndex = -1;
+                        }
                         mLock.notifyAll();
                     }
                     break;
@@ -208,6 +222,27 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
             }
         }
         return mSuccess;
+    }
+
+    public int copyMessageToIccEfReturnIndex(int status, byte[] pdu, byte[] smsc) {
+        if (DBG) log("copyMessageToIccEfReturnIndex: status=" + status + " ==> " +
+                "pdu=("+ Arrays.toString(pdu) +
+                "), smsm=(" + Arrays.toString(smsc) +")");
+        enforceReceiveAndSend("Copying message to SIM");
+        synchronized(mLock) {
+            mIndex = -1;
+            Message response = mHandler.obtainMessage(EVENT_UPDATE_DONE_WITH_INDEX);
+
+            mPhone.mCM.writeSmsToSim(status, IccUtils.bytesToHexString(smsc),
+                    IccUtils.bytesToHexString(pdu), response);
+
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                log("interrupted while trying to update by index");
+            }
+        }
+        return mIndex;
     }
 
     /**
