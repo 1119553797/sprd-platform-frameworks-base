@@ -336,6 +336,8 @@ bool AVIExtractor::MP3Splitter::resync() {
 
             mBuffer->setRange(0, mBuffer->size() - offset);
             break;
+        }else{
+            mFindSync = false;
         }
     }
 
@@ -364,7 +366,7 @@ status_t AVIExtractor::MP3Splitter::read(MediaBuffer **out) {
     int channel_mode;
     if (!GetMPEGAudioFrameSize(
                 header, &frameSize, &sampleRate, &channel_mode, NULL, &numSamples)) {
-        return ERROR_MALFORMED;
+        return ERROR_END_OF_STREAM;
     }
    nChannelnum = channel_mode ;
 
