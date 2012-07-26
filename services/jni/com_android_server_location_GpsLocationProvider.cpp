@@ -318,6 +318,18 @@ static jboolean android_location_GpsLocationProvider_init(JNIEnv* env, jobject o
     if (!sGpsDebugInterface)
        sGpsDebugInterface = (const GpsDebugInterface*)interface->get_extension(GPS_DEBUG_INTERFACE);
 
+    if (!sAGpsInterface) {
+        sAGpsInterface = (const AGpsInterface*)interface->get_extension(AGPS_INTERFACE);
+        if (sAGpsInterface)
+            sAGpsInterface->init(&sAGpsCallbacks);
+    }
+
+    if (!sAGpsRilInterface) {
+       sAGpsRilInterface = (const AGpsRilInterface*)interface->get_extension(AGPS_RIL_INTERFACE);
+        if (sAGpsRilInterface)
+            sAGpsRilInterface->init(&sAGpsRilCallbacks);
+    }
+
     if (!sGpsNiInterface) {
         sGpsNiInterface = (const GpsNiInterface*)interface->get_extension(GPS_NI_INTERFACE);
         if (sGpsNiInterface) {
