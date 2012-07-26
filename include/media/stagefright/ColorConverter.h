@@ -58,6 +58,12 @@ private:
             const void *srcBits, size_t srcSkip,
             void *dstBits, size_t dstSkip);
 
+    void convertSPRDYUV420Planar(
+            size_t width, size_t height, 
+            size_t left, size_t top, size_t right, size_t bottom,
+            const void *srcBits, size_t srcSkip,
+            void *dstBits, size_t dstSkip);
+            
     void convertYUV420SemiPlanar(
             size_t width, size_t height,
             const void *srcBits, size_t srcSkip,
