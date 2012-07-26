@@ -114,7 +114,7 @@ inline int compare_type(const TextLayoutCacheKey& lhs, const TextLayoutCacheKey&
 }
 
 typedef void (*FuncTypeDrawGlyphs)(SkCanvas* canvas, const jchar* glyphArray, int index, int count,
-						  jfloat x, jfloat y, int flags, SkPaint* paint);
+                          jfloat x, jfloat y, int flags, SkPaint* paint);
 
 /*
  * TextLayoutCacheValue is the Cache value
@@ -132,8 +132,8 @@ public:
     SkTypeface* backupPaintTypeface(SkPaint* paint);
     void restorePaintTypeface(SkPaint* paint, SkTypeface* backupTypeface);
 
-	void drawGlyphCustom(FuncTypeDrawGlyphs doDrawGlyphs, SkCanvas* canvas,
-						 jfloat x, jfloat y, int flags, SkPaint* paint);
+    void drawGlyphCustom(FuncTypeDrawGlyphs doDrawGlyphs, SkCanvas* canvas,
+                         jfloat x, jfloat y, int flags, SkPaint* paint);
 
     inline const jfloat* getAdvances() const { return mAdvances.array(); }
     inline size_t getAdvancesCount() const { return mAdvances.size(); }
@@ -193,7 +193,7 @@ private:
             size_t start, size_t count, bool isRTL,
             Vector<jfloat>* const outAdvances, jfloat* outTotalAdvance,
             Vector<jchar>* const outGlyphs);
-	
+
     /*static*/ void setClusterCount(size_t clusterCount);
 
     /*static*/ void computeRunValuesWithHarfbuzzSub(HB_ShaperItem& shaperItem, SkPaint* paint,
@@ -205,8 +205,8 @@ private:
             SkPaint* paint, const UChar* chars, size_t count, size_t contextCount);
 
     /*static*/ void freeShaperItem(HB_ShaperItem& shaperItem);
-	
-	/*static*/ void setupFaceForScript(HB_ShaperItem& shaperItem);
+
+    /*static*/ void setupFaceForScript(HB_ShaperItem& shaperItem, int *p_script);
 
     /*static*/ void shapeRun(HB_ShaperItem& shaperItem, size_t start, size_t count, bool isRTL);
 
@@ -214,6 +214,15 @@ private:
 
     /*static*/ void createGlyphArrays(HB_ShaperItem& shaperItem, int size);
 
+#if USE_HARFBUZZ_NG
+    void init_hb_buffer(HB_ShaperItem& shaperItem,
+            int script, hb_buffer_t *buffer);
+
+    void process_hb_buffer_to_shaperItem(HB_ShaperItem& shaperItem,
+            hb_buffer_t *buffer);
+
+    void shapeRunWithHarfbuzzNG(HB_ShaperItem& shaperItem, int script);
+#endif
 }; // TextLayoutCacheValue
 
 /**

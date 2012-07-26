@@ -243,16 +243,16 @@ HB_Error harfbuzzSkiaGetTable(void* voidface, const HB_Tag tag, HB_Byte* buffer,
     SkTypeface* typeface = reinterpret_cast<SkTypeface*>(voidface);
 
 #if DEBUG_BY_LJK
-	LOGD("harfbuzzSkiaGetTable -- typeface=%08x", typeface);
-	LOGD("                     -- tag=%08x", tag);
-	LOGD("                     -- len(in)=%d", *len);
+    LOGD("harfbuzzSkiaGetTable -- typeface=%08x", typeface);
+    LOGD("                     -- tag=%08x", tag);
+    LOGD("                     -- len(in)=%d", *len);
 #endif
     if (!voidface)
         return HB_Err_Invalid_Argument;
     const size_t tableSize = SkFontHost::GetTableSize(typeface->uniqueID(), tag);
 #if DEBUG_BY_LJK
-	LOGD("                     -- typeface->uniqueID()=%d", typeface->uniqueID());
-	LOGD("                     -- tableSize=%d", tableSize);
+    LOGD("                     -- typeface->uniqueID()=%d", typeface->uniqueID());
+    LOGD("                     -- tableSize=%d", tableSize);
 #endif
     if (!tableSize)
         return HB_Err_Invalid_Argument;
@@ -261,14 +261,320 @@ HB_Error harfbuzzSkiaGetTable(void* voidface, const HB_Tag tag, HB_Byte* buffer,
         *len = tableSize;
         return HB_Err_Ok;
     }
-	
+
     if (*len < tableSize)
         return HB_Err_Invalid_Argument;
     SkFontHost::GetTableData(typeface->uniqueID(), tag, 0, tableSize, buffer);
 #if DEBUG_BY_LJK
-	LOGD("                     -- return HB_Err_Ok");
+    LOGD("                     -- return HB_Err_Ok");
 #endif
     return HB_Err_Ok;
 }
 
 }  // namespace android
+
+#if USE_HARFBUZZ_NG
+#ifdef HB_UNUSED
+#undef HB_UNUSED
+#endif
+
+#include "hb-private.hh"
+#include "hb.h"
+#include "hb-font-private.hh"
+
+namespace android {
+
+static void setupPaintFromUserData(SkPaint* paint, void *user_data)
+{
+    setupPaintWithFontData(paint, reinterpret_cast<FontData*>(user_data));
+}
+
+static hb_bool_t
+hb_skia_get_glyph (hb_font_t *font HB_UNUSED,
+                 void *font_data,
+                 hb_codepoint_t unicode,
+                 hb_codepoint_t variation_selector,
+                 hb_codepoint_t *glyph,
+                 void *user_data HB_UNUSED)
+
+{
+    SkPaint paint;
+    setupPaintFromUserData(&paint, font_data);
+
+    HB_UChar16 character;
+    uint16_t skiaGlyph;
+
+    paint.setTextEncoding(SkPaint::kUTF16_TextEncoding);
+    character = (HB_UChar16)unicode;
+    int numGlyphs = paint.textToGlyphs(&character, 1 * sizeof(skiaGlyph), &skiaGlyph);
+
+    if (numGlyphs == 1)
+    {
+        *glyph = (hb_codepoint_t)skiaGlyph;
+        return 1;
+    }
+    return 0;
+}
+
+static hb_position_t
+hb_skia_get_glyph_h_advance (hb_font_t *font HB_UNUSED,
+                           void *font_data,
+                           hb_codepoint_t glyph,
+                           void *user_data HB_UNUSED)
+{
+    SkPaint paint;
+    setupPaintFromUserData(&paint, font_data);
+
+    paint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
+    uint16_t glyph16 = glyph;
+    SkScalar width;
+//    SkRect bounds;
+    paint.getTextWidths(&glyph16, sizeof(glyph16), &width);//, &bounds);
+
+    return SkScalarToHBFixed(width);
+}
+
+static hb_position_t
+hb_skia_get_glyph_v_advance (hb_font_t *font HB_UNUSED,
+                           void *font_data,
+                           hb_codepoint_t glyph,
+                           void *user_data HB_UNUSED)
+{
+    /*
+    SkPaint paint;
+    setupPaintFromUserData(&paint, font_data);
+    */
+    return 0;
+}
+
+static hb_bool_t
+hb_skia_get_glyph_h_origin (hb_font_t *font HB_UNUSED,
+                          void *font_data HB_UNUSED,
+                          hb_codepoint_t glyph HB_UNUSED,
+                          hb_position_t *x HB_UNUSED,
+                          hb_position_t *y HB_UNUSED,
+                          void *user_data HB_UNUSED)
+{
+    /* We always work in the horizontal coordinates. */
+    return true;
+}
+
+static hb_bool_t
+hb_skia_get_glyph_v_origin (hb_font_t *font HB_UNUSED,
+                          void *font_data,
+                          hb_codepoint_t glyph,
+                          hb_position_t *x,
+                          hb_position_t *y,
+                          void *user_data HB_UNUSED)
+{
+    /*
+    SkPaint paint;
+    setupPaintFromUserData(&paint, font_data);
+    */
+    return true;
+}
+
+static hb_position_t
+hb_skia_get_glyph_h_kerning (hb_font_t *font HB_UNUSED,
+                           void *font_data,
+                           hb_codepoint_t left_glyph,
+                           hb_codepoint_t right_glyph,
+                           void *user_data HB_UNUSED)
+{
+    /*
+    SkPaint paint;
+    setupPaintFromUserData(&paint, font_data);
+    */
+    return 0;
+}
+
+static hb_position_t
+hb_skia_get_glyph_v_kerning (hb_font_t *font HB_UNUSED,
+                           void *font_data HB_UNUSED,
+                           hb_codepoint_t top_glyph HB_UNUSED,
+                           hb_codepoint_t bottom_glyph HB_UNUSED,
+                           void *user_data HB_UNUSED)
+{
+    /* FreeType API doesn't support vertical kerning */
+    return 0;
+}
+
+static hb_bool_t
+hb_skia_get_glyph_extents (hb_font_t *font HB_UNUSED,
+                         void *font_data,
+                         hb_codepoint_t glyph,
+                         hb_glyph_extents_t *extents,
+                         void *user_data HB_UNUSED)
+{
+    SkPaint paint;
+    setupPaintFromUserData(&paint, font_data);
+
+    paint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
+    uint16_t glyph16 = glyph;
+    SkScalar width;
+    SkRect bounds;
+    paint.getTextWidths(&glyph16, sizeof(glyph16), &width, &bounds);
+    
+    extents->x_bearing = SkScalarToHBFixed(bounds.fLeft);
+    extents->y_bearing = SkScalarToHBFixed(bounds.fTop);
+    extents->width = SkScalarToHBFixed(bounds.width());
+    extents->height = SkScalarToHBFixed(bounds.height());
+
+    return true;
+}
+
+static hb_bool_t
+hb_skia_get_glyph_contour_point (hb_font_t *font HB_UNUSED,
+                               void *font_data,
+                               hb_codepoint_t glyph,
+                               unsigned int point_index,
+                               hb_position_t *x,
+                               hb_position_t *y,
+                               void *user_data HB_UNUSED)
+{
+    SkPaint paint;
+    setupPaintFromUserData(&paint, font_data);
+    
+    paint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
+    uint16_t glyph16 = glyph;
+    SkPath path;
+    paint.getTextPath(&glyph16, sizeof(glyph16), 0, 0, &path);
+    uint32_t numPoints = path.getPoints(0, 0);
+    if (point_index >= numPoints)
+        return HB_Err_Invalid_SubTable;
+    SkPoint* points = reinterpret_cast<SkPoint*>(malloc(sizeof(SkPoint) * (point_index + 1)));
+    if (!points)
+        return HB_Err_Invalid_SubTable;
+    // Skia does let us get a single point from the path.
+    path.getPoints(points, point_index + 1);
+    *x = SkScalarToHBFixed(points[point_index].fX);
+    *y = SkScalarToHBFixed(points[point_index].fY);
+//    *resultingNumPoints = numPoints;
+    delete points;
+
+    return true;
+}
+
+static hb_bool_t
+hb_skia_get_glyph_name (hb_font_t *font,
+                      void *font_data,
+                      hb_codepoint_t glyph,
+                      char *name, unsigned int size,
+                      void *user_data HB_UNUSED)
+{
+    /*
+    SkPaint paint;
+    setupPaintFromUserData(&paint, font_data);
+    */
+    snprintf (name, size, "gid%u", glyph);
+    return 0;
+}
+
+static hb_bool_t
+hb_skia_get_glyph_from_name (hb_font_t *font,
+                           void *font_data,
+                           const char *name, int len, /* -1 means nul-terminated */
+                           hb_codepoint_t *glyph,
+                           void *user_data HB_UNUSED)
+{
+    /*
+    SkPaint paint;
+    setupPaintFromUserData(&paint, font_data);
+    */
+    
+    *glyph = 0;
+    
+    return *glyph != 0;
+}
+
+static hb_font_funcs_t *
+_hb_skia_get_font_funcs (void)
+{
+    static const hb_font_funcs_t skia_ffuncs = {
+        HB_OBJECT_HEADER_STATIC,
+
+        true, /* immutable */
+
+        {
+#define HB_FONT_FUNC_IMPLEMENT(name) hb_skia_get_##name,
+            HB_FONT_FUNCS_IMPLEMENT_CALLBACKS
+#undef HB_FONT_FUNC_IMPLEMENT
+        }
+    };
+
+    return const_cast<hb_font_funcs_t *> (&skia_ffuncs);
+}
+
+static hb_blob_t *
+reference_table  (hb_face_t *face HB_UNUSED, hb_tag_t tag, void *user_data)
+{
+    SkTypeface* typeface = reinterpret_cast<SkTypeface*>(user_data);
+    char *buffer;
+
+    if (!user_data)
+        return NULL;
+    const size_t tableSize = SkFontHost::GetTableSize(typeface->uniqueID(), tag);
+
+    if (!tableSize)
+        return NULL;
+
+    buffer = (char *) malloc (tableSize);
+    if (buffer == NULL)
+        return NULL;
+
+    
+    SkFontHost::GetTableData(typeface->uniqueID(), tag, 0, tableSize, buffer);
+
+    return hb_blob_create ((const char *) buffer, tableSize,
+                           HB_MEMORY_MODE_WRITABLE,
+                           buffer, free);
+}
+
+hb_face_t * hb_skia_face_create(FontData* data,
+                           hb_destroy_func_t destroy)
+{
+    hb_face_t *face;
+    SkTypeface* typeface = NULL;
+
+    if (data->complexTypeFace)
+        typeface = data->complexTypeFace;
+    else
+        typeface = data->typeFace;
+
+    face = hb_face_create_for_tables (reference_table, typeface, destroy);
+
+    hb_face_set_index (face, 0/*ft_face->face_index*/);
+    //hb_face_set_upem (face, ft_face->units_per_EM);
+
+    return face;
+}
+
+static void
+_do_nothing (void)
+{
+}
+
+
+hb_font_t *
+hb_skia_font_create (FontData* data,
+                   hb_destroy_func_t destroy)
+{
+    hb_font_t *font;
+    hb_face_t *face;
+
+    face = hb_skia_face_create (data, destroy);
+    font = hb_font_create (face);
+    hb_face_destroy (face);
+    hb_font_set_funcs (font,
+                       _hb_skia_get_font_funcs (),
+                       data, (hb_destroy_func_t) _do_nothing);
+    
+    hb_font_set_scale(font, 1, 1);
+    hb_font_set_ppem(font, 1, 1);
+
+    return font;
+}
+
+}  // namespace android
+
+#endif

@@ -27,6 +27,8 @@
 #ifndef HarfbuzzSkia_h
 #define HarfbuzzSkia_h
 
+#include "RtlProperties.h"
+
 #include "SkScalar.h"
 #include "SkTypeface.h"
 #include "SkPaint.h"
@@ -34,6 +36,10 @@
 extern "C" {
 #include "harfbuzz-shaper.h"
 }
+
+#if USE_HARFBUZZ_NG
+#include "hb.h"
+#endif
 
 namespace android {
 
@@ -60,6 +66,10 @@ typedef struct {
 
 HB_Error harfbuzzSkiaGetTable(void* voidface, const HB_Tag, HB_Byte* buffer, HB_UInt* len);
 extern const HB_FontClass harfbuzzSkiaClass;
+
+hb_font_t *
+hb_skia_font_create (FontData* data,
+                     hb_destroy_func_t destroy);
 
 }  // namespace android
 

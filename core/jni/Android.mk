@@ -167,8 +167,10 @@ LOCAL_C_INCLUDES += \
 	external/icu4c/i18n \
 	external/icu4c/common \
 	external/jpeg \
+	external/freetype/include \
 	external/harfbuzz/contrib \
 	external/harfbuzz/src \
+	external/harfbuzz/harfbuzz-ng/src \
 	frameworks/opt/emoji
 
 LOCAL_SHARED_LIBRARIES := \
@@ -201,6 +203,7 @@ LOCAL_SHARED_LIBRARIES := \
 	libwpa_client \
 	libjpeg \
 	libharfbuzz \
+	libharfbuzz-ng \
 	libnfc_ndef
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)

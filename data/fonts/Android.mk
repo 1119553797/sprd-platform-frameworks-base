@@ -28,7 +28,11 @@ copy_from :=                \
     DroidSerif-BoldItalic.ttf   \
     DroidSansMono.ttf        \
     Lohit-Bengali.ttf        \
-    hindi.ttf               \
+    Lohit-Devanagari.ttf     \
+    Lohit-Tamil.ttf         \
+    Myanmar3.ttf            \
+    ZawgyiOne.ttf           \
+    Lohit-Telugu.ttf        \
     Clockopia.ttf
 
 ifneq ($(NO_FALLBACK_FONT),true)

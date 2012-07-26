@@ -48,6 +48,13 @@ static RtlDebugLevel readRtlDebugLevel() {
 // Define if we want to support complex text (1) or not (0)
 #define SUPPORT_COMPLEX_TEXT 1
 
+// Define if we want to use Harfbuzz-ng (1) or not (0)
+#define USE_HARFBUZZ_NG 1
+
+// for harfbuzz-ng
+#define HAVE_ICU
+#define HAVE_OT
+
 // Define if we want to use Harfbuzz (1) or not (0)
 #define RTL_USE_HARFBUZZ 1
 
