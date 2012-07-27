@@ -496,7 +496,11 @@ class CallbackProxy extends Handler {
             case JS_ALERT:
                 if (mWebChromeClient != null) {
                     final JsResult res = (JsResult) msg.obj;
-                    String message = msg.getData().getString("message");
+                 
+	            String message = msg.getData().getString("message");
+		    if(message != null && message.equals("R.string.upload_file_size_too_large")){
+			message = mContext.getString(R.string.upload_file_size_too_large);
+		    }
                     String url = msg.getData().getString("url");
                     if (!mWebChromeClient.onJsAlert(mWebView, url, message,
                             res)) {

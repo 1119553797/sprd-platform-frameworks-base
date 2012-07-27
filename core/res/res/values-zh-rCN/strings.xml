@@ -1068,4 +1068,6 @@
 	<string name="lockscreen_miss_mms">未读短信</string>
     <string name="lockscreen_sim_card_locked_message">sim卡已锁</string>
     <string name="lockscreen_sim_network_locked_message">网络已锁</string>
+
+    <string name="upload_file_size_too_large">上传文件太大，请分开上传</string>
 </resources>
