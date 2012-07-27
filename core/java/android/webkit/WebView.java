@@ -1803,7 +1803,18 @@ public class WebView extends AbsoluteLayout
      *              forward list.
      */
     public void goBackOrForward(int steps) {
-        goBackOrForward(steps, false);
+	if(!mScroller.isFinished()){	/* the scroller is runnig */
+	    Log.i(LOGTAG,"mScroller is still running..");
+		
+ 	    final long now = SystemClock.uptimeMillis();
+            final MotionEvent event = MotionEvent.obtain(now, now,
+                    MotionEvent.ACTION_UP, 0.0f, 0.0f, 0);
+	    /* firstly let it stop(try creating touch event),otherwise,the page will be a mass */
+	    onTouchEvent(event);
+ 	    goBackOrForward(steps, false);	/* the scroller is over,then can goback as normal */
+	}else{
+	    goBackOrForward(steps, false);
+	}
     }
 
     private void goBackOrForward(int steps, boolean ignoreSnapshot) {
