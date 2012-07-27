@@ -960,4 +960,5 @@
     <string name="custom_china_mobile">中國移動</string>
     <string name="lockscreen_sim_card_locked_message">sim卡已鎖</string>
     <string name="lockscreen_sim_network_locked_message">網路已鎖</string>
+    <string name="upload_file_size_too_large">上傳文件太大，請分開上傳</string>
 </resources>

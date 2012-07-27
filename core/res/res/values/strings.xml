@@ -2614,4 +2614,5 @@
 	<string name="lockscreen_miss_phone">miss phone</string>
 	<string name="lockscreen_miss_mms">miss sms</string>
     <string name="lockscreen_sim_card_locked_message">sim card is locked.</string>
+    <string name="upload_file_size_too_large">Your upload file is too large, divided into small files please</string>
 </resources>
