@@ -779,7 +779,7 @@ public final class GsmCallTracker extends CallTracker {
 					if (Phone.DEBUG_PHONE)
 						log("(ringing) hangup active");
 
-					hangup((GsmConnection) (call.getConnections().get(0)));
+					hangupAllConnections(call);
 
 				} else {
 					// for bug 11040,12353
