@@ -262,6 +262,7 @@ public final class Telephony {
                 values.put(DATE, date);
             }
             values.put(READ, read ? Integer.valueOf(1) : Integer.valueOf(0));
+            values.put(SEEN, read ? Integer.valueOf(1) : Integer.valueOf(0));
             values.put(SUBJECT, subject);
             values.put(BODY, body);
             values.put(PHONE_ID, phoneId);
