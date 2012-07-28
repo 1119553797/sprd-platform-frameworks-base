@@ -362,7 +362,29 @@ static jboolean android_location_GpsLocationProvider_start(JNIEnv* env, jobject 
 {
     const GpsInterface* interface = GetGpsInterface(env, obj);
     if (interface)
+    {
+        //wangsl
+        if (!sAGpsInterface) {
+	    sAGpsInterface = (const AGpsInterface*)interface->get_extension(AGPS_INTERFACE);
+	    if (sAGpsInterface)
+		    sAGpsInterface->init(&sAGpsCallbacks);
+        }
+
+        if (!sAGpsRilInterface) {
+	    sAGpsRilInterface = (const AGpsRilInterface*)interface->get_extension(AGPS_RIL_INTERFACE);
+	    if (sAGpsRilInterface)
+		    sAGpsRilInterface->init(&sAGpsRilCallbacks);
+        }
+
+        if (!sGpsNiInterface) {
+            sGpsNiInterface = (const GpsNiInterface*)interface->get_extension(GPS_NI_INTERFACE);
+            if (sGpsNiInterface) {
+                sGpsNiInterface->init(&sGpsNiCallbacks);
+            }
+        }
         return (interface->start() == 0);
+        //wangsl
+    }
     else
         return false;
 }
