@@ -22,6 +22,8 @@ import android.os.IBinder;
 import android.util.EventLog;
 import android.view.ContextMenu;
 import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
 
 /**
  * Implementation of the {@link android.view.ContextMenu} interface.
@@ -39,6 +41,9 @@ import android.view.View;
  */
 public class ContextMenuBuilder extends MenuBuilder implements ContextMenu {
     
+	//Add by liwd@spreadst.com for IllegalStateException
+	private MenuDialogHelper mContextMenuHelper;
+	
     public ContextMenuBuilder(Context context) {
         super(context);
     }
@@ -87,10 +92,30 @@ public class ContextMenuBuilder extends MenuBuilder implements ContextMenu {
             MenuDialogHelper helper = new MenuDialogHelper(this); 
             helper.show(token);
             
+            //Add by liwd@spreadst.com for IllegalStateException
+            mContextMenuHelper = helper; 
             return helper;
         }
         
         return null;
     }
+ 
+    //Add by liwd@spreadst.com for IllegalStateException begin
+    public void removeContextMenuHelper() {
+    	mContextMenuHelper = null;
+    }
     
+    @Override
+    protected void notifyItemsChanged(boolean cleared) {
+    	if (mContextMenuHelper != null) {
+    		ListAdapter adapter = mContextMenuHelper.getAdapter();
+    		if (adapter == null) return;
+    		if (cleared) {
+                ((BaseAdapter)adapter).notifyDataSetInvalidated();
+            } else {
+                ((BaseAdapter)adapter).notifyDataSetChanged();
+            }
+    	}
+    }
+    //Add by liwd@spreadst.com for IllegalStateException end
 }

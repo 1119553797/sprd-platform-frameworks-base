@@ -903,14 +903,30 @@ public class MenuBuilder implements Menu {
             
             MenuType[] menuTypes = mMenuTypes;
             for (int i = 0; i < NUM_TYPES; i++) {
-                if ((menuTypes[i] != null) && (menuTypes[i].hasMenuView())) {
-                    MenuView menuView = menuTypes[i].mMenuView.get();
-                    menuView.updateChildren(cleared);
-                }
+            	//Add by liwd@spreadst.com for IllegalStateException begin
+//                if ((menuTypes[i] != null) && (menuTypes[i].hasMenuView())) {
+//                    MenuView menuView = menuTypes[i].mMenuView.get();
+//                    menuView.updateChildren(cleared);
+//                }
+            	MenuType mt = menuTypes[i];
+            	if (mt != null) {
+            		if (mt.hasMenuView()) {
+            			MenuView menuView = menuTypes[i].mMenuView.get();
+                        menuView.updateChildren(cleared);
+            		} else if (mt.mMenuType == TYPE_DIALOG) {
+            			notifyItemsChanged(cleared);
+            		}
+            	}
+            	//Add by liwd@spreadst.com for IllegalStateException end
             }
         }
     }
 
+    //Add by liwd@spreadst.com for IllegalStateException
+    protected void notifyItemsChanged(boolean cleared) {
+    	//Do nothing, you can override in subclass
+    }
+    
     /**
      * Called by {@link MenuItemImpl} when its visible flag is changed.
      * @param item The item that has gone through a visibility change.

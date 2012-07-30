@@ -137,4 +137,8 @@ public class MenuDialogHelper implements DialogInterface.OnKeyListener, DialogIn
         mMenu.performItemAction((MenuItemImpl) mAdapter.getItem(which), 0);
     }
     
+    public ListAdapter getAdapter() {
+    	return mAdapter;
+    }
+    
 }

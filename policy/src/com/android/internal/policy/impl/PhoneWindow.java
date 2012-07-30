@@ -674,7 +674,12 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
      * {@link #closeContextMenu()}.
      */
     private synchronized void dismissContextMenu() {
-        mContextMenu = null;
+    	//Add by liwd@spreadst.com for IllegalStateException begin
+    	if (mContextMenu != null) {
+    		mContextMenu.removeContextMenuHelper();
+    		mContextMenu = null;
+    	}
+    	//Add by liwd@spreadst.com for IllegalStateException end
 
         if (mContextMenuHelper != null) {
             mContextMenuHelper.dismiss();
