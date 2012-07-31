@@ -673,6 +673,7 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                 AudioCommand *command = mAudioCommands[0];
                 mAudioCommands.removeAt(0);
                 mLastCommand = *command;
+                bool deleteAudioCommand = true;
 
                 switch (command->mCommand) {
                 case START_TONE: {
@@ -705,6 +706,7 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                                                                     data->mVolume,
                                                                     data->mIO);
                     if (command->mWaitStatus) {
+                        deleteAudioCommand = false;
                         command->mCond.signal();
                         mWaitWorkCV.wait(mLock);
                     }
@@ -716,6 +718,7 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                              data->mKeyValuePairs.string(), data->mIO);
                      command->mStatus = AudioSystem::setParameters(data->mIO, data->mKeyValuePairs);
                      if (command->mWaitStatus) {
+                         deleteAudioCommand = false;
                          command->mCond.signal();
                          mWaitWorkCV.wait(mLock);
                      }
@@ -727,6 +730,7 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                             data->mVolume);
                     command->mStatus = AudioSystem::setVoiceVolume(data->mVolume);
                     if (command->mWaitStatus) {
+                        deleteAudioCommand = false;
                         command->mCond.signal();
                         mWaitWorkCV.wait(mLock);
                     }
@@ -743,7 +747,9 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                 default:
                     LOGW("AudioCommandThread() unknown command %d", command->mCommand);
                 }
-                delete command;
+                if (deleteAudioCommand) {
+                    delete command;
+                }
                 waitTime = INT64_MAX;
             } else {
                 waitTime = mAudioCommands[0]->mTime - curTime;
@@ -851,6 +857,7 @@ status_t AudioPolicyService::AudioCommandThread::volumeCommand(int stream,
         command->mCond.wait(mLock);
         status =  command->mStatus;
         mWaitWorkCV.signal();
+        delete command;
     }
     return status;
 }
@@ -882,6 +889,7 @@ status_t AudioPolicyService::AudioCommandThread::parametersCommand(int ioHandle,
         command->mCond.wait(mLock);
         status =  command->mStatus;
         mWaitWorkCV.signal();
+        delete command;
     }
     return status;
 }
@@ -908,6 +916,7 @@ status_t AudioPolicyService::AudioCommandThread::voiceVolumeCommand(float volume
         command->mCond.wait(mLock);
         status =  command->mStatus;
         mWaitWorkCV.signal();
+        delete command;
     }
     return status;
 }
