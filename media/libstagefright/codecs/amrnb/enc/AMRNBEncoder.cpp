@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#define LOG_NDEBUG 0
+#define LOG_TAG "AMRNBEncoder"
+#include <utils/Log.h>
 
 #include "AMRNBEncoder.h"
 
@@ -82,7 +85,11 @@ status_t AMRNBEncoder::start(MetaData *params) {
                 &mEncState, &mSidState, false /* dtx_enable */),
              0);
 
-    mSource->start(params);
+    status_t err = mSource->start(params);
+    if (OK != err) {
+        LOGE("%s L%d err = %d", __FUNCTION__, __LINE__, err);
+        return err;
+    }
 
     mAnchorTimeUs = 0;
     mNumFramesOutput = 0;
