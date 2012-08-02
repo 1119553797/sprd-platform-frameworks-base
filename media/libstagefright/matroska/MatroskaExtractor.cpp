@@ -35,6 +35,8 @@
 
 namespace android {
 
+#define MKV_VIDEO_SEG_MAX_SIZE (128<<10)
+
 struct DataSourceReader : public mkvparser::IMkvReader {
     DataSourceReader(const sp<DataSource> &source)
         : mSource(source) {
@@ -715,6 +717,7 @@ void MatroskaExtractor::addTracks() {
 
                 meta->setInt32(kKeyWidth, vtrack->GetWidth());
                 meta->setInt32(kKeyHeight, vtrack->GetHeight());
+                meta->setInt32(kKeyMaxInputSize, MKV_VIDEO_SEG_MAX_SIZE);
                 break;
             }
 
