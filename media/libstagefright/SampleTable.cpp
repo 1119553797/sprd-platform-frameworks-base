@@ -327,29 +327,29 @@ status_t SampleTable::getMaxSampleSize(size_t *max_size) {
     return OK;
 }
 
-uint32_t abs_difference(uint32_t time1, uint32_t time2) {
+uint64_t abs_difference(uint64_t  time1, uint64_t time2) {
     return time1 > time2 ? time1 - time2 : time2 - time1;
 }
 
 status_t SampleTable::findSampleAtTime(
-        uint32_t req_time, uint32_t *sample_index, uint32_t flags) {
+        uint64_t req_time, uint32_t *sample_index, uint32_t flags) {
     *sample_index = 0;
 
     Mutex::Autolock autoLock(mLock);
 
     uint32_t cur_sample = 0;
-    uint32_t time = 0;
+    uint64_t time = 0;
     for (uint32_t i = 0; i < mTimeToSampleCount; ++i) {
         uint32_t n = mTimeToSample[2 * i];
         uint32_t delta = mTimeToSample[2 * i + 1];
 
-        if (req_time < time + n * delta) {
-            int j = (req_time - time) / delta;
+        if (req_time < time + (uint64_t)n * delta) {
+            uint64_t j = (req_time - time) / delta;
 
-            uint32_t time1 = time + j * delta;
-            uint32_t time2 = time1 + delta;
+            uint64_t time1 = time + j * delta;
+            uint64_t time2 = time1 + delta;
 
-            uint32_t sampleTime;
+            uint64_t sampleTime;
             if (i+1 == mTimeToSampleCount
                     || (abs_difference(req_time, time1)
                         < abs_difference(req_time, time2))) {
@@ -385,7 +385,7 @@ status_t SampleTable::findSampleAtTime(
             return OK;
         }
 
-        time += delta * n;
+        time += (uint64_t)delta * n;
         cur_sample += n;
     }
 
@@ -440,20 +440,20 @@ status_t SampleTable::findSyncSampleNear(
             return err;
         }
 
-        uint32_t sample_time = mSampleIterator->getSampleTime();
+        uint64_t sample_time = mSampleIterator->getSampleTime();
 
         err = mSampleIterator->seekTo(x);
         if (err != OK) {
             return err;
         }
-        uint32_t x_time = mSampleIterator->getSampleTime();
+        uint64_t x_time = mSampleIterator->getSampleTime();
 
         err = mSampleIterator->seekTo(y);
         if (err != OK) {
             return err;
         }
 
-        uint32_t y_time = mSampleIterator->getSampleTime();
+        uint64_t y_time = mSampleIterator->getSampleTime();
 
         if (abs_difference(x_time, sample_time)
                 > abs_difference(y_time, sample_time)) {
@@ -559,7 +559,7 @@ status_t SampleTable::getMetaDataForSample(
         uint32_t sampleIndex,
         off_t *offset,
         size_t *size,
-        uint32_t *decodingTime,
+        uint64_t *decodingTime,
         bool *isSyncSample) {
     Mutex::Autolock autoLock(mLock);
 
