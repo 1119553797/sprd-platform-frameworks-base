@@ -283,10 +283,14 @@ status_t SurfaceFlinger::readyToRun()
     /*
      *  We're now ready to accept clients...
      */
+    char shutdown[PROPERTY_VALUE_MAX];
+    property_get("persist.sys.normal.shutdown", shutdown, "1");
 
-    // start boot animation
-    property_set("ctl.start", "bootanim");
-    {
+    if(strcmp("1", shutdown)==0){
+        // start boot animation
+        property_set("ctl.start", "bootanim");
+    
+       {
         char value[PROPERTY_VALUE_MAX];
         int ivalue = 0;
 
@@ -298,7 +302,9 @@ status_t SurfaceFlinger::readyToRun()
         else {
             LOGI("start:persist.sys.profile.silent is silent");
         }
+       }
     }
+    property_set("persist.sys.normal.shutdown", "0");
     return NO_ERROR;
 }
 

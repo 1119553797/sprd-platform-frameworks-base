@@ -211,7 +211,7 @@ public final class ShutdownThread extends Thread {
             String reason = (mReboot ? "1" : "0") + (mRebootReason != null ? mRebootReason : "");
             SystemProperties.set(SHUTDOWN_ACTION_PROPERTY, reason);
         }
-
+        SystemProperties.set("persist.sys.normal.shutdown", "1"); 
         Log.i(TAG, "Sending shutdown broadcast...");
         
         // First send the high-level shut down broadcast.
