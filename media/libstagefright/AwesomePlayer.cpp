@@ -1939,6 +1939,12 @@ status_t AwesomePlayer::finishSetDataSource_l() {
 LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
 
     if (!strncasecmp("http://", mUri.string(), 7)) {
+
+		mLowWaterMarkUs = 2000000;
+	    mHighWaterMarkUs = 10000000; 
+	    mStartLowWaterMarkUs = 6000000 ;
+
+		
         mConnectingDataSource = new NuHTTPDataSource;
 
         mLock.unlock();
