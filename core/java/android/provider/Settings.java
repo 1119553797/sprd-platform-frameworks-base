@@ -2502,6 +2502,8 @@ public final class Settings {
          */
         public static final String ALLOW_MOCK_LOCATION = "mock_location";
 
+        public static final String ANR_AUTO_RESTART_APP = "anr_auto_restart_app";
+
         /**
          * A 64-bit number (as a hex string) that is randomly
          * generated on the device's first boot and should remain

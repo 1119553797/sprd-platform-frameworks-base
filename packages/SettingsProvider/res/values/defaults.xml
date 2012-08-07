@@ -90,4 +90,5 @@
      <!-- fixed CR<NEWMSOO112910> by luning at 11-08-27 begin -->
     <integer name="def_sms_validity">255</integer>
      <!-- fixed CR<NEWMSOO112910> by luning at 11-08-27  end  -->
+    <integer name="def_anr_auto_restart_app">0</integer>
 </resources>

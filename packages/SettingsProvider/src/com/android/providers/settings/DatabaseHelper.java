@@ -1266,7 +1266,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Allow mock locations default, based on build
             loadSetting(stmt, Settings.Secure.ALLOW_MOCK_LOCATION,
                     "1".equals(SystemProperties.get("ro.allow.mock.location")) ? 1 : 0);
-    
+
+            loadIntegerSetting(stmt, Settings.Secure.ANR_AUTO_RESTART_APP,
+                    R.integer.def_anr_auto_restart_app);
+
             loadSecure35Settings(stmt);
     
             loadBooleanSetting(stmt, Settings.Secure.MOUNT_PLAY_NOTIFICATION_SND,
