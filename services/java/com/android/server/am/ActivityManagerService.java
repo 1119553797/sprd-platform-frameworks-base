@@ -2988,18 +2988,58 @@ public final class ActivityManagerService extends ActivityManagerNative
                     activity != null ? activity.shortComponentName : null,
                     annotation != null ? "ANR " + annotation : "ANR",
                     info.toString());
-    
+
             // Bring up the infamous App Not Responding dialog
-            Message msg = Message.obtain();
-            HashMap map = new HashMap();
-            msg.what = SHOW_NOT_RESPONDING_MSG;
-            msg.obj = map;
-            map.put("app", app);
-            if (activity != null) {
-                map.put("activity", activity);
+	    boolean flag = false;
+
+            Slog.w(TAG, "ericinfo ANR package name -> "+app.info.packageName);
+            Intent anrIntent = getLaunchIntentForPackage(app.info.packageName);
+            if((anrIntent !=null) && (Settings.Secure.getInt(mContext.getContentResolver(),Settings.Secure.ANR_AUTO_RESTART_APP, 0)==1)){
+            	String pkgName = app.info.packageName;
+  		CrashRecord anrRecord = appAnrRecord.get(pkgName);
+            	if(anrRecord == null){
+            		Slog.w(TAG, "anrRecord == null");
+            		appAnrRecord.put(pkgName, new CrashRecord());
+            	}else{
+            		if(!anrRecord.exceed()){
+            			if(anrRecord.isCancel()){
+                			Slog.w(TAG, " anrRecord >= 3 ");
+                			flag = true;
+                			appAnrRecord.remove(pkgName);
+                		}
+            		}else{
+            			flag = true;
+            		}
+			Slog.w(TAG, "anrRecord != null, package:"+pkgName);
+            	}
+            }else{
+            	flag = true;
             }
-    
-            mHandler.sendMessage(msg);
+
+            // restart application
+            if(!flag){
+		    int pid = app != null ? app.pid : Binder.getCallingPid();
+		    Process.killProcess(pid);
+		    Message msg = Message.obtain();
+		    msg.what = RESTART_IN_ERROR;
+		    msg.obj = anrIntent;
+		    mHandler.sendMessageDelayed(msg, 500);
+		    Slog.w(TAG, "restart Anr application package:"+ app.info.packageName);
+        	}
+            
+            // notify 
+            if(flag){
+
+		    Message msg = Message.obtain();
+		    HashMap map = new HashMap();
+		    msg.obj = map;
+		    map.put("app", app);
+		    msg.what = SHOW_NOT_RESPONDING_MSG;
+		    if (activity != null) {
+			    map.put("activity", activity);
+            }
+                mHandler.sendMessage(msg);
+            }
         }
     }
 
@@ -6952,7 +6992,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 return;
             }
             
-            Slog.w(TAG, "ericinfo crash package name -> "+r.info.packageName);
+            Slog.w(TAG, "ericinfo crash package name ----> "+r.info.packageName);
             laucherIntent = getLaunchIntentForPackage(r.info.packageName);
             if(laucherIntent !=null){
             	String pkgName = r.info.packageName;
@@ -12651,14 +12691,14 @@ public final class ActivityManagerService extends ActivityManagerNative
     		
     		return false ;
     	}
-    	
+	 
     	boolean exceed(){
     		if(totalCount<CRASH_TOTAL_COUNT){
     			totalCount++;
     		}
     		return totalCount >= CRASH_TOTAL_COUNT;
     	}
-    	
+
     	public String toString(){
     		return crashCount +" "+time;
     	}
@@ -12667,5 +12707,6 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int CRASH_COUNT = 3;
     static final int CRASH_TOTAL_COUNT = 20;
     HashMap<String,CrashRecord> appCrashRecord = new HashMap<String,CrashRecord>();
+    HashMap<String,CrashRecord> appAnrRecord = new HashMap<String,CrashRecord>();
     //end crash}
 }
