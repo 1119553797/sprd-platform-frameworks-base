@@ -14,4 +14,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="title_usb_accessory">"Accessoire USB"</string>
     <string name="label_view">"Afficher"</string>
     <string name="always_use_accessory">"Utiliser par défaut pour cet accessoire USB"</string>
+    <string name="usb_accessory_permission_prompt">Permettre à une application %1$s d\'accéder à l\'accessoire USB?</string>
+    <string name="usb_device_confirm_prompt">Ouvert %1$s lorsque ce périphérique USB est connecté?</string>
+    <string name="usb_accessory_confirm_prompt">Ouvrir %1$s lorsque cet accessoire USB est connecté?</string>
+    <string name="mobile_data_connect_disable">"Non"</string>
+    <string name="mobile_data_connect_enable">"Oui"</string>
+    <string name="network_disconnect_title">Avis</string>
+    <string name="network_disconnect_message">Réseau WLAN est  déconnecté. \nSe connecter via la 6G? \nSi vous n\'avez pas le plan de données, cela peut entraîner des frais supplémentaires.</string>
+    <string name="weak_signal_title">SIGNAL FAIBLE</string>
+    <string name="weak_signal_message">Le signal WLAN actuel est très faible, il est recommandé de sélectionner un meilleur</string>
+    <string name="auto_connect">Ne pas demandez  et  connecter automatiquement à d\'autres AP de confiance </string>
 </resources>

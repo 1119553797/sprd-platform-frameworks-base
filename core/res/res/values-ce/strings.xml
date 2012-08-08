@@ -431,7 +431,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="policylab_watchLogin">Tanaw ug login attempts</string>
     <string name="policydesc_watchLogin">Dili malampuson nga suway sa pagmonitor para mulogin sa device, para mubuhat ug uban nga aksyon.</string>
     <string name="policylab_resetPassword">I-reset ang password</string>
-    <string name="policydesc_resetPassword">Pugsa imu password sa bago nga kwenta, nanginahanglan ang administrator nga ihatag sa imu usa paka maka login.</string>
+    <string name="policydesc_resetPassword">I-reset ang password</string>
     <string name="policylab_forceLock">Pugos nga paglock</string>
     <string name="policydesc_forceLock">Kontrol kung malock ang device, nanginahanglan nga ibutang balik imu password.</string>
     <string name="policylab_wipeData">Pad-on tanan data</string>
@@ -629,37 +629,37 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="beforeOneMonthDurationPast">Sa wa pay 1 ka buwan nga nilabay</string>
     <plurals name="num_seconds_ago">
         <item quantity="one">1 ka segundo milabay</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ka mga segundo nga nilabay</item>
     </plurals>
     <plurals name="num_minutes_ago">
         <item quantity="one">1 ka buwang milabay</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ka mga minuto nga nilabay</item>
     </plurals>
     <plurals name="num_hours_ago">
         <item quantity="one">1 ka oras milabay</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ka mga oras nga nilabay</item>
     </plurals>
     <string name="last_month">Miagi nga buwan</string>
     <string name="older">Mas daan</string>
     <plurals name="num_days_ago">
         <item quantity="one">gahapon</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ka mga adlaw nga nilabay</item>
     </plurals>
     <plurals name="in_num_seconds">
         <item quantity="one">sa 1 ka segundo</item>
-        <item quantity="other"></item>
+        <item quantity="other">sulod sa <xliff:g id="count">%d</xliff:g> ka mga segundo</item>
     </plurals>
     <plurals name="in_num_minutes">
         <item quantity="one">sa 1 ka minuto</item>
-        <item quantity="other"></item>
+        <item quantity="other">sulod sa <xliff:g id="count">%d</xliff:g> ka mga minuto</item>
     </plurals>
     <plurals name="in_num_hours">
         <item quantity="one">sa 1 ka oras</item>
-        <item quantity="other"></item>
+        <item quantity="other">sulod sa <xliff:g id="count">%d</xliff:g> ka mga oras</item>
     </plurals>
     <plurals name="in_num_days">
         <item quantity="one">ugma</item>
-        <item quantity="other"></item>
+        <item quantity="other">sulod sa <xliff:g id="count">%d</xliff:g> ka mga adlaw</item>
     </plurals>
     <plurals name="abbrev_num_seconds_ago">
         <item quantity="one">1 ka segundo milabay</item>
@@ -671,11 +671,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     </plurals>
     <plurals name="abbrev_num_hours_ago">
         <item quantity="one">1 ka oras milabay</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ka mga oras nga nilabay</item>
     </plurals>
     <plurals name="abbrev_num_days_ago">
         <item quantity="one">gahapon</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ka mga adlaw nga nilabay</item>
     </plurals>
     <plurals name="abbrev_in_num_seconds">
         <item quantity="one">sa 1 ka segundo</item>
@@ -687,17 +687,17 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     </plurals>
     <plurals name="abbrev_in_num_hours">
         <item quantity="one">sa 1 ka oras</item>
-        <item quantity="other"></item>
+        <item quantity="other">sulod sa <xliff:g id="count">%d</xliff:g> ka mga oras</item>
     </plurals>
     <plurals name="abbrev_in_num_days">
         <item quantity="one">ugma</item>
-        <item quantity="other"></item>
+        <item quantity="other">sulod sa <xliff:g id="count">%d</xliff:g> ka mga adlaw</item>
     </plurals>
     <string name="day">adlaw</string>
     <string name="days">Mga adlaw</string>
     <string name="hour">oras</string>
     <string name="hours">mga oras</string>
-    <string name="second">ikaduha</string>
+    <string name="second">mga sec</string>
     <string name="seconds">mga sec</string>
     <string name="week">semana</string>
     <string name="weeks">mga semana</string>
@@ -789,7 +789,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="adb_active_notification_message">Pili para dili paganahon ang pagdebug sa USB.</string>
     <string name="select_input_method">Pili ug paagi sa input</string>
     <string name="ext_media_checking_notification_message">Nagtsek para sa mga Mali</string>
-    <string name="activity_list_empty">Walay mga pagtugma nga mga aktibidad ang nakit-an</string>
+    <string name="activity_list_empty">Walay mga pagtugma nga mga kontak ang nakit-an.</string>
     <string name="permlab_pkgUsageStats">I-update ang istatistika sa kauban nga paggamit</string>
     <string name="permdesc_pkgUsageStats">Tugtan ang pagbago sa istatistika sa mga nakolekta nga parte sa paggamit. Dili magamit para sa mga normal nga aplikasyon.</string>
     <string name="permlab_copyProtectedData">Tugtan nga pasultian ang serbisyo sa default nga sudlanan nga kopyahon ang sulod. Dili magamit sa mga normal nga mga aplikasyon.</string>
@@ -864,4 +864,153 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_warning">Babala</string>
     <string name="internal_memory_low">SD card nga imbakan hapit na mapuno! Palihug ug delete ug uban mga file para muluwas ug spasyo.</string>
     <string name="button_close">Sarado</string>
+    <string name="address_length">Mga address kay naabot sa pinakadako nga katas-on</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="untitled">&lt;Walay title&gt;</string>
+    <string name="mmiFdnError">Ang operasyon kay nastriktuhan ra sa mga numero nga fixed dialing.</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: Wala naabante</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> after <xliff:g id="time_delay">{2}</xliff:g> ka mga segundo</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: Wala naabante</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: Wala naabante</string>
+    <string name="notification_title">Sign-in mali para sa <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+    <string name="contentServiceTooManyDeletesNotificationDesc">Daghan ra kaayo <xliff:g id="content_type">%s</xliff:g> nga mga delet.</string>
+    <string name="permgroupdesc_storage" product="nosdcard">Access sa imbakan sa USB.</string>
+    <string name="permgroupdesc_storage" product="default">Access sa SD card.</string>
+    <string name="permdesc_statusBarService">Mutugot sa aplikasyon nga mahimo nga estado nga bar.</string>
+    <string name="permlab_receiveEmergencyBroadcast">nagdawat ug mga kagipit nga broadcast</string>
+    <string name="permdesc_receiveEmergencyBroadcast">Mutugot ang aplikasyon  nga mudawat ug muproseso ug mga kagipit nga broadcast nga mensahe. Kini nga permiso kay pwede ra sa mga aplikasyon sa sistema.</string>
+    <string name="permlab_manageUsb">mamahla sa mga gusto ug mga  permiso para sa mga device sa USB</string>
+    <string name="permdesc_manageUsb">Mutugot sa aplikasyon nga mamahala sa mga gusto ug mga permiso para sa mga device sa USB.</string>
+    <string name="permlab_accessWimaxState">tanaw sa estado sa WiMAX</string>
+    <string name="permdesc_accessWimaxState">Mutugot ang aplikasyon nga mutanaw sa impormasyon mahitungod sa estado sa WiMAX.</string>
+    <string name="permlab_changeWimaxState">usbon ang estado sa WiMAX</string>
+    <string name="permdesc_changeWimaxState">Mutugot ang usa ka aplikasyon nga mukonek ug dili mukonek gikan sa network sa WiMAX.</string>
+    <string name="permlab_nfc">I-kontrol ang Near Field Communication</string>
+    <string name="permdesc_nfc">Mutugot ang aplikasyon nga mukumonika sa Near Field Communication (NFC) nga mga tag, mga card,  ug mga tigbasa.</string>
+    <string name="permlab_sdcardWrite" product="nosdcard">usab/delete ug mga sulod sa imbakan sa USB</string>
+    <string name="permlab_sdcardWrite" product="default">Usbon/I-delete ang mga sulod sa SD card</string>
+    <string name="permdesc_sdcardWrite" product="nosdcard">Mutugot ang aplikasyon nga musuwat ngadto sa imbakan sa USB.</string>
+    <string name="permdesc_sdcardWrite" product="default">Tugtan ang aplikasyon nga musuwat ngadto sa SD card.</string>
+    <string name="permlab_use_sip">himu/dawat ug mga tawag sa Internet</string>
+    <string name="permdesc_use_sip">Mutugot ang aplikasyon nga mugamit sa serbisyo sa SIP para muhimo/dawat ug mga tawag sa Internet.</string>
+    <string name="sipAddressTypeCustom">Usbon</string>
+    <string name="sipAddressTypeHome">Home</string>
+    <string name="sipAddressTypeWork">Trabaho</string>
+    <string name="sipAddressTypeOther">Uban</string>
+    <string name="contact_status_update_attribution">pinaagi sa <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> pinaagi sa <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="lockscreen_plugged_in">Nagkarga (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">
+        Wala nimu namao pagdrawing imu pang-unlock nga pagkasunod-sunod ika <xliff:g id="number">%d</xliff:g> na.
+        \n\nPalihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.
+    </string>
+    <string name="lockscreen_failed_attempts_almost_glogin">
+        Wala nimu namao pagdrawing imu pang-unlock nga pagkasunod-sunod ika <xliff:g id="number">%d</xliff:g> na.
+       Kahuman sa <xliff:g id="number">%d</xliff:g> ka mga dili malampuson nga pagsuway, pangutan-on ka nga i-unlock ang imu phone gamit ang Google sign-in.\n\n
+    </string>
+    <string name="lockscreen_too_many_failed_attempts_countdown">Suway balik sulod sa <xliff:g id="number">%d</xliff:g> ka segundo.</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+    <string name="js_dialog_before_unload">Suroy pagawas ani nga pahina? \n\n<xliff:g id="message">%s</xliff:g>\n\nPili-a ang Ok para mupadayon, o Cancel para mupabilin sa karon nga pahina.</string>
+    <string name="permlab_setAlarm">I-takda ang alarma sa alarma nga orasan</string>
+    <string name="permdesc_setAlarm">Mutugot sa aplikasyon nga mutakda ug alarma sa mga na-install nga orasan nga alarma nga aplikasyon. Uban mga orasan nga alarma nga aplikasyon kay pwede dili ma-implementa ani nga tampok.</string>
+    <plurals name="last_num_days">
+        <item quantity="other">Uwahi <xliff:g id="count">%d</xliff:g> ka mga adlaw</item>
+    </plurals>
+    <string name="preposition_for_date">sa <xliff:g id="date" example="May 29">%s</xliff:g></string>
+    <string name="preposition_for_time">sa <xliff:g id="time" example="2:34 am">%s</xliff:g></string>
+    <string name="preposition_for_year">sa <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="minute">MIN</string>
+    <string name="minutes">mga min</string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="chooseUsbActivity">Pili ug aplikasyon para sa USB nga device</string>
+    <string name="aerr_application">Ang aplikasyon nga <xliff:g id="application">%1$s</xliff:g>
+        (process <xliff:g id="process">%2$s</xliff:g>) kay wa gidahum nga nihunong. Palihug ug suway balik.</string>
+    <string name="aerr_process">Ang proseso <xliff:g id="process">%1$s</xliff:g> kay wa gidahum nga nihunong. Palihug ug suway balik.</string>
+    <string name="anr_activity_application">Aktibidad nga <xliff:g id="activity">%1$s</xliff:g> (sa aplikasyon <xliff:g id="application">%2$s</xliff:g>) kay wala nitubag.</string>
+    <string name="anr_activity_process">Aktibidad nga <xliff:g id="activity">%1$s</xliff:g> (sa proseso <xliff:g id="process">%2$s</xliff:g>) kay wala nitubag.</string>
+    <string name="anr_application_process">Aplikasyon nga <xliff:g id="application">%1$s</xliff:g> (nagproseso <xliff:g id="process">%3$s</xliff:g>) ikay wala nitubag.</string>
+    <string name="anr_process">Proseso nga  <xliff:g id="process">%1$s</xliff:g> kay wala nitubag.</string>
+    <string name="launch_warning_title">Aplikasyon Gibalhin</string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> kay nagdagan karon.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> kay orihinal nga nasugdan.</string>
+    <string name="smv_application">Ang aplikasyon nga <xliff:g id="application">%1$s</xliff:g>
+        (process <xliff:g id="process">%2$s</xliff:g>) kay wa gidahum nga nihunong. Palihug ug suway balik.</string>
+    <string name="smv_process">Ang proseso <xliff:g id="process">%1$s</xliff:g> kay nilapas sa palisiya sa self-enforced nga Strikto nga paagi.</string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%2$s</xliff:g> nagdagan</string>
+    <string name="heavy_weight_notification_detail">Pili para baylo ngadto sa aplikasyon</string>
+    <string name="heavy_weight_switcher_title">Baylo ug mga aplikasyon?</string>
+    <string name="heavy_weight_switcher_text">Lain nga aplikasyon nga nagdagan na kay kinahanglan mahunong sa di paka maksugod ug bago.</string>
+    <string name="old_app_action">Balik ngadto sa <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="old_app_description">Ayaw sugdi ang bago nga aplikasyon.</string>
+    <string name="new_app_action">Sugod ug <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="new_app_description">Hunungon ang daan nga aplikasyon nga dili I-save.</string>
+    <string name="ringtone_default_with_actual">Default nga ringtone (<xliff:g id="actual_ringtone">%2$s</xliff:g>)</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="perms_hide"><b>Tago</b></string>
+    <string name="perms_show_all"><b>Pakita tanan</b></string>
+    <string name="usb_storage_message" product="default">Imu gikonek imu telepono sa imu computer gamit ang USB. Pili-a ang pislitanan sa ubos kung imu kopyahon ang mga files sa imu computer ug sa imu Android\u2018s SD card.</string>
+    <string name="usb_storage_error_message" product="nosdcard">Naay problema sa paggamit sa imo imbakan sa USB para mass nga imbakan sa USB.</string>
+    <string name="usb_storage_error_message" product="default">Naay problema sa paggamit sa imu SD card para mass nga imbakan sa USB.</string>
+    <string name="usb_storage_stop_message" product="nosdcard">Sa dili pa pagngon ang imbakan sa USB, siguraduha nga nanaog ang (\u201cejected\u201d) sa imu Android\2018s nga imbakan sa USB gikan sa imu computer.</string>
+    <string name="usb_storage_stop_message" product="default">Sa dili pa pagngon ang imbakan sa USB, siguraduha nga na-unmount na nimu (\u201cejected\u201d) imu Android\u2018s nga SD card sa imu computer.</string>
+    <string name="extmedia_format_title" product="nosdcard">Format sa imbakan sa USB</string>
+    <string name="extmedia_format_title" product="default">format ang SD card</string>
+    <string name="extmedia_format_message" product="nosdcard">Format sa imbakan sa USB, pala-on tanan mga file nga naka-imbak didto? Aksyon dili na mabali!</string>
+    <string name="extmedia_format_message" product="default">Sigurado ka nga imu I-format ang SD card? Tanan data sa imu card kay mawagtang.</string>
+    <string name="candidates_style"><u>mga kandidato</u></string>
+    <string name="ext_media_checking_notification_title" product="nosdcard">Nag-andam sa imbakan sa USB</string>
+    <string name="ext_media_checking_notification_title" product="default">Nag-andam sa SD card</string>
+    <string name="ext_media_nofs_notification_title" product="nosdcard">Blanko nga imbakan sa USB</string>
+    <string name="ext_media_nofs_notification_title" product="default">Blanko nga SD card</string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard">Imbakan sa USB kay blanko o naay wala gisuportahan nga filesystem.</string>
+    <string name="ext_media_nofs_notification_message" product="default">SD card blanko o naay wala gisuportahan nga filesystem.</string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">Naguba nga imbakan sa USB</string>
+    <string name="ext_media_unmountable_notification_title" product="default">Guba nga SD card</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">Imbakan sa USB naguba. I-reformat kung mahimu.</string>
+    <string name="ext_media_unmountable_notification_message" product="default">SD card naguba. Imu ni I-reformat.</string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">Imbakan sa USB wa gidahum nga gitanggal</string>
+    <string name="ext_media_badremoval_notification_title" product="default">SD card wala gidahum nga matanggal</string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">Inaog ang imbakan sa USB bago tanggalon para malikayan ang pagkawala sa data.</string>
+    <string name="ext_media_badremoval_notification_message" product="default">Padung dili imount ang SD card sa dili pa tanggalon aron makalikay sa pagkawala sa data.</string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">Imbakan sa USB luwas na tanggalon</string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">SD card luwas nga nga tanggalon</string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">Luwas na nga tanggalon ang imbakan sa USB.</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">Luwas na nga tanggalon ang SD card.</string>
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">Natanggal nga imbakan sa USB</string>
+    <string name="ext_media_nomedia_notification_title" product="default">Tanggala sa SD card</string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">Imbakan sa USB natanggal. Pagsuksok ug bago nga media.</string>
+    <string name="ext_media_nomedia_notification_message" product="default">SD card natanggal. Suksok ug bago.</string>
+    <string name="dial_number_using">I-dial ang numero\ngamit ang <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="create_contact_using">Naghimu ug kontak\ngamit ang <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="permission_request_notification_with_subtitle">Permiso gihangyo\npara sa account nga <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="cta_tethered_notification_title">Nagtether</string>
+    <string name="custom_china_mobile">Mobile sa Tsina</string>
+    <string name="custom_china_unicom">Unicom sa Tsina</string>
+    <string name="shutdown_after_seconds">Ang phone kay mapawng kahuman sa  <xliff:g id="NUMBER">%d</xliff:g> ka mga segundo</string>
+    <string name="lockscreen_password_error">Ang pahina sa \'<xliff:g id="title">%s</xliff:g>\ kay nag-ingun:</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">
+		Wala nimu namao ug input imu pang-unlock nga password ka <xliff:g id="number">%d</xliff:g> na.
+        \n\nPalihug ug suway balik kahuman sa<xliff:g id="number">%d</xliff:g> ka mga segundo.</string>
+    <string name="progress_unmounting" product="nosdcard">Nagnaog sa imbakan sa USB...</string>
+    <string name="progress_unmounting" product="default">Nagnaog sa SD card...</string>
+    <string name="progress_erasing" product="nosdcard">Nagpala sa imbakan sa USB...</string>
+    <string name="progress_erasing" product="default">Nagpala sa SD card...</string>
+    <string name="format_error" product="nosdcard">Dili malampuson sa pagpala sa imbakan sa USB.</string>
+    <string name="format_error" product="default">Dili malampuson sa pagpala sa SD card.</string>
+    <string name="media_checking" product="nosdcard">Imbakan sa USB kay gisusi pa karon.</string>
+    <string name="media_shared" product="nosdcard">Imbakan sa USB kay gigamit pa karon sa usa ka computer.</string>
+    <string name="audio_play_failed">Sori, kini nga audio kay dili mapaandar,gamiton ang default nga ringtone</string>
+    <string name="sms_full_title">Memorya sa mensahe sa text kay puno</string>
+    <string name="sms_full_body">Incoming nga mensahe wala gidawat kay puno na ang memorya. Palihug ug delete sa mga daan nga mensahe.</string>
+    <string name="unlock_screen_pin_error">Ang pin kay mali!</string>
+    <string name="ap_disconnected">Natanggal</string>
+    <string name="sim_chooser_title">Pili ug SIM</string>
+    <string name="lockscreen_miss_phone">wad-on nga phone</string>
+    <string name="lockscreen_miss_mms">wad-on nga sms</string>
+    <string name="lockscreen_sim_card_locked_message">SIM card kay nalock.</string>
 </resources>

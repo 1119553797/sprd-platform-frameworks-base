@@ -3,4 +3,6 @@
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">VPN services</string>
     <string name="vpn_notification_hint_disconnected">Hikap para mukonek balik sa VPN.</string>
+    <string name="vpn_notification_title_connected"><xliff:g id="profilename">%s</xliff:g> nga VPN kay nakakonek</string>
+    <string name="vpn_notification_title_disconnected"><xliff:g id="profilename">%s</xliff:g> nga VPN kay wala nakakonek</string>
 </resources>

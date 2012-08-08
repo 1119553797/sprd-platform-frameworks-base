@@ -14,4 +14,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="title_usb_accessory">"USB aksesuarı"</string>
     <string name="label_view">"Görüntüle"</string>
     <string name="always_use_accessory">"Bu USB aksesuar için varsayılan olarak kullan"</string>
+    <string name="usb_accessory_permission_prompt">Uygulama %1$s \'nın USB\'ye erişimine izin verilsin mi?</string>
+    <string name="usb_device_confirm_prompt">Bu USB cihaz bağlandığında %1$s açılsın mı?</string>
+    <string name="usb_accessory_confirm_prompt">Bu USB donatımı bağlandığında %1$s açılsın mı?</string>
+    <string name="mobile_data_connect_disable">"Hayır"</string>
+    <string name="mobile_data_connect_enable">"Evet"</string>
+    <string name="network_disconnect_title">Dikkat</string>
+    <string name="network_disconnect_message">WLAN ağ bağlantısı kesildi. \n3G ile bağlansın mı? \nEğer veri aboneliğiniz yoksa ilave ödeme gerektirebilir.</string>
+    <string name="weak_signal_title">ZAYIF SİNYAL</string>
+    <string name="weak_signal_message">Mevcut WLAN sinyali çok zayıf, daha iyi bir sinyal seçmeniz önerilir</string>
+    <string name="auto_connect">Sormadan diğer güvenilen erişim noktasına otomatik olarak bağlan</string>
 </resources>

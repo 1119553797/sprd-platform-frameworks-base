@@ -1,4 +1,28 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">Estado nga bar</string>
+    <string name="status_bar_clear_all_button">Limas</string>
+    <string name="status_bar_no_notifications_title">Walay mga Abiso</string>
+    <string name="status_bar_ongoing_events_title">Nagpadayon</string>
+    <string name="status_bar_latest_events_title">Mga Abiso</string>
+    <string name="battery_low_title">Palihug I-konek ang tigkarga</string>
+    <string name="battery_low_subtitle">Ang baterya kay nagtika-ubos:</string>
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g>
+    o gamay ang nabilin.</string>
+    <string name="battery_low_why">Paggamit sa baterya</string>
+    <string name="usb_accessory_permission_prompt">Tugutan ang aplikasyon %1$s nga mu-access sa accessory sa USB?</string>
+    <string name="usb_device_confirm_prompt">Abli ug %1$s kung kini nga device sa USB kay nakakonek?</string>
+    <string name="usb_accessory_confirm_prompt">Abli ug %1$s kung kini nga accessory sa USB kay nakakonek?</string>
+    <string name="usb_accessory_uri_prompt">Walay naka-install nga mga aplikasyon nga mutrabaho ani nga accessory sa USB. Kat-on ug daghan mahitungod ani nga accessory sa <xliff:g id="url">%1$s</xliff:g></string>
+    <string name="title_usb_accessory">Accessory sa USB</string>
+    <string name="label_view">Tanaw</string>
+    <string name="always_use_accessory">Gamit pinaagi sa default para ani nga  accessory sa USB</string>
+    <string name="mobile_data_connect_disable">Dili</string>
+    <string name="mobile_data_connect_enable">Shagit</string>
+    <string name="network_disconnect_title">Notipiko</string>
+    <string name="network_disconnect_message">Wala nakakonek ang network sa WLAN. \nKonek pinaagi sa 3G? \nKung wala kay data plan, pwede ni magdugang ug bayad.</string>
+    <string name="weak_signal_title">Hinay nga SIGNAL</string>
+    <string name="weak_signal_message">Ang karon nga signal sa WLAN kay hinay kaayo, girekomenda nga mupili ka ug mas maayo</string>
+    <string name="auto_connect">Ayaw pangutananug awtomatik nga mukonek ngadto sa uban nakasaligan nga ap</string>
 </resources>
