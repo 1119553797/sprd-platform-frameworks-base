@@ -14,4 +14,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="title_usb_accessory">"لوازم جانبی USB"</string>
     <string name="label_view">"مشاهده"</string>
     <string name="always_use_accessory">"استفاده به صورت پیش فرض برای این دستگاه USB"</string>
+    <string name="usb_accessory_permission_prompt">اجازه به برنامه %1$s برای دسترسی به لوازم جانبی USB؟</string>
+    <string name="usb_device_confirm_prompt">باز کردن %1$s در صورت اتصال این دستگاه USB؟</string>
+    <string name="usb_accessory_confirm_prompt">باز کردن %1$s در صورت اتصال این لوازم جانبی USB؟</string>
+    <string name="mobile_data_connect_disable">"خیر"</string>
+    <string name="mobile_data_connect_enable">بله</string>
+    <string name="network_disconnect_title">اعلان</string>
+    <string name="network_disconnect_message">اتصال شبکه WLAN قطع شده است. \nاتصال از طریق 3G؟  \nاگر طرح داده ندارید، ممکن است هزینه های اضافی را برای شما ایجاد کند.</string>
+    <string name="weak_signal_title">سیگنال ضعیف</string>
+    <string name="weak_signal_message">سیگنال WLAN کنونی خیلی ضعیف است، توصیه می شود یک سیگنال بهتر انتخاب کنید</string>
+    <string name="auto_connect">سؤال نشود و به طور خودکار اتصال به برنامه مطمئن دیگری برقرار شود</string>
 </resources>
