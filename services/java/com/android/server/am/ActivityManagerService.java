@@ -7083,7 +7083,31 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
         return resolveInfo;
     }
-    
+
+    /**   
+     * if the Crash application has several entrance acitivity
+     * then select the first registration of main Activity
+     */
+    private ResolveInfo checkCrashActivity(Intent intentToResolve,int flags){
+
+	    IPackageManager mPM = AppGlobals.getPackageManager();
+	    List<ResolveInfo> query = null; 
+	    try{ 
+		    query = mPM.queryIntentActivities(
+				    intentToResolve,
+				    intentToResolve.resolveTypeIfNeeded(mContext.getContentResolver()),
+				    flags);
+	    } catch (RemoteException e) {
+		    throw new RuntimeException("Package manager has died", e);
+	    }     
+	    if(query != null)  
+	    {     
+		    return query.get(0); 
+	    }     
+
+	    return null;
+    }
+
     /**
      * get main Activity by package name
      * @param packageName
@@ -7101,7 +7125,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             intentToResolve.removeCategory(Intent.CATEGORY_INFO);
             intentToResolve.addCategory(Intent.CATEGORY_LAUNCHER);
             intentToResolve.setPackage(packageName);
-            resolveInfo = resolveActivity(intentToResolve,0);
+            resolveInfo = checkCrashActivity(intentToResolve,0);
         }
         if (resolveInfo == null) {
             return null;
@@ -7111,8 +7135,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
-    
-    
 
     Intent createAppErrorIntentLocked(ProcessRecord r,
             long timeMillis, ApplicationErrorReport.CrashInfo crashInfo) {
