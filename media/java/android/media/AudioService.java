@@ -1161,7 +1161,7 @@ public class AudioService extends IAudioService.Stub {
         if (mRingerMode == AudioManager.RINGER_MODE_NORMAL) {
             // audible mode, at the bottom of the scale
             if (direction == AudioManager.ADJUST_LOWER
-                    && (oldIndex + 5) / 10 == 1) {
+                    && ((oldIndex + 5) / 10 == 1 || oldIndex == 0)) {
                 // "silent mode", but which one?
                 newRingerMode = System.getInt(mContentResolver, System.VIBRATE_IN_SILENT, 1) == 1
                     ? AudioManager.RINGER_MODE_VIBRATE
