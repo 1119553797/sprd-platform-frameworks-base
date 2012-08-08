@@ -1828,7 +1828,7 @@ void AwesomePlayer::onCheckAudioStatus() {
 
     mAudioStatusEventPending = false;
 
-    if (mWatchForAudioSeekComplete && !mAudioPlayer->isSeeking()) {
+    if (mWatchForAudioSeekComplete && (mAudioPlayer != NULL) && !mAudioPlayer->isSeeking()) {
         mWatchForAudioSeekComplete = false;
 
         if (!mSeekNotificationSent) {
@@ -1842,7 +1842,7 @@ void AwesomePlayer::onCheckAudioStatus() {
     }
 
     status_t finalStatus;
-    if (mWatchForAudioEOS && mAudioPlayer->reachedEOS(&finalStatus)) {
+    if (mWatchForAudioEOS && (mAudioPlayer != NULL) && mAudioPlayer->reachedEOS(&finalStatus)) {
         mWatchForAudioEOS = false;
         mFlags |= AUDIO_AT_EOS;
         mFlags |= FIRST_FRAME;
