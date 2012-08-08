@@ -662,25 +662,6 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
     outputDesc->changeRefCount(stream, 1);
     device = getNewDevice(output);
     AudioOutputDescriptor *hwOutputDesc = mOutputs.valueFor(mHardwareOutput);
-    uint32_t refCountSystem = hwOutputDesc->getRefCount(AudioSystem::SYSTEM);
-    uint32_t refCount = hwOutputDesc->refCount() - outputDesc->getRefCount(AudioSystem::FM) - refCountSystem;
-    if(refCountSystem != 0 && refCount == 0) {
-        //fix FM relate bug, that key sound interrupt fm.
-        if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
-            if(device&0x8){
-                device-=4;
-            }
-            device |= AudioSystem::DEVICE_OUT_FM_HEADSET;
-        }
-
-        if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER){
-            if(device&0x8){
-                device-=4;
-            }
-            device |= AudioSystem::DEVICE_OUT_FM_SPEAKER;
-        }
-    }
-
     if (stream == AudioSystem::FM) {
         //special strategy for stream fm,  in sound setting interface.
         if (hwOutputDesc->mDevice& (AudioSystem::DEVICE_OUT_FM_SPEAKER
@@ -744,25 +725,6 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
             mMusicStopTime = systemTime();
         }
         device = getNewDevice(output);
-        AudioOutputDescriptor *hwOutputDesc = mOutputs.valueFor(mHardwareOutput);
-        uint32_t refCountSystem = hwOutputDesc->getRefCount((AudioSystem::stream_type)AudioSystem::SYSTEM);
-        uint32_t refCount = hwOutputDesc->refCount() - hwOutputDesc->getRefCount(AudioSystem::FM) - refCountSystem;
-        if(refCountSystem != 0 && refCount == 0) {
-            //fix FM relate bug, that key sound interrupt fm.
-            if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET){
-                if(device&0x8){
-                    device-=4;
-                }
-                device |= AudioSystem::DEVICE_OUT_FM_HEADSET;
-            }
-
-            if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER){
-                if(device&0x8){
-                    device-=4;
-                }
-                device |= AudioSystem::DEVICE_OUT_FM_SPEAKER;
-            }
-        }
 
         setOutputDevice(output, device, false, 150);
 
@@ -1880,6 +1842,26 @@ void AudioPolicyManagerBase::setOutputDevice(audio_io_handle_t output, uint32_t 
     LOGI("setOutputDevice() output %d device %x delayMs %d", output, device, delayMs);
     AudioOutputDescriptor *outputDesc = mOutputs.valueFor(output);
 
+    //make MUSIC sound along FM, to fix bug 21560 that game sound interrupt fm.
+    AudioOutputDescriptor *hwOutputDesc = mOutputs.valueFor(mHardwareOutput);
+    uint32_t refCountMedia = hwOutputDesc->strategyRefCount(STRATEGY_MEDIA);
+    uint32_t refCount = hwOutputDesc->refCount() - hwOutputDesc->getRefCount(AudioSystem::FM) - refCountMedia;
+    if(refCountMedia != 0 && refCount == 0) {
+        //fix FM relate bug, that key sound interrupt fm.
+        if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET) {
+            if(device&0x8) {
+                device-=4;
+            }
+            device |= AudioSystem::DEVICE_OUT_FM_HEADSET;
+        }
+
+        if(mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER) {
+            if(device&0x8) {
+                device-=4;
+            }
+            device |= AudioSystem::DEVICE_OUT_FM_SPEAKER;
+        }
+    }
 
     if (outputDesc->isDuplicated()) {
         setOutputDevice(outputDesc->mOutput1->mId, device, force, delayMs);
