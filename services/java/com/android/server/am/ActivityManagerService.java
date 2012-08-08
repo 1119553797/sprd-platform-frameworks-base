@@ -939,6 +939,8 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     static final int SHOW_ERROR_MSG = 1;
+    static final int RESTART_IN_ERROR = 100;
+    static final int SHOW_CRASH_MSG = 101;
     static final int SHOW_NOT_RESPONDING_MSG = 2;
     static final int SHOW_FACTORY_ERROR_MSG = 3;
     static final int UPDATE_CONFIGURATION_MSG = 4;
@@ -968,6 +970,33 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         public void handleMessage(Message msg) {
             switch (msg.what) {
+            case RESTART_IN_ERROR:{
+            	Intent intent = (Intent) msg.obj;
+            	mContext.startActivity(intent);
+//            	restartActivityLocked(intent);
+            } break;
+            case SHOW_CRASH_MSG: {
+                HashMap data = (HashMap) msg.obj;
+                synchronized (ActivityManagerService.this) {
+                    ProcessRecord proc = (ProcessRecord)data.get("app");
+                    if (proc != null && proc.crashDialog != null) {
+                        Slog.e(TAG, "App already has crash dialog: " + proc);
+                        return;
+                    }
+                    AppErrorResult res = (AppErrorResult) data.get("result");
+                    if (!mSleeping && !mShuttingDown) {
+                        Dialog d = new AppCrashDialog(mContext, res, proc);
+                        d.show();
+                        proc.crashDialog = d;
+                    } else {
+                        // The device is asleep, so just pretend that the user
+                        // saw a crash dialog and hit "force quit".
+                        res.set(0);
+                    }
+                }
+                
+                ensureBootCompleted();
+            } break;
             case SHOW_ERROR_MSG: {
                 HashMap data = (HashMap) msg.obj;
                 synchronized (ActivityManagerService.this) {
@@ -6873,6 +6902,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         String shortMsg = crashInfo.exceptionClassName;
         String longMsg = crashInfo.exceptionMessage;
         String stackTrace = crashInfo.stackTrace;
+        boolean flag = false;
+        Intent laucherIntent = null;
+        
         if (shortMsg != null && longMsg != null) {
             longMsg = shortMsg + ": " + longMsg;
         } else if (shortMsg != null) {
@@ -6919,14 +6951,54 @@ public final class ActivityManagerService extends ActivityManagerNative
                 Binder.restoreCallingIdentity(origId);
                 return;
             }
-
-            Message msg = Message.obtain();
-            msg.what = SHOW_ERROR_MSG;
-            HashMap data = new HashMap();
-            data.put("result", result);
-            data.put("app", r);
-            msg.obj = data;
-            mHandler.sendMessage(msg);
+            
+            Slog.w(TAG, "ericinfo crash package name -> "+r.info.packageName);
+            laucherIntent = getLaunchIntentForPackage(r.info.packageName);
+            if(laucherIntent !=null){
+            	String pkgName = r.info.packageName;
+            	CrashRecord appRecord = appCrashRecord.get(pkgName);
+            	if(appRecord == null){
+            		Slog.w(TAG, "appRecord == null");
+            		appCrashRecord.put(pkgName, new CrashRecord());
+            	}else{
+            		if(!appRecord.exceed()){
+            			if(appRecord.isCancel()){
+                			Slog.w(TAG, "cancel");
+                			flag = true;
+                			appCrashRecord.remove(pkgName);
+                		}
+            		}else{
+            			flag = true;
+            		}
+            		
+            		Slog.w(TAG, "appRecord != null, package:"+pkgName);
+            	}
+            }else{
+            	flag = true;
+            	result.set(AppErrorDialog.FORCE_QUIT_AND_REPORT);//FORCE_QUIT_AND_REPORT
+            }
+            
+            // restart application
+            if(!flag){
+        		ComponentName name = laucherIntent.getComponent();
+        		Slog.w(TAG, "restart classname:"+name.getClassName()+", packageName:"+name.getPackageName());
+        		result.set(AppErrorDialog.FORCE_QUIT_AND_REPORT);//FORCE_QUIT_AND_REPORT
+            	Message msg = Message.obtain();
+            	msg.what = RESTART_IN_ERROR;
+            	msg.obj = laucherIntent;
+            	mHandler.sendMessageDelayed(msg, 500);
+        	}
+            
+            // notify 
+            if(flag){
+            	Message msg = Message.obtain();
+                msg.what = SHOW_CRASH_MSG;
+                HashMap data = new HashMap();
+                data.put("result", result);
+                data.put("app", r);
+                msg.obj = data;
+                mHandler.sendMessage(msg);
+            }
 
             Binder.restoreCallingIdentity(origId);
         }
@@ -6952,6 +7024,55 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         }
     }
+    /**
+     * Obtain the corresponding activity by intent
+     * @param intentToResolve
+     * @param flags
+     * @return
+     */
+    private ResolveInfo resolveActivity(Intent intentToResolve,int flags){
+    	IPackageManager mPM = AppGlobals.getPackageManager();
+    	ResolveInfo resolveInfo = null;
+    	try {
+    	resolveInfo = mPM.resolveIntent(
+    			intentToResolve,
+    			intentToResolve.resolveTypeIfNeeded(mContext.getContentResolver()),
+    			flags);
+        } catch (RemoteException e) {
+            throw new RuntimeException("Package manager has died", e);
+        }
+        return resolveInfo;
+    }
+    
+    /**
+     * get main Activity by package name
+     * @param packageName
+     * @return
+     */
+    private  Intent getLaunchIntentForPackage(String packageName) {
+    	
+        Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
+        intentToResolve.addCategory(Intent.CATEGORY_INFO);
+        intentToResolve.setPackage(packageName);
+        ResolveInfo resolveInfo = resolveActivity(intentToResolve,0);
+
+        if (resolveInfo == null) {
+            // reuse the intent instance
+            intentToResolve.removeCategory(Intent.CATEGORY_INFO);
+            intentToResolve.addCategory(Intent.CATEGORY_LAUNCHER);
+            intentToResolve.setPackage(packageName);
+            resolveInfo = resolveActivity(intentToResolve,0);
+        }
+        if (resolveInfo == null) {
+            return null;
+        }
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClassName(packageName, resolveInfo.activityInfo.name);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
+    }
+    
+    
 
     Intent createAppErrorIntentLocked(ProcessRecord r,
             long timeMillis, ApplicationErrorReport.CrashInfo crashInfo) {
@@ -12506,4 +12627,45 @@ public final class ActivityManagerService extends ActivityManagerNative
     public void monitor() {
         synchronized (this) { }
     }
+    
+    //{crash
+    class CrashRecord {
+    	int crashCount = 1; //count of crash
+    	long time ; // Crash of the time occurs
+    	int totalCount = 1;//total count of crash
+    	CrashRecord(){
+    		time = SystemClock.uptimeMillis();
+    	}
+    	
+    	boolean isCancel(){
+    		crashCount++;
+    		long tmp = SystemClock.uptimeMillis();
+    		if((tmp-time)<CRASH_TIME){
+    			if(crashCount >= CRASH_COUNT){
+    				return true;
+    			}
+    		}else{
+    			time = tmp;
+    			crashCount = 1;
+    		}
+    		
+    		return false ;
+    	}
+    	
+    	boolean exceed(){
+    		if(totalCount<CRASH_TOTAL_COUNT){
+    			totalCount++;
+    		}
+    		return totalCount >= CRASH_TOTAL_COUNT;
+    	}
+    	
+    	public String toString(){
+    		return crashCount +" "+time;
+    	}
+    }
+    static final int CRASH_TIME = 2*60*1000;
+    static final int CRASH_COUNT = 3;
+    static final int CRASH_TOTAL_COUNT = 20;
+    HashMap<String,CrashRecord> appCrashRecord = new HashMap<String,CrashRecord>();
+    //end crash}
 }

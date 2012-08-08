@@ -785,6 +785,9 @@
     <string name="chooseActivity" msgid="1009246475582238425">"選取一項操作"</string>
     <string name="chooseUsbActivity" msgid="7892597146032121735">"選取要以 USB 裝置存取的應用程式"</string>
     <string name="noApplications" msgid="1691104391758345586">"沒有應用程式可執行此項操作。"</string>
+    <string name="crash_title" msgid="653922989522758100">"很抱歉！"</string>
+    <string name="crash_application" msgid="4683614104336409186">"<xliff:g id="APPLICATION">%1$s</xliff:g> 應用程式 (程序：<xliff:g id="PROCESS">%2$s</xliff:g>) 異常停止，系統多次嘗試修復無效，請使用其他軟件。"</string>
+    <string name="crash_process" msgid="1551785535966089511">"<xliff:g id="PROCESS">%1$s</xliff:g> 異常停止，系統多次嘗試修復無效，請使用其他軟件。"</string>
     <string name="aerr_title" msgid="653922989522758100">"很抱歉！"</string>
     <string name="aerr_application" msgid="4683614104336409186">"<xliff:g id="APPLICATION">%1$s</xliff:g> 應用程式 (程序：<xliff:g id="PROCESS">%2$s</xliff:g>) 異常終止。請再試一次。"</string>
     <string name="aerr_process" msgid="1551785535966089511">"<xliff:g id="PROCESS">%1$s</xliff:g> 異常終止。請再試一次。"</string>
@@ -793,6 +796,7 @@
     <string name="anr_activity_process" msgid="5420826626009561014">"<xliff:g id="ACTIVITY">%1$s</xliff:g> (程序：<xliff:g id="PROCESS">%2$s</xliff:g>) 無回應。"</string>
     <string name="anr_application_process" msgid="4185842666452210193">"應用程式 <xliff:g id="APPLICATION">%1$s</xliff:g> (程序：<xliff:g id="PROCESS">%2$s</xliff:g>) 無回應。"</string>
     <string name="anr_process" msgid="1246866008169975783">"<xliff:g id="PROCESS">%1$s</xliff:g> 程序無回應。"</string>
+    <string name="crash_close" msgid="3653416315450806396">"確定"</string>
     <string name="force_close" msgid="3653416315450806396">"強制關閉"</string>
     <string name="report" msgid="4060218260984795706">"回報"</string>
     <string name="wait" msgid="7147118217226317732">"等待"</string>
