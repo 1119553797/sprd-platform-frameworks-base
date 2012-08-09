@@ -32,35 +32,6 @@ namespace android {
 // ----------------------------------------------------------------------------
 
 
-void AudioPolicyManagerBase::updateSpeakerStatus()
-{
-    Mutex::Autolock _l(mLock);
-    AudioOutputDescriptor *hwOutputDesc = mOutputs.valueFor(mHardwareOutput);
-    uint32_t refCountNonMedia = hwOutputDesc->refCount() - hwOutputDesc->getRefCount(AudioSystem::MUSIC);
-    uint32_t device = hwOutputDesc->mDevice;
-    LOGI("refCountNonMedia == %d,  mStreams[AudioSystem::MUSIC].mIndexCur == %d, isInCall() == %d, poff == %d"
-        , refCountNonMedia, mStreams[AudioSystem::MUSIC].mIndexCur, isInCall(), poff);
-    if(refCountNonMedia == 0 && mStreams[AudioSystem::MUSIC].mIndexCur == 0 && !isInCall()){
-       if (!poff) {
-           LOGI("%s shutdown speaker!", __FUNCTION__);
-           system("alsa_amixer cset -c sprdphone name=\"Speaker Playback Switch\" 0");
-           poff = true;
-       }
-    }else {
-       if(poff && (device & AudioSystem::DEVICE_OUT_SPEAKER)) {
-           LOGI("%s power on speaker!", __FUNCTION__);
-           system("alsa_amixer cset -c sprdphone name=\"Speaker Playback Switch\" 1");
-           poff = false;
-       }
-    }
-}
-
-bool AudioPolicyManagerBase::isSpeakerOn()
-{
-    Mutex::Autolock _l(mLock);
-    return poff;
-}
-
 status_t AudioPolicyManagerBase::setDeviceConnectionState(AudioSystem::audio_devices device,
                                                   AudioSystem::device_connection_state state,
                                                   const char *device_address)
@@ -309,8 +280,6 @@ void AudioPolicyManagerBase::setPhoneState(int state)
     int oldState = mPhoneState;
     mPhoneState = state;
     bool force = false;
-    LOGI("%s updateSpeakerStatus!", __FUNCTION__);
-    updateSpeakerStatus();
 
     // are we entering or starting a call
     if (!isStateInCall(oldState) && isStateInCall(state)) {
@@ -671,8 +640,6 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
         }
     }
     setOutputDevice(output, device);
-    LOGI("%s updateSpeakerStatus!", __FUNCTION__);
-    updateSpeakerStatus();
 
     // handle special case for sonification while in call
     if (isInCall()) {
@@ -681,15 +648,6 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
 
     // apply volume rules for current stream and device if necessary
     checkAndSetVolume(stream, mStreams[stream].mIndexCur, output, outputDesc->device());
-//    uint32_t refCountNonMedia = hwOutputDesc->refCount() - hwOutputDesc->getRefCount(AudioSystem::MUSIC);
-    uint32_t refCountMedia = hwOutputDesc->getRefCount(AudioSystem::MUSIC);
-    uint32_t refCountNonMedia = hwOutputDesc->refCount() - refCountMedia;
-    if(stream == AudioSystem::MUSIC && refCountNonMedia == 0 && mStreams[AudioSystem::MUSIC].mIndexCur == 0 && !isInCall() && refCountMedia == 1){
-        uint32_t device = hwOutputDesc->mDevice;
-        if((device & AudioSystem::DEVICE_OUT_SPEAKER)) {
-            mpClientInterface->shutDownSpeaker();
-        }
-    }
 
     return NO_ERROR;
 }
@@ -740,8 +698,6 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
         if (output != mHardwareOutput) {
             setOutputDevice(mHardwareOutput, getNewDevice(mHardwareOutput), true);
         }
-        LOGI("%s updateSpeakerStatus!", __FUNCTION__);
-        updateSpeakerStatus();
         return NO_ERROR;
     } else {
         LOGW("stopOutput() refcount is already 0 for output %d", output);
@@ -935,10 +891,6 @@ status_t AudioPolicyManagerBase::setStreamVolumeIndex(AudioSystem::stream_type s
 
     LOGV("setStreamVolumeIndex() stream %d, index %d", stream, index);
     mStreams[stream].mIndexCur = index;
-    if(stream == AudioSystem::MUSIC) {
-        LOGI("%s updateSpeakerStatus!", __FUNCTION__);
-        updateSpeakerStatus();
-    }
 
     // compute and apply stream volume on all outputs according to connected device
     status_t status = NO_ERROR;

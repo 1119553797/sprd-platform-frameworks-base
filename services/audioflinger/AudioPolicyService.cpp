@@ -107,12 +107,6 @@ AudioPolicyService::~AudioPolicyService()
     }
 }
 
-status_t AudioPolicyService::shutDownSpeaker() {
-    AudioPolicyInterface* mAudioPolicyInterface = this->mpPolicyManager;
-    mAudioCommandThread->shutDownSpeakerCommand(mAudioPolicyInterface);
-    return NO_ERROR;
-}
-
 status_t AudioPolicyService::setDeviceConnectionState(AudioSystem::audio_devices device,
                                                   AudioSystem::device_connection_state state,
                                                   const char *device_address)
@@ -736,14 +730,6 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                     }
                     delete data;
                     }break;
-                case SET_SPEAKERSHUTDOWN: {
-                    AudioPolicyManagerBase* mAudioPolicyManagerBase = (AudioPolicyManagerBase*)command->mParam;
-                    bool result = mAudioPolicyManagerBase->isSpeakerOn();
-                    if (result) {
-                        LOGI("%s shutdown speaker!", __FUNCTION__);
-                        system("alsa_amixer cset -c sprdphone name=\"Speaker Playback Switch\" 0");
-                    }
-                    }break;
                 default:
                     LOGW("AudioCommandThread() unknown command %d", command->mCommand);
                 }
@@ -919,15 +905,6 @@ status_t AudioPolicyService::AudioCommandThread::voiceVolumeCommand(float volume
         delete command;
     }
     return status;
-}
-
-status_t AudioPolicyService::AudioCommandThread::shutDownSpeakerCommand(AudioPolicyInterface* mAudioPolicyInterface) {
-    AudioCommand *command = new AudioCommand();
-    command->mCommand = SET_SPEAKERSHUTDOWN;
-    command->mParam = (void *)mAudioPolicyInterface;
-    insertCommand_l(command, 100);
-    mWaitWorkCV.signal();
-    return NO_ERROR;
 }
 
 // insertCommand_l() must be called with mLock held
