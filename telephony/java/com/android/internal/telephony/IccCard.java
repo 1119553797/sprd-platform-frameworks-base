@@ -460,6 +460,8 @@ public abstract class IccCard {
         boolean transitionedIntoIccBlocked;
         boolean transitionedIntoSimBlocked;
         boolean transitionedIntoCardPresent;
+        boolean transitionedIntoIccReady;
+
         State oldState, newState;
         oldState = mState;
         mIccCardStatus = newCardStatus;
@@ -480,6 +482,7 @@ public abstract class IccCard {
         transitionedIntoIccBlocked = (oldState != State.BLOCKED && newState == State.BLOCKED);
         transitionedIntoSimBlocked = (oldState != State.SIM_LOCKED && newState == State.SIM_LOCKED);
         transitionedIntoCardPresent =  !transitionedIntoAbsent;
+        transitionedIntoIccReady = (oldState != State.READY && newState == State.READY);
         if (transitionedIntoPinLocked) {
             if(mDbg) log("Notify SIM pin or puk locked.");
             mPinLockedRegistrants.notifyRegistrants();
@@ -501,15 +504,14 @@ public abstract class IccCard {
         } else if (transitionedIntoSimBlocked){
             if(mDbg) log("Notify SIM locked.");
             broadcastIccStateChangedIntent(INTENT_VALUE_ICC_LOCKED, INTENT_VALUE_LOCKED_SIM);
-	    } else if(mState == State.READY){
+        } else if(transitionedIntoIccReady){
             if(mDbg) log("Notify SIM ready.");
             broadcastGetIccStatusDoneIntent();
-	    } else if(transitionedIntoCardPresent){
-	      if(mDbg) log("Notify SIM present.");
-	      broadcastIccCardPresentIntent();
-	  }
-	  
-    }
+        } else if(transitionedIntoCardPresent){
+            if(mDbg) log("Notify SIM present.");
+            broadcastIccCardPresentIntent();
+        }
+}
 
     /**
      * a interface ,to indicate which type of your sim card .if current card
