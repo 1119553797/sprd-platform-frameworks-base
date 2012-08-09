@@ -504,8 +504,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         int gprsState = mGsmPhone.mSST.getCurrentGprsState();
         boolean desiredPowerState = mGsmPhone.mSST.getDesiredPowerState();
 
-        if ((state == State.IDLE || state == State.SCANNING)
-                && (gprsState == ServiceState.STATE_IN_SERVICE || noAutoAttach)
+        if ((gprsState == ServiceState.STATE_IN_SERVICE || noAutoAttach)
                 && mGsmPhone.mSIMRecords.getRecordsLoaded()
                 && (phone.getState() == Phone.State.IDLE || mGsmPhone.mSST.isConcurrentVoiceAndData())
                 && isDataAllowed()
@@ -518,18 +517,16 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 log("Ignore default type datacall setup because WIFI is connected.");
                 return false;
             }
-            if (state == State.IDLE) {
-                waitingApns = buildWaitingApns();
-                waitingApnsPermanentFailureCountDown = waitingApns.size();
-                if (waitingApns.isEmpty()) {
-                    if (DBG)
-                        log("No APN found");
-                    notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);
-                    return false;
-                } else {
-                    synchronized (allApnsLock) {
-                        log("Create from allApns : " + apnListToString(allApns));
-                    }
+            waitingApns = buildWaitingApns();
+            waitingApnsPermanentFailureCountDown = waitingApns.size();
+            if (waitingApns.isEmpty()) {
+                if (DBG)
+                    log("No APN found");
+                notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);
+                return false;
+            } else {
+                synchronized (allApnsLock) {
+                    log("Create from allApns : " + apnListToString(allApns));
                 }
             }
 
