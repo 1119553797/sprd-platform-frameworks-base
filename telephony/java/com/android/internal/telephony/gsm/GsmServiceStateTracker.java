@@ -679,9 +679,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     protected void updateSpnDisplay() {
         int rule = phone.mSIMRecords.getDisplayRule(ss.getOperatorNumeric());
         String spn = phone.mSIMRecords.getServiceProviderName();
-        String plmn = ss.getOperatorAlphaShort();
+        String plmn = ss.getOperatorAlphaLong();
         if(plmn == null || plmn.length() == 0) {
-            plmn = ss.getOperatorAlphaLong();
+            plmn = ss.getOperatorAlphaShort();
         }
         if(plmn == null || plmn.length() == 0) {
             plmn = ss.getOperatorNumeric();
