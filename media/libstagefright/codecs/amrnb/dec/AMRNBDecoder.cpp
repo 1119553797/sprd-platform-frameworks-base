@@ -165,13 +165,13 @@ status_t AMRNBDecoder::read(
 
     buffer->set_range(0, kNumSamplesPerFrame * sizeof(int16_t));
 
-    if (numBytesRead > mInputBuffer->range_length()) {
+    if (numBytesRead == 0 || numBytesRead > mInputBuffer->range_length()) {
         // This is bad, should never have happened, but did. Abort now.
 
         buffer->release();
         buffer = NULL;
 
-        return ERROR_MALFORMED;
+        return ERROR_END_OF_STREAM;
     }
 
     mInputBuffer->set_range(
