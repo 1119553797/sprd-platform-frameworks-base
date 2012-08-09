@@ -268,7 +268,10 @@ public class AppManage extends Activity {
         public void invokedeletePackage(String packageName, CountDownLatch count) {
             mCount = count;
             mPm.deletePackage(packageName, this, 0);
-            myAppInfoAdapter.deleteItem(packageName);
+            // For fix Bug24091. PackageManagerService.deletePackage() don't delete the package immediately,
+            // and UI will be refresh after the package was deleted. If we delete the item now, there maybe
+            // get a IllegalStateException for "The content of the adapter has changed but ListView did not receive a notification".
+//            myAppInfoAdapter.deleteItem(packageName);
 	}
     }
 
@@ -354,10 +357,15 @@ public class AppManage extends Activity {
                         Slog.w(TAG, "Failed to uninstall : " + pkgName);
                     }
                 }
+
+                // Delete the item after the packages were deleted.
+                for (String pkgName : mUninstallList) {
+                    myAppInfoAdapter.deleteItem(pkgName);
+                }
             }
 
             final Message msg = mHandler.obtainMessage(FREE_SPACE);
-            mHandler.sendMessage(msg);
+            mHandler.sendMessageAtFrontOfQueue(msg);// Update UI immediately.
         }
     }
 
