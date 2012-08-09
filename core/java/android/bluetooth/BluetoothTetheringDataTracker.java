@@ -278,6 +278,11 @@ public class BluetoothTetheringDataTracker implements NetworkStateTracker {
                 mNetworkInfo.setIsAvailable(true);
                 mNetworkInfo.setDetailedState(DetailedState.CONNECTED, null, null);
 
+                // If the networkAttributes used in the ConnectivityService does not contain the TYPE_BLUETOOTH,
+                // the startMonitoring method will not be called, and the mCsHandler will be null.
+                if (null == mCsHandler) {
+                    return;
+                }
                 Message msg = mCsHandler.obtainMessage(EVENT_CONFIGURATION_CHANGED, mNetworkInfo);
                 msg.sendToTarget();
 
@@ -295,6 +300,11 @@ public class BluetoothTetheringDataTracker implements NetworkStateTracker {
         mNetworkInfo.setIsAvailable(false);
         mNetworkInfo.setDetailedState(DetailedState.DISCONNECTED, null, null);
 
+        // If the networkAttributes used in the ConnectivityService does not contain the TYPE_BLUETOOTH,
+        // the startMonitoring method will not be called, and the mCsHandler will be null.
+        if (null == mCsHandler) {
+            return;
+        }
         Message msg = mCsHandler.obtainMessage(EVENT_CONFIGURATION_CHANGED, mNetworkInfo);
         msg.sendToTarget();
 

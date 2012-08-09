@@ -390,7 +390,7 @@ public class BluetoothService extends IBluetooth.Stub {
         return true;
     }
 
-    synchronized void disconnectDevices() {
+    void disconnectDevices() {
         // Disconnect devices handled by BluetoothService.
         for (BluetoothDevice device: getConnectedInputDevices()) {
             disconnectInputDevice(device);
