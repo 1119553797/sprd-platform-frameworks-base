@@ -265,12 +265,16 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             Log.w(TAG, "Unable to open content: " + mUri, ex);
             mCurrentState = STATE_ERROR;
             mTargetState = STATE_ERROR;
+            //Mmz04 - fixed bug 22389
+            MediaPlayerStateCallback(mCurrentState,mTargetState);
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
             return;
         } catch (IllegalArgumentException ex) {
             Log.w(TAG, "Unable to open content: " + mUri, ex);
             mCurrentState = STATE_ERROR;
             mTargetState = STATE_ERROR;
+            //Mmz04 - fixed bug 22389
+            MediaPlayerStateCallback(mCurrentState,mTargetState);
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
             return;
         } catch (NullPointerException ex) {
@@ -319,12 +323,16 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             Log.w(TAG, "Unable to open content: " + mUri, ex);
             mCurrentState = STATE_ERROR;
             mTargetState = STATE_ERROR;
+            //Mmz04 - fixed bug 22389
+            MediaPlayerStateCallback(mCurrentState,mTargetState);
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
             return;
         } catch (IllegalArgumentException ex) {
             Log.w(TAG, "Unable to open content: " + mUri, ex);
             mCurrentState = STATE_ERROR;
             mTargetState = STATE_ERROR;
+            //Mmz04 - fixed bug 22389
+            MediaPlayerStateCallback(mCurrentState,mTargetState);
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
             return;
         } catch (NullPointerException ex) {
@@ -459,6 +467,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             Log.d(TAG, "Error: " + framework_err + "," + impl_err);
             mCurrentState = STATE_ERROR;
             mTargetState = STATE_ERROR;
+            //Mmz04 - fixed bug 22389
+            MediaPlayerStateCallback(mCurrentState,mTargetState);
             if (mMediaController != null) {
                 mMediaController.hide();
             }
