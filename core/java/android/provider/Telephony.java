@@ -1885,11 +1885,25 @@ public final class Telephony {
         /**
          * The content:// style URL for this table
          */
-        public static final Uri CONTENT_URI =
-            Uri.parse("content://telephony/carriers");
+        public static final String STR_CONTENT_URI = "content://telephony/carriers";
 
-        public static final Uri CONTENT_URI_SIM2 =
-            Uri.parse("content://telephony_sim2/carriers");
+        public static final Uri CONTENT_URI = Uri.parse(STR_CONTENT_URI);
+
+        public static final Uri CONTENT_URI_SIM1 = Uri.parse(STR_CONTENT_URI + 0);
+
+        public static final Uri CONTENT_URI_SIM2 = Uri.parse(STR_CONTENT_URI + 1);
+
+        public static final Uri CONTENT_URI_PREFERAPN_SIM1 = Uri.parse(STR_CONTENT_URI + 0
+                + "/preferapn");
+
+        public static final Uri CONTENT_URI_PREFERAPN_SIM2 = Uri.parse(STR_CONTENT_URI + 1
+                + "/preferapn");
+
+        public static final Uri CONTENT_URI_RESTORE_SIM1 = Uri.parse(STR_CONTENT_URI + 0
+                + "/restore");
+
+        public static final Uri CONTENT_URI_RESTORE_SIM2 = Uri.parse(STR_CONTENT_URI + 1
+                + "/restore");
 
         /**
          * The default sort order for this table
@@ -1946,11 +1960,11 @@ public final class Telephony {
 
         public static Uri getContentUri(int phoneId) {
             if (phoneId == 0) {
-                return CONTENT_URI;
+                return CONTENT_URI_SIM1;
             } else if (phoneId == 1) {
                 return CONTENT_URI_SIM2;
             } else {
-                return Uri.parse("content://telephony_sim" + phoneId + "/carriers"); 
+                return Uri.parse("content://telephony" + "/carriers" + phoneId);
             }
         }
     }

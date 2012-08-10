@@ -1105,7 +1105,7 @@ class ContextImpl extends Context {
     private TelephonyManager getTelephonyManager() {
         int phoneId = PhoneFactory.RAW_DEFAULT_PHONE_ID;
         if(PhoneFactory.isMultiSim()){
-            phoneId = PhoneFactory.getPhoneCount();
+            phoneId = PhoneFactory.getDefaultPhoneId();
         }
         return getTelephonyManager(phoneId);
     }
