@@ -1036,6 +1036,10 @@ public class StkService extends Handler implements AppInterface {
                 break;
             case GET_INPUT:
             case GET_INKEY:
+                if(mCurrntCmd == null) {
+                    StkLog.d(this, "mCurrntCmd is null");
+                    return;
+                }
                 Input input = mCurrntCmd.geInput();
                 if (!input.yesNo) {
                     // when help is requested there is no need to send the text
