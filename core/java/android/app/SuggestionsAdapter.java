@@ -99,7 +99,7 @@ class SuggestionsAdapter extends ResourceCursorAdapter {
         super(context,
                 com.android.internal.R.layout.search_dropdown_item_icons_2line,
                 null,   // no initial cursor
-                true);  // auto-requery
+                false);  // auto-requery
         mSearchManager = (SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE);
         mSearchDialog = searchDialog;
         mSearchable = searchable;
@@ -203,13 +203,6 @@ class SuggestionsAdapter extends ResourceCursorAdapter {
         updateSpinnerState(getCursor());
     }
 
-    @Override
-    protected void onContentChanged() {
-        Bundle b = mSearchDialog.onSaveInstanceState();
-        super.onContentChanged();
-        notifyDataSetChanged();
-        mSearchDialog.onRestoreInstanceState(b);
-    }
 
     private void updateSpinnerState(Cursor cursor) {
         Bundle extras = cursor != null ? cursor.getExtras() : null;
