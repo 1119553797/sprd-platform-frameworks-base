@@ -177,8 +177,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     private static final String INTENT_RECONNECT_ALARM = "com.android.internal.telephony.gprs-reconnect";
     private static final String INTENT_RECONNECT_ALARM_EXTRA_REASON = "reason";
 
-    static final Uri PREFERAPN_URI = Uri.parse("content://telephony/carriers/preferapn");
-    static final Uri PREFERAPN_URI_SIM2 = Uri.parse("content://telephony_sim2/carriers/preferapn");
+    static final Uri PREFERAPN_URI = Telephony.Carriers.CONTENT_URI_PREFERAPN_SIM1;
+    static final Uri PREFERAPN_URI_SIM2 = Telephony.Carriers.CONTENT_URI_PREFERAPN_SIM2;
     static final String APN_ID = "apn_id";
     static final String APN_ID_SIM2 = "apn_id_sim2";
     private boolean canSetPreferApn = false;
