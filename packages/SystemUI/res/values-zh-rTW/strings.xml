@@ -38,4 +38,11 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"USB 配件"</string>
     <string name="label_view" msgid="6304565553218192990">"查看"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"預設用於這個 USB 配件"</string>
+    <string name="mobile_data_connect_disable">否</string>
+    <string name="mobile_data_connect_enable">是</string>
+    <string name="network_disconnect_title">通知</string>
+    <string name="network_disconnect_message">WLAN網路已經斷開。\n通過3G網路進行連接? \n如果您沒有訂購資料業務套餐，這將產生一些費用</string>
+    <string name="weak_signal_title">信號弱</string>
+    <string name="weak_signal_message">當前WLAN的信號較弱，建議您選擇信號較好的接入點</string>
+    <string name="auto_connect">不再詢問，總是自動連接其他信任接入點</string>
 </resources>
