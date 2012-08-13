@@ -16,6 +16,8 @@
 
 package android.view;
 
+import com.android.internal.telephony.PhoneFactory;
+
 import android.bluetooth.HeadsetBase;
 import android.content.Context;
 import android.content.Intent;
@@ -178,10 +180,19 @@ public class VolumePanel extends Handler
                 message = RINGTONE_VOLUME_TEXT;
                 Uri ringuri = RingtoneManager.getActualDefaultRingtoneUri(
                         mContext, RingtoneManager.TYPE_RINGTONE);
-                if (ringuri == null) {
+                Uri ringTwoUri = RingtoneManager.getActualDefaultRingtoneUri(mContext, RingtoneManager.TYPE_RINGTONE, 
+                		PhoneFactory.RAW_PHONE_ID);
+                if ((ringuri == null) && (ringTwoUri == null)) {
                     additionalMessage =
-                        com.android.internal.R.string.volume_music_hint_silent_ringtone_selected;
+                        //com.android.internal.R.string.volume_music_hint_silent_ringtone_selected;
+                    	com.android.internal.R.string.volume_music_hint_sim1_and_sim2_silent_ringtone_selected;
                     mRingIsSilent = true;
+                } else if ((ringuri == null) && (ringTwoUri != null)) {
+                	additionalMessage = 
+                		com.android.internal.R.string.volume_music_hint_silent_sim1_ringtone_selected;
+                } else if ((ringuri != null) && (ringTwoUri == null)) {
+                	additionalMessage = 
+                			com.android.internal.R.string.volume_music_hint_sim2_silent_ringtone_selected;
                 }
                 break;
             }

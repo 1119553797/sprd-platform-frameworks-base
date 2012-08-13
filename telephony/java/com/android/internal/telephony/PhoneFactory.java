@@ -62,6 +62,7 @@ public class PhoneFactory {
     // zhanglj add 2011-05-20
     private static final int DEFAULT_PHONE_COUNT = 1;
     public static final int RAW_DEFAULT_PHONE_ID = 0;
+    public static final int RAW_PHONE_ID = 1;
 //    public static final int DEFAULT_PHONE_ID = 0;
     private static boolean isCard1ok = false;
     private static boolean isCard2ok = false;

@@ -819,6 +819,9 @@
     <string name="volume_fm" msgid="">"收音機音量"</string>
     <string name="volume_music_hint_playing_through_bluetooth" msgid="9165984379394601533">"透過藍牙播放"</string>
     <string name="volume_music_hint_silent_ringtone_selected" msgid="6158339745293431194">"已選取靜音鈴聲"</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">"已選取SIM1靜音鈴聲"</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">"已選取SIM2靜音鈴聲"</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">"已選取SIM1和SIM2靜音鈴聲"</string>
     <string name="volume_call" msgid="3941680041282788711">"來電音量"</string>
     <string name="volume_bluetooth_call" msgid="2002891926351151534">"藍牙通話音量"</string>
     <string name="volume_alarm" msgid="1985191616042689100">"鬧鐘音量"</string>
