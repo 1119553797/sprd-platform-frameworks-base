@@ -332,6 +332,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         // receive broadcasts
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
+        filter.addAction(Intent.ACTION_LOCALE_CHANGED);
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION + "0");
@@ -1461,7 +1462,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 			if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)
 					|| Intent.ACTION_SCREEN_OFF.equals(action)) {
 				animateCollapse();
-			} else if (Intent.ACTION_CONFIGURATION_CHANGED.equals(action)) {
+            } else if (Intent.ACTION_LOCALE_CHANGED.equals(action)) {
+                ToggleViewGroup toggleViewGroup = (ToggleViewGroup) mExpandedView.findViewById(R.id.qucik_operation_btns);
+                setToggle(toggleViewGroup);
+            } else if (Intent.ACTION_CONFIGURATION_CHANGED.equals(action)) {
 				updateResources();
 			} else if ((Telephony.Intents.SPN_STRINGS_UPDATED_ACTION + "0")
 					.equals(action)
@@ -1534,6 +1538,33 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         }
     }
     //add by liguxiang 08-30-11 for NEWMS00117967 end
+
+    // setting toggle Multi-language support
+    void setToggle(ToggleViewGroup toggleViewGroup) {
+        LinearLayout wifiLayout, btLayout, soundLayout, mobileNetLayout, rotateLayout;
+        TextView wifiTV, dataTV, brightnessTV, modeTV, bluetoothTV, airplaneTV, rotateTV, gpsTV, lockscreenTV;
+        if (toggleViewGroup != null) {
+            wifiLayout = (LinearLayout)toggleViewGroup.findViewById(R.id.quick_operation_wifi);
+            wifiTV = (TextView)wifiLayout.findViewById(R.id.quick_operation_wifi_name);
+            wifiTV.setText(R.string.wifi_name);
+
+            btLayout = (LinearLayout)toggleViewGroup.findViewById(R.id.quick_operation_bluetooth);
+            bluetoothTV = (TextView)btLayout.findViewById(R.id.quick_operation_bluetooth_name);
+            bluetoothTV.setText(R.string.bluetooth_name);
+
+            soundLayout = (LinearLayout)toggleViewGroup.findViewById(R.id.quick_operation_sound);
+            modeTV = (TextView)soundLayout.findViewById(R.id.quick_operation_sound_name);
+            modeTV.setText(ToggleListener.mSoundModeText);
+
+            mobileNetLayout = (LinearLayout)toggleViewGroup.findViewById(R.id.quick_operation_mobile_net);
+            dataTV = (TextView)mobileNetLayout.findViewById(R.id.quick_operation_mobile_net_name);
+            dataTV.setText(R.string.mobile_net_name);
+
+            rotateLayout = (LinearLayout)toggleViewGroup.findViewById(R.id.quick_operation_auto_rotate);
+            rotateTV = (TextView)rotateLayout.findViewById(R.id.quick_operation_auto_rotate_name);
+            rotateTV.setText(R.string.auto_rotate_name);
+        }
+    }
 
     /**
      * Reload some of our resources when the configuration changes.

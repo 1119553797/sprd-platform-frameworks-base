@@ -49,4 +49,15 @@
     <string name="weak_signal_title">信号弱</string>
     <string name="weak_signal_message">当前WLAN的信号较弱，建议您选择信号较好的接入点</string>
     <string name="auto_connect">不再询问，总是自动连接其他信任接入点</string>
+
+    <string name="wifi_name" >"WLAN"</string>
+    <string name="bluetooth_name" >"蓝牙"</string>
+    <string name="sound_name" >"声音"</string>
+    <string name="mode_sound_name" >"声音"</string>
+    <string name="mode_silent_name" >"静音"</string>
+    <string name="mode_vibrate_name" >"振动"</string>
+    <string name="mobile_net_name" >"数据"</string>
+    <string name="auto_rotate_name" >"旋转"</string>
+    <string name="datanetwork_error_airplane">卡未准备好，您不能使用数据网络业务。</string>
+    <string name="bluetooth_error_airplane">手机处于飞行模式下，您不能使用来蓝牙。</string>
 </resources>

@@ -45,4 +45,15 @@
     <string name="weak_signal_title">信號弱</string>
     <string name="weak_signal_message">當前WLAN的信號較弱，建議您選擇信號較好的接入點</string>
     <string name="auto_connect">不再詢問，總是自動連接其他信任接入點</string>
+
+    <string name="wifi_name" >"WLAN"</string>
+    <string name="bluetooth_name" >"藍牙"</string>
+    <string name="sound_name" >"聲音"</string>
+    <string name="mode_sound_name" >"聲音"</string>
+    <string name="mode_silent_name" >"靜音"</string>
+    <string name="mode_vibrate_name" >"震動"</string>
+    <string name="mobile_net_name" >"數據"</string>
+    <string name="auto_rotate_name" >"旋轉"</string>
+    <string name="datanetwork_error_airplane">卡未準備好，您不能使用數據網絡業務。</string>
+    <string name="bluetooth_error_airplane">手機處於飛行模式下，您不能使用來藍牙。</string>
 </resources>

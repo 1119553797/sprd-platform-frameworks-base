@@ -23,7 +23,7 @@
     android:focusable="true"
     android:descendantFocusability="afterDescendants"
     >
-
+    <include android:id="@+id/qucik_operation_btns" layout="@layout/status_bar_toggle" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

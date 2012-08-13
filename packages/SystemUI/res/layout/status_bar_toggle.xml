@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.systemui.statusbar.ToggleViewGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="80dip"
+    android:layout_gravity="top"
+    android:orientation="horizontal"
+   >
+
+    <include android:id="@+id/quick_operation_wifi"  layout="@layout/quick_operation_wifi_view" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/separator_shade_background" />
+    <include android:id="@+id/quick_operation_bluetooth" layout="@layout/quick_operation_bluetooth_view" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/separator_shade_background" />
+    <include android:id="@+id/quick_operation_sound" layout="@layout/quick_operation_sound_view" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/separator_shade_background" />
+    <include android:id="@+id/quick_operation_mobile_net" layout="@layout/quick_operation_mobile_net_view" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/separator_shade_background" />
+    <include android:id="@+id/quick_operation_auto_rotate" layout="@layout/quick_operation_auto_rotate_view" />
+
+</com.android.systemui.statusbar.ToggleViewGroup>

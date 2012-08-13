@@ -18,5 +18,7 @@
 <resources>
     <!-- Margin at the edge of the screen to ignore touch events for in the windowshade. -->
     <dimen name="status_bar_edge_ignore">5dp</dimen>
+    <dimen name="status_bar_toggle_childview_width">64dip</dimen>
+    <dimen name="status_bar_toggle_childview_height">80dip</dimen>
 </resources>
 
