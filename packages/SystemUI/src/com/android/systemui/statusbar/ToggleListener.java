@@ -244,12 +244,12 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.AIRPLANE_MODE_ON),
                 true, mAirPlaneChangedObserver);
-        mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS),
-                true, mBrightnessChangedObserver);
-        mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.Secure.LOCATION_PROVIDERS_ALLOWED),
-                true, mGpsChangedObserver);
+//        mContext.getContentResolver().registerContentObserver(
+//                Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS),
+//                true, mBrightnessChangedObserver);
+//        mContext.getContentResolver().registerContentObserver(
+//                Settings.System.getUriFor(Settings.Secure.LOCATION_PROVIDERS_ALLOWED),
+//                true, mGpsChangedObserver);
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION),
                 true, mAutoRotateChangedObserver);
@@ -260,6 +260,9 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
 
     public void unregisterReceiver() {
         mToggleViewGroup.getContext().unregisterReceiver(this);
+        mContext.getContentResolver().unregisterContentObserver(mAirPlaneChangedObserver);
+        mContext.getContentResolver().unregisterContentObserver(mAutoRotateChangedObserver);
+        mContext.getContentResolver().unregisterContentObserver(mMobileDataObserver);
     }
 
     @Override
