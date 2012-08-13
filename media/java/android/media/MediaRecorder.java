@@ -316,7 +316,7 @@ public class MediaRecorder
             degrees != 270) {
             throw new IllegalArgumentException("Unsupported angle: " + degrees);
         }
-        setParameter(String.format("video-param-rotation-angle-degrees=%d", degrees));
+        setParameter("video-param-rotation-angle-degrees=" + Integer.toString(degrees));
     }
 
     /**
@@ -435,7 +435,7 @@ public class MediaRecorder
         if (samplingRate <= 0) {
             throw new IllegalArgumentException("Audio sampling rate is not positive");
         }
-        setParameter(String.format("audio-param-sampling-rate=%d", samplingRate));
+        setParameter("audio-param-sampling-rate=" + Integer.toString(samplingRate));
     }
 
     /**
@@ -450,7 +450,7 @@ public class MediaRecorder
         if (numChannels <= 0) {
             throw new IllegalArgumentException("Number of channels is not positive");
         }
-        setParameter(String.format("audio-param-number-of-channels=%d", numChannels));
+        setParameter("audio-param-number-of-channels=" + Integer.toString(numChannels));
     }
 
     /**
@@ -466,7 +466,7 @@ public class MediaRecorder
         if (bitRate <= 0) {
             throw new IllegalArgumentException("Audio encoding bit rate is not positive");
         }
-        setParameter(String.format("audio-param-encoding-bitrate=%d", bitRate));
+        setParameter("audio-param-encoding-bitrate=" + Integer.toString(bitRate));
     }
 
     /**
@@ -482,7 +482,7 @@ public class MediaRecorder
         if (bitRate <= 0) {
             throw new IllegalArgumentException("Video encoding bit rate is not positive");
         }
-        setParameter(String.format("video-param-encoding-bitrate=%d", bitRate));
+        setParameter("video-param-encoding-bitrate=" + Integer.toString(bitRate));
     }
 
     /**
@@ -495,7 +495,7 @@ public class MediaRecorder
         if (zoomValue < 0) {
             throw new IllegalArgumentException("Recording zoom value is not positive");
         }
-        setParameter(String.format("video-param-zoom=%d", zoomValue));
+        setParameter("video-param-zoom=" + Integer.toString(zoomValue));
     }	
 
     //wxz20120204: pause recording. 
