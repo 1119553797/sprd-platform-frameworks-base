@@ -473,7 +473,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
         <item>Kwastan</item>
     </string-array>
     <string-array name="imProtocols">
-        <item></item>
+        <item>AIM</item>
         <item>Windows Live</item>
         <item>Yahoo</item>
         <item>Skype</item>
@@ -635,65 +635,65 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="beforeOneMonthDurationPast">Kafin wata 1 da ya wuce</string>
     <plurals name="num_seconds_ago">
         <item quantity="one">dakika 1 da ya wuce</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> dakika da suka wuce</item>
     </plurals>
     <plurals name="num_minutes_ago">
         <item quantity="one">minti 1 da ya wuce</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> mintuna da suka wuce</item>
     </plurals>
     <plurals name="num_hours_ago">
         <item quantity="one">awa 1 da ya wuce</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> awanni da suka wuce</item>
     </plurals>
     <string name="last_month">Watan da ya gaba ta</string>
     <string name="older">Na da/older</string>
     <plurals name="num_days_ago">
         <item quantity="one">jiya</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> kwanaki da suka wuce</item>
     </plurals>
     <plurals name="in_num_seconds">
         <item quantity="one">a cikin dakika 1</item>
-        <item quantity="other"></item>
+        <item quantity="other">a cikin <xliff:g id="kidaya">%d</xliff:g> dakika</item>
     </plurals>
     <plurals name="in_num_minutes">
         <item quantity="one">a cikin minti 1</item>
-        <item quantity="other"></item>
+        <item quantity="other">a cikin <xliff:g id="kidaya">%d</xliff:g> mintuna</item>
     </plurals>
     <plurals name="in_num_hours">
         <item quantity="one">a cikin awa 1</item>
-        <item quantity="other"></item>
+        <item quantity="other">a cikin <xliff:g id="kidaya">%d</xliff:g> awanni</item>
     </plurals>
     <plurals name="in_num_days">
         <item quantity="one">gobe</item>
-        <item quantity="other"></item>
+        <item quantity="other">a cikin <xliff:g id="kidaya">%d</xliff:g> kwanaki</item>
     </plurals>
     <plurals name="abbrev_num_seconds_ago">
         <item quantity="one">dakika 1 da ya wuce</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> dakika da suka wuce</item>
     </plurals>
     <plurals name="abbrev_num_minutes_ago">
         <item quantity="one">minti 1 da ya wuce</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> mintuna da suka wuce</item>
     </plurals>
     <plurals name="abbrev_num_hours_ago">
         <item quantity="one">awa 1 da ya wuce</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> awanni da suka wuce</item>
     </plurals>
     <plurals name="abbrev_num_days_ago">
         <item quantity="one">jiya</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> kwanaki da suka wuce</item>
     </plurals>
     <plurals name="abbrev_in_num_seconds">
         <item quantity="one">a cikin dakika 1</item>
-        <item quantity="other"></item>
+        <item quantity="other">a cikin <xliff:g id="kidaya">%d</xliff:g> dakika</item>
     </plurals>
     <plurals name="abbrev_in_num_minutes">
         <item quantity="one">a cikin minti 1</item>
-        <item quantity="other"></item>
+        <item quantity="other">a cikin <xliff:g id="kidaya">%d</xliff:g> mintuna</item>
     </plurals>
     <plurals name="abbrev_in_num_hours">
         <item quantity="one">a cikin awa 1</item>
-        <item quantity="other"></item>
+        <item quantity="other">a cikin <xliff:g id="kidaya">%d</xliff:g> awanni</item>
     </plurals>
     <plurals name="abbrev_in_num_days">
         <item quantity="one">gobe</item>
@@ -892,4 +892,147 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_warning">Gargardi</string>
     <string name="internal_memory_low">Ma\'adanar SD card ta kusa cika! Share wasu fayil don samun sarari.</string>
     <string name="button_close">Rufe</string>
+    <string name="address_length">Adireshi ya kai makurar tsawo</string>
+    <string name="byteShort">B</string>
+    <string name="kilobyteShort">KB</string>
+    <string name="megabyteShort">MB</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="untitled">&lt;marar take&gt;</string>
+    <string name="ellipsis">\u2026</string>
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
+    <string name="mmiFdnError">An takaice aiki akan lambobin kira na dindindin kadai.</string>
+    <string name="serviceClassPAD">PAD</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: Ba a tura gaba ba</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> bayan <xliff:g id="time_delay">{2}</xliff:g> dakika</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: Ba a tura gaba ba</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: Ba a tura gaba ba</string>
+    <string name="notification_title">Kuskuren budewa ta <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+    <string name="contentServiceTooManyDeletesNotificationDesc">Masu yawa <xliff:g id="content_type">%s</xliff:g> sharewa.</string>
+    <string name="permgroupdesc_storage" product="default">Sami damar shiga SD card.</string>
+    <string name="permlab_statusBarService">ragayar matsayi</string>
+    <string name="permdesc_statusBarService">Yana bada dama ga shiri ya kasance tagar matsayi.</string>
+    <string name="permlab_receiveEmergencyBroadcast">karbi watsa bayanai na gaggawa</string>
+    <string name="permdesc_receiveEmergencyBroadcast">Yana bada dama ga shiri ya karba kuma ya tafiyar da sakonnin gaggawa da aka watsa. Ana samun wannan izini ne kawai ga shirye shiryen na\'ura.</string>
+    <string name="permlab_manageUsb">sarrafa zabuka da izini don na\'urorin USB</string>
+    <string name="permdesc_manageUsb">Yana bada dama ga shiri ya sarrafa zabuka da izini don na\'urorin USB.</string>
+    <string name="permlab_accessWimaxState">duba halin WiMAX</string>
+    <string name="permdesc_accessWimaxState">Yana bada dama ga shiri ya duba bayani game da halin WiMAX.</string>
+    <string name="permlab_changeWimaxState">canja halin WiMAX</string>
+    <string name="permdesc_changeWimaxState">Yana bada dama ga ga shiri ya hada sadarwa zuwa ko sannan ya yanke hadin daga hanyar sadarwar WiMAX.</string>
+    <string name="permlab_nfc">sarrafa Sadarwar Kusa da Fili</string>
+    <string name="permdesc_nfc">Yana bada dama ga shiri ya sadar tare da Sadarwar Kusa da Fili da alamomi, katuna, da kuma readers.</string>
+    <string name="permlab_sdcardWrite" product="default">kyautata,share bayanan cikin SD card</string>
+    <string name="permdesc_sdcardWrite" product="default">Yana bada dma ga shiri ya rubuta zuwa ga SD card.</string>
+    <string name="permlab_use_sip">yi/amsa kiran intanet</string>
+    <string name="permdesc_use_sip">Yana bada dama ga shiri ya yi amfani da aikin SIP don yi/karbar kiran intanet.</string>
+    <string name="phoneTypeIsdn">ISDN</string>
+    <string name="phoneTypeTtyTdd">TDD na TTY</string>
+    <string name="imProtocolAim">AIM</string>
+    <string name="sipAddressTypeCustom">Kwastan</string>
+    <string name="sipAddressTypeHome">Shafin farko</string>
+    <string name="sipAddressTypeWork">Aiki</string>
+    <string name="sipAddressTypeOther">Wani na daban</string>
+    <string name="contact_status_update_attribution">ta cikin <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> ta cikin <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="lockscreen_plugged_in">Ana caji (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">Ka zana nau\'in mabudinka ba daidai ba <xliff:g id="number">%d</xliff:g> sau.
+        \n\nSake gwadawa a cikin <xliff:g id="number">%d</xliff:g> dakika.</string>
+    <string name="lockscreen_too_many_failed_attempts_countdown">Sake gwadawa a cikin <xliff:g id="number">%d</xliff:g> dakika.</string>
+    <string name="password_keyboard_label_symbol_key">\?123</string>
+    <string name="password_keyboard_label_alpha_key">ABC</string>
+    <string name="password_keyboard_label_alt_key">ALT</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+    <string name="js_dialog_title">Shafin da ke \'<xliff:g id="title">%s</xliff:g>\' ya kan fadin:</string>
+    <string name="js_dialog_before_unload">Kana son fita daga wannan shafin?\n\n<xliff:g id="message">%s</xliff:g>\n\nZabi YA YI don cigaba, ko Soke don cigaba a wannan shafi.</string>
+    <string name="permlab_setAlarm">saita kararrawa a agogo mai kararrawa</string>
+    <string name="permdesc_setAlarm">Yana bada dama ga shiri don sanya kararrawa a cikin shiri mai agogon kararrawa da aka sanya. Wasu shirye shirye masu agogon kararrawa ba za iya aiwatar da wannan siffa ba.</string>
+    <plurals name="last_num_days">
+        <item quantity="other">Na karshe <xliff:g id="count">%d</xliff:g> kwanaki</item>
+    </plurals>
+    <string name="preposition_for_date">a kan <xliff:g id="date" example="May 29">%s</xliff:g></string>
+    <string name="preposition_for_time">a <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+    <string name="preposition_for_year">a cikin <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="second">dakika</string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="addToDictionary">"Kara \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" zuwa kamus</string>
+    <string name="chooseUsbActivity">Zabi shiri don na\'urar USB</string>
+    <string name="crash_title">Yi hakuri!</string>
+    <string name="crash_application">Shirin <xliff:g id="application">%1$s</xliff:g>
+        (hanyar aiki <xliff:g id="process">%2$s</xliff:g>) ya daina aiki ba zato. Na\'ura ta kasa gyara matsalar. Yi amfani da wata na\'urar.</string>
+    <string name="crash_process">Hanyar aikin <xliff:g id="process">%1$s</xliff:g> ta daina aiki ba zato. Na\'ura ta kasa gyara matsalar. Yi amfani da wata na\'urar.</string>
+    <string name="aerr_application">Shirin <xliff:g id="application">%1$s</xliff:g>
+        (hanyar aiki <xliff:g id="process">%2$s</xliff:g>) ya daina aiki ba zato. Sake gwadawa.</string>
+    <string name="aerr_process">Hanyar aikin <xliff:g id="process">%1$s</xliff:g> ta daina aiki ba zato. Sake gwadawa.</string>
+    <string name="anr_activity_application">Aiki <xliff:g id="activity">%1$s</xliff:g> (a cikin shiri <xliff:g id="application">%2$s</xliff:g>) ba ya aiki.</string>
+    <string name="anr_activity_process">Aiki <xliff:g id="activity">%1$s</xliff:g> (a cikin hanyar aiki <xliff:g id="process">%2$s</xliff:g>) ba ya aiki.</string>
+    <string name="anr_application_process">Shiri <xliff:g id="application">%1$s</xliff:g> (cikin hanyar aiki <xliff:g id="process">%2$s</xliff:g>) ba ya aiki.</string>
+    <string name="anr_process">Hanyar aiki <xliff:g id="process">%1$s</xliff:g> ba ya aiki.</string>
+    <string name="crash_close">OK</string>
+    <string name="launch_warning_title">An juyar da shiri zuwa</string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> yanzu yana aiki.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> an assasa shi tun asali.</string>
+    <string name="smv_application">Shirin <xliff:g id="application">%1$s</xliff:g>
+        (hanyar aiki <xliff:g id="process">%2$s</xliff:g>) ya bata tsarin bin Kai\'da na ganin dama. </string>
+    <string name="smv_process">Hanyar aikin <xliff:g id="process">%1$s</xliff:g> ta bata tsarin BinKaidar ta na dorawa kai.</string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> yana aiki</string>
+    <string name="heavy_weight_notification_detail">Zabi don ka canja zuwa shiri</string>
+    <string name="heavy_weight_switcher_title">A canja shirye shirye?</string>
+    <string name="heavy_weight_switcher_text">Wani shirin yana cikin aiki  dole a tsayar da shi kafin ka fara wani sabo.</string>
+    <string name="old_app_action">Dawo zuwa ga <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="old_app_description">Kada ka kunna sabon shirin.</string>
+    <string name="new_app_action">Kunna <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="new_app_description">Dakatar da tsohon shirin ba tare da ajiye wa ba.</string>
+    <string name="ringtone_default_with_actual">Sautin kira na dindindin (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="perms_hide"><b>Boye</b></string>
+    <string name="perms_show_all"><b>Nuna gaba daya</b></string>
+    <string name="usb_storage_message" product="default">Ka hada wayarka da kwamfutarka ta cikin USB. Zabi madannin da ke kasa idan kana son kwafe fayiloli tsakanin kwamfuta da Andiroyid dinka\u2018s SD card.</string>
+    <string name="usb_storage_error_message" product="default">An sami matsala wajen amfani da SD card din ka don ma\'adanar dandazo ta USB.</string>
+    <string name="usb_storage_stop_message" product="default">Kafin ka kashe ma\'adanar USB, tabbatar ka fitar da (\u201canfitar\u201d) Android din ka\u2018s SD card daga cikin kwamfutarka.</string>
+    <string name="extmedia_format_title" product="default">Assasa SD card</string>
+    <string name="extmedia_format_message" product="default">Katabbata kana son assasa SD card? Za ka rasa duk bayanan da ke kan katinka.</string>
+    <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="candidates_style"><u>yan takara</u></string>
+    <string name="ext_media_checking_notification_title" product="default">Ana shirya SD card</string>
+    <string name="ext_media_nofs_notification_title" product="default">Holokon SD card</string>
+    <string name="ext_media_nofs_notification_message" product="default">Katin SD holoko ko yana da fayil da tsarin fayil da bai dace ba.</string>
+    <string name="ext_media_unmountable_notification_title" product="default">SD card ya lalace</string>
+    <string name="ext_media_unmountable_notification_message" product="default">Holokon SD card ko tsarin fayil dinsa bai dace ba.</string>
+    <string name="ext_media_badremoval_notification_title" product="default">An cire SD card ba zato</string>
+    <string name="ext_media_badremoval_notification_message" product="default">Sauko da SD card kafin cirewa don gudun hasarar bayanai.</string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">Za a iya cire SD card</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">Ba matsala za ka iya cire SD card.</string>
+    <string name="ext_media_nomedia_notification_title" product="default">SD card da aka cire</string>
+    <string name="ext_media_nomedia_notification_message" product="default">An cire SD card. Shigar da sabo.</string>
+    <string name="dial_number_using">Buga lamba\nta amfani da <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="create_contact_using">Kirkiri matuntuba\nta amfani da <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="permission_request_notification_with_subtitle">An bukaci izini\ndon asusu <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="alternate_eri_file">/bayanai/eri.xml</string>
+    <string name="cta_tethered_notification_title">Durewa</string>
+    <string name="custom_china_mobile">Wayar tafi-d-gidanka ta Chaina</string>
+    <string name="custom_china_unicom">Unicom na Chaina</string>
+    <string name="shutdown_after_seconds">Waya za ta kulle bayan <xliff:g id="NUMBER">%d</xliff:g> dakikoki</string>
+    <string name="lockscreen_password_error">Kalmar-shiga matsala ce, sake gwadawa!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">Ka shigar da kalmar-shigarka ta mabudi ba daidai ba <xliff:g id="number">%d</xliff:g> sau.
+        \n\nSake gwadawa a cikin <xliff:g id="number">%d</xliff:g> dakika.</string>
+    <string name="progress_unmounting" product="default">Ana sauko da SD card...</string>
+    <string name="progress_erasing" product="default">An na share SD card...</string>
+    <string name="format_error" product="default">An kasa share SD card.</string>
+    <string name="media_checking" product="default">Ana duba SD card yanzu.</string>
+    <string name="media_shared" product="default">Wata kwamfuta tana amfani da SD card yanzu.</string>
+    <string name="audio_play_failed">Yi hakuri, ba za a iya kunna wannan sautin maganar ba. Kada ka saita wannan sautin kiran.</string>
+    <string name="sms_full_title">Memory na sakonnin rubutu ya cika</string>
+    <string name="sms_full_body">An ki karbar sako mai shigowa saboda memore ya cika. Share tsofaffin sakonni.</string>
+    <string name="unlock_screen_pin_error">Pin din matsala ne!</string>
+    <string name="ap_disconnected">an katse sadarwar</string>
+    <string name="sim_chooser_title">Zabi SIM</string>
+    <string name="lockscreen_miss_phone">kuskure waya</string>
+    <string name="lockscreen_miss_mms">kuskure sms</string>
+    <string name="lockscreen_sim_card_locked_message">An kulle SIM card.</string>
 </resources>

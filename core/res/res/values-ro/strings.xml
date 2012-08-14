@@ -12,14 +12,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="ellipsis">"…"</string>
     <string name="emptyPhoneNumber">"(Niciun număr de telefon)"</string>
     <string name="unknownName">"(Necunoscut)"</string>
-    <string name="defaultVoiceMailAlphaTag">"Mesaj vocal"</string>
+    <string name="defaultVoiceMailAlphaTag">Căsuţă vocală</string>
     <string name="defaultMsisdnAlphaTag">"MSISDN1"</string>
     <string name="mmiError">"Problemă de conexiune sau cod MMI nevalid."</string>
     <string name="mmiFdnError">"Operaţia este limitată la numerele cu apelări restricţionate."</string>
     <string name="serviceEnabled">"Serviciul a fost activat."</string>
     <string name="serviceEnabledFor">"Serviciul a fost activat pentru:"</string>
     <string name="serviceDisabled">"Serviciul a fost dezactivat."</string>
-    <string name="serviceRegistered">"Înregistrarea a reuşit."</string>
+    <string name="serviceRegistered">Înregistrarea a fost efectuată cu succes.</string>
     <string name="serviceErased">"Ştergerea a reuşit."</string>
     <string name="passwordIncorrect">"Parolă incorectă."</string>
     <string name="passwordChange" msgid="">Parolă schimbată</string>
@@ -145,8 +145,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="httpErrorFileNotFound">"Nu a fost găsit fişierul solicitat."</string>
     <string name="httpErrorTooManyRequests">"Există prea multe solicitări în curs de procesare. Încercaţi din nou mai târziu."</string>
     <string name="notification_title">"Eroare de conectare pentru <xliff:g id="ACCOUNT">%1$s</xliff:g>"</string>
-    <string name="contentServiceSync">"Sincronizare"</string>
-    <string name="contentServiceSyncNotificationTitle">"Sincronizare"</string>
+    <string name="contentServiceSync">"Sincron"</string>
+    <string name="contentServiceSyncNotificationTitle">"Sincron"</string>
     <string name="contentServiceTooManyDeletesNotificationDesc">"Prea multe ştergeri <xliff:g id="CONTENT_TYPE">%s</xliff:g>."</string>
     <string name="low_memory">"Spaţiul de stocare al telefonului este plin! Ştergeţi fişiere pentru a elibera spaţiu."</string>
     <string name="me">"Eu"</string>
@@ -336,7 +336,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_readFrameBuffer">"Permite unei aplicaţii să citească conţinutul tamponului cadrului."</string>
     <string name="permlab_modifyAudioSettings">"modificare setări audio"</string>
     <string name="permdesc_modifyAudioSettings">"Permite aplicaţiei să modifice setările audio globale, cum ar fi volumul sau rutarea."</string>
-    <string name="permlab_recordAudio">"înregistrare audio"</string>
+    <string name="permlab_recordAudio">"înregistraţi audio"</string>
     <string name="permdesc_recordAudio">"Permite aplicaţiei să acceseze calea către înregistrarea audio."</string>
     <string name="permlab_camera">"realizarea de fotografii şi videoclipuri"</string>
     <string name="permdesc_camera">"Permite unei aplicaţii să facă fotografii cu ajutorul camerei foto. Astfel i se permite aplicaţiei să colecteze oricând imaginile văzute de camera foto."</string>
@@ -394,7 +394,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_setWallpaperHints">"Permite aplicaţiei să seteze sugestiile privind dimensiunile imaginii de fundal a sistemului."</string>
     <string name="permlab_masterClear">"resetare sistem la setările prestabilite din fabrică"</string>
     <string name="permdesc_masterClear">"Permite unei aplicaţii să reseteze complet sistemul la setările din fabrică, ştergând toate datele, configurările şi aplicaţiile instalate."</string>
-    <string name="permlab_setTime">"setare dată/oră"</string>
+    <string name="permlab_setTime">"setare oră"</string>
     <string name="permdesc_setTime">"Permite unei aplicaţii să modifice ora telefonului."</string>
     <string name="permlab_setTimeZone">"setare fus orar"</string>
     <string name="permdesc_setTimeZone">"Permite unei aplicaţii să modifice fusul orar al telefonului."</string>
@@ -563,10 +563,10 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="orgTypeWork">"Serviciu"</string>
     <string name="orgTypeOther">"Altele"</string>
     <string name="orgTypeCustom">"Personalizat"</string>
-    <string name="sipAddressTypeCustom">"Personalizată"</string>
-    <string name="sipAddressTypeHome">"Ecran pornire"</string>
+    <string name="sipAddressTypeCustom">"Personalizat"</string>
+    <string name="sipAddressTypeHome">"Domiciliu"</string>
     <string name="sipAddressTypeWork">"Serviciu"</string>
-    <string name="sipAddressTypeOther">"Altul"</string>
+    <string name="sipAddressTypeOther">"Altele"</string>
     <string name="contact_status_update_attribution">"prin <xliff:g id="SOURCE">%1$s</xliff:g>"</string>
     <string name="contact_status_update_attribution_with_date">"La ora <xliff:g id="DATE">%1$s</xliff:g> de pe <xliff:g id="SOURCE">%2$s</xliff:g>"</string>
     <string name="keyguard_password_enter_pin_code">"Introduceţi codul PIN"</string>
@@ -682,8 +682,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="prepend_shortcut_label">"Meniu+"</string>
     <string name="menu_space_shortcut_label">"spaţiu"</string>
     <string name="menu_enter_shortcut_label">"enter"</string>
-    <string name="menu_delete_shortcut_label">"delete"</string>
-    <string name="search_go">"Căutaţi"</string>
+    <string name="menu_delete_shortcut_label">Ştergere</string>
+    <string name="search_go">Căutare</string>
     <string name="oneMonthDurationPast">"cu 1 lună în urmă"</string>
     <string name="beforeOneMonthDurationPast">"Cu mai mult de 1 lună în urmă"</string>
     <plurals name="num_seconds_ago">
@@ -745,7 +745,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     </plurals>
     <plurals name="abbrev_in_num_minutes">
         <item quantity="one">"în 1 min."</item>
-        <item quantity="other">"în <xliff:g id="COUNT">%d</xliff:g> (de) min."</item>
+        <item quantity="other">"în <xliff:g id="COUNT">%d</xliff:g> (de) minute"</item>
     </plurals>
     <plurals name="abbrev_in_num_hours">
         <item quantity="one">"în 1 oră"</item>
@@ -819,7 +819,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="launch_warning_title">"Aplicaţie redirecţionată"</string>
     <string name="launch_warning_replace">"<xliff:g id="APP_NAME">%1$s</xliff:g> funcţionează acum."</string>
     <string name="launch_warning_original">"<xliff:g id="APP_NAME">%1$s</xliff:g> a fost lansată iniţial."</string>
-    <string name="smv_application">"Aplicaţia <xliff:g id="APPLICATION">%1$s</xliff:g> (procesul <xliff:g id="PROCESS">%2$s</xliff:g>) a încălcat propria politică StrictMode."</string>
+    <string name="smv_application">"Aplicaţia <xliff:g id="APPLICATION">%1$s</xliff:g> (procesul <xliff:g id="PROCESS">%2$s</xliff:g>) s-a oprit în mod neaşteptat. Încercaţi din nou."</string>
     <string name="smv_process">"Procesul <xliff:g id="PROCESS">%1$s</xliff:g> a încălcat propria politică StrictMode."</string>
     <string name="heavy_weight_notification">"Rulează <xliff:g id="APP">%1$s</xliff:g>"</string>
     <string name="heavy_weight_notification_detail">"Selectaţi comutarea aplicaţiei"</string>
@@ -837,7 +837,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="volume_music_hint_silent_ringtone_selected">"Ton de apel silenţios selectat"</string>
     <string name="volume_call">"Volum apel de intrare"</string>
     <string name="volume_bluetooth_call">"Volum apel Bluetooth"</string>
-    <string name="volume_alarm">"Volum alarmă"</string>
+    <string name="volume_alarm">Volumul deșteptătorului</string>
     <string name="volume_notification">"Volum notificare"</string>
     <string name="volume_unknown">"Volum"</string>
     <string name="ringtone_default">"Ton de apel prestabilit"</string>
@@ -924,7 +924,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="ext_media_nomedia_notification_title" product="default">"Card SD extras"</string>
     <string name="ext_media_nomedia_notification_message" product="nosdcard">"Stocarea USB a fost eliminată. Inseraţi mediu de stocare nou."</string>
     <string name="ext_media_nomedia_notification_message" product="default">"Card SD extras. Inseraţi un card nou."</string>
-    <string name="activity_list_empty">"Nu s-a găsit nicio activitate potrivită"</string>
+    <string name="activity_list_empty">"Nu a fost găsită nicio persoană potrivită în agendă."</string>
     <string name="permlab_pkgUsageStats">"actualizare statistici referitoare la utilizarea componentelor"</string>
     <string name="permdesc_pkgUsageStats">"Permite modificarea statisticilor colectate de utilizare a componentelor. Nu se utilizează de aplicaţiile obişnuite."</string>
     <string name="permlab_copyProtectedData">"Permite invocarea serviciului containerului prestabilit pentru a copia conţinutul. Nu se utilizează de aplicaţiile obişnuite."</string>
@@ -949,9 +949,9 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permission_request_notification_title">"Permisiune solicitată"</string>
     <string name="permission_request_notification_with_subtitle">"Permisiune solicitată"\n"pentru contul <xliff:g id="ACCOUNT">%s</xliff:g>"</string>
     <string name="input_method_binding_label">"Metodă de intrare"</string>
-    <string name="sync_binding_label">"Sincronizare"</string>
+    <string name="sync_binding_label">"Sincron"</string>
     <string name="accessibility_binding_label">"Accesibilitate"</string>
-    <string name="wallpaper_binding_label">"Imagine de fundal"</string>
+    <string name="wallpaper_binding_label">Tapet</string>
     <string name="chooser_wallpaper">"Modificaţi imaginea de fundal"</string>
     <string name="pptp_vpn_description">"Protocol de tunel punct la punct"</string>
     <string name="l2tp_vpn_description">"Protocol de tunel Nivel 2 (L2TP)"</string>
@@ -977,7 +977,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="Low_Memory_System">Sistem</string>
     <string name="Btn_Select_Clear">Selectați / Ștergeți</string>
     <string name="myAppTip">Selectați aplicațiile de manevrat</string>
-    <string name="myApp_Start_Btn">Start</string>
+    <string name="myApp_Start_Btn">"Porniţi"</string>
     <string name="myApp_Move2Sd_ChkBox">Mutare la SD</string>
     <string name="myApp_ClearData_ChkBox">Şterge Date</string>
     <string name="myApp_Uninstall_ChkBox">Dezinstalare</string>
@@ -1012,4 +1012,24 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_warning">Avertisment</string>
     <string name="internal_memory_low">Stocarea cardului SD este aproape plină! Ștegeți unele fișiere pentru a face spațiu.</string>
     <string name="button_close">Închidere</string>
+    <string name="address_length">Adresa a atins lungime maximă</string>
+    <string name="permlab_receiveEmergencyBroadcast">primiţi difuzări de urgenţă</string>
+    <string name="permdesc_receiveEmergencyBroadcast">Permite aplicaţiei să primească
+ şi să proceseze mesajele de urgenţă difuzate. Această permisiune este valabilă numai  pentru aplicaţii de sistem.</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="cta_tethered_notification_title">"Tethering"</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicom</string>
+    <string name="shutdown_after_seconds">Telefonul se va deconecta peste <xliff:g id="NUMBER">%d</xliff:g> secunde</string>
+    <string name="lockscreen_password_error">Parola este greșită,încercaţi din nou!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">Aţi introdus incorect parola de deblocare de <xliff:g id="number">%d</xliff:g> ori.                                                                     \n\nVă rugăm să încercaţi din nou peste <xliff:g id="number">%d</xliff:g> secunde.</string>
+    <string name="audio_play_failed">Scuze,acest fişier audio nu poate fi redat,utilizează ringtonul implicit</string>
+    <string name="sms_full_title">"Memoria pentru mesajul text este plină"</string>
+    <string name="sms_full_body">Mesaj de intrare repsins din cauza memoriei pline. Vă rugăm ştergeţi mesajele vechi. </string>
+    <string name="unlock_screen_pin_error">Codul pin este greșit!</string>
+    <string name="ap_disconnected">"Deconectat"</string>
+    <string name="sim_chooser_title">Alegeţi SIM</string>
+    <string name="lockscreen_miss_phone">omiteţi telefonul</string>
+    <string name="lockscreen_miss_mms">omiteţi sms</string>
+    <string name="lockscreen_sim_card_locked_message">"Cardul SIM este blocat."</string>
 </resources>
