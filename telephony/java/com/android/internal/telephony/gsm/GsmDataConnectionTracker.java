@@ -1341,9 +1341,10 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             if (waitingApns!=null&&!waitingApns.isEmpty()) {
                 waitingApns.remove(0);
             }
-            if (DBG) log(String.format("onDataSetupComplete: waitingApns.size=%d" +
-                            " waitingApnsPermanenatFailureCountDown=%d",
-                            waitingApns.size(), waitingApnsPermanentFailureCountDown));
+            if (DBG)
+                log("onDataSetupComplete: waitingApns.size=" + Integer.toString(waitingApns.size())
+                        + " waitingApnsPermanenatFailureCountDown="
+                        + Integer.toString(waitingApnsPermanentFailureCountDown));
 
             // See if there are more APN's to try
             if (waitingApns.isEmpty()) {
