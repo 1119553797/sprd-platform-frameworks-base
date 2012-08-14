@@ -32,10 +32,10 @@ public abstract class IccRecords extends Handler implements IccConstants {
 
     protected static final boolean DBG = true;
     // ***** Instance Variables
-
     protected PhoneBase phone;
     protected RegistrantList recordsLoadedRegistrants = new RegistrantList();
 
+    protected boolean isLoadedBroadcastSend = false;
     protected int recordsToLoad;  // number of pending load requests
 
     protected AdnRecordCache adnCache;
