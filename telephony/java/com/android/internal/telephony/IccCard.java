@@ -25,8 +25,10 @@ import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
 import android.telephony.TelephonyManager;
+import android.util.Config;
 import android.util.Log;
 
+import com.android.internal.telephony.IccCardStatus.CardState;
 import com.android.internal.telephony.PhoneBase;
 import com.android.internal.telephony.CommandsInterface.RadioState;
 
@@ -465,8 +467,14 @@ public abstract class IccCard {
         State oldState, newState;
         oldState = mState;
         mIccCardStatus = newCardStatus;
-        Log.d(mLogTag,mPhone.getPhoneName()+" phone= "+mPhone.getPhoneId()+" mIccCardStatus="+mIccCardStatus.getCardState().toString());
-        newState = getIccCardState();
+        Log.d(mLogTag, mPhone.getPhoneName()
+                + " phone= "
+                + mPhone.getPhoneId()
+                + " mIccCardStatus="
+                + (mIccCardStatus.getCardState() == CardState.CARDSTATE_ABSENT ? "absent"
+                        : (mIccCardStatus.getCardState() == CardState.CARDSTATE_ERROR ? "error"
+                                : "present")));
+		newState = getIccCardState();
         mState = newState;
 
         PhoneFactory.autoSetDefaultPhoneId(true, mPhone.getPhoneId());
@@ -673,11 +681,15 @@ public abstract class IccCard {
 
             switch (msg.what) {
                 case EVENT_RADIO_OFF_OR_NOT_AVAILABLE:
-                    mState = null;
-                    updateStateProperty();
-                    broadcastIccStateChangedIntent(INTENT_VALUE_ICC_NOT_READY, null);
+                    //mState = null;
+                    // updateStateProperty();
+                    //broadcastIccStateChangedIntent(INTENT_VALUE_ICC_NOT_READY, null);
+                    if(Config.DEBUG)Log.d(mLogTag, "EVENT_RADIO_OFF_OR_NOT_AVAILABLE,update property");
+                    mPhone.mCM.getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE));
                     break;
                 case EVENT_ICC_READY:
+                    if (Config.DEBUG)
+                        Log.d(mLogTag, "EVENT_ICC_READY,get property");
                     //TODO: put facility read in SIM_READY now, maybe in REG_NW
                     mPhone.mCM.getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE));
                     mPhone.mCM.queryFacilityLock (
@@ -694,6 +706,8 @@ public abstract class IccCard {
                             obtainMessage(EVENT_QUERY_FACILITY_NETWORK_DONE));
                     break;
                 case EVENT_ICC_LOCKED_OR_ABSENT:
+                    if (Config.DEBUG)
+                        Log.d(mLogTag, "EVENT_ICC_LOCKED_OR_ABSENT,get property");
                     mPhone.mCM.getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE));
                     mPhone.mCM.queryFacilityLock (
                             CommandsInterface.CB_FACILITY_BA_SIM, "", serviceClassX,
@@ -817,7 +831,8 @@ public abstract class IccCard {
                     ((Message)ar.userObj).sendToTarget();
                     break;
                 case EVENT_ICC_STATUS_CHANGED:
-                    Log.d(mLogTag, "Received EVENT_ICC_STATUS_CHANGED, calling getIccCardStatus");
+                    if (Config.DEBUG)
+                        Log.d(mLogTag, "Received EVENT_ICC_STATUS_CHANGED, calling getIccCardStatus");
                     mPhone.mCM.getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE));
                     break;
                 default:
@@ -827,6 +842,8 @@ public abstract class IccCard {
     };
 
     public State getIccCardState() {
+        if (Config.DEBUG)
+            Log.e(mLogTag, "getIccCardState where you called:");
         if (mIccCardStatus == null) {
             Log.e(mLogTag, "[IccCard] IccCardStatus is null");
             return IccCard.State.ABSENT;
@@ -838,21 +855,34 @@ public abstract class IccCard {
         }
 
         RadioState currentRadioState = mPhone.mCM.getRadioState();
+        Log.e(mLogTag,
+                "1 currentRadioState="
+                        + (currentRadioState == RadioState.SIM_NOT_READY ? "SIM_NOT_READY"
+                                : (currentRadioState == RadioState.RADIO_OFF ? "RADIO_OFF"
+                                        : (currentRadioState == RadioState.RADIO_UNAVAILABLE ? "RADIO_UNAVAILABLE"
+                                                : "other"))));
+        if (currentRadioState == RadioState.RADIO_OFF) {
+            // if mIccCardStatus is CardPresent, it means SIM card is exist.
+            // So we return ready
+            return IccCard.State.READY;
+        }
         // check radio technology
-        if( currentRadioState == RadioState.RADIO_OFF         ||
-            currentRadioState == RadioState.RADIO_UNAVAILABLE ||
+        if( /*currentRadioState == RadioState.RADIO_OFF         ||
+            currentRadioState == RadioState.RADIO_UNAVAILABLE ||*/
             currentRadioState == RadioState.SIM_NOT_READY     ||
             currentRadioState == RadioState.RUIM_NOT_READY    ||
             currentRadioState == RadioState.NV_NOT_READY      ||
             currentRadioState == RadioState.NV_READY) {
             return IccCard.State.NOT_READY;
         }
-
+        Log.e(mLogTag, "2 currentRadioState="
+                + (currentRadioState == RadioState.SIM_LOCKED_OR_ABSENT ? "SIM_LOCKED_OR_ABSENT"
+                        : (currentRadioState == RadioState.SIM_READY ? "SIM_READY" : "other")));
         if( currentRadioState == RadioState.SIM_LOCKED_OR_ABSENT  ||
             currentRadioState == RadioState.SIM_READY             ||
             currentRadioState == RadioState.RUIM_LOCKED_OR_ABSENT ||
             currentRadioState == RadioState.RUIM_READY) {
-
+            Log.e(mLogTag, " start ");
             int index;
 
             // check for CDMA radio technology
@@ -870,7 +900,6 @@ public abstract class IccCard {
                 Log.e(mLogTag, "[IccCard] Subscription Application in not present");
                 return IccCard.State.ABSENT;
             }
-
             // check if PIN required
             if (app.app_state.isPinRequired()) {
                 return IccCard.State.PIN_REQUIRED;
@@ -895,7 +924,7 @@ public abstract class IccCard {
             }
             return IccCard.State.NOT_READY;
         }
-
+        Log.e(mLogTag,"other radio state");
         return IccCard.State.ABSENT;
     }
 

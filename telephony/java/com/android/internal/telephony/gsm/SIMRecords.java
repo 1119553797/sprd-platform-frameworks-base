@@ -167,7 +167,7 @@ public final class SIMRecords extends IccRecords {
             Log.d(LOG_TAG, "BroadcastReceiver:phoneid="+phone.getPhoneId()+" intent=" + intent.getAction());
 
             if (intent.getAction().equals(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE, phone.getPhoneId()))) {
-                    fetchSimRecords();
+                    //fetchSimRecords();
             }
         }
     };
@@ -194,9 +194,8 @@ public final class SIMRecords extends IccRecords {
 
     SIMRecords(GSMPhone p) {
         super(p);
-
         adnCache = new AdnRecordCache(phone);
-
+        isLoadedBroadcastSend = false;
         mVmConfig = new VoiceMailConstants();
         mSpnOverride = new SpnOverride();
 
@@ -221,9 +220,8 @@ public final class SIMRecords extends IccRecords {
 
     SIMRecords(GSMPhone p,Context context) {
         super(p);
-
         adnCache = new AdnRecordCache(phone);
-
+        isLoadedBroadcastSend = false;
         mVmConfig = new VoiceMailConstants();
         mSpnOverride = new SpnOverride();
 
@@ -1371,8 +1369,9 @@ public final class SIMRecords extends IccRecords {
         // One record loaded successfully or failed, In either case
         // we need to update the recordsToLoad count
         recordsToLoad -= 1;
-
-        if (recordsToLoad == 0 && recordsRequested == true) {
+        Log.e(LOG_TAG, "onRecordLoaded: recordsToLoad ="+recordsToLoad+",recordsRequested="+recordsRequested+",isLoadedBroadcastSend="+isLoadedBroadcastSend);
+        if (recordsToLoad == 0 && recordsRequested == true && !isLoadedBroadcastSend) {
+            isLoadedBroadcastSend = true;
             onAllRecordsLoaded();
         } else if (recordsToLoad < 0) {
             Log.e(LOG_TAG, "SIMRecords: recordsToLoad <0, programmer error suspected");
@@ -1430,7 +1429,7 @@ public final class SIMRecords extends IccRecords {
         ((GSMPhone) phone).mSimCard.broadcastIccStateChangedIntent(
                 SimCard.INTENT_VALUE_ICC_READY, null);
 
-        // fetchSimRecords();
+         fetchSimRecords();
         // modify by wangxiaobin for MSNEW00130772 Tuesday, November 01 2011 begin
 //        int cf = SystemProperties.getInt("persist.sys.callforwarding", 1);
 //        Log.v(LOG_TAG, "onSimReady call forward state="+cf);
