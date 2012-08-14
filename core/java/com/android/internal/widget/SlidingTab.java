@@ -201,6 +201,7 @@ public class SlidingTab extends ViewGroup {
                     LayoutParams.MATCH_PARENT));
             text.setBackgroundResource(barId);
             text.setTextAppearance(parent.getContext(), R.style.TextAppearance_SlidingTabNormal);
+            text.setHorizontallyScrolling(true);
             // hint.setSingleLine();  // Hmm.. this causes the text to disappear off-screen
 
             // Create target
