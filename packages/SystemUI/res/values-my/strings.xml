@@ -1,4 +1,27 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">အေၾကာင္းအရာျပဘား</string>
+    <string name="status_bar_clear_all_button">ျကည္လင္ေသာ</string>
+    <string name="status_bar_no_notifications_title">သတိေပးခ်က္မ်ားမ႐ွိ</string>
+    <string name="status_bar_ongoing_events_title">သြားေနဆဲ</string>
+    <string name="status_bar_latest_events_title">သတိေပးခ်က္မ်ား</string>
+    <string name="battery_low_title">အားသြင္းစက္ႏွင့္ခ်ိတ္ဆက္ပါ</string>
+    <string name="battery_low_subtitle">ဘက္ထရီနည္းလာျပီ :</string>
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g> ႏွင့္ေအာက္က်န္႐ွိ</string>
+    <string name="battery_low_why">ဘက္ထရီအသံုးျပဳမႈ</string>
+    <string name="usb_accessory_permission_prompt">ပ႐ိုဂရမ္ %1$s  အား USB အပိုပစၥည္းသို႔ ဝင္ေရာက္ခြင့္ျပဳမလား?</string>
+    <string name="usb_device_confirm_prompt">ဤ USB ပစၥည္းခ်ိတ္ဆက္ျပီးပါက %1$s ကို ဖြင့္မလား?</string>
+    <string name="usb_accessory_confirm_prompt">ဤ USB အပိုပစၥည္းခ်ိတ္ဆက္ျပီးပါက %1$s ကို ဖြင့္မလား?</string>
+    <string name="usb_accessory_uri_prompt">USB အပိုပစၥည္းႏွင့္ တြဲဖက္လုပ္ေဆာင္သည့္ သြင္းထားသည့္ ပ႐ိုဂရမ္မ်ားမ႐ွိပါ။ ဤအပိုပစၥည္းႏွင့္ပတ္သက္၍ <xliff:g id="url">%1$s</xliff:g> တြင္ ေလ့လာပါ</string>
+    <string name="title_usb_accessory">USB အပိုပစၥည္း</string>
+    <string name="label_view">ရွာေဖြေရး</string>
+    <string name="always_use_accessory">ဤ USB အပိုပစၥည္းအား မူလပံုစံျဖင့္ အသံုးျပဳမည္</string>
+    <string name="mobile_data_connect_disable">မဟုတ်</string>
+    <string name="mobile_data_connect_enable">ဟုတ် </string>
+    <string name="network_disconnect_title">အသိေပးခ်က္</string>
+    <string name="network_disconnect_message">WLAN ကြန္ယက္ခ်ိတ္ဆက္မႈျဖဳတ္ျပီး။ \n6G မွတဆင့္ ခ်ိတ္ဆက္မလား? \nသင့္တြင္ ေဒတာအစီအစဥ္မ႐ွိပါက အပိုေၾကးမ်ားထပ္ခါထပ္ခါ က်လိမ့္မည္။</string>
+    <string name="weak_signal_title">အခ်က္ျပသေကၤတအားမေကာင္းပါ</string>
+    <string name="weak_signal_message">လက္႐ွိ WLAN အခ်က္ျပသေကၤတမွာ ေတာ္ေတာ္အားမေကာင္းပါ၊ ပိုေကာင္းသည့္တစ္ခုကို ေ႐ြးခ်ယ္ရန္ အၾကံျပဳပါသည္</string>
+    <string name="auto_connect">မေမးဘဲ အျခားယံုၾကည္စိတ္ခ်ရသည့္ ပ႐ုိဂရမ္သို႔ အလိုအေလ်ာက္ခ်ိတ္ဆက္ပါ</string>
 </resources>

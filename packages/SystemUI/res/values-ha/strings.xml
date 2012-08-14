@@ -1,4 +1,28 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">Ragayar Matsayi</string>
+    <string name="status_bar_clear_all_button">Goge</string>
+    <string name="status_bar_no_notifications_title">Babu ankararwa</string>
+    <string name="status_bar_ongoing_events_title">Mai gudana</string>
+    <string name="status_bar_latest_events_title">Ankararwa</string>
+    <string name="battery_low_title">Jona caja</string>
+    <string name="battery_low_subtitle">Batiri yana kara yin kasa:</string>
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g>
+    ko kasa da haka ya rage.</string>
+    <string name="battery_low_why">Amfanin batiri</string>
+    <string name="usb_accessory_permission_prompt">A bada dama ga shirin %1$s don kaiwa ga mahadin USB?</string>
+    <string name="usb_device_confirm_prompt">A bude %1$s yayin da aka jona wannan na\'ura ta USB?</string>
+    <string name="usb_accessory_confirm_prompt">A bude %1$s yayin da aka jona wannan mahadin USB?</string>
+    <string name="usb_accessory_uri_prompt">Babu wasu shiri da aka sanya da suke aiki da wannan mahadi na USB. Kara sani game da wannan mahadi a <xliff:g id="url">%1$s</xliff:g></string>
+    <string name="title_usb_accessory">Mahadin USB</string>
+    <string name="label_view">Bidiyo</string>
+    <string name="always_use_accessory">Yi amfani ta dindindin don wannan mahadi na USB</string>
+    <string name="mobile_data_connect_disable">A\'a</string>
+    <string name="mobile_data_connect_enable">E</string>
+    <string name="network_disconnect_title">Sanarwa</string>
+    <string name="network_disconnect_message">An katse hanyar sadarwar WLAN. \nA Hada ta cikin 3G? \nln ba ka da tsarin biyan samun bayanai, zai iya jawo karin canjin kudi.</string>
+    <string name="weak_signal_title">SIGINA MARAR KARFI</string>
+    <string name="weak_signal_message">Siginar WLAN da ake amfani ba ta da karfi sosai, ana bada shawarar ka zabi wadda ta fi wannan</string>
+    <string name="auto_connect">Kada ka tambaya kuma ka hade da wani amintaccen shiri</string>
 </resources>

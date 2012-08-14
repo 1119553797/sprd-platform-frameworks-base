@@ -12,6 +12,16 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="battery_low_why">"Utilizarea bateriei"</string>
     <string name="usb_accessory_uri_prompt">"Aplic. instal. nu funcţ. cu acest acces. USB. Aflaţi despre acest acces. la <xliff:g id="URL">%1$s</xliff:g>"</string>
     <string name="title_usb_accessory">"Accesoriu USB"</string>
-    <string name="label_view">"Afişaţi"</string>
+    <string name="label_view">"Vizualizaţi"</string>
     <string name="always_use_accessory">"Utiliz. în mod prestabilit pt. acest accesoriu USB"</string>
+    <string name="usb_accessory_permission_prompt">Permiteţi aplicaţiei %1$s să acceseze accesoriul USB?</string>
+    <string name="usb_device_confirm_prompt">A se deschide %1$s când este conectat acest dispozitiv USB?</string>
+    <string name="usb_accessory_confirm_prompt">A se deschide %1$s când este conectat acest accesoriul USB?</string>
+    <string name="mobile_data_connect_disable">"Nu"</string>
+    <string name="mobile_data_connect_enable">"Da"</string>
+    <string name="network_disconnect_title">Aviz</string>
+    <string name="network_disconnect_message">Reţeaua WLAN este deconectată. \nConectaţi prin 3G? \nDacă încă nu aveţi planul de date, se pot ivi cheltuieli adiţionale.</string>
+    <string name="weak_signal_title">SEMNAL SLAB</string>
+    <string name="weak_signal_message">Semnalul WLAN curent este foarte slab, se recomandă să selectaţi unul mai bun</string>
+    <string name="auto_connect">Nu întrebaţi şi conectaţi-vă în mod automat la o altă ap de încredere</string>
 </resources>

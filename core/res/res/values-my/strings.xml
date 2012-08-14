@@ -629,53 +629,53 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="beforeOneMonthDurationPast">လြန္ခဲ့ေသာ 1 လမတိုင္မီက</string>
     <plurals name="num_seconds_ago">
         <item quantity="one">လြန္ခဲ့ေသာ 1 စကၠန္႔က</item>
-        <item quantity="other"></item>
+        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> စကၠန္႔က</item>
     </plurals>
     <plurals name="num_minutes_ago">
         <item quantity="one">လြန္ခဲ့ေသာ 1 လက</item>
-        <item quantity="other"></item>
+        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> မိနစ္က</item>
     </plurals>
     <plurals name="num_hours_ago">
         <item quantity="one">လြန္ခဲ့ေသာ 1 နာရီက</item>
-        <item quantity="other"></item>
+        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> နာရီက</item>
     </plurals>
     <string name="last_month">ျပီးခဲ့ေသာလ</string>
     <string name="older">ပို၍ေဟာင္းေသာ</string>
     <plurals name="num_days_ago">
         <item quantity="one">မေန႔က</item>
-        <item quantity="other"></item>
+        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> ရက္က</item>
     </plurals>
     <plurals name="in_num_seconds">
         <item quantity="one">1 စကၠန္႔အတြင္း</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> စကၠန္႔လွ်င္</item>
     </plurals>
     <plurals name="in_num_minutes">
         <item quantity="one">1 မိနစ္အတြင္း</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> မိနစ္လွ်င္</item>
     </plurals>
     <plurals name="in_num_hours">
         <item quantity="one">1 နာရီအတြင္း</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> နာရီလွ်င္</item>
     </plurals>
     <plurals name="in_num_days">
         <item quantity="one">မနက္ျဖန္</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ရက္လွ်င္</item>
     </plurals>
     <plurals name="abbrev_num_seconds_ago">
         <item quantity="one">လြန္ခဲ့ေသာ 1 စကၠန္႔က</item>
-        <item quantity="other"></item>
+        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> စကၠန္႔က</item>
     </plurals>
     <plurals name="abbrev_num_minutes_ago">
         <item quantity="one">လြန္ခဲ့ေသာ 1 မိနစ္က</item>
-        <item quantity="other"></item>
+        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> နာရီက</item>
     </plurals>
     <plurals name="abbrev_num_hours_ago">
         <item quantity="one">လြန္ခဲ့ေသာ 1 နာရီက</item>
-        <item quantity="other"></item>
+        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> နာရီက</item>
     </plurals>
     <plurals name="abbrev_num_days_ago">
         <item quantity="one">မေန႔က</item>
-        <item quantity="other"></item>
+        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> ရက္က</item>
     </plurals>
     <plurals name="abbrev_in_num_seconds">
         <item quantity="one">1 စကၠန္႔အတြင္း</item>
@@ -683,15 +683,15 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     </plurals>
     <plurals name="abbrev_in_num_minutes">
         <item quantity="one">1 မိနစ္အတြင္း</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> နာရီလွ်င္</item>
     </plurals>
     <plurals name="abbrev_in_num_hours">
         <item quantity="one">1 နာရီအတြင္း</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> နာရီလွ်င္</item>
     </plurals>
     <plurals name="abbrev_in_num_days">
         <item quantity="one">မနက္ျဖန္</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ရက္လွ်င္</item>
     </plurals>
     <string name="day">ေန့</string>
     <string name="days">ရက္မ်ား</string>
@@ -791,7 +791,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="adb_active_notification_message">USB ခ်ိဳ႕ယြင္းခ်က္ဖယ္႐ွားျခင္းကို ပိတ္ရန္ ေ႐ြးခ်ယ္ပါ</string>
     <string name="select_input_method">အသြင္းပံုစံကို ေ႐ြးခ်ယ္ပါ</string>
     <string name="ext_media_checking_notification_message">အမွားမ်ား႐ွာေဖြစစ္ေဆးေနဆဲ</string>
-    <string name="activity_list_empty">တူညီေသာလုပ္ေဆာင္ခ်က္မ်ားမေတြ႔ပါ</string>
+    <string name="activity_list_empty">တူညီေသာဖုန္းလိပ္စာမ်ားမေတြ႔ပါ</string>
     <string name="permlab_pkgUsageStats">အေၾကာင္းအရာအသံုးခ်မႈစာရင္းအင္းမ်ားကို အဆင့္ျမွင့္တင္မည္</string>
     <string name="permdesc_pkgUsageStats">စုစည္းထားေသာ အေၾကာင္းအရာအသံုးျပဳမႈစာရင္းအင္းမ်ားကို အသစ္ျပဳလုပ္ရန္ ခြင့္ျပဳပါ။ ပံုမွန္ပ႐ိုဂရမ္မ်ား အသံုးျပဳရန္မဟုတ္။</string>
     <string name="permlab_copyProtectedData">အေၾကာင္းအရာကို ကူးယူရန္ မူရင္း၀န္ေဆာင္မႈအား လံႈ႔ေဆာ္ရန္ ခြင့္ျပဳပါ။ ပံုမွန္ပ႐ိုဂရမ္မ်ား အသံုးျပဳရန္မဟုတ္။</string>
@@ -866,4 +866,152 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_warning">သတိေပးချက်</string>
     <string name="internal_memory_low">SD ကဒ္သိမ္းဆည္းမႈ ျပည့္ခါနီးျပီ! ေနရာလြတ္ရ႐ွိရန္ အခ်ိဳ႕ဖိုင္မ်ားကို ဖ်က္ပစ္ပါ</string>
     <string name="button_close">ပိတ်သည်</string>
+    <string name="address_length">လိပ္စာမွာအမ်ားဆံုးသတ္မွတ္ခ်က္သို႔ ေရာက္႐ွိ</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="untitled">&lt;ေခါင္းစဥ္မပါ&gt;</string>
+    <string name="mmiFdnError">လုပ္ေဆာင္ခ်က္အား ပံုေသေခၚဆိုမႈနံပါတ္မ်ားသာ ကန္႔သတ္ထားသည္</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: လက္ဆင့္မကမ္းရေသး။</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> ျပီးေနာက္ <xliff:g id="time_delay">{2}</xliff:g> စကၠန္႔</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: လက္ဆင့္မကမ္းရေသး။</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: လက္ဆင့္မကမ္းရေသး။</string>
+    <string name="notification_title"><xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g> သို႔ဝင္ေရာက္ျခင္း အမွားျပေနသည္</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc"><xliff:g id="content_type">%s</xliff:g> ဖ်က္ထားခ်က္မ်ား မ်ားလြန္းေနသည္။</string>
+    <string name="permgroupdesc_storage" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းသို႔ ဝင္ေရာက္မည္</string>
+    <string name="permgroupdesc_storage" product="default">SD ကဒ္သို႔၀င္ပါ</string>
+    <string name="permlab_statusBarService">အေၾကာင္းအရာျပဘား</string>
+    <string name="permdesc_statusBarService">ပ႐ိုဂရမ္အား အေၾကာင္းအရာျပဘားအျဖစ္ ခြင့္ျပဳမည္</string>
+    <string name="permlab_receiveEmergencyBroadcast">အေရးေပၚထုတ္လႊင့္ခ်က္မ်ားကို လက္ခံမည္</string>
+    <string name="permdesc_receiveEmergencyBroadcast">ပ႐ိုဂရမ္အား အေရးေပၚထုတ္လႊင့္ခ်က္မက္ေဆ့ခ်္မ်ား လက္ခံရန္ႏွင့္ လုပ္ေဆာင္ရန္ ခြင့္ျပဳမည္။ ဤခြင့္ျပဳခ်က္အား စစ္စတမ္ပ႐ိုဂရမ္မ်ားသာလွ်င္ ရ႐ွိႏိုင္သည္။</string>
+    <string name="permlab_manageUsb">USB ပစၥည္းမ်ား၏ ဦးစားေပးႏွင့္ ခြင့္ျပဳခ်က္မ်ားကို စီစဥ္ပါ</string>
+    <string name="permdesc_manageUsb">ပ႐ိုဂရမ္အား USB ပစၥည္းမ်ားအတြက္ ဦးစားေပးႏွင့္ ခြင့္ျပဳခ်က္မ်ား စီစဥ္ရန္ ခြင့္ျပဳမည္</string>
+    <string name="permlab_accessWimaxState">WiMAX အေၾကာင္းအရာကို ၾကည့္မည္</string>
+    <string name="permdesc_accessWimaxState">ပ႐ိုဂရမ္အား WiMAX အေျခအေနႏွင့္ပတ္သက္သည့္ အခ်က္အလက္မ်ားၾကည့္႐ႈရန္ ခြင့္ျပဳမည္</string>
+    <string name="permlab_changeWimaxState">WiMAX အေျခအေနေျပာင္းပါ</string>
+    <string name="permdesc_changeWimaxState">ပ႐ိုဂရမ္အား WiMAX ကြန္ယက္သို႔ ခ်ိတ္ဆက္ရန္ႏွင့္ ခ်ိတ္ဆက္မႈျဖဳတ္ရန္ ခြင့္ျပဳမည္</string>
+    <string name="permlab_nfc">အကြာအေဝးတုိၾကိမ္ႏႈန္းျမင့္ ၾကိဳးမဲ့ဆက္သြယ္ေရးစနစ္</string>
+    <string name="permdesc_nfc">ပ႐ိုဂရမ္အား အကြာအေဝးတုိၾကိမ္ႏႈန္းျမင့္ၾကိဳးမဲ့ခ်ိတ္ဆက္မႈစနစ္(NFC) အမွတ္အသားမ်ား၊ ကဒ္မ်ား၊ ဖတ္သည့္စက္မ်ားႏွင့္ ဆက္သြယ္ရန္ ခြင့္ျပဳမည္</string>
+    <string name="permlab_sdcardWrite" product="nosdcard">USB သိမ္းဆည္းမႈအေၾကာင္းအရာမ်ားကို အဆင့္ျမွင့္မည္/ဖ်က္မည္</string>
+    <string name="permlab_sdcardWrite" product="default">လံုျခံဳေရးစနစ္အဆင္အျပင္မ်ား အသစ္ျပဳျပင္မည္</string>
+    <string name="permdesc_sdcardWrite" product="nosdcard">ပ႐ိုဂရမ္အား USB သိမ္းဆည္းမႈပစၥည္းသို႔ ေရးရန္ ခြင့္ျပဳမည္</string>
+    <string name="permdesc_sdcardWrite" product="default">ပ႐ိုဂရမ္အား SD ကဒ္သို႔ ေရးရန္ ခြင့္ျပဳပါ</string>
+    <string name="permlab_use_sip">အင္တာနက္ဖုန္းေခၚဆိုမႈမ်ား ျပဳလုပ္မည္/လက္ခံမည္</string>
+    <string name="permdesc_use_sip">ပ႐ိုဂရမ္အား အင္တာနက္ေခၚဆိုမႈ ျပဳလုပ္ရန္/လက္ခံရန္အတြက္ SIP ဆားဗစ္အသံုးျပဳခြင့္ျပဳမည္</string>
+    <string name="imProtocolSkype">Skype</string>
+    <string name="sipAddressTypeCustom">Custom</string>
+    <string name="sipAddressTypeHome">အိမ္</string>
+    <string name="sipAddressTypeWork">အလုပ္</string>
+    <string name="sipAddressTypeOther">Other</string>
+    <string name="contact_status_update_attribution"><xliff:g id="source" example="Google Talk">%1$s</xliff:g> မွတစ္ဆင့္</string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> မွတစ္ဆင့္ <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="lockscreen_plugged_in">အားသြင္းျခင္း (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">ေသာ့ဖြင့္သည့္ ပံုစံအား  <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ ေရးဆြဲျပီးျဖစ္သည္။ 
+       \n\n <xliff:g id="number">%d</xliff:g> စကၠန္႔အတြင္း ၾကိဳးစားၾကည့္ပါ။   </string>
+    <string name="lockscreen_failed_attempts_almost_glogin">ေသာ့ဖြင့္သည့္ ပံုစံအား  <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ ေရးဆြဲျပီးျဖစ္သည္။ 
+       ေနာက္ထပ္ <xliff:g id="number">%d</xliff:g> ၾကိမ္မွားယြင္းပါက Google ဝင္ေရာက္မႈကို အသံုးျပဳ၍ ဖုန္းကို ေသာ့ဖြင့္ေစလိမ့္မည္။ \n\n
+      </string>
+    <string name="lockscreen_too_many_failed_attempts_countdown"><xliff:g id="number">%d</xliff:g> စကၠန္႔အတြင္း ျပန္လုပ္ၾကည့္ပါ</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+    <string name="js_dialog_before_unload">ဤစာမ်က္ႏွာႏွင့္ ေဝးရာသို႔ ညႊန္မလား? \n\n<xliff:g id="message">%s</xliff:g>\n\nဆက္လုပ္လွ်င္ လုပ္မည္၊ သို႔မဟုတ္ လက္႐ွိစာမ်က္ႏွာတြင္ ဆက္ေနလွ်င္ မလုပ္ပါ ကို ေ႐ြးခ်ယ္ပါ</string>
+    <string name="permlab_setAlarm">ႏိႈးစက္နာရီတြင္ ႏိႈးစက္ထား႐ွိပါ</string>
+    <string name="permdesc_setAlarm">ပ႐ိုဂရမ္အား သြင္းထားေသာ ႏိႈးစက္နာရီပ႐ုိဂရမ္တြင္ ႏိႈးစက္ထား႐ွိရန္ ခြင့္ျပဳမည္။ အခ်ိဳ႕ႏိႈးစက္နာရီပ႐ိုဂရမ္မ်ားက ဤအျပင္အဆင္အား ျပီးဆံုးေအာင္ေဆာင္႐ြက္မည္မဟုတ္။</string>
+    <plurals name="last_num_days">
+        <item quantity="other">ေနာက္ဆံုး <xliff:g id="count">%d</xliff:g> ရက္</item>
+    </plurals>
+    <string name="preposition_for_date"><xliff:g id="date" example="May 29">%s</xliff:g> တြင္</string>
+    <string name="preposition_for_time"><xliff:g id="time" example="2:33 am">%s</xliff:g>တြင္</string>
+    <string name="preposition_for_year"><xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="addToDictionary">" \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" ကို အဘိဓာန္သို႔ ေပါင္းထည့္ပါ</string>
+    <string name="chooseUsbActivity">USB ပစၥည္းအတြက္ ပ႐ိုဂရမ္ေ႐ြးခ်ယ္ပါ</string>
+    <string name="aerr_application">ပ႐ိုဂရမ္ <xliff:g id="application">%1$s</xliff:g>
+        (လုပ္ငန္းစဥ္ <xliff:g id="process">%2$s</xliff:g>) မွာ ႐ုတ္တရက္ရပ္သြားသည္။ ျပန္ၾကိဳးစားၾကည့္ပါ</string>
+    <string name="aerr_process">လုပ္ေဆာင္ခ်က္<xliff:g id="process">%1$s</xliff:g> ႐ုတ္တရက္ရပ္သြားသည္။ ျပန္ၾကိဳးစားၾကည့္ပါ။</string>
+    <string name="anr_activity_application">လုပ္ေဆာင္ခ်က္ <xliff:g id="activity">%1$s</xliff:g> (ပ႐ုိဂရမ္<xliff:g id="application">%2$s</xliff:g>႐ွိ ) တုန္႔ျပန္ျခင္းမ႐ွိပါ</string>
+    <string name="anr_activity_process">လုပ္ေဆာင္ခ်က္ <xliff:g id="activity">%1$s</xliff:g> (လုပ္ငန္းစဥ္ <xliff:g id="process">%2$s</xliff:g>) တုန္႔ျပန္ျခင္းမ႐ွိပါ</string>
+    <string name="anr_application_process">ပ႐ိုဂရမ္ <xliff:g id="application">%1$s</xliff:g> (လုပ္ငန္းစဥ္<xliff:g id="process">%3$s</xliff:g>႐ွိ) တုန္႔ျပန္ခ်က္မ႐ွိပါ။</string>
+    <string name="anr_process">လုပ္ငန္းစဥ္ <xliff:g id="process">%1$s</xliff:g> တုန္႔ျပန္ခ်က္မ႐ွိပါ</string>
+    <string name="launch_warning_title">ပ႐ိုဂရမ္လိပ္စာျပန္ညႊန္းျပီး</string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> ယခုဖြင့္ထားဆဲ</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> အစကတည္းက ဖြင့္ထားျပီးျဖစ္သည္။</string>
+    <string name="smv_application">ပ႐ိုဂရမ္ <xliff:g id="application">%1$s</xliff:g>
+        (လုပ္ငန္းစဥ္ <xliff:g id="process">%2$s</xliff:g>) မွာ ႐ုတ္တရက္ရပ္သြားသည္။ ျပန္ၾကိဳးစားၾကည့္ပါ</string>
+    <string name="smv_process">လုပ္ေဆာင္ခ်က္<xliff:g id="process">%1$s</xliff:g>မွာ StrictMode ၏ ကိုယ္ပုိင္ျပ႒ာန္းခ်က္ဥပေဒအား ခ်ိဳးေဖာက္သည္</string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%2$s</xliff:g> ဖြင့္ထားဆဲ</string>
+    <string name="heavy_weight_notification_detail">ပ႐ုိဂရမ္သို႔ ေျပာင္းလဲျခင္းကို ေ႐ြးခ်ယ္ပါ</string>
+    <string name="heavy_weight_switcher_title">ပ႐ိုဂရမ္ ေျပာင္းမလား?</string>
+    <string name="heavy_weight_switcher_text">အျခားပ႐ုိဂရမ္ဖြင့္ထားဆဲျဖစ္၍ အသစ္မစတင္မီ ယင္းကို ပိတ္ရမည္။</string>
+    <string name="old_app_action"><xliff:g id="old_app">%1$s</xliff:g>သို႔ ျပန္သြားပါ</string>
+    <string name="old_app_description">ပ႐ုိဂရမ္အသစ္ကို မစပါႏွင့္</string>
+    <string name="new_app_action"><xliff:g id="old_app">%1$s</xliff:g> စတင္ပါ</string>
+    <string name="new_app_description">ပ႐ုိဂရမ္အေဟာင္းအား မသိမ္းဆည္းဘဲ ရပ္ဆိုင္းမည္</string>
+    <string name="ringtone_default_with_actual">မူလဖုန္းေခၚဆိုမႈတီးလံုး (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="perms_hide"><b>ဝွက္ထားမည္</b></string>
+    <string name="perms_show_all"><b>အားလံုးကို ျပပါ</b></string>
+    <string name="usb_storage_message" product="nosdcard">သင့္ဖုန္းကို USB မွတဆင့္ ကြန္ပ်ဴတာသို႔ ခ်ိတ္ဆက္ထားျပီးျဖစ္သည္။ သင့္ကြန္ပ်ဴတာႏွင့္ သင့္ Android SD ကဒ္အၾကား ဖုိင္မ်ားကို ကူးယူရန္ ေအာက္႐ွိခလုတ္ကို ႏွိပ္ပါ</string>
+    <string name="usb_storage_message" product="default">သင့္ဖုန္းကို USB မွတဆင့္ ကြန္ပ်ဴတာသို႔ ခ်ိတ္ဆက္ထားျပီးျဖစ္သည္။ သင့္ကြန္ပ်ဴတာႏွင့္ သင့္ Android SD ကဒ္အၾကား ဖုိင္မ်ားကို ကူးယူရန္ ေအာက္႐ွိခလုတ္ကို ႏွိပ္ပါ</string>
+    <string name="usb_storage_error_message" product="nosdcard">သင့္ USB သိမ္းဆည္းမႈ၏ USB သိမ္းဆည္းမႈပစၥည္းအသံုးျပဳရာတြင္ ျပႆနာ႐ွိေနသည္။</string>
+    <string name="usb_storage_error_message" product="default">သင့္ USB သိမ္းဆည္းမႈ၏ SD ကဒ္ အသံုးျပဳရာတြင္ ျပႆနာ႐ွိေနသည္။</string>
+    <string name="usb_storage_stop_message" product="nosdcard">USB သိမ္းဆည္းမႈမပိတ္ခင္ သင့္ကြန္ပ်ဴတာမွ သင့္ Android\u2018s USB သိမ္းဆည္းမႈပစၥည္းအား ျဖဳတ္ျပီး (\u201cျဖဳတ္ျပီး\u201d) ျဖစ္ေၾကာင္း ေသခ်ာေအာင္ျပဳလုပ္ပါ</string>
+    <string name="usb_storage_stop_message" product="default">USB သိမ္းဆည္းမႈမပိတ္ခင္ သင့္ကြန္ပ်ဴတာမွ သင့္ Android\u2018s SD ကဒ္အား ျဖဳတ္ျပီး (\u201cျဖဳတ္ျပီး\u201d) ျဖစ္ေၾကာင္း ေသခ်ာေအာင္ျပဳလုပ္ပါ</string>
+    <string name="extmedia_format_title" product="nosdcard">USB သိမ္းဆည္းမႈကို ေဖာမက္ခ်မည္</string>
+    <string name="extmedia_format_title" product="default">SD ကဒ္ကို ဖ်က္ပါ</string>
+    <string name="extmedia_format_message" product="nosdcard">USB သိမ္းဆည္းမႈကို ေဖာမက္ခ်မည္၊ ယင္း႐ွိ သိမ္းဆည္းထားေသာ ဖုိင္အားလံုးကို ဖ်က္မလား? ယင္းလုပ္ေဆာင္ခ်က္ကို ျပန္ျပင္၍မရပါ!</string>
+    <string name="extmedia_format_message" product="default">သင္ SD ကဒ္ကို ေဖာမက္ခ်မွာေသခ်ာလား? သင့္ကဒ္႐ွိ အခ်က္အလက္မ်ားအားလံုးဆံုး႐ံႈးသြားႏိုင္သည္</string>
+    <string name="candidates_style"><u>ပါဝင္သူမ်ား</u></string>
+    <string name="ext_media_checking_notification_title" product="nosdcard">USB သိမ္းဆည္းမႈျပင္ဆင္ေနဆဲ</string>
+    <string name="ext_media_checking_notification_title" product="default">SD ကဒ္ျပင္ဆင္ေနဆဲ</string>
+    <string name="ext_media_nofs_notification_title" product="nosdcard">USB သိမ္းဆည္းမႈဗလာ</string>
+    <string name="ext_media_nofs_notification_title" product="default">SD ကဒ္ကြက္လပ္ေနရာ</string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard">USB သိမ္းဆည္းမႈမ႐ွိ သို႔မဟုတ္ အေထာက္အပံ့မေပးေသာ ဖုိင္စနစ္</string>
+    <string name="ext_media_nofs_notification_message" product="default">SD ကဒ္ ကြက္လပ္ သို႔မဟုတ္ အေထာက္အပံ့မေပးေသာ ဖုိင္စနစ္</string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">USB သိမ္းဆည္းခ်က္ပ်က္စီး</string>
+    <string name="ext_media_unmountable_notification_title" product="default">SD ကဒ္ပ်က္စီးေနသည္</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">USB သိမ္းဆည္းမႈပ်က္စီးသြားသည္။ ယင္းကို ျပန္ေဖာမက္ခ်ပါ။</string>
+    <string name="ext_media_unmountable_notification_message" product="default">SD ကဒ္ ပ်က္စီးသြား၊ ၄င္းကို ေဖာမက္ခ်ပစ္ရလိမ့္မည္</string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္း႐ုတ္တရက္ျပဳတ္က်သြားသည္</string>
+    <string name="ext_media_badremoval_notification_title" product="default">SD ကဒ္ကို ႐ုတ္တရက္ဖယ္႐ွားပစ္လိုက္သည္ </string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းကို ေဒတာဆံုး႐ႈံးမႈမွ ေ႐ွာင္က်ဥ္ရန္ မျဖဳတ္မီ အရင္ပိတ္ပါ</string>
+    <string name="ext_media_badremoval_notification_message" product="default">ေဒတာဆံုး႐ံႈးမႈမျဖစ္ေစရန္ မျဖဳတ္ခင္ SD ကဒ္ကို ကြန္ပ်ဴတာသို႔ တင္ထားျခင္းမွ ျဖဳတ္ပါ</string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းျဖဳတ္ရန္လံုျခံဳပါျပီ</string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">SD ကဒ္ကို ဖယ္ရန္ လံုျခံဳပါျပီ</string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းအား လံုျခံဳစိတ္ခ်ရစြာ ျဖဳတ္ႏိုင္ျပီျဖစ္သည္။</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">SD ကဒ္ကို လံုျခံဳစိတ္ခ်ရစြာ ဖယ္႐ွားႏိုင္ပါျပီ</string>
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">USB သိမ္းဆည္းမႈဖယ္႐ွားျပီး</string>
+    <string name="ext_media_nomedia_notification_title" product="default">SD ကဒ္မွ ဖယ္႐ွားျပီး</string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းျဖဳတ္ျပီး။ မီဒီယာအသစ္ထည့္ပါ</string>
+    <string name="ext_media_nomedia_notification_message" product="default">SD ကဒ္ဖယ္႐ွားျပီး၊ အသစ္တစ္ခု ထည့္ပါ</string>
+    <string name="dial_number_using"><xliff:g id="number" example="555">%s</xliff:g> အသံုးျပဳ၍ \n နံပါတ္ကို ေခၚဆိုမည္</string>
+    <string name="create_contact_using"><xliff:g id="number" example="555">%s</xliff:g>  အသံုးျပဳ၍ \n လိပ္စာကို ဖန္တီးပါ။</string>
+    <string name="permission_request_notification_with_subtitle">\nအေကာင့္ <xliff:g id="account" example="foo@gmail.com">%s</xliff:g> အတြက္ ခြင့္ျပဳခ်က္ေတာင္းခံျပီး</string>
+    <string name="cta_tethered_notification_title">အြန္လိုင္းသို႔သြားေနဆဲ</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicorn</string>
+    <string name="shutdown_after_seconds"><xliff:g id="NUMBER">%d</xliff:g> စကၠန္႔အၾကာတြင္ ဖုန္းပိတ္မည္</string>
+    <string name="lockscreen_password_error">စကားဝွက္အမွားျပေနသည္၊ ျပန္ၾကိဳးစားၾကည့္ပါ!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">ေသာ့ဖြင့္သည့္ စကားဝွက္အား <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ သြင္းျပီးျဖစ္သည္။ 
+         \n\n <xliff:g id="number">%d</xliff:g> စကၠန္႔အတြင္း ၾကိဳးစားၾကည့္ပါ။   </string>
+    <string name="progress_unmounting" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းပိတ္ေနဆ...</string>
+    <string name="progress_unmounting" product="default">SD ကဒ္ကို ပိတ္ေနဆဲ...</string>
+    <string name="progress_erasing" product="nosdcard">USB သိမ္းဆည္းမႈကို ဖ်က္ေနဆဲ...</string>
+    <string name="progress_erasing" product="default">SD ကဒ္ကို ဖ်က္ေနဆ...</string>
+    <string name="format_error" product="nosdcard">USB သိမ္းဆည္းမႈဖ်က္ျခင္းမေအာင္ျမင္</string>
+    <string name="format_error" product="default">SD ကဒ္ဖ်က္ျခင္းမေအာင္ျမင္</string>
+    <string name="media_checking" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းကို ယခုစစ္ေဆးေနဆဲျဖစ္သည္။</string>
+    <string name="media_checking" product="default">SD ကဒ္ကို လက္႐ွိ စစ္ေဆးဆဲ</string>
+    <string name="media_shared" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းကို ကြန္ပ်ဴတာက ယခုအသံုးျပဳေနဆဲျဖစ္သည္။</string>
+    <string name="media_shared" product="default">SD ကဒ္အား လက္႐ွိကြန္ပ်ဴူတာက အသံုးျပဳေနဆဲ</string>
+    <string name="sms_full_title">စာသားမက္ေဆ့ခ်္ မွတ္ဥာဏ္ျပည့္ေနျပီ</string>
+    <string name="sms_full_body">မွတ္ဥာဏ္ျပည့္သြားသျဖင့္ အ၀င္မက္ေဆ့ခ်္ကို ပယ္ခ်ျပီး။ မက္ေဆ့ခ်္အေဟာင္းမ်ားကို ဖ်က္ပါ</string>
+    <string name="unlock_screen_pin_error">pin အမွားျပေနသည္!</string>
+    <string name="ap_disconnected">ဆက်သွယ်မှုကိုြဖတ်ပယ်</string>
+    <string name="sim_chooser_title">SIM ေ႐ြးခ်ယ္ပါ</string>
+    <string name="lockscreen_miss_phone">မကိုင္ထားေသာဖုန္း (%d)</string>
+    <string name="lockscreen_miss_mms">မဖတ္ထားေသာ sms (%d)</string>
+    <string name="lockscreen_sim_card_locked_message">SIM ကဒ္ကို ေသာ့ခတ္ထားသည္</string>
 </resources>

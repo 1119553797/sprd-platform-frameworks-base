@@ -3,4 +3,6 @@
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">သီးသန္႔ကြန္ယက္၀န္ေဆာင္မႈမ်ား</string>
     <string name="vpn_notification_hint_disconnected">သီးသန္႔ကြန္ယက္သို႔ျပန္လည္ခ်ိတ္ဆက္ရန္ ႏွိပ္ပါ</string>
+    <string name="vpn_notification_title_connected"><xliff:g id="profilename">%s</xliff:g>ႏွင့္ VPN ခ်ိတ္ဆက္ျပီး</string>
+    <string name="vpn_notification_title_disconnected"><xliff:g id="profilename">%s</xliff:g>ႏွင့္ VPN ခ်ိတ္ဆက္မႈျဖဳတ္ျပီး</string>
 </resources>
