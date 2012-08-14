@@ -5529,8 +5529,9 @@ public class WebView extends AbsoluteLayout
                                         + mPreventDefault
                                         + " mDeferTouchProcess = "
                                         + mDeferTouchProcess);
+                            }else{
+                                mVelocityTracker.addMovement(ev);
                             }
-                            mVelocityTracker.addMovement(ev);
                             // set to MOTIONLESS_IGNORE so that it won't keep
                             // removing and sending message in
                             // drawCoreAndCursorRing()
