@@ -779,7 +779,7 @@ public class RingtoneManager {
                                 .getLong(ID_COLUMN_INDEX));
             }
         }
-        return null;
+        return Settings.System.DEFAULT_RINGTONE_URI;
     }
     /* ===== fixed CR<NEWMS00109311> by luning at 2011.11.18 end =====*/
 
