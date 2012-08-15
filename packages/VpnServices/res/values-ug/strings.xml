@@ -3,4 +3,6 @@
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">مۇلازىمەتلىرى VPN</string>
     <string name="vpn_notification_hint_disconnected">چېكىپ VPN غا قايتا ئۇلاڭ.</string>
+    <string name="vpn_notification_title_connected"><xliff:g id="profilename">%s</xliff:g> ئۇلانغان VPN</string>
+    <string name="vpn_notification_title_disconnected"><xliff:g id="profilename">%s</xliff:g> ئۈزۈۋىتىلگەن VPN</string>
 </resources>
