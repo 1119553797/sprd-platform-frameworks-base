@@ -2383,6 +2383,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     // ask watcher if this is allowed
                     boolean resumeOK = true;
                     try {
+                        Slog.w(TAG, "// Activity Resuming, package:" + next.packageName);
                         resumeOK = mController.activityResuming(next.packageName);
                     } catch (RemoteException e) {
                         mController = null;
