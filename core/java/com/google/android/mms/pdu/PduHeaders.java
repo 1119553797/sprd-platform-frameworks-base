@@ -553,6 +553,14 @@ public class PduHeaders {
     }
 
     /**
+     * Get MMS sender number
+     * @return the EncodedStringValue value of the sender number
+     */
+    public EncodedStringValue getFrom() {
+        return (EncodedStringValue) mHeaderMap.get(PduHeaders.FROM);
+    }
+
+    /**
      * Get TO, CC or BCC header value.
      *
      * @param field the field
