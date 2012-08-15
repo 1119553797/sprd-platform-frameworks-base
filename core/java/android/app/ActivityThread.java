@@ -55,6 +55,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.StrictMode;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.util.AndroidRuntimeException;
 import android.util.Config;
 import android.util.DisplayMetrics;
@@ -131,6 +132,8 @@ public final class ActivityThread {
     private static final int LOG_ON_PAUSE_CALLED = 30021;
     private static final int LOG_ON_RESUME_CALLED = 30022;
 
+    private boolean DEBUG_OOM = false;
+    
     static ContextImpl mSystemContext = null;
 
     static IPackageManager sPackageManager;
@@ -1334,6 +1337,12 @@ public final class ActivityThread {
     }
 
     ActivityThread() {
+    	try {
+    		DEBUG_OOM = SystemProperties.getBoolean("persist.sampling_oom", false);
+    	} catch (Exception e) {
+    		DEBUG_OOM = false;
+    		e.printStackTrace();
+    	}
     }
 
     public ApplicationThread getApplicationThread()
@@ -3689,34 +3698,35 @@ public final class ActivityThread {
         try {
         	Looper.loop();
         } catch (OutOfMemoryError e) {
-        	String pname = thread.getProcessName();
-        	String file = "/data/misc/hprofs/";
-        	File dir = new File(file);
-        	if (!dir.exists() || !dir.isDirectory() || !dir.canWrite()) {
-        		file = "/data/data/" + pname + "/";
-        		dir = new File(file);
+        	if (thread.DEBUG_OOM) {
+	        	String pname = thread.getProcessName();
+	        	String file = "/data/misc/hprofs/";
+	        	File dir = new File(file);
+	        	if (!dir.exists() || !dir.isDirectory() || !dir.canWrite()) {
+	        		file = "/data/data/" + pname + "/";
+	        		dir = new File(file);
+	        	}
+	        	
+	        	if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
+	        		File[] files = dir.listFiles();
+	        		for (File f : files) {
+	        			String p = f.getPath();
+	        			if (f.isFile() && p.contains(pname) && p.endsWith("hprof")) {
+	        				f.delete();
+	        			}
+	        		}
+	        		int pid = Process.myPid();
+	        		Date d = new Date();
+	        		String date = d.getDate() + "-" + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
+	        		file += pname +  "_" + pid + "_" + date + ".hprof";
+	
+	        		try {
+	        			android.os.Debug.dumpHprofData(file);
+	        		} catch (IOException e1) {
+	        			e1.printStackTrace();
+	        		}
+	        	}
         	}
-        	
-        	if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
-        		File[] files = dir.listFiles();
-        		for (File f : files) {
-        			String p = f.getPath();
-        			if (f.isFile() && p.contains(pname) && p.endsWith("hprof")) {
-        				f.delete();
-        			}
-        		}
-        		int pid = Process.myPid();
-        		Date d = new Date();
-        		String date = d.getDate() + "-" + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
-        		file += pname +  "_" + pid + "_" + date + ".hprof";
-
-        		try {
-        			android.os.Debug.dumpHprofData(file);
-        		} catch (IOException e1) {
-        			e1.printStackTrace();
-        		}
-        	}
-        	
 			throw e;
         }
 
