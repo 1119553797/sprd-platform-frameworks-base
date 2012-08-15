@@ -470,9 +470,7 @@ public class SipPhone extends SipPhoneBase {
             } else {
                 audioGroup.setMode(AudioGroup.MODE_NORMAL);
             }
-            if (DEBUG) Log.d(LOG_TAG, String.format(
-                    "audioGroup mode change: %d --> %d", mode,
-                    audioGroup.getMode()));
+            if (DEBUG) Log.d(LOG_TAG, "audioGroup mode change: " + Integer.toString(mode) + " --> " + Integer.toString(audioGroup.getMode()));
         }
 
         void hold() throws CallStateException {

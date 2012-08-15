@@ -3062,10 +3062,13 @@ responseUnsolUssdStrings(Parcel p){
                 dc.uusInfo.setDcs(p.readInt());
                 byte[] userData = p.createByteArray();
                 dc.uusInfo.setUserData(userData);
-                Log
-                        .v(LOG_TAG, String.format("Incoming UUS : type=%d, dcs=%d, length=%d",
-                                dc.uusInfo.getType(), dc.uusInfo.getDcs(),
-                                dc.uusInfo.getUserData().length));
+				Log.v(LOG_TAG,
+						"Incoming UUS : type="
+								+ Integer.toString(dc.uusInfo.getType())
+								+ ", dcs="
+								+ Integer.toString(dc.uusInfo.getDcs())
+								+ ", length="
+								+ Integer.toString(dc.uusInfo.getUserData().length));
                 Log.v(LOG_TAG, "Incoming UUS : data (string)="
                         + new String(dc.uusInfo.getUserData()));
                 Log.v(LOG_TAG, "Incoming UUS : data (hex): "

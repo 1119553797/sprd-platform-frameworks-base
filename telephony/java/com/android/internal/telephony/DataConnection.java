@@ -353,8 +353,7 @@ public abstract class DataConnection extends HierarchicalStateMachine {
 
         if (dp.onCompletedMsg != null) {
             Message msg = dp.onCompletedMsg;
-            log(String.format("msg.what=%d msg.obj=%s",
-                    msg.what, ((msg.obj instanceof String) ? (String) msg.obj : "<no-reason>")));
+            log("msg.what=" + Integer.toString(msg.what) + ", msg.obj=" + ((msg.obj instanceof String) ? (String) msg.obj : "<no-reason>"));
             AsyncResult.forMessage(msg);
             msg.sendToTarget();
         }
