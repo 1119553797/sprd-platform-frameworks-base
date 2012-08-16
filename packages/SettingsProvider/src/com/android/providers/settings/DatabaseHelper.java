@@ -1127,6 +1127,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.System.VIBRATE_IN_SILENT,
                     R.bool.def_vibrate_in_silent);
             
+         // Set default endCall
+            loadSetting(stmt, Settings.System.END_BUTTON_BEHAVIOR, 0);
+            
          // ************Modify by luning at01-07-01 begin************
             loadStringSetting(stmt,Settings.System.PHONE_PROFILES_MODE,R.string.def_phone_profiles_mode);
             loadStringSetting(stmt,Settings.System.PROFILES_LAST_MODE,R.string.def_profiles_last_mode);
