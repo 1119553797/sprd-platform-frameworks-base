@@ -288,26 +288,58 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             }
         }
     };
-
+    //change OperatorAlphaLong to chinese show
+    private String getCarrierNameByNumeric(String numeric) {
+        Resources r = Resources.getSystem();
+        Log.d(LOG_TAG, " getOperatorAlphaShortToChinese: old name= null numeric="+numeric);
+        String itemList[] = r.getStringArray(R.array.numeric_to_operator);
+        for (String item:itemList){
+            String numerics[] = item.split("=");
+            Log.d(LOG_TAG, "numeric_to_operator" + item + " numerics[0] " + numerics[0]);
+            if( numerics[0].equalsIgnoreCase(numeric)){
+                return numerics[1];
+            }
+        }
+        return numeric;
+    }
     protected Object responseOperatorString(Parcel p) {
         String response[];
         response = p.readStringArray();
-        response[0] = getCarrierNumericToChinese(response[2], response[0]);
-        Log.d(LOG_TAG, " responseOperatorString():response[0]=" + response[0] + "response[2]="
-                + response[2]);
+        Log.d(LOG_TAG, " change before:response[0]"+response[0]+"response[1]="+response[1]+"response[2]="+response[2] );
+        if( (response[0] == null) && ( response[1] == null ) ) {
+            response[0] = getCarrierNameByNumeric(response[2]);
+            response[1] = getCarrierNameByNumeric(response[2]);
+        }
+        else if(response[0] == null||response[0].length()==0) {
+            response[0] = response[1];
+        }else if(response[1] == null||response[1].length()==0) {
+            response[1] = response[0];
+        }
+        //i18n
+        response[0] = changeOperator(response[0]);
+        response[1] = changeOperator(response[1]);
+        Log.d(LOG_TAG, " ending change:response[0]"+response[0]+"response[1]="+response[1]+"response[2]="+response[2] );
         return response;
     }
-
+    public String changeOperator(String name){
+        Resources r = Resources.getSystem();
+        String ret = name;
+        String itemList[] = r.getStringArray(R.array.operator);
+        Log.d(LOG_TAG, " changeOperator: old name= "+name+" itemList="+itemList);
+        for (String item:itemList){
+            String  parts[] = item.split("=");
+            Log.d(LOG_TAG, "itemList " + item + " parts[0] " + parts[0]);
+            if( parts[0].equalsIgnoreCase(name)){
+                ret = parts[1];
+                break;
+            }
+        }
+        return ret;
+     }
     private String getCarrierNumericToChinese(String numeric, String name) {
         Resources r = Resources.getSystem();
-        Log.d(LOG_TAG, " getOperatorAlphaLongToChinese: old name= " + name+" numeric="+numeric);
-        if (CHINA_MOBILE_NUMERIC_VALUES.equals(numeric)) {
-           return ( r.getString(R.string.china_mobile_numeric_values));
-        }
-        if (CHINA_UNICOM_NUMERIC_VALUES.equals(numeric)) {
-            return ( r.getString(R.string.china_unicom_numeric_values));
-        }
-        return name;
+        Log.d(LOG_TAG, " getCarrierNumericToChinese: old name= " + name+" numeric="+numeric);
+        return changeOperator(getCarrierNameByNumeric(numeric));
     }
 
     class RILSender extends Handler implements Runnable {

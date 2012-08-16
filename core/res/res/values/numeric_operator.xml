@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="numeric_to_operator">
+        <item>46000=China Mobile</item>
+        <item>46001=China Unicom</item>
+        <item>46002=China Mobile</item>
+        <item>46003=China Telecom</item>
+        <item>46007=China Mobile</item>
+    </string-array>
+</resources>
