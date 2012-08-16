@@ -1218,14 +1218,13 @@ public final class ContactsContract {
          * <P>Type: INTEGER</P>
          */
         public static final String DELETED = "deleted";
-		
-		//yeezone:jinwei add sim_index reference
-		/**
-		 * The "sim_index" flag: "0" stands for phone contact
-		 * not "0" stands for sim card contact
-		 */
-		public static final String SIM_INDEX = "sim_index";
-		
+
+        /**
+         * The "sim_index" flag: "0" stands for phone contact not "0" stands for
+         * sim card contact
+         */
+        public static final String SIM_INDEX = "sim_index";
+
         /**
          * The "name_verified" flag: "1" means that the name fields on this raw
          * contact can be trusted and therefore should be used for the entire
