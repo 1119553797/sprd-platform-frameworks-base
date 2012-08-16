@@ -29,6 +29,7 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.util.Config;
 import android.util.EventLog;
@@ -2630,7 +2631,12 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
                         descendant.mScrollY - descendant.mTop);
             }
         } else {
-            throw new IllegalArgumentException("parameter must be a descendant of this view");
+            if (SystemProperties.getBoolean("ro.monkey", false)) {
+                android.util.Log.e("ViewGroup", "parameter must be a descendant of this view. theParent: " + theParent + ", this: " + this);
+                rect.set(-1, -1, -1, -1);
+            } else {
+                throw new IllegalArgumentException("parameter must be a descendant of this view");
+            }
         }
     }
 
