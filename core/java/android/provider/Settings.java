@@ -618,7 +618,7 @@ public final class Settings {
             long newValuesVersion = SystemProperties.getLong(mVersionSystemProperty, 0);
 
             synchronized (this) {
-                if (mValuesVersion != newValuesVersion) {
+                if (mValuesVersion != newValuesVersion || newValuesVersion == 0) {
                     if (LOCAL_LOGV) {
                         Log.v(TAG, "invalidate [" + mUri.getLastPathSegment() + "]: current " +
                                 newValuesVersion + " != cached " + mValuesVersion);
