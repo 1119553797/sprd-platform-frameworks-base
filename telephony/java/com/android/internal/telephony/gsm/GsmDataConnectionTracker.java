@@ -1770,22 +1770,21 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                         phone.getContext());
                 break;
             case EVENT_UPDATE_SNTP_TIME:
-                if(isFirstUpdateTime && updateTimeCount > 0) {
+                if(isFirstUpdateTime ) {
                     Log.d(LOG_TAG, "GSMDataConnTrack trace1");
                     if (Settings.System.getInt(mGsmPhone.getContext().getContentResolver(),
                             Settings.System.AUTO_TIME, 0) == 0) {
                         Log.d(LOG_TAG, "GSMDataConnTrack trace2");
                         isFirstUpdateTime = false;
-                        updateTimeCount = 0;
                         return;
                     }
-                    if(!mGsmPhone.mSST.updateTime()) {
-                        GsmDataConnectionTracker.this.sendEmptyMessageDelayed(EVENT_UPDATE_SNTP_TIME, 10000);
-                        updateTimeCount--;
-                    }else {
-                        updateTimeCount = 5;
-                        isFirstUpdateTime = true;
-                    }
+                    mGsmPhone.mSST.updateTime();
+//                        GsmDataConnectionTracker.this.sendEmptyMessageDelayed(EVENT_UPDATE_SNTP_TIME, 10000);
+//                        updateTimeCount--;
+//                    }else {
+//                        updateTimeCount = 5;
+//                        isFirstUpdateTime = true;
+//                    }
                 }
                 break;
             case EVENT_NETWORK_TYPE_CHANGED:
