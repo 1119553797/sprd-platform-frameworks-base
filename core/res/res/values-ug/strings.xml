@@ -262,9 +262,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_persistentActivity">ئەمەلىي ئىشىلتىش پىروگراممىنىڭ ئۆزىنىڭ داۋاملىق تەرەققىيات قىلشىغا   رۇخسەت قىلىش.شۇڭلاشقا ئۇنى باشقا ئەمەلىي ئىشىلتىشكە بولمايدۇ.</string>
     <string name="permlab_deletePackages">ئەمەلىي پروگىراممىنى ئۆچۈرۈش</string>
     <string name="permdesc_deletePackages">پىروگراممىنىڭ ماشىنا ئادەم   يۈرۈشلغكىنى ئۆچۈرۈشكەرۇخسەت قىلىش.يامان غەرەزلىك پىروگرامما بۇ مۇھىم پىروگراممىنى ئۆچۈۋىتەلەيدۇ.</string>
-    <string name="permlab_clearAppUserData">باشقا ئەمەلىي پروگراممىلارنى ئۆچۈرۈش\' سانلىق مەلۇمات</string>
     <string name="permdesc_clearAppUserData">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ئابونىتنىڭ سانلىق ئاساسىنى ئۇچۇقئىشىلتىشىگە رۇخسەت قىلىش.</string>
-    <string name="permlab_deleteCacheFiles">باشقا ئەمەلىي پروگراممىلارنى ئۆچۈرۈش\' نەق پۇل</string>
     <string name="permdesc_deleteCacheFiles">پىروگراممىنىڭ ساقلانغان ھۆججەتنى ئۆچۈرشىگە رۇخسەت قىلىش.</string>
     <string name="permlab_getPackageSize">ئۆلچەپ ئىشلىتىشىنى ساقلاش ئورنى</string>
     <string name="permdesc_getPackageSize">ئەمەلىي ئىشلەش پىروگراممىسىنىڭ ئابونىتىنىڭ كودى،سانلىق ئاساسى ۋە چوڭ كىچىكلىكىنىتەكشۈرۈشكە رۇخسەت قىلىش</string>
@@ -629,69 +627,69 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="beforeOneMonthDurationPast">1 ئاي بۇرۇندىن ئىلگىرى</string>
     <plurals name="num_seconds_ago">
         <item quantity="one">1بىر سىكۇنىت بۇرۇن</item>
-        <item quantity="other"></item>
+        <item quantity="other">سېكۇنت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
     </plurals>
     <plurals name="num_minutes_ago">
         <item quantity="one">1بىر ئاي بۇرۇن</item>
-        <item quantity="other"></item>
+        <item quantity="other">مىنۇت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
     </plurals>
     <plurals name="num_hours_ago">
         <item quantity="one">1 سائەت بۇرۇن</item>
-        <item quantity="other"></item>
+        <item quantity="other">سائەت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
     </plurals>
     <string name="last_month">ئەڭ ئاخىرقى ئاي</string>
     <string name="older">كوناراق</string>
     <plurals name="num_days_ago">
         <item quantity="one">تۈنۈگۈن</item>
-        <item quantity="other"></item>
+        <item quantity="other">كۈن بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
     </plurals>
     <plurals name="in_num_seconds">
         <item quantity="one">1بىر سىكونت ئىچىدە</item>
-        <item quantity="other"></item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> سىكونت</item>
     </plurals>
     <plurals name="in_num_minutes">
         <item quantity="one">1بىر مىنۇت ئىچىدە</item>
-        <item quantity="other"></item>
+        <item quantity="other">دا <xliff:g id="count">%d</xliff:g> مىنۇت</item>
     </plurals>
     <plurals name="in_num_hours">
         <item quantity="one">1بىر سائەت ئىچىدە</item>
-        <item quantity="other"></item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> سائەت</item>
     </plurals>
     <plurals name="in_num_days">
         <item quantity="one">ئەتە</item>
-        <item quantity="other"></item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> كۈن</item>
     </plurals>
     <plurals name="abbrev_num_seconds_ago">
         <item quantity="one">1بىر سىكۇنىت بۇرۇن</item>
-        <item quantity="other"></item>
+        <item quantity="other">سېكۇنت بۇرۇن<xliff:g id="count">%d</xliff:g> </item>
     </plurals>
     <plurals name="abbrev_num_minutes_ago">
         <item quantity="one">1بىر مىنۇت بۇرۇن</item>
-        <item quantity="other"></item>
+        <item quantity="other">مىنۇت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
     </plurals>
     <plurals name="abbrev_num_hours_ago">
         <item quantity="one">1 سائەت بۇرۇن</item>
-        <item quantity="other"></item>
+        <item quantity="other">سائەت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
     </plurals>
     <plurals name="abbrev_num_days_ago">
         <item quantity="one">تۈنۈگۈن</item>
-        <item quantity="other"></item>
+        <item quantity="other">كۈن بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
     </plurals>
     <plurals name="abbrev_in_num_seconds">
         <item quantity="one">1بىر سىكونت ئىچىدە</item>
-        <item quantity="other"></item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g>سىكونت</item>
     </plurals>
     <plurals name="abbrev_in_num_minutes">
         <item quantity="one">1بىر مىنۇت ئىچىدە</item>
-        <item quantity="other"></item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> مىنۇت</item>
     </plurals>
     <plurals name="abbrev_in_num_hours">
         <item quantity="one">1بىر سائەت ئىچىدە</item>
-        <item quantity="other"></item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> سائەت</item>
     </plurals>
     <plurals name="abbrev_in_num_days">
         <item quantity="one">ئەتە</item>
-        <item quantity="other"></item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> كۈن</item>
     </plurals>
     <string name="day">كۈن</string>
     <string name="days">كۈن</string>
@@ -866,4 +864,171 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_warning">ئاگاھلاندۇرۇش</string>
     <string name="internal_memory_low">SD كارتا توشاي دەپ قالدى! بەزى ھۆججەتلەرنى ئۆچۈرۋېتىڭ.</string>
     <string name="button_close">ئىتىۋېتىش</string>
+    <string name="address_length">ئادىرىس ئەڭ چوڭ ئۇزۇنلۇق چىكىگە يەتتى</string>
+    <string name="byteShort">B</string>
+    <string name="kilobyteShort">كىلوبايىت</string>
+    <string name="megabyteShort">مىگابايت</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="untitled">&lt;تېمىسى يوق&gt;</string>
+    <string name="ellipsis">\u2026</string>
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
+    <string name="mmiFdnError">مەشغۇلات پەقەت موقۇم ئۇرۇلدىغان نومۇردىلا چەكلىمگە ئۇچرايدۇ.</string>
+    <string name="serviceClassPAD">PAD</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: ئالماشتۇرۇپ يوللىماسلىق</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> دىن كىيىن  <xliff:g id="time_delay">{2}</xliff:g> سېكۇنت</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: ئالماشتۇرۇپ يوللىماسلىق</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: ئالماشتۇرۇپ يوللىماسلىق</string>
+    <string name="notification_title"><xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g> غا ئىمزالانغاندا چىققان خاتالىق</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc">تىخمۇ كۆپ<xliff:g id="content_type">%s</xliff:g> ئۆچۈرۈش.</string>
+    <string name="permgroupdesc_storage" product="nosdcard">USB ساقلىغۇچنى زىيارەت قىلىش.</string>
+    <string name="permgroupdesc_storage" product="default">SD كارتىنى زىيارەت قىلىش.</string>
+    <string name="permlab_statusBarService">ھالەت رامكىسى</string>
+    <string name="permdesc_statusBarService">قوللانچى پىروگىراممىنىڭ ھالەت سىتونىغا يول قويۇش.</string>
+    <string name="permlab_receiveEmergencyBroadcast">جىددى رادىئو سىگنالىنى قوبۇل قىلىش</string>
+    <string name="permdesc_receiveEmergencyBroadcast">قوللانچى پىروگىراممىنىڭ جىددى رادىئو ئۇچۇرلىرىنى قوبۇل قىلىپ بىر تەرەپ قىلىشغا يول قويۇش، 
+بۇ بىردىنبىر يول قويۇلغان سېستىما قوللانچىسى.</string>
+    <string name="permlab_manageUsb">USB ئۈسكۈنىلەرنى بىر تەرەپ قىلىش</string>
+    <string name="permdesc_manageUsb">قوللانچى پىروگىرامما ئارقىلىق USB ئۈسكۈنىسىنىڭ ئالدىنلىقى ۋە ھوقۇقىنى بەلگىلەش.</string>
+    <string name="permlab_accessWimaxState">كۆرنۈش WiMAX  ھالىتى</string>
+    <string name="permdesc_accessWimaxState">قوللانچى پىروگىراممىنىڭ كۆرۈشىگە يول قويىلىدۇ. WiMAXغا مۇناسىۋەتلىك ھالەت ئۇچۇرلىرى.</string>
+    <string name="permlab_changeWimaxState">WiMAX ھالىتىنى ئۆزگەرتىش</string>
+    <string name="permdesc_changeWimaxState">قوللانچى پىروگىراممىنىڭ تورنى ئۇلاش ۋە ئۈزۈشىگە يول قويىلىدۇ.</string>
+    <string name="permlab_nfc">يىقىن ئارلىقتىن سىمسىز ئالاقىنى باشقۇرۇش</string>
+    <string name="permdesc_nfc">قوللانچى پىروگىراممىنىڭ يىقىن ئالاقىلىش تىخنىكىسى(NFC)، ساقلىغۇچىسى، كارتا، ئوقۇغۇچ بىلەن ئالاقە قىلىشىغا يول قويىلىدۇ.</string>
+    <string name="permlab_sdcardWrite" product="nosdcard">USB ساقلىغۇچ مۇندەرىجىسىنى ئۆزگەرتىش\يۇيۇش</string>
+    <string name="permlab_sdcardWrite" product="default">SD كارتا مۇندەرىجىسىنى ئۆزگەرتىش\يۇيۇش</string>
+    <string name="permdesc_sdcardWrite" product="nosdcard">قوللانچى پىروگىراممىنىڭ USB ئۈسكۈنىسىگە يىزىشىغا يول قويىلىدۇ.</string>
+    <string name="permdesc_sdcardWrite" product="default">قوللانچى پىروگىراممىنىڭ  SD كارتىسىغا يىزىشىغا يول قويىلىدۇ.</string>
+    <string name="permlab_use_sip">تور تىلفۇنىنى ئۇرۇش\قوبۇل قىلىش </string>
+    <string name="permdesc_use_sip">قوللانچى پىروگىراممىنىڭ SIPنى ئىشلىتىپ / تورتىلفۇن مۇلازىمىتىنى قوبۇل قىلىشقا يول قويىلىدۇ.</string>
+    <string name="phoneTypeIsdn">ISDN</string>
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
+    <string name="imProtocolAim">نىشان</string>
+    <string name="sipAddressTypeCustom">خېرىدار</string>
+    <string name="sipAddressTypeHome">باش بەت</string>
+    <string name="sipAddressTypeWork">خىزمەت</string>
+    <string name="sipAddressTypeOther">باشقا </string>
+    <string name="contact_status_update_attribution">ئارقىلىق <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> via <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="lockscreen_plugged_in">توك قاچىلاۋاتىدۇ (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">سىز قۇلۇپنى ئىچىش رەسمىنى خاتا بويدىڭىز<xliff:g id="number">%d</xliff:g> قىتىم.  <xliff:g id="number">%d</xliff:g> مىنۇت ئىچىدە قايتا سىناپ بېقىڭ.</string>
+    <string name="lockscreen_failed_attempts_almost_glogin">سىز قۇلۇپنى ئىچىش رەسمىنى خاتا بويدىڭىز<xliff:g id="number">%d</xliff:g> قىتىم،<xliff:g id="number">%d</xliff:g>تىخىمۇ كۆپ سىناش مەغلۇپ بولغاندىن كىيىن، سىز تېلفۇنىڭىزدا ئىشلىتىۋاتقان گۇگىل بەلگىسىنى ئىچىشقا مەجبۇر بولىسىز، \n\n
+        <xliff:g id="number">%d</xliff:g> مىنۇت ئىچىدە قايتا سىناپ بېقىڭ.</string>
+    <string name="lockscreen_too_many_failed_attempts_countdown"> قايتا سىناش  <xliff:g id="number">%d</xliff:g>  سىكونت ئىچىدە.</string>
+    <string name="password_keyboard_label_symbol_key">\?123</string>
+    <string name="password_keyboard_label_alpha_key">ABC</string>
+    <string name="password_keyboard_label_alt_key">ALT</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+    <string name="js_dialog_title">بۇ بەتنىڭ مەنىسى  \'<xliff:g id="title">%s</xliff:g>\' :</string>
+    <string name="js_dialog_before_unload">بۇ بەتكە چىكىنىپ يول باشلاش؟ \n\n\<xliff:g id="message">%s</xliff:g>\n\n بەلگە ok نى تاللاپ داۋاملاشتۇرۇڭ ياكى بۇ بەتتىن چىكىنىپ چىقىڭ.</string>
+    <string name="permlab_setAlarm">قوڭغۇراقنى تەڭشەش</string>
+    <string name="permdesc_setAlarm">قوللانچى پىروگىراممىغا سىگنال بەلگىلەش
+قاچىلانغىنى سىگنال بىرىش پىروگىراممىسى، بىر قىسىم سائەت قوڭغۇراقلىرى ئىشلىمەسلىكى مۈمكىن.</string>
+    <plurals name="last_num_days">
+        <item quantity="other">كۈن <xliff:g id="count">%d</xliff:g> ئەڭ ئاخىرقى </item>
+    </plurals>
+    <string name="preposition_for_date"><xliff:g id="date" example="May 29">%s</xliff:g> دا</string>
+    <string name="preposition_for_time">دا <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+    <string name="preposition_for_year">دا <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="addToDictionary">لۇغەتكە \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" قېتىۋىلىش</string>
+    <string name="chooseUsbActivity">USB ئۈسكىنىسى ئۈچۈن قوللىنىشچان دىتالنى تاللاڭ</string>
+    <string name="crash_title">كەچۈرۈڭ!</string>
+    <string name="crash_application">بۇ قوللانچى <xliff:g id="application">%1$s</xliff:g>
+        (جەريان <xliff:g id="process">%2$s</xliff:g>)توختاپ قالدى، سىتىما ئوڭشاشقا ئامالسىز، باشقا دىتال ئىشلىتىڭ.</string>
+    <string name="crash_process">بۇ <xliff:g id="process">%1$s</xliff:g>جەريان ئامالسىز توختىتىلدى، سىستىما بۇ خاتالىقنى ئوڭشىيالمىدى، باشقا يۇمتال ئىشلىتىڭ.</string>
+    <string name="aerr_application">بۇ قوللانچى <xliff:g id="application">%1$s</xliff:g>
+        (جەريان <xliff:g id="process">%2$s</xliff:g>) ئىجرا بولمىدى.قايتا سىناڭ.</string>
+    <string name="aerr_process">بۇ <xliff:g id="process">%1$s</xliff:g>جەريان ئامالسىز توختىتىلدى، سىستىما بۇ خاتالىقنى ئوڭشىيالمىدى، قايتا سىناڭ.</string>
+    <string name="anr_activity_application"><xliff:g id="activity">%1$s</xliff:g> (قوللانچىدا <xliff:g id="application">%2$s</xliff:g>)  نى ئاكتىپلاشتۇرۇشتا ئىنكاس يوق.</string>
+    <string name="anr_activity_process"><xliff:g id="activity">%1$s</xliff:g> (جەريانىدا <xliff:g id="process">%2$s</xliff:g>) نى ئاكتىپلاشتۇرۇشتا ئىنكاس يوق.</string>
+    <string name="anr_application_process">قوللانچى <xliff:g id="application">%1$s</xliff:g> ( جەريانىدا <xliff:g id="process">%2$s</xliff:g>)  ئىلگىرلەش يوق.</string>
+    <string name="anr_process">.جەريان <xliff:g id="process">%1$s</xliff:g>ئىنكاس يوق</string>
+    <string name="crash_close">مۇقىملاش</string>
+    <string name="launch_warning_title">قوللانچىنى يېڭىدىن كىرگۈزۈش</string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> ئىجرا قىلىنۋاتىدۇ.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> دەسلەپكى قەدەمدە تونۇشتۇرۇلدى.</string>
+    <string name="smv_application">بۇ قوللانما <xliff:g id="application">%1$s</xliff:g>
+        (جەريان <xliff:g id="process">%2$s</xliff:g> ) تاساددىبى توختىتىلدى،باشا يۇمشاق دىتال بىلەن تەڭشەش ئېلىپ بېرىڭ.</string>
+    <string name="smv_process">بۇ <xliff:g id="process">%1$s</xliff:g> جەريان ئۆزىنىڭ ئۆزلىكىدىن مەجبۇرى ئىجىرا قىلىش سىياسىتىگە خىلاپلىق قىلدى.</string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> ئىجىرا قىلىنۋاتىدۇ</string>
+    <string name="heavy_weight_notification_detail">ئالماشتۇرىدىغان قوللنىشنى تاللاش</string>
+    <string name="heavy_weight_switcher_title">قوللانما دىتالىنى ئالماشتۇرۇش؟</string>
+    <string name="heavy_weight_switcher_text">يېڭى پىروگىرامما قوزغىتىشىتن بۇرۇن باشقا ئىجرا بولىۋاتقان پىروگىراممىنى تاقىۋىتىڭ.</string>
+    <string name="old_app_action"><xliff:g id="old_app">%1$s</xliff:g> غا قايتىش</string>
+    <string name="old_app_description">يىڭى پروگراممىنى قوزغاتماسلىق.</string>
+    <string name="new_app_action"><xliff:g id="old_app">%1$s</xliff:g> نى قوزغىتىش</string>
+    <string name="new_app_description">ساقلىماي چېكىنپ چىقىش.</string>
+    <string name="ringtone_default_with_actual">سۈكۈت ھالەتتىكى قوڭغۇراق ئاۋازى (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="perms_hide"><b> يوشۇرۇش </b></string>
+    <string name="perms_show_all"><b> ھەممىنى كۆرسىتىش </b></string>
+    <string name="usb_storage_message" product="nosdcard">تېلفۇنىڭىز كومپىيۇتېرغا ئۇلىنىپ بولدى،ئەگەر كوپىيۇتېرىڭىز بىلەن تېلغۇنىڭىزنىڭ USB ساقلىغۇچى ئارىسىدا ھۆججەت يۆتكەش ئېلىپ بارماقچى بولسىڭىز تۆۋەندىكى كونۇپكىنى بېسىڭ.</string>
+    <string name="usb_storage_message" product="default">تېلفۇنىڭىز كومپىيۇتېرنىڭ USB قىسمىغا ئۇلىنىپ بولدى،ئەگەر كومپىيۇتېرىڭىز بىلەن تېلغۇنىڭىزنىڭ  SD كارتا ئارىسىدا ھۆججەت كۆچۈرۈش ئېلىپ بارماقچى بولسىڭىز تۆۋەندىكى كونۇپكىنى بېسىڭ.</string>
+    <string name="usb_storage_error_message" product="nosdcard">USB ساقلىغۇچىڭىزدا كۆپ نەرسىلەرنى ساقلاش ئۈچۈن USB ساقلىغۇچىڭىزنى ئىشلىتىشتە مەسىلە بار.</string>
+    <string name="usb_storage_error_message" product="default">SD كارتىڭىزدا كۆپ نەرسىلەرنى ساقلاش ئۈچۈن USB ساقلىغۇچىڭىزنى ئىشلىتىشتە مەسىلە بار.</string>
+    <string name="usb_storage_stop_message" product="nosdcard">ئۈسكۈنىسنى تاقاشتىن بۇرۇن چىقىرىلقىغا كاپالەتلىك قىلىڭ USB  (\u201c تىز كۆرۈنمە \u201d) your  ئاندوريىد\u2018s SD كارتا كومپيۇتېرنىڭ .</string>
+    <string name="usb_storage_stop_message" product="default">ئۈسكۈنىسنى تاقاشتىن بۇرۇن چىقىرىلقىغا كاپالەتلىك قىلىڭ USB  (\u201c تىز كۆرۈنمە\u201d) your  ئاندىرويىد\u2018s SD كارتا كومپيۇتېرنىڭ .</string>
+    <string name="extmedia_format_title" product="nosdcard">USB ئامبارنى فورماتلاش</string>
+    <string name="extmedia_format_title" product="default">SD كارتىنى فورماتلاش</string>
+    <string name="extmedia_format_message" product="nosdcard">USB ئامبارنى فورماتلاپ، ئۇ يەرگە ساقلانغان بارلىق ھۆججەتلەرنى يۇيۋىتەمسىز؟ ھەرىكەت ئەسلىگە قايتمايدۇ.</string>
+    <string name="extmedia_format_message" product="default">SDكارتىنى راستىنلا فورماتلامسىز؟ كارتىدىكى بارلىق ئۇچۇرلار يوقاپ كىتىدۇ.</string>
+    <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="candidates_style"><u> نامزات </u></string>
+    <string name="ext_media_checking_notification_title" product="nosdcard">USB ساقلىغۇچ تەييارلىنىۋاتىدۇ</string>
+    <string name="ext_media_checking_notification_title" product="default">SD كارتا تەييارلاش</string>
+    <string name="ext_media_nofs_notification_title" product="nosdcard">قۇرۇق USB ساقلىغۇچ</string>
+    <string name="ext_media_nofs_notification_title" product="default">قۇرۇق SDكارتا</string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard">USB ئۈسكۈنىسى قۇرۇق ياكى قوللىمايدىغان ھۆججەت شەكلى.</string>
+    <string name="ext_media_nofs_notification_message" product="default">SD كارتا ئىناۋەتسىز ياكى قوللىمايدىغان سىيىتىما بار.</string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">بۇزۇلغان USB ساقلىغۇچ</string>
+    <string name="ext_media_unmountable_notification_title" product="default">بۇزۇلغان SD كارتا</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">USB ئۈسكۈنىسى بۇزۇلغان بولىشى مۈمكىن، فورماتلاپ قايتا سىناپ بىقىڭ.</string>
+    <string name="ext_media_unmountable_notification_message" product="default">SD كارتا بۇزۇلدى،قايتا فورماتلاشقا مۇھتاج.</string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">USB   ئۈسكۈنىسى تاساددىبى چىقىرۋىتىلدى</string>
+    <string name="ext_media_badremoval_notification_title" product="default">SD كارتا ئۇشتۇمتۇت ئاجىتىۋىتىلدى</string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">USB ئۈسكۈنىسىنى چىقىرۋىتىشتىن بۇرۇن ماتىرياللارنىڭ يوقاپ كىتىشىدىن ساقلىنىڭ. </string>
+    <string name="ext_media_badremoval_notification_message" product="default">SD كارتىنى چىقىرۋىتىش بۇرۇن ماتىرياللارنىڭ يوقاپ كىتىشىدىن ساقلىنىڭ .</string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">USB   ئۈسكۈنىسىنى بىخەتەر چىقىرىش</string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">SD كارتنى بىخەتەر چىقىرىۋىتىش</string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">USBئۈسكۈنىڭىزنى  بىخەتەر چىقىرىۋالسىڭىز بۇلىدۇ.</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">سىزSD كارتىڭىزنى بىخەتەر چىقىرىۋالسىڭىز بۇلىدۇ.</string>
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">USB ئۈسكۈنىسىنى چىقىرىش</string>
+    <string name="ext_media_nomedia_notification_title" product="default">SD كارتىنى چىقىرىش</string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">USB ئۈسكۈنىسى چىقىرىدى، يېڭىدىن سىلىڭ.</string>
+    <string name="ext_media_nomedia_notification_message" product="default">SD كارتا چىقىرىۋىتىلدى،باشقا بىرنى قىستۇرۇڭ.</string>
+    <string name="dial_number_using">ئۇرغان نۇمۇر\n <xliff:g id="number" example="555">%s</xliff:g>نى ئىشلىتىۋاتىدۇ</string>
+    <string name="create_contact_using">ئالاقىلاشقۇچىلارنى قۇرۇش \nئىشلىتىۋاتىدۇ <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="permission_request_notification_with_subtitle">تەلەپ قىلىنغان ھوقۇق \n ۋە ئابۇنىت  <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="cta_tethered_notification_title">چەكلىنىۋاتىدۇ</string>
+    <string name="custom_china_mobile">جۇڭگو كۆچمە خەۋەرلىشىشى</string>
+    <string name="custom_china_unicom">جۇڭگو بىرلەشمە خەۋەرلىشىشى</string>
+    <string name="shutdown_after_seconds"> <xliff:g id="NUMBER">%d</xliff:g> سىكونتتىن كىيىن تېلفۇن ئىتىلىدۇ</string>
+    <string name="lockscreen_password_error">مەخپى نۇمۇر خاتا ،قايتا كىرگۈزۈڭ!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">سىز ئىچىش پارولنى چوقۇم توغرا كىرگۈزىشىڭىز كىرەك<xliff:g id="number">%d</xliff:g> قىتىم،\ <xliff:g id="number">%d</xliff:g> مىنۇت ئىچىدە قايتا سىناپ بېقىڭ.</string>
+    <string name="progress_unmounting" product="nosdcard">USB ئۈسكۈنىسىنى چىقىرۋىتىش ...</string>
+    <string name="progress_unmounting" product="default">SD كارتىنى چىقىرۋىتىش ...</string>
+    <string name="progress_erasing" product="nosdcard">USB ساقلىغۇچنى تازلاش...</string>
+    <string name="progress_erasing" product="default">SD كارتىنى تازلاش...</string>
+    <string name="format_error" product="nosdcard">USB ساقلىغۇچنى تازلاش مەغلۇپ بولدى.</string>
+    <string name="format_error" product="default">SD كارتىنى تازلاش مەغلۇپ بولدى.</string>
+    <string name="media_checking" product="nosdcard">USB ئۈسكۈنىسى تەكشۈرلىۋاتىدۇ.</string>
+    <string name="media_checking" product="default">SD كارتا تەكشۈرىلىۋاتىدۇ.</string>
+    <string name="media_shared" product="nosdcard">USB ئۈسكۈنىسى كومپىيۇتېردا ئىشلىتىلىۋاتىدۇ.</string>
+    <string name="media_shared" product="default">SD كارتا باشقا كومپىيۇتىردا ئىشلىتىلىۋاتىدۇ.</string>
+    <string name="audio_play_failed">كەچۈرۈڭ ، بۇ ئاۋاز ھۆججىتى قويۇلمايدۇ.بۇ ھۆججەتنى تېلفۇن قوڭغۇرىقى قىلىپ تەڭشىمەڭ.</string>
+    <string name="sms_full_title">ئۇچۇر ساقلىغۇچ توشۇپ كەتتى</string>
+    <string name="sms_full_body">ئۇچۇر قوبۇل قىلىنمىدى، كونا ئۇچۇرلارنى ئۆچۈرۋىتىڭ.</string>
+    <string name="unlock_screen_pin_error">PIN خاتا!</string>
+    <string name="ap_disconnected">ئۇلىنىشنى ئۈزۈش</string>
+    <string name="sim_chooser_title">SIM كارتىنى تاللاش</string>
+    <string name="lockscreen_miss_phone">تېلفۇننى قوبۇل قىلماسلىق</string>
+    <string name="lockscreen_miss_mms">قىسقا ئۇچۇر قوبۇل قىلماسلىق</string>
+    <string name="lockscreen_sim_card_locked_message">SIMكارتا تاقالدى.</string>
 </resources>

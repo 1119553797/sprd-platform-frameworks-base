@@ -1,4 +1,27 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">ھالەت رامكىسى</string>
+    <string name="status_bar_clear_all_button">تازلاقلىق</string>
+    <string name="status_bar_no_notifications_title">ئۇقتۇرۇش يوق</string>
+    <string name="status_bar_ongoing_events_title">ھازىر ئېچىلغان</string>
+    <string name="status_bar_latest_events_title">ئۇختۇرۇش</string>
+    <string name="battery_low_title">توك مەنبەسىگە ئۇلاڭ</string>
+    <string name="battery_low_subtitle">باتارىيىنىڭ كۈچى قالمىدى :</string>
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g> ياكى ئېشىپ قالغىننى ئازايتىش.</string>
+    <string name="battery_low_why">باتارىيە ئىشلىتىلىشى</string>
+    <string name="usb_accessory_permission_prompt">يول قويۇلامدۇ؟  s$1% ئۈسكۈنىسىنى پىروگىرامما قوشۇمچە ھۆججىتىUSB </string>
+    <string name="usb_device_confirm_prompt">USB ئۈسكىنىسى ئۇلانغاندا  %1$s  نى ئاچامسىز؟</string>
+    <string name="usb_accessory_confirm_prompt">USB قوشۇمچسى ئۇلانغاندا  %2$s  نى ئاچامسىز؟</string>
+    <string name="usb_accessory_uri_prompt">بۇ  USB ئۈسكىنىسگە ماس كىلىدىغان قوللىنىشچان دىتال يوق. تېخىمۇ كۆپ ئۇچۇرغا ئىرىشمەكچى بولسىڭىز <xliff:g id="url">%1$s</xliff:g></string>
+    <string name="title_usb_accessory">USB ئۈسكۈنىسى قوشۇمچە ھۆججىتى</string>
+    <string name="label_view">كۆرۈش</string>
+    <string name="always_use_accessory">نورمال ئەھۋالادا بۇ  USB ياردەمچى ئۈسكۈنىنى ئىشلىتىش</string>
+    <string name="mobile_data_connect_disable">ياق</string>
+    <string name="mobile_data_connect_enable">ھەئە</string>
+    <string name="network_disconnect_title">ئۇقتۇرۇش</string>
+    <string name="network_disconnect_message">سىمسىز لىنىيىلىك تور ئۈزۈلدىn\،3Gتورى ئارقىلىق ئۇلامسىز؟\nناۋادا سانلىق مەلۇماتلارنى ئېشلىتىش پىلانىڭىز بولسا ،بەلكىم ئۇ نورمىدىن سىرت چىقىم ھاسىل قىلىشى مۇمكىن .</string>
+    <string name="weak_signal_title">سىگنال ئاجىز</string>
+    <string name="weak_signal_message">ھازىرقى  WLAN سىگنالى بەك ئاجىز،بۇنىڭدىن ياخشىراقىنى تاللىغان بولسىڭىز</string>
+    <string name="auto_connect">بىۋاستە ئاپتۇماتىك ھالدا باشقا ئىشەنچىلىك APگە ئۇلانسۇن</string>
 </resources>
