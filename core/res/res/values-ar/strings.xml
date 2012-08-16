@@ -1036,4 +1036,10 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sim_chooser_title">اختر بطاقة الهاتف</string>
     <string name="lockscreen_miss_phone">فقدت الهاتف</string>
     <string name="lockscreen_miss_mms">فقت بطاقة الهاتف</string>
+    <string name="crash_title">عذرا!</string>
+    <string name="crash_application">التطبيق <xliff:g id="application">%1$s</xliff:g> (عملية <xliff:g id="process">%2$s</xliff:g>) توقف بشكل غير متوقع. النظام فشل في إصلاح الخطأ. الرجاء إستخدام برنامج آخر.</string>
+    <string name="crash_process">العملية <xliff:g id="process">%1$s</xliff:g> توقفت بشكل غير متوقع. النظام فشل في إصلاح الخطأ. الرجاء إستخدام برنامج آخر.</string>
+    <string name="crash_close">موافق</string>
+    <string name="lockscreen_sim_card_locked_message">الشريحة مؤمنة.</string>
+    <string name="upload_file_size_too_large">ملف التحميل كبير جدا، الرجاء تجزئتة إلى ملفات صغيرة</string>
 </resources>
