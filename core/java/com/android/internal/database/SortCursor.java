@@ -44,11 +44,29 @@ public class SortCursor extends AbstractCursor
             // Reset our position so the optimizations in move-related code
             // don't screw us over
             mPos = -1;
+
+            /* start:  we should clear cache if we update data. Perhaps some exception will come in the future,
+             *    and we should come back for these code . added by spreadsoft 20120816 */
+         // clear cache
+            for (int i = mRowNumCache.length - 1; i >= 0; i--) {
+                mRowNumCache[i] = -2;
+            }
+            /* end:  we should clear cache if we update data. Perhaps some exception will come in the future,
+             *    and we should come back for these code . added by spreadsoft 20120816 */
         }
 
         @Override
         public void onInvalidated() {
             mPos = -1;
+
+            /* start:  we should clear cache if we update data. Perhaps some exception will come in the future,
+             *    and we should come back for these code . added by spreadsoft 20120816 */
+             // clear cache
+            for (int i = mRowNumCache.length - 1; i >= 0; i--) {
+                mRowNumCache[i] = -2;
+            }
+            /* end:  we should clear cache if we update data. Perhaps some exception will come in the future,
+             *    and we should come back for these code . added by spreadsoft 20120816 */
         }
     };
     
