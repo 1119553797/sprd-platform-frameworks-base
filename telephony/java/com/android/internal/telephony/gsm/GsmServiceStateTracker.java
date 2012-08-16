@@ -29,6 +29,7 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.net.SntpClient;
 import android.os.AsyncResult;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
@@ -168,7 +169,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     static final int CS_NOTIFICATION = 999;  // Id to update and cancel CS restricted
 
     static final int MAX_NUM_DATA_STATE_READS = 20;
-
+    private boolean isSntpStart = false;
     private boolean mLocalLanguageChange = false;// local Language change,true
                                                  // if change
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
@@ -1736,6 +1737,35 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 		return revertToNitz();
 	}
 
+    class UpdateNitzFromSntp extends AsyncTask<Object, Object, Long>{
+        private SntpClient client = new SntpClient();
+        @Override
+        protected void onPostExecute(Long result) {
+            Log.i(LOG_TAG, "UpdateNitzFromSntp thread：onPostExecute ,result=" + result);
+            if (null != result) {
+                setAndBroadcastNetworkSetTime(result
+                        + (SystemClock.elapsedRealtime() - client.getNtpTimeReference()));
+            }
+            isSntpStart=false;
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected Long doInBackground(Object... params) {
+            Log.i(LOG_TAG, "UpdateNitzFromSntp thread：doInBackground");
+            String []sntpList = phone.getContext().getResources().getStringArray(com.android.internal.R.array.config_sntp_server_list);
+            for (String sntp : sntpList) {
+                Log.d(LOG_TAG, "sntp is" + sntp);
+                if (client.requestTime(sntp, 10000)) {
+                    long cachedNtp = client.getNtpTime();
+                    Log.i(LOG_TAG, "Sntp NtpTime = " + cachedNtp);
+                    return cachedNtp;
+                }
+            }
+            return null;
+        }
+    }
+
     private boolean revertToNitz() {
         if (Settings.System.getInt(phone.getContext().getContentResolver(),
                 Settings.System.AUTO_TIME, 0) == 0) {
@@ -1751,22 +1781,11 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             return true;
         }
 
-        String []sntpList = phone.getContext().getResources().getStringArray(com.android.internal.R.array.config_sntp_server_list);
-        SntpClient client = new SntpClient();
-		for (String sntp : sntpList) {
-			Log.d(LOG_TAG, "sntp is" + sntp);
-			if (client.requestTime(sntp, 10000)) {
-				long cachedNtp = client.getNtpTime();
-				// long cachedNtpTimestamp = SystemClock.elapsedRealtime();
-
-				Log.i(LOG_TAG, "Sntp NtpTime = " + cachedNtp);
-
-				setAndBroadcastNetworkSetTime(cachedNtp
-						+ (SystemClock.elapsedRealtime() - client
-								.getNtpTimeReference()));
-				return true;
-			}
-		}
+        if(!isSntpStart){
+            isSntpStart=true;
+            UpdateNitzFromSntp updateTimeFromSntp=new UpdateNitzFromSntp();
+            updateTimeFromSntp.execute();
+        }
         return false;
     }
 
