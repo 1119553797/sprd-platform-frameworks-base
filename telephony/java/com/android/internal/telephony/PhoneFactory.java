@@ -387,10 +387,8 @@ public class PhoneFactory {
             readySimNO = 1;
             notReadySimStatus = card1Status;
         }
-
         if(readySimNO == defaultPhoneId) {
             settingPhoneId = defaultPhoneId;
-            TelephonyManager.setAutoDefaultPhoneId(sContext,defaultPhoneId);
         } else {
             if(notReadySimStatus == SIM_STATUS_PIN_LOCK) {
                 settingPhoneId = defaultPhoneId;
@@ -488,13 +486,6 @@ public class PhoneFactory {
                (state == State.READY) ||
                (state == State.ABSENT)) {
                 return true;
-            } else {
-                boolean isAirplaneModeOn = Settings.System.getInt(sContext.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
-                boolean isStandby = Settings.System.getInt(sContext.getContentResolver(),getSetting(
-                        Settings.System.SIM_STANDBY, phoneId), 1) == 1;
-                if(isAirplaneModeOn || !isStandby) {
-                    return true;
-                }
             }
         }
         return false;
@@ -502,10 +493,13 @@ public class PhoneFactory {
     public static int canHandleDataCall(int phoneId) {
         if (sProxyPhone!=null&&phoneId<sProxyPhone.length) {
             State state = sProxyPhone[phoneId].getIccCard().getIccCardState();
+            boolean isAirplaneModeOn = Settings.System.getInt(sContext.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+            boolean isStandby = Settings.System.getInt(sContext.getContentResolver(),getSetting(
+                    Settings.System.SIM_STANDBY, phoneId), 1) == 1;
             if((state == State.PIN_REQUIRED) ||
                (state == State.PUK_REQUIRED)) {
                 return SIM_STATUS_PIN_LOCK;
-            } else if(state == State.READY) {
+            } else if(state == State.READY && isStandby && !isAirplaneModeOn) {
                 return SIM_STATUS_READY;
             } else {
                 return SIM_STATUS_OTHER;
