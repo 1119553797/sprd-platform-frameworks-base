@@ -24,6 +24,7 @@
 #include <media/stagefright/AudioSource.h>
 #include <media/stagefright/AMRWriter.h>
 #include <media/stagefright/CameraSource.h>
+#include <media/stagefright/FakeCameraSource.h>
 #include <media/stagefright/MPEG2TSWriter.h>
 #include <media/stagefright/MPEG4Writer.h>
 #include <media/stagefright/VideoPhoneWriter.h> //sprd vt must
@@ -1106,6 +1107,74 @@ status_t StagefrightRecorder::setupVideoEncoder(sp<MediaSource> *source) {
     return OK;
 }
 
+status_t StagefrightRecorder::setupFakeCameraVideoEncoder(sp<MediaSource> *source) {
+    source->clear();
+
+    sp<FakeCameraSource> cameraSource = FakeCameraSource::Create();
+    CHECK(cameraSource != NULL);
+
+    sp<MetaData> enc_meta = new MetaData;
+    enc_meta->setInt32(kKeyBitRate, mVideoBitRate);
+    enc_meta->setInt32(kKeySampleRate, mFrameRate);
+
+    switch (mVideoEncoder) {
+        case VIDEO_ENCODER_H263:
+            enc_meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_H263);
+            break;
+
+        case VIDEO_ENCODER_MPEG_4_SP:
+            enc_meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_MPEG4);
+            break;
+
+        case VIDEO_ENCODER_H264:
+            enc_meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_AVC);
+            break;
+
+        default:
+            CHECK(!"Should not be here, unsupported video encoding.");
+            break;
+    }
+
+    sp<MetaData> meta = cameraSource->getFormat();
+
+    int32_t width, height, stride, sliceHeight, colorFormat;
+    CHECK(meta->findInt32(kKeyWidth, &width));
+    CHECK(meta->findInt32(kKeyHeight, &height));
+    CHECK(meta->findInt32(kKeyStride, &stride));
+    CHECK(meta->findInt32(kKeySliceHeight, &sliceHeight));
+    CHECK(meta->findInt32(kKeyColorFormat, &colorFormat));
+
+    enc_meta->setInt32(kKeyWidth, width);
+    enc_meta->setInt32(kKeyHeight, height);
+    enc_meta->setInt32(kKeyIFramesInterval, mIFramesIntervalSec);
+    enc_meta->setInt32(kKeyStride, stride);
+    enc_meta->setInt32(kKeySliceHeight, sliceHeight);
+    enc_meta->setInt32(kKeyColorFormat, colorFormat);
+    if (mVideoTimeScale > 0) {
+        enc_meta->setInt32(kKeyTimeScale, mVideoTimeScale);
+    }
+    if (mVideoEncoderProfile != -1) {
+        enc_meta->setInt32(kKeyVideoProfile, mVideoEncoderProfile);
+    }
+    if (mVideoEncoderLevel != -1) {
+        enc_meta->setInt32(kKeyVideoLevel, mVideoEncoderLevel);
+    }
+
+    OMXClient client;
+    CHECK_EQ(client.connect(), OK);
+
+    sp<MediaSource> encoder = OMXCodec::Create(
+            client.interface(), enc_meta,
+            true /* createEncoder */, cameraSource);
+    if (encoder == NULL) {
+        return UNKNOWN_ERROR;
+    }
+
+    *source = encoder;
+
+    return OK;
+}
+
 status_t StagefrightRecorder::setupAudioEncoder(const sp<MediaWriter>& writer) {
     sp<MediaSource> audioEncoder;
     switch(mAudioEncoder) {
@@ -1137,6 +1206,12 @@ status_t StagefrightRecorder::startVideoPhoneRecording() //sprd vt must
 	{
         	sp<MediaSource> 	encoder;
         	err = setupVideoEncoder(&encoder);
+        	if (err != OK) 
+			return err;
+        	writer->addSource(encoder);
+	} else if (mVideoSource == VIDEO_SOURCE_FAKECAMERA) {
+        	sp<MediaSource> 	encoder;
+        	err = setupFakeCameraVideoEncoder(&encoder);
         	if (err != OK) 
 			return err;
         	writer->addSource(encoder);

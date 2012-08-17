@@ -158,9 +158,14 @@ status_t MediaPhoneClient::prepareRecorder()
     } else {
         LOGI("mediaphone: open %s successed with %d", urlOut, fd);
     }
-	
-    CHECK_RT(mRecorder->setCamera(mCamera));
-    CHECK_RT(mRecorder->setVideoSource(VIDEO_SOURCE_CAMERA));
+    if (mCamera == NULL) {
+        LOGV("prepareRecorder(), set fake camera");
+        CHECK_RT(mRecorder->setVideoSource(VIDEO_SOURCE_FAKECAMERA));
+    } else {
+        LOGV("prepareRecorder(), set vp video es");
+        CHECK_RT(mRecorder->setCamera(mCamera));
+        CHECK_RT(mRecorder->setVideoSource(VIDEO_SOURCE_CAMERA));
+    }
     //CHECK_RT(mRecorder->setAudioSource(AUDIO_SOURCE_MIC));
     //CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_THREE_GPP));
     CHECK_RT(mRecorder->setOutputFormat(OUTPUT_FORMAT_VIDEOPHONE));
@@ -380,7 +385,7 @@ status_t MediaPhoneClient::enableRecord(bool isEnable, int type, int fd)
 	        CHECK_RT(mRecordRecorder->setVideoFrameRate(15));
 	        CHECK_RT(mRecordRecorder->setVideoSize(176, 144));
 	        CHECK_RT(mRecordRecorder->setParameters(String8("video-param-encoding-bitrate=48000")));
-	        CHECK_RT(mRecordRecorder->setVideoEncoder((mEncodeType == 1)?VIDEO_ENCODER_H263:VIDEO_ENCODER_MPEG_4_SP));
+	        CHECK_RT(mRecordRecorder->setVideoEncoder((mDecodeType == 1)?VIDEO_ENCODER_H263:VIDEO_ENCODER_MPEG_4_SP));
 		}
 		if ((type == 0) || (type == 1)){
         	CHECK_RT(mRecordRecorder->setAudioSource(AUDIO_SOURCE_VOICE_CALL));
@@ -434,7 +439,10 @@ status_t MediaPhoneClient::startDownLink()
     LOGV("startDownLink");
     if (mPreviewSurface != NULL) {
     	int64_t token = IPCThreadState::self()->clearCallingIdentity();
-	mCamera->setPreviewDisplay(mPreviewSurface);
+    	if (mCamera != NULL) {
+            LOGV("startDownLink mCamera is not NULL");
+	        mCamera->setPreviewDisplay(mPreviewSurface);
+        }
     	IPCThreadState::self()->restoreCallingIdentity(token);
     }
     CHECK_RT(mPlayer->start());
@@ -448,9 +456,12 @@ status_t MediaPhoneClient::stopDownLink()
 	((StagefrightPlayer*)mPlayer.get())->clearRender();
 	
     int64_t token = IPCThreadState::self()->clearCallingIdentity();
-	mCamera->stopPreview();
-	mCamera->setPreviewDisplay(NULL);
-    mCamera->startPreview();
+    if (mCamera != NULL) {
+        LOGV("stopDownLink mCamera is not NULL");
+    	mCamera->stopPreview();
+    	mCamera->setPreviewDisplay(NULL);
+        mCamera->startPreview();
+    }
     LOGV("stopDownLink, mRemoteSurface(%p)", mRemoteSurface.get());
 	//mRecorder->setPreviewSurface(mRemoteSurface);
     IPCThreadState::self()->restoreCallingIdentity(token);

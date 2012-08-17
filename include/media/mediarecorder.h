@@ -54,6 +54,7 @@ enum video_source {
     VIDEO_SOURCE_DEFAULT = 0,
     VIDEO_SOURCE_CAMERA = 1,
     VIDEO_SOURCE_VIDEOPHONE_VIDEO_ES = 2,//sprd vt must
+    VIDEO_SOURCE_FAKECAMERA = 3,//sprd vt must
     
     VIDEO_SOURCE_LIST_END  // must be last - used to validate audio source type
 };
