@@ -846,7 +846,7 @@ public final class ActivityThread {
         }
 
         private void printRow(PrintWriter pw, String format, Object...objs) {
-            pw.println(String.format(format, objs));
+            pw.println(String.format(Locale.US, format, objs));
         }
     }
 

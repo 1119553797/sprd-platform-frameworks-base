@@ -16,6 +16,8 @@
 
 package com.android.server;
 
+import java.util.Locale;
+
 /**
  * An exception that indicates there was an error with a NativeDaemonConnector operation
  */
@@ -33,7 +35,7 @@ public class NativeDaemonConnectorException extends RuntimeException
 
     public NativeDaemonConnectorException(int code, String cmd, String error)
     {
-        super(String.format("Cmd {%s} failed with code %d : {%s}", cmd, code, error));
+        super(String.format(Locale.US, "Cmd {%s} failed with code %d : {%s}", cmd, code, error));
         mCode = code;
         mCmd = cmd;
     }

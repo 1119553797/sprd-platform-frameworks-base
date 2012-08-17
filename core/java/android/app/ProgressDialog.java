@@ -33,6 +33,8 @@ import com.android.internal.R;
 
 import java.text.NumberFormat;
 
+import java.util.Locale;
+
 /**
  * <p>A dialog showing a progress indicator and an optional text message or view.
  * Only a text message or a view can be used at the same time.</p>
@@ -126,7 +128,7 @@ public class ProgressDialog extends AlertDialog {
                     int max = mProgress.getMax();
                     double percent = (double) progress / (double) max;
                     String format = mProgressNumberFormat;
-                    mProgressNumber.setText(String.format(format, progress, max));
+                    mProgressNumber.setText(String.format(Locale.US, format, progress, max));
                     SpannableString tmp = new SpannableString(mProgressPercentFormat.format(percent));
                     tmp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),
                             0, tmp.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

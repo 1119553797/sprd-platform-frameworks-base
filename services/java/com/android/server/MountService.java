@@ -61,6 +61,7 @@ import android.util.Log;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -484,7 +485,7 @@ class MountService extends IMountService.Stub
                             if (state.equals(Environment.MEDIA_UNMOUNTED)) {
                                 int rc = doMountVolume(path);
                                 if (rc != StorageResultCode.OperationSucceeded) {
-                                    Slog.e(TAG, String.format("Boot-time mount failed (%d)", rc));
+                                    Slog.e(TAG, String.format(Locale.US, "Boot-time mount failed (%d)", rc));
                                 }
                             } else if (state.equals(Environment.MEDIA_SHARED)) {
                                 /*
@@ -655,7 +656,7 @@ class MountService extends IMountService.Stub
                             state = Environment.MEDIA_SHARED;
                             Slog.i(TAG, "Media shared on daemon connection");
                         } else {
-                            throw new Exception(String.format("Unexpected state %d", st));
+                            throw new Exception(String.format(Locale.US, "Unexpected state %d", st));
                         }
                     }
                     if (state != null) {
@@ -769,7 +770,7 @@ class MountService extends IMountService.Stub
                         try {
                             int rc;
                             if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
-                                Slog.w(TAG, String.format("Insertion mount failed (%d)", rc));
+                                Slog.w(TAG, String.format(Locale.US, "Insertion mount failed (%d)", rc));
                             }
                         } catch (Exception ex) {
                             Slog.w(TAG, "Failed to mount media on insertion", ex);
@@ -803,7 +804,7 @@ class MountService extends IMountService.Stub
                 updatePublicVolumeState(path, Environment.MEDIA_BAD_REMOVAL);
                 in = new Intent(Intent.ACTION_MEDIA_BAD_REMOVAL, Uri.parse("file://" + path));
             } else {
-                Slog.e(TAG, String.format("Unknown code {%d}", code));
+                Slog.e(TAG, String.format(Locale.US, "Unknown code {%d}", code));
             }
         } else {
             return false;
@@ -915,7 +916,7 @@ class MountService extends IMountService.Stub
                     return true;
                 return false;
             } else {
-                Slog.e(TAG, String.format("Unexpected response code %d", code));
+                Slog.e(TAG, String.format(Locale.US, "Unexpected response code %d", code));
                 return false;
             }
         }
@@ -1076,7 +1077,7 @@ class MountService extends IMountService.Stub
             if (code == VoldResponseCode.ShareEnabledResult) {
                 return "enabled".equals(tok[2]);
             } else {
-                Slog.e(TAG, String.format("Unexpected response code %d", code));
+                Slog.e(TAG, String.format(Locale.US, "Unexpected response code %d", code));
                 return false;
             }
         }
@@ -1122,7 +1123,7 @@ class MountService extends IMountService.Stub
                         Slog.w(TAG, "Disabling UMS after cable disconnect");
                         doShareUnshareVolume(path, "ums", false);
                         if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
-                            Slog.e(TAG, String.format(
+                            Slog.e(TAG, String.format(Locale.US, 
                                     "Failed to remount {%s} on UMS enabled-disconnect (%d)",
                                             path, rc));
                         }
@@ -1474,7 +1475,7 @@ class MountService extends IMountService.Stub
         warnOnNotMounted();
 
         int rc = StorageResultCode.OperationSucceeded;
-        String cmd = String.format("asec create %s %d %s %s %d", id, sizeMb, fstype, key, ownerUid);
+        String cmd = String.format(Locale.US, "asec create %s %d %s %s %d", id, sizeMb, fstype, key, ownerUid);
         try {
             mConnector.doCommand(cmd);
         } catch (NativeDaemonConnectorException e) {
@@ -1554,7 +1555,7 @@ class MountService extends IMountService.Stub
         }
 
         int rc = StorageResultCode.OperationSucceeded;
-        String cmd = String.format("asec mount %s %s %d", id, key, ownerUid);
+        String cmd = String.format(Locale.US, "asec mount %s %s %d", id, key, ownerUid);
         try {
             mConnector.doCommand(cmd);
         } catch (NativeDaemonConnectorException e) {
@@ -1659,7 +1660,7 @@ class MountService extends IMountService.Stub
             int code = Integer.parseInt(tok[0]);
 	    Log.d(TAG, "************ code: " + code);
             if (code != VoldResponseCode.AsecPathResult) {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
 	    Log.d(TAG, "************ tok[1]: " + tok[1]);
             return tok[1];
@@ -1669,7 +1670,7 @@ class MountService extends IMountService.Stub
             if (code == VoldResponseCode.OpFailedStorageNotFound) {
                 throw new IllegalArgumentException(String.format("Container '%s' not found", id));
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
         }
     }
@@ -1710,7 +1711,7 @@ class MountService extends IMountService.Stub
             String []tok = rsp.get(0).split(" ");
             int code = Integer.parseInt(tok[0]);
             if (code != VoldResponseCode.AsecPathResult) {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
             return tok[1];
         } catch (NativeDaemonConnectorException e) {
@@ -1718,7 +1719,7 @@ class MountService extends IMountService.Stub
             if (code == VoldResponseCode.OpFailedStorageNotFound) {
                 return null;
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
         }
     }
@@ -2107,7 +2108,7 @@ class MountService extends IMountService.Stub
             }
 
             int rc = StorageResultCode.OperationSucceeded;
-            String cmd = String.format("obb mount %s %s %d", mObbState.filename, hashedKey,
+            String cmd = String.format(Locale.US, "obb mount %s %s %d", mObbState.filename, hashedKey,
                     mObbState.callerUid);
             try {
                 mConnector.doCommand(cmd);
@@ -2328,7 +2329,7 @@ class MountService extends IMountService.Stub
                     return true;
                 return false;
             } else {
-                Slog.e(TAG, String.format("Unexpected response code %d", code));
+                Slog.e(TAG, String.format(Locale.US, "Unexpected response code %d", code));
                 return false;
             }
         }

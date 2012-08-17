@@ -49,6 +49,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 
+import java.util.Locale;
+
 /**
  * @hide
  */
@@ -281,7 +283,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                 int code = Integer.parseInt(st.nextToken(" "));
                 if (code != NetdResponseCode.InterfaceGetCfgResult) {
                     throw new IllegalStateException(
-                        String.format("Expected code %d, but got %d",
+                        String.format(Locale.US, "Expected code %d, but got %d",
                                 NetdResponseCode.InterfaceGetCfgResult, code));
                 }
             } catch (NumberFormatException nfe) {
@@ -359,7 +361,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                 // 211 Forwarding <enabled/disabled>
                 return "enabled".equals(tok[2]);
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
@@ -421,7 +423,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                 // XXX: Tethering services <started/stopped> <TBD>...
                 return "started".equals(tok[2]);
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
@@ -596,7 +598,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                     return true;
                 return false;
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
@@ -628,7 +630,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                     return true;
                 return false;
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
@@ -659,7 +661,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                     return true;
                 return false;
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
@@ -690,7 +692,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                     return true;
                 return false;
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
@@ -709,7 +711,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                     return true;
                 return false;
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
@@ -826,7 +828,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
             }
             if ((rx && code != NetdResponseCode.InterfaceRxCounterResult) || (
                     !rx && code != NetdResponseCode.InterfaceTxCounterResult)) {
-                Slog.e(TAG, String.format("Unexpected response code %d", code));
+                Slog.e(TAG, String.format(Locale.US, "Unexpected response code %d", code));
                 return -1;
             }
             return Long.parseLong(tok[1]);
@@ -849,7 +851,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.CHANGE_NETWORK_STATE, "NetworkManagementService");
         try {
-            mConnector.doCommand(String.format(
+            mConnector.doCommand(String.format(Locale.US, 
                     "interface setthrottle %s %d %d", iface, rxKbps, txKbps));
         } catch (NativeDaemonConnectorException e) {
             Slog.e(TAG, "Error communicating with native daemon to set throttle", e);
@@ -885,7 +887,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
             }
             if ((rx && code != NetdResponseCode.InterfaceRxThrottleResult) || (
                     !rx && code != NetdResponseCode.InterfaceTxThrottleResult)) {
-                Slog.e(TAG, String.format("Unexpected response code %d", code));
+                Slog.e(TAG, String.format(Locale.US, "Unexpected response code %d", code));
                 return -1;
             }
             return Integer.parseInt(tok[1]);

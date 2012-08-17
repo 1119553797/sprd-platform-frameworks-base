@@ -32,6 +32,8 @@ import javax.microedition.khronos.opengles.GL11;
 import javax.microedition.khronos.opengles.GL11Ext;
 import javax.microedition.khronos.opengles.GL11ExtensionPack;
 
+import java.util.Locale;
+
 public class GLImpl implements GL10, GL10Ext, GL11, GL11Ext, GL11ExtensionPack {
 
     // Private accessors for native code
@@ -74,7 +76,7 @@ public class GLImpl implements GL10, GL10Ext, GL11, GL11Ext, GL11ExtensionPack {
         } catch (android.os.RemoteException e) {
             // ignore
         }
-        Log.e("OpenGLES", String.format(
+        Log.e("OpenGLES", String.format(Locale.US, 
             "Application %s (SDK target %d) called a GL11 Pointer method with an indirect Buffer.",
             appName, version));
         if (version <= Build.VERSION_CODES.CUPCAKE) {

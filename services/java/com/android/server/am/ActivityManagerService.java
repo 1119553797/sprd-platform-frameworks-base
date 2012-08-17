@@ -8113,7 +8113,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         final int N = list.size()-1;
         for (int i=N; i>=0; i--) {
             ProcessRecord r = (ProcessRecord)list.get(i);
-            pw.println(String.format("%s%s #%2d: %s",
+            pw.println(String.format(Locale.US, "%s%s #%2d: %s",
                     prefix, (r.persistent ? persistentLabel : normalLabel),
                     i, r.toString()));
             if (r.persistent) {
@@ -8174,7 +8174,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     schedGroup = Integer.toString(r.setSchedGroup);
                     break;
             }
-            pw.println(String.format("%s%s #%2d: adj=%s/%s %s (%s)",
+            pw.println(String.format(Locale.US, "%s%s #%2d: adj=%s/%s %s (%s)",
                     prefix, (r.persistent ? persistentLabel : normalLabel),
                     N-i, oomAdj, schedGroup, r.toShortString(), r.adjType));
             if (r.adjSource != null || r.adjTarget != null) {

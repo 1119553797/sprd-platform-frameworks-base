@@ -34,6 +34,8 @@ import java.util.ListIterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import java.util.Locale;
+
 /**
  * Generic connector class for interfacing with a native
  * daemon which uses the libsysutils FrameworkListener
@@ -290,7 +292,7 @@ final class NativeDaemonConnector implements Runnable {
                     return rdata;
                 } else {
                     throw new NativeDaemonConnectorException(
-                            String.format("Expected list response %d, but got %d",
+                            String.format(Locale.US, "Expected list response %d, but got %d",
                                     expectedResponseCode, code));
                 }
             } catch (NumberFormatException nfe) {

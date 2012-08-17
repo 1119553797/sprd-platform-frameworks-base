@@ -39,6 +39,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -156,7 +157,7 @@ public class RecoverySystem {
 
             int commentSize = (footer[4] & 0xff) | ((footer[5] & 0xff) << 8);
             int signatureStart = (footer[0] & 0xff) | ((footer[1] & 0xff) << 8);
-            Log.v(TAG, String.format("comment size %d; signature start %d", commentSize,
+            Log.v(TAG, String.format(Locale.US, "comment size %d; signature start %d", commentSize,
                     signatureStart));
 
             byte[] eocd = new byte[commentSize + 22];
