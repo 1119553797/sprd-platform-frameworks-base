@@ -11,6 +11,7 @@ LOCAL_SRC_FILES:=                         \
         AudioSource.cpp                   \
         AwesomePlayer.cpp                 \
         CameraSource.cpp                  \
+	FakeCameraSource.cpp		  \
         DataSource.cpp                    \
         ESDS.cpp                          \
         FileSource.cpp                    \
@@ -115,7 +116,8 @@ LOCAL_SHARED_LIBRARIES += \
         libstagefright_enc_common \
         libstagefright_avc_common \
         libstagefright_foundation \
-        libstagefright_color_conversion
+        libstagefright_color_conversion \
+	libskia
 
 ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
         LOCAL_LDLIBS += -lpthread -ldl

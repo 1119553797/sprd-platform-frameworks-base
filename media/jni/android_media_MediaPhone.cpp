@@ -170,15 +170,16 @@ static bool process_media_phone_call(JNIEnv *env, jobject thiz, status_t opStatu
 
 static void android_media_MediaPhone_setCamera(JNIEnv* env, jobject thiz, jobject camera)
 {
+    sp<MediaPhone> mp = getMediaPhone(env, thiz);
     // we should not pass a null camera to get_native_camera() call.
     if (camera == NULL) {
-        jniThrowException(env, "java/lang/NullPointerException", "camera object is a NULL pointer");
-        return;
-    }
-    sp<Camera> c = get_native_camera(env, camera, NULL);
-    sp<MediaPhone> mp = getMediaPhone(env, thiz);
-    process_media_phone_call(env, thiz, mp->setCamera(c->remote()),
+        process_media_phone_call(env, thiz, mp->setCamera(NULL),
             "java/lang/RuntimeException", "setCamera failed.");
+    } else {
+        sp<Camera> c = get_native_camera(env, camera, NULL);
+        process_media_phone_call(env, thiz, mp->setCamera(c->remote()),
+            "java/lang/RuntimeException", "setCamera failed.");
+    }
 }
 
 static void setRemoteSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz)
@@ -186,6 +187,10 @@ static void setRemoteSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz
     jobject surface = env->GetObjectField(thiz, fields.remote_surface);
     if (surface != NULL) {
         const sp<Surface> native_surface = get_surface(env, surface);
+        if (NULL == native_surface.get()) {
+            LOGE("setRemoteSurface(), failed to get surface");
+            return;
+        }
         LOGV("setRemoteSurface: surface=%p (id=%d)",
              native_surface.get(), native_surface->getIdentity());
         mp->setRemoteSurface(native_surface);
@@ -200,6 +205,10 @@ static void setLocalSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz)
     jobject surface = env->GetObjectField(thiz, fields.local_surface);
     if (surface != NULL) {
         const sp<Surface> native_surface = get_surface(env, surface);
+        if (NULL == native_surface.get()) {
+            LOGE("setLocalSurface(), failed to get surface");
+            return;
+        }
         LOGV("setLocalSurface: surface=%p (id=%d)",
              native_surface.get(), native_surface->getIdentity());
         mp->setLocalSurface(native_surface);

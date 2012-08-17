@@ -110,6 +110,7 @@ private:
     status_t setupCameraSource();
     status_t setupAudioEncoder(const sp<MediaWriter>& writer);
     status_t setupVideoEncoder(sp<MediaSource> *source);
+    status_t setupFakeCameraVideoEncoder(sp<MediaSource> *source);
 
     // Encoding parameter handling utilities
     status_t setParameter(const String8 &key, const String8 &value);
