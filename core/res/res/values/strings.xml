@@ -145,6 +145,7 @@
     <string name="ClirRejected" msgid="">"CLIR suppression rejected"</string>
     <!-- Displayed as the title for a MT call status in call forwarding. -->
     <string name="ForwardedCall">Forwarded call</string>
+    <string name="CallHold" msgid="">"Call blocked"</string>
     <string name="CallRetrieved" msgid="">"Call retrieved"</string>
     <string name="MultiCall" msgid="">"Multi party call"</string>
     <string name="HoldCallReleased" msgid="">"On hold call released"</string>
