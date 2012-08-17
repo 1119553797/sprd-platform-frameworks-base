@@ -91,7 +91,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
     private MediaController mMediaController;
     private OnCompletionListener mOnCompletionListener;
     private MediaPlayer.OnPreparedListener mOnPreparedListener;
-    private MediaPlayer.OnSeekCompleteListener mOnSeekCompleteListener; 
+    private MediaPlayer.OnSeekCompleteListener mOnSeekCompleteListener;
     private Handler.Callback mStateCallback;
     private int         mCurrentBufferPercentage;
     private OnErrorListener mOnErrorListener;
@@ -121,36 +121,41 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-/*        // Log.i("@@@@", "onMeasure");
-        int width = getDefaultSize(mVideoWidth, widthMeasureSpec);
-        int height = getDefaultSize(mVideoHeight, heightMeasureSpec);
-        if (mVideoWidth > 0 && mVideoHeight > 0) {
-            if (mVideoWidth * height > width * mVideoHeight) {
-                // Log.i("@@@", "image too tall, correcting");
-                height = width * mVideoHeight / mVideoWidth;
-            } else if (mVideoWidth * height < width * mVideoHeight) {
-                // Log.i("@@@", "image too wide, correcting");
-                width = height * mVideoWidth / mVideoHeight;
-            } else {
-                // Log.i("@@@", "aspect ratio is correct: " +
-                // width+"/"+height+"="+
-                // mVideoWidth+"/"+mVideoHeight);
-            }
-        }
-        // Log.i("@@@@@@@@@@", "setting size: " + width + 'x' + height);
-        setMeasuredDimension(width, height);*/
-        int width = mTargetWidth;
-        int height = mTargetHeight;
-        if (width == 0 || height == 0) {
+        //MMz03 - Fix bug 23863
+        if(mIsFullScreen) {
+            // Log.i("@@@@", "onMeasure");
+            int width = getDefaultSize(mVideoWidth, widthMeasureSpec);
+            int height = getDefaultSize(mVideoHeight, heightMeasureSpec);
             if (mVideoWidth > 0 && mVideoHeight > 0) {
-                width = mVideoWidth;
-                height = mVideoHeight;
-            }else{
-                width = getDefaultSize(mVideoWidth, widthMeasureSpec);
-                height = getDefaultSize(mVideoHeight, heightMeasureSpec);
+                if (mVideoWidth * height > width * mVideoHeight) {
+                    // Log.i("@@@", "image too tall, correcting");
+                    height = width * mVideoHeight / mVideoWidth;
+                } else if (mVideoWidth * height < width * mVideoHeight) {
+                    // Log.i("@@@", "image too wide, correcting");
+                    width = height * mVideoWidth / mVideoHeight;
+                } else {
+                    // Log.i("@@@", "aspect ratio is correct: " +
+                    // width+"/"+height+"="+
+                    // mVideoWidth+"/"+mVideoHeight);
+                }
             }
+            // Log.i("@@@@@@@@@@", "setting size: " + width + 'x' + height);
+            setMeasuredDimension(width, height);
+        }else {
+            int width = mTargetWidth;
+            int height = mTargetHeight;
+            if (width == 0 || height == 0) {
+                if (mVideoWidth > 0 && mVideoHeight > 0) {
+                    width = mVideoWidth;
+                    height = mVideoHeight;
+                }else{
+                    width = getDefaultSize(mVideoWidth, widthMeasureSpec);
+                    height = getDefaultSize(mVideoHeight, heightMeasureSpec);
+                }
+            }
+            setMeasuredDimension(width, height);
         }
-        setMeasuredDimension(width, height);
+      //MMz03 - End
     }
 
     public int resolveAdjustedSize(int desiredSize, int measureSpec) {
