@@ -48,6 +48,7 @@ public class SortCursor extends AbstractCursor
             /* start:  we should clear cache if we update data. Perhaps some exception will come in the future,
              *    and we should come back for these code . added by spreadsoft 20120816 */
          // clear cache
+            mLastCacheHit = -1;
             for (int i = mRowNumCache.length - 1; i >= 0; i--) {
                 mRowNumCache[i] = -2;
             }
@@ -62,6 +63,7 @@ public class SortCursor extends AbstractCursor
             /* start:  we should clear cache if we update data. Perhaps some exception will come in the future,
              *    and we should come back for these code . added by spreadsoft 20120816 */
              // clear cache
+            mLastCacheHit = -1;
             for (int i = mRowNumCache.length - 1; i >= 0; i--) {
                 mRowNumCache[i] = -2;
             }
@@ -141,7 +143,10 @@ public class SortCursor extends AbstractCursor
                 Log.w(TAG, "onMove: cache results in a null cursor.");
                 return false;
             }
-            mCursor.moveToPosition(mCurRowNumCache[cache_entry][which]);
+            if (!mCursor.moveToPosition(mCurRowNumCache[cache_entry][which])) {
+                mLastCacheHit = -1;
+                return false;
+            }
             mLastCacheHit = cache_entry;
             return true;
         }
