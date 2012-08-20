@@ -615,6 +615,20 @@ public class WallpaperManager {
             // Ignore.
         }
     }
+
+   /**
+     * update status of wallpaper
+     * @param flag
+     */
+    public void updateWallperVisible(boolean flag) {
+        if(DEBUG) Log.d(TAG, "updateWallperVisible is "+flag);
+        try {
+             // new feature to update status of wallpaper
+            ViewRoot.getWindowSession(mContext.getMainLooper()).updateWallpaperVisibleLocked(flag);
+        } catch (RemoteException e) {
+          // Ignore.
+        }
+    }
     
     /**
      * For applications that use multiple virtual screens showing a wallpaper,
