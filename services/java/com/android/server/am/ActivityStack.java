@@ -1980,6 +1980,7 @@ public class ActivityStack {
                     // The Intent we give to the watcher has the extra data
                     // stripped off, since it can contain private information.
                     Intent watchIntent = intent.cloneFilter();
+                    Slog.w(TAG, "// Activity Starting, package:" + aInfo.applicationInfo.packageName + ", Intent: " + watchIntent);
                     abort = !mService.mController.activityStarting(watchIntent,
                             aInfo.applicationInfo.packageName);
                 } catch (RemoteException e) {
