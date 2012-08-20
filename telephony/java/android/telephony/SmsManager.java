@@ -231,8 +231,8 @@ public final class SmsManager {
                     Log.d("SMSMANGER", "[cmgw]RemoteException");
                 }
             } else {
-	            //SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(null, destinationAddress, parts.get(0), false);
-	            SmsMessage.DeliverPdu pdu = SmsMessage.getDeliverPdu(null, destinationAddress, parts.get(0), timestring);
+	            SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(null, destinationAddress, parts.get(0), false);
+//	            SmsMessage.DeliverPdu pdu = SmsMessage.getDeliverPdu(null, destinationAddress, parts.get(0), timestring);
 	            result = copyMessageToIcc(null, pdu.encodedMessage, STATUS_ON_ICC_SENT);
             }
         }
