@@ -132,8 +132,6 @@ public final class ActivityThread {
     private static final int LOG_ON_PAUSE_CALLED = 30021;
     private static final int LOG_ON_RESUME_CALLED = 30022;
 
-    private boolean DEBUG_OOM = false;
-    
     static ContextImpl mSystemContext = null;
 
     static IPackageManager sPackageManager;
@@ -1337,12 +1335,6 @@ public final class ActivityThread {
     }
 
     ActivityThread() {
-    	try {
-    		DEBUG_OOM = SystemProperties.getBoolean("persist.sampling_oom", false);
-    	} catch (Exception e) {
-    		DEBUG_OOM = false;
-    		e.printStackTrace();
-    	}
     }
 
     public ApplicationThread getApplicationThread()
@@ -3698,14 +3690,21 @@ public final class ActivityThread {
         try {
         	Looper.loop();
         } catch (OutOfMemoryError e) {
-        	if (thread.DEBUG_OOM) {
+        	//add by liwd@spreadst.com, the switcher to dump hprof file when OOM
+        	boolean DEBUG_OOM = false;
+        	
+        	try {
+        		DEBUG_OOM = SystemProperties.getBoolean("ro.monkey", false);
+        		if (!DEBUG_OOM) DEBUG_OOM = SystemProperties.getBoolean("persist.sampling_oom", false);
+        	} catch (Exception e1) {
+        		DEBUG_OOM = false;
+        		e1.printStackTrace();
+        	}
+        	
+        	if (DEBUG_OOM) {
 	        	String pname = thread.getProcessName();
 	        	String file = "/data/misc/hprofs/";
 	        	File dir = new File(file);
-	        	if (!dir.exists() || !dir.isDirectory() || !dir.canWrite()) {
-	        		file = "/data/data/" + pname + "/";
-	        		dir = new File(file);
-	        	}
 	        	
 	        	if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
 	        		File[] files = dir.listFiles();
@@ -3722,8 +3721,9 @@ public final class ActivityThread {
 	
 	        		try {
 	        			android.os.Debug.dumpHprofData(file);
-	        		} catch (IOException e1) {
-	        			e1.printStackTrace();
+	        			Log.v("Debug", "dump hprof : " + file);
+	        		} catch (IOException e2) {
+	        			e2.printStackTrace();
 	        		}
 	        	}
         	}

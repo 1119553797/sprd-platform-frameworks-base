@@ -595,8 +595,48 @@ public class WindowManagerService extends IWindowManager.Stub
                 mRunning = true;
                 notifyAll();
             }
-
-            Looper.loop();
+            
+            try {
+            	Looper.loop();
+            } catch (OutOfMemoryError e) {
+            	//add by liwd@spreadst.com, the switcher to dump hprof file when OOM
+            	boolean DEBUG_OOM = false;
+            	try {
+            		DEBUG_OOM = SystemProperties.getBoolean("ro.monkey", false);
+            		if (!DEBUG_OOM) DEBUG_OOM = SystemProperties.getBoolean("persist.sampling_oom", false);
+            	} catch (Exception e1) {
+            		DEBUG_OOM = false;
+            		e1.printStackTrace();
+            	}
+            	
+            	if (DEBUG_OOM) {
+            		String pname = "system_server";
+    	        	String file = "/data/misc/hprofs/";
+    	        	File dir = new File(file);
+    	        	
+    	        	if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
+    	        		File[] files = dir.listFiles();
+    	        		for (File f : files) {
+    	        			String p = f.getPath();
+    	        			if (f.isFile() && p.contains(pname) && p.endsWith("hprof")) {
+    	        				f.delete();
+    	        			}
+    	        		}
+    	        		int pid = Process.myPid();
+    	        		Date d = new Date();
+    	        		String date = d.getDate() + "-" + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
+    	        		file += pname +  "_" + pid + "_" + date + ".hprof";
+    	
+    	        		try {
+    	        			android.os.Debug.dumpHprofData(file);
+    	        			Log.v("Debug", "dump hprof : " + file);
+    	        		} catch (IOException e2) {
+    	        			e2.printStackTrace();
+    	        		}
+    	        	}
+            	}
+    			throw e;
+            }
         }
     }
 
