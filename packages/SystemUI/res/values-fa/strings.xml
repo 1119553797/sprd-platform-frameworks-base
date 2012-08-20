@@ -24,4 +24,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="weak_signal_title">سیگنال ضعیف</string>
     <string name="weak_signal_message">سیگنال WLAN کنونی خیلی ضعیف است، توصیه می شود یک سیگنال بهتر انتخاب کنید</string>
     <string name="auto_connect">سؤال نشود و به طور خودکار اتصال به برنامه مطمئن دیگری برقرار شود</string>
+    <string name="wifi_name">WLAN</string>
+    <string name="bluetooth_name">بلوتوث</string>
+    <string name="sound_name">صدا</string>
+    <string name="mode_silent_name">بی صدا</string>
+    <string name="mode_vibrate_name">لرزش</string>
+    <string name="mode_sound_name">صدا</string>
+    <string name="auto_rotate_name">چرخش</string>
+    <string name="mobile_net_name">داده</string>
+    <string name="datanetwork_error_airplane">وقتی تلفن در حالت هواپیما است نمی توانید از اطلاعات شبکه استفاده کنید.</string>
+    <string name="bluetooth_error_airplane">وقتی تلفن در حالت هواپیما است نمی توانید از بلوتوث استفاده کنید.</string>
 </resources>
