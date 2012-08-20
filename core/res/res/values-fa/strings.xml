@@ -1008,4 +1008,36 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_warning">هشدار!!</string>
     <string name="internal_memory_low">انباره کارت حافظه تقریبا پر است! لطفا برای ایجاد فضای آزاد برخی فایل ها را حذف کنید.</string>
     <string name="button_close">بستن</string>
+    <string name="address_length">آدرس به حداکثر طول مجاز رسیده است</string>
+    <string name="permlab_receiveEmergencyBroadcast">دریافت پخش های اضطراری</string>
+    <string name="permdesc_receiveEmergencyBroadcast">به برنامه برای دریافت
+و پردازش پیام های پخش اضطراری اجازه می دهد. این مجوز فقط برای برنامه های سیستم
+موجود
+است.</string>
+    <string name="crash_title">"متأسفیم!"</string>
+    <string name="crash_application">برنامه <xliff:g id="application">%1$s</xliff:g> (فرآیند <xliff:g id="process">%2$s</xliff:g>) به طور ناگهانی متوقف شده است.
+سیستم نتوانست مشکل را برطرف کند. لطفاً از نرم افزار دیگری استفاده کنید.</string>
+    <string name="crash_process">فرآیند <xliff:g id="process">%1$s</xliff:g> به طور ناگهانی متوقف شد. سیستم نتوانست خطا را برطرف کند. لطفاً از نرم افزار دیگری استفاده کنید.</string>
+    <string name="crash_close">"تأیید"</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="alternate_eri_file">/data/eri.xml</string>
+    <string name="cta_tethered_notification_title">"دارای اتصال داده با سیم"</string>
+    <string name="custom_china_mobile">تلفن همراه چین</string>
+    <string name="custom_china_unicom">China Unicom</string>
+    <string name="shutdown_after_seconds">تلفن بعد از <xliff:g id="NUMBER">%d</xliff:g> ثانیه خاموش می شود</string>
+    <string name="lockscreen_password_error">رمز عبور اشتباه است، دوباره سعی کنید!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">شما رمز عبور قفل گشایی خود را <xliff:g id="number">%d</xliff:g> بار اشتباه وارد کرده اید.\n\n لطفاً بعد از <xliff:g id="number">%d</xliff:g> ثانیه دوباره امتحان کنید.</string>
+    <string name="audio_play_failed">متأسفیم، این صدا قابل پخش نیست. این آهنگ زنگ را تنظیم نکنید.</string>
+    <string name="sms_full_title">"حافظه پیام متنی پر است"</string>
+    <string name="sms_full_body">چون حافظه پر است پیام ورودی رد شد. لطفاً پیام های قدیمی را حذف کنید.</string>
+    <string name="unlock_screen_pin_error">پین اشتباه است!</string>
+    <string name="ap_disconnected">اتصال قطع شد</string>
+    <string name="sim_chooser_title">انتخاب سیم کارت</string>
+    <string name="lockscreen_miss_phone">تلفن بی پاسخ</string>
+    <string name="lockscreen_miss_mms">پیامک بی پاسخ</string>
+    <string name="lockscreen_sim_card_locked_message">"سیم کارت قفل شد."</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">آهنگ زنگ بی صدای سیم کارت۱ انتخاب شد</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">آهنگ زنگ بی صدای سیم کارت۲ انتخاب شد</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">آهنگ زنگ بی صدای سیم کارت۱ و سیم کارت۲ انتخاب شد</string>
+    <string name="upload_file_size_too_large">فایل آپلود شما خیلی طولانی است، آنرا به فایل های کوچکتر تقسیم کنید</string>
 </resources>
