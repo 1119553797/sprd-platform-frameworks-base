@@ -50,7 +50,7 @@ public class IccCardApplication {
         }
         
         boolean isIccBlocked(){
-        	return this == APPSTATE_BLOCKED;  	
+            return this == APPSTATE_BLOCKED;
         }
 
         boolean isSubscriptionPersoEnabled() {
@@ -64,9 +64,6 @@ public class IccCardApplication {
         boolean isAppNotReady() {
             return this == APPSTATE_UNKNOWN  ||
                    this == APPSTATE_DETECTED;
-        }
-        boolean isSimBlocked(){
-            return this == APPSTATE_SIM_BLOCKED;
         }
     };
 
@@ -99,6 +96,12 @@ public class IccCardApplication {
 
         boolean isPersoSubStateUnknown() {
             return this == PERSOSUBSTATE_UNKNOWN;
+        }
+        boolean isSimBlocked(){
+            return this == PERSOSUBSTATE_SIM_SIM;
+        }
+        boolean isNetworkBlocked(){
+            return this == PERSOSUBSTATE_SIM_NETWORK;
         }
     };
 
