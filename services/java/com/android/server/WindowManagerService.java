@@ -134,6 +134,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -629,7 +630,6 @@ public class WindowManagerService extends IWindowManager.Stub
     	
     	        		try {
     	        			android.os.Debug.dumpHprofData(file);
-    	        			Log.v("Debug", "dump hprof : " + file);
     	        		} catch (IOException e2) {
     	        			e2.printStackTrace();
     	        		}
