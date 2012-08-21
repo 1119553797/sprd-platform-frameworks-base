@@ -32,6 +32,7 @@ import com.android.internal.telephony.IccCardStatus.CardState;
 import com.android.internal.telephony.PhoneBase;
 import com.android.internal.telephony.CommandsInterface.RadioState;
 
+
 /**
  * {@hide}
  */
@@ -474,7 +475,7 @@ public abstract class IccCard {
                 + (mIccCardStatus.getCardState() == CardState.CARDSTATE_ABSENT ? "absent"
                         : (mIccCardStatus.getCardState() == CardState.CARDSTATE_ERROR ? "error"
                                 : "present")));
-		newState = getIccCardState();
+        newState = getIccCardState();
         mState = newState;
 
         PhoneFactory.autoSetDefaultPhoneId(true, mPhone.getPhoneId());
@@ -640,7 +641,7 @@ public abstract class IccCard {
         Intent intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE, mPhone.getPhoneId()));
      
         if(mDbg) log("Broadcasting intent ACTION_GET_ICC_STATUS_DONE , phoneid is " + mPhone.getPhoneId());
-		
+
         ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
     }
     public void broadcastIccCardPresentIntent() {
@@ -911,16 +912,17 @@ public abstract class IccCard {
                 return IccCard.State.BLOCKED;
             }
             if (app.app_state.isSubscriptionPersoEnabled()) {
-                return IccCard.State.NETWORK_LOCKED;
+                if(app.perso_substate.isSimBlocked()){
+                    return IccCard.State.SIM_LOCKED;
+                }else if(app.perso_substate.isNetworkBlocked()){
+                    return IccCard.State.NETWORK_LOCKED;
+                }
             }
             if (app.app_state.isAppReady()) {
                 return IccCard.State.READY;
             }
             if (app.app_state.isAppNotReady()) {
                 return IccCard.State.NOT_READY;
-            }
-            if (app.app_state.isSimBlocked()) {
-                return IccCard.State.SIM_LOCKED;
             }
             return IccCard.State.NOT_READY;
         }
