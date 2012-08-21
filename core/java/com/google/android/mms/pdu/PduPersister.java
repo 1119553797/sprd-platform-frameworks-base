@@ -461,7 +461,7 @@ public class PduPersister {
 							//I noticed that when MediaModelFactory create TextModel,
 							//the default way is to use ISO_8859_1 to decode the data
 							//maybe something wrong at here!
-							blob = new EncodedStringValue(text).getTextString();
+							blob = new EncodedStringValue(part.getCharset(), text).getTextString();
 //						}
 						//======fixed CR<NEWMS00110183> by luning at 11-08-18 end======
                         baos.write(blob, 0, blob.length);
