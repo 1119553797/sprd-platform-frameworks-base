@@ -972,7 +972,10 @@ public class WifiStateTracker extends NetworkStateTracker {
                     resetConnections(true);
                 }
                 // When supplicant dies, kill the DHCP thread
-                mDhcpTarget.getLooper().quit();
+                if (mDhcpTarget != null) {
+                    mDhcpTarget.mBluetoothHeadset.close();
+                    mDhcpTarget.getLooper().quit();
+                }
 
                 mContext.removeStickyBroadcast(new Intent(WifiManager.NETWORK_STATE_CHANGED_ACTION));
                 if (ActivityManagerNative.isSystemReady()) {
