@@ -614,11 +614,8 @@ ssize_t AVIExtractor::parseChunk(off64_t offset, off64_t size, int depth) {
 
             case FOURCC('i', 'd', 'x', '1'):
             {
-                if(mIndexType == NO_INDEX) //IF indx found, don't care idx1
-                {
-                    err = parseIdx1(offset + 8, chunkSize);
-                    mIndexType = IDX1;
-                }
+                err = parseIdx1(offset + 8, chunkSize);
+                mIndexType = IDX1;
                 break;
             }
             case FOURCC('i', 'n', 'd', 'x'):
@@ -967,7 +964,10 @@ status_t AVIExtractor::parseIdx1(off64_t offset, size_t size) {
         uint8_t lo = (chunkType >> 16) & 0xff;
 
         if (hi < '0' || hi > '9' || lo < '0' || lo > '9') {
-            return ERROR_MALFORMED;
+//            return ERROR_MALFORMED;
+            data += 16;
+            n -= 16;
+            continue;
         }
 
         size_t trackIndex = 10 * (hi - '0') + (lo - '0');
