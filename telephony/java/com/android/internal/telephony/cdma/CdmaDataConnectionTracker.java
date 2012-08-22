@@ -45,6 +45,7 @@ import android.util.Log;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.DataCallState;
 import com.android.internal.telephony.DataConnection.FailCause;
+import com.android.internal.telephony.Phone.DataState;
 import com.android.internal.telephony.DataConnection;
 import com.android.internal.telephony.DataConnectionTracker;
 import com.android.internal.telephony.EventLogTags;
@@ -1046,6 +1047,24 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
    public  boolean getApnActivePdpFilter(String apntype) 
    {
            return false;
+   }
+
+   @Override
+   protected String getActiveApnString(String apntype) {
+       // TODO Auto-generated method stub
+       return null;
+   }
+
+   @Override
+   protected String[] getActiveApnTypes(String apntype) {
+       // TODO Auto-generated method stub
+       return null;
+   }
+
+   @Override
+   public DataState getDataConnectionState(String apnType) {
+       // TODO Auto-generated method stub
+       return null;
    }
 
 	protected boolean isConVoiceAndData() {

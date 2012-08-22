@@ -91,31 +91,46 @@ static jlong readTotal(char const* suffix) {
 #endif
 }
 
+// Return the sum number from the first file and second file which exists and contains data
+static jlong cacuBoth(char const* a, char const* b, char const* c, char const* d) {
+	jlong num = readNumber(a) + readNumber(b) + readNumber(c);
+    return num >= 0 ? num : readNumber(d);
+}
+
 // Mobile stats get accessed a lot more often than total stats.
 // Note the individual files can come and go at runtime, so we check
 // each file every time (rather than caching which ones exist).
 
 static jlong getMobileTxPackets(JNIEnv* env, jobject clazz) {
-    return tryBoth(
+    return cacuBoth(
             "/sys/class/net/veth0/statistics/tx_packets",
+            "/sys/class/net/veth1/statistics/tx_packets",
+            "/sys/class/net/veth2/statistics/tx_packets",
             "/sys/class/net/ppp0/statistics/tx_packets");
 }
 
+
 static jlong getMobileRxPackets(JNIEnv* env, jobject clazz) {
-    return tryBoth(
-            "/sys/class/net/veth0/statistics/rx_bytes",
+    return cacuBoth(
+            "/sys/class/net/veth0/statistics/rx_packets",
+            "/sys/class/net/veth1/statistics/rx_packets",
+            "/sys/class/net/veth2/statistics/rx_packets",
             "/sys/class/net/ppp0/statistics/rx_packets");
 }
 
 static jlong getMobileTxBytes(JNIEnv* env, jobject clazz) {
-    return tryBoth(
+    return cacuBoth(
             "/sys/class/net/veth0/statistics/tx_bytes",
+            "/sys/class/net/veth1/statistics/tx_bytes",
+            "/sys/class/net/veth2/statistics/tx_bytes",
             "/sys/class/net/ppp0/statistics/tx_bytes");
 }
 
 static jlong getMobileRxBytes(JNIEnv* env, jobject clazz) {
-    return tryBoth(
+    return cacuBoth(
             "/sys/class/net/veth0/statistics/rx_bytes",
+            "/sys/class/net/veth1/statistics/rx_bytes",
+            "/sys/class/net/veth2/statistics/rx_bytes",
             "/sys/class/net/ppp0/statistics/rx_bytes");
 }
 

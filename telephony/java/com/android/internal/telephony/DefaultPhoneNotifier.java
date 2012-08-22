@@ -124,6 +124,46 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         }
     }
 
+    public void notifyDataConnectionMpdp(String apnType, Phone sender, String reason) {
+        TelephonyManager telephony = TelephonyManager.getDefault();
+        try {
+            if(DBG){
+                Log.d(LOG_TAG, "notifyDataConnection,apnType=" + apnType);
+                Log.d(LOG_TAG, ">>>sender.getDataConnectionState()="
+                        + sender.getDataConnectionState());
+                Log.d(LOG_TAG, ">>>sender.getDataConnectionState(" + apnType + ")="
+                        + sender.getDataConnectionState(apnType));
+                Log.d(LOG_TAG, ">>>sender.isDataConnectivityPossible()="
+                        + sender.isDataConnectivityPossible());
+                Log.d(LOG_TAG, ">>>reason=" + reason);
+                Log.d(LOG_TAG, ">>>sender.getActiveApn()=" + sender.getActiveApn(apnType));
+                if (sender.getActiveApnTypes(apnType) != null) {
+                    for (int i = 0; i < sender.getActiveApnTypes(apnType).length; i++) {
+                        Log.d(LOG_TAG, ">>>sender.getActiveApnTypes[" + i + "]="
+                                + sender.getActiveApnTypes(apnType)[i]);
+                    }
+                } else {
+                    Log.d(LOG_TAG, ">>>sender.getActiveApnTypes()="
+                            + sender.getActiveApnTypes(apnType));
+                }
+                Log.d(LOG_TAG, ">>>sender.getInterfaceName()=" + sender.getInterfaceName(apnType));
+                Log.d(LOG_TAG, ">>>telephony.getNetworkType()=" + telephony.getNetworkType());
+            }
+            mRegistry.notifyDataConnectionMpdp(
+                    convertDataState(sender.getDataConnectionState()),
+                    convertDataState(sender.getDataConnectionState(apnType)),
+                    sender.isDataConnectivityPossible(), reason,
+                    sender.getActiveApn(apnType),
+                    sender.getActiveApnTypes(apnType),
+                    sender.getInterfaceName(apnType),
+                    ((telephony!=null) ? telephony.getNetworkType() :
+                    TelephonyManager.NETWORK_TYPE_UNKNOWN),
+                    sender.getGateway(apnType));
+        } catch (RemoteException ex) {
+            // system process is dead
+        }
+    }
+
     public void notifyDataConnectionFailed(Phone sender, String reason) {
         try {
             mRegistry.notifyDataConnectionFailed(reason);

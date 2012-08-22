@@ -46,7 +46,7 @@ import android.text.TextUtils;
 public class MobileDataStateTracker extends NetworkStateTracker {
 
     private static final String TAG = "MobileDataStateTracker";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
     private Phone.DataState mMobileDataState;
     private ITelephony mPhoneService;
@@ -76,11 +76,11 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 TelephonyManager.getDefault().getNetworkTypeName());
         mNetType = netType;
         mApnType = networkTypeToApnType(netType);
-        if (TextUtils.equals(mApnType, Phone.APN_TYPE_HIPRI)) {
-            mApnTypeToWatchFor = Phone.APN_TYPE_DEFAULT;
-        } else {
+        //if (TextUtils.equals(mApnType, Phone.APN_TYPE_HIPRI)) {
+        //    mApnTypeToWatchFor = Phone.APN_TYPE_DEFAULT;
+        //} else {
             mApnTypeToWatchFor = mApnType;
-        }
+        //}
         if (netType == ConnectivityManager.TYPE_MOBILE ||
                 netType == ConnectivityManager.TYPE_MOBILE_HIPRI) {
             mIsDefaultOrHipri = true;
@@ -172,11 +172,12 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     private Phone.DataState getMobileDataState(Intent intent) {
         String str = intent.getStringExtra(Phone.STATE_KEY);
         if (str != null) {
-            String apnTypeList =
+            /*String apnTypeList =
                     intent.getStringExtra(Phone.DATA_APN_TYPES_KEY);
             if (isApnTypeIncluded(apnTypeList)) {
                 return Enum.valueOf(Phone.DataState.class, str);
-            }
+            }*/
+            return Enum.valueOf(Phone.DataState.class, str);
         }
         return Phone.DataState.DISCONNECTED;
     }
@@ -218,6 +219,14 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                     String apnTypeList = intent.getStringExtra(Phone.DATA_APN_TYPES_KEY);
                     mApnName = apnName;
 
+                    if (state == Phone.DataState.CONNECTED) {
+                        if (DBG) Log.d(TAG, "replacing old mInterfaceName (" +
+                                mInterfaceName + ") with " +
+                                intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY) +
+                                " for " + mApnType);
+                        mInterfaceName = intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY);
+                    }
+
                     boolean unavailable = intent.getBooleanExtra(Phone.NETWORK_UNAVAILABLE_KEY,
                             false);
                     int mmsPhoneId = networkTypeToMMSPhoneId(mNetworkInfo.getType());
@@ -241,18 +250,12 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                             // turns on this network we will need the interfacename but won't get
                             // a fresh connected message - TODO fix this when we get per-APN
                             // notifications
-                            if (state == Phone.DataState.CONNECTED) {
-                                if (DBG) Log.d(TAG, "replacing old mInterfaceName (" +
-                                        mInterfaceName + ") with " +
-                                        intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY) +
-                                        " for " + mApnType);
-                                mInterfaceName = intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY);
-                            }  else {
-                                if((mmsPhoneId >= 0) && (phoneId >= 0) && (mmsPhoneId != phoneId)) {
-                                    return;
-                                }
-                            }
                             return;
+                        } else {
+                            if ((mmsPhoneId >= 0) && (phoneId >= 0)
+                                    && (mmsPhoneId != phoneId)) {
+                                return;
+                            }
                         }
                     } else {
                         return;

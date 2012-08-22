@@ -93,6 +93,7 @@ public interface Phone extends SprdVideoPhone{
     };
 
     static final String STATE_KEY = "state";
+    static final String DATA_APN_TYPE_STATE = "apnTypeState";
     static final String PHONE_NAME_KEY = "phoneName";
     static final String FAILURE_REASON_KEY = "reason";
     static final String STATE_CHANGE_REASON_KEY = "reason";
@@ -253,6 +254,7 @@ public interface Phone extends SprdVideoPhone{
      * {@link android.telephony.PhoneStateListener} instead.
      */
     DataState getDataConnectionState();
+    DataState getDataConnectionState(String apnType);
 
     /**
      * Get the current DataActivityState. No change notification exists at this
@@ -310,12 +312,14 @@ public interface Phone extends SprdVideoPhone{
      *  @return The string array.
      */
     String[] getActiveApnTypes();
+    String[] getActiveApnTypes(String apnType);
 
     /**
      * Returns a string identifier for currently active or last connected APN.
      *  @return The string name.
      */
     String getActiveApn();
+    String getActiveApn(String apnType);
 
     /**
      * Get current signal strength. No change notification available on this

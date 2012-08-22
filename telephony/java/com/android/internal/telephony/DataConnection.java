@@ -304,7 +304,7 @@ public abstract class DataConnection extends HierarchicalStateMachine {
      * @param o will be returned in AsyncResult.userObj
      *          and is either a DisconnectParams or ConnectionParams.
      */
-    private void tearDownData(Object o) {
+    protected void tearDownData(Object o) {
         if (phone.mCM.getRadioState().isOn()) {
             if (DBG) log("tearDownData radio is on, call deactivateDataCall");
             phone.mCM.deactivateDataCall(cid, obtainMessage(EVENT_DEACTIVATE_DONE, o));

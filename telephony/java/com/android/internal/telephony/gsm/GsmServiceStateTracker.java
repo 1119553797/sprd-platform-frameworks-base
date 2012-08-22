@@ -1741,7 +1741,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         private SntpClient client = new SntpClient();
         @Override
         protected void onPostExecute(Long result) {
-            Log.i(LOG_TAG, "UpdateNitzFromSntp thread：onPostExecute ,result=" + result);
+            Log.i(LOG_TAG, "UpdateNitzFromSntp thread:onPostExecute ,result=" + result);
             if (null != result) {
                 setAndBroadcastNetworkSetTime(result
                         + (SystemClock.elapsedRealtime() - client.getNtpTimeReference()));

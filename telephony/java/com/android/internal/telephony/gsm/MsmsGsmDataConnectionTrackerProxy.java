@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -72,11 +73,21 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
     public static GsmDataConnectionTracker getTrackerInstance(GSMPhone phone) {
         int phoneId = phone.getPhoneId();
         mPhoneID = phoneId;
-        if (sTracker == null) {
-            sTracker = new MsmsGsmDataConnectionTracker[PhoneFactory.getPhoneCount()];
-        }
-        if (sTracker[phoneId] == null) {
-            sTracker[phoneId] = new MsmsGsmDataConnectionTracker(phone);
+        if (SystemProperties.getBoolean("persist.telephony.mpdp",false)) {
+            if (sTracker == null) {
+                sTracker = new MpdpMsmsGsmDataConnectionTracker[PhoneFactory.getPhoneCount()];
+            }
+            if (sTracker[phoneId] == null) {
+                sTracker[phoneId] = new MpdpMsmsGsmDataConnectionTracker(phone);
+            }
+        } else {
+            if (sTracker == null) {
+                sTracker = new MsmsGsmDataConnectionTracker[PhoneFactory
+                        .getPhoneCount()];
+            }
+            if (sTracker[phoneId] == null) {
+                sTracker[phoneId] = new MsmsGsmDataConnectionTracker(phone);
+            }
         }
         return sTracker[phoneId];
     }

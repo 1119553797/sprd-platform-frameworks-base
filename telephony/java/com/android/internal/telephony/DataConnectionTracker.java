@@ -195,7 +195,7 @@ public abstract class DataConnectionTracker extends Handler {
 
     /** CID of active data connection */
     protected int cidActive;
-
+    protected ArrayList cidActiveList = null;
    /**
      * Default constructor
      */
@@ -320,6 +320,10 @@ public abstract class DataConnectionTracker extends Handler {
 
             case EVENT_DATA_SETUP_COMPLETE:
                 cidActive = msg.arg1;
+                if (((AsyncResult) msg.obj).exception == null) {
+                    addActiveCid(cidActive);
+                }
+
                 onDataSetupComplete((AsyncResult) msg.obj);
                 break;
 
@@ -429,7 +433,11 @@ public abstract class DataConnectionTracker extends Handler {
 
     protected abstract String[] getActiveApnTypes();
 
+    protected abstract String[] getActiveApnTypes(String apntype);
+
     protected abstract String getActiveApnString();
+
+    protected abstract String getActiveApnString(String apntype);
 
     public abstract ArrayList<DataConnection> getAllDataConnections();
 
@@ -442,6 +450,8 @@ public abstract class DataConnectionTracker extends Handler {
     protected abstract String[] getDnsServers(String apnType);
 
     protected abstract void setState(State s);
+
+    public abstract DataState getDataConnectionState(String apnType);
 
     public abstract  boolean setApnActivePdpFilter(String apntype,boolean filterenable);
 
@@ -528,7 +538,7 @@ public abstract class DataConnectionTracker extends Handler {
         }
     }
 
-    private void setEnabled(int id, boolean enable) {
+    protected void setEnabled(int id, boolean enable) {
         if (DBG) Log.d(LOG_TAG, "setEnabled(" + id + ", " + enable + ") with old state = " +
                 dataEnabled[id] + " and enabledCount = " + enabledCount);
 
@@ -639,5 +649,26 @@ public abstract class DataConnectionTracker extends Handler {
     protected void log2(String s) {
         Log.d(LOG_TAG, "[DataConnectionTracker-phoneId" + phone.getPhoneId() + "] " + s);
     }
-
+    public void addActiveCid(int cid) {
+        if (cidActiveList == null) {
+            cidActiveList = new ArrayList();
+        }
+        for (int i=0;i<cidActiveList.size();i++) {
+            if(cid == cidActiveList.get(i)) {
+                return;
+            }
+        }
+        cidActiveList.add(cid);
+        Log.d(LOG_TAG, "[" + phone.getPhoneId() + "]addActiveCid("+cid+") cidActive("+cidActive+") List("+cidActiveList+")");
+    }
+    public void removeActiveCid(int cid) {
+        if (cidActiveList != null) {
+            for (int i=0;i<cidActiveList.size();i++) {
+                if(cid == cidActiveList.get(i)) {
+                    cidActiveList.remove(i);
+                }
+            }
+        }
+        Log.d(LOG_TAG, "[" + phone.getPhoneId() + "]removeActiveCid("+cid+") cidActive("+cidActive+") List("+cidActiveList+")");
+    }
 }

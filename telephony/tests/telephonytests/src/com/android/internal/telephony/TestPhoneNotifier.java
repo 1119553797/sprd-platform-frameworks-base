@@ -48,6 +48,9 @@ public class TestPhoneNotifier implements PhoneNotifier {
     public void notifyDataConnection(Phone sender, String reason) {
     }
 
+    public void notifyDataConnectionMpdp(String apnType, Phone sender, String reason){
+    }
+
     public void notifyDataConnectionFailed(Phone sender, String reason) {
     }
 

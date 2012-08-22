@@ -30,6 +30,7 @@ import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.util.Log;
 
+import com.android.internal.telephony.Phone.DataState;
 import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
 import com.android.internal.telephony.gsm.NetworkInfo;
@@ -171,6 +172,10 @@ public abstract class PhoneProxy extends Handler implements Phone {
         return mActivePhone.getDataConnectionState();
     }
 
+    public DataState getDataConnectionState(String apnType) {
+        return mActivePhone.getDataConnectionState(apnType);
+    }
+
     public DataActivityState getDataActivityState() {
         return mActivePhone.getDataActivityState();
     }
@@ -203,8 +208,16 @@ public abstract class PhoneProxy extends Handler implements Phone {
         return mActivePhone.getActiveApnTypes();
     }
 
+    public String[] getActiveApnTypes(String apnType) {
+        return mActivePhone.getActiveApnTypes(apnType);
+    }
+
     public String getActiveApn() {
         return mActivePhone.getActiveApn();
+    }
+
+    public String getActiveApn(String apnType) {
+        return mActivePhone.getActiveApn(apnType);
     }
 
     public SignalStrength getSignalStrength() {

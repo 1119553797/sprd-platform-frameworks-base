@@ -91,7 +91,7 @@ public class GsmDataConnection extends DataConnection {
                 + "' APN: '" + apn.apn
                 + "' proxy: '" + apn.proxy + "' port: '" + apn.port);
 
-        if (apn.canHandleType(Phone.APN_TYPE_DEFAULT)) {
+        /*if (apn.canHandleType(Phone.APN_TYPE_DEFAULT)) {
             setHttpProxy(apn.proxy, apn.port);
         } else if (apn.canHandleType(Phone.APN_TYPE_MMS)) {
             // do nothing even though proxy is set
@@ -99,7 +99,7 @@ public class GsmDataConnection extends DataConnection {
             if (apn.proxy != null && apn.proxy.length() > 0) {
                 setHttpProxy(apn.proxy, apn.port);
             }
-        }
+        }*/
         createTime = -1;
         lastFailTime = -1;
         lastFailCause = FailCause.NONE;
@@ -221,6 +221,10 @@ public class GsmDataConnection extends DataConnection {
 
     public ApnSetting getApn() {
         return this.apn;
+    }
+
+    public int getCid(){
+        return this.cid;
     }
 
     private void setHttpProxy(String httpProxy, String httpPort) {

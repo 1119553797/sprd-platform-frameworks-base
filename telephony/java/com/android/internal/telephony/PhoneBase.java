@@ -813,7 +813,16 @@ public abstract class PhoneBase extends Handler implements Phone {
     }
 
     public void notifyDataConnection(String reason) {
-        mNotifier.notifyDataConnection(this, reason);
+        if (SystemProperties.getBoolean("persist.telephony.mpdp", false)) {
+            mNotifier.notifyDataConnectionMpdp(Phone.APN_TYPE_DEFAULT, this,
+                    reason);
+        } else {
+            mNotifier.notifyDataConnection(this, reason);
+        }
+    }
+
+    public void notifyDataConnection(String type, String reason) {
+        mNotifier.notifyDataConnectionMpdp(type, this, reason);
     }
 
     public abstract String getPhoneName();
@@ -1015,8 +1024,16 @@ public abstract class PhoneBase extends Handler implements Phone {
         return mDataConnection.getActiveApnTypes();
     }
 
+    public String[] getActiveApnTypes(String apnType) {
+        return mDataConnection.getActiveApnTypes(apnType);
+    }
+
     public String getActiveApn() {
         return mDataConnection.getActiveApnString();
+    }
+
+    public String getActiveApn(String apnType) {
+        return mDataConnection.getActiveApnString(apnType);
     }
 
     public int enableApnType(String type) {

@@ -102,6 +102,8 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
 
     private int mDataConnectionNetworkType;
 
+    private int mPdpState;
+
     static final int PHONE_STATE_PERMISSION_MASK =
                 PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR |
                 PhoneStateListener.LISTEN_CALL_STATE |
@@ -407,6 +409,39 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             }
         }
         broadcastDataConnectionStateChanged(state, isDataConnectivityPossible, reason, apn,
+                apnTypes, interfaceName, gateway);
+    }
+
+    public void notifyDataConnectionMpdp(int state, int pdpState, boolean isDataConnectivityPossible,
+            String reason, String apn, String[] apnTypes, String interfaceName, int networkType,
+            String gateway) {
+        if (!checkNotifyPermission("notifyDataConnection()" )) {
+           return;
+        }
+        Slog.i(TAG, "notifyDataConnection: state=" + state + " isDataConnectivityPossible="
+                + isDataConnectivityPossible + " reason=" + reason
+                + " interfaceName=" + interfaceName + " networkType=" + networkType);
+        synchronized (mRecords) {
+            mDataConnectionState = state;
+            mPdpState=pdpState;
+            mDataConnectionPossible = isDataConnectivityPossible;
+            mDataConnectionReason = reason;
+            mDataConnectionApn = apn;
+            mDataConnectionApnTypes = apnTypes;
+            mDataConnectionInterfaceName = interfaceName;
+            mDataConnectionNetworkType = networkType;
+            for (int i = mRecords.size() - 1; i >= 0; i--) {
+                Record r = mRecords.get(i);
+                if ((r.events & PhoneStateListener.LISTEN_DATA_CONNECTION_STATE) != 0) {
+                    try {
+                        r.callback.onDataConnectionStateChanged(state, networkType);
+                    } catch (RemoteException ex) {
+                        remove(r.binder);
+                    }
+                }
+            }
+        }
+        broadcastDataConnectionStateChanged(pdpState, isDataConnectivityPossible, reason, apn,
                 apnTypes, interfaceName, gateway);
     }
 

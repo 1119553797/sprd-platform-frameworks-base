@@ -34,6 +34,7 @@ import com.android.internal.telephony.DataConnection;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.DataConnectionTracker.State;
+import com.android.internal.telephony.Phone.DataState;
 
 public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
 
@@ -58,37 +59,41 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
         cr.unregisterContentObserver(mDefaultDataPhoneIdObserver);
     }
 
+    protected void defaultDataChanged() {
+        log("Default Data Phone Id is changed");
+        int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(phone.getContext());
+
+        if (DBG) log("defaultDataPhoneId=" +defaultDataPhoneId+" dataEnabled[APN_DEFAULT_ID]="+dataEnabled[APN_DEFAULT_ID]);
+        if (defaultDataPhoneId != phone.getPhoneId()) {
+            if (isAllPdpDisconnectDone()) {
+                // check if we need to switch phone.
+                setDataDisabledOfDefaultAPN();
+                sendMessage(obtainMessage(EVENT_SWITCH_PHONE));
+            } else {
+                log("isApnTypeActive(Phone.APN_TYPE_DEFAULT)="
+                        + isApnTypeActive(Phone.APN_TYPE_DEFAULT));
+                disableApnType(Phone.APN_TYPE_DEFAULT);
+            }
+        }
+
+        if (defaultDataPhoneId == phone.getPhoneId()) {
+            boolean dataEnabledSetting = true;
+            try {
+                dataEnabledSetting = IConnectivityManager.Stub.asInterface(ServiceManager.
+                    getService(Context.CONNECTIVITY_SERVICE)).getMobileDataEnabledByPhoneId(phone.getPhoneId());
+            } catch (Exception e) {
+                // nothing to do - use the old behavior and leave data on
+            }
+            if (dataEnabledSetting) {
+                setDataEnabledOfDefaultAPN();
+            }
+        }
+    }
+
     private ContentObserver mDefaultDataPhoneIdObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {
-            log("Default Data Phone Id is changed");
-            int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(phone.getContext());
-
-            if (DBG) log("defaultDataPhoneId=" +defaultDataPhoneId+" dataEnabled[APN_DEFAULT_ID]="+dataEnabled[APN_DEFAULT_ID]);
-            if (defaultDataPhoneId != phone.getPhoneId()) {
-                if (isAllPdpDisconnectDone()) {
-                    // check if we need to switch phone.
-                    setDataDisabledOfDefaultAPN();
-                    sendMessage(obtainMessage(EVENT_SWITCH_PHONE));
-                } else {
-                    log("isApnTypeActive(Phone.APN_TYPE_DEFAULT)="
-                            + isApnTypeActive(Phone.APN_TYPE_DEFAULT));
-                    disableApnType(Phone.APN_TYPE_DEFAULT);
-                }
-            }
-
-            if (defaultDataPhoneId == phone.getPhoneId()) {
-                boolean dataEnabledSetting = true;
-                try {
-                    dataEnabledSetting = IConnectivityManager.Stub.asInterface(ServiceManager.
-                        getService(Context.CONNECTIVITY_SERVICE)).getMobileDataEnabledByPhoneId(phone.getPhoneId());
-                } catch (Exception e) {
-                    // nothing to do - use the old behavior and leave data on
-                }
-                if (dataEnabledSetting) {
-                    setDataEnabledOfDefaultAPN();
-                }
-            }
+            defaultDataChanged();
         }
     };
 
@@ -175,14 +180,19 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
 
         boolean notificationDeferred = false;
         for (DataConnection conn : pdpList) {
-            if (tearDown) {
-                if (DBG) log("cleanUpConnection: teardown, call conn.disconnect");
-                conn.disconnect(obtainMessage(EVENT_DISCONNECT_DONE, reason));
-                notificationDeferred = true;
-            } else {
-                if (DBG) log("cleanUpConnection: !tearDown, call conn.resetSynchronously");
-                conn.resetSynchronously();
-                notificationDeferred = false;
+            if (conn.isActive() || conn.isActiving()) {
+                if (tearDown) {
+                    if (DBG)
+                        log("cleanUpConnection: teardown, call conn.disconnect");
+                    removeActiveCid(cidActive);
+                    conn.disconnect(obtainMessage(EVENT_DISCONNECT_DONE, reason));
+                    notificationDeferred = true;
+                } else {
+                    if (DBG)
+                        log("cleanUpConnection: !tearDown, call conn.resetSynchronously");
+                    conn.resetSynchronously();
+                    notificationDeferred = false;
+                }
             }
         }
         stopNetStatPoll();
@@ -311,6 +321,25 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
     public int getDefaultDataPhoneId() {
         return TelephonyManager.getDefaultDataPhoneId(phone.getContext());
     }
+
+    @Override
+    protected String getActiveApnString(String apntype) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    protected String[] getActiveApnTypes(String apntype) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public DataState getDataConnectionState(String apnType) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     @Override
     protected boolean allPhoneIdle() {
         return (MsmsGsmDataConnectionTrackerProxy.isAllPhoneIdle());
