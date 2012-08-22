@@ -2,5 +2,7 @@
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">VPN సేవలు</string>
+    <string name="vpn_notification_title_connected"><xliff:g id="profilename">%s</xliff:g> VPN కనెక్ట్</string>
+    <string name="vpn_notification_title_disconnected"><xliff:g id="profilename">%s</xliff:g>  VPN డిస్కనెక్ట్</string>
     <string name="vpn_notification_hint_disconnected">ఒక VPN కి మళ్ళీ కనెక్ట్ చెయ్యడానికి టచ్ చేయండి.</string>
 </resources>

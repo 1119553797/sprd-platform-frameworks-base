@@ -1,13 +1,21 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="address_length">முகவரி அதிகபட்சத்தை அடைந்தது</string>
+    <string name="byteShort">B</string>
+    <string name="megabyteShort">MB</string>
     <string name="gigabyteShort">ஜி பி</string>
     <string name="terabyteShort">TB</string>
     <string name="petabyteShort">PB</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="untitled">&lt;தலைப்பில்லாதது&gt;</string>
+    <string name="ellipsis">\u2026</string>
     <string name="emptyPhoneNumber">(தொலைபேசி எண் எதுவும் இல்லை)</string>
     <string name="unknownName">(தெரியாதது)</string>
     <string name="defaultVoiceMailAlphaTag">குரல் மின்னஞ்சல்</string>
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
     <string name="mmiError">இணைப்பு பிரச்சனை அல்லது செல்லுபடியாகாத MMI குறியீடு.</string>
+    <string name="mmiFdnError">நிலைத்த டயலிங் எண்களுக்கு மட்டுமே இயக்கங்கள் தடுக்கப்படுகின்றன.</string>
     <string name="serviceEnabled">சேவை செயலாக்கப்பட்டுள்ளது.</string>
     <string name="serviceEnabledFor">க்காக சேவை செயலாக்கப்பட்டுள்ளது:</string>
     <string name="serviceDisabled">சேவை செயலிழக்க செய்யப்பட்டுள்ளது.</string>
@@ -98,6 +106,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="serviceClassDataAsync">சின்க் செய்ய வேண்டாம்</string>
     <string name="serviceClassDataSync">சின்க்</string>
     <string name="serviceClassPacket">பேக்கட்</string>
+    <string name="serviceClassPAD">PAD</string>
     <string name="roamingText0">ரோமிங் சுட்டிக்காட்டி ஆன்</string>
     <string name="roamingText1">ரோமிங் சுட்டிக்காட்டி ஆஃப்</string>
     <string name="roamingText2">ரோமிங் சுட்டிக்காட்டி ஃப்ளாஷ் ஆகிறது</string>
@@ -112,6 +121,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="roamingText11">ரோமிங் பேன்னர் ஆன்</string>
     <string name="roamingText12">ரோமிங் பேன்னர் ஆஃப்</string>
     <string name="roamingTextSearching">சேவைக்காக தேடுகிறது</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>:முன்தள்ளப்படவில்லை</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> <xliff:g id="time_delay">{2}</xliff:g> வினாடிகளுக்குப் பிறகு</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>:முன்தள்ளப்படவில்லை</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>:முன்தள்ளப்படவில்லை</string>
     <string name="fcComplete">அமசங்கள் குறியீடு பூர்த்தி.</string>
     <string name="fcError">இணைப்பு பிரச்சனை அல்லது செல்லுபடியாகாத அம்சத்தின் குறியீடு.</string>
     <string name="httpErrorOk">ஓகே</string>
@@ -130,8 +144,10 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="httpErrorFile">கோப்பு அணுகப்பட முடியாது.</string>
     <string name="httpErrorFileNotFound">வேண்டிய கோப்பு காணப்படவில்லை.</string>
     <string name="httpErrorTooManyRequests">மிகப்பல வேண்டுதல்கள் செய்முறையாகிக் கொண்டிருக்கின்றன.பின்னர் மறுபடி முயற்சிக்கவும்.</string>
+    <string name="notification_title"><xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g> க்கு உள்நுழைதல் பிழை</string>
     <string name="contentServiceSync">சின்க்</string>
     <string name="contentServiceSyncNotificationTitle">சின்க்</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc">மிக அதிக<xliff:g id="content_type">%s</xliff:g>அழித்தல்கள்.</string>
     <string name="low_memory">தொலைபேசி சேமிப்பகம் நிறைவு! கொஞ்சம் இடம் விடுவிக்க சில கோப்புகளை அழிக்கவும்.</string>
     <string name="me">எனக்கு</string>
     <string name="power_dialog">தொலைபேசி விருப்பத்தேர்வுகள்</string>
@@ -176,8 +192,12 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permgrouplab_developmentTools">மேம்படுத்தல் கருவிகள்</string>
     <string name="permgroupdesc_developmentTools">அப்ளிகேஷன் டிவலப்பர்களுக்கு மட்டும் அம்சங்கள் தேவை.</string>
     <string name="permgrouplab_storage">சேமிப்பகம்</string>
+    <string name="permgroupdesc_storage" product="nosdcard">USB சேமிப்பகம் அணுகவும்.</string>
+    <string name="permgroupdesc_storage" product="default">SD கார்டு அணுகவும்.</string>
     <string name="permlab_statusBar">ஸ்டாட்டஸ் பாரை திருத்துக அல்லது செயலிழக்க செய்க</string>
     <string name="permdesc_statusBar">ஸ்டேட்டஸ் பார்-இனை செயலிழ்க்க செய்ய அல்லது சிஸ்டம் உருவகங்களை சேர்க்க அல்லது நீக்க ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
+    <string name="permlab_statusBarService">ஸ்டேட்டஸ் பார் </string>
+    <string name="permdesc_statusBarService">ஸ்டேட்டஸ் பார் ஆக இருக்க அப்ளிகேஷனை அனுமதிக்கிறது.</string>
     <string name="permlab_expandStatusBar">ஸ்டாட்டஸ் பார் விரிவாக்கு/மறை</string>
     <string name="permdesc_expandStatusBar">ஸ்டாட்டஸ் பார்-இனை விரிவுபடுத்த அல்லது மறைக்க ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
     <string name="permlab_processOutgoingCalls">வெளிச்செல்லும் அழைப்புக்களை இடைமறிக்கவும்</string>
@@ -188,6 +208,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_receiveSmsCB">SMSCB செய்திகளை பெற மற்றும் செயல்முறைப்படுத்த ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் உங்களுடைய செய்திகளை கண்காணித்து உங்களுக்கு காட்டாமலேயே அழித்துவிடக் கூடும்.</string>
     <string name="permlab_receiveMms">MMS பெறுக</string>
     <string name="permdesc_receiveMms">MMS  செய்திகளை பெற மற்றும் செயல்முறைப்படுத்த ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் உங்களுடைய செய்திகளை கண்காணித்து உங்களுக்கு காட்டாமலேயே அழித்துவிடக் கூடும்.</string>
+    <string name="permlab_receiveEmergencyBroadcast">அவசரகால ஒளிபரப்புகலைப் பெறவும்</string>
+    <string name="permdesc_receiveEmergencyBroadcast">அவசரகால ஒலிபரப்பு செய்திகளை பெறவும் செயல்முறைப்படுத்தவும் அப்ளிகேஷனை அனுமதிக்கிறது. இந்த அனுமதியானது சிஸ்டம் அப்ளிகேஷன்களுக்கு மட்டுமே கிடைக்கப்பெறுகிறது.</string>
     <string name="permlab_sendSms">SMS  செய்திகள் அனுப்புக</string>
     <string name="permdesc_sendSms">SMSசெய்திகளை அனுப்ப ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் உங்கள் உறுதி இல்லாமலேயே செய்திகளை அனுப்பி உங்களுக்கு செலவு வைத்துவிடும்.</string>
     <string name="permlab_readSms">SMS  அல்லது MMS படிக்கவும்</string>
@@ -342,6 +364,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_vibrate">வைப்ரேட்டரைக் கட்டுப்படுத்த ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
     <string name="permlab_flashlight">ஃப்ளாஷ்லைட் கட்டுப்படுத்துக</string>
     <string name="permdesc_flashlight">ஃப்ளாஷ் லைட்டைக் கட்டுப்படுத்த ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
+    <string name="permlab_manageUsb">USB சாதனங்களுக்கான விருப்பங்கள் மற்றும் அனுமதிகளை சமாளிக்கவும்</string>
+    <string name="permdesc_manageUsb">USB சாதனங்களுக்கான முன் விருப்பங்கள் மற்றும் அனுமதிகளை சமாளிக்க அப்ளிகேஷனை அனுமதிக்கிறது.</string>
     <string name="permlab_hardware_test">வன்பொருள் சோதிக்கவும்</string>
     <string name="permdesc_hardware_test">வன்பொருள் சோதித்தலுக்கான பல உதிரிபாகங்களைக் கட்டுப்படுத்த ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
     <string name="permlab_callPhone">தொலைபேசி எண்களை நேரடியாக அழைக்கவும்</string>
@@ -404,10 +428,16 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_changeWifiState">வை-ஃபை அணுகல் புள்ளிகளில்  இணைத்து கொள்ள அல்லது துண்டித்துக் கொள்ளவும், உருவமைப்பு செய்யப்பட்ட வை-ஃபை வலை அமைப்புகளுக்கு மாற்றங்கள் செய்யவும் ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.  </string>
     <string name="permlab_changeWifiMulticastState">வை-ஃபை பலமுனை ஒளிபரப்பு வரவிடுதலை அனுமதிக்கவும்</string>
     <string name="permdesc_changeWifiMulticastState">உங்களுடைய கருவிக்கு நேரடியாக அனுப்பப்படாத பேக்கெட்டுகளைப் பெற  ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது. அருகாமையில் அளிக்கப்படும் சேவைகளை கண்டுபிடிக்க இது பயன்மிக்கதாக இருக்கலாம். இது பலமுனை ஒளிபரப்பைக் காட்டிலும் அதிக சக்தி பயன்படுத்துகிறது. </string>
+    <string name="permlab_accessWimaxState">WiMAX நிலைமையை பார்வையிடவும்</string>
+    <string name="permdesc_accessWimaxState">WiMAX நிலைமை பற்றிய தகவலைப் பார்வையிட ஒரு அப்ளிகேஷனை அனுமதிக்கிறது.</string>
+    <string name="permlab_changeWimaxState">WiMAX நிலையை மாற்றவும்</string>
+    <string name="permdesc_changeWimaxState">WiMAX வலை அமைப்புக்கு இணைக்கவும் அதிலிருந்து துண்டித்துக்கொள்ளவும் ஒரு அப்ளிகேஷனை அனுமதிக்கிறது.</string>
     <string name="permlab_bluetoothAdmin">புளூடூத் நிர்வாகம்</string>
     <string name="permdesc_bluetoothAdmin">உள்ளூர் புளூ டூத் தொலைபேசியை உருவமைப்பு செய்ய, மற்றும் ரிமோட் கருவிகளை தேடிப்பிடித்து ஜோடியாக, ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.  </string>
     <string name="permlab_bluetooth">புளூடூத் இணைப்புகளை உருவாக்கவும்</string>
     <string name="permdesc_bluetooth">அருகாமையிலுள்ள தொலைபேசியின் உருவமைப்பை பார்வையிட்டு ஜோடியாக்கப்பட்ட கருவிகளுடன் இணைப்புக்களை செய்ய மற்றும் ஏற்க ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
+    <string name="permlab_nfc">களத்திற்கு அருகிலான தகவல் பரிமாற்ற கட்டுப்படுத்தல்</string>
+    <string name="permdesc_nfc">களத்திர்கு அருகாமை தகவல் பரிமாற்ற (NFC) டேக்-கள், கார்டுகள் மற்றும் ரீடர்களுடன் தகவல் பரிமாற ஒரு அப்ளிகேஷனை அனுமதிக்கிறது.</string>
     <string name="permlab_disableKeyguard">கீ லாக் செயலிழக்க செய்க</string>
     <string name="permdesc_disableKeyguard">பூட்டினை  மற்றும் ஏதேனும் சம்பந்தப்பட்ட கடவுச்சொல் பாதுகாப்பினை செயலிழக்கசெய்ய ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது. ஒரு உள்வரும் அழைப்பு பெறப்படும்போது கீ-லாக் செயலிழக்க செய்வது மற்றும் அழைப்பு முடிந்த பின்னர் கீ-லாக்  மறு செயலாக்கம் செய்வது என்பது இதர்கு உண்மையான உதாரணமாகும்.</string>
     <string name="permlab_readSyncSettings">சின்க் அமைப்புக்கள் படிக்கவும்</string>
@@ -424,8 +454,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_readDictionary">பயனர் அகராதியில் பயனர் சேமித்து இருந்திருக்க்க் கூடிய தனிப்பட்ட வார்த்தைகள், பெயர்கள், சொற்றொடர்களைப் படிக்க ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
     <string name="permlab_writeDictionary">ப்யனர் விவரணம் செய்த அகராதி எழுதுக</string>
     <string name="permdesc_writeDictionary">பயனர் அகராதியில் புதிய வார்த்தைகளை எழுத ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
+    <string name="permlab_sdcardWrite" product="nosdcard">USB சேமிப்பக உட்பொருட்களை திருத்தவும்/அழிக்கவும்</string>
+    <string name="permlab_sdcardWrite" product="default">SD கார்டு உட்பொருட்களை திருத்தவும்/அழிக்கவும்</string>
+    <string name="permdesc_sdcardWrite" product="nosdcard">USB சேமிப்பகத்தில் எழுத ஒரு அப்ளிகேஷனை அனுமதிக்கிறது.</string>
+    <string name="permdesc_sdcardWrite" product="default">SD கார்டில் எழுத ஒரு அப்ளிகேஷனை அனுமதிக்கிறது.</string>
     <string name="permlab_cache_filesystem">கேச்சி கோப்பு சிஸ்ட்த்தை அணுகவும்</string>
     <string name="permdesc_cache_filesystem">கேச்சி கோப்பு கட்டமைப்பினை படிக்க எழுத ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
+    <string name="permlab_use_sip">இணையதள அழைப்புகளை செய்யவும்/பெறவும்</string>
+    <string name="permdesc_use_sip">இணைய தள அழைப்புக்களை செய்வதற்கு/பெறுவதற்கு SIP சேவையை பயன்படுத்த ஒரு அப்ளிகேஷனை அனுமதிக்கிறது.</string>
     <string name="policylab_limitPassword">கடவுச்சொல் கட்டுப்படுத்துக</string>
     <string name="policydesc_limitPassword">நீங்கள் பயன்படுத்த அனுமதிக்கப்பட்டகடவுச்சொற்களின் வகைகளை கட்டுப்படுத்தவும்.</string>
     <string name="policylab_watchLogin">லாக்-இன் முயற்சிகளை கவனிக்கவும்</string>
@@ -490,10 +526,12 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="phoneTypeCallback">திரும்ப அழைக்கவும்</string>
     <string name="phoneTypeCar">கார்</string>
     <string name="phoneTypeCompanyMain">கம்பெனிமெயின்</string>
+    <string name="phoneTypeIsdn">ISDN</string>
     <string name="phoneTypeMain">பிரதான</string>
     <string name="phoneTypeOtherFax">மற்ற ஃபேக்ஸ்</string>
     <string name="phoneTypeRadio">ரேடியோ</string>
     <string name="phoneTypeTelex">டெலெக்ஸ்</string>
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
     <string name="phoneTypeWorkMobile">வேலை மொபைல்</string>
     <string name="phoneTypeWorkPager">வேலை பேஜர்</string>
     <string name="phoneTypeAssistant">உதவியாளர்</string>
@@ -515,6 +553,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="imTypeWork">வேலை</string>
     <string name="imTypeOther">மற்றவை</string>
     <string name="imProtocolCustom">வழக்கம்</string>
+    <string name="imProtocolAim">AIM</string>
     <string name="imProtocolMsn">விண்டோஸ் நிகழ்நிலை</string>
     <string name="imProtocolYahoo">யாஹூ</string>
     <string name="imProtocolSkype">ஸ்கைப்</string>
@@ -524,6 +563,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="orgTypeWork">வேலை</string>
     <string name="orgTypeOther">மற்றவை</string>
     <string name="orgTypeCustom">வழக்கம்</string>
+    <string name="contact_status_update_attribution"><xliff:g id="source" example="Google Talk">%1$s</xliff:g> வழியாக</string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g>வழியாக<xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
     <string name="keyguard_password_enter_pin_code">PIN  குறியீடு நுழைக்கவும்</string>
     <string name="keyguard_password_enter_password_code">பூட்டு திறக்க கடவுச்சொல் நுழைக்கவும்</string>
     <string name="keyguard_password_wrong_pin_code">சரியில்லாத PIN குறியீடு!</string>
@@ -576,7 +617,9 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_return_to_call">அழைப்புக்கு திரும்ப வரவும்</string>
     <string name="lockscreen_pattern_correct">சரி!</string>
     <string name="lockscreen_pattern_wrong">மன்னிக்கவும், மீண்டும் முயலவும்</string>
+    <string name="lockscreen_plugged_in">(<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)சார்ஜ் ஆகிறது</string>
     <string name="lockscreen_charged">சார்ஜ் செய்யப்பட்டது</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_low_battery">உங்கள் சார்ஜரை இணைக்கவும்.</string>
     <string name="lockscreen_missing_sim_message_short">சிம் கார்டு இல்லை.</string>
     <string name="lockscreen_missing_sim_message">தொலைபேசியினுள் ஒரு சிம் கார்டு இல்லை.</string>
@@ -588,6 +631,15 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_sim_puk_locked_instructions">தயவு செய்து பயனர் வழிகாட்டியைப் பார்க்கவும் அல்லது வாடிக்கையாளர் சேவையை தொடர்பு கொள்ளவும்.</string>
     <string name="lockscreen_sim_locked_message">சிம் கார்டு பூட்டப்பட்டுள்ளது.</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message">சிம் கார்டு பூட்டு திறக்கிறது\u2026</string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">
+     நீங்கள் <xliff:g id="number">%d</xliff:g>தடவைகள் உங்களுடைய பூட்டுத்திறக்கும் வடிவத்தை தவறாக வரைந்துள்ளீர்கள்.
+        \n\n தயவு செய்து<xliff:g id="number">%d</xliff:g>வினாடிகளில் மீண்டும் முயலவும்.
+    </string>
+    <string name="lockscreen_failed_attempts_almost_glogin">
+        நீங்கள்<xliff:g id="number">%d</xliff:g>தடவைகள் உங்களுடைய பூட்டுத்திறக்கும் வடிவத்தை தவறாக வரைந்துள்ளீர்கள்.
+     தோல்வியுற்ற <xliff:g id="number">%d</xliff:g>க்கு மேற்பட்ட முயற்சிகளுக்குப் பின்னர், உங்களுடைய கூகிள் சைன் -இன் பயன்படுத்திதொலைபேசி பூட்டினைத்திறக்க நீங்கள் கேட்டுக்கொள்ளப்படுவீர்கள்.\n\n தயவு செய்து <xliff:g id="number">%d</xliff:g>வினாடிகளில் மீண்டும் முயலவும்.
+    </string>
+    <string name="lockscreen_too_many_failed_attempts_countdown"><xliff:g id="number">%d</xliff:g>வினாடிகளில் மீண்டும் முயற்சிக்கவும்.</string>
     <string name="lockscreen_forgot_pattern_button_text">வடிவம் மறந்த்தா?</string>
     <string name="lockscreen_glogin_forgot_pattern">கண்க்கு பூட்டு திறப்பு</string>
     <string name="lockscreen_glogin_too_many_attempts">மிகப்பல வடிவு முயற்சிகள்!</string>
@@ -600,19 +652,26 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_unlock_label">பூட்டுவிலக்கு</string>
     <string name="lockscreen_sound_on_label">ஒலி செயல்பாட்டில்</string>
     <string name="lockscreen_sound_off_label">ஒலி அணைப்பில்</string>
+    <string name="password_keyboard_label_symbol_key">\?123</string>
     <string name="password_keyboard_label_alpha_key">ABC</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
     <string name="factorytest_failed">தொழிலக சோதனை தவறியது</string>
     <string name="factorytest_not_system"> FACTORY_TEST செயல்  /சிஸ்டம்/app நிறுவப்பட்ட பேக்கேஜுகளால் மட்டுமே அதாரப்படுத்தப்பட்டது.
         </string>
     <string name="factorytest_no_action">FACTORY_TEST செயல் அளிக்கும் எந்த பேக்கேஜும் காணப்படவில்லை.</string>
     <string name="factorytest_reboot">மறு பூட் செய்யவும்</string>
+    <string name="js_dialog_title"> \'<xliff:g id="title">%s</xliff:g>\' இல் இருக்கும் பக்க சொல்கிறது:</string>
     <string name="js_dialog_title_default">ஜாவா ஸ்கிரிப்ட்</string>
+    <string name="js_dialog_before_unload">இந்தப் பக்கத்தில் இருந்து வெளியேறி செல்லவா?\n\n<xliff:g id="message">%s</xliff:g>\n\n தொடர்வதற்கு சரி தேர்வு செய்க அல்லது நடப்பு பக்கத்தில் இருந்துவிட நிராகரிக்கவும் தேர்வு செய்க.</string>
     <string name="save_password_label">உறுதி செய்க</string>
     <string name="double_tap_toast">டிப்: ஜூம் அகலம் மற்றும் குறுக்க இரட்ட தட்டு தட்டவும்.</string>
     <string name="permlab_readHistoryBookmarks">ப்ரவுசரின் வரலாறு மற்றும் புத்தகக்குறிகளை படிக்கவும்</string>
     <string name="permdesc_readHistoryBookmarks">ப்ரவுசர் சென்று வந்த அனைத்து URLகளை மற்றும் அனைத்து ப்ரவுசரின் புத்தக்குறிகளைப் படிக்க, ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
     <string name="permlab_writeHistoryBookmarks">ப்ரவுசரின் வரலாறு மற்றும் புத்தகக்குறிகளை எழுதுக</string>
     <string name="permdesc_writeHistoryBookmarks">உங்கள் தொலைபேசியில் சேமிக்கப்பட்டுள்ள ப்ரவுசரின் சரித்திரம் அல்லது புத்தகக்குறிகளை திருத்த ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.  உங்கள் ப்ரவுசர் தரவுகளை அழிக்க அல்லது திருத்த குற்றம் புரியும் அப்ளிகேஷன்கள் இதனைப் பயன்படுத்தக் கூடும்.</string>
+    <string name="permlab_setAlarm">அலாரம் கடிகாரத்தில் அலாரம் அமைக்கவும்</string>
+    <string name="permdesc_setAlarm">நிறுவப்பட்ட ஒரு அலார கடிகார அப்ளிகேஷனில் ஒரு அலாரத்தை அமைக்க அப்ளிகேஷனை அனுமதிக்கிறது. சில அலார கடிகார அப்ளிகேஷன்கள் இந்த அம்சத்தினை நடைமுறைப்படுத்தாமல் இருக்கலாம்.</string>
     <string name="permlab_writeGeolocationPermissions">ப்ரவ்சரின் பூகோள அமைவிட அனுமதிகளை திருத்தவும்</string>
     <string name="permdesc_writeGeolocationPermissions">ப்ரவுசரின் பூகோளரீதியான அனுமதிகளைத் திருத்த ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது. தன்னிச்சையான வலத்தளங்களுக்கு அமைவிட்த் தகவலை அனுப்புவதை அனுமதிக்க குற்றம் புரியும் அப்ளிகேஷன்கள் இதனைப் பயன்படுத்தக் கூடும்.</string>
     <string name="save_password_message">இந்த கடவுச்சொல்லை ப்ரவுசர் நினைவு கொள்ள உங்களுக்கு விருப்பமா?</string>
@@ -631,76 +690,83 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="beforeOneMonthDurationPast">1 மாதம் முன்னால்</string>
     <plurals name="num_seconds_ago">
         <item quantity="one">1 நொடி முன்னால்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>வினாடிகளுக்கு முன்னால்</item>
     </plurals>
     <plurals name="num_minutes_ago">
         <item quantity="one">1 மாதம் முன்னால்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>நிமிடங்களுக்கு முன்னால்</item>
     </plurals>
     <plurals name="num_hours_ago">
         <item quantity="one">1 மணி நேரம் முன்னால்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>மணிகளுக்கு முன்னால்</item>
+    </plurals>
+    <plurals name="last_num_days">
+        <item quantity="other">கடைசி<xliff:g id="count">%d</xliff:g> நாட்கள்</item>
     </plurals>
     <string name="last_month">கடந்த மாதம்</string>
     <string name="older">மிகப்பழையது</string>
     <plurals name="num_days_ago">
         <item quantity="one">நேற்று</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>நாட்களுக்கு முன்னால்</item>
     </plurals>
     <plurals name="in_num_seconds">
         <item quantity="one">1 நொடியில்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> வினாடிகளில்</item>
     </plurals>
     <plurals name="in_num_minutes">
         <item quantity="one">1 நிமிடத்தில்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> நிமிடங்களில்</item>
     </plurals>
     <plurals name="in_num_hours">
         <item quantity="one">1 மணியில்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> மணிகளில்</item>
     </plurals>
     <plurals name="in_num_days">
         <item quantity="one">நாளை மறுநாள்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> நாட்களில்</item>
     </plurals>
     <plurals name="abbrev_num_seconds_ago">
         <item quantity="one">1 நொடி முன்னால்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>வினாடிகளுக்கு முன்னால்</item>
     </plurals>
     <plurals name="abbrev_num_minutes_ago">
         <item quantity="one">1 நிமிடம் முன்னால்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>நிமிடங்களுக்கு முன்னால்</item>
     </plurals>
     <plurals name="abbrev_num_hours_ago">
         <item quantity="one">1 மணி நேரம் முன்னால்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>மணிகளுக்கு முன்னால்</item>
     </plurals>
     <plurals name="abbrev_num_days_ago">
         <item quantity="one">நேற்று</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>நாட்களுக்கு முன்னால்</item>
     </plurals>
     <plurals name="abbrev_in_num_seconds">
         <item quantity="one">1 நொடியில்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> வினாடிகளில்</item>
     </plurals>
     <plurals name="abbrev_in_num_minutes">
         <item quantity="one">1 நிமிடத்தில்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> நிமிடங்களில்</item>
     </plurals>
     <plurals name="abbrev_in_num_hours">
         <item quantity="one">1 மணியில்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> மணிகளில்</item>
     </plurals>
     <plurals name="abbrev_in_num_days">
         <item quantity="one">நாளை மறுநாள்</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> நாட்களில்</item>
     </plurals>
+    <string name="preposition_for_date"><xliff:g id="date" example="May 29">%s</xliff:g>அன்று</string>
+    <string name="preposition_for_time"><xliff:g id="time" example="2:33 am">%s</xliff:g>க்கு</string>
+    <string name="preposition_for_year"><xliff:g id="year" example="2003">%s</xliff:g> இல்</string>
     <string name="day">நாள்</string>
     <string name="days">நாட்கள்</string>
     <string name="hour">மணி</string>
     <string name="hours">மணிகள்</string>
     <string name="minute">நிமிடம்</string>
     <string name="minutes">நிமிடங்கள்</string>
+    <string name="second">வினாடி</string>
     <string name="seconds">எஸ்</string>
     <string name="week">வாரம்</string>
     <string name="weeks">வாரங்கள்</string>
@@ -710,10 +776,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="VideoView_error_text_invalid_progressive_playback">மன்னிக்கவும், இந்த சாதனத்தில் வீச்சு செலுத்த செல்லுபடியாகாது.</string>
     <string name="VideoView_error_text_unknown">மன்னிக்கவும், இந்த வீடியோ காண்பிக்க வைக்க முடியாது.</string>
     <string name="VideoView_error_button">ஓகே</string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
     <string name="noon">நண்பகல்</string>
     <string name="Noon">நண்பகல்</string>
     <string name="midnight">"நடு இரவு"</string>
     <string name="Midnight">"நடு இரவு"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
     <string name="selectAll">அனைத்தும் தேர்ந்தெடு</string>
     <string name="selectText">வாசகம் தெரிவு செய்க</string>
     <string name="cut">வெட்டுக</string>
@@ -721,6 +790,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="paste">ஒட்டு</string>
     <string name="copyUrl">URL நகலெடுக்கவும்</string>
     <string name="inputMethod">உள்ளிடும் வழிமுறை</string>
+    <string name="addToDictionary">"அகராதிக்கு \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" சேர்க்கவும்</string>
     <string name="editTextMenuTitle">வாசகம் திருத்துக</string>
     <string name="low_internal_storage_view_title">காலியிடத்தில் தாழ்வு</string>
     <string name="low_internal_storage_view_text">தொலைபேசி இடவச்தி செய்ய சில கோப்புகளை அழிக்கவும்.</string>
@@ -735,12 +805,34 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="alwaysUse">இந்த செயலுக்கு இயல்பாக பயன்படுத்தவும்.</string>
     <string name="clearDefaultHintMsg">இயல்பான முகப்பு பக்க அமைப்புகள் &gt;அப்ளிகேஷன்கள் நீக்கவும் &gt;அப்ளிகேஷன்களை சமாளிக்கவும்.</string>
     <string name="chooseActivity">ஒரு செயலை தெரிவு செய்க</string>
+    <string name="chooseUsbActivity">USB சாதனத்திற்கான ஒரு அப்ளிகேஷன் தேர்ந்தெடுக்கவும்</string>
     <string name="noApplications">இந்தச் செயலை எந்த அப்ளிகேஷனும் செயல்படுத்த முடியாது.</string>
+    <string name="crash_application">அப்ளிகேஷன் <xliff:g id="application">%1$s</xliff:g>(செயல்முறை <xliff:g id="process">%2$s</xliff:g>) எதிர்பாராதவிதமாக நின்றுவிட்டது. பிழையை சிஸ்டம் சரிசெய்யத் தவறியது. தயவு செய்து இன்னொரு மென்பொருளை பயன்படுத்தவும்.</string>
+    <string name="crash_process">செயல்முறை<xliff:g id="process">%1$s</xliff:g>எதிர்பாராதவிதமாக நின்றுவிட்டது. பிழையை சரி செய்ய சிஸ்டம் தவறி விட்டது. தயவு செய்து மற்றொரு மென்பொருளை பயன்படுத்தவும்.</string>
     <string name="aerr_title">மன்னிக்கவும்!</string>
+    <string name="aerr_application">அப்ளிகேஷன் <xliff:g id="application">%1$s</xliff:g>(செயல்முறை  <xliff:g id="process">%2$s</xliff:g>) எதிர்பாராதவிதமாக நின்றுவிட்டது. பிழையை சிஸ்டம் சரிசெய்யத் தவறியது. தயவு செய்து மீண்டும் முயலவும்.</string>
+    <string name="aerr_process">செயல்முறை<xliff:g id="process">%1$s</xliff:g>எதிர்பாராதவிதமாக நின்றுவிட்டது. தயவு செய்து மீண்டும் முயற்சிக்கவும்.</string>
     <string name="anr_title">மன்னிக்கவும்!</string>
+    <string name="anr_activity_application">செயல்பாடு<xliff:g id="activity">%1$s</xliff:g>(அப்ளிகேஷனில் <xliff:g id="application">%2$s</xliff:g>) பதிலளிக்கவில்லை.</string>
+    <string name="anr_activity_process">செயல்பாடு <xliff:g id="activity">%1$s</xliff:g>(செயல்முறையில்<xliff:g id="process">%2$s</xliff:g>) பதிலளிக்கவில்லை.</string>
+    <string name="anr_application_process">அப்ளிகேஷன்<xliff:g id="application">%1$s</xliff:g>(செயல்முறையில் இருக்கும்  <xliff:g id="process">%2$s</xliff:g>) பதிலளிக்கவில்லை.</string>
+    <string name="anr_process">செயல்முறை<xliff:g id="process">%1$s</xliff:g>பதிலளிக்கவில்லை.</string>
     <string name="force_close">மூடுதலை கட்டாயப்படுத்து</string>
     <string name="report">தெரியப்படுத்தவும்</string>
     <string name="wait">காத்திரு</string>
+    <string name="launch_warning_title">அப்ளிகேஷன் திசை திருப்பப்பட்டது</string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> இப்போது ஓடிக்கொண்டிருக்கிறது.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> அசலில் துவக்கப்பட்டது.</string>
+    <string name="smv_application">அப்ளிகேஷன் <xliff:g id="application">%1$s</xliff:g>(செயல்முறை <xliff:g id="process">%2$s</xliff:g>) தான் அமல்படுத்திய கண்டிப்பான மோட் கொள்கையை மீறியது.</string>
+    <string name="smv_process">செயல்முறை<xliff:g id="process">%1$s</xliff:g>தான் அமல்படுத்திய கண்டிப்பான மோட் கொள்கையை மீறிவிட்டது.</string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g>ஓடிக்கொண்டிருக்கிறது</string>
+    <string name="heavy_weight_notification_detail">அப்ளிகேஷனுக்கு மாறிக்கொள்ள சுவிட்ச்சுக்கு தேர்ந்தெடுக்கவும்</string>
+    <string name="heavy_weight_switcher_title">அப்ளிகேஷன்களை மாற்றிக்கொள்ளவா?</string>
+    <string name="heavy_weight_switcher_text">புதிய ஒரு அப்ளிகேஷனை நீங்கள் துவங்கும் முன்னதாக ஏற்கெனவே ஓடிக்கொண்டிருக்கும் இன்னொன்று நிறுத்தப்படுதல் வேண்டும். </string>
+    <string name="old_app_action"><xliff:g id="old_app">%1$s</xliff:g> க்கு திரும்பச் செல்லவும்</string>
+    <string name="old_app_description">புதிய அப்ளிகேஷனைத் துவக்க வேண்டாம்.</string>
+    <string name="new_app_action"><xliff:g id="old_app">%1$s</xliff:g> துவங்கவும்</string>
+    <string name="new_app_description">பழைய அப்ளிகேஷனை சேமிக்காமல் நிறுத்தவும்.</string>
     <string name="sendText">வாசகத்திற்கான ஒரு செயல் தெரிவு செய்க</string>
     <string name="volume_ringtone">மணி ஒலிப்பான் ஒலியளவு</string>
     <string name="volume_music">ஊடக கொள்ளளவு</string>
@@ -753,6 +845,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="volume_notification">அறிவிக்கை கொள்ளளவு</string>
     <string name="volume_unknown">ஒலியளவு</string>
     <string name="ringtone_default">இயல்பான மணி ஒலி</string>
+    <string name="ringtone_default_with_actual">இயல்பான மணியோசை(<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
     <string name="ringtone_silent">நிசப்தம்</string>
     <string name="ringtone_picker_title">மணி ஒலிகள்</string>
     <string name="ringtone_unknown">தெரியாத மணி ஒலி</string>
@@ -772,26 +865,64 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sms_control_no">ரத்து</string>
     <string name="date_time_set">அமை</string>
     <string name="default_permission_group">முன்னிருப்பு</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>,<xliff:g id="perm_line2">%2$s</xliff:g></string>
     <string name="no_permissions">அனுமதிகள் தேவைப்படவில்லை</string>
+    <string name="perms_hide"><b>மறைக்கவும்</b></string>
+    <string name="perms_show_all"><b>அனைத்தையும் காண்பிக்கவும்</b></string>
     <string name="usb_storage_activity_title">USB தொகுப்பு சேமிப்பகம்</string>
     <string name="usb_storage_title">USB இணைக்கப்பட்டது</string>
+    <string name="usb_storage_message" product="nosdcard"> வழியாக உங்களுடைய கணினியுடன் உங்கள் தொலைபேசியை இணைத்துள்ளீர்கள். உங்களுடைய கணினி மற்றும் உங்கள் ஆண்டிராய்டு USB சேமிப்பகத்துக்கு இடையில் கோப்புகளை நகலெடுக்க விரும்பினால் கீழிருக்கும் பொத்தானை தெரிவு செய்யவும்.</string>
+    <string name="usb_storage_message" product="default"> வழியாக உங்களுடைய கணினியுடன் உங்கள் தொலைபேசியை இணைத்துள்ளீர்கள். உங்களுடைய கணினி மற்றும் உங்கள் ஆண்டிராய்டு USB சேமிப்பகத்துக்கு இடையில் கோப்புகளை நகலெடுக்க விரும்பினால் கீழிருக்கும் பொத்தானை தெரிவு செய்யவும்.</string>
     <string name="usb_storage_button_mount">USB சேமிப்பகத்தை ஆன் செய்யவும்</string>
+    <string name="usb_storage_error_message" product="nosdcard">USB தொகுப்பு சேமிப்பகத்திற்கு உங்கள் USB சேமிப்பகத்தை பயன்படுத்துவதில் ஒரு பிரச்சனை உள்ளது.</string>
+    <string name="usb_storage_error_message" product="default">USB தொகுப்பு சேமிப்பகத்திற்கு உங்கள் SD கார்டை பயன்படுத்துவதில் ஒரு பிரச்சனை உள்ளது.</string>
     <string name="usb_storage_notification_title">USB இணைக்கப்பட்டது</string>
     <string name="usb_storage_notification_message">உங்கள் கணினிக்கு/கணினியில் இருந்து கோப்புகள் நகலெடுக்க  தெரிவு செய்க.</string>
     <string name="usb_storage_stop_notification_title">USB சேமிப்பகத்தை ஆஃப் செய்யவும்</string>
     <string name="usb_storage_stop_notification_message">USB சேமிப்பகம் அணைத்தல் தெரிவு செய்க.</string>
     <string name="usb_storage_stop_title">USB சேமிப்பகம் பயனில் உள்ளது</string>
+    <string name="usb_storage_stop_message" product="nosdcard">USB சேமிப்பகத்தை அணைக்கும் முன்பாக, உங்களுடைய கணினியில் இருந்து ஆண்டிராய்டு USB சேமிப்பகத்தினை நீங்கள் இறக்கி வைத்துவிட்டதை(\u201cதூக்கிவீசப்பட்டது\u201d) உறுதி செய்யவும்.</string>
+    <string name="usb_storage_stop_message" product="default">SD கார்டினை அணைக்கும் முன்பாக, உங்களுடைய கணினியில் இருந்து ஆண்டிராய்டு USB சேமிப்பகத்தினை நீங்கள் இறக்கி வைத்துவிட்டதை(\u201cதூக்கிவீசப்பட்டது\u201d) உறுதி செய்யவும்.</string>
     <string name="usb_storage_stop_button_mount">USB சேமிப்பகத்தை ஆஃப் செய்யவும்</string>
     <string name="usb_storage_stop_error_message">USB  சேமிப்பகம் ஆஃப் செய்வதில் இங்கு ஒரு பிரச்சனை உள்ளது.USB ஹோஸ்டினை இறக்கிவிட்டதை நீங்கள் உறுதி செய்து , பின்னர் முயற்சிக்கவும்.</string>
     <string name="dlg_confirm_kill_storage_users_title">USB சேமிப்பகத்தை ஆன் செய்யவும்</string>
     <string name="dlg_confirm_kill_storage_users_text">நீங்கள் USB சேமிப்பகத்தை ஆன் செய்தால், USB சேமிப்பகத்தை ஆஃப் செய்யும் வரை நீங்கள் பயன்படுத்தும் சில அப்ளிகேஷன்கள் கிடைக்கப்பெறலாம்.</string>
     <string name="dlg_error_title">USB இயக்கப்படுத்தல் தவறியது</string>
     <string name="dlg_ok">ஓகே</string>
+    <string name="extmedia_format_title" product="nosdcard">USB சேமிப்பகத்தினை வடிவுரு செய்க</string>
+    <string name="extmedia_format_title" product="default">SD கார்டினை வடிவுரு செய்க</string>
+    <string name="extmedia_format_message" product="nosdcard">USB சேமிப்பகத்தினை வடிவுரு செய்க, அங்கு சேமிக்கப்பட்ட அனைத்து கோப்புக்களையும் அழிக்கவா? செயல் திரும்பப் பெற இயலாதது!</string>
+    <string name="extmedia_format_message" product="default">SD கார்டினை ஃபார்மட் செய்வதில் நீங்கள் உறுதிதானா? கார்டில் இருக்கும் அனைத்து தரவுகளும் காணாமல் போகும்..</string>
     <string name="extmedia_format_button_format">வடிவம்</string>
     <string name="adb_active_notification_title">USB டீ-பக்கிங் இணைக்கப்பட்டது</string>
     <string name="adb_active_notification_message">டீ-பக்கிங் செய்வதை செயலிழக்க செய்ய தெரிவு செய்க.</string>
     <string name="select_input_method">உள்ளிடு முறையை தெரிவு செய்க</string>
+    <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="candidates_style"><u>விண்ணப்பதார்கள்</u></string>
+    <string name="ext_media_checking_notification_title" product="nosdcard">USB சேமிப்பகத்தை தயார்படுத்துகிறது</string>
+    <string name="ext_media_checking_notification_title" product="default">SD கார்டைதயார்படுத்துகிறது</string>
     <string name="ext_media_checking_notification_message">பிழைகளுக்காக சோதிக்கிறது.</string>
+    <string name="ext_media_nofs_notification_title" product="nosdcard">வெற்றிடமான USB சேமிப்பகம்</string>
+    <string name="ext_media_nofs_notification_title" product="default">வெற்றிடமான SD கார்டு</string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard">USB சேமிப்பகம் காலியாக உள்ளது அல்லது துணைநிற்காத கோப்பு சிஸ்டத்தைக் கொண்டுள்ளது.</string>
+    <string name="ext_media_nofs_notification_message" product="default">SD கார்டு காலியாக உள்ளது அல்லது துணை நிற்காத கோப்பு சிஸ்டம் கொண்டுள்ளது.</string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">சேதமாக்கப்பட்ட USB சேமிப்பகம்</string>
+    <string name="ext_media_unmountable_notification_title" product="default">சேதமாக்கப்பட்ட SD சேமிப்பகம்</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">USB சேமிப்பகம் சேதமடைந்துள்ளது. நீங்கள் அதனை மறு வடிவுருவாக்க வேண்டியதிருக்கும்.</string>
+    <string name="ext_media_unmountable_notification_message" product="default">SD கார்டு சேதமடைந்தது. அதனை நீங்கள் மறு வடிவுரு செய்ய வேண்டியிருக்கும்.</string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">USB சேமிப்பகம் எதிர்பாராதவிதமாக அகற்றப்பட்டது</string>
+    <string name="ext_media_badremoval_notification_title" product="default">SD கார்டு எதிர்பாராதவிதமாக அகற்றப்பட்டது</string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">தரவு இழப்பினைத் தவிர்க்க அகற்றுவதற்கு முன்னதாக USB சேமிப்பகத்தினை இறக்கிவைக்கவும்.</string>
+    <string name="ext_media_badremoval_notification_message" product="default">தரவு இழப்பினைத் தவிர்க்க, அகற்றுவதற்கு முன்னதாக SD கார்டினை இறக்கிவைக்கவும்.</string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">USB சேமிப்பகம் அகற்றுவது பாதுகாப்பானது</string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">SD காற்று அகற்றுவது பாதுகாப்பானது</string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">USB சேமிப்பகத்தினை நீங்கள் பாதுகாப்பாக அகற்றலாம்.</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">SD கார்டினை நீங்கள் பாதுகாப்பாக அகற்றலாம்.</string>
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">USB சேமிப்பகம் அகற்றப்பட்ட்து</string>
+    <string name="ext_media_nomedia_notification_title" product="default">SD கார்டு அகற்றப்பட்டது</string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">USB சேமிப்பகம் அகற்றப்பட்ட்து. புதிய ஊடகத்தை செருகவும்.</string>
+    <string name="ext_media_nomedia_notification_message" product="default">SD அகற்றப்பட்டது. புதிய ஒன்றைச் செருகவும்.</string>
     <string name="activity_list_empty">பொருத்தமான நடவடிக்கைகள் காணப்படவில்லை</string>
     <string name="permlab_pkgUsageStats">உதிரிப்பாக பயன்பாடு புள்ளிவிபரங்கள் புதுப்பித்தல்</string>
     <string name="permdesc_pkgUsageStats">சேகரிக்கப்பட்ட பாகங்கள் பயன்பாட்டு புள்ளிவிபரங்களின் திருத்தலுக்கு அனுமதிக்கிறது. சாதாரண அப்ளிகேஷன்கள் ஒருபோதும் பயன்படுத்தக் கூடாது.</string>
@@ -805,6 +936,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="ime_action_next">அடுத்தது</string>
     <string name="ime_action_done">செய்தாயிற்று</string>
     <string name="ime_action_default">செயல்படுத்துக</string>
+    <string name="dial_number_using">\nபயன்படுத்தி <xliff:g id="number" example="555">%s</xliff:g> எண் டயல் செய்யவும்</string>
+    <string name="create_contact_using">\nபயன்படுத்தி<xliff:g id="number" example="555">%s</xliff:g>புதிய தொடர்பு உருவாக்கவும்</string>
     <string name="accessibility_compound_button_selected">சரிபார்க்கப்பட்ட்து</string>
     <string name="accessibility_compound_button_unselected">சரிபார்க்கப்படவில்லை</string>
     <string name="grant_credentials_permission_message_header">பின் வரும் ஒன்று அல்லது மேற்பட்ட அப்ளிகேஷன்கள் உங்கள் கணக்கை இப்போது அல்லது எதிர்காலத்தில் அணுக அனுமதி வேண்டுகிறது.</string>
@@ -813,11 +946,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="allow">அனுமதிக்கவும்</string>
     <string name="deny">மறுத்துவிடுக</string>
     <string name="permission_request_notification_title">அனுமதி வேண்டப்படுகிறது</string>
+    <string name="permission_request_notification_with_subtitle">\nகணக்குக்கு<xliff:g id="account" example="foo@gmail.com">%s</xliff:g>அனுமதி கோரப்பட்டது</string>
     <string name="input_method_binding_label">உள்ளிடும் வழிமுறை</string>
     <string name="sync_binding_label">சின்க்</string>
     <string name="accessibility_binding_label">அணுக இயலும் தன்மை</string>
     <string name="wallpaper_binding_label">சுவர் தாள்</string>
     <string name="chooser_wallpaper">சுவர்தாள் மாற்று</string>
+    <string name="alternate_eri_file">/தரவு/eri.xml</string>
     <string name="pptp_vpn_description">பயிண்ட் டொ பாயிண்ட் டன்னலிங் செயல்முறைத்திட்டம்</string>
     <string name="l2tp_vpn_description">லேயர் 2 டன்ன்ல்லிங் செயல்முறைத்திட்டம்</string>
     <string name="l2tp_ipsec_psk_vpn_description">முன் பகிரப்பட்ட கீ அடிப்படையிலான L2TP/IPSec VPN</string>
@@ -859,12 +994,36 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="china_telecom_numeric_values">சைனா டெலெகாம்</string>
     <string name="stk_refresh_sim_init_message">சிம் கார்டு நாளது தேதிக்கு புதுபிக்கப்படுகிறது</string>
     <string name="stk_refresh_sim_reset_message">தொலைபேசி மறு பூட் செய்யும்</string>
+    <string name="custom_china_mobile">சைனா மொபைல்</string>
+    <string name="custom_china_unicom">சைனா யுனிகாம்</string>
     <string name="charge_active_notification_message">சார்ஜ் மட்டும் மோட் செயலாக்கம்</string>
     <string name="charge_active_notification_title">USB இணைக்கப்பட்ட போது சார்ஜ் மட்டுமேயாக  பயன்படுத்தவும்</string>
+    <string name="shutdown_after_seconds"><xliff:g id="NUMBER">%d</xliff:g> வினாடிகளுக்குப் பின்னர் தொலைபேசி மூடிக்கொள்ளும்</string>
+    <string name="lockscreen_password_error">கடவுச்சொல் பிழையானது, மீண்டும் முயற்சிக்கவும்!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">
+		நீங்கள் உங்களுடைய பூட்டுத்திறக்கும் கடவுச்சொல்லை தவறாக உள்ளிட்டுள்ளீர்கள்<xliff:g id="number">%d</xliff:g> முறைகள்.
+        \n\nதயவு செய்து <xliff:g id="number">%d</xliff:g>வினாடிகளில் மீண்டும் முயலவும்.</string>
+    <string name="progress_unmounting" product="nosdcard">USB சேமிப்பகத்தினை இறக்கிவைக்கிறது...</string>
+    <string name="progress_unmounting" product="default">SD  கார்டினை இறக்கி வைக்கிறது...</string>
+    <string name="progress_erasing" product="nosdcard">USB சேமிப்பகத்தை அழிக்கிறது...</string>
+    <string name="progress_erasing" product="default">SD கார்டினை அழிக்கிறது...</string>
+    <string name="format_error" product="nosdcard">USB சேமிப்பகத்தினை அழிக்க தவறியது.</string>
+    <string name="format_error" product="default">SD கார்டினை அழிக்க தவறியது.</string>
     <string name="media_bad_removal">"இறக்கம் செய்யும் முன்பாக SD கார்டு நீக்கப்பட்டு விட்டது."</string>
+    <string name="media_checking" product="nosdcard">USB சேமிப்பகம் தற்போது சரிபார்க்கப்பட்டு வருகிறது.</string>
+    <string name="media_checking" product="default">SD கார்டு தற்போது சோதிக்கப்படுகிறது.</string>
     <string name="media_removed">"SD கார்டு நீக்கப்பட்டு விட்டது."</string>
+    <string name="media_shared" product="nosdcard">USB சேமிப்பகம் ஒரு கணினியால் தற்போது பயன்படுத்தப்படுகிறது.</string>
+    <string name="media_shared" product="default">SD கார்டு தற்போது ஒரு கணினியின் பயன்பாட்டில் உள்ளது.</string>
     <string name="media_unknown_state">"வெளிப்புற ஊடகம் தெரியாத நிலை."</string>
+    <string name="audio_play_failed">மன்னிக்கவும், இந்த ஆடியோ ஓடவிட முடியாது. இந்த மணியோசையை அமைக்க வேண்டாம்.</string>
+    <string name="sms_full_body">நினைவகம் நிறைந்ததால் உள்வரும் செய்தி மறுக்கப்பட்டது. சிலபழைய செய்திகளை அழைக்கவும்.</string>
     <string name="dialog_warning">எச்சரிக்கை</string>
     <string name="internal_memory_low">SD கார்டு சேமிப்பகம் ஏறக்குறைய நிறைவு! இடவசதி செய்ய தயவு செய்து சில கோப்புகளை அழிக்கவும்.</string>
     <string name="button_close">மூடு</string>
+    <string name="unlock_screen_pin_error">PIN பிழையாக உள்ளது!</string>
+    <string name="ap_disconnected">துண்டிக்கப்பட்டது</string>
+    <string name="sim_chooser_title">சிம் தெரிவு செய்க</string>
+    <string name="lockscreen_miss_phone">தொலைபேசி தவறவிடவும்</string>
+    <string name="lockscreen_miss_mms">எஸ் எம் எஸ் தவறவிடவும்</string>
 </resources>

@@ -1,4 +1,23 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">ஸ்டேட்டஸ் பார் </string>
+    <string name="status_bar_no_notifications_title">அறிவிப்புக்கள் இல்லை</string>
+    <string name="status_bar_ongoing_events_title">நடப்பில் இருக்கும்</string>
+    <string name="battery_low_title">சார்ஜரை தயவு செய்து இணைக்கவும்</string>
+    <string name="battery_low_subtitle">பேட்டரி குறைந்து வருகிறது:</string>
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g>
+    அல்லது குறைவான மீதமிருப்பவை.</string>
+    <string name="battery_low_why">பேட்டரி பயன்</string>
+    <string name="usb_accessory_permission_prompt"> USB உபகரணத்தின் அணுகலுக்கு %1$sஅப்ளிகேஷனை அனுமதிக்கவா?</string>
+    <string name="usb_device_confirm_prompt">இந்த USB சாதனம் இணைக்கப்படும்போது %1$s திறக்கவா?</string>
+    <string name="usb_accessory_confirm_prompt">இந்த USB உபகரணம் இணைக்கப்படும்போது %1$s திறக்கவா?</string>
+    <string name="usb_accessory_uri_prompt">இந்த USB உபகரணத்துடன் வேலை செய்யும் நிறுவப்பட்ட அப்ளிகேஷன்கள் இல்லை. இந்த உபகரணம் பற்றி<xliff:g id="url">%1$s</xliff:g> யில் அதிகம் தெரிந்துகொள்ளவும்.</string>
+    <string name="title_usb_accessory">USB உபகரணம்</string>
+    <string name="always_use_accessory">இந்த USB உபகரணத்திற்கு இயல்பாகவே பயன்படுத்தவும்</string>
+    <string name="network_disconnect_title">அறிவிப்பு</string>
+    <string name="network_disconnect_message">WLAN வலை அமைப்பு துண்டிக்கப்பட்டுள்ளது.\n 3G வழியாக இணைக்கவா? \n உங்களுக்கு ஒரு தரவு பிளான் இல்லையென்றால், இது கூடுதல் கட்டணங்கள் விதிக்க ஏதுவாகும்.</string>
+    <string name="weak_signal_title">வலுவற்ற சமிக்ஞை</string>
+    <string name="weak_signal_message">தற்போதைய WLAN  சமிக்ஞை மிகவும் வலுவற்று உள்ளது, சிறந்த இன்னொன்றை தேர்வு செய்ய நாங்கள் பரிந்துரைக்கிறோம்</string>
+    <string name="auto_connect">கேட்க வேண்டாம் மற்றும் இதர நம்பகமானாப்ளிகேஷனுடன் தன்னியக்கமாக இணைக்கவும்</string>
 </resources>

@@ -1,13 +1,21 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="address_length">ایڈریس زیادہ سے زیادہ لمبائی تک پہنچ گیا ہے </string>
+    <string name="byteShort">B</string>
+    <string name="megabyteShort">ایم بی</string>
     <string name="gigabyteShort">جی بی</string>
     <string name="terabyteShort">ٹی بی</string>
     <string name="petabyteShort">روشن رخشندہ</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="untitled">&lt;گمنام&gt;</string>
+    <string name="ellipsis">u2026\ </string>
     <string name="emptyPhoneNumber">(کوئی فون نمبر)</string>
     <string name="unknownName">(نامَعلُوم ۔)</string>
     <string name="defaultVoiceMailAlphaTag">وائس میل  </string>
+    <string name="defaultMsisdnAlphaTag">ایم ایس ائ  ایس ڈی این 1</string>
     <string name="mmiError">کنکشن کا مسئلہ ہے یا غلط  ایم   ایم  ائ  کوڈ.</string>
+    <string name="mmiFdnError">آپریشن فکسڈ ڈائلنگ صرف نمبرز کے لئے محدود ہے.</string>
     <string name="serviceEnabled">سروس کو فعال کیا گیا تھا.</string>
     <string name="serviceEnabledFor">سروس کے لئے فعال کیا گیا تھا:</string>
     <string name="serviceDisabled">اس سروس کو غیر فعال کر دیا گیا ہے.</string>
@@ -98,6 +106,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="serviceClassDataAsync">غیر ہم آہنگ</string>
     <string name="serviceClassDataSync">ہم وقت ساز کریں</string>
     <string name="serviceClassPacket">پیکٹ</string>
+    <string name="serviceClassPAD">پیڈ</string>
     <string name="roamingText0">رومنگ اشارے  آن  </string>
     <string name="roamingText1">بند اشارے رومنگ</string>
     <string name="roamingText2">اشارے فلیشنگ رومنگ</string>
@@ -112,6 +121,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="roamingText11">میں بینر رومنگ</string>
     <string name="roamingText12">بینر رومنگ بند</string>
     <string name="roamingTextSearching">سروس کے لئے تلاش</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>:نہیں بھیج</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> کے بعد  <xliff:g id="time_delay">{2}</xliff:g> سیکنڈ</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>:نہیں بھیج</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>:نہیں بھیج</string>
     <string name="fcComplete">خصوصیت کوڈ مکمل.</string>
     <string name="fcError">کنکشن کا مسئلہ یا جعلی خصوصیت کوڈ</string>
     <string name="httpErrorOk">اوکے</string>
@@ -130,8 +144,10 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="httpErrorFile">فائل تک رسائی حاصل نہیں ا ہے.</string>
     <string name="httpErrorFileNotFound">درخواست کی گئ فائل   نہیں ملی .</string>
     <string name="httpErrorTooManyRequests"> بہت سے درخواستوں پر عملدرآمد کیا جا رہا ہے. کچھ دیر بعد دوبارہ کوشش کریں.</string>
+    <string name="notification_title">سائن ان میں غلطی کے لئے <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
     <string name="contentServiceSync">ہم وقت ساز کریں</string>
     <string name="contentServiceSyncNotificationTitle">ہم وقت ساز کریں</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc"> \'بہت سارے<xliff:g id="content_type">%s</xliff:g> اخراج.</string>
     <string name="low_memory">فون سٹوریج مکمل ہے! کچھ فائلیں مفت خلا کو خارج کر دیں.</string>
     <string name="me">مجھے</string>
     <string name="power_dialog">فون کے اختیارات</string>
@@ -176,8 +192,12 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permgrouplab_developmentTools">ترقی کے اوزار</string>
     <string name="permgroupdesc_developmentTools">خصوصیات صرف ایپلی کیشنز ڈویلپرز کے لئے ضروری ہے.</string>
     <string name="permgrouplab_storage">محفوظ کرنے کی جگہ </string>
+    <string name="permgroupdesc_storage" product="nosdcard">یو ایس بی سٹوریج تک رسائی حاصل کریں. </string>
+    <string name="permgroupdesc_storage" product="default">ایس ڈی کارڈ تک رسائی حاصل کریں. </string>
     <string name="permlab_statusBar">اسٹیٹس بار کو غیر فعال یا ترمیم</string>
     <string name="permdesc_statusBar">ایپلی کیشنز کو اجازت  ہے کہ وہ اسٹیٹس بار غیر فعال کرین یا آاکنوں  میں اضافہ یا کمی   کرین.</string>
+    <string name="permlab_statusBarService">اسٹیٹس بار</string>
+    <string name="permdesc_statusBarService">درخواست اسٹیٹس بار کرنے کی اجازت دیتا ہے.</string>
     <string name="permlab_expandStatusBar">اسٹیٹس بار کو بڑھانے / ختم</string>
     <string name="permdesc_expandStatusBar">ایپلی کیشنز کو اجازت  ہے کہ وہ اسٹیٹس بار کو بڑھانے یا ختم کرے.</string>
     <string name="permlab_processOutgoingCalls">سبکدوش ہونے والے کالوں تقطیع</string>
@@ -188,6 +208,10 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_receiveSmsCB">ایپلی کیشنز کو اجازت  ہے کہ وہ   ایس ایم   ایس سی بی پیغامات موصول اور  ان   کی  پراسیسنگ  کرے,بدنیتی پر مبنیایپلی کیشن آپ کے پیغامات کی نگرانی یا ان کو آپ کو دکھا ے بغیر خارج کر سکتے ہیں.</string>
     <string name="permlab_receiveMms">ایم   ایم  ایس  موصول</string>
     <string name="permdesc_receiveMms">ایپلی کیشنز کو اجازت  ہے کہ وہ ایم ایم  ایس   پیغامات موصول اور  ان   کی  پراسیسنگ  کرے,بدنیتی پر مبنیایپلی کیشن آپ کے پیغامات کی نگرانی یا ان کو آپ کو دکھا ے بغیر خارج کر سکتے ہیں.</string>
+    <string name="permlab_receiveEmergencyBroadcast">ہنگامی صورت حال کی نشریات حاصل</string>
+    <string name="permdesc_receiveEmergencyBroadcast">"درخواست وصول کرنے کی اجازت دیتا ہے 
+      اور عمل کی ہنگامی نشریاتی پیغامات نہیں ہیں. یہ اجازت صرف اس صورت میں دستیاب ہے 
+      نظام ایپلی کیشنز."</string>
     <string name="permlab_sendSms">ایس ایم ایس پیغامات بھیجیں</string>
     <string name="permdesc_sendSms">ایپلی کیشنز کو اجازت  ہے کہ وہ  ایس ایم ایس کے پیغامات بھیجیں,بدنیتی پر مبنی ایپلی کیشنز  تصدیق کے  بغیر پیغامات بھیج  کر آپ کا پیسہ خرچ کر سکتے ہیں.</string>
     <string name="permlab_readSms">SMS یا   ایم   ایم  ایس پڑھیں</string>
@@ -344,6 +368,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_vibrate">ایپلی کیشنز کو اجازت  ہے کہ وہ  تھرتھراہٹ   کنٹرول کرے.</string>
     <string name="permlab_flashlight">کنٹرول ٹارچ</string>
     <string name="permdesc_flashlight">ایپلی کیشنز کو اجازت  ہے کہ وہ فلیش روشنی  کو  کنٹرول کرے.</string>
+    <string name="permlab_manageUsb">یو ایس بی کے الات کے لئے ترجیحات اور اجازت کا انتظام</string>
+    <string name="permdesc_manageUsb">درخواست کی ترجیحات اوریو ایس بی آلات کے لئے اجازت کا انتظام کرنے کی اجازت دیتا ہے.</string>
     <string name="permlab_hardware_test">ٹیسٹ ہارڈویئر</string>
     <string name="permdesc_hardware_test">ایپلی کیشنز کو اجازت  ہے کہ وہ ہارڈ ویئر ٹیسٹنگ کے مقصد کے لئے  مختلف بیرونی آلات کو کنٹرول کرے .</string>
     <string name="permlab_callPhone">براہ راست فون نمبر کو کال</string>
@@ -406,10 +432,19 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_changeWifiState">درخواست کو وائی فائی رسائی پوائنٹس سے رابطہ قائم کرنے اور  منقطع، اور وائی فائی نیٹ ورک کی تشکیل کرنے کے لئے تبدیلیاں کرنے  کی اجازت  دیں.</string>
     <string name="permlab_changeWifiMulticastState">وائی ​​فائی کے کثیر نشریات سے استقبال کرنےکی اجازت دیں</string>
     <string name="permdesc_changeWifiMulticastState">ایپلی کیشنز کو اجازت دیتا  ہے کہ وہ  براہ راست  پیکٹ وصول نہیں کرے. قریب کی طرف سے پیش  دریافت خدمات کے لئیے  مفیدہے۔ غیر کثیر نشریات کے موڈ کے مقابلے میں یہ زیادہ سے زیادہ طاقت کا استعمال کرتا ہے.</string>
+    <string name="permlab_accessWimaxState">وائی ​​میکس سٹیٹ ملاحظہ کریں</string>
+    <string name="permdesc_accessWimaxState">"ایک درخواست کو دیکھنے کے لئے اجازت دیتا ہے 
+      وائی ​​میکس کی حالت کے بارے میں معلومات. " </string>
+    <string name="permlab_changeWimaxState">وائی ​​میکس ریاست میں تبدیلی </string>
+    <string name="permdesc_changeWimaxState">"ایک درخواست رابطہ قائم کرنے کی اجازت دیتا ہے 
+      اور وائی میکس نیٹ ورک سے منقطع کریں. " </string>
     <string name="permlab_bluetoothAdmin">بلوٹوت انتظامیہ</string>
     <string name="permdesc_bluetoothAdmin">درخواست کو مقامی بلوٹوت فون کےترتیب،   اور ریموٹ آلات کو دریافت اور انکے ساتھ جوڑی کرنے کی اجازت دیں.</string>
     <string name="permlab_bluetooth">بلوٹوت کنکشن تشکیل دے</string>
     <string name="permdesc_bluetooth">درخواست کو مقامی بلوٹوت فون کی ترتیب دیکھنے اور قبول کرنے کے لئے ، جوڑ بنانے کے آلات کے ساتھ کنکشن بنانے کے لئے اجازت  دیں.</string>
+    <string name="permlab_nfc">فیلڈ مواصلات کے قریب کنٹرول</string>
+    <string name="permdesc_nfc">"ایک درخواست پر بات چیت کرنے کی اجازت دیتا ہے
+      کے ساتھ قریب فیلڈ مواصلات ٹیگ (این ایف سی)، کارڈ، اور قارئین کو. " </string>
     <string name="permlab_disableKeyguard">اہم تالا کو غیر فعال کر دیتے ہیں</string>
     <string name="permdesc_disableKeyguard">درخواست  کو  لاک  اور کسی بھی متعلقہ پاس ورڈ کی سیکورٹی کو غیر فعال کرنے کی  اجازت  دیں،اس کی ایک جائز مثال  کی لاک کا آنے والی فون کال  پر  غیر فعال  ھونا ھے،  اور کال ختم ہونے پر دوبارہ فعال  ھونا ھے.</string>
     <string name="permlab_readSyncSettings">مطابقت پذیری کی ترتیبات پڑھیں</string>
@@ -426,8 +461,15 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_readDictionary">درخواست کو کسی نجی الفاظ ،  نام اور جملے پڑھنے  کی  اجازت  دیں جو صارف نے  صارف لغت میں ذخیرہ کیے ہیں .</string>
     <string name="permlab_writeDictionary">صارف کی بنائ ھوئ ڈکشنری میں لکھنا</string>
     <string name="permdesc_writeDictionary">درخواست کو صارف کی  ڈکشنری میں نئے الفاظ لکھنے کے لئے اجازت  دیں.</string>
+    <string name="permlab_sdcardWrite" product="nosdcard">  نظر ثانی / یو ایس بی سٹوریج مواد خارج</string>
+    <string name="permlab_sdcardWrite" product="default">ایس ڈی کارڈ کے مندرجات پر نظر ثانی / حذف</string>
+    <string name="permdesc_sdcardWrite" product="nosdcard">یو ایس بی سٹوریج کے لئے ایک درخواست لکھنے کے لئے اجازت دیتا ہے. </string>
+    <string name="permdesc_sdcardWrite" product="default">ایس ڈی  کارڈ کے لئے ایک درخواست لکھنے کے لئے اجازت دیتا ہے. </string>
     <string name="permlab_cache_filesystem">کیشے فائل نظام تک رسائی</string>
     <string name="permdesc_cache_filesystem">درخواست کو کیشے فائل سسٹم کو پڑھنے  اور لکھنے  کی  اجازت  دیں.</string>
+    <string name="permlab_use_sip">انٹرنیٹ فون کالز / موصول</string>
+    <string name="permdesc_use_sip">ایک درخواست سیپ سروس انٹرنیٹ کالز / حاصل کرنے کے لئے استعمال کرنے کی اجازت دیتا ہے.
+</string>
     <string name="policylab_limitPassword">پاس ورڈ کو محدود</string>
     <string name="policydesc_limitPassword">آپکو پاس ورڈ کی محدود اقسام   کو استعمال کرنے کی اجازت دی گئی ہے</string>
     <string name="policylab_watchLogin">لاگ ان کرنے کی کوشش دیکھتے ہیں</string>
@@ -492,10 +534,12 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="phoneTypeCallback">واپسی کال</string>
     <string name="phoneTypeCar">کار</string>
     <string name="phoneTypeCompanyMain">کمپنی مرکزی</string>
+    <string name="phoneTypeIsdn">ائ ایس ڈی اے ن</string>
     <string name="phoneTypeMain">مرکزی</string>
     <string name="phoneTypeOtherFax">دیگر فیکس</string>
     <string name="phoneTypeRadio">ریڈیو</string>
     <string name="phoneTypeTelex">ٹیلیکس</string>
+    <string name="phoneTypeTtyTdd">ٹی ٹی وائ  ٹی ڈی ڈی</string>
     <string name="phoneTypeWorkMobile">ورک موبائل</string>
     <string name="phoneTypeWorkPager">ورک پیجر </string>
     <string name="phoneTypeAssistant">اسسٹنٹ</string>
@@ -517,6 +561,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="imTypeWork">لفظ تجاویز</string>
     <string name="imTypeOther">دیگر</string>
     <string name="imProtocolCustom">اپنی مرضی کے</string>
+    <string name="imProtocolAim">اے آئ ایم</string>
     <string name="imProtocolMsn">ونڈو لائو</string>
     <string name="imProtocolYahoo">یاہو</string>
     <string name="imProtocolSkype">اسکائپ</string>
@@ -526,6 +571,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="orgTypeWork">لفظ تجاویز</string>
     <string name="orgTypeOther">دیگر</string>
     <string name="orgTypeCustom">اپنی مرضی کے</string>
+    <string name="contact_status_update_attribution">کے ذریعے <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> کے ذریعے <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
     <string name="keyguard_password_enter_pin_code">PIN کوڈ درج کریں</string>
     <string name="keyguard_password_enter_password_code">انلاک پاس ورڈ درج کریں</string>
     <string name="keyguard_password_wrong_pin_code">غلط PIN کوڈ!</string>
@@ -580,7 +627,9 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_return_to_call">فون کرنے پر واپس جائیں</string>
     <string name="lockscreen_pattern_correct">صیح!</string>
     <string name="lockscreen_pattern_wrong">معاف کیجئے گا، دوبارہ کوشش کریں</string>
+    <string name="lockscreen_plugged_in">چارج (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_charged">چارج</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_low_battery">اپنے چارجر متصل کریں.</string>
     <string name="lockscreen_missing_sim_message_short">کوئی سم کارڈ نہی.</string>
     <string name="lockscreen_missing_sim_message">فون میں کوئی سم کارڈ.نہیں۔</string>
@@ -592,6 +641,10 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_sim_puk_locked_instructions">براہ مہربانی یوزر گائیڈ یا کسٹمر سروس سے رابطہ کریں.</string>
     <string name="lockscreen_sim_locked_message">سم کارڈ لاک ہے.</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message">سم کارڈ غیر مقفل کریں\u2026</string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">آپ نےغلط طریقے سے   ان لاک پیٹرن کھولنے چاھا ھے  <xliff:g id="number">%d</xliff:g>  اوقات.   \n\n براہ مہربانی اس میں دوبارہ کوشش کریں    <xliff:g id="number">%d</xliff:g> سیکنڈ.</string>
+    <string name="lockscreen_failed_attempts_almost_glogin">آپ نےغلط طریقے سے   ان لاک پیٹرن کھولنے چاھا ھے    <xliff:g id="number">%d</xliff:g> . بعد میں <xliff:g id="number">%d</xliff:g>زیادہ سے زیادہ ناکام کوششیں، 
+آپ اپنے فون میں اپنے گوگل کی علامت استعمال کرنے کے لئے کھولنے کا کہا جائے گا  n\n\ براہ مہربانی اس میں دوبارہ کوشش کریں  <xliff:g id="number">%d</xliff:g>                    سیکنڈ.       </string>
+    <string name="lockscreen_too_many_failed_attempts_countdown">میں دوبارہ کوشش کریں  <xliff:g id="number">%d</xliff:g> سیکنڈ.</string>
     <string name="lockscreen_forgot_pattern_button_text">پیٹرن بھول گیا؟</string>
     <string name="lockscreen_glogin_forgot_pattern">اکاؤنٹ کھولنے کی</string>
     <string name="lockscreen_glogin_too_many_attempts"> بہت سے پیٹرن کو کرنے کی کوشش!</string>
@@ -604,18 +657,27 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_unlock_label">غیر مقفل</string>
     <string name="lockscreen_sound_on_label">آواز پر ہو</string>
     <string name="lockscreen_sound_off_label">آواز بند ہو</string>
+    <string name="password_keyboard_label_symbol_key">\?123</string>
     <string name="password_keyboard_label_alpha_key">ABC</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
     <string name="factorytest_failed">فیکٹری ٹیسٹ ناکام</string>
     <string name="factorytest_not_system"> فیکٹری_\'ٹیسٹ  کارروائی صرف نظام / ایپلی کیشنز میں نصب پیکجوں کے لئے  ہے</string>
     <string name="factorytest_no_action">"کوئی پیکج نہیں پایا گیا ہے کہ فیکٹری  ٹیسٹ  فراہم کرتا ہے."          </string>
     <string name="factorytest_reboot">پھر بوٹ کریں</string>
+    <string name="js_dialog_title">پر صفحے: \'<xliff:g id="title">%s</xliff:g>\' کا کہنا ہے کہ:</string>
     <string name="js_dialog_title_default">JavaScript</string>
+    <string name="js_dialog_before_unload">اس صفحہ سے دور تشریف لے جائیں؟ \n\n<xliff:g id="message">%s</xliff:g>\n\n منتخب کریں ٹھیک ہے جاری رکھنے کے، یا  منسوخ. موجودہ صفحے پر رہنے کے لئے.</string>
     <string name="save_password_label">تصدیق</string>
     <string name="double_tap_toast">ترکیب:  زوم سےباہراندر کیلئے ڈبل دبائیں.</string>
     <string name="permlab_readHistoryBookmarks">براؤزر \ \'کی تاریخ اور بک مارکس پڑھیں</string>
     <string name="permdesc_readHistoryBookmarks">ایپلی کیشنز کو اجازت  ہے کہ  ان  تمام یو آر ایل کو پڑھے   جن  کا  براؤزر  نے  دورہ کیا , اور براؤزر کے سب  \'بک مارکس کو  بھی پڑھے.</string>
     <string name="permlab_writeHistoryBookmarks">براؤزر ڈیٹا اور بک مارکس لکھیں</string>
     <string name="permdesc_writeHistoryBookmarks">درخواست کو آپ کے براؤزر کی تاریخ یا  اکٹھے  بک مارکس پر نظر ثانی کرنے کی  اجازت  دیں۔  مضر ایپلی کیشنز اس کا استعمال  آپ کے براؤزر کے ڈیٹا کو مٹا نے یا تبدیل کرنے کے لیےکر سکتی ہیں.</string>
+    <string name="permlab_setAlarm">الارم کی گھڑی میں الارم مقرر </string>
+    <string name="permdesc_setAlarm">درخواست میں ایک الارم کا تعین کرنے کی اجازت دیتا ہے 
+      ایک نصب خطرے کی گھنٹی گھڑی درخواست کچھ الارم کلاک کی درخواستوں کرسکتے ہیں. 
+      اس سہولت کا لاگو نہیں. </string>
     <string name="permlab_writeGeolocationPermissions">براؤزر جغرافیائی محل وقوع کے اجازت نامے میں ترمیم کریں</string>
     <string name="permdesc_writeGeolocationPermissions">درخواست کو براؤزر کے جغرافیائی محل وقوع کی اجازت پر نظر ثانی کرنے کی  اجازت  دیں-بدنیتی پر مبنی درخواستیں اس کو صوابدیدی ویب سائٹوں کے لئے جگہ کی معلومات بھیجنے کی اجازت دینے کے لئے استعمال کر سکتی  ہیں.</string>
     <string name="save_password_message">کیا آپ چاہتے ہیں   براؤزر پاس ورڈ کو یاد  رکھے؟</string>
@@ -634,70 +696,76 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="beforeOneMonthDurationPast">اس سے پہلے کہ 1 مہینے پہلے</string>
     <plurals name="num_seconds_ago">
         <item quantity="one">1 سیکنڈ پہلے</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>  سیکنڈ پہلے</item>
     </plurals>
     <plurals name="num_minutes_ago">
         <item quantity="one">1 منٹ قبل</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>  منٹ پہلے </item>
     </plurals>
     <plurals name="num_hours_ago">
         <item quantity="one">1 گھنٹہ پہلے</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> گھنٹے پہلے </item>
+    </plurals>
+    <plurals name="last_num_days">
+        <item quantity="other">خری  <xliff:g id="count">%d</xliff:g>  دنوں</item>
     </plurals>
     <string name="last_month">گزشتہ ماہ</string>
     <string name="older"> زیادہ پرانا</string>
     <plurals name="num_days_ago">
         <item quantity="one">گزشتہ کل</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>  دن پہلے</item>
     </plurals>
     <plurals name="in_num_seconds">
         <item quantity="one">دوسری میں</item>
-        <item quantity="other"></item>
+        <item quantity="other">میں  <xliff:g id="count">%d</xliff:g>سیکنڈ</item>
     </plurals>
     <plurals name="in_num_minutes">
         <item quantity="one">1 منٹ میں</item>
-        <item quantity="other"></item>
+        <item quantity="other">میں  <xliff:g id="count">%d</xliff:g> منٹ</item>
     </plurals>
     <plurals name="in_num_hours">
         <item quantity="one">1 گھنٹے میں</item>
-        <item quantity="other"></item>
+        <item quantity="other">میں  <xliff:g id="count">%d</xliff:g> گھنٹے</item>
     </plurals>
     <plurals name="in_num_days">
         <item quantity="one">کل</item>
-        <item quantity="other"></item>
+        <item quantity="other">میں  <xliff:g id="count">%d</xliff:g> دن</item>
     </plurals>
     <plurals name="abbrev_num_seconds_ago">
         <item quantity="one">1 سیکنڈ پہلے</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>  سیکنڈ پہلے</item>
     </plurals>
     <plurals name="abbrev_num_minutes_ago">
         <item quantity="one">1 منٹ قبل</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>منٹس قبل </item>
     </plurals>
     <plurals name="abbrev_num_hours_ago">
         <item quantity="one">1 گھنٹہ پہلے</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> گھنٹے پہلے </item>
     </plurals>
     <plurals name="abbrev_num_days_ago">
         <item quantity="one">گزشتہ کل</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>  دن پہلے</item>
     </plurals>
     <plurals name="abbrev_in_num_seconds">
         <item quantity="one">دوسری میں</item>
-        <item quantity="other"></item>
+        <item quantity="other">میں  <xliff:g id="count">%d</xliff:g> سیکنڈ</item>
     </plurals>
     <plurals name="abbrev_in_num_minutes">
         <item quantity="one">1 منٹ میں</item>
-        <item quantity="other"></item>
+        <item quantity="other">میں  <xliff:g id="count">%d</xliff:g> منٹ</item>
     </plurals>
     <plurals name="abbrev_in_num_hours">
         <item quantity="one">1 گھنٹے میں</item>
-        <item quantity="other"></item>
+        <item quantity="other">میں  <xliff:g id="count">%d</xliff:g> گھنٹے</item>
     </plurals>
     <plurals name="abbrev_in_num_days">
         <item quantity="one">کل</item>
-        <item quantity="other"></item>
+        <item quantity="other">میں  <xliff:g id="count">%d</xliff:g> دن</item>
     </plurals>
+    <string name="preposition_for_date">شروع  <xliff:g id="date" example="May 29">%s</xliff:g></string>
+    <string name="preposition_for_time">پر <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+    <string name="preposition_for_year">میں <xliff:g id="year" example="2003">%s</xliff:g></string>
     <string name="day">یوم</string>
     <string name="days">ایام</string>
     <string name="hour">گھنٹے</string>
@@ -714,10 +782,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="VideoView_error_text_invalid_progressive_playback">معاف کیجئے گا، یہ ویڈیو اس آلے کے لئے  درست نہیں ہے.</string>
     <string name="VideoView_error_text_unknown">معاف کیجئے گا، اس ویڈیو ادا نہیں کیا جا سکتا ہے.</string>
     <string name="VideoView_error_button">اوکے</string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
     <string name="noon">دوپہر</string>
     <string name="Noon">دوپہر</string>
     <string name="midnight">"آدھی رات"</string>
     <string name="Midnight">"آدھی رات"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
     <string name="selectAll">تمام منتخب </string>
     <string name="selectText">متن کو منتخب کریں</string>
     <string name="cut">کاٹو</string>
@@ -725,6 +796,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="paste">چسپاں</string>
     <string name="copyUrl">کاپی یو آر ایل</string>
     <string name="inputMethod">ان پٹ کا طریقہ</string>
+    <string name="addToDictionary">"شامل کریں\"<xliff:g id="word" example="rickroll">%s</xliff:g>\" ڈکشنری میں</string>
     <string name="editTextMenuTitle">متن میں ترمیم کریں</string>
     <string name="low_internal_storage_view_title">جگہ کم</string>
     <string name="low_internal_storage_view_text">فون سٹوریج کی جگہ کم ہو رہی ہے.</string>
@@ -739,12 +811,37 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="alwaysUse">اس کارروائی کے لئےپہلے سے طے شدہ کام  کریں.</string>
     <string name="clearDefaultHintMsg"> ڈیفالٹ ہوم ترتیبات&gt;  ایپلی کیشنز &gt; صاف کریں</string>
     <string name="chooseActivity">ایک ایکشن منتخب کریں</string>
+    <string name="chooseUsbActivity">یو ایس بی آلہ کے لئے ایک درخواست کو منتخب کریں </string>
     <string name="noApplications">کوئی ایپلی کیشنز اس کارروائی کو انجام کر سکتے ہیں.</string>
+    <string name="crash_application">درخواست <xliff:g id="application">%1$s</xliff:g>
+        (pعمل<xliff:g id="process">%2$s</xliff:g>)غیر متوقع طور پر بند کر دیا نظام کی خرابی کی مرمت کرنے میں ناکام رہے براہ مہربانی دوسرے سافٹ ویئر کا استعمال کریں...</string>
+    <string name="crash_process">عمل  <xliff:g id="process">%1$s</xliff:g> غیر متوقع طور پر بند کر دیا ہے. نظام کی خرابی کی مرمت کرنے میں ناکام براہ مہربانی دوسرے سافٹ ویئر کا استعمال کریں. ہے.</string>
     <string name="aerr_title">معاف کیجئے گا!</string>
+    <string name="aerr_application">درخواست <xliff:g id="application">%1$s</xliff:g>
+        (عمل<xliff:g id="process">%2$s</xliff:g>) غیر متوقع طور پر بند کر دیا ہے. براہ مہربانی دوبارہ کوشش کریں.</string>
+    <string name="aerr_process">عمل <xliff:g id="process">%1$s</xliff:g>غیر متوقع طور پر بند کر دیا. براہ مہربانی دوبارہ کوشش کریں.</string>
     <string name="anr_title">معاف کیجئے گا!</string>
+    <string name="anr_activity_application"> سرگرمی <xliff:g id="activity">%1$s</xliff:g> (درخواست میں <xliff:g id="application">%2$s</xliff:g>) جواب نہیں دے رہی ہے.</string>
+    <string name="anr_activity_process"> سرگرمی <xliff:g id="activity">%1$s</xliff:g> (عمل میں <xliff:g id="application">%2$s</xliff:g>) جواب نہیں دے رہی ہے.</string>
+    <string name="anr_application_process">درخواست <xliff:g id="application">%1$s</xliff:g> (اس عمل میں<xliff:g id="process">%2$s</xliff:g>)جواب نہیں ہے.</string>
+    <string name="anr_process">عمل <xliff:g id="process">%1$s</xliff:g> جواب  نہیں دے رہا.</string>
     <string name="force_close">زبردستی  بند</string>
     <string name="report">کی اطلاع</string>
     <string name="wait">انتظار کریں</string>
+    <string name="launch_warning_title">دوبارہ ہدایت کی درخواست </string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g>اب چالو ہے.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> اصل میں شروع کیا.</string>
+    <string name="smv_application">درخواست <xliff:g id="application">%1$s</xliff:g>
+        (عمل <xliff:g id="process">%2$s</xliff:g>) اس نے اپنی خود نافذ سخت موڈ پالیسی کی خلاف ورزی کی.</string>
+    <string name="smv_process">عمل<xliff:g id="process">%1$s</xliff:g> اس کے خود نافذ سخت موڈ پالیسی کی خلاف ورزی کی ہے.</string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> چل رہا ہے</string>
+    <string name="heavy_weight_notification_detail">درخواست کرنے کے لئے سوئچ کرنے کے لئے منتخب کریں </string>
+    <string name="heavy_weight_switcher_title">درخواستوں سوئچ؟</string>
+    <string name="heavy_weight_switcher_text">انہوں نے کہا کہ ایک اور درخواست پہلے ہی چل رہا ہے اس سے پہلے کہ آپ ایک نیا شروع کیا جا سکتا ہے روکا ضروری ہے. </string>
+    <string name="old_app_action">پر واپس جائیں <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="old_app_description"> نئی درخواست شروع نہیں کرتے ہیں.</string>
+    <string name="new_app_action">شروع کریں <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="new_app_description">بچت کے بغیر پرانے درخواست کرنا بند کرو.</string>
     <string name="sendText">متن کے لئے ایک ایکشن منتخب کریں</string>
     <string name="volume_ringtone">رنگر حجم</string>
     <string name="volume_music">میڈیا کا حجم</string>
@@ -757,6 +854,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="volume_notification">نوٹیفکیشن کا حجم</string>
     <string name="volume_unknown">حجم </string>
     <string name="ringtone_default">پہلے سے طے شدہ رنگ ٹون</string>
+    <string name="ringtone_default_with_actual"><xliff:g id="actual_ringtone">%1$s</xliff:g>ڈیفالٹ رنگ ٹون  </string>
     <string name="ringtone_silent">خاموش</string>
     <string name="ringtone_picker_title">رنگ ٹونز</string>
     <string name="ringtone_unknown">نامعلوم  رنگ ٹون</string>
@@ -776,26 +874,64 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sms_control_no">منسوخ</string>
     <string name="date_time_set">سیٹنگز</string>
     <string name="default_permission_group">ڈیفالٹ</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
     <string name="no_permissions">ضرورت کی اجازت نہیں</string>
+    <string name="perms_hide"><b>چھپانے</b></string>
+    <string name="perms_show_all"><b>تمام دکھائیں</b></string>
     <string name="usb_storage_activity_title"> یو ایس بی ماس سٹوریج</string>
     <string name="usb_storage_title"> یو ایس بی  منسلک ھے</string>
+    <string name="usb_storage_message" product="nosdcard">آپ اپنے کمپیوٹر سے یو ایس بی کے ذریعے اپنے فون منسلک ہے نیچے دیے گئے بٹن کو منتخب کریں اگر آپ کو آپ کے کمپیوٹر اور آپ کی لوڈ، اتارنا اینڈراڈ  یو  یو ایس بی  سٹوریج کے درمیان فائلوں کو کاپی کرنا چاہتے ہیں. ہے.</string>
+    <string name="usb_storage_message" product="default">آپ اپنے کمپیوٹر سے  یو ایس بی کے ذریعے اپنے فون منسلک ہے نیچے دیے گئے بٹن کو منتخب کریں اگر آپ کو آپ کے کمپیوٹر اور آپ کی لوڈ، اتارنا اینڈراڈ  ایس ڈی کارڈ کے درمیان فائلوں کو کاپی کرنا چاہتے ہیں.</string>
     <string name="usb_storage_button_mount">یو ایس بی سٹوریج چلانا</string>
+    <string name="usb_storage_error_message" product="nosdcard">ایک یو ایس بی وپل سٹوریج کے لئے آپ کی یو ایس بی اسٹوریج کا استعمال کرتے ہوئے مسئلہ ہے. </string>
+    <string name="usb_storage_error_message" product="default">آپ ایس ڈی کارڈ  کے لئے یوایس بی بڑے پیمانے پر اسٹوریج کا استعمال کرتے ہوئے ایک مسئلہ ہے. </string>
     <string name="usb_storage_notification_title"> یو ایس بی  منسلک ھے</string>
     <string name="usb_storage_notification_message">آپ کے کمپیوٹر سے / فائلیں کاپی کرنے کے لئے منتخب کریں.</string>
     <string name="usb_storage_stop_notification_title"> یو ایس بی سٹوریج بند کردیں</string>
     <string name="usb_storage_stop_notification_message">یو  ایس   بی  سٹوریج تبدیل کرنے کے لئے منتخب کریں.</string>
     <string name="usb_storage_stop_title">یو ایس بی سٹوریج استعمال میں ھے </string>
+    <string name="usb_storage_stop_message" product="nosdcard">ایس بی اسٹوریج کی طرف رجوع سے پہلے، اس بات کا یقین کر لیں کہ  الگ ہے (\u201cاخراج شدہ\u201d)  آپ اینڈراڈ\u2018s  یوایس بی آپ کے کمپیوٹر سے سٹوریج.</string>
+    <string name="usb_storage_stop_message" product="default"> ایس بی اسٹوریج یو کی طرف رجوع سے پہلے، اس بات کا یقین کریں کہ الگ ہے   (\u201cاخراج شدہ\u201d)  آپ اینڈراڈ\u2018s ایس ڈی کارڈ اپنے کمپیوٹر سے. </string>
     <string name="usb_storage_stop_button_mount"> یو ایس بی سٹوریج بند کردیں</string>
     <string name="usb_storage_stop_error_message">یو ایس بی سٹوریج کی طرف رجوع کرنے میں مسئلہ تھا. اس بات کا یقین کر لیں کہ آپ یو ایس بی میزبان ان ماونٹ  ہے ، پھر دوبارہ کوشش کریں.</string>
     <string name="dlg_confirm_kill_storage_users_title">یو ایس بی سٹوریج چلانا</string>
     <string name="dlg_confirm_kill_storage_users_text">اگر یو ایس بی سٹوریج چالو ہے تو کچھ ایپلی کیشنز آپ استعمال کر رہے ہیں بند ھو جائینگی اور دستیاب نہیں ہوگی جب تک کہ آپ USB یو ایس بی سٹوریج کو بندنھ  کر دیں.</string>
     <string name="dlg_error_title">یو ایس بی  آپریشن میں ناکام رہے</string>
     <string name="dlg_ok">اوکے</string>
+    <string name="extmedia_format_title" product="nosdcard">فارمیٹ یو ایس بی سٹوریج</string>
+    <string name="extmedia_format_title" product="default">فارمیٹ ایس ڈی کارڈ</string>
+    <string name="extmedia_format_message" product="nosdcard">فارمیٹ یو ایس بی سٹوریج، وہاں محفوظ کی تمام فائلوں کو صاف؟ ایکشن کو الٹا نہیں کیا جا سکتا ہے!</string>
+    <string name="extmedia_format_message" product="default">کیا آپ اس بات کا یقین کر لیں کہ آپ ایس ڈی کارڈ کو فارمیٹ کرنا چاہتے ہیں آپ کے کارڈ پر موجود تمام ڈیٹا ختم ہو جائے گا؟ .</string>
     <string name="extmedia_format_button_format">فارمیٹ</string>
     <string name="adb_active_notification_title"> یو ایس بی پرکھنے کے لئے  منسلک ہے</string>
     <string name="adb_active_notification_message">   یو  ایس   بی چیک کو غیر فعال کرنے کے لئے منتخب کریں.</string>
     <string name="select_input_method">ان پٹ طریقہ منتخب کریں</string>
+    <string name="fast_scroll_alphabet">u0020\ ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="fast_scroll_numeric_alphabet">u0020\ 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="candidates_style"><u> امیدوار</u></string>
+    <string name="ext_media_checking_notification_title" product="nosdcard">یوایسبی سٹوریج تیار</string>
+    <string name="ext_media_checking_notification_title" product="default">ایس ڈی  کارڈ تیار</string>
     <string name="ext_media_checking_notification_message">خرابیوں کے لئے پڑتال کر رہا ہے.</string>
+    <string name="ext_media_nofs_notification_title" product="nosdcard">خالی یوایس بی سٹوریج </string>
+    <string name="ext_media_nofs_notification_title" product="default">خالی ایس ڈی کارڈ </string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard">یو ایس بی سٹوریج یا خالی ناجائز فائل سسٹم ہے.</string>
+    <string name="ext_media_nofs_notification_message" product="default">ایس ڈی کارڈ یا خالی ناجائز فائل سسٹم ہے. </string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">یو ایس  بی سٹوریج نقصان پہنچا</string>
+    <string name="ext_media_unmountable_notification_title" product="default">خراب ایس ڈی کارڈ </string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">یو ایس بی سٹوریج نقصان پہنچا ہے تم نے اسے دوبارہ سوروپت کرنا پڑ سکتا ہے. ہے.</string>
+    <string name="ext_media_unmountable_notification_message" product="default">ایس ڈی کارڈ نقصان پہنچا ہے تم نے اسے دوبارہ سوروپت کرنا پڑ سکتا ہے. ہے. </string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">یو ایس بی سٹوریج غیر متوقع طور پر ہٹا دیا </string>
+    <string name="ext_media_badremoval_notification_title" product="default">ایس ڈی غیر متوقع طور پر ہٹا دیا کارڈ </string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">ڈیٹا کو نقصان سے بچنے کے لئے اتارنے سے پہلے اتاریں یو ایس بی سٹوریج.</string>
+    <string name="ext_media_badremoval_notification_message" product="default">اتاریں ایس ڈی کارڈ کے ڈیٹا کے نقصان سے بچنے کے لئے اتارنے سے پہلے.</string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">یو ایس بی سٹوریج ہٹا محفوظ </string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">ایس ڈی  کارڈ محفوظ ختم کرنے کے لئے </string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">آپ  یو ایس بی سٹوریج محفوظ طریقے سے ختم کر سکتے ہیں. </string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">آپ ایس ڈی کارڈ محفوظ طریقے سے ہٹا سکتے ہیں. </string>
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">یوایسبی سٹوریج ہٹا دیں</string>
+    <string name="ext_media_nomedia_notification_title" product="default">ایس ڈی کارڈ ہٹا دیں</string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">یو ایس بی سٹوریج ہٹا نئے میڈیا ڈالیں. ہے. </string>
+    <string name="ext_media_nomedia_notification_message" product="default">ایس ڈی کارڈ کو ہٹا دیا ہے کہ وہ ایک نیا ڈالیں. ہے. </string>
     <string name="activity_list_empty">نہیں ملاپ کے سرگرمیوں ملی.</string>
     <string name="permlab_pkgUsageStats">کسی بھی حصے کے استعمال کے اعداد و شمار کو تازہ کریں</string>
     <string name="permdesc_pkgUsageStats">جمع اجزاء کے اعداد و شمار کی ترمیم کی اجازت دیتا ہے. عام ایپلی کیشنز کی طرف سے استعمال کے لئے نہیں.</string>
@@ -809,6 +945,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="ime_action_next">اگلا</string>
     <string name="ime_action_done">مکمل</string>
     <string name="ime_action_default">ایگزیکیوٹ</string>
+    <string name="dial_number_using">نمبر ڈائل کریںn\ کا استعمال <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="create_contact_using"> رابطہ بنائیں \n استعمال <xliff:g id="number" example="555">%s</xliff:g></string>
     <string name="accessibility_compound_button_selected">چیک کئے گئے</string>
     <string name="accessibility_compound_button_unselected">نہیں کی جانچ پڑتال</string>
     <string name="grant_credentials_permission_message_header">مندرجہ ذیل ایک یا ایک سے زیادہ ایپلی کیشنز سے کہ وہ آپ کے اکاؤنٹ تک رسائی حاصل کرنے کی  درخواست  ہے، اب اور مستقبل میں.</string>
@@ -817,11 +955,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="allow">اجازت دیں</string>
     <string name="deny">انکار کرتے ہیں</string>
     <string name="permission_request_notification_title">اجازت کی درخواست</string>
+    <string name="permission_request_notification_with_subtitle">کی  اکاؤنٹ  کے لیے n\ اجازت کی درخواست <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
     <string name="input_method_binding_label">ان پٹ کا طریقہ</string>
     <string name="sync_binding_label">ہم وقت ساز کریں</string>
     <string name="accessibility_binding_label">رسائی</string>
     <string name="wallpaper_binding_label">وال پیپر</string>
     <string name="chooser_wallpaper"> وال پیپر تبدیل</string>
+    <string name="alternate_eri_file">/اعداد و شمار/eri.xml</string>
     <string name="pptp_vpn_description">پوائنٹ کے پوائنٹ  پروٹوکول</string>
     <string name="l2tp_vpn_description">لیئر پروٹوکول سرنگ</string>
     <string name="l2tp_ipsec_psk_vpn_description"> ایل  ٹی پی2 / آئی پی سیک وی پی این پری مشترکہ کلید</string>
@@ -863,12 +1003,34 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="china_telecom_numeric_values">چین کی ٹیلی کام</string>
     <string name="stk_refresh_sim_init_message">سم کارڈ کو اپ ڈیٹ کیا جاتا ہے</string>
     <string name="stk_refresh_sim_reset_message">فون دوبارہ شروع ہو جائے گا</string>
+    <string name="custom_china_mobile">چائنا موبائل </string>
+    <string name="custom_china_unicom">چائنا یونی کام</string>
     <string name="charge_active_notification_message">صرف فعال موڈ چارج</string>
     <string name="charge_active_notification_title">استعمال کریں چارج صرف اس وقت جب یو ایس بی  سے منسلک ہوں</string>
+    <string name="shutdown_after_seconds">فون  اس کے بعد بند ہو جائے گا <xliff:g id="NUMBER">%d</xliff:g> سیکنڈ</string>
+    <string name="lockscreen_password_error">پاس ورڈ کی غلطی ہے، دوبارہ کوشش کریں!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message"> آپ اپنے کھولنےکا پاس ورڈ غلط ان پٹ کر رھے ھیں   <xliff:g id="number">%d</xliff:g> اوقات.  n\n\   براہ مہربانی اس میں دوبارہ کوشش کریں  <xliff:g id="number">%d</xliff:g>   سیکنڈ.</string>
+    <string name="progress_unmounting" product="nosdcard">یو ایس بی سٹوریج علیحدھ کیا جا رہا ہے …</string>
+    <string name="progress_unmounting" product="default">ایس ڈی کارڈ علیحدھ  کیا جا رہا ہے …</string>
+    <string name="progress_erasing" product="nosdcard">یو ایس بی سٹوریج صاف کیا جا رہا ہے ...</string>
+    <string name="progress_erasing" product="default">ایس ڈی کارڈ صاف کیا جا رہا ہے ...</string>
+    <string name="format_error" product="nosdcard">یو ایس بی سٹوریج کو مٹانے میں ناکام ہے.</string>
+    <string name="format_error" product="default">ایس ڈی کارڈ کو مٹانے میں ناکام ہے.</string>
     <string name="media_bad_removal">" SD  کارڈ ان ماونٹ  کیا جا نے   سے پہلے ہٹا دیا گیا تھا."</string>
+    <string name="media_checking" product="nosdcard">یو ایس بی سٹوریج اس وقت جانچ پڑتال کی جا رہی ہے.</string>
+    <string name="media_checking" product="default">ایس ڈیکارڈ اس وقت جانچ پڑتال کی جا رہی ہے. </string>
     <string name="media_removed">" SD  کارڈ کو ہٹا دیا گیا ہے ہے."</string>
+    <string name="media_shared" product="nosdcard">یو ایس بی سٹوریج فی الحال ایک کمپیوٹر کے استعمال میں ہے.</string>
+    <string name="media_shared" product="default">ایس ڈی کارڈ فی الحال ایک کمپیوٹر کے استعمال میں ہے. </string>
     <string name="media_unknown_state">نامعلوم ھالت میں بیرونی ذرائع ابلاغ.</string>
+    <string name="audio_play_failed">معاف کرنا، یہ آڈیو نہیں کیا جا سکتا ہے. یہ  رنگ ٹون مقرر نہیں کریں .</string>
+    <string name="sms_full_body">موصولہ پیغام بھرا میموری کی وجہ سے مسترد کر دیا. براہ مہربانی پرانے پیغامات کو حذف کریں.</string>
     <string name="dialog_warning">!!انتباہ</string>
     <string name="internal_memory_low">SD کارڈ سٹوریج تقریبا مکمل ہے! براہ مہربانی کچھ فائلیں  کو  حذف کریں. </string>
     <string name="button_close">بند کریں</string>
+    <string name="unlock_screen_pin_error">پن غلطی ہے!</string>
+    <string name="ap_disconnected"> منقطع ھو گیا</string>
+    <string name="sim_chooser_title">سم سے انتخاب کریں </string>
+    <string name="lockscreen_miss_phone"> مس فون</string>
+    <string name="lockscreen_miss_mms">مس ایس ایم ایس</string>
 </resources>

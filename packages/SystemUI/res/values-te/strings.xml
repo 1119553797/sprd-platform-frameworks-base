@@ -1,4 +1,23 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">స్టేటస్ బార్</string>
+    <string name="status_bar_no_notifications_title">నోటిఫికేషన్లు</string>
+    <string name="status_bar_ongoing_events_title">జరుగుతున్న</string>
+    <string name="battery_low_title">ఛార్జర్ కనెక్ట్ దయచేసి</string>
+    <string name="battery_low_subtitle">బ్యాటరీ తక్కువగా ఉంది:</string>
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g>
+    లేదా తక్కువ మిగిలిన. </string>
+    <string name="battery_low_why">బ్యాటరీ ఉపయోగం</string>
+    <string name="usb_accessory_permission_prompt">USB అనుబంధాన్ని చేరుకోవడానికి  అప్లికేషన్ %1$s చేసేందుకు అనుమతించాలా?</string>
+    <string name="usb_device_confirm_prompt">ఓపెన్ చెయ్యి %1$s ఈ USB పరికరం ఎప్పుడు అనుసంధానించబడింది?</string>
+    <string name="usb_accessory_confirm_prompt">ఓపెన్ చెయ్యి %1$s ఈ USB సహాయ పరికరం ఎప్పుడు అనుసంధానించబడింది?</string>
+    <string name="usb_accessory_uri_prompt">ఈ USB యాక్సెసరీతో ఇన్స్టాల్ చేసి అప్లికేషన్లు ఏవీ పని చేయడం లేదు. వద్ద ఈ యాక్సెసరీ గురించి నేర్చుకోండి <xliff:g id="url">%1$s</xliff:g></string>
+    <string name="title_usb_accessory">USB అనుబంధం </string>
+    <string name="always_use_accessory">ఈ USB అనుబంధ సిద్ధంగా ఉపయోగించండి</string>
+    <string name="network_disconnect_title">విచారణ</string>
+    <string name="network_disconnect_message">WLAN నెట్ వర్క్ డిస్కనెక్ట్ అయ్యింది . \n3G ద్వారా కనెక్ట్ అవుతారా ? \n డేటా ప్రణాళికతో కూడిన నెట్ ని మీరు చేసినట్లైతే మీపై అదనపు చార్జీలు పడతాయి .</string>
+    <string name="weak_signal_title">బలహీనమైన సిగ్నల్</string>
+    <string name="weak_signal_message">ప్రస్తుత WLAN సిగ్నల్ చాలా బలహీనంగా ఉంది, మీరు ఒక మంచి ఎనన్నుకొనండి మద్దతిస్తాం</string>
+    <string name="auto_connect">అడగకండి మరియు స్వయంచాలకంగా ఇతర విశ్వసనీయ ap కనెక్ట్ లేదు</string>
 </resources>

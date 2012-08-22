@@ -1,13 +1,21 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="address_length">చిరునామా గరిష్ఠ పొడవు చేరుకుంది</string>
+    <string name="byteShort">B</string>
+    <string name="megabyteShort">MB</string>
     <string name="gigabyteShort">గిగా బైట్స్  </string>
     <string name="terabyteShort">టీబీ</string>
     <string name="petabyteShort">PB</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="untitled">&lt;శీర్షిక పెట్టబడలేదు&gt;</string>
+    <string name="ellipsis">\u2026</string>
     <string name="emptyPhoneNumber">(ఫోన్ నంబర్ లేదు)</string>
     <string name="unknownName">(తెలియని)</string>
     <string name="defaultVoiceMailAlphaTag">వాయిస్ మెయిల్</string>
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
     <string name="mmiError">కనెక్షన్ సమస్య లేదా చెల్లని MMI కోడ్. </string>
+    <string name="mmiFdnError">ఆపరేషన్ మాత్రమే స్థిర డయలింగ్ సంఖ్యలు తొలగించబడ్డాయి.</string>
     <string name="serviceEnabled">సేవ ప్రారంభించబడింది.</string>
     <string name="serviceEnabledFor">కోసం సేవ ప్రారంభించబడింది:</string>
     <string name="serviceDisabled">సేవ డిజేబుల్ చేయబడింది.</string>
@@ -98,6 +106,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="serviceClassDataAsync">ఒక సిమ్క్</string>
     <string name="serviceClassDataSync">సమకాలీకరించు</string>
     <string name="serviceClassPacket">ప్యాకెట్         </string>
+    <string name="serviceClassPAD">PAD</string>
     <string name="roamingText0">రోమింగ్ సూచిక ప్రారంభించబడింది</string>
     <string name="roamingText1">రోమింగ్ సూచిక నిలిపివేయబడింది</string>
     <string name="roamingText2">సూచిక ఫ్లాష్ చేస్తుంది రోమింగ్</string>
@@ -112,6 +121,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="roamingText11">రోమింగ్ బ్యానర్ ఆన్ లో ఉంది</string>
     <string name="roamingText12">రోమింగ్ బ్యానర్ ఆఫ్ లో ఉంది</string>
     <string name="roamingTextSearching">సేవా కోసం శోధిస్తోంది</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: ఫార్వార్డ్ చేయబడ లేదు</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> తర్వాత <xliff:g id="time_delay">{2}</xliff:g> సెకెన్లు</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: ఫార్వార్డ్ చేయబడ లేదు</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: ఫార్వార్డ్ చేయబడ లేదు</string>
     <string name="fcComplete">ఫీచర్ కోడ్ పూర్తి. ఫైలు విజయవంతంగా. </string>
     <string name="fcError">కనెక్షన్ సమస్య లేదా చెల్లని లక్షణం కోడ్. </string>
     <string name="httpErrorOk">సరి</string>
@@ -130,8 +144,10 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="httpErrorFile">ఫైల్ బదిలీ విజయవంతంగా పూర్తి.</string>
     <string name="httpErrorFileNotFound">అభ్యర్థించిన ఫైలు దొరకలేదు.</string>
     <string name="httpErrorTooManyRequests">చాలా అభ్యర్థనల ప్రాసెస్ చేయబడతాయి. తరువాత మళ్ళీ ప్రయత్నించండి.</string>
+    <string name="notification_title">సిగ్న్ ఇన్ ఎర్రొర్ ఫర్ <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
     <string name="contentServiceSync">సమకాలీకరించు</string>
     <string name="contentServiceSyncNotificationTitle">సమకాలీకరించు</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc">చాలా <xliff:g id="content_type">%s</xliff:g> తొలగిస్తే.</string>
     <string name="low_memory">ఫోన్ మెమరీ నిండినది, దయచేసి మీ ఫోనులో కొన్ని ఫైల్స్ ని తొలగించండి. </string>
     <string name="me">నాకు</string>
     <string name="power_dialog">ఫోన్ ఎంపికలు        </string>
@@ -177,8 +193,12 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permgrouplab_developmentTools">అభివృద్ధి పరికరాలు</string>
     <string name="permgroupdesc_developmentTools">అవసరమైన అప్లికేషన్ డెవలపర్లకు మాత్రమే </string>
     <string name="permgrouplab_storage">స్టోరేజ్</string>
+    <string name="permgroupdesc_storage" product="nosdcard">USB నిల్వ యాక్సెస్ చెయ్యండి.</string>
+    <string name="permgroupdesc_storage" product="default">SD  కార్డు ఆక్సెస్ చెయ్యండి.</string>
     <string name="permlab_statusBar">స్టేటస్ బార్ నిలిపి వేయి లేదా సవరించు</string>
     <string name="permdesc_statusBar">స్టేటస్ బార్ ని పని చేయకుండా చేయడానికి లేదా సిస్టమ్ చిహ్నాలను జోడించడానికీ మరియు తొలగించడానికీ ఒక అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string name="permlab_statusBarService">స్టేటస్ బార్</string>
+    <string name="permdesc_statusBarService">అప్లికేషన్ స్థితి బార్ అనుమతిస్తుంది.</string>
     <string name="permlab_expandStatusBar">స్టేటస్ బార్  విస్తరించు/పడిపోవడం</string>
     <string name="permdesc_expandStatusBar">స్టేటస్ బార్ విస్తరించడానికీ లేదా పోవడానికీ అప్లికేషన్ అనుమతిస్తుంది.
 </string>
@@ -190,6 +210,9 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_receiveSmsCB">ఒక అప్లికేషన్ SMSCB సందేశాలను అందుకోవడానికీ, మరియు ప్రక్రియలో ఉంచడానికీ  అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మానిటర్ మీ సందేశాలను గమనిస్తూ ఉండ వచ్చు లేదా మీకు వాటిని చూపకుండానే వాటిని తొలగించవచ్చు.</string>
     <string name="permlab_receiveMms">MMS అందుకుంటారు</string>
     <string name="permdesc_receiveMms">దరఖాస్తు అందుకున్న అనుమతిస్తుంది మరియు ప్రక్రియ MMS సందేశాలకు. హానికరమైన అప్లికేషన్లు మానిటర్ ఉండవచ్చ మీ సందేశాలు లేదా మీరు వాటిని చూపకుండా వాటిని తొలగించండి.</string>
+    <string name="permlab_receiveEmergencyBroadcast">అత్యవసర ప్రసారాలు అందుకుంటారు</string>
+    <string name="permdesc_receiveEmergencyBroadcast">అప్లికేషన్ ని స్వీకరించడానికి మిమ్మల్ని అనుమతిస్తుంది మరియు ప్రక్రియ అత్యవసర ప్రసార సందేశాలను వ్యవస్థ అనువర్తనాలలో అనుమతి మాత్రమే అందుబాటులో ఉంది.
+      . </string>
     <string name="permlab_sendSms">SMS సందేశాలు పంపవచ్చు</string>
     <string name="permdesc_sendSms">ఒక అప్లికేషన్ ని SMS సందేశాలు పంపడానికి మిమ్మల్ని అనుమతిస్తుంది.  హానికరమైన అప్లికేషన్లు మీ నిర్ధారణ లేకుండా సందేశాలు పంపడం ద్వారా మీకు డబ్బు ఖర్చు అయ్యేలా చేయవచ్చు.</string>
     <string name="permlab_readSms">SMS లేదా MMS చదవండి</string>
@@ -345,6 +368,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_vibrate">అప్లికేషన్ వైబ్రేటర్ ని నియంత్రించడానికి అనుమతిస్తుంది.  </string>
     <string name="permlab_flashlight">ఫ్లాష్ లైట్ నియంత్రణ</string>
     <string name="permdesc_flashlight">అప్లికేషన్ ఫ్లాష్ లైట్ ని నియంత్రించడానికి అనుమతిస్తుంది.  </string>
+    <string name="permlab_manageUsb">USB పరికరాల కోసం ప్రాధాన్యతలు మరియు అనుమతుల నిర్వహించేందుకు</string>
+    <string name="permdesc_manageUsb">అప్లికేషన్ ని USB  పరికరాల కోసం ప్రాధాన్యతలు మరియు అనుమతులను నిర్వహించేందుకు అనుమతిస్తుంది.</string>
     <string name="permlab_hardware_test">పరీక్ష హార్డ్వేర్</string>
     <string name="permdesc_hardware_test">అప్లికేషన్ హార్డువేర్ ​​పరిశీలన కోసం వివిధ పార్టులను నియంత్రించడానికి అనుమతిస్తుంది.  </string>
     <string name="permlab_callPhone">నేరుగా ఫోన్ నంబర్లు కాల్ చేయండి</string>
@@ -408,10 +433,17 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_changeWifiState">ఒక అప్లికేషన్ ని కనెక్ట్ అనుమతిస్తుందిమరియు Wi-Fi యాక్సెస్ పాయింట్లు నుండి డిస్కనెక్ట్ చెయ్యడానికి, మరియు మార్పులు చేయుటకు Wi-Fi నెట్ వర్క్లు కన్ఫిగర్.</string>
     <string name="permlab_changeWifiMulticastState">Wi-Fi బహుళ ప్రసార స్వీకరణను అనుమతిస్తాయి</string>
     <string name="permdesc_changeWifiMulticastState">ఒక అప్లికేషన్ ని మీ పరికరం చిరునామాకు  నేరుగా పంపబడని ప్యాకెట్లను అనుమతిస్తుంది. దానికి దగ్గరగా ఉండే సేవలు ఆఫర్ చేయబడినప్పుడే ఇది ఉపయోగకరం. ఇది నాన్-మల్టీ కాస్ట్ విధానం కన్నా ఎక్కువ విద్యుత్తుని ఉపయోగిస్తుంది.</string>
+    <string name="permlab_accessWimaxState">WiMAX రాష్ట్ర వీక్షించేందుకు</string>
+    <string name="permdesc_accessWimaxState">ఒక అప్లికేషన్ చూసేందుకు అనుమతిస్తుంది
+      డబ్ల్యు ఐ మాక్స్ రాష్ట్రంలో గురించి సమాచారం. </string>
+    <string name="permlab_changeWimaxState">డబ్ల్యు ఐ మాక్స్ రాష్ట్ర మార్చేందుకు</string>
+    <string name="permdesc_changeWimaxState">ఒక అప్లికేషన్ కనెక్ట్ అనుమతిస్తుంది  మరియు డబ్ల్యు ఐ మాక్స్ నెట్ వర్క్ నుండి డిస్కనెక్ట్ చెయ్యడానికి ఉపయోగపడుతుంది.</string>
     <string name="permlab_bluetoothAdmin">బ్లూటూత్ పరిపాలన</string>
     <string name="permdesc_bluetoothAdmin">ఒక అప్లికేషన్ ని  స్థానిక బ్లూటూత్ ఫోన్ ని ఆకృతీకరించుటకు మరియు రిమోట్ పరికరాలను కనుగొని, వాటితో జత చేయడానికీ అనుమతిస్తుంది.</string>
     <string name="permlab_bluetooth">బ్లూటూత్  అనుసంధానాలను సృష్టించు</string>
     <string name="permdesc_bluetooth">ఒక అప్లికేషన్ ని  స్థానిక బ్లూటూత్ ఫోన్ యొక్క ఆకృతీకరణను చూసేందుకూ, అలాగే జత చేసే పరికరాలతో అనుసంధానాలను తయారుచేయడానికీ మరియు అంగీకరించడానికీ అనుమతిస్తుంది. </string>
+    <string name="permlab_nfc">సమీప క్షేత్ర సంభాషణ నియంత్రణ</string>
+    <string name="permdesc_nfc">ఒక అప్లికేషన్ ని నియర్ ఫీల్డ్ కమ్యూనికేషన్ (NFC) టాగ్ లు, కార్డులు, మరియు పాఠకులతో కమ్యూనికేట్ చేయడానికి అనుమతిస్తుంది. </string>
     <string name="permlab_disableKeyguard">కీ లాక్  నిలిపి వేయి</string>
     <string name="permdesc_disableKeyguard">ఒక అప్లికేషన్ కీలోక్క్ మరియు ఏదైనా సంబంధిత పాస్వర్డ్ను భద్రతా సాధ్యం అనుమతిస్తుంది. ఈ యొక్క ఒక సక్రమమైన ఉదాహరణకు ఒక వచ్చే ఫోన్ కాల్, అప్పుడు కాల్ పూర్తి అయినప్పుడు కీలోక్క్ తిరిగి ఎనేబుల్ అందుకున్నప్పుడే కీలోక్క్ నిలిపివేసిన ఫోన్ ఉంది.</string>
     <string name="permlab_readSyncSettings">సమకాలీకరణ అమర్పులను చదవండి</string>
@@ -428,8 +460,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="permdesc_readDictionary">ఒక అప్లికేషన్ ని యూజర్ నిఘంటువులో యూజర్ భద్రపరుచుకున్న ఏ ప్రైవేట్  పదాలు, పేర్లు మరియు పద బంధాలనైనా చదవడానికి అనుమతిస్తుంది.</string>
     <string name="permlab_writeDictionary">యూజర్ నిర్వచించిన నిఘంటువు వ్రాయండి</string>
     <string name="permdesc_writeDictionary">ఒక అప్లికేషన్ ని యూజర్ నిఘంటువులోకి కొత్త పదాలను వ్రాయడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_sdcardWrite" product="nosdcard">తొలగించండి / సవరించడానికి USB నిల్వ విషయాలు</string>
+    <string name="permlab_sdcardWrite" product="default">SD కార్డు విషయాలు సవరించడానికి / తొలగించండి</string>
+    <string name="permdesc_sdcardWrite" product="nosdcard">USB  నిల్వకి రాయడానికి ఒక అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string name="permdesc_sdcardWrite" product="default">SD కార్డుకి రాయడానికి ఒక అప్లికేషన్ ని అనుమతిస్తుంది.</string>
     <string name="permlab_cache_filesystem">కాష్ ఫైల్ సిస్టమ్ యాక్సెస్</string>
     <string name="permdesc_cache_filesystem">ఒక అప్లికేషన్ ని కాషె ఫైల్ సిస్టమ్ ని చదవడానికీ మరియు రాయడానికీ అనుమతిస్తుంది.</string>
+    <string name="permlab_use_sip">ఇంటర్నెట్ కాల్స్ / అందుకోవడానికి</string>
+    <string name="permdesc_use_sip">ఒక అప్లికేషన్ ఇంటర్నెట్ కాల్స్ / అందుకోవడానికి సిప్ సేవ ఉపయోగపడుతుంది.</string>
     <string name="policylab_limitPassword">పాస్ వర్డ్ పరిమితం</string>
     <string name="policydesc_limitPassword">మీరు ఉపయోగించడానికి అనుమతించబడిన పాస్వర్డ్ రకాలు పరిమితం. </string>
     <string name="policylab_watchLogin">లాగిన్ ప్రయత్నాలు చూడండి</string>
@@ -495,10 +533,12 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="phoneTypeCallback">కాల్ బ్యాక్  </string>
     <string name="phoneTypeCar">కారు</string>
     <string name="phoneTypeCompanyMain">కంపెనీ ప్రధాన </string>
+    <string name="phoneTypeIsdn">ISDN</string>
     <string name="phoneTypeMain">ప్రధాన  </string>
     <string name="phoneTypeOtherFax">ఇతర ఫ్యాక్స్ </string>
     <string name="phoneTypeRadio">రేడియో</string>
     <string name="phoneTypeTelex">టెలెక్స్</string>
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
     <string name="phoneTypeWorkMobile">పని చేసే మొబైల్</string>
     <string name="phoneTypeWorkPager">కార్యాలయ పేజర్</string>
     <string name="phoneTypeAssistant">సహాయకుడు</string>
@@ -520,6 +560,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="imTypeWork">పని</string>
     <string name="imTypeOther">ఇతరాలు</string>
     <string name="imProtocolCustom">ఆచారం</string>
+    <string name="imProtocolAim">ఎఐఎమ్ లోకి</string>
     <string name="imProtocolMsn">విండోస్ లైవ్</string>
     <string name="imProtocolYahoo">యాహూ</string>
     <string name="imProtocolSkype">స్కైప్</string>
@@ -529,6 +570,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="orgTypeWork">పని</string>
     <string name="orgTypeOther">ఇతరాలు</string>
     <string name="orgTypeCustom">ఆచారం</string>
+    <string name="contact_status_update_attribution">ద్వారా<xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> ద్వారా <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
     <string name="keyguard_password_enter_pin_code">PIN కోడ్ ని ఎంటర్ చేయండి</string>
     <string name="keyguard_password_enter_password_code">పాస్ వర్డ్ ని అన్ లాక్ చేయడానికి ఎంటర్ చేయండి</string>
     <string name="keyguard_password_wrong_pin_code">PIN కోడ్ సరియైనది కాదు!</string>
@@ -581,7 +624,9 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_return_to_call">కాల్ కి తిరిగి రా</string>
     <string name="lockscreen_pattern_correct">సరైనది!</string>
     <string name="lockscreen_pattern_wrong">క్షమించాలి, మళ్ళీ ప్రయత్నించండి</string>
+    <string name="lockscreen_plugged_in">చార్జింగ్ (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_charged">ఛార్జి అయింది</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_low_battery">మీ ఛార్జర్లని కనెక్ట్ చేయండి. </string>
     <string name="lockscreen_missing_sim_message_short">SIM కార్డ్ లేదు.</string>
     <string name="lockscreen_missing_sim_message">మీ ఫొన్ లో SIM కార్డ్ లేదు. </string>
@@ -593,6 +638,17 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_sim_puk_locked_instructions">యూజర్ గైడ్ చూడండి లేదా కస్టమర్ కేర్ సంప్రదించండి.</string>
     <string name="lockscreen_sim_locked_message">SIM కార్డ్ లాక్.</string>
     <string name="lockscreen_sim_unlock_progress_dialog_message">SIM కార్డ్ అన్ లాక్ చేయి\u2026 </string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">
+        
+        మీ అన్ లాక్ నమూనాని తప్పుగా గీశారు <xliff:g id="number">%d</xliff:g> సార్లు.
+        \n\nలో దయచేసి మళ్లీ ప్రయత్నించండి <xliff:g id="number">%d</xliff:g> సెకండ్లు.
+    </string>
+    <string name="lockscreen_failed_attempts_almost_glogin">మీ అన్ లాక్ పాస్వర్డ్ ని మీరు తప్పుగా ఇచ్చారు <xliff:g id="number">%d</xliff:g> టైం.
+       తర్వాత <xliff:g id="number">%d</xliff:g> ఎన్నో విఫల ప్రయత్నాల తర్వాత
+      మీ గూగుల్ సైన్ ఇన్ ని ఉపయోగించి మీ ఫోన్ ని అన్ లాక్ చేసుకోవలసిందని మనవి చేస్తారు.  \n\n
+      లో మళ్లీ ప్రయత్నించి  <xliff:g id="number">%d</xliff:g> సెకెన్లు.
+ </string>
+    <string name="lockscreen_too_many_failed_attempts_countdown">లో మళ్ళీ ప్రయత్నించండి<xliff:g id="number">%d</xliff:g> సెకన్లు.</string>
     <string name="lockscreen_forgot_pattern_button_text">నమూనా మర్చిపోయారా?</string>
     <string name="lockscreen_glogin_forgot_pattern">ఖాతాను అన్ లాక్ చేయండి</string>
     <string name="lockscreen_glogin_too_many_attempts">చాలా దోషపూరితమైన ప్రయత్నాలు!</string>
@@ -605,18 +661,25 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_unlock_label">అన్ లాక్</string>
     <string name="lockscreen_sound_on_label">సౌండ్ ఆన్ </string>
     <string name="lockscreen_sound_off_label">సౌండ్ ఆఫ్</string>
+    <string name="password_keyboard_label_symbol_key">\?123</string>
     <string name="password_keyboard_label_alpha_key">ABC</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
     <string name="factorytest_failed">ఫ్యాక్టరీ పరీక్షలో విఫలమయ్యింది</string>
     <string name="factorytest_not_system">FACTORY_TEST చర్య మాత్రమే/సిస్టమ్/app ఇన్ స్టాల్  కోసం మద్దత్తునిస్తోంది. </string>
     <string name="factorytest_no_action">ఫ్యాక్టరి టెస్ట్ యాక్షన్ కు  ఏవిధమైన ప్యాకేజి కనుగొన బడలేదు.</string>
     <string name="factorytest_reboot">పునఃప్రారంభించండి</string>
+    <string name="js_dialog_title">వద్ద పేజీ\'<xliff:g id="title">%s</xliff:g>\' చెప్పారు:</string>
     <string name="js_dialog_title_default">జావాస్క్రిప్ట్    </string>
+    <string name="js_dialog_before_unload">ఈ పేజీ నుండి దూరంగా నావిగేట్ చేయాలా?\n\n<xliff:g id="message">%s</xliff:g>\n\nకొనసాగించడానికి OK లేదా ప్రస్తుత పేజీలోనే ఉండడానికి కేన్సిల్ ఎంచుకోండి, </string>
     <string name="save_password_label">నిర్థారించండి</string>
     <string name="double_tap_toast">చిట్కా: బయటకు జూమ్ చెయ్యడానికి, జూమ్ తీసివేయడానికీ రెండు సార్లు టాప్ చేయండి.</string>
     <string name="permlab_readHistoryBookmarks">బ్రౌజర్ చరిత్ర బుక్మార్క్లులను చదవండి</string>
     <string name="permdesc_readHistoryBookmarks">అప్లికేషన్   బ్రౌజర్ సందర్శించిన ఆ URL లు, మరియు బ్రౌజర్ \ యొక్క బుక్ మార్క్లులు అన్నీ  చదవడానికి అనుమతిస్తుంది.</string>
     <string name="permlab_writeHistoryBookmarks">బ్రౌజర్\ యొక్క చరిత్ర మరియు బుక్ మార్క్లులను వ్రాయండి</string>
     <string name="permdesc_writeHistoryBookmarks">ఒక అప్లికేషన్ ని  మీ ఫోన్ లో నిల్వ ఉన్న ఉన్నబ్రౌజర్ \ యొక్క చరిత్ర లేదా బుక్ మార్క్లుని సవరించడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మీ బ్రౌజర్ \ బ్రౌజర్ల డేటాని తుడిచి వేయడానికీ లేదా సవరించడానికి దీన్ని ఉపయోగించవచ్చు.</string>
+    <string name="permlab_setAlarm">అలారం గడియారం లో అలారం సెట్</string>
+    <string name="permdesc_setAlarm">అప్లికేషన్లో ఒక అలారం సెట్ కు అనుమతిస్తుంది. సంస్థాపించిన అలారం గడియారం అప్లికేషన్. కొన్ని అలారం గడియారం అప్లికేషన్లు మారవచ్చు ఈ ఫీచర్ అమలు కాదు. </string>
     <string name="permlab_writeGeolocationPermissions">భౌగోళిక బ్రౌజర్ అనుమతులను మార్చండి</string>
     <string name="permdesc_writeGeolocationPermissions">ఒక అప్లికేషన్ ని   బ్రౌజర్ \ యొక్క జియో లొకేషన్ అనుమతులను సవరించడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు అనియత వెబ్ సైట్లకు స్థాన సమాచారం పంపడం అనుమతించేందుకు  దీన్నిఉపయోగించవచ్చు.</string>
     <string name="save_password_message">మీరు ఈ బ్రౌజర్ ని పాస్వర్డ్ గుర్తుంచుకోవాలని అనుకుంటున్నారా?</string>
@@ -635,76 +698,83 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="beforeOneMonthDurationPast">1 నెల క్రితం ముందు</string>
     <plurals name="num_seconds_ago">
         <item quantity="one">1 సెకండు క్రితం</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> సెకన్ల క్రితం</item>
     </plurals>
     <plurals name="num_minutes_ago">
         <item quantity="one">1 నెల క్రితం</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> నిమిషాల క్రితం</item>
     </plurals>
     <plurals name="num_hours_ago">
         <item quantity="one">1 గంట క్రితం</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> గంటల క్రితం</item>
+    </plurals>
+    <plurals name="last_num_days">
+        <item quantity="other">చివరి <xliff:g id="count">%d</xliff:g> రోజుల</item>
     </plurals>
     <string name="last_month">గత నెల        </string>
     <string name="older">పాతవి </string>
     <plurals name="num_days_ago">
         <item quantity="one">నిన్నటి రోజు</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> రోజుల క్రితం</item>
     </plurals>
     <plurals name="in_num_seconds">
         <item quantity="one">1 సెకనులో  </item>
-        <item quantity="other"></item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> సెకండ్లు</item>
     </plurals>
     <plurals name="in_num_minutes">
         <item quantity="one">1 నిమిషములో  </item>
-        <item quantity="other"></item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> నిముషాలు</item>
     </plurals>
     <plurals name="in_num_hours">
         <item quantity="one">1 గంటలో </item>
-        <item quantity="other"></item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> గంటలు</item>
     </plurals>
     <plurals name="in_num_days">
         <item quantity="one">రేపు</item>
-        <item quantity="other"></item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> రోజులు</item>
     </plurals>
     <plurals name="abbrev_num_seconds_ago">
         <item quantity="one">1 సెకండు క్రితం</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> సెకన్ల క్రితం</item>
     </plurals>
     <plurals name="abbrev_num_minutes_ago">
         <item quantity="one">1 గంట</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> నిమిషాల క్రితం</item>
     </plurals>
     <plurals name="abbrev_num_hours_ago">
         <item quantity="one">1 గంట క్రితం</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> గంటల క్రితం</item>
     </plurals>
     <plurals name="abbrev_num_days_ago">
         <item quantity="one">నిన్నటి రోజు</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> రోజుల క్రితం</item>
     </plurals>
     <plurals name="abbrev_in_num_seconds">
         <item quantity="one">1 సెకనులో  </item>
-        <item quantity="other"></item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> సెకండ్లు</item>
     </plurals>
     <plurals name="abbrev_in_num_minutes">
         <item quantity="one">1 గంటలో </item>
-        <item quantity="other"></item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> నిముషాలు</item>
     </plurals>
     <plurals name="abbrev_in_num_hours">
         <item quantity="one">1 గంటలో </item>
-        <item quantity="other"></item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> గంటలు</item>
     </plurals>
     <plurals name="abbrev_in_num_days">
         <item quantity="one">రేపు</item>
-        <item quantity="other"></item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> రోజులు</item>
     </plurals>
+    <string name="preposition_for_date">న <xliff:g id="date" example="May 29">%s</xliff:g></string>
+    <string name="preposition_for_time">వద్ద <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+    <string name="preposition_for_year">లో <xliff:g id="year" example="2003">%s</xliff:g></string>
     <string name="day">రోజు</string>
     <string name="days">రోజులు</string>
     <string name="hour">గంట</string>
     <string name="hours">గంటలు</string>
     <string name="minute">నిమిషం</string>
     <string name="minutes">నిమిషాలు</string>
+    <string name="second">సెకెండ్లు</string>
     <string name="seconds">లు</string>
     <string name="week">వారం</string>
     <string name="weeks">వారాలు</string>
@@ -714,10 +784,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="VideoView_error_text_invalid_progressive_playback">క్షమించాలి, ఈ వీడియో ఈ సాధనాన్ని స్ట్రీమింగ్ కోసం చెల్లుబాటులో లేదు.</string>
     <string name="VideoView_error_text_unknown">క్షమించాలి, ఈ వీడియో చూపడం సాధ్యం కాదు.</string>
     <string name="VideoView_error_button">సరి</string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
     <string name="noon">మధ్యాహ్నం</string>
     <string name="Noon">మధ్యాహ్నం</string>
     <string name="midnight">"అర్థ రాత్రి"</string>
     <string name="Midnight">"అర్థ రాత్రి"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
     <string name="selectAll">అన్నింటినీ సెలెక్టు చెయ్యి</string>
     <string name="selectText">టెక్స్ట్ ఎంచుకోండి</string>
     <string name="cut">కట్ చేయి</string>
@@ -725,6 +798,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="paste">పేస్ట్ </string>
     <string name="copyUrl">URLకి కాపీ చెయ్యి</string>
     <string name="inputMethod">ఇన్ పుట్  పద్ధతి </string>
+    <string name="addToDictionary">"జోడించు \"<xliff:g id="word" example="rickroll">%s</xliff:g>\"నిఘంటువుకు</string>
     <string name="editTextMenuTitle">టెక్స్ట్ను సవరించండి</string>
     <string name="low_internal_storage_view_title">తక్కువ స్పేస్</string>
     <string name="low_internal_storage_view_text">ఫోన్ మెమరీ అతి తక్కువగా ఉన్నది.</string>
@@ -739,12 +813,37 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="alwaysUse">ఈ చర్య కోసం సిద్ధంగా ఉపయోగించండి.</string>
     <string name="clearDefaultHintMsg">డిఫాల్ట్ హోం సెట్టింగులను క్లియర్ చెయ్యి &gt;అప్లికేషన్లు &gt; అప్లికేషన్లను నిర్వహించు.</string>
     <string name="chooseActivity">ఒక చర్య ఎంచుకోండి</string>
+    <string name="chooseUsbActivity">USB సాధనం కోసం ఒక అప్లికేషన్ ఎంచుకోండి</string>
     <string name="noApplications">ఏవిధమైన అప్లికేషను దీనిమీద చర్య తీసుకోలేదు. </string>
+    <string name="crash_application">అప్లికేషన్ ని <xliff:g id="application">%1$s</xliff:g>
+         (ప్రక్రియ <xliff:g id="process">%2$s</xliff:g>ఊహించని విధంగా నిలిపివేయబడింది. సిస్టమ్ లోపం రిపేరు విఫలమైంది. ఇతర సాఫ్ట్వేర్ ఉపయోగించండి. </string>
+    <string name="crash_process">ఊహించని విధంగా నిలిపివేయబడింది: ప్రక్రియ <xliff:g id="process">%1$s</xliff:g>. సిస్టమ్ లోపం రిపేరు విఫలమైంది. ఇతర సాఫ్ట్వేర్ ఉపయోగించండి.</string>
     <string name="aerr_title">క్షమించండి!</string>
+    <string name="aerr_application">అప్లికేషన్ <xliff:g id="application">%1$s</xliff:g>
+        (ప్రక్రియ<xliff:g id="process">%2$s</xliff:g>)ఆకస్మికంగా ఆగిపోయింది. మళ్లీ ప్రయత్నించండి.</string>
+    <string name="aerr_process">ప్రక్రియ <xliff:g id="process">%1$s</xliff:g> ఊహించని విధంగా నిలిపివేయబడింది. దయచేసి మళ్లీ ప్రయత్నించండి. </string>
     <string name="anr_title">క్షమించండి!</string>
+    <string name="anr_activity_application">యాక్టివిటీ <xliff:g id="activity">%1$s</xliff:g> (అప్లికేషన్ లో<xliff:g id="application">%2$s</xliff:g>) ప్రతిస్పందించడం లేదు.</string>
+    <string name="anr_activity_process">యాక్టివిటీ <xliff:g id="activity">%1$s</xliff:g> (ప్రోసెస్ లో ఉంది <xliff:g id="process">%2$s</xliff:g>) ప్రతిస్పందించడం లేదు.</string>
+    <string name="anr_application_process">అప్లికేషన్ <xliff:g id="application">%1$s</xliff:g> (లో ప్రక్రియ <xliff:g id="process">%2$s</xliff:g>) ప్రతిస్పందిస్తున్నారు లేదు.</string>
+    <string name="anr_process">ప్రక్రియ  <xliff:g id="process">%1$s</xliff:g> ప్రతిస్పందించడం లేదు.</string>
     <string name="force_close">మూసివేయండి బలవంతంగా</string>
     <string name="report">నివేదిక</string>
     <string name="wait">ఎదురు చూడు</string>
+    <string name="launch_warning_title">అప్లికేషన్ మళ్లించబడింది </string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> ఇప్పుడు రన్ అవుతోంది.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> మొదట్లో ప్రారంభించబడింది. </string>
+    <string name="smv_application">అప్లికేషన్ ని <xliff:g id="application">%1$s</xliff:g>
+         (ప్రక్రియ <xliff:g id="process">%2$s</xliff:g>) దాని స్వీయ అమలు కఠినమైన మోడ్ విధానం అతిక్రమించారు ఉంది .</string>
+    <string name="smv_process">ప్రక్రియ<xliff:g id="process">%1$s</xliff:g>ఉంది దాని స్వీయ అమలు స్ట్రిక్ట్ మోడ్ విధానం అతిక్రమించారు ఉంది. </string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> నడుస్తోంది</string>
+    <string name="heavy_weight_notification_detail">అప్లికేషన్ మారాలని ఎంచుకోండి</string>
+    <string name="heavy_weight_switcher_title">అప్లికేషన్లు మారండి?</string>
+    <string name="heavy_weight_switcher_text">మరొక అప్లికేషన్ మొదలు పెట్టాలంటే ఇప్పటికే రన్ అవుతున్న అప్లికేషన్ ముందు ఆ నిలిపివేయబడుతుంది. </string>
+    <string name="old_app_action"><xliff:g id="old_app">%1$s</xliff:g> తిరిగి</string>
+    <string name="old_app_description">కొత్త అప్లికేషన్ ప్రారంభించవద్దు.</string>
+    <string name="new_app_action">ప్రారంభించండి <xliff:g id="old_app">%1$s</xliff:g> </string>
+    <string name="new_app_description">సేవ్ చెయ్యకుండా పాత అప్లికేషన్ ఆపు.</string>
     <string name="sendText">టెక్స్ట్ కోసం ఒక చర్య ఎంచుకోండి</string>
     <string name="volume_ringtone">రింగర్ వాల్యూమ్</string>
     <string name="volume_music">మీడియా వాల్యూమ్</string>
@@ -757,6 +856,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="volume_notification">నోటిఫికేషన్ వాల్యుం  </string>
     <string name="volume_unknown">పరిమాణము</string>
     <string name="ringtone_default">డిఫాల్ట్ రింగ్ టోన్</string>
+    <string name="ringtone_default_with_actual">డిఫాల్ట్ రింగ్ టోన్ (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
     <string name="ringtone_silent">సైలెంట్</string>
     <string name="ringtone_picker_title">రింగ్ టోన్లు</string>
     <string name="ringtone_unknown">తెలియని రింగ్ టోన్</string>
@@ -776,30 +876,69 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sms_control_no">రద్దు</string>
     <string name="date_time_set">సెట్ చేయి</string>
     <string name="default_permission_group">స్వయంసిద్ధ</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
     <string name="no_permissions">అవసరమైన అనుమతి లేదు </string>
+    <string name="perms_hide"><b> దాచు </b></string>
+    <string name="perms_show_all"><b> అన్నీ చూపించు</b> </string>
     <string name="usb_storage_activity_title">USB మాస్ స్టోరేజి</string>
     <string name="usb_storage_title">USB అనుసంధానింపబడింది</string>
+    <string name="usb_storage_message" product="nosdcard">మీరు USB ద్వారా మీ కంప్యూటర్కు మీ ఫోన్ అనుసంధానించబడితే. మీరు మీ కంప్యూటర్ మరియు మీ Android\u2018s USB నిల్వ మధ్య ఫైళ్లను కాపీ అని మీరు అనుకుంటే క్రింద బటన్ ఎంచుకోండి.</string>
+    <string name="usb_storage_message" product="default">మీరు USB ద్వారా మీ కంప్యూటర్కు మీ ఫోన్ అనుసందానించబడితే. మీరు మీ కంప్యూటర్ మరియు మీ Android\u2018s SD  కార్డు మధ్య ఫైళ్లను కాపీ అని మీరు అనుకుంటే క్రింద బటన్ ఎంచుకోండి.</string>
     <string name="usb_storage_button_mount">USB నిల్వ ఆన్ చెయ్యి</string>
+    <string name="usb_storage_error_message" product="nosdcard">USB మాస్  స్టోరేజ్ కోసం మీ USB నిల్వ ఉపయోగించి ఒక సమస్య ఉంది.</string>
+    <string name="usb_storage_error_message" product="default">USB మాస్  స్టోరేజ్ కోసం మీ SD కార్డు ఉపయోగించి ఒక సమస్య ఉంది.</string>
     <string name="usb_storage_notification_title">USB అనుసంధానింపబడింది</string>
     <string name="usb_storage_notification_message">ఫైళ్లకు/మీ కంప్యూటర్ నుండి కాపీ ఎంచుకోండి.</string>
     <string name="usb_storage_stop_notification_title">USB నిల్వ ఆఫ్ చెయ్యి</string>
     <string name="usb_storage_stop_notification_message">USB డీబగ్గింగ్ డిసేబుల్ ఎంచుకోండి.</string>
     <string name="usb_storage_stop_title">వాడుకలో USB నిల్వ</string>
+    <string name="usb_storage_stop_message" product="nosdcard">యుఎస్ బి నిల్వ ఆఫ్ చెయ్యడానికి ముందు, మీరు మీ కంప్యూటర్ నుండి మీ ఆండ్రాయిడ్ \u2018s ఎస్ డి కార్డు అన్ మౌంట్ అయేటట్టు జాగ్రత్త తీసుకోండి.(\u201c తెరుచుకుంది \u201d) </string>
+    <string name="usb_storage_stop_message" product="default">యుఎస్ బి నిల్వ ఆఫ్ చెయ్యడానికి ముందు, మీరు మీ కంప్యూటర్ నుండి మీ ఆండ్రాయిడ్ \u2018s ఎస్ డి కార్డు అన్ మౌంట్ అయేటట్టు జాగ్రత్త తీసుకోండి.(\u201c తెరుచుకుంది \u201d) </string>
     <string name="usb_storage_stop_button_mount">USB నిల్వ ఆఫ్ చెయ్యి</string>
     <string name="usb_storage_stop_error_message">USB నిల్వ ఆఫ్ చెయ్యడానికి ఒక సమస్యగా ఉండేది. మీరు USB హోస్ట్ మౌంట్ చేయబడలేదు. జాగ్రత్త తీసుకోండి. ఆపై మళ్ళీ ప్రయత్నించండి.</string>
     <string name="dlg_confirm_kill_storage_users_title">USB నిల్వ ఆన్ చెయ్యి</string>
     <string name="dlg_confirm_kill_storage_users_text">మీరు USB నిల్వ ఆన్ ఉంటే, మీరు ఉపయోగిస్తున్న కొన్ని అప్లికేషన్లు ఆపడానికి మరియు మీరు USB నిల్వ ఆఫ్ వరకు అందుబాటులో ఉండకపోవచ్చు.</string>
     <string name="dlg_error_title">USB ఆపరేషన్ విఫలమైంది</string>
     <string name="dlg_ok">సరి</string>
+    <string name="extmedia_format_title" product="nosdcard">ఫార్మాట్ యుఎస్ బి నిల్వ</string>
+    <string name="extmedia_format_title" product="default">ఫార్మాట్ ఎస్ డి కార్డు</string>
+    <string name="extmedia_format_message" product="nosdcard">ఫార్మాట్ యుఎస్ బి నిల్వ, అక్కడ నిల్వ ఉన్న అన్ని ఫైళ్ళు చెరిపివేయాలా? యాక్షన్ తిరిగి చెయ్యబడదు!</string>
+    <string name="extmedia_format_message" product="default">మీరుSD కార్డుని ఫార్మాట్ చేయాలనుకుంటున్నారా? మీ కార్డులో ఉన్న డేటా అంతా పోతుంది.</string>
     <string name="extmedia_format_button_format">ఫార్మాట్</string>
     <string name="adb_active_notification_title">USB డీబగ్గింగ్ అనుసంధానింపబడింది</string>
     <string name="adb_active_notification_message">USB డీబగ్గింగ్ డిసేబుల్ ని ఎంచుకోండి.</string>
     <string name="select_input_method">ఇన్ పుట్ పద్ధతిని ఎంచుకోండి</string>
+    <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="candidates_style"><u> అభ్యర్థులు </u></string>
+    <string name="ext_media_checking_notification_title" product="nosdcard">USB నిల్వ  సిద్ధమౌతోంది</string>
+    <string name="ext_media_checking_notification_title" product="default">SD కార్డు సిద్ధమౌతోంది</string>
     <string name="ext_media_checking_notification_message">లోపాల కోసం తనిఖీ చేస్తోంది.</string>
+    <string name="ext_media_nofs_notification_title" product="nosdcard">ఖాళీ USB స్టోరేజి</string>
+    <string name="ext_media_nofs_notification_title" product="default">ఖాళీ SD కార్డు</string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard">USB నిల్వ ఖాళీ లేదా మద్దతు ఫైల్సిస్టమ్ కలిగి ఉంది.</string>
+    <string name="ext_media_nofs_notification_message" product="default">SD కార్డు ఖాళీ లేదా మద్దతు ఫైల్సిస్టమ్ కలిగి ఉంది.</string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">పాడైపోయిన USB  నిల్వ</string>
+    <string name="ext_media_unmountable_notification_title" product="default">దెబ్బతిన్న SD కార్డు</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">USB నిల్వ దెబ్బతిన్నాయి.  అది రీఫార్మెట్ అవుంతుంది.</string>
+    <string name="ext_media_unmountable_notification_message" product="default">SD కార్డు దెబ్బతిన్నాయి. మీరు అది రీఫార్మెట్ వుంటుంది.</string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">USB నిల్వ అనుకోకుండా తొలగించబడింది</string>
+    <string name="ext_media_badremoval_notification_title" product="default">అనుకోకుండా తొలగించబడింది SD కార్డు</string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">డేటా నష్టం నివారించేందుకు తొలగించే ముందు తెరవండి USB నిల్వ.</string>
+    <string name="ext_media_badremoval_notification_message" product="default">డేటా నష్టం నివారించేందుకు తొలగించే ముందు తెరవండి SD కార్డు.</string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">USB నిల్వని సురక్షితంగా తొలగించండి </string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">సురక్షిత SD కార్డు తొలగించడానికి</string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">మీరు సురక్షితంగా USB నిల్వ తొలగించవచ్చు.</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">మీరు సురక్షితంగా SD కార్డు తొలగించవచ్చు.</string>
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">తొలగించబడిన USB నిల్వ</string>
+    <string name="ext_media_nomedia_notification_title" product="default">తొలగించబడిన SD కార్డు</string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">USB నిల్వ తొలగించింది. కొత్త మీడియా ఇన్సర్ట్ చెయ్యి.</string>
+    <string name="ext_media_nomedia_notification_message" product="default">SD కార్డు తొలగించింది. ఒక కొత్త ఇన్సర్ట్ చెయ్యి.</string>
     <string name="activity_list_empty">సరిపోలే కార్యకలాపాలు దొరకలేదు</string>
     <string name="permlab_pkgUsageStats">పరికరాల ఉపయోగ గణాంకాలను నవీకరించండి</string>
     <string name="permdesc_pkgUsageStats">సేకరించిన భాగం ఉపయోగ గణాంకాల సవరణకు అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం కాదు.</string>
     <string name="permlab_copyProtectedData">కాపీ కంటెంట్ చేయడానికి డిఫాల్ల్ కంటైనర్ సేవ అర్థించడానికి అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం కాదు.</string>
+    <string name="permdesc_copyProtectedData">కంటెంట్ కాపీ కంటైనర్ సేవ అర్థించడానికి అనుమతిస్తుంది. సాధారణ అనువర్తనాల ఉపయోగం కోసం కాదు.</string>
     <string name="tutorial_double_tap_to_zoom_message_short">జూమ్ నియంత్రణ కోసం రెండుసార్లు టాప్ చెయ్యి</string>
     <string name="gadget_host_error_inflating">విడ్జెట్ ఇన్ ఫ్లేటింగ్ లోపం</string>
     <string name="ime_action_go">వెళ్ళు</string>
@@ -808,6 +947,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="ime_action_next">తదుపరి</string>
     <string name="ime_action_done">జరిగినది</string>
     <string name="ime_action_default">పర్యవేక్షణ</string>
+    <string name="dial_number_using">నెంబర్ డయల్ చెయ్యి\nఉపయోగిస్తూ <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="create_contact_using">కాంటాక్ట్ క్రియేట్ చెయ్యి\nఉపయోగిస్తూ <xliff:g id="number" example="555">%s</xliff:g></string>
     <string name="accessibility_compound_button_selected">తనిఖీ చేసిమ్ది</string>
     <string name="accessibility_compound_button_unselected">పరీక్షించ లేదు </string>
     <string name="grant_credentials_permission_message_header">కింది ఒకటి లేదా ఎక్కువ అప్లికేషన్లు ఇప్పుడు మరియు భవిష్యత్తులో, మీ ఖాతాను యాక్సెస్ అనుమతి అభ్యర్థించవచ్చు.</string>
@@ -816,11 +957,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="allow">అనుమతించు</string>
     <string name="deny">నిరాకరించు</string>
     <string name="permission_request_notification_title">అనుమతి కోసం అభ్యర్ధించడమైనది </string>
+    <string name="permission_request_notification_with_subtitle">అనుమతి \n ఖాతా అభ్యర్థన <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
     <string name="input_method_binding_label">ఇన్ పుట్  పద్ధతి </string>
     <string name="sync_binding_label">సమకాలీకరించు</string>
     <string name="accessibility_binding_label">అందుబాటు</string>
     <string name="wallpaper_binding_label">వాల్‌పేపర్</string>
     <string name="chooser_wallpaper">వాల్ పేపరును మార్చడం</string>
+    <string name="alternate_eri_file">/డేటా/ eri.xml</string>
     <string name="pptp_vpn_description">పాయింట్-టు-పాయింట్ టన్నెలింగ్ ప్రోటోకాల్</string>
     <string name="l2tp_vpn_description">పొర 2 టన్నెలింగ్ ప్రోటోకాల్</string>
     <string name="l2tp_ipsec_psk_vpn_description">ముందుగా షేర్డ్ కీ ఆధారంగా L2TP/IPSec VPN </string>
@@ -862,12 +1005,36 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="china_telecom_numeric_values">చైనా టెలికాం</string>
     <string name="stk_refresh_sim_init_message">SIM కార్డ్ నవీకరించబడుతోంది</string>
     <string name="stk_refresh_sim_reset_message">మీ ఫోన్ రీబూట్ అవుతుంది </string>
+    <string name="custom_china_mobile">చైనా మొబైల్</string>
+    <string name="custom_china_unicom">చైనా యునికాం</string>
     <string name="charge_active_notification_message">ఛార్జ్ మాత్రమే విధానం ప్రారంభమైంది</string>
     <string name="charge_active_notification_title">USB కనెక్ట్ మాత్రమే ఛార్జ్ ఉపయోగించండి</string>
+    <string name="shutdown_after_seconds">సెకన్లు: ఫోన్ <xliff:g id="NUMBER">%d</xliff:g> తర్వాత మూసివేయబడింది చేస్తుంది</string>
+    <string name="lockscreen_password_error">పాస్వర్డ్ను లోపం అని, మళ్ళీ ప్రయత్నించండి!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">
+		మీ అన్ లాక్ పాస్వర్డ్ ని మీరు తప్పుగా ఇన్ పుట్ ఇచ్చారు<xliff:g id="number">%d</xliff:g> సార్లు.
+        \n\n లో మళ్లీ ప్రయత్నించండి <xliff:g id="number">%d</xliff:g>సెకన్లు.</string>
+    <string name="progress_unmounting" product="nosdcard">USB నిల్వ ఉన్మౌన్టింగ్ ...</string>
+    <string name="progress_unmounting" product="default">SD కార్డు ఉన్మౌన్టింగ్ ...</string>
+    <string name="progress_erasing" product="nosdcard">యుఎస్ బి నిల్వ చెరిపివేత ...</string>
+    <string name="progress_erasing" product="default">ఎస్ డి కార్డు చెరిపివేత ...</string>
+    <string name="format_error" product="nosdcard">యుఎస్ బి నిల్వ తుడుచుట విఫలం.</string>
+    <string name="format_error" product="default">ఎస్ డి కార్డు తుడుచుట విఫలం</string>
     <string name="media_bad_removal">"SD కార్డు మౌంట్ కాకముందు తొలగించబడింది."</string>
+    <string name="media_checking" product="nosdcard">USB నిల్వ ప్రస్తుతం తనిఖీ చేస్తున్నారు.</string>
+    <string name="media_checking" product="default">SD కార్డు ప్రస్తుతం తనిఖీ చేస్తున్నారు.</string>
     <string name="media_removed">"SD కార్డు తొలగించబడింది."</string>
+    <string name="media_shared" product="nosdcard">ఒక కంప్యూటర్లో  USB నిల్వ ప్రస్తుతం ఉపయోగంలో ఉంది.</string>
+    <string name="media_shared" product="default">SD కార్డు ఒక కంప్యూటర్ ప్రస్తుతం ఉపయోగంలో ఉంది.</string>
     <string name="media_unknown_state">"బాహ్య మీడియా తెలియని స్థితి."</string>
+    <string name="audio_play_failed">క్షమించాలి, ఈ ఆడియోని ప్లే చెయ్యడం సాధ్యం కాదు. ఈ రింగ్టోన్ ని సెట్ చేయకు.</string>
+    <string name="sms_full_body">ఇన్కమింగ్ సందేశం పూర్తి మెమరీ కారణంగా తిరస్కరించింది. పాత సందేశాలు తొలగించండి.</string>
     <string name="dialog_warning">హెచ్చరిక</string>
     <string name="internal_memory_low">SD కార్డు నిల్వ దాదాపు పూర్తిగా ఉంది! ఉచిత space కోసం కొన్ని ఫైళ్ళను తొలగించండి.</string>
     <string name="button_close">మూసివేయి</string>
+    <string name="unlock_screen_pin_error">PIN లోపం ఉంది!</string>
+    <string name="ap_disconnected"> డిస్కనెక్ట్ చెయ్యి</string>
+    <string name="sim_chooser_title">SIM ఎంచుకోండి</string>
+    <string name="lockscreen_miss_phone">ఫోన్ మిస్</string>
+    <string name="lockscreen_miss_mms">మిస్ sms</string>
 </resources>

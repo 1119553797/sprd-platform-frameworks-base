@@ -2,5 +2,7 @@
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">وی پی این کی خدمات</string>
+    <string name="vpn_notification_title_connected"><xliff:g id="profilename">%s</xliff:g> VPN  منسلک </string>
+    <string name="vpn_notification_title_disconnected"><xliff:g id="profilename">%s</xliff:g> VPN غیر مربوط</string>
     <string name="vpn_notification_hint_disconnected">ویپیینکو دوبارہ مربوط کرنے کے لئے چھوئیں.</string>
 </resources>
