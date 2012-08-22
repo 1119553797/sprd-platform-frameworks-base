@@ -26,7 +26,7 @@
 namespace android {
 
 //for broken files, cannot get samplesize
-#define AVI_VIDEO_SAMPLE_MAX_SIZE (128<<10)
+#define AVI_VIDEO_SAMPLE_MAX_SIZE (192<<10)
 #define AVI_AUDIO_SAMPLE_MAX_SIZE (12 <<10)
 
 
