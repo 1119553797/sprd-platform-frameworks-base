@@ -340,6 +340,7 @@ class PackageManagerService extends IPackageManager.Stub {
     boolean mSystemReady;
     boolean mSafeMode;
     boolean mHasSystemUidErrors;
+    boolean mFlagInstall;
 
     ApplicationInfo mAndroidApplication;
     final ActivityInfo mResolveActivity = new ActivityInfo();
@@ -925,7 +926,7 @@ class PackageManagerService extends IPackageManager.Stub {
                     }
                 }
             }
-
+            mFlagInstall = false;
             // Find base frameworks (resource packages without code).
             mFrameworkInstallObserver = new AppDirObserver(
                 mFrameworkDir.getPath(), OBSERVER_EVENTS, true);
@@ -1002,6 +1003,7 @@ class PackageManagerService extends IPackageManager.Stub {
             mDrmAppInstallObserver.startWatching();
             scanDirLI(mDrmAppPrivateInstallDir, PackageParser.PARSE_FORWARD_LOCK,
                     scanMode, 0);
+            mFlagInstall = true;
 
             EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_SCAN_END,
                     SystemClock.uptimeMillis());
@@ -3338,9 +3340,11 @@ class PackageManagerService extends IPackageManager.Stub {
                      * can happen for older apps that existed before an OTA to
                      * Gingerbread.
                      */
+		    if(mFlagInstall == true){
                     Slog.i(TAG, "Unpacking native libraries for " + path);
                     mInstaller.unlinkNativeLibraryDirectory(dataPathString);
                     NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
+		    }
                 } else {
                     Slog.i(TAG, "Linking native library dir for " + path);
                     mInstaller.linkNativeLibraryDirectory(dataPathString,
