@@ -1,4 +1,23 @@
 <?xml version="1.0"  encoding="utf-8"?>
 <resources
 xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">اسٹیٹس بار</string>
+    <string name="status_bar_no_notifications_title"> اطلاعات نہیں  ھے</string>
+    <string name="status_bar_ongoing_events_title">جاری</string>
+    <string name="battery_low_title">براہ مہربانی چارجر متصل کریں</string>
+    <string name="battery_low_subtitle">بیٹری کم ہو رہی ہے:</string>
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g>
+    یا "کم باقی. </string>
+    <string name="battery_low_why">بیٹری استعمال </string>
+    <string name="usb_accessory_permission_prompt">درخواست یو ایس بی آلات تک رسائی حاصل کرنے کی %1$s اجازت دیں؟</string>
+    <string name="usb_device_confirm_prompt">کھولیں٪1$s جب اس یو ایس بی آلہ کے منسلک کیا گیا ہے تو؟</string>
+    <string name="usb_accessory_confirm_prompt">کھولیں٪1$s جب اس یو ایس بی آلات کو منسلک کیا گیا ہے تو؟</string>
+    <string name="usb_accessory_uri_prompt">س یو ایس بی آلات کے ساتھ کام  کرنے والی ایپلی کیشنز انسٹال نہیں,آلات کے بارے میں مزید معلومات حاصل کریں <xliff:g id="url">%1$s</xliff:g></string>
+    <string name="title_usb_accessory">یو ایس بی آلات</string>
+    <string name="always_use_accessory">اس  یو ایس بی آلات کے لئے پہلے سے طے شدہ کی طرف سے استعمال کریں </string>
+    <string name="network_disconnect_title">نوٹس</string>
+    <string name="network_disconnect_message"> ڈبلیولین نیٹ ورک منقطع. n\  تھری جی کے ذریعے کنیکٹ کیا جاتا ہے؟ n\اگر آپ ایسا کرتے خالص ڈیٹا پلان ہے، یہ اضافی چارجز پڑ سکتا ہے. </string>
+    <string name="weak_signal_title">کمزور سگنل </string>
+    <string name="weak_signal_message">سفارش موجودہ ڈبلیولین سگنل بہت کمزور ہے، کہ آپ ایک بہتر کوئی ایک منتخب</string>
+    <string name="auto_connect">مت پوچھو اور  خود بخود دوسرے قابل بھروسہ اے پی سے رابطہ قائم  کرین</string>
 </resources>
