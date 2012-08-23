@@ -1041,4 +1041,12 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sim_chooser_title">सिम चुनें</string>
     <string name="lockscreen_miss_phone">फोन छूट गया </string>
     <string name="lockscreen_miss_mms">एसएमएस छूट गया </string>
+    <string name="crash_title">क्षमा करें!</string>
+    <string name="crash_application">ऐप्लीकेशन<xliff:g id="application">%1$s</xliff:g>
+        (प्रक्रिया<xliff:g id="process">%2$s</xliff:g>) अप्रत्या‍शित रूप से बंद हो गयी है। त्रुटि सुधारने में सिस्ट्म विफल हो गया है। कृपया दूसरे सॉफ्टवेयर का उपयोग करें।
+</string>
+    <string name="crash_process">प्रक्रिया<xliff:g id="process">%1$s</xliff:g> अप्रत्‍याशित रूप से बंद हो गयी है। त्रुटि सुधारने में सिस्‍टम विफल हो गया है। कृपया दूसरे सॉफ्टवेयर का उपयोग करें।</string>
+    <string name="crash_close">ठीक</string>
+    <string name="lockscreen_sim_card_locked_message">सिम कार्ड लॉक है।</string>
+    <string name="upload_file_size_too_large">आपकी अपलोड फाइल बहुत बड़ी है, कृपया छोटी फाइलों में विभाजित की गयी है</string>
 </resources>

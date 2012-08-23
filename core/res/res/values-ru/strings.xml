@@ -1033,4 +1033,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sim_chooser_title">Выберите SIM</string>
     <string name="lockscreen_miss_phone">пропустить звонок</string>
     <string name="lockscreen_miss_mms">пропустить сообщение</string>
+    <string name="crash_title">Извините!</string>
+    <string name="crash_application">Приложение <xliff:g id="application">%1$s</xliff:g>
+        (процесс <xliff:g id="process">%2$s</xliff:g>) внезапно остановлено. Система не может устранить ошибку. Пожалуйста, используйте другое программное обеспечение.</string>
+    <string name="crash_process">Процесс <xliff:g id="process">%1$s</xliff:g> внезапно остановился. Система не может устранить ошибку. Пожалуйста, используйте другое программное обеспечение.</string>
+    <string name="crash_close">ок</string>
+    <string name="lockscreen_sim_card_locked_message">sim карта заблокирована. </string>
+    <string name="upload_file_size_too_large">Ваш файл загрузки слишком большой, пожалуйста, разделите на небольшие файлы</string>
 </resources>
