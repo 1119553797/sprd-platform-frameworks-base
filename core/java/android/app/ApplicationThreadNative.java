@@ -290,7 +290,11 @@ public abstract class ApplicationThreadNative extends Binder
             updateTimeZone();
             return true;
         }
-
+        case CLEAR_DNS_CACHE_TRANSACTION: {
+            data.enforceInterface(IApplicationThread.descriptor);
+            clearDnsCache();
+            return true;
+        }
         case PROCESS_IN_BACKGROUND_TRANSACTION: {
             data.enforceInterface(IApplicationThread.descriptor);
             processInBackground();
@@ -715,6 +719,13 @@ class ApplicationThreadProxy implements IApplicationThread {
         data.writeInterfaceToken(IApplicationThread.descriptor);
         mRemote.transact(UPDATE_TIME_ZONE_TRANSACTION, data, null,
                 IBinder.FLAG_ONEWAY);
+        data.recycle();
+    }
+
+    public void clearDnsCache() throws RemoteException {
+        Parcel data = Parcel.obtain();
+        data.writeInterfaceToken(IApplicationThread.descriptor);
+        mRemote.transact(CLEAR_DNS_CACHE_TRANSACTION, data, null, IBinder.FLAG_ONEWAY);
         data.recycle();
     }
 

@@ -61,6 +61,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import android.net.Proxy;
 
 
 
@@ -1572,6 +1573,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         if (mNetTrackers[netType].getNetworkInfo().isConnected()) {
             if (mNetAttributes[netType].isDefault()) {
                 mNetTrackers[netType].addDefaultRoute();
+                Intent intent = new Intent(Proxy.PROXY_CHANGE_ACTION);
+                intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING
+                        | Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+                mContext.sendStickyBroadcast(intent);
             } else {
                 // many radios add a default route even when we don't want one.
                 // remove the default interface unless we need it for our active network
@@ -1657,6 +1662,16 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             } catch (NumberFormatException e) {}
         }
         SystemProperties.set("net.dnschange", "" + (n+1));
+        /*
+         * Tell the VMs to toss their DNS caches
+         */
+        Intent intent = new Intent(Intent.ACTION_CLEAR_DNS_CACHE);
+        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+        /*
+         * Connectivity events can happen before boot has completed ...
+         */
+        intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+        mContext.sendBroadcast(intent);
     }
 
     private void handleDnsConfigurationChange(int netType) {

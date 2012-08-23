@@ -95,6 +95,7 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 import dalvik.system.SamplingProfiler;
+import java.net.InetAddress;
 
 final class SuperNotCalledException extends AndroidRuntimeException {
     public SuperNotCalledException(String msg) {
@@ -584,6 +585,11 @@ public final class ActivityThread {
 
         public void updateTimeZone() {
             TimeZone.setDefault(null);
+        }
+
+        public void clearDnsCache() {
+            // a non-standard API to get this to libcore
+            InetAddress.clearDnsCache();
         }
 
         public void processInBackground() {

@@ -87,6 +87,7 @@ public interface IApplicationThread extends IInterface {
     void requestThumbnail(IBinder token) throws RemoteException;
     void scheduleConfigurationChanged(Configuration config) throws RemoteException;
     void updateTimeZone() throws RemoteException;
+    void clearDnsCache() throws RemoteException;
     void processInBackground() throws RemoteException;
     void dumpService(FileDescriptor fd, IBinder servicetoken, String[] args)
             throws RemoteException;
@@ -140,4 +141,5 @@ public interface IApplicationThread extends IInterface {
     int SCHEDULE_SUICIDE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+32;
     int DISPATCH_PACKAGE_BROADCAST_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+33;
     int SCHEDULE_CRASH_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+34;
+    int CLEAR_DNS_CACHE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+37;
 }
