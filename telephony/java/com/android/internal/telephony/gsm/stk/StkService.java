@@ -460,7 +460,10 @@ public class StkService extends Handler implements AppInterface {
             }
             if (eventList != null) {
                 for (int i = 0; i < eventList.length; i++) {
-                    setEventEnabled(eventList[i].value(), true);
+
+                    if(eventList[i] != null){
+                        setEventEnabled(eventList[i].value(), true);
+                    }
                 }
                 IWindowManager wm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
                 if(isValidEvent(AppInterface.EventListType.Event_UserActivity.value())) {
