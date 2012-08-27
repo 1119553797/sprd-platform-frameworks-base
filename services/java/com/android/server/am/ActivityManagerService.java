@@ -7116,7 +7116,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 	    } catch (RemoteException e) {
 		    throw new RuntimeException("Package manager has died", e);
 	    }     
-	    if(query != null)  
+	    if(query != null && query.size() != 0)
 	    {     
 		    return query.get(0); 
 	    }     
