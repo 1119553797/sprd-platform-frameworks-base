@@ -51,6 +51,8 @@ const char *MEDIA_MIMETYPE_CONTAINER_MATROSKA = "video/x-matroska";
 const char *MEDIA_MIMETYPE_CONTAINER_MPEG2TS = "video/mp2ts";
 const char *MEDIA_MIMETYPE_CONTAINER_AVI = "video/avi";
 const char *MEDIA_MIMETYPE_CONTAINER_MPEG2PS = "video/mp2p";
+const char *MEDIA_MIMETYPE_CONTAINER_FLV = "video/flv";
+
 
 const char *MEDIA_MIMETYPE_CONTAINER_CMMB		= "video/cmmb";
 const char *MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263	= "video/videophone/3gpp";//sprd vt must
