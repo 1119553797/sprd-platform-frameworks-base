@@ -291,14 +291,18 @@ public final class Telephony {
 
             boolean markAsUnread = false;
             boolean markAsRead = false;
+            String where = null;
             switch(folder) {
             case MESSAGE_TYPE_INBOX:
             case MESSAGE_TYPE_DRAFT:
 	    case MESSAGE_TYPE_CBSMS:
                 break;
             case MESSAGE_TYPE_OUTBOX:
+                markAsRead = true;
+                break;
             case MESSAGE_TYPE_SENT:
                 markAsRead = true;
+                where = TYPE+"!="+MESSAGE_TYPE_FAILED+" AND "+TYPE+"!="+MESSAGE_TYPE_QUEUED;
                 break;
             case MESSAGE_TYPE_FAILED:
             case MESSAGE_TYPE_QUEUED:
@@ -319,7 +323,7 @@ public final class Telephony {
             values.put(ERROR_CODE, error);
 
             return 1 == SqliteWrapper.update(context, context.getContentResolver(),
-                            uri, values, null, null);
+                            uri, values, where, null);
         }
 
         /**
