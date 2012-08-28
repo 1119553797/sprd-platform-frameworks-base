@@ -44,7 +44,7 @@ import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.gsm.stk.AppInterface;
 import com.android.internal.telephony.gsm.TDPhone;
-
+import com.android.internal.telephony.TelephonyProperties;
 import java.util.ArrayList;
 import android.telephony.PhoneNumberUtils;
 import android.content.BroadcastReceiver;
@@ -593,13 +593,47 @@ public final class SIMRecords extends IccRecords {
         if (imsi == null || mncLength == UNINITIALIZED || mncLength == UNKNOWN) {
             return null;
         }
-
+        if (!hasMncLength) {
+            // get operator's numeric key
+            String operatorNumericProperty = PhoneFactory.getProperty(
+                    TelephonyProperties.PROPERTY_OPERATOR_NUMERIC, phone.getPhoneId());
+            // get operator's numeric by key, this value comes from
+            // network(eg.405800)
+            String numeric = SystemProperties.get(operatorNumericProperty);
+            if (numeric != null) {
+                int length = numeric.length();
+                // check if the mcc code from sim card == mcc code from network
+                if ((length >= 5) && (length <= 6)
+                        && (numeric.substring(0, 3)).equals(imsi.substring(0, 3))) {
+                    // check if the mnc code's length&value from sim card != mnc
+                    // code's length&value from network
+                    if (length != (3 + mncLength)) {// mismatch
+                        if ((numeric.substring(0, length)).equals(imsi.substring(0, length))) {
+                            mncLength = length - 3;
+                        }
+                    }
+                }
+            }
+            Log.d(LOG_TAG, "numeric " + numeric + "| phone.getPhoneId() = " + phone.getPhoneId());
+        }
         // Length = length of MCC + length of MNC
         // length of mcc = 3 (TS 23.003 Section 2.2)
         Log.d(LOG_TAG, "getSIMOperatorNumeric:imsi= "+imsi +" mncLength ="+mncLength);
         return imsi.substring(0, 3 + mncLength);
     }
-
+    /*
+     * add for apn when roaming.
+     * If has no Internet access, try again.
+     * Correction the numeric values.
+     */
+    String getSIMOperatorNumericAlternate(){
+        String numeric = "";
+        if(mncLength == 2 )
+            numeric = imsi.substring(0, 6);
+        else if (mncLength == 3)
+            numeric = imsi.substring(0, 5);
+        return numeric;
+    }
     // ***** Overridden from Handler
     public void handleMessage(Message msg) {
         AsyncResult ar;
@@ -889,6 +923,9 @@ public final class SIMRecords extends IccRecords {
 
                     if (mncLength == 0xf) {
                         mncLength = UNKNOWN;
+                    }
+                    if(mncLength == 2 || mncLength == 3){
+                        hasMncLength = true;
                     }
                 } finally {
                     if (((mncLength == UNINITIALIZED) || (mncLength == UNKNOWN) ||

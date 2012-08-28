@@ -1505,6 +1505,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
   //              if (DBG) log("No APN found for carrier: " + operator);
 
         if (allApns.isEmpty()) {
+            createAllApnListAlternate();
+        }
+        if (allApns.isEmpty()) {
             if (DBG) log("No APN found for carrier: " + operator);
             preferredApn = null;
             notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);
@@ -1529,6 +1532,26 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     }
 }
 
+    private void createAllApnListAlternate() {
+        synchronized (allApnsLock){
+            allApns = new ArrayList<ApnSetting>();
+            String operator = mGsmPhone.mSIMRecords.getSIMOperatorNumericAlternate();
+
+            if (operator != null) {
+                String selection = "numeric = '" + operator + "'";
+
+                Cursor cursor = phone.getContext().getContentResolver().query(
+                        Telephony.Carriers.getContentUri(phone.getPhoneId()), null, selection, null, null);
+
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        allApns = createApnList(cursor);
+                    }
+                    cursor.close();
+                }
+            }
+        }
+    }
     private void createAllPdpList() {
         pdpList = new ArrayList<GsmDataConnection>();
         GsmDataConnection pdp;

@@ -55,6 +55,7 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected int countVoiceMessages = 0;
 
     protected int mncLength = UNINITIALIZED;
+    protected boolean hasMncLength = false; //read from EFad,true: byte[3] is valid;false: byte[3] is invalid.
     protected int mailboxIndex = 0; // 0 is no mailbox dailing number associated
 
     protected String spn;
