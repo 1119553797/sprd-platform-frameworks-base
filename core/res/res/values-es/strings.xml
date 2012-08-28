@@ -1035,4 +1035,11 @@ Ha introducido su contraseña de manera incorrecta <xliff:g id="number">%d</xlif
     <string name="sim_chooser_title">Escoger SIM</string>
     <string name="lockscreen_miss_phone">falta teléfono</string>
     <string name="lockscreen_miss_mms">falta sms</string>
+    <string name="crash_title">Lo siento!</string>
+    <string name="crash_application">La aplicación <xliff:g id="application">%1$s</xliff:g>
+        (proceso <xliff:g id="process">%2$s</xliff:g>) se ha parado inesperadamente. El sistema ha fallado en reparar el error. Por favor utilice otro software.</string>
+    <string name="crash_process">EL proceso <xliff:g id="process">%1$s</xliff:g> se ha parado inesperadamente. El sistema ha fallado en reparar el error. Por favor utilice otro software.</string>
+    <string name="crash_close">aceptar</string>
+    <string name="lockscreen_sim_card_locked_message">la tarjeta SIM está bloqueada.</string>
+    <string name="upload_file_size_too_large">El archivo a subir es demasiado grande, sepárelo en archivos pequeños por favor</string>
 </resources>

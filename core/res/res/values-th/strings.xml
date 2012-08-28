@@ -1035,4 +1035,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sim_chooser_title">เลือกซิม</string>
     <string name="lockscreen_miss_phone">สายที่ไม่ได้รับ</string>
     <string name="lockscreen_miss_mms">SMS ที่ไม่ได้อ่าน</string>
+    <string name="crash_title">ขออภัย!</string>
+    <string name="crash_application">แอพพลิเคชั่น <xliff:g id="application">%1$s</xliff:g>
+        (กระบวนการ  <xliff:g id="process">%2$s</xliff:g>) หยุดทำงานโดยไม่คาดคิด ระบบไม่สามารถซ่อมแซมข้อผิดพลาดได้ กรุณาใช้ซอฟท์แวร์อื่น</string>
+    <string name="crash_process">ขั้นตอน <xliff:g id="process">%1$s</xliff:g> หยุดโดยไม่คาดคิด ระบบไม่สามารถซ่อมแซมข้อผิดพลาดได้ กรุณาใช้ซอฟท์แวร์อื่น</string>
+    <string name="crash_close">ตกลง</string>
+    <string name="lockscreen_sim_card_locked_message">ผลการทดสอบการ์ด SIM</string>
+    <string name="upload_file_size_too_large">ไฟล์ที่อัพโหลดใหญ่เกินไป, กรุณาแบ่งเป็นไฟล์เล็กๆ</string>
 </resources>

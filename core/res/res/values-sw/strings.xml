@@ -550,13 +550,13 @@ Inaruhusu maombi ili kuweka  nguvu kwa
         <item>Desturi</item>
     </string-array>
     <string-array name="imProtocols">
-        <item></item>
+        <item>LENGO</item>
         <item>Madirisha ya Laivu</item>
         <item>Yahoo</item>
         <item>Skype</item>
         <item>QQ</item>
         <item>Google kuzungumza</item>
-        <item></item>
+        <item>ICQ</item>
         <item>Jabba</item>
     </string-array>
     <string name="phoneTypeCustom">Desturi</string>
@@ -1071,4 +1071,21 @@ Inaruhusu maombi ili kuweka  nguvu kwa
     <string name="lockscreen_miss_phone">simu ilokosekana</string>
     <string name="lockscreen_miss_mms">mms zilokosekana</string>
     <string name="lockscreen_sim_card_locked_message">SIM kadi imetiwa loki.</string>
+    <string name="byteShort">B</string>
+    <string name="kilobyteShort">KB</string>
+    <string name="ellipsis">\u2026</string>
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
+    <string name="serviceClassPAD">PEDI</string>
+    <string name="permdesc_changeWimaxState">Kuruhusu matumizi ili kuunganisha na kuunganua kutoka mtandao wa WiMAX.</string>
+    <string name="permdesc_use_sip">Kuruhusu matumizi ili kutumia huduma ya SIP ili kufanya/kupokea wito wa simu wa intaneti.</string>
+    <string name="phoneTypeIsdn">ISDN</string>
+    <string name="imProtocolAim">LENGO</string>
+    <string name="imProtocolIcq">ICQ</string>
+    <string name="password_keyboard_label_alt_key">ALT</string>
+    <string name="crash_title">Samahani!</string>
+    <string name="crash_application">Matumizi <xliff:g id="application">%1$s</xliff:g>
+        (mchakato <xliff:g id="process">%2$s</xliff:g>) yamesimama bila ya kutarajiwa.Mfumo umefeli kurekebisha hitilafu.Tafadhali tumia softweya nyengine.</string>
+    <string name="crash_process">Mchakato <xliff:g id="process">%1$s</xliff:g> umesimama bila ya kutarajiwa.Mfumo umefeli kurekebisha hitilafu.Tafadhali jaribu softweya nyengine.</string>
+    <string name="crash_close">tayari</string>
+    <string name="upload_file_size_too_large">Faili ulolipandisha ni kubwa sana,tafadhali ligawi katika mafaili madogo madogo</string>
 </resources>

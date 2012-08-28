@@ -1035,4 +1035,11 @@ các ứng dụng hệ thống.</string>
     <string name="sim_chooser_title">Chọn SIM</string>
     <string name="lockscreen_miss_phone">mất điện thoại</string>
     <string name="lockscreen_miss_mms">mất sms</string>
+    <string name="crash_title">Rất tiếc!</string>
+    <string name="crash_application">Ứng dụng <xliff:g id="application">%1$s</xliff:g>
+        (quá trình <xliff:g id="process">%2$s</xliff:g>) đã dừng đột ngột. Hệ thống không thể sửa lỗi này. Hãy sử dụng phần mềm khác.</string>
+    <string name="crash_process">Quá trình <xliff:g id="process">%1$s</xliff:g> đã dừng đột ngột. Hệ thống không thể sửa lỗi này. Hãy sử dụng phần mềm khác.</string>
+    <string name="crash_close">ok</string>
+    <string name="lockscreen_sim_card_locked_message">thẻ sim bị khóa.</string>
+    <string name="upload_file_size_too_large">Tệp tải lên của bạn quá lớn, hãy chia ra thành các tệp nhỏ</string>
 </resources>

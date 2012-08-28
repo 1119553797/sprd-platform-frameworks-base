@@ -1028,4 +1028,11 @@ Introduziu a palavra passe de desbloqueio incorrectamente  <xliff:g id="number">
     <string name="sim_chooser_title">Escolher SIM</string>
     <string name="lockscreen_miss_phone">telefone perdido</string>
     <string name="lockscreen_miss_mms">sms perdida</string>
+    <string name="crash_title">Desculpe!</string>
+    <string name="crash_application">A aplicação <xliff:g id="application">%1$s</xliff:g>
+        (processo <xliff:g id="process">%2$s</xliff:g>) parou inesperadamente. Sistema falhou para reparar o erro. Utilize outro software.</string>
+    <string name="crash_process">O processo <xliff:g id="process">%1$s</xliff:g> parou inesperadamente. Sistema falhou para reparar o erro. Utilize outro software.</string>
+    <string name="crash_close">ok</string>
+    <string name="lockscreen_sim_card_locked_message">cartão sim bloqueado.</string>
+    <string name="upload_file_size_too_large">O ficheiro de upload é demasiado grande, divida em pequenos ficheiros</string>
 </resources>

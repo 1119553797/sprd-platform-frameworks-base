@@ -1035,4 +1035,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sim_chooser_title">Pilih SIM</string>
     <string name="lockscreen_miss_phone">telepon yang terlewatkan</string>
     <string name="lockscreen_miss_mms">Sms yang terlewatkan</string>
+    <string name="crash_title">Maaf!</string>
+    <string name="crash_application">"Aplikasi<xliff:g id="application">%1$s</xliff:g>
+         (proses <xliff:g id="process">%2$s</xliff:g>) berhenti tanpa diduga. Sistem gagal untuk memperbaiki kesalahan. Silakan gunakan perangkat lunak lain."</string>
+    <string name="crash_process">Proses <xliff:g id="process">%1$s</xliff:g> berhenti secara tiba-tiba. Sistem gagal untuk memperbaiki kesalahan. Silakan gunakan perangkat lunak lain.</string>
+    <string name="crash_close">ok</string>
+    <string name="lockscreen_sim_card_locked_message">sim card di kunci.</string>
+    <string name="upload_file_size_too_large">Upload berkas anda terlalu besar, silakan bagi menjadi berkas-berkas kecil</string>
 </resources>

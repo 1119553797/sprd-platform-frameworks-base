@@ -1097,4 +1097,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sim_chooser_title">সিম চয়ন করুন</string>
     <string name="lockscreen_miss_phone">ফোন ফসকান</string>
     <string name="lockscreen_miss_mms">পালান sms</string>
+    <string name="crash_title">দুঃখিত!</string>
+    <string name="crash_application">প্রক্রিয়া  <xliff:g id="application">%1$s</xliff:g>
+        (প্রক্রিয়া <xliff:g id="process">%2$s</xliff:g>)অপ্রত্যাশিতভাবে বন্ধ হয়েছে. সিস্টেম এরর মেরামত করতে ব্যর্থ. অন্যান্য সফ্টওয়্যার ব্যবহার করুন.</string>
+    <string name="crash_process">প্রক্রিয়া <xliff:g id="process">%1$s</xliff:g>অপ্রত্যাশিতভাবে বন্ধ হয়েছে. সিস্টেম এরর মেরামত করতে ব্যর্থ. অন্যান্য সফ্টওয়্যার ব্যবহার করুন.</string>
+    <string name="crash_close">ঠিক আছে</string>
+    <string name="lockscreen_sim_card_locked_message">সিম কার্ড টি বন্ধ</string>
+    <string name="upload_file_size_too_large">আপনার আপলোড করা ফাইল ছোট ফাইল বিভক্ত খুব বড়, দয়া করে</string>
 </resources>
