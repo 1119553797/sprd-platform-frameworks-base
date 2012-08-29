@@ -2475,8 +2475,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 }
                 final VelocityTracker velocityTracker = mVelocityTracker;
                 velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
-                final int initialVelocity = (int) velocityTracker.getYVelocity(mActivePointerId);
-
+                int initialVelocity = (int) velocityTracker.getYVelocity(mActivePointerId);
+				initialVelocity /= 2; 
                 reportScrollStateChange(OnScrollListener.SCROLL_STATE_FLING);
                 if (Math.abs(initialVelocity) > mMinimumVelocity) {
                     mFlingRunnable.startOverfling(-initialVelocity);
