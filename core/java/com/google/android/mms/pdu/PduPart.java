@@ -396,7 +396,7 @@ public class PduPart {
 
         if (null == location) {
             byte[] contentId = (byte[]) mPartHeader.get(P_CONTENT_ID);
-            return "cid:" + new String(contentId);
+            return "cid:" + ((contentId!=null) ? (new String(contentId)) : "");
         } else {
             return new String(location);
         }
