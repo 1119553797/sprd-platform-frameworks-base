@@ -1407,8 +1407,7 @@ public final class SIMRecords extends IccRecords {
         // we need to update the recordsToLoad count
         recordsToLoad -= 1;
         Log.e(LOG_TAG, "onRecordLoaded: recordsToLoad ="+recordsToLoad+",recordsRequested="+recordsRequested+",isLoadedBroadcastSend="+isLoadedBroadcastSend);
-        if (recordsToLoad == 0 && recordsRequested == true && !isLoadedBroadcastSend) {
-            isLoadedBroadcastSend = true;
+        if (recordsToLoad == 0 && recordsRequested == true) {
             onAllRecordsLoaded();
         } else if (recordsToLoad < 0) {
             Log.e(LOG_TAG, "SIMRecords: recordsToLoad <0, programmer error suspected");
@@ -1438,8 +1437,11 @@ public final class SIMRecords extends IccRecords {
 
         recordsLoadedRegistrants.notifyRegistrants(
             new AsyncResult(null, null, null));
-        ((GSMPhone) phone).mSimCard.broadcastIccStateChangedIntent(
-                SimCard.INTENT_VALUE_ICC_LOADED, null);
+        if (isLoadedBroadcastSend) {
+            isLoadedBroadcastSend = true;
+            ((GSMPhone) phone).mSimCard.broadcastIccStateChangedIntent(
+                    SimCard.INTENT_VALUE_ICC_LOADED, null);
+        }
     }
 
     //***** Private methods
