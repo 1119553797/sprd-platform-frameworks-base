@@ -813,10 +813,13 @@ public abstract class PhoneBase extends Handler implements Phone {
     }
 
     public void notifyDataConnection(String reason) {
-        if (SystemProperties.getBoolean("persist.telephony.mpdp", false)) {
+        boolean supportMpdp = SystemProperties.getBoolean("persist.telephony.mpdp", true);
+        if (supportMpdp) {
+            Log.d(LOG_TAG, "this version support mpdp !!!");
             mNotifier.notifyDataConnectionMpdp(Phone.APN_TYPE_DEFAULT, this,
                     reason);
         } else {
+            Log.d(LOG_TAG, "this version do not support mpdp !!!");
             mNotifier.notifyDataConnection(this, reason);
         }
     }

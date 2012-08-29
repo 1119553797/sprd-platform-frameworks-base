@@ -73,7 +73,9 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
     public static GsmDataConnectionTracker getTrackerInstance(GSMPhone phone) {
         int phoneId = phone.getPhoneId();
         mPhoneID = phoneId;
-        if (SystemProperties.getBoolean("persist.telephony.mpdp",false)) {
+        boolean supportMpdp = SystemProperties.getBoolean("persist.telephony.mpdp", true);
+        if (supportMpdp) {
+            Log.d(LOG_TAG, "this version support mpdp !!!");
             if (sTracker == null) {
                 sTracker = new MpdpMsmsGsmDataConnectionTracker[PhoneFactory.getPhoneCount()];
             }
@@ -81,6 +83,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                 sTracker[phoneId] = new MpdpMsmsGsmDataConnectionTracker(phone);
             }
         } else {
+            Log.d(LOG_TAG, "this version do not support mpdp !!!");
             if (sTracker == null) {
                 sTracker = new MsmsGsmDataConnectionTracker[PhoneFactory
                         .getPhoneCount()];
