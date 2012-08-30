@@ -19,6 +19,7 @@ package android.widget;
 import android.content.Context;
 import android.hardware.SensorManager;
 import android.util.FloatMath;
+import android.util.Log;
 import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
@@ -514,7 +515,7 @@ public class OverScroller {
         private int mOver;
 
         // Duration in milliseconds to go back from edge to edge. Springback is half of it.
-        private static final int OVERSCROLL_SPRINGBACK_DURATION = 200;
+        private static final int OVERSCROLL_SPRINGBACK_DURATION = 1000;
 
         // Oscillation period
         private static final float TIME_COEF =
@@ -535,7 +536,9 @@ public class OverScroller {
         }
 
         void updateScroll(float q) {
+        	
             mCurrentPosition = mStart + Math.round(q * (mFinal - mStart));
+            
         }
 
         /*
@@ -619,6 +622,7 @@ public class OverScroller {
         }
 
         void finish() {
+        	
             mCurrentPosition = mFinal;
             // Not reset since WebView relies on this value for fast fling.
             // mCurrVelocity = 0.0f;
@@ -826,23 +830,32 @@ public class OverScroller {
         boolean update() {
             final long time = AnimationUtils.currentAnimationTimeMillis();
             final long duration = time - mStartTime;
-
             if (duration > mDuration) {
                 return false;
             }
 
             double distance;
             final float t = duration / 1000.0f;
+            long halfDuration = (mDuration >> 1);
             if (mState == TO_EDGE) {
                 mCurrVelocity = mVelocity + mDeceleration * t;
                 distance = mVelocity * t + mDeceleration * t * t / 2.0f;
             } else {
                 final float d = t * TIME_COEF;
                 mCurrVelocity = mVelocity * (float)Math.cos(d);
-                distance = mVelocity / TIME_COEF * Math.sin(d);
+                if (mState == TO_BOUNDARY) {
+                    distance = mVelocity / TIME_COEF * Math.sin(d);
+                } else {
+                    if (duration < halfDuration) {
+                        distance = mVelocity / TIME_COEF * Math.sin(d);
+                    } else {
+                        long deltaT = duration - halfDuration;
+                        /* Use the specify model. */
+                        distance = mVelocity / TIME_COEF * (Math.cos(1.75 * deltaT / (53.8 + deltaT)));
+                    }
+                }
             }
-
-            mCurrentPosition = mStart + (int) distance;
+            	mCurrentPosition = mStart + (int) distance;
             return true;
         }
     }
