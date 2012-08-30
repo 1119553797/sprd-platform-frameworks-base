@@ -840,7 +840,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         if(networkType == ConnectivityManager.TYPE_MOBILE) {
             //if type is MMS,continue setup data call
             Slog.d(TAG, "if type is MMS,continue setup data call");
-            if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature)) &&
+            if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature,true)) &&
                     !(feature.indexOf(Phone.FEATURE_ENABLE_MMS)!=-1) &&
                     !(feature.indexOf(Phone.FEATURE_ENABLE_WAP)!=-1)) {
             //if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature))) {
@@ -851,7 +851,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
             } else if (TextUtils.equals(feature.substring(0, Phone.FEATURE_ENABLE_MMS.length()), Phone.FEATURE_ENABLE_MMS)) {
                 skipAvailableCheck = true;
-                usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
+                usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature,false));
             } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_SUPL)) {
                 usedNetworkType = ConnectivityManager.TYPE_MOBILE_SUPL;
             } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN)) {
@@ -859,7 +859,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
                 usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
             } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_WAP)) {
-                usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
+                usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature,true));
             }
         }
         NetworkStateTracker network = mNetTrackers[usedNetworkType];
@@ -1016,7 +1016,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
                 } else if (TextUtils.equals(feature.subSequence(0, Phone.FEATURE_ENABLE_MMS.length()), Phone.FEATURE_ENABLE_MMS)) {
-                    usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
+                    usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature,false));
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_SUPL)) {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_SUPL;
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN)) {
@@ -1025,7 +1025,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_WAP)) {
                     if(PhoneFactory.getPhoneCount() < 2) {
-                        usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
+                        usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature,true));
                     } else {
                         Integer currentPid = new Integer(pid);
                         int mmsType;
@@ -1038,7 +1038,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                             if(mNetRequestersPids[mmsType].contains(currentPid)) {
                                 usedNetworkType = mmsType;
                             } else {
-                                usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature));
+                                usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature,true));
                             }
                         }
                     }
@@ -1308,7 +1308,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     if (mMmsFeatureState == FeatureState.DISCONNECTING) {
                         if (!mMmsFeatureRequest.isEmpty()) {
                             FeatureUser f = (FeatureUser) mMmsFeatureRequest.get(0);
-                            if (getPhoneIdByFeature(f.mFeature) != i) {
+                            if (getPhoneIdByFeature(f.mFeature,true) != i) {
                                 Slog.e(TAG, "disconnected mms is " + i + " but stopping is "
                                         + f.mFeature);
                             } else {
@@ -1323,7 +1323,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         Slog.d(TAG, "mms disconnect by network");
                         if (!mMmsFeatureRequest.isEmpty()) {
                             FeatureUser f = (FeatureUser) mMmsFeatureRequest.get(0);
-                            if (getPhoneIdByFeature(f.mFeature) != i) {
+                            if (getPhoneIdByFeature(f.mFeature,true) != i) {
                                 Slog.e(TAG, "disconnected mms is " + i + " but first is "
                                         + f.mFeature);
                             } else {
@@ -2021,11 +2021,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS +"1"));
     }
 
-    private int getPhoneIdByFeature(String feature) {
+    private int getPhoneIdByFeature(String feature, boolean bRealPhone) {
         int phoneId;
         if (isMmsFeature(feature)) {
             if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
-                phoneId = PhoneFactory.getDefaultPhoneId();
+                if(bRealPhone) {
+                    phoneId = PhoneFactory.getDefaultPhoneId();
+                } else {
+                    phoneId = PhoneFactory.getPhoneCount();
+                }
             } else if (feature.length() > Phone.FEATURE_ENABLE_MMS.length()){
                 phoneId = Integer.parseInt(feature.substring(Phone.FEATURE_ENABLE_MMS.length()));
             } else {
