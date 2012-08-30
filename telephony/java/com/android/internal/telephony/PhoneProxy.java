@@ -962,4 +962,11 @@ public abstract class PhoneProxy extends Handler implements Phone {
     public PhoneSubInfoProxy getPhoneSubInfoProxy() {
         return mPhoneSubInfoProxy;
     }
+
+    public boolean getSimLoaded() {
+        Log.d(LOG_TAG,
+                "phone id" + mActivePhone.getPhoneId() + " getSimLoaded:"
+                        + mActivePhone.getSimLoaded());
+        return mActivePhone.getSimLoaded();
+    }
 }

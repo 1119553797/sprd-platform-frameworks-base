@@ -1687,4 +1687,9 @@ public abstract class GSMPhone extends PhoneBase {
         Log.i(LOG_TAG, " This unregisterForGprsAttached for GSM.");
         mSST.unregisterForGprsAttached(h);
     }
+
+    @Override
+    public boolean getSimLoaded() {
+        return mSIMRecords.getSimLoaded();
+    }
 }

@@ -76,7 +76,6 @@ public class TelephonyManager {
     public static final int UNLOCK_PIN2   = 1;
     public static final int UNLOCK_PUK   = 2;
     public static final int UNLOCK_PUK2   = 3;
-
     /** @hide */
     public TelephonyManager(Context context) {
         this(context,PhoneFactory.getPhoneCount());
@@ -88,7 +87,6 @@ public class TelephonyManager {
         mRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
                     PhoneFactory.getServiceName("telephony.registry", phoneId)));
         mPhoneId = phoneId;
-        isStandby=new boolean[2];
     }
 
     /** @hide */
@@ -266,6 +264,17 @@ public class TelephonyManager {
         }
     }
 
+    public boolean getSimLoaded() {
+        boolean simLoaded = false;
+        try {
+            simLoaded = getITelephony().getSimLoaded();
+        } catch (RemoteException ex) {
+         Log.d(TAG, "RemoteException:isSimLoaded"+ex.toString());
+        } catch (NullPointerException ex) {
+         Log.d(TAG, "RemoteException:isSimLoaded"+ex.toString());
+        }
+        return simLoaded;
+    }
     /**
      * Enables location update notifications.  {@link PhoneStateListener#onCellLocationChanged
      * PhoneStateListener.onCellLocationChanged} will be called on location updates.

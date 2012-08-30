@@ -839,7 +839,10 @@ public class PhoneNumberUtils
         for (int i = offset ; i < length + offset ; i++) {
             byte b;
             char c;
-
+            if (i >= bytes.length) {
+                Log.d(LOG_TAG, "index is outofArray length,i "+i+" length "+bytes.length);
+                return;
+            }
             c = bcdToChar((byte)(bytes[i] & 0xf));
 
             if (c == 0) {

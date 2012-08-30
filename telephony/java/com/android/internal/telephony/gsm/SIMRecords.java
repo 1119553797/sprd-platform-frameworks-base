@@ -47,6 +47,8 @@ import com.android.internal.telephony.gsm.TDPhone;
 import com.android.internal.telephony.TelephonyProperties;
 import java.util.ArrayList;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -56,7 +58,7 @@ import android.content.Context;
  * {@hide}
  */
 public final class SIMRecords extends IccRecords {
-    static final String LOG_TAG = "GSM";
+    static final String LOG_TAG = "SIMRecords";
 
     private static final boolean CRASH_RIL = false;
 
@@ -75,7 +77,8 @@ public final class SIMRecords extends IccRecords {
     boolean callForwardingEnabled;
     boolean videoCallForwardingEnabled;
     private Context mContext; 
-
+    // A Tag ,means SIM card is Loaded or not
+    private boolean mSimLoaded = false;
     /**
      * States only used by getSpnFsm FSM
      */
@@ -159,7 +162,6 @@ public final class SIMRecords extends IccRecords {
     private static final int EVENT_AUTO_SELECT_DONE = 34;
     private static final int EVENT_GET_ECC_DONE = 35;
 
-
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -195,12 +197,10 @@ public final class SIMRecords extends IccRecords {
     SIMRecords(GSMPhone p) {
         super(p);
         adnCache = new AdnRecordCache(phone);
-        isLoadedBroadcastSend = false;
         mVmConfig = new VoiceMailConstants();
         mSpnOverride = new SpnOverride();
-
         recordsRequested = false;  // No load request is made till SIM ready
-
+        mSimLoaded = false;
         // recordsToLoad is set to 0 because no requests are made yet
         recordsToLoad = 0;
 
@@ -221,12 +221,10 @@ public final class SIMRecords extends IccRecords {
     SIMRecords(GSMPhone p,Context context) {
         super(p);
         adnCache = new AdnRecordCache(phone);
-        isLoadedBroadcastSend = false;
         mVmConfig = new VoiceMailConstants();
         mSpnOverride = new SpnOverride();
-
         recordsRequested = false;  // No load request is made till SIM ready
-
+        mSimLoaded = false;
         // recordsToLoad is set to 0 because no requests are made yet
         recordsToLoad = 0;
 
@@ -1435,10 +1433,10 @@ public final class SIMRecords extends IccRecords {
         setVoiceMailByCountry(operator);
         setSpnFromConfig(operator);
 
-        recordsLoadedRegistrants.notifyRegistrants(
-            new AsyncResult(null, null, null));
-        if (isLoadedBroadcastSend) {
-            isLoadedBroadcastSend = true;
+        recordsLoadedRegistrants.notifyRegistrants(new AsyncResult(null, null, null));
+        if(!mSimLoaded) {
+            mSimLoaded = true;
+            Log.e(LOG_TAG, "[SIMRecords] onAllRecordsLoaded: send SIM card Loaded");
             ((GSMPhone) phone).mSimCard.broadcastIccStateChangedIntent(
                     SimCard.INTENT_VALUE_ICC_LOADED, null);
         }
@@ -1819,5 +1817,8 @@ public final class SIMRecords extends IccRecords {
 
         Log.w(LOG_TAG, "Value Added Service Group (0xC0), not found in EF CSP");
     }
-
+    public boolean getSimLoaded()  {
+        Log.d(LOG_TAG, "phone " + phone.getPhoneId() + " ismSimLoaded" + mSimLoaded);
+        return mSimLoaded;
+    }
 }

@@ -25,6 +25,7 @@ import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.util.Log;
 
 import com.android.internal.telephony.gsm.NetworkInfo;
 import com.android.internal.telephony.test.SimulatedRadioControl;
@@ -1775,5 +1776,6 @@ public interface Phone extends SprdVideoPhone{
      boolean  getApnActivePdpFilter(String apntype);
 
     void hangupAllCalls();
+    boolean getSimLoaded();
 
 }

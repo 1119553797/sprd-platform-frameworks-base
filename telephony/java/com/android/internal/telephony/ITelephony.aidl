@@ -313,5 +313,6 @@ interface ITelephony {
     String[] getActiveApnTypes();
 
     String getActiveApn();
+    boolean getSimLoaded();
 }
 

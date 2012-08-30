@@ -1188,4 +1188,10 @@ public class SipPhone extends SipPhoneBase {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+    @Override
+    public boolean getSimLoaded() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

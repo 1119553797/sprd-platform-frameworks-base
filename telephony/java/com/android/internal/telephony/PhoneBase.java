@@ -1137,5 +1137,6 @@ public abstract class PhoneBase extends Handler implements Phone {
     public void hangupAllCalls(){
 
     }
+    public abstract boolean getSimLoaded() ;
 
 }
