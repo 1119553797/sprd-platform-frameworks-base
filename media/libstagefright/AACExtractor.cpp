@@ -43,10 +43,57 @@ namespace android {
 #define SYNC_COUNT 1000
 static const uint32_t kMask = 0xfff00000;
 
+static int Resync(
+  const sp<DataSource> &source, off64_t *pos, off64_t *post_id3_pos) {
+    if (post_id3_pos != NULL) {
+        *post_id3_pos = 0;
+    }
+
+    if (*pos == 0) {
+        // Skip an optional ID3 header if syncing at the very beginning
+        // of the datasource.
+
+        for (;;) {
+            uint8_t id3header[10];
+            if (source->readAt(*pos, id3header, sizeof(id3header))
+                    < (ssize_t)sizeof(id3header)) {
+                // If we can't even read these 10 bytes, we might as well bail
+                // out, even if there _were_ 10 bytes of valid mp3 audio data...
+                return false;
+            }
+
+            if (memcmp("ID3", id3header, 3)) {
+                break;
+            }
+
+            // Skip the ID3v2 header.
+
+            size_t len =
+                ((id3header[6] & 0x7f) << 21)
+                | ((id3header[7] & 0x7f) << 14)
+                | ((id3header[8] & 0x7f) << 7)
+                | (id3header[9] & 0x7f);
+
+            len += 10;
+
+            *pos += len;
+
+            LOGI("AAC,skipped ID3 tag, new starting offset is %lld (0x%08llx)",
+                 *pos, *pos);
+        }
+
+        if (post_id3_pos != NULL) {
+            *post_id3_pos = *pos;
+        }
+    }
+    return 0;
+}
+
+
 class AACSource : public MediaSource {
 public:
     AACSource(const sp<DataSource> &source,
-              const sp<MetaData> &meta, int bitrate);
+              const sp<MetaData> &meta, off64_t first_frame_pos, int bitrate);
 
     virtual status_t start(MetaData *params = NULL);
     virtual status_t stop();
@@ -135,7 +182,13 @@ AACExtractor::AACExtractor(const sp<DataSource> &source)
     int sampleRate;
     int channelCount;
     int sampleNum;
-    size = aac_parse_header(source, 0, &sampleRate, &channelCount, &sampleNum);
+    off64_t pos = 0;
+    off64_t post_id3_pos = 0;
+
+    Resync(source, &pos, &post_id3_pos); 
+    mFirstFramePos = post_id3_pos;
+    
+    size = aac_parse_header(source, mFirstFramePos, &sampleRate, &channelCount, &sampleNum);
 	
     mMeta = new MetaData;
     mMeta->setCString(
@@ -147,7 +200,7 @@ AACExtractor::AACExtractor(const sp<DataSource> &source)
 	
     //estimate bit rate
     int totalSampleNum=0;
-    int totalSize = 0;
+    int totalSize = mFirstFramePos;
     for(int i=0;i<FRAME_NUM_BITRATE;i++)
     {
     	size = aac_parse_header(source, totalSize, NULL, &channelCount, &sampleNum);
@@ -164,8 +217,9 @@ AACExtractor::AACExtractor(const sp<DataSource> &source)
 
     off_t streamSize;
     if (mDataSource->getSize(&streamSize) == OK) {
-        mMeta->setInt64(kKeyDuration, (int64_t)streamSize*1000000*8/mBitrate);
-        LOGI("streamSize %d,duration %lld us",streamSize,(int64_t)streamSize*1000000*8/mBitrate);
+        mMeta->setInt64(kKeyDuration, ((int64_t)streamSize - mFirstFramePos)*1000000*8/mBitrate);
+        LOGI("streamSize %d,duration %lld us",
+              streamSize,((int64_t)streamSize - mFirstFramePos)*1000000*8/mBitrate);
     }
 
     mInitCheck = OK;
@@ -195,7 +249,7 @@ sp<MediaSource> AACExtractor::getTrack(size_t index) {
         return NULL;
     }
 
-    return new AACSource(mDataSource, mMeta, mBitrate);
+    return new AACSource(mDataSource, mMeta, mFirstFramePos, mBitrate);
 }
 
 sp<MetaData> AACExtractor::getTrackMetaData(size_t index, uint32_t flags) {
@@ -209,10 +263,10 @@ sp<MetaData> AACExtractor::getTrackMetaData(size_t index, uint32_t flags) {
 ////////////////////////////////////////////////////////////////////////////////
 
 AACSource::AACSource(
-        const sp<DataSource> &source, const sp<MetaData> &meta, int bitrate)
+        const sp<DataSource> &source, const sp<MetaData> &meta, off64_t first_frame_pos,int bitrate)
     : mDataSource(source),
       mMeta(meta),
-      mOffset(0),
+      mOffset(first_frame_pos),
       mCurrentTimeUs(0),
       mStarted(false),
       mGroup(NULL),
@@ -340,11 +394,15 @@ status_t AACSource::read(
 bool SniffAAC(
         const sp<DataSource> &source, String8 *mimeType, float *confidence,
         sp<AMessage> *) {
-        
-    int size1 = aac_parse_header(source,0,NULL,NULL,NULL);
+    off64_t pos = 0;
+    off64_t post_id3_pos = 0;
+
+    Resync(source, &pos, &post_id3_pos);
+    
+    int size1 = aac_parse_header(source,post_id3_pos,NULL,NULL,NULL);
     if(size1<=0)
 	return false;
-    int size2 = aac_parse_header(source,(size_t)size1,NULL,NULL,NULL);
+    int size2 = aac_parse_header(source,(size_t)size1+post_id3_pos,NULL,NULL,NULL);
     if(size2<=0)
 	return false;
 

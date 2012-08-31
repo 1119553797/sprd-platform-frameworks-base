@@ -43,7 +43,8 @@ private:
     sp<MetaData> mMeta;
     status_t mInitCheck;
     int mBitrate;	
-
+    off64_t mFirstFramePos;
+    
     AACExtractor(const AACExtractor &);
     AACExtractor &operator=(const AACExtractor &);
 };
