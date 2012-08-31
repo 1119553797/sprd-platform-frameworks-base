@@ -260,8 +260,9 @@ public class VCardUtils {
      */
     public static void insertStructuredPostalDataUsingContactsStruct(int vcardType,
             final ContentProviderOperation.Builder builder,
-            final VCardEntry.PostalData postalData) {
-        builder.withValueBackReference(StructuredPostal.RAW_CONTACT_ID, 0);
+            final VCardEntry.PostalData postalData,
+            final int rawContactsResultIndex) {
+        builder.withValueBackReference(StructuredPostal.RAW_CONTACT_ID, rawContactsResultIndex);
         builder.withValue(Data.MIMETYPE, StructuredPostal.CONTENT_ITEM_TYPE);
 
         builder.withValue(StructuredPostal.TYPE, postalData.type);
@@ -295,6 +296,21 @@ public class VCardUtils {
         if (postalData.isPrimary) {
             builder.withValue(Data.IS_PRIMARY, 1);
         }
+    }
+
+    /**
+     * <p>
+     * Inserts postal data into the builder object.
+     * </p>
+     * <p>
+     * Note that the data structure of ContactsContract is different from that defined in vCard.
+     * So some conversion may be performed in this method.
+     * </p>
+     */
+    public static void insertStructuredPostalDataUsingContactsStruct(int vcardType,
+            final ContentProviderOperation.Builder builder,
+            final VCardEntry.PostalData postalData) {
+        insertStructuredPostalDataUsingContactsStruct(vcardType, builder, postalData, 0);
     }
 
     public static String constructNameFromElements(final int vcardType,

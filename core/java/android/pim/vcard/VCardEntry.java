@@ -1271,7 +1271,7 @@ public class VCardEntry {
             for (PostalData postalData : mPostalList) {
                 builder = ContentProviderOperation.newInsert(Data.CONTENT_URI);
                 VCardUtils.insertStructuredPostalDataUsingContactsStruct(
-                        mVCardType, builder, postalData);
+                        mVCardType, builder, postalData, rawContactsResultIndex);
                 operationList.add(builder.build());
             }
         }
