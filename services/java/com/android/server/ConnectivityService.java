@@ -2025,7 +2025,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         int phoneId;
         if (isMmsFeature(feature)) {
             if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
-                if(bRealPhone) {
+                if(bRealPhone || PhoneFactory.getPhoneCount() == 1) {
                     phoneId = PhoneFactory.getDefaultPhoneId();
                 } else {
                     phoneId = PhoneFactory.getPhoneCount();
