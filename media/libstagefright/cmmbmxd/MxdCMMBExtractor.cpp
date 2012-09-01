@@ -45,7 +45,7 @@ namespace android {
 #define VIDEO_HEIGHT (240)
 #define AUDIO_SAMPLERATE (24000)
 #define AUDIO_NUM_CHANNELS (2)
-
+#define RESERVED_SPACE (20*1024)
 
 
 	int   getAudioData(void *ph, void **p, unsigned long *timeStamp);
@@ -53,6 +53,14 @@ namespace android {
 	int   socketCacheByteNum(void *ph);
 	void* connectCmmbServer(int port);
 	void  teardownCmmbServer(void *ph);
+
+	void *mem_malloc(void *p, unsigned long size);
+	void mem_free(void *p);
+
+	extern int g_MxdSocketRecvBufSize;
+
+	static int g_VideoSocketRecvBufferSize = 0;
+
 
 	enum {
 		MXD_ERROR_BASE = -5000,
@@ -105,6 +113,8 @@ namespace android {
 		void *mAVSock;
 		int mTimeoutCount;
 		unsigned long mLastFrameTs;
+		unsigned char* mLastVideoFrame;
+		int mLastVideoFrameSize;
 
 		MxdCMMBSource(const MxdCMMBSource &);
 		MxdCMMBSource &operator=(const MxdCMMBSource &);
@@ -133,7 +143,7 @@ namespace android {
 		mAudioTrack(NULL),
 		mCmmbMetaData(new MetaData){
 			strcpy(mFileName,filename);
-			LOGI("MxdCMMBExtractor::MxdCMMBExtractor  success");
+			LOGI("MxdCMMBExtractor::MxdCMMBExtractor  success ---- Ver.1.2");
 
 	}
 
@@ -196,7 +206,7 @@ namespace android {
 		unsigned int len2 = (unsigned int)str4 - (unsigned int)str3;
 		memcpy(vPortTmp,str2,len1);
 		memcpy(aPortTmp,str3+1,len2-1);
-		
+
 		int vPort = atoi(vPortTmp);
 		int aPort = atoi(aPortTmp);
 
@@ -204,6 +214,8 @@ namespace android {
 
 		mVideoStream = connectCmmbServer(vPort);
 		gVideoClient = mVideoStream;
+		g_VideoSocketRecvBufferSize = g_MxdSocketRecvBufSize == 0? 200*1024 : g_MxdSocketRecvBufSize;
+		LOGI("recv buffer size = %d",g_VideoSocketRecvBufferSize);
 		if(mVideoStream == NULL) {
 			LOGI("connet video server failed");
 			return ERROR_NOT_CONNECTED;
@@ -295,8 +307,8 @@ namespace android {
 
 			/*
 			if ((flags & kIncludeExtensiveMetaData)
-				&& !track->includes_expensive_metadata) {
-					track->includes_expensive_metadata = true;
+			&& !track->includes_expensive_metadata) {
+			track->includes_expensive_metadata = true;
 
 
 			}
@@ -318,7 +330,7 @@ namespace android {
 		{
 
 			{
-				
+
 				mVideoTrack = new Track(VIDEO_TRACK_SEQ);
 				//LOGV("CMMB has video");
 				mVideoTrack->meta->setInt32(kKeyWidth, VIDEO_WIDTH);
@@ -328,7 +340,7 @@ namespace android {
 			}
 
 			{
-				
+
 				mAudioTrack = new Track(AUDIO_TRACK_SEQ);
 				//LOGV("CMMB has audio");
 				mAudioTrack->meta->setInt32(kKeyChannelCount, AUDIO_NUM_CHANNELS);
@@ -482,6 +494,8 @@ namespace android {
 		mTimeoutCount(0), 
 		mBuffer(NULL),
 		mLastFrameTs(0),
+		mLastVideoFrame(NULL),
+		mLastVideoFrameSize(0),
 		mAVSock(AVSock)
 	{
 		const char *mime;
@@ -493,9 +507,15 @@ namespace android {
 
 	MxdCMMBSource::~MxdCMMBSource() {
 		LOGI("MxdCMMBSource::~MxdCMMBSource() invoke");
-		if (mStarted) {
-			stop();
+		if(mLastVideoFrame != NULL)
+		{
+			mem_free(mLastVideoFrame);
+			mLastVideoFrame = NULL;
 		}
+		mLastVideoFrameSize = 0;
+
+		stop();
+		
 	}
 
 	status_t MxdCMMBSource::start(MetaData *params) {
@@ -515,6 +535,8 @@ namespace android {
 		int32_t max_size;
 		CHECK(mFormat->findInt32(kKeyMaxInputSize, &max_size));
 		mGroup->add_buffer(new MediaBuffer(max_size));
+
+		mStarted = true;
 		return OK;
 	}
 
@@ -546,6 +568,24 @@ namespace android {
 		Mutex::Autolock autoLock(mLock);
 		return mFormat;
 	}
+
+
+	static const unsigned char gDUMMYAAC[171] = 
+	{
+		0x21,	0x19,	0x53,	0xED,	0x84,	0xFE,	0x10,	0x18,	0x84,	0x1A,	0x1C,	0x05,	0x0A,	0x5A,	0xB6,	0x01,
+		0x56,	0x28,	0x99,	0x79,	0x20,	0x31,	0xAA,	0xFC,	0x3A,	0xAB,	0xF2,	0xDD,	0x39,	0xA9,	0x9E,	0xD6,
+		0xD8,	0xA5,	0x92,	0x21,	0x70,	0x44,	0xA0,	0x02,	0x40,	0xB9,	0x70,	0x00,	0x0A,	0xC8,	0x0A,	0xDC,
+		0x71,	0x9A,	0x70,	0x81,	0xB0,	0x82,	0x85,	0x41,	0x07,	0xB0,	0x00,	0x50,	0x51,	0x6A,	0xFB,	0xD0,
+		0x24,	0x00,	0x2E,	0xDE,	0x03,	0xBB,	0xC0,	0x04,	0x20,	0x00,	0x00,	0x00,	0x00,	0x00,	0xE1,	0x9A,
+		0x07,	0x78,	0x0C,	0x01,	0xBD,	0x18,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,
+		0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,
+		0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,
+		0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,
+		0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,
+		0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x00,	0x03,	0xCF	
+	};
+
+
 
 	// read a decodable unit
 	status_t MxdCMMBSource::read(
@@ -592,28 +632,20 @@ namespace android {
 					return ERROR_END_OF_STREAM;
 				}
 
+				
+				int hold = g_VideoSocketRecvBufferSize>RESERVED_SPACE ? (g_VideoSocketRecvBufferSize-RESERVED_SPACE) : 200*1024;
+				if(socketCacheByteNum(MxdCMMBExtractor::gVideoClient) >hold  )
+				{
+					MxdCMMBExtractor::mIsStreamDone = 1;
+					mBuffer->release();
+					mBuffer = NULL;
+
+					return ERROR_END_OF_STREAM;
+				}
+
 				if(mTrackType == AUDIO_TRACK_SEQ ) {
 
-					int ll = 0;
-					while(ll < 100 && socketCacheByteNum(mAVSock) < 5000)
-					{
-						if(true == mStop)
-						{
-							mBuffer->release();
-							mBuffer = NULL;
-							//return ERROR_CONNECTION_LOST;
-							return ERROR_TIMEOUT;
-						}
-
-						if(MxdCMMBExtractor::mIsStreamDone == 1)
-						{
-							mBuffer->release();
-							mBuffer = NULL;
-							return ERROR_END_OF_STREAM;
-						}
-						ll++; usleep(10000);
-					}
-					if(ll >= 100) 
+					if(socketCacheByteNum(mAVSock) < 2000)
 					{
 						len = 0;
 					}
@@ -621,10 +653,19 @@ namespace android {
 					{
 						len = getAudioData(mAVSock, &pdata, &ts);
 					}
+
+
 				}
 				else
 				{
-					len = getVideoData(mAVSock, &pdata, &ts);
+					if(socketCacheByteNum(mAVSock) < 8)
+					{
+						len = 0;
+					}
+					else
+					{
+						len = getVideoData(mAVSock, &pdata, &ts);
+					}
 				}
 				timeStamp = (int64_t)ts;
 				pucData = (uint8_t *)pdata;
@@ -639,16 +680,29 @@ namespace android {
 				}
 				if(len == 0 ) 
 				{
+
 					if(mTrackType == VIDEO_TRACK_SEQ)
 					{
+
 						//fill a h264 FILL_FRAME
-						size = 128;
-						dstData[0] = 0x0c;
-						for(int i=1;i<128;i++)
+						if(mLastVideoFrameSize != 0 && mLastVideoFrame != NULL)
 						{
-							dstData[i] = 0xff;
+							size = mLastVideoFrameSize;
+							memcpy(dstData, mLastVideoFrame, size);
+						}
+						else
+						{
+
+							size = 128;
+							dstData[0] = 0x0c;
+							for(int i=1;i<127;i++)
+							{
+								dstData[i] = 0xff;
+							}
+							dstData[127] = 0x80;
 						}
 						timeStamp = (int64_t)mLastFrameTs;
+						//mLastFrameTs = timeStamp;
 						mBuffer->set_range(0, size);
 						mBuffer->meta_data()->clear();
 						mBuffer->meta_data()->setInt64(kKeyTime, (timeStamp * 1000000) / mTimescale);
@@ -656,22 +710,35 @@ namespace android {
 						mBuffer = NULL;
 						return OK;
 					}
-					mTimeoutCount++;
-					/*
-					if(mTimeoutCount >5) 
+					else
 					{
-					LOGI("%d ===================================mTimeoutCount > 5", mTrackType);
+						//fill a aac FILL_FRAME
+						size = 171;
+
+						for(int i=0;i<171;i++)
+						{
+							dstData[i] = gDUMMYAAC[i];
+						}
+						timeStamp = (int64_t)mLastFrameTs;
+						//mLastFrameTs = timeStamp;
+						mBuffer->set_range(0, size);
+						mBuffer->meta_data()->clear();
+						mBuffer->meta_data()->setInt64(kKeyTime, (timeStamp * 1000000) / mTimescale);
+						*out = mBuffer;
+						mBuffer = NULL;
+						return OK;
+
+					}
+
+				}
+
+				if ((int64_t)ts -(int64_t)mLastFrameTs < -0xfffffff)
+				{           
 					MxdCMMBExtractor::mIsStreamDone = 1;
 					mBuffer->release();
 					mBuffer = NULL;
-					return ERROR_END_OF_STREAM;
-					}
-					*/
 
-					mBuffer->release();
-					mBuffer = NULL;
-					return ERROR_TIMEOUT;
-					//return ERROR_CONNECTION_LOST;
+					return ERROR_END_OF_STREAM;
 				}
 
 				mLastFrameTs = ts;
@@ -679,16 +746,22 @@ namespace android {
 				mTimeoutCount = 0;
 
 				size = (size_t)len;
-
-				if(mStarted == false)
-					mStarted = true;        
-
+  
+#if 0
+				if(mTrackType == VIDEO_TRACK_SEQ &&  (pucData[0] & 0x1f) == 5   )
+				{
+					mLastVideoFrame = (unsigned char*)mem_malloc(mLastVideoFrame,size);
+					memcpy(mLastVideoFrame,pucData,size);
+					mLastVideoFrameSize = size;
+				}
+#endif
 				memcpy(dstData, pucData, size);
 				mBuffer->set_range(0, size);
 				mBuffer->meta_data()->clear();
 				mBuffer->meta_data()->setInt64(kKeyTime, (timeStamp * 1000000) / mTimescale);
 				*out = mBuffer;
 				mBuffer = NULL;
+
 				return OK;
 			}
 
