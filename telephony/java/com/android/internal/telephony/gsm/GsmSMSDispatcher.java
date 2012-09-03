@@ -273,7 +273,6 @@ final class GsmSMSDispatcher extends SMSDispatcher {
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
     	SmsMessage.getSmsValidity(this.mContext);
     	//=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
-        
         for (int i = 0; i < msgCount; i++) {
             SmsHeader.ConcatRef concatRef = new SmsHeader.ConcatRef();
             concatRef.refNumber = refNumber;
@@ -308,12 +307,13 @@ final class GsmSMSDispatcher extends SMSDispatcher {
                     encoding, smsHeader.languageTable, smsHeader.languageShiftTable);
             if (i == 0) {
                 mCm.setCMMS(1,null);
-            } else if (i == (msgCount - 1)) {
-                mCm.setCMMS(0,null);
+//            } else if (i == (msgCount - 1)) {
+//                mCm.setCMMS(0,null);
             }
 
             sendRawPdu(pdus.encodedScAddress, pdus.encodedMessage, sentIntent, deliveryIntent);
         }
+        mCm.setCMMS(0,null);
     }
 
     protected boolean saveMultipartText(String destinationAddress, String scAddress,
