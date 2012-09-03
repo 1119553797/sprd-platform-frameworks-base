@@ -590,6 +590,11 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
     if (stream == AudioSystem::NOTIFICATION) {
         setStreamMute(AudioSystem::ALARM, true, output);
     }
+    if ((stream == AudioSystem::RING) && (mPhoneState == AudioSystem::MODE_RINGTONE))
+    {
+        setStreamMute(AudioSystem::MUSIC, true, output);
+    }
+
     //for 20275, unplug headsets when startup sound is playing, then video and audio playing are silent.
     if(mHeadsetStateReadTimes) {
         char buf[12] = {'\0'};
@@ -665,6 +670,10 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
     }
     if (stream == AudioSystem::NOTIFICATION) {
         setStreamMute(AudioSystem::ALARM, false, output, 300);
+    }
+    if (stream == AudioSystem::RING)
+    {
+        setStreamMute(AudioSystem::MUSIC, false, output, 300);
     }
 
     AudioOutputDescriptor *outputDesc = mOutputs.valueAt(index);
