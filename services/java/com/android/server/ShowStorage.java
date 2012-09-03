@@ -43,6 +43,9 @@ public class ShowStorage extends Activity {
 
     private TextView mTextView;
 
+    private boolean mStatePaused = false;
+    private boolean mDataInitialized = false;
+
     private Button mApplicationBtn, mMailBtn, mSmsMmsBtn;
 
     @Override
@@ -97,6 +100,10 @@ public class ShowStorage extends Activity {
 
         setAlertMessage();
         initButton();
+
+        Bundle data = getIntent().getExtras();
+        long[] lastSize = (long[])data.getSerializable("lastSize");
+        getLastSizeFromArray(lastSize);
     }
 
     @Override
@@ -236,31 +243,49 @@ public class ShowStorage extends Activity {
     }
 
     @Override
-    public void onResume() {
+    public void onPause() {
+        mStatePaused = true;
+        super.onPause();
+    }
 
+    private void getLastSizeFromArray(long[] lastSize)
+    {
         final int mTOTALLOCATION = 0;
         final int mFREELOCATION = 1;
         final int mAPPLICATIONLOCATION = 2;
         final int mMAILLOCATION = 3;
         final int mSMSMMSLOCATION = 4;
         final int mSYSTEMLOCATION = 5;
-        final int mELEMENTCOUNT = 6;
-        long[] mLastSize = new long[mELEMENTCOUNT];
 
-        DeviceStorageMonitorService dsm = (DeviceStorageMonitorService) ServiceManager
-                .getService(DeviceStorageMonitorService.SERVICE);
-        if (dsm != null) {
-            dsm.updateMemory();
-            mLastSize = dsm.callOK();
+        if (lastSize == null)
+            return;
+
+        mTotalSize = lastSize[mTOTALLOCATION];
+        mLastFreeSize = lastSize[mFREELOCATION];
+        mLastApplicationSize = lastSize[mAPPLICATIONLOCATION];
+        mLastMailSize = lastSize[mMAILLOCATION];
+        mLastSmsMmsSize = lastSize[mSMSMMSLOCATION];
+        mLastSystemSize = lastSize[mSYSTEMLOCATION];
+        mDataInitialized = true;
+    }
+
+    @Override
+    public void onResume() {
+        if (mStatePaused || !mDataInitialized) {
+            long[] lastSize = null;
+
+            DeviceStorageMonitorService dsm = (DeviceStorageMonitorService) ServiceManager
+                    .getService(DeviceStorageMonitorService.SERVICE);
+            if (dsm != null) {
+                dsm.updateMemory();
+                lastSize = dsm.callOK();
+                if (dsm.getCallOKSuccuess()) {
+                    getLastSizeFromArray(lastSize);
+                }
+            }
+
+            mStatePaused = false;
         }
-
-        mTotalSize = mLastSize[mTOTALLOCATION];
-        mLastFreeSize = mLastSize[mFREELOCATION];
-        mLastApplicationSize = mLastSize[mAPPLICATIONLOCATION];
-        mLastMailSize = mLastSize[mMAILLOCATION];
-        mLastSmsMmsSize = mLastSize[mSMSMMSLOCATION];
-        mLastSystemSize = mLastSize[mSYSTEMLOCATION];
-
         if(mLastApplicationSize == 0){
             mApplicationBtn.setEnabled(false);
         }
