@@ -18,6 +18,7 @@ namespace android
 #include<sys/ioctl.h>
 #include <fcntl.h>
 
+	int g_MxdSocketRecvBufSize = 0;
 
 	static int prefetchSocketByteNum(int fd)
 	{
@@ -25,7 +26,7 @@ namespace android
 		fd_set readfd;
 		struct timeval timeout;
 		timeout.tv_sec=0;
-		timeout.tv_usec=1*1000*1000;
+		timeout.tv_usec= 0;/*1*1000*1000;*/
 		FD_ZERO(&readfd);
 		FD_SET(fd,&readfd);
 		ret=select(fd+1, &readfd, NULL, NULL, &timeout);
@@ -62,6 +63,7 @@ namespace android
 
 			socklen_t optlen = sizeof(nRecvBuf);
 			re = getsockopt(fd,SOL_SOCKET,SO_RCVBUF, &nRecvBuf, &optlen);
+			g_MxdSocketRecvBufSize = nRecvBuf;
 			server_addr.sin_family = AF_INET;
 			server_addr.sin_port = htons(port);
 			if(connect(fd,(struct sockaddr *)&server_addr,sizeof(server_addr)) != 0)
@@ -95,7 +97,7 @@ namespace android
 	}
 
 
-	static void *mem_malloc(void *p, unsigned long size)
+	void *mem_malloc(void *p, unsigned long size)
 	{
 		unsigned long *ptemp = NULL;
 		if(p)
@@ -117,7 +119,7 @@ namespace android
 		return ptemp;
 	}
 
-	static void mem_free(void *p)
+	void mem_free(void *p)
 	{
 		unsigned long *ptemp = (unsigned long *)p;
 		ptemp--;
@@ -180,9 +182,11 @@ namespace android
 		}
 
 		int fd = scs->av_fd;
+		/*
 		int statu = prefetchSocketByteNum(fd);
 		if(statu <= 0)
-			return statu;
+		return statu;
+		*/
 
 
 		if(!getInt32(fd, timeStamp))GOTO_ERROR_PROC(("get timestamp field error!"));
@@ -213,10 +217,11 @@ READERROR:
 		}
 
 		int fd = scs->av_fd;
-
+		/*
 		int statu = prefetchSocketByteNum(fd);
 		if(statu <= 0)
-			return statu;
+		return statu;
+		*/
 
 
 		if(!getInt32(fd, timeStamp)) GOTO_ERROR_PROC(("get timestamp field error!"));
