@@ -819,6 +819,7 @@ public class MediaPhone extends Handler
 	                	onCodecRequest(params[0], params[2]);
 					}
 				} else {
+				    mCodecCount = 0;
 	                onCodecRequest(params[0], 0);
 				}
                 return;
@@ -936,7 +937,7 @@ public class MediaPhone extends Handler
 				}
 			}
 		}
-            	if (mCodecState != CodecState.CODEC_START) { 
+            if ((2 == mCodecCount) && (mCodecState != CodecState.CODEC_START)) { 
 	            try {
 			mCodecState = CodecState.CODEC_START;
 			if (mOnCallEventListener != null) {
