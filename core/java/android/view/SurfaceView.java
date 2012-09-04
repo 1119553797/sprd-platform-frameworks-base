@@ -181,6 +181,7 @@ public class SurfaceView extends View {
     }
 
     private void init() {
+		Log.d(TAG,"mSurface is "+(mSurface == null ? "null" : " not null") );
         setWillNotDraw(true);
     }
     
