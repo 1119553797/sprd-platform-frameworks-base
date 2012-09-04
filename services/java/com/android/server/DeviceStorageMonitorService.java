@@ -32,6 +32,7 @@ import android.content.IntentFilter;
 import android.content.pm.IPackageDataObserver;
 import android.content.pm.IPackageManager;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -64,6 +65,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class implements a service to monitor the amount of disk
@@ -132,6 +134,7 @@ class DeviceStorageMonitorService extends Binder {
     private long mySmsMmsMemory = 0;
     private long mySystemMemory = 0;
     private boolean mUpdateMemory = false;
+    private boolean mGetMemorySuccuess = true;
 
     private static final int NO_MEMORY_SMS_NOTIFICATION_ID = 100;
 
@@ -577,15 +580,40 @@ class DeviceStorageMonitorService extends Binder {
         if (ret == GET_MEMORY_ERROR) {
             Slog.e(TAG, "Get (MailMemory SmsMmsMemory ApplicationMemory) Error");
         }
+        mGetMemorySuccuess = (ret == GET_MEMORY_SUCCUESS);
         mySystemMemory = myTotalMemory - myFreeMemory - myMailMemory - mySmsMmsMemory
                 - myApplicationMemory;
     }
 
     private void startShowStorageActivity(){
-        Intent mShowStorageIntent = new Intent(mContext,com.android.server.ShowStorage.class);
-        mShowStorageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        if(bootCompleted){
-            mContext.startActivity(mShowStorageIntent);
+        if (bootCompleted) {
+            getShowStorageData();
+            if (mGetMemorySuccuess) {
+                final int mTOTALLOCATION = 0;
+                final int mFREELOCATION = 1;
+                final int mAPPLICATIONLOCATION = 2;
+                final int mMAILLOCATION = 3;
+                final int mSMSMMSLOCATION = 4;
+                final int mSYSTEMLOCATION = 5;
+                final int mELEMENTCOUNT = 6;
+
+                long mySize[] = new long[mELEMENTCOUNT];
+                mySize[mTOTALLOCATION] = myTotalMemory;
+                mySize[mFREELOCATION] = myFreeMemory;
+                mySize[mAPPLICATIONLOCATION] = myApplicationMemory;
+                mySize[mMAILLOCATION] = myMailMemory;
+                mySize[mSMSMMSLOCATION] = mySmsMmsMemory;
+                mySize[mSYSTEMLOCATION] = mySystemMemory;
+
+                Bundle data = new Bundle();
+                data.putSerializable("lastSize", mySize);
+
+                Intent mShowStorageIntent = new Intent(mContext,com.android.server.ShowStorage.class);
+                mShowStorageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                mShowStorageIntent.putExtras(data);
+
+                mContext.startActivity(mShowStorageIntent);
+            }
         }
     }
 
@@ -657,7 +685,7 @@ class DeviceStorageMonitorService extends Binder {
                     mSizeObserver.invokeGetSize(info.packageName, count1);
 
                     try {
-                        count1.await();
+                        count1.await(500, TimeUnit.MILLISECONDS);
                     } catch (InterruptedException e) {
                         Slog.e(TAG, "Failed computing size for pkg : " + info.packageName);
                     }
@@ -665,7 +693,11 @@ class DeviceStorageMonitorService extends Binder {
                     // Process the package statistics
                     myPackageStats = mSizeObserver.stats;
                     boolean succeeded = mSizeObserver.succeeded;
-                    if (succeeded && myPackageStats == null) {
+                    if (myPackageStats == null) {
+                        if (succeeded)
+                            Slog.v(TAG, "Failed getting size for pkg : " + info.packageName);
+                        else
+                            Slog.v(TAG, "Time out getting size for pkg : " + info.packageName);
                         return GET_MEMORY_ERROR;
                     }
 
@@ -745,6 +777,10 @@ class DeviceStorageMonitorService extends Binder {
         mySize[mSYSTEMLOCATION] = mySystemMemory;
 
         return mySize;
+    }
+
+    public boolean getCallOKSuccuess() {
+        return mGetMemorySuccuess;
     }
 
     //lino add 2012-12-08 begin for NEWMS00148531
