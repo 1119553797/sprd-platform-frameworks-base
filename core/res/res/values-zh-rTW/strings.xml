@@ -1025,4 +1025,5 @@
     <string name="sim_chooser_title">選擇SIM卡</string>
     <string name="lockscreen_miss_phone">未接電話</string>
     <string name="lockscreen_miss_mms">未讀短信</string>
+    <string name="cant_open_airplane_mode_when_phone_busy">"電話忙,不允許開啟飛航模式"</string>
 </resources>

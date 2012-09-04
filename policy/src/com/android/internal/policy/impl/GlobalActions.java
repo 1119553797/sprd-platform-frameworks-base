@@ -39,6 +39,8 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.android.internal.R;
 import com.android.internal.app.ShutdownThread;
 import com.android.internal.telephony.PhoneFactory;
@@ -225,7 +227,16 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 R.string.global_actions_airplane_mode_on_status,
                 R.string.global_actions_airplane_mode_off_status) {
 
+            private boolean isCalling = false;
+
             void onToggle(boolean on) {
+                if (on && (isCalling = isCalling())) {
+                    Toast.makeText(mContext, R.string.cant_open_airplane_mode_when_phone_busy,
+                            Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "mAirplaneModeOn onToggle(" + on + "), but phone is busy now");
+                    return;
+                }
+
                 if (Boolean.parseBoolean(
                         SystemProperties.get(TelephonyProperties.PROPERTY_INECM_MODE))) {
                     mIsWaitingForEcmExit = true;
@@ -241,6 +252,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
             @Override
             protected void changeStateFromPress(boolean buttonOn) {
+                if (buttonOn && isCalling) {
+                    return;
+                }
                 // In ECM mode airplane state cannot be changed
                 if (!(Boolean.parseBoolean(SystemProperties
                         .get(TelephonyProperties.PROPERTY_INECM_MODE)))) {
@@ -273,6 +287,14 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
             public boolean showBeforeProvisioning() {
                 return false;
+            }
+
+            private boolean isCalling() {
+                final TelephonyManager tm = TelephonyManager.getDefault();
+                if (null == tm) {
+                    return false;
+                }
+                return tm.getCallState() != TelephonyManager.CALL_STATE_IDLE;
             }
         };
 

@@ -2627,4 +2627,5 @@
 	<string name="lockscreen_miss_mms">miss sms</string>
     <string name="lockscreen_sim_card_locked_message">sim card is locked.</string>
     <string name="upload_file_size_too_large">Your upload file is too large, divided into small files please</string>
+    <string name="cant_open_airplane_mode_when_phone_busy">Can not open Airplane mode, phone is busy now.</string>
 </resources>

@@ -1077,4 +1077,7 @@
     <string name="lockscreen_sim_network_locked_message">网络已锁</string>
 
     <string name="upload_file_size_too_large">上传文件太大，请分开上传</string>
+
+    <!-- Strings for Airplane mode -->
+    <string name="cant_open_airplane_mode_when_phone_busy">"电话忙,不能开启飞行模式"</string>
 </resources>
