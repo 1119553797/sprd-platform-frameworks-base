@@ -302,30 +302,30 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         }
         return numeric;
     }
-    protected Object responseOperatorString(Parcel p) {
-        String response[];
-        response = p.readStringArray();
-        Log.d(LOG_TAG, " change before:response[0]"+response[0]+"response[1]="+response[1]+"response[2]="+response[2] );
-        if( (response[0] == null) && ( response[1] == null ) ) {
-            response[0] = getCarrierNameByNumeric(response[2]);
-            response[1] = getCarrierNameByNumeric(response[2]);
+
+    protected String[] responseOperatorString(String response[], int index) {
+
+        Log.d(LOG_TAG, " change before:long " + response[index] + "short =" + response[index + 1]
+                + "numeric=" + response[index + 2]);
+        if ((response[index] == null) && (response[index + 1] == null)) {
+            response[index] = getCarrierNameByNumeric(response[index + 2]);
+            response[index + 1] = getCarrierNameByNumeric(response[index + 2]);
+        } else if (response[index] == null || response[index].length() == 0) {
+            response[index] = response[index + 1];
+        } else if (response[index + 1] == null || response[index + 1].length() == 0) {
+            response[index + 1] = response[index];
         }
-        else if(response[0] == null||response[0].length()==0) {
-            response[0] = response[1];
-        }else if(response[1] == null||response[1].length()==0) {
-            response[1] = response[0];
-        }
-        //i18n
-        response[0] = changeOperator(response[0]);
-        response[1] = changeOperator(response[1]);
-        Log.d(LOG_TAG, " ending change:response[0]"+response[0]+"response[1]="+response[1]+"response[2]="+response[2] );
+        // i18n
+        response[index] = changeOperator(response[index]);
+        response[index + 1] = changeOperator(response[index + 1]);
+        Log.d(LOG_TAG, " ending change:long " + response[0] + "short=" + response[1] + "numeric ="
+                + response[2]);
         return response;
     }
     public String changeOperator(String name){
         Resources r = Resources.getSystem();
         String ret = name;
         String itemList[] = r.getStringArray(R.array.operator);
-        Log.d(LOG_TAG, " changeOperator: old name= "+name+" itemList="+itemList);
         for (String item:itemList){
             String  parts[] = item.split("=");
             Log.d(LOG_TAG, "itemList " + item + " parts[0] " + parts[0]);
@@ -336,11 +336,6 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         }
         return ret;
      }
-    private String getCarrierNumericToChinese(String numeric, String name) {
-        Resources r = Resources.getSystem();
-        Log.d(LOG_TAG, " getCarrierNumericToChinese: old name= " + name+" numeric="+numeric);
-        return changeOperator(getCarrierNameByNumeric(numeric));
-    }
 
     class RILSender extends Handler implements Runnable {
         public RILSender(Looper looper) {
@@ -2287,7 +2282,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_SIGNAL_STRENGTH: ret =  responseSignalStrength(p); break;
             case RIL_REQUEST_REGISTRATION_STATE: ret =  responseStrings(p); break;
             case RIL_REQUEST_GPRS_REGISTRATION_STATE: ret =  responseStrings(p); break;
-            case RIL_REQUEST_OPERATOR: ret =  responseOperatorString(p); break;
+            case RIL_REQUEST_OPERATOR: ret =  responseOperatorString(p.readStringArray(),0); break;
             case RIL_REQUEST_RADIO_POWER: ret =  responseVoid(p); break;
             case RIL_REQUEST_DTMF: ret =  responseVoid(p); break;
             case RIL_REQUEST_SEND_SMS: ret =  responseSMS(p); break;
@@ -3169,9 +3164,10 @@ responseUnsolUssdStrings(Parcel p){
         ret = new ArrayList<NetworkInfo>(strings.length / 5);
 
         for (int i = 0 ; i < strings.length ; i += 5) {
+            strings= responseOperatorString(strings,i );
             ret.add (
                 new NetworkInfo(
-                    getCarrierNumericToChinese(strings[i+2],strings[i+0]),
+                    strings[i],
                     strings[i+1],
                     strings[i+2],
                     strings[i+3],
