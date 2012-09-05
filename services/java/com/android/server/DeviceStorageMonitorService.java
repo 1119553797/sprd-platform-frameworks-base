@@ -478,13 +478,12 @@ class DeviceStorageMonitorService extends Binder {
         if(localLOGV) Slog.i(TAG, "Sending low memory notification");
         //log the event to event log with the amount of free storage(in bytes) left on the device
         EventLog.writeEvent(EventLogTags.LOW_STORAGE, mFreeMem);
-        //  Pack up the values and broadcast them to everyone
-        //Intent lowMemIntent = new Intent(Intent.ACTION_MANAGE_PACKAGE_STORAGE);
-        //lowMemIntent.putExtra("memory", mFreeMem);// force an early check
-        //lowMemIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        Intent lowMemIntent = new Intent(mContext, com.android.server.ShowStorage.class);
-        lowMemIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent showStorageIntent = createShowStorageIntent(false);
+        if (showStorageIntent == null) {
+            Log.w(TAG, "createShowStorageIntent error, do not send low memory notification");
+            return;
+        }
         NotificationManager mNotificationMgr =
                 (NotificationManager)mContext.getSystemService(
                         Context.NOTIFICATION_SERVICE);
@@ -492,7 +491,7 @@ class DeviceStorageMonitorService extends Binder {
                 com.android.internal.R.string.low_internal_storage_view_title);
         CharSequence details = mContext.getText(
                 com.android.internal.R.string.low_internal_storage_view_text);
-        PendingIntent intent = PendingIntent.getActivity(mContext, 0,  lowMemIntent, 0);
+        PendingIntent intent = PendingIntent.getActivity(mContext, 0,  showStorageIntent, 0);
         Notification notification = new Notification();
         notification.icon = com.android.internal.R.drawable.stat_notify_disk_full;
         notification.tickerText = title;
@@ -585,10 +584,14 @@ class DeviceStorageMonitorService extends Binder {
                 - myApplicationMemory;
     }
 
-    private void startShowStorageActivity(){
-        if (bootCompleted) {
-            getShowStorageData();
-            if (mGetMemorySuccuess) {
+    private Intent createShowStorageIntent(boolean hasData){
+        Intent showStorageIntent = null;
+        getShowStorageData();
+        if (mGetMemorySuccuess) {
+            showStorageIntent = new Intent(mContext,com.android.server.ShowStorage.class);
+            showStorageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+            if (hasData) {
                 final int mTOTALLOCATION = 0;
                 final int mFREELOCATION = 1;
                 final int mAPPLICATIONLOCATION = 2;
@@ -607,12 +610,17 @@ class DeviceStorageMonitorService extends Binder {
 
                 Bundle data = new Bundle();
                 data.putSerializable("lastSize", mySize);
+                showStorageIntent.putExtras(data);
+            }
+        }
+        return showStorageIntent;
+    }
 
-                Intent mShowStorageIntent = new Intent(mContext,com.android.server.ShowStorage.class);
-                mShowStorageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                mShowStorageIntent.putExtras(data);
-
-                mContext.startActivity(mShowStorageIntent);
+    private void startShowStorageActivity(){
+        if (bootCompleted) {
+            Intent showStorageIntent = createShowStorageIntent(true);
+            if (showStorageIntent != null) {
+                mContext.startActivity(showStorageIntent);
             }
         }
     }

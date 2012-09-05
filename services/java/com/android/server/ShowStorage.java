@@ -102,8 +102,10 @@ public class ShowStorage extends Activity {
         initButton();
 
         Bundle data = getIntent().getExtras();
-        long[] lastSize = (long[])data.getSerializable("lastSize");
-        getLastSizeFromArray(lastSize);
+        if (data != null) {
+            long[] lastSize = (long[])data.getSerializable("lastSize");
+            getLastSizeFromArray(lastSize);
+        }
     }
 
     @Override
