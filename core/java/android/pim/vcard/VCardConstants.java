@@ -63,6 +63,7 @@ public class VCardConstants {
 
     // Properties both ContactsStruct and de-fact vCard extensions
     // Shown in http://en.wikipedia.org/wiki/VCard support are defined here.
+    public static final String PROPERTY_X_IM = "X-IM-";
     public static final String PROPERTY_X_AIM = "X-AIM";
     public static final String PROPERTY_X_MSN = "X-MSN";
     public static final String PROPERTY_X_YAHOO = "X-YAHOO";

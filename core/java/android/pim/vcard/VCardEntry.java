@@ -76,7 +76,7 @@ public class VCardEntry {
         sImMap.put(VCardConstants.PROPERTY_X_GOOGLE_TALK, Im.PROTOCOL_GOOGLE_TALK);
         sImMap.put(VCardConstants.ImportOnly.PROPERTY_X_GOOGLE_TALK_WITH_SPACE,
                 Im.PROTOCOL_GOOGLE_TALK);
-        sImMap.put(VCardConstants.PROPERTY_X_OTHER, Im.PROTOCOL_NETMEETING);
+        sImMap.put(VCardConstants.PROPERTY_X_NETMEETING, Im.PROTOCOL_NETMEETING);
         sImMap.put(VCardConstants.PROPERTY_X_OTHER, Im.PROTOCOL_OTHER);
     }
 
@@ -1064,6 +1064,9 @@ public class VCardEntry {
                 type = Im.TYPE_HOME;
             }
             addIm(protocol, null, type, propValue, isPrimary);
+        } else if (propName.startsWith(VCardConstants.PROPERTY_X_IM)) {
+            String customProtocol = propName.substring(VCardConstants.PROPERTY_X_IM.length());
+            addIm(Im.PROTOCOL_CUSTOM, customProtocol, Im.TYPE_HOME, propValue, false);
         } else if (propName.equals(VCardConstants.PROPERTY_NOTE)) {
             addNote(propValue);
         } else if (propName.equals(VCardConstants.PROPERTY_URL)) {
