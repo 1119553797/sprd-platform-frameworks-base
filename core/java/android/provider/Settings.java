@@ -1130,6 +1130,7 @@ public final class Settings {
          */
         public static final String AIRPLANE_MODE_RADIOS = "airplane_mode_radios";
 
+        public static final String AVALIABLE_CARD_COUNTS = "avaliable_cards_counts";
         /**
          * A comma separated list of radios that should to be disabled when airplane mode
          * is on, but can be manually reenabled by the user.  For example, if RADIO_WIFI is
