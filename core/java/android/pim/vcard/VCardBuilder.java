@@ -1183,9 +1183,14 @@ public class VCardBuilder {
                 if (protocolAsObject == null) {
                     continue;
                 }
-                final String propertyName = VCardUtils.getPropertyNameForIm(protocolAsObject);
+                 String propertyName = VCardUtils.getPropertyNameForIm(protocolAsObject);
                 if (propertyName == null) {
-                    continue;
+                    if (protocolAsObject == Im.PROTOCOL_CUSTOM) {
+                        propertyName = VCardConstants.PROPERTY_X_IM
+                                + contentValues.getAsString(Im.CUSTOM_PROTOCOL);
+                    } else {
+                        continue;
+                    }
                 }
                 String data = contentValues.getAsString(Im.DATA);
                 if (data != null) {
