@@ -1467,6 +1467,47 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     protected void onCleanUpConnection(boolean tearDown, String reason) {
         cleanUpConnection(tearDown, reason);
     }
+    /**
+     * sometimes the mnc may start with "0",but it means the same without "0"
+     * so we should get operatorextend by operator and match apns for both of them.
+     */
+    private String getOperatorExtend(String operator) {
+        String operatorextend;
+
+        String mcc = operator.substring(0, 3);
+        String mnc = operator.substring(3);
+        if (DBG) log("getOperatorExtend");
+        // mnc must be 2 number or 3 number
+        if (mnc.length() == 3) {
+            if (mnc.startsWith("0")) {
+                operatorextend = mcc + mnc.substring(1);
+            } else {
+                operatorextend = null;
+            }
+        } else {// 2 number
+            operatorextend = mcc + 0 + mnc;
+        }
+        return operatorextend;
+    }
+    /**
+     *  getApnQueryString by both operator and operatorextend.
+     */
+    private String getApnQueryString(String operator) {
+        String selection;
+        String operatorextend = getOperatorExtend(operator);
+
+        if (DBG)
+            log("getApnQueryString");
+        // mnc must be 2 number or 3 number
+        if (operatorextend != null) {
+            selection = "numeric = '" + operator + "'" + "or numeric = '" + operatorextend + "'";
+
+        } else {// 2 number
+
+            selection = "numeric = '" + operator + "'";
+        }
+        return selection;
+    }
 
     /**
      * Based on the sim operator numeric, create a list for all possible pdps
@@ -1478,9 +1519,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         synchronized (allApnsLock){
             allApns = new ArrayList<ApnSetting>();
             String operator = mGsmPhone.mSIMRecords.getSIMOperatorNumeric();
-
-            if (operator != null) {
-                String selection = "numeric = '" + operator + "'";
+            if (DBG) log("Start searching APN for carrier" + operator);
+            if (operator != null && operator.length() > 4 && operator.length() < 7) {
+                String selection = getApnQueryString(operator);
 
                 Cursor cursor = phone.getContext().getContentResolver().query(
                         Telephony.Carriers.getContentUri(phone.getPhoneId()), null, selection, null, null);
@@ -1504,7 +1545,11 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
  //           if (allApns.isEmpty()) {
   //              if (DBG) log("No APN found for carrier: " + operator);
 
+        //sometimes we can not find apns by operator, so we try to find apns by another operator in SIMRecords;
+        //but apns found by the second way should not appear in ApnSettings,
         if (allApns.isEmpty()) {
+            operator = mGsmPhone.mSIMRecords.getSIMOperatorNumericAlternate();
+            if (DBG) log("No APN found for original carrier, start searching for carrier" + operator);
             createAllApnListAlternate();
         }
         if (allApns.isEmpty()) {
@@ -1514,7 +1559,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         } else {
             preferredApn = getPreferredApn();
             Log.d(LOG_TAG, "Get PreferredAPN");
-            if (preferredApn != null && !preferredApn.numeric.equals(operator)) {
+            if (preferredApn != null && !isPreferredApnValid()) {
 
                 preferredApn = null;
                 //TS for compile
@@ -1523,7 +1568,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 Log.d(LOG_TAG, "All APNs:" + allApns);
                 preferredApn = getPreferredApn();
                 Log.d(LOG_TAG, "Get PreferredAPN");
-                if (preferredApn != null && !preferredApn.numeric.equals(operator)) {
+                if (preferredApn != null && !isPreferredApnValid()) {
                     preferredApn = null;
                     setPreferredApn(-1);
                 }
@@ -1537,8 +1582,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             allApns = new ArrayList<ApnSetting>();
             String operator = mGsmPhone.mSIMRecords.getSIMOperatorNumericAlternate();
 
-            if (operator != null) {
-                String selection = "numeric = '" + operator + "'";
+            if (operator != null && operator.length() > 4 && operator.length() < 7) {
+                String selection = getApnQueryString(operator);
 
                 Cursor cursor = phone.getContext().getContentResolver().query(
                         Telephony.Carriers.getContentUri(phone.getPhoneId()), null, selection, null, null);
@@ -1600,7 +1645,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             if (canSetPreferApn && preferredApn != null) {
                 Log.i(LOG_TAG, "Preferred APN:" + operator + ":"
                         + preferredApn.numeric + ":" + preferredApn);
-                if (preferredApn.numeric.equals(operator)) {
+                if (isPreferredApnValid()) {
                     Log.i(LOG_TAG, "Waiting APN set to preferred APN");
                     apnList.add(preferredApn);
                     return apnList;
@@ -1626,6 +1671,15 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             }
         }
         return apnList;
+    }
+
+    protected boolean isPreferredApnValid() {
+        String operator = mGsmPhone.mSIMRecords.getSIMOperatorNumeric();
+        if (preferredApn.numeric.equals(operator)
+                || preferredApn.numeric.equals(getOperatorExtend(operator))) {
+            return true;
+        }
+        return false;
     }
 
     /**
