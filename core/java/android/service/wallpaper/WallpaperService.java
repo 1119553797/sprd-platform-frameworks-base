@@ -467,6 +467,7 @@ public abstract class WallpaperService extends Service {
         void updateSurface(boolean forceRelayout, boolean forceReport, boolean redrawNeeded) {
             if (mDestroyed) {
                 Log.w(TAG, "Ignoring updateSurface: destroyed");
+                return;
             }
             
             int myWidth = mSurfaceHolder.getRequestedWidth();
@@ -516,8 +517,12 @@ public abstract class WallpaperService extends Service {
                         mLayout.windowAnimations =
                                 com.android.internal.R.style.Animation_Wallpaper;
                         mInputChannel = new InputChannel();
-                        mSession.add(mWindow, mLayout, View.VISIBLE, mContentInsets,
+                        int res = mSession.add(mWindow, mLayout, View.VISIBLE, mContentInsets,
                                 mInputChannel);
+                        if (res < WindowManagerImpl.ADD_OKAY) {
+                            Log.w(TAG,"add window error. result:" + res + " token:" + mLayout.token + " window:" + mWindow);
+                            return;
+                        }
                         mCreated = true;
 
                         InputQueue.registerInputChannel(mInputChannel, mInputHandler,
