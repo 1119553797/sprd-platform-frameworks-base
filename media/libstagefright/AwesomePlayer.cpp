@@ -1459,21 +1459,51 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyWidth, &mVideoWidth));
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyHeight, &mVideoHeight));
 
-		LOGI("mVideoWidth =%d mVideoHeight =%d ",mVideoWidth,mVideoHeight);
-		if (!strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_AVC))
-		{
-			int32_t profile ;
+        LOGI("mVideoWidth =%d mVideoHeight =%d ",mVideoWidth,mVideoHeight);
+        bool videooutsize = false ;
 
-			mVideoTrack->getFormat()->findInt32(kKeyVideoProfile, &profile);
+        if (mVideoWidth > mVideoHeight )
+        {
+               if (mVideoWidth >= 1920 ||mVideoHeight >= 1080 )
+                        videooutsize = true ;
+        }
+        else
+        {
+              if (mVideoWidth >= 1080 ||mVideoHeight >= 1920 )
+                        videooutsize = true ;
+        }
+        if (videooutsize)
+        {
+          LOGI("vide size is not susport play audio only ");
+          mVideoSource.clear();
+          return OK;
+        }
 
-			LOGI("avc profile 0x%x",profile);
+        if (!strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_AVC))
+        {
+            int32_t profile ;
+
+            mVideoTrack->getFormat()->findInt32(kKeyVideoProfile, &profile);
+
+            LOGI("avc profile 0x%x",profile);
 			
-			if(profile > 0x64)
-			{
-			  mVideoSource.clear();
-			  return OK;
-			}
-		}
+		    if (mVideoWidth > mVideoHeight )
+	        {
+	               if (mVideoWidth >= 1280 ||mVideoHeight >= 720 )
+	                        videooutsize = true ;
+	        }
+	        else
+	        {
+	              if (mVideoWidth >= 720 ||mVideoHeight >= 1280 )
+	                        videooutsize = true ;
+	        }
+
+            if(profile > 0x64 || videooutsize)
+            {
+                mVideoSource.clear();
+                return OK;
+            }
+        }
 
         status_t err = mVideoSource->start();
 
