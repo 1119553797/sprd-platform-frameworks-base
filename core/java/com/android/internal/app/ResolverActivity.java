@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.LabeledIntent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
@@ -112,6 +113,19 @@ public class ResolverActivity extends AlertActivity implements
 
     public void onClick(DialogInterface dialog, int which) {
         ResolveInfo ri = mAdapter.resolveInfoForPosition(which);
+		try{
+               Log.w("ResolverActivity", "packagename : "+ri.activityInfo.packageName);
+               PackageInfo pInfo= mPm.getPackageInfo(ri.activityInfo.packageName, 0);  
+               if(pInfo == null){
+                       Log.w("ResolverActivity", "package is uninstall");
+                       return;
+               }
+        }catch(Exception e){
+               Log.w("ResolverActivity", "Exception:"+e.getMessage());
+               
+               return ;
+        }
+
         Intent intent = mAdapter.intentForPosition(which);
         boolean alwaysCheck = (mAlwaysCheck != null && mAlwaysCheck.isChecked());
         onIntentSelected(ri, intent, alwaysCheck);
