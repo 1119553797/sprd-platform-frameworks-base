@@ -52,6 +52,8 @@
 #include <sys/types.h>
 //wong
 
+#include <cutils/properties.h>
+
 #define INDENT "  "
 #define INDENT2 "    "
 
@@ -145,6 +147,12 @@ static bool validateMotionEvent(int32_t action, size_t pointerCount,
         pointerIdBits.markBit(id);
     }
     return true;
+}
+
+static bool isMonkey() {
+    char propBuf[8];
+    property_get("ro.monkey", propBuf, "false");
+    return strcmp(propBuf, "true") == 0;
 }
 
 
@@ -958,12 +966,15 @@ int32_t InputDispatcher::findFocusedWindowTargetsLocked(nsecs_t currentTime,
                     "focused application that may eventually add a window: %s.",
                     getApplicationWindowLabelLocked(mFocusedApplication, NULL).string());
 #endif
-            /*injectionResult = handleTargetsNotReadyLocked(currentTime, entry,
+            if (!isMonkey()) {
+            injectionResult = handleTargetsNotReadyLocked(currentTime, entry,
                     mFocusedApplication, NULL, nextWakeupTime);
-            goto Unresponsive;*/
+            goto Unresponsive;
+            } else {
             LOGI("Dropping event ,we don't need waiting for fucor window anymore .");
             injectionResult = INPUT_EVENT_INJECTION_FAILED;
             goto Failed;
+            }
         }
 
         LOGI("Dropping event because there is no focused window or focused application.");
@@ -1146,12 +1157,15 @@ int32_t InputDispatcher::findTouchedWindowTargetsLocked(nsecs_t currentTime,
                         "focused application that may eventually add a new window: %s.",
                         getApplicationWindowLabelLocked(mFocusedApplication, NULL).string());
 #endif
-                /*injectionResult = handleTargetsNotReadyLocked(currentTime, entry,
+                if (!isMonkey()) {
+                injectionResult = handleTargetsNotReadyLocked(currentTime, entry,
                         mFocusedApplication, NULL, nextWakeupTime);
-                goto Unresponsive;*/
+                goto Unresponsive;
+                } else {
                 LOGI("Dropping event ,we don't need waiting for fucor window anymore .");
                 injectionResult = INPUT_EVENT_INJECTION_FAILED;
                 goto Failed;
+                }
             }
 
             LOGI("Dropping event because there is no touched window or focused application.");
