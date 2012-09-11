@@ -344,8 +344,12 @@ class AlarmManagerService extends IAlarmManager.Stub {
 
         while (it.hasNext()) {
             Alarm alarm = it.next();
-			Slog.v(TAG, "remove" + alarm);
-			it.remove();
+            Slog.v(TAG, "alarm.operation.getTargetPackage():" + alarm.operation.getTargetPackage());
+            Slog.v(TAG, "operation.getTargetPackage():" + operation.getTargetPackage());
+            if (alarm.operation.getTargetPackage().equals(operation.getTargetPackage())) {
+                Slog.v(TAG, "remove alarm:" + alarm);
+                it.remove();
+            }
 		}
 		if (alarmList.size() <= 0) {
 			Slog.v(TAG, "Power off alarmList is empty");
