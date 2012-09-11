@@ -479,12 +479,13 @@ public class PhoneFactory {
     public static boolean checkSimFinish(int phoneId) {
         if (sProxyPhone!=null&&phoneId<sProxyPhone.length) {
             State state = sProxyPhone[phoneId].getIccCard().getIccCardState();
-            Log.i(LOG_TAG, "checkSimFinish state["+phoneId+"]=" + state);
-            if((state == State.PIN_REQUIRED) ||
+            boolean radioReady = sCommandsInterface[phoneId].getRadioStateEx().isReady();
+            Log.i(LOG_TAG, "checkSimFinish state["+phoneId+"]=" + state+" radioReady["+phoneId+"]="+radioReady);
+            if(radioReady && ((state == State.PIN_REQUIRED) ||
                (state == State.PUK_REQUIRED) ||
                (state == State.NETWORK_LOCKED) ||
                (state == State.READY) ||
-               (state == State.ABSENT)) {
+               (state == State.ABSENT))) {
                 return true;
             }
         }
@@ -493,13 +494,12 @@ public class PhoneFactory {
     public static int canHandleDataCall(int phoneId) {
         if (sProxyPhone!=null&&phoneId<sProxyPhone.length) {
             State state = sProxyPhone[phoneId].getIccCard().getIccCardState();
-            boolean isAirplaneModeOn = Settings.System.getInt(sContext.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
-            boolean isStandby = Settings.System.getInt(sContext.getContentResolver(),getSetting(
-                    Settings.System.SIM_STANDBY, phoneId), 1) == 1;
+            boolean radioOn = sCommandsInterface[phoneId].getRadioStateEx().isOn();
+            Log.i(LOG_TAG, "canHandleDataCall radioOn["+phoneId+"]=" + radioOn);
             if((state == State.PIN_REQUIRED) ||
                (state == State.PUK_REQUIRED)) {
                 return SIM_STATUS_PIN_LOCK;
-            } else if(state == State.READY && isStandby && !isAirplaneModeOn) {
+            } else if(state == State.READY && radioOn) {
                 return SIM_STATUS_READY;
             } else {
                 return SIM_STATUS_OTHER;

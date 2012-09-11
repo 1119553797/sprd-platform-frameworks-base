@@ -94,6 +94,7 @@ public abstract class BaseCommands implements CommandsInterface {
     protected int mCdmaSubscription;
     // Type of Phone, GSM or CDMA. Set by CDMAPhone or GSMPhone.
     protected int mPhoneType;
+    protected RadioStateEx mStateEx = RadioStateEx.RADIO_OFF;
 
 
     public BaseCommands(Context context) {
@@ -106,6 +107,9 @@ public abstract class BaseCommands implements CommandsInterface {
         return mState;
     }
 
+    public RadioStateEx getRadioStateEx() {
+        return mStateEx;
+    }
 
     public void registerForRadioStateChanged(Handler h, int what, Object obj) {
         Registrant r = new Registrant (h, what, obj);
@@ -719,9 +723,17 @@ public abstract class BaseCommands implements CommandsInterface {
                 Log.d(LOG_TAG,"Notifying: radio technology change GSM OFF to CDMA");
                 mRadioTechnologyChangedRegistrants.notifyRegistrants();
             }
+            if (mState.isOn()) {
+                setRadioStateEx(RadioStateEx.RADIO_ON);
+            } else {
+                setRadioStateEx(RadioStateEx.RADIO_OFF);
+            }
         }
     }
 
     protected void onRadioAvailable() {
+    }
+    protected void setRadioStateEx(RadioStateEx newState) {
+        mStateEx = newState;
     }
 }

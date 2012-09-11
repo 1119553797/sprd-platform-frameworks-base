@@ -1463,6 +1463,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
 
     public void
     setRadioPower(boolean on, Message result) {
+        setRadioStateEx(RadioStateEx.RADIO_SWITCHING);
         //if radio is OFF set preferred NW type and cmda subscription
         if(mInitialRadioStateChange) {
             synchronized (mStateMonitor) {

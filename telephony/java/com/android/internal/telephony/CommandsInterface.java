@@ -83,6 +83,22 @@ public interface CommandsInterface extends SprdCommandsInterface{
         }
     }
 
+    enum RadioStateEx {
+        RADIO_OFF, RADIO_SWITCHING, RADIO_ON;
+
+        public boolean isOn() {
+            return this == RADIO_ON;
+        }
+
+        public boolean isOff() {
+            return this == RADIO_OFF;
+        }
+
+        public boolean isReady() {
+            return this != RADIO_SWITCHING;
+        }
+    }
+
     //***** Constants
 
     // Used as parameter to dial() and setCLIR() below
@@ -167,6 +183,7 @@ public interface CommandsInterface extends SprdCommandsInterface{
     //***** Methods
 
     RadioState getRadioState();
+    RadioStateEx getRadioStateEx();
 
     /**
      * Fires on any RadioState transition
