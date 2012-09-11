@@ -58,14 +58,7 @@ int sock_checkReadble(void *ph);
 	#define CMMB_LOGICAL_CHANNEL_ID 2
 #endif
 
-///////////////lg add 2012-06-13////////
-int64_t lastTimeVideo = 0;
-int64_t baseTimeVideo = 0;
-int64_t lastTimeAudio = 0;
-int64_t baseTimeAudio = 0;
-int64_t maxTimeVideo = 0;
-int countVideo = 0;
-/////////////////////////////////////////
+
 
 class ProcessState;
 
@@ -155,9 +148,33 @@ private:
     void *mAVSock;
     int mTimeoutCount;
 
+///////////////lg add 2012-06-13////////
+	static  int64_t lastTimeVideo ;
+	static  int64_t baseTimeVideo ;
+	static  int64_t lastTimeAudio ;
+	static  int64_t baseTimeAudio ;
+	static  int64_t maxTimeVideo ;
+	static  int countVideo ;
+	static  int timeStampError ;//lg add 2012-09-06
+/////////////////////////////////////////
+
+ //   LOGI("class CMMBSource : public MediaSource ");
     CMMBSource(const CMMBSource &);
     CMMBSource &operator=(const CMMBSource &);
 };
+
+
+///////////////lg add 2012-06-13////////
+	int64_t CMMBSource::lastTimeVideo=0;
+	int64_t CMMBSource::baseTimeVideo=0;
+	int64_t CMMBSource::lastTimeAudio=0;
+	int64_t CMMBSource::baseTimeAudio=0;
+	int64_t CMMBSource::maxTimeVideo=0;
+	int CMMBSource::countVideo=0;
+	int CMMBSource::timeStampError=0;//lg add 2012-09-06
+/////////////////////////////////////////
+
+
 
 CMMBExtractor::Track::Track(uint32_t trackType) 
     : meta(NULL), timescale(CMMB_TIME_SCALE), includes_expensive_metadata(false), skipTrack(false)
@@ -211,14 +228,7 @@ status_t CMMBExtractor::initialize() {
 	//cmmb system
 //    ProcessState::self()->startThreadPool(); 
 
-///////////////lg add 2012-06-13////////
-	lastTimeVideo = 0;
-	baseTimeVideo = 0;
-	lastTimeAudio = 0;
-	baseTimeAudio = 0;
-	maxTimeVideo = 0;
-	countVideo = 0;
-/////////////////////////////////////////
+
 
 #ifdef DUMP_MFS_FILE
     const char* dumpfile = "/data/data/dump.mfs";
@@ -230,7 +240,7 @@ status_t CMMBExtractor::initialize() {
     mVideoSock = NULL;
     mAudioSock = NULL;
 
- 	LOGI("=============CMMBExtractor ver2.0.4================");
+ 	LOGI("=============CMMBExtractor ver2.0.5================");
 	
 	
     LOGI("===============CMMBExtractor:initialize() is called");
@@ -855,8 +865,6 @@ RETRY:
 			}
 			timeStamp = timeStamp + baseTimeVideo;	
 			lastTimeVideo = timeStamp;
-			LOGI(" ===============lastTimeVideo========%llx", lastTimeVideo);
-			
 		}
 		 
 	/////////////////////////////////////////////////////////////////////////////
@@ -880,7 +888,33 @@ RETRY:
         }
         mTimeoutCount = 0;
 
-        size = (size_t)len;
+///////////////////////////////lg add 2012-09-06//////////////////////////////
+	LOGI("**timeVideo-TimeAudio**=%lld", (lastTimeVideo-lastTimeAudio));
+	 //check timestamp for synchronization, |vedioTime-audiotime|>10s
+	if(((lastTimeVideo-lastTimeAudio)>22500*10) || ((lastTimeAudio-lastTimeVideo)>22500*10))
+	{	
+		timeStampError++;
+		LOGI("==timeStampError== %d", timeStampError);
+	}
+	else
+	{
+		timeStampError=0;
+	}
+
+	if (timeStampError >100)
+	{
+		timeStampError = 0;
+		LOGI("==timeStampError > 100=="); 
+       		mAVSock = NULL;
+		mBuffer->release();
+       		mBuffer = NULL;
+		return ERROR_CONNECTION_LOST;
+	}
+//////////////////////////////////////////////////////////////////////////
+
+
+
+	size = (size_t)len;
         
         if(mStarted == false)
             mStarted = true;        
