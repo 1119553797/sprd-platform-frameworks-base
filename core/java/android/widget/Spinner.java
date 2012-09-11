@@ -17,6 +17,7 @@
 package android.widget;
 
 import android.annotation.Widget;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +25,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -250,6 +252,16 @@ public class Spinner extends AbsSpinner implements OnClickListener {
         if (!handled) {
             handled = true;
             Context context = getContext();
+            
+            //add by liwd for bug 25093 begin
+            if (context != null && context instanceof Activity) {
+            	Activity a = (Activity)context;
+            	if (a.isFinishing()) {
+            		Log.v("Spinner", "Activity is finishing, so igonre showing the dialog.");
+            		return true;
+            	}
+            }
+            //add by liwd for bug 25093 end
             
             final DropDownAdapter adapter = new DropDownAdapter(getAdapter());
 
