@@ -767,13 +767,17 @@ public abstract class GSMPhone extends PhoneBase {
         GsmMmiCode mmi = GsmMmiCode.newFromDialString(networkPortion, this);
         if (LOCAL_DEBUG) Log.d(LOG_TAG,
                                "dialing w/ mmi '" + mmi + "'...");
-        Log.d(LOG_TAG, "GsmPhone isStkCall = '" + isStkCall);
+        Log.d(LOG_TAG, "GsmPhone isStkCall = " + isStkCall);
         mCT.setStkCall(isStkCall);
         if (mmi == null) {
             return mCT.dial(newDialString, uusInfo);
         } else if (mmi.isTemporaryModeCLIR()) {
             return mCT.dial(mmi.dialingNumber, mmi.getCLIRMode(), uusInfo);
         } else {
+            if (isStkCall) {
+                Log.d(LOG_TAG, " StkCall doesn't run MMI ");
+                return mCT.dial(newDialString, uusInfo);
+            }
             mPendingMMIs.add(mmi);
             mMmiRegistrants.notifyRegistrants(new AsyncResult(null, mmi, null));
             mmi.processCode();
