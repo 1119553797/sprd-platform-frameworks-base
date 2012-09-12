@@ -370,6 +370,7 @@ status_t MPEG4Extractor::readMetaData() {
             //mFileMetaData->setCString(kKeyMIMEType, "video/mp4");
             char mime[11] = "video/";
             strcat(mime, mMajorBrand);
+            memset(mMajorBrand, 0, sizeof(mMajorBrand)); // reset value to empty
             LOGD("video mime:%s", mime);
             mFileMetaData->setCString(kKeyMIMEType, mime);
         } else {
