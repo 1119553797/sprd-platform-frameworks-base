@@ -1199,6 +1199,7 @@ status_t MediaPlayerService::Client::attachAuxEffect(int effectId)
 
 void MediaPlayerService::Client::notify(void* cookie, int msg, int ext1, int ext2)
 {
+    if (cookie == NULL) {return;}
     Client* client = static_cast<Client*>(cookie);
 
     if (MEDIA_INFO == msg &&
@@ -1214,7 +1215,11 @@ void MediaPlayerService::Client::notify(void* cookie, int msg, int ext1, int ext
         client->addNewMetadataUpdate(metadata_type);
     }
     LOGV("[%d] notify (%p, %d, %d, %d)", client->mConnId, cookie, msg, ext1, ext2);
-    client->mClient->notify(msg, ext1, ext2);
+    if ((client != NULL) && (client->mClient != NULL) )
+    {
+        client->mClient->notify(msg, ext1, ext2);
+    }
+
 }
 
 
