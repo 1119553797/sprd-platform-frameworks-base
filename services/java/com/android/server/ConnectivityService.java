@@ -783,7 +783,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     FeatureUser k = (FeatureUser)mMmsFeatureRequest.get(0);
                     if (TextUtils.equals(k.mFeature, feature) && mMmsFeatureState != FeatureState.DISCONNECTING) {
                         if (mMmsFeatureState == FeatureState.CONNECTING) {
-                             isAlreadyConnecting = true;
+                             //isAlreadyConnecting = true;
                         }
                         if (DBG) {
                             Slog.d(TAG, "startUsing same Mms Feature as current mMmsFeatureState=" + mMmsFeatureState);
@@ -906,13 +906,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
                 if (!isAlreadyConnecting) {
                     if (DBG) Slog.d(TAG, "reconnecting to special network");
-                    if(!network.reconnect()){
-                        //if the mms apn is not available, remove the request from mMmsFeatureRequest
-                        //if not remove it, the othe mms send request will be pending.
-                        if (isMmsFeature(feature) && mMmsFeatureRequest.size() > 0) {
-                            mMmsFeatureRequest.remove(0);
+                    synchronized(this) {
+                        if(!network.reconnect()){
+                            //if the mms apn is not available, remove the request from mMmsFeatureRequest
+                            //if not remove it, the othe mms send request will be pending.
+                            if (isMmsFeature(feature) && mMmsFeatureRequest.size() > 0) {
+                                mMmsFeatureRequest.remove(0);
+                            }
+                            return Phone.APN_TYPE_NOT_AVAILABLE;
                         }
-                        return Phone.APN_TYPE_NOT_AVAILABLE;
                     }
                 } else {
                     if (DBG) Slog.d(TAG, "already reconnecting to special network");
