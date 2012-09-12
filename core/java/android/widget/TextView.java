@@ -99,6 +99,7 @@ import android.view.ViewParent;
 import android.view.ViewRoot;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.WindowManager.BadTokenException;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.AnimationUtils;
@@ -7574,7 +7575,16 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
 
     private class MenuHandler implements MenuItem.OnMenuItemClickListener {
         public boolean onMenuItemClick(MenuItem item) {
-            return onTextContextMenuItem(item.getItemId());
+        	//modified by liwd for bug 22603 begin
+        	boolean handled = false;
+        	try {
+        		handled = onTextContextMenuItem(item.getItemId());
+        	} catch (BadTokenException e) {
+        		Log.d("TextView.MenuHandler", "BadTokenException because of Activity or Window is gone, " +
+        				"so igonre showing the cursor(a PopupWindow).");
+        	}
+            return handled;
+            //modified by liwd end
         }
     }
 
