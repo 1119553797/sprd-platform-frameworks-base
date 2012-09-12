@@ -44,6 +44,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.WindowManager.BadTokenException;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.ExtractedText;
@@ -1288,14 +1289,20 @@ public class InputMethodService extends AbstractInputMethodService {
             return;
         }
         
+        //modified by liwd for bug 23631 begin 
+        boolean winInVisbleByBadToken = false;
         try {
             mWindowWasVisible = mWindowVisible;
             mInShowWindow = true;
             showWindowInner(showInput);
+        } catch (BadTokenException e) {
+        	winInVisbleByBadToken = true;
+        	Log.d(TAG, "BadTokenException when show InputMethod, because the Activity has gone, just ignore.");
         } finally {
-            mWindowWasVisible = true;
+        	mWindowWasVisible = !winInVisbleByBadToken;
             mInShowWindow = false;
         }
+        //modified by liwd end
     }
     
     void showWindowInner(boolean showInput) {
