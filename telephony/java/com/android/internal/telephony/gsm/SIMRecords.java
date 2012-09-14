@@ -20,6 +20,7 @@ import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOI
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC;
+import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ALTE_OPERATOR_NUMERIC;
 import android.content.Context;
 import android.os.AsyncResult;
 import android.os.Message;
@@ -274,6 +275,7 @@ public final class SIMRecords extends IccRecords {
         //adnCache.reset();
 
         phone.setSystemProperty(PROPERTY_ICC_OPERATOR_NUMERIC, null);
+        phone.setSystemProperty(PROPERTY_ALTE_OPERATOR_NUMERIC, null);
         phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ALPHA, null);
         phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, null);
 
@@ -617,6 +619,7 @@ public final class SIMRecords extends IccRecords {
         // Length = length of MCC + length of MNC
         // length of mcc = 3 (TS 23.003 Section 2.2)
         Log.d(LOG_TAG, "getSIMOperatorNumeric:imsi= "+imsi +" mncLength ="+mncLength);
+        phone.setSystemProperty(PROPERTY_ICC_OPERATOR_NUMERIC, imsi.substring(0, 3 + mncLength));
         return imsi.substring(0, 3 + mncLength);
     }
     /*
@@ -626,10 +629,12 @@ public final class SIMRecords extends IccRecords {
      */
     String getSIMOperatorNumericAlternate(){
         String numeric = "";
-        if(mncLength == 2 )
+        if(mncLength == 2 ){
             numeric = imsi.substring(0, 6);
-        else if (mncLength == 3)
+        }else if (mncLength == 3){
             numeric = imsi.substring(0, 5);
+        }
+        phone.setSystemProperty(PROPERTY_ALTE_OPERATOR_NUMERIC, numeric);
         return numeric;
     }
     // ***** Overridden from Handler
@@ -1417,10 +1422,6 @@ public final class SIMRecords extends IccRecords {
         Log.d(LOG_TAG, "SIMRecords: record load complete");
 
         String operator = getSIMOperatorNumeric();
-
-        // Some fields require more than one SIM record to set
-
-        phone.setSystemProperty(PROPERTY_ICC_OPERATOR_NUMERIC, operator);
 
         if (imsi != null) {
             phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ISO_COUNTRY,

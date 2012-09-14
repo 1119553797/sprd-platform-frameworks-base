@@ -86,6 +86,7 @@ public interface TelephonyProperties
      *  Availablity: SIM state must be "READY"
      */
     static String PROPERTY_ICC_OPERATOR_NUMERIC = "gsm.sim.operator.numeric";
+    static String PROPERTY_ALTE_OPERATOR_NUMERIC = "gsm.alte.operator.numeric";
 
     /** PROPERTY_ICC_OPERATOR_ALPHA is also known as the SPN, or Service Provider Name.
      *  Availablity: SIM state must be "READY"
