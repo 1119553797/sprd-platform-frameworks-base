@@ -221,6 +221,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         // hide the dialog.
         if (mSimUnlockProgressDialog != null) {
             mSimUnlockProgressDialog.hide();
+            mOkButton.setEnabled(true);
         }
         mUpdateMonitor.removeCallback(this);
     	mContext.unregisterReceiver(mBroadcastReceiver);
@@ -277,6 +278,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         } else if (v == mOkButton) {
             if(!checkPinLength()){
                  Log.d("SimUnlockScreen", "on click ok Button ");
+                 mOkButton.setEnabled(false);
                  getSimUnlockProgressDialog().show();
                  checkPin();
             }
@@ -316,6 +318,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 			void onSimLockChangedResponse(boolean success) {
 				if (mSimUnlockProgressDialog != null) {
 					mSimUnlockProgressDialog.hide();
+					mOkButton.setEnabled(true);
 				}
 				if (success) {
 					// ----------------------
