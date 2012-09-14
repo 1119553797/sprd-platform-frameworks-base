@@ -101,6 +101,15 @@ public class ShutdownFullscreenActivity extends Activity {
 		mDialog=new AlertDialog.Builder(this).create();
 		mDialog.setTitle(com.android.internal.R.string.power_off);
 		mDialog.setMessage(getString(com.android.internal.R.string.shutdown_after_seconds,mSeconds));
+		mDialog.setButton(DialogInterface.BUTTON_NEUTRAL,getText(com.android.internal.R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        myHandler.removeCallbacks(myRunnable);
+                        dialog.cancel();
+                        unregisterReceiver(mReceiver);
+                        finish();
+                    }});
+        mDialog.setCancelable(false);
 		mDialog.show();
         if(mConfirm == false){
         	myHandler.postDelayed(myRunnable, 1000);
