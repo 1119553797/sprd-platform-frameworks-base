@@ -96,7 +96,7 @@
     <!-- Displayed when a SIM PIN password is too long or too short. -->
     <string name="invalidPin">Type a PIN that is 4 to 8 numbers.</string>
     <!-- Displayed when a SIM PUK password is too short. -->
-    <string name="invalidPuk">Type a PUK that is 8 numbers or longer.</string>
+    <string name="invalidPuk">Type a PUK that is 8 numbers.</string>
     <!-- Displayed to prompt the user to type the PUK password to unlock
          the SIM card. -->
     <string name="needPuk">Your SIM card is PUK-locked. Type the PUK code to unlock it.</string>

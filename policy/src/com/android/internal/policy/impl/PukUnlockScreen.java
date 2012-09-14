@@ -585,7 +585,7 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     //--------------
 	private boolean checkPukLength() {
 		// make sure that the pin is at least 4 digits long.
-        if (mEnteredDigits < MAX_PUK_LENGTH) {
+        if (mEnteredDigits != MAX_PUK_LENGTH) {
             mHeaderText.setText(R.string.invalidPuk);
             mPukText.setText("");
             mEnteredDigits = 0;
