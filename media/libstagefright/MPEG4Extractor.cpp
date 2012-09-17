@@ -1654,7 +1654,10 @@ status_t MPEG4Source::read(
         err = mGroup->acquire_buffer(&mBuffer);
 
         if (err != OK) {
-            CHECK(mBuffer == NULL);
+            if (mBuffer != NULL) {
+                mBuffer->release();
+                mBuffer = NULL;
+            }
             return err;
         }
     }
