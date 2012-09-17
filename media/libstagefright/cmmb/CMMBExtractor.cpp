@@ -116,6 +116,15 @@ public:
 
 //    virtual bool cmmbDataResumed();
     int connectToDataServer();
+	///////////////lg add 2012-06-13////////
+	static  int64_t lastTimeVideo ;
+	static  int64_t baseTimeVideo ;
+	static  int64_t lastTimeAudio ;
+	static  int64_t baseTimeAudio ;
+	static  int64_t maxTimeVideo ;
+	static  int countVideo ;
+	static  int timeStampError ;//lg add 2012-09-06
+/////////////////////////////////////////
 
 protected:
     virtual ~CMMBSource();
@@ -145,18 +154,11 @@ private:
     MediaBuffer *mBuffer;    
 
     sp<CMMBExtractor> mExtractor;
+
     void *mAVSock;
     int mTimeoutCount;
 
-///////////////lg add 2012-06-13////////
-	static  int64_t lastTimeVideo ;
-	static  int64_t baseTimeVideo ;
-	static  int64_t lastTimeAudio ;
-	static  int64_t baseTimeAudio ;
-	static  int64_t maxTimeVideo ;
-	static  int countVideo ;
-	static  int timeStampError ;//lg add 2012-09-06
-/////////////////////////////////////////
+
 
  //   LOGI("class CMMBSource : public MediaSource ");
     CMMBSource(const CMMBSource &);
@@ -228,7 +230,13 @@ status_t CMMBExtractor::initialize() {
 	//cmmb system
 //    ProcessState::self()->startThreadPool(); 
 
-
+	CMMBSource::lastTimeVideo=0;
+	CMMBSource::baseTimeVideo=0;
+	CMMBSource::lastTimeAudio=0;
+	CMMBSource::baseTimeAudio=0;
+	CMMBSource::maxTimeVideo=0;
+	CMMBSource::countVideo=0;
+	CMMBSource::timeStampError=0;//lg add 2012-09-06
 
 #ifdef DUMP_MFS_FILE
     const char* dumpfile = "/data/data/dump.mfs";
@@ -668,7 +676,6 @@ status_t CMMBExtractor::updateAudioTrackInfoFromESDS_MPEG4Audio(
 
     int32_t prevSampleRate;
     CHECK(mAudioTrack->meta->findInt32(kKeySampleRate, &prevSampleRate));
-
     LOGI("==============New sample rate is = %d", sampleRate);
     if (prevSampleRate != sampleRate) {
         LOGV("mpeg4 audio sample rate different from previous setting. "
@@ -717,6 +724,8 @@ CMMBSource::CMMBSource(
     const char *mime;
     bool success = mFormat->findCString(kKeyMIMEType, &mime);
     CHECK(success);
+
+
 
     mIsAVC = !strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_AVC);    
     
@@ -990,6 +999,7 @@ static void convertTimeToDate(int64_t time_1904, String8 *s) {
 }
 
 }  // namespace android
+
 
 
 
