@@ -1147,8 +1147,12 @@ class MountService extends IMountService.Stub
 
     private void sendUsbIntent(boolean c){
 	 Log.d(TAG,"send usb intent wiht action : " + (c ? Intent.ACTION_SPRD_USB_AVAILABLE : Intent.ACTION_SPRD_USB_UNAVAILABLE));
-	 mContext.sendBroadcast(
+	try{	
+		 mContext.sendBroadcast(
 	 	new Intent((c ? Intent.ACTION_SPRD_USB_AVAILABLE : Intent.ACTION_SPRD_USB_UNAVAILABLE)));
+	} catch(IllegalStateException ex){
+		Log.d(TAG,"Cannot broadcast before boot completed, retry later.");
+	}
 	 Log.d(TAG," usb intent  end");
     }
     //add by liguxiang 09-15-11 for whether usb available end
