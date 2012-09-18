@@ -590,9 +590,15 @@ MediaRecorder::MediaRecorder()
     const sp<IMediaPlayerService>& service(getMediaPlayerService());
     if (service != NULL) {
         mMediaRecorder = service->createMediaRecorder(getpid());
+    } else {
+        LOGE("constructor service is null");
+        return;
     }
     if (mMediaRecorder != NULL) {
         mCurrentState = MEDIA_RECORDER_IDLE;
+    } else {
+        LOGE("constructor mMediaRecorder is null");
+        return;
     }
     doCleanUp();
 }
