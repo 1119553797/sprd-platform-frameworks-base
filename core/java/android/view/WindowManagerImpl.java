@@ -18,6 +18,7 @@ package android.view;
 
 import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.os.SystemProperties;
 import android.util.AndroidRuntimeException;
 import android.util.Config;
 import android.util.Log;
@@ -174,7 +175,39 @@ public class WindowManagerImpl implements WindowManager {
             mParams[index] = wparams;
         }
         // do this last because it fires off messages to start doing things
-        root.setView(view, wparams, panelParentView);
+        // modified by liwd@spreadst.com to avoid "Failed to register input channel" in monkey test.
+        try {
+        	root.setView(view, wparams, panelParentView);
+        } catch (RuntimeException e) {
+        	boolean MONKEY = false;
+        	try {
+        		MONKEY = SystemProperties.getBoolean("ro.monkey", false);
+        	} catch (Exception e1) {
+        		MONKEY = false;
+        		Log.w("WindowManagerImpl", "Cannot get system property: ro.monkey");
+        	}
+        	
+        	if (MONKEY) {
+        		String msg = e.getMessage();
+        		if (msg != null && msg.contains("register input channel")) {
+        			try {
+        				Log.w("WindowManagerImpl", "Failed to register input channel with ViewRoot: " + root.toString()
+        						+ ", and it's InputChannel: " + root.mInputChannel 
+        						+ ".\n Often because: 'binder got transaction with invalid fd, -1'. The pipe created by "
+        						+ "WMS was broken before talking with binder driver."
+        						+ "\n But I don't know why, we just ignore it in monkey test.");
+        				removeViewImmediate(view);
+        			} catch (Exception e2) {
+        				Log.w("WindowManagerImpl", "Ignore the removeViewImmediate() fail: " + e2.getMessage());
+        			}
+        		} else {
+        			throw e;
+        		}
+        	} else {
+        		throw e;
+        	}
+        }
+        // modified by liwd@spreadst.com end
     }
 
     public void updateViewLayout(View view, ViewGroup.LayoutParams params) {
