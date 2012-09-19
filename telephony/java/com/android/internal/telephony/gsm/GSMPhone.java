@@ -301,7 +301,35 @@ public abstract class GSMPhone extends PhoneBase {
     }
 
     public DataState getDataConnectionState(String apnType) {
-        return mDataConnection.getDataConnectionState(apnType);
+        DataState ret = mDataConnection.getDataConnectionState(apnType);
+
+        if (mSST == null) {
+            // Radio Technology Change is ongoning, dispose() and removeReferences() have
+            // already been called
+
+            ret = DataState.DISCONNECTED;
+        } else if (mSST.getCurrentGprsState()
+                != ServiceState.STATE_IN_SERVICE) {
+            // If we're out of service, open TCP sockets may still work
+            // but no data will flow
+            ret = DataState.DISCONNECTED;
+        } else { /* mSST.gprsState == ServiceState.STATE_IN_SERVICE */
+            switch (ret) {
+                case CONNECTED:
+                    if ( mCT.state != Phone.State.IDLE
+                            && !mSST.isConcurrentVoiceAndData()) {
+                        ret = DataState.SUSPENDED;
+                    } else if (mCT.state == Phone.State.IDLE
+                                  && MsmsGsmDataConnectionTrackerProxy.isAnotherCardVoiceing(getPhoneId())
+                                  && !MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()) {
+                        ret = DataState.SUSPENDED;
+                    } else {
+                        ret = DataState.CONNECTED;
+                    }
+                break;
+            }
+        }
+        return ret;
     }
 
     public DataState getDataConnectionState() {

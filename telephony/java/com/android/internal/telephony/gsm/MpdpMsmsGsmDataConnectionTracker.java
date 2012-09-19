@@ -611,23 +611,21 @@ public class MpdpMsmsGsmDataConnectionTracker extends MsmsGsmDataConnectionTrack
 
     @Override
     public String[] getActiveApnTypes(String apnType) {
-        //GsmDataConnection pdp = null;
+        GsmDataConnection pdp = null;
         String[] result;
         if(apnType==null){
             return null;
         }
-        //if (dataServiceTable != null && dataServiceTable.length > 0
-        //        && apnTypeToId(apnType) != APN_INVALID_ID) {
-        //    pdp = this.dataServiceTable[apnTypeToId(apnType)];
-        //}
-        //if (pdp != null && pdp.getApn() != null) {
-        //    result=pdp.getApn().types;
-        //} else {
-        //    result=new String[1];
-        //    result[0]=Phone.APN_TYPE_DEFAULT;
-        //}
-        result=new String[1];
-        result[0]=apnType;
+        if (dataServiceTable != null && dataServiceTable.length > 0
+                && apnTypeToId(apnType) != APN_INVALID_ID) {
+            pdp = this.dataServiceTable[apnTypeToId(apnType)];
+        }
+        if (pdp != null && pdp.getApn() != null) {
+            result=pdp.getApn().types;
+        } else {
+            result=new String[1];
+            result[0]=new String(apnType);
+        }
         return result;
 
     }

@@ -418,8 +418,8 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         if (!checkNotifyPermission("notifyDataConnection()" )) {
            return;
         }
-        Slog.i(TAG, "notifyDataConnection: state=" + state + " isDataConnectivityPossible="
-                + isDataConnectivityPossible + " reason=" + reason
+        Slog.i(TAG, "notifyDataConnection: state=" + state + " pdpState=" + pdpState +
+                " isDataConnectivityPossible=" + isDataConnectivityPossible + " reason=" + reason
                 + " interfaceName=" + interfaceName + " networkType=" + networkType);
         synchronized (mRecords) {
             mDataConnectionState = state;
