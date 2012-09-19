@@ -24,4 +24,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="weak_signal_title">سىگنال ئاجىز</string>
     <string name="weak_signal_message">ھازىرقى  WLAN سىگنالى بەك ئاجىز،بۇنىڭدىن ياخشىراقىنى تاللىغان بولسىڭىز</string>
     <string name="auto_connect">بىۋاستە ئاپتۇماتىك ھالدا باشقا ئىشەنچىلىك APگە ئۇلانسۇن</string>
+    <string name="bluetooth_name">"كۆك چىش"</string>
+    <string name="sound_name">"ئاۋاز"</string>
+    <string name="mode_silent_name">"ئاۋازسىز"</string>
+    <string name="mode_vibrate_name">"تىترەش"</string>
+    <string name="mode_sound_name">"ئاۋاز"</string>
+    <string name="auto_rotate_name">"ئايلاندۇرۇش"</string>
+    <string name="mobile_net_name">"سانلىق مەلۇمات"</string>
+    <string name="datanetwork_error_airplane">كارتا تەييارلانمىدى، سىز رەقەملىك تور مۇلازىمەت كەسپىنى ئىشلىتەلمەيسىز.</string>
+    <string name="bluetooth_error_airplane">تېلېفون ئۇچۇش ھالىتىدە، سىز كۆك چىشنى ئىشلىتەلمەيسىز.</string>
 </resources>

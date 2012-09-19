@@ -1032,4 +1032,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_miss_phone">omiteţi telefonul</string>
     <string name="lockscreen_miss_mms">omiteţi sms</string>
     <string name="lockscreen_sim_card_locked_message">"Cardul SIM este blocat."</string>
+    <string name="CallHold" msgid="">"Apel blocat"</string>
+    <string name="crash_title">Scuze!</string>
+    <string name="crash_application">Aplicaţia <xliff:g id="application">%1$s</xliff:g>
+        (procesul <xliff:g id="process">%2$s</xliff:g>) s-a oprit pe neaşteptate. Sistemul nu a reuşit să repară eroarea. Vă rugăm să utilizaţi un alt soft.</string>
+    <string name="crash_process">Procesul <xliff:g id="process">%1$s</xliff:g> s-a oprit pe neaşteptate. Sistemul nu a reuşit să repară eroarea. Vă rugăm să utilizaţi un alt soft.</string>
+    <string name="crash_close">ok</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">Ton de apel SIM1 selectat mut</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">Ton de apel SIM2 selectat mut</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">Ton de apel SIM1 şi SIM2 selectat mut</string>
+    <string name="upload_file_size_too_large">Fişierul de încărcare este prea mare, divizaţi-l în fişiere mai mici</string>
 </resources>

@@ -1016,4 +1016,37 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_warning">Uyarı</string>
     <string name="internal_memory_low">SD kart depolaması dolmak üzere! Lütfen yer açmak için bazı dosyaları silin.</string>
     <string name="button_close">"Kapat"</string>
+    <string name="address_length">Adres maksimum uzunluğa erişti</string>
+    <string name="permlab_receiveEmergencyBroadcast">acil durum yayınlarını al</string>
+    <string name="permdesc_receiveEmergencyBroadcast">Uygulamaya
+      \'e erişim ve acil durum mesajlarına işlem yapma izni verir. Bu izin sadece
+      sistem uygulamaları için geçerlidir.</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="cta_tethered_notification_title">"Doğrudan bağlantı oluşturma"</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicom</string>
+    <string name="shutdown_after_seconds">Telefon <xliff:g id="NUMBER">%d</xliff:g> saniye sonra kapanacak</string>
+    <string name="lockscreen_password_error">Şifre hatası, tekrar deneyin!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">
+		Kilit açma şifrenizi <xliff:g id="number">%d</xliff:g> defa yanlış girdiniz.
+        \n\nLütfen <xliff:g id="number">%d</xliff:g> saniye içerisinde tekrar deneyiniz.</string>
+    <string name="audio_play_failed">Üzgünüm, bu ses oynatılamıyor, varsayılan zil sesi kullanılıyor</string>
+    <string name="sms_full_title">"Kısa mesaj belleği dolu"</string>
+    <string name="sms_full_body">"Gelen ileti, belleğin dolu olması nedeniyle reddedildi. Lütfen eski iletilerinizi silin."</string>
+    <string name="unlock_screen_pin_error">Pin hatası!</string>
+    <string name="ap_disconnected">"Bağlantı kesildi"</string>
+    <string name="sim_chooser_title">SIM seç</string>
+    <string name="lockscreen_miss_phone">ulaşmayan telefon</string>
+    <string name="lockscreen_miss_mms">ulaşmayan sms</string>
+    <string name="lockscreen_sim_card_locked_message">"SIM kart kilitli."</string>
+    <string name="CallHold" msgid="">"Arama engellendi"</string>
+    <string name="crash_title">Üzgünüz!</string>
+    <string name="crash_application"><xliff:g id="application">%1$s</xliff:g>
+        (işlem <xliff:g id="process">%2$s</xliff:g>) uygulaması aniden durdu. Sistem hatayı tamir edemedi. Lütfen başka bir yazılım kullanın.</string>
+    <string name="crash_process"><xliff:g id="process">%1$s</xliff:g> işlemi aniden durdu. Sistem hatayı tamir edemedi. Lütfen başka bir yazılım kullanın.</string>
+    <string name="crash_close">tamam</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">SIM1 Sessiz zil sesi seçildi</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">SIM2 Sessiz zil sesi seçildi</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM1 ve SIM2 Sessiz zil sesi seçildi</string>
+    <string name="upload_file_size_too_large">Yükleme dosyanız çok büyük, lütfen küçük dosyalara bölün</string>
 </resources>

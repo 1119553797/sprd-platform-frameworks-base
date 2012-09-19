@@ -697,7 +697,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     </plurals>
     <plurals name="abbrev_in_num_days">
         <item quantity="one">gobe</item>
-        <item quantity="other"></item>
+        <item quantity="other">cikin <xliff:g id="count">%d</xliff:g> kwanaki</item>
     </plurals>
     <string name="day">yini</string>
     <string name="days">kwanaki</string>
@@ -1035,4 +1035,9 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_miss_phone">kuskure waya</string>
     <string name="lockscreen_miss_mms">kuskure sms</string>
     <string name="lockscreen_sim_card_locked_message">An kulle SIM card.</string>
+    <string name="CallHold" msgid="">An toshe kira</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">An zabi shirun sautin kira a SIM1 </string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">An zabi shirun sautin kira a SIM2</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">An zabi shirun sautin kira a SIM1 da SIM2</string>
+    <string name="upload_file_size_too_large">Fayil din da ka ke dorawa ya yi girma da yawa, raba shi zuwa kananan fayiloli</string>
 </resources>

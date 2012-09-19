@@ -24,4 +24,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="weak_signal_title">ZAYIF SİNYAL</string>
     <string name="weak_signal_message">Mevcut WLAN sinyali çok zayıf, daha iyi bir sinyal seçmeniz önerilir</string>
     <string name="auto_connect">Sormadan diğer güvenilen erişim noktasına otomatik olarak bağlan</string>
+    <string name="bluetooth_name">Bluetooth</string>
+    <string name="sound_name">Ses</string>
+    <string name="mode_silent_name">Sessiz</string>
+    <string name="mode_vibrate_name">Titret</string>
+    <string name="mode_sound_name">Ses</string>
+    <string name="auto_rotate_name">Çevir</string>
+    <string name="mobile_net_name">Veri</string>
+    <string name="datanetwork_error_airplane">Telefon u\çak modundayken DataNetwork özelliğini kullanamazsınız.</string>
+    <string name="bluetooth_error_airplane">Telefon u\çak modundayken Bluetooth özelliğini kullanamazsınız.</string>
 </resources>

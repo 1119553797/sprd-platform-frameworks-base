@@ -25,4 +25,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="weak_signal_title">SIGINA MARAR KARFI</string>
     <string name="weak_signal_message">Siginar WLAN da ake amfani ba ta da karfi sosai, ana bada shawarar ka zabi wadda ta fi wannan</string>
     <string name="auto_connect">Kada ka tambaya kuma ka hade da wani amintaccen shiri</string>
+    <string name="bluetooth_name">Bluetooth</string>
+    <string name="sound_name">Sauti</string>
+    <string name="mode_silent_name">Shiru</string>
+    <string name="mode_vibrate_name">Yi jijjiga</string>
+    <string name="mode_sound_name">Sauti</string>
+    <string name="auto_rotate_name">Kewaya</string>
+    <string name="mobile_net_name">Bayanai</string>
+    <string name="datanetwork_error_airplane">Ba za ka iya amfani da Hanyar sadarwar Bayanai ba yayin da waya ke yanayin kiran cikin jirgi.</string>
+    <string name="bluetooth_error_airplane">Ba za ka iya amfani da Bluetooth ba yayin da waya ke a yanayin kiran cikin jirgi.</string>
 </resources>

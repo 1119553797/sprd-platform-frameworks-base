@@ -24,4 +24,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="weak_signal_title">SEMNAL SLAB</string>
     <string name="weak_signal_message">Semnalul WLAN curent este foarte slab, se recomandă să selectaţi unul mai bun</string>
     <string name="auto_connect">Nu întrebaţi şi conectaţi-vă în mod automat la o altă ap de încredere</string>
+    <string name="bluetooth_name">Bluetooth</string>
+    <string name="sound_name">Sunet</string>
+    <string name="mode_silent_name">Mut</string>
+    <string name="mode_vibrate_name">Vibrare</string>
+    <string name="mode_sound_name">Sunet</string>
+    <string name="auto_rotate_name">Rotiţi</string>
+    <string name="mobile_net_name">Date</string>
+    <string name="datanetwork_error_airplane">Nu puteţi utiliza Reţeaua de date când telefonul este în modul avion.</string>
+    <string name="bluetooth_error_airplane">Nu puteţi utiliza Bluetooth când telefonul este în modul avion.</string>
 </resources>

@@ -1037,4 +1037,18 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sim_chooser_title">SIM ఎంచుకోండి</string>
     <string name="lockscreen_miss_phone">ఫోన్ మిస్</string>
     <string name="lockscreen_miss_mms">మిస్ sms</string>
+    <string name="CallHold" msgid="">"కాల్ బ్లాక్ చేయబడినడి"</string>
+    <string name="sipAddressTypeCustom">కస్టమ్</string>
+    <string name="sipAddressTypeHome">హోమ్</string>
+    <string name="sipAddressTypeWork">పని</string>
+    <string name="sipAddressTypeOther">ఇతరములు</string>
+    <string name="crash_title">క్షమించండి!</string>
+    <string name="crash_close">సరి</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">SIM1 నిశ్శబ్ధ రింగ్టోన్ ఎంచుకోబడినది</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">SIM1 నిశ్శబ్ధ రింగ్టోన్ ఎంచుకోబడినది</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM1 మరియు SIM2 నిశ్శబ్ధ రింగ్టోన్ ఎంచుకోబడినది</string>
+    <string name="cta_tethered_notification_title">టెథరింగ్</string>
+    <string name="sms_full_title">టెక్స్ట్ సందేశాల మెమరీ నిండినది</string>
+    <string name="lockscreen_sim_card_locked_message">SIM కార్డు లాక్ చేయబడినది.</string>
+    <string name="upload_file_size_too_large">మీరు అప్లోడ్ చేయదలచిన ఫైల్ బాగా పెద్దది, దయచేసి చిన్న భాగాలుగా విభజించబడినది</string>
 </resources>

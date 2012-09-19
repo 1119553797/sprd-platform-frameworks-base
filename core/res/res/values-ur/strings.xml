@@ -1033,4 +1033,18 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sim_chooser_title">سم سے انتخاب کریں </string>
     <string name="lockscreen_miss_phone"> مس فون</string>
     <string name="lockscreen_miss_mms">مس ایس ایم ایس</string>
+    <string name="CallHold" msgid="">کال بلاک</string>
+    <string name="sipAddressTypeCustom">اصول</string>
+    <string name="sipAddressTypeHome">ہوم</string>
+    <string name="sipAddressTypeWork">کام</string>
+    <string name="sipAddressTypeOther">دیگر</string>
+    <string name="crash_title">معاف کیجئے گا!</string>
+    <string name="crash_close">اوکے</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">سم1 خاموشرنگ ٹون منتخب </string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">سم2 خاموشرنگ ٹون منتخب </string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">سم1 اور سم2 خاموش رنگ ٹون، منتخب</string>
+    <string name="cta_tethered_notification_title">ٹیٹتھرنگ</string>
+    <string name="sms_full_title">متن پیغام مکمل میموری</string>
+    <string name="lockscreen_sim_card_locked_message">سم کارڈ مقفل ہے.</string>
+    <string name="upload_file_size_too_large">اپ لوڈ فائل بہت بڑی ہے،  براہ مہربانی چھوٹے فائلوں میں تقسیم کریں</string>
 </resources>

@@ -663,11 +663,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     </plurals>
     <plurals name="abbrev_num_seconds_ago">
         <item quantity="one">1 ka segundo milabay</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ka mga seg ang nilabay</item>
     </plurals>
     <plurals name="abbrev_num_minutes_ago">
         <item quantity="one">1 ka minuto milabay</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ka mga min ang nilabay</item>
     </plurals>
     <plurals name="abbrev_num_hours_ago">
         <item quantity="one">1 ka oras milabay</item>
@@ -679,11 +679,11 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     </plurals>
     <plurals name="abbrev_in_num_seconds">
         <item quantity="one">sa 1 ka segundo</item>
-        <item quantity="other"></item>
+        <item quantity="other">sulod sa <xliff:g id="count">%d</xliff:g> ka mga seg</item>
     </plurals>
     <plurals name="abbrev_in_num_minutes">
         <item quantity="one">sa 1 ka minuto</item>
-        <item quantity="other"></item>
+        <item quantity="other">sulod sa <xliff:g id="count">%d</xliff:g> ka mga min</item>
     </plurals>
     <plurals name="abbrev_in_num_hours">
         <item quantity="one">sa 1 ka oras</item>
@@ -1013,4 +1013,26 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_miss_phone">wad-on nga phone</string>
     <string name="lockscreen_miss_mms">wad-on nga sms</string>
     <string name="lockscreen_sim_card_locked_message">SIM card kay nalock.</string>
+    <string name="megabyteShort">MB</string>
+    <string name="ellipsis">\u2026</string>
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
+    <string name="CallHold" msgid="">"Tawag Naalihan"</string>
+    <string name="serviceClassPAD">PAD</string>
+    <string name="permlab_statusBarService">estado nga bar</string>
+    <string name="phoneTypeIsdn">ISDN</string>
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
+    <string name="js_dialog_title">Ang pahina sa \'<xliff:g id="title">%s</xliff:g>\' kay nag-ingun:</string>
+    <string name="addToDictionary">"Dugang ug \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" ngadto sa diksyunaryo</string>
+    <string name="crash_title">Sori!</string>
+    <string name="crash_application">Ang aplikasyon nga <xliff:g id="application">%1$s</xliff:g>
+        (proseso <xliff:g id="process">%2$s</xliff:g>) kay wa gidahum nga nihunongg. Sistema dili malampuson sa pag-ayo sa mali. Palihug gamit ug lain software.</string>
+    <string name="crash_process">Ang proseso nga <xliff:g id="process">%1$s</xliff:g> kay wala gidahum nga mahunong. Sistema dili malampuson sa pag-ayo sa mali. Palihug ug gamit ug lain software.</string>
+    <string name="crash_close">ok</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">Napili nga Hilom nga ringtone sa SIM1</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">Napili nga Hilom nga ringtone sa SIM2</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">Napili nga Hilom nga ringtone sa SIM1 ug SIM2</string>
+    <string name="usb_storage_message" product="nosdcard">Nakakonekta ka sa imu phone ngadto sa imu computer pinaagi sa USB. Pili-a ang pislitanan sa ubos kung gusto nimo kopyahon ang mga file tunga sa imu computer ug imu Android\u2018s nga imbakan sa USB.</string>
+    <string name="media_checking" product="default">SD card kay gisusi pa karon.</string>
+    <string name="media_shared" product="default">SD card kay gigamit pa karon sa computer.</string>
+    <string name="upload_file_size_too_large">Imu gi-upload nga file kay dako ra kaayo, gibahin ngadto sa gagmay nga mga file palihug</string>
 </resources>

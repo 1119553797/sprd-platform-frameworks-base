@@ -1012,4 +1012,36 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="dialog_warning">Attention</string>
     <string name="internal_memory_low">"La carte de stockage SD est presque pleine! Veuillez supprimer certains fichiers pour plus d\'espace."</string>
     <string name="button_close">"Proche"</string>
+    <string name="address_length">L\'adresse a atteint la longueur maximale</string>
+    <string name="permlab_receiveEmergencyBroadcast">recevoir des diffusions d\'urgence</string>
+    <string name="permdesc_receiveEmergencyBroadcast">Permettre aux applications de recevoir
+       et de traiter les messages d\'urgence de diffusés. Cette autorisation est uniquement disponible
+       aux applications du système.</string>
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="cta_tethered_notification_title">"Partage de connexion"</string>
+    <string name="custom_china_mobile">"China Mobile"</string>
+    <string name="custom_china_unicom">"China Unicom"</string>
+    <string name="shutdown_after_seconds">Le téléphone s\'éteindra apres <xliff:g id="NUMBER">%d</xliff:g> secondes</string>
+    <string name="lockscreen_password_error">Le mot de passe est erronné, essayez à nouveau!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">Vous avez incorrectement saisi votre code de deblocage <xliff:g id="number">%d</xliff:g> times.
+        \n\nS\'il vous plaît essayez de nouveau dans <xliff:g id="number">%d</xliff:g> secondes.</string>
+    <string name="audio_play_failed">Désolé, cet audio ne peut pas être joué, utilise la sonnerie par défaut</string>
+    <string name="sms_full_title">"Notification de mémoire est pleine"</string>
+    <string name="sms_full_body">"Message entrant rejeté, car la mémoire est pleine. Veuillez supprimer les anciens messages."</string>
+    <string name="unlock_screen_pin_error">Le pin est  est erronné!</string>
+    <string name="ap_disconnected">"Déconnecté"</string>
+    <string name="sim_chooser_title">Choisir la carte SIM</string>
+    <string name="lockscreen_miss_phone">phone manqué</string>
+    <string name="lockscreen_miss_mms">sms manqué</string>
+    <string name="lockscreen_sim_card_locked_message">"La carte SIM est verrouillée."</string>
+    <string name="CallHold" msgid="">"Appel bloqué"</string>
+    <string name="crash_title">Désolé!</string>
+    <string name="crash_application">L\'application <xliff:g id="application">%1$s</xliff:g>
+      s\'est arrétée de façon innatendue  (processus <xliff:g id="process">%2$s</xliff:g>) . Le système n\'a pas pu réparer l\'erreur. Veuillez utiliser un autre logiciel.</string>
+    <string name="crash_process">Le processus <xliff:g id="process">%1$s</xliff:g> s\'est arrété de façon innatendue. Le système n\'a pas pu réparer l\'erreur. Veuillez utiliser un autre logiciel.</string>
+    <string name="crash_close">ok</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">Carte SIM1 mode silence sélectionné</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">Carte SIM2 mode silence sélectionné</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">Carte SIM1 et SIM2 mode silence sélectionné</string>
+    <string name="upload_file_size_too_large">Votre dossier de téléchargement est trop grand, veuillez le diviser en plusieurs petits fichiers</string>
 </resources>
