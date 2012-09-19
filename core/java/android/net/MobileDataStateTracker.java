@@ -60,6 +60,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
     // DEFAULT and HIPRI are the same connection.  If we're one of these we need to check if
     // the other is also disconnected before we reset sockets
     private boolean mIsDefaultOrHipri = false;
+    private static final String MSG_FROM_SELF = "msgfromself";
 
     private PhoneStateListener mPhoneStateListener;
     /**
@@ -217,9 +218,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                     String reason = intent.getStringExtra(Phone.STATE_CHANGE_REASON_KEY);
                     String apnName = intent.getStringExtra(Phone.DATA_APN_KEY);
                     String apnTypeList = intent.getStringExtra(Phone.DATA_APN_TYPES_KEY);
+                    boolean bIsBroadcastMsg = !intent.getBooleanExtra(MSG_FROM_SELF, false);
                     mApnName = apnName;
 
-                    if (state == Phone.DataState.CONNECTED) {
+                    if (state == Phone.DataState.CONNECTED && bIsBroadcastMsg) {
                         if (DBG) Log.d(TAG, "replacing old mInterfaceName (" +
                                 mInterfaceName + ") with " +
                                 intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY) +
@@ -313,11 +315,15 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                                 setDetailedState(DetailedState.SUSPENDED, reason, apnName);
                                 break;
                             case CONNECTED:
-                                mInterfaceName = intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY);
+                                if(bIsBroadcastMsg) {
+                                    mInterfaceName = intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY);
+                                }
                                 if (mInterfaceName == null) {
                                     Log.d(TAG, "CONNECTED event did not supply interface name.");
                                 }
-                                mDefaultGatewayAddr = intent.getIntExtra(Phone.DATA_GATEWAY_KEY, 0);
+                                if(bIsBroadcastMsg) {
+                                    mDefaultGatewayAddr = intent.getIntExtra(Phone.DATA_GATEWAY_KEY, 0);
+                                }
                                 if (mDefaultGatewayAddr == 0) {
                                     Log.d(TAG, "CONNECTED event did not supply a default gateway.");
                                 }
@@ -463,6 +469,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 intent.putExtra(Phone.DATA_IFACE_NAME_KEY, mInterfaceName);
                 intent.putExtra(Phone.NETWORK_UNAVAILABLE_KEY, false);
                 intent.putExtra(Phone.DATA_GATEWAY_KEY, mDefaultGatewayAddr);
+                intent.putExtra(MSG_FROM_SELF, true);
                 if (mStateReceiver != null) mStateReceiver.onReceive(mContext, intent);
                 break;
             case Phone.APN_REQUEST_STARTED:
