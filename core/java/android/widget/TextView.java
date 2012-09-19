@@ -8099,7 +8099,10 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         public void updatePosition(HandleView handle, int x, int y) {
             final int previousOffset = getSelectionStart();
             int offset = getHysteresisOffset(x, y, previousOffset);
-
+            
+            if (offset == -1) {
+                return;
+            }
             if (offset != previousOffset) {
                 Selection.setSelection((Spannable) mText, offset);
                 updatePosition();
