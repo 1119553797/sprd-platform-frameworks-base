@@ -693,7 +693,7 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
         }
         device = getNewDevice(output);
 
-        setOutputDevice(output, device, false, 150);
+        setOutputDevice(output, device, false, 1200);  //delay time stamp
 
 #ifdef WITH_A2DP
         if (mA2dpOutput != 0 && !a2dpUsedForSonification() &&
