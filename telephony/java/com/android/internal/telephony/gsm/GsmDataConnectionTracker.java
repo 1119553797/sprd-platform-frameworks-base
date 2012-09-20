@@ -743,6 +743,15 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         msg.obj = reason;
         pdp.connect(msg, apn);
 
+        if (apn.canHandleType(Phone.APN_TYPE_DEFAULT)) {
+            setHttpProxy(apn.proxy, apn.port);
+        } else if (apn.canHandleType(Phone.APN_TYPE_MMS)) {
+            // do nothing even though proxy is set
+        } else {
+            if (apn.proxy != null && apn.proxy.length() > 0) {
+                setHttpProxy(apn.proxy, apn.port);
+            }
+        }
         setState(State.INITING);
         phone.notifyDataConnection(reason);
         return true;
@@ -1984,4 +1993,19 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             }
         }
     }
+
+    protected void setHttpProxy(String httpProxy, String httpPort) {
+        if (httpProxy == null || httpProxy.length() == 0) {
+            phone.setSystemProperty("net.gprs.http-proxy", null);
+            return;
+        }
+
+        if (httpPort == null || httpPort.length() == 0) {
+            httpPort = "8080";     // Default to port 8080
+        }
+
+        phone.setSystemProperty("net.gprs.http-proxy",
+                "http://" + httpProxy + ":" + httpPort + "/");
+    }
+
 }
