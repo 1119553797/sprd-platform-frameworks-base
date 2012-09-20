@@ -311,10 +311,8 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                     mHeaderText.setText(title);
                     mPukText.setText("");
                 } else {
-                    if (!checkPukLength()) {
-                        checkPuk();
-                        mCurrentStatus = STATUS_INPUT_PUK;
-                    }
+                    checkPuk();
+                    mCurrentStatus = STATUS_INPUT_PUK;
                 }
                 break;
         }
@@ -582,10 +580,10 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     public void onTimeChanged() {
 
     }
-    //--------------
-	private boolean checkPukLength() {
-		// make sure that the pin is at least 4 digits long.
-        if (mEnteredDigits != MAX_PUK_LENGTH) {
+
+    private boolean checkPukLength() {
+        // make sure that the PUK code is 8 digits long.
+        if (mCurrentStatus == STATUS_INPUT_PUK && mEnteredDigits != MAX_PUK_LENGTH) {
             mHeaderText.setText(R.string.invalidPuk);
             mPukText.setText("");
             mEnteredDigits = 0;
@@ -593,7 +591,8 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             return true;
         }
         return false;
-	}
+    }
+
     private void clearDigits() {
         final Editable digits = mPukText.getEditableText();
         final int len = digits.length();
@@ -602,5 +601,5 @@ public class PukUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             mEnteredDigits = 0;
         }
     }
-    //------------------------
+
 }
