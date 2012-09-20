@@ -832,17 +832,4 @@ public class MpdpMsmsGsmDataConnectionTracker extends MsmsGsmDataConnectionTrack
     protected void log(String s) {
         Log.d(LOG_TAG, "[MpdpMsmGsmDataConnectionTracker-phoneId" + mGsmPhone.getPhoneId() + "] " + s);
     }
-    private void setHttpProxy(String httpProxy, String httpPort) {
-        if (httpProxy == null || httpProxy.length() == 0) {
-            phone.setSystemProperty("net.gprs.http-proxy", null);
-            return;
-        }
-
-        if (httpPort == null || httpPort.length() == 0) {
-            httpPort = "8080";     // Default to port 8080
-        }
-
-        phone.setSystemProperty("net.gprs.http-proxy",
-                "http://" + httpProxy + ":" + httpPort + "/");
-    }
 }
