@@ -539,6 +539,7 @@ public class MediaPhone extends Handler
 	            FileOutputStream fos = new FileOutputStream(fn);
 	            try {
 					_enableRecord(isEnable, type, fos.getFD());
+                    mCm.controlIFrame(false, true, null);
 	            } finally {
 	                fos.close();
 	            }
