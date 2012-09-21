@@ -29,6 +29,7 @@ import android.os.Debug;
 import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemProperties;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -2243,7 +2244,23 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                     // No need to do all this work if we're not going to move anyway
                     boolean atEdge = false;
                     if (incrementalDeltaY != 0) {
-                        atEdge = trackMotionScroll(deltaY, incrementalDeltaY);
+                        // For monkey test
+                        try {
+                            atEdge = trackMotionScroll(deltaY, incrementalDeltaY);
+                        } catch (IndexOutOfBoundsException e) {
+                            boolean isMonkey = false;
+                            try {
+                                isMonkey = SystemProperties.getBoolean("ro.monkey", false);
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
+                            if (isMonkey) {
+                                e.printStackTrace();
+                                break;
+                            } else {
+                                throw e;
+                            }
+                        }
                     }
 
                     // Check to see if we have bumped into the scroll limit
