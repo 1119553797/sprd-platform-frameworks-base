@@ -1023,4 +1023,18 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sim_chooser_title">SIM كارتىنى تاللاش</string>
     <string name="lockscreen_miss_phone">تېلفۇننى قوبۇل قىلماسلىق</string>
     <string name="lockscreen_miss_mms">قىسقا ئۇچۇر قوبۇل قىلماسلىق</string>
+    <string name="CallHold" msgid="">"چاقىرىش توسۇلۇپ قالماق"</string>
+    <string name="sipAddressTypeCustom">"ئۆزلىكىدىن ئېنىقلىما بېرىش"</string>
+    <string name="sipAddressTypeHome">"تۇرالغۇ"</string>
+    <string name="sipAddressTypeWork">"ئورۇن"</string>
+    <string name="sipAddressTypeOther">"باشقا"</string>
+    <string name="crash_title">"كەچۈرۈڭ!"</string>
+    <string name="crash_close">بولدى</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">SIM1نىڭ ئاۋازسىز قوڭغۇرىقىنى تاللاش</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">SIM1نىڭ ئاۋازسىز قوڭغۇرىقىنى تاللاش</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM1بىلەنSIM2 نى ئاۋازسىز قوڭغۇرىقىنى تاللاش</string>
+    <string name="cta_tethered_notification_title">"USB باغلامسىز"</string>
+    <string name="sms_full_title">"ئۇچۇر قاچىلاش بوشلۇقى تولۇپ قالدى"</string>
+    <string name="lockscreen_sim_card_locked_message">sim تاقالدى</string>
+    <string name="upload_file_size_too_large">يۇللىغان ھۆججەت بەك چوڭككەن، بۆلۈپ يوللاڭ</string>
 </resources>

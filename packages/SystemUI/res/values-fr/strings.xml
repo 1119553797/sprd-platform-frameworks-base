@@ -24,4 +24,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="weak_signal_title">SIGNAL FAIBLE</string>
     <string name="weak_signal_message">Le signal WLAN actuel est très faible, il est recommandé de sélectionner un meilleur</string>
     <string name="auto_connect">Ne pas demandez  et  connecter automatiquement à d\'autres AP de confiance </string>
+    <string name="bluetooth_name">Bluetooth</string>
+    <string name="sound_name">Son</string>
+    <string name="mode_silent_name">Silence</string>
+    <string name="mode_vibrate_name">Vibreur</string>
+    <string name="mode_sound_name">Son</string>
+    <string name="auto_rotate_name">Tourner</string>
+    <string name="mobile_net_name">Donées</string>
+    <string name="datanetwork_error_airplane">Vous ne pouvez pas utiliser les données de réseau lorsque le téléphone est en mode Avion.</string>
+    <string name="bluetooth_error_airplane">Vous ne pouvez pas utiliser le bluetooth lorsque le téléphone est en mode Avion.</string>
 </resources>

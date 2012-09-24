@@ -1026,4 +1026,18 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sim_chooser_title">சிம் தெரிவு செய்க</string>
     <string name="lockscreen_miss_phone">தொலைபேசி தவறவிடவும்</string>
     <string name="lockscreen_miss_mms">எஸ் எம் எஸ் தவறவிடவும்</string>
+    <string name="CallHold" msgid="">"அழைப்பு தடுக்கப்பட்டது"</string>
+    <string name="sipAddressTypeCustom">வழக்கப்படியாக</string>
+    <string name="sipAddressTypeHome">முகப்பு</string>
+    <string name="sipAddressTypeWork">வேலை</string>
+    <string name="sipAddressTypeOther">மற்ற்</string>
+    <string name="crash_title">மன்னிக்கவும்!</string>
+    <string name="crash_close">சரி</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">சிம் 1 தொலைபேசி மணியோசை தேர்வு செய்யப்பட்டது</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">சிம் 2 தொலைபேசி மணியோசை தேர்வு செய்யப்பட்டது</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">சிம் 1 மற்றும் சிம் 2 நிசப்தம் மணியோசை தேர்ந்தெடுக்கப்பட்ட்து</string>
+    <string name="cta_tethered_notification_title">டெதெரிங்க்</string>
+    <string name="sms_full_title">வாசகசெய்தி நினைவகம் நிறைவு</string>
+    <string name="lockscreen_sim_card_locked_message">சிம் கார்டு பூட்டப்பட்டது.</string>
+    <string name="upload_file_size_too_large">உங்களுடைய சுமை ஏற்ற கோப்பு மிகவும் பெரிது. தயவு செய்து சிறிய  கோப்புகளாக பிரிக்கவும்</string>
 </resources>

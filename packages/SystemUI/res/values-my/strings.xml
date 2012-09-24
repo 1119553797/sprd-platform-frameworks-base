@@ -24,4 +24,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="weak_signal_title">အခ်က္ျပသေကၤတအားမေကာင္းပါ</string>
     <string name="weak_signal_message">လက္႐ွိ WLAN အခ်က္ျပသေကၤတမွာ ေတာ္ေတာ္အားမေကာင္းပါ၊ ပိုေကာင္းသည့္တစ္ခုကို ေ႐ြးခ်ယ္ရန္ အၾကံျပဳပါသည္</string>
     <string name="auto_connect">မေမးဘဲ အျခားယံုၾကည္စိတ္ခ်ရသည့္ ပ႐ုိဂရမ္သို႔ အလိုအေလ်ာက္ခ်ိတ္ဆက္ပါ</string>
+    <string name="bluetooth_name">ဘလူးတု</string>
+    <string name="sound_name">အသံ</string>
+    <string name="mode_silent_name">အသံေဖ်ာက္ထားျခင္း</string>
+    <string name="mode_vibrate_name">တုန္ခါပါ</string>
+    <string name="mode_sound_name">အသံ</string>
+    <string name="auto_rotate_name">လွည့္ပါ</string>
+    <string name="mobile_net_name">အခ်က္အလက္</string>
+    <string name="datanetwork_error_airplane">ဖုန္းကို ေလယာဥ္ပ်ံသန္းစဥ္ပံုစံတြင္ထားပါက ေဒတာကြန္ယက္အသံုးမျပဳႏုိင္ပါ။</string>
+    <string name="bluetooth_error_airplane">ဖုန္းကို ေလယာဥ္ပ်ံသန္းစဥ္ပံုစံတြင္ထားပါက ဘလူးတုအသံုးမျပဳႏုိင္ပါ။</string>
 </resources>

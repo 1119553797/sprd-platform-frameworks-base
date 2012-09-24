@@ -679,7 +679,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     </plurals>
     <plurals name="abbrev_in_num_seconds">
         <item quantity="one">1 စကၠန္႔အတြင္း</item>
-        <item quantity="other"></item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g>စကၠန္႔အတြင္း</item>
     </plurals>
     <plurals name="abbrev_in_num_minutes">
         <item quantity="one">1 မိနစ္အတြင္း</item>
@@ -1014,4 +1014,22 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_miss_phone">မကိုင္ထားေသာဖုန္း (%d)</string>
     <string name="lockscreen_miss_mms">မဖတ္ထားေသာ sms (%d)</string>
     <string name="lockscreen_sim_card_locked_message">SIM ကဒ္ကို ေသာ့ခတ္ထားသည္</string>
+    <string name="megabyteShort">MB</string>
+    <string name="ellipsis">\u2026</string>
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
+    <string name="CallHold" msgid="">"ဖုန္းေခၚဆိုမႈပိတ္ဆို႔ျပီး"</string>
+    <string name="serviceClassPAD">PAD</string>
+    <string name="phoneTypeIsdn">ISDN</string>
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
+    <string name="js_dialog_title">\'<xliff:g id="title">%s</xliff:g>\' ႐ွိ စာမ်က္ႏွာမွ ေျပာၾကားခ်က္:</string>
+    <string name="crash_title">ေဆာရီး!</string>
+    <string name="crash_application">ပ႐ိုဂရမ္<xliff:g id="application">%1$s</xliff:g>
+        (လုပ္ငန္းစဥ္  <xliff:g id="process">%2$s</xliff:g>) မွာ မေမွ်ာ္လင့္ဘဲ ရပ္တန္႔သြားသည္။ စနစ္မွ အမွားျပင္ဆင္ျခင္း မေအာင္ျမင္ပါ။ အျခားေဆာ့ဖ္ဝဲလ္ကို အသံုးျပဳပါ။</string>
+    <string name="crash_process">လုပ္ငန္းစဥ္  <xliff:g id="process">%1$s</xliff:g> မွာ မေမွ်ာ္လင့္ဘဲ ရပ္တန္႔သြားသည္။ စနစ္မွ အမွားျပင္ဆင္ျခင္း မေအာင္ျမင္ပါ။ အျခားေဆာ့ဖ္ဝဲလ္ကို အသံုးျပဳပါ။</string>
+    <string name="crash_close">လုပ္မည္</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">SIM1 အသံေဖ်ာက္ထားသည့္ ဖုန္းေခၚဆိုမႈတီးလံုးေ႐ြးခ်ယ္ျပီး</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">SIM2 အသံေဖ်ာက္ထားသည့္ ဖုန္းေခၚဆိုမႈတီးလံုးေ႐ြးခ်ယ္ျပီး</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM1 ႏွင့္ SIM2 အသံေဖ်ာက္ထားသည့္ ဖုန္းေခၚဆိုမႈတီးလံုးေ႐ြးခ်ယ္ျပီး</string>
+    <string name="audio_play_failed">ေဆာရီး၊ ဤအသံအား ဖြင့္၍မရပါ။ ဤဖုန္းေခၚဆိုမႈတီးလံုးကို မထား႐ွိပါႏွင့္။</string>
+    <string name="upload_file_size_too_large">သင္အပ္လုဒ္လုပ္မည့္ဖုိင္မွာ ၾကီးလြန္းေနသည္၊ ဖုိင္ငယ္မ်ားအျဖစ္ ခြဲပါ</string>
 </resources>
