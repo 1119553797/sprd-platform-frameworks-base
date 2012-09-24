@@ -33,7 +33,14 @@ copy_from :=                \
     Myanmar3.ttf            \
     ZawgyiOne.ttf           \
     Lohit-Telugu.ttf        \
-    Clockopia.ttf
+    Clockopia.ttf           \
+    Tibetan.ttf             \
+    Lohit-Punjabi.ttf       \
+    Lohit-Gujarati.ttf      \
+    KhmerOS.ttf             \
+    Phetsarath_OT.ttf       \
+    AbyssinicaSIL-R.ttf     \
+    Georgian.ttf
 
 ifneq ($(NO_FALLBACK_FONT),true)
 ifeq ($(filter %system/fonts/DroidSansFallback.ttf,$(PRODUCT_COPY_FILES)),)

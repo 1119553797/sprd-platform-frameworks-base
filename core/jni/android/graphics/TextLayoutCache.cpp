@@ -461,6 +461,13 @@ const static char* paths[] = {
     "/system/fonts/Myanmar3.ttf",
     "/system/fonts/ZawgyiOne.ttf",
     "/system/fonts/Lohit-Telugu.ttf",
+    "/system/fonts/Tibetan.ttf",
+    "/system/fonts/Lohit-Punjabi.ttf",
+    "/system/fonts/Lohit-Gujarati.ttf",
+    "/system/fonts/KhmerOS.ttf",
+    "/system/fonts/Phetsarath_OT.ttf",
+//    "/system/fonts/AbyssinicaSIL-R.ttf",
+    "/system/fonts/Georgian.ttf",
     NULL
 };
 enum CustomScript {
@@ -474,6 +481,13 @@ enum CustomScript {
     Myanmar,
     Zawgyi,
     Telugu,
+	Tibetan,
+	Punjabi,
+	Gujarati,
+	Khmer,
+	Laotian,
+//	Amharic,
+	Georgian,
     NUM_SCRIPTS
 };
 const hb_script_t ScriptTag[] = {
@@ -487,6 +501,15 @@ const hb_script_t ScriptTag[] = {
     HB_SCRIPT_MYANMAR,
     HB_SCRIPT_MYANMAR,
     HB_SCRIPT_TELUGU,
+
+	HB_SCRIPT_TIBETAN,
+	HB_SCRIPT_GURMUKHI,
+	HB_SCRIPT_GUJARATI,
+	HB_SCRIPT_KHMER,
+	HB_SCRIPT_LAO,
+//	HB_SCRIPT_COMMON,
+	HB_SCRIPT_GEORGIAN,
+
     HB_SCRIPT_COMMON
 };
 const hb_tag_t LanguageTag[] = {
@@ -500,6 +523,15 @@ const hb_tag_t LanguageTag[] = {
     HB_TAG('B','R','M',' '),
     HB_TAG('B','R','M',' '),
     HB_TAG('T','E','L',' '),
+
+    HB_TAG('T','I','B',' '),
+    HB_TAG('P','A','N',' '),
+    HB_TAG('G','U','J',' '),
+    HB_TAG('K','H','M',' '),
+    HB_TAG('L','A','O',' '),
+//    HB_TAG('A','M','H',' '),
+    HB_TAG('K','A','T',' '),
+
     HB_TAG('E','N','G',' ')
 };
 #if DEBUG_GLYPHS
@@ -577,6 +609,27 @@ void TextLayoutCacheValue::setupFaceForScript(HB_ShaperItem& shaperItem, int *p_
             break;
         case HB_Script_Thai:
             script = Thai;
+            break;
+        case HB_Script_Tibetan:
+            script = Tibetan;
+            break;
+        case HB_Script_Gurmukhi:
+            script = Punjabi;
+            break;
+        case HB_Script_Gujarati:
+            script = Gujarati;
+            break;
+        case HB_Script_Khmer:
+            script = Khmer;
+            break;
+        case HB_Script_Lao:
+            script = Laotian;
+            break;
+        //case HB_Script_Ethiopic:
+        //    script = Amharic;
+        //    break;
+        case HB_Script_Georgian:
+            script = Georgian;
             break;
         default:
             // HB_Script_Common; includes Ethiopic
@@ -782,6 +835,12 @@ void TextLayoutCacheValue::shapeRun(HB_ShaperItem& shaperItem, size_t start, siz
 //            ||     HB_Script_Bengali == shaperItem.item.script
 //            ||     HB_Script_Telugu == shaperItem.item.script
 //            ||     HB_Script_Thai == shaperItem.item.script
+            ||     HB_Script_Tibetan == shaperItem.item.script
+            ||     HB_Script_Gurmukhi == shaperItem.item.script
+            ||     HB_Script_Gujarati == shaperItem.item.script
+//            ||     HB_Script_Khmer == shaperItem.item.script
+            ||     HB_Script_Lao == shaperItem.item.script
+            ||     HB_Script_Georgian == shaperItem.item.script
 //            ||     HB_Script_Common == shaperItem.item.script
     ) {
         int script;
