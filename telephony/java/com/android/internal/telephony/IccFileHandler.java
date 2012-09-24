@@ -429,7 +429,6 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                 ar = (AsyncResult)msg.obj;
                 response = (Message) ar.userObj;
                 result = (IccIoResult) ar.result;
-
                 if (ar.exception != null) {
                     sendResult(response, null, ar.exception);
                     break;
@@ -443,9 +442,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                 }
 
                 data = result.payload;
-
                 fileid = msg.arg1;
-
                 if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
                     throw new IccFileTypeMismatch();
                 }

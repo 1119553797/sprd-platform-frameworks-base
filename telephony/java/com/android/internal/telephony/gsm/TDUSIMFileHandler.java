@@ -614,7 +614,6 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 				ar = (AsyncResult) msg.obj;
 				response = (Message) ar.userObj;
 				result = (IccIoResult) ar.result;
-
 				if (ar.exception != null) {
 					sendResult(response, null, ar.exception);
 					break;
@@ -865,8 +864,11 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 		case EF_MWIS:
 		case EF_MBI:
 		case EF_SPN:
-		case EF_AD:
-			 
+        case EF_AD:
+            if (isUsim) {
+                return MF_SIM + DF_ADF;
+            }
+            break;
 		case EF_MBDN:
 		case EF_PNN:
 		case EF_SPDI:
