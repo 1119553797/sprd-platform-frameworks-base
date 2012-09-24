@@ -949,7 +949,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="old_app_description">Ayaw sugdi ang bago nga aplikasyon.</string>
     <string name="new_app_action">Sugod ug <xliff:g id="old_app">%1$s</xliff:g></string>
     <string name="new_app_description">Hunungon ang daan nga aplikasyon nga dili I-save.</string>
-    <string name="ringtone_default_with_actual">Default nga ringtone (<xliff:g id="actual_ringtone">%2$s</xliff:g>)</string>
+    <string name="ringtone_default_with_actual">Default nga ringtone (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
     <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
     <string name="perms_hide"><b>Tago</b></string>
     <string name="perms_show_all"><b>Pakita tanan</b></string>
