@@ -1221,6 +1221,9 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             }
 
             case KeyEvent.KEYCODE_BACK: {
+                if (dispatcher == null) {
+                    break;
+                }
                 if (event.getRepeatCount() > 0) break;
                 if (featureId < 0) break;
                 // Currently don't do anything with long press.
