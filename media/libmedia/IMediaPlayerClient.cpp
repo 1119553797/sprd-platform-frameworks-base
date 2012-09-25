@@ -42,7 +42,11 @@ public:
         data.writeInt32(msg);
         data.writeInt32(ext1);
         data.writeInt32(ext2);
-        remote()->transact(NOTIFY, data, &reply, IBinder::FLAG_ONEWAY);
+        //fix bug 21444 low memory causes
+        if (remote())
+        {
+            remote()->transact(NOTIFY, data, &reply, IBinder::FLAG_ONEWAY);
+        }
     }
 };
 
