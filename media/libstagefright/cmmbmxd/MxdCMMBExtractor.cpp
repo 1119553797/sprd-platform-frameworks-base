@@ -115,11 +115,22 @@ namespace android {
 		unsigned long mLastFrameTs;
 		unsigned char* mLastVideoFrame;
 		int mLastVideoFrameSize;
-
+//add922		
+	  int64_t lastTimeVideo ;
+	   int64_t baseTimeVideo ;
+	   int64_t lastTimeAudio ;
+	   int64_t baseTimeAudio ;
+	   int64_t maxTimeVideo ;
+	   int64_t maxTimeAudio ;
+		   int countVideo ;
+		   int 	countAudio;
+	   int timeStampError ;
+//add922	
 		MxdCMMBSource(const MxdCMMBSource &);
 		MxdCMMBSource &operator=(const MxdCMMBSource &);
 	};
-
+	
+		
 	MxdCMMBExtractor::Track::Track(uint32_t trackType) 
 		: meta(NULL), timestampscale(TIMESTAMP_SCALE)
 	{
@@ -501,7 +512,16 @@ namespace android {
 		const char *mime;
 		bool success = mFormat->findCString(kKeyMIMEType, &mime);
 		CHECK(success);  
-
+		
+ lastTimeVideo=0;
+ baseTimeVideo=0;
+	 lastTimeAudio=0;
+	 baseTimeAudio=0;
+	 maxTimeVideo=0;
+ maxTimeAudio=0;	
+	 countVideo=0;
+	 countAudio=0;
+	 timeStampError=0;
 	}
 
 
@@ -667,7 +687,61 @@ namespace android {
 						len = getVideoData(mAVSock, &pdata, &ts);
 					}
 				}
-				timeStamp = (int64_t)ts;
+			//	timeStamp = (int64_t)ts;
+			//add922
+			if(len<=0)
+				{
+					timeStamp = (int64_t)ts;
+				}
+		else{
+					if(mTrackType == AUDIO_TRACK_SEQ){
+			
+						timeStamp = (int64_t)ts;
+						//	LOGD(" liwk=========a==ts=%x=timeStamp=%lx-baseTimeAudio=%lx--lastTimeAudio=%lx=======",ts,timeStamp,baseTimeAudio,lastTimeAudio);
+							if( (timeStamp + baseTimeAudio) < lastTimeAudio ){
+							maxTimeAudio = lastTimeAudio;
+			
+							LOGD(" liwk===============maxTimeAudio========%lx", maxTimeAudio);
+						}
+						if((timeStamp + baseTimeAudio)  < maxTimeAudio){
+							countAudio++;
+							LOGI(" liwk===============countAudio========%d", countAudio);
+						}
+						if(countAudio >= 3){
+							 baseTimeAudio = maxTimeAudio - timeStamp ;
+							baseTimeVideo = baseTimeAudio;
+							countAudio = 0;
+							LOGI(" liwk===============baseTimeAudio========%lx", baseTimeAudio);
+						}
+						timeStamp = timeStamp + baseTimeAudio;	
+						lastTimeAudio = timeStamp;				
+										
+					}
+					else{
+				 		
+						timeStamp = (int64_t)ts;	
+						if( (timeStamp + baseTimeVideo) < lastTimeVideo ){
+							maxTimeVideo = lastTimeVideo;
+			
+							LOGD(" liwk===============maxTimeVideo========%lx", maxTimeVideo);
+						}
+						if((timeStamp + baseTimeVideo)  < maxTimeVideo){
+							countVideo++;
+							LOGI(" liwk===============countVideo========%d", countVideo);
+						}
+						if(countVideo >= 3){
+							baseTimeVideo = maxTimeVideo - timeStamp ;
+							baseTimeAudio = baseTimeVideo;
+							countVideo = 0;
+							LOGI(" liwk===============baseTimeVideo========%lx", baseTimeVideo);
+						}
+						timeStamp = timeStamp + baseTimeVideo;	
+						lastTimeVideo = timeStamp;
+						//			LOGD(" liwk========v==ts=%x=timeStamp=%lx--baseTimeVideo=%lx--lastTimeVideo=%lx=======",ts,timeStamp,baseTimeVideo,lastTimeVideo);		
+					}
+		 		}
+			//add922   
+			
 				pucData = (uint8_t *)pdata;
 
 				if (len < 0)
@@ -731,7 +805,7 @@ namespace android {
 					}
 
 				}
-
+/*
 				if ((int64_t)ts -(int64_t)mLastFrameTs < -0xfffffff)
 				{           
 					MxdCMMBExtractor::mIsStreamDone = 1;
@@ -742,7 +816,33 @@ namespace android {
 				}
 
 				mLastFrameTs = ts;
+				*/
+				mLastFrameTs = timeStamp;
+//add922
+/*
+LOGI("**timeVideo-TimeAudio**=%lld", (lastTimeVideo-lastTimeAudio));
+	 //check timestamp for synchronization, |vedioTime-audiotime|>10s
+	if(((lastTimeVideo-lastTimeAudio)>22500*10) || ((lastTimeAudio-lastTimeVideo)>22500*10))
+	{	
+		timeStampError++;
+		LOGI("==timeStampError== %d", timeStampError);
+	}
+	else
+	{
+		timeStampError=0;
+	}
 
+	if (timeStampError >100)
+	{
+		timeStampError = 0;
+		LOGI("==timeStampError > 100=="); 
+					MxdCMMBExtractor::mIsStreamDone = 1;
+					mBuffer->release();
+					mBuffer = NULL;
+
+					return ERROR_END_OF_STREAM;
+	}*/
+//add922
 				mTimeoutCount = 0;
 
 				size = (size_t)len;
