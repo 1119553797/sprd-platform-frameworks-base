@@ -609,15 +609,29 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     }
     
     public boolean isUsbConnected(){
-    	IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
-        INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
-        try{
-        	 return service.isUsbConnected();
-        } catch (Exception e) {
-           Log.e(TAG, "Error toggling usb Status :" + e);
-           return false;
-        }
+//    	IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+//        INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+//        try{
+//        	 return service.isUsbConnected();
+//        } catch (Exception e) {
+//           Log.e(TAG, "Error toggling usb Status :" + e);
+//           return false;
+//        }
     	//return mUsbConnected;
+        boolean udcEnabled = isUsbUdcpowerStarted();
+        Log.i(TAG,"udcEnabled=" + udcEnabled);
+        if (!udcEnabled) {
+            IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+            INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+            try{
+             return service.isUsbConnected();
+            } catch (Exception e) {
+                Log.e(TAG, "Error toggling usb Status :" + e);
+                return false;
+            }
+        } else {
+             return mUsbConnected;
+        }
     }
     
     //add by liguxiang 08-28-11 for spreadtrum usb settings <udcpower && gser && vser> end
