@@ -145,9 +145,9 @@ public class UsbService extends IUsbManager.Stub {
     private final UEventObserver mUEventObserver = new UEventObserver() {
         @Override
         public void onUEvent(UEventObserver.UEvent event) {
-            if (Log.isLoggable(TAG, Log.VERBOSE)) {
-                Slog.v(TAG, "USB UEVENT: " + event.toString());
-            }
+            //if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                Log.d(TAG, "USB UEVENT: " + event.toString());
+            //}
 
             synchronized (mLock) {
                 String name = event.get("SWITCH_NAME");
