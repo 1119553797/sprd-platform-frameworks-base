@@ -7615,12 +7615,22 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             case ID_SELECT_ALL:
                 Selection.setSelection((Spannable) mText, 0, mText.length());
                 startTextSelectionMode();
-                getSelectionController().show();
+                // Modified by wuwz for bug 23773 begin
+                final CursorController controller = getSelectionController();
+                if (null != controller) {
+                    getSelectionController().show();
+                }
+                // Modified by wuwz for bug 23773 end
                 return true;
 
             case ID_START_SELECTING_TEXT:
                 startTextSelectionMode();
-                getSelectionController().show();
+                // Modified by wuwz for bug 23773 begin
+                final CursorController controller = getSelectionController();
+                if (null != controller) {
+                    getSelectionController().show();
+                }
+                // Modified by wuwz for bug 23773 end
                 return true;
 
             case ID_CUT:                
