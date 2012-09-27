@@ -909,4 +909,120 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"USB-opslag wordt momenteel gebruikt door een computer."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"SD-kaart wordt momenteel gebruikt door een computer."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Extern medium heeft onbekende status."</string>
+    <string name="address_length">Adres heeft het maximum lengte</string>
+    <string name="passwordChange" msgid="">"Wachtwoord wijzigen"</string>
+    <string name="badPin2">"De oude PIN2-code die u heeft ingevoerd, is onjuist."</string>
+    <string name="badPuk2">"De PUK2-code die u heeft ingevoerd, is onjuist."</string>
+    <string name="mismatchPin2">"De PIN2-codes die u heeft ingevoerd, komen niet overeen."</string>
+    <string name="mismatchPuk">"De PUK-codes die u heeft ingevoerd, komen niet overeen."</string>
+    <string name="mismatchPuk2">"De PUK2-codes die u heeft ingevoerd, komen niet overeen."</string>
+    <string name="invalidPuk">Typ een PUK 8 cijfers of langer.</string>
+    <string name="needPinLock">PIN wijzigen moet het instellen van PIN-slot.</string>
+    <string name="ColpMmi">De identificatie van de presentatie</string>
+    <string name="ColrMmi">Connected Line Identification Restriction</string>
+    <string name="UnConditionCfMmi" msgid="">"Onvoorwaardelijk Oproepafleiding"</string>
+    <string name="BusyCfMmi" msgid="">"Bij bezet doorschakelen"</string>
+    <string name="NoReplyCfMmi" msgid="">"Als er geen antwoord doorschakelen"</string>
+    <string name="NotReachCfMmi" msgid="">"Als niet bereikbaar doorschakelen"</string>
+    <string name="AllCfMmi" msgid="">"Alle oproepen doorschakelen"</string>
+    <string name="ConditionCfMmi" msgid="">"Voorwaardelijk Oproep doorschakelen"</string>
+    <string name="BaocMmi" msgid="">"Blokkeren van alle uitgaande gesprekken"</string>
+    <string name="BaoicMmi" msgid="">"Blokkeren van alle uitgaande internationale gesprekken"</string>
+    <string name="BaoicxhMmi" msgid="">"Blokkeren van alle uitgaande internationale gesprekken met uitzondering van eigen land"</string>
+    <string name="BaicMmi" msgid="">"Blokkeren van alle inkomende gesprekken"</string>
+    <string name="BaicrMmi" msgid="">"Blokkeren van alle inkomende gesprekken tijdens roaming"</string>
+    <string name="BaallMmi" msgid="">"Alles blokkeren voor alle basisdiensten"</string>
+    <string name="BamoMmi" msgid="">"Alle uitgaande voor alle basisdiensten"</string>
+    <string name="BamtMmi" msgid="">"Alle inkomende voor alle basisdiensten"</string>
+    <string name="ActiveUnconCf">Bel doorgestuurd onvoorwaardelijke</string>
+    <string name="ActiveConCf">Bel doorgestuurd voorwaardelijke</string>
+    <string name="CallForwarded">Bel doorgestuurd</string>
+    <string name="CallWaiting">"Wisselgesprek"</string>
+    <string name="CugCall" msgid="">"CUG Oproep"</string>
+    <string name="OutCallBarred" msgid="">"Uitgaand gesprek geblokkeerd"</string>
+    <string name="InCallBarred" msgid="">"Binnenkomende oproep geblokkeerd"</string>
+    <string name="ClirRejected" msgid="">"CLIR onderdrukking verworpen"</string>
+    <string name="ForwardedCall">Doorgeschakeld gesprek</string>
+    <string name="CallHold" msgid="">"Oproep geblokkeerd"</string>
+    <string name="CallRetrieved" msgid="">"Oproep terugnemen"</string>
+    <string name="MultiCall" msgid="">"Multi gesprek"</string>
+    <string name="HoldCallReleased" msgid="">"Gesprek in de wacht vrijgegeven"</string>
+    <string name="ConnectingEct" msgid="">"Aansluiten ECT"</string>
+    <string name="ConnectedEct" msgid="">"Verbonden ECT"</string>
+    <string name="IncomingCallForwarded" msgid="">"Extra inkomende oproep doorgeschakeld"</string>
+    <string name="Pin2Mmi">"PIN2-wijziging"</string>
+    <string name="PukMmi">"PIN unlock"</string>
+    <string name="Puk2Mmi">"PIN2 unlock"</string>
+    <string name="pinpuk_attempts">\nAttempts Overige:</string>
+    <string name="lockscreen_sim_network_locked_message">Telefoon SIM netwerk geblokkeerd</string>
+    <string name="sim1_puk_requried">SIM1 PIN geblokkeerd, voer PUK in om te deblokkeren</string>
+    <string name="sim2_puk_requried">SIM2 PIN geblokkeerd, voer PUK in om te deblokkeren</string>
+    <string name="sim_puk_requried">SIM PIN geblokkeerd, voer PUK in om te deblokkeren</string>
+    <string name="keyguard_password_enter_sim1_pin_code">Voer SIM1 PIN-code</string>
+    <string name="keyguard_password_enter_sim2_pin_code">Voer SIM2 PIN-code</string>
+    <string name="keyguard_password_enter_sim_pin_code">Voer SIM PIN-code</string>
+    <string name="keyguard_sim1_pin_accepted">SIM1 PIN Unlock Succesvol</string>
+    <string name="keyguard_sim2_pin_accepted">SIM2 PIN Unlock Succesvol</string>
+    <string name="keyguard_sim_pin_accepted">SIM PIN Unlock Succesvol</string>
+    <string name="puk_accept">PUK wordt aanvaard</string>
+    <string name="unblocking_fail">Ontstoppen mislukt, PUK her-invoeren</string>
+    <string name="keyguard_password_wrong_puk_code">"Onjuiste PUK-code!"</string>
+    <string name="new_pin">Voer een nieuwe PIN-code</string>
+    <string name="reenter">PIN Opnieuw invoeren</string>
+    <string name="lockscreen_blocked_sim_message_short">SIM-kaart geblokkeerd.</string>
+    <string name="crash_title">Sorry!</string>
+    <string name="crash_application">De toepassing <xliff:g id="application">%1$s</xliff:g>
+        (voortgang <xliff:g id="process">%2$s</xliff:g>) is onverwachts gestopt. Systeem kan de fout niet herstellen. Gebruik andere software. </string>
+    <string name="crash_process">Het proces <xliff:g id="process">%1$s</xliff:g> is onverwacht gestopt. Systeem kan de fout niet herstellen. Gebruik andere software.</string>
+    <string name="crash_close">OK</string>
+    <string name="volume_fm">FM volume</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">SIM1 Silent ringtone geselecteerd</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">SIM2 Silent ringtone geselecteerd</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM1 en SIM2 Silent ringtone geselecteerd</string>
+    <string name="cta_tethered_notification_title">"Tethering"</string>
+    <string name="Low_Memory_Alert">Telefoon opslagruimte is te laag. Verwijder enkele data om de stabiliteit van de telefoon te waarborgen.</string>
+    <string name="Low_Memory_Free">Gratis</string>
+    <string name="Low_Memory_Application">"Apps"</string>
+    <string name="Low_Memory_Mail">Mail</string>
+    <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+    <string name="Low_Memory_System">Systeem</string>
+    <string name="Btn_Select_Clear">Selecteer / Wissen</string>
+    <string name="myAppTip">Selecteer toepassingen te hanteren</string>
+    <string name="myApp_Start_Btn">"Start"</string>
+    <string name="myApp_Move2Sd_ChkBox">Naar SD verplaatsen</string>
+    <string name="myApp_ClearData_ChkBox">Wiss data</string>
+    <string name="myApp_Uninstall_ChkBox">"Verwijderen"</string>
+    <string name="myAppLoading">"Laden..."</string>
+    <string name="myAppProcessing">Processing\u2026</string>
+    <string name="keyguard_password_enter_puk_code">Voer PUK-code</string>
+    <string name="keyguard_password_enter_new_pin_first_code">Voer nieuwe PIN-code</string>
+    <string name="keyguard_password_enter_new_pin_second_code">Opnieuw invoeren Nieuwe PIN-code</string>
+    <string name="ums_active_notification_message">USB-massaopslag ingeschakeld</string>
+    <string name="modem_active_notification_title">Gebruik modem debug mode</string>
+    <string name="modem_active_notification_message">modem ingeschakeld debug mode</string>
+    <string name="china_mobile_numeric_values">China Mobile</string>
+    <string name="china_unicom_numeric_values">China Unicom</string>
+    <string name="china_telecom_numeric_values">China Telecom</string>
+    <string name="stk_refresh_sim_init_message">SIM-kaart wordt bijgewerkt</string>
+    <string name="stk_refresh_sim_reset_message">Telefoon zal opnieuw opstarten</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicom</string>
+    <string name="charge_active_notification_message">Alleen opladen ingeschakeld modus</string>
+    <string name="charge_active_notification_title">Gebruik opladen alleen wanneer usb is aangesloten</string>
+    <string name="shutdown_after_seconds">Telefoon wordt uitgeschakeld na <xliff:g id="NUMBER">%d</xliff:g> seconden</string>
+    <string name="lockscreen_password_error">Foute wachtwoord, probeer opnieuw!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">Je hebt uw unlock wachtwoord verkeerd ingevoerd<xliff:g id="number">%d</xliff:g>keer.\n\nProbeer nogmaals in <xliff:g id="number">%d</xliff:g> seconden.</string>
+    <string name="audio_play_failed">Sorry, kan dit geluid niet afgespelen. Deze ringtone niet instellen.</string>
+    <string name="sms_full_title">"Sms-geheugen vol"</string>
+    <string name="sms_full_body">"Inkomende berichten geweigerd wegens onvoldoende geheugen. Verwijder oude berichten."</string>
+    <string name="dialog_warning">Waarschuwing</string>
+    <string name="internal_memory_low">SD kaart opslag is bijna vol! Verwijder enkele bestanden om ruimte vrij te maken.</string>
+    <string name="button_close">"Sluiten"</string>
+    <string name="unlock_screen_pin_error">Foute pin!</string>
+    <string name="ap_disconnected">verbroken </string>
+    <string name="sim_chooser_title">Kies SIM</string>
+    <string name="lockscreen_miss_phone">mis telefoon</string>
+    <string name="lockscreen_miss_mms">mis sms</string>
+    <string name="lockscreen_sim_card_locked_message">"SIM-kaart is vergrendeld."</string>
+    <string name="upload_file_size_too_large">Uw upload bestand is te groot, verdeel in kleine bestanden</string>
 </resources>

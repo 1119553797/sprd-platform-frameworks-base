@@ -909,4 +909,122 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Der USB-Speicher wird derzeit von einem Computer verwendet."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Die SD-Karte wird derzeit von einem Computer verwendet."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Unbekannter Status des externen Speichermediums"</string>
+    <string name="address_length">"Adresse hat die maximale Länge erreicht"</string>
+    <string name="passwordChange" msgid="">"Passwort geändert"</string>
+    <string name="badPin2">"Die von Ihnen eingegebene alte PIN2 ist nicht korrekt."</string>
+    <string name="badPuk2">"Der von Ihnen eingegebene PUK2 ist nicht korrekt."</string>
+    <string name="mismatchPin2">"Die von Ihnen eingegebenen PIN2-Nummern stimmen nicht überein."</string>
+    <string name="mismatchPuk">"Die von Ihnen eingegebenen PUK-Nummern stimmen nicht überein."</string>
+    <string name="mismatchPuk2">"Die von Ihnen eingegebenen PUK2-Nummern stimmen nicht überein."</string>
+    <string name="invalidPuk">Geben Sie eine PUK ein die 8 Zahlen oder mehr hat.</string>
+    <string name="needPinLock">PIN-Sperre einrichten und PIN ändern.</string>
+    <string name="ColpMmi">"Anzeige der Rufnummer des Anrufers"</string>
+    <string name="ColrMmi">"Anzeige der Rufnummer des Anrufers unterdrückt"</string>
+    <string name="UnConditionCfMmi" msgid="">"Generelle Rufumleitung"</string>
+    <string name="BusyCfMmi" msgid="">"Rufweiterleitung, wenn besetzt ist"</string>
+    <string name="NoReplyCfMmi" msgid="">"Rufweiterleitung bei Nichtmelden"</string>
+    <string name="NotReachCfMmi" msgid="">"Rufweiterleitung, wenn nicht erreichbar"</string>
+    <string name="AllCfMmi" msgid="">"Alle Anrufe werden weitergeleitet"</string>
+    <string name="ConditionCfMmi" msgid="">"Bedingte Rufumleitung"</string>
+    <string name="BaocMmi" msgid="">"Alle abgehenden Anrufe sperren"</string>
+    <string name="BaoicMmi" msgid="">"Alle abgehenden internationalen Anrufe sperren"</string>
+    <string name="BaoicxhMmi" msgid="">"Alle abgehenden internationalen Anrufe sperren, außer aus dem Heimatland"</string>
+    <string name="BaicMmi" msgid="">"Alle eingehenden Anrufe sperren"</string>
+    <string name="BaicrMmi" msgid="">"Beim Roaming alle eingehende Anrufe sperren"</string>
+    <string name="BaallMmi" msgid="">"Anrufsperre für alle Basisdienstleistungen"</string>
+    <string name="BamoMmi" msgid="">"Alle abgehenden Basisdienstleistungen"</string>
+    <string name="BamtMmi" msgid="">"Alle eingehenden Basisdienstleistungen"</string>
+    <string name="ActiveUnconCf">"Generelle Rufumleitung"</string>
+    <string name="ActiveConCf">"Bedingte Anrufweiterleitung"</string>
+    <string name="CallForwarded">"Anruf weitergeleitet"</string>
+    <string name="CallWaiting">"Anklopfen"</string>
+    <string name="CugCall" msgid="">"CUG Anruf"</string>
+    <string name="OutCallBarred" msgid="">"Abgehender Anruf gesperrt"</string>
+    <string name="InCallBarred" msgid="">"Eingehender Anruf ist gesperrt"</string>
+    <string name="ClirRejected" msgid="">"CLIR Unterdrückung abgelehnt"</string>
+    <string name="ForwardedCall">Weitergeleiteter Anruf</string>
+    <string name="CallHold" msgid="">"Anruf blockiert"</string>
+    <string name="CallRetrieved" msgid="">"Anruf eingeschaltet"</string>
+    <string name="MultiCall" msgid="">"Konferenzschaltung"</string>
+    <string name="HoldCallReleased" msgid="">"Anruf in der Warteschleife ist freigegeben"</string>
+    <string name="ConnectingEct" msgid="">ECT verbinden</string>
+    <string name="ConnectedEct" msgid="">ECT ist verbunden</string>
+    <string name="IncomingCallForwarded" msgid="">"Ein weiterer eingehender Anruf wird weitergeleitet"</string>
+    <string name="Pin2Mmi">"PIN2-Änderung"</string>
+    <string name="PukMmi">"PIN entsperren"</string>
+    <string name="Puk2Mmi">"PIN2 entsperren"</string>
+    <string name="pinpuk_attempts">\nVerbleibende Versuche :</string>
+    <string name="lockscreen_sim_network_locked_message">SIM-Netzwerk ist gesperrt</string>
+    <string name="sim1_puk_requried">SIM1 PIN blockiert, PUK eingeben, um sie freizuschalten"</string>
+    <string name="sim2_puk_requried">SIM2 PIN blockiert, PUK eingeben, um sie freizuschalten"</string>
+    <string name="sim_puk_requried">SIM PIN blockiert, PUK eingeben, um sie freizuschalten"</string>
+    <string name="keyguard_password_enter_sim1_pin_code">"SIM1 PIN-Code eingeben"</string>
+    <string name="keyguard_password_enter_sim2_pin_code">"SIM2 PIN-Code eingeben"</string>
+    <string name="keyguard_password_enter_sim_pin_code">"SIM PIN-Code eingeben"</string>
+    <string name="keyguard_sim1_pin_accepted">SIM1 PIN erfolgreich entsperrt</string>
+    <string name="keyguard_sim2_pin_accepted">SIM2 PIN erfolgreich entsperrt</string>
+    <string name="keyguard_sim_pin_accepted">SIM PIN erfolgreich entsperrt</string>
+    <string name="puk_accept">PUK ist angenommen</string>
+    <string name="unblocking_fail">Entsperren ist gescheitert, geben Sie die PUK erneut ein</string>
+    <string name="keyguard_password_wrong_puk_code">"Falscher PUK-Code!"</string>
+    <string name="new_pin">Eine neue PIN eingeben</string>
+    <string name="reenter">PIN wieder eingeben</string>
+    <string name="lockscreen_blocked_sim_message_short">Die SIM-Karte ist gesperrt</string>
+    <string name="crash_title">"Entschuldigung!"</string>
+    <string name="crash_application">Die Anwendungs <xliff:g id="application">%1$s</xliff:g>
+        (vorgang <xliff:g id="process">%2$s</xliff:g>) wurde unerwartet beendet. Das System konnte den Fehler nicht reparieren. Bitte verwenden Sie eine andere Software.</string>
+    <string name="crash_process">Der Vorgang <xliff:g id="process">%1$s</xliff:g> hat unerwartet gestoppt. Das System konnte den Fehler nicht reparieren. Benutzen Sie, bitte, andere Software.</string>
+    <string name="crash_close">"OK"</string>
+    <string name="volume_fm">UKW Lautstärke</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">SIM1 lautloser Klingelton gewählt</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">SIM2 lautloser Klingelton gewählt</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM1 und SIM2 lautloser Klingelton gewählt</string>
+    <string name="cta_tethered_notification_title">"Tethering"</string>
+    <string name="Low_Memory_Alert">Telefon Speicherplatz verringert sich. Bitte entfernen Sie einige Daten, um die Stabilität des Telefons zu gewährleisten.</string>
+    <string name="Low_Memory_Free">Frei</string>
+    <string name="Low_Memory_Application">"Anwendungen"</string>
+    <string name="Low_Memory_Mail">Mail</string>
+    <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+    <string name="Low_Memory_System">System</string>
+    <string name="Btn_Select_Clear">Auswählen/löschen</string>
+    <string name="myAppTip">Handhabbare Anwendungen auswählen</string>
+    <string name="myApp_Start_Btn">"Von"</string>
+    <string name="myApp_Move2Sd_ChkBox">Auf die SD-Karte verschieben</string>
+    <string name="myApp_ClearData_ChkBox">Daten löschen</string>
+    <string name="myApp_Uninstall_ChkBox">"Deinstallieren"</string>
+    <string name="myAppLoading">"Wird geladen..."</string>
+    <string name="myAppProcessing">Wird ausgeführt\u2026</string>
+    <string name="keyguard_password_enter_puk_code">"PUK-Code eingeben"</string>
+    <string name="keyguard_password_enter_new_pin_first_code">"Neuen PIN-Code eingeben"</string>
+    <string name="keyguard_password_enter_new_pin_second_code">"Neuen PIN-Code noch einmal eingeben"</string>
+    <string name="ums_active_notification_message">USB-Massenspeicher aktivieren</string>
+    <string name="modem_active_notification_title">debug-Modus im Modem verwenden</string>
+    <string name="modem_active_notification_message">debug-Modus im Modem aktiviert</string>
+    <string name="china_mobile_numeric_values">China Mobile</string>
+    <string name="china_unicom_numeric_values">China Unicom</string>
+    <string name="china_telecom_numeric_values">China Telecom</string>
+    <string name="stk_refresh_sim_init_message">SIM-Karte wird aktualisiert</string>
+    <string name="stk_refresh_sim_reset_message">Handy wird neu starten</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicom</string>
+    <string name="charge_active_notification_message">Nur der Lademodus ist aktiviert</string>
+    <string name="charge_active_notification_title">Nur laden, wenn USB verbunden ist</string>
+    <string name="shutdown_after_seconds">Telefon wird nach <xliff:g id="NUMBER">%d</xliff:g> Sekunden heruntergefahren</string>
+    <string name="lockscreen_password_error">Passwortfehler, noch einmal versuchen!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">
+Sie haben Ihr Passwort falsch eingegeben<xliff:g id="number">%d</xliff:g> times.
+        \n\nVersuchen Sie es in ein paar <xliff:g id="number">%d</xliff:g> Sekunden erneut.</string>
+    <string name="audio_play_failed">Leider kann dies nicht wiedergegeben werden. Setzen Sie nicht diesen Klingelton.</string>
+    <string name="sms_full_title">"Speicher für Textnachrichten ist voll."</string>
+    <string name="sms_full_body">"Die eingehende Nachricht wurde zurückgewiesen, da der Speicher voll ist. Löschen Sie alte Nachrichten."</string>
+    <string name="dialog_warning">Warnung</string>
+    <string name="internal_memory_low">SD-Karte Speicher ist fast voll! Bitte löschen Sie einige Dateien, um Speicherplatz freizugeben.</string>
+    <string name="button_close">"Schließen"</string>
+    <string name="unlock_screen_pin_error">PIN-Fehler!</string>
+    <string name="ap_disconnected">unterbrochen</string>
+    <string name="sim_chooser_title">SIM wählen</string>
+    <string name="lockscreen_miss_phone">verpasste Anrufe</string>
+    <string name="lockscreen_miss_mms">ungelesene Nachrichten</string>
+    <string name="lockscreen_sim_card_locked_message">"Bitte PIN-Code eingeben"</string>
+    <string name="upload_file_size_too_large">Die hochzuladende Datei ist zu groß,bitte in kleinere Dateien aufteilen</string>
 </resources>

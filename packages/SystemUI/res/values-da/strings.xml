@@ -38,4 +38,20 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"USB-ekstraudstyr"</string>
     <string name="label_view" msgid="6304565553218192990">"Vis"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Brug som standard til dette USB-tilbehør"</string>
+    <string name="mobile_data_connect_disable">Nej</string>
+    <string name="mobile_data_connect_enable">Ja</string>
+    <string name="network_disconnect_title">Meddelelse</string>
+    <string name="network_disconnect_message">WLAN netværk er afbrudt. \nConnect via 3G? \nHvis du netto har dataabonnement, kan det medføre ekstra gebyrer.</string>
+    <string name="weak_signal_title">Svagt signal</string>
+    <string name="weak_signal_message">Den nuværende WLAN signalet er meget svagt, anbefaler, at du vælger en bedre</string>
+    <string name="auto_connect">Spørg ikke, og automatisk oprette forbindelse til andre betroede ap</string>
+    <string name="bluetooth_name">"Bluetooth"</string>
+    <string name="sound_name">"Lyd"</string>
+    <string name="mode_silent_name">"Lydløs"</string>
+    <string name="mode_vibrate_name">"Vibration"</string>
+    <string name="mode_sound_name">"Lyd"</string>
+    <string name="auto_rotate_name">"Roter"</string>
+    <string name="mobile_net_name">"Data"</string>
+    <string name="datanetwork_error_airplane">Du kan ikke bruge datanetværk, når telefonen er i flytilstand.</string>
+    <string name="bluetooth_error_airplane">Du kan ikke brug Bluetooth, når telefonen er i flytilstand.</string>
 </resources>

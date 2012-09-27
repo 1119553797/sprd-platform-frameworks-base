@@ -909,4 +909,123 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Nośnik USB jest obecnie używany przez komputer."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Karta SD jest obecnie używana przez komputer."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Nośnik zewnętrzny jest w nieznanym stanie."</string>
+    <string name="address_length">Adres osiągnął maksymalną długość</string>
+    <string name="passwordChange" msgid="">"Zmieniono hasło"</string>
+    <string name="badPin2">"Wprowadzony stary kod PIN2 jest niepoprawny."</string>
+    <string name="badPuk2">"Wprowadzony kod PUK2 jest nieprawidłowy."</string>
+    <string name="mismatchPin2">"Wprowadzone kody PIN2 nie są identyczne."</string>
+    <string name="mismatchPuk">"Wprowadzone kody PUK nie są identyczne."</string>
+    <string name="mismatchPuk2">"Wprowadzone kody PUK2 nie są identyczne."</string>
+    <string name="invalidPuk">Wprowadź PUK złożony przynajmniej z 8 cyfr.</string>
+    <string name="needPinLock">Zmiana PIN wymaga ustawienia blokady PIN.</string>
+    <string name="ColpMmi">Wyświetlanie numeru przychodzącego</string>
+    <string name="ColrMmi">Ograniczenie wyświetlania numeru przychodzącego</string>
+    <string name="UnConditionCfMmi" msgid="">"Bezwarunkowe przekazywanie rozmów"</string>
+    <string name="BusyCfMmi" msgid="">"Przekazywanie rozmów jeśli numer zajęty"</string>
+    <string name="NoReplyCfMmi" msgid="">"Przekazywanie rozmów jeśli brak odpowiedzi"</string>
+    <string name="NotReachCfMmi" msgid="">"Przekazywanie rozmów jeśli numer nieosiągalny"</string>
+    <string name="AllCfMmi" msgid="">"Przekazywanie wszystkich rozmów"</string>
+    <string name="ConditionCfMmi" msgid="">"Warunkowe przekazywanie rozmów"</string>
+    <string name="BaocMmi" msgid="">"Wykluczanie wszystkich rozmów wychodzących"</string>
+    <string name="BaoicMmi" msgid="">"Wykluczanie wszystkich rozmów wychodzących międzynarodowych"</string>
+    <string name="BaoicxhMmi" msgid="">"Wykluczanie wszystkich rozmów wychodzących międzynarodowych z wyjątkiem kraju ojczystego"</string>
+    <string name="BaicMmi" msgid="">"Wykluczanie wszystkich rozmów przychodzących"</string>
+    <string name="BaicrMmi" msgid="">"Wykluczanie wszystkich rozmów przychodzących przy roamingu"</string>
+    <string name="BaallMmi" msgid="">"Wszystkie wykluczenia dla wszystkich usług podstawowych"</string>
+    <string name="BamoMmi" msgid="">"Wszystkie wychodzące dla wszystkich usług podstawowych"</string>
+    <string name="BamtMmi" msgid="">"Wszystkie przychodzące dla wszystkich usług podstawowych"</string>
+    <string name="ActiveUnconCf">Rozmowa przekierowana bezwarunkowo</string>
+    <string name="ActiveConCf">Rozmowa przekierowana warunkowo</string>
+    <string name="CallForwarded">Rozmowa przekierowana</string>
+    <string name="CallWaiting">"Połączenia oczekujące"</string>
+    <string name="CugCall" msgid="">"Rozmowa z CUG"</string>
+    <string name="OutCallBarred" msgid="">"Rozmowa wychodząca jest wykluczona"</string>
+    <string name="InCallBarred" msgid="">Rozmowa przychodząca jest wykluczona"</string>
+    <string name="ClirRejected" msgid="">"Odrzucono ograniczenie CLIR"</string>
+    <string name="ForwardedCall">Rozmowa przekazana</string>
+    <string name="CallHold" msgid="">"Rozmowa zablokowana"</string>
+    <string name="CallRetrieved" msgid="">"Rozmowa wczytana"</string>
+    <string name="MultiCall" msgid="">"Rozmowa multi party"</string>
+    <string name="HoldCallReleased" msgid="">"Zwolniono wstrzymaną rozmowę"</string>
+    <string name="ConnectingEct" msgid="">"Łączenie ECT"</string>
+    <string name="ConnectedEct" msgid="">"ECT podłączony"</string>
+    <string name="IncomingCallForwarded" msgid="">"Przekierowano dodatkową rozmowę przychodzącą"</string>
+    <string name="Pin2Mmi">"Zmiana kodu PIN2"</string>
+    <string name="PukMmi">"Odblokowanie PIN"</string>
+    <string name="Puk2Mmi">"Odblokowanie PIN2"</string>
+    <string name="pinpuk_attempts">\nPrób pozostało :</string>
+    <string name="lockscreen_sim_network_locked_message">Telefon ma simlocka</string>
+    <string name="sim1_puk_requried">PIN karty SIM1 zablokowany. By odblokować, podaj PUK</string>
+    <string name="sim2_puk_requried">PIN karty SIM2 zablokowany. By odblokować, podaj PUK</string>
+    <string name="sim_puk_requried">PIN karty SIM zablokowany. By odblokować, podaj PUK</string>
+    <string name="keyguard_password_enter_sim1_pin_code">Podaj kod PIN SIM1</string>
+    <string name="keyguard_password_enter_sim2_pin_code">Podaj kod PIN SIM2</string>
+    <string name="keyguard_password_enter_sim_pin_code">Podaj kod PIN SIM</string>
+    <string name="keyguard_sim1_pin_accepted">Zdjęcie blokady karty SIM1 przez PIN powiodło się</string>
+    <string name="keyguard_sim2_pin_accepted">Zdjęcie blokady karty SIM2 przez PIN powiodło się</string>
+    <string name="keyguard_sim_pin_accepted">Zdjęcie blokady karty SIM przez PIN powiodło się</string>
+    <string name="puk_accept">PUK zgadza się</string>
+    <string name="unblocking_fail">Odblokowanie nie udało się, podaj ponownie PUK</string>
+    <string name="keyguard_password_wrong_puk_code">"Błędny kod PUK!"</string>
+    <string name="new_pin">Podaj nowy PIN</string>
+    <string name="reenter">Podaj ponownie PIN</string>
+    <string name="lockscreen_blocked_sim_message_short">Karta SIM zalokowana.</string>
+    <string name="crash_title">Niestety!</string>
+    <string name="crash_application">Aplikacja <xliff:g id="application">%1$s</xliff:g>
+        (proces <xliff:g id="process">%2$s</xliff:g>) nieoczekiwanie zakończyła się. Nie udało się usunąć błędu. Konieczny inny program. 
+</string>
+    <string name="crash_process">Proces <xliff:g id="process">%1$s</xliff:g> zakończył się nieoczekiwanie. System nie mógł usunąć błędu. Wybierz inny program.</string>
+    <string name="crash_close">OK</string>
+    <string name="volume_fm">Głośność FM</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">Wybrano dźwięk cichy SIM1</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">Wybrano dźwięk cichy SIM2</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">Wybrano dźwięk cichy SIM1 i SIM2</string>
+    <string name="cta_tethered_notification_title">"Tethering"</string>
+    <string name="Low_Memory_Alert">Coraz mniej wolnego miejsca. Usuń część danych by zapewnić stabilność telefonu.</string>
+    <string name="Low_Memory_Free">Wolne</string>
+    <string name="Low_Memory_Application">"Aplikacje"</string>
+    <string name="Low_Memory_Mail">Poczta</string>
+    <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+    <string name="Low_Memory_System">System</string>
+    <string name="Btn_Select_Clear">Wybierz/wyczyść</string>
+    <string name="myAppTip">Wybierz aplikacje</string>
+    <string name="myApp_Start_Btn">"Start"</string>
+    <string name="myApp_Move2Sd_ChkBox">Przenieś na SD</string>
+    <string name="myApp_ClearData_ChkBox">Wyczyść dane</string>
+    <string name="myApp_Uninstall_ChkBox">"Odinstaluj"</string>
+    <string name="myAppLoading">"Trwa wczytywanie..."</string>
+    <string name="myAppProcessing">Przetwarzanie\u2026</string>
+    <string name="keyguard_password_enter_puk_code">Podaj kod PUK</string>
+    <string name="keyguard_password_enter_new_pin_first_code">Podaj nowy kod PIN</string>
+    <string name="keyguard_password_enter_new_pin_second_code">Podaj jeszcze raz nowy kod PIN</string>
+    <string name="ums_active_notification_message">magazyn USB aktywny</string>
+    <string name="modem_active_notification_title">użyj trybu debugowania modemu</string>
+    <string name="modem_active_notification_message">włączony tryb debugowania modemu</string>
+    <string name="china_mobile_numeric_values">China Mobile</string>
+    <string name="china_unicom_numeric_values">China Unicom</string>
+    <string name="china_telecom_numeric_values">China Telecom</string>
+    <string name="stk_refresh_sim_init_message">Aktualizacja karty SIM</string>
+    <string name="stk_refresh_sim_reset_message">Telefon uruchomi się ponownie</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicom</string>
+    <string name="charge_active_notification_message">Włączony tryb tylko ładowania</string>
+    <string name="charge_active_notification_title">Korzystaj z trybu ładowania tylko po podłączeniu USB</string>
+    <string name="shutdown_after_seconds">Telefon wyłączy się po <xliff:g id="NUMBER">%d</xliff:g> sekundach</string>
+    <string name="lockscreen_password_error">Błędne hasło, spróbuj jeszcze raz!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">Wpisałeś nieprawidłowe hasło odblokowujące <xliff:g id="number">%d</xliff:g> razy.
+        \n\nSpróbuj ponownie za <xliff:g id="number">%d</xliff:g> sekund.
+</string>
+    <string name="audio_play_failed">Niestety, tego nagrania dźwiękowego nie można odtworzyć. Nie wybieraj tej melodii dzwonka.</string>
+    <string name="sms_full_title">"Pamięć wiadomości tekstowych jest pełna"</string>
+    <string name="sms_full_body">"Przychodząca wiadomość została odrzucona z powodu zapełnienia pamięci. Usuń stare wiadomości."</string>
+    <string name="dialog_warning">Ostrzeżenie</string>
+    <string name="internal_memory_low">Karta SD niemal pełna! Usuń część plików by zwolnić miejsce.</string>
+    <string name="button_close">Zamknij</string>
+    <string name="unlock_screen_pin_error">Błędny PIN!</string>
+    <string name="ap_disconnected"> rozłączony</string>
+    <string name="sim_chooser_title">Wybierz SIM</string>
+    <string name="lockscreen_miss_phone">nieodebrane połączenie</string>
+    <string name="lockscreen_miss_mms">nieodebrany sms</string>
+    <string name="lockscreen_sim_card_locked_message">"Karta SIM jest zablokowana."</string>
+    <string name="upload_file_size_too_large">Twój plik jest za duży, podziel na mniejsze</string>
 </resources>

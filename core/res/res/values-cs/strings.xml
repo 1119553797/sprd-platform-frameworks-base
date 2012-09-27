@@ -909,4 +909,121 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Úložiště USB je momentálně používáno počítačem."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Karta SD je momentálně používána počítačem."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Neznámý stav externího média."</string>
+    <string name="address_length">Adresa přesáhla maximální délku</string>
+    <string name="passwordChange" msgid="">"Heslo změněno"</string>
+    <string name="badPin2">"Původní kód PIN2 byl zadán nesprávně."</string>
+    <string name="badPuk2">"Kód PUK2 byl zadán nesprávně."</string>
+    <string name="mismatchPin2">"Zadané kódy PIN2 se neshodují."</string>
+    <string name="mismatchPuk">"Zadané kódy PUK se neshodují."</string>
+    <string name="mismatchPuk2">"Zadané kódy PUK2 se neshodují."</string>
+    <string name="invalidPuk">Vložte PUK o min. 8 číslech nebo delší.</string>
+    <string name="needPinLock">Změna PIN nutná PIN-zamknut.</string>
+    <string name="ColpMmi">Prezentace identifikace připojené linky</string>
+    <string name="ColrMmi">Omezení identifikace připojené linky</string>
+    <string name="UnConditionCfMmi" msgid="">"Bezpodmínečné přesměrování hovoru"</string>
+    <string name="BusyCfMmi" msgid="">"Pokud je uživatel zaneprázdněný, přesměrovat hovor"</string>
+    <string name="NoReplyCfMmi" msgid="">"Pokud je uživatel neodpovídá, přesměrovat hovor"</string>
+    <string name="NotReachCfMmi" msgid="">"Pokud je uživatel nedostupný, přesměrovat hovor"</string>
+    <string name="AllCfMmi" msgid="">"Přesměrování všech hovorů"</string>
+    <string name="ConditionCfMmi" msgid="">"Podmínečné přesměrování hovoru"</string>
+    <string name="BaocMmi" msgid="">"Blokování všech odchozích hovorů"</string>
+    <string name="BaoicMmi" msgid="">"Blokování všech odchozích mezinárodních hovorů"</string>
+    <string name="BaoicxhMmi" msgid="">"Blokování všech odchozích mezinárodních hovorů kromě těch do domovské země"</string>
+    <string name="BaicMmi" msgid="">"Blokování všech příchozích hovorů"</string>
+    <string name="BaicrMmi" msgid="">"Blokování všech příchozích roamingových hovorů"</string>
+    <string name="BaallMmi" msgid="">"Veškeré zamezení všem základním službám"</string>
+    <string name="BamoMmi" msgid="">"Všechny odchozí pro všechny základní služby"</string>
+    <string name="BamtMmi" msgid="">"Všechny příchozí pro všechny základní služby"</string>
+    <string name="ActiveUnconCf">Hovor byl bezpodmínečně přesměrován</string>
+    <string name="ActiveConCf">Hovor byl podmínečně přesměrován</string>
+    <string name="CallForwarded">Hovor byl přesměrován</string>
+    <string name="CallWaiting">"Další hovor na lince"</string>
+    <string name="CugCall" msgid="">"CUG hovor"</string>
+    <string name="OutCallBarred" msgid="">"Odchozí hovor byl odmítnut"</string>
+    <string name="InCallBarred" msgid="">"Příchozí hovor byl zamezen"</string>
+    <string name="ClirRejected" msgid="">"CLIR zobrazení zamítnuto"</string>
+    <string name="ForwardedCall">Přesměrovaný hovor</string>
+    <string name="CallHold" msgid="">"Hovor zablokován"</string>
+    <string name="CallRetrieved" msgid="">"Hovor obnoven"</string>
+    <string name="MultiCall" msgid="">"Hromadný hovor"</string>
+    <string name="HoldCallReleased" msgid="">"Čekající hovor uvolněn"</string>
+    <string name="ConnectingEct" msgid="">"Připojení ECT"</string>
+    <string name="ConnectedEct" msgid="">"ECT připojeno"</string>
+    <string name="IncomingCallForwarded" msgid="">"Další příchozí hovor byl přesměrován"</string>
+    <string name="Pin2Mmi">"Změna kódu PIN2"</string>
+    <string name="PukMmi">"odemknout PIN"</string>
+    <string name="Puk2Mmi">"odemknout PIN2"</string>
+    <string name="pinpuk_attempts">\nZbývající pokusy :</string>
+    <string name="lockscreen_sim_network_locked_message">Telefon je uzamčen pro SIM síť</string>
+    <string name="sim1_puk_requried">SIM1 PIN blokován, Pro odblokování zadejte PUK</string>
+    <string name="sim2_puk_requried">SIM2 PIN blokován, Pro odblokování zadejte PUK</string>
+    <string name="sim_puk_requried">SIM PIN blokován, Pro odblokování zadejte PUK</string>
+    <string name="keyguard_password_enter_sim1_pin_code">Zadat PIN kód SIM1</string>
+    <string name="keyguard_password_enter_sim2_pin_code">Zadat PIN kód SIM2</string>
+    <string name="keyguard_password_enter_sim_pin_code">Zadat PIN kód SIM</string>
+    <string name="keyguard_sim1_pin_accepted">SIM1 Odemknutí PIN bylo úspěšné</string>
+    <string name="keyguard_sim2_pin_accepted">SIM2 Odemknutí PIN bylo úspěšné</string>
+    <string name="keyguard_sim_pin_accepted">SIM Odemknutí PIN bylo úspěšné</string>
+    <string name="puk_accept">PUK byl přijat</string>
+    <string name="unblocking_fail">Odblokování selhalo, znovu zadejte PUK</string>
+    <string name="keyguard_password_wrong_puk_code">"Zadaný kód PUK je nesprávný."</string>
+    <string name="new_pin">Zadat nový PIN</string>
+    <string name="reenter">Znovu zadat PIN</string>
+    <string name="lockscreen_blocked_sim_message_short">SIM karta je blokována.</string>
+    <string name="crash_title">Promiňte!</string>
+    <string name="crash_application">Aplikace <xliff:g id="application">%1$s</xliff:g>
+        (proces <xliff:g id="process">%2$s</xliff:g>) se nečekaně zastavil. Systému se nepodařilo chybu opravit. Prosím použijte jiný software.</string>
+    <string name="crash_process">Proces <xliff:g id="process">%1$s</xliff:g> byl nečekaně zastaven. Systém nemohl chybu opravit. Prosím použijte jiný software.</string>
+    <string name="crash_close">"OK"</string>
+    <string name="volume_fm">hlasitost FM</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">SIM1 Vybrán tichý vyzváněcí tón</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">SIM2 Vybrán tichý vyzváněcí tón</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM1 a SIM2 Vybrán tichý vyzváněcí tón</string>
+    <string name="cta_tethered_notification_title">"Tethering"</string>
+    <string name="Low_Memory_Alert">Úložiště telefonu je téměř plné. Pro zajištění stability telefonu prosím nějaká data smažte.</string>
+    <string name="Low_Memory_Free">Volné místo</string>
+    <string name="Low_Memory_Application">"Aplikace"</string>
+    <string name="Low_Memory_Mail">Pošta</string>
+    <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+    <string name="Low_Memory_System">Systém</string>
+    <string name="Btn_Select_Clear">Vybrat / Vymazat</string>
+    <string name="myAppTip">Vybrat aplikace pro ovládání</string>
+    <string name="myApp_Start_Btn">"Spustit"</string>
+    <string name="myApp_Move2Sd_ChkBox">Přesunout na SD</string>
+    <string name="myApp_ClearData_ChkBox">Smazat data</string>
+    <string name="myApp_Uninstall_ChkBox">"Odinstalovat"</string>
+    <string name="myAppLoading">"Načítání..."</string>
+    <string name="myAppProcessing">zpracovávání\u2026</string>
+    <string name="keyguard_password_enter_puk_code">Zadat PUK kód</string>
+    <string name="keyguard_password_enter_new_pin_first_code">Zadat nový PIN kód</string>
+    <string name="keyguard_password_enter_new_pin_second_code">Znovu zadat nový PIN kód</string>
+    <string name="ums_active_notification_message">aktivován usb hromadné úložiště</string>
+    <string name="modem_active_notification_title">použít režim moderního ladění</string>
+    <string name="modem_active_notification_message">moderní ladění zapnuto</string>
+    <string name="china_mobile_numeric_values">China Mobile</string>
+    <string name="china_unicom_numeric_values">China Unicom</string>
+    <string name="china_telecom_numeric_values">China Telecom</string>
+    <string name="stk_refresh_sim_init_message">SIM karta se aktualizuje</string>
+    <string name="stk_refresh_sim_reset_message">Telefon bude restartován</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicom</string>
+    <string name="charge_active_notification_message">Spuštěn režim pro nabíjení</string>
+    <string name="charge_active_notification_title">Použít režim nabíjení, když je připojeno USB</string>
+    <string name="shutdown_after_seconds">Telefon se vypne po <xliff:g id="NUMBER">%d</xliff:g> sekundách</string>
+    <string name="lockscreen_password_error">Heslo je chybné,zkuste to znovu!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">Vaše heslo pro odemčení jste zadali nesprávně <xliff:g id="number">%d</xliff:g> krát.
+        \n\nProsím zkuste to znovu za <xliff:g id="number">%d</xliff:g> sekund.</string>
+    <string name="audio_play_failed">Promiňte,toto audio bohužel nelze přehrát. Nenastavujte ho jako vyzváněcí tón.</string>
+    <string name="sms_full_title">"Paměť pro textové zprávy je plná"</string>
+    <string name="sms_full_body">"Příchozí zpráva byla odmítnuta, protože paměť je zaplněna. Smažte prosím staré zprávy."</string>
+    <string name="dialog_warning">Varování</string>
+    <string name="internal_memory_low">úložiště na SD kartě je téměř plné! Pro uvolnění místa prosím smažte některé soubory .</string>
+    <string name="button_close">"Zavřít"</string>
+    <string name="unlock_screen_pin_error">Pin je chybný!</string>
+    <string name="ap_disconnected"> přerušeno</string>
+    <string name="sim_chooser_title">Vybrat SIM</string>
+    <string name="lockscreen_miss_phone">zmeškaný hovor</string>
+    <string name="lockscreen_miss_mms">zmeškaná sms</string>
+    <string name="lockscreen_sim_card_locked_message">"Karta SIM je zablokována."</string>
+    <string name="upload_file_size_too_large">Váš nahrávaný soubor je příliš velký, prosím rozdělte ho na malé soubory</string>
 </resources>

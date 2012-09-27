@@ -909,4 +909,121 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Αυτή τη στιγμή ο αποθηκευτικός χώρος USB χρησιμοποιείται από κάποιον υπολογιστή."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Αυτή τη στιγμή η κάρτα SD χρησιμοποιείται από κάποιον υπολογιστή."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Το εξωτερικό μέσο είναι σε άγνωστη κατάσταση."</string>
+    <string name="address_length">Η διεύθυνση έφτασε το μέγιστο μήκος</string>
+    <string name="passwordChange" msgid="">"Ο κωδικός πρόσβασης άλλαξε"</string>
+    <string name="badPin2">"Ο παλιός αριθμός PIN2 που πληκτρολογήσατε είναι εσφαλμένος."</string>
+    <string name="badPuk2">"Ο κωδικός PUK2 που πληκτρολογήσατε είναι εσφαλμένος."</string>
+    <string name="mismatchPin2">"Οι αριθμοί PIN2 που πληκτρολογήσατε δεν ταιριάζουν."</string>
+    <string name="mismatchPuk">"Οι αριθμοί PUK που πληκτρολογήσατε δεν ταιριάζουν."</string>
+    <string name="mismatchPuk2">"Οι αριθμοί PUK2 που πληκτρολογήσατε δεν ταιριάζουν."</string>
+    <string name="invalidPuk">Πληκτρολογήστε ένα PUK που να είναι 8 αριθμοί ή μεγαλύτερο.</string>
+    <string name="needPinLock">Ξεκλείδωμα και αλλαγή του μπλοκαρισμένου κωδικού PIN.</string>
+    <string name="ColpMmi">Παρουσίαση αναγνώρισης συνδεδεμένης γραμμής</string>
+    <string name="ColrMmi">Περιορισμός αναγνώρισης συνδεδεμένης γραμμής</string>
+    <string name="UnConditionCfMmi" msgid="">"Προώθηση κλήσεων υπό όρους"</string>
+    <string name="BusyCfMmi" msgid="">"Όταν είστε απασχολημένος γίνεται προώθηση κλήσεων"</string>
+    <string name="NoReplyCfMmi" msgid="">"Όταν δεν υπάρχει απάντηση γίνεται προώθηση κλήσεων"</string>
+    <string name="NotReachCfMmi" msgid="">"Όταν δεν είστε προσβάσιμος γίνεται προώθηση κλήσεων"</string>
+    <string name="AllCfMmi" msgid="">"Προώθηση όλων των κλήσεων"</string>
+    <string name="ConditionCfMmi" msgid="">"Προώθηση κλήσεων υπό όρους"</string>
+    <string name="BaocMmi" msgid="">"Φραγή όλων των εξερχόμενων κλήσεων"</string>
+    <string name="BaoicMmi" msgid="">"Φραγή όλων των εξερχομένων διεθνών κλήσεων </string>
+    <string name="BaoicxhMmi" msgid="">"Φραγή όλων των εξερχομένων διεθνών κλήσεων εκτός των τοπικών"</string>
+    <string name="BaicMmi" msgid="">"Φραγή όλων των εισερχομένων κλήσεων"</string>
+    <string name="BaicrMmi" msgid="">"Φραγή όλων των εισερχομένων κλήσεων κατά την περιαγωγή"</string>
+    <string name="BaallMmi" msgid="">"Φραγή σε όλες τις βασικές υπηρεσίες"</string>
+    <string name="BamoMmi" msgid="">"Εξαγωγή όλων των βασικών υπηρεσιών"</string>
+    <string name="BamtMmi" msgid="">"Εισαγωγή όλων των βασικών υπηρεσιών"</string>
+    <string name="ActiveUnconCf">Η κλήση προωθήθηκε χωρίς όρους</string>
+    <string name="ActiveConCf">Η κλήση προωθήθηκε υπό όρους</string>
+    <string name="CallForwarded">Η κλήση προωθήθηκε</string>
+    <string name="CallWaiting">"Αναμ. κλήσ."</string>
+    <string name="CugCall" msgid="">"Κλήση CUG"</string>
+    <string name="OutCallBarred" msgid="">"Φραγή εξερχόμενης κλήσης"</string>
+    <string name="InCallBarred" msgid="">"Φραγή εισερχόμενης κλήσης"</string>
+    <string name="ClirRejected" msgid="">"Η καταστολή CLIR απορρίφθηκε"</string>
+    <string name="ForwardedCall">Προωθημένη κλήση</string>
+    <string name="CallHold" msgid="">"Η κλήση αποκλείστηκε"</string>
+    <string name="CallRetrieved" msgid="">"Η κλήση ανακτήθηκε"</string>
+    <string name="MultiCall" msgid="">"Πολλαπλή συνομιλία"</string>
+    <string name="HoldCallReleased" msgid="">"Η κλήση σε αναμονή ελευθερώθηκε"</string>
+    <string name="ConnectingEct" msgid="">"Το ECT συνδέεται"</string>
+    <string name="ConnectedEct" msgid="">"Συνδεδεμένο ECT"</string>
+    <string name="IncomingCallForwarded" msgid="">"Η νέα εισερχόμενη κλήση προωθήθηκε"</string>
+    <string name="Pin2Mmi">"Αλλαγή αριθμού PIN2"</string>
+    <string name="PukMmi">"Ξεκλείδωμα PIN"</string>
+    <string name="Puk2Mmi">"Ξεκλείδωμα PIN2"</string>
+    <string name="pinpuk_attempts">\n προσπάθειες απομένουν:</string>
+    <string name="lockscreen_sim_network_locked_message">Το τηλέφωνο έχει κλειδωθεί μέσω της SIM δικτύου</string>
+    <string name="sim1_puk_requried">Το PIN της SIM1 έχει μπλοκαριστεί, εισάγετε το PUK για να ξεμπλοκάρετε</string>
+    <string name="sim2_puk_requried">Το PIN της SIM2 έχει μπλοκαριστεί, εισάγετε το PUK για να ξεμπλοκάρετε</string>
+    <string name="sim_puk_requried">Το PIN της SIM έχει μπλοκαριστεί, εισάγετε το PUK για να ξεμπλοκάρετε</string>
+    <string name="keyguard_password_enter_sim1_pin_code">Εισάγετε κωδικό PIN για τη SIM1</string>
+    <string name="keyguard_password_enter_sim2_pin_code">Εισάγετε κωδικό PIN για τη SIM2</string>
+    <string name="keyguard_password_enter_sim_pin_code">Εισάγετε κωδικό PIN για τη SIM</string>
+    <string name="keyguard_sim1_pin_accepted">Επιτυχία ξεκλειδώματος του PIN της SIM1</string>
+    <string name="keyguard_sim2_pin_accepted">Επιτυχία ξεκλειδώματος του PIN της SIM2</string>
+    <string name="keyguard_sim_pin_accepted">Επιτυχία ξεκλειδώματος του PIN της SIM</string>
+    <string name="puk_accept">Το PUK έγινε δεκτό</string>
+    <string name="unblocking_fail">Το ξεμπλοκάρισμα απέτυχε, εισάγετε πάλι το PUK</string>
+    <string name="keyguard_password_wrong_puk_code">"Λανθασμένος κώδικας PUK!"</string>
+    <string name="new_pin">Εισάγετε νέο PIN</string>
+    <string name="reenter">Εισάγετε πάλι το PIN</string>
+    <string name="lockscreen_blocked_sim_message_short">Η κάρτα SIM έχει μπλοκαριστεί.</string>
+    <string name="crash_title">Λυπούμαστε!</string>
+    <string name="crash_application">Η εφαρμογή <xliff:g id="application">%1$s</xliff:g>
+        (διαδικασία <xliff:g id="process">%2$s</xliff:g>) σταμάτησε απρόσμενα. Το σύστημα απέτυχε να επανορθώσει το σφάλμα. Παρακαλώ χρησιμοποιήστε άλλο λογισμικό.</string>
+    <string name="crash_process">Η διαδικασία <xliff:g id="process">%1$s</xliff:g> σταμάτησε απρόσμενα. Το σύστημα απέτυχε να επανορθώσει το σφάλμα. Παρακαλώ χρησιμοποιήστε άλλο λογισμικό.</string>
+    <string name="crash_close">"ΟΚ"</string>
+    <string name="volume_fm">Ένταση FM</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">Επιλέχθηκε σιωπηλός ήχος κλήσης για SIM1</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">Επιλέχθηκε σιωπηλός ήχος κλήσης για SIM2</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">Επιλέχθηκε σιωπηλός ήχος κλήσης για SIM1 και SIM2</string>
+    <string name="cta_tethered_notification_title">"Tethering"</string>
+    <string name="Low_Memory_Alert">Ο αποθηκευτικός χώρος του τηλεφώνου έχει μειωθεί. Παρακαλώ αφαιρέστε κάποια δεδομένα για να υπάρχει σταθερότητα στο τηλέφωνο.</string>
+    <string name="Low_Memory_Free">Ελεύθερα</string>
+    <string name="Low_Memory_Application">"Εφαρμογές"</string>
+    <string name="Low_Memory_Mail">Αλληλογραφία</string>
+    <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+    <string name="Low_Memory_System">Σύστημα</string>
+    <string name="Btn_Select_Clear">Επιλογή / Διαγραφή</string>
+    <string name="myAppTip">Επιλέξτε εφαρμογές για να χειριστείτε</string>
+    <string name="myApp_Start_Btn">"Εκκίνηση"</string>
+    <string name="myApp_Move2Sd_ChkBox">Μετακινείστε στην SD</string>
+    <string name="myApp_ClearData_ChkBox">Διαγράψτε δεδομένα</string>
+    <string name="myApp_Uninstall_ChkBox">"Κατάργηση εγκατάστασης"</string>
+    <string name="myAppLoading">"Φόρτωση..."</string>
+    <string name="myAppProcessing">Επεξεργασία\u2026</string>
+    <string name="keyguard_password_enter_puk_code">Εισάγετε κωδικό PUK</string>
+    <string name="keyguard_password_enter_new_pin_first_code">Εισάγετε νέο κωδικό PIN</string>
+    <string name="keyguard_password_enter_new_pin_second_code">Εισάγετε νέο κωδικό PIN ξανά</string>
+    <string name="ums_active_notification_message">Ενεργοποιήθηκε η μαζική αποθήκευση usb</string>
+    <string name="modem_active_notification_title">Χρησιμοποιήστε τη λειτουργία αποσφαλμάτωσης του μόντεμ</string>
+    <string name="modem_active_notification_message">Η λειτουργία αποσφαλμάτωσης του μόντεμ είναι ενεργή</string>
+    <string name="china_mobile_numeric_values">China Mobile</string>
+    <string name="china_unicom_numeric_values">China Unicom</string>
+    <string name="china_telecom_numeric_values">China Telecom</string>
+    <string name="stk_refresh_sim_init_message">Η κάρτα SIM ενημερώνεται</string>
+    <string name="stk_refresh_sim_reset_message">Το τηλέφωνο θα κάνει επανεκκίνηση</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicom</string>
+    <string name="charge_active_notification_message">Ενεργοποίηση λειτουργίας φόρτισης</string>
+    <string name="charge_active_notification_title">Χρησιμοποιήστε λειτουργία φόρτισης όταν συνδέεται το USB</string>
+    <string name="shutdown_after_seconds">Το τηλέφωνο θα κλείσει μετά από <xliff:g id="NUMBER">%d</xliff:g> δευτερόλεπτα</string>
+    <string name="lockscreen_password_error">Ο κωδικός πρόσβασης είναι λάθος, παρακαλώ δοκιμάστε πάλι!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">Λανθασμένη εισαγωγή του κωδικού ξεκλειδώματος <xliff:g id="number">%d</xliff:g> φορές.
+        \n\nΠαρακαλώ δοκιμάστε ξανά σε <xliff:g id="number">%d</xliff:g> δευτερόλεπτα.</string>
+    <string name="audio_play_failed">Λυπούμαστε, αυτός ο ήχος δεν μπορεί να αναπαραχθεί. Μην ορίσετε αυτό τον ήχο κλήσης.</string>
+    <string name="sms_full_title">"Μνήμη μηνυμάτων κειμένου πλήρης"</string>
+    <string name="sms_full_body">"Το εισερχόμενο μήνυμα απορρίφθηκε, επειδή η μνήμη είναι πλήρης. Διαγράψτε τα παλιά μηνύματα."</string>
+    <string name="dialog_warning">Προσοχή...</string>
+    <string name="internal_memory_low">Ο χώρος αποθήκευσης της κάρτας SD είναι σχεδόν γεμάτος! Παρακαλώ διαγράψτε μερικά αρχεία για να ελευθερώσετε χώρο.</string>
+    <string name="button_close">"Κλείσιμο"</string>
+    <string name="unlock_screen_pin_error">Το pin είναι λάθος!</string>
+    <string name="ap_disconnected">Αποσυνδέθηκε</string>
+    <string name="sim_chooser_title">Επιλέξτε SIM</string>
+    <string name="lockscreen_miss_phone">Αναπάντητες κλήσεις</string>
+    <string name="lockscreen_miss_mms">Αναπάντητα sms</string>
+    <string name="lockscreen_sim_card_locked_message">"Η κάρτα SIM είναι κλειδωμένη."</string>
+    <string name="upload_file_size_too_large">Το αρχείο που θέλετε να ανεβάσετε είναι πολύ μεγάλο, παρακαλώ χωρίστε το σε μικρά αρχεία</string>
 </resources>

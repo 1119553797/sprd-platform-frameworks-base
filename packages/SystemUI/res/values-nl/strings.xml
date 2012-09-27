@@ -38,4 +38,20 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"USB-accessoire"</string>
     <string name="label_view" msgid="6304565553218192990">"Weergeven"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Standaard gebruiken voor dit USB-accessoire"</string>
+    <string name="mobile_data_connect_disable">"Nee"</string>
+    <string name="mobile_data_connect_enable">Ja</string>
+    <string name="network_disconnect_title">Opmerken</string>
+    <string name="network_disconnect_message">WLAN-netwerk is verbroken. \nVerbind via 3G? \nAls u over data gegevens beschikt, kunnen extra kosten worden verbonden.</string>
+    <string name="weak_signal_title">ZWAK SIGNAAL</string>
+    <string name="weak_signal_message">De huidige WLAN-signaal is erg zwak, raden u aan een betere selecteren</string>
+    <string name="auto_connect">Vraag niet en automatisch verbinding maken met andere vertrouwde ap</string>
+    <string name="bluetooth_name">Bluethooth</string>
+    <string name="sound_name">"Geluid"</string>
+    <string name="mode_silent_name">"Stil"</string>
+    <string name="mode_vibrate_name">"Trillen"</string>
+    <string name="mode_sound_name">"Geluid"</string>
+    <string name="auto_rotate_name">"Draaien"</string>
+    <string name="mobile_net_name">"Gegevens"</string>
+    <string name="datanetwork_error_airplane">U kunt datanetwerk niet gebruiken als de telefoon in vliegtuigmodus is.</string>
+    <string name="bluetooth_error_airplane">U kunt Bluetooth niet gebruiken als de telefoon in vliegtuigmodus is.</string>
 </resources>

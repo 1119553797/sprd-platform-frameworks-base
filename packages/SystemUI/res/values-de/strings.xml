@@ -38,4 +38,20 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"USB-Zubehör"</string>
     <string name="label_view" msgid="6304565553218192990">"Anzeigen"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Standardmäßig für dieses USB-Zubehör verwenden"</string>
+    <string name="mobile_data_connect_disable">"Nein"</string>
+    <string name="mobile_data_connect_enable">"Ja"</string>
+    <string name="network_disconnect_title">Hinweis</string>
+    <string name="network_disconnect_message">WLAN-Netzwerk ist getrennt. \nVerbinden via 3G? \nWenn Sie nicht die Daten Service-Pakete bestellen, die einige Kosten verursachen.</string>
+    <string name="weak_signal_title">SCHWACHES SIGNAL</string>
+    <string name="weak_signal_message">Die aktuelle WLAN-Signal ist sehr schwach, es wird empfohlen, eins besseres Signal zu suchen</string>
+    <string name="auto_connect">Nicht nachfragen und automatisch mit einer anderen vertrauenswürdigen App verbinden</string>
+    <string name="bluetooth_name">"Bluetooth"</string>
+    <string name="sound_name">"Töne"</string>
+    <string name="mode_silent_name">"Lautlos"</string>
+    <string name="mode_vibrate_name">"Vibrieren"</string>
+    <string name="mode_sound_name">"Töne"</string>
+    <string name="auto_rotate_name">"Drehen"</string>
+    <string name="mobile_net_name">"Daten"</string>
+    <string name="datanetwork_error_airplane">Sie können Datanetwork nicht verwenden, wenn das Telefon im Flugmodus ist.</string>
+    <string name="bluetooth_error_airplane">Sie können Bluetooth nicht verwenden, wenn das Telefon im Flugmodus ist.</string>
 </resources>

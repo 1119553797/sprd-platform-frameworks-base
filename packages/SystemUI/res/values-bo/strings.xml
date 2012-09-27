@@ -1,0 +1,33 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">རྣམ་པའི་ཐོ་གཞུང་།</string>
+    <string name="status_bar_clear_all_button">གཙང་སེལ།</string>
+    <string name="status_bar_no_notifications_title">བརྡ་ཐོ་མེད།</string>
+    <string name="status_bar_ongoing_events_title">ལས་བཞིན་པའི་</string>
+    <string name="status_bar_latest_events_title">བརྡ་ཐོ།</string>
+    <string name="battery_low_title">གློག་བླུགས་ཆས་ལ་འབྲེལ་མཐུད་གནང་རོགས།</string>
+    <string name="battery_low_subtitle">གློག་ཤུགས་ལྷག་མ་མང་པོ་མི་འདུག</string>
+    <string name="battery_low_percent_format">གློག་ཤུགས་ལྷག་མ་<xliff:g id="NUMBER">%d%%</xliff:g> ཡང་ན་དེ་ལ་ཉུང་བ།</string>
+    <string name="battery_low_why">གློག་ཚད་སྤྱོད་པའི་གནས་ཚུལ།</string>
+    <string name="usb_accessory_uri_prompt">USBལྷུ་ལག་ལ་འཚམ་པའི་ཉེར་སྤྱོད་བྱ་རིམ་སྒྲིག་འཇུག་བྱས་མེད། ལྷུག་ལག་འདིའི་ཞིབ་ཕྲའི་གནས་ཚུལ་ཤེས་འདོད་ན་<xliff:g id="URL">%1$s</xliff:g>ལ་འཚམས་འདྲི་གནང་རོགས།</string>
+    <string name="title_usb_accessory">USBལྷུ་ལག</string>
+    <string name="label_view">ལྟ་ཞིབ།</string>
+    <string name="always_use_accessory">ཁོག་འཐད་སྐབས་USBལྷུ་ལག་འདི་སྤྱོད་པ།</string>
+    <string name="mobile_data_connect_disable">མིན།</string>
+    <string name="mobile_data_connect_enable">རེད།</string>
+    <string name="network_disconnect_title">བརྡ་ཐོ།</string>
+    <string name="network_disconnect_message">WLANདྲ་རྒྱ་འབྲེལ་གཅོད་ཟིན། \n3Gདྲ་རྒྱ་བརྒྱུད་ནས་འབྲེལ་མཐུད་བྱེད་དམ། \nགལ་ཏེ་ཁྱེད་ཀྱིས་གཞི་གྲངས་ཉོས་མེད་ན་འདིས་འགྲོ་གྲོན་ཁ་ཤས་ཐོབ་ཀྱི་རེད།</string>
+    <string name="weak_signal_title">བརྡ་རྟགས་ཞན།</string>
+    <string name="weak_signal_message">མིག་སྔའི་WLANབརྡ་རྟགས་ཞན་པས་བརྡ་རྟགས་ལེགས་པའི་མཐུད་སྣེ་འདེམས་དགོས།</string>
+    <string name="auto_connect">འདྲི་རྩད་མི་བྱེད། རང་འགུལ་གྱིས་དེ་མི་ཡིད་རྟོན་ཡོད་པའི་མཐུད་སྣེར་འབྲེལ་མཐུད་དགོས།</string>
+    <string name="bluetooth_name">སོ་སྔོན་པོ།</string>
+    <string name="sound_name">སྒྲ་ནུས།</string>
+    <string name="mode_silent_name">སྒྲ་མེད།</string>
+    <string name="mode_vibrate_name">འདར་འགུལ།</string>
+    <string name="mode_sound_name">སྒྲ་ནུས།</string>
+    <string name="auto_rotate_name">འཁྱིལ་འཁོར།</string>
+    <string name="mobile_net_name">གཞི་གྲངས།</string>
+    <string name="datanetwork_error_airplane">ཁཱ་གྲ་སྒྲིག་བྱས་མེད་པས་གཞི་གྲངས་དྲ་རྒྱའི་ལས་སྒོ་སྤྱོད་མི་ཐུབ།</string>
+    <string name="bluetooth_error_airplane">ཁ་པར་འཕུར་སྐྱོད་དཔེ་རྣམ་ལ་གནས་ཡོད་པས་སོ་སྔོན་པོ་སྤྱོད་མི་ཆོག</string>
+</resources>
