@@ -2284,8 +2284,14 @@ void MPEG4Writer::Track::writeTrackHeader(
                   mOwner->writeInt32(samplerate << 16);
                   if (!strcasecmp(MEDIA_MIMETYPE_AUDIO_AAC, mime)) {
                     mOwner->beginBox("esds");
-                        CHECK(mCodecSpecificData);
-                        CHECK(mCodecSpecificDataSize > 0);
+                    if (mCodecSpecificData == NULL || mCodecSpecificDataSize <= 0)
+                    {
+                        LOGE("MPEG4Writer Error: mCodecSpecificDataSize = %d, mCodecSpecificData is %d(bool)", mCodecSpecificDataSize, mCodecSpecificData == NULL);
+                        LOGE("writeTrackHeader fail to write moov box, the recording file can't play!");
+                        return;
+                    }
+                        //CHECK(mCodecSpecificData);
+                        //CHECK(mCodecSpecificDataSize > 0);
 
                         mOwner->writeInt32(0);     // version=0, flags=0
                         mOwner->writeInt8(0x03);   // ES_DescrTag
