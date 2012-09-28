@@ -205,8 +205,6 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
     // true if the keyguard is hidden by another window
     private boolean mHidden = false;
 
-    private boolean firstlock= true;
-
     /**
      * Helps remember whether the screen has turned on since the last time
      * it turned off due to timeout. see {@link #onScreenTurnedOff(int)}
@@ -1001,17 +999,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             if (!mSystemReady) return;
 
             playSounds(true);
-//add by xiaolingyou
-	 String shutdown;
-    //property_get("persist.sys.normal.shutdown", shutdown, "1");
-    shutdown=SystemProperties.get("persist.sys.normal.shutdown"); 
-    Log.v(TAG,"handleShow():shutdown="+shutdown+","+ firstlock);
-    if(shutdown.equals("0")&& firstlock){
-        //异常关机时开机锁屏不显示
-        Log.v(TAG,"handleShow(),firstlock= false");
-        firstlock= false;
-     }else{
-//add end
+
             mKeyguardViewManager.show();
             mShowing = true;
             adjustUserActivityLocked();
@@ -1021,7 +1009,6 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             } catch (RemoteException e) {
             }
             mShowKeyguardWakeLock.release();
-                }
         }
     }
 

@@ -286,39 +286,7 @@ status_t SurfaceFlinger::readyToRun()
     char shutdown[PROPERTY_VALUE_MAX];
     property_get("persist.sys.normal.shutdown", shutdown, "1");
 
-	char read_buf[2] = {'2'};
-	{
-		char *hwrstfilename = "/sys/devices/platform/hwrst.0/hwrst";
-		int hwrst_fd = -1;
-		
-		int ret;
-
-		hwrst_fd = open(hwrstfilename, O_RDWR);
-		if(hwrst_fd < 0){
-			LOGE("%s open error: %s\n", hwrstfilename, strerror(errno));
-			return false;
-		}
-
-		ret = read(hwrst_fd, read_buf, sizeof(read_buf));
-		LOGE("read_buf %s\n", read_buf);
-		if(ret < 0){
-			LOGD("read %s failed\n", hwrstfilename);
-			return false;
-		}else{
-			LOGD("%s get: %s\n", hwrstfilename, read_buf);
-		}
-
-		ret = write(hwrst_fd, read_buf, sizeof(read_buf));
-		if(ret < 0){
-			LOGD("write %s failed\n", hwrstfilename);
-			return false;
-		}else{
-			LOGD("%s set: %s\n", hwrstfilename, read_buf);
-		}
-	}
-//end by xu
-      LOGI("bootanim start!");
-		if(read_buf[0] == '2'){
+    if(strcmp("1", shutdown)==0){
         // start boot animation
         property_set("ctl.start", "bootanim");
     
@@ -330,17 +298,13 @@ status_t SurfaceFlinger::readyToRun()
         if (atoi(value)== 0){
             LOGI("start:persist.sys.profile.silent is soundable");
             property_set("ctl.start","startupsound");
-           		}
-        		else {
-            	LOGI("start:persist.sys.profile.silent is silent");
-           		}
-         	}
-			property_set("persist.sys.normal.shutdown", "1");
-    	}else{
-			property_set("persist.sys.normal.shutdown", "0");
-		}
-
-
+        }
+        else {
+            LOGI("start:persist.sys.profile.silent is silent");
+        }
+       }
+    }
+    property_set("persist.sys.normal.shutdown", "0");
     return NO_ERROR;
 }
 
