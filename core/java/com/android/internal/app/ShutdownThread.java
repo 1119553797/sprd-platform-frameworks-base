@@ -43,6 +43,9 @@ import com.android.internal.telephony.PhoneFactory;
 import android.util.Log;
 import android.view.WindowManager;
 
+import java.io.File;  
+import java.io.FileOutputStream;  
+
 public final class ShutdownThread extends Thread {
     // constants
     private static final String TAG = "ShutdownThread";
@@ -213,7 +216,18 @@ public final class ShutdownThread extends Thread {
         }
         SystemProperties.set("persist.sys.normal.shutdown", "1"); 
         Log.i(TAG, "Sending shutdown broadcast...");
-        
+try{
+//		File file = new File("/productinfo/normalshutdown.file");
+		File file_hw = new File("/sys/devices/platform/hwrst.0/hwrst_status");  
+      FileOutputStream fos_hw = new FileOutputStream(file_hw);  
+		String write_str_hw= "1";
+      byte [] bytes_hw = write_str_hw.getBytes(); 
+      fos_hw.write(bytes_hw); 
+      fos_hw.close(); 
+}catch(Exception   e_hw){e_hw.printStackTrace();} 
+
+	//add end        
+
         // First send the high-level shut down broadcast.
         mActionDone = false;
         mContext.sendOrderedBroadcast(new Intent(Intent.ACTION_SHUTDOWN), null,
