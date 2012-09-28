@@ -7611,14 +7611,15 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         ClipboardManager clip = (ClipboardManager)getContext()
                 .getSystemService(Context.CLIPBOARD_SERVICE);
 
+        CursorController controller = null;
         switch (id) {
             case ID_SELECT_ALL:
                 Selection.setSelection((Spannable) mText, 0, mText.length());
                 startTextSelectionMode();
                 // Modified by wuwz for bug 23773 begin
-                final CursorController controller = getSelectionController();
+                controller = getSelectionController();
                 if (null != controller) {
-                    getSelectionController().show();
+                	controller.show();
                 }
                 // Modified by wuwz for bug 23773 end
                 return true;
@@ -7626,9 +7627,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             case ID_START_SELECTING_TEXT:
                 startTextSelectionMode();
                 // Modified by wuwz for bug 23773 begin
-                final CursorController controller = getSelectionController();
+                controller = getSelectionController();
                 if (null != controller) {
-                    getSelectionController().show();
+                	controller.show();
                 }
                 // Modified by wuwz for bug 23773 end
                 return true;
