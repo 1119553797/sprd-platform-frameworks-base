@@ -1,5 +1,10 @@
 package android.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+
+import android.os.Process;
 import android.os.SystemProperties;
 
 /**
@@ -51,7 +56,32 @@ public class MonkeyUtils {
     	}
     	return isMonkey;
 	}
-	
+
+    public static void outputHProfile(String pname) {
+        String file = "/data/misc/hprofs/";
+        File dir = new File(file);
+
+        if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
+            File[] files = dir.listFiles();
+            for (File f : files) {
+                String p = f.getPath();
+                if (f.isFile() && p.contains(pname) && p.endsWith("hprof")) {
+                    f.delete();
+                }
+            }
+            int pid = Process.myPid();
+            Date d = new Date();
+            String date = d.getDate() + "-" + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
+            file += pname +  "_" + pid + "_" + date + ".hprof";
+
+            try {
+                android.os.Debug.dumpHprofData(file);
+            } catch (IOException e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+
 	private static void checkArguments(String tag, String msg, Throwable e) throws MonkeyUtilException {
 		if (tag == null || msg == null || e == null) 
 			throw new MonkeyUtilException("You must supply full info. \ntag = " + tag + "\nmsg = " + msg + "\ne = " + e);
