@@ -38,4 +38,20 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"Пристрій USB"</string>
     <string name="label_view" msgid="6304565553218192990">"Переглянути"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Використовувати за умовчанням для аксесуара USB"</string>
+    <string name="mobile_data_connect_disable">"Ні"</string>
+    <string name="mobile_data_connect_enable">"Так"</string>
+    <string name="network_disconnect_title">Сповіщення</string>
+    <string name="network_disconnect_message">Мережа WLAN відключена. \nЗв’язатися через 3G? \nЯкщо у вас немає тарифного плану, операто може зажадати додаткової оплати.</string>
+    <string name="weak_signal_title">Слабкий сигнал</string>
+    <string name="weak_signal_message">Сигналу WLAN дуже слабкий, рекомендується вибрати кращий</string>
+    <string name="auto_connect">Не запитувати і автоматично підключатися до інших довірених AP</string>
+    <string name="bluetooth_name">"Bluetooth"</string>
+    <string name="sound_name">"Звук"</string>
+    <string name="mode_silent_name">"Беззвучний"</string>
+    <string name="mode_vibrate_name">"Вібросигнал"</string>
+    <string name="mode_sound_name">"Звук"</string>
+    <string name="auto_rotate_name">"Повернути"</string>
+    <string name="mobile_net_name">"Дані"</string>
+    <string name="datanetwork_error_airplane">Ви не можете використовувати мережу даних, коли телефон знаходиться в режимі літака.</string>
+    <string name="bluetooth_error_airplane">Ви не можете використання Bluetooth, коли телефон знаходиться в режимі літака.</string>
 </resources>

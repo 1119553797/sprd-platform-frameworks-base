@@ -38,4 +38,20 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"Akcesorium USB"</string>
     <string name="label_view" msgid="6304565553218192990">"Wyświetl"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Używaj domyślnie dla tego akcesorium USB"</string>
+    <string name="mobile_data_connect_disable">Nr</string>
+    <string name="mobile_data_connect_enable">Tak</string>
+    <string name="network_disconnect_title">Uwaga</string>
+    <string name="network_disconnect_message">Sieć WLAN rozłączona. \nPołączyć przez 3G? \nMoże to wymagać dodatkowych opłat.</string>
+    <string name="weak_signal_title">SŁABY SYGNAŁ</string>
+    <string name="weak_signal_message">Sygnał WLAN bardzo słaby, wybierz inny</string>
+    <string name="auto_connect">Nie pytaj i automatycznie łącz z zaufanym AP</string>
+    <string name="bluetooth_name">"Bluetooth"</string>
+    <string name="sound_name">"Dźwięk"</string>
+    <string name="mode_silent_name">"Cichy"</string>
+    <string name="mode_vibrate_name">"Wibracje"</string>
+    <string name="mode_sound_name">"Dźwięk"</string>
+    <string name="auto_rotate_name">"Obróć"</string>
+    <string name="mobile_net_name">"Dane"</string>
+    <string name="datanetwork_error_airplane">Nie możesz korzystać z DataNetwork gdy telefon jest w trybie samolotu.</string>
+    <string name="bluetooth_error_airplane">Nie możesz korzystać z (Brak sugestii) gdy telefon jest w trybie samolotu.</string>
 </resources>

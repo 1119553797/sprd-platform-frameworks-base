@@ -38,4 +38,20 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"Dodatek USB"</string>
     <string name="label_view" msgid="6304565553218192990">"Prikaži"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Privzeto uporabi za ta dodatek USB"</string>
+    <string name="mobile_data_connect_disable">Ne</string>
+    <string name="mobile_data_connect_enable">"Da"</string>
+    <string name="network_disconnect_title">Obvestilo</string>
+    <string name="network_disconnect_message">WLAN omrežje je prekinjeno. \nPoveži preko 3G? \nČe nimate zakupljenega podatkovnega prenosa, lahko to povzroči dodatne stroške.</string>
+    <string name="weak_signal_title">ŠIBEK SIGNAL</string>
+    <string name="weak_signal_message">Trenutni WLAN signal je zelo slab, priporočamo, da izberete boljšega</string>
+    <string name="auto_connect">Ne sprašuj in samodejno poveži na drugi zaupni program</string>
+    <string name="bluetooth_name">"Bluetooth"</string>
+    <string name="sound_name">Zvok</string>
+    <string name="mode_silent_name">"Tiho"</string>
+    <string name="mode_vibrate_name">"Vibriranje"</string>
+    <string name="mode_sound_name">Zvok</string>
+    <string name="auto_rotate_name">"Zasukaj"</string>
+    <string name="mobile_net_name">"Podatki"</string>
+    <string name="datanetwork_error_airplane">Ne morete uporabljati podatkovnega omrežja, ko je telefon v načinu letenja.</string>
+    <string name="bluetooth_error_airplane">Ne morete uporabljati Bluetootha, ko je telefon v načinu letenja.</string>
 </resources>

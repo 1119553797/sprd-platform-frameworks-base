@@ -909,4 +909,119 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Pomnilnik USB trenutno uporablja računalnik."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Kartico SD trenutno uporablja računalnik."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Neznano stanje zunanjih nosilcev podatkov."</string>
+    <string name="address_length">Naslov je dosegel maksimalno dolžino</string>
+    <string name="passwordChange" msgid="">"Geslo spremenjeno"</string>
+    <string name="badPin2">"Vneseni stari PIN2 ni pravilen."</string>
+    <string name="badPuk2">"Vneseni PUK2 ni pravilen."</string>
+    <string name="mismatchPin2">"Vneseni številki PIN2 se ne ujemata."</string>
+    <string name="mismatchPuk">"Vneseni številki PUK se ne ujemata."</string>
+    <string name="mismatchPuk2">"Vneseni številki PUK2 se ne ujemata."</string>
+    <string name="invalidPuk">Vtipkajte PUK, ki ima 8 številk ali več.</string>
+    <string name="needPinLock">Zamenjava PIN-a potrebuje nastavitev PIN-zaklenjen.</string>
+    <string name="ColpMmi">Identifikacijska predstavite povezane linije</string>
+    <string name="ColrMmi">Identifikacija omejitve povezane linije</string>
+    <string name="UnConditionCfMmi" msgid="">"Brezpogojno posredovanje klica"</string>
+    <string name="BusyCfMmi" msgid="">"Ob zasedenosti posreduj klic"</string>
+    <string name="NoReplyCfMmi" msgid="">"Ob neodzivnosti posreduj klic"</string>
+    <string name="NotReachCfMmi" msgid="">"Ob nedosegljivosti posreduj klic"</string>
+    <string name="AllCfMmi" msgid="">"Posredovanje vseh klicev"</string>
+    <string name="ConditionCfMmi" msgid="">"Pogojno posredovanje klica"</string>
+    <string name="BaocMmi" msgid="">"Zapora vseh odhodnih klicev"</string>
+    <string name="BaoicMmi" msgid="">"Zapora vseh izhodnih mednarodnih klicev"</string>
+    <string name="BaoicxhMmi" msgid="">"Zapora vseh izhodnih mednarodnih klicev, razen domače države"</string>
+    <string name="BaicMmi" msgid="">"Zapora vseh dohodnih klicev"</string>
+    <string name="BaicrMmi" msgid="">"Zapora vseh dohodnih klicev med gostovanjem"</string>
+    <string name="BaallMmi" msgid="">"Vse zapore za vse osnovne storitve"</string>
+    <string name="BamoMmi" msgid="">"Vsi odhodni za Vse osnovne storitve"</string>
+    <string name="BamtMmi" msgid="">"Vsi dohodni za Vse osnovne storitve"</string>
+    <string name="ActiveUnconCf">Brezpogojno posredovanje klicev</string>
+    <string name="ActiveConCf">Pogojno posredovanje klicev</string>
+    <string name="CallForwarded">Posredovanje klicev</string>
+    <string name="CallWaiting">"Čakajoči klic"</string>
+    <string name="CugCall" msgid="">"CUG klic"</string>
+    <string name="OutCallBarred" msgid="">"Zapora odhodnega klica"</string>
+    <string name="InCallBarred" msgid="">"Zapora vhodnega klica"</string>
+    <string name="ClirRejected" msgid="">"CLIR ukinitev je zavrnjena"</string>
+    <string name="ForwardedCall">Posredovan klic</string>
+    <string name="CallHold" msgid="">"Blokiran klic"</string>
+    <string name="CallRetrieved" msgid="">"Priklican klic"</string>
+    <string name="MultiCall" msgid="">"Klic več oseb"</string>
+    <string name="HoldCallReleased" msgid="">"Klic na čakanju je bil sproščen"</string>
+    <string name="ConnectingEct" msgid="">"Povezujem ECT"</string>
+    <string name="ConnectedEct" msgid="">"Povezan ECT"</string>
+    <string name="IncomingCallForwarded" msgid="">"Dodaten vhodni klic je posredovan"</string>
+    <string name="Pin2Mmi">"Sprememba kode PIN2"</string>
+    <string name="PukMmi">"Odklep PIN-a"</string>
+    <string name="Puk2Mmi">"Odklep PIN2-a"</string>
+    <string name="pinpuk_attempts">\nPreostali poskusi:</string>
+    <string name="lockscreen_sim_network_locked_message">Telefon je preko SIM-a zaklenjen na omrežje</string>
+    <string name="sim1_puk_requried">SIM1 PIN blokiran, vnesite PUK za deblokado</string>
+    <string name="sim2_puk_requried">SIM2 PIN blokiran, vnesite PUK za deblokado</string>
+    <string name="sim_puk_requried">SIM PIN blokiran, vnesite PUK za deblokado</string>
+    <string name="keyguard_password_enter_sim1_pin_code">Vnesite SIM 1 PIN kodo</string>
+    <string name="keyguard_password_enter_sim2_pin_code">Vnesite SIM 2 PIN kodo</string>
+    <string name="keyguard_password_enter_sim_pin_code">Vnesite SIM  PIN kodo</string>
+    <string name="keyguard_sim1_pin_accepted">SIM1 PIN odklep uspešen</string>
+    <string name="keyguard_sim2_pin_accepted">SIM2 PIN odklep uspešen</string>
+    <string name="keyguard_sim_pin_accepted">SIM PIN odklep uspešen</string>
+    <string name="puk_accept">PUK je bil sprejet</string>
+    <string name="unblocking_fail">Odblokiranje ni uspelo, ponovno vnesite PUK</string>
+    <string name="keyguard_password_wrong_puk_code">"Nepravilna koda PUK."</string>
+    <string name="new_pin">Vnesite nov PIN</string>
+    <string name="reenter">Ponovno vnesite PIN</string>
+    <string name="lockscreen_blocked_sim_message_short">SIM kartica je blokirana.</string>
+    <string name="crash_title">Oprostite!</string>
+    <string name="crash_application">Program <xliff:g id="application">%1$s</xliff:g> (proces <xliff:g id="process">%2$s</xliff:g>) se je nepričakovano ustavil. Sistemu ni uspelo popraviti napake. Prosimo, uporabite drugo programsko opremo.</string>
+    <string name="crash_process">Proces  <xliff:g id="process">%1$s</xliff:g> se je nepričakovano ustavil. Sistem ni popravil napake. Prosimo, uporabite drugo programsko opremo.</string>
+    <string name="crash_close">"V redu"</string>
+    <string name="volume_fm">FM jakost zvoka</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">SIM1 izbran tihi način</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">SIM2 izbran tihi način</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM1 in SIM2 izbran tihi način</string>
+    <string name="cta_tethered_notification_title">"Internetna povezava prek telefona"</string>
+    <string name="Low_Memory_Alert">Prostor za shranjevanje v telefonu, se manjša. Prosimo, odstranite nekaj podatkov, da zagotovite stabilnost telefona.</string>
+    <string name="Low_Memory_Free">Prosto</string>
+    <string name="Low_Memory_Application">"Programi"</string>
+    <string name="Low_Memory_Mail">Pošta</string>
+    <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+    <string name="Low_Memory_System">Sistem</string>
+    <string name="Btn_Select_Clear">Izber / Briši</string>
+    <string name="myAppTip">Izberite program, ki ga želite izbrisati</string>
+    <string name="myApp_Start_Btn">"Začetek"</string>
+    <string name="myApp_Move2Sd_ChkBox">PremakniNaSD</string>
+    <string name="myApp_ClearData_ChkBox">PočistiPodatke</string>
+    <string name="myApp_Uninstall_ChkBox">"Odstrani"</string>
+    <string name="myAppLoading">"Nalaganje …"</string>
+    <string name="myAppProcessing">procesiram\u2026</string>
+    <string name="keyguard_password_enter_puk_code">Vnesite PUK kodo</string>
+    <string name="keyguard_password_enter_new_pin_first_code">Vnesite novo PIN kodo</string>
+    <string name="keyguard_password_enter_new_pin_second_code">Ponovno vnesite novo PIN kodo</string>
+    <string name="ums_active_notification_message">usb shranjevanje podatkov omogočeno</string>
+    <string name="modem_active_notification_title">uporabi način razhroščevanja modema</string>
+    <string name="modem_active_notification_message">razhroščevalni način modema je omogočen</string>
+    <string name="china_mobile_numeric_values">China Mobile</string>
+    <string name="china_unicom_numeric_values">China Unicom</string>
+    <string name="china_telecom_numeric_values">China Telecom</string>
+    <string name="stk_refresh_sim_init_message">SIM kartica se posodablja</string>
+    <string name="stk_refresh_sim_reset_message">Telefon se bo ponovno zagnal</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicom</string>
+    <string name="charge_active_notification_message">Način samo polnjenja omogočen</string>
+    <string name="charge_active_notification_title">Uporabi samo polnjenje, ko je USB priključen</string>
+    <string name="shutdown_after_seconds">Telefon se bo ugasnil čez <xliff:g id="NUMBER">%d</xliff:g> sekund </string>
+    <string name="lockscreen_password_error">Napaka gesla, poskustite ponovno!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">Vnesli ste nepravilno geslo za odklep <xliff:g id="number">%d</xliff:g> krat. \n\n Prosimo poskustite ponovno čez <xliff:g id="number">%d</xliff:g> sekund.</string>
+    <string name="audio_play_failed">Oprostite, ta avdio ne more biti predvajan. Ne nastavljajte tega zvonjenja.</string>
+    <string name="sms_full_title">"Pomnilnik besedilnih sporočil je poln"</string>
+    <string name="sms_full_body">"Dohodno sporočilo zavrnjeno, ker je pomnilnik poln. Izbrišite stara sporočila."</string>
+    <string name="dialog_warning">Pozor</string>
+    <string name="internal_memory_low">Prostora na SD kartici je skoraj zmanjkalo! Prosimo, izbrišite nekaj datotek, da sprostite mesto.</string>
+    <string name="button_close">"Zapri"</string>
+    <string name="unlock_screen_pin_error">Napaka PIN-a!</string>
+    <string name="ap_disconnected">prekinjeno</string>
+    <string name="sim_chooser_title">Izberite SIM</string>
+    <string name="lockscreen_miss_phone">zgrešeni klic</string>
+    <string name="lockscreen_miss_mms">zgrešeni sms</string>
+    <string name="lockscreen_sim_card_locked_message">"Kartica SIM je zaklenjena."</string>
+    <string name="upload_file_size_too_large">Datoteka, ki jo želite naložiti, je prevelika, zato bo razdeljena na manjše dele</string>
 </resources>

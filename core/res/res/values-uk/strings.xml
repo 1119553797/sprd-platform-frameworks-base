@@ -909,4 +909,121 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Наразі комп\'ютер використовує носій USB."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Наразі комп\'ютер використовує карту SD."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Зовнішні носії в невідомому стані."</string>
+    <string name="address_length">Адреса досягла обмеження довжини</string>
+    <string name="passwordChange" msgid="">"Пароль змінено"</string>
+    <string name="badPuk2">"Введений PUK2 неправильний."</string>
+    <string name="mismatchPin2">"Введені PIN2-коди не збігаються."</string>
+    <string name="mismatchPuk">"Введені PUK-коди не збігаються."</string>
+    <string name="mismatchPuk2">"Введені PUK2-коди не збігаються."</string>
+    <string name="invalidPuk">Введіть PUK, що на 8 номерів і більше.</string>
+    <string name="needPinLock">Змінити PIN-код необхідно установити PIN-заблокування.</string>
+    <string name="ColpMmi">Подання ідентифікації сполучної лінії</string>
+    <string name="ColrMmi">Обмеження ідентифікації сполучної лінії</string>
+    <string name="UnConditionCfMmi" msgid="">"Безумовна переадресація викликів"</string>
+    <string name="BusyCfMmi" msgid="">"Якщо абонент зайнятий включити переадресацію виклику"</string>
+    <string name="NoReplyCfMmi" msgid="">"Якщо абонент не відповідає, включити переадресацію виклику"</string>
+    <string name="NotReachCfMmi" msgid="">"Якщо абонент не доступний, включити переадресацію виклику"</string>
+    <string name="AllCfMmi" msgid="">"Переадресація всіх викликів"</string>
+    <string name="ConditionCfMmi" msgid="">"Умовна переадресація викликів"</string>
+    <string name="BaocMmi" msgid="">"Заборона всіх вихідних викликів"</string>
+    <string name="BaoicMmi" msgid="">"Заборона всіх вихідних міжнародних викликів"</string>
+    <string name="BaoicxhMmi" msgid="">"Заборона всіх вихідних міжнародних викликів окрім рідної країни"</string>
+    <string name="BaicMmi" msgid="">"Заборона всіх вхідних викликів"</string>
+    <string name="BaicrMmi" msgid="">"Заборона всіх вхідних викликів під час роумінгу"</string>
+    <string name="BaallMmi" msgid="">"Повна заборона на всі базові послуги"</string>
+    <string name="BamoMmi" msgid="">"Усі вихідні віклики для всіх базових послуг"</string>
+    <string name="BamtMmi" msgid="">"Усі вхідні виклики для всіх базових послуг"</string>
+    <string name="ActiveUnconCf">Виклик безумовно переадресовано</string>
+    <string name="ActiveConCf">Виклик умовно переадресован</string>
+    <string name="CallForwarded">Виклик переадревсовано</string>
+    <string name="CallWaiting">"Паралел. виклик"</string>
+    <string name="CugCall" msgid="">"Виклик CUG"</string>
+    <string name="OutCallBarred" msgid="">"Вихідний виклик заборонено"</string>
+    <string name="InCallBarred" msgid="">"Вхідні виклики заблоковано"</string>
+    <string name="ClirRejected" msgid="">"Заглушувач антивизначнику номеру відхилено"</string>
+    <string name="ForwardedCall">Переадресовані виклики</string>
+    <string name="CallHold" msgid="">"Виклик заблоковано"</string>
+    <string name="CallRetrieved" msgid="">"Виклик видправлено"</string>
+    <string name="MultiCall" msgid="">"Многаканальний виклик"</string>
+    <string name="HoldCallReleased" msgid="">"Утриманийя виклик відпущено"</string>
+    <string name="ConnectingEct" msgid="">"ECT з’єднуется"</string>
+    <string name="ConnectedEct" msgid="">"ECT під\'єднано."</string>
+    <string name="IncomingCallForwarded" msgid="">"Додатковий вхідний виклик перенаправлено"</string>
+    <string name="Pin2Mmi">"Зміна PIN2"</string>
+    <string name="PukMmi">"Розблокувати PIN-код"</string>
+    <string name="Puk2Mmi">"Розблокувати PIN2-код"</string>
+    <string name="pinpuk_attempts">\nЗалишилося спроб :</string>
+    <string name="lockscreen_sim_network_locked_message">Телефон у заблокованій мережі SIM</string>
+    <string name="sim1_puk_requried">SIM1 PIN заблоковано, введіть код PUK, щоб розблокувати</string>
+    <string name="sim2_puk_requried">SIM2 PIN заблоковано, введіть код PUK, щоб розблокувати</string>
+    <string name="sim_puk_requried">SIM PIN заблоковано, введіть код PUK, щоб розблокувати</string>
+    <string name="keyguard_password_enter_sim1_pin_code">Введіть PIN код SIM1</string>
+    <string name="keyguard_password_enter_sim2_pin_code">Введіть PIN код SIM2</string>
+    <string name="keyguard_password_enter_sim_pin_code">Введіть PIN код SIM</string>
+    <string name="keyguard_sim1_pin_accepted">SIM1 PIN-код розблоковано успішно</string>
+    <string name="keyguard_sim2_pin_accepted">SIM2 PIN-код розблоковано успішно</string>
+    <string name="keyguard_sim_pin_accepted">SIM PIN-код розблоковано успішно</string>
+    <string name="puk_accept">PUK приймаються</string>
+    <string name="unblocking_fail">Розблокування не вдалося, повторно введіть PUK</string>
+    <string name="keyguard_password_wrong_puk_code">"Неправильний PUK-код!"</string>
+    <string name="new_pin">Введіть новий PIN-код</string>
+    <string name="reenter">Повторно введіть PIN-код</string>
+    <string name="lockscreen_blocked_sim_message_short">SIM-карту блоковано.</string>
+    <string name="crash_title">На жаль</string>
+    <string name="crash_application">Застосування <xliff:g id="application">%1$s</xliff:g>
+        (процесс <xliff:g id="process">%2$s</xliff:g>) припинено несподівано. Система не змогла виправити помилку. Будь ласка, використовуйте інші програми .</string>
+    <string name="crash_process">Процес <xliff:g id="process">%1$s</xliff:g> зупинено несподівано. Система не змогла виправити помилку. Будь ласка, використовуйте інші програми.</string>
+    <string name="crash_close">"OK"</string>
+    <string name="volume_fm">FM обсяг</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">SIM1 Обрана тиха мелодія</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">SIM2 Обрана тиха мелодія</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM1 і SIM2 Тиха мелодія обрана</string>
+    <string name="cta_tethered_notification_title">"Прив\'язка"</string>
+    <string name="Low_Memory_Alert">Просіору зберігання телефону занадто низький. Будь ласка, видаліть частину вмісту, щоб забезпечити стабільність телефону.</string>
+    <string name="Low_Memory_Free">Безкоштовно</string>
+    <string name="Low_Memory_Application">"Програми"</string>
+    <string name="Low_Memory_Mail">пошта</string>
+    <string name="Low_Memory_Sms_Mms">SMS / MMS</string>
+    <string name="Low_Memory_System">Система</string>
+    <string name="Btn_Select_Clear">Обрати / Очистити</string>
+    <string name="myAppTip">Вибір програм для обробки</string>
+    <string name="myApp_Start_Btn">"Пуск"</string>
+    <string name="myApp_Move2Sd_ChkBox">Перемістити до SD</string>
+    <string name="myApp_ClearData_ChkBox">Очистити дані</string>
+    <string name="myApp_Uninstall_ChkBox">"Видалити"</string>
+    <string name="myAppLoading">"Завантаж…"</string>
+    <string name="myAppProcessing">Обробка \u2026</string>
+    <string name="keyguard_password_enter_puk_code">Введіть PUK-код</string>
+    <string name="keyguard_password_enter_new_pin_first_code">Введіть новий PIN-код</string>
+    <string name="keyguard_password_enter_new_pin_second_code">Введіть новий PIN-код знову</string>
+    <string name="ums_active_notification_message">USB Mass Storage увімкнено</string>
+    <string name="modem_active_notification_title">використовувати режим відладки модему</string>
+    <string name="modem_active_notification_message">Модем включений режим відладки</string>
+    <string name="china_mobile_numeric_values">China Mobile</string>
+    <string name="china_unicom_numeric_values">China Unicom</string>
+    <string name="china_telecom_numeric_values">China Telecom</string>
+    <string name="stk_refresh_sim_init_message">Відновлення SIM-карти</string>
+    <string name="stk_refresh_sim_reset_message">Телефон буде перезавантажений</string>
+    <string name="custom_china_mobile">China Mobile</string>
+    <string name="custom_china_unicom">China Unicom</string>
+    <string name="charge_active_notification_message">Включено лише режим зарядки </string>
+    <string name="charge_active_notification_title">Використовуйте заряджати лише коли підключено USB</string>
+    <string name="shutdown_after_seconds">Телефон буде закрита після <xliff:g id="NUMBER">%d</xliff:g> секунд</string>
+    <string name="lockscreen_password_error">Пароль невірен, спробуйте ще раз!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">
+		Невірний код разблокування введено <xliff:g id="number">%d</xliff:g> разів
+        \n\nБудь ласка, спробуйте ще раз через <xliff:g id="number">%d</xliff:g> секунд.</string>
+    <string name="audio_play_failed">На жаль, це аудіо не відтворюється. Неможливо встановити цей рингтон.</string>
+    <string name="sms_full_title">"Пам\'ять текстових повід."</string>
+    <string name="sms_full_body">"Вхідне повідомл. відхилено через заповн. пам\'яті. Видаліть попер. повідомл."</string>
+    <string name="dialog_warning">Попередження</string>
+    <string name="internal_memory_low">SD-карта пам\'яті майже повна! Будь ласка, видаліть деякі файли, щоб звільнити місце.</string>
+    <string name="button_close">"Закрити"</string>
+    <string name="unlock_screen_pin_error">PIN-код невірний!</string>
+    <string name="ap_disconnected">  відключено</string>
+    <string name="sim_chooser_title">Вибрати SIM</string>
+    <string name="lockscreen_miss_phone">пропустити дзвінок</string>
+    <string name="lockscreen_miss_mms">пропустити SMS</string>
+    <string name="lockscreen_sim_card_locked_message">"SIM-карту заблок-но."</string>
+    <string name="upload_file_size_too_large">Ваш файл завантаження занадто великий, будь ласка, розділить на невеликі файли</string>
 </resources>

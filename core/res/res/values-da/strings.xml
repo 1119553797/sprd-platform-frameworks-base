@@ -909,4 +909,122 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"USB-lager er i øjeblikket i brug af en computer."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"SD-kortet er i øjeblikket i brug af en computer."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Eksternt medie i ukendt tilstand."</string>
+    <string name="address_length">Address har nået den maksimale længde</string>
+    <string name="passwordChange" msgid="">"Kodeord ændret"</string>
+    <string name="badPin2">"Den gamle PIN2-kode, du indtastede, er ikke korrekt."</string>
+    <string name="badPuk2">"Den indtastede PUK2-kode er ikke korrekt."</string>
+    <string name="mismatchPin2">"De indtastede PIN2-koder stemmer ikke overens."</string>
+    <string name="mismatchPuk">"De indtastede PUK-koder stemmer ikke overens."</string>
+    <string name="mismatchPuk2">"De indtastede PUK2-koder stemmer ikke overens."</string>
+    <string name="invalidPuk">Skriv en PUK på 8 tal eller længere.</string>
+    <string name="needPinLock">Skift PIN-kode skal sætte PIN-låst.</string>
+    <string name="ColpMmi">Tilsluttet nummer præsentation</string>
+    <string name="ColrMmi">Tilsluttet nummer begrænsning</string>
+    <string name="UnConditionCfMmi" msgid="">"Betingelsesløst viderestilling af opkald"</string>
+    <string name="BusyCfMmi" msgid="">"Når optaget viderestilling"</string>
+    <string name="NoReplyCfMmi" msgid="">"Når intet svar viderestilling af opkald"</string>
+    <string name="NotReachCfMmi" msgid="">"Når ikke nås viderestilling af opkald"</string>
+    <string name="AllCfMmi" msgid="">\'"Alle viderestilling af opkald"</string>
+    <string name="ConditionCfMmi" msgid="">"Konditionelt viderestilling"</string>
+    <string name="BaocMmi" msgid="">"Spærring af alle udgående opkald"</string>
+    <string name="BaoicMmi" msgid="">"Spærring af alle udgående internationale opkald"</string>
+    <string name="BaoicxhMmi" msgid="">"Spærring af alle udgående internationale opkald undtagen til hjemland"</string>
+    <string name="BaicMmi" msgid="">"Spærring af alle indgående opkald"</string>
+    <string name="BaicrMmi" msgid="">"Spærring af alle indgående opkald under roaming"</string>
+    <string name="BaallMmi" msgid="">"Alle spærring af alle grundlæggende tjenester"</string>
+    <string name="BamoMmi" msgid="">"Alle udgående for alle grundlæggende tjenester"</string>
+    <string name="BamtMmi" msgid="">"Alle indgående for alle grundlæggende tjenester"</string>
+    <string name="ActiveUnconCf">Ring fremsendt ubetinget</string>
+    <string name="ActiveConCf">Ring fremsendes betinget</string>
+    <string name="CallForwarded">Viderestilles opkaldet</string>
+    <string name="CallWaiting">"Ventende opkald"</string>
+    <string name="CugCall" msgid="">\'"CUG Opkald"</string>
+    <string name="OutCallBarred" msgid="">"Udgående opkald spærret"</string>
+    <string name="InCallBarred" msgid="">"Indgående opkald spærret"</string>
+    <string name="ClirRejected" msgid="">"CLIR undertrykkelse afvist"</string>
+    <string name="ForwardedCall">Viderestillet opkald</string>
+    <string name="CallHold" msgid="">"Opkald blokeret"</string>
+    <string name="CallRetrieved" msgid="">"Opkald hentet"</string>
+    <string name="MultiCall" msgid="">"Fler parti opkald"</string>
+    <string name="HoldCallReleased" msgid="">"På hold kalde frigivet"</string>
+    <string name="ConnectingEct" msgid="">Tilslutning ECT</string>
+    <string name="ConnectedEct" msgid="">Forbundet ECT</string>
+    <string name="IncomingCallForwarded" msgid="">"Yderligere indgående opkald videresendt"</string>
+    <string name="Pin2Mmi">"ændring af PIN2-kode"</string>
+    <string name="PukMmi">"PIN låse op"</string>
+    <string name="Puk2Mmi">"PIN2 låse op"</string>
+    <string name="pinpuk_attempts">\nAttempts fordæk:</string>
+    <string name="lockscreen_sim_network_locked_message">Telefon er SIM Netværket er låst</string>
+    <string name="sim1_puk_requried">SIM-kortet 1 PIN-kode spærret, Indtast PUK at fjerne blokeringen</string>
+    <string name="sim2_puk_requried">SIM-kortet 2 PIN-kode spærret, Indtast PUK at fjerne blokeringen</string>
+    <string name="sim_puk_requried">SIM-kortet PIN-kode spærret, Indtast PUK at fjerne blokeringen</string>
+    <string name="keyguard_password_enter_sim1_pin_code">Indtast SIM1 PIN-kode</string>
+    <string name="keyguard_password_enter_sim2_pin_code">Indtast SIM2 PIN-kode</string>
+    <string name="keyguard_password_enter_sim_pin_code">Indtast SIM PIN-kode</string>
+    <string name="keyguard_sim1_pin_accepted">SIM-kortet 1 PIN Lås op Succes</string>
+    <string name="keyguard_sim2_pin_accepted">SIM-kortet 2 PIN Lås op Succes</string>
+    <string name="keyguard_sim_pin_accepted">SIM-kortet PIN Lås op Succes</string>
+    <string name="puk_accept">PUK er accepteret</string>
+    <string name="unblocking_fail">Fjernelse af blokering mislykkedes, genindtaste PUK</string>
+    <string name="keyguard_password_wrong_puk_code">"Forkert PUK-kode."</string>
+    <string name="new_pin">Indtast en ny PIN-kode</string>
+    <string name="reenter">Indtaste PIN koden</string>
+    <string name="lockscreen_blocked_sim_message_short">SIM-kortet er spærret.</string>
+    <string name="crash_title">Beklager!</string>
+    <string name="crash_application">Ansøgningen <xliff:g id="application">%1$s</xliff:g>
+        (proces <xliff:g id="process">%2$s</xliff:g>) er standset uventet. System undladt at reparere fejlen. Brug venligst anden software. </string>
+    <string name="crash_process">Processen <xliff:g id="process">%1$s</xliff:g> er standset uventet. System undladt at reparere fejlen. Brug venligst anden software.</string>
+    <string name="crash_close">"OK"</string>
+    <string name="volume_fm">FM volumen</string>
+    <string name="volume_music_hint_silent_sim1_ringtone_selected">SIM-kortet 1 Lydløs ringetone valgt</string>
+    <string name="volume_music_hint_sim2_silent_ringtone_selected">SIM-kortet 2 Lydløs ringetone valgt</string>
+    <string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM-kortet 1 og SIM-kortet 2 Lydløs ringetone valgt</string>
+    <string name="cta_tethered_notification_title">"Tethering"</string>
+    <string name="Low_Memory_Alert">Telefon lagerplads går lavt. Fjern nogle data for at sikre stabiliteten af telefonen.</string>
+    <string name="Low_Memory_Free">Ledig</string>
+    <string name="Low_Memory_Application">"Programmer"</string>
+    <string name="Low_Memory_Mail">Mail</string>
+    <string name="Low_Memory_Sms_Mms">SMS / MMS</string>
+    <string name="Low_Memory_System">System</string>
+    <string name="Btn_Select_Clear">Vælg / Slet</string>
+    <string name="myAppTip">Vælg programmer til at håndtere</string>
+    <string name="myApp_Start_Btn">"Start"</string>
+    <string name="myApp_Move2Sd_ChkBox">MoveToSD</string>
+    <string name="myApp_ClearData_ChkBox">Slette Data</string>
+    <string name="myApp_Uninstall_ChkBox">"Afinstaller"</string>
+    <string name="myAppLoading">"Indlæser ..."</string>
+    <string name="myAppProcessing">forarbejdning \u2026</string>
+    <string name="keyguard_password_enter_puk_code">Indtast PUK-kode</string>
+    <string name="keyguard_password_enter_new_pin_first_code">Indtast ny PIN-kode</string>
+    <string name="keyguard_password_enter_new_pin_second_code">Indtast ny PIN-kode igen</string>
+    <string name="ums_active_notification_message">usb lagerenhed aktiveret</string>
+    <string name="modem_active_notification_title">bruge modem fejlfindingstilstand</string>
+    <string name="modem_active_notification_message">modem fejlsøgning aktiveret tilstand</string>
+    <string name="china_mobile_numeric_values">Kina Mobile</string>
+    <string name="china_unicom_numeric_values">Kina Unicom</string>
+    <string name="china_telecom_numeric_values">Kina Telecom</string>
+    <string name="stk_refresh_sim_init_message">SIM-kort opdaterer</string>
+    <string name="stk_refresh_sim_reset_message">Telefon genstarter</string>
+    <string name="custom_china_mobile">Kina Mobile</string>
+    <string name="custom_china_unicom">Kina Unicom</string>
+    <string name="charge_active_notification_message">Oplad kun aktiveret tilstand</string>
+    <string name="charge_active_notification_title">Brug Oplad kun når usb tilsluttet</string>
+    <string name="shutdown_after_seconds">Telefonen lukkes ned efter <xliff:g id="NUMBER">%d</xliff:g> sekunder</string>
+    <string name="lockscreen_password_error">Adgangskoden er fejl  prøv igen!</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">
+Du har forkert input din adgangskode til oplåsning <xliff:g id="number">%d</xliff:g> gange.
+         \n\nPrøv igen i <xliff:g id="number">%d</xliff:g> sekunder. "</string>
+    <string name="audio_play_failed">Beklager, kan denne lyd ikke afspilles. Kan ikke angive denne ringetone.</string>
+    <string name="sms_full_title">"Sms-hukommelsen er fuld"</string>
+    <string name="sms_full_body">"En indgående besked blev afvist, da hukommelsen er fuld. Slet gamle beskeder."</string>
+    <string name="dialog_warning">Advarsel </string>
+    <string name="internal_memory_low">SD Kort lagring er næsten fuld! Slet nogle filer for at frigøre plads.</string>
+    <string name="button_close">"Luk"</string>
+    <string name="unlock_screen_pin_error">Stiften er fejl!</string>
+    <string name="ap_disconnected">frakobles</string>
+    <string name="sim_chooser_title">Vælg SIM</string>
+    <string name="lockscreen_miss_phone">glip af telefon</string>
+    <string name="lockscreen_miss_mms">glip sms</string>
+    <string name="lockscreen_sim_card_locked_message">"SIM-kortet er låst."</string>
+    <string name="upload_file_size_too_large">Dit upload filen er for stor, opdelt i små filer behage</string>
 </resources>

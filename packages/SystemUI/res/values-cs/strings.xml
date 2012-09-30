@@ -38,4 +38,20 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"Periferní zařízení USB"</string>
     <string name="label_view" msgid="6304565553218192990">"Zobrazit"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Pro toto periferní zařízení USB použít jako výchozí"</string>
+    <string name="mobile_data_connect_disable">Ne</string>
+    <string name="mobile_data_connect_enable">Ano</string>
+    <string name="network_disconnect_title">Upozornění</string>
+    <string name="network_disconnect_message">Síť WLAN byla odpojena. \nPřipojit se přes 3G? \nPokud nemáte datový plán, může to vyvolat další poplatky.</string>
+    <string name="weak_signal_title">SLABÝ SIGNÁL</string>
+    <string name="weak_signal_message">Aktuální WLAN signál je velmi slabý, vyberte lepší</string>
+    <string name="auto_connect">Neptat se a automaticky připojit k jiné důvěryhodné aplikaci</string>
+    <string name="bluetooth_name">"Bluetooth"</string>
+    <string name="sound_name">"Zvuk"</string>
+    <string name="mode_silent_name">"Tichý"</string>
+    <string name="mode_vibrate_name">"Vibrace"</string>
+    <string name="mode_sound_name">"Zvuk"</string>
+    <string name="auto_rotate_name">"Otočit"</string>
+    <string name="mobile_net_name">"Data"</string>
+    <string name="datanetwork_error_airplane">Nemůžete používat datovou síť, když je telefon v režimu letadlo.</string>
+    <string name="bluetooth_error_airplane">Nelze použít Bluetooth, když je telefon v režimu letadlo.</string>
 </resources>

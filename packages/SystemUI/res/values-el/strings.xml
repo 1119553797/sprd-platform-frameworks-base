@@ -38,4 +38,20 @@
     <string name="title_usb_accessory" msgid="4966265263465181372">"Αξεσουάρ USB"</string>
     <string name="label_view" msgid="6304565553218192990">"Προβολή"</string>
     <string name="always_use_accessory" msgid="1210954576979621596">"Χρήση από προεπιλογή για αυτό το εξάρτημα USB"</string>
+    <string name="mobile_data_connect_disable">Όχι</string>
+    <string name="mobile_data_connect_enable">Ναι</string>
+    <string name="network_disconnect_title">Ειδοποίηση</string>
+    <string name="network_disconnect_message">Το δίκτυο WLAN έχει αποσυνδεθεί. \nΣύνδεση μέσω 3G; \nΑν δεν έχετε ακόμα πλάνο δεδομένων, μπορεί να επιβαρυνθείτε με επιπλέον κόστος.</string>
+    <string name="weak_signal_title">Αδύναμο σήμα</string>
+    <string name="weak_signal_message">Το τρέχον σήμα WLAN είναι πολύ αδύναμο, προτείνεται να επιλέξετε ένα καλύτερο</string>
+    <string name="auto_connect">Μπορείς να συνδεθείς αυτόματα με άλλο έμπιστο AP</string>
+    <string name="bluetooth_name">"Bluetooth"</string>
+    <string name="sound_name">"Ήχος"</string>
+    <string name="mode_silent_name">"Σίγαση"</string>
+    <string name="mode_vibrate_name">"Δόνηση"</string>
+    <string name="mode_sound_name">"Ήχος"</string>
+    <string name="auto_rotate_name">"Περιστροφή"</string>
+    <string name="mobile_net_name">"Δεδομένα"</string>
+    <string name="datanetwork_error_airplane">Δεν μπορείτε να χρησιμοποιήσετε το Δίκτυο Δεδομένων όταν το τηλέφωνο βρίσκεται σε λειτουργία πτήσης.</string>
+    <string name="bluetooth_error_airplane">Δεν μπορείτε να χρησιμοποιήσετε το bluetooth όταν το τηλέφωνο βρίσκεται σε λειτουργία πτήσης.</string>
 </resources>
