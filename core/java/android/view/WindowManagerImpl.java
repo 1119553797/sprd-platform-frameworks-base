@@ -268,10 +268,12 @@ public class WindowManagerImpl implements WindowManager {
         if (root.mAddNesting > 0) {
             return view;
         }
-
-        InputMethodManager imm = InputMethodManager.getInstance(view.getContext());
-        if (imm != null) {
-            imm.windowDismissed(mViews[index].getWindowToken());
+        
+        if (view != null) {//Fix bug 78939 by liwd@spreads.com, it has been fixed in 4.1
+	        InputMethodManager imm = InputMethodManager.getInstance(view.getContext());
+	        if (imm != null) {
+	            imm.windowDismissed(mViews[index].getWindowToken());
+	        }
         }
         root.die(false);
         finishRemoveViewLocked(view, index);
