@@ -16,7 +16,6 @@
 
 package android.database;
 
-import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,8 +29,7 @@ import java.util.Map;
  *
  * {@hide}
  */
-public final class BulkCursorToCursorAdaptor extends AbstractWindowedCursor 
-											 implements IBinder.DeathRecipient {
+public final class BulkCursorToCursorAdaptor extends AbstractWindowedCursor {
     private static final String TAG = "BulkCursor";
 
     private SelfContentObserver mObserverBridge;
@@ -39,21 +37,10 @@ public final class BulkCursorToCursorAdaptor extends AbstractWindowedCursor
     private int mCount;
     private String[] mColumns;
     private boolean mWantsAllOnMoveCalls;
-    
-    //add by liwd@spreadst.com begin
-    private boolean mLinkedToDeath;
-    private static boolean isMonkey;
-    
-    static {
-    	isMonkey = MonkeyUtils.isMonkey();
-    	if (isMonkey) Log.v(TAG, "Now user is a monkey.");
-    }
-    //add by liwd@spreadst.com end
-    
+
     public void set(IBulkCursor bulkCursor) {
         mBulkCursor = bulkCursor;
-        linkToDeath();//by liwd
-        
+
         try {
             mCount = mBulkCursor.count();
             mWantsAllOnMoveCalls = mBulkCursor.getWantsAllOnMoveCalls();
@@ -72,8 +59,6 @@ public final class BulkCursorToCursorAdaptor extends AbstractWindowedCursor
      */
     public void set(IBulkCursor bulkCursor, int count, int idIndex) {
         mBulkCursor = bulkCursor;
-        linkToDeath();//by liwd
-        
         mColumns = null;  // lazily retrieved
         mCount = count;
         mRowIdColumnIndex = idIndex;
@@ -159,8 +144,6 @@ public final class BulkCursorToCursorAdaptor extends AbstractWindowedCursor
             mBulkCursor.close();
         } catch (RemoteException ex) {
             Log.w(TAG, "Remote process exception when closing");
-        } finally {//add by liwd@spreadst.com
-        	unlinkToDeath();
         }
         mWindow = null;        
     }
@@ -231,6 +214,7 @@ public final class BulkCursorToCursorAdaptor extends AbstractWindowedCursor
                 mColumns = mBulkCursor.getColumnNames();
             } catch (RemoteException ex) {
                 Log.e(TAG, "Unable to fetch column names because the remote process is dead");
+                suicideIfMonkey();
                 return null;
             }
         }
@@ -298,33 +282,16 @@ public final class BulkCursorToCursorAdaptor extends AbstractWindowedCursor
             return Bundle.EMPTY;
         }
     }
-
-    //add by liwd@spreadst.com begin
-    private void linkToDeath() {
-    	if (isMonkey && !mLinkedToDeath) {
-	    	try {
-				mBulkCursor.asBinder().linkToDeath(this, 0);
-				mLinkedToDeath = true;
-			} catch (RemoteException e) {
-			}
-    	}
-    }
     
-    private void unlinkToDeath() {
-    	if (isMonkey && mLinkedToDeath) {
-			mBulkCursor.asBinder().unlinkToDeath(this, 0);
-			mLinkedToDeath = false;
-		}
-    }
-    
-	@Override
-	public void binderDied() {
-		unlinkToDeath();
-		if (isMonkey) {
+    //add by liwd@spreadst.com
+    private void suicideIfMonkey() {
+    	if (MonkeyUtils.isMonkey()) {
 			Log.d(TAG, "The provider process is killed when low memory, so we also kill the " +
 					"client process avoiding throw other exceptions to block monkey test.");
 			android.os.Process.killProcess(android.os.Process.myPid());
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {}
 		}
-	}
-	//add by liwd@spreadst.com end
+    }
 }
