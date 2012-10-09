@@ -7918,7 +7918,16 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
 
         public void hide() {
             mIsDragging = false;
-            mContainer.dismiss();
+            try {//Modified by liwd@spreadst.com for bug 78485
+            	mContainer.dismiss();
+            } catch (IllegalArgumentException e) {
+            	if (android.util.MonkeyUtils.isMonkey()) {
+            		Log.v(LOG_TAG, "Exception in hide(): " + e.getMessage() + "\n" 
+            				+ "We just ignore this because it won't happen in normal use.");
+            	} else {
+            		throw e;
+            	}
+            }
         }
 
         public boolean isShowing() {
