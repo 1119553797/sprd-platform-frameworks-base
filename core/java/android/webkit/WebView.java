@@ -2393,6 +2393,10 @@ public class WebView extends AbsoluteLayout
 
         Rect rect = new Rect();
         calcOurContentVisibleRect(rect);
+
+        // add for monkey bug 78958 NullPointerException
+        if (mWebViewCore == null) return rect;
+
         // Rect.equals() checks for null input.
         if (!rect.equals(mLastVisibleRectSent)) {
             Point pos = new Point(rect.left, rect.top);
