@@ -556,6 +556,14 @@ public class MediaScanner
         }
 
         public void handleStringTag(String name, String value) {
+            /*fix bug78581 for garbled display on music by reference to 6820*/
+            try{
+                if(value.equals(new String(value.getBytes("ISO-8859-1"), "ISO-8859-1"))) {
+                    String result = new String(value.getBytes("ISO-8859-1"),"GBK");
+                    value = result;
+                }
+            } catch(Exception e){}
+
             if (name.equalsIgnoreCase("title") || name.startsWith("title;")) {
                 // Don't trim() here, to preserve the special \001 character
                 // used to force sorting. The media provider will trim() before
