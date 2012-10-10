@@ -2482,6 +2482,9 @@ public class WebView extends AbsoluteLayout
     private boolean sendViewSizeZoom() {
         if (mPreviewZoomOnly) return false;
 
+        // add for monkey bug 78961 NullPointerException
+        if (mWebViewCore == null) return false;
+
         int viewWidth = getViewWidth();
         int newWidth = Math.round(viewWidth * mInvActualScale);
         int newHeight = Math.round(getViewHeight() * mInvActualScale);
