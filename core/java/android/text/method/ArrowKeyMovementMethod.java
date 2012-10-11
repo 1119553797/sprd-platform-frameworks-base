@@ -19,6 +19,7 @@ package android.text.method;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
+import android.util.MonkeyUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -149,7 +150,18 @@ public class ArrowKeyMovementMethod implements MovementMethod {
             break;
 
         case KeyEvent.KEYCODE_DPAD_RIGHT:
-            handled |= right(widget, buffer);
+            // Modified by wuwz for BUG73101 begin
+            try {
+                handled |= right(widget, buffer);
+            } catch (IndexOutOfBoundsException e) {
+                if (MonkeyUtils.isMonkey()) {
+                    android.util.Log.e("ArrowKeyMovementMethod", "Fail to change select text - " + e.getLocalizedMessage());
+                    return true;
+                } else {
+                    throw e;
+                }
+            }
+            // Modified by wuwz for BUG73101 end
             break;
 
         case KeyEvent.KEYCODE_DPAD_CENTER:
