@@ -616,7 +616,7 @@ int	VideoPhoneSource::writeRingBuffer(char* data,int nLen)
 	if ((nTemp = nLen - nTemp) > 0)
 	{
 		memcpy(m_RingBuffer,data ,nTemp);
-		m_nDataEnd	= nTemp - 1;
+		m_nDataEnd	= nTemp;
 	}
 
 	if (bChangeStart)
