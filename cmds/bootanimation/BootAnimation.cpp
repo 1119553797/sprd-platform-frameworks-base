@@ -223,12 +223,21 @@ status_t BootAnimation::readyToRun() {
         return -1;
 
     // create the native surface
-    sp<SurfaceControl> control = session()->createSurface(
-            0, dinfo.w, dinfo.h, PIXEL_FORMAT_RGB_565);
+    /*sp<SurfaceControl> control = session()->createSurface(
+            0, dinfo.w, dinfo.h, PIXEL_FORMAT_RGB_565);*/
+    sp<SurfaceControl> control;
+    if (dinfo.w > dinfo.h) {
+        control = session()->createSurface(
+                  0, dinfo.h, dinfo.w, PIXEL_FORMAT_RGB_565);
+    } else {
+        control = session()->createSurface(
+                  0, dinfo.w, dinfo.h, PIXEL_FORMAT_RGB_565);
+    }
 
     SurfaceComposerClient::openGlobalTransaction();
     control->setLayer(0x40000000);
     SurfaceComposerClient::closeGlobalTransaction();
+    SurfaceComposerClient::setOrientation(0,0,0);
 
     sp<Surface> s = control->getSurface();
 
@@ -417,9 +426,9 @@ bool BootAnimation::movie()
         char path[256];
         char pathType;
         if (sscanf(l, "%d %d %d", &width, &height, &fps) == 3) {
-            //LOGD("> w=%d, h=%d, fps=%d", width, height, fps);
-            animation.width = width;
-            animation.height = height;
+            //LOGD("> w=%d, h=%d, fps=%d", fps, width, height);
+            animation.width = (width > 0 ? width : mWidth);
+            animation.height = (height > 0 ? height : mHeight);
             animation.fps = fps;
         }
         else if (sscanf(l, " %c %d %d %s", &pathType, &count, &pause, path) == 4) {
