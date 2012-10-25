@@ -28,8 +28,12 @@ import android.util.Slog;
 import com.android.internal.logging.AndroidConfig;
 import com.android.server.NetworkManagementSocketTagger;
 import dalvik.system.VMRuntime;
+
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Date;
 import java.util.TimeZone;
 import java.util.logging.LogManager;
 import org.apache.harmony.luni.internal.util.TimezoneGetter;
@@ -68,6 +72,24 @@ public class RuntimeInit {
 
                 if (mApplicationObject == null) {
                     Slog.e(TAG, "*** FATAL EXCEPTION IN SYSTEM PROCESS: " + t.getName(), e);
+                    if (e instanceof OutOfMemoryError) {
+                        String pname = "system_server";
+                        String file = "/data/misc/hprofs/";
+                        File dir = new File(file);
+                        if (!dir.exists() || !dir.isDirectory() || !dir.canWrite()) {
+                            file = "/data/data/";
+                            dir = new File(file);
+                        }
+                        if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
+                            int pid = Process.myPid();
+                            file += "/oom_" + pname + ".hprof";
+                            try {
+                                android.os.Debug.dumpHprofData(file);
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }
                 } else {
                     Slog.e(TAG, "FATAL EXCEPTION: " + t.getName(), e);
                 }
