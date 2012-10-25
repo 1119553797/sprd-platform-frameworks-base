@@ -49,7 +49,17 @@ private:
     MediaBufferGroup *mBufferGroup;
     size_t mTagIndex;
 
+    // for AVC.
+    bool mIsAVC;
+    size_t mNALLengthSize;
+    uint8_t *mSrcBuffer;
+
+    //for AAC.
+    bool mIsAAC;
+    
     //sp<MP3Splitter> mSplitter;
+
+    size_t parseNALSize(const uint8_t *data) const;
 
     DISALLOW_EVIL_CONSTRUCTORS(FLVSource);
 };
@@ -60,6 +70,29 @@ FLVExtractor::FLVSource::FLVSource(
       mTrackIndex(trackIndex),
       mTrack(mExtractor->mTracks.itemAt(trackIndex)),
       mBufferGroup(NULL) {
+
+    const char *mime;
+    bool success = mTrack.mMeta->findCString(kKeyMIMEType, &mime);
+    CHECK(success);
+    mIsAVC = !strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_AVC);
+    mIsAAC = !strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AAC);
+
+    if (mIsAVC) {
+        uint32_t type;
+        const void *data;
+        size_t size;
+        CHECK(mTrack.mMeta->findData(kKeyAVCC, &type, &data, &size));
+
+        const uint8_t *ptr = (const uint8_t *)data;
+
+        CHECK(size >= 7);
+        CHECK_EQ((unsigned)ptr[0], 1u);  // configurationVersion == 1
+
+        // The number of bytes used to encode the length of a NAL unit.
+        mNALLengthSize = 1 + (ptr[4] & 3);
+    }
+    LOGE("mIsAVC=%d, mNALLengthSize=%d",mIsAVC,mNALLengthSize);
+
 }
 
 FLVExtractor::FLVSource::~FLVSource() {
@@ -77,6 +110,12 @@ status_t FLVExtractor::FLVSource::start(MetaData *params) {
     mBufferGroup->add_buffer(new MediaBuffer(mTrack.mMaxTagSize));
     mTagIndex = 0;
 
+    mSrcBuffer = NULL;
+    if(mIsAVC)
+    {
+        mSrcBuffer =  new uint8_t[mTrack.mMaxTagSize]; ;
+    }
+
     return OK;
 }
 
@@ -85,12 +124,36 @@ status_t FLVExtractor::FLVSource::stop() {
 
     delete mBufferGroup;
     mBufferGroup = NULL;
-    
+
+    if(NULL != mSrcBuffer)
+    {
+        delete[] mSrcBuffer;
+        mSrcBuffer = NULL;
+    }
     return OK;
 }
 
 sp<MetaData> FLVExtractor::FLVSource::getFormat() {
     return mTrack.mMeta;
+}
+
+size_t FLVExtractor::FLVSource::parseNALSize(const uint8_t *data) const {
+    switch (mNALLengthSize) {
+        case 1:
+            return *data;
+        case 2:
+            return U16_AT(data);
+        case 3:
+            return ((size_t)data[0] << 16) | U16_AT(&data[1]);
+        case 4:
+            return U32_AT(data);
+    }
+
+    // This cannot happen, mNALLengthSize springs to life by adding 1 to
+    // a 2-bit integer.
+    CHECK(!"Should not be here.");
+
+    return 0;
 }
 
 status_t FLVExtractor::FLVSource::read(
@@ -127,32 +190,120 @@ status_t FLVExtractor::FLVSource::read(
                 return ERROR_END_OF_STREAM;
             //}
         }
+        if(size > mTrack.mMaxTagSize)
+        {
+            LOGE("buffer is not enough, size=%d,maxsize=%d",size, mTrack.mMaxTagSize);
+            return ERROR_MALFORMED;
+        }
 
         MediaBuffer *out;
         CHECK_EQ(mBufferGroup->acquire_buffer(&out), (status_t)OK);
-
-        if(size > mTrack.mMaxTagSize)
-        {
-            LOGE("buffer is not enough");
-            size = mTrack.mMaxTagSize;//buffer is not enough
-        }
-        ssize_t n = mExtractor->mDataSource->readAt(offset, out->data(), size);
-
-        if (n < (ssize_t)size) {
-            return n < 0 ? (status_t)n : (status_t)ERROR_MALFORMED;
-        }
-
-        out->set_range(0, size);
-
+        //
         out->meta_data()->setInt64(kKeyTime, timeUs);
-
         if (isKey) {
             out->meta_data()->setInt32(kKeyIsSyncFrame, 1);
         }
 
-       *buffer = out;
+        if(!mIsAVC)
+        {
+            ssize_t n = mExtractor->mDataSource->readAt(offset, out->data(), size);
+            if (n < (ssize_t)size) {
+                out->release();
+                return n < 0 ? (status_t)n : (status_t)ERROR_MALFORMED;
+            }
+
+            if(!mIsAAC)
+            {
+                out->set_range(0, size);
+            }
+            else
+            {
+                // read out one AACAUDIODATA(the 1Byte head of AUDIODATA has been skipped).
+                /*   struct for AACAUDIODATA
+                AACPacketType       UI8         0: AAC sequence header
+                                                1: AAC raw
+                Data                UI8[n]      if AACPacketType == 0
+                                                    AudioSpecificConfig
+                                                else if AACPacketType == 1
+                                                    Raw AAC frame data
+                */
+                 // NOTE: skip the  the header of AACAUDIODATA(1Bytes).
+                out->set_range(1, (size>1)?(size-1):0);
+            }
+            
+            *buffer = out;
+        }
+        else
+        {
+            // Whole NAL units are returned but each fragment is prefixed by
+            // the start code (0x00 00 00 01).
+            uint8_t *dstData;
+            uint8_t *srcData;
+            size_t srcOffset;
+            size_t dstOffset;
+
+            /* Read one AVCVIdeoPacket  to the temp buffer( the 1Byte header of VIDEODATA has 
+                 been skipped ).  */
+            ssize_t n = mExtractor->mDataSource->readAt(offset, mSrcBuffer, size);
+            if ((n < (ssize_t)size ) || (size < 4)) {
+                out->release();
+                return n < 0 ? (status_t)n : (status_t)ERROR_MALFORMED;
+            }
+
+            // check the AVCPacketType.  Only  send out AVC NALU.
+            if( mSrcBuffer[0] != 1)
+            {
+                // AVCPacketType has been saved in meta data. discard it.
+                LOGE("AVCPacketType = %d, discard. ",mSrcBuffer[0]);
+                out->release();
+                continue;
+            }
+            // skip the header of AVCVIdeoPacket(4Bytes).
+            size  -= 4;
+            srcData = mSrcBuffer + 4;
+            srcOffset = 0;
+            dstData = (uint8_t *)out->data();
+            dstOffset = 0;
+
+            while (srcOffset < size) {
+                bool isMalFormed = (srcOffset + mNALLengthSize > size);
+                size_t nalLength = 0;
+                if (!isMalFormed) {
+                    nalLength = parseNALSize(&srcData[srcOffset]);
+                    srcOffset += mNALLengthSize;
+                    isMalFormed = srcOffset + nalLength > size;
+                }
+
+                if (isMalFormed) {
+                    LOGE("Video is malformed,srcOffset=%d, nalLength=%d, size=%d",srcOffset,nalLength,size);
+                    out->release();
+                    return ERROR_MALFORMED;
+                }
+
+                if (nalLength == 0) {
+                    LOGE("nalLength is error or end of the tag");
+                    break;
+                }
+
+                CHECK(dstOffset + 4 <= out->size());
+
+                dstData[dstOffset++] = 0;
+                dstData[dstOffset++] = 0;
+                dstData[dstOffset++] = 0;
+                dstData[dstOffset++] = 1;
+                memcpy(&dstData[dstOffset], &srcData[srcOffset], nalLength);
+                srcOffset += nalLength;
+                dstOffset += nalLength;
+            }
+            CHECK_EQ(srcOffset, size);
+            CHECK(out != NULL);
+            out->set_range(0, dstOffset);
+
+             *buffer = out;
+        }
        break;
     }
+
     return OK;
 }
 
@@ -302,7 +453,7 @@ status_t FLVExtractor::parseTag(off_t offset, off64_t size, int depth) {
     
     for( uint32_t i=0; i<mTracks.size(); i++) {
         Track *track = &mTracks.editItemAt( i );
-        track->mCurTagPos = offset + 4 + 11 + len;
+        track->mCurTagPos = offset + 4 + SIZE_OF_TAG_HEAD + len;
 
         if( track->mKind == Track::VIDEO )
             Vtrack = track;
@@ -334,9 +485,75 @@ status_t FLVExtractor::parseTag(off_t offset, off64_t size, int depth) {
             if(FLV_TAG_TYPE_VIDEO==type) {
                 Vtrack->mCurTagPos = offset;
                 LOGE("get video tag Header!");
+                switch(flags&0x0f)
+                {
+                case FLV_CODECID_H263:
+                    Vtrack->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_H263);
+                    break;
+                case FLV_CODECID_AVC:
+                    Vtrack->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_AVC);
+                    // NOTE: skip the head of VIDEODATA(1Byte) and the header of AVCPacketType(4Bytes).
+                    if( len > 5 ) // 1+4
+                    {
+                        /*   struct for AVCVIDEOPACKET
+                            AVCPacketType       UI8         0: AVC sequence header
+                                                            1: AVC NALU
+                                                            2: AVC end of sequence (lower level NALU
+                                                                sequence ender is not required or supported)
+                            CompositionTime     SI24        if AVCPacketType == 1
+                                                                Composition time offset
+                                                            else
+                                                                0
+                            Data                            UI8[n]      if AVCPacketType == 0
+                                                                AVCDecoderConfigurationRecord
+                                                            else if AVCPacketType == 1
+                                                                One or more NALUs (can be individual
+                                                                slices per FLV packets; that is, full frames
+                                                                are not strictly required)
+                                                            else if AVCPacketType == 2
+                                                                Empty
+                        */
+                        uint8_t *pSrcBuffer;
+                        ssize_t n;
+                        
+                        pSrcBuffer = new uint8_t[len-1];
+                        if(NULL ==  pSrcBuffer)
+                        {
+                            return MEDIA_ERROR_BASE;
+                        }
+
+                        // read one AVCVIdeoPacket. skip the head of VIDEODATA(1Byte).
+                        n = mDataSource->readAt(offset + 4 + SIZE_OF_TAG_HEAD + 1, pSrcBuffer, len-1);
+                        if (n < len-1) {
+                            LOGE("read AVCVIdeoPacket error, size:%d vs %d",size,  n );
+                            delete[] pSrcBuffer;
+                            return ERROR_MALFORMED;
+                        }
+
+                        // check the AVCPacketType.
+                        if(pSrcBuffer[0] == 0)
+                        {
+                            // save the AVCDecoderConfigurationRecord in meta data.
+                            // skip the head of AVCVIdeoPacket(4Bytes).
+                            Vtrack->mMeta->setData(kKeyAVCC, kTypeAVCC, &(pSrcBuffer[4]), len-5);
+                        }
+                        // TODO: else.
+
+                        delete[] pSrcBuffer;
+                    }
+                    break;
+                case FLV_CODECID_SCREEN:
+                case FLV_CODECID_SCREEN2:
+                case FLV_CODECID_VP6:
+                case FLV_CODECID_VP6A:
+                default:
+                    const char *mime = "application/octet-stream";
+                    Vtrack->mMeta->setCString(kKeyMIMEType, mime);
+                    break;
+                }
                 break;
             } else {
-                offset += 4 + 11 + len;
+                offset += 4 + SIZE_OF_TAG_HEAD + len;
                 continue;
             }
         }
@@ -364,8 +581,10 @@ status_t FLVExtractor::parseTag(off_t offset, off64_t size, int depth) {
                 switch(audio_codec)
                 {
                     case FLV_CODECID_MP3:
-                        mime = MEDIA_MIMETYPE_AUDIO_MPEG;
-                        Atrack->mMeta->setCString(kKeyMIMEType, mime);
+                        Atrack->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_MPEG);
+                        break;
+                    case FLV_CODECID_AAC:
+                        Atrack->mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_AAC);
                         break;
                     case FLV_CODECID_NELLYMOSER_8HZ_MONO:                            
                     case FLV_CODECID_NELLYMOSER:                            
@@ -373,6 +592,8 @@ status_t FLVExtractor::parseTag(off_t offset, off64_t size, int depth) {
                     case FLV_CODECID_ADPCM:
                     case FLV_CODECID_PCM_LE:                            
                     default:
+                        const char *mime = "application/octet-stream";
+                        Atrack->mMeta->setCString(kKeyMIMEType, mime);
                         break;
                 }
 
@@ -420,7 +641,7 @@ status_t FLVExtractor::parseTag(off_t offset, off64_t size, int depth) {
 
                 break;
             } else {
-                offset += 4 + 11 + len;
+                offset += 4 + SIZE_OF_TAG_HEAD + len;
                 continue;
             }
         }
