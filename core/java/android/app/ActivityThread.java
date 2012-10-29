@@ -2002,6 +2002,14 @@ public final class ActivityThread {
                 appContext.init(r.packageInfo, r.token, this);
                 appContext.setOuterContext(activity);
                 CharSequence title = r.activityInfo.loadLabel(appContext.getPackageManager());
+                
+                if (mSystemThread && mCompatConfiguration == null) {
+                	Message msg = mH.obtainMessage(H.LAUNCH_ACTIVITY, r);
+                	mH.sendMessageDelayed(msg, 30);
+                	Log.v(TAG, "mCompatConfiguration is null while performLaunchActivity, so try again after 30ms.");
+                	return null;
+                }
+                
                 Configuration config = new Configuration(mCompatConfiguration);
                 if (DEBUG_CONFIGURATION) Slog.v(TAG, "Launching activity "
                         + r.activityInfo.name + " with config " + config);
