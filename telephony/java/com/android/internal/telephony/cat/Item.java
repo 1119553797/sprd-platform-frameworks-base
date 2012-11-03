@@ -32,17 +32,28 @@ public class Item implements Parcelable {
     public String text;
     /** Icon of the item */
     public Bitmap icon;
+    /** Next action indicator index*/
+    public int mNaiIndex;
 
     public Item(int id, String text) {
         this.id = id;
         this.text = text;
         this.icon = null;
+        this.mNaiIndex = -1;
+    }
+
+    public Item(int id, String text, int nai_index) {
+        this.id = id;
+        this.text = text;
+        this.icon = null;
+        this.mNaiIndex = nai_index;
     }
 
     public Item(Parcel in) {
         id = in.readInt();
         text = in.readString();
         icon = in.readParcelable(null);
+        mNaiIndex = in.readInt();
     }
 
     public int describeContents() {
@@ -53,6 +64,7 @@ public class Item implements Parcelable {
         dest.writeInt(id);
         dest.writeString(text);
         dest.writeParcelable(icon, flags);
+        dest.writeInt(mNaiIndex);
     }
 
     public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {

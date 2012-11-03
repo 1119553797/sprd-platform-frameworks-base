@@ -35,7 +35,7 @@ import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
 import com.android.internal.telephony.gsm.UsimServiceTable;
 import com.android.internal.telephony.ims.IsimRecords;
-import com.android.internal.telephony.test.SimulatedRadioControl;
+//import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.CallManager;
 
 import java.util.List;
@@ -745,8 +745,8 @@ public abstract class PhoneProxy extends Handler implements Phone {
         mActivePhone.setCdmaSubscription(cdmaSubscriptionType, response);
     }
 
-    public SimulatedRadioControl getSimulatedRadioControl() {
-        return mActivePhone.getSimulatedRadioControl();
+    public String getSimulatedRadioControl() {
+        return null;
     }
 
     public int enableApnType(String type) {
@@ -1053,7 +1053,7 @@ public abstract class PhoneProxy extends Handler implements Phone {
         Log.d(LOG_TAG, " getApnActivePdpFilter:" + apntype);
         return mActivePhone.getApnActivePdpFilter(apntype);
     }
-    
+
     public IccSmsInterfaceManagerProxy getIccSmsInterfaceManagerProxy() {
         return mIccSmsInterfaceManagerProxy;
     }

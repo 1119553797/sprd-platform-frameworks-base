@@ -278,4 +278,30 @@ public class NetworkUtils {
         result = builder.toString();
         return result;
     }
+
+    /**
+     * Look up a host name and return the result as an int. Works if the argument
+     * is an IP address in dot notation. Obviously, this can only be used for IPv4
+     * addresses.
+     * @param hostname the name of the host (or the IP address)
+     * @return the IP address as an {@code int} in network byte order
+     */
+    public static int lookupHost(String hostname) {
+        InetAddress inetAddress;
+	  Log.d(TAG, "lookupHost:"+hostname);
+        try {
+            inetAddress = InetAddress.getByName(hostname);
+        } catch (UnknownHostException e) {
+            return -1;
+        }
+        byte[] addrBytes;
+        int addr;
+
+        addrBytes = inetAddress.getAddress();
+        addr = ((addrBytes[3] & 0xff) << 24)
+                | ((addrBytes[2] & 0xff) << 16)
+                | ((addrBytes[1] & 0xff) << 8)
+                |  (addrBytes[0] & 0xff);
+        return addr;
+    }
 }

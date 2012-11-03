@@ -39,7 +39,7 @@ import android.util.Log;
 import com.android.internal.R;
 import com.android.internal.telephony.gsm.UsimServiceTable;
 import com.android.internal.telephony.ims.IsimRecords;
-import com.android.internal.telephony.test.SimulatedRadioControl;
+//import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.gsm.SIMRecords;
 
 import java.io.FileDescriptor;
@@ -138,7 +138,7 @@ public abstract class PhoneBase extends Handler implements Phone {
     public boolean mIsTheCurrentActivePhone = true;
     boolean mIsVoiceCapable = true;
     public IccRecords mIccRecords;
-    protected AtomicReference<IccCard> mIccCard = new AtomicReference<IccCard>();
+    public AtomicReference<IccCard> mIccCard = new AtomicReference<IccCard>();
     public SmsStorageMonitor mSmsStorageMonitor;
     public SmsUsageMonitor mSmsUsageMonitor;
     public SMSDispatcher mSMS;
@@ -203,7 +203,7 @@ public abstract class PhoneBase extends Handler implements Phone {
      */
     protected PhoneNotifier mNotifier;
 
-    protected SimulatedRadioControl mSimulatedRadioControl;
+//    protected SimulatedRadioControl mSimulatedRadioControl;
 
     boolean mUnitTestMode;
 
@@ -606,8 +606,8 @@ public abstract class PhoneBase extends Handler implements Phone {
     }
 
     // Inherited documentation suffices.
-    public SimulatedRadioControl getSimulatedRadioControl() {
-        return mSimulatedRadioControl;
+    public String getSimulatedRadioControl() {
+        return null;
     }
 
     /**
@@ -666,6 +666,63 @@ public abstract class PhoneBase extends Handler implements Phone {
             }
         }
     }
+
+    /**
+     * Utility code to set the system locale if it's not set already
+     * @param language Two character language code desired
+     * @param country Two character country code desired
+     * @param fromMcc Indicating whether the locale is set according to MCC table.
+     *                This flag wil be ignored by default implementation.
+     *                TODO: Use a source enumeration so that source of the locale
+     *                      can be prioritized.
+     *
+     *  {@hide}
+     */
+    public void setSystemLocale(String language, String country, boolean fromMcc) {
+        String l = SystemProperties.get("persist.sys.language");
+        String c = SystemProperties.get("persist.sys.country");
+
+        if (null == language) {
+            return; // no match possible
+        }
+        language = language.toLowerCase();
+        if (null == country) {
+            country = "";
+        }
+        country = country.toUpperCase();
+
+        if((null == l || 0 == l.length()) && (null == c || 0 == c.length())) {
+            try {
+                // try to find a good match
+                String[] locales = mContext.getAssets().getLocales();
+                final int N = locales.length;
+                String bestMatch = null;
+                for(int i = 0; i < N; i++) {
+                    // only match full (lang + country) locales
+                    if (locales[i]!=null && locales[i].length() >= 5 &&
+                            locales[i].substring(0,2).equals(language)) {
+                        if (locales[i].substring(3,5).equals(country)) {
+                            bestMatch = locales[i];
+                            break;
+                        } else if (null == bestMatch) {
+                            bestMatch = locales[i];
+                        }
+                    }
+                }
+                if (null != bestMatch) {
+                    IActivityManager am = ActivityManagerNative.getDefault();
+                    Configuration config = am.getConfiguration();
+                    config.locale = new Locale(bestMatch.substring(0,2),
+                                               bestMatch.substring(3,5));
+                    config.userSetLocale = true;
+                    am.updateConfiguration(config);
+                }
+            } catch (Exception e) {
+                // Intentionally left blank
+            }
+        }
+    }
+
 
     /**
      * Get state
@@ -1241,7 +1298,7 @@ public abstract class PhoneBase extends Handler implements Phone {
         pw.println(" mLooper=" + mLooper);
         pw.println(" mContext=" + mContext);
         pw.println(" mNotifier=" + mNotifier);
-        pw.println(" mSimulatedRadioControl=" + mSimulatedRadioControl);
+//        pw.println(" mSimulatedRadioControl=" + mSimulatedRadioControl);
         pw.println(" mUnitTestMode=" + mUnitTestMode);
         pw.println(" isDnsCheckDisabled()=" + isDnsCheckDisabled());
         pw.println(" getUnitTestMode()=" + getUnitTestMode());

@@ -342,7 +342,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             case EVENT_RADIO_STATE_CHANGED:
                 // This will do nothing in the radio not
                 // available case
-//                setPowerStateToDesired();
+               // setPowerStateToDesired();
                 setPowerStateToDesired(false);
                 pollState();
                 break;
@@ -513,6 +513,20 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             break;
         }
     }
+
+
+    protected void setPowerStateToDesired() {
+        // If we want it on and it's off, turn it on
+        if (mDesiredPowerState
+            && cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF) {
+            cm.setRadioPower(true, null);
+        } else if (!mDesiredPowerState && cm.getRadioState().isOn()) {
+            // If it's on and available and we want it off gracefully
+            DataConnectionTracker dcTracker = phone.mDataConnectionTracker;
+            powerOffRadioSafely(dcTracker);
+        } // Otherwise, we're in the desired state
+    }
+
 
     protected void setPowerStateToDesired(boolean force) {
         // If we want it on and it's off, turn it on
@@ -858,20 +872,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 mNitzUpdatedTime = false;
                 pollStateDone();
             break;
-
-            case RUIM_NOT_READY:
-            case RUIM_READY:
-            case RUIM_LOCKED_OR_ABSENT:
-            case NV_NOT_READY:
-            case NV_READY:
-                if (DBG) log("Radio Technology Change ongoing, setting SS to off");
-                newSS.setStateOff();
-                newCellLoc.setStateInvalid();
-                setSignalStrengthDefaultValues();
-                mGotCountryCode = false;
-
-                //NOTE: pollStateDone() is not needed in this case
-                break;
 
             default:
                 // Issue all poll-related commands at once

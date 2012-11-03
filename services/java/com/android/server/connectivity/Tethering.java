@@ -527,6 +527,93 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         Log.e(TAG, "unable start or stop USB tethering");
     }
 
+    //added by dengfp@thundersoft  for spreadtrum usb settings <udcpower && gser && vser> begin
+    public boolean enableUsbUdcpower(boolean enabled){
+//    	if(VDBG) Log.d(TAG,"enableUsbUdcpower("+enabled+")");
+//	try{
+//		if(enabled && !mNMService.isUsbUdcpowerStarted())
+//		   mNMService.startUsbUdcpower();
+//		else if(!enabled && mNMService.isUsbUdcpowerStarted())
+//		   mNMService.stopUsbUdcpower();
+//	   }catch(Exception e){
+//	      Log.e(TAG,"Error toggling usb Udcpower:" + e);
+		return false;
+//	   }
+//	   return true;
+    }
+   public boolean isUsbUdcpowerStarted(){
+//   	try{
+//		return mNMService.isUsbUdcpowerStarted();
+//   	}catch(Exception e){
+//   	    Log.e(TAG,"Fail to exec isUsbUdcpowerStarted:" + e);
+	    return false;
+//   	}
+   }
+   public boolean enableUsbGser(boolean enabled){
+//   	if(VDBG) Log.d(TAG,"enableUsbGser:" + enabled);
+//	try{
+//		if(enabled && !mNMService.isUsbGserStarted())
+//		  mNMService.startUsbGser();
+//		else if(!enabled && mNMService.isUsbGserStarted())
+//		  mNMService.stopUsbGser();
+//	}catch(Exception e){
+//	    Log.e(TAG,"Fail to enableUsbGser:" + e);
+	    return false;
+//	}
+//	return true;
+   }
+  public boolean isUsbGserStarted(){
+//        try{
+//        	return mNMService.isUsbGserStarted();
+//       } catch (Exception e) {
+//           Log.e(TAG, "Error toggling usb Gser :" + e);
+           return false;
+//       }
+    }
+
+    public boolean enableUsbVser(boolean enabled) {
+//        if(VDBG) Log.d(TAG, "enableUsbVser(" + enabled + ")");
+//        try {
+//            if (enabled && !mNMService.isUsbVserStarted())
+//                 mNMService.startUsbVser();
+//            else  if(!enabled && mNMService.isUsbVserStarted())
+//                mNMService.stopUsbVser();
+//        } catch (Exception e) {
+//            Log.e(TAG, "Error toggling usb Vser :" + e);
+            return false;
+//        }
+//        return true;
+    }
+
+    public boolean isUsbVserStarted(){
+//        try{
+//        	return mNMService.isUsbVserStarted();
+//       } catch (Exception e) {
+//           Log.e(TAG, "Error toggling usb Vser :" + e);
+           return false;
+//       }
+    }
+
+    public boolean isUsbConnected(){
+//        try{
+//        	 return mNMService.isUsbConnected();
+//        } catch (Exception e) {
+//           Log.e(TAG, "Error toggling usb Status :" + e);
+           return false;
+//        }
+  }
+    public boolean isUsbRNDISStarted(){
+//        try{
+//        	 return mNMService.isUsbRNDISStarted();
+//       } catch (Exception e) {
+//           Log.e(TAG, "Error toggling usb RNDIS :" + e);
+           return false;
+//       }
+    }
+    //add by dengfp@thundersoft for spreadtrum usb settings <udcpower && gser && vser> end
+
+
+
     // configured when we start tethering and unconfig'd on error or conclusion
     private boolean configureUsbIface(boolean enabled) {
         if (VDBG) Log.d(TAG, "configureUsbIface(" + enabled + ")");

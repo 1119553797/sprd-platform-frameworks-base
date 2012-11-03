@@ -39,14 +39,24 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
     public IccPhoneBookInterfaceManagerProxy(IccPhoneBookInterfaceManager
             iccPhoneBookInterfaceManager) {
         mIccPhoneBookInterfaceManager = iccPhoneBookInterfaceManager;
-        if(ServiceManager.getService("simphonebook") == null) {
-            ServiceManager.addService("simphonebook", this);
+        int phoneId = mIccPhoneBookInterfaceManager.getPhoneId();
+        String serviceName = PhoneFactory.getServiceName("simphonebook", phoneId);
+        if(ServiceManager.getService(serviceName) == null) {
+            ServiceManager.addService(serviceName, this);
         }
     }
 
     public void setmIccPhoneBookInterfaceManager(
             IccPhoneBookInterfaceManager iccPhoneBookInterfaceManager) {
         this.mIccPhoneBookInterfaceManager = iccPhoneBookInterfaceManager;
+    }
+
+    public int getInsertIndex() {
+        return mIccPhoneBookInterfaceManager.getInsertIndex();
+    }
+
+    public boolean isApplicationOnIcc(int type) {
+        return mIccPhoneBookInterfaceManager.isApplicationOnIcc(type);
     }
 
     public boolean
@@ -69,7 +79,72 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
         return mIccPhoneBookInterfaceManager.getAdnRecordsSize(efid);
     }
 
+    public int[] getAvalibleEmailCount(String name, String number,
+            String[] emails, String anr, int[] emailNums) throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getAvalibleEmailCount(name,number,emails,anr,emailNums );
+    }
+
+    public int[] getAvalibleAnrCount(String name, String number,
+            String[] emails, String anr, int[] anrNums) throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getAvalibleAnrCount(name,number,emails,anr,anrNums);
+    }
+
+    public int[] getEmailRecordsSize() throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getEmailRecordsSize();
+    }
+
+    public int[] getAnrRecordsSize() throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getAnrRecordsSize();
+	}
+
+    public int getEmailNum() throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getEmailNum();
+    }
+
+    public int getAnrNum() throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getAnrNum();
+    }
+
+    public int getEmailMaxLen() throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getEmailMaxLen();
+    }
+
+    public int getPhoneNumMaxLen() throws android.os.RemoteException {
+        return mIccPhoneBookInterfaceManager.getPhoneNumMaxLen();
+    }
+
     public List<AdnRecord> getAdnRecordsInEf(int efid) throws android.os.RemoteException {
         return mIccPhoneBookInterfaceManager.getAdnRecordsInEf(efid);
+    }
+
+    public int updateAdnRecordsInEfBySearchEx(int efid, String oldTag,
+            String oldPhoneNumber, String[] oldEmailList, String oldAnr,
+            String oldSne, String oldGrp,
+            String newTag, String newPhoneNumber, String[] newEmailList,
+            String newAnr, String newAas, String newSne, String newGrp,
+            String newGas, String pin2) {
+        return mIccPhoneBookInterfaceManager.updateAdnRecordsInEfBySearchEx(efid,
+                oldTag, oldPhoneNumber, oldEmailList, oldAnr, oldSne, oldGrp, newTag,
+                newPhoneNumber, newEmailList, newAnr, newAas, newSne, newGrp,
+                newGas, pin2);
+	}
+
+    public boolean updateAdnRecordsInEfByIndexEx(int efid, String newTag,
+            String newPhoneNumber, String[] newEmailList, String newAnr,
+            String newAas, String newSne, String newGrp, String newGas,
+            int index, String pin2) {
+        return mIccPhoneBookInterfaceManager.updateAdnRecordsInEfByIndexEx(efid,
+                newTag, newPhoneNumber, newEmailList, newAnr, newAas, newSne,
+                newGrp, newGas, index, pin2);
+    }
+
+    public int updateUsimGroupBySearchEx(String oldName,String newName) {
+        return mIccPhoneBookInterfaceManager.updateUsimGroupBySearchEx(oldName, newName);
+    }
+    public boolean updateUsimGroupById(String newName,int groupId){
+        return mIccPhoneBookInterfaceManager.updateUsimGroupById(newName, groupId);
+    }
+    public List<String> getGasInEf(){
+        return mIccPhoneBookInterfaceManager.getGasInEf();
     }
 }

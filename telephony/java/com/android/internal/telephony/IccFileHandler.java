@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * {@hide}
  */
-public abstract class IccFileHandler extends Handler implements IccConstants {
+public abstract class IccFileHandler extends IccThreadHandler implements IccConstants {
 
     //from TS 11.11 9.1 or elsewhere
     static protected final int COMMAND_READ_BINARY = 0xb0;
@@ -90,19 +90,20 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     static protected final int EVENT_READ_ICON_DONE = 10;
 
      // member variables
+    protected PhoneBase phone;
     protected final CommandsInterface mCi;
     protected final IccCard mParentCard;
     protected String mAid;
 
-    static class LoadLinearFixedContext {
+    public static class LoadLinearFixedContext {
 
-        int efid;
-        int recordNum, recordSize, countRecords;
-        boolean loadAll;
+        public int efid;
+        public int recordNum, recordSize, countRecords;
+        public boolean loadAll;
 
-        Message onLoaded;
+        public Message onLoaded;
 
-        ArrayList<byte[]> results;
+        public ArrayList<byte[]> results;
 
         LoadLinearFixedContext(int efid, int recordNum, Message onLoaded) {
             this.efid = efid;
@@ -185,6 +186,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
         Message response
                 = obtainMessage(EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE,
                         new LoadLinearFixedContext(fileid, onLoaded));
+        Log.i("IccFileHandler", "getEFLinearRecordSize, fileid:"+Integer.toHexString(fileid)+", ef path:"+getEFPath(fileid));
         mCi.iccIOForApp(COMMAND_GET_RESPONSE, fileid, getEFPath(fileid),
                     0, 0, GET_RESPONSE_EF_SIZE_BYTES, null, null, mAid, response);
     }
@@ -201,7 +203,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     public void loadEFLinearFixedAll(int fileid, Message onLoaded) {
         Message response = obtainMessage(EVENT_GET_RECORD_SIZE_DONE,
                         new LoadLinearFixedContext(fileid,onLoaded));
-
+        Log.i("IccFileHandler", "loadEFLinearFixedAll, fileid:"+Integer.toHexString(fileid)+", ef path:"+getEFPath(fileid));
         mCi.iccIOForApp(COMMAND_GET_RESPONSE, fileid, getEFPath(fileid),
                         0, 0, GET_RESPONSE_EF_SIZE_BYTES, null, null, mAid, response);
     }
@@ -254,9 +256,27 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
      */
     public void updateEFLinearFixed(int fileid, int recordNum, byte[] data,
             String pin2, Message onComplete) {
+        Log.i("IccFileHandler", "updateEFLinearFixed, fileid:"+Integer.toHexString(fileid)+", ef path:"+getEFPath(fileid)+", recordNum:"+recordNum);
         mCi.iccIOForApp(COMMAND_UPDATE_RECORD, fileid, getEFPath(fileid),
                         recordNum, READ_RECORD_MODE_ABSOLUTE, data.length,
                         IccUtils.bytesToHexString(data), pin2, mAid, onComplete);
+    }
+
+        /**
+     * Update a record in a linear fixed EF
+     * @param fileid EF id
+     * @param recordNum 1-based (not 0-based) record number
+     * @param data must be exactly as long as the record in the EF
+     * @param pin2 for CHV2 operations, otherwist must be null
+     * @param onComplete onComplete.obj will be an AsyncResult
+     *                   onComplete.obj.userObj will be a IccIoResult on success
+     */
+    public void updateEFLinearFixed(int fileid, int recordNum, byte[] data,
+            String pin2, Message onComplete, int pathNum) {
+
+        phone.mCM.iccIO(COMMAND_UPDATE_RECORD, fileid, getEFPath(fileid),
+                        recordNum, READ_RECORD_MODE_ABSOLUTE, data.length,
+                        IccUtils.bytesToHexString(data), pin2, onComplete);
     }
 
     /**
@@ -541,6 +561,9 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
     }
 
     protected abstract String getEFPath(int efid);
+
+    public abstract void addDualMapFile(int efid);
+
     protected abstract void logd(String s);
 
     protected abstract void loge(String s);

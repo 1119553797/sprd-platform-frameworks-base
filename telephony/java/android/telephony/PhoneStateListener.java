@@ -27,7 +27,6 @@ import android.util.Log;
 
 import com.android.internal.telephony.IPhoneStateListener;
 import com.android.internal.telephony.Phone;
-import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
 
 /**
  * A listener class for monitoring changes in specific telephony states

@@ -36,6 +36,8 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected boolean mDestroyed = false; // set to true once this object needs to be disposed of
     protected Context mContext;
     protected CommandsInterface mCi;
+
+    protected PhoneBase phone;
     protected IccFileHandler mFh;
     protected IccCard mParentCard;
 

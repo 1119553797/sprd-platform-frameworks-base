@@ -75,7 +75,7 @@ import com.android.internal.telephony.SmsRawData;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.Phone.DataState;
 import com.android.internal.telephony.cat.CatService;
-import com.android.internal.telephony.test.SimulatedRadioControl;
+//import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.IccVmNotSupportedException;
 
 import com.android.internal.telephony.gsm.GsmCall;
@@ -154,9 +154,9 @@ public final class TDPhone extends GSMPhone {
 	final TDPhone phone = this;
 	mVideoCT = new VideoCallTracker(phone);
 
-        if (ci instanceof SimulatedRadioControl) {
-            mSimulatedRadioControl = (SimulatedRadioControl) ci;
-        }
+//        if (ci instanceof SimulatedRadioControl) {
+//            mSimulatedRadioControl = (SimulatedRadioControl) ci;
+//        }
 
         mDataConnectionTracker = MsmsGsmDataConnectionTrackerProxy.getTrackerInstance(this);
         //mCM.setPhoneType(Phone.PHONE_TYPE_TD);
@@ -581,7 +581,7 @@ public final class TDPhone extends GSMPhone {
                     onComplete.sendToTarget();
                 }
                 break;
-                
+
 			default:
 				super.handleMessage(msg);
 
@@ -1022,7 +1022,7 @@ public final class TDPhone extends GSMPhone {
 					resp);
 		}
 	}
-	
+
 
     private void handleCfuQueryResult(CallForwardInfo[] infos) {
         if (infos == null || infos.length == 0) {

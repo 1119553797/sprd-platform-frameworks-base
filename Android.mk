@@ -36,6 +36,7 @@ SECONDARY_FRAMEWORKS_SUBDIRS := \
         core/java/android/gesture \
         core/java/android/speech/srec \
         media/java/android/media/videoeditor \
+        telephony/java/com/android/internal/telephony/test \
         media/java/android/media/audiofx \
         media/mca/effect/java/android/media/effect \
         media/mca/effect/java/android/media/effect/effects
@@ -265,7 +266,6 @@ $(full_classes_compiled_jar): $(framework_res_R_stamp)
 $(LOCAL_INSTALLED_MODULE): | $(dir $(LOCAL_INSTALLED_MODULE))framework-res.apk
 
 framework_built := $(call java-lib-deps,framework)
-
 framework_built += $(call java-lib-deps,framework2)
 # AIDL files to be preprocessed and included in the SDK,
 # relative to the root of the build tree.

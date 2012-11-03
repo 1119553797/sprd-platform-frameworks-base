@@ -153,7 +153,10 @@ public class IccCardStatus {
     }
 
     public IccCardApplication getApplication(int index) {
-        return mApplications.get(index);
+    	if(mApplications.size() > index){
+    		return mApplications.get(index);
+    	}
+        return null;
     }
 
     @Override
@@ -166,14 +169,16 @@ public class IccCardStatus {
         .append(",num_apps=").append(mNumApplications)
         .append(",gsm_id=").append(mGsmUmtsSubscriptionAppIndex);
         if (mGsmUmtsSubscriptionAppIndex >=0
-                && mGsmUmtsSubscriptionAppIndex <CARD_MAX_APPS) {
+                && mGsmUmtsSubscriptionAppIndex <CARD_MAX_APPS
+                && mGsmUmtsSubscriptionAppIndex < mApplications.size()) {
             app = getApplication(mGsmUmtsSubscriptionAppIndex);
             sb.append(app == null ? "null" : app);
         }
 
         sb.append(",cmda_id=").append(mCdmaSubscriptionAppIndex);
         if (mCdmaSubscriptionAppIndex >=0
-                && mCdmaSubscriptionAppIndex <CARD_MAX_APPS) {
+                && mCdmaSubscriptionAppIndex <CARD_MAX_APPS
+                && mCdmaSubscriptionAppIndex < mApplications.size()) {
             app = getApplication(mCdmaSubscriptionAppIndex);
             sb.append(app == null ? "null" : app);
         }

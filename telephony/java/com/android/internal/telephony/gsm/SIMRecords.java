@@ -176,11 +176,12 @@ public class SIMRecords extends IccRecords {
     };
 
     // ***** Constructor
+    public SIMRecords(IccCard card, Context c, PhoneBase mPhone) {
+        super(card, c, mPhone.mCM);
 
-    public SIMRecords(IccCard card, Context c, CommandsInterface ci) {
-        super(card, c, ci);
-
-        adnCache = new AdnRecordCache(mFh);
+    	phone = mPhone;
+        //adnCache = new AdnRecordCache(mFh);
+        adnCache = new AdnRecordCache(phone);
 
         mVmConfig = new VoiceMailConstants();
         mSpnOverride = new SpnOverride();

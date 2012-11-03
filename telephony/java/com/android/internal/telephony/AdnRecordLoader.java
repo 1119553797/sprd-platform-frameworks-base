@@ -20,25 +20,49 @@ import java.util.ArrayList;
 
 import android.os.AsyncResult;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.os.Looper;
+import com.android.internal.telephony.IccUtils;
 
-
-public class AdnRecordLoader extends Handler {
-    final static String LOG_TAG = "RIL_AdnRecordLoader";
+public class AdnRecordLoader extends IccThreadHandler {
+    static String LOG_TAG;
 
     //***** Instance Variables
 
-    private IccFileHandler mFh;
+    PhoneBase phone;
     int ef;
     int extensionEF;
     int pendingExtLoads;
     Message userResponse;
     String pin2;
 
-    // For "load one"
-    int recordNumber;
+	// add multi record and email in usim begin
+	private IccFileHandler mFh;
+	int emailEF;
+	int iapEF;
+
+	int sneEF;
+	int aasEF;
+	int grpEF;
+	int gasEF;
+	int fileCount;
+	int emailNum;
+	int adnNum;
+	int emailNumInIap;
+	int emailTagInIap;
+	int aasNum;
+	byte[] iapRec;
+	ArrayList<Integer> anrefids;
+	ArrayList<Integer> anrEfIndex;
+	ArrayList<Integer> anrNums;
+	ArrayList<Integer> emailEfids;
+	ArrayList<Integer> emailNums;
+	ArrayList<Integer> emailEfIndex;
+	// add multi record and email in usim end
+
+	// For "load one"
+	int recordNumber;
 
     // for "load all"
     ArrayList<AdnRecord> adns; // only valid after EVENT_ADN_LOAD_ALL_DONE
@@ -55,14 +79,38 @@ public class AdnRecordLoader extends Handler {
     static final int EVENT_EF_LINEAR_RECORD_SIZE_DONE = 4;
     static final int EVENT_UPDATE_RECORD_DONE = 5;
 
+	// add multi record and email in usim begin
+	static final int EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE = 6;
+	static final int EVENT_EF_PBR_IAP_LINEAR_RECORD_SIZE_DONE = 7;
+
+	static final int EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE = 8;
+	static final int EVENT_EF_PBR_SNE_LINEAR_RECORD_SIZE_DONE = 9;
+	static final int EVENT_UPDATE_ANR_RECORD_DONE = 10;
+	static final int EVENT_EF_PBR_AAS_LINEAR_RECORD_SIZE_DONE = 11;
+	static final int EVENT_EF_PBR_GRP_LINEAR_RECORD_SIZE_DONE = 12;
+	static final int EVENT_EF_PBR_GAS_LINEAR_RECORD_SIZE_DONE = 13;
+	static final int EVENT_UPDATE_AAS_RECORD_DONE = 14;
+	static final int EVENT_UPDATE_SNE_RECORD_DONE = 15;
+	static final int EVENT_UPDATE_GRP_RECORD_DONE = 16;
+	static final int EVENT_UPDATE_GAS_RECORD_DONE = 17;
+
+	// add multi record and email in usim end
+
     //***** Constructor
 
-    public AdnRecordLoader(IccFileHandler fh) {
-        // The telephony unit-test cases may create AdnRecords
-        // in secondary threads
-        super(Looper.getMainLooper());
-        mFh = fh;
+    public AdnRecordLoader(PhoneBase phone) {
+        this.phone = phone;
+        mFh = phone.getIccFileHandler();
+        LOG_TAG = phone.getPhoneName();
     }
+
+	// add multi record and email in usim
+	public AdnRecordLoader(IccFileHandler fh) {
+		// The telephony unit-test cases may create AdnRecords
+		// in secondary threads
+		// super(Looper.getMainLooper());
+		mFh = fh;
+	}
 
     /**
      * Resulting AdnRecord is placed in response.obj.result
@@ -125,8 +173,120 @@ public class AdnRecordLoader extends Handler {
             obtainMessage(EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
     }
 
-    //***** Overridden from Handler
+	// ***** Overridden from Handler
+	// add multi record and email in usim begin
+	public void updateEFAdnToUsim(AdnRecord adn, int ef, int extensionEF,
+			int recordNumber, String pin2, Message response) {
+		this.ef = ef;
+		this.extensionEF = extensionEF;
+		this.recordNumber = recordNumber;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(ef, obtainMessage(
+				EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
+	}
 
+	public void updateEFEmailToUsim(AdnRecord adn, int emailEF, int emailNum,
+			int efid, int adnNum, int emailTagInIap, String pin2,
+			Message response) {
+		
+		this.emailEF = emailEF;
+		this.emailNum = emailNum;
+		this.ef = efid;
+		this.adnNum = adnNum;
+		this.emailTagInIap = emailTagInIap;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(emailEF, obtainMessage(
+				EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE, adn));
+
+	}
+       public void updateEFEmailToUsim(AdnRecord adn, ArrayList<Integer> emailEfids,
+			 ArrayList<Integer> emailNums,int efid,int adnNum,ArrayList<Integer> emailEfIndex, String pin2,Message response) {
+             Log.i("AdnRecordLoader ","updateEFEmailToUsim  emailEfids " +emailEfids + "emailNums "+emailNums + "emailEfIndex " + emailEfIndex);
+		this.emailEfids = emailEfids;
+		this.emailNums = emailNums;
+		this.ef = efid;
+		this.adnNum = adnNum;
+	
+		this.emailEfIndex = emailEfIndex;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(emailEfids.get(0), obtainMessage(
+				EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE, adn));
+
+	}
+
+	public void updateEFAnrToUsim(AdnRecord adn, ArrayList<Integer> anrefids,
+			int efid, int adnNum, String pin2, Message response) {
+		this.anrefids = anrefids;
+		this.ef = efid;
+		this.adnNum = adnNum;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(anrefids.get(0), obtainMessage(
+				EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE, adn));
+
+	}
+
+    /**
+     * @param grpEfId grp ef id to be updated
+     * @param recordNum 1-based (not 0-based) record number
+     * @param data must be exactly as long as the record in the EF
+     * @param pin2 pin2 for CHV2 operations, otherwise must be null
+     */
+    public void updateEFGrpToUsim(int grpEfId, int recordNum, byte[] data, String pin2) {
+
+        mFh.updateEFLinearFixed(grpEfId, recordNum, data, pin2,
+                obtainMessage(EVENT_UPDATE_RECORD_DONE));
+    }
+
+    public void updateEFGasToUsim(int gasEfId, int recordNum, byte[] data, String pin2) {
+
+        mFh.updateEFLinearFixed(gasEfId, recordNum, data, pin2,
+                obtainMessage(EVENT_UPDATE_RECORD_DONE));
+    }
+
+	public void updateEFAnrToUsim(AdnRecord adn, ArrayList<Integer> anrefids,
+			int efid, int adnNum, ArrayList<Integer> anrNums,  ArrayList<Integer> anrEfIndex,String pin2, Message response) {
+		this.anrefids = anrefids;
+		this.ef = efid;
+		this.adnNum = adnNum;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		this.anrEfIndex = anrEfIndex;
+		this.anrNums = anrNums;
+		mFh.getEFLinearRecordSize(anrefids.get(0), obtainMessage(
+				EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE, adn));
+	 }
+
+
+	public void updateEFIapToUsim(AdnRecord adn, int iapEF, int adnNum,
+			int emailNumInIap, String pin2, Message response) {
+		this.iapEF = iapEF;
+		this.adnNum = adnNum;
+		this.emailNumInIap = emailNumInIap;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(iapEF, obtainMessage(
+				EVENT_EF_PBR_IAP_LINEAR_RECORD_SIZE_DONE, adn));
+
+	}
+
+	public void updateEFIapToUsim(AdnRecord adn, int iapEF, int adnNum,
+			byte[] record, String pin2, Message response) {
+		 Log.i("AdnRecordLoader ","updateEFIapToUsim  iapEF " +iapEF );
+		this.iapEF = iapEF;
+		this.adnNum = adnNum;
+		this.iapRec = record;
+		this.userResponse = response;
+		this.pin2 = pin2;
+		mFh.getEFLinearRecordSize(iapEF, obtainMessage(
+				EVENT_EF_PBR_IAP_LINEAR_RECORD_SIZE_DONE, adn));
+
+	}
+
+	// add multi record and email in usim end
     public void
     handleMessage(Message msg) {
         AsyncResult ar;
@@ -136,6 +296,7 @@ public class AdnRecordLoader extends Handler {
         try {
             switch (msg.what) {
                 case EVENT_EF_LINEAR_RECORD_SIZE_DONE:
+                    Log.d(LOG_TAG,"AdnRecordLoader handle EVENT_EF_LINEAR_RECORD_SIZE_DONE, ef:" + Integer.toHexString(ef));
                     ar = (AsyncResult)(msg.obj);
                     adn = (AdnRecord)(ar.userObj);
 
@@ -161,6 +322,7 @@ public class AdnRecordLoader extends Handler {
                         throw new RuntimeException("wrong ADN format",
                                 ar.exception);
                     }
+                    Log.i("AdnRecordLoader", "recordNumber " + recordNumber);
 
                     mFh.updateEFLinearFixed(ef, recordNumber,
                             data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
@@ -230,6 +392,7 @@ public class AdnRecordLoader extends Handler {
                 break;
 
                 case EVENT_ADN_LOAD_ALL_DONE:
+                    Log.d(LOG_TAG,"AdnRecordLoader handle EVENT_ADN_LOAD_ALL_DONE, ef:" + Integer.toHexString(ef));
                     ar = (AsyncResult)(msg.obj);
                     ArrayList<byte[]> datas = (ArrayList<byte[]>)(ar.result);
 
@@ -258,7 +421,149 @@ public class AdnRecordLoader extends Handler {
                         }
                     }
                 break;
-            }
+			// add multi record and email in usim begin
+			case EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE:
+				Log.d(LOG_TAG,
+						"EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE emailNum :"
+								+ emailNums);
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
+
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
+                      
+				recordSize = (int[]) ar.result;
+				// recordSize is int[3] array
+				// int[0] is the record length
+				// int[1] is the total length of the EF file
+				// int[2] is the number of records in the EF file
+				// So int[0] * int[2] = int[1]
+       			 Log.d(LOG_TAG,
+						"EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE (1) :  adnNum " + adnNum + " number " + recordSize[2]);
+				if (recordSize.length != 3/* || adnNum > recordSize[2]*/) {
+					throw new RuntimeException(
+							"get wrong EF record size format", ar.exception);
+				}
+				   Log.d(LOG_TAG,
+						"EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE (2) :"
+								);
+				fileCount = 0;
+				for (int i = 0, size = emailEfids.size(); i < size; i++) {
+					Log.e("GSM", "efids.get(" + i + ") is " + emailEfids.get(i) + " number " + emailNums.get(i) );
+
+                                
+					if (emailEfids.get(i) != 0 &&emailNums.get(i)!=0 ) {
+						fileCount++;
+						data = adn.buildEmailString(recordSize[0], emailEfIndex.get(i), ef, adnNum);
+					      if (data == null) {
+						     throw new RuntimeException("wrong ADN format", ar.exception);
+					      }
+						mFh.updateEFLinearFixed(emailEfids.get(i), emailNums.get(i), data,
+								pin2,
+								obtainMessage(EVENT_UPDATE_RECORD_DONE));
+					}
+				}
+
+				pendingExtLoads = 1;
+
+				break;
+
+			case EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE:
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
+				Log.e("GSM", "EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE");
+
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
+				recordSize = (int[]) ar.result;
+				 Log.d(LOG_TAG,
+						"EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE (1) :  adnNum " + adnNum + "number " + recordSize[2]);
+				if (recordSize.length != 3 /*|| adnNum > recordSize[2]*/) {
+					throw new RuntimeException(
+							"get wrong EF record size format", ar.exception);
+				}
+				Log.e("GSM", "anrefids = " + anrefids);
+				Log.e("GSM", "anrefids.size is " + anrefids.size()
+						+ "   ADNefid == ef:" + ef);
+
+				fileCount = 0;
+				for (int i = 0, size = anrefids.size(); i < size; i++) {
+					Log.e("GSM", "efids.get(" + i + ") is " + anrefids.get(i) + " number " + anrNums.get(i));
+
+					if (anrefids.get(i)!=0 && anrNums.get(i)!=0) {
+						fileCount++;
+						data = adn.buildAnrString(recordSize[0], anrEfIndex.get(i), ef, adnNum);
+						mFh.updateEFLinearFixed(anrefids.get(i),
+								anrNums.get(i), data, pin2,
+								obtainMessage(EVENT_UPDATE_ANR_RECORD_DONE));
+					}
+				}
+				pendingExtLoads = 1;
+				break;
+
+		
+			
+			// add end
+			case EVENT_EF_PBR_IAP_LINEAR_RECORD_SIZE_DONE:
+				ar = (AsyncResult) (msg.obj);
+				adn = (AdnRecord) (ar.userObj);
+
+				if (ar.exception != null) {
+					throw new RuntimeException("get EF record size failed",
+							ar.exception);
+				}
+
+				recordSize = (int[]) ar.result;
+				// recordSize is int[3] array
+				// int[0] is the record length
+				// int[1] is the total length of the EF file
+				// int[2] is the number of records in the EF file
+				// So int[0] * int[2] = int[1]
+				if (recordSize.length != 3 || adnNum > recordSize[2]) {
+					throw new RuntimeException(
+							"get wrong EF record size format", ar.exception);
+				}
+				if (this.iapRec != null) {
+
+					data = this.iapRec;
+				} else {
+
+					data = adn.buildIapString(recordSize[0], 0xff);
+				}
+				if (data == null) {
+					throw new RuntimeException("worong ADN format",
+							ar.exception);
+				}
+
+				mFh.updateEFLinearFixed(iapEF, adnNum, data, pin2,
+						obtainMessage(EVENT_UPDATE_RECORD_DONE));
+
+				pendingExtLoads = 1;
+
+				break;
+
+			case EVENT_UPDATE_ANR_RECORD_DONE:
+				ar = (AsyncResult) (msg.obj);
+				if (ar.exception != null) {
+					throw new RuntimeException("update EF adn record failed",
+							ar.exception);
+				}
+				Log.e(LOG_TAG, "EVENT_UPDATE_ANR_RECORD_DONE, message is "
+						+ msg.toString() + "fileCount " + fileCount);
+				pendingExtLoads = 0;
+				result = null;
+				fileCount--;
+				if (fileCount == 0)
+					break;
+				else
+					return;
+				// add multi record and email in usim end
+
+			}
         } catch (RuntimeException exc) {
             if (userResponse != null) {
                 AsyncResult.forMessage(userResponse)

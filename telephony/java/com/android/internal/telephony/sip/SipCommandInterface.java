@@ -257,6 +257,18 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     public void queryCLIP(Message response) {
     }
 
+	@Override
+	public void queryCOLP(Message response) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void queryCOLR(Message response) {
+		// TODO Auto-generated method stub
+
+	}
+
     public void getBasebandVersion (Message response) {
     }
 

@@ -884,6 +884,34 @@
   <java-symbol type="string" name="default_audio_route_name_dock_speakers" />
   <java-symbol type="string" name="default_audio_route_name_hdmi" />
   <java-symbol type="string" name="default_audio_route_category_name" />
+  <java-symbol type="string" name="passwordChange" />
+  <java-symbol type="string" name="badPin2" />
+  <java-symbol type="string" name="badPuk2" />
+  <java-symbol type="string" name="ColrMmi" />
+  <java-symbol type="string" name="ColpMmi" />
+  <java-symbol type="string" name="Puk2Mmi" />
+  <java-symbol type="string" name="PukMmi" />
+  <java-symbol type="string" name="Pin2Mmi" />
+  <java-symbol type="string" name="ConditionCfMmi" />
+  <java-symbol type="string" name="AllCfMmi" />
+  <java-symbol type="string" name="NotReachCfMmi" />
+  <java-symbol type="string" name="NoReplyCfMmi" />
+  <java-symbol type="string" name="BusyCfMmi" />
+  <java-symbol type="string" name="UnConditionCfMmi" />
+  <java-symbol type="string" name="BamtMmi" />
+  <java-symbol type="string" name="BamoMmi" />
+  <java-symbol type="string" name="BaallMmi" />
+  <java-symbol type="string" name="BaicrMmi" />
+  <java-symbol type="string" name="BaicMmi" />
+  <java-symbol type="string" name="BaoicxhMmi" />
+  <java-symbol type="string" name="BaoicMmi" />
+  <java-symbol type="string" name="BaocMmi" />
+  <java-symbol type="string" name="needPinLock" />
+  <java-symbol type="string" name="mismatchPuk2" />
+  <java-symbol type="string" name="mismatchPuk" />
+  <java-symbol type="string" name="mismatchPin2" />
+  <java-symbol type="string" name="stk_refresh_sim_init_message" />
+
 
   <java-symbol type="plurals" name="abbrev_in_num_days" />
   <java-symbol type="plurals" name="abbrev_in_num_hours" />

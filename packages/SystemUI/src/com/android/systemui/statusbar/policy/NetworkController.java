@@ -242,12 +242,14 @@ public class NetworkController extends BroadcastReceiver {
 
             mPhoneStateListener[i] = getPhoneStateListener(i);
             // register for phone state notifications.
+
             mPhone[i].listen(mPhoneStateListener[i],
                               PhoneStateListener.LISTEN_SERVICE_STATE
                             | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS
                             | PhoneStateListener.LISTEN_CALL_STATE
                             | PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
                             | PhoneStateListener.LISTEN_DATA_ACTIVITY);
+
             mDataConnected[i] = false;
             mSimState[i] = IccCard.State.READY;
             mPhoneState[i] = TelephonyManager.CALL_STATE_IDLE;
@@ -305,7 +307,12 @@ public class NetworkController extends BroadcastReceiver {
     }
 
     public boolean isEmergencyOnly() {
-        return (mServiceState != null && mServiceState.isEmergencyOnly());
+      boolean  isEmg = false;
+      int count = mServiceState.length;
+      for(int i = 0; count > i;i++){
+         isEmg = isEmg || (mServiceState[i] != null && mServiceState[i].isEmergencyOnly());
+       }
+     return isEmg;
     }
 
     public void addPhoneSignalIconView(ImageView v) {
@@ -995,7 +1002,7 @@ public class NetworkController extends BroadcastReceiver {
             //   - We are connected to mobile data, or
             //   - We are not connected to mobile data, as long as the *reason* packets are not
             //     being routed over that link is that we have better connectivity via wifi.
-            // If data is disconnected for some other reason but wifi (or ethernet/bluetooth) 
+            // If data is disconnected for some other reason but wifi (or ethernet/bluetooth)
             // is connected, we show nothing.
             // Otherwise (nothing connected) we show "No internet connection".
 
@@ -1339,7 +1346,7 @@ public class NetworkController extends BroadcastReceiver {
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         for (int i=0; i < numPhones; i++) {
         pw.println("NetworkController state:");
-//        pw.println(String.format("  %s network type %d (%s)", 
+//        pw.println(String.format("  %s network type %d (%s)",
 //                mConnected?"CONNECTED":"DISCONNECTED",
 //                mConnectedNetworkType, mConnectedNetworkTypeName));
         pw.println("  - telephony ------");

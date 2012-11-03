@@ -504,8 +504,8 @@ public abstract class DataConnectionTracker extends Handler {
      */
     protected DataConnectionTracker(PhoneBase phone) {
         super();
-        if (DBG) log("DCT.constructor");
         mPhone = phone;
+        if (DBG) log("DCT.constructor");
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(getActionIntentReconnectAlarm());

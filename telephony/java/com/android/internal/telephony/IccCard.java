@@ -138,7 +138,8 @@ public class IccCard {
     private static final int EVENT_CHANGE_ICC_PASSWORD_DONE = 9;
     private static final int EVENT_QUERY_FACILITY_FDN_DONE = 10;
     private static final int EVENT_CHANGE_FACILITY_FDN_DONE = 11;
-    private static final int EVENT_ICC_STATUS_CHANGED = 12;
+    //private static final int EVENT_ICC_STATUS_CHANGED = 12;
+    protected static final int EVENT_ICC_STATUS_CHANGED = 12;
     private static final int EVENT_CARD_REMOVED = 13;
     private static final int EVENT_CARD_ADDED = 14;
     private static final int EVENT_PIN2PUK2_DONE = 15;
@@ -207,14 +208,14 @@ public class IccCard {
                 mPhone.mCM, mHandler, EVENT_CDMA_SUBSCRIPTION_SOURCE_CHANGED, null);
         if (phone.mCM.getLteOnCdmaMode() == Phone.LTE_ON_CDMA_TRUE
                 && phone instanceof CDMALTEPhone) {
-            mIccFileHandler = new CdmaLteUiccFileHandler(this, "", mPhone.mCM);
-            mIccRecords = new CdmaLteUiccRecords(this, mPhone.mContext, mPhone.mCM);
+            mIccFileHandler = new CdmaLteUiccFileHandler(this, "", mPhone);
+            mIccRecords = new CdmaLteUiccRecords(this, mPhone.mContext, mPhone);
         } else {
             // Correct aid will be set later (when GET_SIM_STATUS returns)
-            mIccFileHandler = is3gpp ? new SIMFileHandler(this, "", mPhone.mCM) :
-                                       new RuimFileHandler(this, "", mPhone.mCM);
-            mIccRecords = is3gpp ? new SIMRecords(this, mPhone.mContext, mPhone.mCM) :
-                                   new RuimRecords(this, mPhone.mContext, mPhone.mCM);
+            mIccFileHandler = is3gpp ? new SIMFileHandler(this, "", mPhone) :
+                                       new RuimFileHandler(this, "", mPhone);
+            mIccRecords = is3gpp ? new SIMRecords(this, mPhone.mContext, mPhone) :
+                                   new RuimRecords(this, mPhone.mContext, mPhone);
         }
         mCatService = CatService.getInstance(mPhone.mCM, mIccRecords,
                 mPhone.mContext, mIccFileHandler, this);
@@ -396,7 +397,12 @@ public class IccCard {
     public boolean getIccLockEnabled() {
         return mIccPinLocked;
      }
-
+    /**
+     * Set ICC pin lock
+     */
+    public void setIccLockEnabled(boolean enabled) {
+        mIccPinLocked = enabled;
+     }
     /**
      * Check whether ICC fdn (fixed dialing number) is enabled
      * This is a sync call which returns the cached pin enabled state

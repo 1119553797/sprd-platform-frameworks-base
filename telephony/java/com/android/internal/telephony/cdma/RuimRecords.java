@@ -79,10 +79,12 @@ public final class RuimRecords extends IccRecords {
     private static final int EVENT_RUIM_REFRESH = 31;
 
 
-    public RuimRecords(IccCard card, Context c, CommandsInterface ci) {
-        super(card, c, ci);
+    public RuimRecords(IccCard card, Context c, PhoneBase mPhone) {
+        super(card, c, mPhone.mCM);
 
-        adnCache = new AdnRecordCache(mFh);
+    	phone = mPhone;
+        //adnCache = new AdnRecordCache(mFh);
+        adnCache = new AdnRecordCache(phone);
 
         recordsRequested = false;  // No load request is made till SIM ready
 

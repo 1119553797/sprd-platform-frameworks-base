@@ -28,8 +28,10 @@ import android.util.Log;
 //public interface CommandsInterface {
 public interface CommandsInterface extends SprdCommandsInterface{
     enum RadioState {
-        RADIO_OFF(0),         /* Radio explictly powered off (eg CFUN=0) */
-        RADIO_UNAVAILABLE(0), /* Radio unavailable (eg, resetting or not booted) */
+      RADIO_OFF,         /* Radio explictly powered off (eg CFUN=0) */
+      RADIO_UNAVAILABLE, /* Radio unavailable (eg, resetting or not booted) */
+//        RADIO_OFF(0),         /* Radio explictly powered off (eg CFUN=0) */
+//        RADIO_UNAVAILABLE(0), /* Radio unavailable (eg, resetting or not booted) */
         SIM_NOT_READY(1),     /* Radio is on, but the SIM interface is not ready */
         SIM_LOCKED_OR_ABSENT(1),  /* SIM PIN locked, PUK required, network
                                      personalization, or SIM absent */
@@ -39,21 +41,24 @@ public interface CommandsInterface extends SprdCommandsInterface{
         RUIM_LOCKED_OR_ABSENT(2), /* RUIM PIN locked, PUK required, network
                                      personalization locked, or RUIM absent */
         NV_NOT_READY(3),      /* Radio is on, but the NV interface is not available */
-        NV_READY(3);          /* Radio is on and the NV interface is available */
-
+        NV_READY(3),          /* Radio is on and the NV interface is available */
+        RADIO_ON;
         public boolean isOn() /* and available...*/ {
-            return this == SIM_NOT_READY
-                    || this == SIM_LOCKED_OR_ABSENT
-                    || this == SIM_READY
-                    || this == RUIM_NOT_READY
-                    || this == RUIM_READY
-                    || this == RUIM_LOCKED_OR_ABSENT
-                    || this == NV_NOT_READY
-                    || this == NV_READY;
+              return this == RADIO_ON;
+//            return this == SIM_NOT_READY
+//                    || this == SIM_LOCKED_OR_ABSENT
+//                    || this == SIM_READY
+//                    || this == RUIM_NOT_READY
+//                    || this == RUIM_READY
+//                    || this == RUIM_LOCKED_OR_ABSENT
+//                    || this == NV_NOT_READY
+//                    || this == NV_READY;
         }
         private int stateType;
         private RadioState (int type) {
             stateType = type;
+        }
+        private RadioState () {
         }
 
         public int getType() {
@@ -233,6 +238,15 @@ public interface CommandsInterface extends SprdCommandsInterface{
      */
     void registerForOffOrNotAvailable(Handler h, int what, Object obj);
     void unregisterForOffOrNotAvailable(Handler h);
+
+    /**
+     * Fires on any transition into SIM_READY
+     * Fires immediately if if currently in that state
+     * In general, actions should be idempotent. State may change
+     * before event is received.
+     */
+    void registerForSIMReady(Handler h, int what, Object obj);
+    void unregisterForSIMReady(Handler h);
 
     /**
      * Fires on any change in ICC status
@@ -1176,6 +1190,26 @@ public interface CommandsInterface extends SprdCommandsInterface{
      */
 
     void queryCLIP(Message response);
+    /**
+     * (AsyncResult)response.obj).result is an int[] with element [0] set to
+     * 0 for "COLP is Inactive", and 1 for "COLP is Active",and 2
+     * for "COLP is No network"
+     *
+     * @param response is callback message
+     */
+
+    void queryCOLP(Message response);
+
+
+    /**
+     * (AsyncResult)response.obj).result is an int[] with element [0] set to
+     * 0 for "COLP is Inactive", and 1 for "COLP is Active",and 2
+     * for "COLP is No network"
+     *
+     * @param response is callback message
+     */
+
+    void queryCOLR(Message response);
 
     /**
      * response.obj will be a an int[2]

@@ -23,9 +23,22 @@ public class CatResponseMessage {
         String usersInput  = null;
         boolean usersYesNoSelection = false;
         boolean usersConfirm = false;
+        byte BearerType = 0;
+        String BearerParam = null;
+        int bufferSize;
+        int ChannelId;
+        boolean LinkStatus;
+        int channelDataLen = 0;
+        String channelData = null;
+        int mMode;
+        AppInterface.EventListType event;
 
         public CatResponseMessage(CatCmdMessage cmdMsg) {
             this.cmdDet = cmdMsg.mCmdDet;
+        }
+
+        public CatResponseMessage(AppInterface.EventListType event){
+            this.event = event;
         }
 
         public void setResultCode(ResultCode resCode) {
@@ -46,6 +59,32 @@ public class CatResponseMessage {
 
         public void setConfirmation(boolean confirm) {
             usersConfirm = confirm;
+        }
+
+        public void setBearerParam(byte type, String param, int size) {
+            BearerType = type;
+            BearerParam = param;
+            bufferSize = size;
+        }
+
+        public void setChannelStatus(int id, boolean status) {
+            ChannelId = id;
+            LinkStatus = status;
+            mMode = 0;
+        }
+
+        public void setChannelStatus(int id, boolean status, int mode) {
+            ChannelId = id;
+            LinkStatus = status;
+            mMode = mode;
+        }
+
+        public void setChannelDataLen(int len) {
+            channelDataLen = len;
+        }
+
+        public void setChannelData(String str) {
+            channelData = str;
         }
 
         CommandDetails getCmdDetails() {

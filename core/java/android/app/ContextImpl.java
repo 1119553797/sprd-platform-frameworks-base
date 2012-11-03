@@ -17,6 +17,7 @@
 package android.app;
 
 import com.android.internal.policy.PolicyManager;
+import com.android.internal.telephony.PhoneFactory;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -432,10 +433,21 @@ class ContextImpl extends Context {
                     }
                 }});
 
-        registerService(TELEPHONY_SERVICE, new ServiceFetcher() {
+        if (PhoneFactory.isMultiSim()) {
+            for (int i = 0; i <= PhoneFactory.getPhoneCount(); i++) {
+                final int phoneid = i;
+                registerService(PhoneFactory.getServiceName(TELEPHONY_SERVICE, i),
+                        new ServiceFetcher() {
+                            public Object createService(ContextImpl ctx) {
+                                return new TelephonyManager(ctx.getOuterContext(), phoneid);
+                            }});
+            }
+        } else {
+            registerService(TELEPHONY_SERVICE, new ServiceFetcher() {
                 public Object createService(ContextImpl ctx) {
                     return new TelephonyManager(ctx.getOuterContext());
                 }});
+        }
 
         registerService(THROTTLE_SERVICE, new StaticServiceFetcher() {
                 public Object createStaticService() {

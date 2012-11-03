@@ -293,11 +293,19 @@ public class ConnectivityManager {
      */
     public static final int TYPE_WIFI_P2P    = 13;
 
-    /** {@hide} */
-    public static final int MAX_RADIO_TYPE   = TYPE_WIFI_P2P;
+    public static final int TYPE_MOBILE_DM = 14;
 
     /** {@hide} */
-    public static final int MAX_NETWORK_TYPE = TYPE_WIFI_P2P;
+    public static final int TYPE_MOBILE_WAP = 35;
+
+    /** {@hide} */
+    public static final int MAX_TYPE_FOR_ONE_SIM = 100;
+
+    /** {@hide} */
+    public static final int MAX_RADIO_TYPE   = TYPE_MOBILE_WAP + PhoneFactory.getPhoneCount() * MAX_TYPE_FOR_ONE_SIM;
+
+    /** {@hide} */
+    public static final int MAX_NETWORK_TYPE = TYPE_MOBILE_WAP + PhoneFactory.getPhoneCount() * MAX_TYPE_FOR_ONE_SIM;
 
     public static final int DEFAULT_NETWORK_PREFERENCE = TYPE_WIFI;
 
@@ -883,6 +891,53 @@ public class ConnectivityManager {
             return false;
         }
     }
+
+    /**
+     * {@hide}
+     */
+    public static int getNetworkTypeByPhoneId(int phoneId, int defaultType) {
+        int featureType;
+        if (phoneId < PhoneFactory.getPhoneCount()) {
+            featureType = defaultType + (phoneId + 1) * MAX_TYPE_FOR_ONE_SIM;
+        } else {
+            throw new IllegalArgumentException(
+                "phoneId is not leagal!");
+        }
+        return featureType;
+    }
+
+    /**
+     * {@hide}
+     */
+    public static int getDefaultNetworkType(int netType) {
+        return netType % MAX_TYPE_FOR_ONE_SIM;
+    }
+
+    /**
+     * {@hide}
+     */
+    public static int getPhoneIdByNetworkType(int netType) {
+        if (netType < MAX_TYPE_FOR_ONE_SIM) {
+            return TelephonyManager.getPhoneCount();
+        } else {
+            return netType / MAX_TYPE_FOR_ONE_SIM - 1;
+        }
+    }
+
+    /**
+     * {@hide}
+     */
+    public static boolean isMmsType(int type) {
+        boolean isMmsType = false;
+        for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+            if (type == getNetworkTypeByPhoneId(i, TYPE_MOBILE_MMS)) {
+                isMmsType = true;
+                break;
+            }
+        }
+        return isMmsType;
+    }
+
 
     /**
      * Gets the value of the setting for enabling Mobile data.

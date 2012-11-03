@@ -30,7 +30,7 @@ import android.telephony.SignalStrength;
 import com.android.internal.telephony.DataConnection;
 import com.android.internal.telephony.gsm.UsimServiceTable;
 import com.android.internal.telephony.ims.IsimRecords;
-import com.android.internal.telephony.test.SimulatedRadioControl;
+//import com.android.internal.telephony.test.SimulatedRadioControl;
 
 import java.util.List;
 
@@ -1381,7 +1381,7 @@ public interface Phone extends SprdVideoPhone{
      * @ return A SimulatedRadioControl if this is a simulated interface;
      * otherwise, null.
      */
-    SimulatedRadioControl getSimulatedRadioControl();
+    String getSimulatedRadioControl();
 
     /**
      * Enables the specified APN type. Only works for "special" APN types,

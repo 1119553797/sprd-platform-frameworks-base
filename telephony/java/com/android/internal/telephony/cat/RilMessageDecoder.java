@@ -51,13 +51,15 @@ class RilMessageDecoder extends StateMachine {
      * @param fh
      * @return RilMesssageDecoder
      */
-    public static synchronized RilMessageDecoder getInstance(Handler caller, IccFileHandler fh) {
+    // zhanglj delete begin 2011-05-25 for cancel single instance
+/*    public static synchronized RilMessageDecoder getInstance(Handler caller, SIMFileHandler fh) {
         if (sInstance == null) {
             sInstance = new RilMessageDecoder(caller, fh);
             sInstance.start();
         }
         return sInstance;
-    }
+    }*/
+    // zhanglj delete end
 
     /**
      * Start decoding the message parameters,
@@ -90,7 +92,7 @@ class RilMessageDecoder extends StateMachine {
         msg.sendToTarget();
     }
 
-    private RilMessageDecoder(Handler caller, IccFileHandler fh) {
+    public RilMessageDecoder(Handler caller, IccFileHandler fh, int phoneId) {
         super("RilMessageDecoder");
 
         addState(mStateStart);
@@ -98,7 +100,7 @@ class RilMessageDecoder extends StateMachine {
         setInitialState(mStateStart);
 
         mCaller = caller;
-        mCmdParamsFactory = CommandParamsFactory.getInstance(this, fh);
+        mCmdParamsFactory = new CommandParamsFactory(this, fh ,phoneId);
     }
 
     private class StateStart extends State {
@@ -139,20 +141,28 @@ class RilMessageDecoder extends StateMachine {
         mCurrentRilMessage = rilMsg;
         switch(rilMsg.mId) {
         case CatService.MSG_ID_SESSION_END:
-        case CatService.MSG_ID_CALL_SETUP:
+        //case CatService.MSG_ID_CALL_SETUP:
             mCurrentRilMessage.mResCode = ResultCode.OK;
             sendCmdForExecution(mCurrentRilMessage);
             decodingStarted = false;
             break;
+        case CatService.MSG_ID_CALL_SETUP:
         case CatService.MSG_ID_PROACTIVE_COMMAND:
         case CatService.MSG_ID_EVENT_NOTIFY:
         case CatService.MSG_ID_REFRESH:
             byte[] rawData = null;
             try {
+                CatLog.d(this, "[stk]ril msg = " + rilMsg.mId + " mData =" + (String)rilMsg.mData);
                 rawData = IccUtils.hexStringToBytes((String) rilMsg.mData);
+                CatLog.d(this, "[stk]rawData length"+rawData.length);
+                if (rawData.length == 0) {
+                    CatLog.d(this, "[stk]rawData is empty");
+                    decodingStarted = false;
+                    break;
+                }
             } catch (Exception e) {
                 // zombie messages are dropped
-                CatLog.d(this, "decodeMessageParams dropping zombie messages");
+                CatLog.d(this, "[stk] decodemessage Exception e:" + e);
                 decodingStarted = false;
                 break;
             }
@@ -162,7 +172,8 @@ class RilMessageDecoder extends StateMachine {
                 decodingStarted = true;
             } catch (ResultException e) {
                 // send to Service for proper RIL communication.
-                CatLog.d(this, "decodeMessageParams: caught ResultException e=" + e);
+                CatLog.d(this, "[stk]mCmdParamsFactory.make Exception = " + e);
+                mCurrentRilMessage.mId = CatService.MSG_ID_SESSION_END;
                 mCurrentRilMessage.mResCode = e.result();
                 sendCmdForExecution(mCurrentRilMessage);
                 decodingStarted = false;

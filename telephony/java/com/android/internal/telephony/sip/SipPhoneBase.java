@@ -143,6 +143,10 @@ abstract class SipPhoneBase extends PhoneBase {
         return false;
     }
 
+    public boolean getCallForwardingIndicator(int serviceClass) {
+        return false;
+    }
+
     public List<? extends MmiCode> getPendingMmiCodes() {
         return new ArrayList<MmiCode>(0);
     }

@@ -16,15 +16,20 @@
 
 package com.android.internal.telephony;
 
+import android.util.LogPrinter;
 import android.content.pm.PackageManager;
 import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.ServiceManager;
-
+import android.telephony.PhoneNumberUtils;
+import android.util.Log;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import com.android.internal.telephony.IccCardApplication.CardType;
+import com.android.internal.telephony.IccCardApplication.AppType;
 
 /**
  * SimPhoneBookInterfaceManager to provide an inter-process communication to
@@ -35,10 +40,12 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 
     protected PhoneBase phone;
     protected AdnRecordCache adnCache;
-    protected final Object mLock = new Object();
+    protected Object mLock = new Object();
     protected int recordSize[];
+    protected int simIndex = -1;
     protected boolean success;
     protected List<AdnRecord> records;
+    protected boolean readRecordSuccess = false;
 
     protected static final boolean ALLOW_SIM_OP_IN_UI_THREAD = false;
 
@@ -46,7 +53,11 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
     protected static final int EVENT_LOAD_DONE = 2;
     protected static final int EVENT_UPDATE_DONE = 3;
 
-    protected Handler mBaseHandler = new Handler() {
+    private static final String LOG_TAG = "IccPhoneBookInterfaceManager";
+
+    protected Handler mBaseHandler = new IccThreadHandler() {
+
+    
         @Override
         public void handleMessage(Message msg) {
             AsyncResult ar;
@@ -71,6 +82,14 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                     ar = (AsyncResult) msg.obj;
                     synchronized (mLock) {
                         success = (ar.exception == null);
+                        Log.i("IccPhoneBookInterfaceManager ","EVENT_UPDATE_DONE  success " +success);
+                        if (success) {
+                            simIndex = getInsertIndex();
+                        }else {
+                            simIndex = -1;
+                            Log.e("IccPhoneBookInterface", "[EVENT_UPDATE_DONE]", ar.exception);
+                        }
+                        Log.i("IccPhoneBookInterfaceManager ","EVENT_UPDATE_DONE  simIndex " +simIndex);
                         notifyPending(ar);
                     }
                     break;
@@ -78,11 +97,13 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                     ar = (AsyncResult)msg.obj;
                     synchronized (mLock) {
                         if (ar.exception == null) {
+                            readRecordSuccess =  true;
                             records = (List<AdnRecord>) ar.result;
                         } else {
                             if(DBG) logd("Cannot load ADN records");
                             if (records != null) {
-                                records.clear();
+                                // no need to clear the records
+                                // records.clear();
                             }
                         }
                         notifyPending(ar);
@@ -170,6 +191,55 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         return success;
     }
 
+    public int updateAdnRecordsInEfBySearchEx(int efid, String oldTag,
+            String oldPhoneNumber, String[] oldEmailList, String oldAnr, 
+            String oldSne, String oldGrp,
+            String newTag, String newPhoneNumber, String[] newEmailList,
+            String newAnr, String newAas, String newSne, String newGrp,
+            String newGas, String pin2) {
+        if (phone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+            "Requires android.permission.WRITE_CONTACTS permission");
+        }
+        Log.v(LOG_TAG, "updateAdnRecordsInEfBySearchEx** ");
+
+        if (DBG)
+            logd("updateAdnRecordsInEfBySearchEx: efid=" + efid + " (" + newTag
+                    + "," + newPhoneNumber + ")" + " pin2=" + pin2);
+
+        int newid = updateEfForIccType(efid);
+
+        synchronized (mLock) {
+            checkThread();
+            success = false;
+            AtomicBoolean status = new AtomicBoolean(false);
+            Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, status);
+            AdnRecord oldAdn = null;
+            AdnRecord newAdn = null;
+
+            if (newid == IccConstants.EF_PBR) {
+                oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmailList,
+                        oldAnr, "", oldSne, oldGrp, "");
+                newAdn = new AdnRecord(newTag, newPhoneNumber, newEmailList,
+                        newAnr, newAas, newSne, newGrp, newGas);
+
+                adnCache.updateUSIMAdnBySearch(newid, oldAdn, newAdn, pin2,
+                        response);
+
+            } else {
+                oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
+                newAdn = new AdnRecord(newTag, newPhoneNumber);
+                adnCache.updateAdnBySearch(newid, oldAdn, newAdn, pin2,
+                        response);
+            }
+            waitForResult(status);
+        }
+        Log.i(LOG_TAG,"updateAdnRecordsInEfBySearchEx end "+success + ", simIndex "+simIndex);
+        return simIndex;
+    }
+    
+    
     /**
      * Update an ADN-like EF record by record index
      *
@@ -212,7 +282,108 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         }
         return success;
     }
+    public boolean updateAdnRecordsInEfByIndexEx(int efid, String newTag,
+            String newPhoneNumber, String[] newEmailList, String newAnr,
+            String newAas, String newSne, String newGrp, String newGas,
+            int index, String pin2) {
 
+        if (phone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+            "Requires android.permission.WRITE_CONTACTS permission");
+        }
+
+        if (DBG)
+            Log.i(LOG_TAG, "updateAdnRecordsInEfByIndexEx: efid=" + Integer.toHexString(efid) 
+                    + " (" + newTag + "," + newPhoneNumber + ")" + " index=" + index);
+
+        int newid = updateEfForIccType(efid);
+
+        if (DBG)
+            Log.i(LOG_TAG, "updateAdnRecordsInEfByIndexEx: newid=" + Integer.toHexString(newid));
+
+
+        synchronized (mLock) {
+            checkThread();
+            success = false;
+            AtomicBoolean status = new AtomicBoolean(false);
+            Message response = mBaseHandler.obtainMessage(EVENT_UPDATE_DONE, status);
+            AdnRecord oldAdn = null;
+            AdnRecord newAdn = null;
+
+            if (newid == IccConstants.EF_PBR) {
+
+                newAdn = new AdnRecord(newTag, newPhoneNumber, newEmailList,
+                        newAnr, newAas, newSne, newGrp, newGas);
+
+                adnCache.updateUSIMAdnByIndex(newid, index, newAdn, pin2,response);
+
+            } else {
+
+                newAdn = new AdnRecord(newTag, newPhoneNumber);
+                adnCache.updateAdnByIndex(newid, newAdn, index, pin2, response);
+            }
+            waitForResult(status);
+        }
+        Log.i(LOG_TAG,"updateAdnRecordsInEfByIndexEx end "+success );
+        return success;   
+
+    }
+
+
+
+
+    public abstract int [] getAvalibleEmailCount(String name, String number,
+            String[] emails, String anr, int[] emailNums);
+
+    public abstract int [] getAvalibleAnrCount(String name, String number,
+            String[] emails, String anr, int[] anrNums);
+
+	public abstract int[] getEmailRecordsSize();
+
+	public abstract int[] getAnrRecordsSize();
+
+	public abstract int getEmailNum();
+
+    public abstract int getAnrNum();
+
+    public abstract int getEmailMaxLen();
+
+    public abstract int getPhoneNumMaxLen();
+
+	public boolean hasEmailInIccCard() {
+		return adnCache.mUsimPhoneBookManager.ishaveEmail;
+	}
+
+	public boolean getIshaveAnrField() {
+		return adnCache.mUsimPhoneBookManager.ishaveAnr;
+	}
+
+
+	public int getInsertIndex() {
+		return adnCache.mInsertId;
+	}
+
+	public int[] getRecordsSize(int efid) {
+	    if (DBG) logd("getRecordsSize: efid=" + Integer.toHexString(efid));
+	    if(efid<=0){
+	        loge("the efid is invalid");
+	        return null;
+	    }
+	    synchronized (mLock) {
+	        checkThread();
+	        recordSize = new int[3];
+
+	        // Using mBaseHandler, no difference in EVENT_GET_SIZE_DONE handling
+	        AtomicBoolean status = new AtomicBoolean(false);
+	        Message response = mBaseHandler.obtainMessage(EVENT_GET_SIZE_DONE, status);
+
+	        phone.getIccFileHandler().getEFLinearRecordSize(efid, response);
+	        waitForResult(status);
+	    }
+
+	    return recordSize;
+	}
     /**
      * Get the capacity of records in efid
      *
@@ -233,7 +404,8 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
      * @param efid the EF id of a ADN-like ICC
      * @return List of AdnRecord
      */
-    public List<AdnRecord> getAdnRecordsInEf(int efid) {
+    public synchronized List<AdnRecord> getAdnRecordsInEf(int efid) { //add by zhengshenglan at 08-23-2011 for NEWMS00113396
+    //public List<AdnRecord> getAdnRecordsInEf(int efid) {
 
         if (phone.getContext().checkCallingOrSelfPermission(
                 android.Manifest.permission.READ_CONTACTS)
@@ -243,15 +415,19 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         }
 
         efid = updateEfForIccType(efid);
-        if (DBG) logd("getAdnRecordsInEF: efid=" + efid);
 
         synchronized(mLock) {
+            readRecordSuccess =  false;
             checkThread();
             AtomicBoolean status = new AtomicBoolean(false);
             Message response = mBaseHandler.obtainMessage(EVENT_LOAD_DONE, status);
             adnCache.requestLoadAllAdnLike(efid, adnCache.extensionEfForEf(efid), response);
             waitForResult(status);
         }
+        if(!readRecordSuccess){
+
+                  return null;
+		}
         return records;
     }
 
@@ -285,5 +461,82 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         }
         return efid;
     }
+
+    int getPhoneId(){
+        return phone.getPhoneId();
+    }
+
+    public boolean isApplicationOnIcc(int type) {
+	IccCardApplication.AppType newType;
+        switch(type) {
+            case CardType.UNKNOWN:
+		newType = AppType.APPTYPE_UNKNOWN;
+		break;
+            case CardType.SIM:
+		newType = AppType.APPTYPE_SIM;
+		break;
+            case CardType.USIM:
+		newType = AppType.APPTYPE_USIM;
+		break;
+            case CardType.RUIM:
+		newType = AppType.APPTYPE_RUIM;
+		break;
+            case CardType.CSIM:
+		newType = AppType.APPTYPE_CSIM;
+		break;
+            case CardType.ISIM:
+		newType = AppType.APPTYPE_ISIM;
+		break;
+            default:
+		newType = AppType.APPTYPE_UNKNOWN; break;
+        }
+	return phone.getIccCard().isApplicationOnIcc(newType);
+	
+    }
+    
+    public int updateUsimGroupBySearchEx(String oldName,String newName) {
+        if (phone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+            "Requires android.permission.WRITE_CONTACTS permission");
+        }
+
+        return adnCache.updateGasBySearch(oldName, newName);
+    }
+
+
+    public boolean updateUsimGroupById(String newName,int groupId){
+
+        if (phone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+            "Requires android.permission.WRITE_CONTACTS permission");
+        }
+
+        return adnCache.updateGasByIndex(newName, groupId);  
+
+    }
+
+
+    public List<String> getGasInEf() {
+
+        if (phone.getContext().checkCallingOrSelfPermission(
+                android.Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(
+            "Requires android.permission.READ_CONTACTS permission");
+        }
+        if (!phone.getIccCard().isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)) {
+            Log.e(LOG_TAG,"Can not get gas from a sim card" );
+            return null;
+        }
+
+        return adnCache.loadGasFromUsim();
+    }
+
+
+
+
+
 }
 

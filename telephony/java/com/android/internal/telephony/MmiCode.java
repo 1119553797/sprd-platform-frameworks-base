@@ -28,11 +28,10 @@ public interface MmiCode
         PENDING,
         CANCELLED,
         COMPLETE,
-        NETCOMPLETE,
         FAILED
     }
 
-
+    public Phone getPhone();
     /**
      * @return Current state of MmiCode request
      */
@@ -44,11 +43,6 @@ public interface MmiCode
      */
 
     public CharSequence getMessage();
-
-    /**
-     * @return Phone associated with the MMI/USSD message
-     */
-    public Phone getPhone();
 
     /**
      * Cancels pending MMI request.

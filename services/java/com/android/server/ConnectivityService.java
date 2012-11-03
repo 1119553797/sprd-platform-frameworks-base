@@ -631,6 +631,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
     public void setNetworkPreference(int preference) {
         enforceChangePermission();
 
+        preference = getRealNetworkType(preference);
         mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_NETWORK_PREFERENCE, preference, 0));
     }
 
@@ -640,7 +641,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
         synchronized(this) {
             preference = mNetworkPreference;
         }
-        return preference;
+        return ConnectivityManager.getDefaultNetworkType(preference);
     }
 
     private void handleSetNetworkPreference(int preference) {
@@ -773,6 +774,32 @@ private NetworkStateTracker makeWimaxStateTracker() {
         return getNetworkInfo(mActiveDefaultNetwork, uid);
     }
 
+    /**
+     * used for get mainsim info in multisim version
+     * mainsim could be any slot but called with the same network type
+     * for 3rdparty app.
+     */
+    private int getRealNetworkType(int networkType) {
+        return getRealNetworkType(networkType, TelephonyManager.getDefaultDataPhoneId(mContext));
+    }
+
+    private int getRealNetworkType(int networkType, int phoneId) {
+        if (networkType < ConnectivityManager.MAX_TYPE_FOR_ONE_SIM
+                && mNetConfigs[networkType] != null
+                && mNetConfigs[networkType].radio == ConnectivityManager.TYPE_MOBILE) {
+            networkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, networkType);
+        }
+        return networkType;
+    }
+
+    private NetworkStateTracker getRealNetworkTracker(NetworkStateTracker tracker) {
+        NetworkInfo info = tracker.getNetworkInfo();
+        if (info.getPhoneId()  == TelephonyManager.getPhoneCount()) {
+            return mNetTrackers[getRealNetworkType(info.getType())];
+        }
+        return tracker;
+    }
+
     @Override
     public NetworkInfo getNetworkInfo(int networkType) {
         enforceAccessPermission();
@@ -783,6 +810,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
     private NetworkInfo getNetworkInfo(int networkType, int uid) {
         NetworkInfo info = null;
         if (isNetworkTypeValid(networkType)) {
+            networkType = getRealNetworkType(networkType);
             final NetworkStateTracker tracker = mNetTrackers[networkType];
             if (tracker != null) {
                 info = getFilteredNetworkInfo(tracker, uid);
@@ -799,6 +827,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
         synchronized (mRulesLock) {
             for (NetworkStateTracker tracker : mNetTrackers) {
                 if (tracker != null) {
+                    tracker = getRealNetworkTracker(tracker);
                     result.add(getFilteredNetworkInfo(tracker, uid));
                 }
             }
@@ -829,6 +858,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
     public LinkProperties getLinkProperties(int networkType) {
         enforceAccessPermission();
         if (isNetworkTypeValid(networkType)) {
+            networkType = getRealNetworkType(networkType);
             final NetworkStateTracker tracker = mNetTrackers[networkType];
             if (tracker != null) {
                 return tracker.getLinkProperties();
@@ -845,6 +875,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
         synchronized (mRulesLock) {
             for (NetworkStateTracker tracker : mNetTrackers) {
                 if (tracker != null) {
+                    tracker = getRealNetworkTracker(tracker);
                     final NetworkInfo info = getFilteredNetworkInfo(tracker, uid);
                     result.add(new NetworkState(
                             info, tracker.getLinkProperties(), tracker.getLinkCapabilities()));
@@ -856,6 +887,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
 
     private NetworkState getNetworkStateUnchecked(int networkType) {
         if (isNetworkTypeValid(networkType)) {
+            networkType = getRealNetworkType(networkType);
             final NetworkStateTracker tracker = mNetTrackers[networkType];
             if (tracker != null) {
                 return new NetworkState(tracker.getNetworkInfo(), tracker.getLinkProperties(),
@@ -917,6 +949,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
 
     public boolean setRadio(int netType, boolean turnOn) {
         enforceChangePermission();
+        netType = getRealNetworkType(netType);
         if (!ConnectivityManager.isNetworkTypeValid(netType)) {
             return false;
         }
@@ -972,7 +1005,9 @@ private NetworkStateTracker makeWimaxStateTracker() {
                         mNetworkType + ", " + mFeature + ", " + mBinder +"), created " +
                         (System.currentTimeMillis() - mCreateTime) + " mSec ago");
             }
+            if (!TextUtils.equals(mFeature, Phone.FEATURE_ENABLE_WAP)) {
             stopUsingNetworkFeature(this, false);
+            }
         }
 
         public boolean isSameUser(FeatureUser u) {
@@ -1015,6 +1050,15 @@ private NetworkStateTracker makeWimaxStateTracker() {
 
             FeatureUser f = new FeatureUser(networkType, feature, binder);
 
+            if(networkType == ConnectivityManager.TYPE_MOBILE) {
+                Slog.d(TAG, "if type is MMS,continue setup data call");
+                if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature)) &&
+                        !(feature.indexOf(Phone.FEATURE_ENABLE_MMS) != -1) &&
+                        !(feature.indexOf(Phone.FEATURE_ENABLE_WAP) != -1)) {
+                    if (DBG) Slog.d(TAG, "requested special network with data disabled - rejected");
+                    return Phone.APN_TYPE_NOT_AVAILABLE;
+                }
+            }
             // TODO - move this into individual networktrackers
             int usedNetworkType = convertFeatureToNetworkType(networkType, feature);
 
@@ -1075,6 +1119,14 @@ private NetworkStateTracker makeWimaxStateTracker() {
                     }
 
                     if (restoreTimer >= 0) {
+                        if (isMmsFeature(feature)
+                                && ConnectivityManager.getPhoneIdByNetworkType(usedNetworkType) != TelephonyManager
+                                        .getDefaultDataPhoneId(mContext)) {
+                            restoreTimer = restoreTimer * 2;
+                            if (DBG) {
+                                log("Not default sim reconnect, change restoreTimer to " + restoreTimer);
+                            }
+                        }
                         mHandler.sendMessageDelayed(mHandler.obtainMessage(
                                 EVENT_RESTORE_DEFAULT_NETWORK, f), restoreTimer);
                     }
@@ -1291,6 +1343,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
             if (DBG) log("requestRouteToHostAddress on invalid network: " + networkType);
             return false;
         }
+        networkType = getRealNetworkType(networkType);
         NetworkStateTracker tracker = mNetTrackers[networkType];
 
         if (tracker == null || !tracker.getNetworkInfo().isConnected() ||
@@ -1525,12 +1578,14 @@ private NetworkStateTracker makeWimaxStateTracker() {
                 (enabled ? ENABLED : DISABLED), 0));
     }
 
-    private void handleSetMobileData(boolean enabled) {
-        if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
+    private void handleSetMobileData(boolean enabled, int phoneId) {
+        int networkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId,
+                ConnectivityManager.TYPE_MOBILE);
+        if (mNetTrackers[networkType] != null) {
             if (VDBG) {
-                log(mNetTrackers[ConnectivityManager.TYPE_MOBILE].toString() + enabled);
+                log(mNetTrackers[networkType].toString() + enabled);
             }
-            mNetTrackers[ConnectivityManager.TYPE_MOBILE].setUserDataEnable(enabled);
+            mNetTrackers[networkType].setUserDataEnable(enabled);
         }
         if (mNetTrackers[ConnectivityManager.TYPE_WIMAX] != null) {
             if (VDBG) {
@@ -1550,6 +1605,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
     }
 
     private void handleSetPolicyDataEnable(int networkType, boolean enabled) {
+        networkType = getRealNetworkType(networkType);
         if (isNetworkTypeValid(networkType)) {
             final NetworkStateTracker tracker = mNetTrackers[networkType];
             if (tracker != null) {
@@ -1598,7 +1654,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
      */
     private void handleDisconnect(NetworkInfo info) {
 
-        int prevNetType = info.getType();
+        int prevNetType = getRealNetworkType(info.getType(), info.getPhoneId());
 
         mNetTrackers[prevNetType].setTeardownRequested(false);
         /*
@@ -1718,6 +1774,13 @@ private NetworkStateTracker makeWimaxStateTracker() {
 
 //                if (currentPriority >= mNetConfigs[checkType].mPriority) continue;
 
+                // for a multi-sim system, mNetTracker which is not on the mainSim
+                // will not be reconnected in tryFailover.
+                if (mNetConfigs[checkType].radio == ConnectivityManager.TYPE_MOBILE
+                        && ConnectivityManager.getPhoneIdByNetworkType(checkType) != TelephonyManager
+                                .getDefaultDataPhoneId(mContext))
+                    continue;
+
                 NetworkStateTracker checkTracker = mNetTrackers[checkType];
                 NetworkInfo checkInfo = checkTracker.getNetworkInfo();
                 if (!checkInfo.isConnectedOrConnecting() || checkTracker.isTeardownRequested()) {
@@ -1774,7 +1837,8 @@ private NetworkStateTracker makeWimaxStateTracker() {
      * @param info the {@link NetworkInfo} for the failed network
      */
     private void handleConnectionFailure(NetworkInfo info) {
-        mNetTrackers[info.getType()].setTeardownRequested(false);
+        final int type = getRealNetworkType(info.getType(), info.getPhoneId());
+        mNetTrackers[type].setTeardownRequested(false);
 
         String reason = info.getReason();
         String extraInfo = info.getExtraInfo();
@@ -1803,8 +1867,8 @@ private NetworkStateTracker makeWimaxStateTracker() {
             info.setFailover(false);
         }
 
-        if (mNetConfigs[info.getType()].isDefault()) {
-            tryFailover(info.getType());
+        if (mNetConfigs[type].isDefault()) {
+            tryFailover(type);
             if (mActiveDefaultNetwork != -1) {
                 NetworkInfo switchTo = mNetTrackers[mActiveDefaultNetwork].getNetworkInfo();
                 intent.putExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO, switchTo);
@@ -1869,7 +1933,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
     }
 
     private void handleConnect(NetworkInfo info) {
-        final int type = info.getType();
+        final int type = getRealNetworkType(info.getType(), info.getPhoneId());
 
         // snapshot isFailover, because sendConnectedBroadcast() resets it
         boolean isFailover = info.isFailover();
@@ -1930,6 +1994,15 @@ private NetworkStateTracker makeWimaxStateTracker() {
         updateNetworkSettings(thisNet);
         handleConnectivityChange(type, false);
         sendConnectedBroadcastDelayed(info, getConnectivityChangeDelay());
+        if (info.getType() == ConnectivityManager.TYPE_MOBILE_WAP) {
+            try {
+                String proxyAddr = mCurrentLinkProperties[type].getHttpProxy().getHost();
+                int inetAddr = NetworkUtils.lookupHost(proxyAddr);
+                requestRouteToHost(type, inetAddr);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         // notify battery stats service about this network
         final String iface = thisNet.getLinkProperties().getInterfaceName();
@@ -2498,7 +2571,8 @@ private NetworkStateTracker makeWimaxStateTracker() {
                     // TODO: Temporary allowing network configuration
                     //       change not resetting sockets.
                     //       @see bug/4455071
-                    handleConnectivityChange(info.getType(), false);
+                    handleConnectivityChange(getRealNetworkType(info.getType(), info.getPhoneId()),
+                            false);
                     break;
                 case EVENT_CLEAR_NET_TRANSITION_WAKELOCK:
                     String causedBy = null;
@@ -2540,7 +2614,7 @@ private NetworkStateTracker makeWimaxStateTracker() {
                 case EVENT_SET_MOBILE_DATA:
                 {
                     boolean enabled = (msg.arg1 == ENABLED);
-                    handleSetMobileData(enabled);
+                    handleSetMobileData(enabled, msg.arg2);
                     break;
                 }
                 case EVENT_APPLY_GLOBAL_HTTP_PROXY:
@@ -2586,7 +2660,32 @@ private NetworkStateTracker makeWimaxStateTracker() {
             return ConnectivityManager.TETHER_ERROR_UNSUPPORTED;
         }
     }
-
+    //added by dengfp for spreadtrum usbsettings <udcpower && gser && vser> begin
+    public boolean enableUdcpower(boolean enabled){
+          return mTethering.enableUsbUdcpower(enabled);
+    }
+    public boolean isUsbUdcpowerStarted(){
+	  return mTethering.isUsbUdcpowerStarted();
+    }
+    public boolean enableGser(boolean enabled){
+	  return mTethering.enableUsbGser(enabled);
+    }
+   public boolean isUsbGserStarted(){
+	  return mTethering.isUsbGserStarted();
+    }
+    public boolean enableVser(boolean enabled){
+	  return mTethering.enableUsbVser(enabled);
+    }
+    public boolean isUsbVserStarted(){
+	  return mTethering.isUsbVserStarted();
+    }
+    public boolean isUsbRNDISStarted(){
+	  return mTethering.isUsbRNDISStarted();
+    }
+    public boolean isUsbConnected(){
+	  return mTethering.isUsbConnected();
+    }
+    //added by dengfp for spreadtrum usbsettings <udcpower && gser && vser> end
     // javadoc from interface
     public int untether(String iface) {
         enforceTetherChangePermission();
@@ -2924,21 +3023,36 @@ private NetworkStateTracker makeWimaxStateTracker() {
         int usedNetworkType = networkType;
 
         if(networkType == ConnectivityManager.TYPE_MOBILE) {
-            if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_MMS;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_SUPL)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_SUPL;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN) ||
-                    TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN_ALWAYS)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_DUN;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_FOTA)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_FOTA;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_IMS)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_IMS;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_CBS)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_CBS;
+            if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_DM) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_DM);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_DM);
+            } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_MMS) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_MMS);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_MMS);
+            } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_SUPL) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_SUPL);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_SUPL);
+            } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_DUN) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_DUN);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_DUN);
+            } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_DUN_ALWAYS) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_DUN_ALWAYS);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_DUN);
+            } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_HIPRI) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_HIPRI);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_HIPRI);
+            } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_FOTA) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_FOTA);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_FOTA);
+            } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_IMS) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_IMS);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_IMS);
+            } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_CBS) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_CBS);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_CBS);
+            } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_WAP) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_WAP);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_WAP);
             } else {
                 Slog.e(TAG, "Can't match any mobile netTracker!");
             }
@@ -3114,6 +3228,62 @@ private NetworkStateTracker makeWimaxStateTracker() {
         }
     }
 
+    private boolean isMmsFeature(String feature) {
+        return (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS +"0"))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS +"1"));
+    }
+
+    private boolean isDmFeature(String feature) {
+        return (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM +"0"))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM +"1"));
+    }
+
+    private int getPhoneIdByFeature(String feature, String defaultFeature) {
+        int phoneId;
+        if (TextUtils.indexOf(feature, defaultFeature) == -1) {
+            throw new IllegalArgumentException("Illeagal Feature: " + feature + " "
+                    + defaultFeature);
+        }
+        if (feature.length() == defaultFeature.length()) {
+            phoneId = PhoneFactory.getDefaultPhoneId();
+        } else if (feature.length() > defaultFeature.length()) {
+            phoneId = Integer.parseInt(feature.substring(defaultFeature.length()));
+        } else {
+            throw new IllegalArgumentException("Illeagal Feature: " + feature);
+        }
+
+        return phoneId;
+    }
+
+    private int getPhoneIdByFeature(String feature) {
+        int phoneId = -1;
+        if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_DM) != -1) {
+            phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_DM);
+        } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_MMS) != -1) {
+            phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_MMS);
+        } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_SUPL) != -1) {
+            phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_SUPL);
+        } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_DUN) != -1) {
+            phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_DUN);
+        } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_DUN_ALWAYS) != -1) {
+            phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_DUN_ALWAYS);
+        } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_HIPRI) != -1) {
+            phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_HIPRI);
+        } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_FOTA) != -1) {
+            phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_FOTA);
+        } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_IMS) != -1) {
+            phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_IMS);
+        } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_CBS) != -1) {
+            phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_CBS);
+        } else if (TextUtils.indexOf(feature, Phone.FEATURE_ENABLE_WAP) != -1) {
+            phoneId = getPhoneIdByFeature(feature, Phone.FEATURE_ENABLE_WAP);
+        } else {
+            Slog.e(TAG, "Can't match any mobile netTracker!");
+        }
+        return phoneId;
+    }
 
     /**
      * @see ConnectivityManager#getMobileDataEnabledByPhoneId(int)

@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony.cat;
 
+import com.android.internal.telephony.cat.AppInterface.EventListType;
+
 import android.graphics.Bitmap;
 
 /**
@@ -57,6 +59,38 @@ class DisplayTextParams extends CommandParams {
         return false;
     }
 }
+//Deal With DTMF Message Start
+class DtmfParams extends CommandParams{
+    TextMessage textMsg;
+    String dtmfString;
+
+    DtmfParams(CommandDetails cmdDet, TextMessage textMsg,String dtmf) {
+        super(cmdDet);
+        this.textMsg = textMsg;
+        dtmfString = dtmf;
+    }
+
+    boolean setIcon(Bitmap icon) {
+        if (icon != null && textMsg != null) {
+            textMsg.icon = icon;
+            return true;
+        }
+        return false;
+    }
+}
+//Deal With DTMF Message End
+//Language Setting Add Start
+class LanguageParams extends CommandParams{
+
+    String languageString;
+
+    LanguageParams(CommandDetails cmdDet,String language) {
+        super(cmdDet);
+        languageString = language;
+    }
+
+}
+//Language Setting Add End
 
 class LaunchBrowserParams extends CommandParams {
     TextMessage confirmMsg;
@@ -103,12 +137,14 @@ class PlayToneParams extends CommandParams {
 class CallSetupParams extends CommandParams {
     TextMessage confirmMsg;
     TextMessage callMsg;
+    TextMessage calladdress;
 
     CallSetupParams(CommandDetails cmdDet, TextMessage confirmMsg,
-            TextMessage callMsg) {
+            TextMessage callMsg, TextMessage calladdress) {
         super(cmdDet);
         this.confirmMsg = confirmMsg;
         this.callMsg = callMsg;
+        this.calladdress = calladdress;
     }
 
     boolean setIcon(Bitmap icon) {
@@ -171,29 +207,97 @@ class GetInputParams extends CommandParams {
     }
 }
 
-/*
- * BIP (Bearer Independent Protocol) is the mechanism for SIM card applications
- * to access data connection through the mobile device.
- *
- * SIM utilizes proactive commands (OPEN CHANNEL, CLOSE CHANNEL, SEND DATA and
- * RECEIVE DATA to control/read/write data for BIP. Refer to ETSI TS 102 223 for
- * the details of proactive commands procedures and their structures.
- */
-class BIPClientParams extends CommandParams {
-    TextMessage textMsg;
-    boolean bHasAlphaId;
+class EventListParams extends CommandParams {
+    EventListType[] eventList;
 
-    BIPClientParams(CommandDetails cmdDet, TextMessage textMsg, boolean has_alpha_id) {
+    EventListParams(CommandDetails cmdDet, EventListType[] list) {
         super(cmdDet);
-        this.textMsg = textMsg;
-        this.bHasAlphaId = has_alpha_id;
+        this.eventList = list;
+    }
+}
+
+class OpenChannelDataParams extends CommandParams {
+    OpenChannelData openchanneldata;
+
+    OpenChannelDataParams(CommandDetails cmdDet, OpenChannelData opendata) {
+        super(cmdDet);
+        openchanneldata = opendata;
+        openchanneldata.setChannelType(cmdDet.typeOfCommand);
     }
 
     boolean setIcon(Bitmap icon) {
-        if (icon != null && textMsg != null) {
-            textMsg.icon = icon;
+        if (icon != null && openchanneldata != null) {
+            openchanneldata.icon = icon;
             return true;
         }
         return false;
     }
+}
+
+class CloseChannelDataParams extends CommandParams {
+	CloseChannelData closechanneldata;
+    DeviceIdentities deviceIdentities;
+
+    CloseChannelDataParams(CommandDetails cmdDet, CloseChannelData closedata, DeviceIdentities identities) {
+        super(cmdDet);
+        closechanneldata = closedata;
+        closechanneldata.setChannelType(cmdDet.typeOfCommand);
+        deviceIdentities = identities;
+    }
+
+    boolean setIcon(Bitmap icon) {
+        if (icon != null && closechanneldata != null) {
+            closechanneldata.icon = icon;
+            return true;
+        }
+        return false;
+    }
+}
+
+class ReceiveChannelDataParams extends CommandParams {
+	ReceiveChannelData receivedata;
+
+	ReceiveChannelDataParams(CommandDetails cmdDet, ReceiveChannelData rdata) {
+        super(cmdDet);
+        receivedata = rdata;
+        receivedata.setChannelType(cmdDet.typeOfCommand);
+    }
+
+    boolean setIcon(Bitmap icon) {
+        if (icon != null && receivedata != null) {
+            receivedata.icon = icon;
+            return true;
+        }
+        return false;
+    }
+}
+
+class SendChannelDataParams extends CommandParams {
+	SendChannelData senddata;
+    DeviceIdentities deviceIdentities;
+
+	SendChannelDataParams(CommandDetails cmdDet, SendChannelData sdata, DeviceIdentities identities) {
+        super(cmdDet);
+        senddata = sdata;
+        senddata.setChannelType(cmdDet.typeOfCommand);
+        deviceIdentities = identities;
+    }
+
+    boolean setIcon(Bitmap icon) {
+        if (icon != null && senddata != null) {
+            senddata.icon = icon;
+            return true;
+        }
+        return false;
+    }
+}
+
+class GetChannelStatusParams extends CommandParams {
+	GetChannelStatus channelstatus;
+
+	GetChannelStatusParams(CommandDetails cmdDet, GetChannelStatus status) {
+        super(cmdDet);
+        channelstatus = status;
+        channelstatus.setChannelType(cmdDet.typeOfCommand);
+	}
 }

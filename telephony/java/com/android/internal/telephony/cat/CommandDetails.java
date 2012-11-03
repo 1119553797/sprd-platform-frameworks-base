@@ -27,7 +27,7 @@ abstract class ValueObject {
  * Class for Command Detailes object of proactive commands from SIM.
  * {@hide}
  */
-class CommandDetails extends ValueObject implements Parcelable {
+public class CommandDetails extends ValueObject implements Parcelable {
     public boolean compRequired;
     public int commandNumber;
     public int typeOfCommand;
@@ -41,8 +41,8 @@ class CommandDetails extends ValueObject implements Parcelable {
     }
 
     public boolean compareTo(CommandDetails other) {
-        return (this.compRequired == other.compRequired &&
-                this.commandNumber == other.commandNumber &&
+        //return (this.compRequired == other.compRequired &&
+        return (this.commandNumber == other.commandNumber &&
                 this.commandQualifier == other.commandQualifier &&
                 this.typeOfCommand == other.typeOfCommand);
     }

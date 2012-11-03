@@ -39,13 +39,26 @@ public enum ComprehensionTlvTag {
     FILE_LIST(0x12),
     HELP_REQUEST(0x15),
     DEFAULT_TEXT(0x17),
+    NEXT_ACTION_INDICATOR(0x18),
     EVENT_LIST(0x19),
     ICON_ID(0x1e),
     ITEM_ICON_ID_LIST(0x1f),
+    DATE_TIME_TIMEZONE(0x26),
     IMMEDIATE_RESPONSE(0x2b),
+  //Deal With DTMF Message Start
+    DTMF(0x2c),
+  //Deal With DTMF Message End
     LANGUAGE(0x2d),
     URL(0x31),
     BROWSER_TERMINATION_CAUSE(0x34),
+    BEARER_DESCRIPTION(0x35),
+    CHANNEL_DATA(0x36),
+    CHANNEL_DATA_LENGTH(0x37),
+    CHANNEL_STATUS(0x38),
+    BUFFER_SIZE(0x39),
+    TRANSPORT_LEVEL(0x3c),
+    OTHER_ADDRESS(0x3e),
+    NETWORK_ACCESS_NAME(0x47),
     TEXT_ATTRIBUTE(0x50);
 
     private int mValue;

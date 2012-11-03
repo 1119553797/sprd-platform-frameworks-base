@@ -69,6 +69,53 @@ interface IIccPhoneBook {
             String pin2);
 
     /**
+     * Get the max munber of email in efid
+     *
+     *
+     * @return  int[3] array
+     *            recordSizes[0]  is the single record length
+     *            recordSizes[1]  is the total length of the EF file
+     *            recordSizes[2]  is the number of records in the EF file
+     */
+    int[] getEmailRecordsSize();
+    /**
+     * Get the max munber of anr in efid
+     *
+     *
+     * @return  int[3] array
+     *            recordSizes[0]  is the single record length
+     *            recordSizes[1]  is the total length of the EF file
+     *            recordSizes[2]  is the number of records in the EF file
+     */
+    int[] getAnrRecordsSize();
+
+    int getAnrNum();
+
+    int getEmailNum();
+
+    int getInsertIndex();
+
+
+
+    //add multi record and email in usim
+    //yeezone:jinwei Add a new contact in SimCard.
+     /**Add newAdn in ADN-like record in EF
+      * @param efid must be one among EF_ADN, EF_FDN, and EF_SDN
+      * @param newTag adn tag to be stored
+      * @param newPhoneNumber adn number ot be stored
+      *        Set both newTag and newPhoneNubmer to "" means to replace the old
+      *        record with empty one, aka, delete old record
+      * @param pin2 required to update EF_FDN, otherwise must be null
+      * @return sim_index
+     */
+    int
+    updateAdnRecordsInEfBySearchEx(int efid,
+            String oldTag, String oldPhoneNumber,in String[] oldEmailList, String oldAnr,
+            String oldSne, String oldGrp,
+            String newTag, String newPhoneNumber,in String[] newEmailList,
+            String newAnr,String newAas, String newSne, String newGrp,
+            String newGas,  String pin2);
+       /**
      * Update an ADN-like EF record by record index
      *
      * This is useful for iteration the whole ADN file, such as write the whole
@@ -97,5 +144,14 @@ interface IIccPhoneBook {
      *            recordSizes[2]  is the number of records in the EF file
      */
     int[] getAdnRecordsSize(int efid);
-
+    boolean updateAdnRecordsInEfByIndexEx(int efid, String newTag, String newPhoneNumber,
+				in String[] newEmailList,String newAnr,String newAas, String newSne,String newGrp, String      newGas,  int index, String pin2);
+    int[] getAvalibleEmailCount(String name, String number,in String[] emails, String anr, in int[] emailNums);
+    int [] getAvalibleAnrCount(String name, String number,in String[] emails, String anr, in int[] anrNums);
+    boolean isApplicationOnIcc(int appType);
+    int updateUsimGroupBySearchEx(String oldName,String newName);
+    boolean updateUsimGroupById(String newName,int groupId);
+    List<String> getGasInEf();
+    int getEmailMaxLen();
+    int getPhoneNumMaxLen();
 }

@@ -41,8 +41,9 @@ public final class RuimFileHandler extends IccFileHandler {
     //***** Instance Variables
 
     //***** Constructor
-    public RuimFileHandler(IccCard card, String aid, CommandsInterface ci) {
-        super(card, aid, ci);
+    public RuimFileHandler(IccCard card, String aid, PhoneBase mPhone) {
+        super(card, aid, mPhone.mCM);
+    	phone = mPhone;
     }
 
     protected void finalize() {
@@ -86,4 +87,7 @@ public final class RuimFileHandler extends IccFileHandler {
         Log.e(LOG_TAG, "[RuimFileHandler] " + msg);
     }
 
+    public void addDualMapFile(int efid) {
+
+    }
 }

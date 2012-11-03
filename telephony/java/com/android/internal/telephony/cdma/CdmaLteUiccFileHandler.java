@@ -22,6 +22,7 @@ import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.IccFileHandler;
+import com.android.internal.telephony.PhoneBase;
 import android.os.Message;
 
 /**
@@ -30,8 +31,8 @@ import android.os.Message;
 public final class CdmaLteUiccFileHandler extends IccFileHandler {
     static final String LOG_TAG = "CDMA";
 
-    public CdmaLteUiccFileHandler(IccCard card, String aid, CommandsInterface ci) {
-        super(card, aid, ci);
+    public CdmaLteUiccFileHandler(IccCard card, String aid, PhoneBase mPhone) {
+        super(card, aid, mPhone.mCM);
     }
 
     protected String getEFPath(int efid) {
@@ -74,6 +75,10 @@ public final class CdmaLteUiccFileHandler extends IccFileHandler {
 
     protected void loge(String msg) {
         Log.e(LOG_TAG, "[CdmaLteUiccFileHandler] " + msg);
+    }
+
+    public void addDualMapFile(int efid) {
+
     }
 
 }

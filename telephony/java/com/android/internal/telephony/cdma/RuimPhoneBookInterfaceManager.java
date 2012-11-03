@@ -19,6 +19,7 @@ package com.android.internal.telephony.cdma;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
 
 import com.android.internal.telephony.IccPhoneBookInterfaceManager;
@@ -74,6 +75,62 @@ public class RuimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager 
 
     protected void loge(String msg) {
         Log.e(LOG_TAG, "[RuimPbInterfaceManager] " + msg);
+    }
+	@Override
+	public int updateAdnRecordsInEfBySearchEx(int efid, String oldTag,
+			String oldPhoneNumber, String[] oldEmailList, String oldAnr,
+			String oldSne, String oldGrp,
+			String newTag, String newPhoneNumber, String[] newEmailList,
+			String newAnr, String newAas, String newSne, String newGrp,
+			String newGas, String pin2) {
+		// TODO Auto-generated method stub
+		return -1;
+	}
+
+	@Override
+	public int[] getAvalibleEmailCount(String name, String number,
+			String[] emails, String anr, int[] emailNums) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int[] getAvalibleAnrCount(String name, String number,
+			String[] emails, String anr, int[] anrNums) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int[] getEmailRecordsSize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int[] getAnrRecordsSize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getEmailNum() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+    @Override
+    public int getAnrNum() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public int getEmailMaxLen() {
+        return 0;
+    }
+
+    public int getPhoneNumMaxLen() {
+        return 0;
     }
 }
 

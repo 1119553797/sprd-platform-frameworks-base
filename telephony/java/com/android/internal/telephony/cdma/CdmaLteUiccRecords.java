@@ -57,8 +57,8 @@ public final class CdmaLteUiccRecords extends SIMRecords {
 
     private final IsimUiccRecords mIsimUiccRecords = new IsimUiccRecords();
 
-    public CdmaLteUiccRecords(IccCard card, Context c, CommandsInterface ci) {
-        super(card, c, ci);
+    public CdmaLteUiccRecords(IccCard card, Context c, PhoneBase mPhone) {
+        super(card, c, mPhone);
     }
 
     // Refer to ETSI TS 102.221

@@ -35,9 +35,9 @@ public final class SIMFileHandler extends IccFileHandler implements IccConstants
     //***** Instance Variables
 
     //***** Constructor
-
-    public SIMFileHandler(IccCard card, String aid, CommandsInterface ci) {
-        super(card, aid, ci);
+    public SIMFileHandler(IccCard card, String aid, PhoneBase mPhone) {
+        super(card, aid, mPhone.mCM);
+    	phone = mPhone;
     }
 
     protected void finalize() {
@@ -108,5 +108,9 @@ public final class SIMFileHandler extends IccFileHandler implements IccConstants
 
     protected void loge(String msg) {
         Log.e(LOG_TAG, "[SIMFileHandler] " + msg);
+    }
+
+    public void addDualMapFile(int efid) {
+
     }
 }

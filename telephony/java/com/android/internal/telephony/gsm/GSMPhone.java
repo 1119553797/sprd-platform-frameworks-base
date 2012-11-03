@@ -72,7 +72,7 @@ import com.android.internal.telephony.PhoneProxy;
 import com.android.internal.telephony.PhoneSubInfo;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.UUSInfo;
-import com.android.internal.telephony.test.SimulatedRadioControl;
+//import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.telephony.IccVmNotSupportedException;
 import com.android.internal.telephony.ServiceStateTracker;
@@ -151,9 +151,9 @@ public abstract class GSMPhone extends PhoneBase {
     GSMPhone (Context context, CommandsInterface ci, PhoneNotifier notifier, boolean unitTestMode) {
         super(notifier, context, ci, unitTestMode);
 
-        if (ci instanceof SimulatedRadioControl) {
-            mSimulatedRadioControl = (SimulatedRadioControl) ci;
-        }
+//        if (ci instanceof SimulatedRadioControl) {
+//            mSimulatedRadioControl = (SimulatedRadioControl) ci;
+//        }
 
         mCM.setPhoneType(Phone.PHONE_TYPE_GSM);
         mIccCard.set(UiccController.getInstance(this).getIccCard());
@@ -161,7 +161,7 @@ public abstract class GSMPhone extends PhoneBase {
         mCT = new GsmCallTracker(this);
         mSST = new GsmServiceStateTracker (this);
         mSMS = new GsmSMSDispatcher(this, mSmsStorageMonitor, mSmsUsageMonitor);
-        mDataConnectionTracker = new GsmDataConnectionTracker (this);
+//        mDataConnectionTracker = new GsmDataConnectionTracker (this);
         if (!unitTestMode) {
             mSimPhoneBookIntManager = new SimPhoneBookInterfaceManager(this);
             mSimSmsIntManager = new SimSmsInterfaceManager(this, mSMS);
@@ -244,7 +244,7 @@ public abstract class GSMPhone extends PhoneBase {
     @Override
     public void removeReferences() {
         Log.d(LOG_TAG, "removeReferences");
-        mSimulatedRadioControl = null;
+//        mSimulatedRadioControl = null;
         mSimPhoneBookIntManager = null;
         mSimSmsIntManager = null;
         mSubInfo = null;

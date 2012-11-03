@@ -16,12 +16,16 @@
 
 package com.android.internal.telephony.cat;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.PhoneNumberUtils;
 
 import com.android.internal.telephony.GsmAlphabet;
+import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.IccFileHandler;
+import com.android.internal.R;
 
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +41,7 @@ class CommandParamsFactory extends Handler {
     private CommandParams mCmdParams = null;
     private int mIconLoadState = LOAD_NO_ICON;
     private RilMessageDecoder mCaller = null;
+    private int mPhoneId;
 
     // constants
     static final int MSG_ID_LOAD_ICON_DONE = 1;
@@ -48,16 +53,14 @@ class CommandParamsFactory extends Handler {
 
     // Command Qualifier values for refresh command
     static final int REFRESH_NAA_INIT_AND_FULL_FILE_CHANGE  = 0x00;
+    static final int REFRESH_FILE_CHANGE                    = 0x01;
     static final int REFRESH_NAA_INIT_AND_FILE_CHANGE       = 0x02;
     static final int REFRESH_NAA_INIT                       = 0x03;
     static final int REFRESH_UICC_RESET                     = 0x04;
 
-    // Command Qualifier values for PLI command
-    static final int DTTZ_SETTING                           = 0x03;
-    static final int LANGUAGE_SETTING                       = 0x04;
-
-    static synchronized CommandParamsFactory getInstance(RilMessageDecoder caller,
-            IccFileHandler fh) {
+    // zhanglj delete begin 2011-05-25 for cancel single instance
+/*    static synchronized CommandParamsFactory getInstance(RilMessageDecoder caller,
+            SIMFileHandler fh) {
         if (sInstance != null) {
             return sInstance;
         }
@@ -65,11 +68,13 @@ class CommandParamsFactory extends Handler {
             return new CommandParamsFactory(caller, fh);
         }
         return null;
-    }
+    }*/
+    // zhanglj delete end
 
-    private CommandParamsFactory(RilMessageDecoder caller, IccFileHandler fh) {
+    public CommandParamsFactory(RilMessageDecoder caller, IccFileHandler fh, int phoneId) {
         mCaller = caller;
-        mIconLoader = IconLoader.getInstance(this, fh);
+        mIconLoader = IconLoaderProxy.getInstance(this, fh, phoneId);
+        mPhoneId = phoneId;
     }
 
     private CommandDetails processCommandDetails(List<ComprehensionTlv> ctlvs) {
@@ -83,8 +88,7 @@ class CommandParamsFactory extends Handler {
                 try {
                     cmdDet = ValueParser.retrieveCommandDetails(ctlvCmdDet);
                 } catch (ResultException e) {
-                    CatLog.d(this,
-                            "processCommandDetails: Failed to procees command details e=" + e);
+                    CatLog.d(this, "Failed to procees command details");
                 }
             }
         }
@@ -93,6 +97,8 @@ class CommandParamsFactory extends Handler {
 
     void make(BerTlv berTlv) {
         if (berTlv == null) {
+            CatLog.d(this, "make() berTlv is null!!!!!!");
+            sendCmdParams(ResultCode.CMD_TYPE_NOT_UNDERSTOOD);
             return;
         }
         // reset global state parameters.
@@ -117,8 +123,7 @@ class CommandParamsFactory extends Handler {
         AppInterface.CommandType cmdType = AppInterface.CommandType
                 .fromInt(cmdDet.typeOfCommand);
         if (cmdType == null) {
-            // This PROACTIVE COMMAND is presently not handled. Hence set
-            // result code as BEYOND_TERMINAL_CAPABILITY in TR.
+            // send a terminal response to modem
             mCmdParams = new CommandParams(cmdDet);
             sendCmdParams(ResultCode.BEYOND_TERMINAL_CAPABILITY);
             return;
@@ -145,10 +150,22 @@ class CommandParamsFactory extends Handler {
                  cmdPending = processGetInput(cmdDet, ctlvs);
                  break;
              case SEND_DTMF:
-             case SEND_SMS:
+                 //Deal With DTMF Message Start
+                 cmdPending = processDtmfNotify(cmdDet, ctlvs);
+                 break;
+                 //Deal With DTMF Message End
+             
              case SEND_SS:
-             case SEND_USSD:
+                 //Icon Display Add Start
+                 cmdPending = processSendSsNotify(cmdDet, ctlvs);
+                 break;
+                 //Icon Display Add End
+
+             case SEND_SMS:
                  cmdPending = processEventNotify(cmdDet, ctlvs);
+                 break;
+             case SEND_USSD:
+                 cmdPending = processEventNotifyUssd(cmdDet, ctlvs);
                  break;
              case SET_UP_CALL:
                  cmdPending = processSetupCall(cmdDet, ctlvs);
@@ -163,23 +180,40 @@ class CommandParamsFactory extends Handler {
              case PLAY_TONE:
                 cmdPending = processPlayTone(cmdDet, ctlvs);
                 break;
-             case PROVIDE_LOCAL_INFORMATION:
-                cmdPending = processProvideLocalInfo(cmdDet, ctlvs);
+             case SET_UP_EVENT_LIST:
+                processSetUpEventList(cmdDet, ctlvs);
                 break;
+	     case PROVIDE_LOCAL_INFORMATION:
+                cmdPending = false;
+                mCmdParams = new CommandParams(cmdDet);
+                break;
+            //Language Setting Add Start
+             case LANGUAGE_NOTIFACTION:
+                processLanguageNotify(cmdDet, ctlvs);
+                break;
+            //Language Setting Add End
              case OPEN_CHANNEL:
-             case CLOSE_CHANNEL:
-             case RECEIVE_DATA:
-             case SEND_DATA:
-                 cmdPending = processBIPClient(cmdDet, ctlvs);
+                 cmdPending = processOpenChannel(cmdDet, ctlvs);
                  break;
-            default:
+             case CLOSE_CHANNEL:
+                 cmdPending = processCloseChannel(cmdDet, ctlvs);
+                 break;
+             case RECEIVE_DATA:
+                 cmdPending = processReceiveData(cmdDet, ctlvs);
+                 break;
+             case SEND_DATA:
+                 cmdPending = processSendData(cmdDet, ctlvs);
+                 break;
+             case GET_CHANNEL_STATUS:
+                 processGetChannelStatus(cmdDet, ctlvs);
+                 break;
+             default:
                 // unsupported proactive commands
                 mCmdParams = new CommandParams(cmdDet);
                 sendCmdParams(ResultCode.BEYOND_TERMINAL_CAPABILITY);
                 return;
             }
         } catch (ResultException e) {
-            CatLog.d(this, "make: caught ResultException e=" + e);
             mCmdParams = new CommandParams(cmdDet);
             sendCmdParams(e.result());
             return;
@@ -263,6 +297,20 @@ class CommandParamsFactory extends Handler {
         return null;
     }
 
+    private ComprehensionTlv searchForLastTag(ComprehensionTlvTag tag,
+            List<ComprehensionTlv> ctlvs) {
+        Iterator<ComprehensionTlv> iter = ctlvs.iterator();
+        int tagValue = tag.value();
+        ComprehensionTlv lastctlv = null;
+        while (iter.hasNext()) {
+            ComprehensionTlv ctlv = iter.next();
+            if (ctlv.getTag() == tagValue) {
+                lastctlv = ctlv;
+            }
+        }
+        return lastctlv;
+    }
+
     /**
      * Processes DISPLAY_TEXT proactive command from the SIM card.
      *
@@ -286,6 +334,7 @@ class CommandParamsFactory extends Handler {
                 ctlvs);
         if (ctlv != null) {
             textMsg.text = ValueParser.retrieveTextString(ctlv);
+            CatLog.d(this, "text = " + textMsg.text);
         }
         // If the tlv object doesn't exist or the it is a null object reply
         // with command not understood.
@@ -396,6 +445,9 @@ class CommandParamsFactory extends Handler {
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
         if (ctlv != null) {
             iconId = ValueParser.retrieveIconId(ctlv);
+            if(iconId.selfExplanatory) {
+                input.text = "";
+            }
         }
 
         // parse duration
@@ -472,6 +524,9 @@ class CommandParamsFactory extends Handler {
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
         if (ctlv != null) {
             iconId = ValueParser.retrieveIconId(ctlv);
+            if(iconId.selfExplanatory) {
+                input.text = "";
+            }
         }
 
         input.digitOnly = (cmdDet.commandQualifier & 0x01) == 0;
@@ -479,6 +534,17 @@ class CommandParamsFactory extends Handler {
         input.echo = (cmdDet.commandQualifier & 0x04) == 0;
         input.packed = (cmdDet.commandQualifier & 0x08) != 0;
         input.helpAvailable = (cmdDet.commandQualifier & 0x80) != 0;
+
+        if (input.ucs2 == true) {
+            // the max text length should be less than 120 usc2 characters as the whole terminal
+            // response data length is less than 255 and the header may has 15 bytes.
+            if (input.minLen > 120) {
+                input.minLen = 120;
+            }
+            if (input.maxLen > 120) {
+                input.maxLen = 120;
+            }
+        }
 
         mCmdParams = new GetInputParams(cmdDet, input);
 
@@ -501,17 +567,26 @@ class CommandParamsFactory extends Handler {
     private boolean processRefresh(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) {
 
-        CatLog.d(this, "process Refresh");
+        CatLog.d(this, "processRefresh command = " + cmdDet.commandQualifier);
+        TextMessage textMsg = new TextMessage();
+        Resources r = Resources.getSystem();
 
-        // REFRESH proactive command is rerouted by the baseband and handled by
-        // the telephony layer. IDLE TEXT should be removed for a REFRESH command
-        // with "initialization" or "reset"
         switch (cmdDet.commandQualifier) {
         case REFRESH_NAA_INIT_AND_FULL_FILE_CHANGE:
+        case REFRESH_FILE_CHANGE:
         case REFRESH_NAA_INIT_AND_FILE_CHANGE:
         case REFRESH_NAA_INIT:
         case REFRESH_UICC_RESET:
-            mCmdParams = new DisplayTextParams(cmdDet, null);
+            textMsg.text = r.getString(R.string.stk_refresh_sim_init_message);
+            mCmdParams = new DisplayTextParams(cmdDet, textMsg);
+            break;
+        // Use RIL_UNSOL_SIM_REFRESH instead
+//        case REFRESH_UICC_RESET:
+//            textMsg.text = r.getString(R.string.stk_refresh_sim_reset_message);
+//            mCmdParams = new DisplayTextParams(cmdDet, textMsg);
+//            break;
+        default:
+            CatLog.d(this, "processRefresh: wrong commandQualifier");
             break;
         }
         return false;
@@ -536,6 +611,7 @@ class CommandParamsFactory extends Handler {
         IconId titleIconId = null;
         ItemsIconId itemsIconId = null;
         Iterator<ComprehensionTlv> iter = ctlvs.iterator();
+        byte[] nextActionData = null;
 
         ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID,
                 ctlvs);
@@ -543,10 +619,27 @@ class CommandParamsFactory extends Handler {
             menu.title = ValueParser.retrieveAlphaId(ctlv);
         }
 
+        ctlv = searchForTag(ComprehensionTlvTag.NEXT_ACTION_INDICATOR, ctlvs);
+        if (ctlv != null) {
+            CatLog.d(this, "SelectItem found NEXT_ACTION_INDICATOR");
+            nextActionData = ValueParser.retrieveByteArray(ctlv, 0);
+            if (nextActionData != null) {
+                CatLog.d(this, "SelectItem NEXT_ACTION = "
+                         + IccUtils.bytesToHexString(nextActionData));
+            }
+        }
+
+        int i = 0;
         while (true) {
             ctlv = searchForNextTag(ComprehensionTlvTag.ITEM, iter);
             if (ctlv != null) {
-                menu.items.add(ValueParser.retrieveItem(ctlv));
+                String naiString = null;
+                if (nextActionData != null && i < nextActionData.length) {
+                    AppInterface.NextActionInd naiId = AppInterface.NextActionInd.fromInt(nextActionData[i]);
+                    naiString = AppInterface.NextActionInd.NaiToString(naiId);
+                }
+                menu.items.add(ValueParser.retrieveItem(ctlv, naiString));
+                i ++;
             } else {
                 break;
             }
@@ -615,6 +708,66 @@ class CommandParamsFactory extends Handler {
         return true;
     }
 
+    //Language Setting Add Start
+    private boolean processLanguageNotify(CommandDetails cmdDet,
+            List<ComprehensionTlv> ctlvs) throws ResultException {
+
+        CatLog.d(this, "processLanguageNotify start");
+        System.out.println("wangsl processLanguageNotify start");
+        String language = null;
+
+        ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.LANGUAGE,
+                ctlvs);
+        if (ctlv != null) {
+             language = ValueParser.retrieveLanguage(ctlv);
+        } else {
+            CatLog.d(this, "processLanguageNotify language is null");
+            //throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+            //CR119858 Modify Start
+            //language = StkLanguageDecoder.getInstance().getDefaultLanguage();
+            //CR119858 Modify End
+		}
+
+        mCmdParams = new LanguageParams(cmdDet, language);
+
+        return false;
+    }
+    //language
+
+
+    //Icon Display Add Start
+    private boolean processSendSsNotify(CommandDetails cmdDet,
+            List<ComprehensionTlv> ctlvs) throws ResultException {
+
+        CatLog.d(this, "processSendSsNotify start");
+
+        TextMessage textMsg = new TextMessage();
+        IconId iconId = null;
+
+        ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID,
+                ctlvs);
+        if (ctlv != null) {
+            textMsg.text = ValueParser.retrieveAlphaId(ctlv);
+        } 
+
+        ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
+        if (ctlv != null) {
+            iconId = ValueParser.retrieveIconId(ctlv);
+            textMsg.iconSelfExplanatory = iconId.selfExplanatory;
+        }
+
+        textMsg.responseNeeded = false;
+        mCmdParams = new DisplayTextParams(cmdDet, textMsg);
+
+        if (iconId != null) {
+            mIconLoadState = LOAD_SINGLE_ICON;
+            mIconLoader.loadIcon(iconId.recordNumber, this
+                    .obtainMessage(MSG_ID_LOAD_ICON_DONE));
+            return true;
+        }
+        return false;
+    }
+    //Icon Display Add End
     /**
      * Processes EVENT_NOTIFY message from baseband.
      *
@@ -634,7 +787,13 @@ class CommandParamsFactory extends Handler {
 
         ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID,
                 ctlvs);
-        textMsg.text = ValueParser.retrieveAlphaId(ctlv);
+        if (ctlv != null) {
+            textMsg.text = ValueParser.retrieveAlphaId(ctlv);
+        } else {
+            throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+            //textMsg.text = Resources.getSystem().getString(R.string.sms_control_title);
+            //CatLog.d(this, "alpha id null, use default="+textMsg.text);
+        }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
         if (ctlv != null) {
@@ -654,6 +813,85 @@ class CommandParamsFactory extends Handler {
         return false;
     }
 
+    private boolean processEventNotifyUssd(CommandDetails cmdDet,
+            List<ComprehensionTlv> ctlvs) throws ResultException {
+
+        CatLog.d(this, "process EventNotify");
+
+        TextMessage textMsg = new TextMessage();
+        IconId iconId = null;
+
+        ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID,
+                ctlvs);
+        if (ctlv != null) {
+            textMsg.text = ValueParser.retrieveAlphaId(ctlv);
+        } else {
+            //throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+            CatLog.d(this, "EventNotify no alpha id, make the default string");
+            textMsg.text = "Send ussd";
+        }
+
+        ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
+        if (ctlv != null) {
+            iconId = ValueParser.retrieveIconId(ctlv);
+            textMsg.iconSelfExplanatory = iconId.selfExplanatory;
+        }
+
+        textMsg.responseNeeded = false;
+        mCmdParams = new DisplayTextParams(cmdDet, textMsg);
+
+        if (iconId != null) {
+            mIconLoadState = LOAD_SINGLE_ICON;
+            mIconLoader.loadIcon(iconId.recordNumber, this
+                    .obtainMessage(MSG_ID_LOAD_ICON_DONE));
+            return true;
+        }
+        return false;
+    }
+
+    //Deal With DTMF Message Start
+    private boolean processDtmfNotify(CommandDetails cmdDet,
+            List<ComprehensionTlv> ctlvs) throws ResultException {
+
+        System.out.println("wangsl processDtmfNotify start");
+        String dtmfString = null;
+        TextMessage textMsg = new TextMessage();
+        IconId iconId = null;
+
+        ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.DTMF,
+                ctlvs);
+        if (ctlv != null) {
+            dtmfString = ValueParser.retrieveDTMF(ctlv);
+            System.out.println("wangsl dtmfString is:" + dtmfString);
+        } else {
+            System.out.println("wangsl retrieve dtmf error");
+            throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+        }
+
+        ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID,
+                ctlvs);
+        if (ctlv != null) {
+            textMsg.text = ValueParser.retrieveAlphaId(ctlv);
+        }
+
+        ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
+        if (ctlv != null) {
+            iconId = ValueParser.retrieveIconId(ctlv);
+            textMsg.iconSelfExplanatory = iconId.selfExplanatory;
+        }
+
+        textMsg.responseNeeded = false;
+        mCmdParams = new DtmfParams(cmdDet, textMsg,dtmfString);
+
+        if (iconId != null) {
+            mIconLoadState = LOAD_SINGLE_ICON;
+            mIconLoader.loadIcon(iconId.recordNumber, this
+                    .obtainMessage(MSG_ID_LOAD_ICON_DONE));
+            return true;
+        }
+        return false;
+    }
+    //Deal With DTMF Message End
     /**
      * Processes SET_UP_EVENT_LIST proactive command from the SIM card.
      *
@@ -666,18 +904,32 @@ class CommandParamsFactory extends Handler {
     private boolean processSetUpEventList(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) {
 
-        CatLog.d(this, "process SetUpEventList");
-        //
-        // ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.EVENT_LIST,
-        // ctlvs);
-        // if (ctlv != null) {
-        // try {
-        // byte[] rawValue = ctlv.getRawValue();
-        // int valueIndex = ctlv.getValueIndex();
-        // int valueLen = ctlv.getLength();
-        //
-        // } catch (IndexOutOfBoundsException e) {}
-        // }
+        CatLog.d(this, "processSetUpEventList");
+        AppInterface.EventListType[] eventList = null;
+
+         ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.EVENT_LIST, ctlvs);
+         if (ctlv != null) {
+             try {
+                 byte[] rawValue = ctlv.getRawValue();
+                 int valueIndex = ctlv.getValueIndex();
+                 int valueLen = ctlv.getLength();
+                 CatLog.d(this, "processSetUpEventList valueLen = " + valueLen);
+                 if (valueLen > 0) {
+                     eventList = new AppInterface.EventListType[valueLen];
+                     for (int i = 0;i < valueLen;i ++) {
+                         eventList[i] = AppInterface.EventListType.fromInt(rawValue[valueIndex+i] & 0xff);
+                         CatLog.d(this, "processSetUpEventList:eventtype = " + eventList[i]);
+                     }
+                 } else {
+                     CatLog.d(this, "processSetUpEventList empty list");
+                 }
+             } catch (IndexOutOfBoundsException e) {
+                 CatLog.d(this, "ProcessSetUpEventList exception = " + e);
+             }
+         } else {
+             CatLog.d(this, "processSetUpEventList:get ctlv Failed");
+         }
+         mCmdParams = new EventListParams(cmdDet, eventList);
         return true;
     }
 
@@ -691,7 +943,7 @@ class CommandParamsFactory extends Handler {
      *         asynchronous processing is required.
      * @throws ResultException
      */
-    private boolean processLaunchBrowser(CommandDetails cmdDet,
+     private boolean processLaunchBrowser(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
         CatLog.d(this, "process LaunchBrowser");
@@ -719,8 +971,9 @@ class CommandParamsFactory extends Handler {
 
         // parse alpha identifier.
         ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID, ctlvs);
-        confirmMsg.text = ValueParser.retrieveAlphaId(ctlv);
-
+        if (ctlv != null) {
+            confirmMsg.text = ValueParser.retrieveAlphaId(ctlv);
+        }
         // parse icon identifier
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
         if (ctlv != null) {
@@ -764,7 +1017,7 @@ class CommandParamsFactory extends Handler {
      *         asynchronous processing is required.t
      * @throws ResultException
      */
-    private boolean processPlayTone(CommandDetails cmdDet,
+     private boolean processPlayTone(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
         CatLog.d(this, "process PlayTone");
@@ -830,7 +1083,7 @@ class CommandParamsFactory extends Handler {
      * @return true if the command is processing is pending and additional
      *         asynchronous processing is required.
      */
-    private boolean processSetupCall(CommandDetails cmdDet,
+     private boolean processSetupCall(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
         CatLog.d(this, "process SetupCall");
 
@@ -840,12 +1093,17 @@ class CommandParamsFactory extends Handler {
         TextMessage confirmMsg = new TextMessage();
         // Call set up phase message.
         TextMessage callMsg = new TextMessage();
+        // Call address message.
+        TextMessage callAddress = new TextMessage();
         IconId confirmIconId = null;
         IconId callIconId = null;
 
         // get confirmation message string.
         ctlv = searchForNextTag(ComprehensionTlvTag.ALPHA_ID, iter);
-        confirmMsg.text = ValueParser.retrieveAlphaId(ctlv);
+        if (ctlv != null) {
+            confirmMsg.text = ValueParser.retrieveAlphaId(ctlv);
+            CatLog.d(this, "process SetupCall confirmMsg =" + confirmMsg.text);
+        }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
         if (ctlv != null) {
@@ -857,6 +1115,7 @@ class CommandParamsFactory extends Handler {
         ctlv = searchForNextTag(ComprehensionTlvTag.ALPHA_ID, iter);
         if (ctlv != null) {
             callMsg.text = ValueParser.retrieveAlphaId(ctlv);
+            CatLog.d(this, "process SetupCall callMsg =" + callMsg.text);
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
@@ -865,7 +1124,24 @@ class CommandParamsFactory extends Handler {
             callMsg.iconSelfExplanatory = callIconId.selfExplanatory;
         }
 
-        mCmdParams = new CallSetupParams(cmdDet, confirmMsg, callMsg);
+        // get call set up address.
+        ctlv = searchForTag(ComprehensionTlvTag.ADDRESS, ctlvs);
+        if (ctlv != null) {
+            byte[] rawValue = ctlv.getRawValue();
+            int valueIndex = ctlv.getValueIndex();
+            int length = ctlv.getLength();
+            CatLog.d(this, "process SetupCall call valueIndex="+valueIndex+" length="+length);
+            if ( length > 0) {
+                callAddress.text = PhoneNumberUtils.calledPartyBCDToString(rawValue, valueIndex, length);
+                CatLog.d(this, "process SetupCall call address ="+callAddress.text);
+            } else {
+                CatLog.d(this, "process SetupCall call address is NULL");
+            }
+        } else {
+            CatLog.d(this, "process SetupCall call ctlv not found");
+        }
+
+        mCmdParams = new CallSetupParams(cmdDet, confirmMsg, callMsg, callAddress);
 
         if (confirmIconId != null || callIconId != null) {
             mIconLoadState = LOAD_MULTI_ICONS;
@@ -882,62 +1158,356 @@ class CommandParamsFactory extends Handler {
         return false;
     }
 
-    private boolean processProvideLocalInfo(CommandDetails cmdDet, List<ComprehensionTlv> ctlvs)
-            throws ResultException {
-        CatLog.d(this, "process ProvideLocalInfo");
-        switch (cmdDet.commandQualifier) {
-            case DTTZ_SETTING:
-                CatLog.d(this, "PLI [DTTZ_SETTING]");
-                mCmdParams = new CommandParams(cmdDet);
-                break;
-            case LANGUAGE_SETTING:
-                CatLog.d(this, "PLI [LANGUAGE_SETTING]");
-                mCmdParams = new CommandParams(cmdDet);
-                break;
-            default:
-                CatLog.d(this, "PLI[" + cmdDet.commandQualifier + "] Command Not Supported");
-                mCmdParams = new CommandParams(cmdDet);
-                throw new ResultException(ResultCode.BEYOND_TERMINAL_CAPABILITY);
+     /**
+      * Processes OPEN_CHANNEL proactive command from the SIM card.
+      *
+      * @param cmdDet Command Details object retrieved from the proactive command
+      *        object
+      * @param ctlvs List of ComprehensionTlv objects following Command Details
+      *        object and Device Identities object within the proactive command
+      * @return true if the command is processing is pending and additional
+      *         asynchronous processing is required.
+      */
+     private boolean processOpenChannel(CommandDetails cmdDet,
+             List<ComprehensionTlv> ctlvs) throws ResultException {
+         CatLog.d(this, "process OpenChannel");
+
+         Iterator<ComprehensionTlv> iter = ctlvs.iterator();
+         IconId iconId = null;
+         OpenChannelData openchanneldata = new OpenChannelData();
+         // Alpha identifier
+         ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID, ctlvs);
+         if (ctlv != null) {
+             openchanneldata.text = ValueParser.retrieveAlphaId(ctlv);
+             if (openchanneldata.text != null) {
+                 openchanneldata.isNullAlphaId = false;
+                 CatLog.d(this, "OpenChannel Alpha identifier done");
+             } else {
+                 openchanneldata.isNullAlphaId = true;
+                 CatLog.d(this, "OpenChannel null Alpha id");
+             }
+         }
+         // Icon identifier
+         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
+         if (ctlv != null) {
+             iconId = ValueParser.retrieveIconId(ctlv);
+             openchanneldata.iconSelfExplanatory = iconId.selfExplanatory;
+             CatLog.d(this, "OpenChannel Icon identifier done");
+         }
+         // Bearer description
+         ctlv = searchForTag(ComprehensionTlvTag.BEARER_DESCRIPTION, ctlvs);
+         if (ctlv != null) {
+             try {
+                 byte[] rawValue = ctlv.getRawValue();
+                 int valueIndex = ctlv.getValueIndex();
+                 openchanneldata.BearerType = rawValue[valueIndex];
+                 int length = ctlv.getLength();
+                 if (length > 1) {
+                     openchanneldata.BearerParam = IccUtils.bytesToHexString(ValueParser.retrieveByteArray(ctlv, 1));
+                     CatLog.d(this, "OpenChannel Bearer description done");
+                 }
+             } catch (IndexOutOfBoundsException e) {
+                 CatLog.d(this, "OpenChannel BEARER_DESCRIPTION IndexOutOfBoundsException");
+                 throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
+             }
+         } else {
+             CatLog.d(this, "OpenChannel BEARER_DESCRIPTION ctlv is null");
+             throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+         }
+         // Buffer size
+         ctlv = searchForTag(ComprehensionTlvTag.BUFFER_SIZE, ctlvs);
+         if (ctlv != null) {
+             try {
+                 byte[] rawValue = ctlv.getRawValue();
+                 int valueIndex = ctlv.getValueIndex();
+                 openchanneldata.bufferSize = ((rawValue[valueIndex] & 0xff) << 8) |
+                                                rawValue[valueIndex + 1] & 0xff;
+                 CatLog.d(this, "OpenChannel Buffer size done");
+             } catch (IndexOutOfBoundsException e) {
+                 CatLog.d(this, "OpenChannel BUFFER_SIZE IndexOutOfBoundsException");
+                 throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
+             }
+         } else {
+             CatLog.d(this, "OpenChannel BUFFER_SIZE ctlv is null");
+             throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+         }
+         // Network Access Name
+         ctlv = searchForTag(ComprehensionTlvTag.NETWORK_ACCESS_NAME, ctlvs);
+         if (ctlv != null) {
+                 //openchanneldata.NetAccessName = IccUtils.bytesToHexString(ValueParser.retrieveByteArray(ctlv, 0));
+                 byte[] raw = ValueParser.retrieveByteArray(ctlv, 0);
+                 openchanneldata.NetAccessName = convNetworkAccessName(raw);
+                 CatLog.d(this, "OpenChannel Network Access Name done");
+         }
+         // Other address (local address)
+         ctlv = searchForTag(ComprehensionTlvTag.OTHER_ADDRESS, ctlvs);
+         if (ctlv != null) {
+             try {
+                 byte[] rawValue = ctlv.getRawValue();
+                 int valueIndex = ctlv.getValueIndex();
+                 int length = ctlv.getLength();
+                 if (length > 1) {
+                     openchanneldata.OtherAddressType = rawValue[valueIndex];
+                     byte [] address = ValueParser.retrieveByteArray(ctlv, 1);
+                     if (openchanneldata.OtherAddressType == OpenChannelData.ADDRESS_TYPE_IPV4 && address.length == 4) {
+                         openchanneldata.OtherAddress = convIpv4Address(address);
+                         CatLog.d(this, "OpenChannel local address done");
+                     } else {
+                         CatLog.d(this, "OpenChannel local Address is not ipv4 format");
+                         openchanneldata.OtherAddress = "";
+                         openchanneldata.OtherAddressType = 0;
+                     }
+                 } else {
+                     CatLog.d(this, "OpenChannel local address tag length error");
+                 }
+             } catch (IndexOutOfBoundsException e) {
+                 CatLog.d(this, "OpenChannel OtherAddress IndexOutOfBoundsException");
+             }
+         }
+         // Text String (User login)
+         ctlv = searchForNextTag(ComprehensionTlvTag.TEXT_STRING, iter);
+         if (ctlv != null) {
+             openchanneldata.LoginStr = ValueParser.retrieveTextString(ctlv);
+             CatLog.d(this, "OpenChannel User login done");
+         }
+         // Text String (User password)
+         ctlv = searchForNextTag(ComprehensionTlvTag.TEXT_STRING, iter);
+         if (ctlv != null) {
+             openchanneldata.PwdStr = ValueParser.retrieveTextString(ctlv);
+             CatLog.d(this, "OpenChannel User password done");
+         }
+         // SIM ME interface transport level
+         ctlv = searchForTag(ComprehensionTlvTag.TRANSPORT_LEVEL, ctlvs);
+         if (ctlv != null) {
+             try {
+                 byte[] rawValue = ctlv.getRawValue();
+                 int valueIndex = ctlv.getValueIndex();
+                 openchanneldata.transportType = rawValue[valueIndex];
+                 openchanneldata.portNumber = ((rawValue[valueIndex+1] & 0xff) << 8) |
+                                                rawValue[valueIndex + 2] & 0xff;
+                 CatLog.d(this, "OpenChannel transport level done");
+             } catch (IndexOutOfBoundsException e) {
+                 CatLog.d(this, "OpenChannel TRANSPORT_LEVEL IndexOutOfBoundsException");
+             }
+         }
+         // Data destination address
+         ctlv = searchForLastTag(ComprehensionTlvTag.OTHER_ADDRESS, ctlvs);
+         if (ctlv != null) {
+             try {
+                 byte[] rawValue = ctlv.getRawValue();
+                 int valueIndex = ctlv.getValueIndex();
+                 int length = ctlv.getLength();
+                 if (length > 1) {
+                     openchanneldata.DataDstAddressType = rawValue[valueIndex];
+                     byte [] address = ValueParser.retrieveByteArray(ctlv, 1);
+                     if (openchanneldata.DataDstAddressType == OpenChannelData.ADDRESS_TYPE_IPV4 && address.length == 4) {
+                         openchanneldata.DataDstAddress = convIpv4Address(address);
+                         CatLog.d(this, "OpenChannel Data destination address done");
+                     } else {
+                         CatLog.d(this, "OpenChannel Data destination address is not ipv4 format");
+                         openchanneldata.DataDstAddress = "";
+                         openchanneldata.DataDstAddressType = 0;
+                     }
+                 } else {
+                     CatLog.d(this, "OpenChannel Data destination address tag length error");
+                 }
+             } catch (IndexOutOfBoundsException e) {
+                 CatLog.d(this, "OpenChannel DataDstAddress IndexOutOfBoundsException");
+             }
+         }
+
+         mCmdParams = new OpenChannelDataParams(cmdDet, openchanneldata);
+         if (iconId != null) {
+             mIconLoadState = LOAD_SINGLE_ICON;
+             mIconLoader.loadIcon(iconId.recordNumber, this
+                     .obtainMessage(MSG_ID_LOAD_ICON_DONE));
+             return true;
+         }
+         CatLog.d(this, "Alpha id: " + openchanneldata.text +
+                        ", NetAccessName: " + openchanneldata.NetAccessName +
+                        ", bufferSize: " + openchanneldata.bufferSize +
+                        ", BearerType: " + openchanneldata.BearerType + "\n" +
+                        ", BearerParam: " + openchanneldata.BearerParam +
+                        ", LocalAddressType: " + openchanneldata.OtherAddressType +
+                        ", LocalAddress: " + openchanneldata.OtherAddress +
+                        ", LoginStr: " + openchanneldata.LoginStr + "\n" +
+                        ", PwdStr: " + openchanneldata.PwdStr +
+                        ", transportType: " + openchanneldata.transportType +
+                        ", portNumber: " + openchanneldata.portNumber +
+                        ", DataDstAddressType: " + openchanneldata.DataDstAddressType + "\n" +
+                        ", DataDstAddress: " + openchanneldata.DataDstAddress);
+         return false;
+     }
+
+    private String convIpv4Address(byte[] address) {
+        StringBuffer sb = new StringBuffer("");
+        for(int i = 0; i < 3; i ++) {
+            sb.append(String.valueOf(address[i] & 0xff));
+            sb.append(".");
         }
-        return false;
+        sb.append(String.valueOf(address[3] & 0xff));
+        return sb.toString();
     }
 
-    private boolean processBIPClient(CommandDetails cmdDet,
-                                     List<ComprehensionTlv> ctlvs) throws ResultException {
-        AppInterface.CommandType commandType =
-                                    AppInterface.CommandType.fromInt(cmdDet.typeOfCommand);
-        if (commandType != null) {
-            CatLog.d(this, "process "+ commandType.name());
+    private String convNetworkAccessName(byte[] apn) {
+        if (apn == null)
+            return null;
+
+        int len = apn.length;
+        int temp_len = 0;
+        int index = 0;
+        StringBuilder ret = new StringBuilder(2 * len);
+
+        while (len > 1) {
+            temp_len = apn[index++];
+            if (temp_len < len) {
+                for (int i = 0; i < temp_len; i++) {
+                    ret.append((char) apn[index]);
+                    index++;
+                }
+                len = len - (temp_len + 1);
+                if (len > 1) {
+                    ret.append('.');
+                } else {
+                    break;
+                }
+            } else {
+                for (int i = 0; i < len - 1; i++) {
+                    ret.append((char) apn[index]);
+                    index++;
+                }
+                break;
+            }
         }
 
-        TextMessage textMsg = new TextMessage();
-        IconId iconId = null;
-        ComprehensionTlv ctlv = null;
-        boolean has_alpha_id = false;
-
-        // parse alpha identifier
-        ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID, ctlvs);
-        if (ctlv != null) {
-            textMsg.text = ValueParser.retrieveAlphaId(ctlv);
-            CatLog.d(this, "alpha TLV text=" + textMsg.text);
-            has_alpha_id = true;
-        }
-
-        // parse icon identifier
-        ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
-        if (ctlv != null) {
-            iconId = ValueParser.retrieveIconId(ctlv);
-            textMsg.iconSelfExplanatory = iconId.selfExplanatory;
-        }
-
-        textMsg.responseNeeded = false;
-        mCmdParams = new BIPClientParams(cmdDet, textMsg, has_alpha_id);
-
-        if (iconId != null) {
-            mIconLoadState = LOAD_SINGLE_ICON;
-            mIconLoader.loadIcon(iconId.recordNumber, this.obtainMessage(MSG_ID_LOAD_ICON_DONE));
-            return true;
-        }
-        return false;
+        return ret.toString();
     }
+
+     private boolean processCloseChannel(CommandDetails cmdDet,
+             List<ComprehensionTlv> ctlvs) throws ResultException {
+         CatLog.d(this, "process CloseChannel");
+         DeviceIdentities deviceIdentities = null;
+         IconId iconId = null;
+         CloseChannelData closechanneldata = new CloseChannelData();
+         //Device identities
+         ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.DEVICE_IDENTITIES, ctlvs);
+         if (ctlv != null) {
+             deviceIdentities = ValueParser.retrieveDeviceIdentities(ctlv);
+         }
+         // Alpha identifier
+         ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID, ctlvs);
+         if (ctlv != null) {
+             closechanneldata.text = ValueParser.retrieveAlphaId(ctlv);
+         }
+         // Icon identifier
+         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
+         if (ctlv != null) {
+             iconId = ValueParser.retrieveIconId(ctlv);
+             closechanneldata.iconSelfExplanatory = iconId.selfExplanatory;
+         }
+
+         mCmdParams = new CloseChannelDataParams(cmdDet, closechanneldata, deviceIdentities);
+         if (iconId != null) {
+             mIconLoadState = LOAD_SINGLE_ICON;
+             mIconLoader.loadIcon(iconId.recordNumber, this
+                     .obtainMessage(MSG_ID_LOAD_ICON_DONE));
+             return true;
+         }
+         return false;
+     }
+
+     private boolean processReceiveData(CommandDetails cmdDet,
+             List<ComprehensionTlv> ctlvs) throws ResultException {
+         CatLog.d(this, "process ReceiveData");
+
+         IconId iconId = null;
+         ReceiveChannelData receivedata = new ReceiveChannelData();
+         // Alpha identifier
+         ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID, ctlvs);
+         if (ctlv != null) {
+             receivedata.text = ValueParser.retrieveAlphaId(ctlv);
+         }
+         // Icon identifier
+         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
+         if (ctlv != null) {
+             iconId = ValueParser.retrieveIconId(ctlv);
+             receivedata.iconSelfExplanatory = iconId.selfExplanatory;
+         }
+         // Channel data length
+         ctlv = searchForTag(ComprehensionTlvTag.CHANNEL_DATA_LENGTH, ctlvs);
+         if (ctlv != null) {
+             try {
+                 byte[] rawValue = ctlv.getRawValue();
+                 int valueIndex = ctlv.getValueIndex();
+                 receivedata.channelDataLength = rawValue[valueIndex] & 0xff;
+             } catch (IndexOutOfBoundsException e) {
+                 CatLog.d(this, "ReceiveData CHANNEL_DATA_LENGTH IndexOutOfBoundsException");
+                 throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
+             }
+         } else {
+             CatLog.d(this, "ReceiveData CHANNEL_DATA_LENGTH ctlv is null");
+             throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+         }
+
+         mCmdParams = new ReceiveChannelDataParams(cmdDet, receivedata);
+         if (iconId != null) {
+             mIconLoadState = LOAD_SINGLE_ICON;
+             mIconLoader.loadIcon(iconId.recordNumber, this
+                     .obtainMessage(MSG_ID_LOAD_ICON_DONE));
+             return true;
+         }
+         return false;
+     }
+
+     private boolean processSendData(CommandDetails cmdDet,
+             List<ComprehensionTlv> ctlvs) throws ResultException {
+         CatLog.d(this, "process SendData");
+
+         IconId iconId = null;
+         DeviceIdentities deviceIdentities = null;
+         SendChannelData senddata = new SendChannelData();
+         //Device identities
+         ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.DEVICE_IDENTITIES, ctlvs);
+         if (ctlv != null) {
+             deviceIdentities = ValueParser.retrieveDeviceIdentities(ctlv);
+         }
+         // Alpha identifier
+         ctlv = searchForTag(ComprehensionTlvTag.ALPHA_ID, ctlvs);
+         if (ctlv != null) {
+             senddata.text = ValueParser.retrieveAlphaId(ctlv);
+         }
+         // Icon identifier
+         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
+         if (ctlv != null) {
+             iconId = ValueParser.retrieveIconId(ctlv);
+             senddata.iconSelfExplanatory = iconId.selfExplanatory;
+         }
+         // Channel data
+         ctlv = searchForTag(ComprehensionTlvTag.CHANNEL_DATA, ctlvs);
+         if (ctlv != null) {
+             senddata.sendDataStr = IccUtils.bytesToHexString(ValueParser.retrieveByteArray(ctlv, 0));
+         } else {
+             CatLog.d(this, "SendData CHANNEL_DATA ctlv is null");
+             throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+         }
+         CatLog.d(this, "Alpha id: " + senddata.text + " senddata: " + senddata.sendDataStr);
+
+         mCmdParams = new SendChannelDataParams(cmdDet, senddata, deviceIdentities);
+         if (iconId != null) {
+             mIconLoadState = LOAD_SINGLE_ICON;
+             mIconLoader.loadIcon(iconId.recordNumber, this
+                     .obtainMessage(MSG_ID_LOAD_ICON_DONE));
+             return true;
+         }
+         return false;
+     }
+
+     private void processGetChannelStatus(CommandDetails cmdDet,
+             List<ComprehensionTlv> ctlvs) throws ResultException {
+         CatLog.d(this, "process GetChannelStatus");
+
+         GetChannelStatus channelstatus = new GetChannelStatus();
+         mCmdParams = new GetChannelStatusParams(cmdDet, channelstatus);
+         return;
+     }
 }

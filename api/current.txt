@@ -12363,6 +12363,7 @@ package android.net {
     field public static final int TYPE_DUMMY = 8; // 0x8
     field public static final int TYPE_ETHERNET = 9; // 0x9
     field public static final int TYPE_MOBILE = 0; // 0x0
+    field public static final int TYPE_MOBILE_DM = 14; // 0xe
     field public static final int TYPE_MOBILE_DUN = 4; // 0x4
     field public static final int TYPE_MOBILE_HIPRI = 5; // 0x5
     field public static final int TYPE_MOBILE_MMS = 2; // 0x2
