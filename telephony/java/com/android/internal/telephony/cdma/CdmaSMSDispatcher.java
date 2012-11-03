@@ -291,6 +291,13 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
         sendSubmitPdu(pdu, sentIntent, deliveryIntent, destAddr);
     }
 
+    /* Start liuhongxing 20110602 */
+    protected void sendDmData(String destAddr, String scAddr, int destPort, int srcPort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        return;
+    }
+    /* End liu 20110602 */
+
     /** {@inheritDoc} */
     @Override
     protected void sendText(String destAddr, String scAddr, String text,
@@ -330,6 +337,11 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
                 uData, (deliveryIntent != null) && lastPart);
 
         sendSubmitPdu(submitPdu, sentIntent, deliveryIntent, destinationAddress);
+    }
+
+    protected boolean saveMultipartText(String destinationAddress, String scAddress,
+            ArrayList<String> parts, boolean isOutbox, String timestring, int savestatus) {
+        return false;
     }
 
     protected void sendSubmitPdu(SmsMessage.SubmitPdu pdu,

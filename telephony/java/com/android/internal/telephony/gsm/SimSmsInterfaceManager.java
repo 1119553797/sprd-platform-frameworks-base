@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.IccSmsInterfaceManager;
 import com.android.internal.telephony.IccUtils;
@@ -50,9 +51,11 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
 
     private final Object mLock = new Object();
     private boolean mSuccess;
+    private String copyMsgToIccEx;//fix bug 4197,phone_02
     private List<SmsRawData> mSms;
     private HashMap<Integer, HashSet<String>> mCellBroadcastSubscriptions =
             new HashMap<Integer, HashSet<String>>();
+    private String simCapacity;
 
     private CellBroadcastRangeManager mCellBroadcastRangeManager =
             new CellBroadcastRangeManager();
@@ -61,12 +64,14 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
     private static final int EVENT_UPDATE_DONE = 2;
     private static final int EVENT_SET_BROADCAST_ACTIVATION_DONE = 3;
     private static final int EVENT_SET_BROADCAST_CONFIG_DONE = 4;
+    private static final int EVENT_GET_CAPACITY_DONE = 6;
     private static final int SMS_CB_CODE_SCHEME_MIN = 0;
     private static final int SMS_CB_CODE_SCHEME_MAX = 255;
 
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            String strCapacity[];
             AsyncResult ar;
 
             switch (msg.what) {
@@ -74,6 +79,7 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
                     ar = (AsyncResult) msg.obj;
                     synchronized (mLock) {
                         mSuccess = (ar.exception == null);
+                        copyMsgToIccEx = ar.exception == null ? "" : ((CommandException)ar.exception).getCommandError().name();
                         mLock.notifyAll();
                     }
                     break;
@@ -90,6 +96,23 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
                         mLock.notifyAll();
                     }
                     break;
+
+                case EVENT_GET_CAPACITY_DONE:
+                    ar = (AsyncResult)msg.obj;
+                    synchronized (mLock) {
+	                    if (ar.exception == null) {
+	                        mSuccess = true;
+	                        strCapacity = (String[])ar.result;
+	                        if (strCapacity != null && strCapacity.length >= 2) {
+	                            if(DBG) log("[sms]sim used:" + strCapacity[0] +" total:" + strCapacity[1]);
+	                            simCapacity = strCapacity[0] + ":" +strCapacity[1];
+	                            if(DBG) log("[sms]simCapacity: " + simCapacity);
+	                        }
+	                    } else {
+	                        if(DBG) log("[sms]get sim capacity fail");
+	                    }
+	                    mLock.notifyAll();
+                    }
                 case EVENT_SET_BROADCAST_ACTIVATION_DONE:
                 case EVENT_SET_BROADCAST_CONFIG_DONE:
                     ar = (AsyncResult) msg.obj;
@@ -188,6 +211,59 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
             }
         }
         return mSuccess;
+    }
+
+    /**
+     * Get Sim card capacity.
+     *
+     * @return success or not
+     *
+     */
+    public String getSimCapacity() {
+        synchronized(mLock) {
+            mSuccess = false;
+            Message response = mHandler.obtainMessage(EVENT_GET_CAPACITY_DONE);
+
+            mPhone.mCM.getSimCapacity(response);
+
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                log("interrupted while trying to update by index");
+            }
+        }
+        return simCapacity;
+    }
+
+    /**
+     * //fix bug 4197,phone_02
+     * Copy a raw SMS PDU to the SIM.
+     *
+     * @param pdu the raw PDU to store
+     * @param status message status (STATUS_ON_ICC_READ, STATUS_ON_ICC_UNREAD,
+     *               STATUS_ON_ICC_SENT, STATUS_ON_ICC_UNSENT)
+     * @return success or not
+     *
+     */
+    public String copyMessageToIccEfWithResult(int status, byte[] pdu, byte[] smsc) {
+        if (DBG) log("copyMessageToIccEf: status=" + status + " ==> " +
+                "pdu=("+ Arrays.toString(pdu) +
+                "), smsm=(" + Arrays.toString(smsc) +")");
+        enforceReceiveAndSend("Copying message to SIM");
+        synchronized(mLock) {
+            copyMsgToIccEx = null;
+            Message response = mHandler.obtainMessage(EVENT_UPDATE_DONE);
+
+            mPhone.mCM.writeSmsToSim(status, IccUtils.bytesToHexString(smsc),
+                    IccUtils.bytesToHexString(pdu), response);
+
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                log("interrupted while trying to update by index");
+            }
+        }
+        return copyMsgToIccEx;
     }
 
     /**
@@ -316,6 +392,37 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
                 return setCellBroadcastConfig(configs);
             }
         }
+    }
+    public void activateCellBroadcastSms(int activate) {
+        log("activateCellBroadcastSms  activate = " + activate);
+        setCellBroadcastActivation(activate == 0);
+    }
+
+    public void setCellBroadcastSmsConfig(int[] configValuesArray){
+        int count = 5 ;
+        int j =0;
+        SmsBroadcastConfigInfo[]  config = new SmsBroadcastConfigInfo[configValuesArray.length/count];	
+        for(int i= 0;i<configValuesArray.length;i+=count){
+            config[j] =  new  SmsBroadcastConfigInfo( 
+                    configValuesArray[i],
+                    configValuesArray[i+1],
+                    configValuesArray[i+2],
+                    configValuesArray[i+3],
+                    (configValuesArray[i+4]==0)
+                  );
+            j++;
+        } 
+        log("setCellBroadcastConfig! config.length"+config.length);
+
+        for(int i=0; i<config.length; i++){
+            log("setCellBroadcastConfig! config. "+config[i].toString());
+        }        
+        setCellBroadcastConfig(config);
+    }
+
+    public void getCellBroadcastSmsConfig(Message response) {
+        log("getCellBroadcastSmsConfig");
+        mPhone.mCM.getGsmBroadcastConfig(response);
     }
 
     private boolean setCellBroadcastConfig(SmsBroadcastConfigInfo[] configs) {

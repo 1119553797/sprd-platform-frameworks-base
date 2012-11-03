@@ -33,6 +33,24 @@ import java.nio.charset.Charset;
 public class IccUtils {
     static final String LOG_TAG="IccUtils";
 
+    //Deal With DTMF Message Start
+    static final int DTMF_NUM_0 = 0x0;
+    static final int DTMF_NUM_1 = 0x1;
+    static final int DTMF_NUM_2 = 0x2;
+    static final int DTMF_NUM_3 = 0x3;
+    static final int DTMF_NUM_4 = 0x4;
+    static final int DTMF_NUM_5 = 0x5;
+    static final int DTMF_NUM_6 = 0x6;
+    static final int DTMF_NUM_7 = 0x7;
+    static final int DTMF_NUM_8 = 0x8;
+    static final int DTMF_NUM_9 = 0x9;
+    static final int DTMF_STAR      = 0xa;
+    static final int DTMF_HASH      = 0xb;
+    static final int DTMF_PAUSE     = 0xc;
+    static final int DTMF_WILD      = 0xd;
+    static final int DTMF_EXPANSION = 0xe;
+    static final int DTMF_FILLER    = 0xf;
+    //Deal With DTMF Message Start
     /**
      * Many fields in GSM SIM's are stored as nibble-swizzled BCD
      *
@@ -62,6 +80,64 @@ public class IccUtils {
 
         return ret.toString();
     }
+
+    //Deal With DTMF Message Start
+    public static String bcdToString_Dtmf(byte[] data, int offset, int length) {
+         StringBuilder ret = new StringBuilder(length*2);
+
+         for (int i = offset ; i < offset + length ; i++) {
+            byte b;
+            int v[] = new int[2];
+
+            v[0] = data[i] & 0xf;
+            v[1] = (data[i] >> 4) & 0xf;
+
+            for(int j = 0;j < 2; j++) {
+                switch(v[j]) {
+                    case DTMF_NUM_0:
+                    case DTMF_NUM_1:
+                    case DTMF_NUM_2:
+                    case DTMF_NUM_3:
+                    case DTMF_NUM_4:
+                    case DTMF_NUM_5:
+                    case DTMF_NUM_6:
+                    case DTMF_NUM_7:
+                    case DTMF_NUM_8:
+                    case DTMF_NUM_9:
+                        ret.append((char)(v[j] + '0'));
+                        break;
+
+                    case DTMF_STAR:
+                       ret.append('*');
+                       break;
+
+                    case DTMF_HASH:
+                       ret.append('#');
+                       break;
+
+                    case DTMF_PAUSE:
+                       ret.append('P');
+                       break;
+
+                    case DTMF_WILD:
+                       ret.append('w');
+                       break;
+
+                    case DTMF_FILLER:
+                       //do nothing
+                       break;
+
+                    case DTMF_EXPANSION:
+                    default:
+                        j = 2;
+                        break;
+                }
+            }
+         }
+
+         return ret.toString();
+    }
+    //Deal With DTMF Message Start
 
     /**
      * Decode cdma byte into String.

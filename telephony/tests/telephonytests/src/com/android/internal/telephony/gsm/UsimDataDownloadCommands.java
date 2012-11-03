@@ -32,7 +32,7 @@ import junit.framework.Assert;
  * Dummy BaseCommands for UsimDataDownloadTest. Only implements UICC envelope and
  * SMS acknowledgement commands.
  */
-class UsimDataDownloadCommands extends BaseCommands {
+abstract class UsimDataDownloadCommands extends BaseCommands {
     private static final String TAG = "UsimDataDownloadCommands";
 
     private boolean mExpectingAcknowledgeGsmSms;        // true if expecting ack GSM SMS
@@ -230,11 +230,11 @@ class UsimDataDownloadCommands extends BaseCommands {
     }
 
     @Override
-    public void dial(String address, int clirMode, Message result) {
+    public void dial(String address, int clirMode, boolean isStkCall, Message result) {
     }
 
     @Override
-    public void dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
+    public void dial(String address, int clirMode, UUSInfo uusInfo, boolean isStkCall, Message result) {
     }
 
     @Override
@@ -417,7 +417,7 @@ class UsimDataDownloadCommands extends BaseCommands {
     }
 
     @Override
-    public void setNetworkSelectionModeManual(String operatorNumeric, Message response) {
+    public void setNetworkSelectionModeManual(String operatorNumeric, int act, Message response) {
     }
 
     @Override

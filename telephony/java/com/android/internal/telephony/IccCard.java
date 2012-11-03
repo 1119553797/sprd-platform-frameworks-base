@@ -79,10 +79,17 @@ public class IccCard {
     private boolean mIccFdnEnabled = false; // Default to disabled.
                                             // Will be updated when SIM_READY.
 
+    private boolean mIccPin2Blocked = false; // Default to disabled.
+    // Will be updated when sim status changes.
+    private boolean mIccPuk2Blocked = false; // Default to disabled.
+    // Will be updated when sim status changes.
+
     /* Parameter is3gpp's values to be passed to constructor */
     public final static boolean CARD_IS_3GPP = true;
     public final static boolean CARD_IS_NOT_3GPP = false;
 
+    private int mPin1RetryCount = -1;
+    private int mPin2RetryCount = -1;
 
     /* The extra data for broacasting intent INTENT_ICC_STATE_CHANGE */
     static public final String INTENT_KEY_ICC_STATE = "ss";
@@ -92,6 +99,8 @@ public class IccCard {
     static public final String INTENT_VALUE_ICC_ABSENT = "ABSENT";
     /* LOCKED means ICC is locked by pin or by network */
     static public final String INTENT_VALUE_ICC_LOCKED = "LOCKED";
+    /* BLOCKED means ICC is blocked */
+    static public final String INTENT_VALUE_ICC_BLOCKED = "BLOCKED";
     /* READY means ICC is ready to access */
     static public final String INTENT_VALUE_ICC_READY = "READY";
     /* IMSI means ICC IMSI is ready in property */
@@ -109,6 +118,14 @@ public class IccCard {
     /* PERM_DISABLED means ICC is permanently disabled due to puk fails */
     static public final String INTENT_VALUE_ABSENT_ON_PERM_DISABLED = "PERM_DISABLED";
 
+    /* REFRESH means ICC is refreshed */
+    static public final String INTENT_VALUE_ICC_REFRESH= "REFRESH";
+
+    static public final String INTENT_KEY_PHONE_ID = "phone_id";
+
+    static public final String INTENT_KEY_FDN_STAUS = "fdn_status";
+
+    static public final String INTENT_KEY_FDN_SIM_REFRESH = "fdn_sim_refresh";
 
     protected static final int EVENT_ICC_LOCKED = 1;
     private static final int EVENT_GET_ICC_STATUS_DONE = 2;
@@ -124,8 +141,10 @@ public class IccCard {
     private static final int EVENT_ICC_STATUS_CHANGED = 12;
     private static final int EVENT_CARD_REMOVED = 13;
     private static final int EVENT_CARD_ADDED = 14;
-    protected static final int EVENT_CDMA_SUBSCRIPTION_SOURCE_CHANGED = 15;
-    protected static final int EVENT_RADIO_ON = 16;
+    private static final int EVENT_PIN2PUK2_DONE = 15;
+    private static final int EVENT_CHANGE_FDN_PASSWORD_DONE = 16;
+    protected static final int EVENT_CDMA_SUBSCRIPTION_SOURCE_CHANGED = 17;
+    protected static final int EVENT_RADIO_ON = 18;
 
     /*
       UNKNOWN is a transient state, for example, after uesr inputs ICC pin under
@@ -139,6 +158,7 @@ public class IccCard {
         PUK_REQUIRED,
         NETWORK_LOCKED,
         READY,
+        BLOCKED,
         NOT_READY,
         PERM_DISABLED;
 
@@ -353,12 +373,12 @@ public class IccCard {
 
     public void supplyPin2 (String pin2, Message onComplete) {
         mPhone.mCM.supplyIccPin2(pin2,
-                mHandler.obtainMessage(EVENT_PINPUK_DONE, onComplete));
+                mHandler.obtainMessage(EVENT_PIN2PUK2_DONE, onComplete));
     }
 
     public void supplyPuk2 (String puk2, String newPin2, Message onComplete) {
         mPhone.mCM.supplyIccPuk2(puk2, newPin2,
-                mHandler.obtainMessage(EVENT_PINPUK_DONE, onComplete));
+                mHandler.obtainMessage(EVENT_PIN2PUK2_DONE, onComplete));
     }
 
     public void supplyNetworkDepersonalization (String pin, Message onComplete) {
@@ -386,6 +406,20 @@ public class IccCard {
      */
      public boolean getIccFdnEnabled() {
         return mIccFdnEnabled;
+     }
+
+     /**
+      * @return No. of Attempts remaining to unlock PIN1/PUK1
+      */
+     public int getIccPin1RetryCount() {
+         return mPin1RetryCount;
+     }
+
+     /**
+      * @return No. of Attempts remaining to unlock PIN2/PUK2
+      */
+     public int getIccPin2RetryCount() {
+         return mPin2RetryCount;
      }
 
      /**
@@ -471,7 +505,7 @@ public class IccCard {
      public void changeIccFdnPassword(String oldPassword, String newPassword,
              Message onComplete) {
          mPhone.mCM.changeIccPin2(oldPassword, newPassword,
-                 mHandler.obtainMessage(EVENT_CHANGE_ICC_PASSWORD_DONE, onComplete));
+                 mHandler.obtainMessage(EVENT_CHANGE_FDN_PASSWORD_DONE, onComplete));
 
      }
 
@@ -514,9 +548,12 @@ public class IccCard {
         boolean transitionedIntoPinLocked;
         boolean transitionedIntoAbsent;
         boolean transitionedIntoNetworkLocked;
+        boolean transitionedIntoIccBlocked;
         boolean transitionedIntoPermBlocked;
+        boolean transitionedIntoIccReady;
         boolean isIccCardRemoved;
         boolean isIccCardAdded;
+        boolean transitionedIntoCardPresent;
 
         State oldState, newState;
         State oldRuimState = getRuimState();
@@ -527,6 +564,7 @@ public class IccCard {
 
         synchronized (mStateMonitor) {
             mState = newState;
+            PhoneFactory.autoSetDefaultPhoneId(true, mPhone.getPhoneId());
             updateStateProperty();
             if (oldState != State.READY && newState == State.READY) {
                 mHandler.sendMessage(mHandler.obtainMessage(EVENT_ICC_READY));
@@ -545,8 +583,12 @@ public class IccCard {
         transitionedIntoAbsent = (oldState != State.ABSENT && newState == State.ABSENT);
         transitionedIntoNetworkLocked = (oldState != State.NETWORK_LOCKED
                 && newState == State.NETWORK_LOCKED);
+        transitionedIntoIccBlocked = (oldState != State.BLOCKED && newState == State.BLOCKED);
         transitionedIntoPermBlocked = (oldState != State.PERM_DISABLED
                 && newState == State.PERM_DISABLED);
+        transitionedIntoIccReady = (oldState != State.READY && newState == State.READY);
+        transitionedIntoCardPresent =  !transitionedIntoAbsent;
+
         isIccCardRemoved = (oldState != null &&
                         oldState.iccCardExist() && newState == State.ABSENT);
         isIccCardAdded = (oldState == State.ABSENT &&
@@ -571,6 +613,15 @@ public class IccCard {
             if (mDbg) log("Notify SIM permanently disabled.");
             broadcastIccStateChangedIntent(INTENT_VALUE_ICC_ABSENT,
                     INTENT_VALUE_ABSENT_ON_PERM_DISABLED);
+        }else if (transitionedIntoIccBlocked) {
+            if(mDbg) log("Notify ICC blocked.");
+            broadcastIccStateChangedIntent(INTENT_VALUE_ICC_BLOCKED, null);
+        }else if(transitionedIntoIccReady){
+            broadcastGetIccStatusDoneIntent();
+            if(mDbg) log("Notify SIM ready.");
+        }else if(transitionedIntoCardPresent){
+	        if(mDbg) log("Notify SIM present.");
+	        broadcastIccCardPresentIntent();
         }
 
         if (isIccCardRemoved) {
@@ -589,6 +640,29 @@ public class IccCard {
             }
             mIccRecords.onReady();
         }
+    }
+
+    public void broadcastGetIccStatusDoneIntent() {
+        Intent intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE, mPhone.getPhoneId()));
+
+        if(mDbg) log("Broadcasting intent ACTION_GET_ICC_STATUS_DONE , phoneid is " + mPhone.getPhoneId());
+
+        ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
+    }
+
+    public void broadcastIccCardPresentIntent() {
+        Intent intent = new Intent(TelephonyIntents.SIM_CARD_PRESENT);
+        intent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
+        if (mDbg) log("Broadcasting intent SIM_CARD_PRESENT , phoneid is " + mPhone.getPhoneId());
+        ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
+    }
+
+    private void broadFdnStatusChangeIntent(){
+        Log.e(mLogTag," broadFdnStatusChange sendBroadcast FDN_STATE_CHANGED");
+        Intent intent = new Intent("android.intent.action.FDN_STATE_CHANGED"+ mPhone.getPhoneId());
+        intent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
+        intent.putExtra(INTENT_KEY_FDN_STAUS, getIccFdnEnabled());
+        mPhone.getContext().sendBroadcast(intent);
     }
 
     private void onIccSwap(boolean isAdded) {
@@ -670,15 +744,56 @@ public class IccCard {
         }
     }
 
+    /**
+     * Parse the error response to obtain No of attempts remaining to unlock PIN1/PUK1
+     */
+    private void parsePinPukErrorResult(AsyncResult ar, boolean isPin1) {
+        int[] intArray = (int[]) ar.result;
+        int length = intArray.length;
+        if(isPin1){
+            mPin1RetryCount = -1;
+        }else{
+            mPin2RetryCount = -1;
+        }
+        if (length > 0) {
+            if (isPin1) {
+                mPin1RetryCount = intArray[0];
+            } else {
+                mPin2RetryCount = intArray[0];
+            }
+        }
+    log("mPin1RetryCount is "+ mPin1RetryCount +",mPin2RetryCount is "+mPin2RetryCount);
+
+    }
+
     public void broadcastIccStateChangedIntent(String value, String reason) {
         Intent intent = new Intent(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra(Phone.PHONE_NAME_KEY, mPhone.getPhoneName());
         intent.putExtra(INTENT_KEY_ICC_STATE, value);
         intent.putExtra(INTENT_KEY_LOCKED_REASON, reason);
+        intent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
+        intent.putExtra(INTENT_KEY_FDN_STAUS, getIccFdnEnabled());
         if(mDbg) log("Broadcasting intent ACTION_SIM_STATE_CHANGED " +  value
-                + " reason " + reason);
+                + " reason " + reason + " phoneid " + mPhone.getPhoneId());
         ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
+
+        if (PhoneFactory.isMultiSim()) {
+            /*
+        String action = PhoneFactory.getAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED, mPhone.getPhoneId());
+        Intent specifiedIntent = new Intent(action);
+        specifiedIntent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+        specifiedIntent.putExtra(Phone.PHONE_NAME_KEY, mPhone.getPhoneName());
+        specifiedIntent.putExtra(INTENT_KEY_ICC_STATE, value);
+        specifiedIntent.putExtra(INTENT_KEY_LOCKED_REASON, reason);
+        specifiedIntent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
+        specifiedIntent.putExtra(INTENT_KEY_FDN_STAUS, getIccFdnEnabled());
+        ActivityManagerNative.broadcastStickyIntent(specifiedIntent, READ_PHONE_STATE);
+        */
+            intent.setAction(PhoneFactory.getAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED, mPhone.getPhoneId()));
+            ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
+        }
+        //TODO: check ACTION_SIM_STATE_CHANGED broadcast logic
     }
 
     protected Handler mHandler = new Handler() {
@@ -733,6 +848,7 @@ public class IccCard {
                     getIccCardStatusDone(ar);
                     break;
                 case EVENT_PINPUK_DONE:
+                case EVENT_PIN2PUK2_DONE:
                     // a PIN/PUK/PIN2/PUK2/Network Personalization
                     // request has completed. ar.userObj is the response Message
                     // Repoll before returning
@@ -740,6 +856,13 @@ public class IccCard {
                     // TODO should abstract these exceptions
                     AsyncResult.forMessage(((Message)ar.userObj)).exception
                                                         = ar.exception;
+                    if ((ar.exception != null) && (ar.result != null)) {
+                        if (msg.what == EVENT_PINPUK_DONE) {
+                            parsePinPukErrorResult(ar, true);
+                        } else {
+                            parsePinPukErrorResult(ar, false);
+                        }
+                    }
                     mPhone.mCM.getIccCardStatus(
                         obtainMessage(EVENT_REPOLL_STATUS_DONE, ar.userObj));
                     break;
@@ -768,6 +891,9 @@ public class IccCard {
                         if (mDbg) log( "EVENT_CHANGE_FACILITY_LOCK_DONE: " +
                                 "mIccPinLocked= " + mIccPinLocked);
                     } else {
+                        if (ar.result != null) {
+                            parsePinPukErrorResult(ar, true);
+                        }
                         Log.e(mLogTag, "Error change facility lock with exception "
                             + ar.exception);
                     }
@@ -780,9 +906,13 @@ public class IccCard {
 
                     if (ar.exception == null) {
                         mIccFdnEnabled = mDesiredFdnEnabled;
+                        broadFdnStatusChangeIntent();
                         if (mDbg) log("EVENT_CHANGE_FACILITY_FDN_DONE: " +
                                 "mIccFdnEnabled=" + mIccFdnEnabled);
                     } else {
+                        if (ar.result != null) {
+                            parsePinPukErrorResult(ar, false);
+                        }
                         Log.e(mLogTag, "Error change facility fdn with exception "
                                 + ar.exception);
                     }
@@ -791,10 +921,18 @@ public class IccCard {
                     ((Message)ar.userObj).sendToTarget();
                     break;
                 case EVENT_CHANGE_ICC_PASSWORD_DONE:
+                case EVENT_CHANGE_FDN_PASSWORD_DONE:
                     ar = (AsyncResult)msg.obj;
                     if(ar.exception != null) {
                         Log.e(mLogTag, "Error in change sim password with exception"
                             + ar.exception);
+                        if (ar.result != null) {
+                            if (msg.what == EVENT_CHANGE_ICC_PASSWORD_DONE) {
+                                parsePinPukErrorResult(ar, true);
+                            } else {
+                                parsePinPukErrorResult(ar, false);
+                            }
+                        }
                     }
                     AsyncResult.forMessage(((Message)ar.userObj)).exception
                                                         = ar.exception;
@@ -853,11 +991,18 @@ public class IccCard {
         RadioState currentRadioState = mPhone.mCM.getRadioState();
         // check radio technology
         if( currentRadioState == RadioState.RADIO_OFF         ||
-            currentRadioState == RadioState.RADIO_UNAVAILABLE) {
+            currentRadioState == RadioState.RADIO_UNAVAILABLE ||
+            currentRadioState == RadioState.SIM_NOT_READY     ||
+            currentRadioState == RadioState.RUIM_NOT_READY    ||
+            currentRadioState == RadioState.NV_NOT_READY      ||
+            currentRadioState == RadioState.NV_READY) {
             return IccCard.State.NOT_READY;
         }
 
-        if( currentRadioState == RadioState.RADIO_ON ) {
+        if( currentRadioState == RadioState.SIM_LOCKED_OR_ABSENT  ||
+            currentRadioState == RadioState.SIM_READY             ||
+            currentRadioState == RadioState.RUIM_LOCKED_OR_ABSENT ||
+            currentRadioState == RadioState.RUIM_READY) {
             State csimState =
                 getAppState(mIccCardStatus.getCdmaSubscriptionAppIndex());
             State usimState =
@@ -904,6 +1049,9 @@ public class IccCard {
         }
         if (app.app_state.isPukRequired()) {
             return IccCard.State.PUK_REQUIRED;
+        }
+        if (app.app_state.isIccBlocked()) {
+            return IccCard.State.BLOCKED;
         }
         if (app.app_state.isSubscriptionPersoEnabled()) {
             return IccCard.State.NETWORK_LOCKED;
@@ -962,8 +1110,34 @@ public class IccCard {
             return false;
         } else {
             // Returns ICC card status for both GSM and CDMA mode
-            return mIccCardStatus.getCardState().isCardPresent();
+            if (mPhone.getPhoneName().equals("GSM") || mPhone.getPhoneName().equals("TD")) {
+                return mIccCardStatus.getCardState().isCardPresent();
+            }else {
+                // TODO: Make work with a CDMA device with a RUIM card.
+                return false;
+            }
         }
+    }
+
+    /**
+     * @return true if ICC card is PIN2 blocked
+     */
+    public boolean getIccPin2Blocked() {
+        return mIccPin2Blocked;
+    }
+
+    /**
+     * @return true if ICC card is PUK2 blocked
+     */
+    public boolean getIccPuk2Blocked() {
+        return mIccPuk2Blocked;
+    }
+
+    /**
+     * @return true if ICC card is on
+     */
+    public boolean isIccCardOn() {
+        return mPhone.mCM.getRadioState() != RadioState.RADIO_UNAVAILABLE;
     }
 
     private void log(String msg) {

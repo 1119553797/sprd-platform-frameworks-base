@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.android.internal.telephony.PhoneFactory;
 
 /**
  * The Telephony provider contains data related to phone operation.
@@ -117,6 +118,11 @@ public final class Telephony {
          * been received
          */
         public static final String STATUS = "status";
+
+        /**
+         * The Phone Id for multi-sim multi-standby
+         */
+        public static final String PHONE_ID = "phone_id";
 
         public static final int STATUS_NONE = -1;
         public static final int STATUS_COMPLETE = 0;
@@ -1158,6 +1164,12 @@ public final class Telephony {
          * <P>Type: TEXT</P>
          */
         public static final String META_DATA = "meta_data";
+
+        /**
+         * The Phone ID of the message
+         * <P>Type: INTEGER</P>
+         */
+        public static final String PHONE_ID = "phone_id";
     }
 
     /**
@@ -1230,6 +1242,12 @@ public final class Telephony {
          * <P>Type: INTEGER</P>
          */
         public static final String HAS_ATTACHMENT = "has_attachment";
+
+        /**
+         * The Phone ID of the message
+         * <P>Type: INTEGER</P>
+         */
+        public static final String PHONE_ID = "phone_id";
     }
 
     /**
@@ -1724,6 +1742,11 @@ public final class Telephony {
              * The time we last tried to send or download the message.
              */
             public static final String LAST_TRY = "last_try";
+            /**
+             * The Phone ID of the message
+             * <P>Type: INTEGER</P>
+             */
+            public static final String PHONE_ID = "phone_id";
         }
 
         public static final class WordsTable {
@@ -1740,6 +1763,9 @@ public final class Telephony {
          */
         public static final Uri CONTENT_URI =
             Uri.parse("content://telephony/carriers");
+
+        public static final Uri CONTENT_URI_SIM2 =
+            Uri.parse("content://telephony_sim2/carriers");
 
         /**
          * The default sort order for this table
@@ -1814,6 +1840,16 @@ public final class Telephony {
           * but currently only used for LTE(14) and EHRPD(13).
           */
         public static final String BEARER = "bearer";
+
+        public static Uri getContentUri(int phoneId) {
+            if (phoneId == 0) {
+                return CONTENT_URI;
+            } else if (phoneId == 1) {
+                return CONTENT_URI_SIM2;
+            } else {
+                return Uri.parse("content://telephony_sim" + phoneId + "/carriers");
+            }
+        }
     }
 
     /**
@@ -2033,5 +2069,8 @@ public final class Telephony {
         public static final String EXTRA_PLMN       = "plmn";
         public static final String EXTRA_SHOW_SPN   = "showSpn";
         public static final String EXTRA_SPN        = "spn";
+        public static final String EXTRA_PHONE_ID   = "phone_id";
+        public static final String NETWORK_UPDATE_ACTION =
+            "android.provider.Telephony.NETWORK_UPDATE";  //add by liguxiang 11-10-11 for NEWMS00139124
     }
 }

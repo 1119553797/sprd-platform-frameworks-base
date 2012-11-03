@@ -23,6 +23,7 @@ import android.util.Log;
 import com.android.internal.util.HexDump;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static android.telephony.SmsManager.STATUS_ON_ICC_FREE;
@@ -85,6 +86,21 @@ public abstract class IccSmsInterfaceManager extends ISms.Stub {
         }
         mDispatcher.sendData(destAddr, scAddr, destPort, data, sentIntent, deliveryIntent);
     }
+
+/*Start liuhongxing 20110602 */
+    public void sendDmData(String destAddr, String scAddr, int destPort, int srcPort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        mPhone.getContext().enforceCallingPermission(
+                "android.permission.SEND_SMS",
+                "Sending SMS message");
+        if (Log.isLoggable("SMS", Log.VERBOSE)) {
+            log("sendData: destAddr=" + destAddr + " scAddr=" + scAddr + " destPort=" +
+                destPort + " data='"+ HexDump.toHexString(data)  + "' sentIntent=" +
+                sentIntent + " deliveryIntent=" + deliveryIntent);
+        }
+        mDispatcher.sendDmData(destAddr, scAddr, destPort, srcPort, data, sentIntent, deliveryIntent);
+    }
+/*End liu 20110602 */
 
     /**
      * Send a text based SMS.
@@ -164,6 +180,12 @@ public abstract class IccSmsInterfaceManager extends ISms.Stub {
                 (ArrayList<PendingIntent>) sentIntents, (ArrayList<PendingIntent>) deliveryIntents);
     }
 
+    public boolean saveMultipartText(String destAddr, String scAddr,
+            List<String> parts, boolean isOutbox, String timestring, int savestatus) {
+        return mDispatcher.saveMultipartText(destAddr, scAddr, (ArrayList<String>) parts, isOutbox,
+                timestring, savestatus);
+    }
+
     /**
      * create SmsRawData lists from all sms record byte[]
      * Use null to indicate "free" record
@@ -198,20 +220,26 @@ public abstract class IccSmsInterfaceManager extends ISms.Stub {
      */
     protected byte[] makeSmsRecordData(int status, byte[] pdu) {
         byte[] data = new byte[IccConstants.SMS_RECORD_LENGTH];
+        Arrays.fill(data, (byte)0xff);
 
         // Status bits for this record.  See TS 51.011 10.5.3
         data[0] = (byte)(status & 7);
 
-        System.arraycopy(pdu, 0, data, 1, pdu.length);
+        //System.arraycopy(pdu, 0, data, 1, pdu.length);
+        System.arraycopy(pdu, 1, data, 1, (pdu.length - 1));
 
         // Pad out with 0xFF's.
-        for (int j = pdu.length+1; j < IccConstants.SMS_RECORD_LENGTH; j++) {
-            data[j] = -1;
-        }
+        //for (int j = pdu.length+1; j < IccConstants.SMS_RECORD_LENGTH; j++) {
+        //    data[j] = -1;
+        //}
 
         return data;
     }
 
     protected abstract void log(String msg);
+
+    int getPhoneId(){
+        return mPhone.getPhoneId();
+    }
 
 }

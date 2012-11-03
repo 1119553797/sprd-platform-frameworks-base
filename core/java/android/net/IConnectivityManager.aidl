@@ -121,4 +121,8 @@ interface IConnectivityManager
     void startLegacyVpn(in VpnConfig config, in String[] racoon, in String[] mtpd);
 
     LegacyVpnInfo getLegacyVpnInfo();
+
+    boolean getMobileDataEnabledByPhoneId(int phoneId);
+
+    void setMobileDataEnabledByPhoneId(int phoneId, boolean enabled);
 }

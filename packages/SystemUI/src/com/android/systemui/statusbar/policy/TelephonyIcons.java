@@ -75,6 +75,17 @@ class TelephonyIcons {
               R.drawable.stat_sys_data_fully_connected_3g }
         };
 
+    static final int[][] DATA_T = {
+        { R.drawable.stat_sys_data_connected_t,
+          R.drawable.stat_sys_data_connected_t,
+          R.drawable.stat_sys_data_connected_t,
+          R.drawable.stat_sys_data_connected_t },
+        { R.drawable.stat_sys_data_fully_connected_t,
+          R.drawable.stat_sys_data_fully_connected_t,
+          R.drawable.stat_sys_data_fully_connected_t,
+          R.drawable.stat_sys_data_fully_connected_t }
+    };
+
     static final int[][] DATA_E = {
             { R.drawable.stat_sys_data_connected_e,
               R.drawable.stat_sys_data_connected_e,

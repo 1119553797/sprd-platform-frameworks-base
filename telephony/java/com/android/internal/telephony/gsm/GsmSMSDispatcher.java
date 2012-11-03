@@ -35,6 +35,7 @@ import android.util.Log;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.PhoneBase;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsMessageBase;
@@ -43,6 +44,7 @@ import com.android.internal.telephony.SmsStorageMonitor;
 import com.android.internal.telephony.SmsUsageMonitor;
 import com.android.internal.telephony.TelephonyProperties;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -238,6 +240,9 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
     @Override
     protected void sendData(String destAddr, String scAddr, int destPort,
             byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+        SmsMessage.getSmsValidity(this.mContext);
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
         SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
                 scAddr, destAddr, destPort, data, (deliveryIntent != null));
         if (pdu != null) {
@@ -248,18 +253,74 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
         }
     }
 
+    /* Start liuhongxing 20110602 */
+    protected void sendDmData(String destAddr, String scAddr, int destPort, int srcPort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+        SmsMessage.getSmsValidity(this.mContext);
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
+        SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
+                scAddr, destAddr, destPort, srcPort, data, (deliveryIntent != null));
+        sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent, destAddr);
+    }
+    /* End liu 20110602 */
+
     /** {@inheritDoc} */
     @Override
     protected void sendText(String destAddr, String scAddr, String text,
             PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
+        SmsMessage.getSmsValidity(this.mContext);
+        //=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
         SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
                 scAddr, destAddr, text, (deliveryIntent != null));
         if (pdu != null) {
-            sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent,
-                    destAddr);
+            sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent, destAddr);
         } else {
             Log.e(TAG, "GsmSMSDispatcher.sendText(): getSubmitPdu() returned null");
         }
+    }
+
+    protected boolean saveMultipartText(String destinationAddress, String scAddress,
+            ArrayList<String> parts, boolean isOutbox, String timestring, int savestatus) {
+
+        int refNumber = SMSDispatcher.getNextConcatenatedRef() & 0x00FF;
+        int msgCount = parts.size();
+        int encoding = android.telephony.SmsMessage.ENCODING_UNKNOWN;
+        boolean result = false;
+
+        for (int i = 0; i < msgCount; i++) {
+            TextEncodingDetails details = com.android.internal.telephony.gsm.SmsMessage.calculateLength(parts.get(i), false);
+            if (encoding != details.codeUnitSize
+                    && (encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN
+                            || encoding == android.telephony.SmsMessage.ENCODING_7BIT)) {
+                encoding = details.codeUnitSize;
+            }
+        }
+        SmsManager smsManager = SmsManager.getDefault();
+
+        for (int i = 0; i < msgCount; i++) {
+            SmsHeader.ConcatRef concatRef = new SmsHeader.ConcatRef();
+            concatRef.refNumber = refNumber;
+            concatRef.seqNumber = i + 1;  // 1-based sequence
+            concatRef.msgCount = msgCount;
+            concatRef.isEightBits = true;
+            SmsHeader smsHeader = new SmsHeader();
+            smsHeader.concatRef = concatRef;
+
+            if (!isOutbox) {
+                SmsMessage.DeliverPdu pdus = com.android.internal.telephony.gsm.SmsMessage.getDeliverPdu(null, destinationAddress,
+                        parts.get(i), timestring, SmsHeader.toByteArray(smsHeader), encoding);
+                result = smsManager.copyMessageToIcc(null, pdus.encodedMessage, savestatus);
+            } else {
+                SmsMessage.SubmitPdu pdus = SmsMessage.getSubmitPdu(scAddress, destinationAddress,
+                        parts.get(i), false, SmsHeader.toByteArray(smsHeader),
+                        encoding);
+                result = smsManager.copyMessageToIcc(null, pdus.encodedMessage, savestatus);
+            }
+            if (!result) break;
+        }
+        return result;
     }
 
     /** {@inheritDoc} */
@@ -278,8 +339,7 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
                 message, deliveryIntent != null, SmsHeader.toByteArray(smsHeader),
                 encoding, smsHeader.languageTable, smsHeader.languageShiftTable);
         if (pdu != null) {
-            sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent,
-                    destinationAddress);
+            sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent, destinationAddress);
         } else {
             Log.e(TAG, "GsmSMSDispatcher.sendNewSubmitPdu(): getSubmitPdu() returned null");
         }

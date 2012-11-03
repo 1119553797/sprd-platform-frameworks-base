@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncResult;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
@@ -63,6 +64,7 @@ import com.android.internal.telephony.ServiceStateTracker;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.UUSInfo;
+import com.android.internal.telephony.SprdVideoPhone.CallType;
 import com.android.internal.telephony.cat.CatService;
 import com.android.internal.telephony.uicc.UiccController;
 
@@ -73,6 +75,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.android.internal.telephony.CommandsInterface.CF_REASON_UNCONDITIONAL;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC;
@@ -80,7 +83,7 @@ import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OP
 /**
  * {@hide}
  */
-public class CDMAPhone extends PhoneBase {
+public abstract class CDMAPhone extends PhoneBase {
     static final String LOG_TAG = "CDMA";
     private static final boolean DBG = true;
     private static final boolean VDBG = false; /* STOP SHIP if true */
@@ -367,7 +370,16 @@ public class CDMAPhone extends PhoneBase {
         return mCT.dial(newDialString);
     }
 
+    public Connection
+    dial (String dialString, boolean isStkCall) throws CallStateException {
+        return dial(dialString, false);
+    }
+
     public Connection dial(String dialString, UUSInfo uusInfo) throws CallStateException {
+        throw new CallStateException("Sending UUS information NOT supported in CDMA!");
+    }
+
+    public Connection dial(String dialString, UUSInfo uusInfo, boolean isStkCall) throws CallStateException {
         throw new CallStateException("Sending UUS information NOT supported in CDMA!");
     }
 
@@ -774,12 +786,109 @@ public class CDMAPhone extends PhoneBase {
         return ret;
     }
 
+    //{Add for compile error
+    public void registerForPreciseVideoCallStateChanged(Handler h, int what, Object obj) {
+
+    }
+    public void unregisterForPreciseVideoCallStateChanged(Handler h) {
+
+    }
+    public void registerForNewRingingVideoCall(Handler h, int what, Object obj) {
+
+    }
+    public void unregisterForNewRingingVideoCall(Handler h) {
+
+    }
+    public void registerForIncomingRingVideoCall(Handler h, int what, Object obj) {}
+
+    public void unregisterForIncomingRingVideoCall(Handler h) { }
+
+    public void registerForVideoCallDisconnect(Handler h, int what, Object obj) { }
+
+    public void unregisterForVideoCallDisconnect(Handler h) { }
+
+    public void registerForVideoCallFallBack(Handler h, int what, Object obj) { }
+
+    public void unregisterForVideoCallFallBack(Handler h) { }
+
+    public void registerForVideoCallFail(Handler h, int what, Object obj) { }
+
+    public void unregisterForVideoCallFail(Handler h) { }
+
+    public void registerForRemoteCamera(Handler h, int what, Object obj) { }
+
+    public void unregisterForRemoteCamera(Handler h) { }
+
+    public void registerForVideoCallCodec(Handler h, int what, Object obj) { }
+
+    public void unregisterForVideoCallCodec(Handler h) { }
+
+    public void registerForGprsAttached(Handler h, int what, Object obj) { }
+
+    public void unregisterForGprsAttached(Handler h) { }
+
+    public CallType getCallType()  {
+        return null;
+    }
+
+    public Connection  dialVP(String dialString) throws CallStateException {
+        return null;
+    }
+
+    public void  fallBack() throws CallStateException { }
+
+    public void  acceptFallBack() throws CallStateException { }
+
+    public void  controlCamera(boolean bEnable) throws CallStateException { }
+
+    public void  controlAudio(boolean bEnable) throws CallStateException { }
+
+    public void codecVP(int type, Bundle param) { }
+
+    /**
+     * Return gam Authenticate
+     */
+    public String Mbbms_Gsm_Authenticate(String nonce) {
+        return null;
+    }
+
+    /**
+     * Return usim Authenticate
+     */
+    public String Mbbms_USim_Authenticate(String nonce, String autn) {
+        return null;
+    }
+
+    /**
+     * Return sim type
+     */
+    public String getSimType() {
+        return null;
+    }
+
+    public String[] getRegistrationState() {
+        return null;
+    }
     public void getCallForwardingOption(int commandInterfaceCFReason, Message onComplete) {
         Log.e(LOG_TAG, "getCallForwardingOption: not possible in CDMA");
     }
-
+    public void getCallForwardingOption(int commandInterfaceCFReason, int serviceClass, Message onComplete) {
+        Log.e(LOG_TAG, "getCallForwardingOption: not possible in CDMA");
+    }
+    public boolean isVTCall() {
+        Log.e(LOG_TAG, "isVTCall: not possible in CDMA");
+        return false;
+    }
     public void setCallForwardingOption(int commandInterfaceCFAction,
             int commandInterfaceCFReason,
+            String dialingNumber,
+            int timerSeconds,
+            Message onComplete) {
+        Log.e(LOG_TAG, "setCallForwardingOption: not possible in CDMA");
+    }
+    public void setCallForwardingOption(int commandInterfaceCFAction,
+            int commandInterfaceCFReason,
+            int serviceClass,
             String dialingNumber,
             int timerSeconds,
             Message onComplete) {
@@ -806,6 +915,21 @@ public class CDMAPhone extends PhoneBase {
         return null;
     }
 
+    public void changeBarringPassword(String facility, String oldPwd, String newPwd, Message onComplete){
+        Log.e(LOG_TAG, "changeBarringPassword: not possible in CDMA");
+    }
+
+    public void setFacilityLock(String facility, boolean lockState, String password,
+            int serviceClass, Message onComplete){
+        Log.e(LOG_TAG, "setFacilityLock: not possible in CDMA");
+    }
+    public void queryFacilityLock (String facility, String password, int serviceClass, Message onComplete){
+        Log.e(LOG_TAG, "queryFacilityLock: not possible in CDMA");
+    }
+    public void recordPhoneState(Phone.State state){
+        Log.e(LOG_TAG, "recordPhoneState: not possible in CDMA");
+    }
+    //}Add for compile error
     /**
      * Notify any interested party of a Phone state change  {@link Phone.State}
      */
@@ -1470,6 +1594,18 @@ public class CDMAPhone extends PhoneBase {
     private void unregisterForRuimRecordEvents() {
         mIccRecords.unregisterForRecordsEvents(this);
         mIccRecords.unregisterForRecordsLoaded(this);
+    }
+
+    public void setIccCard(boolean turnOn) {
+        Log.e(LOG_TAG, "setIccCard: not possible in CDMA");
+    }
+    public int getPhoneId() {
+        Log.e(LOG_TAG, "getPhoneId: not possible in CDMA");
+        return 0;
+    }
+    public int getRemainTimes(int type) {
+        Log.e(LOG_TAG, "getRemainTimes: not possible in CDMA");
+        return 0;
     }
 
     protected void log(String s) {

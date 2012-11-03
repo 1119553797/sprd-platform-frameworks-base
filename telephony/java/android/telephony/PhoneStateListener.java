@@ -27,6 +27,7 @@ import android.util.Log;
 
 import com.android.internal.telephony.IPhoneStateListener;
 import com.android.internal.telephony.Phone;
+import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
 
 /**
  * A listener class for monitoring changes in specific telephony states
@@ -207,6 +208,15 @@ public class PhoneStateListener {
     public void onCallForwardingIndicatorChanged(boolean cfi) {
         // default implementation empty
     }
+    
+    /**
+     * Callback invoked when the call-forwarding indicator changes.
+     * serviceClass voice:1;video:16
+     * @hide
+     */
+    public void onCallForwardingIndicatorChangedByServiceClass(boolean cfi ,int serviceClass) {
+        // default implementation empty
+    }
 
     /**
      * Callback invoked when device cell location changes.
@@ -321,6 +331,11 @@ public class PhoneStateListener {
                     .sendToTarget();
         }
 
+        public void onCallForwardingIndicatorChangedByServiceClass(boolean cfi, int serviceClass) {
+            Message.obtain(mHandler, LISTEN_CALL_FORWARDING_INDICATOR, cfi ? 1 : 0, serviceClass,
+                    null).sendToTarget();
+        }
+
         public void onCellLocationChanged(Bundle bundle) {
             CellLocation location = CellLocation.newFromBundle(bundle);
             Message.obtain(mHandler, LISTEN_CELL_LOCATION, 0, 0, location).sendToTarget();
@@ -367,6 +382,7 @@ public class PhoneStateListener {
                     break;
                 case LISTEN_CALL_FORWARDING_INDICATOR:
                     PhoneStateListener.this.onCallForwardingIndicatorChanged(msg.arg1 != 0);
+                    PhoneStateListener.this.onCallForwardingIndicatorChangedByServiceClass(msg.arg1 != 0, msg.arg2);
                     break;
                 case LISTEN_CELL_LOCATION:
                     PhoneStateListener.this.onCellLocationChanged((CellLocation)msg.obj);

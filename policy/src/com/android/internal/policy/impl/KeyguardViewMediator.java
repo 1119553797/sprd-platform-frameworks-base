@@ -727,8 +727,11 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
     }
 
     /** {@inheritDoc} */
-    public void onSimStateChanged(IccCard.State simState) {
-        if (DEBUG) Log.d(TAG, "onSimStateChanged: " + simState);
+    //add DSDS start
+    //public void onSimStateChanged(IccCard.State simState) {
+    public void onSimStateChanged(IccCard.State simState ,int subscription) {
+    //add DSDS end
+        if (true) Log.d(TAG, "onSimStateChanged: " + simState);
 
         switch (simState) {
             case ABSENT:
@@ -775,6 +778,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             case READY:
                 synchronized (this) {
                     if (isShowing()) {
+                        Log.i(TAG,"sim state is READY");
                         resetStateLocked();
                     }
                 }
@@ -1329,4 +1333,51 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
         }
     }
 
+    /** {@inheritDoc} */
+    public void onClockVisibilityChanged() {
+        adjustStatusBarLocked();
+    }
+
+    /** {@inheritDoc} */
+    public void onPhoneStateChanged(int phoneState) {
+        // ignored
+    }
+
+    /** {@inheritDoc} */
+    public void onRefreshBatteryInfo(boolean showBatteryInfo, boolean pluggedIn, int batteryLevel) {
+        // ignored
+    }
+
+    /** {@inheritDoc} */
+    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
+        // ignored
+    }
+
+    /** {@inheritDoc} */
+    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int phoneId){
+
+    };
+
+    /** {@inheritDoc} */
+    public void onRingerModeChanged(int state) {
+        // ignored
+    }
+
+    /** {@inheritDoc} */
+    public void onTimeChanged() {
+        // ignored
+    }
+
+    /** {@inheritDoc} */
+    public void onDeviceProvisioned() {
+        mContext.sendBroadcast(mUserPresentIntent);
+    }
+    /** {@inheritDoc} */
+    public void onMessageCountChanged(int messagecount){
+
+    }
+    /** {@inheritDoc} */
+    public void onDeleteMessageCount(int messagecount){
+
+    }
 }

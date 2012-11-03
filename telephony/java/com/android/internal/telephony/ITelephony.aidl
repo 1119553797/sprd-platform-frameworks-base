@@ -52,6 +52,7 @@ interface ITelephony {
      * @return true if the call screen was shown.
      */
     boolean showCallScreen();
+    boolean showCallScreenForStk();
 
     /**
      * Variation of showCallScreen() that also specifies whether the
@@ -72,6 +73,8 @@ interface ITelephony {
      * @return whether it hung up
      */
     boolean endCall();
+
+    void holdCall();
 
     /**
      * Answer the currently-ringing call.
@@ -154,6 +157,11 @@ interface ITelephony {
      */
     boolean supplyPuk(String puk, String pin);
 
+    String getSmsc();
+    boolean setSmsc(String smscAddr);
+
+    int getIccPin1RetryCount();
+
     /**
      * Handles PIN MMI commands (PIN/PIN2/PUK/PUK2), which are initiated
      * without SEND (so <code>dial</code> is not appropriate).
@@ -162,6 +170,17 @@ interface ITelephony {
      * @return true if MMI command is executed.
      */
     boolean handlePinMmi(String dialString);
+
+    /**
+     * Set the iccCard to on or off
+     */
+    boolean setIccCard(boolean turnOn);
+
+    /**
+     * Check to see if the iccCard is on or not.
+     * @return returns true if the radio is on.
+     */
+    boolean isIccCardOn();
 
     /**
      * Toggles the radio on or off.
@@ -223,6 +242,7 @@ interface ITelephony {
      int getCallState();
      int getDataActivity();
      int getDataState();
+     int getDataStatebyApnType(String apnType);
 
     /**
      * Returns the current active phone type as integer.
@@ -284,5 +304,39 @@ interface ITelephony {
      * Returns the all observed cell information of the device.
      */
     List<CellInfo> getAllCellInfo();
+
+    /**
+     * @return true if a IccFdn enabled
+     */
+    boolean getIccFdnEnabled();
+
+    /**
+     * Return gam Authenticate
+     */
+    String[] Mbbms_Gsm_Authenticate(String nonce);
+
+    /**
+     * Return usim Authenticate
+     */
+    String[] Mbbms_USim_Authenticate(String nonce, String autn);
+
+    /**
+     * Return sim type
+     */
+    String getSimType();
+
+    String[] getRegistrationState();
+
+    boolean isVTCall();
+
+    int getRemainTimes(int type);
+
+    boolean setApnActivePdpFilter(String apntype,boolean filterenable);
+
+    boolean getApnActivePdpFilter(String apntype);
+
+    String[] getActiveApnTypes();
+
+    String getActiveApn();
 }
 

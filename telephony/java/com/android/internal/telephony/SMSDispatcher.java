@@ -676,6 +676,7 @@ public abstract class SMSDispatcher extends Handler {
         Intent intent = new Intent(Intents.SMS_RECEIVED_ACTION);
         intent.putExtra("pdus", pdus);
         intent.putExtra("format", getFormat());
+        intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
         dispatch(intent, RECEIVE_SMS_PERMISSION);
     }
 
@@ -690,6 +691,7 @@ public abstract class SMSDispatcher extends Handler {
         Intent intent = new Intent(Intents.DATA_SMS_RECEIVED_ACTION, uri);
         intent.putExtra("pdus", pdus);
         intent.putExtra("format", getFormat());
+        intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
         dispatch(intent, RECEIVE_SMS_PERMISSION);
     }
 
@@ -721,6 +723,12 @@ public abstract class SMSDispatcher extends Handler {
      */
     protected abstract void sendData(String destAddr, String scAddr, int destPort,
             byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent);
+
+    /* Start liuhongxing 20110602 */
+    protected abstract void sendDmData(String destAddr, String scAddr, int destPort,
+            int srcPort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent);
+    /* End liu 20110602 */
 
     /**
      * Send a text based SMS.
@@ -850,6 +858,9 @@ public abstract class SMSDispatcher extends Handler {
     protected abstract void sendNewSubmitPdu(String destinationAddress, String scAddress,
             String message, SmsHeader smsHeader, int encoding,
             PendingIntent sentIntent, PendingIntent deliveryIntent, boolean lastPart);
+
+    protected abstract boolean saveMultipartText(String destinationAddress, String scAddress,
+            ArrayList<String> parts, boolean isOutbox, String timestring, int savestatus);
 
     /**
      * Send a SMS
@@ -1064,6 +1075,7 @@ public abstract class SMSDispatcher extends Handler {
         if (!success) {
             // broadcast SMS_REJECTED_ACTION intent
             Intent intent = new Intent(Intents.SMS_REJECTED_ACTION);
+            intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
             intent.putExtra("result", result);
             mWakeLock.acquire(WAKE_LOCK_TIMEOUT);
             mContext.sendBroadcast(intent, "android.permission.RECEIVE_SMS");

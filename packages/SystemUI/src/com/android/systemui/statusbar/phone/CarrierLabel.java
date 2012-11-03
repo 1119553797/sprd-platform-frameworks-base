@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.provider.Telephony;
+import android.provider.Telephony.Intents;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Slog;
@@ -50,7 +51,7 @@ public class CarrierLabel extends TextView {
 
     public CarrierLabel(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        updateNetworkName(false, null, false, null);
+        updateNetworkName(false, null, false, null, 0);
     }
 
     @Override
@@ -82,15 +83,17 @@ public class CarrierLabel extends TextView {
                 updateNetworkName(intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN, false),
                         intent.getStringExtra(Telephony.Intents.EXTRA_SPN),
                         intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN, false),
-                        intent.getStringExtra(Telephony.Intents.EXTRA_PLMN));
+                        intent.getStringExtra(Telephony.Intents.EXTRA_PLMN),
+                        intent.getIntExtra(Intents.EXTRA_PHONE_ID, 0));
             }
         }
     };
 
-    void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
-        if (false) {
+    void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn, int phoneid) {
+        if (phoneid != 0) return;
+        if (true) {
             Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
-                    + " showPlmn=" + showPlmn + " plmn=" + plmn);
+                    + " showPlmn=" + showPlmn + " plmn=" + plmn + "phoneid" + phoneid);
         }
         final String str;
         // match logic in KeyguardStatusViewManager

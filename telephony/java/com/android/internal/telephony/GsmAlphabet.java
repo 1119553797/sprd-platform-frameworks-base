@@ -733,6 +733,25 @@ public class GsmAlphabet {
         }
         return count;
     }
+    /**
+     * Returns the count of 7-bit GSM alphabet characters
+     * needed to represent this string.
+     * @param throwsException If true, throws EncodeException if unencodable
+     * char. Otherwise, counts invalid char as 1 septet
+     */
+    public static int
+    countGsmSeptets(CharSequence s, boolean throwsException, boolean dummy) throws EncodeException {
+        int charIndex = 0;
+        int sz = s.length();
+        int count = 0;
+
+        while (charIndex < sz) {
+            count += countGsmSeptets(s.charAt(charIndex), throwsException);
+            charIndex++;
+        }
+
+        return count;
+    }
 
     /**
      * Returns the count of 7-bit GSM alphabet characters
@@ -930,6 +949,24 @@ public class GsmAlphabet {
         }
         return size;
     }
+
+
+    public static byte[] isAsciiStringToGsm8BitUnpackedField(String s)
+    throws EncodeException{
+	int i;
+	for(i=0;i<s.length();i++)
+	{
+		int c = s.charAt(i);
+		if(c >= 128){
+			 throw new EncodeException("string is not ascii string");}
+	}
+
+	return stringToGsm8BitPacked(s);
+
+    }
+
+    // Set in the static initializer
+    private static int sGsmSpaceChar;
 
     /**
      * Modify the array of enabled national language single shift tables for SMS

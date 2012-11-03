@@ -41,7 +41,7 @@ import java.util.List;
  * {@hide}
  *
  */
-public interface Phone {
+public interface Phone extends SprdVideoPhone{
 
     /** used to enable additional debug messages */
     static final boolean DEBUG_PHONE = true;
@@ -135,6 +135,8 @@ public interface Phone {
     static final String APN_TYPE_IMS = "ims";
     /** APN type for CBS */
     static final String APN_TYPE_CBS = "cbs";
+    static final String APN_TYPE_DM = "dm";
+    static final String APN_TYPE_WAP = "wap";
 
     // "Features" accessible through the connectivity manager
     static final String FEATURE_ENABLE_MMS = "enableMMS";
@@ -145,6 +147,8 @@ public interface Phone {
     static final String FEATURE_ENABLE_FOTA = "enableFOTA";
     static final String FEATURE_ENABLE_IMS = "enableIMS";
     static final String FEATURE_ENABLE_CBS = "enableCBS";
+    static final String FEATURE_ENABLE_DM = "enableDM";
+    static final String FEATURE_ENABLE_WAP = "enableWAP";
 
     /**
      * Return codes for <code>enableApnType()</code>
@@ -219,6 +223,8 @@ public interface Phone {
     int NT_MODE_LTE_ONLY     = RILConstants.NETWORK_MODE_LTE_ONLY;
     int PREFERRED_NT_MODE    = RILConstants.PREFERRED_NETWORK_MODE;
 
+    int NT_MODE_AUTO         = RILConstants.NETWORK_MODE_AUTO;
+    int NT_MODE_TD_SCDMA_ONLY= RILConstants.NETWORK_MODE_TD_SCDMA_ONLY;
 
     // Used for CDMA roaming mode
     static final int CDMA_RM_HOME        = 0;  // Home Networks only, as defined in PRL
@@ -598,6 +604,9 @@ public interface Phone {
      */
     void unregisterForSuppServiceFailed(Handler h);
 
+    void registerForSuppServiceSucc(Handler h, int what, Object obj);
+    void unregisterForSuppServiceSucc(Handler h);
+
     /**
      * Register for notifications when a sInCall VoicePrivacy is enabled
      *
@@ -833,6 +842,18 @@ public interface Phone {
     Connection dial(String dialString) throws CallStateException;
 
     /**
+     * Initiate a new voice connection. This happens asynchronously, so you
+     * cannot assume the audio path is connected (or a call index has been
+     * assigned) until PhoneStateChanged notification has occurred.
+     *
+     * @exception CallStateException if a new outgoing call is not currently
+     * possible because no more call slots exist or a call exists that is
+     * dialing, alerting, ringing, or waiting.  Other errors are
+     * handled asynchronously.
+     */
+    Connection dial(String dialString, boolean isStkCall) throws CallStateException;
+
+    /**
      * Initiate a new voice connection with supplementary User to User
      * Information. This happens asynchronously, so you cannot assume the audio
      * path is connected (or a call index has been assigned) until
@@ -844,6 +865,20 @@ public interface Phone {
      *                errors are handled asynchronously.
      */
     Connection dial(String dialString, UUSInfo uusInfo) throws CallStateException;
+
+    /**
+     * Initiate a new voice connection with supplementary User to User
+     * Information. This happens asynchronously, so you cannot assume the audio
+     * path is connected (or a call index has been assigned) until
+     * PhoneStateChanged notification has occurred.
+     *
+     * @exception CallStateException if a new outgoing call is not currently
+     *                possible because no more call slots exist or a call exists
+     *                that is dialing, alerting, ringing, or waiting. Other
+     *                errors are handled asynchronously.
+     */
+    Connection dial(String dialString, UUSInfo uusInfo, boolean isStkCall)
+            throws CallStateException;
 
     /**
      * Handles PIN MMI commands (PIN/PIN2/PUK/PUK2), which are initiated
@@ -1031,6 +1066,13 @@ public interface Phone {
                                  String dialingNumber,
                                  int timerSeconds,
                                  Message onComplete);
+
+    void queryFacilityLock(String facility, String password, int serviceClass, Message onComplete);
+
+    void setFacilityLock(String facility, boolean lockState, String password,
+                        int serviceClass, Message onComplete);
+
+    void changeBarringPassword(String facility, String oldPwd, String newPwd, Message onComplete);
 
     /**
      * getOutgoingCallerIdDisplay
@@ -1783,4 +1825,8 @@ public interface Phone {
      * Remove references to external object stored in this object.
      */
     void removeReferences();
+
+    boolean setApnActivePdpFilter(String apntype, boolean filterenable);
+
+    boolean getApnActivePdpFilter(String apntype);
 }

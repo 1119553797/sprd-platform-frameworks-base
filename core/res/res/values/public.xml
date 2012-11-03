@@ -1249,6 +1249,9 @@
   <java-symbol type="id" name="button6" />
   <java-symbol type="id" name="button7" />
   <java-symbol type="id" name="carrier" />
+  <java-symbol type="id" name="carrier1" />
+  <java-symbol type="id" name="missedCallCount" />
+  <java-symbol type="id" name="messageCount" />
   <java-symbol type="id" name="date" />
   <java-symbol type="id" name="eight" />
   <java-symbol type="id" name="emergencyCallButton" />
@@ -1368,6 +1371,13 @@
   <java-symbol type="string" name="lockscreen_too_many_failed_pin_attempts_dialog_message" />
   <java-symbol type="string" name="lockscreen_unlock_label" />
   <java-symbol type="string" name="status_bar_device_locked" />
+  <java-symbol type="string" name="missed_call" />
+  <java-symbol type="string" name="unread_message" />
+  <java-symbol type="string" name="lockscreen_blocked_sim_message_short" />
+  <java-symbol type="string" name="keyguard_password_enter_sim1_pin_code" />
+  <java-symbol type="string" name="keyguard_password_enter_sim2_pin_code" />
+  <java-symbol type="string" name="keyguard_password_enter_sim1_puk_code" />
+  <java-symbol type="string" name="keyguard_password_enter_sim2_puk_code" />
   <java-symbol type="style" name="Animation.LockScreen" />
   <java-symbol type="style" name="Theme.Dialog.RecentApplications" />
   <java-symbol type="style" name="Theme.ExpandedMenu" />
@@ -3655,5 +3665,18 @@
   <public type="style" name="Widget.Holo.Light.MediaRouteButton" id="0x010301d6" />
   <public type="style" name="Widget.DeviceDefault.MediaRouteButton" id="0x010301d7" />
   <public type="style" name="Widget.DeviceDefault.Light.MediaRouteButton" id="0x010301d8" />
+
+  <java-symbol type="string" name="china_mobile_numeric_values" />
+  <java-symbol type="string" name="china_unicom_numeric_values" />
+  <java-symbol type="string" name="ActiveUnconCf" />
+  <java-symbol type="string" name="ActiveConCf" />
+  <java-symbol type="string" name="CallForwarded" />
+  <java-symbol type="string" name="CallWaiting" />
+  <java-symbol type="string" name="OutCallBarred" />
+  <java-symbol type="string" name="InCallBarred" />
+  <java-symbol type="string" name="ForwardedCall" />
+  <java-symbol type="string" name="CallHold" />
+  <java-symbol type="string" name="CallRetrieved" />
+  <java-symbol type="string" name="IncomingCallForwarded" />
 
 </resources>

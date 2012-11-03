@@ -41,6 +41,7 @@ public interface IccConstants {
     static final int EF_SST = 0x6f38;
     static final int EF_CFIS = 0x6FCB;
     static final int EF_IMG = 0x4f20;
+    static final int EF_CC = 0x4f23;
 
     // USIM SIM file ids from TS 31.102
     public static final int EF_PBR = 0x4F30;
@@ -53,6 +54,7 @@ public interface IccConstants {
     static final int EF_SPN_SHORT_CPHS = 0x6f18;
     static final int EF_INFO_CPHS = 0x6f16;
     static final int EF_CSP_CPHS = 0x6f15;
+    static final int EF_ECC = 0x6FB7;
 
     // CDMA RUIM file ids from 3GPP2 C.S0023-0
     static final int EF_CST = 0x6f32;
@@ -84,6 +86,7 @@ public interface IccConstants {
     static final String DF_GRAPHICS = "5F50";
     static final String DF_GSM = "7F20";
     static final String DF_CDMA = "7F25";
+    static final String DF_ADF = "7FFF";
 
     //ISIM access
     static final String DF_ADFISIM = "7FFF";

@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.android.internal.telephony.CommandException;
 import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.IccSmsInterfaceManager;
 import com.android.internal.telephony.IccUtils;
@@ -47,6 +48,7 @@ public class RuimSmsInterfaceManager extends IccSmsInterfaceManager {
     private final Object mLock = new Object();
     private boolean mSuccess;
     private List<SmsRawData> mSms;
+    private String copyMsgToIccEx;//fix bug 4197,phone_02
 
     private static final int EVENT_LOAD_DONE = 1;
     private static final int EVENT_UPDATE_DONE = 2;
@@ -61,6 +63,7 @@ public class RuimSmsInterfaceManager extends IccSmsInterfaceManager {
                     ar = (AsyncResult) msg.obj;
                     synchronized (mLock) {
                         mSuccess = (ar.exception == null);
+                        copyMsgToIccEx = ar.exception == null ? "" : ((CommandException)ar.exception).getCommandError().name();
                         mLock.notifyAll();
                     }
                     break;
@@ -168,6 +171,48 @@ public class RuimSmsInterfaceManager extends IccSmsInterfaceManager {
     }
 
     /**
+     * //fix bug 4197,phone_02
+     * Copy a raw SMS PDU to the SIM.
+     *
+     * @param pdu the raw PDU to store
+     * @param status message status (STATUS_ON_ICC_READ, STATUS_ON_ICC_UNREAD,
+     *               STATUS_ON_ICC_SENT, STATUS_ON_ICC_UNSENT)
+     * @return success or not
+     *
+     */
+    public String copyMessageToIccEfWithResult(int status, byte[] pdu, byte[] smsc) {
+        if (DBG) log("copyMessageToIccEf: status=" + status + " ==> " +
+                "pdu=("+ Arrays.toString(pdu) +
+                "), smsm=(" + Arrays.toString(smsc) +")");
+        enforceReceiveAndSend("Copying message to SIM");
+        synchronized(mLock) {
+            copyMsgToIccEx = null;
+            Message response = mHandler.obtainMessage(EVENT_UPDATE_DONE);
+
+            mPhone.mCM.writeSmsToSim(status, IccUtils.bytesToHexString(smsc),
+                    IccUtils.bytesToHexString(pdu), response);
+
+            try {
+                mLock.wait();
+            } catch (InterruptedException e) {
+                log("interrupted while trying to update by index");
+            }
+        }
+        return copyMsgToIccEx;
+    }
+
+    /**
+     * Get Sim card capacity.
+     *
+     * @return success or not
+     *
+     */
+    public String getSimCapacity() {
+        String capacity = new String("0:0");
+        return capacity;
+    }
+
+    /**
      * Retrieves all messages currently stored on RUIM.
      */
     public List<SmsRawData> getAllMessagesFromIccEf() {
@@ -213,6 +258,21 @@ public class RuimSmsInterfaceManager extends IccSmsInterfaceManager {
         // Not implemented
         Log.e(LOG_TAG, "Error! Not implemented for CDMA.");
         return false;
+    }
+
+    public void activateCellBroadcastSms(int activate) {
+        // Not implemented
+        Log.e(LOG_TAG, "Error! Not implemented for CDMA.");
+    }
+
+    public void setCellBroadcastSmsConfig(int[] configValuesArray) {
+        // Not implemented
+        Log.e(LOG_TAG, "Error! Not implemented for CDMA.");
+    }
+
+    public void getCellBroadcastSmsConfig(Message response) {
+        // Not implemented
+        Log.e(LOG_TAG, "Error! Not implemented for CDMA.");
     }
 
     protected void log(String msg) {

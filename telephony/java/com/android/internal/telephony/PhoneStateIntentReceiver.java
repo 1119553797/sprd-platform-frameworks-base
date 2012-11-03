@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Telephony.Intents;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -58,6 +59,7 @@ public final class PhoneStateIntentReceiver extends BroadcastReceiver {
     private int mServiceStateEventWhat;
     private int mLocationEventWhat;
     private int mAsuEventWhat;
+    private int mPhoneId;
 
     public PhoneStateIntentReceiver() {
         super();
@@ -65,9 +67,14 @@ public final class PhoneStateIntentReceiver extends BroadcastReceiver {
     }
 
     public PhoneStateIntentReceiver(Context context, Handler target) {
+        this(context, target, PhoneFactory.getDefaultPhoneId());
+    }
+
+    public PhoneStateIntentReceiver(Context context, Handler target, int phoneId) {
         this();
         setContext(context);
         setTarget(target);
+        mPhoneId = phoneId;
     }
 
     public void setContext(Context c) {
@@ -137,6 +144,10 @@ public final class PhoneStateIntentReceiver extends BroadcastReceiver {
         mWants |= NOTIF_SERVICE;
         mServiceStateEventWhat = eventWhat;
         mFilter.addAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED);
+        if (PhoneFactory.isMultiSim()) {
+            mFilter.addAction(PhoneFactory.getAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED,
+                    mPhoneId));
+        }
     }
 
     public boolean getNotifyServiceState() {
@@ -147,6 +158,10 @@ public final class PhoneStateIntentReceiver extends BroadcastReceiver {
         mWants |= NOTIF_SIGNAL;
         mAsuEventWhat = eventWhat;
         mFilter.addAction(TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED);
+        if (PhoneFactory.isMultiSim()) {
+            mFilter.addAction(PhoneFactory.getAction(TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED,
+                    mPhoneId));
+        }
     }
 
     public boolean getNotifySignalStrength() {
@@ -165,8 +180,13 @@ public final class PhoneStateIntentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
+        if (mPhoneId != intent.getIntExtra(Intents.EXTRA_PHONE_ID, PhoneFactory.getDefaultPhoneId())) {
+            return;
+        }
         try {
-            if (TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED.equals(action)) {
+            if (TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED.equals(action)
+                    || PhoneFactory.getAction(TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED,
+                            mPhoneId).equals(action)) {
                 mSignalStrength = SignalStrength.newFromBundle(intent.getExtras());
 
                 if (mTarget != null && getNotifySignalStrength()) {
@@ -185,7 +205,9 @@ public final class PhoneStateIntentReceiver extends BroadcastReceiver {
                             mPhoneStateEventWhat);
                     mTarget.sendMessage(message);
                 }
-            } else if (TelephonyIntents.ACTION_SERVICE_STATE_CHANGED.equals(action)) {
+            } else if (TelephonyIntents.ACTION_SERVICE_STATE_CHANGED.equals(action)
+                    || PhoneFactory.getAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED,
+                            mPhoneId).equals(action)) {
                 mServiceState = ServiceState.newFromBundle(intent.getExtras());
 
                 if (mTarget != null && getNotifyServiceState()) {

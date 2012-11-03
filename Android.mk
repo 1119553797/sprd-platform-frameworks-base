@@ -43,7 +43,6 @@ include $(CLEAR_VARS)
 
 # FRAMEWORKS_BASE_SUBDIRS comes from build/core/pathmap.mk
 LOCAL_SRC_FILES := $(call find-other-java-files,$(FRAMEWORKS_BASE_SUBDIRS))
-
 SECONDARY_SRC_FILES := $(call find-other-java-files,$(SECONDARY_FRAMEWORKS_SUBDIRS))
 
 LOCAL_SRC_FILES := $(filter-out $(SECONDARY_SRC_FILES),$(LOCAL_SRC_FILES))

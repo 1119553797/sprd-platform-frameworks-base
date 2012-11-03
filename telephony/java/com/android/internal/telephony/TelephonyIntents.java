@@ -236,4 +236,33 @@ public class TelephonyIntents {
      */
     public static final String ACTION_SHOW_NOTICE_ECM_BLOCK_OTHERS
             = "android.intent.action.ACTION_SHOW_NOTICE_ECM_BLOCK_OTHERS";
+
+    public static final String ACTION_GET_ICC_STATUS_DONE = "android.intent.action.GET_ICC_STATUS_DONE";
+    public static final String SIM_ADNCACHE_LOADED = "android.intent.action.SIM_ADNCACHE_LOADED";
+
+    /**
+     * <p>Broadcast Action: It indicates if the sim sms is ready
+     * <p class="note">.
+     * This is a notice to application if the SMS related operations is allowed
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     */
+    public static final String ACTION_IS_SIM_SMS_READY
+            = "android.intent.action.ACTION_IS_SIM_SMS_READY";
+
+    public static final String ACTION_IS_SIM2_SMS_READY
+            = "android.intent.action.ACTION_IS_SIM2_SMS_READY";
+
+    /**
+     * <p>Broadcast Action: It indicates the STK perform the refresh operation
+     * <p class="note">.
+     * This is a notice to application that the SIM contacts need to be reloaded.
+     *
+     * <p class="note">
+     */
+    public static final String ACTION_STK_REFRESH_SIM_CONTACTS
+            = "android.intent.action.ACTION_STK_REFRESH_SIM_CONTACTS";
+
+    public static final String SIM_CARD_PRESENT = "android.intent.action.SIM_CARD_PRESENT";
 }

@@ -68,7 +68,8 @@ public abstract class PhoneBase extends Handler implements Phone {
     public static final String NETWORK_SELECTION_KEY = "network_selection_key";
     // Key used to read and write the saved network selection operator name
     public static final String NETWORK_SELECTION_NAME_KEY = "network_selection_name_key";
-
+    // Key used to read and write the saved network selection operator act
+    public static final String NETWORK_SELECTION_ACT_KEY = "network_selection_act_key";
 
     // Key used to read/write "disable data connection on boot" pref (used for testing)
     public static final String DATA_DISABLED_ON_BOOT_KEY = "disabled_on_boot_key";
@@ -90,6 +91,12 @@ public abstract class PhoneBase extends Handler implements Phone {
     protected static final int EVENT_GET_CALL_FORWARD_DONE       = 13;
     protected static final int EVENT_CALL_RING                   = 14;
     protected static final int EVENT_CALL_RING_CONTINUE          = 15;
+    protected static final int EVENT_GET_CALL_FORWARD_BUSY_DONE       = 116;
+    protected static final int EVENT_GET_CALL_FORWARD_NO_REPLY_DONE       = 117;
+    protected static final int EVENT_GET_CALL_FORWARD_NOT_REACHABLE_DONE       = 118;
+    protected static final int EVENT_SET_CALL_FORWARD_BUSY_DONE       = 216;
+    protected static final int EVENT_SET_CALL_FORWARD_NO_REPLY_DONE       = 217;
+    protected static final int EVENT_SET_CALL_FORWARD_NOT_REACHABLE_DONE       = 218;
 
     // Used to intercept the carrier selection calls so that
     // we can save the values.
@@ -111,6 +118,10 @@ public abstract class PhoneBase extends Handler implements Phone {
     protected static final int EVENT_NEW_ICC_SMS                    = 29;
     protected static final int EVENT_ICC_RECORD_EVENTS              = 30;
 
+    protected static final int EVENT_SET_CALL_BARRING_DONE       = 31;
+    protected static final int EVENT_GET_CALL_BARRING_DONE       = 32;
+    protected static final int EVENT_CHANGE_CALL_BARRING_PASSWORD_DONE       = 33;
+
     // Key used to read/write current CLIR setting
     public static final String CLIR_KEY = "clir_key";
 
@@ -121,9 +132,9 @@ public abstract class PhoneBase extends Handler implements Phone {
     public CommandsInterface mCM;
     boolean mDnsCheckDisabled;
     public DataConnectionTracker mDataConnectionTracker;
-    boolean mDoesRilSendMultipleCallRing;
-    int mCallRingContinueToken;
-    int mCallRingDelay;
+    protected boolean mDoesRilSendMultipleCallRing;
+    protected  int mCallRingContinueToken;
+    protected  int mCallRingDelay;
     public boolean mIsTheCurrentActivePhone = true;
     boolean mIsVoiceCapable = true;
     public IccRecords mIccRecords;
@@ -140,7 +151,14 @@ public abstract class PhoneBase extends Handler implements Phone {
         if(getUnitTestMode()) {
             return;
         }
-        SystemProperties.set(property, value);
+        if (PhoneFactory.isMultiSim()) {
+            SystemProperties.set(PhoneFactory.getProperty(property, getPhoneId()), value);
+            if (getPhoneId() == PhoneFactory.getDefaultPhoneId()) {
+                SystemProperties.set(property, value);
+            }
+        } else {
+            SystemProperties.set(property, value);
+        }
     }
 
 
@@ -169,6 +187,9 @@ public abstract class PhoneBase extends Handler implements Phone {
             = new RegistrantList();
 
     protected final RegistrantList mSuppServiceFailedRegistrants
+            = new RegistrantList();
+
+    protected final RegistrantList mSuppServiceSuccRegistrants
             = new RegistrantList();
 
     protected Looper mLooper; /* to insure registrants are in correct thread*/
@@ -442,6 +463,18 @@ public abstract class PhoneBase extends Handler implements Phone {
     }
 
     // Inherited documentation suffices.
+    public void registerForSuppServiceSucc(Handler h, int what, Object obj) {
+        checkCorrectThread(h);
+
+        mSuppServiceSuccRegistrants.addUnique(h, what, obj);
+    }
+
+    // Inherited documentation suffices.
+    public void unregisterForSuppServiceSucc(Handler h) {
+        mSuppServiceSuccRegistrants.remove(h);
+    }
+
+    // Inherited documentation suffices.
     public void registerForMmiInitiate(Handler h, int what, Object obj) {
         checkCorrectThread(h);
 
@@ -473,7 +506,16 @@ public abstract class PhoneBase extends Handler implements Phone {
     private String getSavedNetworkSelection() {
         // open the shared preferences and search with our key.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-        return sp.getString(NETWORK_SELECTION_KEY, "");
+        return sp.getString(PhoneFactory.getSetting(NETWORK_SELECTION_KEY, getPhoneId()), "");
+    }
+
+    /**
+     * Method to retrieve the saved operator act from the Shared Preferences
+     */
+    private int getSavedNetworkSelectionAct() {
+        // open the shared preferences and search with our key.
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+        return sp.getInt(PhoneFactory.getSetting(NETWORK_SELECTION_ACT_KEY, getPhoneId()), OperatorInfo.ACT_GSM);
     }
 
     /**
@@ -484,12 +526,13 @@ public abstract class PhoneBase extends Handler implements Phone {
     public void restoreSavedNetworkSelection(Message response) {
         // retrieve the operator id
         String networkSelection = getSavedNetworkSelection();
+        int networkSelectionAct = getSavedNetworkSelectionAct();
 
         // set to auto if the id is empty, otherwise select the network.
         if (TextUtils.isEmpty(networkSelection)) {
             mCM.setNetworkSelectionModeAutomatic(response);
         } else {
-            mCM.setNetworkSelectionModeManual(networkSelection, response);
+            mCM.setNetworkSelectionModeManual(networkSelection, networkSelectionAct, response);
         }
     }
 
@@ -575,7 +618,7 @@ public abstract class PhoneBase extends Handler implements Phone {
      * @exception RuntimeException if the current thread is not
      * the thread that originally obtained this PhoneBase instance.
      */
-    private void checkCorrectThread(Handler h) {
+    protected void checkCorrectThread(Handler h) {
         if (h.getLooper() != mLooper) {
             throw new RuntimeException(
                     "com.android.internal.telephony.Phone must be used from within one thread");
@@ -982,6 +1025,26 @@ public abstract class PhoneBase extends Handler implements Phone {
         mCM.unregisterForT53AudioControlInfo(h);
     }
 
+    public void registerForGprsAttached(Handler h, int what, Object obj) {
+        // This function should be overridden by the class GSMPhone. Not implemented in CDMAPhone.
+        logUnexpectedGsmMethodCall("registerForGprsAttached");
+    }
+
+    public void unregisterForGprsAttached(Handler h) {
+        // This function should be overridden by the class GSMPhone. Not implemented in CDMAPhone.
+        logUnexpectedGsmMethodCall("unregisterForGprsAttached");
+    }
+
+    public void registerForGprsDetached(Handler h, int what, Object obj) {
+        // This function should be overridden by the class GSMPhone. Not implemented in CDMAPhone.
+        logUnexpectedGsmMethodCall("registerForGprsDetached");
+    }
+
+    public void unregisterForGprsDetached(Handler h) {
+        // This function should be overridden by the class GSMPhone. Not implemented in CDMAPhone.
+        logUnexpectedGsmMethodCall("unregisterForGprsDetached");
+    }
+
      public void setOnEcbModeExitResponse(Handler h, int what, Object obj){
          // This function should be overridden by the class CDMAPhone. Not implemented in GSMPhone.
          logUnexpectedCdmaMethodCall("setOnEcbModeExitResponse");
@@ -1145,6 +1208,18 @@ public abstract class PhoneBase extends Handler implements Phone {
     @Override
     public UsimServiceTable getUsimServiceTable() {
         return mIccRecords.getUsimServiceTable();
+    }
+
+    public boolean setApnActivePdpFilter(String apntype, boolean filterenable) {
+        Log.d(LOG_TAG, " setApnActivePdpFilter:" + apntype + filterenable);
+        return mDataConnectionTracker.setApnActivePdpFilter(apntype, filterenable);
+
+    }
+
+    public boolean getApnActivePdpFilter(String apntype) {
+        Log.d(LOG_TAG, " getApnActivePdpFilter:" + apntype);
+        return mDataConnectionTracker.getApnActivePdpFilter(apntype);
+
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {

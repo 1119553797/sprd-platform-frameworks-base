@@ -210,6 +210,13 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
     }
 
     @Override
+    protected boolean isApnTypeFilters(String type) {
+    
+        Log.d(LOG_TAG, " ApnActiveTypeFilter  return false");
+        return false;
+    }
+
+    @Override
     protected boolean isDataAllowed() {
         final boolean internalDataEnabled;
         synchronized (mDataEnabledLock) {
@@ -1023,6 +1030,16 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
     protected void loge(String s) {
         Log.e(LOG_TAG, "[CdmaDCT] " + s);
     }
+
+   public boolean setApnActivePdpFilter(String apntype,boolean filterenable) 
+   {
+        return false ;
+   }
+
+   public  boolean getApnActivePdpFilter(String apntype) 
+   {
+           return false;
+   }
 
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {

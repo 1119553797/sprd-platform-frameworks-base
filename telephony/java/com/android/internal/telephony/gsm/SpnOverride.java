@@ -88,6 +88,12 @@ public class SpnOverride {
             Log.w(LOG_TAG, "Exception in spn-conf parser " + e);
         } catch (IOException e) {
             Log.w(LOG_TAG, "Exception in spn-conf parser " + e);
+        } finally{
+            try {
+                spnReader.close();
+            } catch (IOException e2) {
+                Log.w(LOG_TAG, "Exception in spn-conf parser " + e2);
+            }
         }
     }
 

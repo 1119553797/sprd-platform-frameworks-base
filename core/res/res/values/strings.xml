@@ -124,6 +124,21 @@
     <string name="RuacMmi">Rejection of undesired annoying calls</string>
     <string name="CndMmi">Calling number delivery</string>
     <string name="DndMmi">Do not disturb</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="ActiveUnconCf">Call forwarded unconditional</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="ActiveConCf">Call forwarded conditional</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="CallForwarded">Call forwarded</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="CallWaiting">Call waiting</string>
+    <string name="OutCallBarred" msgid="">"Outgoing call barred"</string>
+    <string name="InCallBarred" msgid="">"Incomming call barred"</string>
+    <!-- Displayed as the title for a MT call status in call forwarding. -->
+    <string name="ForwardedCall">Forwarded call</string>
+    <string name="CallHold" msgid="">"Call holded"</string>
+    <string name="CallRetrieved" msgid="">"Call retrieved"</string>
+    <string name="IncomingCallForwarded" msgid="">"Additional incoming call forwarded"</string>
 
     <!-- Displayed to confirm to the user that caller ID will be restricted on the next call as usual. -->
     <string name="CLIRDefaultOnNextCallOn">Caller ID defaults to restricted. Next call: Restricted</string>
@@ -1859,11 +1874,13 @@
     <!-- Instructions telling the user to enter their SIM PIN to unlock the keyguard.
          Displayed in one line in a large font.  -->
     <string name="keyguard_password_enter_pin_code">Type PIN code</string>
-
+    <string name="keyguard_password_enter_sim1_pin_code">Type Sim1 PIN code</string>
+    <string name="keyguard_password_enter_sim2_pin_code">Type Sim2 PIN code</string>
     <!-- Instructions telling the user to enter their SIM PUK to unlock the keyguard.
          Displayed in one line in a large font.  -->
     <string name="keyguard_password_enter_puk_code">Type PUK and new PIN code</string>
-
+    <string name="keyguard_password_enter_sim1_puk_code">Type Sim1 PUK and new PIN code</string>
+    <string name="keyguard_password_enter_sim2_puk_code">Type Sim2 PUK and new PIN code</string>
     <!-- Prompt to enter SIM PUK in Edit Text Box in unlock screen -->
     <string name="keyguard_password_enter_puk_prompt">PUK code</string>
     <!-- Prompt to enter New SIM PIN in Edit Text Box in unlock screen -->
@@ -1936,6 +1953,7 @@
 
     <!-- Shown in the lock screen when there is no SIM card. -->
     <string name="lockscreen_missing_sim_message_short">No SIM card.</string>
+    <string name="lockscreen_blocked_sim_message_short">SIM card is blocked.</string>
     <!-- Shown in the lock screen when there is no SIM card. -->
     <string name="lockscreen_missing_sim_message" product="tablet">No SIM card in tablet.</string>
     <!-- Shown in the lock screen when there is no SIM card. -->
@@ -3578,4 +3596,8 @@
     <string name="media_route_chooser_grouping_done">Done</string>
     <string name="china_unicom_numeric_values">China Unicom</string>
     <string name="china_mobile_numeric_values">China Mobile</string>
+    <!-- LockScreen missed call start -->
+    <string name="missed_call">%1$d Missed call</string>
+    <!-- LockScreen missed call end -->
+    <string name="unread_message">%1$d Unread message</string>
 </resources>

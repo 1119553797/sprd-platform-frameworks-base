@@ -55,10 +55,11 @@ public interface RILConstants {
     int ILLEGAL_SIM_OR_ME = 15;               /* network selection failure due
                                                  to wrong SIM/ME and no
                                                  retries needed */
+    int SMS_SAVE_FAIL_FULL = 16;
 
     /* NETWORK_MODE_* See ril.h RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE */
     int NETWORK_MODE_WCDMA_PREF     = 0; /* GSM/WCDMA (WCDMA preferred) */
-    int NETWORK_MODE_GSM_ONLY       = 1; /* GSM only */
+    //int NETWORK_MODE_GSM_ONLY       = 1; /* GSM only */
     int NETWORK_MODE_WCDMA_ONLY     = 2; /* WCDMA only */
     int NETWORK_MODE_GSM_UMTS       = 3; /* GSM/WCDMA (auto mode, according to PRL)
                                             AVAILABLE Application Settings menu*/
@@ -73,7 +74,17 @@ public interface RILConstants {
     int NETWORK_MODE_LTE_CMDA_EVDO_GSM_WCDMA = 10; /* LTE, CDMA, EvDo, GSM/WCDMA */
     int NETWORK_MODE_LTE_ONLY       = 11; /* LTE Only mode. */
 
-    int PREFERRED_NETWORK_MODE      = NETWORK_MODE_WCDMA_PREF;
+    int NETWORK_MODE_AUTO           = NETWORK_MODE_WCDMA_ONLY; /* GSM/TD-SCDMA */
+    int NETWORK_MODE_GSM_ONLY       = 13;/* GSM only */
+    int NETWORK_MODE_TD_SCDMA_ONLY  = 15;/* TD-SCDMA only*/
+
+    //int PREFERRED_NETWORK_MODE      = NETWORK_MODE_WCDMA_PREF;
+    int PREFERRED_NETWORK_MODE      = NETWORK_MODE_AUTO;
+
+    /* CDMA subscription source. See ril.h RIL_REQUEST_CDMA_SET_SUBSCRIPTION */
+    int SUBSCRIPTION_FROM_RUIM      = 0; /* CDMA subscription from RUIM when available */
+    int SUBSCRIPTION_FROM_NV        = 1; /* CDMA subscription from NV */
+    int PREFERRED_CDMA_SUBSCRIPTION = SUBSCRIPTION_FROM_NV;
 
     int CDMA_CELL_BROADCAST_SMS_DISABLED = 1;
     int CDMA_CELL_BROADCAST_SMS_ENABLED  = 0;
@@ -82,6 +93,8 @@ public interface RILConstants {
     int GSM_PHONE = 1;
     int CDMA_PHONE = 2;
     int SIP_PHONE  = 3;
+
+    int TD_PHONE = 4;
 
     int LTE_ON_CDMA_UNKNOWN = -1;
     int LTE_ON_CDMA_FALSE = 0;
@@ -259,7 +272,44 @@ cat include/telephony/ril.h | \
     int RIL_REQUEST_ISIM_AUTHENTICATION = 105;
     int RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU = 106;
     int RIL_REQUEST_STK_SEND_ENVELOPE_WITH_STATUS = 107;
-    int RIL_REQUEST_VOICE_RADIO_TECH = 108;
+
+    // following is for videophone h324
+    int RIL_REQUEST_VIDEOPHONE_DIAL = 108;
+    int RIL_REQUEST_VIDEOPHONE_CODEC = 109;
+    int RIL_REQUEST_VIDEOPHONE_HANGUP = 110;
+    int RIL_REQUEST_VIDEOPHONE_ANSWER = 111;
+    int RIL_REQUEST_VIDEOPHONE_FALLBACK = 112;
+    int RIL_REQUEST_VIDEOPHONE_STRING = 113;
+    int RIL_REQUEST_VIDEOPHONE_LOCAL_MEDIA = 114;
+    int RIL_REQUEST_VIDEOPHONE_RECORD_VIDEO = 115;
+    int RIL_REQUEST_VIDEOPHONE_RECORD_AUDIO = 116;
+    int RIL_REQUEST_VIDEOPHONE_TEST = 117;
+    int RIL_REQUEST_GET_CURRENT_VIDEOCALLS = 118;
+    int RIL_REQUEST_VIDEOPHONE_CONTROL_AUDIO = 119;
+    int RIL_REQUEST_VIDEOPHONE_CONTROL_IFRAME = 120;
+
+    int RIL_REQUEST_MBBMS_GSM_AUTHEN = 121;
+    int RIL_REQUEST_MBBMS_USIM_AUTHEN = 122;
+    int RIL_REQUEST_MBBMS_SIM_TYPE = 123;
+
+    int RIL_REQUEST_GPRS_ATTACH = 124;
+    int RIL_REQUEST_GPRS_DETACH = 125;
+
+    int RIL_REQUEST_GET_SIM_CAPACITY = 126;
+    int RIL_REQUEST_QUERY_COLP = 127;
+    int RIL_REQUEST_QUERY_COLR = 128;
+
+    int RIL_REQUEST_MMI_ENTER_SIM = 129;
+    //add by chengyake for NEWMS00132975 at Wednesday, November 23 2011 begin
+    int RIL_REQUEST_END_ALL_CONNECTIONS = 130;
+    //add by chengyake for NEWMS00132975 at Wednesday, November 23 2011 end
+    //int RIL_REQUEST_QUERY_PIN_RETRY_COUNT = 131;
+    int RIL_REQUEST_GET_REMAIN_TIMES = 131;
+    int RIL_REQUEST_SET_CMMS = 132;
+    int RIL_REQUEST_SIM_POWER = 133;
+    int RIL_REQUEST_VIDEOPHONE_SET_VOICERECORDTYPE = 134;
+    int RIL_REQUEST_VOICE_RADIO_TECH = 135;
+
     int RIL_UNSOL_RESPONSE_BASE = 1000;
     int RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED = 1000;
     int RIL_UNSOL_RESPONSE_CALL_STATE_CHANGED = 1001;
@@ -296,5 +346,23 @@ cat include/telephony/ril.h | \
     int RIL_UNSOl_CDMA_PRL_CHANGED = 1032;
     int RIL_UNSOL_EXIT_EMERGENCY_CALLBACK_MODE = 1033;
     int RIL_UNSOL_RIL_CONNECTED = 1034;
-    int RIL_UNSOL_VOICE_RADIO_TECH_CHANGED = 1035;
+
+    // following is for videophone h324
+    int RIL_UNSOL_VIDEOPHONE_DATA = 1035;
+    int RIL_UNSOL_VIDEOPHONE_CODEC = 1036;
+    int RIL_UNSOL_VIDEOPHONE_DCPI = 1037;
+    int RIL_UNSOL_VIDEOPHONE_DSCI = 1038;
+    int RIL_UNSOL_VIDEOPHONE_STRING = 1039;
+    int RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA = 1040;
+    int RIL_UNSOL_VIDEOPHONE_MM_RING = 1041;
+	int RIL_UNSOL_VIDEOPHONE_RELEASING = 1042;
+    int RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO = 1043;
+    int RIL_UNSOL_VIDEOPHONE_MEDIA_START = 1044;
+    int RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED = 1045;
+
+    // for STK
+    int RIL_UNSOL_ON_STIN = 1046;
+
+    int RIL_UNSOL_SIM_SMS_READY = 1047;
+    int RIL_UNSOL_VOICE_RADIO_TECH_CHANGED = 1048;
 }

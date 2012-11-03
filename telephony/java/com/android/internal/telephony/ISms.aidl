@@ -18,6 +18,7 @@ package com.android.internal.telephony;
 
 import android.app.PendingIntent;
 import com.android.internal.telephony.SmsRawData;
+import android.os.Message;
 
 /** Interface for applications to access the ICC phone book.
  *
@@ -67,6 +68,26 @@ interface ISms {
     boolean copyMessageToIccEf(int status, in byte[] pdu, in byte[] smsc);
 
     /**
+     * fix bug 4197 phone_02
+     * Copy a raw SMS PDU to the ICC.
+     *
+     * @param pdu the raw PDU to store
+     * @param status message status (STATUS_ON_ICC_READ, STATUS_ON_ICC_UNREAD,
+     *               STATUS_ON_ICC_SENT, STATUS_ON_ICC_UNSENT)
+     * @return success or not
+     *
+     */
+    String copyMessageToIccEfWithResult(int status, in byte[] pdu, in byte[] smsc);
+
+    /**
+     * Get Sim card capacity.
+     *
+     * @return Sim capacity string.
+     *
+     */
+    String getSimCapacity();
+
+    /**
      * Send a data SMS.
      *
      * @param smsc the SMSC to send the message through, or NULL for the
@@ -90,6 +111,32 @@ interface ISms {
      *  raw pdu of the status report is in the extended data ("pdu").
      */
     void sendData(in String destAddr, in String scAddr, in int destPort,
+            in byte[] data, in PendingIntent sentIntent, in PendingIntent deliveryIntent);
+
+    /**
+     * Send a DM data SMS.
+     *
+     * @param smsc the SMSC to send the message through, or NULL for the
+     *  default SMSC
+     * @param data the body of the message to send
+     * @param sentIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is sucessfully sent, or failed.
+     *  The result code will be <code>Activity.RESULT_OK<code> for success,
+     *  or one of these errors:<br>
+     *  <code>RESULT_ERROR_GENERIC_FAILURE</code><br>
+     *  <code>RESULT_ERROR_RADIO_OFF</code><br>
+     *  <code>RESULT_ERROR_NULL_PDU</code><br>
+     *  For <code>RESULT_ERROR_GENERIC_FAILURE</code> the sentIntent may include
+     *  the extra "errorCode" containing a radio technology specific value,
+     *  generally only useful for troubleshooting.<br>
+     *  The per-application based SMS control checks sentIntent. If sentIntent
+     *  is NULL the caller will be checked against all unknown applicaitons,
+     *  which cause smaller number of SMS to be sent in checking period.
+     * @param deliveryIntent if not NULL this <code>PendingIntent</code> is
+     *  broadcast when the message is delivered to the recipient.  The
+     *  raw pdu of the status report is in the extended data ("pdu").
+     */
+    void sendDmData(in String destAddr, in String scAddr, in int destPort, in int srcPort,
             in byte[] data, in PendingIntent sentIntent, in PendingIntent deliveryIntent);
 
     /**
@@ -143,6 +190,10 @@ interface ISms {
     void sendMultipartText(in String destinationAddress, in String scAddress,
             in List<String> parts, in List<PendingIntent> sentIntents,
             in List<PendingIntent> deliveryIntents);
+
+
+    boolean saveMultipartText(in String destinationAddress, in String scAddress,
+    		in List<String> parts, in boolean isOutbox, in String timestring, in int savestatus);
 
     /**
      * Enable reception of cell broadcast (SMS-CB) messages with the given
@@ -198,4 +249,9 @@ interface ISms {
      */
     boolean disableCellBroadcastRange(int startMessageId, int endMessageId);
 
+    void activateCellBroadcastSms(int activate);
+
+    void setCellBroadcastSmsConfig(in int[] configValuesArray);
+
+    void getCellBroadcastSmsConfig(in Message response);
 }

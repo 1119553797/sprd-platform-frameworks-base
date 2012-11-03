@@ -32,7 +32,9 @@ import libcore.util.MutableInt;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -61,14 +63,20 @@ class KeyguardStatusViewManager implements OnClickListener {
     private static final int HELP_MESSAGE_TEXT = 13;
     private static final int OWNER_INFO = 14;
     private static final int BATTERY_INFO = 15;
-
+    //add newfeature for DSDS start
+    private static final int MESSAGE_COUNT=16;
+    //add newfeature for DSDS end
     private StatusMode mStatus;
     private String mDateFormatString;
     private TransientTextManager mTransientTextManager;
+    private TransientTextManager mTransientTextManager1;
 
     // Views that this class controls.
     // NOTE: These may be null in some LockScreen screens and should protect from NPE
     private TextView mCarrierView;
+    //add DSDS start
+    private TextView mCarrierView1;
+    //add DSDS end
     private TextView mDateView;
     private TextView mStatus1View;
     private TextView mOwnerInfoView;
@@ -88,7 +96,11 @@ class KeyguardStatusViewManager implements OnClickListener {
     private int mBatteryLevel = 100;
 
     // last known SIM state
-    protected State mSimState;
+    //add DSDS start
+//    protected State mSimState;
+//    protected State mSimState1;
+    protected State[] mSimState;
+    //add DSDS end
 
     private LockPatternUtils mLockPatternUtils;
     private KeyguardUpdateMonitor mUpdateMonitor;
@@ -97,6 +109,9 @@ class KeyguardStatusViewManager implements OnClickListener {
 
     // Shadowed text values
     private CharSequence mCarrierText;
+    //add DSDS start
+    private CharSequence mCarrierText1;
+    //add DSDS end
     private CharSequence mCarrierHelpText;
     private String mHelpMessageText;
     private String mInstructionText;
@@ -104,8 +119,25 @@ class KeyguardStatusViewManager implements OnClickListener {
     private boolean mShowingStatus;
     private KeyguardScreenCallback mCallback;
     private final boolean mEmergencyCallButtonEnabledInScreen;
-    private CharSequence mPlmn;
-    private CharSequence mSpn;
+    //add DSDS start
+    private int mphoneId;
+//    private CharSequence mPlmn;
+//    private CharSequence mSpn;
+//    private CharSequence mPlmn1;
+//    private CharSequence mSpn1;
+    private CharSequence[] mPlmn;
+    private CharSequence[] mSpn;
+    //add DSDS end
+    //add newfeature for DSDS start
+    private int mMessageCount=0;
+    private TextView mMessageCoutView;
+    private TextView mPhoneCoutView;
+    private CharSequence mMessageCountInfo;
+    private boolean mUnreadMessageEnabledInLockScreen;
+    private int mMissedCallCount=0;
+    private TextView mMissedCallTextView;
+    //add DSDS missed call end
+
     protected int mPhoneState;
     private DigitalClock mDigitalClock;
 
@@ -158,6 +190,12 @@ class KeyguardStatusViewManager implements OnClickListener {
         }
     };
 
+    public KeyguardStatusViewManager(View view, KeyguardUpdateMonitor updateMonitor,
+            LockPatternUtils lockPatternUtils, KeyguardScreenCallback callback,
+            boolean emergencyButtonEnabledInScreen){
+    	this(view,updateMonitor,lockPatternUtils,callback,emergencyButtonEnabledInScreen,false);
+    }
+
     /**
      *
      * @param view the containing view of all widgets
@@ -168,7 +206,7 @@ class KeyguardStatusViewManager implements OnClickListener {
      */
     public KeyguardStatusViewManager(View view, KeyguardUpdateMonitor updateMonitor,
                 LockPatternUtils lockPatternUtils, KeyguardScreenCallback callback,
-                boolean emergencyButtonEnabledInScreen) {
+                boolean emergencyButtonEnabledInScreen,boolean unreadMessageEnabledInLockScreen) {
         if (DEBUG) Log.v(TAG, "KeyguardStatusViewManager()");
         mContainer = view;
         mDateFormatString = getContext().getString(R.string.abbrev_wday_month_day_no_year);
@@ -177,6 +215,14 @@ class KeyguardStatusViewManager implements OnClickListener {
         mCallback = callback;
 
         mCarrierView = (TextView) findViewById(R.id.carrier);
+        mCarrierView1= (TextView) findViewById(R.id.carrier1);
+        if(!TelephonyManager.isMultiSim()) {
+            mCarrierView1.setVisibility(View.GONE);
+        }
+
+        mPlmn=new CharSequence[TelephonyManager.getPhoneCount()];
+        mSpn =new CharSequence[TelephonyManager.getPhoneCount()];
+        mSimState =new State[TelephonyManager.getPhoneCount()];
         mDateView = (TextView) findViewById(R.id.date);
         mStatus1View = (TextView) findViewById(R.id.status1);
         mAlarmStatusView = (TextView) findViewById(R.id.alarm_status);
@@ -197,7 +243,15 @@ class KeyguardStatusViewManager implements OnClickListener {
             mEmergencyCallButton.setFocusable(false); // touch only!
         }
 
-        mTransientTextManager = new TransientTextManager(mCarrierView);
+        if(TelephonyManager.getPhoneCount()>1)
+        {
+            mTransientTextManager = new TransientTextManager(mCarrierView);
+            mTransientTextManager1= new TransientTextManager(mCarrierView1);
+        }
+        else
+        {
+            mTransientTextManager = new TransientTextManager(mCarrierView);
+        }
 
         mUpdateMonitor.registerInfoCallback(mInfoCallback);
         mUpdateMonitor.registerSimStateCallback(mSimStateCallback);
@@ -207,13 +261,35 @@ class KeyguardStatusViewManager implements OnClickListener {
         updateOwnerInfo();
 
         // Required to get Marquee to work.
-        final View scrollableViews[] = { mCarrierView, mDateView, mStatus1View, mOwnerInfoView,
-                mAlarmStatusView };
-        for (View v : scrollableViews) {
-            if (v != null) {
-                v.setSelected(true);
+        // add DSDS start
+//        final View scrollableViews[] = { mCarrierView,mCarrierView1, mDateView, mStatus1View, mOwnerInfoView,
+//                mAlarmStatusView };
+        if(TelephonyManager.getPhoneCount()>1)
+        {
+            final View scrollableViews[] = { mCarrierView,mCarrierView1, mDateView, mStatus1View, mOwnerInfoView,
+                    mAlarmStatusView };
+            for (View v : scrollableViews) {
+                if (v != null) {
+                    v.setSelected(true);
+                }
             }
         }
+        else
+        {
+            final View scrollableViews[] = { mCarrierView, mDateView, mStatus1View, mOwnerInfoView,
+                    mAlarmStatusView };
+            for (View v : scrollableViews) {
+                if (v != null) {
+                    v.setSelected(true);
+                }
+            }
+        }
+//        for (View v : scrollableViews) {
+//            if (v != null) {
+//                v.setSelected(true);
+//            }
+//        }
+        //add DSDS end
     }
 
     private boolean inWidgetMode() {
@@ -225,8 +301,16 @@ class KeyguardStatusViewManager implements OnClickListener {
         update(INSTRUCTION_TEXT, string);
     }
 
-    void setCarrierText(CharSequence string) {
-        mCarrierText = string;
+    void setCarrierText(CharSequence string,int phoneId) {
+    	if(phoneId ==0)
+    	{
+    		mCarrierText = string;
+    	}
+    	else
+    	{
+    		mCarrierText1= string;
+    	}
+        mphoneId=phoneId;
         update(CARRIER_TEXT, string);
     }
 
@@ -234,6 +318,45 @@ class KeyguardStatusViewManager implements OnClickListener {
         mOwnerInfoText = string;
         update(OWNER_INFO, string);
     }
+
+    private void messageCountViewsetOnClickListener(boolean enable){
+        if(mMessageCoutView !=null){
+            if(enable){
+                mMessageCoutView.setOnClickListener(new OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         if(mMessageCount == 0){
+                             return;
+                         }
+                         Intent intent = new Intent(Intent.ACTION_MAIN);
+                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                 | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                 | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                         intent.setType("vnd.android-dir/mms-sms");
+                         getContext().startActivity(intent);
+                         mCallback.goToUnlockScreen();
+                     }
+                 });
+           }else{
+                 mMessageCoutView.setOnClickListener(null);
+           }
+        }
+    }
+
+    //add newfeature for DSDS start
+    void setMessageCountText(int messagecount)
+    {
+    	mMessageCountInfo=getContext().getString(R.string.unread_message, messagecount);
+
+    	if(messagecount > 0){
+    		messageCountViewsetOnClickListener(true);
+    	}else{
+    		messageCountViewsetOnClickListener(false);
+    	}
+    	mMessageCount = messagecount;
+    	update(MESSAGE_COUNT, String.valueOf(messagecount));
+    }
+    //add newfeature for DSDS end
 
     /**
      * Sets the carrier help text message, if view is present. Carrier help text messages are
@@ -277,6 +400,7 @@ class KeyguardStatusViewManager implements OnClickListener {
 
                 case OWNER_INFO:
                 case CARRIER_TEXT:
+                case MESSAGE_COUNT:
                 default:
                     if (DEBUG) Log.w(TAG, "Not showing message id " + what + ", str=" + string);
             }
@@ -333,6 +457,7 @@ class KeyguardStatusViewManager implements OnClickListener {
         updateOwnerInfo();
         updateStatus1();
         updateCarrierText();
+        updateMessageCountInfoForLockScreen();
     }
 
     private void updateAlarmInfo() {
@@ -371,7 +496,73 @@ class KeyguardStatusViewManager implements OnClickListener {
         if (!inWidgetMode() && mCarrierView != null) {
             mCarrierView.setText(mCarrierText);
         }
+
+        if(TelephonyManager.isMultiSim())
+        {
+            if (!inWidgetMode() && mCarrierView1 != null) {
+                mCarrierView1.setText(mCarrierText1);
+            }
+        }
+
     }
+
+    //add new feature for lockscreen start
+    private void updateMessageCountInfoForLockScreen()
+    {
+    	Log.i("KeyguardUpdateMonitor","show the Message Count Info : "+mMessageCountInfo);
+    	if(mMessageCoutView != null)
+    	{
+        	mMessageCoutView.setText(mMessageCountInfo);
+        	mMessageCoutView.setVisibility(View.VISIBLE);
+    	}
+
+    }
+
+    private void deleteMessageCountInfoForLockScreen()
+    {
+    	Log.i("KeyguardUpdateMonitor","delete the Message Count Info : "+mMessageCountInfo);
+    	if(mMessageCoutView != null)
+    	{
+        	mMessageCoutView.setText("");
+        	mMessageCoutView.setVisibility(View.GONE);
+    	}
+    }
+
+    private void missedCallTextViewSetOnClickListener(boolean enable){
+        if(mMissedCallTextView !=null){
+            if(enable){
+                mMissedCallTextView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_CALL_BUTTON);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                        getContext().startActivity(intent);
+                        mCallback.goToUnlockScreen();
+                    }
+                });
+            }else{
+                mMissedCallTextView.setOnClickListener(null);
+            }
+        }
+    }
+
+    private void updateMissedCallInfoForLockScreen(int count) {
+        Log.i(TAG, "updateMissedCallInfoForLockScreen : " + count);
+        if (mMissedCallTextView != null) {
+            if (count > 0) {
+            	missedCallTextViewSetOnClickListener(true);
+                mMissedCallCount = count;
+                mMissedCallTextView.setVisibility(View.VISIBLE);
+                mMissedCallTextView.setText(getContext().getString(R.string.missed_call,
+                        mMissedCallCount));
+            } else {
+                mMissedCallTextView.setVisibility(View.GONE);
+                missedCallTextViewSetOnClickListener(false);
+            }
+        }
+    }
+    //add new feature for lockscreen end
 
     private CharSequence getAltTextMessage(MutableInt icon) {
         // If we have replaced the status area with a single widget, then this code
@@ -459,6 +650,7 @@ class KeyguardStatusViewManager implements OnClickListener {
                 return StatusMode.SimPukLocked;
             case READY:
                 return StatusMode.Normal;
+            case BLOCKED:
             case PERM_DISABLED:
                 return StatusMode.SimPermDisabled;
             case UNKNOWN:
@@ -477,71 +669,71 @@ class KeyguardStatusViewManager implements OnClickListener {
      *
      * @param simState
      */
-    private void updateCarrierStateWithSimStatus(State simState) {
+    private void updateCarrierStateWithSimStatus(State simState,int phoneId) {
         if (DEBUG) Log.d(TAG, "updateCarrierTextWithSimStatus(), simState = " + simState);
 
-        CharSequence carrierText = null;
+//      CharSequence carrierText = null;
+//      CharSequence carrierText1 = null;
+        CharSequence[] carrierText=new CharSequence[TelephonyManager.getPhoneCount()];
         int carrierHelpTextId = 0;
         mEmergencyButtonEnabledBecauseSimLocked = false;
         mStatus = getStatusForIccState(simState);
-        mSimState = simState;
-        switch (mStatus) {
-            case Normal:
-                carrierText = makeCarierString(mPlmn, mSpn);
-                break;
+        mSimState[phoneId] = simState;
+            switch (mStatus) {
+                case Normal:
+                    carrierText[phoneId] = makeCarierString(mPlmn[phoneId], mSpn[phoneId]);
+                    break;
 
-            case NetworkLocked:
-                carrierText = makeCarrierStringOnEmergencyCapable(
-                        getContext().getText(R.string.lockscreen_network_locked_message),
-                        mPlmn);
-                carrierHelpTextId = R.string.lockscreen_instructions_when_pattern_disabled;
-                break;
+                case NetworkLocked:
+                	carrierText[phoneId] = makeCarierString(mPlmn[phoneId],
+                            getContext().getText(R.string.lockscreen_network_locked_message));
+                    carrierHelpTextId = R.string.lockscreen_instructions_when_pattern_disabled;
+                    break;
 
-            case SimMissing:
-                // Shows "No SIM card | Emergency calls only" on devices that are voice-capable.
-                // This depends on mPlmn containing the text "Emergency calls only" when the radio
-                // has some connectivity. Otherwise, it should be null or empty and just show
-                // "No SIM card"
-                carrierText =  makeCarrierStringOnEmergencyCapable(
-                        getContext().getText(R.string.lockscreen_missing_sim_message_short),
-                        mPlmn);
-                carrierHelpTextId = R.string.lockscreen_missing_sim_instructions_long;
-                break;
+                case SimMissing:
+                    // Shows "No SIM card | Emergency calls only" on devices that are voice-capable.
+                    // This depends on mPlmn containing the text "Emergency calls only" when the radio
+                    // has some connectivity. Otherwise, it should be null or empty and just show
+                    // "No SIM card"
+                	carrierText[phoneId] = getContext().getText(R.string.lockscreen_missing_sim_message_short);
+                    if (mLockPatternUtils.isEmergencyCallCapable()) {
+                    	carrierText[phoneId] = makeCarierString(mPlmn[phoneId],carrierText[phoneId]);
+                    }
+                    carrierHelpTextId = R.string.lockscreen_missing_sim_instructions_long;
+                    break;
 
-            case SimPermDisabled:
-                carrierText = getContext().getText(
-                        R.string.lockscreen_permanent_disabled_sim_message_short);
-                carrierHelpTextId = R.string.lockscreen_permanent_disabled_sim_instructions;
-                mEmergencyButtonEnabledBecauseSimLocked = true;
-                break;
-
-            case SimMissingLocked:
-                carrierText =  makeCarrierStringOnEmergencyCapable(
-                        getContext().getText(R.string.lockscreen_missing_sim_message_short),
-                        mPlmn);
-                carrierHelpTextId = R.string.lockscreen_missing_sim_instructions;
-                mEmergencyButtonEnabledBecauseSimLocked = true;
-                break;
-
-            case SimLocked:
-                carrierText = makeCarrierStringOnEmergencyCapable(
-                        getContext().getText(R.string.lockscreen_sim_locked_message),
-                        mPlmn);
-                mEmergencyButtonEnabledBecauseSimLocked = true;
-                break;
-
-            case SimPukLocked:
-                carrierText = makeCarrierStringOnEmergencyCapable(
-                        getContext().getText(R.string.lockscreen_sim_puk_locked_message),
-                        mPlmn);
-                if (!mLockPatternUtils.isPukUnlockScreenEnable()) {
-                    // This means we're showing the PUK unlock screen
+                case SimPermDisabled:
+                    carrierText[phoneId] = makeCarierString(mPlmn[phoneId],
+                            getContext().getText(R.string.lockscreen_blocked_sim_message_short));
+                    carrierHelpTextId = R.string.lockscreen_permanent_disabled_sim_instructions;
                     mEmergencyButtonEnabledBecauseSimLocked = true;
-                }
-                break;
-        }
+                    break;
 
-        setCarrierText(carrierText);
+                case SimMissingLocked:
+                	carrierText[phoneId] = makeCarierString(mPlmn[phoneId],
+                            getContext().getText(R.string.lockscreen_missing_sim_message_short));
+                    carrierHelpTextId = R.string.lockscreen_missing_sim_instructions;
+                    mEmergencyButtonEnabledBecauseSimLocked = true;
+                    break;
+
+                case SimLocked:
+                	carrierText[phoneId] = makeCarierString(mPlmn[phoneId],
+                            getContext().getText(R.string.lockscreen_sim_locked_message));
+                    mEmergencyButtonEnabledBecauseSimLocked = true;
+                    break;
+
+                case SimPukLocked:
+                	carrierText[phoneId] = makeCarierString(mPlmn[phoneId],
+                            getContext().getText(R.string.lockscreen_sim_puk_locked_message));
+                    if (!mLockPatternUtils.isPukUnlockScreenEnable()) {
+                        // This means we're showing the PUK unlock screen
+                        mEmergencyButtonEnabledBecauseSimLocked = true;
+                    }
+                    break;
+            }
+        setCarrierText(carrierText[phoneId],phoneId);
+        Log.d("KeyguardStatusViewManager", "updateCarrierTextWithSimStatus()--" +
+                  ", carrierText["+phoneId+"]="+carrierText[phoneId]+", mStatus="+mStatus+", phoneId="+phoneId);
         setCarrierHelpText(carrierHelpTextId);
         updateEmergencyCallButtonState(mPhoneState);
     }
@@ -558,6 +750,11 @@ class KeyguardStatusViewManager implements OnClickListener {
         return simMessage;
     }
 
+    //add new feature for DSDS start
+    private void updateMessageCountForLockScreen(int messagecount){
+    	setMessageCountText(messagecount);
+    }
+    //add new feature for DSDS end
     private View findViewById(int id) {
         return mContainer.findViewById(id);
     }
@@ -620,10 +817,13 @@ class KeyguardStatusViewManager implements OnClickListener {
 
     private void updateEmergencyCallButtonState(int phoneState) {
         if (mEmergencyCallButton != null) {
-            boolean enabledBecauseSimLocked =
-                    mLockPatternUtils.isEmergencyCallEnabledWhileSimLocked()
-                    && mEmergencyButtonEnabledBecauseSimLocked;
-            boolean shown = mEmergencyCallButtonEnabledInScreen || enabledBecauseSimLocked;
+            //add DSDS start
+//            boolean enabledBecauseSimLocked =
+//                    mLockPatternUtils.isEmergencyCallEnabledWhileSimLocked()
+//                    && mEmergencyButtonEnabledBecauseSimLocked;
+//            boolean shown = mEmergencyCallButtonEnabledInScreen || enabledBecauseSimLocked;
+            boolean shown = mEmergencyCallButtonEnabledInScreen;
+            //add DSDS end
             mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton,
                     phoneState, shown);
         }
@@ -646,11 +846,23 @@ class KeyguardStatusViewManager implements OnClickListener {
             refreshDate();
         }
 
-        @Override
-        public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
-            mPlmn = plmn;
-            mSpn = spn;
-            updateCarrierStateWithSimStatus(mSimState);
+        public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int phoneId) {
+           Log.i(TAG,"onRefreshCarrierInfo implements: plmn ="+plmn+", spn ="+spn+", phoneId"+phoneId);
+//           if(phoneId ==0)
+//           {
+//               mPlmn = plmn;
+//               mSpn = spn;
+//        	   updateCarrierStateWithSimStatus(mSimState,phoneId);
+//           }
+//           else
+//           {
+//               mPlmn1 = plmn;
+//               mSpn1 = spn;
+//        	   updateCarrierStateWithSimStatus(mSimState1,phoneId);
+//           }
+             mPlmn[phoneId]=plmn;
+             mSpn [phoneId]=spn;
+             updateCarrierStateWithSimStatus(mSimState[phoneId],phoneId);
         }
 
         @Override
@@ -659,12 +871,20 @@ class KeyguardStatusViewManager implements OnClickListener {
             updateEmergencyCallButtonState(phoneState);
         }
 
+        /** {@inheritDoc} */
+        public void onClockVisibilityChanged() {
+            // ignored
+        }
+
+        public void onDeviceProvisioned() {
+            // ignored
+        }
     };
 
     private SimStateCallback mSimStateCallback = new SimStateCallback() {
 
-        public void onSimStateChanged(State simState) {
-            updateCarrierStateWithSimStatus(simState);
+        public void onSimStateChanged(IccCard.State simState,int subscription) {
+            updateCarrierStateWithSimStatus(simState,subscription);
         }
     };
 

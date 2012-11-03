@@ -17,6 +17,7 @@
 package android.telephony;
 
 import android.os.Parcel;
+import android.text.format.Time;
 import android.util.Log;
 
 import com.android.internal.telephony.GsmAlphabet;
@@ -95,6 +96,25 @@ public class SmsMessage {
      */
     public SmsMessageBase mWrappedSmsMessage;
 
+    /**
+     * {@hide}
+     */
+    private int phoneId;
+
+    /**
+     * {@hide}
+     */
+    public int getPhoneId() {
+        return phoneId;
+    }
+
+    /**
+     * {@hide}
+     */
+    public void setPhoneId(int phoneId) {
+        this.phoneId = phoneId;
+    }
+
     public static class SubmitPdu {
 
         public byte[] encodedScAddress; // Null if not applicable.
@@ -111,6 +131,31 @@ public class SmsMessage {
          * @hide
          */
         protected SubmitPdu(SubmitPduBase spb) {
+            this.encodedMessage = spb.encodedMessage;
+            this.encodedScAddress = spb.encodedScAddress;
+        }
+
+    }
+
+    /**
+     * @hide
+     */
+    public static class DeliverPdu {
+
+        public byte[] encodedScAddress; // Null if not applicable.
+        public byte[] encodedMessage;
+
+        public String toString() {
+            return "DeliverPdu: encodedScAddress = "
+                    + Arrays.toString(encodedScAddress)
+                    + ", encodedMessage = "
+                    + Arrays.toString(encodedMessage);
+        }
+
+        /**
+         * @hide
+         */
+        protected DeliverPdu(SubmitPduBase spb) {
             this.encodedMessage = spb.encodedMessage;
             this.encodedScAddress = spb.encodedScAddress;
         }
@@ -411,6 +456,31 @@ public class SmsMessage {
     }
 
     /**
+     * Get an SMS_DELIVER PDU for a destination address and a message
+     *
+     * @param scAddress Service Centre address.  Null means use default.
+     * @return a <code>SubmitPdu</code> containing the encoded SC
+     *         address, if applicable, and the encoded message.
+     *         Returns null on encode error.
+     * @hide
+     */
+    public static DeliverPdu getDeliverPdu(String scAddress,
+            String destinationAddress, String message, String timestamp) {
+        SubmitPduBase spb;
+        int activePhone = TelephonyManager.getDefault().getPhoneType();
+
+        if (PHONE_TYPE_CDMA == activePhone) {
+            Log.d(LOG_TAG, "[cmgw]get phone type error");
+            return null;
+        } else {
+            spb = com.android.internal.telephony.gsm.SmsMessage.getDeliverPdu(scAddress,
+                    destinationAddress, message, timestamp);
+        }
+
+        return new DeliverPdu(spb);
+    }
+
+    /**
      * Get an SMS-SUBMIT PDU for a data message to a destination address &amp; port.
      * This method will not attempt to use any GSM national language 7 bit encodings.
      *
@@ -438,6 +508,21 @@ public class SmsMessage {
         }
 
         return new SubmitPdu(spb);
+    }
+
+    //add by TS for the save time received pdu
+    /**
+     * @hide
+     */
+    public static byte[] getReceivedPdu(String destAddr,String message,int status,Time time){
+        byte[] data;
+        int activePhone = TelephonyManager.getDefault().getPhoneType();
+        if(PHONE_TYPE_CDMA == activePhone) {
+            return  null;
+        }else{
+            data =com.android.internal.telephony.gsm.SmsMessage.getReceivedPdu(destAddr,message,time);
+        }
+        return data;
     }
 
     /**
@@ -584,6 +669,15 @@ public class SmsMessage {
      */
     public byte[] getUserData() {
         return mWrappedSmsMessage.getUserData();
+    }
+
+    /**
+     * Return the user data header (UDH).
+     *
+     * @hide
+     */
+    public SmsHeader getUserDataHeader() {
+        return mWrappedSmsMessage.getUserDataHeader();
     }
 
     /**

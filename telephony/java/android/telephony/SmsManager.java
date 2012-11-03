@@ -19,10 +19,15 @@ package android.telephony;
 import android.app.PendingIntent;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.Message;
 import android.text.TextUtils;
+import android.text.format.Time;
+import android.util.Log;
 
 import com.android.internal.telephony.ISms;
 import com.android.internal.telephony.IccConstants;
+import com.android.internal.telephony.PhoneFactory;
+import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.SmsRawData;
 
 import java.util.ArrayList;
@@ -42,8 +47,21 @@ import java.util.List;
  */
 public final class SmsManager {
     /** Singleton object constructed during class initialization. */
-    private static final SmsManager sInstance = new SmsManager();
+    private static final SmsManager[] sInstance;
+    private static final String TAG = "SmsManager";
+    private int mPhoneId;
 
+    static {
+        if (PhoneFactory.isMultiSim()) {
+            sInstance = new SmsManager[PhoneFactory.getPhoneCount() + 1];
+            for (int i = 0; i <= PhoneFactory.getPhoneCount(); i++) {
+                sInstance[i] = new SmsManager(i);
+            }
+        } else {
+            sInstance = new SmsManager[1];
+            sInstance[0] = new SmsManager(0);
+        }
+    }
     /**
      * Send a text based SMS.
      *
@@ -82,7 +100,7 @@ public final class SmsManager {
         }
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 iccISms.sendText(destinationAddress, scAddress, text, sentIntent, deliveryIntent);
             }
@@ -147,7 +165,7 @@ public final class SmsManager {
 
         if (parts.size() > 1) {
             try {
-                ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+                ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
                 if (iccISms != null) {
                     iccISms.sendMultipartText(destinationAddress, scAddress, parts,
                             sentIntents, deliveryIntents);
@@ -167,6 +185,57 @@ public final class SmsManager {
             sendTextMessage(destinationAddress, scAddress, parts.get(0),
                     sentIntent, deliveryIntent);
         }
+    }
+
+    public boolean saveMultipartTextMessage(String destinationAddress, ArrayList<String> parts,
+            boolean isOutbox, String timestring) {
+        boolean result = false;
+
+        Log.d(TAG, "[cmgw]message size = " + parts.size());
+        if (parts == null || parts.size() < 1) {
+            Log.d(TAG, "[cmgw]Invalid message body");
+            return result;
+        }
+        int savestatus = isOutbox ? STATUS_ON_ICC_SENT : STATUS_ON_ICC_READ;
+
+        if (!isOutbox) {
+            if (parts.size() > 1) {
+                //result = SmsMessage.saveMultipartText(destinationAddress, null, parts, isOutbox, timestring);
+                try {
+                    ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
+                    if (iccISms != null) {
+                        result = iccISms.saveMultipartText(destinationAddress, null, parts, isOutbox, timestring, savestatus);
+                    } else {
+                        Log.d(TAG, "[cmgw]iccISms is null");
+                    }
+                } catch (RemoteException ex) {
+                    // ignore it
+                    Log.d(TAG, "[cmgw]RemoteException");
+                }
+            } else {
+	            SmsMessage.DeliverPdu pdu = SmsMessage.getDeliverPdu(null, destinationAddress, parts.get(0), timestring);
+	            result = copyMessageToIcc(null, pdu.encodedMessage, STATUS_ON_ICC_READ);
+            }
+        } else {
+            if (parts.size() > 1) {
+                //result = SmsMessage.saveMultipartText(destinationAddress, null, parts, isOutbox, null);
+                try {
+                    ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
+                    if (iccISms != null) {
+                        result = iccISms.saveMultipartText(destinationAddress, null, parts, isOutbox, timestring, savestatus);
+                    } else {
+                        Log.d(TAG, "[cmgw]iccISms is null");
+                    }
+                } catch (RemoteException ex) {
+                    // ignore it
+                    Log.d(TAG, "[cmgw]RemoteException");
+                }
+            } else {
+	            SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(null, destinationAddress, parts.get(0), false);
+	            result = copyMessageToIcc(null, pdu.encodedMessage, STATUS_ON_ICC_SENT);
+            }
+        }
+        return result;
     }
 
     /**
@@ -208,7 +277,7 @@ public final class SmsManager {
         }
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 iccISms.sendData(destinationAddress, scAddress, destinationPort & 0xFFFF,
                         data, sentIntent, deliveryIntent);
@@ -218,17 +287,61 @@ public final class SmsManager {
         }
     }
 
+    /* Start liuhongxing 20110602 */
+    /**
+     * @hide
+     */
+    public void sendDmDataMessage(
+            String destinationAddress, String scAddress, short destinationPort,
+            short sourcePort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        if (TextUtils.isEmpty(destinationAddress)) {
+            throw new IllegalArgumentException("Invalid destinationAddress");
+        }
+
+        if (data == null || data.length == 0) {
+            throw new IllegalArgumentException("Invalid message data");
+        }
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
+            if (iccISms != null) {
+                iccISms.sendDmData(destinationAddress, scAddress, destinationPort & 0xFFFF,
+                        sourcePort & 0xFFFF,
+                        data, sentIntent, deliveryIntent);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+    }
+
+/* End liu 20110602 */
+
     /**
      * Get the default instance of the SmsManager
      *
      * @return the default instance of the SmsManager
      */
     public static SmsManager getDefault() {
-        return sInstance;
+        if (PhoneFactory.isMultiSim()) {
+            return sInstance[PhoneFactory.getPhoneCount()];
+        } else {
+            return sInstance[0];
+        }
     }
 
-    private SmsManager() {
-        //nothing
+    /**
+     * @hide
+     */
+    public static SmsManager getDefault(int phoneId) {
+        if (phoneId >= PhoneFactory.getPhoneCount()) {
+            throw new IllegalArgumentException("phoneId exceeds phoneCount");
+        }
+        return sInstance[phoneId];
+    }
+
+    private SmsManager(int phoneId) {
+        mPhoneId = phoneId;
     }
 
     /**
@@ -248,7 +361,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.copyMessageToIccEf(status, pdu, smsc);
             }
@@ -257,6 +370,28 @@ public final class SmsManager {
         }
 
         return success;
+    }
+
+    /**
+     * Get Sim card capacity.
+     *
+     * @return success or not
+     * @hide
+     */
+    public String getSimCapacity() {
+        boolean success = false;
+        String simCapacity = new String("0:0");
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
+            if (iccISms != null) {
+                simCapacity = iccISms.getSimCapacity();
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return simCapacity;
     }
 
     /**
@@ -276,7 +411,7 @@ public final class SmsManager {
         Arrays.fill(pdu, (byte)0xff);
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.updateMessageOnIccEf(messageIndex, STATUS_ON_ICC_FREE, pdu);
             }
@@ -305,7 +440,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.updateMessageOnIccEf(messageIndex, newStatus, pdu);
             }
@@ -325,11 +460,11 @@ public final class SmsManager {
      *
      * {@hide}
      */
-    public static ArrayList<SmsMessage> getAllMessagesFromIcc() {
+    public ArrayList<SmsMessage> getAllMessagesFromIcc() {
         List<SmsRawData> records = null;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 records = iccISms.getAllMessagesFromIccEf();
             }
@@ -359,7 +494,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.enableCellBroadcast(messageIdentifier);
             }
@@ -389,7 +524,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.disableCellBroadcast(messageIdentifier);
             }
@@ -420,7 +555,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.enableCellBroadcastRange(startMessageId, endMessageId);
             }
@@ -451,7 +586,7 @@ public final class SmsManager {
         boolean success = false;
 
         try {
-            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
             if (iccISms != null) {
                 success = iccISms.disableCellBroadcastRange(startMessageId, endMessageId);
             }
@@ -462,6 +597,42 @@ public final class SmsManager {
         return success;
     }
 
+    /** @hide */
+    public void activateCellBroadcastSms(int activate) {
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
+            if (iccISms != null) {
+                iccISms.activateCellBroadcastSms(activate);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+    }
+
+    /** @hide */
+    public void setCellBroadcastSmsConfig(int[] configValuesArray) {
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
+            if (iccISms != null) {
+                iccISms.setCellBroadcastSmsConfig(configValuesArray);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+    }
+   
+    /** @hide */
+    public void getCellBroadcastSmsConfig(Message response) {
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
+            if (iccISms != null) {
+                iccISms.getCellBroadcastSmsConfig(response);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+    }
+
     /**
      * Create a list of <code>SmsMessage</code>s from a list of RawSmsData
      * records returned by <code>getAllMessagesFromIcc()</code>
@@ -470,7 +641,7 @@ public final class SmsManager {
      *   <code>getAllMessagesFromIcc</code>
      * @return <code>ArrayList</code> of <code>SmsMessage</code> objects.
      */
-    private static ArrayList<SmsMessage> createMessageListFromRawRecords(List<SmsRawData> records) {
+    private ArrayList<SmsMessage> createMessageListFromRawRecords(List<SmsRawData> records) {
         ArrayList<SmsMessage> messages = new ArrayList<SmsMessage>();
         if (records != null) {
             int count = records.size();
@@ -481,6 +652,15 @@ public final class SmsManager {
                     SmsMessage sms = SmsMessage.createFromEfRecord(i+1, data.getBytes());
                     if (sms != null) {
                         messages.add(sms);
+                        // Update STATUS_ON_ICC_READ status
+                        byte status = (byte) (data.getBytes()[0] & 0x07);
+                        Log.d("GSM", "createMessageListFromRawRecords: status = " + status);
+                        if (status == STATUS_ON_ICC_UNREAD) {
+                            Log.d("GSM", "createMessageListFromRawRecords update pdu = " +
+                                  IccUtils.bytesToHexString(data.getBytes()));
+                            boolean result = updateMessageOnIcc(i+1, STATUS_ON_ICC_READ, data.getBytes());
+                            Log.d("GSM", "createMessageListFromRawRecords: update result = " + result);
+                        }
                     }
                 }
             }
@@ -519,4 +699,128 @@ public final class SmsManager {
     static public final int RESULT_ERROR_LIMIT_EXCEEDED     = 5;
     /** Failed because FDN is enabled. {@hide} */
     static public final int RESULT_ERROR_FDN_CHECK_FAILURE  = 6;
+    /** {@hide} */
+    static public final int RESULT_ERROR_SMSC_FDN_CHECK_FAILURE = 7;//modify by dory.zheng for fdn
+
+    /**
+     * Copy a raw SMS PDU to the ICC.
+     * ICC (Integrated Circuit Card) is the card of the device.
+     * For example, this can be the SIM or USIM for GSM.
+     *
+     * @param smsc the SMSC for this message, or NULL for the default SMSC
+     * @param pdu the raw PDU to store
+     * @param status message status (STATUS_ON_ICC_READ, STATUS_ON_ICC_UNREAD,
+     *               STATUS_ON_ICC_SENT, STATUS_ON_ICC_UNSENT)
+     * @return true for success
+     *
+     * {@hide}
+     */
+    public String copyMessageToIccEfWithResult(byte[] smsc, byte[] pdu, int status) {
+        String exception = null;
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms", mPhoneId)));
+            if (iccISms != null) {
+                exception = iccISms.copyMessageToIccEfWithResult(status, pdu, smsc);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+            Log.d("SmsManager", "RemoteException hanppend when call copyMessageToIccEfWithResult method!!",ex);
+        }
+
+        return exception;
+    }
+
+    /**
+     * @hide
+     */
+    public boolean copyMessageToIcc(String scAddr, String destAddr, String message,
+            boolean statusRe, int status) {
+        SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(scAddr, destAddr, message, statusRe);
+
+        return copyMessageToIcc(null, pdu.encodedMessage, status);
+    }
+
+    //fix for bug 4197
+    /**
+     * @hide
+     */
+    public String copyMessageToIccEfWithResult(String scAddr, String destAddr, String message,
+            boolean statusRe, int status) {
+        SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(scAddr, destAddr, message, statusRe);
+
+        return copyMessageToIccEfWithResult(null, pdu.encodedMessage, status);
+    }
+
+    //add by TS  for the received message copy to Icc should save the received time
+    /**
+     * @hide
+     */
+    public boolean copyMessageToIcc(String scAddr, String destAddr, String message, int status ,long time) {
+        Time time1 = new Time();
+        time1.set(time);
+        byte[] data = SmsMessage.getReceivedPdu(destAddr,message,status,time1);
+        if(data == null){
+            return false;
+        }
+        return copyMessageToIcc(null,data,status);
+    }
+    //fix for bug 4197
+    //add by TS  for the received message copy to Icc should save the received time
+    /**
+     * @hide
+     */
+    public String copyMessageToIccEfWithResult(String scAddr, String destAddr, String message, int status ,long time) {
+        Time time1 = new Time();
+        time1.set(time);
+        byte[] data = SmsMessage.getReceivedPdu(destAddr,message,status,time1);
+        if(data == null){
+            Log.d("SmsManager", "copyMessageToIccEfWithResult ===> data is null ! ");
+            return null;
+        }
+        return copyMessageToIccEfWithResult(null,data,status);
+    }
+
+
+    /**
+     * 20120303 add
+     * @param scAddr
+     * @param destAddr
+     * @param message
+     * @param status
+     * @param time
+     * @param phoneId
+     * @return
+     */
+    public String copyMessageToIccEfWithResult(String scAddr, String destAddr, String message, int status ,long time ,int phoneId) {
+        Time time1 = new Time();
+        time1.set(time);
+        byte[] data = SmsMessage.getReceivedPdu(destAddr,message,status,time1);
+        if(data == null){
+            Log.d("SmsManager", "copyMessageToIccEfWithResult ===> data is null ! ");
+            return null;
+        }
+        return copyMessageToIccEfWithResult(null,data,status,phoneId);
+    }
+    public String copyMessageToIccEfWithResult(byte[] smsc, byte[] pdu, int status, int phoneId) {
+        String exception = null;
+
+        try {
+            ISms iccISms = ISms.Stub.asInterface(ServiceManager.getService(PhoneFactory.getServiceName("isms",phoneId)));
+            if (iccISms != null) {
+                exception = iccISms.copyMessageToIccEfWithResult(status, pdu, smsc);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+            Log.d("SmsManager", "RemoteException hanppend when call copyMessageToIccEfWithResult method!!",ex);
+        }
+
+        return exception;
+    }
+    public String copyMessageToIccEfWithResult(String scAddr, String destAddr, String message,
+            boolean statusRe, int status,int phoneId) {
+        SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(scAddr, destAddr, message, statusRe);
+
+        return copyMessageToIccEfWithResult(null, pdu.encodedMessage, status,phoneId);
+    }
 }

@@ -50,6 +50,7 @@ import android.os.Parcelable;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -75,6 +76,8 @@ import java.io.IOException;
  * via its {@link com.android.internal.policy.impl.KeyguardViewCallback}, as appropriate.
  */
 public class LockPatternKeyguardView extends KeyguardViewBase {
+
+    private boolean[] mIsPinUnlockCancelled = {false, false};
 
     private static final int TRANSPORT_USERACTIVITY_TIMEOUT = 10000;
 
@@ -149,12 +152,23 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
          * Unlock by entering a sim pin.
          */
         SimPin,
+        //add DSDS start
+        /**
+         * Unlock by entering a second sim pin.
+         */
+        Sim2Pin,
+        //add DSDS end
 
         /**
          * Unlock by entering a sim puk.
          */
         SimPuk,
-
+        //add DSDS start
+        /**
+         * Unlock by entering a second sim puk.
+         */
+        Sim2Puk,
+        //add DSDS end
         /**
          * Unlock by entering an account's login and password.
          */
@@ -288,21 +302,26 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
             }
         }
 
-        public void goToUnlockScreen() {
-            final IccCard.State simState = mUpdateMonitor.getSimState();
-            if (stuckOnLockScreenBecauseSimMissing()
-                     || (simState == IccCard.State.PUK_REQUIRED
-                         && !mLockPatternUtils.isPukUnlockScreenEnable())){
-                // stuck on lock screen when sim missing or
-                // puk'd but puk unlock screen is disabled
-                return;
+            public void goToUnlockScreen() {
+                //final IccCard.State simState = mUpdateMonitor.getSimState();
+                if (stuckOnLockScreenBecauseSimMissing()
+                         //|| (simState == IccCard.State.PUK_REQUIRED
+                         //&& !mLockPatternUtils.isPukUnlockScreenEnable())
+                      ){
+                    // stuck on lock screen when sim missing or
+                    // puk'd but puk unlock screen is disabled
+                    return;
+                }
+                if (!isSecure()) {
+                    getCallback().keyguardDone(true);
+                } else {
+                    updateScreen(Mode.UnlockScreen, false);
+                }
             }
-            if (!isSecure()) {
-                getCallback().keyguardDone(true);
-            } else {
-                updateScreen(Mode.UnlockScreen, false);
+            public void updatePinUnlockCancel(int subscription) {
+                Log.d(TAG, "updatePinUnlockCancel sub :" + subscription);
+                mIsPinUnlockCancelled[subscription] = true;
             }
-        }
 
         public void forgotPattern(boolean isForgotten) {
             if (mEnableFallback) {
@@ -712,6 +731,9 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
             mPluggedIn = pluggedIn;
         }
 
+    @Override
+    public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn ,int phoneId) {}
+
         @Override
         public void onClockVisibilityChanged() {
             int visFlags = (getSystemUiVisibility() & ~View.STATUS_BAR_DISABLE_CLOCK)
@@ -805,17 +827,30 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
 
     private boolean isSecure() {
         UnlockMode unlockMode = getUnlockMode();
+		boolean isAirPlaneMode = Settings.System.getInt(
+				mContext.getContentResolver(),
+				Settings.System.AIRPLANE_MODE_ON, 0) != 0;
         boolean secure = false;
         switch (unlockMode) {
             case Pattern:
                 secure = mLockPatternUtils.isLockPatternEnabled();
                 break;
             case SimPin:
-                secure = mUpdateMonitor.getSimState() == IccCard.State.PIN_REQUIRED;
+                secure = mUpdateMonitor.getSimState(0) == IccCard.State.PIN_REQUIRED && !isAirPlaneMode;
                 break;
+            //add DSDS start
+            case Sim2Pin:
+                secure = mUpdateMonitor.getSimState(1) == IccCard.State.PIN_REQUIRED && !isAirPlaneMode;
+                break;
+            //add DSDS end
             case SimPuk:
-                secure = mUpdateMonitor.getSimState() == IccCard.State.PUK_REQUIRED;
+                secure = mUpdateMonitor.getSimState(0) == IccCard.State.PUK_REQUIRED && !isAirPlaneMode;
                 break;
+            //add DSDS start
+            case Sim2Puk:
+                secure = mUpdateMonitor.getSimState(1) == IccCard.State.PUK_REQUIRED && !isAirPlaneMode;
+                break;
+            //add DSDS end
             case Account:
                 secure = true;
                 break;
@@ -845,7 +880,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
             }
         }
 
-        // Re-create the unlock screen if necessary.
+        // Re-create the unlock screen if necessary. This is primarily required to properly handle
+        // SIM state changes. This typically happens when this method is called by reset()
         final UnlockMode unlockMode = getUnlockMode();
         if (mode == Mode.UnlockScreen && unlockMode != UnlockMode.Unknown) {
             if (force || mUnlockScreen == null || unlockMode != mUnlockScreenMode) {
@@ -920,15 +956,29 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                     mConfiguration,
                     mUpdateMonitor,
                     mKeyguardScreenCallback,
-                    mLockPatternUtils);
-        } else if (unlockMode == UnlockMode.SimPin) {
+                    mLockPatternUtils,0);
+        }else if (unlockMode == UnlockMode.Sim2Puk){
+            unlockView = new SimPukUnlockScreen(
+                    mContext,
+                    mConfiguration,
+                    mUpdateMonitor,
+                    mKeyguardScreenCallback,
+                    mLockPatternUtils,1);
+        }else if (unlockMode == UnlockMode.SimPin) {
             unlockView = new SimUnlockScreen(
                     mContext,
                     mConfiguration,
                     mUpdateMonitor,
                     mKeyguardScreenCallback,
-                    mLockPatternUtils);
-        } else if (unlockMode == UnlockMode.Account) {
+                    mLockPatternUtils,0);
+        }else if(unlockMode == UnlockMode.Sim2Pin){
+            unlockView = new SimUnlockScreen(
+                    mContext,
+                    mConfiguration,
+                    mUpdateMonitor,
+                    mKeyguardScreenCallback,
+                    mLockPatternUtils,1);
+        }else if (unlockMode == UnlockMode.Account) {
             try {
                 unlockView = new AccountUnlockScreen(
                         mContext,
@@ -1045,14 +1095,17 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
      */
     private Mode getInitialMode() {
         final IccCard.State simState = mUpdateMonitor.getSimState();
-        if (stuckOnLockScreenBecauseSimMissing() ||
-                (simState == IccCard.State.PUK_REQUIRED &&
-                        !mLockPatternUtils.isPukUnlockScreenEnable())) {
+        if (stuckOnLockScreenBecauseSimMissing()
+                //||(simState == IccCard.State.PUK_REQUIRED &&
+                //!mLockPatternUtils.isPukUnlockScreenEnable())
+                ) {
+            Log.i(TAG,"InitialMode is LockScreen");
             return Mode.LockScreen;
         } else {
             if (!isSecure() || mShowLockBeforeUnlock) {
                 return Mode.LockScreen;
             } else {
+                Log.i(TAG,"InitialMode is UnlockScreen");
                 return Mode.UnlockScreen;
             }
         }
@@ -1062,37 +1115,40 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
      * Given the current state of things, what should the unlock screen be?
      */
     private UnlockMode getUnlockMode() {
-        final IccCard.State simState = mUpdateMonitor.getSimState();
-        UnlockMode currentMode;
-        if (simState == IccCard.State.PIN_REQUIRED) {
-            currentMode = UnlockMode.SimPin;
-        } else if (simState == IccCard.State.PUK_REQUIRED) {
-            currentMode = UnlockMode.SimPuk;
-        } else {
-            final int mode = mLockPatternUtils.getKeyguardStoredPasswordQuality();
-            switch (mode) {
-                case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
-                case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
-                case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
-                case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
-                    currentMode = UnlockMode.Password;
-                    break;
-                case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
-                case DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED:
-                    if (mLockPatternUtils.isLockPatternEnabled()) {
-                        // "forgot pattern" button is only available in the pattern mode...
-                        if (mForgotPattern || mLockPatternUtils.isPermanentlyLocked()) {
-                            currentMode = UnlockMode.Account;
-                        } else {
-                            currentMode = UnlockMode.Pattern;
-                        }
-                    } else {
-                        currentMode = UnlockMode.Unknown;
-                    }
-                    break;
-                default:
-                   throw new IllegalStateException("Unknown unlock mode:" + mode);
+        int phonenum=TelephonyManager.getPhoneCount();
+        UnlockMode currentMode=null;
+
+        final IccCard.State[] simState = new IccCard.State[phonenum];
+        for(int i=0;i<phonenum;i++){
+            simState[i]=mUpdateMonitor.getSimState(i);
+            Log.i("xxxxxx","simState = "+simState[i]+", i = "+i);
+            if (simState[i]== IccCard.State.PIN_REQUIRED && (phonenum == 1 || !mIsPinUnlockCancelled[i])) {
+                  currentMode =i==0?UnlockMode.SimPin:UnlockMode.Sim2Pin;
+                  return currentMode;
+            } else if (simState[i] == IccCard.State.PUK_REQUIRED) {
+                  currentMode =i==0?UnlockMode.SimPuk:UnlockMode.Sim2Puk;
+                  return currentMode;
             }
+        }
+        final int mode = mLockPatternUtils.getKeyguardStoredPasswordQuality();
+        switch (mode) {
+            case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
+            case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
+            case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
+            case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
+                currentMode = UnlockMode.Password;
+                break;
+            case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
+            case DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED:
+                // "forgot pattern" button is only available in the pattern mode...
+                if (mForgotPattern || mLockPatternUtils.isPermanentlyLocked()) {
+                    currentMode = UnlockMode.Account;
+                } else {
+                    currentMode = UnlockMode.Pattern;
+                }
+                break;
+            default:
+               throw new IllegalStateException("Unknown unlock mode:" + mode);
         }
         return currentMode;
     }

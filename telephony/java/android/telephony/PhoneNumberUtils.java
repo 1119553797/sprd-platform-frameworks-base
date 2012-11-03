@@ -35,7 +35,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseIntArray;
-
+import com.android.internal.telephony.MsmsConstants;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_IDP_STRING;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY;
@@ -43,6 +43,9 @@ import static com.android.internal.telephony.TelephonyProperties.PROPERTY_OPERAT
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneFactory;
 
 /**
  * Various utilities for dealing with phone number strings.
@@ -161,7 +164,14 @@ public class PhoneNumberUtils
         // TODO: We don't check for SecurityException here (requires
         // CALL_PRIVILEGED permission).
         if (scheme.equals("voicemail")) {
-            return TelephonyManager.getDefault().getCompleteVoiceMailNumber();
+            //return TelephonyManager.getDefault().getCompleteVoiceMailNumber();
+            // Fixed bug 811 by phone_07, 2011.10.27
+            if (intent.hasExtra(MsmsConstants.SUBSCRIPTION_KEY)) {
+                return TelephonyManager.getDefault(intent.getIntExtra(MsmsConstants.SUBSCRIPTION_KEY, 0))
+                        .getVoiceMailNumber();
+            } else {
+                return TelephonyManager.getDefault().getVoiceMailNumber();
+            }
         }
 
         if (context == null) {
@@ -959,6 +969,7 @@ public class PhoneNumberUtils
             case 0xb: return '#';
             case 0xc: return PAUSE;
             case 0xd: return WILD;
+            case 0xe: return WAIT;
 
             default: return 0;
         }
@@ -976,6 +987,8 @@ public class PhoneNumberUtils
             return 0xc;
         } else if (c == WILD) {
             return 0xd;
+        } else if (c == WAIT) {
+            return 0xe;
         } else {
             throw new RuntimeException ("invalid char for BCD " + c);
         }
@@ -1066,7 +1079,7 @@ public class PhoneNumberUtils
         boolean hasPlus = number.indexOf('+') != -1;
         if (hasPlus) numberLenEffective--;
 
-        if (numberLenEffective == 0) return null;
+//        if (numberLenEffective == 0) return null;
 
         int resultLen = (numberLenEffective + 1) / 2;  // Encoded numbers require only 4 bits each.
         int extraBytes = 1;                            // Prepended TOA byte.
@@ -1553,7 +1566,82 @@ public class PhoneNumberUtils
     public static boolean isEmergencyNumber(String number) {
         // Return true only if the specified number *exactly* matches
         // one of the emergency numbers listed by the RIL / SIM.
-        return isEmergencyNumberInternal(number, true /* useExactMatch */);
+        //return isEmergencyNumberInternal(number, true /* useExactMatch */);
+        // modified emergency number logic 2011-9-30 start
+        int phoneCount = PhoneFactory.getPhoneCount();
+        boolean isSimEmergency = false;
+        for (int i = 0; i < phoneCount; i++ ) {
+            isSimEmergency = isSimEmergency || isSimEmergencyNumber(number,i);
+        }
+        return isSimEmergency;
+    }
+
+    /**
+     * @hide
+     */
+    public static boolean isSimEmergencyNumber(String number, int phoneId) {
+        if (number == null || phoneId < 0) return false;
+        int phoneCount = PhoneFactory.getPhoneCount();
+        if (phoneId >= phoneCount) return false;
+        // Strip the separators from the number before comparing it
+        // to the list.
+        number = extractNetworkPortionAlt(number);
+        // modified emergency number logic 2011-9-30 start
+        String numbers = "";
+
+        boolean isEmergency = false;
+        for (int j = 0; j < phoneCount; j++ ) {
+            isEmergency = isEmergency || PhoneFactory.isCardExist(j);
+        }
+
+        if(!isEmergency) {
+            numbers += "000,08,110,999,118,119";
+        }
+
+        if ( PhoneFactory.isCardExist(phoneId)) {
+
+            // retrieve the list of emergency numbers
+            // check read-write ecclist property first
+            String tmpnumbers = SystemProperties.get("ril.ecclist");
+            if (TextUtils.isEmpty(tmpnumbers)) {
+                // then read-only ecclist property since old RIL only uses this
+                tmpnumbers = SystemProperties.get("ro.ril.ecclist");
+            }
+            if (!TextUtils.isEmpty(tmpnumbers)){
+                numbers += ","+tmpnumbers;
+            }
+
+            // retrieve the list of ecc in sim card
+            String eccList = SystemProperties.get(
+                    PhoneFactory.getSetting("ril.sim.ecclist",phoneId));
+            if (!TextUtils.isEmpty(eccList)){
+                numbers += ","+eccList;
+            }
+        }
+
+        log("sim"+phoneId+" emergency numbers: " + numbers);
+
+        if (!TextUtils.isEmpty(numbers)) {
+            // searches through the comma-separated list for a match,
+            // return true if one is found.
+            for (String emergencyNum : numbers.split(",")) {
+//                if (useExactMatch) {
+                    if (number.equals(emergencyNum)) {
+                        return true;
+                    }
+//                } else {
+//                    if (number.startsWith(emergencyNum)) {
+//                        return true;
+//                    }
+//                }
+            }
+        }
+        // No ecclist system property, so use our own list.
+//        if (useExactMatch) {
+            return (number.equals("112") || number.equals("911"));
+//        } else {
+//            return (number.startsWith("112") || number.startsWith("911"));
+//        }
     }
 
     /**
@@ -1579,7 +1667,7 @@ public class PhoneNumberUtils
     public static boolean isPotentialEmergencyNumber(String number) {
         // Check against the emergency numbers listed by the RIL / SIM,
         // and *don't* require an exact match.
-        return isEmergencyNumberInternal(number, false /* useExactMatch */);
+        return isEmergencyNumber(number);
     }
 
     /**
@@ -1823,13 +1911,56 @@ public class PhoneNumberUtils
      * @hide TODO: pending API Council approval
      */
     public static boolean isVoiceMailNumber(String number) {
+//      String vmNumber;
+//
+//      try {
+//          vmNumber = TelephonyManager.getDefault().getVoiceMailNumber();
+//      } catch (SecurityException ex) {
+//          return false;
+//      }
+//
+//      // Fix bug 5010 by phone_07, 2011.11.08
+//      vmNumber = extractNetworkPortionAlt(vmNumber);
+//
+//      // Strip the separators from the number before comparing it
+//      // to the list.
+//      number = extractNetworkPortionAlt(number);
+//
+//      // compare tolerates null so we need to make sure that we
+//      // don't return true when both are null.
+//      return !TextUtils.isEmpty(number) && compare(number, vmNumber);
+
+      int phoneCount = PhoneFactory.getPhoneCount();
+      boolean isVoiceMailNumber = false;
+      for (int i = 0; i < phoneCount; i++ ) {
+          isVoiceMailNumber = isVoiceMailNumber || isVoiceMailNumber(i,number);
+      }
+      return isVoiceMailNumber;
+    }
+
+    /**
+     * isVoiceMailNumber: checks a given number against the voicemail number
+     * provided by the RIL and SIM card. The caller must have the
+     * READ_PHONE_STATE credential.
+     *
+     * @param phoneId
+     * @param number the number to look up.
+     * @return true if the number is in the list of voicemail. False otherwise,
+     *         including if the caller does not have the permission to read the
+     *         VM number.
+     * @hide
+     */
+    // Fixed bug 4973 by phone_07, 2011.11.02, start
+    public static boolean isVoiceMailNumber(int phoneId, String number) {
         String vmNumber;
 
         try {
-            vmNumber = TelephonyManager.getDefault().getVoiceMailNumber();
+            vmNumber = TelephonyManager.getDefault(phoneId).getVoiceMailNumber();
         } catch (SecurityException ex) {
             return false;
         }
+        // Fix bug 5010 by phone_07, 2011.11.08
+        vmNumber = extractNetworkPortionAlt(vmNumber);
 
         // Strip the separators from the number before comparing it
         // to the list.
@@ -1838,7 +1969,7 @@ public class PhoneNumberUtils
         // compare tolerates null so we need to make sure that we
         // don't return true when both are null.
         return !TextUtils.isEmpty(number) && compare(number, vmNumber);
-    }
+    }// Fixed bug 4973 by phone_07, 2011.11.02, end
 
     /**
      * Translates any alphabetic letters (i.e. [A-Za-z]) in the

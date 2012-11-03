@@ -66,7 +66,7 @@ public abstract class DataConnection extends StateMachine {
     protected static final boolean VDBG = false;
 
     protected static Object mCountLock = new Object();
-    protected static int mCount;
+    protected static int[] mCount = new int[PhoneFactory.getPhoneCount()];
     protected AsyncChannel mAc;
 
     protected List<ApnContext> mApnList = null;

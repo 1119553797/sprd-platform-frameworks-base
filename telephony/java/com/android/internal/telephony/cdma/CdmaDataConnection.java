@@ -51,8 +51,9 @@ public class CdmaDataConnection extends DataConnection {
      */
     static CdmaDataConnection makeDataConnection(CDMAPhone phone, int id, RetryManager rm,
             DataConnectionTracker dct) {
+        int phoneId = phone.getPhoneId();
         synchronized (mCountLock) {
-            mCount += 1;
+            mCount[phoneId] += 1;
         }
         CdmaDataConnection cdmaDc = new CdmaDataConnection(phone, "CdmaDC-" + mCount,
                 id, rm, dct);

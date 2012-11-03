@@ -49,6 +49,7 @@ import android.view.WindowManager;
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.SamplingProfilerIntegration;
 import com.android.internal.widget.LockSettingsService;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.server.accessibility.AccessibilityManagerService;
 import com.android.server.am.ActivityManagerService;
 import com.android.server.input.InputManagerService;
@@ -156,7 +157,19 @@ class ServerThread extends Thread {
             context = ActivityManagerService.main(factoryTest);
 
             Slog.i(TAG, "Telephony Registry");
-            ServiceManager.addService("telephony.registry", new TelephonyRegistry(context));
+            if (PhoneFactory.isMultiSim()) {
+                TelephonyRegistry[] telephonyRegistry = new TelephonyRegistry[PhoneFactory.getPhoneCount()];
+                for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                    telephonyRegistry[i] = new TelephonyRegistry(context, i);
+                    ServiceManager.addService(PhoneFactory.getServiceName("telephony.registry", i),
+                            telephonyRegistry[i]);
+                }
+                ServiceManager.addService("telephony.registry",
+                        new CompositeTelephonyRegistry(context, telephonyRegistry));
+            } else {
+                ServiceManager.addService("telephony.registry",
+                        new TelephonyRegistry(context, 0));
+            }
 
             Slog.i(TAG, "Scheduling Policy");
             ServiceManager.addService(Context.SCHEDULING_POLICY_SERVICE,

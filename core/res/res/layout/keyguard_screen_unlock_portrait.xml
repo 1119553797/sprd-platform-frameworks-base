@@ -122,6 +122,14 @@
         android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
         android:textAppearance="?android:attr/textAppearanceMedium"
     />
+    <TextView
+        android:id="@+id/carrier1"
+        android:layout_gravity="center_horizontal"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+    />
 
     <!-- Footer: an emergency call button and an initially hidden "Forgot pattern" button -->
     <LinearLayout

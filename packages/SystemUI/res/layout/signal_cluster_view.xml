@@ -105,6 +105,40 @@
                 />
         </FrameLayout>
     </FrameLayout>
+    <!--add secend signal icon layout start-->
+    <FrameLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        >
+        <View
+            android:layout_height="6dp"
+            android:layout_width="6dp"
+            android:visibility="invisible"
+            />
+        <FrameLayout
+            android:id="@+id/mobile_combo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:id="@+id/mobile_signal1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />
+            <ImageView
+                android:id="@+id/mobile_type1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />
+            <ImageView
+                android:id="@+id/mobile_inout1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="right|bottom"
+                />
+        </FrameLayout>
+    </FrameLayout>
+    <!--add secend signal icon layout end-->
     <ImageView
         android:id="@+id/airplane"
         android:layout_height="wrap_content"

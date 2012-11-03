@@ -105,9 +105,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
     };
 
     SimStateCallback mSimStateCallback = new SimStateCallback() {
-        public void onSimStateChanged(State simState) {
-            updateTargets();
-        }
+        @Override
+		public void onSimStateChanged(State simState, int subscription) {
+			// TODO Auto-generated method stub
+
+		}
     };
 
     private interface UnlockWidgetCommonMethods {

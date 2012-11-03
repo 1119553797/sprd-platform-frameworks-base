@@ -45,6 +45,9 @@ public class TestPhoneNotifier implements PhoneNotifier {
     public void notifyCallForwardingChanged(Phone sender) {
     }
 
+    public void notifyCallForwardingChanged(Phone sender, int serviceClass){
+    }
+
     public void notifyDataConnection(Phone sender, String reason, String apnType) {
     }
 

@@ -16,6 +16,7 @@
 
 package com.android.internal.telephony;
 
+import com.android.internal.telephony.gsm.MsmsGsmDataConnectionTrackerProxy;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -24,6 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
+import android.net.IConnectivityManager;
 import android.net.LinkCapabilities;
 import android.net.LinkProperties;
 import android.net.NetworkInfo;
@@ -34,6 +36,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.preference.PreferenceManager;
@@ -138,6 +141,7 @@ public abstract class DataConnectionTracker extends Handler {
     public static final int EVENT_CLEAN_UP_ALL_CONNECTIONS = BASE + 30;
     public static final int CMD_SET_DEPENDENCY_MET = BASE + 31;
     public static final int CMD_SET_POLICY_DATA_ENABLE = BASE + 32;
+    protected static final int EVENT_SWITCH_PHONE = BASE + 100;    // self-defined event
 
     /***** Constants *****/
 
@@ -176,9 +180,9 @@ public abstract class DataConnectionTracker extends Handler {
     // TODO: move away from static state once 5587429 is fixed.
     protected static boolean sPolicyDataEnabled = true;
 
-    private boolean[] dataEnabled = new boolean[APN_NUM_TYPES];
+    protected boolean[] dataEnabled = new boolean[APN_NUM_TYPES];
 
-    private int enabledCount = 0;
+    protected int enabledCount = 0;
 
     /* Currently requested APN type (TODO: This should probably be a parameter not a member) */
     protected String mRequestedApnType = Phone.APN_TYPE_DEFAULT;
@@ -511,18 +515,31 @@ public abstract class DataConnectionTracker extends Handler {
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         filter.addAction(INTENT_SET_FAIL_DATA_SETUP_COUNTER);
 
-        mUserDataEnabled = Settings.Secure.getInt(
-                mPhone.getContext().getContentResolver(), Settings.Secure.MOBILE_DATA, 1) == 1;
+        if (!PhoneFactory.isMultiSim()) {
+            mUserDataEnabled = Settings.Secure.getInt(
+                    mPhone.getContext().getContentResolver(), Settings.Secure.MOBILE_DATA, 1) == 1;
+        } else {
+            mUserDataEnabled = Settings.Secure.getIntAtIndex(
+                    mPhone.getContext().getContentResolver(), Settings.Secure.MOBILE_DATA, mPhone.getPhoneId(), 1) == 1;
+        }
 
         // TODO: Why is this registering the phone as the receiver of the intent
         //       and not its own handler?
         mPhone.getContext().registerReceiver(mIntentReceiver, filter, null, mPhone);
 
+        boolean dataEnabledSetting = true;
+        int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(mPhone.getContext());
+        try {
+            dataEnabledSetting = IConnectivityManager.Stub.asInterface(ServiceManager.
+                getService(Context.CONNECTIVITY_SERVICE)).getMobileDataEnabledByPhoneId(mPhone.getPhoneId());
+        } catch (Exception e) {
+            // nothing to do - use the old behavior and leave data on
+        }
         // This preference tells us 1) initial condition for "dataEnabled",
         // and 2) whether the RIL will setup the baseband to auto-PS attach.
 
-        dataEnabled[APN_DEFAULT_ID] = SystemProperties.getBoolean(DEFALUT_DATA_ON_BOOT_PROP,
-                                                                  true);
+        dataEnabled[APN_DEFAULT_ID] = SystemProperties.getBoolean(DEFALUT_DATA_ON_BOOT_PROP, true)
+                                          && dataEnabledSetting && (defaultDataPhoneId == mPhone.getPhoneId());
         if (dataEnabled[APN_DEFAULT_ID]) {
             enabledCount++;
         }
@@ -613,7 +630,7 @@ public abstract class DataConnectionTracker extends Handler {
     public void setDataOnRoamingEnabled(boolean enabled) {
         if (getDataOnRoamingEnabled() != enabled) {
             final ContentResolver resolver = mPhone.getContext().getContentResolver();
-            Settings.Secure.putInt(resolver, Settings.Secure.DATA_ROAMING, enabled ? 1 : 0);
+            Settings.Secure.putIntAtIndex(resolver, Settings.Secure.DATA_ROAMING, mPhone.getPhoneId(), enabled ? 1 : 0);
             // will trigger handleDataOnRoamingChange() through observer
         }
     }
@@ -622,12 +639,8 @@ public abstract class DataConnectionTracker extends Handler {
      * Return current {@link Settings.Secure#DATA_ROAMING} value.
      */
     public boolean getDataOnRoamingEnabled() {
-        try {
-            final ContentResolver resolver = mPhone.getContext().getContentResolver();
-            return Settings.Secure.getInt(resolver, Settings.Secure.DATA_ROAMING) != 0;
-        } catch (SettingNotFoundException snfe) {
-            return false;
-        }
+        final ContentResolver resolver = mPhone.getContext().getContentResolver();
+		return Settings.Secure.getIntAtIndex(resolver, Settings.Secure.DATA_ROAMING, mPhone.getPhoneId(), 0) != 0;
     }
 
     private void handleDataOnRoamingChange() {
@@ -690,7 +703,9 @@ public abstract class DataConnectionTracker extends Handler {
                 if (msg.obj instanceof String) {
                     reason = (String) msg.obj;
                 }
-                onTrySetupData(reason);
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(mPhone.getPhoneId())) {
+                    onTrySetupData(reason);
+                }
                 break;
 
             case EVENT_DATA_STALL_ALARM:
@@ -701,11 +716,15 @@ public abstract class DataConnectionTracker extends Handler {
                 if (getDataOnRoamingEnabled() == false) {
                     resetAllRetryCounts();
                 }
-                onRoamingOff();
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(mPhone.getPhoneId())) {
+                    onRoamingOff();
+                }
                 break;
 
             case EVENT_ROAMING_ON:
-                onRoamingOn();
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(mPhone.getPhoneId())) {
+                    onRoamingOn();
+                }
                 break;
 
             case EVENT_RADIO_AVAILABLE:
@@ -713,7 +732,9 @@ public abstract class DataConnectionTracker extends Handler {
                 break;
 
             case EVENT_RADIO_OFF_OR_NOT_AVAILABLE:
-                onRadioOffOrNotAvailable();
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(mPhone.getPhoneId())) {
+                    onRadioOffOrNotAvailable();
+                }
                 break;
 
             case EVENT_DATA_SETUP_COMPLETE:
@@ -735,7 +756,9 @@ public abstract class DataConnectionTracker extends Handler {
                 break;
 
             case EVENT_CLEAN_UP_ALL_CONNECTIONS: {
-                onCleanUpAllConnections((String) msg.obj);
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(mPhone.getPhoneId())) {
+                    onCleanUpAllConnections((String) msg.obj);
+                }
                 break;
             }
             case EVENT_CLEAN_UP_CONNECTION: {
@@ -853,6 +876,12 @@ public abstract class DataConnectionTracker extends Handler {
         }
     }
 
+    protected abstract boolean isApnTypeFilters(String type);
+
+    public abstract  boolean setApnActivePdpFilter(String apntype, boolean filterenable);
+
+    public abstract boolean getApnActivePdpFilter(String apntype) ;
+
     protected LinkProperties getLinkProperties(String apnType) {
         int id = apnTypeToId(apnType);
 
@@ -889,7 +918,7 @@ public abstract class DataConnectionTracker extends Handler {
     // a new APN has gone active and needs to send events to catch up with the
     // current condition
     private void notifyApnIdUpToCurrent(String reason, int apnId) {
-        switch (mState) {
+        switch (getStateByApnType(apnIdToType(apnId))) {
             case IDLE:
             case INITING:
                 break;
@@ -1016,6 +1045,17 @@ public abstract class DataConnectionTracker extends Handler {
         sendMessage(msg);
     }
 
+    private boolean applyNewStateToApnContext(int apnId, int enabled) {
+        ApnContext apnContext = mApnContexts.get(apnIdToType(apnId));
+        if (apnContext == null) {
+            loge("onEnableApn(" + apnId + ", " + enabled + "): NO ApnContext");
+            return false;
+        }
+        apnContext.setEnabled(enabled == ENABLED);
+        apnContext.setDependencyMet(apnContext.getDependencyMet());
+        return true;
+    }
+
     protected void onEnableApn(int apnId, int enabled) {
         if (DBG) {
             log("EVENT_APN_ENABLE_REQUEST apnId=" + apnId + ", apnType=" + apnIdToType(apnId) +
@@ -1023,6 +1063,8 @@ public abstract class DataConnectionTracker extends Handler {
                     ", enabledCount = " + enabledCount + ", isApnTypeActive = " +
                     isApnTypeActive(apnIdToType(apnId)));
         }
+        if (!applyNewStateToApnContext(apnId, enabled)) return;
+
         if (enabled == ENABLED) {
             synchronized (this) {
                 if (!dataEnabled[apnId]) {
@@ -1210,6 +1252,14 @@ public abstract class DataConnectionTracker extends Handler {
         for (DataConnection dc : mDataConnections.values()) {
             dc.resetRetryCount();
         }
+    }
+
+    private State getStateByApnType(String apnType) {
+        ApnContext apnContext = mApnContexts.get(apnType);
+        if (apnContext != null) {
+            return apnContext.getState();
+        }
+        return mState;
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {

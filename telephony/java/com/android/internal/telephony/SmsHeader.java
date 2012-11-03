@@ -70,6 +70,7 @@ public class SmsHeader {
     public static final int ELT_ID_NATIONAL_LANGUAGE_LOCKING_SHIFT    = 0x25;
 
     public static final int PORT_WAP_PUSH = 2948;
+    public static final int PORT_WAP_OTA = 49999;
     public static final int PORT_WAP_WSP  = 9200;
 
     public static class PortAddrs {

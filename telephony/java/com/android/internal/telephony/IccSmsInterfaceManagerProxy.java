@@ -17,7 +17,9 @@
 package com.android.internal.telephony;
 
 import android.app.PendingIntent;
+import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.Message;
 
 import java.util.List;
 
@@ -27,8 +29,12 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
     public IccSmsInterfaceManagerProxy(IccSmsInterfaceManager
             iccSmsInterfaceManager) {
         this.mIccSmsInterfaceManager = iccSmsInterfaceManager;
-        if(ServiceManager.getService("isms") == null) {
-            ServiceManager.addService("isms", this);
+//        if(ServiceManager.getService("isms") == null) {
+//            ServiceManager.addService("isms", this);
+        int phoneId =this.mIccSmsInterfaceManager.getPhoneId();
+        String serviceName = PhoneFactory.getServiceName("isms", phoneId);
+        if(ServiceManager.getService(serviceName) == null) {
+            ServiceManager.addService(serviceName, this);
         }
     }
 
@@ -45,6 +51,14 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
             byte[] smsc) throws android.os.RemoteException {
         return mIccSmsInterfaceManager.copyMessageToIccEf(status, pdu, smsc);
     }
+    //fix for bug 4197
+    public String copyMessageToIccEfWithResult(int status, byte[] pdu, byte[] smsc) throws android.os.RemoteException {
+        return mIccSmsInterfaceManager.copyMessageToIccEfWithResult(status, pdu, smsc);
+    }
+
+    public String getSimCapacity() throws android.os.RemoteException {
+        return mIccSmsInterfaceManager.getSimCapacity();
+    }
 
     public List<SmsRawData> getAllMessagesFromIccEf() throws android.os.RemoteException {
         return mIccSmsInterfaceManager.getAllMessagesFromIccEf();
@@ -55,6 +69,14 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
         mIccSmsInterfaceManager.sendData(destAddr, scAddr, destPort, data,
                 sentIntent, deliveryIntent);
     }
+
+/*Start liuhongxing 20110602 */
+    public void sendDmData(String destAddr, String scAddr, int destPort, int srcPort,
+            byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
+        mIccSmsInterfaceManager.sendDmData(destAddr, scAddr, destPort, srcPort, data,
+                sentIntent, deliveryIntent);
+    }
+/*End liu 20110602 */
 
     public void sendText(String destAddr, String scAddr,
             String text, PendingIntent sentIntent, PendingIntent deliveryIntent) {
@@ -67,6 +89,15 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
         mIccSmsInterfaceManager.sendMultipartText(destAddr, scAddr,
                 parts, sentIntents, deliveryIntents);
     }
+
+
+    //TS for compile
+    public boolean saveMultipartText(String destinationAddress, String scAddress,
+            List<String> parts, boolean isOutbox, String timestring,
+			int savestatus) throws RemoteException {
+        return mIccSmsInterfaceManager.saveMultipartText(destinationAddress, scAddress,
+                parts, isOutbox, timestring, savestatus);
+	}
 
     public boolean enableCellBroadcast(int messageIdentifier) throws android.os.RemoteException {
         return mIccSmsInterfaceManager.enableCellBroadcast(messageIdentifier);
@@ -84,5 +115,16 @@ public class IccSmsInterfaceManagerProxy extends ISms.Stub {
     public boolean disableCellBroadcastRange(int startMessageId, int endMessageId)
             throws android.os.RemoteException {
         return mIccSmsInterfaceManager.disableCellBroadcastRange(startMessageId, endMessageId);
+    }
+
+    public void activateCellBroadcastSms(int activate) throws android.os.RemoteException {
+        mIccSmsInterfaceManager.activateCellBroadcastSms(activate);
+    }
+
+    public void setCellBroadcastSmsConfig(int[] configValuesArray) throws android.os.RemoteException {
+        mIccSmsInterfaceManager.setCellBroadcastSmsConfig(configValuesArray);
+    }
+    public void getCellBroadcastSmsConfig(Message response) throws android.os.RemoteException {
+        mIccSmsInterfaceManager.getCellBroadcastSmsConfig(response);
     }
 }

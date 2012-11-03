@@ -97,6 +97,7 @@ public abstract class ServiceStateTracker extends Handler {
     protected static final int EVENT_POLL_STATE_REGISTRATION           = 4;
     protected static final int EVENT_POLL_STATE_GPRS                   = 5;
     protected static final int EVENT_POLL_STATE_OPERATOR               = 6;
+    protected static final int EVENT_SIM_SMS_READY                     = 9;
     protected static final int EVENT_POLL_SIGNAL_STRENGTH              = 10;
     protected static final int EVENT_NITZ_TIME                         = 11;
     protected static final int EVENT_SIGNAL_STRENGTH_UPDATE            = 12;
@@ -235,7 +236,7 @@ public abstract class ServiceStateTracker extends Handler {
     setRadioPower(boolean power) {
         mDesiredPowerState = power;
 
-        setPowerStateToDesired();
+        setPowerStateToDesired(true);
     }
 
     /**
@@ -304,7 +305,7 @@ public abstract class ServiceStateTracker extends Handler {
     protected abstract Phone getPhone();
     protected abstract void handlePollStateResult(int what, AsyncResult ar);
     protected abstract void updateSpnDisplay();
-    protected abstract void setPowerStateToDesired();
+    protected abstract void setPowerStateToDesired(boolean force);
     protected abstract void log(String s);
     protected abstract void loge(String s);
 

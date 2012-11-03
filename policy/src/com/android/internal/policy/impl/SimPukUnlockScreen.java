@@ -24,8 +24,10 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.widget.LockPatternUtils;
 
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -52,11 +54,13 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
     private TextView mHeaderText;
     private TextView mPukText;
     private TextView mPinText;
+    private TextView mPinText2;
     private TextView mFocusedEntry;
 
     private View mOkButton;
     private View mDelPukButton;
     private View mDelPinButton;
+    private View mDelPinButton2;
 
     private ProgressDialog mSimUnlockProgressDialog = null;
 
@@ -65,16 +69,22 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
     private int mCreationOrientation;
 
     private int mKeyboardHidden;
+    //add DSDS start
+    private int mSub;
+    //add DSDS end
 
+    private int mRemainTimes;
     private static final char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     public SimPukUnlockScreen(Context context, Configuration configuration,
             KeyguardUpdateMonitor updateMonitor, KeyguardScreenCallback callback,
-            LockPatternUtils lockpatternutils) {
+            LockPatternUtils lockpatternutils,int subscription) {
         super(context);
         mUpdateMonitor = updateMonitor;
-        mCallback = callback;;
-
+        mCallback = callback;
+        //add DSDS start
+        mSub=subscription;
+        //add DSDS end
         mCreationOrientation = configuration.orientation;
         mKeyboardHidden = configuration.hardKeyboardHidden;
         mLockPatternUtils = lockpatternutils;
@@ -93,23 +103,46 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
 
         mPukText = (TextView) findViewById(R.id.pukDisplay);
         mPinText = (TextView) findViewById(R.id.pinDisplay);
+//        mPinText2 = (TextView) findViewById(R.id.pinDisplay2);
         mDelPukButton = findViewById(R.id.pukDel);
         mDelPinButton = findViewById(R.id.pinDel);
+//        mDelPinButton2 = findViewById(R.id.pinDel2);
         mOkButton = findViewById(R.id.ok);
 
         mDelPinButton.setOnClickListener(this);
-        mDelPukButton.setOnClickListener(this);
+//        mDelPinButton2.setOnClickListener(this);
+//        mDelPukButton.setOnClickListener(this);
         mOkButton.setOnClickListener(this);
 
-        mHeaderText.setText(R.string.keyguard_password_enter_puk_code);
+        try{
+            mRemainTimes = ITelephony.Stub.asInterface(
+                    ServiceManager.getService(PhoneFactory.getServiceName(
+                                    Context.TELEPHONY_SERVICE, mSub)))
+                    .getRemainTimes(TelephonyManager.UNLOCK_PUK);
+
+            if (PhoneFactory.getPhoneCount() == 2) {
+               if (1 == mSub) {
+                   mHeaderText.setText(getContext().getString(R.string.keyguard_password_enter_sim2_puk_code) + "(" + mRemainTimes + ")");
+               } else {
+                   mHeaderText.setText(getContext().getString(R.string.keyguard_password_enter_sim1_puk_code) + "(" + mRemainTimes + ")");
+               }
+            } else {
+                mHeaderText.setText(getContext().getString(R.string.keyguard_password_enter_puk_code) + "(" + mRemainTimes + ")");
+            }
+        }catch(Exception ex){
+            mHeaderText.setText(getContext().getString(R.string.badPuk)  + "(" + mRemainTimes +")");
+        }
+
         // To make marquee work
         mHeaderText.setSelected(true);
 
         mKeyguardStatusViewManager = new KeyguardStatusViewManager(this, updateMonitor,
-                lockpatternutils, callback, true);
+                lockpatternutils, callback, false);
 
         mPinText.setFocusableInTouchMode(true);
         mPinText.setOnFocusChangeListener(this);
+//        mPinText2.setFocusableInTouchMode(true);
+//        mPinText2.setOnFocusChangeListener(this);
         mPukText.setFocusableInTouchMode(true);
         mPukText.setOnFocusChangeListener(this);
     }
@@ -127,7 +160,15 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
     /** {@inheritDoc} */
     public void onResume() {
         // start fresh
-        mHeaderText.setText(R.string.keyguard_password_enter_puk_code);
+        if (PhoneFactory.getPhoneCount() == 2) {
+            if (1 == mSub) {
+                mHeaderText.setText(getContext().getString(R.string.keyguard_password_enter_sim2_puk_code) + "(" + mRemainTimes + ")");
+            } else {
+                mHeaderText.setText(getContext().getString(R.string.keyguard_password_enter_sim1_puk_code) + "(" + mRemainTimes + ")");
+            }
+         } else {
+             mHeaderText.setText(getContext().getString(R.string.keyguard_password_enter_puk_code) + "(" + mRemainTimes + ")");
+         }
         mKeyguardStatusViewManager.onResume();
     }
 
@@ -160,8 +201,12 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
         @Override
         public void run() {
             try {
-                final boolean result = ITelephony.Stub.asInterface(ServiceManager
-                        .checkService("phone")).supplyPuk(mPuk, mPin);
+                //add DSDS start
+//                final boolean result = ITelephony.Stub.asInterface(ServiceManager
+//                        .checkService("phone")).supplyPuk(mPuk, mPin);
+                final boolean result = ITelephony.Stub.asInterface(ServiceManager.getService(
+                        PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,mSub))).supplyPuk(mPuk,mPin);
+                //add DSDS end
 
                 post(new Runnable() {
                     public void run() {
@@ -191,6 +236,14 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
             if (mFocusedEntry != mPinText)
                 mPinText.requestFocus();
             final Editable digits = mPinText.getEditableText();
+            final int len = digits.length();
+            if (len > 0) {
+                digits.delete(len-1, len);
+            }
+        } else if (v == mDelPinButton2) {
+            if (mFocusedEntry != mPinText2)
+                mPinText2.requestFocus();
+            final Editable digits = mPinText2.getEditableText();
             final int len = digits.length();
             if (len > 0) {
                 digits.delete(len-1, len);
@@ -238,6 +291,23 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
             return;
         }
 
+        if (mPinText2.getText().length() < 4
+                || mPinText2.getText().length() > 8) {
+            // otherwise, display a message to the user, and don't submit.
+            mHeaderText.setText(R.string.invalidPin);
+            mPinText2.setText("");
+            return;
+        }
+
+        String mNewPin = mPinText.getText().toString();
+        String mConfirmPin = mPinText2.getText().toString();
+        if(!mNewPin.equals(mConfirmPin)) {
+            mHeaderText.setText(R.string.mismatchPin);
+            mPinText.setText("");
+            mPinText2.setText("");
+            return;
+        }
+
         getSimUnlockProgressDialog().show();
 
         new CheckSimPuk(mPukText.getText().toString(),
@@ -251,12 +321,29 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
                         if (success) {
                             // before closing the keyguard, report back that
                             // the sim is unlocked so it knows right away
-                            mUpdateMonitor.reportSimUnlocked();
+                            mUpdateMonitor.reportSimUnlocked(mSub);
                             mCallback.goToUnlockScreen();
                         } else {
-                            mHeaderText.setText(R.string.badPuk);
+                            try {
+                                mRemainTimes = ITelephony.Stub.asInterface(
+                                        ServiceManager.getService(PhoneFactory.getServiceName(
+                                                Context.TELEPHONY_SERVICE, mSub)))
+                                                .getRemainTimes(TelephonyManager.UNLOCK_PUK);
+                                if (mRemainTimes >= 1) {
+                                    mHeaderText.setText(getContext().getString(R.string.badPuk) + "(" + mRemainTimes +")");
+                                } else {
+                                    mOkButton.setEnabled(false);
+                                    String displayMessage = getContext().getString(
+                                            R.string.lockscreen_sim_puk_locked_message);
+                                    mHeaderText.setText(displayMessage);
+                                }
+                            } catch (Exception e) {
+                                mHeaderText.setText(getContext().getString(R.string.badPuk) + "(" + mRemainTimes +")");
+                            }
+
                             mPukText.setText("");
                             mPinText.setText("");
+                            mPinText2.setText("");
                         }
                     }
                 });
@@ -304,6 +391,11 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
             mCallback.recreateMe(newConfig);
         } else if (newConfig.hardKeyboardHidden != mKeyboardHidden) {
             mKeyboardHidden = newConfig.hardKeyboardHidden;
+            final boolean isKeyboardOpen =
+                (mKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO);
+            if (mUpdateMonitor.isKeyguardBypassEnabled() && isKeyboardOpen) {
+                mCallback.goToUnlockScreen();
+            }
         }
 
     }
@@ -380,6 +472,7 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
             if (v == mCancelButton) {
                 // clear the PIN/PUK entry fields if the user cancels
                 mPinText.setText("");
+                mPinText2.setText("");
                 mPukText.setText("");
                 mCallback.goToLockScreen();
                 return;

@@ -24,6 +24,7 @@ import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.MccTable;
 import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.ServiceStateTracker;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
@@ -313,14 +314,8 @@ public class CdmaServiceStateTracker extends ServiceStateTracker {
             break;
 
         case EVENT_RADIO_STATE_CHANGED:
-            if(cm.getRadioState() == RadioState.RADIO_ON) {
-                handleCdmaSubscriptionSource(mCdmaSSM.getCdmaSubscriptionSource());
-
-                // Signal strength polling stops when radio is off.
-                queueNextSignalStrengthPoll();
-            }
             // This will do nothing in the 'radio not available' case.
-            setPowerStateToDesired();
+            setPowerStateToDesired(false);
             pollState();
             break;
 
@@ -511,7 +506,7 @@ public class CdmaServiceStateTracker extends ServiceStateTracker {
     }
 
     @Override
-    protected void setPowerStateToDesired() {
+    protected void setPowerStateToDesired(boolean force) {
         // If we want it on and it's off, turn it on
         if (mDesiredPowerState
             && cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF) {

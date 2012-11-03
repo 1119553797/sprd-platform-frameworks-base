@@ -16,6 +16,8 @@
 
 package com.android.internal.telephony.gsm;
 
+import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
+import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_DATA_SYNC;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC;
@@ -67,7 +69,7 @@ public class SIMRecords extends IccRecords {
 
     private String imsi;
     private boolean callForwardingEnabled;
-
+    boolean videoCallForwardingEnabled;
 
     /**
      * States only used by getSpnFsm FSM
@@ -477,6 +479,32 @@ public class SIMRecords extends IccRecords {
                             + "Probably malformed SIM record", ex);
 
         }
+    }
+
+    public boolean getCallForwardingFlag(int serviceClass) {
+        Log.w(LOG_TAG,"getCallForwardingFlag(), serviceClass" + serviceClass);
+        if ((serviceClass & SERVICE_CLASS_VOICE) != 0) {
+            Log.w(LOG_TAG,"getCallForwardingFlag(), callForwardingEnabled:" + callForwardingEnabled);
+            return callForwardingEnabled;
+        } else if ((serviceClass & SERVICE_CLASS_DATA_SYNC) != 0) {
+            Log.w(LOG_TAG,"getCallForwardingFlag(), videoCallForwardingEnabled:" + videoCallForwardingEnabled);
+            return videoCallForwardingEnabled;
+        }
+        return false;
+    }
+
+    public boolean getVideoCallForwardingFlag() {
+        Log.w(LOG_TAG,"getVideoCallForwardingFlag(): " + videoCallForwardingEnabled);
+        return videoCallForwardingEnabled;
+    }
+
+    public void setVideoCallForwardingFlag(int line, boolean enable) {
+        Log.w(LOG_TAG,"setVideoCallForwardingFlag(), line: " + line + ", enable:" + enable);
+        if (line != 1) return; // only line 1 is supported
+
+        videoCallForwardingEnabled = enable;
+
+//        ((TDPhone) phone).notifyCallForwardingIndicator(SERVICE_CLASS_DATA_SYNC);
     }
 
     /**
@@ -1402,7 +1430,7 @@ public class SIMRecords extends IccRecords {
     @Override
     public int getDisplayRule(String plmn) {
         int rule;
-        if (spn == null || spnDisplayCondition == -1) {
+        if (spn == null || spn.length() == 0 || spnDisplayCondition == -1) {
             // EF_SPN was not found on the SIM, or not yet loaded.  Just show ONS.
             rule = SPN_RULE_SHOW_PLMN;
         } else if (isOnMatchingPlmn(plmn)) {
@@ -1413,7 +1441,7 @@ public class SIMRecords extends IccRecords {
             }
         } else {
             rule = SPN_RULE_SHOW_PLMN;
-            if ((spnDisplayCondition & 0x02) == 0x00) {
+            if ((spnDisplayCondition & 0x02) == 0x00 && plmn != null) {
                 // SPN required if not registered to HPLMN or PLMN in EF_SPDI
                 rule |= SPN_RULE_SHOW_SPN;
             }
@@ -1438,6 +1466,18 @@ public class SIMRecords extends IccRecords {
                 }
             }
         }
+
+        //MNC of CHINA MOBILE: 00,02,07
+        String operNum = getOperatorNumeric();
+        if (operNum != null &&
+           (operNum.equals("46000") ||
+            operNum.equals("46002") ||
+            operNum.equals("46007"))) {
+            if (plmn.equals("46000") || plmn.equals("46002") || plmn.equals("46007")) {
+                return true;
+            }
+        }
+
         return false;
     }
 

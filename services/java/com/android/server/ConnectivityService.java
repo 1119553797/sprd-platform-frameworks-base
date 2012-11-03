@@ -69,6 +69,7 @@ import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Slog;
@@ -77,6 +78,7 @@ import android.util.SparseIntArray;
 import com.android.internal.net.LegacyVpnInfo;
 import com.android.internal.net.VpnConfig;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.server.am.BatteryStatsService;
 import com.android.server.connectivity.Tethering;
 import com.android.server.connectivity.Vpn;
@@ -1425,6 +1427,10 @@ private NetworkStateTracker makeWimaxStateTracker() {
         //       which is where we store the value and maybe make this
         //       asynchronous.
         enforceAccessPermission();
+        if (PhoneFactory.isMultiSim()) {
+            int phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+            return getMobileDataEnabledByPhoneId(phoneId);
+        }
         boolean retVal = Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.MOBILE_DATA, 1) == 1;
         if (VDBG) log("getMobileDataEnabled returning " + retVal);
@@ -1508,6 +1514,11 @@ private NetworkStateTracker makeWimaxStateTracker() {
      */
     public void setMobileDataEnabled(boolean enabled) {
         enforceChangePermission();
+        if (PhoneFactory.isMultiSim()) {
+            int phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+            setMobileDataEnabledByPhoneId(phoneId, enabled);
+            return;
+        }
         if (DBG) log("setMobileDataEnabled(" + enabled + ")");
 
         mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_MOBILE_DATA,
@@ -3102,4 +3113,54 @@ private NetworkStateTracker makeWimaxStateTracker() {
             }
         }
     }
+
+
+    /**
+     * @see ConnectivityManager#getMobileDataEnabledByPhoneId(int)
+     */
+    public boolean getMobileDataEnabledByPhoneId(int phoneId) {
+        enforceAccessPermission();
+        boolean retVal = Settings.Secure.getIntAtIndex(mContext.getContentResolver(),
+                Settings.Secure.MOBILE_DATA, phoneId, 1) == 1;
+        if (DBG) Slog.d(TAG, "getMobileDataEnabled[" + phoneId + "] returning " + retVal);
+        return retVal;
+    }
+
+    /**
+     * @see ConnectivityManager#setMobileDataEnabledByPhoneId(int, boolean)
+     */
+    public synchronized void setMobileDataEnabledByPhoneId(int phoneId, boolean enabled) {
+        enforceChangePermission();
+        if (DBG) Slog.d(TAG, "setMobileDataEnabled(" + phoneId + "," + enabled + ")");
+        mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_MOBILE_DATA,
+                (enabled ? ENABLED : DISABLED), phoneId));
+
+/*
+        if (getMobileDataEnabledByPhoneId(phoneId) == enabled) return;
+
+        Settings.Secure.putIntAtIndex(mContext.getContentResolver(),
+                Settings.Secure.MOBILE_DATA, phoneId, enabled ? 1 : 0);
+
+        int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+        if (enabled) {
+            if (phoneId == defaultDataPhoneId) {
+                if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
+                    if (DBG) Slog.d(TAG, "starting up " + mNetTrackers[ConnectivityManager.TYPE_MOBILE]);
+                    mNetTrackers[ConnectivityManager.TYPE_MOBILE].reconnect();
+                }
+            }
+        } else {
+            for (NetworkStateTracker nt : mNetTrackers) {
+                if (nt == null) continue;
+                int netType = nt.getNetworkInfo().getType();
+                if (getPhoneIdByNetworkType(netType) != phoneId) continue;
+                if (mNetConfigs[netType].radio == ConnectivityManager.TYPE_MOBILE) {
+                    if (DBG) Slog.d(TAG, "tearing down " + nt);
+                    nt.teardown();
+                }
+            }
+        }
+*/
+    }
+
 }

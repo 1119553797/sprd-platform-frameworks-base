@@ -25,8 +25,11 @@ import android.os.Binder;
 import android.os.Build.VERSION_CODES;
 import android.os.RemoteException;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 
 import java.net.InetAddress;
+
+import com.android.internal.telephony.PhoneFactory;
 
 /**
  * Class that answers queries about the state of network connectivity. It also
@@ -878,6 +881,37 @@ public class ConnectivityManager {
             return mService.isActiveNetworkMetered();
         } catch (RemoteException e) {
             return false;
+        }
+    }
+
+    /**
+     * Gets the value of the setting for enabling Mobile data.
+     *
+     * @param phoneId which phone
+     *
+     * @return Whether mobile data is enabled.
+     * @hide
+     */
+    public boolean getMobileDataEnabledByPhoneId(int phoneId) {
+        try {
+            return mService.getMobileDataEnabledByPhoneId(phoneId);
+        } catch (RemoteException e) {
+            return true;
+        }
+    }
+
+    /**
+     * Sets the persisted value for enabling/disabling Mobile data.
+     *
+     * @param phoneId which phone
+     * @param enabled Whether the mobile data connection should be
+     *            used or not.
+     * @hide
+     */
+    public void setMobileDataEnabledByPhoneId(int phoneId, boolean enabled) {
+        try {
+            mService.setMobileDataEnabledByPhoneId(phoneId, enabled);
+        } catch (RemoteException e) {
         }
     }
 }

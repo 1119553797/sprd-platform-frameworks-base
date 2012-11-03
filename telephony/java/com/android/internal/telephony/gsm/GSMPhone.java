@@ -33,9 +33,11 @@ import android.telephony.CellLocation;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import com.android.internal.telephony.CallTracker;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_DISABLE;
 import static com.android.internal.telephony.CommandsInterface.CF_ACTION_ENABLE;
@@ -64,6 +66,7 @@ import com.android.internal.telephony.MmiCode;
 import com.android.internal.telephony.OperatorInfo;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneBase;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.PhoneNotifier;
 import com.android.internal.telephony.PhoneProxy;
 import com.android.internal.telephony.PhoneSubInfo;
@@ -82,11 +85,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import android.app.Notification;
+import android.app.NotificationManager;
 
 /**
  * {@hide}
  */
-public class GSMPhone extends PhoneBase {
+public abstract class GSMPhone extends PhoneBase {
     // NOTE that LOG_TAG here is "GSM", which means that log messages
     // from this file will go into the radio log rather than the main
     // log.  (Use "adb logcat -b radio" to see them.)
@@ -100,6 +105,8 @@ public class GSMPhone extends PhoneBase {
     public static final String VM_NUMBER = "vm_number_key";
     // Key used to read/write the SIM IMSI used for storing the voice mail
     public static final String VM_SIM_IMSI = "vm_sim_imsi_key";
+    // Notification id for USSD
+    private static final int NOTIFICATION_ID_USSD = 300;
 
     // Instance Variables
     GsmCallTracker mCT;
@@ -122,7 +129,17 @@ public class GSMPhone extends PhoneBase {
     private String mImeiSv;
     private String mVmNumber;
 
+    private boolean mIsStkCall = false;
 
+    private static final int MO_CALL = 0;
+    private static final int MT_CALL = 1;
+
+    private static final int MAX_INIT_QUERY_CF_COUNT = 8;
+    private int initQueryCountCF = MAX_INIT_QUERY_CF_COUNT;
+    private int initQueryCountCF_BUSY = 0;
+    private int initQueryCountCF_NOANSWER = 0;
+    private int initQueryCountCF_NOTREACHABLE = 0;
+    private static final String getCallForwardLock = "";
     // Constructors
 
     public
@@ -462,17 +479,17 @@ public class GSMPhone extends PhoneBase {
         mCT.explicitCallTransfer();
     }
 
-    public GsmCall
+    public Call
     getForegroundCall() {
         return mCT.foregroundCall;
     }
 
-    public GsmCall
+    public Call
     getBackgroundCall() {
         return mCT.backgroundCall;
     }
 
-    public GsmCall
+    public Call
     getRingingCall() {
         return mCT.ringingCall;
     }
@@ -696,11 +713,21 @@ public class GSMPhone extends PhoneBase {
 
     public Connection
     dial(String dialString) throws CallStateException {
-        return dial(dialString, null);
+        return dial(dialString, false);
     }
 
     public Connection
-    dial (String dialString, UUSInfo uusInfo) throws CallStateException {
+    dial (String dialString, boolean isStkCall) throws CallStateException {
+        return dial(dialString, (UUSInfo)null, isStkCall);
+    }
+
+    public Connection
+    dial(String dialString, UUSInfo uusInfo) throws CallStateException {
+        return dial(dialString, uusInfo, false);
+    }
+
+    public Connection
+    dial (String dialString, UUSInfo uusInfo, boolean isStkCall) throws CallStateException {
         // Need to make sure dialString gets parsed properly
         String newDialString = PhoneNumberUtils.stripSeparators(dialString);
 
@@ -715,11 +742,18 @@ public class GSMPhone extends PhoneBase {
         if (LOCAL_DEBUG) Log.d(LOG_TAG,
                                "dialing w/ mmi '" + mmi + "'...");
 
+        Log.d(LOG_TAG, "GsmPhone isStkCall = '" + isStkCall);
+        mCT.setStkCall(isStkCall);
+
         if (mmi == null) {
             return mCT.dial(newDialString, uusInfo);
         } else if (mmi.isTemporaryModeCLIR()) {
             return mCT.dial(mmi.dialingNumber, mmi.getCLIRMode(), uusInfo);
         } else {
+            if (isStkCall) {
+                Log.d(LOG_TAG, " StkCall doesn't run MMI ");
+                return mCT.dial(newDialString, uusInfo);
+            }
             mPendingMMIs.add(mmi);
             mMmiRegistrants.notifyRegistrants(new AsyncResult(null, mmi, null));
             mmi.processCode();
@@ -789,7 +823,7 @@ public class GSMPhone extends PhoneBase {
     private void storeVoiceMailNumber(String number) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(VM_NUMBER, number);
+        editor.putString(PhoneFactory.getSetting(VM_NUMBER, getPhoneId()), number);
         editor.apply();
         setVmSimImsi(getSubscriberId());
     }
@@ -799,20 +833,20 @@ public class GSMPhone extends PhoneBase {
         String number = mIccRecords.getVoiceMailNumber();
         if (TextUtils.isEmpty(number)) {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-            number = sp.getString(VM_NUMBER, null);
+            number = sp.getString(PhoneFactory.getSetting(VM_NUMBER, getPhoneId()), null);
         }
         return number;
     }
 
     private String getVmSimImsi() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-        return sp.getString(VM_SIM_IMSI, null);
+        return sp.getString(PhoneFactory.getSetting(VM_SIM_IMSI, getPhoneId()), null);
     }
 
     private void setVmSimImsi(String imsi) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(VM_SIM_IMSI, imsi);
+        editor.putString(PhoneFactory.getSetting(VM_SIM_IMSI, getPhoneId()), imsi);
         editor.apply();
     }
 
@@ -918,7 +952,13 @@ public class GSMPhone extends PhoneBase {
             Message resp;
             if (commandInterfaceCFReason == CF_REASON_UNCONDITIONAL) {
                 resp = obtainMessage(EVENT_GET_CALL_FORWARD_DONE, onComplete);
-            } else {
+            } else if (commandInterfaceCFReason == CF_REASON_BUSY) {
+                resp = obtainMessage(EVENT_GET_CALL_FORWARD_BUSY_DONE, onComplete);
+            }else if (commandInterfaceCFReason == CF_REASON_NO_REPLY) {
+                resp = obtainMessage(EVENT_GET_CALL_FORWARD_NO_REPLY_DONE, onComplete);
+            }else if (commandInterfaceCFReason == CF_REASON_NOT_REACHABLE) {
+                resp = obtainMessage(EVENT_GET_CALL_FORWARD_NOT_REACHABLE_DONE, onComplete);
+            }else{
                 resp = onComplete;
             }
             mCM.queryCallForwardStatus(commandInterfaceCFReason,0,null,resp);
@@ -937,7 +977,16 @@ public class GSMPhone extends PhoneBase {
             if (commandInterfaceCFReason == CF_REASON_UNCONDITIONAL) {
                 resp = obtainMessage(EVENT_SET_CALL_FORWARD_DONE,
                         isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, onComplete);
-            } else {
+            } else if (commandInterfaceCFReason == CF_REASON_BUSY) {
+                resp = obtainMessage(EVENT_SET_CALL_FORWARD_BUSY_DONE,
+                        isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, onComplete);
+            }else if (commandInterfaceCFReason == CF_REASON_NO_REPLY) {
+                resp = obtainMessage(EVENT_SET_CALL_FORWARD_NO_REPLY_DONE,
+                        isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, onComplete);
+            }else if (commandInterfaceCFReason == CF_REASON_NOT_REACHABLE) {
+                resp = obtainMessage(EVENT_SET_CALL_FORWARD_NOT_REACHABLE_DONE,
+                        isCfEnable(commandInterfaceCFAction) ? 1 : 0, 0, onComplete);
+            }else {
                 resp = onComplete;
             }
             mCM.setCallForward(commandInterfaceCFAction,
@@ -947,6 +996,22 @@ public class GSMPhone extends PhoneBase {
                     timerSeconds,
                     resp);
         }
+    }
+
+    public void queryFacilityLock (String facility, String password, int serviceClass, Message onComplete){
+        if (LOCAL_DEBUG) Log.d(LOG_TAG, "queryFacilityLock: " + facility);
+        mCM.queryFacilityLock(facility, password, serviceClass, obtainMessage(EVENT_GET_CALL_BARRING_DONE, onComplete));
+    }
+
+    public void setFacilityLock (String facility, boolean lockState, String password,
+                        int serviceClass, Message onComplete){
+        if (LOCAL_DEBUG) Log.d(LOG_TAG, "setFacilityLock: " + facility);
+        mCM.setFacilityLock(facility, lockState, password, serviceClass, obtainMessage(EVENT_SET_CALL_BARRING_DONE, onComplete));
+    }
+
+    public void changeBarringPassword(String facility, String oldPwd, String newPwd, Message onComplete){
+        if (LOCAL_DEBUG) Log.d(LOG_TAG, "changeBarringPassword: " + facility);
+        mCM.changeBarringPassword(facility, oldPwd, newPwd, obtainMessage(EVENT_CHANGE_CALL_BARRING_PASSWORD_DONE, onComplete));
     }
 
     public void getOutgoingCallerIdDisplay(Message onComplete) {
@@ -984,6 +1049,7 @@ public class GSMPhone extends PhoneBase {
         public Message message;
         public String operatorNumeric;
         public String operatorAlphaLong;
+        public int operatorAct;
     }
 
     public void
@@ -995,6 +1061,7 @@ public class GSMPhone extends PhoneBase {
         nsm.message = response;
         nsm.operatorNumeric = "";
         nsm.operatorAlphaLong = "";
+        nsm.operatorAct = OperatorInfo.ACT_GSM;
 
         // get the message
         Message msg = obtainMessage(EVENT_SET_NETWORK_AUTOMATIC_COMPLETE, nsm);
@@ -1013,11 +1080,12 @@ public class GSMPhone extends PhoneBase {
         nsm.message = response;
         nsm.operatorNumeric = network.getOperatorNumeric();
         nsm.operatorAlphaLong = network.getOperatorAlphaLong();
+        nsm.operatorAct = network.getAct();
 
         // get the message
         Message msg = obtainMessage(EVENT_SET_NETWORK_MANUAL_COMPLETE, nsm);
 
-        mCM.setNetworkSelectionModeManual(network.getOperatorNumeric(), msg);
+        mCM.setNetworkSelectionModeManual(network.getOperatorNumeric(), network.getAct(), msg);
     }
 
     public void
@@ -1098,7 +1166,8 @@ public class GSMPhone extends PhoneBase {
 
         isUssdError
             = (ussdMode != CommandsInterface.USSD_MODE_NOTIFY
-                && ussdMode != CommandsInterface.USSD_MODE_REQUEST);
+                && ussdMode != CommandsInterface.USSD_MODE_REQUEST
+                && ussdMode != CommandsInterface.USSD_MODE_TERMINATED);
 
         // See comments in GsmMmiCode.java
         // USSD requests aren't finished until one
@@ -1129,6 +1198,11 @@ public class GSMPhone extends PhoneBase {
                 mmi = GsmMmiCode.newNetworkInitiatedUssd(ussdMessage,
                                                    isUssdRequest,
                                                    GSMPhone.this);
+                NotificationManager nm = (NotificationManager)mContext
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+                Notification notification = new Notification();
+                notification.defaults = Notification.DEFAULT_SOUND;
+                nm.notify(NOTIFICATION_ID_USSD,notification);
                 onNetworkInitiatedUssd(mmi);
             }
         }
@@ -1215,13 +1289,28 @@ public class GSMPhone extends PhoneBase {
             case EVENT_USSD:
                 ar = (AsyncResult)msg.obj;
 
-                String[] ussdResult = (String[]) ar.result;
+                if (ar.exception != null) {
+                    Log.d(LOG_TAG, "EVENT_USSD  ar.exception != null");
+                    GsmMmiCode found = null;
+                    for(int i=0,s=mPendingMMIs.size(); i<s; i++) {
+                        if (mPendingMMIs.get(i).isPendingUSSD()) {
+                            found = mPendingMMIs.get(i);
+                            break;
+                        }
+                    }
+                    if (found != null) {
+                        Log.d(LOG_TAG, "EVENT_USSD found != null");
+                        found.onUssdFinishedError();
+                    }
+                } else {
+                    String[] ussdResult = (String[]) ar.result;
 
-                if (ussdResult.length > 1) {
-                    try {
-                        onIncomingUSSD(Integer.parseInt(ussdResult[0]), ussdResult[1]);
-                    } catch (NumberFormatException e) {
-                        Log.w(LOG_TAG, "error parsing USSD");
+                    if (ussdResult.length > 1) {
+                        try {
+                            onIncomingUSSD(Integer.parseInt(ussdResult[0]), ussdResult[1]);
+                        } catch (NumberFormatException e) {
+                            Log.w(LOG_TAG, "error parsing USSD");
+                        }
                     }
                 }
             break;
@@ -1241,14 +1330,89 @@ public class GSMPhone extends PhoneBase {
 
             case EVENT_SSN:
                 ar = (AsyncResult)msg.obj;
-                SuppServiceNotification not = (SuppServiceNotification) ar.result;
-                mSsnRegistrants.notifyRegistrants(ar);
+                CharSequence cs = null;
+                SuppServiceNotification ssn = (SuppServiceNotification) ar.result;
+                if (ssn.notificationType == MO_CALL) {
+                    switch(ssn.code) {
+                        case SuppServiceNotification.MO_CODE_UNCONDITIONAL_CF_ACTIVE:
+                        cs = mContext.getText(com.android.internal.R.string.ActiveUnconCf);
+                        break;
+                        case SuppServiceNotification.MO_CODE_SOME_CF_ACTIVE:
+                        cs = mContext.getText(com.android.internal.R.string.ActiveConCf);
+                        break;
+                        case SuppServiceNotification.MO_CODE_CALL_FORWARDED:
+                        cs = mContext.getText(com.android.internal.R.string.CallForwarded);
+                        break;
+                        case SuppServiceNotification.MO_CODE_CALL_IS_WAITING:
+                        cs = mContext.getText(com.android.internal.R.string.CallWaiting);
+                        break;
+                        //case SuppServiceNotification.MO_CODE_CUG_CALL:
+                        //cs = mContext.getText(com.android.internal.R.string.CugCall);
+                        //break;
+                        case SuppServiceNotification.MO_CODE_OUTGOING_CALLS_BARRED:
+                        cs = mContext.getText(com.android.internal.R.string.OutCallBarred);
+                        break;
+                        case SuppServiceNotification.MO_CODE_INCOMING_CALLS_BARRED:
+                        cs = mContext.getText(com.android.internal.R.string.InCallBarred);
+                        break;
+                        //case SuppServiceNotification.MO_CODE_CLIR_SUPPRESSION_REJECTED:
+                        //cs = mContext.getText(com.android.internal.R.string.ClirRejected);
+                        //break;
+                    }
+                } else if (ssn.notificationType == MT_CALL) {
+                    switch(ssn.code) {
+                        case SuppServiceNotification.MT_CODE_FORWARDED_CALL:
+                        cs = mContext.getText(com.android.internal.R.string.ForwardedCall);
+                        break;
+                     /* case SuppServiceNotification.MT_CODE_CUG_CALL:
+                        cs = mContext.getText(com.android.internal.R.string.CugCall);
+                        break;*/
+                        //Fix Bug 4182 phone_01
+                        case SuppServiceNotification.MT_CODE_CALL_ON_HOLD:
+                        cs = mContext.getText(com.android.internal.R.string.CallHold);
+                        break;
+                        case SuppServiceNotification.MT_CODE_CALL_RETRIEVED:
+                        cs = mContext.getText(com.android.internal.R.string.CallRetrieved);
+                        break;
+                        /*case SuppServiceNotification.MT_CODE_MULTI_PARTY_CALL:
+                        cs = mContext.getText(com.android.internal.R.string.MultiCall);
+                        break;
+                        case SuppServiceNotification.MT_CODE_ON_HOLD_CALL_RELEASED:
+                        cs = mContext.getText(com.android.internal.R.string.HoldCallReleased);
+                        break;
+                        case SuppServiceNotification.MT_CODE_CALL_CONNECTING_ECT:
+                        cs = mContext.getText(com.android.internal.R.string.ConnectingEct);
+                        break;
+                        case SuppServiceNotification.MT_CODE_CALL_CONNECTED_ECT:
+                        cs = mContext.getText(com.android.internal.R.string.ConnectedEct);
+                        break;*/
+                        case SuppServiceNotification.MT_CODE_ADDITIONAL_CALL_FORWARDED:
+                        cs = mContext.getText(com.android.internal.R.string.IncomingCallForwarded);
+                        break;
+                    }
+                }
+                if (cs!=null) {
+                    Toast.makeText(mContext, cs, Toast.LENGTH_LONG).show();
+                }
+                //mSsnRegistrants.notifyRegistrants(ar);
             break;
 
-            case EVENT_SET_CALL_FORWARD_DONE:
+//            case EVENT_SET_CALL_FORWARD_DONE:
+//                ar = (AsyncResult)msg.obj;
+//                if (ar.exception == null) {
+//                    mIccRecords.setVoiceCallForwardingFlag(1, msg.arg1 == 1);
+//                }
+//                onComplete = (Message) ar.userObj;
+//                if (onComplete != null) {
+//                    AsyncResult.forMessage(onComplete, ar.result, ar.exception);
+//                    onComplete.sendToTarget();
+//                }
+//                break;
+
+            case EVENT_SET_CALL_BARRING_DONE:
                 ar = (AsyncResult)msg.obj;
                 if (ar.exception == null) {
-                    mIccRecords.setVoiceCallForwardingFlag(1, msg.arg1 == 1);
+                    //mSIMRecords.setVoiceCallForwardingFlag(1, msg.arg1 == 1);
                 }
                 onComplete = (Message) ar.userObj;
                 if (onComplete != null) {
@@ -1373,18 +1537,20 @@ public class GSMPhone extends PhoneBase {
             nsm.message.sendToTarget();
         }
 
+/*    for NEWMS00129043
         // open the shared preferences editor, and write the value.
         // nsm.operatorNumeric is "" if we're in automatic.selection.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(NETWORK_SELECTION_KEY, nsm.operatorNumeric);
-        editor.putString(NETWORK_SELECTION_NAME_KEY, nsm.operatorAlphaLong);
+        editor.putString(PhoneFactory.getSetting(NETWORK_SELECTION_KEY, getPhoneId()), nsm.operatorNumeric);
+        editor.putString(PhoneFactory.getSetting(NETWORK_SELECTION_NAME_KEY, getPhoneId()), nsm.operatorAlphaLong);
+        editor.putInt(PhoneFactory.getSetting(NETWORK_SELECTION_ACT_KEY, getPhoneId()), nsm.operatorAct);
 
         // commit and log the result.
         if (! editor.commit()) {
             Log.e(LOG_TAG, "failed to commit network selection preference");
         }
-
+*/
     }
 
     /**
@@ -1503,5 +1669,15 @@ public class GSMPhone extends PhoneBase {
         if (VDBG) pw.println(" mImei=" + mImei);
         if (VDBG) pw.println(" mImeiSv=" + mImeiSv);
         pw.println(" mVmNumber=" + mVmNumber);
+    }
+
+    public void registerForGprsAttached(Handler h,int what, Object obj) {
+        Log.i(LOG_TAG, " This registerForGprsAttached for GSM.");
+        mSST.registerForDataConnectionAttached(h, what, obj);
+    }
+
+    public void unregisterForGprsAttached(Handler h) {
+        Log.i(LOG_TAG, " This unregisterForGprsAttached for GSM.");
+        mSST.unregisterForDataConnectionAttached(h);
     }
 }

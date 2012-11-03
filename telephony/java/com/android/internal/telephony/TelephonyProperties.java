@@ -163,6 +163,7 @@ public interface TelephonyProperties
      * when there is a radio technology change.
      */
     static final String PROPERTY_RESET_ON_RADIO_TECH_CHANGE = "persist.radio.reset_on_switch";
+    static final String ADNCACHE_LOADED_STATE ="gsm.sim.adncache.loaded";
 
     /**
      * Set to false to disable SMS receiving, default is

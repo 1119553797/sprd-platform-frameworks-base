@@ -15,12 +15,13 @@
  */
 
 package com.android.internal.telephony;
-
+import com.android.internal.telephony.gsm.TDPhone;
 import com.android.internal.telephony.sip.SipPhone;
 
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.AsyncResult;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RegistrantList;
@@ -301,12 +302,30 @@ public final class CallManager {
                 mDefaultPhone = basePhone;
             }
             mPhones.add(basePhone);
+
+	    if (basePhone instanceof TDPhone) {
+            TDPhone tdPhone = (TDPhone)basePhone;
+            ArrayList<Call> calls = tdPhone.getRingingCalls();
+            for (Call call : calls) {
+                mRingingCalls.add(call);
+			}
+            calls = tdPhone.getBackgroundCalls();
+            for (Call call : calls) {
+                mBackgroundCalls.add(call);
+            }
+            calls = tdPhone.getForegroundCalls();
+            for (Call call : calls) {
+                mForegroundCalls.add(call);
+            }
+	    } else {
             mRingingCalls.add(basePhone.getRingingCall());
             mBackgroundCalls.add(basePhone.getBackgroundCall());
             mForegroundCalls.add(basePhone.getForegroundCall());
+	    }
             registerForPhoneStates(basePhone);
             return true;
         }
+
         return false;
     }
 
@@ -367,6 +386,22 @@ public final class CallManager {
         return getFirstActiveRingingCall().getPhone();
     }
 
+    /**
+     * @return the phone associated with any call
+     */
+    public Phone getPhoneInCall() {
+        Phone phone = null;
+        if (!getFirstActiveRingingCall().isIdle()) {
+            phone = getFirstActiveRingingCall().getPhone();
+        } else if (!getActiveFgCall().isIdle()) {
+            phone = getActiveFgCall().getPhone();
+        } else {
+            // If BG call is idle, we return default phone
+            phone = getFirstActiveBgCall().getPhone();
+        }
+        return phone;
+    }
+
     public void setAudioMode() {
         Context context = getContext();
         if (context == null) return;
@@ -419,7 +454,7 @@ public final class CallManager {
         }
     }
 
-    private Context getContext() {
+    public Context getContext() {
         Phone defaultPhone = getDefaultPhone();
         return ((defaultPhone == null) ? null : defaultPhone.getContext());
     }
@@ -712,6 +747,20 @@ public final class CallManager {
      * handled asynchronously.
      */
     public Connection dial(Phone phone, String dialString) throws CallStateException {
+        return dial(phone, dialString, false);
+    }
+
+    /**
+     * Initiate a new voice connection. This happens asynchronously, so you
+     * cannot assume the audio path is connected (or a call index has been
+     * assigned) until PhoneStateChanged notification has occurred.
+     *
+     * @exception CallStateException if a new outgoing call is not currently
+     * possible because no more call slots exist or a call exists that is
+     * dialing, alerting, ringing, or waiting.  Other errors are
+     * handled asynchronously.
+     */
+    public Connection dial(Phone phone, String dialString, boolean isStkCall) throws CallStateException {
         Phone basePhone = getPhoneBase(phone);
         Connection result;
 
@@ -743,7 +792,7 @@ public final class CallManager {
             }
         }
 
-        result = basePhone.dial(dialString);
+        result = basePhone.dial(dialString,isStkCall);
 
         if (VDBG) {
             Log.d(LOG_TAG, "End dial(" + basePhone + ", "+ dialString + ")");
@@ -786,7 +835,7 @@ public final class CallManager {
      * @param phone
      * @return true if the phone can make a new call
      */
-    private boolean canDial(Phone phone) {
+    public boolean canDial(Phone phone) {
         int serviceState = phone.getServiceState().getState();
         boolean hasRingingCall = hasActiveRingingCall();
         boolean hasActiveCall = hasActiveFgCall();
@@ -1705,6 +1754,16 @@ public final class CallManager {
             }
         }
         return false;
+    }
+
+    public void  codecVP(Phone phone, int type, Bundle param) {
+        if (phone == null) {
+            Log.d(LOG_TAG, "codeVP(), phone is null, so use default phone");
+            mDefaultPhone.codecVP(type, param);
+            return;
+        }
+        Log.d(LOG_TAG, "codecVP(), phoneid: " + phone.getPhoneId());
+		phone.codecVP(type, param);
     }
 
     private Handler mHandler = new Handler() {

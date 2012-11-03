@@ -25,18 +25,77 @@ import android.util.Log;
 /**
  * {@hide}
  */
-public interface CommandsInterface {
+//public interface CommandsInterface {
+public interface CommandsInterface extends SprdCommandsInterface{
     enum RadioState {
-        RADIO_OFF,         /* Radio explicitly powered off (eg CFUN=0) */
-        RADIO_UNAVAILABLE, /* Radio unavailable (eg, resetting or not booted) */
-        RADIO_ON;          /* Radio is on */
+        RADIO_OFF(0),         /* Radio explictly powered off (eg CFUN=0) */
+        RADIO_UNAVAILABLE(0), /* Radio unavailable (eg, resetting or not booted) */
+        SIM_NOT_READY(1),     /* Radio is on, but the SIM interface is not ready */
+        SIM_LOCKED_OR_ABSENT(1),  /* SIM PIN locked, PUK required, network
+                                     personalization, or SIM absent */
+        SIM_READY(1),         /* Radio is on and SIM interface is available */
+        RUIM_NOT_READY(2),    /* Radio is on, but the RUIM interface is not ready */
+        RUIM_READY(2),        /* Radio is on and the RUIM interface is available */
+        RUIM_LOCKED_OR_ABSENT(2), /* RUIM PIN locked, PUK required, network
+                                     personalization locked, or RUIM absent */
+        NV_NOT_READY(3),      /* Radio is on, but the NV interface is not available */
+        NV_READY(3);          /* Radio is on and the NV interface is available */
 
         public boolean isOn() /* and available...*/ {
-            return this == RADIO_ON;
+            return this == SIM_NOT_READY
+                    || this == SIM_LOCKED_OR_ABSENT
+                    || this == SIM_READY
+                    || this == RUIM_NOT_READY
+                    || this == RUIM_READY
+                    || this == RUIM_LOCKED_OR_ABSENT
+                    || this == NV_NOT_READY
+                    || this == NV_READY;
+        }
+        private int stateType;
+        private RadioState (int type) {
+            stateType = type;
+        }
+
+        public int getType() {
+            return stateType;
         }
 
         public boolean isAvailable() {
             return this != RADIO_UNAVAILABLE;
+        }
+
+        public boolean isSIMReady() {
+            return this == SIM_READY;
+        }
+
+        public boolean isRUIMReady() {
+            return this == RUIM_READY;
+        }
+
+        public boolean isNVReady() {
+            return this == NV_READY;
+        }
+
+        public boolean isGsm() {
+            if (BaseCommands.getLteOnCdmaModeStatic() == Phone.LTE_ON_CDMA_TRUE) {
+                return false;
+            } else {
+                return this == SIM_NOT_READY
+                        || this == SIM_LOCKED_OR_ABSENT
+                        || this == SIM_READY;
+            }
+        }
+
+        public boolean isCdma() {
+            if (BaseCommands.getLteOnCdmaModeStatic() == Phone.LTE_ON_CDMA_TRUE) {
+                return true;
+            } else {
+                return this ==  RUIM_NOT_READY
+                        || this == RUIM_READY
+                        || this == RUIM_LOCKED_OR_ABSENT
+                        || this == NV_NOT_READY
+                        || this == NV_READY;
+            }
         }
     }
 
@@ -74,6 +133,15 @@ public interface CommandsInterface {
     static final String CB_FACILITY_BA_SIM       = "SC";
     static final String CB_FACILITY_BA_FD        = "FD";
 
+    static final int CB_REASON_AO    = 0;
+    static final int CB_REASON_OI    = 1;
+    static final int CB_REASON_OX    = 2;
+    static final int CB_REASON_AI    = 3;
+    static final int CB_REASON_IR    = 4;
+    static final int CB_REASON_AB    = 5;
+
+    static final int CB_ACTION_DISABLE		= 0;
+    static final int CB_ACTION_ENABLE		= 1;
 
     // Used for various supp services apis
     // See 27.007 +CCFC or +CLCK
@@ -92,6 +160,12 @@ public interface CommandsInterface {
     // by messages sent to setOnUSSD handler
     static final int USSD_MODE_NOTIFY       = 0;
     static final int USSD_MODE_REQUEST      = 1;
+    static final int USSD_MODE_TERMINATED   = 2;
+
+    // SIM Refresh results, passed up from RIL.
+    static final int SIM_REFRESH_FILE_UPDATED   = 0;  // Single file updated
+    static final int SIM_REFRESH_INIT           = 1;  // SIM initialized; reload all
+    static final int SIM_REFRESH_RESET          = 2;  // SIM reset; may be locked
 
     // GSM SMS fail cause for acknowledgeLastIncomingSMS. From TS 23.040, 9.2.3.22.
     static final int GSM_SMS_FAIL_CAUSE_MEMORY_CAPACITY_EXCEEDED    = 0xD3;
@@ -178,6 +252,15 @@ public interface CommandsInterface {
     void unregisterForInCallVoicePrivacyOn(Handler h);
     void registerForInCallVoicePrivacyOff(Handler h, int what, Object obj);
     void unregisterForInCallVoicePrivacyOff(Handler h);
+
+    /**
+     * Fires on any transition into RUIM_READY
+     * Fires immediately if if currently in that state
+     * In general, actions should be idempotent. State may change
+     * before event is received.
+     */
+    void registerForRUIMReady(Handler h, int what, Object obj);
+    void unregisterForRUIMReady(Handler h);
 
     /**
      * unlike the register* methods, there's only one new 3GPP format SMS handler.
@@ -305,6 +388,17 @@ public interface CommandsInterface {
      */
     void setOnCallRing(Handler h, int what, Object obj);
     void unSetOnCallRing(Handler h);
+
+    /**
+     * Sets the handler for Sim Sms Ready notifications.
+     * Unlike the register* methods, there's only one notification handler
+     *
+     * @param h Handler for notification message.
+     * @param what User-defined message code.
+     * @param obj User object.
+     */
+    void setOnSimSmsReady(Handler h, int what, Object obj);
+    void unSetOnSimSmsReady(Handler h);
 
     /**
      * Sets the handler for RESTRICTED_STATE changed notification,
@@ -730,7 +824,8 @@ public interface CommandsInterface {
      * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
      * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
      */
-    void dial (String address, int clirMode, Message result);
+//    void dial (String address, int clirMode, Message result);
+    void dial (String address, int clirMode, boolean isStkCall, Message result);
 
     /**
      *  returned message
@@ -743,7 +838,8 @@ public interface CommandsInterface {
      * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
      * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
      */
-    void dial(String address, int clirMode, UUSInfo uusInfo, Message result);
+//    void dial(String address, int clirMode, UUSInfo uusInfo, Message result);
+    void dial(String address, int clirMode, UUSInfo uusInfo, boolean isStkCall, Message result);
 
     /**
      *  returned message
@@ -987,6 +1083,12 @@ public interface CommandsInterface {
     void sendBurstDtmf(String dtmfString, int on, int off, Message result);
 
     /**
+     * @param status status of setCMMS when send long message
+     * @param response sent when operation completes
+     */
+    void setCMMS(int status, Message response);
+
+    /**
      * smscPDU is smsc address in PDU form GSM BCD format prefixed
      *      by a length byte (as expected by TS 27.005) or NULL for default SMSC
      * pdu is SMS in PDU format as an ASCII hex string
@@ -1140,7 +1242,8 @@ public interface CommandsInterface {
 
     void setNetworkSelectionModeAutomatic(Message response);
 
-    void setNetworkSelectionModeManual(String operatorNumeric, Message response);
+//    void setNetworkSelectionModeManual(String operatorNumeric, Message response);
+    void setNetworkSelectionModeManual(String operatorNumeric, int act, Message response);
 
     /**
      * Queries whether the current network selection mode is automatic
@@ -1576,4 +1679,12 @@ public interface CommandsInterface {
      * Notifiy that we are testing an emergency call
      */
     public void testingEmergencyCall();
+
+    //add by chengyake for NEWMS00132975 at Wednesday, November 23 2011 end
+    /**
+     * Hang up all connection.
+     * AT command:ATH
+     */
+    void endAllConnections (Message result);
+    //add by chengyake for NEWMS00132975 at Wednesday, November 23 2011 end
 }

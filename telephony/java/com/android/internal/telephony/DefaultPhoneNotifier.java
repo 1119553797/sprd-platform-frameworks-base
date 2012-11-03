@@ -36,11 +36,19 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
     static final String LOG_TAG = "GSM";
     private static final boolean DBG = true;
     private ITelephonyRegistry mRegistry;
+	private int mPhoneId;
 
     /*package*/
     DefaultPhoneNotifier() {
+	     mPhoneId = PhoneFactory.getPhoneCount();
         mRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
                     "telephony.registry"));
+    }
+
+    DefaultPhoneNotifier(int phoneId) {
+	    mPhoneId = phoneId;
+        mRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
+                    PhoneFactory.getServiceName("telephony.registry", phoneId)));
     }
 
     public void notifyPhoneState(Phone sender) {
@@ -93,6 +101,14 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         }
     }
 
+    public void notifyCallForwardingChanged(Phone sender, int serviceClass) {
+        try {
+            mRegistry.notifyCallForwardingChangedByServiceClass(sender.getCallForwardingIndicator(), serviceClass);
+        } catch (RemoteException ex) {
+            // system process is dead
+        }
+    }
+
     public void notifyDataActivity(Phone sender) {
         try {
             mRegistry.notifyDataActivity(convertDataActivityState(sender.getDataActivityState()));
@@ -111,7 +127,7 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         // TODO
         // use apnType as the key to which connection we're talking about.
         // pass apnType back up to fetch particular for this one.
-        TelephonyManager telephony = TelephonyManager.getDefault();
+        TelephonyManager telephony = TelephonyManager.getDefault(sender.getPhoneId());
         LinkProperties linkProperties = null;
         LinkCapabilities linkCapabilities = null;
         boolean roaming = false;

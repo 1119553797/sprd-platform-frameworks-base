@@ -63,7 +63,7 @@ public class UsimDataDownloadTest extends AndroidTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        mCm = new UsimDataDownloadCommands(mContext);
+        //mCm = new UsimDataDownloadCommands(mContext);
         mHandlerThread = new TestHandlerThread();
         mHandlerThread.start();
         mHandler = mHandlerThread.getHandler();

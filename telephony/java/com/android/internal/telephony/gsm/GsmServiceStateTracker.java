@@ -29,6 +29,8 @@ import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.ServiceStateTracker;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
+import com.android.internal.telephony.PhoneFactory;
+import com.android.internal.R;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -54,6 +56,7 @@ import android.provider.Settings.SettingNotFoundException;
 import android.provider.Telephony.Intents;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.text.TextUtils;
 import android.util.EventLog;
@@ -155,6 +158,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     /** waiting period before recheck gprs and voice registration. */
     static final int DEFAULT_GPRS_CHECK_PERIOD_MILLIS = 60 * 1000;
 
+    protected static final int EVENT_ICC_STATUS_CHANGED = 39;
+
     /** Notification type. */
     static final int PS_ENABLED = 1001;            // Access Control blocks data service
     static final int PS_DISABLED = 1002;           // Access Control enables data service
@@ -166,16 +171,27 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     /** Notification id. */
     static final int PS_NOTIFICATION = 888;  // Id to update and cancel PS restricted
     static final int CS_NOTIFICATION = 999;  // Id to update and cancel CS restricted
+
     private boolean mLocalLanguageChange = false;// local Language change,true
                                                  // if change
+
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d(LOG_TAG, "BroadcastReceiver:phoneid="+phone.getPhoneId()+" intent=" + intent.getAction());
+
             if (intent.getAction().equals(Intent.ACTION_LOCALE_CHANGED)) {
                 // update emergency string whenever locale changed
                 mLocalLanguageChange = true;
                 pollState();
                 updateSpnDisplay();
+            }else if(TelephonyIntents.SIM_CARD_PRESENT.equals(intent.getAction()) && intent.
+                    getIntExtra("phone_id",-1)==phone.getPhoneId()){
+                Log.d(LOG_TAG, " intent.getIntExtra(phone_id,-1)=" + intent.getIntExtra("phone_id",-1));
+                mLocalLanguageChange = false;
+                Message msg=new Message();
+                msg.what=EVENT_ICC_STATUS_CHANGED;
+                GsmServiceStateTracker.this.handleMessage(msg);
             }else{
                 mLocalLanguageChange = false;
             }
@@ -221,12 +237,17 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         cm.setOnSignalStrengthUpdate(this, EVENT_SIGNAL_STRENGTH_UPDATE, null);
         cm.setOnRestrictedStateChanged(this, EVENT_RESTRICTED_STATE_CHANGED, null);
         phone.getIccCard().registerForReady(this, EVENT_SIM_READY, null);
+        cm.setOnSimSmsReady(this, EVENT_SIM_SMS_READY, null);
 
         // system setting property AIRPLANE_MODE_ON is set in Settings.
         int airplaneMode = Settings.System.getInt(
                 phone.getContext().getContentResolver(),
                 Settings.System.AIRPLANE_MODE_ON, 0);
-        mDesiredPowerState = ! (airplaneMode > 0);
+//        mDesiredPowerState = ! (airplaneMode > 0);
+        boolean isStandby = Settings.System.getInt(cr,PhoneFactory.getSetting(
+                Settings.System.SIM_STANDBY, phone.getPhoneId()), 1) == 1;
+        boolean isNotSelected = Settings.System.getInt(cr,Settings.System.POWER_ON_STANDBY_SELECT, 0) == 0;
+        mDesiredPowerState = ! (airplaneMode > 0) && isStandby && isNotSelected;
 
         cr = phone.getContext().getContentResolver();
         cr.registerContentObserver(
@@ -242,6 +263,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         // Monitor locale change
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_LOCALE_CHANGED);
+        filter.addAction(TelephonyIntents.SIM_CARD_PRESENT);
         phone.getContext().registerReceiver(mIntentReceiver, filter);
 
         // Gsm doesn't support OTASP so its not needed
@@ -260,6 +282,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         cm.unSetOnNITZTime(this);
         cr.unregisterContentObserver(this.mAutoTimeObserver);
         cr.unregisterContentObserver(this.mAutoTimeZoneObserver);
+        cm.unSetOnSimSmsReady(this);
     }
 
     protected void finalize() {
@@ -276,6 +299,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         int[] ints;
         String[] strings;
         Message message;
+        Intent intent;
+        String action;
 
         if (!phone.mIsTheCurrentActivePhone) {
             Log.e(LOG_TAG, "Received message " + msg +
@@ -290,7 +315,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
             case EVENT_SIM_READY:
                 // Set the network type, in case the radio does not restore it.
-                cm.setCurrentPreferredNetworkType();
+//                cm.setCurrentPreferredNetworkType();
 
                 // The SIM is now ready i.e if it was locked
                 // it has been unlocked. At this stage, the radio is already
@@ -313,10 +338,12 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 queueNextSignalStrengthPoll();
                 break;
 
+            case EVENT_ICC_STATUS_CHANGED:
             case EVENT_RADIO_STATE_CHANGED:
                 // This will do nothing in the radio not
                 // available case
-                setPowerStateToDesired();
+//                setPowerStateToDesired();
+                setPowerStateToDesired(false);
                 pollState();
                 break;
 
@@ -328,7 +355,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 // This callback is called when signal strength is polled
                 // all by itself
 
-                if (!(cm.getRadioState().isOn())) {
+//                if (!(cm.getRadioState().isOn())) {
+                if (!(cm.getRadioState().isOn()) || (cm.getRadioState().isCdma())) {
                     // Polling will continue when radio turns back on
                     return;
                 }
@@ -471,17 +499,31 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 onRestrictedStateChanged(ar);
                 break;
 
+            case EVENT_SIM_SMS_READY:
+                intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_IS_SIM_SMS_READY, phone.getPhoneId()));
+                intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+                intent.putExtra("isReady", true);
+                intent.putExtra("phoneId", phone.getPhoneId());
+                log("send broadcast for EVENT_SIM_SMS_READY phoneId=" + phone.getPhoneId());
+                phone.getContext().sendStickyBroadcast(intent);
+                break;
+
             default:
                 super.handleMessage(msg);
             break;
         }
     }
 
-    protected void setPowerStateToDesired() {
+    protected void setPowerStateToDesired(boolean force) {
         // If we want it on and it's off, turn it on
         if (mDesiredPowerState
             && cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF) {
-            cm.setRadioPower(true, null);
+            // don't set radio_power on when no card
+            if (force || phone.getIccCard().getIccCardState() != IccCard.State.ABSENT
+                    && phone.getIccCard().getIccCardState() != IccCard.State.UNKNOWN) {
+                cm.setRadioPower(true, null);
+                log("setPowerStateToDesired : setRadioPower  force --"+force);
+            }
         } else if (!mDesiredPowerState && cm.getRadioState().isOn()) {
             // If it's on and available and we want it off gracefully
             DataConnectionTracker dcTracker = phone.mDataConnectionTracker;
@@ -551,6 +593,16 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             show3G = false;
         }
 
+        if(plmn == null || plmn.length() == 0) {
+            plmn = ss.getOperatorAlphaShort();
+        }
+        // For white-card test,both short and long name are null but Operator name is't null,
+        //so display Operator name,bug 8970
+        if(plmn == null || plmn.length() == 0) {
+            plmn = ss.getOperatorNumeric();
+        }
+        int phoneId = phone.getPhoneId();
+
         // For emergency calls only, pass the EmergencyCallsOnly string via EXTRA_PLMN
         if (mEmergencyOnly && cm.getRadioState().isOn()) {
             plmn = Resources.getSystem().
@@ -607,6 +659,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             intent.putExtra(Intents.EXTRA_SPN, spn);
             intent.putExtra(Intents.EXTRA_SHOW_PLMN, showPlmn);
             intent.putExtra(Intents.EXTRA_PLMN, plmn);
+            intent.putExtra(Intents.EXTRA_PHONE_ID, phoneId);
             phone.getContext().sendStickyBroadcast(intent);
         }
 
@@ -622,6 +675,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     protected void handlePollStateResult (int what, AsyncResult ar) {
         int ints[];
         String states[];
+        int type = 0;
 
         // Ignore stale requests from last poll
         if (ar.userObj != pollingContext) return;
@@ -669,6 +723,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                                     cid = Integer.parseInt(states[2], 16);
                                 }
                             }
+                            if (states.length >= 4 && states[3] != null) {
+                                type = Integer.parseInt(states[3]);
+                            }
                             if (states.length > 14) {
                                 if (states[14] != null && states[14].length() > 0) {
                                     psc = Integer.parseInt(states[14], 16);
@@ -683,6 +740,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     newSS.setState (regCodeToServiceState(regState));
 
                     if (regState == 8 || regState == 10 || regState == 12 || regState == 13 || regState == 14) {
+                    // if (regState == 10 || regState == 12 || regState == 13 || regState == 14) {
                         mEmergencyOnly = true;
                     } else {
                         mEmergencyOnly = false;
@@ -697,7 +755,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 case EVENT_POLL_STATE_GPRS:
                     states = (String[])ar.result;
 
-                    int type = 0;
                     regState = -1;
                     mNewReasonDataDenied = -1;
                     mNewMaxDataCalls = 1;
@@ -802,6 +859,20 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 pollStateDone();
             break;
 
+            case RUIM_NOT_READY:
+            case RUIM_READY:
+            case RUIM_LOCKED_OR_ABSENT:
+            case NV_NOT_READY:
+            case NV_READY:
+                if (DBG) log("Radio Technology Change ongoing, setting SS to off");
+                newSS.setStateOff();
+                newCellLoc.setStateInvalid();
+                setSignalStrengthDefaultValues();
+                mGotCountryCode = false;
+
+                //NOTE: pollStateDone() is not needed in this case
+                break;
+
             default:
                 // Issue all poll-related commands at once
                 // then count down the responses, which
@@ -832,7 +903,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     private void pollStateDone() {
         if (DBG) {
-            log("Poll ServiceState done: " +
+            log("[" + phone.getPhoneId() + "]Poll ServiceState done: " +
                 " oldSS=[" + ss + "] newSS=[" + newSS +
                 "] oldGprs=" + gprsState + " newData=" + newGPRSState +
                 " oldMaxDataCalls=" + mMaxDataCalls +
@@ -1353,7 +1424,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
      * @return true for roaming state set
      */
     private boolean isRoamingBetweenOperators(boolean gsmRoaming, ServiceState s) {
-        String spn = SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA, "empty");
+        String iccOperatorAlphaProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA, phone.getPhoneId());
+        String spn = SystemProperties.get(iccOperatorAlphaProperty, "empty");
 
         String onsl = s.getOperatorAlphaLong();
         String onss = s.getOperatorAlphaShort();
@@ -1361,8 +1434,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         boolean equalsOnsl = onsl != null && spn.equals(onsl);
         boolean equalsOnss = onss != null && spn.equals(onss);
 
+        String iccOperatorNumericProperty = PhoneFactory.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC, phone.getPhoneId());
         String simNumeric = SystemProperties.get(
-                TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC, "");
+                iccOperatorNumericProperty, "");
         String  operatorNumeric = s.getOperatorNumeric();
 
         boolean equalsMcc = true;
@@ -1510,7 +1585,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 zone = TimeZone.getTimeZone( tzname );
             }
 
-            String iso = SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY);
+            String operatorIsoCountryProperty = PhoneFactory.getProperty(
+                    TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, phone.getPhoneId());
+            String iso = SystemProperties.get(operatorIsoCountryProperty);
 
             if (zone == null) {
 
@@ -1761,12 +1838,12 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
     @Override
     protected void log(String s) {
-        Log.d(LOG_TAG, "[GsmSST] " + s);
+        Log.d(LOG_TAG, "[GsmSST]-phoneId" + phone.getPhoneId() + "] " + s);
     }
 
     @Override
     protected void loge(String s) {
-        Log.e(LOG_TAG, "[GsmSST] " + s);
+        Log.e(LOG_TAG, "[GsmSST]-phoneId" + phone.getPhoneId() + "] " + s);
     }
 
     private static void sloge(String s) {

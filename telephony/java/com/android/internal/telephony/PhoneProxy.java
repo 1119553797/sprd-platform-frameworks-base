@@ -40,10 +40,10 @@ import com.android.internal.telephony.CallManager;
 
 import java.util.List;
 
-public class PhoneProxy extends Handler implements Phone {
+public abstract class PhoneProxy extends Handler implements Phone {
     public final static Object lockForRadioTechnologyChange = new Object();
 
-    private Phone mActivePhone;
+    protected Phone mActivePhone;
     private CommandsInterface mCommandsInterface;
     private IccSmsInterfaceManagerProxy mIccSmsInterfaceManagerProxy;
     private IccPhoneBookInterfaceManagerProxy mIccPhoneBookInterfaceManagerProxy;
@@ -400,6 +400,14 @@ public class PhoneProxy extends Handler implements Phone {
         mActivePhone.unregisterForSuppServiceFailed(h);
     }
 
+    public void registerForSuppServiceSucc(Handler h, int what, Object obj) {
+        mActivePhone.registerForSuppServiceSucc(h, what, obj);
+    }
+
+    public void unregisterForSuppServiceSucc(Handler h) {
+        mActivePhone.unregisterForSuppServiceSucc(h);
+    }
+
     public void registerForInCallVoicePrivacyOn(Handler h, int what, Object obj){
         mActivePhone.registerForInCallVoicePrivacyOn(h,what,obj);
     }
@@ -520,8 +528,16 @@ public class PhoneProxy extends Handler implements Phone {
         return mActivePhone.dial(dialString);
     }
 
+    public Connection dial(String dialString, boolean isStkCall) throws CallStateException {
+        return mActivePhone.dial(dialString, isStkCall);
+    }
+
     public Connection dial(String dialString, UUSInfo uusInfo) throws CallStateException {
         return mActivePhone.dial(dialString, uusInfo);
+    }
+
+    public Connection dial(String dialString, UUSInfo uusInfo, boolean isStkCal) throws CallStateException {
+        return mActivePhone.dial(dialString, uusInfo, isStkCal);
     }
 
     public boolean handlePinMmi(String dialString) {
@@ -929,6 +945,22 @@ public class PhoneProxy extends Handler implements Phone {
         mActivePhone.unsetOnEcbModeExitResponse(h);
     }
 
+    public void queryFacilityLock (String facility, String password, int serviceClass, Message onComplete){
+        Log.d(LOG_TAG, "queryFacilityLock(), facility: " + facility);
+        mActivePhone.queryFacilityLock(facility, password, serviceClass, onComplete);
+    }
+
+    public void setFacilityLock (String facility, boolean lockState, String password,
+                        int serviceClass, Message onComplete){
+        Log.d(LOG_TAG, "setFacilityLock(), facility: " + facility);
+        mActivePhone.setFacilityLock(facility, lockState, password, serviceClass, onComplete);
+    }
+
+    public void changeBarringPassword(String facility, String oldPwd, String newPwd, Message onComplete){
+        Log.d(LOG_TAG, "changeBarringPassword(), facility: " + facility);
+        mActivePhone.changeBarringPassword(facility, oldPwd, newPwd, onComplete);
+    }
+
     public boolean isCspPlmnEnabled() {
         return mActivePhone.isCspPlmnEnabled();
     }
@@ -968,5 +1000,69 @@ public class PhoneProxy extends Handler implements Phone {
     public void removeReferences() {
         mActivePhone = null;
         mCommandsInterface = null;
+    }
+
+    /**
+     * Returns the array，String[0] - sres,String[1] - kc,
+     *
+     * @hide
+     */
+    public String Mbbms_Gsm_Authenticate(String nonce) {
+        String authen = mActivePhone.Mbbms_Gsm_Authenticate(nonce);
+        return authen;
+    }
+
+    /**
+     * Returns the array，String[0] ，“1” -need GBA recynchronization，“0” - succeed。
+     * String[1] - res, String[2] -ck, String[3] - ik;
+     *
+     * @hide
+     */
+    public String Mbbms_USim_Authenticate(String nonce, String autn) {
+        String authen = mActivePhone.Mbbms_USim_Authenticate(nonce, autn);
+        return authen;
+    }
+
+    /**
+     * Returns the type，0 --SIM，1 -- USIM,
+     *
+     * @hide
+     */
+    public String getSimType() {
+        return mActivePhone.getSimType();
+    }
+
+    public String[] getRegistrationState() {
+        return mActivePhone.getRegistrationState();
+    }
+
+    public boolean isVTCall() {
+        return mActivePhone.isVTCall();
+    }
+
+    public int getRemainTimes(int type) {
+        return mActivePhone.getRemainTimes(type);
+    }
+
+    public boolean setApnActivePdpFilter(String apntype, boolean filterenable) {
+        Log.d(LOG_TAG, " setApnActivePdpFilter:" + apntype + filterenable);
+        return mActivePhone.setApnActivePdpFilter(apntype, filterenable);
+    }
+
+    public boolean getApnActivePdpFilter(String apntype) {
+        Log.d(LOG_TAG, " getApnActivePdpFilter:" + apntype);
+        return mActivePhone.getApnActivePdpFilter(apntype);
+    }
+    
+    public IccSmsInterfaceManagerProxy getIccSmsInterfaceManagerProxy() {
+        return mIccSmsInterfaceManagerProxy;
+    }
+
+    public IccPhoneBookInterfaceManagerProxy getIccPhoneBookInterfaceManagerProxy() {
+        return mIccPhoneBookInterfaceManagerProxy;
+    }
+
+    public PhoneSubInfoProxy getPhoneSubInfoProxy() {
+        return mPhoneSubInfoProxy;
     }
 }

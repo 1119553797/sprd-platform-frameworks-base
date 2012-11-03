@@ -163,7 +163,7 @@ public class CDMALTEPhone extends CDMAPhone {
         // get the message
         Message msg = obtainMessage(EVENT_SET_NETWORK_MANUAL_COMPLETE, nsm);
 
-        mCM.setNetworkSelectionModeManual(network.getOperatorNumeric(), msg);
+        mCM.setNetworkSelectionModeManual(network.getOperatorNumeric(), network.getAct(), msg);
     }
 
     /**

@@ -44,6 +44,15 @@
         android:ellipsize="marquee"
         android:textAppearance="?android:attr/textAppearanceMedium"
     />
+    <TextView android:id="@+id/carrier1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/pinDisplayGroup"
+        android:gravity="left|bottom"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+    />
 
     <!-- displays dots as user enters pin -->
     <LinearLayout android:id="@+id/pinDisplayGroup"

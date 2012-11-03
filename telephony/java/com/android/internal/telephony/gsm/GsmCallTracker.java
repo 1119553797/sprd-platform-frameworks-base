@@ -61,7 +61,10 @@ public final class GsmCallTracker extends CallTracker {
 
     static final int MAX_CONNECTIONS = 7;   // only 7 connections allowed in GSM
     static final int MAX_CONNECTIONS_PER_CALL = 5; // only 5 connections allowed per call
-
+    //for bug6837 by phone_01 s
+    static Phone.State phoneState_0 = Phone.State.IDLE;
+    static Phone.State phoneState_1 = Phone.State.IDLE;
+    //for bug6837 by phone_01 e
     //***** Instance Variables
     GsmConnection connections[] = new GsmConnection[MAX_CONNECTIONS];
     RegistrantList voiceCallEndedRegistrants = new RegistrantList();
@@ -83,6 +86,8 @@ public final class GsmCallTracker extends CallTracker {
     GSMPhone phone;
 
     boolean desiredMute = false;    // false = mute off
+
+    boolean mIsStkCall = false;    // true = call from STK
 
     Phone.State state = Phone.State.IDLE;
 
@@ -200,8 +205,11 @@ public final class GsmCallTracker extends CallTracker {
             throw new CallStateException("cannot dial in current state");
         }
 
-        pendingMO = new GsmConnection(phone.getContext(), checkForTestEmergencyNumber(dialString),
-                this, foregroundCall);
+//        pendingMO = new GsmConnection(phone.getContext(), checkForTestEmergencyNumber(dialString),
+//                this, foregroundCall);
+        boolean isStkCall = getStkCall();
+        log("GsmCallTracker dial: isStkCall=" + isStkCall);
+        pendingMO = new GsmConnection(phone.getContext(), dialString, this, foregroundCall, isStkCall);
         hangupPendingMO = false;
 
         if (pendingMO.address == null || pendingMO.address.length() == 0
@@ -217,7 +225,8 @@ public final class GsmCallTracker extends CallTracker {
             // Always unmute when initiating a new call
             setMute(false);
 
-            cm.dial(pendingMO.address, clirMode, uusInfo, obtainCompleteMessage());
+//            cm.dial(pendingMO.address, clirMode, uusInfo, obtainCompleteMessage());
+            cm.dial(pendingMO.address, clirMode, uusInfo, isStkCall, obtainCompleteMessage());
         }
 
         updatePhoneState();
@@ -404,6 +413,7 @@ public final class GsmCallTracker extends CallTracker {
         }
 
         if (state != oldState) {
+            recordPhoneState(state);//for bug6837 by phone_01
             phone.notifyPhoneStateChanged();
         }
     }
@@ -447,8 +457,14 @@ public final class GsmCallTracker extends CallTracker {
                 }
             }
 
-            if (DBG_POLL) log("poll: conn[i=" + i + "]=" +
+            if (DBG_POLL) log("poll["+ this + "]: conn[i=" + i + "]=" +
                     conn+", dc=" + dc);
+
+			if ((dc != null) && (!dc.isVoice))
+			{
+				if (DBG_POLL) log("not voice call, return");
+				continue;
+			}
 
             if (conn == null && dc != null) {
                 // Connection appeared in CLCC response that we don't know about
@@ -555,6 +571,9 @@ public final class GsmCallTracker extends CallTracker {
                             + foregroundCall.getState());
 
             droppedDuringPoll.add(pendingMO);
+
+            // Pending MO is dropped, the connection of GSMCall(foreground) should be clear
+            pendingMO.parent.detach(pendingMO);
             pendingMO = null;
             hangupPendingMO = false;
         }
@@ -762,6 +781,18 @@ public final class GsmCallTracker extends CallTracker {
         phone.notifyPreciseCallStateChanged();
     }
 
+    //add by liguxiang 10-14-11 for NEWMS00128207 begin
+    /* package */
+    void sprdHangupAll(GsmCall call) throws CallStateException {
+        if (call.getConnections().size() == 0) {
+            throw new CallStateException("no connections in call");
+        }
+        hangupAllConnections(call);
+        call.onHangupLocal();
+        phone.notifyPreciseCallStateChanged();
+    }
+    //add by liguxiang 10-14-11 for NEWMS00128207 end
+
     /* package */
     void hangupWaitingOrBackground() {
         if (Phone.DEBUG_PHONE) log("hangupWaitingOrBackground");
@@ -789,6 +820,7 @@ public final class GsmCallTracker extends CallTracker {
     }
 
     void hangupAllConnections(GsmCall call) throws CallStateException{
+        /*
         try {
             int count = call.connections.size();
             for (int i = 0; i < count; i++) {
@@ -798,6 +830,11 @@ public final class GsmCallTracker extends CallTracker {
         } catch (CallStateException ex) {
             Log.e(LOG_TAG, "hangupConnectionByIndex caught " + ex);
         }
+        */
+       //add by chengyake for NEWMS00132975 at Wednesday, November 23 2011 begin
+       cm.endAllConnections(obtainCompleteMessage());
+       //add by chengyake for NEWMS00132975 at Wednesday, November 23 2011 end
+
     }
 
     /* package */
@@ -905,12 +942,17 @@ public final class GsmCallTracker extends CallTracker {
                 phone.notifyPreciseCallStateChanged();
                 droppedDuringPoll.clear();
             break;
-
+            //change for bug6837 by phone_01 s
             case EVENT_REPOLL_AFTER_DELAY:
-            case EVENT_CALL_STATE_CHANGE:
+//            case EVENT_CALL_STATE_CHANGE:
                 pollCallsWhenSafe();
             break;
-
+            //we need to ensure the other card is not in RINGING/OFFHOOK state
+            //this may Seldom happens when SIM1 has MO and an incoming MT for SIM2 reaches the modem at the same time.
+            case EVENT_CALL_STATE_CHANGE:
+                if (verifyEnable()) pollCallsWhenSafe();
+            break;
+            //change for bug6837 by phone_01 e
             case EVENT_RADIO_AVAILABLE:
                 handleRadioAvailable();
             break;
@@ -921,9 +963,46 @@ public final class GsmCallTracker extends CallTracker {
         }
     }
 
-    protected void log(String msg) {
-        Log.d(LOG_TAG, "[GsmCallTracker] " + msg);
+    void setStkCall(boolean isStkcall) {
+        mIsStkCall = isStkcall;
     }
+
+    boolean getStkCall() {
+        return mIsStkCall;
+    }
+
+    protected void log(String msg) {
+        Log.d(LOG_TAG, "[GsmCallTracker-phoneId" + phone.getPhoneId() + "] " + msg);
+    }
+
+    //for bug6837 by phone_01 s
+    public void recordPhoneState(Phone.State newState){
+
+        if (TelephonyManager.getPhoneCount() <= 1) return;
+        if (DBG_POLL) log("recordPhoneState newState:" + newState);
+        int phoneId = phone.getPhoneId();
+        if (phoneId == 0){
+            phoneState_0 = newState;
+        }else if (phoneId == 1){
+            phoneState_1 = newState;
+        }
+    }
+    private boolean verifyEnable(){
+        boolean isThisPhoneIDEnabled = true;
+
+        if(TelephonyManager.getPhoneCount() > 1){
+            if (DBG_POLL) log("verify if the other phone is idle!");
+            int targetId = (phone.getPhoneId() == 0)?1:0;
+            if (targetId == 0){
+                isThisPhoneIDEnabled = (phoneState_0 == Phone.State.IDLE)?true:false;
+            }else{
+                isThisPhoneIDEnabled = (phoneState_1 == Phone.State.IDLE)?true:false;
+            }
+            if (isThisPhoneIDEnabled == false && DBG_POLL) log("The other card is in use, operation quit!!");
+        }
+        return isThisPhoneIDEnabled;
+    }
+    //for bug6837 by phone_01 e
 
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
