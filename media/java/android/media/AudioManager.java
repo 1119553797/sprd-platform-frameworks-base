@@ -213,6 +213,13 @@ public class AudioManager {
     public static final int STREAM_DTMF = AudioSystem.STREAM_DTMF;
     /** @hide The audio stream for text to speech (TTS) */
     public static final int STREAM_TTS = AudioSystem.STREAM_TTS;
+    // modified fo FM start
+    // add STREAM_FM
+    /** @hide The audio stream for FM */
+    public static final int STREAM_FM = AudioSystem.STREAM_FM;
+    // modified fo FM end
+
+
     /** Number of audio streams */
     /**
      * @deprecated Use AudioSystem.getNumStreamTypes() instead
@@ -231,7 +238,11 @@ public class AudioManager {
         7,  // STREAM_BLUETOOTH_SCO
         7,  // STREAM_SYSTEM_ENFORCED
         11, // STREAM_DTMF
-        11  // STREAM_TTS
+        11, // STREAM_TTS
+        // modified for FM start
+        // add FM default volume
+        11  // STREAM_FM
+        // modified for FM end
     };
 
     /**
@@ -1501,6 +1512,17 @@ public class AudioManager {
         return AudioSystem.isStreamActive(STREAM_MUSIC, 0);
     }
 
+    // modified for FM start
+    /**
+     * @hide
+     * Checks whether FM is active.
+     * @return true if FM is active.
+     */
+    public boolean isFmActive() {
+        return AudioSystem.isStreamActive(STREAM_FM, 0);
+    }
+    // modified for FM end
+
     /**
      * @hide
      * If the stream is active locally or remotely, adjust its volume according to the enforced
@@ -2326,6 +2348,14 @@ public class AudioManager {
      * mode and the Android device in USB host mode
      */
     public static final int DEVICE_OUT_USB_DEVICE = AudioSystem.DEVICE_OUT_USB_DEVICE;
+    // modified for FM start
+    /** {@hide} The audio output device code for FM headset.
+     */
+    public static final int DEVICE_OUT_FM_HEADSET = AudioSystem.DEVICE_OUT_FM_HEADSET;
+    /** {@hide} The audio output device code for FM speaker.
+     */
+    public static final int DEVICE_OUT_FM_SPEAKER = AudioSystem.DEVICE_OUT_FM_SPEAKER;
+    // modified for FM end
     /** {@hide} This is not used as a returned value from {@link #getDevicesForStream}, but could be
      *  used in the future in a set method to select whatever default device is chosen by the
      *  platform-specific implementation.

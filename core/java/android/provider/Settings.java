@@ -1502,6 +1502,29 @@ public final class Settings {
          */
         public static final String VOLUME_MUSIC = "volume_music";
 
+        // modified for FM start
+        /**
+         * FM volume. This is used internally, changing this value will not
+         * change the volume. See AudioManager.
+         */
+        public static final String VOLUME_FM = "volume_fm";
+
+        /**
+         * reserved volume1
+         */
+        public static final String VOLUME_RESERVED_1 = "volume_reserved_1";
+
+        /**  
+         * reserved volume2
+         */
+        public static final String VOLUME_RESERVED_2 = "volume_reserved_2";
+
+        /**  
+         * reserved volume3
+         */
+        public static final String VOLUME_RESERVED_3 = "volume_reserved_3";
+        // modified for FM end
+
         /**
          * Alarm volume. This is used internally, changing this
          * value will not change the volume. See AudioManager.
@@ -1570,7 +1593,10 @@ public final class Settings {
          */
         public static final String[] VOLUME_SETTINGS = {
             VOLUME_VOICE, VOLUME_SYSTEM, VOLUME_RING, VOLUME_MUSIC,
-            VOLUME_ALARM, VOLUME_NOTIFICATION, VOLUME_BLUETOOTH_SCO
+            VOLUME_ALARM, VOLUME_NOTIFICATION, VOLUME_BLUETOOTH_SCO,
+            // modified for FM start
+            VOLUME_RESERVED_1, VOLUME_RESERVED_2, VOLUME_RESERVED_3, VOLUME_FM
+            // modified for FM end
         };
 
         /**
@@ -2023,6 +2049,9 @@ public final class Settings {
             VOLUME_SYSTEM,
             VOLUME_RING,
             VOLUME_MUSIC,
+            // modified for FM start
+            VOLUME_FM,
+            // modified for FM end
             VOLUME_ALARM,
             VOLUME_NOTIFICATION,
             VOLUME_BLUETOOTH_SCO,
