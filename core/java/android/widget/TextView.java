@@ -8072,7 +8072,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     /**
      * Paste clipboard content between min and max positions.
      */
-    private void paste(int min, int max) {
+    protected void paste(int min, int max) {
         ClipboardManager clipboard =
             (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = clipboard.getPrimaryClip();

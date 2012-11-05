@@ -48,6 +48,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
  * {@link android.R.styleable#View View Attributes}
  */
 public class EditText extends TextView {
+	
+	private boolean canParse = true;
+	
     public EditText(Context context) {
         this(context, null);
     }
@@ -128,4 +131,20 @@ public class EditText extends TextView {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setClassName(EditText.class.getName());
     }
+    
+    /**
+     * Open an interface for set whether to allow paste
+     * @param can
+     */
+    public void setParse(boolean can){
+    	canParse = can;
+    }
+    
+    protected void paste(int min, int max) {
+    	if(!canParse){
+    		return;
+    	}
+    	super.paste(min, max);
+    }
+    
 }
