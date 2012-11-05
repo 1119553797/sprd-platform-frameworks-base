@@ -3104,6 +3104,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return am.isMusicActive();
     }
 
+    // modified for FM start
+    /**
+     * @return Whether FM is being played right now.
+     */
+    boolean isFmActive() {
+        final AudioManager am = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
+        if (am == null) {
+            Log.w(TAG, "isFmActive: couldn't get AudioManager reference");
+            return false;
+        }
+        return am.isFmActive();
+    }
+    // modified for FM end
+
     /**
      * Tell the audio service to adjust the volume appropriate to the event.
      * @param keycode
@@ -3339,6 +3353,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
                         break;
                     }
+
+                    // modified for FM
+                    if (isFmActive() && (result & ACTION_PASS_TO_USER) == 0) {
+                        handleVolumeKey(AudioManager.STREAM_FM, keyCode);
+                        break;
+                    }
+                    // modified for FM
                 }
                 break;
             }

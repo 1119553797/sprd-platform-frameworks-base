@@ -164,7 +164,14 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 R.string.volume_icon_description_media, //FIXME should have its own description
                 R.drawable.ic_media_route_on_holo_dark,
                 R.drawable.ic_media_route_disabled_holo_dark,
-                false);// will be dynamically updated
+                false),// will be dynamically updated
+        // modified for FM start
+        FmStream(AudioManager.STREAM_FM,
+                R.string.volume_icon_description_media,
+                R.drawable.ic_audio_vol,
+                R.drawable.ic_audio_vol_mute,
+                true);
+        // modified for FM end
 
         int streamType;
         int descRes;
@@ -191,7 +198,8 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
         StreamResources.NotificationStream,
         StreamResources.AlarmStream,
         StreamResources.MasterStream,
-        StreamResources.RemoteStream
+        StreamResources.RemoteStream,
+        StreamResources.FmStream
     };
 
     /** Object that contains data for each slider */
@@ -643,6 +651,12 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 if (LOGD) { Log.d(TAG, "showing remote volume "+index+" over "+ max); }
                 break;
             }
+
+            // modified for FM start
+            case AudioManager.STREAM_FM: {
+                break;
+            }
+            // modified for FM end
         }
 
         StreamControl sc = mStreamControls.get(streamType);

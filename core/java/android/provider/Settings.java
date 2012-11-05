@@ -1610,7 +1610,10 @@ public final class Settings {
          */
         public static final String[] VOLUME_SETTINGS = {
             VOLUME_VOICE, VOLUME_SYSTEM, VOLUME_RING, VOLUME_MUSIC,
-            VOLUME_ALARM, VOLUME_NOTIFICATION, VOLUME_BLUETOOTH_SCO
+            VOLUME_ALARM, VOLUME_NOTIFICATION, VOLUME_BLUETOOTH_SCO,
+            // modified for FM start
+            VOLUME_RESERVED_1, VOLUME_RESERVED_2, VOLUME_RESERVED_3, VOLUME_FM
+            // modified for FM end
         };
 
         /**
@@ -2084,6 +2087,9 @@ public final class Settings {
             VOLUME_SYSTEM,
             VOLUME_RING,
             VOLUME_MUSIC,
+            // modified for FM start
+            VOLUME_FM,
+            // modified for FM end
             VOLUME_ALARM,
             VOLUME_NOTIFICATION,
             VOLUME_BLUETOOTH_SCO,

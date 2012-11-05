@@ -5678,6 +5678,7 @@ package android.content {
     field public static final java.lang.String ACTION_EXTERNAL_APPLICATIONS_AVAILABLE = "android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE";
     field public static final java.lang.String ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE = "android.intent.action.EXTERNAL_APPLICATIONS_UNAVAILABLE";
     field public static final java.lang.String ACTION_FACTORY_TEST = "android.intent.action.FACTORY_TEST";
+    field public static final java.lang.String ACTION_FM = "android.intent.action.FM";
     field public static final java.lang.String ACTION_GET_CONTENT = "android.intent.action.GET_CONTENT";
     field public static final java.lang.String ACTION_GTALK_SERVICE_CONNECTED = "android.intent.action.GTALK_CONNECTED";
     field public static final java.lang.String ACTION_GTALK_SERVICE_DISCONNECTED = "android.intent.action.GTALK_DISCONNECTED";
@@ -15600,8 +15601,10 @@ package android.os {
     method public static java.io.File getDataDirectory();
     method public static java.io.File getDownloadCacheDirectory();
     method public static java.io.File getExternalStorageDirectory();
+    method public static java.io.File getExternalStorageDirectorySd();
     method public static java.io.File getExternalStoragePublicDirectory(java.lang.String);
     method public static java.lang.String getExternalStorageState();
+    method public static java.lang.String getExternalStorageStateSd();
     method public static java.io.File getRootDirectory();
     method public static boolean isExternalStorageEmulated();
     method public static boolean isExternalStorageRemovable();
@@ -16945,6 +16948,7 @@ package android.provider {
   public static class CallLog.Calls implements android.provider.BaseColumns {
     ctor public CallLog.Calls();
     method public static java.lang.String getLastOutgoingCall(android.content.Context);
+    method public static java.lang.String getLastOutgoingCall(android.content.Context, int);
     field public static final java.lang.String CACHED_NAME = "name";
     field public static final java.lang.String CACHED_NUMBER_LABEL = "numberlabel";
     field public static final java.lang.String CACHED_NUMBER_TYPE = "numbertype";
@@ -16961,6 +16965,7 @@ package android.provider {
     field public static final java.lang.String NEW = "new";
     field public static final java.lang.String NUMBER = "number";
     field public static final int OUTGOING_TYPE = 2; // 0x2
+    field public static final java.lang.String PHONE_ID = "phoneid";
     field public static final java.lang.String TYPE = "type";
   }
 
@@ -17552,6 +17557,8 @@ package android.provider {
     field public static final android.net.Uri CONTENT_URI;
     field public static final java.lang.String CONTENT_VCARD_TYPE = "text/x-vcard";
     field public static final android.net.Uri CONTENT_VCARD_URI;
+    field public static final java.lang.String DISPLAY_ACCOUNT_NAME = "display_account_name";
+    field public static final java.lang.String DISPLAY_ACCOUNT_TYPE = "display_account_type";
   }
 
   public static final class ContactsContract.Contacts.AggregationSuggestions implements android.provider.BaseColumns android.provider.ContactsContract.ContactOptionsColumns android.provider.ContactsContract.ContactStatusColumns android.provider.ContactsContract.ContactsColumns {
@@ -17647,6 +17654,8 @@ package android.provider {
     field public static final android.net.Uri CONTENT_URI;
     field public static final long DEFAULT = 0L; // 0x0L
     field public static final java.lang.String DIRECTORY_AUTHORITY = "authority";
+    field public static final java.lang.String DISPLAY_ACCOUNT_NAME = "display_account_name";
+    field public static final java.lang.String DISPLAY_ACCOUNT_TYPE = "display_account_type";
     field public static final java.lang.String DISPLAY_NAME = "displayName";
     field public static final java.lang.String EXPORT_SUPPORT = "exportSupport";
     field public static final int EXPORT_SUPPORT_ANY_ACCOUNT = 2; // 0x2
@@ -18531,8 +18540,12 @@ package android.provider {
     field public static final java.lang.String VIBRATE_ON = "vibrate_on";
     field public static final java.lang.String VOLUME_ALARM = "volume_alarm";
     field public static final java.lang.String VOLUME_BLUETOOTH_SCO = "volume_bluetooth_sco";
+    field public static final java.lang.String VOLUME_FM = "volume_fm";
     field public static final java.lang.String VOLUME_MUSIC = "volume_music";
     field public static final java.lang.String VOLUME_NOTIFICATION = "volume_notification";
+    field public static final java.lang.String VOLUME_RESERVED_1 = "volume_reserved_1";
+    field public static final java.lang.String VOLUME_RESERVED_2 = "volume_reserved_2";
+    field public static final java.lang.String VOLUME_RESERVED_3 = "volume_reserved_3";
     field public static final java.lang.String VOLUME_RING = "volume_ring";
     field public static final java.lang.String[] VOLUME_SETTINGS;
     field public static final java.lang.String VOLUME_SYSTEM = "volume_system";
