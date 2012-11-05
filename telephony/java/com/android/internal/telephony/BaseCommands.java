@@ -39,9 +39,6 @@ public abstract class BaseCommands implements CommandsInterface {
     //***** Instance Variables
     protected Context mContext;
     protected RadioState mState = RadioState.RADIO_UNAVAILABLE;
-    protected RadioState mSimState = RadioState.RADIO_UNAVAILABLE;
-    protected RadioState mRuimState = RadioState.RADIO_UNAVAILABLE;
-    protected RadioState mNvState = RadioState.RADIO_UNAVAILABLE;
     protected Object mStateMonitor = new Object();
 
     protected RegistrantList mRadioStateChangedRegistrants = new RegistrantList();
@@ -49,11 +46,6 @@ public abstract class BaseCommands implements CommandsInterface {
     protected RegistrantList mAvailRegistrants = new RegistrantList();
     protected RegistrantList mOffOrNotAvailRegistrants = new RegistrantList();
     protected RegistrantList mNotAvailRegistrants = new RegistrantList();
-    protected RegistrantList mSIMReadyRegistrants = new RegistrantList();
-    protected RegistrantList mSIMLockedRegistrants = new RegistrantList();
-    protected RegistrantList mRUIMReadyRegistrants = new RegistrantList();
-    protected RegistrantList mRUIMLockedRegistrants = new RegistrantList();
-    protected RegistrantList mNVReadyRegistrants = new RegistrantList();
     protected RegistrantList mCallStateRegistrants = new RegistrantList();
     protected RegistrantList mVoiceNetworkStateRegistrants = new RegistrantList();
     protected RegistrantList mDataNetworkStateRegistrants = new RegistrantList();
@@ -119,19 +111,6 @@ public abstract class BaseCommands implements CommandsInterface {
     public RadioState getRadioState() {
         return mState;
     }
-
-    public RadioState getSimState() {
-        return mSimState;
-    }
-
-    public RadioState getRuimState() {
-        return mRuimState;
-    }
-
-    public RadioState getNvState() {
-        return mNvState;
-    }
-
 
     public void registerForRadioStateChanged(Handler h, int what, Object obj) {
         Registrant r = new Registrant (h, what, obj);
@@ -216,101 +195,6 @@ public abstract class BaseCommands implements CommandsInterface {
     public void unregisterForOffOrNotAvailable(Handler h) {
         synchronized(mStateMonitor) {
             mOffOrNotAvailRegistrants.remove(h);
-        }
-    }
-
-
-
-    /** Any transition into SIM_READY */
-    public void registerForSIMReady(Handler h, int what, Object obj) {
-        Registrant r = new Registrant (h, what, obj);
-
-        synchronized (mStateMonitor) {
-            mSIMReadyRegistrants.add(r);
-
-            if (mSimState.isSIMReady()) {
-                r.notifyRegistrant(new AsyncResult(null, null, null));
-            }
-        }
-    }
-
-    public void unregisterForSIMReady(Handler h) {
-        synchronized (mStateMonitor) {
-            mSIMReadyRegistrants.remove(h);
-        }
-    }
-
-    /** Any transition into RUIM_READY */
-    public void registerForRUIMReady(Handler h, int what, Object obj) {
-        Registrant r = new Registrant (h, what, obj);
-
-        synchronized (mStateMonitor) {
-            mRUIMReadyRegistrants.add(r);
-
-            if (mRuimState.isRUIMReady()) {
-                r.notifyRegistrant(new AsyncResult(null, null, null));
-            }
-        }
-    }
-
-    public void unregisterForRUIMReady(Handler h) {
-        synchronized(mStateMonitor) {
-            mRUIMReadyRegistrants.remove(h);
-        }
-    }
-
-    /** Any transition into NV_READY */
-    public void registerForNVReady(Handler h, int what, Object obj) {
-        Registrant r = new Registrant (h, what, obj);
-
-        synchronized (mStateMonitor) {
-            mNVReadyRegistrants.add(r);
-
-            if (mNvState.isNVReady()) {
-                r.notifyRegistrant(new AsyncResult(null, null, null));
-            }
-        }
-    }
-
-    public void unregisterForNVReady(Handler h) {
-        synchronized (mStateMonitor) {
-            mNVReadyRegistrants.remove(h);
-        }
-    }
-
-    public void registerForSIMLockedOrAbsent(Handler h, int what, Object obj) {
-        Registrant r = new Registrant (h, what, obj);
-
-        synchronized (mStateMonitor) {
-            mSIMLockedRegistrants.add(r);
-
-            if (mSimState == RadioState.SIM_LOCKED_OR_ABSENT) {
-                r.notifyRegistrant(new AsyncResult(null, null, null));
-            }
-        }
-    }
-
-    public void unregisterForSIMLockedOrAbsent(Handler h) {
-        synchronized (mStateMonitor) {
-            mSIMLockedRegistrants.remove(h);
-        }
-    }
-
-    public void registerForRUIMLockedOrAbsent(Handler h, int what, Object obj) {
-        Registrant r = new Registrant (h, what, obj);
-
-        synchronized (mStateMonitor) {
-            mRUIMLockedRegistrants.add(r);
-
-            if (mRuimState == RadioState.RUIM_LOCKED_OR_ABSENT) {
-                r.notifyRegistrant(new AsyncResult(null, null, null));
-            }
-        }
-    }
-
-    public void unregisterForRUIMLockedOrAbsent(Handler h) {
-        synchronized (mStateMonitor) {
-            mRUIMLockedRegistrants.remove(h);
         }
     }
 

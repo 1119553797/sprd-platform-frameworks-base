@@ -75,6 +75,6 @@ public class NetworkConfig {
      * Indicates if this network is supposed to be default-routable
      */
     public boolean isDefault() {
-        return (type == radio);
+        return ConnectivityManager.getDefaultNetworkType(type) == radio;
     }
 }

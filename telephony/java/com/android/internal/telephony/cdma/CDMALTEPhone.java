@@ -36,7 +36,6 @@ import com.android.internal.telephony.PhoneProxy;
 import com.android.internal.telephony.SMSDispatcher;
 import com.android.internal.telephony.gsm.GsmSMSDispatcher;
 import com.android.internal.telephony.gsm.SmsMessage;
-import com.android.internal.telephony.gsm.SimCard;
 import com.android.internal.telephony.ims.IsimRecords;
 import com.android.internal.telephony.uicc.UiccController;
 
@@ -221,15 +220,6 @@ public class CDMALTEPhone extends CDMAPhone {
             if (DBG) log("updateCurrentCarrierInProvider mIccRecords == null ret false");
         }
         return false;
-    }
-
-    @Override
-    public void setSystemLocale(String language, String country, boolean fromMcc) {
-        // Avoid system locale is set from MCC table if CDMALTEPhone is used.
-        // The locale will be picked up based on EFpl/EFli once CSIM records are loaded.
-        if (fromMcc) return;
-
-        super.setSystemLocale(language, country, false);
     }
 
     // return IMSI from USIM as subscriber ID.

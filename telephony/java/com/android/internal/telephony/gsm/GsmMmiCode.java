@@ -852,7 +852,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                         // invalid length
                         handlePasswordError(com.android.internal.R.string.invalidPin);
                     } else if (sc.equals(SC_PIN) &&
-                               phone.mIccCard.get().getState() == SimCard.State.PUK_REQUIRED ) {
+                               phone.getIccCard().getState() == IccCard.State.PUK_REQUIRED ) {
                         // Sim is puk-locked
                         handlePasswordError(com.android.internal.R.string.needPuk);
                     } else if (sc.equals(SC_PIN)&&!phone.getIccCard().getIccLockEnabled()) {

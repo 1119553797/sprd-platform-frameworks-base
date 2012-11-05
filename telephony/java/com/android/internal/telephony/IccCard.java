@@ -997,18 +997,11 @@ public class IccCard {
         RadioState currentRadioState = mPhone.mCM.getRadioState();
         // check radio technology
         if( currentRadioState == RadioState.RADIO_OFF         ||
-            currentRadioState == RadioState.RADIO_UNAVAILABLE ||
-            currentRadioState == RadioState.SIM_NOT_READY     ||
-            currentRadioState == RadioState.RUIM_NOT_READY    ||
-            currentRadioState == RadioState.NV_NOT_READY      ||
-            currentRadioState == RadioState.NV_READY) {
+            currentRadioState == RadioState.RADIO_UNAVAILABLE) {
             return IccCard.State.NOT_READY;
         }
 
-        if( currentRadioState == RadioState.SIM_LOCKED_OR_ABSENT  ||
-            currentRadioState == RadioState.SIM_READY             ||
-            currentRadioState == RadioState.RUIM_LOCKED_OR_ABSENT ||
-            currentRadioState == RadioState.RUIM_READY) {
+        if( currentRadioState == RadioState.RADIO_ON ) {
             State csimState =
                 getAppState(mIccCardStatus.getCdmaSubscriptionAppIndex());
             State usimState =

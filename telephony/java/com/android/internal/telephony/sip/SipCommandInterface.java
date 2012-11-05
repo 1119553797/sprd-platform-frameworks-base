@@ -733,18 +733,6 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 	}
 
 	@Override
-	public void registerForRUIMReady(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unregisterForRUIMReady(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setOnSimSmsReady(Handler h, int what, Object obj) {
 		// TODO Auto-generated method stub
 

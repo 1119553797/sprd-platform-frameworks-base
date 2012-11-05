@@ -441,11 +441,11 @@ public abstract class SimulatedCommands extends BaseCommands
      *      The ar.result List is sorted by DriverCall.index
      */
     public void getCurrentCalls (Message result) {
-        if (mState == RadioState.SIM_READY) {
+        if ((mState == RadioState.RADIO_ON) && !isSimLocked()) {
             //Log.i("GSM", "[SimCmds] getCurrentCalls");
             resultSuccess(result, simulatedCallState.getDriverCalls());
         } else {
-            //Log.i("GSM", "[SimCmds] getCurrentCalls: SIM not ready!");
+            //Log.i("GSM", "[SimCmds] getCurrentCalls: RADIO_OFF or SIM not ready!");
             resultFail(result,
                 new CommandException(
                     CommandException.Error.RADIO_NOT_AVAILABLE));
@@ -1025,14 +1025,7 @@ public abstract class SimulatedCommands extends BaseCommands
 
     public void setRadioPower(boolean on, Message result) {
         if(on) {
-            if (isSimLocked()) {
-                Log.i("SIM", "[SimCmd] setRadioPower: SIM locked! state=" +
-                        mSimLockedState);
-                setRadioState(RadioState.SIM_LOCKED_OR_ABSENT);
-            }
-            else {
-                setRadioState(RadioState.SIM_READY);
-            }
+            setRadioState(RadioState.RADIO_ON);
         } else {
             setRadioState(RadioState.RADIO_OFF);
         }

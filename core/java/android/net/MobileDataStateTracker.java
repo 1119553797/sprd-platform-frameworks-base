@@ -33,6 +33,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.provider.Telephony.Intents;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Slog;
@@ -40,7 +41,9 @@ import android.util.Slog;
 import com.android.internal.telephony.DataConnectionTracker;
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
+import com.android.internal.telephony.gsm.MsmsGsmDataConnectionTracker;
 import com.android.internal.util.AsyncChannel;
 
 import java.io.CharArrayWriter;
@@ -56,7 +59,7 @@ import java.io.PrintWriter;
 public class MobileDataStateTracker implements NetworkStateTracker {
 
     private static final String TAG = "MobileDataStateTracker";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
     private static final boolean VDBG = false;
 
     private Phone.DataState mMobileDataState;
@@ -80,6 +83,7 @@ public class MobileDataStateTracker implements NetworkStateTracker {
     private Handler mHandler;
     private AsyncChannel mDataConnectionTrackerAc;
     private Messenger mMessenger;
+    private int mNetType;
 
     /**
      * Create a new MobileDataStateTracker
@@ -87,10 +91,11 @@ public class MobileDataStateTracker implements NetworkStateTracker {
      * @param tag the name of this network
      */
     public MobileDataStateTracker(int netType, String tag) {
-        mNetworkInfo = new NetworkInfo(netType,
+        mNetworkInfo = new NetworkInfo(netType % ConnectivityManager.MAX_TYPE_FOR_ONE_SIM,
                 TelephonyManager.getDefault().getNetworkType(), tag,
-                TelephonyManager.getDefault().getNetworkTypeName());
+                TelephonyManager.getDefault().getNetworkTypeName(), getPhoneId(netType));
         mApnType = networkTypeToApnType(netType);
+        mNetType = netType;
     }
 
     /**
@@ -180,6 +185,16 @@ public class MobileDataStateTracker implements NetworkStateTracker {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(TelephonyIntents.
                     ACTION_ANY_DATA_CONNECTION_STATE_CHANGED)) {
+                if (isMultiSimType()) {
+                    int phoneId = intent.getIntExtra(Phone.PHONE_ID, -1);
+                    if (phoneId != getPhoneId(mNetType)) {
+                        mNetworkInfo.setIsAvailable(true);
+                        if (DBG) {
+                            log("[" + getPhoneId(mNetType) + "]receive ACTION_ANY_DATA_CONNECTION_STATE_CHANGED with unaccept phoneid:" + phoneId);
+                        }
+                        return;
+                    }
+                }
                 String apnType = intent.getStringExtra(Phone.DATA_APN_TYPE_KEY);
                 if (VDBG) {
                     log(String.format("Broadcast received: ACTION_ANY_DATA_CONNECTION_STATE_CHANGED"
@@ -189,19 +204,27 @@ public class MobileDataStateTracker implements NetworkStateTracker {
                 if (!TextUtils.equals(apnType, mApnType)) {
                     return;
                 }
-                mNetworkInfo.setSubtype(TelephonyManager.getDefault().getNetworkType(),
-                        TelephonyManager.getDefault().getNetworkTypeName());
+                int phoneId = intent.getIntExtra(Intents.EXTRA_PHONE_ID, 0);
+                if (mApnType.equals(Phone.APN_TYPE_MMS)) {
+                    mNetworkInfo.setIsAvailable(true);
+                    if (phoneId != getPhoneId(mNetType)) {
+                        log(mNetworkInfo.getTypeName() + "(" + "phoneId:" + phoneId + "!=" + getPhoneId(mNetType) + ")");
+                        return;
+                    }
+                } else {
+                    mNetworkInfo.setIsAvailable(!intent.getBooleanExtra(Phone.NETWORK_UNAVAILABLE_KEY,
+                            false));
+                }
+                if (DBG) {
+                    log(mApnType + " setting isAvailable to " + mNetworkInfo.isAvailable());
+                }
+                mNetworkInfo.setSubtype(TelephonyManager.getDefault(phoneId).getNetworkType(),
+                        TelephonyManager.getDefault(phoneId).getNetworkTypeName());
                 Phone.DataState state = Enum.valueOf(Phone.DataState.class,
                         intent.getStringExtra(Phone.STATE_KEY));
                 String reason = intent.getStringExtra(Phone.STATE_CHANGE_REASON_KEY);
                 String apnName = intent.getStringExtra(Phone.DATA_APN_KEY);
                 mNetworkInfo.setRoaming(intent.getBooleanExtra(Phone.DATA_NETWORK_ROAMING_KEY,
-                        false));
-                if (VDBG) {
-                    log(mApnType + " setting isAvailable to " +
-                            intent.getBooleanExtra(Phone.NETWORK_UNAVAILABLE_KEY,false));
-                }
-                mNetworkInfo.setIsAvailable(!intent.getBooleanExtra(Phone.NETWORK_UNAVAILABLE_KEY,
                         false));
 
                 if (DBG) {
@@ -283,6 +306,7 @@ public class MobileDataStateTracker implements NetworkStateTracker {
             } else if (intent.getAction().
                     equals(DataConnectionTracker.ACTION_DATA_CONNECTION_TRACKER_MESSENGER)) {
                 if (VDBG) log(mApnType + " got ACTION_DATA_CONNECTION_TRACKER_MESSENGER");
+                if (intent.getIntExtra(MsmsGsmDataConnectionTracker.EXTRA_PHONE_ID, -1) != getPhoneId(mNetType)) return;
                 mMessenger = intent.getParcelableExtra(DataConnectionTracker.EXTRA_MESSENGER);
                 AsyncChannel ac = new AsyncChannel();
                 ac.connect(mContext, MobileDataStateTracker.this.mHandler, mMessenger);
@@ -293,9 +317,8 @@ public class MobileDataStateTracker implements NetworkStateTracker {
     }
 
     private void getPhoneService(boolean forceRefresh) {
-        if ((mPhoneService == null) || forceRefresh) {
-            mPhoneService = ITelephony.Stub.asInterface(ServiceManager.getService("phone"));
-        }
+        mPhoneService = ITelephony.Stub.asInterface(ServiceManager.getService(PhoneFactory
+                .getServiceName("phone", getPhoneId(mNetType))));
     }
 
     /**
@@ -550,7 +573,7 @@ public class MobileDataStateTracker implements NetworkStateTracker {
     }
 
     public static String networkTypeToApnType(int netType) {
-        switch(netType) {
+        switch(netType % ConnectivityManager.MAX_TYPE_FOR_ONE_SIM) {
             case ConnectivityManager.TYPE_MOBILE:
                 return Phone.APN_TYPE_DEFAULT;  // TODO - use just one of these
             case ConnectivityManager.TYPE_MOBILE_MMS:
@@ -567,10 +590,22 @@ public class MobileDataStateTracker implements NetworkStateTracker {
                 return Phone.APN_TYPE_IMS;
             case ConnectivityManager.TYPE_MOBILE_CBS:
                 return Phone.APN_TYPE_CBS;
+            case ConnectivityManager.TYPE_MOBILE_DM:
+                return Phone.APN_TYPE_DM;
+            case ConnectivityManager.TYPE_MOBILE_WAP:
+                return Phone.APN_TYPE_WAP;
             default:
                 sloge("Error mapping networkType " + netType + " to apnType.");
                 return null;
         }
+    }
+
+    private boolean isMultiSimType() {
+        return true;
+    }
+
+    private int getPhoneId(int netType) {
+        return ConnectivityManager.getPhoneIdByNetworkType(netType);
     }
 
     /**
@@ -588,11 +623,11 @@ public class MobileDataStateTracker implements NetworkStateTracker {
     }
 
     private void log(String s) {
-        Slog.d(TAG, mApnType + ": " + s);
+        Slog.d(TAG, mApnType + "(" + mNetworkInfo.getTypeName() + ")" + ": " + s);
     }
 
     private void loge(String s) {
-        Slog.e(TAG, mApnType + ": " + s);
+        Slog.e(TAG, mApnType + "(" + mNetworkInfo.getTypeName() + ")" + ": " + s);
     }
 
     static private void sloge(String s) {
