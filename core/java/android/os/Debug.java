@@ -19,7 +19,9 @@ package android.os;
 import com.android.internal.util.TypedProperties;
 
 import android.util.Log;
+import android.app.ActivityManager;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -34,6 +36,7 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Date;
 
 import org.apache.harmony.dalvik.ddmc.Chunk;
 import org.apache.harmony.dalvik.ddmc.ChunkHandler;

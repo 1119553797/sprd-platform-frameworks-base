@@ -197,10 +197,6 @@ public class PduParser {
     }
     
     public GenericPdu parse(){
-    	return parse(PhoneFactory.DEFAULT_PHONE_ID);
-    }
-
-    public GenericPdu parse(){
         return parse(PhoneFactory.DEFAULT_PHONE_ID);
     }
 
