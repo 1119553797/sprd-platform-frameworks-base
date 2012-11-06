@@ -2152,13 +2152,17 @@ private NetworkStateTracker makeWimaxStateTracker() {
         Collection<RouteInfo> routesToAdd = null;
         CompareResult<InetAddress> dnsDiff = new CompareResult<InetAddress>();
         CompareResult<RouteInfo> routeDiff = new CompareResult<RouteInfo>();
+        CompareResult<LinkAddress> linkDiff = new CompareResult<LinkAddress>();
+
         if (curLp != null) {
             // check for the delta between the current set and the new
             routeDiff = curLp.compareRoutes(newLp);
             dnsDiff = curLp.compareDnses(newLp);
+            linkDiff = curLp.compareAddresses(newLp);
         } else if (newLp != null) {
             routeDiff.added = newLp.getRoutes();
             dnsDiff.added = newLp.getDnses();
+            linkDiff.added = newLp.getLinkAddresses();
         }
 
         boolean routesChanged = (routeDiff.removed.size() != 0 || routeDiff.added.size() != 0);
@@ -2193,6 +2197,26 @@ private NetworkStateTracker makeWimaxStateTracker() {
                     }
                 }
             }
+        }
+
+        if (!routesChanged) {
+           if (linkDiff.removed.size() != 0 || linkDiff.added.size() != 0) {
+               if(curLp != null) {
+                   for (RouteInfo r : curLp.getRoutes()) {
+                       if (isLinkDefault || ! r.isDefaultRoute()) {
+                           removeRoute(curLp, r,TO_DEFAULT_TABLE);
+                       }
+                   }
+               }
+               if (newLp != null) {
+                    for (RouteInfo r : newLp.getRoutes()) {
+                        if (isLinkDefault || ! r.isDefaultRoute()) {
+                            addRoute(newLp, r,TO_DEFAULT_TABLE);
+                        }
+                    }
+               }
+               routesChanged = true;
+           }
         }
 
         if (!isLinkDefault) {
