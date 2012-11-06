@@ -27458,6 +27458,7 @@ package android.widget {
     ctor public EditText(android.content.Context, android.util.AttributeSet, int);
     method public void extendSelection(int);
     method public void selectAll();
+    method public void setParse(boolean);
     method public void setSelection(int, int);
     method public void setSelection(int);
   }
@@ -28892,6 +28893,7 @@ package android.widget {
     method protected void onSelectionChanged(int, int);
     method protected void onTextChanged(java.lang.CharSequence, int, int, int);
     method public boolean onTextContextMenuItem(int);
+    method protected void paste(int, int);
     method public void removeTextChangedListener(android.text.TextWatcher);
     method protected void resetResolvedDrawables();
     method protected void resolveDrawables();
