@@ -115,7 +115,7 @@ public abstract class GSMPhone extends PhoneBase {
     SimPhoneBookInterfaceManager mSimPhoneBookIntManager;
     SimSmsInterfaceManager mSimSmsIntManager;
     PhoneSubInfo mSubInfo;
-
+    UiccController mUiccController;
 
     Registrant mPostDialHandler;
 
@@ -156,7 +156,8 @@ public abstract class GSMPhone extends PhoneBase {
 //        }
 
         mCM.setPhoneType(Phone.PHONE_TYPE_GSM);
-        mIccCard.set(UiccController.getInstance(this).getIccCard());
+        mUiccController = new UiccController(this);
+        mIccCard.set(mUiccController.getIccCard());
         mIccRecords = mIccCard.get().getIccRecords();
         mCT = new GsmCallTracker(this);
         mSST = new GsmServiceStateTracker (this);

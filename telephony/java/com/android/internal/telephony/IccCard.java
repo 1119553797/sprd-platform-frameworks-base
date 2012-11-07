@@ -203,6 +203,8 @@ public class IccCard {
         mDbg = dbg;
         if (mDbg) log("[IccCard] Creating card type " + (is3gpp ? "3gpp" : "3gpp2"));
         mPhone = phone;
+        //get card status actively not wait for card status change events
+        mHandler.sendMessage(mHandler.obtainMessage(EVENT_ICC_STATUS_CHANGED));
         this.is3gpp = is3gpp;
         mCdmaSSM = CdmaSubscriptionSourceManager.getInstance(mPhone.getContext(),
                 mPhone.mCM, mHandler, EVENT_CDMA_SUBSCRIPTION_SOURCE_CHANGED, null);

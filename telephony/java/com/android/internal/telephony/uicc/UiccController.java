@@ -51,7 +51,7 @@ public class UiccController {
         return mIccCard;
     }
 
-    private UiccController(PhoneBase phone) {
+    public UiccController(PhoneBase phone) {
         if (DBG) log("Creating UiccController");
         setNewPhone(phone);
     }
