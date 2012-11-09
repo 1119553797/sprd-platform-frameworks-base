@@ -19,7 +19,9 @@ package android.os;
 import com.android.internal.util.TypedProperties;
 
 import android.util.Log;
+import android.app.ActivityManager;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -34,6 +36,7 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Date;
 
 import org.apache.harmony.dalvik.ddmc.Chunk;
 import org.apache.harmony.dalvik.ddmc.ChunkHandler;
@@ -1369,4 +1372,105 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
     public static String getCaller() {
         return getCaller(Thread.currentThread().getStackTrace(), 0);
     }
+    
+    //--------------------------------------------------------------------------
+    // Add By liwd@spreadst.com to debug hard problems such as Monkey or MTBF 
+    //--------------------------------------------------------------------------
+    
+    /**
+     * @hide
+     * Detect whether we are in monkey mode.
+     * 
+     * I think the best usage is in "catch" block, like this:
+     *     try {    
+     *         ... ...
+     *     } catch (XxxException e) {
+     *         if (android.os.Debug.isMonkey()) {
+     *             ... ...
+     *         } else {
+     *             throw e;
+     *         }
+     *     }
+     * Because it needs some time to get the system property, pls don't use it
+     * too frequently. 
+     * 
+     * @return Whether in monkey mode
+     */
+    public static boolean isMonkey() {
+       return ActivityManager.isUserAMonkey();
+	}
+    
+    /**
+     * @hide
+     * Dump the hprof file of the current process.
+     * 
+     * Don not use this in non-debug mode, because the hprof file will be dump
+     * to the /data block, and these files may be large.
+     * 
+     * @param pname The current process name.
+     */
+    public static void dumpHprof(String pname) {
+        String file = "/data/misc/hprofs/";
+        File dir = new File(file);
+
+        if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
+            File[] files = dir.listFiles();
+            for (File f : files) {
+                String p = f.getPath();
+                if (f.isFile() && p.contains(pname) && p.endsWith("hprof")) {
+                    f.delete();
+                }
+            }
+            int pid = Process.myPid();
+            Date d = new Date();
+            String date = d.getDate() + "-" + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
+            file += pname +  "_" + pid + "_" + date + ".hprof";
+
+            try {
+                dumpHprofData(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * @hide
+     * Detect whether we are in debug mode.
+     * 
+     * I think the best usage is in "catch" block, like this:
+     *     try {    
+     *         ... ...
+     *     } catch (XxxException e) {
+     *         if (android.os.Debug.isDebug()) {
+     *             ... ...
+     *         } else {
+     *             throw e;
+     *         }
+     *     }
+     * Because it needs some time to get the system property, pls don't use it
+     * too frequently. 
+     * 
+     * @return Whether in debug mode
+     */
+    public static boolean isDebug() {
+    	boolean isDebug = false;
+    	try {
+    		isDebug = SystemProperties.getBoolean("ro.spread.debug", false);
+    	} catch (Exception e) {
+    		isDebug = false;
+    		e.printStackTrace();
+    	}
+    	return isDebug;
+    }
+    
+    /**
+     * @hide
+     * 
+     * @return
+     */
+    public static boolean isMonkeyOrDebug() {
+    	return isMonkey() || isDebug();
+    }
+    
 }
