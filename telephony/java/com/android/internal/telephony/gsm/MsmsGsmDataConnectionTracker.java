@@ -78,6 +78,14 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
                 mUserDataEnabled = enabled;
                 Settings.Secure.putIntAtIndex(mPhone.getContext().getContentResolver(),
                         Settings.Secure.MOBILE_DATA, mPhone.getPhoneId(), enabled ? 1 : 0);
+                if (getDataOnRoamingEnabled() == false &&
+                        mPhone.getServiceState().getRoaming() == true) {
+                    if (enabled) {
+                        notifyOffApnsOfAvailability(Phone.REASON_ROAMING_ON);
+                    } else {
+                        notifyOffApnsOfAvailability(Phone.REASON_DATA_DISABLED);
+                    }
+                }
                 if (prevEnabled != getAnyDataEnabled()) {
                     if (!prevEnabled) {
                         resetAllRetryCounts();
@@ -157,8 +165,8 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
                 // when VoiceCall is started,new DataCall setup is stopped,so if
                 // VoiceCall is ended,we still
                 // need to setup DataCall which is stopped just now.
-                MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
-                        .getRequestPhoneIdBeforeVoiceCallEnd());
+//                MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
+//                        .getRequestPhoneIdBeforeVoiceCallEnd());
             } else {
                 // clean slate after call end.
                 resetPollStats();
@@ -173,8 +181,8 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
         	resetAllRetryCounts();
             mReregisterOnReconnectFailure = false;
             // in case data setup was attempted when we were on a voice call
-            MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
-                    .getRequestPhoneIdBeforeVoiceCallEnd());
+//            MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
+//                    .getRequestPhoneIdBeforeVoiceCallEnd());
         }
     }
 
@@ -197,8 +205,12 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
         }
     }
     @Override
-    protected void onEnableNewApn() {
-        MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(mPhone.getPhoneId());
+    protected boolean trySetupData(ApnContext apnContext) {
+        return MsmsGsmDataConnectionTrackerProxy.trySetupData(apnContext, mPhone.getPhoneId());
+    }
+
+    public boolean trySetupDataInternal(ApnContext apnContext) {
+        return super.trySetupData(apnContext);
     }
 
     @Override

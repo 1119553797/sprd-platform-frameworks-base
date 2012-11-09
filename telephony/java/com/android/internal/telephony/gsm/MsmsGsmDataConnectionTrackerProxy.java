@@ -103,12 +103,17 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
         return builder.toString();
     }
 
-    public static void onEnableNewApn(int phoneId) {
+    public static boolean trySetupData(ApnContext apnContext, int phoneId) {
         synchronized (sInstance) {
+            boolean ret = false;
             log("onEnableNewApn(" + phoneId + ") activePhoneId:" + sActivePhoneId);
             if (phoneId == INVALID_PHONE_ID) {
                 log("phoneId is invalid,onEnableNewApn out!!!");
-                return;
+                return ret;
+            }
+            if (sTracker == null || sTracker[phoneId] == null) {
+                log("call trySetupData in Constructor");
+                return ret;
             }
             sRequestConnectPhoneId = phoneId;
             sRequestPhoneIdBeforeVoiceCallEnd = sRequestConnectPhoneId;
@@ -118,17 +123,25 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                         checkAndSwitchPhone(sActivePhoneId, null);
                     } else {
                         sTracker[sActivePhoneId].cleanUpAllConnections(true,
-                                Phone.REASON_DATA_DISABLED);
+                                "switchConnection");
                     }
                 }else{
-                    sTracker[sActivePhoneId].setupDataOnReadyApns(Phone.REASON_DATA_ENABLED);
+                    //sTracker[sActivePhoneId].setupDataOnReadyApns(Phone.REASON_DATA_ENABLED);
+                    ret = sTracker[sActivePhoneId].trySetupDataInternal(apnContext);
                 }
             } else {
-                if (sTracker[sRequestConnectPhoneId].getCurrentGprsState() == ServiceState.STATE_IN_SERVICE) {
-                    sTracker[sRequestConnectPhoneId].setupDataOnReadyApns(Phone.REASON_DATA_ENABLED);
-                    sActivePhoneId = sRequestConnectPhoneId;
+                if (!sTracker[sRequestConnectPhoneId].isAutoAttachOnCreation()) {
+                    // do not use this case
+                    if (sTracker[sRequestConnectPhoneId].getCurrentGprsState() == ServiceState.STATE_IN_SERVICE) {
+                        sTracker[sRequestConnectPhoneId].setupDataOnReadyApns("switchConnection");
+                        sActivePhoneId = sRequestConnectPhoneId;
+                    } else {
+                        sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
+                        sActivePhoneId = sRequestConnectPhoneId;
+                    }
                 } else {
-                    sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
+                    //sTracker[sRequestConnectPhoneId].setupDataOnReadyApns("switchConnection");
+                    ret = sTracker[sRequestConnectPhoneId].trySetupDataInternal(apnContext);
                     sActivePhoneId = sRequestConnectPhoneId;
                 }
             }
@@ -137,6 +150,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                 sRequestConnectPhoneId=INVALID_PHONE_ID;
             }
             log("onEnableNewApn out");
+            return ret;
         }
     }
 

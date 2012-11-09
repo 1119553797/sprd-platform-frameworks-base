@@ -51,12 +51,12 @@ public class UiccController {
         return mIccCard;
     }
 
-    public UiccController(PhoneBase phone) {
+    protected UiccController(PhoneBase phone) {
         if (DBG) log("Creating UiccController");
         setNewPhone(phone);
     }
 
-    private void setNewPhone(PhoneBase phone) {
+    protected void setNewPhone(PhoneBase phone) {
         mCurrentPhone = phone;
         if (phone instanceof GSMPhone) {
             if (DBG) log("New phone is GSMPhone");

@@ -764,7 +764,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         return trySetupData(apnContext);
     }
 
-    private boolean trySetupData(ApnContext apnContext) {
+    protected boolean trySetupData(ApnContext apnContext) {
         if (DBG) {
             log("trySetupData for type:" + apnContext.getApnType() +
                     " due to " + apnContext.getReason());
@@ -2010,18 +2010,17 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         return null;
     }
 
-      //It does not apply to DSDS
-//    @Override
-//    protected void onEnableApn(int apnId, int enabled) {
-//        ApnContext apnContext = mApnContexts.get(apnIdToType(apnId));
-//        if (apnContext == null) {
-//            loge("onEnableApn(" + apnId + ", " + enabled + "): NO ApnContext");
-//            return;
-//        }
-//        // TODO change our retry manager to use the appropriate numbers for the new APN
-//        if (DBG) log("onEnableApn: apnContext=" + apnContext + " call applyNewState");
-//        applyNewState(apnContext, enabled == ENABLED, apnContext.getDependencyMet());
-//    }
+    @Override
+    protected void onEnableApn(int apnId, int enabled) {
+        ApnContext apnContext = mApnContexts.get(apnIdToType(apnId));
+        if (apnContext == null) {
+            loge("onEnableApn(" + apnId + ", " + enabled + "): NO ApnContext");
+            return;
+        }
+        // TODO change our retry manager to use the appropriate numbers for the new APN
+        if (DBG) log("onEnableApn: apnContext=" + apnContext + " call applyNewState");
+        applyNewState(apnContext, enabled == ENABLED, apnContext.getDependencyMet());
+    }
 
     @Override
     // TODO: We shouldnt need this.

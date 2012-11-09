@@ -73,7 +73,7 @@ import com.android.internal.telephony.PhoneSubInfo;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.telephony.UUSInfo;
 //import com.android.internal.telephony.test.SimulatedRadioControl;
-import com.android.internal.telephony.uicc.UiccController;
+import com.android.internal.telephony.uicc.MsUiccController;
 import com.android.internal.telephony.IccVmNotSupportedException;
 import com.android.internal.telephony.ServiceStateTracker;
 
@@ -115,7 +115,7 @@ public abstract class GSMPhone extends PhoneBase {
     SimPhoneBookInterfaceManager mSimPhoneBookIntManager;
     SimSmsInterfaceManager mSimSmsIntManager;
     PhoneSubInfo mSubInfo;
-    UiccController mUiccController;
+
 
     Registrant mPostDialHandler;
 
@@ -156,8 +156,7 @@ public abstract class GSMPhone extends PhoneBase {
 //        }
 
         mCM.setPhoneType(Phone.PHONE_TYPE_GSM);
-        mUiccController = new UiccController(this);
-        mIccCard.set(mUiccController.getIccCard());
+        mIccCard.set(MsUiccController.getInstance(this).getIccCard());
         mIccRecords = mIccCard.get().getIccRecords();
         mCT = new GsmCallTracker(this);
         mSST = new GsmServiceStateTracker (this);

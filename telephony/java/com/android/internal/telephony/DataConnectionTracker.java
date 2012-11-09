@@ -539,13 +539,13 @@ public abstract class DataConnectionTracker extends Handler {
         // and 2) whether the RIL will setup the baseband to auto-PS attach.
 
         dataEnabled[APN_DEFAULT_ID] = SystemProperties.getBoolean(DEFALUT_DATA_ON_BOOT_PROP, true)
-                                          && dataEnabledSetting && (defaultDataPhoneId == mPhone.getPhoneId());
+                                          /*&& dataEnabledSetting */&& (defaultDataPhoneId == mPhone.getPhoneId());
         if (dataEnabled[APN_DEFAULT_ID]) {
             enabledCount++;
         }
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mPhone.getContext());
-        mAutoAttachOnCreation = sp.getBoolean(PhoneBase.DATA_DISABLED_ON_BOOT_KEY, false);
+        mAutoAttachOnCreation = sp.getBoolean(PhoneBase.DATA_DISABLED_ON_BOOT_KEY, true);
 
         // watch for changes to Settings.Secure.DATA_ROAMING
         mDataRoamingSettingObserver = new DataRoamingSettingObserver(mPhone);
@@ -639,8 +639,12 @@ public abstract class DataConnectionTracker extends Handler {
      * Return current {@link Settings.Secure#DATA_ROAMING} value.
      */
     public boolean getDataOnRoamingEnabled() {
-        final ContentResolver resolver = mPhone.getContext().getContentResolver();
-		return Settings.Secure.getIntAtIndex(resolver, Settings.Secure.DATA_ROAMING, mPhone.getPhoneId(), 0) != 0;
+        try {
+            final ContentResolver resolver = mPhone.getContext().getContentResolver();
+            return Settings.Secure.getIntAtIndex(resolver, Settings.Secure.DATA_ROAMING, mPhone.getPhoneId()) != 0;
+        } catch (SettingNotFoundException snfe) {
+            return false;
+        }
     }
 
     private void handleDataOnRoamingChange() {
