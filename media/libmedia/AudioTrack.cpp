@@ -43,6 +43,7 @@
 namespace android {
 // ---------------------------------------------------------------------------
 
+static const int8_t kMaxRetryCount = 127;
 // static
 status_t AudioTrack::getMinFrameCount(
         int* frameCount,
@@ -1023,6 +1024,8 @@ bool AudioTrack::processAudioBuffer(const sp<AudioTrackThread>& thread)
         mCbf(EVENT_MORE_DATA, mUserData, &audioBuffer);
         writtenSize = audioBuffer.size;
 
+        static int8_t mRetryCount = kMaxRetryCount;
+
         // Sanity check on returned size
         if (ssize_t(writtenSize) <= 0) {
             // The callback is done filling buffers
@@ -1030,8 +1033,20 @@ bool AudioTrack::processAudioBuffer(const sp<AudioTrackThread>& thread)
             // still try to get more data in intervals of WAIT_PERIOD_MS
             // but don't just loop and block the CPU, so wait
             usleep(WAIT_PERIOD_MS*1000);
+            // qiaozw added begin, fix bug 89262
+            // set CBLK_UNDERRUN_OFF flag, let mCbf(EVENT_UNDERRUN, mUserData, 0) be excuted at next loop.
+            // it will signals soundpool callback to call stop()
+            if (--mRetryCount <= 0) {
+                mRetryCount = kMaxRetryCount;
+                mCblk->flags &= ~CBLK_UNDERRUN_MSK; //normally releaseBuffer(&audioBuffer) below will set this flag.
+            }
+            // qiaozw added end
             break;
         }
+
+        //fix bug 89262
+        mRetryCount = kMaxRetryCount;
+
         if (writtenSize > reqSize) writtenSize = reqSize;
 
         if (mFormat == AudioSystem::PCM_8_BIT && !(mFlags & AudioSystem::OUTPUT_FLAG_DIRECT)) {
