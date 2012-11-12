@@ -103,7 +103,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
         return builder.toString();
     }
 
-    public static boolean trySetupData(ApnContext apnContext, int phoneId) {
+    public static boolean onEnableNewApn(ApnContext apnContext, int phoneId) {
         synchronized (sInstance) {
             boolean ret = false;
             log("onEnableNewApn(" + phoneId + ") activePhoneId:" + sActivePhoneId);
@@ -127,7 +127,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                     }
                 }else{
                     //sTracker[sActivePhoneId].setupDataOnReadyApns(Phone.REASON_DATA_ENABLED);
-                    ret = sTracker[sActivePhoneId].trySetupDataInternal(apnContext);
+                    ret = sTracker[sActivePhoneId].trySetupData(apnContext);
                 }
             } else {
                 if (!sTracker[sRequestConnectPhoneId].isAutoAttachOnCreation()) {
@@ -141,7 +141,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                     }
                 } else {
                     //sTracker[sRequestConnectPhoneId].setupDataOnReadyApns("switchConnection");
-                    ret = sTracker[sRequestConnectPhoneId].trySetupDataInternal(apnContext);
+                    ret = sTracker[sRequestConnectPhoneId].trySetupData(apnContext);
                     sActivePhoneId = sRequestConnectPhoneId;
                 }
             }

@@ -32,6 +32,7 @@ import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Log;
 
+import com.android.internal.telephony.ApnContext;
 import com.android.internal.telephony.ApnSetting;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.DataCallState;
@@ -618,7 +619,7 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
      * @override com.android.internal.telephony.DataConnectionTracker
      */
     @Override
-    protected void onEnableNewApn() {
+    protected void onEnableNewApn(ApnContext apnContext) {
         // No mRequestedApnType check; only one connection is supported
         cleanUpConnection(true, Phone.REASON_APN_SWITCHED, false);
     }

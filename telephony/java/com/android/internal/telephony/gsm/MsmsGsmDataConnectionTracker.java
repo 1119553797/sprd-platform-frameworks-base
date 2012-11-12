@@ -204,15 +204,11 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
         	mApnContexts.get(Phone.APN_TYPE_DEFAULT).setEnabled(false);
         }
     }
+
     @Override
-    protected boolean trySetupData(ApnContext apnContext) {
-        return MsmsGsmDataConnectionTrackerProxy.trySetupData(apnContext, mPhone.getPhoneId());
+    protected void onEnableNewApn(ApnContext apnContext) {
+        MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(apnContext, mPhone.getPhoneId());
     }
-
-    public boolean trySetupDataInternal(ApnContext apnContext) {
-        return super.trySetupData(apnContext);
-    }
-
     @Override
     protected void onDisconnectDone(int connId, AsyncResult ar) {
         MsmsGsmDataConnectionTrackerProxy.onDisconnectDone(connId, mPhone.getPhoneId(), ar, mPhone.getContext());

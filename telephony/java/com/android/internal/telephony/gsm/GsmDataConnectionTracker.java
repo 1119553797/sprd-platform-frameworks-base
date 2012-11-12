@@ -2011,18 +2011,6 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     }
 
     @Override
-    protected void onEnableApn(int apnId, int enabled) {
-        ApnContext apnContext = mApnContexts.get(apnIdToType(apnId));
-        if (apnContext == null) {
-            loge("onEnableApn(" + apnId + ", " + enabled + "): NO ApnContext");
-            return;
-        }
-        // TODO change our retry manager to use the appropriate numbers for the new APN
-        if (DBG) log("onEnableApn: apnContext=" + apnContext + " call applyNewState");
-        applyNewState(apnContext, enabled == ENABLED, apnContext.getDependencyMet());
-    }
-
-    @Override
     // TODO: We shouldnt need this.
     protected boolean onTrySetupData(String reason) {
         if (DBG) log("onTrySetupData: reason=" + reason);

@@ -1068,6 +1068,7 @@ public abstract class DataConnectionTracker extends Handler {
                     isApnTypeActive(apnIdToType(apnId)));
         }
         if (!applyNewStateToApnContext(apnId, enabled)) return;
+        ApnContext apnContext = mApnContexts.get(apnIdToType(apnId));
 
         if (enabled == ENABLED) {
             synchronized (this) {
@@ -1079,7 +1080,7 @@ public abstract class DataConnectionTracker extends Handler {
             String type = apnIdToType(apnId);
             if (!isApnTypeActive(type)) {
                 mRequestedApnType = type;
-                onEnableNewApn();
+                onEnableNewApn(apnContext);
             } else {
                 notifyApnIdUpToCurrent(Phone.REASON_APN_SWITCHED, apnId);
             }
@@ -1109,7 +1110,7 @@ public abstract class DataConnectionTracker extends Handler {
                     // stuff as enable requests come in and pops them back on as we disable back
                     // down to the lower pri stuff
                     mRequestedApnType = Phone.APN_TYPE_DEFAULT;
-                    onEnableNewApn();
+                    onEnableNewApn(apnContext);
                 }
             }
         }
@@ -1121,7 +1122,7 @@ public abstract class DataConnectionTracker extends Handler {
      * mRequestedApnType is set prior to call
      * To be overridden.
      */
-    protected void onEnableNewApn() {
+    protected void onEnableNewApn(ApnContext apnContext) {
     }
 
     /**
