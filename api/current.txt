@@ -15603,8 +15603,10 @@ package android.os {
     method public static java.io.File getDataDirectory();
     method public static java.io.File getDownloadCacheDirectory();
     method public static java.io.File getExternalStorageDirectory();
+    method public static java.io.File getExternalStorageDirectorySd();
     method public static java.io.File getExternalStoragePublicDirectory(java.lang.String);
     method public static java.lang.String getExternalStorageState();
+    method public static java.lang.String getExternalStorageStateSd();
     method public static java.io.File getRootDirectory();
     method public static boolean isExternalStorageEmulated();
     method public static boolean isExternalStorageRemovable();
@@ -16948,6 +16950,7 @@ package android.provider {
   public static class CallLog.Calls implements android.provider.BaseColumns {
     ctor public CallLog.Calls();
     method public static java.lang.String getLastOutgoingCall(android.content.Context);
+    method public static java.lang.String getLastOutgoingCall(android.content.Context, int);
     field public static final java.lang.String CACHED_NAME = "name";
     field public static final java.lang.String CACHED_NUMBER_LABEL = "numberlabel";
     field public static final java.lang.String CACHED_NUMBER_TYPE = "numbertype";
@@ -16964,6 +16967,7 @@ package android.provider {
     field public static final java.lang.String NEW = "new";
     field public static final java.lang.String NUMBER = "number";
     field public static final int OUTGOING_TYPE = 2; // 0x2
+    field public static final java.lang.String PHONE_ID = "phoneid";
     field public static final java.lang.String TYPE = "type";
   }
 
@@ -17555,6 +17559,8 @@ package android.provider {
     field public static final android.net.Uri CONTENT_URI;
     field public static final java.lang.String CONTENT_VCARD_TYPE = "text/x-vcard";
     field public static final android.net.Uri CONTENT_VCARD_URI;
+    field public static final java.lang.String DISPLAY_ACCOUNT_NAME = "display_account_name";
+    field public static final java.lang.String DISPLAY_ACCOUNT_TYPE = "display_account_type";
   }
 
   public static final class ContactsContract.Contacts.AggregationSuggestions implements android.provider.BaseColumns android.provider.ContactsContract.ContactOptionsColumns android.provider.ContactsContract.ContactStatusColumns android.provider.ContactsContract.ContactsColumns {
@@ -17650,6 +17656,8 @@ package android.provider {
     field public static final android.net.Uri CONTENT_URI;
     field public static final long DEFAULT = 0L; // 0x0L
     field public static final java.lang.String DIRECTORY_AUTHORITY = "authority";
+    field public static final java.lang.String DISPLAY_ACCOUNT_NAME = "display_account_name";
+    field public static final java.lang.String DISPLAY_ACCOUNT_TYPE = "display_account_type";
     field public static final java.lang.String DISPLAY_NAME = "displayName";
     field public static final java.lang.String EXPORT_SUPPORT = "exportSupport";
     field public static final int EXPORT_SUPPORT_ANY_ACCOUNT = 2; // 0x2
