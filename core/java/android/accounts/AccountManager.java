@@ -338,6 +338,23 @@ public class AccountManager {
         }
     }
 
+
+   /**
++     * @hide
++     */
+    public String getUserDataPrivileged(final Account account, final String key) {
+        if (account == null) throw new IllegalArgumentException("account is null");
+        if (key == null) throw new IllegalArgumentException("key is null");
+        try {
+            return mService.getUserDataPrivileged(account, key);
+        } catch (RemoteException e) {
+            // will never happen
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
     /**
      * Lists the currently registered authenticators.
      *

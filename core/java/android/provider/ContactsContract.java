@@ -490,7 +490,8 @@ public final class ContactsContract {
          * <p>TYPE: text</p>
          */
         public static final String DISPLAY_NAME = "displayName";
-
+	public static final String DISPLAY_ACCOUNT_TYPE = "display_account_type";
+	public static final String DISPLAY_ACCOUNT_NAME = "display_account_name";
         /**
          * <p>
          * The authority of the Directory Provider. Contacts Provider will
@@ -1438,6 +1439,10 @@ public final class ContactsContract {
          */
         public static final Uri CONTENT_VCARD_URI = Uri.withAppendedPath(CONTENT_URI,
                 "as_vcard");
+ 	
+	public static final String DISPLAY_ACCOUNT_TYPE = "display_account_type";
+	public static final String DISPLAY_ACCOUNT_NAME = "display_account_name";
+
 
        /**
         * Boolean parameter that may be used with {@link #CONTENT_VCARD_URI}
@@ -7494,6 +7499,7 @@ public final class ContactsContract {
          */
         public static final int STATUS_NO_ACCOUNTS_NO_CONTACTS = 4;
 
+	public static final int STATUS_IMPORTING = 5;
         /**
          * Additional data associated with the status.
          *
@@ -8007,7 +8013,8 @@ public final class ContactsContract {
              */
             public static final String LIST_GROUP_ACTION =
                     "com.android.contacts.action.LIST_GROUP";
-
+	public static final String MULTI_PICK_ACTION =
+                    "com.android.contacts.action.MULTI_PICK";
             /**
              * When in LIST_GROUP_ACTION mode, this is the group to display.
              */
@@ -8406,7 +8413,8 @@ public final class ContactsContract {
                         sb.append(markedToken);
                         if (i < lastToken - 1) {
                             // Add the characters that appeared between this token and the next.
-                            sb.append(contentLine.substring(
+                            //sb.append(contentLine.substring(
+				sb.append(contentLine.trim().substring(
                                     tokenOffsets.get(i) + originalToken.length(),
                                     tokenOffsets.get(i + 1)));
                         }

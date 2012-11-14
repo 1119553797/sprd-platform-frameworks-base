@@ -140,6 +140,10 @@ public class Environment {
 
     private static final File DOWNLOAD_CACHE_DIRECTORY
             = getDirectory("DOWNLOAD_CACHE", "/cache");
+//in 8810ea,we use it as external sdcard
+    private static final File EXTERNAL_STORAGE_DIRECTORY_SD
+            = getDirectory("SECONDARY_STORAGE", "/mnt/sdcard/external");
+
 
     /**
      * Gets the Android data directory.
@@ -189,6 +193,35 @@ public class Environment {
     public static File getExternalStorageDirectory() {
         return EXTERNAL_STORAGE_DIRECTORY;
     }
+
+
+   /**
+     * Gets the Android Second external storage directory.  This directory may not
+     * currently be accessible if it has been mounted by the user on their
+     * computer, has been removed from the device, or some other problem has
+     * happened.
+     * @see #getExternalStorageStateSd()
+     */
+    public static File getExternalStorageDirectorySd() {
+        return EXTERNAL_STORAGE_DIRECTORY_SD;
+    }
+
+     /**
+      * Gets the current state of the second "external" storage device.
+      * 
+      * <p>See {@link #getExternalStorageDirectory()} for more information.
+      */
+     public static String getExternalStorageStateSd() {
+         try {
+             IMountService mountService = IMountService.Stub.asInterface(ServiceManager
+                     .getService("mount"));
+             return mountService.getVolumeState(getExternalStorageDirectorySd()
+                     .toString());
+         } catch (Exception rex) {
+             return Environment.MEDIA_REMOVED;
+         }
+     }
+
 
     /**
      * Standard directory in which to place any audio files that should be

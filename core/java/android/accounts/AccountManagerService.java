@@ -441,6 +441,28 @@ public class AccountManagerService
         }
     }
 
+
+
+    public String getUserDataPrivileged(Account account, String key) {
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            Log.v(TAG, "getUserData: " + account
+                    + ", key " + key
+                    + ", caller's uid " + Binder.getCallingUid()
+                    + ", pid " + Binder.getCallingPid());
+        }
+        if (account == null) throw new IllegalArgumentException("account is null");
+        if (key == null) throw new IllegalArgumentException("key is null");
+        checkBinderPermission(Manifest.permission.AUTHENTICATE_ACCOUNTS);
+        long identityToken = clearCallingIdentity();
+	checkAuthenticateAccountsPermission(account);
+        UserAccounts accounts = getUserAccountsForCaller();
+
+        try {
+            return readUserDataInternal(accounts,account, key);
+        } finally {
+            restoreCallingIdentity(identityToken);
+        }
+    }
     public String getUserData(Account account, String key) {
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "getUserData: " + account

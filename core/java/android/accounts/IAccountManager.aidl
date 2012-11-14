@@ -29,6 +29,7 @@ import android.os.Bundle;
 interface IAccountManager {
     String getPassword(in Account account);
     String getUserData(in Account account, String key);
+String getUserDataPrivileged(in Account account, String key);
     AuthenticatorDescription[] getAuthenticatorTypes();
     Account[] getAccounts(String accountType);
     void hasFeatures(in IAccountManagerResponse response, in Account account, in String[] features);
