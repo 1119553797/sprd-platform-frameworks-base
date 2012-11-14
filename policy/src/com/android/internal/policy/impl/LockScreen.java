@@ -461,10 +461,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
         } else {
             inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
         }
-
-        mStatusViewManager = new KeyguardStatusViewManager(this, mUpdateMonitor, mLockPatternUtils,
-                mCallback, false);
-
+        /* modify 2012/11/14 enable emergency button in the lock sreen start */
+        /*
+         * mStatusViewManager = new KeyguardStatusViewManager(this,
+         * mUpdateMonitor, mLockPatternUtils, mCallback, false);
+         */
+        mStatusViewManager = new KeyguardStatusViewManager(this,
+                mUpdateMonitor, mLockPatternUtils, mCallback, true);
+        /* modify 2012/11/14 enable emergency button in the lock sreen end */
         setFocusable(true);
         setFocusableInTouchMode(true);
         setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
