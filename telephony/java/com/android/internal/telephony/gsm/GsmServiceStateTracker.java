@@ -753,7 +753,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     newSS.setState (regCodeToServiceState(regState));
 
                     if (regState == 8 || regState == 10 || regState == 12 || regState == 13 || regState == 14) {
-                    // if (regState == 10 || regState == 12 || regState == 13 || regState == 14) {
                         mEmergencyOnly = true;
                     } else {
                         mEmergencyOnly = false;

@@ -495,7 +495,7 @@ public abstract class SMSDispatcher extends Handler {
             if (smsHeader != null && smsHeader.portAddrs != null) {
                 if (smsHeader.portAddrs.destPort == SmsHeader.PORT_WAP_PUSH) {
                     // GSM-style WAP indication
-                    return mWapPush.dispatchWapPdu(sms.getUserData());
+                    return mWapPush.dispatchWapPdu(sms.getUserData(),pdus,sms.getDisplayOriginatingAddress());
                 } else {
                     // The message was sent to a port, so concoct a URI for it.
                     dispatchPortAddressedPdus(pdus, smsHeader.portAddrs.destPort);
