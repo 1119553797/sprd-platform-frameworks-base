@@ -543,7 +543,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen) {
+            /* Delete 20121115 Spreadst of 91985 disenable menuKey unLock start */
+            /*
             mCallback.goToUnlockScreen();
+            */
+            /* Delete 20121115 Spreadst of 91985 disenable menuKey unLock end */
         }
         return false;
     }
