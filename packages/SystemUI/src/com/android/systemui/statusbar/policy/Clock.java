@@ -57,7 +57,7 @@ public class Clock extends TextView {
     private static final int AM_PM_STYLE_SMALL   = 1;
     private static final int AM_PM_STYLE_GONE    = 2;
 
-    private static final int AM_PM_STYLE = AM_PM_STYLE_GONE;
+    private static int AM_PM_STYLE = AM_PM_STYLE_GONE;
 
     public Clock(Context context) {
         this(context, null);
@@ -180,6 +180,12 @@ public class Clock extends TextView {
             sdf = mClockFormat;
         }
         String result = sdf.format(mCalendar.getTime());
+
+        //add 20121115 Spreadst of bug91592 status bar have no am/pm start
+        if (!b24) {
+            AM_PM_STYLE = AM_PM_STYLE_SMALL;
+        }
+        //add 20121115 Spreadst of bug91592 status bar have no am/pm end
 
         if (AM_PM_STYLE != AM_PM_STYLE_NORMAL) {
             int magic1 = result.indexOf(MAGIC1);
