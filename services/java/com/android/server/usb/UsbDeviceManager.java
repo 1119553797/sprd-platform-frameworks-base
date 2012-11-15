@@ -90,7 +90,15 @@ public class UsbDeviceManager {
     private static final int MSG_SET_CURRENT_FUNCTIONS = 2;
     private static final int MSG_SYSTEM_READY = 3;
     private static final int MSG_BOOT_COMPLETED = 4;
-
+    /*
+     * Add 20121115 Spreadst of 89084 the usb debugging can not change the
+     * language start
+     */
+    private static final int MSG_LOCAL_CHANGE = 5;
+    /*
+     * Add 20121115 Spreadst of 89084 the usb debugging can not change the
+     * language end
+     */
     private static final int AUDIO_MODE_NONE = 0;
     private static final int AUDIO_MODE_SOURCE = 1;
 
@@ -299,7 +307,22 @@ public class UsbDeviceManager {
                 mHandler.sendEmptyMessage(MSG_BOOT_COMPLETED);
             }
         };
+        /*
+         * Add 20121115 Spreadst of 89084 the usb debugging can not change the
+         * language start
+         */
+        private final BroadcastReceiver mLocalChangeReceiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                if (DEBUG)
+                    Slog.d(TAG, "language is change....");
+                mHandler.sendEmptyMessage(MSG_LOCAL_CHANGE);
+            }
+        };
 
+        /*
+         * Add 20121115 Spreadst of 89084 the usb debugging can not change the
+         * language end
+         */
         public UsbHandler(Looper looper) {
             super(looper);
             try {
@@ -346,6 +369,16 @@ public class UsbDeviceManager {
 
                 mContext.registerReceiver(mBootCompletedReceiver,
                         new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
+                /*
+                 * Add 20121115 Spreadst of 89084 the usb debugging can not
+                 * change the language start
+                 */
+                mContext.registerReceiver(mLocalChangeReceiver,
+                        new IntentFilter(Intent.ACTION_LOCALE_CHANGED));
+                /*
+                 * Add 20121115 Spreadst of 89084 the usb debugging can not
+                 * change the language end
+                 */
             } catch (Exception e) {
                 Slog.e(TAG, "Error initializing UsbHandler", e);
             }
@@ -596,6 +629,21 @@ public class UsbDeviceManager {
                     updateUsbState();
                     updateAudioSourceFunction();
                     break;
+            /*
+             * Add 20121115 Spreadst of 89084 the usb debugging can not change
+             * the language start
+             */
+                case MSG_LOCAL_CHANGE:
+                    mUsbNotificationId = 0;
+                    mAdbNotificationShown = false;
+                    updateUsbNotification();
+                    updateAdbNotification();
+                    updateUsbState();
+                    break;
+            /*
+             * Add 20121115 Spreadst of 89084 the usb debugging can not change
+             * the language end
+             */
                 case MSG_BOOT_COMPLETED:
                     mBootCompleted = true;
                     if (mCurrentAccessory != null) {
