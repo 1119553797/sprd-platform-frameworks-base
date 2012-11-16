@@ -2060,13 +2060,6 @@ public class Intent implements Parcelable, Cloneable {
     public static final String ACTION_PROVIDER_CHANGED =
             "android.intent.action.PROVIDER_CHANGED";
 
-    // modified for FM start
-    /**
-     * add intent about FM
-     */
-    public static final String ACTION_FM = "android.intent.action.FM";
-    // modified for FM end
-
     /**
      * Broadcast Action: Wired Headset plugged in or unplugged.
      *

@@ -224,23 +224,9 @@ public final class Telephony {
          */
         public static Uri addMessageToUri(ContentResolver resolver,
                 Uri uri, String address, String body, String subject,
-                Long date, boolean read, boolean deliveryReport, int phoneId) {
-            return addMessageToUri(resolver, uri, address, body, subject,
-                    date, read, deliveryReport, -1L, phoneId);
-        }
-
-        public static Uri addMessageToUri(ContentResolver resolver,
-                Uri uri, String address, String body, String subject,
                 Long date, boolean read, boolean deliveryReport) {
             return addMessageToUri(resolver, uri, address, body, subject,
-                    date, read, deliveryReport, -1L, PhoneFactory.DEFAULT_PHONE_ID);
-        }
-
-        public static Uri addMessageToUri(ContentResolver resolver,
-                Uri uri, String address, String body, String subject,
-                Long date, boolean read, boolean seen, boolean deliveryReport, int phoneId) {
-            return addMessageToUri(resolver, uri, address, body, subject,
-                    date, read, seen, deliveryReport, -1L, phoneId);
+                    date, read, deliveryReport, -1L);
         }
 
         /**
@@ -277,7 +263,6 @@ public final class Telephony {
             values.put(READ, read ? Integer.valueOf(1) : Integer.valueOf(0));
             values.put(SUBJECT, subject);
             values.put(BODY, body);
-            values.put(PHONE_ID, phoneId);
             if (deliveryReport) {
                 values.put(STATUS, STATUS_PENDING);
             }
@@ -381,14 +366,6 @@ public final class Telephony {
                     boolean read) {
                 return addMessageToUri(resolver, CONTENT_URI, address, body,
                         subject, date, read, false);
-            }
-            //gerry.li 20111020
-            //support dual sim-card
-            public static Uri addMessage(ContentResolver resolver,
-                    String address, String body, String subject, Long date,
-                    boolean read, boolean seen, int phoneID) {
-                return addMessageToUri(resolver, CONTENT_URI, address, body,
-                        subject, date, read, seen, false, phoneID);
             }
         }
 
@@ -745,7 +722,6 @@ public final class Telephony {
             public static SmsMessage[] getMessagesFromIntent(
                     Intent intent) {
                 Object[] messages = (Object[]) intent.getSerializableExtra("pdus");
-					int phoneId = intent.getIntExtra(PHONE_ID, 0);
                 String format = intent.getStringExtra("format");
                 byte[][] pduObjs = new byte[messages.length][];
 
@@ -758,7 +734,6 @@ public final class Telephony {
                 for (int i = 0; i < pduCount; i++) {
                     pdus[i] = pduObjs[i];
                     msgs[i] = SmsMessage.createFromPdu(pdus[i], format);
-						msgs[i].setPhoneId(phoneId);
                 }
                 return msgs;
             }

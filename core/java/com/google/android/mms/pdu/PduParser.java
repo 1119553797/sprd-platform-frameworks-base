@@ -17,7 +17,6 @@
 
 package com.google.android.mms.pdu;
 
-import com.android.internal.telephony.PhoneFactory;
 import com.google.android.mms.ContentType;
 import com.google.android.mms.InvalidHeaderValueException;
 
@@ -103,7 +102,7 @@ public class PduParser {
      * @return the pdu structure if parsing successfully.
      *         null if parsing error happened or mandatory fields are not set.
      */
-    public GenericPdu parse(int phoneId){
+    public GenericPdu parse(){
         if (mPduDataStream == null) {
             return null;
         }
@@ -136,22 +135,22 @@ public class PduParser {
 
         switch (messageType) {
             case PduHeaders.MESSAGE_TYPE_SEND_REQ:
-                SendReq sendReq = new SendReq(mHeaders, mBody, phoneId);
+                SendReq sendReq = new SendReq(mHeaders, mBody);
                 return sendReq;
             case PduHeaders.MESSAGE_TYPE_SEND_CONF:
-                SendConf sendConf = new SendConf(mHeaders, phoneId);
+                SendConf sendConf = new SendConf(mHeaders);
                 return sendConf;
             case PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND:
                 NotificationInd notificationInd =
-                    new NotificationInd(mHeaders, phoneId);
+                    new NotificationInd(mHeaders);
                 return notificationInd;
             case PduHeaders.MESSAGE_TYPE_NOTIFYRESP_IND:
                 NotifyRespInd notifyRespInd =
-                    new NotifyRespInd(mHeaders, phoneId);
+                    new NotifyRespInd(mHeaders);
                 return notifyRespInd;
             case PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF:
                 RetrieveConf retrieveConf =
-                    new RetrieveConf(mHeaders, mBody, phoneId);
+                    new RetrieveConf(mHeaders, mBody);
 
                 byte[] contentType = retrieveConf.getContentType();
                 if (null == contentType) {
@@ -176,19 +175,19 @@ public class PduParser {
                 return null;
             case PduHeaders.MESSAGE_TYPE_DELIVERY_IND:
                 DeliveryInd deliveryInd =
-                    new DeliveryInd(mHeaders, phoneId);
+                    new DeliveryInd(mHeaders);
                 return deliveryInd;
             case PduHeaders.MESSAGE_TYPE_ACKNOWLEDGE_IND:
                 AcknowledgeInd acknowledgeInd =
-                    new AcknowledgeInd(mHeaders, phoneId);
+                    new AcknowledgeInd(mHeaders);
                 return acknowledgeInd;
             case PduHeaders.MESSAGE_TYPE_READ_ORIG_IND:
                 ReadOrigInd readOrigInd =
-                    new ReadOrigInd(mHeaders, phoneId);
+                    new ReadOrigInd(mHeaders);
                 return readOrigInd;
             case PduHeaders.MESSAGE_TYPE_READ_REC_IND:
                 ReadRecInd readRecInd =
-                    new ReadRecInd(mHeaders, phoneId);
+                    new ReadRecInd(mHeaders);
                 return readRecInd;
             default:
                 log("Parser doesn't support this message type in this version!");

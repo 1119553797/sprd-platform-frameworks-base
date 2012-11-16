@@ -55,19 +55,6 @@ public class RetrieveConf extends MultimediaMessagePdu {
         super(headers, body);
     }
 
-    public RetrieveConf(int phoneId) throws InvalidHeaderValueException {
-        super(phoneId);
-        setMessageType(PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF);
-    }
-
-    RetrieveConf(PduHeaders headers, int phoneId) {
-        super(headers, phoneId);
-    }
-
-    RetrieveConf(PduHeaders headers, PduBody body, int phoneId) {
-        super(headers, body, phoneId);
-    }
-
     /**
      * Get CC value.
      *

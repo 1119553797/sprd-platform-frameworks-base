@@ -17,7 +17,6 @@
 
 package com.google.android.mms.pdu;
 
-import com.android.internal.telephony.PhoneFactory;
 import com.google.android.mms.ContentType;
 import com.google.android.mms.InvalidHeaderValueException;
 import com.google.android.mms.MmsException;
@@ -41,7 +40,6 @@ import android.provider.MediaStore;
 import android.provider.Telephony;
 import android.provider.Telephony.Mms;
 import android.provider.Telephony.MmsSms;
-import android.provider.Telephony.Sms;
 import android.provider.Telephony.Threads;
 import android.provider.Telephony.Mms.Addr;
 import android.provider.Telephony.Mms.Part;
@@ -131,7 +129,6 @@ public class PduPersister {
         Mms.MESSAGE_SIZE,
         Mms.SUBJECT_CHARSET,
         Mms.RETRIEVE_TEXT_CHARSET,
-        Mms.PHONE_ID,
     };
 
     private static final int PDU_COLUMN_ID                    = 0;
@@ -161,7 +158,6 @@ public class PduPersister {
     private static final int PDU_COLUMN_MESSAGE_SIZE          = 24;
     private static final int PDU_COLUMN_SUBJECT_CHARSET       = 25;
     private static final int PDU_COLUMN_RETRIEVE_TEXT_CHARSET = 26;
-    private static final int PDU_COLUMN_PHONE_ID              = 27;
 
     private static final String[] PART_PROJECTION = new String[] {
         Part._ID,
@@ -527,7 +523,6 @@ public class PduPersister {
         PduCacheEntry cacheEntry = null;
         int msgBox = 0;
         long threadId = -1;
-        int phoneId;
         try {
             synchronized(PDU_CACHE_INSTANCE) {
                 if (PDU_CACHE_INSTANCE.isUpdating(uri)) {
@@ -562,7 +557,7 @@ public class PduPersister {
 
                 msgBox = c.getInt(PDU_COLUMN_MESSAGE_BOX);
                 threadId = c.getLong(PDU_COLUMN_THREAD_ID);
-                phoneId = c.getInt(PDU_COLUMN_PHONE_ID);
+
                 set = ENCODED_STRING_COLUMN_INDEX_MAP.entrySet();
                 for (Entry<Integer, Integer> e : set) {
                     setEncodedStringValueToHeaders(
@@ -618,28 +613,28 @@ public class PduPersister {
 
             switch (msgType) {
             case PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND:
-                pdu = new NotificationInd(headers, phoneId);
+                pdu = new NotificationInd(headers);
                 break;
             case PduHeaders.MESSAGE_TYPE_DELIVERY_IND:
-                pdu = new DeliveryInd(headers, phoneId);
+                pdu = new DeliveryInd(headers);
                 break;
             case PduHeaders.MESSAGE_TYPE_READ_ORIG_IND:
-                pdu = new ReadOrigInd(headers, phoneId);
+                pdu = new ReadOrigInd(headers);
                 break;
             case PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF:
-                pdu = new RetrieveConf(headers, body, phoneId);
+                pdu = new RetrieveConf(headers, body);
                 break;
             case PduHeaders.MESSAGE_TYPE_SEND_REQ:
-                pdu = new SendReq(headers, body, phoneId);
+                pdu = new SendReq(headers, body);
                 break;
             case PduHeaders.MESSAGE_TYPE_ACKNOWLEDGE_IND:
-                pdu = new AcknowledgeInd(headers, phoneId);
+                pdu = new AcknowledgeInd(headers);
                 break;
             case PduHeaders.MESSAGE_TYPE_NOTIFYRESP_IND:
-                pdu = new NotifyRespInd(headers, phoneId);
+                pdu = new NotifyRespInd(headers);
                 break;
             case PduHeaders.MESSAGE_TYPE_READ_REC_IND:
-                pdu = new ReadRecInd(headers, phoneId);
+                pdu = new ReadRecInd(headers);
                 break;
             case PduHeaders.MESSAGE_TYPE_SEND_CONF:
             case PduHeaders.MESSAGE_TYPE_FORWARD_REQ:
@@ -983,7 +978,7 @@ public class PduPersister {
         }
         PDU_CACHE_INSTANCE.purge(uri);
 
-        ContentValues values = new ContentValues(11);
+        ContentValues values = new ContentValues(10);
         byte[] contentType = sendReq.getContentType();
         if (contentType != null) {
             values.put(Mms.CONTENT_TYPE, toIsoString(contentType));
@@ -992,11 +987,6 @@ public class PduPersister {
         long date = sendReq.getDate();
         if (date != -1) {
             values.put(Mms.DATE, date);
-        }
-
-        int phoneId = sendReq.getPhoneId();
-        if(phoneId != -1){
-            values.put(Mms.PHONE_ID, phoneId);
         }
 
         int deliveryReport = sendReq.getDeliveryReport();
@@ -1217,7 +1207,7 @@ public class PduPersister {
      * @param uri Where to store the given PDU object.
      * @return A Uri which can be used to access the stored PDU.
      */
-    public Uri persist(GenericPdu pdu, Uri uri, int phoneId) throws MmsException {
+    public Uri persist(GenericPdu pdu, Uri uri) throws MmsException {
         if (uri == null) {
             throw new MmsException("Uri may not be null.");
         }
@@ -1256,8 +1246,6 @@ public class PduPersister {
         PduBody body = null;
         ContentValues values = new ContentValues();
         Set<Entry<Integer, String>> set;
-
-        values.put(Sms.PHONE_ID, phoneId);
 
         set = ENCODED_STRING_COLUMN_NAME_MAP.entrySet();
         for (Entry<Integer, String> e : set) {
@@ -1399,10 +1387,6 @@ public class PduPersister {
         return res;
     }
 
-    public Uri persist(GenericPdu pdu, Uri uri) throws MmsException {
-        return persist(pdu, uri, PhoneFactory.DEFAULT_PHONE_ID);
-    }
-
     /**
      * Move a PDU object from one location to another.
      *
@@ -1489,43 +1473,5 @@ public class PduPersister {
         return SqliteWrapper.query(mContext, mContentResolver,
                 uriBuilder.build(), null, selection, selectionArgs,
                 PendingMessages.DUE_TIME);
-    }
-
-    public Cursor getPendingMessages(long dueTime, int phoneId) {
-        Uri.Builder uriBuilder = PendingMessages.CONTENT_URI.buildUpon();
-        uriBuilder.appendQueryParameter("protocol", "mms");
-
-        String selection = PendingMessages.ERROR_TYPE + " < ?"
-                + " AND " + PendingMessages.DUE_TIME + " <= ?"
-                + " AND " + PendingMessages.PHONE_ID + " = ?";
-
-        String[] selectionArgs = new String[] {
-                String.valueOf(MmsSms.ERR_TYPE_GENERIC_PERMANENT),
-                String.valueOf(dueTime),
-                String.valueOf(phoneId),
-        };
-
-        return SqliteWrapper.query(mContext, mContentResolver,
-                uriBuilder.build(), null, selection, selectionArgs,
-                PendingMessages.DUE_TIME);
-    }
-
-    // newly add for msms
-    public int markPendingMessageWithTransportFailure(long dueTime, int phoneId){
-        Uri.Builder uriBuilder = PendingMessages.CONTENT_URI.buildUpon();
-        uriBuilder.appendQueryParameter("protocol", "mms");
-
-        String selection = PendingMessages.ERROR_TYPE + " = ?"
-                + " AND " + PendingMessages.DUE_TIME + " <= ?"
-                + " AND " + PendingMessages.PHONE_ID + " = ?";
-        String[] selectionArgs = new String[]{
-                String.valueOf(MmsSms.NO_ERROR),
-                String.valueOf(dueTime),
-                String.valueOf(phoneId),
-        };
-
-        ContentValues values = new ContentValues(1);
-        values.put(PendingMessages.ERROR_TYPE, MmsSms.ERR_TYPE_TRANSPORT_FAILURE);
-        return SqliteWrapper.update(mContext, mContentResolver, uriBuilder.build(), values, selection, selectionArgs);
     }
 }

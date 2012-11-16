@@ -184,6 +184,5 @@
             file="/system/framework/android.test.runner.jar" />
     <library name="javax.obex"
             file="/system/framework/javax.obex.jar"/>
-    <library name="com.broadcom.bt.service"
-            file="/system/framework/com.broadcom.bt.service.jar" />
+
 </permissions>

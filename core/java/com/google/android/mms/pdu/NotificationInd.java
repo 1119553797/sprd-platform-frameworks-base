@@ -46,15 +46,6 @@ public class NotificationInd extends GenericPdu {
         super(headers);
     }
 
-    public NotificationInd(int phoneId) throws InvalidHeaderValueException {
-        super(phoneId);
-        setMessageType(PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND);
-    }
-
-    NotificationInd(PduHeaders headers, int phoneId) {
-        super(headers, phoneId);
-    }
-
     /**
      * Get X-Mms-Content-Class Value.
      *

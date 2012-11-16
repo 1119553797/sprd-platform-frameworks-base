@@ -52,22 +52,13 @@ public class AudioSystem
     public static final int STREAM_DTMF = 8;
     /* @hide The audio stream for text to speech (TTS) */
     public static final int STREAM_TTS = 9;
-    // modified for FM start
-    // add STREAM_FM
-    /* @hide The audio stream for FM */
-    public static final int STREAM_FM = 10;
-    // modified for FM end
     /**
      * @deprecated Use {@link #numStreamTypes() instead}
      */
     public static final int NUM_STREAMS = 5;
 
     // Expose only the getter method publicly so we can change it in the future
-    // modified for FM start
-    // number of stream types changes because STREAM_FM is added for FM
-    //    private static final int NUM_STREAM_TYPES = 10;
-    private static final int NUM_STREAM_TYPES = 11;
-    // modified for FM end
+    private static final int NUM_STREAM_TYPES = 10;
     public static final int getNumStreamTypes() { return NUM_STREAM_TYPES; }
 
     /*
@@ -213,11 +204,7 @@ public class AudioSystem
     public static final int DEVICE_OUT_DGTL_DOCK_HEADSET = 0x1000;
     public static final int DEVICE_OUT_USB_ACCESSORY = 0x2000;
     public static final int DEVICE_OUT_USB_DEVICE = 0x4000;
-    // modified for FM start
-    // add FM devices: headset and speaker
-    public static final int DEVICE_OUT_FM_HEADSET = 0x1000000;
-    public static final int DEVICE_OUT_FM_SPEAKER = 0x2000000;
-    // modified for FM end
+
     public static final int DEVICE_OUT_DEFAULT = 0x8000;
     public static final int DEVICE_OUT_ALL = (DEVICE_OUT_EARPIECE |
                                               DEVICE_OUT_SPEAKER |
@@ -234,11 +221,6 @@ public class AudioSystem
                                               DEVICE_OUT_DGTL_DOCK_HEADSET |
                                               DEVICE_OUT_USB_ACCESSORY |
                                               DEVICE_OUT_USB_DEVICE |
-                                              // modified for FM start
-                                              // add FM devices
-                                              DEVICE_OUT_FM_HEADSET |
-                                              DEVICE_OUT_FM_SPEAKER |
-                                              // modified for FM end
                                               DEVICE_OUT_DEFAULT);
     public static final int DEVICE_OUT_ALL_A2DP = (DEVICE_OUT_BLUETOOTH_A2DP |
                                                    DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
@@ -248,10 +230,6 @@ public class AudioSystem
                                                   DEVICE_OUT_BLUETOOTH_SCO_CARKIT);
     public static final int DEVICE_OUT_ALL_USB = (DEVICE_OUT_USB_ACCESSORY |
                                                   DEVICE_OUT_USB_DEVICE);
-    // modified for FM start
-    public static final int DEVICE_OUT_ALL_FM = (DEVICE_OUT_FM_HEADSET |
-                                                  DEVICE_OUT_FM_SPEAKER);
-    // modified for FM end
 
     // input devices
     public static final int DEVICE_IN_COMMUNICATION = 0x10000;
@@ -284,11 +262,6 @@ public class AudioSystem
     public static final String DEVICE_OUT_DGTL_DOCK_HEADSET_NAME = "digital_dock";
     public static final String DEVICE_OUT_USB_ACCESSORY_NAME = "usb_accessory";
     public static final String DEVICE_OUT_USB_DEVICE_NAME = "usb_device";
-    // modified for FM start
-    // add FM devices' names
-    public static final String DEVICE_OUT_FM_HEADSET_NAME = "fm_headset";
-    public static final String DEVICE_OUT_FM_SPEAKER_NAME = "fm_speaker";
-    // modified for FM end
 
     public static String getDeviceName(int device)
     {
@@ -323,12 +296,6 @@ public class AudioSystem
             return DEVICE_OUT_USB_ACCESSORY_NAME;
         case DEVICE_OUT_USB_DEVICE:
             return DEVICE_OUT_USB_DEVICE_NAME;
-        // modified for FM start
-        case DEVICE_OUT_FM_HEADSET:
-            return DEVICE_OUT_FM_HEADSET_NAME;
-        case DEVICE_OUT_FM_SPEAKER:
-            return DEVICE_OUT_FM_SPEAKER_NAME;
-        // modified for FM end
         case DEVICE_IN_DEFAULT:
         default:
             return "";

@@ -42,15 +42,6 @@ public class SendConf extends GenericPdu {
         super(headers);
     }
 
-    public SendConf(int phoneId) throws InvalidHeaderValueException {
-        super(phoneId);
-        setMessageType(PduHeaders.MESSAGE_TYPE_SEND_CONF);
-    }
-
-    SendConf(PduHeaders headers, int phoneId) {
-        super(headers, phoneId);
-    }
-
     /**
      * Get Message-ID value.
      *
