@@ -1290,4 +1290,6 @@
     <string name="default_audio_route_category_name" msgid="3722811174003886946">"系統"</string>
     <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"藍牙音訊"</string>
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"完成"</string>
+    <string name="china_unicom_numeric_values">中國聯通</string>
+    <string name="china_mobile_numeric_values">中國移動</string>
 </resources>

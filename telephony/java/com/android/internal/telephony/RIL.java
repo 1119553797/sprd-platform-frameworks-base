@@ -24,7 +24,7 @@ import static android.telephony.TelephonyManager.NETWORK_TYPE_UMTS;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSDPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSUPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSPA;
-
+import android.content.res.Resources;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -47,7 +47,7 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.text.TextUtils;
 import android.util.Log;
-
+import com.android.internal.R;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
 import com.android.internal.telephony.cdma.CdmaCallWaitingNotification;
@@ -2236,7 +2236,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_SIGNAL_STRENGTH: ret =  responseSignalStrength(p); break;
             case RIL_REQUEST_VOICE_REGISTRATION_STATE: ret =  responseStrings(p); break;
             case RIL_REQUEST_DATA_REGISTRATION_STATE: ret =  responseStrings(p); break;
-            case RIL_REQUEST_OPERATOR: ret =  responseStrings(p); break;
+            case RIL_REQUEST_OPERATOR: ret =  responseOperatorString(p); break;
             case RIL_REQUEST_RADIO_POWER: ret =  responseVoid(p); break;
             case RIL_REQUEST_DTMF: ret =  responseVoid(p); break;
             case RIL_REQUEST_SEND_SMS: ret =  responseSMS(p); break;
@@ -2844,7 +2844,60 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                                 new AsyncResult (null, new Integer(rilVer), null));
         }
     }
-
+    private String getCarrierNameByNumeric(String numeric) {
+        Resources r = Resources.getSystem();
+        Log.d(LOG_TAG, " getOperatorAlphaShortToChinese: old name= null numeric="+numeric);
+        String itemList[] = r.getStringArray(R.array.numeric_to_operator);
+        for (String item:itemList){
+            String numerics[] = item.split("=");
+            Log.d(LOG_TAG, "numeric_to_operator" + item + " numerics[0] " + numerics[0]);
+            if( numerics[0].equalsIgnoreCase(numeric)){
+                return numerics[1];
+            }
+        }
+        return numeric;
+    }
+    protected Object responseOperatorString(Parcel p) {
+        String response[];
+        response = p.readStringArray();
+        if( (response[0] == null) && ( response[1] == null ) ) {
+            response[0] = getCarrierNameByNumeric(response[2]);
+            response[1] = getCarrierNameByNumeric(response[2]);
+        }else if(response[0] == null) {
+            response[0] = response[1];
+        }else if(response[1] == null) {
+            response[1] = response[0];
+        }
+        //i18n
+        response[0] = changeOperator(response[0]);
+        response[1] = changeOperator(response[1]);
+        Log.d(LOG_TAG, " responseOperatorString():response[0]"+response[0]+"response[1]="+response[1]+"response[2]="+response[2] );
+        return response;
+    }
+    public String changeOperator(String name){
+        Resources r = Resources.getSystem();
+        String ret = name;
+        Log.d(LOG_TAG, " changeOperator: old name= "+name);
+        String itemList[] = r.getStringArray(R.array.operator);
+        Log.d(LOG_TAG, " changeOperator: old name= " + name + " itemList=" + itemList.toString());
+        for (String item:itemList){
+            String  parts[] = item.split("=");
+            Log.d(LOG_TAG, "itemList " + item + " parts[0] " + parts[0]);
+            if( parts[0].equalsIgnoreCase(name)){
+                ret = parts[1];
+                break;
+            }
+        }
+        return ret;
+     }
+    private String getCarrierNumericToChinese(String numeric, String name) {
+        Log.d(LOG_TAG, " getOperatorAlphaLongToChinese: old name= " + name+" numeric="+numeric);
+        String carrierName = getCarrierNameByNumeric(numeric);
+        if (carrierName.equals(numeric) && !TextUtils.isEmpty(name)) {
+            carrierName = name;
+        }
+        return changeOperator(carrierName);
+    }
     private Object
     responseInts(Parcel p) {
         int numInts;

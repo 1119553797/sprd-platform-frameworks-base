@@ -69,7 +69,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.TimeZone;
-
+import com.android.internal.R;
 /**
  * {@hide}
  */
@@ -150,6 +150,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     private String curSpn = null;
     private String curPlmn = null;
     private int curSpnRule = 0;
+    private boolean curShow3G = false;
 
     /** waiting period before recheck gprs and voice registration. */
     static final int DEFAULT_GPRS_CHECK_PERIOD_MILLIS = 60 * 1000;
@@ -165,13 +166,18 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     /** Notification id. */
     static final int PS_NOTIFICATION = 888;  // Id to update and cancel PS restricted
     static final int CS_NOTIFICATION = 999;  // Id to update and cancel CS restricted
-
+    private boolean mLocalLanguageChange = false;// local Language change,true
+                                                 // if change
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_LOCALE_CHANGED)) {
                 // update emergency string whenever locale changed
+                mLocalLanguageChange = true;
+                pollState();
                 updateSpnDisplay();
+            }else{
+                mLocalLanguageChange = false;
             }
         }
     };
@@ -494,27 +500,102 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
         cm.setRadioPower(false, null);
     }
+    //change SPN to chinese
+    private String updateSpnToChinese(String numeric, String name) {
+        Resources r = Resources.getSystem();
+        String newName;
+        Log.d(LOG_TAG, "getCarrierNumericToChinese: old name= " + name+" numeric="+numeric);
+        if ("46000".equals(numeric) ||
+               "46002".equals(numeric) ||
+               "46007".equals(numeric)) {
+            newName = r.getString(R.string.china_mobile_numeric_values);
+            if (newName != null && newName.equals("CMCC")) {
+                return name;
+            } else {
+                return newName;
+            }
+        }
+        if ("46001".equals(numeric)) {
+            newName = r.getString(R.string.china_unicom_numeric_values);
+            if (newName != null && newName.equals("CUCC")) {
+                return name;
+            } else {
+                return newName;
+            }
+        }
+        return name;
+    }
 
     protected void updateSpnDisplay() {
         int rule = phone.mIccRecords.getDisplayRule(ss.getOperatorNumeric());
         String spn = phone.mIccRecords.getServiceProviderName();
         String plmn = ss.getOperatorAlphaLong();
+        boolean show3G = false;
+
+        if(plmn == null || plmn.length() == 0) {
+          plmn = ss.getOperatorAlphaShort();
+        }
+        // For white-card test,both short and long name are null but Operator name is't null,
+        //so display Operator name,bug 8970
+        if(plmn == null || plmn.length() == 0) {
+            plmn = ss.getOperatorNumeric();
+        }
+
+        if (mRilRadioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_HSDPA ||
+            mRilRadioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_HSPA  ||
+            mRilRadioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_HSPAP ||
+            mRilRadioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_HSUPA ||
+            mRilRadioTechnology == ServiceState.RIL_RADIO_TECHNOLOGY_UMTS) {
+            show3G = true;
+        } else {
+            show3G = false;
+        }
 
         // For emergency calls only, pass the EmergencyCallsOnly string via EXTRA_PLMN
         if (mEmergencyOnly && cm.getRadioState().isOn()) {
             plmn = Resources.getSystem().
                 getText(com.android.internal.R.string.emergency_calls_only).toString();
+            show3G = false;
             if (DBG) log("updateSpnDisplay: emergency only and radio is on plmn='" + plmn + "'");
         }
 
-        if (rule != curSpnRule
+      if(plmn == null || plmn.length() == 0){
+          plmn = Resources.getSystem().
+              getText(com.android.internal.R.string.lockscreen_carrier_default).toString();
+          show3G = false;
+        }
+        if (rule != curSpnRule || mLocalLanguageChange
                 || !TextUtils.equals(spn, curSpn)
                 || !TextUtils.equals(plmn, curPlmn)) {
             boolean showSpn = !mEmergencyOnly && !TextUtils.isEmpty(spn)
                 && (rule & SIMRecords.SPN_RULE_SHOW_SPN) == SIMRecords.SPN_RULE_SHOW_SPN;
             boolean showPlmn = !TextUtils.isEmpty(plmn) && (mEmergencyOnly ||
                 ((rule & SIMRecords.SPN_RULE_SHOW_PLMN) == SIMRecords.SPN_RULE_SHOW_PLMN));
-
+            if (showPlmn) {
+               if (show3G) {
+                    if (plmn != null && plmn.length()!=0) {
+                        plmn += "3G";
+                    }
+                }
+            } else {
+                if (showSpn) {
+                    if (spn != null && spn.length() != 0) {
+                        String operNum = phone.mIccRecords.getOperatorNumeric();
+                        if (operNum != null &&
+                            (operNum.equals("46000") ||
+                             operNum.equals("46001") ||
+                             operNum.equals("46002") ||
+                             operNum.equals("46007"))) {
+                            spn = updateSpnToChinese(ss.getOperatorNumeric(), spn);
+                        }
+                    }
+                    if (show3G) {
+                        if (spn != null && spn.length()!=0) {
+                            spn += "3G";
+                        }
+                    }
+                }
+            }
             if (DBG) {
                 log(String.format("updateSpnDisplay: changed sending intent" + " rule=" + rule +
                             " showPlmn='%b' plmn='%s' showSpn='%b' spn='%s'",
@@ -532,6 +613,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         curSpnRule = rule;
         curSpn = spn;
         curPlmn = plmn;
+        curShow3G = show3G;
     }
 
     /**

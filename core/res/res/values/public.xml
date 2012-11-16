@@ -306,6 +306,8 @@
   <java-symbol type="dimen" name="notification_title_text_size" />
   <java-symbol type="dimen" name="notification_subtext_size" />
 
+  <java-symbol type="string" name="china_mobile_numeric_values" />
+  <java-symbol type="string" name="china_unicom_numeric_values" />
   <java-symbol type="string" name="add_account_button_label" />
   <java-symbol type="string" name="addToDictionary" />
   <java-symbol type="string" name="action_bar_home_description" />
@@ -1405,6 +1407,8 @@
   <java-symbol type="array" name="config_serialPorts" />
   <java-symbol type="array" name="radioAttributes" />
   <java-symbol type="array" name="config_oemUsbModeOverride" />
+  <java-symbol type="array" name="numeric_to_operator" />
+  <java-symbol type="array" name="operator" />
   <java-symbol type="bool" name="config_animateScreenLights" />
   <java-symbol type="bool" name="config_automatic_brightness_available" />
   <java-symbol type="bool" name="config_sf_limitedAlpha" />
