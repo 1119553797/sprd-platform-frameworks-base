@@ -52,6 +52,21 @@ public class NotifyRespInd extends GenericPdu {
         super(headers);
     }
 
+    public NotifyRespInd(int mmsVersion,
+                         byte[] transactionId,
+                         int status,
+                         int phoneId) throws InvalidHeaderValueException {
+        super(phoneId);
+        setMessageType(PduHeaders.MESSAGE_TYPE_NOTIFYRESP_IND);
+        setMmsVersion(mmsVersion);
+        setTransactionId(transactionId);
+        setStatus(status);
+    }
+
+    NotifyRespInd(PduHeaders headers, int phoneId) {
+        super(headers, phoneId);
+    }
+
     /**
      * Get X-Mms-Report-Allowed field value.
      *

@@ -42,6 +42,15 @@ public class ReadOrigInd extends GenericPdu {
         super(headers);
     }
 
+    public ReadOrigInd(int phoneId) throws InvalidHeaderValueException {
+        super(phoneId);
+        setMessageType(PduHeaders.MESSAGE_TYPE_READ_ORIG_IND);
+    }
+
+    ReadOrigInd(PduHeaders headers, int phoneId) {
+        super(headers, phoneId);
+    }
+
     /**
      * Get Date value.
      *

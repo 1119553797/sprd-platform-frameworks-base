@@ -54,6 +54,25 @@ public class ReadRecInd extends GenericPdu {
         super(headers);
     }
 
+    public ReadRecInd(EncodedStringValue from,
+                      byte[] messageId,
+                      int mmsVersion,
+                      int readStatus,
+                      EncodedStringValue[] to,
+                      int phoneId) throws InvalidHeaderValueException {
+        super(phoneId);
+        setMessageType(PduHeaders.MESSAGE_TYPE_READ_REC_IND);
+        setFrom(from);
+        setMessageId(messageId);
+        setMmsVersion(mmsVersion);
+        setTo(to);
+        setReadStatus(readStatus);
+    }
+
+    ReadRecInd(PduHeaders headers, int phoneId) {
+        super(headers, phoneId);
+    }
+
     /**
      * Get Date value.
      *

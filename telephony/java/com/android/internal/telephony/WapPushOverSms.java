@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.provider.Telephony;
 import android.provider.Telephony.Sms.Intents;
+import android.text.TextUtils;
 import android.util.Log;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -39,6 +40,7 @@ public class WapPushOverSms {
     private final Context mContext;
     private WspTypeDecoder pduDecoder;
     private SMSDispatcher mSmsDispatcher;
+    private int mPhoneId;
 
     /**
      * Hold the wake lock for 5 seconds, which should be enough time for
@@ -118,11 +120,14 @@ public class WapPushOverSms {
     public WapPushOverSms(Phone phone, SMSDispatcher smsDispatcher) {
         mSmsDispatcher = smsDispatcher;
         mContext = phone.getContext();
+        mPhoneId = phone.getPhoneId();
         mWapConn = new WapPushConnection(mContext);
         mWapConn.bindWapPushManager();
     }
 
-
+    public int dispatchWapPdu(byte[] pdu) {
+        return dispatchWapPdu(pdu, null, "");
+    }
     /**
      * Dispatches inbound messages that are in the WAP PDU format. See
      * wap-230-wsp-20010705-a section 8 for details on the WAP PDU format.
@@ -132,7 +137,7 @@ public class WapPushOverSms {
      *         {@link Activity#RESULT_OK} if the message has been broadcast
      *         to applications
      */
-    public int dispatchWapPdu(byte[] pdu) {
+    public int dispatchWapPdu(byte[] pdu,byte[][] pdus, String number) {
 
         if (false) Log.d(LOG_TAG, "Rx: " + IccUtils.bytesToHexString(pdu));
 
@@ -230,7 +235,11 @@ public class WapPushOverSms {
                     intent.putExtra("data", intentData);
                     intent.putExtra("contentTypeParameters",
                             pduDecoder.getContentParameters());
-
+                    intent.putExtra("pdus", pdus);
+                    intent.putExtra(Phone.PHONE_ID, mPhoneId);
+                    if (!TextUtils.isEmpty(number)) {
+							intent.putExtra("from", number);
+                       }
                     int procRet = wapPushMan.processMessage(wapAppId, contentType, intent);
                     if (false) Log.v(LOG_TAG, "procRet:" + procRet);
                     if ((procRet & WapPushManagerParams.MESSAGE_HANDLED) > 0
@@ -267,7 +276,11 @@ public class WapPushOverSms {
         intent.putExtra("header", header);
         intent.putExtra("data", intentData);
         intent.putExtra("contentTypeParameters", pduDecoder.getContentParameters());
-
+        intent.putExtra("pdus", pdus);
+        intent.putExtra(Phone.PHONE_ID, mPhoneId);
+        if (!TextUtils.isEmpty(number)) {
+				intent.putExtra("from", number);
+         }
         mSmsDispatcher.dispatch(intent, permission);
 
         return Activity.RESULT_OK;

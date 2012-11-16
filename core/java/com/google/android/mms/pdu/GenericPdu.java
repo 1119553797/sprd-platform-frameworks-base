@@ -17,6 +17,7 @@
 
 package com.google.android.mms.pdu;
 
+import com.android.internal.telephony.PhoneFactory;
 import com.google.android.mms.InvalidHeaderValueException;
 
 public class GenericPdu {
@@ -24,12 +25,14 @@ public class GenericPdu {
      * The headers of pdu.
      */
     PduHeaders mPduHeaders = null;
+    protected int mPhoneId;
 
     /**
      * Constructor.
      */
     public GenericPdu() {
         mPduHeaders = new PduHeaders();
+        mPhoneId = PhoneFactory.DEFAULT_PHONE_ID;
     }
 
     /**
@@ -39,6 +42,17 @@ public class GenericPdu {
      */
     GenericPdu(PduHeaders headers) {
         mPduHeaders = headers;
+        mPhoneId = PhoneFactory.DEFAULT_PHONE_ID;
+    }
+
+    public GenericPdu(int phoneId) {
+        mPduHeaders = new PduHeaders();
+        mPhoneId = phoneId;
+    }
+
+    GenericPdu(PduHeaders headers, int phoneId) {
+        mPduHeaders = headers;
+        mPhoneId = phoneId;
     }
 
     /**
@@ -109,5 +123,9 @@ public class GenericPdu {
      */
     public void setFrom(EncodedStringValue value) {
         mPduHeaders.setEncodedStringValue(value, PduHeaders.FROM);
+    }
+
+    public int getPhoneId(){
+        return mPhoneId;
     }
 }
