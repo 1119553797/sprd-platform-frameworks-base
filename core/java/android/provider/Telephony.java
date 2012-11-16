@@ -260,11 +260,11 @@ public final class Telephony {
         public static Uri addMessageToUri(ContentResolver resolver,
                 Uri uri, String address, String body, String subject,
                 Long date, boolean read, boolean deliveryReport, long threadId) {
-            
-            return addMessageToUri(resolver, uri, address, body, subject, 
-            		date, read, deliveryReport, threadId, PhoneFactory.DEFAULT_PHONE_ID);
+
+            return addMessageToUri(resolver, uri, address, body, subject,
+                       date, read, deliveryReport, threadId, PhoneFactory.DEFAULT_PHONE_ID);
         }
-        
+
         public static Uri addMessageToUri(ContentResolver resolver,
                 Uri uri, String address, String body, String subject,
                 Long date, boolean read,boolean seen, boolean deliveryReport, long threadId, int phoneId) {
@@ -290,7 +290,7 @@ public final class Telephony {
         public static Uri addMessageToUri(ContentResolver resolver,
                 Uri uri, String address, String body, String subject,
                 Long date, boolean read, boolean deliveryReport, long threadId, int phoneId) {
-            return addMessageToUri(resolver, uri, address, body, subject, date, read, false, deliveryReport, threadId, phoneId) ;
+            return addMessageToUri(resolver, uri, address, body, subject, date, read, false, deliveryReport, threadId, phoneId);
         }
 
         /**
@@ -422,7 +422,7 @@ public final class Telephony {
                 return addMessageToUri(resolver, CONTENT_URI, address, body,
                         subject, date, true, false);
             }
-			
+
             //gerry.li 20111020
             //support dual sim-card
             public static Uri addMessage(ContentResolver resolver,
@@ -513,7 +513,7 @@ public final class Telephony {
                 return addMessageToUri(resolver, CONTENT_URI, address, body,
                         subject, date, true, deliveryReport, threadId);
             }
-            
+
             public static Uri addMessage(ContentResolver resolver,
                     String address, String body, String subject, Long date,
                     boolean deliveryReport, long threadId, int phoneId) {

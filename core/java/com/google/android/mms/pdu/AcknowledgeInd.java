@@ -48,7 +48,7 @@ public class AcknowledgeInd extends GenericPdu {
     AcknowledgeInd(PduHeaders headers) {
         super(headers);
     }
-    
+
     public AcknowledgeInd(int mmsVersion, byte[] transactionId, int phoneId)
             throws InvalidHeaderValueException {
         super(phoneId);
@@ -57,7 +57,7 @@ public class AcknowledgeInd extends GenericPdu {
         setMmsVersion(mmsVersion);
         setTransactionId(transactionId);
     }
-    
+
     AcknowledgeInd(PduHeaders headers, int phoneId) {
         super(headers, phoneId);
     }

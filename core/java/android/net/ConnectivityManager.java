@@ -876,24 +876,6 @@ public class ConnectivityManager {
         } catch (RemoteException e) {}
         return false;
     }
- 
-    /**
-     * {@hide}
-     */
-    public static int getMmsTypeByPhoneId(int phoneId) {
-        int MmsType;
-        if (phoneId == 0) {
-            MmsType = TYPE_MOBILE_MMS;
-        } else if (phoneId < PhoneFactory.getPhoneCount()) {
-            MmsType = TYPE_MOBILE_HIPRI + phoneId;
-        } else {
-            throw new IllegalArgumentException(
-                "phoneId is not leagal!");
-        }
-        return MmsType;
-    }
-
-
 
     /**
      * Returns if the currently active data network is metered. A network is

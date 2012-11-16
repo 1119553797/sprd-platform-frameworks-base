@@ -15,7 +15,7 @@
  */
 
 package com.android.internal.telephony;
-import com.android.internal.telephony.gsm.TDPhone;
+
 import com.android.internal.telephony.sip.SipPhone;
 
 import android.content.Context;
@@ -53,11 +53,11 @@ import java.util.List;
  *
  *
  */
-public final class CallManager {
+public class CallManager {
 
-    private static final String LOG_TAG ="CallManager";
-    private static final boolean DBG = true;
-    private static final boolean VDBG = false;
+    protected static final String LOG_TAG ="CallManager";
+    protected static final boolean DBG = true;
+    protected static final boolean VDBG = false;
 
     private static final int EVENT_DISCONNECT = 100;
     private static final int EVENT_PRECISE_CALL_STATE_CHANGED = 101;
@@ -81,25 +81,25 @@ public final class CallManager {
     private static final int EVENT_POST_DIAL_CHARACTER = 119;
 
     // Singleton instance
-    private static final CallManager INSTANCE = new CallManager();
+    protected static  CallManager INSTANCE ;
 
     // list of registered phones, which are PhoneBase objs
-    private final ArrayList<Phone> mPhones;
+    protected final ArrayList<Phone> mPhones;
 
     // list of supported ringing calls
-    private final ArrayList<Call> mRingingCalls;
+    protected final ArrayList<Call> mRingingCalls;
 
     // list of supported background calls
-    private final ArrayList<Call> mBackgroundCalls;
+    protected final ArrayList<Call> mBackgroundCalls;
 
     // list of supported foreground calls
-    private final ArrayList<Call> mForegroundCalls;
+    protected final ArrayList<Call> mForegroundCalls;
 
     // empty connection list
-    private final ArrayList<Connection> emptyConnections = new ArrayList<Connection>();
+    protected final ArrayList<Connection> emptyConnections = new ArrayList<Connection>();
 
     // default phone as the first phone registered, which is PhoneBase obj
-    private Phone mDefaultPhone;
+    protected Phone mDefaultPhone;
 
     // state registrants
     protected final RegistrantList mPreciseCallStateRegistrants
@@ -165,7 +165,7 @@ public final class CallManager {
     protected final RegistrantList mPostDialCharacterRegistrants
     = new RegistrantList();
 
-    private CallManager() {
+    protected CallManager() {
         mPhones = new ArrayList<Phone>();
         mRingingCalls = new ArrayList<Call>();
         mBackgroundCalls = new ArrayList<Call>();
@@ -189,7 +189,7 @@ public final class CallManager {
      * is a PhoneProxy obj
      * or the Phone itself if Phone is not a PhoneProxy obj
      */
-    private static Phone getPhoneBase(Phone phone) {
+    protected static Phone getPhoneBase(Phone phone) {
         if (phone instanceof PhoneProxy) {
             return phone.getForegroundCall().getPhone();
         }
@@ -289,42 +289,6 @@ public final class CallManager {
      * @return true if register successfully
      */
     public boolean registerPhone(Phone phone) {
-        Phone basePhone = getPhoneBase(phone);
-
-        if (basePhone != null && !mPhones.contains(basePhone)) {
-
-            if (DBG) {
-                Log.d(LOG_TAG, "registerPhone(" +
-                        phone.getPhoneName() + " " + phone + ")");
-            }
-
-            if (mPhones.isEmpty()) {
-                mDefaultPhone = basePhone;
-            }
-            mPhones.add(basePhone);
-
-	    if (basePhone instanceof TDPhone) {
-            TDPhone tdPhone = (TDPhone)basePhone;
-            ArrayList<Call> calls = tdPhone.getRingingCalls();
-            for (Call call : calls) {
-                mRingingCalls.add(call);
-			}
-            calls = tdPhone.getBackgroundCalls();
-            for (Call call : calls) {
-                mBackgroundCalls.add(call);
-            }
-            calls = tdPhone.getForegroundCalls();
-            for (Call call : calls) {
-                mForegroundCalls.add(call);
-            }
-	    } else {
-            mRingingCalls.add(basePhone.getRingingCall());
-            mBackgroundCalls.add(basePhone.getBackgroundCall());
-            mForegroundCalls.add(basePhone.getForegroundCall());
-	    }
-            registerForPhoneStates(basePhone);
-            return true;
-        }
 
         return false;
     }
@@ -459,7 +423,7 @@ public final class CallManager {
         return ((defaultPhone == null) ? null : defaultPhone.getContext());
     }
 
-    private void registerForPhoneStates(Phone phone) {
+    protected void registerForPhoneStates(Phone phone) {
         // for common events supported by all phones
         phone.registerForPreciseCallStateChanged(mHandler, EVENT_PRECISE_CALL_STATE_CHANGED, null);
         phone.registerForDisconnect(mHandler, EVENT_DISCONNECT, null);
