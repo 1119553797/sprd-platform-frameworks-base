@@ -46,15 +46,6 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := $(call find-other-java-files,$(FRAMEWORKS_BASE_SUBDIRS))
 SECONDARY_SRC_FILES := $(call find-other-java-files,$(SECONDARY_FRAMEWORKS_SUBDIRS))
 
-SECONDARY_SRC_FILES += \
-       telephony/java/com/android/internal/telephony/MsmsCallManager.java \
-       telephony/java/com/android/internal/telephony/MsmsPhoneFactory.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoCall.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoCallTracker.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoConnection.java \
-       telephony/java/com/android/internal/telephony/gsm/TDPhone.java \
-       telephony/java/com/android/internal/telephony/SprdRIL.java
-
 LOCAL_SRC_FILES := $(filter-out $(SECONDARY_SRC_FILES),$(LOCAL_SRC_FILES))
 # EventLogTags files.
 LOCAL_SRC_FILES += \
@@ -744,16 +735,6 @@ include $(BUILD_JAVA_LIBRARY)
 include $(CLEAR_VARS)
 # FRAMEWORKS_BASE_SUBDIRS comes from build/core/pathmap.mk
 LOCAL_SRC_FILES := $(call find-other-java-files,$(SECONDARY_FRAMEWORKS_SUBDIRS))
-
-LOCAL_SRC_FILES += \
-       telephony/java/com/android/internal/telephony/MsmsCallManager.java \
-       telephony/java/com/android/internal/telephony/MsmsPhoneFactory.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoCall.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoCallTracker.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoConnection.java \
-       telephony/java/com/android/internal/telephony/gsm/TDPhone.java \
-       telephony/java/com/android/internal/telephony/SprdRIL.java
-
 LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_JAVA_LIBRARIES := bouncycastle core core-junit ext framework
 LOCAL_MODULE_TAGS := optional

@@ -1334,7 +1334,7 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
 
     /**
      * Return a String describing the calling method and location at a particular stack depth.
-     * @param callStack the Thread stack
+     * @param callStack the Thread stack 
      * @param depth the depth of stack to return information for.
      * @return the String describing the caller at that depth.
      */
@@ -1369,17 +1369,17 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
     public static String getCaller() {
         return getCaller(Thread.currentThread().getStackTrace(), 0);
     }
-
+    
     //--------------------------------------------------------------------------
-    // Add By liwd@spreadst.com to debug hard problems such as Monkey or MTBF
+    // Add By liwd@spreadst.com to debug hard problems such as Monkey or MTBF 
     //--------------------------------------------------------------------------
-
+    
     /**
      * @hide
      * Detect whether we are in monkey mode.
-     *
+     * 
      * I think the best usage is in "catch" block, like this:
-     *     try {
+     *     try {    
      *         ... ...
      *     } catch (XxxException e) {
      *         if (android.os.Debug.isMonkey()) {
@@ -1389,21 +1389,21 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      *         }
      *     }
      * Because it needs some time to get the system property, pls don't use it
-     * too frequently.
-     *
+     * too frequently. 
+     * 
      * @return Whether in monkey mode
      */
     public static boolean isMonkey() {
        return ActivityManager.isUserAMonkey();
-    }
-
+	}
+    
     /**
      * @hide
      * Dump the hprof file of the current process.
-     *
+     * 
      * Don not use this in non-debug mode, because the hprof file will be dump
      * to the /data block, and these files may be large.
-     *
+     * 
      * @param pname The current process name.
      */
     public static void dumpHprof(String pname) {
@@ -1430,13 +1430,13 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
             }
         }
     }
-
+    
     /**
      * @hide
      * Detect whether we are in debug mode.
-     *
+     * 
      * I think the best usage is in "catch" block, like this:
-     *     try {
+     *     try {    
      *         ... ...
      *     } catch (XxxException e) {
      *         if (android.os.Debug.isDebug()) {
@@ -1446,28 +1446,28 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      *         }
      *     }
      * Because it needs some time to get the system property, pls don't use it
-     * too frequently.
-     *
+     * too frequently. 
+     * 
      * @return Whether in debug mode
      */
     public static boolean isDebug() {
-        boolean isDebug = false;
-        try {
-          isDebug = SystemProperties.getBoolean("ro.spread.debug", false);
-        } catch (Exception e) {
-          isDebug = false;
-          e.printStackTrace();
-        }
-        return isDebug;
+    	boolean isDebug = false;
+    	try {
+    		isDebug = SystemProperties.getBoolean("ro.spread.debug", false);
+    	} catch (Exception e) {
+    		isDebug = false;
+    		e.printStackTrace();
+    	}
+    	return isDebug;
     }
-
+    
     /**
      * @hide
-     *
+     * 
      * @return
      */
     public static boolean isMonkeyOrDebug() {
-       return isMonkey() || isDebug();
+    	return isMonkey() || isDebug();
     }
-
+    
 }

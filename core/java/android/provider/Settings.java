@@ -1527,12 +1527,12 @@ public final class Settings {
          */
         public static final String VOLUME_RESERVED_1 = "volume_reserved_1";
 
-        /**
+        /**  
          * reserved volume2
          */
         public static final String VOLUME_RESERVED_2 = "volume_reserved_2";
 
-        /**
+        /**  
          * reserved volume3
          */
         public static final String VOLUME_RESERVED_3 = "volume_reserved_3";
