@@ -484,8 +484,6 @@ static JNINativeMethod gMethods[] = {
     {"_prepare",             "()V",                             (void *)android_media_MediaRecorder_prepare},
     {"getMaxAmplitude",      "()I",                             (void *)android_media_MediaRecorder_native_getMaxAmplitude},
     {"start",                "()V",                             (void *)android_media_MediaRecorder_start},
-    {"pause",                "()V",                             (void *)android_media_MediaRecorder_pause},
-    {"resume",                "()V",                             (void *)android_media_MediaRecorder_resume},
     {"stop",                 "()V",                             (void *)android_media_MediaRecorder_stop},
     {"native_reset",         "()V",                             (void *)android_media_MediaRecorder_native_reset},
     {"release",              "()V",                             (void *)android_media_MediaRecorder_release},
