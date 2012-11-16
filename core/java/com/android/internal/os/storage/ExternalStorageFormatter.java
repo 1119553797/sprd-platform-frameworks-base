@@ -51,12 +51,20 @@ public class ExternalStorageFormatter extends Service
     private boolean mFactoryReset = false;
     private boolean mAlwaysReset = false;
 
+    //add for bug87011 
+    private boolean mFinished = false;
+
     StorageEventListener mStorageListener = new StorageEventListener() {
         @Override
         public void onStorageStateChanged(String path, String oldState, String newState) {
             Log.i(TAG, "Received storage state changed notification that " +
                     path + " changed state from " + oldState +
                     " to " + newState);
+            //add for bug 87011 do not update when finished.
+            if(mFinished){
+                Log.d(TAG, "not to updateProgressState for finished :");
+                return;
+            }
             updateProgressState();
         }
     };
@@ -64,7 +72,6 @@ public class ExternalStorageFormatter extends Service
     @Override
     public void onCreate() {
         super.onCreate();
-
         if (mStorageManager == null) {
             mStorageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
             mStorageManager.registerListener(mStorageListener);
@@ -83,13 +90,14 @@ public class ExternalStorageFormatter extends Service
         if (intent.getBooleanExtra(EXTRA_ALWAYS_RESET, false)) {
             mAlwaysReset = true;
         }
-
+        //add for nug 87011
+        mFinished = false;
         mStorageVolume = intent.getParcelableExtra(StorageVolume.EXTRA_STORAGE_VOLUME);
-
+        Log.d(TAG,"onStartCommand format : "+mStorageVolume);
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(true);
+            mProgressDialog.setCancelable(false);//changed true to false for bug 87011
             mProgressDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             if (!mAlwaysReset) {
                 mProgressDialog.setOnCancelListener(this);
@@ -192,6 +200,9 @@ public class ExternalStorageFormatter extends Service
                         } else {
                             try {
                                 mountService.mountVolume(extStoragePath);
+                                //add for bug 87011
+                                //set finish flag to avoid handling mount state again
+                                mFinished = true;
                             } catch (RemoteException e) {
                                 Log.w(TAG, "Failed talking with mount service", e);
                             }
