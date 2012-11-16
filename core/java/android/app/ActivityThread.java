@@ -4742,7 +4742,22 @@ public final class ActivityThread {
                     LogPrinter(Log.DEBUG, "ActivityThread"));
         }
 
-        Looper.loop();
+        try {//add by liwd@spreadst.com, the switcher to dump hprof file when OOM
+            Looper.loop();
+        } catch (OutOfMemoryError e) {
+            if (Debug.isMonkeyOrDebug()) {
+                Debug.dumpHprof(thread.getProcessName());
+            }
+            throw e;
+        } catch (RuntimeException e1) {
+            if (Debug.isMonkeyOrDebug()) {
+                String cause = Log.getStackTraceString(e1.getCause());
+                if (null != cause && cause.contains("Caused by: java.lang.OutOfMemoryError:")) {
+                    Debug.dumpHprof(thread.getProcessName());
+                }
+            }
+            throw e1;
+        }
 
         throw new RuntimeException("Main thread loop unexpectedly exited");
     }
