@@ -296,6 +296,15 @@ public class MobileDataStateTracker implements NetworkStateTracker {
                     }
                     return;
                 }
+                int phoneId = intent.getIntExtra(Intents.EXTRA_PHONE_ID, -1);
+                if (phoneId != mNetworkInfo.getPhoneId()) {
+                    if (DBG) {
+                        log(String.format(
+                                "Broadcast received: ACTION_ANY_DATA_CONNECTION_FAILED ignore, " +
+                                "my phoneId=%d != received phoneId=%d", getPhoneId(mNetType), phoneId));
+                    }
+                    return;
+                }
                 String reason = intent.getStringExtra(Phone.FAILURE_REASON_KEY);
                 String apnName = intent.getStringExtra(Phone.DATA_APN_KEY);
                 if (DBG) {

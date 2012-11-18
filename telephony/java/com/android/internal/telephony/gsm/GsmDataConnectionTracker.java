@@ -166,6 +166,10 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
     @Override
     protected void onActionIntentReconnectAlarm(Intent intent) {
+        if (intent.getIntExtra("phoneId", -1) != mPhone.getPhoneId()) {
+            log("onActionIntentReconnectAlarm: other phone");
+            return;
+        }
         String reason = intent.getStringExtra(INTENT_RECONNECT_ALARM_EXTRA_REASON);
         int connectionId = intent.getIntExtra(INTENT_RECONNECT_ALARM_EXTRA_TYPE, -1);
         int retryCount = intent.getIntExtra(INTENT_RECONNECT_ALARM_EXTRA_RETRY_COUNT, 0);
@@ -1804,6 +1808,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         // and to tell the DC to set the retry count in the retry manager.
         int retryCount = dcac.dataConnection.getRetryCount();
         intent.putExtra(INTENT_RECONNECT_ALARM_EXTRA_RETRY_COUNT, retryCount);
+        intent.putExtra("phoneId", mPhone.getPhoneId());
 
         if (DBG) {
             log("startAlarmForReconnect: next attempt in " + (delay / 1000) + "s" +
