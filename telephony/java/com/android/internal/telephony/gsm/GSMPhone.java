@@ -1504,7 +1504,7 @@ public abstract class GSMPhone extends PhoneBase {
     boolean updateCurrentCarrierInProvider() {
         if (mIccRecords != null) {
             try {
-                Uri uri = Uri.withAppendedPath(Telephony.Carriers.CONTENT_URI, "current");
+                Uri uri = Uri.withAppendedPath(Telephony.Carriers.getContentUri(getPhoneId()), "current");
                 ContentValues map = new ContentValues();
                 map.put(Telephony.Carriers.NUMERIC, mIccRecords.getOperatorNumeric());
                 mContext.getContentResolver().insert(uri, map);

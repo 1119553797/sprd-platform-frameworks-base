@@ -1718,7 +1718,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     private boolean retryAfterDisconnected(String reason) {
         boolean retry = true;
 
-        if ( Phone.REASON_RADIO_TURNED_OFF.equals(reason) ) {
+        if ( Phone.REASON_RADIO_TURNED_OFF.equals(reason)
+                || "switchConnection".equals(reason) ) {
             retry = false;
         }
         return retry;
