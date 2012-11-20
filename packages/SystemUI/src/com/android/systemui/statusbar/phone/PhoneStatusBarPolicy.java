@@ -131,6 +131,19 @@ public class PhoneStatusBarPolicy {
             else if (action.equals(TtyIntent.TTY_ENABLED_CHANGE_ACTION)) {
                 updateTTY(intent);
             }
+            /*
+             * Add 20121120 Spreadst of 94363 ,add headset icon in statusbar
+             * start
+             */
+            else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                int state = intent.getIntExtra("state", -1);
+                if (state == 1) {
+                    updateHeadSet(true);
+                } else {
+                    updateHeadSet(false);
+                }
+            }
+            /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar end */
         }
     };
 
@@ -147,6 +160,9 @@ public class PhoneStatusBarPolicy {
         filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TtyIntent.TTY_ENABLED_CHANGE_ACTION);
+        /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar start */
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
+        /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar end */
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
 
         // storage
@@ -187,6 +203,10 @@ public class PhoneStatusBarPolicy {
         // volume
         mService.setIcon("volume", R.drawable.stat_sys_ringer_silent, 0, null);
         mService.setIconVisibility("volume", false);
+        /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar start */
+        mService.setIcon("headset", com.android.internal.R.drawable.stat_sys_headset, 0, null);
+        mService.setIconVisibility("headset", false);
+        /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar end */
         updateVolume();
     }
 
@@ -296,4 +316,10 @@ public class PhoneStatusBarPolicy {
             mService.setIconVisibility("tty", false);
         }
     }
+
+    /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar start */
+    private final void updateHeadSet(boolean show) {
+        mService.setIconVisibility("headset", show);
+    }
+    /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar end */
 }

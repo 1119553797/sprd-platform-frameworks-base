@@ -42,6 +42,10 @@
        <item><xliff:g id="id">alarm_clock</xliff:g></item>
        <item><xliff:g id="id">secure</xliff:g></item>
        <item><xliff:g id="id">clock</xliff:g></item>
+       <!-- Add 20121120 Spreadst of 94363 ,add headset icon in statusbar start -->
+        <item><xliff:g id="id">headset</xliff:g></item>
+        <!-- Add 20121120 Spreadst of 94363 ,add headset icon in statusbar end -->
+
     </string-array>
 
     <!-- Flag indicating whether the surface flinger has limited
