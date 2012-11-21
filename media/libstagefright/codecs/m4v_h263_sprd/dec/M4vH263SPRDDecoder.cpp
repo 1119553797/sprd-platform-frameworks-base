@@ -44,11 +44,13 @@ namespace android {
 M4vH263SPRDDecoder::M4vH263SPRDDecoder(const sp<MediaSource> &source)
     : mSource(source),
     mStarted(false),
+    mHandle(new tagvideoDecControls),
     mInputBuffer(NULL),
     mNumSamplesOutput_(0),
     mTargetTimeUs(-1),
     mCodecExtraBufferMalloced(false){
-
+    
+    memset(mHandle, 0, sizeof(tagvideoDecControls));
     mFormat = new MetaData;
     mFormat->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_RAW);
 
@@ -76,6 +78,9 @@ M4vH263SPRDDecoder::~M4vH263SPRDDecoder() {
         stop();
     }
 
+    delete mHandle;
+    mHandle = NULL;
+    
     free(mCodecInterBuffer);
     mCodecInterBuffer = NULL;
 
@@ -173,7 +178,7 @@ status_t M4vH263SPRDDecoder::start(MetaData *) {
     video_format.frame_height = 0;
 
     video_format.uv_interleaved = 1;// todo jgdu
-    uint8_t success = MP4DecInit(&codec_buf,&video_format);
+    uint8_t success = MP4DecInit( mHandle, &codec_buf,&video_format);
 
 //    LOGI("%s, %d, success: %d, width: %d, height: %d", __FUNCTION__, __LINE__, success, video_format.frame_width, video_format.frame_height);
 #endif        
@@ -241,7 +246,7 @@ status_t M4vH263SPRDDecoder::start(MetaData *) {
     codec_buf.common_buffer_ptr = mCodecExtraBuffer;
     codec_buf.size = mCodecExtraBufferSize;
 
-    MP4DecMemCacheInit(&codec_buf);
+    MP4DecMemCacheInit( mHandle,&codec_buf);
 
     mSource->start();
 
@@ -259,14 +264,14 @@ status_t M4vH263SPRDDecoder::stop() {
         mInputBuffer->release();
         mInputBuffer = NULL;
     }
-
+    
     mSource->stop();
 
     releaseFrames();
 
     mStarted = false;
-//    return (PVCleanUpVideoDecoder(mHandle) == PV_TRUE)? OK: UNKNOWN_ERROR;
-	return OK;
+    return (MP4DecRelease(mHandle) == MMDEC_OK)? OK: UNKNOWN_ERROR;
+//	return OK;
 }
 
 sp<MetaData> M4vH263SPRDDecoder::getFormat() {
@@ -325,7 +330,7 @@ status_t M4vH263SPRDDecoder::read(
     MMDecOutput dec_out;
 	
 //    LOGI("%s, %d, mNumSamplesOutput_: %d", __FUNCTION__, __LINE__, mNumSamplesOutput_);
-    MP4DecSetCurRecPic((uint8_t *)mFrames[mNumSamplesOutput_ & 0x01]->data());
+    MP4DecSetCurRecPic( mHandle, (uint8_t *)mFrames[mNumSamplesOutput_ & 0x01]->data());
 
     dec_in.pStream = (uint8 *) bitstream;
     dec_in.dataLen = bufferSize;
@@ -338,7 +343,7 @@ status_t M4vH263SPRDDecoder::read(
 
     dec_out.VopPredType = -1;
     dec_out.frameEffective = 0;	
-    MMDecRet decRet =	MP4DecDecode(&dec_in,&dec_out);
+    MMDecRet decRet =	MP4DecDecode( mHandle, &dec_in,&dec_out);
     LOGI("%s, %d, decRet: %d", __FUNCTION__, __LINE__, decRet);
 //    Status =  (decRet == MMDEC_OK)?OMX_TRUE : OMX_FALSE;
 #endif	
@@ -347,13 +352,13 @@ status_t M4vH263SPRDDecoder::read(
 #if 0
     PVGetVideoDimensions(mHandle, &disp_width, &disp_height);
 #else
-    Mp4GetVideoDimensions(&disp_width, &disp_height);
+    Mp4GetVideoDimensions( mHandle, &disp_width, &disp_height);
 #endif
     int32_t buf_width, buf_height;
 #if 0
     PVGetBufferDimensions(mHandle, &buf_width, &buf_height);
 #else
-    Mp4GetBufferDimensions(&buf_width, &buf_height);
+    Mp4GetBufferDimensions( mHandle, &buf_width, &buf_height);
 #endif
     if (buf_width != mWidth || buf_height != mHeight) 
     {
