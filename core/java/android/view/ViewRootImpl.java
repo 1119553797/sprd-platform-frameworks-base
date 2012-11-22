@@ -3895,7 +3895,15 @@ public final class ViewRootImpl implements ViewParent,
      */
     public boolean performHapticFeedback(int effectId, boolean always) {
         try {
-            return sWindowSession.performHapticFeedback(mWindow, effectId, always);
+            /* Add 20121122 Spreadst of 95316 , monkey bug start */
+            if (sWindowSession != null) {
+                /* Add 20121122 Spreadst of 95316 , monkey bug end */
+                return sWindowSession.performHapticFeedback(mWindow, effectId, always);
+                /* Add 20121122 Spreadst of 95316 , monkey bug start */
+            } else {
+                return false;
+            }
+            /* Add 20121122 Spreadst of 95316 , monkey bug end */
         } catch (RemoteException e) {
             return false;
         }
