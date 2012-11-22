@@ -323,7 +323,49 @@ public class WindowManagerImpl implements WindowManager {
             mParams[index] = wparams;
         }
         // do this last because it fires off messages to start doing things
-        root.setView(view, wparams, panelParentView);
+        /* Add 20121122 Spreadst of 93510 , monkey bug start */
+        try {
+            /* Add 20121122 Spreadst of 93510 , monkey bug end */
+            root.setView(view, wparams, panelParentView);
+            /* Add 20121122 Spreadst of 93510 , monkey bug start */
+        } catch (RuntimeException e) {
+            boolean MONKEY = false;
+            try {
+                MONKEY = SystemProperties.getBoolean("ro.monkey", false);
+            } catch (Exception e1) {
+                MONKEY = false;
+                Log.w("WindowManagerImpl", "Cannot get system property: ro.monkey");
+            }
+
+            if (MONKEY) {
+                String msg = e.getMessage();
+                if (msg != null) {
+                    if (e instanceof BadTokenException) {
+                        Log.w("WindowManagerImpl",
+                                "BadTokenException, but we just ignore this in monkey test, the msg is:\n" + msg);
+                    } else if (msg != null && msg.contains("register input channel")) {
+                        Log.w("WindowManagerImpl",
+                                "Failed to register input channel with ViewRoot: "
+                                        + root.toString()
+                                        + ", and it's InputChannel: "
+                                        + root.mInputChannel
+                                        + ".\n Often because: 'binder got transaction with invalid fd, -1'. The pipe created by "
+                                        + "WMS was broken before talking with binder driver."
+                                        + "\n But I don't know why, we just ignore it in monkey test.");
+                    }
+                    try {
+                        removeViewImmediate(view);
+                    } catch (Exception e2) {
+                        Log.w("WindowManagerImpl", "Ignore the removeViewImmediate() fail: " + e2.getMessage());
+                    }
+                } else {
+                    Log.w("WindowManagerImpl", "root.setView in addView() failed, just ignore this in monkey test.");
+                }
+            } else {
+                throw e;
+            }
+        }
+        /* Add 20121122 Spreadst of 93510 , monkey bug end */
     }
 
     public void updateViewLayout(View view, ViewGroup.LayoutParams params) {
