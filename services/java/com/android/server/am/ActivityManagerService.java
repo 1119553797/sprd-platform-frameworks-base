@@ -3146,6 +3146,10 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (true || IS_USER_BUILD) {
             return;
         }
+        boolean IS_LOG_SLOW = "1".equals(SystemProperties.get("ro.logappslow", "0"));
+        if (!IS_LOG_SLOW) {
+            return;
+        }
         String tracesPath = SystemProperties.get("dalvik.vm.stack-trace-file", null);
         if (tracesPath == null || tracesPath.length() == 0) {
             return;
