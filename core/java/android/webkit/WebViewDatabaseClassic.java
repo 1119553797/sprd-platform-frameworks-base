@@ -137,10 +137,19 @@ final class WebViewDatabaseClassic extends WebViewDatabase {
             sDatabase = context.openOrCreateDatabase(DATABASE_FILE, 0, null);
         } catch (SQLiteException e) {
             // try again by deleting the old db and create a new one
-            if (context.deleteDatabase(DATABASE_FILE)) {
-                sDatabase = context.openOrCreateDatabase(DATABASE_FILE, 0,
-                        null);
+            // modify 20121123 Spreadst of fix aob bug begin
+//            if (context.deleteDatabase(DATABASE_FILE)) {
+//                sDatabase = context.openOrCreateDatabase(DATABASE_FILE, 0,
+//                        null);
+            try{
+                if (context.deleteDatabase(DATABASE_FILE)) {
+                    sDatabase = context.openOrCreateDatabase(DATABASE_FILE, 0,
+                            null);
+                }
+            } catch (Exception e2) {
+                sDatabase=null;
             }
+            // modify 20121123 Spreadst of fix aob bug end
         }
 
         // sDatabase should not be null,
