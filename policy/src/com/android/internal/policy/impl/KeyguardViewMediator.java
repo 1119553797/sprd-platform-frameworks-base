@@ -1239,7 +1239,18 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             if (mShowing) {
                 // disable navigation status bar components (home, recents) if lock screen is up
                 flags |= StatusBarManager.DISABLE_RECENT;
-                if (isSecure() || !ENABLE_INSECURE_STATUS_BAR_EXPAND) {
+                /*
+                 * Merge add 20121126 Spreadst of 91542,disabel statusbar in
+                 * slide lock start
+                 */
+                /*
+                 * if (isSecure() || !ENABLE_INSECURE_STATUS_BAR_EXPAND) {
+                 */
+                if (isSecure() || ENABLE_INSECURE_STATUS_BAR_EXPAND) {
+                    /*
+                     * Merge add 20121126 Spreadst of 91542,disabel statusbar in
+                     * slide lock end
+                     */
                     // showing secure lockscreen; disable expanding.
                     flags |= StatusBarManager.DISABLE_EXPAND;
                 }
