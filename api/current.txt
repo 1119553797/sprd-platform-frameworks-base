@@ -3292,6 +3292,7 @@ package android.app {
     method public android.app.DownloadManager.Request setDestinationInExternalPublicDir(java.lang.String, java.lang.String);
     method public android.app.DownloadManager.Request setDestinationUri(android.net.Uri);
     method public android.app.DownloadManager.Request setMimeType(java.lang.String);
+    method public android.app.DownloadManager.Request setNotificationClass(java.lang.String);
     method public android.app.DownloadManager.Request setNotificationVisibility(int);
     method public deprecated android.app.DownloadManager.Request setShowRunningNotification(boolean);
     method public android.app.DownloadManager.Request setTitle(java.lang.CharSequence);

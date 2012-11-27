@@ -356,6 +356,7 @@ public class DownloadManager {
         private boolean mIsVisibleInDownloadsUi = true;
         private boolean mScannable = false;
         private boolean mUseSystemCache = false;
+        private String mNotificationClass;//add 20121122 Spreadst oma download
         /** if a file is designated as a MediaScanner scannable file, the following value is
          * stored in the database column {@link Downloads.Impl#COLUMN_MEDIA_SCANNED}.
          */
@@ -398,7 +399,12 @@ public class DownloadManager {
          * {@link #VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION}
          */
         private int mNotificationVisibility = VISIBILITY_VISIBLE;
-
+        //add 20121122 Spreadst oma download start
+        public Request setNotificationClass(String notificationClassName) {
+            mNotificationClass = notificationClassName;
+            return this;
+        }
+        //add 20121122 Spreadst oma download end
         /**
          * @param uri the HTTP URI to download.
          */
@@ -668,7 +674,7 @@ public class DownloadManager {
             values.put(Downloads.Impl.COLUMN_URI, mUri.toString());
             values.put(Downloads.Impl.COLUMN_IS_PUBLIC_API, true);
             values.put(Downloads.Impl.COLUMN_NOTIFICATION_PACKAGE, packageName);
-
+            values.put(Downloads.Impl.COLUMN_NOTIFICATION_CLASS, mNotificationClass);//add 20121122 Spreadst oma download
             if (mDestinationUri != null) {
                 values.put(Downloads.Impl.COLUMN_DESTINATION, Downloads.Impl.DESTINATION_FILE_URI);
                 values.put(Downloads.Impl.COLUMN_FILE_NAME_HINT, mDestinationUri.toString());
