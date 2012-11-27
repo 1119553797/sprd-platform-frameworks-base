@@ -1906,6 +1906,9 @@ public class NumberPicker extends LinearLayout {
                     return filtered;
                 }
             } else {
+                if(mSetSelectionCommand != null) {
+                    removeCallbacks(mSetSelectionCommand);
+                }
                 CharSequence filtered = String.valueOf(source.subSequence(start, end));
                 if (TextUtils.isEmpty(filtered)) {
                     return "";
