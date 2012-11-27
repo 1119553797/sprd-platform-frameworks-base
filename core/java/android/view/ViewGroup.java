@@ -432,6 +432,17 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
     private boolean debugDraw() {
         return mAttachInfo != null && mAttachInfo.mDebugLayout;
     }
+	
+    /** isDescendant()
+    *   used to indicate wether a View is a descendant of a ViewGroup
+    */
+    private static boolean isDescendant(ViewGroup viewGroup, View view) {
+        ViewParent parent = view.getParent();
+        while (parent != null && parent != viewGroup && parent instanceof View) {
+            parent = ((View) parent).getParent();
+        }
+        return parent == viewGroup;
+    }
 
     private void initViewGroup() {
         // ViewGroup doesn't draw by default
@@ -823,7 +834,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
             return this;
         }
 
-        if (mFocused != null) {
+        if (mFocused != null && isDescendant(this, mFocused)) {
             return mFocused.findFocus();
         }
         return null;
