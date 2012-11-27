@@ -1120,6 +1120,11 @@ public final class InputMethodManager {
             } catch (RemoteException e) {
                 Log.w(TAG, "IME died: " + mCurId, e);
             }
+            /* Merge add 20121126 Spreadst of 34049,null pointer error start */
+            catch (IllegalArgumentException e) {
+                Log.w(TAG, "IME err occurs: " + mCurId, e);
+            }
+            /* Merge add 20121126 Spreadst of 34049,null pointer error end */
         }
 
         return true;
