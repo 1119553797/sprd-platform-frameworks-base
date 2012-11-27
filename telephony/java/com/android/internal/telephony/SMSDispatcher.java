@@ -47,6 +47,7 @@ import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Config;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -246,7 +247,7 @@ public abstract class SMSDispatcher extends Handler {
         switch (msg.what) {
         case EVENT_NEW_SMS:
             // A new SMS has been received by the device
-            if (false) {
+            if (Config.LOGD) {
                 Log.d(TAG, "New SMS Message Received");
             }
 
@@ -634,7 +635,7 @@ public abstract class SMSDispatcher extends Handler {
             // Dispatch the PDU to applications
             if (destPort == SmsHeader.PORT_WAP_PUSH) {
                 // Handle the PUSH
-                return mWapPush.dispatchWapPdu(datagram);
+                return mWapPush.dispatchWapPdu(datagram, pdus, "");
             } else {
                 pdus = new byte[1][];
                 pdus[0] = datagram;
@@ -649,13 +650,15 @@ public abstract class SMSDispatcher extends Handler {
             if (destPort == SmsHeader.PORT_WAP_PUSH) {
                 // Build up the data stream
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
+                String addressNumber = null;
                 for (int i = 0; i < messageCount; i++) {
                     SmsMessage msg = SmsMessage.createFromPdu(pdus[i], getFormat());
                     byte[] data = msg.getUserData();
+                    addressNumber = msg.getDisplayOriginatingAddress();
                     output.write(data, 0, data.length);
                 }
                 // Handle the PUSH
-                return mWapPush.dispatchWapPdu(output.toByteArray());
+                return mWapPush.dispatchWapPdu(output.toByteArray(), pdus, addressNumber);
             } else {
                 // The messages were sent to a port, so concoct a URI for it
                 dispatchPortAddressedPdus(pdus, destPort);
