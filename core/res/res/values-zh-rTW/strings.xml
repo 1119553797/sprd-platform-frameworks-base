@@ -1292,4 +1292,5 @@
     <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"完成"</string>
     <string name="china_unicom_numeric_values">中國聯通</string>
     <string name="china_mobile_numeric_values">中國移動</string>
+    <string name="ActiveConCf" msgid="">"有條件呼叫轉移啟動"</string>
 </resources>
