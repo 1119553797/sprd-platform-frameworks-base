@@ -295,6 +295,9 @@ class BluetoothBondState {
         mPinAttempt.put(address, new Integer(newAttempt));
     }
 
+    void closeProfileProxyService() {
+        closeProfileProxy();
+    }
     private void getProfileProxy() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 

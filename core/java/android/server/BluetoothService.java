@@ -405,6 +405,7 @@ public class BluetoothService extends IBluetooth.Stub {
      * The Bluetooth has been turned off, but hot. Do bonding, profile cleanup
      */
     synchronized void finishDisable() {
+        closeProfileProxy();
         // mark in progress bondings as cancelled
         for (String address : mBondState.listInState(BluetoothDevice.BOND_BONDING)) {
             mBondState.setBondState(address, BluetoothDevice.BOND_NONE,
@@ -1991,6 +1992,13 @@ public class BluetoothService extends IBluetooth.Stub {
     private void getProfileProxy() {
         mAdapter.getProfileProxy(mContext,
                                  mBluetoothProfileServiceListener, BluetoothProfile.HEADSET);
+    }
+
+    private void closeProfileProxy() {
+        if (mHeadsetProxy != null) {
+            mAdapter.closeProfileProxy(BluetoothProfile.HEADSET, mHeadsetProxy);
+        }
+        mBondState.closeProfileProxyService();
     }
 
     private BluetoothProfile.ServiceListener mBluetoothProfileServiceListener =
