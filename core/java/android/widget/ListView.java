@@ -40,6 +40,9 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.RemoteViews.RemoteView;
+import android.os.Handler;
+import java.lang.Thread;
+import android.app.ActivityManager;
 
 import java.util.ArrayList;
 
@@ -128,6 +131,11 @@ public class ListView extends AbsListView {
 
     // Keeps focused children visible through resizes
     private FocusSelector mFocusSelector;
+	
+    // A handler that used to handle the setAdapter invokation from other thread.
+    private Handler mSetAdapterHandler = new Handler();
+	
+    private long mMainThreadId = -1;
 
     public ListView(Context context) {
         this(context, null);
@@ -139,6 +147,8 @@ public class ListView extends AbsListView {
 
     public ListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+		
+        mMainThreadId = Thread.currentThread().getId();
 
         TypedArray a = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.ListView, defStyle, 0);
@@ -435,6 +445,20 @@ public class ListView extends AbsListView {
      */
     @Override
     public void setAdapter(ListAdapter adapter) {
+		
+        if (Thread.currentThread().getId() != mMainThreadId && ActivityManager.isUserAMonkey()) {
+            Log.e("ListView", "WARNING: calling setAdapter from another thread is not prefered.", new Exception());
+            final ListAdapter fadapter = adapter;
+            mSetAdapterHandler.post(
+			new Runnable() {
+				public void run() {
+					setAdapter(fadapter);
+				}
+			}
+            );
+            return;
+        }
+
         if (mAdapter != null && mDataSetObserver != null) {
             mAdapter.unregisterDataSetObserver(mDataSetObserver);
         }
