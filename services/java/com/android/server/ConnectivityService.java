@@ -42,6 +42,7 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.LinkProperties.CompareResult;
 import android.net.MobileDataStateTracker;
+import android.net.MsmsFeatureManager;
 import android.net.NetworkConfig;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.DetailedState;
@@ -280,6 +281,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     // list of DeathRecipients used to make sure features are turned off when
     // a process dies
     private List<FeatureUser> mFeatureUsers;
+    private MsmsFeatureManager mFeatureManager;
 
     private boolean mSystemReady;
     private Intent mInitialBroadcast;
@@ -468,6 +470,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
 
         mFeatureUsers = new ArrayList<FeatureUser>();
+        mFeatureManager = MsmsFeatureManager.getInstance(mContext);
 
         mNumDnsEntries = 0;
 
@@ -1041,6 +1044,10 @@ private NetworkStateTracker makeWimaxStateTracker() {
             log("startUsingNetworkFeature for net " + networkType + ": " + feature + ", uid="
                     + Binder.getCallingUid());
         }
+        if (!mFeatureManager.tryStartUsingFeature(networkType, feature, binder, getCallingPid(),
+                getCallingUid(), getPhoneIdByFeature(feature), isMainSimFeature(feature))) {
+            return Phone.APN_REQUEST_STARTED;
+        }
         enforceChangePermission();
         try {
             if (!ConnectivityManager.isNetworkTypeValid(networkType) ||
@@ -1289,6 +1296,10 @@ private NetworkStateTracker makeWimaxStateTracker() {
                     log("stopUsingNetworkFeature: net " + networkType + ": " + feature +
                             " not a known feature - dropping");
                 }
+            }
+
+            if (callTeardown) {
+                mFeatureManager.stopUsingFeature(networkType, feature, pid, uid, getPhoneIdByFeature(feature));
             }
         }
 
@@ -3283,6 +3294,10 @@ private NetworkStateTracker makeWimaxStateTracker() {
             Slog.e(TAG, "Can't match any mobile netTracker!");
         }
         return phoneId;
+    }
+
+    private boolean isMainSimFeature(String feature) {
+        return !isMmsFeature(feature) || TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS);
     }
 
     /**
