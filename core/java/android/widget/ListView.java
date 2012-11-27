@@ -19,6 +19,7 @@ package android.widget;
 import com.android.internal.R;
 import com.android.internal.util.Predicate;
 import com.google.android.collect.Lists;
+import android.database.CursorIndexOutOfBoundsException;
 
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +44,7 @@ import android.widget.RemoteViews.RemoteView;
 import android.os.Handler;
 import java.lang.Thread;
 import android.app.ActivityManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -2062,17 +2064,32 @@ public class ListView extends AbsListView {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return commonKey(keyCode, 1, event);
+        try {
+            return commonKey(keyCode, 1, event);
+        } catch (CursorIndexOutOfBoundsException e) {
+            Log.e("ListView", "Data changed while doing scroll", e);
+            return false;
+        }
     }
 
     @Override
     public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
-        return commonKey(keyCode, repeatCount, event);
+        try {
+            return commonKey(keyCode, repeatCount, event);
+        } catch (CursorIndexOutOfBoundsException e) {
+            Log.e("ListView", "Data changed while doing scroll", e);
+            return false;
+        }
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        return commonKey(keyCode, 1, event);
+        try {
+            return commonKey(keyCode, 1, event);
+        } catch (CursorIndexOutOfBoundsException e) {
+            Log.e("ListView", "Data changed while doing scroll", e);
+            return false;
+        }
     }
 
     private boolean commonKey(int keyCode, int count, KeyEvent event) {
