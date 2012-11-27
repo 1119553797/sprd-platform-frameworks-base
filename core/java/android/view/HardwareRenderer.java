@@ -1178,7 +1178,10 @@ public abstract class HardwareRenderer {
                             // Shouldn't reach here
                             view.draw(canvas);
                         }
-                    } finally {
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "view can't draw "+view);
+                        return false;
+                    }finally {
                         callbacks.onHardwarePostDraw(canvas);
                         canvas.restoreToCount(saveCount);
                         view.mRecreateDisplayList = false;
