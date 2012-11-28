@@ -11511,7 +11511,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (!mRestartingServices.contains(r)) {
             return;
         }
-        if(isReadMemForRestartService){
+        Slog.w(TAG, "performServiceRestartLocked packagename :"+r.packageName);
+        if(isReadMemForRestartService && !"com.android.phone".equals(r.packageName)){
             long freeMem = readAvailMem();
             Slog.w(TAG, "restart service :"+r.packageName);
             if(freeMem < 1024*restartServiceAtMem){
