@@ -61,7 +61,8 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
 public final class Debug
 {
     private static final String TAG = "Debug";
-
+    private static final boolean IS_DEBUG_BUILD =
+            Build.TYPE.equals("eng") || Build.TYPE.equals("userdebug");
     /**
      * Flags for startMethodTracing().  These can be ORed together.
      *
@@ -1454,14 +1455,7 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      * @return Whether in debug mode
      */
     public static boolean isDebug() {
-    	boolean isDebug = false;
-    	try {
-    		isDebug = SystemProperties.getBoolean("ro.spread.debug", false);
-    	} catch (Exception e) {
-    		isDebug = false;
-    		e.printStackTrace();
-    	}
-    	return isDebug;
+    	return IS_DEBUG_BUILD;
     }
     
     /**
