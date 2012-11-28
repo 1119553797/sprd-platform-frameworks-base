@@ -205,7 +205,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     // Maximum number of recent tasks that we can remember.
     static final int MAX_RECENT_TASKS = 20;
-    
+
     // Amount of time after a call to stopAppSwitches() during which we will
     // prevent further untrusted switches from happening.
     static final long APP_SWITCH_DELAY_TIME = 5*1000;
@@ -291,6 +291,18 @@ public final class ActivityManagerService extends ActivityManagerNative
     // default actuion automatically.  Important for devices without direct input
     // devices.
     private boolean mShowDialogs = true;
+
+    //add for change process adj
+    private class appProcess {
+        int pid;
+        String processName;
+        int adj;
+    }
+    // Maximum number of process that we can set adj.
+    static final int MAX_PROCESS_SET_ADJ = 4;
+    // To remember the process which be set
+    appProcess SAP = new appProcess();
+    List<appProcess> setAppList = new ArrayList<appProcess>();
 
     private static final int DEFAULT_SCAN_MEM_GAPTIME = 5000;
 
@@ -2291,6 +2303,44 @@ public final class ActivityManagerService extends ActivityManagerNative
                 "setPackageAskScreenCompat");
         synchronized (this) {
             mCompatModePackages.setPackageAskCompatModeLocked(packageName, ask);
+        }
+    }
+
+    //add for change process adj
+    public void setProcessAdj(int pid, int adj, boolean reset) {
+        for (int j=mLruProcesses.size()-1; j>=0; j--) {
+            ProcessRecord app = mLruProcesses.get(j);
+            if (app.pid == pid) {
+                if(!reset){
+                    //save old adj
+                    if(setAppList.size()<=MAX_PROCESS_SET_ADJ){
+                        SAP.pid = app.pid;
+                        SAP.processName = app.processName;
+                        SAP.adj = app.curRawAdj;
+
+                        setAppList.add(SAP);
+                    }else{
+                        Log.w(TAG, "Can't set process adj! 4 process has been set!");
+                    }
+
+                    //set new adj
+                    app.curAdj = adj;
+                    app.curRawAdj = adj;
+                 }else{
+                    //reset adj
+                     if(setAppList != null && setAppList.size()>0){
+                         for(int i=0;i<setAppList.size();i++){
+                             appProcess tmpProcess = (appProcess)setAppList.get(i);
+                             if(tmpProcess.pid == pid){
+                                app.curAdj = tmpProcess.adj;
+                                app.curRawAdj = tmpProcess.adj;
+                                setAppList.remove(i);
+                              }
+                          }
+                      }
+                 }
+                break;
+            }
         }
     }
 
@@ -14650,7 +14700,17 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         boolean success = true;
 
-        computeOomAdjLocked(app, hiddenAdj, TOP_APP, false, doingAll);
+        //add for change process adj
+        if(setAppList != null && setAppList.size()>0){
+            for(int i=0;i<setAppList.size();i++){
+                appProcess tmpProcess = (appProcess)setAppList.get(i);
+                if (app.pid != tmpProcess.pid) {
+                    computeOomAdjLocked(app, hiddenAdj, TOP_APP, false, doingAll);
+                }
+            }
+        }else{
+            computeOomAdjLocked(app, hiddenAdj, TOP_APP, false, doingAll);
+        }
 
         if (app.curRawAdj != app.setRawAdj) {
             if (wasKeeping && !app.keeping) {
