@@ -196,7 +196,7 @@ public class Clock extends TextView {
                     formatted.delete(magic1, magic2+1);
                 } else {
                     if (AM_PM_STYLE == AM_PM_STYLE_SMALL) {
-                        CharacterStyle style = new RelativeSizeSpan(0.7f);
+                        CharacterStyle style = new RelativeSizeSpan(0.5f); //Modify 0.7f-->0.5 for bug 97029
                         formatted.setSpan(style, magic1, magic2,
                                           Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     }
