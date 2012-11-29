@@ -32976,6 +32976,7 @@ package java.net {
     method public boolean getReuseAddress() throws java.net.SocketException;
     method public synchronized int getSendBufferSize() throws java.net.SocketException;
     method public int getSoLinger() throws java.net.SocketException;
+    method public synchronized int getSoSNDTimeout() throws java.net.SocketException;
     method public synchronized int getSoTimeout() throws java.net.SocketException;
     method public boolean getTcpNoDelay() throws java.net.SocketException;
     method public int getTrafficClass() throws java.net.SocketException;
@@ -32992,6 +32993,7 @@ package java.net {
     method public void setReuseAddress(boolean) throws java.net.SocketException;
     method public synchronized void setSendBufferSize(int) throws java.net.SocketException;
     method public void setSoLinger(boolean, int) throws java.net.SocketException;
+    method public synchronized void setSoSNDTimeout(int) throws java.net.SocketException;
     method public synchronized void setSoTimeout(int) throws java.net.SocketException;
     method public static synchronized void setSocketImplFactory(java.net.SocketImplFactory) throws java.io.IOException;
     method public void setTcpNoDelay(boolean) throws java.net.SocketException;
@@ -33056,6 +33058,7 @@ package java.net {
     field public static final int SO_RCVBUF = 4098; // 0x1002
     field public static final int SO_REUSEADDR = 4; // 0x4
     field public static final int SO_SNDBUF = 4097; // 0x1001
+    field public static final int SO_SNDTIMEOUT = 4103; // 0x1007
     field public static final int SO_TIMEOUT = 4102; // 0x1006
     field public static final int TCP_NODELAY = 1; // 0x1
   }
@@ -46495,6 +46498,7 @@ package org.apache.http.params {
     field public static final java.lang.String MAX_LINE_LENGTH = "http.connection.max-line-length";
     field public static final java.lang.String SOCKET_BUFFER_SIZE = "http.socket.buffer-size";
     field public static final java.lang.String SO_LINGER = "http.socket.linger";
+    field public static final java.lang.String SO_SNDTIMEOUT = "http.socket.sendtimeout";
     field public static final java.lang.String SO_TIMEOUT = "http.socket.timeout";
     field public static final java.lang.String STALE_CONNECTION_CHECK = "http.connection.stalecheck";
     field public static final java.lang.String TCP_NODELAY = "http.tcp.nodelay";
@@ -46538,12 +46542,14 @@ package org.apache.http.params {
   public final class HttpConnectionParams implements org.apache.http.params.CoreConnectionPNames {
     method public static int getConnectionTimeout(org.apache.http.params.HttpParams);
     method public static int getLinger(org.apache.http.params.HttpParams);
+    method public static int getSoSNDTimeout(org.apache.http.params.HttpParams);
     method public static int getSoTimeout(org.apache.http.params.HttpParams);
     method public static int getSocketBufferSize(org.apache.http.params.HttpParams);
     method public static boolean getTcpNoDelay(org.apache.http.params.HttpParams);
     method public static boolean isStaleCheckingEnabled(org.apache.http.params.HttpParams);
     method public static void setConnectionTimeout(org.apache.http.params.HttpParams, int);
     method public static void setLinger(org.apache.http.params.HttpParams, int);
+    method public static void setSoSNDTimeout(org.apache.http.params.HttpParams, int);
     method public static void setSoTimeout(org.apache.http.params.HttpParams, int);
     method public static void setSocketBufferSize(org.apache.http.params.HttpParams, int);
     method public static void setStaleCheckingEnabled(org.apache.http.params.HttpParams, boolean);
