@@ -1293,4 +1293,10 @@
     <string name="china_unicom_numeric_values">中國聯通</string>
     <string name="china_mobile_numeric_values">中國移動</string>
     <string name="ActiveConCf" msgid="">"有條件呼叫轉移啟動"</string>
+    <string name="ActiveUnconCf" msgid="">"無條件呼叫轉移啟動"</string>
+    <string name="ConditionCfMmi" msgid="">"所有條件來電轉接"</string>
+    <string name="UnConditionCfMmi" msgid="">"無條件來電轉接"</string>
+    <string name="CallForwarded" msgid="">"呼叫已轉移"</string>
+    <string name="IncomingCallForwarded" msgid="">"來電被轉移"</string>
+    <string name="ForwardedCall" msgid="">"轉移呼叫"</string>
 </resources>
