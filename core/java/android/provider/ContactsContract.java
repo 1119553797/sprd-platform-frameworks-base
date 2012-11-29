@@ -490,8 +490,8 @@ public final class ContactsContract {
          * <p>TYPE: text</p>
          */
         public static final String DISPLAY_NAME = "displayName";
-	public static final String DISPLAY_ACCOUNT_TYPE = "display_account_type";
-	public static final String DISPLAY_ACCOUNT_NAME = "display_account_name";
+	public static final String DISPLAY_ACCOUNT_TYPE = "account_type";
+	public static final String DISPLAY_ACCOUNT_NAME = "account_name";
         /**
          * <p>
          * The authority of the Directory Provider. Contacts Provider will
@@ -1440,8 +1440,8 @@ public final class ContactsContract {
         public static final Uri CONTENT_VCARD_URI = Uri.withAppendedPath(CONTENT_URI,
                 "as_vcard");
  	
-	public static final String DISPLAY_ACCOUNT_TYPE = "display_account_type";
-	public static final String DISPLAY_ACCOUNT_NAME = "display_account_name";
+	public static final String DISPLAY_ACCOUNT_TYPE = "account_type";
+	public static final String DISPLAY_ACCOUNT_NAME = "account_name";
 
 
        /**

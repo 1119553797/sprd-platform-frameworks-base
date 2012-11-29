@@ -441,8 +441,6 @@ public class AccountManagerService
         }
     }
 
-
-
     public String getUserDataPrivileged(Account account, String key) {
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "getUserData: " + account
@@ -452,9 +450,8 @@ public class AccountManagerService
         }
         if (account == null) throw new IllegalArgumentException("account is null");
         if (key == null) throw new IllegalArgumentException("key is null");
-        checkBinderPermission(Manifest.permission.AUTHENTICATE_ACCOUNTS);
+
         long identityToken = clearCallingIdentity();
-	checkAuthenticateAccountsPermission(account);
         UserAccounts accounts = getUserAccountsForCaller();
 
         try {
