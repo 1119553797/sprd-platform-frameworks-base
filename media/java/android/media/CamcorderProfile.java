@@ -90,9 +90,12 @@ public class CamcorderProfile
      */
     public static final int QUALITY_QVGA = 7;
 
+    /** @hide */
+    public static final int QUALITY_MIDDLE= 8;
+
     // Start and end of quality list
     private static final int QUALITY_LIST_START = QUALITY_LOW;
-    private static final int QUALITY_LIST_END = QUALITY_QVGA;
+    private static final int QUALITY_LIST_END = QUALITY_MIDDLE;
 
     /**
      * Time lapse quality level corresponding to the lowest available resolution.
@@ -134,9 +137,12 @@ public class CamcorderProfile
      */
     public static final int QUALITY_TIME_LAPSE_QVGA = 1007;
 
+    /** @hide */
+    public static final int QUALITY_TIME_LAPSE_MIDDLE = 1008;
+
     // Start and end of timelapse quality list
     private static final int QUALITY_TIME_LAPSE_LIST_START = QUALITY_TIME_LAPSE_LOW;
-    private static final int QUALITY_TIME_LAPSE_LIST_END = QUALITY_TIME_LAPSE_QVGA;
+    private static final int QUALITY_TIME_LAPSE_LIST_END = QUALITY_TIME_LAPSE_MIDDLE;
 
     /**
      * Default recording duration in seconds before the session is terminated.

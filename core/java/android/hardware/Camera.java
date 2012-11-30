@@ -1588,6 +1588,14 @@ public class Camera {
         private static final String KEY_PREVIEW_FPS_RANGE = "preview-fps-range";
         private static final String KEY_PICTURE_SIZE = "picture-size";
         private static final String KEY_PICTURE_FORMAT = "picture-format";
+        /** @hide */
+        private static final String KEY_BRIGHTNESS = "brightness";
+        /** @hide */
+        private static final String KEY_CONTRAST = "contrast";
+        /** @hide */
+        private static final String KEY_ISO = "iso";
+        /** @hide */
+        private static final String KEY_SATURATION = "saturation";
         private static final String KEY_JPEG_THUMBNAIL_SIZE = "jpeg-thumbnail-size";
         private static final String KEY_JPEG_THUMBNAIL_WIDTH = "jpeg-thumbnail-width";
         private static final String KEY_JPEG_THUMBNAIL_HEIGHT = "jpeg-thumbnail-height";
@@ -2476,6 +2484,81 @@ public class Camera {
             }
             return formats;
         }
+
+
+       /** @hide */
+	public   void setBrightness(String value)
+	{
+		set(KEY_BRIGHTNESS, value);
+	}
+
+       /** @hide */
+	public  String getBrightness()
+	{
+		return get(KEY_BRIGHTNESS);
+	}
+
+       /** @hide */
+	public List<String> getSupportedBrightness() {
+		String str = get(KEY_BRIGHTNESS + SUPPORTED_VALUES_SUFFIX);
+		return split(str);
+	}
+
+       /** @hide */
+	public   void setContrast(String value)
+	{
+		set(KEY_CONTRAST, value);
+	}
+
+       /** @hide */
+	public  String getContrast()
+	{
+		return get(KEY_CONTRAST);
+	}
+
+       /** @hide */
+	public List<String> getSupportedContrast() {
+		String str = get(KEY_CONTRAST + SUPPORTED_VALUES_SUFFIX);
+		return split(str);
+	}
+
+       /** @hide */
+        public   void setISO(String value)
+        {
+                set(KEY_ISO, value);
+        }
+
+       /** @hide */
+        public  String getISO()
+        {
+                return get(KEY_ISO);
+        }
+
+       /** @hide */
+        public List<String> getSupportedISO()
+        {
+                String str = get(KEY_ISO + SUPPORTED_VALUES_SUFFIX);
+                return split(str);
+        }
+
+       /** @hide */
+	public void    setSaturation(String value)
+	{
+		set(KEY_SATURATION, value);
+	}
+
+       /** @hide */
+	public String  getSaturation()
+	{
+		return get(KEY_SATURATION);
+	}
+
+       /** @hide */
+	public List<String> getSupportedSaturation()
+	{
+		String str = get(KEY_SATURATION + SUPPORTED_VALUES_SUFFIX);
+		return split(str);
+	}
 
         private String cameraFormatForPixelFormat(int pixel_format) {
             switch(pixel_format) {
