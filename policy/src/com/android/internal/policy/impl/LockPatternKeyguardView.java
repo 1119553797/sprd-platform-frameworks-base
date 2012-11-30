@@ -1140,12 +1140,18 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 break;
             case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
             case DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED:
+                /* Modify 20121129 Spreadst of 96582,sim unlock to pattern unlock start */
+                if(mLockPatternUtils.isLockPatternEnabled()){
                 // "forgot pattern" button is only available in the pattern mode...
-                if (mForgotPattern || mLockPatternUtils.isPermanentlyLocked()) {
-                    currentMode = UnlockMode.Account;
+                    if (mForgotPattern || mLockPatternUtils.isPermanentlyLocked()) {
+                        currentMode = UnlockMode.Account;
+                    } else {
+                        currentMode = UnlockMode.Pattern;
+                    }
                 } else {
-                    currentMode = UnlockMode.Pattern;
+                    currentMode = UnlockMode.Unknown;
                 }
+                /* Modify 20121129 Spreadst of 96582,sim unlock to pattern unlock end */
                 break;
             default:
                throw new IllegalStateException("Unknown unlock mode:" + mode);
