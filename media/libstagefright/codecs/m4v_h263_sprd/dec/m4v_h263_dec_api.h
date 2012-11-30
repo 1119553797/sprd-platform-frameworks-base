@@ -139,45 +139,22 @@ typedef struct
 #endif		
 }MMDecOutput;
 
-/* Application controls, this structed shall be allocated */
-/*    and initialized in the application.                 */
-typedef struct tagvideoDecControls
-{
-    /* The following fucntion pointer is copied to BitstreamDecVideo structure  */
-    /*    upon initialization and never used again. */
-//    int (*readBitstreamData)(uint8 *buf, int nbytes_required, void *appData);
-//    applicationData appData;
-
-//    uint8 *outputFrame;
-    void *videoDecoderData;     /* this is an internal pointer that is only used */
-    /* in the decoder library.   */
-#ifdef PV_MEMORY_POOL
-    int32 size;
-#endif
-//    int nLayers;
-    /* pointers to VOL data for frame-based decoding. */
-//    uint8 *volbuf[2];           /* maximum of 2 layers for now */
-//    int32 volbuf_size[2];
-
-	int g_mpeg4_dec_err_flag;
-} VideoDecControls;
-
 /**----------------------------------------------------------------------------*
 **                           Function Prototype                               **
 **----------------------------------------------------------------------------*/
 #ifdef _VSP_LINUX_
-void MP4DecSetPostFilter(VideoDecControls *decCtrl, int en);
+void MP4DecSetPostFilter(int en);
 typedef int (*FunctionType_BufCB)(void *userdata,void *pHeader,int flag);
 
-void MP4DecRegBufferCB(VideoDecControls *decCtrl, FunctionType_BufCB bindCb,FunctionType_BufCB unbindCb,void *userdata);
-void MP4DecReleaseRefBuffers(VideoDecControls *decCtrl);
-int MP4DecGetLastDspFrm(VideoDecControls *decCtrl,void **pOutput);
-void MP4DecSetCurRecPic(VideoDecControls *decCtrl, uint8	*pFrameY);
-MMDecRet MP4DecMemCacheInit(VideoDecControls *decCtrl, MMCodecBuffer *pBuffer);
+void MP4DecRegBufferCB(FunctionType_BufCB bindCb,FunctionType_BufCB unbindCb,void *userdata);
+void MP4DecReleaseRefBuffers();
+int MP4DecGetLastDspFrm(void **pOutput);
+void MP4DecSetCurRecPic(uint8	*pFrameY);
+MMDecRet MP4DecMemCacheInit(MMCodecBuffer *pBuffer);
 #endif
 
-void Mp4GetVideoDimensions(VideoDecControls *decCtrl, int32 *display_width, int32 *display_height);
-void Mp4GetBufferDimensions(VideoDecControls *decCtrl, int32 *width, int32 *height); 
+void Mp4GetVideoDimensions(int32 *display_width, int32 *display_height);
+void Mp4GetBufferDimensions(int32 *width, int32 *height); 
 
 /*****************************************************************************/
 //  Description: Init mpeg4 decoder	
@@ -185,7 +162,7 @@ void Mp4GetBufferDimensions(VideoDecControls *decCtrl, int32 *width, int32 *heig
 //  Author:        
 //	Note:           
 /*****************************************************************************/
-MMDecRet MP4DecInit(VideoDecControls *decCtrl, MMCodecBuffer * pBuffer,MMDecVideoFormat * pVideoFormat);
+MMDecRet MP4DecInit(MMCodecBuffer * pBuffer,MMDecVideoFormat * pVideoFormat);
 
 /*****************************************************************************/
 //  Description: Init mpeg4 decoder	memory
@@ -193,7 +170,7 @@ MMDecRet MP4DecInit(VideoDecControls *decCtrl, MMCodecBuffer * pBuffer,MMDecVide
 //  Author:        
 //	Note:           
 /*****************************************************************************/
-MMDecRet MP4DecMemInit(VideoDecControls *decCtrl, MMCodecBuffer *pBuffer);
+MMDecRet MP4DecMemInit(MMCodecBuffer *pBuffer);
 
 /*****************************************************************************/
 //  Description: Decode one vop	
@@ -201,7 +178,7 @@ MMDecRet MP4DecMemInit(VideoDecControls *decCtrl, MMCodecBuffer *pBuffer);
 //  Author:        
 //	Note:           
 /*****************************************************************************/
-MMDecRet MP4DecDecode(VideoDecControls *decCtrl, MMDecInput *pInput,MMDecOutput *pOutput);
+MMDecRet MP4DecDecode(MMDecInput *pInput,MMDecOutput *pOutput);
 
 /*****************************************************************************/
 //  Description: frame buffer no longer used for display
@@ -209,7 +186,7 @@ MMDecRet MP4DecDecode(VideoDecControls *decCtrl, MMDecInput *pInput,MMDecOutput 
 //  Author:        
 //	Note:           
 /*****************************************************************************/
-//MMDecRet MPEG4_DecReleaseDispBfr(uint8 *pBfrAddr);
+MMDecRet MPEG4_DecReleaseDispBfr(uint8 *pBfrAddr);
 
 /*****************************************************************************/
 //  Description: Close mpeg4 decoder	
@@ -217,7 +194,7 @@ MMDecRet MP4DecDecode(VideoDecControls *decCtrl, MMDecInput *pInput,MMDecOutput 
 //  Author:        
 //	Note:           
 /*****************************************************************************/
-MMDecRet MP4DecRelease(VideoDecControls *decCtrl);
+MMDecRet MP4DecRelease(void);
 
 /*****************************************************************************/
 //  Description: check whether VSP can used for video decoding or not
@@ -235,7 +212,7 @@ BOOLEAN MPEG4DEC_VSP_Available (void);
 //	Note:  the transposed type is passed from MMI "req_transposed"
 //         req_transposed£º 1£ºtranposed  0: normal    
 /*****************************************************************************/
-void mpeg4dec_GetOneDspFrm (VideoDecControls *decCtrl, MMDecOutput * pOutput, int req_transposed, int is_last_frame);
+void mpeg4dec_GetOneDspFrm (MMDecOutput * pOutput, int req_transposed, int is_last_frame);
 
 /**----------------------------------------------------------------------------*
 **                         Compiler Flag                                      **
