@@ -43,6 +43,9 @@
 // Log debug messages about hover events.
 #define DEBUG_HOVER 0
 
+// Log debug messages about motion event but no move motion event.
+#define DEBUG_MOTION_EVENT_NOT_MOVE 1
+
 #include "InputDispatcher.h"
 
 #include <utils/Trace.h>
@@ -2406,6 +2409,16 @@ void InputDispatcher::notifyMotion(const NotifyMotionArgs* args) {
     if (!validateMotionEvent(args->action, args->pointerCount, args->pointerProperties)) {
         return;
     }
+#if DEBUG_MOTION_EVENT_NOT_MOVE
+    if (args->action != AMOTION_EVENT_ACTION_MOVE) {
+       ALOGD("notifyMotion - eventTime=%lld, deviceId=%d, source=0x%x, policyFlags=0x%x, "
+            "action=0x%x, flags=0x%x, metaState=0x%x, buttonState=0x%x, edgeFlags=0x%x, "
+            "xPrecision=%f, yPrecision=%f, downTime=%lld",
+            args->eventTime, args->deviceId, args->source, args->policyFlags,
+            args->action, args->flags, args->metaState, args->buttonState,
+            args->edgeFlags, args->xPrecision, args->yPrecision, args->downTime);
+    }
+#endif
 
     uint32_t policyFlags = args->policyFlags;
     policyFlags |= POLICY_FLAG_TRUSTED;
