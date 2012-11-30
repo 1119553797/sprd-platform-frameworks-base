@@ -49,7 +49,8 @@ static const char* routingModeStrings[] =
     "NORMAL",
     "RINGTONE",
     "IN_CALL",
-    "IN_COMMUNICATION"
+    "IN_COMMUNICATION",
+    "WAITING"
 };
 
 static const char* routeNone = "NONE";

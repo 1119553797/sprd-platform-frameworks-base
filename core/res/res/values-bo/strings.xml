@@ -499,13 +499,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
         <item>རང་བཟོས།</item>
     </string-array>
     <string-array name="imProtocols">
-        <item></item>
-        <item></item>
+        <item>"AIM"</item>
+        <item>"Windows Live"</item>
         <item>Yahoo</item>
         <item>Skype</item>
         <item>QQ</item>
         <item>Google Talk</item>
-        <item></item>
+        <item>"ICQ"</item>
         <item>"Jabber"</item>
     </string-array>
     <string name="phoneTypeCustom">རང་བཟོས།</string>
@@ -993,4 +993,21 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_miss_mms">ཀློག་མེད་པའི་འཕྲིན་ཐུང་།</string>
     <string name="lockscreen_sim_card_locked_message">SIMཁཱ་ཟྭ་རྒྱག</string>
     <string name="upload_file_size_too_large">ཡར་སྤྲོད་ཡིག་ཆ་ཆེ་དྲགས་འདུག་པས་དབྱེ་བ་ཕྱེ་ནས་ཡར་སྤྲོད་བྱེད།</string>
+    <string name="byteShort">"B"</string>
+    <string name="kilobyteShort">"KB"</string>
+    <string name="terabyteShort">"TB"</string>
+    <string name="imProtocolAim">"AIM"</string>
+    <string name="imProtocolMsn">"Windows Live"</string>
+    <string name="imProtocolIcq">"ICQ"</string>
+    <string name="lockscreen_pin_locked_message">SIMཁཱ་ཟྭ་རྒྱག</string>
+    <string name="sim3_puk_requried">SIM3 PINགྲངས་སྒོ་རྒྱབ་ཟིན། PUKགྲངས་ནང་འཇུག་སྟེ་སྒོ་ཕྱེ་དགོས།</string>
+    <string name="keyguard_password_enter_sim3_pin_code">SIM 3PIN གྲངས་ནང་འཇུག</string>
+    <string name="keyguard_sim3_pin_accepted">SIM3 PINགྲངས་སྒོ་ཕྱེ་ལེགས་གྲུབ།</string>
+    <string name="password_keyboard_label_symbol_key">"?123"</string>
+    <string name="password_keyboard_label_alpha_key">"ABC"</string>
+    <string name="password_keyboard_label_alt_key">"ALT"</string>
+    <string name="prepend_shortcut_label">གདམ་བྱང་།+</string>
+    <string name="fast_scroll_alphabet">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+    <string name="fast_scroll_numeric_alphabet">" 0123456790ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+    <string name="cant_open_airplane_mode_when_phone_busy">ཁ་པར་བྲེལ་བ་ཆེ་བས་འཕུར་སྐྱོད་དཔེ་རྣམ་འགོ་སློང་མི་ཐུབ།</string>
 </resources>

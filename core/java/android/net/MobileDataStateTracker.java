@@ -35,6 +35,7 @@ import com.android.internal.telephony.gsm.MsmsGsmDataConnectionTrackerProxy;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.text.TextUtils;
+import android.os.Bundle;
 
 /**
  * Track the state of mobile data connectivity. This is done by
@@ -106,7 +107,8 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 "net.veth0.dns1",
                 "net.veth0.dns2",
                 "net.ppp0.dns1",
-                "net.ppp0.dns2"};
+                "net.ppp0.dns2",
+                "net.default.dns"};
 
     }
 
@@ -115,16 +117,13 @@ public class MobileDataStateTracker extends NetworkStateTracker {
             public void onServiceStateChanged(ServiceState state) {
                 boolean bSet = false;
                 boolean available = true;
-                int mmsPhoneId = networkTypeToMMSPhoneId(mNetworkInfo.getType());
-
-                Log.d(TAG, "ListenServiceState: available:"+mNetworkInfo.isAvailable()+ " newState:"+
-                        state.getState()+" subscription:" + mSubscription+" mmsPhoneId="+mmsPhoneId);
-                if((mmsPhoneId >= 0) && (mSubscription == mmsPhoneId)) {
-                    boolean bActivate = MsmsGsmDataConnectionTrackerProxy.isActiveOrDefaultPhoneId(mmsPhoneId);
-
-                    if(bActivate) {
-                        return;
-                    }
+                int mmsPhoneId = networkTypeToMMSPhoneId(mNetType);
+                int defaultPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+                Log.d(TAG, "ListenServiceState: available:" + mNetworkInfo.isAvailable()
+                        + " newState:" + state.getState() + " subscription:" + mSubscription
+                        + " mmsPhoneId=" + mmsPhoneId + " defaultPhoneId=" + defaultPhoneId);
+                if ((mmsPhoneId >= 0) && (mSubscription == mmsPhoneId)
+                        && (mmsPhoneId != defaultPhoneId)) {
                     if((mNetworkInfo.isAvailable() && (state.getState() != ServiceState.STATE_IN_SERVICE)) ||
                        (!mNetworkInfo.isAvailable() && (state.getState() == ServiceState.STATE_IN_SERVICE))){
                         bSet = true;
@@ -159,8 +158,8 @@ public class MobileDataStateTracker extends NetworkStateTracker {
         else
             mMobileDataState = Phone.DataState.DISCONNECTED;
 
-        int mmsPhoneId = networkTypeToMMSPhoneId(mNetType);
-        if(mmsPhoneId >=0) {
+        int mmsPhoneId = getFixdMMSType(mNetType);
+        if(PhoneFactory.getPhoneCount() > 1 && mmsPhoneId >= 0) {
             mPhoneStateListener = getPhoneStateListener(mmsPhoneId);
             // register for phone state notifications.
             ((TelephonyManager) mContext
@@ -181,6 +180,65 @@ public class MobileDataStateTracker extends NetworkStateTracker {
             return Enum.valueOf(Phone.DataState.class, str);
         }
         return Phone.DataState.DISCONNECTED;
+    }
+
+    private Phone.DataState getMobileDataStateExtend(Intent intent) {
+        Bundle apnStates = intent.getExtras();
+        if (apnStates != null) {
+            Bundle data = apnStates.getBundle(mApnType);
+            if (data != null) {
+                String str = data.getString(Phone.DATA_SUB_APN_STATE_KEY);
+                if (str != null) {
+                    return Enum.valueOf(Phone.DataState.class, str);
+                }
+                return Phone.DataState.DISCONNECTED;
+            }
+        }
+        return getMobileDataState(intent);
+    }
+
+    private String getApnNameExtend(Intent intent) {
+        Bundle apnStates = intent.getExtras();
+        if (apnStates != null) {
+            Bundle data = apnStates.getBundle(mApnType);
+            if (data != null) {
+                return data.getString(Phone.DATA_SUB_APN_KEY);
+            }
+        }
+        return intent.getStringExtra(Phone.DATA_APN_KEY);
+    }
+
+    private String getInterfaceExtend(Intent intent) {
+        Bundle apnStates = intent.getExtras();
+        if (apnStates != null) {
+            Bundle data = apnStates.getBundle(mApnType);
+            if (data != null) {
+                return data.getString(Phone.DATA_SUB_IFACE_NAME_KEY);
+            }
+        }
+        return intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY);
+    }
+
+    private int getGatewayExtend(Intent intent) {
+        Bundle apnStates = intent.getExtras();
+        if (apnStates != null) {
+            Bundle data = apnStates.getBundle(mApnType);
+            if (data != null) {
+                return data.getInt(Phone.DATA_SUB_GATEWAY_KEY);
+            }
+        }
+        return intent.getIntExtra(Phone.DATA_GATEWAY_KEY, 0);
+    }
+
+    private boolean isApnSupport(Intent intent, String apnTypeList) {
+        Bundle apnStates = intent.getExtras();
+        if (apnStates != null) {
+            Bundle data = apnStates.getBundle(mApnType);
+            if (data != null) {
+                return true;
+            }
+        }
+        return isApnTypeIncluded(apnTypeList);
     }
 
     private boolean isApnTypeIncluded(String typeList) {
@@ -213,60 +271,52 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                     int phoneId = intent.getIntExtra(Phone.PHONE_ID, -1);
                     Log.d(TAG, "["
                             + "]receive ACTION_ANY_DATA_CONNECTION_STATE_CHANGED with phoneid:"
-                            + phoneId);
-                    Phone.DataState state = getMobileDataState(intent);
-                    String reason = intent.getStringExtra(Phone.STATE_CHANGE_REASON_KEY);
-                    String apnName = intent.getStringExtra(Phone.DATA_APN_KEY);
-                    String apnTypeList = intent.getStringExtra(Phone.DATA_APN_TYPES_KEY);
+                            + phoneId + " " + mApnType + "(" + mNetType + ")");
                     boolean bIsBroadcastMsg = !intent.getBooleanExtra(MSG_FROM_SELF, false);
-                    mApnName = apnName;
-
-                    if (state == Phone.DataState.CONNECTED && bIsBroadcastMsg) {
-                        if (DBG) Log.d(TAG, "replacing old mInterfaceName (" +
-                                mInterfaceName + ") with " +
-                                intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY) +
-                                " for " + mApnType);
-                        mInterfaceName = intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY);
+                    Phone.DataState state = Phone.DataState.DISCONNECTED;
+                    int mmsPhoneId = networkTypeToMMSPhoneId(mNetType);
+                    if ((mmsPhoneId < 0)
+                            || (mmsPhoneId >= 0 && mmsPhoneId == phoneId)) {
+                        if (bIsBroadcastMsg) {
+                            mApnName = getApnNameExtend(intent);
+                            String newIface = getInterfaceExtend(intent);
+                            if (DBG)
+                                Log.d(TAG, "replacing old mInterfaceName (" + mInterfaceName
+                                        + ") with " + newIface + " for " + mApnType);
+                            mInterfaceName = newIface;
+                        }
+                        state = getMobileDataStateExtend(intent);
+                    } else {
+                        return;
                     }
+                    String reason = intent.getStringExtra(Phone.STATE_CHANGE_REASON_KEY);
+                    String apnTypeList = intent.getStringExtra(Phone.DATA_APN_TYPES_KEY);
 
                     boolean unavailable = intent.getBooleanExtra(Phone.NETWORK_UNAVAILABLE_KEY,
                             false);
-                    int mmsPhoneId = networkTypeToMMSPhoneId(mNetworkInfo.getType());
-                    // set this regardless of the apnTypeList.  It's all the same radio/network
-                    // underneath
-                    if(mmsPhoneId < 0) {
-                        Log.d(TAG, "[type=" + mNetType + "]setIsAvailable=" + !unavailable);
-                        mNetworkInfo.setIsAvailable(!unavailable);
-                    } else {
-                        boolean bActivate = MsmsGsmDataConnectionTrackerProxy.isActiveOrDefaultPhoneId(mmsPhoneId);
-                        Log.d(TAG, "[type=" + mNetType + "]setIsAvailable=" + !unavailable+" mmsPhoneId["+mmsPhoneId+"] activate is "+bActivate);
-                        if(bActivate) {
-                            mNetworkInfo.setIsAvailable(!unavailable);
-                        }
-                    }
+                    Log.d(TAG, "[type=" + mNetType + "]setIsAvailable=" + !unavailable);
+                    mNetworkInfo.setIsAvailable(!unavailable);
 
-                    if (isApnTypeIncluded(apnTypeList)) {
+                    if (isApnSupport(intent,apnTypeList)) {
                         if (mEnabled == false) {
                             // if we're not enabled but the APN Type is supported by this connection
                             // we should record the interface name if one's provided.  If the user
                             // turns on this network we will need the interfacename but won't get
                             // a fresh connected message - TODO fix this when we get per-APN
                             // notifications
+
                             return;
                         } else {
-                            if ((mmsPhoneId >= 0) && (phoneId >= 0)
-                                    && (mmsPhoneId != phoneId)) {
-                                return;
-                            }
                         }
                     } else {
                         return;
                     }
 
-                    if (DBG) Log.d(TAG, mApnType + " Received state= " + state + ", old= " +
-                            mMobileDataState + ", reason= " +
-                            (reason == null ? "(unspecified)" : reason) +
-                            ", apnTypeList= " + apnTypeList);
+                    if (DBG)
+                        Log.d(TAG, mApnType + "(" + mNetworkInfo.getTypeName() + ") " + mApnName
+                                + " Received state= " + state + ", old= " + mMobileDataState
+                                + ", reason= " + (reason == null ? "(unspecified)" : reason)
+                                + ", apnTypeList= " + apnTypeList);
 
                     if (mMobileDataState != state) {
                         mMobileDataState = state;
@@ -277,7 +327,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                                     setTeardownRequested(false);
                                 }
 
-                                setDetailedState(DetailedState.DISCONNECTED, reason, apnName);
+                                setDetailedState(DetailedState.DISCONNECTED, reason, mApnName);
                                 boolean doReset = true;
                                 if (mIsDefaultOrHipri == true) {
                                     // both default and hipri must go down before we reset
@@ -309,25 +359,25 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                                 //mDefaultGatewayAddr = 0;
                                 break;
                             case CONNECTING:
-                                setDetailedState(DetailedState.CONNECTING, reason, apnName);
+                                setDetailedState(DetailedState.CONNECTING, reason, mApnName);
                                 break;
                             case SUSPENDED:
-                                setDetailedState(DetailedState.SUSPENDED, reason, apnName);
+                                setDetailedState(DetailedState.SUSPENDED, reason, mApnName);
                                 break;
                             case CONNECTED:
                                 if(bIsBroadcastMsg) {
-                                    mInterfaceName = intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY);
+                                    mInterfaceName = getInterfaceExtend(intent);
                                 }
                                 if (mInterfaceName == null) {
                                     Log.d(TAG, "CONNECTED event did not supply interface name.");
                                 }
                                 if(bIsBroadcastMsg) {
-                                    mDefaultGatewayAddr = intent.getIntExtra(Phone.DATA_GATEWAY_KEY, 0);
+                                    mDefaultGatewayAddr = getGatewayExtend(intent);
                                 }
                                 if (mDefaultGatewayAddr == 0) {
                                     Log.d(TAG, "CONNECTED event did not supply a default gateway.");
                                 }
-                                setDetailedState(DetailedState.CONNECTED, reason, apnName);
+                                setDetailedState(DetailedState.CONNECTED, reason, mApnName);
                                 break;
                         }
                     }
@@ -462,6 +512,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 //send out a connected message
                 Intent intent = new Intent(TelephonyIntents.
                         ACTION_ANY_DATA_CONNECTION_STATE_CHANGED);
+                intent.putExtra(Phone.PHONE_ID, getPhoneId());
                 intent.putExtra(Phone.STATE_KEY, Phone.DataState.CONNECTED.toString());
                 intent.putExtra(Phone.STATE_CHANGE_REASON_KEY, Phone.REASON_APN_CHANGED);
                 intent.putExtra(Phone.DATA_APN_TYPES_KEY, mApnTypeToWatchFor);
@@ -693,6 +744,14 @@ public class MobileDataStateTracker extends NetworkStateTracker {
         if(netType == ConnectivityManager.TYPE_MOBILE_MMS) {
             return TelephonyManager.getDefaultDataPhoneId(mContext);
         } else if (netType > ConnectivityManager.TYPE_MOBILE_DM
+                && netType <= ConnectivityManager.MAX_NETWORK_TYPE) {
+            return netType - ConnectivityManager.TYPE_MOBILE_DM - 1;
+        } else {
+            return -1;
+        }
+    }
+    private int getFixdMMSType(int netType) {
+        if (netType > ConnectivityManager.TYPE_MOBILE_DM
                 && netType <= ConnectivityManager.MAX_NETWORK_TYPE) {
             return netType - ConnectivityManager.TYPE_MOBILE_DM - 1;
         } else {

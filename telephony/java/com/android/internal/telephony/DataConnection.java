@@ -726,7 +726,10 @@ public abstract class DataConnection extends HierarchicalStateMachine {
                     if (DBG) log("DcDisconnectingState discarding msg.what=EVENT_DISCONNECT");
                     retVal = true;
                     break;
-
+                case EVENT_CONNECT:
+                    if (DBG) log("DcDisconnectingState discarding msg.what=EVENT_CONNECT");
+                    retVal = true;
+                    break;
                 case EVENT_DEACTIVATE_DONE:
                     if (DBG) log("DcDisconnectingState msg.what=EVENT_DEACTIVATE_DONE");
                     AsyncResult ar = (AsyncResult) msg.obj;

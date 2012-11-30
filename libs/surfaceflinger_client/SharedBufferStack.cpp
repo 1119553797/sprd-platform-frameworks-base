@@ -29,6 +29,7 @@
 #include <ui/Region.h>
 
 #define DEBUG_ATOMICS 0
+#define TIMEOUT_LIMIT 15
 
 namespace android {
 // ----------------------------------------------------------------------------
@@ -489,7 +490,8 @@ void SharedBufferClient::setPatch(int32_t patch)
 SharedBufferServer::SharedBufferServer(SharedClient* sharedClient,
         int surface, int num, int32_t identity)
     : SharedBufferBase(sharedClient, surface, identity),
-      mNumBuffers(num)
+      mNumBuffers(num),
+      mLockFlag(false)
 {
     mSharedStack->init(identity);
     mSharedStack->token = surface;
@@ -513,6 +515,24 @@ ssize_t SharedBufferServer::retireAndLock()
     RWLock::AutoRLock _l(mLock);
 
     RetireUpdate update(this, mNumBuffers);
+
+    //add to solve surface.destroy() block start
+    if (mLockFlag) {
+        ssize_t buf = update();
+        mSharedClient->cv.broadcast();
+        if (buf >= 0) {
+            if (uint32_t(buf) >= SharedBufferStack::NUM_BUFFER_MAX) {
+                return BAD_VALUE;
+            }
+            SharedBufferStack& stack( *mSharedStack );
+            buf = stack.index[buf];
+            LOGD_IF(DEBUG_ATOMICS && buf>=0, "retire=%d, %s",
+                    int(buf), dump("").string());
+        }
+        return buf;
+    }
+    //add to solve surface.destroy() block end
+
     ssize_t buf = updateCondition( update );
     if (buf >= 0) {
         if (uint32_t(buf) >= SharedBufferStack::NUM_BUFFER_MAX)
@@ -529,7 +549,32 @@ void SharedBufferServer::setStatus(status_t status)
 {
     if (status < NO_ERROR) {
         StatusUpdate update(this, status);
-        updateCondition( update );
+        //updateCondition( update );
+        //add to solve surface.destroy() block start
+        if (status == NO_INIT) {
+            if (mLockFlag) {
+                update();
+                mSharedClient->cv.broadcast();
+                return;
+            }
+            int timeout = 0;
+            do {
+                if (!mSharedClient->lock.tryLock()) break;
+                timeout++;
+                sleep(1);
+            } while (timeout < TIMEOUT_LIMIT);
+            update();
+            mSharedClient->cv.broadcast();
+
+            if (timeout < TIMEOUT_LIMIT) {
+                mSharedClient->lock.unlock();
+            } else if (timeout == TIMEOUT_LIMIT) {
+                mLockFlag = true;
+            }
+        } else {
+            updateCondition( update );
+        }
+        //add to solve surface.destroy() block end
     }
 }
 

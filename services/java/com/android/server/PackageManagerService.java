@@ -3340,7 +3340,9 @@ class PackageManagerService extends IPackageManager.Stub {
                      * can happen for older apps that existed before an OTA to
                      * Gingerbread.
                      */
-		    if(mFlagInstall == true){
+			boolean isCopy = false;
+            isCopy = nativeLibraryDir.listFiles().length > 0 ? false : true;
+		    if(mFlagInstall == true || isCopy ){
                     Slog.i(TAG, "Unpacking native libraries for " + path);
                     mInstaller.unlinkNativeLibraryDirectory(dataPathString);
                     NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);

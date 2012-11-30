@@ -85,6 +85,8 @@ public class ShutdownFullscreenActivity extends Activity {
 		
         mConfirm = getIntent().getBooleanExtra(Intent.EXTRA_KEY_CONFIRM, false);
         Slog.i(TAG, "onCreate(): confirm=" + mConfirm);
+        
+        ShutDownWakeLock.acquireCpuWakeLock(this);
 
 		IntentFilter filter=new IntentFilter(Intent.ACTION_POWER_CONNECTED);
 		filter.addAction(Intent.ACTION_BATTERY_OKAY);
@@ -134,5 +136,12 @@ public class ShutdownFullscreenActivity extends Activity {
 				catch(IOException e){}
         	}
 		});
+    }
+    
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        ShutDownWakeLock.releaseCpuLock();
+        super.onDestroy();
     }
 }

@@ -37,7 +37,7 @@ interface ITelephonyRegistry {
             String gateway);
     void notifyDataConnectionMpdp(int state, int pdpState, boolean isDataConnectivityPossible,
             String reason, String apn, in String[] apnTypes, String interfaceName, int networkType,
-            String gateway);
+            String gateway, in Bundle apnStates);
     void notifyDataConnectionFailed(String reason);
     void notifyCellLocation(in Bundle cellLocation);
 }

@@ -409,17 +409,17 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             }
         }
         broadcastDataConnectionStateChanged(state, isDataConnectivityPossible, reason, apn,
-                apnTypes, interfaceName, gateway);
+                apnTypes, interfaceName, gateway, null);
     }
 
     public void notifyDataConnectionMpdp(int state, int pdpState, boolean isDataConnectivityPossible,
             String reason, String apn, String[] apnTypes, String interfaceName, int networkType,
-            String gateway) {
+            String gateway, Bundle apnStates) {
         if (!checkNotifyPermission("notifyDataConnection()" )) {
            return;
         }
-        Slog.i(TAG, "notifyDataConnection: state=" + state + " pdpState=" + pdpState +
-                " isDataConnectivityPossible=" + isDataConnectivityPossible + " reason=" + reason
+        Slog.i(TAG, "notifyDataConnectionMpdp: phoneId="+ mPhoneId + " state=" + state + " pdpState=" + pdpState
+                + " isDataConnectivityPossible=" + isDataConnectivityPossible + " reason=" + reason
                 + " interfaceName=" + interfaceName + " networkType=" + networkType);
         synchronized (mRecords) {
             mDataConnectionState = state;
@@ -442,7 +442,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             }
         }
         broadcastDataConnectionStateChanged(pdpState, isDataConnectivityPossible, reason, apn,
-                apnTypes, interfaceName, gateway);
+                apnTypes, interfaceName, gateway, apnStates);
     }
 
     public void notifyDataConnectionFailed(String reason) {
@@ -609,7 +609,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
 
     private void broadcastDataConnectionStateChanged(int state,
             boolean isDataConnectivityPossible,
-            String reason, String apn, String[] apnTypes, String interfaceName, String gateway) {
+            String reason, String apn, String[] apnTypes, String interfaceName, String gateway, Bundle apnStates) {
         // Note: not reporting to the battery stats service here, because the
         // status bar takes care of that after taking into account all of the
         // required info.
@@ -638,6 +638,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         }
         intent.putExtra(Phone.DATA_GATEWAY_KEY, gatewayAddr);
         intent.putExtra(Intents.EXTRA_PHONE_ID, mPhoneId);
+        intent.putExtras(apnStates);
 
         mContext.sendStickyBroadcast(intent);
     }

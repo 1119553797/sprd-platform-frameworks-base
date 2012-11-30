@@ -30,4 +30,6 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="mobile_net_name">གཞི་གྲངས།</string>
     <string name="datanetwork_error_airplane">ཁཱ་གྲ་སྒྲིག་བྱས་མེད་པས་གཞི་གྲངས་དྲ་རྒྱའི་ལས་སྒོ་སྤྱོད་མི་ཐུབ།</string>
     <string name="bluetooth_error_airplane">ཁ་པར་འཕུར་སྐྱོད་དཔེ་རྣམ་ལ་གནས་ཡོད་པས་སོ་སྔོན་པོ་སྤྱོད་མི་ཆོག</string>
+    <string name="wifi_name">"WLAN"</string>
+    <string name="wifi_error">ནོར་བ།</string>
 </resources>

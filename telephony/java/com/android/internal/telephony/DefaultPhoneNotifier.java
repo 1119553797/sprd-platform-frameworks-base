@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.android.internal.telephony.ITelephonyRegistry;
 import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
+import android.net.NetworkUtils;
 
 /**
  * broadcast intents
@@ -158,12 +159,39 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
                     sender.getInterfaceName(apnType),
                     ((telephony!=null) ? telephony.getNetworkType() :
                     TelephonyManager.NETWORK_TYPE_UNKNOWN),
-                    sender.getGateway(apnType));
+                    sender.getGateway(apnType),
+                    getAllApnStates(sender));
         } catch (RemoteException ex) {
             // system process is dead
         }
     }
-
+    public Bundle getAllApnStates(Phone sender) {
+        Bundle apnStates = new Bundle();
+        String[] apnList = {
+                Phone.APN_TYPE_DEFAULT, Phone.APN_TYPE_MMS, Phone.APN_TYPE_SUPL,
+                Phone.APN_TYPE_DUN, Phone.APN_TYPE_HIPRI, Phone.APN_TYPE_DM
+        };
+        for (int i = 0; i < apnList.length; i++) {
+            Phone.DataState dataState = sender.getDataConnectionState(apnList[i]);
+            String iface = sender.getInterfaceName(apnList[i]);
+            String gw = sender.getGateway(apnList[i]);
+            String apn = sender.getActiveApn(apnList[i]);
+            int gatewayAddr = 0;
+            if (gw != null) {
+                gatewayAddr = NetworkUtils.v4StringToInt(gw);
+            }
+            Log.d(LOG_TAG, "getAllApnStates[" + i + "]=" + apnList[i] + " apn[" + i + "]=" + apn
+                    + " apnState[" + i + "]=" + dataState.toString() + " iface[" + i + "]=" + iface
+                    + " gw[" + i + "]=" + gw + " gwAddr[" + i + "]=" + gatewayAddr);
+            Bundle data = new Bundle();
+            data.putString(Phone.DATA_SUB_IFACE_NAME_KEY, iface);
+            data.putString(Phone.DATA_SUB_APN_STATE_KEY, dataState.toString());
+            data.putInt(Phone.DATA_SUB_GATEWAY_KEY, gatewayAddr);
+            data.putString(Phone.DATA_SUB_APN_KEY, apn);
+            apnStates.putBundle(apnList[i], data);
+        }
+        return apnStates;
+    }
     public void notifyDataConnectionFailed(Phone sender, String reason) {
         try {
             mRegistry.notifyDataConnectionFailed(reason);

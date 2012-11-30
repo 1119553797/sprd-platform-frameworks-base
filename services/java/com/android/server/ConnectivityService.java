@@ -1101,6 +1101,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         if (!ConnectivityManager.isNetworkTypeValid(networkType)) {
             return false;
         }
+        networkType = getRealNetworkType(networkType);
         NetworkStateTracker tracker = mNetTrackers[networkType];
 
         if (tracker == null || !tracker.getNetworkInfo().isConnected() ||
@@ -1187,7 +1188,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             for (NetworkStateTracker nt : mNetTrackers) {
                 if (nt == null) continue;
                 int netType = nt.getNetworkInfo().getType();
-                if (mNetAttributes[netType].mRadio == ConnectivityManager.TYPE_MOBILE) {
+                if (mNetAttributes[netType].mRadio == ConnectivityManager.TYPE_MOBILE  && !isMmsType(netType)) {
                     if (DBG) Slog.d(TAG, "tearing down " + nt);
                     nt.teardown();
                 }
@@ -2023,6 +2024,13 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS +"1"));
     }
 
+    private boolean isMmsType(int netType) {
+        if (netType == ConnectivityManager.TYPE_MOBILE_MMS || netType > ConnectivityManager.TYPE_MOBILE_DM) {
+            return true;
+        }
+        return false;
+    }
+
     private int getPhoneIdByFeature(String feature, boolean bRealPhone) {
         int phoneId;
         if (isMmsFeature(feature)) {
@@ -2090,7 +2098,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 if (nt == null) continue;
                 int netType = nt.getNetworkInfo().getType();
                 if (getPhoneIdByNetworkType(netType) != phoneId) continue;
-                if (mNetAttributes[netType].mRadio == ConnectivityManager.TYPE_MOBILE) {
+                if (mNetAttributes[netType].mRadio == ConnectivityManager.TYPE_MOBILE  && !isMmsType(netType)) {
                     if (DBG) Slog.d(TAG, "tearing down " + nt);
                     nt.teardown();
                 }

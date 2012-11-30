@@ -105,6 +105,10 @@ public interface Phone extends SprdVideoPhone{
     static final String DATA_GATEWAY_KEY = "gateway";
     static final String NETWORK_UNAVAILABLE_KEY = "networkUnvailable";
     static final String PHONE_IN_ECM_STATE = "phoneinECMState";
+    static final String DATA_SUB_IFACE_NAME_KEY = "sub_iface";
+    static final String DATA_SUB_APN_STATE_KEY = "sub_apn_state";
+    static final String DATA_SUB_GATEWAY_KEY = "sub_gateway";
+    static final String DATA_SUB_APN_KEY = "sub_apn";
 
     /**
      * APN types for data connections.  These are usage categories for an APN

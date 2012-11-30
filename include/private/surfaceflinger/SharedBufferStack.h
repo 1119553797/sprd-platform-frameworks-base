@@ -349,6 +349,7 @@ private:
     mutable RWLock mLock;
     int mNumBuffers;
     BufferList mBufferList;
+    bool mLockFlag;
 
 
     struct RetireUpdate : public UpdateBase {

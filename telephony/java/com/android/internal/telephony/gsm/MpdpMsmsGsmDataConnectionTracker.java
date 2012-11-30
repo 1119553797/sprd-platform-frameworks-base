@@ -235,6 +235,7 @@ public class MpdpMsmsGsmDataConnectionTracker extends MsmsGsmDataConnectionTrack
                 }
             }
           //notify all service types if needed.
+            /*
             if (mActiveApn != null) {
                 setState(State.CONNECTED);
                 for (String type : mActiveApn.types) {
@@ -253,6 +254,13 @@ public class MpdpMsmsGsmDataConnectionTracker extends MsmsGsmDataConnectionTrack
                         }
                     }
 
+                }
+            }
+            */
+            setState(State.CONNECTED);
+            for (int i = 0; i < APN_NUM_TYPES; i++) {
+                if (dataEnabled[i] == true && dataServiceTable[i] != null) {
+                    notifyDataConnection(apnIdToType(i), reason);
                 }
             }
             if(DBG) dumpDataServiceTable();
@@ -445,7 +453,9 @@ public class MpdpMsmsGsmDataConnectionTracker extends MsmsGsmDataConnectionTrack
            phone.notifyDataConnection(Phone.APN_TYPE_DEFAULT, Phone.REASON_DATA_DISABLED);
        }
        if (retryAfterDisconnected(cd.getReason())) {
-           trySetupData(cd.getReason());
+           if(isAllPdpDisconnectDone() || !Phone.REASON_PDP_LOST.equals(cd.getReason())) {
+               trySetupData(cd.getReason());
+           }
        }
     }
 
@@ -469,6 +479,13 @@ public class MpdpMsmsGsmDataConnectionTracker extends MsmsGsmDataConnectionTrack
             return Phone.APN_TYPE_NOT_AVAILABLE;
         }
 
+        if (phone.getServiceState().getState() != ServiceState.STATE_IN_SERVICE
+                || !mGsmPhone.mSST.getDesiredPowerState()) {
+            if (DBG)
+                log2("ServiceState=" + phone.getServiceState().getState() + " desiredPowerState="
+                        + mGsmPhone.mSST.getDesiredPowerState());
+            return Phone.APN_REQUEST_FAILED;
+        }
 
         // just because it's active doesn't mean we had it explicitly requested before
         // (a broad default may handle many types).  make sure we mark it enabled

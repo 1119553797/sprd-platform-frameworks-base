@@ -100,15 +100,27 @@ LOCAL_STATIC_LIBRARIES := \
 ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
 LOCAL_STATIC_LIBRARIES += \
 	libstagefright_aacdec_sprd \
-        libstagefright_mp3dec_sprd
+        libstagefright_mp3dec_sprd	\
+		libstagefright_avcdec_sprd	\
+	libstagefright_m4vh263dec_sprd
+
 LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libaacdec_sprd.a
 LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libmp3dec_sprd.a
+
+LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libm4vh263dec_sprd.a
+LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libavcdec_sprd.a
 else
 LOCAL_LDFLAGS += $(TOP)/customize/customer_cfg/${ANDROID_3RDPARTY_IMAGE_TAG}/proprietary/stagefright/libstagefright_aacdec_sprd.a
 LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libaacdec_sprd.a
 
 LOCAL_LDFLAGS += $(TOP)/customize/customer_cfg/${ANDROID_3RDPARTY_IMAGE_TAG}/proprietary/stagefright/libstagefright_mp3dec_sprd.a
 LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libmp3dec_sprd.a
+
+LOCAL_LDFLAGS += $(TOP)/customize/customer_cfg/${ANDROID_3RDPARTY_IMAGE_TAG}/proprietary/stagefright/libstagefright_m4vh263dec_sprd.a
+LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libm4vh263dec_sprd.a
+
+LOCAL_LDFLAGS += $(TOP)/customize/customer_cfg/${ANDROID_3RDPARTY_IMAGE_TAG}/proprietary/stagefright/libstagefright_avcdec_sprd.a
+LOCAL_LDFLAGS += $(TOP)/frameworks/base/media/libstagefright/codecs/libavcdec_sprd.a
 endif
 
 LOCAL_SHARED_LIBRARIES += \
@@ -137,6 +149,8 @@ LOCAL_CFLAGS += -Wno-multichar
 
 #ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
 LOCAL_CFLAGS += -DBUILD_SPRD_AAC
+LOCAL_CFLAGS += -DBUILD_SPRD_M4VH263
+LOCAL_CFLAGS += -DBUILD_SPRD_AVC
 #endif
 
 LOCAL_MODULE:= libstagefright

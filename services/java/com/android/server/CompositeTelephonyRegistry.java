@@ -116,8 +116,8 @@ public class CompositeTelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     @Override
-    public void notifyDataConnectionMpdp(int state, int typeState, boolean isDataConnectivityPossible, String reason,
-            String apn, String[] apnTypes, String interfaceName, int networkType, String gateway)
+	public void notifyDataConnectionMpdp(int state, int typeState, boolean isDataConnectivityPossible, String reason,
+			String apn, String[] apnTypes, String interfaceName, int networkType, String gateway, Bundle apnStates)
             throws RemoteException {
         Slog.w(TAG, "Error, should not call CompositeTelephonyRegistry.notifyDataConnection");
     }

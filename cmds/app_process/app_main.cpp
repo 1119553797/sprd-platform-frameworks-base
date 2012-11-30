@@ -170,8 +170,20 @@ void doLastShutDownCheck()
     }
 }
 
+void *oom_adj_thread(void *arg)
+{
+    sleep(20);
+    FILE *oom_adj = fopen("/proc/self/oom_adj", "w");
+    if (oom_adj) {
+        fputs("7", oom_adj);
+        fclose(oom_adj);
+    }
+    return NULL;
+}
+
 int main(int argc, const char* const argv[])
 {
+    pthread_t oom_adj_t;
     // These are global variables in ProcessState.cpp
     mArgC = argc;
     mArgV = argv;
@@ -225,6 +237,7 @@ int main(int argc, const char* const argv[])
 
             LOGV("App process is starting with pid=%d, class=%s.\n",
                  getpid(), runtime.getClassName());
+            pthread_create(&oom_adj_t, NULL, oom_adj_thread, NULL);
             runtime.start();
         }
     } else {
