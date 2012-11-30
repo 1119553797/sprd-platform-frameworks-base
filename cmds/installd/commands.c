@@ -22,6 +22,7 @@ dir_rec_t android_data_dir;
 dir_rec_t android_asec_dir;
 dir_rec_t android_app_dir;
 dir_rec_t android_app_private_dir;
+dir_rec_t android_app_preload_dir;
 dir_rec_array_t android_system_dirs;
 
 int install(const char *pkgname, uid_t uid, gid_t gid)

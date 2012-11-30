@@ -119,6 +119,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.BufferedReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -244,6 +246,9 @@ public class PackageManagerService extends IPackageManager.Stub {
     // This is where all application persistent data goes for secondary users.
     final File mUserAppDataDir;
 
+	// This is preload app  dir
+	final File mPreInstallDir;
+
     /** The location for ASEC container files on internal storage. */
     final String mAsecInternalPath;
 
@@ -261,6 +266,9 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     // This is the object monitoring mDrmAppPrivateInstallDir.
     final FileObserver mDrmAppInstallObserver;
+
+    // This is the object monitoring mPreInstallDir.
+	final FileObserver mPreInstallObserver;
 
     // Used for priviledge escalation.  MUST NOT BE CALLED WITH mPackages
     // LOCK HELD.  Can be called with mInstallLock held.
@@ -374,6 +382,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     boolean mSystemReady;
     boolean mSafeMode;
     boolean mHasSystemUidErrors;
+    boolean mFlagInstall;
 
     ApplicationInfo mAndroidApplication;
     final ActivityInfo mResolveActivity = new ActivityInfo();
@@ -898,6 +907,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             mSeparateProcesses = null;
         }
 
+        mPreInstallDir = new File("/system/preloadapp");
         mInstaller = new Installer();
 
         WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
@@ -1042,6 +1052,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
             }
 
+            mFlagInstall = false;
+            
             // Find base frameworks (resource packages without code).
             mFrameworkInstallObserver = new AppDirObserver(
                 mFrameworkDir.getPath(), OBSERVER_EVENTS, true);
@@ -1139,7 +1151,12 @@ public class PackageManagerService extends IPackageManager.Stub {
                     mAppInstallDir.getPath(), OBSERVER_EVENTS, false);
                 mAppInstallObserver.startWatching();
                 scanDirLI(mAppInstallDir, 0, scanMode, 0);
-    
+                
+				mPreInstallObserver = new AppDirObserver(
+				    mPreInstallDir.getPath(), OBSERVER_EVENTS, false);
+				mPreInstallObserver.startWatching();
+				scanDirLI(mPreInstallDir, 0, scanMode, 0);
+
                 mDrmAppInstallObserver = new AppDirObserver(
                     mDrmAppPrivateInstallDir.getPath(), OBSERVER_EVENTS, false);
                 mDrmAppInstallObserver.startWatching();
@@ -1176,10 +1193,11 @@ public class PackageManagerService extends IPackageManager.Stub {
                     reportSettingsProblem(Log.WARN, msg);
                 }
             } else {
+			    mPreInstallObserver = null;
                 mAppInstallObserver = null;
                 mDrmAppInstallObserver = null;
             }
-
+            mFlagInstall = true;
             EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_SCAN_END,
                     SystemClock.uptimeMillis());
             Slog.i(TAG, "Time to scan packages: "
@@ -3078,6 +3096,42 @@ public class PackageManagerService extends IPackageManager.Stub {
         return true;
     }
 
+    private boolean isPreloadApp(String path){    
+        if(path.equals("/system/preloadapp"))
+              return true;
+        return false;
+	}    
+
+    private boolean isDeleteApp(String packageName){    
+        File unInstallRecord = new File("/data/app/.delrecord");
+        try{ 
+            BufferedReader br = new BufferedReader(new FileReader(unInstallRecord));
+            String lineContent = null;
+                while( (lineContent = br.readLine()) != null){
+                    if(packageName.equals(lineContent)){
+                           br.close();
+                           return true;
+                    }    
+			    }    
+            }catch(Exception e){
+                  Log.e(TAG, " isDeleteApp IOException");
+          }    
+      return false;
+    }    
+   
+    private boolean delAppRecord(String packageName,int parseFlags){    
+        File delRecord = new File("/data/app/.delrecord");
+        try{
+            FileWriter writer = new FileWriter(delRecord, true);
+            writer.write(packageName +"\n");
+            writer.flush();
+            writer.close();
+           }catch(IOException e){
+                Log.e(TAG, "preloadapp unInstall record:  IOException");
+           }
+      return true;
+     }
+
     /*
      *  Scan a package and return the newly parsed package.
      *  Returns null in case of errors and the error code is stored in mLastScanError
@@ -3096,6 +3150,12 @@ public class PackageManagerService extends IPackageManager.Stub {
             mLastScanError = pp.getParseError();
             return null;
         }
+         
+        File delRecord = new File("/data/app/.delrecord");
+        if(isPreloadApp(scanFile.getParent()) && delRecord.exists()){
+            if(isDeleteApp(pkg.packageName))return pkg;
+        }
+
         PackageSetting ps = null;
         PackageSetting updatedPkg;
         // reader
@@ -3928,13 +3988,17 @@ public class PackageManagerService extends IPackageManager.Stub {
                      * something. If it is, ask installd to remove it and create
                      * a directory so we can copy to it afterwards.
                      */
-                    boolean isSymLink;
-                    try {
-                        isSymLink = S_ISLNK(Libcore.os.lstat(nativeLibraryDir.getPath()).st_mode);
-                    } catch (ErrnoException e) {
-                        // This shouldn't happen, but we'll fail-safe.
-                        isSymLink = true;
-                    }
+                    boolean isCopy = false;
+                    isCopy = nativeLibraryDir.listFiles().length > 0 ? false : true;
+                    if (mFlagInstall == true || isCopy) {
+                        boolean isSymLink;
+                        try {
+                               isSymLink = S_ISLNK(Libcore.os.lstat(nativeLibraryDir.getPath()).st_mode);
+                            }catch (ErrnoException e) {
+                               // This shouldn't happen, but we'll fail-safe.
+                               isSymLink = true;
+                            }
+
                     if (isSymLink) {
                         mInstaller.unlinkNativeLibraryDirectory(dataPathString);
                     }
@@ -3945,6 +4009,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                      * the libraries if necessary.
                      */
                     NativeLibraryHelper.copyNativeBinariesIfNeededLI(scanFile, nativeLibraryDir);
+
+					}
                 } else {
                     Slog.i(TAG, "Linking native library dir for " + path);
                     mInstaller.linkNativeLibraryDirectory(dataPathString,
@@ -7722,6 +7788,11 @@ public class PackageManagerService extends IPackageManager.Stub {
             Log.i(TAG, "Removing non-system package:"+p.packageName);
             // Kill application pre-emptively especially for apps on sd.
             killApplication(packageName, p.applicationInfo.uid);
+
+            //add delete preload app record
+            String path = p.mPath.substring(0, p.mPath.lastIndexOf("/"));
+            if(isPreloadApp(path)) delAppRecord(p.packageName, flags);
+
             ret = deleteInstalledPackageLI(p, deleteCodeAndResources, flags, outInfo,
                     writeSettings);
         }
@@ -9169,6 +9240,10 @@ public class PackageManagerService extends IPackageManager.Stub {
                 if (pkg.applicationInfo != null && isSystemApp(pkg)) {
                     Slog.w(TAG, "Cannot move system application");
                     returnCode = PackageManager.MOVE_FAILED_SYSTEM_PACKAGE;
+				}else if(pkg.applicationInfo.sourceDir != null 
+				      && pkg.applicationInfo.sourceDir.startsWith("/system/preloadapp")){
+                      Slog.w(TAG, "Cannot move preload application: " + pkg.applicationInfo.sourceDir);
+                      returnCode = PackageManager.MOVE_FAILED_INTERNAL_ERROR;
                 } else if (pkg.mOperationPending) {
                     Slog.w(TAG, "Attempt to move package which has pending operations");
                     returnCode = PackageManager.MOVE_FAILED_OPERATION_PENDING;

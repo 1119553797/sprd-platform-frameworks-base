@@ -317,6 +317,8 @@ int initialize_globals() {
     android_system_dirs.dirs[0].path = system_app_path;
     android_system_dirs.dirs[0].len = strlen(system_app_path);
 
+    android_app_preload_dir.path = "/system/preloadapp/";
+    android_app_preload_dir.len = strlen(android_app_preload_dir.path);
     // vendor
     // TODO replace this with an environment variable (doesn't exist yet)
     android_system_dirs.dirs[1].path = "/vendor/app/";

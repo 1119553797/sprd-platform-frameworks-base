@@ -89,6 +89,7 @@ typedef struct {
 
 extern dir_rec_t android_app_dir;
 extern dir_rec_t android_app_private_dir;
+extern dir_rec_t android_app_preload_dir;
 extern dir_rec_t android_data_dir;
 extern dir_rec_t android_asec_dir;
 extern dir_rec_array_t android_system_dirs;
