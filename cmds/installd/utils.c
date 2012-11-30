@@ -421,6 +421,8 @@ int validate_apk_path(const char *path)
     } else if (!strncmp(path, android_asec_dir.path, android_asec_dir.len)) {
         dir_len = android_asec_dir.len;
         allowsubdir = 1;
+    } else if (!strncmp(path, android_app_preload_dir.path, android_app_preload_dir.len)) {
+        dir_len = android_app_preload_dir.len;
     } else {
         ALOGE("invalid apk path '%s' (bad prefix)\n", path);
         return -1;
