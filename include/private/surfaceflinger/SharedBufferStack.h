@@ -183,12 +183,29 @@ protected:
     status_t updateCondition(T update);
 };
 
+#define TIMEOUT_LIMIT_T 500 //bug67304
 template <typename T>
 status_t SharedBufferBase::updateCondition(T update) {
     SharedClient& client( *mSharedClient );
-    Mutex::Autolock _l(client.lock);
+	//modified for bug67304 begin
+      int timeout = 0;
+
+    do {
+        if (!client.lock.tryLock()) 
+        break;
+        timeout++;
+        usleep(20000); //20ms
+    } while (timeout < TIMEOUT_LIMIT_T);
+
+    if(timeout == TIMEOUT_LIMIT_T)
+    {
+        return -1;
+    }
+   	
     ssize_t result = update();
-    client.cv.broadcast();    
+    client.cv.broadcast();   
+    client.lock.unlock();
+    //modified for bug67304 end
     return result;
 }
 
