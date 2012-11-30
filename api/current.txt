@@ -15707,11 +15707,12 @@ package android.os {
     method public static java.io.File getDataDirectory();
     method public static java.io.File getDownloadCacheDirectory();
     method public static java.io.File getExternalStorageDirectory();
-    method public static java.io.File getExternalStorageDirectorySd();
     method public static java.io.File getExternalStoragePublicDirectory(java.lang.String);
     method public static java.lang.String getExternalStorageState();
-    method public static java.lang.String getExternalStorageStateSd();
     method public static java.io.File getRootDirectory();
+    method public static java.io.File getSecondStorageDirectory();
+    method public static java.lang.String getSecondStorageState();
+    method public static int getSecondStorageType();
     method public static boolean isExternalStorageEmulated();
     method public static boolean isExternalStorageRemovable();
     field public static java.lang.String DIRECTORY_ALARMS;
@@ -15732,6 +15733,9 @@ package android.os {
     field public static final java.lang.String MEDIA_SHARED = "shared";
     field public static final java.lang.String MEDIA_UNMOUNTABLE = "unmountable";
     field public static final java.lang.String MEDIA_UNMOUNTED = "unmounted";
+    field public static final int SECOND_STORAGE_TYPE_EXTERNAL = 2; // 0x2
+    field public static final int SECOND_STORAGE_TYPE_INTERNAL = 1; // 0x1
+    field public static final int SECOND_STORAGE_TYPE_NAND = 0; // 0x0
   }
 
   public abstract class FileObserver {
