@@ -48,6 +48,7 @@
 #include <GLES/gl.h>
 #include <GLES/glext.h>
 #include <EGL/eglext.h>
+#include <system/audio.h>
 
 #include "BootAnimation.h"
 
@@ -405,6 +406,7 @@ bool BootAnimation::movie()
 
     Animation animation;
 
+    soundplay();
     // Parse the description file
     for (;;) {
         const char* endl = strstr(s, "\n");
@@ -568,7 +570,96 @@ bool BootAnimation::movie()
         }
     }
 
+    soundstop();
     return false;
+}
+
+bool BootAnimation::soundplay()
+{
+	mp = NULL;
+
+	if(soundpath.length() == 0){
+
+		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "sound resource is not right.");
+		return false;
+	}
+
+	int fd = open(soundpath.string(), O_RDONLY);
+
+	if(fd == -1){
+
+		__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "boot animation play default source.");
+
+		close(fd);
+
+		fd = open(sound_default_path.string(),O_RDONLY);
+
+		if(fd == -1){
+
+			close(fd);
+			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "can not find bootanimation resource....");
+			return false;
+		}
+	}
+	//__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "path = %s fd = %d", soundpath.string(), fd);
+	//AudioSystem::setForceUse((audio_policy_force_use_t)1,(audio_policy_forced_cfg_t)1);// for media,force speaker.
+
+	mp = new MediaPlayer();
+	mp->setDataSource(fd, 0, 0x7ffffffffffffffLL);
+	mp->setAudioStreamType(AUDIO_STREAM_MUSIC);
+	mp->prepare();
+	mp->start();
+	return false;
+}
+
+bool BootAnimation::soundstop()
+{
+	if(soundpath.length() == 0){
+		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "no sound resource ");
+		return false;
+	}
+
+	if(mp != NULL)mp->stop();
+	return false;
+}
+
+bool BootAnimation::setsoundpath(String8 path)
+{
+	//__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "path = %s", path.string());
+	soundpath = path;
+	return false;
+}
+
+bool BootAnimation::setmoviepath(String8 path)
+{
+	//__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "moviepath = %s", path.string());
+	moviepath = path;
+	return false;
+}
+
+bool BootAnimation::setdescname(String8 path)
+{
+	//__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "descname = %s", path.string());
+	descname = path;
+	return false;
+}
+
+bool BootAnimation::setsoundpath_default(String8 path)
+{
+	sound_default_path  = path;
+	return false;
+}
+
+bool BootAnimation::setmoviepath_default(String8 path)
+{
+	movie_default_path = path;
+	return false;
+}
+
+bool BootAnimation::setdescname_default(String8 path)
+{
+	descname_default = path;
+	return false;
 }
 
 // ---------------------------------------------------------------------------

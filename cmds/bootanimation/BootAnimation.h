@@ -26,9 +26,23 @@
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
+/*added boot and shutdown animation */
+#include <fcntl.h>
+#include <media/mediaplayer.h>
+/*added boot and shutdown animation ---*/
+
 class SkBitmap;
 
 namespace android {
+/*added boot and shutdown animation ,define  path here*/
+#define BOOTANIMATION_BOOT_FILM_PATH_DEFAULT		"/system/media/bootanimation.zip"
+#define BOOTANIMATION_SHUTDOWN_FILM_PATH_DEFAULT	"/system/media/shutdownanimation.zip"
+
+#define BOOTANIMATION_BOOT_SOUND_PATH_DEFAULT		"/system/media/bootsound.mp3"
+#define BOOTANIMATION_SHUTDOWN_SOUND_PATH_DEFAULT	"/system/media/shutdownsound.mp3"
+
+
+#define BOOTANIMATION_PATHSET_MAX	100
 
 class Surface;
 class SurfaceComposerClient;
@@ -43,6 +57,14 @@ public:
     virtual     ~BootAnimation();
 
     sp<SurfaceComposerClient> session() const;
+
+	bool setsoundpath(String8 path);
+	bool setmoviepath(String8 path);
+	bool setdescname(String8 path);
+
+	bool setsoundpath_default(String8 path);
+	bool setmoviepath_default(String8 path);
+	bool setdescname_default(String8 path);
 
 private:
     virtual bool        threadLoop();
@@ -82,6 +104,19 @@ private:
     status_t initTexture(void* buffer, size_t len);
     bool android();
     bool movie();
+
+/*added boot and shutdown animation ,next function and param is metioned*/
+    bool soundplay();
+    bool soundstop();
+    sp<MediaPlayer> mp;
+    String8		soundpath;
+    String8		moviepath;
+    String8		descname;
+    String8 		movie_default_path;
+    String8 		sound_default_path;
+    String8		descname_default;
+
+/*added boot and shutdown animation ---*/
 
     void checkExit();
 
