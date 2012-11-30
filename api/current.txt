@@ -17559,8 +17559,8 @@ package android.provider {
     field public static final android.net.Uri CONTENT_URI;
     field public static final java.lang.String CONTENT_VCARD_TYPE = "text/x-vcard";
     field public static final android.net.Uri CONTENT_VCARD_URI;
-    field public static final java.lang.String DISPLAY_ACCOUNT_NAME = "display_account_name";
-    field public static final java.lang.String DISPLAY_ACCOUNT_TYPE = "display_account_type";
+    field public static final java.lang.String DISPLAY_ACCOUNT_NAME = "account_name";
+    field public static final java.lang.String DISPLAY_ACCOUNT_TYPE = "account_type";
   }
 
   public static final class ContactsContract.Contacts.AggregationSuggestions implements android.provider.BaseColumns android.provider.ContactsContract.ContactOptionsColumns android.provider.ContactsContract.ContactStatusColumns android.provider.ContactsContract.ContactsColumns {
@@ -17656,8 +17656,8 @@ package android.provider {
     field public static final android.net.Uri CONTENT_URI;
     field public static final long DEFAULT = 0L; // 0x0L
     field public static final java.lang.String DIRECTORY_AUTHORITY = "authority";
-    field public static final java.lang.String DISPLAY_ACCOUNT_NAME = "display_account_name";
-    field public static final java.lang.String DISPLAY_ACCOUNT_TYPE = "display_account_type";
+    field public static final java.lang.String DISPLAY_ACCOUNT_NAME = "account_name";
+    field public static final java.lang.String DISPLAY_ACCOUNT_TYPE = "account_type";
     field public static final java.lang.String DISPLAY_NAME = "displayName";
     field public static final java.lang.String EXPORT_SUPPORT = "exportSupport";
     field public static final int EXPORT_SUPPORT_ANY_ACCOUNT = 2; // 0x2
