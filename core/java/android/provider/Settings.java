@@ -2992,6 +2992,36 @@ public final class Settings {
         public static final String TETHER_SUPPORTED = "tether_supported";
 
         /**
+         * Used to indicate wether usb tethered - defaults to false
+         * @hide
+         */
+        public static final String USB_TETHERED = "usb_tethered";
+        
+        /**
+         * Used to disable cdrom on a device - defaults to false
+         * @hide
+         */
+        public static final String CDROM_ENABLED = "cdrom_enabled";
+
+        /**
+         * Used to disable vser,gser on a device - defaults to false
+         * @hide
+         */
+        public static final String VSER_GSER_ENABLED = "vser_gser_enabled";
+        
+        /**
+         * Used to disable vser on a device - defaults to true
+         * @hide
+         */
+        public static final String VSER_ENABLED = "vser_enabled";
+        
+        /**
+         * Used to disable gser on a device - defaults to true
+         * @hide
+         */
+        public static final String GSER_ENABLED = "gser_enabled";
+        
+        /**
          * Used to require DUN APN on the device or not - defaults to a build config value
          * which defaults to false
          * @hide
