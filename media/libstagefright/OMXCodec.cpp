@@ -28,10 +28,16 @@
 #include "include/AMRWBDecoder.h"
 #include "include/AMRWBEncoder.h"
 #include "include/AVCDecoder.h"
+#ifdef BUILD_SPRD_AVC
+#include "include/AVCSPRDDecoder.h"
+#endif
 #include "include/AVCEncoder.h"
 #include "include/IMAADPCMDecoder.h"
 #include "include/G711Decoder.h"
 #include "include/M4vH263Decoder.h"
+#ifdef BUILD_SPRD_M4VH263
+#include "include/M4vH263SPRDDecoder.h"
+#endif
 #include "include/M4vH263Encoder.h"
 //#include "include/MP3Decoder.h"
 #include "include/MP3SPRDDecoder.h"
@@ -103,6 +109,12 @@ FACTORY_CREATE_ENCODER(M4vH263Encoder)
 #ifdef BUILD_SPRD_AAC
 FACTORY_CREATE(AACSPRDDecoder)
 #endif
+#ifdef BUILD_SPRD_AVC
+FACTORY_CREATE(AVCSPRDDecoder)
+#endif
+#ifdef BUILD_SPRD_M4VH263
+FACTORY_CREATE(M4vH263SPRDDecoder)
+#endif
 
 static sp<MediaSource> InstantiateSoftwareEncoder(
         const char *name, const sp<MediaSource> &source,
@@ -145,9 +157,15 @@ static sp<MediaSource> InstantiateSoftwareCodec(
         FACTORY_REF(AACSPRDDecoder)
 #endif        
         FACTORY_REF(AVCDecoder)
+#ifdef BUILD_SPRD_AVC        
+        FACTORY_REF(AVCSPRDDecoder)
+#endif        
         FACTORY_REF(IMAADPCMDecoder)
         FACTORY_REF(G711Decoder)
         FACTORY_REF(M4vH263Decoder)
+#ifdef BUILD_SPRD_M4VH263 
+	FACTORY_REF(M4vH263SPRDDecoder)
+#endif
         FACTORY_REF(VorbisDecoder)
         FACTORY_REF(VPXDecoder)
     };
@@ -195,12 +213,18 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.TI.Video.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.SEC.MPEG4.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.PV.mpeg4dec" },//@zha
+#ifdef BUILD_SPRD_M4VH263    
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "M4vH263SPRDDecoder" },
+#endif    
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "M4vH263Decoder" },
 //    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.PV.mpeg4dec" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.7x30.video.decoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.video.decoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.H263.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.PV.h263dec" },//@zha
+#ifdef BUILD_SPRD_M4VH263    
+    { MEDIA_MIMETYPE_VIDEO_H263, "M4vH263SPRDDecoder" },
+#endif
     { MEDIA_MIMETYPE_VIDEO_H263, "M4vH263Decoder" },
 //    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.PV.h263dec" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.7x30.video.decoder.avc" },
@@ -208,6 +232,9 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.TI.Video.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.SEC.AVC.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.PV.avcdec" },//@zha
+#ifdef BUILD_SPRD_AVC       
+    { MEDIA_MIMETYPE_VIDEO_AVC, "AVCSPRDDecoder" },
+#endif    
     { MEDIA_MIMETYPE_VIDEO_AVC, "AVCDecoder" },
 //    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.PV.avcdec" },
     { MEDIA_MIMETYPE_AUDIO_VORBIS, "VorbisDecoder" },
