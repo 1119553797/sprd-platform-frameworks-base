@@ -1294,4 +1294,10 @@
     <string name="china_mobile_numeric_values">中国移动</string>
     <string name="china_unicom_numeric_values">中国联通</string>
     <string name="ActiveConCf" msgid="">"有条件呼叫转移启动"</string>
+    <string name="UnConditionCfMmi" msgid="">"无条件来电转接"</string>
+    <string name="ConditionCfMmi" msgid="">"所有条件来电转接"</string>
+    <string name="ActiveUnconCf" msgid="">"无条件呼叫转移启动"</string>
+    <string name="CallForwarded" msgid="">"呼叫已转移"</string>
+    <string name="IncomingCallForwarded" msgid="">"来电被转移"</string>
+    <string name="ForwardedCall" msgid="">"转移呼叫"</string>
 </resources>
