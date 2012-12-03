@@ -56,6 +56,7 @@ import android.location.ICountryDetector;
 import android.location.ILocationManager;
 import android.location.LocationManager;
 import android.media.AudioManager;
+import android.hardware.fm.FmManager;
 import android.media.MediaRouter;
 import android.net.ConnectivityManager;
 import android.net.IConnectivityManager;
@@ -288,6 +289,11 @@ class ContextImpl extends Context {
         registerService(AUDIO_SERVICE, new ServiceFetcher() {
                 public Object createService(ContextImpl ctx) {
                     return new AudioManager(ctx);
+                }});
+
+        registerService(FM_SERVICE, new ServiceFetcher() {
+                public Object createService(ContextImpl ctx) {
+                    return new FmManager(ctx);
                 }});
 
         registerService(MEDIA_ROUTER_SERVICE, new ServiceFetcher() {

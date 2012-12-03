@@ -1798,6 +1798,15 @@ public abstract class Context {
 
     /**
      * Use with {@link #getSystemService} to retrieve a
+     * {@link android.hardware.fm.FmManager} for handling management of volume and audio routing.
+     *
+     * @see #getSystemService
+     * @see android.hardware.fm.FmManager
+     */
+    public static final String FM_SERVICE = "fm";
+
+    /**
+     * Use with {@link #getSystemService} to retrieve a
      * {@link android.media.MediaRouter} for controlling and managing
      * routing of media.
      *
