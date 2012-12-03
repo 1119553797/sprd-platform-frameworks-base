@@ -1690,7 +1690,56 @@ public class PhoneNumberUtils
      *         listed in the RIL / sim, otherwise return false.
      */
     private static boolean isEmergencyNumberInternal(String number, boolean useExactMatch) {
-        return isEmergencyNumberInternal(number, null, useExactMatch);
+        // If the number passed in is null, just return false:
+        if (number == null) return false;
+
+        // If the number passed in is a SIP address, return false, since the
+        // concept of "emergency numbers" is only meaningful for calls placed
+        // over the cell network.
+        // (Be sure to do this check *before* calling extractNetworkPortionAlt(),
+        // since the whole point of extractNetworkPortionAlt() is to filter out
+        // any non-dialable characters (which would turn 'abc911def@example.com'
+        // into '911', for example.))
+        if (isUriNumber(number)) {
+            return false;
+        }
+
+        // Strip the separators from the number before comparing it
+        // to the list.
+        number = extractNetworkPortionAlt(number);
+
+        // retrieve the list of emergency numbers
+        // check read-write ecclist property first
+        String numbers = SystemProperties.get("ril.ecclist");
+        if (TextUtils.isEmpty(numbers)) {
+            // then read-only ecclist property since old RIL only uses this
+            numbers = SystemProperties.get("ro.ril.ecclist");
+        }
+
+        if (!TextUtils.isEmpty(numbers)) {
+            // searches through the comma-separated list for a match,
+            // return true if one is found.
+            for (String emergencyNum : numbers.split(",")) {
+                if (useExactMatch) {
+                    if (number.equals(emergencyNum)) {
+                        return true;
+                    }
+                } else {
+                    if (number.startsWith(emergencyNum)) {
+                        return true;
+                    }
+                }
+            }
+            // no matches found against the list!
+            return false;
+        }
+
+        // No ecclist system property, so use our own list.
+        if (useExactMatch) {
+            return (number.equals("112") || number.equals("911"));
+        } else {
+            return (number.startsWith("112") || number.startsWith("911"));
+        }
     }
 
     /**
@@ -1753,70 +1802,28 @@ public class PhoneNumberUtils
     private static boolean isEmergencyNumberInternal(String number,
                                                      String defaultCountryIso,
                                                      boolean useExactMatch) {
-        // If the number passed in is null, just return false:
-        if (number == null) return false;
-
-        // If the number passed in is a SIP address, return false, since the
-        // concept of "emergency numbers" is only meaningful for calls placed
-        // over the cell network.
-        // (Be sure to do this check *before* calling extractNetworkPortionAlt(),
-        // since the whole point of extractNetworkPortionAlt() is to filter out
-        // any non-dialable characters (which would turn 'abc911def@example.com'
-        // into '911', for example.))
-        if (isUriNumber(number)) {
-            return false;
-        }
-
-        // Strip the separators from the number before comparing it
-        // to the list.
-        number = extractNetworkPortionAlt(number);
-
-        // retrieve the list of emergency numbers
-        // check read-write ecclist property first
-        String numbers = SystemProperties.get("ril.ecclist");
-        if (TextUtils.isEmpty(numbers)) {
-            // then read-only ecclist property since old RIL only uses this
-            numbers = SystemProperties.get("ro.ril.ecclist");
-        }
-
-        if (!TextUtils.isEmpty(numbers)) {
-            // searches through the comma-separated list for a match,
-            // return true if one is found.
-            for (String emergencyNum : numbers.split(",")) {
-                // It is not possible to append additional digits to an emergency number to dial
-                // the number in Brazil - it won't connect.
-                if (useExactMatch || "BR".equalsIgnoreCase(defaultCountryIso)) {
-                    if (number.equals(emergencyNum)) {
-                        return true;
-                    }
-                } else {
-                    if (number.startsWith(emergencyNum)) {
-                        return true;
-                    }
-                }
+        PhoneNumberUtil util = PhoneNumberUtil.getInstance();
+        try {
+            PhoneNumber pn = util.parse(number, defaultCountryIso);
+            // libphonenumber guarantees short numbers such as emergency numbers are classified as
+            // invalid. Therefore, if the number passes the validation test, we believe it is not an
+            // emergency number.
+            // TODO: Compare against a list of country-specific known emergency numbers instead, once
+            // that has been collected.
+            if (util.isValidNumber(pn)) {
+                return false;
+            } else if ("BR".equalsIgnoreCase(defaultCountryIso) && number.length() >= 8) {
+                // This is to prevent Brazilian local numbers which start with 911 being incorrectly
+                // classified as emergency numbers. 911 is not an emergency number in Brazil; it is also
+                // not possible to append additional digits to an emergency number to dial the number in
+                // Brazil - it won't connect.
+                // TODO: Clean this up once a list of country-specific known emergency numbers is
+                // collected.
+                return false;
             }
-            // no matches found against the list!
-            return false;
+        } catch (NumberParseException e) {
         }
-
-        Log.d(LOG_TAG, "System property doesn't provide any emergency numbers."
-                + " Use embedded logic for determining ones.");
-
-        // No ecclist system property, so use our own list.
-        if (defaultCountryIso != null) {
-            ShortNumberUtil util = new ShortNumberUtil();
-            if (useExactMatch) {
-                return util.isEmergencyNumber(number, defaultCountryIso);
-            } else {
-                return util.connectsToEmergencyNumber(number, defaultCountryIso);
-            }
-        } else {
-            if (useExactMatch) {
-                return (number.equals("112") || number.equals("911"));
-            } else {
-                return (number.startsWith("112") || number.startsWith("911"));
-            }
-        }
+        return isEmergencyNumber(number);
     }
 
     /**
