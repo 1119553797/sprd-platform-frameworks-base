@@ -1421,6 +1421,30 @@ public abstract class GSMPhone extends PhoneBase {
                 }
                 break;
 
+            case EVENT_GET_CALL_BARRING_DONE:
+                ar = (AsyncResult)msg.obj;
+                if (ar.exception == null) {
+                    //handleCfuQueryResult((CallForwardInfo[])ar.result);
+                }
+                onComplete = (Message) ar.userObj;
+                if (onComplete != null) {
+                    AsyncResult.forMessage(onComplete, ar.result, ar.exception);
+                    onComplete.sendToTarget();
+                }
+                break;
+
+            case EVENT_CHANGE_CALL_BARRING_PASSWORD_DONE:
+                ar = (AsyncResult)msg.obj;
+                if (ar.exception == null) {
+                    //mSIMRecords.setVoiceCallForwardingFlag(1, msg.arg1 == 1);
+                }
+                onComplete = (Message) ar.userObj;
+                if (onComplete != null) {
+                    AsyncResult.forMessage(onComplete, ar.result, ar.exception);
+                    onComplete.sendToTarget();
+                }
+                break;
+
             case EVENT_SET_VM_NUMBER_DONE:
                 ar = (AsyncResult)msg.obj;
                 if (IccVmNotSupportedException.class.isInstance(ar.exception)) {
