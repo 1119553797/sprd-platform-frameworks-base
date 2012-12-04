@@ -1302,6 +1302,24 @@ public final class Telephony {
          * <P>Type: INTEGER</P>
          */
         public static final String PHONE_ID = "phone_id";
+
+        //add by liuyang start ,update search
+		/**
+		 * The Recipient addresses of the message
+		 * <P>
+		 * Type: INTEGER
+		 * </P>
+		 */
+		public static final String RECIPIENT_ADDRESSES = "recipient_addresses";
+
+		/**
+		 * The Recipient names of the message
+		 * <P>
+		 * Type: INTEGER
+		 * </P>
+		 */
+		public static final String RECIPIENT_NAMES = "recipient_names";
+        //add by liuyang end ,update search
     }
 
     /**
@@ -1330,11 +1348,19 @@ public final class Telephony {
          * messages.
          */
         public static long getOrCreateThreadId(Context context, String recipient) {
-            Set<String> recipients = new HashSet<String>();
-
-            recipients.add(recipient);
-            return getOrCreateThreadId(context, recipients);
+            return getOrCreateThreadId(context, recipient, "");
         }
+
+        /*@hide*/
+        public static long getOrCreateThreadId(Context context, String recipient, String name) {
+            Set<String> recipients = new HashSet<String>();
+            recipients.add(recipient);
+
+            Set<String> names = new HashSet<String>();
+            names.add(name);
+            return getOrCreateThreadId(context, recipients, names);
+        }
+
 
         /**
          * Given the recipients list and subject of an unsaved message,
@@ -1348,22 +1374,38 @@ public final class Telephony {
          */
         public static long getOrCreateThreadId(
                 Context context, Set<String> recipients) {
+            return getOrCreateThreadId(context, recipients, new HashSet<String>());
+        }
+
+        /*@hide*/
+        public static long getOrCreateThreadId(
+                Context context, Set<String> recipients, Set<String> recipientNames) {
             Uri.Builder uriBuilder = THREAD_ID_CONTENT_URI.buildUpon();
 
             for (String recipient : recipients) {
                 if (Mms.isEmailAddress(recipient)) {
                     recipient = Mms.extractAddrSpec(recipient);
                 }
-
                 uriBuilder.appendQueryParameter("recipient", recipient);
             }
+
+            for (String name : recipientNames) {
+                uriBuilder.appendQueryParameter("recipientNames", name);
+            }
+
+            // update threads.
+            SqliteWrapper.delete(context, context.getContentResolver(), OBSOLETE_THREADS_URI, null, null);
 
             Uri uri = uriBuilder.build();
             //if (DEBUG) Log.v(TAG, "getOrCreateThreadId uri: " + uri);
 
             Cursor cursor = SqliteWrapper.query(context, context.getContentResolver(),
                     uri, ID_PROJECTION, null, null, null);
+
             if (cursor != null) {
+                if (DEBUG) {
+                    Log.v(TAG, "getOrCreateThreadId cursor cnt: " + cursor.getCount());
+                }
                 try {
                     if (cursor.moveToFirst()) {
                         return cursor.getLong(0);
