@@ -1095,14 +1095,12 @@ public abstract class DataConnectionTracker extends Handler {
                 }
             }
             if (didDisable) {
-                if ((enabledCount == 0) || (apnId == APN_DUN_ID)) {
-                    mRequestedApnType = Phone.APN_TYPE_DEFAULT;
-                    onCleanUpConnection(true, apnId, Phone.REASON_DATA_DISABLED);
-                }
+                mRequestedApnType = Phone.APN_TYPE_DEFAULT;
+                onCleanUpConnection(true, apnId, Phone.REASON_DATA_DISABLED);
 
                 // send the disconnect msg manually, since the normal route wont send
                 // it (it's not enabled)
-                notifyApnIdDisconnected(Phone.REASON_DATA_DISABLED, apnId);
+                //notifyApnIdDisconnected(Phone.REASON_DATA_DISABLED, apnId);
                 if (dataEnabled[APN_DEFAULT_ID] == true
                         && !isApnTypeActive(Phone.APN_TYPE_DEFAULT)) {
                     // TODO - this is an ugly way to restore the default conn - should be done
