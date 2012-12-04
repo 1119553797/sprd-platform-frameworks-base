@@ -89,8 +89,6 @@ extern int register_android_media_ToneGenerator(JNIEnv *env);
 
 extern int register_android_util_FloatMath(JNIEnv* env);
 
-extern int register_android_hardware_fm_FmJni(JNIEnv* env);
-
 namespace android {
 
 /*
@@ -1198,8 +1196,6 @@ static const RegJNIRec gRegJNI[] = {
 
     REG_JNI(register_android_animation_PropertyValuesHolder),
     REG_JNI(register_com_android_internal_content_NativeLibraryHelper),
-
-    REG_JNI(register_android_hardware_fm_FmJni),
 };
 
 /*
