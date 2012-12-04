@@ -5339,7 +5339,6 @@ package android.content {
     field public static final java.lang.String DEVICE_POLICY_SERVICE = "device_policy";
     field public static final java.lang.String DOWNLOAD_SERVICE = "download";
     field public static final java.lang.String DROPBOX_SERVICE = "dropbox";
-    field public static final java.lang.String FM_SERVICE = "fm";
     field public static final java.lang.String INPUT_METHOD_SERVICE = "input_method";
     field public static final java.lang.String INPUT_SERVICE = "input";
     field public static final java.lang.String KEYGUARD_SERVICE = "keyguard";
@@ -9925,96 +9924,6 @@ package android.hardware {
     field public static final deprecated int SENSOR_TEMPERATURE = 4; // 0x4
     field public static final deprecated int SENSOR_TRICORDER = 64; // 0x40
     field public static final float STANDARD_GRAVITY = 9.80665f;
-  }
-
-}
-
-package android.hardware.fm {
-
-  public class FmConsts {
-    ctor public FmConsts();
-    field public static final int FM_STATE_INVALID_VALUE = -1048576; // 0xfff00000
-    field public static final int FM_STATE_NO_ERROR = 0; // 0x0
-    field public static final int FM_STATE_UNINITIALIZED = -1024; // 0xfffffc00
-    field public static final int FM_STATE_UNKNOWN = -1073741824; // 0xc0000000
-  }
-
-  public static final class FmConsts.FmAudioMode extends java.lang.Enum {
-    method public static android.hardware.fm.FmConsts.FmAudioMode valueOf(java.lang.String);
-    method public static final android.hardware.fm.FmConsts.FmAudioMode[] values();
-    enum_constant public static final android.hardware.fm.FmConsts.FmAudioMode FM_AUDIO_MODE_AUTO;
-    enum_constant public static final android.hardware.fm.FmConsts.FmAudioMode FM_AUDIO_MODE_MONO;
-    enum_constant public static final android.hardware.fm.FmConsts.FmAudioMode FM_AUDIO_MODE_STEREO;
-    enum_constant public static final android.hardware.fm.FmConsts.FmAudioMode FM_AUDIO_MODE_UNKNOWN;
-  }
-
-  public static final class FmConsts.FmAudioPath extends java.lang.Enum {
-    method public static android.hardware.fm.FmConsts.FmAudioPath valueOf(java.lang.String);
-    method public static final android.hardware.fm.FmConsts.FmAudioPath[] values();
-    enum_constant public static final android.hardware.fm.FmConsts.FmAudioPath FM_AUDIO_PATH_HEADSET;
-    enum_constant public static final android.hardware.fm.FmConsts.FmAudioPath FM_AUDIO_PATH_NONE;
-    enum_constant public static final android.hardware.fm.FmConsts.FmAudioPath FM_AUDIO_PATH_SPEAKER;
-    enum_constant public static final android.hardware.fm.FmConsts.FmAudioPath FM_AUDIO_PATH_UNKNOWN;
-  }
-
-  public static final class FmConsts.FmBand extends java.lang.Enum {
-    method public static android.hardware.fm.FmConsts.FmBand valueOf(java.lang.String);
-    method public static final android.hardware.fm.FmConsts.FmBand[] values();
-    enum_constant public static final android.hardware.fm.FmConsts.FmBand FM_BAND_EU;
-    enum_constant public static final android.hardware.fm.FmConsts.FmBand FM_BAND_JP_STD;
-    enum_constant public static final android.hardware.fm.FmConsts.FmBand FM_BAND_JP_WIDE;
-    enum_constant public static final android.hardware.fm.FmConsts.FmBand FM_BAND_NA;
-    enum_constant public static final android.hardware.fm.FmConsts.FmBand FM_BAND_UNKNOWN;
-  }
-
-  public static final class FmConsts.FmMuteMode extends java.lang.Enum {
-    method public static android.hardware.fm.FmConsts.FmMuteMode valueOf(java.lang.String);
-    method public static final android.hardware.fm.FmConsts.FmMuteMode[] values();
-    enum_constant public static final android.hardware.fm.FmConsts.FmMuteMode FM_MUTE_MODE_MUTE;
-    enum_constant public static final android.hardware.fm.FmConsts.FmMuteMode FM_MUTE_MODE_UNKNOWN;
-    enum_constant public static final android.hardware.fm.FmConsts.FmMuteMode FM_MUTE_MODE_UNMUTE;
-  }
-
-  public static final class FmConsts.FmSearchDirection extends java.lang.Enum {
-    method public static android.hardware.fm.FmConsts.FmSearchDirection valueOf(java.lang.String);
-    method public static final android.hardware.fm.FmConsts.FmSearchDirection[] values();
-    enum_constant public static final android.hardware.fm.FmConsts.FmSearchDirection FM_SEARCH_DOWN;
-    enum_constant public static final android.hardware.fm.FmConsts.FmSearchDirection FM_SEARCH_UP;
-  }
-
-  public static final class FmConsts.FmStepType extends java.lang.Enum {
-    method public static android.hardware.fm.FmConsts.FmStepType valueOf(java.lang.String);
-    method public static final android.hardware.fm.FmConsts.FmStepType[] values();
-    enum_constant public static final android.hardware.fm.FmConsts.FmStepType FM_STEP_100KHZ;
-    enum_constant public static final android.hardware.fm.FmConsts.FmStepType FM_STEP_50KHZ;
-    enum_constant public static final android.hardware.fm.FmConsts.FmStepType FM_STEP_UNKNOWN;
-  }
-
-  public class FmManager {
-    ctor public FmManager(android.content.Context);
-    method public boolean cancelSearch();
-    method public android.hardware.fm.FmConsts.FmAudioMode getAudioMode();
-    method public android.hardware.fm.FmConsts.FmAudioPath getAudioPath();
-    method public android.hardware.fm.FmConsts.FmBand getBand();
-    method public int getError();
-    method public int getFreq();
-    method public int getRssi();
-    method public android.hardware.fm.FmConsts.FmStepType getStepType();
-    method public int getVolume();
-    method public boolean isFmOn();
-    method public boolean isMuted();
-    method public boolean mute();
-    method public boolean powerDown();
-    method public boolean powerUp();
-    method public boolean setAudioMode(android.hardware.fm.FmConsts.FmAudioMode);
-    method public boolean setAudioPath(android.hardware.fm.FmConsts.FmAudioPath);
-    method public boolean setBand(android.hardware.fm.FmConsts.FmBand);
-    method public boolean setFreq(int);
-    method public boolean setRssi(int);
-    method public boolean setStepType(android.hardware.fm.FmConsts.FmStepType);
-    method public boolean setVolume(int);
-    method public boolean startSearch(int, android.hardware.fm.FmConsts.FmSearchDirection, int);
-    method public boolean unmute();
   }
 
 }

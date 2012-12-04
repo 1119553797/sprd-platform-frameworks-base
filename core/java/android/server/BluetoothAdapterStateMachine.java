@@ -465,23 +465,12 @@ final class BluetoothAdapterStateMachine extends StateMachine {
                             transitionTo(mHotOff);
                             mBluetoothService.finishDisable();
                             mBluetoothService.cleanupAfterFinishDisable();
-                            // BTL-Z Quick switch modification: BlueZ turns cold and then hot
-                            // immediately when turning off BT. BTL-Z skips turning cold.
-                            /*
                             deferMessage(obtainMessage(TURN_COLD));
                             if (mContext.getResources().getBoolean
                                 (com.android.internal.R.bool.config_bluetooth_adapter_quick_switch) &&
                                 !mBluetoothService.isAirplaneModeOn()) {
                                 deferMessage(obtainMessage(TURN_HOT));
                                 mDelayBroadcastStateOff = true;
-                            }
-                            */
-                            if (!mContext.getResources().getBoolean
-                                (com.android.internal.R.bool.config_bluetooth_adapter_quick_switch) ||
-                                mBluetoothService.isAirplaneModeOn()) {
-                                deferMessage(obtainMessage(TURN_COLD));
-                            } else {
-                                broadcastState(BluetoothAdapter.STATE_OFF);
                             }
                         }
                     } else {
