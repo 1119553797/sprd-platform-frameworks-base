@@ -11493,7 +11493,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (!mRestartingServices.contains(r)) {
             mRestartingServices.add(r);
         }
-        
+        r.restartForKill = allowCancel;
         r.cancelNotification();
         
         mHandler.removeCallbacks(r.restarter);
@@ -11517,8 +11517,10 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, "restart service :"+r.packageName);
             if(freeMem < 1024*restartServiceAtMem){
                 Slog.w(TAG, "freeMem < 1024 * "+restartServiceAtMem);
-                r.nextRestartTime += SERVICE_MIN_RESTART_TIME_BETWEEN;
-                mHandler.postAtTime(r.restarter, r.nextRestartTime);
+                /**
+                 * Has been filterd out repeat services in scheduleServiceRestartLocked
+                 */
+                scheduleServiceRestartLocked(r,r.restartForKill);
                 return ;
             }
         }
