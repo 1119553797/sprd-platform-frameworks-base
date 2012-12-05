@@ -146,7 +146,9 @@ public class MimeTypeMap {
             }
         } else if ("text/vnd.wap.wml".equals(mimeType)) {
             // As we don't support wml, render it as plain text
-            mimeType = "text/plain";
+//delete 20121205 Spreadst of wml start
+//            mimeType = "text/plain";
+//delete 20121205 Spreadst of wml end
         } else {
             // It seems that xhtml+xml and vnd.wap.xhtml+xml mime
             // subtypes are used interchangeably. So treat them the same.
