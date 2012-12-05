@@ -342,8 +342,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             case EVENT_RADIO_STATE_CHANGED:
                 // This will do nothing in the radio not
                 // available case
-                setPowerStateToDesired();
-               // setPowerStateToDesired(false);
+//                setPowerStateToDesired();
+                setPowerStateToDesired(false);
                 pollState();
                 break;
 
