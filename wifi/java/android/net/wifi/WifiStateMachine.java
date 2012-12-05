@@ -90,6 +90,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
+import android.os.SystemProperties;
+
 /**
  * Track the state of Wifi connectivity. All event handling is done here,
  * and all changes in connectivity state are initiated here.
@@ -199,7 +201,10 @@ public class WifiStateMachine extends StateMachine {
     // Wakelock held during wifi start/stop and driver load/unload
     private PowerManager.WakeLock mWakeLock;
 
-    private Context mContext;
+    //add by spreadst_lc for cmcc wifi feature
+    private static Context mContext;
+    private boolean supportCMCC = false;
+    //add by spreadst_lc for cmcc wifi feature
 
     private DhcpInfoInternal mDhcpInfoInternal;
     private WifiInfo mWifiInfo;
@@ -555,6 +560,8 @@ public class WifiStateMachine extends StateMachine {
 
         mContext = context;
         mInterfaceName = wlanInterface;
+
+        supportCMCC = SystemProperties.get("ro.operator").equals("cmcc");
 
         mNetworkInfo = new NetworkInfo(ConnectivityManager.TYPE_WIFI, 0, NETWORKTYPE, "");
         mBatteryStats = IBatteryStats.Stub.asInterface(ServiceManager.getService("batteryinfo"));
@@ -2968,8 +2975,15 @@ public class WifiStateMachine extends StateMachine {
                         netId = result.getNetworkId();
                     }
 
-                    if (mWifiConfigStore.selectNetwork(netId) &&
-                            mWifiNative.reconnect()) {
+                    //add by spreadst_lc for cmcc wifi feature start
+                    boolean reconnectOk = false;
+                    if (supportCMCC) {
+                        reconnectOk = mWifiNative.reconnectAPCommand();
+                    } else {
+                        reconnectOk = mWifiNative.reconnect();
+                    }
+                    if (mWifiConfigStore.selectNetwork(netId) && reconnectOk) {
+                    //add by spreadst_lc for cmcc wifi feature end
                         /* The state tracker handles enabling networks upon completion/failure */
                         mSupplicantStateTracker.sendMessage(WifiManager.CONNECT_NETWORK);
                         replyToMessage(message, WifiManager.CONNECT_NETWORK_SUCCEEDED);
@@ -3027,6 +3041,14 @@ public class WifiStateMachine extends StateMachine {
                     break;
                 case WifiMonitor.NETWORK_DISCONNECTION_EVENT:
                     if (DBG) log("Network connection lost");
+                    //add by spreadst_lc for cmcc wifi feature start
+                    SupplicantState mSupplicantState = mWifiInfo.getSupplicantState();
+                    if(supportCMCC && (mSupplicantState == SupplicantState.COMPLETED)) {
+                        Intent interruptIntent = new Intent("interruptforfaraway");
+                        interruptIntent.putExtra("wifi_last_ssid", mWifiInfo.getSSID());
+                        mContext.sendBroadcast(interruptIntent);
+                    }
+                    //add by spreadst_lc for cmcc wifi feature end
                     handleNetworkDisconnect();
                     transitionTo(mDisconnectedState);
                     break;
@@ -3846,4 +3868,49 @@ public class WifiStateMachine extends StateMachine {
     private void loge(String s) {
         Log.e(TAG, s);
     }
+
+    //add wifi api by spreadst_lc start
+    public void setAutoConnect(boolean autoconnect){
+        mWifiNative.setAutoConnectCommand(autoconnect);
+    }
+
+    public synchronized boolean setTrustListPriority(String ssid,int priority){
+        return mWifiNative.setPriorityCommand(ssid, priority);
+    }
+
+    public void disconnectAp(){
+        mWifiNative.disconnectApCommand();
+    }
+
+    /**
+     * Initiate a reconnection to AP
+     *
+     * @return {@code true} if the operation succeeds, {@code false} otherwise
+     */
+    public synchronized boolean reconnectAPCommand() {
+        if (mWifiState.get() != WIFI_STATE_ENABLED) {
+            return false;
+        }
+        return mWifiNative.reconnectAPCommand();
+    }
+
+   public boolean setGprsToWifi(boolean flag){
+       return mWifiNative.setGprsToWifiCommand(flag);
+   }
+
+   public boolean setGprsConnectState(boolean connected){
+       if (mWifiState.get() != WIFI_STATE_ENABLED) {
+           return false;
+       }
+       return mWifiNative.setGprsConnectStateCommand(connected);
+   }
+
+   static void notifyWpsGprsEvent(String ssid,int netWorkid){
+       Intent wifiIntent = new Intent(WifiManager.ACTION_WIFI_TO_GPRS);
+       wifiIntent.putExtra("ssid", ssid);
+       wifiIntent.putExtra("networkid", netWorkid);
+       mContext.sendBroadcast(wifiIntent);
+   }
+   //add wifi api by spreadst_lc end
+
 }

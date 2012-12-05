@@ -79,6 +79,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mValidTables.add("favorites");
         mValidTables.add("gservices");
         mValidTables.add("old_favorites");
+
+        mValidTables.add("trusted_list");//add by spreadst_lc for cmcc wifi feature
+
     }
 
     public DatabaseHelper(Context context) {
@@ -127,6 +130,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "shortcut INTEGER," +
                     "ordering INTEGER" +
                     ");");
+
+        //add by spreadst_lc for cmcc wifi feature start
+        db.execSQL("CREATE TABLE trusted_list (" +
+                "_id INTEGER PRIMARY KEY," +
+                "ssid TEXT UNIQUE ON CONFLICT REPLACE," +
+                "priority INTEGER" +
+                ");");
+        //add by spreadst_lc for cmcc wifi feature end
 
         db.execSQL("CREATE INDEX bookmarksIndex1 ON bookmarks (folder);");
         db.execSQL("CREATE INDEX bookmarksIndex2 ON bookmarks (shortcut);");
@@ -1133,6 +1144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP INDEX IF EXISTS bookmarksIndex1");
             db.execSQL("DROP INDEX IF EXISTS bookmarksIndex2");
             db.execSQL("DROP TABLE IF EXISTS favorites");
+            db.execSQL("DROP TABLE IF EXISTS trusted_list");//add by spreadst_lc for cmcc wifi feature
             onCreate(db);
 
             // Added for diagnosing settings.db wipes after the fact

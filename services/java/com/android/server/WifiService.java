@@ -376,7 +376,11 @@ public class WifiService extends IWifiManager.Stub {
                     @Override
                     public void onReceive(Context context, Intent intent) {
                         mAirplaneModeOn.set(isAirplaneModeOn());
-                        handleAirplaneModeToggled(mAirplaneModeOn.get());
+                        /* On airplane mode disable, restore wifi state if necessary */
+                        if (!mAirplaneModeOn.get() && (testAndClearWifiSavedState() ||
+                            mPersistWifiState.get() == WIFI_ENABLED_AIRPLANE_OVERRIDE)) {
+                                persistWifiState(true);
+                        }
                         updateWifiState();
                     }
                 },
@@ -443,10 +447,7 @@ public class WifiService extends IWifiManager.Stub {
         boolean wifiEnabled = shouldWifiBeEnabled() || testAndClearWifiSavedState();
         Slog.i(TAG, "WifiService starting up with Wi-Fi " +
                 (wifiEnabled ? "enabled" : "disabled"));
-
-        // If we are already disabled (could be due to airplane mode), avoid changing persist
-        // state here
-        if (wifiEnabled) setWifiEnabled(wifiEnabled);
+        setWifiEnabled(wifiEnabled);
 
         mWifiWatchdogStateMachine = WifiWatchdogStateMachine.
                makeWifiWatchdogStateMachine(mContext);
@@ -484,43 +485,26 @@ public class WifiService extends IWifiManager.Stub {
         }
     }
 
-    private void handleWifiToggled(boolean wifiEnabled) {
-        boolean airplaneEnabled = mAirplaneModeOn.get() && isAirplaneToggleable();
-        if (wifiEnabled) {
-            if (airplaneEnabled) {
-                persistWifiState(WIFI_ENABLED_AIRPLANE_OVERRIDE);
-            } else {
-                persistWifiState(WIFI_ENABLED);
-            }
-        } else {
-            // When wifi state is disabled, we do not care
-            // if airplane mode is on or not. The scenario of
-            // wifi being disabled due to airplane mode being turned on
-            // is handled handleAirplaneModeToggled()
-            persistWifiState(WIFI_DISABLED);
-        }
-    }
-
-    private void handleAirplaneModeToggled(boolean airplaneEnabled) {
-        if (airplaneEnabled) {
-            // Wifi disabled due to airplane on
-            if (mWifiEnabled) {
-                persistWifiState(WIFI_DISABLED_AIRPLANE_ON);
-            }
-        } else {
-            /* On airplane mode disable, restore wifi state if necessary */
-            if (testAndClearWifiSavedState() ||
-                    mPersistWifiState.get() == WIFI_ENABLED_AIRPLANE_OVERRIDE) {
-                persistWifiState(WIFI_ENABLED);
-            }
-        }
-    }
-
-    private void persistWifiState(int state) {
+    private void persistWifiState(boolean enabled) {
         final ContentResolver cr = mContext.getContentResolver();
-        mPersistWifiState.set(state);
-        Settings.Secure.putInt(cr, Settings.Secure.WIFI_ON, state);
+        boolean airplane = mAirplaneModeOn.get() && isAirplaneToggleable();
+        if (enabled) {
+            if (airplane) {
+                mPersistWifiState.set(WIFI_ENABLED_AIRPLANE_OVERRIDE);
+            } else {
+                mPersistWifiState.set(WIFI_ENABLED);
+            }
+        } else {
+            if (airplane) {
+                mPersistWifiState.set(WIFI_DISABLED_AIRPLANE_ON);
+            } else {
+                mPersistWifiState.set(WIFI_DISABLED);
+            }
+        }
+
+        Settings.Secure.putInt(cr, Settings.Secure.WIFI_ON, mPersistWifiState.get());
     }
+
 
     /**
      * see {@link android.net.wifi.WifiManager#pingSupplicant()}
@@ -584,6 +568,12 @@ public class WifiService extends IWifiManager.Stub {
             Slog.e(TAG, "Invoking mWifiStateMachine.setWifiEnabled\n");
         }
 
+        //add by spreadst_lc for enable wifi in airplanmode
+        if(enable && (mAirplaneModeOn.get() || isAirplaneModeOn())){
+            return false;
+        }
+        //end by spreadst_lc end
+
         if (enable) {
             reportStartWorkSource();
         }
@@ -594,9 +584,12 @@ public class WifiService extends IWifiManager.Stub {
          * only CHANGE_WIFI_STATE is enforced
          */
 
-        long ident = Binder.clearCallingIdentity();
-        handleWifiToggled(enable);
-        Binder.restoreCallingIdentity(ident);
+        /* Avoids overriding of airplane state when wifi is already in the expected state */
+        if (enable != mWifiEnabled) {
+            long ident = Binder.clearCallingIdentity();
+            persistWifiState(enable);
+            Binder.restoreCallingIdentity(ident);
+        }
 
         if (enable) {
             if (!mIsReceiverRegistered) {
@@ -1772,5 +1765,42 @@ public class WifiService extends IWifiManager.Stub {
         }
     }
 
+    //add by spreadst_lc for cmcc wifi feature start
+    public void setAutoConnect(boolean autoconnect){
+        enforceChangePermission();
+        mWifiStateMachine.setAutoConnect(autoconnect);
+    }
+
+    public boolean setTrustListPriority(String ssid,int priority){
+        enforceChangePermission();
+        return mWifiStateMachine.setTrustListPriority(ssid,priority);
+    }
+
+    public void disconnectAp(){
+        enforceChangePermission();
+        mWifiStateMachine.disconnectAp();
+    }
+
+    /**
+     * see {@link android.net.wifi.WifiManager#reconnect()}
+     * @return {@code true} if the operation succeeds
+     */
+    public boolean reconnectAP() {
+        enforceChangePermission();
+
+        return mWifiStateMachine.reconnectAPCommand();
+    }
+
+    public boolean setGprsConnectState(boolean connected){
+        if (mAirplaneModeOn.get()) {
+            return false;
+        }
+        return mWifiStateMachine.setGprsConnectState(connected);
+    }
+
+    public boolean setGprsToWifi(boolean flag){
+        return mWifiStateMachine.setGprsToWifi(flag);
+    }
+    //add by spreadst_lc for cmcc wifi feature end
 
 }

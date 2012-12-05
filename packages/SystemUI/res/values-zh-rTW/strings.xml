@@ -147,4 +147,14 @@
     <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"螢幕會自動旋轉。"</string>
     <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"螢幕已鎖定為橫向模式。"</string>
     <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"螢幕已鎖定為垂直模式。"</string>
+
+    <!-- add by spreadst_lc for cmcc wifi feature start -->
+    <string name="mobile_data_connect_disable">否</string>
+    <string name="mobile_data_connect_enable">是</string>
+    <string name="network_disconnect_title">通知</string>
+    <string name="network_disconnect_message">WLAN網絡已經斷開。\n通過3G網絡進行連接? \n如果您沒有訂購數據業務套餐，將會產生一些費用</string>
+    <string name="weak_signal_title">信號弱</string>
+    <string name="weak_signal_message">當前WLAN的信號較弱，建議您選擇信號較好的無線存取點</string>
+    <string name="auto_connect">不再詢問，總是自動連接其他信任無線存取點</string>
+    <!-- add by spreadst_lc for cmcc wifi feature end -->
 </resources>

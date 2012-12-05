@@ -291,6 +291,10 @@ public class WifiManager {
      * @see #ERROR_AUTHENTICATING
      */
     public static final String EXTRA_SUPPLICANT_ERROR = "supplicantError";
+    //add by spreadst_lc for cmcc wifi feature start
+    public static final String ERROR_ACTION = "android.net.wifi.ERROR";
+    public static final String EXTRA_ERROR_CODE = "errorCode";
+    //add by spreadst_lc for cmcc wifi feature end
 
     /**
      * Broadcast intent action indicating that the configured networks changed.
@@ -438,6 +442,9 @@ public class WifiManager {
 
     /** Anything better than or equal to this will show the max bars. */
     private static final int MAX_RSSI = -55;
+
+    //add by spreadst_lc for cmcc wifi feature
+    public static final String ACTION_WIFI_TO_GPRS = "sprd.com.android.wifi.to.gprs";
 
     /**
      * Number of RSSI levels used in the framework to initiate
@@ -1926,4 +1933,70 @@ public class WifiManager {
              return false;
         }
     }
+
+    //add wifi api by spreadst_lc start
+    public boolean setAutoConnect(boolean autoconnect){
+        try {
+            mService.setAutoConnect(autoconnect);
+            return true;
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+     public boolean setTrustListPriority(String ssid,int priority){
+         try {
+             return mService.setTrustListPriority(ssid,priority);
+         } catch (RemoteException e) {
+             // TODO Auto-generated catch block
+             e.printStackTrace();
+             return false;
+         }
+     }
+
+    public void disconnectAp(){
+        try {
+            mService.disconnectAp();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Reconnect to the currently active access point, if we are currently
+     * disconnected. This may result in the asynchronous delivery of state
+     * change events.
+     * @return {@code true} if the operation succeeded
+     */
+    public boolean reconnectAP() {
+        try {
+            return mService.reconnectAP();
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+
+    public boolean setGprsConnectState(boolean connected){
+        try {
+            return mService.setGprsConnectState(connected);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean setGprsToWifi(boolean flag){
+        try {
+            return mService.setGprsToWifi(flag);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
+        }
+    }
+    //add wifi api by spreadst_lc end
 }

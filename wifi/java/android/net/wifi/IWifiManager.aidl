@@ -106,5 +106,14 @@ interface IWifiManager
     Messenger getWifiStateMachineMessenger();
 
     String getConfigFile();
+
+    //add wifi api by spreadst_lc start
+    void setAutoConnect(boolean autoconnect);
+    boolean setTrustListPriority(String ssid,int priority);
+    void disconnectAp();
+    boolean reconnectAP();
+    boolean setGprsConnectState(boolean connected);
+    boolean setGprsToWifi(boolean flag);
+    //add wifi api by spreadst_lc end
 }
 

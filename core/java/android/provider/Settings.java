@@ -810,6 +810,7 @@ public final class Settings {
             MOVED_TO_SECURE.add(Secure.SETTINGS_CLASSNAME);
             MOVED_TO_SECURE.add(Secure.USB_MASS_STORAGE_ENABLED);
             MOVED_TO_SECURE.add(Secure.USE_GOOGLE_MAIL);
+            MOVED_TO_SECURE.add(Secure.WIFI_AUTO_CONNECT);//add by spreadst_lc for cmcc wifi feature
             MOVED_TO_SECURE.add(Secure.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON);
             MOVED_TO_SECURE.add(Secure.WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY);
             MOVED_TO_SECURE.add(Secure.WIFI_NUM_OPEN_NETWORKS_KEPT);
@@ -1605,6 +1606,14 @@ public final class Settings {
          * @hide
          */
         public static final String SMS_VALIDITY = "sms_validity";
+
+        //add by spreadst_lc for cmcc wifi feature start
+        public static final String WIFI_CELLULAR_WLAN = "wifi_cellular_wlan";
+        public static final int CELLULAR_WALN_AUTO = 0;
+        public static final int CELLULAR_WALN_MANUAL = 1;
+        public static final int CELLULAR_WALN_ALWAYS = 2;
+        //add by spreadst_lc for cmcc wifi feature end
+
         /**
          * The mapping of stream type (integer) to its setting.
          */
@@ -2124,6 +2133,7 @@ public final class Settings {
             SIP_CALL_OPTIONS,
             SIP_RECEIVE_CALLS,
             POINTER_SPEED,
+            WIFI_CELLULAR_WLAN,//add by spreadst_lc for cmcc wifi feature
             VIBRATE_WHEN_RINGING
         };
 
@@ -2245,6 +2255,10 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_MOBILE_DATA_TRANSITION_WAKELOCK_TIMEOUT_MS =
                 Secure.WIFI_MOBILE_DATA_TRANSITION_WAKELOCK_TIMEOUT_MS;
+
+        //add by spreadst_lc for cmcc wifi feature
+        @Deprecated
+        public static final String WIFI_AUTO_CONNECT = Secure.WIFI_AUTO_CONNECT;
 
         /**
          * @deprecated Use
@@ -3266,6 +3280,9 @@ public final class Settings {
          * Space delimited list of plugin packages that are enabled.
          */
         public static final String TTS_ENABLED_PLUGINS = "tts_enabled_plugins";
+
+        //add by spreadst_lc for cmcc wifi feature
+        public static final String WIFI_AUTO_CONNECT = "wifi_auto_connect";
 
         /**
          * Whether to notify the user of open networks.
@@ -4526,6 +4543,7 @@ public final class Settings {
             TTS_DEFAULT_COUNTRY,
             TTS_ENABLED_PLUGINS,
             TTS_DEFAULT_LOCALE,
+            WIFI_AUTO_CONNECT,//add by spreadst_lc for cmcc wifi feature
             WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON,
             WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY,
             WIFI_NUM_OPEN_NETWORKS_KEPT,

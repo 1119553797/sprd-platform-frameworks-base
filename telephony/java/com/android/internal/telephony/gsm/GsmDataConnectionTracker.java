@@ -76,6 +76,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import android.net.wifi.WifiManager;
+import android.os.SystemProperties;
+
 /**
  * {@hide}
  */
@@ -83,6 +86,11 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     protected final String LOG_TAG = "GSM";
     GSMPhone mGsmPhone;
     private static final boolean RADIO_TESTS = false;
+
+    //add by spreadst_lc for cmcc wifi feature start
+    private WifiManager mWifiManager;
+    private boolean supportCMCC = false;
+    //add by spreadst_lc for cmcc wifi feature end
 
     private ArrayList<HashMap<String,Boolean>> ApnFilters = null;
 
@@ -237,6 +245,13 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
         initApnContextsAndDataConnection();
         broadcastMessenger();
+
+        //add by spreadst_lc for cmcc wifi feature start
+        supportCMCC = SystemProperties.get("ro.operator").equals("cmcc");
+        if(mWifiManager == null){
+            mWifiManager = (WifiManager) mPhone.getContext().getSystemService(Context.WIFI_SERVICE);
+        }
+        //add by spreadst_lc for cmcc wifi feature start
     }
 
     @Override
@@ -1537,6 +1552,12 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             if (DBG) log("startNetStatPoll");
             resetPollStats();
             mNetStatPollEnabled = true;
+            //add by spreadst_lc for cmcc wifi feature start
+            if (supportCMCC) {
+                SystemProperties.set("gsm.gprs.attached", "true");
+                mWifiManager.setGprsConnectState(true);
+            }
+			//add by spreadst_lc for cmcc wifi feature end
             mPollNetStat.run();
         }
     }
@@ -1544,6 +1565,17 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     @Override
     protected void stopNetStatPoll() {
         mNetStatPollEnabled = false;
+        //add by spreadst_lc for cmcc wifi feature start
+        if (supportCMCC) {
+            Thread thr = new Thread(new Runnable(){
+                public void run() {
+                    SystemProperties.set("gsm.gprs.attached", "false");
+                    mWifiManager.setGprsConnectState(false);
+                }
+            });
+            thr.start();
+        }
+		//add by spreadst_lc for cmcc wifi feature end
         removeCallbacks(mPollNetStat);
         if (DBG) log("stopNetStatPoll");
     }

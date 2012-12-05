@@ -50,6 +50,27 @@ public class WifiNative {
 
     String mInterface = "";
 
+    //add wifi api by spreadst_lc start
+    public boolean setAutoConnectCommand(boolean autoconnect) {
+        return doBooleanCommand(autoconnect ? "AUTOMATICAL-CONNECT" : "MANUALLY-CONNECT");
+    }
+    public boolean setPriorityCommand(String ssid,int priority) {
+        return doBooleanCommand("SET_PRIORITY " + ssid + " " + priority);
+    }
+    public void disconnectApCommand() {
+        doBooleanCommand("DISCONNECTAP");
+    }
+    public boolean reconnectAPCommand() {
+        return doBooleanCommand("RECONNECTAP");
+    }
+    public boolean setGprsConnectStateCommand(boolean connected) {
+        return doBooleanCommand(connected ? "GPRS_ONLINE=1" : "GPRS_ONLINE=0");
+    }
+    public boolean setGprsToWifiCommand(boolean flag) {
+        return doBooleanCommand(flag ? "GPRS_TO_WIFI=1" : "GPRS_TO_WIFI=0");
+    }
+    //add wifi api by spreadst_lc end
+
     public native static boolean loadDriver();
 
     public native static boolean isDriverLoaded();

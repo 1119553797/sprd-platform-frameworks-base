@@ -385,4 +385,14 @@
 
     <!-- Description of the button in the phone-style notification panel that controls auto-rotation, when auto-rotation is off. [CHAR LIMIT=NONE] -->
     <string name="accessibility_rotation_lock_on_portrait">Screen is locked in portrait orientation.</string>
+
+	<!--add by spreadst_lc for cmcc wifi feature start-->
+    <string name="weak_signal_title">WEAK SIGNAL</string>
+	<string name="weak_signal_message">The current WLAN signal is very weak, recommend that you select a better one</string>
+    <string name="auto_connect">Do not ask and automatically connect to other trusted ap</string>
+    <string name="mobile_data_connect_disable">No</string>
+    <string name="mobile_data_connect_enable">Yes</string>
+    <string name="network_disconnect_title">Notice</string>
+    <string name="network_disconnect_message">WLAN network is disconnected. \nConnect via 3G? \nIf you do net have data plan, it may incur additional charges.</string>
+    <!--add by spreadst_lc for cmcc wifi feature end-->
 </resources>
