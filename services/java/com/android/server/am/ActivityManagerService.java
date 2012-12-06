@@ -277,6 +277,13 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     public ActivityStack mMainStack;
+    
+    //add for lowmem version(4+2)
+    private boolean IS_LOWMEM_VERSION = false;
+
+    private boolean isReadMemForRestartService = false;
+    private static final boolean DEFAULT_READ_MEM_FOR_RESTART_SERVICE = false;
+    private int restartServiceAtMem = 16;
 
     private final boolean mHeadless;
 
@@ -1519,6 +1526,12 @@ public final class ActivityManagerService extends ActivityManagerNative
         mBgBroadcastQueue = new BroadcastQueue(this, "background", BROADCAST_BG_TIMEOUT);
         mBroadcastQueues[0] = mFgBroadcastQueue;
         mBroadcastQueues[1] = mBgBroadcastQueue;
+
+        isReadMemForRestartService = SystemProperties.getBoolean("persist.sys.service.delay", DEFAULT_READ_MEM_FOR_RESTART_SERVICE);
+        restartServiceAtMem = SystemProperties.getInt("persist.sys.lowmem",restartServiceAtMem);
+        Slog.i(TAG, "isReadMemForRestartService: " + isReadMemForRestartService + " ,restartServiceAtMem:"+restartServiceAtMem);
+        
+        IS_LOWMEM_VERSION = "1".equals(SystemProperties.get("ro.build.product.lowmem", "0"));
 
         File dataDir = Environment.getDataDirectory();
         File systemDir = new File(dataDir, "system");
@@ -3274,9 +3287,15 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         final ProcessStats processStats = new ProcessStats(true);
 
-        File tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids, null);
-
+        File tracesFile = null;
         String cpuInfo = null;
+
+        //user version and lowmem version and anr in foreground app
+        if (IS_USER_BUILD && IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
+            Slog.w(TAG, "do not dump traces: is user build and lowmem version and anr in backgroound app");
+        } else {
+            tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids);
+
         if (MONITOR_CPU_USAGE) {
             updateCpuStatsNow();
             synchronized (mProcessStatsThread) {
@@ -3288,11 +3307,13 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         info.append(processStats.printCurrentState(anrTime));
 
-        Slog.e(TAG, info.toString());
         if (tracesFile == null) {
             // There is no trace file, so dump (only) the alleged culprit's threads to the log
             Process.sendSignal(app.pid, Process.SIGNAL_QUIT);
         }
+        }//end user version and lowmem version and anr in foreground app 
+
+        Slog.e(TAG, info.toString());
 
         addErrorToDropBox("anr", app, app.processName, activity, parent, annotation,
                 cpuInfo, tracesFile, null);
