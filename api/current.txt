@@ -11699,12 +11699,14 @@ package android.media {
     ctor public RingtoneManager(android.app.Activity);
     ctor public RingtoneManager(android.content.Context);
     method public static android.net.Uri getActualDefaultRingtoneUri(android.content.Context, int);
+    method public static android.net.Uri getActualDefaultRingtoneUri(android.content.Context, int, int);
     method public android.database.Cursor getCursor();
     method public static int getDefaultType(android.net.Uri);
     method public static android.net.Uri getDefaultUri(int);
     method public boolean getIncludeDrm();
     method public android.media.Ringtone getRingtone(int);
     method public static android.media.Ringtone getRingtone(android.content.Context, android.net.Uri);
+    method public static int getRingtonePhoneId(android.net.Uri);
     method public int getRingtonePosition(android.net.Uri);
     method public android.net.Uri getRingtoneUri(int);
     method public boolean getStopPreviousRingtone();
@@ -11712,6 +11714,7 @@ package android.media {
     method public int inferStreamType();
     method public static boolean isDefault(android.net.Uri);
     method public static void setActualDefaultRingtoneUri(android.content.Context, int, android.net.Uri);
+    method public static void setActualDefaultRingtoneUri(android.content.Context, int, android.net.Uri, int);
     method public void setIncludeDrm(boolean);
     method public void setStopPreviousRingtone(boolean);
     method public void setType(int);

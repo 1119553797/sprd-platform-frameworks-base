@@ -61,6 +61,7 @@ import java.util.Locale;
 
 import libcore.io.ErrnoException;
 import libcore.io.Libcore;
+import com.android.internal.telephony.PhoneFactory;
 
 /**
  * Internal service helper that no-one should use directly.
@@ -317,20 +318,22 @@ public class MediaScanner
 
     /** whether to use bulk inserts or individual inserts for each item */
     private static final boolean ENABLE_BULK_INSERTS = true;
-
+    private static final int PHONE_COUNT = PhoneFactory.getPhoneCount();
     // used when scanning the image database so we know whether we have to prune
     // old thumbnail files
     private int mOriginalCount;
     /** Whether the database had any entries in it before the scan started */
     private boolean mWasEmptyPriorToScan = false;
     /** Whether the scanner has set a default sound for the ringer ringtone. */
-    private boolean mDefaultRingtoneSet;
+//    private boolean mDefaultRingtoneSet;
+    private boolean[] mDefaultRingtoneSet = new boolean[PHONE_COUNT];
     /** Whether the scanner has set a default sound for the notification ringtone. */
     private boolean mDefaultNotificationSet;
     /** Whether the scanner has set a default sound for the alarm ringtone. */
     private boolean mDefaultAlarmSet;
     /** The filename for the default sound for the ringer ringtone. */
-    private String mDefaultRingtoneFilename;
+//    private String mDefaultRingtoneFilename;
+    private String[] mDefaultRingtoneFilename = new String[PHONE_COUNT];
     /** The filename for the default sound for the notification ringtone. */
     private String mDefaultNotificationFilename;
     /** The filename for the default sound for the alarm ringtone. */
@@ -396,8 +399,12 @@ public class MediaScanner
     }
 
     private void setDefaultRingtoneFileNames() {
-        mDefaultRingtoneFilename = SystemProperties.get(DEFAULT_RINGTONE_PROPERTY_PREFIX
-                + Settings.System.RINGTONE);
+//        mDefaultRingtoneFilename = SystemProperties.get(DEFAULT_RINGTONE_PROPERTY_PREFIX
+//                + Settings.System.RINGTONE);
+        for (int i = 0; i < PHONE_COUNT; i++) {
+            mDefaultRingtoneFilename[i] = SystemProperties.get(DEFAULT_RINGTONE_PROPERTY_PREFIX
+                + PhoneFactory.getSetting(Settings.System.RINGTONE,i));
+        }
         mDefaultNotificationFilename = SystemProperties.get(DEFAULT_RINGTONE_PROPERTY_PREFIX
                 + Settings.System.NOTIFICATION_SOUND);
         mDefaultAlarmAlertFilename = SystemProperties.get(DEFAULT_RINGTONE_PROPERTY_PREFIX
@@ -921,10 +928,13 @@ public class MediaScanner
                                 doesPathHaveFilename(entry.mPath, mDefaultNotificationFilename)) {
                             needToSetSettings = true;
                         }
-                    } else if (ringtones && !mDefaultRingtoneSet) {
-                        if (TextUtils.isEmpty(mDefaultRingtoneFilename) ||
-                                doesPathHaveFilename(entry.mPath, mDefaultRingtoneFilename)) {
-                            needToSetSettings = true;
+                    } else if (ringtones ) {
+                        for(int i = 0;i< PHONE_COUNT && !mDefaultRingtoneSet[i]; i++) {
+	                        if (TextUtils.isEmpty(mDefaultRingtoneFilename[i]) ||
+	                                doesPathHaveFilename(entry.mPath, mDefaultRingtoneFilename[i])) {
+	                                needToSetSettings = true;
+                                        break;
+	                        }
                         }
                     } else if (alarms && !mDefaultAlarmSet) {
                         if (TextUtils.isEmpty(mDefaultAlarmAlertFilename) ||
@@ -981,8 +991,15 @@ public class MediaScanner
                     setSettingIfNotSet(Settings.System.NOTIFICATION_SOUND, tableUri, rowId);
                     mDefaultNotificationSet = true;
                 } else if (ringtones) {
-                    setSettingIfNotSet(Settings.System.RINGTONE, tableUri, rowId);
-                    mDefaultRingtoneSet = true;
+                    //setSettingIfNotSet(Settings.System.RINGTONE, tableUri, rowId);
+                   // mDefaultRingtoneSet = true;
+                    for (int i = 0; i < PHONE_COUNT; i++) {
+                        if (!mDefaultRingtoneSet[i] && (TextUtils.isEmpty(mDefaultRingtoneFilename[i])
+                                || doesPathHaveFilename(entry.mPath, mDefaultRingtoneFilename[i]))) {
+                            setSettingIfNotSet(PhoneFactory.getSetting(Settings.System.RINGTONE, i), tableUri, rowId);
+                            mDefaultRingtoneSet[i] = true;
+                        }
+                    }
                 } else if (alarms) {
                     setSettingIfNotSet(Settings.System.ALARM_ALERT, tableUri, rowId);
                     mDefaultAlarmSet = true;

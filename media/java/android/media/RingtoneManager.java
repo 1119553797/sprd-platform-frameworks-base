@@ -36,6 +36,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.android.internal.telephony.PhoneFactory;
+
 /**
  * RingtoneManager provides access to ringtones, notification, and other types
  * of sounds. It manages querying the different media providers and combines the
@@ -657,8 +659,12 @@ public class RingtoneManager {
     }
     
     private static String getSettingForType(int type) {
+        return getSettingForType(type, PhoneFactory.DEFAULT_PHONE_ID);
+    }
+    private static String getSettingForType(int type, int phoneId) {
         if ((type & TYPE_RINGTONE) != 0) {
-            return Settings.System.RINGTONE;
+//            return Settings.System.RINGTONE;
+            return PhoneFactory.getSetting(Settings.System.RINGTONE,phoneId);
         } else if ((type & TYPE_NOTIFICATION) != 0) {
             return Settings.System.NOTIFICATION_SOUND;
         } else if ((type & TYPE_ALARM) != 0) {
@@ -721,5 +727,32 @@ public class RingtoneManager {
             return null;
         }
     }
-    
+
+    public static Uri getActualDefaultRingtoneUri(Context context, int type, int phoneId) {
+        String setting = getSettingForType(type, phoneId);
+        if (setting == null) return null;
+            final String uriString = Settings.System.getString(context.getContentResolver(), setting);
+            return uriString != null ? Uri.parse(uriString) : null;
+    }
+
+    public static void setActualDefaultRingtoneUri(Context context, int type, Uri ringtoneUri, int phoneId) {
+        String setting = getSettingForType(type, phoneId);
+        if (setting == null) return;
+            Settings.System.putString(context.getContentResolver(), setting,
+            ringtoneUri != null ? ringtoneUri.toString() : null);
+    }
+
+    public static int getRingtonePhoneId(Uri uri) {
+       int phoneId;
+       if(uri == null){
+           return PhoneFactory.DEFAULT_PHONE_ID;
+       }
+       String uriStr = uri.toString();
+       String ringtoneUriStr = Settings.System.DEFAULT_RINGTONE_URI.toString();
+       if(uriStr.startsWith((ringtoneUriStr))
+             && uriStr.length() !=  ringtoneUriStr.length()){
+           return Integer.parseInt(uriStr.substring(ringtoneUriStr.length(), ringtoneUriStr.length()+1));
+       }
+       return PhoneFactory.DEFAULT_PHONE_ID;
+    }
 }
