@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.pm.IPackageManager;
 import android.content.res.Configuration;
 import android.media.AudioService;
+import android.hardware.fm.FmService;
 import android.net.wifi.p2p.WifiP2pService;
 import android.os.Looper;
 import android.os.RemoteException;
@@ -562,6 +563,15 @@ class ServerThread extends Thread {
                     ServiceManager.addService(Context.AUDIO_SERVICE, new AudioService(context));
                 } catch (Throwable e) {
                     reportWtf("starting Audio Service", e);
+                }
+            }
+
+            if (!"0".equals(SystemProperties.get("system_init.startfmservice"))) {
+                try {
+                    Slog.i(TAG, "Fm Service");
+                    ServiceManager.addService(Context.FM_SERVICE, new FmService(context));
+                } catch (Throwable e) {
+                    reportWtf("starting Fm Service", e);
                 }
             }
 

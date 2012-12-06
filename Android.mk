@@ -39,7 +39,8 @@ SECONDARY_FRAMEWORKS_SUBDIRS := \
         telephony/java/com/android/internal/telephony/test \
         media/java/android/media/audiofx \
         media/mca/effect/java/android/media/effect \
-        media/mca/effect/java/android/media/effect/effects
+        media/mca/effect/java/android/media/effect/effects \
+        core/java/android/hardware/fm/
 include $(CLEAR_VARS)
 
 # FRAMEWORKS_BASE_SUBDIRS comes from build/core/pathmap.mk
@@ -236,7 +237,8 @@ LOCAL_SRC_FILES += \
 	telephony/java/com/android/internal/telephony/IExtendedNetworkService.aidl \
 	voip/java/android/net/sip/ISipSession.aidl \
 	voip/java/android/net/sip/ISipSessionListener.aidl \
-	voip/java/android/net/sip/ISipService.aidl
+	voip/java/android/net/sip/ISipService.aidl \
+    core/java/android/hardware/fm/IFmService.aidl
 #
 
 
