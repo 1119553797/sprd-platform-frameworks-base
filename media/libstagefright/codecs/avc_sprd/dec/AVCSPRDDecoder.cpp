@@ -470,8 +470,8 @@ status_t AVCSPRDDecoder::read(
 
         int32 iSkipToIDR = 1;
 
-        dec_in.pStream = (uint8 *)fragPtr;
-        dec_in.dataLen = fragSize;//+4;
+        dec_in.pStream = (uint8 *)(fragPtr - 4); //  4 for startcode.
+        dec_in.dataLen = fragSize+4;
         dec_in.beLastFrm = 0;
         dec_in.expected_IVOP = iSkipToIDR;
         dec_in.beDisplayed = 1;
@@ -480,8 +480,8 @@ status_t AVCSPRDDecoder::read(
         dec_out.frameEffective = 0;	
 
         MMDecRet decRet = H264DecDecode(&dec_in,&dec_out);
-        LOGI("%s, %d, decRet: %d", __FUNCTION__, __LINE__, decRet);
-
+        LOGI("%s, %d, decRet: %d, dec_out.frameEffective: %d", __FUNCTION__, __LINE__, decRet, dec_out.frameEffective);
+        
         switch (nalType) {
             case AVC_NALTYPE_SPS:
             {
@@ -508,14 +508,13 @@ status_t AVCSPRDDecoder::read(
             case AVC_NALTYPE_PPS:
             {
                 mPPSSeen = true;
-
-                *out = new MediaBuffer(0);
-
-                err = OK;
-                break;
             }
             case AVC_NALTYPE_SLICE:
             case AVC_NALTYPE_IDR:
+            case AVC_NALTYPE_SEI:
+            case AVC_NALTYPE_AUD:
+            case AVC_NALTYPE_FILL:
+            case AVC_NALTYPE_EOSEQ:
             {
                     if (dec_out.frameEffective)
                     {
@@ -528,33 +527,13 @@ status_t AVCSPRDDecoder::read(
                         // Do _not_ release input buffer yet.
 
                         releaseFragment = false;
-                        err = OK;
-                        break;
                     }else
                     {
                        *out = new MediaBuffer(0);
-
-                        err = OK;
-                    }                    
-                break;
-            }
-            case AVC_NALTYPE_SEI:
-            {
-                *out = new MediaBuffer(0);
-
+                    }
                 err = OK;
                 break;
             }
-            case AVC_NALTYPE_AUD:
-            case AVC_NALTYPE_FILL:
-            case AVC_NALTYPE_EOSEQ:
-            {
-                *out = new MediaBuffer(0);
-
-                err = OK;
-                break;
-            }
-
             default:
             {
                 LOGE("Should not be here, unknown nalType %d", nalType);
