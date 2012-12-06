@@ -2774,6 +2774,11 @@ public final class Settings {
          */
         public static final String ADB_ENABLED = "adb_enabled";
 
+       /**
+          * Whether MODEM  is enabled
+          */
+         public static final String MODEM_ENABLED = "modem_enabled";
+
         /**
          * Setting to allow mock locations and location provider status to be injected into the
          * LocationManager service for testing purposes during application development.  These

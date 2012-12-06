@@ -454,8 +454,12 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         }
 
         Intent intent = new Intent();
-        intent.setClassName("com.android.settings", "com.android.settings.TetherSettings");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        if(icon == com.android.internal.R.drawable.stat_sys_tether_usb){
+            intent.setClassName("com.android.settings", "com.android.settings.SprdUsbSettings");
+        }else{
+            intent.setClassName("com.android.settings", "com.android.settings.TetherSettings");
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
 
@@ -528,87 +532,87 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     }
 
     //added by dengfp@thundersoft  for spreadtrum usb settings <udcpower && gser && vser> begin
-    public boolean enableUsbUdcpower(boolean enabled){
-//    	if(VDBG) Log.d(TAG,"enableUsbUdcpower("+enabled+")");
-//	try{
-//		if(enabled && !mNMService.isUsbUdcpowerStarted())
-//		   mNMService.startUsbUdcpower();
-//		else if(!enabled && mNMService.isUsbUdcpowerStarted())
-//		   mNMService.stopUsbUdcpower();
-//	   }catch(Exception e){
-//	      Log.e(TAG,"Error toggling usb Udcpower:" + e);
-		return false;
-//	   }
-//	   return true;
+   public boolean enableUsbUdcpower(boolean enabled){
+      if(VDBG) Log.d(TAG,"enableUsbUdcpower("+enabled+")");
+      try {
+         if(enabled && !mNMService.isUsbUdcpowerStarted())
+             mNMService.startUsbUdcpower();
+         else if(!enabled && mNMService.isUsbUdcpowerStarted())
+             mNMService.stopUsbUdcpower();
+      } catch(Exception e) {
+            Log.e(TAG,"Error toggling usb Udcpower:" + e);
+            return false;
+      }
+       return true;
     }
    public boolean isUsbUdcpowerStarted(){
-//   	try{
-//		return mNMService.isUsbUdcpowerStarted();
-//   	}catch(Exception e){
-//   	    Log.e(TAG,"Fail to exec isUsbUdcpowerStarted:" + e);
-	    return false;
-//   	}
+       try {
+          return mNMService.isUsbUdcpowerStarted();
+       } catch(Exception e) {
+             Log.e(TAG,"Fail to exec isUsbUdcpowerStarted:" + e);
+            return false;
+       }
    }
    public boolean enableUsbGser(boolean enabled){
-//   	if(VDBG) Log.d(TAG,"enableUsbGser:" + enabled);
-//	try{
-//		if(enabled && !mNMService.isUsbGserStarted())
-//		  mNMService.startUsbGser();
-//		else if(!enabled && mNMService.isUsbGserStarted())
-//		  mNMService.stopUsbGser();
-//	}catch(Exception e){
-//	    Log.e(TAG,"Fail to enableUsbGser:" + e);
-	    return false;
-//	}
-//	return true;
+      if(VDBG) Log.d(TAG,"enableUsbGser:" + enabled);
+      try{
+          if(enabled && !mNMService.isUsbGserStarted())
+              mNMService.startUsbGser();
+          else if(!enabled && mNMService.isUsbGserStarted())
+              mNMService.stopUsbGser();
+      }catch(Exception e){
+              Log.e(TAG,"Fail to enableUsbGser:" + e);
+              return false;
+      }
+      return true;
    }
   public boolean isUsbGserStarted(){
-//        try{
-//        	return mNMService.isUsbGserStarted();
-//       } catch (Exception e) {
-//           Log.e(TAG, "Error toggling usb Gser :" + e);
+        try{
+            return mNMService.isUsbGserStarted();
+       } catch (Exception e) {
+           Log.e(TAG, "Error toggling usb Gser :" + e);
            return false;
-//       }
+       }
     }
 
     public boolean enableUsbVser(boolean enabled) {
-//        if(VDBG) Log.d(TAG, "enableUsbVser(" + enabled + ")");
-//        try {
-//            if (enabled && !mNMService.isUsbVserStarted())
-//                 mNMService.startUsbVser();
-//            else  if(!enabled && mNMService.isUsbVserStarted())
-//                mNMService.stopUsbVser();
-//        } catch (Exception e) {
-//            Log.e(TAG, "Error toggling usb Vser :" + e);
+        if(VDBG) Log.d(TAG, "enableUsbVser(" + enabled + ")");
+        try {
+            if (enabled && !mNMService.isUsbVserStarted())
+                 mNMService.startUsbVser();
+            else  if(!enabled && mNMService.isUsbVserStarted())
+                mNMService.stopUsbVser();
+        } catch (Exception e) {
+            Log.e(TAG, "Error toggling usb Vser :" + e);
             return false;
-//        }
-//        return true;
+        }
+        return true;
     }
 
     public boolean isUsbVserStarted(){
-//        try{
-//        	return mNMService.isUsbVserStarted();
-//       } catch (Exception e) {
-//           Log.e(TAG, "Error toggling usb Vser :" + e);
+        try{
+            return mNMService.isUsbVserStarted();
+       } catch (Exception e) {
+           Log.e(TAG, "Error toggling usb Vser :" + e);
            return false;
-//       }
+       }
     }
 
     public boolean isUsbConnected(){
-//        try{
-//        	 return mNMService.isUsbConnected();
-//        } catch (Exception e) {
-//           Log.e(TAG, "Error toggling usb Status :" + e);
+        try{
+            return mNMService.isUsbConnected();
+        } catch (Exception e) {
+           Log.e(TAG, "Error toggling usb Status :" + e);
            return false;
-//        }
-  }
+        }
+     }
     public boolean isUsbRNDISStarted(){
-//        try{
-//        	 return mNMService.isUsbRNDISStarted();
-//       } catch (Exception e) {
-//           Log.e(TAG, "Error toggling usb RNDIS :" + e);
+        try{
+            return mNMService.isUsbRNDISStarted();
+       } catch (Exception e) {
+           Log.e(TAG, "Error toggling usb RNDIS :" + e);
            return false;
-//       }
+       }
     }
     //add by dengfp@thundersoft for spreadtrum usb settings <udcpower && gser && vser> end
 
@@ -1491,12 +1495,11 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
             boolean mTryCell = !WAIT_FOR_NETWORK_TO_SETTLE;
             @Override
             public void enter() {
-                turnOnMasterTetherSettings(); // may transition us out
-
                 mTryCell = !WAIT_FOR_NETWORK_TO_SETTLE; // better try something first pass
                                                         // or crazy tests cases will fail
                 chooseUpstreamType(mTryCell);
                 mTryCell = !mTryCell;
+                turnOnMasterTetherSettings(); // may transition us out
             }
             @Override
             public void exit() {

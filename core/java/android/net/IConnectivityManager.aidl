@@ -73,6 +73,16 @@ interface IConnectivityManager
     void setPolicyDataEnable(int networkType, boolean enabled);
 
     int tether(String iface);
+    //added by dengfp for spreadtrum usb settings <udcpower && gser && vser> begin
+    boolean enableUdcpower(boolean enabled);
+    boolean isUsbUdcpowerStarted();
+    boolean enableGser(boolean enabled);
+    boolean isUsbGserStarted();
+    boolean enableVser(boolean enabled);
+    boolean isUsbVserStarted();
+    boolean isUsbRNDISStarted();
+    boolean isUsbConnected();
+    //added by dengfp for spreadtrum usb settings <udcpower && gser && vser> end
 
     int untether(String iface);
 

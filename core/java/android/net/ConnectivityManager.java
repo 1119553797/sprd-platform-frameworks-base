@@ -736,7 +736,88 @@ public class ConnectivityManager {
             return new String[0];
         }
     }
-
+  //dengfp added begin
+  /**
+    * {@hide}
+  */
+public boolean enableUdcpower(boolean enabled){
+        try {
+          return mService.enableUdcpower(enabled);
+        }catch (RemoteException e) {
+            return false;
+        }
+    }
+   /**
+     * {@hide}
+     */
+    public boolean isUsbUdcpowerStarted(){
+       try {
+         return mService.isUsbUdcpowerStarted();
+       }catch (RemoteException e) {
+            return false;
+       }
+    }
+    /**
+     * {@hide}
+     */
+    public boolean enableGser(boolean enabled){
+       try {
+         return mService.enableGser(enabled);
+       }catch (RemoteException e) {
+            return false;
+       }
+    }
+   /**
+     * {@hide}
+     */
+   public boolean isUsbGserStarted(){
+       try {
+         return mService.isUsbGserStarted();
+       }catch (RemoteException e) {
+            return false;
+       }
+    }
+    /**
+     * {@hide}
+     */
+    public boolean enableVser(boolean enabled){
+       try {
+         return mService.enableVser(enabled);
+       }catch (RemoteException e) {
+            return false;
+       }
+    }
+    /**
+     * {@hide}
+     */
+    public boolean isUsbVserStarted(){
+       try {
+         return mService.isUsbVserStarted();
+       }catch (RemoteException e) {
+            return false;
+       }
+    }
+    /**
+     * {@hide}
+     */
+    public boolean isUsbRNDISStarted(){
+       try {
+         return mService.isUsbRNDISStarted();
+       }catch (RemoteException e) {
+            return false;
+       }
+    }
+    /**
+     * {@hide}
+     */
+    public boolean isUsbConnected(){
+       try {
+         return mService.isUsbConnected();
+       }catch (RemoteException e) {
+            return false;
+       }
+    }
+   ////////dengfp added end
     /**
      * {@hide}
      */

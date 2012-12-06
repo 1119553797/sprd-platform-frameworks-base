@@ -156,6 +156,28 @@ public class UsbManager {
     public static final String USB_FUNCTION_ADB = "adb";
 
     /**
+     * Name of the gser USB function.
+     * Used in extras for the {@link #ACTION_USB_STATE} broadcast
+     *
+     * {@hide}
+     */
+    public static final String USB_FUNCTION_VSER = "vser";
+    /**
+     * Name of the vser USB function.
+     * Used in extras for the {@link #ACTION_USB_STATE} broadcast
+     *
+     * {@hide}
+     */
+    public static final String USB_FUNCTION_GSER = "gser";
+
+    /**
+     * Name of the cdrom USB function.
+     * Used in extras for the {@link #ACTION_USB_STATE} broadcast
+     *
+     * {@hide}
+     */
+    public static final String USB_FUNCTION_CDROM = "cdrom";
+    /**
      * Name of the RNDIS ethernet USB function.
      * Used in extras for the {@link #ACTION_USB_STATE} broadcast
      *
@@ -194,6 +216,15 @@ public class UsbManager {
      * {@hide}
      */
     public static final String USB_FUNCTION_ACCESSORY = "accessory";
+
+
+	/**
+		* Name of the Modem USB function.
+		* Used in extras for the {@link #ACTION_USB_STATE} broadcast
+		*
+		* {@hide}
+		*/
+	   public static final String USB_FUNCTION_MODEM = "modem";
 
     /**
      * Name of extra for {@link #ACTION_USB_DEVICE_ATTACHED} and
