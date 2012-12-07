@@ -850,10 +850,13 @@ public class PowerManagerService extends IPowerManager.Stub
 
     public void acquireWakeLockLocked(int flags, IBinder lock, int uid, int pid, String tag,
             WorkSource ws) {
-        if (mSpew) {
+        if (true) {
             Slog.d(TAG, "acquireWakeLock flags=0x" + Integer.toHexString(flags) + " tag=" + tag);
         }
 
+        for(int i = 0; i < mLocks.size(); i ++){
+            Log.i(TAG, "mLocks " + i + mLocks.get(i).flags + mLocks.get(i).tag);
+        }
         if (ws != null && ws.size() == 0) {
             ws = null;
         }
@@ -1017,11 +1020,14 @@ public class PowerManagerService extends IPowerManager.Stub
             return;
         }
 
-        if (mSpew) {
+        if (true) {
             Slog.d(TAG, "releaseWakeLock flags=0x"
                     + Integer.toHexString(wl.flags) + " tag=" + wl.tag);
         }
 
+        for(int i = 0; i < mLocks.size(); i ++){
+            Log.i(TAG, "mLocks " + i + mLocks.get(i).flags + mLocks.get(i).tag);
+        }
         if (isScreenLock(wl.flags)) {
             if ((wl.flags & LOCK_MASK) == PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK) {
                 mProximityWakeLockCount--;
@@ -1765,6 +1771,11 @@ public class PowerManagerService extends IPowerManager.Stub
             }
         }
         int err = nativeSetScreenState(on);
+
+        Log.i(TAG, "setScreenState: screen_state=" + on + " mPartialCount=" + mPartialCount + "err=" + err);
+        for(int i = 0; i < mLocks.size(); i ++){
+            Log.i(TAG, "mLocks " + i + mLocks.get(i).flags + mLocks.get(i).tag);
+        }
         if (err == 0) {
             mLastScreenOnTime = (on ? SystemClock.elapsedRealtime() : 0);
             if (mUseSoftwareAutoBrightness) {
