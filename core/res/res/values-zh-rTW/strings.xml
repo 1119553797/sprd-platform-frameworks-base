@@ -1299,4 +1299,10 @@
     <string name="CallForwarded" msgid="">"呼叫已轉移"</string>
     <string name="IncomingCallForwarded" msgid="">"來電被轉移"</string>
     <string name="ForwardedCall" msgid="">"轉移呼叫"</string>
+    <!-- Add 20121128 Spreadst of 96576,add string value of PIN unlock start -->
+    <string name="keyguard_password_enter_sim1_pin_code">"輸入 Sim1 PIN 碼"</string>
+    <string name="keyguard_password_enter_sim2_pin_code">"輸入 Sim2 PIN 碼"</string>
+    <string name="keyguard_password_enter_sim2_puk_code">"輸入 Sim2 PUK 碼和新的 PIN 碼"</string>
+    <string name="keyguard_password_enter_sim1_puk_code">"輸入 Sim1 PUK 碼和新的 PIN 碼"</string>
+    <!-- Add 20121128 Spreadst of 96576,add string value of PIN unlock end -->
 </resources>

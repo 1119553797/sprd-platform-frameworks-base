@@ -1300,4 +1300,11 @@
     <string name="CallForwarded" msgid="">"呼叫已转移"</string>
     <string name="IncomingCallForwarded" msgid="">"来电被转移"</string>
     <string name="ForwardedCall" msgid="">"转移呼叫"</string>
+    <!-- Add 20121128 Spreadst of 96576,add string value of PIN unlock start -->
+    <string name="keyguard_password_enter_sim1_pin_code">"输入 Sim1 PIN 码"</string>
+    <string name="keyguard_password_enter_sim2_pin_code">"输入 Sim2 PIN 码"</string>
+    <string name="keyguard_password_enter_sim1_puk_code">"输入 Sim1 PUK 码和新的 PIN 码"</string>
+    <string name="keyguard_password_enter_sim2_puk_code">"输入 Sim2 PUK 码和新的 PIN 码"</string>
+    <!-- Add 20121128 Spreadst of 96576,add string value of PIN unlock end -->
+
 </resources>
