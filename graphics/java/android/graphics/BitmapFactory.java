@@ -20,6 +20,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.FileDescriptor;
@@ -33,6 +34,7 @@ import java.io.InputStream;
  */
 public class BitmapFactory {
     private static final int DECODE_BUFFER_SIZE = 16 * 1024;
+    private static final String TAG = "BitmapFactory";
 
     public static class Options {
         /**
@@ -303,6 +305,7 @@ public class BitmapFactory {
             /*  do nothing.
                 If the exception happened on open, bm will be null.
             */
+            Log.e(TAG, "decodeFile: " + pathName + " failed!", e);
         } finally {
             if (stream != null) {
                 try {
@@ -379,6 +382,7 @@ public class BitmapFactory {
                 If the exception happened on open, bm will be null.
                 If it happened on close, bm is still valid.
             */
+            Log.e(TAG, "decodeResource failed! ", e);
         } finally {
             try {
                 if (is != null) is.close();
