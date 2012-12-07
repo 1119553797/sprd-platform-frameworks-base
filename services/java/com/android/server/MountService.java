@@ -1333,7 +1333,8 @@ class MountService extends IMountService.Stub
          */
         String vs = getVolumeState(path);
         String method = "ums";
-        if (enable && vs.equals(Environment.MEDIA_MOUNTED)) {
+        //set ums when sd card is unmounted for bug 101703
+        if (enable && (vs.equals(Environment.MEDIA_MOUNTED)||vs.equals(Environment.MEDIA_UNMOUNTED))) {
             // Override for isUsbMassStorageEnabled()
             setUmsEnabling(enable);
             UmsEnableCallBack umscb = new UmsEnableCallBack(path, method, true);
