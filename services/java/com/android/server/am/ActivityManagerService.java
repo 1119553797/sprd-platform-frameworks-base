@@ -1532,6 +1532,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         Slog.i(TAG, "isReadMemForRestartService: " + isReadMemForRestartService + " ,restartServiceAtMem:"+restartServiceAtMem);
         
         IS_LOWMEM_VERSION = "1".equals(SystemProperties.get("ro.build.product.lowmem", "0"));
+        if(IS_LOWMEM_VERSION) {
+            mProcessLimitOverride = 0;//add for lowmem[4+2]
+        }
 
         File dataDir = Environment.getDataDirectory();
         File systemDir = new File(dataDir, "system");
@@ -3294,7 +3297,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (IS_USER_BUILD && IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
             Slog.w(TAG, "do not dump traces: is user build and lowmem version and anr in backgroound app");
         } else {
-            tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids);
+            tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids, null);
 
         if (MONITOR_CPU_USAGE) {
             updateCpuStatsNow();
