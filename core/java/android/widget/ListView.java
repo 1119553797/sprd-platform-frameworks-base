@@ -1731,7 +1731,13 @@ public class ListView extends AbsListView {
             }
 
             invokeOnItemScrollListener();
-        } finally {
+         /*Add 20121210 Spreadst of 101604 [AOB]Crash about IllegalStateException start */
+       } catch(IllegalStateException e){
+                Log.e("ListView","mItemCount != mAdapter.getCount()  mItemCount = "+mItemCount+"; adapterCount = "+mAdapter.getCount());
+                e.printStackTrace();
+           }
+         /*Add 20121210 Spreadst of 101604 [AOB]Crash about IllegalStateException end */
+        finally {
             if (!blockLayoutRequests) {
                 mBlockLayoutRequests = false;
             }
