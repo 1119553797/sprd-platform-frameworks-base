@@ -58,6 +58,8 @@ import java.util.ArrayList;
  */
 public class ZygoteInit {
 
+    private static final boolean LESS_GC = true;
+    private static final boolean ENABLE_NATIVE_PRELOAD = true;
     private static final String TAG = "Zygote";
 
     private static final String ANDROID_SOCKET_ENV = "ANDROID_SOCKET_zygote";
@@ -270,6 +272,9 @@ public class ZygoteInit {
                     = new BufferedReader(new InputStreamReader(is), 256);
 
                 int count = 0;
+                if (ENABLE_NATIVE_PRELOAD) {
+                    count = runtime.preloadClasses();
+                } else {
                 String line;
                 while ((line = br.readLine()) != null) {
                     // Skip comments and blank lines.
@@ -306,6 +311,7 @@ public class ZygoteInit {
                         throw new RuntimeException(t);
                     }
                 }
+				}
 
                 Log.i(TAG, "...preloaded " + count + " classes in "
                         + (SystemClock.uptimeMillis()-startTime) + "ms.");
@@ -337,8 +343,10 @@ public class ZygoteInit {
 
         Debug.startAllocCounting();
         try {
+            if(LESS_GC) {
             System.gc();
             runtime.runFinalizationSync();
+            }
             mResources = Resources.getSystem();
             mResources.startPreloading();
             if (PRELOAD_RESOURCES) {
@@ -375,9 +383,11 @@ public class ZygoteInit {
                 if (false) {
                     Log.v(TAG, " GC at " + Debug.getGlobalAllocSize());
                 }
+                if(LESS_GC) {
                 System.gc();
                 runtime.runFinalizationSync();
                 Debug.resetGlobalAllocSize();
+                }
             }
             int id = ar.getResourceId(i, 0);
             if (false) {
@@ -398,9 +408,11 @@ public class ZygoteInit {
                 if (false) {
                     Log.v(TAG, " GC at " + Debug.getGlobalAllocSize());
                 }
+                if(LESS_GC) {
                 System.gc();
                 runtime.runFinalizationSync();
                 Debug.resetGlobalAllocSize();
+                }
             }
             int id = ar.getResourceId(i, 0);
             if (false) {
@@ -433,8 +445,10 @@ public class ZygoteInit {
         runtime.runFinalizationSync();
         System.gc();
         runtime.runFinalizationSync();
+        if(LESS_GC) {
         System.gc();
         runtime.runFinalizationSync();
+        }
     }
 
     /**
