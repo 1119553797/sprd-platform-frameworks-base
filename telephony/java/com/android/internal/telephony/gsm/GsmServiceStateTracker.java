@@ -753,13 +753,12 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     newSS.setState (regCodeToServiceState(regState));
 
                     // if (regState == 10 || regState == 12 || regState == 13 || regState == 14) {
-                    if (regState == 3 || regState == 6 || regState == 10 || regState == 12 || regState == 13 || regState == 14) {
+                    if (regState == 8 || regState == 10 || regState == 12 || regState == 13 || regState == 14) {
                         mEmergencyOnly = true;
                     } else {
                         mEmergencyOnly = false;
                     }
-		    log("Set mEmergencyOnly = " + mEmergencyOnly);
-
+                    log("Set mEmergencyOnly = " + mEmergencyOnly);
                     // LAC and CID are -1 if not avail
                     newCellLoc.setLacAndCid(lac, cid);
                     newCellLoc.setPsc(psc);
@@ -1385,7 +1384,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             case 2: // 2 is "searching"
             case 3: // 3 is "registration denied"
             case 4: // 4 is "unknown" no vaild in current baseband
-	    case 8: // 8 define emergency only
+            case 8: // 8 define emergency only
             case 10:// same as 0, but indicates that emergency call is possible.
             case 12:// same as 2, but indicates that emergency call is possible.
             case 13:// same as 3, but indicates that emergency call is possible.
