@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Атрымлiвайце доступ да дакладных крынiц месцазнаходжання, такiх як Глабальная геапазiцыйная сiстэма, з планшэта. Калi службы вызначэння месцазнаходжання даступныя i ўключаныя, дзякуючы гэтаму дазволу прыкладанне зможа вызначаць ваша дакл месцазнаходжанне."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Атрымлiвайце доступ да дакладных крынiц месцазнаходжання, такiх як Глабальная геапазiцыйная сiстэма, з тэлефона. Калi службы вызначэння месцазнаходжання даступныя i ўключаныя, дзякуючы гэтаму дазволу прыкладанне зможа вызначаць ваша дакладн месцазнаходжанне."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"прыблізнае (заснаванае на дадзеных сеткі) месцазнаходжанне"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Атрымлiвайце доступ да прыблiзнага месцазнаходжання ад правайдараў месцазнаходжання з дапамогай крынiц сеткi, такiх як вышка мабiльнай сувязi i Wi-Fi. Калi гэтыя службы вызначэння месцазнаходжання будуць даступныя i ўключаныя, дзякуючы гэтаму дазволу прыкладанне зможа вызначаць ваша прыблiзнае месцазнаходжанне."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Атрымлiвайце доступ да прыблiзнага месцазнаходжання ад правайдараў месцазнаходжання з дапамогай крынiц сеткi, такiх як вышка мабiльнай сувязi i WLAN. Калi гэтыя службы вызначэння месцазнаходжання будуць даступныя i ўключаныя, дзякуючы гэтаму дазволу прыкладанне зможа вызначаць ваша прыблiзнае месцазнаходжанне."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"доступ да SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Дазваляе прыкладанням выкарыстоўваць нізкаўзроўневыя функцыі SurfaceFlinger."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"чытаць буфер кадраў"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Дазваляе прыкладанням змяняць стан прывязкі да сеткі."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"змяняць налады выкарыстання фонавых дадзеных"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Дазваляе прыкладанням змяняць налады выкарыстання зыходных дадзеных."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"прагляд злучэнняў Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Дазваляе прыкладанню праглядаць звесткi пра падключэннi да сеткi, напрыклад пра тое, дзе ёсць сеткi Wi-Fi i якiя прылады Wi-Fi да iх падключаны."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"падключэнне да сеткі Wi-Fi і адключэнне ад яе"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Дазваляе прыкладанням падключацца да кропак доступу Wi-Fi і адключацца ад iх, а таксама ўносіць змяненні ў канфiгурацыю прылад сеткі Wi-Fi."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"дазваляе прыём Wi-Fi Multicast"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Дазваляе прыкладанням атрымліваць пакеты, адпраўленыя на ўсе прылады з сеткi Wi-Fi з дапамогай групавых адрасоў, а не толькі на ваш планшэт. Будзе выкарыстоўвацца больш энергіі, чым у рэжыме нешматадраснай перадачы."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Дазваляе прыкладанням атрымліваць пакеты, адпраўленыя на ўсе прылады з сеткi Wi-Fi з дапамогай групавых адрасоў, а не толькі на ваш тэлефон. Будзе выкарыстоўвацца больш энергіі, чым у рэжыме нешматадраснай перадачы."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"прагляд злучэнняў WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Дазваляе прыкладанню праглядаць звесткi пра падключэннi да сеткi, напрыклад пра тое, дзе ёсць сеткi WLAN i якiя прылады WLAN да iх падключаны."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"падключэнне да сеткі WLAN і адключэнне ад яе"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Дазваляе прыкладанням падключацца да кропак доступу WLAN і адключацца ад iх, а таксама ўносіць змяненні ў канфiгурацыю прылад сеткі WLAN."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"дазваляе прыём WLAN Multicast"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Дазваляе прыкладанням атрымліваць пакеты, адпраўленыя на ўсе прылады з сеткi WLAN з дапамогай групавых адрасоў, а не толькі на ваш планшэт. Будзе выкарыстоўвацца больш энергіі, чым у рэжыме нешматадраснай перадачы."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Дазваляе прыкладанням атрымліваць пакеты, адпраўленыя на ўсе прылады з сеткi WLAN з дапамогай групавых адрасоў, а не толькі на ваш тэлефон. Будзе выкарыстоўвацца больш энергіі, чым у рэжыме нешматадраснай перадачы."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"атрыманне доступу да налад прылады Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Дазваляе прыкладанням наладжваць лакальны планшэт Bluetooth, выяўляць і падлучаць выдаленыя прылады."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Дазваляе прыкладанням наладжваць лакальны тэлефон Bluetooth, а таксама знаходзіць выдаленыя прылады i падлучацца да ix."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Рынгтоны"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Невядомы рынгтон"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Сетка Wi-Fi даступная"</item>
-    <item quantity="other" msgid="4192424489168397386">"Даступныя сеткі Wi-Fi"</item>
+    <item quantity="one" msgid="6654123987418168693">"Сетка WLAN даступная"</item>
+    <item quantity="other" msgid="4192424489168397386">"Даступныя сеткі WLAN"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Адкрытая сетка Wi-Fi даступная"</item>
-    <item quantity="other" msgid="7915895323644292768">"Даступны адкрытыя сеткі Wi-Fi"</item>
+    <item quantity="one" msgid="1634101450343277345">"Адкрытая сетка WLAN даступная"</item>
+    <item quantity="other" msgid="7915895323644292768">"Даступны адкрытыя сеткі WLAN"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Увайдзіце ў сетку Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Увайдзіце ў сетку WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Немагчыма падключыцца да Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Немагчыма падключыцца да WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" дрэннае падключэнне да Інтэрнэту."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Пачаць работу Wi-Fi Direct. Гэта адключыць кліента або кропку доступу Wi-Fi."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Немагчыма запусціць Wi-Fi Direct."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct уключаны"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Пачаць работу WLAN Direct. Гэта адключыць кліента або кропку доступу WLAN."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Немагчыма запусціць WLAN Direct."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct уключаны"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Дакраніцеся, каб наладзіць"</string>
     <string name="accept" msgid="1645267259272829559">"Прыняць"</string>
     <string name="decline" msgid="2112225451706137894">"Адхіліць"</string>
@@ -1153,7 +1153,7 @@
     <string name="submit" msgid="1602335572089911941">"Перадаць"</string>
     <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Рэжым \"У машыне\" ўключаны"</string>
     <string name="car_mode_disable_notification_message" msgid="8035230537563503262">"Дакраніцеся, каб выйсці з рэжыму \"Штурман\"."</string>
-    <string name="tethered_notification_title" msgid="3146694234398202601">"USB-мадэм або кропка доступу Wi-Fi актыўныя"</string>
+    <string name="tethered_notification_title" msgid="3146694234398202601">"USB-мадэм або кропка доступу WLAN актыўныя"</string>
     <string name="tethered_notification_message" msgid="6857031760103062982">"Націсніце, каб наладзіць."</string>
     <string name="back_button_label" msgid="2300470004503343439">"Назад"</string>
     <string name="next_button_label" msgid="1080555104677992408">"Далей"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Перадача дадз. 2G-3G выключана"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Перадача дадзеных 4G выключана"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Мабільная перадача дадз. выкл."</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Перад. дадз. Wi-Fi адключаная"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Перад. дадз. WLAN адключаная"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Націсніце, каб уключыць."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Перавышаны ліміт 2G-3G"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Перавышаны ліміт дадзеных 4G"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Перавышаны ліміт мабільных дадзеных"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Перав. ліміт па дадзеным Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Перав. ліміт па дадзеным WLAN"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"Аб\'ём <xliff:g id="SIZE">%s</xliff:g> перавышае устаноўл. мяжу."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Зыходныя дадзеныя абмежаваныя"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Націсніце, каб зняць абмежаванне."</string>

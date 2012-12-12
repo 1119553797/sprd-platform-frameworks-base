@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Permet d\'accéder à des sources de localisation précises telles que le système GPS de la tablette. Lorsque les services de localisation sont disponibles et activés, cette autorisation permet à l\'application de déterminer votre position exacte."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Permet d\'accéder à des sources de localisation précises telles que le système GPS du téléphone. Lorsque les services de localisation sont disponibles et activés, cette autorisation permet à l\'application de déterminer votre position exacte."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"position (réseau) approximative"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Permet d\'accéder à la position approximative par l\'intermédiaire de fournisseurs de position utilisant des sources réseau telles que les antennes-relais et le Wi-Fi. Lorsque ces services de localisation sont disponibles et activés, cette autorisation permet à l\'application de déterminer votre position approximative."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Permet d\'accéder à la position approximative par l\'intermédiaire de fournisseurs de position utilisant des sources réseau telles que les antennes-relais et le WLAN. Lorsque ces services de localisation sont disponibles et activés, cette autorisation permet à l\'application de déterminer votre position approximative."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"Accès à SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Permet à l\'application d\'utiliser les fonctionnalités de bas niveau de SurfaceFlinger."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"Lecture de la mémoire tampon graphique"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Permet à l\'application de modifier l\'état de la connectivité du partage de connexion."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"modifier le paramètre d\'utilisation des données en arrière-plan"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Permet à l\'application de modifier les paramètres de consommation des données en arrière-plan."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"afficher les connexions Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Permet à l\'application d\'accéder à des informations sur les réseaux Wi-Fi afin de savoir si une connexion Wi-Fi est activée et pour connaître le nom des appareils connectés au Wi-Fi, par exemple."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"activer/désactiver la connexion Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Permet à l\'application de se connecter à des points d\'accès Wi-Fi, de s\'en déconnecter et de modifier la configuration de l\'appareil pour les réseaux Wi-Fi."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"autoriser la réception de données en Wi-Fi multidiffusion"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Permet à l\'application de recevoir des paquets envoyés à tous les appareils (et pas seulement à votre tablette) d\'un réseau Wi-Fi qui utilise des adresses de multidiffusion. Cette autorisation entraîne une consommation d\'énergie supérieure au mode de diffusion simple."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Permet à l\'application de recevoir des paquets envoyés à tous les appareils (et pas seulement à votre téléphone) d\'un réseau Wi-Fi qui utilise des adresses de multidiffusion. Cette autorisation entraîne une consommation d\'énergie supérieure au mode de diffusion simple."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"afficher les connexions WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Permet à l\'application d\'accéder à des informations sur les réseaux WLAN afin de savoir si une connexion WLAN est activée et pour connaître le nom des appareils connectés au WLAN, par exemple."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"activer/désactiver la connexion WLAN"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Permet à l\'application de se connecter à des points d\'accès WLAN, de s\'en déconnecter et de modifier la configuration de l\'appareil pour les réseaux WLAN."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"autoriser la réception de données en WLAN multidiffusion"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Permet à l\'application de recevoir des paquets envoyés à tous les appareils (et pas seulement à votre tablette) d\'un réseau WLAN qui utilise des adresses de multidiffusion. Cette autorisation entraîne une consommation d\'énergie supérieure au mode de diffusion simple."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Permet à l\'application de recevoir des paquets envoyés à tous les appareils (et pas seulement à votre téléphone) d\'un réseau WLAN qui utilise des adresses de multidiffusion. Cette autorisation entraîne une consommation d\'énergie supérieure au mode de diffusion simple."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"accéder aux paramètres Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Permet à l\'application de configurer la tablette Bluetooth locale, d\'identifier des appareils distants et de les associer à la tablette."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Permet à l\'application de configurer le téléphone Bluetooth local, d\'identifier des appareils distants et de les associer au téléphone."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Sonneries"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Sonnerie inconnue"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Réseau Wi-Fi disponible"</item>
-    <item quantity="other" msgid="4192424489168397386">"Réseaux Wi-Fi disponibles"</item>
+    <item quantity="one" msgid="6654123987418168693">"Réseau WLAN disponible"</item>
+    <item quantity="other" msgid="4192424489168397386">"Réseaux WLAN disponibles"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Réseau Wi-Fi ouvert disponible"</item>
-    <item quantity="other" msgid="7915895323644292768">"Réseaux Wi-Fi ouverts disponibles"</item>
+    <item quantity="one" msgid="1634101450343277345">"Réseau WLAN ouvert disponible"</item>
+    <item quantity="other" msgid="7915895323644292768">"Réseaux WLAN ouverts disponibles"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Connectez-vous au réseau Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Connectez-vous au réseau WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Impossible de se connecter au Wi-Fi."</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Impossible de se connecter au WLAN."</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" dispose d\'une mauvaise connexion Internet."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Lancer le Wi-Fi Direct. Cela désactive le fonctionnement du Wi-Fi client ou via un point d\'accès."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Impossible d\'activer le Wi-Fi Direct."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct activé"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Lancer le WLAN Direct. Cela désactive le fonctionnement du WLAN client ou via un point d\'accès."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Impossible d\'activer le WLAN Direct."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct activé"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Appuyez pour accéder aux paramètres."</string>
     <string name="accept" msgid="1645267259272829559">"Accepter"</string>
     <string name="decline" msgid="2112225451706137894">"Refuser"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Données 2G-3G désactivées"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Données 4G désactivées"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Données mobiles désactivées"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi désactivé"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLAN désactivé"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Appuyez ici pour réactiver."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Quota de données 2G-3G dépassé"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Quota de données 4G dépassé"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Quota utilisation données dépassé"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Quota de données Wi-Fi dépassé"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Quota de données WLAN dépassé"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> au-delà de la limite spécifiée."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Données en arrière-plan limitées"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Appuyez pour suppr. restriction."</string>

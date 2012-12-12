@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"存取平板電腦 GPS 等精確位置資訊來源。當位置資訊服務可以使用且已開啟時，這項權限即可讓應用程式判斷您的精確位置。"</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"存取手機 GPS 等精確位置資訊來源。當位置資訊服務可以使用且已開啟時，這項權限即可讓應用程式判斷您的精確位置。"</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"概略位置 (以網路為基準)"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"存取無線通信基地台、Wi-Fi 等網路來源提供的概略位置資訊。當上述位置資訊服務可以使用且已開啟時，這項權限即可讓應用程式判斷您的概略位置。"</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"存取無線通信基地台、WLAN 等網路來源提供的概略位置資訊。當上述位置資訊服務可以使用且已開啟時，這項權限即可讓應用程式判斷您的概略位置。"</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"存取 SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"允許應用程式使用 SurfaceFlinger 的低階功能。"</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"讀取框架緩衝"</string>
@@ -489,12 +489,12 @@
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"變更背景資料使用設定"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"允許應用程式變更背景資料使用設定。"</string>
     <string name="permlab_accessWifiState" msgid="5202012949247040011">"查看 WiFi 連線"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"允許應用程式查看 Wi-Fi 網路相關資訊，例如是否已啟用 Wi-Fi，以及所連上 Wi-Fi 裝置的名稱。"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"允許應用程式查看 WLAN 網路相關資訊，例如是否已啟用 WLAN，以及所連上 WLAN 裝置的名稱。"</string>
     <string name="permlab_changeWifiState" msgid="6550641188749128035">"建立及中斷 WiFi 連線"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"允許應用程式與 Wi-Fi 存取點連線或中斷連線，並可變更 Wi-Fi 網路的裝置設定。"</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允許接收 Wi-Fi 多點傳播封包"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"允許應用程式接收透過多點傳播位址傳送給 Wi-Fi 網路上所有裝置 (而不只是傳送給您的平板電腦) 的封包。這項設定會比非多點傳播模式耗用更多電力。"</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"允許應用程式接收透過多點傳播位址傳送給 Wi-Fi 網路上所有裝置 (而不只是傳送給您的手機) 的封包。這項設定會比非多點傳播模式耗用更多電力。"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"允許應用程式與 WLAN 存取點連線或中斷連線，並可變更 WLAN 網路的裝置設定。"</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允許接收 WLAN 多點傳播封包"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"允許應用程式接收透過多點傳播位址傳送給 WLAN 網路上所有裝置 (而不只是傳送給您的平板電腦) 的封包。這項設定會比非多點傳播模式耗用更多電力。"</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"允許應用程式接收透過多點傳播位址傳送給 WLAN 網路上所有裝置 (而不只是傳送給您的手機) 的封包。這項設定會比非多點傳播模式耗用更多電力。"</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"存取藍牙設定"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"允許應用程式設定本機藍牙平板電腦，以及搜尋遠端裝置並配對連線。"</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"允許應用程式設定本機藍牙手機，以及搜尋遠端裝置並配對連線。"</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"鈴聲"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"未知的鈴聲"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"已偵測到 Wi-Fi 網路"</item>
-    <item quantity="other" msgid="4192424489168397386">"已偵測到 Wi-Fi 網路"</item>
+    <item quantity="one" msgid="6654123987418168693">"已偵測到 WLAN 網路"</item>
+    <item quantity="other" msgid="4192424489168397386">"已偵測到 WLAN 網路"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"開啟可用 Wi-Fi 網路"</item>
-    <item quantity="other" msgid="7915895323644292768">"開啟可用 Wi-Fi 網路"</item>
+    <item quantity="one" msgid="1634101450343277345">"開啟可用 WLAN 網路"</item>
+    <item quantity="other" msgid="7915895323644292768">"開啟可用 WLAN 網路"</item>
   </plurals>
     <string name="wifi_available_sign_in" msgid="4029489716605255386">"登入 WiFi 網路"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"無法連線至 Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"無法連線至 WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" 的網際網路連線狀況不佳。"</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
     <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"啟動 WiFi Direct 作業，這會關閉 WiFi 用戶端/無線基地台作業。"</string>
     <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"無法啟動 WiFi Direct。"</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct 已開啟"</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct 已開啟"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"輕觸即可設定"</string>
     <string name="accept" msgid="1645267259272829559">"接受"</string>
     <string name="decline" msgid="2112225451706137894">"拒絕"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"已停用 2G-3G 數據"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"已停用 4G 數據"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"已停用行動數據"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi 數據已停用"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLAN 數據已停用"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"輕觸即可啟用。"</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"已超過 2G-3G 數據上限"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"已超過 4G 數據上限"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"已超過行動數據上限"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"已超過 Wi-Fi 數據上限"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"已超過 WLAN 數據上限"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> 超過規定上限。"</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"已限制背景資料"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"輕觸即可解除限制。"</string>

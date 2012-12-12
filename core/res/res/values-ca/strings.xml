@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Accedeix a fonts d\'ubicació precises, com ara el Sistema de Posicionament Global (GPS) a la tauleta. Quan els serveis d\'ubicació estiguin disponibles i activats, aquest permís permet que l\'aplicació determini la teva ubicació precisa."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Accedeix a fonts d\'ubicació precises, com ara el Sistema de Posicionament Global (GPS) al telèfon. Quan els serveis d\'ubicació estiguin disponibles i activats, aquest permís permet que l\'aplicació determini la teva ubicació precisa."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"ubicació aproximada (basada en xarxa)"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Accedeix a la ubicació aproximada des dels proveïdors d\'ubicació mitjançant fonts de xarxa, com ara torres de telefonia mòbil i Wi-Fi. Quan aquests serveis d\'ubicació estiguin disponibles i activats, aquest permís permet que l\'aplicació determini la teva ubicació aproximada."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Accedeix a la ubicació aproximada des dels proveïdors d\'ubicació mitjançant fonts de xarxa, com ara torres de telefonia mòbil i WLAN. Quan aquests serveis d\'ubicació estiguin disponibles i activats, aquest permís permet que l\'aplicació determini la teva ubicació aproximada."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"accedir a SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Permet que l\'aplicació utilitzi funcions SurfaceFlinger de baix nivell."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"llegir la memòria intermèdia de marcs"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Permet a l\'aplicació canviar l\'estat de la connectivitat de les xarxes compartides."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"canviar la configuració d\'ús de dades de referència"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Permet que l\'aplicació canviï la configuració d\'ús de les dades de fons."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"visualització de les connexions Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Permet que l\'aplicació visualitzi informació sobre les xarxes Wi-Fi, com ara si la Wi-Fi està activada i el nom dels dispositius Wi-Fi connectats."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"connexió i desconnexió de la Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Permet que l\'aplicació es connecti i es desconnecti de punts d\'accés Wi-Fi i que faci canvis a la configuració de les xarxes Wi-Fi dels dispositius."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"visualització de les connexions WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Permet que l\'aplicació visualitzi informació sobre les xarxes WLAN, com ara si la WLAN està activada i el nom dels dispositius WLAN connectats."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"connexió i desconnexió de la WLAN"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Permet que l\'aplicació es connecti i es desconnecti de punts d\'accés WLAN i que faci canvis a la configuració de les xarxes WLAN dels dispositius."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"permetre la recepció de multidifusió Wi-fi"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Permet que l\'aplicació rebi paquets enviats a tots els dispositius d\'una xarxa Wi-Fi mitjançant les adreces multidifusió, no només a la teva tauleta. Fa servir més energia que el mode que no és multidifusió."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Permet que l\'aplicació rebi paquets enviats a tots els dispositius d\'una xarxa Wi-Fi mitjançant les adreces multidifusió, no només al teu telèfon. Fa servir més energia que el mode que no és multidifusió."</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Permet que l\'aplicació rebi paquets enviats a tots els dispositius d\'una xarxa WLAN mitjançant les adreces multidifusió, no només a la teva tauleta. Fa servir més energia que el mode que no és multidifusió."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Permet que l\'aplicació rebi paquets enviats a tots els dispositius d\'una xarxa WLAN mitjançant les adreces multidifusió, no només al teu telèfon. Fa servir més energia que el mode que no és multidifusió."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"accés a la configuració de Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Permet que l\'aplicació configuri la tauleta Bluetooth local i que cerqui i sincronitzi dispositius remots."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Permet que l\'aplicació configuri el telèfon Bluetooth local i que cerqui i sincronitzi dispositius remots."</string>
@@ -1010,15 +1010,15 @@
     <item quantity="one" msgid="1634101450343277345">"Xarxa Wi-fi oberta disponible"</item>
     <item quantity="other" msgid="7915895323644292768">"Xarxes Wi-fi obertes disponibles"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Inicia la sessió a la xarxa Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Inicia la sessió a la xarxa WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"No s\'ha pogut connectar a la Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"No s\'ha pogut connectar a la WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" té una mala connexió a Internet."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Inicia Wi-Fi Direct. Això desactivarà el client/la zona Wi-Fi."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"No s\'ha pogut iniciar Wi-Fi Direct."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct està activat"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Inicia WLAN Direct. Això desactivarà el client/la zona WLAN."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"No s\'ha pogut iniciar WLAN Direct."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct està activat"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Toca per accedir a la configuració"</string>
     <string name="accept" msgid="1645267259272829559">"Accepta"</string>
     <string name="decline" msgid="2112225451706137894">"Rebutja"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Dades 2G-3G desactivades"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Dades 4G desactivades"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Dades mòbils desactivades"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"S\'han desactivat les dades Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"S\'han desactivat les dades WLAN"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Toca per activar."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"S\'ha superat el límit de dades 2G-3G"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"S\'ha superat el límit de dades 4G"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"S\'ha superat el límit de dades mòbils"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"S\'ha superat el límit de dades Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"S\'ha superat el límit de dades WLAN"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> per sobre del límit especif."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Dades de referència restringides"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Toca per eliminar la restricció."</string>

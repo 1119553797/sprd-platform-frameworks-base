@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Truy cập nguồn vị trí chính xác như Hệ thống định vị toàn cầu trên máy tính bảng. Khi các dịch vụ định vị sẵn có và được bật, quyền này cho phép ứng dụng xác định vị trí chính xác của bạn."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Truy cập nguồn vị trí chính xác như Hệ thống định vị toàn cầu trên điện thoại. Khi các dịch vụ định vị sẵn có và được bật, quyền này cho phép ứng dụng xác định vị trí chính xác của bạn."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"vị trí (dựa trên mạng) gần đúng"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Truy cập vị trí gần đúng từ nhà cung cấp vị trí bằng cách sử dụng các tài nguyên mạng như tháp phát sóng và Wi-Fi. Khi các dịch vụ định vị này sẵn có và được bật, quyền này cho phép ứng dụng xác định vị trí gần đúng của bạn."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Truy cập vị trí gần đúng từ nhà cung cấp vị trí bằng cách sử dụng các tài nguyên mạng như tháp phát sóng và WLAN. Khi các dịch vụ định vị này sẵn có và được bật, quyền này cho phép ứng dụng xác định vị trí gần đúng của bạn."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"truy cập SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Cho phép ứng dụng sử dụng các tính năng SurfaceFlinger cấp độ thấp."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"đọc bộ đệm khung"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Cho phép ứng dụng thay đổi trạng thái của kết nối mạng được dùng làm điểm truy cập Internet."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"thay đổi cài đặt sử dụng dữ liệu nền"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Cho phép ứng dụng thay đổi cài đặt sử dụng dữ liệu nền."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"xem kết nối Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Cho phép ứng dụng xem thông tin về mạng Wi-Fi, chẳng hạn như Wi-Fi đã được bật chưa và tên của thiết bị Wi-Fi được kết nối."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"kết nối và ngắt kết nối Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Cho phép ứng dụng kết nối ngắt kết nối khỏi các điểm truy cập Wi-Fi và để thực hiện thay đổi đối với cấu hình thiết bị cho mạng Wi-Fi."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"cho phép thu tín hiệu Wi-Fi Đa hướng"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Cho phép ứng dụng nhận các gói được gửi đến tất cả các thiết bị trên mạng Wi-Fi các địa chỉ đa hướng, chứ không phải chỉ máy tính bảng của bạn. Chế độ này sử dụng nhiều năng lượng hơn chế độ không phát đa hướng."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Cho phép ứng dụng nhận các gói được gửi đến tất cả các thiết bị trên mạng Wi-Fi các địa chỉ đa hướng, chứ không phải chỉ điện thoại của bạn. Chế độ này sử dụng nhiều năng lượng hơn chế độ không phát đa hướng."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"xem kết nối WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Cho phép ứng dụng xem thông tin về mạng WLAN, chẳng hạn như WLAN đã được bật chưa và tên của thiết bị WLAN được kết nối."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"kết nối và ngắt kết nối WLAN"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Cho phép ứng dụng kết nối ngắt kết nối khỏi các điểm truy cập WLAN và để thực hiện thay đổi đối với cấu hình thiết bị cho mạng WLAN."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"cho phép thu tín hiệu WLAN Đa hướng"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Cho phép ứng dụng nhận các gói được gửi đến tất cả các thiết bị trên mạng WLAN các địa chỉ đa hướng, chứ không phải chỉ máy tính bảng của bạn. Chế độ này sử dụng nhiều năng lượng hơn chế độ không phát đa hướng."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Cho phép ứng dụng nhận các gói được gửi đến tất cả các thiết bị trên mạng WLAN các địa chỉ đa hướng, chứ không phải chỉ điện thoại của bạn. Chế độ này sử dụng nhiều năng lượng hơn chế độ không phát đa hướng."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"truy cập cài đặt Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Cho phép ứng dụng định cấu hình máy tính bảng Bluetooth cục bộ cũng như phát hiện và ghép nối với các thiết bị từ xa."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Cho phép ứng dụng định cấu hình điện thoại Bluetooth cục bộ cũng như phát hiện và ghép nối với các thiết bị từ xa."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Nhạc chuông"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Nhạc chuông không xác định"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Mạng Wi-Fi khả dụng"</item>
-    <item quantity="other" msgid="4192424489168397386">"Mạng Wi-Fi khả dụng"</item>
+    <item quantity="one" msgid="6654123987418168693">"Mạng WLAN khả dụng"</item>
+    <item quantity="other" msgid="4192424489168397386">"Mạng WLAN khả dụng"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Mở mạng Wi-Fi khả dụng"</item>
-    <item quantity="other" msgid="7915895323644292768">"Mở mạng Wi-Fi khả dụng"</item>
+    <item quantity="one" msgid="1634101450343277345">"Mở mạng WLAN khả dụng"</item>
+    <item quantity="other" msgid="7915895323644292768">"Mở mạng WLAN khả dụng"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Đăng nhập vào mạng Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Đăng nhập vào mạng WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Không thể kết nối với Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Không thể kết nối với WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" có kết nối Internet không tốt."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Khởi động Wi-Fi Direct. Việc này sẽ tắt hoạt động của ứng dụng khách/điểm phát sóng Wi-Fi."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Không thể khởi động Wi-Fi Direct."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct được bật"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Khởi động WLAN Direct. Việc này sẽ tắt hoạt động của ứng dụng khách/điểm phát sóng WLAN."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Không thể khởi động WLAN Direct."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct được bật"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Chạm để cài đặt"</string>
     <string name="accept" msgid="1645267259272829559">"Đồng ý"</string>
     <string name="decline" msgid="2112225451706137894">"Từ chối"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Đã tắt dữ liệu 2G-3G"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G dữ liệu bị vô hiệu hóa"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Dữ liệu di động bị vô hiệu hóa"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Đã tắt dữ liệu Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Đã tắt dữ liệu WLAN"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Chạm để bật."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Đã vượt quá g.hạn dữ liệu 2G-3G"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Đã vượt quá giới hạn dữ liệu 4G"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Đã vượt quá g.hạn d.liệu d.động"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Vượt quá g.hạn d.liệu Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Vượt quá g.hạn d.liệu WLAN"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> vượt quá g.hạn được chỉ định."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Dữ liệu nền bị giới hạn"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Chạm để xóa giới hạn."</string>

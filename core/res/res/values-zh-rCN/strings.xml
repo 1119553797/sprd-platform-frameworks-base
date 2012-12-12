@@ -381,7 +381,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"访问平板电脑上的 GPS 等确切位置源。当位置服务可用且处于启用状态时，此权限可让该应用确定您的确切位置。"</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"访问手机上的 GPS 等确切位置源。当位置服务可用且处于启用状态时，此权限可让该应用确定您的确切位置。"</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"（基于网络的）大概位置"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"访问位置提供程序根据基站和 Wi-Fi 等网络源确定的大概位置。当这些位置服务可用且处于启用状态时，此权限可让该应用确定您的大概位置。"</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"访问位置提供程序根据基站和 WLAN 等网络源确定的大概位置。当这些位置服务可用且处于启用状态时，此权限可让该应用确定您的大概位置。"</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"访问 SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"允许应用使用 SurfaceFlinger 低级功能。"</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"读取帧缓冲区"</string>
@@ -489,13 +489,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"允许应用更改绑定网络连接的状态。"</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"更改后台数据使用设置"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"允许应用更改后台数据使用设置。"</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"查看 Wi-Fi 连接"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"允许该应用查看 Wi-Fi 网络的相关信息，例如是否启用了 Wi-Fi 以及连接的 Wi-Fi 设备的名称。"</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"连接 Wi-Fi 和断开连接"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"允许该应用与 Wi-Fi 接入点建立和断开连接，以及更改 Wi-Fi 网络的设备配置。"</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允许接收 Wi-Fi 多播"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"允许该应用使用多播地址接收发送到 Wi-Fi 网络上所有设备（而不仅仅是您的平板电脑）的数据包。该操作的耗电量比非多播模式要大。"</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"允许该应用使用多播地址接收发送到 Wi-Fi 网络上所有设备（而不仅仅是您的手机）的数据包。该操作的耗电量比非多播模式要大。"</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"查看 WLAN 连接"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"允许该应用查看 WLAN 网络的相关信息，例如是否启用了 WLAN 以及连接的 WLAN 设备的名称。"</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"连接 WLAN 和断开连接"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"允许该应用与 WLAN 接入点建立和断开连接，以及更改 WLAN 网络的设备配置。"</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允许接收 WLAN 多播"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"允许该应用使用多播地址接收发送到 WLAN 网络上所有设备（而不仅仅是您的平板电脑）的数据包。该操作的耗电量比非多播模式要大。"</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"允许该应用使用多播地址接收发送到 WLAN 网络上所有设备（而不仅仅是您的手机）的数据包。该操作的耗电量比非多播模式要大。"</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"访问蓝牙设置"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"允许应用配置本地蓝牙平板电脑，以及发现远程设备并进行配对。"</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"允许应用配置本地蓝牙手机，以及发现远程设备并进行配对。"</string>
@@ -1004,22 +1004,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"铃声"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"未知铃声"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"有可用的 Wi-Fi 网络"</item>
-    <item quantity="other" msgid="4192424489168397386">"有可用的 Wi-Fi 网络"</item>
+    <item quantity="one" msgid="6654123987418168693">"有可用的 WLAN 网络"</item>
+    <item quantity="other" msgid="4192424489168397386">"有可用的 WLAN 网络"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"打开可用的 Wi-Fi 网络"</item>
-    <item quantity="other" msgid="7915895323644292768">"打开可用的 Wi-Fi 网络"</item>
+    <item quantity="one" msgid="1634101450343277345">"打开可用的 WLAN 网络"</item>
+    <item quantity="other" msgid="7915895323644292768">"打开可用的 WLAN 网络"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"登录到 Wi-Fi 网络"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"登录到 WLAN 网络"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"无法连接到 Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"无法连接到 WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" 互联网连接状况不佳。"</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"启动 Wi-Fi Direct。此操作将会关闭 Wi-Fi 客户端/热点。"</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"无法启动 Wi-Fi Direct。"</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"已启用 Wi-Fi Direct"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"启动 WLAN Direct。此操作将会关闭 WLAN 客户端/热点。"</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"无法启动 WLAN Direct。"</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"已启用 WLAN Direct"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"通过触摸进行设置"</string>
     <string name="accept" msgid="1645267259272829559">"接受"</string>
     <string name="decline" msgid="2112225451706137894">"拒绝"</string>
@@ -1250,12 +1250,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G-3G 数据已停用"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G 数据已停用"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"移动数据已停用"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi 数据网络已停用"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLAN 数据网络已停用"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"触摸可启用。"</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"已超出 2G-3G 数据流量限制"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"已超出 4G 数据使用上限"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"已超出移动数据流量上限"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"超出了 Wi-Fi 数据流量上限"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"超出了 WLAN 数据流量上限"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"超出规定上限 <xliff:g id="SIZE">%s</xliff:g>。"</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"后台数据受限制"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"触摸可去除限制。"</string>

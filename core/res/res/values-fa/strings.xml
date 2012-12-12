@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"به منابع موقعیت مکانی دقیق مانند سیستم موقعیت‌یابی جهانی در رایانه لوحی خود دسترسی پیدا کنید. وقتی سرویس‌های موقعیت مکانی موجود و فعال باشند، این مجوز به برنامه اجازه می‌دهد موقعیت مکانی دقیق شما را تعیین کند."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"به منابع موقعیت مکانی دقیق مانند سیستم موقعیت‌یابی جهانی در تلفن خود دسترسی پیدا کنید. وقتی سرویس‌های موقعیت مکانی موجود و فعال باشند، این مجوز به برنامه اجازه می‌دهد موقعیت مکانی دقیق شما را تعیین کند."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"موقعیت مکانی تقریبی (مبتنی بر شبکه)"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"به موقعیت مکانی تقریبی ارا‌ئه‌دهندگان موقعیت مکانی با استفاده از منابع شبکه مانند برج مخابراتی و Wi-Fi دسترسی پیدا کنید. وقتی این سرویس‌های موقعیت مکانی موجود و فعال باشند، این مجوز به برنامه امکان می‌دهد موقعیت مکانی تقریبی شما را تعیین کند."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"به موقعیت مکانی تقریبی ارا‌ئه‌دهندگان موقعیت مکانی با استفاده از منابع شبکه مانند برج مخابراتی و WLAN دسترسی پیدا کنید. وقتی این سرویس‌های موقعیت مکانی موجود و فعال باشند، این مجوز به برنامه امکان می‌دهد موقعیت مکانی تقریبی شما را تعیین کند."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"دسترسی به SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"اجازه می‎دهد برنامه از ویژگی‌های سطح پایین SurfaceFlinger استفاده کند."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"خواندن بافر قاب"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"به برنامه اجازه می‎دهد تا وضعیت اتصال شبکه اتصال داده با سیم را تغییر دهد."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"تغییر تنظیمات میزان استفاده داده در پس‌زمینه"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"به برنامه اجازه می‎دهد تا تنظیم کاربرد داده‎های پس‌زمینه را تغییر دهد."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"مشاهدهٔ اتصالات Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"به برنامه امکان می‌دهد اطلاعات مربوط به شبکه Wi-Fi را مشاهده کند، به عنوان مثال فعال بودن Wi-Fi و نام دستگاه‌های Wi-Fi متصل."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"اتصال به Wi-Fi و قطع اتصال از آن"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"به برنامه اجازه می‎دهد تا به نقاط دسترسی Wi-Fi وصل شود و ارتباط خود را با آن‌ها قطع کند و تغییراتی را در پیکربندی دستگاه برای شبکه‎های Wi-Fi ایجاد کند."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"دریافت چندگانه Wi-Fi را مجاز می‌کند"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"به برنامه اجازه می‌دهد به دریافت بسته‌های ارسالی به همه دستگاه‌های موجود در شبکه Wi-Fi با استفاده از آدرس‌های پخش چندگانه و نه فقط به رایانه لوحی شما بپردازند. این از توان مصرف بیشتری نسبت به حالت پخش غیرچندگانه استفاده می‌کند."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"به برنامه اجازه می‌دهد به دریافت بسته‌های ارسالی به همه دستگاه‌های موجود در شبکه Wi-Fi با استفاده از آدرس‌های پخش چندگانه و نه فقط به تلفن شما بپردازند. این از توان مصرف بیشتری نسبت به حالت پخش غیرچندگانه استفاده می‌کند."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"مشاهدهٔ اتصالات WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"به برنامه امکان می‌دهد اطلاعات مربوط به شبکه WLAN را مشاهده کند، به عنوان مثال فعال بودن WLAN و نام دستگاه‌های WLAN متصل."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"اتصال به WLAN و قطع اتصال از آن"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"به برنامه اجازه می‎دهد تا به نقاط دسترسی WLAN وصل شود و ارتباط خود را با آن‌ها قطع کند و تغییراتی را در پیکربندی دستگاه برای شبکه‎های WLAN ایجاد کند."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"دریافت چندگانه WLAN را مجاز می‌کند"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"به برنامه اجازه می‌دهد به دریافت بسته‌های ارسالی به همه دستگاه‌های موجود در شبکه WLAN با استفاده از آدرس‌های پخش چندگانه و نه فقط به رایانه لوحی شما بپردازند. این از توان مصرف بیشتری نسبت به حالت پخش غیرچندگانه استفاده می‌کند."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"به برنامه اجازه می‌دهد به دریافت بسته‌های ارسالی به همه دستگاه‌های موجود در شبکه WLAN با استفاده از آدرس‌های پخش چندگانه و نه فقط به تلفن شما بپردازند. این از توان مصرف بیشتری نسبت به حالت پخش غیرچندگانه استفاده می‌کند."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"دسترسی به تنظیمات بلوتوث"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"به برنامه اجازه می‎دهد تا رایانه لوحی بلوتوث محلی را پیکربندی کرده، دستگاه‌های راه دور را شناسایی کرده و با آن‌ها جفت شود."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"به برنامه اجازه می‎دهد تا تلفن بلوتوث محلی را پیکربندی کند و دستگاه‌های راه دور را پیدا کند و با آن‌ها جفت شود."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"آهنگ‌های زنگ"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"آهنگ زنگ ناشناس"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"شبکه Wi-Fi موجود است"</item>
-    <item quantity="other" msgid="4192424489168397386">"شبکه‌های Wi-Fi موجود هستند"</item>
+    <item quantity="one" msgid="6654123987418168693">"شبکه WLAN موجود است"</item>
+    <item quantity="other" msgid="4192424489168397386">"شبکه‌های WLAN موجود هستند"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"شبکه Wi-Fi موجود را باز کنید"</item>
-    <item quantity="other" msgid="7915895323644292768">"شبکه‌های Wi-Fi موجود را باز کنید"</item>
+    <item quantity="one" msgid="1634101450343277345">"شبکه WLAN موجود را باز کنید"</item>
+    <item quantity="other" msgid="7915895323644292768">"شبکه‌های WLAN موجود را باز کنید"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"ورود به شبکه Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"ورود به شبکه WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"اتصال به Wi-Fi ممکن نیست"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"اتصال به WLAN ممکن نیست"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" اتصال اینترنتی ضعیفی دارد."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Wi-Fi Direct را شروع کنید. این کار نقطه اتصال/سرویس گیرنده Wi-Fi را غیرفعال خواهد کرد."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Wi-Fi Direct شروع نشد."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct روشن است"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"WLAN Direct را شروع کنید. این کار نقطه اتصال/سرویس گیرنده WLAN را غیرفعال خواهد کرد."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"WLAN Direct شروع نشد."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct روشن است"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"لمس کردن برای تنظیمات"</string>
     <string name="accept" msgid="1645267259272829559">"پذیرش"</string>
     <string name="decline" msgid="2112225451706137894">"عدم پذیرش"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"داده‌های 2G-3G غیرفعال شد"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"داده 4G غیر فعال شده است"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"داده‌های تلفن همراه غیرفعال شد"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"داده‌های Wi-Fi غیرفعال شد"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"داده‌های WLAN غیرفعال شد"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"برای فعال کردن لمس کنید."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"اطلاعات 2G-3G بیش از حد مجاز است"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"بیش از حد مجاز 4G است"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"داده‌های تلفن همراه از مقدار مجاز بیشتر است"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"از محدوده مجاز داده‌های Wi-Fi بیشتر شد"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"از محدوده مجاز داده‌های WLAN بیشتر شد"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> از حد تعیین شده بیشتر شد."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"داده پس‌زمینه محدود شد"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"برای حذف محدودیت، لمس کنید."</string>

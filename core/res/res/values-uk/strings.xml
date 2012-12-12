@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Отримувати доступ до джерел даних про точне місцезнаходження, як-от системи глобального позиціонування на планшетному ПК. Якщо ці служби локації доступні й увімкнені, такий дозвіл дає програмі змогу визначати ваше точне місцезнаходження."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Отримувати доступ до джерел даних про точне місцезнаходження, як-от системи глобального позиціонування на телефоні. Якщо служби локації доступні й увімкнені, такий дозвіл дає програмі змогу визначати ваше точне місцезнаходження."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"приблизне (мережеве) місцезнаходження"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Отримувати доступ до приблизного місцезнаходження від постачальників даних місцезнаходження за допомогою мережевих джерел, як-от веж мобільного зв’язку й точок доступу Wi-Fi. Якщо ці служби локації доступні й увімкнені, такий дозвіл дає програмі змогу визначати ваше приблизне місцезнаходження."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Отримувати доступ до приблизного місцезнаходження від постачальників даних місцезнаходження за допомогою мережевих джерел, як-от веж мобільного зв’язку й точок доступу WLAN. Якщо ці служби локації доступні й увімкнені, такий дозвіл дає програмі змогу визначати ваше приблизне місцезнаходження."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"дост. до SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Дозволяє програмі використовувати низькорівневі функції SurfaceFlinger."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"читати фрейм-буфер"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Дозволяє програмі змінювати стан під’єднання до мережі в режимі модема."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"змінювати параметр викор. фонових даних"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Дозволяє програмі змінювати параметр використання фонових даних."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"переглядати з’єднання Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Дозволяє програмі переглядати інформацію про використання мереж Wi-Fi, як-от увімкнення/вимкнення Wi-Fi, а також назви під’єднаних до Wi-Fi пристроїв."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"під’єднуватися й від’єднуватися від Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Дозволяє програмі під’єднуватися та від’єднуватися від точок доступу Wi-Fi, а також вносити зміни в налаштування пристрою для мереж Wi-Fi."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"дозвол. отримання багатоадр. Wi-Fi"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Дозволяє програмі отримувати пакети, надіслані за допомогою групової адресації на всі пристрої в мережі Wi-Fi, а не лише на ваш планшетний ПК. Використовує більше заряду, ніж режим небагатоадресних пакетів."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Дозволяє програмі отримувати пакети, надіслані за допомогою групової адресації на всі пристрої в мережі Wi-Fi, а не лише на ваш телефон. Використовує більше заряду, ніж режим небагатоадресних пакетів."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"переглядати з’єднання WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Дозволяє програмі переглядати інформацію про використання мереж WLAN, як-от увімкнення/вимкнення WLAN, а також назви під’єднаних до WLAN пристроїв."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"під’єднуватися й від’єднуватися від WLAN"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Дозволяє програмі під’єднуватися та від’єднуватися від точок доступу WLAN, а також вносити зміни в налаштування пристрою для мереж WLAN."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"дозвол. отримання багатоадр. WLAN"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Дозволяє програмі отримувати пакети, надіслані за допомогою групової адресації на всі пристрої в мережі WLAN, а не лише на ваш планшетний ПК. Використовує більше заряду, ніж режим небагатоадресних пакетів."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Дозволяє програмі отримувати пакети, надіслані за допомогою групової адресації на всі пристрої в мережі WLAN, а не лише на ваш телефон. Використовує більше заряду, ніж режим небагатоадресних пакетів."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"отримувати доступ до налаштувань Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Дозволяє програмі налаштовувати планшетний ПК із локальним Bluetooth, а також знаходити віддалені пристрої та створювати з ними пару."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Дозволяє програмі налаштовувати телефон із локальним Bluetooth, а також знаходити віддалені пристрої та створювати з ними пару."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Мелодії"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Невідома мелодія"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Wi-Fi мережа доступна"</item>
-    <item quantity="other" msgid="4192424489168397386">"Wi-Fi мережі доступні"</item>
+    <item quantity="one" msgid="6654123987418168693">"WLAN мережа доступна"</item>
+    <item quantity="other" msgid="4192424489168397386">"WLAN мережі доступні"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Відкрита Wi-Fi мережа доступна"</item>
-    <item quantity="other" msgid="7915895323644292768">"Відкриті Wi-Fi мережі доступні"</item>
+    <item quantity="one" msgid="1634101450343277345">"Відкрита WLAN мережа доступна"</item>
+    <item quantity="other" msgid="7915895323644292768">"Відкриті WLAN мережі доступні"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Вхід у мережу Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Вхід у мережу WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Не вдалося під’єднатися до мережі Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Не вдалося під’єднатися до мережі WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" має погане з’єднання з Інтернетом."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Запустити Wi-Fi Direct. Це вимкне з’єднання Wi-Fi клієнт/точка доступу."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Не вдалося запустити Wi-Fi Direct."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct увімкнено"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Запустити WLAN Direct. Це вимкне з’єднання WLAN клієнт/точка доступу."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Не вдалося запустити WLAN Direct."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct увімкнено"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Торкніться, щоб побачити налаштування"</string>
     <string name="accept" msgid="1645267259272829559">"Прийняти"</string>
     <string name="decline" msgid="2112225451706137894">"Відхилити"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Дані 2G–3G вимкнено"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Дані 4G вимкнено"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Мобільне передав. даних вимкнено"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Дані Wi-Fi вимкнено"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Дані WLAN вимкнено"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Торкніться, щоб увімкнути."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Перевищено ліміт даних 2G–3G"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Перевищено ліміт даних 4G"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Перевищено ліміт мобільних даних"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Перевищено ліміт даних Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Перевищено ліміт даних WLAN"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> – понад указаний ліміт."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Викор-ня фонових даних обмежено"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Торкн., щоб видалити обмеження."</string>

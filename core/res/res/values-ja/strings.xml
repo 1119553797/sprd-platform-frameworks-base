@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"正確な位置情報源（タブレットのGPSなど）にアクセスします。これにより、位置情報サービスが利用でき、ONになっているときは、アプリが正確な現在地を特定できるようになります。"</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"正確な位置情報源（携帯端末のGPSなど）にアクセスします。これにより、位置情報サービスが利用でき、ONになっているときは、アプリが正確な現在地を特定できるようになります。"</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"おおよその位置情報（ネットワーク基地局）"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"基地局やWi-Fiなどのネットワーク情報源を使用して、位置情報提供元からのおおよその位置情報にアクセスします。これにより、これらの位置情報サービスが利用でき、ONになっているときは、アプリがおおよその現在地を特定できるようになります。"</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"基地局やWLANなどのネットワーク情報源を使用して、位置情報提供元からのおおよその位置情報にアクセスします。これにより、これらの位置情報サービスが利用でき、ONになっているときは、アプリがおおよその現在地を特定できるようになります。"</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"SurfaceFlingerへのアクセス"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"SurfaceFlingerの低レベルの機能の使用をアプリに許可します。"</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"フレームバッファの読み取り"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"ネットワークのテザリング接続状態の変更をアプリに許可します。"</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"バックグラウンドデータ使用設定の変更"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"バックグラウンドデータの使用設定の変更をアプリに許可します。"</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"Wi-Fi接続の表示"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Wi-FiがONになっているかどうか、接続されているWi-Fi端末の名前など、Wi-Fiネットワークに関する情報を表示することをアプリに許可します。"</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"Wi-Fiからの接続と切断"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Wi-Fiアクセスポイントへの接続/切断、Wi-Fiネットワークのデバイス設定の変更をアプリに許可します。"</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Wi-Fiマルチキャストの受信を許可する"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"マルチキャストアドレスを使用して、このタブレットだけでなくWi-Fiネットワーク上のすべてのデバイスに送信されたパケットを受信することをアプリに許可します。マルチキャスト以外のモードよりも電池の消費量が大きくなります。"</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"マルチキャストアドレスを使用して、この携帯端末だけでなくWi-Fiネットワーク上のすべてのデバイスに送信されたパケットを受信することをアプリに許可します。マルチキャスト以外のモードよりも電池の消費量が大きくなります。"</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"WLAN接続の表示"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"WLANがONになっているかどうか、接続されているWLAN端末の名前など、WLANネットワークに関する情報を表示することをアプリに許可します。"</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"WLANからの接続と切断"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"WLANアクセスポイントへの接続/切断、WLANネットワークのデバイス設定の変更をアプリに許可します。"</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"WLANマルチキャストの受信を許可する"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"マルチキャストアドレスを使用して、このタブレットだけでなくWLANネットワーク上のすべてのデバイスに送信されたパケットを受信することをアプリに許可します。マルチキャスト以外のモードよりも電池の消費量が大きくなります。"</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"マルチキャストアドレスを使用して、この携帯端末だけでなくWLANネットワーク上のすべてのデバイスに送信されたパケットを受信することをアプリに許可します。マルチキャスト以外のモードよりも電池の消費量が大きくなります。"</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"Bluetoothの設定へのアクセス"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"ローカルのBluetoothタブレットを設定することと、リモート端末を検出してペアに設定することをアプリに許可します。"</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"ローカルのBluetooth携帯端末を設定することと、リモート端末を検出してペアに設定することをアプリに許可します。"</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"着信音"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"不明な着信音"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Wi-Fiを利用できます"</item>
-    <item quantity="other" msgid="4192424489168397386">"Wi-Fiを利用できます"</item>
+    <item quantity="one" msgid="6654123987418168693">"WLANを利用できます"</item>
+    <item quantity="other" msgid="4192424489168397386">"WLANを利用できます"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Wi-Fiオープンネットワークが利用できます"</item>
-    <item quantity="other" msgid="7915895323644292768">"Wi-Fiオープンネットワークが利用できます"</item>
+    <item quantity="one" msgid="1634101450343277345">"WLANオープンネットワークが利用できます"</item>
+    <item quantity="other" msgid="7915895323644292768">"WLANオープンネットワークが利用できます"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Wi-Fiネットワークにログイン"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"WLANネットワークにログイン"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Wi-Fiに接続できませんでした"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"WLANに接続できませんでした"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" はインターネット接続に問題があります。"</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Wi-Fi Directを開始します。これによりWi-Fiクライアント/アクセスポイントがOFFになります。"</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Wi-Fi Directを開始できませんでした。"</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi DirectはONです"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"WLAN Directを開始します。これによりWLANクライアント/アクセスポイントがOFFになります。"</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"WLAN Directを開始できませんでした。"</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN DirectはONです"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"設定を表示するにはタップしてください"</string>
     <string name="accept" msgid="1645267259272829559">"同意する"</string>
     <string name="decline" msgid="2112225451706137894">"同意しない"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G～3Gデータが無効になりました"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4Gデータが無効になりました"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"モバイルデータが無効になりました"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fiデータが無効になりました"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLANデータが無効になりました"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"タップして有効にします。"</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"2G～3Gデータの上限を超えました"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"4Gデータの上限を超えました"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"モバイルデータの上限を超えました"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Wi-Fiデータの上限を超えました"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"WLANデータの上限を超えました"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"指定した上限を<xliff:g id="SIZE">%s</xliff:g>超えました。"</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"バックグラウンドデータに上限あり"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"タップして上限をなくします。"</string>

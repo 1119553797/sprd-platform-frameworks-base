@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Få adgang til præcise placeringskilder, som f.eks. GPS (Global Positioning System) på tabletten. Når placeringstjenesterne er tilgængelige og aktiverede, kan appen med denne tilladelse bestemme din præcise placering."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Få adgang til præcise placeringskilder, som f.eks. GPS (Global Positioning System) på telefonen. Når placeringstjenesterne er tilgængelige og aktiverede, kan appen med denne tilladelse bestemme din præcise placering."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"omtrentlig (netværksbaseret) placering"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Få adgang til den omtrentlige placering fra placeringsudbydere ved hjælp af netværkskilder, som f.eks. mobilmaster og Wi-Fi. Når disse placeringstjenester er tilgængelige og aktiverede, kan appen med denne tilladelse bestemme din omtrentlige placering."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Få adgang til den omtrentlige placering fra placeringsudbydere ved hjælp af netværkskilder, som f.eks. mobilmaster og WLAN. Når disse placeringstjenester er tilgængelige og aktiverede, kan appen med denne tilladelse bestemme din omtrentlige placering."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"få adgang til SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Tillader, at appen kan bruge SurfaceFlinger-funktioner på lavt niveau."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"læs rammebuffer"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Tillader, at appen kan ændre tilstand for en netværksforbindelse via netdeling."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"skift brugerindstilling for baggrundsdata"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Tillader, at appen kan ændre indstillingen for brug af baggrundsdata."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"få vist Wi-Fi-forbindelser"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Tillader, at appen kan læse oplysninger om Wi-Fi-netværk, f.eks. hvorvidt Wi-Fi er aktiveret og navnet på forbundne Wi-Fi-enheder."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"oprette og afbryde Wi-Fi-forbindelse"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Tillader, at appen kan oprette og afbryde forbindelsen fra Wi-Fi-adgangspunkter og foretage ændringer i enhedskonfigurationen for Wi-Fi-netværk."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"tillad Wi-Fi-multicastmodtagelse"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Tillader, at appen kan modtage pakker, der sendes til alle enheder på et Wi-Fi-netværk ved hjælp af multicastadresser, ikke kun din tablet. Den bruger mere strøm end tilstanden, der ikke anvender multicast."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Tillader, at appen kan modtage pakker, der sendes til alle enheder på et Wi-Fi-netværk ved hjælp af multicastadresser, ikke kun din telefon. Den bruger mere strøm end tilstanden, der ikke anvender multicast."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"få vist WLAN-forbindelser"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Tillader, at appen kan læse oplysninger om WLAN-netværk, f.eks. hvorvidt WLAN er aktiveret og navnet på forbundne WLAN-enheder."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"oprette og afbryde WLAN-forbindelse"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Tillader, at appen kan oprette og afbryde forbindelsen fra WLAN-adgangspunkter og foretage ændringer i enhedskonfigurationen for WLAN-netværk."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"tillad WLAN-multicastmodtagelse"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Tillader, at appen kan modtage pakker, der sendes til alle enheder på et WLAN-netværk ved hjælp af multicastadresser, ikke kun din tablet. Den bruger mere strøm end tilstanden, der ikke anvender multicast."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Tillader, at appen kan modtage pakker, der sendes til alle enheder på et WLAN-netværk ved hjælp af multicastadresser, ikke kun din telefon. Den bruger mere strøm end tilstanden, der ikke anvender multicast."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"få adgang til Bluetooth-indstillinger"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Tillader, at appen kan konfigurere den lokale Bluetooth-tablet samt finde og parre med fjerne enheder."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Tillader, at appen kan konfigurere den lokale Bluetooth-telefon samt finde og parre med eksterne enheder."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Ringetoner"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Ukendt ringetone"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Wi-Fi-netværk tilgængeligt"</item>
-    <item quantity="other" msgid="4192424489168397386">"Tilgængelige Wi-Fi-netværk"</item>
+    <item quantity="one" msgid="6654123987418168693">"WLAN-netværk tilgængeligt"</item>
+    <item quantity="other" msgid="4192424489168397386">"Tilgængelige WLAN-netværk"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Åbent Wi-Fi-netværk tilgængeligt"</item>
-    <item quantity="other" msgid="7915895323644292768">"Der er åbne Wi-Fi-netværk tilgængelige"</item>
+    <item quantity="one" msgid="1634101450343277345">"Åbent WLAN-netværk tilgængeligt"</item>
+    <item quantity="other" msgid="7915895323644292768">"Der er åbne WLAN-netværk tilgængelige"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Log ind på Wi-Fi-netværket"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Log ind på WLAN-netværket"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kunne ikke oprette forbindelse til Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kunne ikke oprette forbindelse til WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" har en dårlig internetforbindelse."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Start Wi-Fi Direct. Dette slår Wi-Fi-klient/hotspot fra."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Wi-Fi Direct kunne ikke startes."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct er slået til"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Start WLAN Direct. Dette slår WLAN-klient/hotspot fra."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"WLAN Direct kunne ikke startes."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct er slået til"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Tryk for indstillinger"</string>
     <string name="accept" msgid="1645267259272829559">"Accepter"</string>
     <string name="decline" msgid="2112225451706137894">"Afvis"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G-3G-data er deaktiveret"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G-data er deaktiveret"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Mobildata er deaktiveret"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi-data er deaktiveret"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLAN-data er deaktiveret"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Tryk for at aktivere."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"2G-3G-data overskredet"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Grænsen for 4G-data er overskredet"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Mobildatagrænsen er overskredet"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Grænsen for Wi-Fi-data er overskredet"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Grænsen for WLAN-data er overskredet"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> over den angivne grænse."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Baggrundsdata er begrænsede"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Tryk for at fjerne begrænsn."</string>

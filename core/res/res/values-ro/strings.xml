@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Accesează de pe tabletă surse de locaţii exacte, cum ar fi cele ale sistemului Global Positioning System. Atunci când serviciile de localizare sunt disponibile şi activate, cu această permisiune aplicaţia poate determina locaţia dvs. exactă."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Accesează de pe telefon surse de locaţii exacte, cum ar fi cele ale sistemului Global Positioning System. Atunci când serviciile de localizare sunt disponibile şi activate, cu această permisiune aplicaţia poate determina locaţia dvs. exactă."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"locaţie aproximativă (bazată pe reţea)"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Accesează locaţia aproximativă de la furnizorii de locaţie utilizând surse de reţea cum ar fi cele prin turn de celule şi Wi-Fi. Atunci când aceste servicii de localizare sunt disponibile şi activate, cu această permisiune aplicaţia poate determina locaţia dvs. aproximativă."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Accesează locaţia aproximativă de la furnizorii de locaţie utilizând surse de reţea cum ar fi cele prin turn de celule şi WLAN. Atunci când aceste servicii de localizare sunt disponibile şi activate, cu această permisiune aplicaţia poate determina locaţia dvs. aproximativă."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"accesare SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Permite aplicaţiei să utilizeze funcţiile de nivel redus SurfaceFlinger."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"citire zonă tampon de cadre"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Permite aplicaţiei să modifice starea de conectivitate prin tethering la reţea."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"modificare setare pentru utilizarea datelor din fundal"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Permite aplicaţiei să modifice setarea pentru utilizarea datelor de fundal."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"vizualizează conexiunile Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Permite aplicaţiei să vadă informaţiile despre reţelele Wi-Fi, de ex. dacă o reţea Wi-Fi este activată, precum şi numele dispozitivelor conectate la reţeaua Wi-Fi."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"se conectează şi se deconectează de la Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Permite aplicaţiei să se conecteze şi să se deconecteze de la punctele de acces Wi-Fi, precum şi să efectueze modificări în configuraţia dispozitivului pentru reţelele Wi-Fi."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"permitere recepţionare difuzare multiplă Wi-Fi"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Permite aplicaţiei să primească pachetele trimise către toate dispozitivele dintr-o reţea Wi-Fi, utilizând adrese cu difuzare multiplă, nu doar tableta dvs. Această funcţie utilizează mai multă energie decât modul fără difuzare multiplă."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Permite aplicaţiei să primească pachetele trimise către toate dispozitivele dintr-o reţea Wi-Fi, utilizând adrese cu difuzare multiplă, nu doar telefonul dvs. Această funcţie utilizează mai multă energie decât modul fără difuzare multiplă."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"vizualizează conexiunile WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Permite aplicaţiei să vadă informaţiile despre reţelele WLAN, de ex. dacă o reţea WLAN este activată, precum şi numele dispozitivelor conectate la reţeaua WLAN."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"se conectează şi se deconectează de la WLAN"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Permite aplicaţiei să se conecteze şi să se deconecteze de la punctele de acces WLAN, precum şi să efectueze modificări în configuraţia dispozitivului pentru reţelele WLAN."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"permitere recepţionare difuzare multiplă WLAN"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Permite aplicaţiei să primească pachetele trimise către toate dispozitivele dintr-o reţea WLAN, utilizând adrese cu difuzare multiplă, nu doar tableta dvs. Această funcţie utilizează mai multă energie decât modul fără difuzare multiplă."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Permite aplicaţiei să primească pachetele trimise către toate dispozitivele dintr-o reţea WLAN, utilizând adrese cu difuzare multiplă, nu doar telefonul dvs. Această funcţie utilizează mai multă energie decât modul fără difuzare multiplă."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"accesează setările Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Permite aplicaţiei să configureze tableta Bluetooth locală, să descopere şi să se împerecheze cu dispozitive la distanţă."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Permite aplicaţiei să configureze telefonul Bluetooth local, să descopere şi să se împerecheze cu dispozitive la distanţă."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Tonuri de apel"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Ton de apel necunoscut"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Reţea Wi-Fi disponibilă"</item>
-    <item quantity="other" msgid="4192424489168397386">"Reţele Wi-Fi disponibile"</item>
+    <item quantity="one" msgid="6654123987418168693">"Reţea WLAN disponibilă"</item>
+    <item quantity="other" msgid="4192424489168397386">"Reţele WLAN disponibile"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Reţea Wi-Fi deschisă disponibilă"</item>
-    <item quantity="other" msgid="7915895323644292768">"Reţele Wi-Fi deschise disponibile"</item>
+    <item quantity="one" msgid="1634101450343277345">"Reţea WLAN deschisă disponibilă"</item>
+    <item quantity="other" msgid="7915895323644292768">"Reţele WLAN deschise disponibile"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Conectaţi-vă în reţeaua Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Conectaţi-vă în reţeaua WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nu se poate conecta la Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nu se poate conecta la WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" are o conexiune la internet slabă."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Porniţi Wi-Fi Direct. Acest lucru va dezactiva clientul/hotspotul Wi-Fi."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Wi-Fi Direct nu a putut porni."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct este activat"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Porniţi WLAN Direct. Acest lucru va dezactiva clientul/hotspotul WLAN."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"WLAN Direct nu a putut porni."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct este activat"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Atingeţi pentru setări"</string>
     <string name="accept" msgid="1645267259272829559">"Acceptaţi"</string>
     <string name="decline" msgid="2112225451706137894">"Refuzaţi"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Datele 2G-3G au fost dezactivate"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Datele 4G au fost dezactivate"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Datele mobile au fost dezactiv."</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Date Wi-Fi dezactivate"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Date WLAN dezactivate"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Atingeţi pentru activare."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"S-a depăşit limita de date 2G-3G"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"S-a depăşit limita de date 4G"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"S-a depăşit limit. date mobile"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"S-a depăşit limita de date Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"S-a depăşit limita de date WLAN"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> peste limita specificată."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Datele de fundal restricţionate"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Atingeţi pt. a elimina limita."</string>

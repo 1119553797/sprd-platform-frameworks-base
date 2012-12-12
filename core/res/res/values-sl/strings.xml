@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Dostop do virov za določitev natančne lokacije, kot je GPS v tabličnem računalniku. Ko so lokacijske storitve na voljo in vklopljene, lahko aplikacija s tem dovoljenjem natančno določi vašo lokacijo."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Dostop do virov za določitev natančne lokacije, kot je GPS v telefonu. Ko so lokacijske storitve na voljo in vklopljene, lahko aplikacija s tem dovoljenjem natančno določi vašo lokacijo."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"približna lokacija, ki temelji na omrežju"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Dostop do približne lokacije s pomočjo ponudnikov lokacij, ki uporabljajo omrežne vire, kot so bazne postaje in Wi-Fi. Ko so te lokacijske storitve na voljo in vklopljene, lahko aplikacija s tem dovoljenjem določi vašo približno lokacijo."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Dostop do približne lokacije s pomočjo ponudnikov lokacij, ki uporabljajo omrežne vire, kot so bazne postaje in WLAN. Ko so te lokacijske storitve na voljo in vklopljene, lahko aplikacija s tem dovoljenjem določi vašo približno lokacijo."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"dostop do storitve SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Programu omogoča uporabo funkcij nizke ravni SurfaceFlinger."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"branje grafičnega/slikovnega medpomnilnika"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Programu dovoljuje spreminjanje stanja povezljivosti posredniškega omrežja."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"spreminjanje nastavitev porabe podatkov ozadja"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Programu omogoča spreminjanje nastavitev uporabe podatkov ozadja."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"prikaz povezav Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Aplikaciji omogoča ogled podatkov o omrežjih Wi-Fi, na primer o tem, ali je Wi-Fi omogočen, in imen povezanih naprav Wi-Fi."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"vzpostavitev povezave z omrežjem Wi-Fi in prekinitev povezave z njim"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Aplikaciji omogoča, da vzpostavi povezavo z dostopnimi točkami Wi-Fi in prekine povezavo z njimi ter spremeni konfiguracijo naprav za omrežja Wi-Fi."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"prikaz povezav WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Aplikaciji omogoča ogled podatkov o omrežjih WLAN, na primer o tem, ali je WLAN omogočen, in imen povezanih naprav WLAN."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"vzpostavitev povezave z omrežjem WLAN in prekinitev povezave z njim"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Aplikaciji omogoča, da vzpostavi povezavo z dostopnimi točkami WLAN in prekine povezavo z njimi ter spremeni konfiguracijo naprav za omrežja WLAN."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"dovoljevanje sprejema večvrstnega brezžičnega oddajanja"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Aplikaciji omogoča prejemanje paketov, poslanih v vse naprave v omrežju Wi-Fi z večvrstnimi naslovi, ne samo v vaš tablični računalnik. Poraba je večja kot v načinu delovanja brez večvrstnega oddajanja."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Aplikaciji omogoča prejemanje paketov, poslanih v vse naprave v omrežju Wi-Fi z večvrstnimi naslovi, ne samo v vaš telefon. Poraba je večja kot v načinu delovanja brez večvrstnega oddajanja."</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Aplikaciji omogoča prejemanje paketov, poslanih v vse naprave v omrežju WLAN z večvrstnimi naslovi, ne samo v vaš tablični računalnik. Poraba je večja kot v načinu delovanja brez večvrstnega oddajanja."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Aplikaciji omogoča prejemanje paketov, poslanih v vse naprave v omrežju WLAN z večvrstnimi naslovi, ne samo v vaš telefon. Poraba je večja kot v načinu delovanja brez večvrstnega oddajanja."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"dostop do nastavitev Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Programu omogoča konfiguriranje lokalnega tabličnega računalnika Bluetooth ter zaznavanje oddaljenih naprav in združevanje z njimi."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Programu omogoča konfiguriranje lokalnega telefona s tehnologijo Bluetooth ter odkrivanje oddaljenih naprav in povezovanje z njimi."</string>
@@ -1010,15 +1010,15 @@
     <item quantity="one" msgid="1634101450343277345">"Odpiranje razpoložljivega brezžičnega omrežja"</item>
     <item quantity="other" msgid="7915895323644292768">"Odpiranje razpoložljivih brezžičnih omrežij"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Prijava v omrežje Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Prijava v omrežje WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Z omrežjem Wi-Fi se ni mogoče povezati"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Z omrežjem WLAN se ni mogoče povezati"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" ima slabo internetno povezavo."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Zaženite Wi-Fi Direct. S tem boste izklopili odjemalca/dostopno točko Wi-Fi."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Wi-Fi Direct ni bilo mogoče zagnati."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct je vklopljen"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Zaženite WLAN Direct. S tem boste izklopili odjemalca/dostopno točko WLAN."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"WLAN Direct ni bilo mogoče zagnati."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct je vklopljen"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Dotaknite se za nastavitve"</string>
     <string name="accept" msgid="1645267259272829559">"Sprejmi"</string>
     <string name="decline" msgid="2112225451706137894">"Zavrni"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Podatki 2G-3G so onemogočeni"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Podatki 4G so onemogočeni"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Mobilni podatki so onemogočeni"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Upor. podatk. Wi-Fi onemogočena"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Upor. podatk. WLAN onemogočena"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Dotaknite se, da omogočite."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Omejit. za podat. 2G-3G presež."</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Omejitev za podat. 4G presež."</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Omej. za pod. v mob. n. presež."</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Presež. omej. za podatke Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Presež. omej. za podatke WLAN"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"Velikost <xliff:g id="SIZE">%s</xliff:g> presega omejitev"</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Podatki v ozadju so omejeni"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Dotaknite se, da odst. omejitev."</string>

@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Piekļūst precīzas atrašanās vietas noteikšanas avotiem, piemēram, planšetdatora globālās pozicionēšanas sistēmai. Kad atrašanās vietas noteikšanas pakalpojumi ir pieejami un ieslēgti, ar šo atļauja lietotne var noteikt jūsu precīzu atrašanās vietu."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Piekļūst precīzas atrašanās vietas noteikšanas avotiem, piemēram, tālruņa globālās pozicionēšanas sistēmai. Kad atrašanās vietas noteikšanas pakalpojumi ir pieejami un ieslēgti, ar šo atļauju lietotne var noteikt jūsu precīzu atrašanās vietu."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"aptuvena atrašanās vieta (tīklā)"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Piekļūst informācijai par aptuveno atrašanās vietu no atrašanās vietas noteikšanas nodrošinātājiem, izmantojot tādus tīkla avotus kā mobilo sakaru tornis un Wi-Fi. Kad šie atrašanās vietas noteikšanas pakalpojumi ir pieejami un ir ieslēgti, ar šo atļauju lietotne var noteikt jūsu aptuveno atrašanās vietu."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Piekļūst informācijai par aptuveno atrašanās vietu no atrašanās vietas noteikšanas nodrošinātājiem, izmantojot tādus tīkla avotus kā mobilo sakaru tornis un WLAN. Kad šie atrašanās vietas noteikšanas pakalpojumi ir pieejami un ir ieslēgti, ar šo atļauju lietotne var noteikt jūsu aptuveno atrašanās vietu."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"piekļūt SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Ļauj lietotnei lietot SurfaceFlinger zema līmeņa funkcijas."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"lasīt kadru buferi"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Ļauj lietotnei mainīt piesaistes tīkla savienojamības statusu."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"mainīt fona datu lietojuma iestatījumu"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Ļauj lietotnei mainīt fona datu lietošanas iestatījumu."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"skatīt Wi-Fi savienojumus"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Ļauj lietotnei skatīt informāciju par Wi-Fi tīklošanu, piemēram, par to, vai Wi-Fi ir iespējots, kā arī pievienoto Wi-Fi ierīču nosaukumus."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"izveidot un pārtraukt Wi-Fi savienojumu"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Ļauj lietotnei izveidot savienojumu ar Wi-Fi piekļuves punktiem un pārtraukt savienojumus ar tiem, kā arī veikt izmaiņas ierīces Wi-Fi tīklu konfigurācijā."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"atļaut Wi-Fi multiraides uztveršanu"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Ļauj lietotnei saņemt sūtījumus, kas sūtīti uz visām ierīcēm Wi-Fi tīklā, izmantojot multiraides adreses, nevis tikai jūsu planšetdatoru. Tādējādi tiek patērēts vairāk enerģijas nekā režīmā, kas nav multiraide."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Ļauj lietotnei saņemt sūtījumus, kas sūtīti uz visām ierīcēm Wi-Fi tīklā, izmantojot multiraides adreses, nevis tikai jūsu tālruni. Tādējādi tiek patērēts vairāk enerģijas nekā režīmā, kas nav multiraide."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"skatīt WLAN savienojumus"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Ļauj lietotnei skatīt informāciju par WLAN tīklošanu, piemēram, par to, vai WLAN ir iespējots, kā arī pievienoto WLAN ierīču nosaukumus."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"izveidot un pārtraukt WLAN savienojumu"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Ļauj lietotnei izveidot savienojumu ar WLAN piekļuves punktiem un pārtraukt savienojumus ar tiem, kā arī veikt izmaiņas ierīces WLAN tīklu konfigurācijā."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"atļaut WLAN multiraides uztveršanu"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Ļauj lietotnei saņemt sūtījumus, kas sūtīti uz visām ierīcēm WLAN tīklā, izmantojot multiraides adreses, nevis tikai jūsu planšetdatoru. Tādējādi tiek patērēts vairāk enerģijas nekā režīmā, kas nav multiraide."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Ļauj lietotnei saņemt sūtījumus, kas sūtīti uz visām ierīcēm WLAN tīklā, izmantojot multiraides adreses, nevis tikai jūsu tālruni. Tādējādi tiek patērēts vairāk enerģijas nekā režīmā, kas nav multiraide."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"piekļūt Bluetooth iestatījumiem"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Ļauj lietotnei konfigurēt vietējo Bluetooth planšetdatoru, kā arī atklāt attālas ierīces un savienot tās pārī."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Ļauj lietotnei konfigurēt vietējo Bluetooth tālruni, kā arī atklāt attālas ierīces un savienot tās pārī."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Zvana signāli"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Nezināms zvana signāls"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Wi-Fi tīkls ir pieejams."</item>
-    <item quantity="other" msgid="4192424489168397386">"Wi-Fi tīkli ir pieejami"</item>
+    <item quantity="one" msgid="6654123987418168693">"WLAN tīkls ir pieejams."</item>
+    <item quantity="other" msgid="4192424489168397386">"WLAN tīkli ir pieejami"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Ir pieejams atvērts Wi-Fi tīkls"</item>
-    <item quantity="other" msgid="7915895323644292768">"Ir pieejami atvērti Wi-Fi tīkli."</item>
+    <item quantity="one" msgid="1634101450343277345">"Ir pieejams atvērts WLAN tīkls"</item>
+    <item quantity="other" msgid="7915895323644292768">"Ir pieejami atvērti WLAN tīkli."</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Pierakstieties Wi-Fi tīklā."</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Pierakstieties WLAN tīklā."</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nevarēja izveidot savienojumu ar Wi-Fi."</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nevarēja izveidot savienojumu ar WLAN."</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" ir slikts interneta savienojums."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Palaist programmu Wi-Fi Direct. Tādējādi tiks izslēgta Wi-Fi klienta/tīklāja darbība."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Nevarēja palaist programmu Wi-Fi Direct."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct ir ieslēgts"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Palaist programmu WLAN Direct. Tādējādi tiks izslēgta WLAN klienta/tīklāja darbība."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Nevarēja palaist programmu WLAN Direct."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct ir ieslēgts"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Pieskarieties, lai piekļūtu iestatījumiem."</string>
     <string name="accept" msgid="1645267259272829559">"Piekrist"</string>
     <string name="decline" msgid="2112225451706137894">"Noraidīt"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G–3G dati ir atspējoti"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G dati ir atspējoti"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Mobilie dati ir atspējoti"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi dati atspējoti"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLAN dati atspējoti"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Pieskarieties, lai iespējotu."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"2G-3G datu ierobež. pārsniegts"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"4G datu limits pārsniegts"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Pārsniegts mobilo datu ierobežoj."</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Wi-Fi datu ierobež. pārsniegts"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"WLAN datu ierobež. pārsniegts"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> virs norādītā ierobežojuma."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Fona dati ir ierobežoti."</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Pieskar., lai noņemtu ierobež."</string>

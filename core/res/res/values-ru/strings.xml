@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Приложение сможет определять ваше точное местоположение, используя данные со спутников GPS. Для этого в настройках устройства должна быть включена соответствующая функция."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Приложение сможет определять ваше точное местоположение, используя данные со спутников GPS. Для этого в настройках устройства должна быть включена соответствующая функция."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"Определение примерного местоположения (по координатам сети)"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Приложение сможет определять ваше примерное местоположение, используя различные источники геоданных (например, по координатам мобильной сети и точек доступа Wi-Fi). Для этого в настройках устройства должна быть включена соответствующая функция."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Приложение сможет определять ваше примерное местоположение, используя различные источники геоданных (например, по координатам мобильной сети и точек доступа WLAN). Для этого в настройках устройства должна быть включена соответствующая функция."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"получать доступ к SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Приложение сможет использовать низкоуровневые функции SurfaceFlinger."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"считывать буфер фреймов"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Приложение сможет включать и выключать режим модема."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"изменять настройки использования данных в фоновом режиме"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Приложение сможет изменять настройки использования трафика в фоновом режиме."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"Просмотр подключений Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Приложение сможет просматривать информацию о сети Wi-Fi: состояние сети и имена подключенных устройств."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"Подключение/отключение от сети Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Приложение сможет подключаться к точкам доступа Wi-Fi и отключаться от них, а также изменять конфигурацию сетей Wi-Fi на устройстве."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Получение данных по многоадресной рассылке через Wi-Fi"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Приложение сможет получать пакеты, отправленные всем устройствам в сети Wi-Fi (не только вашему планшетному ПК) в многоадресной рассылке. При этом расходуется больше энергии, чем в одноадресном режиме."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Приложение сможет получать пакеты, отправленные всем устройствам в сети Wi-Fi (не только вашему телефону) в многоадресной рассылке. При этом расходуется больше энергии, чем в одноадресном режиме."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"Просмотр подключений WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Приложение сможет просматривать информацию о сети WLAN: состояние сети и имена подключенных устройств."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"Подключение/отключение от сети WLAN"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Приложение сможет подключаться к точкам доступа WLAN и отключаться от них, а также изменять конфигурацию сетей WLAN на устройстве."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Получение данных по многоадресной рассылке через WLAN"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Приложение сможет получать пакеты, отправленные всем устройствам в сети WLAN (не только вашему планшетному ПК) в многоадресной рассылке. При этом расходуется больше энергии, чем в одноадресном режиме."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Приложение сможет получать пакеты, отправленные всем устройствам в сети WLAN (не только вашему телефону) в многоадресной рассылке. При этом расходуется больше энергии, чем в одноадресном режиме."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"Доступ к настройкам Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Приложение сможет настраивать параметры локального планшетного ПК с поддержкой Bluetooth, а также обнаруживать удаленные устройства и выполнять сопряжение с ними."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Приложение сможет настраивать параметры локального телефона с поддержкой Bluetooth, а также обнаруживать удаленные устройства и выполнять сопряжение с ними."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Мелодии"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Неизвестная мелодия"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Доступна сеть Wi-Fi"</item>
-    <item quantity="other" msgid="4192424489168397386">"Доступна сеть Wi-Fi"</item>
+    <item quantity="one" msgid="6654123987418168693">"Доступна сеть WLAN"</item>
+    <item quantity="other" msgid="4192424489168397386">"Доступна сеть WLAN"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Найдена доступная сеть Wi-Fi"</item>
-    <item quantity="other" msgid="7915895323644292768">"Найдены доступные сети Wi-Fi"</item>
+    <item quantity="one" msgid="1634101450343277345">"Найдена доступная сеть WLAN"</item>
+    <item quantity="other" msgid="7915895323644292768">"Найдены доступные сети WLAN"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Подключение к Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Подключение к WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Не удалось подключиться к сети Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Не удалось подключиться к сети WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" – плохое интернет-соединение."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Начать соединение через Wi-Fi Direct. Модуль Wi-Fi будет отключен."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Не удалось запустить Wi-Fi Direct."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct включен"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Начать соединение через WLAN Direct. Модуль WLAN будет отключен."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Не удалось запустить WLAN Direct."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct включен"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Нажмите, чтобы открыть настройки"</string>
     <string name="accept" msgid="1645267259272829559">"Принять"</string>
     <string name="decline" msgid="2112225451706137894">"Отклонить"</string>
@@ -1153,7 +1153,7 @@
     <string name="submit" msgid="1602335572089911941">"Отправить"</string>
     <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Включен режим \"Штурман\""</string>
     <string name="car_mode_disable_notification_message" msgid="8035230537563503262">"Чтобы выйти, нажмите здесь."</string>
-    <string name="tethered_notification_title" msgid="3146694234398202601">"USB-модем/точка доступа Wi-Fi используется"</string>
+    <string name="tethered_notification_title" msgid="3146694234398202601">"USB-модем/точка доступа WLAN используется"</string>
     <string name="tethered_notification_message" msgid="6857031760103062982">"Нажмите для настройки."</string>
     <string name="back_button_label" msgid="2300470004503343439">"Назад"</string>
     <string name="next_button_label" msgid="1080555104677992408">"Далее"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Передача данных 2G/3G отключена"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Передача данных 4G отключена"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Моб. Интернет отключен"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Передача данных через Wi-Fi отключена"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Передача данных через WLAN отключена"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Нажмите, чтобы включить."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Превышен лимита трафика 2G и 3G"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Превышен лимит на трафик 4G"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Превышен лимит на моб. трафик"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Превышен лимит трафика Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Превышен лимит трафика WLAN"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"Лимит превышен на <xliff:g id="SIZE">%s</xliff:g>."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Фоновый режим ограничен"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Снять ограничение..."</string>

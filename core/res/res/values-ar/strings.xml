@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"للدخول إلى مصادر المواقع مثل نظام تحديد المواقع العالمي على الجهاز اللوحي. وعند توفر خدمات المواقع وتشغيلها، يتيح هذا الإذن للتطبيق تحديد الموقع تحديدًا دقيقًا."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"للدخول إلى مصادر المواقع الدقيقة مثل نظام تحديد المواقع العالمي على الهاتف. وعند توفر خدمات المواقع وتشغيلها، يتيح هذا الإذن للتطبيق تحديد الموقع تحديدًا دقيقًا."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"موقع تقريبي (يعتمد على الشبكة)"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"للدخول إلى الموقع التقريبي من موفري المواقع باستخدام مصادر الشبكة مثل برج الهاتف الخلوي وWi-Fi. وعند توفر خدمات المواقع هذه وتشغيلها، يتيح هذا الإذن للتطبيق تحديد الموقع التقريبي."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"للدخول إلى الموقع التقريبي من موفري المواقع باستخدام مصادر الشبكة مثل برج الهاتف الخلوي وWLAN. وعند توفر خدمات المواقع هذه وتشغيلها، يتيح هذا الإذن للتطبيق تحديد الموقع التقريبي."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"الدخول إلى SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"للسماح للتطبيق باستخدام ميزات SurfaceFlinger ذات المستوى المنخفض."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"قراءة المخزن المؤقت للإطارات"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"للسماح للتطبيق بتغيير حالة اتصال الشبكة المربوطة."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"تغيير إعداد استخدام بيانات الخلفية"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"للسماح للتطبيق بتغيير إعداد استخدام بيانات الخلفية."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"عرض اتصالات Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"للسماح للتطبيق بعرض معلومات حول شبكات Wi-Fi، كعرض معلومات حول ما إذا تم تمكين Wi-Fi واسم أجهزة Wi-Fi المتصلة."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"التوصيل والفصل من Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"للسماح للتطبيق بالاتصال بنقاط الوصول إلى Wi-Fi وقطع الاتصال بها، وإجراء تغييرات على تهيئة الجهاز لشبكات Wi-Fi."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"السماح باستقبال بث Wi-Fi متعدد"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"للمساح للتطبيق بتلقي الحزم التي يتم إرسالها إلى جميع الأجهزة على شبكة Wi-Fi باستخدام عناوين بث متعدد، وليس باستخدام جهازك اللوحي فقط. ويؤدي ذلك إلى استخدام قدر أكبر من الطاقة يفوق وضع البث غير المتعدد."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"للمساح للتطبيق بتلقي الحزم التي يتم إرسالها إلى جميع الأجهزة على شبكة Wi-Fi باستخدام عناوين بث متعدد، وليس باستخدام هاتفك فقط. ويؤدي ذلك إلى استخدام قدر أكبر من الطاقة يفوق وضع البث غير المتعدد."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"عرض اتصالات WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"للسماح للتطبيق بعرض معلومات حول شبكات WLAN، كعرض معلومات حول ما إذا تم تمكين WLAN واسم أجهزة WLAN المتصلة."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"التوصيل والفصل من WLAN"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"للسماح للتطبيق بالاتصال بنقاط الوصول إلى WLAN وقطع الاتصال بها، وإجراء تغييرات على تهيئة الجهاز لشبكات WLAN."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"السماح باستقبال بث WLAN متعدد"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"للمساح للتطبيق بتلقي الحزم التي يتم إرسالها إلى جميع الأجهزة على شبكة WLAN باستخدام عناوين بث متعدد، وليس باستخدام جهازك اللوحي فقط. ويؤدي ذلك إلى استخدام قدر أكبر من الطاقة يفوق وضع البث غير المتعدد."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"للمساح للتطبيق بتلقي الحزم التي يتم إرسالها إلى جميع الأجهزة على شبكة WLAN باستخدام عناوين بث متعدد، وليس باستخدام هاتفك فقط. ويؤدي ذلك إلى استخدام قدر أكبر من الطاقة يفوق وضع البث غير المتعدد."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"الدخول إلى إعدادات بلوتوث"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"للسماح للتطبيق بتهيئة لوحة البلوتوث المحلي، واكتشاف أجهزة التحكم عن بعد والاقتران بها."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"للسماح للتطبيق بتهيئة هاتف البلوتوث المحلي، واكتشاف أجهزة التحكم عن بعد والاقتران بها."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"نغمات الرنين"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"نغمة رنين غير معروفة"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"شبكة Wi-Fi متاحة"</item>
-    <item quantity="other" msgid="4192424489168397386">"شبكات Wi-Fi متاحة"</item>
+    <item quantity="one" msgid="6654123987418168693">"شبكة WLAN متاحة"</item>
+    <item quantity="other" msgid="4192424489168397386">"شبكات WLAN متاحة"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"هناك شبكة Wi-Fi مفتوحة متاحة"</item>
-    <item quantity="other" msgid="7915895323644292768">"هناك شبكات Wi-Fi مفتوحة متاحة"</item>
+    <item quantity="one" msgid="1634101450343277345">"هناك شبكة WLAN مفتوحة متاحة"</item>
+    <item quantity="other" msgid="7915895323644292768">"هناك شبكات WLAN مفتوحة متاحة"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"تسجيل الدخول إلى شبكة Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"تسجيل الدخول إلى شبكة WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"تعذر الاتصال بـ Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"تعذر الاتصال بـ WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" لديها اتصال إنترنت رديء."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"اتصال Wi-Fi مباشر"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"ابدأ Wi-Fi Direct. يؤدي هذا إلى إيقاف عميل/نقطة اتصال Wi-Fi."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"تعذر بدء Wi-Fi Direct."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"تم تشغيل اتصال Wi-Fi المباشر"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"اتصال WLAN مباشر"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"ابدأ WLAN Direct. يؤدي هذا إلى إيقاف عميل/نقطة اتصال WLAN."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"تعذر بدء WLAN Direct."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"تم تشغيل اتصال WLAN المباشر"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"المس للحصول على الإعدادات"</string>
     <string name="accept" msgid="1645267259272829559">"قبول"</string>
     <string name="decline" msgid="2112225451706137894">"رفض"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"تم تعطيل بيانات شبكات الجيل الثاني والجيل الثالث"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"تم تعطيل بيانات شبكة الجيل الرابع"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"تم تعطيل بيانات الجوال"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"تم تعطيل بيانات Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"تم تعطيل بيانات WLAN"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"المس للتمكين."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"تم تجاوز حد بيانات شبكات 2G-3G"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"تم تجاوز حد بيانات 4G"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"تم تجاوز حد بيانات الجوال"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"تم تجاوز حد بيانات شبكة Wi-Fi"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"تم تجاوز حد بيانات شبكة WLAN"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> فوق الحد المعين."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"تم تقييد بيانات الخلفية"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"المس لإزالة التقييد."</string>

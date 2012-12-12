@@ -492,7 +492,7 @@
     <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Allows the app to view information about Wi-FI networking, such as whether Wi-FI is enabled and name of connected Wi-FI devices."</string>
     <string name="permlab_changeWifiState" msgid="6550641188749128035">"connect and disconnect from WiFi"</string>
     <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Allows the app to connect to and disconnect from Wi-FI access points and to make changes to device configuration for Wi-FI networks."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"allow Wi-Fi Multicast reception"</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"allow WLAN Multicast reception"</string>
     <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Allows the app to receive packets sent to all devices on a Wi-FI network using multicast addresses, not just your tablet. It uses more power than the non-multicast mode."</string>
     <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Allows the app to receive packets sent to all devices on a Wi-FI network using multicast addresses, not just your phone. It uses more power than the non-multicast mode."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"access Bluetooth settings"</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Ringtones"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Unknown ringtone"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Wi-Fi network available"</item>
-    <item quantity="other" msgid="4192424489168397386">"Wi-Fi networks available"</item>
+    <item quantity="one" msgid="6654123987418168693">"WLAN network available"</item>
+    <item quantity="other" msgid="4192424489168397386">"WLAN networks available"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Open available Wi-Fi network"</item>
-    <item quantity="other" msgid="7915895323644292768">"Open Wi-Fi networks available"</item>
+    <item quantity="one" msgid="1634101450343277345">"Open available WLAN network"</item>
+    <item quantity="other" msgid="7915895323644292768">"Open WLAN networks available"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Sign in to Wi-Fi network"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Sign in to WLAN network"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Couldn\'t connect to Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Couldn\'t connect to WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" has a poor Internet connection."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Start Wi-Fi Direct. This will turn off Wi-Fi client/hotspot."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Couldn\'t start Wi-Fi Direct."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct is on"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Start WLAN Direct. This will turn off WLAN client/hotspot."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Couldn\'t start WLAN Direct."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct is on"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Touch for settings"</string>
     <string name="accept" msgid="1645267259272829559">"Accept"</string>
     <string name="decline" msgid="2112225451706137894">"Decline"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G-3G data disabled"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G data disabled"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Mobile data disabled"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi data disabled"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLAN data disabled"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Touch to enable."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"2G-3G data limit exceeded"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"4G data limit exceeded"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Mobile data limit exceeded"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Wi-Fi data limit exceeded"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"WLAN data limit exceeded"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> over specified limit."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Background data restricted"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Touch to remove restriction."</string>

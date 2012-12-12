@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"እንደ አለም አቀፍ የመሬት አቀማመጥ ስርዓት (GPS) ያሉ የትክክለኛ የመነሻ ምንጮችን በጡባዊ ቱኮው ላይ አግኝ። የአካባቢ አገልግሎቶች የሚገኙና የተነሱ ሲሆኑ ይህ ፈቃድ መተግበሪያው ትክክለኛ አካባቢህን እንዲያውቅ ይፈቅድለታል።"</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"እንደ አለም አቀፍ የመሬት አቀማመጥ ስርዓት (GPS) ያሉ የትክክለኛ የመነሻ ምንጮችን በስልኩ ላይ አግኝ። የአካባቢ አገልግሎቶች የሚገኙና የተነሱ ሲሆኑ ይህ ፈቃድ መተግበሪያው ትክክለኛ አካባቢህን እንዲያውቅ ይፈቅድለታል።"</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"ግምታዊ (በአውታረ መረብ ላይ የተመሰረተ) አካባቢ"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"እንደ ህዋስ ማማ እና Wi-Fi ያሉ የአውታረ መረብ ምንጮችን በመጠቀም ግምታዊ አካባቢን ከአካባቢ አቅራቢዎች ድረስባቸው። እነዚህ የአካባቢ አገልግሎቶች የሚገኙና የተነሱ ሲሆኑ ይህ ፈቃድ መተግበሪያው ግምታዊ አካባቢህን እንዲያውቅ ይፈቅድለታል።"</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"እንደ ህዋስ ማማ እና WLAN ያሉ የአውታረ መረብ ምንጮችን በመጠቀም ግምታዊ አካባቢን ከአካባቢ አቅራቢዎች ድረስባቸው። እነዚህ የአካባቢ አገልግሎቶች የሚገኙና የተነሱ ሲሆኑ ይህ ፈቃድ መተግበሪያው ግምታዊ አካባቢህን እንዲያውቅ ይፈቅድለታል።"</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"SurfaceFlinger ድረስ።"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"መተግበሪያውን የSurfaceFlinger ዝቅተኛ ደረጃ ባህሪያትን ለመጠቀም ይፈቅዳል።"</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"የንዑስ ክፈፍ ቋት አንብብ"</string>
@@ -489,12 +489,12 @@
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"የዳራ ውሂብ አጠቃቀም ቅንብር ለውጥ"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"የዳራ ውሂብ አጠቃቀም ቅንብሮች  ለመለወጥ ለመተግበሪያው ይፈቅዳሉ፡፡"</string>
     <string name="permlab_accessWifiState" msgid="5202012949247040011">"የገመድ አልባ ግኑኝነቶችን እይ"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"መተግበሪያው አንደ Wi-Fi እንደነቃ እና የተገናኙ የWi-Fi መሳሪያዎችን ስም የመሳሰሉ የWi-Fi አውታረ መረብ መረጃዎችን እንዲያይ ይፈቅድለታል።"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"መተግበሪያው አንደ WLAN እንደነቃ እና የተገናኙ የWLAN መሳሪያዎችን ስም የመሳሰሉ የWLAN አውታረ መረብ መረጃዎችን እንዲያይ ይፈቅድለታል።"</string>
     <string name="permlab_changeWifiState" msgid="6550641188749128035">"ከገመድ አልባ ጋር ተገናኝና ተላቀቅ"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"መተግበሪያው ከWi-Fi መዳረሻ ነጥቦች ጋር እንዲገናኝና እንዲለያይ እንዲሁም ለWi-Fi አውታረ መረቦች የመሳሪያ ውቅር ለውጦች እንዲያደርግ ይፈቅድለታል።"</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"የWi-Fi ብዙስምሪትተቀባይፍቀድ"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"መተግበሪያው ባለብዙ ስምሪት አድራሻዎችን በመጠቀም ጡባዊ ቱኮህን ብቻ ሳይሆን በWi-Fi አውታረ መረብ ላሉ መሳሪያዎች በሙሉ የተላኩ እሽጎችን እንዲቀበል ይፈቅድለታል። ባለብዙ ስምሪት ካልሆነው ሁኔታ የበለጠ ሃይል ይጠቀማል።"</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"መተግበሪያው ባለብዙ ስምሪት አድራሻዎችን በመጠቀም ስልክህን ብቻ ሳይሆን በWi-Fi አውታረ መረብ ላሉ መሳሪያዎች በሙሉ የተላኩ እሽጎችን እንዲቀበል ይፈቅድለታል። ባለብዙ ስምሪት ካልሆነው ሁኔታ የበለጠ ሃይል ይጠቀማል።"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"መተግበሪያው ከWLAN መዳረሻ ነጥቦች ጋር እንዲገናኝና እንዲለያይ እንዲሁም ለWLAN አውታረ መረቦች የመሳሪያ ውቅር ለውጦች እንዲያደርግ ይፈቅድለታል።"</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"የWLAN ብዙስምሪትተቀባይፍቀድ"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"መተግበሪያው ባለብዙ ስምሪት አድራሻዎችን በመጠቀም ጡባዊ ቱኮህን ብቻ ሳይሆን በWLAN አውታረ መረብ ላሉ መሳሪያዎች በሙሉ የተላኩ እሽጎችን እንዲቀበል ይፈቅድለታል። ባለብዙ ስምሪት ካልሆነው ሁኔታ የበለጠ ሃይል ይጠቀማል።"</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"መተግበሪያው ባለብዙ ስምሪት አድራሻዎችን በመጠቀም ስልክህን ብቻ ሳይሆን በWLAN አውታረ መረብ ላሉ መሳሪያዎች በሙሉ የተላኩ እሽጎችን እንዲቀበል ይፈቅድለታል። ባለብዙ ስምሪት ካልሆነው ሁኔታ የበለጠ ሃይል ይጠቀማል።"</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"የብሉቱዝ ቅንብሮችን ድረስባቸው"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"የአካባቢውን ብሉቱዝ ጡባዊ ለማዋቀር እና አግኝቶ ከሩቅ መሣሪያዎች ጋር ለማጣመር ለመተግበሪያው ይፈቅዳሉ።"</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"የአካባቢውን ብሉቱዝ ጡባዊ ለማዋቀር እና አግኝቶ ከሩቅ መሣሪያዎች ጋር ለማጣመር ለመተግበሪያው ይፈቅዳሉ።"</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"ጥሪ ድምፆች"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"ያልታወቀ የስልክ ጥሪ ድምፅ"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"የWi-Fi አውታረ መረብ አለ"</item>
+    <item quantity="one" msgid="6654123987418168693">"የWLAN አውታረ መረብ አለ"</item>
     <item quantity="other" msgid="4192424489168397386">"የWiFi አውታረ መረቦች አሉ"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"አውታረ መረብ ሲኖር Wi-Fi ክፈት"</item>
-    <item quantity="other" msgid="7915895323644292768">"አውታረ መረቦች ሲኖሩ Wi-Fi ክፈት"</item>
+    <item quantity="one" msgid="1634101450343277345">"አውታረ መረብ ሲኖር WLAN ክፈት"</item>
+    <item quantity="other" msgid="7915895323644292768">"አውታረ መረቦች ሲኖሩ WLAN ክፈት"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"ወደ Wi-Fi አውታረ መረብ በመለያ ግባ"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"ወደ WLAN አውታረ መረብ በመለያ ግባ"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"ወደ Wi-Fi ለማያያዝ አልተቻለም"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"ወደ WLAN ለማያያዝ አልተቻለም"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" ደካማ የበይነመረብ ግንኙነት ኣለው።"</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi ቀጥታ"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"የWi-Fi በቀጥታ  ጀምር።ይህ የWi-Fi ደንበኛ /ድረስ ነጥብ  ያጠፋል።"</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"በቀጥታ Wi-Fi ማስጀመር አልተቻለም።"</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"የWi-Fi ቀጥታ በርቷል"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN ቀጥታ"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"የWLAN በቀጥታ  ጀምር።ይህ የWLAN ደንበኛ /ድረስ ነጥብ  ያጠፋል።"</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"በቀጥታ WLAN ማስጀመር አልተቻለም።"</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"የWLAN ቀጥታ በርቷል"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"ለቅንብሮች ንካ"</string>
     <string name="accept" msgid="1645267259272829559">"ተቀበል"</string>
     <string name="decline" msgid="2112225451706137894">"ውድቅ አድርግ"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G-3G ውሂብ ቦዝኗል"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G ውሂብ ቦዝኗል"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"የተንቀሳቃሽ ውሂብ ቦዝኗል"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi ውሂብ ቦዝኗል"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLAN ውሂብ ቦዝኗል"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"ለማንቃት ንካ።"</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"2G-3G የውሂብ ወሰን አልፏል"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"4G ውሂብ ወሰን አልፏል"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"የተንቀሳቃሽ ውሂብ ወሰን አልፏል"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Wi-Fi ውሂብ ገደብ ታልፏል"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"WLAN ውሂብ ገደብ ታልፏል"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> ከተወሰነለት በላይ።"</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"በስተጀርባ ውሂብ የተገደበ ነው"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"ገደብ ለማስወገድ ንካ።"</string>

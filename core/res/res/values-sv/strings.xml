@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Få åtkomst till exakta platskällor, till exempel GPS på pekdatorn. När platstjänsterna är tillgängliga och aktiverade tillåts appen att fastställa exakt var du befinner dig med den här behörigheten."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Få åtkomst till exakta platskällor, till exempel GPS på mobilen. När platstjänsterna är tillgängliga och aktiverade tillåts appen att fastställa exakt var du befinner dig med den här behörigheten."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"ungefärlig (nätverksbaserad) plats"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Få åtkomst till ungefärlig plats från platsleverantörer med hjälp av källor i nätverket som mobilmast och Wi-Fi. När platstjänsterna är tillgängliga och aktiverade tillåts appen att fastställa ungefär var du befinner dig med den här behörigheten."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Få åtkomst till ungefärlig plats från platsleverantörer med hjälp av källor i nätverket som mobilmast och WLAN. När platstjänsterna är tillgängliga och aktiverade tillåts appen att fastställa ungefär var du befinner dig med den här behörigheten."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"få åtkomst till SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Tillåter att appen använder lågnivåfunktioner i SurfaceFlinger."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"läsa rambuffert"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Tillåter att appen ändrar statusen för en delad nätverksanslutning."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"ändra inställningar för användning av bakgrundsdata"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Tillåter att appen ändrar inställningen för användning av bakgrundsdata."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"visa Wi-Fi-anslutningar"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Tillåter att appen kommer åt information om Wi-Fi-nätverk, till exempel om Wi-Fi är aktiverat och namn på anslutna Wi-Fi-enheter."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"anslut och koppla från Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Tillåter att appen ansluter till och kopplar från Wi-Fi-åtkomstpunkter samt gör ändringar i enhetens konfiguration för Wi-Fi-nätverk."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"tillåt Wi-Fi multicast-mottagning"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Tillåter att appen tar emot paket som skickats med multicast-adress till alla enheter i ett Wi-Fi-nätverk och inte bara till den här pekdatorn. Detta drar mer batteri än när multicastläget inte används."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Tillåter att appen tar emot paket som skickats med multicast-adress till alla enheter i ett Wi-Fi-nätverk och inte bara till den här mobilen. Detta drar mer batteri än när multicastläget inte används."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"visa WLAN-anslutningar"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Tillåter att appen kommer åt information om WLAN-nätverk, till exempel om WLAN är aktiverat och namn på anslutna WLAN-enheter."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"anslut och koppla från WLAN"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Tillåter att appen ansluter till och kopplar från WLAN-åtkomstpunkter samt gör ändringar i enhetens konfiguration för WLAN-nätverk."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"tillåt WLAN multicast-mottagning"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Tillåter att appen tar emot paket som skickats med multicast-adress till alla enheter i ett WLAN-nätverk och inte bara till den här pekdatorn. Detta drar mer batteri än när multicastläget inte används."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Tillåter att appen tar emot paket som skickats med multicast-adress till alla enheter i ett WLAN-nätverk och inte bara till den här mobilen. Detta drar mer batteri än när multicastläget inte används."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"få åtkomst till Bluetooth-inställningar"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Tillåter att appen konfigurerar den lokala Bluetooth-pekdatorn samt upptäcker och parkopplar den med fjärranslutna enheter."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Tillåter att appen konfigurerar den lokala Bluetooth-mobilen samt upptäcker och parkopplar den med fjärranslutna enheter."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Ringsignaler"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Okänd ringsignal"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Wi-Fi-nätverk är tillgängliga"</item>
-    <item quantity="other" msgid="4192424489168397386">"Wi-Fi-nätverk är tillgängliga"</item>
+    <item quantity="one" msgid="6654123987418168693">"WLAN-nätverk är tillgängliga"</item>
+    <item quantity="other" msgid="4192424489168397386">"WLAN-nätverk är tillgängliga"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Öppna Wi-Fi-nätverk är tillgängliga"</item>
-    <item quantity="other" msgid="7915895323644292768">"Öppna Wi-Fi-nätverk är tillgängliga"</item>
+    <item quantity="one" msgid="1634101450343277345">"Öppna WLAN-nätverk är tillgängliga"</item>
+    <item quantity="other" msgid="7915895323644292768">"Öppna WLAN-nätverk är tillgängliga"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Logga in på Wi-Fi-nätverk"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Logga in på WLAN-nätverk"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Det gick inte att ansluta till Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Det gick inte att ansluta till WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" har en dålig Internetanslutning."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi direkt"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Starta direkt Wi-Fi-användning. Detta inaktiverar Wi-Fi-användning med klient/trådlös surfzon."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Det gick inte att starta Wi-Fi direkt."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct är aktiverat"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN direkt"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Starta direkt WLAN-användning. Detta inaktiverar WLAN-användning med klient/trådlös surfzon."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Det gick inte att starta WLAN direkt."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct är aktiverat"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Tryck om du vill visa inställningar"</string>
     <string name="accept" msgid="1645267259272829559">"Godkänn"</string>
     <string name="decline" msgid="2112225451706137894">"Avvisa"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Data via 2G-3G har inaktiverats"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Data via 4G har inaktiverats"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Mobildata har inaktiverats"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Data via Wi-Fi har inaktiverats"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Data via WLAN har inaktiverats"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Tryck om du vill aktivera."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Gränsen för data via 2G-3G har överskridits"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Gränsen för data via 4G har överskridits"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Gränsen för mobildata har överskridits"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Gränsen för data via Wi-Fi har överskridits"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Gränsen för data via WLAN har överskridits"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> över angiven gräns."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Bakgrundsdata är begränsade"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Tryck för att radera begränsning"</string>

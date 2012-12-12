@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"एप्‍लिकेशन को टेदर की गई नेटवर्क कनेक्‍टिविटी की स्‍थिति बदलने देता है."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"पृष्ठभूमि डेटा उपयोग सेटिंग बदलें"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"एप्‍लिकेशन को पृष्ठभूमि डेटा उपयोग सेटिंग बदलने देता है."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"Wi-Fi कनेक्‍शन देखें"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"एप्लिकेशन को Wi-Fi नेटवर्क के बारे में जानकारी, जैसे WI-Fi सक्षम है या नहीं और कनेक्‍ट किए गए Wi-Fi उपकरणों के नाम, देखने देता है."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"Wi-Fi से कनेक्‍ट और डिस्‍कनेक्‍ट करें"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"एप्लिकेशन को Wi-Fi पहुंच बिंदुओं से कनेक्ट और डिस्कनेक्ट करने और Wi-Fi नेटवर्क के लिए उपकरण कॉन्फ़िगरेशन में परिवर्तन करने देता है."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Wi-Fi मल्‍टीकास्‍ट प्राप्ति को अनुमति दें"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"एप्लिकेशन को Wi-Fi नेटवर्क पर मल्टीकास्ट पते के उपयोग से केवल आपके टेबलेट पर ही नहीं, बल्कि सभी उपकरणों पर भेजे गए पैकेट प्राप्‍त करने देता है. यह गैर-मल्टीकास्ट मोड से अधिक पावर का उपयोग करता है."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"एप्लिकेशन को Wi-Fi नेटवर्क पर मल्टीकास्ट पते के उपयोग से केवल आपके फ़ोन पर ही नहीं, बल्कि सभी उपकरणों पर भेजे गए पैकेट प्राप्‍त करने देता है. यह गैर-मल्टीकास्ट मोड से अधिक पावर का उपयोग करता है."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"WLAN कनेक्‍शन देखें"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"एप्लिकेशन को WLAN नेटवर्क के बारे में जानकारी, जैसे WI-Fi सक्षम है या नहीं और कनेक्‍ट किए गए WLAN उपकरणों के नाम, देखने देता है."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"WLAN से कनेक्‍ट और डिस्‍कनेक्‍ट करें"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"एप्लिकेशन को WLAN पहुंच बिंदुओं से कनेक्ट और डिस्कनेक्ट करने और WLAN नेटवर्क के लिए उपकरण कॉन्फ़िगरेशन में परिवर्तन करने देता है."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"WLAN मल्‍टीकास्‍ट प्राप्ति को अनुमति दें"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"एप्लिकेशन को WLAN नेटवर्क पर मल्टीकास्ट पते के उपयोग से केवल आपके टेबलेट पर ही नहीं, बल्कि सभी उपकरणों पर भेजे गए पैकेट प्राप्‍त करने देता है. यह गैर-मल्टीकास्ट मोड से अधिक पावर का उपयोग करता है."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"एप्लिकेशन को WLAN नेटवर्क पर मल्टीकास्ट पते के उपयोग से केवल आपके फ़ोन पर ही नहीं, बल्कि सभी उपकरणों पर भेजे गए पैकेट प्राप्‍त करने देता है. यह गैर-मल्टीकास्ट मोड से अधिक पावर का उपयोग करता है."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"Bluetooth सेटिंग पर पहुंचें"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"किसी एप्‍लिकेशन को स्‍थानीय Bluetooth टेबलेट कॉन्‍फ़िगर करने की और रिमोट उपकरणों के साथ खोजने और युग्‍मित करने देता है."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"एप्‍लिकेशन को स्‍थानीय Bluetooth फ़ोन कॉन्‍फ़िगर करने देता है, और रिमोट उपकरणों के साथ खोजने और युग्‍मित करने देता है."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"रिंगटोन"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"अज्ञात रिंगटोन"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Wi-Fi नेटवर्क उपलब्‍ध"</item>
-    <item quantity="other" msgid="4192424489168397386">"Wi-Fi नेटवर्क उपलब्‍ध"</item>
+    <item quantity="one" msgid="6654123987418168693">"WLAN नेटवर्क उपलब्‍ध"</item>
+    <item quantity="other" msgid="4192424489168397386">"WLAN नेटवर्क उपलब्‍ध"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"उपलब्‍ध Wi-Fi नेटवर्क खोलें"</item>
-    <item quantity="other" msgid="7915895323644292768">"खुले Wi-Fi नेटवर्क उपलब्‍ध है"</item>
+    <item quantity="one" msgid="1634101450343277345">"उपलब्‍ध WLAN नेटवर्क खोलें"</item>
+    <item quantity="other" msgid="7915895323644292768">"खुले WLAN नेटवर्क उपलब्‍ध है"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Wi-Fi नेटवर्क में साइन इन करें"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"WLAN नेटवर्क में साइन इन करें"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Wi-Fi से कनेक्‍ट नहीं हो सका"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"WLAN से कनेक्‍ट नहीं हो सका"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" के पास एक कमज़ोर इंटरनेट कनेक्‍शन है."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi प्रत्यक्ष"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Wi-Fi डायरेक्ट प्रारंभ करें. इससे Wi-Fi क्‍लाइंट/हॉटस्पॉट कार्यवाही बंद हो जाएगी."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Wi-Fi डायरेक्ट प्रारंभ नहीं किया जा सका."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi प्रत्यक्ष चालू है"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN प्रत्यक्ष"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"WLAN डायरेक्ट प्रारंभ करें. इससे WLAN क्‍लाइंट/हॉटस्पॉट कार्यवाही बंद हो जाएगी."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"WLAN डायरेक्ट प्रारंभ नहीं किया जा सका."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN प्रत्यक्ष चालू है"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"सेटिंग के लिए स्‍पर्श करें"</string>
     <string name="accept" msgid="1645267259272829559">"स्वीकार करें"</string>
     <string name="decline" msgid="2112225451706137894">"अस्वीकार करें"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G-3G डेटा अक्षम किया गया"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G डेटा अक्षम किया गया"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"मोबाइल डेटा अक्षम किया गया"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi डेटा अक्षम हो गया"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLAN डेटा अक्षम हो गया"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"सक्षम करने के लिए स्‍पर्श करें."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"2G-3G डेटा सीमा पार हो गई है"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"4G डेटा सीमा पार हो गई है"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"मोबाइल डेटा सीमा पार हो गई है"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Wi-Fi डेटा सीमा पार हो गई है"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"WLAN डेटा सीमा पार हो गई है"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> निर्दिष्ट सीमा से अधिक."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"पृष्ठभूमि डेटा प्रतिबंधित है"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"प्रतिबंध निकालने हेतु स्‍पर्श करें."</string>

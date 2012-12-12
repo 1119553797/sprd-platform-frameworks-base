@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Přístup ke zdrojům přesné polohy v tabletu, jako je například systém GPS. Pokud jsou tyto služby určování polohy k dispozici a jsou zapnuté, umožňuje toto oprávnění aplikaci určit vaši přesnou polohu."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Přístup ke zdrojům přesné polohy v telefonu, jako je například systém GPS. Pokud jsou tyto služby určování polohy k dispozici a jsou zapnuté, umožňuje toto oprávnění aplikaci určit vaši přesnou polohu."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"přibližná poloha (pomocí sítě)"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Přístup k přibližné poloze určené poskytovateli polohy prostřednictvím síťových zdrojů, jako jsou mobilní vysílače a sítě Wi-Fi. Pokud jsou tyto služby určování polohy k dispozici a jsou zapnuté, umožňuje toto oprávnění aplikaci určit vaši přibližnou polohu."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Přístup k přibližné poloze určené poskytovateli polohy prostřednictvím síťových zdrojů, jako jsou mobilní vysílače a sítě WLAN. Pokud jsou tyto služby určování polohy k dispozici a jsou zapnuté, umožňuje toto oprávnění aplikaci určit vaši přibližnou polohu."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"přístup ke službě SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Umožňuje aplikaci používat nízkoúrovňové funkce SurfaceFlinger."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"čtení vyrovnávací paměti snímků"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Umožňuje aplikaci změnit stav sdíleného datového připojení k síti."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"změnit nastavení použití dat na pozadí"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Umožňuje aplikaci změnit nastavení použití dat na pozadí."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"zobrazení připojení Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Umožňuje aplikaci zobrazit informace o sítích Wi-fi, například o tom, zda je povoleno připojení Wi-Fi, nebo název připojených zařízení Wi-Fi."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"připojení k síti Wi-Fi a odpojení od sítě Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Umožňuje aplikaci připojit se k přístupovým bodům Wi-Fi či se od nich odpojit a provádět změny konfigurace zařízení pro sítě Wi-Fi."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"povolení příjmu Wi-Fi Multicast"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Umožňuje aplikaci přijímat pakety odeslané do všech zařízení v síti Wi-Fi nejen pomocí tabletu, ale i prostřednictvím adres vícesměrového vysílání. Spotřeba energie je vyšší než u režimu bez vícesměrového vysílání (multicast)."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Umožňuje aplikaci přijímat pakety odeslané do všech zařízení v síti Wi-Fi nejen pomocí telefonu, ale i prostřednictvím adres vícesměrového vysílání. Spotřeba energie je vyšší než u režimu bez vícesměrového vysílání (multicast)."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"zobrazení připojení WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Umožňuje aplikaci zobrazit informace o sítích Wi-fi, například o tom, zda je povoleno připojení WLAN, nebo název připojených zařízení WLAN."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"připojení k síti WLAN a odpojení od sítě WLAN"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Umožňuje aplikaci připojit se k přístupovým bodům WLAN či se od nich odpojit a provádět změny konfigurace zařízení pro sítě WLAN."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"povolení příjmu WLAN Multicast"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Umožňuje aplikaci přijímat pakety odeslané do všech zařízení v síti WLAN nejen pomocí tabletu, ale i prostřednictvím adres vícesměrového vysílání. Spotřeba energie je vyšší než u režimu bez vícesměrového vysílání (multicast)."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Umožňuje aplikaci přijímat pakety odeslané do všech zařízení v síti WLAN nejen pomocí telefonu, ale i prostřednictvím adres vícesměrového vysílání. Spotřeba energie je vyšší než u režimu bez vícesměrového vysílání (multicast)."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"přístup do nastavení Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Umožňuje aplikaci konfigurovat místní tablet s rozhraním Bluetooth a vyhledávat a párovat vzdálená zařízení."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Umožňuje aplikaci konfigurovat místní telefon s rozhraním Bluetooth a vyhledávat a párovat vzdálená zařízení."</string>
@@ -1010,15 +1010,15 @@
     <item quantity="one" msgid="1634101450343277345">"K dispozici je veřejná síť WiFi"</item>
     <item quantity="other" msgid="7915895323644292768">"Jsou k dispozici veřejné sítě WiFi"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Přihlásit se k síti Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Přihlásit se k síti WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Připojení k síti Wi-Fi se nezdařilo"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Připojení k síti WLAN se nezdařilo"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" má pomalé připojení k internetu."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Přímé připojení sítě Wi-Fi"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Spustit přímé připojení sítě Wi-Fi. Tato možnost vypne provoz sítě Wi-Fi v režimu klient/hotspot."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Přímé připojení sítě Wi-Fi se nepodařilo spustit."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Přímé připojení sítě Wi-Fi je zapnuto"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Přímé připojení sítě WLAN"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Spustit přímé připojení sítě WLAN. Tato možnost vypne provoz sítě WLAN v režimu klient/hotspot."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Přímé připojení sítě WLAN se nepodařilo spustit."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Přímé připojení sítě WLAN je zapnuto"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Nastavení otevřete dotykem"</string>
     <string name="accept" msgid="1645267259272829559">"Přijmout"</string>
     <string name="decline" msgid="2112225451706137894">"Odmítnout"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Datové přenosy 2G a 3G zakázány"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Datové přenosy 4G jsou zakázány"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Mobilní data jsou zakázána"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Přenos dat přes Wi-Fi zakázán"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Přenos dat přes WLAN zakázán"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Dotykem povolte."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Překročili jste limit dat 2G–3G"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Překročili jste limit dat 4G."</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Překročili jste limit mobilních dat."</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Datový limit Wi-Fi byl překročen"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Datový limit WLAN byl překročen"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> nad stanoveným limitem."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Přenos dat na pozadí je omezen"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Klepnutím omezení odstraníte."</string>

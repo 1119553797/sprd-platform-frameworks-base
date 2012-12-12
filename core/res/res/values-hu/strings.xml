@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"A pontos tartózkodásihely-adatokhoz való hozzáférés GPS használatával táblagépen. Amikor a helyszolgáltatások elérhetők és engedélyezve vannak, akkor az alkalmazás meghatározhatja az Ön pontos tartózkodási helyét."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"A pontos tartózkodásihely-adatokhoz való hozzáférés GPS használatával telefonon. Amikor a helyszolgáltatások elérhetők és engedélyezve vannak, akkor az alkalmazás meghatározhatja az Ön pontos tartózkodási helyét."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"hozzávetőleges (hálózatalapú) tartózkodási hely"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"A hozzávetőleges tartózkodásihely-adatokhoz való hozzáférés cellatornyok és Wi-Fi hálózatok használatával. Amikor ezek a helyszolgáltatások elérhetők és engedélyezve vannak, akkor az alkalmazás meghatározhatja az Ön hozzávetőleges tartózkodási helyét."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"A hozzávetőleges tartózkodásihely-adatokhoz való hozzáférés cellatornyok és WLAN hálózatok használatával. Amikor ezek a helyszolgáltatások elérhetők és engedélyezve vannak, akkor az alkalmazás meghatározhatja az Ön hozzávetőleges tartózkodási helyét."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"hozzáférés a SurfaceFlingerhez"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Lehetővé teszi az alkalmazás számára a SurfaceFlinger alacsony szintű funkciók használatát."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"keretpuffer olvasása"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Lehetővé teszi az alkalmazás számára a megosztott hálózati csatlakoztathatóság állapotának módosítását."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"háttéradatok használati beállításának módosítása"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Lehetővé teszi az alkalmazás számára a háttérben történő adathasználat beállításainak módosítását."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"Wi-Fi kapcsolatok megtekintése"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Lehetővé teszi az alkalmazás számára, hogy hozzáférjen Wi-Fi hálózati információkhoz: például, hogy engedélyezve van-e a Wi-Fi, valamint a csatlakoztatott Wi-Fi eszközök nevéhez."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"kapcsolódás Wi-Fi-hez és a kapcsolat bontása"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Lehetővé teszi az alkalmazás számára, hogy kapcsolódjon Wi-Fi hozzáférési pontokhoz, illetve megszüntesse a kapcsolatot velük, valamint hogy módosítsa az egyes eszközök Wi-Fi beállításait."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Wi-Fi multicast vétel engedélyezése"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Lehetővé teszi az alkalmazás számára, hogy olyan csomagokat fogadjon, amelyeket nem csak a táblagépének, hanem egy Wi-Fi hálózat minden eszközének elküldtek többirányú címek használatával. Több energiát használ, mint a nem többirányú üzemmód."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Lehetővé teszi az alkalmazás számára, hogy olyan csomagokat fogadjon, amelyeket nem csak a telefonjának, hanem egy Wi-Fi hálózat minden eszközének elküldtek többirányú címek használatával. Több energiát használ, mint a nem többirányú üzemmód."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"WLAN kapcsolatok megtekintése"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Lehetővé teszi az alkalmazás számára, hogy hozzáférjen WLAN hálózati információkhoz: például, hogy engedélyezve van-e a WLAN, valamint a csatlakoztatott WLAN eszközök nevéhez."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"kapcsolódás WLAN-hez és a kapcsolat bontása"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Lehetővé teszi az alkalmazás számára, hogy kapcsolódjon WLAN hozzáférési pontokhoz, illetve megszüntesse a kapcsolatot velük, valamint hogy módosítsa az egyes eszközök WLAN beállításait."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"WLAN multicast vétel engedélyezése"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Lehetővé teszi az alkalmazás számára, hogy olyan csomagokat fogadjon, amelyeket nem csak a táblagépének, hanem egy WLAN hálózat minden eszközének elküldtek többirányú címek használatával. Több energiát használ, mint a nem többirányú üzemmód."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Lehetővé teszi az alkalmazás számára, hogy olyan csomagokat fogadjon, amelyeket nem csak a telefonjának, hanem egy WLAN hálózat minden eszközének elküldtek többirányú címek használatával. Több energiát használ, mint a nem többirányú üzemmód."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"Bluetooth-beállítások elérése"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Lehetővé teszi az alkalmazás számára, hogy konfigurálja a helyi Bluetooth-t, valamint hogy távoli eszközöket fedezzen fel és párosítson."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Lehetővé teszi az alkalmazás számára, hogy konfigurálja a helyi Bluetooth telefont, valamint hogy távoli eszközöket fedezzen fel és párosítson."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Csengőhangok"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Ismeretlen csengőhang"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Wi-Fi hálózat elérhető"</item>
-    <item quantity="other" msgid="4192424489168397386">"Wi-Fi hálózatok elérhetők"</item>
+    <item quantity="one" msgid="6654123987418168693">"WLAN hálózat elérhető"</item>
+    <item quantity="other" msgid="4192424489168397386">"WLAN hálózatok elérhetők"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Nyílt Wi-Fi hálózat elérhető"</item>
-    <item quantity="other" msgid="7915895323644292768">"Nyílt Wi-Fi hálózatok elérhetők"</item>
+    <item quantity="one" msgid="1634101450343277345">"Nyílt WLAN hálózat elérhető"</item>
+    <item quantity="other" msgid="7915895323644292768">"Nyílt WLAN hálózatok elérhetők"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Bejelentkezés Wi-Fi hálózatba"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Bejelentkezés WLAN hálózatba"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nem sikerült csatlakozni a Wi-Fi hálózathoz"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nem sikerült csatlakozni a WLAN hálózathoz"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" rossz internetkapcsolattal rendelkezik."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Wi-Fi Direct elindítása. A Wi-Fi kliens/hotspot ettől leáll."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Nem sikerült elindítani a Wi-Fi Direct kapcsolatot."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"A Wi-Fi Direct be van kapcsolva"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"WLAN Direct elindítása. A WLAN kliens/hotspot ettől leáll."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Nem sikerült elindítani a WLAN Direct kapcsolatot."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"A WLAN Direct be van kapcsolva"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"A beállításokhoz érintse meg"</string>
     <string name="accept" msgid="1645267259272829559">"Elfogadás"</string>
     <string name="decline" msgid="2112225451706137894">"Elutasítás"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G-3G adatforgalom letiltva"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G adatforgalom letiltva"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Mobil adatforgalom letiltva"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Wi-Fi adatok letiltva"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"WLAN adatok letiltva"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Érintse meg az engedélyezéshez."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Elérte a 2G/3G adatkorlátot"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Elérte a 4G adatkorlátot"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Elérte a mobil adatkorlátot"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Elérte a Wi-Fi adatkorlátot"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Elérte a WLAN adatkorlátot"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g>-tal túllépte a korlátot."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Háttéradatok korlátozva"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Korlátozás törlése"</string>

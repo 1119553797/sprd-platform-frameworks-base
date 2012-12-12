@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Pasiekite tikslius vietos nustatymo šaltinius, pvz., pasaulinę padėties nustatymo sistemą, planšetiniame kompiuteryje. Kai vietos nustatymo paslaugos pasiekiamos ir įjungtos, šis leidimas suteikia teisę programai nustatyti tikslią vietą."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Pasiekite tikslius vietos nustatymo šaltinius, pvz., pasaulinę padėties nustatymo sistemą telefone. Kai vietos nustatymo paslaugos pasiekiamos ir įjungtos, šis leidimas suteikia teisę programai nustatyti tikslią vietą."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"apytikslė (pagrįsta pagal tinklą) vieta"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Pasiekite apytikslę vietą iš vietos nustatymo paslaugų teikėjų naudodami tinklo šaltinius, pvz., mobiliojo ryšio bokštą ir „Wi-Fi“. Kai šios vietos nustatymo paslaugos pasiekiamos ir įjungtos, šis leidimas suteikia teisę programai nustatyti apytikslę jūsų vietą."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Pasiekite apytikslę vietą iš vietos nustatymo paslaugų teikėjų naudodami tinklo šaltinius, pvz., mobiliojo ryšio bokštą ir „WLAN“. Kai šios vietos nustatymo paslaugos pasiekiamos ir įjungtos, šis leidimas suteikia teisę programai nustatyti apytikslę jūsų vietą."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"pasiekti „SurfaceFlinger“"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Leidžiama programai naudoti „SurfaceFlinger“ žemo lygio funkcijas."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"skaityti kadrų buferį"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Leidžiama programai keisti susieto tinklo jungiamumą."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"keisti fono duomenų naudojimo nustatymą"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Leidžiama programai keisti fono duomenų naudojimo nustatymą."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"žiūrėti „Wi-Fi“ ryšius"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Leidžiama programai peržiūrėti informaciją apie „Wi-Fi“ ryšio tinklus, pvz., ar įgalintas „Wi-Fi“, ir prijungtų „Wi-Fi“ įrenginių pavadinimus."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"prijungti prie „Wi-Fi“ ir atjungti nuo jo"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Leidžiama programai prisijungti prie „Wi-Fi“ ryšio prieigos taškų ir nuo jų atsijungti bei keisti įrenginio „Wi-Fi“ ryšio tinklų konfigūraciją."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"leisti „Wi-Fi“ daugiaadresio perdavimo priėmimą"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Leidžiama programai gauti paketus, siunčiamus į visus prie „Wi-Fi“ ryšio tinklo prijungtus įrenginius (ne tik į planšetinį kompiuterį), naudojančius daugiaadresio perdavimo adresus. Ji naudoja daugiau energijos nei ne daugiaadresio perdavimo režimas."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Leidžiama programai gauti paketus, siunčiamus į visus prie „Wi-Fi“ ryšio tinklo prijungtus įrenginius (ne tik į telefoną), naudojančius daugiaadresio perdavimo adresus. Ji naudoja daugiau energijos nei ne daugiaadresio perdavimo režimas."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"žiūrėti „WLAN“ ryšius"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Leidžiama programai peržiūrėti informaciją apie „WLAN“ ryšio tinklus, pvz., ar įgalintas „WLAN“, ir prijungtų „WLAN“ įrenginių pavadinimus."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"prijungti prie „WLAN“ ir atjungti nuo jo"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Leidžiama programai prisijungti prie „WLAN“ ryšio prieigos taškų ir nuo jų atsijungti bei keisti įrenginio „WLAN“ ryšio tinklų konfigūraciją."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"leisti „WLAN“ daugiaadresio perdavimo priėmimą"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Leidžiama programai gauti paketus, siunčiamus į visus prie „WLAN“ ryšio tinklo prijungtus įrenginius (ne tik į planšetinį kompiuterį), naudojančius daugiaadresio perdavimo adresus. Ji naudoja daugiau energijos nei ne daugiaadresio perdavimo režimas."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Leidžiama programai gauti paketus, siunčiamus į visus prie „WLAN“ ryšio tinklo prijungtus įrenginius (ne tik į telefoną), naudojančius daugiaadresio perdavimo adresus. Ji naudoja daugiau energijos nei ne daugiaadresio perdavimo režimas."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"pasiekti „Bluetooth“ nustatymus"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Leidžiama programai konfigūruoti vietinį „Bluetooth“ planšetinį kompiuterį ir atrasti nuotolinius įrenginius bei su jais susieti."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Leidžiama programai konfigūruoti vietinį „Bluetooth“ telefoną ir atrasti bei susieti su nuotoliniais įrenginiais."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Skambėjimo tonai"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Nežinomas skambėjimo tonas"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Galimas „Wi-Fi“ tinklas"</item>
-    <item quantity="other" msgid="4192424489168397386">"galimi „Wi-Fi“ tinklai"</item>
+    <item quantity="one" msgid="6654123987418168693">"Galimas „WLAN“ tinklas"</item>
+    <item quantity="other" msgid="4192424489168397386">"galimi „WLAN“ tinklai"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Atidaryti galimą „Wi-Fi“ tinklą"</item>
-    <item quantity="other" msgid="7915895323644292768">"Atidaryti galimus „Wi-Fi“ tinklus"</item>
+    <item quantity="one" msgid="1634101450343277345">"Atidaryti galimą „WLAN“ tinklą"</item>
+    <item quantity="other" msgid="7915895323644292768">"Atidaryti galimus „WLAN“ tinklus"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Prisijungti prie „Wi-Fi“ ryšio tinklo"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Prisijungti prie „WLAN“ ryšio tinklo"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nepavyko prisijungti prie „Wi-Fi“"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nepavyko prisijungti prie „WLAN“"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" turi prastą interneto ryšį."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Tiesioginis „Wi-Fi“ ryšys"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Paleiskite „Wi-Fi Direct“. Bus išjungta „Wi-Fi“ programa / viešosios interneto prieigos taškas."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Nepavyko paleisti „Wi-Fi Direct“."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"„Wi-Fi Direct“ įjungta"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Tiesioginis „WLAN“ ryšys"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Paleiskite „WLAN Direct“. Bus išjungta „WLAN“ programa / viešosios interneto prieigos taškas."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Nepavyko paleisti „WLAN Direct“."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"„WLAN Direct“ įjungta"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Jei norite peržiūrėti nustatymus, palieskite"</string>
     <string name="accept" msgid="1645267259272829559">"Sutikti"</string>
     <string name="decline" msgid="2112225451706137894">"Atmesti"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G–3G duomenys neleidžiami"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"4G duomenys neleidžiami"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Mobilieji duomenys neleidžiami"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"„Wi-Fi“ duomenys neleidžiami"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"„WLAN“ duomenys neleidžiami"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Palieskite, kad įgalintumėte."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Viršyta 2G–3G duomenų riba"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Viršyta 4G duomenų riba"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Viršyta mobiliųjų duomenų riba"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Viršytas „Wi-Fi“ duomenų aprib."</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Viršytas „WLAN“ duomenų aprib."</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> viršyta nurodyta riba."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Apriboti foniniai duomenys"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Palieskite, kad pašalint. aprib."</string>

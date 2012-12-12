@@ -380,7 +380,7 @@
     <string name="permdesc_accessFineLocation" product="tablet" msgid="8960597421469894181">"Acessar fontes de localização precisa, como o GPS do tablet. Quando esses serviços de localização estão disponíveis e ligados, esta permissão possibilita que o aplicativo determine sua localização precisa."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="239268765496141815">"Acessar fontes de localização precisa, como o GPS do telefone. Quando esses serviços de localização estão disponíveis e ligados, esta permissão possibilita que o aplicativo determine sua localização precisa."</string>
     <string name="permlab_accessCoarseLocation" msgid="7422827215441638984">"localização aproximada (com base na rede)"</string>
-    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Acessar a localização aproximada a partir de fornecedores de localização que utilizam fontes de rede como torres de celular e Wi-Fi. Quando esses serviços de localização estão disponíveis e ligados, esta permissão possibilita que o aplicativo determine sua localização aproximada."</string>
+    <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Acessar a localização aproximada a partir de fornecedores de localização que utilizam fontes de rede como torres de celular e WLAN. Quando esses serviços de localização estão disponíveis e ligados, esta permissão possibilita que o aplicativo determine sua localização aproximada."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"acessar SurfaceFlinger"</string>
     <string name="permdesc_accessSurfaceFlinger" msgid="1041619516733293551">"Permite que o aplicativo use recursos com baixos níveis de SurfaceFlinger."</string>
     <string name="permlab_readFrameBuffer" msgid="6690504248178498136">"ler o buffer do frame"</string>
@@ -488,13 +488,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"Permite que o aplicativo altere o estado de conectividade de rede conectada."</string>
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"alterar configuração de uso dos dados de segundo plano"</string>
     <string name="permdesc_changeBackgroundDataSetting" msgid="5347729578468744379">"Permite que o aplicativo altere as configurações de uso de dados de segundo plano."</string>
-    <string name="permlab_accessWifiState" msgid="5202012949247040011">"ver conexões Wi-Fi"</string>
-    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Permite que o aplicativo acesse informações sobre redes Wi-Fi, como a ativação do Wi-Fi e o nome dos dispositivos Wi-Fi conectados."</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"conectar e desconectar do Wi-Fi"</string>
-    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Permite que o aplicativo conecte e desconecte dos pontos de acesso Wi-Fi e faça alterações nas configurações do dispositivo para redes Wi-Fi."</string>
-    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"permitir recebimento de multicast Wi-Fi"</string>
-    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Permite que o aplicativo receba pacotes enviados para todos os dispositivos em uma rede Wi-Fi usando endereços de difusão seletiva, e não apenas o tablet. Consome mais energia do que o modo não multicast."</string>
-    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Permite que o aplicativo receba pacotes enviados para todos os dispositivos em uma rede Wi-Fi usando endereços de difusão seletiva, e não apenas o telefone. Consome mais energia do que o modo não multicast."</string>
+    <string name="permlab_accessWifiState" msgid="5202012949247040011">"ver conexões WLAN"</string>
+    <string name="permdesc_accessWifiState" msgid="5002798077387803726">"Permite que o aplicativo acesse informações sobre redes WLAN, como a ativação do WLAN e o nome dos dispositivos WLAN conectados."</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"conectar e desconectar do WLAN"</string>
+    <string name="permdesc_changeWifiState" msgid="7137950297386127533">"Permite que o aplicativo conecte e desconecte dos pontos de acesso WLAN e faça alterações nas configurações do dispositivo para redes WLAN."</string>
+    <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"permitir recebimento de multicast WLAN"</string>
+    <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Permite que o aplicativo receba pacotes enviados para todos os dispositivos em uma rede WLAN usando endereços de difusão seletiva, e não apenas o tablet. Consome mais energia do que o modo não multicast."</string>
+    <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Permite que o aplicativo receba pacotes enviados para todos os dispositivos em uma rede WLAN usando endereços de difusão seletiva, e não apenas o telefone. Consome mais energia do que o modo não multicast."</string>
     <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"acessar configurações de Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"Permite que um aplicativo configure o tablet Bluetooth local, descubra dispositivos remotos e emparelhe com eles."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"Permite que um aplicativo configure o telefone Bluetooth local, descubra e emparelhe com dispositivos remotos."</string>
@@ -1003,22 +1003,22 @@
     <string name="ringtone_picker_title" msgid="3515143939175119094">"Toques"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Toque desconhecido"</string>
   <plurals name="wifi_available">
-    <item quantity="one" msgid="6654123987418168693">"Rede Wi-Fi disponível"</item>
-    <item quantity="other" msgid="4192424489168397386">"Redes Wi-Fi disponíveis"</item>
+    <item quantity="one" msgid="6654123987418168693">"Rede WLAN disponível"</item>
+    <item quantity="other" msgid="4192424489168397386">"Redes WLAN disponíveis"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one" msgid="1634101450343277345">"Rede Wi-Fi aberta disponível"</item>
-    <item quantity="other" msgid="7915895323644292768">"Redes Wi-Fi abertas disponíveis"</item>
+    <item quantity="one" msgid="1634101450343277345">"Rede WLAN aberta disponível"</item>
+    <item quantity="other" msgid="7915895323644292768">"Redes WLAN abertas disponíveis"</item>
   </plurals>
-    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Fazer login na rede Wi-Fi"</string>
+    <string name="wifi_available_sign_in" msgid="4029489716605255386">"Fazer login na rede WLAN"</string>
     <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
     <skip />
-    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Não foi possível se conectar a redes Wi-Fi"</string>
+    <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Não foi possível se conectar a redes WLAN"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="5548780776418332675">" tem uma conexão de baixa qualidade com a Internet."</string>
-    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
-    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Iniciar o Wi-Fi Direct. Isso desativará o ponto de acesso/cliente Wi-Fi."</string>
-    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Não foi possível iniciar o Wi-Fi Direct."</string>
-    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"Wi-Fi Direct ativado"</string>
+    <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"WLAN Direct"</string>
+    <string name="wifi_p2p_turnon_message" msgid="2909250942299627244">"Iniciar o WLAN Direct. Isso desativará o ponto de acesso/cliente WLAN."</string>
+    <string name="wifi_p2p_failed_message" msgid="3763669677935623084">"Não foi possível iniciar o WLAN Direct."</string>
+    <string name="wifi_p2p_enabled_notification_title" msgid="2068321881673734886">"WLAN Direct ativado"</string>
     <string name="wifi_p2p_enabled_notification_message" msgid="1638949953993894335">"Tocar para acessar configurações"</string>
     <string name="accept" msgid="1645267259272829559">"Aceitar"</string>
     <string name="decline" msgid="2112225451706137894">"Recusar"</string>
@@ -1249,12 +1249,12 @@
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Dados 2G e 3G desativados"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Dados 4G desativados"</string>
     <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Dados móveis desativados"</string>
-    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Dados Wi-Fi desativados"</string>
+    <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Dados WLAN desativados"</string>
     <string name="data_usage_limit_body" msgid="3317964706973601386">"Toque para ativar."</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Limite de dados 2G-3G excedido"</string>
     <string name="data_usage_4g_limit_snoozed_title" msgid="1106562779311209039">"Limite de dados 4G excedido"</string>
     <string name="data_usage_mobile_limit_snoozed_title" msgid="279240572165412168">"Limite de dados do celular excedido"</string>
-    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Limite de dados Wi-Fi excedido"</string>
+    <string name="data_usage_wifi_limit_snoozed_title" msgid="8743856006384825974">"Limite de dados WLAN excedido"</string>
     <string name="data_usage_limit_snoozed_body" msgid="7035490278298441767">"<xliff:g id="SIZE">%s</xliff:g> acima do limite especificado."</string>
     <string name="data_usage_restricted_title" msgid="5965157361036321914">"Dados de segundo plano restritos"</string>
     <string name="data_usage_restricted_body" msgid="6741521330997452990">"Toque para remover a restrição."</string>
