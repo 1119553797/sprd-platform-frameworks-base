@@ -37,6 +37,7 @@ import com.android.internal.telephony.CommandsInterface.RadioState;
 import com.android.internal.telephony.gsm.SIMFileHandler;
 import com.android.internal.telephony.gsm.SIMRecords;
 import com.android.internal.telephony.cat.CatService;
+import com.android.internal.telephony.cat.StkServiceProxy;
 import com.android.internal.telephony.cdma.CDMALTEPhone;
 import com.android.internal.telephony.cdma.CdmaLteUiccFileHandler;
 import com.android.internal.telephony.cdma.CdmaLteUiccRecords;
@@ -219,7 +220,9 @@ public class IccCard {
             mIccRecords = is3gpp ? new SIMRecords(this, mPhone.mContext, mPhone) :
                                    new RuimRecords(this, mPhone.mContext, mPhone);
         }
-        mCatService = CatService.getInstance(mPhone.mCM, mIccRecords,
+//        mCatService = CatService.getInstance(mPhone.mCM, mIccRecords,
+//                mPhone.mContext, mIccFileHandler, this);
+        mCatService = StkServiceProxy.getInstance(mPhone.mCM, mIccRecords,
                 mPhone.mContext, mIccFileHandler, this);
         mPhone.mCM.registerForOffOrNotAvailable(mHandler, EVENT_RADIO_OFF_OR_NOT_AVAILABLE, null);
         mPhone.mCM.registerForOn(mHandler, EVENT_RADIO_ON, null);
