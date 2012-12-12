@@ -21,6 +21,7 @@ copy_from :=                \
     DroidKufi-Regular.ttf     \
     DroidNaskh-Regular.ttf     \
     DroidSansHebrew.ttf     \
+    DroidSansHebrew-Bold.ttf \
     DroidSansThai.ttf       \
     DroidSerif-Regular.ttf  \
     DroidSerif-Bold.ttf     \

@@ -453,7 +453,7 @@ void TextLayoutCacheValue::freeShaperItem(HB_ShaperItem& shaperItem) {
 const static char* paths[] = {
     "/system/fonts/Lohit-Bengali.ttf",
     "/system/fonts/Lohit-Devanagari.ttf",
-    "/system/fonts/DroidSansHebrew-Regular.ttf",
+    "/system/fonts/DroidSansHebrew.ttf",
     "/system/fonts/DroidSansHebrew-Bold.ttf",
     "/system/fonts/DroidNaskh-Regular.ttf",
     "/system/fonts/Lohit-Tamil.ttf",
@@ -581,19 +581,19 @@ void TextLayoutCacheValue::setupFaceForScript(HB_ShaperItem& shaperItem, int *p_
         case HB_Script_Devanagari:
             script = Devanagari;
             break;
-        //case HB_Script_Hebrew:
-        //    switch (typeface->style()) {
-        //        case SkTypeface::kBold:
-        //        case SkTypeface::kBoldItalic:
-        //            script = HebrewBold;
-        //            break;
-        //        case SkTypeface::kNormal:
-        //        case SkTypeface::kItalic:
-        //        default:
-        //            script = Hebrew;
-        //            break;
-        //    }
-        //    break;
+        case HB_Script_Hebrew:
+            switch (typeface->style()) {
+                case SkTypeface::kBold:
+                case SkTypeface::kBoldItalic:
+                    script = HebrewBold;
+                    break;
+                case SkTypeface::kNormal:
+                case SkTypeface::kItalic:
+                default:
+                    script = Hebrew;
+                    break;
+            }
+            break;
         case HB_Script_Arabic:
             script = Naskh;
             break;
