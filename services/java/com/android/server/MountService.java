@@ -1318,6 +1318,18 @@ class MountService extends IMountService.Stub
          * If the volume is mounted and we're enabling then unmount it
          */
         String path = Environment.getExternalStorageDirectory().getPath();
+        setUsbMassStorageEnabled(path,enable);
+        path = Environment.getSecondStorageDirectory().getPath();
+        if(!mVolumeMap.get(path).isEmulated()){
+        	setUsbMassStorageEnabled(path,enable);
+        }
+        
+    }
+    
+    public void setUsbMassStorageEnabled(String path,boolean enable) {
+        /*
+         * If the volume is mounted and we're enabling then unmount it
+         */
         String vs = getVolumeState(path);
         String method = "ums";
         if (enable && vs.equals(Environment.MEDIA_MOUNTED)) {
@@ -1347,7 +1359,8 @@ class MountService extends IMountService.Stub
 
     public boolean isUsbMassStorageEnabled() {
         waitForReady();
-        return doGetVolumeShared(Environment.getExternalStorageDirectory().getPath(), "ums");
+        return doGetVolumeShared(Environment.getExternalStorageDirectory().getPath(), "ums")
+        ||doGetVolumeShared(Environment.getSecondStorageDirectory().getPath(), "ums");
     }
 
     /**

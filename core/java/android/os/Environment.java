@@ -141,8 +141,15 @@ public class Environment {
     private static final File DOWNLOAD_CACHE_DIRECTORY
             = getDirectory("DOWNLOAD_CACHE", "/cache");
 //in 8810ea,we use it as external sdcard
-    private static final File EXTERNAL_STORAGE_DIRECTORY_SD
-            = getDirectory("SECONDARY_STORAGE", "/mnt/sdcard/external");
+    private static final File SECOND_STORAGE_DIRECTORY
+            = getDirectory("SECONDARY_STORAGE", "/storage/sdcard1");
+    
+    //nand
+    public static final int SECOND_STORAGE_TYPE_NAND = 0;
+    //built-in cannot be moved
+    public static final int SECOND_STORAGE_TYPE_INTERNAL = 1;
+    //external removable
+    public static final int SECOND_STORAGE_TYPE_EXTERNAL = 2;
 
 
     /**
@@ -202,8 +209,8 @@ public class Environment {
      * happened.
      * @see #getExternalStorageStateSd()
      */
-    public static File getExternalStorageDirectorySd() {
-        return EXTERNAL_STORAGE_DIRECTORY_SD;
+    public static File getSecondStorageDirectory() {
+        return SECOND_STORAGE_DIRECTORY;
     }
 
      /**
@@ -211,15 +218,30 @@ public class Environment {
       * 
       * <p>See {@link #getExternalStorageDirectory()} for more information.
       */
-     public static String getExternalStorageStateSd() {
+     public static String getSecondStorageState() {
          try {
              IMountService mountService = IMountService.Stub.asInterface(ServiceManager
                      .getService("mount"));
-             return mountService.getVolumeState(getExternalStorageDirectorySd()
+             return mountService.getVolumeState(getSecondStorageDirectory()
                      .toString());
          } catch (Exception rex) {
              return Environment.MEDIA_REMOVED;
          }
+     }
+     
+     /**
+      * Gets the current type of the second "external" storage device
+      * @return 
+      */
+     public static int getSecondStorageType(){
+    	 String stype = System.getenv("SECOND_STORAGE_TYPE");
+    	 int type = SECOND_STORAGE_TYPE_EXTERNAL;
+    	 try{
+    		 type = Integer.parseInt(stype);
+    	 }catch(Exception e){
+    		 type = SECOND_STORAGE_TYPE_EXTERNAL;
+    	 }
+    	 return type ;
      }
 
 
