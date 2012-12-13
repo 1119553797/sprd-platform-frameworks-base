@@ -23,6 +23,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.Registrant;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
@@ -85,7 +86,7 @@ public class GsmConnection extends Connection {
     static final int EVENT_WAKE_LOCK_TIMEOUT = 4;
 
     //***** Constants
-    static final int PAUSE_DELAY_FIRST_MILLIS = 100;
+    static final int PAUSE_DELAY_FIRST_MILLIS = SystemProperties.getInt("gsm.operator.delay", 5000);
     static final int PAUSE_DELAY_MILLIS = 3 * 1000;
     static final int WAKE_LOCK_TIMEOUT_MILLIS = 60*1000;
 
