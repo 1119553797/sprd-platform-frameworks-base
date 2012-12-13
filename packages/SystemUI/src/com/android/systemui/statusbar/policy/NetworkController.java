@@ -399,7 +399,7 @@ public class NetworkController extends BroadcastReceiver {
     public void refreshSignalCluster(SignalCluster cluster) {
         cluster.setWifiIndicators(
                 // only show wifi in the cluster if connected or if wifi-only
-                mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature),
+                mWifiEnabled /*&& (mWifiConnected || !mHasMobileDataFeature)*/,
                 mWifiIconId,
                 mWifiActivityIconId,
                 mContentDescriptionWifi);
