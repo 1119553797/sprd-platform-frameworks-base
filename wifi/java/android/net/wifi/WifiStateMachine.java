@@ -2510,6 +2510,7 @@ public class WifiStateMachine extends StateMachine {
                      */
                     mWifiNative.killSupplicant();
                     mWifiNative.closeSupplicantConnection();
+                    mWifiInfo.setMacAddress(null);
                     transitionTo(mDriverLoadedState);
                     break;
                 case CMD_STOP_SUPPLICANT_FAILED:
