@@ -256,6 +256,7 @@ public final class Recognizer {
      * Start recognition
      */
     public void start() {
+		Log.d(TAG, "start : mActiveGrammar.mGrammar = " + mActiveGrammar.mGrammar);
         // TODO: shouldn't be here?
         SR_RecognizerActivateRule(mRecognizer, mActiveGrammar.mGrammar, "trash", 1);
         SR_RecognizerStart(mRecognizer);
@@ -364,6 +365,7 @@ public final class Recognizer {
      */
     public void stop() {
         SR_RecognizerStop(mRecognizer);
+        Log.d(TAG, "stop : mActiveGrammar.mGrammar = " + mActiveGrammar.mGrammar);
         SR_RecognizerDeactivateRule(mRecognizer, mActiveGrammar.mGrammar, "trash");
     }
     
