@@ -280,6 +280,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     Settings.Secure.WIFI_WATCHDOG_PING_COUNT,
                     Settings.Secure.WIFI_WATCHDOG_PING_DELAY_MS,
                     Settings.Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS,
+                    Settings.Secure.WIFI_AUTO_CONNECT,
                 };
             moveFromSystemToSecure(db, settingsToMove);
             upgradeVersion = 28;
@@ -1634,6 +1635,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     R.bool.def_wifi_on);
             loadBooleanSetting(stmt, Settings.Secure.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON,
                     R.bool.def_networks_available_notification_on);
+            loadBooleanSetting(stmt, Settings.Secure.WIFI_AUTO_CONNECT,
+                    R.bool.def_wifi_auto_connect);
 
             String wifiWatchList = SystemProperties.get("ro.com.android.wifi-watchlist");
             if (!TextUtils.isEmpty(wifiWatchList)) {
