@@ -1554,8 +1554,12 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             mNetStatPollEnabled = true;
             //add by spreadst_lc for cmcc wifi feature start
             if (supportCMCC) {
-                SystemProperties.set("gsm.gprs.attached", "true");
-                mWifiManager.setGprsConnectState(true);
+				new Thread(new Runnable() {
+					public void run() {
+                        SystemProperties.set("gsm.gprs.attached", "true");
+                        mWifiManager.setGprsConnectState(true);
+					}
+				}).start();
             }
 			//add by spreadst_lc for cmcc wifi feature end
             mPollNetStat.run();
