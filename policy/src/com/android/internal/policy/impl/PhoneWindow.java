@@ -764,6 +764,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
             PanelFeatureState st = getPanelState(featureId, true);
             if (!st.isOpen) {
+                st.isPrepared = false;
                 return preparePanel(st, event);
             }
         }
