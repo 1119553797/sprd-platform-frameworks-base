@@ -3989,7 +3989,11 @@ public class PackageManagerService extends IPackageManager.Stub {
                      * a directory so we can copy to it afterwards.
                      */
                     boolean isCopy = false;
-                    isCopy = nativeLibraryDir.listFiles().length > 0 ? false : true;
+                    try {
+                        isCopy = nativeLibraryDir.listFiles().length > 0 ? false : true;
+                    } catch (NullPointerException ne) {
+                        isCopy = true;
+                    }
                     if (mFlagInstall == true || isCopy) {
                         boolean isSymLink;
                         try {
