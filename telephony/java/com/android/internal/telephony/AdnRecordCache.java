@@ -84,10 +84,16 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 	// add multi record and email in usim end
 
     //***** Constructor
-
     public AdnRecordCache(PhoneBase phone) {
         this.phone = phone;
         mFh = phone.getIccFileHandler();
+        mUsimPhoneBookManager = new UsimPhoneBookManager(phone, mFh, this);
+    }
+
+    public AdnRecordCache(IccFileHandler fh, PhoneBase phone) {
+        this.phone = phone;
+//        mFh = phone.getIccFileHandler();
+        mFh = fh;
         mUsimPhoneBookManager = new UsimPhoneBookManager(phone, mFh, this);
     }
 

@@ -29,7 +29,7 @@ import com.android.internal.telephony.PhoneBase;
 /**
  * {@hide}
  */
-public final class SIMFileHandler extends IccFileHandler implements IccConstants {
+public class SIMFileHandler extends IccFileHandler implements IccConstants {
     static final String LOG_TAG = "GSM";
 
     //***** Instance Variables

@@ -35,6 +35,7 @@ import android.view.WindowManager;
 import com.android.internal.telephony.PhoneBase;
 import com.android.internal.telephony.CommandsInterface.RadioState;
 import com.android.internal.telephony.gsm.SIMFileHandler;
+import com.android.internal.telephony.gsm.TDUSIMFileHandler;
 import com.android.internal.telephony.gsm.SIMRecords;
 import com.android.internal.telephony.cat.CatService;
 import com.android.internal.telephony.cat.StkServiceProxy;
@@ -215,7 +216,9 @@ public class IccCard {
             mIccRecords = new CdmaLteUiccRecords(this, mPhone.mContext, mPhone);
         } else {
             // Correct aid will be set later (when GET_SIM_STATUS returns)
-            mIccFileHandler = is3gpp ? new SIMFileHandler(this, "", mPhone) :
+//          mIccFileHandler = is3gpp ? new SIMFileHandler(this, "", mPhone) :
+//                                     new RuimFileHandler(this, "", mPhone);
+            mIccFileHandler = is3gpp ? new TDUSIMFileHandler(this, "", mPhone) :
                                        new RuimFileHandler(this, "", mPhone);
             mIccRecords = is3gpp ? new SIMRecords(this, mPhone.mContext, mPhone) :
                                    new RuimRecords(this, mPhone.mContext, mPhone);
