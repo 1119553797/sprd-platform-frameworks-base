@@ -180,8 +180,7 @@ public class SIMRecords extends IccRecords {
         super(card, c, mPhone.mCM);
 
     	phone = mPhone;
-        //adnCache = new AdnRecordCache(mFh);
-        adnCache = new AdnRecordCache(phone);
+        adnCache = new AdnRecordCache(mFh, phone);
 
         mVmConfig = new VoiceMailConstants();
         mSpnOverride = new SpnOverride();
