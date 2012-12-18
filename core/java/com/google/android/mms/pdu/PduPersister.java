@@ -514,7 +514,163 @@ public class PduPersister {
             }
         }
     }
+    /* Add 20121218 Spreadst of AppBackup start */
+    /** Load a PDU from storage by given Uri.
+     *
+     * @param uri
+     *            The Uri of the PDU to be loaded.
+     * @return A generic PDU object, it may be cast to dedicated PDU.
+     * @throws MmsException
+     *             Failed to load some fields of a PDU. */
+    public GenericPdu load(Uri uri) throws MmsException {
+        PduCacheEntry cacheEntry = PDU_CACHE_INSTANCE.get(uri);
+        if (cacheEntry != null) {
+            return cacheEntry.getPdu();
+        }
+        return loadFromDB(uri, cacheEntry);
+    }
 
+    /** Backup Mms Pdu to storage by given Uri.
+     *
+     * @param uri
+     *            The Uri of the PDU to be loaded.
+     * @return A generic PDU object, it may be cast to dedicated PDU.
+     * @throws MmsException
+     *             Failed to load some fields of a PDU. */
+    public GenericPdu loadForBackupMms(Uri uri) throws MmsException {
+        return loadFromDB(uri, null);
+    }
+
+    private GenericPdu loadFromDB(Uri uri, PduCacheEntry cacheEntry)
+            throws MmsException {
+        Cursor c = SqliteWrapper.query(mContext, mContentResolver, uri,
+                        PDU_PROJECTION, null, null, null);
+        PduHeaders headers = new PduHeaders();
+        Set<Entry<Integer, Integer>> set;
+        long msgId = ContentUris.parseId(uri);
+        int msgBox;
+        long threadId;
+        int phoneId;
+
+        try {
+            if ((c == null) || (c.getCount() != 1) || !c.moveToFirst()) {
+                throw new MmsException("Bad uri: " + uri);
+            }
+
+            msgBox = c.getInt(PDU_COLUMN_MESSAGE_BOX);
+            threadId = c.getLong(PDU_COLUMN_THREAD_ID);
+            phoneId = c.getInt(PDU_COLUMN_PHONE_ID);
+
+            set = ENCODED_STRING_COLUMN_INDEX_MAP.entrySet();
+            for (Entry<Integer, Integer> e : set) {
+                setEncodedStringValueToHeaders(
+                        c, e.getValue(), headers, e.getKey());
+            }
+
+            set = TEXT_STRING_COLUMN_INDEX_MAP.entrySet();
+            for (Entry<Integer, Integer> e : set) {
+                setTextStringToHeaders(
+                        c, e.getValue(), headers, e.getKey());
+            }
+
+            set = OCTET_COLUMN_INDEX_MAP.entrySet();
+            for (Entry<Integer, Integer> e : set) {
+                setOctetToHeaders(
+                        c, e.getValue(), headers, e.getKey());
+            }
+
+            set = LONG_COLUMN_INDEX_MAP.entrySet();
+            for (Entry<Integer, Integer> e : set) {
+                setLongToHeaders(
+                        c, e.getValue(), headers, e.getKey());
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        // Check whether 'msgId' has been assigned a valid value.
+        if (msgId == -1L) {
+            throw new MmsException("Error! ID of the message: -1.");
+        }
+
+        // Load address information of the MM.
+        loadAddress(msgId, headers);
+
+        int msgType = headers.getOctet(PduHeaders.MESSAGE_TYPE);
+        PduBody body = new PduBody();
+
+        // For PDU which type is M_retrieve.conf or Send.req, we should
+        // load multiparts and put them into the body of the PDU.
+        if ((msgType == PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF)
+                || (msgType == PduHeaders.MESSAGE_TYPE_SEND_REQ)) {
+            PduPart[] parts = loadParts(msgId);
+            if (parts != null) {
+                int partsNum = parts.length;
+                for (int i = 0; i < partsNum; i++) {
+                    body.addPart(parts[i]);
+                }
+            }
+        }
+
+        GenericPdu pdu = null;
+        switch (msgType) {
+            case PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND:
+                pdu = new NotificationInd(headers, phoneId);
+                break;
+            case PduHeaders.MESSAGE_TYPE_DELIVERY_IND:
+                pdu = new DeliveryInd(headers, phoneId);
+                break;
+            case PduHeaders.MESSAGE_TYPE_READ_ORIG_IND:
+                pdu = new ReadOrigInd(headers, phoneId);
+                break;
+            case PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF:
+                pdu = new RetrieveConf(headers, body, phoneId);
+                break;
+            case PduHeaders.MESSAGE_TYPE_SEND_REQ:
+                pdu = new SendReq(headers, body, phoneId);
+                break;
+            case PduHeaders.MESSAGE_TYPE_ACKNOWLEDGE_IND:
+                pdu = new AcknowledgeInd(headers, phoneId);
+                break;
+            case PduHeaders.MESSAGE_TYPE_NOTIFYRESP_IND:
+                pdu = new NotifyRespInd(headers, phoneId);
+                break;
+            case PduHeaders.MESSAGE_TYPE_READ_REC_IND:
+                pdu = new ReadRecInd(headers, phoneId);
+                break;
+            case PduHeaders.MESSAGE_TYPE_SEND_CONF:
+            case PduHeaders.MESSAGE_TYPE_FORWARD_REQ:
+            case PduHeaders.MESSAGE_TYPE_FORWARD_CONF:
+            case PduHeaders.MESSAGE_TYPE_MBOX_STORE_REQ:
+            case PduHeaders.MESSAGE_TYPE_MBOX_STORE_CONF:
+            case PduHeaders.MESSAGE_TYPE_MBOX_VIEW_REQ:
+            case PduHeaders.MESSAGE_TYPE_MBOX_VIEW_CONF:
+            case PduHeaders.MESSAGE_TYPE_MBOX_UPLOAD_REQ:
+            case PduHeaders.MESSAGE_TYPE_MBOX_UPLOAD_CONF:
+            case PduHeaders.MESSAGE_TYPE_MBOX_DELETE_REQ:
+            case PduHeaders.MESSAGE_TYPE_MBOX_DELETE_CONF:
+            case PduHeaders.MESSAGE_TYPE_MBOX_DESCR:
+            case PduHeaders.MESSAGE_TYPE_DELETE_REQ:
+            case PduHeaders.MESSAGE_TYPE_DELETE_CONF:
+            case PduHeaders.MESSAGE_TYPE_CANCEL_REQ:
+            case PduHeaders.MESSAGE_TYPE_CANCEL_CONF:
+                throw new MmsException(
+                        "Unsupported PDU type: " + Integer.toHexString(msgType));
+
+            default:
+                throw new MmsException(
+                        "Unrecognized PDU type: " + Integer.toHexString(msgType));
+        }
+
+        if (cacheEntry != null) {
+            cacheEntry = new PduCacheEntry(pdu, msgBox, threadId);
+            PDU_CACHE_INSTANCE.put(uri, cacheEntry);
+        }
+        return pdu;
+    }
+    /* Add 20121218 Spreadst of AppBackup end */
     /**
      * Load a PDU from storage by given Uri.
      *
@@ -522,7 +678,8 @@ public class PduPersister {
      * @return A generic PDU object, it may be cast to dedicated PDU.
      * @throws MmsException Failed to load some fields of a PDU.
      */
-    public GenericPdu load(Uri uri) throws MmsException {
+    /* Delete 20121218 Spreadst of AppBackup start */
+    /*public GenericPdu load(Uri uri) throws MmsException {
         GenericPdu pdu = null;
         PduCacheEntry cacheEntry = null;
         int msgBox = 0;
@@ -677,8 +834,8 @@ public class PduPersister {
             }
         }
         return pdu;
-    }
-
+    }*/
+    /* Delete 20121218 Spreadst of AppBackup end */
     private void persistAddress(
             long msgId, int type, EncodedStringValue[] array) {
         ContentValues values = new ContentValues(3);

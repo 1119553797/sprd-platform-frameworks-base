@@ -499,7 +499,12 @@ public class PduHeaders {
      * @return the TextString value of the pdu header
      *          with specified header field
      */
+    /* Modify 20121218 Spreadst of AppBackup start */
+    /*
     protected byte[] getTextString(int field) {
+    */
+    public byte[] getTextString(int field) {
+    /* Modify 20121218 Spreadst of AppBackup end */
         return (byte[]) mHeaderMap.get(field);
     }
 
@@ -548,7 +553,12 @@ public class PduHeaders {
      * @return the EncodedStringValue value of the pdu header
      *          with specified header field
      */
+    /* Modify 20121218 Spreadst of AppBackup start */
+    /*
     protected EncodedStringValue getEncodedStringValue(int field) {
+    */
+    public EncodedStringValue getEncodedStringValue(int field) {
+    /* Modify 20121218 Spreadst of AppBackup end */
         return (EncodedStringValue) mHeaderMap.get(field);
     }
 
@@ -559,7 +569,12 @@ public class PduHeaders {
      * @return the EncodeStringValue array of the pdu header
      *          with specified header field
      */
+    /* Modify 20121218 Spreadst of AppBackup start */
+    /*
     protected EncodedStringValue[] getEncodedStringValues(int field) {
+    */
+    public EncodedStringValue[] getEncodedStringValues(int field) {
+    /* Modify 20121218 Spreadst of AppBackup end */
         ArrayList<EncodedStringValue> list =
                 (ArrayList<EncodedStringValue>) mHeaderMap.get(field);
         if (null == list) {
