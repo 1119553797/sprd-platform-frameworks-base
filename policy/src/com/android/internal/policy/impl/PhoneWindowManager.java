@@ -159,6 +159,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static final boolean localLOGV = false;
     static final boolean DEBUG_LAYOUT = false;
     static final boolean DEBUG_INPUT = false;
+    static final boolean DEBUG_INPUT_LESS = true;
     static final boolean DEBUG_STARTING_WINDOW = false;
     static final boolean SHOW_STARTING_ANIMATIONS = true;
     static final boolean SHOW_PROCESSES_ON_ALT_MENU = false;
@@ -1728,7 +1729,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
         final boolean canceled = event.isCanceled();
 
-        if (DEBUG_INPUT) {
+        if (DEBUG_INPUT | DEBUG_INPUT_LESS) {
             Log.d(TAG, "interceptKeyTi keyCode=" + keyCode + " down=" + down + " repeatCount="
                     + repeatCount + " keyguardOn=" + keyguardOn + " mHomePressed=" + mHomePressed
                     + " canceled=" + canceled);
@@ -3236,7 +3237,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return 0;
         }
 
-        if (DEBUG_INPUT) {
+        if (DEBUG_INPUT | DEBUG_INPUT_LESS) {
             Log.d(TAG, "interceptKeyTq keycode=" + keyCode
                   + " screenIsOn=" + isScreenOn + " keyguardActive=" + keyguardActive);
         }
