@@ -292,6 +292,12 @@ public final class ActivityManagerService extends ActivityManagerNative
     // devices.
     private boolean mShowDialogs = true;
 
+    private static final int DEFAULT_SCAN_MEM_GAPTIME = 5000;
+
+    private long curr_scan_time = 0;
+
+    private long currMem = 0;
+
     /**
      * Description of a request to start a new activity, which has been held
      * due to app switches being disabled.
@@ -11507,9 +11513,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
         if(isReadMemForRestartService){
             long freeMem = readAvailMem();
-            Slog.w(TAG, "==performServiceRestartLocked===");
+            Slog.w(TAG, "restart service :"+r.packageName);
             if(freeMem < 1024*restartServiceAtMem){
-                Slog.w(TAG, "==freeMem < 1024*16===");
+                Slog.w(TAG, "freeMem < 1024 * "+restartServiceAtMem);
                 r.nextRestartTime += SERVICE_MIN_RESTART_TIME_BETWEEN;
                 mHandler.postAtTime(r.restarter, r.nextRestartTime);
                 return ;
@@ -15386,6 +15392,14 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     //read Avail Mem 
     private long readAvailMem() {
+        long time = SystemClock.uptimeMillis();
+        Slog.d(TAG, curr_scan_time+" : "+time);
+        if(time - curr_scan_time < DEFAULT_SCAN_MEM_GAPTIME){
+            Slog.d(TAG, "Returns the last scan results !");
+            return currMem ;
+        }
+        curr_scan_time = time;
+
         FileInputStream is = null;
         byte[] mBuffer = new byte[1024];
         try {
@@ -15407,7 +15421,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                     i++;
                 }
             }
-            return memFree + memCached;
+            currMem = memFree + memCached;
+            return currMem;
         } catch (java.io.FileNotFoundException e) {
            e.printStackTrace();
         } catch (Exception e) {
