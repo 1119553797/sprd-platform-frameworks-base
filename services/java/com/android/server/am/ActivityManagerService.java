@@ -11505,6 +11505,16 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (!mRestartingServices.contains(r)) {
             return;
         }
+        if(isReadMemForRestartService){
+            long freeMem = readAvailMem();
+            Slog.w(TAG, "==performServiceRestartLocked===");
+            if(freeMem < 1024*restartServiceAtMem){
+                Slog.w(TAG, "==freeMem < 1024*16===");
+                r.nextRestartTime += SERVICE_MIN_RESTART_TIME_BETWEEN;
+                mHandler.postAtTime(r.restarter, r.nextRestartTime);
+                return ;
+            }
+        }
         bringUpServiceLocked(r, r.intent.getIntent().getFlags(), true);
     }
 
@@ -15372,5 +15382,73 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
             return map;
         }
+    }
+
+    //read Avail Mem 
+    private long readAvailMem() {
+        FileInputStream is = null;
+        byte[] mBuffer = new byte[1024];
+        try {
+            long memFree = 0;
+            long memCached = 0;
+            /*FileInputStream*/ is = new FileInputStream("/proc/meminfo");
+            int len = is.read(mBuffer);
+            //is.close();
+            final int BUFLEN = mBuffer.length;
+            for (int i=0; i<len && (memFree == 0 || memCached == 0); i++) {
+                if (matchText(mBuffer, i, "MemFree")) {
+                    i += 7;
+                    memFree = extractMemValue(mBuffer, i);
+                } else if (matchText(mBuffer, i, "Cached")) {
+                    i += 6;
+                    memCached = extractMemValue(mBuffer, i);
+                }
+                while (i < BUFLEN && mBuffer[i] != '\n') {
+                    i++;
+                }
+            }
+            return memFree + memCached;
+        } catch (java.io.FileNotFoundException e) {
+           e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+         }finally{
+            if(is!=null){
+              try{
+                  is.close();
+              }catch (Exception e) {
+                  e.printStackTrace();
+                }
+            }
+         }
+        return 0;
+    }
+    private boolean matchText(byte[] buffer, int index, String text) {
+        int N = text.length();
+        if ((index+N) >= buffer.length) {
+            return false;
+        }
+        for (int i=0; i<N; i++) {
+            if (buffer[index+i] != text.charAt(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private long extractMemValue(byte[] buffer, int index) {
+        while (index < buffer.length && buffer[index] != '\n') {
+            if (buffer[index] >= '0' && buffer[index] <= '9') {
+                int start = index;
+                index++;
+                while (index < buffer.length && buffer[index] >= '0'
+                    && buffer[index] <= '9') {
+                    index++;
+                }
+                String str = new String(buffer, 0, start, index-start);
+                return ((long)Integer.parseInt(str));
+            }
+            index++;
+        }
+        return 0;
     }
 }
