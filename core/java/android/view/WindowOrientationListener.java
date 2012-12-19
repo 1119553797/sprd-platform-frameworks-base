@@ -117,6 +117,9 @@ public abstract class WindowOrientationListener {
             }
             mSensorManager.unregisterListener(mSensorEventListener);
             mEnabled = false;
+            //add for bug http://dev.spreadst.com/lion/show_bug.cgi?id=4564
+            //set the default rotation when the sensor disabled
+            mSensorEventListener.setProposedRotation(Surface.ROTATION_0);
         }
     }
 
@@ -368,6 +371,11 @@ public abstract class WindowOrientationListener {
 
         public int getProposedRotation() {
             return mProposedRotation;
+        }
+
+        //add for bug http://dev.spreadst.com/lion/show_bug.cgi?id=4564
+        public void setProposedRotation(int rot){
+            mProposedRotation = rot;
         }
 
         @Override
