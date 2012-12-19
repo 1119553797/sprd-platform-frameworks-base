@@ -87,7 +87,7 @@ static void android_server_AlarmManagerService_clear(JNIEnv* env, jobject obj, j
        int result = ioctl(fd, ANDROID_ALARM_CLEAR(type), &ts);
        if (result < 0)
        {
-        LOGE("Unable to clear alarm: %s\n", strerror(errno));
+        ALOGE("Unable to clear alarm: %s\n", strerror(errno));
     }
 }
 /* Add 20121218 Spreadst of 105993  Regular boot development end */
