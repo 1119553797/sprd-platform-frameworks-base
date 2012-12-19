@@ -111,7 +111,7 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
 
         mDelPinButton.setOnClickListener(this);
 //        mDelPinButton2.setOnClickListener(this);
-//        mDelPukButton.setOnClickListener(this);
+        mDelPukButton.setOnClickListener(this);
         mOkButton.setOnClickListener(this);
 
         try{
