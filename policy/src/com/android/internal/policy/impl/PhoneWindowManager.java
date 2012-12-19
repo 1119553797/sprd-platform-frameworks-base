@@ -1091,7 +1091,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         synchronized (mLock) {
             mEndcallBehavior = Settings.System.getInt(resolver,
                     Settings.System.END_BUTTON_BEHAVIOR,
-                    Settings.System.END_BUTTON_BEHAVIOR_DEFAULT);
+                    0);
+                    //Settings.System.END_BUTTON_BEHAVIOR_DEFAULT);
+
             mIncallPowerBehavior = Settings.Secure.getInt(resolver,
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR,
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR_DEFAULT);
