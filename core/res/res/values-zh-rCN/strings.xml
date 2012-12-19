@@ -1306,5 +1306,7 @@
     <string name="keyguard_password_enter_sim1_puk_code">"输入 Sim1 PUK 码和新的 PIN 码"</string>
     <string name="keyguard_password_enter_sim2_puk_code">"输入 Sim2 PUK 码和新的 PIN 码"</string>
     <!-- Add 20121128 Spreadst of 96576,add string value of PIN unlock end -->
-
+    <!-- Add 20121218 Spreadst of 105993  Regular boot development start -->
+    <string name="shutdown_after_seconds">您的手机会在<xliff:g id="NUMBER">%d</xliff:g>秒后关机</string>
+    <!-- Add 20121218 Spreadst of 105993  Regular boot development end -->
 </resources>

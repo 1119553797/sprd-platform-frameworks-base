@@ -22,10 +22,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Slog;
+import android.widget.TextView;
 
 import com.android.server.pm.ShutdownThread;
 
-public class ShutdownActivity extends Activity {
+public class ShutdownActivity extends ShutdownFullscreenActivity {
 
     private static final String TAG = "ShutdownActivity";
     private boolean mReboot;
@@ -34,7 +35,8 @@ public class ShutdownActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+/* Add 20121218 Spreadst of 105993  Regular boot development start */
+/*
         Intent intent = getIntent();
         mReboot = Intent.ACTION_REBOOT.equals(intent.getAction());
         mConfirm = intent.getBooleanExtra(Intent.EXTRA_KEY_CONFIRM, false);
@@ -50,5 +52,8 @@ public class ShutdownActivity extends Activity {
                 }
             }
         });
+*/
+       setContentView(new TextView(this));
+/* Add 20121218 Spreadst of 105993  Regular boot development end */
     }
 }

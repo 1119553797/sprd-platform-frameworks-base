@@ -77,7 +77,20 @@ static void android_server_AlarmManagerService_set(JNIEnv* env, jobject obj, jin
         ALOGE("Unable to set alarm to %lld.%09lld: %s\n", seconds, nanoseconds, strerror(errno));
     }
 }
+/* Add 20121218 Spreadst of 105993  Regular boot development start */
+static void android_server_AlarmManagerService_clear(JNIEnv* env, jobject obj, jint fd, jint type)
+{
+    struct timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = 0;
 
+       int result = ioctl(fd, ANDROID_ALARM_CLEAR(type), &ts);
+       if (result < 0)
+       {
+        LOGE("Unable to clear alarm: %s\n", strerror(errno));
+    }
+}
+/* Add 20121218 Spreadst of 105993  Regular boot development end */
 static jint android_server_AlarmManagerService_waitForAlarm(JNIEnv* env, jobject obj, jint fd)
 {
 	int result = 0;
@@ -101,6 +114,9 @@ static JNINativeMethod sMethods[] = {
 	{"init", "()I", (void*)android_server_AlarmManagerService_init},
 	{"close", "(I)V", (void*)android_server_AlarmManagerService_close},
 	{"set", "(IIJJ)V", (void*)android_server_AlarmManagerService_set},
+/* Add 20121218 Spreadst of 105993  Regular boot development start */
+        {"clear", "(II)V", (void*)android_server_AlarmManagerService_clear},
+/* Add 20121218 Spreadst of 105993  Regular boot development end */
     {"waitForAlarm", "(I)I", (void*)android_server_AlarmManagerService_waitForAlarm},
     {"setKernelTimezone", "(II)I", (void*)android_server_AlarmManagerService_setKernelTimezone},
 };
