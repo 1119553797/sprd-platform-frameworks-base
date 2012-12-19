@@ -3633,4 +3633,7 @@
     <string name="missed_call">%1$d Missed call</string>
     <!-- LockScreen missed call end -->
     <string name="unread_message">%1$d Unread message</string>
+    <!-- Add 20121218 Spreadst of 105993  Regular boot development start -->
+    <string name="shutdown_after_seconds">Phone will shut down after <xliff:g id="NUMBER">%d</xliff:g> seconds</string>
+    <!-- Add 20121218 Spreadst of 105993  Regular boot development end -->
 </resources>

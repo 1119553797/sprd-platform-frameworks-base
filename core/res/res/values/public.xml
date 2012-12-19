@@ -1592,6 +1592,7 @@
   <java-symbol type="string" name="config_defaultDreamComponent" />
   <java-symbol type="string" name="enable_explore_by_touch_warning_title" />
   <java-symbol type="string" name="enable_explore_by_touch_warning_message" />
+  <java-symbol type="string" name="shutdown_after_seconds" />
 
   <java-symbol type="layout" name="resolver_grid" />
   <java-symbol type="id" name="resolver_grid" />

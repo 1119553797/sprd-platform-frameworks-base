@@ -30,6 +30,9 @@ interface IAlarmManager {
     void setTime(long millis);
     void setTimeZone(String zone);
     void remove(in PendingIntent operation);
+/* Add 20121218 Spreadst of 105993  Regular boot development start */
+    void removeAlarm(in PendingIntent operation);
+/* Add 20121218 Spreadst of 105993  Regular boot development end */
 }
 
 

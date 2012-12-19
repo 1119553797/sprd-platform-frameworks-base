@@ -79,6 +79,14 @@ public class AlarmManager
      * wakes up.
      */
     public static final int ELAPSED_REALTIME = 3;
+/* Add 20121218 Spreadst of 105993  Regular boot development start */
+    /**
+     * Alarm time in {@link System#currentTimeMillis System.currentTimeMillis()}
+     * (wall clock time in UTC), which will wake up the device when
+     * it goes off.
+     */
+    public static final int POWER_OFF_WAKEUP = 4;
+/* Add 20121218 Spreadst of 105993  Regular boot development end */
 
     private final IAlarmManager mService;
 
@@ -276,6 +284,25 @@ public class AlarmManager
         } catch (RemoteException ex) {
         }
     }
+
+/* Add 20121218 Spreadst of 105993  Regular boot development start */
+     /**
+     * Remove any power off alarms.
+     * Any alarm, of any type, whose Intent matches this one (as defined by
+     * {@link Intent#filterEquals}), will be canceled.
+     *
+     * @param operation IntentSender which matches a previously added
+     * IntentSender.
+     *
+     * @see #set
+     */
+    public void cancelAlarm(PendingIntent operation) {
+        try {
+            mService.removeAlarm(operation);
+        } catch (RemoteException ex) {
+        }
+    }
+/* Add 20121218 Spreadst of 105993  Regular boot development end */
 
     /**
      * Set the system wall clock time.
