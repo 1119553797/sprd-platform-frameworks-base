@@ -1140,7 +1140,7 @@ final class ActivityStack {
             prev.resumeKeyDispatchingLocked();
         }
 
-        if (prev.app != null && prev.cpuTimeAtResume > 0
+        if (prev != null && prev.app != null && prev.cpuTimeAtResume > 0
                 && mService.mBatteryStatsService.isOnBattery()) {
             long diff = 0;
             synchronized (mService.mProcessStatsThread) {
@@ -1159,7 +1159,9 @@ final class ActivityStack {
                 }
             }
         }
-        prev.cpuTimeAtResume = 0; // reset it
+        if (prev != null) {
+            prev.cpuTimeAtResume = 0; // reset it
+        }
     }
 
     /**
