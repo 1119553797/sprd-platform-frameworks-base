@@ -112,6 +112,8 @@ public interface IActivityManager extends IInterface {
     public boolean moveActivityTaskToBack(IBinder token, boolean nonRoot) throws RemoteException;
     public void moveTaskBackwards(int task) throws RemoteException;
     public int getTaskForActivity(IBinder token, boolean onlyRoot) throws RemoteException;
+    //add for change process adj
+    public void setProcessAdj(int pid, int adj, boolean reset) throws RemoteException;
     /* oneway */
     public void reportThumbnail(IBinder token,
             Bitmap thumbnail, CharSequence description) throws RemoteException;
@@ -606,4 +608,5 @@ public interface IActivityManager extends IInterface {
     int GET_LAUNCHED_FROM_UID_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+149;
     int UNSTABLE_PROVIDER_DIED_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+150;
     int IS_INTENT_SENDER_AN_ACTIVITY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+151;
+    int SET_PROCESS_ADJ_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+200;
 }

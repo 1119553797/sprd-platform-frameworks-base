@@ -564,6 +564,17 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
 
+        //add for change process adj
+        case SET_PROCESS_ADJ_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            int pid = data.readInt();
+            int adj = data.readInt();
+            boolean reset = data.readInt() != 0;
+            setProcessAdj(pid,adj,reset);
+            reply.writeNoException();
+            return true;
+        }
+
         case REPORT_THUMBNAIL_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
             IBinder token = data.readStrongBinder();
@@ -2323,6 +2334,22 @@ class ActivityManagerProxy implements IActivityManager
         reply.recycle();
         return res;
     }
+
+    //add for change process adj
+    public void setProcessAdj(int pid, int adj, boolean reset) throws RemoteException
+    {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(pid);
+        data.writeInt(adj);
+        data.writeInt(reset ? 1 : 0);
+        mRemote.transact(SET_PROCESS_ADJ_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+    }
+
     public void reportThumbnail(IBinder token,
                                 Bitmap thumbnail, CharSequence description) throws RemoteException
     {
