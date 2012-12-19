@@ -58,6 +58,7 @@ import com.android.internal.telephony.DataCallState;
 import com.android.internal.telephony.DataConnection;
 import com.android.internal.telephony.DataConnection.FailCause;
 import com.android.internal.telephony.DataConnection.UpdateLinkPropertyResult;
+import com.android.internal.telephony.DataConnectionTracker.State;
 import com.android.internal.telephony.DataConnectionAc;
 import com.android.internal.telephony.DataConnectionTracker;
 import com.android.internal.telephony.EventLogTags;
@@ -286,7 +287,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         ApnContext apnContext = mApnContexts.get(type);
         if (apnContext == null) return false;
 
-        return (apnContext.getDataConnection() != null);
+        return (apnContext.getDataConnection() != null) && (apnContext.getState() != State.IDLE);
     }
 
     @Override
@@ -661,7 +662,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
     private void onDataConnectionAttached() {
         if (DBG) log("onDataConnectionAttached");
-        if (getOverallState() == State.CONNECTED) {
+//      if (getOverallState() == State.CONNECTED) {
+        if (isConnected()) {
             if (DBG) log("onDataConnectionAttached: start polling notify attached");
             startNetStatPoll();
             startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
@@ -1754,8 +1756,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     private boolean retryAfterDisconnected(String reason) {
         boolean retry = true;
 
-        if ( Phone.REASON_RADIO_TURNED_OFF.equals(reason)
-                || "switchConnection".equals(reason) ) {
+        if (Phone.REASON_RADIO_TURNED_OFF.equals(reason)
+                || "switchConnection".equals(reason) || Phone.REASON_DATA_DISABLED.equals(reason)) {
             retry = false;
         }
         return retry;
