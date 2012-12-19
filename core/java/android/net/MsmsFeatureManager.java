@@ -128,10 +128,12 @@ public class MsmsFeatureManager {
     private List<FeatureUser>[] mRunQueue;
     private int mActiveSim;
     private Context mContext;
+    private int mPhoneCount;
 
     private static MsmsFeatureManager mInstance = null;
 
     private MsmsFeatureManager(int phoneCount, Context context) {
+        mPhoneCount = phoneCount;
         mRunQueue = new ArrayList[phoneCount];
         for (int i = 0; i < phoneCount; i++) {
             mRunQueue[i] = new ArrayList<FeatureUser>();
@@ -164,7 +166,7 @@ public class MsmsFeatureManager {
         int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
 
         Slog.d(TAG, "defaultDataChanged:" + defaultDataPhoneId);
-        for (int phoneId = 0; phoneId < TelephonyManager.getPhoneCount(); phoneId++) {
+        for (int phoneId = 0; phoneId < mPhoneCount; phoneId++) {
             if (phoneId == defaultDataPhoneId) continue;
             for (int i = 0; i < mRunQueue[phoneId].size(); i++) {
                 FeatureUser u = mRunQueue[phoneId].get(i);
@@ -194,6 +196,11 @@ public class MsmsFeatureManager {
     public synchronized boolean tryStartUsingFeature(int networkType, String feature,
             IBinder binder, int pid, int uid, int phoneId, boolean isMainSimFeature) {
         Slog.d(TAG, "tryStartUsingFeature(" + networkType + ", " + feature + ")");
+        // if the feature is invalid, return true and let ConnectivityService
+        // to handle
+        if (phoneId < 0 || phoneId >= mPhoneCount) {
+            return true;
+        }
         for (int i = 0; i < mRunQueue[phoneId].size(); i++) {
             FeatureUser u = (FeatureUser) mRunQueue[phoneId].get(i);
             if (uid == u.mUid && pid == u.mPid && networkType == u.mNetworkType
@@ -283,7 +290,7 @@ public class MsmsFeatureManager {
             minPriority = ((FeatureUser) mRunQueue[mActiveSim].get(0)).mPriority;
             minSim = mActiveSim;
         }
-        for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+        for (int i = 0; i < mPhoneCount; i++) {
             if (!mRunQueue[i].isEmpty()) {
                 int priority = ((FeatureUser) mRunQueue[i].get(0)).mPriority;
                 if (priority < minPriority) {
