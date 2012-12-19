@@ -1005,13 +1005,31 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         // We always want to have some reasonable width hint.
         WindowManager wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
-        int baseSize = d.getMaximumSizeDimension();
+
+        int rawWidth = d.getRawWidth();
+        int rawHeight = d.getRawHeight();
+        int w;
+        int h;
+        if (rawWidth < rawHeight) {
+            w = rawWidth * 2;
+            h = rawHeight;
+        } else {
+            w = rawHeight * 2;
+            h = rawWidth;
+        }
+        if (wallpaper.width < w)
+            wallpaper.width = w;
+
+        if (wallpaper.height < h)
+            wallpaper.height = h;
+
+        /*int baseSize = d.getMaximumSizeDimension();
         if (wallpaper.width < baseSize) {
             wallpaper.width = baseSize;
         }
         if (wallpaper.height < baseSize) {
             wallpaper.height = baseSize;
-        }
+        }*/
     }
 
     // Called by SystemBackupAgent after files are restored to disk.
