@@ -60,7 +60,12 @@ public class GenericPdu {
      *
      * @return A PduHeaders of this PDU.
      */
+    /* Modify 20121218 Spreadst of AppBackup  start */
+    /*
     PduHeaders getPduHeaders() {
+    */
+    public PduHeaders getPduHeaders() {
+    /* Modify 20121218 Spreadst of AppBackup end */
         return mPduHeaders;
     }
 
