@@ -103,14 +103,14 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
 
         mPukText = (TextView) findViewById(R.id.pukDisplay);
         mPinText = (TextView) findViewById(R.id.pinDisplay);
-//        mPinText2 = (TextView) findViewById(R.id.pinDisplay2);
+        mPinText2 = (TextView) findViewById(R.id.pinDisplay2);
         mDelPukButton = findViewById(R.id.pukDel);
         mDelPinButton = findViewById(R.id.pinDel);
-//        mDelPinButton2 = findViewById(R.id.pinDel2);
+        mDelPinButton2 = findViewById(R.id.pinDel2);
         mOkButton = findViewById(R.id.ok);
 
         mDelPinButton.setOnClickListener(this);
-//        mDelPinButton2.setOnClickListener(this);
+        mDelPinButton2.setOnClickListener(this);
         mDelPukButton.setOnClickListener(this);
         mOkButton.setOnClickListener(this);
 
@@ -141,8 +141,8 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
 
         mPinText.setFocusableInTouchMode(true);
         mPinText.setOnFocusChangeListener(this);
-//        mPinText2.setFocusableInTouchMode(true);
-//        mPinText2.setOnFocusChangeListener(this);
+        mPinText2.setFocusableInTouchMode(true);
+        mPinText2.setOnFocusChangeListener(this);
         mPukText.setFocusableInTouchMode(true);
         mPukText.setOnFocusChangeListener(this);
     }

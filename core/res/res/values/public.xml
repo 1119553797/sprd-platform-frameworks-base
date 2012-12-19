@@ -1305,7 +1305,9 @@
   <java-symbol type="id" name="password" />
   <java-symbol type="id" name="passwordEntry" />
   <java-symbol type="id" name="pinDel" />
+  <java-symbol type="id" name="pinDel2" />
   <java-symbol type="id" name="pinDisplay" />
+  <java-symbol type="id" name="pinDisplay2" />
   <java-symbol type="id" name="propertyOf" />
   <java-symbol type="id" name="pukDel" />
   <java-symbol type="id" name="pukDisplay" />
