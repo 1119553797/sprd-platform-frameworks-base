@@ -101,6 +101,8 @@ class ServiceRecord extends Binder {
     
     private int lastStartId;    // identifier of most recent start request.
 
+    boolean restartForKill;  //see AMS#killServicesLocked(ProcessRecord,boolean) and AMS#realStartServiceLocked(ServiceRecord,ProcessRecord)
+
     static class StartItem {
         final ServiceRecord sr;
         final boolean taskRemoved;
