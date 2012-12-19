@@ -417,6 +417,7 @@ public class NetworkController extends BroadcastReceiver {
         } else {
             // normal mobile data
             for (int i=0; i < numPhones; i++) {
+                if (mDataTypeIconId[i] == 0) mMobileActivityIconId[i] = 0;
                 cluster.setMobileDataIndicators(
                         mHasMobileDataFeature,
                         mShowPhoneRSSIForData ? mPhoneSignalIconId[i] : mDataSignalIconId[i],

@@ -180,11 +180,8 @@ public class ApnSetting {
 
     public boolean canHandleType(String type) {
         for (String t : types) {
-            // DEFAULT handles all, and HIPRI is handled by DEFAULT
-            if (t.equalsIgnoreCase(type) ||
-                    t.equalsIgnoreCase(Phone.APN_TYPE_ALL) ||
-                    (t.equalsIgnoreCase(Phone.APN_TYPE_DEFAULT) &&
-                    type.equalsIgnoreCase(Phone.APN_TYPE_HIPRI))) {
+            // APN_TYPE_ALL handles all, and HIPRI can not be handled by DEFAULT
+            if (t.equals(type) || t.equals(Phone.APN_TYPE_ALL)) {
                 return true;
             }
         }
