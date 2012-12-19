@@ -639,6 +639,19 @@ public class DefaultContainerService extends IntentService {
         final boolean isForwardLocked = (flags & PackageManager.INSTALL_FORWARD_LOCK) != 0;
 
         check_inner : {
+/* Add 20121218 Spreadst of 106635 ,install location start */
+            int installPreference = Settings.System.getInt(getApplicationContext()
+                    .getContentResolver(),
+                    Settings.Secure.DEFAULT_INSTALL_LOCATION,
+                    PackageHelper.APP_INSTALL_AUTO);
+            if (installPreference == PackageHelper.APP_INSTALL_INTERNAL) {
+                prefer = PREFER_INTERNAL;
+                break check_inner;
+            } else if (installPreference == PackageHelper.APP_INSTALL_EXTERNAL) {
+                prefer = PREFER_EXTERNAL;
+                break check_inner;
+            }
+/* Add 20121218 Spreadst of 106635 ,install location end */
             /*
              * Explicit install flags should override the manifest settings.
              */
@@ -664,7 +677,8 @@ public class DefaultContainerService extends IntentService {
                 checkBoth = true;
                 break check_inner;
             }
-
+/* Delete 20121218 Spreadst of 106635 ,install location start */
+/*
             // Pick user preference
             int installPreference = Settings.System.getInt(getApplicationContext()
                     .getContentResolver(),
@@ -677,7 +691,8 @@ public class DefaultContainerService extends IntentService {
                 prefer = PREFER_EXTERNAL;
                 break check_inner;
             }
-
+*/
+/* Delete 20121218 Spreadst of 106635 ,install location end */
             /*
              * Fall back to default policy of internal-only if nothing else is
              * specified.
@@ -699,7 +714,12 @@ public class DefaultContainerService extends IntentService {
         }
 
         boolean fitsOnSd = false;
+/* Modify 20121218 Spreadst of 106635 ,install location start */
+/*
         if (!emulated && (checkBoth || prefer == PREFER_EXTERNAL)) {
+*/
+        if (emulated && (checkBoth || prefer == PREFER_EXTERNAL)) {
+/* Modify 20121218 Spreadst of 106635 ,install location end */
             try {
                 fitsOnSd = isUnderExternalThreshold(apkFile, isForwardLocked);
             } catch (IOException e) {
@@ -711,7 +731,12 @@ public class DefaultContainerService extends IntentService {
             if (fitsOnInternal) {
                 return PackageHelper.RECOMMEND_INSTALL_INTERNAL;
             }
+/* Modify 20121218 Spreadst of 106635 ,install location start */
+/*
         } else if (!emulated && prefer == PREFER_EXTERNAL) {
+*/
+        } else if (emulated && prefer == PREFER_EXTERNAL) {
+/* Modify 20121218 Spreadst of 106635 ,install location end */
             if (fitsOnSd) {
                 return PackageHelper.RECOMMEND_INSTALL_EXTERNAL;
             }
