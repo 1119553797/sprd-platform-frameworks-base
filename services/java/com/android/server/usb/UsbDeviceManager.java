@@ -735,7 +735,7 @@ public class UsbDeviceManager {
                    mAccessoryEnabled = false;
                    mUmsEnabled = true;
                    mVserEnabled = mGserEnabled = false;    //we defaultly opens VSER and GSER,but now remove it
-                   adbEnabled = mAdbEnabled = true;
+                   //adbEnabled = mAdbEnabled = true;
                    mVserGserEnabled = false;
                }else if(functions.equalsIgnoreCase("vser,gser")){
                    mcdromEnabled = mPtpEnabled = mMtpEnabled = mTetherEnabled = false;
