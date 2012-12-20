@@ -1383,7 +1383,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             String []tok = line.split(" ");
             int code = Integer.parseInt(tok[0]);
             if (code == NetdResponseCode.UsbUdcpowerStatusResult) {
-                if (tok[3].equals("started"))
+                if (tok[4].equals("started"))
                     return true;
                 return false;
             } else {
@@ -1426,7 +1426,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             String []tok = line.split(" ");
             int code = Integer.parseInt(tok[0]);
             if (code == NetdResponseCode.UsbGserStatusResult) {
-                if (tok[3].equals("started"))
+                if (tok[4].equals("started"))
                     return true;
                 return false;
             } else {
@@ -1471,7 +1471,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             String []tok = line.split(" ");
             int code = Integer.parseInt(tok[0]);
             if (code == NetdResponseCode.UsbVserStatusResult) {
-                if (tok[3].equals("started"))
+                if (tok[4].equals("started"))
                     return true;
                 return false;
             } else {
@@ -1493,7 +1493,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             String []tok = line.split(" ");
             int code = Integer.parseInt(tok[0]);
             if (code == NetdResponseCode.UsbConnectStatusResult) {
-                if (tok[3].equals("connected"))
+                if (tok[4].equals("connected"))
                     return true;
                 return false;
             } else {
@@ -1519,7 +1519,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             String []tok = line.split(" ");
             int code = Integer.parseInt(tok[0]);
             if (code == NetdResponseCode.UsbRNDISStatusResult) {
-                if (tok[3].equals("started"))
+                if (tok[4].equals("started"))
                     return true;
                 return false;
             } else {
