@@ -582,6 +582,12 @@ void TextLayoutCacheValue::setupFaceForScript(HB_ShaperItem& shaperItem, int *p_
             script = Devanagari;
             break;
         case HB_Script_Hebrew:
+//add on 2012-12-20 for bug105960 start
+            if (typeface == NULL) {
+                script = Hebrew;
+                break;
+            }
+//add on 2012-12-20 for bug105960 end
             switch (typeface->style()) {
                 case SkTypeface::kBold:
                 case SkTypeface::kBoldItalic:
