@@ -42,6 +42,7 @@ import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.LinkProperties.CompareResult;
 import android.net.MobileDataStateTracker;
+import android.net.MsMobileDataStateTracker;
 import android.net.MsmsFeatureManager;
 import android.net.NetworkConfig;
 import android.net.NetworkInfo;
@@ -491,8 +492,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 mNetTrackers[netType].startMonitoring(context, mHandler);
                break;
             case ConnectivityManager.TYPE_MOBILE:
-                mNetTrackers[netType] = new MobileDataStateTracker(netType,
-                        mNetConfigs[netType].name);
+//                mNetTrackers[netType] = new MobileDataStateTracker(netType,
+//                        mNetConfigs[netType].name);
+                mNetTrackers[netType] = new MsMobileDataStateTracker(netType % ConnectivityManager.MAX_TYPE_FOR_ONE_SIM,
+                        mNetConfigs[netType].name, ConnectivityManager.getPhoneIdByNetworkType(netType));
                 mNetTrackers[netType].startMonitoring(context, mHandler);
                 break;
             case ConnectivityManager.TYPE_DUMMY:

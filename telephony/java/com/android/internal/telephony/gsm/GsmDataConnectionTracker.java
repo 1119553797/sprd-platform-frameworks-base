@@ -1938,9 +1938,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     private void onRecordsLoaded() {
         if (DBG) log("onRecordsLoaded: createAllApnList");
         createAllApnList();
-        if (mPhone.mCM.getRadioState().isOn() &&
-               (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(mPhone.getPhoneId()) ||
-                mPhone.getPhoneId() == TelephonyManager.getDefaultDataPhoneId(mPhone.getContext()))) {
+        if (mPhone.mCM.getRadioState().isOn()) {
             if (DBG) log("onRecordsLoaded: notifying data availability");
             notifyOffApnsOfAvailability(Phone.REASON_SIM_LOADED);
         }
