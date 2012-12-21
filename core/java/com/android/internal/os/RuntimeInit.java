@@ -23,6 +23,7 @@ import android.os.Debug;
 import android.os.IBinder;
 import android.os.Process;
 import android.os.SystemProperties;
+import android.os.FileUtils;
 import android.util.Log;
 import android.util.Slog;
 import com.android.internal.logging.AndroidConfig;
@@ -73,21 +74,11 @@ public class RuntimeInit {
                 if (mApplicationObject == null) {
                     Slog.e(TAG, "*** FATAL EXCEPTION IN SYSTEM PROCESS: " + t.getName(), e);
                     if (e instanceof OutOfMemoryError) {
-                        String pname = "system_server";
-                        String file = "/data/misc/hprofs/";
-                        File dir = new File(file);
-                        if (!dir.exists() || !dir.isDirectory() || !dir.canWrite()) {
-                            file = "/data/data/";
-                            dir = new File(file);
-                        }
-                        if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
-                            int pid = Process.myPid();
-                            file += "/oom_" + pname + ".hprof";
-                            try {
-                                android.os.Debug.dumpHprofData(file);
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
-                            }
+                        dumpSystemTrace();
+                    } else if (e instanceof RuntimeException) {
+                        String cause = Log.getStackTraceString(e.getCause());
+                        if (null != cause && cause.contains("Caused by: java.lang.OutOfMemoryError:")) {
+                            dumpSystemTrace();
                         }
                     }
                 } else {
@@ -107,6 +98,36 @@ public class RuntimeInit {
                 // Try everything to make sure this process goes away.
                 Process.killProcess(Process.myPid());
                 System.exit(10);
+            }
+        }
+    }
+
+    private static final void dumpSystemTrace() {
+        String pname = "system_process";
+        String hprofPath  = "/data/misc/hprofs/";
+        File dir = new File(hprofPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+            FileUtils.setPermissions(dir.getPath(), 0777, -1, -1);
+        }
+
+        File[] hprofsFiles = dir.listFiles();
+        for (File f : hprofsFiles) {
+            String p = f.getPath();
+            if (f.isFile() && p.contains(pname) && p.endsWith("hprof")) {
+                f.delete();
+            }
+        } 
+
+        if (dir.exists() && dir.isDirectory() && dir.canWrite()) {
+            int pid = Process.myPid();
+            Date d = new Date();
+            String date = d.getDate() + "-" + d.getHours() + "-" + d.getMinutes() + "-" + d.getSeconds();
+            hprofPath += "oom_" + pname +  "_" + pid + "_" + date + ".hprof";
+            try {
+                android.os.Debug.dumpHprofData(hprofPath);
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
         }
     }
