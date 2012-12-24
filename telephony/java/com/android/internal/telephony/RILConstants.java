@@ -59,7 +59,7 @@ public interface RILConstants {
 
     /* NETWORK_MODE_* See ril.h RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE */
     int NETWORK_MODE_WCDMA_PREF     = 0; /* GSM/WCDMA (WCDMA preferred) */
-    //int NETWORK_MODE_GSM_ONLY       = 1; /* GSM only */
+    int NETWORK_MODE_GSM_ONLY       = 1; /* GSM only */
     int NETWORK_MODE_WCDMA_ONLY     = 2; /* WCDMA only */
     int NETWORK_MODE_GSM_UMTS       = 3; /* GSM/WCDMA (auto mode, according to PRL)
                                             AVAILABLE Application Settings menu*/
@@ -73,13 +73,7 @@ public interface RILConstants {
     int NETWORK_MODE_LTE_GSM_WCDMA  = 9; /* LTE, GSM/WCDMA */
     int NETWORK_MODE_LTE_CMDA_EVDO_GSM_WCDMA = 10; /* LTE, CDMA, EvDo, GSM/WCDMA */
     int NETWORK_MODE_LTE_ONLY       = 11; /* LTE Only mode. */
-
-    int NETWORK_MODE_AUTO           = NETWORK_MODE_WCDMA_ONLY; /* GSM/TD-SCDMA */
-    int NETWORK_MODE_GSM_ONLY       = 13;/* GSM only */
-    int NETWORK_MODE_TD_SCDMA_ONLY  = 15;/* TD-SCDMA only*/
-
-    //int PREFERRED_NETWORK_MODE      = NETWORK_MODE_WCDMA_PREF;
-    int PREFERRED_NETWORK_MODE      = NETWORK_MODE_AUTO;
+    int PREFERRED_NETWORK_MODE      = NETWORK_MODE_WCDMA_PREF;
 
     /* CDMA subscription source. See ril.h RIL_REQUEST_CDMA_SET_SUBSCRIPTION */
     int SUBSCRIPTION_FROM_RUIM      = 0; /* CDMA subscription from RUIM when available */

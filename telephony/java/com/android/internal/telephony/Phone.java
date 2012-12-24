@@ -223,9 +223,6 @@ public interface Phone extends SprdVideoPhone{
     int NT_MODE_LTE_ONLY     = RILConstants.NETWORK_MODE_LTE_ONLY;
     int PREFERRED_NT_MODE    = RILConstants.PREFERRED_NETWORK_MODE;
 
-    int NT_MODE_AUTO         = RILConstants.NETWORK_MODE_AUTO;
-    int NT_MODE_TD_SCDMA_ONLY= RILConstants.NETWORK_MODE_TD_SCDMA_ONLY;
-
     // Used for CDMA roaming mode
     static final int CDMA_RM_HOME        = 0;  // Home Networks only, as defined in PRL
     static final int CDMA_RM_AFFILIATED  = 1;  // Roaming an Affiliated networks, as defined in PRL

@@ -1083,12 +1083,17 @@ public class TelephonyManager {
     /**
      * @hide
      */
-	public static final int MODEM_TYPE_GSM = 0;
+    public static final int MODEM_TYPE_GSM = 0;
 
     /**
      * @hide
      */
-	public static final int MODEM_TYPE_TDSCDMA = 1;
+    public static final int MODEM_TYPE_TDSCDMA = 1;
+
+    /**
+     * @hide
+     */
+    public static final int MODEM_TYPE_WCDMA = 2;
 
 
     /**
@@ -1296,9 +1301,11 @@ public class TelephonyManager {
             modemValue =  baseBand.split("\\|")[1];
 //            Log.d(TAG, "modemValue = "+modemValue);
             //if(modemValue.equals("sc8805_sp8805")){//fix bug 7294 close
-            if(modemValue.equals("sc8810_modem")){//fix bug 7294 add
+            if ((modemValue.equals("sc8810_modem"))
+                || (modemValue.equals("sc8825_modem"))){//fix bug 7294 add
                 return MODEM_TYPE_TDSCDMA;
-            }else if(modemValue.equals("sc6810_sp6810")){
+            }else if ((modemValue.equals("sc6810_sp6810"))
+                || (modemValue.equals("sc6825_modem"))) {
                 return MODEM_TYPE_GSM;
             }
         }
