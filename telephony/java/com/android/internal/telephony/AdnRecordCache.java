@@ -195,7 +195,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
         }
 
         userWriteResponse.put(efid, response);
-
+        mInsertId = recordIndex;
         new AdnRecordLoader(mFh).updateEF(adn, efid, extensionEF,
                 recordIndex, pin2,
                 obtainMessage(EVENT_UPDATE_ADN_DONE, efid, recordIndex, adn));
