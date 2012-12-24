@@ -32,6 +32,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import com.android.internal.R;
+import com.android.internal.telephony.PhoneFactory;
 
 /**
  * This widget display an analogic clock with two hands for hours and
@@ -89,13 +90,14 @@ public class CarrierLabel2 extends TextView {
     };
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn, int phoneid) {
-        if (phoneid != 1) return;
+        if (phoneid != 0) return;
         if (true) {
             Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn + "phoneid" + phoneid);
         }
         StringBuilder str = new StringBuilder();
         boolean something = false;
+        boolean hasSim = PhoneFactory.isCardExist(phoneid);
         if (showPlmn && plmn != null) {
             str.append(plmn);
             something = true;
@@ -107,10 +109,27 @@ public class CarrierLabel2 extends TextView {
             str.append(spn);
             something = true;
         }
+
         if (something) {
+            if (showPlmn
+                    && plmn != null
+                    && plmn.equals(mContext
+                            .getString(com.android.internal.R.string.lockscreen_carrier_default))) {
+                if (!hasSim) {
+                    str.append(" | ");
+                    str.append(mContext
+                            .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+                }
+            }
             setText(str.toString());
         } else {
-            setText(com.android.internal.R.string.lockscreen_carrier_default);
+            str.append(mContext.getString(com.android.internal.R.string.lockscreen_carrier_default));
+            if (!hasSim) {
+                str.append(" | ");
+                str.append(mContext
+                        .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+            }
+            setText(str.toString());
         }
     }
 

@@ -33,6 +33,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import com.android.internal.R;
+import com.android.internal.telephony.PhoneFactory;
 
 /**
  * This widget display an analogic clock with two hands for hours and
@@ -95,23 +96,45 @@ public class CarrierLabel extends TextView {
             Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn + "phoneid" + phoneid);
         }
-        final String str;
-        // match logic in KeyguardStatusViewManager
-        final boolean plmnValid = showPlmn && !TextUtils.isEmpty(plmn);
-        final boolean spnValid = showSpn && !TextUtils.isEmpty(spn);
-        if (plmnValid && spnValid) {
-            str = plmn + "|" + spn;
-        } else if (plmnValid) {
-            str = plmn;
-        } else if (spnValid) {
-            str = spn;
-        } else {
-            str = "";
+        StringBuilder str = new StringBuilder();
+        boolean something = false;
+        boolean hasSim = PhoneFactory.isCardExist(phoneid);
+        if (showPlmn && plmn != null) {
+            str.append(plmn);
+            something = true;
         }
-        setText(str);
+        if (showSpn && spn != null) {
+            if (something) {
+                str.append('\n');
+            }
+            str.append(spn);
+            something = true;
+        }
+
+        if (something) {
+            if (showPlmn
+                    && plmn != null
+                    && plmn.equals(mContext
+                            .getString(com.android.internal.R.string.lockscreen_carrier_default))) {
+                if (!hasSim) {
+                    str.append(" | ");
+                    str.append(mContext
+                            .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+                }
+            }
+            setText(str.toString());
+        } else {
+            str.append(mContext.getString(com.android.internal.R.string.lockscreen_carrier_default));
+            if (!hasSim) {
+                str.append(" | ");
+                str.append(mContext
+                        .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+            }
+            setText(str.toString());
+        }
     }
 
-    
+
 }
 
 
