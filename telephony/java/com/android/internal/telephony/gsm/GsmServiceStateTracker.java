@@ -631,7 +631,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         }
         if (rule != curSpnRule || mLocalLanguageChange
                 || !TextUtils.equals(spn, curSpn)
-                || !TextUtils.equals(plmn, curPlmn)) {
+                || !TextUtils.equals(plmn, curPlmn)
+                || show3G != curShow3G) {
             boolean showSpn = !mEmergencyOnly && !TextUtils.isEmpty(spn)
                 && (rule & SIMRecords.SPN_RULE_SHOW_SPN) == SIMRecords.SPN_RULE_SHOW_SPN;
             boolean showPlmn = !TextUtils.isEmpty(plmn) && (mEmergencyOnly ||
@@ -790,8 +791,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     }
                     newGPRSState = regCodeToServiceState(regState);
                     mDataRoaming = regCodeIsRoaming(regState);
-                    mNewRilRadioTechnology = type;
-                    newSS.setRadioTechnology(type);
+                    //mNewRilRadioTechnology = type;
+                    //newSS.setRadioTechnology(type);
                 break;
 
                 case EVENT_POLL_STATE_OPERATOR:
