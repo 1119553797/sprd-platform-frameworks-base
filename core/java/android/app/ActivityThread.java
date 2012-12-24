@@ -3314,7 +3314,13 @@ public final class ActivityThread {
                         r.mPendingRemoveWindow = v;
                         r.mPendingRemoveWindowManager = wm;
                     } else {
-                        wm.removeViewImmediate(v);
+                        // modify for bug 107343.
+                        try {
+                            wm.removeViewImmediate(v);
+                        } catch (IllegalArgumentException ex) {
+                            Slog.v(TAG, "Remove view failed when handle destroy activity!", ex);
+                        }
+                        // modify for bug 107343 end.
                     }
                 }
                 if (wtoken != null && r.mPendingRemoveWindow == null) {
