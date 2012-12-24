@@ -696,9 +696,9 @@ class KeyguardStatusViewManager implements OnClickListener {
                     // has some connectivity. Otherwise, it should be null or empty and just show
                     // "No SIM card"
                 	carrierText[phoneId] = getContext().getText(R.string.lockscreen_missing_sim_message_short);
-                    if (mLockPatternUtils.isEmergencyCallCapable()) {
+                    /*if (mLockPatternUtils.isEmergencyCallCapable()) {
                     	carrierText[phoneId] = makeCarierString(mPlmn[phoneId],carrierText[phoneId]);
-                    }
+                    }*/
                     carrierHelpTextId = R.string.lockscreen_missing_sim_instructions_long;
                     break;
 
