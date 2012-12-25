@@ -3709,5 +3709,6 @@
   <java-symbol type="string" name="CallHold" />
   <java-symbol type="string" name="CallRetrieved" />
   <java-symbol type="string" name="IncomingCallForwarded" />
+  <java-symbol type="string" name="usb_cdrom_notification_title" />
 
 </resources>

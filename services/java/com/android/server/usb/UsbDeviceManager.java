@@ -68,6 +68,7 @@ import java.util.Scanner;
 public class UsbDeviceManager {
 
     private static final String TAG = UsbDeviceManager.class.getSimpleName();
+
     private static final boolean DEBUG = true;
 
     private static final String USB_STATE_MATCH =
@@ -1147,6 +1148,8 @@ public class UsbDeviceManager {
                 // The above is from 4.0 source cod
                 else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY)) {
                     id = com.android.internal.R.string.usb_accessory_notification_title;
+                } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_CDROM)) {
+                    id = com.android.internal.R.string.usb_cdrom_notification_title;
                 } else {
                     // There is a different notification for USB tethering so we don't need one here
                     if (!containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_RNDIS)) {
