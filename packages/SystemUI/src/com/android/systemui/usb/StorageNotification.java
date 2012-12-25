@@ -28,6 +28,7 @@ import android.os.HandlerThread;
 import android.os.storage.StorageEventListener;
 import android.os.storage.StorageManager;
 import android.provider.Settings;
+import android.content.ComponentName;
 import android.util.Slog;
 
 public class StorageNotification extends StorageEventListener {
@@ -134,7 +135,8 @@ public class StorageNotification extends StorageEventListener {
              * for stopping UMS.
              */
             Intent intent = new Intent();
-            intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
+            intent.setComponent(new ComponentName("com.android.settings", "com.android.settings.SprdUsbSettings"));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
             setUsbStorageNotification(
                     com.android.internal.R.string.usb_storage_stop_notification_title,
@@ -258,7 +260,7 @@ public class StorageNotification extends StorageEventListener {
 
         if (available) {
             Intent intent = new Intent();
-            intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
+            intent.setComponent(new ComponentName("com.android.settings", "com.android.settings.SprdUsbSettings"));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
@@ -339,6 +341,7 @@ public class StorageNotification extends StorageEventListener {
             notificationManager.notify(notificationId, mUsbStorageNotification);
         } else {
             notificationManager.cancel(notificationId);
+            mUsbStorageNotification = null;
         }
     }
 
@@ -410,6 +413,7 @@ public class StorageNotification extends StorageEventListener {
             notificationManager.notify(notificationId, mMediaStorageNotification);
         } else {
             notificationManager.cancel(notificationId);
+            mMediaStorageNotification = null;
         }
     }
 }
