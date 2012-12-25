@@ -96,10 +96,10 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
     pEnd += 2; /* skip the '\r' and '\n' */
     pStart = pEnd;
     leftLen = pBufferEnd - pStart;
+//    LOGI("drm_parseDM starting");
     do {
         pDmInfo->transferEncoding = DRM_MESSAGE_CODING_7BIT; /* According RFC2045 chapter 6.1, the default value should be 7bit.*/
         strcpy((char *)pDmInfo->contentType, "text/plain");  /* According RFC2045 chapter 5.2, the default value should be "text/plain". */
-
         /* Deal the header information */
         while ((('\r' != *pStart) || ('\n' != *(pStart + 1))) && pStart < pBufferEnd) {
             pEnd = drm_strnstr(pStart, (uint8_t *)DRM_NEW_LINE_CRLF, leftLen);
@@ -129,6 +129,8 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
                         strncpy((char *)pDmInfo->contentType, (char *)pStart, pEnd - pStart);
                         pDmInfo->contentType[pEnd - pStart] = '\0';
                     }
+//		  LOGI("parser_drm second content type: %s",pDmInfo->contentType);
+					
                 } else if (0 == drm_strnicmp(pStart, (uint8_t *)HEADERS_CONTENT_ID, HEADERS_CONTENT_ID_LEN)) {
                     uint8_t tmpBuf[MAX_CONTENT_ID] = {0};
                     uint8_t *pTmp;
@@ -157,6 +159,7 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
                     }
                 }
             } else { /* First confirm delivery type, Forward_Lock, Combined Delivery or Separate Delivery */
+//		  LOGI("parser_drm First confirm delivery type ...");
                 if (0 == drm_strnicmp(pStart, (uint8_t *)HEADERS_CONTENT_TYPE, HEADERS_CONTENT_TYPE_LEN)) {
                     pStart += HEADERS_CONTENT_TYPE_LEN;
                     DRM_SKIP_SPACE_TAB(pStart);
@@ -165,6 +168,7 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
                         strncpy((char *)pDmInfo->contentType, (char *)pStart, pEnd - pStart);
                         pDmInfo->contentType[pEnd - pStart] = '\0';
                     }
+//		  LOGI("parser_drm First content type: %s",pDmInfo->contentType);
 
                     if (0 == strcmp((char *)pDmInfo->contentType, DRM_MIME_TYPE_RIGHTS_XML)) {
                         pDmInfo->deliveryType = COMBINED_DELIVERY;
@@ -178,6 +182,7 @@ int32_t drm_parseDM(const uint8_t *buffer, int32_t bufferLen, T_DRM_DM_Info *pDm
                         pDmInfo->deliveryType = FORWARD_LOCK;
                         status = DM_PARSING_CONTENT;
                     }
+//  	           LOGI("parser_drm First delivery type: %d",pDmInfo->deliveryType);
                 }
             }
             pEnd += 2; /* skip the '\r' and '\n' */

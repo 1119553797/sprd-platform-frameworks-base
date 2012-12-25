@@ -27,7 +27,7 @@
 /**
  * Current id.
  */
-static int32_t curID = 0;
+static int32_t curID = 1;
 
 /**
  * The header pointer for the session list.
@@ -742,6 +742,8 @@ int32_t SVC_drm_installRights(T_DRM_Input_Data data, T_DRM_Rights_Info* pRightsI
     switch(data.mimeType) {
     case TYPE_DRM_MESSAGE: /* in case of Combined Delivery, extract the rights part to install */
         {
+	      Trace("svc_drm_installright TYPE_DRM_MESSAGE");
+
             T_DRM_DM_Info dmInfo;
 
             memset(&dmInfo, 0, sizeof(T_DRM_DM_Info));
@@ -765,6 +767,8 @@ int32_t SVC_drm_installRights(T_DRM_Input_Data data, T_DRM_Rights_Info* pRightsI
         break;
     case TYPE_DRM_RIGHTS_XML:
     case TYPE_DRM_RIGHTS_WBXML:
+      Trace("svc_drm_installright TYPE_DRM_RIGHTS_XML TYPE_DRM_RIGHTS_WBXML ");
+		
         memset(&rights, 0, sizeof(T_DRM_Rights));
         if (FALSE == drm_relParser(buf, bufLen, data.mimeType, &rights)) {
             free(buf);
@@ -774,6 +778,7 @@ int32_t SVC_drm_installRights(T_DRM_Input_Data data, T_DRM_Rights_Info* pRightsI
     case TYPE_DRM_CONTENT: /* DCF should not using "SVC_drm_installRights", it should be used to open a session. */
     case TYPE_DRM_UNKNOWN:
     default:
+       Trace("svc_drm_installright TYPE_DRM_UNKNOWN ");
         free(buf);
         return DRM_MEDIA_DATA_INVALID;
     }
@@ -783,7 +788,8 @@ int32_t SVC_drm_installRights(T_DRM_Input_Data data, T_DRM_Rights_Info* pRightsI
     /* append the rights information to DRM engine storage */
     if (FALSE == drm_appendRightsInfo(&rights))
         return DRM_FAILURE;
-
+    Trace("svc_drm_installright ok");
+	
     memset(pRightsInfo, 0, sizeof(T_DRM_Rights_Info));
     drm_getLicenseInfo(&rights, pRightsInfo);
 
@@ -795,7 +801,9 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
 {
     int32_t session;
     int32_t dataLen;
+    int32_t ret;
     T_DRM_Session_Node* s;
+    T_DRM_Rights_Info rightsinfo; //
 
     if (0 == data.inputHandle)
         return DRM_MEDIA_DATA_INVALID;
@@ -842,6 +850,12 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
 
             s->deliveryMethod = dmInfo.deliveryType;
 
+/*	   if (s->deliveryMethod == COMBINED_DELIVERY)
+	   {
+	   	ret = SVC_drm_installRights(data, &rightsinfo);
+	        Trace("SVC_drm_openSession to COMBINED_DELIVERY install right return %d",ret);
+	   }
+*/
             if (SEPARATE_DELIVERY_FL == s->deliveryMethod)
                 s->contentLength = DRM_UNKNOWN_DATA_LEN;
             else
@@ -1756,10 +1770,11 @@ int32_t SVC_drm_getRightsInfo(int32_t session, T_DRM_Rights_Info* rights)
 
     if (session < 0 || NULL == rights)
         return DRM_FAILURE;
-
+//    LOGI("SVC_drm_getRightsInfo session >= 0");
     s = getSession(session);
     if (NULL == s)
         return DRM_SESSION_NOT_OPENED;
+//    LOGI("SVC_drm_getRightsInfo getsession is not null");
 
     if (FORWARD_LOCK == s->deliveryMethod) {
         strcpy((char *)rights->roId, "ForwardLock");
@@ -1767,17 +1782,22 @@ int32_t SVC_drm_getRightsInfo(int32_t session, T_DRM_Rights_Info* rights)
         rights->playRights.indicator = DRM_NO_CONSTRAINT;
         rights->executeRights.indicator = DRM_NO_CONSTRAINT;
         rights->printRights.indicator = DRM_NO_CONSTRAINT;
+//        LOGI("SVC_drm_getRightsInfo Ok");
+		
         return DRM_SUCCESS;
     }
 
     if (FALSE == drm_readFromUidTxt(s->contentID, &id, GET_ID))
         return DRM_NO_RIGHTS;
+//        LOGI("SVC_drm_getRightsInfo drm_readFromUidTxt Ok");
 
     if (FALSE == drm_writeOrReadInfo(id, NULL, &roAmount, GET_ROAMOUNT))
         return DRM_FAILURE;
+//        LOGI("SVC_drm_getRightsInfo drm_writeOrReadInfo Ok");
 
     if (roAmount < 0)
         return DRM_NO_RIGHTS;
+//        LOGI("SVC_drm_getRightsInfo roAmount Ok");
 
     /* some rights has been installed, but now there is no valid rights */
     if (0 == roAmount) {
@@ -1786,6 +1806,7 @@ int32_t SVC_drm_getRightsInfo(int32_t session, T_DRM_Rights_Info* rights)
         rights->playRights.indicator = DRM_NO_PERMISSION;
         rights->executeRights.indicator = DRM_NO_PERMISSION;
         rights->printRights.indicator = DRM_NO_PERMISSION;
+//       LOGI("SVC_drm_getRightsInfo roAmount return Ok");
         return DRM_SUCCESS;
     }
 
@@ -1793,6 +1814,7 @@ int32_t SVC_drm_getRightsInfo(int32_t session, T_DRM_Rights_Info* rights)
     memset(&rightsInfo, 0, sizeof(T_DRM_Rights));
     if (FALSE == drm_writeOrReadInfo(id, &rightsInfo, &roAmount, GET_A_RO))
         return DRM_FAILURE;
+//       LOGI("SVC_drm_getRightsInfo drm_writeOrReadInfo return Ok");
 
     memset(rights, 0, sizeof(T_DRM_Rights_Info));
     drm_getLicenseInfo(&rightsInfo, rights);

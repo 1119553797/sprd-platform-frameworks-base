@@ -32,6 +32,7 @@ public class DrmRightsManager {
      * The "application/vnd.oma.drm.rights+wbxml" mime type.
      */
     public static final String DRM_MIMETYPE_RIGHTS_WBXML_STRING = "application/vnd.oma.drm.rights+wbxml";
+    public static final String DRM_MIMETYPE_RIGHT_MESSAGE =  "application/vnd.oma.drm.message";	
 
     /**
      * The id of "application/vnd.oma.drm.rights+xml" mime type.

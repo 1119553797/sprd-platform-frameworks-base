@@ -564,7 +564,9 @@ Java_android_drm_mobile1_DrmRawContent_nativeConstructDrmContent
     int32_t id;
     T_DRM_Input_Data inData;
     DrmData* drmInData;
-
+    int32_t ret;
+    T_DRM_Rights_Info rightinfo;
+	
     switch (mimeType) {
     case JNI_DRM_MIMETYPE_MESSAGE:
         mimeType = TYPE_DRM_MESSAGE;
@@ -579,22 +581,47 @@ Java_android_drm_mobile1_DrmRawContent_nativeConstructDrmContent
     drmInData = newItem();
     if (NULL == drmInData)
         return JNI_DRM_FAILURE;
-
+   // ALOGI("jni nativeConstructDrmContent newItem ok");
+	
     drmInData->env = env;
     drmInData->pInData = &data;
     drmInData->len = len;
 
     if (JNI_DRM_FAILURE == addItem(drmInData))
         return JNI_DRM_FAILURE;
-
+//     LOGI("jni nativeConstructDrmContent addItem ok");
+	 
     inData.inputHandle = (int32_t)drmInData;
     inData.mimeType = mimeType;
     inData.getInputDataLength = getInputStreamDataLength;
     inData.readInputData = readInputStreamData;
+/*	
+    ret = SVC_drm_installRights(inData, &rightinfo);
+    LOGI("jni nativeConstructDrmContent installright:%d",ret);
+     freeItem(drmInData);
+	 
+   drmInData = newItem();
+    if (NULL == drmInData)
+        return JNI_DRM_FAILURE;
+    LOGI("jni nativeConstructDrmContent newItem2 ok");
+	
+    drmInData->env = env;
+    drmInData->pInData = &data;
+    drmInData->len = len;
 
+    if (JNI_DRM_FAILURE == addItem(drmInData))
+        return JNI_DRM_FAILURE;
+     LOGI("jni nativeConstructDrmContent addItem2 ok");
+	 
+    inData.inputHandle = (int32_t)drmInData;
+    inData.mimeType = mimeType;
+    inData.getInputDataLength = getInputStreamDataLength;
+    inData.readInputData = readInputStreamData;	 	
+*/	
     id = SVC_drm_openSession(inData);
     if (id < 0)
         return JNI_DRM_FAILURE;
+//     LOGI("jni nativeConstructDrmContent opensession ok:%d",id);
 
     drmInData->id = id;
 
@@ -954,14 +981,17 @@ Java_android_drm_mobile1_DrmRightsManager_nativeQueryRights
 {
     jint id;
     T_DRM_Rights_Info rightsInfo;
-
+//   LOGI("jni query DrmRights");
     if (JNI_DRM_FAILURE == getObjectIntField(env, rawContent, "id", &id))
         return JNI_DRM_FAILURE;
 
     memset(&rightsInfo, 0, sizeof(T_DRM_Rights_Info));
     if (DRM_SUCCESS != SVC_drm_getRightsInfo(id, &rightsInfo))
+    	{
+//    	LOGI("jni query DrmRights failed");
         return JNI_DRM_FAILURE;
-
+    	}
+//	LOGI("jni query DrmRights success");
     return setRightsFields(env, rights, &rightsInfo);
 }
 

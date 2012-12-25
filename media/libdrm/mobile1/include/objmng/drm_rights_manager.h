@@ -26,8 +26,11 @@ extern "C" {
 #include <parser_rel.h>
 
 #ifdef DRM_DEVICE_ARCH_ARM
-#define ANDROID_DRM_CORE_PATH   "/data/drm/rights/"
-#define DRM_UID_FILE_PATH       "/data/drm/rights/uid.txt"
+//#define ANDROID_DRM_CORE_PATH   "/data/drm/rights/"
+//#define DRM_UID_FILE_PATH       "/data/drm/rights/uid.txt"
+#define ANDROID_DRM_CORE_PATH   "/data/data/com.android.providers.drm/"
+#define DRM_UID_FILE_PATH       "/data/data/com.android.providers.drm/uid.txt"
+
 #else
 #define ANDROID_DRM_CORE_PATH   "/home/user/golf/esmertec/device/out/debug/host/linux-x86/product/sim/data/data/com.android.drm.mobile1/"
 #define DRM_UID_FILE_PATH       "/home/user/golf/esmertec/device/out/debug/host/linux-x86/product/sim/data/data/com.android.drm.mobile1/uid.txt"
