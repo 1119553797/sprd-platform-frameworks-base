@@ -1073,6 +1073,7 @@
     <string name="usb_ptp_notification_title" msgid="1960817192216064833">"已視為相機連線"</string>
     <string name="usb_cd_installer_notification_title" msgid="6774712827892090754">"已視為安裝程式連線"</string>
     <string name="usb_accessory_notification_title" msgid="7848236974087653666">"已連接 USB 配件"</string>
+    <string name="usb_cdrom_notification_title">"虛擬光驅已啟用"</string>
     <string name="usb_notification_message" msgid="2290859399983720271">"輕觸即可顯示其他 USB 選項。"</string>
     <string name="extmedia_format_title" product="nosdcard" msgid="9020092196061007262">"將 USB 儲存裝置格式化？"</string>
     <string name="extmedia_format_title" product="default" msgid="3648415921526526069">"將 SD 卡格式化？"</string>
