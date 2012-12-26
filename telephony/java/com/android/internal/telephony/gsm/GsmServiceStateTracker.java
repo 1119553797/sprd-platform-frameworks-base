@@ -763,6 +763,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     // LAC and CID are -1 if not avail
                     newCellLoc.setLacAndCid(lac, cid);
                     newCellLoc.setPsc(psc);
+                    mNewRilRadioTechnology = type;
+                    newSS.setRadioTechnology(type);
                 break;
 
                 case EVENT_POLL_STATE_GPRS:

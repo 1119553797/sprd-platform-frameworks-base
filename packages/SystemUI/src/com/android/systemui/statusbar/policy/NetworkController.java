@@ -80,7 +80,7 @@ import com.android.systemui.R;
 public class NetworkController extends BroadcastReceiver {
     // debug
     static final String TAG = "StatusBar.NetworkController";
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = true;
     static final boolean CHATTY = false; // additional diagnostics, but not logspew
 
     // telephony
@@ -417,7 +417,7 @@ public class NetworkController extends BroadcastReceiver {
         } else {
             // normal mobile data
             for (int i=0; i < numPhones; i++) {
-                if (mDataTypeIconId[i] == 0) mMobileActivityIconId[i] = 0;
+                //if (mDataTypeIconId[i] == 0) mMobileActivityIconId[i] = 0;
                 cluster.setMobileDataIndicators(
                         mHasMobileDataFeature,
                         mShowPhoneRSSIForData ? mPhoneSignalIconId[i] : mDataSignalIconId[i],
@@ -1106,6 +1106,8 @@ public class NetworkController extends BroadcastReceiver {
                 combinedActivityIconId = mMobileActivityIconId[phoneId];
                 combinedSignalIconId = mDataSignalIconId[phoneId]; // set by updateDataIcon()
                 mContentDescriptionCombinedSignal = mContentDescriptionDataType;
+            } else {
+                mMobileActivityIconId[phoneId] = 0;
             }
         }
 
