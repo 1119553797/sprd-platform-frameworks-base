@@ -2046,6 +2046,14 @@ public class BluetoothService extends IBluetooth.Stub {
 
     /*package*/ String getAddressFromObjectPath(String objectPath) {
         String adapterObjectPath = mAdapterProperties.getObjectPath();
+        if (adapterObjectPath == null || (objectPath != null && !objectPath.startsWith(adapterObjectPath))) {
+            String adapterPath = getAdapterPathNative();
+            Log.d(TAG, "getAddressFromObjectPath: adapterPath = " + adapterPath);
+            if (adapterPath != null) {
+                mAdapterProperties.setProperty("ObjectPath", adapterPath + "/dev_");
+            }
+            adapterObjectPath = mAdapterProperties.getObjectPath();
+        }
         if (adapterObjectPath == null || objectPath == null) {
             Log.e(TAG, "getAddressFromObjectPath: AdapterObjectPath:" + adapterObjectPath +
                     "  or deviceObjectPath:" + objectPath + " is null");
