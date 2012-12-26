@@ -130,6 +130,41 @@ public class Patterns {
                         // input.  This is to stop foo.sure from
                         // matching as foo.su
 
+    //add by spreadst-start
+    public static final String GOOD_IRI_CHAR_ONLY_ENG_NUM = "a-zA-Z0-9";
+    public static final Pattern WEB_URL_FOR_TEXTVIEW = Pattern.compile(
+        "((?:(http|https|Http|Https|rtsp|Rtsp):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)"
+        + "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_"
+        + "\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?"
+        + "((?:(?:[" + GOOD_IRI_CHAR_ONLY_ENG_NUM + "][" + GOOD_IRI_CHAR + "\\-]{0,64}\\.)+" // named host
+        + TOP_LEVEL_DOMAIN_STR_FOR_WEB_URL
+        + "|(?:(?:25[0-5]|2[0-4]" // or ip address
+        + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(?:25[0-5]|2[0-4][0-9]"
+        + "|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1]"
+        + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
+        + "|[1-9][0-9]|[1-9]|0))"
+        + "|(?:([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}"// for ipv6 address
+        + "|:((:[0-9a-fA-F]{1,4}){1,6}|:)"
+        + "|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,5}|:)"
+        + "|([0-9a-fA-F]{1,4}:){2}((:[0-9a-fA-F]{1,4}){1,4}|:)"
+        + "|([0-9a-fA-F]{1,4}:){3}((:[0-9a-fA-F]{1,4}){1,3}|:)"
+        + "|([0-9a-fA-F]{1,4}:){4}((:[0-9a-fA-F]{1,4}){1,2}|:)"
+        + "|([0-9a-fA-F]{1,4}:){5}:([0-9a-fA-F]{1,4})?"
+        + "|([0-9a-fA-F]{1,4}:){6}:))"
+        + "(?:\\:\\d{1,5})?)" // plus option port number
+        + "(\\/(?:(?:[" + GOOD_IRI_CHAR_ONLY_ENG_NUM + "\\;\\/\\?\\:\\@\\&\\=\\#\\~" // plus option query params
+        + "\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?"
+        + "(?:\\b|$|(?=[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))", Pattern.CASE_INSENSITIVE); // and finally, a word boundary or end of
+        // input. This is to stop foo.sure from
+        // matching as foo.su
+
+    public static final Pattern FILE_NAME = Pattern.compile(
+        "(?:[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+\\.[0-9a-zA-Z]*"
+        + "(?:\\b|$|(?=[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))");
+	    //add by spreadst-end
+
+
+
     public static final Pattern IP_ADDRESS
         = Pattern.compile(
             "((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
