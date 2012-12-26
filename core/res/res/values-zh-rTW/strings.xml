@@ -47,7 +47,7 @@
     <string name="badPuk" msgid="5487257647081132201">"您輸入的 PUK 不正確。"</string>
     <string name="mismatchPin" msgid="609379054496863419">"您輸入的 PIN 不符。"</string>
     <string name="invalidPin" msgid="3850018445187475377">"輸入 4~8 個數字的 PIN。"</string>
-    <string name="invalidPuk" msgid="8761456210898036513">"輸入 8 位數以上的 PUK。"</string>
+    <string name="invalidPuk" msgid="8761456210898036513">"輸入 8 位數的 PUK。"</string>
     <string name="needPuk" msgid="919668385956251611">"SIM 卡的 PUK 已鎖定。請輸入 PUK 碼解除鎖定。"</string>
     <string name="needPuk2" msgid="4526033371987193070">"請輸入 PUK2 以解鎖 SIM 卡。"</string>
     <string name="imei" msgid="2625429890869005782">"IMEI"</string>

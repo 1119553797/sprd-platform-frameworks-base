@@ -275,8 +275,8 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
     }
 
     private void checkPuk() {
-        // make sure that the puk is at least 8 digits long.
-        if (mPukText.getText().length() < 8) {
+        // make sure that the puk is 8 digits long.
+        if (mPukText.getText().length() != 8) {
             // otherwise, display a message to the user, and don't submit.
             mHeaderText.setText(R.string.invalidPuk);
             mPukText.setText("");
