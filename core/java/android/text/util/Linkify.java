@@ -209,21 +209,21 @@ public class Linkify {
         ArrayList<LinkSpec> links = new ArrayList<LinkSpec>();
 
         if ((mask & WEB_URLS) != 0) {
-            gatherLinks(links, text, Patterns.WEB_URL,
+            gatherLinks(links, text, Patterns.WEB_URL_FOR_TEXTVIEW,
                 new String[] { "http://", "https://", "rtsp://" },
-                sUrlMatchFilter, null);
+                sUrlMatchFilter, null, mask);
         }
 
         if ((mask & EMAIL_ADDRESSES) != 0) {
             gatherLinks(links, text, Patterns.EMAIL_ADDRESS,
                 new String[] { "mailto:" },
-                null, null);
+                null, null, mask);
         }
 
         if ((mask & PHONE_NUMBERS) != 0) {
             gatherLinks(links, text, Patterns.PHONE,
                 new String[] { "tel:" },
-                sPhoneNumberMatchFilter, sPhoneNumberTransformFilter);
+                sPhoneNumberMatchFilter, sPhoneNumberTransformFilter, mask);
         }
 
         if ((mask & MAP_ADDRESSES) != 0) {
@@ -421,9 +421,31 @@ public class Linkify {
         return url;
     }
 
+    static int realEnd = 0;
+    private static final String extractFileNameFromUrl (Spannable s, int end) {
+            int len = s.length();
+            int findStart = -1;
+            int findEnd = -1;
+            CharSequence cs;
+            if (end < len - 1) {
+               cs = s.subSequence(end, len);
+               Matcher m = Patterns.FILE_NAME.matcher(cs);
+               while (m.find()) {
+                     findStart = m.start();
+                     findEnd = m.end();
+                     if (findStart == 0 && findEnd < len) {
+                         realEnd = end + findEnd;
+
+                         return s.subSequence(findStart, findEnd).toString();
+                    }
+              }
+           }
+			return "";
+    }
+
     private static final void gatherLinks(ArrayList<LinkSpec> links,
             Spannable s, Pattern pattern, String[] schemes,
-            MatchFilter matchFilter, TransformFilter transformFilter) {
+            MatchFilter matchFilter, TransformFilter transformFilter, int mask) {
         Matcher m = pattern.matcher(s);
 
         while (m.find()) {
@@ -433,8 +455,16 @@ public class Linkify {
             if (matchFilter == null || matchFilter.acceptMatch(s, start, end)) {
                 LinkSpec spec = new LinkSpec();
                 String url = makeUrl(m.group(0), schemes, m, transformFilter);
-
-                spec.url = url;
+                StringBuilder urlBuilder = new StringBuilder(url);
+                if ((mask & WEB_URLS) != 0 ) {
+                   String fileName = extractFileNameFromUrl(s, end);
+                   android.util.Log.e("linkify","fileName: " + fileName + ", end: " + end + ", realEnd: " + realEnd);
+                   if (!"".equals(fileName)) {
+                       end = realEnd;
+                       urlBuilder.append(fileName);
+                   }
+                }
+                spec.url = urlBuilder.toString();
                 spec.start = start;
                 spec.end = end;
 
