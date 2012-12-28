@@ -561,6 +561,7 @@ public class AccountManagerService
                     }
                 }
                 db.setTransactionSuccessful();
+		removeAccountFromCacheLocked(accounts, account);
                 insertAccountIntoCacheLocked(accounts, account);
             } finally {
                 db.endTransaction();
