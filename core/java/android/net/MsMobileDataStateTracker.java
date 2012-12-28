@@ -5,15 +5,13 @@ import com.android.internal.telephony.ITelephony;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.MobileDataStateTracker.MdstHandler;
-import android.net.MobileDataStateTracker.MobileDataStateReceiver;
 import android.os.Handler;
 import android.os.ServiceManager;
 import android.telephony.TelephonyManager;
+import android.util.Slog;
 
 /**
  * Track the state of mobile data connectivity. This is done by
@@ -57,7 +55,7 @@ public class MsMobileDataStateTracker extends MobileDataStateTracker {
             int phoneId = intent.getIntExtra(Phone.PHONE_ID, -1);
             if (phoneId == mPhoneId) {
                 if (DBG) {
-                    log("[" + mPhoneId + "]receive " + intent.getAction());
+                    log("receive " + intent.getAction());
                 }
                 super.onReceive(context, intent);
             }
@@ -79,6 +77,11 @@ public class MsMobileDataStateTracker extends MobileDataStateTracker {
             default:
                 return MobileDataStateTracker.networkTypeToApnType(netType);
         }
+    }
+
+    @ Override
+    protected void log(String s) {
+        Slog.d(TAG, mApnType + mPhoneId + ": " + s);
     }
 
 }

@@ -55,7 +55,7 @@ import java.io.PrintWriter;
  */
 public class MobileDataStateTracker implements NetworkStateTracker {
 
-    private static final String TAG = "MobileDataStateTracker";
+    protected static final String TAG = "MobileDataStateTracker";
     protected static final boolean DBG = false;
     private static final boolean VDBG = false;
 

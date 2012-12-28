@@ -43,9 +43,7 @@ import com.android.internal.telephony.IccCard;
 
 public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
 
-    public static String EXTRA_PHONE_ID = "EXTRA_PHONE_ID";
-
-	MsmsGsmDataConnectionTracker(GSMPhone p) {
+    MsmsGsmDataConnectionTracker(GSMPhone p) {
         super(p);
 
         ContentResolver cr = mPhone.getContext().getContentResolver();
@@ -56,18 +54,18 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
 //        if (isApnTypeEnabled(Phone.APN_TYPE_DEFAULT)) {
 //            MsmsGsmDataConnectionTrackerProxy.setActivePhoneId(mPhone.getPhoneId());
 //        }
-	}
+    }
 
-	public void dispose() {
+    public void dispose() {
         ContentResolver cr = mPhone.getContext().getContentResolver();
         cr.unregisterContentObserver(mDefaultDataPhoneIdObserver);
         super.dispose();
-	}
+    }
 
     protected void broadcastMessenger() {
         Intent intent = new Intent(ACTION_DATA_CONNECTION_TRACKER_MESSENGER);
         intent.putExtra(EXTRA_MESSENGER, new Messenger(this));
-        intent.putExtra(EXTRA_PHONE_ID, mPhone.getPhoneId());
+        intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
         mPhone.getContext().sendBroadcast(intent);
     }
 
