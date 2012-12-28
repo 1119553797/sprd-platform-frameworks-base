@@ -590,7 +590,7 @@ class MountService extends IMountService.Stub
         }
     }
 
-    private void updatePublicVolumeState(String path, String state) {
+    private boolean updatePublicVolumeState(String path, String state) {
         String oldState;
         synchronized(mVolumeStates) {
             oldState = mVolumeStates.put(path, state);
@@ -598,7 +598,7 @@ class MountService extends IMountService.Stub
         if (state.equals(oldState)) {
             Slog.w(TAG, String.format("Duplicate state transition (%s -> %s) for %s",
                     state, state, path));
-            return;
+            return false;
         }
 
         Slog.d(TAG, "volume state changed for " + path + " (" + oldState + " -> " + state + ")");
@@ -634,6 +634,8 @@ class MountService extends IMountService.Stub
                 }
             }
         }
+
+        return true;
     }
 
     /**
@@ -835,8 +837,9 @@ class MountService extends IMountService.Stub
             action = Intent.ACTION_MEDIA_CHECKING;
         } else if (newState == VolumeState.Mounted) {
             if (DEBUG_EVENTS) Slog.i(TAG, "updating volume state mounted");
-            updatePublicVolumeState(path, Environment.MEDIA_MOUNTED);
-            action = Intent.ACTION_MEDIA_MOUNTED;
+            if(updatePublicVolumeState(path, Environment.MEDIA_MOUNTED)){
+                action = Intent.ACTION_MEDIA_MOUNTED;
+            }
         } else if (newState == VolumeState.Unmounting) {
             action = Intent.ACTION_MEDIA_EJECT;
         } else if (newState == VolumeState.Formatting) {
