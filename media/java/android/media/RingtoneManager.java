@@ -178,6 +178,8 @@ public class RingtoneManager {
             "android.intent.extra.ringtone.PICKED_URI";
     
     // Make sure the column ordering and then ..._COLUMN_INDEX are in sync
+    public static final String EXTRA_RINGTONE_INCLUDE_EXTERNAL =
+            "android.intent.extra.ringtone.INCLUDE_EXTERNAL";
     
     private static final String[] INTERNAL_COLUMNS = new String[] {
         MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
@@ -217,7 +219,7 @@ public class RingtoneManager {
 
     private Activity mActivity;
     private Context mContext;
-    
+    private Cursor[] mCursorArr;
     private Cursor mCursor;
 
     private int mType = TYPE_RINGTONE;
@@ -232,6 +234,7 @@ public class RingtoneManager {
     private Ringtone mPreviousRingtone;
 
     private boolean mIncludeDrm;
+    private boolean mIncludeExternal;
     
     /**
      * Constructs a RingtoneManager. This constructor is recommended as its
@@ -344,6 +347,10 @@ public class RingtoneManager {
         mIncludeDrm = includeDrm;
     }
 
+    public void setIncludeExternal(boolean includeExternal) {
+        mIncludeExternal = includeExternal;
+    }
+
     /**
      * Returns a {@link Cursor} of all the ringtones available. The returned
      * cursor will be the same cursor returned each time this method is called,
@@ -368,7 +375,8 @@ public class RingtoneManager {
         final Cursor drmCursor = mIncludeDrm ? getDrmRingtones() : null;
         final Cursor mediaCursor = getMediaRingtones();
              
-        return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor },
+        mCursorArr = new Cursor[] { internalCursor, drmCursor, mediaCursor};
+        return mCursor = new SortCursor(mCursorArr,
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
     }
 
@@ -754,5 +762,118 @@ public class RingtoneManager {
            return Integer.parseInt(uriStr.substring(ringtoneUriStr.length(), ringtoneUriStr.length()+1));
        }
        return PhoneFactory.DEFAULT_PHONE_ID;
+    }
+    public Cursor getExternalMusics() {
+        // Get the external media cursor. First check to see if it is mounted.
+        final String status = Environment.getExternalStorageState();
+        if(!status.equals(Environment.MEDIA_MOUNTED) && !status.equals(Environment.MEDIA_MOUNTED_READ_ONLY)){
+            return null;
+        }
+//        if(!"1".equals(SystemProperties.get("ro.device.support.nand"))){
+//            String sd_status = Environment.getExternalStorageStateSd();
+//            if(!sd_status.equals(Environment.MEDIA_MOUNTED) && !sd_status.equals(Environment.MEDIA_MOUNTED_READ_ONLY)){
+//                return null;
+//            }
+//        }
+        // filter
+        StringBuilder where = new StringBuilder();
+        where.append(MediaStore.Audio.Media.TITLE + " != ''");
+        where.append(" AND " + MediaStore.Audio.Media.IS_MUSIC + "=1");
+
+        boolean hasExternalRingtone = false;
+        for (int i = mFilterColumns.size() - 1; i >= 0; i--) {
+            if(mFilterColumns.get(i).equals(
+                MediaStore.Audio.AudioColumns.IS_RINGTONE)) {
+                hasExternalRingtone = true;
+                break;
+            }
+        }
+        if (hasExternalRingtone) {
+            where.append(" AND (" + MediaStore.Audio.Media.IS_RINGTONE + "=0 or "
+                    + MediaStore.Audio.Media.IS_RINGTONE +" is null)");
+        }
+
+//        return query(
+//                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MEDIA_COLUMNS,
+//                where.toString(), null,
+//                MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+        return (status.equals(Environment.MEDIA_MOUNTED) || status
+                .equals(Environment.MEDIA_MOUNTED_READ_ONLY)) ? query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MEDIA_COLUMNS,
+                where.toString(), null,
+                MediaStore.Audio.Media.DEFAULT_SORT_ORDER) : null;
+    }
+    public Ringtone getCustomRingtone(int position) {
+        if (mStopPreviousRingtone && mPreviousRingtone != null) {
+            mPreviousRingtone.stop();
+        }
+
+        mPreviousRingtone = getRingtone(mContext, getCustomRingtoneUri(position), inferStreamType());
+        return mPreviousRingtone;
+    }
+    public Uri getCustomRingtoneUri(int position) {
+        final Cursor cursor = getExternalMusics();
+
+        if (!cursor.moveToPosition(position)) {
+            return null;
+        }
+
+        return getUriFromCursor(cursor);
+    }
+    public int getCunstomRingtonePosition(Uri ringtoneUri) {
+
+        if (ringtoneUri == null) return -1;
+
+        final Cursor cursor = getExternalMusics();
+        final int cursorCount = cursor.getCount();
+
+        if (!cursor.moveToFirst()) {
+            return -1;
+        }
+
+        // Only create Uri objects when the actual URI changes
+        Uri currentUri = null;
+        String previousUriString = null;
+        for (int i = 0; i < cursorCount; i++) {
+            String uriString = cursor.getString(URI_COLUMN_INDEX);
+            if (currentUri == null || !uriString.equals(previousUriString)) {
+                currentUri = Uri.parse(uriString);
+            }
+
+            if (ringtoneUri.equals(ContentUris.withAppendedId(currentUri, cursor
+                    .getLong(ID_COLUMN_INDEX)))) {
+                return i;
+            }
+
+            cursor.move(1);
+
+            previousUriString = uriString;
+        }
+
+        return -1;
+    }
+    public void requery(){
+        if(mCursorArr != null && mCursorArr.length > 0){
+           for(Cursor c : mCursorArr){
+               if(c != null && !c.isClosed()){
+                   c.requery();
+               }
+            }
+         }
+    }
+
+    /**
+     * close all Cursors
+     *
+     * @hide
+     */
+    public void closeCursors(){
+        if(mCursorArr != null && mCursorArr.length > 0){
+           for(Cursor c : mCursorArr){
+               if(c != null && !c.isClosed()){
+                   c.close();
+               }
+            }
+         }
     }
 }
