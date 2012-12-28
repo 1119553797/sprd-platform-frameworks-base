@@ -505,7 +505,7 @@ DRM_file_open(const uint16_t *name, int32_t nameLen, int32_t mode,
       O_RDWR | O_CREAT
     };
 
-    Trace("DRM_file_open %.*S mode 0x%x", nameLen, name, mode);
+    Trace("DRM_file_open %d %s mode 0x%x", nameLen, name, mode);
 
     assert((mode & ~(DRM_FILE_MODE_READ|DRM_FILE_MODE_WRITE)) == 0);
 

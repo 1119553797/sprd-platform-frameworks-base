@@ -102,8 +102,13 @@ public final class DrmStore
     public static final Intent addDrmFile(ContentResolver cr, File file, String title) {
         FileInputStream fis = null;
         Intent result = null;
+	FileInputStream fis2 = null;
 
         try {
+            fis2 = new FileInputStream(file);	
+            DrmRightsManager manager  = DrmRightsManager.getInstance();		
+	    manager.installRights(fis2, (int) fis2.available(), DrmRawContent.DRM_MIMETYPE_MESSAGE_STRING);
+			
             fis = new FileInputStream(file);
             if (title == null) {
                 title = file.getName();
@@ -127,25 +132,19 @@ public final class DrmStore
         return result;
     }
 
-    /**
-     * Utility function for inserting a file stream into the DRM content provider.
-     *
-     * @param cr The content resolver to use
-     * @param fis The FileInputStream to insert
-     * @param title The title for the content (or null)
-     * @return uri to the DRM record or null
-     */
-    public static final Intent addDrmFile(ContentResolver cr, FileInputStream fis, String title) {
+    public static final Intent addDrmContentFile1(ContentResolver cr, FileInputStream fis, String title) {
         OutputStream os = null;
         Intent result = null;
 
         try {
             DrmRawContent content = new DrmRawContent(fis, (int) fis.available(),
-                    DrmRawContent.DRM_MIMETYPE_MESSAGE_STRING);
+                    DrmRawContent.DRM_MIMETYPE_CONTENT_STRING);
             String mimeType = content.getContentType();
             long size = fis.getChannel().size();
-
-            DrmRightsManager manager = manager = DrmRightsManager.getInstance();
+	    Log.w(TAG, "addDrmContentFile1 getRightsAddress " + content.getRightsAddress());
+		
+            DrmRightsManager manager  = DrmRightsManager.getInstance();
+	//   if (DRM_MIMETYPE_RIGHTS_XML_STRING.equals(mimeType))
             DrmRights rights = manager.queryRights(content);
             InputStream stream = content.getContentInputStream(rights);
 
@@ -179,6 +178,7 @@ public final class DrmStore
 
                 }
             }
+	  manager.deleteRights(rights);
         } catch (Exception e) {
             Log.e(TAG, "pushing file failed", e);
         } finally {
@@ -192,6 +192,108 @@ public final class DrmStore
             }
         }
 
+        return result;
+    }	
+    public static final Intent addDrmContentFile(ContentResolver cr, File file, File rightfile, String title) {
+        FileInputStream fis = null;
+	FileInputStream fis2= null;
+        Intent result = null;
+
+        try {			
+            fis2 = new FileInputStream(rightfile);	
+            DrmRightsManager manager  = DrmRightsManager.getInstance();		
+	    manager.installRights(fis2, (int) fis2.available(), DrmRightsManager.DRM_MIMETYPE_RIGHTS_WBXML_STRING);
+						
+            fis = new FileInputStream(file);
+            if (title == null) {
+                title = file.getName();
+                int lastDot = title.lastIndexOf('.');
+                if (lastDot > 0) {
+                    title = title.substring(0, lastDot);
+                }
+            }
+            result = addDrmContentFile1(cr, fis, title);
+        } catch (Exception e) {
+            Log.e(TAG, "pushing file failed", e);
+        } finally {
+            try {
+                if (fis != null)
+                    fis.close();
+            } catch (IOException e) {
+                Log.e(TAG, "IOException in DrmStore.addDrmFile()", e);
+            }
+        }
+
+
+        return result;
+    }
+
+    /**
+     * Utility function for inserting a file stream into the DRM content provider.
+     *
+     * @param cr The content resolver to use
+     * @param fis The FileInputStream to insert
+     * @param title The title for the content (or null)
+     * @return uri to the DRM record or null
+     */
+    public static final Intent addDrmFile(ContentResolver cr, FileInputStream fis, String title) {
+        OutputStream os = null;
+        Intent result = null;
+
+        try {
+            DrmRawContent content = new DrmRawContent(fis, (int) fis.available(),
+                    DrmRawContent.DRM_MIMETYPE_MESSAGE_STRING);
+            String mimeType = content.getContentType();
+            long size = fis.getChannel().size();
+
+            DrmRightsManager manager  = DrmRightsManager.getInstance();
+	//   if (DRM_MIMETYPE_RIGHTS_XML_STRING.equals(mimeType))
+            DrmRights rights = manager.queryRights(content);
+            InputStream stream = content.getContentInputStream(rights);
+
+            Uri contentUri = null;
+            if (mimeType.startsWith("audio/")) {
+                contentUri = DrmStore.Audio.CONTENT_URI;
+            } else if (mimeType.startsWith("image/")) {
+                contentUri = DrmStore.Images.CONTENT_URI;
+            } else {
+                Log.w(TAG, "unsupported mime type " + mimeType);
+            }
+
+            if (contentUri != null) {
+                ContentValues values = new ContentValues(3);
+                values.put(DrmStore.Columns.TITLE, title);
+                values.put(DrmStore.Columns.SIZE, size);
+                values.put(DrmStore.Columns.MIME_TYPE, mimeType);
+
+                Uri uri = cr.insert(contentUri, values);
+                if (uri != null) {
+                    os = cr.openOutputStream(uri);
+
+                    byte[] buffer = new byte[1000];
+                    int count;
+
+                    while ((count = stream.read(buffer)) != -1) {
+                        os.write(buffer, 0, count);
+                    }
+                    result = new Intent();
+                    result.setDataAndType(uri, mimeType);
+                }
+            }
+	manager.deleteRights(rights);
+        } catch (Exception e) {
+            Log.e(TAG, "pushing file failed", e);
+        } finally {
+            try {
+                if (fis != null)
+                    fis.close();
+                if (os != null)
+                    os.close();
+            } catch (IOException e) {
+                Log.e(TAG, "IOException in DrmStore.addDrmFile()", e);
+            }
+        }
+ 
         return result;
     }
 
