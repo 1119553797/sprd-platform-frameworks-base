@@ -59,7 +59,7 @@ public class SortCursor extends AbstractCursor
         int length = mCursors.length;
         mSortColumns = new int[length];
         for (int i = 0 ; i < length ; i++) {
-            if (mCursors[i] == null) continue;
+            if (mCursors[i] == null || mCursors[i].isClosed()) continue;
             
             // Register ourself as a data set observer
             mCursors[i].registerDataSetObserver(mObserver);
@@ -72,7 +72,7 @@ public class SortCursor extends AbstractCursor
         mCursor = null;
         String smallest = "";
         for (int j = 0 ; j < length; j++) {
-            if (mCursors[j] == null || mCursors[j].isAfterLast())
+            if (mCursors[j] == null || mCursors[j].isAfterLast() || mCursors[j].isClosed())
                 continue;
             String current = mCursors[j].getString(mSortColumns[j]);
             if (mCursor == null || current.compareToIgnoreCase(smallest) < 0) {
