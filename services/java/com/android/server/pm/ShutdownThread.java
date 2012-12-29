@@ -59,6 +59,9 @@ public final class ShutdownThread extends Thread {
 
     // length of vibration before shutting down
     private static final int SHUTDOWN_VIBRATE_MS = 500;
+
+    private static final int MAX_SHUTDOWN_TIME = 5*1000;
+    private static long shutdownTime = 0;
     
     // state tracking
     private static Object sIsStartedGuard = new Object();
@@ -214,7 +217,19 @@ public final class ShutdownThread extends Thread {
         pd.setCancelable(false);
         pd.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
 
-        pd.show();
+        //pd.show();
+          
+        shutdownTime = SystemClock.elapsedRealtime() + MAX_SHUTDOWN_TIME;
+        String[] bootcmd = {"bootanimation", "shutdown"} ;
+
+        try {
+            Log.i(TAG, "exec the bootanimation ");
+            SystemProperties.set("service.bootanim.exit", "0");
+            Runtime.getRuntime().exec(bootcmd);
+        } catch (Exception e){ 
+           Log.e(TAG,"bootanimation command exe err!");
+        }   
+
 
         sInstance.mContext = context;
         sInstance.mPowerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
@@ -362,6 +377,13 @@ public final class ShutdownThread extends Thread {
             }
         }
 
+		long shutdownDelay = shutdownTime - SystemClock.elapsedRealtime();
+        if (shutdownDelay > 0) {
+            Log.i(TAG, "Shutdown delay:"+shutdownDelay);
+            SystemClock.sleep(shutdownDelay);
+        }
+
+
         rebootOrShutdown(mReboot, mRebootReason);
     }
 
@@ -501,7 +523,7 @@ public final class ShutdownThread extends Thread {
                 // Failure to vibrate shouldn't interrupt shutdown.  Just log it.
                 Log.w(TAG, "Failed to vibrate during shutdown.", e);
             }
-
+            
             // vibrator is asynchronous so we need to wait to avoid shutting down too soon.
             try {
                 Thread.sleep(SHUTDOWN_VIBRATE_MS);

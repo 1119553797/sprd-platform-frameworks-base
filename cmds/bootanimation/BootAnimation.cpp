@@ -288,11 +288,14 @@ status_t BootAnimation::readyToRun() {
             (access(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE, R_OK) == 0) &&
             (mZip.open(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE) == NO_ERROR)) ||
 
-            ((access(USER_BOOTANIMATION_FILE, R_OK) == 0) &&
-            (mZip.open(USER_BOOTANIMATION_FILE) == NO_ERROR)) ||
+            ((access(moviepath, R_OK) == 0) &&
+            (mZip.open(moviepath) == NO_ERROR)) ||
 
-            ((access(SYSTEM_BOOTANIMATION_FILE, R_OK) == 0) &&
-            (mZip.open(SYSTEM_BOOTANIMATION_FILE) == NO_ERROR))) {
+            ((access(movie_default_path, R_OK) == 0) &&
+            (mZip.open(movie_default_path) == NO_ERROR)) ||
+
+            ((access(USER_BOOTANIMATION_FILE, R_OK) == 0) &&
+            (mZip.open(USER_BOOTANIMATION_FILE) == NO_ERROR))) {
         mAndroidAnimation = false;
     }
 
@@ -307,9 +310,6 @@ bool BootAnimation::threadLoop()
     } else {
         r = movie();
     }
-
-    // No need to force exit anymore
-    property_set(EXIT_PROP_NAME, "0");
 
     eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     eglDestroyContext(mDisplay, mContext);
