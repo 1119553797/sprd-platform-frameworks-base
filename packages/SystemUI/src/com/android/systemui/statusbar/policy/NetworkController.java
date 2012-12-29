@@ -164,6 +164,7 @@ public class NetworkController extends BroadcastReceiver {
     ArrayList<ImageView> mDataTypeIconViews = new ArrayList<ImageView>();
     ArrayList<TextView> mCombinedLabelViews = new ArrayList<TextView>();
     ArrayList<TextView> mMobileLabelViews = new ArrayList<TextView>();
+    ArrayList<TextView> mMobileLabelViews1 = new ArrayList<TextView>();
     ArrayList<TextView> mWifiLabelViews = new ArrayList<TextView>();
     ArrayList<TextView> mEmergencyLabelViews = new ArrayList<TextView>();
     ArrayList<SignalCluster> mSignalClusters = new ArrayList<SignalCluster>();
@@ -236,6 +237,7 @@ public class NetworkController extends BroadcastReceiver {
         mContentDescriptionCombinedSignal = new String[numPhones];
         mContentDescriptionDataType = new String[numPhones];
         mLastSignalLevel = new int[numPhones];
+
         ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         mHasMobileDataFeature = cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
@@ -385,6 +387,10 @@ public class NetworkController extends BroadcastReceiver {
 
     public void addWifiLabelView(TextView v) {
         mWifiLabelViews.add(v);
+    }
+
+    public void addMobileLabelView1(TextView v) {
+        mMobileLabelViews1.add(v);
     }
 
     public void addEmergencyLabelView(TextView v) {
@@ -828,22 +834,41 @@ public class NetworkController extends BroadcastReceiver {
                     + " showPlmn=" + showPlmn + " plmn=" + plmn + " phoneId" + phoneId);
         }
         StringBuilder str = new StringBuilder();
+
         boolean something = false;
+        boolean hasSim = PhoneFactory.isCardExist(phoneId);
         if (showPlmn && plmn != null) {
             str.append(plmn);
             something = true;
         }
         if (showSpn && spn != null) {
             if (something) {
-                str.append(mNetworkNameSeparator);
+                str.append('\n');
             }
             str.append(spn);
             something = true;
         }
+
         if (something) {
+            if (showPlmn
+                    && plmn != null
+                    && plmn.equals(mContext
+                            .getString(com.android.internal.R.string.lockscreen_carrier_default))) {
+                if (!hasSim) {
+                    str.append(" | ");
+                    str.append(mContext
+                            .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+                }
+            }
             mNetworkName[phoneId] = str.toString();
         } else {
-            mNetworkName[phoneId] = mNetworkNameDefault;
+            str.append(mContext.getString(com.android.internal.R.string.lockscreen_carrier_default));
+            if (!hasSim) {
+                str.append(" | ");
+                str.append(mContext
+                        .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+            }
+            mNetworkName[phoneId] = str.toString();
         }
     }
 
@@ -1384,14 +1409,27 @@ public class NetworkController extends BroadcastReceiver {
         }
 
         // mobile label
-        N = mMobileLabelViews.size();
-        for (int i=0; i<N; i++) {
-            TextView v = mMobileLabelViews.get(i);
-            v.setText(mobileLabel);
-            if ("".equals(mobileLabel)) {
-                v.setVisibility(View.GONE);
-            } else {
-                v.setVisibility(View.VISIBLE);
+        if (phoneId == 0) {
+            N = mMobileLabelViews.size();
+            for (int i = 0; i < N; i++) {
+                TextView v = mMobileLabelViews.get(i);
+                v.setText(mNetworkName[phoneId]);
+                if ("".equals(mNetworkName[phoneId])) {
+                    v.setVisibility(View.GONE);
+                } else {
+                    v.setVisibility(View.VISIBLE);
+                }
+            }
+        } else if (phoneId == 1) {
+            N = mMobileLabelViews1.size();
+            for (int i = 0; i < N; i++) {
+                TextView v = mMobileLabelViews1.get(i);
+                v.setText(mNetworkName[phoneId]);
+                if ("".equals(mNetworkName[phoneId])) {
+                    v.setVisibility(View.GONE);
+                } else {
+                    v.setVisibility(View.VISIBLE);
+                }
             }
         }
 
