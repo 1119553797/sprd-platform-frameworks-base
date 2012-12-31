@@ -228,7 +228,7 @@ public class SIMRecords extends IccRecords {
         spdiNetworks = null;
         pnnHomeName = null;
 
-        adnCache.reset();
+       // adnCache.reset();
 
         log("SIMRecords: onRadioOffOrNotAvailable set 'gsm.sim.operator.numeric' to operator=null");
         phone.setSystemProperty(PROPERTY_ICC_OPERATOR_NUMERIC, null);
