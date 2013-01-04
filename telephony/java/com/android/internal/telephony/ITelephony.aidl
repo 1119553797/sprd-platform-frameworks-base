@@ -337,6 +337,6 @@ interface ITelephony {
 
     String[] getActiveApnTypes();
 
-    String getActiveApn();
+    //String getActiveApn();
 }
 

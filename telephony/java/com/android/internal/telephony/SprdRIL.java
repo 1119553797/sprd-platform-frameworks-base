@@ -39,19 +39,6 @@ public final class SprdRIL extends RIL {
 
     static final String LOG_TAG = "SprdRILJ";
 
-    protected Registrant mVPDataRegistrant;
-    protected RegistrantList mVPCodecRegistrants = new RegistrantList();
-    protected Registrant mVPStrsRegistrant;
-    protected Registrant mVPRemoteMediaRegistrant;
-    protected Registrant mVPMMRingRegistrant;
-    protected Registrant mVPRecordVideoRegistrant;
-    protected Registrant mVPFallBackRegistrant;
-    protected Registrant mVPFailRegistrant;
-    protected Registrant mVPRemoteCameraRegistrant;
-    protected Registrant mVPMediaStartRegistrant;
-    protected RegistrantList mVideoCallStateRegistrants = new RegistrantList();
-    protected Registrant mStkStinRegistrant;
-
     private final class DSCIInfo {
         int id;
         int idr;
@@ -308,106 +295,6 @@ public final class SprdRIL extends RIL {
         send(rr);
     }
 
-    public void setOnVPData(Handler h, int what, Object obj) {
-        mVPDataRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPData(Handler h) {
-        mVPDataRegistrant.clear();
-    }
-
-    public void setOnVPCodec(Handler h, int what, Object obj) {
-	   Registrant r = new Registrant (h, what, obj);
-
-	   mVPCodecRegistrants.add(r);
-   }
-
-    public void unSetOnVPCodec(Handler h) {
-	   mVPCodecRegistrants.remove(h);
-   }
-
-    public void setOnVPString(Handler h, int what, Object obj) {
-        mVPStrsRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPString(Handler h) {
-        mVPStrsRegistrant.clear();
-    }
-
-    public void setOnVPRemoteMedia(Handler h, int what, Object obj) {
-        mVPRemoteMediaRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPRemoteMedia(Handler h) {
-        mVPRemoteMediaRegistrant.clear();
-    }
-
-    public void setOnVPMMRing(Handler h, int what, Object obj) {
-        mVPMMRingRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPMMRing(Handler h) {
-        mVPMMRingRegistrant.clear();
-    }
-
-    public void setOnVPRecordVideo(Handler h, int what, Object obj) {
-        mVPRecordVideoRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPRecordVideo(Handler h) {
-        mVPRecordVideoRegistrant.clear();
-    }
-
-    public void setOnVPFallBack(Handler h, int what, Object obj) {
-        mVPFallBackRegistrant = new Registrant(h, what, obj);
-    }
-
-    public void unSetOnVPFallBack(Handler h) {
-        mVPFallBackRegistrant.clear();
-    }
-
-    public void setOnVPFail(Handler h, int what, Object obj) {
-        mVPFailRegistrant = new Registrant(h, what, obj);
-    }
-
-    public void unSetOnVPFail(Handler h) {
-        mVPFailRegistrant.clear();
-    }
-
-    public void setOnVPRemoteCamera(Handler h, int what, Object obj) {
-        mVPRemoteCameraRegistrant = new Registrant(h, what, obj);
-    }
-
-    public void unSetOnVPRemoteCamera(Handler h) {
-        mVPRemoteCameraRegistrant.clear();
-    }
-
-    public void setOnVPMediaStart(Handler h, int what, Object obj) {
-        mVPMediaStartRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unSetOnVPMediaStart(Handler h) {
-        mVPMediaStartRegistrant.clear();
-    }
-
-    public void registerForVideoCallStateChanged(Handler h, int what, Object obj) {
-        Registrant r = new Registrant(h, what, obj);
-
-        mVideoCallStateRegistrants.add(r);
-    }
-
-    public void unregisterForVideoCallStateChanged(Handler h) {
-        mVideoCallStateRegistrants.remove(h);
-    }
-
-    public void setOnStkStin(Handler h, int what, Object obj) {
-        mStkStinRegistrant = new Registrant (h, what, obj);
-    }
-
-    public void unsetOnStkStin(Handler h) {
-        mStkStinRegistrant.clear();
-    }
-
     protected void
     processSolicited (Parcel p) {
         int serial, error;
@@ -453,7 +340,6 @@ public final class SprdRIL extends RIL {
                     case RIL_REQUEST_GPRS_DETACH: ret = responseVoid(p); break;
                     case RIL_REQUEST_GET_REMAIN_TIMES: ret =  responseInts(p); break;
                     case RIL_REQUEST_GET_SIM_CAPACITY: ret =  responseStrings(p); break;
-                    //case RIL_REQUEST_QUERY_PIN_RETRY_COUNT: ret =  responseInts(p); break;
                     case RIL_REQUEST_SET_CMMS: ret =  responseVoid(p); break;
                     case RIL_REQUEST_SIM_POWER: ret =  responseVoid(p); break;
                     default:
@@ -787,7 +673,6 @@ public final class SprdRIL extends RIL {
 			 case RIL_REQUEST_GPRS_DETACH: return "GPRS_DETACH";
 			 case RIL_REQUEST_GET_SIM_CAPACITY: return "GET_SIM_CAPACITY";
 			 case RIL_REQUEST_GET_REMAIN_TIMES: return "REMAIN_TIMES";
-			 //case RIL_REQUEST_QUERY_PIN_RETRY_COUNT: return "QUERY_PIN_RETRY_COUNT";
 			 default: return requestToString(request);
 		 }
 	 }
@@ -897,15 +782,5 @@ public final class SprdRIL extends RIL {
 
     }
 
-    public void queryPinRetryCount(int type, Message result){
-    //    RILRequest rr = RILRequest.obtain(RIL_REQUEST_QUERY_PIN_RETRY_COUNT, result);
-    //    rr.mp.writeInt(1);
-    //    rr.mp.writeInt(type);
-    //
-    //    if (RILJ_LOGD) riljLog(rr.serialString() + "> " + sprdRequestToString(rr.mRequest));
-    //
-    //    send(rr);
-    }
-
- }
+}
 

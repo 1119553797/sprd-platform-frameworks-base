@@ -202,7 +202,7 @@ class RILRequest {
  *
  * {@hide}
  */
-public abstract class RIL extends BaseCommands implements CommandsInterface {
+public abstract class RIL extends SprdBaseCommands implements CommandsInterface {
     static final String LOG_TAG = "RILJ";
     static final boolean RILJ_LOGD = true;
     static final boolean RILJ_LOGV = false; // STOP SHIP if true

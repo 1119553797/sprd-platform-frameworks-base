@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.android.internal.telephony.BaseCommands;
+import com.android.internal.telephony.SprdBaseCommands;
 import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
@@ -30,7 +30,7 @@ import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
  * SIP doesn't need CommandsInterface. The class does nothing but made to work
  * with PhoneBase's constructor.
  */
-class SipCommandInterface extends BaseCommands implements CommandsInterface {
+class SipCommandInterface extends SprdBaseCommands implements CommandsInterface {
     SipCommandInterface(Context context) {
         super(context);
     }
@@ -237,7 +237,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
     }
 
     public void setNetworkSelectionModeManual(
-            String operatorNumeric, Message response) {
+            String operatorNumeric, int act, Message response) {
     }
 
     public void getNetworkSelectionMode(Message response) {
@@ -528,138 +528,6 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 	}
 
 	@Override
-	public void setOnVPData(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnVPData(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setOnVPCodec(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnVPCodec(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setOnVPString(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnVPString(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setOnVPRemoteMedia(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnVPRemoteMedia(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setOnVPMMRing(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnVPMMRing(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setOnVPRecordVideo(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnVPRecordVideo(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setOnVPFallBack(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnVPFallBack(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setOnVPFail(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnVPFail(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setOnVPRemoteCamera(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnVPRemoteCamera(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setOnVPMediaStart(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnVPMediaStart(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void registerForVideoCallStateChanged(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unregisterForVideoCallStateChanged(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public int getPhoneId() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -709,37 +577,7 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 	}
 
 	@Override
-	public void setOnStkStin(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unsetOnStkStin(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void queryPinRetryCount(int type, Message response) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setSIMPower(boolean on, Message result) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setOnSimSmsReady(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unSetOnSimSmsReady(Handler h) {
 		// TODO Auto-generated method stub
 
 	}
@@ -751,15 +589,9 @@ class SipCommandInterface extends BaseCommands implements CommandsInterface {
 	}
 
 	@Override
-	public void setNetworkSelectionModeManual(String operatorNumeric, int act,
-			Message response) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void endAllConnections(Message result) {
 		// TODO Auto-generated method stub
 
 	}
+
 }
