@@ -266,8 +266,8 @@ public final class ActivityManagerService extends ActivityManagerNative
     // LRU background list.
     static final int MAX_SERVICE_INACTIVITY = 30*60*1000;
     
-    // How long we wait until we timeout on key dispatching.
-    static final int KEY_DISPATCHING_TIMEOUT = 5*1000;
+    // How long we wait until we timeout on key dispatching.add for lowmem version(4+2)
+    static final int KEY_DISPATCHING_TIMEOUT = Build.IS_LOWMEM_VERSION ? 8*1000 : 5*1000;
 
     // How long we wait until we timeout on key dispatching during instrumentation.
     static final int INSTRUMENTATION_KEY_DISPATCHING_TIMEOUT = 60*1000;
@@ -1548,9 +1548,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         isReadMemForRestartService = SystemProperties.getBoolean("persist.sys.service.delay", DEFAULT_READ_MEM_FOR_RESTART_SERVICE);
         restartServiceAtMem = SystemProperties.getInt("persist.sys.lowmem",restartServiceAtMem);
         Slog.i(TAG, "isReadMemForRestartService: " + isReadMemForRestartService + " ,restartServiceAtMem:"+restartServiceAtMem);
-        
-        IS_LOWMEM_VERSION = "1".equals(SystemProperties.get("ro.build.product.lowmem", "0"));
-        if(IS_LOWMEM_VERSION) {
+
+        if(Build.IS_LOWMEM_VERSION) {
             mProcessLimitOverride = 0;//add for lowmem[4+2]
         }
 
@@ -3354,7 +3353,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         String cpuInfo = null;
 
         //user version and lowmem version and anr in foreground app
-        if (IS_USER_BUILD && IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
+        if (IS_USER_BUILD && Build.IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
             Slog.w(TAG, "do not dump traces: is user build and lowmem version and anr in backgroound app");
         } else {
             tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids, null);

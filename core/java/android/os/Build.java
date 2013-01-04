@@ -434,6 +434,13 @@ public class Build {
     public static final boolean IS_DEBUGGABLE =
             SystemProperties.getInt("ro.debuggable", 0) == 1;
 
+   
+    /**
+     * Returns true if we are running low mem version(4+2).
+     * @hide
+     */
+    public static final boolean IS_LOWMEM_VERSION = "1".equals(SystemProperties.get("ro.build.product.lowmem", "0"));
+
     /**
      * Returns the version string for the radio firmware.  May return
      * null (if, for instance, the radio is not currently on).
