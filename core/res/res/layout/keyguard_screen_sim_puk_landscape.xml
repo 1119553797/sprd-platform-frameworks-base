@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <!-- Carrier info -->
         <TextView android:id="@+id/carrier"
@@ -168,6 +168,7 @@
                           android:textColor="@android:color/primary_text_holo_light"
                           android:textStyle="bold"
                           android:inputType="textPassword"
+                          android:hint="@android:string/keyguard_password_enter_pin_confirm_prompt"
                       />
 
                       <ImageButton android:id="@+id/pinDel2"

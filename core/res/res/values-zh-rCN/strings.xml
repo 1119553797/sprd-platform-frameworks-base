@@ -682,6 +682,7 @@
     <string name="keyguard_password_enter_puk_code" msgid="4800725266925845333">"请输入 PUK 码和新的 PIN 码"</string>
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"PUK 码"</string>
     <string name="keyguard_password_enter_pin_prompt" msgid="8027680321614196258">"新的 PIN 码"</string>
+    <string name="keyguard_password_enter_pin_confirm_prompt" >"确认新的 PIN 码"</string>
     <string name="keyguard_password_entry_touch_hint" msgid="7858547464982981384"><font size="17">"触摸可输入密码"</font></string>
     <string name="keyguard_password_enter_password_code" msgid="1054721668279049780">"输入密码以解锁"</string>
     <string name="keyguard_password_enter_pin_password_code" msgid="6391755146112503443">"输入 PIN 进行解锁"</string>

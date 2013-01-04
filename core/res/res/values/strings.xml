@@ -1914,7 +1914,7 @@
     <string name="keyguard_password_enter_puk_prompt">PUK code</string>
     <!-- Prompt to enter New SIM PIN in Edit Text Box in unlock screen -->
     <string name="keyguard_password_enter_pin_prompt">New PIN code</string>
-
+    <string name="keyguard_password_enter_pin_confirm_prompt">Confirm the new PIN Code</string>
     <!-- Displayed as hint in passwordEntry EditText on PasswordUnlockScreen [CHAR LIMIT=30]-->
     <string name="keyguard_password_entry_touch_hint"><font size="17">Touch to type password</font></string>
 
