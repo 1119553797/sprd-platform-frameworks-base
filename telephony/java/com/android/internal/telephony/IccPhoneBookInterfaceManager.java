@@ -28,7 +28,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import com.android.internal.telephony.IccCardApplication.CardType;
 import com.android.internal.telephony.IccCardApplication.AppType;
 
 /**
@@ -467,33 +466,9 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
     }
 
     public boolean isApplicationOnIcc(int type) {
-	IccCardApplication.AppType newType;
-        switch(type) {
-            case CardType.UNKNOWN:
-		newType = AppType.APPTYPE_UNKNOWN;
-		break;
-            case CardType.SIM:
-		newType = AppType.APPTYPE_SIM;
-		break;
-            case CardType.USIM:
-		newType = AppType.APPTYPE_USIM;
-		break;
-            case CardType.RUIM:
-		newType = AppType.APPTYPE_RUIM;
-		break;
-            case CardType.CSIM:
-		newType = AppType.APPTYPE_CSIM;
-		break;
-            case CardType.ISIM:
-		newType = AppType.APPTYPE_ISIM;
-		break;
-            default:
-		newType = AppType.APPTYPE_UNKNOWN; break;
-        }
-	return phone.getIccCard().isApplicationOnIcc(newType);
-	
+        return phone.getIccCard().isApplicationOnIcc(IccCardApplication.AppType.values()[type]);
     }
-    
+
     public int updateUsimGroupBySearchEx(String oldName,String newName) {
         if (phone.getContext().checkCallingOrSelfPermission(
                 android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {

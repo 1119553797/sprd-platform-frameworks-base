@@ -34,16 +34,6 @@ public class IccCardApplication {
         APPTYPE_ISIM
     };
 
-    // CardType is defined because Enum can't be passed through binder;
-    // CardType must compiles with AppType
-    public interface CardType{
-        int UNKNOWN = 0;
-        int SIM     = 1;
-        int USIM    = 2;
-        int RUIM    = 3;
-        int CSIM    = 4;
-        int ISIM    = 5;
-    };
     public enum AppState{
         APPSTATE_UNKNOWN,
         APPSTATE_DETECTED,
@@ -110,7 +100,6 @@ public class IccCardApplication {
             return this == PERSOSUBSTATE_UNKNOWN;
         }
     };
-
 
     public AppType        app_type;
     public AppState       app_state;
