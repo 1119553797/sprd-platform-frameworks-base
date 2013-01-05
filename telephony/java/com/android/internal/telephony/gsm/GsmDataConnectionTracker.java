@@ -640,6 +640,19 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         }
     }
 
+    /**
+     * Report on whether data connectivity is enabled for apnContext.
+     * @return {@code false} if data connectivity has been explicitly disabled,
+     * {@code true} otherwise.
+     */
+    private boolean getAnyDataEnabled(ApnContext apnContext) {
+        synchronized (mDataEnabledLock) {
+            if (Phone.APN_TYPE_MMS.equals(apnContext.getApnType())) return true;
+            if (Phone.APN_TYPE_WAP.equals(apnContext.getApnType())) return true;
+            return mInternalDataEnabled && mUserDataEnabled && sPolicyDataEnabled;
+        }
+    }
+
     private boolean isDataAllowed(ApnContext apnContext) {
         return apnContext.isReady() && isDataAllowed();
     }
@@ -805,7 +818,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         boolean desiredPowerState = mPhone.getServiceStateTracker().getDesiredPowerState();
 
         if ((apnContext.getState() == State.IDLE || apnContext.getState() == State.SCANNING) &&
-                isDataAllowed(apnContext) && getAnyDataEnabled() && !isEmergency()) {
+                isDataAllowed(apnContext) && getAnyDataEnabled(apnContext) && !isEmergency()) {
 
             if (apnContext.getState() == State.IDLE) {
                 ArrayList<ApnSetting> waitingApns = buildWaitingApns(apnContext.getApnType());
