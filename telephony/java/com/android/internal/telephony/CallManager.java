@@ -57,7 +57,7 @@ public class CallManager {
 
     protected static final String LOG_TAG ="CallManager";
     protected static final boolean DBG = true;
-    protected static final boolean VDBG = false;
+    protected static final boolean VDBG = true;
 
     private static final int EVENT_DISCONNECT = 100;
     private static final int EVENT_PRECISE_CALL_STATE_CHANGED = 101;
