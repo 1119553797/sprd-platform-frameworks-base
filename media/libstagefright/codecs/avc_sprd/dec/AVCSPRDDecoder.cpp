@@ -363,6 +363,13 @@ MediaBuffer *AVCSPRDDecoder::drainOutputBuffer() {
     return new MediaBuffer(0);
 }
 
+void dump_bs( uint8* pBuffer,int32 aInBufSize)
+{
+	FILE *fp = fopen("/data/video_es.m4v","ab");
+	fwrite(pBuffer,1,aInBufSize,fp);
+	fclose(fp);
+}
+
 status_t AVCSPRDDecoder::read(
         MediaBuffer **out, const ReadOptions *options) {
     *out = NULL;
@@ -478,6 +485,8 @@ status_t AVCSPRDDecoder::read(
         dec_in.err_pkt_num = 0;
 
         dec_out.frameEffective = 0;	
+
+ //       dump_bs(dec_in.pStream, dec_in.dataLen);
 
         MMDecRet decRet = H264DecDecode(&dec_in,&dec_out);
         LOGI("%s, %d, decRet: %d, dec_out.frameEffective: %d", __FUNCTION__, __LINE__, decRet, dec_out.frameEffective);
