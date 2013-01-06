@@ -499,18 +499,28 @@ status_t AVCSPRDDecoder::read(
                 int32_t aligned_width, aligned_height;
                 H264GetBufferDimensions(&aligned_width, &aligned_height) ;
 
-                int32_t oldWidth, oldHeight;
-                CHECK(mFormat->findInt32(kKeyWidth, &oldWidth));
-                CHECK(mFormat->findInt32(kKeyHeight, &oldHeight));
+                int32_t ref_frm_num;
+                H264GetRefBufNum(&ref_frm_num); 
 
-                if (oldWidth != aligned_width || oldHeight != aligned_height) {
-                    mFormat->setInt32(kKeyWidth, aligned_width);
-                    mFormat->setInt32(kKeyHeight, aligned_height);
+                if ((aligned_width >= 1280 && aligned_height >= 720) ||
+                    (aligned_width >= 1280 && aligned_height >= 720) || (ref_frm_num > 8))
+                {
+                    err = ERROR_UNSUPPORTED;                    
+                }else
+                {
+                    int32_t oldWidth, oldHeight;
+                    CHECK(mFormat->findInt32(kKeyWidth, &oldWidth));
+                    CHECK(mFormat->findInt32(kKeyHeight, &oldHeight));
 
-                    err = INFO_FORMAT_CHANGED;
-                } else {
-                    *out = new MediaBuffer(0);
-                    err = OK;
+                    if (oldWidth != aligned_width || oldHeight != aligned_height) {
+                        mFormat->setInt32(kKeyWidth, aligned_width);
+                        mFormat->setInt32(kKeyHeight, aligned_height);
+
+                        err = INFO_FORMAT_CHANGED;
+                    } else {
+                        *out = new MediaBuffer(0);
+                        err = OK;
+                    }
                 }
                break;
             }

@@ -142,7 +142,7 @@ typedef struct
 
 MMDecRet H264DecGetNALType(uint8 *bitstream, int size, int *nal_type, int *nal_ref_idc);
 void H264GetBufferDimensions(int32 *aligned_width, int32 *aligned_height) ;
-
+void H264GetRefBufNum(int32 *numBuffers); 
 
 /*****************************************************************************/
 //  Description: Init h264 decoder	
