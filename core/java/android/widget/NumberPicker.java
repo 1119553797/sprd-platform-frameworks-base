@@ -16,6 +16,8 @@
 
 package android.widget;
 
+import java.util.Locale;
+
 import com.android.internal.R;
 
 import android.annotation.Widget;
@@ -71,7 +73,7 @@ public class NumberPicker extends LinearLayout {
                 public String toString(int value) {
                     mArgs[0] = value;
                     mBuilder.delete(0, mBuilder.length());
-                    mFmt.format("%02d", mArgs);
+                    mFmt.format(Locale.US,"%02d", mArgs);//add Locale.US for bugzilla 104296
                     return mFmt.toString();
                 }
         };
