@@ -749,7 +749,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             try {
                 stmt = db.compileStatement("INSERT INTO system(name,value)"
                         + " VALUES(?,?);");
-                loadSetting(stmt, Secure.SET_INSTALL_LOCATION, 0);
+                loadSetting(stmt, Secure.SET_INSTALL_LOCATION, 1);
                 loadSetting(stmt, Secure.DEFAULT_INSTALL_LOCATION,
                         PackageHelper.APP_INSTALL_AUTO);
                 db.setTransactionSuccessful();
@@ -1118,7 +1118,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
             loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_PULSE,
                     R.bool.def_notification_pulse);
-            loadSetting(stmt, Settings.Secure.SET_INSTALL_LOCATION, 0);
+            loadSetting(stmt, Settings.Secure.SET_INSTALL_LOCATION, 1);
             loadSetting(stmt, Settings.Secure.DEFAULT_INSTALL_LOCATION,
                     PackageHelper.APP_INSTALL_AUTO);
     

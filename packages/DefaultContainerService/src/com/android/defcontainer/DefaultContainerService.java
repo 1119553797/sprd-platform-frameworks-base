@@ -389,6 +389,12 @@ public class DefaultContainerService extends IntentService {
         boolean checkExt = false;
         boolean checkBoth = false;
         check_inner : {
+            // get user preference
+            int installPreference = Settings.System.getInt(getApplicationContext()
+                    .getContentResolver(),
+                    Settings.Secure.DEFAULT_INSTALL_LOCATION,
+                    PackageHelper.APP_INSTALL_AUTO);
+
             // Check flags.
             if ((flags & PackageManager.INSTALL_FORWARD_LOCK) != 0) {
                 // Check for forward locked app
@@ -410,28 +416,45 @@ public class DefaultContainerService extends IntentService {
                 checkInt = true;
                 break check_inner;
             } else if (installLocation == PackageInfo.INSTALL_LOCATION_PREFER_EXTERNAL) {
-                checkExt = true;
-                checkBoth = true;
-                break check_inner;
+                if(installPreference == PackageHelper.APP_INSTALL_INTERNAL) {
+                    checkInt = true;
+                    break check_inner; 
+                } else if (installPreference == PackageHelper.APP_INSTALL_EXTERNAL) {
+                    checkExt = true;
+                    break check_inner;
+                } else {
+                    checkExt = true;
+                    checkBoth = true;
+                    break check_inner;
+                }
             } else if (installLocation == PackageInfo.INSTALL_LOCATION_AUTO) {
-                checkInt = true;
-                checkBoth = true;
-                break check_inner;
+                if(installPreference == PackageHelper.APP_INSTALL_INTERNAL) {
+                    checkInt = true;
+                    break check_inner; 
+                } else if (installPreference == PackageHelper.APP_INSTALL_EXTERNAL) {
+                    checkExt = true;
+                    break check_inner;
+                } else {
+                    checkExt = true;
+                    checkBoth = true;
+                    break check_inner;
+                }
             }
+
             // Pick user preference
-            int installPreference = Settings.System.getInt(getApplicationContext()
-                    .getContentResolver(),
-                    Settings.Secure.DEFAULT_INSTALL_LOCATION,
-                    PackageHelper.APP_INSTALL_AUTO);
             if (installPreference == PackageHelper.APP_INSTALL_INTERNAL) {
                 checkInt = true;
                 break check_inner;
             } else if (installPreference == PackageHelper.APP_INSTALL_EXTERNAL) {
                 checkExt = true;
                 break check_inner;
+            } else {//default policy if nothing else is specified.
+                checkExt = true;
+                checkBoth = true;
+                break check_inner;
             }
             // Fall back to default policy if nothing else is specified.
-            checkInt = true;
+            //checkInt = true;
         }
 
         // Package size = code size + cache size + data size
