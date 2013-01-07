@@ -465,6 +465,10 @@ public class ActivityChooserModel extends DataSetObservable {
      */
     public Intent chooseActivity(int index) {
         synchronized (mInstanceLock) {
+            if (mIntent == null) {
+                return null;
+            }
+
             ensureConsistentState();
 
             ActivityResolveInfo chosenActivity = mActivities.get(index);
