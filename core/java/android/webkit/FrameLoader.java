@@ -349,7 +349,7 @@ class FrameLoader {
         if (accept == null || accept.length() == 0) {
             mHeaders.put("Accept", HEADER_STR);
         }
-        mHeaders.put("Accept-Charset", "utf-8, iso-8859-1, utf-16, *;q=0.7");
+        mHeaders.put("Accept-Charset", "utf-8, iso-8859-1, gb2312, gbk, utf-16, *;q=0.7");
 
         String acceptLanguage = mSettings.getAcceptLanguage();
         if (acceptLanguage.length() > 0) {
