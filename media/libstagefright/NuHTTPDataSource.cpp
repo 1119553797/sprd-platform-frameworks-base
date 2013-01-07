@@ -145,6 +145,7 @@ status_t NuHTTPDataSource::connect(
     mState = CONNECTING;
 
     if (needsToReconnect) {
+        LOGI("connect, needsToReconnect");
         mHTTP.disconnect();
         err = mHTTP.connect(host, port);
     }
@@ -339,6 +340,9 @@ ssize_t NuHTTPDataSource::internalRead(void *data, size_t size) {
 }
 
 ssize_t NuHTTPDataSource::readAt(off_t offset, void *data, size_t size) {
+    size_t retry_count = 0;
+    bool needsToReconnect = false;
+
     LOGV("readAt offset %ld, size %d", offset, size);
 
     Mutex::Autolock autoLock(mLock);
@@ -368,25 +372,80 @@ ssize_t NuHTTPDataSource::readAt(off_t offset, void *data, size_t size) {
         ssize_t n =
             internalRead((uint8_t *)data + numBytesRead, size - numBytesRead);
 
-        if (n < 0) {
-            return n;
+        if (n <= 0) {
+            //return n;
+            needsToReconnect = true;
+            break;
         }
 
         numBytesRead += (size_t)n;
 
-        if (n == 0) {
-            if (mContentLengthValid) {
+        //if (n == 0) {
+            //if (mContentLengthValid) {
                 // We know the content length and made sure not to read beyond
                 // it and yet the server closed the connection on us.
-                return ERROR_IO;
-            }
+                //return ERROR_IO;
+            //}
 
-            break;
+            //break;
+        //}
+    }
+
+    if(needsToReconnect) {
+        LOGI("receive error from server, try reconnect to the server");
+        numBytesRead = 0;
+        while(retry_count < 3) {
+		    String8 host = mHost;
+            String8 path = mPath;
+            String8 headers = mHeaders;
+            status_t err = 0;
+
+            disconnect();
+            err = connect(host, mPort, path, headers, offset);
+
+            LOGI("reconnet, err = %d, retry_count = %d",err,retry_count);
+            retry_count++;
+            if (err != OK) {
+                continue;
+            }
+            numBytesRead = reReadAt(offset, data, size);
+            if(numBytesRead != 0) {
+                break;
+            }
         }
     }
 
+	if(needsToReconnect && numBytesRead == 0) {
+		LOGI("after reconnect, still get no data from server");
+		return ERROR_IO;
+	}
+
     mOffset += numBytesRead;
 
+    return numBytesRead;
+}
+
+ssize_t NuHTTPDataSource::reReadAt(off_t offset, void *data, size_t size) {
+    size_t numBytesRead = 0;
+    bool needsToReconnect = false;
+
+    while (numBytesRead < size) {
+        ssize_t n =
+            internalRead((uint8_t *)data + numBytesRead, size - numBytesRead);
+
+        if (n <= 0) {
+            needsToReconnect = true;
+            break;
+        }
+
+        numBytesRead += (size_t)n;
+    }
+
+    if(needsToReconnect) {
+        numBytesRead = 0;
+    }
+
+    LOGI("reReadAt, numBytesRead = %d",numBytesRead);
     return numBytesRead;
 }
 
