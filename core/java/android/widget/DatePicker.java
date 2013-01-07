@@ -120,6 +120,9 @@ public class DatePicker extends FrameLayout {
 
     private boolean mIsEnabled = DEFAULT_ENABLED_STATE;
 
+    //add for bug 118739
+    private boolean mDigitMonth;
+
     /**
      * The callback used to indicate the user changes\d the date.
      */
@@ -185,6 +188,10 @@ public class DatePicker extends FrameLayout {
                         mTempDate.add(Calendar.DAY_OF_MONTH, newVal - oldVal);
                     }
                 } else if (picker == mMonthSpinner) {
+                    if(mDigitMonth){
+                        oldVal--;
+                        newVal--;
+                    }
                     if (oldVal == 11 && newVal == 0) {
                         mTempDate.add(Calendar.MONTH, 1);
                     } else if (oldVal == 0 && newVal == 11) {
@@ -229,7 +236,12 @@ public class DatePicker extends FrameLayout {
         mMonthSpinner = (NumberPicker) findViewById(R.id.month);
         mMonthSpinner.setMinValue(0);
         mMonthSpinner.setMaxValue(mNumberOfMonths - 1);
-        mMonthSpinner.setDisplayedValues(mShortMonths);
+        mMonthSpinner.setFormatter(NumberPicker.TWO_DIGIT_FORMATTER);
+        if(mDigitMonth){
+            mMonthSpinner.setDisplayedValues(null);
+        }else{
+            mMonthSpinner.setDisplayedValues(mShortMonths);
+        }
         mMonthSpinner.setOnLongPressUpdateInterval(200);
         mMonthSpinner.setOnValueChangedListener(onChangeListener);
         mMonthSpinnerInput = (EditText) mMonthSpinner.findViewById(R.id.numberpicker_input);
@@ -482,6 +494,12 @@ public class DatePicker extends FrameLayout {
             mShortMonths[i] = DateUtils.getMonthString(Calendar.JANUARY + i,
                     DateUtils.LENGTH_MEDIUM);
         }
+        //add for bug 118739
+        if(mShortMonths[0].startsWith("1")){
+            mDigitMonth = true;
+        }else{
+            mDigitMonth = false;
+        }
     }
 
     /**
@@ -647,9 +665,15 @@ public class DatePicker extends FrameLayout {
 
         // make sure the month names are a zero based array
         // with the months in the month spinner
-        String[] displayedValues = Arrays.copyOfRange(mShortMonths,
-                mMonthSpinner.getMinValue(), mMonthSpinner.getMaxValue() + 1);
-        mMonthSpinner.setDisplayedValues(displayedValues);
+        if(mDigitMonth){
+            mMonthSpinner.setMinValue(mMonthSpinner.getMinValue() + 1);
+            mMonthSpinner.setMaxValue(mMonthSpinner.getMaxValue() + 1);
+            mMonthSpinner.setDisplayedValues(null);
+        }else{
+            String[] displayedValues = Arrays.copyOfRange(mShortMonths,
+                    mMonthSpinner.getMinValue(), mMonthSpinner.getMaxValue() + 1);
+            mMonthSpinner.setDisplayedValues(displayedValues);
+        }
 
         // year spinner range does not change based on the current date
         mYearSpinner.setMinValue(mMinDate.get(Calendar.YEAR));
@@ -658,7 +682,11 @@ public class DatePicker extends FrameLayout {
 
         // set the spinner values
         mYearSpinner.setValue(mCurrentDate.get(Calendar.YEAR));
-        mMonthSpinner.setValue(mCurrentDate.get(Calendar.MONTH));
+        if(mDigitMonth){
+            mMonthSpinner.setValue(mCurrentDate.get(Calendar.MONTH) +1);
+        }else{
+            mMonthSpinner.setValue(mCurrentDate.get(Calendar.MONTH));
+        }
         mDaySpinner.setValue(mCurrentDate.get(Calendar.DAY_OF_MONTH));
     }
 
