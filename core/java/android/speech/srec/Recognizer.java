@@ -366,6 +366,10 @@ public final class Recognizer {
     public void stop() {
         SR_RecognizerStop(mRecognizer);
         Log.d(TAG, "stop : mActiveGrammar.mGrammar = " + mActiveGrammar.mGrammar);
+		if (mActiveGrammar.mGrammar == 0) {
+			Log.e(TAG, "error state , return");
+			return;
+		}
         SR_RecognizerDeactivateRule(mRecognizer, mActiveGrammar.mGrammar, "trash");
     }
     
