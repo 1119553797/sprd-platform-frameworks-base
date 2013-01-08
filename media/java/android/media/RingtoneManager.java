@@ -405,7 +405,7 @@ public class RingtoneManager {
     public Uri getRingtoneUri(int position) {
         // use cursor directly instead of requerying it, which could easily
         // cause position to shuffle.
-        if (mCursor == null || !mCursor.moveToPosition(position)) {
+        if (mCursor == null || !mCursor.moveToPosition(position) || mCursor.isClosed()) {
             return null;
         }
         
