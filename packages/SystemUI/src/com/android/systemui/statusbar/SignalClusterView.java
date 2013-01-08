@@ -178,6 +178,7 @@ public class SignalClusterView
         mAirplaneIconId = airplaneIconId;
 
         apply();
+        apply2();
     }
 
     @Override
@@ -261,7 +262,7 @@ public class SignalClusterView
                     (mWifiVisible ? "VISIBLE" : "GONE"),
                     mWifiStrengthId, mWifiActivityId));
 
-        if (mMobileVisible1) {
+        if (mMobileVisible1 && !mIsAirplaneMode) {
             mMobileGroup1.setVisibility(View.VISIBLE);
             mMobile1.setImageResource(mMobileStrengthId1);
             mMobileActivity1.setImageResource(mMobileActivityId1);

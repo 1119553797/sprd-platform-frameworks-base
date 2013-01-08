@@ -609,6 +609,9 @@ public class NetworkController extends BroadcastReceiver {
     }
 
     private final void updateTelephonySignalStrength(int phoneId) {
+        if (mAirplaneMode) {
+            mAirplaneIconId = R.drawable.stat_sys_signal_flightmode;
+        }
         if (!hasService(phoneId)) {
             if (CHATTY) Slog.d(TAG, "updateTelephonySignalStrength: !hasService()");
             mPhoneSignalIconId[phoneId] = R.drawable.stat_sys_signal_0;
@@ -1210,7 +1213,7 @@ public class NetworkController extends BroadcastReceiver {
             mContentDescriptionPhoneSignal[phoneId] = mContext.getString(
                     R.string.accessibility_airplane_mode);
             mAirplaneIconId = R.drawable.stat_sys_signal_flightmode;
-            mPhoneSignalIconId[phoneId] = mDataSignalIconId[phoneId] = R.drawable.stat_sys_signal_flightmode;
+            //mPhoneSignalIconId[phoneId] = mDataSignalIconId[phoneId] = R.drawable.stat_sys_signal_flightmode;
             mDataTypeIconId[phoneId] = 0;
 
             // combined values from connected wifi take precedence over airplane mode
