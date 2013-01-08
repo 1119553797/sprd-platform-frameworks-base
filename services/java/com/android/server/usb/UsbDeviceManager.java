@@ -447,7 +447,7 @@ public class UsbDeviceManager {
                         Settings.Secure.getUriFor(Settings.Secure.USB_TETHERED),
                         false, new TetherSettingsObserver());
 
-               mContentResolver.registerContentObserver(
+                mContentResolver.registerContentObserver(
                         Settings.Secure.getUriFor(Settings.Secure.VSER_GSER_ENABLED),
                                 false, new VserGserSettingsObserver());
 
@@ -973,7 +973,6 @@ public class UsbDeviceManager {
                     mAdbNotificationShown = false;
                     updateUsbNotification();
                     updateAdbNotification();
-                    updateUsbState();
                     break;
             /*
              * Add 20121115 Spreadst of 89084 the usb debugging can not change

@@ -19,8 +19,10 @@ package com.android.systemui.usb;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Environment;
 import android.os.Handler;
@@ -78,7 +80,16 @@ public class StorageNotification extends StorageEventListener {
         mAsyncEventHandler = new Handler(thr.getLooper());
 
         onUsbMassStorageConnectionChanged(connected);
+        mContext.registerReceiver(mLocalChangeReceiver,
+                new IntentFilter(Intent.ACTION_LOCALE_CHANGED));
     }
+
+    private final BroadcastReceiver mLocalChangeReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            Slog.d(TAG, "language is change....");
+            updateUsbMassStorageNotification(mUmsAvailable);
+        }
+    };
 
     /*
      * @override com.android.os.storage.StorageEventListener
