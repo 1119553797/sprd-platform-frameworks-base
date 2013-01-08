@@ -67,6 +67,8 @@ public class Ringtone {
 
     private int mStreamType = AudioManager.STREAM_RING;
 
+    private boolean mLoop = false;
+
     /** {@hide} */
     public Ringtone(Context context, boolean allowRemote) {
         mContext = context;
@@ -223,10 +225,12 @@ public class Ringtone {
             // do not play ringtones if stream volume is 0
             // (typically because ringer mode is silent).
             if (mAudioManager.getStreamVolume(mStreamType) != 0) {
+                mLocalPlayer.setLooping(mLoop);
                 mLocalPlayer.start();
             }
         } else if (mAllowRemote) {
             try {
+                mRemotePlayer.setLooping(mRemoteToken, mLoop);
                 mRemotePlayer.play(mRemoteToken, mUri, mStreamType);
             } catch (RemoteException e) {
                 Log.w(TAG, "Problem playing ringtone: " + e);
@@ -282,5 +286,16 @@ public class Ringtone {
 
     void setTitle(String title) {
         mTitle = title;
+    }
+
+    /**
+     * Enable or disable ringtone's loop playback
+     */
+    public void setLooping(boolean looping) {
+        if (LOGD) {
+            Log.d(TAG, "setLooping() looping=" + looping);
+        }
+
+        mLoop = looping;
     }
 }

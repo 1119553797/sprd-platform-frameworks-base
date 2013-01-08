@@ -130,6 +130,17 @@ public class RingtonePlayer extends SystemUI {
             }
         }
 
+        public void setLooping(IBinder token, boolean looping) {
+            if (LOGD) Slog.d(TAG, "setLooping(token=" + token + ", looping=" + looping + ")");
+            Client client;
+            synchronized (mClients) {
+                client = mClients.get(token);
+            }
+            if (client != null) {
+                client.mRingtone.setLooping(looping);
+            }
+        }
+
         @Override
         public void playAsync(Uri uri, boolean looping, int streamType) {
             if (LOGD) Slog.d(TAG, "playAsync(uri=" + uri + ")");

@@ -11784,6 +11784,7 @@ package android.media {
     method public java.lang.String getTitle(android.content.Context);
     method public boolean isPlaying();
     method public void play();
+    method public void setLooping(boolean);
     method public void setStreamType(int);
     method public void stop();
   }

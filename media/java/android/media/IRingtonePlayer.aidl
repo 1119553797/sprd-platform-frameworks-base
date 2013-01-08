@@ -26,6 +26,7 @@ interface IRingtonePlayer {
     void play(IBinder token, in Uri uri, int streamType);
     void stop(IBinder token);
     boolean isPlaying(IBinder token);
+    void setLooping(IBinder token, boolean loop);
 
     /** Used for Notification sound playback. */
     void playAsync(in Uri uri, boolean looping, int streamType);
