@@ -370,6 +370,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // The last window we were told about in focusChanged.
     WindowState mFocusedWindow;
     IApplicationToken mFocusedApp;
+    int mLongPressVolumeKeyCode;
 
     private static final class PointerLocationInputEventReceiver extends InputEventReceiver {
         private final PointerLocationView mView;
@@ -3354,15 +3355,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         // If music is playing but we decided not to pass the key to the
                         // application, handle the volume change here.
                         handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
+                        handleVolumeKeyLongPress(keyCode);
                         break;
                     }
 
                     // modified for FM
                     if (isFmActive() && (result & ACTION_PASS_TO_USER) == 0) {
+                        // If fm is playing but we decided not to pass the key to the
+                        // application, handle the volume change here.
                         handleVolumeKey(AudioManager.STREAM_FM, keyCode);
+                        handleVolumeKeyLongPress(keyCode);
                         break;
                     }
                     // modified for FM
+                }else if (mLongPressVolumeKeyCode > 0) {
+                    cancelVolumeKeyLongPress();
                 }
                 break;
             }
@@ -3502,6 +3509,33 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
         return result;
+    }
+
+    Runnable mVolumeLongPressRunnable = new Runnable() {
+        public void run() {
+            if (isMusicActive()) {
+                // If music is playing , handle the volume change here.
+                handleVolumeKey(AudioManager.STREAM_MUSIC, mLongPressVolumeKeyCode);
+            } else if (isFmActive()) {
+                // If fm is playing , handle the volume change here.
+                handleVolumeKey(AudioManager.STREAM_FM, mLongPressVolumeKeyCode);
+            }
+
+            if (mLongPressVolumeKeyCode != KeyEvent.KEYCODE_UNKNOWN) {
+                mHandler.postDelayed(mVolumeLongPressRunnable, ViewConfiguration.getKeyRepeatDelay());
+            }
+        }
+    };
+
+    void handleVolumeKeyLongPress(int keycode) {
+        mLongPressVolumeKeyCode = keycode;
+        mHandler.removeCallbacks(mVolumeLongPressRunnable);
+        mHandler.postDelayed(mVolumeLongPressRunnable, ViewConfiguration.getLongPressTimeout());
+    }
+
+    void cancelVolumeKeyLongPress() {
+        mLongPressVolumeKeyCode = KeyEvent.KEYCODE_UNKNOWN;
+        mHandler.removeCallbacks(mVolumeLongPressRunnable);
     }
 
     /** {@inheritDoc} */
