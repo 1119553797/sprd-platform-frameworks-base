@@ -16,6 +16,7 @@
 
 package com.android.internal.policy.impl;
 
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.R;
@@ -79,6 +80,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private ToggleAction mAirplaneModeOn;
 
     private MyAdapter mAdapter;
+    private TelephonyManager[] mTelephonyManagers;
+    private ServiceState mServiceState[];
 
     private boolean mKeyguardShowing = false;
     private boolean mDeviceProvisioned = false;
@@ -86,6 +89,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private boolean mIsWaitingForEcmExit = false;
     private boolean mHasTelephony;
     private boolean mHasVibrator;
+    private int mPhoneCount = 1;
 
     private IWindowManager mIWindowManager;
 
@@ -96,7 +100,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         mContext = context;
         mWindowManagerFuncs = windowManagerFuncs;
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-
+        mPhoneCount = PhoneFactory.getPhoneCount();
+        mTelephonyManagers = new TelephonyManager[mPhoneCount];
+        mServiceState= new ServiceState[mPhoneCount];
         // receive broadcasts
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
@@ -105,9 +111,14 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         context.registerReceiver(mBroadcastReceiver, filter);
 
         // get notified of phone state changes
-        TelephonyManager telephonyManager =
-                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+//        TelephonyManager telephonyManager =
+//                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+//        telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+        for (int i = 0; i <mPhoneCount; i++) {
+            mTelephonyManagers[i] = (TelephonyManager) mContext.getSystemService(PhoneFactory
+                    .getServiceName(Context.TELEPHONY_SERVICE, i));
+            mTelephonyManagers[i].listen(mPhoneStateListener(i), PhoneStateListener.LISTEN_SERVICE_STATE);
+        }
         ConnectivityManager cm = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
         mHasTelephony = cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
@@ -172,6 +183,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     mContext.startActivity(ecmDialogIntent);
                 } else {
                     changeAirplaneModeSystemSetting(on);
+                    mHandler.removeMessages(EVENT_SERVICE_CHANGE_WAIT_TIMEOUT);
+                    mHandler.sendEmptyMessageDelayed(EVENT_SERVICE_CHANGE_WAIT_TIMEOUT,DELAY_AIRPLANE_SET_TIME);
                 }
             }
 
@@ -729,17 +742,49 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
     };
 
-    PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-        @Override
-        public void onServiceStateChanged(ServiceState serviceState) {
-            if (!mHasTelephony) return;
-            final boolean inAirplaneMode = serviceState.getState() == ServiceState.STATE_POWER_OFF;
-            mAirplaneState = inAirplaneMode ? ToggleAction.State.On : ToggleAction.State.Off;
-            mAirplaneModeOn.updateState(mAirplaneState);
-            mAdapter.notifyDataSetChanged();
-        }
-    };
+    private PhoneStateListener mPhoneStateListener(final int phoneId) {
+        PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onServiceStateChanged(ServiceState serviceState) {
+                if (!mHasTelephony)
+                    return;
+                mServiceState[phoneId]=serviceState;
+                Log.d(TAG,"phoneId "+phoneId+ "serviceState:" + serviceState);
+                boolean inAirplaneMode = isAllRadioOFF();
+                boolean mIsAirPlane = isAirplaneModeOn();
+                if (inAirplaneMode == mIsAirPlane) {
+                    Log.v(TAG, "mAirplaneModeOn is inTransition and reset state");
+                    mAirplaneState = inAirplaneMode ? ToggleAction.State.On
+                            : ToggleAction.State.Off;
+                    mAirplaneModeOn.updateState(mAirplaneState);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        };
+        return mPhoneStateListener;
+    }
 
+    private boolean isAllRadioOFF(){
+        for(int i=0;i<mPhoneCount;i++){
+            if (mTelephonyManagers[i] != null && mTelephonyManagers[i].hasIccCard() == true && isStandby(i)) {
+                if (mServiceState[i] != null && mServiceState[i].getState() != ServiceState.STATE_POWER_OFF) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isStandby (int phoneId) {
+        String tmpStr = null;
+        if(phoneId == 0){
+            tmpStr = Settings.System.SIM_STANDBY;
+        }else{
+            tmpStr = Settings.System.SIM_STANDBY + phoneId;
+        }
+        return Settings.System.getInt(mContext.getContentResolver(),
+            tmpStr, 1) == 1;
+    }
     private BroadcastReceiver mRingerModeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -748,6 +793,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             }
         }
     };
+
+    private boolean isAirplaneModeOn() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+    }
 
     private ContentObserver mAirplaneModeObserver = new ContentObserver(new Handler()) {
         @Override
@@ -760,6 +810,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private static final int MESSAGE_REFRESH = 1;
     private static final int MESSAGE_SHOW = 2;
     private static final int DIALOG_DISMISS_DELAY = 300; // ms
+    protected static final int DELAY_AIRPLANE_SET_TIME = 5000; // time (msec)
+    protected static final int EVENT_SERVICE_CHANGE_WAIT_TIMEOUT = 101;//message id
 
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -776,6 +828,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             case MESSAGE_SHOW:
                 handleShow();
                 break;
+            case EVENT_SERVICE_CHANGE_WAIT_TIMEOUT:
+                onAirplaneModeChangedTimedout();
             }
         }
     };
@@ -790,6 +844,18 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 0) == 1;
         mAirplaneState = airplaneModeOn ? ToggleAction.State.On : ToggleAction.State.Off;
         mAirplaneModeOn.updateState(mAirplaneState);
+    }
+
+    private void onAirplaneModeChangedTimedout() {
+
+        boolean airplaneModeOn = Settings.System.getInt(
+                mContext.getContentResolver(),
+                Settings.System.AIRPLANE_MODE_ON,
+                0) == 1;
+        Log.d(TAG,"onAirplaneModeChangedTimedout:airplaneModeOn = " + airplaneModeOn);
+        mAirplaneState = airplaneModeOn ? ToggleAction.State.On : ToggleAction.State.Off;
+        mAirplaneModeOn.updateState(mAirplaneState);
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
