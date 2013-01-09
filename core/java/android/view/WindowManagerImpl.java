@@ -323,21 +323,13 @@ public class WindowManagerImpl implements WindowManager {
             mParams[index] = wparams;
         }
         // do this last because it fires off messages to start doing things
-        /* Add 20121122 Spreadst of 93510 , monkey bug start */
+        // Add by liwd@spreadst.com for monkey bug -- START
+        // Because we want ignore this problem in monkey test, 
+        // it shouldn't happen in normal use.
         try {
-            /* Add 20121122 Spreadst of 93510 , monkey bug end */
-            root.setView(view, wparams, panelParentView);
-            /* Add 20121122 Spreadst of 93510 , monkey bug start */
+            root.setView(view, wparams, panelParentView); //This line is original code
         } catch (RuntimeException e) {
-            boolean MONKEY = false;
-            try {
-                MONKEY = SystemProperties.getBoolean("ro.monkey", false);
-            } catch (Exception e1) {
-                MONKEY = false;
-                Log.w("WindowManagerImpl", "Cannot get system property: ro.monkey");
-            }
-
-            if (MONKEY) {
+            if (android.os.Debug.isMonkey()) {
                 String msg = e.getMessage();
                 if (msg != null) {
                     if (e instanceof BadTokenException) {
@@ -365,7 +357,7 @@ public class WindowManagerImpl implements WindowManager {
                 throw e;
             }
         }
-        /* Add 20121122 Spreadst of 93510 , monkey bug end */
+        // Add by liwd@spreadst.com for monkey bug -- END
     }
 
     public void updateViewLayout(View view, ViewGroup.LayoutParams params) {
