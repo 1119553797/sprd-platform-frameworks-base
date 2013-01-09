@@ -2898,7 +2898,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                     }
                     if (handled) {
                         setPressed(false);
-                        v.setPressed(false);
+                        if (v != null) v.setPressed(false);
                     }
                 } else {
                     setPressed(false);
