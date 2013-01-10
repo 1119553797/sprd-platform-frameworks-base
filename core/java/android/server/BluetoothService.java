@@ -84,6 +84,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+
 public class BluetoothService extends IBluetooth.Stub {
     private static final String TAG = "BluetoothService";
     private static final boolean DBG = true;
@@ -114,6 +117,10 @@ public class BluetoothService extends IBluetooth.Stub {
 
     private static final String SHARED_PREFERENCE_DOCK_ADDRESS = "dock_bluetooth_address";
     private static final String SHARED_PREFERENCES_NAME = "bluetooth_service_settings";
+
+    private static final String DISCOVERABLE_ALARM = "android.server.bluetoothservice.action.DISCOVERABLEALARM";
+    private final AlarmManager mAlarmManager;
+    private final PendingIntent mPendingIntent;
 
     private static final int MESSAGE_UUID_INTENT = 1;
     private static final int MESSAGE_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY = 2;
@@ -237,9 +244,14 @@ public class BluetoothService extends IBluetooth.Stub {
         mHfpProfileState.start();
         mA2dpProfileState.start();
 
+        mAlarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(DISCOVERABLE_ALARM);
+        mPendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, 0);
+
         IntentFilter filter = new IntentFilter();
         registerForAirplaneMode(filter);
 
+        filter.addAction(DISCOVERABLE_ALARM);
         filter.addAction(Intent.ACTION_DOCK_EVENT);
         mContext.registerReceiver(mReceiver, filter);
         mBluetoothInputProfileHandler = BluetoothInputProfileHandler.getInstance(mContext, this);
@@ -449,6 +461,7 @@ public class BluetoothService extends IBluetooth.Stub {
         } finally {
             Binder.restoreCallingIdentity(ident);
         }
+        mAlarmManager.cancel(mPendingIntent);
     }
 
     /**
@@ -817,16 +830,24 @@ public class BluetoothService extends IBluetooth.Stub {
 
         switch (mode) {
         case BluetoothAdapter.SCAN_MODE_NONE:
+            mAlarmManager.cancel(mPendingIntent);
             pairable = false;
             discoverable = false;
             break;
         case BluetoothAdapter.SCAN_MODE_CONNECTABLE:
+            mAlarmManager.cancel(mPendingIntent);
             pairable = true;
             discoverable = false;
             break;
         case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE:
+            mAlarmManager.cancel(mPendingIntent);
             pairable = true;
             discoverable = true;
+            if (duration != 0) {
+                mAlarmManager.set(AlarmManager.RTC_WAKEUP,
+                        System.currentTimeMillis()
+                        + duration * 1000, mPendingIntent);
+            }
             if (DBG) Log.d(TAG, "BT Discoverable for " + duration + " seconds");
             break;
         default:
@@ -1729,6 +1750,11 @@ public class BluetoothService extends IBluetooth.Stub {
                                 mContext.MODE_PRIVATE).edit();
                     editor.putBoolean(SHARED_PREFERENCE_DOCK_ADDRESS + mDockAddress, true);
                     editor.apply();
+                }
+            } else if (DISCOVERABLE_ALARM.equals(action)) {
+                if (isEnabledInternal()) {
+                    // TODO: Switch back to the previous scan mode
+                    setScanMode(BluetoothAdapter.SCAN_MODE_CONNECTABLE, -1);
                 }
             }
         }
