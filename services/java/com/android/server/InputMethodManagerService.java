@@ -2444,9 +2444,15 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             }
             mSwitchingDialog = mDialogBuilder.create();
             mSwitchingDialog.setCanceledOnTouchOutside(true);
-            mSwitchingDialog.getWindow().setType(
+            //mSwitchingDialog.getWindow().setType(
                     //WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG);
+            if (mKeyguardManager.isKeyguardLocked()) {
+                mSwitchingDialog.getWindow().setType(
+                    WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+            } else {
+                mSwitchingDialog.getWindow().setType(
                     WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
+            }
             mSwitchingDialog.getWindow().getAttributes().setTitle("Select input method");
             mSwitchingDialog.show();
         }
