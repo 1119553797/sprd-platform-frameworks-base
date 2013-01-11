@@ -1567,11 +1567,17 @@ public class TelephonyManager {
      * @hide
      */
     public static boolean setDefaultDataPhoneId(Context context, int phoneId) {
-        SystemProperties.set("persist.msms.phone_default", String.valueOf(phoneId));
+        setPropertyDataPhoneId(phoneId);
         return Settings.System.putInt(context.getContentResolver(),
                 Settings.System.MULTI_SIM_DATA_CALL, phoneId);
     }
 
+    /**
+     * @hide
+     */
+    public static void setPropertyDataPhoneId(int phoneId) {
+        SystemProperties.set("persist.msms.phone_default", String.valueOf(phoneId));
+    }
     /**
      * @hide
      */

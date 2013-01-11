@@ -163,11 +163,12 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     private static final String INTENT_DATA_STALL_ALARM =
         "com.android.internal.telephony.gprs-data-stall";
 
-    static final Uri PREFERAPN_NO_UPDATE_URI =
-                        Uri.parse("content://telephony/carriers/preferapn_no_update");
-    static final Uri PREFERAPN_NO_UPDATE_URI_SIM2 = Uri.parse("content://telephony_sim2/carriers/preferapn_no_update");
+    static final Uri PREFERAPN_NO_UPDATE_URI = Telephony.Carriers.CONTENT_URI_PREFERAPN_NO_UPDATE_SIM1;
+    static final Uri PREFERAPN_NO_UPDATE_URI_SIM2 = Telephony.Carriers.CONTENT_URI_PREFERAPN_NO_UPDATE_SIM2;
+    static final Uri PREFERAPN_NO_UPDATE_URI_SIM3 = Telephony.Carriers.CONTENT_URI_PREFERAPN_NO_UPDATE_SIM3;
     static final String APN_ID = "apn_id";
     static final String APN_ID_SIM2 = "apn_id_sim2";
+    static final String APN_ID_SIM3 = "apn_id_sim3";
     private boolean canSetPreferApn = false;
 
     protected static final boolean DATA_STALL_SUSPECTED = true;
@@ -2614,6 +2615,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 return PREFERAPN_NO_UPDATE_URI;
             case 1:
                 return PREFERAPN_NO_UPDATE_URI_SIM2;
+            case 2:
+                return PREFERAPN_NO_UPDATE_URI_SIM3;
         }
     }
 
@@ -2624,6 +2627,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 return APN_ID;
             case 1:
                 return APN_ID_SIM2;
+            case 2:
+                return APN_ID_SIM3;
         }
     }
 
