@@ -1857,11 +1857,42 @@ public final class Telephony {
         /**
          * The content:// style URL for this table
          */
-        public static final Uri CONTENT_URI =
-            Uri.parse("content://telephony/carriers");
+        public static final String STR_CONTENT_URI = "content://telephony/carriers";
 
-        public static final Uri CONTENT_URI_SIM2 =
-            Uri.parse("content://telephony_sim2/carriers");
+        public static final Uri CONTENT_URI = Uri.parse(STR_CONTENT_URI);
+
+        public static final Uri CONTENT_URI_SIM1 = Uri.parse(STR_CONTENT_URI + 0);
+
+        public static final Uri CONTENT_URI_SIM2 = Uri.parse(STR_CONTENT_URI + 1);
+
+        public static final Uri CONTENT_URI_SIM3 = Uri.parse(STR_CONTENT_URI + 2);
+
+        public static final Uri CONTENT_URI_PREFERAPN_SIM1 = Uri.parse(STR_CONTENT_URI + 0
+                + "/preferapn");
+
+        public static final Uri CONTENT_URI_PREFERAPN_SIM2 = Uri.parse(STR_CONTENT_URI + 1
+                + "/preferapn");
+
+        public static final Uri CONTENT_URI_PREFERAPN_SIM3 = Uri.parse(STR_CONTENT_URI + 2
+                + "/preferapn");
+
+        public static final Uri CONTENT_URI_PREFERAPN_NO_UPDATE_SIM1 = Uri.parse(STR_CONTENT_URI + 0
+                + "/preferapn_no_update");
+
+        public static final Uri CONTENT_URI_PREFERAPN_NO_UPDATE_SIM2 = Uri.parse(STR_CONTENT_URI + 1
+                + "/preferapn_no_update");
+
+        public static final Uri CONTENT_URI_PREFERAPN_NO_UPDATE_SIM3 = Uri.parse(STR_CONTENT_URI + 2
+                + "/preferapn_no_update");
+
+        public static final Uri CONTENT_URI_RESTORE_SIM1 = Uri.parse(STR_CONTENT_URI + 0
+                + "/restore");
+
+        public static final Uri CONTENT_URI_RESTORE_SIM2 = Uri.parse(STR_CONTENT_URI + 1
+                + "/restore");
+
+        public static final Uri CONTENT_URI_RESTORE_SIM3 = Uri.parse(STR_CONTENT_URI + 2
+                + "/restore");
 
         /**
          * The default sort order for this table
@@ -1913,6 +1944,7 @@ public final class Telephony {
          * For example, "IP", "IPV6", "IPV4V6", or "PPP".
          */
         public static final String PROTOCOL = "protocol";
+        public static final String PRELOAD = "preload";
 
         /**
           * The protocol to be used to connect to this APN when roaming.
@@ -1939,11 +1971,14 @@ public final class Telephony {
 
         public static Uri getContentUri(int phoneId) {
             if (phoneId == 0) {
-                return CONTENT_URI;
+                return CONTENT_URI_SIM1;
             } else if (phoneId == 1) {
                 return CONTENT_URI_SIM2;
+            } else if (phoneId == 2) {
+                return CONTENT_URI_SIM3;
             } else {
-                return Uri.parse("content://telephony_sim" + phoneId + "/carriers");
+                int realId = phoneId + 1;
+                return Uri.parse("content://telephony" + "/carriers" + phoneId);
             }
         }
     }
