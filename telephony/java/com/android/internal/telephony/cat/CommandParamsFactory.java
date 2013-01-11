@@ -790,9 +790,9 @@ class CommandParamsFactory extends Handler {
         if (ctlv != null) {
             textMsg.text = ValueParser.retrieveAlphaId(ctlv);
         } else {
-            throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
-            //textMsg.text = Resources.getSystem().getString(R.string.sms_control_title);
-            //CatLog.d(this, "alpha id null, use default="+textMsg.text);
+//          throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+            textMsg.text = Resources.getSystem().getString(R.string.sms_control_title);
+            CatLog.d(this, "alpha id null, use default="+textMsg.text);
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
@@ -816,7 +816,7 @@ class CommandParamsFactory extends Handler {
     private boolean processEventNotifyUssd(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "process EventNotify");
+        CatLog.d(this, "process EventNotifyUssd");
 
         TextMessage textMsg = new TextMessage();
         IconId iconId = null;
@@ -827,8 +827,8 @@ class CommandParamsFactory extends Handler {
             textMsg.text = ValueParser.retrieveAlphaId(ctlv);
         } else {
             //throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
-            CatLog.d(this, "EventNotify no alpha id, make the default string");
-            textMsg.text = "Send ussd";
+            textMsg.text = Resources.getSystem().getString(R.string.sending);
+            CatLog.d(this, "alpha id null, use default="+textMsg.text);
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
