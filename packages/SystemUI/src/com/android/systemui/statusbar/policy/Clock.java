@@ -41,7 +41,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import com.android.internal.R;
+import com.android.systemui.R;
+
 
 /**
  * This widget display an analogic clock with two hands for hours and
@@ -132,9 +133,9 @@ public class Clock extends TextView {
         int res;
 
         if (b24) {
-            res = R.string.twenty_four_hour_time_format;
+            res = R.string.expanded_twenty_four_hour_time_format;
         } else {
-            res = R.string.twelve_hour_time_format;
+            res = R.string.expanded_twelve_hour_time_format;
         }
 
         final char MAGIC1 = '\uEF00';
@@ -196,17 +197,24 @@ public class Clock extends TextView {
                     formatted.delete(magic1, magic2+1);
                 } else {
                     if (AM_PM_STYLE == AM_PM_STYLE_SMALL) {
-                        CharacterStyle style = new RelativeSizeSpan(0.5f); //Modify 0.7f-->0.5 for bug 97029
+                        CharacterStyle style = new RelativeSizeSpan(0.8f); //Modify 0.8f for bug 97029 ,bug113080
                         formatted.setSpan(style, magic1, magic2,
                                           Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     }
-                    formatted.delete(magic2, magic2 + 1);
-                    formatted.delete(magic1, magic1 + 1);
+                    /* Modify 20130109 Spreadst IndexOutOfBoundsException start */
+                    for(int i=0;i<formatted.length();i++){
+                        char c = formatted.charAt(i);
+                        if (c == MAGIC1 || c == MAGIC2)
+                            formatted.delete(i, i + 1);
+                    }
+//                    formatted.delete(magic2, magic2 + 1);
+//                    formatted.delete(magic1, magic1 + 1);
+                    /* Modify 20130109 Spreadst IndexOutOfBoundsException end */
                 }
                 return formatted;
             }
         }
- 
+
         return result;
 
     }

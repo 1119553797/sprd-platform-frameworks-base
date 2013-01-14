@@ -22,5 +22,6 @@
          necessary.
          -->
     <string name="status_bar_date_formatter">%1$s\n%2$s</string>
-
+    <string name="expanded_twenty_four_hour_time_format">H:mm</string>
+    <string name="expanded_twelve_hour_time_format">h:mma</string>
 </resources>
