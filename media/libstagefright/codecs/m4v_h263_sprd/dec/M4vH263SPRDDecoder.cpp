@@ -142,7 +142,7 @@ status_t M4vH263SPRDDecoder::start(MetaData *) {
         vol_size = 0;
 
     }
-//    LOGI("%s, %d, mode: %d, vol_size: %d", __FUNCTION__, __LINE__, mode, vol_size);
+    LOGI("%s, %d, mode: %d, vol_size: %d", __FUNCTION__, __LINE__, mode, vol_size);
 
 #if 0
     Bool success = PVInitVideoDecoder(
@@ -180,7 +180,7 @@ status_t M4vH263SPRDDecoder::start(MetaData *) {
     video_format.uv_interleaved = 1;// todo jgdu
     uint8_t success = MP4DecInit( mHandle, &codec_buf,&video_format);
 
-//    LOGI("%s, %d, success: %d, width: %d, height: %d", __FUNCTION__, __LINE__, success, video_format.frame_width, video_format.frame_height);
+    LOGI("%s, %d, success: %d, width: %d, height: %d", __FUNCTION__, __LINE__, success, video_format.frame_width, video_format.frame_height);
 #endif        
 
     if (vol_data[0]) free(vol_data[0]);
@@ -326,6 +326,17 @@ status_t M4vH263SPRDDecoder::read(
         return UNKNOWN_ERROR;
     }
 #else
+
+    if (bufferSize < 0)
+    {
+        LOGE("failed to decode video frame.");
+
+        inputBuffer->release();
+        inputBuffer = NULL;
+
+        return UNKNOWN_ERROR;
+    }
+    
     MMDecInput dec_in;
     MMDecOutput dec_out;
 	
