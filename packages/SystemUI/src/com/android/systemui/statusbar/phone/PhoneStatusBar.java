@@ -942,11 +942,11 @@ public class PhoneStatusBar extends BaseStatusBar {
                     mPile.getHeight(), mScrollView.getHeight(), mCarrierLabelHeight));
         }
 
-        final boolean emergencyCallsShownElsewhere = mEmergencyCallLabel != null;
-        final boolean makeVisible =
-            !(emergencyCallsShownElsewhere && mNetworkController.isEmergencyOnly())
-            && mPile.getHeight() < (mScrollView.getHeight() - mCarrierLabelHeight);
-        
+//        final boolean emergencyCallsShownElsewhere = mEmergencyCallLabel != null;
+//        final boolean makeVisible =
+//            !(emergencyCallsShownElsewhere && mNetworkController.isEmergencyOnly())
+//            && mPile.getHeight() < (mScrollView.getHeight() - mCarrierLabelHeight);
+        final boolean makeVisible = mPile.getHeight() < (mScrollView.getHeight() - mCarrierLabelHeight);
         if (force || mCarrierLabelVisible != makeVisible) {
             mCarrierLabelVisible = makeVisible;
             if (DEBUG) {
