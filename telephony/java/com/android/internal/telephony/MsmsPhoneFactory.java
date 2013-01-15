@@ -108,6 +108,7 @@ public class MsmsPhoneFactory extends PhoneFactory {
                 int phoneType = getPhoneType(networkMode);
                 sCommandsInterface = new SprdRIL[phoneCount];
                 sProxyPhone = new SprdPhoneProxy[phoneCount];
+                isCardHandled = new boolean [phoneCount];
                 for(int i = 0; i < phoneCount;i++) {
                     sCommandsInterface[i] = new SprdRIL(context, networkMode, cdmaSubscription, i);
                     if (phoneType == Phone.PHONE_TYPE_GSM) {

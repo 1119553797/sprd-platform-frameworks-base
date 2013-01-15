@@ -62,8 +62,7 @@ public class PhoneFactory {
     public static final int DEFAULT_PHONE_ID = 0;
     public static final int DEFAULT_DUAL_SIM_INIT_PHONE_ID = -1;
 
-    protected static boolean isCard1ok = false;
-    protected static boolean isCard2ok = false;
+    protected static boolean isCardHandled[];
 
     //***** Class Methods
 
@@ -323,29 +322,27 @@ public class PhoneFactory {
     public synchronized static int autoSetDefaultPhoneId(boolean isUpdate, int phoneId) {
         int defaultPhoneId = TelephonyManager.getDefaultDataPhoneId(sContext);
         int settingPhoneId = -1;
-        if (phoneId == 0) {
-            isCard1ok = true;
+        if (phoneId >= 0 && phoneId < TelephonyManager.getPhoneCount()) {
+            isCardHandled[phoneId] = true;
         }
-        if (phoneId == 1) {
-            isCard2ok = true;
-        }
-        if (isCard1ok && isCard2ok) {
-            boolean hasCard1 = (PhoneFactory.isCardReady(0));
-            boolean hasCard2 = (PhoneFactory.isCardReady(1));
-            Log.i(LOG_TAG, "autoSetDefaultPhoneId,hasCard1=" + hasCard1 + ",hasCard2="
-                    + hasCard2 + ",defaultPhoneId=" + defaultPhoneId);
-            if (hasCard1 && !hasCard2) {
-                settingPhoneId = 0;
-            } else if (!hasCard1 && hasCard2) {
-                settingPhoneId = 1;
-            } else if (!hasCard1 && !hasCard2) {
-                return settingPhoneId;
+        Log.i(LOG_TAG, "autoSetDefaultPhoneId,defaultPhoneId=" + defaultPhoneId);
+        if (isAllCardHandled()) {
+            if (!isAllSimReady()) {
+                for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+                    Log.i(LOG_TAG, "isCardReady(" + i + ") = " + PhoneFactory.isCardReady(i));
+                    if (PhoneFactory.isCardReady(i)) {
+                        settingPhoneId = i;
+                        break;
+                    }
+                }
             }
             if (settingPhoneId == -1) {
-                if (getSimState(0) != State.READY || getSimState(1) != State.READY) {
-                    Log.i(LOG_TAG, "getSimState(0)" + getSimState(0) + ", getSimState(1)" +getSimState(1));
-                    return defaultPhoneId;
-                }
+//                for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+//                    if (getSimState(i) != State.READY)
+//                    Log.i(LOG_TAG, "getSimState(" +i + ")" + getSimState(i));
+//                    return defaultPhoneId;
+//                }
+                Log.i(LOG_TAG, "autoSetDefaultPhoneId,getSettingPhoneId");
                 settingPhoneId = TelephonyManager.getSettingPhoneId(sContext);
             }
             if (isUpdate && settingPhoneId != defaultPhoneId) {
@@ -353,27 +350,61 @@ public class PhoneFactory {
             }
             setDefaultValue();
         } else {
-            Log.i(LOG_TAG, "autoSetDefaultPhoneId,defaultPhoneId=" + defaultPhoneId
-                            + ",phoneId=" + phoneId + ",isCard1ok=" + isCard1ok + ",isCard2ok="
-                            + isCard2ok);
+            for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+                Log.i(LOG_TAG, "phoneId" + "[" + i + "]" + isCardHandled[i]);
+            }
         }
         return settingPhoneId;
     }
 
     private static void setDefaultValue(){
         int settingPhoneId = -1;
-        boolean hasCard1 = (PhoneFactory.isCardReady(0));
-        boolean hasCard2 = (PhoneFactory.isCardReady(1));
-        if (hasCard1 && !hasCard2) {
-            settingPhoneId = 0;
-        } else if (!hasCard1 && hasCard2) {
-            settingPhoneId = 1;
+        if (!isAllSimReady()) {
+            for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+                if (PhoneFactory.isCardReady(i)) {
+                    settingPhoneId = i;
+                    break;
+                }
+            }
         }
+        Log.d(LOG_TAG, "setDefaultValue settingPhoneId = " + settingPhoneId);
         if (settingPhoneId != -1) {
-            TelephonyManager.setVoiceDefaultSim(sContext, settingPhoneId);
-            TelephonyManager.setVideoDefaultSim(sContext, settingPhoneId);
-            TelephonyManager.setMmsDefaultSim(sContext, settingPhoneId);
+            TelephonyManager.setDefaultSim(sContext, TelephonyManager.MODE_VOICE, settingPhoneId);
+            TelephonyManager.setDefaultSim(sContext, TelephonyManager.MODE_VEDIO, settingPhoneId);
+            TelephonyManager.setDefaultSim(sContext, TelephonyManager.MODE_MMS, settingPhoneId);
+        } else {
+            int settingVoicePhoneId = TelephonyManager.getSubscriberDesiredSim(sContext, TelephonyManager.MODE_VOICE);
+            int settingVideoPhoneId = TelephonyManager.getSubscriberDesiredSim(sContext, TelephonyManager.MODE_VEDIO);
+            int settingMmsPhoneId = TelephonyManager.getSubscriberDesiredSim(sContext, TelephonyManager.MODE_MMS);
+            Log.d(LOG_TAG, "setDefaultValue,settingVoicePhoneId=" + settingVoicePhoneId
+                    + " settingVideoPhoneId=" + settingVideoPhoneId
+                    + " settingMmsPhoneId=" + settingMmsPhoneId);
+            TelephonyManager.setDefaultSim(sContext, TelephonyManager.MODE_VOICE, settingVoicePhoneId);
+            TelephonyManager.setDefaultSim(sContext, TelephonyManager.MODE_VEDIO, settingVideoPhoneId);
+            TelephonyManager.setDefaultSim(sContext, TelephonyManager.MODE_MMS, settingMmsPhoneId);
         }
+    }
+
+    public static boolean isAllSimReady() {
+        boolean allSimReady = true;
+        for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+            if (!PhoneFactory.isCardReady(i)) {
+                allSimReady = false;
+                break;
+            }
+        }
+        return allSimReady;
+    }
+
+    public static boolean isAllCardHandled() {
+        boolean allCardHandled = true;
+        for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+            if (!isCardHandled[i]) {
+                allCardHandled = false;
+                break;
+            }
+        }
+        return allCardHandled;
     }
 
     public static void updateDefaultPhoneId(int settingPhoneId) {
