@@ -3245,11 +3245,15 @@ public final class ActivityManagerService extends ActivityManagerNative
                 sb.append(" since ");
                 sb.append(msg);
                 FileOutputStream fos = new FileOutputStream(tracesFile);
-                fos.write(sb.toString().getBytes());
+                try{
+                    fos.write(sb.toString().getBytes());
                 if (app == null) {
                     fos.write("\n*** No application process!".getBytes());
                 }
-                fos.close();
+                }finally{
+                   if(fos != null)
+                       fos.close();
+                }
                 FileUtils.setPermissions(tracesFile.getPath(), 0666, -1, -1); // -rw-rw-rw-
             } catch (IOException e) {
                 Slog.w(TAG, "Unable to prepare slow app traces file: " + tracesPath, e);
