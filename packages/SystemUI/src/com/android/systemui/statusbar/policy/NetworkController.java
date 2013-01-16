@@ -846,7 +846,7 @@ public class NetworkController extends BroadcastReceiver {
         }
         if (showSpn && spn != null) {
             if (something) {
-                str.append('\n');
+                str.append(" | ");
             }
             str.append(spn);
             something = true;
