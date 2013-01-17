@@ -18,6 +18,7 @@
 package com.google.android.mms.pdu;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -395,6 +396,10 @@ public class PduPart {
 
         if (null == location) {
             byte[] contentId = (byte[]) mPartHeader.get(P_CONTENT_ID);
+            if (contentId == null) {
+                Log.e(TAG, "contentId is null", new Throwable());
+                return "";
+            }
             return "cid:" + new String(contentId);
         } else {
             return new String(location);
