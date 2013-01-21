@@ -234,6 +234,9 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
 
     // last known state of the cellular connection
     private String mPhoneState = TelephonyManager.EXTRA_STATE_IDLE;
+    
+    // engmode
+    private boolean engModeFlag = false;
 
     /**
      * we send this intent when the keyguard is dismissed.
@@ -340,6 +343,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
         userFilter.addAction(Intent.ACTION_USER_SWITCHED);
         userFilter.addAction(Intent.ACTION_USER_REMOVED);
         mContext.registerReceiver(mUserChangeReceiver, userFilter);
+        engModeFlag = "engtest".equals(SystemProperties.get("ro.bootmode", "mode"))?true:false;
+
     }
 
     /**
@@ -595,6 +600,14 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
      * the keyguard to be shown.
      */
     private void doKeyguardLocked() {
+
+
+        if(engModeFlag){
+            Log.d(TAG, "show engmode!");
+            engModeFlag = false;
+            return ;
+        }
+
         // if another app is disabling us, don't show
         if (!mExternallyEnabled) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because externally disabled");

@@ -112,6 +112,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserId;
 import android.provider.Settings;
+import android.provider.Telephony.Intents;
 import android.text.format.Time;
 import android.util.EventLog;
 import android.util.Log;
@@ -1552,7 +1553,11 @@ public final class ActivityManagerService extends ActivityManagerNative
         if(Build.IS_LOWMEM_VERSION) {
             mProcessLimitOverride = 0;//add for lowmem[4+2]
         }
-
+        
+        String mode = SystemProperties.get("ro.bootmode", "mode");
+        engModeFlag = "engtest".equals(mode)?true:false;
+        Slog.i(TAG, "engModeFlag: " + engModeFlag + " ,mode:"+mode);
+        
         File dataDir = Environment.getDataDirectory();
         File systemDir = new File(dataDir, "system");
         systemDir.mkdirs();
@@ -2192,10 +2197,23 @@ public final class ActivityManagerService extends ActivityManagerNative
                         null, null, 0, 0, 0, 0, null, false, null);
             }
         }
-
+        if(engModeFlag){
+            mHandler.postDelayed(new Runnable(){
+                public void run(){
+                    Log.d(TAG, "show engmode to handler!");
+                    Intent intent = new Intent(Intents.SECRET_CODE_ACTION,
+                            Uri.parse("android_secret_code://" + "83789"));
+                    mContext.sendBroadcast(intent);
+                }
+            }, 500);
+            engModeFlag = false;
+        }
+        
         return true;
     }
-
+    
+    boolean engModeFlag = false;
+    
     /**
      * Starts the "new version setup screen" if appropriate.
      */
