@@ -1307,4 +1307,7 @@
     <string name="keyguard_password_enter_sim2_puk_code">"輸入 Sim2 PUK 碼和新的 PIN 碼"</string>
     <string name="keyguard_password_enter_sim1_puk_code">"輸入 Sim1 PUK 碼和新的 PIN 碼"</string>
     <!-- Add 20121128 Spreadst of 96576,add string value of PIN unlock end -->
+  
+    <string name="stk_refresh_sim_init_message">SIM卡更新中</string>
+    <string name="stk_refresh_sim_reset_message">手機即將重新啟動</string>
 </resources>
