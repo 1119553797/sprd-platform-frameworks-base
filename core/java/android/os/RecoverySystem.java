@@ -49,6 +49,12 @@ import org.apache.harmony.security.pkcs7.SignedData;
 import org.apache.harmony.security.pkcs7.SignerInfo;
 import org.apache.harmony.security.provider.cert.X509CertImpl;
 
+import android.os.StatFs;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 /**
  * RecoverySystem contains methods for interacting with the Android
  * recovery system (the separate partition that can be used to install
@@ -69,6 +75,7 @@ public class RecoverySystem {
 
     /** Used to communicate with recovery.  See bootable/recovery/recovery.c. */
     private static File RECOVERY_DIR = new File("/cache/recovery");
+    private static String CACHE_DIR = "/cache";
     private static File COMMAND_FILE = new File(RECOVERY_DIR, "command");
     private static File LOG_FILE = new File(RECOVERY_DIR, "log");
     private static String LAST_PREFIX = "last_";
@@ -374,6 +381,28 @@ public class RecoverySystem {
      * @throws IOException if something goes wrong.
      */
     private static void bootCommand(Context context, String arg) throws IOException {
+        runCommandLine("mount");
+        StatFs cache_stat = new StatFs(CACHE_DIR);
+        long blockSize = cache_stat.getBlockSize();
+        long availableBlocks = cache_stat.getAvailableBlocks();
+        long cache_free = blockSize * availableBlocks;
+        Log.d(TAG, "Cache free size " + cache_free);
+        if(cache_free < 0x200000)
+        {
+            Log.d(TAG, "May be need more space, Clean Cache Directory");
+            try{
+                cleanCache(CACHE_DIR);
+            }catch(Exception e){
+                Log.d(TAG, "Counter a exception during clean cache" + e.toString());
+            }
+        }
+        cache_stat.restat(CACHE_DIR);
+        blockSize = cache_stat.getBlockSize();
+        availableBlocks = cache_stat.getAvailableBlocks();
+        cache_free = blockSize * availableBlocks;
+        cache_stat.finalize();
+        Log.d(TAG, "Now Cache free size " + cache_free);
+
         RECOVERY_DIR.mkdirs();  // In case we need it
         COMMAND_FILE.delete();  // In case it's not writable
         LOG_FILE.delete();
@@ -427,4 +456,53 @@ public class RecoverySystem {
     }
 
     private void RecoverySystem() { }  // Do not instantiate
+
+    private static void cleanCache(String filepath) throws IOException {
+        if(filepath.toLowerCase().endsWith("lost+found"))
+            return;
+
+        File f = new File(filepath);
+        if (f.exists() && f.isDirectory()) {
+            if (f.listFiles().length == 0) {
+                f.delete();
+            } else {
+                File delFile[] = f.listFiles();
+                int i = f.listFiles().length;
+                for (int j = 0; j < i; j++) {
+                    if (delFile[j].isDirectory()) {
+                        try {
+                            cleanCache(delFile[j].getAbsolutePath());
+                        } catch (Exception e) {
+                            Log.v(TAG, "cant delete directory for security" + delFile[j]);
+                            continue;
+                        }
+                    }
+                    delFile[j].delete();
+                }
+            }
+        }
+    }
+    private static void runCommandLine(String command) {
+        try {
+            // Process must be fully qualified here because android.os.Process
+            // is used elsewhere
+            Log.d(TAG, command + " START");
+            java.lang.Process p = Runtime.getRuntime().exec(command);
+
+            // pipe everything from process stdout -> System.err
+            InputStream inStream = p.getInputStream();
+            InputStreamReader inReader = new InputStreamReader(inStream);
+            BufferedReader inBuffer = new BufferedReader(inReader);
+            String s;
+            while ((s = inBuffer.readLine()) != null) {
+                    Log.d(TAG, s);
+            }
+            Log.d(TAG, command + " DONE");
+
+            int status = p.waitFor();
+        } catch (Exception e) {
+            Log.e(TAG, "runCommandLine " + command + " exception");
+            Log.e(TAG, e.toString());
+        }
+    }
 }
