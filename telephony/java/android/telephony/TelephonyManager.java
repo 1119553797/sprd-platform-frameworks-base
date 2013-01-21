@@ -18,6 +18,7 @@ package android.telephony;
 
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -66,9 +67,16 @@ public class TelephonyManager {
     private static ITelephonyRegistry sRegistry;
     private int mPhoneId;
 
+    //About default sim card setting for vioce,video,mms
+    public static final int MODE_VOICE = 0;
+    public static final int MODE_VEDIO = 1;
+    public static final int MODE_MMS = 2;
     private static final String dualCardDefaultPhone = "com.android.dualcard_settings_preferences";
     private static final String simCardFavoritekey = "sim_card_favorite";
     private static final String simCardForwardSettingKey = "sim_forward_setting";
+    private static final String simCardFavoriteVoicekey = "sim_card_favorite_voice";
+    private static final String simCardFavoriteVideokey = "sim_card_favorite_video";
+    private static final String simCardFavoriteMmskey = "sim_card_favorite_mms";
     private static final String sharedActivityName = "com.android.phone";
 
     /** @hide */
@@ -1487,49 +1495,47 @@ public class TelephonyManager {
     /**
      * @hide
      */
-    public static int getVoiceDefaultSim(Context context) {
-        return Settings.System.getInt(context.getContentResolver(),
-                Settings.System.MULTI_SIM_VOICE_CALL, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
-    }
+    public static boolean setDefaultSim(Context context, int mode, int phoneId) {
 
-    /**
-     * @hide
-     */
-    public static boolean setVoiceDefaultSim(Context context, int phoneId) {
+        String phoneIdKey = "";
+        switch (mode) {
+            case MODE_VOICE:
+                phoneIdKey = Settings.System.MULTI_SIM_VOICE_CALL;
+                break;
+            case MODE_VEDIO:
+                phoneIdKey = Settings.System.MULTI_SIM_VIDEO_CALL;
+                break;
+            case MODE_MMS:
+                phoneIdKey = Settings.System.MULTI_SIM_MMS;
+                break;
+            default:
+                break;
+        }
+        Log.d(TAG, "setDefaultSim:phoneIdKey " + phoneIdKey + " phoneId " + phoneId);
         return Settings.System.putInt(context.getContentResolver(),
-                Settings.System.MULTI_SIM_VOICE_CALL, phoneId);
+                phoneIdKey, phoneId);
     }
 
     /**
      * @hide
      */
-    public static int getVideoDefaultSim(Context context) {
+    public static int getDefaultSim(Context context, int mode) {
+        String phoneIdKey = "";
+        switch (mode) {
+            case MODE_VOICE:
+                phoneIdKey = Settings.System.MULTI_SIM_VOICE_CALL;
+                break;
+            case MODE_VEDIO:
+                phoneIdKey = Settings.System.MULTI_SIM_VIDEO_CALL;
+                break;
+            case MODE_MMS:
+                phoneIdKey = Settings.System.MULTI_SIM_MMS;
+                break;
+            default:
+                break;
+        }
         return Settings.System.getInt(context.getContentResolver(),
-                Settings.System.MULTI_SIM_VIDEO_CALL, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
-    }
-
-    /**
-     * @hide
-     */
-    public static boolean setVideoDefaultSim(Context context, int phoneId) {
-        return Settings.System.putInt(context.getContentResolver(),
-                Settings.System.MULTI_SIM_VIDEO_CALL, phoneId);
-    }
-
-    /**
-     * @hide
-     */
-    public static int getMmsDefaultSim(Context context) {
-        return Settings.System.getInt(context.getContentResolver(),
-                Settings.System.MULTI_SIM_MMS, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
-    }
-
-    /**
-     * @hide
-     */
-    public static boolean setMmsDefaultSim(Context context, int phoneId) {
-        return Settings.System.putInt(context.getContentResolver(),
-                Settings.System.MULTI_SIM_MMS, phoneId);
+                phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
     }
 
     /**
@@ -1590,6 +1596,62 @@ public class TelephonyManager {
             editor.putInt(simCardFavoritekey, setPhoneId);
             editor.commit();
         }
+    }
+
+    /**
+     * @hide
+     */
+    public static void setSubscriberDesiredSim(Context context, int mode, int setPhoneId) {
+        SharedPreferences settings = getPhoneSetting(context);
+        String phoneIdKey = "";
+
+        switch (mode) {
+            case MODE_VOICE:
+                phoneIdKey = simCardFavoriteVoicekey;
+                break;
+            case MODE_VEDIO:
+                phoneIdKey = simCardFavoriteVideokey;
+                break;
+            case MODE_MMS:
+                phoneIdKey = simCardFavoriteMmskey;
+                break;
+            default:
+                break;
+        }
+        Log.d(TAG, "setDefaultSim:phoneIdKey " + phoneIdKey + " phoneId " + setPhoneId);
+
+        int DefaultId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+        if (setPhoneId != DefaultId) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(phoneIdKey, setPhoneId);
+            editor.commit();
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public static int getSubscriberDesiredSim(Context context, int mode) {
+        SharedPreferences settings = getPhoneSetting(context);
+        String phoneIdKey = "";
+
+        switch (mode) {
+            case MODE_VOICE:
+                phoneIdKey = simCardFavoriteVoicekey;
+                break;
+            case MODE_VEDIO:
+                phoneIdKey = simCardFavoriteVideokey;
+                break;
+            case MODE_MMS:
+                phoneIdKey = simCardFavoriteMmskey;
+                break;
+            default:
+                break;
+        }
+        Log.d(TAG, "getSettingDefaultSim:phoneIdKey " + phoneIdKey);
+
+        int setPhoneId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+        return setPhoneId;
     }
 
     /**

@@ -20397,6 +20397,9 @@ package android.telephony {
     field public static final java.lang.String EXTRA_STATE_IDLE;
     field public static final java.lang.String EXTRA_STATE_OFFHOOK;
     field public static final java.lang.String EXTRA_STATE_RINGING;
+    field public static final int MODE_MMS = 2; // 0x2
+    field public static final int MODE_VEDIO = 1; // 0x1
+    field public static final int MODE_VOICE = 0; // 0x0
     field public static final int NETWORK_TYPE_1xRTT = 7; // 0x7
     field public static final int NETWORK_TYPE_CDMA = 4; // 0x4
     field public static final int NETWORK_TYPE_EDGE = 2; // 0x2
