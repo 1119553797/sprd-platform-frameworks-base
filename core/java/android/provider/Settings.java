@@ -1528,12 +1528,12 @@ public final class Settings {
          */
         public static final String VOLUME_RESERVED_1 = "volume_reserved_1";
 
-        /**  
+        /**
          * reserved volume2
          */
         public static final String VOLUME_RESERVED_2 = "volume_reserved_2";
 
-        /**  
+        /**
          * reserved volume3
          */
         public static final String VOLUME_RESERVED_3 = "volume_reserved_3";
@@ -1605,7 +1605,9 @@ public final class Settings {
         /**
          * @hide
          */
-        public static final String SMS_VALIDITY = "sms_validity";
+        public static final String SMS_VALIDITY_SIM = "sms_validity_sim";
+        public static final String SMS_VALIDITY_SIM1 = "sms_validity_sim1";
+        public static final String SMS_VALIDITY_SIM2 = "sms_validity_sim2";
 
         //add by spreadst_lc for cmcc wifi feature start
         public static final String WIFI_CELLULAR_WLAN = "wifi_cellular_wlan";
@@ -3015,7 +3017,7 @@ public final class Settings {
          * @hide
          */
         public static final String USB_TETHERED = "usb_tethered";
-        
+
         /**
          * Used to disable cdrom on a device - defaults to false
          * @hide
@@ -3027,19 +3029,19 @@ public final class Settings {
          * @hide
          */
         public static final String VSER_GSER_ENABLED = "vser_gser_enabled";
-        
+
         /**
          * Used to disable vser on a device - defaults to true
          * @hide
          */
         public static final String VSER_ENABLED = "vser_enabled";
-        
+
         /**
          * Used to disable gser on a device - defaults to true
          * @hide
          */
         public static final String GSER_ENABLED = "gser_enabled";
-        
+
         /**
          * Used to require DUN APN on the device or not - defaults to a build config value
          * which defaults to false

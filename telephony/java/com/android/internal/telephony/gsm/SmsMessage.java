@@ -19,6 +19,7 @@ package com.android.internal.telephony.gsm;
 import android.content.Context;
 import android.provider.Settings;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.TelephonyManager;
 import android.text.format.Time;
 import android.util.Log;
 
@@ -1561,9 +1562,26 @@ public class SmsMessage extends SmsMessageBase {
 
     //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
     private static int validity;
-    public static void getSmsValidity(Context context) {
+    public static void getSmsValidity(Context context, int phoneId) {
         if (null != context) {
-            validity = Settings.System.getInt(context.getContentResolver(), Settings.System.SMS_VALIDITY , 255);
+            boolean isMultiSim = TelephonyManager.isMultiSim();
+            if (isMultiSim) {
+                if (phoneId == 0) {
+                    validity = Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.SMS_VALIDITY_SIM1, 255);
+                } else if (phoneId == 1) {
+                    validity = Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.SMS_VALIDITY_SIM2, 255);
+                } else {
+                    validity = Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.SMS_VALIDITY_SIM, 255);
+                }
+            } else {
+                validity = Settings.System.getInt(context.getContentResolver(),
+                        Settings.System.SMS_VALIDITY_SIM, 255);
+            }
+            Log.d(LOG_TAG, "getSmsValidity()--->>      validity = " + validity + ", phoneId = "
+                    + phoneId);
         }
     }
     //=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===

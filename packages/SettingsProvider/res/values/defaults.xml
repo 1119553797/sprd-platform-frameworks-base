@@ -152,4 +152,7 @@
     <!-- Number of retries for connecting to DHCP.
          Value here is the same as WifiStateMachine.DEFAULT_MAX_DHCP_RETRIES -->
     <integer name="def_max_dhcp_retries">9</integer>
+
+    <!-- Default value of Sms Validity -->
+    <integer name="def_sms_validity">255</integer>
 </resources>

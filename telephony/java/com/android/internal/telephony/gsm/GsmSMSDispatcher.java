@@ -241,7 +241,7 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
     protected void sendData(String destAddr, String scAddr, int destPort,
             byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
-        SmsMessage.getSmsValidity(this.mContext);
+        SmsMessage.getSmsValidity(this.mContext, mPhone.getPhoneId());
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
         SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
                 scAddr, destAddr, destPort, data, (deliveryIntent != null));
@@ -257,7 +257,7 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
     protected void sendDmData(String destAddr, String scAddr, int destPort, int srcPort,
             byte[] data, PendingIntent sentIntent, PendingIntent deliveryIntent) {
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
-        SmsMessage.getSmsValidity(this.mContext);
+        SmsMessage.getSmsValidity(this.mContext, mPhone.getPhoneId());
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
         SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
                 scAddr, destAddr, destPort, srcPort, data, (deliveryIntent != null));
@@ -270,7 +270,7 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
     protected void sendText(String destAddr, String scAddr, String text,
             PendingIntent sentIntent, PendingIntent deliveryIntent) {
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
-        SmsMessage.getSmsValidity(this.mContext);
+        SmsMessage.getSmsValidity(this.mContext, mPhone.getPhoneId());
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
         SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
                 scAddr, destAddr, text, (deliveryIntent != null));

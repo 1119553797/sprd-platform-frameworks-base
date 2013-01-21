@@ -1553,6 +1553,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
                     R.integer.def_pointer_speed);
 
+            loadStringSetting(stmt, Settings.System.SMS_VALIDITY_SIM, R.integer.def_sms_validity);
+            loadStringSetting(stmt, Settings.System.SMS_VALIDITY_SIM1, R.integer.def_sms_validity);
+            loadStringSetting(stmt, Settings.System.SMS_VALIDITY_SIM2, R.integer.def_sms_validity);
+
         } finally {
             if (stmt != null) stmt.close();
         }
