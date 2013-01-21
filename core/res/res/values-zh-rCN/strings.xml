@@ -1311,4 +1311,9 @@
     <!-- Add 20121218 Spreadst of 105993  Regular boot development start -->
     <string name="shutdown_after_seconds">您的手机会在<xliff:g id="NUMBER">%d</xliff:g>秒后关机</string>
     <!-- Add 20121218 Spreadst of 105993  Regular boot development end -->
+
+    <!--STK Add start-->
+    <string name="stk_refresh_sim_init_message" >SIM卡更新中</string>
+    <string name="stk_refresh_sim_reset_message" >手机即将重启</string>
+    <!--STK Add end  -->
 </resources>
