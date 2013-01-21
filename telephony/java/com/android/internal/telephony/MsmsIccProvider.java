@@ -73,7 +73,7 @@ public class MsmsIccProvider extends IccProvider {
     private static final String AUTHORITY = "icc";
     private static final String CONTENT_URI = "content://" + AUTHORITY + "/";
     private static final int  PHONE_COUNT = PhoneFactory.getPhoneCount();
-    private static final int INVALID_PHONE_ID = UriMatcher.NO_MATCH * 2;
+    private static final int INVALID_PHONE_ID = 10000;
 
     private static final UriMatcher URL_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
     /** this is only to match phoneId, it do not care whether the uri is illegal **/
