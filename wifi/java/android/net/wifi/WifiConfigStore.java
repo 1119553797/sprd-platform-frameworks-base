@@ -1026,6 +1026,61 @@ class WifiConfigStore {
                         allowedProtocolsString);
                 break setVariables;
             }
+            // Broadcom, WAPI
+            if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WAPI_PSK)) {
+                if (!mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.wapiPskTypeVarName,
+                    Integer.toString(config.wapiPskType))) {
+                    Log.d(TAG, config.SSID + ": failed to set WAPI_PSK key type: "+
+                                config.wapiPskType);
+                    break setVariables;
+                }
+
+                // Prevent client screw-up by passing in a WifiConfiguration we gave it
+                // by preventing "*" as a key.
+                if (config.preSharedKey != null && !config.preSharedKey.equals("*") &&
+                    !mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.pskVarName,
+                    config.preSharedKey)) {
+                    Log.d(TAG, "failed to set psk: "+
+                                config.preSharedKey);
+                    break setVariables;
+                }
+            }
+            else if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WAPI_CERT)) {
+                if (!mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.wapiCertIndexVarName,
+                    Integer.toString(config.wapiCertIndex))) {
+                    Log.d(TAG, config.SSID + ": failed to set WAPI_CERT index: "+
+                                config.wapiCertIndex);
+                    break setVariables;
+                }
+
+                if (config.wapiAsCert != null &&
+                    !mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.wapiAsCertVarName,
+                    config.wapiAsCert)) {
+                    Log.d(TAG, "failed to set WAPI_CERT as cert: "+
+                                config.wapiAsCert);
+                    break setVariables;
+                }
+
+                if (config.wapiUserCert != null &&
+                    !mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.wapiUserCertVarName,
+                    config.wapiUserCert)) {
+                    Log.d(TAG, "failed to set WAPI_CERT user cert: "+
+                                config.wapiUserCert);
+                    break setVariables;
+                }
+            }
+            else {
+            // Broadcom, WAPI
 
             String allowedAuthAlgorithmsString =
                 makeString(config.allowedAuthAlgorithms, WifiConfiguration.AuthAlgorithm.strings);
@@ -1102,6 +1157,9 @@ class WifiConfigStore {
                     break setVariables;
                 }
             }
+            // Broadcom, WAPI
+            }
+            // Broadcom, WAPI
 
             if (!mWifiNative.setNetworkVariable(
                         netId,
@@ -1450,6 +1508,44 @@ class WifiConfigStore {
             }
         }
 
+        // Broadcom, WAPI
+        if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WAPI_PSK)) {
+            value = mWifiNative.getNetworkVariable(netId, WifiConfiguration.wapiPskTypeVarName);
+            config.wapiPskType = -1;
+            Log.d(TAG, "***WAPI : readNetworkVariables WAPI_PSK key type " + value);
+            if (!TextUtils.isEmpty(value)) {
+                try {
+                    config.wapiPskType = Integer.parseInt(value);
+                } catch (NumberFormatException ignore) {
+                }
+            }
+        }
+        else if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WAPI_CERT)) {
+            value = mWifiNative.getNetworkVariable(netId, WifiConfiguration.wapiCertIndexVarName);
+            config.wapiCertIndex = -1;
+            Log.d(TAG, "***WAPI : readNetworkVariables WAPI_CERT index " + value);
+            if (!TextUtils.isEmpty(value)) {
+                try {
+                    config.wapiCertIndex = Integer.parseInt(value);
+                } catch (NumberFormatException ignore) {
+                }
+            }
+            value = mWifiNative.getNetworkVariable(netId, WifiConfiguration.wapiAsCertVarName);
+            Log.d(TAG, "***WAPI : readNetworkVariables WAPI_CERT as cert " + value);
+            if (!TextUtils.isEmpty(value)) {
+                config.wapiAsCert = removeDoubleQuotes(value);
+            } else {
+                config.wapiAsCert = null;
+            }
+            value = mWifiNative.getNetworkVariable(netId, WifiConfiguration.wapiUserCertVarName);
+            Log.d(TAG, "***WAPI : readNetworkVariables WAPI_CERT user cert " + value);
+            if (!TextUtils.isEmpty(value)) {
+                config.wapiUserCert = removeDoubleQuotes(value);
+            } else {
+                config.wapiUserCert = null;
+            }
+        }
+        // Broadcom, WAPI
         migrateOldEapTlsIfNecessary(config, netId);
     }
 

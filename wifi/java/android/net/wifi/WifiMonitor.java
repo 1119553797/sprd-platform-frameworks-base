@@ -60,6 +60,16 @@ public class WifiMonitor {
     private static final String EVENT_PREFIX_STR = "CTRL-EVENT-";
     private static final int EVENT_PREFIX_LEN_STR = EVENT_PREFIX_STR.length();
 
+    // Broadcom, WAPI
+    /** Adding WAPI prefix */
+    private static final String WAPI_EVENT_PREFIX_STR = "WAPI:";
+    private static final String WAPI_CERTIFICATION_FAILURE_STR =
+       "certificate initialization failed";
+    private static final String WAPI_AUTHENTICATION_FAILURE_STR =
+       "authentication failed";
+    private static final String WAPI_CERTIFICATION_LOST_STR =
+       "certificate lost";
+// Broadcom, WAPI
     /** All WPA events coming from the supplicant start with this prefix */
     private static final String WPA_EVENT_PREFIX_STR = "WPA:";
     private static final String PASSWORD_MAY_BE_INCORRECT_STR =
@@ -300,6 +310,12 @@ public class WifiMonitor {
     public static final int WPS_TIMEOUT_EVENT                    = BASE + 11;
     /* Driver was hung */
     public static final int DRIVER_HUNG_EVENT                    = BASE + 12;
+    // Broadcom, WAPI
+    /* WAPI events leaving some gap*/
+    public static final int WAPI_AUTHENTICATION_FAILURE_EVENT    = BASE + 13;
+    public static final int WAPI_CERTIFICATION_FAILURE_EVENT     = BASE + 14;
+    public static final int WAPI_CERTIFICATION_LOST_EVENT        = BASE + 15;
+//Broadcom, WAPI
 
     /* P2P events */
     public static final int P2P_DEVICE_FOUND_EVENT               = BASE + 21;
@@ -378,6 +394,27 @@ public class WifiMonitor {
                     Log.d(TAG, "Event [" + eventStr + "]");
                 }
                 if (!eventStr.startsWith(EVENT_PREFIX_STR)) {
+                    // Broadcom, WAPI
+                    // Parsing WAPI event
+                    if (eventStr.startsWith(WAPI_EVENT_PREFIX_STR) &&
+                            0 < eventStr.indexOf(WAPI_CERTIFICATION_FAILURE_STR)) {
+                        Log.v(TAG, "Got WAPI event [" + eventStr + "]");
+                        mStateMachine.sendMessage(WAPI_CERTIFICATION_FAILURE_EVENT);
+                        continue;
+                    }
+                    if (eventStr.startsWith(WAPI_EVENT_PREFIX_STR) &&
+                            0 < eventStr.indexOf(WAPI_AUTHENTICATION_FAILURE_STR)) {
+                        Log.v(TAG, "Got WAPI event [" + eventStr + "]");
+                        mStateMachine.sendMessage(WAPI_AUTHENTICATION_FAILURE_EVENT);
+                        continue;
+                    }
+                    if (eventStr.startsWith(WAPI_EVENT_PREFIX_STR) &&
+                            0 < eventStr.indexOf(WAPI_CERTIFICATION_LOST_STR)) {
+                        Log.v(TAG, "Got WAPI event [" + eventStr + "]");
+                        mStateMachine.sendMessage(WAPI_CERTIFICATION_LOST_EVENT);
+                        continue;
+                    }
+                    // Broadcom, WAPI
                     if (eventStr.startsWith(WPA_EVENT_PREFIX_STR) &&
                             0 < eventStr.indexOf(PASSWORD_MAY_BE_INCORRECT_STR)) {
                         mStateMachine.sendMessage(AUTHENTICATION_FAILURE_EVENT);

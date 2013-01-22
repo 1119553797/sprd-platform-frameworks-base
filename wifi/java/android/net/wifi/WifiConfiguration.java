@@ -76,6 +76,20 @@ public class WifiConfiguration implements Parcelable {
     public static final String priorityVarName = "priority";
     /** {@hide} */
     public static final String hiddenSSIDVarName = "scan_ssid";
+    // Broadcom, WAPI
+    /** {@hide} */
+    public static final String wapiAsCertVarName = "wapi_as_cert";
+    /** {@hide} */
+    public static final String wapiUserCertVarName = "wapi_user_cert";
+    /** {@hide} */
+    public static final String wapiCertIndexVarName = "cert_index";
+    /** {@hide} */
+    public static final String wapiPskTypeVarName = "psk_key_type";
+    /** {@hide} */
+    public static final int WAPI_ASCII_PASSWORD = 0;
+    /** {@hide} */
+    public static final int WAPI_HEX_PASSWORD = 1;
+    // Broadcom, WAPI
     /** {@hide} */
     public static final int INVALID_NETWORK_ID = -1;
 
@@ -150,10 +164,21 @@ public class WifiConfiguration implements Parcelable {
           */
         public static final int WPA2_PSK = 4;
 
+        // Broadcom, WAPI
+        /** WAPI pre-shared key (requires {@code preSharedKey} to be specified). */
+        public static final int WAPI_PSK = 5;
+        /** WAPI certificate to be specified. */
+        public static final int WAPI_CERT = 6;
+        // Broadcom, WAPI
+
         public static final String varName = "key_mgmt";
 
         public static final String[] strings = { "NONE", "WPA_PSK", "WPA_EAP", "IEEE8021X",
-                "WPA2_PSK" };
+                "WPA2_PSK"
+        // Broadcom, WAPI
+                , "WAPI_PSK", "WAPI_CERT"
+        // Broadcom, WAPI
+        };
     }
 
     /**
@@ -166,10 +191,18 @@ public class WifiConfiguration implements Parcelable {
         public static final int WPA = 0;
         /** WPA2/IEEE 802.11i */
         public static final int RSN = 1;
+        // Broadcom, WAPI
+        /** WAPI */
+        public static final int WAPI = 2;
+        // Broadcom, WAPI
 
         public static final String varName = "proto";
 
-        public static final String[] strings = { "WPA", "RSN" };
+        public static final String[] strings = { "WPA", "RSN"
+        // Broadcom, WAPI
+                , "WAPI"
+        // Broadcom, WAPI
+        };
     }
 
     /**
@@ -358,6 +391,25 @@ public class WifiConfiguration implements Parcelable {
      */
     public BitSet allowedGroupCiphers;
 
+    // Broadcom, WAPI
+    /**
+     * The location of WAPI AS Cert.
+     */
+    public String wapiAsCert;
+    /**
+     * The location of WAPI User Cert.
+     */
+    public String wapiUserCert;
+    /**
+     * The WAPI Cert Index.
+     */
+    public int wapiCertIndex;
+    /**
+     * The WAPI PSK Key Type.
+     */
+    public int wapiPskType;
+    // Broadcom, WAPI
+
     /**
      * @hide
      */
@@ -414,6 +466,12 @@ public class WifiConfiguration implements Parcelable {
         wepKeys = new String[4];
         for (int i = 0; i < wepKeys.length; i++)
             wepKeys[i] = null;
+        // Broadcom, WAPI
+        wapiAsCert = null;
+        wapiUserCert = null;
+        wapiCertIndex = -1;
+        wapiPskType = -1;
+        // Broadcom, WAPI
         for (EnterpriseField field : enterpriseFields) {
             field.setValue(null);
         }
@@ -495,6 +553,24 @@ public class WifiConfiguration implements Parcelable {
         if (this.preSharedKey != null) {
             sbuf.append('*');
         }
+        // Broadcom, WAPI
+        sbuf.append('\n');
+        if (this.wapiAsCert != null) {
+            sbuf.append(" WapiAsCert: ").append(this.wapiAsCert);
+        }
+        sbuf.append('\n');
+        if (this.wapiUserCert != null) {
+            sbuf.append(" WapiUserCert: ").append(this.wapiUserCert);
+        }
+        sbuf.append('\n');
+        if (this.wapiCertIndex != -1) {
+            sbuf.append(" WapiCertIndex: ").append(this.wapiCertIndex);
+        }
+        sbuf.append('\n');
+        if (this.wapiPskType != -1) {
+            sbuf.append(" WapiPskType: ").append(this.wapiPskType);
+        }
+        // Broadcom, WAPI
 
         for (EnterpriseField field : enterpriseFields) {
             sbuf.append('\n').append(" " + field.varName() + ": ");
@@ -554,6 +630,13 @@ public class WifiConfiguration implements Parcelable {
         } else if (allowedKeyManagement.get(KeyMgmt.IEEE8021X)) {
             return KeyMgmt.IEEE8021X;
         }
+        // Broadcom, WAPI
+        else if (allowedKeyManagement.get(KeyMgmt.WAPI_PSK)) {
+            return KeyMgmt.WAPI_PSK;
+        } else if (allowedKeyManagement.get(KeyMgmt.WAPI_CERT)) {
+            return KeyMgmt.WAPI_CERT;
+        }
+        // Broadcom, WAPI
         return KeyMgmt.NONE;
     }
 
@@ -571,6 +654,12 @@ public class WifiConfiguration implements Parcelable {
             SSID = source.SSID;
             BSSID = source.BSSID;
             preSharedKey = source.preSharedKey;
+            // Broadcom, WAPI
+            wapiAsCert = null;
+            wapiUserCert = null;
+            wapiCertIndex = -1;
+            wapiPskType = -1;
+            // Broadcom, WAPI
 
             wepKeys = new String[4];
             for (int i = 0; i < wepKeys.length; i++)
@@ -613,6 +702,15 @@ public class WifiConfiguration implements Parcelable {
         writeBitSet(dest, allowedAuthAlgorithms);
         writeBitSet(dest, allowedPairwiseCiphers);
         writeBitSet(dest, allowedGroupCiphers);
+        // Broadcom, WAPI
+        if (allowedKeyManagement.get(KeyMgmt.WAPI_PSK)) {
+            dest.writeInt(wapiPskType);
+        } else if (allowedKeyManagement.get(KeyMgmt.WAPI_CERT)) {
+            dest.writeString(wapiAsCert);
+            dest.writeString(wapiUserCert);
+            dest.writeInt(wapiCertIndex);
+        }
+        // Broadcom, WAPI
 
         for (EnterpriseField field : enterpriseFields) {
             dest.writeString(field.value());
@@ -643,6 +741,15 @@ public class WifiConfiguration implements Parcelable {
                 config.allowedAuthAlgorithms  = readBitSet(in);
                 config.allowedPairwiseCiphers = readBitSet(in);
                 config.allowedGroupCiphers    = readBitSet(in);
+                // Broadcom, WAPI
+                if (config.allowedKeyManagement.get(KeyMgmt.WAPI_PSK)) {
+                    config.wapiPskType = in.readInt();
+                } else if (config.allowedKeyManagement.get(KeyMgmt.WAPI_CERT)) {
+                    config.wapiAsCert = in.readString();
+                    config.wapiUserCert = in.readString();
+                    config.wapiCertIndex = in.readInt();
+                }
+                // Broadcom, WAPI
 
                 for (EnterpriseField field : config.enterpriseFields) {
                     field.setValue(in.readString());

@@ -1892,6 +1892,10 @@ public class WifiStateMachine extends StateMachine {
                 case WifiMonitor.SUPPLICANT_STATE_CHANGE_EVENT:
                 case WifiMonitor.AUTHENTICATION_FAILURE_EVENT:
                 case WifiMonitor.WPS_OVERLAP_EVENT:
+                // Broadcom, WAPI
+                case WifiMonitor.WAPI_AUTHENTICATION_FAILURE_EVENT:
+                case WifiMonitor.WAPI_CERTIFICATION_FAILURE_EVENT:
+                // Broadcom, WAPI
                 case CMD_BLACKLIST_NETWORK:
                 case CMD_CLEAR_BLACKLIST:
                 case CMD_SET_SCAN_MODE:
@@ -1915,6 +1919,18 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_SET_SUSPEND_OPTIMIZATIONS:
                     mSuspendWakeLock.release();
                     break;
+		case WifiMonitor.WAPI_CERTIFICATION_LOST_EVENT:
+		{
+			Intent intent;
+			Log.e(TAG, "Handling WAPI_EVENT, msg [" + message.what + "]");
+			String wapiEventName = "wapi_string";
+			intent = new Intent(WifiManager.SUPPLICANT_WAPI_EVENT);
+
+			intent.putExtra(wapiEventName, WifiManager.WAPI_EVENT_CERT_LOST_CODE);
+			mContext.sendBroadcast(intent);
+			break;
+		}
+ //Broadcom, WAPI
                 case WifiMonitor.DRIVER_HUNG_EVENT:
                     setWifiEnabled(false);
                     setWifiEnabled(true);
@@ -2595,6 +2611,10 @@ public class WifiStateMachine extends StateMachine {
                 case WifiMonitor.NETWORK_DISCONNECTION_EVENT:
                 case WifiMonitor.AUTHENTICATION_FAILURE_EVENT:
                 case WifiMonitor.WPS_OVERLAP_EVENT:
+                // Broadcom, WAPI
+                case WifiMonitor.WAPI_AUTHENTICATION_FAILURE_EVENT:
+                case WifiMonitor.WAPI_CERTIFICATION_FAILURE_EVENT:
+                // Broadcom, WAPI
                 case CMD_SET_SCAN_TYPE:
                 case CMD_SET_COUNTRY_CODE:
                 case CMD_SET_FREQUENCY_BAND:
@@ -2922,6 +2942,31 @@ public class WifiStateMachine extends StateMachine {
             if (DBG) log(getName() + message.toString() + "\n");
             StateChangeResult stateChangeResult;
             switch(message.what) {
+                // Broadcom, WAPI
+                case WifiMonitor.WAPI_AUTHENTICATION_FAILURE_EVENT:
+                {
+                    Intent intent;
+                    Log.v(TAG, "Handling WAPI_EVENT, msg [" + message.what + "]");
+                    String wapiEventName = "wapi_string";
+                    intent = new Intent(WifiManager.SUPPLICANT_WAPI_EVENT);
+
+                    intent.putExtra(wapiEventName, WifiManager.WAPI_EVENT_AUTH_FAIL_CODE);
+                    mContext.sendBroadcast(intent);
+                    mSupplicantStateTracker.sendMessage(WifiMonitor.WAPI_AUTHENTICATION_FAILURE_EVENT);
+                    break;
+                }
+                case WifiMonitor.WAPI_CERTIFICATION_FAILURE_EVENT:
+                {
+                    Intent intent;
+                    Log.v(TAG, "Handling WAPI_EVENT, msg [" + message.what + "]");
+                    String wapiEventName = "wapi_string";
+                    intent = new Intent(WifiManager.SUPPLICANT_WAPI_EVENT);
+
+                    intent.putExtra(wapiEventName, WifiManager.WAPI_EVENT_CERT_FAIL_CODE);
+                    mContext.sendBroadcast(intent);
+                    break;
+                }
+                // Broadcom, WAPI
                 case WifiMonitor.AUTHENTICATION_FAILURE_EVENT:
                     mSupplicantStateTracker.sendMessage(WifiMonitor.AUTHENTICATION_FAILURE_EVENT);
                     break;
