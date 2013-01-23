@@ -28,25 +28,6 @@ framework_res_source_path := APPS/framework-res_intermediates/src
 
 # the library
 # ============================================================
-# These will be included in framework-opengles to avoid issues with the limit
-# on the number of classes/dex
-PRE_FRAMEWORKS_SUBDIRS := \
-        opengl/java/javax/microedition/khronos/opengles
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := $(call find-other-java-files,$(PRE_FRAMEWORKS_SUBDIRS))
-LOCAL_NO_STANDARD_LIBRARIES := true
-LOCAL_JAVA_LIBRARIES := core
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := framework-opengles
-LOCAL_MODULE_CLASS := JAVA_LIBRARIES
-
-LOCAL_NO_EMMA_INSTRUMENT := true
-LOCAL_NO_EMMA_COMPILE := true
-
-LOCAL_DX_FLAGS := --core-library
-
-include $(BUILD_JAVA_LIBRARY)
-
 #
 # These will be included in framework2 to avoid issues with the limit
 # on the number of classes/dex
@@ -75,11 +56,8 @@ SECONDARY_SRC_FILES += \
        telephony/java/com/android/internal/telephony/gsm/TDPhone.java \
        telephony/java/com/android/internal/telephony/SprdRIL.java
 
-PRE_SRC_FILES := $(call find-other-java-files,$(PRE_FRAMEWORKS_SUBDIRS))
 
 LOCAL_SRC_FILES := $(filter-out $(SECONDARY_SRC_FILES),$(LOCAL_SRC_FILES))
-LOCAL_SRC_FILES := $(filter-out $(PRE_SRC_FILES),$(LOCAL_SRC_FILES))
-
 # EventLogTags files.
 LOCAL_SRC_FILES += \
        core/java/android/content/EventLogTags.logtags \
@@ -273,7 +251,7 @@ LOCAL_INTERMEDIATE_SOURCES := \
 			$(framework_res_source_path)/com/android/internal/R.java
 
 LOCAL_NO_STANDARD_LIBRARIES := true
-LOCAL_JAVA_LIBRARIES := bouncycastle core core-junit ext framework-opengles
+LOCAL_JAVA_LIBRARIES := bouncycastle core core-junit ext
 
 LOCAL_MODULE := framework
 LOCAL_MODULE_CLASS := JAVA_LIBRARIES
