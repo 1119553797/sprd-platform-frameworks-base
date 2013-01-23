@@ -103,7 +103,7 @@ public class UsbDeviceManager {
     // Delay for debouncing USB disconnects.
     // We often get rapid connect/disconnect events when enabling USB functions,
     // which need debouncing.
-    private static final int UPDATE_DELAY = 1000;
+    private static final int UPDATE_DELAY = 1500;
 
     private static final String BOOT_MODE_PROPERTY = "ro.bootmode";
 
