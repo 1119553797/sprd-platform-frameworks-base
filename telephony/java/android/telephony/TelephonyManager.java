@@ -1315,6 +1315,8 @@ public class TelephonyManager {
             }else if ((modemValue.equals("sc6810_sp6810"))
                 || (modemValue.equals("sc6825_modem"))) {
                 return MODEM_TYPE_GSM;
+            }else if (modemValue.equals("sc7702_modem")) {
+                return MODEM_TYPE_WCDMA;
             }
         }
         Log.d(TAG, "can not get the baseband version");
