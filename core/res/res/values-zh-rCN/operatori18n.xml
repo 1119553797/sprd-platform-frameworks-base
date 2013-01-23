@@ -9,5 +9,13 @@
         <item>CHN-UNICOM=中国联通</item>
         <item>UNICOM=中国联通</item>
         <item>China Unicom=中国联通</item>
+        <item>74401=HPGYSA</item>
+        <item>74402=Proth</item>
+        <item>74404=Telecel</item>
+        <item>74405=Personal</item>
+        <item>72404=TIM</item>
+        <item>72405=Claro</item>
+        <item>72406=VIVO</item>
+        <item>72416=BrTCel</item>
     </string-array>
 </resources>

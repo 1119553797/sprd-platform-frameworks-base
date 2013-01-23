@@ -3368,10 +3368,22 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
         ret = new ArrayList<OperatorInfo>(strings.length / 5);
 
         for (int i = 0 ; i < strings.length ; i += 5) {
+            if( (strings[i+0] == null) && ( strings[i+1] == null ) ) {
+                // both OperatorAlphaLong and OperatorAlphaShort are null,
+                // so get both of them by numeric from numeric_operator.xml
+                strings[i+0] = getCarrierNameByNumeric(strings[i+2]);
+                strings[i+1] = getCarrierNameByNumeric(strings[i+2]);
+            }else if(strings[i+0] == null) {
+                //use OperatorAlphaShort as OperatorAlphaLong
+                strings[i+0] = strings[i+1];
+            }else if(strings[i+1] == null) {
+                //use OperatorAlphaLong as OperatorAlphaShort
+                strings[i+1] = strings[i+0];
+            }
             ret.add (
                 new OperatorInfo(
-                    getCarrierNumericToChinese(strings[i+2],strings[i+0]),
-                    strings[i+1],
+                    changeOperator(strings[i+0]),
+                    changeOperator(strings[i+1]),
                     strings[i+2],
                     strings[i+3],
                     strings[i+4]));
