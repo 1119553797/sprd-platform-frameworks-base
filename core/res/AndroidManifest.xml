@@ -1741,16 +1741,16 @@
             android:permission="android.permission.SHUTDOWN"
             android:excludeFromRecents="true">
             <intent-filter>
-                <action android:name="android.intent.action.ACTION_REQUEST_SHUTDOWN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name="com.android.server.ShutdownFullscreenActivity"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="orientation|keyboardHidden|screenSize" android:windowSoftInputMode="stateHidden"
             android:permission="android.permission.SHUTDOWN" android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_REQUEST_SHUTDOWN_FULLSCREEN" />
+                <action android:name="android.intent.action.ACTION_REQUEST_SHUTDOWN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
