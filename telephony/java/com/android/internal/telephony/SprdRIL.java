@@ -430,6 +430,7 @@ public final class SprdRIL extends RIL {
                 case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED:ret =  responseVoid(p); break;
                 case RIL_UNSOL_ON_STIN:ret = responseInts(p); break;
                 case RIL_UNSOL_SIM_SMS_READY:ret = responseVoid(p); break;
+                case RIL_UNSOL_STK_CALL_SETUP: ret = responseString(p); break;
                 default:
                     p.setDataPosition(position);
                     super.processUnsolicited(p);
@@ -640,6 +641,15 @@ public final class SprdRIL extends RIL {
                 if (mSimSmsReadyRegistrant != null) {
                     mSimSmsReadyRegistrant.notifyRegistrant(
                             new AsyncResult (null, ret, null));
+                }
+                break;
+
+            case RIL_UNSOL_STK_CALL_SETUP:
+                if (RILJ_LOGD) unsljLogRet(response, ret);
+
+                if (mCatCallSetUpRegistrant != null) {
+                    mCatCallSetUpRegistrant.notifyRegistrant(
+                                        new AsyncResult (null, ret, null));
                 }
                 break;
         }
