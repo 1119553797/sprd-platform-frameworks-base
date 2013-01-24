@@ -260,6 +260,16 @@ public class CallLog {
          * @hide
          */
         public static final String VIDEO_CALL_FLAG = "video_Call_Flag";
+        
+    	//add for new ui
+    	/**
+
+             * The cached formatted phone number.
+             * This value is not guaranteed to be present.
+             * <P>Type: TEXT</P>
+             * @hide
+             */
+        public static final String ICC_ID = "icc_id";
 
         /**
          * Adds a call to the call log.
@@ -463,6 +473,110 @@ public class CallLog {
             return result;
         }
         // pengj 2012-02-23 add for call log view sim card info end
+        
+        //add for new ui start
+        /**
+         * Adds a call to the call log.
+         *
+         * @param ci the CallerInfo object to get the target contact from.  Can be null
+         * if the contact is unknown.
+         * @param context the context used to get the ContentResolver
+         * @param number the phone number to be added to the calls db
+         * @param presentation the number presenting rules set by the network for
+         *        "allowed", "payphone", "restricted" or "unknown"
+         * @param callType enumerated values for "incoming", "outgoing", or "missed"
+         * @param start time stamp for the call in milliseconds
+         * @param duration call duration in seconds
+         * @param phoneId PhoneId
+         * @param videoCallFlag video call flag
+         * @param icc_id phone icc id 
+         *
+         * {@hide}
+         */
+        public static Uri addCall(CallerInfo ci, Context context, String number,
+        		int presentation, int callType, long start, int duration, int phoneId, int videoCallFlag, String iccId) {
+        	final ContentResolver resolver = context.getContentResolver();
+
+        	// If this is a private number then set the number to Private, otherwise check
+        	// if the number field is empty and set the number to Unavailable
+        	if (presentation == Connection.PRESENTATION_RESTRICTED) {
+        		number = CallerInfo.PRIVATE_NUMBER;
+        		if (ci != null) ci.name = "";
+        	} else if (presentation == Connection.PRESENTATION_PAYPHONE) {
+        		number = CallerInfo.PAYPHONE_NUMBER;
+        		if (ci != null) ci.name = "";
+        	} else if (TextUtils.isEmpty(number)
+        			|| presentation == Connection.PRESENTATION_UNKNOWN) {
+        		number = CallerInfo.UNKNOWN_NUMBER;
+        		if (ci != null) ci.name = "";
+        	}
+
+        	ContentValues values = new ContentValues(5);
+
+        	values.put(NUMBER, number);
+        	values.put(TYPE, Integer.valueOf(callType));
+        	values.put(DATE, Long.valueOf(start));
+        	values.put(DURATION, Long.valueOf(duration));
+        	values.put(NEW, Integer.valueOf(1));
+        	values.put(PHONE_ID, Integer.valueOf(phoneId));
+        	values.put(VIDEO_CALL_FLAG, Integer.valueOf(videoCallFlag));
+        	values.put(ICC_ID, iccId);
+        	if (callType == MISSED_TYPE) {
+        		values.put(IS_READ, Integer.valueOf(0));
+        	}
+        	if (ci != null) {
+        		values.put(CACHED_NAME, ci.name);
+        		values.put(CACHED_NUMBER_TYPE, ci.numberType);
+        		values.put(CACHED_NUMBER_LABEL, ci.numberLabel);
+        	}
+
+        	if ((ci != null) && (ci.person_id > 0)) {
+        		// Update usage information for the number associated with the contact ID.
+        		// We need to use both the number and the ID for obtaining a data ID since other
+        		// contacts may have the same number.
+
+        		final Cursor cursor;
+
+        		// We should prefer normalized one (probably coming from
+        		// Phone.NORMALIZED_NUMBER column) first. If it isn't available try others.
+        		if (ci.normalizedNumber != null) {
+        			final String normalizedPhoneNumber = ci.normalizedNumber;
+        			cursor = resolver.query(Phone.CONTENT_URI,
+        					new String[] { Phone._ID },
+        					Phone.CONTACT_ID + " =? AND " + Phone.NORMALIZED_NUMBER + " =?",
+        					new String[] { String.valueOf(ci.person_id), normalizedPhoneNumber},
+        					null);
+        		} else {
+        			final String phoneNumber = ci.phoneNumber != null ? ci.phoneNumber : number;
+        			cursor = resolver.query(Phone.CONTENT_URI,
+        					new String[] { Phone._ID },
+        					Phone.CONTACT_ID + " =? AND " + Phone.NUMBER + " =?",
+        					new String[] { String.valueOf(ci.person_id), phoneNumber},
+        					null);
+        		}
+
+        		if (cursor != null) {
+        			try {
+        				if (cursor.getCount() > 0 && cursor.moveToFirst()) {
+        					final Uri feedbackUri = DataUsageFeedback.FEEDBACK_URI.buildUpon()
+        							.appendPath(cursor.getString(0))
+        							.appendQueryParameter(DataUsageFeedback.USAGE_TYPE,
+        									DataUsageFeedback.USAGE_TYPE_CALL)
+        									.build();
+        					resolver.update(feedbackUri, new ContentValues(), null, null);
+        				}
+        			} finally {
+        				cursor.close();
+        			}
+        		}
+        	}
+
+        	Uri result = resolver.insert(CONTENT_URI, values);
+
+        	removeExpiredEntries(context);
+
+        	return result;
+        }
 
         /**
          * Query the call log database for the last dialed number.
