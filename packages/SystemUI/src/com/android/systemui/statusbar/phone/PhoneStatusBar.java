@@ -184,7 +184,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     private TextView mCarrierLabel1;
     private boolean mCarrierLabelVisible = false;
     private int mCarrierLabelHeight;
-    private TextView mEmergencyCallLabel;
+    //private TextView mEmergencyCallLabel;
 
     // drag bar
     CloseDragHandle mCloseView;
@@ -452,16 +452,16 @@ public class PhoneStatusBar extends BaseStatusBar {
         mNetworkController.addSignalCluster(signalCluster);
         signalCluster.setNetworkController(mNetworkController);
 
-        mEmergencyCallLabel = (TextView)mStatusBarWindow.findViewById(R.id.emergency_calls_only);
-        if (mEmergencyCallLabel != null) {
-            mNetworkController.addEmergencyLabelView(mEmergencyCallLabel);
-            mEmergencyCallLabel.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                @Override
-                public void onLayoutChange(View v, int left, int top, int right, int bottom,
-                        int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    updateCarrierLabelVisibility(false);
-                }});
-        }
+//        mEmergencyCallLabel = (TextView)mStatusBarWindow.findViewById(R.id.emergency_calls_only);
+//        if (mEmergencyCallLabel != null) {
+//            mNetworkController.addEmergencyLabelView(mEmergencyCallLabel);
+//            mEmergencyCallLabel.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//                @Override
+//                public void onLayoutChange(View v, int left, int top, int right, int bottom,
+//                        int oldLeft, int oldTop, int oldRight, int oldBottom) {
+//                    updateCarrierLabelVisibility(false);
+//                }});
+//        }
 
         if (SHOW_CARRIER_LABEL) {
             mCarrierLabel = (TextView)mStatusBarWindow.findViewById(R.id.carrier_label);
