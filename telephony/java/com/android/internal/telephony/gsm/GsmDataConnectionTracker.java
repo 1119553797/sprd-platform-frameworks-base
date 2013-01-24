@@ -387,6 +387,12 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             case ConnectivityManager.TYPE_MOBILE_CBS:
                 apnContext = addApnContext(Phone.APN_TYPE_CBS);
                 break;
+            case ConnectivityManager.TYPE_MOBILE_DM:
+                apnContext = addApnContext(Phone.APN_TYPE_DM);
+                break;
+            case ConnectivityManager.TYPE_MOBILE_WAP:
+                apnContext = addApnContext(Phone.APN_TYPE_WAP);
+                break;
             default:
                 // skip unknown types
                 continue;
