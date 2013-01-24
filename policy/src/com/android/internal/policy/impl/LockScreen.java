@@ -326,7 +326,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
                 case com.android.internal.R.drawable.ic_lockscreen_camera:
                     launchActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
-                    mCallback.pokeWakelock();
+                    //modify for bug 113544 Unlock cannot directly camera.
+                    // mCallback.pokeWakelock();
+                    mCallback.goToUnlockScreen();
                     break;
 
                 case com.android.internal.R.drawable.ic_lockscreen_silent:
