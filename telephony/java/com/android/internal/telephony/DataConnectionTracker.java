@@ -154,7 +154,9 @@ public abstract class DataConnectionTracker extends Handler {
     protected static final int APN_IMS_ID = 5;
     protected static final int APN_FOTA_ID = 6;
     protected static final int APN_CBS_ID = 7;
-    protected static final int APN_NUM_TYPES = 8;
+    protected static final int APN_DM_ID = 8;
+    protected static final int APN_WAP_ID = 9;
+    protected static final int APN_NUM_TYPES = 10;
 
     public static final int DISABLED = 0;
     public static final int ENABLED = 1;

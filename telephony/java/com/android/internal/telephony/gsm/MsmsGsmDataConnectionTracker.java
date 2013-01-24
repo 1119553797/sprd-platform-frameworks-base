@@ -30,6 +30,7 @@ import android.os.ServiceManager;
 import android.provider.Settings;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.telephony.ApnContext;
@@ -246,5 +247,26 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
 
     public boolean isAutoAttachOnCreation() {
         return mAutoAttachOnCreation;
+    }
+
+    protected int apnTypeToId(String type) {
+        if (TextUtils.equals(type, Phone.APN_TYPE_DM)) {
+            return APN_DM_ID;
+        } else if (TextUtils.equals(type, Phone.APN_TYPE_WAP)) {
+            return APN_WAP_ID;
+        } else {
+            return super.apnTypeToId(type);
+        }
+    }
+
+    protected String apnIdToType(int id) {
+        switch (id) {
+        case APN_DM_ID:
+            return Phone.APN_TYPE_DM;
+        case APN_WAP_ID:
+            return Phone.APN_TYPE_WAP;
+        default:
+            return super.apnIdToType(id);
+        }
     }
 }
