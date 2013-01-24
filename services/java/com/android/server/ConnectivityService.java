@@ -1047,10 +1047,6 @@ private NetworkStateTracker makeWimaxStateTracker() {
             log("startUsingNetworkFeature for net " + networkType + ": " + feature + ", uid="
                     + Binder.getCallingUid());
         }
-        if (!mFeatureManager.tryStartUsingFeature(networkType, feature, binder, getCallingPid(),
-                getCallingUid(), getPhoneIdByFeature(feature), isMainSimFeature(feature))) {
-            return Phone.APN_REQUEST_STARTED;
-        }
         enforceChangePermission();
         try {
             if (!ConnectivityManager.isNetworkTypeValid(networkType) ||
@@ -1103,6 +1099,11 @@ private NetworkStateTracker makeWimaxStateTracker() {
                                         ni.getTypeName());
                             }
                         }
+                    }
+
+                    if (!mFeatureManager.tryStartUsingFeature(networkType, feature, binder, getCallingPid(),
+                            getCallingUid(), getPhoneIdByFeature(feature), isMainSimFeature(feature))) {
+                        return Phone.APN_REQUEST_STARTED;
                     }
 
                     int restoreTimer = getRestoreDefaultNetworkDelay(usedNetworkType);
