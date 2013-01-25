@@ -71,6 +71,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
         if (sTracker[phoneId] == null) {
         	sTracker[phoneId] = new MsmsGsmDataConnectionTracker(phone);
         }
+        sActivePhoneId = TelephonyManager.getDefaultDataPhoneId(phone.getContext());
         return sTracker[phoneId];
     }
 
