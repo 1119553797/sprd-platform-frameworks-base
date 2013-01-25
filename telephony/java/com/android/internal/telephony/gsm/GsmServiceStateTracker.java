@@ -1540,24 +1540,30 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
             String[] nitzSubs = nitz.split("[/:,+-]");
 
-            int year = 2000 + Integer.parseInt(nitzSubs[0]);
-            c.set(Calendar.YEAR, year);
+            try {
+                int year = 2000 + Integer.parseInt(nitzSubs[0]);
+                c.set(Calendar.YEAR, year);
 
-            // month is 0 based!
-            int month = Integer.parseInt(nitzSubs[1]) - 1;
-            c.set(Calendar.MONTH, month);
+                // month is 0 based!
+                int month = Integer.parseInt(nitzSubs[1]) - 1;
+                c.set(Calendar.MONTH, month);
 
-            int date = Integer.parseInt(nitzSubs[2]);
-            c.set(Calendar.DATE, date);
+                int date = Integer.parseInt(nitzSubs[2]);
+                c.set(Calendar.DATE, date);
 
-            int hour = Integer.parseInt(nitzSubs[3]);
-            c.set(Calendar.HOUR, hour);
+                int hour = Integer.parseInt(nitzSubs[3]);
+                c.set(Calendar.HOUR, hour);
 
-            int minute = Integer.parseInt(nitzSubs[4]);
-            c.set(Calendar.MINUTE, minute);
+                int minute = Integer.parseInt(nitzSubs[4]);
+                c.set(Calendar.MINUTE, minute);
 
-            int second = Integer.parseInt(nitzSubs[5]);
-            c.set(Calendar.SECOND, second);
+                int second = Integer.parseInt(nitzSubs[5]);
+                c.set(Calendar.SECOND, second);
+            } catch (NumberFormatException e) {
+                log("NITZ: time format is incorrect");
+                // set nitzReceiveTime to an invalid value to bypass the time update
+                nitzReceiveTime = SystemClock.elapsedRealtime() + 60 * 1000;
+            }
 
             boolean sign = (nitz.indexOf('-') == -1);
 
