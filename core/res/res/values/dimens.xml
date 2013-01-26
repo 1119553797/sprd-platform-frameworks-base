@@ -59,6 +59,9 @@
     <!-- Min width for a tablet device -->
     <dimen name="min_xlarge_screen_width">800dp</dimen>
 
+    <!-- Padding of Action menu divider -->
+    <dimen name="action_menu_divider_padding">12dip</dimen>
+
     <!-- Default height of a key in the password keyboard for alpha (used by keyguard) -->
     <dimen name="password_keyboard_key_height_alpha">56dip</dimen>
     <!-- Default height of a key in the password keyboard for numeric (used by keyguard) -->
@@ -237,4 +240,14 @@
     <dimen name="notification_title_text_size">18dp</dimen>
     <!-- Size of smaller notification text (see TextAppearance.StatusBar.EventContent.Line2, Info, Time) -->
     <dimen name="notification_subtext_size">12dp</dimen>
+
+    <!-- Values of dialog padding for SprdTheme -->
+    <dimen name="dialog_button_bar_padding_top">0dip</dimen>
+    <dimen name="dialog_button_bar_padding_left">0dip</dimen>
+    <dimen name="dialog_button_bar_padding_right">0dip</dimen>
+    <dimen name="dialog_button_bar_padding_bottom">0dip</dimen>
+    <dimen name="dialog_button_bar_divider_padding">0dip</dimen>
+
+    <dimen name="dialog_button_padding_left">4dip</dimen>
+    <dimen name="dialog_button_padding_right">4dip</dimen>
 </resources>

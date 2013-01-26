@@ -1040,8 +1040,14 @@ public class SearchView extends LinearLayout implements CollapsibleActionView {
 
     private int getSearchIconId() {
         TypedValue outValue = new TypedValue();
-        getContext().getTheme().resolveAttribute(com.android.internal.R.attr.searchViewSearchIcon,
+        try {
+            getContext().getTheme().resolveAttribute(com.android.internal.R.attr.searchViewSearchIconWhenExpanded,
                 outValue, true);
+        } catch (Exception resourceNotFound) {
+            getContext().getTheme().resolveAttribute(com.android.internal.R.attr.searchViewSearchIcon,
+                outValue, true);
+            android.util.Log.e("SearchView","Maybe not find the resource in current dpi : "+resourceNotFound);
+        }
         return outValue.resourceId;
     }
 

@@ -1345,12 +1345,14 @@ please see styles_device_defaults.xml.
 
     <style name="TextAppearance.Holo.Widget.ActionBar.Title"
            parent="TextAppearance.Holo.Medium">
+        <item name="android:textColor">?android:attr/actionBarTextColorPrimary</item>
         <item name="android:textSize">@android:dimen/action_bar_title_text_size</item>
     </style>
 
     <style name="TextAppearance.Holo.Widget.ActionBar.Subtitle"
            parent="TextAppearance.Holo.Small">
         <item name="android:textSize">@android:dimen/action_bar_subtitle_text_size</item>
+        <item name="android:textColor">?android:attr/actionBarTextColorSecondary</item>
     </style>
 
     <style name="TextAppearance.Holo.Widget.ActionBar.Title.Inverse"
@@ -1537,6 +1539,12 @@ please see styles_device_defaults.xml.
         <item name="android:paddingRight">4dip</item>
     </style>
 
+    <style name="Widget.Holo.Button.Dialog">
+        <item name="android:background">?android:attr/dialogButtonBackground</item>
+        <item name="android:paddingLeft">@dimen/dialog_button_padding_left</item>
+        <item name="android:paddingRight">@dimen/dialog_button_padding_right</item>
+    </style>
+
     <style name="Widget.Holo.Button.Borderless.Small">
         <item name="android:textSize">14sp</item>
     </style>
@@ -1573,11 +1581,27 @@ please see styles_device_defaults.xml.
         <item name="background">@null</item>
     </style>
 
+    <style name="Holo.Dialog.ButtonBar" parent="ButtonBar">
+        <item name="android:paddingTop">@dimen/dialog_button_bar_padding_top</item>
+        <item name="android:paddingLeft">@dimen/dialog_button_bar_padding_left</item>
+        <item name="android:paddingRight">@dimen/dialog_button_bar_padding_right</item>
+        <item name="android:paddingBottom">@dimen/dialog_button_bar_padding_bottom</item>
+        <item name="divider">?android:attr/dialogButtonBarDividerVertical</item>
+        <item name="showDividers">middle</item>
+        <item name="dividerPadding">@dimen/dialog_button_bar_divider_padding</item>
+        <item name="background">@null</item>
+    </style>
+
     <style name="Holo.SegmentedButton" parent="SegmentedButton">
         <item name="android:background">@android:drawable/btn_group_holo_dark</item>
     </style>
 
     <style name="Holo.ButtonBar.AlertDialog">
+        <item name="android:background">@null</item>
+        <item name="android:dividerPadding">0dp</item>
+    </style>
+
+    <style name="Holo.Dialog.ButtonBar.AlertDialog">
         <item name="android:background">@null</item>
         <item name="android:dividerPadding">0dp</item>
     </style>
@@ -1974,6 +1998,12 @@ please see styles_device_defaults.xml.
         <item name="android:paddingRight">4dip</item>
     </style>
 
+    <style name="Widget.Holo.Light.Button.Dialog">
+        <item name="android:background">?android:attr/dialogButtonBackground</item>
+        <item name="android:paddingLeft">@dimen/dialog_button_padding_left</item>
+        <item name="android:paddingRight">@dimen/dialog_button_padding_right</item>
+    </style>
+
     <style name="Widget.Holo.Light.Button.Borderless.Small">
         <item name="android:textSize">14sp</item>
     </style>
@@ -2000,8 +2030,16 @@ please see styles_device_defaults.xml.
 
     <style name="Holo.Light.ButtonBar" parent="Holo.ButtonBar">
     </style>
+    
+    <style name="Holo.Light.Dialog.ButtonBar" parent="Holo.Dialog.ButtonBar">
+    </style>
 
     <style name="Holo.Light.ButtonBar.AlertDialog">
+        <item name="android:background">@null</item>
+        <item name="android:dividerPadding">0dp</item>
+    </style>
+
+    <style name="Holo.Light.Dialog.ButtonBar.AlertDialog">
         <item name="android:background">@null</item>
         <item name="android:dividerPadding">0dp</item>
     </style>
@@ -2297,7 +2335,7 @@ please see styles_device_defaults.xml.
         <item name="android:background">@android:drawable/ab_solid_light_holo</item>
         <item name="android:backgroundStacked">@android:drawable/ab_stacked_solid_light_holo</item>
         <item name="android:backgroundSplit">@android:drawable/ab_bottom_solid_light_holo</item>
-        <item name="android:divider">?android:attr/dividerVertical</item>
+        <item name="android:divider">@android:drawable/ab_menu_divider_holo_light</item>
         <item name="android:progressBarStyle">@android:style/Widget.Holo.Light.ProgressBar.Horizontal</item>
         <item name="android:indeterminateProgressStyle">@android:style/Widget.Holo.Light.ProgressBar</item>
         <item name="android:progressBarPadding">32dip</item>
@@ -2310,7 +2348,7 @@ please see styles_device_defaults.xml.
         <item name="android:background">@android:drawable/ab_solid_dark_holo</item>
         <item name="android:backgroundStacked">@android:drawable/ab_stacked_solid_dark_holo</item>
         <item name="android:backgroundSplit">@android:drawable/ab_bottom_solid_inverse_holo</item>
-        <item name="android:divider">@android:drawable/list_divider_holo_dark</item>
+        <item name="android:divider">@android:drawable/ab_menu_divider_holo_light</item>
         <item name="android:progressBarStyle">@android:style/Widget.Holo.ProgressBar.Horizontal</item>
         <item name="android:indeterminateProgressStyle">@android:style/Widget.Holo.ProgressBar</item>
         <item name="android:progressBarPadding">32dip</item>

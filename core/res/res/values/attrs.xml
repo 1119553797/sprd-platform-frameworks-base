@@ -252,6 +252,15 @@
         <attr name="listDivider" format="reference" />
         <!-- The list divider used in alert dialogs. -->
         <attr name="listDividerAlertDialog" format="reference" />
+        <!-- The divider of dialog. -->
+        <attr name="dialogButtonBarDividerVertical" format="reference|color"/>
+        <!-- The Button Style of dialog. -->
+        <attr name="dialogButtonBackground" format="reference|color" />
+        <!-- The style of dialog button. -->
+        <attr name="dialogButtonBarButtonStyle" format="reference" />
+        <!-- Style for dialog button bars. -->
+        <attr name="dialogButtonBarStyle" format="reference" />
+
         <!-- TextView style for list separators. -->
         <attr name="listSeparatorTextViewStyle" format="reference" />
         <!-- The preferred left padding for an expandable list item (for child-specific layouts,
@@ -432,9 +441,12 @@
         <!-- Alert Dialog styles -->
         <!-- ============ -->
         <eat-comment />
+        <attr name="alertDialogTitleTopDivider" format="reference|color"/>
+        <attr name="dialogTitleDivider" format="reference|color"/>
         <attr name="alertDialogStyle" format="reference" />
         <attr name="alertDialogButtonGroupStyle" format="reference" />
         <attr name="alertDialogCenterButtons" format="boolean" />
+        <attr name="dialogButtonBarDivider" format="reference" />
 
         <!-- ============== -->
         <!-- Image elements -->
@@ -663,7 +675,10 @@
         <attr name="actionMenuTextAppearance" format="reference" />
         <!-- Color for text that appears within action menu items. -->
         <attr name="actionMenuTextColor" format="color|reference" />
-
+        <!-- Color for text that appears on action bar. -->
+        <attr name="actionBarTextColorPrimary" format="reference|color" />
+        <!-- Color for text that appears on action bar subtitle. -->
+        <attr name="actionBarTextColorSecondary" format="reference|color" />
         <!-- =================== -->
         <!-- Action mode styles  -->
         <!-- =================== -->
@@ -805,6 +820,7 @@
         <attr name="searchViewGoIcon" format="reference" />
         <!-- SearchView Search icon -->
         <attr name="searchViewSearchIcon" format="reference" />
+        <attr name="searchViewSearchIconWhenExpanded" format="reference" />
         <!-- SearchView Voice button icon -->
         <attr name="searchViewVoiceIcon" format="reference" />
         <!-- SearchView query refinement icon -->

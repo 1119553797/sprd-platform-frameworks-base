@@ -116,6 +116,7 @@ please see themes_device_defaults.xml.
         <item name="buttonStyleToggle">@android:style/Widget.Button.Toggle</item>
 
         <item name="selectableItemBackground">@android:drawable/item_background</item>
+        <item name="dialogButtonBackground">@android:drawable/btn_default</item>
         <item name="borderlessButtonStyle">?android:attr/buttonStyle</item>
         <item name="homeAsUpIndicator">@android:drawable/ic_ab_back_holo_dark</item>
 
@@ -194,7 +195,9 @@ please see themes_device_defaults.xml.
         <item name="alertDialogIcon">@android:drawable/ic_dialog_alert</item>
 
         <item name="toastFrameBackground">@android:drawable/toast_frame</item>
-        
+        <item name="alertDialogTitleTopDivider">@null</item>
+        <item name="dialogTitleDivider">@null</item>
+
         <!-- Panel attributes -->
         <item name="panelBackground">@android:drawable/menu_background</item>
         <item name="panelFullBackground">@android:drawable/menu_background_fill_parent_width</item>
@@ -335,9 +338,13 @@ please see themes_device_defaults.xml.
         <item name="actionBarItemBackground">?android:attr/selectableItemBackground</item>
 
         <item name="dividerVertical">@drawable/divider_vertical_dark</item>
+        <item name="dialogButtonBarDividerVertical">@drawable/divider_vertical_dark</item>
         <item name="dividerHorizontal">@drawable/divider_vertical_dark</item>
         <item name="buttonBarStyle">@android:style/ButtonBar</item>
+        <item name="dialogButtonBarStyle">@android:style/ButtonBar</item>
         <item name="buttonBarButtonStyle">?android:attr/buttonStyle</item>
+        <item name="dialogButtonBarButtonStyle">?android:attr/buttonStyle</item>
+
         <item name="segmentedButtonStyle">@android:style/SegmentedButton</item>
 
         <!-- SearchView attributes -->
@@ -346,6 +353,7 @@ please see themes_device_defaults.xml.
         <item name="searchViewTextFieldRight">@drawable/textfield_searchview_right_holo_dark</item>
         <item name="searchViewCloseIcon">@android:drawable/ic_clear</item>
         <item name="searchViewSearchIcon">@android:drawable/ic_search</item>
+        <item name="searchViewSearchIconWhenExpanded">@android:drawable/ic_search_expand</item>
         <item name="searchViewGoIcon">@android:drawable/ic_go</item>
         <item name="searchViewVoiceIcon">@android:drawable/ic_voice_search</item>
         <item name="searchViewEditQuery">@android:drawable/ic_commit_search_api_holo_dark</item>
@@ -462,6 +470,7 @@ please see themes_device_defaults.xml.
         <item name="searchViewTextFieldRight">@drawable/textfield_searchview_right_holo_light</item>
         <item name="searchViewCloseIcon">@android:drawable/ic_clear_holo_light</item>
         <item name="searchViewSearchIcon">@android:drawable/ic_search_api_holo_light</item>
+        <item name="searchViewSearchIconWhenExpanded">@drawable/ic_search_api_holo_light_expand</item>
         <item name="searchViewGoIcon">@android:drawable/ic_go_search_api_holo_light</item>
         <item name="searchViewVoiceIcon">@android:drawable/ic_voice_search_api_holo_light</item>
         <item name="searchViewEditQuery">@android:drawable/ic_commit_search_api_holo_light</item>
@@ -951,6 +960,7 @@ please see themes_device_defaults.xml.
         <item name="mediaRouteButtonStyle">@android:style/Widget.Holo.MediaRouteButton</item>
 
         <item name="selectableItemBackground">@android:drawable/item_background_holo_dark</item>
+        <item name="dialogButtonBackground">@drawable/dialog_button_background_holo_dark</item>
         <item name="borderlessButtonStyle">@android:style/Widget.Holo.Button.Borderless</item>
         <item name="homeAsUpIndicator">@android:drawable/ic_ab_back_holo_dark</item>
 
@@ -1014,6 +1024,9 @@ please see themes_device_defaults.xml.
         <item name="alertDialogTheme">@android:style/Theme.Holo.Dialog.Alert</item>
         <item name="alertDialogCenterButtons">false</item>
         <item name="alertDialogIcon">@android:drawable/ic_dialog_alert_holo_dark</item>
+        <item name="alertDialogTitleTopDivider">@android:drawable/dialog_title_top_divider_holo</item>
+        <item name="dialogTitleDivider">@android:drawable/dialog_title_divider_holo_dark</item>
+        <item name="dialogButtonBarDivider">@android:drawable/dialog_buttonbar_divider_holo_dark</item>
 
         <item name="toastFrameBackground">@android:drawable/toast_frame_holo</item>
         
@@ -1121,6 +1134,8 @@ please see themes_device_defaults.xml.
         <item name="searchWidgetCorpusItemBackground">@android:color/search_widget_corpus_item_background</item>
 
         <!-- Action bar styles -->
+        <item name="actionBarTextColorPrimary">@android:color/actionbar_primary_text_holo_dark</item>
+        <item name="actionBarTextColorSecondary">@android:color/actionbar_secondary_text_holo_dark</item>
         <item name="actionDropDownStyle">@android:style/Widget.Holo.Spinner.DropDown.ActionBar</item>
         <item name="actionButtonStyle">@android:style/Widget.Holo.ActionButton</item>
         <item name="actionOverflowButtonStyle">@android:style/Widget.Holo.ActionButton.Overflow</item>
@@ -1132,10 +1147,12 @@ please see themes_device_defaults.xml.
         <item name="actionBarTabTextStyle">@style/Widget.Holo.ActionBar.TabText</item>
         <item name="actionModeStyle">@style/Widget.Holo.ActionMode</item>
         <item name="actionModeCloseButtonStyle">@style/Widget.Holo.ActionButton.CloseMode</item>
+        <item name="actionBarDivider">@android:drawable/ab_menu_divider_holo_dark</item>
         <item name="actionBarStyle">@android:style/Widget.Holo.ActionBar</item>
         <item name="actionBarSize">@dimen/action_bar_default_height</item>
         <item name="actionModePopupWindowStyle">@android:style/Widget.Holo.PopupWindow.ActionMode</item>
         <item name="actionBarWidgetTheme">@null</item>
+        <item name="actionBarItemBackground">@android:drawable/action_bar_item_background_holo_dark</item>
 
         <item name="actionModeCutDrawable">@android:drawable/ic_menu_cut_holo_dark</item>
         <item name="actionModeCopyDrawable">@android:drawable/ic_menu_copy_holo_dark</item>
@@ -1146,9 +1163,12 @@ please see themes_device_defaults.xml.
         <item name="actionModeWebSearchDrawable">@android:drawable/ic_menu_search_holo_dark</item>
 
         <item name="dividerVertical">?android:attr/listDivider</item>
+        <item name="dialogButtonBarDividerVertical">@android:drawable/dialog_button_bar_divider_holo_dark</item>
         <item name="dividerHorizontal">?android:attr/listDivider</item>
         <item name="buttonBarStyle">@android:style/Holo.ButtonBar</item>
+        <item name="dialogButtonBarStyle">@android:style/Holo.Dialog.ButtonBar</item>
         <item name="buttonBarButtonStyle">?android:attr/borderlessButtonStyle</item>
+        <item name="dialogButtonBarButtonStyle">@android:style/Widget.Holo.Button.Dialog</item>
         <item name="segmentedButtonStyle">@android:style/Holo.SegmentedButton</item>
 
         <!-- SearchView attributes -->
@@ -1256,6 +1276,7 @@ please see themes_device_defaults.xml.
         <item name="mediaRouteButtonStyle">@android:style/Widget.Holo.Light.MediaRouteButton</item>
 
         <item name="selectableItemBackground">@android:drawable/item_background_holo_light</item>
+        <item name="dialogButtonBackground">@drawable/dialog_button_background_holo_light</item>
         <item name="borderlessButtonStyle">@android:style/Widget.Holo.Light.Button.Borderless</item>
         <item name="homeAsUpIndicator">@android:drawable/ic_ab_back_holo_light</item>
 
@@ -1319,6 +1340,9 @@ please see themes_device_defaults.xml.
         <item name="alertDialogCenterButtons">false</item>
         <item name="alertDialogTheme">@android:style/Theme.Holo.Light.Dialog.Alert</item>
         <item name="alertDialogIcon">@android:drawable/ic_dialog_alert_holo_light</item>
+        <item name="alertDialogTitleTopDivider">@android:drawable/dialog_title_top_divider_holo</item>
+        <item name="dialogTitleDivider">@android:drawable/dialog_title_divider_holo_light</item>
+        <item name="dialogButtonBarDivider">@android:drawable/dialog_buttonbar_divider_holo_light</item>
 
         <item name="toastFrameBackground">@android:drawable/toast_frame_holo</item>
         
@@ -1429,6 +1453,8 @@ please see themes_device_defaults.xml.
         <item name="searchWidgetCorpusItemBackground">@android:color/search_widget_corpus_item_background</item>
 
         <!-- Action bar styles -->
+        <item name="actionBarTextColorPrimary">@android:color/actionbar_primary_text_holo_light</item>
+        <item name="actionBarTextColorSecondary">@android:color/actionbar_secondary_text_holo_light</item>
         <item name="actionDropDownStyle">@android:style/Widget.Holo.Light.Spinner.DropDown.ActionBar</item>
         <item name="actionButtonStyle">@android:style/Widget.Holo.Light.ActionButton</item>
         <item name="actionOverflowButtonStyle">@android:style/Widget.Holo.Light.ActionButton.Overflow</item>
@@ -1440,10 +1466,12 @@ please see themes_device_defaults.xml.
         <item name="actionBarTabTextStyle">@style/Widget.Holo.Light.ActionBar.TabText</item>
         <item name="actionModeStyle">@style/Widget.Holo.Light.ActionMode</item>
         <item name="actionModeCloseButtonStyle">@style/Widget.Holo.Light.ActionButton.CloseMode</item>
+        <item name="actionBarDivider">@android:drawable/ab_menu_divider_holo_light</item>
         <item name="android:actionBarStyle">@android:style/Widget.Holo.Light.ActionBar.Solid</item>
         <item name="actionBarSize">@dimen/action_bar_default_height</item>
         <item name="actionModePopupWindowStyle">@android:style/Widget.Holo.Light.PopupWindow.ActionMode</item>
         <item name="actionBarWidgetTheme">@null</item>
+        <item name="actionBarItemBackground">@android:drawable/action_bar_item_background_holo_light</item>
 
         <item name="actionModeCutDrawable">@android:drawable/ic_menu_cut_holo_light</item>
         <item name="actionModeCopyDrawable">@android:drawable/ic_menu_copy_holo_light</item>
@@ -1454,9 +1482,12 @@ please see themes_device_defaults.xml.
         <item name="actionModeWebSearchDrawable">@android:drawable/ic_menu_search_holo_light</item>
 
         <item name="dividerVertical">?android:attr/listDivider</item>
+        <item name="dialogButtonBarDividerVertical">@android:drawable/dialog_button_bar_divider_holo_light</item>
         <item name="dividerHorizontal">?android:attr/listDivider</item>
         <item name="buttonBarStyle">@android:style/Holo.Light.ButtonBar</item>
+        <item name="dialogButtonBarStyle">@android:style/Holo.Light.Dialog.ButtonBar</item>
         <item name="buttonBarButtonStyle">?android:attr/borderlessButtonStyle</item>
+        <item name="dialogButtonBarButtonStyle">@android:style/Widget.Holo.Light.Button.Dialog</item>
         <item name="segmentedButtonStyle">@android:style/Holo.Light.SegmentedButton</item>
 
         <!-- SearchView attributes -->
@@ -1488,10 +1519,14 @@ please see themes_device_defaults.xml.
          with an inverse color profile. The dark action bar sharply stands out against
          the light content. -->
     <style name="Theme.Holo.Light.DarkActionBar">
+        <item name="actionBarTextColorPrimary">@android:color/actionbar_primary_text_holo_dark</item>
+        <item name="actionBarTextColorSecondary">@android:color/actionbar_secondary_text_holo_dark</item>
         <item name="android:windowContentOverlay">@android:drawable/ab_solid_shadow_holo</item>
         <item name="android:actionBarStyle">@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse</item>
         <item name="actionBarWidgetTheme">@android:style/Theme.Holo</item>
 
+        <item name="dialogTheme">@android:style/Theme.Holo.Light.Dialog.DarkActionBar</item>
+        <item name="alertDialogTheme">@android:style/Theme.Holo.Light.Dialog.Alert.DarkActionBar</item>
         <item name="actionDropDownStyle">@android:style/Widget.Holo.Spinner.DropDown.ActionBar</item>
         <item name="actionButtonStyle">@android:style/Widget.Holo.ActionButton</item>
         <item name="actionOverflowButtonStyle">@android:style/Widget.Holo.ActionButton.Overflow</item>
@@ -1502,8 +1537,8 @@ please see themes_device_defaults.xml.
         <item name="actionBarTabStyle">@style/Widget.Holo.Light.ActionBar.TabView.Inverse</item>
         <item name="actionBarTabBarStyle">@style/Widget.Holo.Light.ActionBar.TabBar.Inverse</item>
         <item name="actionBarTabTextStyle">@style/Widget.Holo.Light.ActionBar.TabText.Inverse</item>
-        <item name="actionBarDivider">@android:drawable/list_divider_holo_dark</item>
-        <item name="actionBarItemBackground">@android:drawable/item_background_holo_dark</item>
+        <item name="actionBarDivider">@android:drawable/ab_menu_divider_holo_dark</item>
+        <item name="actionBarItemBackground">@android:drawable/action_bar_item_background_holo_dark</item>
         <item name="actionMenuTextColor">?android:attr/textColorPrimaryInverse</item>
         <item name="actionModeStyle">@style/Widget.Holo.Light.ActionMode.Inverse</item>
         <item name="actionModeCloseButtonStyle">@style/Widget.Holo.ActionButton.CloseMode</item>
@@ -1569,6 +1604,7 @@ please see themes_device_defaults.xml.
         <item name="android:colorBackgroundCacheHint">@null</item>
 
         <item name="android:buttonBarStyle">@android:style/Holo.ButtonBar.AlertDialog</item>
+        <item name="android:dialogButtonBarStyle">@android:style/Holo.Dialog.ButtonBar.AlertDialog</item>
         <item name="borderlessButtonStyle">@android:style/Widget.Holo.Button.Borderless.Small</item>
         
         <item name="textAppearance">@android:style/TextAppearance.Holo</item>
@@ -1677,6 +1713,7 @@ please see themes_device_defaults.xml.
         <item name="android:colorBackgroundCacheHint">@null</item>
 
         <item name="android:buttonBarStyle">@android:style/Holo.Light.ButtonBar.AlertDialog</item>
+        <item name="android:dialogButtonBarStyle">@android:style/Holo.Light.Dialog.ButtonBar.AlertDialog</item>
         <item name="borderlessButtonStyle">@android:style/Widget.Holo.Light.Button.Borderless.Small</item>
 
         <item name="textAppearance">@android:style/TextAppearance.Holo.Light</item>
@@ -1746,6 +1783,60 @@ please see themes_device_defaults.xml.
         <item name="windowContentOverlay">@null</item>
         <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
         <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+
+    <style name="Theme.Holo.Light.Dialog.DarkActionBar">
+        <item name="actionDropDownStyle">@android:style/Widget.Holo.Spinner.DropDown.ActionBar</item>
+        <item name="actionButtonStyle">@android:style/Widget.Holo.ActionButton</item>
+        <item name="actionOverflowButtonStyle">@android:style/Widget.Holo.ActionButton.Overflow</item>
+        <item name="actionModeBackground">@android:drawable/cab_background_top_holo_dark</item>
+        <item name="actionModeSplitBackground">@android:drawable/cab_background_bottom_holo_dark</item>
+        <item name="actionModeCloseDrawable">@android:drawable/ic_cab_done_holo_dark</item>
+        <item name="homeAsUpIndicator">@android:drawable/ic_ab_back_holo_dark</item>
+        <item name="actionBarTabStyle">@style/Widget.Holo.Light.ActionBar.TabView.Inverse</item>
+        <item name="actionBarTabBarStyle">@style/Widget.Holo.Light.ActionBar.TabBar.Inverse</item>
+        <item name="actionBarTabTextStyle">@style/Widget.Holo.Light.ActionBar.TabText.Inverse</item>
+        <item name="actionBarDivider">@android:drawable/ab_menu_divider_holo_light</item>
+        <item name="actionBarItemBackground">@android:drawable/action_bar_item_background_holo_dark</item>
+        <item name="actionMenuTextColor">?android:attr/textColorPrimaryInverse</item>
+        <item name="actionModeStyle">@style/Widget.Holo.Light.ActionMode.Inverse</item>
+        <item name="actionModeCloseButtonStyle">@style/Widget.Holo.ActionButton.CloseMode</item>
+        <item name="actionModePopupWindowStyle">@android:style/Widget.Holo.PopupWindow.ActionMode</item>
+
+        <item name="actionModeCutDrawable">@android:drawable/ic_menu_cut_holo_dark</item>
+        <item name="actionModeCopyDrawable">@android:drawable/ic_menu_copy_holo_dark</item>
+        <item name="actionModePasteDrawable">@android:drawable/ic_menu_paste_holo_dark</item>
+        <item name="actionModeSelectAllDrawable">@android:drawable/ic_menu_selectall_holo_dark</item>
+        <item name="actionModeShareDrawable">@android:drawable/ic_menu_share_holo_dark</item>
+        <item name="actionModeFindDrawable">@android:drawable/ic_menu_find_holo_dark</item>
+        <item name="actionModeWebSearchDrawable">@android:drawable/ic_menu_search_holo_dark</item>
+    </style>
+
+    <style name="Theme.Holo.Light.Dialog.Alert.DarkActionBar">
+        <item name="actionDropDownStyle">@android:style/Widget.Holo.Spinner.DropDown.ActionBar</item>
+        <item name="actionButtonStyle">@android:style/Widget.Holo.ActionButton</item>
+        <item name="actionOverflowButtonStyle">@android:style/Widget.Holo.ActionButton.Overflow</item>
+        <item name="actionModeBackground">@android:drawable/cab_background_top_holo_dark</item>
+        <item name="actionModeSplitBackground">@android:drawable/cab_background_bottom_holo_dark</item>
+        <item name="actionModeCloseDrawable">@android:drawable/ic_cab_done_holo_dark</item>
+        <item name="homeAsUpIndicator">@android:drawable/ic_ab_back_holo_dark</item>
+        <item name="actionBarTabStyle">@style/Widget.Holo.Light.ActionBar.TabView.Inverse</item>
+        <item name="actionBarTabBarStyle">@style/Widget.Holo.Light.ActionBar.TabBar.Inverse</item>
+        <item name="actionBarTabTextStyle">@style/Widget.Holo.Light.ActionBar.TabText.Inverse</item>
+        <item name="actionBarDivider">@android:drawable/ab_menu_divider_holo_dark</item>
+        <item name="actionBarItemBackground">@android:drawable/action_bar_item_background_holo_dark</item>
+        <item name="actionMenuTextColor">?android:attr/textColorPrimaryInverse</item>
+        <item name="actionModeStyle">@style/Widget.Holo.Light.ActionMode.Inverse</item>
+        <item name="actionModeCloseButtonStyle">@style/Widget.Holo.ActionButton.CloseMode</item>
+        <item name="actionModePopupWindowStyle">@android:style/Widget.Holo.PopupWindow.ActionMode</item>
+
+        <item name="actionModeCutDrawable">@android:drawable/ic_menu_cut_holo_dark</item>
+        <item name="actionModeCopyDrawable">@android:drawable/ic_menu_copy_holo_dark</item>
+        <item name="actionModePasteDrawable">@android:drawable/ic_menu_paste_holo_dark</item>
+        <item name="actionModeSelectAllDrawable">@android:drawable/ic_menu_selectall_holo_dark</item>
+        <item name="actionModeShareDrawable">@android:drawable/ic_menu_share_holo_dark</item>
+        <item name="actionModeFindDrawable">@android:drawable/ic_menu_find_holo_dark</item>
+        <item name="actionModeWebSearchDrawable">@android:drawable/ic_menu_search_holo_dark</item>
     </style>
 
     <!-- Default holographic (dark) for windows that want to have the user's selected

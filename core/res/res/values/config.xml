@@ -96,6 +96,7 @@
 
     <!-- The duration (in milliseconds) of a medium-length animation. -->
     <integer name="config_mediumAnimTime">150</integer>
+    <integer name="dialog_config_mediumAnimTime">150</integer>
 
     <!-- The duration (in milliseconds) of a long animation. -->
     <integer name="config_longAnimTime">200</integer>
