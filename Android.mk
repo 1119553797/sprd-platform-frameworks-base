@@ -40,7 +40,9 @@ SECONDARY_FRAMEWORKS_SUBDIRS := \
         media/java/android/media/audiofx \
         media/mca/effect/java/android/media/effect \
         media/mca/effect/java/android/media/effect/effects \
-        core/java/android/hardware/fm/
+        core/java/android/hardware/fm/ \
+        core/java/com/google/android/mms \
+        core/java/com/google/android/util
 include $(CLEAR_VARS)
 
 # FRAMEWORKS_BASE_SUBDIRS comes from build/core/pathmap.mk
