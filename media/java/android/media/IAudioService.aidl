@@ -151,4 +151,6 @@ interface IAudioService {
     int setBluetoothA2dpDeviceConnectionState(in BluetoothDevice device, int state);
 
     AudioRoutesInfo startWatchingRoutes(in IAudioRoutesObserver observer);
+
+    void setSpeakerMediaOn(boolean on);
 }

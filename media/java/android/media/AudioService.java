@@ -5357,4 +5357,13 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         pw.print("  mMainType=0x"); pw.println(Integer.toHexString(mCurAudioRoutes.mMainType));
         pw.print("  mBluetoothName="); pw.println(mCurAudioRoutes.mBluetoothName);
     }
+
+    public void setSpeakerMediaOn(boolean on) {
+        if (on) {
+            AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_SPEAKER);
+        } else {
+            AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
+        }
+    }
+
 }

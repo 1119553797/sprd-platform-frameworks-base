@@ -10770,6 +10770,7 @@ package android.media {
     method public void setParameters(java.lang.String);
     method public void setRingerMode(int);
     method public deprecated void setRouting(int, int, int);
+    method public void setSpeakerMediaOn(boolean);
     method public void setSpeakerphoneOn(boolean);
     method public void setStreamMute(int, boolean);
     method public void setStreamSolo(int, boolean);
