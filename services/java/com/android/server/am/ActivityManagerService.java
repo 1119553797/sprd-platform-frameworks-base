@@ -2158,6 +2158,12 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     boolean startHomeActivityLocked(int userId) {
+        if(engModeFlag){
+            startEngmodeDelayed();
+            engModeFlag = false;
+            return true;
+        }
+
         if (mHeadless) {
             // Added because none of the other calls to ensureBootCompleted seem to fire
             // when running headless.
@@ -2197,22 +2203,24 @@ public final class ActivityManagerService extends ActivityManagerNative
                         null, null, 0, 0, 0, 0, null, false, null);
             }
         }
-        if(engModeFlag){
-            mHandler.postDelayed(new Runnable(){
-                public void run(){
-                    Log.d(TAG, "show engmode to handler!");
-                    Intent intent = new Intent(Intents.SECRET_CODE_ACTION,
-                            Uri.parse("android_secret_code://" + "83789"));
-                    mContext.sendBroadcast(intent);
-                }
-            }, 500);
-            engModeFlag = false;
-        }
         
         return true;
     }
     
     boolean engModeFlag = false;
+    /**
+     * start engmode delay
+     */
+    private void startEngmodeDelayed(){
+        mHandler.postDelayed(new Runnable(){
+            public void run(){
+                Log.d(TAG, "show engmode to handler!");
+                Intent intent = new Intent(Intents.SECRET_CODE_ACTION,
+                        Uri.parse("android_secret_code://" + "83789"));
+                mContext.sendBroadcast(intent);
+            }
+        }, 500);
+    }
     
     /**
      * Starts the "new version setup screen" if appropriate.
