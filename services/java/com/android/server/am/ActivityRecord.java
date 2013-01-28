@@ -879,7 +879,11 @@ final class ActivityRecord {
                 return ActivityManagerService.INSTRUMENTATION_KEY_DISPATCHING_TIMEOUT;
             }
 
-            return ActivityManagerService.KEY_DISPATCHING_TIMEOUT;
+            if (SystemClock.elapsedRealtime() <= ActivityManagerService.THE_FIRST_FOUR_MINUTES_AFTER_BOOTING) {
+                return ActivityManagerService.BOOT_KEY_DISPATCHING_TIMEOUT;
+            } else {
+                return ActivityManagerService.KEY_DISPATCHING_TIMEOUT;
+            }
         }
     }
 
