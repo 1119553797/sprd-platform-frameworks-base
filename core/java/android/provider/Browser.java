@@ -155,8 +155,8 @@ public class Browser {
      *  @param title    Title for the bookmark. Can be null or empty string.
      *  @param url      Url for the bookmark. Can be null or empty string.
      */
-    public static final void saveBookmark(Context c, 
-                                          String title, 
+    public static final void saveBookmark(Context c,
+                                          String title,
                                           String url) {
         Intent i = new Intent(Intent.ACTION_INSERT, Browser.BOOKMARKS_URI);
         i.putExtra("title", title);
@@ -233,10 +233,10 @@ public class Browser {
      *
      *  @param cr   The ContentResolver used to access the database.
      */
-    public static final Cursor getAllBookmarks(ContentResolver cr) throws 
+    public static final Cursor getAllBookmarks(ContentResolver cr) throws
             IllegalStateException {
         return cr.query(Bookmarks.CONTENT_URI,
-                new String[] { Bookmarks.URL }, 
+                new String[] { Bookmarks.URL },
                 Bookmarks.IS_FOLDER + " = 0", null, null);
     }
 
@@ -258,6 +258,12 @@ public class Browser {
     private static final void addOrUrlEquals(StringBuilder sb) {
         sb.append(" OR " + BookmarkColumns.URL + " = ");
     }
+
+    // Add for OTA begin at 2013-01-29
+    public static final Cursor getVisitedLikeInterface(ContentResolver cr, String url) {
+        return getVisitedLike(cr,url);
+    }
+    // Add for OTA end at 2013-01-29
 
     private static final Cursor getVisitedLike(ContentResolver cr, String url) {
         boolean secure = false;
@@ -397,7 +403,7 @@ public class Browser {
         // TODO make a single request to the provider to do this in a single transaction
         Cursor cursor = null;
         try {
-            
+
             // Select non-bookmark history, ordered by date
             cursor = cr.query(History.CONTENT_URI,
                     new String[] { History._ID, History.URL, History.DATE_LAST_VISITED },
@@ -520,7 +526,7 @@ public class Browser {
      * @param cr    The ContentResolver used to access the database.
      * @param url   url to remove.
      */
-    public static final void deleteFromHistory(ContentResolver cr, 
+    public static final void deleteFromHistory(ContentResolver cr,
                                                String url) {
         cr.delete(History.CONTENT_URI, History.URL + "=?", new String[] { url });
     }
@@ -554,7 +560,7 @@ public class Browser {
             Log.e(LOGTAG, "clearSearches", e);
         }
     }
-    
+
     /**
      *  Request all icons from the database.  This call must either be called
      *  in the main thread or have had Looper.prepare() invoked in the calling
@@ -563,7 +569,7 @@ public class Browser {
      *  @param  cr The ContentResolver used to access the database.
      *  @param  where Clause to be used to limit the query from the database.
      *          Must be an allowable string to be passed into a database query.
-     *  @param  listener IconListener that gets the icons once they are 
+     *  @param  listener IconListener that gets the icons once they are
      *          retrieved.
      */
     public static final void requestAllIcons(ContentResolver cr, String where,

@@ -13263,12 +13263,10 @@ package android.net.wifi {
     field public java.lang.String preSharedKey;
     field public int priority;
     field public int status;
-// Broadcom, WAPI
     field public java.lang.String wapiAsCert;
     field public int wapiCertIndex;
     field public int wapiPskType;
     field public java.lang.String wapiUserCert;
-// Broadcom, WAPI
     field public java.lang.String[] wepKeys;
     field public int wepTxKeyIndex;
   }
@@ -13293,10 +13291,8 @@ package android.net.wifi {
   public static class WifiConfiguration.KeyMgmt {
     field public static final int IEEE8021X = 3; // 0x3
     field public static final int NONE = 0; // 0x0
-// Broadcom, WAPI
     field public static final int WAPI_CERT = 6; // 0x6
     field public static final int WAPI_PSK = 5; // 0x5
-// Broadcom, WAPI
     field public static final int WPA_EAP = 2; // 0x2
     field public static final int WPA_PSK = 1; // 0x1
     field public static final java.lang.String[] strings;
@@ -13313,9 +13309,7 @@ package android.net.wifi {
 
   public static class WifiConfiguration.Protocol {
     field public static final int RSN = 1; // 0x1
-// Broadcom, WAPI
     field public static final int WAPI = 2; // 0x2
-// Broadcom, WAPI
     field public static final int WPA = 0; // 0x0
     field public static final java.lang.String[] strings;
     field public static final java.lang.String varName = "proto";
@@ -13394,12 +13388,10 @@ package android.net.wifi {
     field public static final java.lang.String SCAN_RESULTS_AVAILABLE_ACTION = "android.net.wifi.SCAN_RESULTS";
     field public static final java.lang.String SUPPLICANT_CONNECTION_CHANGE_ACTION = "android.net.wifi.supplicant.CONNECTION_CHANGE";
     field public static final java.lang.String SUPPLICANT_STATE_CHANGED_ACTION = "android.net.wifi.supplicant.STATE_CHANGE";
-// Broadcom, WAPI
     field public static final java.lang.String SUPPLICANT_WAPI_EVENT = "android.net.wifi.supplicant.WAPI_EVENT";
     field public static final int WAPI_EVENT_AUTH_FAIL_CODE = 16; // 0x10
     field public static final int WAPI_EVENT_CERT_FAIL_CODE = 17; // 0x11
     field public static final int WAPI_EVENT_CERT_LOST_CODE = 18; // 0x12
-// Broadcom, WAPI
     field public static final int WIFI_MODE_FULL = 1; // 0x1
     field public static final int WIFI_MODE_FULL_HIGH_PERF = 3; // 0x3
     field public static final int WIFI_MODE_SCAN_ONLY = 2; // 0x2
@@ -16756,6 +16748,7 @@ package android.provider {
     method public static final void deleteHistoryTimeFrame(android.content.ContentResolver, long, long);
     method public static final android.database.Cursor getAllBookmarks(android.content.ContentResolver) throws java.lang.IllegalStateException;
     method public static final android.database.Cursor getAllVisitedUrls(android.content.ContentResolver) throws java.lang.IllegalStateException;
+    method public static final android.database.Cursor getVisitedLikeInterface(android.content.ContentResolver, java.lang.String);
     method public static final void requestAllIcons(android.content.ContentResolver, java.lang.String, android.webkit.WebIconDatabase.IconListener);
     method public static final void saveBookmark(android.content.Context, java.lang.String, java.lang.String);
     method public static final void sendString(android.content.Context, java.lang.String);
