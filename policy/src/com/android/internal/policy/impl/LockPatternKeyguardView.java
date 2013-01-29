@@ -26,6 +26,8 @@ import com.android.internal.widget.LockScreenWidgetCallback;
 import com.android.internal.widget.LockScreenWidgetInterface;
 import com.android.internal.widget.TransportControlView;
 
+import dalvik.system.PathClassLoader;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
@@ -104,6 +106,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
     private boolean mEnableFallback = false; // assume no fallback UI until we know better
 
     private boolean mShowLockBeforeUnlock = false;
+
+    private boolean mUniverseui_support = false;
 
     // Interface to a biometric sensor that can optionally be used to unlock the device
     private BiometricSensorUnlock mBiometricUnlock;
@@ -477,6 +481,9 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
         mPluggedIn = mUpdateMonitor.isDevicePluggedIn();
         mScreenOn = ((PowerManager)context.getSystemService(Context.POWER_SERVICE)).isScreenOn();
         mUpdateMonitor.registerInfoCallback(mInfoCallback);
+
+        mUniverseui_support = SystemProperties.getBoolean("universe_ui_support", false);
+        mShowLockBeforeUnlock |= mUniverseui_support;
 
         /**
          * We'll get key events the current screen doesn't use. see
@@ -930,15 +937,45 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
     }
 
     View createLockScreen() {
-        View lockView = new LockScreen(
-                mContext,
-                mConfiguration,
-                mLockPatternUtils,
-                mUpdateMonitor,
-                mKeyguardScreenCallback);
+        View lockView = null;
+        if (DEBUG_CONFIGURATION) {
+            Log.v(TAG, "mUniverseui_support=" + mUniverseui_support);
+        }
+        if (!mUniverseui_support) {
+            lockView = new LockScreen(
+                    mContext,
+                    mConfiguration,
+                    mLockPatternUtils,
+                    mUpdateMonitor,
+                    mKeyguardScreenCallback);
+        } else {
+            if (mLockClassLoader == null) {
+                mLockClassLoader = new LockClassLoader();
+            }
+
+            try {
+                lockView = new RemoteLockView(mContext, mLockPatternUtils,
+                        mUpdateMonitor, mKeyguardScreenCallback, mLockClassLoader);
+
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+                lockView = new LockScreen(mContext, mConfiguration,
+                        mLockPatternUtils, mUpdateMonitor, mKeyguardScreenCallback);
+            }
+        }
         initializeTransportControlView(lockView);
         return lockView;
     }
+
+	private static class LockClassLoader extends PathClassLoader {
+		private static final String LOCKSCREEN_APK_PATH = "/system/app/lockscreen.apk";
+
+		public LockClassLoader() {
+			super(LOCKSCREEN_APK_PATH, ClassLoader.getSystemClassLoader());
+		}
+	}
+
+	private static LockClassLoader mLockClassLoader = null;
 
     View createUnlockScreenFor(UnlockMode unlockMode) {
         View unlockView = null;
