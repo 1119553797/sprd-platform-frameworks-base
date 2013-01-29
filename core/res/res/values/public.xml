@@ -3710,5 +3710,6 @@
   <java-symbol type="string" name="CallRetrieved" />
   <java-symbol type="string" name="IncomingCallForwarded" />
   <java-symbol type="string" name="usb_cdrom_notification_title" />
-
+  <java-symbol type="style"  name="Theme.UniverseUI.Light.DarkActionBar" />
+  <java-symbol type="style"  name="Theme.UniverseUI.Light" />
 </resources>
