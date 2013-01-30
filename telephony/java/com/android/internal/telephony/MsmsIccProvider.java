@@ -16,18 +16,28 @@
 
 package com.android.internal.telephony;
 
-import android.content.ContentValues;
+import android.content.ContentProvider;
 import android.content.UriMatcher;
+import android.content.ContentValues;
+import android.database.AbstractCursor;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.os.SystemProperties;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.HashMap;
+
+import com.android.internal.telephony.IccConstants;
+import com.android.internal.telephony.AdnRecord;
+import com.android.internal.telephony.IIccPhoneBook;
 
 
 /**
@@ -70,36 +80,24 @@ public class MsmsIccProvider extends IccProvider {
     private static final String STR_NEW_TAG= "newTag";
     private static final String STR_NEW_NUMBER= "newNumber";
         
-    private static final String AUTHORITY = "icc";
-    private static final String CONTENT_URI = "content://" + AUTHORITY + "/";
     private static final int  PHONE_COUNT = PhoneFactory.getPhoneCount();
-    private static final int INVALID_PHONE_ID = UriMatcher.NO_MATCH * 2;
+    private static final int  MAX_MATCH_TYPE = 8;
 
-    private static final UriMatcher URL_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-    /** this is only to match phoneId, it do not care whether the uri is illegal **/
-    private static final UriMatcher PHONE_ID_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final UriMatcher URL_MATCHER =
+                            new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        URL_MATCHER.addURI(AUTHORITY, "adn", ADN);
-        URL_MATCHER.addURI(AUTHORITY, "fdn", FDN);
-        URL_MATCHER.addURI(AUTHORITY, "sdn", SDN);
-        URL_MATCHER.addURI(AUTHORITY, "fdn_s", FDN_S);
-        URL_MATCHER.addURI(AUTHORITY, "gas", GAS);
-
-        URL_MATCHER.addURI(AUTHORITY, "#/adn", ADN);
-        URL_MATCHER.addURI(AUTHORITY, "#/fdn", FDN);
-        URL_MATCHER.addURI(AUTHORITY, "#/sdn", SDN);
-        URL_MATCHER.addURI(AUTHORITY, "#/fdn_s", FDN_S);
-        URL_MATCHER.addURI(AUTHORITY, "#/gas", GAS);
-
-        // to match phoneId
-        for (int i = 0; i < PHONE_COUNT; i++) {
-            PHONE_ID_MATCHER.addURI(AUTHORITY, i + "/*", i);
-        }
-        PHONE_ID_MATCHER.addURI(AUTHORITY, "#/*", INVALID_PHONE_ID);
-        PHONE_ID_MATCHER.addURI(AUTHORITY, "*", PHONE_COUNT);
+    	for(int i = 0;i <= PHONE_COUNT; i++){
+                URL_MATCHER.addURI(getIccName(i), "adn", getCompoundMatchValue(i, ADN));
+                URL_MATCHER.addURI(getIccName(i), "fdn", getCompoundMatchValue(i, FDN));
+                URL_MATCHER.addURI(getIccName(i), "sdn", getCompoundMatchValue(i, SDN));
+                URL_MATCHER.addURI(getIccName(i), "fdn_s", getCompoundMatchValue(i, FDN_S));
+                URL_MATCHER.addURI(getIccName(i), "gas", getCompoundMatchValue(i, GAS));
+    	}
     }
 
+
+    private boolean mSimulator;
 
     public static class AdnComparator implements Comparator<AdnRecord> {
         public final int compare(AdnRecord a, AdnRecord b) {
@@ -133,21 +131,21 @@ public class MsmsIccProvider extends IccProvider {
             String[] selectionArgs, String sort) {
         Log.e(TAG, "query, uri:"+url);
         int match = URL_MATCHER.match(url);
-        switch (match) {
+        switch (getMatch(match)) {
             case ADN:
-                return loadFromEf(IccConstants.EF_ADN, getPhoneId(url));
+                return loadFromEf(IccConstants.EF_ADN, getPhoneId(match));
 
             case FDN:
-                return loadFromEf(IccConstants.EF_FDN, getPhoneId(url));
+                return loadFromEf(IccConstants.EF_FDN, getPhoneId(match));
 
             case SDN:
-                return loadFromEf(IccConstants.EF_SDN, getPhoneId(url));
+                return loadFromEf(IccConstants.EF_SDN, getPhoneId(match));
 
             case FDN_S:
-                return getEfSize(IccConstants.EF_FDN, getPhoneId(url));
+                return getEfSize(IccConstants.EF_FDN, getPhoneId(match));
 
             case GAS:
-                return loadGas(getPhoneId(url));
+                return loadGas(getPhoneId(match));
 
             default:
                 throw new IllegalArgumentException("Unknown URL " + url);
@@ -156,7 +154,7 @@ public class MsmsIccProvider extends IccProvider {
 
     @Override
     public String getType(Uri url) {
-        switch (URL_MATCHER.match(url)) {
+        switch (getMatch(URL_MATCHER.match(url))) {
             case ADN:
             case FDN:
             case SDN:
@@ -179,9 +177,9 @@ public class MsmsIccProvider extends IccProvider {
         Log.i(TAG, "insert, uri:"+url+" initialValues:"+initialValues);
 
         int match = URL_MATCHER.match(url);
-        int phoneId = getPhoneId(url);
-        if (DBG) Log.i(TAG, "insert, match:" + match + ", getPhoneId:" + phoneId);
-        switch (match) {
+        int phoneId = getPhoneId(match);
+        if (DBG) Log.i(TAG, "insert, match:"+match+", getMatch(match):"+getMatch(match));        
+        switch (getMatch(match)) {
             case ADN:
                 efType = IccConstants.EF_ADN;
                 break;
@@ -243,20 +241,18 @@ public class MsmsIccProvider extends IccProvider {
             return null;
         }
 
-        StringBuilder buf = new StringBuilder(CONTENT_URI);
-        switch (match) {
+        StringBuilder buf = new StringBuilder("content://"+getIccName(phoneId)+"/");
+        switch (getMatch(match)) {
             case ADN:
-                buf.append(getPathName("adn", phoneId));
-                buf.append("/" + index);
+                buf.append("adn/"+index);
                 break;
 
             case GAS:
-                buf.append(getPathName("gas", phoneId));
-                buf.append("/" + index);
+                buf.append("gas/"+index);
                 break;
-
+                
             case FDN:
-                buf.append(getPathName("fdn", phoneId));
+                buf.append("fdn/");
                 break;
         }
 
@@ -294,8 +290,8 @@ public class MsmsIccProvider extends IccProvider {
         Log.i(TAG, "delete, uri:"+url+" where:"+where+" whereArgs:"+whereArgs);
 
         int match = URL_MATCHER.match(url);
-        int phoneId = getPhoneId(url);
-        switch (match) {
+        int phoneId = getPhoneId(match);
+        switch (getMatch(match)) {
             case ADN:
                 efType = IccConstants.EF_ADN;
                 break;
@@ -379,7 +375,7 @@ public class MsmsIccProvider extends IccProvider {
             return 0;
         } else {
             getContext().getContentResolver().notifyChange(
-                    Uri.parse(CONTENT_URI + getPathName("adn", phoneId)), null);
+                    Uri.parse("content://"+getIccName(phoneId)+"/adn"), null);
         }
         return 1;
     }
@@ -396,8 +392,8 @@ public class MsmsIccProvider extends IccProvider {
         Log.i(TAG, "update, uri:"+url+" where: "+where+" value: " + values);
 
         int match = URL_MATCHER.match(url);
-        int phoneId = getPhoneId(url);
-        switch (match) {
+        int phoneId = getPhoneId(match);
+        switch (getMatch(match)) {
             case ADN:
                 efType = IccConstants.EF_ADN;
                 break;
@@ -483,7 +479,7 @@ public class MsmsIccProvider extends IccProvider {
             return 0;
         } else {
             getContext().getContentResolver().notifyChange(
-                    Uri.parse(CONTENT_URI + getPathName("adn", phoneId)), null);
+                    Uri.parse("content://"+getIccName(phoneId)+"/adn"), null);
         }
 
         return 1;
@@ -789,32 +785,28 @@ public class MsmsIccProvider extends IccProvider {
     private void log(String msg) {
         Log.d(TAG, "[MsmsIccProvider] " + msg);
     }
-
-    private int getPhoneId(Uri uri) {
-        int match = PHONE_ID_MATCHER.match(uri);
-        if (match == UriMatcher.NO_MATCH) {
-            throw new IllegalArgumentException("UnKnow URI : " + uri);
-        } else if (match == INVALID_PHONE_ID) {
-            List<String> paths = uri.getPathSegments();
-            if (paths != null && paths.size() > 0) {
-                String id = paths.get(0);
-                Log.e(TAG, "Invalid phoneId : " + id);
-                //no matter whether the phoneId is invalid
-                return Integer.parseInt(id);
-            }
-            throw new IllegalArgumentException("Cannot parse URI : " + uri);
-        }
-        return match;
+    
+    
+    private int getPhoneId(int compoundMatch){
+    	return compoundMatch / MAX_MATCH_TYPE;
+    }
+    
+    private int getMatch(int compoundMatch){
+    	return compoundMatch % MAX_MATCH_TYPE;
+    }
+    
+    private static int getCompoundMatchValue(int phoneId, int match) {
+        return phoneId * MAX_MATCH_TYPE + match;
     }
 
-    private static String getPathName(String path, int phoneId) {
+    private static String getIccName(int phoneId){
         if (PhoneFactory.isMultiSim()) {
             if (phoneId == PhoneFactory.getPhoneCount()) {
-                return path;
+                return "icc";
             }
-            return phoneId + "/" + path;
+            return "icc" + phoneId;
         } else {
-            return path;
+            return "icc";
         }
     }
 
