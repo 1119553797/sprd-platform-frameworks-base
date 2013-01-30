@@ -3742,7 +3742,8 @@
   <java-symbol type="layout" name="spread_digtal_clock" />
   <java-symbol type="id" name="spread_date" />
   <java-symbol type="string" name="digtal_formatter" />
-  
+
+  <java-symbol type="layout" name="custom_notification_template_base" />
   
 
 </resources>
