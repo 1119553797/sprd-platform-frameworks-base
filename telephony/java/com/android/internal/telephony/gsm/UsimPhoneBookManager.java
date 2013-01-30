@@ -763,7 +763,7 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
 
             index = lst.get(m);
 
-            if(index != null && index.recordNumInIap !=null)
+            if(index != null && index.recordNumInIap !=null && index.usedSet != null)
             {
 
                 int num = getUsedNumSetIndex( efid,  index);
