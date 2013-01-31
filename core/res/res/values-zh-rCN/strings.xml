@@ -1316,4 +1316,7 @@
     <string name="stk_refresh_sim_init_message" >SIM卡更新中</string>
     <string name="stk_refresh_sim_reset_message" >手机即将重启</string>
     <!--STK Add end  -->
+    <!--add for network lock and sim lock-->
+    <string name="lockscreen_sim_network_locked_message">网络已锁</string>
+    <string name="lockscreen_sim_card_locked_message">sim卡已锁</string>
 </resources>

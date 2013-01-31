@@ -46,6 +46,7 @@ import com.android.internal.telephony.TelephonyIntents;
 
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
 import com.android.internal.R;
 import com.google.android.collect.Lists;
 
@@ -184,11 +185,13 @@ public class KeyguardUpdateMonitor {
                     state[simSubscription] = IccCard.State.PIN_REQUIRED;
                 } else if (IccCard.INTENT_VALUE_LOCKED_ON_PUK.equals(lockedReason)) {
                     state[simSubscription] = IccCard.State.PUK_REQUIRED;
+                }  else if (IccCard.INTENT_VALUE_LOCKED_NETWORK.equals(lockedReason)) {
+                    state[simSubscription] = IccCard.State.NETWORK_LOCKED;
+                } else if (IccCard.INTENT_VALUE_LOCKED_SIM.equals(lockedReason)) {
+                    state[simSubscription] = IccCard.State.SIM_LOCKED;
                 } else {
                     state[simSubscription] = IccCard.State.UNKNOWN;
                 }
-            } else if (IccCard.INTENT_VALUE_LOCKED_NETWORK.equals(stateExtra)) {
-                state[simSubscription] = IccCard.State.NETWORK_LOCKED;
             } else if (IccCard.INTENT_VALUE_ICC_NOT_READY.equals(stateExtra)) {
                 state[simSubscription] = IccCard.State.NOT_READY;
             } else if (IccCard.INTENT_VALUE_ICC_BLOCKED.equals(stateExtra)) {

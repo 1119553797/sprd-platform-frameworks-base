@@ -1310,4 +1310,7 @@
   
     <string name="stk_refresh_sim_init_message">SIM卡更新中</string>
     <string name="stk_refresh_sim_reset_message">手機即將重新啟動</string>
+    <!--add for network lock and sim lock-->
+    <string name="lockscreen_sim_network_locked_message">網路已鎖</string>
+    <string name="lockscreen_sim_card_locked_message">sim卡已鎖</string>
 </resources>

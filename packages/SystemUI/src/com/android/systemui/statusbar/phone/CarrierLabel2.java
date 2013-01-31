@@ -90,7 +90,7 @@ public class CarrierLabel2 extends TextView {
     };
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn, int phoneid) {
-        if (phoneid != 0) return;
+        if (phoneid != 1) return;
         if (true) {
             Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn + "phoneid" + phoneid);
