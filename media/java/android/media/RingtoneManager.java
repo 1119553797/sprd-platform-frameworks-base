@@ -32,9 +32,10 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.provider.Settings.System;
 import android.util.Log;
-
+import android.database.sqlite.SQLiteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 
 import com.android.internal.telephony.PhoneFactory;
 
@@ -235,6 +236,10 @@ public class RingtoneManager {
 
     private boolean mIncludeDrm;
     private boolean mIncludeExternal;
+
+    /* Add 20130130 Spreadst of 90412,the ringtone not ring start */
+    private static Uri mDefaultRingtoneUri = Uri.parse("content://media/internal/audio/media/9");
+    /* Add 20130130 Spreadst of 90412,the ringtone not ring end */
     
     /**
      * Constructs a RingtoneManager. This constructor is recommended as its
@@ -616,6 +621,32 @@ public class RingtoneManager {
      * @see #getRingtone(Context, Uri)
      */
     private static Ringtone getRingtone(final Context context, Uri ringtoneUri, int streamType) {
+        /* Add 20130130 Spreadst of 90412,the ringtone not ring start */
+        if (ringtoneUri.toString().startsWith("content://media/external/audio/media/")) {
+            try {
+                Cursor cursor = null;
+                cursor = context.getContentResolver().query(ringtoneUri,
+                        new String[] { MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA }, null, null, null);
+                if (cursor != null) {
+                    if (cursor.getCount() == 0) {
+                        ringtoneUri = mDefaultRingtoneUri;
+                    }
+                    if (cursor.moveToFirst()) {
+                        File filePath = new File(cursor.getString(1));
+                        if (!filePath.exists()) {
+                            ringtoneUri = mDefaultRingtoneUri;
+                        }
+                    }
+                }
+            } catch (SQLiteException sqle) {
+                Log.e(TAG, sqle.toString());
+            }
+        }
+
+        if (ringtoneUri.toString().startsWith(Settings.System.DEFAULT_RINGTONE_URI.toString())) {
+            ringtoneUri = mDefaultRingtoneUri;
+        }
+        /* Add 20130130 Spreadst of 90412,the ringtone not ring end */
         try {
             final Ringtone r = new Ringtone(context, true);
             if (streamType >= 0) {
