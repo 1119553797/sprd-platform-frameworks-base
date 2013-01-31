@@ -1555,6 +1555,8 @@ public class PhoneNumberUtils
     // to 7.
     static final int MIN_MATCH = 7;
 
+    private static final String CUSTOM_EMERGENCY_NUMBER = "120,122";
+
     /**
      * Checks a given number against the list of
      * emergency numbers provided by the RIL and SIM card.
@@ -1587,19 +1589,18 @@ public class PhoneNumberUtils
         // to the list.
         number = extractNetworkPortionAlt(number);
         // modified emergency number logic 2011-9-30 start
-        String numbers = "";
+        StringBuffer numbers = new StringBuffer();
 
-        boolean isEmergency = false;
+        boolean hasSimCard = false;
         for (int j = 0; j < phoneCount; j++ ) {
-            isEmergency = isEmergency || PhoneFactory.isCardExist(j);
+            hasSimCard = hasSimCard || TelephonyManager.getDefault(j).hasIccCard();
         }
 
-        if(!isEmergency) {
-            numbers += "000,08,110,999,118,119";
-        }
-
-        if ( PhoneFactory.isCardExist(phoneId)) {
-
+        if (!hasSimCard) {
+            numbers.append("000,08,110,999,118,119");
+            numbers.append(",");
+            numbers.append(CUSTOM_EMERGENCY_NUMBER);
+        } else if (TelephonyManager.getDefault(phoneId).hasIccCard()) {
             // retrieve the list of emergency numbers
             // check read-write ecclist property first
             String tmpnumbers = SystemProperties.get("ril.ecclist");
@@ -1608,40 +1609,31 @@ public class PhoneNumberUtils
                 tmpnumbers = SystemProperties.get("ro.ril.ecclist");
             }
             if (!TextUtils.isEmpty(tmpnumbers)){
-                numbers += ","+tmpnumbers;
+                numbers.append(",");
+                numbers.append(tmpnumbers);
             }
 
             // retrieve the list of ecc in sim card
             String eccList = SystemProperties.get(
                     PhoneFactory.getSetting("ril.sim.ecclist",phoneId));
             if (!TextUtils.isEmpty(eccList)){
-                numbers += ","+eccList;
+                numbers.append(",");
+                numbers.append(eccList);
             }
         }
-
-        log("sim"+phoneId+" emergency numbers: " + numbers);
+        log("sim" + phoneId + " emergency numbers: " + numbers);
 
         if (!TextUtils.isEmpty(numbers)) {
             // searches through the comma-separated list for a match,
             // return true if one is found.
-            for (String emergencyNum : numbers.split(",")) {
-//                if (useExactMatch) {
-                    if (number.equals(emergencyNum)) {
-                        return true;
-                    }
-//                } else {
-//                    if (number.startsWith(emergencyNum)) {
-//                        return true;
-//                    }
-//                }
+            for (String emergencyNum : numbers.toString().split(",")) {
+                if (number.equals(emergencyNum)) {
+                    return true;
+                }
             }
         }
         // No ecclist system property, so use our own list.
-//        if (useExactMatch) {
-            return (number.equals("112") || number.equals("911"));
-//        } else {
-//            return (number.startsWith("112") || number.startsWith("911"));
-//        }
+        return (number.equals("112") || number.equals("911"));
     }
 
     /**
