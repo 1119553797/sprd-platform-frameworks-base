@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import com.android.internal.util.MemInfoReader;
 import com.android.server.wm.WindowManagerService;
-
+import android.os.SystemProperties;
 import android.graphics.Point;
 import android.util.Slog;
 
@@ -37,12 +37,12 @@ class ProcessList {
 
     // This is a process only hosting activities that are not visible,
     // so it can be killed without any disruption.
-    static final int HIDDEN_APP_MAX_ADJ = 15;
+    static int HIDDEN_APP_MAX_ADJ = 15;
     static int HIDDEN_APP_MIN_ADJ = 9;
 
     // The B list of SERVICE_ADJ -- these are the old and decrepit
     // services that aren't as shiny and interesting as the ones in the A list.
-    static final int SERVICE_B_ADJ = 8;
+    static int SERVICE_B_ADJ = 8;
 
     // This is the process of the previous application that the user was in.
     // This process is kept above other things, because it is very common to
@@ -50,38 +50,38 @@ class ProcessList {
     // task switch (toggling between the two top recent apps) as well as normal
     // UI flow such as clicking on a URI in the e-mail app to view in the browser,
     // and then pressing back to return to e-mail.
-    static final int PREVIOUS_APP_ADJ = 7;
+    static int PREVIOUS_APP_ADJ = 7;
 
     // This is a process holding the home application -- we want to try
     // avoiding killing it, even if it would normally be in the background,
     // because the user interacts with it so much.
-    static final int HOME_APP_ADJ = 6;
+    static int HOME_APP_ADJ = 6;
 
     // This is a process holding an application service -- killing it will not
     // have much of an impact as far as the user is concerned.
-    static final int SERVICE_ADJ = 5;
+    static int SERVICE_ADJ = 5;
 
     // This is a process currently hosting a backup operation.  Killing it
     // is not entirely fatal but is generally a bad idea.
-    static final int BACKUP_APP_ADJ = 4;
+    static int BACKUP_APP_ADJ = 4;
 
     // This is a process with a heavy-weight application.  It is in the
     // background, but we want to try to avoid killing it.  Value set in
     // system/rootdir/init.rc on startup.
-    static final int HEAVY_WEIGHT_APP_ADJ = 3;
+    static int HEAVY_WEIGHT_APP_ADJ = 3;
 
     // This is a process only hosting components that are perceptible to the
     // user, and we really want to avoid killing them, but they are not
     // immediately visible. An example is background music playback.
-    static final int PERCEPTIBLE_APP_ADJ = 2;
+    static int PERCEPTIBLE_APP_ADJ = 2;
 
     // This is a process only hosting activities that are visible to the
     // user, so we'd prefer they don't disappear.
-    static final int VISIBLE_APP_ADJ = 1;
+    static int VISIBLE_APP_ADJ = 1;
 
     // This is the process running the current foreground app.  We'd really
     // rather not kill it!
-    static final int FOREGROUND_APP_ADJ = 0;
+    static int FOREGROUND_APP_ADJ = 0;
 
     // This is a system persistent process, such as telephony.  Definitely
     // don't want to kill it, but doing so is not completely fatal.
@@ -113,7 +113,7 @@ class ProcessList {
     // These are the various interesting memory levels that we will give to
     // the OOM killer.  Note that the OOM killer only supports 6 slots, so we
     // can't give it a different value for every possible kind of process.
-    private final int[] mOomAdj = new int[] {
+    private int[] mOomAdj = new int[] {
             FOREGROUND_APP_ADJ, VISIBLE_APP_ADJ, PERCEPTIBLE_APP_ADJ,
             BACKUP_APP_ADJ, HIDDEN_APP_MIN_ADJ, HIDDEN_APP_MAX_ADJ
     };
@@ -130,7 +130,7 @@ class ProcessList {
             57344, 65536, 81920
     };
     // The actual OOM killer memory levels we are using.
-    private final long[] mOomMinFree = new long[mOomAdj.length];
+    private long[] mOomMinFree = new long[mOomAdj.length];
 
     private final long mTotalMemMb;
 
@@ -169,13 +169,44 @@ class ProcessList {
         StringBuilder memString = new StringBuilder();
 
         float scale = scaleMem > scaleDisp ? scaleMem : scaleDisp;
+
+        String lmkProperty = SystemProperties.get("lmk.autocalc", "true");
+        boolean autocalc =  "true".equalsIgnoreCase(lmkProperty);
+        if(!autocalc){
+           mOomAdj[0]     = SystemProperties.getInt("ro.LMK_SLOT0_ADJ", 0);
+           mOomAdj[1]     = SystemProperties.getInt("ro.LMK_SLOT1_ADJ", 1);
+           mOomAdj[2]     = SystemProperties.getInt("ro.LMK_SLOT2_ADJ", 2);
+           mOomAdj[3]     = SystemProperties.getInt("ro.LMK_SLOT3_ADJ", 4);
+           mOomAdj[4]     = SystemProperties.getInt("ro.LMK_SLOT4_ADJ", 9);
+           mOomAdj[5]     = SystemProperties.getInt("ro.LMK_SLOT5_ADJ", 15);
+           mOomMinFree[0] = SystemProperties.getInt("ro.LMK_SLOT0_MINFREE", 8192);
+           mOomMinFree[1] = SystemProperties.getInt("ro.LMK_SLOT1_MINFREE", 12288);
+           mOomMinFree[2] = SystemProperties.getInt("ro.LMK_SLOT2_MINFREE", 16384);
+           mOomMinFree[3] = SystemProperties.getInt("ro.LMK_SLOT3_MINFREE", 24576);
+           mOomMinFree[4] = SystemProperties.getInt("ro.LMK_SLOT4_MINFREE", 28672);
+           mOomMinFree[5] = SystemProperties.getInt("ro.LMK_SLOT5_MINFREE", 32768);
+           /* Fix ADJ */
+           /*FOREGROUND_APP_ADJ = SystemProperties.getInt("ro.FOREGROUND_APP_ADJ", 0);
+           VISIBLE_APP_ADJ    = SystemProperties.getInt("ro.VISIBLE_APP_ADJ", 1);
+           PERCEPTIBLE_APP_ADJ = SystemProperties.getInt("ro.PERCEPTIBLE_APP_ADJ", 2);
+           HEAVY_WEIGHT_APP_ADJ = SystemProperties.getInt("ro.HEAVY_WEIGHT_APP_ADJ", 3);
+           BACKUP_APP_ADJ = SystemProperties.getInt("ro.BACKUP_APP_ADJ", 4);
+           SERVICE_ADJ = SystemProperties.getInt("ro.SERVICE_ADJ", 5);
+           HOME_APP_ADJ = SystemProperties.getInt("ro.HOME_APP_ADJ", 6);
+           PREVIOUS_APP_ADJ = SystemProperties.getInt("ro.PREVIOUS_APP_ADJ", 7);
+           SERVICE_B_ADJ = SystemProperties.getInt("ro.SERVICE_B_ADJ", 8);
+           HIDDEN_APP_MIN_ADJ = SystemProperties.getInt("ro.HIDDEN_APP_MIN_ADJ", 9);
+           HIDDEN_APP_MAX_ADJ = SystemProperties.getInt("ro.HIDDEN_APP_MAX_ADJ", 15);*/
+           return;
+        }
+
         if (scale < 0) scale = 0;
         else if (scale > 1) scale = 1;
         for (int i=0; i<mOomAdj.length; i++) {
             long low = mOomMinFreeLow[i];
             long high = mOomMinFreeHigh[i];
             mOomMinFree[i] = (long)(low + ((high-low)*scale));
-
+          
             if (i > 0) {
                 adjString.append(',');
                 memString.append(',');
