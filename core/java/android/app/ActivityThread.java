@@ -4765,10 +4765,14 @@ public final class ActivityThread {
             throw e;
         } catch (RuntimeException e1) {
             if (Debug.isMonkeyOrDebug()) {
-                String cause = Log.getStackTraceString(e1.getCause());
-                if (null != cause && cause.contains("Caused by: java.lang.OutOfMemoryError:")) {
-                    Debug.dumpHprof(thread.getProcessName());
-                }
+            	boolean dump = false;
+            	try {
+	                String cause = Log.getStackTraceString(e1.getCause());
+	                dump = null != cause && cause.contains("Caused by: java.lang.OutOfMemoryError:");
+            	} catch (OutOfMemoryError e2) {//getStackTraceString may be OOM
+            		dump = true;
+            	}
+            	if (dump) Debug.dumpHprof(thread.getProcessName());
             }
             throw e1;
         }
