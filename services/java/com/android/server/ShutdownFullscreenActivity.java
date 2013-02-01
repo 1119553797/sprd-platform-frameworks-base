@@ -65,18 +65,7 @@ public class ShutdownFullscreenActivity extends Activity {
         }
     };
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(Intent.ACTION_BATTERY_OKAY.equals(intent.getAction())|
-                    Intent.ACTION_POWER_CONNECTED.equals(intent.getAction())){
-                ShutDownWakeLock.releaseCpuLock();
-                myHandler.removeCallbacks(myRunnable);
-                unregisterReceiver(mReceiver);
-                finish();
-            }
-        }
-    };
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +73,25 @@ public class ShutdownFullscreenActivity extends Activity {
 
         mConfirm = getIntent().getBooleanExtra(Intent.EXTRA_KEY_CONFIRM, false);
         Slog.i(TAG, "onCreate(): confirm=" + mConfirm);
+        if(getIntent().getBooleanExtra("can_be_cancel", false)) {
+                mReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if(Intent.ACTION_BATTERY_OKAY.equals(intent.getAction())|
+                        Intent.ACTION_POWER_CONNECTED.equals(intent.getAction())){
+                        ShutDownWakeLock.releaseCpuLock();
+                        myHandler.removeCallbacks(myRunnable);
+                        if(mReceiver != null)
+                            unregisterReceiver(mReceiver);
+                        finish();
+                    }
+                }
+            };
 
-        IntentFilter filter=new IntentFilter(Intent.ACTION_POWER_CONNECTED);
-        filter.addAction(Intent.ACTION_BATTERY_OKAY);
-        registerReceiver(mReceiver, filter);
-
+         IntentFilter filter=new IntentFilter(Intent.ACTION_POWER_CONNECTED);
+         filter.addAction(Intent.ACTION_BATTERY_OKAY);
+         registerReceiver(mReceiver, filter);
+        }
         requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
         Window win = getWindow();
         win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
@@ -105,7 +108,8 @@ public class ShutdownFullscreenActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         myHandler.removeCallbacks(myRunnable);
                         dialog.cancel();
-                        unregisterReceiver(mReceiver);
+                        if(mReceiver != null)
+                            unregisterReceiver(mReceiver);
                         finish();
                     }});
         mDialog.setCancelable(false);
