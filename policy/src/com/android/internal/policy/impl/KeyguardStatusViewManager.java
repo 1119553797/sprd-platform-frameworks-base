@@ -641,9 +641,11 @@ class KeyguardStatusViewManager implements OnClickListener {
             case ABSENT:
                 return StatusMode.SimMissing;
             case NETWORK_LOCKED:
-                return StatusMode.SimMissingLocked;
+                return StatusMode.NetworkLocked;
             case NOT_READY:
                 return StatusMode.SimMissing;
+            case SIM_LOCKED:
+                return StatusMode.SimLocked;
             case PIN_REQUIRED:
                 return StatusMode.SimLocked;
             case PUK_REQUIRED:
