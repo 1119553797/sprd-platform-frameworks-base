@@ -70,6 +70,11 @@ import java.util.Date;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
+import android.os.SystemProperties;
+
+import com.android.internal.telephony.PhoneFactory;
+import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 
 /**
  * A GPS implementation of LocationProvider used by LocationManager.
@@ -294,6 +299,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
     // how long to wait if we have a network error in NTP or XTRA downloading
     // current setting - 5 minutes
     private static final long RETRY_INTERVAL = 5*60*1000;
+    private int mPhoneIsRegistered;
+    private TelephonyManager mTelephonyManager;
 
     private final IGpsStatusProvider mGpsStatusProvider = new IGpsStatusProvider.Stub() {
         public void addGpsStatusListener(IGpsStatusListener listener) throws RemoteException {
@@ -459,6 +466,11 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 Thread.currentThread().interrupt();
             }
         }
+
+        int phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+        mTelephonyManager = (TelephonyManager) mContext.getSystemService(
+                    PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, phoneId));
+        mTelephonyManager.listen(mPhoneStateListener(phoneId), PhoneStateListener.LISTEN_SERVICE_STATE);
     }
 
     private void initialize() {
@@ -1006,6 +1018,17 @@ public class GpsLocationProvider implements LocationProviderInterface {
                     mPositionMode = GPS_POSITION_MODE_MS_BASED;
                 }
             }
+
+            int enableOption = Settings.Secure.getInt(mContext.getContentResolver(), "assisted_gps_enable_option", 0);
+            Log.d(TAG, "get the agps enable option is " + enableOption);
+            if (enableOption == 2) {
+                mPositionMode = GPS_POSITION_MODE_STANDALONE;
+            } else if (enableOption == 0) {
+                if (mTelephonyManager.isNetworkRoaming() || mPhoneIsRegistered != ServiceState.STATE_IN_SERVICE) {
+                    mPositionMode = GPS_POSITION_MODE_STANDALONE;
+                }
+            }
+            Log.d(TAG, "after set mPositionMode = " + mPositionMode);
 
             int interval = (hasCapability(GPS_CAPABILITY_SCHEDULING) ? mFixInterval : 1000);
             if (!native_set_position_mode(mPositionMode, GPS_POSITION_RECURRENCE_PERIODIC,
@@ -1556,6 +1579,16 @@ public class GpsLocationProvider implements LocationProviderInterface {
             m.obj = obj;
             mHandler.sendMessage(m);
         }
+    }
+
+    private PhoneStateListener mPhoneStateListener(int phoneId) {
+        PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onServiceStateChanged(ServiceState serviceState) {
+                mPhoneIsRegistered = serviceState.getState();
+            }
+        };
+        return mPhoneStateListener;
     }
 
     private final class ProviderHandler extends Handler {
