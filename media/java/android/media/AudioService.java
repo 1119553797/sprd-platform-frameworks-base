@@ -2368,6 +2368,9 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 device &= AudioSystem.DEVICE_OUT_ALL_A2DP;
             }
         }
+        if (stream == AudioSystem.STREAM_FM && device == 0) {
+            return AudioSystem.DEVICE_OUT_FM_HEADSET;
+        }
         return device;
     }
 
