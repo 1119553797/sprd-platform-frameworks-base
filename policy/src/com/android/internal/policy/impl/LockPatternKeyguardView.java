@@ -78,6 +78,7 @@ import java.io.IOException;
 public class LockPatternKeyguardView extends KeyguardViewBase {
 
     private boolean[] mIsPinUnlockCancelled = {false, false};
+    private boolean[] mIsPukUnlockCancelled = {false, false};
 
     private static final int TRANSPORT_USERACTIVITY_TIMEOUT = 10000;
 
@@ -321,6 +322,11 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
             public void updatePinUnlockCancel(int subscription) {
                 Log.d(TAG, "updatePinUnlockCancel sub :" + subscription);
                 mIsPinUnlockCancelled[subscription] = true;
+            }
+
+            public void updatePukUnlockCancel(int subscription) {
+                Log.d(TAG, "updatePukUnlockCancel sub :" + subscription);
+                mIsPukUnlockCancelled[subscription] = true;
             }
 
         public void forgotPattern(boolean isForgotten) {
@@ -1122,10 +1128,10 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
         for(int i=0;i<phonenum;i++){
             simState[i]=mUpdateMonitor.getSimState(i);
             Log.i("xxxxxx","simState = "+simState[i]+", i = "+i);
-            if (simState[i]== IccCard.State.PIN_REQUIRED && (phonenum == 1 || !mIsPinUnlockCancelled[i])) {
+            if (simState[i]== IccCard.State.PIN_REQUIRED && !mIsPinUnlockCancelled[i]) {
                   currentMode =i==0?UnlockMode.SimPin:UnlockMode.Sim2Pin;
                   return currentMode;
-            } else if (simState[i] == IccCard.State.PUK_REQUIRED) {
+            } else if (simState[i] == IccCard.State.PUK_REQUIRED && !mIsPukUnlockCancelled[i]) {
                   currentMode =i==0?UnlockMode.SimPuk:UnlockMode.Sim2Puk;
                   return currentMode;
             }
