@@ -73,8 +73,9 @@ public class MediaFile {
     
     // More video file types
     public static final int FILE_TYPE_MP2PS   = 200;
+    public static final int FILE_TYPE_FLV     = 201;
     private static final int FIRST_VIDEO_FILE_TYPE2 = FILE_TYPE_MP2PS;
-    private static final int LAST_VIDEO_FILE_TYPE2 = FILE_TYPE_MP2PS;
+    private static final int LAST_VIDEO_FILE_TYPE2 = FILE_TYPE_FLV;
 
     // Image file types
     public static final int FILE_TYPE_JPEG    = 31;
@@ -208,7 +209,7 @@ public class MediaFile {
         addFileType("WEBM", FILE_TYPE_WEBM, "video/webm");
         addFileType("TS", FILE_TYPE_MP2TS, "video/mp2ts");
         addFileType("AVI", FILE_TYPE_AVI, "video/avi");
-
+        addFileType("FLV", FILE_TYPE_FLV, "video/flv");
         if (isWMVEnabled()) {
             addFileType("WMV", FILE_TYPE_WMV, "video/x-ms-wmv", MtpConstants.FORMAT_WMV);
             addFileType("ASF", FILE_TYPE_ASF, "video/x-ms-asf");
