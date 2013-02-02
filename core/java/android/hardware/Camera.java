@@ -1596,6 +1596,12 @@ public class Camera {
         private static final String KEY_ISO = "iso";
         /** @hide */
         private static final String KEY_SATURATION = "saturation";
+        /** @hide */
+        private static final String KEY_SMILE_SNAP_MODE = "smile_snap_mode";
+        /** @hide */
+        private static final String KEY_HDR = "hdr";
+        /** @hide */
+        private static final String KEY_HDR_SUPPORTED = "hdr-supported";
         private static final String KEY_JPEG_THUMBNAIL_SIZE = "jpeg-thumbnail-size";
         private static final String KEY_JPEG_THUMBNAIL_WIDTH = "jpeg-thumbnail-width";
         private static final String KEY_JPEG_THUMBNAIL_HEIGHT = "jpeg-thumbnail-height";
@@ -2560,6 +2566,11 @@ public class Camera {
 		return split(str);
 	}
 
+        /** @hide */
+        public boolean isCaptureHdrSupported() {
+            String str = get(KEY_HDR_SUPPORTED);
+            return TRUE.equals(str);
+        }
         private String cameraFormatForPixelFormat(int pixel_format) {
             switch(pixel_format) {
             case ImageFormat.NV16:      return PIXEL_FORMAT_YUV422SP;
