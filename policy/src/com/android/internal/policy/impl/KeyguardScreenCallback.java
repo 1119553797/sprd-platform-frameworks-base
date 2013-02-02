@@ -38,6 +38,7 @@ public interface KeyguardScreenCallback extends KeyguardViewCallback {
      * Update the subscription for which the dialog was dismissed.
      */
     void updatePinUnlockCancel(int subscription);
+    void updatePukUnlockCancel(int subscription);
 
     /**
      * The user reported that they forgot their pattern (or not, when they want to back out of the

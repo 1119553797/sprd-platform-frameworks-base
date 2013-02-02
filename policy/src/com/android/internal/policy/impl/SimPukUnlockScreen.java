@@ -475,6 +475,7 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
                 mPinText2.setText("");
                 mPukText.setText("");
                 mCallback.goToLockScreen();
+                mCallback.updatePukUnlockCancel(mSub);
                 return;
             }
 
