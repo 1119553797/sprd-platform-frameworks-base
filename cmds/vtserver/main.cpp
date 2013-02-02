@@ -24,7 +24,7 @@
 #define CTP_TEST "ctp.test"
 #define BTUT_TEST "btut.test"
 //for 8810ea
-#define SPRD_SD_TESTFILE "/sdcard/external/test.txt"
+#define SPRD_SD_TESTFILE "/sdcard/test.txt"
 #define SPRD_SD_TAG "SDCardTest"
 
 int write_file_tag(char* filename, char* buf)
