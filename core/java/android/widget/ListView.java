@@ -16,10 +16,6 @@
 
 package android.widget;
 
-import android.view.MotionEvent;
-import android.widget.FrameLayout;
-import android.view.VelocityTracker;
-import android.view.ViewConfiguration;
 import com.android.internal.R;
 import com.android.internal.util.Predicate;
 import com.google.android.collect.Lists;
@@ -77,9 +73,6 @@ import java.util.ArrayList;
  */
 @RemoteView
 public class ListView extends AbsListView {
-    public static final int SWIPE_LEFT=0;
-    public static final int SWIPE_RIGHT=1;
-
     /**
      * Used to indicate a no preference for a position type.
      */
@@ -169,7 +162,7 @@ public class ListView extends AbsListView {
                     com.android.internal.R.layout.simple_list_item_1, entries));
         }
 
-	Drawable d = a.getDrawable(com.android.internal.R.styleable.ListView_divider);
+        final Drawable d = a.getDrawable(com.android.internal.R.styleable.ListView_divider);
         if (d != null) {
             // If a divider is specified use its intrinsic height for divider height
             setDivider(d);
@@ -3678,217 +3671,4 @@ public class ListView extends AbsListView {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setClassName(ListView.class.getName());
     }
-
-    public void setOnSwipeListener(OnSwipeListener listener) {
-	if (listener == null) {
-	    setOnTouchListener(null);
-	    setOnSwipeListener(null);
-	} else {
-	    SwipeListViewListener swipeListViewListener =new SwipeListViewListener(listener);
-	    setOnTouchListener(swipeListViewListener);
-	    setOnScrollListener(swipeListViewListener.makeScrollListener());
-	}
-    }
-
-    public interface OnSwipeListener {
-	boolean onSwipeStart(ListView parent, int pos, View view);
-	void onSwipeEnd(ListView parent, int pos, View view, int direction);
-	View getSwipeView(ListView parent, int pos, View view, int direction);
-    }
-    
-    private class SwipeListViewListener implements View.OnTouchListener {
-    
-	private int mSlop;
-	private int mMinFlingVelocity;
-	private int mMaxFlingVelocity;
-
-	private ListView mListView;
-	private OnSwipeListener mCallback;
-	private int mViewWidth = 1;
-
-	private float mDownX;
-	private float mDownY;
-	private VelocityTracker mVelocityTracker;
-	private int mDownPosition;
-	private View mDownView;
-	private View mSwipeView;
-	private PopupWindow mPopupWindow;
-	private boolean mPaused;
-
-	public SwipeListViewListener(OnSwipeListener callback) {
-	    mListView = ListView.this;
-	    ViewConfiguration vc = ViewConfiguration.get(mListView.getContext());
-	    mSlop = vc.getScaledTouchSlop();
-	    mMinFlingVelocity = vc.getScaledMinimumFlingVelocity();
-	    mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
-
-	    mCallback = callback;
-	}
-
-	public void setEnabled(boolean enabled) {
-	    mPaused = !enabled;
-	}
-
-	public AbsListView.OnScrollListener makeScrollListener() {
-	    return new AbsListView.OnScrollListener() {
-		@Override
-		public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-		    setEnabled(scrollState != AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
-		}
-
-		@Override
-		public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-		}
-	    };
-	}
-
-	@Override
-	public boolean onTouch(View view, MotionEvent motionEvent) {
-	    if (mViewWidth < 2) {
-		mViewWidth = mListView.getWidth();
-	    }
-
-	    switch (motionEvent.getActionMasked()) {
-		case MotionEvent.ACTION_DOWN: {
-		    if (mPaused) {
-			break;
-		    }
-		    mListView.requestDisallowInterceptTouchEvent(true);
-		    // Find the child view that was touched (perform a hit test)
-		    Rect rect = new Rect();
-		    int childCount = mListView.getChildCount();
-		    int[] listViewCoords = new int[2];
-		    mListView.getLocationOnScreen(listViewCoords);
-		    int x = (int) motionEvent.getRawX() - listViewCoords[0];
-		    int y = (int) motionEvent.getRawY() - listViewCoords[1];
-		    View child;
-		    for (int i = 0; i < childCount; i++) {
-			child = mListView.getChildAt(i);
-			child.getHitRect(rect);
-			if (rect.contains(x, y)) {
-			    mDownView = child;
-			    break;
-			}
-		    }
-		    if (mDownView != null) {
-			mDownX = motionEvent.getRawX();
-			mDownY = motionEvent.getRawY();
-			mDownPosition = mListView.getPositionForView(mDownView);
-			if (!mCallback.onSwipeStart(mListView, mDownPosition, mDownView)) {
-			    mDownView = null;
-			    break;
-			} 
-
-			mVelocityTracker = VelocityTracker.obtain();
-			mVelocityTracker.addMovement(motionEvent);
-		    }
-		    view.onTouchEvent(motionEvent);
-		    return true;
-		}
-
-		case MotionEvent.ACTION_UP: {
-		    if (mPaused
-			|| mDownView == null
-			|| mPopupWindow == null
-			|| mSwipeView == null
-			|| mVelocityTracker == null) {
-			break;
-		    }
-		
-		    float deltaX = motionEvent.getRawX() - mDownX;
-		    mVelocityTracker.addMovement(motionEvent);
-		    mVelocityTracker.computeCurrentVelocity(500); // 1000 by defaut but it was too much
-		    float velocityX = Math.abs(mVelocityTracker.getXVelocity());
-		    float velocityY = Math.abs(mVelocityTracker.getYVelocity());
-		    boolean swipe = false;
-		    int direction = -1;
-
-		    if (Math.abs(deltaX) > mViewWidth / 2) {
-			swipe = true;
-			direction = deltaX > 0 ? SWIPE_RIGHT: SWIPE_LEFT;
-		    } else if (mMinFlingVelocity <= velocityX && velocityX <= mMaxFlingVelocity
-			       && velocityY < velocityX) {
-			swipe = true;
-			direction = mVelocityTracker.getXVelocity() > 0 ? SWIPE_RIGHT: SWIPE_LEFT;
-		    }
-
-		    mPopupWindow.dismiss();
-		    mDownView.setAlpha(1);
-		    mDownView.setTranslationX(0);
-		
-		    if (swipe) {
-			mCallback.onSwipeEnd(mListView, mDownPosition, mDownView, direction);
-		    }
-		
-		    mPopupWindow.dismiss();
-		    mPopupWindow = null;
-		
-		    mVelocityTracker = null;
-		    mDownX = 0;
-		    mDownView = null;
-		    mSwipeView = null;
-		    mDownPosition = ListView.INVALID_POSITION;
-		    mPopupWindow = null;
-		    break;
-		}
-
-		case MotionEvent.ACTION_MOVE: {
-		    if (mVelocityTracker == null || mPaused || mDownView == null) {
-			break;
-		    }
-
-		    float deltaX = motionEvent.getRawX() - mDownX;
-		    float deltaY = motionEvent.getRawY() - mDownY;
-		    if (Math.abs(deltaX) < mSlop) {
-			break;
-		    }
-
-		    if (mSwipeView ==null && Math.abs(deltaY) > 100) {
-			break;
-		    }
-
-		    mVelocityTracker.addMovement(motionEvent);
-		    mListView.requestDisallowInterceptTouchEvent(true);
-
-		    // Cancel ListView's touch (un-highlighting the item)
-		    MotionEvent cancelEvent = MotionEvent.obtain(motionEvent);
-		    cancelEvent.setAction(MotionEvent.ACTION_CANCEL |
-					  (motionEvent.getActionIndex()
-					   << MotionEvent.ACTION_POINTER_INDEX_SHIFT));
-		    mListView.onTouchEvent(cancelEvent);
-
-		    float alpha=Math.max(0f, Math.min(1f,1f - 2f * Math.abs(deltaX) / mViewWidth));
-		    mDownView.setAlpha(alpha);
-		    mDownView.setTranslationX(deltaX);
-		    
-		    if (mSwipeView==null) {
-			int direction = deltaX > 0 ? SWIPE_RIGHT: SWIPE_LEFT;
-			mSwipeView = mCallback.getSwipeView(mListView, mDownPosition, mDownView, direction);
-		    }
-		    
-		    if (mPopupWindow==null) {
-			mPopupWindow=new PopupWindow(mDownView.getWidth(),mDownView.getHeight());
-			FrameLayout holder=new FrameLayout(getContext());
-			holder.addView(mSwipeView);
-			mPopupWindow.setContentView(holder);
-		    }
-
-		    if (mSwipeView.getBackground()!=null) {
-			mSwipeView.getBackground().setAlpha(Math.max(0,(255-(int)(alpha*255*1.5))));			
-		    } 
-		    
-		    if (mPopupWindow.isShowing()) {
-			// mPopupWindow.update();
-		    } else {
-			mPopupWindow.showAsDropDown(mDownView,0,0-mDownView.getHeight());	    
-		    }
-		    return true;
-		}
-	    }
-	    return false;
-	}
-    }
 }
-
-
-

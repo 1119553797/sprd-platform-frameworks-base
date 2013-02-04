@@ -195,7 +195,7 @@ public class ActionBarContainer extends FrameLayout {
 
         final boolean hasTabs = mTabContainer != null && mTabContainer.getVisibility() != GONE;
 
-        if (!mIsSplit && mTabContainer != null && mTabContainer.getVisibility() != GONE) {
+        if (mTabContainer != null && mTabContainer.getVisibility() != GONE) {
             final int containerHeight = getMeasuredHeight();
             final int tabHeight = mTabContainer.getMeasuredHeight();
 

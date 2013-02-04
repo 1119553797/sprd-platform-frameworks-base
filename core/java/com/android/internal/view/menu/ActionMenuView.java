@@ -15,7 +15,6 @@
  */
 package com.android.internal.view.menu;
 
-import android.os.SystemProperties;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -34,8 +33,6 @@ import com.android.internal.R;
  */
 public class ActionMenuView extends LinearLayout implements MenuBuilder.ItemInvoker, MenuView {
     private static final String TAG = "ActionMenuView";
-
-    public static boolean UNIVERSE_UI_SUPPORT = SystemProperties.getBoolean("universe_ui_support",false);
     
     static final int MIN_CELL_SIZE = 56; // dips
     static final int GENERATED_ITEM_PADDING = 4; // dips
@@ -527,10 +524,6 @@ public class ActionMenuView extends LinearLayout implements MenuBuilder.ItemInvo
 
     @Override
     protected boolean hasDividerBeforeChildAt(int childIndex) {
-	if (UNIVERSE_UI_SUPPORT) {
-	    return super.hasDividerBeforeChildAt(childIndex);
-	} 
-
         final View childBefore = getChildAt(childIndex - 1);
         final View child = getChildAt(childIndex);
         boolean result = false;

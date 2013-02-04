@@ -167,23 +167,8 @@ public class CursorLoader extends AsyncTaskLoader<Cursor> {
      */
     @Override
     protected void onStopLoading() {
-	// NOTE: cancelLoad is disabled to fix this bug:
-	// 1. make some changes to the underlying database, so that
-	// Loader.mContentChanged flag is set
-	// 
-	// 2. query the database using the loader, then the mContentChanged will
-	// be cleared by loader.onStartLoading, but before the loader returns
-	// any data, stop the loader, thus the loader is canceled, and the
-	// Loader.mCursor is untouched.
-	// 
-	// 3. since the mContentChanged is cleared by the former onStartLoading,
-	// any succeeding onStartLoading will never forceLoad the database
-	//
-	// disable the `cancelLoad` should not leek any cursor, because
-	// Loader.deliverResult will close those `stale` cursors.
-
-	// Attempt to cancel the current load task if possible.
-        // cancelLoad();
+        // Attempt to cancel the current load task if possible.
+        cancelLoad();
     }
 
     @Override

@@ -56,13 +56,8 @@ public class ScrollingTabContainerView extends HorizontalScrollView
     int mMaxTabWidth;
     int mStackedTabMaxWidth;
     private int mContentHeight;
-    
-    private boolean mHeightFixed=false;
-    private boolean mAlternativeTabStyle=false;
-    
     private int mSelectedTabIndex;
 
-    
     protected Animator mVisibilityAnim;
     protected final VisibilityAnimListener mVisAnimListener = new VisibilityAnimListener();
 
@@ -212,9 +207,6 @@ public class ScrollingTabContainerView extends HorizontalScrollView
         super.onConfigurationChanged(newConfig);
 
         ActionBarPolicy abp = ActionBarPolicy.get(getContext());
-	if (mHeightFixed) {
-	    return;
-	}
         // Action bar can change size on configuration changes.
         // Reread the desired height from the theme-specified style.
         setContentHeight(abp.getTabContainerHeight());
@@ -368,10 +360,6 @@ public class ScrollingTabContainerView extends HorizontalScrollView
 
         public TabView(Context context, ActionBar.Tab tab, boolean forList) {
             super(context, null, com.android.internal.R.attr.actionBarTabStyle);
-	    if (mAlternativeTabStyle) {
-		setOrientation(LinearLayout.VERTICAL);		
-	    } 
-
             mTab = tab;
 
             if (forList) {
@@ -426,12 +414,7 @@ public class ScrollingTabContainerView extends HorizontalScrollView
                         ImageView iconView = new ImageView(getContext());
                         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
                                 LayoutParams.WRAP_CONTENT);
-			if (mAlternativeTabStyle) {
-			    lp.gravity = Gravity.CENTER_HORIZONTAL;			    
-			} else {
-			    lp.gravity = Gravity.CENTER_VERTICAL;
-			}
-
+                        lp.gravity = Gravity.CENTER_VERTICAL;
                         iconView.setLayoutParams(lp);
                         addView(iconView, 0);
                         mIconView = iconView;
@@ -450,11 +433,7 @@ public class ScrollingTabContainerView extends HorizontalScrollView
                         textView.setEllipsize(TruncateAt.END);
                         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
                                 LayoutParams.WRAP_CONTENT);
-			if (mAlternativeTabStyle) {
-			    lp.gravity = Gravity.CENTER_HORIZONTAL;			    
-			} else {
-			    lp.gravity = Gravity.CENTER_VERTICAL;
-			}
+                        lp.gravity = Gravity.CENTER_VERTICAL;
                         textView.setLayoutParams(lp);
                         addView(textView);
                         mTextView = textView;
@@ -548,15 +527,5 @@ public class ScrollingTabContainerView extends HorizontalScrollView
         @Override
         public void onAnimationRepeat(Animator animation) {
         }
-    }
-
-    public void setFixedHeight(int height) {
-	mContentHeight=height;
-	mHeightFixed=true;
-    }
-
-    public void setAlternativeTabStyle(boolean alternativeTabStyle) {
-	mAlternativeTabStyle=alternativeTabStyle;
-	// TODO: update tab
     }
 }

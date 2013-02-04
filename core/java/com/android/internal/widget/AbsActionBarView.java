@@ -37,7 +37,6 @@ public abstract class AbsActionBarView extends ViewGroup {
     protected ActionBarContainer mSplitView;
     protected boolean mSplitActionBar;
     protected boolean mSplitWhenNarrow;
-    protected boolean mAlternativeTabStyle;
     protected int mContentHeight;
 
     protected Animator mVisibilityAnim;
@@ -92,10 +91,6 @@ public abstract class AbsActionBarView extends ViewGroup {
      */
     public void setSplitWhenNarrow(boolean splitWhenNarrow) {
         mSplitWhenNarrow = splitWhenNarrow;
-    }
-
-    public void setAlternativeTabStyle(boolean alternativeTabStyle) {
-	mAlternativeTabStyle = alternativeTabStyle;
     }
 
     public void setContentHeight(int height) {

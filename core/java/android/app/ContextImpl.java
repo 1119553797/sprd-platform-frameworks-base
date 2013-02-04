@@ -16,9 +16,6 @@
 
 package android.app;
 
-import android.theme.IThemeManager;
-import android.theme.ThemeManager;
-
 import com.android.internal.policy.PolicyManager;
 import com.android.internal.telephony.PhoneFactory;
 
@@ -274,13 +271,6 @@ class ContextImpl extends Context {
                     IBinder b = ServiceManager.getService(ACCOUNT_SERVICE);
                     IAccountManager service = IAccountManager.Stub.asInterface(b);
                     return new AccountManager(ctx, service);
-                }});
-
-        registerService(THEME_SERVICE, new ServiceFetcher() {
-                public Object createService(ContextImpl ctx) {
-                    IBinder b = ServiceManager.getService(THEME_SERVICE);
-                    IThemeManager service = IThemeManager.Stub.asInterface(b);
-                    return new ThemeManager(ctx, service);
                 }});
 
         registerService(ACTIVITY_SERVICE, new ServiceFetcher() {

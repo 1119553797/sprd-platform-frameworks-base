@@ -429,53 +429,6 @@ static jlong android_content_AssetManager_getAssetRemainingLength(JNIEnv* env, j
     return a->getRemainingLength();
 }
 
-static jboolean android_content_AssetManager_detachThemePath(JNIEnv* env, jobject clazz,
-            jstring packageName, jint cookie)
-{
-    if (packageName == NULL) {
-        jniThrowException(env, "java/lang/NullPointerException", "packageName");
-        return JNI_FALSE;
-    }
-
-    AssetManager* am = assetManagerForJavaObject(env, clazz);
-    if (am == NULL) {
-        return JNI_FALSE;
-    }
-
-    const char* name8 = env->GetStringUTFChars(packageName, NULL);
-    bool res = am->detachThemePath(String8(name8), (void *)cookie);
-    env->ReleaseStringUTFChars(packageName, name8);
-
-    return res;
-}
-
-static jint android_content_AssetManager_attachThemePath(
-    JNIEnv* env, jobject clazz, jstring origPath, jstring path)
-{
-    if (path == NULL) {
-        jniThrowException(env, "java/lang/NullPointerException", "path");
-        return JNI_FALSE;
-    }
-
-    AssetManager* am = assetManagerForJavaObject(env, clazz);
-    if (am == NULL) {
-        return JNI_FALSE;
-    }
-
-    const char* path8 = env->GetStringUTFChars(path, NULL);
-    const char* origPath8 = env->GetStringUTFChars(origPath, NULL);
-    
-    void* cookie;
-    bool res = am->attachThemePath(String8(origPath8), String8(path8), &cookie);
-
-    env->ReleaseStringUTFChars(path, path8);
-
-    return (res) ? (jint)cookie : 0;
-}
-
-
-
-
 static jint android_content_AssetManager_addAssetPath(JNIEnv* env, jobject clazz,
                                                        jstring path)
 {
@@ -1687,12 +1640,6 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_getAssetRemainingLength },
     { "addAssetPath",   "(Ljava/lang/String;)I",
         (void*) android_content_AssetManager_addAssetPath },
-
-    { "detachThemePath", "(Ljava/lang/String;I)Z",
-        (void*) android_content_AssetManager_detachThemePath },
-    { "attachThemePath",   "(Ljava/lang/String;Ljava/lang/String;)I",
-        (void*) android_content_AssetManager_attachThemePath },
-
     { "isUpToDate",     "()Z",
         (void*) android_content_AssetManager_isUpToDate },
 
