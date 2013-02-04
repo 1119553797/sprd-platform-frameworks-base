@@ -26,6 +26,7 @@
 //for 8810ea
 #define SPRD_SD_TESTFILE "/sdcard/test.txt"
 #define SPRD_SD_TAG "SDCardTest"
+#define SPRD_READ_FM_TESTFILE "/data/data/com.spreadst.validationtools/fm2.txt"
 
 int write_file_tag(char* filename, char* buf)
 {
@@ -233,7 +234,77 @@ int main(int argc, char** argv)
 			ch = '7';
         }
     }
+
     
+    else if(ch == 's')
+    {
+        char* type = getenv("SECOND_STORAGE_TYPE");
+        char* path;
+        if(strcmp(type, "0") == 0 || strcmp(type, "1") == 0)
+        {
+		path = strcat(getenv("EXTERNAL_STORAGE"),"/fm2.txt");
+        }
+        else
+	{
+		path = strcat(getenv("SECONDARY_STORAGE"),"/fm2.txt");
+	}
+	char buf0[20] = {0};
+	int rr = read_file_tag(SPRD_READ_FM_TESTFILE, buf0);
+        int ret_w = write_file_tag(path, buf0);
+
+	char buf[20] = {0};
+        int ret_r = read_file_tag(path, buf);
+        if(ret_w != 0 || ret_r != 0 || strcmp(buf, buf0) != 0)
+        {
+			ALOGE("=== SDCard save fm failed! ===\n");
+			ch = '8';
+        }
+        else
+        {
+			ALOGE("=== SDCard save fm succeed! ===\n");
+			ch = '7';
+        }
+    }
+
+    else if(ch == 'f')
+    {
+        char* type = getenv("SECOND_STORAGE_TYPE");
+        char* path;
+       if(strcmp(type, "0") == 0 || strcmp(type, "1") == 0)
+        {
+		path = strcat(getenv("EXTERNAL_STORAGE"),"/fm2.txt");
+        }
+        else
+	{
+		path = strcat(getenv("SECONDARY_STORAGE"),"/fm2.txt");
+	}
+	char buf0[20] = {0};
+	int rr = read_file_tag(path, buf0);
+	if(rr == 0)
+	{
+		int ret_w = write_file_tag(SPRD_READ_FM_TESTFILE, buf0);
+
+		char buf[20] = {0};
+                int ret_r = read_file_tag(SPRD_READ_FM_TESTFILE, buf);
+                if(ret_w != 0 || ret_r != 0 || strcmp(buf, buf0) != 0)
+                {
+			ALOGE("=== SDCard read fm failed! ===\n");
+			ch = '8';
+                }
+                else
+                {
+			ALOGE("=== SDCard read fm succeed! ===\n");
+			ch = '7';
+                }
+	}
+	else
+	{
+		ALOGE("=== SDCard read fm failed! ===\n");
+		ch = '8';
+	}
+
+    }
+   
     fp = fopen("/data/data/com.spreadst.validationtools/vt.txt", "wb");
     if(fp == NULL)
     {
