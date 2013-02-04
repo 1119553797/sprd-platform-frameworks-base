@@ -198,10 +198,11 @@ int main(int argc, char** argv)
 	}
 
     else if(ch == '6')
-    {    	
-    	int ret_w = write_file_tag(SPRD_SD_TESTFILE, SPRD_SD_TAG);
+    {
+        char* path = strcat(getenv("EXTERNAL_STORAGE"),"/test.txt");
+    	int ret_w = write_file_tag(path, SPRD_SD_TAG);
     	char buf[20] = {0};
-    	int ret_r = read_file_tag(SPRD_SD_TESTFILE, buf);
+    	int ret_r = read_file_tag(path, buf);
     	if(ret_w != 0 || ret_r != 0 || strcmp(buf, SPRD_SD_TAG) != 0)
     	{
 			ALOGE("=== SDCard test failed! ===\n");
@@ -212,6 +213,25 @@ int main(int argc, char** argv)
 			ALOGE("=== SDCard test succeed! ===\n");
 			ch = '7';
     	}    	
+    }
+
+    else if(ch == 'd')
+    {
+	char* path = strcat(getenv("SECONDARY_STORAGE"),"/test.txt");
+	ALOGE(" SDCard  path:%s\n",path);
+        int ret_w = write_file_tag(path, SPRD_SD_TAG);
+        char buf[20] = {0};
+        int ret_r = read_file_tag(path, buf);
+        if(ret_w != 0 || ret_r != 0 || strcmp(buf, SPRD_SD_TAG) != 0)
+        {
+			ALOGE("=== SDCard test failed! ===\n");
+			ch = '8';
+        }
+        else
+        {
+			ALOGE("=== SDCard test succeed! ===\n");
+			ch = '7';
+        }
     }
     
     fp = fopen("/data/data/com.spreadst.validationtools/vt.txt", "wb");
