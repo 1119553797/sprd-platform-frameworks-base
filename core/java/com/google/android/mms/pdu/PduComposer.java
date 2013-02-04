@@ -38,6 +38,7 @@ public class PduComposer {
     static private final int PDU_IPV4_ADDRESS_TYPE = 3;
     static private final int PDU_IPV6_ADDRESS_TYPE = 4;
     static private final int PDU_UNKNOWN_ADDRESS_TYPE = 5;
+    private static final String TAG = "PduComposer";
 
     /**
      * Address regular expression string.
@@ -521,6 +522,7 @@ public class PduComposer {
      * Append header to mMessage.
      */
     private int appendHeader(int field) {
+		Log.d(TAG, "appendHeader field = "+field);
         switch (field) {
             case PduHeaders.MMS_VERSION:
                 appendOctet(field);
@@ -607,6 +609,7 @@ public class PduComposer {
             case PduHeaders.DELIVERY_REPORT:
             case PduHeaders.READ_REPORT:
                 int octet = mPduHeader.getOctet(field);
+                Log.d(TAG, "appendHeader <status,reportallowed,priority,delivery,read> octet = "+octet);
                 if (0 == octet) {
                     return PDU_COMPOSE_FIELD_NOT_SET;
                 }
@@ -662,6 +665,7 @@ public class PduComposer {
 
             case PduHeaders.EXPIRY:
                 long expiry = mPduHeader.getLongInteger(field);
+                Log.d(TAG, "appendHeader expiry = "+expiry);
                 if (-1 == expiry) {
                     return PDU_COMPOSE_FIELD_NOT_SET;
                 }
@@ -800,6 +804,7 @@ public class PduComposer {
      * Make Send.req.
      */
     private int makeSendReqPdu() {
+		Log.d(TAG, "----------------------- makeSendReqPdu start ----------------------- ");
         if (mMessage == null) {
             mMessage = new ByteArrayOutputStream();
             mPosition = 0;
@@ -990,6 +995,7 @@ public class PduComposer {
             // content type is mandatory
             return PDU_COMPOSE_CONTENT_ERROR;
         }
+		Log.d(TAG, "makeMessageBody contentType = "+contentType);
 
         appendShortInteger(contentTypeIdentifier.intValue());
 
@@ -1016,7 +1022,7 @@ public class PduComposer {
                     appendTextString("<" + new String(start) + ">");
                 }
             }
-
+            Log.d(TAG, "makeMessageBody part.getContentType() = "+PduPersister.toUTF8String(part.getContentType()));
             // content-type parameter: type
             appendOctet(PduPart.P_CT_MR_TYPE);
             appendTextString(part.getContentType());
@@ -1034,6 +1040,7 @@ public class PduComposer {
         int partNum = body.getPartsNum();
         appendUintvarInteger(partNum);
         for (int i = 0; i < partNum; i++) {
+			Log.d(TAG, "makeMessageBody partNum --> begin for :  "+i);
             part = body.getPart(i);
             mStack.newbuf();  // Leaving space for header lengh and data length
             PositionMarker attachment = mStack.mark();
@@ -1043,6 +1050,7 @@ public class PduComposer {
 
             byte[] partContentType = part.getContentType();
 
+            Log.d(TAG, "makeMessageBody partNum partContentType =  "+PduPersister.toUTF8String(partContentType));
             if (partContentType == null) {
                 // content type is mandatory
                 return PDU_COMPOSE_CONTENT_ERROR;
@@ -1077,11 +1085,13 @@ public class PduComposer {
                     }
                 }
             }
+            Log.d(TAG, "makeMessageBody partNum PduPart.P_DEP_NAME =  "+PduPersister.toUTF8String(name));
             appendOctet(PduPart.P_DEP_NAME);
             appendTextString(name);
 
             // content-type parameter : charset
             int charset = part.getCharset();
+            Log.d(TAG, "makeMessageBody partNum charset =  "+charset);
             if (charset != 0) {
                 appendOctet(PduPart.P_CHARSET);
                 appendShortInteger(charset);
@@ -1109,6 +1119,7 @@ public class PduComposer {
             if (null != contentLocation) {
             	appendOctet(PduPart.P_CONTENT_LOCATION);
             	appendTextString(contentLocation);
+				Log.d(TAG, "makeMessageBody partNum contentLocation = "+PduPersister.toUTF8String(contentLocation));
             }
 
             // content
@@ -1121,7 +1132,7 @@ public class PduComposer {
                 arraycopy(partData, 0, partData.length);
                 dataLength = partData.length;
             } else {
-                InputStream cr;
+                InputStream cr = null;
                 try {
                     byte[] buffer = new byte[PDU_COMPOSER_BLOCK_SIZE];
                     cr = mResolver.openInputStream(part.getDataUri());
@@ -1137,6 +1148,12 @@ public class PduComposer {
                     return PDU_COMPOSE_CONTENT_ERROR;
                 } catch (RuntimeException e) {
                     return PDU_COMPOSE_CONTENT_ERROR;
+                } finally {
+                    if (cr != null){
+                        try {
+                            cr.close();
+                        } catch (IOException e) {}
+                    }
                 }
             }
 
@@ -1145,6 +1162,7 @@ public class PduComposer {
             }
 
             mStack.pop();
+            Log.d(TAG, "makeMessageBody partNum headerLength =  "+headerLength + "  dataLength = "+dataLength);
             appendUintvarInteger(headerLength);
             appendUintvarInteger(dataLength);
             mStack.copy();

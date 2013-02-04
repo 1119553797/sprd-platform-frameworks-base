@@ -26,6 +26,7 @@ public class GenericPdu {
      */
     PduHeaders mPduHeaders = null;
     protected int mPhoneId;
+    protected String mIccid;
 
     /**
      * Constructor.
@@ -132,5 +133,9 @@ public class GenericPdu {
 
     public int getPhoneId(){
         return mPhoneId;
+    }
+
+    public String getIccid(){
+    	return mIccid;
     }
 }

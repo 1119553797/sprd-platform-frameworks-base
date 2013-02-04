@@ -227,6 +227,10 @@ public class SendReq extends MultimediaMessagePdu {
         mPhoneId = phoneId;
     }
 
+    public void setIccid(String Iccid){
+    	mIccid = Iccid;
+    }
+
     /**
      * Get X-Mms-Expiry value.
      *

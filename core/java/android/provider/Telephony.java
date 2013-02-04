@@ -16,6 +16,8 @@
 
 package android.provider;
 
+
+
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.content.ContentResolver;
@@ -182,6 +184,15 @@ public final class Telephony {
          * <P>Type: TEXT</P>
          */
         public static final String META_DATA = "meta_data";
+        
+        //Add by huibin for NEWUI Project begin
+        /**
+         * ICC Id used for get phone informations
+         * <P>Type: TEXT</P>
+         */
+        public static final String ICC_ID = "icc_id";
+        //Add by huibin for NEWUI Preject end
+        
 }
 
     /**
@@ -292,6 +303,45 @@ public final class Telephony {
                 Long date, boolean read, boolean deliveryReport, long threadId, int phoneId) {
             return addMessageToUri(resolver, uri, address, body, subject, date, read, false, deliveryReport, threadId, phoneId);
         }
+        
+        //Add by huibin for NEWUI Project begin
+        public static Uri addMessageToUri(ContentResolver resolver,
+                Uri uri, String address, String body, String subject,
+                Long date, boolean read, boolean deliveryReport, int phoneId,String strIccid) {
+            return addMessageToUri(resolver, uri, address, body, subject,
+                    date, read, deliveryReport, -1L, phoneId,strIccid);
+        }
+        
+        public static Uri addMessageToUri(ContentResolver resolver,
+                Uri uri, String address, String body, String subject,
+                Long date, boolean read, boolean deliveryReport, long threadId, int phoneId,String strIccid) {
+            return addMessageToUri(resolver, uri, address, body, subject, date, read, false, deliveryReport, threadId, phoneId,strIccid) ;
+        }
+        
+        public static Uri addMessageToUri(ContentResolver resolver,
+                Uri uri, String address, String body, String subject,
+                Long date, boolean read,boolean seen, boolean deliveryReport, long threadId, int phoneId,String strIccid) {
+            ContentValues values = new ContentValues(10);
+
+            values.put(ADDRESS, address);
+            if (date != null) {
+                values.put(DATE, date);
+            }
+            values.put(SEEN, seen ? Integer.valueOf(1) : Integer.valueOf(0));
+            values.put(READ, read ? Integer.valueOf(1) : Integer.valueOf(0));
+            values.put(SUBJECT, subject);
+            values.put(BODY, body);
+            values.put(PHONE_ID, phoneId);
+            values.put(ICC_ID, strIccid);
+            if (deliveryReport) {
+                values.put(STATUS, STATUS_PENDING);
+            }
+            if (threadId != -1L) {
+                values.put(THREAD_ID, threadId);
+            }
+            return resolver.insert(uri, values);
+        }
+        //Add by huibin for NEWUI Project end
 
         /**
          * Move a message to the given folder.
@@ -890,6 +940,12 @@ public final class Telephony {
         public static final String MESSAGE_SIZE = "m_size";
 
         /**
+         * (20120202) The service center (SC)
+         * <P>Type: TEXT</P>
+         */
+        public static final String SERVICE_CENTER = "service_center";
+
+        /**
          * The priority of the message.
          * <P>Type: TEXT</P>
          */
@@ -1224,6 +1280,12 @@ public final class Telephony {
          * <P>Type: INTEGER</P>
          */
         public static final String PHONE_ID = "phone_id";
+        
+        /**
+         * The ICC ID of the message
+         * <P>Type: TEXT</P>
+         */
+        public static final String ICC_ID = "icc_id";
     }
 
     /**
@@ -1303,23 +1365,25 @@ public final class Telephony {
          */
         public static final String PHONE_ID = "phone_id";
 
-        //add by liuyang start ,update search
-		/**
-		 * The Recipient addresses of the message
-		 * <P>
-		 * Type: INTEGER
-		 * </P>
-		 */
-		public static final String RECIPIENT_ADDRESSES = "recipient_addresses";
 
-		/**
-		 * The Recipient names of the message
-		 * <P>
-		 * Type: INTEGER
-		 * </P>
-		 */
-		public static final String RECIPIENT_NAMES = "recipient_names";
-        //add by liuyang end ,update search
+        /**
+         * The Recipient addresses of the message
+         * <P> Type: INTEGER </P>
+         */
+        public static final String RECIPIENT_ADDRESSES = "recipient_addresses";
+
+        /**
+         * The Recipient names of the message
+         * <P> Type: INTEGER </P>
+         */
+        public static final String RECIPIENT_NAMES = "recipient_names";
+
+        
+        /**
+         * The ICC ID of the message
+         * <P>Type: TEXT</P>
+         */
+        public static final String ICC_ID = "icc_id";
     }
 
     /**
@@ -1843,6 +1907,12 @@ public final class Telephony {
              * <P>Type: INTEGER</P>
              */
             public static final String PHONE_ID = "phone_id";
+            
+            /**
+             * The ICC ID of the message
+             * <P>Type: TEXT</P>
+             */
+            public static final String ICC_ID = "icc_id";
         }
 
         public static final class WordsTable {
