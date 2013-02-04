@@ -26,7 +26,10 @@ import android.database.ContentObserver;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.provider.Settings;
-import android.text.format.DateFormat;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.CharacterStyle;
+import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -34,7 +37,9 @@ import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Displays the time
@@ -49,6 +54,10 @@ public class DigitalClock extends RelativeLayout {
 
     private Calendar mCalendar;
     private String mFormat;
+
+    private String mClockFormatString;
+    private SimpleDateFormat mClockFormat;
+
     private TextView mTimeDisplayBackground;
     private TextView mTimeDisplayForeground;
     private AmPm mAmPm;
@@ -231,9 +240,78 @@ public class DigitalClock extends RelativeLayout {
     public void updateTime() {
         mCalendar.setTimeInMillis(System.currentTimeMillis());
 
-        CharSequence newTime = DateFormat.format(mFormat, mCalendar);
-        mTimeDisplayBackground.setText(newTime);
-        mTimeDisplayForeground.setText(newTime);
+//        String newTime = DateFormat.format(mFormat, mCalendar);
+
+        boolean timeFormat = android.text.format.DateFormat.is24HourFormat(getContext());
+
+        int res;
+
+        if (timeFormat) {
+            res = R.string.twenty_four_hour_time_format;
+        } else {
+            res = R.string.twelve_hour_time_format;
+        }
+
+        String format = getContext().getString(res);
+        final char MAGIC1 = '\uEF00';
+        final char MAGIC2 = '\uEF01';
+        SimpleDateFormat sdf;
+        if (!format.equals(mClockFormatString)) {
+            int a = -1;
+            boolean quoted = false;
+            for (int i = 0; i < format.length(); i++) {
+                char c = format.charAt(i);
+
+                if (c == '\'') {
+                    quoted = !quoted;
+                }
+                if (!quoted && c == 'a') {
+                    a = i;
+                    break;
+                }
+            }
+
+            if (a >= 0) {
+                // Move a back so any whitespace before AM/PM is also in the
+                // alternate size.
+                final int b = a;
+                while (a > 0 && Character.isWhitespace(format.charAt(a - 1))) {
+                    a--;
+                }
+                format = format.substring(0, a) + MAGIC1 + "a" + MAGIC2 + format.substring(b + 1);
+            }
+
+            mClockFormat = sdf = new SimpleDateFormat(format);
+            mClockFormatString = format;
+        } else {
+            sdf = mClockFormat;
+        }
+        String newTime = sdf.format(mCalendar.getTime());
+
+        int magic1 = newTime.indexOf(MAGIC1);
+        int magic2 = newTime.indexOf(MAGIC2);
+        SpannableStringBuilder formatted = new SpannableStringBuilder(newTime.trim());
+        String language = Locale.getDefault().getLanguage();
+        if (magic1 >= 0 && magic2 > magic1) {
+            if (timeFormat) {
+                formatted.delete(magic1, magic2 + 1);
+            } else {
+                CharacterStyle style = new RelativeSizeSpan(0.4f);
+                if ("zh".equals(language) || "ko".equals(language)) {
+                    formatted.setSpan(style, magic1, magic2, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    formatted.delete(magic2, magic2 + 2);
+                    formatted.delete(magic1, magic1 + 1);
+                } else {
+                    formatted.setSpan(style, magic1, magic2, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    formatted.delete(magic2, magic2 + 1);
+                    formatted.delete(magic1, magic1 + 1);
+
+                }
+            }
+        }
+
+        mTimeDisplayBackground.setText(formatted);
+        mTimeDisplayForeground.setText(formatted);
         mAmPm.setIsMorning(mCalendar.get(Calendar.AM_PM) == 0);
     }
 
