@@ -134,26 +134,6 @@ AssetManager::~AssetManager(void)
     delete[] mVendor;
 }
 
-bool AssetManager::addOverlayAssetPath(const String8& origPath, const String8& overlayPath, void** cookie) 
-{
-    asset_path oap;
-    oap.path = overlayPath;
-    oap.type = ::getFileType(overlayPath.string());
-    oap.idmap = idmapPathForPackagePath(overlayPath);
-
-    if (isIdmapStaleLocked(origPath, oap.path, oap.idmap)) {
-	createIdmapFileLocked(origPath, oap.path, oap.idmap);
-    }
-
-    mAssetPaths.add(oap);
-
-    if (cookie) {
-        *cookie = (void*)mAssetPaths.size();
-    }    	    
-    return true;
-}
-
-
 bool AssetManager::addAssetPath(const String8& path, void** cookie)
 {
     AutoMutex _l(mLock);
@@ -349,7 +329,6 @@ bool AssetManager::createIdmapFileLocked(const String8& originalPath, const Stri
         ALOGW("failed to write idmap file %s (open: %s)\n", idmapPath.string(), strerror(errno));
         goto error_free;
     }
-    ::chmod(idmapPath.string(),0777);
     for (;;) {
         ssize_t written = TEMP_FAILURE_RETRY(write(fd, data + offset, size));
         if (written < 0) {
@@ -635,13 +614,75 @@ const ResTable* AssetManager::getResTable(bool required) const
     if (mCacheMode != CACHE_OFF && !mCacheValid)
         const_cast<AssetManager*>(this)->loadFileNameCacheLocked();
 
-    mResources = rt = new ResTable();
+    const size_t N = mAssetPaths.size();
+    for (size_t i=0; i<N; i++) {
+        Asset* ass = NULL;
+        ResTable* sharedRes = NULL;
+        bool shared = true;
+        const asset_path& ap = mAssetPaths.itemAt(i);
+        Asset* idmap = openIdmapLocked(ap);
+        ALOGV("Looking for resource asset in '%s'\n", ap.path.string());
+        if (ap.type != kFileTypeDirectory) {
+            if (i == 0) {
+                // The first item is typically the framework resources,
+                // which we want to avoid parsing every time.
+                sharedRes = const_cast<AssetManager*>(this)->
+                    mZipSet.getZipResourceTable(ap.path);
+            }
+            if (sharedRes == NULL) {
+                ass = const_cast<AssetManager*>(this)->
+                    mZipSet.getZipResourceTableAsset(ap.path);
+                if (ass == NULL) {
+                    ALOGV("loading resource table %s\n", ap.path.string());
+                    ass = const_cast<AssetManager*>(this)->
+                        openNonAssetInPathLocked("resources.arsc",
+                                                 Asset::ACCESS_BUFFER,
+                                                 ap);
+                    if (ass != NULL && ass != kExcludedAsset) {
+                        ass = const_cast<AssetManager*>(this)->
+                            mZipSet.setZipResourceTableAsset(ap.path, ass);
+                    }
+                }
+                
+                if (i == 0 && ass != NULL) {
+                    // If this is the first resource table in the asset
+                    // manager, then we are going to cache it so that we
+                    // can quickly copy it out for others.
+                    ALOGV("Creating shared resources for %s", ap.path.string());
+                    sharedRes = new ResTable();
+                    sharedRes->add(ass, (void*)(i+1), false, idmap);
+                    sharedRes = const_cast<AssetManager*>(this)->
+                        mZipSet.setZipResourceTable(ap.path, sharedRes);
+                }
+            }
+        } else {
+            ALOGV("loading resource table %s\n", ap.path.string());
+            Asset* ass = const_cast<AssetManager*>(this)->
+                openNonAssetInPathLocked("resources.arsc",
+                                         Asset::ACCESS_BUFFER,
+                                         ap);
+            shared = false;
+        }
+        if ((ass != NULL || sharedRes != NULL) && ass != kExcludedAsset) {
+            if (rt == NULL) {
+                mResources = rt = new ResTable();
+                updateResourceParamsLocked();
+            }
+            ALOGV("Installing resource asset %p in to table %p\n", ass, mResources);
+            if (sharedRes != NULL) {
+                ALOGV("Copying existing resources for %s", ap.path.string());
+                rt->add(sharedRes);
+            } else {
+                ALOGV("Parsing resources for %s", ap.path.string());
+                rt->add(ass, (void*)(i+1), !shared, idmap);
+            }
 
-    if (rt) {
-        const size_t N = mAssetPaths.size();
-        for (size_t i=0; i<N; i++) {
-            const asset_path& ap = mAssetPaths.itemAt(i);
-            updateResTableFromAssetPath(rt, ap, (void*)(i+1));
+            if (!shared) {
+                delete ass;
+            }
+        }
+        if (idmap != NULL) {
+            delete idmap;
         }
     }
 
@@ -649,79 +690,7 @@ const ResTable* AssetManager::getResTable(bool required) const
     if (!rt) {
         mResources = rt = new ResTable();
     }
-
     return rt;
-}
-
-void AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& ap, void *cookie) const
-{
-    Asset* ass = NULL;
-    ResTable* sharedRes = NULL;
-    bool shared = true;
-    size_t cookiePos = (size_t)cookie;
-    Asset* idmap = openIdmapLocked(ap);
-    ALOGV("Looking for resource asset in '%s'\n", ap.path.string());
-    if (ap.type != kFileTypeDirectory) {
-        if (cookiePos == 1) {
-            // The first item is typically the framework resources,
-            // which we want to avoid parsing every time.
-            sharedRes = const_cast<AssetManager*>(this)->
-                mZipSet.getZipResourceTable(ap.path);
-        }
-        if (sharedRes == NULL) {
-            ass = const_cast<AssetManager*>(this)->
-                mZipSet.getZipResourceTableAsset(ap.path);
-            if (ass == NULL) {
-                ALOGV("loading resource table %s\n", ap.path.string());
-                ass = const_cast<AssetManager*>(this)->
-                    openNonAssetInPathLocked("resources.arsc",
-					     Asset::ACCESS_BUFFER,
-					     ap);
-                if (ass != NULL && ass != kExcludedAsset) {
-                    ass = const_cast<AssetManager*>(this)->
-                        mZipSet.setZipResourceTableAsset(ap.path, ass);
-                }
-            }
-
-            if (cookiePos == 0 && ass != NULL) {
-                // If this is the first resource table in the asset
-                // manager, then we are going to cache it so that we
-                // can quickly copy it out for others.
-                ALOGV("Creating shared resources for %s", ap.path.string());
-                sharedRes = new ResTable();
-                sharedRes->add(ass, cookie, false, idmap);
-                sharedRes = const_cast<AssetManager*>(this)->
-                    mZipSet.setZipResourceTable(ap.path, sharedRes);
-            }
-        }
-    } else {
-        ALOGV("loading resource table %s\n", ap.path.string());
-        Asset* ass = const_cast<AssetManager*>(this)->
-            openNonAssetInPathLocked("resources.arsc",
-				     Asset::ACCESS_BUFFER,
-				     ap);
-        shared = false;
-    }
-    if ((ass != NULL || sharedRes != NULL) && ass != kExcludedAsset) {
-        updateResourceParamsLocked();
-        ALOGV("Installing resource asset %p in to table %p\n", ass, mResources);
-        if (sharedRes != NULL) {
-            ALOGV("Copying existing resources for %s", ap.path.string());
-            rt->add(sharedRes);
-        } else {
-            ALOGV("Parsing resources for %s", ap.path.string());
-            rt->add(ass, cookie, !shared, idmap);
-        }
-
-        if (!shared) {
-            delete ass;
-        }
-    } else {
-	rt->add(NULL, cookie, !shared, NULL);
-    }
-    if (idmap != NULL) {
-	delete idmap;
-    }   
 }
 
 void AssetManager::updateResourceParamsLocked() const
@@ -2029,40 +1998,4 @@ int AssetManager::ZipSet::getIndex(const String8& zip) const
     mZipFile.add(NULL);
 
     return mZipPath.size()-1;
-}
-
-
-bool AssetManager::attachThemePath(const String8& origPath, const String8& path, void** cookie)
-{
-    AutoMutex _l(mLock);
-
-    bool res = addOverlayAssetPath(origPath, path, cookie);
-    ResTable* rt = mResources;
-    if (res && rt != NULL && ((size_t)*cookie == mAssetPaths.size())) {
-        const asset_path& ap = mAssetPaths.itemAt((size_t)*cookie - 1);
-        updateResTableFromAssetPath(rt, ap, *cookie);
-    }
-    return res;
-}
-
-bool AssetManager::detachThemePath(const String8 &packageName, void* cookie)
-{
-    AutoMutex _l(mLock);
-
-    const size_t which = ((size_t)cookie)-1;
-    if (which >= mAssetPaths.size()) {
-        return false;
-    }
-
-    mAssetPaths.removeAt(which);
-
-    ResTable* rt = mResources;
-    if (rt == NULL) {
-        ALOGV("ResTable must not be NULL");
-        return false;
-    }
-
-    rt->removeAssetsByCookie(packageName, (void *)cookie);
-
-    return true;
 }

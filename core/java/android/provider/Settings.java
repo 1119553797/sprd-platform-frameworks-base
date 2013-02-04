@@ -1119,7 +1119,7 @@ public final class Settings {
          * @return true if the values were set, false on database errors
          */
         public static boolean putConfiguration(ContentResolver cr, Configuration config) {
-	    return Settings.System.putFloat(cr, FONT_SCALE, config.fontScale);
+            return Settings.System.putFloat(cr, FONT_SCALE, config.fontScale);
         }
 
         /** @hide */
@@ -1381,7 +1381,6 @@ public final class Settings {
          * Scaling factor for fonts, float.
          */
         public static final String FONT_SCALE = "font_scale";
-
 
         /**
          * Name of an application package to be debugged.

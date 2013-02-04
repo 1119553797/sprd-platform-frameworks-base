@@ -4026,14 +4026,11 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
         pkg.mScanPath = path;
 
-	boolean hasCode=((pkg.applicationInfo.flags&ApplicationInfo.FLAG_HAS_CODE)!=0);
         if ((scanMode&SCAN_NO_DEX) == 0) {
             if (performDexOptLI(pkg, forceDex, (scanMode&SCAN_DEFER_DEX) != 0)
                     == DEX_OPT_FAILED) {
-		if (hasCode) {
-		    mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
-		    return null;
-		} 
+                mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
+                return null;
             }
         }
 

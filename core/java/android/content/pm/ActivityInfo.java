@@ -320,7 +320,6 @@ public class ActivityInfo extends ComponentInfo
      * {@link android.R.attr#configChanges} attribute.
      */
     public static final int CONFIG_ORIENTATION = 0x0080;
-
     /**
      * Bit in {@link #configChanges} that indicates that the activity
      * can itself handle changes to the screen layout.  Set from the
@@ -365,7 +364,6 @@ public class ActivityInfo extends ComponentInfo
      * constant starts at the high bits.
      */
     public static final int CONFIG_FONT_SCALE = 0x40000000;
-    
     
     /** @hide
      * Unfortunately the constants for config changes in native code are
