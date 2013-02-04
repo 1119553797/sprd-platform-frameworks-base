@@ -2497,6 +2497,7 @@ package android.app {
     method public abstract void removeTab(android.app.ActionBar.Tab);
     method public abstract void removeTabAt(int);
     method public abstract void selectTab(android.app.ActionBar.Tab);
+    method public abstract void setAlternativeTabStyle(boolean);
     method public abstract void setBackgroundDrawable(android.graphics.drawable.Drawable);
     method public abstract void setCustomView(android.view.View);
     method public abstract void setCustomView(android.view.View, android.app.ActionBar.LayoutParams);
@@ -2515,11 +2516,13 @@ package android.app {
     method public abstract void setLogo(int);
     method public abstract void setLogo(android.graphics.drawable.Drawable);
     method public abstract void setNavigationMode(int);
+    method public abstract void setReserveOverflow(boolean);
     method public abstract void setSelectedNavigationItem(int);
     method public void setSplitBackgroundDrawable(android.graphics.drawable.Drawable);
     method public void setStackedBackgroundDrawable(android.graphics.drawable.Drawable);
     method public abstract void setSubtitle(java.lang.CharSequence);
     method public abstract void setSubtitle(int);
+    method public abstract void setTabHeight(int);
     method public abstract void setTitle(java.lang.CharSequence);
     method public abstract void setTitle(int);
     method public abstract void show();
@@ -5363,6 +5366,7 @@ package android.content {
     field public static final java.lang.String STORAGE_SERVICE = "storage";
     field public static final java.lang.String TELEPHONY_SERVICE = "phone";
     field public static final java.lang.String TEXT_SERVICES_MANAGER_SERVICE = "textservices";
+    field public static final java.lang.String THEME_SERVICE = "theme";
     field public static final java.lang.String UI_MODE_SERVICE = "uimode";
     field public static final java.lang.String USB_SERVICE = "usb";
     field public static final java.lang.String VIBRATOR_SERVICE = "vibrator";
@@ -6729,6 +6733,7 @@ package android.content.res {
   public final class AssetManager {
     method public void close();
     method public final java.lang.String[] getLocales();
+    method public java.lang.String getThemePackageName(boolean);
     method public final java.lang.String[] list(java.lang.String) throws java.io.IOException;
     method public final java.io.InputStream open(java.lang.String) throws java.io.IOException;
     method public final java.io.InputStream open(java.lang.String, int) throws java.io.IOException;
@@ -22463,6 +22468,72 @@ package android.text.util {
 
 }
 
+package android.theme {
+
+  public abstract interface IThemeManager implements android.os.IInterface {
+    method public abstract android.theme.ThemeInfo getAppliedTheme(java.lang.String) throws android.os.RemoteException;
+    method public abstract java.util.List<android.theme.ThemeInfo> getThemes() throws android.os.RemoteException;
+    method public abstract boolean setTheme(android.theme.ThemeInfo) throws android.os.RemoteException;
+    method public abstract boolean unsetTheme(android.theme.ThemeInfo) throws android.os.RemoteException;
+  }
+
+  public static abstract class IThemeManager.Stub extends android.os.Binder implements android.theme.IThemeManager {
+    ctor public IThemeManager.Stub();
+    method public android.os.IBinder asBinder();
+    method public static android.theme.IThemeManager asInterface(android.os.IBinder);
+    method public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int) throws android.os.RemoteException;
+  }
+
+  public class ThemeInfo implements android.os.Parcelable java.io.Serializable {
+    method public int describeContents();
+    method public java.lang.String getPackageName();
+    method public java.lang.String getResDir();
+    method public java.lang.String getTargetResDir();
+    method public void setResDir(java.lang.String);
+    method public void setTargetResDir(java.lang.String);
+    method public void setThemeName(int);
+    method public void setThemePreview(int);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator CREATOR;
+    field public boolean mApplied;
+    field public java.lang.String mPackageName;
+    field public java.lang.String mTargetPackageName;
+  }
+
+  public class ThemeManager {
+    ctor public ThemeManager(android.content.Context, android.theme.IThemeManager);
+    method public android.theme.ThemeInfo getAppliedTheme(java.lang.String);
+    method public java.util.List<android.theme.ThemeInfo> getThemes();
+    method public void registerOnThemeChangedListener(android.theme.ThemeManager.OnThemeChangedListener);
+    method public void registerOnThemePackageChangedListener(android.theme.ThemeManager.OnThemePackageChangedListener);
+    method public boolean setTheme(android.theme.ThemeInfo);
+    method public boolean unsetTheme(android.theme.ThemeInfo);
+    field public static final java.lang.String INTENT_ACTION_THEME_CHANGED = "android.intent.action.theme_changed";
+    field public static final java.lang.String INTENT_ACTION_THEME_PACKAGE_CHANGED = "android.intent.action.theme_package_changed";
+    field public static final java.lang.String KEY_IS_THEME_PACKAGE = "is_theme_package";
+    field public static final java.lang.String KEY_TARGET_PACKAGE_NAME = "target_package";
+    field public static final java.lang.String KEY_THEME_NAME = "theme_name";
+    field public static final java.lang.String KEY_THEME_PREVIEW = "theme_preview";
+  }
+
+  public static abstract interface ThemeManager.OnThemeChangedListener {
+    method public abstract void onThemeChanged();
+  }
+
+  public static abstract interface ThemeManager.OnThemePackageChangedListener {
+    method public abstract void onThemePackageChanged();
+  }
+
+  public class ThemeManagerService extends android.theme.IThemeManager.Stub {
+    ctor public ThemeManagerService(android.content.Context);
+    method public android.theme.ThemeInfo getAppliedTheme(java.lang.String);
+    method public java.util.List<android.theme.ThemeInfo> getThemes();
+    method public boolean setTheme(android.theme.ThemeInfo);
+    method public boolean unsetTheme(android.theme.ThemeInfo);
+  }
+
+}
+
 package android.util {
 
   public class AndroidException extends java.lang.Exception {
@@ -27980,12 +28051,15 @@ package android.widget {
     method public void setFooterDividersEnabled(boolean);
     method public void setHeaderDividersEnabled(boolean);
     method public void setItemsCanFocus(boolean);
+    method public void setOnSwipeListener(android.widget.ListView.OnSwipeListener);
     method public void setOverscrollFooter(android.graphics.drawable.Drawable);
     method public void setOverscrollHeader(android.graphics.drawable.Drawable);
     method public void setSelection(int);
     method public void setSelectionAfterHeaderView();
     method public void setSelectionFromTop(int, int);
     method public void smoothScrollByOffset(int);
+    field public static final int SWIPE_LEFT = 0; // 0x0
+    field public static final int SWIPE_RIGHT = 1; // 0x1
   }
 
   public class ListView.FixedViewInfo {
@@ -27993,6 +28067,12 @@ package android.widget {
     field public java.lang.Object data;
     field public boolean isSelectable;
     field public android.view.View view;
+  }
+
+  public static abstract interface ListView.OnSwipeListener {
+    method public abstract android.view.View getSwipeView(android.widget.ListView, int, android.view.View, int);
+    method public abstract void onSwipeEnd(android.widget.ListView, int, android.view.View, int);
+    method public abstract boolean onSwipeStart(android.widget.ListView, int, android.view.View);
   }
 
   public class MediaController extends android.widget.FrameLayout {

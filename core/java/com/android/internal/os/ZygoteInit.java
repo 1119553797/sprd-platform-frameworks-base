@@ -232,7 +232,7 @@ public class ZygoteInit {
 
     static void preload() {
         preloadClasses();
-        preloadResources();
+        //preloadResources();
     }
 
     /**

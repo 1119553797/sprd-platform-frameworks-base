@@ -960,6 +960,8 @@ please see themes_device_defaults.xml.
         <item name="listPreferredItemHeightLarge">80dip</item>
         <item name="dropdownListPreferredItemHeight">?android:attr/listPreferredItemHeightSmall</item>
         <item name="textAppearanceListItemSmall">?android:attr/textAppearanceMedium</item>
+	<item name="listPreferredBackground">@android:drawable/list_preferred_background</item>
+	<item name="listPreferredItemBackground">@android:drawable/list_prefered_item_background</item>
         <item name="listPreferredItemPaddingLeft">8dip</item>
         <item name="listPreferredItemPaddingRight">8dip</item>
 
@@ -1265,6 +1267,8 @@ please see themes_device_defaults.xml.
         <item name="listPreferredItemHeightLarge">80dip</item>
         <item name="dropdownListPreferredItemHeight">?android:attr/listPreferredItemHeightSmall</item>
         <item name="textAppearanceListItemSmall">?android:attr/textAppearanceMedium</item>
+	<item name="listPreferredBackground">@android:drawable/list_preferred_background_light</item>
+        <item name="listPreferredItemBackground">@android:drawable/list_prefered_item_background_light</item>
         <item name="listPreferredItemPaddingLeft">8dip</item>
         <item name="listPreferredItemPaddingRight">8dip</item>
 

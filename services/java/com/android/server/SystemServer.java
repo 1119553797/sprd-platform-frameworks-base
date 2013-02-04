@@ -16,6 +16,7 @@
 
 package com.android.server;
 
+import android.theme.ThemeManagerService;
 import android.accounts.AccountManagerService;
 import android.app.ActivityManagerNative;
 import android.bluetooth.BluetoothAdapter;
@@ -210,6 +211,14 @@ class ServerThread extends Thread {
                 ServiceManager.addService(Context.ACCOUNT_SERVICE, accountManager);
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting Account Manager", e);
+            }
+
+            try {
+                Slog.i(TAG, "Theme Manager");
+                ServiceManager.addService(Context.THEME_SERVICE,
+                        new ThemeManagerService(context));
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting Theme Manager", e);
             }
 
             Slog.i(TAG, "Content Manager");

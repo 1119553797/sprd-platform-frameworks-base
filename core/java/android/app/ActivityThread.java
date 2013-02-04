@@ -16,6 +16,11 @@
 
 package android.app;
 
+import android.theme.IThemeManager;
+import android.content.pm.PackageInfo;
+import android.text.TextUtils;
+import android.theme.ThemeInfo;
+import android.theme.ThemeManager;
 import android.app.backup.BackupAgent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
@@ -150,6 +155,7 @@ public final class ActivityThread {
     static ContextImpl mSystemContext = null;
 
     static IPackageManager sPackageManager;
+    static IThemeManager sThemeManager;
 
     final ApplicationThread mAppThread = new ApplicationThread();
     final Looper mLooper = Looper.myLooper();
@@ -1506,6 +1512,15 @@ public final class ActivityThread {
         return am != null ? am.mInitialApplication : null;
     }
 
+    public static IThemeManager getThemeManager() {
+        if (sThemeManager != null) {
+            return sThemeManager;
+        }
+        IBinder b = ServiceManager.getService(Context.THEME_SERVICE);
+        sThemeManager = IThemeManager.Stub.asInterface(b);
+        return sThemeManager;
+    }
+
     public static IPackageManager getPackageManager() {
         if (sPackageManager != null) {
             //Slog.v("PackageManager", "returning cur default = " + sPackageManager);
@@ -1586,6 +1601,21 @@ public final class ActivityThread {
             return null;
         }
 
+
+	ThemeInfo sysTheme=null;
+	ThemeInfo appTheme=null;
+	try {
+	    sysTheme=getThemeManager().getAppliedTheme("/system/framework/framework-res.apk");
+	    appTheme=getThemeManager().getAppliedTheme(resDir);
+	} catch (Exception e) {} 
+	
+	attachThemeAssets(assets, sysTheme, true);
+	attachThemeAssets(assets, appTheme, false);
+	
+	attachThemeAssets(AssetManager.getSystem(), sysTheme, true);
+
+
+	
         //Slog.i(TAG, "Resource: key=" + key + ", display metrics=" + metrics);
         DisplayMetrics metrics = getDisplayMetricsLocked(null, false);
         r = new Resources(assets, metrics, getConfiguration(), compInfo);
@@ -3674,22 +3704,25 @@ public final class ActivityThread {
         if (config.locale != null) {
             Locale.setDefault(config.locale);
         }
-
         Resources.updateSystemConfiguration(config, dm, compat);
-
+	
         ApplicationPackageManager.configurationChanged();
         //Slog.i(TAG, "Configuration changed in " + currentPackageName());
         
-        Iterator<WeakReference<Resources>> it =
-            mActiveResources.values().iterator();
-        //Iterator<Map.Entry<String, WeakReference<Resources>>> it =
-        //    mActiveResources.entrySet().iterator();
+        // Iterator<WeakReference<Resources>> it =
+        //     mActiveResources.values().iterator();
+        Iterator<Map.Entry<ResourcesKey, WeakReference<Resources>>> it =
+	    mActiveResources.entrySet().iterator();
+
         while (it.hasNext()) {
-            WeakReference<Resources> v = it.next();
+	    Map.Entry<ResourcesKey, WeakReference<Resources>> entry=it.next();
+            WeakReference<Resources> v = entry.getValue();
+	    String currentResDir = entry.getKey().mResDir;
             Resources r = v.get();
             if (r != null) {
                 if (DEBUG_CONFIGURATION) Slog.v(TAG, "Changing resources "
                         + r + " config to: " + config);
+
                 r.updateConfiguration(config, dm, compat);
                 //Slog.i(TAG, "Updated app resources " + v.getKey()
                 //        + " " + r + ": " + r.getConfiguration());
@@ -3698,7 +3731,7 @@ public final class ActivityThread {
                 it.remove();
             }
         }
-        
+
         return changes != 0;
     }
 
@@ -4778,5 +4811,23 @@ public final class ActivityThread {
         }
 
         throw new RuntimeException("Main thread loop unexpectedly exited");
+    }
+
+    private boolean attachThemeAssets(AssetManager assets, ThemeInfo theme, boolean forSystem) {
+	if (theme==null) {
+	    return false;
+	}
+
+	if (assets.getThemeCookie(forSystem)!=0) {
+	    return false;
+	}
+	
+	int cookie = assets.attachThemePath(theme.getTargetResDir(), theme.getResDir());
+	if (cookie != 0) {
+	    assets.setThemePackageName(theme.getPackageName(), forSystem);
+	    assets.setThemeCookie(cookie, forSystem);
+	    return true;
+	}
+	return false;
     }
 }

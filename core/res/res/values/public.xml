@@ -240,6 +240,8 @@
   <java-symbol type="bool" name="action_bar_embed_tabs" />
   <java-symbol type="bool" name="action_bar_embed_tabs_pre_jb" />
   <java-symbol type="bool" name="action_bar_expanded_action_views_exclusive" />
+  <java-symbol type="bool" name="config_hasPermanentMenuKey" />
+  <java-symbol type="bool" name="config_alternativePanelStyle" />
   <java-symbol type="bool" name="config_allowActionMenuItemTextWithIcon" />
   <java-symbol type="bool" name="config_bluetooth_adapter_quick_switch" />
   <java-symbol type="bool" name="config_bluetooth_sco_off_call" />
@@ -1112,6 +1114,7 @@
   <java-symbol type="layout" name="list_menu_item_checkbox" />
   <java-symbol type="layout" name="list_menu_item_icon" />
   <java-symbol type="layout" name="list_menu_item_layout" />
+  <java-symbol type="layout" name="list_menu_item_layout_overlay" />
   <java-symbol type="layout" name="list_menu_item_radio" />
   <java-symbol type="layout" name="locale_picker_item" />
   <java-symbol type="layout" name="media_controller" />

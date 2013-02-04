@@ -1584,6 +1584,7 @@ public abstract class Context {
      * @see android.accounts.AccountManager
      */
     public static final String ACCOUNT_SERVICE = "account";
+    public static final String THEME_SERVICE = "theme";
 
     /**
      * Use with {@link #getSystemService} to retrieve a
