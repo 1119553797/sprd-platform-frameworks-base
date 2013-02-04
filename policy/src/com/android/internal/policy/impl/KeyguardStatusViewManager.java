@@ -643,7 +643,7 @@ class KeyguardStatusViewManager implements OnClickListener {
             case NETWORK_LOCKED:
                 return StatusMode.NetworkLocked;
             case NOT_READY:
-                return StatusMode.SimMissing;
+                return StatusMode.SimNotReady;
             case SIM_LOCKED:
                 return StatusMode.SimLocked;
             case PIN_REQUIRED:
@@ -682,12 +682,17 @@ class KeyguardStatusViewManager implements OnClickListener {
         mStatus = getStatusForIccState(simState);
         mSimState[phoneId] = simState;
             switch (mStatus) {
+                // fix bug 116364 start
+                case SimNotReady:
+                    carrierText[phoneId] = makeCarierString(mPlmn[phoneId], mSpn[phoneId]);
+                    break;
+                // fix bug 116364 end
                 case Normal:
                     carrierText[phoneId] = makeCarierString(mPlmn[phoneId], mSpn[phoneId]);
                     break;
 
                 case NetworkLocked:
-                	carrierText[phoneId] = makeCarierString(mPlmn[phoneId],
+                    carrierText[phoneId] = makeCarierString(mPlmn[phoneId],
                             getContext().getText(R.string.lockscreen_network_locked_message));
                     carrierHelpTextId = R.string.lockscreen_instructions_when_pattern_disabled;
                     break;
@@ -781,8 +786,13 @@ class KeyguardStatusViewManager implements OnClickListener {
         SimMissing(false),
 
         /**
-         * The sim card is missing, and this is the device isn't provisioned, so we don't let
-         * them get past the screen.
+         * The sim card is not ready.
+         */
+        SimNotReady(false),
+
+        /**
+         * The sim card is missing, and this is the device isn't provisioned, so
+         * we don't let them get past the screen.
          */
         SimMissingLocked(false),
 
