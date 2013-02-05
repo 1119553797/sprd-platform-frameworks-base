@@ -223,6 +223,16 @@ class KeyguardStatusViewManager implements OnClickListener {
         mPlmn=new CharSequence[TelephonyManager.getPhoneCount()];
         mSpn =new CharSequence[TelephonyManager.getPhoneCount()];
         mSimState =new State[TelephonyManager.getPhoneCount()];
+        mMessageCoutView = (TextView) findViewById(R.id.messageCount);
+        if (mMessageCoutView != null) {
+            if (mMessageCount == 0) {
+                mMessageCoutView.setVisibility(View.GONE);
+                messageCountViewsetOnClickListener(false);
+            } else {
+                mMessageCoutView.setVisibility(View.VISIBLE);
+                messageCountViewsetOnClickListener(true);
+            }
+        }
         mDateView = (TextView) findViewById(R.id.date);
         mStatus1View = (TextView) findViewById(R.id.status1);
         mAlarmStatusView = (TextView) findViewById(R.id.alarm_status);
@@ -891,6 +901,12 @@ class KeyguardStatusViewManager implements OnClickListener {
         public void onDeviceProvisioned() {
             // ignored
         }
+
+        public void onMessageCountChanged(int messageCount) {
+            if (messageCount > 0) {
+                updateMessageCountForLockScreen(messageCount);
+            }
+        };
     };
 
     private SimStateCallback mSimStateCallback = new SimStateCallback() {
