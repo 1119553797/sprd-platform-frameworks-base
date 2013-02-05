@@ -18,6 +18,7 @@ package com.android.systemui.statusbar;
 
 import java.util.ArrayList;
 
+import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.KeyguardManager;
 import android.app.Notification;
@@ -35,6 +36,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -49,6 +51,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.WindowManagerImpl;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
@@ -58,6 +61,7 @@ import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarIconList;
 import com.android.internal.statusbar.StatusBarNotification;
+import com.android.internal.telephony.ITelephony;
 import com.android.internal.widget.SizeAdaptiveLayout;
 import com.android.systemui.SearchPanelView;
 import com.android.systemui.SystemUI;
@@ -74,7 +78,7 @@ import com.android.systemui.R;
 public abstract class BaseStatusBar extends SystemUI implements
     CommandQueue.Callbacks, RecentsPanelView.OnRecentsPanelVisibilityChangedListener {
     static final String TAG = "StatusBar";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     protected static final int MSG_OPEN_RECENTS_PANEL = 1020;
     protected static final int MSG_CLOSE_RECENTS_PANEL = 1021;
@@ -114,6 +118,25 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected RecentTasksLoader mRecentTasksLoader;
 
     protected PopupMenu mNotificationBlamePopup;
+
+    //add for universe_ui_support
+    private ActivityManager am;
+    private String[] mOngoingNotificationNeedExitApps;
+    protected boolean isUniverseSupport = false;
+    private static String universeSupportKey = "universe_ui_support";
+    private static final String SERVICECMD = "com.android.music.musicservicecommand";
+    private static final String CMDNAME = "command";
+    private static final String CMDPAUSE = "pause";
+    // ongoing notification
+    protected NotificationData mOngoingNotificationData = new NotificationData();
+    protected NotificationRowLayout mOngoingPile;
+
+    // latest notification
+    protected NotificationData mLatestNotificationData = new NotificationData();
+    protected NotificationRowLayout mLatestPile;
+
+    // addNotificationViews total limit
+    private final int LIMIT_NOTIFICATION_COUNTS = 40;
 
     // UI-specific methods
 
@@ -198,7 +221,13 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
-
+        //add for universe_ui_support
+        isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, false);
+        isUniverseSupport = true;
+        if (isUniverseSupport) {
+            mOngoingNotificationNeedExitApps = mContext.getResources().getStringArray(R.array.need_exit_button_apps);
+            am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        }
         // Connect in to the status bar manager service
         StatusBarIconList iconList = new StatusBarIconList();
         ArrayList<IBinder> notificationKeys = new ArrayList<IBinder>();
@@ -294,6 +323,13 @@ public abstract class BaseStatusBar extends SystemUI implements
                 content.setBackgroundResource(R.drawable.notification_row_legacy_bg);
             } else {
                 content.setBackgroundResource(com.android.internal.R.drawable.notification_bg);
+            }
+            if (isUniverseSupport) {
+                content.setBackgroundResource(R.drawable.custom_notification_row_bg);
+            }
+        } else {
+            if (isUniverseSupport) {
+                content.setBackgroundResource(R.drawable.custom_notification_row_bg);
             }
         }
     }
@@ -535,7 +571,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mContext.getResources().getDimensionPixelSize(R.dimen.notification_min_height);
         int maxHeight =
                 mContext.getResources().getDimensionPixelSize(R.dimen.notification_max_height);
-        StatusBarNotification sbn = entry.notification;
+        final StatusBarNotification sbn = entry.notification;
         RemoteViews oneU = sbn.notification.contentView;
         RemoteViews large = sbn.notification.bigContentView;
         if (oneU == null) {
@@ -545,7 +581,57 @@ public abstract class BaseStatusBar extends SystemUI implements
         // create the row view
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
-        View row = inflater.inflate(R.layout.status_bar_notification_row, parent, false);
+        //add for universe_ui_support
+        View row = null;
+        if (!isUniverseSupport) {
+            row = inflater.inflate(R.layout.status_bar_notification_row, parent, false);
+        } else {
+            if (entry.notification.isOngoing() && appNeedExitButton(sbn.pkg)) {
+                row = inflater.inflate(R.layout.custom_status_bar_notification_row_ongoing, parent, false);
+            } else {
+                row = inflater.inflate(R.layout.custom_status_bar_notification_row, parent, false);
+            }
+        }
+
+        if (isUniverseSupport) {
+            Button terminate = (Button)row.findViewById(R.id.ongoing_exit);
+            if (sbn.isOngoing() && terminate != null) {
+                terminate.setVisibility(View.VISIBLE);
+                if ("com.android.phone".equals(sbn.pkg)) {
+                    terminate.setText(R.string.status_bar_expanded_notification_hungup_button_text);
+                } else {
+                    //TODO: list all the known casese. eg.no memory
+                }
+                terminate.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if ("com.android.phone".equals(sbn.pkg)) {
+                            try {
+                                    ITelephony telephonyService = ITelephony.Stub.asInterface(
+                                            ServiceManager.checkService(Context.TELEPHONY_SERVICE));
+                                    if (telephonyService == null) {
+                                        Log.w(TAG, "Unable to find ITelephony interface.");
+                                        return;
+                                    }
+                                    telephonyService.endCall();
+                            } catch (IllegalArgumentException e) {
+                                e.printStackTrace();
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                            }
+                        } else if ("com.android.music".equals(sbn.pkg)) {
+                            Intent intent = new Intent(SERVICECMD);
+                            intent.putExtra(CMDNAME, CMDPAUSE);
+                            mContext.sendBroadcast(intent);
+                        } else {
+                          mContext.stopService(new Intent().setPackage(sbn.pkg));
+                          am.forceStopPackage(sbn.pkg);
+                        }
+                    }
+                });
+            }
+        }
 
         // for blaming (see SwipeHelper.setLongPressListener)
         row.setTag(sbn.pkg);
@@ -711,7 +797,20 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected StatusBarNotification removeNotificationViews(IBinder key) {
-        NotificationData.Entry entry = mNotificationData.remove(key);
+        //add for universe_ui_support
+        NotificationData.Entry entry = null;
+        if (!isUniverseSupport) {
+            entry = mNotificationData.remove(key);
+        } else {
+            entry = mOngoingNotificationData.remove(key);
+            if (entry == null) {
+                entry = mLatestNotificationData.remove(key);
+                if (entry == null) {
+                    Slog.w(TAG, "removeNotification for unknown key: " + key);
+                    return null;
+                }
+            }
+        }
         if (entry == null) {
             Slog.w(TAG, "removeNotification for unknown key: " + key);
             return null;
@@ -747,16 +846,33 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
         // Construct the expanded view.
         NotificationData.Entry entry = new NotificationData.Entry(key, notification, iconView);
-        if (!inflateViews(entry, mPile)) {
+        //add for universe_ui_support
+        if (!isUniverseSupport ? (!inflateViews(entry, mPile)) : (!inflateViews(entry, notification.isOngoing() ? mOngoingPile:mLatestPile))) {
             handleNotificationError(key, notification, "Couldn't expand RemoteViews for: "
                     + notification);
             return null;
         }
-
+        limitNotificationCounts();
         // Add the expanded view and icon.
-        int pos = mNotificationData.add(entry);
-        if (DEBUG) {
-            Slog.d(TAG, "addNotificationViews: added at " + pos);
+        //add for universe_ui_support
+        if(isUniverseSupport) {
+            final boolean isOngoing = entry.notification.isOngoing();
+            if (isOngoing) {
+                int pos = mOngoingNotificationData.add(entry);
+                if (DEBUG) {
+                    Slog.d(TAG, "addNotificationViews ongoing: added at " + pos);
+                }
+            } else {
+                int pos = mLatestNotificationData.add(entry);
+                if (DEBUG) {
+                    Slog.d(TAG, "addNotificationViews latest: added at " + pos);
+                }
+            }
+        } else {
+            int pos = mNotificationData.add(entry);
+            if (DEBUG) {
+                Slog.d(TAG, "addNotificationViews: added at " + pos);
+            }
         }
         updateExpansionStates();
         updateNotificationIcons();
@@ -816,12 +932,20 @@ public abstract class BaseStatusBar extends SystemUI implements
     public void updateNotification(IBinder key, StatusBarNotification notification) {
         if (DEBUG) Slog.d(TAG, "updateNotification(" + key + " -> " + notification + ")");
 
-        final NotificationData.Entry oldEntry = mNotificationData.findByKey(key);
-        if (oldEntry == null) {
-            Slog.w(TAG, "updateNotification for unknown key: " + key);
-            return;
+        //add for universe_ui_support
+        NotificationData.Entry oldEntry = null;
+        if (!isUniverseSupport) {
+            oldEntry = mNotificationData.findByKey(key);
+        } else {
+            oldEntry = mOngoingNotificationData.findByKey(key);
+            if (oldEntry == null) {
+                oldEntry = mLatestNotificationData.findByKey(key);
+            }
+            if (oldEntry == null) {
+                Slog.w(TAG, "updateNotification for unknown key: " + key);
+                return;
+            }
         }
-
         final StatusBarNotification oldNotification = oldEntry.notification;
 
         // XXX: modify when we do something more intelligent with the two content views
@@ -918,7 +1042,18 @@ public abstract class BaseStatusBar extends SystemUI implements
                 newEntry.setUserExpanded(true);
             }
         }
-
+        if (isUniverseSupport && notification.isOngoing()) {
+            Button terminate = (Button) rowParent.findViewById(R.id.ongoing_exit);
+            if (terminate != null) {
+                if ("android".equals(notification.pkg)) {
+                    terminate.setText(R.string.status_bar_expanded_notification_cancel_button_text);
+                } else if ("com.android.phone".equals(notification.pkg)) {
+                    terminate.setText(R.string.status_bar_expanded_notification_hungup_button_text);
+                } else {
+                    terminate.setText(R.string.status_bar_expanded_notification_stop_button_text);
+                }
+            }
+        }
         // Update the veto button accordingly (and as a result, whether this row is
         // swipe-dismissable)
         updateNotificationVetoButton(oldEntry.row, notification);
@@ -966,4 +1101,39 @@ public abstract class BaseStatusBar extends SystemUI implements
         KeyguardManager km = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
     }
+
+    /**
+     * which app need exit button
+     */
+    private boolean appNeedExitButton(String pkg) {
+        boolean result = false;
+        if (mOngoingNotificationNeedExitApps != null) {
+            for (String s : mOngoingNotificationNeedExitApps) {
+                if (s != null && s.equals(pkg)) {
+                    result = true;
+                }
+            }
+        }
+        return result;
+    }
+
+    /* Add 20130116 Spreadst of  106710  OutOfMemoryError start */
+    private void limitNotificationCounts() {
+        if (isUniverseSupport) {
+            if (mLatestNotificationData.size()
+                    + mOngoingNotificationData.size() > LIMIT_NOTIFICATION_COUNTS) {
+                if (mLatestNotificationData.size() > 0) {
+                    removeNotificationViews(mLatestNotificationData.get(0).key);
+                } else {
+                    removeNotificationViews(mOngoingNotificationData.get(0).key);
+                }
+                Log.d(TAG, "mLatestNotificationData  del");
+            }
+        } else {
+            if (mNotificationData.size() > LIMIT_NOTIFICATION_COUNTS) {
+                removeNotificationViews(mNotificationData.get(0).key);
+            }
+        }
+    }
+    /* Add 20130116 Spreadst of  106710  OutOfMemoryError end */
 }

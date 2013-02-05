@@ -33,4 +33,11 @@
     <drawable name="system_bar_background">#ff000000</drawable>
     <!-- the darkening filter applied to notifications -->
     <drawable name="notification_icon_area_smoke">#aa000000</drawable>
+    <!-- universe_ui_support -->
+    <drawable name="custom_notification_item_background_color">#ffebebeb</drawable>
+    <drawable name="custom_notification_item_background_color_pressed">#ffFF6400</drawable>
+    <drawable name="custom_default_status_expanded_bg">#ffebebeb</drawable>
+    <drawable name="custom_default_text_color">#ff000000</drawable>
+    <color name="custom_notification_switch_on_text_color">#ffff6400</color>
+    <color name="custom_notification_switch_off_text_color">#ff858585</color>
 </resources>

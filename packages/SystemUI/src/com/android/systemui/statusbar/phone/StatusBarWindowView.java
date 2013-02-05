@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
+import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -36,24 +37,49 @@ public class StatusBarWindowView extends FrameLayout
 
     private ExpandHelper mExpandHelper;
     private NotificationRowLayout latestItems;
+    //add for universe_ui_support
+    protected boolean isUniverseSupport = false;
+    private static String universeSupportKey = "universe_ui_support";
+    private ExpandHelper mLatesExpandHelper;
+    private ExpandHelper mOngoingExpandHelper;
+    private NotificationRowLayout mLatestItems;
+    private NotificationRowLayout mOngoingItems;
+    private  boolean mCurrentIsLatestPile = true;
 
     PhoneStatusBar mService;
 
     public StatusBarWindowView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        //add for universe_ui_support
+        isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, false);
+        isUniverseSupport = true;
         setMotionEventSplittingEnabled(false);
     }
 
     @Override
     protected void onAttachedToWindow () {
         super.onAttachedToWindow();
-        latestItems = (NotificationRowLayout) findViewById(R.id.latestItems);
+        if (isUniverseSupport) {
+            mLatestItems = (NotificationRowLayout)findViewById(R.id.custom_latestItems);
+            mOngoingItems = (NotificationRowLayout)findViewById(R.id.custom_ongoingItems);
+        } else {
+            latestItems = (NotificationRowLayout) findViewById(R.id.latestItems);
+        }
         ScrollView scroller = (ScrollView) findViewById(R.id.scroll);
         int minHeight = getResources().getDimensionPixelSize(R.dimen.notification_row_min_height);
         int maxHeight = getResources().getDimensionPixelSize(R.dimen.notification_row_max_height);
-        mExpandHelper = new ExpandHelper(mContext, latestItems, minHeight, maxHeight);
-        mExpandHelper.setEventSource(this);
-        mExpandHelper.setScrollView(scroller);
+        if (isUniverseSupport) {
+            mLatesExpandHelper = new ExpandHelper(mContext, mLatestItems, minHeight, maxHeight);
+            mLatesExpandHelper.setEventSource(this);
+            mLatesExpandHelper.setScrollView(scroller);
+            mOngoingExpandHelper = new ExpandHelper(mContext, mOngoingItems, minHeight, maxHeight);
+            mOngoingExpandHelper.setEventSource(this);
+            mOngoingExpandHelper.setScrollView(scroller);
+        } else {
+            mExpandHelper = new ExpandHelper(mContext, latestItems, minHeight, maxHeight);
+            mExpandHelper.setEventSource(this);
+            mExpandHelper.setScrollView(scroller);
+        }
     }
 
     @Override
@@ -74,19 +100,53 @@ public class StatusBarWindowView extends FrameLayout
         MotionEvent cancellation = MotionEvent.obtain(ev);
         cancellation.setAction(MotionEvent.ACTION_CANCEL);
 
-        boolean intercept = mExpandHelper.onInterceptTouchEvent(ev) ||
-                super.onInterceptTouchEvent(ev);
-        if (intercept) {
-            latestItems.onInterceptTouchEvent(cancellation);
+        if (isUniverseSupport) {
+            if (mCurrentIsLatestPile) {
+                boolean intercept = mLatesExpandHelper.onInterceptTouchEvent(ev) ||
+                        super.onInterceptTouchEvent(ev);
+                if (intercept) {
+                    mLatestItems.onInterceptTouchEvent(cancellation);
+                }
+                return intercept;
+            } else {
+                boolean intercept = mOngoingExpandHelper.onInterceptTouchEvent(ev) ||
+                        super.onInterceptTouchEvent(ev);
+                if (intercept) {
+                    mOngoingItems.onInterceptTouchEvent(cancellation);
+                }
+                return intercept;
+            }
+        } else {
+            boolean intercept = mExpandHelper.onInterceptTouchEvent(ev) ||
+                    super.onInterceptTouchEvent(ev);
+            if (intercept) {
+                latestItems.onInterceptTouchEvent(cancellation);
+            }
+            return intercept;
         }
-        return intercept;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        boolean handled = mExpandHelper.onTouchEvent(ev) ||
-                super.onTouchEvent(ev);
-        return handled;
+        if (isUniverseSupport) {
+            if (mCurrentIsLatestPile) {
+                boolean handled = mLatesExpandHelper.onTouchEvent(ev) ||
+                        super.onTouchEvent(ev);
+                return handled;
+            } else {
+                boolean handled = mOngoingExpandHelper.onTouchEvent(ev) ||
+                        super.onTouchEvent(ev);
+                return handled;
+            }
+        } else {
+            boolean handled = mExpandHelper.onTouchEvent(ev) ||
+                    super.onTouchEvent(ev);
+            return handled;
+        }
+    }
+
+    void setCurrentIsLatestPile(boolean value) {
+        mCurrentIsLatestPile = value;
     }
 }
 

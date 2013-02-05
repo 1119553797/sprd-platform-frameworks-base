@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.systemui.statusbar.phone.ToggleViewGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="top"
+    android:orientation="horizontal"
+   >
+    <include android:id="@+id/quick_switch_wifi_toggle"  layout="@layout/quick_switch_wifi_view" />
+    <include layout="@layout/quick_switch_item_divider" />
+    <include android:id="@+id/quick_switch_bluetooth_toggle" layout="@layout/quick_switch_bluetooth_view" />
+    <include layout="@layout/quick_switch_item_divider" />
+    <include android:id="@+id/quick_switch_mobile_net_toggle" layout="@layout/quick_switch_mobile_net_view" />
+    <include layout="@layout/quick_switch_item_divider" />
+    <include android:id="@+id/quick_switch_sound_toggle" layout="@layout/quick_switch_sound_view" />
+    <include layout="@layout/quick_switch_item_divider" />
+    <include android:id="@+id/quick_switch_gps_toggle" layout="@layout/quick_switch_gps_view" />
+    <include layout="@layout/quick_switch_item_divider" />
+    <include android:id="@+id/quick_switch_brightness_toggle" layout="@layout/quick_switch_brightness_view" />
+    <include layout="@layout/quick_switch_item_divider" />
+    <include android:id="@+id/quick_switch_airplane_toggle" layout="@layout/quick_switch_airplane_view" />
+    <include layout="@layout/quick_switch_item_divider" />
+    <include android:id="@+id/quick_switch_auto_rotate_toggle" layout="@layout/quick_switch_auto_rotate_view" />
+</com.android.systemui.statusbar.phone.ToggleViewGroup>

@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_notification_row_bg"
+    >
+    <Button
+        android:id="@+id/veto"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:gravity="right"
+        android:layout_marginRight="-80dp"
+        android:background="@null"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        />
+
+    <com.android.systemui.statusbar.LatestItemView android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        android:src="@drawable/custom_notification_row_bg"
+        >
+
+        <com.android.internal.widget.SizeAdaptiveLayout android:id="@+id/adaptive"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:src="@drawable/custom_notification_row_bg" />
+
+    </com.android.systemui.statusbar.LatestItemView>
+
+    <Button
+        android:id="@+id/ongoing_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="6dip"
+        android:visibility="gone"
+        android:text="@string/status_bar_expanded_notification_stop_button_text"
+        android:textColor="@drawable/custom_default_text_color"
+        android:textSize="16sp"
+        android:background="@drawable/btn_default_small"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/custom_status_bar_hr_sprd"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.systemui.statusbar.phone.QuickSwitchLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="top"
+    android:orientation="vertical"
+    android:background="@drawable/notification_header_bg"
+   >
+    <View android:id="@+id/status_bar_quick_switch_items_top_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@drawable/custom_status_bar_hr_sprd"
+    />
+    <include android:id="@+id/status_bar_quick_switch_items"  layout="@layout/status_bar_toggle" />
+    <View android:id="@+id/status_bar_quick_switch_items_buttom_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@drawable/custom_status_bar_hr_sprd"
+    />
+</com.android.systemui.statusbar.phone.QuickSwitchLayout>

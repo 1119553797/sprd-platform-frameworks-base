@@ -156,4 +156,11 @@
 
     <!-- The size of the gesture span needed to activate the "pull" notification expansion -->
     <dimen name="pull_span_min">25dp</dimen>
+    <!-- add for universe_ui_support -->
+    <dimen name="status_bar_toggle_childview_width">64dip</dimen>
+    <dimen name="status_bar_toggle_childview_height">60dip</dimen>
+    <dimen name="custom_status_bar_height">24dip</dimen>
+    <dimen name="custom_status_bar_icon_padding">1dip</dimen>
+    <item type="dimen" name="custom_status_bar_icon_drawing_alpha">100%</item>
+    <dimen name="custom_status_bar_expanded_notification_switch_text_size">16sp</dimen>
 </resources>

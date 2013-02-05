@@ -20,6 +20,13 @@
     <!-- For formatting day of week and date in DateView.  Day of week precedes date by default,
          but this may be overridden on a per-locale basis if necessary. -->
     <string name="status_bar_date_formatter">%2$s\n%1$s</string>
+<<<<<<< HEAD
     <string name="expanded_twenty_four_hour_time_format">H:mm</string>
     <string name="expanded_twelve_hour_time_format">ah:mm</string>
+=======
+    <!-- universe_ui_support -->
+    <string name="custom_status_bar_date_formatter">%2$s\n%1$s</string>
+    <string name="custom_twenty_four_hour_time_format">HH:mm</string>
+    <string name="custom_twelve_hour_time_format">h:mm a</string>
+>>>>>>> 0362f12... bug#122230 description 4.0 to 4.1 porting for SystemUI
 </resources>

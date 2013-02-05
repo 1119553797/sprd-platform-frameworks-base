@@ -157,4 +157,12 @@
     <string name="network_disconnect_title">通知</string>
     <string name="network_disconnect_message">WLAN网络已经断开。\n通过3G网络进行连接? \n如果您没有订购数据业务套餐，这将产生一些费用</string>
     <!--add by spreadst_lc for cmcc wifi feature end-->
+    <!-- universe_ui_support -->
+    <string name="datanetwork_error_airplane">手机处于飞行模式下，您不能使用数据网络业务.</string>
+    <string name="bluetooth_error_airplane">手机处于飞行模式下，您不能使用蓝牙。</string>
+    <string name="status_bar_expanded_notification_stop_button_text" >停止</string>
+    <string name="status_bar_expanded_notification_hungup_button_text" >挂断</string>
+    <string name="status_bar_expanded_notification_cancel_button_text" >取消</string>
+    <string name="status_bar_expanded_notification_latest_button_text" >通知消息</string>
+    <string name="status_bar_expanded_notification_ongoing_button_text" >正在运行</string>
 </resources>

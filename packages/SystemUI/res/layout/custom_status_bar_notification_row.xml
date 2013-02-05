@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_notification_row_bg"
+    >
+    <Button
+        android:id="@+id/veto"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:gravity="right"
+        android:layout_marginRight="-80dp"
+        android:background="@null"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        />
+
+    <com.android.systemui.statusbar.LatestItemView android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        android:src="@drawable/custom_notification_row_bg"
+        >
+
+        <com.android.internal.widget.SizeAdaptiveLayout android:id="@+id/adaptive"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:src="@drawable/custom_notification_row_bg" />
+
+    </com.android.systemui.statusbar.LatestItemView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/custom_status_bar_hr_sprd"
+        />
+
+</RelativeLayout>

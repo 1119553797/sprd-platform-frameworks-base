@@ -395,4 +395,18 @@
     <string name="network_disconnect_title">Notice</string>
     <string name="network_disconnect_message">WLAN network is disconnected. \nConnect via 3G? \nIf you do net have data plan, it may incur additional charges.</string>
     <!--add by spreadst_lc for cmcc wifi feature end-->
+    <!-- universe_ui_support -->
+    <string name="datanetwork_error_airplane">You can\'t use Mobile data when the phone is in airplane mode.</string>
+    <string name="bluetooth_error_airplane">You can\'t use Bluetooth when the phone is in airplane mode.</string>
+    <string name="status_bar_expanded_notification_stop_button_text" >Stop</string>
+    <string name="status_bar_expanded_notification_hungup_button_text" >Hungup</string>
+    <string name="status_bar_expanded_notification_cancel_button_text" >Cancel</string>
+    <string name="status_bar_expanded_notification_latest_button_text" >Notifications</string>
+    <string name="status_bar_expanded_notification_ongoing_button_text" >Ongoing</string>
+    <string-array name="need_exit_button_apps" translatable="false">
+    <item>com.metek.stopwatch</item>
+    <item>com.android.music</item>
+    <item>com.android.phone</item>
+    <item>com.broadcom.bt.app.fm</item>
+    </string-array>
 </resources>
