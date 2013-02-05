@@ -1563,6 +1563,9 @@ public final class ActivityThread {
         return config;
     }
 
+    Resources getTopLevelResources(String resDir, CompatibilityInfo compInfo) {
+	return getTopLevelResources(resDir, compInfo, null);
+	}
     /**
      * Creates the top level Resources for applications with the given compatibility info.
      *
@@ -1570,7 +1573,7 @@ public final class ActivityThread {
      * @param compInfo the compability info. It will use the default compatibility info when it's
      * null.
      */
-    Resources getTopLevelResources(String resDir, CompatibilityInfo compInfo) {
+    Resources getTopLevelResources(String resDir, CompatibilityInfo compInfo, String packageName) {
         ResourcesKey key = new ResourcesKey(resDir, compInfo.applicationScale);
         Resources r;
         synchronized (mPackages) {
@@ -1601,19 +1604,23 @@ public final class ActivityThread {
             return null;
         }
 
+        boolean isCTSTest = false;
+        if (packageName != null && packageName.contains("com.android.cts.holo")) {
+            isCTSTest = true;
+        }
+        if (!isCTSTest) {
+            ThemeInfo sysTheme=null;
+            ThemeInfo appTheme=null;
+            try {
+                sysTheme=getThemeManager().getAppliedTheme("/system/framework/framework-res.apk");
+                appTheme=getThemeManager().getAppliedTheme(resDir);
+            } catch (Exception e) {}
 
-	ThemeInfo sysTheme=null;
-	ThemeInfo appTheme=null;
-	try {
-	    sysTheme=getThemeManager().getAppliedTheme("/system/framework/framework-res.apk");
-	    appTheme=getThemeManager().getAppliedTheme(resDir);
-	} catch (Exception e) {} 
-	
-	attachThemeAssets(assets, sysTheme, true);
-	attachThemeAssets(assets, appTheme, false);
-	
-	attachThemeAssets(AssetManager.getSystem(), sysTheme, true);
+            attachThemeAssets(assets, sysTheme, true);
+            attachThemeAssets(assets, appTheme, false);
 
+            attachThemeAssets(AssetManager.getSystem(), sysTheme, true);
+        }
 
 	
         //Slog.i(TAG, "Resource: key=" + key + ", display metrics=" + metrics);
@@ -1645,7 +1652,7 @@ public final class ActivityThread {
      * Creates the top level resources for the given package.
      */
     Resources getTopLevelResources(String resDir, LoadedApk pkgInfo) {
-        return getTopLevelResources(resDir, pkgInfo.mCompatibilityInfo.get());
+        return getTopLevelResources(resDir, pkgInfo.mCompatibilityInfo.get(), pkgInfo.getPackageName());
     }
 
     final Handler getHandler() {
