@@ -165,6 +165,9 @@ public class TelephonyIntents {
     public static final String ACTION_DATA_CONNECTION_FAILED
             = "android.intent.action.DATA_CONNECTION_FAILED";
 
+    public static final String ACTION_SIM_READY_LOAD_ICCID = "android.intent.action.SIM_READY_LOAD_ICCID";
+
+    public static final String ACTION_SIM_ACTIVED_STATE= "android.intent.action.SIM_ACTIVED_STATE";
 
     /**
      * Broadcast Action: The sim card state has changed.

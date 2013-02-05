@@ -21,18 +21,18 @@ import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_DAT
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncResult;
-import android.os.Handler;
 import android.os.Message;
-import android.os.SystemProperties;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.android.internal.telephony.AdnRecord;
 import com.android.internal.telephony.AdnRecordCache;
 import com.android.internal.telephony.AdnRecordLoader;
-import com.android.internal.telephony.BaseCommands;
-import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.IccFileHandler;
 import com.android.internal.telephony.IccRecords;
@@ -40,11 +40,13 @@ import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.IccVmFixedException;
 import com.android.internal.telephony.IccVmNotSupportedException;
 import com.android.internal.telephony.MccTable;
-import com.android.internal.telephony.Phone;
+
+import com.android.internal.telephony.PhoneFactory;
+import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.PhoneBase;
 import com.android.internal.telephony.SmsMessageBase;
 import com.android.internal.telephony.IccRefreshResponse;
-
+import com.android.internal.telephony.TelephonyProperties;
 import java.util.ArrayList;
 
 
@@ -59,6 +61,8 @@ public class SIMRecords extends IccRecords {
     protected static final boolean DBG = true;
 
     // ***** Instance Variables
+
+    private IccFileHandler mIccFh;
 
     VoiceMailConstants mVmConfig;
 
@@ -175,6 +179,32 @@ public class SIMRecords extends IccRecords {
         "405931", "405932"
     };
 
+    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            final String action = intent.getAction();
+            final int phoneId = phone.getPhoneId();
+            Log.d(LOG_TAG, "BroadcastReceiver:phoneid=" + phone.getPhoneId() + " intent.action="
+                    + action);
+
+            if (action.equals(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE,
+                    phoneId))) {
+                fetchSimRecords();
+            } else if (action.equals(PhoneFactory.getAction(
+                    TelephonyIntents.ACTION_SIM_READY_LOAD_ICCID, phoneId))) {
+                loadIccId();
+            }
+        }
+    };
+
+    private void loadIccId() {
+        if (DBG) {
+            Log.d(LOG_TAG, "[SIMRecords] loadIccId():phoneid=" + phone.getPhoneId());
+        }
+        mFh.loadEFTransparent(EF_ICCID, obtainMessage(EVENT_GET_ICCID_DONE));
+        recordsToLoad++;
+    }
     // ***** Constructor
     public SIMRecords(IccCard card, Context c, PhoneBase mPhone) {
         super(card, c, mPhone.mCM);
@@ -197,7 +227,10 @@ public class SIMRecords extends IccRecords {
 
         // Start off by setting empty state
         onRadioOffOrNotAvailable();
-
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE, phone.getPhoneId()));
+        filter.addAction(PhoneFactory.getAction(TelephonyIntents.ACTION_SIM_READY_LOAD_ICCID, phone.getPhoneId()));
+        phone.getContext().registerReceiver(mIntentReceiver, filter);
     }
 
     @Override
@@ -206,6 +239,7 @@ public class SIMRecords extends IccRecords {
         //Unregister for all events
         mCi.unregisterForOffOrNotAvailable( this);
         mCi.unregisterForIccRefresh(this);
+        phone.getContext().unregisterReceiver(mIntentReceiver);
         mCi.unSetOnSmsOnSim(this);
         super.dispose();
     }
@@ -808,7 +842,20 @@ public class SIMRecords extends IccRecords {
                 iccid = IccUtils.bcdToString(data, 0, data.length);
 
                 log("iccid: " + iccid);
+                phone.setSystemProperty(TelephonyProperties.PROPERTY_SIM_ICCID, iccid);
 
+                Log.d(LOG_TAG, "[SIMRecords] handleMessage EVENT_GET_ICCID_DONE phoneId : "
+                        + phone.getPhoneId());
+
+                int state = Settings.System
+                        .getInt(phone.getContext().getContentResolver(),
+                                PhoneFactory.getSetting(Settings.System.SIM_STANDBY,
+                                        phone.getPhoneId()), 1);
+                Log.d(LOG_TAG, "[SIMRecords] handleMessage EVENT_GET_ICCID_DONE SIM_STANDBY : "
+                        + state);
+                if (state != 1) {
+                    broadcastSimDisableStateIntent();
+                }
             break;
 
 
@@ -1710,5 +1757,13 @@ public class SIMRecords extends IccRecords {
         }
 
         log("[CSP] Value Added Service Group (0xC0), not found!");
+    }
+
+    private void broadcastSimDisableStateIntent() {
+        Intent simDisableIntent = new Intent(TelephonyIntents.ACTION_SIM_ACTIVED_STATE);
+        simDisableIntent.putExtra(IccCard.INTENT_KEY_PHONE_ID, phone.getPhoneId());
+        phone.getContext().sendBroadcast(simDisableIntent);
+        Log.d(LOG_TAG,
+                "[SIMRecords] broadcastSimDisableStateIntent phoneId : " + phone.getPhoneId());
     }
 }

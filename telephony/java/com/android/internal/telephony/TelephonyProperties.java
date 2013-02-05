@@ -59,6 +59,11 @@ public interface TelephonyProperties
      */
     static final String PROPERTY_OPERATOR_ISMANUAL = "operator.ismanual";
 
+    /*
+     * IccId for sim card.
+     */
+    static final String PROPERTY_SIM_ICCID = "gsm.sim.iccid";
+
     /** 'true' if the device is considered roaming on this network for GSM
      *  purposes.
      *  Availability: when registered to a network

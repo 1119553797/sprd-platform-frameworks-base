@@ -18,9 +18,7 @@ package android.telephony;
 
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
@@ -28,7 +26,6 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Settings;
-import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 
 import com.android.internal.telephony.IPhoneSubInfo;
@@ -36,8 +33,6 @@ import com.android.internal.telephony.ITelephony;
 import com.android.internal.telephony.ITelephonyRegistry;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneFactory;
-import com.android.internal.telephony.RILConstants;
-import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 
 import java.util.List;
@@ -429,6 +424,12 @@ public class TelephonyManager {
         String operatorAlphaProperty = PhoneFactory.getProperty(
                 TelephonyProperties.PROPERTY_OPERATOR_ALPHA, mPhoneId);
         return SystemProperties.get(operatorAlphaProperty);
+    }
+
+    public String getSimIccId(int phoneId) {
+        String iccidProperty = PhoneFactory.getProperty(TelephonyProperties.PROPERTY_SIM_ICCID,
+                phoneId);
+        return SystemProperties.get(iccidProperty);
     }
 
     /**

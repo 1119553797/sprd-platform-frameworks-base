@@ -42,6 +42,7 @@ import android.server.BluetoothService;
 import android.server.search.SearchManagerService;
 import android.service.dreams.DreamManagerService;
 import android.util.DisplayMetrics;
+import android.sim.SimManagerService;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
@@ -212,6 +213,13 @@ class ServerThread extends Thread {
                 Slog.e(TAG, "Failure starting Account Manager", e);
             }
 
+			try {
+                Slog.i(TAG, "Sim Manager");
+                ServiceManager.addService("sim_manager",
+                        new SimManagerService(context));
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting Sim Manager", e);
+            }
             Slog.i(TAG, "Content Manager");
             contentService = ContentService.main(context,
                     factoryTest == SystemServer.FACTORY_TEST_LOW_LEVEL);

@@ -691,6 +691,21 @@ public class IccCard {
 	        broadcastIccCardPresentIntent();
         }
 
+        if (mDbg) {
+            log(" phoneid " + mPhone.getPhoneId() + " misFirstStart" + misFirstStart);
+        }
+        if (hasIccCard() && !misFirstStart) {
+            misFirstStart = true;
+            Intent simReadyLoadIccId = new Intent(PhoneFactory.getAction(
+                    TelephonyIntents.ACTION_SIM_READY_LOAD_ICCID, mPhone.getPhoneId()));
+            simReadyLoadIccId.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+            simReadyLoadIccId.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
+            if (mDbg) {
+                log("Broadcasting intent load iccid");
+            }
+            ActivityManagerNative.broadcastStickyIntent(simReadyLoadIccId, READ_PHONE_STATE);
+        }
+
         if (isIccCardRemoved) {
             mHandler.sendMessage(mHandler.obtainMessage(EVENT_CARD_REMOVED, null));
         } else if (isIccCardAdded) {
@@ -708,6 +723,8 @@ public class IccCard {
             mIccRecords.onReady();
         }
     }
+
+    private boolean misFirstStart = false;
 
     public void broadcastGetIccStatusDoneIntent() {
         Intent intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE, mPhone.getPhoneId()));

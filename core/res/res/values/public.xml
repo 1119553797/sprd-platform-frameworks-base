@@ -3712,4 +3712,22 @@
   <java-symbol type="string" name="usb_cdrom_notification_title" />
   <java-symbol type="style"  name="Theme.UniverseUI.Light.DarkActionBar" />
   <java-symbol type="style"  name="Theme.UniverseUI.Light" />
+
+  <java-symbol type="drawable" name="sim_color_1_sprd" />
+  <java-symbol type="drawable" name="sim_color_2_sprd" />
+  <java-symbol type="drawable" name="sim_color_3_sprd" />
+  <java-symbol type="drawable" name="sim_color_4_sprd" />
+  <java-symbol type="drawable" name="sim_color_5_sprd" />
+  <java-symbol type="drawable" name="sim_color_6_sprd" />
+  <java-symbol type="drawable" name="sim_color_7_sprd" />
+  <java-symbol type="drawable" name="sim_color_8_sprd" />
+
+  <java-symbol type="layout" name="select_sim_multichoice" />
+  <java-symbol type="layout" name="select_sim" />
+  <java-symbol type="layout" name="select_sim_singlechoice" />
+
+  <java-symbol type="id" name="sim_name" />
+  <java-symbol type="id" name="sim_color" />
+  <java-symbol type="id" name="btn" />
+
 </resources>

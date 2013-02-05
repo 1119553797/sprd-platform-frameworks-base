@@ -40,6 +40,7 @@ SECONDARY_FRAMEWORKS_SUBDIRS := \
         media/java/android/media/audiofx \
         media/mca/effect/java/android/media/effect \
         media/mca/effect/java/android/media/effect/effects \
+        core/java/android/sim \
         core/java/android/hardware/fm/ \
         core/java/com/google/android/mms \
         core/java/com/google/android/util
@@ -289,6 +290,7 @@ aidl_files := \
 	frameworks/base/core/java/android/accounts/IAccountManagerResponse.aidl \
 	frameworks/base/core/java/android/accounts/IAccountAuthenticator.aidl \
 	frameworks/base/core/java/android/accounts/IAccountAuthenticatorResponse.aidl \
+	frameworks/base/core/java/android/sim/ISimManager.aidl \
 	frameworks/base/core/java/android/app/Notification.aidl \
 	frameworks/base/core/java/android/app/PendingIntent.aidl \
 	frameworks/base/core/java/android/bluetooth/BluetoothDevice.aidl \
@@ -750,14 +752,9 @@ include $(CLEAR_VARS)
 # FRAMEWORKS_BASE_SUBDIRS comes from build/core/pathmap.mk
 LOCAL_SRC_FILES := $(call find-other-java-files,$(SECONDARY_FRAMEWORKS_SUBDIRS))
 
+LOCAL_SRC_FILES += $(SECONDARY_SRC_FILES)
 LOCAL_SRC_FILES += \
-       telephony/java/com/android/internal/telephony/MsmsCallManager.java \
-       telephony/java/com/android/internal/telephony/MsmsPhoneFactory.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoCall.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoCallTracker.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoConnection.java \
-       telephony/java/com/android/internal/telephony/gsm/TDPhone.java \
-       telephony/java/com/android/internal/telephony/SprdRIL.java
+       core/java/android/sim/ISimManager.aidl
 
 LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_JAVA_LIBRARIES := bouncycastle core core-junit ext framework
