@@ -89,6 +89,7 @@ LOCAL_SRC_FILES := $(filter-out \
 LOCAL_SRC_FILES += \
 	core/java/android/accessibilityservice/IAccessibilityServiceConnection.aidl \
 	core/java/android/accessibilityservice/IAccessibilityServiceClient.aidl \
+	core/java/android/theme/IThemeManager.aidl \
 	core/java/android/accounts/IAccountManager.aidl \
 	core/java/android/accounts/IAccountManagerResponse.aidl \
 	core/java/android/accounts/IAccountAuthenticator.aidl \
@@ -286,6 +287,7 @@ framework_built += $(call java-lib-deps,framework2)
 # relative to the root of the build tree.
 # ============================================================
 aidl_files := \
+	frameworks/base/core/java/android/theme/IThemeManager.aidl \
 	frameworks/base/core/java/android/accounts/IAccountManager.aidl \
 	frameworks/base/core/java/android/accounts/IAccountManagerResponse.aidl \
 	frameworks/base/core/java/android/accounts/IAccountAuthenticator.aidl \

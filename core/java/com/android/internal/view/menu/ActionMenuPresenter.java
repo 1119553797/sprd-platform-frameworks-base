@@ -81,9 +81,9 @@ public class ActionMenuPresenter extends BaseMenuPresenter
 
         final ActionBarPolicy abp = ActionBarPolicy.get(context);
         if (!mReserveOverflowSet) {
-            mReserveOverflow = abp.showsOverflowMenuButton();
+	    mReserveOverflow = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_hasPermanentMenuKey);
         }
-
         if (!mWidthLimitSet) {
             mWidthLimit = abp.getEmbeddedMenuWidthLimit();
         }

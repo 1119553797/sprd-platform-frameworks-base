@@ -961,4 +961,8 @@ public abstract class ActionBar {
             super(source);
         }
     }
+
+    public abstract void setAlternativeTabStyle(boolean alternativeTabStyle);
+    public abstract void setTabHeight(int height);
+    public abstract void setReserveOverflow(boolean reserved);
 }

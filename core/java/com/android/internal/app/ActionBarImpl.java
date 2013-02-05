@@ -99,6 +99,7 @@ public class ActionBarImpl extends ActionBar {
 
     private static final int CONTEXT_DISPLAY_NORMAL = 0;
     private static final int CONTEXT_DISPLAY_SPLIT = 1;
+    private static final int CONTEXT_DISPLAY_ALTERNATIVE_TAB_STYLE = 2;
     
     private static final int INVALID_POSITION = -1;
 
@@ -188,7 +189,8 @@ public class ActionBarImpl extends ActionBar {
         }
 
         mActionView.setContextView(mContextView);
-        mContextDisplayMode = mActionView.isSplitActionBar() ?
+
+	mContextDisplayMode = mActionView.isSplitActionBar() ?
                 CONTEXT_DISPLAY_SPLIT : CONTEXT_DISPLAY_NORMAL;
 
         // This was initially read from the action bar style
@@ -200,11 +202,22 @@ public class ActionBarImpl extends ActionBar {
 
         ActionBarPolicy abp = ActionBarPolicy.get(mContext);
         setHomeButtonEnabled(abp.enableHomeButtonByDefault() || homeAsUp);
-        setHasEmbeddedTabs(abp.hasEmbeddedTabs());
+
+	if (mContextDisplayMode==CONTEXT_DISPLAY_ALTERNATIVE_TAB_STYLE) {
+	    setHasEmbeddedTabs(false);
+	} else {
+	    setHasEmbeddedTabs(mContext.getResources().getBoolean(
+				   com.android.internal.R.bool.action_bar_embed_tabs));
+	}
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
-        setHasEmbeddedTabs(ActionBarPolicy.get(mContext).hasEmbeddedTabs());
+	if (mContextDisplayMode==CONTEXT_DISPLAY_ALTERNATIVE_TAB_STYLE) {
+	    setHasEmbeddedTabs(false);
+	} else {
+	    setHasEmbeddedTabs(mContext.getResources().getBoolean(
+				   com.android.internal.R.bool.action_bar_embed_tabs));
+	}
     }
 
     private void setHasEmbeddedTabs(boolean hasEmbeddedTabs) {
@@ -212,9 +225,9 @@ public class ActionBarImpl extends ActionBar {
         // Switch tab layout configuration if needed
         if (!mHasEmbeddedTabs) {
             mActionView.setEmbeddedTabView(null);
-            mContainerView.setTabContainer(mTabScrollView);
+            mSplitView.setTabContainer(mTabScrollView);
         } else {
-            mContainerView.setTabContainer(null);
+            mSplitView.setTabContainer(null);
             mActionView.setEmbeddedTabView(mTabScrollView);
         }
         final boolean isInTabMode = getNavigationMode() == NAVIGATION_MODE_TABS;
@@ -246,15 +259,13 @@ public class ActionBarImpl extends ActionBar {
             tabScroller.setVisibility(View.VISIBLE);
             mActionView.setEmbeddedTabView(tabScroller);
         } else {
-            if (getNavigationMode() == NAVIGATION_MODE_TABS) {
-                tabScroller.setVisibility(View.VISIBLE);
-                if (mOverlayLayout != null) {
-                    mOverlayLayout.requestFitSystemWindows();
-                }
-            } else {
-                tabScroller.setVisibility(View.GONE);
-            }
-            mContainerView.setTabContainer(tabScroller);
+            tabScroller.setVisibility(getNavigationMode() == NAVIGATION_MODE_TABS ?
+                    View.VISIBLE : View.GONE);
+	    if (mContextDisplayMode == CONTEXT_DISPLAY_ALTERNATIVE_TAB_STYLE) {
+		mSplitView.setTabContainer(tabScroller);		
+	    } else {
+		mContainerView.setTabContainer(tabScroller);		
+	    }
         }
         mTabScrollView = tabScroller;
     }
@@ -447,7 +458,7 @@ public class ActionBarImpl extends ActionBar {
             mode.invalidate();
             mContextView.initForMode(mode);
             animateToMode(true);
-            if (mSplitView != null && mContextDisplayMode == CONTEXT_DISPLAY_SPLIT) {
+            if (mSplitView != null && (mContextDisplayMode == CONTEXT_DISPLAY_SPLIT || mContextDisplayMode == CONTEXT_DISPLAY_ALTERNATIVE_TAB_STYLE)) {
                 // TODO animate this
                 if (mSplitView.getVisibility() != View.VISIBLE) {
                     mSplitView.setVisibility(View.VISIBLE);
@@ -688,8 +699,11 @@ public class ActionBarImpl extends ActionBar {
                 b.with(ObjectAnimator.ofFloat(mContentView, "translationY",
                         startingY, 0));
             }
-            if (mSplitView != null && mContextDisplayMode == CONTEXT_DISPLAY_SPLIT) {
-                mSplitView.setTranslationY(mSplitView.getHeight());
+            if (mSplitView != null
+		&& (mContextDisplayMode == CONTEXT_DISPLAY_SPLIT ||mContextDisplayMode == CONTEXT_DISPLAY_ALTERNATIVE_TAB_STYLE))
+	    {
+                mSplitView.setAlpha(0);
+		mSplitView.setTranslationY(mSplitView.getHeight());
                 mSplitView.setVisibility(View.VISIBLE);
                 b.with(ObjectAnimator.ofFloat(mSplitView, "translationY", 0));
             }
@@ -1193,5 +1207,35 @@ public class ActionBarImpl extends ActionBar {
         if (!mDisplayHomeAsUpSet) {
             setDisplayHomeAsUpEnabled(enable);
         }
+    }
+    
+    @Override
+    public void setReserveOverflow(boolean reserved) {
+	mActionView.setReserveOverflow(reserved);
+    }
+    
+    @Override
+    public void setAlternativeTabStyle(boolean alternativeTabStyle) {
+	if (alternativeTabStyle) {
+	    mContextDisplayMode=CONTEXT_DISPLAY_ALTERNATIVE_TAB_STYLE;
+	    setHasEmbeddedTabs(false);
+	    mActionView.setSplitActionBar(false);
+	    mActionView.setSplitWhenNarrow(false);
+	} else {
+	    mContextDisplayMode = mActionView.isSplitActionBar() ?
+                CONTEXT_DISPLAY_SPLIT : CONTEXT_DISPLAY_NORMAL;
+	    setHasEmbeddedTabs(mContext.getResources().getBoolean(
+				   com.android.internal.R.bool.action_bar_embed_tabs));
+	}
+	mActionView.setAlternativeTabStyle(alternativeTabStyle);
+
+	ensureTabsExist();
+	mTabScrollView.setAlternativeTabStyle(alternativeTabStyle);
+    }
+
+    @Override
+    public void setTabHeight(int height) {
+	ensureTabsExist();
+	mTabScrollView.setFixedHeight(height);
     }
 }
