@@ -264,6 +264,9 @@ public class KeyguardUpdateMonitor {
                     case MSG_USER_CHANGED:
                         handleUserChanged(msg.arg1);
                         break;
+                    case MSG_UNREAD_MESSAGE_COUNT:
+                        handleMessageCountChanged(msg.arg1);
+                        break;
                 }
             }
         };
@@ -553,6 +556,16 @@ public class KeyguardUpdateMonitor {
         }
     }
 
+    // add DSDS missed call for lockscreen end
+    // add newfeature for lockscreen start
+    private void handleMessageCountChanged(int messageCount) {
+        if (true)
+            Log.d(TAG, "handleMessageCountChanged() :" + messageCount);
+        for (int i = 0; i < mInfoCallbacks.size(); i++) {
+            mInfoCallbacks.get(i).onMessageCountChanged(messageCount);
+        }
+    }
+
     /**
      * @param pluggedIn state from {@link android.os.BatteryManager#EXTRA_PLUGGED}
      * @return Whether the device is considered "plugged in."
@@ -696,6 +709,13 @@ public class KeyguardUpdateMonitor {
          * Called when the user changes.
          */
         void onUserChanged(int userId);
+
+        /**
+         * Called when recevie the new Sms/Mms
+         *
+         * @param messagecount The count of unread Message
+         */
+        void onMessageCountChanged(int messageCount);
     }
 
     // Simple class that allows methods to easily be overwritten
@@ -734,6 +754,10 @@ public class KeyguardUpdateMonitor {
 			// TODO Auto-generated method stub
 
 		}
+
+        @Override
+        public void onMessageCountChanged(int messageCount) {
+        }
     }
 
     /**
@@ -769,6 +793,7 @@ public class KeyguardUpdateMonitor {
 			//add DSDS end
 
             callback.onClockVisibilityChanged();
+            callback.onMessageCountChanged(mUnreadMessageCount);
         } else {
             if (DEBUG) Log.e(TAG, "Object tried to add another INFO callback",
                     new Exception("Whoops"));
