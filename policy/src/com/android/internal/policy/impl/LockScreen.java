@@ -45,6 +45,7 @@ import android.util.Slog;
 import android.media.AudioManager;
 import android.os.RemoteException;
 import android.provider.MediaStore;
+import android.os.SystemProperties;
 
 import java.io.File;
 
@@ -86,6 +87,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
     // Is there a vibrator
     private final boolean mHasVibrator;
 
+    private static String universeSupportKey = "universe_ui_support";
+    boolean isUniverseSupport = SystemProperties.getBoolean(universeSupportKey,false);
     InfoCallbackImpl mInfoCallback = new InfoCallbackImpl() {
 
         @Override
@@ -273,7 +276,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                 resId = mSilentMode ? R.array.lockscreen_targets_when_silent
                     : R.array.lockscreen_targets_when_soundon;
             } else {
-                resId = R.array.lockscreen_targets_with_camera;
+                if (isUniverseSupport) {
+                    resId = R.array.lockscreen_targets_with_camera_uui;
+                } else {
+                    resId = R.array.lockscreen_targets_with_camera;
+                }
             }
             if (mGlowPadView.getTargetResourceId() != resId) {
                 mGlowPadView.setTargetResources(resId);
@@ -313,9 +320,54 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
         public void onTrigger(View v, int target) {
             final int resId = mGlowPadView.getResourceIdForTarget(target);
-            switch (resId) {
+            if (isUniverseSupport) {
+                switch (resId) {
+                case com.android.internal.R.drawable.ic_lockscreen_call:
+                    Intent assistIntent = SearchManager
+                            .getAssistIntent(mContext);
+                    // Intent assistIntent = SearchManager
+                    // .getAssistIntent(mContext);
+                    // if (assistIntent != null) {
+                    // launchActivity(assistIntent);
+                    // } else {
+                    // Log.w(TAG, "Failed to get intent for assist activity");
+                    // }
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_DIAL);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(intent);
+                    mCallback.pokeWakelock();
+                    mCallback.goToUnlockScreen();
+                    break;
+
+                case com.android.internal.R.drawable.ic_lockscreen_camera:
+                    launchActivity(new Intent(
+                            MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
+                    mCallback.pokeWakelock();
+                    mCallback.goToUnlockScreen();
+                    break;
+
+                case com.android.internal.R.drawable.ic_lockscreen_sms:
+                    // toggleRingMode();
+                    Intent intent1 = new Intent(Intent.ACTION_MAIN);
+                    intent1.addCategory(Intent.CATEGORY_DEFAULT);
+                    intent1.setType("vnd.android.cursor.dir/mms");
+                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(intent1);
+                    mCallback.pokeWakelock();
+                    mCallback.goToUnlockScreen();
+                    break;
+
+                case com.android.internal.R.drawable.ic_lockscreen_unlock_phantom:
+                case com.android.internal.R.drawable.ic_lockscreen_unlock:
+                    mCallback.goToUnlockScreen();
+                    break;
+                }
+            } else {
+                switch (resId) {
                 case com.android.internal.R.drawable.ic_action_assist_generic:
-                    Intent assistIntent = SearchManager.getAssistIntent(mContext);
+                    Intent assistIntent = SearchManager
+                            .getAssistIntent(mContext);
                     if (assistIntent != null) {
                         launchActivity(assistIntent);
                     } else {
@@ -334,12 +386,13 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                 case com.android.internal.R.drawable.ic_lockscreen_silent:
                     toggleRingMode();
                     mCallback.pokeWakelock();
-                break;
+                    break;
 
                 case com.android.internal.R.drawable.ic_lockscreen_unlock_phantom:
                 case com.android.internal.R.drawable.ic_lockscreen_unlock:
                     mCallback.goToUnlockScreen();
-                break;
+                    break;
+                }
             }
         }
 
@@ -461,7 +514,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
         final LayoutInflater inflater = LayoutInflater.from(context);
         if (DBG) Log.v(TAG, "Creation orientation = " + mCreationOrientation);
         if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
-            inflater.inflate(R.layout.keyguard_screen_tab_unlock, this, true);
+            if (isUniverseSupport) {
+                inflater.inflate(R.layout.keyguard_screen_tab_unlock_uui, this, true);
+            } else {
+                inflater.inflate(R.layout.keyguard_screen_tab_unlock, this, true);
+            }
         } else {
             inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
         }

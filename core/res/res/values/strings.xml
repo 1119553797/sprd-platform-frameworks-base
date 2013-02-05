@@ -3642,4 +3642,6 @@
     <string name="lockscreen_sim_network_locked_message">Phone is SIM Network locked</string>
     <string name="lockscreen_sim_card_locked_message">sim card is locked.</string>
     <string name="digtal_formatter">%2$s</string>
+    <string name="description_target_call">Call</string>
+    <string name="description_target_sms">Sms</string>
 </resources>

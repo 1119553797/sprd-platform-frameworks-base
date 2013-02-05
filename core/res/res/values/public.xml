@@ -3745,5 +3745,15 @@
 
   <java-symbol type="layout" name="custom_notification_template_base" />
   
-
+    <java-symbol type="layout" name="keyguard_screen_tab_unlock_uui" />
+    <java-symbol type="array" name="lockscreen_targets_with_camera_uui" />
+    <java-symbol type="array" name="lockscreen_target_descriptions_with_camera_uui" />
+    <java-symbol type="drawable" name="ic_lockscreen_call" />
+    <java-symbol type="drawable" name="ic_lockscreen_call_normal" />
+    <java-symbol type="drawable" name="ic_lockscreen_call_activated" />
+    <java-symbol type="drawable" name="ic_lockscreen_sms" />
+    <java-symbol type="drawable" name="ic_lockscreen_sms_normal" />
+    <java-symbol type="drawable" name="ic_lockscreen_sms_activated" />
+    <java-symbol type="string" name="description_target_call" />
+    <java-symbol type="string" name="description_target_sms" />
 </resources>
