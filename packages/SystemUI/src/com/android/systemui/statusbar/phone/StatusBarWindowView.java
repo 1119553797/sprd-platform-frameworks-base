@@ -52,7 +52,6 @@ public class StatusBarWindowView extends FrameLayout
         super(context, attrs);
         //add for universe_ui_support
         isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, false);
-        isUniverseSupport = true;
         setMotionEventSplittingEnabled(false);
     }
 
