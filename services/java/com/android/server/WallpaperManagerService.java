@@ -89,11 +89,16 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
      * restarting it vs. just reverting to the static wallpaper.
      */
     static final long MIN_WALLPAPER_CRASH_TIME = 10000;
-    
+
     static final File WALLPAPER_BASE_DIR = new File("/data/system/users");
     static final String WALLPAPER = "wallpaper";
     static final String WALLPAPER_INFO = "wallpaper_info.xml";
 
+    static final String LOCKSCREEN_WALLPAPER = "lockscreen";
+//    static final String LOCKSCREEN_WALLPAPER_INFO = "lockscreen_wallpaper_info.xml";
+
+    static final String MAINMENU_WALLPAPER = "mainmenu";
+//    static final String MAINMENU_WALLPAPER_INFO = "mainmenu_wallpaper_info.xml";
     /**
      * Observes the wallpaper for changes and notifies all IWallpaperServiceCallbacks
      * that the wallpaper has changed. The CREATE is triggered when there is no
@@ -105,6 +110,8 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         final WallpaperData mWallpaper;
         final File mWallpaperDir;
         final File mWallpaperFile;
+        final File mLockScreenWallpaperFile;
+        final File mMainMenuWallpaperFile;
 
         public WallpaperObserver(WallpaperData wallpaper) {
             super(getWallpaperDir(wallpaper.userId).getAbsolutePath(),
@@ -112,6 +119,8 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             mWallpaperDir = getWallpaperDir(wallpaper.userId);
             mWallpaper = wallpaper;
             mWallpaperFile = new File(mWallpaperDir, WALLPAPER);
+            mLockScreenWallpaperFile = new File(mWallpaperDir, LOCKSCREEN_WALLPAPER);
+            mMainMenuWallpaperFile = new File(mWallpaperDir, MAINMENU_WALLPAPER);
         }
 
         @Override
@@ -138,6 +147,10 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                                 false, mWallpaper);
                         saveSettingsLocked(mWallpaper);
                     }
+                }else if(mLockScreenWallpaperFile.equals(changedFile)){
+                    notifyCallbacksLockedByLockScreen(mWallpaper);
+                }else if(mMainMenuWallpaperFile.equals(changedFile)){
+                    notifyCallbacksLockedByMainMenu(mWallpaper);
                 }
             }
         }
@@ -217,7 +230,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             mInfo = info;
             mWallpaper = wallpaper;
         }
-        
+
         public void onServiceConnected(ComponentName name, IBinder service) {
             synchronized (mLock) {
                 if (mWallpaper.connection == this) {
@@ -382,7 +395,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             return changed;
         }
     }
-    
+
     public WallpaperManagerService(Context context) {
         if (DEBUG) Slog.v(TAG, "WallpaperService startup");
         mContext = context;
@@ -393,7 +406,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         WALLPAPER_BASE_DIR.mkdirs();
         loadSettingsLocked(0);
     }
-    
+
     private static File getWallpaperDir(int userId) {
         return new File(WALLPAPER_BASE_DIR + "/" + userId);
     }
@@ -508,7 +521,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         } finally {
             Binder.restoreCallingIdentity(ident);
         }
-        
+
         // This can happen if the default wallpaper component doesn't
         // exist.  This should be a system configuration problem, but
         // let's not let it crash the system and just live with no
@@ -667,7 +680,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             }
         }
     }
-    
+
     boolean bindWallpaperComponentLocked(ComponentName componentName, boolean force,
             boolean fromUser, WallpaperData wallpaper) {
         if (DEBUG) Slog.v(TAG, "bindWallpaperComponentLocked: componentName=" + componentName);
@@ -687,10 +700,10 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                 }
             }
         }
-        
+
         try {
             if (componentName == null) {
-                String defaultComponent = 
+                String defaultComponent =
                     mContext.getString(com.android.internal.R.string.default_wallpaper_component);
                 if (defaultComponent != null) {
                     // See if there is a default wallpaper component specified
@@ -717,9 +730,9 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                 Slog.w(TAG, msg);
                 return false;
             }
-            
+
             WallpaperInfo wi = null;
-            
+
             Intent intent = new Intent(WallpaperService.SERVICE_INTERFACE);
             if (componentName != null && !componentName.equals(wallpaper.imageWallpaperComponent)) {
                 // Make sure the selected service is actually a wallpaper service.
@@ -757,7 +770,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                     return false;
                 }
             }
-            
+
             // Bind the service!
             if (DEBUG) Slog.v(TAG, "Binding to:" + componentName);
             WallpaperConnection newConn = new WallpaperConnection(wi, wallpaper);
@@ -927,7 +940,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
 
     private void loadSettingsLocked(int userId) {
         if (DEBUG) Slog.v(TAG, "loadSettingsLocked");
-        
+
         JournaledFile journal = makeJournaledFile(userId);
         FileInputStream stream = null;
         File file = journal.chooseForRead();
@@ -965,7 +978,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                                         .getPackageName())) {
                             wallpaper.nextWallpaperComponent = wallpaper.imageWallpaperComponent;
                         }
-                          
+
                         if (DEBUG) {
                             Slog.v(TAG, "mWidth:" + wallpaper.width);
                             Slog.v(TAG, "mHeight:" + wallpaper.height);
@@ -1159,7 +1172,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
     protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
                 != PackageManager.PERMISSION_GRANTED) {
-            
+
             pw.println("Permission Denial: can't dump wallpaper service from from pid="
                     + Binder.getCallingPid()
                     + ", uid=" + Binder.getCallingUid());
@@ -1197,6 +1210,150 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                     pw.print("    mLastDiedTime=");
                     pw.println(wallpaper.lastDiedTime - SystemClock.uptimeMillis());
                 }
+            }
+        }
+    }
+
+    public ParcelFileDescriptor getWallpaperByTarget(IWallpaperManagerCallback cb,
+            Bundle outParams, int target) {
+        synchronized (mLock) {
+            // This returns the current user's wallpaper, if called by a system service. Else it
+            // returns the wallpaper for the calling user.
+            int callingUid = Binder.getCallingUid();
+            int wallpaperUserId = 0;
+            if (callingUid == android.os.Process.SYSTEM_UID) {
+                wallpaperUserId = mCurrentUserId;
+            } else {
+                wallpaperUserId = UserId.getUserId(callingUid);
+            }
+            WallpaperData wallpaper = mWallpaperMap.get(wallpaperUserId);
+            try {
+                if (outParams != null) {
+                    outParams.putInt("width", wallpaper.width);
+                    outParams.putInt("height", wallpaper.height);
+                }
+                wallpaper.callbacks.register(cb);
+                File f = null;
+                switch (target) {
+                    case WallpaperInfo.WALLPAPER_LOCKSCREEN_TYPE:
+                        f = new File(getWallpaperDir(wallpaperUserId), WALLPAPER);;
+                        break;
+                    case WallpaperInfo.WALLPAPER_MAINMENU_TYPE:
+                        f = new File(getWallpaperDir(wallpaperUserId), LOCKSCREEN_WALLPAPER);;
+                        break;
+                    default:
+                        f = new File(getWallpaperDir(wallpaperUserId), MAINMENU_WALLPAPER);;
+                        break;
+                }
+
+                if (!f.exists()) {
+                    return null;
+                }
+                return ParcelFileDescriptor.open(f, MODE_READ_ONLY);
+            } catch (FileNotFoundException e) {
+                /* Shouldn't happen as we check to see if the file exists */
+                Slog.w(TAG, "Error getting wallpaper", e);
+            }
+            return null;
+        }
+    }
+
+    public ParcelFileDescriptor setWallpaperByTarget(String name, int target) {
+        if (DEBUG) Slog.v(TAG, "setWallpaper");
+        int userId = UserId.getCallingUserId();
+        WallpaperData wallpaper = mWallpaperMap.get(userId);
+        if (wallpaper == null) {
+            throw new IllegalStateException("Wallpaper not yet initialized for user " + userId);
+        }
+        checkPermission(android.Manifest.permission.SET_WALLPAPER);
+        synchronized (mLock) {
+            final long ident = Binder.clearCallingIdentity();
+            try {
+                ParcelFileDescriptor pfd = updateWallpaperBitmapLocked(name, wallpaper,target);
+                if (pfd != null) {
+                    wallpaper.imageWallpaperPending = true;
+                }
+                return pfd;
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
+    }
+
+    ParcelFileDescriptor updateWallpaperBitmapLocked(String name, WallpaperData wallpaper, int target) {
+
+        if (name == null) name = "";
+        try {
+            File dir = getWallpaperDir(wallpaper.userId);
+            if (!dir.exists()) {
+                dir.mkdir();
+                FileUtils.setPermissions(
+                        dir.getPath(),
+                        FileUtils.S_IRWXU|FileUtils.S_IRWXG|FileUtils.S_IXOTH,
+                        -1, -1);
+            }
+            ParcelFileDescriptor fd = null;
+            switch (target) {
+                case WallpaperInfo.WALLPAPER_LOCKSCREEN_TYPE:
+                    fd = ParcelFileDescriptor.open(new File(dir, LOCKSCREEN_WALLPAPER),
+                            MODE_CREATE|MODE_READ_WRITE);
+                    break;
+                case WallpaperInfo.WALLPAPER_MAINMENU_TYPE:
+                    fd = ParcelFileDescriptor.open(new File(dir, MAINMENU_WALLPAPER),
+                            MODE_CREATE|MODE_READ_WRITE);
+                    break;
+                default:
+                    fd = ParcelFileDescriptor.open(new File(dir, WALLPAPER),
+                            MODE_CREATE|MODE_READ_WRITE);
+                    break;
+            }
+            wallpaper.name = name;
+            return fd;
+        } catch (FileNotFoundException e) {
+            Slog.w(TAG, "Error setting wallpaper", e);
+        }
+        return null;
+    }
+
+    private void notifyCallbacksLockedByLockScreen(WallpaperData wallpaper) {
+        final int n = wallpaper.callbacks.beginBroadcast();
+        for (int i = 0; i < n; i++) {
+            try {
+                wallpaper.callbacks.getBroadcastItem(i).onWallpaperChanged();
+            } catch (RemoteException e) {
+
+                // The RemoteCallbackList will take care of removing
+                // the dead object for us.
+            }
+        }
+        wallpaper.callbacks.finishBroadcast();
+        final Intent intent = new Intent(Intent.ACTION_LOCKSCREEN_WALLPAPER_CHANGED);
+        mContext.sendBroadcast(intent);
+    }
+
+    private void notifyCallbacksLockedByMainMenu(WallpaperData wallpaper) {
+        final int n = wallpaper.callbacks.beginBroadcast();
+        for (int i = 0; i < n; i++) {
+            try {
+                wallpaper.callbacks.getBroadcastItem(i).onWallpaperChanged();
+            } catch (RemoteException e) {
+
+                // The RemoteCallbackList will take care of removing
+                // the dead object for us.
+            }
+        }
+        wallpaper.callbacks.finishBroadcast();
+        final Intent intent = new Intent(Intent.ACTION_MAINMENU_WALLPAPER_CHANGED);
+        mContext.sendBroadcast(intent);
+
+    }
+
+    public void clearLockScreenWallpaper() {
+        synchronized (mLock) {
+            File f = new File(getWallpaperDir(UserId.getCallingUserId()), LOCKSCREEN_WALLPAPER);
+            if (f.exists()) {
+                f.delete();
+                f = null;
             }
         }
     }

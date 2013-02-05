@@ -29,7 +29,12 @@ interface IWallpaperManager {
      * Set the wallpaper.
      */
     ParcelFileDescriptor setWallpaper(String name);
-    
+
+     /**
+     * Set the wallpaper by app type
+     */
+    ParcelFileDescriptor setWallpaperByTarget(String name, int toTarget);
+
     /**
      * Set the live wallpaper.
      */
@@ -40,7 +45,13 @@ interface IWallpaperManager {
      */
     ParcelFileDescriptor getWallpaper(IWallpaperManagerCallback cb,
             out Bundle outParams);
-    
+
+     /**
+     * Get the wallpaper from app type.
+     */
+    ParcelFileDescriptor getWallpaperByTarget(IWallpaperManagerCallback cb,
+            out Bundle outParams, int toTarget);
+
     /**
      * Get information about a live wallpaper.
      */
@@ -66,4 +77,6 @@ interface IWallpaperManager {
      * Returns the desired minimum height for the wallpaper.
      */
     int getHeightHint();
+
+    void clearLockScreenWallpaper();
 }

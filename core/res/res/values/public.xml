@@ -3475,6 +3475,7 @@
   <public type="attr" name="requiresFadingEdge" id="0x010103a5" />
   <public type="attr" name="publicKey" id="0x010103a6" />
 
+
   <public type="style" name="TextAppearance.SuggestionHighlight" id="0x01030118" />
   <public type="style" name="Theme.Holo.Light.DarkActionBar" id="0x01030119" />
   <public type="style" name="Widget.Holo.Button.Borderless.Small" id="0x0103011a" />
@@ -3693,6 +3694,13 @@
 
   <public type="attr" name="mediaRouteButtonStyle" id="0x010103ad" />
   <public type="attr" name="mediaRouteTypes" id="0x010103ae" />
+
+
+  <public type="attr" name="spread_dial" id="0x010103af" />
+  <public type="attr" name="spread_hand_hour" id="0x010103b0" />
+  <public type="attr" name="spread_hand_minute" id="0x010103b1" />
+  <public type="attr" name="spread_hand_second" id="0x010103b2" />
+
   <public type="style" name="Widget.Holo.MediaRouteButton" id="0x010301d5" />
   <public type="style" name="Widget.Holo.Light.MediaRouteButton" id="0x010301d6" />
   <public type="style" name="Widget.DeviceDefault.MediaRouteButton" id="0x010301d7" />
@@ -3730,5 +3738,11 @@
   <java-symbol type="id" name="sim_name" />
   <java-symbol type="id" name="sim_color" />
   <java-symbol type="id" name="btn" />
+
+  <java-symbol type="layout" name="spread_digtal_clock" />
+  <java-symbol type="id" name="spread_date" />
+  <java-symbol type="string" name="digtal_formatter" />
+  
+  
 
 </resources>

@@ -250,4 +250,8 @@
 
     <dimen name="dialog_button_padding_left">4dip</dimen>
     <dimen name="dialog_button_padding_right">4dip</dimen>
+
+	    <!--spread digtal clock -->
+    <dimen name="spread_date_size">20dip</dimen>
+    <dimen name="spread_time_size">42dip</dimen>
 </resources>

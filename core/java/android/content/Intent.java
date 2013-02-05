@@ -1162,6 +1162,15 @@ public class Intent implements Parcelable, Cloneable {
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_SET_WALLPAPER = "android.intent.action.SET_WALLPAPER";
 
+
+    /**
+     * Activity Action: Show settings for choosing spread wallpaper
+     * <p>Input: Nothing.
+     * <p>Output: Nothing.
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_SET_SPREAD_WALLPAPER = "android.intent.action.SET_SPREAD_WALLPAPER";
+
     /**
      * Activity Action: Show activity for reporting a bug.
      * <p>Input: Nothing.
@@ -1692,6 +1701,20 @@ public class Intent implements Parcelable, Cloneable {
      */
     @Deprecated @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_WALLPAPER_CHANGED = "android.intent.action.WALLPAPER_CHANGED";
+
+    /**
+     * Broadcast Action:  The current system wallpaper has changed.  See
+     * {@link android.app.WallpaperManager} for retrieving the new wallpaper.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_LOCKSCREEN_WALLPAPER_CHANGED = "android.intent.action.LOCKSCREEN_WALLPAPER_CHANGED";
+
+    /**
+     * Broadcast Action:  The current system wallpaper has changed.  See
+     * {@link android.app.WallpaperManager} for retrieving the new wallpaper.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_MAINMENU_WALLPAPER_CHANGED = "android.intent.action.MAINMENU_WALLPAPER_CHANGED";
     /**
      * Broadcast Action: The current device {@link android.content.res.Configuration}
      * (orientation, locale, etc) has changed.  When such a change happens, the

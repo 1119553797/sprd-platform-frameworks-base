@@ -5731,5 +5731,13 @@
         <attr name="minWidth" />
         <attr name="minHeight" />
     </declare-styleable>
+    
+       <!-- custom spread clock att -->
+    <declare-styleable name="SpreadAnalogClock">
+       <attr name="spread_dial" format="reference"/>
+        <attr name="spread_hand_hour" format="reference"/>
+        <attr name="spread_hand_minute" format="reference"/>
+        <attr name="spread_hand_second" format="reference"/>
+    </declare-styleable>
 
 </resources>

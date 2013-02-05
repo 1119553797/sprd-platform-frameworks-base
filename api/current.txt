@@ -890,6 +890,10 @@ package android {
     field public static final int spinnerStyle = 16842881; // 0x1010081
     field public static final int spinnersShown = 16843595; // 0x101034b
     field public static final int splitMotionEvents = 16843503; // 0x10102ef
+    field public static final int spread_dial = 16843695; // 0x10103af
+    field public static final int spread_hand_hour = 16843696; // 0x10103b0
+    field public static final int spread_hand_minute = 16843697; // 0x10103b1
+    field public static final int spread_hand_second = 16843698; // 0x10103b2
     field public static final int src = 16843033; // 0x1010119
     field public static final int stackFromBottom = 16843005; // 0x10100fd
     field public static final int starStyle = 16842882; // 0x1010082
@@ -4096,15 +4100,21 @@ package android.app {
     method public android.graphics.drawable.Drawable loadThumbnail(android.content.pm.PackageManager);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator CREATOR;
+    field public static final int WALLPAPER_DEFAULT_TYPE = 0; // 0x0
+    field public static final int WALLPAPER_LOCKSCREEN_TYPE = 1; // 0x1
+    field public static final int WALLPAPER_MAINMENU_TYPE = 2; // 0x2
+    field public static final java.lang.String WALLPAPER_TARGET_ID = "wallpaper_target_id";
   }
 
   public class WallpaperManager {
     method public void clear() throws java.io.IOException;
+    method public void clearLockScreenWallpaper();
     method public void clearWallpaperOffsets(android.os.IBinder);
     method public void forgetLoadedWallpaper();
     method public int getDesiredMinimumHeight();
     method public int getDesiredMinimumWidth();
     method public android.graphics.drawable.Drawable getDrawable();
+    method public android.graphics.drawable.Drawable getDrawable(int);
     method public android.graphics.drawable.Drawable getFastDrawable();
     method public static android.app.WallpaperManager getInstance(android.content.Context);
     method public android.app.WallpaperInfo getWallpaperInfo();
@@ -4112,7 +4122,9 @@ package android.app {
     method public android.graphics.drawable.Drawable peekFastDrawable();
     method public void sendWallpaperCommand(android.os.IBinder, java.lang.String, int, int, int, android.os.Bundle);
     method public void setBitmap(android.graphics.Bitmap) throws java.io.IOException;
+    method public void setBitmap(android.graphics.Bitmap, int) throws java.io.IOException;
     method public void setResource(int) throws java.io.IOException;
+    method public void setResource(int, int) throws java.io.IOException;
     method public void setStream(java.io.InputStream) throws java.io.IOException;
     method public void setWallpaperOffsetSteps(float, float);
     method public void setWallpaperOffsets(android.os.IBinder, float, float);
@@ -5692,7 +5704,9 @@ package android.content {
     field public static final java.lang.String ACTION_INSERT_OR_EDIT = "android.intent.action.INSERT_OR_EDIT";
     field public static final java.lang.String ACTION_INSTALL_PACKAGE = "android.intent.action.INSTALL_PACKAGE";
     field public static final java.lang.String ACTION_LOCALE_CHANGED = "android.intent.action.LOCALE_CHANGED";
+    field public static final java.lang.String ACTION_LOCKSCREEN_WALLPAPER_CHANGED = "android.intent.action.LOCKSCREEN_WALLPAPER_CHANGED";
     field public static final java.lang.String ACTION_MAIN = "android.intent.action.MAIN";
+    field public static final java.lang.String ACTION_MAINMENU_WALLPAPER_CHANGED = "android.intent.action.MAINMENU_WALLPAPER_CHANGED";
     field public static final java.lang.String ACTION_MANAGE_NETWORK_USAGE = "android.intent.action.MANAGE_NETWORK_USAGE";
     field public static final java.lang.String ACTION_MANAGE_PACKAGE_STORAGE = "android.intent.action.MANAGE_PACKAGE_STORAGE";
     field public static final java.lang.String ACTION_MEDIA_BAD_REMOVAL = "android.intent.action.MEDIA_BAD_REMOVAL";
@@ -5736,6 +5750,7 @@ package android.content {
     field public static final java.lang.String ACTION_SEND = "android.intent.action.SEND";
     field public static final java.lang.String ACTION_SENDTO = "android.intent.action.SENDTO";
     field public static final java.lang.String ACTION_SEND_MULTIPLE = "android.intent.action.SEND_MULTIPLE";
+    field public static final java.lang.String ACTION_SET_SPREAD_WALLPAPER = "android.intent.action.SET_SPREAD_WALLPAPER";
     field public static final java.lang.String ACTION_SET_WALLPAPER = "android.intent.action.SET_WALLPAPER";
     field public static final java.lang.String ACTION_SHUTDOWN = "android.intent.action.ACTION_SHUTDOWN";
     field public static final java.lang.String ACTION_SYNC = "android.intent.action.SYNC";
@@ -28786,6 +28801,17 @@ package android.widget {
 
   public abstract interface SpinnerAdapter implements android.widget.Adapter {
     method public abstract android.view.View getDropDownView(int, android.view.View, android.view.ViewGroup);
+  }
+
+  public class SpreadAnalogClock extends android.view.View {
+    ctor public SpreadAnalogClock(android.content.Context);
+    ctor public SpreadAnalogClock(android.content.Context, android.util.AttributeSet);
+    ctor public SpreadAnalogClock(android.content.Context, android.util.AttributeSet, int);
+  }
+
+  public class SpreadDigitalClock extends android.widget.RelativeLayout {
+    ctor public SpreadDigitalClock(android.content.Context);
+    ctor public SpreadDigitalClock(android.content.Context, android.util.AttributeSet);
   }
 
   public class StackView extends android.widget.AdapterViewAnimator {

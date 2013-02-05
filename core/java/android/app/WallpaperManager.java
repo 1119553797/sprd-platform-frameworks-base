@@ -199,9 +199,13 @@ public class WallpaperManager {
         private IWallpaperManager mService;
         private Bitmap mWallpaper;
         private Bitmap mDefaultWallpaper;
-        
+        private Bitmap mLockScreenWallpaper;
+        private Bitmap mMainMenuScreenWallpaper;
+
         private static final int MSG_CLEAR_WALLPAPER = 1;
-        
+        private static final int MSG_CLEAR_WALLPAPER_BY_LOCKSCREEN = 2;
+        private static final int MSG_CLEAR_WALLPAPER_BY_MAINMENU = 3;
+
         private final Handler mHandler;
         
         Globals(Looper looper) {
@@ -217,6 +221,16 @@ public class WallpaperManager {
                                 mDefaultWallpaper = null;
                             }
                             break;
+                        case MSG_CLEAR_WALLPAPER_BY_LOCKSCREEN:
+                            synchronized (this) {
+                                mLockScreenWallpaper = null;
+                            }
+                            break;
+                        case MSG_CLEAR_WALLPAPER_BY_MAINMENU:
+                            synchronized (this) {
+                                mMainMenuScreenWallpaper = null;
+                            }
+                            break;
                     }
                 }
             };
@@ -229,6 +243,29 @@ public class WallpaperManager {
              * fetch it.
              */
             mHandler.sendEmptyMessage(MSG_CLEAR_WALLPAPER);
+        }
+
+        public void onWallpaperChangedByLockScreen() {
+            /* The wallpaper has changed but we shouldn't eagerly load the
+             * wallpaper as that would be inefficient. Reset the cached wallpaper
+             * to null so if the user requests the wallpaper again then we'll
+             * fetch it.
+             */
+            mHandler.sendEmptyMessage(MSG_CLEAR_WALLPAPER_BY_LOCKSCREEN);
+        }
+
+        public void onWallpaperChangedByMainMenu() {
+            /* The wallpaper has changed but we shouldn't eagerly load the
+             * wallpaper as that would be inefficient. Reset the cached wallpaper
+             * to null so if the user requests the wallpaper again then we'll
+             * fetch it.
+             */
+            mHandler.sendEmptyMessage(MSG_CLEAR_WALLPAPER_BY_MAINMENU);
+        }
+
+
+        public Handler getHandler() {
+            return mHandler;
         }
 
         public Bitmap peekWallpaperBitmap(Context context, boolean returnDefault) {
@@ -261,6 +298,8 @@ public class WallpaperManager {
             synchronized (this) {
                 mWallpaper = null;
                 mDefaultWallpaper = null;
+                mLockScreenWallpaper = null;
+                mMainMenuScreenWallpaper = null;
             }
         }
 
@@ -320,8 +359,88 @@ public class WallpaperManager {
             }
             return null;
         }
-    }
-    
+
+        private Bitmap getCurrentWallpaperLocked(int target) {
+            try {
+                Bundle params = new Bundle();
+                ParcelFileDescriptor fd = mService.getWallpaperByTarget(this, params,target);
+                if (fd != null) {
+                    int width = params.getInt("width", 0);
+                    int height = params.getInt("height", 0);
+
+                    try {
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        Bitmap bm = BitmapFactory.decodeFileDescriptor(
+                                fd.getFileDescriptor(), null, options);
+                        return generateBitmap(bm, width, height);
+                    } catch (OutOfMemoryError e) {
+                        Log.w(TAG, "Can't decode file", e);
+                    } finally {
+                        try {
+                            fd.close();
+                        } catch (IOException e) {
+                            // Ignore
+                        }
+                    }
+                }
+            } catch (RemoteException e) {
+                // Ignore
+            }
+         return null;
+       }
+
+        public Bitmap peekWallpaperBitmap(Context context,
+                boolean returnDefault, int target) {
+            switch (target) {
+                case WallpaperInfo.WALLPAPER_LOCKSCREEN_TYPE: {
+                    synchronized (this) {
+                        if (mLockScreenWallpaper != null) {
+                            return mLockScreenWallpaper;
+                        }
+                        try {
+                            mLockScreenWallpaper = getCurrentWallpaperLocked(target);
+                        } catch (OutOfMemoryError e) {
+                            Log.w(TAG, "No memory load current wallpaper", e);
+                        }
+                        if (returnDefault) {
+                            if (mLockScreenWallpaper == null) {
+                                mDefaultWallpaper = getDefaultWallpaperLocked(context);
+                                return mDefaultWallpaper;
+                            } else {
+                                mDefaultWallpaper = null;
+                            }
+                        }
+                        return mLockScreenWallpaper;
+                    }
+                }
+                case WallpaperInfo.WALLPAPER_MAINMENU_TYPE: {
+                    synchronized (this) {
+                        if (mMainMenuScreenWallpaper != null) {
+                            return mMainMenuScreenWallpaper;
+                        }
+                        try {
+                            mMainMenuScreenWallpaper = getCurrentWallpaperLocked(target);
+                        } catch (OutOfMemoryError e) {
+                            Log.w(TAG, "No memory load current wallpaper", e);
+                        }
+                        if (returnDefault) {
+                            if (mMainMenuScreenWallpaper == null) {
+                                mDefaultWallpaper = getDefaultWallpaperLocked(context);
+                                return mDefaultWallpaper;
+                            } else {
+                                mDefaultWallpaper = null;
+                            }
+                        }
+                        return mMainMenuScreenWallpaper;
+                    }
+                }
+                default:
+                    return peekWallpaperBitmap(context, returnDefault);
+            }
+
+        }
+ }
+
     private static final Object sSync = new Object[0];
     private static Globals sGlobals;
 
@@ -522,6 +641,37 @@ public class WallpaperManager {
         }
         try {
             ParcelFileDescriptor fd = sGlobals.mService.setWallpaper(null);
+            if (fd == null) {
+                return;
+            }
+            FileOutputStream fos = null;
+            try {
+                fos = new ParcelFileDescriptor.AutoCloseOutputStream(fd);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            } finally {
+                if (fos != null) {
+                    fos.close();
+                }
+            }
+        } catch (RemoteException e) {
+            // Ignore
+        }
+    }
+
+
+    /**
+     * Change the current system wallpaper to a bitmap.  The given bitmap is
+     * converted to a PNG and stored as the wallpaper.  On success, the intent
+     * {@link Intent#ACTION_WALLPAPER_CHANGED} is broadcast.
+     *
+     * @param bitmap The bitmap to save.
+     *
+     * @throws IOException If an error occurs reverting to the default
+     * wallpaper.
+     */
+    public void setBitmap(Bitmap bitmap,int toTarget) throws IOException {
+        try {
+            ParcelFileDescriptor fd = sGlobals.mService.setWallpaperByTarget(null,toTarget);
             if (fd == null) {
                 return;
             }
@@ -820,6 +970,55 @@ public class WallpaperManager {
         } catch (OutOfMemoryError e) {
             Log.w(TAG, "Can't generate default bitmap", e);
             return bm;
+        }
+    }
+
+    public void setResource(int resid,int toTarget) throws IOException {
+        try {
+            Resources resources = mContext.getResources();
+            /* Set the wallpaper to the default values */
+            ParcelFileDescriptor fd = sGlobals.mService.setWallpaperByTarget(
+                    "res:" + resources.getResourceName(resid),toTarget);
+            if (fd != null) {
+                FileOutputStream fos = null;
+                try {
+                    fos = new ParcelFileDescriptor.AutoCloseOutputStream(fd);
+                    setWallpaper(resources.openRawResource(resid), fos);
+                } finally {
+                    if (fos != null) {
+                        fos.close();
+                    }
+                }
+            }
+        } catch (RemoteException e) {
+            // Ignore
+        }
+    }
+
+    /**
+     * Retrieve the current system wallpaper; if
+     * no wallpaper is set, the system default wallpaper is returned.
+     * This is returned as an
+     * abstract Drawable that you can install in a View to display whatever
+     * wallpaper the user has currently set.
+     *
+     * @return Returns a Drawable object that will draw the wallpaper.
+     */
+    public Drawable getDrawable(int target) {
+        Bitmap bm = sGlobals.peekWallpaperBitmap(mContext, false, target);
+        if (bm != null) {
+            Drawable dr = new BitmapDrawable(mContext.getResources(), bm);
+            dr.setDither(false);
+            return dr;
+        }
+        return null;
+    }
+
+    public void clearLockScreenWallpaper() {
+        try {
+            sGlobals.mService.clearLockScreenWallpaper();
+        } catch (RemoteException e) {
+
         }
     }
 }

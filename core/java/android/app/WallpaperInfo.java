@@ -72,6 +72,11 @@ public final class WallpaperInfo implements Parcelable {
      */
     final int mDescriptionResource;
 
+    public static final String WALLPAPER_TARGET_ID = "wallpaper_target_id";
+    public static final int WALLPAPER_LOCKSCREEN_TYPE = 1;
+    public static final int WALLPAPER_MAINMENU_TYPE = 2;
+    public static final int WALLPAPER_DEFAULT_TYPE = 0;
+
     /**
      * Constructor.
      * 
