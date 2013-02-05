@@ -164,6 +164,7 @@
             android:snapMargin="@dimen/glowpadview_snap_margin"
             android:feedbackCount="1"
             android:vibrationDuration="20"
+            android:layout_marginBottom="150dip"
             android:glowRadius="@dimen/glowpadview_glow_radius"
             android:pointDrawable="@drawable/ic_lockscreen_glowdot"
             />
