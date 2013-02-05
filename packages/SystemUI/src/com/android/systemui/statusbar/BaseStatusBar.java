@@ -223,7 +223,6 @@ public abstract class BaseStatusBar extends SystemUI implements
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
         //add for universe_ui_support
         isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, false);
-        isUniverseSupport = true;
         if (isUniverseSupport) {
             mOngoingNotificationNeedExitApps = mContext.getResources().getStringArray(R.array.need_exit_button_apps);
             am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
