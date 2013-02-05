@@ -1236,13 +1236,13 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                 File f = null;
                 switch (target) {
                     case WallpaperInfo.WALLPAPER_LOCKSCREEN_TYPE:
-                        f = new File(getWallpaperDir(wallpaperUserId), WALLPAPER);;
-                        break;
-                    case WallpaperInfo.WALLPAPER_MAINMENU_TYPE:
                         f = new File(getWallpaperDir(wallpaperUserId), LOCKSCREEN_WALLPAPER);;
                         break;
-                    default:
+                    case WallpaperInfo.WALLPAPER_MAINMENU_TYPE:
                         f = new File(getWallpaperDir(wallpaperUserId), MAINMENU_WALLPAPER);;
+                        break;
+                    default:
+                        f = new File(getWallpaperDir(wallpaperUserId), WALLPAPER);;
                         break;
                 }
 
@@ -1319,7 +1319,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         final int n = wallpaper.callbacks.beginBroadcast();
         for (int i = 0; i < n; i++) {
             try {
-                wallpaper.callbacks.getBroadcastItem(i).onWallpaperChanged();
+                wallpaper.callbacks.getBroadcastItem(i).onWallpaperChangedByLockScreen();
             } catch (RemoteException e) {
 
                 // The RemoteCallbackList will take care of removing
@@ -1335,7 +1335,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         final int n = wallpaper.callbacks.beginBroadcast();
         for (int i = 0; i < n; i++) {
             try {
-                wallpaper.callbacks.getBroadcastItem(i).onWallpaperChanged();
+                wallpaper.callbacks.getBroadcastItem(i).onWallpaperChangedByMainMenu();
             } catch (RemoteException e) {
 
                 // The RemoteCallbackList will take care of removing
