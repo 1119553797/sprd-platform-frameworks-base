@@ -61,6 +61,7 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
 
     private static final String PROPERTY_STATE = "State";
 
+    private Object mPriorityLock = new Object();
     private final Context mContext;
     private final IntentFilter mIntentFilter;
     private HashMap<BluetoothDevice, Integer> mAudioDevices;
@@ -432,18 +433,22 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
         return sinks;
     }
 
-    public synchronized int getPriority(BluetoothDevice device) {
-        mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM, "Need BLUETOOTH permission");
-        return Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.getBluetoothA2dpSinkPriorityKey(device.getAddress()),
-                BluetoothA2dp.PRIORITY_UNDEFINED);
+    public int getPriority(BluetoothDevice device) {
+        synchronized (mPriorityLock) {
+            mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM, "Need BLUETOOTH permission");
+            return Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.getBluetoothA2dpSinkPriorityKey(device.getAddress()),
+                    BluetoothA2dp.PRIORITY_UNDEFINED);
+        }
     }
 
-    public synchronized boolean setPriority(BluetoothDevice device, int priority) {
-        mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM,
-                                                "Need BLUETOOTH_ADMIN permission");
-        return Settings.Secure.putInt(mContext.getContentResolver(),
-                Settings.Secure.getBluetoothA2dpSinkPriorityKey(device.getAddress()), priority);
+    public boolean setPriority(BluetoothDevice device, int priority) {
+        synchronized (mPriorityLock) {
+            mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM,
+                                                    "Need BLUETOOTH_ADMIN permission");
+            return Settings.Secure.putInt(mContext.getContentResolver(),
+                    Settings.Secure.getBluetoothA2dpSinkPriorityKey(device.getAddress()), priority);
+        }
     }
 
     public synchronized boolean allowIncomingConnect(BluetoothDevice device, boolean value) {
