@@ -330,4 +330,10 @@ public class RemoteLockView extends RelativeLayout implements KeyguardScreen,
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void  onMessageCountChanged(int count) {
+
+
+    }
 }
