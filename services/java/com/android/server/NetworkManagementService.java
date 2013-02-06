@@ -78,6 +78,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
+import java.util.Locale;
 
 /**
  * @hide
@@ -1387,7 +1388,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                     return true;
                 return false;
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US,"Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
@@ -1430,7 +1431,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                     return true;
                 return false;
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US,"Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
@@ -1475,7 +1476,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                     return true;
                 return false;
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US,"Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
@@ -1497,7 +1498,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                     return true;
                 return false;
             } else {
-                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+                throw new IllegalStateException(String.format(Locale.US,"Unexpected response code %d", code));
             }
         }
         throw new IllegalStateException("Got an empty response");
