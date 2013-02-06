@@ -373,7 +373,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                     } else {
                         Log.w(TAG, "Failed to get intent for assist activity");
                     }
-                    mCallback.pokeWakelock();
+                        // mCallback.pokeWakelock();
+                    mCallback.goToUnlockScreen();
                     break;
 
                 case com.android.internal.R.drawable.ic_lockscreen_camera:
