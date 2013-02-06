@@ -64,18 +64,16 @@ public class IccUtils {
         StringBuilder ret = new StringBuilder(length*2);
 
         for (int i = offset ; i < offset + length ; i++) {
-            byte b;
             int v;
 
             v = data[i] & 0xf;
-            if (v > 9)  break;
-            ret.append((char)('0' + v));
+            if (v > 0xf)  continue;
+            ret.append(Integer.toHexString(v));
 
             v = (data[i] >> 4) & 0xf;
             // Some PLMNs have 'f' as high nibble, ignore it
-            if (v == 0xf) continue;
-            if (v > 9)  break;
-            ret.append((char)('0' + v));
+            if (v > 0xf)  continue;
+            ret.append(Integer.toHexString(v));
         }
 
         return ret.toString();
