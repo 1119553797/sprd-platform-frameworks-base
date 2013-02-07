@@ -24,6 +24,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Slog;
@@ -40,6 +41,7 @@ import com.android.systemui.R;
 
 public class StatusBarIconView extends AnimatedImageView {
     private static final String TAG = "StatusBarIconView";
+    private static String universeSupportKey = "universe_ui_support";
 
     private StatusBarIcon mIcon;
     @ViewDebug.ExportedProperty private String mSlot;
@@ -66,10 +68,16 @@ public class StatusBarIconView extends AnimatedImageView {
         if (notification != null) {
             final int outerBounds = res.getDimensionPixelSize(R.dimen.status_bar_icon_size);
             final int imageBounds = res.getDimensionPixelSize(R.dimen.status_bar_icon_drawing_size);
-            final float scale = (float)imageBounds / (float)outerBounds;
+            float scale = (float)imageBounds / (float)outerBounds;
+            if (SystemProperties.getBoolean(universeSupportKey, false)) {
+                scale = 1.0f;
+            }
             setScaleX(scale);
             setScaleY(scale);
-            final float alpha = res.getFraction(R.dimen.status_bar_icon_drawing_alpha, 1, 1);
+            float alpha = res.getFraction(R.dimen.status_bar_icon_drawing_alpha, 1, 1);
+            if (SystemProperties.getBoolean(universeSupportKey, false)) {
+                alpha = res.getFraction(R.dimen.custom_status_bar_icon_drawing_alpha, 1, 1);
+            }
             setAlpha(alpha);
         }
 
@@ -155,7 +163,7 @@ public class StatusBarIconView extends AnimatedImageView {
     /**
      * Returns the right icon to use for this item, respecting the iconId and
      * iconPackage (if set)
-     * 
+     *
      * @param context Context to use to get resources if iconPackage is not set
      * @return Drawable for this item, or null if the package or item could not
      *         be found
@@ -177,7 +185,7 @@ public class StatusBarIconView extends AnimatedImageView {
         if (icon.iconId == 0) {
             return null;
         }
-        
+
         try {
             return r.getDrawable(icon.iconId);
         } catch (RuntimeException e) {
@@ -269,7 +277,7 @@ public class StatusBarIconView extends AnimatedImageView {
     }
 
     public String toString() {
-        return "StatusBarIconView(slot=" + mSlot + " icon=" + mIcon 
+        return "StatusBarIconView(slot=" + mSlot + " icon=" + mIcon
             + " notification=" + mNotification + ")";
     }
 }

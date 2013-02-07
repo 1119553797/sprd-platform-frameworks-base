@@ -1207,7 +1207,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         loadNotificationShade();
 
         final LinearLayout.LayoutParams params
-            = new LinearLayout.LayoutParams(mIconSize + 2*mIconHPadding, mNaturalBarHeight);
+            = new LinearLayout.LayoutParams(mIconSize, mNaturalBarHeight);
 
 
         ArrayList<View> toShow = new ArrayList<View>();
