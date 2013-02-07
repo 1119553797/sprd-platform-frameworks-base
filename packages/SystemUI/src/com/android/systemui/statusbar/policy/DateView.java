@@ -43,6 +43,7 @@ public final class DateView extends TextView {
             final String action = intent.getAction();
             if (Intent.ACTION_TIME_TICK.equals(action)
                     || Intent.ACTION_TIME_CHANGED.equals(action)
+                    || Intent.ACTION_LOCALE_CHANGED.equals(action)
                     || Intent.ACTION_TIMEZONE_CHANGED.equals(action)) {
                 updateClock();
             }
@@ -59,7 +60,7 @@ public final class DateView extends TextView {
         mAttachedToWindow = true;
         setUpdates();
     }
-    
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -90,7 +91,10 @@ public final class DateView extends TextView {
         final Context context = getContext();
         Date now = new Date();
         CharSequence dow = DateFormat.format("EEEE", now);
-        CharSequence date = DateFormat.getLongDateFormat(context).format(now);
+        /* Modify 20130206 Spreadst of 123621  DateFormat change start */
+//        CharSequence date = DateFormat.getLongDateFormat(context).format(now);
+        CharSequence date = DateFormat.getDateFormat(context).format(now);
+        /* Modify 20130206 Spreadst of 123621 DateFormat change end */
         setText(context.getString(R.string.status_bar_date_formatter, dow, date));
     }
 
@@ -118,6 +122,7 @@ public final class DateView extends TextView {
                 IntentFilter filter = new IntentFilter();
                 filter.addAction(Intent.ACTION_TIME_TICK);
                 filter.addAction(Intent.ACTION_TIME_CHANGED);
+                filter.addAction(Intent.ACTION_LOCALE_CHANGED);
                 filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
                 mContext.registerReceiver(mIntentReceiver, filter, null, null);
                 updateClock();
