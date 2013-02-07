@@ -460,6 +460,9 @@ public final class DropBoxManagerService extends IDropBoxManagerService.Stub {
 
         /** Sorts earlier EntryFile instances before later ones. */
         public final int compareTo(EntryFile o) {
+            if (null == o) {
+                return 0;
+            }
             if (timestampMillis < o.timestampMillis) return -1;
             if (timestampMillis > o.timestampMillis) return 1;
             if (file != null && o.file != null) return file.compareTo(o.file);
