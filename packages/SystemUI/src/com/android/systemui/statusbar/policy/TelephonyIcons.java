@@ -35,6 +35,21 @@ class TelephonyIcons {
           R.drawable.stat_sys_signal_4_fully }
     };
 
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_UUI = {
+        { R.drawable.stat_sys_signal_0_sprd,
+          R.drawable.stat_sys_signal_1_sprd,
+          R.drawable.stat_sys_signal_2_sprd,
+          R.drawable.stat_sys_signal_3_sprd,
+          R.drawable.stat_sys_signal_4_sprd },
+        { R.drawable.stat_sys_signal_0_sprd,
+          R.drawable.stat_sys_signal_1_sprd,
+          R.drawable.stat_sys_signal_2_sprd,
+          R.drawable.stat_sys_signal_3_sprd,
+          R.drawable.stat_sys_signal_4_sprd }
+    };
+
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI = TELEPHONY_SIGNAL_STRENGTH_UUI;
+
     static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING = {
         { R.drawable.stat_sys_signal_0,
           R.drawable.stat_sys_signal_1,
@@ -49,6 +64,7 @@ class TelephonyIcons {
     };
 
     static final int[][] DATA_SIGNAL_STRENGTH = TELEPHONY_SIGNAL_STRENGTH;
+    static final int[][] DATA_SIGNAL_STRENGTH_UUI = TELEPHONY_SIGNAL_STRENGTH_UUI;
 
     //***** Data connection icons
 
@@ -133,7 +149,16 @@ class TelephonyIcons {
               R.drawable.stat_sys_data_fully_connected_4g,
               R.drawable.stat_sys_data_fully_connected_4g }
         };
-
+    static final int[][] DATA_R = {
+        { R.drawable.stat_sys_data_connected_roam,
+          R.drawable.stat_sys_data_connected_roam,
+          R.drawable.stat_sys_data_connected_roam,
+          R.drawable.stat_sys_data_connected_roam },
+        { R.drawable.stat_sys_data_fully_connected_roam,
+          R.drawable.stat_sys_data_fully_connected_roam,
+          R.drawable.stat_sys_data_fully_connected_roam,
+          R.drawable.stat_sys_data_fully_connected_roam }
+    };
 
 }
 

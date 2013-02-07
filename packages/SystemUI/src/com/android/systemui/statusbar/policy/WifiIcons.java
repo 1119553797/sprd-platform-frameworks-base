@@ -32,5 +32,19 @@ class WifiIcons {
               R.drawable.stat_sys_wifi_signal_4_fully }
         };
 
+    static final int[][] WIFI_SIGNAL_STRENGTH_UUI = {
+        { R.drawable.stat_sys_wifi_signal_0_sprd,
+          R.drawable.stat_sys_wifi_signal_1_sprd,
+          R.drawable.stat_sys_wifi_signal_2_sprd,
+          R.drawable.stat_sys_wifi_signal_3_sprd,
+          R.drawable.stat_sys_wifi_signal_4_sprd },
+        { R.drawable.stat_sys_wifi_signal_0_sprd,
+          R.drawable.stat_sys_wifi_signal_1_sprd,
+          R.drawable.stat_sys_wifi_signal_2_sprd,
+          R.drawable.stat_sys_wifi_signal_3_sprd,
+          R.drawable.stat_sys_wifi_signal_4_sprd },
+    };
+
     static final int WIFI_LEVEL_COUNT = WIFI_SIGNAL_STRENGTH[0].length;
+    static final int WIFI_ON = R.drawable.stat_sys_wifi_signal_null_sprd;
 }
