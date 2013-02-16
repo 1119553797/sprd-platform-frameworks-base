@@ -1787,7 +1787,15 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
                             + " " + ussdString);
 
-        rr.mp.writeString(ussdString);
+        byte[] ussdByte = null;
+        try {
+            ussdByte = GsmAlphabet.stringToGsm8BitPacked(ussdString);
+        } catch (Exception e) {
+            Log.d(LOG_TAG, "Exception e = " + e);
+        }
+        String sendData = IccUtils.bytesToHexString(ussdByte);
+        Log.d(LOG_TAG, "USSD sendData = " + sendData);
+        rr.mp.writeString(sendData);
 
         send(rr);
     }
@@ -2526,7 +2534,8 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
             case RIL_UNSOL_RESPONSE_NEW_SMS: ret =  responseString(p); break;
             case RIL_UNSOL_RESPONSE_NEW_SMS_STATUS_REPORT: ret =  responseString(p); break;
             case RIL_UNSOL_RESPONSE_NEW_SMS_ON_SIM: ret =  responseInts(p); break;
-            case RIL_UNSOL_ON_USSD: ret =  responseStrings(p); break;
+            //case RIL_UNSOL_ON_USSD: ret =  responseStrings(p); break;
+            case RIL_UNSOL_ON_USSD: ret =  responseUnsolUssdStrings(p); break;
             case RIL_UNSOL_NITZ_TIME_RECEIVED: ret =  responseString(p); break;
             case RIL_UNSOL_SIGNAL_STRENGTH: ret = responseSignalStrength(p); break;
             case RIL_UNSOL_DATA_CALL_LIST_CHANGED: ret = responseDataCallList(p);break;
@@ -3112,6 +3121,32 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
         return response;
     }
 
+    protected Object
+    responseUnsolUssdStrings(Parcel p){
+        String response[] = null;
+
+        response = p.readStringArray();
+        if (response.length > 2) {
+            int num = Integer.parseInt(response[2]);
+            if (num == GSM_TYPE) {
+                byte[] dataUssd = IccUtils.hexStringToBytes(response[1]);
+                response[1] = GsmAlphabet.gsm8BitUnpackedToString(dataUssd, 0, dataUssd.length);
+            } else if (num == UCS2_TYPE) {
+                byte[] bytes = new byte[response[1].length()/2];
+                for (int i=0; i<response[1].length(); i+=2) {
+                    bytes[i/2] = (byte)(Integer.parseInt(response[1].substring(i,i+2),16));
+                }
+                try{
+                    String utfString = new String(bytes,"UTF-16");
+                    response[1] = utfString;
+                }catch(Exception e){
+
+                }
+            }
+        }
+
+        return response;
+    }
 
     protected Object
     responseICC_IO(Parcel p) {
