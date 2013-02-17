@@ -85,8 +85,9 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                         if (success) {
                             simIndex = getInsertIndex();
                         }else {
-                            simIndex = -1;
+                            //simIndex = -1;
                             Log.e("IccPhoneBookInterface", "[EVENT_UPDATE_DONE]", ar.exception);
+                            simIndex = ((IccPhoneBookOperationException)ar.exception).mErrorCode - 1;                          
                         }
                         Log.i("IccPhoneBookInterfaceManager ","EVENT_UPDATE_DONE  simIndex " +simIndex);
                         notifyPending(ar);
@@ -281,11 +282,11 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         }
         return success;
     }
-    public boolean updateAdnRecordsInEfByIndexEx(int efid, String newTag,
+    public int updateAdnRecordsInEfByIndexEx(int efid, String newTag,
             String newPhoneNumber, String[] newEmailList, String newAnr,
             String newAas, String newSne, String newGrp, String newGas,
             int index, String pin2) {
-
+       
         if (phone.getContext().checkCallingOrSelfPermission(
                 android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             throw new SecurityException(
@@ -324,8 +325,9 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
             }
             waitForResult(status);
         }
-        Log.i(LOG_TAG,"updateAdnRecordsInEfByIndexEx end "+success );
-        return success;   
+        Log.i(LOG_TAG,"updateAdnRecordsInEfByIndexEx end "+success +" simIndex = "+simIndex);
+
+        return simIndex;   
 
     }
 

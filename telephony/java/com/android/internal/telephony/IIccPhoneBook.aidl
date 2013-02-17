@@ -144,7 +144,7 @@ interface IIccPhoneBook {
      *            recordSizes[2]  is the number of records in the EF file
      */
     int[] getAdnRecordsSize(int efid);
-    boolean updateAdnRecordsInEfByIndexEx(int efid, String newTag, String newPhoneNumber,
+    int updateAdnRecordsInEfByIndexEx(int efid, String newTag, String newPhoneNumber,
 				in String[] newEmailList,String newAnr,String newAas, String newSne,String newGrp, String      newGas,  int index, String pin2);
     int[] getAvalibleEmailCount(String name, String number,in String[] emails, String anr, in int[] emailNums);
     int [] getAvalibleAnrCount(String name, String number,in String[] emails, String anr, in int[] anrNums);

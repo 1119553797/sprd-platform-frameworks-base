@@ -698,10 +698,8 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
 
         Set<Integer> totalSet =  set1 ;
 
-        for (int i = 1; i < count; i++) {
+        for (int i = 1; i <= count; i++) {
             Integer subjectNum = new Integer(i);
-            //Log.i(LOG_TAG, "getUsedNumSet  subjectNum (0)"
-            //       + subjectNum);
             if (!totalSet.contains(subjectNum) && set2.contains(subjectNum)) {
 
                 Log.i(LOG_TAG, "getUsedNumSet  subjectNum(1) "

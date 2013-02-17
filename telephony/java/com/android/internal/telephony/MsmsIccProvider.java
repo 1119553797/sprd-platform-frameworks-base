@@ -23,6 +23,9 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.provider.ContactsContract.CommonDataKinds;
+import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -74,7 +77,7 @@ public class MsmsIccProvider extends IccProvider {
     private static final String CONTENT_URI = "content://" + AUTHORITY + "/";
     private static final int  PHONE_COUNT = PhoneFactory.getPhoneCount();
     private static final int INVALID_PHONE_ID = 10000;
-
+    public static final String WITH_EXCEPTION = "with_exception";
     private static final UriMatcher URL_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
     /** this is only to match phoneId, it do not care whether the uri is illegal **/
     private static final UriMatcher PHONE_ID_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -238,8 +241,13 @@ public class MsmsIccProvider extends IccProvider {
             index = addIccRecordToEf(efType, tag, number, emails, anr, aas,
                     sne, grp, gas, pin2, phoneId);
         }
-        
-        if(index==-1){
+             
+        if(index < 0){
+            int errorCode = index + 1;
+            if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
+                Log.d(TAG, "throw exception");
+                throwException(errorCode);
+            }
             return null;
         }
 
@@ -316,7 +324,7 @@ public class MsmsIccProvider extends IccProvider {
         }
 
         boolean success = false;
-
+        int recIndex = -1;
         // parse where clause
         int index = -1;         //maybe simIndex or groupId
         String tag = "";
@@ -369,9 +377,19 @@ public class MsmsIccProvider extends IccProvider {
         }else if(isGas){
             success = updateUsimGroupById("", index, phoneId);
         }else{
-            success = deleteIccRecordFromEfByIndex(efType, index, pin2, phoneId);
+            recIndex = deleteIccRecordFromEfByIndex(efType, index, pin2, phoneId);
         }
 
+        if (recIndex < 0) {
+            success = false;
+//            if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
+//                throwException(recIndex + 1);
+//            }
+            
+        }else {
+            success = true;
+        }
+        
         if (DBG)
             log("delete result: " + success);
 
@@ -459,6 +477,7 @@ public class MsmsIccProvider extends IccProvider {
                     + newEmail + ",  index:"+index);
 
         boolean success = false;
+        int recIndex = -1;
 
         if(isFdn){
             //added for fdn
@@ -468,15 +487,24 @@ public class MsmsIccProvider extends IccProvider {
             number = values.getAsString(STR_NUMBER);
             newTag = values.getAsString(STR_NEW_TAG);
             newNumber = values.getAsString(STR_NEW_NUMBER);
-            if(-1!=updateIccRecordInEf(efType, tag, number, null, "", "", "", newTag,
+            if(0 <= updateIccRecordInEf(efType, tag, number, null, "", "", "", newTag,
                     newNumber, null, "", "", "", "", "", pin2, phoneId))
                 success = true;
         }else if(isGas){
             success = updateUsimGroupById(newgas, index, phoneId);
         }else{
-            success = updateIccRecordInEfByIndex(efType, newTag,
+            recIndex = updateIccRecordInEfByIndex(efType, newTag,
                     newNumber, newemails, newanr, newaas, newsne, newgrp, newgas,index,
                     pin2, phoneId);
+            if (recIndex < 0) {
+                success = false;
+                if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
+                    Log.d(TAG, "throw exception");
+                    throwException(recIndex + 1);
+                }
+            } else {
+                success = true;
+            }
         }
 
         if (!success) {
@@ -650,9 +678,37 @@ public class MsmsIccProvider extends IccProvider {
         if (DBG) log("updateIccRecordInEf: " + retIndex);
         return retIndex;
     }
-
+    private void throwException(int errorCode)  {     
+        switch (errorCode) {
+            case IccPhoneBookOperationException.WRITE_OPREATION_FAILED:
+                throw new IccPBForRecordException(IccPBForRecordException.WRITE_RECORD_FAILED,
+                		"write record failed");   
+            
+            case IccPhoneBookOperationException.ADN_CAPACITY_FULL:
+                throw new IccPBForRecordException(IccPBForRecordException.ADN_RECORD_CAPACITY_FULL,
+                		"adn record capacity full");     
+                
+            case IccPhoneBookOperationException.EMAIL_CAPACITY_FULL:
+                throw new IccPBForMimetypeException(IccPBForMimetypeException.CAPACITY_FULL,
+                        Email.CONTENT_ITEM_TYPE, "email capacity full");
+                
+            case IccPhoneBookOperationException.LOAD_ADN_FAIL:
+                throw new IccPBForRecordException(IccPBForRecordException.LOAD_RECORD_FAILED,
+                		"load adn failed");    
+                
+            case IccPhoneBookOperationException.OVER_NAME_MAX_LENGTH:
+                throw new IccPBForMimetypeException(IccPBForMimetypeException.OVER_LENGTH_LIMIT,
+                        CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,"over the length of name ");
+                
+            case IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH:
+                throw new IccPBForMimetypeException(IccPBForMimetypeException.OVER_LENGTH_LIMIT,
+                        Phone.CONTENT_ITEM_TYPE,"over the length of phone number");
+            default:
+                break;
+        }
+    }
     // yeezone:jinwei update icc record from sim
-    private boolean updateIccRecordInEfByIndex(int efType, String newName,
+    private int updateIccRecordInEfByIndex(int efType, String newName,
             String newNumber, String[]  newEmailList, String newAnr,
             String newAas, String newSne, String newGrp, String newGas,
             int simIndex, String pin2, int phoneId) {
@@ -661,13 +717,14 @@ public class MsmsIccProvider extends IccProvider {
                     + newName + ", newnumber=" + newNumber + ", newEmailList="
                     + newEmailList + ", newAnr=" + newAnr + ", newSne="
                     + newSne + ", index=" + simIndex + ", phoneId:"+phoneId);
-        boolean success = false;
+       // boolean success = false;
 
+        int recIndex = -1;
         try {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService(PhoneFactory.getServiceName("simphonebook", phoneId)));
             if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfByIndexEx(efType, newName,
+                recIndex = iccIpb.updateAdnRecordsInEfByIndexEx(efType, newName,
                         newNumber, newEmailList, newAnr, newAas, newSne,
                         newGrp, newGas, simIndex, pin2);
             }
@@ -676,8 +733,8 @@ public class MsmsIccProvider extends IccProvider {
         } catch (SecurityException ex) {
             if (DBG) log(ex.toString());
         }
-        if (DBG) log("updateIccRecordInEfByIndex: " + success);
-        return success;
+        if (DBG) log("updateIccRecordInEfByIndex: " + recIndex);
+        return recIndex;
     }
     
     private int deleteIccRecordFromEf(int efType, String name,
@@ -706,18 +763,19 @@ public class MsmsIccProvider extends IccProvider {
         return retIndex;
     }
 
-    private boolean deleteIccRecordFromEfByIndex(int efType, int index, String pin2, int phoneId) {
+    private int deleteIccRecordFromEfByIndex(int efType, int index, String pin2, int phoneId) {
         if (DBG)
             log("deleteIccRecordFromEfByIndex: efType=" + Integer.toHexString(efType) + ", index="
                     + index + ", pin2=" + pin2);
 
         boolean success = false;
+        int recIndex = -1;
 
         try {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub
                     .asInterface(ServiceManager.getService(PhoneFactory.getServiceName("simphonebook", phoneId)));
             if (iccIpb != null) {
-                success = iccIpb.updateAdnRecordsInEfByIndexEx(efType, "", "",
+                recIndex = iccIpb.updateAdnRecordsInEfByIndexEx(efType, "", "",
                         null, "", "", "", "", "", index, pin2);
 
             }
@@ -727,9 +785,14 @@ public class MsmsIccProvider extends IccProvider {
             if (DBG)
                 log(ex.toString());
         }
+        if (recIndex < 0) {
+            success = false;
+        }else {
+            success = true;
+        }
         if (DBG)
-            log("deleteIccRecordFromEfByIndex: " + success);
-        return success;
+            log("deleteIccRecordFromEfByIndex: " + success + " recIndex = "+recIndex);
+        return recIndex;
     }
 
     // end delete icc record from sim

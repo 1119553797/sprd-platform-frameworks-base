@@ -301,7 +301,7 @@ public class AdnRecordLoader extends IccThreadHandler {
                     adn = (AdnRecord)(ar.userObj);
 
                     if (ar.exception != null) {
-                        throw new RuntimeException("get EF record size failed",
+                        throw new IccPhoneBookOperationException(0, "get EF record size failed",
                                 ar.exception);
                     }
 
@@ -312,16 +312,17 @@ public class AdnRecordLoader extends IccThreadHandler {
                     // int[2]  is the number of records in the EF file
                     // So int[0] * int[2] = int[1]
                    if (recordSize.length != 3 || recordNumber > recordSize[2]) {
-                        throw new RuntimeException("get wrong EF record size format",
+                        throw new IccPhoneBookOperationException(0, "get wrong EF record size format",
                                 ar.exception);
                     }
-
-                    data = adn.buildAdnString(recordSize[0]);
-
-                    if(data == null) {
-                        throw new RuntimeException("wrong ADN format",
-                                ar.exception);
+                    try {
+                        data = adn.buildAdnString(recordSize[0]);
+                    } catch (IccPhoneBookOperationException e) {
+                        // TODO: handle exception
+                       // throw new IccPhoneBookOperationException(e.mErrorCode, e.getMessage());
+                        throw e;
                     }
+                    
                     Log.i("AdnRecordLoader", "recordNumber " + recordNumber);
 
                     mFh.updateEFLinearFixed(ef, recordNumber,
@@ -333,7 +334,7 @@ public class AdnRecordLoader extends IccThreadHandler {
                 case EVENT_UPDATE_RECORD_DONE:
                     ar = (AsyncResult)(msg.obj);
                     if (ar.exception != null) {
-                        throw new RuntimeException("update EF adn record failed",
+                        throw new IccPhoneBookOperationException(0, "update EF adn record failed",
                                 ar.exception);
                     }
                     pendingExtLoads = 0;
@@ -344,16 +345,10 @@ public class AdnRecordLoader extends IccThreadHandler {
                     data = (byte[])(ar.result);
 
                     if (ar.exception != null) {
-                        throw new RuntimeException("load failed", ar.exception);
+                        throw new IccPhoneBookOperationException(IccPhoneBookOperationException.LOAD_ADN_FAIL,
+                                "adn load failed", ar.exception);
                     }
-
-                    if (false) {
-                        Log.d(LOG_TAG,"ADN EF: 0x"
-                            + Integer.toHexString(ef)
-                            + ":" + recordNumber
-                            + "\n" + IccUtils.bytesToHexString(data));
-                    }
-
+                
                     adn = new AdnRecord(ef, recordNumber, data);
                     result = adn;
 
@@ -376,7 +371,8 @@ public class AdnRecordLoader extends IccThreadHandler {
                     adn = (AdnRecord)(ar.userObj);
 
                     if (ar.exception != null) {
-                        throw new RuntimeException("load failed", ar.exception);
+                        throw new IccPhoneBookOperationException(IccPhoneBookOperationException.LOAD_ADN_FAIL,
+                                "ext1 load failed", ar.exception);
                     }
 
                     Log.d(LOG_TAG,"ADN extension EF: 0x"
@@ -397,7 +393,8 @@ public class AdnRecordLoader extends IccThreadHandler {
                     ArrayList<byte[]> datas = (ArrayList<byte[]>)(ar.result);
 
                     if (ar.exception != null) {
-                        throw new RuntimeException("load failed", ar.exception);
+                        throw new IccPhoneBookOperationException(IccPhoneBookOperationException.LOAD_ADN_FAIL,
+                                "load all adn failed", ar.exception);
                     }
 
                     adns = new ArrayList<AdnRecord>(datas.size());
@@ -430,7 +427,9 @@ public class AdnRecordLoader extends IccThreadHandler {
 				adn = (AdnRecord) (ar.userObj);
 
 				if (ar.exception != null) {
-					throw new RuntimeException("get EF record size failed",
+					throw new IccPhoneBookOperationException(
+					        IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+					        "get EF record size failed",
 							ar.exception);
 				}
                       
@@ -443,7 +442,7 @@ public class AdnRecordLoader extends IccThreadHandler {
        			 Log.d(LOG_TAG,
 						"EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE (1) :  adnNum " + adnNum + " number " + recordSize[2]);
 				if (recordSize.length != 3/* || adnNum > recordSize[2]*/) {
-					throw new RuntimeException(
+					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
 							"get wrong EF record size format", ar.exception);
 				}
 				   Log.d(LOG_TAG,
@@ -458,7 +457,8 @@ public class AdnRecordLoader extends IccThreadHandler {
 						fileCount++;
 						data = adn.buildEmailString(recordSize[0], emailEfIndex.get(i), ef, adnNum);
 					      if (data == null) {
-						     throw new RuntimeException("wrong ADN format", ar.exception);
+						     throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+						             "wrong ADN format", ar.exception);
 					      }
 						mFh.updateEFLinearFixed(emailEfids.get(i), emailNums.get(i), data,
 								pin2,
@@ -476,14 +476,15 @@ public class AdnRecordLoader extends IccThreadHandler {
 				Log.e("GSM", "EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE");
 
 				if (ar.exception != null) {
-					throw new RuntimeException("get EF record size failed",
+					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+					        "get EF record size failed",
 							ar.exception);
 				}
 				recordSize = (int[]) ar.result;
 				 Log.d(LOG_TAG,
 						"EVENT_EF_PBR_ANR_LINEAR_RECORD_SIZE_DONE (1) :  adnNum " + adnNum + "number " + recordSize[2]);
 				if (recordSize.length != 3 /*|| adnNum > recordSize[2]*/) {
-					throw new RuntimeException(
+					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
 							"get wrong EF record size format", ar.exception);
 				}
 				Log.e("GSM", "anrefids = " + anrefids);
@@ -513,7 +514,8 @@ public class AdnRecordLoader extends IccThreadHandler {
 				adn = (AdnRecord) (ar.userObj);
 
 				if (ar.exception != null) {
-					throw new RuntimeException("get EF record size failed",
+					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+					        "get EF record size failed",
 							ar.exception);
 				}
 
@@ -524,7 +526,7 @@ public class AdnRecordLoader extends IccThreadHandler {
 				// int[2] is the number of records in the EF file
 				// So int[0] * int[2] = int[1]
 				if (recordSize.length != 3 || adnNum > recordSize[2]) {
-					throw new RuntimeException(
+					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
 							"get wrong EF record size format", ar.exception);
 				}
 				if (this.iapRec != null) {
@@ -535,7 +537,8 @@ public class AdnRecordLoader extends IccThreadHandler {
 					data = adn.buildIapString(recordSize[0], 0xff);
 				}
 				if (data == null) {
-					throw new RuntimeException("worong ADN format",
+					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED, 
+					        "wrong Iap format",
 							ar.exception);
 				}
 
@@ -549,7 +552,8 @@ public class AdnRecordLoader extends IccThreadHandler {
 			case EVENT_UPDATE_ANR_RECORD_DONE:
 				ar = (AsyncResult) (msg.obj);
 				if (ar.exception != null) {
-					throw new RuntimeException("update EF adn record failed",
+					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+					        "update EF Anr record failed",
 							ar.exception);
 				}
 				Log.e(LOG_TAG, "EVENT_UPDATE_ANR_RECORD_DONE, message is "
@@ -564,7 +568,20 @@ public class AdnRecordLoader extends IccThreadHandler {
 				// add multi record and email in usim end
 
 			}
-        } catch (RuntimeException exc) {
+        } catch (IccPhoneBookOperationException exc) {
+            if (userResponse != null) {
+                AsyncResult.forMessage(userResponse)
+                                .exception = exc;
+                userResponse.sendToTarget();
+                // Loading is all or nothing--either every load succeeds
+                // or we fail the whole thing.
+                userResponse = null;
+            }
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+            IccPhoneBookOperationException exc = new IccPhoneBookOperationException(
+                    IccPhoneBookOperationException.WRITE_OPREATION_FAILED, e.getMessage());
             if (userResponse != null) {
                 AsyncResult.forMessage(userResponse)
                                 .exception = exc;
