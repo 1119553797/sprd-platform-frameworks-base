@@ -129,7 +129,7 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
                 newGas, pin2);
 	}
 
-    public boolean updateAdnRecordsInEfByIndexEx(int efid, String newTag,
+    public int updateAdnRecordsInEfByIndexEx(int efid, String newTag,
             String newPhoneNumber, String[] newEmailList, String newAnr,
             String newAas, String newSne, String newGrp, String newGas,
             int index, String pin2) {

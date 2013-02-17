@@ -18,6 +18,8 @@ package com.android.internal.telephony;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.ContactsContract.CommonDataKinds;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.Log;
@@ -370,7 +372,8 @@ public class AdnRecord implements Parcelable {
         byte[] byteTag = null;
         byte[] adnString = null;
         int footerOffset = recordSize - FOOTER_SIZE_BYTES;
-
+        int maxLengthForNumber = (ADN_DIALING_NUMBER_END
+                - ADN_DIALING_NUMBER_START + 1) * 2;
         // create an empty record
         adnString = new byte[recordSize];
         for (int i = 0; i < recordSize; i++) {
@@ -383,15 +386,16 @@ public class AdnRecord implements Parcelable {
             Log.w(LOG_TAG, "[buildAdnString] Empty dialing number");
             return adnString;   // return the empty record (for delete)
         } else if (!TextUtils.isEmpty(number)
-                && number.length() > (ADN_DIALING_NUMBER_END
-                        - ADN_DIALING_NUMBER_START + 1) * 2) {
+                && number.length() > maxLengthForNumber){
             Log.w(LOG_TAG,
                     "[buildAdnString] Max length of dialing number is 20");
-            return null;
+            throw new IccPhoneBookOperationException(IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH,
+                     "Max length of dialing number is "+maxLengthForNumber);
         } else if (alphaTag != null && alphaTag.length() > footerOffset) {
             Log.w(LOG_TAG,
                     "[buildAdnString] Max length of tag is " + footerOffset);
-            return null;
+            throw new IccPhoneBookOperationException(IccPhoneBookOperationException.OVER_NAME_MAX_LENGTH,
+                    "Max length of name is "+footerOffset);
         } else {
             if (!TextUtils.isEmpty(number)) {
                 bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(number);
@@ -436,7 +440,8 @@ public class AdnRecord implements Parcelable {
 				if (byteTag != null && byteTag.length > footerOffset) {
 					Log.w(LOG_TAG, "[buildAdnString] Max length of tag is "
 							+ footerOffset);
-					return null;
+					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.OVER_NAME_MAX_LENGTH,
+		                     "Max length of name is "+footerOffset);
 				}
 			}
 
@@ -512,6 +517,7 @@ public class AdnRecord implements Parcelable {
 				} catch (java.io.UnsupportedEncodingException ex2) {
 					Log.e(LOG_TAG,
 							"[AdnRecord]emailRecord convert byte exception");
+					
 				}
 			}
 		}

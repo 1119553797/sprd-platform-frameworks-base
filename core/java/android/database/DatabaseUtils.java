@@ -18,6 +18,10 @@ package android.database;
 
 import org.apache.commons.codec.binary.Hex;
 
+import com.android.internal.telephony.IccPBForMimetypeException;
+import com.android.internal.telephony.IccPBForRecordException;
+
+import android.R.integer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.OperationApplicationException;
@@ -74,7 +78,7 @@ public class DatabaseUtils {
     public static final int STATEMENT_UNPREPARED = 9;
     /** One of the values returned by {@link #getSqlStatementType(String)}. */
     public static final int STATEMENT_OTHER = 99;
-
+    
     /**
      * Special function for writing an exception result at the header of
      * a parcel, to be used when returning an exception from a transaction.
@@ -87,6 +91,8 @@ public class DatabaseUtils {
     public static final void writeExceptionToParcel(Parcel reply, Exception e) {
         int code = 0;
         boolean logException = true;
+        int errorCode = 0;
+        String mimeType = null;
         if (e instanceof FileNotFoundException) {
             code = 1;
             logException = false;
@@ -111,6 +117,16 @@ public class DatabaseUtils {
         } else if (e instanceof OperationCanceledException) {
             code = 11;
             logException = false;
+        } else if (e instanceof IccPBForRecordException) {
+            IccPBForRecordException exception = (IccPBForRecordException)e;
+            Log.d(TAG, "IccPBForRecordException error code= "+exception.mErrorCode);
+            errorCode = exception.mErrorCode;         
+            code = 12;
+        } else if (e instanceof IccPBForMimetypeException) {
+            IccPBForMimetypeException exception = (IccPBForMimetypeException)e;
+            errorCode = exception.mErrorCode;
+            mimeType = exception.mMimeType;
+            code = 13;
         } else {
             reply.writeException(e);
             Log.e(TAG, "Writing exception to parcel", e);
@@ -118,7 +134,10 @@ public class DatabaseUtils {
         }
         reply.writeInt(code);
         reply.writeString(e.getMessage());
-
+        reply.writeInt(errorCode);
+        if (null != mimeType) {
+            reply.writeString(mimeType);
+        }
         if (logException) {
             Log.e(TAG, "Writing exception to parcel", e);
         }
@@ -184,6 +203,10 @@ public class DatabaseUtils {
                 throw new SQLiteException(msg);
             case 11:
                 throw new OperationCanceledException(msg);
+            case 12:               
+                throw new IccPBForRecordException(reply.readInt(),msg);
+            case 13:
+                throw new IccPBForMimetypeException(reply.readInt(),reply.readString(),msg);
             default:
                 reply.readException(code, msg);
         }
