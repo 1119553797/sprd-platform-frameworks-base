@@ -663,8 +663,8 @@ public class NetworkController extends BroadcastReceiver {
         }
         if (!mPhone[phoneId].hasIccCard()) {
 
-            mPhoneSignalIconId[phoneId] = 0;
-            mDataSignalIconId[phoneId] = 0;
+            mPhoneSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd;
+            mDataSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd;
 
             return;
         }
