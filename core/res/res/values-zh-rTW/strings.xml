@@ -1313,4 +1313,8 @@
     <!--add for network lock and sim lock-->
     <string name="lockscreen_sim_network_locked_message">網路已鎖</string>
     <string name="lockscreen_sim_card_locked_message">sim卡已鎖</string>
+        <!-- LockScreen missed call start -->
+    <string name="missed_call">%1$d 個未接來電</string>
+    <!-- LockScreen missed call end -->
+    <string name="unread_message">%1$d 條未讀信息</string>
 </resources>

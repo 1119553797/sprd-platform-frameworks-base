@@ -1320,7 +1320,7 @@
     <string name="lockscreen_sim_network_locked_message">网络已锁</string>
     <string name="lockscreen_sim_card_locked_message">sim卡已锁</string>
     <!-- LockScreen missed call start -->
-    <string name="missed_call">%1$d 未接来电</string>
+    <string name="missed_call">%1$d 个未接来电</string>
     <!-- LockScreen missed call end -->
-    <string name="unread_message">%1$d 未读信息</string>
+    <string name="unread_message">%1$d 条未读信息</string>
 </resources>
