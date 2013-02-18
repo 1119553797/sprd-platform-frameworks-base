@@ -335,6 +335,7 @@ public class MediaScanner
     // set to true if file path comparisons should be case insensitive.
     // this should be set when scanning files on a case insensitive file system.
     private boolean mCaseInsensitivePaths;
+    private static final boolean MEDIA_SCANNER_OPT_DEBUG = true;
 
     private BitmapFactory.Options mBitmapOptions = new BitmapFactory.Options();
 
@@ -1144,17 +1145,19 @@ public class MediaScanner
                 if (inScanDirectory(path, directories)) {
                     // we didn't see this file in the scan directory.
                     fileMissing = true;
+                    if (MEDIA_SCANNER_OPT_DEBUG) Log.d(TAG, path + " is indicated as missing!");
                 } else {
                     // the file is outside of our scan directory,
                     // so we need to check for file existence here.
                     File testFile = new File(path);
                     if (!testFile.exists()) {
                         fileMissing = true;
+                        if (MEDIA_SCANNER_OPT_DEBUG) Log.d(TAG, path + " is not exit!");
                     }
                 }
             }
 
-            if (fileMissing) {
+  /*          if (fileMissing) {
                 // do not delete missing playlists, since they may have been modified by the user.
                 // the user can delete them in the media player instead.
                 // instead, clear the path and lastModified fields in the row
@@ -1169,6 +1172,30 @@ public class MediaScanner
                 } else {
                     mMediaProvider.delete(ContentUris.withAppendedId(entry.mTableUri, entry.mRowId), null, null);
                     iterator.remove();
+                }
+            }*/
+
+            if (fileMissing) {
+                // Clear the file path to prevent the _DELETE_FILE database hook
+                // in the media provider from deleting the file.
+                // If the file is truly gone the delete is unnecessary, and we want to avoid
+                // accidentally deleting files that are really there.
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.MediaColumns.DATA, "");
+                values.put(MediaStore.MediaColumns.DATE_MODIFIED, 0);
+                mMediaProvider.update(ContentUris.withAppendedId(entry.mTableUri, entry.mRowId),
+                        values, null, null);
+
+                // do not delete missing playlists, since they may have been modified by the user.
+                // the user can delete them in the media player instead.
+                // instead, clear the path and lastModified fields in the row
+                MediaFile.MediaFileType mediaFileType = MediaFile.getFileType(path);
+                int fileType = (mediaFileType == null ? 0 : mediaFileType.fileType);
+
+                if (!MediaFile.isPlayListFileType(fileType)) {
+                    mMediaProvider.delete(ContentUris.withAppendedId(entry.mTableUri, entry.mRowId),
+                            null, null);
+                     iterator.remove();
                 }
             }
         }
