@@ -122,6 +122,9 @@ public abstract class ServiceStateTracker extends Handler {
     protected static final int EVENT_OTA_PROVISION_STATUS_CHANGE       = 37;
     protected static final int EVENT_SET_RADIO_POWER_OFF               = 38;
 
+    //modify for <Bug125400> start
+    protected static final int EVENT_RADIO_RESET = 1000;
+    //modify for <Bug125400> start
     protected static final String TIMEZONE_PROPERTY = "persist.sys.timezone";
 
     /**
