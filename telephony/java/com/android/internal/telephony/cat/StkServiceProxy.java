@@ -42,6 +42,9 @@ public class StkServiceProxy extends Handler {
 
     public static CatService getInstance(CommandsInterface ci, IccRecords ir,
             Context context, IccFileHandler fh, IccCard ic) {
+        if (ci == null) {
+            return null;
+        }
         int phoneId = ci.getPhoneId();
         if (sStkServiceProxy == null) {
             sStkServiceProxy = new StkServiceProxy();
