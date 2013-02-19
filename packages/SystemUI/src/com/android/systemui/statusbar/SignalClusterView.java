@@ -17,8 +17,10 @@
 package com.android.systemui.statusbar;
 
 import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.util.Slog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
@@ -45,33 +47,27 @@ public class SignalClusterView
     private boolean mWifiConnected = false;
     //add by TS_LC for show data call icon :end
     private int mWifiStrengthId = 0, mWifiActivityId = 0;
-    private boolean mMobileVisible = false;
-    private boolean mDataVisible = false;
-    private int mPhoneColor=0;
-    //add DSDS start
-    private boolean mMobileVisible1= false;
-    private boolean mDataVisible1 = false;
-    private int mPhoneColor1=0;
-    //add DSDS end
-    private int mMobileStrengthId = 0, mMobileActivityId = 0, mMobileTypeId = 0;
+    private boolean[] mMobileVisible;
+    private boolean[] mDataVisible;
+    private int[] mPhoneColor;
 
-    //add DSDS start
-    private int mMobileStrengthId1 = 0,mMobileActivityId1= 0, mMobileTypeId1 =0;
-    //add DSDS end
+    private int[] mMobileStrengthId, mMobileActivityId, mMobileTypeId;
 
     private boolean mIsAirplaneMode = false;
-    private String mWifiDescription, mMobileDescription, mMobileTypeDescription;
-    //add DSDS start
-    private String mMobileDescription1, mMobileTypeDescription1;
-    //add DSDS end
-    ViewGroup mWifiGroup, mMobileGroup, mMobileDataType;
-    ImageView mWifi, mMobile, mWifiActivity, mMobileActivity, mMobileType;
+    private String[] mMobileDescription, mMobileTypeDescription;
+    private String mWifiDescription;
 
-    //add DSDS start
-    ViewGroup mMobileGroup1, mMobileDataType1;
-    ImageView mMobile1,mMobileActivity1,mMobileType1;
-    //add DSDS end
+    ViewGroup mWifiGroup, mMobileLayout;
+    ImageView mWifi, mWifiActivity;
 
+    ViewGroup[] mMobileDataType;
+    View[] mMobileGroup;
+    ImageView[] mMobile, mMobileActivity, mMobileType;
+    ImageView mAirplane;
+    Context mContext;
+    
+    private int mPhoneNumber = 0;
+    
     View mSpacer;
 
     public SignalClusterView(Context context) {
@@ -84,11 +80,40 @@ public class SignalClusterView
 
     public SignalClusterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mContext = context;
+        init();
     }
 
     public void setNetworkController(NetworkController nc) {
         if (DEBUG) Slog.d(TAG, "NetworkController=" + nc);
         mNC = nc;
+    }
+    
+    protected void init(){
+    	mPhoneNumber = TelephonyManager.getPhoneCount();
+    	mMobileVisible = new boolean[mPhoneNumber];
+    	mDataVisible = new boolean[mPhoneNumber];
+    	mMobileStrengthId = new int[mPhoneNumber];
+    	mMobileActivityId = new int[mPhoneNumber];
+    	mMobileTypeId = new int[mPhoneNumber];
+    	mPhoneColor = new int[mPhoneNumber];
+
+    	mMobileGroup = new ViewGroup[mPhoneNumber];
+    	mMobileDataType = new ViewGroup[mPhoneNumber];
+    	mMobile = new ImageView[mPhoneNumber];
+    	mMobileActivity = new ImageView[mPhoneNumber];
+    	mMobileType = new ImageView[mPhoneNumber];
+    	mMobileDescription = new String[mPhoneNumber];
+    	mMobileTypeDescription= new String[mPhoneNumber];
+
+    	for(int i=0;i<mPhoneNumber;i++){
+    		mMobileVisible[i] = false;
+    		mDataVisible[i] = false;
+    		mMobileStrengthId[i] = 0;
+    		mMobileActivityId[i] = 0;
+    		mMobileTypeId[i] = 0;
+    		mPhoneColor[i] = 0;
+    	}
     }
 
     @Override
@@ -98,24 +123,21 @@ public class SignalClusterView
         mWifiGroup      = (ViewGroup) findViewById(R.id.wifi_combo);
         mWifi           = (ImageView) findViewById(R.id.wifi_signal);
         mWifiActivity   = (ImageView) findViewById(R.id.wifi_inout);
-        mMobileGroup    = (ViewGroup) findViewById(R.id.mobile_combo);
-        mMobile         = (ImageView) findViewById(R.id.mobile_signal);
-        mMobileDataType = (ViewGroup) findViewById(R.id.mobile_data_type);
-        mMobileActivity = (ImageView) findViewById(R.id.mobile_inout);
-        mMobileType     = (ImageView) findViewById(R.id.mobile_type);
-
-        //add DSDS start
-        mMobileGroup1    = (ViewGroup) findViewById(R.id.mobile_combo1);
-        mMobile1         = (ImageView) findViewById(R.id.mobile_signal1);
-        mMobileDataType1 = (ViewGroup) findViewById(R.id.mobile_data_type1);
-        mMobileActivity1 = (ImageView) findViewById(R.id.mobile_inout1);
-        mMobileType1     = (ImageView) findViewById(R.id.mobile_type1);
-        //add DSDS end
-
+        
+        mMobileLayout   = (ViewGroup) findViewById(R.id.mobile_layout);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         mSpacer         =             findViewById(R.id.spacer);
-
-        apply();
-        apply2();
+        
+        for(int i=0;i<mPhoneNumber;i++){
+        	mMobileGroup[i] = inflater.inflate(R.layout.signal_cluster_item_view,null);
+        	mMobileLayout.addView(mMobileGroup[i], i);
+        	mMobileGroup[i]    = (ViewGroup) mMobileGroup[i].findViewById(R.id.mobile_combo);
+        	mMobile[i]         = (ImageView) mMobileGroup[i].findViewById(R.id.mobile_signal);
+        	mMobileDataType[i] = (ViewGroup) mMobileGroup[i].findViewById(R.id.mobile_data_type);
+        	mMobileActivity[i] = (ImageView) mMobileGroup[i].findViewById(R.id.mobile_inout);
+        	mMobileType[i]     = (ImageView) mMobileGroup[i].findViewById(R.id.mobile_type);
+        	apply(i);
+        }
     }
 
     @Override
@@ -123,18 +145,19 @@ public class SignalClusterView
         mWifiGroup      = null;
         mWifi           = null;
         mWifiActivity   = null;
+        mMobileLayout   = null;
+        for(int i=0;i<mPhoneNumber;i++){
+        	mMobileGroup[i]    = null;
+        	mMobile[i]         = null;
+        	mMobileActivity[i] = null;
+        	mMobileType[i]     = null;
+        	mMobileDataType[i] = null;
+        }
         mMobileGroup    = null;
         mMobile         = null;
         mMobileDataType = null;
         mMobileActivity = null;
         mMobileType     = null;
-        //add DSDS start
-        mMobileGroup1    = null;
-        mMobile1         = null;
-        mMobileDataType1 = null;
-        mMobileActivity1 = null;
-        mMobileType1     = null;
-        //add DSDS end
         super.onDetachedFromWindow();
     }
 
@@ -148,40 +171,34 @@ public class SignalClusterView
         mWifiActivityId = activityIcon;
         mWifiDescription = contentDescription;
 
-        apply();
+        apply(0);
     }
 
     public void setMobileDataIndicators(boolean visible, int strengthIcon, boolean mDataConnected, int activityIcon,
             int typeIcon, String contentDescription, String typeContentDescription, int phoneColor,int phoneId) {
-        if (phoneId == 0) {
-            mMobileVisible = visible;
-            mMobileStrengthId = strengthIcon;
-            mMobileActivityId = activityIcon;
-            mMobileTypeId = typeIcon;
-            mMobileDescription = contentDescription;
-            mMobileTypeDescription = typeContentDescription;
-            mDataVisible = mDataConnected;
-            mPhoneColor=phoneColor;
-            apply();
-        } else {
-            mMobileVisible1 = visible;
-            mMobileStrengthId1 = strengthIcon;
-            mMobileActivityId1 = activityIcon;
-            mMobileTypeId1 = typeIcon;
-            mMobileDescription1 = contentDescription;
-            mMobileTypeDescription1 = typeContentDescription;
-            mDataVisible1 = mDataConnected;
-            mPhoneColor1=phoneColor;
-            apply2();
-        }
+    	if(phoneId >= mPhoneNumber){
+    		Slog.d(TAG, "setMobileDataIndicators,invalid phoneId=" + phoneId);
+    		return;
+    	}
+    	mMobileVisible[phoneId] = visible;
+    	mMobileStrengthId[phoneId] = strengthIcon;
+    	mMobileActivityId[phoneId] = activityIcon;
+    	mMobileTypeId[phoneId] = typeIcon;
+    	mMobileDescription[phoneId] = contentDescription;
+    	mMobileTypeDescription[phoneId] = typeContentDescription;
+    	mDataVisible[phoneId] = mDataConnected;
+    	mPhoneColor[phoneId] =phoneColor;
+    	apply(phoneId);
+    	
     }
 
     @Override
     public void setIsAirplaneMode(boolean is) {
         mIsAirplaneMode = is;
 
-        apply();
-        apply2();
+        for(int i=0;i<mPhoneNumber;i++){
+        	apply(i);
+        }
     }
 
     @Override
@@ -190,20 +207,32 @@ public class SignalClusterView
         // ignore content description, so populate manually
         if (mWifiVisible && mWifiGroup.getContentDescription() != null)
             event.getText().add(mWifiGroup.getContentDescription());
-        if (mMobileVisible && mMobileGroup.getContentDescription() != null)
-            event.getText().add(mMobileGroup.getContentDescription());
+        boolean isMobileVisible = false;
+        for(int i=0;i<mPhoneNumber;i++){
+        	if(mMobileVisible[i]){ 
+        		isMobileVisible = true;
+        	}
+        }
+        if (isMobileVisible && mMobileLayout.getContentDescription() != null)
+            event.getText().add(mMobileLayout.getContentDescription());
         return super.dispatchPopulateAccessibilityEvent(event);
     }
+    
     public void setMobileSignalColor(int phoneColor,int phoneId){
-		if (phoneId == 0) {
-			mPhoneColor = phoneColor;
-		} else if (phoneId == 1) {
-			mPhoneColor1 = phoneColor;
-		} 
-     }
+    	if(phoneId >= mPhoneNumber){
+    		Slog.d(TAG, "setMobileSignalColor,invalid phoneId=" + phoneId);
+    		return;
+    	}
+    	mPhoneColor[phoneId] = phoneColor;
+    }
+    
     // Run after each indicator change.
-    private void apply() {
+    private void apply(int phoneId) {
         if (mWifiGroup == null) return;
+        if(phoneId >= mPhoneNumber){
+        	Slog.d(TAG, "apply,invalid phoneId=" + phoneId);
+        	return;
+        }
 
         if (mWifiVisible) {
             mWifiGroup.setVisibility(View.VISIBLE);
@@ -218,20 +247,27 @@ public class SignalClusterView
                 String.format("wifi: %s sig=%d act=%d",
                     (mWifiVisible ? "VISIBLE" : "GONE"),
                     mWifiStrengthId, mWifiActivityId));
+        
+        if (mMobileVisible[phoneId] && mMobileStrengthId[phoneId] !=0) {
+    		mMobileGroup[phoneId].setVisibility(View.VISIBLE);
+    		mMobile[phoneId].setImageResource(mMobileStrengthId[phoneId]);
+    		mMobileActivity[phoneId].setImageResource(mMobileActivityId[phoneId]);
+    		mMobileType[phoneId].setImageResource(mMobileTypeId[phoneId]);
+    		mMobile[phoneId].setBackgroundColor(mPhoneColor[phoneId]);
+            mMobileDataType[phoneId].setBackgroundColor(mPhoneColor[phoneId]);
+    		mMobileGroup[phoneId].setContentDescription(mMobileTypeDescription[phoneId] + " " + mMobileDescription[phoneId]);
+    	} else {
+    		mMobileGroup[phoneId].setVisibility(View.GONE);
+    	}
 
-        if (mMobileVisible && mMobileStrengthId!=0) {
-            mMobileGroup.setVisibility(View.VISIBLE);
-            mMobile.setBackgroundColor(mPhoneColor);
-            mMobile.setImageResource(mMobileStrengthId);
-            mMobileDataType.setBackgroundColor(mPhoneColor);
-            mMobileActivity.setImageResource(mMobileActivityId);
-            mMobileType.setImageResource(mMobileTypeId);
-            mMobileGroup.setContentDescription(mMobileTypeDescription + " " + mMobileDescription);
-        } else {
-            mMobileGroup.setVisibility(View.GONE);
+        boolean mobileVisible = false;
+        for(int i=0;i<mPhoneNumber;i++){
+        	if(mMobileVisible[i]){
+        		mobileVisible = true;
+        		break;
+        	}
         }
-
-        if (mMobileVisible && mWifiVisible && mIsAirplaneMode) {
+        if (mobileVisible && mWifiVisible && mIsAirplaneMode) {
             mSpacer.setVisibility(View.INVISIBLE);
         } else {
             mSpacer.setVisibility(View.GONE);
@@ -239,68 +275,17 @@ public class SignalClusterView
 
         if (DEBUG) Slog.d(TAG,
                 String.format("mobile: %s sig=%d act=%d typ=%d",
-                    (mMobileVisible ? "VISIBLE" : "GONE"),
+                    (mMobileVisible[phoneId] ? "VISIBLE" : "GONE"),
                     mMobileStrengthId, mMobileActivityId, mMobileTypeId));
         //mod by TS_LC for data call icon :start
         if (mIsAirplaneMode) {
-            mMobileType.setVisibility(View.GONE);
-            mMobileActivity.setVisibility(View.GONE);
+            mMobileType[phoneId].setVisibility(View.GONE);
+            mMobileActivity[phoneId].setVisibility(View.GONE);
         } else {
-            mMobileType.setVisibility(mMobileVisible ? View.VISIBLE : View.GONE);
-            mMobileActivity.setVisibility(mDataVisible ? View.VISIBLE : View.GONE);
+            mMobileType[phoneId].setVisibility(mMobileVisible[phoneId] ? View.VISIBLE : View.GONE);
+            mMobileActivity[phoneId].setVisibility(mDataVisible[phoneId] ? View.VISIBLE : View.GONE);
         }
        //mod by TS_LC for data call icon :end
     }
-    //add DSDS start
-    private void apply2() {
-        if (mWifiGroup == null) return;
-
-        if (mWifiVisible) {
-            mWifiGroup.setVisibility(View.VISIBLE);
-            mWifi.setImageResource(mWifiStrengthId);
-            mWifiActivity.setImageResource(mWifiActivityId);
-            mWifiGroup.setContentDescription(mWifiDescription);
-        } else {
-            mWifiGroup.setVisibility(View.GONE);
-        }
-
-        if (DEBUG) Slog.d(TAG,
-                String.format("wifi: %s sig=%d act=%d",
-                    (mWifiVisible ? "VISIBLE" : "GONE"),
-                    mWifiStrengthId, mWifiActivityId));
-
-        if (mMobileVisible1 && mMobileStrengthId1!=0) {
-            mMobileGroup1.setVisibility(View.VISIBLE);
-            mMobile1.setBackgroundColor(mPhoneColor1);
-            mMobile1.setImageResource(mMobileStrengthId1);
-            mMobileDataType1.setBackgroundColor(mPhoneColor1);
-            mMobileActivity1.setImageResource(mMobileActivityId1);
-            mMobileType1.setImageResource(mMobileTypeId1);
-            mMobileGroup1.setContentDescription(mMobileTypeDescription1 + " " + mMobileDescription1);
-        } else {
-            mMobileGroup1.setVisibility(View.GONE);
-        }
-
-        if (mMobileVisible1 && mWifiVisible && mIsAirplaneMode) {
-            mSpacer.setVisibility(View.INVISIBLE);
-        } else {
-            mSpacer.setVisibility(View.GONE);
-        }
-
-        if (DEBUG) Slog.d(TAG,
-                String.format("mobile: %s sig=%d act=%d typ=%d",
-                    (mMobileVisible1 ? "VISIBLE" : "GONE"),
-                    mMobileStrengthId1, mMobileActivityId1, mMobileTypeId1));
-
-        //mod by TS_LC for data call icon :start
-        if (mIsAirplaneMode) {
-            mMobileType1.setVisibility(View.GONE);
-            mMobileActivity1.setVisibility(View.GONE);
-        } else {
-            mMobileType1.setVisibility(mMobileVisible1 ? View.VISIBLE : View.GONE);
-            mMobileActivity1.setVisibility(mDataVisible1 ? View.VISIBLE : View.GONE);
-        }
-        //mod by TS_LC for data call icon :end
-    }
-    //add DSDS end
+  
 }
