@@ -370,6 +370,29 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         psRestrictDisabledRegistrants.remove(h);
     }
 
+    //modify for <Bug125400> start
+    private void startRadioAgain() {
+        int airplaneMode = Settings.System.getInt(
+                phone.getContext().getContentResolver(),
+                Settings.System.AIRPLANE_MODE_ON, 0);
+        boolean isStandby = Settings.System.getInt(cr,PhoneFactory.getSetting(
+                Settings.System.SIM_STANDBY, phone.getPhoneId()), 1) == 1;
+        boolean isNotSelected = Settings.System.getInt(cr,Settings.System.POWER_ON_STANDBY_SELECT, 0) == 0;
+        mDesiredPowerState = ! (airplaneMode > 0) && isStandby && isNotSelected;
+        Log.v(LOG_TAG, "startRadioAgain mDesiredPowerState:" + mDesiredPowerState);
+        Log.v(LOG_TAG, "startRadioAgain cm.getRadioState():" + cm.getRadioState());
+
+        if(mDesiredPowerState) {
+            if(cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF && phone.getIccCard().getIccCardState() != IccCard.State.ABSENT && phone.getIccCard().getIccCardState() != IccCard.State.UNKNOWN
+
+) {
+                Log.v(LOG_TAG, "startRadioAgain trace");
+                cm.setRadioPower(true, null);
+            }
+        }
+    }
+    //modify for <Bug125400> end
+
     public void handleMessage (Message msg) {
         AsyncResult ar;
         int[] ints;
@@ -410,6 +433,12 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 pollState();
                 // Signal strength polling stops when radio is off
                 queueNextSignalStrengthPoll();
+
+                //wangsl
+                Log.v(LOG_TAG, "EVENT_SIM_READY Trace");
+                //startRadioAgain();
+                //wangsl
+
                 break;
             case EVENT_ICC_STATUS_CHANGED:
             case EVENT_RADIO_STATE_CHANGED:
@@ -581,6 +610,11 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 phone.getContext().sendStickyBroadcast(intent);
                 break;
 
+			//modify for <Bug125400> start
+            case EVENT_RADIO_RESET:
+                startRadioAgain();
+                break;
+            //modify for <Bug125400> end
             default:
                 Log.e(LOG_TAG, "Unhandled message with number: " + msg.what);
             break;
@@ -596,6 +630,11 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 cm.setRadioPower(true, null);
                 Log.v(LOG_TAG, "GsmServiceStateTracker.java---card "+phone.getPhoneId()+"RadioPower true.");
             }
+            //modify for <Bug125400> start
+            if(phone.getIccCard().getIccCardState() == IccCard.State.ABSENT) {
+                this.sendEmptyMessageDelayed(EVENT_RADIO_RESET,5*1000);
+            }
+            //modify for <Bug125400> end
         } else if (!mDesiredPowerState && cm.getRadioState().isOn()) {
             DataConnectionTracker dcTracker = phone.mDataConnection;
             if (! dcTracker.isDataConnectionAsDesired()) {
