@@ -3340,13 +3340,17 @@ class PackageManagerService extends IPackageManager.Stub {
                      * can happen for older apps that existed before an OTA to
                      * Gingerbread.
                      */
-			boolean isCopy = false;
-            isCopy = nativeLibraryDir.listFiles().length > 0 ? false : true;
-		    if(mFlagInstall == true || isCopy ){
-                    Slog.i(TAG, "Unpacking native libraries for " + path);
-                    mInstaller.unlinkNativeLibraryDirectory(dataPathString);
-                    NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
-		    }
+                    boolean isCopy = false;
+                    try {
+                        isCopy = nativeLibraryDir.listFiles().length > 0 ? false : true;
+                    } catch (NullPointerException e) {
+                        isCopy = true;
+                    }
+                    if(mFlagInstall == true || isCopy ){
+                        Slog.i(TAG, "Unpacking native libraries for " + path);
+                        mInstaller.unlinkNativeLibraryDirectory(dataPathString);
+                        NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
+                    }
                 } else {
                     Slog.i(TAG, "Linking native library dir for " + path);
                     mInstaller.linkNativeLibraryDirectory(dataPathString,
