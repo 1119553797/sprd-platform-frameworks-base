@@ -815,7 +815,8 @@ public final class CacheManager {
 
                 // Only add the default expiration for non-html markup. Some
                 // sites like news.google.com have no cache directives.
-                if (!mimeType.startsWith("text/html")) {
+                if (!(mimeType.startsWith("text/html")
+                        ||mimeType.startsWith("text/vnd.wap.wml"))) {
                     ret.expires = System.currentTimeMillis() + 86400000; // 24*60*60*1000
                 } else {
                     // Setting a expires as zero will cache the result for
