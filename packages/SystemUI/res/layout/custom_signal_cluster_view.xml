@@ -52,86 +52,10 @@
         android:visibility="gone"
         android:id="@+id/spacer"
         />
-    <FrameLayout
+   <LinearLayout
+        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <View
-            android:layout_width="6dp"
-            android:layout_height="6dp"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/mobile_combo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="1dip"
-            android:layout_marginRight="1dip"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:id="@+id/mobile_signal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <FrameLayout
-                android:id="@+id/mobile_data_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <ImageView
-                    android:id="@+id/mobile_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <ImageView
-                    android:id="@+id/mobile_inout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom" />
-            </FrameLayout>
-        </LinearLayout>
-    </FrameLayout>
-
-    <!--add secend signal icon layout start-->
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <View
-            android:layout_width="6dp"
-            android:layout_height="6dp"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/mobile_combo1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="1dip"
-            android:layout_marginRight="1dip"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:id="@+id/mobile_signal1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <FrameLayout
-                android:id="@+id/mobile_data_type1"
-                android:layout_width="wrap_content" 
-                android:layout_height="wrap_content" >
-                <ImageView
-                    android:id="@+id/mobile_type1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <ImageView
-                    android:id="@+id/mobile_inout1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom" />
-            </FrameLayout>
-        </LinearLayout>
-
-    </FrameLayout>
-    <!--add secend signal icon layout end-->
+        android:orientation="horizontal"
+        android:id="@+id/mobile_layout"
+        />
 </com.android.systemui.statusbar.SignalClusterView>
