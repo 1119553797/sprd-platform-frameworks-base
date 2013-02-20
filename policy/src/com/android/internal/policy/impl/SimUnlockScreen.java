@@ -43,6 +43,7 @@ import android.widget.TextView;
 import com.android.internal.R;
 
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * Displays a dialer like interface to unlock the SIM PIN.
@@ -117,6 +118,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         remainTimes = mTelePhoneManager.getRemainTimes(TelephonyManager.UNLOCK_PIN);
         mHeaderText.setText(getHeaderText());
         mPinText.setFocusable(false);
+        hideSoftKeyboard();
 
         mOkButton.setOnClickListener(this);
 
@@ -149,6 +151,13 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
 		 mContext.registerReceiver(mBroadcastReceiver, filter);
     }
+
+     private void hideSoftKeyboard() {
+     // Hide soft keyboard, if visible
+         InputMethodManager inputMethodManager = (InputMethodManager)
+         getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+         inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
+     }
 
     /** {@inheritDoc} */
     public boolean needsInput() {
