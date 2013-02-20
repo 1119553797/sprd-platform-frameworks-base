@@ -28,16 +28,20 @@ import com.android.internal.policy.impl.KeyguardUpdateMonitor.SimStateCallback;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.widget.LinearLayout;
+
 import libcore.util.MutableInt;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -141,6 +145,14 @@ class KeyguardStatusViewManager implements OnClickListener {
     protected int mPhoneState;
     private DigitalClock mDigitalClock;
 
+    private LinearLayout mCarrier;
+    private TextView[] mCarrialLable;
+    private int mPhoneNumber = 0;
+    private static String universeSupportKey = "universe_ui_support";
+    boolean isUniverseSupport = SystemProperties.getBoolean(universeSupportKey,false);
+    private TransientTextManager[]  mTransientTextManag;
+    private CharSequence[] mCarrierName;
+    
     private class TransientTextManager {
         private TextView mTextView;
         private class Data {
@@ -213,13 +225,25 @@ class KeyguardStatusViewManager implements OnClickListener {
         mLockPatternUtils = lockPatternUtils;
         mUpdateMonitor = updateMonitor;
         mCallback = callback;
-
-        mCarrierView = (TextView) findViewById(R.id.carrier);
-        mCarrierView1= (TextView) findViewById(R.id.carrier1);
-        if(!TelephonyManager.isMultiSim()) {
-            mCarrierView1.setVisibility(View.GONE);
+        if (isUniverseSupport) {
+            final LayoutInflater inflater = LayoutInflater.from(mContainer.getContext());
+            mPhoneNumber = TelephonyManager.getPhoneCount();
+            mCarrier = (LinearLayout) mContainer.findViewById(R.id.carrier);
+            mCarrialLable = new TextView [mPhoneNumber];
+            mCarrierName = new CharSequence[mPhoneNumber];
+            for (int i = 0; i < mPhoneNumber; i++) {
+                mCarrialLable[i] = (TextView)inflater.inflate(R.layout.keyguard_screen_tab_unlock_sim, null);
+                mCarrialLable[i].setId(i);
+                mCarrier.addView(mCarrialLable[i], i);
+            }
+            mTransientTextManag = new TransientTextManager[mPhoneNumber];
+        } else {
+            mCarrierView = (TextView) findViewById(R.id.carrier);
+            mCarrierView1 = (TextView) findViewById(R.id.carrier1);
+            if (!TelephonyManager.isMultiSim()) {
+                mCarrierView1.setVisibility(View.GONE);
+            }
         }
-
         mPlmn=new CharSequence[TelephonyManager.getPhoneCount()];
         mSpn =new CharSequence[TelephonyManager.getPhoneCount()];
         mSimState =new State[TelephonyManager.getPhoneCount()];
@@ -252,17 +276,21 @@ class KeyguardStatusViewManager implements OnClickListener {
             mEmergencyCallButton.setOnClickListener(this);
             mEmergencyCallButton.setFocusable(false); // touch only!
         }
-
-        if(TelephonyManager.getPhoneCount()>1)
-        {
-            mTransientTextManager = new TransientTextManager(mCarrierView);
-            mTransientTextManager1= new TransientTextManager(mCarrierView1);
+        if (isUniverseSupport) {
+            for (int i = 0; i < mPhoneNumber; i++) {
+                mTransientTextManag[i] = new TransientTextManager(mCarrialLable[i]);
+            }
+        } else {
+            if (TelephonyManager.getPhoneCount() > 1)
+            {
+                mTransientTextManager = new TransientTextManager(mCarrierView);
+                mTransientTextManager1 = new TransientTextManager(mCarrierView1);
+            }
+            else
+            {
+                mTransientTextManager = new TransientTextManager(mCarrierView);
+            }
         }
-        else
-        {
-            mTransientTextManager = new TransientTextManager(mCarrierView);
-        }
-
         mUpdateMonitor.registerInfoCallback(mInfoCallback);
         mUpdateMonitor.registerSimStateCallback(mSimStateCallback);
 
@@ -274,26 +302,48 @@ class KeyguardStatusViewManager implements OnClickListener {
         // add DSDS start
 //        final View scrollableViews[] = { mCarrierView,mCarrierView1, mDateView, mStatus1View, mOwnerInfoView,
 //                mAlarmStatusView };
-        if(TelephonyManager.getPhoneCount()>1)
-        {
-            final View scrollableViews[] = { mCarrierView,mCarrierView1, mDateView, mStatus1View, mOwnerInfoView,
-                    mAlarmStatusView };
+        if (isUniverseSupport){      
+            final View scrollView[] = {
+                    mDateView, mStatus1View, mOwnerInfoView,
+                    mAlarmStatusView
+            };
+            int viewLength = scrollView.length + mPhoneNumber;
+            final View scrollableViews[] = new View[viewLength];
+            for (int i = 0; i < viewLength; i++) {
+                if (i < mPhoneNumber) {
+                    scrollableViews[i] = mCarrialLable[i];
+                } else {
+                    scrollableViews[i] = scrollView[i - mPhoneNumber];
+                }
+            }
             for (View v : scrollableViews) {
                 if (v != null) {
                     v.setSelected(true);
                 }
             }
-        }
-        else
-        {
-            final View scrollableViews[] = { mCarrierView, mDateView, mStatus1View, mOwnerInfoView,
-                    mAlarmStatusView };
-            for (View v : scrollableViews) {
-                if (v != null) {
-                    v.setSelected(true);
+        }else{
+            if(TelephonyManager.getPhoneCount()>1)
+            {
+                final View scrollableViews[] = { mCarrierView,mCarrierView1, mDateView, mStatus1View, mOwnerInfoView,
+                        mAlarmStatusView };
+                for (View v : scrollableViews) {
+                    if (v != null) {
+                        v.setSelected(true);
+                    }
+                }
+            }
+            else
+            {
+                final View scrollableViews[] = { mCarrierView, mDateView, mStatus1View, mOwnerInfoView,
+                        mAlarmStatusView };
+                for (View v : scrollableViews) {
+                    if (v != null) {
+                        v.setSelected(true);
+                    }
                 }
             }
         }
+
 //        for (View v : scrollableViews) {
 //            if (v != null) {
 //                v.setSelected(true);
@@ -312,14 +362,19 @@ class KeyguardStatusViewManager implements OnClickListener {
     }
 
     void setCarrierText(CharSequence string,int phoneId) {
-    	if(phoneId ==0)
-    	{
-    		mCarrierText = string;
-    	}
-    	else
-    	{
-    		mCarrierText1= string;
-    	}
+        if (isUniverseSupport) {
+            mCarrierName[phoneId] = string;
+        } else {
+            if(phoneId ==0)
+            {
+                mCarrierText = string;
+            }
+            else
+            {
+                mCarrierText1= string;
+            }
+        }
+
         mphoneId=phoneId;
         update(CARRIER_TEXT, string);
     }
@@ -503,17 +558,27 @@ class KeyguardStatusViewManager implements OnClickListener {
     }
 
     private void updateCarrierText() {
-        if (!inWidgetMode() && mCarrierView != null) {
-            mCarrierView.setText(mCarrierText);
-        }
-
-        if(TelephonyManager.isMultiSim())
-        {
-            if (!inWidgetMode() && mCarrierView1 != null) {
-                mCarrierView1.setText(mCarrierText1);
+        if (isUniverseSupport) {
+            if(!inWidgetMode()){
+            for (int i = 0; i < mPhoneNumber; i++) {
+                if (mCarrialLable[i] != null) {
+                    mCarrialLable[i].setText(mCarrierName[i]);
+                }
             }
-        }
+            }
+        } else {
+            if (!inWidgetMode() && mCarrierView != null) {
+                mCarrierView.setText(mCarrierText);
+            }
 
+            if (TelephonyManager.isMultiSim())
+            {
+                if (!inWidgetMode() && mCarrierView1 != null) {
+                    mCarrierView1.setText(mCarrierText1);
+                }
+            }
+
+        }
     }
 
     //add new feature for lockscreen start

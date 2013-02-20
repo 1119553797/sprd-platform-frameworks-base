@@ -1482,26 +1482,36 @@ public class NetworkController extends BroadcastReceiver {
         }
 
         // mobile label
-        if (phoneId == 0) {
-            N = mMobileLabelViews.size();
-            for (int i = 0; i < N; i++) {
-                TextView v = mMobileLabelViews.get(i);
-                v.setText(mNetworkName[phoneId]);
-                if ("".equals(mNetworkName[phoneId])) {
-                    v.setVisibility(View.GONE);
-                } else {
-                    v.setVisibility(View.VISIBLE);
-                }
+        if (UNIVERSEUI_SUPPORT) {
+            TextView v = mMobileLabelViews.get(phoneId);
+            v.setText(mNetworkName[phoneId]);
+            if ("".equals(mNetworkName[phoneId])) {
+                v.setVisibility(View.GONE);
+            } else {
+                v.setVisibility(View.VISIBLE);
             }
-        } else if (phoneId == 1) {
-            N = mMobileLabelViews1.size();
-            for (int i = 0; i < N; i++) {
-                TextView v = mMobileLabelViews1.get(i);
-                v.setText(mNetworkName[phoneId]);
-                if ("".equals(mNetworkName[phoneId])) {
-                    v.setVisibility(View.GONE);
-                } else {
-                    v.setVisibility(View.VISIBLE);
+        } else {
+            if (phoneId == 0) {
+                N = mMobileLabelViews.size();
+                for (int i = 0; i < N; i++) {
+                    TextView v = mMobileLabelViews.get(i);
+                    v.setText(mNetworkName[phoneId]);
+                    if ("".equals(mNetworkName[phoneId])) {
+                        v.setVisibility(View.GONE);
+                    } else {
+                        v.setVisibility(View.VISIBLE);
+                    }
+                }
+            } else if (phoneId == 1) {
+                N = mMobileLabelViews1.size();
+                for (int i = 0; i < N; i++) {
+                    TextView v = mMobileLabelViews1.get(i);
+                    v.setText(mNetworkName[phoneId]);
+                    if ("".equals(mNetworkName[phoneId])) {
+                        v.setVisibility(View.GONE);
+                    } else {
+                        v.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }

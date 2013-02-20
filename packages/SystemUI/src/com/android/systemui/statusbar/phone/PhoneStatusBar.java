@@ -37,6 +37,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
@@ -145,6 +146,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     private float mFlingGestureMaxOutputVelocityPx; // how fast can it really go? (should be a little
                                                     // faster than mSelfCollapseVelocityPx)
+    private int mPhoneNumber = 0;
 
     PhoneStatusBarPolicy mIconPolicy;
 
@@ -188,6 +190,8 @@ public class PhoneStatusBar extends BaseStatusBar {
     RotationToggle mRotationButton;
 
     // carrier/wifi label
+    private LinearLayout mCarrier;
+    private TextView[] mCarrialLable;
     private TextView mCarrierLabel;
     private TextView mCarrierLabel1;
     private boolean mCarrierLabelVisible = false;
@@ -454,7 +458,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         if (TelephonyManager.isMultiSim()) {
             if (isUniverseSupport) {
-                mStatusBarWindow.findViewById(R.id.custom_status_bar_expanded_double_sim).setVisibility(View.VISIBLE);
+                mStatusBarWindow.findViewById(R.id.carrier).setVisibility(View.VISIBLE);          	
             }
         }
 
@@ -538,8 +542,16 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         //add for universe_ui_support
         if (isUniverseSupport) {
+            mPhoneNumber = TelephonyManager.getPhoneCount();
+            mCarrialLable = new TextView[mPhoneNumber];
             mStatusBarWindow = (StatusBarWindowView) View.inflate(context,
                     R.layout.custom_super_status_bar, null);
+            mCarrier = (LinearLayout) mStatusBarWindow.findViewById(R.id.carrier);
+            for (int i = 0; i < mPhoneNumber; i++) {
+                mCarrialLable[i] = new TextView(context);
+                mCarrialLable[i].setTextColor(Color.BLACK);
+                mCarrier.addView(mCarrialLable[i], i);
+            }
         } else {
             mStatusBarWindow = (StatusBarWindowView) View.inflate(context,
                     R.layout.super_status_bar, null);
@@ -694,24 +706,39 @@ public class PhoneStatusBar extends BaseStatusBar {
 //        }
 
         if (SHOW_CARRIER_LABEL) {
-            mCarrierLabel = (TextView)mStatusBarWindow.findViewById(R.id.carrier_label);
-            mCarrierLabel.setVisibility(mCarrierLabelVisible ? View.VISIBLE : View.INVISIBLE);
-
-            mCarrierLabel1= (TextView)mStatusBarWindow.findViewById(R.id.carrier_label1);
-            mCarrierLabel1.setVisibility(mCarrierLabelVisible ? View.VISIBLE : View.INVISIBLE);
-            if(!TelephonyManager.isMultiSim()) {
-                mCarrierLabel1.setVisibility(View.GONE);
+            if (isUniverseSupport) {
+                for (int i = 0; i < mPhoneNumber; i++) {
+                    mCarrialLable[i].setVisibility(mCarrierLabelVisible ? View.VISIBLE
+                            : View.INVISIBLE);
+                }
+                if (mNetworkController.hasMobileDataFeature()) {
+                    for (int i = 0; i < mPhoneNumber; i++) {
+                        mNetworkController.addMobileLabelView(mCarrialLable[i]);
+                    }
+                } else {
+                    for (int i = 0; i < mPhoneNumber; i++) {
+                        mNetworkController.addCombinedLabelView(mCarrialLable[i]);
+                    }
+                }
+            } else {
+                mCarrierLabel = (TextView) mStatusBarWindow.findViewById(R.id.carrier_label);
+                mCarrierLabel.setVisibility(mCarrierLabelVisible ? View.VISIBLE : View.INVISIBLE);
+                mCarrierLabel1 = (TextView) mStatusBarWindow
+                        .findViewById(R.id.carrier_label1);
+                mCarrierLabel1.setVisibility(mCarrierLabelVisible ? View.VISIBLE : View.INVISIBLE);
+                if (!TelephonyManager.isMultiSim()) {
+                    mCarrierLabel1.setVisibility(View.GONE);
+                }
+                if (mNetworkController.hasMobileDataFeature()) {
+                    mNetworkController.addMobileLabelView(mCarrierLabel);
+                    mNetworkController.addMobileLabelView1(mCarrierLabel1);
+                } else {
+                    mNetworkController.addCombinedLabelView(mCarrierLabel);
+                    mNetworkController.addCombinedLabelView(mCarrierLabel1);
+                }
             }
-
             // for mobile devices, we always show mobile connection info here (SPN/PLMN)
             // for other devices, we show whatever network is connected
-            if (mNetworkController.hasMobileDataFeature()) {
-                mNetworkController.addMobileLabelView(mCarrierLabel);
-                mNetworkController.addMobileLabelView1(mCarrierLabel1);
-            } else {
-                mNetworkController.addCombinedLabelView(mCarrierLabel);
-                mNetworkController.addCombinedLabelView(mCarrierLabel1);
-            }
 
             if (!isUniverseSupport) {
                 // set up the dynamic hide/show of the label
@@ -1292,8 +1319,36 @@ public class PhoneStatusBar extends BaseStatusBar {
             if (DEBUG) {
                 Slog.d(TAG, "making carrier label " + (makeVisible?"visible":"invisible"));
             }
-            mCarrierLabel.animate().cancel();
-            mCarrierLabel1.animate().cancel();
+            if (isUniverseSupport) {
+                for (int i = 0; i < mPhoneNumber; i++) {
+                    mCarrialLable[i].animate().cancel();
+                }
+                if (makeVisible) {
+                    for (int i = 0; i < mPhoneNumber; i++) {
+                        mCarrialLable[i].setVisibility(View.VISIBLE);
+                    }
+                }
+                for (int i = 0; i < mPhoneNumber; i++) {
+                    final int phoneNumber = i;
+                    mCarrialLable[i].animate()
+                            .alpha(makeVisible ? 1f : 0f)
+                            // .setStartDelay(makeVisible ? 500 : 0)
+                            // .setDuration(makeVisible ? 750 : 100)
+                            .setDuration(150)
+                            .setListener(makeVisible ? null : new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    if (!mCarrierLabelVisible) { // race
+                                        mCarrialLable[phoneNumber].setVisibility(View.INVISIBLE);
+                                        mCarrialLable[phoneNumber].setAlpha(0f);
+                                    }
+                                }
+                            })
+                            .start();
+                }
+            } else {
+                mCarrierLabel.animate().cancel();
+                mCarrierLabel1.animate().cancel();
             if (makeVisible) {
                 mCarrierLabel.setVisibility(View.VISIBLE);
                 mCarrierLabel1.setVisibility(View.VISIBLE);
@@ -1328,6 +1383,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 }
             })
             .start();
+		}
         }
     }
 

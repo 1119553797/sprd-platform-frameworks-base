@@ -169,32 +169,14 @@
             android:pointDrawable="@drawable/ic_lockscreen_glowdot"
             />
 
-        <TextView
-            android:id="@+id/carrier"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="215dip"
-            android:gravity="center_horizontal"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
-            android:textColor="?android:attr/textColorSecondary"
-            />
-        <TextView
-            android:id="@+id/carrier1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="200dip"
-            android:gravity="center_horizontal"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
-            android:textColor="?android:attr/textColorSecondary"
-            />
+	  <LinearLayout 
+	       android:orientation="vertical"
+		   android:layout_width="fill_parent" 
+		   android:layout_height="wrap_content"
+		   android:layout_alignParentBottom="true" 
+		   android:layout_marginBottom="215dip"
+		   android:id="@+id/carrier" 
+		   />
 
     </RelativeLayout>
 

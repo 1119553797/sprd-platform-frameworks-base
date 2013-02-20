@@ -68,9 +68,11 @@
     <RelativeLayout android:id="@+id/carriergroup" android:layout_width="fill_parent"
             android:layout_height="wrap_content" android:orientation="horizontal"
             android:background="@drawable/custom_default_status_expanded_bg" >
-            <include android:id="@+id/custom_status_bar_expanded_double_sim"
-                layout="@layout/custom_status_bar_expanded_double_sim_layout"
-                android:gravity="center_vertical|left"/>
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+		android:layout_marginTop="1dip" android:layout_marginBottom="1dip"
+		android:id="@+id/carrier" />
             <ImageView android:id="@+id/clear_all_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
