@@ -441,7 +441,7 @@ public class PduPersister {
                     if (ContentType.TEXT_PLAIN.equals(type) || ContentType.APP_SMIL.equals(type)
                             || ContentType.TEXT_HTML.equals(type)) {
                         String text = c.getString(PART_COLUMN_TEXT);
-                        byte [] blob = new EncodedStringValue(text != null ? text : "")
+                        byte [] blob = new EncodedStringValue(part.getCharset(), text != null ? text : "")
                             .getTextString();
                         baos.write(blob, 0, blob.length);
                     } else {
@@ -951,7 +951,12 @@ public class PduPersister {
                     || ContentType.APP_SMIL.equals(contentType)
                     || ContentType.TEXT_HTML.equals(contentType)) {
                 ContentValues cv = new ContentValues();
-                cv.put(Telephony.Mms.Part.TEXT, new EncodedStringValue(data).getString());
+                int charset = part.getCharset();
+                if (charset == CharacterSets.UTF_16) {
+                    cv.put(Telephony.Mms.Part.TEXT, new EncodedStringValue(charset, data).getString());
+                } else {
+                    cv.put(Telephony.Mms.Part.TEXT, new EncodedStringValue(data).getString());
+                }
                 if (mContentResolver.update(uri, cv, null, null) != 1) {
                     throw new MmsException("unable to update " + uri.toString());
                 }
@@ -1564,7 +1569,7 @@ public class PduPersister {
 
         return res;
     }
-    
+
     /**
      * Persist a PDU object to specific location in the storage.
      *

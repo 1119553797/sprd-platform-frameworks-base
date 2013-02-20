@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import com.google.android.mms.pdu.CharacterSets;
+
 /**
  * Encoded-string-value = Text-string | Value-length Char-set Text-string
  */
@@ -76,6 +78,22 @@ public class EncodedStringValue implements Cloneable {
             mCharacterSet = CharacterSets.DEFAULT_CHARSET;
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Default encoding must be supported.", e);
+        }
+    }
+
+    /*
+     * Encoded strings by the set Charset.
+     */
+    public EncodedStringValue(int charset, String data) {
+        try {
+            if (charset != CharacterSets.UTF_16) {
+                charset = CharacterSets.DEFAULT_CHARSET;
+            }
+            String charsetName = CharacterSets.getMimeName(charset);
+            mData = data.getBytes(charsetName);
+            mCharacterSet = charset;
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, "General encoding must be supported.", e);
         }
     }
 
@@ -268,7 +286,7 @@ public class EncodedStringValue implements Cloneable {
 
         return new EncodedStringValue(value.mCharacterSet, value.mData);
     }
-    
+
     public static EncodedStringValue[] encodeStrings(String[] array) {
         int count = array.length;
         if (count > 0) {
