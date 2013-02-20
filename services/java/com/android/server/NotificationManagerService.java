@@ -82,6 +82,8 @@ import java.util.HashSet;
 
 import libcore.io.IoUtils;
 
+import android.media.MediaPlayer;
+
 
 /** {@hide} */
 public class NotificationManagerService extends INotificationManager.Stub
@@ -1027,6 +1029,21 @@ public class NotificationManagerService extends INotificationManager.Stub
                         uri = Settings.System.DEFAULT_NOTIFICATION_URI;
                     } else {
                         uri = notification.sound;
+                        // fix bug 123647 start
+                        // use MediaPlayer's setDataSource() method to check the file's existency
+                        MediaPlayer player = null;
+                        try {
+                            player = new MediaPlayer();
+                            player.setDataSource(uri.toString());
+                        } catch (Exception ex) {
+                            Slog.d(TAG, "default notification will be used");
+                            uri = Settings.System.DEFAULT_NOTIFICATION_URI;
+                        } finally {
+                            if (player != null) {
+                                player.release();
+                            }
+                        }
+                        // fix bug 123647 end
                     }
                     boolean looping = (notification.flags & Notification.FLAG_INSISTENT) != 0;
                     int audioStreamType;
