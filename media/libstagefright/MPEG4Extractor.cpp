@@ -40,8 +40,6 @@
 
 namespace android {
 
-static char mMajorBrand[5] = ""; // major brand of file type box
-
 class MPEG4Source : public MediaSource {
 public:
     // Caller retains ownership of both "dataSource" and "sampleTable".
@@ -249,15 +247,12 @@ static const char *FourCC2MIME(uint32_t fourcc) {
             return MEDIA_MIMETYPE_AUDIO_MPEG;
 
         case FOURCC('m', 'p', '4', 'v'):
-            strcpy(mMajorBrand, "mp4");
             return MEDIA_MIMETYPE_VIDEO_MPEG4;
 
         case FOURCC('s', '2', '6', '3'):
-            strcpy(mMajorBrand, "3gpp");
             return MEDIA_MIMETYPE_VIDEO_H263;
 
         case FOURCC('a', 'v', 'c', '1'):
-            strcpy(mMajorBrand, "mp4");
             return MEDIA_MIMETYPE_VIDEO_AVC;
 
         default:
@@ -367,12 +362,7 @@ status_t MPEG4Extractor::readMetaData() {
 
     if (mHaveMetadata) {
         if (mHasVideo) {
-            //mFileMetaData->setCString(kKeyMIMEType, "video/mp4");
-            char mime[11] = "video/";
-            strcat(mime, mMajorBrand);
-            memset(mMajorBrand, 0, sizeof(mMajorBrand)); // reset value to empty
-            LOGD("video mime:%s", mime);
-            mFileMetaData->setCString(kKeyMIMEType, mime);
+            mFileMetaData->setCString(kKeyMIMEType, "video/mp4");
         } else {
             mFileMetaData->setCString(kKeyMIMEType, "audio/mp4");
         }
