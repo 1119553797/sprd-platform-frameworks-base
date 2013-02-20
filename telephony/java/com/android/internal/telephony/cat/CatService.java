@@ -53,6 +53,11 @@ import java.io.ByteArrayOutputStream;
 
 import android.os.SystemProperties;
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 
 class RilMessage {
     int mId;
@@ -498,6 +503,9 @@ public class CatService extends Handler implements AppInterface {
         intent.putExtra("STK CMD", cmdMsg);
         intent.putExtra("phone_id", mPhoneId);
         mContext.sendBroadcast(intent);
+        if (cmdParams.getCommandType() == AppInterface.CommandType.SEND_USSD) {
+        	mCurrntCmd = null;
+        }
     }
 
     /**
@@ -577,6 +585,16 @@ public class CatService extends Handler implements AppInterface {
         }
 
         mCmdIf.sendTerminalResponse(hexString, null);
+        RemoveLastCmd();
+    }
+
+    private void RemoveLastCmd() {
+        // Add Start for bug 77920
+        if (lastCmd != null) {
+            CatLog.d(this, "<" + mPhoneId + ">" + "handleCmdResponse:remove lastCmd");
+            lastCmd = null;
+        }
+        // Add End for bug 77920
     }
 
     private void encodeOptionalTags(CommandDetails cmdDet,
@@ -968,7 +986,9 @@ public class CatService extends Handler implements AppInterface {
         case MSG_ID_REFRESH_STIN:
             CatLog.d(this, "<" + mPhoneId + ">" + "[stk]MSG_ID_REFRESH_STIN" );
             handleRefreshCmdResponse(0);
-            handleSessionEnd();
+            //fix bug 106913 by qianqian.tian
+            //handleSessionEnd();
+            //end bug 106913 by qianqian.tian
             break;
         default:
             throw new AssertionError("Unrecognized CAT command: " + msg.what);
@@ -1170,6 +1190,7 @@ public class CatService extends Handler implements AppInterface {
             case SET_UP_MENU:
                 helpRequired = resMsg.resCode == ResultCode.HELP_INFO_REQUIRED;
                 sendMenuSelection(resMsg.usersMenuSelection, helpRequired);
+                RemoveLastCmd();
                 return;
             case SELECT_ITEM:
                 resp = new SelectItemResponseData(resMsg.usersMenuSelection);
@@ -1217,6 +1238,7 @@ public class CatService extends Handler implements AppInterface {
                 // confirmation result is send back using a dedicated ril message
                 // invoked by the CommandInterface call above.
                 mCurrntCmd = null;
+                RemoveLastCmd();
                 return;
             }
             break;
@@ -1388,7 +1410,7 @@ public class CatService extends Handler implements AppInterface {
                 ComponentName cn = mRunningTaskInfoList.get(0).topActivity;
                 CatLog.d(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText cn is " + cn);
                 boolean result = ((cn.getClassName().indexOf("com.android.stk") != -1))
-                        || (cn.getClassName().equals("com.android.launcher2.Launcher"))
+                        || isHome(cn)
                         || isInIdleScreen();
                 return result;
             }
@@ -1396,5 +1418,28 @@ public class CatService extends Handler implements AppInterface {
             CatLog.d(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText exception");
         }
         return false;
+    }
+    private List<String> getHomes() {
+    	List<String> names = new ArrayList<String>();
+    	PackageManager packageManager = mContext.getPackageManager();
+    	Intent intent = new Intent(Intent.ACTION_MAIN);
+    	intent.addCategory(Intent.CATEGORY_HOME);
+    	List<ResolveInfo> resolveInfo = packageManager.queryIntentActivities(
+    			intent, PackageManager.MATCH_DEFAULT_ONLY);
+    	for (ResolveInfo ri : resolveInfo) {
+    		names.add(ri.activityInfo.packageName);
+    		System.out.println(ri.activityInfo.packageName);
+    	}
+    	return names;
+    }
+
+    public boolean isHome(ComponentName m) {
+    	String packagename = m.getPackageName();
+    	List<String> name = getHomes();
+    	for (String i : name) {
+    		if (packagename.equals(i))
+    			return true;
+    	}
+    	return false;
     }
 }

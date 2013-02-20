@@ -96,6 +96,7 @@ class ComprehensionTlv {
                 startIndex = ctlv.mValueIndex + ctlv.mLength;
             } else {
                 CatLog.d(LOG_TAG, "decodeMany: ctlv is null, stop decoding");
+                items.clear();
                 break;
             }
         }
