@@ -38,6 +38,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.android.internal.R;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * Displays a dialer like interface to unlock the SIM PUK.
@@ -180,8 +181,15 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
             mSimUnlockProgressDialog = null;
         }
         mUpdateMonitor.removeCallback(this);
+        hideSoftKeyboard();
     }
 
+     private void hideSoftKeyboard() {
+     // Hide soft keyboard, if visible
+         InputMethodManager inputMethodManager = (InputMethodManager)
+         getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+         inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
+     }
 
     /**
      * Since the IPC can block, we want to run the request in a separate thread
@@ -308,6 +316,7 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
             return;
         }
 
+        hideSoftKeyboard();
         getSimUnlockProgressDialog().show();
 
         new CheckSimPuk(mPukText.getText().toString(),
@@ -474,6 +483,7 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
                 mPinText.setText("");
                 mPinText2.setText("");
                 mPukText.setText("");
+                hideSoftKeyboard();
                 mCallback.goToLockScreen();
                 mCallback.updatePukUnlockCancel(mSub);
                 return;
