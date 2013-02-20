@@ -225,10 +225,14 @@ public class ActionBarImpl extends ActionBar {
         // Switch tab layout configuration if needed
         if (!mHasEmbeddedTabs) {
             mActionView.setEmbeddedTabView(null);
-            mSplitView.setTabContainer(mTabScrollView);
+            if(null != mTabScrollView && null == mTabScrollView.getParent()){
+                mSplitView.setTabContainer(mTabScrollView);
+            }
         } else {
             mSplitView.setTabContainer(null);
-            mActionView.setEmbeddedTabView(mTabScrollView);
+            if(null != mTabScrollView && null == mTabScrollView.getParent()){
+                mActionView.setEmbeddedTabView(mTabScrollView);
+            }
         }
         final boolean isInTabMode = getNavigationMode() == NAVIGATION_MODE_TABS;
         if (mTabScrollView != null) {
