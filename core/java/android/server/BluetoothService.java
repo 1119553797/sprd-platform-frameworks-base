@@ -58,6 +58,7 @@ import android.os.ServiceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
+import java.util.Locale;
 
 import com.android.internal.app.IBatteryStats;
 
@@ -305,7 +306,7 @@ public class BluetoothService extends IBluetooth.Stub {
             // This is not truly random but good enough for our purposes.
             int pin = (int) Math.floor(Math.random() * 10000);
 
-            mDockPin = String.format("%04d", pin);
+            mDockPin = String.format(Locale.US,"%04d", pin);
             out.write(mDockPin);
             return true;
         } catch (FileNotFoundException e) {
