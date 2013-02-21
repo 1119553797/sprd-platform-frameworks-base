@@ -1168,6 +1168,11 @@ class MountService extends IMountService.Stub
                 mVolumeStates.put(mExternalStoragePath, Environment.MEDIA_MOUNTED);
             }
         }
+        
+        //add mount state for inernal storage in NAND
+        if (Environment.getSecondStorageType() == Environment.SECOND_STORAGE_TYPE_NAND) {
+            mVolumeStates.put(Environment.getSecondStorageDirectory().getPath(), Environment.MEDIA_MOUNTED);
+        }
 
         // XXX: This will go away soon in favor of IMountServiceObserver
         mPms = (PackageManagerService) ServiceManager.getService("package");
