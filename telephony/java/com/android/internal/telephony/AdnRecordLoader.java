@@ -301,7 +301,9 @@ public class AdnRecordLoader extends IccThreadHandler {
                     adn = (AdnRecord)(ar.userObj);
 
                     if (ar.exception != null) {
-                        throw new IccPhoneBookOperationException(0, "get EF record size failed",
+                        throw new IccPhoneBookOperationException(
+                        		IccPhoneBookOperationException.WRITE_OPREATION_FAILED, 
+                        		"get EF record size failed",
                                 ar.exception);
                     }
 
@@ -312,14 +314,15 @@ public class AdnRecordLoader extends IccThreadHandler {
                     // int[2]  is the number of records in the EF file
                     // So int[0] * int[2] = int[1]
                    if (recordSize.length != 3 || recordNumber > recordSize[2]) {
-                        throw new IccPhoneBookOperationException(0, "get wrong EF record size format",
+                        throw new IccPhoneBookOperationException(
+                        		IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+                        		"get wrong EF record size format",
                                 ar.exception);
                     }
                     try {
                         data = adn.buildAdnString(recordSize[0]);
                     } catch (IccPhoneBookOperationException e) {
                         // TODO: handle exception
-                       // throw new IccPhoneBookOperationException(e.mErrorCode, e.getMessage());
                         throw e;
                     }
                     
@@ -334,7 +337,9 @@ public class AdnRecordLoader extends IccThreadHandler {
                 case EVENT_UPDATE_RECORD_DONE:
                     ar = (AsyncResult)(msg.obj);
                     if (ar.exception != null) {
-                        throw new IccPhoneBookOperationException(0, "update EF adn record failed",
+                        throw new IccPhoneBookOperationException(
+                        		IccPhoneBookOperationException.WRITE_OPREATION_FAILED, 
+                        		"update EF adn record failed",
                                 ar.exception);
                     }
                     pendingExtLoads = 0;
@@ -514,7 +519,8 @@ public class AdnRecordLoader extends IccThreadHandler {
 				adn = (AdnRecord) (ar.userObj);
 
 				if (ar.exception != null) {
-					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+					throw new IccPhoneBookOperationException(
+							IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
 					        "get EF record size failed",
 							ar.exception);
 				}
@@ -526,7 +532,8 @@ public class AdnRecordLoader extends IccThreadHandler {
 				// int[2] is the number of records in the EF file
 				// So int[0] * int[2] = int[1]
 				if (recordSize.length != 3 || adnNum > recordSize[2]) {
-					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+					throw new IccPhoneBookOperationException(
+							IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
 							"get wrong EF record size format", ar.exception);
 				}
 				if (this.iapRec != null) {
@@ -537,7 +544,8 @@ public class AdnRecordLoader extends IccThreadHandler {
 					data = adn.buildIapString(recordSize[0], 0xff);
 				}
 				if (data == null) {
-					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED, 
+					throw new IccPhoneBookOperationException(
+							IccPhoneBookOperationException.WRITE_OPREATION_FAILED, 
 					        "wrong Iap format",
 							ar.exception);
 				}
@@ -552,7 +560,8 @@ public class AdnRecordLoader extends IccThreadHandler {
 			case EVENT_UPDATE_ANR_RECORD_DONE:
 				ar = (AsyncResult) (msg.obj);
 				if (ar.exception != null) {
-					throw new IccPhoneBookOperationException(IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+					throw new IccPhoneBookOperationException(
+							IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
 					        "update EF Anr record failed",
 							ar.exception);
 				}

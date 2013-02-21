@@ -378,18 +378,12 @@ public class MsmsIccProvider extends IccProvider {
             success = updateUsimGroupById("", index, phoneId);
         }else{
             recIndex = deleteIccRecordFromEfByIndex(efType, index, pin2, phoneId);
-        }
-
-        if (recIndex < 0) {
-            success = false;
-//            if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
-//                throwException(recIndex + 1);
-//            }
-            
-        }else {
-            success = true;
-        }
-        
+            if (recIndex < 0) {
+                success = false;         
+            }else {
+                success = true;
+            }
+        }       
         if (DBG)
             log("delete result: " + success);
 
