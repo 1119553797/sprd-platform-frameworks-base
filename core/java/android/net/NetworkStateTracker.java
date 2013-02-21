@@ -101,6 +101,15 @@ public abstract class NetworkStateTracker extends Handler {
         return getNameServerList(mDnsPropNames);
     }
 
+    public String[] getNameServersDM() {
+        String[] propname=new  String[]{
+		"net."+mInterfaceName+".dns1",
+		"net."+mInterfaceName+".dns2"
+	};
+
+        return getNameServerList(propname);
+    }
+
     /**
      * Return the IP addresses of the DNS servers available for this
      * network interface.

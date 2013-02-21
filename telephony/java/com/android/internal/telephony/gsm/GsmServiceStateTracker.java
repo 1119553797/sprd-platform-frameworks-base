@@ -607,6 +607,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_IS_SIM_SMS_READY, phone.getPhoneId()));
                 intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
                 intent.putExtra("isReady", true);
+                intent.putExtra("phoneId", phone.getPhoneId());
                 phone.getContext().sendStickyBroadcast(intent);
                 break;
 

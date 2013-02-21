@@ -62,7 +62,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import android.net.Proxy;
-
+import java.net.InetAddress;
 
 
 /**
@@ -1590,7 +1590,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         mNetTrackers[netType].removeDefaultRoute();
                     }
                 }
-                mNetTrackers[netType].addPrivateDnsRoutes();
+                
+                if(netType != ConnectivityManager.TYPE_MOBILE_DM){	// mod for DM
+                    mNetTrackers[netType].addPrivateDnsRoutes();
+                }
+                
             }
         } else {
             if (mNetAttributes[netType].isDefault()) {
@@ -1642,6 +1646,22 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             SystemProperties.set(prop, "");
         }
     }
+    private static int lookupHost(String hostname) {
+        InetAddress inetAddress;
+        try {
+            inetAddress = InetAddress.getByName(hostname);
+        } catch (Exception e) {
+            return -1;
+        }
+        byte[] addrBytes;
+        int addr;
+        addrBytes = inetAddress.getAddress();
+        addr = ((addrBytes[3] & 0xff) << 24)
+                | ((addrBytes[2] & 0xff) << 16)
+                | ((addrBytes[1] & 0xff) << 8)
+                |  (addrBytes[0] & 0xff);
+        return addr;
+    }
 
     private void writePidDns(String[] dnsList, int pid) {
         int j = 1;
@@ -1651,6 +1671,20 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             }
         }
     }
+    
+  private void writePidDnsDM(String[] dnsList, int pid) {
+        int j = 1;
+        for (String dns : dnsList) {
+            if (dns != null && !TextUtils.equals(dns, "0.0.0.0")) {
+               SystemProperties.set("net.dns" + j++ + "." + pid, dns);
+
+				int  inetAddr = lookupHost(dns);
+
+ 				requestRouteToHost(ConnectivityManager.TYPE_MOBILE_DM,inetAddr);
+  
+             }
+         }
+     }
 
     private void bumpDns() {
         /*
@@ -1681,8 +1715,14 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         // add default net's dns entries
         NetworkStateTracker nt = mNetTrackers[netType];
         if (nt != null && nt.getNetworkInfo().isConnected() && !nt.isTeardownRequested()) {
-            String[] dnsList = nt.getNameServers();
-            if (mNetAttributes[netType].isDefault()) {
+            //String[] dnsList = nt.getNameServers();
+            String[] dnsList;
+	    if(netType == ConnectivityManager.TYPE_MOBILE_DM)
+		dnsList=nt.getNameServersDM();
+            else
+		dnsList=nt.getNameServers();
+
+	    if (mNetAttributes[netType].isDefault()) {
                 int j = 1;
                 for (String dns : dnsList) {
                     if (dns != null && !TextUtils.equals(dns, "0.0.0.0")) {
@@ -1706,7 +1746,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 List pids = mNetRequestersPids[netType];
                 for (int y=0; y< pids.size(); y++) {
                     Integer pid = (Integer)pids.get(y);
-                    writePidDns(dnsList, pid.intValue());
+                   // writePidDns(dnsList, pid.intValue());
+		    if(netType == ConnectivityManager.TYPE_MOBILE_DM)	//mod for DM
+                   	 writePidDnsDM(dnsList, pid.intValue());
+		    else
+			 writePidDns(dnsList, pid.intValue());
                 }
             }
         }

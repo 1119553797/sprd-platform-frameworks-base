@@ -367,7 +367,7 @@ public class MpdpMsmsGsmDataConnectionTracker extends MsmsGsmDataConnectionTrack
                 if (conn == dataServiceTable[i]) {
                     log("cleanUpConnection:conn already handled,ignor!");
                     phone.notifyDataConnection(apnIdToType(i),reason);
-                    break;
+                    continue;
                 } else {
                     conn = dataServiceTable[i];
                 }
@@ -384,7 +384,8 @@ public class MpdpMsmsGsmDataConnectionTracker extends MsmsGsmDataConnectionTrack
                         }
                         if (notificationDeferred == false) {
                             phone.notifyDataConnection(apnIdToType(i),reason);
-                            break;
+                            notificationDeferred = true;
+                            continue ;
                         }
                         removeActiveCid(conn.getCid());
                         DisconnectData cd = this.getDisconnectData();
