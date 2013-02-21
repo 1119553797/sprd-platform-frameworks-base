@@ -3747,7 +3747,6 @@
   <java-symbol type="string" name="digtal_formatter" />
 
   <java-symbol type="layout" name="custom_notification_template_base" />
-    <java-symbol type="layout" name="keyguard_screen_tab_unlock_sim" />
     <java-symbol type="layout" name="keyguard_screen_tab_unlock_uui" />
     <java-symbol type="array" name="lockscreen_targets_with_camera_uui" />
     <java-symbol type="array" name="lockscreen_target_descriptions_with_camera_uui" />
