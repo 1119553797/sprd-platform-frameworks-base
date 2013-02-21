@@ -103,7 +103,7 @@ public class NetworkController extends BroadcastReceiver {
     ServiceState[] mServiceState;
     SignalStrength[] mSignalStrength;
     private PhoneStateListener[] mPhoneStateListener;
-    int[][] mDataIconList = {TelephonyIcons.DATA_G[0],TelephonyIcons.DATA_G[0]};
+    int[][] mDataIconList;
     String[] mNetworkName;
     String mNetworkNameDefault;
     String mNetworkNameSeparator;
@@ -252,7 +252,8 @@ public class NetworkController extends BroadcastReceiver {
         mContentDescriptionCombinedSignal = new String[numPhones];
         mContentDescriptionDataType = new String[numPhones];
         mLastSignalLevel = new int[numPhones];
-
+        mDataIconList = new int[numPhones][TelephonyIcons.DATA_G[0].length];
+        
         ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         mHasMobileDataFeature = cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
@@ -308,6 +309,7 @@ public class NetworkController extends BroadcastReceiver {
             mLastDataTypeIconId[i] = -1;
             mLastSimColor[i] = -1;
             mNetworkName[i] = mNetworkNameDefault;
+            mDataIconList[i] = TelephonyIcons.DATA_G[0];
         }
         mHspaDataDistinguishable = mContext.getResources().getBoolean(
                 R.bool.config_hspa_data_distinguishable);
