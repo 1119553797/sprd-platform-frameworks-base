@@ -1457,9 +1457,6 @@ public final class Telephony {
                 uriBuilder.appendQueryParameter("recipientNames", name);
             }
 
-            // update threads.
-            SqliteWrapper.delete(context, context.getContentResolver(), OBSOLETE_THREADS_URI, null, null);
-
             Uri uri = uriBuilder.build();
             //if (DEBUG) Log.v(TAG, "getOrCreateThreadId uri: " + uri);
 
