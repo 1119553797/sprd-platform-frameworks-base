@@ -92,6 +92,7 @@
                           android:textStyle="bold"
                           android:inputType="textPassword"
                           android:textColor="#000"
+                          android:textCursorDrawable="@null"
                           android:hint="@android:string/keyguard_password_enter_puk_prompt"
                       />
 
@@ -123,6 +124,7 @@
                           android:textStyle="bold"
                           android:inputType="textPassword"
                           android:textColor="#000"
+                          android:textCursorDrawable="@null"
                           android:hint="@android:string/keyguard_password_enter_pin_prompt"
                       />
 
@@ -152,6 +154,7 @@
                           android:textStyle="bold"
                           android:inputType="textPassword"
                           android:textColor="#000"
+                          android:textCursorDrawable="@null"
                           android:hint="@android:string/keyguard_password_enter_pin_confirm_prompt"
                       />
 

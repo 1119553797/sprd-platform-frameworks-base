@@ -106,6 +106,7 @@
                           android:maxLines="1"
                           android:textAppearance="?android:attr/textAppearanceLargeInverse"
                           android:textStyle="bold"
+                          android:textCursorDrawable="@null"
                           android:inputType="textPassword"
                       />
 
@@ -138,6 +139,7 @@
                           android:textColor="@android:color/primary_text_holo_light"
                           android:textStyle="bold"
                           android:inputType="textPassword"
+                          android:textCursorDrawable="@null"
                           android:hint="@android:string/keyguard_password_enter_pin_prompt"
                       />
 
@@ -168,6 +170,7 @@
                           android:textColor="@android:color/primary_text_holo_light"
                           android:textStyle="bold"
                           android:inputType="textPassword"
+                          android:textCursorDrawable="@null"
                           android:hint="@android:string/keyguard_password_enter_pin_confirm_prompt"
                       />
 
