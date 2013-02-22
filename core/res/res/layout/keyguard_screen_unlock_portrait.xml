@@ -114,6 +114,16 @@
         android:layout_gravity="center_horizontal"
      />
 
+    <LinearLayout
+        android:id="@+id/carrier"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="12dip"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- 
     <TextView
         android:id="@+id/carrier"
         android:layout_gravity="center_horizontal"
@@ -130,6 +140,7 @@
         android:textSize="@dimen/keyguard_lockscreen_status_line_font_size"
         android:textAppearance="?android:attr/textAppearanceMedium"
     />
+     -->
 
     <!-- Footer: an emergency call button and an initially hidden "Forgot pattern" button -->
     <LinearLayout

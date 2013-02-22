@@ -38,9 +38,11 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /***
@@ -73,10 +75,7 @@ class KeyguardStatusViewManager implements OnClickListener {
 
     // Views that this class controls.
     // NOTE: These may be null in some LockScreen screens and should protect from NPE
-    private TextView mCarrierView;
-    //add DSDS start
-    private TextView mCarrierView1;
-    //add DSDS end
+    private TextView[] mCarrierViews;
     private TextView mDateView;
     private TextView mStatus1View;
     private TextView mOwnerInfoView;
@@ -108,10 +107,7 @@ class KeyguardStatusViewManager implements OnClickListener {
     private boolean mEmergencyButtonEnabledBecauseSimLocked;
 
     // Shadowed text values
-    private CharSequence mCarrierText;
-    //add DSDS start
-    private CharSequence mCarrierText1;
-    //add DSDS end
+    private CharSequence[] mCarrierTexts;
     private CharSequence mCarrierHelpText;
     private String mHelpMessageText;
     private String mInstructionText;
@@ -213,10 +209,15 @@ class KeyguardStatusViewManager implements OnClickListener {
         mLockPatternUtils = lockPatternUtils;
         mUpdateMonitor = updateMonitor;
         mCallback = callback;
-        mCarrierView = (TextView) findViewById(R.id.carrier);
-        mCarrierView1 = (TextView) findViewById(R.id.carrier1);
-        if (!TelephonyManager.isMultiSim()) {
-              mCarrierView1.setVisibility(View.GONE);
+        LinearLayout carriersArea = (LinearLayout) findViewById(R.id.carrier);
+        int phoneCount = TelephonyManager.getPhoneCount();
+        mCarrierViews = new TextView[phoneCount];
+        mCarrierTexts = new CharSequence[phoneCount];
+        for (int i = 0; i < phoneCount; i++) {
+            TextView carrier = new TextView(getContext());
+            carrier.setGravity(Gravity.CENTER_HORIZONTAL);
+            carriersArea.addView(carrier);
+            mCarrierViews[i] = carrier;
         }
         mPlmn=new CharSequence[TelephonyManager.getPhoneCount()];
         mSpn =new CharSequence[TelephonyManager.getPhoneCount()];
@@ -251,15 +252,9 @@ class KeyguardStatusViewManager implements OnClickListener {
             mEmergencyCallButton.setFocusable(false); // touch only!
         }
 
-            if (TelephonyManager.getPhoneCount() > 1)
-            {
-                mTransientTextManager = new TransientTextManager(mCarrierView);
-                mTransientTextManager1 = new TransientTextManager(mCarrierView1);
-            }
-            else
-            {
-                mTransientTextManager = new TransientTextManager(mCarrierView);
-            }
+        if (TelephonyManager.getPhoneCount() > 0) {
+            mTransientTextManager = new TransientTextManager(mCarrierViews[0]);
+        }
 
         mUpdateMonitor.registerInfoCallback(mInfoCallback);
         mUpdateMonitor.registerSimStateCallback(mSimStateCallback);
@@ -268,38 +263,20 @@ class KeyguardStatusViewManager implements OnClickListener {
         refreshDate();
         updateOwnerInfo();
 
-        // Required to get Marquee to work.
-        // add DSDS start
-//        final View scrollableViews[] = { mCarrierView,mCarrierView1, mDateView, mStatus1View, mOwnerInfoView,
-//                mAlarmStatusView };
-
-            if(TelephonyManager.getPhoneCount()>1)
-            {
-                final View scrollableViews[] = { mCarrierView,mCarrierView1, mDateView, mStatus1View, mOwnerInfoView,
-                        mAlarmStatusView };
-                for (View v : scrollableViews) {
-                    if (v != null) {
-                        v.setSelected(true);
-                    }
-                }
+        for (View v : mCarrierViews) {
+            if (v != null) {
+                v.setSelected(true);
             }
-            else
-            {
-                final View scrollableViews[] = { mCarrierView, mDateView, mStatus1View, mOwnerInfoView,
-                        mAlarmStatusView };
-                for (View v : scrollableViews) {
-                    if (v != null) {
-                        v.setSelected(true);
-                    }
-                }
+        }
+        final View scrollableViews[] = {
+                mDateView, mStatus1View, mOwnerInfoView, mAlarmStatusView
+        };
+        for (View v : scrollableViews) {
+            if (v != null) {
+                v.setSelected(true);
             }
+        }
 
-//        for (View v : scrollableViews) {
-//            if (v != null) {
-//                v.setSelected(true);
-//            }
-//        }
-        //add DSDS end
     }
 
     private boolean inWidgetMode() {
@@ -312,14 +289,7 @@ class KeyguardStatusViewManager implements OnClickListener {
     }
 
     void setCarrierText(CharSequence string,int phoneId) {
-            if(phoneId ==0)
-            {
-                mCarrierText = string;
-            }
-            else
-            {
-                mCarrierText1= string;
-            }
+        mCarrierTexts[phoneId] = string;
 
         mphoneId=phoneId;
         update(CARRIER_TEXT, string);
@@ -504,18 +474,15 @@ class KeyguardStatusViewManager implements OnClickListener {
     }
 
     private void updateCarrierText() {
-            if (!inWidgetMode() && mCarrierView != null) {
-                mCarrierView.setText(mCarrierText);
+
+            if (inWidgetMode()) {
+                return;
             }
 
-            if (TelephonyManager.isMultiSim())
-            {
-                if (!inWidgetMode() && mCarrierView1 != null) {
-                    mCarrierView1.setText(mCarrierText1);
-                }
+            int phoneCount = TelephonyManager.getPhoneCount();
+            for (int i = 0; i < phoneCount; i++) {
+                mCarrierViews[i].setText(mCarrierTexts[i]);
             }
-
-
     }
 
     //add new feature for lockscreen start
@@ -596,7 +563,7 @@ class KeyguardStatusViewManager implements OnClickListener {
                 icon.value = BATTERY_LOW_ICON;
             }
         } else {
-            string = mCarrierText;
+            string = mCarrierTexts[0];
         }
         return string;
     }
