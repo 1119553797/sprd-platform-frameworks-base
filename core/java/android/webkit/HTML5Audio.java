@@ -47,6 +47,10 @@ class HTML5Audio extends Handler
     // Logging tag.
     private static final String LOGTAG = "HTML5Audio";
 
+    //fix bug 120319 on 20130222 begin
+    private boolean mIsAFLossPause = false;
+    //fix bug 120319 on 20130222 end
+
     private MediaPlayer mMediaPlayer;
 
     // The C++ MediaPlayerPrivateAndroid object.
@@ -245,12 +249,17 @@ class HTML5Audio extends Handler
         switch (focusChange) {
         case AudioManager.AUDIOFOCUS_GAIN:
             // resume playback
+            //fix bug 120319 on 20130222 begin
             if (mMediaPlayer == null) {
+                Log.d(LOGTAG,"1.AudioManager.AUDIOFOCUS_GAIN if");
                 resetMediaPlayer();
-            } else if (mState != ERROR && !mMediaPlayer.isPlaying()) {
+            } else if (mState != ERROR && !mMediaPlayer.isPlaying() && mIsAFLossPause) {
+                Log.d(LOGTAG,"2.AudioManager.AUDIOFOCUS_GAIN else");
                 mMediaPlayer.start();
                 mState = STARTED;
+                mIsAFLossPause = false;
             }
+            //fix bug 120319 on 20130222 end
             break;
 
         case AudioManager.AUDIOFOCUS_LOSS:
@@ -265,7 +274,13 @@ class HTML5Audio extends Handler
         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
             // Lost focus for a short time, but we have to stop
             // playback.
-            if (mState != ERROR && mMediaPlayer.isPlaying()) pause();
+            //fix bug 120319 on 20130222 begin
+            if (mState != ERROR && mMediaPlayer.isPlaying()) {
+                Log.d(LOGTAG,"3.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT");
+                pause();
+                mIsAFLossPause = true;
+            }
+            //fix bug 120319 on 20130222 end
             break;
         }
     }
