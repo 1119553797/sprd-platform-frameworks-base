@@ -33,7 +33,15 @@
         android:textSize="24sp"
             />
 
-    <!-- Carrier info -->
+    <LinearLayout
+        android:id="@+id/carrier"
+        android:orientation="vertical"
+        android:layout_above="@+id/pinDisplayGroup"
+        android:layout_marginTop="9dip"
+        android:gravity="left|bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <!-- Carrier info
     <TextView android:id="@+id/carrier"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -53,6 +61,7 @@
         android:ellipsize="marquee"
         android:textAppearance="?android:attr/textAppearanceMedium"
     />
+    -->
 
     <!-- displays dots as user enters pin -->
     <LinearLayout android:id="@+id/pinDisplayGroup"
