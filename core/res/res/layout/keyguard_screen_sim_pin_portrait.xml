@@ -36,7 +36,14 @@
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-        <!-- Carrier info -->
+        <LinearLayout
+            android:id="@+id/carrier"
+            android:orientation="vertical"
+            android:layout_marginTop="9dip"
+            android:gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        <!-- Carrier info
         <TextView android:id="@+id/carrier"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -52,6 +59,7 @@
             android:singleLine="true"
             android:ellipsize="marquee"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
+        -->
 
         <!-- password entry -->
         <LinearLayout
