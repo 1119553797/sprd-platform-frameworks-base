@@ -39,7 +39,7 @@ import com.android.internal.telephony.IIccPhoneBook;
  */
 public class IccProvider extends ContentProvider {
     private static final String TAG = "IccProvider";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
 
     private static final String[] ADDRESS_BOOK_COLUMN_NAMES = new String[] {
@@ -370,7 +370,7 @@ public class IccProvider extends ContentProvider {
     }
 
 
-    private boolean deleteIccRecordFromEf(int efType, String name, String number, String[] emails,
+    protected boolean deleteIccRecordFromEf(int efType, String name, String number, String[] emails,
             String pin2) {
         if (DBG) log("deleteIccRecordFromEf: efType=" + efType +
                 ", name=" + name + ", number=" + number + ", emails=" + emails + ", pin2=" + pin2);

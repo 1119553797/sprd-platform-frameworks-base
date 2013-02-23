@@ -141,7 +141,7 @@ public class MsmsPhoneFactory extends PhoneFactory {
                     mPhoneSubInfoProxy[i] = ((SprdPhoneProxy)sProxyPhone[i]).getPhoneSubInfoProxy();
                 }
                 new CompositeIccSmsInterfaceManagerProxy(mIccSmsInterfaceManagerProxy);
-                //new CompositeIccPhoneBookInterfaceManagerProxy(mIccPhoneBookInterfaceManagerProxy);
+                new CompositeIccPhoneBookInterfaceManagerProxy(mIccPhoneBookInterfaceManagerProxy);
                 new CompositePhoneSubInfoProxy(mPhoneSubInfoProxy);
 
                 sMadeDefaults = true;

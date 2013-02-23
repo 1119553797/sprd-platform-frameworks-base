@@ -324,7 +324,6 @@ public class MsmsIccProvider extends IccProvider {
         }
 
         boolean success = false;
-        int recIndex = -1;
         // parse where clause
         int index = -1;         //maybe simIndex or groupId
         String tag = "";
@@ -377,12 +376,19 @@ public class MsmsIccProvider extends IccProvider {
         }else if(isGas){
             success = updateUsimGroupById("", index, phoneId);
         }else{
-            recIndex = deleteIccRecordFromEfByIndex(efType, index, pin2, phoneId);
-            if (recIndex < 0) {
-                success = false;         
-            }else {
-                success = true;
-            }
+             //use the default method to delete iccRecord,because the 3rd app will not use index
+             if(index == -1) {
+                 Log.d(TAG,"the 3rd app will not use index");
+                 success = super.deleteIccRecordFromEf(efType, tag, number, null, pin2);
+             } else {
+                 int recIndex = -1;
+                 recIndex = deleteIccRecordFromEfByIndex(efType, index, pin2, phoneId);
+                 if (recIndex < 0) {
+                     success = false;
+                 }else {
+                     success = true;
+                 }
+             }
         }       
         if (DBG)
             log("delete result: " + success);
