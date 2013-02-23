@@ -3095,42 +3095,54 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
         return true;
     }
-
-    private boolean isPreloadApp(String path){    
-        if(path.equals("/system/preloadapp"))
+    
+    private boolean isPreloadApp(String path){
+       if(path.equals("/system/preloadapp"))
               return true;
-        return false;
-	}    
-
-    private boolean isDeleteApp(String packageName){    
-        File unInstallRecord = new File("/data/app/.delrecord");
-        try{ 
-            BufferedReader br = new BufferedReader(new FileReader(unInstallRecord));
-            String lineContent = null;
-                while( (lineContent = br.readLine()) != null){
-                    if(packageName.equals(lineContent)){
-                           br.close();
-                           return true;
-                    }    
-			    }    
-            }catch(Exception e){
-                  Log.e(TAG, " isDeleteApp IOException");
-          }    
       return false;
-    }    
-   
-    private boolean delAppRecord(String packageName,int parseFlags){    
-        File delRecord = new File("/data/app/.delrecord");
-        try{
-            FileWriter writer = new FileWriter(delRecord, true);
-            writer.write(packageName +"\n");
-            writer.flush();
-            writer.close();
+   }
+
+    private boolean isDeleteApp(String packageName){
+      File unInstallRecord = new File("/data/app/.delrecord");
+      BufferedReader br = null;
+      try{
+          br = new BufferedReader(new FileReader(unInstallRecord));
+          String lineContent = null;
+          while( (lineContent = br.readLine()) != null){
+              if(packageName.equals(lineContent)){
+                   return true;
+              }
+          }
+      }catch(IOException e){
+           Log.e(TAG, " isDeleteApp IOException");
+      }finally{
+           try{
+              if(br != null)
+                br.close();
            }catch(IOException e){
-                Log.e(TAG, "preloadapp unInstall record:  IOException");
+               Log.e(TAG, " isDeleteApp Close ... IOException");
            }
-      return true;
      }
+     return false;
+    }
+
+    private boolean delAppRecord(String packageName,int parseFlags){
+      File delRecord = new File("/data/app/.delrecord");
+      FileWriter writer = null;
+      try{
+         writer = new FileWriter(delRecord, true);
+         writer.write(packageName +"\n");
+         writer.flush();
+      }catch(IOException e){
+           Log.e(TAG, "preloadapp unInstall record:  IOException");
+      }finally{
+           try{
+            if(writer != null)
+                writer.close();
+           }catch(IOException e){}
+      }
+       return true;
+    }
 
     /*
      *  Scan a package and return the newly parsed package.
