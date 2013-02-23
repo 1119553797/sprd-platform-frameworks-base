@@ -73,16 +73,18 @@ public class RuntimeInit {
 
                 if (mApplicationObject == null) {
                     Slog.e(TAG, "*** FATAL EXCEPTION IN SYSTEM PROCESS: " + t.getName(), e);
-                    if (e instanceof OutOfMemoryError) {
+                    /*if (e instanceof OutOfMemoryError) {
                         dumpSystemTrace();
                     } else if (e instanceof RuntimeException) {
                         String cause = Log.getStackTraceString(e.getCause());
                         if (null != cause && cause.contains("Caused by: java.lang.OutOfMemoryError:")) {
                             dumpSystemTrace();
                         }
-                    }
+                    }//*/
+                    dumpHprofInMonkey("system_process", e);
                 } else {
                     Slog.e(TAG, "FATAL EXCEPTION: " + t.getName(), e);
+                    dumpHprofInMonkey(t.getName(), e);
                 }
 
                 // Bring up crash dialog, wait for it to be dismissed
@@ -100,9 +102,28 @@ public class RuntimeInit {
                 System.exit(10);
             }
         }
+
+        private void dumpHprofInMonkey(String name, Throwable e) {
+            if (e instanceof OutOfMemoryError) {
+                if (android.os.Debug.isMonkey()) {
+                    android.os.Debug.dumpHprof(name);
+                } else {
+                    Slog.e(TAG, "There is a OOM!");
+                }
+            } else if (e instanceof RuntimeException) {
+                String cause = Log.getStackTraceString(e.getCause());
+                if (null != cause && cause.contains("Caused by: java.lang.OutOfMemoryError")) {
+                    if (android.os.Debug.isMonkey()) {
+                        android.os.Debug.dumpHprof(name);
+                    } else {
+                        Slog.e(TAG, "There is a OOM!");
+                    }
+                }
+            }
+        }
     }
 
-    private static final void dumpSystemTrace() {
+    /*private static final void dumpSystemTrace() {
         String pname = "system_process";
         String hprofPath  = "/data/misc/hprofs/";
         File dir = new File(hprofPath);
@@ -130,7 +151,7 @@ public class RuntimeInit {
                 e1.printStackTrace();
             }
         }
-    }
+    }//*/
 
     private static final void commonInit() {
         if (DEBUG) Slog.d(TAG, "Entered RuntimeInit!");
