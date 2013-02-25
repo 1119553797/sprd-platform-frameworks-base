@@ -429,14 +429,14 @@ public class PackageParser {
 
     private Certificate[] loadCertificates(JarFile jarFile, JarEntry je,
             byte[] readBuffer) {
+        InputStream is = null;
         try {
             // We must read the stream for the JarEntry to retrieve
             // its certificates.
-            InputStream is = new BufferedInputStream(jarFile.getInputStream(je));
+            is = new BufferedInputStream(jarFile.getInputStream(je));
             while (is.read(readBuffer, 0, readBuffer.length) != -1) {
                 // not using
             }
-            is.close();
             return je != null ? je.getCertificates() : null;
         } catch (IOException e) {
             Slog.w(TAG, "Exception reading " + je.getName() + " in "
@@ -444,7 +444,14 @@ public class PackageParser {
         } catch (RuntimeException e) {
             Slog.w(TAG, "Exception reading " + je.getName() + " in "
                     + jarFile.getName(), e);
-        }
+        }finally{
+          try{
+              if(is != null)
+                 is.close();
+          }catch (IOException e){
+	    Slog.w(TAG, "Exception   is.close" ); 
+          }
+	}
         return null;
     }
 
