@@ -107,17 +107,24 @@ final class SharedPreferencesImpl implements SharedPreferences {
         Map map = null;
         FileStatus stat = new FileStatus();
         if (FileUtils.getFileStatus(mFile.getPath(), stat) && mFile.canRead()) {
+            BufferedInputStream str = null;
             try {
-                BufferedInputStream str = new BufferedInputStream(
+                str = new BufferedInputStream(
                         new FileInputStream(mFile), 16*1024);
                 map = XmlUtils.readMapXml(str);
-                str.close();
             } catch (XmlPullParserException e) {
                 Log.w(TAG, "getSharedPreferences", e);
             } catch (FileNotFoundException e) {
                 Log.w(TAG, "getSharedPreferences", e);
             } catch (IOException e) {
                 Log.w(TAG, "getSharedPreferences", e);
+            }finally{
+                try{
+                   if(str != null)
+                      str.close();
+                }catch (IOException e){
+                Log.w(TAG, "IOException  getSharedPreferences str.close", e);
+                }
             }
         }
         mLoaded = true;
