@@ -246,8 +246,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     // This is where all application persistent data goes for secondary users.
     final File mUserAppDataDir;
 
-	// This is preload app  dir
-	final File mPreInstallDir;
+    // This is preload app  dir
+    final File mPreInstallDir;
 
     /** The location for ASEC container files on internal storage. */
     final String mAsecInternalPath;
@@ -268,7 +268,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     final FileObserver mDrmAppInstallObserver;
 
     // This is the object monitoring mPreInstallDir.
-	final FileObserver mPreInstallObserver;
+    final FileObserver mPreInstallObserver;
 
     // Used for priviledge escalation.  MUST NOT BE CALLED WITH mPackages
     // LOCK HELD.  Can be called with mInstallLock held.
@@ -383,6 +383,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     boolean mSafeMode;
     boolean mHasSystemUidErrors;
     boolean mFlagInstall;
+    boolean engModeEnable;
 
     ApplicationInfo mAndroidApplication;
     final ActivityInfo mResolveActivity = new ActivityInfo();
@@ -878,6 +879,10 @@ public class PackageManagerService extends IPackageManager.Stub {
             Slog.w(TAG, "**** ro.build.version.sdk not set!");
         }
 
+        String mode = SystemProperties.get("ro.bootmode", "mode");
+        engModeEnable = "engtest".equals(mode)?true:false;
+        Slog.i(TAG, "engModeEnable: " + engModeEnable + " ,mode:"+mode);
+
         mContext = context;
         mFactoryTest = factoryTest;
         mOnlyCore = onlyCore;
@@ -1062,6 +1067,26 @@ public class PackageManagerService extends IPackageManager.Stub {
                     | PackageParser.PARSE_IS_SYSTEM_DIR,
                     scanMode | SCAN_NO_DEX, 0);
 
+            //add for engmode
+            if(engModeEnable){
+                //temp null
+                mVendorAppDir = null;
+                mDrmAppInstallObserver = null;
+                mSystemAppDir = null;
+                mAppInstallObserver = null;
+                mSystemInstallObserver = null;
+                mPreInstallObserver = null;
+                mVendorInstallObserver = null;
+                mAppInstallDir = null;
+
+                Slog.i(TAG, " begin scan the apps !");
+                scanDirLIOnly(PackageParser.PARSE_IS_SYSTEM
+                        | PackageParser.PARSE_IS_SYSTEM_DIR, scanMode, 0);
+                Slog.i(TAG, " end scan the apps !");
+
+                engModeEnable = false;
+            }else{
+            //normal mode
             // Collect all system packages.
             mSystemAppDir = new File(Environment.getRootDirectory(), "app");
             mSystemInstallObserver = new AppDirObserver(
@@ -1152,10 +1177,10 @@ public class PackageManagerService extends IPackageManager.Stub {
                 mAppInstallObserver.startWatching();
                 scanDirLI(mAppInstallDir, 0, scanMode, 0);
                 
-				mPreInstallObserver = new AppDirObserver(
-				    mPreInstallDir.getPath(), OBSERVER_EVENTS, false);
-				mPreInstallObserver.startWatching();
-				scanDirLI(mPreInstallDir, 0, scanMode, 0);
+                mPreInstallObserver = new AppDirObserver(
+                    mPreInstallDir.getPath(), OBSERVER_EVENTS, false);
+                mPreInstallObserver.startWatching();
+                scanDirLI(mPreInstallDir, 0, scanMode, 0);
 
                 mDrmAppInstallObserver = new AppDirObserver(
                     mDrmAppPrivateInstallDir.getPath(), OBSERVER_EVENTS, false);
@@ -1193,9 +1218,10 @@ public class PackageManagerService extends IPackageManager.Stub {
                     reportSettingsProblem(Log.WARN, msg);
                 }
             } else {
-			    mPreInstallObserver = null;
+                mPreInstallObserver = null;
                 mAppInstallObserver = null;
                 mDrmAppInstallObserver = null;
+            }
             }
             mFlagInstall = true;
             EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_SCAN_END,
@@ -3044,6 +3070,100 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
+    List<String> scanFile = new ArrayList<String>();
+    private void scanDirLIOnly(int flags, int scanMode, long currentTime){
+
+        scanFile.add("/system/app/AudioProfile.apk");
+        scanFile.add("/system/app/BackupRestoreConfirmation.apk");
+        scanFile.add("/system/app/Bluetooth.apk" );
+        scanFile.add("/system/app/Camera.apk" );
+        scanFile.add("/system/app/DefaultContainerService.apk" );
+        scanFile.add( "/system/app/DrmProvider.apk" );
+        scanFile.add( "/system/app/FMPlayer.apk" );
+        scanFile.add( "/system/app/KeyChain.apk" );
+        scanFile.add( "/system/app/LatinIME.apk" );
+        scanFile.add( "/system/app/MediaProvider.apk" );
+        scanFile.add( "/system/app/NoiseField.apk" );
+        scanFile.add( "/system/app/PhaseBeam.apk" );
+        scanFile.add( "/system/app/PicoTts.apk" );
+        scanFile.add( "/system/app/Provision.apk" );
+        scanFile.add( "/system/app/SettingsProvider.apk" );
+        scanFile.add( "/system/app/SharedStorageBackup.apk" );
+        scanFile.add( "/system/app/SystemUI.apk" );
+        scanFile.add( "/system/app/TelephonyProvider.apk" );
+        scanFile.add( "/system/app/UserDictionaryProvider.apk" );
+        scanFile.add( "/system/app/ValidationTools.apk" );
+        scanFile.add( "/system/app/ValidationtoolsFm.apk" );
+        scanFile.add( "/system/app/VpnDialogs.apk" );
+        scanFile.add( "/system/app/WAPPushManager.apk" );
+        scanFile.add( "/system/app/engineeringmodel.apk" );
+        scanFile.add( "/system/app/lockscreen.apk" );
+        scanFile.add( "/system/app/modemassert.apk" );
+        scanFile.add( "/system/app/SystemUpdate.apk" );
+        scanFile.add( "/system/app/CellBroadcastReceiver.apk" );
+        scanFile.add( "/system/app/CertInstaller.apk" );
+        scanFile.add( "/system/app/mxdcmmbplayer.apk" );
+        scanFile.add( "/system/app/Mms.apk" );
+        scanFile.add( "/system/app/MsmsPhone.apk" );
+        scanFile.add( "/system/app/MsmsSettings.apk" );
+        scanFile.add( "/system/app/MsmsStk.apk" );
+        scanFile.add( "/system/app/PackageInstaller.apk" );
+        scanFile.add( "/system/app/Launcher2.apk" );
+        scanFile.add( "/system/app/ApplicationsProvider.apk" );
+        scanFile.add( "/system/app/Contacts.apk" );
+        scanFile.add( "/system/app/ContactsProvider.apk" );
+//        scanFile.add(new File("/system/app/MyFavorites.apk"));
+//        scanFile.add(new File("/system/app/MagicSmokeWallpapers.apk"));
+//        scanFile.add(new File("/system/app/PinyinIME.apk"));
+//        scanFile.add(new File("/system/app/S2LockScreen.apk"));
+//        scanFile.add(new File("/system/app/SearchCallLog.apk"));
+//        scanFile.add(new File("/system/app/Music.apk"));
+//        scanFile.add(new File("/system/app/MusicFX.apk"));
+//        scanFile.add(new File("/system/app/Browser.apk"));
+//        scanFile.add(new File("/system/app/Calculator.apk"));
+//        scanFile.add(new File("/system/app/Hasmterlockscreen.apk"));
+//        scanFile.add(new File("/system/app/HoloSpiralWallpaper.apk"));
+//        scanFile.add(new File("/system/app/Draglockscreen.apk"));
+//        scanFile.add(new File("/system/app/Calendar.apk"));
+//        scanFile.add(new File("/system/app/CalendarProvider.apk"));
+//        scanFile.add(new File("/system/app/Galaxy4.apk"));
+//        scanFile.add(new File("/system/app/Gallery2.apk"));
+//        scanFile.add(new File("/system/app/HTMLViewer.apk"));
+//        scanFile.add(new File("/system/app/Email.apk"));
+//        scanFile.add(new File("/system/app/Exchange.apk"));
+//        scanFile.add(new File("/system/app/DeskClock.apk"));
+//        scanFile.add(new File("/system/app/LiveWallpapers.apk"));
+//        scanFile.add(new File("/system/app/LiveWallpapersPicker.apk"));
+//        scanFile.add(new File("/system/app/QuickSearchBox.apk"));
+//        scanFile.add(new File("/system/app/SprdNote.apk"));
+//        scanFile.add(new File("/system/app/DownloadProvider.apk"));
+//        scanFile.add(new File("/system/app/DownloadProviderUi.apk"));
+//        scanFile.add(new File("/system/app/Stk1.apk"));
+//        scanFile.add(new File("/system/app/SprdDM.apk"));
+//        scanFile.add(new File("/system/app/AppBackup.apk"));
+//        scanFile.add(new File("/system/app/VisualizationWallpapers.apk"));
+//        scanFile.add(new File("/system/app/VoiceDialer.apk"));
+//        scanFile.add(new File("/system/app/SoundRecorder.apk"));
+
+        File f = null;
+        for(String fn:scanFile){
+            f = new File(fn);
+            if(f != null && f.exists()){
+                 Slog.w(TAG, "scan " + f.getPath() + " of list ");
+                PackageParser.Package pkg = scanPackageLI(f,
+                        flags|PackageParser.PARSE_MUST_BE_APK, scanMode, currentTime);
+                // Don't mess around with apps in system partition.
+                if (pkg == null && (flags & PackageParser.PARSE_IS_SYSTEM) == 0 &&
+                        mLastScanError == PackageManager.INSTALL_FAILED_INVALID_APK) {
+                    // Delete the apk
+                    Slog.w(TAG, "Cleaning up failed install of " + f);
+                    f.delete();
+                }
+            }
+        }
+        scanFile = null;
+    }
+
     private static File getSettingsProblemFile() {
         File dataDir = Environment.getDataDirectory();
         File systemDir = new File(dataDir, "system");
@@ -4026,7 +4146,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                      */
                     NativeLibraryHelper.copyNativeBinariesIfNeededLI(scanFile, nativeLibraryDir);
 
-					}
+                    }
                 } else {
                     Slog.i(TAG, "Linking native library dir for " + path);
                     mInstaller.linkNativeLibraryDirectory(dataPathString,
@@ -4038,14 +4158,14 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
         pkg.mScanPath = path;
 
-	boolean hasCode=((pkg.applicationInfo.flags&ApplicationInfo.FLAG_HAS_CODE)!=0);
+        boolean hasCode=((pkg.applicationInfo.flags&ApplicationInfo.FLAG_HAS_CODE)!=0);
         if ((scanMode&SCAN_NO_DEX) == 0) {
             if (performDexOptLI(pkg, forceDex, (scanMode&SCAN_DEFER_DEX) != 0)
                     == DEX_OPT_FAILED) {
-		if (hasCode) {
-		    mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
-		    return null;
-		} 
+                if (hasCode) {
+                    mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
+                    return null;
+                }
             }
         }
 
@@ -9259,8 +9379,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                 if (pkg.applicationInfo != null && isSystemApp(pkg)) {
                     Slog.w(TAG, "Cannot move system application");
                     returnCode = PackageManager.MOVE_FAILED_SYSTEM_PACKAGE;
-				}else if(pkg.applicationInfo.sourceDir != null 
-				      && pkg.applicationInfo.sourceDir.startsWith("/system/preloadapp")){
+                }else if(pkg.applicationInfo.sourceDir != null
+                      && pkg.applicationInfo.sourceDir.startsWith("/system/preloadapp")){
                       Slog.w(TAG, "Cannot move preload application: " + pkg.applicationInfo.sourceDir);
                       returnCode = PackageManager.MOVE_FAILED_INTERNAL_ERROR;
                 } else if (pkg.mOperationPending) {
