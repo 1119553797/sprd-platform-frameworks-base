@@ -1183,9 +1183,13 @@ public final class BatteryStatsImpl extends BatteryStats {
                     return null;
                 }
             }
-
-            len = is.read(buffer);
-            is.close();
+            /* SPRD: Add to catch the exception. @{ */
+            try {
+                len = is.read(buffer);
+            } finally {
+                is.close();
+            }
+            /* @} */
         } catch (java.io.IOException e) {
             return null;
         }
@@ -1330,18 +1334,29 @@ public final class BatteryStatsImpl extends BatteryStats {
      * @return
      */
     private long getCurrentRadioDataUptime() {
+        // SPRD: Defined as a local variable.
+        BufferedReader br = null;
         try {
             File awakeTimeFile = new File("/sys/devices/virtual/net/rmnet0/awake_time_ms");
             if (!awakeTimeFile.exists()) return 0;
-            BufferedReader br = new BufferedReader(new FileReader(awakeTimeFile));
+            // SPRD: Initialization.
+            br = new BufferedReader(new FileReader(awakeTimeFile));
             String line = br.readLine();
-            br.close();
+            // SPRD: BufferedInputStream not close.
+            //br.close();
             return Long.parseLong(line) * 1000;
         } catch (NumberFormatException nfe) {
             // Nothing
         } catch (IOException ioe) {
             // Nothing
+        /* SPRD: BufferedInputStream Close @{ */
+        }finally{
+            try{
+                if(br != null)
+                br.close();
+            }catch (IOException ioe){}
         }
+        /* @} */
         return 0;
     }
 
@@ -5088,18 +5103,29 @@ public final class BatteryStatsImpl extends BatteryStats {
 
             mWriteLock.lock();
         }
-
+        // SPRD: Defined as a local variable.
+        FileOutputStream stream = null;
         try {
-            FileOutputStream stream = new FileOutputStream(mFile.chooseForWrite());
+            // SPRD: Initialization.
+            stream = new FileOutputStream(mFile.chooseForWrite());
             stream.write(next.marshall());
             stream.flush();
             FileUtils.sync(stream);
-            stream.close();
+            // SPRD: FileOutputStream not close.
+            //stream.close();
             mFile.commit();
         } catch (IOException e) {
             Slog.w("BatteryStats", "Error writing battery statistics", e);
             mFile.rollback();
         } finally {
+            /* SPRD: FileOutputStream Close @{ */
+            try {
+                if(stream != null)
+                    stream.close();
+            } catch (IOException e){
+                Slog.w("BatteryStats", "Error stream.close ", e);
+            }
+            /* @} */
             next.recycle();
             mWriteLock.unlock();
         }
