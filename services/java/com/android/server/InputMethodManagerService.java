@@ -886,8 +886,15 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
 
             executeOrSendMessage(mCurClient.client, mCaller.obtainMessageIO(
                     MSG_SET_ACTIVE, 0, mCurClient));
-            executeOrSendMessage(mCurClient.client, mCaller.obtainMessageIO(
+            if (mKeyguardManager != null
+                    && mKeyguardManager.isKeyguardLocked()
+                    && mKeyguardManager.isKeyguardSecure()) {
+                handleMessage(mCaller.obtainMessageIO(
                     MSG_UNBIND_METHOD, mCurSeq, mCurClient.client));
+            } else {
+                executeOrSendMessage(mCurClient.client, mCaller.obtainMessageIO(
+                    MSG_UNBIND_METHOD, mCurSeq, mCurClient.client));
+            }
             mCurClient.sessionRequested = false;
             mCurClient = null;
 
