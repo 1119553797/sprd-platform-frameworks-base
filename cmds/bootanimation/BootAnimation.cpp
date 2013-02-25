@@ -215,6 +215,9 @@ status_t BootAnimation::initTexture(void* buffer, size_t len)
 }
 
 status_t BootAnimation::readyToRun() {
+    //force screen display in vertical layout
+    mSession->setOrientation(0, 0, 0);
+	
     mAssets.addDefaultAssets();
 
     DisplayInfo dinfo;
@@ -237,7 +240,6 @@ status_t BootAnimation::readyToRun() {
     SurfaceComposerClient::openGlobalTransaction();
     control->setLayer(0x40000000);
     SurfaceComposerClient::closeGlobalTransaction();
-    SurfaceComposerClient::setOrientation(0,0,0);
 
     sp<Surface> s = control->getSurface();
 

@@ -71,6 +71,7 @@ import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.IApplicationToken;
@@ -932,6 +933,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Intent.EXTRA_DOCK_STATE_UNDOCKED);
         }
 
+        /** Added by shutdown animation Start */
+        IntentFilter shutdownDialogFilter = new IntentFilter();
+        shutdownDialogFilter.addAction(Intent.ACTION_SHUTDOWN);
+        context.registerReceiver(shutdownDisableOrintationReceiver, shutdownDialogFilter);
+        /** Added by shutdown animation End */
+		
         // watch the plug to know whether to trigger the screen saver
         filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
@@ -3613,6 +3620,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    /** Added for shutdown animation Start */
+    BroadcastReceiver shutdownDisableOrintationReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_SHUTDOWN.equals(intent.getAction())) {
+                Log.e(TAG,"\t\t\t Should disable the sensor	listener ...");
+                mOrientationListener.disable();
+                mOrientationSensorEnabled = false;
+            } else {
+                Log.e(TAG,"other broadcast coming....");
+            }
+        }
+    };
+    /** Added by shutdown animation End */
+	
     BroadcastReceiver mDockReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             if (Intent.ACTION_DOCK_EVENT.equals(intent.getAction())) {
