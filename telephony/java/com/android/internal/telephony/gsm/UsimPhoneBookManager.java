@@ -2207,10 +2207,16 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
         int anrType = 0;
         String anr = null;
         int numAdnRecs = mPhoneBookRecords.size();
-
+        
         mAdnRecordSizeArray[num] = mPhoneBookRecords.size();
-        log( "updateAdnRecord mAdnRecordSizeArray[num] : "
+        log( "updateAdnRecord numAdnRecs : "
                 + numAdnRecs + " num " + num);
+        for (int i = 0; i < num; i++) {
+            mAdnRecordSizeArray[num] -= mAdnRecordSizeArray[i];
+        }
+        
+        log( "updateAdnRecord mAdnRecordSizeArray[num] : "
+                + mAdnRecordSizeArray[num] + " num " + num);
 
         int numIapRec = 0;
         int efid = 0;
