@@ -840,11 +840,10 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 
             if (find_index) {
                 find_index = false;
-                recNum = num;
-                if (num > 0) {
-                    mInsertId += mUsimPhoneBookManager.mAdnRecordSizeArray[num - 1];
-                }
-
+                recNum = num;                
+                for (int i = 0; i < num; i++) {
+                    mInsertId += mUsimPhoneBookManager.mAdnRecordSizeArray[i]; 
+                }                          
                 Log.i(LOG_TAG, "updateUSIMAdnBySearch (3)");
                 Log.i(LOG_TAG, "mInsertId" + mInsertId);
 
@@ -1138,12 +1137,13 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 int adnRecNum;
                 if (recNum == -1) {
                     break;
-                } else if (recNum == 0) {
-                    adnRecNum = index - 1;
-                } else {
-                    adnRecNum = mAdnRecordSizeArray[recNum - 1] + index - 1;
                 }
-                Log.d(LOG_TAG, "AdnRecordCache:EVENT_UPDATE_USIM_ADN_DONE:mInsertId = " + mInsertId);
+                adnRecNum = index - 1;
+                for (int i = 0; i < recNum; i++) {
+                    adnRecNum += mAdnRecordSizeArray[i];
+                }               
+                Log.d(LOG_TAG, "AdnRecordCache:EVENT_UPDATE_USIM_ADN_DONE:mInsertId = "
+                    + mInsertId + "adnRecNum = " + adnRecNum);
                 if (ar.exception == null && adnLikeFiles.get(efid) != null) {
                     adn.setRecordNumber(mInsertId);
                     mUsimPhoneBookManager.setPhoneBookRecords(adnRecNum, adn);
