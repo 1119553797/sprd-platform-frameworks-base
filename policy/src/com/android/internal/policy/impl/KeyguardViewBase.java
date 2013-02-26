@@ -16,12 +16,16 @@
 
 package com.android.internal.policy.impl;
 
+import android.app.WallpaperInfo;
+import android.app.WallpaperManager;
 import android.content.Context;
-import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.IAudioService;
@@ -29,10 +33,9 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.Gravity;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Slog;
 
@@ -47,10 +50,13 @@ import android.util.Slog;
  */
 public abstract class KeyguardViewBase extends FrameLayout {
 
+    private static final String TAG = "KeyguardViewBase";
     private static final int BACKGROUND_COLOR = 0x70000000;
     private KeyguardViewCallback mCallback;
     private AudioManager mAudioManager;
     private TelephonyManager mTelephonyManager = null;
+    private WindowManager mWindowManager;
+    private WallpaperManager mWallpaperManager;
     // Whether the volume keys should be handled by keyguard. If true, then
     // they will be handled here for specific media types such as music, otherwise
     // the audio service will bring up the volume dialog.
@@ -79,6 +85,30 @@ public abstract class KeyguardViewBase extends FrameLayout {
 
     public KeyguardViewBase(Context context, KeyguardViewCallback callback) {
         super(context);
+        // modify for bug 128521 start, merge from 4.0
+        Configuration configuration = context.getResources().getConfiguration();
+        DisplayMetrics metric = new DisplayMetrics();
+        if (mWindowManager == null) {
+            mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        }
+        if (mWallpaperManager == null) {
+            mWallpaperManager = (WallpaperManager) context
+                    .getSystemService(Context.WALLPAPER_SERVICE);
+        }
+        Drawable drawable = mWallpaperManager.getDrawable(WallpaperInfo.WALLPAPER_LOCKSCREEN_TYPE);
+        mWindowManager.getDefaultDisplay().getMetrics(metric);
+        int width = metric.widthPixels;
+        int height = metric.heightPixels;
+        // fix bug 111078 start.
+        if (configuration != null) {
+            if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                width = metric.heightPixels;
+                height = metric.widthPixels;
+            }
+        }
+        // fix bug 111078 end.
+        mBackgroundDrawable = this.getDestDrawale(drawable, width, height);
+        // modify for bug 128521 end
         mCallback = callback;
         resetBackground();
     }
@@ -266,10 +296,10 @@ public abstract class KeyguardViewBase extends FrameLayout {
             try {
                 audioService.dispatchMediaKeyEvent(keyEvent);
             } catch (RemoteException e) {
-                Log.e("KeyguardViewBase", "dispatchMediaKeyEvent threw exception " + e);
+                Log.e(TAG, "dispatchMediaKeyEvent threw exception " + e);
             }
         } else {
-            Slog.w("KeyguardViewBase", "Unable to find IAudioService for media key event");
+            Slog.w(TAG, "Unable to find IAudioService for media key event");
         }
     }
 
@@ -277,5 +307,27 @@ public abstract class KeyguardViewBase extends FrameLayout {
     public void dispatchSystemUiVisibilityChanged(int visibility) {
         super.dispatchSystemUiVisibilityChanged(visibility);
         setSystemUiVisibility(STATUS_BAR_DISABLE_BACK);
+    }
+
+    /**
+     * Add this method for bug 128521, merge from 4.0
+     */
+    private Drawable getDestDrawale(Drawable drawable, int width, int height) {
+        if (drawable == null) {
+            return null;
+        }
+        int sourceWidth = ((BitmapDrawable) drawable).getBitmap().getWidth();
+        int sourceHeight = ((BitmapDrawable) drawable).getBitmap().getHeight();
+        if (sourceWidth < width || sourceHeight < height) {
+            return drawable;
+        }
+        int destX = (sourceWidth - width) / 2;
+        int dextY = (sourceHeight - height) / 2;
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+
+        Bitmap destBitmap = Bitmap.createBitmap(bitmap, destX, dextY, width, height);
+
+        return new BitmapDrawable(destBitmap);
     }
 }
