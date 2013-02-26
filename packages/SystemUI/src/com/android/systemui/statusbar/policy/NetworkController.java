@@ -1306,11 +1306,11 @@ public class NetworkController extends BroadcastReceiver {
             mContentDescriptionCombinedSignal[phoneId] = mHasMobileDataFeature
                 ? mContentDescriptionDataType[phoneId] : mContentDescriptionWifi;
 
-            if ((isCdma(phoneId) && isCdmaEri(phoneId)) || mPhone[phoneId].isNetworkRoaming()) {
-                mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_roam;
-            } else {
-                mDataTypeIconId[phoneId] = 0;
-            }
+//            if ((isCdma(phoneId) && isCdmaEri(phoneId)) || mPhone[phoneId].isNetworkRoaming()) {
+//                mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_roam;
+//            } else {
+//                mDataTypeIconId[phoneId] = 0;
+//            }
         }
 
         if (DEBUG) {
