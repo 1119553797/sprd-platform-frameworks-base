@@ -1312,6 +1312,7 @@
     <string name="shutdown_after_seconds">您的手机会在<xliff:g id="NUMBER">%d</xliff:g>秒后关机</string>
     <!-- Add 20121218 Spreadst of 105993  Regular boot development end -->
 
+
     <!--STK Add start-->
     <string name="stk_refresh_sim_init_message" >SIM卡更新中</string>
     <string name="stk_refresh_sim_reset_message" >手机即将重启</string>
@@ -1323,4 +1324,23 @@
     <string name="missed_call">%1$d 个未接来电</string>
     <!-- LockScreen missed call end -->
     <string name="unread_message">%1$d 条未读信息</string>
+
+    <!-- Strings for ShowStorage Activity-->
+    <string name="Low_Memory_Alert">手机存储空间即将告罄，您必须删除某些数据以确保手机的稳定</string>
+    <string name="Low_Memory_Free">空闲</string>
+    <string name="Low_Memory_Application">应用</string>
+    <string name="Low_Memory_Mail">邮件</string>
+    <string name="Low_Memory_Sms_Mms">短信/彩信</string>
+    <string name="Low_Memory_System">系统</string>
+    <string name="Btn_Select_Clear">选择并清除</string>
+
+    <!-- Strings for AppManage Activity -->
+    <string name="myAppTip">请选择要删除的应用</string>
+    <string name="myApp_Start_Btn">开始</string>
+
+    <string name="myApp_Move2Sd_ChkBox">迁移到SD卡</string>
+    <string name="myApp_ClearData_ChkBox">清除数据</string>
+    <string name="myApp_Uninstall_ChkBox">卸载应用</string>
+    <string name="myAppLoading">加载中\u2026</string>
+    <string name="myAppProcessing">处理中\u2026</string>
 </resources>

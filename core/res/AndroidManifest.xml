@@ -1761,6 +1761,19 @@
                 android:process=":ui">
         </activity>
 
+        <activity android:name="com.android.server.ShowStorage"
+                android:configChanges="orientation|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:excludeFromRecents="false">
+        </activity>
+
+        <activity android:name="com.android.server.AppManage"
+                android:configChanges="orientation|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:excludeFromRecents="false"
+                android:theme="@style/Theme.Holo.Light" >
+        </activity>
+
         <receiver android:name="com.android.server.BootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
