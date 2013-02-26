@@ -23,6 +23,8 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncResult;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
@@ -116,6 +118,8 @@ public abstract class GSMPhone extends PhoneBase {
     SimSmsInterfaceManager mSimSmsIntManager;
     PhoneSubInfo mSubInfo;
 
+    HandlerThread mHandlerThread;
+    Handler mAsyncThread;
 
     Registrant mPostDialHandler;
 
@@ -175,6 +179,10 @@ public abstract class GSMPhone extends PhoneBase {
         mCM.setOnUSSD(this, EVENT_USSD, null);
         mCM.setOnSuppServiceNotification(this, EVENT_SSN, null);
         mSST.registerForNetworkAttached(this, EVENT_REGISTERED_TO_NETWORK, null);
+
+        mHandlerThread = new HandlerThread("GSMPhone_AsyncThread");
+        mHandlerThread.start();
+        mAsyncThread = new AsyncThread(mHandlerThread.getLooper());
 
         if (false) {
             try {
@@ -1526,6 +1534,12 @@ public abstract class GSMPhone extends PhoneBase {
      * @return true for success; false otherwise.
      */
     boolean updateCurrentCarrierInProvider() {
+        mAsyncThread.removeMessages(EVENT_SIM_RECORDS_LOADED);
+        mAsyncThread.sendEmptyMessage(EVENT_SIM_RECORDS_LOADED);
+        return true;
+    }
+
+    private boolean updateCurrentCarrier() {
         if (mIccRecords != null) {
             try {
                 Uri uri = Uri.withAppendedPath(Telephony.Carriers.getContentUri(getPhoneId()), "current");
@@ -1703,5 +1717,19 @@ public abstract class GSMPhone extends PhoneBase {
     public void unregisterForGprsAttached(Handler h) {
         Log.i(LOG_TAG, " This unregisterForGprsAttached for GSM.");
         mSST.unregisterForDataConnectionAttached(h);
+    }
+
+    class AsyncThread extends Handler {
+        public AsyncThread(Looper looper) {
+            super(looper);
+        }
+
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case EVENT_SIM_RECORDS_LOADED:
+                updateCurrentCarrier();
+                break;
+            }
+        }
     }
 }
