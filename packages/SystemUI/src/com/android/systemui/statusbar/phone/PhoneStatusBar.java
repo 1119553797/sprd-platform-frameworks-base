@@ -458,7 +458,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         if (TelephonyManager.isMultiSim()) {
             if (isUniverseSupport) {
-                mStatusBarWindow.findViewById(R.id.carrier).setVisibility(View.VISIBLE);          	
+                mStatusBarWindow.findViewById(R.id.carrier).setVisibility(View.VISIBLE);
             }
         }
 
@@ -765,6 +765,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_LOCALE_CHANGED); //add for bug 128516
         context.registerReceiver(mBroadcastReceiver, filter);
 
         return mStatusBarView;
