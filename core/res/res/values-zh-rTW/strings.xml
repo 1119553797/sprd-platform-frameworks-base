@@ -1310,6 +1310,7 @@
   
     <string name="stk_refresh_sim_init_message">SIM卡更新中</string>
     <string name="stk_refresh_sim_reset_message">手機即將重新啟動</string>
+
     <!--add for network lock and sim lock-->
     <string name="lockscreen_sim_network_locked_message">網路已鎖</string>
     <string name="lockscreen_sim_card_locked_message">sim卡已鎖</string>
@@ -1317,4 +1318,19 @@
     <string name="missed_call">%1$d 個未接來電</string>
     <!-- LockScreen missed call end -->
     <string name="unread_message">%1$d 條未讀信息</string>
+
+    <string name="Low_Memory_Alert">手機存儲空間即將告罄，您必須刪除某些資料以確保手機的穩定</string>
+    <string name="Low_Memory_Free">空閒</string>
+    <string name="Low_Memory_Application">應用</string>
+    <string name="Low_Memory_Mail">郵件</string>
+    <string name="Low_Memory_Sms_Mms">短信/彩信</string>
+    <string name="Low_Memory_System">系統</string>
+    <string name="Btn_Select_Clear">選擇並清除</string>
+    <string name="myAppTip">請選擇要刪除的應用</string>
+    <string name="myApp_Start_Btn">開始</string>
+    <string name="myApp_Move2Sd_ChkBox">遷移到SD卡</string>
+    <string name="myApp_ClearData_ChkBox">清除資料</string>
+    <string name="myApp_Uninstall_ChkBox">卸載應用</string>
+    <string name="myAppLoading">載入中\u2026</string>
+    <string name="myAppProcessing">處理中\u2026</string>
 </resources>

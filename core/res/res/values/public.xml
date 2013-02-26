@@ -3758,4 +3758,32 @@
     <java-symbol type="drawable" name="ic_lockscreen_sms_activated" />
     <java-symbol type="string" name="description_target_call" />
     <java-symbol type="string" name="description_target_sms" />
+
+  <java-symbol type="id" name="app_icon" />
+  <java-symbol type="id" name="Application_Manage_Button" />
+  <java-symbol type="id" name="app_name" />
+  <java-symbol type="id" name="app_size" />
+  <java-symbol type="id" name="ClearData_ChkBox_Id" />
+  <java-symbol type="id" name="Image_Application_Id" />
+  <java-symbol type="id" name="Image_Free_Id" />
+  <java-symbol type="id" name="Image_Mail_Id" />
+  <java-symbol type="id" name="Image_Sms_Mms_Id" />
+  <java-symbol type="id" name="Image_System_Id" />
+  <java-symbol type="id" name="Low_Memory_Alert" />
+  <java-symbol type="id" name="Low_Memory_Application_Id" />
+  <java-symbol type="id" name="Low_Memory_Free_Id" />
+  <java-symbol type="id" name="Low_Memory_Mail_Id" />
+  <java-symbol type="id" name="Low_Memory_Sms_Mms_Id" />
+  <java-symbol type="id" name="Low_Memory_System_Id" />
+  <java-symbol type="id" name="Mail_Manage_Button" />
+  <java-symbol type="id" name="Move2Sd_ChkBox_Id" />
+  <java-symbol type="id" name="myApp_List" />
+  <java-symbol type="id" name="myApp_Start_Btn_Id" />
+  <java-symbol type="id" name="Sms_Mms_Button" />
+  <java-symbol type="id" name="Uninstall_ChkBox_Id" />
+  <java-symbol type="layout" name="app_mng_list_item" />
+  <java-symbol type="layout" name="app_mng_storage" />
+  <java-symbol type="layout" name="showstorage" />
+  <java-symbol type="string" name="myAppLoading" />
+  <java-symbol type="string" name="myAppProcessing" />
 </resources>

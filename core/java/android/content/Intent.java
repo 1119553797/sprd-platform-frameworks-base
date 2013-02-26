@@ -2857,6 +2857,12 @@ public class Intent implements Parcelable, Cloneable {
      */
     public static final String ACTION_DEFAULT_PHONE_CHANGE =
             "android.intent.action.DEFAULT_PHONE_CHANGE_ACTION";
+    
+    /**
+     * @hide
+     * 
+     */
+    public static final String ACTION_SHOW_STORAGE = "android.intent.action.show_storage";
 
     /**
      * Used to indicate that a {@link #ACTION_GET_CONTENT} intent should only return
