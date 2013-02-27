@@ -35,7 +35,7 @@ import com.android.internal.telephony.IccPhoneBookInterfaceManager;
 
 public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
     static final String LOG_TAG = "GSM";
-
+    static final String TAG = "SimPhoneBookInterfaceManager";
     public SimPhoneBookInterfaceManager(GSMPhone phone) {
         super(phone);
         adnCache = phone.mIccRecords.getAdnCache();
@@ -61,12 +61,17 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
         Log.i(LOG_TAG,"getAdnRecordsSize");
         if (phone.getIccCard().isApplicationOnIcc(
                 IccCardApplication.AppType.APPTYPE_USIM)
+                && (IccPhoneBookInterfaceManager.isPbrFileExisting == true)
                 && (efid == IccConstants.EF_ADN)) {
-            return getUsimAdnRecordsSize();
+            int[] size = getUsimAdnRecordsSize();
+            Log.d(TAG, "getUsimAdnRecordsSize = " + size);
+            if (null == size) {
+                size = getRecordsSize(efid);
+            }    
+            return size;
         } else {
             return getRecordsSize(efid);
         }
-
     }
 
 	private int[] getUsimAdnRecordsSize() {

@@ -1006,7 +1006,16 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 }
             }
         }
-
+        if (efid == EF_PBR && result == null) {
+            efid = EF_ADN;
+            Log.i(LOG_TAG, "pbr is empty,read adn");
+            result = getRecordsIfLoaded(efid);
+            if (result != null) {
+                if (result.size() == 0) {
+                    result = null;
+                }
+            }
+        }
         // Have we already loaded this efid?
         if (result != null) {
             if (response != null) {
