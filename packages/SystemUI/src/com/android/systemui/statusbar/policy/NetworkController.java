@@ -213,7 +213,7 @@ public class NetworkController extends BroadcastReceiver {
         void setWifiIndicators(boolean visible, boolean connected,int strengthIcon, int activityIcon,
                 String contentDescription);
         void setMobileDataIndicators(boolean visible, int strengthIcon, boolean mDataConnected, int activityIcon,
-                int typeIcon, String contentDescription, String typeContentDescription, int phoneColor,int phoneId);
+                int typeIcon, String contentDescription, String typeContentDescription, int phoneColor,int cardIcon, int phoneId);
         void setIsAirplaneMode(boolean is);
     }
 
@@ -438,7 +438,7 @@ public class NetworkController extends BroadcastReceiver {
                     mMobileActivityIconId[mDDS],
                     mDataTypeIconId[mDDS],
                     mContentDescriptionWimax,
-                    mContentDescriptionDataType[mDDS],Color.TRANSPARENT, mDDS);
+                    mContentDescriptionDataType[mDDS],Color.TRANSPARENT, TelephonyIcons.DEFAULT_CARD, mDDS);
         } else {
             // normal mobile data
             for (int i=0; i < numPhones; i++) {
@@ -454,7 +454,7 @@ public class NetworkController extends BroadcastReceiver {
                         mMobileActivityIconId[i],
                         mDataTypeIconId[i],
                         mContentDescriptionPhoneSignal[i],
-                        mContentDescriptionDataType[i],simColor, i);
+                        mContentDescriptionDataType[i],simColor,TelephonyIcons.CARD[i], i);
                 }else{
                     cluster.setMobileDataIndicators(
                             mHasMobileDataFeature,
@@ -463,7 +463,7 @@ public class NetworkController extends BroadcastReceiver {
                             mMobileActivityIconId[i],
                             mDataTypeIconId[i],
                             mContentDescriptionPhoneSignal[i],
-                            mContentDescriptionDataType[i],Color.TRANSPARENT, i);
+                            mContentDescriptionDataType[i],Color.TRANSPARENT, TelephonyIcons.CARD[i], i);
                 }
             }
         }
@@ -666,9 +666,13 @@ public class NetworkController extends BroadcastReceiver {
             return;
         }
         if (!mPhone[phoneId].hasIccCard()) {
-
-            mPhoneSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd;
-            mDataSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd;
+            if ("cucc".equals(SystemProperties.get("ro.operator", ""))) {
+                mPhoneSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd_cucc;
+                mDataSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd_cucc;
+            } else {
+                mPhoneSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd;
+                mDataSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd;
+            }
 
             return;
         }
