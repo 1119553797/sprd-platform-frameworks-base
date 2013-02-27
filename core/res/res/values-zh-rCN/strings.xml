@@ -1165,12 +1165,22 @@
     <string name="throttle_warning_notification_message" msgid="3340822228599337743">"触摸可了解有关移动数据使用的详情。"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"已超出手机数据上限"</string>
     <string name="throttled_notification_message" msgid="5443457321354907181">"触摸可了解有关移动数据使用的详情。"</string>
+    <!-- Modify Spreadst of 129900 can't show whole information on webpage start -->
+    <!--
     <string name="no_matches" msgid="8129421908915840737">"无匹配项"</string>
     <string name="find_on_page" msgid="1946799233822820384">"在网页上查找"</string>
   <plurals name="matches_found">
     <item quantity="one" msgid="8167147081136579439">"1 个匹配项"</item>
     <item quantity="other" msgid="4641872797067609177">"第 <xliff:g id="INDEX">%d</xliff:g> 项，共 <xliff:g id="TOTAL">%d</xliff:g> 项"</item>
   </plurals>
+   -->
+    <string name="no_matches" msgid="8129421908915840737">"0/0"</string>
+    <string name="find_on_page" msgid="1946799233822820384">"在网页上查找"</string>
+  <plurals name="matches_found">
+    <item quantity="one" msgid="8167147081136579439">"1/1"</item>
+    <item quantity="other" msgid="4641872797067609177">"<xliff:g id="INDEX">%d</xliff:g>/<xliff:g id="TOTAL">%d</xliff:g>"</item>
+  </plurals>
+    <!-- Modify Spreadst of 129900 can't show whole information on webpage end -->
     <string name="action_mode_done" msgid="7217581640461922289">"完成"</string>
     <string name="progress_unmounting" product="nosdcard" msgid="3923810448507612746">"正在卸载 USB 存储设备..."</string>
     <string name="progress_unmounting" product="default" msgid="1327894998409537190">"正在卸载 SD 卡..."</string>
