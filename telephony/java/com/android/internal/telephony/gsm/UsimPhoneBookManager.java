@@ -27,6 +27,7 @@ import com.android.internal.telephony.AdnRecord;
 import com.android.internal.telephony.AdnRecordCache;
 import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.IccFileHandler;
+import com.android.internal.telephony.IccPhoneBookInterfaceManager;
 import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.PhoneBase;
 import com.android.internal.telephony.IccThreadHandler;
@@ -224,9 +225,11 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
                 readPbrFileAndWait();
             }
 
-            if (mPbrFile == null)
+            if (mPbrFile == null) {
+                IccPhoneBookInterfaceManager.isPbrFileExisting = false;
+                Log.i(LOG_TAG, "isPbrFileExisting = false");
                 return null;
-
+            }               
             int numRecs = mPbrFile.mFileIds.size();
 
             // add begin for add multi record and email in usim
@@ -344,26 +347,17 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
     }
 
     public int getEmailNum() {
-
-        if (ishaveEmail) {
-            Log.i(LOG_TAG, "ishaveEmail " + ishaveEmail);
-            int[] efids =  getSubjectEfids(USIM_SUBJCET_EMAIL,0);
-
-            if(efids == null){
-
-                return 0;
-            }
-            int num = efids.length;
-
-            log( "getEmailNum " +  num);
-
-            return num;
-        } else {
-
-            return 0;
+        int[] efids =  getSubjectEfids(USIM_SUBJCET_EMAIL,0);
+        if(efids == null){
+            Log.i(LOG_TAG, "efids is NULL");
+            return -2;
         }
 
+        int num = efids.length;
+        Log.i(LOG_TAG, "getEmailNum " + num);
+        return num;
     }
+    
     public int[] getValidNumToMatch(AdnRecord adn,int type, int[] subjectNums)
     {
         int []  ret = null;
@@ -1239,6 +1233,8 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
         }
         if (mPbrFile == null) {
             Log.e(LOG_TAG, "Error: Pbr file is empty");
+            IccPhoneBookInterfaceManager.isPbrFileExisting =  false;
+            Log.i(LOG_TAG, "isPbrFileExisting = false");
             return null;
         }
         // END 20110413
@@ -1305,6 +1301,8 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
         }
         if (mPbrFile == null) {
             Log.e(LOG_TAG, "Error: Pbr file is empty");
+            IccPhoneBookInterfaceManager.isPbrFileExisting = false;
+            Log.i(LOG_TAG, "isPbrFileExisting = false");
             return;
         }
 

@@ -53,7 +53,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
     protected static final int EVENT_UPDATE_DONE = 3;
 
     private static final String LOG_TAG = "IccPhoneBookInterfaceManager";
-
+    public static boolean isPbrFileExisting = true;
     protected Handler mBaseHandler = new IccThreadHandler() {
 
     
@@ -456,7 +456,9 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
     private int updateEfForIccType(int efid) {
         // Check if we are trying to read ADN records
         if (efid == IccConstants.EF_ADN) {
-            if (phone.getIccCard().isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)) {
+            Log.d(LOG_TAG,"isPbrFileExisting = "+isPbrFileExisting);
+            if (phone.getIccCard().isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM) 
+                    && isPbrFileExisting == true) {    
                 return IccConstants.EF_PBR;
             }
         }
