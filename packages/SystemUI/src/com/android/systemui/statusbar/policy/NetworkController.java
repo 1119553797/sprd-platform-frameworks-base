@@ -558,6 +558,8 @@ public class NetworkController extends BroadcastReceiver {
                 Slog.d(TAG, "onServiceStateChanged on phoneId" + phoneId + "state=" + state.getState());
             }
             mServiceState[phoneId] = state;
+            mDataNetType[phoneId] = mServiceState[phoneId].getRadioTechnology();
+            Slog.d(TAG, "mDataNetType[" + phoneId + "]" + mDataNetType[phoneId]);
             updateTelephonySignalStrength(phoneId);
             updateDataNetType(phoneId);
             updateDataIcon(phoneId);
@@ -750,12 +752,38 @@ public class NetworkController extends BroadcastReceiver {
                 case TelephonyManager.NETWORK_TYPE_HSDPA:
                 case TelephonyManager.NETWORK_TYPE_HSUPA:
                 case TelephonyManager.NETWORK_TYPE_HSPA:
-                case TelephonyManager.NETWORK_TYPE_HSPAP:
                     if (mHspaDataDistinguishable) {
+                        if ("cucc".equals(SystemProperties.get("ro.operator", ""))) {
+                            mDataIconList[phoneId] = TelephonyIcons.DATA_H[mDataCondition];
+                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_h_sprd;
+                            mContentDescriptionDataType[phoneId] = mContext.getString(
+                                    R.string.accessibility_data_connection_3_5g);
+                        } else {
                         mDataIconList[phoneId] = TelephonyIcons.DATA_3G[mDataCondition];
                         mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g_sprd;
                         mContentDescriptionDataType[phoneId] = mContext.getString(
                                 R.string.accessibility_data_connection_3_5g);
+                        }
+                    } else {
+                        mDataIconList[phoneId] = TelephonyIcons.DATA_T[mDataCondition];
+                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_t;
+                        mContentDescriptionDataType[phoneId] = mContext.getString(
+                                R.string.accessibility_data_connection_3g);
+                    }
+                    break;
+                case TelephonyManager.NETWORK_TYPE_HSPAP:
+                    if (mHspaDataDistinguishable) {
+                        if ("cucc".equals(SystemProperties.get("ro.operator", ""))) {
+                            mDataIconList[phoneId] = TelephonyIcons.DATA_H[mDataCondition];
+                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_hp_sprd;
+                            mContentDescriptionDataType[phoneId] = mContext.getString(
+                                    R.string.accessibility_data_connection_3_5g);
+                        } else {
+                            mDataIconList[phoneId] = TelephonyIcons.DATA_3G[mDataCondition];
+                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g_sprd;
+                            mContentDescriptionDataType[phoneId] = mContext.getString(
+                                    R.string.accessibility_data_connection_3_5g);
+                        }
                     } else {
                         mDataIconList[phoneId] = TelephonyIcons.DATA_T[mDataCondition];
                         mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_t;
@@ -806,7 +834,6 @@ public class NetworkController extends BroadcastReceiver {
                     break;
             }
         }
-
         if ((isCdma(phoneId) && isCdmaEri(phoneId)) || mPhone[phoneId].isNetworkRoaming()) {
             mDataIconList[phoneId] = TelephonyIcons.DATA_R[mDataCondition];
             mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_roam_sprd;
