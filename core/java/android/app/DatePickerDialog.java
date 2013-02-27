@@ -152,7 +152,8 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
 
     @Override
     protected void onStop() {
-        tryNotifyDateSet();
+        //deleted for bug 117295, already do tryNotifyDateSet in onClick()
+        //tryNotifyDateSet();
         super.onStop();
     }
 
