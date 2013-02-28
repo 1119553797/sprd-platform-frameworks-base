@@ -143,7 +143,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="502dip">
+        android:layout_height="402dip">
 
         <com.android.internal.widget.multiwaveview.GlowPadView
             android:id="@+id/unlock_widget"
@@ -151,6 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
+            android:layout_gravity="top"
             android:gravity="top"
             android:focusable="true"
 
@@ -164,7 +165,6 @@
             android:snapMargin="@dimen/glowpadview_snap_margin"
             android:feedbackCount="1"
             android:vibrationDuration="20"
-            android:layout_marginBottom="150dip"
             android:glowRadius="@dimen/glowpadview_glow_radius"
             android:pointDrawable="@drawable/ic_lockscreen_glowdot"
             />
@@ -173,7 +173,7 @@
             android:id="@+id/carrier"
             android:orientation="vertical"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="215dip"
+            android:layout_marginBottom="100dip"
             android:gravity="center_horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
