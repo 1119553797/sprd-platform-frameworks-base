@@ -41,7 +41,7 @@ import android.widget.RemoteViews;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-
+import android.graphics.Color;
 /**
  * A class that represents how a persistent notification is to be presented to
  * the user using the {@link android.app.NotificationManager}.
@@ -58,6 +58,7 @@ import java.util.ArrayList;
  */
 public class Notification implements Parcelable
 {
+    
     /**
      * Use all default values (where applicable).
      */
@@ -347,6 +348,8 @@ public class Notification implements Parcelable
      * @deprecated Use {@link #priority} with a positive value.
      */
     public static final int FLAG_HIGH_PRIORITY      = 0x00000080;
+    
+    private static final int STAUS_DESCRIBE_TEXT_COLOR = 0xff757575;
 
     public int flags;
 
@@ -1415,16 +1418,22 @@ public class Notification implements Parcelable
                         "setBackgroundResource", R.drawable.notification_bg_low);
             }
             if (mSmallIcon != 0) {
-                contentView.setImageViewResource(smallIconImageViewId, mSmallIcon);
+                contentView.setImageViewResource(smallIconImageViewId,mSmallIcon);
                 contentView.setViewVisibility(smallIconImageViewId, View.VISIBLE);
             } else {
                 contentView.setViewVisibility(smallIconImageViewId, View.GONE);
             }
             if (mContentTitle != null) {
                 contentView.setTextViewText(R.id.title, mContentTitle);
+                if(isUniverseSupport){
+                    contentView.setTextColor(R.id.title,Color.BLACK);
+                }
             }
             if (mContentText != null) {
                 contentView.setTextViewText(R.id.text, mContentText);
+                if(isUniverseSupport){
+                    contentView.setTextColor(R.id.text,STAUS_DESCRIBE_TEXT_COLOR);
+                }
                 showLine3 = true;
             }
             if (mContentInfo != null) {
@@ -1502,14 +1511,18 @@ public class Notification implements Parcelable
             int N = mActions.size();
             if (N > 0) {
                 // Log.d("Notification", "has actions: " + mContentText);
-                big.setViewVisibility(R.id.actions, View.VISIBLE);
-                big.setViewVisibility(R.id.action_divider, View.VISIBLE);
+                if(!isUniverseSupport){
+                    big.setViewVisibility(R.id.actions, View.VISIBLE);
+                    big.setViewVisibility(R.id.action_divider, View.VISIBLE);
+                }                
                 if (N>MAX_ACTION_BUTTONS) N=MAX_ACTION_BUTTONS;
                 big.removeAllViews(R.id.actions);
                 for (int i=0; i<N; i++) {
                     final RemoteViews button = generateActionButton(mActions.get(i));
                     //Log.d("Notification", "adding action " + i + ": " + mActions.get(i).title);
-                    big.addView(R.id.actions, button);
+                    if(!isUniverseSupport){
+                        big.addView(R.id.actions, button);
+                    }
                 }
             }
             return big;
@@ -1545,7 +1558,11 @@ public class Notification implements Parcelable
         private RemoteViews makeBigContentView() {
             if (mActions.size() == 0) return null;
 
-            return applyStandardTemplateWithActions(R.layout.notification_template_big_base);
+            if(isUniverseSupport){
+                return applyStandardTemplateWithActions(R.layout.custom_notification_template_base);
+            }else{
+                return applyStandardTemplateWithActions(R.layout.notification_template_big_base);
+            }
         }
 
         private RemoteViews generateActionButton(Action action) {
