@@ -222,8 +222,18 @@ public class ConnectivityManager
     public static final int TYPE_MOBILE_DM = 10;
     /** {@hide} TODO: Need to adjust this for WiMAX. */
     public static final int MAX_RADIO_TYPE   = TYPE_MOBILE_DM;
+
+    //modify for <Bug#130570> DM in dual sim mode start
+    /** {@hide} */
+    public static final int TYPE_MOBILE_MMS_EXTERNAL = TYPE_MOBILE_DM + PhoneFactory.getPhoneCount(); //mms0 and mms1
+
     /** {@hide} TODO: Need to adjust this for WiMAX. */
-    public static final int MAX_NETWORK_TYPE = TYPE_MOBILE_DM + PhoneFactory.getPhoneCount();
+    public static final int MAX_NETWORK_TYPE = TYPE_MOBILE_MMS_EXTERNAL + PhoneFactory.getPhoneCount();//dm0 and dm1
+
+
+    //public static final int MAX_NETWORK_TYPE = TYPE_MOBILE_DM + PhoneFactory.getPhoneCount();
+    //modify for <Bug#130570> DM in dual sim mode end
+
 
     public static final int DEFAULT_NETWORK_PREFERENCE = TYPE_WIFI;
 
@@ -682,6 +692,24 @@ public class ConnectivityManager
         return MmsType;
     }
 
+    //modify for <Bug#130570> DM in dual sim mode start
+    /**
+     * {@hide}
+     */
+    public static int getDmTypeByPhoneId(int phoneId) {
+        int DmType;
+        if (PhoneFactory.getPhoneCount() == 1) {
+            DmType = TYPE_MOBILE_DM;
+        } else if (phoneId < PhoneFactory.getPhoneCount()) {
+            DmType = TYPE_MOBILE_MMS_EXTERNAL + phoneId + 1;
+        } else {
+            throw new IllegalArgumentException(
+                "phoneId is not leagal!");
+        }
+        return DmType;
+    }
+    //modify for <Bug#130570> DM in dual sim mode end
+    
     /**
      * {@hide}
      */

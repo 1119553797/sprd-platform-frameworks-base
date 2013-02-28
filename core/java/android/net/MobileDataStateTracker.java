@@ -106,6 +106,10 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 "net.gprs.dns2",
                 "net.veth0.dns1",
                 "net.veth0.dns2",
+                //xiaolong modify for <Bug#107850> start
+                "net.veth1.dns1",
+                "net.veth2.dns2",
+                //xiaolong modify for <Bug#107850> end
                 "net.ppp0.dns1",
                 "net.ppp0.dns2",
                 "net.default.dns"};
@@ -727,6 +731,18 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
                 break;
             default:
+                //modify for <Bug#130570> DM in dual sim mode start
+                if(mNetType > ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL 
+                   && mNetType <= ConnectivityManager.MAX_NETWORK_TYPE) {
+                   if(mNetType == ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL + 1) {
+                       phoneId = 0;
+                   } else {
+                       phoneId = 1;
+                   }
+                   return phoneId;
+                }
+                //modify for <Bug#130570> DM in dual sim mode end
+
                 for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
                     if (mNetType == ConnectivityManager.getMmsTypeByPhoneId(i)) {
                         phoneId = i;
@@ -744,15 +760,24 @@ public class MobileDataStateTracker extends NetworkStateTracker {
         if(netType == ConnectivityManager.TYPE_MOBILE_MMS) {
             return TelephonyManager.getDefaultDataPhoneId(mContext);
         } else if (netType > ConnectivityManager.TYPE_MOBILE_DM
-                && netType <= ConnectivityManager.MAX_NETWORK_TYPE) {
+        //modify for <Bug#130570> DM in dual sim mode start
+                && netType <= ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL) {
             return netType - ConnectivityManager.TYPE_MOBILE_DM - 1;
+        } else if (netType > ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL
+                && netType <= ConnectivityManager.MAX_NETWORK_TYPE) {
+            //return netType - ConnectivityManager.TYPE_MOBILE_DM - 1;
+            return netType - ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL - 1;
+        //modify for <Bug#130570> DM in dual sim mode end
         } else {
             return -1;
         }
     }
     private int getFixdMMSType(int netType) {
         if (netType > ConnectivityManager.TYPE_MOBILE_DM
-                && netType <= ConnectivityManager.MAX_NETWORK_TYPE) {
+                //modify for <Bug#130570> DM in dual sim mode start
+                //&& netType <= ConnectivityManager.MAX_NETWORK_TYPE) {
+                && netType <= ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL) {
+                //modify for <Bug#130570> DM in dual sim mode end
             return netType - ConnectivityManager.TYPE_MOBILE_DM - 1;
         } else {
             return -1;

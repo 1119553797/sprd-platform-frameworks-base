@@ -841,14 +841,29 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             //if type is MMS,continue setup data call
             Slog.d(TAG, "if type is MMS,continue setup data call");
             if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature,true)) &&
+                    //modify for <Bug#130570> DM in dual sim mode start
+            		!(feature.indexOf(Phone.FEATURE_ENABLE_DM)!=-1) &&
+                    //modify for <Bug#130570> DM in dual sim mode end
                     !(feature.indexOf(Phone.FEATURE_ENABLE_MMS)!=-1) &&
                     !(feature.indexOf(Phone.FEATURE_ENABLE_WAP)!=-1)) {
             //if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature))) {
                 if (DBG) Slog.d(TAG, "requested special network with data disabled - rejected");
                 return Phone.APN_TYPE_NOT_AVAILABLE;
             }
-            if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
+            //modify for <Bug#130570> DM in dual sim mode start
+            //if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
+            //    usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
+            //}
+            
+            if (TextUtils.equals(feature.substring(0, Phone.FEATURE_ENABLE_DM.length()), Phone.FEATURE_ENABLE_DM)) {
+                skipAvailableCheck = true;
+                if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
+                    usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
+                } else {
+                    int phoneId = getPhoneIdByFeature(feature,true);
+                    usedNetworkType = ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL + phoneId + 1;
+                }
+            //modify for <Bug#130570> DM in dual sim mode end
             } else if (TextUtils.equals(feature.substring(0, Phone.FEATURE_ENABLE_MMS.length()), Phone.FEATURE_ENABLE_MMS)) {
                 skipAvailableCheck = true;
                 usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature,false));
@@ -1015,8 +1030,18 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             // TODO - move to MobileDataStateTracker
             int usedNetworkType = networkType;
             if (networkType == ConnectivityManager.TYPE_MOBILE) {
-                if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
-                    usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
+                //modify for <Bug#130570> DM in dual sim mode start
+                //if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
+                //    usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
+                
+                if (TextUtils.equals(feature.substring(0, Phone.FEATURE_ENABLE_DM.length()), Phone.FEATURE_ENABLE_DM)) {
+                    if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
+                        usedNetworkType = ConnectivityManager.TYPE_MOBILE_DM;
+                    } else {
+                        int phoneId = getPhoneIdByFeature(feature,true);
+                        usedNetworkType = ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL + phoneId + 1;
+                    }
+                //modify for <Bug#130570> DM in dual sim mode end
                 } else if (TextUtils.equals(feature.subSequence(0, Phone.FEATURE_ENABLE_MMS.length()), Phone.FEATURE_ENABLE_MMS)) {
                     usedNetworkType = ConnectivityManager.getMmsTypeByPhoneId(getPhoneIdByFeature(feature,false));
                 } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_SUPL)) {
@@ -1590,8 +1615,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         mNetTrackers[netType].removeDefaultRoute();
                     }
                 }
-                
-                if(netType != ConnectivityManager.TYPE_MOBILE_DM){	// mod for DM
+                //modify for <Bug#130570> DM in dual sim mode start
+                if(netType != ConnectivityManager.TYPE_MOBILE_DM && netType != (ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL + 1) && netType != (ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL + 2)){	// mod for DM
+                //modify for <Bug#130570> DM in dual sim mode end
                     mNetTrackers[netType].addPrivateDnsRoutes();
                 }
                 
@@ -1662,30 +1688,38 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 |  (addrBytes[0] & 0xff);
         return addr;
     }
-
-    private void writePidDns(String[] dnsList, int pid) {
+    //modify for <Bug#130570> DM in dual sim mode start 
+    private boolean writePidDns(String[] dnsList, int pid) {
         int j = 1;
+        boolean changed = false;
         for (String dns : dnsList) {
             if (dns != null && !TextUtils.equals(dns, "0.0.0.0")) {
                 SystemProperties.set("net.dns" + j++ + "." + pid, dns);
+            changed = true;
             }
         }
+        return changed;
     }
-    
-  private void writePidDnsDM(String[] dnsList, int pid) {
+    //modify for <Bug#130570> DM in dual sim mode end
+    //modify for <Bug#130570> DM in dual sim mode start    
+  private boolean writePidDnsDM(String[] dnsList, int pid, int netType) {
         int j = 1;
+        boolean changed = false;
         for (String dns : dnsList) {
             if (dns != null && !TextUtils.equals(dns, "0.0.0.0")) {
                SystemProperties.set("net.dns" + j++ + "." + pid, dns);
 
 				int  inetAddr = lookupHost(dns);
+                
+ 				//requestRouteToHost(ConnectivityManager.TYPE_MOBILE_DM,inetAddr);
+                requestRouteToHost(netType,inetAddr);
 
- 				requestRouteToHost(ConnectivityManager.TYPE_MOBILE_DM,inetAddr);
   
              }
          }
+        return changed;
      }
-
+    //modify for <Bug#130570> DM in dual sim mode end
     private void bumpDns() {
         /*
          * Bump the property that tells the name resolver library to reread
@@ -1714,10 +1748,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private void handleDnsConfigurationChange(int netType) {
         // add default net's dns entries
         NetworkStateTracker nt = mNetTrackers[netType];
+        //modify for <Bug#130570> DM in dual sim mode start 
+        boolean changed = false;
+        //modify for <Bug#130570> DM in dual sim mode start 
         if (nt != null && nt.getNetworkInfo().isConnected() && !nt.isTeardownRequested()) {
             //String[] dnsList = nt.getNameServers();
             String[] dnsList;
-	    if(netType == ConnectivityManager.TYPE_MOBILE_DM)
+        //modify for <Bug#130570> DM in dual sim mode start
+	    if(netType == ConnectivityManager.TYPE_MOBILE_DM || (netType > ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL && netType <= ConnectivityManager.MAX_NETWORK_TYPE))
+        //modify for <Bug#130570> DM in dual sim mode end
 		dnsList=nt.getNameServersDM();
             else
 		dnsList=nt.getNameServers();
@@ -1741,20 +1780,24 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     SystemProperties.set("net.dns" + k, "");
                 }
                 mNumDnsEntries = j;
+                changed = true;
             } else {
                 // set per-pid dns for attached secondary nets
                 List pids = mNetRequestersPids[netType];
                 for (int y=0; y< pids.size(); y++) {
                     Integer pid = (Integer)pids.get(y);
                    // writePidDns(dnsList, pid.intValue());
-		    if(netType == ConnectivityManager.TYPE_MOBILE_DM)	//mod for DM
-                   	 writePidDnsDM(dnsList, pid.intValue());
+          //modify for <Bug#130570> DM in dual sim mode start
+		    if(netType == ConnectivityManager.TYPE_MOBILE_DM || (netType > ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL && netType <= ConnectivityManager.MAX_NETWORK_TYPE))	//mod for DM
+
+                changed = writePidDnsDM(dnsList, pid.intValue(), netType);
 		    else
-			 writePidDns(dnsList, pid.intValue());
+			    changed = writePidDns(dnsList, pid.intValue());
                 }
             }
         }
-        bumpDns();
+          if(changed) bumpDns();
+          //modify for <Bug#130570> DM in dual sim mode end
     }
 
     private int getRestoreDefaultNetworkDelay() {
@@ -2069,7 +2112,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     private boolean isMmsType(int netType) {
-        if (netType == ConnectivityManager.TYPE_MOBILE_MMS || netType > ConnectivityManager.TYPE_MOBILE_DM) {
+        //modify for <Bug#130570> DM in dual sim mode start
+        if (netType == ConnectivityManager.TYPE_MOBILE_MMS || (netType > ConnectivityManager.TYPE_MOBILE_DM && netType <= ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL)) {
+        //modify for <Bug#130570> DM in dual sim mode end
             return true;
         }
         return false;
@@ -2089,7 +2134,17 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             } else {
                 throw new IllegalArgumentException("Illeagal Feature: " + feature);
             }
-        } else {
+        } 
+        //modify for <Bug#130570> DM in dual sim mode start
+        else if(isDmFeature(feature)) {
+            if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM)) {
+                phoneId = PhoneFactory.getDefaultPhoneId();
+            } else {
+                phoneId = Integer.parseInt(feature.substring(Phone.FEATURE_ENABLE_DM.length()));
+            }//for dual sim
+        }
+        //modify for <Bug#130570> DM in dual sim mode end
+        else {
             if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_WAP)) {
                 return TelephonyManager.getDefaultDataPhoneId(mContext);
             }
@@ -2098,11 +2153,23 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         return phoneId;
     }
 
+    //modify for <Bug#130570> DM in dual sim mode start
+    private boolean isDmFeature(String feature) {
+        return (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM +"0"))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM +"1"));
+    }
+    //modify for <Bug#130570> DM in dual sim mode end
+
     private int getPhoneIdByNetworkType(int netType) {
         if (netType <= ConnectivityManager.TYPE_MOBILE_DM) {
             return TelephonyManager.getDefaultDataPhoneId(mContext);
-        } else {
+        //modify for <Bug#130570> DM in dual sim mode start
+        } else if (netType <= ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL) {
             return netType - ConnectivityManager.TYPE_MOBILE_DM - 1;
+        } else {
+            return netType - ConnectivityManager.TYPE_MOBILE_MMS_EXTERNAL - 1;
+        //modify for <Bug#130570> DM in dual sim mode end
         }
     }
 
