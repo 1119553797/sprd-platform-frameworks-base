@@ -94,7 +94,7 @@ public class WifiMonitor {
     private static final String WPS_OVERLAP_STR = "WPS-OVERLAP-DETECTED";
     private static final String WPS_TIMEOUT_STR = "WPS-TIMEOUT";
 
-    private static final String wpsGprsEvent = "WPS-AP-AVAILABLE-GPRS";//add by spreadst_lc for cmcc wifi feature
+    private static final String EVENT_SCAN_RESULTS_AVAILABLE_POPUP = "SCAN_RESULTS_AVAILABLE_POPUP";
 
     /**
      * Names of events from wpa_supplicant (minus the prefix). In the
@@ -430,26 +430,20 @@ public class WifiMonitor {
                         handleP2pEvents(eventStr);
                     } else if (eventStr.startsWith(HOST_AP_EVENT_PREFIX_STR)) {
                         handleHostApEvents(eventStr);
-                    }
-                    //add by spreadst_lc for cmcc wifi feature start
-                    else if(eventStr.contains(wpsGprsEvent)){
+                    } else if (eventStr.contains(EVENT_SCAN_RESULTS_AVAILABLE_POPUP)) {
                         String ssid = "";
-                        int netWorkId = -1;
-                        if(eventStr.length() > wpsGprsEvent.length()){
-
-                            String[] connectInfo = (eventStr.substring(wpsGprsEvent.length())).trim().split(" ");
-                            if(connectInfo.length>=3) {
-                                netWorkId = Integer.parseInt(connectInfo[0]);
-                                ssid = connectInfo[2];
-                            }
-                            else {
-                                ssid = connectInfo[0];
+                        int networkId = -1;
+                        if(eventStr.length() > EVENT_SCAN_RESULTS_AVAILABLE_POPUP.length()) {
+                            String[] connectInfo = (eventStr.substring(EVENT_SCAN_RESULTS_AVAILABLE_POPUP.length())).trim().split(" ");
+                            if(connectInfo.length >= 2) {
+                                networkId = Integer.parseInt(connectInfo[0]);
+                                ssid = connectInfo[1];
                             }
                         }
-                        Log.d(TAG,"netWorkId = " + netWorkId);
+                        Log.d(TAG,"networkId = " + networkId);
                         Log.d(TAG,"ssid = " + ssid);
                         if(!("".equals(ssid))) {
-                            WifiStateMachine.notifyWpsGprsEvent(ssid,netWorkId);
+                            WifiStateMachine.notifyMobileToWlanEvent(ssid,networkId);
                         }
                     }
                     //add by spreadst_lc for cmcc wifi feature end

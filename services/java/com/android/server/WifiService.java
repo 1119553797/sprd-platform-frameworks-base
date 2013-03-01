@@ -1776,9 +1776,9 @@ public class WifiService extends IWifiManager.Stub {
         return mWifiStateMachine.setTrustListPriority(ssid,priority);
     }
 
-    public void disconnectAp(){
+    public boolean setMobileToWifiPolicy(int policy) {
         enforceChangePermission();
-        mWifiStateMachine.disconnectAp();
+        return mWifiStateMachine.setMobileToWifiPolicy(policy);
     }
 
     /**
@@ -1789,17 +1789,6 @@ public class WifiService extends IWifiManager.Stub {
         enforceChangePermission();
 
         return mWifiStateMachine.reconnectAPCommand();
-    }
-
-    public boolean setGprsConnectState(boolean connected){
-        if (mAirplaneModeOn.get()) {
-            return false;
-        }
-        return mWifiStateMachine.setGprsConnectState(connected);
-    }
-
-    public boolean setGprsToWifi(boolean flag){
-        return mWifiStateMachine.setGprsToWifi(flag);
     }
     //add by spreadst_lc for cmcc wifi feature end
 

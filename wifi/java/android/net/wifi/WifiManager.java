@@ -459,7 +459,7 @@ public class WifiManager {
     private static final int MAX_RSSI = -55;
 
     //add by spreadst_lc for cmcc wifi feature
-    public static final String ACTION_WIFI_TO_GPRS = "sprd.com.android.wifi.to.gprs";
+    public static final String ACTION_MOBLIE_TO_WLAN = "action.mobile.to.wlan";
 
     /**
      * Number of RSSI levels used in the framework to initiate
@@ -1971,12 +1971,13 @@ public class WifiManager {
          }
      }
 
-    public void disconnectAp(){
+    public boolean setMobileToWifiPolicy (int policy) {
         try {
-            mService.disconnectAp();
+            return mService.setMobileToWifiPolicy(policy);
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -1990,26 +1991,6 @@ public class WifiManager {
         try {
             return mService.reconnectAP();
         } catch (RemoteException e) {
-            return false;
-        }
-    }
-
-    public boolean setGprsConnectState(boolean connected){
-        try {
-            return mService.setGprsConnectState(connected);
-        } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean setGprsToWifi(boolean flag){
-        try {
-            return mService.setGprsToWifi(flag);
-        } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
             return false;
         }
     }

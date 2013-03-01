@@ -52,22 +52,18 @@ public class WifiNative {
 
     //add wifi api by spreadst_lc start
     public boolean setAutoConnectCommand(boolean autoconnect) {
-        return doBooleanCommand(autoconnect ? "AUTOMATICAL-CONNECT" : "MANUALLY-CONNECT");
+        return doBooleanCommand(autoconnect ? "CONNECT_MODE 1" : "CONNECT_MODE 0");
     }
     public boolean setPriorityCommand(String ssid,int priority) {
         return doBooleanCommand("SET_PRIORITY " + ssid + " " + priority);
     }
-    public void disconnectApCommand() {
-        doBooleanCommand("DISCONNECTAP");
+
+    public boolean setMobileToWifiPolicy(int policy) {
+        return doBooleanCommand("MOBILE2WLAN_POLICY "+policy);
     }
+
     public boolean reconnectAPCommand() {
         return doBooleanCommand("RECONNECTAP");
-    }
-    public boolean setGprsConnectStateCommand(boolean connected) {
-        return doBooleanCommand(connected ? "GPRS_ONLINE=1" : "GPRS_ONLINE=0");
-    }
-    public boolean setGprsToWifiCommand(boolean flag) {
-        return doBooleanCommand(flag ? "GPRS_TO_WIFI=1" : "GPRS_TO_WIFI=0");
     }
     //add wifi api by spreadst_lc end
 

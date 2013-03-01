@@ -1611,10 +1611,10 @@ public final class Settings {
         public static final String SMS_VALIDITY_SIM2 = "sms_validity_sim2";
 
         //add by spreadst_lc for cmcc wifi feature start
-        public static final String WIFI_CELLULAR_WLAN = "wifi_cellular_wlan";
-        public static final int CELLULAR_WALN_AUTO = 0;
-        public static final int CELLULAR_WALN_MANUAL = 1;
-        public static final int CELLULAR_WALN_ALWAYS = 2;
+        public static final String MOBILE_TO_WLAN_POLICY = "mobile_to_wlan_policy";
+        public static final int MOBILE_TO_WLAN_POLICY_AUTO = 0;
+        public static final int MOBILE_TO_WLAN_POLICY_MANUAL = 1;
+        public static final int MOBILE_TO_WLAN_POLICY_POPUP = 2;
         //add by spreadst_lc for cmcc wifi feature end
 
         /**
@@ -2136,7 +2136,7 @@ public final class Settings {
             SIP_CALL_OPTIONS,
             SIP_RECEIVE_CALLS,
             POINTER_SPEED,
-            WIFI_CELLULAR_WLAN,//add by spreadst_lc for cmcc wifi feature
+            MOBILE_TO_WLAN_POLICY,//add by spreadst_lc for cmcc wifi feature
             VIBRATE_WHEN_RINGING
         };
 

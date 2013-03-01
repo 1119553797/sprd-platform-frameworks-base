@@ -2674,7 +2674,7 @@ public class WifiStateMachine extends StateMachine {
                 transitionTo(mScanModeState);
             } else {
                 mWifiNative.setScanResultHandling(CONNECT_MODE);
-                mWifiNative.reconnect();
+                //mWifiNative.reconnect();
                 // Status pulls in the current supplicant state and network connection state
                 // events over the monitor connection. This helps framework sync up with
                 // current supplicant state
@@ -3022,12 +3022,8 @@ public class WifiStateMachine extends StateMachine {
                     }
 
                     //add by spreadst_lc for cmcc wifi feature start
-                    boolean reconnectOk = false;
-                    if (supportCMCC) {
-                        reconnectOk = mWifiNative.reconnectAPCommand();
-                    } else {
-                        reconnectOk = mWifiNative.reconnect();
-                    }
+                    boolean reconnectOk = mWifiNative.reconnect();
+
                     if (mWifiConfigStore.selectNetwork(netId) && reconnectOk) {
                     //add by spreadst_lc for cmcc wifi feature end
                         /* The state tracker handles enabling networks upon completion/failure */
@@ -3924,10 +3920,9 @@ public class WifiStateMachine extends StateMachine {
         return mWifiNative.setPriorityCommand(ssid, priority);
     }
 
-    public void disconnectAp(){
-        mWifiNative.disconnectApCommand();
+    public boolean setMobileToWifiPolicy(int policy){
+        return mWifiNative.setMobileToWifiPolicy(policy);
     }
-
     /**
      * Initiate a reconnection to AP
      *
@@ -3940,22 +3935,11 @@ public class WifiStateMachine extends StateMachine {
         return mWifiNative.reconnectAPCommand();
     }
 
-   public boolean setGprsToWifi(boolean flag){
-       return mWifiNative.setGprsToWifiCommand(flag);
-   }
-
-   public boolean setGprsConnectState(boolean connected){
-       if (mWifiState.get() != WIFI_STATE_ENABLED) {
-           return false;
-       }
-       return mWifiNative.setGprsConnectStateCommand(connected);
-   }
-
-   static void notifyWpsGprsEvent(String ssid,int netWorkid){
-       Intent wifiIntent = new Intent(WifiManager.ACTION_WIFI_TO_GPRS);
-       wifiIntent.putExtra("ssid", ssid);
-       wifiIntent.putExtra("networkid", netWorkid);
-       mContext.sendBroadcast(wifiIntent);
+   static void notifyMobileToWlanEvent(String ssid,int networkId) {
+       Intent mIntent = new Intent(WifiManager.ACTION_MOBLIE_TO_WLAN);
+       mIntent.putExtra("ssid", ssid);
+       mIntent.putExtra("networkid", networkId);
+       mContext.sendBroadcast(mIntent);
    }
    //add wifi api by spreadst_lc end
 

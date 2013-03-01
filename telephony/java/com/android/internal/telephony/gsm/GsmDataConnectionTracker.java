@@ -1576,14 +1576,13 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             mNetStatPollEnabled = true;
             //add by spreadst_lc for cmcc wifi feature start
             if (supportCMCC) {
-				new Thread(new Runnable() {
-					public void run() {
+                new Thread(new Runnable() {
+                    public void run() {
                         SystemProperties.set("gsm.gprs.attached", "true");
-                        mWifiManager.setGprsConnectState(true);
-					}
-				}).start();
+                    }
+                }).start();
             }
-			//add by spreadst_lc for cmcc wifi feature end
+            //add by spreadst_lc for cmcc wifi feature end
             mPollNetStat.run();
         }
     }
@@ -1596,12 +1595,11 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             Thread thr = new Thread(new Runnable(){
                 public void run() {
                     SystemProperties.set("gsm.gprs.attached", "false");
-                    mWifiManager.setGprsConnectState(false);
                 }
             });
             thr.start();
         }
-		//add by spreadst_lc for cmcc wifi feature end
+        //add by spreadst_lc for cmcc wifi feature end
         removeCallbacks(mPollNetStat);
         if (DBG) log("stopNetStatPoll");
     }
