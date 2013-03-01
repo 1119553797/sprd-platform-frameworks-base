@@ -831,8 +831,8 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
                         set = (Set<Integer>) index.usedSet[num]; 
                         if(set != null){
                             log("SetMapOfRepeatEfid  size " + set.size() );
-                        }				          
-                        totalSet = getUsedNumSet(totalSet,set,count);
+                            totalSet = getUsedNumSet(totalSet,set,count);
+                        }				                                  
                     }   
                 }
             }
@@ -1890,13 +1890,12 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
         String emails = null;
 
         mEmailFileRecord = emailInfo.record.get(efid);
-        log("getType1Email size " +  mEmailFileRecord.size());
-
+        
         if (mEmailFileRecord == null) {
 
             return null;
         }
-
+        log("getType1Email size " +  mEmailFileRecord.size());
         emails = readEmailRecord(adnNum);
         log( "getType1Email,emails " + emails);
 
@@ -1998,14 +1997,10 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
 
         AdnRecord rec = mPhoneBookRecords.get(adnNum);
 
-        log( "setEmailandAnr,rec name:" + rec.getAlphaTag()
-                + "num " + rec.getNumber() + " adnNum " + adnNum);
-
         if (rec == null && (emails != null || anr != null)) {
 
             rec = new AdnRecord("", "");
         }
-
         if (emails != null) {
             rec.setEmails(emails);
 
