@@ -474,7 +474,6 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
             AdnRecordLoader adnRecordLoader, int adnNum, int index, int efid,
             AdnRecord oldAdn, AdnRecord newAdn, int iapEF, String pin2) {
         int resultValue = 1;
-        int[][] anrNumInIap = null;
         int[] subjectNum = null;
         boolean newAnr = false;
         int[] updateSubjectFlag = null;

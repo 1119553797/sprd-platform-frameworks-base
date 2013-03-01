@@ -63,8 +63,7 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
                 IccCardApplication.AppType.APPTYPE_USIM)
                 && (IccPhoneBookInterfaceManager.isPbrFileExisting == true)
                 && (efid == IccConstants.EF_ADN)) {
-            int[] size = getUsimAdnRecordsSize();
-            Log.d(TAG, "getUsimAdnRecordsSize = " + size);
+            int[] size = getUsimAdnRecordsSize();            
             if (null == size) {
                 size = getRecordsSize(efid);
             }    
@@ -84,23 +83,6 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
 		if (mUsimPhoneBookManager == null) {
 			return null;
 		}
-
-		/*int efid;
-		int[] recordSizeAdn, recordSizeTotal = new int[3];
-		for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
-			efid = mUsimPhoneBookManager.findEFInfo(num);
-
-			if (efid == -1) {
-				return null;
-			}
-			recordSizeAdn = getRecordsSize(efid);
-			Log.i(LOG_TAG,"getUsimAdnRecordsSize  num "+num);
-			recordSizeTotal[0] = recordSizeAdn[0];
-			recordSizeTotal[1] += recordSizeAdn[1];
-			recordSizeTotal[2] += recordSizeAdn[2];
-		}
-		return recordSizeTotal;*/
-
 		return mUsimPhoneBookManager.getAdnRecordsSize();
 	}
 
