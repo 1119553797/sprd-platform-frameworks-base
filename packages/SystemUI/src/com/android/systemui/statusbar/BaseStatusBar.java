@@ -1037,6 +1037,11 @@ public abstract class BaseStatusBar extends SystemUI implements
             addNotificationViews(key, notification);
             if (wasExpanded) {
                 final NotificationData.Entry newEntry = mNotificationData.findByKey(key);
+                // Add 20130301 Spreadst of 132163 Monkey bug NullPointerException
+                if (newEntry == null) {
+                    Slog.w(TAG, "updateNotification for unknown key: " + key);
+                    return;
+                }
                 expandView(newEntry, true);
                 newEntry.setUserExpanded(true);
             }
