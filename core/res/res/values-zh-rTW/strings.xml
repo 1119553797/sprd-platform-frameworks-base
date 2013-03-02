@@ -1164,11 +1164,18 @@
     <string name="throttle_warning_notification_message" msgid="3340822228599337743">"輕觸即可進一步瞭解行動數據用量。"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"已達行動資料上限"</string>
     <string name="throttled_notification_message" msgid="5443457321354907181">"輕觸即可進一步瞭解行動數據用量。"</string>
-    <string name="no_matches" msgid="8129421908915840737">"沒有相符項目"</string>
+    <!-- Modify Spreadst of 129900 can't show whole information on webpage start -->
+    <!-- <string name="no_matches" msgid="8129421908915840737">"沒有相符項目"</string> -->
+    <string name="no_matches" msgid="8129421908915840737">"0/0"</string>
+    <!-- Modify Spreadst of 129900 can't show whole information on webpage end -->
     <string name="find_on_page" msgid="1946799233822820384">"在頁面中尋找"</string>
   <plurals name="matches_found">
-    <item quantity="one" msgid="8167147081136579439">"1 個相符項目"</item>
-    <item quantity="other" msgid="4641872797067609177">"第 <xliff:g id="INDEX">%d</xliff:g> 個相符項目 (共 <xliff:g id="TOTAL">%d</xliff:g> 個相符項目)"</item>
+    <!-- Modify Spreadst of 129900 can't show whole information on webpage start -->
+    <!-- <item quantity="one" msgid="8167147081136579439">"1 個相符項目"</item> -->
+    <!-- <item quantity="other" msgid="4641872797067609177">"第 <xliff:g id="INDEX">%d</xliff:g> 個相符項目 (共 <xliff:g id="TOTAL">%d</xliff:g> 個相符項目)"</item> -->
+    <item quantity="one" msgid="8167147081136579439">"1/1"</item>
+    <item quantity="other" msgid="4641872797067609177">"<xliff:g id="INDEX">%d</xliff:g>/<xliff:g id="TOTAL">%d</xliff:g>"</item>
+    <!-- Modify Spreadst of 129900 can't show whole information on webpage start -->
   </plurals>
     <string name="action_mode_done" msgid="7217581640461922289">"完成"</string>
     <string name="progress_unmounting" product="nosdcard" msgid="3923810448507612746">"正在卸載 USB 儲存裝置..."</string>

@@ -14,25 +14,29 @@
      limitations under the License.
 -->
 
+<!--Modify Spreadst of 129900 can't show whole information on webpage  start -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
     >
     <EditText android:id="@+id/edit"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:scrollHorizontally="true"
         android:inputType="text"
         android:hint="@string/find_on_page"
-        android:textSize="11sp"
+        android:textSize="15dp"
         android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
+        android:layout_marginRight="10dip"
         />
     <TextView android:id="@+id/matches"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_gravity="top"
-        android:textSize="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+	    android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?android:attr/textColorPrimary"
         />
 </LinearLayout>
+ <!--Modify Spreadst of 129900 can't show whole information on webpage  end -->
