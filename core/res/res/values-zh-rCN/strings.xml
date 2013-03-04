@@ -1496,6 +1496,7 @@
   <string msgid="5830814349250834225" product="nosdcard" name="media_shared">"某台计算机正在使用 USB 存储设备。"</string>
   <string msgid="5706130568133540435" product="default" name="media_shared">"目前有计算机正在使用 SD 卡。"</string>
   <string msgid="729192782197290385" name="media_unknown_state">"外部媒体处于未知状态。"</string>
+  <!-- SPRD: add for add format internal storage @{ -->
   <string name="progress_unmounting1">"正在卸载 内部存储设备..."</string>
   <string name="progress_erasing1">"正在格式化 内部存储设备..."</string>
   <string name="format_error1">"无法清除 内部存储设备。"</string>
@@ -1504,6 +1505,7 @@
   <string name="media_removed1">"内部存储设备已移除。"</string>
   <string name="media_shared1">"目前计算机正在使用 内部存储设备。"</string>
   <string name="media_unknown_state1">"内部媒体处于未知状态。"</string>
+  <!-- @} -->
   <string msgid="1778686618230011964" name="share">"分享"</string>
   <string msgid="4808270900322985960" name="find">"查找"</string>
   <string msgid="4337157977400211589" name="websearch">"网页搜索"</string>

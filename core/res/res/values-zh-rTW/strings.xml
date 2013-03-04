@@ -1493,6 +1493,7 @@
   <string product="nosdcard" name="media_shared">"某台電腦正在使用 USB 存放裝置。"</string>
   <string product="default" name="media_shared">"目前有電腦正在使用 SD 卡。"</string>
   <string name="media_unknown_state">"外部媒體處於未知狀態。"</string>
+  <!-- SPRD: add for add format internal storage @{ -->
   <string name="progress_unmounting1">"正在卸載 内部儲存裝置..."</string>
   <string name="progress_erasing1">"正在清除 内部儲存裝置..."</string>
   <string name="format_error1">"無法清除 内部儲存裝置。"</string>
@@ -1501,6 +1502,7 @@
   <string name="media_removed1">"内部儲存裝置已移除。"</string>
   <string name="media_shared1">"電腦目前正在使用 内部儲存裝置。"</string>
   <string name="media_unknown_state1">"内部媒體狀態不明。"</string>
+  <!-- @} -->
   <string name="share">"分享"</string>
   <string name="find">"查找"</string>
   <string name="websearch">"網頁搜索"</string>
