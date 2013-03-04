@@ -1195,6 +1195,16 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"某台计算机正在使用 USB 存储设备。"</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"目前有计算机正在使用 SD 卡。"</string>
     <string name="media_unknown_state" msgid="729192782197290385">"外部媒体处于未知状态。"</string>
+
+    <string name="progress_unmounting1">"正在卸载 内部存储设备..."</string>
+    <string name="progress_erasing1">"正在格式化 内部存储设备..."</string>
+    <string name="format_error1">"无法清除 内部存储设备。"</string>
+    <string name="media_bad_removal1">"内部存储设备尚未卸载就被移除。"</string>
+    <string name="media_checking1">"目前正在检查 内部存储设备。"</string>
+    <string name="media_removed1">"内部存储设备已移除。"</string>
+    <string name="media_shared1">"目前计算机正在使用 内部存储设备。"</string>
+    <string name="media_unknown_state1">"内部媒体处于未知状态。"</string>
+
     <string name="share" msgid="1778686618230011964">"分享"</string>
     <string name="find" msgid="4808270900322985960">"查找"</string>
     <string name="websearch" msgid="4337157977400211589">"网页搜索"</string>

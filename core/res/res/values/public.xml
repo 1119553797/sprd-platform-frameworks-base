@@ -3787,4 +3787,13 @@
   <java-symbol type="layout" name="showstorage" />
   <java-symbol type="string" name="myAppLoading" />
   <java-symbol type="string" name="myAppProcessing" />
+
+  <java-symbol type="string" name="format_error1" />
+  <java-symbol type="string" name="media_bad_removal1" />
+  <java-symbol type="string" name="media_checking1" />
+  <java-symbol type="string" name="media_removed1" />
+  <java-symbol type="string" name="media_shared1" />
+  <java-symbol type="string" name="media_unknown_state1" />
+  <java-symbol type="string" name="progress_erasing1" />
+  <java-symbol type="string" name="progress_unmounting1" />
 </resources>

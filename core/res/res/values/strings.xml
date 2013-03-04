@@ -3372,6 +3372,15 @@
     <!-- Text for message for an unknown external media state [CHAR LIMIT=NONE] -->
     <string name="media_unknown_state">External media in unknown state.</string>
 
+    <string name="progress_unmounting1">Unmounting internal storage...</string>
+    <string name="progress_erasing1">Erasing internal storage...</string>
+    <string name="format_error1">Couldn\'t erase internal storage.</string>
+    <string name="media_bad_removal1">Internal storage was removed before being unmounted.</string>
+    <string name="media_checking1">Internal storage is currently being checked.</string>
+    <string name="media_removed1">Internal storage has been removed.</string>
+    <string name="media_shared1">Internal storage is currently in use by a computer.</string>
+    <string name="media_unknown_state1">Internal media in unknown state.</string>
+
     <!-- Text for WebView's text selection Action Mode -->
     <!-- ActionBar action to share the current selection [CHAR LIMIT=10] -->
     <string name="share">Share</string>
