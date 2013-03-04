@@ -10914,6 +10914,7 @@ package android.media {
 
   public static abstract interface AudioRecord.OnRecordPositionUpdateListener {
     method public abstract void onMarkerReached(android.media.AudioRecord);
+    method public abstract void onMoreData(android.media.AudioRecord, java.nio.ByteBuffer, int);
     method public abstract void onPeriodicNotification(android.media.AudioRecord);
   }
 
