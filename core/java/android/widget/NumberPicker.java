@@ -883,6 +883,7 @@ public class NumberPicker extends LinearLayout {
                         ensureScrollWheelAdjusted();
                     }
                     onScrollStateChange(OnScrollListener.SCROLL_STATE_IDLE);
+                    invalidate();
                 }
                 mVelocityTracker.recycle();
                 mVelocityTracker = null;
