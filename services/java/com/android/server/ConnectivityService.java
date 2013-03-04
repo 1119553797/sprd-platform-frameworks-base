@@ -3267,19 +3267,15 @@ private NetworkStateTracker makeWimaxStateTracker() {
     }
 
     private boolean isMmsFeature(String feature) {
-        if (feature != null) {
-            return feature.startsWith(Phone.FEATURE_ENABLE_MMS);
-        } else {
-            return false;
-        }
+        return (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS +"0"))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS +"1"));
     }
 
     private boolean isDmFeature(String feature) {
-        if (feature != null) {
-            return feature.startsWith(Phone.FEATURE_ENABLE_DM);
-        } else {
-            return false;
-        }
+        return (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM +"0"))
+                || (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DM +"1"));
     }
 
     private int getPhoneIdByFeature(String feature, String defaultFeature) {

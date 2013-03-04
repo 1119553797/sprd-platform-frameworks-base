@@ -30,8 +30,6 @@ public abstract class CatLog {
 
         if (className.contains("com.android.stk1")) {
             Log.d("STK", "<1>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
-        } else if(className.contains("com.android.stk2")) {
-            Log.d("STK", "<2>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
         } else if(className.contains("com.android.stk")) {
             Log.d("STK", "<0>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
         }else{
