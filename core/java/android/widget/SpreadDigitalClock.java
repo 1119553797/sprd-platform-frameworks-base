@@ -52,6 +52,7 @@ public class SpreadDigitalClock extends RelativeLayout {
 
     String mFormat;
 
+    private TextView mWeek;
     private TextView mDate;
     private TextView mTime;
 
@@ -81,8 +82,8 @@ public class SpreadDigitalClock extends RelativeLayout {
         final LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.spread_digtal_clock, this,true);
 
-        mDate = (TextView)this.findViewById(R.id.spread_date);
-
+        mDate = (TextView) this.findViewById(R.id.spread_date);
+        mWeek = (TextView) this.findViewById(R.id.spread_week);
     }
 
     @Override
@@ -107,6 +108,7 @@ public class SpreadDigitalClock extends RelativeLayout {
                     CharSequence week = DateFormat.format("EEEE", mCalendar.getTime());
                     CharSequence date = DateFormat.getDateFormat(SpreadDigitalClock.this.getContext()).format(mCalendar.getTime());
                     CharSequence dow = SpreadDigitalClock.this.getContext().getString(com.android.internal.R.string.digtal_formatter, week, date);
+                    mWeek.setText(week);
                     mDate.setText(dow);
                     invalidate();
                     long now = SystemClock.uptimeMillis();
