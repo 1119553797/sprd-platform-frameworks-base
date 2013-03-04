@@ -889,7 +889,13 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
 
     public void
     dial(String address, int clirMode, UUSInfo uusInfo, boolean isStkCall, Message result) {
-        RILRequest rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
+        RILRequest rr;
+
+        if (address.indexOf('/') == -1) {
+            rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
+        } else {
+            rr = RILRequest.obtain(RIL_REQUEST_DIAL_EMERGENCY_CALL, result);
+        }
 
         rr.mp.writeString(address);
         rr.mp.writeInt(clirMode);

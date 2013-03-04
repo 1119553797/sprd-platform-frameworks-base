@@ -226,6 +226,12 @@ public final class GsmCallTracker extends CallTracker {
             setMute(false);
 
 //            cm.dial(pendingMO.address, clirMode, uusInfo, obtainCompleteMessage());
+            // Add for bug 121825 Start
+            if (PhoneNumberUtils.isCustomEmergencyNumber(pendingMO.address)) {
+                Log.d(LOG_TAG,"Pending MO is Custom Emergency call");
+                pendingMO.address = pendingMO.address + '/';
+            }
+            // Add for bug 121825 End
             cm.dial(pendingMO.address, clirMode, uusInfo, isStkCall, obtainCompleteMessage());
         }
 

@@ -1636,6 +1636,15 @@ public class PhoneNumberUtils
         return (number.equals("112") || number.equals("911"));
     }
 
+    // Add for bug 121825 Start
+    /**
+     * @hide
+     */
+    public static boolean isCustomEmergencyNumber(String number) {
+        return (isEmergencyNumber(number) && (CUSTOM_EMERGENCY_NUMBER.indexOf(number) != -1));
+    }
+    // Add for bug 121825 End
+
     /**
      * Checks if given number might *potentially* result in
      * a call to an emergency service on the current network.
