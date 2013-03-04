@@ -61,7 +61,9 @@ public class PhoneFactory {
     public static final int DEFAULT_PHONE_COUNT = 1;
     public static final int DEFAULT_PHONE_ID = 0;
     public static final int DEFAULT_DUAL_SIM_INIT_PHONE_ID = -1;
-
+    public static boolean UNIVERSEUI_SUPPORT = SystemProperties.getBoolean("universe_ui_support",false);
+    
+    
     protected static boolean isCardHandled[];
 
     //***** Class Methods
@@ -348,7 +350,9 @@ public class PhoneFactory {
             if (isUpdate && settingPhoneId != defaultPhoneId) {
                 updateDefaultPhoneId(settingPhoneId);
             }
-            setDefaultValue();
+            if (!UNIVERSEUI_SUPPORT) {
+                setDefaultValue();
+            }   
         } else {
             for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
                 Log.i(LOG_TAG, "phoneId" + "[" + i + "]" + isCardHandled[i]);
