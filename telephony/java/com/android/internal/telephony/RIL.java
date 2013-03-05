@@ -3779,6 +3779,7 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
             case RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU: return "RIL_REQUEST_ACKNOWLEDGE_INCOMING_GSM_SMS_WITH_PDU";
             case RIL_REQUEST_STK_SEND_ENVELOPE_WITH_STATUS: return "RIL_REQUEST_STK_SEND_ENVELOPE_WITH_STATUS";
             case RIL_REQUEST_VOICE_RADIO_TECH: return "RIL_REQUEST_VOICE_RADIO_TECH";
+            case RIL_REQUEST_DIAL_EMERGENCY_CALL: return "RIL_REQUEST_DIAL_EMERGENCY_CALL";
             default: return "<unknown request>";
         }
     }
