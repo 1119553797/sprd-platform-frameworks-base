@@ -503,7 +503,9 @@ public class CatService extends Handler implements AppInterface {
         intent.putExtra("STK CMD", cmdMsg);
         intent.putExtra("phone_id", mPhoneId);
         mContext.sendBroadcast(intent);
-        if (cmdParams.getCommandType() == AppInterface.CommandType.SEND_USSD) {
+        if (cmdParams.getCommandType() == AppInterface.CommandType.SEND_USSD ||
+             cmdParams.getCommandType() == AppInterface.CommandType.SEND_SS ||
+             cmdParams.getCommandType() == AppInterface.CommandType.SEND_SMS) {
         	mCurrntCmd = null;
         }
     }
