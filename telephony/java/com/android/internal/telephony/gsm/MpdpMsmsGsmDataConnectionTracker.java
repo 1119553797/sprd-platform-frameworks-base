@@ -479,7 +479,8 @@ public class MpdpMsmsGsmDataConnectionTracker extends MsmsGsmDataConnectionTrack
             if (DBG) log2("type is fiters");
             return Phone.APN_TYPE_NOT_AVAILABLE;
         }
-
+        //modify for <bug#130961> start
+        /*
         if (phone.getServiceState().getState() != ServiceState.STATE_IN_SERVICE
                 || !mGsmPhone.mSST.getDesiredPowerState()) {
             if (DBG)
@@ -487,7 +488,8 @@ public class MpdpMsmsGsmDataConnectionTracker extends MsmsGsmDataConnectionTrack
                         + mGsmPhone.mSST.getDesiredPowerState());
             return Phone.APN_REQUEST_FAILED;
         }
-
+        */
+        //modify for <bug#130961> start
         // just because it's active doesn't mean we had it explicitly requested before
         // (a broad default may handle many types).  make sure we mark it enabled
         // so if the default is disabled we keep the connection for others
