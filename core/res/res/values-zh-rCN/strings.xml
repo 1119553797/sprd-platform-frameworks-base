@@ -1363,4 +1363,6 @@
     <string name="myApp_Uninstall_ChkBox">卸载应用</string>
     <string name="myAppLoading">加载中\u2026</string>
     <string name="myAppProcessing">处理中\u2026</string>
+    
+    <string name="ringtone_waning">错误的文件，请重新选择</string>
 </resources>

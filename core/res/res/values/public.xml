@@ -3796,4 +3796,6 @@
   <java-symbol type="string" name="media_unknown_state1" />
   <java-symbol type="string" name="progress_erasing1" />
   <java-symbol type="string" name="progress_unmounting1" />
+  
+  <java-symbol type="string" name="ringtone_waning" />
 </resources>

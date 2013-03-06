@@ -3677,4 +3677,6 @@
     <string name="digtal_formatter">%2$s</string>
     <string name="description_target_call">Call</string>
     <string name="description_target_sms">Sms</string>
+    
+    <string name="ringtone_waning">The wrong file, please re-select</string>
 </resources>

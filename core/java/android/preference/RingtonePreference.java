@@ -25,6 +25,12 @@ import android.provider.Settings.System;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
+import java.io.File;
+import android.database.Cursor;
+import android.content.ContentResolver;
+import android.provider.MediaStore;
+import android.widget.Toast;
+import android.util.Log;
 /**
  * A {@link Preference} that allows the user to choose a ringtone from those on the device. 
  * The chosen ringtone's URI will be persisted as a string.
@@ -233,9 +239,15 @@ public class RingtonePreference extends Preference implements
             
             if (data != null) {
                 Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                
+                Log.d(TAG, "uri --> " +uri);
                 if (callChangeListener(uri != null ? uri.toString() : "")) {
-                    onSaveRingtone(uri);
+
+                    if(isMediaAvaliable(uri)){
+                        onSaveRingtone(uri);
+                    } else {
+                        Toast.makeText(getContext(), getContext().getText(com.android.internal.R.string.ringtone_waning).toString(), Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
             
@@ -243,6 +255,38 @@ public class RingtonePreference extends Preference implements
         }
         
         return false;
+    }
+
+    private boolean isMediaAvaliable(Uri uri) {
+        if (uri == null)
+            return true;
+        String uriStr = uri.toString();
+        File mediaFile = null;
+        if (uriStr.startsWith("file")) {
+            mediaFile = new File(uriStr.substring(7));
+        } else if (uriStr.startsWith("content://media/")) {
+            Cursor cursor = null;
+            try {
+                ContentResolver cr = getContext().getContentResolver();
+                cursor = cr.query(uri,
+                        new String[] { MediaStore.MediaColumns.DATA }, null,
+                        null, null);
+                if (cursor != null && cursor.getCount() > 0) {
+                    cursor.moveToFirst();
+                    String path = cursor.getString(0);
+                    mediaFile = new File(path);
+                }
+            } finally {
+                if (cursor != null)
+                    cursor.close();
+            }
+        } else
+            return true;
+
+        if (mediaFile == null || !mediaFile.exists() || mediaFile.length() <= 0)
+            return false;
+
+        return true;
     }
 
 }
