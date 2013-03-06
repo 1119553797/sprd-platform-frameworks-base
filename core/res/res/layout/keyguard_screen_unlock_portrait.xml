@@ -28,8 +28,8 @@
     android:gravity="center_horizontal">
 
     <com.android.internal.widget.DigitalClock android:id="@+id/time"
-        android:layout_marginTop="@dimen/keyguard_lockscreen_status_line_clockfont_top_margin"
-        android:layout_marginBottom="@dimen/keyguard_lockscreen_status_line_clockfont_bottom_margin"
+        android:layout_marginTop="10dip"
+        android:layout_marginBottom="10dip"
         android:layout_marginRight="@dimen/keyguard_lockscreen_status_line_font_right_margin"
         android:layout_gravity="right">
 
@@ -117,7 +117,7 @@
         android:id="@+id/carrier"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:layout_marginTop="-5dip"
+        android:layout_marginTop="-10dip"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
