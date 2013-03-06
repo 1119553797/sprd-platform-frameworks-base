@@ -601,6 +601,13 @@ public abstract class IccCard {
     private void onQueryFacilityLock(AsyncResult ar) {
         if(ar.exception != null) {
             if (mDbg) log("Error in querying facility lock:" + ar.exception);
+            //Bug 130984 begin
+            int RemainCount = mPhone.getRemainTimes(TelephonyManager.UNLOCK_PIN);
+            log("onQueryFacilityLock ==> getRemainTimes:"+RemainCount);
+            if(0 >= RemainCount) {
+             mIccPinLocked = true;
+            }
+            //Bug 130984 end
             return;
         }
 
@@ -786,6 +793,12 @@ public abstract class IccCard {
                     } else {
                         Log.e(mLogTag, "Error change facility fdn with exception "
                                 + ar.exception);
+                        //Bug 130984 begin
+                        //check sim PIN enable/disable
+                        mPhone.mCM.queryFacilityLock (
+                                CommandsInterface.CB_FACILITY_BA_SIM, "", serviceClassX,
+                                obtainMessage(EVENT_QUERY_FACILITY_LOCK_DONE));
+                        //Bug 130984 end
                     }
                     AsyncResult.forMessage(((Message)ar.userObj)).exception
                                                         = ar.exception;
