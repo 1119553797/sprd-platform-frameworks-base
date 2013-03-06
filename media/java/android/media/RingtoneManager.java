@@ -239,6 +239,7 @@ public class RingtoneManager {
 
     /* Add 20130130 Spreadst of 90412,the ringtone not ring start */
     private static Uri mDefaultRingtoneUri = Uri.parse("content://media/internal/audio/media/9");
+    private static Uri mDefaultNotificationUri = Uri.parse("content://media/internal/audio/media/7");
     /* Add 20130130 Spreadst of 90412,the ringtone not ring end */
     
     /**
@@ -673,11 +674,46 @@ public class RingtoneManager {
      * @return A {@link Uri} pointing to the default sound for the sound type.
      * @see #setActualDefaultRingtoneUri(Context, int, Uri)
      */
+
     public static Uri getActualDefaultRingtoneUri(Context context, int type) {
         String setting = getSettingForType(type);
         if (setting == null) return null;
         final String uriString = Settings.System.getString(context.getContentResolver(), setting);
-        return uriString != null ? Uri.parse(uriString) : null;
+        /* Modify 20130306 by Spreadst for bug88517  start */
+
+        Uri uri = ( uriString != null ? Uri.parse(uriString) : null);
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(uri,
+                    new String[] { MediaStore.Audio.Media.TITLE , MediaStore.Audio.Media.DATA }, null, null, null);
+            if (cursor != null && cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    File filePath = new File(cursor.getString(1));
+                    if(!filePath.exists() ) {
+                        if ((type & TYPE_RINGTONE) != 0) {
+                            uri = mDefaultRingtoneUri;
+                        } else if ((type & TYPE_NOTIFICATION) != 0) {
+                            uri = mDefaultNotificationUri;
+                        }
+                    }
+                }
+            } else {
+                if ((type & TYPE_RINGTONE) != 0) {
+                    uri = mDefaultRingtoneUri;
+                } else if ((type & TYPE_NOTIFICATION) != 0) {
+                    uri = mDefaultNotificationUri;
+                }
+            }
+        } catch (Exception sqle) {
+            Log.d(TAG, sqle.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+                cursor = null;
+            }
+        }
+        /* Modify 20130306 by Spreadst for bug88517  end */
+        return uri;
     }
     
     /**
