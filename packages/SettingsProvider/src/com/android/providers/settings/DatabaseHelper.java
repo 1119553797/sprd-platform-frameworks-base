@@ -1726,6 +1726,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadIntegerSetting(stmt, Settings.Secure.WIFI_MAX_DHCP_RETRY_COUNT,
                     R.integer.def_max_dhcp_retries);
+
+            //Modify for CMCC case: change default input method. START
+            boolean supportCMCC = false;
+            supportCMCC = SystemProperties.get("ro.operator").equals("cmcc");
+            if (supportCMCC) {
+                loadStringSetting(stmt, Settings.Secure.DEFAULT_INPUT_METHOD,
+                    R.string.config_default_input_method);
+            }
+            //Modify for CMCC case: change default input method. END.
+
         } finally {
             if (stmt != null) stmt.close();
         }
