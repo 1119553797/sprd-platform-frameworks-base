@@ -216,7 +216,7 @@ public class NetworkController extends BroadcastReceiver {
         void setWifiIndicators(boolean visible, boolean connected,int strengthIcon, int activityIcon,
                 String contentDescription);
         void setMobileDataIndicators(boolean visible, int strengthIcon, boolean mDataConnected, int activityIcon,
-                int typeIcon, String contentDescription, String typeContentDescription, int phoneColor,int cardIcon, int phoneId);
+                int typeIcon, String contentDescription, String typeContentDescription, int phoneColor,int cardId, int phoneId);
         void setIsAirplaneMode(boolean is);
     }
 
@@ -442,10 +442,11 @@ public class NetworkController extends BroadcastReceiver {
                     mMobileActivityIconId[mDDS],
                     mDataTypeIconId[mDDS],
                     mContentDescriptionWimax,
-                    mContentDescriptionDataType[mDDS],Color.TRANSPARENT, TelephonyIcons.DEFAULT_CARD, mDDS);
+                    mContentDescriptionDataType[mDDS],Color.TRANSPARENT, 0, mDDS);
         } else {
             // normal mobile data
             for (int i=0; i < numPhones; i++) {
+                int cardId = i + 1;
                 if(UNIVERSEUI_SUPPORT){
                     int simColor = mSimColor[i];
                     if(mAirplaneMode){
@@ -458,7 +459,7 @@ public class NetworkController extends BroadcastReceiver {
                         mMobileActivityIconId[i],
                         mDataTypeIconId[i],
                         mContentDescriptionPhoneSignal[i],
-                        mContentDescriptionDataType[i],simColor,TelephonyIcons.CARD[i], i);
+                        mContentDescriptionDataType[i],simColor,cardId, i);
                 }else{
                     cluster.setMobileDataIndicators(
                             mHasMobileDataFeature,
@@ -467,7 +468,7 @@ public class NetworkController extends BroadcastReceiver {
                             mMobileActivityIconId[i],
                             mDataTypeIconId[i],
                             mContentDescriptionPhoneSignal[i],
-                            mContentDescriptionDataType[i],Color.TRANSPARENT, TelephonyIcons.CARD[i], i);
+                            mContentDescriptionDataType[i],Color.TRANSPARENT, cardId, i);
                 }
             }
         }

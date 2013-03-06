@@ -159,11 +159,5 @@ class TelephonyIcons {
           R.drawable.stat_sys_data_fully_connected_roam,
           R.drawable.stat_sys_data_fully_connected_roam }
     };
-    static final int DEFAULT_CARD = 0;
-    static final int[] CARD = {
-        R.drawable.stat_sys_card1_sprd,
-        R.drawable.stat_sys_card2_sprd,
-        R.drawable.stat_sys_card3_sprd,
-    };
 }
 
