@@ -13378,7 +13378,6 @@ package android.net.wifi {
     method public boolean pingSupplicant();
     method public boolean reassociate();
     method public boolean reconnect();
-    method public boolean reconnectAP();
     method public boolean removeNetwork(int);
     method public boolean saveConfiguration();
     method public boolean setAutoConnect(boolean);

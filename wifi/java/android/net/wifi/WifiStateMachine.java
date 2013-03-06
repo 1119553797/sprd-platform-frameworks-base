@@ -3086,8 +3086,8 @@ public class WifiStateMachine extends StateMachine {
                     //add by spreadst_lc for cmcc wifi feature start
                     SupplicantState mSupplicantState = mWifiInfo.getSupplicantState();
                     if(supportCMCC && (mSupplicantState == SupplicantState.COMPLETED)) {
-                        Intent interruptIntent = new Intent("interruptforfaraway");
-                        interruptIntent.putExtra("wifi_last_ssid", mWifiInfo.getSSID());
+                        Intent interruptIntent = new Intent("wifi_disconnect_ap");
+                        interruptIntent.putExtra("xtra_networkInfo", mWifiInfo);
                         mContext.sendBroadcast(interruptIntent);
                     }
                     //add by spreadst_lc for cmcc wifi feature end
@@ -3922,17 +3922,6 @@ public class WifiStateMachine extends StateMachine {
 
     public boolean setMobileToWifiPolicy(int policy){
         return mWifiNative.setMobileToWifiPolicy(policy);
-    }
-    /**
-     * Initiate a reconnection to AP
-     *
-     * @return {@code true} if the operation succeeds, {@code false} otherwise
-     */
-    public synchronized boolean reconnectAPCommand() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED) {
-            return false;
-        }
-        return mWifiNative.reconnectAPCommand();
     }
 
    static void notifyMobileToWlanEvent(String ssid,int networkId) {

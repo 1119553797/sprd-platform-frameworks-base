@@ -1980,19 +1980,5 @@ public class WifiManager {
             return false;
         }
     }
-
-    /**
-     * Reconnect to the currently active access point, if we are currently
-     * disconnected. This may result in the asynchronous delivery of state
-     * change events.
-     * @return {@code true} if the operation succeeded
-     */
-    public boolean reconnectAP() {
-        try {
-            return mService.reconnectAP();
-        } catch (RemoteException e) {
-            return false;
-        }
-    }
     //add wifi api by spreadst_lc end
 }

@@ -110,7 +110,6 @@ interface IWifiManager
     //add wifi api by spreadst_lc start
     void setAutoConnect(boolean autoconnect);
     boolean setTrustListPriority(String ssid,int priority);
-    boolean reconnectAP();
     boolean setMobileToWifiPolicy(int policy);
     //add wifi api by spreadst_lc end
 }

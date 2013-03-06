@@ -61,10 +61,6 @@ public class WifiNative {
     public boolean setMobileToWifiPolicy(int policy) {
         return doBooleanCommand("MOBILE2WLAN_POLICY "+policy);
     }
-
-    public boolean reconnectAPCommand() {
-        return doBooleanCommand("RECONNECTAP");
-    }
     //add wifi api by spreadst_lc end
 
     public native static boolean loadDriver();

@@ -1780,16 +1780,6 @@ public class WifiService extends IWifiManager.Stub {
         enforceChangePermission();
         return mWifiStateMachine.setMobileToWifiPolicy(policy);
     }
-
-    /**
-     * see {@link android.net.wifi.WifiManager#reconnect()}
-     * @return {@code true} if the operation succeeds
-     */
-    public boolean reconnectAP() {
-        enforceChangePermission();
-
-        return mWifiStateMachine.reconnectAPCommand();
-    }
     //add by spreadst_lc for cmcc wifi feature end
 
 }
