@@ -24,6 +24,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.os.SystemProperties;
 import android.text.TextUtils.TruncateAt;
 import android.view.Gravity;
 import android.view.View;
@@ -68,6 +69,10 @@ public class ScrollingTabContainerView extends HorizontalScrollView
 
     private static final TimeInterpolator sAlphaInterpolator = new DecelerateInterpolator();
 
+  //add for universe_ui_support
+    private static String universeSupportKey = "universe_ui_support";
+    private static boolean isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, false);
+
     private static final int FADE_DURATION = 200;
 
     public ScrollingTabContainerView(Context context) {
@@ -79,6 +84,9 @@ public class ScrollingTabContainerView extends HorizontalScrollView
         mStackedTabMaxWidth = abp.getStackedTabMaxWidth();
 
         mTabLayout = createTabLayout();
+        if(isUniverseSupport){
+            mTabLayout.setDividerDrawable(null);
+        }
         addView(mTabLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
     }
