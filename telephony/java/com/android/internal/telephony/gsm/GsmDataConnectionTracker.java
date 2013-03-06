@@ -247,6 +247,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
         initApnContextsAndDataConnection();
         broadcastMessenger();
+        initApnActivePdpFilter();
 
         //add by spreadst_lc for cmcc wifi feature start
         supportCMCC = SystemProperties.get("ro.operator").equals("cmcc");
