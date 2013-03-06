@@ -1170,6 +1170,15 @@ class WifiConfigStore {
                 break setVariables;
             }
 
+            if (config.home_ap != -1 && !mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.homeApVarName,
+                    Integer.toString(config.home_ap))) {
+                loge(config.SSID + ": failed to set home_ap: "
+                        +config.home_ap);
+                break setVariables;
+            }
+
             if (config.hiddenSSID && !mWifiNative.setNetworkVariable(
                         netId,
                         WifiConfiguration.hiddenSSIDVarName,
@@ -1392,6 +1401,15 @@ class WifiConfigStore {
         if (!TextUtils.isEmpty(value)) {
             try {
                 config.priority = Integer.parseInt(value);
+            } catch (NumberFormatException ignore) {
+            }
+        }
+
+        value = mWifiNative.getNetworkVariable(netId, WifiConfiguration.homeApVarName);
+        config.home_ap = -1;
+        if (!TextUtils.isEmpty(value)) {
+            try {
+                config.home_ap = Integer.parseInt(value);
             } catch (NumberFormatException ignore) {
             }
         }

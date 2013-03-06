@@ -86,6 +86,8 @@ public class WifiConfiguration implements Parcelable {
     /** {@hide} */
     public static final String wapiPskTypeVarName = "psk_key_type";
     /** {@hide} */
+    public static final String homeApVarName = "home_ap";
+    /** {@hide} */
     public static final int WAPI_ASCII_PASSWORD = 0;
     /** {@hide} */
     public static final int WAPI_HEX_PASSWORD = 1;
@@ -355,6 +357,12 @@ public class WifiConfiguration implements Parcelable {
     public int priority;
 
     /**
+     * Home_ap be set 1 or 0 to indicate wether the ap is home network or not
+     * @hide
+     */
+    public int home_ap;
+
+    /**
      * This is a network that does not broadcast its SSID, so an
      * SSID-specific probe request must be used for scans.
      */
@@ -466,6 +474,7 @@ public class WifiConfiguration implements Parcelable {
         wepKeys = new String[4];
         for (int i = 0; i < wepKeys.length; i++)
             wepKeys[i] = null;
+        home_ap = -1;
         // Broadcom, WAPI
         wapiAsCert = null;
         wapiUserCert = null;
@@ -665,6 +674,7 @@ public class WifiConfiguration implements Parcelable {
             for (int i = 0; i < wepKeys.length; i++)
                 wepKeys[i] = source.wepKeys[i];
 
+            home_ap = source.home_ap;
             wepTxKeyIndex = source.wepTxKeyIndex;
             priority = source.priority;
             hiddenSSID = source.hiddenSSID;
@@ -695,6 +705,7 @@ public class WifiConfiguration implements Parcelable {
             dest.writeString(wepKey);
         dest.writeInt(wepTxKeyIndex);
         dest.writeInt(priority);
+        dest.writeInt(home_ap);
         dest.writeInt(hiddenSSID ? 1 : 0);
 
         writeBitSet(dest, allowedKeyManagement);
@@ -735,6 +746,7 @@ public class WifiConfiguration implements Parcelable {
                     config.wepKeys[i] = in.readString();
                 config.wepTxKeyIndex = in.readInt();
                 config.priority = in.readInt();
+                config.home_ap = in.readInt();
                 config.hiddenSSID = in.readInt() != 0;
                 config.allowedKeyManagement   = readBitSet(in);
                 config.allowedProtocols       = readBitSet(in);
