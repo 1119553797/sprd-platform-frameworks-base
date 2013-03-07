@@ -155,4 +155,7 @@
 
     <!-- Default value of Sms Validity -->
     <integer name="def_sms_validity">255</integer>
+
+    <!-- Default value of default_input_method  -->
+    <string name="config_default_input_method" translatable="false"></string>
 </resources>
