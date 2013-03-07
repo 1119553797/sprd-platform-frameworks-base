@@ -1723,4 +1723,34 @@ public class TelephonyManager {
                 Context.MODE_WORLD_READABLE + Context.MODE_WORLD_WRITEABLE);
     }
 
+    /**
+     * @hide
+     */
+    public static boolean isCurrentCard(int phoneId) {
+        String operator = SystemProperties.get("ro.operator", "");
+        String numeric = SystemProperties
+        .get(PhoneFactory.getProperty(TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC, phoneId));
+        Log.d("zhaishaohua","isCuccCard called: numeric = " + numeric);
+        if ("cucc".equals(operator)) {
+            if (numeric.equals("46001") || numeric.equals("46006")) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if ("cmcc".equals(operator)) {
+            if (numeric.equals("46000") || numeric.equals("46002") || numeric.equals("46007")) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if ("ctcc".equals(operator)) {
+            if (numeric.equals("46003")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
 }
