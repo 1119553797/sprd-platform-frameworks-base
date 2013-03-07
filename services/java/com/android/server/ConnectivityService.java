@@ -699,8 +699,13 @@ private NetworkStateTracker makeWimaxStateTracker() {
         if (mNetTrackers[mNetworkPreference].getNetworkInfo().isConnected())
             return;
 
-        if (!mNetTrackers[mNetworkPreference].isAvailable())
+        if (!mNetTrackers[mNetworkPreference].isAvailable()) {
             return;
+        } else if(ConnectivityManager.getDefaultNetworkType(mNetworkPreference) != ConnectivityManager.TYPE_WIFI) {
+            if(!getMobileDataEnabled()) {
+                return;
+            }
+        }
 
         for (int t=0; t <= ConnectivityManager.MAX_RADIO_TYPE; t++) {
             if (t != mNetworkPreference && mNetTrackers[t] != null &&
@@ -1953,6 +1958,13 @@ private NetworkStateTracker makeWimaxStateTracker() {
         // snapshot isFailover, because sendConnectedBroadcast() resets it
         boolean isFailover = info.isFailover();
         final NetworkStateTracker thisNet = mNetTrackers[type];
+
+        if(type != ConnectivityManager.TYPE_WIFI &&
+                mNetworkPreference != ConnectivityManager.DEFAULT_NETWORK_PREFERENCE) {
+            mNetworkPreference = type;
+            final ContentResolver cr = mContext.getContentResolver();
+            Settings.Secure.putInt(cr, Settings.Secure.NETWORK_PREFERENCE, mNetworkPreference);
+        }
 
         // if this is a default net and other default is running
         // kill the one not preferred
