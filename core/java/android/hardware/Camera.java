@@ -1407,6 +1407,13 @@ public class Camera {
      * @see #getParameters()
      */
     public void setParameters(Parameters params) {
+        if ("invalid".equals(params.getFocusMode())) {
+                throw new RuntimeException("Throw exception for invalid parameters,Because FocusMode parameters was invalid.");
+        }
+
+        if ("invalid".equals(params.getFlashMode())) {
+                throw new RuntimeException("Throw exception for invalid parameters,Because FlashMode parameters was invalid.");
+        }
         native_setParameters(params.flatten());
     }
 
@@ -3394,7 +3401,63 @@ public class Camera {
          * @see #getFocusAreas()
          */
         public void setFocusAreas(List<Area> focusAreas) {
-            set(KEY_FOCUS_AREAS, focusAreas);
+		if (focusAreas != null ) {
+			if (focusAreas.size() > getMaxNumFocusAreas()) {
+				throw new IllegalArgumentException("llegalArgument focus area is invalid NumFocusAreas must < 4.");
+			}
+			for (int i = 0; i < focusAreas.size(); i++) {
+				if ((focusAreas.get(i).rect.left >= -1000)  ) {
+					set(KEY_FOCUS_AREAS, focusAreas);
+				} else {
+					throw new IllegalArgumentException("llegalArgument focus area is invalid left must >= -1000.");
+				}
+
+				if ((focusAreas.get(i).rect.top >= -1000)  ) {
+					set(KEY_FOCUS_AREAS, focusAreas);
+				} else {
+					throw new IllegalArgumentException("llegalArgument focus area is invalid top must >= -1000.");
+				}
+
+				if ((focusAreas.get(i).rect.right <= 1000)  ) {
+					set(KEY_FOCUS_AREAS, focusAreas);
+				} else {
+					throw new IllegalArgumentException("llegalArgument focus area is invalid right must <= 1000.");
+				}
+
+				if ((focusAreas.get(i).rect.bottom <= 1000)  ) {
+					set(KEY_FOCUS_AREAS, focusAreas);
+				} else {
+					throw new IllegalArgumentException("llegalArgument focus area is invalid bottom must <= 1000.");
+				}
+
+				if ((focusAreas.get(i).weight >= 1)) {
+					set(KEY_FOCUS_AREAS, focusAreas);
+				} else {
+					throw new IllegalArgumentException("llegalArgument focus area is invalid ,weight must be >= 1 .");
+				}
+
+				if ((focusAreas.get(i).weight <= 1000)) {
+					set(KEY_FOCUS_AREAS, focusAreas);
+				} else {
+					throw new IllegalArgumentException("llegalArgument focus area is invalid ,weight must be <= 1000.");
+				}
+
+				if ((focusAreas.get(i).rect.left) < (focusAreas.get(i).rect.right)) {
+					set(KEY_FOCUS_AREAS, focusAreas);
+				} else {
+					throw new IllegalArgumentException("llegalArgument focus area is invalid left must < right.");
+				}
+
+				if ((focusAreas.get(i).rect.top) < (focusAreas.get(i).rect.bottom)) {
+					set(KEY_FOCUS_AREAS, focusAreas);
+				} else {
+					throw new IllegalArgumentException("llegalArgument focus area is invalid top must < bottom.");
+				}
+
+			}
+		}else {
+			set(KEY_FOCUS_AREAS, focusAreas);
+		}
         }
 
         /**
