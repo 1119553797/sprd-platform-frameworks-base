@@ -66,6 +66,7 @@ public class TelephonyManager {
     public static final int MODE_VOICE = 0;
     public static final int MODE_VEDIO = 1;
     public static final int MODE_MMS = 2;
+    public static final int PHONE_ID_INVALID = -1;
     private static final String dualCardDefaultPhone = "com.android.dualcard_settings_preferences";
     private static final String simCardFavoritekey = "sim_card_favorite";
     private static final String simCardForwardSettingKey = "sim_forward_setting";
@@ -1523,7 +1524,11 @@ public class TelephonyManager {
      * @hide
      */
     public static int getDefaultSim(Context context, int mode) {
+        if (getPhoneCount() == 1) {
+            return 0;
+        }
         String phoneIdKey = "";
+        int phoneId = PHONE_ID_INVALID;
         switch (mode) {
             case MODE_VOICE:
                 phoneIdKey = Settings.System.MULTI_SIM_VOICE_CALL;
@@ -1537,8 +1542,27 @@ public class TelephonyManager {
             default:
                 break;
         }
-        return Settings.System.getInt(context.getContentResolver(),
+        phoneId = Settings.System.getInt(context.getContentResolver(),
                 phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+        int iccCount = 0;
+        int avtivedPhone = PHONE_ID_INVALID;
+        for (int i = 0; i < getPhoneCount(); ++i) {
+            TelephonyManager tmp = getDefault(i);
+            if (tmp != null && tmp.hasIccCard()) {
+                iccCount++;
+                avtivedPhone = i;
+            }
+        }
+        if (PHONE_ID_INVALID == phoneId && iccCount > 1) {
+            return PHONE_ID_INVALID;
+        }
+        if (iccCount == 1) {
+            phoneId = avtivedPhone;
+            TelephonyManager.setDefaultSim(context, MODE_MMS, phoneId);
+            TelephonyManager.setDefaultSim(context, MODE_VOICE, phoneId);
+            TelephonyManager.setDefaultSim(context, MODE_VEDIO, phoneId);
+        }
+        return phoneId;
     }
 
     /**
