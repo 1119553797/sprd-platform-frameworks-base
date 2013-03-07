@@ -3021,11 +3021,7 @@ public class WifiStateMachine extends StateMachine {
                         netId = result.getNetworkId();
                     }
 
-                    //add by spreadst_lc for cmcc wifi feature start
-                    boolean reconnectOk = mWifiNative.reconnect();
-
-                    if (mWifiConfigStore.selectNetwork(netId) && reconnectOk) {
-                    //add by spreadst_lc for cmcc wifi feature end
+                    if (mWifiConfigStore.selectNetwork(netId) && mWifiNative.reconnect()) {
                         /* The state tracker handles enabling networks upon completion/failure */
                         mSupplicantStateTracker.sendMessage(WifiManager.CONNECT_NETWORK);
                         replyToMessage(message, WifiManager.CONNECT_NETWORK_SUCCEEDED);

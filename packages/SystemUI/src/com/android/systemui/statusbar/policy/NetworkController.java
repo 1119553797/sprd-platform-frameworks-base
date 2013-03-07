@@ -532,7 +532,7 @@ public class NetworkController extends BroadcastReceiver {
                     Settings.Secure.WIFI_AUTO_CONNECT,0) == 0) {
                 showDialog(mWifiInfo);
              }
-             if (requireShowDisconnDialog(mWifiInfo)) {
+             if (requireShowDisconnDialog(mWifiInfo,true)) {
                 showWifiDisconnDialog();
              }
         }
@@ -1025,6 +1025,9 @@ public class NetworkController extends BroadcastReceiver {
                 }
             } else if (!mWifiConnected) {
                 mWifiSsid = null;
+                if (requireShowDisconnDialog(null,false)) {
+                    showWifiDisconnDialog();
+                }
             }
         } else if (action.equals(WifiManager.RSSI_CHANGED_ACTION)) {
             mWifiRssi = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, -200);
@@ -1831,9 +1834,11 @@ public class NetworkController extends BroadcastReceiver {
         d.show();
     }
 
-    private boolean requireShowDisconnDialog(WifiInfo mWifiInfo) {
-        if(availableApConfigs(mWifiInfo) != null) {
-            return false;
+    private boolean requireShowDisconnDialog(WifiInfo mWifiInfo,boolean isDisconnect) {
+        if (isDisconnect) {
+            if(availableApConfigs(mWifiInfo) != null) {
+                return false;
+            }
         }
 
         boolean isDownload = false;
