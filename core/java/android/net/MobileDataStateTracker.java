@@ -108,7 +108,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 "net.veth0.dns2",
                 //xiaolong modify for <Bug#107850> start
                 "net.veth1.dns1",
-                "net.veth2.dns2",
+                "net.veth1.dns2",
                 //xiaolong modify for <Bug#107850> end
                 "net.ppp0.dns1",
                 "net.ppp0.dns2",
