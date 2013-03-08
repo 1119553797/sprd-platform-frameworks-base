@@ -227,12 +227,14 @@ public final class GsmCallTracker extends CallTracker {
 
 //            cm.dial(pendingMO.address, clirMode, uusInfo, obtainCompleteMessage());
             // Add for bug 121825 Start
+            String tmpAddr = pendingMO.address;
             if (PhoneNumberUtils.isCustomEmergencyNumber(pendingMO.address)) {
                 Log.d(LOG_TAG,"Pending MO is Custom Emergency call");
-                pendingMO.address = pendingMO.address + '/';
+                tmpAddr = tmpAddr + "/1";
             }
+            //cm.dial(pendingMO.address, clirMode, uusInfo, isStkCall, obtainCompleteMessage());
+            cm.dial(tmpAddr, clirMode, uusInfo, isStkCall, obtainCompleteMessage());
             // Add for bug 121825 End
-            cm.dial(pendingMO.address, clirMode, uusInfo, isStkCall, obtainCompleteMessage());
         }
 
         updatePhoneState();
