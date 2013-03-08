@@ -1026,61 +1026,6 @@ class WifiConfigStore {
                         allowedProtocolsString);
                 break setVariables;
             }
-            // Broadcom, WAPI
-            if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WAPI_PSK)) {
-                if (!mWifiNative.setNetworkVariable(
-                    netId,
-                    WifiConfiguration.wapiPskTypeVarName,
-                    Integer.toString(config.wapiPskType))) {
-                    Log.d(TAG, config.SSID + ": failed to set WAPI_PSK key type: "+
-                                config.wapiPskType);
-                    break setVariables;
-                }
-
-                // Prevent client screw-up by passing in a WifiConfiguration we gave it
-                // by preventing "*" as a key.
-                if (config.preSharedKey != null && !config.preSharedKey.equals("*") &&
-                    !mWifiNative.setNetworkVariable(
-                    netId,
-                    WifiConfiguration.pskVarName,
-                    config.preSharedKey)) {
-                    Log.d(TAG, "failed to set psk: "+
-                                config.preSharedKey);
-                    break setVariables;
-                }
-            }
-            else if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WAPI_CERT)) {
-                if (!mWifiNative.setNetworkVariable(
-                    netId,
-                    WifiConfiguration.wapiCertIndexVarName,
-                    Integer.toString(config.wapiCertIndex))) {
-                    Log.d(TAG, config.SSID + ": failed to set WAPI_CERT index: "+
-                                config.wapiCertIndex);
-                    break setVariables;
-                }
-
-                if (config.wapiAsCert != null &&
-                    !mWifiNative.setNetworkVariable(
-                    netId,
-                    WifiConfiguration.wapiAsCertVarName,
-                    config.wapiAsCert)) {
-                    Log.d(TAG, "failed to set WAPI_CERT as cert: "+
-                                config.wapiAsCert);
-                    break setVariables;
-                }
-
-                if (config.wapiUserCert != null &&
-                    !mWifiNative.setNetworkVariable(
-                    netId,
-                    WifiConfiguration.wapiUserCertVarName,
-                    config.wapiUserCert)) {
-                    Log.d(TAG, "failed to set WAPI_CERT user cert: "+
-                                config.wapiUserCert);
-                    break setVariables;
-                }
-            }
-            else {
-            // Broadcom, WAPI
 
             String allowedAuthAlgorithmsString =
                 makeString(config.allowedAuthAlgorithms, WifiConfiguration.AuthAlgorithm.strings);
@@ -1130,6 +1075,60 @@ class WifiConfigStore {
                 break setVariables;
             }
 
+            // Broadcom, WAPI
+            if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WAPI_PSK)) {
+                if (!mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.wapiPskTypeVarName,
+                    Integer.toString(config.wapiPskType))) {
+                    Log.d(TAG, config.SSID + ": failed to set WAPI_PSK key type: "+
+                                config.wapiPskType);
+                    break setVariables;
+                }
+
+                // Prevent client screw-up by passing in a WifiConfiguration we gave it
+                // by preventing "*" as a key.
+                if (config.preSharedKey != null && !config.preSharedKey.equals("*") &&
+                    !mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.pskVarName,
+                    config.preSharedKey)) {
+                    Log.d(TAG, "failed to set psk: "+
+                                config.preSharedKey);
+                    break setVariables;
+                }
+            } else if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WAPI_CERT)) {
+                if (!mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.wapiCertIndexVarName,
+                    Integer.toString(config.wapiCertIndex))) {
+                    Log.d(TAG, config.SSID + ": failed to set WAPI_CERT index: "+
+                                config.wapiCertIndex);
+                    break setVariables;
+                }
+
+                if (config.wapiAsCert != null &&
+                    !mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.wapiAsCertVarName,
+                    config.wapiAsCert)) {
+                    Log.d(TAG, "failed to set WAPI_CERT as cert: "+
+                                config.wapiAsCert);
+                    break setVariables;
+                }
+
+                if (config.wapiUserCert != null &&
+                    !mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.wapiUserCertVarName,
+                    config.wapiUserCert)) {
+                    Log.d(TAG, "failed to set WAPI_CERT user cert: "+
+                                config.wapiUserCert);
+                    break setVariables;
+                }
+            }
+            // Broadcom, WAPI
+
             boolean hasSetKey = false;
             if (config.wepKeys != null) {
                 for (int i = 0; i < config.wepKeys.length; i++) {
@@ -1157,9 +1156,6 @@ class WifiConfigStore {
                     break setVariables;
                 }
             }
-            // Broadcom, WAPI
-            }
-            // Broadcom, WAPI
 
             if (!mWifiNative.setNetworkVariable(
                         netId,
@@ -1678,7 +1674,11 @@ class WifiConfigStore {
             key = config.SSID + KeyMgmt.strings[KeyMgmt.WPA_EAP];
         } else if (config.wepKeys[0] != null) {
             key = config.SSID + "WEP";
-        } else {
+        } else if (config.allowedKeyManagement.get(KeyMgmt.WAPI_PSK)) {
+            key = config.SSID + KeyMgmt.strings[KeyMgmt.WAPI_PSK];
+        } else if (config.allowedKeyManagement.get(KeyMgmt.WAPI_CERT)) {
+            key = config.SSID + KeyMgmt.strings[KeyMgmt.WAPI_CERT];
+        }else {
             key = config.SSID + KeyMgmt.strings[KeyMgmt.NONE];
         }
 
