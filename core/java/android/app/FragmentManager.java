@@ -1288,7 +1288,16 @@ final class FragmentManagerImpl extends FragmentManager {
 
     public void enqueueAction(Runnable action, boolean allowStateLoss) {
         if (!allowStateLoss) {
-            checkStateLoss();
+            try {
+                checkStateLoss();
+            } catch (IllegalStateException e) {
+                if (android.os.Debug.isMonkey()) {
+                    Log.e(TAG, "IllegalStateException: Can not perform this action after onSaveInstanceState");
+                    return;
+                } else {
+                    throw e;
+                }
+            }
         }
         synchronized (this) {
             if (mActivity == null) {
@@ -1368,7 +1377,12 @@ final class FragmentManagerImpl extends FragmentManager {
         if (mExecutingActions) {
             throw new IllegalStateException("Recursive entry to executePendingTransactions");
         }
-        
+
+        if (null == mActivity && android.os.Debug.isMonkey()) {
+            Log.e(TAG, "Activity had been destroyed(execPendingActions)!");
+            return false;
+        }
+
         if (Looper.myLooper() != mActivity.mHandler.getLooper()) {
             throw new IllegalStateException("Must be called from main thread of process");
         }
