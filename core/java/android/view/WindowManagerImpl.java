@@ -372,6 +372,9 @@ public class WindowManagerImpl implements WindowManager {
 
         synchronized (this) {
             int index = findViewLocked(view, true);
+            if (index < 0) {
+                return;
+            }
             ViewRootImpl root = mRoots[index];
             mParams[index] = wparams;
             root.setLayoutParams(wparams, false);
@@ -381,19 +384,29 @@ public class WindowManagerImpl implements WindowManager {
     public void removeView(View view) {
         synchronized (this) {
             int index = findViewLocked(view, true);
+            if (index < 0) {
+                return;
+            }
             View curView = removeViewLocked(index);
             if (curView == view) {
                 return;
             }
-            
-            throw new IllegalStateException("Calling with view " + view
+
+            if (null == curView && android.os.Debug.isMonkey()) {
+                Log.e("WindowManagerImpl", "The ViewAncestor is null in monkey test!");
+            } else {
+                throw new IllegalStateException("Calling with view " + view
                     + " but the ViewAncestor is attached to " + curView);
+            }
         }
     }
 
     public void removeViewImmediate(View view) {
         synchronized (this) {
             int index = findViewLocked(view, true);
+            if (index < 0) {
+                return;
+            }
             ViewRootImpl root = mRoots[index];
             View curView = root.getView();
             
@@ -684,8 +697,12 @@ public class WindowManagerImpl implements WindowManager {
                 }
             }
             if (required) {
-                throw new IllegalArgumentException(
+                if (android.os.Debug.isMonkey()) {
+                    Log.e("WindowManager", "findViewLocked - not find. view: " + view + ", count: " + count);
+                } else {
+                    throw new IllegalArgumentException(
                         "View not attached to window manager");
+                }
             }
             return -1;
         }
