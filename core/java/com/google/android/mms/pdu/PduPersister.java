@@ -357,6 +357,13 @@ public class PduPersister {
         return null;
     }
 
+    private byte[] getByteArrayFromPartColumn_Encode(Cursor c, int columnIndex){
+        if (!c.isNull(columnIndex)) {
+            return new EncodedStringValue(c.getString(columnIndex)).getTextString();
+        }
+        return null;
+    }
+
     private PduPart[] loadParts(long msgId) throws MmsException {
         Cursor c = SqliteWrapper.query(mContext, mContentResolver,
                 Uri.parse("content://mms/" + msgId + "/part"),
@@ -395,7 +402,7 @@ public class PduPersister {
                     part.setContentId(contentId);
                 }
 
-                byte[] contentLocation = getByteArrayFromPartColumn(
+                byte[] contentLocation = getByteArrayFromPartColumn_Encode(
                         c, PART_COLUMN_CONTENT_LOCATION);
                 if (contentLocation != null) {
                     part.setContentLocation(contentLocation);
@@ -906,8 +913,10 @@ public class PduPersister {
         }
 
         if (part.getContentLocation() != null) {
-            value = toIsoString(part.getContentLocation());
-            values.put(Part.CONTENT_LOCATION, (String) value);
+//            value = toIsoString(part.getContentLocation());
+//            values.put(Part.CONTENT_LOCATION, (String) value);
+            String location = new String(part.getContentLocation());
+            values.put(Part.CONTENT_LOCATION, location);
         }
 
         Uri res = SqliteWrapper.insert(mContext, mContentResolver, uri, values);
@@ -1285,8 +1294,10 @@ public class PduPersister {
         }
 
         if (part.getContentLocation() != null) {
-            value = toIsoString(part.getContentLocation());
-            values.put(Part.CONTENT_LOCATION, (String) value);
+//            value = toIsoString(part.getContentLocation());
+//            values.put(Part.CONTENT_LOCATION, (String) value);
+            String location = new String(part.getContentLocation());
+            values.put(Part.CONTENT_LOCATION, location);
         }
 
         SqliteWrapper.update(mContext, mContentResolver, uri, values, null, null);
