@@ -1165,7 +1165,7 @@ please see themes_device_defaults.xml.
         <item name="actionModeWebSearchDrawable">@android:drawable/ic_menu_search_holo_dark</item>
 
         <item name="dividerVertical">?android:attr/listDivider</item>
-        <item name="dialogButtonBarDividerVertical">@android:drawable/dialog_button_bar_divider_holo_dark</item>
+        <item name="dialogButtonBarDividerVertical">@android:drawable/dialog_buttonbar_divider_holo_dark</item>
         <item name="dividerHorizontal">?android:attr/listDivider</item>
         <item name="buttonBarStyle">@android:style/Holo.ButtonBar</item>
         <item name="dialogButtonBarStyle">@android:style/Holo.Dialog.ButtonBar</item>
@@ -1486,7 +1486,7 @@ please see themes_device_defaults.xml.
         <item name="actionModeWebSearchDrawable">@android:drawable/ic_menu_search_holo_light</item>
 
         <item name="dividerVertical">?android:attr/listDivider</item>
-        <item name="dialogButtonBarDividerVertical">@android:drawable/dialog_button_bar_divider_holo_light</item>
+        <item name="dialogButtonBarDividerVertical">@android:drawable/dialog_buttonbar_divider_holo_light</item>
         <item name="dividerHorizontal">?android:attr/listDivider</item>
         <item name="buttonBarStyle">@android:style/Holo.Light.ButtonBar</item>
         <item name="dialogButtonBarStyle">@android:style/Holo.Light.Dialog.ButtonBar</item>
