@@ -1548,9 +1548,13 @@ public class TelephonyManager {
         int avtivedPhone = PHONE_ID_INVALID;
         for (int i = 0; i < getPhoneCount(); ++i) {
             TelephonyManager tmp = getDefault(i);
-            if (tmp != null && tmp.hasIccCard()) {
-                iccCount++;
-                avtivedPhone = i;
+            if (tmp != null) {
+                if (tmp.hasIccCard()) {
+                    iccCount++;
+                    avtivedPhone = i;
+                } else if (phoneId == i) {
+                    phoneId = PHONE_ID_INVALID;
+                }
             }
         }
         if (PHONE_ID_INVALID == phoneId && iccCount > 1) {

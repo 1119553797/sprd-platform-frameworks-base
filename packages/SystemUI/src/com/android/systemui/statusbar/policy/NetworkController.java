@@ -449,6 +449,7 @@ public class NetworkController extends BroadcastReceiver {
                 int cardId = i + 1;
                 if(UNIVERSEUI_SUPPORT){
                     int simColor = mSimColor[i];
+                    updateTelephonySignalStrength(i);
                     if(mAirplaneMode){
                         simColor = Color.TRANSPARENT;
                     }
