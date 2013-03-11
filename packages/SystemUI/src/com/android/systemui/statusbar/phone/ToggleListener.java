@@ -632,7 +632,12 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
 
     private boolean noCanUsedCard() {
         if (numPhones > 1) {
-            if ((!hasCard[0] || isStandby[0]) && (!hasCard[1] || isStandby[1])) {
+            boolean noCanUsed = true;
+            for (int i=0;i<numPhones;i++){
+                noCanUsed &= (!hasCard[i] || isStandby[i]) ;
+            }
+            Log.d(TAG, "noCanUsed= " + noCanUsed);
+            if(noCanUsed){
                 Log.d(TAG, "updateDataNetworkBtn dsds  no card or standby");
                 return true;
             }
