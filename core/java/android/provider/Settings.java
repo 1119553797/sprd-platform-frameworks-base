@@ -1213,6 +1213,8 @@ public final class Settings {
          * @hide
          */
 		public static final String POWER_ON_STANDBY_SELECT = "power_on_standby_select";
+
+        public static final String AVALIABLE_CARD_COUNTS = "avaliable_cards_counts";
         /**
          * Constant for use in AIRPLANE_MODE_RADIOS to specify Bluetooth radio.
          */
