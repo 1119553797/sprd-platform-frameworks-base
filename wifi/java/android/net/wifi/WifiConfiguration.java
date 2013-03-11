@@ -664,10 +664,10 @@ public class WifiConfiguration implements Parcelable {
             BSSID = source.BSSID;
             preSharedKey = source.preSharedKey;
             // Broadcom, WAPI
-            wapiAsCert = null;
-            wapiUserCert = null;
-            wapiCertIndex = -1;
-            wapiPskType = -1;
+            wapiAsCert = source.wapiAsCert;
+            wapiUserCert = source.wapiUserCert;
+            wapiCertIndex = source.wapiCertIndex;
+            wapiPskType = source.wapiPskType;
             // Broadcom, WAPI
 
             wepKeys = new String[4];
