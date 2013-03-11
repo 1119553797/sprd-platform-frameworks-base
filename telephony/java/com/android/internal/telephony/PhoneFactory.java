@@ -332,10 +332,24 @@ public class PhoneFactory {
             if (!isAllSimReady()) {
                 for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
                     Log.i(LOG_TAG, "isCardReady(" + i + ") = " + PhoneFactory.isCardReady(i));
-                    if (PhoneFactory.isCardReady(i)) {
-                        settingPhoneId = i;
-                        break;
+                    if (UNIVERSEUI_SUPPORT) {
+                        boolean isCardExist = isCardExist(i);
+                        if (isCardExist) {
+                            boolean isAirplaneModeOn = Settings.System.getInt(
+                                    sContext.getContentResolver(),
+                                    Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+                            if (!isAirplaneModeOn) {
+                                settingPhoneId = i;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (PhoneFactory.isCardReady(i)) {
+                            settingPhoneId = i;
+                            break;
+                        }
                     }
+
                 }
             }
             if (settingPhoneId == -1) {
@@ -347,9 +361,16 @@ public class PhoneFactory {
                 Log.i(LOG_TAG, "autoSetDefaultPhoneId,getSettingPhoneId");
                 settingPhoneId = TelephonyManager.getSettingPhoneId(sContext);
             }
-            if (isUpdate && settingPhoneId != defaultPhoneId) {
-                updateDefaultPhoneId(settingPhoneId);
+            if(UNIVERSEUI_SUPPORT){
+                if(isUpdate && settingPhoneId != defaultPhoneId&& !isCardExist(defaultPhoneId)){
+                    updateDefaultPhoneId(settingPhoneId);
+                }
+            }else{
+                if (isUpdate && settingPhoneId != defaultPhoneId) {
+                    updateDefaultPhoneId(settingPhoneId);
+                }
             }
+
             if (!UNIVERSEUI_SUPPORT) {
                 setDefaultValue();
             }   
@@ -412,9 +433,16 @@ public class PhoneFactory {
     }
 
     public static void updateDefaultPhoneId(int settingPhoneId) {
-        if (getSimState(settingPhoneId) != State.READY) {
-            Log.i(LOG_TAG, "PhoneId " + settingPhoneId + " not ready");
-            return;
+        if (!UNIVERSEUI_SUPPORT) {
+            if (getSimState(settingPhoneId) != State.READY) {
+                Log.i(LOG_TAG, "PhoneId " + settingPhoneId + " not ready");
+                return;
+            }
+        } else {
+            if (!isCardExist(settingPhoneId)) {
+                Log.i(LOG_TAG, "PhoneId " + settingPhoneId + " not exist");
+                return;
+            }
         }
         Log.i(LOG_TAG, "updateDefaultPhoneId=" + settingPhoneId);
         TelephonyManager.setDefaultDataPhoneId(sContext, settingPhoneId);

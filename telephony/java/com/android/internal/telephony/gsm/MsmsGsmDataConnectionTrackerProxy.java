@@ -301,7 +301,13 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
             sActivePhoneId = phoneId;
         }
     }
-
+    public static int getActivePhoneId() {
+        if (sActivePhoneId != INVALID_PHONE_ID) {
+            return sActivePhoneId;
+        } else {
+            return INVALID_PHONE_ID;
+        }
+    }
     public static boolean isActivePhoneId(int phoneId) {
         sActivePhoneId = ((sActivePhoneId != INVALID_PHONE_ID) ? sActivePhoneId : INVALID_PHONE_ID);
         if (sActivePhoneId == phoneId) {
