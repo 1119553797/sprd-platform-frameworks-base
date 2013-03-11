@@ -20,6 +20,8 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -205,6 +207,7 @@ public class NetworkController extends BroadcastReceiver {
     private int mIndex = 0;
     private boolean isConnected = false;
     private AlertDialog weakSignalDialog = null;
+    private AlertDialog wlan2MobileDialog = null;
     private ConnectivityManager mConnectivityManager;
     private boolean supportCMCC = false;
     private static String WHERE = "(" + Downloads.Impl.COLUMN_STATUS + " > '"+(Downloads.Impl.STATUS_PENDING - 1)
@@ -534,7 +537,7 @@ public class NetworkController extends BroadcastReceiver {
                 showDialog(mWifiInfo);
              }
              if (requireShowDisconnDialog(mWifiInfo,true)) {
-                showWifiDisconnDialog();
+                 wlan2MobileDialog();
              }
         }
         //add by spreadst_lc for cmcc wifi feature end
@@ -1007,6 +1010,11 @@ public class NetworkController extends BroadcastReceiver {
             mWifiEnabled = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
                     WifiManager.WIFI_STATE_UNKNOWN) == WifiManager.WIFI_STATE_ENABLED;
 
+            boolean mWifiDisabled = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
+                    WifiManager.WIFI_STATE_UNKNOWN) == WifiManager.WIFI_STATE_DISABLED;
+            if (mWifiDisabled && requireShowDisconnDialog(null,false)) {
+                wlan2MobileDialog();
+            }
         } else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
             final NetworkInfo networkInfo = (NetworkInfo)
                     intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
@@ -1026,9 +1034,6 @@ public class NetworkController extends BroadcastReceiver {
                 }
             } else if (!mWifiConnected) {
                 mWifiSsid = null;
-                if (requireShowDisconnDialog(null,false)) {
-                    showWifiDisconnDialog();
-                }
             }
         } else if (action.equals(WifiManager.RSSI_CHANGED_ACTION)) {
             mWifiRssi = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, -200);
@@ -1810,9 +1815,33 @@ public class NetworkController extends BroadcastReceiver {
         return SECURITY_NONE;
     }
 
+    private void wlan2MobileDialog() {
+       if (wlan2MobileDialog != null && wlan2MobileDialog.isShowing()) {
+           return;
+       }
+
+       NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
+       if (info != null && info.getType() == ConnectivityManager.TYPE_MOBILE) {
+           return;
+       }
+
+       mConnectivityManager.setMobileDataEnabled(false);
+       int phoneId = 0;
+       if (PhoneFactory.isMultiSim()) {
+           phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+       }
+       TelephonyManager mTeleMgr = (TelephonyManager) mContext.getSystemService(PhoneFactory
+               .getServiceName(Context.TELEPHONY_SERVICE, phoneId));
+
+       if (mTeleMgr.getDataState() != TelephonyManager.DATA_DISCONNECTED) {
+           startTimer();
+       } else {
+           showWifiDisconnDialog();
+       }
+    }
+
     private void showWifiDisconnDialog() {
-       final boolean mMobileDateStatus = mConnectivityManager.getMobileDataEnabled();
-        mConnectivityManager.setMobileDataEnabled(false);
+        final boolean mMobileDateStatus = mConnectivityManager.getMobileDataEnabled();
         AlertDialog.Builder b = new AlertDialog.Builder(mContext);
         b.setCancelable(true);
         b.setTitle(R.string.network_disconnect_title);
@@ -1830,9 +1859,9 @@ public class NetworkController extends BroadcastReceiver {
                     mContext.sendBroadcast(new Intent("android.download.spstoptask"));
                 }
         });
-        AlertDialog d = b.create();
-        d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        d.show();
+        wlan2MobileDialog = b.create();
+        wlan2MobileDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        wlan2MobileDialog.show();
     }
 
     private boolean requireShowDisconnDialog(WifiInfo mWifiInfo,boolean isDisconnect) {
@@ -1853,5 +1882,46 @@ public class NetworkController extends BroadcastReceiver {
         }
         return isDownload;
     }
+
+    private Timer timer;
+    private TimerTask timerTask;
+
+    private void startTimer() {
+       closeTimer();
+       timer = new Timer(true);
+       timerTask = new TimerTask() {
+           public void run() {
+               mHandler.sendEmptyMessage(0);
+            }
+        };
+        timer.schedule(timerTask, 4000);
+    }
+
+    private void closeTimer() {
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+            timer = null;
+        }
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case 0:
+                    showWifiDisconnDialog();
+                    break;
+                default:
+                    //TODO:
+                    break;
+            }
+        }
+    };
     //add by spreadst_lc for cmcc wifi feature end
 }
