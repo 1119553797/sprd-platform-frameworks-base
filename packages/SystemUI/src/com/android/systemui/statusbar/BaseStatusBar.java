@@ -38,6 +38,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Slog;
@@ -121,6 +122,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     //add for universe_ui_support
     private ActivityManager am;
+    private TelephonyManager tm; //add for bug 133301
     private String[] mOngoingNotificationNeedExitApps;
     protected boolean isUniverseSupport = false;
     private static String universeSupportKey = "universe_ui_support";
@@ -226,6 +228,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (isUniverseSupport) {
             mOngoingNotificationNeedExitApps = mContext.getResources().getStringArray(R.array.need_exit_button_apps);
             am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+            tm= (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);//add for bug 133301
         }
         // Connect in to the status bar manager service
         StatusBarIconList iconList = new StatusBarIconList();
@@ -586,7 +589,14 @@ public abstract class BaseStatusBar extends SystemUI implements
             row = inflater.inflate(R.layout.status_bar_notification_row, parent, false);
         } else {
             if (entry.notification.isOngoing() && appNeedExitButton(sbn.pkg)) {
-                row = inflater.inflate(R.layout.custom_status_bar_notification_row_ongoing, parent, false);
+                /*Modify 20130312 Spreadst of 133301 ExitButton show start*/
+                if (("com.android.phone".equals(sbn.pkg))
+                        && (tm != null && tm.getCallState() == TelephonyManager.CALL_STATE_IDLE)) {
+                    row = inflater.inflate(R.layout.custom_status_bar_notification_row,parent, false);
+                } else {
+                    row = inflater.inflate(R.layout.custom_status_bar_notification_row_ongoing,parent, false);
+                }
+                /*Modify 20130312 Spreadst of 133301 ExitButton show end*/
             } else {
                 row = inflater.inflate(R.layout.custom_status_bar_notification_row, parent, false);
             }
