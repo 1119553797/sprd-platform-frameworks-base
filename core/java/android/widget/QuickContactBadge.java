@@ -34,6 +34,7 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.provider.ContactsContract.QuickContact;
 import android.provider.ContactsContract.RawContacts;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.accessibility.AccessibilityEvent;
@@ -44,6 +45,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
  * and on-click behavior.
  */
 public class QuickContactBadge extends ImageView implements OnClickListener {
+    
+    private static final String TAG = "QuickContactBadge";
+    
     private Uri mContactUri;
     private String mContactEmail;
     private String mContactPhone;
@@ -214,6 +218,7 @@ public class QuickContactBadge extends ImageView implements OnClickListener {
     @Override
     public void onClick(View v) {
         if (mContactUri != null) {
+            Log.v(TAG, "Before showQuickContact, mContactUri = " + mContactUri);
             QuickContact.showQuickContact(getContext(), QuickContactBadge.this, mContactUri,
                     QuickContact.MODE_LARGE, mExcludeMimes);
         } else if (mContactEmail != null) {
