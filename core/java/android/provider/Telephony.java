@@ -2012,7 +2012,7 @@ public final class Telephony {
          */
         public static final String PROTOCOL = "protocol";
         public static final String PRELOAD = "preload";
-
+	public static final String PRESET = "preset";
         /**
           * The protocol to be used to connect to this APN when roaming.
           *
