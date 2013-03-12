@@ -2742,7 +2742,7 @@ public class PowerManagerService extends IPowerManager.Stub
                                 if (mScreenBrightnessAnimator.currentValue <= lcdValue) {
                                     steps = AUTOBRIGHTNESS_ANIM_STEPS;
                                 } else {
-                                    steps = AUTODIMNESS_ANIM_STEPS;
+                                    steps = AUTOBRIGHTNESS_ANIM_STEPS * 2;
                                 }
                             }
                         }
