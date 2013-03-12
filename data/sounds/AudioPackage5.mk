@@ -47,7 +47,6 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/notifications/vega.ogg:system/media/audio/notifications/vega.ogg \
 	$(LOCAL_PATH)/ringtones/Aquila.ogg:system/media/audio/ringtones/Aquila.ogg \
 	$(LOCAL_PATH)/ringtones/ArgoNavis.ogg:system/media/audio/ringtones/ArgoNavis.ogg \
-	$(LOCAL_PATH)/ringtones/BOOTES.ogg:system/media/audio/ringtones/BOOTES.ogg \
 	$(LOCAL_PATH)/ringtones/Carina.ogg:system/media/audio/ringtones/Carina.ogg \
 	$(LOCAL_PATH)/ringtones/CASSIOPEIA.ogg:system/media/audio/ringtones/CASSIOPEIA.ogg \
 	$(LOCAL_PATH)/ringtones/Centaurus.ogg:system/media/audio/ringtones/Centaurus.ogg \
