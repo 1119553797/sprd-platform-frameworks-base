@@ -72,7 +72,6 @@ public class RuntimeInit {
                 mCrashing = true;
 
                 if (mApplicationObject == null) {
-                    Slog.e(TAG, "*** FATAL EXCEPTION IN SYSTEM PROCESS: " + t.getName(), e);
                     /*if (e instanceof OutOfMemoryError) {
                         dumpSystemTrace();
                     } else if (e instanceof RuntimeException) {
@@ -82,9 +81,10 @@ public class RuntimeInit {
                         }
                     }//*/
                     dumpHprofInMonkey("system_process", e);
+                    Slog.e(TAG, "*** FATAL EXCEPTION IN SYSTEM PROCESS: " + t.getName(), e);
                 } else {
-                    Slog.e(TAG, "FATAL EXCEPTION: " + t.getName(), e);
                     dumpHprofInMonkey(t.getName(), e);
+                    Slog.e(TAG, "FATAL EXCEPTION: " + t.getName(), e);
                 }
 
                 // Bring up crash dialog, wait for it to be dismissed
