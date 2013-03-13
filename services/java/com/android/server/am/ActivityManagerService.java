@@ -3025,7 +3025,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         // Find the application record.
         for (int i=mLruProcesses.size()-1; i>=0; i--) {
             ProcessRecord rec = mLruProcesses.get(i);
-            if (rec.thread != null && rec.thread.asBinder() == threadBinder) {
+            if (rec != null && rec.thread != null && rec.thread.asBinder() == threadBinder) {
                 return i;
             }
         }
