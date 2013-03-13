@@ -1532,18 +1532,22 @@ public class TelephonyManager {
         switch (mode) {
             case MODE_VOICE:
                 phoneIdKey = Settings.System.MULTI_SIM_VOICE_CALL;
+                phoneId = Settings.System.getInt(context.getContentResolver(),
+                        phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
                 break;
             case MODE_VEDIO:
                 phoneIdKey = Settings.System.MULTI_SIM_VIDEO_CALL;
+                phoneId = Settings.System.getInt(context.getContentResolver(),
+                        phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
                 break;
             case MODE_MMS:
                 phoneIdKey = Settings.System.MULTI_SIM_MMS;
+                phoneId = Settings.System.getInt(context.getContentResolver(),
+                        phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_MMS_PHONE_ID);
                 break;
             default:
                 break;
         }
-        phoneId = Settings.System.getInt(context.getContentResolver(),
-                phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
         int iccCount = 0;
         int avtivedPhone = PHONE_ID_INVALID;
         for (int i = 0; i < getPhoneCount(); ++i) {
@@ -1671,23 +1675,25 @@ public class TelephonyManager {
     public static int getSubscriberDesiredSim(Context context, int mode) {
         SharedPreferences settings = getPhoneSetting(context);
         String phoneIdKey = "";
-
+        int setPhoneId = PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID;
         switch (mode) {
             case MODE_VOICE:
                 phoneIdKey = simCardFavoriteVoicekey;
+                setPhoneId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
                 break;
             case MODE_VEDIO:
                 phoneIdKey = simCardFavoriteVideokey;
+                setPhoneId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
                 break;
             case MODE_MMS:
                 phoneIdKey = simCardFavoriteMmskey;
+                setPhoneId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_MMS_PHONE_ID);
                 break;
             default:
                 break;
         }
         Log.d(TAG, "getSettingDefaultSim:phoneIdKey " + phoneIdKey);
 
-        int setPhoneId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
         return setPhoneId;
     }
 
