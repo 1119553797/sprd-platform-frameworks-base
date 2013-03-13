@@ -2853,6 +2853,23 @@ public class Intent implements Parcelable, Cloneable {
 
     /**
      * @hide
+     * In Spreadtrum's UniverseUI, some app's theme will be requested to be changed,
+     * we can use this key of intent, and set the theme different in the code of app
+     * you want to change.
+     *
+     * TODO: If the intent has this key of extra, the developers should attention the apps
+     *       which request to change theme, the original theme, which may dimed 
+     *       in AndroidManifest.xml, and set a new theme with changing light or not only.
+     *
+     *       For example, if in AndroidManifest.xml the activity using 
+     *       theme="@*android:style/Theme.Holo.Dialog.Alert" , in java , if we get this
+     *       extra as true, we **must** use
+     *       setTheme(com.android.internal.R.style.Theme_Holo_Light_Dialog_Alert); only!
+     */
+    public static final String EXTRA_KEY_REQUEST_CHANGE_THEME = "sprd.intent.extra.change_theme";
+
+    /**
+     * @hide
      * simcard status changed send action
      */
     public static final String ACTION_DEFAULT_PHONE_CHANGE =
