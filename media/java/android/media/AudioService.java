@@ -2251,6 +2251,11 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
             } else if (AudioSystem.isStreamActive(AudioSystem.STREAM_MUSIC, 0)) {
                 if (DEBUG_VOL)
                     Log.v(TAG, "getActiveStreamType: Forcing STREAM_MUSIC stream active");
+// Add for bug 134812 start
+                if(AudioSystem.isStreamActive(AudioSystem.STREAM_FM, 0) && suggestedStreamType == AudioSystem.STREAM_FM){
+                    return AudioSystem.STREAM_FM;
+                }
+// Add for bug 134812 end
                 return AudioSystem.STREAM_MUSIC;
             // modified for FM start
             } else if (AudioSystem.isStreamActive(AudioSystem.STREAM_FM, 0)) {
