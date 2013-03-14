@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class SimManagerService extends ISimManager.Stub {
 
@@ -60,7 +61,7 @@ public class SimManagerService extends ISimManager.Stub {
 
     private Map<String, Sim> mSimCache = new HashMap<String, Sim>();
 
-    private Map<Integer, Sim> mSimCacheByPhoneId = new HashMap<Integer, Sim>();
+    private Map<Integer, Sim> mSimCacheByPhoneId = new TreeMap<Integer, Sim>();
 
     Set<Integer> mUsedColors = new HashSet<Integer>();
 
