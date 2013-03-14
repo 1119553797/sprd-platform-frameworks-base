@@ -97,6 +97,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private boolean     mCanSeekBack;
     private boolean     mCanSeekForward;
     private boolean     mIsFullScreen = true;
+    private boolean isPlaying = false;
 
     //add by ll
     private String scheme;
@@ -244,6 +245,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
     public void stopPlayback() {
         if (mMediaPlayer != null) {
+            isPlaying = false;
             //mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
@@ -344,6 +346,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     MediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
         new MediaPlayer.OnVideoSizeChangedListener() {
             public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                Log.d(TAG, "mSizeChangedListener");
+                isPlaying = true;
                 mVideoWidth = mp.getVideoWidth();
                 mVideoHeight = mp.getVideoHeight();
                 if (mVideoWidth != 0 && mVideoHeight != 0) {
@@ -360,6 +364,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
     MediaPlayer.OnPreparedListener mPreparedListener = new MediaPlayer.OnPreparedListener() {
         public void onPrepared(MediaPlayer mp) {
+            Log.d(TAG,"onPrepared");
             mCurrentState = STATE_PREPARED;
 
             // Get the capabilities of the player for this stream
@@ -404,6 +409,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                     if (mTargetState == STATE_PLAYING) {
                         Log.d(TAG,"onPrepared AA");
                         //add by ll
+                        Log.d(TAG,"mIsStream AA "+mIsStream);
+                        Log.d(TAG, " seekToPosition AA " +seekToPosition);
                         if(!mIsStream ||seekToPosition==0){
                             start();
                         }
@@ -425,6 +432,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 if (mTargetState == STATE_PLAYING) {
                     Log.d(TAG,"onPrepared BB");
                     //add by ll
+                    Log.d(TAG,"mIsStream BB "+mIsStream);
+                    Log.d(TAG, " seekToPosition BB " +seekToPosition);
                     if(!mIsStream ||seekToPosition==0){
                         start();
                     }
@@ -729,8 +738,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     }
 
     public void start() {
+        Log.d(TAG, "isInPlaybackState "+isInPlaybackState());
         if (isInPlaybackState()) {
             mMediaPlayer.start();
+            isPlaying = true;
             mCurrentState = STATE_PLAYING;
         }
         mTargetState = STATE_PLAYING;
@@ -739,6 +750,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public void pause() {
         if (isInPlaybackState()) {
             if (mMediaPlayer.isPlaying()) {
+                isPlaying = false;
                 mMediaPlayer.pause();
                 mCurrentState = STATE_PAUSED;
             }
@@ -747,6 +759,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     }
 
     public void suspend() {
+        isPlaying = false;
         release(false);
     }
 
@@ -758,6 +771,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
     // cache duration as mDuration for faster access
     public int getDuration() {
+        Log.d(TAG, "duration isInPlaybackState() "+isInPlaybackState());
         if (isInPlaybackState()) {
             if (mDuration > 0) {
                 return mDuration;
@@ -779,6 +793,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public void seekTo(int msec) {
         Log.d(TAG,"seekTo() msec="+msec);
         Log.d(TAG,"seekTo() isInPlaybackState="+isInPlaybackState());
+        if(isStream()){
+            isPlaying = false;
+        }
         if (isInPlaybackState()) {
             mMediaPlayer.seekTo(msec);
             mSeekWhenPrepared = 0;
@@ -792,6 +809,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         return isInPlaybackState() && mMediaPlayer.isPlaying();
     }
 
+    public boolean isPlay() {
+        return isPlaying;
+    }
     public int getBufferPercentage() {
         if (mMediaPlayer != null) {
             return mCurrentBufferPercentage;
@@ -800,6 +820,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     }
 
     private boolean isInPlaybackState() {
+        Log.d(TAG, "mCurrentState "+mCurrentState);
         return (mMediaPlayer != null &&
                 mCurrentState != STATE_ERROR &&
                 mCurrentState != STATE_IDLE &&
