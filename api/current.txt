@@ -29302,6 +29302,7 @@ package android.widget {
     method public int getBufferPercentage();
     method public int getCurrentPosition();
     method public int getDuration();
+    method public boolean isPlay();
     method public boolean isPlaying();
     method public boolean isStopPlaybackCompleted();
     method public void pause();
