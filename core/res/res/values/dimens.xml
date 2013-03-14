@@ -253,5 +253,5 @@
 
 	    <!--spread digtal clock -->
     <dimen name="spread_date_size">20dip</dimen>
-    <dimen name="spread_time_size">60dip</dimen>
+    <dimen name="spread_time_size">50dip</dimen>
 </resources>
