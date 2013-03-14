@@ -51,7 +51,8 @@ LOCAL_SRC_FILES:=                         \
 	VideoPhoneExtractor.cpp		  \
 	VideoPhoneWriter.cpp		  \
         CharDeviceSource.cpp              \
-	AACExtractor.cpp                  
+	AACExtractor.cpp                  \
+	FLVExtractor.cpp
 
 LOCAL_C_INCLUDES:= \
 	$(JNI_H_INCLUDE) \

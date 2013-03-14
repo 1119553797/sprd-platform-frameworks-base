@@ -27,6 +27,7 @@
 #include "matroska/MatroskaExtractor.h"
 
 #include "include/AACExtractor.h"
+#include "include/FLVExtractor.h"
 
 
 #include <media/stagefright/foundation/AMessage.h>
@@ -110,6 +111,7 @@ void DataSource::RegisterDefaultSniffers() {
     RegisterSniffer(SniffMPEG2TS);
     RegisterSniffer(SniffMP3);
     RegisterSniffer(SniffAAC);
+    RegisterSniffer(SniffFLV);
 }
 
 // static
