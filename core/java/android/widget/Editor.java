@@ -2139,12 +2139,16 @@ public class Editor {
             final int width = mContentView.getMeasuredWidth();
             positionX = Math.min(displayMetrics.widthPixels - width, positionX);
             positionX = Math.max(0, positionX);
-
-            if (isShowing()) {
-                mPopupWindow.update(positionX, positionY, -1, -1);
+            if (mTextView.getWindowVisibility() == View.VISIBLE) {
+                if (isShowing()) {
+                    mPopupWindow.update(positionX, positionY, -1, -1);
+                } else {
+                    mPopupWindow.showAtLocation(mTextView, Gravity.NO_GRAVITY,
+                                                positionX, positionY);
+                }
             } else {
-                mPopupWindow.showAtLocation(mTextView, Gravity.NO_GRAVITY,
-                        positionX, positionY);
+                if (isShowing())
+                    mPopupWindow.dismiss();
             }
         }
 
@@ -3074,7 +3078,7 @@ public class Editor {
                     onHandleMoved();
                 }
 
-                if (isVisible()) {
+                if (isVisible() && mTextView.getWindowVisibility() == View.VISIBLE) {
                     final int positionX = parentPositionX + mPositionX;
                     final int positionY = parentPositionY + mPositionY;
                     if (isShowing()) {
