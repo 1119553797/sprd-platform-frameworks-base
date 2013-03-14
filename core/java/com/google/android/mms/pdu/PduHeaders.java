@@ -339,7 +339,7 @@ public class PduHeaders {
      *          with specified header field. Return 0 if
      *          the value is not set.
      */
-    protected int getOctet(int field) {
+    public int getOctet(int field) {
         Integer octet = (Integer) mHeaderMap.get(field);
         if (null == octet) {
             return 0;
