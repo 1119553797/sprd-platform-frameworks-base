@@ -1743,6 +1743,7 @@ public class NetworkController extends BroadcastReceiver {
     }
 
     private List<WifiConfiguration> availableApConfigs(WifiInfo mWifiInfo) {
+
         List<ScanResult> results = mWifiManager.getScanResults();
         if (results == null || results.size() == 0) {
             return null;
@@ -1753,7 +1754,7 @@ public class NetworkController extends BroadcastReceiver {
             return null;
         }
 
-        List<WifiConfiguration> availableConfigs = new ArrayList<WifiConfiguration> ();
+        List<WifiConfiguration> availableConfigs = new ArrayList<WifiConfiguration>();
         for(WifiConfiguration config : configs) {
             for(ScanResult result : results) {
                 if((config.networkId != mWifiInfo.getNetworkId()) &&
@@ -1866,7 +1867,7 @@ public class NetworkController extends BroadcastReceiver {
 
     private boolean requireShowDisconnDialog(WifiInfo mWifiInfo,boolean isDisconnect) {
         if (isDisconnect) {
-            if(availableApConfigs(mWifiInfo) != null) {
+            if(availableApConfigs(mWifiInfo) != null && availableApConfigs(mWifiInfo).size() != 0) {
                 return false;
             }
         }
