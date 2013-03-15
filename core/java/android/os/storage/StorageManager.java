@@ -579,4 +579,10 @@ public class StorageManager
         }
         return paths;
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        mMountService.unregisterListener(mBinderListener);
+        super.finalize();
+    }
 }
