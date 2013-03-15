@@ -904,6 +904,7 @@ public class IccCard {
         ActivityManagerNative.broadcastStickyIntent(specifiedIntent, READ_PHONE_STATE);
         */
             intent.setAction(PhoneFactory.getAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED, mPhone.getPhoneId()));
+            intent.putExtra(INTENT_KEY_ICC_STATE, value);
             ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
         }
         //TODO: check ACTION_SIM_STATE_CHANGED broadcast logic
