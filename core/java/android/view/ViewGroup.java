@@ -4294,7 +4294,13 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
                         descendant.mScrollY - descendant.mTop);
             }
         } else {
-            throw new IllegalArgumentException("parameter must be a descendant of this view");
+            if (android.os.Debug.isMonkey()) {
+                android.util.Log.e("ViewGroup", "parameter must be a descendant of this view. theParent: " 
+                                   + theParent + ", this: " + this);
+                rect.set(-1, -1, -1, -1);
+            } else {
+                throw new IllegalArgumentException("parameter must be a descendant of this view");
+            }
         }
     }
 
