@@ -25,6 +25,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.text.TextUtils;
 import android.util.Log;
@@ -243,7 +244,8 @@ public class MsmsIccProvider extends IccProvider {
         }
              
         if(index < 0){
-            int errorCode = index + 1;
+            int errorCode = index;
+            Log.d(TAG, "errorCode = "+errorCode);
             if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
                 Log.d(TAG, "throw exception");
                 throwException(errorCode);
@@ -374,7 +376,8 @@ public class MsmsIccProvider extends IccProvider {
         if(isFdn){
             if(-1!=deleteIccRecordFromEf(efType, tag, number, null, "", "", "", pin2, phoneId)) success = true;
         }else if(isGas){
-            success = updateUsimGroupById("", index, phoneId);
+            int result = updateUsimGroupById("", index, phoneId);
+            success = result < 0 ? false : true;
         }else{
              //use the default method to delete iccRecord,because the 3rd app will not use index
              if(index == -1) {
@@ -434,26 +437,7 @@ public class MsmsIccProvider extends IccProvider {
                 throw new UnsupportedOperationException(
                         "Cannot insert into URL: " + url);
         }
-        /*
-        String tag = values.getAsString("tag");
-        String number = values.getAsString("number");
-        String anr = values.getAsString("anr");
-        String aas = values.getAsString("aas");
-        String sne = values.getAsString("sne");
-        String grp = values.getAsString("grp");
-        String gas = values.getAsString("gas");
 
-        String[] emails = new String[1];
-        String mEmail = values.getAsString("email");
-
-        emails[0] = mEmail;
-
-        if (DBG)
-            log("update, new tag: " + tag + ",  number:" + number + ",  anr:" + anr
-                + ",  aas:" + aas + ",  sne:" + sne + ",  grp:" + grp
-                + ",  gas:" + gas + ",  Email:" + (emails == null ? "null":emails[0])
-                );
-         */
         String newTag = values.getAsString(STR_TAG);
         String newNumber = values.getAsString(STR_NUMBER);
         Integer index = values.getAsInteger(STR_INDEX);         //maybe simIndex or groupId
@@ -491,22 +475,22 @@ public class MsmsIccProvider extends IccProvider {
                     newNumber, null, "", "", "", "", "", pin2, phoneId))
                 success = true;
         }else if(isGas){
-            success = updateUsimGroupById(newgas, index, phoneId);
+            recIndex = updateUsimGroupById(newgas, index, phoneId);
+
         }else{
             recIndex = updateIccRecordInEfByIndex(efType, newTag,
                     newNumber, newemails, newanr, newaas, newsne, newgrp, newgas,index,
                     pin2, phoneId);
-            if (recIndex < 0) {
-                success = false;
-                if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
-                    Log.d(TAG, "throw exception");
-                    throwException(recIndex + 1);
-                }
-            } else {
-                success = true;
-            }
         }
-
+        if (recIndex < 0) {
+            success = false;
+            if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
+                Log.d(TAG, "throw exception :recIndex = "+recIndex);
+                throwException(recIndex);
+            }
+        } else {
+            success = true;
+        }
         if (!success) {
             return 0;
         } else {
@@ -703,6 +687,12 @@ public class MsmsIccProvider extends IccProvider {
             case IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH:
                 throw new IccPBForMimetypeException(IccPBForMimetypeException.OVER_LENGTH_LIMIT,
                         Phone.CONTENT_ITEM_TYPE,"over the length of phone number");
+            case IccPhoneBookOperationException.OVER_GROUP_NAME_MAX_LENGTH:
+                throw new IccPBForMimetypeException(IccPBForMimetypeException.OVER_LENGTH_LIMIT,
+                        GroupMembership.CONTENT_ITEM_TYPE,"over the length of group name");
+            case IccPhoneBookOperationException.GROUP_CAPACITY_FULL:
+                throw new IccPBForMimetypeException(IccPBForMimetypeException.CAPACITY_FULL,
+                        GroupMembership.CONTENT_ITEM_TYPE, "group capacity full");
             default:
                 break;
         }
@@ -904,26 +894,27 @@ public class MsmsIccProvider extends IccProvider {
         return groupId;
     } 
 
-    private boolean updateUsimGroupById(String newName,int groupId, int phoneId) {
+    private int updateUsimGroupById(String newName,int groupId, int phoneId) {
         if (DBG)
             log("updateUsimGroupById: newName=" + newName + ", groupId="
                     + groupId + ", phoneId=" + phoneId);
         boolean success = false;
-
+        int result = -1;
         try {
             IIccPhoneBook iccIpb = IIccPhoneBook.Stub.asInterface(
                     ServiceManager.getService(PhoneFactory.getServiceName("simphonebook", phoneId)));
             if (iccIpb != null) {
-                success = iccIpb.updateUsimGroupById(newName, groupId);
+                result = iccIpb.updateUsimGroupById(newName, groupId);
             }
         } catch (RemoteException ex) {
             // ignore it
         } catch (SecurityException ex) {
             if (DBG) log(ex.toString());
         }
+        success = result < 0 ? false : true;
         if (DBG) 
             log("updateUsimGroupById: " + success);
-        return success;
+        return result;
     }   
     
 

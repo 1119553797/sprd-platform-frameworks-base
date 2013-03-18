@@ -141,7 +141,7 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
     public int updateUsimGroupBySearchEx(String oldName,String newName) {
         return mIccPhoneBookInterfaceManager.updateUsimGroupBySearchEx(oldName, newName);
     }
-    public boolean updateUsimGroupById(String newName,int groupId){
+    public int updateUsimGroupById(String newName,int groupId){
         return mIccPhoneBookInterfaceManager.updateUsimGroupById(newName, groupId);
     }
     public List<String> getGasInEf(){

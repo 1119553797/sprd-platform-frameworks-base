@@ -4,14 +4,16 @@ package com.android.internal.telephony;
 public class IccPhoneBookOperationException extends RuntimeException {
     private static final long serialVersionUID = 1L;
     
-    public static final int WRITE_OPREATION_FAILED = 0;
-    public static final int EMAIL_CAPACITY_FULL = -1;
-    public static final int ADN_CAPACITY_FULL = -2;
-    public static final int OVER_NAME_MAX_LENGTH = -3;
-    public static final int OVER_NUMBER_MAX_LENGTH = -4;
-    public static final int LOAD_ADN_FAIL = -5;
+    public static final int WRITE_OPREATION_FAILED = -1;
+    public static final int EMAIL_CAPACITY_FULL = -2;
+    public static final int ADN_CAPACITY_FULL = -3;
+    public static final int OVER_NAME_MAX_LENGTH = -4;
+    public static final int OVER_NUMBER_MAX_LENGTH = -5;
+    public static final int LOAD_ADN_FAIL = -6;
+    public static final int OVER_GROUP_NAME_MAX_LENGTH = -7;
+    public static final int GROUP_CAPACITY_FULL = -8;
     
-    int mErrorCode = 0;
+    int mErrorCode = -1;
             
     public  IccPhoneBookOperationException() {
         

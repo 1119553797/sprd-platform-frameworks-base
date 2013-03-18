@@ -140,7 +140,7 @@ public class CompositeIccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.St
         return mIccPhoneBookInterfaceManager[getSimplePolicyPhoneId()].updateUsimGroupBySearchEx(oldName, newName);
     }
 
-    public boolean updateUsimGroupById(String newName,int groupId){
+    public int updateUsimGroupById(String newName,int groupId){
         return mIccPhoneBookInterfaceManager[getSimplePolicyPhoneId()].updateUsimGroupById(newName, groupId);
     }
 

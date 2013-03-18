@@ -394,29 +394,36 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 
         if (index == -1) {
             Log.e(LOG_TAG, "Gas record don't exist for " + oldGas);
-            return -1;
+            return IccPhoneBookOperationException.GROUP_CAPACITY_FULL;
         }
 
         int gasEfId = mUsimPhoneBookManager.findEFGasInfo();
         int[] gasSize = phone.getIccPhoneBookInterfaceManager().getRecordsSize(gasEfId);
         if (gasSize == null) return -1;
-
         byte[] data = gasToByte(newGas, gasSize[0]);
+        if (data == null) {
+            Log.d(LOG_TAG, "data == null");
+            return IccPhoneBookOperationException.OVER_GROUP_NAME_MAX_LENGTH;
+        }
         new AdnRecordLoader(mFh).updateEFGasToUsim(gasEfId, index, data, null);
         mUsimPhoneBookManager.updateGasList(newGas, index);
         return index;
     }
 
-    public boolean updateGasByIndex(String newGas, int groupId) {
+    public int updateGasByIndex(String newGas, int groupId) {
 
         int gasEfId = mUsimPhoneBookManager.findEFGasInfo();
         int[] gasSize = phone.getIccPhoneBookInterfaceManager().getRecordsSize(gasEfId);
-        if (gasSize == null) return false;
+        if (gasSize == null) return IccPhoneBookOperationException.WRITE_OPREATION_FAILED;
 
         byte[] data = gasToByte(newGas, gasSize[0]);
+        if (data == null) {
+            Log.d(LOG_TAG, "data == null");
+            return IccPhoneBookOperationException.OVER_GROUP_NAME_MAX_LENGTH;
+        }
         new AdnRecordLoader(mFh).updateEFGasToUsim(gasEfId, groupId, data, null);
         mUsimPhoneBookManager.updateGasList(newGas, groupId);
-        return true;
+        return groupId;
     }
 
     private byte[] gasToByte(String gas, int recordSize) {
@@ -438,7 +445,13 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                     gasByte[0] = (byte) 0x80;
                 } catch (java.io.UnsupportedEncodingException ex2) {
                     Log.e(LOG_TAG, "gas convert byte exception");
-                }
+                } catch (ArrayIndexOutOfBoundsException e) {                    
+                    Log.e(LOG_TAG, "over the length of group name");
+                    return null;
+                }                
+            }catch (ArrayIndexOutOfBoundsException ex) {               
+                Log.e(LOG_TAG, "over the length of group name");
+                return null;
             }
         }
         return gasByte;

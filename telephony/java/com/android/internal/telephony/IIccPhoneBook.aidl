@@ -150,7 +150,7 @@ interface IIccPhoneBook {
     int [] getAvalibleAnrCount(String name, String number,in String[] emails, String anr, in int[] anrNums);
     boolean isApplicationOnIcc(int appType);
     int updateUsimGroupBySearchEx(String oldName,String newName);
-    boolean updateUsimGroupById(String newName,int groupId);
+    int updateUsimGroupById(String newName,int groupId);
     List<String> getGasInEf();
     int getEmailMaxLen();
     int getPhoneNumMaxLen();

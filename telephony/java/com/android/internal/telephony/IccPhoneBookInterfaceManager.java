@@ -87,7 +87,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                         }else {
                             //simIndex = -1;
                             Log.e("IccPhoneBookInterface", "[EVENT_UPDATE_DONE]", ar.exception);
-                            simIndex = ((IccPhoneBookOperationException)ar.exception).mErrorCode - 1;                          
+                            simIndex = ((IccPhoneBookOperationException)ar.exception).mErrorCode;                          
                         }
                         Log.i("IccPhoneBookInterfaceManager ","EVENT_UPDATE_DONE  simIndex " +simIndex);
                         notifyPending(ar);
@@ -484,7 +484,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
     }
 
 
-    public boolean updateUsimGroupById(String newName,int groupId){
+    public int updateUsimGroupById(String newName,int groupId){
 
         if (phone.getContext().checkCallingOrSelfPermission(
                 android.Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {

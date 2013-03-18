@@ -3,12 +3,12 @@ package com.android.internal.telephony;
 
 public class IccPBForMimetypeException extends IccPhoneBookOperationException {
     private static final long serialVersionUID = 1L;
-    public static final int COMMON_OPREATION_FAILED = 0;
-    public static final int CAPACITY_FULL = -1;
-    public static final int OVER_LENGTH_LIMIT = -2;
-    public static final int WRONG_FORMAT = -3;
+    public static final int COMMON_OPREATION_FAILED = -1;
+    public static final int CAPACITY_FULL = -2;
+    public static final int OVER_LENGTH_LIMIT = -3;
+    public static final int WRONG_FORMAT = -4;
     
-    public int mErrorCode = 0;
+    public int mErrorCode = -1;
     public String mMimeType = null;
             
     public  IccPBForMimetypeException() {
