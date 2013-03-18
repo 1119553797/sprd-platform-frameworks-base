@@ -1057,7 +1057,13 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
         }
         if (isUniverseSupport && notification.isOngoing()) {
-            Button terminate = (Button) rowParent.findViewById(R.id.ongoing_exit);
+            Button terminate = null;
+            try {
+                terminate = (Button) rowParent.findViewById(R.id.ongoing_exit);
+            } catch  (NullPointerException e) {
+                terminate = null;
+                Slog.w(TAG, "To avoid NullPonter: rowParent!");
+            }
             if (terminate != null) {
                 if ("android".equals(notification.pkg)) {
                     terminate.setText(R.string.status_bar_expanded_notification_cancel_button_text);
