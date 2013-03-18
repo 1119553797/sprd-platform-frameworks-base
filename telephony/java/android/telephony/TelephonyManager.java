@@ -1317,7 +1317,8 @@ public class TelephonyManager {
             }else if ((modemValue.equals("sc6810_sp6810"))
                 || (modemValue.equals("sc6825_modem"))) {
                 return MODEM_TYPE_GSM;
-            }else if (modemValue.equals("sc7702_modem")) {
+            }else if ((modemValue.equals("sc7702_modem"))
+                || (modemValue.equals("sc7710g2_modem"))) {
                 return MODEM_TYPE_WCDMA;
             }
         }
