@@ -44,6 +44,8 @@ import com.android.internal.R;
 
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
+import android.provider.Settings;
+import android.provider.Settings.System;
 
 /**
  * Displays a dialer like interface to unlock the SIM PIN.
@@ -277,13 +279,15 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         getSimUnlockProgressDialog().show();
 
         new CheckSimPin(mPinText.getText().toString()) {
-            void onSimLockChangedResponse(final boolean success) {
+            void onSimLockChangedResponse(final boolean success) {      
                 mPinText.post(new Runnable() {
                     public void run() {
                         if (mSimUnlockProgressDialog != null) {
                             mSimUnlockProgressDialog.hide();
                         }
                         if (success) {
+                            System.putInt(mContext.getContentResolver(), PhoneFactory.getSetting(
+                                    System.PIN_SUCCESS, mSub), 1);
                             // before closing the keyguard, report back that
                             // the sim is unlocked so it knows right away
                             mUpdateMonitor.reportSimUnlocked(mSub);
@@ -520,5 +524,5 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             digits.delete(0, len);
             mEnteredDigits = 0;
         }
-    }
+    }   
 }
