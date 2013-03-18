@@ -565,7 +565,7 @@ public class NetworkController extends BroadcastReceiver {
                 Slog.d(TAG, "onServiceStateChanged on phoneId" + phoneId + "state=" + state.getState());
             }
             mServiceState[phoneId] = state;
-            mDataNetType[phoneId] = mServiceState[phoneId].getRadioTechnology();
+            mDataNetType[phoneId] = mServiceState[phoneId].getNetworkType();
             Slog.d(TAG, "mDataNetType[" + phoneId + "]" + mDataNetType[phoneId]);
             updateTelephonySignalStrength(phoneId);
             updateDataNetType(phoneId);
