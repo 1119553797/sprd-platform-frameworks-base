@@ -16,6 +16,7 @@
 
 package com.android.server;
 
+import android.os.SystemProperties;
 import android.theme.ThemeManagerService;
 import android.accounts.AccountManagerService;
 import android.app.ActivityManagerNative;
@@ -74,7 +75,8 @@ class ServerThread extends Thread {
     private static final String TAG = "SystemServer";
     private static final String ENCRYPTING_STATE = "trigger_restart_min_framework";
     private static final String ENCRYPTED_STATE = "1";
-
+    private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
+    
     ContentResolver mContentResolver;
 
     void reportWtf(String msg, Throwable e) {
@@ -222,13 +224,15 @@ class ServerThread extends Thread {
                 Slog.e(TAG, "Failure starting Sim Manager", e);
             }
 
-            try {
-                Slog.i(TAG, "Theme Manager");
-                ServiceManager.addService(Context.THEME_SERVICE,
-                        new ThemeManagerService(context));
-            } catch (Throwable e) {
-                Slog.e(TAG, "Failure starting Theme Manager", e);
-            }
+	    if (UNIVERSE_UI_SUPPORT) {
+		try {
+		    Slog.i(TAG, "Theme Manager");
+		    ServiceManager.addService(Context.THEME_SERVICE,
+					      new ThemeManagerService(context));
+		} catch (Throwable e) {
+		    Slog.e(TAG, "Failure starting Theme Manager", e);
+		}
+	    }
 
             Slog.i(TAG, "Content Manager");
             contentService = ContentService.main(context,

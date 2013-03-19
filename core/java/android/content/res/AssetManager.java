@@ -16,6 +16,7 @@
 
 package android.content.res;
 
+import android.os.SystemProperties;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.util.TypedValue;
@@ -82,6 +83,8 @@ public final class AssetManager {
 
     private String mThemePackageNameForSystem;
     private int mThemeCookieForSystem;
+
+    // private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
 
     /**
      * Create a new AssetManager containing only the basic system assets.
@@ -250,9 +253,14 @@ public final class AssetManager {
 
     /*package*/ final void ensureStringBlocks() {
         if (mStringBlocks == null) {
+	    boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
             synchronized (this) {
                 if (mStringBlocks == null) {
-                    makeStringBlocks(false);
+		    if (UNIVERSE_UI_SUPPORT) {
+			makeStringBlocks(false);
+		    } else {
+		    	makeStringBlocks(true);
+		    }
                 }
             }
         }

@@ -16,6 +16,7 @@
 
 package android.app;
 
+import android.os.SystemProperties;
 import android.theme.IThemeManager;
 import android.content.pm.PackageInfo;
 import android.text.TextUtils;
@@ -156,6 +157,7 @@ public final class ActivityThread {
 
     static IPackageManager sPackageManager;
     static IThemeManager sThemeManager;
+    private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
 
     final ApplicationThread mAppThread = new ApplicationThread();
     final Looper mLooper = Looper.myLooper();
@@ -1608,7 +1610,7 @@ public final class ActivityThread {
         if (packageName != null && packageName.contains("com.android.cts.holo")) {
             isCTSTest = true;
         }
-        if (!isCTSTest) {
+        if (UNIVERSE_UI_SUPPORT && !isCTSTest) {
             ThemeInfo sysTheme=null;
             ThemeInfo appTheme=null;
             try {
@@ -1622,7 +1624,6 @@ public final class ActivityThread {
             attachThemeAssets(AssetManager.getSystem(), sysTheme, true);
         }
 
-	
         //Slog.i(TAG, "Resource: key=" + key + ", display metrics=" + metrics);
         DisplayMetrics metrics = getDisplayMetricsLocked(null, false);
         r = new Resources(assets, metrics, getConfiguration(), compInfo);
@@ -3711,25 +3712,22 @@ public final class ActivityThread {
         if (config.locale != null) {
             Locale.setDefault(config.locale);
         }
+
         Resources.updateSystemConfiguration(config, dm, compat);
-	
+
         ApplicationPackageManager.configurationChanged();
         //Slog.i(TAG, "Configuration changed in " + currentPackageName());
         
-        // Iterator<WeakReference<Resources>> it =
-        //     mActiveResources.values().iterator();
-        Iterator<Map.Entry<ResourcesKey, WeakReference<Resources>>> it =
-	    mActiveResources.entrySet().iterator();
-
+        Iterator<WeakReference<Resources>> it =
+            mActiveResources.values().iterator();
+        //Iterator<Map.Entry<String, WeakReference<Resources>>> it =
+        //    mActiveResources.entrySet().iterator();
         while (it.hasNext()) {
-	    Map.Entry<ResourcesKey, WeakReference<Resources>> entry=it.next();
-            WeakReference<Resources> v = entry.getValue();
-	    String currentResDir = entry.getKey().mResDir;
+            WeakReference<Resources> v = it.next();
             Resources r = v.get();
             if (r != null) {
                 if (DEBUG_CONFIGURATION) Slog.v(TAG, "Changing resources "
                         + r + " config to: " + config);
-
                 r.updateConfiguration(config, dm, compat);
                 //Slog.i(TAG, "Updated app resources " + v.getKey()
                 //        + " " + r + ": " + r.getConfiguration());
@@ -3738,7 +3736,7 @@ public final class ActivityThread {
                 it.remove();
             }
         }
-
+        
         return changes != 0;
     }
 

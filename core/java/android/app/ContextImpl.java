@@ -16,6 +16,7 @@
 
 package android.app;
 
+import android.os.SystemProperties;
 import android.theme.IThemeManager;
 import android.theme.ThemeManager;
 
@@ -276,13 +277,15 @@ class ContextImpl extends Context {
                     return new AccountManager(ctx, service);
                 }});
 
-        registerService(THEME_SERVICE, new ServiceFetcher() {
-                public Object createService(ContextImpl ctx) {
-                    IBinder b = ServiceManager.getService(THEME_SERVICE);
-                    IThemeManager service = IThemeManager.Stub.asInterface(b);
-                    return new ThemeManager(ctx, service);
-                }});
-
+	if (SystemProperties.getBoolean("universe_ui_support",false)) {
+	    registerService(THEME_SERVICE, new ServiceFetcher() {
+		    public Object createService(ContextImpl ctx) {
+			IBinder b = ServiceManager.getService(THEME_SERVICE);
+			IThemeManager service = IThemeManager.Stub.asInterface(b);
+			return new ThemeManager(ctx, service);
+		    }});
+	}
+	
         registerService(ACTIVITY_SERVICE, new ServiceFetcher() {
                 public Object createService(ContextImpl ctx) {
                     return new ActivityManager(ctx.getOuterContext(), ctx.mMainThread.getHandler());
