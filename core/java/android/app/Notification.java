@@ -810,13 +810,16 @@ public class Notification implements Parcelable
         // TODO: rewrite this to use Builder
         //add for universe_ui_support
         RemoteViews contentView = null;
+        
+        /* Revert this change temporary
+         * TODO: Need to check the root-cause of invalid blank in StatusBar
         if (isUniverseSupport) {
             contentView = new RemoteViews(context.getPackageName(),
                     R.layout.custom_notification_template_base);
-        } else {
+        } else {*/
             contentView = new RemoteViews(context.getPackageName(),
                     R.layout.notification_template_base);
-        }
+        //}
 
         if (this.icon != 0) {
             contentView.setImageViewResource(R.id.icon, this.icon);
@@ -829,6 +832,9 @@ public class Notification implements Parcelable
         }
         if (contentTitle != null) {
             contentView.setTextViewText(R.id.title, contentTitle);
+            if (isUniverseSupport) {
+                contentView.setTextColor(R.id.title, Color.BLACK);
+            }
         }
         if (contentText != null) {
             contentView.setTextViewText(R.id.text, contentText);
@@ -1511,18 +1517,22 @@ public class Notification implements Parcelable
             int N = mActions.size();
             if (N > 0) {
                 // Log.d("Notification", "has actions: " + mContentText);
-                if(!isUniverseSupport){
+                /* Revert this change temporary
+                 *TODO: Need to check the root-cause of invalid blank in StatusBar
+                if(!isUniverseSupport){*/
                     big.setViewVisibility(R.id.actions, View.VISIBLE);
                     big.setViewVisibility(R.id.action_divider, View.VISIBLE);
-                }                
+                //}                
                 if (N>MAX_ACTION_BUTTONS) N=MAX_ACTION_BUTTONS;
                 big.removeAllViews(R.id.actions);
                 for (int i=0; i<N; i++) {
                     final RemoteViews button = generateActionButton(mActions.get(i));
                     //Log.d("Notification", "adding action " + i + ": " + mActions.get(i).title);
-                    if(!isUniverseSupport){
+                    /* Revert this change temporary
+                     * TODO: Need to check the root-cause of invalid blank in StatusBar
+                    if(!isUniverseSupport){*/
                         big.addView(R.id.actions, button);
-                    }
+                    //}
                 }
             }
             return big;
@@ -1533,11 +1543,13 @@ public class Notification implements Parcelable
                 return mContentView;
             } else {
                 //add for universe_ui_support
-                if (isUniverseSupport) {
-                    return applyStandardTemplate(R.layout.custom_notification_template_base, true);
-                } else {
+                /* Revert this change temporary
+                 * TODO: Need to check the root-cause of invalid blank in StatusBar
+                 *if (isUniverseSupport) {
+                 *    return applyStandardTemplate(R.layout.custom_notification_template_base, true);
+                 *} else {*/
                     return applyStandardTemplate(R.layout.notification_template_base, true); // no more special large_icon flavor
-                }
+                //}
             }
         }
 
@@ -1558,11 +1570,13 @@ public class Notification implements Parcelable
         private RemoteViews makeBigContentView() {
             if (mActions.size() == 0) return null;
 
-            if(isUniverseSupport){
-                return applyStandardTemplateWithActions(R.layout.custom_notification_template_base);
-            }else{
+        /* Revert this change temporary
+         * TODO: Need to check the root-cause of invalid blank in StatusBar
+            //if(isUniverseSupport){
+            //    return applyStandardTemplateWithActions(R.layout.custom_notification_template_base);
+            //}else{*/
                 return applyStandardTemplateWithActions(R.layout.notification_template_big_base);
-            }
+            //}
         }
 
         private RemoteViews generateActionButton(Action action) {
