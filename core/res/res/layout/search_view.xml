@@ -83,7 +83,7 @@
 
             <view class="android.widget.SearchView$SearchAutoComplete"
                 android:id="@+id/search_src_text"
-                android:layout_height="36dip"
+                android:layout_height="@dimen/search_view_src_text_height"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:minWidth="@dimen/search_view_text_min_width"
