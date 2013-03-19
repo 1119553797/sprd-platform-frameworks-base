@@ -160,6 +160,9 @@
     <!-- Preferred width of the search view. -->
     <dimen name="search_view_preferred_width">320dip</dimen>
 
+    <!-- Resize height of search view. -->
+    <dimen name="search_view_src_text_height">36dip</dimen>
+
     <!-- Dialog title height -->
     <dimen name="alert_dialog_title_height">64dip</dimen>
     <!-- Dialog button bar height -->
