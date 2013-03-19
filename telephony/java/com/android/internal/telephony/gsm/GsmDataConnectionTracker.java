@@ -1629,7 +1629,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         TxRxSum preTxRxSum = new TxRxSum(mDataStallTxRxSum);
         mDataStallTxRxSum.updateTxRxSum();
 
-        if (VDBG) {
+        if (DBG) {
             log("updateDataStallInfo: mDataStallTxRxSum=" + mDataStallTxRxSum +
                     " preTxRxSum=" + preTxRxSum);
         }
@@ -1644,7 +1644,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             }
         }
         if ( sent > 0 && received > 0 ) {
-            if (VDBG) log("updateDataStallInfo: IN/OUT");
+            if (DBG) log("updateDataStallInfo: IN/OUT");
             mSentSinceLastRecv = 0;
             putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
         } else if (sent > 0 && received == 0) {
@@ -1658,11 +1658,11 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                         " mSentSinceLastRecv=" + mSentSinceLastRecv);
             }
         } else if (sent == 0 && received > 0) {
-            if (VDBG) log("updateDataStallInfo: IN");
+            if (DBG) log("updateDataStallInfo: IN");
             mSentSinceLastRecv = 0;
             putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
         } else {
-            if (VDBG) log("updateDataStallInfo: NONE");
+            if (DBG) log("updateDataStallInfo: NONE");
         }
     }
 
