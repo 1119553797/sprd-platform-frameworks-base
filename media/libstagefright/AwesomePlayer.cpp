@@ -1476,7 +1476,8 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
         {
           LOGI("vide size is not susport play audio only ");
           mVideoSource.clear();
-          return OK;
+          return BAD_VALUE;
+          //return OK;
         }
 
         if (!strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_AVC))
@@ -1501,7 +1502,8 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
             if(profile > 0x64 || videooutsize)
             {
                 mVideoSource.clear();
-                return OK;
+                return BAD_VALUE;
+                //return OK;
             }
         }
 

@@ -1704,7 +1704,7 @@ status_t MPEG4Source::read(
             mBuffer->release();
             mBuffer = NULL;
 
-            return ERROR_MALFORMED;
+            return ERROR_END_OF_STREAM;
         }
 
         MediaBuffer *clone = mBuffer->clone();
