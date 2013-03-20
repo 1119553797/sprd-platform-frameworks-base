@@ -386,8 +386,8 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             // reset before mode and set
             int lastMode = mRingerModeSharePre.getInt("soundmode", 2);
             boolean isVibrate = mRingerModeSharePre.getBoolean("vibratemode", false);
-            if (lastMode == AudioManager.RINGER_MODE_NORMAL) {
-                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            if (lastMode == AudioManager.RINGER_MODE_NORMAL || lastMode == AudioManager.RINGER_MODE_OUTDOOR) {
+                    mAudioManager.setRingerMode(lastMode);
                 if (isVibrate) {
                     mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ON);
@@ -421,7 +421,6 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                     AudioManager.VIBRATE_SETTING_OFF);
         }
     }
-
     private void updateSoundModeButton() {
         boolean isSilent = mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
         int iconId = R.drawable.quick_switch_general_on_sprd;

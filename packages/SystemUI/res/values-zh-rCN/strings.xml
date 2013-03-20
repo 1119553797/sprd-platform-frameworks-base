@@ -128,6 +128,7 @@
     <string name="accessibility_tty_enabled" msgid="4613200365379426561">"电传打字机已启用。"</string>
     <string name="accessibility_ringer_vibrate" msgid="666585363364155055">"振铃器振动。"</string>
     <string name="accessibility_ringer_silent" msgid="9061243307939135383">"振铃器静音。"</string>
+    <string name="accessibility_ringer_outdoor">"振铃器户外。"</string>
     <string name="accessibility_recents_item_dismissed" msgid="6803574935084867070">"已删除<xliff:g id="APP">%s</xliff:g>"</string>
     <string name="data_usage_disabled_dialog_3g_title" msgid="5257833881698644687">"2G-3G 数据网络已停用"</string>
     <string name="data_usage_disabled_dialog_4g_title" msgid="4789143363492682629">"4G 数据网络已停用"</string>

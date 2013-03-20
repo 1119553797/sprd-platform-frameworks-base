@@ -252,18 +252,20 @@ public class PhoneStatusBarPolicy {
         AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         final int ringerMode = audioManager.getRingerMode();
         final boolean visible = ringerMode == AudioManager.RINGER_MODE_SILENT ||
-                ringerMode == AudioManager.RINGER_MODE_VIBRATE;
+                ringerMode == AudioManager.RINGER_MODE_VIBRATE || ringerMode == AudioManager.RINGER_MODE_OUTDOOR;
 
         final int iconId;
         String contentDescription = null;
         if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
             iconId = R.drawable.stat_sys_ringer_vibrate;
             contentDescription = mContext.getString(R.string.accessibility_ringer_vibrate);
-        } else {
-            iconId =  R.drawable.stat_sys_ringer_silent;
+        } else if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
+            iconId = R.drawable.stat_sys_ringer_silent;
             contentDescription = mContext.getString(R.string.accessibility_ringer_silent);
+        } else {
+                iconId = R.drawable.stat_sys_ringer_outdoor;
+                contentDescription = mContext.getString(R.string.accessibility_ringer_outdoor);
         }
-
         if (visible) {
             mService.setIcon("volume", iconId, 0, contentDescription);
         }

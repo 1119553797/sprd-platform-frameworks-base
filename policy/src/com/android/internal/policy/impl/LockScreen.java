@@ -93,7 +93,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
 
         @Override
         public void onRingerModeChanged(int state) {
-            boolean silent = AudioManager.RINGER_MODE_NORMAL != state;
+            boolean silent = (AudioManager.RINGER_MODE_NORMAL != state && AudioManager.RINGER_MODE_OUTDOOR != state);
             if (silent != mSilentMode) {
                 mSilentMode = silent;
                 mUnlockWidgetMethods.updateResources();
@@ -469,7 +469,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                 ? AudioManager.RINGER_MODE_VIBRATE
                 : AudioManager.RINGER_MODE_SILENT);
         } else {
-            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_OUTDOOR) {
+                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_OUTDOOR);
+            } else {
+                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            }
+
         }
     }
 
@@ -599,7 +604,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
     }
 
     private boolean isSilentMode() {
-        return mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
+        boolean isSilent = (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL)
+                && (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_OUTDOOR);
+        return isSilent;
     }
 
     @Override

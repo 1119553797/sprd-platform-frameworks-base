@@ -49,7 +49,8 @@ public class VolumeController implements ToggleSlider.Listener {
 
         mAudioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 
-        mMute = mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
+        mMute = (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL && mAudioManager
+                .getRingerMode() != AudioManager.RINGER_MODE_OUTDOOR);
         mVolume = mAudioManager.getStreamVolume(STREAM);
         control.setMax(mAudioManager.getStreamMaxVolume(STREAM));
         control.setValue(mVolume);

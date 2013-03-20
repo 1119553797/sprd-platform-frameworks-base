@@ -20,6 +20,7 @@ import static android.Manifest.permission.REMOTE_AUDIO_PLAYBACK;
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 import static android.media.AudioManager.RINGER_MODE_VIBRATE;
+import static android.media.AudioManager.RINGER_MODE_OUTDOOR;
 
 import android.app.Activity;
 import android.app.ActivityManagerNative;
@@ -614,11 +615,17 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
         int ringerModeFromSettings =
                 System.getInt(cr, System.MODE_RINGER, AudioManager.RINGER_MODE_NORMAL);
+        Log.d(TAG, "ringerModeFromSettings ="+ringerModeFromSettings);
         int ringerMode = ringerModeFromSettings;
         // sanity check in case the settings are restored from a device with incompatible
         // ringer modes
         if (!AudioManager.isValidRingerMode(ringerMode)) {
-            ringerMode = AudioManager.RINGER_MODE_NORMAL;
+            if(ringerModeFromSettings ==AudioManager.RINGER_MODE_OUTDOOR){
+                ringerMode = AudioManager.RINGER_MODE_OUTDOOR;
+            }else{
+                ringerMode = AudioManager.RINGER_MODE_NORMAL;
+            }
+
         }
         if ((ringerMode == AudioManager.RINGER_MODE_VIBRATE) && !mHasVibrator) {
             ringerMode = AudioManager.RINGER_MODE_SILENT;
@@ -836,7 +843,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         // setting volume on master stream type also controls silent mode
         if (((flags & AudioManager.FLAG_ALLOW_RINGER_MODES) != 0) ||
                 (mStreamVolumeAlias[streamType] == getMasterStreamType())) {
-            int newRingerMode;
+            int newRingerMode ;
             if (index == 0) {
                 newRingerMode = mHasVibrator ? AudioManager.RINGER_MODE_VIBRATE
                                               : AudioManager.RINGER_MODE_SILENT;
@@ -846,7 +853,11 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                                    false,
                                    true);
             } else {
-                newRingerMode = AudioManager.RINGER_MODE_NORMAL;
+                if (getRingerMode() == RINGER_MODE_OUTDOOR) {
+                    newRingerMode = AudioManager.RINGER_MODE_OUTDOOR;
+                } else {
+                    newRingerMode = AudioManager.RINGER_MODE_NORMAL;
+                }
             }
             setRingerMode(newRingerMode);
         }
@@ -1179,7 +1190,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         for (int streamType = numStreamTypes - 1; streamType >= 0; streamType--) {
             if (isStreamMutedByRingerMode(streamType)) {
                 if (!isStreamAffectedByRingerMode(streamType) ||
-                    ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+                    ringerMode == AudioManager.RINGER_MODE_NORMAL||ringerMode == AudioManager.RINGER_MODE_OUTDOOR) {
                     // ring and notifications volume should never be 0 when not silenced
                     // on voice capable devices
                     if (mVoiceCapable &&
@@ -1200,7 +1211,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 }
             } else {
                 if (isStreamAffectedByRingerMode(streamType) &&
-                    ringerMode != AudioManager.RINGER_MODE_NORMAL) {
+                        ringerMode != AudioManager.RINGER_MODE_NORMAL
+                        && ringerMode != AudioManager.RINGER_MODE_OUTDOOR) {
                    mStreamStates[streamType].mute(null, true);
                    mRingerModeMutedStreams |= (1 << streamType);
                }
@@ -2115,6 +2127,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         int ringerMode = getRingerMode();
 
         switch (ringerMode) {
+        case RINGER_MODE_OUTDOOR:
         case RINGER_MODE_NORMAL:
             if (direction == AudioManager.ADJUST_LOWER) {
                 if (mHasVibrator) {

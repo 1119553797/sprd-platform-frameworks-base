@@ -324,7 +324,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private void refreshSilentMode() {
         if (!mHasVibrator) {
             final boolean silentModeOn =
-                    mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
+                    ((mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL)&&(mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_OUTDOOR));
             ((ToggleAction)mSilentModeAction).updateState(
                     silentModeOn ? ToggleAction.State.On : ToggleAction.State.Off);
         }
@@ -638,7 +638,12 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             if (on) {
                 mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
             } else {
-                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_OUTDOOR) {
+                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_OUTDOOR);
+                } else {
+                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                }
+
             }
         }
 
@@ -678,15 +683,21 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         public View create(Context context, View convertView, ViewGroup parent,
                 LayoutInflater inflater) {
             View v = inflater.inflate(R.layout.global_actions_silent_mode, parent, false);
+            final int outDoorIndex = AudioManager.RINGER_MODE_OUTDOOR; 
 
             int selectedIndex = ringerModeToIndex(mAudioManager.getRingerMode());
-            for (int i = 0; i < 3; i++) {
-                View itemView = v.findViewById(ITEM_IDS[i]);
-                itemView.setSelected(selectedIndex == i);
-                // Set up click handler
-                itemView.setTag(i);
-                itemView.setOnClickListener(this);
-            }
+                for (int i = 0; i < 3; i++) {
+                    View itemView = v.findViewById(ITEM_IDS[i]);
+                    if (selectedIndex == outDoorIndex) {
+                        itemView.setSelected((outDoorIndex - 1) == i);
+                    } else {
+                        itemView.setSelected(selectedIndex == i);
+                    }
+                    // Set up click handler
+                    itemView.setTag(i);
+                    itemView.setOnClickListener(this);
+                }
+
             return v;
         }
 
