@@ -628,7 +628,7 @@ public class IccCard {
 
         synchronized (mStateMonitor) {
             mState = newState;
-            PhoneFactory.autoSetDefaultPhoneId(true, mPhone.getPhoneId());
+            PhoneFactory.autoSetDefaultPhoneId(false, mPhone.getPhoneId());
             updateStateProperty();
             if (oldState != State.READY && newState == State.READY) {
                 mHandler.sendMessage(mHandler.obtainMessage(EVENT_ICC_READY));
