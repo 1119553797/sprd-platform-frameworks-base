@@ -60,6 +60,7 @@ public class MsmsIccProvider extends IccProvider {
     private static final int SDN = 3;
     private static final int FDN_S = 4;
     private static final int GAS = 5;
+    private static final int LND = 6;
 
     private static final String STR_TAG = "tag";
     private static final String STR_NUMBER = "number";
@@ -89,12 +90,14 @@ public class MsmsIccProvider extends IccProvider {
         URL_MATCHER.addURI(AUTHORITY, "sdn", SDN);
         URL_MATCHER.addURI(AUTHORITY, "fdn_s", FDN_S);
         URL_MATCHER.addURI(AUTHORITY, "gas", GAS);
+        URL_MATCHER.addURI(AUTHORITY, "lnd", LND);
 
         URL_MATCHER.addURI(AUTHORITY, "#/adn", ADN);
         URL_MATCHER.addURI(AUTHORITY, "#/fdn", FDN);
         URL_MATCHER.addURI(AUTHORITY, "#/sdn", SDN);
         URL_MATCHER.addURI(AUTHORITY, "#/fdn_s", FDN_S);
         URL_MATCHER.addURI(AUTHORITY, "#/gas", GAS);
+        URL_MATCHER.addURI(AUTHORITY, "#/lnd", LND);
 
         // to match phoneId
         for (int i = 0; i < PHONE_COUNT; i++) {
@@ -150,6 +153,9 @@ public class MsmsIccProvider extends IccProvider {
             case FDN_S:
                 return getEfSize(IccConstants.EF_FDN, getPhoneId(url));
 
+            case LND:
+                return loadFromEf(IccConstants.EF_LND, getPhoneId(url));
+
             case GAS:
                 return loadGas(getPhoneId(url));
 
@@ -193,6 +199,10 @@ public class MsmsIccProvider extends IccProvider {
             case FDN:
                 efType = IccConstants.EF_FDN;
                 pin2 = initialValues.getAsString("pin2");
+                break;
+
+            case LND:
+                efType = IccConstants.EF_LND;
                 break;
 
             case GAS:
@@ -268,6 +278,10 @@ public class MsmsIccProvider extends IccProvider {
             case FDN:
                 buf.append(getPathName("fdn", phoneId));
                 break;
+
+            case LND:
+                buf.append(getPathName("lnd", phoneId));
+                buf.append("/" + index);
         }
 
         resultUri = Uri.parse(buf.toString());

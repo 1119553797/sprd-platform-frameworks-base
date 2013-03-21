@@ -78,6 +78,7 @@ public class AdnRecordLoader extends IccThreadHandler {
     static final int EVENT_ADN_LOAD_ALL_DONE = 3;
     static final int EVENT_EF_LINEAR_RECORD_SIZE_DONE = 4;
     static final int EVENT_UPDATE_RECORD_DONE = 5;
+    static final int EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE = 18;
 
 	// add multi record and email in usim begin
 	static final int EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE = 6;
@@ -173,6 +174,16 @@ public class AdnRecordLoader extends IccThreadHandler {
             obtainMessage(EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
     }
 
+    public void updateEFCyclic(AdnRecord adn, int ef, int extensionEF, int recordNumber,
+            String pin2, Message response) {
+        this.ef = ef;
+        this.extensionEF = extensionEF;
+        this.recordNumber = recordNumber;
+        this.userResponse = response;
+        this.pin2 = pin2;
+        //mFh.getEFLinearRecordSize(ef, obtainMessage(EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
+        mFh.getEFLinearRecordSize(ef, obtainMessage(EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE, adn));
+    }
 	// ***** Overridden from Handler
 	// add multi record and email in usim begin
 	public void updateEFAdnToUsim(AdnRecord adn, int ef, int extensionEF,
@@ -331,6 +342,46 @@ public class AdnRecordLoader extends IccThreadHandler {
                     mFh.updateEFLinearFixed(ef, recordNumber,
                             data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
 
+                    pendingExtLoads = 1;
+
+                    break;
+                case EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE:
+                    Log.d(LOG_TAG,"AdnRecordLoader handle EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE, ef:" + Integer.toHexString(ef));
+                    ar = (AsyncResult)(msg.obj);
+                    adn = (AdnRecord)(ar.userObj);
+
+                    if (ar.exception != null) {
+                        throw new IccPhoneBookOperationException(
+                        IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+                          "get EF record size failed",
+                                ar.exception);
+                    }
+
+                    int[] CyclicrecordSize = (int[])ar.result;
+                    // recordSize is int[3] array
+                    // int[0]  is the record length
+                    // int[1]  is the total length of the EF file
+                    // int[2]  is the number of records in the EF file
+                    // So int[0] * int[2] = int[1]
+                   if (CyclicrecordSize.length != 3 || recordNumber > CyclicrecordSize[2]) {
+                        throw new IccPhoneBookOperationException(
+                               IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
+                                "get wrong EF record size format",
+                                ar.exception);
+                    }
+                    try {
+                        data = adn.buildAdnString(CyclicrecordSize[0]);
+                    } catch (IccPhoneBookOperationException e) {
+                        // TODO: handle exception
+                        throw e;
+                    }
+
+                    Log.i("AdnRecordLoader", "recordNumber " + recordNumber);
+
+                    //mFh.updateEFLinearFixed(ef, recordNumber,
+                            //data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
+                    mFh.updateEFCYCLICLinearFixed(ef, recordNumber,
+                            data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
                     pendingExtLoads = 1;
 
                     break;

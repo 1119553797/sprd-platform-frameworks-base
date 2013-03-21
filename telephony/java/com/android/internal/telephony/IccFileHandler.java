@@ -35,6 +35,7 @@ public abstract class IccFileHandler extends IccThreadHandler implements IccCons
 
     // from TS 11.11 9.2.5
     static protected final int READ_RECORD_MODE_ABSOLUTE = 4;
+    static protected final int READ_RECORD_MODE_CYCLIC = 3;
 
     //***** types of files  TS 11.11 9.3
     static protected final int EF_TYPE_TRANSPARENT = 0;
@@ -260,6 +261,14 @@ public abstract class IccFileHandler extends IccThreadHandler implements IccCons
         mCi.iccIOForApp(COMMAND_UPDATE_RECORD, fileid, getEFPath(fileid),
                         recordNum, READ_RECORD_MODE_ABSOLUTE, data.length,
                         IccUtils.bytesToHexString(data), pin2, mAid, onComplete);
+    }
+
+    public void updateEFCYCLICLinearFixed(int fileid, int recordNum, byte[] data,
+            String pin2, Message onComplete) {
+        Log.i("IccFileHandler", "updateEFCYCLICLinearFixed, fileid:"+Integer.toHexString(fileid)+", ef path:"+getEFPath(fileid)+",recordNum:"+recordNum);
+        phone.mCM.iccIO(COMMAND_UPDATE_RECORD, fileid, getEFPath(fileid),
+                        recordNum, READ_RECORD_MODE_CYCLIC, data.length,
+                        IccUtils.bytesToHexString(data), pin2, onComplete);
     }
 
         /**
@@ -546,6 +555,7 @@ public abstract class IccFileHandler extends IccThreadHandler implements IccCons
         case EF_FDN:
         case EF_MSISDN:
         case EF_SDN:
+        case EF_LND:
         case EF_EXT1:
         case EF_EXT2:
         case EF_EXT3:
