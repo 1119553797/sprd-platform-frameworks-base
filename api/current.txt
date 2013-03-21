@@ -10845,6 +10845,7 @@ package android.media {
     field public static final deprecated int NUM_STREAMS = 5; // 0x5
     field public static final java.lang.String RINGER_MODE_CHANGED_ACTION = "android.media.RINGER_MODE_CHANGED";
     field public static final int RINGER_MODE_NORMAL = 2; // 0x2
+    field public static final int RINGER_MODE_OUTDOOR = 3; // 0x3
     field public static final int RINGER_MODE_SILENT = 0; // 0x0
     field public static final int RINGER_MODE_VIBRATE = 1; // 0x1
     field public static final deprecated int ROUTE_ALL = -1; // 0xffffffff
