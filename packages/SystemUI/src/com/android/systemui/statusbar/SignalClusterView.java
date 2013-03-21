@@ -67,9 +67,9 @@ public class SignalClusterView
     TextView[] mMobileCard;
     ImageView mAirplane;
     Context mContext;
-    
+
     private int mPhoneNumber = 0;
-    
+
     View mSpacer;
 
     public SignalClusterView(Context context) {
@@ -90,7 +90,7 @@ public class SignalClusterView
         if (DEBUG) Slog.d(TAG, "NetworkController=" + nc);
         mNC = nc;
     }
-    
+
     protected void init(){
     	mPhoneNumber = TelephonyManager.getPhoneCount();
     	mMobileVisible = new boolean[mPhoneNumber];
@@ -98,7 +98,7 @@ public class SignalClusterView
     	mMobileStrengthId = new int[mPhoneNumber];
     	mMobileActivityId = new int[mPhoneNumber];
     	mMobileCardId = new int[mPhoneNumber];
-    	
+
     	mMobileTypeId = new int[mPhoneNumber];
     	mPhoneColor = new int[mPhoneNumber];
 
@@ -129,13 +129,14 @@ public class SignalClusterView
         super.onAttachedToWindow();
 
         mWifiGroup      = (ViewGroup) findViewById(R.id.wifi_combo);
+        if(!mWifiVisible)mWifiGroup.setVisibility(View.GONE);//add for bug 137529
         mWifi           = (ImageView) findViewById(R.id.wifi_signal);
         mWifiActivity   = (ImageView) findViewById(R.id.wifi_inout);
-        
+
         mMobileLayout   = (ViewGroup) findViewById(R.id.mobile_layout);
         LayoutInflater inflater = LayoutInflater.from(mContext);
         mSpacer         =             findViewById(R.id.spacer);
-        
+
         for(int i=0;i<mPhoneNumber;i++){
         	mMobileGroup[i] = inflater.inflate(R.layout.signal_cluster_item_view,null);
         	mMobileLayout.addView(mMobileGroup[i], i);
@@ -207,7 +208,7 @@ public class SignalClusterView
     	mPhoneColor[phoneId] =phoneColor;
         mMobileCardId[phoneId] = cardId;
     	apply(phoneId);
-    	
+
     }
 
     @Override
@@ -227,7 +228,7 @@ public class SignalClusterView
             event.getText().add(mWifiGroup.getContentDescription());
         boolean isMobileVisible = false;
         for(int i=0;i<mPhoneNumber;i++){
-        	if(mMobileVisible[i]){ 
+            if (mMobileVisible[i]) {
         		isMobileVisible = true;
         	}
         }
@@ -235,7 +236,7 @@ public class SignalClusterView
             event.getText().add(mMobileLayout.getContentDescription());
         return super.dispatchPopulateAccessibilityEvent(event);
     }
-    
+
     public void setMobileSignalColor(int phoneColor,int phoneId){
     	if(phoneId >= mPhoneNumber){
     		Slog.d(TAG, "setMobileSignalColor,invalid phoneId=" + phoneId);
@@ -243,7 +244,7 @@ public class SignalClusterView
     	}
     	mPhoneColor[phoneId] = phoneColor;
     }
-    
+
     // Run after each indicator change.
     private void apply(int phoneId) {
         if (mWifiGroup == null) return;
@@ -261,11 +262,11 @@ public class SignalClusterView
             mWifiGroup.setVisibility(View.GONE);
         }
 
-        if (DEBUG) Slog.d(TAG,
+        /*if (DEBUG)*/ Slog.d(TAG,
                 String.format("wifi: %s sig=%d act=%d",
                     (mWifiVisible ? "VISIBLE" : "GONE"),
                     mWifiStrengthId, mWifiActivityId));
-        
+
         if (mMobileVisible[phoneId] && mMobileStrengthId[phoneId] != 0) {
             mMobileGroup[phoneId].setVisibility(View.VISIBLE);
             mMobileCard[phoneId].setText(mMobileCardId[phoneId] + "");
@@ -280,7 +281,7 @@ public class SignalClusterView
         } else {
             mMobileGroup[phoneId].setVisibility(View.GONE);
         }
-        
+
 
         boolean mobileVisible = false;
         for(int i=0;i<mPhoneNumber;i++){
@@ -313,5 +314,5 @@ public class SignalClusterView
         }
        //mod by TS_LC for data call icon :end
     }
-  
+
 }
