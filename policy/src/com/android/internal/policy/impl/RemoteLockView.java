@@ -336,4 +336,8 @@ public class RemoteLockView extends RelativeLayout implements KeyguardScreen,
 
 
     }
+
+    @Override
+    public void onMissedCallCountChanged(int count) {
+    }
 }
