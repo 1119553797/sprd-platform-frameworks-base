@@ -16,6 +16,7 @@
 
 package com.android.internal.os;
 
+import android.os.SystemProperties;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -100,6 +101,8 @@ public class ZygoteInit {
 
     /** Controls whether we should preload resources during zygote init. */
     private static final boolean PRELOAD_RESOURCES = true;
+
+    private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
 
     /**
      * Invokes a static "main(argv[]) method on class "className".
@@ -232,7 +235,9 @@ public class ZygoteInit {
 
     static void preload() {
         preloadClasses();
-        //preloadResources();
+	if (!UNIVERSE_UI_SUPPORT) {
+	    preloadResources();
+	}
     }
 
     /**
