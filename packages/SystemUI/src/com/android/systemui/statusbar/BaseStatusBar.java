@@ -126,7 +126,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     private String[] mOngoingNotificationNeedExitApps;
     protected boolean isUniverseSupport = false;
     private static String universeSupportKey = "universe_ui_support";
-    private static final String SERVICECMD = "com.android.music.musicservicecommand";
+    private static final String SERVICECMD = "com.android.music.musicservicecommand2";//modify for bug 136019
     private static final String CMDNAME = "command";
     private static final String CMDPAUSE = "pause";
     // ongoing notification
