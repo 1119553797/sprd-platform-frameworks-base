@@ -605,7 +605,11 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (isUniverseSupport) {
             Button terminate = (Button)row.findViewById(R.id.ongoing_exit);
             if (sbn.isOngoing() && terminate != null) {
-                terminate.setVisibility(View.VISIBLE);
+                /*
+                 * Temperoray hide this one, because JellyBeans has a hung up button
+                 * as *original design*.
+                 * terminate.setVisibility(View.VISIBLE);
+                 */
                 if ("com.android.phone".equals(sbn.pkg)) {
                     terminate.setText(R.string.status_bar_expanded_notification_hungup_button_text);
                 } else {

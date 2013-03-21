@@ -1,8 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/custom_notification_row_bg"
     >
+
+    <View
+        android:id="@+id/top_glow"
+        android:alpha="0"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/notification_divider_height"
+        android:layout_gravity="top|center_horizontal"
+        android:background="@drawable/top_divider_glow"
+        />
+
     <Button
         android:id="@+id/veto"
         android:layout_width="48dp"
@@ -19,14 +29,15 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:clickable="true"
-        android:layout_marginRight="76dip"
-        android:src="@drawable/custom_notification_row_bg"
-        >
+        ><!-- *Remove an attribute*
+           - The JellyBeans has a onGoingExit button by default, so no need to draw
+           - a hung up button in this layout.
+           - Temproray delete this attribute: android:layout_marginRight="76dip" -->
 
         <com.android.internal.widget.SizeAdaptiveLayout android:id="@+id/adaptive"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:src="@drawable/custom_notification_row_bg" />
+           />
 
     </com.android.systemui.statusbar.LatestItemView>
 
@@ -44,10 +55,13 @@
         android:background="@drawable/btn_default_small"
         />
     <View
+        android:id="@+id/bottom_glow"
+        android:alpha="0"
+        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/custom_status_bar_hr_sprd"
+        android:layout_height="@dimen/notification_divider_height"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="@drawable/bottom_divider_glow"
         />
 
-</RelativeLayout>
+</FrameLayout>
