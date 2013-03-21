@@ -24,6 +24,7 @@ public interface IccConstants {
     static final int EF_ADN = 0x6F3A;
     static final int EF_FDN = 0x6F3B;
     static final int EF_SDN = 0x6F49;
+    static final int EF_LND = 0x6F44;
     static final int EF_EXT1 = 0x6F4A;
     static final int EF_EXT2 = 0x6F4B;
     static final int EF_EXT3 = 0x6F4C;

@@ -59,6 +59,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 
 	// add multi record and email in usim begin
 	static final int EVENT_UPDATE_USIM_ADN_DONE = 3;
+   static final int EVENT_UPDATE_CYCLIC_DONE = 4;
 
 	public int mInsertId = -1;
 	protected final Object mLock = new Object();
@@ -143,6 +144,9 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
     getRecordsIfLoaded(int efid) {
         return adnLikeFiles.get(efid);
     }
+    public void removedRecordsIfLoaded(int efid) {
+        adnLikeFiles.remove(efid);
+    }
 
     /**
      * Returns extension ef associated with ADN-like EF or -1 if
@@ -153,6 +157,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
     int extensionEfForEf(int efid) {
         switch (efid) {
             case EF_MBDN: return EF_EXT6;
+            case EF_LND:
             case EF_ADN: return EF_EXT1;
             case EF_SDN: return EF_EXT3;
             case EF_FDN: return EF_EXT2;
@@ -999,6 +1004,44 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
     }
 
 
+/**
+     * Insert newAdn in LND-like record in EF The LND-like records must be read
+     * through requestLoadAllAdnLike() before
+     *
+     * @param efid must be EF_LND
+     * @param newAdn is the lnd to be stored If lnd file is full, it will delete
+     *            front data
+     * @param pin2 is required to update EF_FDN, otherwise must be null
+     * @param response message to be posted when done response.exception hold
+     *            the exception in error
+     */
+    public void insertLndBySearch(int efid, AdnRecord oldLnd, AdnRecord newLnd, String pin2,
+            Message response) {
+
+        int extensionEF;
+        extensionEF = extensionEfForEf(efid);
+        Log.d(LOG_TAG, "insertLndBySearch:efid" + efid + " extensionEF" + extensionEF);
+        if (extensionEF < 0) {
+            sendErrorResponse(response, IccPhoneBookOperationException.WRITE_OPREATION_FAILED ,"EF is not known LND-like EF:" + efid);
+            return;
+        }
+
+        removedRecordsIfLoaded(efid);
+
+        Message pendingResponse = userWriteResponse.get(efid);
+
+        if (pendingResponse != null) {
+            sendErrorResponse(response,IccPhoneBookOperationException.WRITE_OPREATION_FAILED , "Have pending update for EF:" + efid);
+            return;
+        }
+
+        userWriteResponse.put(efid, response);
+        new AdnRecordLoader(mFh).updateEFCyclic(newLnd, efid, extensionEF, 0, pin2,
+                obtainMessage(EVENT_UPDATE_CYCLIC_DONE, efid, 0, newLnd));
+
+    }
+
+
     /**
      * Responds with exception (in response) if efid is not a known ADN-like
      * record
@@ -1137,6 +1180,26 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 AsyncResult.forMessage(response, index, ar.exception);
                 Log.i("AdnRecordCache", "response" + response + "index " + index
                         + "target " + response.getTarget());
+                response.sendToTarget();
+                break;
+                // add for cyclic files
+            case EVENT_UPDATE_CYCLIC_DONE:
+                ar = (AsyncResult) msg.obj;
+                efid = msg.arg1;
+                index = msg.arg2;
+                adn = (AdnRecord) (ar.userObj);
+                Log.i("AdnRecordCache", "efid " + efid + "mInsertId = " + mInsertId +" ,index = " + index);
+
+                if (ar.exception != null){
+                    Log.i("AdnRecordCache", "ar.exception != null");
+                }
+
+                response = userWriteResponse.get(efid);
+                userWriteResponse.delete(efid);
+
+                AsyncResult.forMessage(response, index, ar.exception);
+                Log.i("AdnRecordCache", "response" + response + "target "
+                        + response.getTarget());
                 response.sendToTarget();
                 break;
             // add multi record and email in usim begin

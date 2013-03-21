@@ -448,7 +448,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
                     }
 
                     if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]
-                            || EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
+                            || (EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]&& EF_TYPE_CYCLIC != data[RESPONSE_DATA_STRUCTURE])) {
                         throw new IccFileTypeMismatch();
                     }
 
@@ -527,10 +527,13 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
                             loge("GSM: TYPE_EF exception");
                             throw new IccFileTypeMismatch();
                         }
-                        if (EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
+
+                        if ((EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE])
+                                && (EF_TYPE_CYCLIC != data[RESPONSE_DATA_STRUCTURE])) {
                             loge("GSM: EF_TYPE_LINEAR_FIXED exception");
                             throw new IccFileTypeMismatch();
                         }
+
                         lc.recordSize = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
                         size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
                                 + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
@@ -764,6 +767,7 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
             case EF_FDN:
             case EF_MSISDN:
             case EF_SDN:
+            case EF_LND:
             case EF_EXT1:
             case EF_EXT2:
             case EF_EXT3:

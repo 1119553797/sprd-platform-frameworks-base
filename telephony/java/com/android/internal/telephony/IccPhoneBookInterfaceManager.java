@@ -218,7 +218,13 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
             AdnRecord oldAdn = null;
             AdnRecord newAdn = null;
 
-            if (newid == IccConstants.EF_PBR) {
+            if (newid == IccConstants.EF_LND) {
+                Log.d("IccPhoneBookInterfaceManager", "insertLNDRecord: efid=" + efid + " ("
+                        + newTag + "," + newPhoneNumber + ")" + " pin2=" + pin2);
+                oldAdn = new AdnRecord(oldTag, oldPhoneNumber);
+                newAdn = new AdnRecord(newTag, newPhoneNumber);
+                adnCache.insertLndBySearch(newid, oldAdn, newAdn, pin2, response);
+            } else if (newid == IccConstants.EF_PBR) {
                 oldAdn = new AdnRecord(oldTag, oldPhoneNumber, oldEmailList,
                         oldAnr, "", oldSne, oldGrp, "");
                 newAdn = new AdnRecord(newTag, newPhoneNumber, newEmailList,
