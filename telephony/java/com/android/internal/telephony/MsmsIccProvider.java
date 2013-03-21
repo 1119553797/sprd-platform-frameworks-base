@@ -476,20 +476,28 @@ public class MsmsIccProvider extends IccProvider {
                 success = true;
         }else if(isGas){
             recIndex = updateUsimGroupById(newgas, index, phoneId);
-
+            if (recIndex < 0) {
+                success = false;
+                if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
+                    Log.d(TAG, "throw exception :recIndex = "+recIndex);
+                    throwException(recIndex);
+                }
+            } else {
+                success = true;
+            }
         }else{
             recIndex = updateIccRecordInEfByIndex(efType, newTag,
                     newNumber, newemails, newanr, newaas, newsne, newgrp, newgas,index,
                     pin2, phoneId);
-        }
-        if (recIndex < 0) {
-            success = false;
-            if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
-                Log.d(TAG, "throw exception :recIndex = "+recIndex);
-                throwException(recIndex);
+            if (recIndex < 0) {
+                success = false;
+                if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
+                    Log.d(TAG, "throw exception :recIndex = "+recIndex);
+                    throwException(recIndex);
+                }
+            } else {
+                success = true;
             }
-        } else {
-            success = true;
         }
         if (!success) {
             return 0;
