@@ -225,6 +225,18 @@ public class UsbDeviceManager {
         mHasUsbAccessory = pm.hasSystemFeature(PackageManager.FEATURE_USB_ACCESSORY);
         initRndisAddress();
 
+        Settings.Secure.putInt(context.getContentResolver(),
+                Settings.Secure.USB_TETHERED, 0);
+        Settings.Secure.putInt(context.getContentResolver(),
+                Settings.Secure.CDROM_ENABLED, 0);
+        if (Settings.Secure.getInt(context.getContentResolver(),
+                "remember_usb_choice", 0) == 0
+                && Settings.Secure.getInt(context.getContentResolver(),
+                "current_function", 0) < 5) {
+            Settings.Secure.putInt(context.getContentResolver(),
+                    "current_function", 0);
+        }
+
         readOemUsbOverrideConfig();
 
         // create a thread for our Handler
@@ -760,14 +772,14 @@ public class UsbDeviceManager {
                     }
                     // setting this property will also change the current USB state
                     // via a property trigger
-                    SystemProperties.set("persist.sys.usb.config", functions);
+                    //SystemProperties.set("persist.sys.usb.config", functions);
                     if (waitForState(functions)) {
                         mCurrentFunctions = functions;
                         mDefaultFunctions = functions;
                     } else {
                         Slog.e(TAG, "Failed to switch persistent USB config to " + functions);
                         // revert to previous configuration if we fail
-                        SystemProperties.set("persist.sys.usb.config", mDefaultFunctions);
+                        //SystemProperties.set("persist.sys.usb.config", mDefaultFunctions);
                     }
                 }
             } else {
