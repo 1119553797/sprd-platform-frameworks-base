@@ -1188,6 +1188,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 efid = msg.arg1;
                 index = msg.arg2;
                 adn = (AdnRecord) (ar.userObj);
+                mInsertId = 1;
                 Log.i("AdnRecordCache", "efid " + efid + "mInsertId = " + mInsertId +" ,index = " + index);
 
                 if (ar.exception != null){
