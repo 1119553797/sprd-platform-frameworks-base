@@ -63,6 +63,11 @@ public class PhoneFactory {
     public static final int DEFAULT_DUAL_SIM_INIT_PHONE_ID = -1;
     public static final int DEFAULT_DUAL_SIM_INIT_MMS_PHONE_ID = -1;
     public static boolean UNIVERSEUI_SUPPORT = SystemProperties.getBoolean("universe_ui_support",false);
+
+    private static final int SIM_STATUS_READY = 0;
+    private static final int SIM_STATUS_PIN_LOCK = 1;
+    private static final int SIM_STATUS_OTHER = 2;
+    private static final int SIM_STATUS_ABSENT = 3;
     
     
     protected static boolean isCardHandled[];
@@ -362,12 +367,17 @@ public class PhoneFactory {
                 Log.i(LOG_TAG, "autoSetDefaultPhoneId,getSettingPhoneId");
                 settingPhoneId = TelephonyManager.getSettingPhoneId(sContext);
             }
+            boolean isHasCardAbsent = false;
+            for (int i = 0; i < TelephonyManager.getPhoneCount(); i++){
+                isHasCardAbsent |= getSimState(i) == State.ABSENT && i == defaultPhoneId;
+            }
+            Log.d(LOG_TAG, "isHasCardAbsent= "+isHasCardAbsent);
             if(UNIVERSEUI_SUPPORT){
-                if(isUpdate && settingPhoneId != defaultPhoneId&& !isCardExist(defaultPhoneId)){
+                if (isUpdate || isHasCardAbsent && settingPhoneId != defaultPhoneId&& !isCardExist(defaultPhoneId)){
                     updateDefaultPhoneId(settingPhoneId);
                 }
             }else{
-                if (isUpdate && settingPhoneId != defaultPhoneId) {
+                if (isUpdate || isHasCardAbsent && settingPhoneId != defaultPhoneId) {
                     updateDefaultPhoneId(settingPhoneId);
                 }
             }
@@ -457,5 +467,60 @@ public class PhoneFactory {
 	public static int getDefaultPhoneId() {
 		return SystemProperties.getInt("persist.msms.phone_default", DEFAULT_PHONE_ID);
 	}
+
+    public static int checkDataCall(int[] cardStatus) {
+        int settingPhoneId = -1;
+        int defaultPhoneId = TelephonyManager.getDefaultDataPhoneId(sContext);
+        for (int i = 0; i < sProxyPhone.length; i++) {
+            if ((cardStatus[i] == SIM_STATUS_READY || cardStatus[i] == SIM_STATUS_PIN_LOCK)
+                    && i == defaultPhoneId) {
+                settingPhoneId = defaultPhoneId;
+                break;
+            } else if (cardStatus[i] == SIM_STATUS_READY) {
+                settingPhoneId = i;
+            }
+        }
+
+        return settingPhoneId;
+    }
+
+    public static boolean checkSimFinish(int phoneId) {
+        if (sProxyPhone != null && phoneId < sProxyPhone.length) {
+            State state = sProxyPhone[phoneId].getIccCard().getIccCardState();
+            boolean radioReady = sCommandsInterface[phoneId].getRadioState().isAvailable();
+            Log.i(LOG_TAG, "checkSimFinish state[" + phoneId + "]=" + state + " radioReady["
+                    + phoneId + "]=" +
+                    radioReady);
+            if (radioReady && ((state == State.PIN_REQUIRED) ||
+                    (state == State.PUK_REQUIRED) ||
+                    (state == State.NETWORK_LOCKED) ||
+                    (state == State.READY) ||
+                    (state == State.ABSENT) || (state == State.NOT_READY))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int canHandleDataCall(int phoneId) {
+        if (sProxyPhone != null && phoneId < sProxyPhone.length) {
+            State state = sProxyPhone[phoneId].getIccCard().getIccCardState();
+            boolean radioOn = sCommandsInterface[phoneId].getRadioState().isOn();
+            Log.i(LOG_TAG, "canHandleDataCall radioOn[" + phoneId + "]=" + radioOn);
+            if ((state == State.PIN_REQUIRED) ||
+                    (state == State.PUK_REQUIRED)) {
+                return SIM_STATUS_PIN_LOCK;
+            } else if (state == State.READY && radioOn) {
+                return SIM_STATUS_READY;
+            }
+            else if (state == State.ABSENT) {
+                return SIM_STATUS_ABSENT;
+            }
+            else {
+                return SIM_STATUS_OTHER;
+            }
+        }
+        return SIM_STATUS_OTHER;
+    }
 
 }
