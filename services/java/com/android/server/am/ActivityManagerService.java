@@ -12174,7 +12174,14 @@ public final class ActivityManagerService  extends ActivityManagerNative
                     ordered, sticky, false, userId);
             if (DEBUG_BROADCAST) Slog.v(
                     TAG, "Enqueueing parallel broadcast " + r);
-            final boolean replaced = replacePending && queue.replaceParallelBroadcastLocked(r);
+            /** SPRD: modified for limit broadcast count @{ */
+            //final boolean replaced = replacePending && queue.replaceParallelBroadcastLocked(r);
+            boolean replaced = replacePending && queue.replaceParallelBroadcastLocked(r);
+            // add for limit broadcast count
+            if (!replaced) {
+                replaced = queue.checkParallelBroadcastLocked(r);
+            }
+            /** @} */
             if (!replaced) {
                 queue.enqueueParallelBroadcastLocked(r);
                 queue.scheduleBroadcastsLocked();
@@ -12269,7 +12276,12 @@ public final class ActivityManagerService  extends ActivityManagerNative
                 int seq = r.intent.getIntExtra("seq", -1);
                 Slog.i(TAG, "Enqueueing broadcast " + r.intent.getAction() + " seq=" + seq);
             }
-            boolean replaced = replacePending && queue.replaceOrderedBroadcastLocked(r); 
+            boolean replaced = replacePending && queue.replaceOrderedBroadcastLocked(r);
+            /** SPRD: add for limit broadcast count @{ */
+            if (!replaced) {
+                replaced = queue.checkOrderedBroadcastLocked(r);
+            }
+            /** @} */
             if (!replaced) {
                 queue.enqueueOrderedBroadcastLocked(r);
                 queue.scheduleBroadcastsLocked();

@@ -57,6 +57,11 @@ public class BroadcastQueue {
     static final int MAX_BROADCAST_HISTORY = 25;
     static final int MAX_BROADCAST_SUMMARY_HISTORY = 100;
 
+    /** SPRD: add for limit broadcast count @{ */
+    private final int MAX_BROADCAST_LENGTH = 500;
+    private final int MAX_BROADCAST_REPEAT = MAX_BROADCAST_LENGTH * 9 / 10;
+    /** @} */
+
     final ActivityManagerService mService;
 
     /**
@@ -206,6 +211,87 @@ public class BroadcastQueue {
         }
         return false;
     }
+
+    /**
+     * SPRD: add for limit broadcast count @{
+     *
+     * @hide
+     */
+    public final boolean checkParallelBroadcastLocked(BroadcastRecord r) {
+        boolean replaced = false;
+        int length = mParallelBroadcasts.size();
+        // fixme: this solution can not completely resolve the problem
+        // assume that broadcast list will never reach MAX_BROADCAST_LENGHT
+        // or start replace action to limit size grow up
+        int lastIndex = length - 1;
+        boolean isChecked = false;
+        if(length > MAX_BROADCAST_LENGTH) {
+            int repeatCount = 0;
+            //if a broadcast has really hight ratio in the list
+            //assume it is blocked, in order not add to list
+            //replace the last one and print stack trace
+            for(int i = length - 1; i >=0 ; i-- ) {
+                if(r.intent.filterEquals(mParallelBroadcasts.get(i).intent)) {
+                    repeatCount ++;
+                    if(!isChecked) {
+                        lastIndex = i;
+                        isChecked = true;
+                    }
+                    if(repeatCount > MAX_BROADCAST_REPEAT) {
+                        replaced = true;
+                        Exception e = new Exception("Broadcast size exceed");
+                        e.printStackTrace();
+                        break;
+                    }
+                }
+            }
+        }
+        if(replaced) {
+            mParallelBroadcasts.set(lastIndex, r);
+        }
+        return replaced;
+    }
+
+    /**
+     * add for limit broadcast count
+     *
+     * @hide
+     */
+    public final boolean checkOrderedBroadcastLocked(BroadcastRecord r) {
+        boolean replaced = false;
+        int length = mOrderedBroadcasts.size();
+        // fixme: this solution can not completely resolve the problem
+        // assume that broadcast list will never reach MAX_BROADCAST_LENGHT
+        // or start replace action to limit size grow up
+        int lastIndex = length - 1;
+        if(length > MAX_BROADCAST_LENGTH) {
+            int repeatCount = 0;
+            boolean isChecked = false;
+            //if a broadcast has really hight ratio in the list
+            //assume it is blocked, in order not add to list
+            //replace the last one and print stack trace
+            for(int i = length - 1; i >= 0; i-- ) {
+                if(r.intent.filterEquals(mOrderedBroadcasts.get(i).intent)) {
+                    repeatCount ++;
+                    if(!isChecked) {
+                        lastIndex = i;
+                        isChecked = true;
+                    }
+                    if(repeatCount > MAX_BROADCAST_REPEAT) {
+                        replaced = true;
+                        Exception e = new Exception("Broadcast size exceed");
+                        e.printStackTrace();
+                        break;
+                    }
+                }
+            }
+        }
+        if(replaced) {
+            mOrderedBroadcasts.set(lastIndex, r);
+        }
+        return replaced;
+    }
+    /** @} */
 
     private final void processCurBroadcastLocked(BroadcastRecord r,
             ProcessRecord app) throws RemoteException {
