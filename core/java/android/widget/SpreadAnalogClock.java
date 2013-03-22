@@ -16,7 +16,10 @@
 
 package android.widget;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -30,7 +33,8 @@ import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RemoteViews.RemoteView;
-import com.android.internal.R;
+
+import java.util.TimeZone;
 
 /**
  * This widget display an analogic clock with two hands for hours and minutes.
@@ -137,6 +141,19 @@ public class SpreadAnalogClock extends View {
 		mTickerStopped = false;
 		super.onAttachedToWindow();
 
+        // modify for bug 128937 start
+        if (!mAttached) {
+            mAttached = true;
+            IntentFilter filter = new IntentFilter();
+
+            filter.addAction(Intent.ACTION_TIME_TICK);
+            filter.addAction(Intent.ACTION_TIME_CHANGED);
+            filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+
+            getContext().registerReceiver(mIntentReceiver, filter, null, mHandler);
+        }
+        // modify for bug 128937 end
+
 		/**
 		 * requests a tick on the next hard-second boundary
 		 */
@@ -170,6 +187,12 @@ public class SpreadAnalogClock extends View {
 	protected void onDetachedFromWindow() {
 		super.onDetachedFromWindow();
 		mTickerStopped = true;
+        // modify for bug 128937 start
+        if (mAttached) {
+            getContext().unregisterReceiver(mIntentReceiver);
+            mAttached = false;
+        }
+        // modify for bug 128937 end
 	}
 
 	@Override
@@ -289,5 +312,21 @@ public class SpreadAnalogClock extends View {
 				time.toMillis(false), flags);
 		setContentDescription(contentDescription);
 	}
+
+    // modify for bug 128937 start
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED)) {
+                String tz = intent.getStringExtra("time-zone");
+                mCalendar = new Time(TimeZone.getTimeZone(tz).getID());
+            }
+
+            onTimeChanged();
+
+            invalidate();
+        }
+    };
+    // modify for bug 128937 end
 
 }
