@@ -3000,7 +3000,13 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         if ((ar = mPanels) == null || ar.length <= featureId) {
             PanelFeatureState[] nar = new PanelFeatureState[featureId + 1];
             if (ar != null) {
-                System.arraycopy(ar, 0, nar, 0, ar.length);
+                try {
+                    System.arraycopy(ar, 0, nar, 0, ar.length);
+                } catch(ArrayStoreException e) {
+                    Log.e(TAG, "System.arraycopy ArrayStoreException: " + e.getMessage());
+                    e.printStackTrace();
+                    return null;
+                }
             }
             mPanels = ar = nar;
         }
