@@ -79,8 +79,8 @@ import java.io.IOException;
  */
 public class LockPatternKeyguardView extends KeyguardViewBase {
 
-    private boolean[] mIsPinUnlockCancelled = {false, false};
-    private boolean[] mIsPukUnlockCancelled = {false, false};
+    private boolean[] mIsPinUnlockCancelled;
+    private boolean[] mIsPukUnlockCancelled;
 
     private static final int TRANSPORT_USERACTIVITY_TIMEOUT = 10000;
 
@@ -484,6 +484,14 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
 
         mUniverseui_support = SystemProperties.getBoolean("universe_ui_support", false);
         mShowLockBeforeUnlock |= mUniverseui_support;
+
+        final int phoneCount = TelephonyManager.getPhoneCount();
+        mIsPinUnlockCancelled = new boolean[phoneCount];
+        mIsPukUnlockCancelled = new boolean[phoneCount];
+        for (int i = 0; i < phoneCount; i++) {
+            mIsPinUnlockCancelled[i] = false;
+            mIsPukUnlockCancelled[i] = false;
+        }
 
         /**
          * We'll get key events the current screen doesn't use. see
