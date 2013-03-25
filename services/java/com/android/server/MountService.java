@@ -1672,7 +1672,9 @@ class MountService extends IMountService.Stub
             int code = e.getCode();
 	    Log.d(TAG, "************ catch NativeDaemonConnectorException code: " + code);
             if (code == VoldResponseCode.OpFailedStorageNotFound) {
-                throw new IllegalArgumentException(String.format("Container '%s' not found", id));
+                Log.i(TAG,"code == VoldResponseCode.OpFailedStorageNotFound");
+                Slog.i(TAG, String.format("Container '%s' not found", id));
+                return null;
             } else {
                 throw new IllegalStateException(String.format(Locale.US, "Unexpected response code %d", code));
             }

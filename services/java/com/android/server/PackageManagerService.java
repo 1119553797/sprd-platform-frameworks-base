@@ -9839,6 +9839,10 @@ class PackageManagerService extends IPackageManager.Stub {
            int num = 0;
            synchronized (mPackages) {
                for (String cid : list) {
+                   String s = PackageHelper.getSdDir(cid);
+                   if(s == null) {
+                       continue;
+                   }
                    SdInstallArgs args = new SdInstallArgs(cid);
                    if (DEBUG_SD_INSTALL) Log.i(TAG, "Processing container " + cid);
                    String pkgName = args.getPackageName();
