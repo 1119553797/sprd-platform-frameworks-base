@@ -366,6 +366,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
             } else {
                 switch (resId) {
                 case com.android.internal.R.drawable.ic_action_assist_generic:
+                    /** comment this, because it don't support Google Now
                     Intent assistIntent = SearchManager
                             .getAssistIntent(mContext);
                     if (assistIntent != null) {
@@ -373,6 +374,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                     } else {
                         Log.w(TAG, "Failed to get intent for assist activity");
                     }
+                    */
+
+                    Intent globalSearchIntent = new Intent(SearchManager.INTENT_ACTION_GLOBAL_SEARCH);
+                    launchActivity(globalSearchIntent);
+
                         // mCallback.pokeWakelock();
                     mCallback.goToUnlockScreen();
                     break;
