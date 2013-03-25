@@ -1705,6 +1705,14 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
 
+        case IS_HOME_KEY_PRESSED_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            boolean res = isHomeKeyPressed();
+            reply.writeNoException();
+            reply.writeInt(res ? 1 : 0);
+            return true;
+        } 
+
         }
 
         return super.onTransact(code, data, reply, flags);
@@ -3899,6 +3907,19 @@ class ActivityManagerProxy implements IActivityManager
         reply.recycle();
         return result;
     }
+
+    public boolean isHomeKeyPressed() throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        mRemote.transact(IS_HOME_KEY_PRESSED_TRANSACTION, data, reply, 0);
+        reply.readException();
+        boolean res = reply.readInt() != 0;
+        data.recycle();
+        reply.recycle();
+        return res;
+    }
+
 
     private IBinder mRemote;
 }

@@ -158,6 +158,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.android.internal.policy.impl.PhoneWindowManager;
+
 public final class ActivityManagerService extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
     private static final String USER_DATA_DIR = "/data/user/";
@@ -15567,5 +15569,8 @@ public final class ActivityManagerService extends ActivityManagerNative
             index++;
         }
         return 0;
+    }
+    public boolean isHomeKeyPressed() {
+        return PhoneWindowManager.mIsHomeKeyPressed.getAndSet(false);
     }
 }
