@@ -345,8 +345,10 @@ public class PhoneStateListener {
         }
 
         public void onDataConnectionStateChanged(int state, int networkType) {
+            Log.d("PhoneStateListener", "onDataConnectionStateChanged(" + state + ", " + networkType + ") E");
             Message.obtain(mHandler, LISTEN_DATA_CONNECTION_STATE, state, networkType).
                     sendToTarget();
+            Log.d("PhoneStateListener", "onDataConnectionStateChanged() X");
         }
 
         public void onDataActivity(int direction) {
@@ -390,8 +392,11 @@ public class PhoneStateListener {
                     PhoneStateListener.this.onCallStateChanged(msg.arg1, (String)msg.obj);
                     break;
                 case LISTEN_DATA_CONNECTION_STATE:
+                    Log.d("PhoneStateListener", "handleMessage(LISTEN_DATA_CONNECTION_STATE), arg1: " + msg.arg1 + ", arg2: " + msg.arg2 + ") E");
                     PhoneStateListener.this.onDataConnectionStateChanged(msg.arg1, msg.arg2);
+                    Log.d("PhoneStateListener", "handleMessage(LISTEN_DATA_CONNECTION_STATE), a");
                     PhoneStateListener.this.onDataConnectionStateChanged(msg.arg1);
+                    Log.d("PhoneStateListener", "handleMessage(LISTEN_DATA_CONNECTION_STATE), X");
                     break;
                 case LISTEN_DATA_ACTIVITY:
                     PhoneStateListener.this.onDataActivity(msg.arg1);
