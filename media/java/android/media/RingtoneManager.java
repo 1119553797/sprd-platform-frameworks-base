@@ -373,14 +373,14 @@ public class RingtoneManager {
      * @see #URI_COLUMN_INDEX
      */
     public Cursor getCursor() {
-        if (mCursor != null && mCursor.requery()) {
+        if (mCursor != null && !mCursor.isClosed() && mCursor.requery()) {
             return mCursor;
         }
         
         final Cursor internalCursor = getInternalRingtones();
         final Cursor drmCursor = mIncludeDrm ? getDrmRingtones() : null;
         final Cursor mediaCursor = getMediaRingtones();
-             
+
         mCursorArr = new Cursor[] { internalCursor, drmCursor, mediaCursor};
         return mCursor = new SortCursor(mCursorArr,
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
@@ -411,7 +411,7 @@ public class RingtoneManager {
     public Uri getRingtoneUri(int position) {
         // use cursor directly instead of requerying it, which could easily
         // cause position to shuffle.
-        if (mCursor == null || !mCursor.moveToPosition(position) || mCursor.isClosed()) {
+        if (mCursor == null || mCursor.isClosed() ||!mCursor.moveToPosition(position) ) {
             return null;
         }
         
@@ -453,12 +453,11 @@ public class RingtoneManager {
                     .getLong(ID_COLUMN_INDEX)))) {
                 return i;
             }
-            
+
             cursor.move(1);
-            
+
             previousUriString = uriString;
         }
-        
         return -1;
     }
 
