@@ -3411,15 +3411,17 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
     private void onSetWiredDeviceConnectionState(int device, int state, String name)
     {
         synchronized (mConnectedDevices) {
-            if ((state == 0) && ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
+//delete for bug141679 start
+/**            if ((state == 0) && ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
                     (device == AudioSystem.DEVICE_OUT_WIRED_HEADPHONE))) {
                 setBluetoothA2dpOnInt(true);
-            }
+            }*/
             handleDeviceConnection((state == 1), device, "");
-            if ((state != 0) && ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
+/**            if ((state != 0) && ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
                     (device == AudioSystem.DEVICE_OUT_WIRED_HEADPHONE))) {
                 setBluetoothA2dpOnInt(false);
-            }
+            }*/
+//delete for bug141679 end
             sendDeviceConnectionIntent(device, state, name);
         }
     }
