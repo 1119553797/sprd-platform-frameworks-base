@@ -526,11 +526,15 @@ class KeyguardStatusViewManager implements OnClickListener {
         }
     }
 
+    /**
+     * Update Missed call info for Lock Screen
+     * @param count The count of missed call
+     */
     private void updateMissedCallInfoForLockScreen(int count) {
         Log.i(TAG, "updateMissedCallInfoForLockScreen : " + count);
         if (mMissedCallTextView != null) {
             if (count > 0) {
-            	missedCallTextViewSetOnClickListener(true);
+                missedCallTextViewSetOnClickListener(true);
                 mMissedCallCount = count;
                 mMissedCallTextView.setVisibility(View.VISIBLE);
                 mMissedCallTextView.setText(getContext().getString(R.string.missed_call,
@@ -541,7 +545,6 @@ class KeyguardStatusViewManager implements OnClickListener {
             }
         }
     }
-    //add new feature for lockscreen end
 
     private CharSequence getAltTextMessage(MutableInt icon) {
         // If we have replaced the status area with a single widget, then this code
@@ -875,6 +878,10 @@ class KeyguardStatusViewManager implements OnClickListener {
             if (messageCount > 0) {
                 updateMessageCountForLockScreen(messageCount);
             }
+        };
+
+        public void onMissedCallCountChanged(int count) {
+            updateMissedCallInfoForLockScreen(count);
         };
     };
 

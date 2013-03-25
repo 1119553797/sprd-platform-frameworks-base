@@ -267,6 +267,10 @@ public class KeyguardUpdateMonitor {
                     case MSG_UNREAD_MESSAGE_COUNT:
                         handleMessageCountChanged(msg.arg1);
                         break;
+                    case MSG_MISSED_CALL_COUNT:
+                    case MSG_MISSED_CALL_CANCEL:
+                        handeleMissedCallCountChanged(msg.arg1);
+                        break;
                 }
             }
         };
@@ -566,6 +570,13 @@ public class KeyguardUpdateMonitor {
         }
     }
 
+    private void handeleMissedCallCountChanged(int count) {
+        mMissedCallCount = count;
+        for (int i = 0; i < mInfoCallbacks.size(); i++) {
+            mInfoCallbacks.get(i).onMissedCallCountChanged(count);
+        }
+    }
+
     /**
      * @param pluggedIn state from {@link android.os.BatteryManager#EXTRA_PLUGGED}
      * @return Whether the device is considered "plugged in."
@@ -716,6 +727,12 @@ public class KeyguardUpdateMonitor {
          * @param messagecount The count of unread Message
          */
         void onMessageCountChanged(int messageCount);
+
+        /**
+         * Called when receive the new Missed Call
+         * @param count The count of missed call
+         */
+        void onMissedCallCountChanged(int count);
     }
 
     // Simple class that allows methods to easily be overwritten
@@ -757,6 +774,10 @@ public class KeyguardUpdateMonitor {
 
         @Override
         public void onMessageCountChanged(int messageCount) {
+        }
+
+        @Override
+        public void onMissedCallCountChanged(int count) {
         }
     }
 
