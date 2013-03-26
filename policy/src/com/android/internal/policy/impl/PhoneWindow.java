@@ -2483,6 +2483,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                 mActionModePopup = null;
             }
 
+            mActionModeView = null;
+
             PanelFeatureState st = getPanelState(FEATURE_OPTIONS_PANEL, false);
             if (st != null && st.menu != null && mFeatureId < 0) {
                 st.menu.close();
