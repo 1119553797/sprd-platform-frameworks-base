@@ -2646,7 +2646,13 @@ public final class ActivityThread {
         // we are back active so skip it.
         unscheduleGcIdler();
 
-        ActivityClientRecord r = performResumeActivity(token, clearHide);
+        ActivityClientRecord r;
+        try {
+            r = performResumeActivity(token, clearHide);
+        } catch (IllegalStateException e) {
+            Log.e(TAG, "IllegalStateException in performResumeActivity: " + e.getMessage());
+            r = null;
+        }
 
         if (r != null) {
             final Activity a = r.activity;
