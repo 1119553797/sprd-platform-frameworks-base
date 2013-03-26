@@ -18,7 +18,6 @@ package com.android.internal.telephony;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.LocalServerSocket;
 import android.os.Looper;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -26,12 +25,7 @@ import android.util.Log;
 import android.os.SystemProperties;
 
 import com.android.internal.telephony.IccCard.State;
-import com.android.internal.telephony.cdma.CDMAPhone;
-import com.android.internal.telephony.cdma.CDMALTEPhone;
 import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
-import com.android.internal.telephony.gsm.GSMPhone;
-import com.android.internal.telephony.gsm.SimPhoneBookInterfaceManager;
-import com.android.internal.telephony.gsm.SimSmsInterfaceManager;
 import com.android.internal.telephony.sip.SipPhone;
 import com.android.internal.telephony.sip.SipPhoneFactory;
 
@@ -58,10 +52,12 @@ public class PhoneFactory {
                          CdmaSubscriptionSourceManager.PREFERRED_CDMA_SUBSCRIPTION;
 
     // zhanglj add 2011-05-20
+    static final int  MMS_SET_AUTO = 3;
+
     public static final int DEFAULT_PHONE_COUNT = 1;
     public static final int DEFAULT_PHONE_ID = 0;
     public static final int DEFAULT_DUAL_SIM_INIT_PHONE_ID = -1;
-    public static final int DEFAULT_DUAL_SIM_INIT_MMS_PHONE_ID = -1;
+    public static final int DEFAULT_DUAL_SIM_INIT_MMS_PHONE_ID = MMS_SET_AUTO;
     public static boolean UNIVERSEUI_SUPPORT = SystemProperties.getBoolean("universe_ui_support",false);
 
     private static final int SIM_STATUS_READY = 0;
