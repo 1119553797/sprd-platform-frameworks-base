@@ -6421,7 +6421,15 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             int viewType = lp.viewType;
             final boolean scrapHasTransientState = scrap.hasTransientState();
             if (!shouldRecycleViewType(viewType) || scrapHasTransientState) {
-                if (viewType != ITEM_VIEW_TYPE_HEADER_OR_FOOTER || scrapHasTransientState) {
+                boolean addScrap = false;
+                if (viewType != ITEM_VIEW_TYPE_HEADER_OR_FOOTER) {
+                    addScrap = true;
+                } else if (scrap.onCheckIsTextEditor()){
+                    addScrap = false;
+                } else {
+                    addScrap = scrapHasTransientState;
+                }
+                if (addScrap) {
                     if (mSkippedScrap == null) {
                         mSkippedScrap = new ArrayList<View>();
                     }
