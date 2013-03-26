@@ -47,7 +47,7 @@ import com.android.internal.telephony.PhoneFactory;
  */
 public final class Telephony {
     private static final String TAG = "Telephony";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     // Constructor

@@ -522,7 +522,7 @@ public class PduComposer {
      * Append header to mMessage.
      */
     private int appendHeader(int field) {
-		Log.d(TAG, "appendHeader field = "+field);
+//		Log.d(TAG, "appendHeader field = "+field);
         switch (field) {
             case PduHeaders.MMS_VERSION:
                 appendOctet(field);
@@ -609,7 +609,7 @@ public class PduComposer {
             case PduHeaders.DELIVERY_REPORT:
             case PduHeaders.READ_REPORT:
                 int octet = mPduHeader.getOctet(field);
-                Log.d(TAG, "appendHeader <status,reportallowed,priority,delivery,read> octet = "+octet);
+//                Log.d(TAG, "appendHeader <status,reportallowed,priority,delivery,read> octet = "+octet);
                 if (0 == octet) {
                     return PDU_COMPOSE_FIELD_NOT_SET;
                 }
@@ -665,7 +665,7 @@ public class PduComposer {
 
             case PduHeaders.EXPIRY:
                 long expiry = mPduHeader.getLongInteger(field);
-                Log.d(TAG, "appendHeader expiry = "+expiry);
+//                Log.d(TAG, "appendHeader expiry = "+expiry);
                 if (-1 == expiry) {
                     return PDU_COMPOSE_FIELD_NOT_SET;
                 }
