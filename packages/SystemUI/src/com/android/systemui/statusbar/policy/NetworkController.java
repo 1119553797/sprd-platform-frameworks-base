@@ -1009,12 +1009,6 @@ public class NetworkController extends BroadcastReceiver {
         if (action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
             mWifiEnabled = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
                     WifiManager.WIFI_STATE_UNKNOWN) == WifiManager.WIFI_STATE_ENABLED;
-
-            boolean mWifiDisabled = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
-                    WifiManager.WIFI_STATE_UNKNOWN) == WifiManager.WIFI_STATE_DISABLED;
-            if (mWifiDisabled && requireShowDisconnDialog(null,false)) {
-                wlan2MobileDialog();
-            }
         } else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
             final NetworkInfo networkInfo = (NetworkInfo)
                     intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
