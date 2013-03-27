@@ -1047,7 +1047,8 @@ public class NetworkController extends BroadcastReceiver {
             if (mDataAndWifiStacked) {
                 mWifiIconId = 0;
             } else {
-                mWifiIconId = mWifiEnabled ? R.drawable.stat_sys_wifi_signal_null : 0;
+                // Modify stat_sys_wifi_signal_null to stat_sys_wifi_signal_null_sprd for bug 142111
+                mWifiIconId = mWifiEnabled ? R.drawable.stat_sys_wifi_signal_null_sprd : 0;
             }
             mContentDescriptionWifi = mContext.getString(R.string.accessibility_no_wifi);
         }
