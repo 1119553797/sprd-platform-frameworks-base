@@ -1763,5 +1763,20 @@ public class TelephonyManager {
         }
         return false;
     }
+    /**
+     * @hide
+     */
+    public static boolean isRadioBusy(Context context) {
+        return Settings.Secure.getInt(context.getContentResolver(),
+                Settings.Secure.RADIO_OPERATION, 0) == 1;
+    }
 
+    /**
+     * @hide
+     */
+    public static void setRadioBusy(Context context, boolean mRadioPower) {
+        Log.d(TAG, "setRadioBusy " + mRadioPower);
+        Settings.Secure.putInt(context.getContentResolver(),
+                Settings.Secure.RADIO_OPERATION, mRadioPower ? 1 : 0);
+    }
 }

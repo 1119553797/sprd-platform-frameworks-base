@@ -3575,6 +3575,7 @@ public final class Settings {
          * @hide
          */
         public static final String MOBILE_DATA = "mobile_data";
+        public static final String RADIO_OPERATION = "radio_operation";
 
         /**
          * The CDMA roaming mode 0 = Home Networks, CDMA default
