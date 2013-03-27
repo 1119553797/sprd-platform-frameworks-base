@@ -199,7 +199,7 @@ public class ContentType {
     }
 
     public static boolean isAudioType(String contentType) {
-        return (null != contentType) && contentType.startsWith("audio/");
+        return (null != contentType) && (contentType.startsWith("audio/") || contentType.endsWith("ogg"));
     }
 
     public static boolean isVideoType(String contentType) {
