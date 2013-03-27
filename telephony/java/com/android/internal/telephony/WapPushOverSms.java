@@ -195,94 +195,140 @@ public class WapPushOverSms {
 
         byte[] intentData;
 
-        if (mimeType != null && mimeType.equals(WspTypeDecoder.CONTENT_TYPE_B_PUSH_CO)) {
-            intentData = pdu;
+        // Add for support OTA begin at 2013-03-27
+        if (false) Log.d(LOG_TAG, "dispatchWapPdu()       mimeType: " + mimeType);
+        if (WspTypeDecoder.CONTENT_MIME_TYPE_B_OTA_OMA.equals(mimeType)
+                || WspTypeDecoder.CONTENT_MIME_TYPE_B_OTA_NOKIA_SETTINGS.equals(mimeType)
+                || WspTypeDecoder.CONTENT_MIME_TYPE_B_OTA_NOKIA_BOOKMARKS.equals(mimeType)) {
+            dispatchWapPdu_OTA(pdus, pdu, transactionId, pduType, headerStartIndex, headerLength,
+                    mimeType);
+        // Add for support OTA end at 2013-03-27
         } else {
-            int dataIndex = headerStartIndex + headerLength;
-            intentData = new byte[pdu.length - dataIndex];
-            System.arraycopy(pdu, dataIndex, intentData, 0, intentData.length);
-        }
-
-        /**
-         * Seek for application ID field in WSP header.
-         * If application ID is found, WapPushManager substitute the message
-         * processing. Since WapPushManager is optional module, if WapPushManager
-         * is not found, legacy message processing will be continued.
-         */
-        if (pduDecoder.seekXWapApplicationId(index, index + headerLength - 1)) {
-            index = (int) pduDecoder.getValue32();
-            pduDecoder.decodeXWapApplicationId(index);
-            String wapAppId = pduDecoder.getValueString();
-            if (wapAppId == null) {
-                wapAppId = Integer.toString((int) pduDecoder.getValue32());
+            if (mimeType != null && mimeType.equals(WspTypeDecoder.CONTENT_TYPE_B_PUSH_CO)) {
+                intentData = pdu;
+            } else {
+                int dataIndex = headerStartIndex + headerLength;
+                intentData = new byte[pdu.length - dataIndex];
+                System.arraycopy(pdu, dataIndex, intentData, 0, intentData.length);
             }
 
-            String contentType = ((mimeType == null) ?
-                                  Long.toString(binaryContentType) : mimeType);
-            if (false) Log.v(LOG_TAG, "appid found: " + wapAppId + ":" + contentType);
+            /**
+             * Seek for application ID field in WSP header.
+             * If application ID is found, WapPushManager substitute the message
+             * processing. Since WapPushManager is optional module, if WapPushManager
+             * is not found, legacy message processing will be continued.
+             */
+            if (pduDecoder.seekXWapApplicationId(index, index + headerLength - 1)) {
+                index = (int) pduDecoder.getValue32();
+                pduDecoder.decodeXWapApplicationId(index);
+                String wapAppId = pduDecoder.getValueString();
+                if (wapAppId == null) {
+                    wapAppId = Integer.toString((int) pduDecoder.getValue32());
+                }
 
-            try {
-                boolean processFurther = true;
-                IWapPushManager wapPushMan = mWapConn.getWapPushManager();
+                String contentType = ((mimeType == null) ?
+                                      Long.toString(binaryContentType) : mimeType);
+                if (false) Log.v(LOG_TAG, "appid found: " + wapAppId + ":" + contentType);
 
-                if (wapPushMan == null) {
-                    if (false) Log.w(LOG_TAG, "wap push manager not found!");
-                } else {
-                    Intent intent = new Intent();
-                    intent.putExtra("transactionId", transactionId);
-                    intent.putExtra("pduType", pduType);
-                    intent.putExtra("header", header);
-                    intent.putExtra("data", intentData);
-                    intent.putExtra("contentTypeParameters",
-                            pduDecoder.getContentParameters());
-                    intent.putExtra("pdus", pdus);
-                    intent.putExtra(Phone.PHONE_ID, mPhoneId);
-                    if (!TextUtils.isEmpty(number)) {
-							intent.putExtra("from", number);
-                       }
-                    int procRet = wapPushMan.processMessage(wapAppId, contentType, intent);
-                    if (false) Log.v(LOG_TAG, "procRet:" + procRet);
-                    if ((procRet & WapPushManagerParams.MESSAGE_HANDLED) > 0
-                        && (procRet & WapPushManagerParams.FURTHER_PROCESSING) == 0) {
-                        processFurther = false;
+                try {
+                    boolean processFurther = true;
+                    IWapPushManager wapPushMan = mWapConn.getWapPushManager();
+
+                    if (wapPushMan == null) {
+                        if (false) Log.w(LOG_TAG, "wap push manager not found!");
+                    } else {
+                        Intent intent = new Intent();
+                        intent.putExtra("transactionId", transactionId);
+                        intent.putExtra("pduType", pduType);
+                        intent.putExtra("header", header);
+                        intent.putExtra("data", intentData);
+                        intent.putExtra("contentTypeParameters",
+                                pduDecoder.getContentParameters());
+                        intent.putExtra("pdus", pdus);
+                        intent.putExtra(Phone.PHONE_ID, mPhoneId);
+                        if (!TextUtils.isEmpty(number)) {
+                            intent.putExtra("from", number);
+                        }
+                        int procRet = wapPushMan.processMessage(wapAppId, contentType, intent);
+                        if (false) Log.v(LOG_TAG, "procRet:" + procRet);
+                        if ((procRet & WapPushManagerParams.MESSAGE_HANDLED) > 0
+                                && (procRet & WapPushManagerParams.FURTHER_PROCESSING) == 0) {
+                            processFurther = false;
+                        }
                     }
+                    if (!processFurther) {
+                        return Intents.RESULT_SMS_HANDLED;
+                    }
+                } catch (RemoteException e) {
+                    if (false) Log.w(LOG_TAG, "remote func failed...");
                 }
-                if (!processFurther) {
-                    return Intents.RESULT_SMS_HANDLED;
+            }
+            if (false) Log.v(LOG_TAG, "fall back to existing handler");
+
+            if (mimeType == null) {
+                if (false) Log.w(LOG_TAG, "Header Content-Type error.");
+                return Intents.RESULT_SMS_GENERIC_ERROR;
+            }
+
+            int dataIndex = headerStartIndex + headerLength;
+            byte[] data = new byte[pdu.length - dataIndex];
+            String permission;
+            if (mimeType != null) {
+                if (mimeType.equals(WspTypeDecoder.CONTENT_TYPE_B_PUSH_CO)) {
+                    data = pdu;
+                    permission = "android.permission.RECEIVE_WAP_PUSH";
+                } else if (mimeType.equals(WspTypeDecoder.CONTENT_TYPE_B_MMS)) {
+                    System.arraycopy(pdu, dataIndex, data, 0, data.length);
+                    permission = "android.permission.RECEIVE_MMS";
+                } else {
+                    System.arraycopy(pdu, dataIndex, data, 0, data.length);
+                    permission = "android.permission.RECEIVE_WAP_PUSH";
                 }
-            } catch (RemoteException e) {
-                if (false) Log.w(LOG_TAG, "remote func failed...");
+                this.dispatch(mimeType, transactionId, pduType, header, data, pdus, permission,
+                        number);
             }
         }
-        if (false) Log.v(LOG_TAG, "fall back to existing handler");
 
-        if (mimeType == null) {
-            if (false) Log.w(LOG_TAG, "Header Content-Type error.");
-            return Intents.RESULT_SMS_GENERIC_ERROR;
+        return Activity.RESULT_OK;
+    }
+
+    private void dispatch(String mimeType, int transactionId, int pduType, byte[] header,
+            byte[] data, byte[][] pdus, String permission, String number) {
+        Intent intent = new Intent(Intents.WAP_PUSH_RECEIVED_ACTION);
+        intent.setType(mimeType);
+        intent.putExtra("transactionId", transactionId);
+        intent.putExtra("pduType", pduType);
+        intent.putExtra("header", header);
+        intent.putExtra("data", data);
+        intent.putExtra("pdus", pdus);
+        intent.putExtra(Phone.PHONE_ID, mPhoneId);
+        if (!TextUtils.isEmpty(number)) {
+            intent.putExtra("from", number);
         }
+        mSmsDispatcher.dispatch(intent, permission);
+    }
 
-        String permission;
+    // Add for support OTA begin at 2013-03-27
+    private void dispatchWapPdu_OTA(byte[][] pdus, byte[] pdu, int transactionId, int pduType,
+            int headerStartIndex, int headerLength, String mimeType) {
+        byte[] header = new byte[headerLength];
+        System.arraycopy(pdu, headerStartIndex, header, 0, header.length);
+        int dataIndex = headerStartIndex + headerLength;
+        byte[] data = new byte[pdu.length - dataIndex];
+        System.arraycopy(pdu, dataIndex, data, 0, data.length);
 
-        if (mimeType.equals(WspTypeDecoder.CONTENT_TYPE_B_MMS)) {
-            permission = "android.permission.RECEIVE_MMS";
-        } else {
-            permission = "android.permission.RECEIVE_WAP_PUSH";
-        }
+        Log.w(LOG_TAG, "dispatchWapPdu_OTA()           transactionId = " + transactionId + ",  mimeType="
+                + mimeType + ",  header = " + header);
 
         Intent intent = new Intent(Intents.WAP_PUSH_RECEIVED_ACTION);
         intent.setType(mimeType);
         intent.putExtra("transactionId", transactionId);
         intent.putExtra("pduType", pduType);
         intent.putExtra("header", header);
-        intent.putExtra("data", intentData);
-        intent.putExtra("contentTypeParameters", pduDecoder.getContentParameters());
-        intent.putExtra("pdus", pdus);
+        intent.putExtra("mimeType", mimeType);
+        intent.putExtra("data", data);
         intent.putExtra(Phone.PHONE_ID, mPhoneId);
-        if (!TextUtils.isEmpty(number)) {
-				intent.putExtra("from", number);
-         }
-        mSmsDispatcher.dispatch(intent, permission);
-
-        return Activity.RESULT_OK;
+        mSmsDispatcher.dispatch(intent, "android.permission.RECEIVE_WAP_PUSH");
     }
+    // Add for support OTA end at 2013-03-27
 }

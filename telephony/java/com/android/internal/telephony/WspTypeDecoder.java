@@ -30,6 +30,9 @@ public class WspTypeDecoder {
 
     public static final int PDU_TYPE_PUSH = 0x06;
     public static final int PDU_TYPE_CONFIRMED_PUSH = 0x07;
+    // Add for support OTA begin at 2013-03-27
+    public static final int CONTENT_TYPE_B_OTA_OMA = 0x36;
+    // Add for support OTA end at 2013-03-27
 
     private final static HashMap<Integer, String> WELL_KNOWN_MIME_TYPES =
             new HashMap<Integer, String>();
@@ -195,6 +198,12 @@ public class WspTypeDecoder {
     public static final String CONTENT_TYPE_B_PUSH_CO = "application/vnd.wap.coc";
     public static final String CONTENT_TYPE_B_MMS = "application/vnd.wap.mms-message";
     public static final String CONTENT_TYPE_B_PUSH_SYNCML_NOTI = "application/vnd.syncml.notification";
+
+    // Add for support OTA begin at 2013-03-27
+    public static final String CONTENT_MIME_TYPE_B_OTA_OMA = "application/vnd.wap.connectivity-wbxml";
+    public static final String CONTENT_MIME_TYPE_B_OTA_NOKIA_SETTINGS = "application/x-wap-prov.browser-settings";
+    public static final String CONTENT_MIME_TYPE_B_OTA_NOKIA_BOOKMARKS = "application/x-wap-prov.browser-bookmarks";
+    // Add for support OTA end at 2013-03-27
 
     byte[] wspData;
     int    dataLength;

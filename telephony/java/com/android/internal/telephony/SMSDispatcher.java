@@ -494,7 +494,12 @@ public abstract class SMSDispatcher extends Handler {
             pdus[0] = sms.getPdu();
 
             if (smsHeader != null && smsHeader.portAddrs != null) {
-                if (smsHeader.portAddrs.destPort == SmsHeader.PORT_WAP_PUSH) {
+                if (smsHeader.portAddrs.destPort == SmsHeader.PORT_WAP_PUSH
+                    // Add for support OTA begin at 2013-03-27
+                        || smsHeader.portAddrs.destPort == SmsHeader.PORT_WAP_OTA) {
+                    Log.d(TAG, "dispatchNormalMessage()     smsHeader.portAddrs.destPort="
+                            + smsHeader.portAddrs.destPort);
+                    // Add for support OTA end at 2013-03-27
                     // GSM-style WAP indication
                     return mWapPush.dispatchWapPdu(sms.getUserData(),pdus,sms.getDisplayOriginatingAddress());
                 } else {
@@ -633,7 +638,10 @@ public abstract class SMSDispatcher extends Handler {
             byte[] datagram = output.toByteArray();
 
             // Dispatch the PDU to applications
-            if (destPort == SmsHeader.PORT_WAP_PUSH) {
+            if (destPort == SmsHeader.PORT_WAP_PUSH
+                    // Add for support OTA begin at 2013-03-27
+                    || destPort == SmsHeader.PORT_WAP_OTA) {
+                    // Add for support OTA end at 2013-03-27
                 // Handle the PUSH
                 return mWapPush.dispatchWapPdu(datagram, pdus, "");
             } else {
@@ -647,7 +655,10 @@ public abstract class SMSDispatcher extends Handler {
 
         // Dispatch the PDUs to applications
         if (destPort != -1) {
-            if (destPort == SmsHeader.PORT_WAP_PUSH) {
+            if (destPort == SmsHeader.PORT_WAP_PUSH
+                    // Add for support OTA begin at 2013-03-27
+                    || destPort == SmsHeader.PORT_WAP_OTA) {
+                    // Add for support OTA end at 2013-03-27
                 // Build up the data stream
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
                 String addressNumber = null;
