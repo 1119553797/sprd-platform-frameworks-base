@@ -417,7 +417,14 @@ bool BootAnimation::movie()
 
     Animation animation;
 
-    soundplay();
+    char silence[PROPERTY_VALUE_MAX];
+    property_get("persist.sys.silence", silence, "0");
+
+    if(strcmp("1", silence)==0){
+        // do something.
+    }else{
+        soundplay();
+    }
     // Parse the description file
     for (;;) {
         const char* endl = strstr(s, "\n");
@@ -617,7 +624,7 @@ bool BootAnimation::soundplay()
 
 	mp = new MediaPlayer();
 	mp->setDataSource(fd, 0, 0x7ffffffffffffffLL);
-	mp->setAudioStreamType(AUDIO_STREAM_MUSIC);
+	mp->setAudioStreamType(/*AUDIO_STREAM_MUSIC*/AUDIO_STREAM_SYSTEM);
 	mp->prepare();
 	mp->start();
 	return false;
