@@ -259,7 +259,7 @@ public class NetworkController extends BroadcastReceiver {
         mContentDescriptionDataType = new String[numPhones];
         mLastSignalLevel = new int[numPhones];
         mDataIconList = new int[numPhones][TelephonyIcons.DATA_G[0].length];
-        
+
         ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         mHasMobileDataFeature = cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
@@ -516,14 +516,14 @@ public class NetworkController extends BroadcastReceiver {
                 updateTelephonySignalStrength(i);
                 refreshViews(i);
             }
-        } else if (action.equals(SimManager.INSERT_SIMS_CHANGED_ACTION)){            
+        } else if (action.equals(SimManager.INSERT_SIMS_CHANGED_ACTION)){
             ArrayList<Sim> changedSims= intent.getParcelableArrayListExtra("sim");
             for (Sim sim : changedSims) {
                 mSimColor[sim.getPhoneId()] = sim.getColor();
                 Log.d(TAG, "mSimColor["+sim.getPhoneId()+"]: "+sim.getColor());
                 refreshViews(sim.getPhoneId());
                 }
-           
+
         } else if (action.equals(WimaxManagerConstants.NET_4G_STATE_CHANGED_ACTION) ||
                 action.equals(WimaxManagerConstants.SIGNAL_LEVEL_CHANGED_ACTION) ||
                 action.equals(WimaxManagerConstants.WIMAX_NETWORK_STATE_CHANGED_ACTION)) {
@@ -1236,13 +1236,13 @@ public class NetworkController extends BroadcastReceiver {
                 }
                 switch (mWifiActivity) {
                     case WifiManager.DATA_ACTIVITY_IN:
-                        mWifiActivityIconId = R.drawable.stat_sys_wifi_in;
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_in_sprd;
                         break;
                     case WifiManager.DATA_ACTIVITY_OUT:
-                        mWifiActivityIconId = R.drawable.stat_sys_wifi_out;
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_out_sprd;
                         break;
                     case WifiManager.DATA_ACTIVITY_INOUT:
-                        mWifiActivityIconId = R.drawable.stat_sys_wifi_inout;
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_inout_sprd;
                         break;
                     case WifiManager.DATA_ACTIVITY_NONE:
                         mWifiActivityIconId = 0;
