@@ -508,7 +508,17 @@ class CommandParamsFactory extends Handler {
                 byte[] rawValue = ctlv.getRawValue();
                 int valueIndex = ctlv.getValueIndex();
                 input.minLen = rawValue[valueIndex] & 0xff;
+                // the min length is less then 240 bytes as the whole terminal
+                // response data length is less than 255 and the header may has 15 bytes.
+                if (input.minLen > 240) {
+                    input.minLen = 240;
+                }   
                 input.maxLen = rawValue[valueIndex + 1] & 0xff;
+                // the max length is less then 240 bytes as the whole terminal
+                // response data length is less than 255 and the header may has 15 bytes.
+                if (input.maxLen > 240) {
+                    input.maxLen = 240;
+                }
             } catch (IndexOutOfBoundsException e) {
                 throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
             }
@@ -535,6 +545,11 @@ class CommandParamsFactory extends Handler {
         input.packed = (cmdDet.commandQualifier & 0x08) != 0;
         input.helpAvailable = (cmdDet.commandQualifier & 0x80) != 0;
 
+        if (input.ucs2 == true && input.digitOnly == false) {
+            input.minLen = (input.minLen == 1) ? 1:(input.minLen/2);
+            input.maxLen = (input.maxLen == 1) ? 1:(input.maxLen/2);
+        }
+        
         if (input.ucs2 == true) {
             // the max text length should be less than 120 usc2 characters as the whole terminal
             // response data length is less than 255 and the header may has 15 bytes.
