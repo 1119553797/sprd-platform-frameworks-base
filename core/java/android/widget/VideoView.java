@@ -99,6 +99,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private boolean     mCanSeekForward;
     private boolean     mIsFullScreen = true;
     private boolean isPlaying = false;
+    private Dialog alertDialog;
 
     //add by ll
     private String scheme;
@@ -480,6 +481,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         new MediaPlayer.OnErrorListener() {
         public boolean onError(MediaPlayer mp, int framework_err, int impl_err) {
             Log.d(TAG, "Error: " + framework_err + "," + impl_err);
+            if(alertDialog != null && alertDialog.isShowing()){
+                Log.d(TAG, "oNError alertDialog");
+                alertDialog.dismiss();
+            }
             mCurrentState = STATE_ERROR;
             mTargetState = STATE_ERROR;
             if (mMediaController != null) {
@@ -523,7 +528,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 //                                })
 //                        .setCancelable(false)
 //                        .show();
-                Dialog alertDialog = new AlertDialog.Builder(mContext)
+                alertDialog = new AlertDialog.Builder(mContext)
                 .setMessage(messageId)
                 .setPositiveButton(com.android.internal.R.string.VideoView_error_button,
                         new DialogInterface.OnClickListener(){
