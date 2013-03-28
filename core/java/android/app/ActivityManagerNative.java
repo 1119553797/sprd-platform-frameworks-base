@@ -1705,6 +1705,13 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
 
+        case KILL_STOP_FRONT_APP_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            killStopFrontApp(data.readInt());
+            reply.writeNoException();
+            return true;
+        }
+
         case IS_HOME_KEY_PRESSED_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
             boolean res = isHomeKeyPressed();
@@ -2299,6 +2306,16 @@ class ActivityManagerProxy implements IActivityManager
         data.writeInterfaceToken(IActivityManager.descriptor);
         data.writeInt(task);
         mRemote.transact(MOVE_TASK_TO_BACK_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+    }
+    public void killStopFrontApp(int func) throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(func);
+        mRemote.transact(KILL_STOP_FRONT_APP_TRANSACTION, data, reply, 0);
         reply.readException();
         data.recycle();
         reply.recycle();

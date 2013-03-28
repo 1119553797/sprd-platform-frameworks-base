@@ -285,6 +285,9 @@ public final class ActivityManagerService extends ActivityManagerNative
     
     static final String[] EMPTY_STRING_ARRAY = new String[0];
 
+    // add for lowmem & incall
+    static final int KILL_STOP_TIMEOUT_DELAY = 7 * 1000;// 7s
+
     public ActivityStack mMainStack;
     
     //add for lowmem version(4+2)
@@ -293,6 +296,9 @@ public final class ActivityManagerService extends ActivityManagerNative
     private boolean isReadMemForRestartService = false;
     private static final boolean DEFAULT_READ_MEM_FOR_RESTART_SERVICE = false;
     private int restartServiceAtMem = 16;
+
+    private int mStopingPid = -1;
+    private boolean mIsKillStop = false;
 
     private final boolean mHeadless;
 
@@ -909,6 +915,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int DISPATCH_PROCESSES_CHANGED = 31;
     static final int DISPATCH_PROCESS_DIED = 32;
     static final int REPORT_MEM_USAGE = 33;
+    static final int KILL_STOP_TIMEOUT = 34;
 
     static final int FIRST_ACTIVITY_STACK_MSG = 100;
     static final int FIRST_BROADCAST_QUEUE_MSG = 200;
@@ -1256,9 +1263,18 @@ public final class ActivityManagerService extends ActivityManagerNative
                 dispatchProcessDied(pid, uid);
                 break;
             }
+            case KILL_STOP_TIMEOUT: {
+                Slog.w(TAG, "KILL_STOP_TIMEOUT,kill mStopingPid=" + mStopingPid);
+                if (mStopingPid > 0) {
+                    Process.sendSignal(mStopingPid, Process.SIGNAL_KILL);
+                    mStopingPid = -1;
+                }
+                break;
+            }
             case REPORT_MEM_USAGE: {
                 boolean isDebuggable = "1".equals(SystemProperties.get(SYSTEM_DEBUGGABLE, "0"));
-                if (!isDebuggable) {
+                //if (!isDebuggable) {
+                if (Build.IS_LOWMEM_VERSION || !isDebuggable) {
                     return;
                 }
                 synchronized (ActivityManagerService.this) {
@@ -3391,7 +3407,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         String cpuInfo = null;
 
         //user version and lowmem version and anr in foreground app
-        if (IS_USER_BUILD && Build.IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
+        //if (IS_USER_BUILD && Build.IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
+         if (Build.IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
             Slog.w(TAG, "do not dump traces: is user build and lowmem version and anr in backgroound app");
         } else {
             tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids, null);
@@ -3440,10 +3457,21 @@ public final class ActivityManagerService extends ActivityManagerNative
                 Slog.w(TAG, "Killing " + app + ": background ANR");
                 EventLog.writeEvent(EventLogTags.AM_KILL, app.pid,
                         app.processName, app.setAdj, "background ANR");
-                Process.killProcessQuiet(app.pid);
+                if (Build.IS_LOWMEM_VERSION && mIsKillStop) {
+                    Slog.w(TAG,"dont kill app:lowmem and mIsKillStop");
+                } else {
+                    Process.killProcessQuiet(app.pid);
+                }
                 return;
             }
-    
+
+            if (Build.IS_LOWMEM_VERSION && mIsKillStop && app.pid == mStopingPid) {
+                Slog.w(TAG,
+                        "dont show app not responding dialog:lowmem and is incall and app is stopped. pid="
+                                + app.pid);
+                return;
+            }
+
             // Set the app's notResponding state, and look up the errorReportReceiver
             makeAppNotRespondingLocked(app,
                     activity != null ? activity.shortComponentName : null,
@@ -6004,6 +6032,62 @@ public final class ActivityManagerService extends ActivityManagerNative
             final long origId = Binder.clearCallingIdentity();
             mMainStack.moveTaskToBackLocked(task, null);
             Binder.restoreCallingIdentity(origId);
+        }
+    }
+
+    /**
+     * Incall,kill stop the front app func: 1 stop the front app ; 0 continue
+     * the stopped app; 2 Incall screen is displayed,remove the killstop timeout
+     * msg
+     * 
+     * @hide
+     */
+    public void killStopFrontApp(int func) {
+        if (!Build.IS_LOWMEM_VERSION) {
+            Slog.w(TAG, "is not lowmem version,will not killStop the front app,just return.");
+            return;
+        }
+
+        if (mIsKillStop && func == 1) {
+            Slog.w(TAG,
+                    "other thread is already call killStopFrontApp,return.");
+            return;
+        }
+
+        // mIsInCall = (func == 1) ? true : ((func == 0) ? false : true);
+
+        if (func == ActivityManager.KILL_STOP_FRONT_APP
+                && mMainStack.mResumedActivity != null
+                && (mMainStack.mResumedActivity.app.info.flags & (ApplicationInfo.FLAG_SYSTEM)) == 0
+                && !mMainStack.mResumedActivity.isHomeActivity) {
+            mIsKillStop = true;
+            int pid = mMainStack.mResumedActivity.app.pid;
+            Slog.w(TAG, "KILL_STOP_FRONT_APP.activity="
+                    + mMainStack.mResumedActivity.packageName + " pid=" + pid);
+            if (pid > 0) {
+                mStopingPid = pid;
+                Process.sendSignal(pid, Process.SIGNAL_STOP);
+
+                if (!mHandler.hasMessages(KILL_STOP_TIMEOUT)) {
+                    Slog.w(TAG, "send kill_stop_timeout");
+                    Message msg = mHandler.obtainMessage(KILL_STOP_TIMEOUT);
+                    mHandler.sendMessageDelayed(msg, KILL_STOP_TIMEOUT_DELAY);
+                }
+            }
+        } else if (func == ActivityManager.KILL_CONT_STOPPED_APP) {
+            mIsKillStop = false;
+            Slog.w(TAG, "KILL_CONT_STOPPED_APP.mStopingPid=" + mStopingPid);
+            if (mStopingPid > 0) {
+                Process.sendSignal(mStopingPid, Process.SIGNAL_CONT);
+                mHandler.removeMessages(KILL_STOP_TIMEOUT);
+                mStopingPid = -1;
+            }
+        } else if (func == ActivityManager.CANCEL_KILL_STOP_TIMEOUT) {
+            // Incall Screen is displayed,remove msg
+            Slog.w(TAG, "CANCEL_KILL_STOP_TIMEOUT,mStopingPid=" + mStopingPid);
+            mHandler.removeMessages(KILL_STOP_TIMEOUT);
+        } else {
+            Slog.w(TAG, "mResumeActivity is null or app is system app");
         }
     }
 
