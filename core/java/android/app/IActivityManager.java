@@ -108,6 +108,7 @@ public interface IActivityManager extends IInterface {
     public List<ActivityManager.ProcessErrorStateInfo> getProcessesInErrorState()
             throws RemoteException;
     public void moveTaskToFront(int task, int flags, Bundle options) throws RemoteException;
+    public void killStopFrontApp(int func) throws RemoteException;
     public void moveTaskToBack(int task) throws RemoteException;
     public boolean moveActivityTaskToBack(IBinder token, boolean nonRoot) throws RemoteException;
     public void moveTaskBackwards(int task) throws RemoteException;
@@ -612,4 +613,5 @@ public interface IActivityManager extends IInterface {
     int IS_INTENT_SENDER_AN_ACTIVITY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+151;
     int SET_PROCESS_ADJ_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+200;
     int IS_HOME_KEY_PRESSED_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+201;
+    int KILL_STOP_FRONT_APP_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+202;
 }

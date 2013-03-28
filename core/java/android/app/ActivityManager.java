@@ -255,6 +255,21 @@ public class ActivityManager {
      */
     public static final int COMPAT_MODE_TOGGLE = 2;
 
+    /**
+     * @hide
+     */
+    public static final int KILL_STOP_FRONT_APP = 1;
+
+    /**
+     * @hide
+     */
+    public static final int KILL_CONT_STOPPED_APP = 0;
+
+    /**
+     * @hide
+     */
+    public static final int CANCEL_KILL_STOP_TIMEOUT = 2;
+
     /** @hide */
     public int getFrontActivityScreenCompatMode() {
         try {
