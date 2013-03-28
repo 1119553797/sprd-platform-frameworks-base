@@ -1753,6 +1753,7 @@ public class NetworkController extends BroadcastReceiver {
         for(WifiConfiguration config : configs) {
             for(ScanResult result : results) {
                 if((config.networkId != mWifiInfo.getNetworkId()) &&
+                        config.SSID != null &&
                         (removeDoubleQuotes(config.SSID)).equals(result.SSID) &&
                         getSecurity(config) == getSecurity(result)) {
                     availableConfigs.add(config);
