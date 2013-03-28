@@ -106,6 +106,7 @@ public final class GsmCallTracker extends CallTracker {
 
         cm.registerForOn(this, EVENT_RADIO_AVAILABLE, null);
         cm.registerForNotAvailable(this, EVENT_RADIO_NOT_AVAILABLE, null);
+        sendEmptyMessage(EVENT_INITIALIZE);
     }
 
     public void dispose() {
@@ -972,6 +973,11 @@ public final class GsmCallTracker extends CallTracker {
             case EVENT_RADIO_NOT_AVAILABLE:
                 handleRadioNotAvailable();
             break;
+
+            case EVENT_INITIALIZE:
+                log("handle EVENT_INITIALIZE");
+                phone.notifyPhoneStateChanged();
+                break;
         }
     }
 
