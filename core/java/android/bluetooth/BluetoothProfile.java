@@ -88,6 +88,12 @@ public interface BluetoothProfile {
     public static final int PBAP = 6;
 
     /**
+     * OPP
+     * @hide
+     */
+    public static final int OPP = 7;
+
+    /**
      * Default priority for devices that we try to auto-connect to and
      * and allow incoming connections for the profile
      * @hide
