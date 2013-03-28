@@ -51,6 +51,7 @@ interface IBluetooth
     boolean startDiscovery();
     boolean cancelDiscovery();
     boolean isDiscovering();
+    boolean isInBondingSate();
     byte[] readOutOfBandData();
 
     int getAdapterConnectionState();

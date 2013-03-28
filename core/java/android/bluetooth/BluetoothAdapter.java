@@ -760,6 +760,20 @@ public final class BluetoothAdapter {
         } catch (RemoteException e) {Log.e(TAG, "", e);}
         return false;
     }
+    /**
+     * Is local device in bonding state
+     * @return
+     * @hide
+     */
+    public boolean isInBondingState() {
+        if (getState() != STATE_ON) {
+            return false;
+        }
+        try {
+            return mService.isInBondingSate();
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
+        return false;
+    }
 
     /**
      * Return the set of {@link BluetoothDevice} objects that are bonded
@@ -826,6 +840,24 @@ public final class BluetoothAdapter {
             Log.e(TAG, "getProfileConnectionState:", e);
         }
         return BluetoothProfile.STATE_DISCONNECTED;
+    }
+
+    /**
+     * Called when profile state changed.
+     * @param device BluetoothDevice
+     * @param profile BluetoothProfile
+     * @param state Current BluetoothProfile state
+     * @param prevState Former BluetoothProfile state
+     *
+     * @hide
+     */
+    public void sendConnectionStateChange(BluetoothDevice
+            device, int profile, int state, int prevState) {
+        try {
+            mService.sendConnectionStateChange(device, profile, state, prevState);
+        } catch (RemoteException e) {
+            Log.e(TAG, "sendConnectionStateChange:", e);
+        }
     }
 
     /**

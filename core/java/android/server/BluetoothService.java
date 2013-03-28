@@ -1186,6 +1186,11 @@ public class BluetoothService extends IBluetooth.Stub {
         return removeDeviceNative(getObjectPathFromAddress(address));
     }
 
+    public synchronized boolean isInBondingSate() {
+        String[] bondingDevices = mBondState.listInState(BluetoothDevice.BOND_BONDING);
+        return (bondingDevices.length > 0);
+    }
+
     public synchronized String[] listBonds() {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM, "Need BLUETOOTH permission");
         return mBondState.listInState(BluetoothDevice.BOND_BONDED);
