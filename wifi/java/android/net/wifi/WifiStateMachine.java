@@ -3739,7 +3739,10 @@ public class WifiStateMachine extends StateMachine {
                     TetherStateChange stateChange = (TetherStateChange) message.obj;
                     if (isWifiTethered(stateChange.active)) {
                         transitionTo(mTetheredState);
-                    }
+                    } else {
+			loge("TetheringState: wifi is Not Tethered startTethering again");
+			startTethering(stateChange.available);
+		    }
                     return HANDLED;
                 case CMD_TETHER_NOTIFICATION_TIMED_OUT:
                     if (message.arg1 == mTetherToken) {
