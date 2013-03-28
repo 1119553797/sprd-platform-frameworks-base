@@ -24,7 +24,8 @@ import static android.telephony.TelephonyManager.NETWORK_TYPE_UMTS;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSDPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSUPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSPA;
-import android.content.res.Resources;
+import android.app.ActivityManager;
+import android.app.ActivityManagerNative;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import android.net.ConnectivityManager;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -42,6 +44,7 @@ import android.os.Parcel;
 import android.os.PowerManager;
 import android.os.SystemProperties;
 import android.os.PowerManager.WakeLock;
+import android.os.RemoteException;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
@@ -206,6 +209,7 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
     static final String LOG_TAG = "RILJ";
     static final boolean RILJ_LOGD = true;
     static final boolean RILJ_LOGV = false; // STOP SHIP if true
+    static Thread mThread;
 
     /**
      * Wake lock timeout should be longer than the longest timeout in
@@ -2591,7 +2595,26 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
             break;
             case RIL_UNSOL_RESPONSE_CALL_STATE_CHANGED:
                 if (RILJ_LOGD) unsljLog(response);
-
+                // for bug 97008 start
+                if (mThread == null && Build.IS_LOWMEM_VERSION && PhoneFactory.SUPPORT_KILL_STOP) {
+                    mThread = new Thread(new Runnable() {
+                        public void run() {
+                            try {
+                                if (RILJ_LOGD)riljLog("ActivityManagerNative.moveTaskToBack() start ");
+                                ActivityManagerNative.getDefault().killStopFrontApp(ActivityManager.KILL_STOP_FRONT_APP);
+                                if (RILJ_LOGD)riljLog("ActivityManagerNative.moveTaskToBack() end ");
+                                Thread.sleep(3000);
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            mThread = null;
+                        }
+                    });
+                    mThread.start();
+                }
+                // for bug 97008 start
                 mCallStateRegistrants
                     .notifyRegistrants(new AsyncResult(null, null, null));
             break;

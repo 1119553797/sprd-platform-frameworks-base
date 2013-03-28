@@ -59,6 +59,7 @@ public class PhoneFactory {
     public static final int DEFAULT_DUAL_SIM_INIT_PHONE_ID = -1;
     public static final int DEFAULT_DUAL_SIM_INIT_MMS_PHONE_ID = MMS_SET_AUTO;
     public static boolean UNIVERSEUI_SUPPORT = SystemProperties.getBoolean("universe_ui_support",false);
+    public static final boolean SUPPORT_KILL_STOP = true;
 
     private static final int SIM_STATUS_READY = 0;
     private static final int SIM_STATUS_PIN_LOCK = 1;

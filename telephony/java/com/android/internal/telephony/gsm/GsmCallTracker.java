@@ -17,6 +17,7 @@
 package com.android.internal.telephony.gsm;
 
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Registrant;
@@ -56,6 +57,10 @@ public final class GsmCallTracker extends CallTracker {
     private static final boolean REPEAT_POLLING = false;
 
     private static final boolean DBG_POLL = false;
+
+    private boolean mMoveToBack = false;
+    private static final int THREAD_PRIORITY = -10;
+    private int mCurrentPriority = android.os.Process.THREAD_PRIORITY_DEFAULT;
 
     //***** Constants
 
@@ -648,6 +653,17 @@ public final class GsmCallTracker extends CallTracker {
 
         updatePhoneState();
 
+        // for bug 97008 start
+        if (state == Phone.State.IDLE && Build.IS_LOWMEM_VERSION) {
+            int pid = android.os.Process.myPid();
+            int priority = android.os.Process.getThreadPriority(pid);
+            if (priority != mCurrentPriority) {
+                Log.d(LOG_TAG, "setThreadPriority to : " + mCurrentPriority);
+                android.os.Process.setThreadPriority(mCurrentPriority);
+            }
+        }
+        // for bug 97008 end
+
         if (unknownConnectionAppeared) {
             phone.notifyUnknownConnection();
         }
@@ -894,6 +910,7 @@ public final class GsmCallTracker extends CallTracker {
                     needsPoll = false;
                     lastRelevantPoll = null;
                     handlePollCalls((AsyncResult)msg.obj);
+                    mMoveToBack = false;
                 }
             break;
 
@@ -963,7 +980,22 @@ public final class GsmCallTracker extends CallTracker {
             //we need to ensure the other card is not in RINGING/OFFHOOK state
             //this may Seldom happens when SIM1 has MO and an incoming MT for SIM2 reaches the modem at the same time.
             case EVENT_CALL_STATE_CHANGE:
-                if (verifyEnable()) pollCallsWhenSafe();
+                Log.d(LOG_TAG,"EVENT_CALL_STATE_CHANGE ...");
+                if (verifyEnable()) {
+                    // for bug 97008 start
+                    if (!mMoveToBack && Build.IS_LOWMEM_VERSION) {
+                        mMoveToBack = true;
+                        int pid = android.os.Process.myPid();
+                        int priority = android.os.Process.getThreadPriority(pid);
+                        if (priority != THREAD_PRIORITY) {
+                            mCurrentPriority = priority;
+                            Log.d(LOG_TAG, "setThreadPriority to : " + THREAD_PRIORITY);
+                            android.os.Process.setThreadPriority(THREAD_PRIORITY);
+                        }
+                    }
+                    // for bug 97008 start
+                    pollCallsWhenSafe();
+                }
             break;
             //change for bug6837 by phone_01 e
             case EVENT_RADIO_AVAILABLE:
@@ -1009,7 +1041,6 @@ public final class GsmCallTracker extends CallTracker {
         boolean isThisPhoneIDEnabled = true;
 
         if(TelephonyManager.getPhoneCount() > 1){
-            if (DBG_POLL) log("verify if the other phone is idle!");
             int targetId = (phone.getPhoneId() == 0)?1:0;
             if (targetId == 0){
                 isThisPhoneIDEnabled = (phoneState_0 == Phone.State.IDLE)?true:false;
@@ -1018,6 +1049,7 @@ public final class GsmCallTracker extends CallTracker {
             }
             if (isThisPhoneIDEnabled == false && DBG_POLL) log("The other card is in use, operation quit!!");
         }
+        if (DBG_POLL) log("verify if the other phone is idle! return : " + isThisPhoneIDEnabled);
         return isThisPhoneIDEnabled;
     }
     //for bug6837 by phone_01 e
