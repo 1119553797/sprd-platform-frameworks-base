@@ -4150,6 +4150,8 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
             //printf("Adding new package id %d at index %d\n", id, idx);
             err = mPackageGroups.add(group);
             if (err < NO_ERROR) {
+	        delete group;
+                delete package;
                 return (mError=err);
             }
             group->basePackage = package;
@@ -4158,12 +4160,13 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
         } else {
             group = mPackageGroups.itemAt(idx-1);
             if (group == NULL) {
+	        delete package;		
                 return (mError=UNKNOWN_ERROR);
             }
         }
         err = group->packages.add(package);
         if (err < NO_ERROR) {
-            return (mError=err);
+           return (mError=err);
         }
     } else {
         LOG_ALWAYS_FATAL("Package id out of range");

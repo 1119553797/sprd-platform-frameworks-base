@@ -563,14 +563,16 @@ public final class UsageStatsService extends IUsageStats.Stub {
 
     private void writeStatsFLOCK(File file) throws IOException {
         FileOutputStream stream = new FileOutputStream(file);
+        Parcel out = null;
         try {
-            Parcel out = Parcel.obtain();
+            out = Parcel.obtain();
             writeStatsToParcelFLOCK(out);
             stream.write(out.marshall());
             out.recycle();
             stream.flush();
         } finally {
             FileUtils.sync(stream);
+            out.recycle();
             stream.close();
         }
     }
