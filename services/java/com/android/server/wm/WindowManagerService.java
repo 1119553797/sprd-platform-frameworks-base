@@ -6998,7 +6998,8 @@ public class WindowManagerService extends IWindowManager.Stub
                             if (wtoken.removed || wtoken.startingData == null) {
                                 // If the window was successfully added, then
                                 // we need to remove it.
-                                if (wtoken.startingWindow != null) {
+                                if (wtoken.startingWindow != null
+                                   || wtoken.hasVisible || wtoken.waitingToShow) {
                                     if (DEBUG_STARTING_WINDOW) Slog.v(TAG,
                                             "Aborted starting " + wtoken
                                             + ": removed=" + wtoken.removed
