@@ -825,7 +825,10 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
 
     s->rawContent = (uint8_t *)malloc(s->rawContentLen);
     if (NULL == s->rawContent)
-        return DRM_FAILURE;
+    {
+        freeSession(s);
+	return DRM_FAILURE;
+    }
 
     /* Read input data to buffer */
     if (0 >= data.readInputData(data.inputHandle, s->rawContent, s->rawContentLen)) {
@@ -881,14 +884,21 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
             if (DRM_MESSAGE_CODING_BASE64 == s->transferEncoding) {
                 s->infoStruct = (T_DRM_DM_Base64_Node *)malloc(sizeof(T_DRM_DM_Base64_Node));
                 if (NULL == s->infoStruct)
+                {
+                    freeSession(s);
                     return DRM_FAILURE;
+                }
+
                 memset(s->infoStruct, 0, sizeof(T_DRM_DM_Base64_Node));
 
                 strcpy((char *)((T_DRM_DM_Base64_Node *)(s->infoStruct))->boundary, (char *)dmInfo.boundary);
             } else {
                 s->infoStruct = (T_DRM_DM_Binary_Node *)malloc(sizeof(T_DRM_DM_Binary_Node));
                 if (NULL == s->infoStruct)
+                {
+                    freeSession(s);
                     return DRM_FAILURE;
+                 }
                 memset(s->infoStruct, 0, sizeof(T_DRM_DM_Binary_Node));
 
                 strcpy((char *)((T_DRM_DM_Binary_Node *)(s->infoStruct))->boundary, (char *)dmInfo.boundary);
@@ -1052,7 +1062,10 @@ int32_t SVC_drm_openSession(T_DRM_Input_Data data)
 
             s->infoStruct = (T_DRM_Dcf_Node *)malloc(sizeof(T_DRM_Dcf_Node));
             if (NULL == s->infoStruct)
-                return DRM_FAILURE;
+            {
+                freeSession(s);
+		return DRM_FAILURE;
+            }
             memset(s->infoStruct, 0, sizeof(T_DRM_Dcf_Node));
 
             s->deliveryMethod = SEPARATE_DELIVERY;
