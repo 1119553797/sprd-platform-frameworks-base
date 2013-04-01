@@ -104,6 +104,14 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
         return builder.toString();
     }
 
+    private static String getSetupDataReason(int setupPhoneId, Context context) {
+        if (setupPhoneId == TelephonyManager.getDefaultDataPhoneId(context)) {
+            return Phone.REASON_DATA_ENABLED;
+        } else {
+            return "switchConnection";
+        }
+    }
+
     public static boolean onEnableNewApn(ApnContext apnContext, int phoneId) {
         synchronized (sInstance) {
             boolean ret = false;
@@ -199,13 +207,15 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                 if (!sTracker[sRequestConnectPhoneId].isAutoAttachOnCreation()) {
                     // in the case that gprs state will be checked before setup pdp
                     if (sTracker[sRequestConnectPhoneId].getCurrentGprsState() == ServiceState.STATE_IN_SERVICE) {
-                        sTracker[sRequestConnectPhoneId].setupDataOnReadyApns("switchConnection");
+                        sTracker[sRequestConnectPhoneId].setupDataOnReadyApns(getSetupDataReason(
+                                sRequestConnectPhoneId, context));
                     } else {
                         sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
                     }
                 } else {
                     // in the case that gprs state will NOT be checked before setup pdp
-                    sTracker[sRequestConnectPhoneId].setupDataOnReadyApns("switchConnection");
+                    sTracker[sRequestConnectPhoneId].setupDataOnReadyApns(getSetupDataReason(
+                            sRequestConnectPhoneId, context));
                 }
                 sActivePhoneId = sRequestConnectPhoneId;
                 sRequestConnectPhoneId = INVALID_PHONE_ID;
@@ -264,13 +274,15 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                 if (!sTracker[sRequestConnectPhoneId].isAutoAttachOnCreation()) {
                     // in the case that gprs state will be checked before setup pdp
                     if (sTracker[sRequestConnectPhoneId].getCurrentGprsState() == ServiceState.STATE_IN_SERVICE) {
-                        sTracker[sRequestConnectPhoneId].setupDataOnReadyApns("switchConnection");
+                        sTracker[sRequestConnectPhoneId].setupDataOnReadyApns(getSetupDataReason(
+                                sRequestConnectPhoneId, context));
                     } else {
                         sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
                     }
                 } else {
                     // in the case that gprs state will NOT be checked before setup pdp
-                    sTracker[sRequestConnectPhoneId].setupDataOnReadyApns("switchConnection");
+                    sTracker[sRequestConnectPhoneId].setupDataOnReadyApns(getSetupDataReason(
+                            sRequestConnectPhoneId, context));
                 }
                 sActivePhoneId = sRequestConnectPhoneId;
                 sRequestConnectPhoneId = INVALID_PHONE_ID;
