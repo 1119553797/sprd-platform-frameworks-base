@@ -746,10 +746,17 @@ public class NetworkController extends BroadcastReceiver {
                     }
                 case TelephonyManager.NETWORK_TYPE_EDGE:
                     if (!mShowAtLeastThreeGees) {
-                        mDataIconList[phoneId] = TelephonyIcons.DATA_E[mDataCondition];
-                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_e_sprd;
-                        mContentDescriptionDataType[phoneId] = mContext.getString(
-                                R.string.accessibility_data_connection_edge);
+                        if ("cucc".equals(SystemProperties.get("ro.operator", ""))) {
+                            mDataIconList[phoneId] = TelephonyIcons.DATA_G[mDataCondition];
+                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_g_sprd;
+                            mContentDescriptionDataType[phoneId] = mContext.getString(
+                                    R.string.accessibility_data_connection_gprs);
+                        } else {
+                            mDataIconList[phoneId] = TelephonyIcons.DATA_E[mDataCondition];
+                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_e_sprd;
+                            mContentDescriptionDataType[phoneId] = mContext.getString(
+                                    R.string.accessibility_data_connection_edge);
+                        }
                         break;
                     } else {
                         // fall through
