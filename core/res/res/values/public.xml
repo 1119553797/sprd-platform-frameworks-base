@@ -1281,7 +1281,6 @@
   <java-symbol type="id" name="button6" />
   <java-symbol type="id" name="button7" />
   <java-symbol type="id" name="carrier" />
-  <java-symbol type="id" name="carrier1" />
   <java-symbol type="id" name="missedCallCount" />
   <java-symbol type="id" name="messageCount" />
   <java-symbol type="id" name="date" />
