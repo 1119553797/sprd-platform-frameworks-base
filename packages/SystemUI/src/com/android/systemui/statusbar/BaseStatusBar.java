@@ -954,10 +954,11 @@ public abstract class BaseStatusBar extends SystemUI implements
             if (oldEntry == null) {
                 oldEntry = mLatestNotificationData.findByKey(key);
             }
-            if (oldEntry == null) {
-                Slog.w(TAG, "updateNotification for unknown key: " + key);
-                return;
-            }
+        }
+        // bug 145351:Clone android4.0 Bug 134004
+        if (oldEntry == null) {
+            Slog.w(TAG, "updateNotification for unknown key: " + key);
+            return;
         }
         final StatusBarNotification oldNotification = oldEntry.notification;
 
