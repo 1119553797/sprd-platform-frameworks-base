@@ -271,8 +271,12 @@ public class UsbDeviceManager {
         }
         mUseUsbNotification = !massStorageSupported;
 
-        // make sure the ADB_ENABLED setting value matches the current state
-        Settings.Secure.putInt(mContentResolver, Settings.Secure.ADB_ENABLED, mAdbEnabled ? 1 : 0);
+        // make sure the adb current state matches the ADB_ENABLED setting value
+        boolean adbEnabled = Settings.Secure.getInt(mContentResolver,
+                Settings.Secure.ADB_ENABLED, 0) != 0;
+        if (adbEnabled != mAdbEnabled) {
+            mHandler.sendMessage(MSG_ENABLE_ADB, adbEnabled);
+        }
 
         mHandler.sendEmptyMessage(MSG_SYSTEM_READY);
     }
