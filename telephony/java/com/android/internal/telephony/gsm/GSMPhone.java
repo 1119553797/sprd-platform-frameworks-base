@@ -54,6 +54,7 @@ import static com.android.internal.telephony.CommandsInterface.CF_REASON_UNCONDI
 import static com.android.internal.telephony.CommandsInterface.SERVICE_CLASS_VOICE;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_BASEBAND_VERSION;
 
+import com.android.internal.telephony.Phone.DataState;
 import com.android.internal.telephony.cat.CatService;
 import com.android.internal.telephony.Call;
 import com.android.internal.telephony.CallForwardInfo;
@@ -332,13 +333,17 @@ public abstract class GSMPhone extends PhoneBase {
 
                 case CONNECTED:
                 case DISCONNECTING:
-                    if ( mCT.state != Phone.State.IDLE
+                    if (mCT.state != Phone.State.IDLE
                             && !mSST.isConcurrentVoiceAndDataAllowed()) {
+                        ret = DataState.SUSPENDED;
+                    } else if (mCT.state == Phone.State.IDLE
+                            && MsmsGsmDataConnectionTrackerProxy.isAnotherCardVoiceing(getPhoneId())
+                            && !MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()) {
                         ret = DataState.SUSPENDED;
                     } else {
                         ret = DataState.CONNECTED;
                     }
-                break;
+                    break;
 
                 case INITING:
                 case CONNECTING:
