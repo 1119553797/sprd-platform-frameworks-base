@@ -46,6 +46,8 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
 
     private static final int INVALID_PHONE_ID = -1;
 
+    private static final boolean MULTI_MODEM_SUPPORT = false;
+
     private static MsmsGsmDataConnectionTrackerProxy sInstance = new MsmsGsmDataConnectionTrackerProxy();
     private static MsmsGsmDataConnectionTracker[] sTracker;
 
@@ -56,6 +58,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
     // sRequestConnectPhoneId when voiceCall Started and setup dataCall after
     // voiceCall ended.
     private static int sRequestPhoneIdBeforeVoiceCallEnd = INVALID_PHONE_ID;
+    private static int sVoicePhoneId = INVALID_PHONE_ID;
     public static MsmsGsmDataConnectionTrackerProxy getInstance() {
         //if (sInstance == null) {
         //	sInstance = new MsmsGsmDataConnectionTrackerProxy();
@@ -296,14 +299,17 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
     }
 
     static void onVoiceCallStarted(int phoneId) {
+        log("onVoiceCallStart sVoicePhoneId=" + phoneId);
+        sVoicePhoneId = phoneId;
         for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
-            sTracker[i].onVoiceCallStartedInternal();
+            sTracker[i].onVoiceCallStartedInternal(phoneId);
         }
     }
 
     static void onVoiceCallEnded(int phoneId) {
+        sVoicePhoneId = INVALID_PHONE_ID;
         for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
-            sTracker[i].onVoiceCallEndedInternal();
+            sTracker[i].onVoiceCallEndedInternal(phoneId);
         }
     }
 
@@ -421,5 +427,21 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
 
     public static void resetRequestPhoneIdBeforeVoiceCallEnd() {
         sRequestPhoneIdBeforeVoiceCallEnd = INVALID_PHONE_ID;
+    }
+
+    static boolean isSupportMultiModem() {
+        return MULTI_MODEM_SUPPORT;
+    }
+
+    static boolean isAnotherCardVoiceing(int phoneId) {
+        boolean ret = false;
+
+        if((sVoicePhoneId == INVALID_PHONE_ID) || (sVoicePhoneId == phoneId)) {
+            ret = false;
+        } else {
+            ret = true;
+        }
+        log("isAnotherCardVoiceing phoneId: "+phoneId+" sVoicePhoneId: " + sVoicePhoneId +" result: " + ret);
+        return ret;
     }
 }

@@ -150,25 +150,42 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
         MsmsGsmDataConnectionTrackerProxy.onVoiceCallEnded(mPhone.getPhoneId());
     }
 
-    public void onVoiceCallStartedInternal() {
-        super.onVoiceCallStarted();
+    public void onVoiceCallStartedInternal(int phoneId) {
+        log("onVoiceCallStartInternal[" + mPhone.getPhoneId() + "]: isConnected=" + isConnected() +" phoneId="+phoneId);
+        if(phoneId == mPhone.getPhoneId()) {
+            if (isConnected() && ! mGsmPhone.mSST.isConcurrentVoiceAndDataAllowed()) {
+                stopNetStatPoll();
+                mPhone.notifyDataConnection(Phone.REASON_VOICE_CALL_STARTED);
+            }
+        } else if(!MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()){
+            if (isConnected()) {
+                stopNetStatPoll();
+                mPhone.notifyDataConnection(Phone.REASON_VOICE_CALL_STARTED);
+            }
+        }
     }
 
-    public void onVoiceCallEndedInternal() {
+    public void onVoiceCallEndedInternal(int phoneId) {
         log("onVoiceCallEndedInternal[" + mPhone.getPhoneId() + "]");
         if (isConnected()) {
-            if (!mGsmPhone.mSST.isConcurrentVoiceAndDataAllowed()) {
+            if (phoneId == mPhone.getPhoneId()) {
+                if (!mGsmPhone.mSST.isConcurrentVoiceAndDataAllowed()) {
+                    startNetStatPoll();
+                    startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
+                    notifyDataConnection(Phone.REASON_VOICE_CALL_ENDED);
+                    // when VoiceCall is started,new DataCall setup is
+                    // stopped,so if
+                    // VoiceCall is ended,we still
+                    // need to setup DataCall which is stopped just now.
+                    // MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
+                    // .getRequestPhoneIdBeforeVoiceCallEnd());
+                } else {
+                    // clean slate after call end.
+                    resetPollStats();
+                }
+            } else if (!MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()) {
                 startNetStatPoll();
-                startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
-                notifyDataConnection(Phone.REASON_VOICE_CALL_ENDED);
-                // when VoiceCall is started,new DataCall setup is stopped,so if
-                // VoiceCall is ended,we still
-                // need to setup DataCall which is stopped just now.
-//                MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
-//                        .getRequestPhoneIdBeforeVoiceCallEnd());
-            } else {
-                // clean slate after call end.
-                resetPollStats();
+                mPhone.notifyDataConnection(Phone.REASON_VOICE_CALL_ENDED);
             }
         } else if (isDisconnecting()) {
         	for(ApnContext apnContext : mApnContexts.values()) {

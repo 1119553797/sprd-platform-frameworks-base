@@ -227,10 +227,11 @@ public final class TDPhone extends GSMPhone {
 
                 case CONNECTED:
                 case DISCONNECTING:
-                    if (( mCT.state != Phone.State.IDLE
-                            || (mVideoCT.state != Phone.State.IDLE)
-                            || !MsmsGsmDataConnectionTrackerProxy.isAllPhoneIdle())
-                            && !mSST.isConcurrentVoiceAndDataAllowed()) {
+                    if ((mCT.state != Phone.State.IDLE) && !mSST.isConcurrentVoiceAndDataAllowed()) {
+                        ret = DataState.SUSPENDED;
+                    } else if (mCT.state == Phone.State.IDLE
+                            && MsmsGsmDataConnectionTrackerProxy.isAnotherCardVoiceing(getPhoneId())
+                            && !MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()) {
                         ret = DataState.SUSPENDED;
                     } else {
                         ret = DataState.CONNECTED;
