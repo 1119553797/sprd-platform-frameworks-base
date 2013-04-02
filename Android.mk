@@ -282,7 +282,31 @@ $(full_classes_compiled_jar): $(framework_res_R_stamp)
 $(LOCAL_INSTALLED_MODULE): | $(dir $(LOCAL_INSTALLED_MODULE))framework-res.apk
 
 framework_built := $(call java-lib-deps,framework)
-framework_built += $(call java-lib-deps,framework2)
+
+
+include $(CLEAR_VARS)
+# FRAMEWORKS_BASE_SUBDIRS comes from build/core/pathmap.mk
+LOCAL_SRC_FILES := $(call find-other-java-files,$(SECONDARY_FRAMEWORKS_SUBDIRS))
+
+LOCAL_SRC_FILES += $(SECONDARY_SRC_FILES)
+LOCAL_SRC_FILES += \
+       core/java/android/sim/ISimManager.aidl
+
+LOCAL_NO_STANDARD_LIBRARIES := true
+LOCAL_JAVA_LIBRARIES := bouncycastle core core-junit ext framework
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := framework2
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_NO_EMMA_INSTRUMENT := true
+LOCAL_NO_EMMA_COMPILE := true
+
+#LOCAL_JARJAR_RULES := $(LOCAL_PATH)/jarjar-rules.txt
+
+LOCAL_DX_FLAGS := --core-library
+
+include $(BUILD_JAVA_LIBRARY)
+
+framework2_built := $(call java-lib-deps,framework2)
 # AIDL files to be preprocessed and included in the SDK,
 # relative to the root of the build tree.
 # ============================================================
@@ -592,7 +616,7 @@ LOCAL_UNINSTALLABLE_MODULE := true
 include $(BUILD_DROIDDOC)
 
 # $(gen), i.e. framework.aidl, is also needed while building against the current stub.
-$(full_target): $(framework_built) $(gen)
+$(full_target): $(framework_built) $(framework2_built) $(gen)
 $(INTERNAL_PLATFORM_API_FILE): $(full_target)
 $(call dist-for-goals,sdk,$(INTERNAL_PLATFORM_API_FILE))
 
@@ -621,7 +645,7 @@ LOCAL_UNINSTALLABLE_MODULE := true
 include $(BUILD_DROIDDOC)
 
 # $(gen), i.e. framework.aidl, is also needed while building against the current stub.
-$(full_target): $(framework_built) $(gen)
+$(full_target): $(framework_built) $(framework2_built) $(gen)
 
 droidcore: doc-comment-check-docs
 
@@ -661,7 +685,7 @@ $(static_doc_index_redirect): \
 	$(hide) $(ACP) $< $@
 
 $(full_target): $(static_doc_index_redirect)
-$(full_target): $(framework_built)
+$(full_target): $(framework_built) $(framework2_built)
 
 # ==== docs for the web (on the google app engine server) =======================
 include $(CLEAR_VARS)
@@ -745,28 +769,6 @@ LOCAL_MODULE := ext
 
 LOCAL_NO_EMMA_INSTRUMENT := true
 LOCAL_NO_EMMA_COMPILE := true
-
-LOCAL_DX_FLAGS := --core-library
-
-include $(BUILD_JAVA_LIBRARY)
-
-include $(CLEAR_VARS)
-# FRAMEWORKS_BASE_SUBDIRS comes from build/core/pathmap.mk
-LOCAL_SRC_FILES := $(call find-other-java-files,$(SECONDARY_FRAMEWORKS_SUBDIRS))
-
-LOCAL_SRC_FILES += $(SECONDARY_SRC_FILES)
-LOCAL_SRC_FILES += \
-       core/java/android/sim/ISimManager.aidl
-
-LOCAL_NO_STANDARD_LIBRARIES := true
-LOCAL_JAVA_LIBRARIES := bouncycastle core core-junit ext framework
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := framework2
-LOCAL_MODULE_CLASS := JAVA_LIBRARIES
-LOCAL_NO_EMMA_INSTRUMENT := true
-LOCAL_NO_EMMA_COMPILE := true
-
-#LOCAL_JARJAR_RULES := $(LOCAL_PATH)/jarjar-rules.txt
 
 LOCAL_DX_FLAGS := --core-library
 

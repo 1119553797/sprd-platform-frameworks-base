@@ -226,10 +226,14 @@ public class ActionBarImpl extends ActionBar {
         if (!mHasEmbeddedTabs) {
             mActionView.setEmbeddedTabView(null);
             if(null != mTabScrollView && null == mTabScrollView.getParent()){
-                mSplitView.setTabContainer(mTabScrollView);
+                if (mSplitView != null) {
+                    mSplitView.setTabContainer(mTabScrollView);
+                }
             }
         } else {
-            mSplitView.setTabContainer(null);
+            if (mSplitView != null) {
+                mSplitView.setTabContainer(null);
+            }
             if(null != mTabScrollView && null == mTabScrollView.getParent()){
                 mActionView.setEmbeddedTabView(mTabScrollView);
             }
