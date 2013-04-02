@@ -56,6 +56,8 @@ public abstract class Call {
     // merged, etc.
     protected boolean isGeneric = false;
 
+    protected boolean isVideo = false;
+
     protected final String LOG_TAG = "Call";
 
     /* Instance Methods */
@@ -252,5 +254,9 @@ public abstract class Call {
                 Log.w(LOG_TAG, " hangupIfActive: caught " + ex);
             }
         }
+    }
+
+    public boolean isVideo() {
+        return isVideo;
     }
 }

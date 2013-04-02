@@ -57,6 +57,7 @@ class VideoCall extends Call {
     /*package*/
     VideoCall (VideoCallTracker owner) {
         this.owner = owner;
+        isVideo = true;
     }
 
     public void dispose() {
