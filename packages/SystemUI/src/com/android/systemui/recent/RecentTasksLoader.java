@@ -165,7 +165,7 @@ public class RecentTasksLoader {
         Drawable icon = getFullResIcon(td.resolveInfo, pm);
 
         if (DEBUG) Log.v(TAG, "Loaded bitmap for task "
-                + td + ": " + thumbs.mainThumbnail);
+                + td /*+ ": " + thumbs.mainThumbnail  del for 145692 */);
         synchronized (td) {
             if (thumbs != null && thumbs.mainThumbnail != null) {
                 td.setThumbnail(thumbs.mainThumbnail);
