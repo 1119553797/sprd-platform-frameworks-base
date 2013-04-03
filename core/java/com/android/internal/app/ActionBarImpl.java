@@ -57,6 +57,7 @@ import android.widget.SpinnerAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import android.os.SystemProperties;
 
 /**
  * ActionBarImpl is the ActionBar implementation used
@@ -119,6 +120,7 @@ public class ActionBarImpl extends ActionBar {
 
     private Animator mCurrentShowAnim;
     private boolean mShowHideAnimationEnabled;
+    private boolean mIsUniverseSupport = SystemProperties.getBoolean("universe_ui_support", false);
 
     final AnimatorListener mHideListener = new AnimatorListenerAdapter() {
         @Override
@@ -226,13 +228,17 @@ public class ActionBarImpl extends ActionBar {
         if (!mHasEmbeddedTabs) {
             mActionView.setEmbeddedTabView(null);
             if(null != mTabScrollView && null == mTabScrollView.getParent()){
-                if (mSplitView != null) {
+                if (mIsUniverseSupport && mSplitView != null){
                     mSplitView.setTabContainer(mTabScrollView);
+                }else{
+                    mContainerView.setTabContainer(mTabScrollView);
                 }
             }
         } else {
-            if (mSplitView != null) {
+            if(mIsUniverseSupport && mSplitView != null){
                 mSplitView.setTabContainer(null);
+            }else{
+                mContainerView.setTabContainer(null);
             }
             if(null != mTabScrollView && null == mTabScrollView.getParent()){
                 mActionView.setEmbeddedTabView(mTabScrollView);
