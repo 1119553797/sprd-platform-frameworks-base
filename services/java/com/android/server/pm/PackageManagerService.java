@@ -3112,6 +3112,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         scanFile.add( "/system/app/Mms.apk" );
         scanFile.add( "/system/app/MsmsPhone.apk" );
         scanFile.add( "/system/app/MsmsSettings.apk" );
+        scanFile.add( "/system/app/Settings.apk" );
         scanFile.add( "/system/app/MsmsStk.apk" );
         scanFile.add( "/system/app/PackageInstaller.apk" );
         scanFile.add( "/system/app/Launcher2.apk" );
