@@ -20,6 +20,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -65,15 +66,14 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     private ConnectivityManager mConnManager;
     private BluetoothAdapter mBluetoothAdapter;
     private TelephonyManager[] mTelephonyManagers;
+    private PhoneStateListener[] mPhoneStateListener;
+    private ServiceState mServiceState[];
     private int mWifiState;
     private int mBluetoothState;
     private int numPhones = 1;
     private boolean[] hasCard;
     private boolean[] isStandby;
-    private PhoneStateIntentReceiver mPhoneStateReceiver;
-    private PhoneStateIntentReceiver mPhoneStateReceiver2;
-    private static final int EVENT_SERVICE_STATE_CHANGED = 3;
-    protected static final int EVENT_AIRPLANE_SWITCH_DELAY_MESSAGE = 100;
+    protected static final int EVENT_AIRPLANE_SWITCH_DELAY_MESSAGE = 3;
     protected static final int DELAY_AIRPLANE_SET_TIME = 5000;
     private static final String RINGER_MODE = "ringer_mode";
 
@@ -101,23 +101,17 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         mConnManager = (ConnectivityManager) mContext
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         mTelephonyManagers = new TelephonyManager[numPhones];
-        mPhoneStateReceiver = new PhoneStateIntentReceiver(mContext, mHandler);
-        mPhoneStateReceiver.notifyServiceState(EVENT_SERVICE_STATE_CHANGED);
-        if (numPhones > 1) {
-            mPhoneStateReceiver2 = new PhoneStateIntentReceiver(mContext, mHandler, 1);
-            mPhoneStateReceiver2.notifyServiceState(EVENT_SERVICE_STATE_CHANGED);
-        }
-
-        mPhoneStateReceiver.registerIntent();
-        if (numPhones > 1) {
-            mPhoneStateReceiver2.registerIntent();
-        }
-
+        mPhoneStateListener = new PhoneStateListener[numPhones];
+        mServiceState= new ServiceState[numPhones];
         for (int i = 0; i < numPhones; i++) {
             mTelephonyManagers[i] = (TelephonyManager) mContext.getSystemService(PhoneFactory
                     .getServiceName(Context.TELEPHONY_SERVICE, i));
         }
-
+        for (int i = 0; i <numPhones; i++) {
+            mTelephonyManagers[i] = (TelephonyManager) mContext.getSystemService(PhoneFactory
+                    .getServiceName(Context.TELEPHONY_SERVICE, i));
+            mTelephonyManagers[i].listen(mPhoneStateListener(i), PhoneStateListener.LISTEN_SERVICE_STATE);
+        }
         updateWifiButton();
         updateBluetoothButton();
         updateDataNetworkButton();
@@ -158,6 +152,8 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                 break;
             case R.id.quick_switch_airplane_toggle:
                 toggleAirplane();
+                mHandler.removeMessages(EVENT_AIRPLANE_SWITCH_DELAY_MESSAGE);
+                mHandler.sendEmptyMessageDelayed(EVENT_AIRPLANE_SWITCH_DELAY_MESSAGE, DELAY_AIRPLANE_SET_TIME);
                 break;
             case R.id.quick_switch_auto_rotate_toggle:
                 toggleAutoRotate();
@@ -198,6 +194,9 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         mContext.getContentResolver().registerContentObserver(
                 Settings.Secure.getUriFor(Settings.Secure.MOBILE_DATA),
                 true, mMobileDataObserver);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.Secure.getUriFor(Settings.Secure.RADIO_OPERATION), true,
+                mRadioBusyObserver);
     }
 
     public void unregisterReceiver() {
@@ -208,12 +207,17 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         mContext.getContentResolver().unregisterContentObserver(mGpsChangedObserver);
         mContext.getContentResolver().unregisterContentObserver(mAutoRotateChangedObserver);
         mContext.getContentResolver().unregisterContentObserver(mMobileDataObserver);
-        mPhoneStateReceiver.unregisterIntent();
-        if (numPhones > 1) {
-            if (mPhoneStateReceiver2 != null) {
-                mPhoneStateReceiver2.unregisterIntent();
+        mContext.getContentResolver().unregisterContentObserver(mRadioBusyObserver);
+        Log.d(TAG,"unregisterReceiver");
+        if (mPhoneStateListener!=null&&mTelephonyManagers!=null) {
+            for (int i =0;i<mTelephonyManagers.length;i++) {
+                mTelephonyManagers[i].listen(mPhoneStateListener[i], PhoneStateListener.LISTEN_NONE);
+                mPhoneStateListener[i] = null;
+                mTelephonyManagers[i] = null;
             }
         }
+        mTelephonyManagers = null;
+        mPhoneStateListener = null;
     }
 
     @Override
@@ -566,9 +570,6 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     }
 
     private void toggleAirplane() {
-        if (!noCanUsedCard()) {
-            airPlaneViewEnable(false);
-        }
         try {
             mAirplaneEnable = Settings.System.getInt(
                     this.mContext.getContentResolver(),
@@ -576,6 +577,9 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         } catch (SettingNotFoundException e) {
             e.printStackTrace();
         }
+        Log.d(TAG,"toggleAirplane");
+        TelephonyManager.setRadioBusy(mContext, true);
+        airPlaneViewEnable(false);
         Settings.System.putInt(this.mContext.getContentResolver(),
                 Settings.System.AIRPLANE_MODE_ON, mAirplaneEnable ? 0 : 1);
         Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
@@ -648,46 +652,61 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         }
         return false;
     }
-
-    private void onAirplaneModeChanged() {
-        ServiceState serviceState = mPhoneStateReceiver.getServiceState();
-        boolean airplaneModeEnabled = false;
-        if (numPhones > 1) {
-            ServiceState serviceState2 = mPhoneStateReceiver2.getServiceState();
-            Log.d(TAG, "serviceState =" + serviceState.getState()
-                    + " serviceState2 =" + serviceState2.getState());
-            if ((hasCard[0] && !isStandby[0]) && (hasCard[1] && !isStandby[1])) {
-                if (isAirplaneModeOn(mContext)) {
-                    airplaneModeEnabled = ((serviceState.getState() == ServiceState.STATE_POWER_OFF) && (serviceState2
-                            .getState() == ServiceState.STATE_POWER_OFF));
-                } else {
-                    airplaneModeEnabled = !((serviceState.getState() != ServiceState.STATE_POWER_OFF) && (serviceState2
-                            .getState() != ServiceState.STATE_POWER_OFF));
+    private PhoneStateListener mPhoneStateListener(final int phoneId) {
+        PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onServiceStateChanged(ServiceState serviceState) {
+                mServiceState[phoneId]=serviceState;
+                Log.d(TAG,"onServiceStateChanged phoneId " + phoneId + " serviceState:" + serviceState);
+                boolean inAirplaneMode = isAllRadioOFF();
+                boolean mIsAirPlane = isAirplaneModeOn(mContext);
+                if (inAirplaneMode == mIsAirPlane) {
+                    TelephonyManager.setRadioBusy(mContext, false);
+                    airPlaneViewEnable(true);
+                    updateAirplaneButton();
                 }
-            } else if ((hasCard[0] && !isStandby[0]) && (!hasCard[1] || isStandby[1])) {
-                Log.d(TAG, "sim1 ready sim2 standby or has not");
-                airplaneModeEnabled = serviceState.getState() == ServiceState.STATE_POWER_OFF;
-            } else if ((hasCard[1] && !isStandby[1]) && (!hasCard[0] || isStandby[0])) {
-                Log.d(TAG, "sim1 standby or has not sim2 ready");
-                airplaneModeEnabled = serviceState2.getState() == ServiceState.STATE_POWER_OFF;
             }
-        } else {
-            if (!hasCard[0] || isStandby[0]) {
-                airplaneModeEnabled = isAirplaneModeOn(mContext);
-            } else {
-                airplaneModeEnabled = ((serviceState.getState() == ServiceState.STATE_POWER_OFF));
+        };
+        return mPhoneStateListener;
+    }
+
+    private boolean isAllRadioOFF(){
+        for(int i=0;i<numPhones;i++){
+            if (mTelephonyManagers[i] != null && mTelephonyManagers[i].hasIccCard() == true && isStandby(i)) {
+                if (mServiceState[i] != null && mServiceState[i].getState() != ServiceState.STATE_POWER_OFF) {
+                    return false;
+                }
             }
         }
+        return true;
+    }
 
-        Log.d(TAG, "airplaneModeEnabled is " + airplaneModeEnabled
-                + "  isAirplaneModeOn(mContext) =" + isAirplaneModeOn(mContext));
-
-        if (isAirplaneModeOn(mContext) != airplaneModeEnabled) {
-            return;
+    private boolean isStandby (int phoneId) {
+        String tmpStr = null;
+        if(phoneId == 0){
+            tmpStr = Settings.System.SIM_STANDBY;
+        }else{
+            tmpStr = Settings.System.SIM_STANDBY + phoneId;
         }
+        return Settings.System.getInt(mContext.getContentResolver(),
+            tmpStr, 1) == 1;
+    }
 
-        updateAirplaneButton();
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case EVENT_AIRPLANE_SWITCH_DELAY_MESSAGE:
+                    onAirplaneModeChangedTimedout();
+                    break;
+            }
+        }
+    };
+
+    private void onAirplaneModeChangedTimedout() {
+        TelephonyManager.setRadioBusy(mContext, false);
         airPlaneViewEnable(true);
+        updateAirplaneButton();
     }
 
     private boolean isAirplaneModeOn(Context context) {
@@ -695,18 +714,8 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                 Settings.System.AIRPLANE_MODE_ON, 0) != 0;
     }
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case EVENT_SERVICE_STATE_CHANGED:
-                    onAirplaneModeChanged();
-                    break;
-            }
-        }
-    };
-
     private void airPlaneViewEnable(boolean enable) {
+        Log.d(TAG,"airPlaneViewEnable " + enable);
         LinearLayout airPlaneView = (LinearLayout) mToggleViewGroup
                 .findViewById(R.id.quick_switch_airplane_toggle);
         airPlaneView.setEnabled(enable);
@@ -834,13 +843,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             super.onChange(selfChange);
             Log.d(TAG, "mAirPlaneChangedObserver");
             updateAirplaneStatus();
-            if (!noCanUsedCard()) {
-                // has used card
-                airPlaneViewEnable(false);
-            } else {
-                // no card can used
-                updateAirplaneButton();
-            }
+            updateAirplaneButton();
         }
     };
 
@@ -859,5 +862,17 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             updateAutorotateButton();
         }
     };
+    private ContentObserver mRadioBusyObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            Log.d(TAG, "mRadioBusyObserver");
+            onRadioBusyStateChanged();
+        }
+    };
 
+    private void onRadioBusyStateChanged() {
+        boolean isRadioBusy = TelephonyManager.isRadioBusy(mContext);
+        Log.d(TAG,"onRadioBusyStateChanged " + isRadioBusy);
+        airPlaneViewEnable(!isRadioBusy);
+    }
 }
