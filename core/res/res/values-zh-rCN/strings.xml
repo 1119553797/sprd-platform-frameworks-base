@@ -1365,4 +1365,7 @@
     <string name="myAppProcessing">处理中\u2026</string>
     
     <string name="ringtone_waning">错误的文件，请重新选择</string>
+    <string name="CallHold" msgid="">通话被保持</string>
+    <string name="CallRetrieved" msgid="">通话已恢复</string>
+    <string name="CallWaiting">通话等待中</string>
 </resources>
