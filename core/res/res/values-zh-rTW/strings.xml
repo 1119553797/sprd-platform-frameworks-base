@@ -1350,4 +1350,7 @@
     <string name="myApp_Uninstall_ChkBox">卸載應用</string>
     <string name="myAppLoading">載入中\u2026</string>
     <string name="myAppProcessing">處理中\u2026</string>
+    <string name="CallHold" msgid="">通話被保持</string>
+    <string name="CallRetrieved" msgid="">通話已恢復</string>
+    <string name="CallWaiting">>通話等待中</string>
 </resources>
