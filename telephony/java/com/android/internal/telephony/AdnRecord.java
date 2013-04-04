@@ -421,7 +421,7 @@ public class AdnRecord implements Parcelable {
 
 				try {
 					byteTag = GsmAlphabet
-							.isAsciiStringToGsm8BitUnpackedField(alphaTag);
+							.stringToGsmAlphaSS(alphaTag);
 					System.arraycopy(byteTag, 0, adnString, 0, byteTag.length);
 				} catch (EncodeException ex) {
 					try {
