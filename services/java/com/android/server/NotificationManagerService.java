@@ -1072,8 +1072,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                 // vibrate
                 final boolean useDefaultVibrate =
                     (notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
-                if ((useDefaultVibrate || notification.vibrate != null)
-                        && !(audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT)) {
+                if ((useDefaultVibrate || notification.vibrate != null)) {
                     mVibrateNotification = r;
 
                     mVibrator.vibrate(useDefaultVibrate ? DEFAULT_VIBRATE_PATTERN
