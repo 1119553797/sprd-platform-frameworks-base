@@ -2649,8 +2649,9 @@ public final class ActivityThread {
         ActivityClientRecord r;
         try {
             r = performResumeActivity(token, clearHide);
-        } catch (IllegalStateException e) {
-            Log.e(TAG, "IllegalStateException in performResumeActivity: " + e.getMessage());
+        } catch (RuntimeException e) {
+            Log.e(TAG, "RuntimeException in performResumeActivity: " + e.getMessage() + ", finish it!");
+            e.printStackTrace();
             r = null;
         }
 
