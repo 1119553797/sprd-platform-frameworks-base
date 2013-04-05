@@ -25,6 +25,8 @@ import android.text.Spanned;
 import android.util.Patterns;
 import android.webkit.WebView;
 import android.widget.TextView;
+import android.text.style.ForegroundColorSpan;
+
 
 
 import java.io.UnsupportedEncodingException;
@@ -209,9 +211,9 @@ public class Linkify {
         ArrayList<LinkSpec> links = new ArrayList<LinkSpec>();
 
         if ((mask & WEB_URLS) != 0) {
-            gatherLinks(links, text, Patterns.WEB_URL_FOR_TEXTVIEW,
+            gatherMyLinks(links, text, Patterns.WEB_URL_FOR_TEXTVIEW,
                 new String[] { "http://", "https://", "rtsp://" },
-                sUrlMatchFilter, null, mask);
+                sUrlMatchFilter, null);
         }
 
         if ((mask & EMAIL_ADDRESSES) != 0) {
@@ -564,6 +566,96 @@ public class Linkify {
             i++;
         }
     }
+    //===== fixed CR<NEWMS00120677> by luning at 11-09-17 begin=====
+    public static final Spannable findLinks(Spannable text, int mask) {
+        if (mask == 0) {
+            return text;
+        }
+
+        URLSpan[] old = text.getSpans(0, text.length(), URLSpan.class);
+        for (int i = old.length - 1; i >= 0; i--) {
+            text.removeSpan(old[i]);
+        }
+
+        ArrayList<LinkSpec> links = new ArrayList<LinkSpec>();
+
+        if ((mask & WEB_URLS) != 0) {
+            gatherMyLinks(links, text, Patterns.WEB_URL,
+                new String[] { "http://", "https://", "rtsp://"},
+                sUrlMatchFilter, null);
+        }
+
+        if ((mask & EMAIL_ADDRESSES) != 0) {
+            gatherLinks(links, text, Patterns.EMAIL_ADDRESS,
+                new String[] { "mailto:" },
+                null, null, mask);
+        }
+
+        if ((mask & PHONE_NUMBERS) != 0) {
+            gatherLinks(links, text, Patterns.PHONE,
+                new String[] { "tel:" },
+                sPhoneNumberMatchFilter, sPhoneNumberTransformFilter, mask);
+        }
+
+        if ((mask & MAP_ADDRESSES) != 0) {
+            gatherMapLinks(links, text);
+        }
+
+        pruneOverlaps(links);
+        for (LinkSpec link : links) {
+            text.setSpan(new ForegroundColorSpan(android.R.color.background_light), link.start, link.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            applyLink(link.url, link.start, link.end, text);
+        }
+        return text;
+    }
+
+    private static final void gatherMyLinks(ArrayList<LinkSpec> links,
+            Spannable s, Pattern pattern, String[] schemes,
+            MatchFilter matchFilter, TransformFilter transformFilter) {
+        int index = -1;
+        String linkspec = s.toString();
+        if (linkspec != null && !"".equals(linkspec)) {
+            index = linkspec.indexOf(" : ");
+            if (index != -1)
+                linkspec = linkspec.substring(index);
+        }
+        String[] str = linkspec.split("[\u4e00-\u9fa5]");
+        String otherStr = null;
+        for (String linkStr : str) {
+            index = linkStr.toLowerCase().indexOf("www");
+            if (index != -1) {
+                otherStr = linkStr.substring(0, index);
+                if (otherStr != null && !"".equals(otherStr)) {
+                    findUrl(links, s, pattern, schemes, matchFilter,
+                            transformFilter, otherStr);
+                }
+                linkStr = linkStr.substring(index);
+            }
+            findUrl(links, s, pattern, schemes, matchFilter, transformFilter,
+                    linkStr);
+        }
+    }
+
+    private static void findUrl(ArrayList<LinkSpec> links, Spannable s,
+            Pattern pattern, String[] schemes, MatchFilter matchFilter,
+            TransformFilter transformFilter, String linkStr) {
+        Matcher m = pattern.matcher(linkStr);
+        while (m.find()) {
+            int start = m.start() ;
+            int end = m.end() ;
+            if (matchFilter == null
+                    || matchFilter.acceptMatch(linkStr, start, end)) {
+                LinkSpec spec = new LinkSpec();
+                String weblink = m.group(0);
+                String url = makeUrl(weblink, schemes, m, transformFilter);
+                spec.url = url;
+                spec.start = s.toString().indexOf(weblink);
+                spec.end = spec.start+weblink.length();
+                links.add(spec);
+            }
+        }
+    }
+    //===== fixed CR<NEWMS00120677> by luning at 11-09-17 end=====
 }
 
 class LinkSpec {
