@@ -448,7 +448,16 @@ final class FragmentManagerImpl extends FragmentManager {
 
     @Override
     public boolean popBackStackImmediate() {
-        checkStateLoss();
+        try {
+            checkStateLoss();
+        } catch (IllegalStateException e) {
+            if (android.os.Debug.isMonkey()) {
+                Log.e(TAG, "IllegalStateException: Can not perform this action after onSaveInstanceState");
+                return false;
+            } else {
+                throw e;
+            }
+        }
         executePendingTransactions();
         return popBackStackState(mActivity.mHandler, null, -1, 0);
     }
