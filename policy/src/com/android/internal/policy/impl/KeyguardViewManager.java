@@ -150,7 +150,9 @@ public class KeyguardViewManager implements KeyguardWindowController {
             mWindowLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_USER;
         } else {
             if (DEBUG) Log.d(TAG, "Rotation sensor for lock screen Off!");
-            mWindowLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
+            // Just support portrait mode for bug 144037
+            // mWindowLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
+            mWindowLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         }
 
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
