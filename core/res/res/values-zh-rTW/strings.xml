@@ -1353,4 +1353,6 @@
     <string name="CallHold" msgid="">通話被保持</string>
     <string name="CallRetrieved" msgid="">通話已恢復</string>
     <string name="CallWaiting">>通話等待中</string>
+    <string name="OutCallBarred" msgid="">呼叫被禁止</string>
+    <string name="InCallBarred" msgid="">來電被禁止</string>
 </resources>
