@@ -241,9 +241,15 @@ public class VibratorService extends IVibratorService.Stub
     }
 
     public void cancelVibrate(IBinder token) {
-        mContext.enforceCallingOrSelfPermission(
-                android.Manifest.permission.VIBRATE,
-                "cancelVibrate");
+        try {
+            mContext.enforceCallingOrSelfPermission(
+                    android.Manifest.permission.VIBRATE,
+                    "cancelVibrate");
+        } catch (NullPointerException e) {
+            Slog.e(TAG, "cancelVibrate encounter null pointer exception: " + e.getMessage());
+            e.printStackTrace();
+            return;
+        }
 
         // so wakelock calls will succeed
         long identity = Binder.clearCallingIdentity();
