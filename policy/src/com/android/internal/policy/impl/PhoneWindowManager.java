@@ -157,7 +157,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class PhoneWindowManager implements WindowManagerPolicy {
     static final String TAG = "WindowManager";
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = true;
     static final boolean localLOGV = false;
     static final boolean DEBUG_LAYOUT = false;
     static final boolean DEBUG_INPUT = false;
