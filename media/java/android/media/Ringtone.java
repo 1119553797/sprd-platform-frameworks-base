@@ -68,7 +68,9 @@ public class Ringtone {
     private int mStreamType = AudioManager.STREAM_RING;
 
     private boolean mLoop = false;
-
+    /* Add 20130407 Spreadst of 144891,not reset to default ringtone start */
+    private static Uri mDefaultRingtoneUri = Uri.parse("content://media/internal/audio/media/9");
+    /* Add 20130407 Spreadst of 144891,not reset to default ringtone end */
     /** {@hide} */
     public Ringtone(Context context, boolean allowRemote) {
         mContext = context;
@@ -201,6 +203,22 @@ public class Ringtone {
             if (!mAllowRemote) {
                 Log.w(TAG, "Remote playback not allowed: " + e);
             }
+            /*
+             * Add 20130407 Spreadst of 144891,not reset to default ringtone
+             * start
+             */
+            mUri = mDefaultRingtoneUri;
+            mLocalPlayer = new MediaPlayer();
+            try {
+                mLocalPlayer.setDataSource(mContext, mUri);
+                mLocalPlayer.setAudioStreamType(mStreamType);
+                mLocalPlayer.prepare();
+            } catch (SecurityException ex) {
+                destroyLocalPlayer();
+            } catch (IOException ex) {
+                destroyLocalPlayer();
+            }
+            /* Add 20130407 Spreadst of 144891,not reset to default ringtone end */
         }
 
         if (LOGD) {
