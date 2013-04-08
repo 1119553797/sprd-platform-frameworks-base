@@ -84,7 +84,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
 
     private static final int TRANSPORT_USERACTIVITY_TIMEOUT = 10000;
 
-    static final boolean DEBUG_CONFIGURATION = true;
+    static final boolean DEBUG_CONFIGURATION = false;
 
     // time after launching EmergencyDialer before the screen goes blank.
     private static final int EMERGENCY_CALL_TIMEOUT = 10000;
@@ -92,7 +92,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
     // intent action for launching emergency dialer activity.
     static final String ACTION_EMERGENCY_DIAL = "com.android.phone.EmergencyDialer.DIAL";
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final String TAG = "LockPatternKeyguardView";
 
     private final KeyguardUpdateMonitor mUpdateMonitor;
