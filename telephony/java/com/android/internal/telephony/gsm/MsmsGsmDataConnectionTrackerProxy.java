@@ -108,7 +108,9 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
     }
 
     private static String getSetupDataReason(int setupPhoneId, Context context) {
-        if (setupPhoneId == TelephonyManager.getDefaultDataPhoneId(context)) {
+        // fix bug 147671 start
+        if ( context != null && setupPhoneId == TelephonyManager.getDefaultDataPhoneId(context)) {
+        // fix bug 147671 end
             return Phone.REASON_DATA_ENABLED;
         } else {
             return "switchConnection";
