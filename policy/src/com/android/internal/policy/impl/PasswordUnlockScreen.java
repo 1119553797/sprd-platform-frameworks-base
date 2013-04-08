@@ -28,25 +28,21 @@ import com.android.internal.widget.PasswordEntryKeyboardView;
 
 import android.os.CountDownTimer;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.security.KeyStore;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.text.method.TextKeyListener;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Space;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -135,6 +131,13 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
                     @Override
                     public void onClick(View v) {
                         mKeyboardHelper.handleBackspace();
+                    }
+                });
+                pinDelete.setOnLongClickListener(new OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        mPasswordEntry.setText("");
+                        return false;
                     }
                 });
             }
