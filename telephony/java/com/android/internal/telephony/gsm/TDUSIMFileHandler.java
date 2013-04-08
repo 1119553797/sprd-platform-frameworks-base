@@ -835,6 +835,11 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
             case EF_SPN_SHORT_CPHS:
             case EF_INFO_CPHS:
                 return MF_SIM + DF_GSM;
+             case EF_MSISDN:
+                 if (isUsim) {
+                     return MF_SIM + DF_ADF;
+                 }
+                 return MF_SIM + DF_TELECOM;
 
             case EF_PBR:
                 // we only support global phonebook.
