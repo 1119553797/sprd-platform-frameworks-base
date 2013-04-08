@@ -294,16 +294,15 @@ public class FmService extends IFmService.Stub {
 
         synchronized(mFmAudioPathLock) {
             if (mFmAudioPath != path) {
-                AudioManager am = ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE));
                 if (path == FM_AUDIO_PATH_NONE) {
-                    am.setWiredDeviceConnectionState(AudioManager.DEVICE_OUT_FM_SPEAKER, AudioSystem.DEVICE_STATE_UNAVAILABLE, "");
-                    am.setWiredDeviceConnectionState(AudioManager.DEVICE_OUT_FM_HEADSET, AudioSystem.DEVICE_STATE_UNAVAILABLE, "");
+                    AudioSystem.setDeviceConnectionState(AudioManager.DEVICE_OUT_FM_SPEAKER, AudioSystem.DEVICE_STATE_UNAVAILABLE, "");
+                    AudioSystem.setDeviceConnectionState(AudioManager.DEVICE_OUT_FM_HEADSET, AudioSystem.DEVICE_STATE_UNAVAILABLE, "");
                 } else if (path == FM_AUDIO_PATH_SPEAKER) {
-                    am.setWiredDeviceConnectionState(AudioManager.DEVICE_OUT_FM_HEADSET, AudioSystem.DEVICE_STATE_UNAVAILABLE, "");
-                    am.setWiredDeviceConnectionState(AudioManager.DEVICE_OUT_FM_SPEAKER, AudioSystem.DEVICE_STATE_AVAILABLE, "");
+                    AudioSystem.setDeviceConnectionState(AudioManager.DEVICE_OUT_FM_HEADSET, AudioSystem.DEVICE_STATE_UNAVAILABLE, "");
+                    AudioSystem.setDeviceConnectionState(AudioManager.DEVICE_OUT_FM_SPEAKER, AudioSystem.DEVICE_STATE_AVAILABLE, "");
                 } else if (path == FM_AUDIO_PATH_HEADSET) {
-                    am.setWiredDeviceConnectionState(AudioManager.DEVICE_OUT_FM_SPEAKER, AudioSystem.DEVICE_STATE_UNAVAILABLE, "");
-                    am.setWiredDeviceConnectionState(AudioManager.DEVICE_OUT_FM_HEADSET, AudioSystem.DEVICE_STATE_AVAILABLE, "");
+                    AudioSystem.setDeviceConnectionState(AudioManager.DEVICE_OUT_FM_SPEAKER, AudioSystem.DEVICE_STATE_UNAVAILABLE, "");
+                    AudioSystem.setDeviceConnectionState(AudioManager.DEVICE_OUT_FM_HEADSET, AudioSystem.DEVICE_STATE_AVAILABLE, "");
                 }
 
                 mFmAudioPath = path;
