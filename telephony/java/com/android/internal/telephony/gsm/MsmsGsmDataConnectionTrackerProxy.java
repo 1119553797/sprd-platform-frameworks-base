@@ -379,6 +379,7 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                                     mDone = true;
                                     DetachGprs.this.notifyAll();
                                 }
+                                getLooper().quit();
                                 break;
                         }
                     }
