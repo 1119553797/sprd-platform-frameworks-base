@@ -621,32 +621,6 @@ public class RingtoneManager {
      * @see #getRingtone(Context, Uri)
      */
     private static Ringtone getRingtone(final Context context, Uri ringtoneUri, int streamType) {
-        /* Add 20130130 Spreadst of 90412,the ringtone not ring start */
-        if (ringtoneUri.toString().startsWith("content://media/external/audio/media/")) {
-            try {
-                Cursor cursor = null;
-                cursor = context.getContentResolver().query(ringtoneUri,
-                        new String[] { MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA }, null, null, null);
-                if (cursor != null) {
-                    if (cursor.getCount() == 0) {
-                        ringtoneUri = mDefaultRingtoneUri;
-                    }
-                    if (cursor.moveToFirst()) {
-                        File filePath = new File(cursor.getString(1));
-                        if (!filePath.exists()) {
-                            ringtoneUri = mDefaultRingtoneUri;
-                        }
-                    }
-                }
-            } catch (SQLiteException sqle) {
-                Log.e(TAG, sqle.toString());
-            }
-        }
-
-        if (ringtoneUri.toString().startsWith(Settings.System.DEFAULT_RINGTONE_URI.toString())) {
-            ringtoneUri = mDefaultRingtoneUri;
-        }
-        /* Add 20130130 Spreadst of 90412,the ringtone not ring end */
         try {
             final Ringtone r = new Ringtone(context, true);
             if (streamType >= 0) {
