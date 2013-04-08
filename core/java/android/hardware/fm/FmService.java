@@ -47,6 +47,7 @@ public class FmService extends IFmService.Stub {
         public void binderDied() {
             int index = mObserverHandlers.indexOf(this);
             if (index >= 0) {
+                setAudioPath(FM_AUDIO_PATH_NONE);
                 powerDown();
             }
         }
