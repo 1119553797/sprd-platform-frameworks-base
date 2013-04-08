@@ -40,4 +40,5 @@
     <drawable name="custom_default_text_color">#ff000000</drawable>
     <color name="custom_notification_switch_on_text_color">#ffff6400</color>
     <color name="custom_notification_switch_off_text_color">#ff858585</color>
+    <color name="transparent">#00000000</color>
 </resources>
