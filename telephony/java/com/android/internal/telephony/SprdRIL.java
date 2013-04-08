@@ -49,6 +49,7 @@ public final class SprdRIL extends RIL {
         int num_type;
         int bs_type;
         int cause;
+        int location; // if  cause = 57 and location <= 2, it mean current sim hasn't start vt service
     }
 
 	//***** Constructors
@@ -423,7 +424,7 @@ public final class SprdRIL extends RIL {
                 case RIL_UNSOL_VIDEOPHONE_STRING: ret = responseString(p); break;
                 case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: ret = responseInts(p); break;
                 case RIL_UNSOL_VIDEOPHONE_MM_RING: ret = responseInts(p); break;
-				case RIL_UNSOL_VIDEOPHONE_RELEASING: ret = responseString(p); break;
+                case RIL_UNSOL_VIDEOPHONE_RELEASING: ret = responseString(p); break;
                 case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: ret = responseInts(p); break;
                 case RIL_UNSOL_VIDEOPHONE_DSCI: ret = responseDSCI(p); break;
                 case RIL_UNSOL_VIDEOPHONE_MEDIA_START: ret = responseInts(p); break;
@@ -590,12 +591,17 @@ public final class SprdRIL extends RIL {
                 if (info.cause > 0) {
                     if (RILJ_LOGD)
                         riljLog(" RIL_UNSOL_VIDEOPHONE_DSCI number: " + info.number + ", cause: "
-                                + info.cause);
+                                + info.cause + ", location: " + info.location);
                     if ((info.cause == 47) || (info.cause == 57) || (info.cause == 58)
                             || (info.cause == 88)) {
                         if (mVPFallBackRegistrant != null) {
-                            mVPFallBackRegistrant.notifyRegistrant(new AsyncResult(null,
-                                    new AsyncResult(info.number, info.cause, null), null));
+                            if ((info.cause == 57) && (info.location <= 2)) { // if  cause = 57 and location <= 2, it mean current sim hasn't start vt service
+                                mVPFallBackRegistrant.notifyRegistrant(new AsyncResult(null,
+                                        new AsyncResult(info.number, info.cause + 100, null), null));
+                            } else  {
+                                mVPFallBackRegistrant.notifyRegistrant(new AsyncResult(null,
+                                        new AsyncResult(info.number, info.cause, null), null));
+                            }
                         }
                     } else {
                         if (mVPFailRegistrant != null) {
@@ -702,9 +708,10 @@ public final class SprdRIL extends RIL {
 		    info.bs_type = p.readInt();//bs_type
 		    if (info.type == 1) {
 			info.cause = p.readInt();
+			info.location = p.readInt();//my side or other side
 		    }
 	    }
-	    riljLog("responseDSCI(), number: " + info.number + ", status: " + info.stat + ", type: " + info.type + ", cause: " + info.cause);
+	    riljLog("responseDSCI(), number: " + info.number + ", status: " + info.stat + ", type: " + info.type + ", cause: " + info.cause + ", location: " + info.location);
 
 	    return info;
 	}
@@ -725,7 +732,7 @@ public final class SprdRIL extends RIL {
             case RIL_UNSOL_VIDEOPHONE_STRING: return "UNSOL_VIDEOPHONE_STRING";
             case RIL_UNSOL_VIDEOPHONE_REMOTE_MEDIA: return "UNSOL_VIDEOPHONE_REMOTE_MEDIA";
             case RIL_UNSOL_VIDEOPHONE_MM_RING: return "UNSOL_VIDEOPHONE_MM_RING";
-		    case RIL_UNSOL_VIDEOPHONE_RELEASING: return "RIL_UNSOL_VIDEOPHONE_RELEASING";
+            case RIL_UNSOL_VIDEOPHONE_RELEASING: return "RIL_UNSOL_VIDEOPHONE_RELEASING";
             case RIL_UNSOL_VIDEOPHONE_RECORD_VIDEO: return "UNSOL_VIDEOPHONE_RECORD_VIDEO";
             case RIL_UNSOL_VIDEOPHONE_MEDIA_START: return "UNSOL_VIDEOPHONE_MEDIA_START";
             case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED: return "UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED";
