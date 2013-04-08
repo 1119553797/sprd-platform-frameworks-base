@@ -1650,9 +1650,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadSetting(stmt, Settings.Secure.CDMA_CELL_BROADCAST_SMS,
                     RILConstants.CDMA_CELL_BROADCAST_SMS_DISABLED);
 
-            // Don't do this.  The SystemServer will initialize ADB_ENABLED from a
-            // persistent system property instead.
-            //loadSetting(stmt, Settings.Secure.ADB_ENABLED, 0);
+            // Enable adb when eng mode.
+            if (!SystemProperties.get("ro.build.type", "user").equals("user")) {
+                loadSetting(stmt, Settings.Secure.ADB_ENABLED, 1);
+            }
 
             // Allow mock locations default, based on build
             loadSetting(stmt, Settings.Secure.ALLOW_MOCK_LOCATION,
