@@ -1261,6 +1261,8 @@ public class NetworkController extends BroadcastReceiver {
             combinedLabel = wifiLabel;
             combinedSignalIconId = mWifiIconId; // set by updateWifiIcons()
             mContentDescriptionCombinedSignal[phoneId] = mContentDescriptionWifi;
+        } else {
+            mWifiActivityIconId = 0;
         }
 
         if (mDataConnected[phoneId]) {
