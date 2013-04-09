@@ -568,7 +568,6 @@ public final class UsageStatsService extends IUsageStats.Stub {
             out = Parcel.obtain();
             writeStatsToParcelFLOCK(out);
             stream.write(out.marshall());
-            out.recycle();
             stream.flush();
         } finally {
             FileUtils.sync(stream);
