@@ -32,6 +32,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ResultReceiver;
 import android.os.ServiceManager;
@@ -407,7 +408,10 @@ public final class InputMethodManager {
                             // Check focus again in case that "onWindowFocus" is called before
                             // handling this message.
                             if (mServedView != null && mServedView.hasWindowFocus()) {
-                                checkFocus(mHasBeenInactive);
+                                PowerManager powerManager = (PowerManager) mServedView.getContext()
+                                        .getSystemService(Context.POWER_SERVICE);
+                                if (powerManager.isScreenOn())
+                                    checkFocus(mHasBeenInactive);
                             }
                         }
                     }
