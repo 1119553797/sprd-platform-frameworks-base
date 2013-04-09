@@ -299,7 +299,13 @@ public abstract class AbstractCursor implements CrossProcessCursor {
     public int getColumnIndexOrThrow(String columnName) {
         final int index = getColumnIndex(columnName);
         if (index < 0) {
+            if (android.os.Debug.isMonkey()) {
+                Log.e("AbstractCursor", "requesting column index < 0");
+                android.os.Process.killProcess(android.os.Process.myPid());
+                return -1;
+            } else {
             throw new IllegalArgumentException("column '" + columnName + "' does not exist");
+            }
         }
         return index;
     }
