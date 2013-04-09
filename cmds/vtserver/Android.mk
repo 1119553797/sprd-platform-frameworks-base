@@ -19,6 +19,11 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)
 
+ifeq ($(BOARD_HAVE_BLUETOOTH_BK),true)
+LOCAL_CFLAGS := \
+    -DBOARD_HAVE_BLUETOOTH_BK
+endif
+
 LOCAL_MODULE:= vtserver
 
 
