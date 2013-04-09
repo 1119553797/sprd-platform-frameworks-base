@@ -457,6 +457,12 @@ public class PhoneFactory {
         sContext.sendBroadcast(new Intent(Intent.ACTION_DEFAULT_PHONE_CHANGE));
     }
 
+    public static void forceUpdateDefaultPhoneId(int settingPhoneId) {
+        Log.i(LOG_TAG, "forceUpdateDefaultPhoneId=" + settingPhoneId);
+        TelephonyManager.setDefaultDataPhoneId(sContext, settingPhoneId);
+        sContext.sendBroadcast(new Intent(Intent.ACTION_DEFAULT_PHONE_CHANGE));
+    }
+
     public static Phone getPhone(int phoneId) {
         return getPhones()[phoneId];
     }
