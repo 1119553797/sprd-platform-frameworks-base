@@ -46,7 +46,7 @@ public class SimManager {
     public static final int ABSENT_SIM_COLOR = 0xFF808080;
 
     public static final int[] COLORS = {
-            0xFFFF383A, 0xFFD9BE97, 0xFFA372D9, 0xFFFF49A7, 0xFFFFAF21, 0xFF49C737, 0xFF3ADED5,
+            0xFFFF383A, 0xFFFF6400, 0xFFA372D9, 0xFFFF49A7, 0xFFFFAF21, 0xFF49C737, 0xFF00A2D5,
             0xFF4274DB
     };
 
