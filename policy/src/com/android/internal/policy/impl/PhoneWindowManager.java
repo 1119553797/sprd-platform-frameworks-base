@@ -1778,7 +1778,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (keyCode == KeyEvent.KEYCODE_HOME) {
 
             WindowManager.LayoutParams attrs = win != null ? win.getAttrs() : null;
-            if ((null != attrs.packageName) && (attrs.packageName.startsWith("com.spreadst.validationtools"))){
+            if ((null != attrs) && (null != attrs.packageName) && (attrs.packageName.startsWith("com.spreadst.validationtools"))){
                     return 0;
                 }
             // If we have released the home key, and didn't do anything else
