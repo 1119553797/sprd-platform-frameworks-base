@@ -853,11 +853,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                                    false,
                                    true);
             } else {
-                if (getRingerMode() == RINGER_MODE_OUTDOOR) {
-                    newRingerMode = AudioManager.RINGER_MODE_OUTDOOR;
-                } else {
-                    newRingerMode = AudioManager.RINGER_MODE_NORMAL;
-                }
+            	newRingerMode = getRingerMode();
             }
             setRingerMode(newRingerMode);
         }
