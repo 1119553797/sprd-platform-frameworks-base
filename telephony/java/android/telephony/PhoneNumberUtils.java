@@ -127,6 +127,74 @@ public class PhoneNumberUtils
         return c == PAUSE || c == WAIT;
     }
 
+	public final static char pAndwToCommaAndSemicolon(char c) {
+		if (isPause(c)) {
+			return PAUSE;
+		} else if (isToneWait(c)) {
+			return WAIT;
+		}
+		return c;
+	}
+
+	public final static char CommaAndSemicolonTopAndw(char c) {
+		if (c == PAUSE) {
+			return 'P';
+		} else if (c == WAIT) {
+			return 'W';
+		}
+		return c;
+	}
+
+	public final static String pAndwToCommaAndSemicolon(String str) {
+		if (null != str) {
+			StringBuilder strBlder = new StringBuilder();
+			int len = str.length();
+			for (int i = 0; i < len; i++) {
+				switch (str.charAt(i)) {
+					case 'p':
+					case 'P': {
+					strBlder.append(PAUSE);
+					}
+					break;
+					case 'w':
+					case 'W': {
+					strBlder.append(WAIT);
+					}
+					break;
+					default:
+					strBlder.append(str.charAt(i));
+				}
+			}
+			return strBlder.toString();
+		} else {
+			return null;
+		}
+	}
+
+    public final static String CommaAndSemicolonTopAndw(String str) {
+		if (null != str) {
+			StringBuilder strBlder = new StringBuilder();
+			int len = str.length();
+			for (int i = 0; i < len; i++) {
+				switch (str.charAt(i)) {
+					case PAUSE: {
+					strBlder.append('P');
+					}
+					break;
+					case WAIT: {
+					strBlder.append('W');
+					}
+					break;
+					default:
+					strBlder.append(str.charAt(i));
+				}
+			}
+			return strBlder.toString();
+		} else {
+			return null;
+		}
+	}
+
     private static boolean
     isPause (char c){
         return c == 'p'||c == 'P';
@@ -136,7 +204,6 @@ public class PhoneNumberUtils
     isToneWait (char c){
         return c == 'w'||c == 'W';
     }
-
 
     /** Returns true if ch is not dialable or alpha char */
     private static boolean isSeparator(char ch) {
