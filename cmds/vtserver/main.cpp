@@ -53,7 +53,59 @@ int read_file_tag(char* filename, char* buf)
 	fclose(fp);
 	return 0;
 }
+static int rfkill_id = -1;
+static char *rfkill_state_path = NULL;
+static int init_rfkill() {
+    char path[64];
+    char buf[16];
+    int fd;
+    int sz;
+    int id;
+    for (id = 0; ; id++) {
+        snprintf(path, sizeof(path), "/sys/class/rfkill/rfkill%d/type", id);
+        fd = open(path, O_RDONLY);
+        if (fd < 0) {
+		ALOGI("BTUT init_rfkill open fd error\n");
+            return -1;
+        }
+        sz = read(fd, &buf, sizeof(buf));
+        close(fd);
+        if (sz >= 9 && memcmp(buf, "bluetooth", 9) == 0) {
+            rfkill_id = id;
+            break;
+        }
+    }
 
+    asprintf(&rfkill_state_path, "/sys/class/rfkill/rfkill%d/state", rfkill_id);
+    return 0;
+}
+
+static int set_bluetooth_power(int on) {
+    int sz;
+    int fd = -1;
+    int ret = -1;
+    const char buffer = (on ? '1' : '0');
+
+    if (rfkill_id == -1) {
+        if (init_rfkill()) goto out;
+    }
+
+    fd = open(rfkill_state_path, O_WRONLY);
+    if (fd < 0) {
+	ALOGI("BTUT set_bluetooth_power open fd error\n");
+        goto out;
+    }
+    sz = write(fd, &buffer, 1);
+    if (sz < 0) {
+	ALOGI("BTUT set_bluetooth_power write fd error\n");
+        goto out;
+    }
+    ret = 0;
+
+out:
+    if (fd >= 0) close(fd);
+    return ret;
+}
 int main(int argc, char** argv)
 {
 	ALOGE("=== vtserver start! ===\n");
@@ -91,10 +143,81 @@ int main(int argc, char** argv)
     }
     else if(ch == '3')
     {
-//	    property_get(BTUT_TEST, buf, "1");
-//	    if(strcmp(buf, "0") == 0)
-		if(ch == '3')
-	    {
+#ifdef BOARD_HAVE_BLUETOOTH_BK
+        ALOGE("=== receive BTUT test requirement! ===\n");
+        ALOGE("=== BTUT test start! ===\n");
+        int error;
+        ALOGE("=== BTUT test stop bluetoothd! ===\n");
+        error = system("setprop ctl.stop bluetoothd");
+        ALOGE("=== BTUT test stop hciattach! ===\n");
+        error = system("setprop ctl.stop hciattach");
+        ALOGE("=== BTUT test close BT power! ===\n");
+        if (set_bluetooth_power(0))
+        {
+            LOGI("===BTUT test POWOFF BT failed ===\n");
+        }
+        //msleep(100);
+        ALOGE("=== BTUT test Write EUT mode! ===\n");
+        system("echo 1 > /data/bteut.txt");
+        ALOGE("=== BTUT test open BT power! ===\n");
+        if (set_bluetooth_power(1) < 0) 
+        {
+            ALOGI("===BTUT test POWON BT failed ===\n");
+            system("rm /data/bteut.txt");
+            return NULL;
+        }	
+        ALOGE("=== BTUT test start hciattach! ===\n");
+        error = system("setprop ctl.start hciattach");
+        sleep(2);
+        ALOGE("=== BTUT test hciconfig up! ===\n");
+        error = system("hciconfig hci0 up");
+        if(error == -1 || error == 127)
+        {
+            ALOGE("=== BTUT test failed on cmd 1! ===\n");
+            ch = '5';
+        }
+        else
+        {
+            error = system("hcitool cmd 0x03 0x03");
+            if(error == -1 || error == 127)
+            {
+                ALOGE("=== BTUT test failed on cmd 2! ===\n");
+                ch = '5';
+            }
+            else
+            {
+                error = system("hcitool cmd 0x03 0x1a 0x03");
+                if(error == -1 || error == 127)
+                {
+                    ALOGE("=== BTUT test failed on cmd 3! ===\n");
+                    ch = '5';
+                }
+                else
+                {
+                    error = system("hcitool cmd 0x03 0x05  0x02 0x00 0x02");
+                    if(error == -1 || error == 127)
+                    {
+                        ALOGE("=== BTUT test failed on cmd 4! ===\n");
+                        ch = '5';
+                    }
+                    else
+                    {
+                        if(error == -1 || error == 127)
+                        {
+                            ALOGE("=== BTUT test failed on cmd 5! ===\n");
+                            ch = '5';
+                        } 
+                        else
+                        {
+                            ALOGE("=== BTUT test succeed! ===\n");
+                            ch = '4';
+                            system("rm /data/bteut.txt");
+                        }
+                    }
+                }
+            }
+        }
+#else
 			ALOGE("=== receive BTUT test requirement! ===\n");
 			ALOGE("=== BTUT test start! ===\n");
 			int error = system("hciconfig hci0 up");
@@ -157,7 +280,8 @@ int main(int argc, char** argv)
 					}
 				}
 			}
-	    }
+
+#endif
     }
     else if(ch == 'a')
     {
