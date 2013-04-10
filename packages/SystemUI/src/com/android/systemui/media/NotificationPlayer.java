@@ -18,6 +18,7 @@ package com.android.systemui.media;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
@@ -63,6 +64,16 @@ public class NotificationPlayer implements OnCompletionListener {
 
     private Looper mLooper;
 
+    // fix bug 148265 start
+    OnAudioFocusChangeListener mAudioFocusListener = new OnAudioFocusChangeListener() {
+        public void onAudioFocusChange(int focusChange) {
+            if (focusChange < 0) {
+                stop();
+            }
+        }
+    };
+    // fix bug 148265 end
+
     /*
      * Besides the use of audio focus, the only implementation difference between AsyncPlayer and
      * NotificationPlayer resides in the creation of the MediaPlayer. For the completion callback,
@@ -91,10 +102,10 @@ public class NotificationPlayer implements OnCompletionListener {
                     if ((mCmd.uri != null) && (mCmd.uri.getEncodedPath() != null)
                             && (mCmd.uri.getEncodedPath().length() > 0)) {
                         if (mCmd.looping) {
-                            audioManager.requestAudioFocus(null, mCmd.stream,
+                            audioManager.requestAudioFocus(mAudioFocusListener, mCmd.stream,
                                     AudioManager.AUDIOFOCUS_GAIN);
                         } else {
-                            audioManager.requestAudioFocus(null, mCmd.stream,
+                            audioManager.requestAudioFocus(mAudioFocusListener, mCmd.stream,
                                     AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
                         }
                     }
@@ -179,7 +190,7 @@ public class NotificationPlayer implements OnCompletionListener {
                         mPlayer.stop();
                         mPlayer.release();
                         mPlayer = null;
-                        mAudioManager.abandonAudioFocus(null);
+                        mAudioManager.abandonAudioFocus(mAudioFocusListener);
                         mAudioManager = null;
                         if((mLooper != null)
                                 && (mLooper.getThread().getState() != Thread.State.TERMINATED)) {
@@ -208,7 +219,7 @@ public class NotificationPlayer implements OnCompletionListener {
 
     public void onCompletion(MediaPlayer mp) {
         if (mAudioManager != null) {
-            mAudioManager.abandonAudioFocus(null);
+            mAudioManager.abandonAudioFocus(mAudioFocusListener);
         }
         // if there are no more sounds to play, end the Looper to listen for media completion
         synchronized (mCmdQueue) {
