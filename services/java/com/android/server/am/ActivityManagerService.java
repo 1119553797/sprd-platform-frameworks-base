@@ -3239,6 +3239,19 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
         }
+        else{
+            Debug.dumpNativeBacktraceToFile(firstPids.get(0), tracesPath);
+            final String[] NATIVE_STACKS_OF_DEFAULT = new String[] {
+                "/system/bin/surfaceflinger",
+                "/system/bin/mediaserver"
+            };
+            int[] pids = Process.getPidsForCommands(NATIVE_STACKS_OF_DEFAULT);
+            if (pids != null) {
+                for (int pid : pids) {
+                    Debug.dumpNativeBacktraceToFile(pid, tracesPath);
+                }
+            }
+        }
     }
 
     final void logAppTooSlow(ProcessRecord app, long startTime, String msg) {
