@@ -325,7 +325,7 @@ public final class TDPhone extends GSMPhone {
 
     public Call
     getBackgroundCall() {
-        if (mVideoCT.isAlive()) {
+        if (mVideoCT.backgroundCall.getState() != Call.State.IDLE) {
             Log.e(LOG_TAG, "getBackgroundCall(), mVideoCT");
             return mVideoCT.backgroundCall;
         } else {
@@ -344,7 +344,7 @@ public final class TDPhone extends GSMPhone {
 
     public Call
     getRingingCall() {
-        if (mVideoCT.isAlive())
+        if (mVideoCT.ringingCall.getState() != Call.State.IDLE)
             return mVideoCT.ringingCall;
         else
             return mCT.ringingCall;

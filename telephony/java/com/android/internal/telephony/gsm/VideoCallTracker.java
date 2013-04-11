@@ -491,12 +491,12 @@ public final class VideoCallTracker extends CallTracker {
             
                 log("phone.isInCall(): " + phone.isInCall());
                 
-    		    if (phone.isInCall()) {
-        			if (DBG_POLL) log("new incoming video call during call, need hangup: " + dc);
+                /*if (phone.isInCall()) {
+                    if (DBG_POLL) log("new incoming video call during call, need hangup: " + dc);
             			//cm.hangupConnection (dc.index, obtainCompleteMessage());
             			cm.hangupWaitingOrBackground(obtainCompleteMessage());
             			break;
-        		    }
+                }*/
                     connections[i] = new VideoConnection(phone.getContext(), dc, this, i);
 
                     // it's a ringing call
