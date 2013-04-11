@@ -3120,8 +3120,8 @@ public final class ActivityThread {
     }
 
     private void handleSleeping(IBinder token, boolean sleeping) {
-        ActivityClientRecord r = mActivities.get(token);
 
+        ActivityClientRecord r = mActivities.get(token);
         if (r == null) {
             Log.w(TAG, "handleSleeping: no activity for token " + token);
             return;
@@ -3155,8 +3155,24 @@ public final class ActivityThread {
             }
         } else {
             if (r.stopped && r.activity.mVisibleFromServer) {
-                r.activity.performRestart();
-                r.stopped = false;
+                try {
+                    r.activity.performRestart();
+                    r.stopped = false;
+                } catch (Exception e) {
+                    Log.e(TAG, "RuntimeException in performRestart: " + e.getMessage()
+                            + ", finish this Activity:" + r);
+                    try {
+                        r.activity.performStop();
+                    } catch (Exception ee) {
+                        if (!mInstrumentation.onException(r.activity, ee)) {
+                            throw new RuntimeException(
+                                    "Unable to stop activity "
+                                            + r.intent.getComponent().toShortString()
+                                            + ": " + ee.toString(), ee);
+                        }
+                    }
+                    r.stopped = true;
+                }
             }
         }
     }
