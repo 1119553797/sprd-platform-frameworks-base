@@ -2017,6 +2017,7 @@ public final class ActivityThread {
                 r.state.setClassLoader(cl);
             }
         } catch (Exception e) {
+        	e.printStackTrace();
             if (!mInstrumentation.onException(activity, e)) {
                 throw new RuntimeException(
                     "Unable to instantiate activity " + component
