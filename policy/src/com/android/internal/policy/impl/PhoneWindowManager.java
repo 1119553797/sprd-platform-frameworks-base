@@ -601,6 +601,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         
         @Override
         public void onProposedRotationChanged(int rotation) {
+            Log.v(TAG, "onProposedRotationChanged, rotation=" + rotation);
             if (localLOGV) Log.v(TAG, "onProposedRotationChanged, rotation=" + rotation);
             updateRotation(false);
         }
