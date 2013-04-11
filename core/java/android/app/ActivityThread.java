@@ -3058,30 +3058,32 @@ public final class ActivityThread {
 
     private void handleStopActivity(IBinder token, boolean show, int configChanges) {
         ActivityClientRecord r = mActivities.get(token);
-        r.activity.mConfigChangeFlags |= configChanges;
-
-        StopInfo info = new StopInfo();
-        performStopActivityInner(r, info, show, true);
-
-        if (localLOGV) Slog.v(
-            TAG, "Finishing stop of " + r + ": show=" + show
-            + " win=" + r.window);
-
-        updateVisibility(r, show);
-
-        // Make sure any pending writes are now committed.
-        if (!r.isPreHoneycomb()) {
-            QueuedWork.waitToFinish();
+        if (r != null) {
+	        r.activity.mConfigChangeFlags |= configChanges;
+	
+	        StopInfo info = new StopInfo();
+	        performStopActivityInner(r, info, show, true);
+	
+	        if (localLOGV) Slog.v(
+	            TAG, "Finishing stop of " + r + ": show=" + show
+	            + " win=" + r.window);
+	
+	        updateVisibility(r, show);
+	
+	        // Make sure any pending writes are now committed.
+	        if (!r.isPreHoneycomb()) {
+	            QueuedWork.waitToFinish();
+	        }
+	
+	        // Schedule the call to tell the activity manager we have
+	        // stopped.  We don't do this immediately, because we want to
+	        // have a chance for any other pending work (in particular memory
+	        // trim requests) to complete before you tell the activity
+	        // manager to proceed and allow us to go fully into the background.
+	        info.activity = r;
+	        info.state = r.state;
+	        mH.post(info);
         }
-
-        // Schedule the call to tell the activity manager we have
-        // stopped.  We don't do this immediately, because we want to
-        // have a chance for any other pending work (in particular memory
-        // trim requests) to complete before you tell the activity
-        // manager to proceed and allow us to go fully into the background.
-        info.activity = r;
-        info.state = r.state;
-        mH.post(info);
     }
 
     final void performRestartActivity(IBinder token) {
