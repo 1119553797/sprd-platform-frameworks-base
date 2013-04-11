@@ -221,7 +221,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
 
     private Runnable mRecreateRunnable = new Runnable() {
         public void run() {
-            Mode mode = mMode;
+            Mode mode = getInitialMode();
             // If we were previously in a locked state but now it's Unknown, it means the phone
             // was previously locked because of SIM state and has since been resolved. This
             // bit of code checks this condition and dismisses keyguard.
