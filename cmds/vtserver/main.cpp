@@ -154,7 +154,7 @@ int main(int argc, char** argv)
         ALOGE("=== BTUT test close BT power! ===\n");
         if (set_bluetooth_power(0))
         {
-            LOGI("===BTUT test POWOFF BT failed ===\n");
+            ALOGI("===BTUT test POWOFF BT failed ===\n");
         }
         //msleep(100);
         ALOGE("=== BTUT test Write EUT mode! ===\n");
