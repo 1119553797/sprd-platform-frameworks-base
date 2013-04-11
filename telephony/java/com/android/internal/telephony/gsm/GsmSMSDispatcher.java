@@ -26,6 +26,7 @@ import android.os.SystemProperties;
 import android.provider.Telephony.Sms;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.PhoneNumberUtils;
+import android.telephony.ServiceState;
 import android.telephony.SmsCbLocation;
 import android.telephony.SmsCbMessage;
 import android.telephony.SmsManager;
@@ -155,6 +156,45 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
             }
         }
         acknowledgeLastIncomingSms(true, Intents.RESULT_SMS_HANDLED, null);
+    }
+
+    /**
+     * If this is the last part send the parts out to the application, otherwise
+     * the part is stored for later processing.
+     */
+
+    /**
+     * Called when received sms cell broadcast
+     * 
+     * @param ar AsyncResult passed into the message handler. ar.result should
+     *            be a String representing the status report PDU, as ASCII hex.
+     */
+    protected void handleSmsCB(AsyncResult ar) {
+        String pduString = (String) ar.result;
+        Log.i(TAG, "handleSmsCB pduString :" + pduString + "PhoneId: " + mPhone.getPhoneId());
+
+        // byte[][] bytePages =
+        // SmsCBMessage.getSmsCBPage(pduString,pduString.length(),mGsmPhone.getContext(),mResolver);
+//        byte[][] bytePages = SmsCBMessage.getSmsCBPage(pduString, pduString.length(),
+//                mPhone.getContext(), mResolver, mPhone.getPhoneId());
+        byte[][] bytePages;
+        if (mPhone.getServiceState().getRadioTechnology() == ServiceState.RIL_RADIO_TECHNOLOGY_UMTS) {
+            bytePages = SmsCBMessage_UMTS.getSmsCBPage(pduString, pduString.length(),
+                    mPhone.getContext(), mResolver, mPhone.getPhoneId());
+        } else {
+            bytePages = SmsCBMessage.getSmsCBPage(pduString, pduString.length(),
+                    mPhone.getContext(), mResolver, mPhone.getPhoneId());
+        }
+
+
+        // processSmsCBPage(page);
+        Log.i(TAG, "handleSmsCB bytePages");
+        if (bytePages != null) {
+
+            dispatchSmsCB(bytePages);
+
+        }
+
     }
 
     /** {@inheritDoc} */
@@ -361,6 +401,67 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
     @Override
     protected void acknowledgeLastIncomingSms(boolean success, int result, Message response) {
         mCm.acknowledgeLastIncomingGsmSms(success, resultToCause(result), response);
+    }
+
+    public void activateCellBroadcastSms(int activate, Message response) {
+        // Unless CBS is implemented for GSM, this point should be unreachable.
+        Log.i(TAG, "Error! The functionality cell broadcast sms is not implemented for GSM.");
+        if (mCm != null)
+            mCm.setGsmBroadcastActivation((activate == 0), response);
+        // response.recycle();
+    }
+
+    public void getCellBroadcastSmsConfig(Message response) {
+        // Unless CBS is implemented for GSM, this point should be unreachable.
+        Log.i(TAG, "Error! The functionality cell broadcast sms is not implemented for GSM.");
+        if (mCm != null)
+            mCm.getGsmBroadcastConfig(response);
+        // response.recycle();
+    }
+
+    public void setCellBroadcastConfig(int[] configValuesArray, Message response) {
+        // Unless CBS is implemented for GSM, this point should be unreachable.
+        Log.i(TAG,
+                "setCellBroadcastConfig! The functionality cell broadcast sms is  implemented for GSM.");
+
+        int count = 4;// NO_OF_INTS_STRUCT_1 ,see in class
+                      // CellBroadcastSmsSettingActivity
+        Log.i(TAG, "setCellBroadcastConfig! The functionality cell configValuesArray[0] "
+                + configValuesArray[0] + "mCm" + mCm);
+        if (mCm != null) {
+            SmsBroadcastConfigInfo[] config = new SmsBroadcastConfigInfo[configValuesArray.length
+                    / count];
+            Log.i(TAG, "configValuesArray.length:" + configValuesArray.length);
+            int j = 0;
+            for (int i = 0; i < configValuesArray.length; i += count) {
+
+                // TS for compile
+                config[j] = new SmsBroadcastConfigInfo(
+
+                        configValuesArray[i],
+                        configValuesArray[i + 1],
+                        configValuesArray[i + 2],
+                        configValuesArray[i + 3],
+                        false// configValuesArray[i+4]
+
+                );
+                j++;
+                // break;
+
+            }
+
+            Log.i(TAG, "setCellBroadcastConfig! config.length" + config.length);
+
+            for (int i = 0; i < config.length; i++) {
+
+                Log.i(TAG, "setCellBroadcastConfig! config[" + i + "]:" + config[i].toString());
+
+            }
+
+            mCm.setGsmBroadcastConfig(config, response);
+        }
+        // response.recycle();
+
     }
 
     private static int resultToCause(int rc) {

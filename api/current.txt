@@ -31,6 +31,7 @@ package android {
     field public static final java.lang.String BRICK = "android.permission.BRICK";
     field public static final java.lang.String BROADCAST_PACKAGE_REMOVED = "android.permission.BROADCAST_PACKAGE_REMOVED";
     field public static final java.lang.String BROADCAST_SMS = "android.permission.BROADCAST_SMS";
+    field public static final java.lang.String BROADCAST_SMSCB = "android.permission.BROADCAST_SMSCB";
     field public static final java.lang.String BROADCAST_STICKY = "android.permission.BROADCAST_STICKY";
     field public static final java.lang.String BROADCAST_WAP_PUSH = "android.permission.BROADCAST_WAP_PUSH";
     field public static final java.lang.String CALL_PHONE = "android.permission.CALL_PHONE";
@@ -94,6 +95,7 @@ package android {
     field public static final java.lang.String RECEIVE_BOOT_COMPLETED = "android.permission.RECEIVE_BOOT_COMPLETED";
     field public static final java.lang.String RECEIVE_MMS = "android.permission.RECEIVE_MMS";
     field public static final java.lang.String RECEIVE_SMS = "android.permission.RECEIVE_SMS";
+    field public static final java.lang.String RECEIVE_SMSCB = "android.permission.RECEIVE_SMSCB";
     field public static final java.lang.String RECEIVE_WAP_PUSH = "android.permission.RECEIVE_WAP_PUSH";
     field public static final java.lang.String RECORD_AUDIO = "android.permission.RECORD_AUDIO";
     field public static final java.lang.String REORDER_TASKS = "android.permission.REORDER_TASKS";
