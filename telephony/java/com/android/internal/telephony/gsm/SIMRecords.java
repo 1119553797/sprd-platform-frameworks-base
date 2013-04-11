@@ -1676,7 +1676,7 @@ public class SIMRecords extends IccRecords {
 
         for (int i = 0 ; i + 2 < plmnEntries.length ; i += 3) {
             String plmnCode;
-            plmnCode = IccUtils.bcdToString(plmnEntries, i, 3);
+            plmnCode = IccUtils.bcdToStringSpdi(plmnEntries, i, 3);
 
             // Valid operator codes are 5 or 6 digits
             if (plmnCode.length() >= 5) {
