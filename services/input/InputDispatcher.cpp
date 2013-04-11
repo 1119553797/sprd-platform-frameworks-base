@@ -2877,7 +2877,8 @@ void InputDispatcher::setInputDispatchMode(bool enabled, bool frozen) {
 #if DEBUG_FOCUS
     ALOGD("setInputDispatchMode: enabled=%d, frozen=%d", enabled, frozen);
 #endif
-
+		ALOGD("setInputDispatchMode: mDispatchEnabled=%d, mDispatchFrozen=%d", mDispatchEnabled, mDispatchFrozen);
+		ALOGD("setInputDispatchMode: enabled=%d, frozen=%d", enabled, frozen);
     bool changed;
     { // acquire lock
         AutoMutex _l(mLock);

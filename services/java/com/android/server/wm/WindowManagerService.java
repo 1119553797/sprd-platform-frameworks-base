@@ -163,7 +163,7 @@ public class WindowManagerService extends IWindowManager.Stub
     static final boolean DEBUG_LAYOUT = false;
     static final boolean DEBUG_RESIZE = false;
     static final boolean DEBUG_LAYERS = false;
-    static final boolean DEBUG_INPUT = false;
+    static final boolean DEBUG_INPUT = true;
     static final boolean DEBUG_INPUT_METHOD = false;
     static final boolean DEBUG_VISIBILITY = false;
     static final boolean DEBUG_WINDOW_MOVEMENT = false;
@@ -9297,16 +9297,16 @@ public class WindowManagerService extends IWindowManager.Stub
     }
 
     private void startFreezingDisplayLocked(boolean inTransaction) {
+
         if (mDisplayFrozen) {
             return;
         }
-
         if (mDisplay == null || !mPolicy.isScreenOnFully()) {
             // No need to freeze the screen before the system is ready or if
             // the screen is off.
             return;
         }
-
+        Slog.d(TAG,"startFreezingDisplayLocked "+mDisplayFrozen );
         mScreenFrozenLock.acquire();
 
         mDisplayFrozen = true;
@@ -9384,7 +9384,7 @@ public class WindowManagerService extends IWindowManager.Stub
             updateRotation = true;
         }
         Surface.unfreezeDisplay(0);
-
+        Slog.d(TAG,"stopFreezingDisplayLocked "+mDisplayFrozen);
         mInputMonitor.thawInputDispatchingLw();
 
         boolean configChanged;
