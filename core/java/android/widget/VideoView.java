@@ -810,6 +810,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     }
 
     public void pause() {
+        Log.d(TAG, "pause()");
         if (isInPlaybackState()) {
             if (mMediaPlayer.isPlaying()) {
                 isPlaying = false;
@@ -821,6 +822,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     }
 
     public void suspend() {
+        Log.d(TAG, "suspend()");
         isPlaying = false;
         release(false);
     }
