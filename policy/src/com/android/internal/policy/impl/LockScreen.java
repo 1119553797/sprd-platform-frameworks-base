@@ -348,12 +348,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                     break;
 
                 case com.android.internal.R.drawable.ic_lockscreen_sms:
-                    // toggleRingMode();
-                    Intent intent1 = new Intent(Intent.ACTION_MAIN);
-                    intent1.addCategory(Intent.CATEGORY_DEFAULT);
-                    intent1.setType("vnd.android.cursor.dir/mms");
-                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(intent1);
+
+                    Intent smsIntent = new Intent(Intent.ACTION_MAIN);
+                    smsIntent.setType("vnd.android.cursor.dir/mms");
+                    launchActivity(smsIntent);
                     mCallback.pokeWakelock();
                     mCallback.goToUnlockScreen();
                     break;
