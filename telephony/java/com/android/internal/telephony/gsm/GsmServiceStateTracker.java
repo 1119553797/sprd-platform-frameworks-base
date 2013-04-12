@@ -828,9 +828,11 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
              *  not roaming between operators.
              */
             boolean roaming = (mGsmRoaming || mDataRoaming);
-            if (mGsmRoaming && !isRoamingBetweenOperators(mGsmRoaming, newSS)) {
-                roaming = false;
-            }
+            // romaing is set when ehplmn is not equal to rplmn, even the mcc
+            // of them are equal (BUG147333)
+            //if (mGsmRoaming && !isRoamingBetweenOperators(mGsmRoaming, newSS)) {
+            //    roaming = false;
+            //}
             newSS.setRoaming(roaming);
             newSS.setEmergencyOnly(mEmergencyOnly);
             pollStateDone();
