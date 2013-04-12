@@ -246,11 +246,12 @@ public abstract class KeyguardViewBase extends FrameLayout {
 
                         // modified for FM
                         if (mAudioManager.isFmActive()) {
-                            mAudioManager.adjustLocalOrRemoteStreamVolume(
-                                    AudioManager.STREAM_FM,
-                                    keyCode == KeyEvent.KEYCODE_VOLUME_UP
-                                            ? AudioManager.ADJUST_RAISE
-                                            : AudioManager.ADJUST_LOWER);
+                            mAudioManager.adjustStreamVolume(
+                                        AudioManager.STREAM_FM,
+                                        keyCode == KeyEvent.KEYCODE_VOLUME_UP
+                                                ? AudioManager.ADJUST_RAISE
+                                                : AudioManager.ADJUST_LOWER,
+                                        0);
                         // modified for FM end
                         } else {
                             // Volume buttons should only function for music (local or remote).
