@@ -2650,8 +2650,8 @@ public final class ActivityThread {
         ActivityClientRecord r;
         try {
             r = performResumeActivity(token, clearHide);
-        } catch (RuntimeException e) {
-            Log.e(TAG, "RuntimeException in performResumeActivity: " + e.getMessage() + ", finish it!");
+        } catch (Exception e) {
+            Log.e(TAG, "Exception in performResumeActivity: " + e.getMessage() + ", finish it!");
             e.printStackTrace();
             r = null;
         }
