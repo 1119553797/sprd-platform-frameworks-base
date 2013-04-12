@@ -81,8 +81,14 @@ public class ShutdownFullscreenActivity extends Activity {
                         Intent.ACTION_POWER_CONNECTED.equals(intent.getAction())){
                         ShutDownWakeLock.releaseCpuLock();
                         myHandler.removeCallbacks(myRunnable);
-                        if(mReceiver != null)
-                            unregisterReceiver(mReceiver);
+                        if(mReceiver != null) {
+                            try {
+                                unregisterReceiver(mReceiver);
+                            } catch (IllegalArgumentException e) {
+                                Slog.e(TAG, "Exception: " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                        }
                         finish();
                     }
                 }
@@ -108,8 +114,14 @@ public class ShutdownFullscreenActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         myHandler.removeCallbacks(myRunnable);
                         dialog.cancel();
-                        if(mReceiver != null)
-                            unregisterReceiver(mReceiver);
+                        if(mReceiver != null) {
+                            try {
+                                unregisterReceiver(mReceiver);
+                            } catch (IllegalArgumentException e) {
+                                Slog.e(TAG, "Exception: " + e.getMessage());
+                                e.printStackTrace();
+                            }
+                        }
                         finish();
                     }});
         mDialog.setCancelable(false);
