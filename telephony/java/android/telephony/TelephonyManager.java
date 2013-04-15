@@ -1538,8 +1538,14 @@ public class TelephonyManager {
                 break;
             case MODE_VEDIO:
                 phoneIdKey = Settings.System.MULTI_SIM_VIDEO_CALL;
-                phoneId = Settings.System.getInt(context.getContentResolver(),
-                        phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+                //when modem type is MODEM_TYPE_TDSCDMA or MODEM_TYPE_WCDMA, only phone0 can make a vedio call
+                if (getDefault().getModemType() > 0) {
+                    phoneId = Settings.System.getInt(context.getContentResolver(),
+                            phoneIdKey, PhoneFactory.DEFAULT_PHONE_ID);
+                } else {
+                    phoneId = Settings.System.getInt(context.getContentResolver(),
+                            phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+                }
                 break;
             case MODE_MMS:
                 phoneIdKey = Settings.System.MULTI_SIM_MMS;
@@ -1684,7 +1690,12 @@ public class TelephonyManager {
                 break;
             case MODE_VEDIO:
                 phoneIdKey = simCardFavoriteVideokey;
-                setPhoneId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+                //when modem type is MODEM_TYPE_TDSCDMA or MODEM_TYPE_WCDMA, only phone0 can make a vedio call
+                if (getDefault().getModemType() > 0) {
+                    setPhoneId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_PHONE_ID);
+                } else {
+                    setPhoneId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+                }
                 break;
             case MODE_MMS:
                 phoneIdKey = simCardFavoriteMmskey;
