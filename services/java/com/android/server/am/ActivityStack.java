@@ -1327,7 +1327,15 @@ final class ActivityStack {
         // Now for any activities that aren't visible to the user, make
         // sure they no longer are keeping the screen frozen.
         while (i >= 0) {
-            r = mHistory.get(i);
+            try {
+                r = mHistory.get(i);
+            } catch (IndexOutOfBoundsException e) {
+                i = mHistory.size() - 1;
+                while (mHistory.get(i) != topRunningActivityLocked(null)) {
+                    i--;
+                }
+                continue;
+            }
             if (DEBUG_VISBILITY) Slog.v(
                     TAG, "Make invisible? " + r + " finishing=" + r.finishing
                     + " state=" + r.state
