@@ -27,7 +27,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncResult;
 import android.os.Message;
+import android.os.SystemProperties;
 import android.provider.Settings;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 
 import com.android.internal.telephony.AdnRecord;
@@ -47,6 +49,7 @@ import com.android.internal.telephony.PhoneBase;
 import com.android.internal.telephony.SmsMessageBase;
 import com.android.internal.telephony.IccRefreshResponse;
 import com.android.internal.telephony.TelephonyProperties;
+import com.android.internal.telephony.IccCardApplication;
 import java.util.ArrayList;
 
 
@@ -157,6 +160,7 @@ public class SIMRecords extends IccRecords {
     private static final int EVENT_SIM_REFRESH = 31;
     private static final int EVENT_GET_CFIS_DONE = 32;
     private static final int EVENT_GET_CSP_CPHS_DONE = 33;
+    private static final int EVENT_GET_ECC_DONE = 35;
 
     // Lookup table for carriers known to produce SIMs which incorrectly indicate MNC length.
 
@@ -1166,6 +1170,21 @@ public class SIMRecords extends IccRecords {
                 handleEfCspData(data);
                 break;
 
+            case EVENT_GET_ECC_DONE:
+                isRecordLoadResponse = true;
+
+                ar = (AsyncResult)msg.obj;
+
+                if (ar.exception != null) {
+                    break;
+                }
+                handleEcc(ar);
+
+                /* byte[] eccList = (byte[])ar.result;
+                System.setProperty("ril.sim.ecclist", IccUtils.bytesToHexString(eccList));
+                if (DBG) log("ECC List: " + IccUtils.bytesToHexString(eccList));*/
+
+                break;
             default:
                 super.handleMessage(msg);   // IccRecords handles generic record load responses
 
@@ -1247,6 +1266,48 @@ public class SIMRecords extends IccRecords {
                 if (DBG) log("handleSimRefresh with unknown operation");
                 break;
         }
+    }
+
+
+    private void handleEcc(AsyncResult ar) {
+
+        IccCard card = phone.getIccCard();
+
+        if (DBG) log("EVENT_GET_ECC_DONE handleEcc ");
+        if (card != null&& card.isApplicationOnIcc(IccCardApplication.AppType.APPTYPE_USIM)) {
+            String eccList = "";
+            String number = "";
+            int footerOffset = 0;
+            int numberLength = 3;
+            ArrayList<byte[]> results = (ArrayList<byte[]>) ar.result;
+            if(results == null){
+                return;
+            }
+
+            for (int i = 0; i < results.size(); i++) {
+                if (DBG) log( "ECC: " +IccUtils.bytesToHexString(results.get(i)));
+
+                number = PhoneNumberUtils.calledPartyBCDFragmentToString(
+                        results.get(i), footerOffset, numberLength);
+
+                if (DBG) log("ECC number: " + number);
+
+                if (!number.equals("")) {
+                    eccList = eccList + number + ",";
+                }
+            }
+            if (DBG) log("ECC List: " + eccList);
+            if(!eccList.equals("")){
+                SystemProperties.set(PhoneFactory.getSetting("ril.sim.ecclist", phone.getPhoneId()), eccList);
+            }
+
+        } else {
+            byte[] eccList = (byte[]) ar.result;
+            SystemProperties.set(PhoneFactory.getSetting("ril.sim.ecclist", phone.getPhoneId()), IccUtils.bytesToHexString(eccList));
+
+            if (DBG) log("ECC List: " + IccUtils.bytesToHexString(eccList));
+        }
+
     }
 
     /**
@@ -1445,6 +1506,10 @@ public class SIMRecords extends IccRecords {
 
         mFh.loadEFTransparent(EF_CSP_CPHS,obtainMessage(EVENT_GET_CSP_CPHS_DONE));
         recordsToLoad++;
+
+        mFh.loadEFTransparent(EF_ECC, obtainMessage(EVENT_GET_ECC_DONE));
+        recordsToLoad++;
+
 
         // XXX should seek instead of examining them all
         if (false) { // XXX
