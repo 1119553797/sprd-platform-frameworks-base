@@ -79,6 +79,28 @@ public class IccUtils {
         return ret.toString();
     }
 
+    //modify for 148853 if plmn has f ingore it.
+    public static String
+    bcdToStringSpdi(byte[] data, int offset, int length) {
+        StringBuilder ret = new StringBuilder(length*2);
+
+        for (int i = offset ; i < offset + length ; i++) {
+            int v;
+
+            v = data[i] & 0xf;
+            if (v > 0xf)  break;
+            ret.append(Integer.toHexString(v));
+
+            v = (data[i] >> 4) & 0xf;
+            // Some PLMNs have 'f' as high nibble, ignore it
+            if (v == 0xf) continue;
+            if (v > 0xf)  break;
+            ret.append(Integer.toHexString(v));
+        }
+
+        return ret.toString();
+    }
+
     //Deal With DTMF Message Start
     public static String bcdToString_Dtmf(byte[] data, int offset, int length) {
          StringBuilder ret = new StringBuilder(length*2);
