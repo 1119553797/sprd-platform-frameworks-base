@@ -1355,4 +1355,9 @@
     <string name="CallWaiting">>通話等待中</string>
     <string name="OutCallBarred" msgid="">呼叫被禁止</string>
     <string name="InCallBarred" msgid="">來電被禁止</string>
+
+    <!-- Strings for Gsm Mmi code -->
+    <string name="Pin2Mmi">"變更PIN2"</string>
+    <string name="badPin2">"您所輸入的舊 PIN2 不正確"</string>
+    <string name="mismatchPin2">"您所輸入的 PIN2 不符"</string>
 </resources>
