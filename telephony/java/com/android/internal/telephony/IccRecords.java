@@ -369,6 +369,20 @@ public abstract class IccRecords extends Handler implements IccConstants {
     }
 
     /**
+     * Returns SIM opl PNN Suport
+     */
+    public boolean getSimOnsSupport() {
+        return false;
+    }
+
+    /**
+     * Returns SIM Operator Name String
+     */
+    public String getSimOnsName(String regPlmn, int lac) {
+        return null;
+    }
+
+    /**
      * Get the current Voice call forwarding flag for GSM/UMTS and the like SIMs
      *
      * @return true if enabled
