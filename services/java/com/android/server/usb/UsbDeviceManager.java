@@ -16,9 +16,20 @@
 
 package com.android.server.usb;
 
-import android.app.PendingIntent;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -30,37 +41,21 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
-import android.net.Uri;
-import android.os.Binder;
-import android.os.Bundle;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Parcelable;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
-import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UEventObserver;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.provider.Settings;
 import android.util.Pair;
 import android.util.Slog;
-
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
 
 /**
  * UsbDeviceManager manages USB state in device mode.
@@ -656,6 +651,7 @@ public class UsbDeviceManager {
                         mTetherEnabled = false;
                     }
                     if (functions.equalsIgnoreCase("rndis")) {
+                        mTempVserGserEnabled = mVserGserEnabled;
                         mTetherEnabled = true;
                         mPtpEnabled = false;
                         mMtpEnabled = false;
@@ -748,12 +744,21 @@ public class UsbDeviceManager {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
 
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
-                    if (adbEnabled) {
-                        functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                    if (mTetherEnabled){
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
+                        if (adbEnabled) {
+                            functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                        }
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
+                    } else {
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
+                        if (adbEnabled) {
+                            functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                        }
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
                     }
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
                 } else {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
@@ -850,12 +855,21 @@ public class UsbDeviceManager {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
 
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
-                    if (mAdbEnabled) {
-                        functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                    if (mTetherEnabled){
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
+                        if (mAdbEnabled) {
+                            functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                        }
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
+                    } else {
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
+                        if (mAdbEnabled) {
+                            functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                        }
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
                     }
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
                 } else {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
