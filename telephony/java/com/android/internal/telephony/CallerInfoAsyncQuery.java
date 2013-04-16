@@ -57,6 +57,8 @@ public class CallerInfoAsyncQuery {
     // configured on a per-product basis.)
     private static final boolean ENABLE_UNKNOWN_NUMBER_GEO_DESCRIPTION = true;
 
+    private static final boolean IS_USE_GECODE_DATABASE = true;
+
     /**
      * Interface for a CallerInfoAsyncQueryHandler result return.
      */
@@ -265,7 +267,11 @@ public class CallerInfoAsyncQuery {
                             // the CallerInfo object is totally blank here (i.e. no name
                             // *or* phoneNumber).  So we need to pass in cw.number as
                             // a fallback number.
-                            mCallerInfo.updateGeoDescription(mQueryContext, cw.number);
+                            if (IS_USE_GECODE_DATABASE) {
+                                mCallerInfo.setGeocodeInformation(mQueryContext, cw.number);
+                            } else {
+                                mCallerInfo.updateGeoDescription(mQueryContext, cw.number);
+                            }
                         }
                     }
 

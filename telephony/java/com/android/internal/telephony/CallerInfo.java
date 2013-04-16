@@ -525,6 +525,45 @@ public class CallerInfo {
     }
 
     /**
+     * set Geocode information base on the numnber.
+     * @param context the context used to look up the current Province / City.
+     * @param number
+     */
+    public void setGeocodeInformation(Context context, String number) {
+        Uri uri = Uri.parse("content://gecode_location/gecode");
+        try {
+            Cursor cursor = context.getContentResolver().query(uri, new String[] {
+                    "province", "city"
+            }, number, null, null);
+
+            if (null == cursor) {
+                geoDescription = getGeoDescription(context, number);
+                return;
+            } else {
+                cursor.moveToPosition(-1);
+                if (cursor.moveToNext()) {
+                    String procince = cursor.getString(0);
+                    String city = cursor.getString(1);
+
+                    if (procince.equals(city)) { // Municipality
+                        geoDescription = procince;
+                    } else {
+                        geoDescription = procince + city;
+                    }
+                }
+
+                if (null != cursor) {
+                    cursor.close();
+                    cursor = null;
+                }
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, "setGeocodeInformation Exception msg: " + ex.toString());
+        }
+    }
+
+
+    /**
      * @return a geographical description string for the specified number.
      * @see com.android.i18n.phonenumbers.PhoneNumberOfflineGeocoder
      */
