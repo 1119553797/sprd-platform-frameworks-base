@@ -614,6 +614,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                     terminate.setText(R.string.status_bar_expanded_notification_hungup_button_text);
                 } else {
                     //TODO: list all the known casese. eg.no memory
+                    terminate.setVisibility(View.VISIBLE);
                 }
                 terminate.setOnClickListener(new View.OnClickListener() {
 
