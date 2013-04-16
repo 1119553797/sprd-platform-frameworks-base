@@ -205,6 +205,7 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
     }
 
     private final Object mStatsLock = new Object();
+    private final Object mTimerLock = new Object();
 
     /** Set of currently active ifaces. */
     private HashMap<String, NetworkIdentitySet> mActiveIfaces = Maps.newHashMap();
@@ -646,7 +647,8 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
 
         final long token = Binder.clearCallingIdentity();
         try {
-            performPoll(FLAG_PERSIST_ALL);
+            //performPoll(FLAG_PERSIST_ALL);
+            mHandler.obtainMessage(MSG_PERFORM_POLL, FLAG_PERSIST_ALL, 0).sendToTarget();
         } finally {
             Binder.restoreCallingIdentity(token);
         }
@@ -905,7 +907,7 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
     }
 
     private void performPoll(int flags) {
-        synchronized (mStatsLock) {
+        synchronized (mTimerLock) {
             mWakeLock.acquire();
 
             // try refreshing time source when stale
