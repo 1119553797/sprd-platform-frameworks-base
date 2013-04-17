@@ -1009,7 +1009,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     }
 
     public void addNotification(IBinder key, StatusBarNotification notification) {
-        /* if (DEBUG) */ Slog.d(TAG, "addNotification score=" + notification.score);
+        /* if (DEBUG) */ Slog.d(TAG, "addNotification =" + notification);
         StatusBarIconView iconView = addNotificationViews(key, notification);
         if (iconView == null) return;
 
@@ -2336,6 +2336,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         if (n.notification.tickerText != null && mStatusBarWindow.getWindowToken() != null) {
             if (0 == (mDisabled & (StatusBarManager.DISABLE_NOTIFICATION_ICONS
                             | StatusBarManager.DISABLE_NOTIFICATION_TICKER))) {
+                Log.d(TAG,"pkg="+n.pkg+";uid="+n.uid+";tickerText="+n.notification.tickerText);
                 mTicker.addEntry(n);
             }
         }
