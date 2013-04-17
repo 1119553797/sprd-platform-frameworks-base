@@ -564,7 +564,13 @@ public class SIMRecords extends IccRecords {
             // A future optimization would be to inspect fileList and
             // only reload those files that we care about.  For now,
             // just re-fetch all SIM records that we cache.
+            Log.d(LOG_TAG,"SIMRecords  onRefresh");
+            adnCache.reset();
             fetchSimRecords();
+            mParentCard.queryFacilityFdnDone();
+            Intent intent = new Intent(TelephonyIntents.ACTION_STK_REFRESH_SIM_CONTACTS);
+            intent.putExtra("phone_id", phone.getPhoneId());
+            phone.getContext().sendBroadcast(intent);
         }
     }
 
@@ -1267,8 +1273,9 @@ public class SIMRecords extends IccRecords {
                 // For now, fetch all records if this is not a
                 // voicemail number.
                 // TODO: Handle other cases, instead of fetching all.
-                adnCache.reset();
-                fetchSimRecords();
+                //adnCache.reset();
+                //fetchSimRecords();
+                onRefresh(true, null);
                 break;
         }
     }
@@ -1282,6 +1289,9 @@ public class SIMRecords extends IccRecords {
         if (refreshResponse.aid != null &&
                 !refreshResponse.aid.equals(mParentCard.getAid())) {
             // This is for different app. Ignore.
+            if (DBG)
+                log("handleSimRefresh refresh.aid = " + refreshResponse.aid + " ParentAid = "
+                        + mParentCard.getAid() + " not match");
             return;
         }
 
@@ -1293,8 +1303,9 @@ public class SIMRecords extends IccRecords {
             case IccRefreshResponse.REFRESH_RESULT_INIT:
                 if (DBG) log("handleSimRefresh with SIM_REFRESH_INIT");
                 // need to reload all files (that we care about)
-                adnCache.reset();
-                fetchSimRecords();
+                //adnCache.reset();
+                //fetchSimRecords();
+                onRefresh(true, null);
                 break;
             case IccRefreshResponse.REFRESH_RESULT_RESET:
                 if (DBG) log("handleSimRefresh with SIM_REFRESH_RESET");

@@ -741,6 +741,25 @@ public class IccCard {
         ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
     }
 
+    public void queryFacilityFdnDone() {
+        Log.d(mLogTag, "IccCard  queryFacilityFdnDone");
+        int serviceClassX = CommandsInterface.SERVICE_CLASS_VOICE +
+                            CommandsInterface.SERVICE_CLASS_DATA +
+                            CommandsInterface.SERVICE_CLASS_FAX;
+
+        Message msg = mHandler.obtainMessage(EVENT_QUERY_FACILITY_FDN_DONE);
+        mPhone.mCM.queryFacilityLock (
+                            CommandsInterface.CB_FACILITY_BA_FD, "", serviceClassX,
+                            msg);
+
+        Log.d(mLogTag," queryFacilityFdnDone sendBroadcast FDN_STATE_CHANGED");
+        Intent intent = new Intent("android.intent.action.FDN_STATE_CHANGED"+ mPhone.getPhoneId());
+        intent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
+        intent.putExtra(INTENT_KEY_FDN_STAUS, getIccFdnEnabled());
+        intent.putExtra(INTENT_KEY_FDN_SIM_REFRESH, INTENT_VALUE_ICC_REFRESH);
+        mPhone.getContext().sendBroadcast(intent);
+    }
+
     private void broadFdnStatusChangeIntent(){
         Log.e(mLogTag," broadFdnStatusChange sendBroadcast FDN_STATE_CHANGED");
         Intent intent = new Intent("android.intent.action.FDN_STATE_CHANGED"+ mPhone.getPhoneId());
