@@ -1171,7 +1171,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
     }
 
     /** @see AudioManager#setRingerMode(int) */
-    public void setRingerMode(int ringerMode) {
+    public void setRingerMode(int ringerMode) { 
         if ((ringerMode == AudioManager.RINGER_MODE_VIBRATE) && !mHasVibrator) {
             ringerMode = AudioManager.RINGER_MODE_SILENT;
         }

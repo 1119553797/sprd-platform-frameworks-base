@@ -663,7 +663,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private static class SilentModeTriStateAction implements Action, View.OnClickListener {
 
-        private final int[] ITEM_IDS = { R.id.option1, R.id.option2, R.id.option3 };
+        private final int[] ITEM_IDS = {
+                R.id.option1, R.id.option2, R.id.option3, R.id.option4
+        };
 
         private final AudioManager mAudioManager;
         private final Handler mHandler;
@@ -688,20 +690,15 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         public View create(Context context, View convertView, ViewGroup parent,
                 LayoutInflater inflater) {
             View v = inflater.inflate(R.layout.global_actions_silent_mode, parent, false);
-            final int outDoorIndex = AudioManager.RINGER_MODE_OUTDOOR; 
 
             int selectedIndex = ringerModeToIndex(mAudioManager.getRingerMode());
-                for (int i = 0; i < 3; i++) {
-                    View itemView = v.findViewById(ITEM_IDS[i]);
-                    if (selectedIndex == outDoorIndex) {
-                        itemView.setSelected((outDoorIndex - 1) == i);
-                    } else {
-                        itemView.setSelected(selectedIndex == i);
-                    }
-                    // Set up click handler
-                    itemView.setTag(i);
-                    itemView.setOnClickListener(this);
-                }
+            for (int i = 0; i < 4; i++) {
+                View itemView = v.findViewById(ITEM_IDS[i]);
+                itemView.setSelected(selectedIndex == i);
+                // Set up click handler
+                itemView.setTag(i);
+                itemView.setOnClickListener(this);
+            }
 
             return v;
         }
