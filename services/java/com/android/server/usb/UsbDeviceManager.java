@@ -956,6 +956,7 @@ public class UsbDeviceManager {
                         int device = scanner.nextInt();
                         intent.putExtra("card", card);
                         intent.putExtra("device", device);
+                        scanner.close(); //add for 153097
                     } catch (FileNotFoundException e) {
                         Slog.e(TAG, "could not open audio source PCM file", e);
                     }
