@@ -171,7 +171,9 @@ public class VpnService extends Service {
             return false;
         } finally {
             try {
-                dup.close();
+                if (dup != null) {
+                    dup.close();
+                }
             } catch (Exception e) {
                 // ignore
             }
