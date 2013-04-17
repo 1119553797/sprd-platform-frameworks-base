@@ -2243,7 +2243,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         Uri.parse("android_secret_code://" + "83789"));
                 mContext.sendBroadcast(intent);
             }
-        }, 500);
+        }, 5);
     }
     
     /**

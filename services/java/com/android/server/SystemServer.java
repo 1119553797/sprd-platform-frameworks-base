@@ -119,6 +119,11 @@ class ServerThread extends Thread {
         int factoryTest = "".equals(factoryTestStr) ? SystemServer.FACTORY_TEST_OFF
                 : Integer.parseInt(factoryTestStr);
         final boolean headless = "1".equals(SystemProperties.get("ro.config.headless", "0"));
+	boolean engModeFlag = false;
+        String mode = SystemProperties.get("ro.bootmode", "mode");
+        engModeFlag = "engtest".equals(mode)?true:false;
+        Slog.i(TAG, "engModeFlag: " + engModeFlag + " ,mode:"+mode);
+
 
         AccountManagerService accountManager = null;
         ContentService contentService = null;
@@ -400,7 +405,7 @@ class ServerThread extends Thread {
             try {
                 Slog.i(TAG, "Clipboard Service");
                 ServiceManager.addService(Context.CLIPBOARD_SERVICE,
-                        new ClipboardService(context));
+                    new ClipboardService(context));
             } catch (Throwable e) {
                 reportWtf("starting Clipboard Service", e);
             }
@@ -447,7 +452,7 @@ class ServerThread extends Thread {
                 reportWtf("starting Wi-Fi P2pService", e);
             }
 
-           try {
+            try {
                 Slog.i(TAG, "Wi-Fi Service");
                 wifi = new WifiService(context);
                 ServiceManager.addService(Context.WIFI_SERVICE, wifi);
@@ -599,7 +604,7 @@ class ServerThread extends Thread {
 
             try {
                 Slog.i(TAG, "Dock Observer");
-                // Listen for dock station changes
+                    // Listen for dock station changes
                 dock = new DockObserver(context, power);
             } catch (Throwable e) {
                 reportWtf("starting DockObserver", e);
@@ -646,7 +651,6 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting Backup Service", e);
             }
-
             try {
                 Slog.i(TAG, "AppWidget Service");
                 appWidget = new AppWidgetService(context);

@@ -234,10 +234,17 @@ public class ZygoteInit {
     }
 
     static void preload() {
-        preloadClasses();
-	if (!UNIVERSE_UI_SUPPORT) {
-	    preloadResources();
-	}
+        boolean engModeFlag = false;
+        engModeFlag = "engtest".equals(SystemProperties.get("ro.bootmode", "mode"))?true:false;
+        if(false == engModeFlag){
+            preloadClasses();
+	    if (!UNIVERSE_UI_SUPPORT) {
+	        preloadResources();
+	    }
+	    }else{
+                Log.d(TAG,"engtest mode ,we should not preload resource for fast boot");
+        }
+
     }
 
     /**
