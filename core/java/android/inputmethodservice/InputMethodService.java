@@ -934,8 +934,11 @@ public class InputMethodService extends AbstractInputMethodService {
         if (config.orientation != Configuration.ORIENTATION_LANDSCAPE) {
             return false;
         }
+
+        //On NoExtractUi we still want mFullscreenArea visible to show candidate view
         if (mInputEditorInfo != null
-                && (mInputEditorInfo.imeOptions & EditorInfo.IME_FLAG_NO_FULLSCREEN) != 0) {
+                && ((mInputEditorInfo.imeOptions & EditorInfo.IME_FLAG_NO_FULLSCREEN) != 0
+                    || (mInputEditorInfo.imeOptions & EditorInfo.IME_FLAG_NO_EXTRACT_UI) != 0)) {
             return false;
         }
         return true;
