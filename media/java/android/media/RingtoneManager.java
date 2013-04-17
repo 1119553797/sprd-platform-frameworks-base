@@ -853,6 +853,9 @@ public class RingtoneManager {
     }
     public Uri getCustomRingtoneUri(int position) {
         final Cursor cursor = getExternalMusics();
+        if(cursor == null){
+            return null;
+        }
 
         if (!cursor.moveToPosition(position)) {
             return null;
