@@ -4807,12 +4807,12 @@ public final class ActivityThread {
         try {//add by liwd@spreadst.com, the switcher to dump hprof file when OOM
             Looper.loop();
         } catch (OutOfMemoryError e) {
-            if (Debug.isMonkeyOrDebug()) {
+            if (Debug.isMonkey()) {
                 Debug.dumpHprof(thread.getProcessName());
             }
             throw e;
         } catch (RuntimeException e1) {
-            if (Debug.isMonkeyOrDebug()) {
+            if (Debug.isMonkey()) {
             	boolean dump = false;
             	try {
 	                String cause = Log.getStackTraceString(e1.getCause());
