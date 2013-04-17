@@ -431,7 +431,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 break;
 
             case EVENT_SIM_RECORDS_LOADED:
-                updateSpnDisplay();
+                checkSimONSUpdateSpnDisplay();
                 break;
 
             case EVENT_LOCATION_UPDATES_ENABLED:
@@ -579,6 +579,32 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             }
         }
         return name;
+    }
+
+    //update plmn according sim opl pnn file
+    public void hasSIMOnsAndUpdate(){
+
+        boolean SIMOnsEnabled = phone.mIccRecords.getSimOnsSupport();
+        String SimOnsName;
+        int lac = -1;
+
+        if (cellLoc != null) {
+            lac = cellLoc.getLac();
+        }
+
+        if(SIMOnsEnabled){
+            SimOnsName = phone.mIccRecords.getSimOnsName(ss.getOperatorNumeric(),lac);
+            if (SimOnsName != null){
+                if (DBG) log("SimOnsName:" + SimOnsName);
+                ss.setOperatorName(SimOnsName, ss.getOperatorAlphaShort(),ss.getOperatorNumeric());
+            }
+        }
+    }
+
+    public void checkSimONSUpdateSpnDisplay() {
+        if (DBG) log("checkSimONSUpdateSpnDisplay");
+        hasSIMOnsAndUpdate();
+        updateSpnDisplay();
     }
 
     protected void updateSpnDisplay() {
@@ -943,6 +969,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
         boolean hasLocationChanged = !newCellLoc.equals(cellLoc);
 
+        boolean hasSpnUpdated = false;
+
         // Add an event log when connection state changes
         if (ss.getState() != newSS.getState() || gprsState != newGPRSState) {
             EventLog.writeEvent(EventLogTags.GSM_SERVICE_STATE_CHANGE,
@@ -1001,13 +1029,23 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             mNitzUpdatedTime = false;
         }
 
+        if (hasLocationChanged) {
+            phone.notifyLocationChanged();
+            checkSimONSUpdateSpnDisplay();
+            hasSpnUpdated = true;
+            Log.d(LOG_TAG,"hasLocationChanged = " + hasLocationChanged +"hasSpnUpdated"+hasSpnUpdated);
+        }
+
         if (hasChanged) {
             String operatorNumeric;
 
             phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ALPHA,
                 ss.getOperatorAlphaLong());
 
-            updateSpnDisplay();
+            //updateSpnDisplay();
+            if (!hasSpnUpdated) {
+                checkSimONSUpdateSpnDisplay();
+            }
 
             String prevOperatorNumeric =
                     SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_NUMERIC, "");
@@ -1155,9 +1193,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             mRoamingOffRegistrants.notifyRegistrants();
         }
 
-        if (hasLocationChanged) {
-            phone.notifyLocationChanged();
-        }
 
         if (! isGprsConsistent(gprsState, ss.getState())) {
             if (!mStartedGprsRegCheck && !mReportedGprsNoReg) {

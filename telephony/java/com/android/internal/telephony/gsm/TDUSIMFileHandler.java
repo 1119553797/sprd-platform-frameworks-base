@@ -818,9 +818,13 @@ public final class TDUSIMFileHandler extends SIMFileHandler implements
 
             case EF_MBDN:
             case EF_PNN:
+             case EF_OPL:
             case EF_SPDI:
             case EF_SST:
             case EF_CFIS:
+                 if (isUsim) {
+                     return MF_SIM + DF_ADF;
+                 }
 
                 return MF_SIM + DF_GSM;
             case EF_FDN:
