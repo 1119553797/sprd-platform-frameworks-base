@@ -1033,8 +1033,11 @@ public final class BatteryStatsImpl extends BatteryStats {
 
         try {
             FileInputStream is = new FileInputStream("/proc/wakelocks");
-            len = is.read(buffer);
-            is.close();
+            try{
+               len = is.read(buffer);
+            }finally{
+               is.close();
+            }
 
             if (len > 0) {
                 int i;
@@ -1173,18 +1176,23 @@ public final class BatteryStatsImpl extends BatteryStats {
      * @return
      */
     private long getCurrentRadioDataUptime() {
+        BufferedReader br = null;
         try {
             File awakeTimeFile = new File("/sys/devices/virtual/net/rmnet0/awake_time_ms");
             if (!awakeTimeFile.exists()) return 0;
-            BufferedReader br = new BufferedReader(new FileReader(awakeTimeFile));
-            String line = br.readLine();
-            br.close();
+             br = new BufferedReader(new FileReader(awakeTimeFile));
+             String line = br.readLine();
             return Long.parseLong(line) * 1000;
         } catch (NumberFormatException nfe) {
             // Nothing
         } catch (IOException ioe) {
             // Nothing
-        }
+        }finally{
+           try{
+               if(br != null)
+               br.close();
+           }catch (IOException ioe){}
+	}
         return 0;
     }
 
@@ -4868,18 +4876,21 @@ public final class BatteryStatsImpl extends BatteryStats {
 
             mWriteLock.lock();
         }
-
+        FileOutputStream stream = null;
         try {
-            FileOutputStream stream = new FileOutputStream(mFile.chooseForWrite());
-            stream.write(next.marshall());
-            stream.flush();
-            FileUtils.sync(stream);
-            stream.close();
+            try{
+               stream = new FileOutputStream(mFile.chooseForWrite());
+               stream.write(next.marshall());
+               stream.flush();
+               FileUtils.sync(stream);
+            }finally{
+               if(stream != null)
+                    stream.close();
+            }
             mFile.commit();
         } catch (IOException e) {
             Slog.w("BatteryStats", "Error writing battery statistics", e);
             mFile.rollback();
-        } finally {
             next.recycle();
             mWriteLock.unlock();
         }
@@ -4915,24 +4926,30 @@ public final class BatteryStatsImpl extends BatteryStats {
         }
 
         mUidStats.clear();
-
+        FileInputStream stream = null;
         try {
             File file = mFile.chooseForRead();
             if (!file.exists()) {
                 return;
             }
-            FileInputStream stream = new FileInputStream(file);
+            stream = new FileInputStream(file);
 
             byte[] raw = readFully(stream);
             Parcel in = Parcel.obtain();
             in.unmarshall(raw, 0, raw.length);
             in.setDataPosition(0);
-            stream.close();
 
             readSummaryFromParcel(in);
         } catch(java.io.IOException e) {
             Slog.e("BatteryStats", "Error reading battery statistics", e);
-        }
+        }finally{
+           try{
+              if(stream != null)
+                 stream.close();
+           } catch(java.io.IOException e){
+             Slog.e("BatteryStats", "Error stream.close", e);
+           }
+	}
 
         long now = SystemClock.elapsedRealtime();
         if (USE_OLD_HISTORY) {
