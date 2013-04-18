@@ -1569,7 +1569,7 @@ final class Settings {
                 }
             }
 
-            str.close();
+            //str.close();
 
         } catch (XmlPullParserException e) {
             mReadMessages.append("Error reading: " + e.toString());
@@ -1581,6 +1581,13 @@ final class Settings {
             PackageManagerService.reportSettingsProblem(Log.ERROR, "Error reading settings: " + e);
             Log.wtf(PackageManagerService.TAG, "Error reading package manager settings", e);
 
+        } finally {
+            // add for 153568
+            if (str != null) {
+                try {
+                    str.close();
+                } catch (IOException e){}
+            }
         }
 
         final int N = mPendingPackages.size();
