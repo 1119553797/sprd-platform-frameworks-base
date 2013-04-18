@@ -22,6 +22,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.os.SystemProperties; //SPRD: add for factory mode, The default input method is modified.
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.text.TextUtils;
@@ -841,12 +842,24 @@ public class InputMethodUtils {
         }
 
         public void putSelectedInputMethod(String imeId) {
+            /** SPRD: add for factory mode, The default input method is modified. @{ */
+            String mode = SystemProperties.get("ro.bootmode", "mode");
+            if ("engtest".equals(mode)) {
+                if (DEBUG) {
+                    Slog.d(TAG, "engtest mode, not do putSelectedInputMethodStr: " + imeId + ", "
+                           + mCurrentUserId);
+                }
+            } else {
+            /** @} */
             if (DEBUG) {
                 Slog.d(TAG, "putSelectedInputMethodStr: " + imeId + ", "
                         + mCurrentUserId);
             }
             Settings.Secure.putStringForUser(
                     mResolver, Settings.Secure.DEFAULT_INPUT_METHOD, imeId, mCurrentUserId);
+            /** SPRD: add for factory mode, The default input method is modified. @{ */
+            }
+            /** @} */
         }
 
         public void putSelectedSubtype(int subtypeId) {
