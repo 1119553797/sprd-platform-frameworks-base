@@ -455,6 +455,10 @@ public class Spinner extends AbsSpinner implements OnClickListener {
         mInLayout = true;
         layout(0, false);
         mInLayout = false;
+
+        if (changed && mPopup.isShowing()) {
+            mPopup.show();
+        }
     }
 
     /**
