@@ -847,7 +847,7 @@ final class Settings {
                 }
             }
 
-            str.close();
+            //str.close();
 
         } catch (XmlPullParserException e) {
             mReadMessages.append("Error reading: " + e.toString());
@@ -859,6 +859,13 @@ final class Settings {
             mReadMessages.append("Error reading: " + e.toString());
             PackageManagerService.reportSettingsProblem(Log.ERROR, "Error reading settings: " + e);
             Log.wtf(PackageManagerService.TAG, "Error reading package manager stopped packages", e);
+        } finally {
+            // add for 153687
+            if (str != null) {
+                try {
+                    str.close();
+                } catch (IOException e){}
+            }
         }
     }
 
