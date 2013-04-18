@@ -4878,19 +4878,21 @@ public final class BatteryStatsImpl extends BatteryStats {
         }
         FileOutputStream stream = null;
         try {
-            try{
                stream = new FileOutputStream(mFile.chooseForWrite());
                stream.write(next.marshall());
                stream.flush();
                FileUtils.sync(stream);
-            }finally{
-               if(stream != null)
-                    stream.close();
-            }
-            mFile.commit();
+               mFile.commit();
         } catch (IOException e) {
             Slog.w("BatteryStats", "Error writing battery statistics", e);
             mFile.rollback();
+        }finally{
+            try{
+               if(stream != null)
+                    stream.close();
+            }catch (IOException e){
+                    Slog.w("BatteryStats", "Error stream.close ", e);
+	    }
             next.recycle();
             mWriteLock.unlock();
         }
