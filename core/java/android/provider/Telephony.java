@@ -320,6 +320,13 @@ public final class Telephony {
         
         public static Uri addMessageToUri(ContentResolver resolver,
                 Uri uri, String address, String body, String subject,
+                Long date, boolean read, boolean seen, boolean deliveryReport, int phoneId, String iccId) {
+            return addMessageToUri(resolver, uri, address, body, subject,
+                    date, read, seen, deliveryReport, -1L, phoneId, iccId);
+        }
+        
+        public static Uri addMessageToUri(ContentResolver resolver,
+                Uri uri, String address, String body, String subject,
                 Long date, boolean read,boolean seen, boolean deliveryReport, long threadId, int phoneId,String strIccid) {
             ContentValues values = new ContentValues(10);
 
@@ -441,6 +448,12 @@ public final class Telephony {
                 return addMessageToUri(resolver, CONTENT_URI, address, body,
                         subject, date, read, seen, false, phoneID);
             }
+            public static Uri addMessage(ContentResolver resolver,
+                    String address, String body, String subject, Long date,
+                    boolean read, boolean seen, int phoneID, String iccId) {
+                return addMessageToUri(resolver, CONTENT_URI, address, body,
+                        subject, date, read, seen, false, phoneID, iccId);
+            }
         }
 
         /**
@@ -514,6 +527,13 @@ public final class Telephony {
                     int phoneID) {
                 return addMessageToUri(resolver, CONTENT_URI, address, body,
                         subject, date, true, seen, false, phoneID);
+            }
+            
+            public static Uri addMessage(ContentResolver resolver,
+                    String address, String body, String subject, Long date,boolean seen,
+                    int phoneID, String iccId) {
+                return addMessageToUri(resolver, CONTENT_URI, address, body,
+                        subject, date, true, seen, false, phoneID, iccId);
             }
         }
 
