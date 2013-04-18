@@ -27,6 +27,7 @@ import android.media.MediaPlayer;
 import android.media.Metadata;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnInfoListener;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -94,6 +95,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private MediaPlayer.OnPreparedListener mOnPreparedListener;
     private MediaPlayer.OnSeekCompleteListener mOnSeekCompleteListener;  //add by ll
     private MediaPlayer.OnVideoSizeChangedListener mOnVideoSizeChangedListener;  //add by ll
+    private MediaPlayer.OnInfoListener mInfoListener;
     private int         mCurrentBufferPercentage;
     private OnErrorListener mOnErrorListener;
     private int         mSeekWhenPrepared;  // recording the seek position while preparing
@@ -321,6 +323,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             mMediaPlayer.setOnCompletionListener(mCompletionListener);
             mMediaPlayer.setOnErrorListener(mErrorListener);
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
+            mMediaPlayer.setOnInfoListener(mInfoListener);
             mCurrentBufferPercentage = 0;
             mMediaPlayer.setDataSource(mContext, mUri, mHeaders);
             mMediaPlayer.setDisplay(mSurfaceHolder);
@@ -643,6 +646,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         mOnErrorListener = l;
     }
 
+    public void setOnInfoListener(OnInfoListener l){
+        mInfoListener = l;
+    }
     SurfaceHolder.Callback mSHCallback = new SurfaceHolder.Callback()
     {
         public void surfaceChanged(SurfaceHolder holder, int format,
