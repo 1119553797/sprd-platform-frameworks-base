@@ -284,10 +284,20 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
      *   missing.
      */
     private boolean stuckOnLockScreenBecauseSimMissing() {
+        boolean isSimMissing = true;
+        final int phoneCount = TelephonyManager.getPhoneCount();
+        for (int phoneIndex = 0; phoneIndex < phoneCount; phoneIndex++) {
+            final IccCard.State state = mUpdateMonitor.getSimState(phoneIndex);
+            isSimMissing = (state == IccCard.State.ABSENT
+                    || state == IccCard.State.PERM_DISABLED);
+            if (!isSimMissing) {
+                break;
+            }
+        }
+
         return mRequiresSim
                 && (!mUpdateMonitor.isDeviceProvisioned())
-                && (mUpdateMonitor.getSimState() == IccCard.State.ABSENT ||
-                    mUpdateMonitor.getSimState() == IccCard.State.PERM_DISABLED);
+                && isSimMissing;
     }
 
     /**
@@ -1145,7 +1155,6 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
      * the lock screen (lock or unlock).
      */
     private Mode getInitialMode() {
-        final IccCard.State simState = mUpdateMonitor.getSimState();
         if (stuckOnLockScreenBecauseSimMissing()
                 //||(simState == IccCard.State.PUK_REQUIRED &&
                 //!mLockPatternUtils.isPukUnlockScreenEnable())

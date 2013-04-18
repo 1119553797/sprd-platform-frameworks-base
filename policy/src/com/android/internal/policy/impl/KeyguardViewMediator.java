@@ -630,15 +630,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             return;
         }
 
-        // if the setup wizard hasn't run yet, don't show
-        final boolean requireSim = !SystemProperties.getBoolean("keyguard.no_require_sim",
-                false);
         final boolean provisioned = mUpdateMonitor.isDeviceProvisioned();
-        final IccCard.State state = mUpdateMonitor.getSimState();
-        final boolean lockedOrMissing = state.isPinLocked()
-                || ((state == IccCard.State.ABSENT
-                || state == IccCard.State.PERM_DISABLED)
-                && requireSim);
+        final boolean lockedOrMissing = isSimLockedOrMissing();
 
         if (!lockedOrMissing && !provisioned) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because device isn't provisioned"
@@ -744,7 +737,9 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
     //public void onSimStateChanged(IccCard.State simState) {
     public void onSimStateChanged(IccCard.State simState ,int subscription) {
     //add DSDS end
-        if (true) Log.d(TAG, "onSimStateChanged: " + simState);
+        if (DEBUG) {
+            Log.d(TAG, "onSimStateChanged: " + simState + ", subscription: " + subscription);
+        }
 
         switch (simState) {
             case ABSENT:
@@ -1403,5 +1398,30 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
     /** {@inheritDoc} */
     public void onDeleteMessageCount(int messagecount){
 
+    }
+
+    /**
+     * Check sim state is Locked of missing for 'Multi-SIM card'
+     * 
+     * @return true locked or missing, else false
+     */
+    private boolean isSimLockedOrMissing() {
+        // if the setup wizard hasn't run yet, don't show
+        final boolean requireSim = !SystemProperties.getBoolean("keyguard.no_require_sim",
+                false);
+
+        boolean lockedOrMissing = false;
+        final int phoneCount = TelephonyManager.getPhoneCount();
+        for (int phoneIndex = 0; phoneIndex < phoneCount; phoneIndex++) {
+            final IccCard.State state = mUpdateMonitor.getSimState(phoneIndex);
+            lockedOrMissing = lockedOrMissing || state.isPinLocked()
+                    || ((state == IccCard.State.ABSENT
+                    || state == IccCard.State.PERM_DISABLED)
+                    && requireSim);
+            if (lockedOrMissing) {
+                break;
+            }
+        }
+        return lockedOrMissing;
     }
 }
