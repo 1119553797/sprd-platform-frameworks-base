@@ -666,8 +666,13 @@ public class PduParser {
                 case PduHeaders.MBOX_TOTALS:
                 case PduHeaders.MBOX_QUOTAS:
                 {
-                    /* Value-length */
-                    parseValueLength(pduDataStream);
+                    try {
+                        /* Value-length */
+                        parseValueLength(pduDataStream);
+                    } catch (RuntimeException e) {
+                        log(headerField + " Value length > LENGTH_QUOTE!");
+                        return null;
+                    }
 
                     /* Message-total-token | Size-total-token */
                     extractByteValue(pduDataStream);
