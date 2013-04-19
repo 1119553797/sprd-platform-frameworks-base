@@ -99,8 +99,13 @@ public class ThumbnailUtils {
         Bitmap bitmap = null;
         MediaFileType fileType = MediaFile.getFileType(filePath);
         if (fileType != null && fileType.fileType == MediaFile.FILE_TYPE_JPEG) {
-            createThumbnailFromEXIF(filePath, targetSize, maxPixels, sizedThumbnailBitmap);
-            bitmap = sizedThumbnailBitmap.mBitmap;
+            try {
+                createThumbnailFromEXIF(filePath, targetSize, maxPixels, sizedThumbnailBitmap);
+                bitmap = sizedThumbnailBitmap.mBitmap;
+            } catch (OutOfMemoryError oom) {
+                Log.e(TAG, "#createThumbnailFromEXIF Unable to decode file " + filePath
+                        + ". OutOfMemoryError.", oom);
+            }
         }
 
         if (bitmap == null) {
