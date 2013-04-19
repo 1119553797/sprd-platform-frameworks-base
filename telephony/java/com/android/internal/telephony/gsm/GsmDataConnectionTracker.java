@@ -2641,7 +2641,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             cursor.moveToFirst();
             pos = cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers._ID));
             for(ApnSetting p:mAllApns) {
-                if (p.id == pos && p.canHandleType(mRequestedApnType)) {
+                if (p.id == pos && p.canHandleType(Phone.APN_TYPE_DEFAULT)) {
                     log("getPreferredApn: X found apnSetting" + p);
                     cursor.close();
                     return p;
