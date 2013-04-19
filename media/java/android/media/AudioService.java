@@ -2522,7 +2522,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 // the initial index should never be 0 for ring and notification streams on phones
                 // (voice capable devices) if not in silent or vibrate mode.
                 // same for system stream on phones and tablets
-                if ((index == 0) && (mRingerMode == AudioManager.RINGER_MODE_NORMAL) &&
+                if ((index == 0) && (mRingerMode == AudioManager.RINGER_MODE_NORMAL || 
+                        mRingerMode == AudioManager.RINGER_MODE_OUTDOOR) &&
                         ((mVoiceCapable &&
                                 (mStreamVolumeAlias[mStreamType] == AudioSystem.STREAM_RING)) ||
                          (mStreamVolumeAlias[mStreamType] == AudioSystem.STREAM_SYSTEM))) {
@@ -2757,7 +2758,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                                 // If the stream is not muted any more, restore its volume if
                                 // ringer mode allows it
                                 if (!isStreamAffectedByRingerMode(mStreamType) ||
-                                        mRingerMode == AudioManager.RINGER_MODE_NORMAL) {
+                                        mRingerMode == AudioManager.RINGER_MODE_NORMAL
+                                        || mRingerMode == AudioManager.RINGER_MODE_OUTDOOR) {
                                     Set set = mIndex.entrySet();
                                     Iterator i = set.iterator();
                                     while (i.hasNext()) {
