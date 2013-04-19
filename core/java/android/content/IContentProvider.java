@@ -75,4 +75,8 @@ public interface IContentProvider extends IInterface {
     static final int GET_STREAM_TYPES_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 21;
     static final int OPEN_TYPED_ASSET_FILE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 22;
     static final int CREATE_CANCELATION_SIGNAL_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 23;
+    static final int BULK_UPDATE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 24;
+    static final int BULK_DELETE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 25;
+    static final int RESET_SEQUENCE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 26;
+
 }

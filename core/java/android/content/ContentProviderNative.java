@@ -41,7 +41,9 @@ import java.util.ArrayList;
 /**
  * {@hide}
  */
-abstract public class ContentProviderNative extends Binder implements IContentProvider {
+abstract public class ContentProviderNative extends Binder implements IContentProviderEx {
+    private static final String TAG = "ContentProvider";
+
     public ContentProviderNative()
     {
         attachInterface(this, descriptor);
@@ -317,7 +319,7 @@ abstract public class ContentProviderNative extends Binder implements IContentPr
 }
 
 
-final class ContentProviderProxy implements IContentProvider
+final class ContentProviderProxy implements IContentProviderEx
 {
     public ContentProviderProxy(IBinder remote)
     {
@@ -442,6 +444,97 @@ final class ContentProviderProxy implements IContentProvider
             return count;
         } finally {
             data.recycle();
+            reply.recycle();
+        }
+    }
+
+    public int bulkDelete(Uri[] uri, String[] userWheres, String[][] whereArgs) throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        try {
+            data.writeInterfaceToken(IContentProvider.descriptor);
+
+            data.writeTypedArray(uri, 0);
+
+            int length = 0;
+            if (userWheres != null)
+                length = userWheres.length;
+            data.writeInt(length);
+            for (int i = 0; i < length; i++)
+                data.writeString(userWheres[i]);
+
+            length = 0;
+            if (whereArgs != null)
+                length = whereArgs.length;
+
+            for (int i = 0; i < length; i++) {
+                int subLength = 0;
+                if (whereArgs[i] != null)
+                    subLength = whereArgs[i].length;
+                for (int j = 0; j < subLength; j++)
+                    data.writeString(whereArgs[i][j]);
+            }
+
+            mRemote.transact(BULK_DELETE_TRANSACTION, data, reply, 0);
+
+            DatabaseUtils.readExceptionFromParcel(reply);
+
+            int count = reply.readInt();
+            return count;
+        } finally {
+            data.recycle();
+            reply.recycle();
+        }
+    }
+
+    public int bulkUpdate(Uri[] uri, ContentValues[] initialValues, String[] userWheres,
+                String[][] whereArgs) throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        try {
+            data.writeInterfaceToken(IContentProvider.descriptor);
+            data.writeTypedArray(uri, 0);
+
+            data.writeTypedArray(initialValues, 0);
+
+            int length = 0;
+            if (userWheres != null)
+                length = userWheres.length;
+            for (int i = 0; i < length; i++) {
+                data.writeString(userWheres[i]);
+            }
+
+            length = 0;
+            if (whereArgs != null)
+                length = whereArgs.length;
+            for (int i = 0; i < length; i++) {
+                int subLength = 0;
+                if (whereArgs[i] != null)
+                    subLength = whereArgs[i].length;
+                for (int j = 0; j < subLength; j++)
+                    data.writeString(whereArgs[i][j]);
+            }
+
+            mRemote.transact(BULK_UPDATE_TRANSACTION, data, reply, 0);
+
+            DatabaseUtils.readExceptionFromParcel(reply);
+            int count = reply.readInt();
+            return count;
+        } finally {
+            data.recycle();
+            reply.recycle();
+        }
+    }
+
+    public int resetSequence() throws RemoteException {
+        Parcel reply = Parcel.obtain();
+        try {
+            mRemote.transact(RESET_SEQUENCE_TRANSACTION, null, reply, 0);
+
+            DatabaseUtils.readExceptionFromParcel(reply);
+            int ret = reply.readInt();
+            return ret;
+        } finally {
             reply.recycle();
         }
     }
