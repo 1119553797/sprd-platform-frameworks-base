@@ -24,6 +24,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.IContentProvider;
+import android.content.IContentProviderEx;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.drm.DrmManagerClient;
@@ -33,6 +34,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.RemoteException;
 import android.os.SystemProperties;
+import android.os.storage.StorageManager;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Audio.Playlists;
@@ -55,6 +57,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
@@ -116,6 +119,8 @@ public class MediaScanner
     }
 
     private final static String TAG = "MediaScanner";
+
+    private final static boolean MEDIA_SCANNER_OPT_DEBUG = true;
 
     private static final String[] FILES_PRESCAN_PROJECTION = new String[] {
             Files.FileColumns._ID, // 0
@@ -356,6 +361,7 @@ public class MediaScanner
         String mPath;
         long mLastModified;
         int mFormat;
+        boolean mSeenInFileSystem;
         boolean mLastModifiedChanged;
 
         FileEntry(long rowId, String path, long lastModified, int format) {
@@ -363,6 +369,7 @@ public class MediaScanner
             mPath = path;
             mLastModified = lastModified;
             mFormat = format;
+            mSeenInFileSystem = false;
             mLastModifiedChanged = false;
         }
 
@@ -381,6 +388,14 @@ public class MediaScanner
     private ArrayList<PlaylistEntry> mPlaylistEntries = new ArrayList<PlaylistEntry>();
 
     private MediaInserter mMediaInserter;
+
+    private MediaUpdater mMediaUpdater;
+
+    private MediaDeleter mMediaDeleter;
+
+    // hashes file path to FileEntry.
+    // path should be lower case if mCaseInsensitivePaths is true
+    private HashMap<String, FileEntry> mFileCache;
 
     private ArrayList<FileEntry> mPlayLists;
 
@@ -474,19 +489,28 @@ public class MediaScanner
                 }
             }
 
-            FileEntry entry = makeEntryFor(path);
+//            FileEntry entry = makeEntryFor(path);
+            String key = path;
+            if (mCaseInsensitivePaths) {
+                key = path.toLowerCase();
+            }
+           FileEntry entry = mFileCache.get(key);
             // add some slack to avoid a rounding error
             long delta = (entry != null) ? (lastModified - entry.mLastModified) : 0;
             boolean wasModified = delta > 1 || delta < -1;
             if (entry == null || wasModified) {
                 if (wasModified) {
+                    Log.d(TAG, "wasModified");
                     entry.mLastModified = lastModified;
                 } else {
+                    Log.d(TAG, "new FileEntry 111111");
                     entry = new FileEntry(0, path, lastModified,
                             (isDirectory ? MtpConstants.FORMAT_ASSOCIATION : 0));
+                    mFileCache.put(key, entry);
                 }
                 entry.mLastModifiedChanged = true;
             }
+            entry.mSeenInFileSystem = true;
 
             if (mProcessPlaylists && MediaFile.isPlayListFileType(mFileType)) {
                 mPlayLists.add(entry);
@@ -535,6 +559,7 @@ public class MediaScanner
                 // (even though it already exists in the database), to trigger
                 // the correct code path for updating its entry
                 if (mMtpObjectHandle != 0) {
+                    Log.d(TAG, "mtp set entry.mRowId = 0");
                     entry.mRowId = 0;
                 }
                 // rescan for metadata if file was modified since last scan
@@ -833,6 +858,7 @@ public class MediaScanner
                 }
             }
             long rowId = entry.mRowId;
+            Log.d(TAG, "rowId = " + rowId);
             if (MediaFile.isAudioFileType(mFileType) && (rowId == 0 || mMtpObjectHandle != 0)) {
                 // Only set these for new entries. For existing entries, they
                 // may have been modified later, and we want to keep the current
@@ -897,6 +923,8 @@ public class MediaScanner
 
             Uri tableUri = mFilesUri;
             MediaInserter inserter = mMediaInserter;
+            MediaUpdater updater = mMediaUpdater;
+
             if (!mNoMedia) {
                 if (MediaFile.isVideoFileType(mFileType)) {
                     tableUri = mVideoUri;
@@ -1021,10 +1049,11 @@ public class MediaScanner
             String existingSettingValue = Settings.System.getString(mContext.getContentResolver(),
                     settingName);
 
-            if (TextUtils.isEmpty(existingSettingValue)) {
+            if (true){//TextUtils.isEmpty(existingSettingValue)) {
                 // Set the setting to the given URI
                 Settings.System.putString(mContext.getContentResolver(), settingName,
                         ContentUris.withAppendedId(uri, rowId).toString());
+                Log.d(TAG,"media setSettingIfNotSet settingName "+settingName+"values:"+ ContentUris.withAppendedId(uri, rowId).toString());
             }
         }
 
@@ -1056,6 +1085,11 @@ public class MediaScanner
         String where = null;
         String[] selectionArgs = null;
 
+        if (mFileCache == null) {
+            mFileCache = new HashMap<String, FileEntry>();
+        } else {
+            mFileCache.clear();
+        }
         if (mPlayLists == null) {
             mPlayLists = new ArrayList<FileEntry>();
         } else {
@@ -1100,12 +1134,13 @@ public class MediaScanner
                     c = mMediaProvider.query(limitUri, FILES_PRESCAN_PROJECTION,
                             where, selectionArgs, MediaStore.Files.FileColumns._ID, null);
                     if (c == null) {
+                        Log.d(TAG, "Cursor is null, break");
                         break;
                     }
 
                     int num = c.getCount();
-
                     if (num == 0) {
+                        Log.d(TAG, "number is 0, break");
                         break;
                     }
                     mWasEmptyPriorToScan = false;
@@ -1115,6 +1150,7 @@ public class MediaScanner
                         int format = c.getInt(FILES_PRESCAN_FORMAT_COLUMN_INDEX);
                         long lastModified = c.getLong(FILES_PRESCAN_DATE_MODIFIED_COLUMN_INDEX);
                         lastId = rowId;
+                        Log.d(TAG, "rowId = " + rowId + ", path: " + path);
 
                         // Only consider entries with absolute path names.
                         // This allows storing URIs in the database without the
@@ -1134,6 +1170,7 @@ public class MediaScanner
                                 int fileType = (mediaFileType == null ? 0 : mediaFileType.fileType);
 
                                 if (!MediaFile.isPlayListFileType(fileType)) {
+                                    Log.d(TAG, "prescan deleter.delete(" + rowId + ")");
                                     deleter.delete(rowId);
                                     if (path.toLowerCase(Locale.US).endsWith("/.nomedia")) {
                                         deleter.flush();
@@ -1142,6 +1179,17 @@ public class MediaScanner
                                     }
                                 }
                             }
+                        }
+
+                        if (path != null && (path.startsWith("/") || path.trim().equals(""))) {
+                            String key = path;
+                            if (mCaseInsensitivePaths) {
+                                key = path.toLowerCase();
+                            }
+
+                            FileEntry entry = new FileEntry(rowId, path,
+                                    lastModified, format);
+                            mFileCache.put(key, entry);
                         }
                     }
                 }
@@ -1161,6 +1209,16 @@ public class MediaScanner
             mOriginalCount = c.getCount();
             c.close();
         }
+    }
+
+    private String getNearestParent(String path, String[] parents) {
+        String foundParent = "";
+        for (String parent : parents) {
+            if (path.startsWith(parent) && parent.length() > foundParent.length()) {
+                foundParent = parent;
+            }
+        }
+        return foundParent;
     }
 
     private boolean inScanDirectory(String path, String[] directories) {
@@ -1244,6 +1302,7 @@ public class MediaScanner
             if (size > 0) {
                 String [] foo = new String [size];
                 foo = whereArgs.toArray(foo);
+                Log.d(TAG, "mProvider.delete MediaStore.MediaColumns._ID IN (" + whereClause.toString() + ")");
                 int numrows = mProvider.delete(mBaseUri, MediaStore.MediaColumns._ID + " IN (" +
                         whereClause.toString() + ")", foo);
                 //Log.i("@@@@@@@@@", "rows deleted: " + numrows);
@@ -1254,6 +1313,94 @@ public class MediaScanner
     }
 
     private void postscan(String[] directories) throws RemoteException {
+        Iterator<FileEntry> iterator = mFileCache.values().iterator();
+
+        ArrayList<FileEntry> entriesToRemove = new ArrayList<FileEntry>();
+
+        MediaDeleter deleter = mMediaDeleter;
+        MediaUpdater updater = mMediaUpdater;
+
+        while (iterator.hasNext()) {
+            FileEntry entry = iterator.next();
+            String path = entry.mPath;
+            MediaFile.MediaFileType mediaFileType = MediaFile.getFileType(entry.mPath);
+            int fileType = (mediaFileType == null ? 0 : mediaFileType.fileType);
+
+            // remove database entries for files that no longer exist.
+            boolean fileMissing = false;
+            //if (MEDIA_SCANNER_OPT_DEBUG) Log.d(TAG, "checking " + path);
+            StorageManager sm = (StorageManager)mContext.getSystemService(Context.STORAGE_SERVICE);
+            if (!entry.mSeenInFileSystem && !MtpConstants.isAbstractObject(entry.mFormat)) {
+                if (inScanDirectory(path, directories)) {
+                    if (MEDIA_SCANNER_OPT_DEBUG) Log.d(TAG, path + " is indicated as missing!");
+                    // we didn't see this file in the scan directory.
+                    fileMissing = true;
+                } else {
+                    String nearestParent = getNearestParent(path, sm.getVolumePaths());
+                    if (TextUtils.isEmpty(nearestParent) // This means the file is inside internal
+                            || sm.getVolumeState(nearestParent).equals(Environment.MEDIA_REMOVED)) {
+                        if (MEDIA_SCANNER_OPT_DEBUG) Log.d(TAG, path + " is indicated as missing cause its media is removed!" + "nearestParent:" + nearestParent);
+                        fileMissing = true;
+                    } else {
+                        /* TODO:  we can't delete the record that inside other volumes which is mounted or going to be mounted.
+                                                        The deleting should be done during the scanning of the their own volumes. */
+                        if (MEDIA_SCANNER_OPT_DEBUG) Log.d(TAG, "Skip deleting missing files " + path + " it will be deleted or updated soon.");
+                    }
+                }
+            }
+
+            if (fileMissing) {
+                entriesToRemove.add(entry);
+                if (!MediaFile.isPlayListFileType(fileType))
+                    iterator.remove();
+            }
+        }
+        Log.d(TAG, "updater.update entries count " + entriesToRemove.size());
+        for(FileEntry entry : entriesToRemove) {
+			// Clear the file path to prevent the _DELETE_FILE database hook
+			// in the media provider from deleting the file.
+			// If the file is truly gone the delete is unnecessary, and we want to avoid
+			// accidentally deleting files that are really there.
+			ContentValues values = new ContentValues();
+			values.put(Files.FileColumns.DATA, "");
+			values.put(Files.FileColumns.DATE_MODIFIED, 0);
+            File testFile = new File(entry.mPath);
+
+            // if the file is no longer exists, we don't need to update the data field.
+            /*if (testFile.exists()) */{
+                if (updater == null) {
+                    mMediaProvider.update(ContentUris.withAppendedId(mFilesUri, entry.mRowId),
+                        values, null, null);
+                } else {
+                    updater.update(ContentUris.withAppendedId(mFilesUri, entry.mRowId),
+                        values, null, null);
+                }
+            }
+        }
+        if (updater != null)
+            updater.flushAll();
+        Log.d(TAG, "deleter.delete entries count " + entriesToRemove.size());
+        for(FileEntry entry : entriesToRemove) {
+			// do not delete missing playlists, since they may have been modified by the user.
+			// the user can delete them in the media player instead.
+			// instead, clear the path and lastModified fields in the row
+			MediaFile.MediaFileType mediaFileType = MediaFile.getFileType(entry.mPath);
+			int fileType = (mediaFileType == null ? 0 : mediaFileType.fileType);
+
+            if (!MediaFile.isPlayListFileType(fileType)) {
+                if (deleter == null){
+                    Log.d(TAG, "postscan mMediaProvider.delete(" + entry.mRowId + ")");
+                    mMediaProvider.delete(ContentUris.withAppendedId(mFilesUri, entry.mRowId),
+                        null, null);
+                }else {
+                    Log.d(TAG, "postscan deleter.delete("+ entry.mRowId + ")");
+                    deleter.delete(ContentUris.withAppendedId(mFilesUri, entry.mRowId),
+                        null, null);
+                }
+            }
+        }
+        if (deleter != null)
+            deleter.flushAll();
 
         // handle playlists last, after we know what media files are on the storage.
         if (mProcessPlaylists) {
@@ -1265,6 +1412,7 @@ public class MediaScanner
 
         // allow GC to clean up
         mPlayLists = null;
+        mFileCache = null;
         mMediaProvider = null;
     }
 
@@ -1289,6 +1437,9 @@ public class MediaScanner
 
     public void scanDirectories(String[] directories, String volumeName) {
         try {
+            for (String path : directories)
+                Log.d(TAG, "====== scanning " + path);
+
             long start = System.currentTimeMillis();
             initialize(volumeName);
             prescan(null, true);
@@ -1297,9 +1448,19 @@ public class MediaScanner
             if (ENABLE_BULK_INSERTS) {
                 // create MediaInserter for bulk inserts
                 mMediaInserter = new MediaInserter(mMediaProvider, 500);
+                if (mMediaProvider instanceof IContentProviderEx) {
+                    Log.d(TAG, "MediaProvider implements IContentProviderEx, enable bulk operations");
+                    mMediaUpdater = new MediaUpdater(mMediaProvider, 500);
+                    mMediaDeleter = new MediaDeleter(mMediaProvider, 2000);
+                } else {
+                    Log.d(TAG, "MediaProvider does not implement IContentProviderEx, disable bulk operations");
+                    mMediaUpdater = null;
+                    mMediaDeleter = null;
+                }
             }
 
             for (int i = 0; i < directories.length; i++) {
+                Log.d(TAG, "====== processDirectory " + directories[i]);
                 processDirectory(directories[i], mClient);
             }
 
@@ -1307,13 +1468,30 @@ public class MediaScanner
                 // flush remaining inserts
                 mMediaInserter.flushAll();
                 mMediaInserter = null;
+
+                if (mMediaUpdater != null)
+                    mMediaUpdater.flushAll();
             }
 
             long scan = System.currentTimeMillis();
+            for (String path : directories)
+                Log.d(TAG, "====== postscan " + path);
             postscan(directories);
+
+            if (ENABLE_BULK_INSERTS) {
+                if (mMediaUpdater != null) {
+                    mMediaUpdater.flushAll();
+                    mMediaUpdater = null;
+                }
+                if (mMediaDeleter != null) {
+                    mMediaDeleter.flushAll();
+                    mMediaDeleter = null;
+                }
+            }
+
             long end = System.currentTimeMillis();
 
-            if (false) {
+            if (true) {
                 Log.d(TAG, " prescan time: " + (prescan - start) + "ms\n");
                 Log.d(TAG, "    scan time: " + (scan - prescan) + "ms\n");
                 Log.d(TAG, "postscan time: " + (end - scan) + "ms\n");
@@ -1328,6 +1506,9 @@ public class MediaScanner
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException in MediaScanner.scan()", e);
         }
+
+        for (String path : directories)
+            Log.d(TAG, "====== finished " + path);
     }
 
     // this function is used to scan a single file
@@ -1479,20 +1660,24 @@ public class MediaScanner
 
         Cursor c = null;
         try {
+            Log.d(TAG, "mFilesUri: " + mFilesUri.toString());
             c = mMediaProvider.query(mFilesUri, FILES_PRESCAN_PROJECTION,
                     where, selectionArgs, null, null);
             if (c.moveToNext()) {
                 long rowId = c.getLong(FILES_PRESCAN_ID_COLUMN_INDEX);
                 int format = c.getInt(FILES_PRESCAN_FORMAT_COLUMN_INDEX);
                 long lastModified = c.getLong(FILES_PRESCAN_DATE_MODIFIED_COLUMN_INDEX);
+                Log.d(TAG, "mMediaProvider.query rowId = " + rowId);
                 return new FileEntry(rowId, path, lastModified, format);
             }
         } catch (RemoteException e) {
+            e.printStackTrace();
         } finally {
             if (c != null) {
                 c.close();
             }
         }
+        Log.d(TAG, "makeEntryFor return null");
         return null;
     }
 

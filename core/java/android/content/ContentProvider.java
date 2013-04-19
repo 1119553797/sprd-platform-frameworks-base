@@ -207,6 +207,25 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
             return ContentProvider.this.bulkInsert(uri, initialValues);
         }
 
+        public int bulkDelete(Uri[] uris, String[] userWheres, String[][] whereArgs) {
+            for (Uri uri : uris) {
+                enforceWritePermission(uri);
+            }
+            return ContentProvider.this.bulkDelete(uris, userWheres, whereArgs);
+        }
+
+        public int bulkUpdate(Uri[] uris, ContentValues[] initialValues, String[] userWheres,
+            String[][] whereArgs) {
+            for (Uri uri : uris) {
+                enforceWritePermission(uri);
+            }
+			return ContentProvider.this.bulkUpdate(uris, initialValues, userWheres, whereArgs);
+        }
+
+        public int resetSequence() {
+	    return ContentProvider.this.resetSequence();
+        }
+
         @Override
         public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations)
                 throws OperationApplicationException {
@@ -706,6 +725,39 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
         }
         return numValues;
     }
+
+
+    /**
+     * @hide
+     */
+    public int bulkDelete(Uri[] uris, String[] userWheres, String[][] whereArgs) {
+        int numDeletes = userWheres.length;
+        for (int i = 0; i < numDeletes; i++) {
+            delete(uris[i], userWheres[i], whereArgs[i]);
+        }
+        return numDeletes;
+    }
+
+    /**
+     * @hide
+     */
+    public int bulkUpdate(Uri[] uris, ContentValues[] initialValues, String[] userWheres,
+            String[][] whereArgs) {
+         int numUpgrades = initialValues.length;
+		 for (int i = 0; i < numUpgrades; i++) {
+             update(uris[i], initialValues[i], userWheres[i], whereArgs[i]);
+         }
+         return numUpgrades;
+    }
+
+    /**
+     * @hide
+     */
+
+    public int resetSequence() {
+         return 0;
+    }
+
 
     /**
      * Implement this to handle requests to delete one or more rows.
