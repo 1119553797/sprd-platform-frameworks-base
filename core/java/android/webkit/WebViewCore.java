@@ -43,6 +43,8 @@ import android.webkit.WebViewInputDispatcher.WebKitCallbacks;
 
 import junit.framework.Assert;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -434,6 +436,14 @@ public final class WebViewCore {
                 filePath = uri.getLastPathSegment();
             }
             String uriString = uri.toString();
+            if(uriString != null && uriString.startsWith("file:")){
+                try {
+                    uriString = URLDecoder.decode(uriString,"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
             BrowserFrame.sJavaBridge.storeFilePathForContentUri(filePath, uriString);
             return uriString;
         }
