@@ -304,11 +304,14 @@ public final class UsageStatsService extends IUsageStats.Stub {
     
     private Parcel getParcelForFile(File file) throws IOException {
         FileInputStream stream = new FileInputStream(file);
-        byte[] raw = readFully(stream);
-        Parcel in = Parcel.obtain();
-        in.unmarshall(raw, 0, raw.length);
-        in.setDataPosition(0);
-        stream.close();
+        try {
+            byte[] raw = readFully(stream);
+            Parcel in = Parcel.obtain();
+            in.unmarshall(raw, 0, raw.length);
+            in.setDataPosition(0);
+        } finally { 
+            stream.close();   
+        } // add try-finally for 154398
         return in;
     }
     
