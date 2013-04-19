@@ -198,7 +198,7 @@ static void nativeShutdown(JNIEnv *env, jobject clazz) {
 
 static void nativeReboot(JNIEnv *env, jobject clazz, jstring reason) {
     if (reason == NULL) {
-        android_reboot(ANDROID_RB_RESTART, 0, 0);
+        android_reboot(ANDROID_RB_RESTART2, 0, "power-noreason");
     } else {
         const char *chars = env->GetStringUTFChars(reason, NULL);
         android_reboot(ANDROID_RB_RESTART2, 0, (char *) chars);
