@@ -184,5 +184,7 @@
     <drawable name="notification_template_icon_bg">#3333B5E5</drawable>
     <drawable name="notification_template_icon_low_bg">#0cffffff</drawable>
 
+    <drawable name="notification_template_text">#999999</drawable>
+
 </resources>
 
