@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
@@ -12,7 +12,7 @@
         android:layout_gravity="top|center_horizontal"
         android:background="@drawable/top_divider_glow"
         />
-
+    
     <Button
         android:id="@+id/veto"
         android:layout_width="48dp"
@@ -54,14 +54,22 @@
         android:textSize="16sp"
         android:background="@drawable/btn_default_small"
         />
+
+    <View
+        android:id="@+id/devider"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/custom_status_bar_hr_sprd" />
+
     <View
         android:id="@+id/bottom_glow"
-        android:alpha="0"
-        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="@dimen/notification_divider_height"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_below="@id/devider"
+        android:layout_gravity="center_horizontal"
+        android:alpha="0"
         android:background="@drawable/bottom_divider_glow"
-        />
+        android:visibility="invisible" />
 
-</FrameLayout>
+</RelativeLayout>
