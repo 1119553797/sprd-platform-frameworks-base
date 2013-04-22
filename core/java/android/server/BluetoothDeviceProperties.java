@@ -46,31 +46,33 @@ class BluetoothDeviceProperties {
             if (propertyValues == null) {
                 propertyValues = new HashMap<String, String>();
             }
-
-            for (int i = 0; i < properties.length; i++) {
-                String name = properties[i];
-                String newValue = null;
-                int len;
-                if (name == null) {
-                    Log.e(TAG, "Error: Remote Device Property at index "
-                        + i + " is null");
-                    continue;
-                }
-                if (name.equals("UUIDs") || name.equals("Nodes")) {
-                    StringBuilder str = new StringBuilder();
-                    len = Integer.valueOf(properties[++i]);
-                    for (int j = 0; j < len; j++) {
-                        str.append(properties[++i]);
-                        str.append(",");
+            try {
+                for (int i = 0; i < properties.length; i++) {
+                    String name = properties[i];
+                    String newValue = null;
+                    int len;
+                    if (name == null) {
+                        Log.e(TAG, "Error: Remote Device Property at index "
+                            + i + " is null");
+                        continue;
                     }
-                    if (len > 0) {
-                        newValue = str.toString();
+                    if (name.equals("UUIDs") || name.equals("Nodes")) {
+                        StringBuilder str = new StringBuilder();
+                        len = Integer.valueOf(properties[++i]);
+                        for (int j = 0; j < len; j++) {
+                            str.append(properties[++i]);
+                            str.append(",");
+                        }
+                        if (len > 0) {
+                            newValue = str.toString();
+                        }
+                    } else {
+                        newValue = properties[++i];
                     }
-                } else {
-                    newValue = properties[++i];
+                    propertyValues.put(name, newValue);
                 }
-
-                propertyValues.put(name, newValue);
+            } catch (Exception e) {
+                Log.e(TAG,"AddProperties happens exception ",e);
             }
             mPropertiesMap.put(address, propertyValues);
         }
