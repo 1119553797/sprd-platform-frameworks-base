@@ -102,6 +102,8 @@ public class SIMRecords extends IccRecords {
     boolean simOnsSurport = false;
     boolean simPnnOnsEnabled = false;
     boolean simPnnOplOnsEnabled = false;
+    boolean CPHSFirstRead;//CPHS
+    boolean hasCPHSONS = false;
 
     int spnDisplayCondition;
     // Numeric network codes listed in TS 51.011 EF[SPDI]
@@ -226,8 +228,9 @@ public class SIMRecords extends IccRecords {
         mVmConfig = new VoiceMailConstants();
         mSpnOverride = new SpnOverride();
 
+        CPHSFirstRead = SystemProperties.getBoolean("ro.operatorname.cphsfirst", false);//CPHS
         simOnsSurport = SystemProperties.getBoolean("ro.operatorname.oplpnnsurport", false);
-        Log.d(LOG_TAG, "simOnsSurport"+simOnsSurport);
+        Log.d(LOG_TAG, "CPHSFirstRead :" + CPHSFirstRead+";simOnsSurport:"+simOnsSurport);
         recordsRequested = false;  // No load request is made till SIM ready
 
         // recordsToLoad is set to 0 because no requests are made yet
@@ -947,7 +950,14 @@ public class SIMRecords extends IccRecords {
             case EVENT_GET_SPN_DONE:
                 isRecordLoadResponse = true;
                 ar = (AsyncResult) msg.obj;
-                getSpnFsm(false, ar);
+                if(CPHSFirstRead){
+                    if (DBG) log("Load CPHS Firstly false");
+                    getCPHSSpnFsm(false, ar);
+                } else{
+                    if (DBG) log("Load 3GPP Firstly false");
+                    getSpnFsm(false, ar);
+                }
+
             break;
 
             case EVENT_GET_CFF_DONE:
@@ -1546,8 +1556,13 @@ public class SIMRecords extends IccRecords {
         mFh.loadEFTransparent(EF_CFF_CPHS, obtainMessage(EVENT_GET_CFF_DONE));
         recordsToLoad++;
 
-
-        getSpnFsm(true, null);
+        if(CPHSFirstRead){
+            if (DBG) log("Load CPHS Firstly true");
+            getCPHSSpnFsm(true, null);
+        } else{
+            if (DBG) log("Load 3GPP Firstly true");
+            getSpnFsm(true, null);
+        }
 
         mFh.loadEFTransparent(EF_SPDI, obtainMessage(EVENT_GET_SPDI_DONE));
         recordsToLoad++;
@@ -1625,10 +1640,30 @@ public class SIMRecords extends IccRecords {
     }
 
     /**
+     * Compares two PLMN entries isn't in one country.
+     */
+    private  boolean plmnCountryMatches(String plmn1, String plmn2) {
+        if (plmn1 == null || plmn2 == null) {
+            return false;
+        }
+        String MCC1 = plmn1.substring(0,3);
+        String MCC2 = plmn2.substring(0,3);
+
+        if (DBG) log("MCC1 =" + MCC1 + " ,MCC2 = " + MCC2);
+        return MCC1.equals(MCC2);
+    }
+    /**
      * Checks if plmn is HPLMN or on the spdiNetworks list.
      */
     private boolean isOnMatchingPlmn(String plmn) {
         if (plmn == null) return false;
+
+        if (hasCPHSONS){
+            if(plmnCountryMatches(plmn, getOperatorNumeric())){
+                return true;
+            }
+            return false;
+        }
 
         if (plmn.equals(getOperatorNumeric())) {
             return true;
@@ -1768,6 +1803,100 @@ public class SIMRecords extends IccRecords {
 
                 spnState = Get_Spn_Fsm_State.IDLE;
                 break;
+            default:
+                spnState = Get_Spn_Fsm_State.IDLE;
+        }
+    }
+
+
+    /**
+     * Finite State Machine to load Service Provider Name , which can be stored
+     * in either EF_SPN_CPHS, or EF_SPN_SHORT_CPHS (CPHS4.2), EF_SPN (3GPP)
+     *
+     * After starting, FSM will search SPN EFs in order and stop after finding
+     * the first valid SPN
+     *
+     * @param start set true only for initialize loading
+     * @param ar the AsyncResult from loadEFTransparent
+     *        ar.exception holds exception in error
+     *        ar.result is byte[] for data in success
+     */
+    private void getCPHSSpnFsm(boolean start, AsyncResult ar) {
+        byte[] data;
+
+        if (start) {
+            spnState = Get_Spn_Fsm_State.INIT;
+        }
+
+        switch(spnState){
+            case INIT:
+                spn = null;
+
+                mFh.loadEFTransparent( EF_SPN_CPHS,
+                        obtainMessage(EVENT_GET_SPN_DONE));
+                recordsToLoad++;
+                //spnState = Get_Spn_Fsm_State.READ_SPN_3GPP;//
+                //mojo require firstly read CPHS firstly
+                spnState = Get_Spn_Fsm_State.READ_SPN_CPHS;
+                break;
+            case READ_SPN_CPHS:
+                if (ar != null && ar.exception == null) {
+                    data = (byte[]) ar.result;
+                    spn = IccUtils.adnStringFieldToString(
+                            data, 0, data.length - 1 );
+                    spnDisplayCondition = 2;
+                    hasCPHSONS = true;
+
+                    if (DBG) log("Load EF_SPN_CPHS: " + spn+ " spnDisplayCondition: " + spnDisplayCondition);
+                    phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ALPHA, spn);
+
+                    spnState = Get_Spn_Fsm_State.IDLE;
+                } else {
+                    mFh.loadEFTransparent(
+                            EF_SPN_SHORT_CPHS, obtainMessage(EVENT_GET_SPN_DONE));
+                    recordsToLoad++;
+
+                    spnState = Get_Spn_Fsm_State.READ_SPN_SHORT_CPHS;
+                }
+                break;
+            case READ_SPN_SHORT_CPHS:
+                if (ar != null && ar.exception == null) {
+                    data = (byte[]) ar.result;
+                    spn = IccUtils.adnStringFieldToString(
+                            data, 0, data.length - 1);
+                    spnDisplayCondition = 2;
+                    hasCPHSONS = true;
+
+                    if (DBG) log("Load EF_SPN_SHORT_CPHS: " + spn+ " spnDisplayCondition:" + spnDisplayCondition);
+                    phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ALPHA, spn);
+                    spnState = Get_Spn_Fsm_State.IDLE;
+                }else {
+                    mFh.loadEFTransparent( EF_SPN,
+                            obtainMessage(EVENT_GET_SPN_DONE));
+                    recordsToLoad++;
+
+                    spnState = Get_Spn_Fsm_State.READ_SPN_3GPP;
+                }
+                break;
+            case READ_SPN_3GPP:
+                if (ar != null && ar.exception == null) {
+                    data = (byte[]) ar.result;
+                    spnDisplayCondition = 0xff & data[0];
+                    spn = IccUtils.adnStringFieldToString(data, 1, data.length - 1);
+
+                    if (DBG) log("Load EF_SPN: " + spn
+                            + " spnDisplayCondition: " + spnDisplayCondition);
+                    phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ALPHA, spn);
+
+                    spnState = Get_Spn_Fsm_State.IDLE;
+                } else {
+                    spnDisplayCondition = -1;
+                    if (DBG) log("No SPN loaded in either CHPS or 3GPP");
+                }
+
+                spnState = Get_Spn_Fsm_State.IDLE;
+                break;
+
             default:
                 spnState = Get_Spn_Fsm_State.IDLE;
         }
