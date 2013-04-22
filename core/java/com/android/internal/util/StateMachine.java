@@ -1019,7 +1019,9 @@ public class StateMachine {
             StateInfo curStateInfo = mStateInfo.get(destState);
             do {
                 mTempStateStack[mTempStateStackCount++] = curStateInfo;
-                curStateInfo = curStateInfo.parentStateInfo;
+                if (curStateInfo != null) {
+                    curStateInfo = curStateInfo.parentStateInfo;
+                }
             } while ((curStateInfo != null) && !curStateInfo.active);
 
             if (mDbg) {
