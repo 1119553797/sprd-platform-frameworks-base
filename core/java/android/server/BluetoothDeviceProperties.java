@@ -67,7 +67,10 @@ class BluetoothDeviceProperties {
                             newValue = str.toString();
                         }
                     } else {
-                        newValue = properties[++i];
+			if((++i) >= properties.length){
+				break;
+			}
+                        newValue = properties[i];
                     }
                     propertyValues.put(name, newValue);
                 }
