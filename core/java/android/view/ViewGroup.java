@@ -1979,6 +1979,8 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
      * Returns true if the flag was previously set.
      */
     private static boolean resetCancelNextUpFlag(View view) {
+        if(null == view)
+             return false;
         if ((view.mPrivateFlags & CANCEL_NEXT_UP_EVENT) != 0) {
             view.mPrivateFlags &= ~CANCEL_NEXT_UP_EVENT;
             return true;
