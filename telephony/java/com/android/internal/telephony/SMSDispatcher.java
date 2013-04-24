@@ -117,8 +117,6 @@ public abstract class SMSDispatcher extends Handler {
     /** Don't send SMS (user did not confirm). */
     static final int EVENT_STOP_SENDING = 7;        // accessed from inner class
 
-    static final protected int EVENT_NEW_SMS_CELL_BROADCAST = 13;
-
     protected final Phone mPhone;
     protected final Context mContext;
     protected final ContentResolver mResolver;
@@ -278,15 +276,6 @@ public abstract class SMSDispatcher extends Handler {
 
             break;
 
-        case EVENT_NEW_SMS_CELL_BROADCAST:
-
-            if (Config.LOGD) {
-                Log.d(TAG, "New SMSCB Message Received");
-            }
-
-           handleSmsCB((AsyncResult)msg.obj);
-           break;
-
         case EVENT_SEND_SMS_COMPLETE:
             // An outbound SMS has been successfully transferred, or failed.
             handleSendComplete((AsyncResult) msg.obj);
@@ -365,14 +354,6 @@ public abstract class SMSDispatcher extends Handler {
         mContext.sendOrderedBroadcast(intent, permission, resultReceiver,
                 this, Activity.RESULT_OK, null, null);
     }
-
-    /**
-     * Called when received sms cell broadcast
-     * 
-     * @param ar AsyncResult passed into the message handler. ar.result should
-     *            be a String representing the status report PDU, as ASCII hex.
-     */
-    protected abstract void handleSmsCB(AsyncResult ar);
 
     /**
      * Called when SMS send completes. Broadcasts a sentIntent on success.
@@ -711,19 +692,6 @@ public abstract class SMSDispatcher extends Handler {
         intent.putExtra("format", getFormat());
         intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
         dispatch(intent, RECEIVE_SMS_PERMISSION);
-    }
-
-    /**
-     * Dispatches standard PDUs to interested applications
-     * 
-     * @param pdus The raw PDUs making up the message
-     */
-    protected void dispatchSmsCB(byte[][] pages) {
-        Log.i("SMSDispatcher", "dispatchSmsCB");
-        Intent intent = new Intent(Intents.SMSCB_RECEIVED_ACTION);
-        intent.putExtra("pages", pages);
-        intent.putExtra(Phone.PHONE_ID, mPhone.getPhoneId());
-        dispatch(intent, "android.permission.RECEIVE_SMSCB");
     }
 
     /**
@@ -1223,17 +1191,5 @@ public abstract class SMSDispatcher extends Handler {
             Log.d(TAG, "Dispatching SMS CB");
             dispatch(intent, RECEIVE_SMS_PERMISSION);
         }
-    }
-
-    public void activateCellBroadcastSms(int activate, Message response) {
-        // TODO Auto-generated method stub
-    }
-
-    public void getCellBroadcastSmsConfig(Message response) {
-        // TODO Auto-generated method stub
-    }
-
-    public void setCellBroadcastConfig(int[] configValuesArray, Message response) {
-        // TODO Auto-generated method stub
     }
 }

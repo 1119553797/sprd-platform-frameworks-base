@@ -1656,20 +1656,18 @@ public abstract class GSMPhone extends PhoneBase {
      * @param response Callback message is empty on completion
      */
     public void activateCellBroadcastSms(int activate, Message response) {
-        Log.i(LOG_TAG, "[GSMPhone] activateCellBroadcastSms() is obsolete; use SmsManager");
-        mSMS.activateCellBroadcastSms(activate,response);
-//        response.sendToTarget();
+        Log.e(LOG_TAG, "[GSMPhone] activateCellBroadcastSms() is obsolete; use SmsManager");
+        response.sendToTarget();
     }
 
     /**
      * Query the current configuration of cdma cell broadcast SMS.
-     u
+     *
      * @param response Callback message is empty on completion
      */
     public void getCellBroadcastSmsConfig(Message response) {
-        Log.i(LOG_TAG, "[GSMPhone] getCellBroadcastSmsConfig() is obsolete; use SmsManager");
-        mSMS.getCellBroadcastSmsConfig(response);
-//        response.sendToTarget();
+        Log.e(LOG_TAG, "[GSMPhone] getCellBroadcastSmsConfig() is obsolete; use SmsManager");
+        response.sendToTarget();
     }
 
     /**
@@ -1678,9 +1676,8 @@ public abstract class GSMPhone extends PhoneBase {
      * @param response Callback message is empty on completion
      */
     public void setCellBroadcastSmsConfig(int[] configValuesArray, Message response) {
-        Log.i(LOG_TAG, "[GSMPhone] setCellBroadcastSmsConfig() is obsolete; use SmsManager");
-        mSMS.setCellBroadcastConfig(configValuesArray,response);
-//        response.sendToTarget();
+        Log.e(LOG_TAG, "[GSMPhone] setCellBroadcastSmsConfig() is obsolete; use SmsManager");
+        response.sendToTarget();
     }
 
     public boolean isCspPlmnEnabled() {

@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.os.AsyncResult;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.SystemProperties;
@@ -281,18 +280,6 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
 
         return processMessagePart(userData, address, referenceNumber, segment, totalSegments,
                 0L, destinationPort, true);
-    }
-
-    /**
-     * Called when received sms cell broadcast
-     * 
-     * @param ar AsyncResult passed into the message handler. ar.result should
-     *            be a String representing the status report PDU, as ASCII hex.
-     */
-    protected void handleSmsCB(AsyncResult ar) {
-
-        // is not implemented
-
     }
 
     /** {@inheritDoc} */
