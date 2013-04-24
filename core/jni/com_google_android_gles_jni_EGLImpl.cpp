@@ -34,6 +34,7 @@
 #include <SkPixelRef.h>
 
 #include <ui/ANativeObjectBase.h>
+#include <unistd.h>
 
 namespace android {
 
@@ -327,6 +328,29 @@ not_valid_surface:
     }
 
     window = android_Surface_getNativeWindow(_env, native_window);
+    /* add for bug 135584 b */
+    /* @description:
+     * sometimes when the opegl thread get the surface,
+     * however,the surface created by surfaceView hasn't
+     * finished or done yet,the window will be null.
+     * @reason:
+     * maybe because of the time sequence problem in between the
+     * two threads.
+     * @solutions:
+     * in order not to influence on the logic of code, we may try some
+     * time to fetch window again and again until it is created
+     * in 500ms.
+     * */
+    int retryCount = 0;
+    while (window == NULL){
+    	usleep(10000);
+    	retryCount++;
+    	if(retryCount > 50){	/* not over 500ms */
+    		break;
+    	}
+    	window = android_Surface_getNativeWindow(_env, native_window);
+    }
+    /* add for bug 135584 e */
     if (window == NULL)
         goto not_valid_surface;
 
