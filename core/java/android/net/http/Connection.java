@@ -393,7 +393,21 @@ abstract class Connection {
         } catch (IOException e) {
             error = EventHandler.ERROR_CONNECT;
             exception = e;
-        }
+            // add 20130416 spreadst of fix bug 152300 start
+        } catch (RuntimeException e) {
+                Throwable throwable = e.getCause();
+                if(throwable != null && throwable instanceof javax.security.cert.CertificateException){
+                    req.mFailCount = RETRY_REQUEST_LIMIT;
+                    HttpLog.v("SSL exception performing handshake:" + e);
+                    error = EventHandler.ERROR_FAILED_SSL_HANDSHAKE;
+                    exception = e;
+                 }else{
+                    HttpLog.v("openConnection exception:" + e);
+                    error = EventHandler.ERROR;
+                    exception = e;
+                 }
+         }
+        // add 20130416 spreadst of fix bug 152300 end
 
         if (HttpLog.LOGV) {
             long now2 = SystemClock.uptimeMillis();
