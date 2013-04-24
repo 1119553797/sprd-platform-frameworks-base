@@ -260,7 +260,7 @@ public final class VideoCallTracker extends CallTracker {
         // AT+CHLD=0 means "release held or UDUB"
         // so if the phone isn't ringing, this could hang up held
         if (ringingCall.getState().isRinging()) {
-            internalHangup();
+            cm.rejectCall(obtainCompleteMessage());
         } else {
             throw new CallStateException("phone not ringing");
         }
@@ -474,9 +474,13 @@ public final class VideoCallTracker extends CallTracker {
                     // Someone has already asked to hangup this call
                     if (hangupPendingMO) {
                         hangupPendingMO = false;
-                        if (Phone.DEBUG_PHONE) log(
-                                "poll: hangupPendingMO, hangup conn " + i);
-                        hangupConnection(connections[0]);
+                        try {
+                            if (Phone.DEBUG_PHONE) log(
+                                    "poll: hangupPendingMO, hangup conn " + i);
+                            hangup(connections[i]);
+                        } catch (CallStateException ex) {
+                            Log.e(LOG_TAG, "unexpected error on hangup");
+                        }
 
                         // Do not continue processing this poll
                         // Wait for hangup and repoll
@@ -497,7 +501,7 @@ public final class VideoCallTracker extends CallTracker {
             			cm.hangupWaitingOrBackground(obtainCompleteMessage());
             			break;
                 }*/
-                    connections[i] = new VideoConnection(phone.getContext(), dc, this, i);
+                    connections[i] = new VideoConnection(phone.getContext(), dc, this, dc.index);
 
                     // it's a ringing call
                     if (connections[i].getCall() == ringingCall) {
@@ -535,7 +539,7 @@ public final class VideoCallTracker extends CallTracker {
                 // we were tracking. Assume dropped call and new call
 
                 droppedDuringPoll.add(conn);
-                connections[i] = new VideoConnection (phone.getContext(), dc, this, i);
+                connections[i] = new VideoConnection (phone.getContext(), dc, this, dc.index);
 
                 if (connections[i].getCall() == ringingCall) {
                     newRinging = connections[i];
@@ -671,7 +675,7 @@ public final class VideoCallTracker extends CallTracker {
             throw new CallStateException ("VideoConnection " + conn
                                     + "does not belong to VideoCallTracker " + this);
         }
-		Log.w(LOG_TAG,"hangup begin");
+
         if (conn == pendingMO) {
             // We're hanging up an outgoing call that doesn't have it's
             // GSM index assigned yet
@@ -679,7 +683,14 @@ public final class VideoCallTracker extends CallTracker {
             if (Phone.DEBUG_PHONE) log("hangup: set hangupPendingMO to true");
             hangupPendingMO = true;
         } else {
-			internalHangup();
+            try {
+                cm.hangupConnection (conn.getGSMIndex(), obtainCompleteMessage());
+            } catch (CallStateException ex) {
+                // Ignore "connection not found"
+                // Call may have hung up already
+                Log.w(LOG_TAG,"GsmCallTracker WARN: hangup() on absent connection "
+                                + conn);
+            }
         }
 
         conn.onHangupLocal();
@@ -723,17 +734,79 @@ public final class VideoCallTracker extends CallTracker {
         if (call.getConnections().size() == 0) {
             throw new CallStateException("no connections in call");
         }
-		
-        Log.w(LOG_TAG, "fhy: call.isRinging():" + call.isRinging());
-        if (call.isRinging()) {
-            internalHangupWithReason(17);
-        } else {
-            internalHangup();
-        }
 
+        if (call == ringingCall) {
+            if (Phone.DEBUG_PHONE) log("(ringing) hangup waiting or background");
+            cm.hangupWaitingOrBackground(obtainCompleteMessage());
+        } else if (call == foregroundCall) {
+            if (call.isDialingOrAlerting()) {
+                if (Phone.DEBUG_PHONE) {
+                    log("(foregnd) hangup dialing or alerting...");
+                }
+                hangup((VideoConnection)(call.getConnections().get(0)));
+            } else {
+                hangupForegroundResumeBackground();
+            }
+        } else if (call == backgroundCall) {
+            if (ringingCall.isRinging()) {
+                if (Phone.DEBUG_PHONE) {
+                    log("hangup all conns in background call");
+                }
+                hangupAllConnections(call);
+            } else {
+                hangupWaitingOrBackground();
+            }
+        } else {
+            throw new RuntimeException ("VideoCall " + call +
+                    "does not belong to GsmCallTracker " + this);
+        }
 
         call.onHangupLocal();
         phone.notifyPreciseVideoCallStateChanged();
+    }
+
+    /* package */
+    void hangupWaitingOrBackground() {
+        if (Phone.DEBUG_PHONE) log("hangupWaitingOrBackground");
+        cm.hangupWaitingOrBackground(obtainCompleteMessage());
+    }
+
+    /* package */
+    void hangupForegroundResumeBackground() {
+        if (Phone.DEBUG_PHONE) log("hangupForegroundResumeBackground");
+        cm.hangupForegroundResumeBackground(obtainCompleteMessage());
+    }
+
+    void hangupConnectionByIndex(VideoCall call, int index)
+            throws CallStateException {
+        int count = call.connections.size();
+        for (int i = 0; i < count; i++) {
+            VideoConnection cn = (VideoConnection)call.connections.get(i);
+            if (cn.getGSMIndex() == index) {
+                cm.hangupConnection(index, obtainCompleteMessage());
+                return;
+            }
+        }
+
+        throw new CallStateException("no gsm index found");
+    }
+
+    void hangupAllConnections(VideoCall call) throws CallStateException{
+        /*
+        try {
+            int count = call.connections.size();
+            for (int i = 0; i < count; i++) {
+                VideoConnection cn = (VideoConnection)call.connections.get(i);
+                cm.hangupConnection(cn.getGSMIndex(), obtainCompleteMessage());
+            }
+        } catch (CallStateException ex) {
+            Log.e(LOG_TAG, "hangupConnectionByIndex caught " + ex);
+        }
+        */
+       //add by chengyake for NEWMS00132975 at Wednesday, November 23 2011 begin
+       cm.endAllConnections(obtainCompleteMessage());
+       //add by chengyake for NEWMS00132975 at Wednesday, November 23 2011 end
+
     }
 
     /* package */
@@ -828,13 +901,13 @@ public final class VideoCallTracker extends CallTracker {
                             causeCode, loc != null ? loc.getCid() : -1,
                             TelephonyManager.getDefault().getNetworkType());
                 }
-				
-		for (int i = 0, s =  droppedDuringPoll.size(); i < s ; i++) {
-	        VideoConnection conn = droppedDuringPoll.get(i);
-	        conn.onRemoteDisconnect((Integer)causeCode);
-	    }
 
-	    updatePhoneState();
+                for (int i = 0, s =  droppedDuringPoll.size(); i < s ; i++) {
+                    VideoConnection conn = droppedDuringPoll.get(i);
+                    conn.onRemoteDisconnect((Integer)causeCode);
+                }
+
+            updatePhoneState();
             phone.notifyPreciseVideoCallStateChanged();
             droppedDuringPoll.clear();
             break;
@@ -852,15 +925,15 @@ public final class VideoCallTracker extends CallTracker {
                 handleRadioNotAvailable();
             break;
 
-			case EVENT_FALLBACK:
-				phone.notifyVideoCallFallBack((AsyncResult)msg.obj);
-			break;
-			case EVENT_VIDEOCALLFAIL:
-				phone.notifyVideoCallFail((AsyncResult)msg.obj);
-			break;
-			case EVENT_VIDEOCALLCODEC:
-				phone.notifyVideoCallCodec((AsyncResult)msg.obj);
-			break;
+            case EVENT_FALLBACK:
+                phone.notifyVideoCallFallBack((AsyncResult)msg.obj);
+            break;
+            case EVENT_VIDEOCALLFAIL:
+                phone.notifyVideoCallFail((AsyncResult)msg.obj);
+            break;
+            case EVENT_VIDEOCALLCODEC:
+                phone.notifyVideoCallCodec((AsyncResult)msg.obj);
+            break;
         }
     }
 
@@ -868,41 +941,15 @@ public final class VideoCallTracker extends CallTracker {
         Log.d(LOG_TAG, "[VideoCallTracker] " + msg);
     }
 
-	void hangupConnection(VideoConnection conn)
-	{
-		Log.w(LOG_TAG,"hangupConnection");
-        internalHangup();
-	}
+    public boolean isAlive(){
+        if (state != Phone.State.IDLE)
+            return true;
+        else
+            return false;
+        //return (foregroundCall.getState().isAlive() || ringingCall.getState().isAlive());
+    };
 
-	public boolean isAlive(){
-		if (state != Phone.State.IDLE)
-			return true;
-		else
-			return false;
-		//return (foregroundCall.getState().isAlive() || ringingCall.getState().isAlive());
-	};
-
-	private void internalHangup(){
-		try{
-			cm.hangupVP(obtainCompleteMessage(), -1);	
-		}catch (IllegalStateException ex) {
-	        // Ignore "connection not found"
-	        // Call may have hung up already
-	        Log.w(LOG_TAG,"internaleHangup failed");
-	    }
-	}
-
-	private void internalHangupWithReason(int reason){
-		try{
-			cm.hangupVP(obtainCompleteMessage(), reason);	
-		}catch (IllegalStateException ex) {
-	        // Ignore "connection not found"
-	        // Call may have hung up already
-	        Log.w(LOG_TAG,"internaleHangup failed");
-	    }
-	}
-
-	protected void pollCallsWhenSafe() {
+    protected void pollCallsWhenSafe() {
         needsPoll = true;
 
         if (checkNoOperationsPending()) {
