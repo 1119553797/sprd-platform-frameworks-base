@@ -40,6 +40,7 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Displays the time
@@ -86,7 +87,7 @@ public class DigitalClock extends RelativeLayout {
         }
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, final Intent intent) {
             // Post a runnable to avoid blocking the broadcast.
             final boolean timezoneChanged =
                     intent.getAction().equals(Intent.ACTION_TIMEZONE_CHANGED);
@@ -95,7 +96,12 @@ public class DigitalClock extends RelativeLayout {
                 clock.mHandler.post(new Runnable() {
                     public void run() {
                         if (timezoneChanged) {
+                            final String tz = intent.getStringExtra("time-zone");
+                            final TimeZone timeZone = TimeZone.getTimeZone(tz);
                             clock.mCalendar = Calendar.getInstance();
+                            if (null != clock.mClockFormat) {
+                                clock.mClockFormat.setTimeZone(timeZone);
+                            }
                         }
                         clock.updateTime();
                     }
