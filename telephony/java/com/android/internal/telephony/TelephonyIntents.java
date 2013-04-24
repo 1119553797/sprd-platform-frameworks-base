@@ -191,7 +191,8 @@ public class TelephonyIntents {
      */
     public static final String ACTION_SIM_STATE_CHANGED
             = "android.intent.action.SIM_STATE_CHANGED";
-
+    // added for phone process restart,send broadcast for rebuilding the adn cache of sim contacts
+    public static final String ACTION_PHONE_RESTART = "android.intent.action.PHONE_RESTART";
 
     /**
      * Broadcast Action: The time was set by the carrier (typically by the NITZ string).
