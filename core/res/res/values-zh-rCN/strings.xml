@@ -1208,6 +1208,8 @@
 
     <string name="share" msgid="1778686618230011964">"分享"</string>
     <string name="find" msgid="4808270900322985960">"查找"</string>
+    <string name="find_prev_title" msgid="4808270900322985961">"上一个"</string>
+    <string name="find_next_title" msgid="4808270900322985962">"下一个"</string>
     <string name="websearch" msgid="4337157977400211589">"网页搜索"</string>
     <string name="gpsNotifTicker" msgid="5622683912616496172">"来自<xliff:g id="NAME">%s</xliff:g>的定位请求"</string>
     <string name="gpsNotifTitle" msgid="5446858717157416839">"定位请求"</string>

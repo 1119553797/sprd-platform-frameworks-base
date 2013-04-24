@@ -3402,6 +3402,8 @@
     <string name="find">Find</string>
     <!-- ActionBar action to use the current selection to perform a web search [CHAR-LIMIT=16] -->
     <string name="websearch">Web Search</string>
+    <string name="find_prev_title">Previous</string>
+    <string name="find_next_title">Next</string>
 
     <!-- Network positioning notification ticker. The name of the user (e.g. John Doe) who sent
          the request is shown as a dynamic string. -->
