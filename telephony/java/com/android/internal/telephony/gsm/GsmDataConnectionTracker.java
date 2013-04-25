@@ -1241,7 +1241,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         if (DBG) log("setupData: init dc and apnContext refCount=" + refCount);
 
         // configure retry count if no other Apn is using the same connection.
-        if (refCount == 0) {
+        if (refCount == 0 && apn != null) {
             configureRetry(dc, apn.canHandleType(Phone.APN_TYPE_DEFAULT),
                     apnContext.getRetryCount());
         }
