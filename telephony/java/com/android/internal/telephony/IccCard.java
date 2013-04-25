@@ -1053,6 +1053,7 @@ public class IccCard {
                     AsyncResult.forMessage(((Message)ar.userObj)).exception
                                                         = ar.exception;
                     ((Message)ar.userObj).sendToTarget();
+                    mPhone.mCM.getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE));
                     break;
                 case EVENT_CHANGE_FACILITY_FDN_DONE:
                     ar = (AsyncResult)msg.obj;
@@ -1105,6 +1106,9 @@ public class IccCard {
                     break;
                 case EVENT_CHANGE_ICC_PASSWORD_DONE:
                 case EVENT_CHANGE_FDN_PASSWORD_DONE:
+                    if (msg.what == EVENT_CHANGE_ICC_PASSWORD_DONE) {
+                        mPhone.mCM.getIccCardStatus(obtainMessage(EVENT_GET_ICC_STATUS_DONE));
+                    }
                     ar = (AsyncResult)msg.obj;
                     if(ar.exception != null) {
                         Log.e(mLogTag, "Error in change sim password with exception"
