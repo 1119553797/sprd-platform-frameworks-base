@@ -69,6 +69,7 @@ import android.os.RemoteException;
 import android.os.ResultReceiver;
 import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.provider.Settings.SettingNotFoundException;
@@ -3558,7 +3559,10 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         }
 
         public void putSelectedInputMethod(String imeId) {
+            String mode = SystemProperties.get("ro.bootmode", "mode");
+	    if (!"engtest".equals(mode)) {
             Settings.Secure.putString(mResolver, Settings.Secure.DEFAULT_INPUT_METHOD, imeId);
+	    }
         }
 
         public void putSelectedSubtype(int subtypeId) {
