@@ -121,7 +121,7 @@ public class MsmsFeatureManager {
         }
 
         public boolean equals(FeatureUser u) {
-            return mNetworkType == u.mNetworkType && mFeature == u.mFeature && mUid == u.mUid && mPid == u.mPid;
+            return mNetworkType == u.mNetworkType && mFeature.equals(u.mFeature) && mUid == u.mUid && mPid == u.mPid;
         }
     }
 
