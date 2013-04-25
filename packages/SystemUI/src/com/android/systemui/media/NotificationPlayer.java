@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.lang.IllegalStateException;
 import java.lang.Thread;
 import java.util.LinkedList;
+import android.os.SystemProperties;
 
 /**
  * @hide
@@ -101,6 +102,7 @@ public class NotificationPlayer implements OnCompletionListener {
                     player.prepare();
                     if ((mCmd.uri != null) && (mCmd.uri.getEncodedPath() != null)
                             && (mCmd.uri.getEncodedPath().length() > 0)) {
+                        SystemProperties.set("persist.sys.fm.notifyplayer", "true");
                         if (mCmd.looping) {
                             audioManager.requestAudioFocus(mAudioFocusListener, mCmd.stream,
                                     AudioManager.AUDIOFOCUS_GAIN);
@@ -190,6 +192,7 @@ public class NotificationPlayer implements OnCompletionListener {
                         mPlayer.stop();
                         mPlayer.release();
                         mPlayer = null;
+                        SystemProperties.set("persist.sys.fm.notifyplayer", "false");
                         mAudioManager.abandonAudioFocus(mAudioFocusListener);
                         mAudioManager = null;
                         if((mLooper != null)
@@ -219,6 +222,7 @@ public class NotificationPlayer implements OnCompletionListener {
 
     public void onCompletion(MediaPlayer mp) {
         if (mAudioManager != null) {
+            SystemProperties.set("persist.sys.fm.notifyplayer", "false");
             mAudioManager.abandonAudioFocus(mAudioFocusListener);
         }
         // if there are no more sounds to play, end the Looper to listen for media completion
