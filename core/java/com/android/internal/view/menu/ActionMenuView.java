@@ -61,7 +61,9 @@ public class ActionMenuView extends LinearLayout implements MenuBuilder.ItemInvo
         final float density = context.getResources().getDisplayMetrics().density;
         mMinCellSize = (int) (MIN_CELL_SIZE * density);
         mGeneratedItemPadding = (int) (GENERATED_ITEM_PADDING * density);
-
+        if (UNIVERSE_UI_SUPPORT) {
+	    setShowDividers(SHOW_DIVIDER_MIDDLE);
+        } 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ActionBar,
                 R.attr.actionBarStyle, 0);
         mMaxItemHeight = a.getDimensionPixelSize(R.styleable.ActionBar_height, 0);
