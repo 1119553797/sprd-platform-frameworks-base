@@ -397,6 +397,12 @@ class MountService extends IMountService.Stub
                         return;
                     }
 
+                    if(Environment.SECOND_STORAGE_TYPE_NAND == Environment.getSecondStorageType()
+                            && Environment.getSecondStorageDirectory().getPath().equals(ucb.path)){
+                        Slog.w(TAG, "no need to unmount for nand: " + ucb.path);
+                        return;
+                    }
+
                     mForceUnmounts.add(ucb);
                     if (DEBUG_UNMOUNT) Slog.i(TAG, " registered = " + mUpdatingStatus);
                     // Register only if needed.
