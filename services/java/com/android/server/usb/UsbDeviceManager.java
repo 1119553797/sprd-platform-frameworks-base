@@ -746,11 +746,11 @@ public class UsbDeviceManager {
 
                     if (mTetherEnabled){
                         functions = addFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
-                        functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
                         if (adbEnabled) {
+                            functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
                             functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                            functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
                         }
-                        functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
                     } else {
                         functions = addFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
                         if (adbEnabled) {
@@ -857,11 +857,11 @@ public class UsbDeviceManager {
 
                     if (mTetherEnabled){
                         functions = addFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
-                        functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
                         if (mAdbEnabled) {
+                            functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
                             functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                            functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
                         }
-                        functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
                     } else {
                         functions = addFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
                         if (mAdbEnabled) {
