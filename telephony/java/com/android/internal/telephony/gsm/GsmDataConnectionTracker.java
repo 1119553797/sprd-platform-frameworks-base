@@ -702,6 +702,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
         boolean allowed =
                     (gprsState == ServiceState.STATE_IN_SERVICE || mAutoAttachOnCreation) &&
+                    (mPhone.getServiceState().getState() == ServiceState.STATE_IN_SERVICE) &&
                     mPhone.mIccRecords.getRecordsLoaded() &&
                     (mPhone.getState() == Phone.State.IDLE ||
                      mPhone.getServiceStateTracker().isConcurrentVoiceAndDataAllowed()) &&
@@ -713,6 +714,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             String reason = "";
             if (!((gprsState == ServiceState.STATE_IN_SERVICE) || mAutoAttachOnCreation)) {
                 reason += " - gprs= " + gprsState;
+            }
+            if (mPhone.getServiceState().getState() != ServiceState.STATE_IN_SERVICE) {
+                reason += " - gsm= " + mPhone.getServiceState().getState();
             }
             if (!mPhone.mIccRecords.getRecordsLoaded()) reason += " - SIM not loaded";
             if (mPhone.getState() != Phone.State.IDLE &&
