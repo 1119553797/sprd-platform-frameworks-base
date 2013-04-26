@@ -1237,10 +1237,18 @@ public class Camera {
      * @see Parameters#getMaxNumDetectedFaces()
      */
     public final void startFaceDetection() {
+    	Parameters parameters  = new Parameters();
         if (mFaceDetectionRunning) {
             throw new RuntimeException("Face detection is already running");
         }
-        _startFaceDetection(CAMERA_FACE_DETECTION_HW);
+
+		Log.e(TAG, "getMaxNumDetectedFaces" + parameters.getMaxNumDetectedFaces());
+		if (parameters.getMaxNumDetectedFaces() == 0) {
+            throw new RuntimeException("Throw an exception because face detection is not supported.");
+		} else {
+		    _startFaceDetection(CAMERA_FACE_DETECTION_HW);
+		}
+
         mFaceDetectionRunning = true;
     }
 
