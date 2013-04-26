@@ -1,5 +1,13 @@
+
 package com.android.systemui.statusbar.phone;
 
+import android.sim.Sim;
+import android.sim.SimManager;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.view.WindowManager;
+import android.content.DialogInterface;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -36,6 +44,8 @@ import com.android.internal.telephony.PhoneStateIntentReceiver;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.ToggleViewGroup;
+import com.android.systemui.statusbar.phone.DataListAdapter;
+import android.telephony.TelephonyManager;
 
 public class ToggleListener extends BroadcastReceiver implements View.OnClickListener {
     private static final String TAG = "ToggleListener";
@@ -63,7 +73,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     private final ContentResolver mResolver;
     private AudioManager mAudioManager;
     private WifiManager mWifiManager;
-    private ConnectivityManager mConnManager;
+    private ConnectivityManager mSimConnManager[], mConnManager;
     private BluetoothAdapter mBluetoothAdapter;
     private TelephonyManager[] mTelephonyManagers;
     private PhoneStateListener[] mPhoneStateListener;
@@ -80,9 +90,13 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     private boolean mAirplaneEnable;
     private boolean mGpsEnable;
     private boolean mAutorotateEnable;
+    private int simNum = 0;
+    private int setPhoneId = 0;
 
     // indicate whether the data network is on
     private boolean mDataDefaultNetworkOn = false;
+    private AlertDialog alertDialog = null;
+    boolean closeFlag = true;
 
     public ToggleListener(ToggleViewGroup toggleViewGroup) {
         mToggleViewGroup = toggleViewGroup;
@@ -102,16 +116,18 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         mTelephonyManagers = new TelephonyManager[numPhones];
         mPhoneStateListener = new PhoneStateListener[numPhones];
-        mServiceState= new ServiceState[numPhones];
+        mServiceState = new ServiceState[numPhones];
         for (int i = 0; i < numPhones; i++) {
             mTelephonyManagers[i] = (TelephonyManager) mContext.getSystemService(PhoneFactory
                     .getServiceName(Context.TELEPHONY_SERVICE, i));
         }
-        for (int i = 0; i <numPhones; i++) {
+        for (int i = 0; i < numPhones; i++) {
             mTelephonyManagers[i] = (TelephonyManager) mContext.getSystemService(PhoneFactory
                     .getServiceName(Context.TELEPHONY_SERVICE, i));
-            mTelephonyManagers[i].listen(mPhoneStateListener(i), PhoneStateListener.LISTEN_SERVICE_STATE);
+            mTelephonyManagers[i].listen(mPhoneStateListener(i),
+                    PhoneStateListener.LISTEN_SERVICE_STATE);
         }
+
         updateWifiButton();
         updateBluetoothButton();
         updateDataNetworkButton();
@@ -139,7 +155,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                 }
                 break;
             case R.id.quick_switch_mobile_net_toggle:
-                toggleDataNetwork();
+                toggleAutoDataConnection();
                 break;
             case R.id.quick_switch_sound_toggle:
                 toggleSoundMode();
@@ -153,7 +169,8 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             case R.id.quick_switch_airplane_toggle:
                 toggleAirplane();
                 mHandler.removeMessages(EVENT_AIRPLANE_SWITCH_DELAY_MESSAGE);
-                mHandler.sendEmptyMessageDelayed(EVENT_AIRPLANE_SWITCH_DELAY_MESSAGE, DELAY_AIRPLANE_SET_TIME);
+                mHandler.sendEmptyMessageDelayed(EVENT_AIRPLANE_SWITCH_DELAY_MESSAGE,
+                        DELAY_AIRPLANE_SET_TIME);
                 break;
             case R.id.quick_switch_auto_rotate_toggle:
                 toggleAutoRotate();
@@ -162,7 +179,6 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                 break;
         }
     }
-
     public void registerReceiver() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
@@ -173,6 +189,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         filter.addAction(AudioManager.VIBRATE_SETTING_CHANGED_ACTION);
         filter.addAction(Intent.ACTION_DEFAULT_PHONE_CHANGE);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
+        filter.addAction(Intent.ACTION_DATA_CONNECTION_DETTACH);
         mToggleViewGroup.getContext().registerReceiver(this, filter);
 
         // listen the fields changed, then refresh the UI
@@ -208,10 +225,11 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         mContext.getContentResolver().unregisterContentObserver(mAutoRotateChangedObserver);
         mContext.getContentResolver().unregisterContentObserver(mMobileDataObserver);
         mContext.getContentResolver().unregisterContentObserver(mRadioBusyObserver);
-        Log.d(TAG,"unregisterReceiver");
-        if (mPhoneStateListener!=null&&mTelephonyManagers!=null) {
-            for (int i =0;i<mTelephonyManagers.length;i++) {
-                mTelephonyManagers[i].listen(mPhoneStateListener[i], PhoneStateListener.LISTEN_NONE);
+        Log.d(TAG, "unregisterReceiver");
+        if (mPhoneStateListener != null && mTelephonyManagers != null) {
+            for (int i = 0; i < mTelephonyManagers.length; i++) {
+                mTelephonyManagers[i]
+                        .listen(mPhoneStateListener[i], PhoneStateListener.LISTEN_NONE);
                 mPhoneStateListener[i] = null;
                 mTelephonyManagers[i] = null;
             }
@@ -219,7 +237,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         mTelephonyManagers = null;
         mPhoneStateListener = null;
     }
-
+    
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
@@ -239,6 +257,10 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             Log.d(TAG, "ACTION_DEFAULT_PHONE_CHANGE");
             // getSimCardStatus();
             updateDataNetworkButton();
+        } else if (action.equals(Intent.ACTION_DATA_CONNECTION_DETTACH)) {
+            Log.d(TAG, "ACTION_DATA_CONNECTION_DETTACH");
+            updateButtonImage(R.id.quick_switch_mobile_net_icon, sDataNetSyncImages[0]);
+            dataViewEnable(true);
         }
     }
 
@@ -337,27 +359,12 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                     Toast.LENGTH_SHORT).show();
             return;
         }
-
-        int imageIndex = 1;
-        int[] dataNetSyncImages = new int[2];
-        dataNetSyncImages = sDataNetSyncImages;
-
-        if (noCanUsedCard()) {
-            updateButtonImage(R.id.quick_switch_mobile_net_icon, dataNetSyncImages[imageIndex]);
-            return;
+        if (alertDialog != null)
+            alertDialog.dismiss();
+        updateButtonImage(R.id.quick_switch_mobile_net_icon, sDataNetSyncImages[1]);
+        if (closeFlag) {
+            dataViewEnable(false);
         }
-
-        if (numPhones > 1) {
-            mDataDefaultNetworkOn = !mConnManager.getMobileDataEnabledByPhoneId(TelephonyManager
-                    .getDefaultDataPhoneId(mContext));
-            mConnManager.setMobileDataEnabled(mDataDefaultNetworkOn);
-        } else {
-            mDataDefaultNetworkOn = !mConnManager.getMobileDataEnabled();
-            mConnManager.setMobileDataEnabled(mDataDefaultNetworkOn);
-        }
-
-        imageIndex = mDataDefaultNetworkOn ? 0 : 1;
-        updateButtonImage(R.id.quick_switch_mobile_net_icon, dataNetSyncImages[imageIndex]);
     }
 
     private void updateDataNetworkButton() {
@@ -390,8 +397,9 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             // reset before mode and set
             int lastMode = mRingerModeSharePre.getInt("soundmode", 2);
             boolean isVibrate = mRingerModeSharePre.getBoolean("vibratemode", false);
-            if (lastMode == AudioManager.RINGER_MODE_NORMAL || lastMode == AudioManager.RINGER_MODE_OUTDOOR) {
-                    mAudioManager.setRingerMode(lastMode);
+            if (lastMode == AudioManager.RINGER_MODE_NORMAL
+                    || lastMode == AudioManager.RINGER_MODE_OUTDOOR) {
+                mAudioManager.setRingerMode(lastMode);
                 if (isVibrate) {
                     mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ON);
@@ -425,6 +433,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                     AudioManager.VIBRATE_SETTING_OFF);
         }
     }
+
     private void updateSoundModeButton() {
         boolean isSilent = mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
         int iconId = R.drawable.quick_switch_general_on_sprd;
@@ -530,7 +539,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
 
     /**
      * Gets state of brightness mode.
-     *
+     * 
      * @param context
      * @return true if auto brightness is on.
      */
@@ -551,7 +560,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
 
     /**
      * Gets brightness level.
-     *
+     * 
      * @param context
      * @return brightness level between 0 and 255.
      */
@@ -577,7 +586,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         } catch (SettingNotFoundException e) {
             e.printStackTrace();
         }
-        Log.d(TAG,"toggleAirplane");
+        Log.d(TAG, "toggleAirplane");
         TelephonyManager.setRadioBusy(mContext, true);
         airPlaneViewEnable(false);
         Settings.System.putInt(this.mContext.getContentResolver(),
@@ -636,11 +645,11 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     private boolean noCanUsedCard() {
         if (numPhones > 1) {
             boolean noCanUsed = true;
-            for (int i=0;i<numPhones;i++){
-                noCanUsed &= (!hasCard[i] || isStandby[i]) ;
+            for (int i = 0; i < numPhones; i++) {
+                noCanUsed &= (!hasCard[i] || isStandby[i]);
             }
             Log.d(TAG, "noCanUsed= " + noCanUsed);
-            if(noCanUsed){
+            if (noCanUsed) {
                 Log.d(TAG, "updateDataNetworkBtn dsds  no card or standby");
                 return true;
             }
@@ -652,12 +661,14 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         }
         return false;
     }
+
     private PhoneStateListener mPhoneStateListener(final int phoneId) {
         PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
             @Override
             public void onServiceStateChanged(ServiceState serviceState) {
-                mServiceState[phoneId]=serviceState;
-                Log.d(TAG,"onServiceStateChanged phoneId " + phoneId + " serviceState:" + serviceState);
+                mServiceState[phoneId] = serviceState;
+                Log.d(TAG, "onServiceStateChanged phoneId " + phoneId + " serviceState:"
+                        + serviceState);
                 boolean inAirplaneMode = isAllRadioOFF();
                 boolean mIsAirPlane = isAirplaneModeOn(mContext);
                 if (inAirplaneMode == mIsAirPlane) {
@@ -670,10 +681,12 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         return mPhoneStateListener;
     }
 
-    private boolean isAllRadioOFF(){
-        for(int i=0;i<numPhones;i++){
-            if (mTelephonyManagers[i] != null && mTelephonyManagers[i].hasIccCard() == true && isStandby(i)) {
-                if (mServiceState[i] != null && mServiceState[i].getState() != ServiceState.STATE_POWER_OFF) {
+    private boolean isAllRadioOFF() {
+        for (int i = 0; i < numPhones; i++) {
+            if (mTelephonyManagers[i] != null && mTelephonyManagers[i].hasIccCard() == true
+                    && isStandby(i)) {
+                if (mServiceState[i] != null
+                        && mServiceState[i].getState() != ServiceState.STATE_POWER_OFF) {
                     return false;
                 }
             }
@@ -681,15 +694,15 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         return true;
     }
 
-    private boolean isStandby (int phoneId) {
+    private boolean isStandby(int phoneId) {
         String tmpStr = null;
-        if(phoneId == 0){
+        if (phoneId == 0) {
             tmpStr = Settings.System.SIM_STANDBY;
-        }else{
+        } else {
             tmpStr = Settings.System.SIM_STANDBY + phoneId;
         }
         return Settings.System.getInt(mContext.getContentResolver(),
-            tmpStr, 1) == 1;
+                tmpStr, 1) == 1;
     }
 
     private Handler mHandler = new Handler() {
@@ -714,8 +727,14 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                 Settings.System.AIRPLANE_MODE_ON, 0) != 0;
     }
 
+    private void dataViewEnable(boolean enable) {
+        Log.d(TAG, "dataViewEnable " + enable);
+        LinearLayout dataView = (LinearLayout) mToggleViewGroup
+                .findViewById(R.id.quick_switch_mobile_net_toggle);
+        dataView.setEnabled(enable);
+    }
     private void airPlaneViewEnable(boolean enable) {
-        Log.d(TAG,"airPlaneViewEnable " + enable);
+        Log.d(TAG, "airPlaneViewEnable " + enable);
         LinearLayout airPlaneView = (LinearLayout) mToggleViewGroup
                 .findViewById(R.id.quick_switch_airplane_toggle);
         airPlaneView.setEnabled(enable);
@@ -728,6 +747,102 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         } catch (Exception e) {
             Slog.e(TAG, e.getMessage());
         }
+    }
+
+    private void toggleAutoDataConnection() {
+        if (mAirplaneEnable) {
+            Toast.makeText(mContext, R.string.datanetwork_error_airplane,
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        setPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+        SimManager simManager = SimManager.get(mContext);
+        if (simManager == null) {
+            Log.d(TAG, "simManager = " + null);
+        } else {
+            Log.d(TAG, "simManager = " + simManager);
+        }
+        Sim sim[];
+        final Sim sims[];
+        sim = simManager.getSims();
+        final int simNum = sim.length;
+        if (simNum == 0) {
+            return;
+        }
+        final int closeData = -1;
+        boolean isCloseData = false;
+        int mobileCount = 0;
+        mSimConnManager = new ConnectivityManager[simNum];
+        if (simNum > 0) {
+            sims = new Sim[simNum + 1];
+        } else {
+            sims = sim;
+        }
+        for (int i = 0; i < simNum; i++) {
+            sims[i] = sim[i];
+            mSimConnManager[i] = (ConnectivityManager) mContext
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (!mSimConnManager[i].getMobileDataEnabledByPhoneId(i)) {
+                mobileCount++;
+            }
+        }
+        if (mobileCount == simNum) {
+            isCloseData = true;
+        }
+        sims[simNum] = new Sim(closeData, null, mContext.getResources().getString(
+                R.string.closeData), 0);
+        DataListAdapter simsAdapter = new DataListAdapter(mContext, sims,
+                new View.OnClickListener() {
+
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        Log.w(TAG, "simsAdapter data-- position = " + v.getId());
+                        int position = v.getId();
+                        int phoneId = sims[v.getId()].getPhoneId();
+                        Log.d(TAG, "onClick-- position = " + phoneId);
+                        if (phoneId != -1) {
+                            Log.d(TAG, "enter into phoneid = " + phoneId);
+                            mSimConnManager[position].setMobileDataEnabledByPhoneId(phoneId, true);
+                            for (int i = 0; i < simNum; i++) {
+                                int indexPhoneId = sims[i].getPhoneId();
+                                if (phoneId == indexPhoneId) {
+                                    mSimConnManager[i].setMobileDataEnabledByPhoneId(phoneId,
+                                            true);
+                                } else {
+                                    mSimConnManager[i].setMobileDataEnabledByPhoneId(indexPhoneId,
+                                            false);
+                                }
+                            }
+                            closeFlag = true;
+
+                        } else {
+                            for (int i = 0; i < simNum; i++) {
+                                int indexPhoneId = sims[i].getPhoneId();
+                                mSimConnManager[i].setMobileDataEnabledByPhoneId(indexPhoneId,
+                                        false);
+                            }
+                            closeFlag = false;
+                            setPhoneId = -1;
+                        }
+                        toggleDataNetwork();
+                        if (phoneId != -1) {
+                            Intent intent = new Intent();
+                            intent.putExtra("SIM_ID", phoneId);
+                            intent.putExtra("SETTING_ID", setPhoneId);
+                            intent.setAction(Intent.ACTION_DATA_CONNECTION_CHANGED);
+                            mContext.sendBroadcast(intent);
+                        }
+                    }
+                }, com.android.internal.R.layout.select_sim_singlechoice, isCloseData);
+
+        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+        b.setCancelable(true)
+                .setTitle(R.string.dataConnectSetting)
+                .setInverseBackgroundForced(true);
+        b.setAdapter(simsAdapter, null);
+        alertDialog = b.create();
+        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ERROR);
+        alertDialog.show();
     }
 
     private void updateAutorotateButton() {
@@ -872,7 +987,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
 
     private void onRadioBusyStateChanged() {
         boolean isRadioBusy = TelephonyManager.isRadioBusy(mContext);
-        Log.d(TAG,"onRadioBusyStateChanged " + isRadioBusy);
+        Log.d(TAG, "onRadioBusyStateChanged " + isRadioBusy);
         airPlaneViewEnable(!isRadioBusy);
     }
 }

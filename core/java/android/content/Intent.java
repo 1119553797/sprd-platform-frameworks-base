@@ -2833,6 +2833,12 @@ public class Intent implements Parcelable, Cloneable {
     public static final String EXTRA_CHANGED_UID_LIST =
             "android.intent.extra.changed_uid_list";
 
+    public static final String ACTION_DATA_CONNECTION_CHANGED = 
+            "android.intent.action.DATA_CONNECTION_CHANGE_ACTION";
+    
+    public static final String ACTION_DATA_CONNECTION_DETTACH = 
+            "android.intent.action.DATA_DETTACH_ACTION";
+    
     /**
      * @hide
      * Magic extra system code can use when binding, to give a label for
