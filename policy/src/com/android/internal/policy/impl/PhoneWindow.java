@@ -57,6 +57,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.util.AndroidRuntimeException;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
@@ -145,6 +146,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     private DrawableFeatureState[] mDrawables;
 
     private PanelFeatureState[] mPanels;
+
+    private boolean mHasFloatKeyView = SystemProperties.getBoolean("ro.floatkey.show", false);
 
     /**
      * The panel that is prepared or opened (the most recent one if there are
@@ -834,6 +837,10 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                         playSoundEffect = true;
                     }
                 }
+            }
+
+            if (mHasFloatKeyView) {
+                playSoundEffect = false;
             }
 
             if (playSoundEffect) {
