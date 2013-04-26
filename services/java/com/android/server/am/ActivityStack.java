@@ -56,6 +56,7 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.UserId;
+import android.os.TransactionTooLargeException;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
@@ -1698,6 +1699,16 @@ final class ActivityStack {
                 
                 checkReadyForSleepLocked();
 
+            } catch (TransactionTooLargeException e1) {
+                try {
+                    next.app.thread.scheduleCrash("TransactionTooLargeException");
+                } catch (Exception err) {
+                    //
+                }
+                requestFinishActivityLocked(next.appToken, Activity.RESULT_CANCELED, null,
+                        "TransTooLarge");
+                mHandler.sendEmptyMessage(RESUME_TOP_ACTIVITY_MSG);
+                return true;
             } catch (Exception e) {
                 // Whoops, need to restart this activity!
                 if (DEBUG_STATES) Slog.v(TAG, "Resume failed; resetting state to "
