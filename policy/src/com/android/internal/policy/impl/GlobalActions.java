@@ -831,7 +831,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private static final int MESSAGE_REFRESH = 1;
     private static final int MESSAGE_SHOW = 2;
     private static final int DIALOG_DISMISS_DELAY = 300; // ms
-    protected static final int DELAY_AIRPLANE_SET_TIME = 5000; // time (msec)
+    protected static final int DELAY_AIRPLANE_SET_TIME = 30000; // time (msec)
     protected static final int EVENT_SERVICE_CHANGE_WAIT_TIMEOUT = 101;//message id
 
     private Handler mHandler = new Handler() {

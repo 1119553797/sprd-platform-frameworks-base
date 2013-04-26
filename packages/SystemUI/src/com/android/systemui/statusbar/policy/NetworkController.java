@@ -514,6 +514,7 @@ public class NetworkController extends BroadcastReceiver {
             updateAirplaneMode();
             for (int i=0; i < numPhones; i++) {
                 updateTelephonySignalStrength(i);
+                updateDataNetType(i);
                 refreshViews(i);
             }
         } else if (action.equals(SimManager.INSERT_SIMS_CHANGED_ACTION)){
@@ -664,11 +665,14 @@ public class NetworkController extends BroadcastReceiver {
             mAirplaneIconId = R.drawable.stat_sys_signal_flightmode;
             if (numPhones>1) {
                 mPhoneSignalIconId[numPhones-1] = mDataSignalIconId[numPhones-1] = R.drawable.stat_sys_signal_flightmode;
+                mSignalStrength[numPhones-1] = null;
                 for (int i=0; i < numPhones-1; i++) {
                     mPhoneSignalIconId[i] = mDataSignalIconId[i] = 0;
+                    mSignalStrength[i] = null;
                 }
             } else {
                 mPhoneSignalIconId[phoneId] = mDataSignalIconId[phoneId] = R.drawable.stat_sys_signal_flightmode;
+                mSignalStrength[phoneId] = null;
             }
             return;
         }
@@ -722,6 +726,14 @@ public class NetworkController extends BroadcastReceiver {
     }
 
     private final void updateDataNetType(int phoneId) {
+        if (mAirplaneMode) {
+            for (int i = 0; i < numPhones; i++) {
+                mDataNetType[i] = TelephonyManager.NETWORK_TYPE_UNKNOWN;
+                mDataTypeIconId[phoneId] = 0;
+                Log.d(TAG, "updateDataNetType AirplaneMode is on");
+            }
+            return;
+        }
         int mDataCondition = 0;
         if (mDataState[phoneId] == TelephonyManager.DATA_CONNECTED) {
             mDataCondition=1;
@@ -1345,7 +1357,8 @@ public class NetworkController extends BroadcastReceiver {
         }
 
         if (DEBUG) {
-            Slog.d(TAG, "refreshViews connected={"
+            Slog.d(TAG, "phoneId:"+ phoneId
+                    + "refreshViews connected={"
                     + (mWifiConnected?" wifi":"")
                     + (mDataConnected[phoneId]?" data":"")
                     + " } level="
