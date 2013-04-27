@@ -33,6 +33,8 @@ import android.view.View;
 
 import com.android.server.pm.ShutdownThread;
 
+import android.telephony.TelephonyManager;
+import android.telephony.PhoneStateListener;
 import android.media.MediaPlayer;
 import android.content.ContentResolver;
 import android.provider.Settings;
@@ -98,6 +100,21 @@ public class ShutdownFullscreenActivity extends Activity {
          filter.addAction(Intent.ACTION_BATTERY_OKAY);
          registerReceiver(mReceiver, filter);
         }
+
+        PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String ignored) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    ShutDownWakeLock.releaseCpuLock();
+                    myHandler.removeCallbacks(myRunnable);
+                    finish();
+                }
+            }
+        };
+
+        TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        mTelephonyManager.listen(mPhoneStateListener,
+                PhoneStateListener.LISTEN_CALL_STATE);
         requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
         Window win = getWindow();
         win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
