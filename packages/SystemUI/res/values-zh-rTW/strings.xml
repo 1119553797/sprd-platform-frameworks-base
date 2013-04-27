@@ -157,6 +157,8 @@
     <string name="weak_signal_title">信號弱</string>
     <string name="weak_signal_message">當前WLAN的信號較弱，建議您選擇信號較好的無線存取點</string>
     <string name="auto_connect">不再詢問，總是自動連接其他信任無線存取點</string>
+    <string name="dataConnectSetting" >數據連接</string>
+    <string name="closeData" >關閉</string>
     <!-- add by spreadst_lc for cmcc wifi feature end -->
     <!-- universe_ui_support -->
     <string name="datanetwork_error_airplane">手機處於飛行模式下,您不能使用數據網絡業務.</string>
