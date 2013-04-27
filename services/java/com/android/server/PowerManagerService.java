@@ -1814,7 +1814,7 @@ public class PowerManagerService extends IPowerManager.Stub
                         + " noChangeLights=" + noChangeLights
                         + " reason=" + reason);
             }
-            
+
             if (noChangeLights) {
                 newState = (newState & ~LIGHTS_MASK) | (mPowerState & LIGHTS_MASK);
             }
@@ -2654,6 +2654,22 @@ public class PowerManagerService extends IPowerManager.Stub
         }
     }
 
+    private int getAutoBrightnessButtonLightValue(int sensorValue, int[] values) {
+        try {
+            int i;
+            for (i = 0; i < mAutoBrightnessLevels.length; i++) {
+                if (sensorValue < mAutoBrightnessLevels[i]) {
+                    break;
+                }
+            }
+            return values[i];
+        } catch (Exception e) {
+            // guard against null pointer or index out of bounds errors
+            Slog.e(TAG, "getAutoBrightnessButtonLightValue", e);
+            return 255;
+        }
+    }
+
     private Runnable mProximityTask = new Runnable() {
         public void run() {
             synchronized (mLocks) {
@@ -2720,7 +2736,7 @@ public class PowerManagerService extends IPowerManager.Stub
                 // we only do this if we are undocked, since lighting should be stable when
                 // stationary in a dock.
                 int lcdValue = getAutoBrightnessValue(value, mLcdBacklightValues);
-                int buttonValue = getAutoBrightnessValue(value, mButtonBacklightValues);
+                int buttonValue = getAutoBrightnessButtonLightValue(value, mButtonBacklightValues);
                 int keyboardValue;
                 if (mKeyboardVisible) {
                     keyboardValue = getAutoBrightnessValue(value, mKeyboardBacklightValues);
