@@ -860,6 +860,12 @@ public abstract class SMSDispatcher extends Handler {
                 deliveryIntent = deliveryIntents.get(i);
             }
 
+            if (i == 0) {
+                mCm.setCMMS(1,null);
+            } else if (i == (msgCount - 1)) {
+                mCm.setCMMS(0,null);
+            }
+
             sendNewSubmitPdu(destAddr, scAddr, parts.get(i), smsHeader, encoding,
                     sentIntent, deliveryIntent, (i == (msgCount - 1)));
         }
