@@ -409,16 +409,16 @@
 
     <array name="lockscreen_targets_with_camera_uui">
         <item>@drawable/ic_lockscreen_unlock</item>
-        <item>@drawable/ic_lockscreen_call</item>
-        <item>@drawable/ic_lockscreen_camera</item>
         <item>@drawable/ic_lockscreen_sms</item>
+        <item>@drawable/ic_lockscreen_camera</item>
+        <item>@drawable/ic_lockscreen_call</item>
     </array>
 
     <array name="lockscreen_target_descriptions_with_camera_uui">
         <item>@string/description_target_unlock</item>
-        <item>@string/description_target_call</item>
-        <item>@string/description_target_camera</item>
         <item>@string/description_target_sms</item>
+        <item>@string/description_target_camera</item>
+        <item>@string/description_target_call</item>
     </array>
 
 </resources>
