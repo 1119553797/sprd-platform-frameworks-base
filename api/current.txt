@@ -13385,7 +13385,6 @@ package android.net.wifi {
     method public boolean saveConfiguration();
     method public boolean setAutoConnect(boolean);
     method public boolean setMobileToWifiPolicy(int);
-    method public boolean setTrustListPriority(java.lang.String, int);
     method public boolean setWifiEnabled(boolean);
     method public boolean startScan();
     method public int updateNetwork(android.net.wifi.WifiConfiguration);

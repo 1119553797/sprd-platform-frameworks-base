@@ -2144,6 +2144,13 @@ private NetworkStateTracker makeWimaxStateTracker() {
             }
         }
 
+        if (ConnectivityManager.getDefaultNetworkType(netType) == ConnectivityManager.TYPE_MOBILE) {
+            if (mNetTrackers[netType].getNetworkInfo().isConnected()) {
+                SystemProperties.set("gsm.gprs.attached", "true");
+            } else {
+                SystemProperties.set("gsm.gprs.attached", "false");
+            }
+        }
         // TODO: Temporary notifying upstread change to Tethering.
         //       @see bug/4455071
         /** Notify TetheringService if interface name has been changed. */

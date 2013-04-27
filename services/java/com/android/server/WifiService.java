@@ -1771,11 +1771,6 @@ public class WifiService extends IWifiManager.Stub {
         mWifiStateMachine.setAutoConnect(autoconnect);
     }
 
-    public boolean setTrustListPriority(String ssid,int priority){
-        enforceChangePermission();
-        return mWifiStateMachine.setTrustListPriority(ssid,priority);
-    }
-
     public boolean setMobileToWifiPolicy(int policy) {
         enforceChangePermission();
         return mWifiStateMachine.setMobileToWifiPolicy(policy);

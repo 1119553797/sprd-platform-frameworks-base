@@ -1961,16 +1961,6 @@ public class WifiManager {
         }
     }
 
-     public boolean setTrustListPriority(String ssid,int priority){
-         try {
-             return mService.setTrustListPriority(ssid,priority);
-         } catch (RemoteException e) {
-             // TODO Auto-generated catch block
-             e.printStackTrace();
-             return false;
-         }
-     }
-
     public boolean setMobileToWifiPolicy (int policy) {
         try {
             return mService.setMobileToWifiPolicy(policy);

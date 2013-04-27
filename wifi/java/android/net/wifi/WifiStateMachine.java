@@ -3915,10 +3915,6 @@ public class WifiStateMachine extends StateMachine {
         mWifiNative.setAutoConnectCommand(autoconnect);
     }
 
-    public synchronized boolean setTrustListPriority(String ssid,int priority){
-        return mWifiNative.setPriorityCommand(ssid, priority);
-    }
-
     public boolean setMobileToWifiPolicy(int policy){
         return mWifiNative.setMobileToWifiPolicy(policy);
     }

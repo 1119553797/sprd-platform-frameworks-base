@@ -54,9 +54,6 @@ public class WifiNative {
     public boolean setAutoConnectCommand(boolean autoconnect) {
         return doBooleanCommand(autoconnect ? "CONNECT_MODE 1" : "CONNECT_MODE 0");
     }
-    public boolean setPriorityCommand(String ssid,int priority) {
-        return doBooleanCommand("SET_PRIORITY " + ssid + " " + priority);
-    }
 
     public boolean setMobileToWifiPolicy(int policy) {
         return doBooleanCommand("MOBILE2WLAN_POLICY "+policy);
