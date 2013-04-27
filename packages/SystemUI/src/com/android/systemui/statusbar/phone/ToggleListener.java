@@ -759,9 +759,8 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         SimManager simManager = SimManager.get(mContext);
         if (simManager == null) {
             Log.d(TAG, "simManager = " + null);
-        } else {
-            Log.d(TAG, "simManager = " + simManager);
-        }
+            return;
+        } 
         Sim sim[];
         final Sim sims[];
         sim = simManager.getSims();
@@ -814,7 +813,6 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                                 }
                             }
                             closeFlag = true;
-
                         } else {
                             for (int i = 0; i < simNum; i++) {
                                 int indexPhoneId = sims[i].getPhoneId();
