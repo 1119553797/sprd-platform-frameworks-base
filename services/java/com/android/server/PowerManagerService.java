@@ -1412,6 +1412,8 @@ public class PowerManagerService extends IPowerManager.Stub
             Slog.i(TAG, "sendNotificationLocked: " + on, here);
         }
 
+        Log.i(TAG, "sendNotificationLocked on = " + on + ", why = " + why);
+
         if (!on) {
             mStillNeedSleepNotification = false;
         }
@@ -1517,6 +1519,7 @@ public class PowerManagerService extends IPowerManager.Stub
 
                     policy.screenTurningOn(mScreenOnListener);
                     try {
+                        Log.i(TAG, "wake up Activity why = " + why);
                         ActivityManagerNative.getDefault().wakingUp();
                     } catch (RemoteException e) {
                         // ignore it
@@ -1541,6 +1544,7 @@ public class PowerManagerService extends IPowerManager.Stub
 
                     policy.screenTurnedOff(why);
                     try {
+                        Log.i(TAG, "sleep Activity why = " + why);
                         ActivityManagerNative.getDefault().goingToSleep();
                     } catch (RemoteException e) {
                         // ignore it.
@@ -1866,6 +1870,7 @@ public class PowerManagerService extends IPowerManager.Stub
 
 
             if (oldScreenOn != newScreenOn) {
+                Log.i(TAG, "setPowerState on = " + newScreenOn  + ", reason = " + reason);
                 if (newScreenOn) {
                     // When the user presses the power button, we need to always send out the
                     // notification that it's going to sleep so the keyguard goes on.  But
