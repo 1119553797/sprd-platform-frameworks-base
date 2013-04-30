@@ -16,7 +16,6 @@
 
 package android.database;
 
-import dalvik.system.CloseGuard;
 /**
  * A base class for Cursors that store their data in {@link CursorWindow}s.
  * <p>
@@ -39,12 +38,6 @@ public abstract class AbstractWindowedCursor extends AbstractCursor {
      * The cursor window owned by this cursor.
      */
     protected CursorWindow mWindow;
-    private CloseGuard mCloseGuard;
-    {
-        if (android.os.Debug.isMonkey()) {
-            mCloseGuard = CloseGuard.get();
-        }
-    }
 
     @Override
     public byte[] getBlob(int columnIndex) {
@@ -143,10 +136,6 @@ public abstract class AbstractWindowedCursor extends AbstractCursor {
         super.checkPosition();
         
         if (mWindow == null) {
-            if (null != mCloseGuard) {
-                mCloseGuard.warnIfOpen();
-                mCloseGuard.close();
-            }
             throw new StaleDataException("Attempting to access a closed CursorWindow." +
                     "Most probable cause: cursor is deactivated prior to calling this method.");
         }
@@ -174,13 +163,6 @@ public abstract class AbstractWindowedCursor extends AbstractCursor {
         if (window != mWindow) {
             closeWindow();
             mWindow = window;
-            if (null != mCloseGuard) {
-                if (null == mWindow) {
-                    mCloseGuard.open("new");
-                } else {
-                    mCloseGuard.close();
-                }
-            }
         }
     }
 
@@ -201,9 +183,6 @@ public abstract class AbstractWindowedCursor extends AbstractCursor {
         if (mWindow != null) {
             mWindow.close();
             mWindow = null;
-            if (null != mCloseGuard) {
-                mCloseGuard.open("new");
-            }
         }
     }
 
@@ -217,13 +196,6 @@ public abstract class AbstractWindowedCursor extends AbstractCursor {
     protected void clearOrCreateWindow(String name) {
         if (mWindow == null) {
             mWindow = new CursorWindow(name);
-            if (null != mCloseGuard) {
-                if (null == mWindow) {
-                    mCloseGuard.open("new");
-                } else {
-                    mCloseGuard.close();
-                }
-            }
         } else {
             mWindow.clear();
         }
