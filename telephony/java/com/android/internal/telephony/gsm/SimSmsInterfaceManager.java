@@ -113,6 +113,7 @@ public class SimSmsInterfaceManager extends IccSmsInterfaceManager {
 	                    }
 	                    mLock.notifyAll();
                     }
+                    break;
                 case EVENT_SET_BROADCAST_ACTIVATION_DONE:
                 case EVENT_SET_BROADCAST_CONFIG_DONE:
                     ar = (AsyncResult) msg.obj;

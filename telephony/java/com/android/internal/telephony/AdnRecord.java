@@ -557,6 +557,9 @@ public class AdnRecord implements Parcelable {
 			} else {
 				anrString[0] = (byte) 0x01;
 				anrNumber = PhoneNumberUtils.numberToCalledPartyBCD(anrRecord);
+				if (anrNumber == null) {
+				    return anrString;
+				}
 				anrString[ADN_BCD_NUMBER_LENGTH + 1] = (byte) (anrNumber.length);
 				System.arraycopy(anrNumber, 0, anrString, 2, anrNumber.length);
 				if (recordSize > TYPE1_DATA_LENGTH) {

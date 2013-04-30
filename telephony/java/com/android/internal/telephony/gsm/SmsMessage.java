@@ -701,7 +701,7 @@ public class SmsMessage extends SmsMessageBase {
         DeliverPdu ret = new DeliverPdu();
         // MTI = SMS-SUBMIT, UDHI = header != null
         byte mtiByte = (byte)(0x00 | (header != null ? 0x40 : 0x00));
-        Log.d(LOG_TAG, "[cmgw]mtiByte = " + mtiByte + " header =" + header);
+        Log.d(LOG_TAG, "[cmgw]mtiByte = " + mtiByte);
         ByteArrayOutputStream bo = getDeliverPduHead(
                 scAddress, destinationAddress, mtiByte, ret);
         // User Data (and length)
