@@ -26,6 +26,7 @@ import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
 import static android.view.WindowManager.LayoutParams.FLAG_SPLIT_TOUCH;
 
+import com.android.internal.telephony.cat.AppInterface;
 import com.android.internal.view.RootViewSurfaceTaker;
 import com.android.internal.view.StandaloneActionMode;
 import com.android.internal.view.menu.ContextMenuBuilder;
@@ -41,6 +42,7 @@ import com.android.internal.widget.ActionBarView;
 
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -2433,6 +2435,25 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             // this window lost focus
             if (!hasWindowFocus && mPanelChordingKey != 0) {
                 closePanel(FEATURE_OPTIONS_PANEL);
+            }
+         // For STK Event_IdleScreenAvailable.
+            if (hasWindowFocus) {
+                try {
+                    WindowManager.LayoutParams layoutParams = ((WindowManager.LayoutParams)mDecor.mLayoutParams);
+                    IWindowManager wm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
+                    if (layoutParams!= null && layoutParams.idleScreenAvailable) {
+                        if (wm.isEventIdleScreenNeeded()) {
+                            Intent intent = new Intent(AppInterface.CAT_CMD_EVENT);
+                            intent.putExtra("event_type", AppInterface.EventListType.Event_IdleScreenAvailable.value());
+                            mContext.sendBroadcast(intent);
+                        }
+                        wm.setInIdleScreen(true);
+                    } else {
+                        wm.setInIdleScreen(false);
+                    }
+                }catch (Exception e) {
+                    Log.w(TAG, "Unable to cast layoutParams");
+                }
             }
 
             final Callback cb = getCallback();

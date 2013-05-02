@@ -36,6 +36,7 @@ import static android.view.WindowManager.LayoutParams.TYPE_WALLPAPER;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.policy.PolicyManager;
 import com.android.internal.policy.impl.PhoneWindowManager;
+import com.android.internal.telephony.cat.AppInterface;
 import com.android.internal.view.IInputContext;
 import com.android.internal.view.IInputMethodClient;
 import com.android.internal.view.IInputMethodManager;
@@ -285,6 +286,10 @@ public class WindowManagerService extends IWindowManager.Stub
     private int mAllowDisableKeyguard = ALLOW_DISABLE_UNKNOWN; // sync'd by mKeyguardTokenWatcher
 
     private static final float THUMBNAIL_ANIMATION_DECELERATE_FACTOR = 1.5f;
+
+    boolean mUserActivityEventNeeded = false;
+    boolean mIdleScreenEventNeeded = false;
+    boolean mIsInIdleScreen = false;
 
     final TokenWatcher mKeyguardTokenWatcher = new TokenWatcher(
             new Handler(), "WindowManagerService.mKeyguardTokenWatcher") {
@@ -3885,8 +3890,30 @@ public class WindowManagerService extends IWindowManager.Stub
                 updateFocusedWindowLocked(UPDATE_FOCUS_NORMAL, true /*updateInputWindows*/);
                 Binder.restoreCallingIdentity(origId);
             }
-        }
+        }    
     }
+        public void setEventUserActivityNeeded(boolean bEventNeeded) {
+        	mUserActivityEventNeeded = bEventNeeded;
+        }
+
+        public void setEventIdleScreenNeeded(boolean bEventNeeded) {
+        	mIdleScreenEventNeeded = bEventNeeded;
+        }
+
+        public boolean isEventIdleScreenNeeded() {
+        	return mIdleScreenEventNeeded;
+        }
+
+        // set if current window is idlescreen window
+        public void setInIdleScreen(boolean isInIdleScreen) {
+        	mIsInIdleScreen = isInIdleScreen;
+        }
+
+        // see if current window is in idlescreen window now
+        public boolean isInIdleScreen() {
+        	return mIsInIdleScreen;
+        }
+
 
     public void prepareAppTransition(int transit, boolean alwaysKeepCurrent) {
         if (!checkCallingPermission(android.Manifest.permission.MANAGE_APP_TOKENS,
@@ -6676,6 +6703,17 @@ public class WindowManagerService extends IWindowManager.Stub
     
     final InputMonitor mInputMonitor = new InputMonitor(this);
     private boolean mEventDispatchingEnabled;
+    
+    public void notifyStkUserActivity() {
+        // For STK User activity event down load.
+        if (mSystemBooted && mUserActivityEventNeeded) {
+            Log.d(TAG, "notify Stk user activity");
+			Intent intent = new Intent(AppInterface.CAT_CMD_EVENT);
+            intent.putExtra("event_type", AppInterface.EventListType.Event_UserActivity.value());
+            mContext.sendBroadcast(intent);
+        }
+
+    }
 
     public void pauseKeyDispatching(IBinder _token) {
         if (!checkCallingPermission(android.Manifest.permission.MANAGE_APP_TOKENS,

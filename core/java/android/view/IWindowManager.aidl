@@ -203,6 +203,22 @@ interface IWindowManager
      * Device has a software navigation bar (separate from the status bar).
      */
     boolean hasNavigationBar();
+    /**
+     * For StkService use to set mUserActivityEventNeeded flag when StkService's mEventList change.
+     */
+    void setEventUserActivityNeeded(boolean bEventNeeded);
+
+    /**
+     * For StkService use to set mIdleScreenEventNeeded flag when StkService's mEventList change.
+     */
+    void setEventIdleScreenNeeded(boolean bEventNeeded);
+    boolean isEventIdleScreenNeeded();
+
+    /**
+     * To see if the current window is in idle screen
+     */
+    void setInIdleScreen(boolean isIdleScreen);
+    boolean isInIdleScreen();
 
     /**
      * Lock the device immediately.

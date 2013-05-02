@@ -450,7 +450,23 @@ public class BridgeWindowManager implements IWindowManager {
     public boolean hasNavigationBar() {
         return false; // should this return something else?
     }
+    
+    public void setEventUserActivityNeeded(boolean bEventNeeded) {
+    }
 
+    public void setEventIdleScreenNeeded(boolean bEventNeeded) {
+    }
+
+    public boolean isEventIdleScreenNeeded() {
+        return false;
+    }
+
+    public void setInIdleScreen(boolean isIdleScreen) {
+    }
+
+    public boolean isInIdleScreen() {
+        return false;
+    }
     @Override
     public void lockNow() {
         // TODO Auto-generated method stub
