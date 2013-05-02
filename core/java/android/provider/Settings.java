@@ -1204,8 +1204,6 @@ public final class Settings {
          * @hide
          */
         public static final String SIM_STANDBY = "sim_standby";
-        
-        public static final String PIN_SUCCESS = "pin_success";
 
         /**
          * Whether Standby_Select is show,ever.
