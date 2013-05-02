@@ -843,6 +843,12 @@ public interface WindowManager extends ViewManager {
          * @hide
          */
         public int privateFlags;
+        
+        /** Idle screen flag: if Home activity's TYPE_BASE_APPLICATON screen
+         * show, the value will be true, other situation will be false.
+         * To support STK Event_IdleScreenAvailable.
+         *{@hide} */
+        public boolean idleScreenAvailable = false;
 
         /**
          * Given a particular set of window manager flags, determine whether

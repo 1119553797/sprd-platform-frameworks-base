@@ -440,22 +440,22 @@ public class CatService extends Handler implements AppInterface {
                 }
                 IWindowManager wm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
                 if(isValidEvent(AppInterface.EventListType.Event_UserActivity.value())) {
-                  /*  try {
-                        wm.setEventUserActivityNeeded(true);
-                    } catch (RemoteException e) {
-                        CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
-                    } catch (NullPointerException e2) {
-                          CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
-                    }*/
+                	try {
+                		wm.setEventUserActivityNeeded(true);
+                	} catch (RemoteException e) {
+                		CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+                	} catch (NullPointerException e2) {
+                		CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+                	}
                 }
                 if(isValidEvent(AppInterface.EventListType.Event_IdleScreenAvailable.value())) {
-                   /* try {
-                        wm.setEventIdleScreenNeeded(true);
-                    } catch (RemoteException e) {
-                        CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
-                    } catch (NullPointerException e2) {
-                          CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
-                    }*/
+                	try {
+                		wm.setEventIdleScreenNeeded(true);
+                	} catch (RemoteException e) {
+                		CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+                	} catch (NullPointerException e2) {
+                		CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+                	}
                 }
             }
             sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, null);
@@ -1082,24 +1082,24 @@ public class CatService extends Handler implements AppInterface {
                 break;
             case Event_UserActivity:
                 oneShot = true;
-               /* try {
-                    wm.setEventUserActivityNeeded(false);
+                try {
+                	wm.setEventUserActivityNeeded(false);
                 } catch (RemoteException e) {
-                    CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+                	CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
                 } catch (NullPointerException e2) {
-                    CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
-                }*/
+                	CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+                }
                 break;
             case Event_IdleScreenAvailable:
-                oneShot = true;
-                sourceId = DEV_ID_DISPLAY;
-               /* try {
-                    wm.setEventIdleScreenNeeded(false);
-                } catch (RemoteException e) {
-                    CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
-                } catch (NullPointerException e2) {
-                    CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
-                }*/
+            	oneShot = true;
+            	sourceId = DEV_ID_DISPLAY;
+            	try {
+            		wm.setEventIdleScreenNeeded(false);
+            	} catch (RemoteException e) {
+            		CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+            	} catch (NullPointerException e2) {
+            		CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+            	}
                 break;
             case Event_BrowserTermination:
                 tag = 0x80 | ComprehensionTlvTag.BROWSER_TERMINATION_CAUSE.value();
