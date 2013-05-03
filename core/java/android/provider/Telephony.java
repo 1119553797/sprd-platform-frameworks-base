@@ -2285,6 +2285,7 @@ public final class Telephony {
 
         public static final String EXTRA_SHOW_PLMN  = "showPlmn";
         public static final String EXTRA_PLMN       = "plmn";
+	public static final String EXTRA_SHORT_PLMN = "splmn";
         public static final String EXTRA_SHOW_SPN   = "showSpn";
         public static final String EXTRA_SPN        = "spn";
         public static final String EXTRA_PHONE_ID   = "phone_id";

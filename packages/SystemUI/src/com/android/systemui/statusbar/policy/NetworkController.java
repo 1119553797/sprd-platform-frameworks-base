@@ -499,10 +499,12 @@ public class NetworkController extends BroadcastReceiver {
             refreshViews(phoneId);
         } else if (action.equals(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION)) {
             final int phoneId = intent.getIntExtra(Intents.EXTRA_PHONE_ID, 0);
-            updateNetworkName(intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN, false),
+            updateNetworkNewName(intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN, false),
                         intent.getStringExtra(Telephony.Intents.EXTRA_SPN),
                         intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN, false),
-                        intent.getStringExtra(Telephony.Intents.EXTRA_PLMN), phoneId);
+                        intent.getStringExtra(Telephony.Intents.EXTRA_PLMN), 
+                        intent.getStringExtra(Telephony.Intents.EXTRA_SHORT_PLMN), 
+                        phoneId);
             refreshViews(phoneId);
         } else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
                  action.equals(ConnectivityManager.INET_CONDITION_ACTION)) {
@@ -963,6 +965,55 @@ public class NetworkController extends BroadcastReceiver {
         boolean hasSim = PhoneFactory.isCardExist(phoneId);
         if (showPlmn && plmn != null) {
             str.append(plmn);
+            something = true;
+        }
+        if (showSpn && spn != null) {
+            if (something) {
+                str.append(" | ");
+            }
+            str.append(spn);
+            something = true;
+        }
+
+        if (something) {
+            if (showPlmn
+                    && plmn != null
+                    && plmn.equals(mContext
+                            .getString(com.android.internal.R.string.lockscreen_carrier_default))) {
+                if (!hasSim) {
+                    str.append(" | ");
+                    str.append(mContext
+                            .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+                }
+            }
+            mNetworkName[phoneId] = str.toString();
+        } else {
+            str.append(mContext.getString(com.android.internal.R.string.lockscreen_carrier_default));
+            if (!hasSim) {
+                str.append(" | ");
+                str.append(mContext
+                        .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+            }
+            mNetworkName[phoneId] = str.toString();
+        }
+    }
+
+    void updateNetworkNewName(boolean showSpn, String spn, boolean showPlmn, String plmn, String splmn,int phoneId) {
+        if (true) {
+            Slog.d("CarrierLabel", "updateNetworkNewName showSpn=" + showSpn + " spn=" + spn
+                    + " showPlmn=" + showPlmn + " plmn=" + plmn + " phoneId" + phoneId);
+        }
+        StringBuilder str = new StringBuilder();
+
+        boolean something = false;
+        boolean hasSim = PhoneFactory.isCardExist(phoneId);
+        if (showPlmn && plmn != null) {
+            str.append(plmn);
+	    if(splmn !=null)
+	    	{
+		str.append(" | ");			
+		str.append(splmn);
+	    	}
             something = true;
         }
         if (showSpn && spn != null) {

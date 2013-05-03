@@ -611,6 +611,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         int rule = phone.mIccRecords.getDisplayRule(ss.getOperatorNumeric());
         String spn = phone.mIccRecords.getServiceProviderName();
         String plmn = ss.getOperatorAlphaLong();
+	String splmn = ss.getOperatorAlphaShort();
+	
         boolean show3G = false;
 
         if(plmn == null || plmn.length() == 0) {
@@ -699,6 +701,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             intent.putExtra(Intents.EXTRA_SPN, spn);
             intent.putExtra(Intents.EXTRA_SHOW_PLMN, showPlmn);
             intent.putExtra(Intents.EXTRA_PLMN, plmn);
+            intent.putExtra(Intents.EXTRA_SHORT_PLMN, splmn);
             intent.putExtra(Intents.EXTRA_PHONE_ID, phoneId);
             phone.getContext().sendStickyBroadcast(intent);
         }
