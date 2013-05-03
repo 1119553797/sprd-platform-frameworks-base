@@ -261,7 +261,11 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
         SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
                 scAddr, destAddr, destPort, srcPort, data, (deliveryIntent != null));
-        sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent, destAddr);
+        if (pdu != null) {
+            sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent,destAddr);
+        } else {
+            Log.e(TAG, "GsmSMSDispatcher.sendDmData(): getSubmitPdu() returned null");
+        }
     }
     /* End liu 20110602 */
 
@@ -455,6 +459,9 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
             SmsCbHeader header = new SmsCbHeader(receivedPdu);
             String plmn = SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_NUMERIC);
             GsmCellLocation cellLocation = (GsmCellLocation) mPhone.getCellLocation();
+            if (cellLocation == null) {
+                return;
+            }
             int lac = cellLocation.getLac();
             int cid = cellLocation.getCid();
 
