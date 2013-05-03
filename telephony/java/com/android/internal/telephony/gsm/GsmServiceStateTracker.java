@@ -692,8 +692,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             }
             if (DBG) {
                 log(String.format("updateSpnDisplay: changed sending intent" + " rule=" + rule +
-                            " showPlmn='%b' plmn='%s' showSpn='%b' spn='%s'",
-                            showPlmn, plmn, showSpn, spn));
+                            " showPlmn='%b' plmn='%s'  splmn='%s' showSpn='%b' spn='%s'",
+                            showPlmn, plmn, splmn, showSpn, spn));
             }
             Intent intent = new Intent(Intents.SPN_STRINGS_UPDATED_ACTION);
             intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);

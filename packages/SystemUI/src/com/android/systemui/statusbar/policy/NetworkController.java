@@ -1001,18 +1001,20 @@ public class NetworkController extends BroadcastReceiver {
     void updateNetworkNewName(boolean showSpn, String spn, boolean showPlmn, String plmn, String splmn,int phoneId) {
         if (true) {
             Slog.d("CarrierLabel", "updateNetworkNewName showSpn=" + showSpn + " spn=" + spn
-                    + " showPlmn=" + showPlmn + " plmn=" + plmn + " phoneId" + phoneId);
+                    + " showPlmn=" + showPlmn + " plmn=" + plmn +" splmn=" + splmn + " phoneId" + phoneId);
         }
+	
         StringBuilder str = new StringBuilder();
 
         boolean something = false;
         boolean hasSim = PhoneFactory.isCardExist(phoneId);
         if (showPlmn && plmn != null) {
             str.append(plmn);
-	    if(splmn !=null)
+	    if(splmn !=null )
 	    	{
-		str.append(" | ");			
+		str.append("(");			
 		str.append(splmn);
+		str.append(") ");			
 	    	}
             something = true;
         }
