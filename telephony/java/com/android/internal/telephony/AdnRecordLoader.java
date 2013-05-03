@@ -26,7 +26,7 @@ import android.os.Looper;
 import com.android.internal.telephony.IccUtils;
 
 public class AdnRecordLoader extends IccThreadHandler {
-    static String LOG_TAG;
+    static String LOG_TAG = "AdnRecordLoader";
 
     //***** Instance Variables
 
@@ -447,16 +447,16 @@ public class AdnRecordLoader extends IccThreadHandler {
                     Log.d(LOG_TAG,"AdnRecordLoader handle EVENT_ADN_LOAD_ALL_DONE, ef:" + Integer.toHexString(ef));
                     ar = (AsyncResult)(msg.obj);
                     ArrayList<byte[]> datas = (ArrayList<byte[]>)(ar.result);
-
+                    Log.d(LOG_TAG,"AdnRecordLoader handle EVENT_ADN_LOAD_ALL_DONE, datas:" + datas);
                     if (ar.exception != null) {
+                        Log.d(LOG_TAG,"AdnRecordLoader handle EVENT_ADN_LOAD_ALL_DONE, exception : " + ar.exception);
                         throw new IccPhoneBookOperationException(IccPhoneBookOperationException.LOAD_ADN_FAIL,
                                 "load all adn failed", ar.exception);
-                    }
-
+                    }                  
                     adns = new ArrayList<AdnRecord>(datas.size());
                     result = adns;
                     pendingExtLoads = 0;
-
+                    Log.d(LOG_TAG,"efid = "+ef+" datas.size() = " + datas.size());
                     for(int i = 0, s = datas.size() ; i < s ; i++) {
                         adn = new AdnRecord(ef, 1 + i, datas.get(i));
                         adns.add(adn);
@@ -473,6 +473,7 @@ public class AdnRecordLoader extends IccThreadHandler {
                                 obtainMessage(EVENT_EXT_RECORD_LOAD_DONE, adn));
                         }
                     }
+                    Log.d(LOG_TAG,"efid = "+ef+" result = " + result);
                 break;
 			// add multi record and email in usim begin
 			case EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE:
@@ -629,9 +630,11 @@ public class AdnRecordLoader extends IccThreadHandler {
 
 			}
         } catch (IccPhoneBookOperationException exc) {
+            Log.d(LOG_TAG, "IccPhoneBookOperationException : "+exc.getMessage());
             if (userResponse != null) {
                 AsyncResult.forMessage(userResponse)
                                 .exception = exc;
+                Log.d(LOG_TAG, " sendToTarget:exception "+exc.getMessage());
                 userResponse.sendToTarget();
                 // Loading is all or nothing--either every load succeeds
                 // or we fail the whole thing.

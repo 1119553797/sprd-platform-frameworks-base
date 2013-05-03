@@ -96,11 +96,14 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                 case EVENT_LOAD_DONE:
                     ar = (AsyncResult)msg.obj;
                     synchronized (mLock) {
+                        Log.d(LOG_TAG, "ar.exception = "+ar.exception);
                         if (ar.exception == null) {
                             readRecordSuccess =  true;
                             records = (List<AdnRecord>) ar.result;
+                            Log.d(LOG_TAG, "records = "+records);
                         } else {
                             if(DBG) logd("Cannot load ADN records");
+                            Log.d(LOG_TAG, "Cannot load ADN records");
                             if (records != null) {
                                 // no need to clear the records
                                 // records.clear();
@@ -428,13 +431,15 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
             checkThread();
             AtomicBoolean status = new AtomicBoolean(false);
             Message response = mBaseHandler.obtainMessage(EVENT_LOAD_DONE, status);
+            Log.d(LOG_TAG, "requestLoadAllAdnLike  efid = "+efid);
             adnCache.requestLoadAllAdnLike(efid, adnCache.extensionEfForEf(efid), response);
             waitForResult(status);
         }
         if(!readRecordSuccess){
-
+            Log.d(LOG_TAG, "readRecordSuccess = false efid = "+efid);
                   return null;
 		}
+        Log.d(LOG_TAG, "getAdnRecordsInEf records = "+records+" efid = "+efid);
         return records;
     }
 

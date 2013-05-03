@@ -564,10 +564,12 @@ public class MsmsIccProvider extends IccProvider {
             }
         } catch (RemoteException ex) {
             // ignore it
+            Log.w(TAG, "RemoteException "+ex.toString());
         } catch (SecurityException ex) {
             if (DBG) log(ex.toString());
+            Log.w(TAG, "SecurityException "+ex.toString());
         }
-
+        Log.w(TAG, "loadFromEf : adnRecords "+adnRecords);
         if (adnRecords != null) {
             // Load the results
             final int N = adnRecords.size();
@@ -579,7 +581,7 @@ public class MsmsIccProvider extends IccProvider {
             return cursor;
         } else {
             // No results to load
-            Log.w(TAG, "Cannot load ADN records");
+            Log.w(TAG, "Cannot load ADN records efType = "+Integer.toHexString(efType) + ", phoneId=" + phoneId);
             return new MatrixCursor(ADDRESS_BOOK_COLUMN_NAMES);
         }
     }

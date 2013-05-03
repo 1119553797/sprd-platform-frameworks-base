@@ -1156,7 +1156,9 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 
                 if (ar.exception == null) {
                     adnLikeFiles.put(efid, (ArrayList<AdnRecord>) ar.result);
+                    Log.d(LOG_TAG, "efid = "+efid+" adnLikeFiles "+adnLikeFiles.get(efid));
                 }
+                Log.d(LOG_TAG, "efid = "+efid+" ar.exception "+ar.exception);
                 notifyWaiters(waiters, ar);
                 break;
             case EVENT_UPDATE_ADN_DONE:
