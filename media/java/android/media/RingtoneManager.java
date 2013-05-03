@@ -238,8 +238,6 @@ public class RingtoneManager {
     private boolean mIncludeExternal;
 
     /* Add 20130130 Spreadst of 90412,the ringtone not ring start */
-    private static Uri mDefaultRingtoneUri = Uri.parse("content://media/internal/audio/media/9");
-    private static Uri mDefaultNotificationUri = Uri.parse("content://media/internal/audio/media/7");
     /* Add 20130130 Spreadst of 90412,the ringtone not ring end */
     
     /**
@@ -656,6 +654,12 @@ public class RingtoneManager {
 
         Uri uri = ( uriString != null ? Uri.parse(uriString) : null);
         Cursor cursor = null;
+        String ringerUriString = Settings.System.getString(context.getContentResolver(),
+                Settings.System.DEFAULT_RINGTONE);
+        Uri mDefaultRingtoneUri = (ringerUriString != null ? Uri.parse(ringerUriString) : null);
+        String notificationUriString = Settings.System.getString(context.getContentResolver(),
+                Settings.System.DEFAULT_NOTIFICATION);
+        Uri mDefaultNotificationUri = (notificationUriString != null ? Uri.parse(notificationUriString) : null);
         try {
             cursor = context.getContentResolver().query(uri,
                     new String[] { MediaStore.Audio.Media.TITLE , MediaStore.Audio.Media.DATA }, null, null, null);
