@@ -184,6 +184,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
     // Maximum volume adjust steps allowed in a single batch call.
     private static final int MAX_BATCH_VOLUME_ADJUST_STEPS = 4;
+    private  boolean isOutDoorMode = false;
+    private  boolean isNormalMode = false;
 
     /* Sound effect file names  */
     private static final String SOUND_EFFECTS_PATH = "/media/audio/ui/";
@@ -846,6 +848,11 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
             int newRingerMode = getRingerMode(); //get old RingerMode as new
             if (index == 0) {
+                if (newRingerMode == AudioManager.RINGER_MODE_OUTDOOR) {
+                    isOutDoorMode = true;
+                } else if (newRingerMode == AudioManager.RINGER_MODE_NORMAL) {
+                    isNormalMode = true;
+                }
                 if (newRingerMode != AudioManager.RINGER_MODE_SILENT) {
                     newRingerMode = mHasVibrator ? AudioManager.RINGER_MODE_VIBRATE
                             : AudioManager.RINGER_MODE_SILENT;
@@ -857,11 +864,15 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                                    false,
                                    true);
             } else {
-                if (getRingerMode() == RINGER_MODE_OUTDOOR) {
+                if (isOutDoorMode) {
                     newRingerMode = AudioManager.RINGER_MODE_OUTDOOR;
-                } else {
+                } else if (isNormalMode) {
                     newRingerMode = AudioManager.RINGER_MODE_NORMAL;
+                } else {
+                    newRingerMode = getRingerMode();
                 }
+                isOutDoorMode = false;
+                isNormalMode = false;
             }
             setRingerMode(newRingerMode);
         }
