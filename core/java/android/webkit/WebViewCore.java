@@ -1880,7 +1880,12 @@ public final class WebViewCore {
             if (mBlockMessages) {
                 return;
             }
-            mHandler.sendMessageDelayed(msg, delay);
+            
+            // S: Add for avoid JE @{
+            if (mHandler != null) {
+                mHandler.sendMessageDelayed(msg, delay);
+            }
+            // @}
         }
 
         /**
