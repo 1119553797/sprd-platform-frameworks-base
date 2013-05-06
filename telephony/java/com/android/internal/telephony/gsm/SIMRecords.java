@@ -1296,14 +1296,14 @@ public class SIMRecords extends IccRecords {
             return;
         }
 
-        if (refreshResponse.aid != null &&
-                !refreshResponse.aid.equals(mParentCard.getAid())) {
-            // This is for different app. Ignore.
-            if (DBG)
-                log("handleSimRefresh refresh.aid = " + refreshResponse.aid + " ParentAid = "
-                        + mParentCard.getAid() + " not match");
-            return;
-        }
+//        if (refreshResponse.aid != null &&
+//                !refreshResponse.aid.equals(mParentCard.getAid())) {
+//            // This is for different app. Ignore.
+//            if (DBG)
+//                log("handleSimRefresh refresh.aid = " + refreshResponse.aid + " ParentAid = "
+//                        + mParentCard.getAid() + " not match");
+//            return;
+//        }
 
         switch (refreshResponse.refreshResult) {
             case IccRefreshResponse.REFRESH_RESULT_FILE_UPDATE:
