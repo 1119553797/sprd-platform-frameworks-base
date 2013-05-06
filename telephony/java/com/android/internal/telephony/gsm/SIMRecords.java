@@ -1370,9 +1370,23 @@ public class SIMRecords extends IccRecords {
 
         } else {
             byte[] eccList = (byte[]) ar.result;
-            SystemProperties.set(PhoneFactory.getSetting("ril.sim.ecclist", phone.getPhoneId()), IccUtils.bytesToHexString(eccList));
+            if (eccList == null) {
+                return;
+            }
+            int numberLength = 3;
+            String number = "";
+            for (int footerOffset = 0; footerOffset < eccList.length / numberLength; footerOffset++) {
+                number += PhoneNumberUtils.calledPartyBCDFragmentToString(eccList, footerOffset
+                        * numberLength, numberLength)
+                        + ",";
+            }
+            if (DBG)
+                log("numbers: " + number);
+            SystemProperties.set(PhoneFactory.getSetting("ril.sim.ecclist", phone.getPhoneId()),
+                    number);
 
-            if (DBG) log("ECC List: " + IccUtils.bytesToHexString(eccList));
+            if (DBG)
+                log("ECC List: " + IccUtils.bytesToHexString(eccList));
         }
 
     }
