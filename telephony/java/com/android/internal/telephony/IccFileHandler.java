@@ -169,9 +169,9 @@ public abstract class IccFileHandler extends IccThreadHandler implements IccCons
                         onLoaded));
 
         // TODO(): Verify when path changes are done.
-        mCi.iccIOForApp(COMMAND_GET_RESPONSE, IccConstants.EF_IMG, "img",
+        mCi.iccIOForApp(COMMAND_GET_RESPONSE, IccConstants.EF_IMG, getEFPath(IccConstants.EF_IMG),
                 recordNum, READ_RECORD_MODE_ABSOLUTE,
-                GET_RESPONSE_EF_IMG_SIZE_BYTES, null, null, mAid, response);
+                GET_RESPONSE_EF_SIZE_BYTES, null, null, mAid, response);
     }
 
     /**
@@ -242,7 +242,7 @@ public abstract class IccFileHandler extends IccThreadHandler implements IccCons
         Message response = obtainMessage(EVENT_READ_ICON_DONE, fileid, 0,
                 onLoaded);
 
-        mCi.iccIOForApp(COMMAND_READ_BINARY, fileid, "img", highOffset, lowOffset,
+        mCi.iccIOForApp(COMMAND_READ_BINARY, fileid, getEFPath(IccConstants.EF_IMG), highOffset, lowOffset,
                 length, null, null, mAid, response);
     }
 
