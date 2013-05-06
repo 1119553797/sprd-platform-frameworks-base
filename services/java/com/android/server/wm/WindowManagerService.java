@@ -7032,6 +7032,14 @@ public class WindowManagerService extends IWindowManager.Stub
                     if (view != null) {
                         boolean abort = false;
 
+                        while (!android.os.Debug.isStartLock()) {
+                            try {
+                                wait(10);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        android.os.Debug.setStartLock(false);
                         synchronized(mWindowMap) {
                             if (wtoken.removed || wtoken.startingData == null) {
                                 // If the window was successfully added, then
@@ -7055,6 +7063,7 @@ public class WindowManagerService extends IWindowManager.Stub
                                     + wtoken.startingWindow + " startingView="
                                     + wtoken.startingView);
                         }
+                        android.os.Debug.setStartLock(true);
 
                         if (abort) {
                             try {

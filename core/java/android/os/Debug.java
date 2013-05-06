@@ -82,6 +82,10 @@ public final class Debug
     // set/cleared by waitForDebugger()
     private static volatile boolean mWaiting = false;
 
+    // For Preventing deadlock between AMS and WMS
+    private static boolean mDeadLock = true;
+    private static boolean mStartLock = true;
+
     private Debug() {}
 
     /*
@@ -1455,16 +1459,54 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      * @return Whether in debug mode
      */
     public static boolean isDebug() {
-    	return IS_DEBUG_BUILD;
+        return IS_DEBUG_BUILD;
     }
-    
+
     /**
      * @hide
-     * 
-     * @return
+     * Whether is monkey mode or debug version.
+     *
+     * @return True is in monkey mode or debug version.
      */
     public static boolean isMonkeyOrDebug() {
-    	return isMonkey() || isDebug();
+        return isMonkey() || isDebug();
     }
-    
+
+    /**
+     * @hide
+     * Whether can get death notice lock.
+     *
+     * @return True - death notice lock is available.
+     */
+    public static boolean isDeadLock() {
+        return mDeadLock;
+    }
+
+    /**
+     * @hide
+     * Set whether death notice lock can be obtained.
+     * @param bLocked Whether death notice lock can be obtained.
+     */
+    public static void setDeadLock(boolean bLocked) {
+        mDeadLock = bLocked;
+    }
+
+    /**
+     * @hide
+     * Whether can get start notice lock.
+     *
+     * @return True - start notice lock is available.
+     */
+    public static boolean isStartLock() {
+        return mStartLock;
+    }
+
+    /**
+     * @hide
+     * Set whether start notice lock can be obtained.
+     * @param bLocked Whether start notice lock can be obtained.
+     */
+    public static void setStartLock(boolean bLocked) {
+        mStartLock = bLocked;
+    }
 }

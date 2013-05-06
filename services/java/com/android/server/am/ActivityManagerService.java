@@ -885,9 +885,18 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (localLOGV) Slog.v(
                 TAG, "Death received in " + this
                 + " for thread " + mAppThread.asBinder());
+            while (!android.os.Debug.isDeadLock()) {
+                try {
+                    wait(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            android.os.Debug.setDeadLock(false);
             synchronized(ActivityManagerService.this) {
                 appDiedLocked(mApp, mPid, mAppThread);
             }
+            android.os.Debug.setDeadLock(true);
         }
     }
 
