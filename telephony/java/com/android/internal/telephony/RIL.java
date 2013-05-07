@@ -3533,24 +3533,27 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
     }
 
     protected Object responseGmsBroadcastConfig(Parcel p) {
-        int num;
-        ArrayList<SmsBroadcastConfigInfo> response;
-        SmsBroadcastConfigInfo info;
-
-        num = p.readInt();
-        response = new ArrayList<SmsBroadcastConfigInfo>(num);
-
-        for (int i = 0; i < num; i++) {
-            int fromId = p.readInt();
-            int toId = p.readInt();
-            int fromScheme = p.readInt();
-            int toScheme = p.readInt();
-            boolean selected = (p.readInt() == 1);
-
-            info = new SmsBroadcastConfigInfo(fromId, toId, fromScheme,
-                    toScheme, selected);
-            response.add(info);
-        }
+//        int num;
+//        ArrayList<SmsBroadcastConfigInfo> response;
+//        SmsBroadcastConfigInfo info;
+//
+//        num = p.readInt();
+//        response = new ArrayList<SmsBroadcastConfigInfo>(num);
+//
+//        for (int i = 0; i < num; i++) {
+//            int fromId = p.readInt();
+//            int toId = p.readInt();
+//            int fromScheme = p.readInt();
+//            int toScheme = p.readInt();
+//            boolean selected = (p.readInt() == 1);
+//
+//            info = new SmsBroadcastConfigInfo(fromId, toId, fromScheme,
+//                    toScheme, selected);
+//            response.add(info);
+//        }
+//        return response;
+        String response =  p.readString();
+        Log.i("RIL","responseGmsBroadcastConfig  " +  response);
         return response;
     }
 
