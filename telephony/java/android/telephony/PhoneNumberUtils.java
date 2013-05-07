@@ -1664,7 +1664,7 @@ public class PhoneNumberUtils
         }
 
         if (!hasSimCard) {
-            numbers.append("000,08,110,999,118,119,120,122");
+            numbers.append("000,08,110,999,118,119");
             numbers.append(",");
             numbers.append(CUSTOM_EMERGENCY_NUMBER);
         } else if (TelephonyManager.getDefault(phoneId).hasIccCard()) {
@@ -1700,8 +1700,7 @@ public class PhoneNumberUtils
             }
         }
         // No ecclist system property, so use our own list.
-        return (number.equals("112") || number.equals("911") || number.equals("110") 
-                || number.equals("119") || number.equals("120") || number.equals("122"));
+        return (number.equals("112") || number.equals("911"));
     }
 
     // Add for bug 121825 Start
