@@ -335,7 +335,15 @@ public abstract class CursorAdapter extends BaseAdapter implements Filterable,
         if (newCursor != null) {
             if (mChangeObserver != null) newCursor.registerContentObserver(mChangeObserver);
             if (mDataSetObserver != null) newCursor.registerDataSetObserver(mDataSetObserver);
-            mRowIDColumn = newCursor.getColumnIndexOrThrow("_id");
+            try {
+                mRowIDColumn = newCursor.getColumnIndexOrThrow("_id");
+            } catch (IllegalArgumentException e) {
+                if (android.os.Debug.isMonkey()) {
+                    Log.e("CursorAdapter", "requesting column index < 0");
+                } else {
+                    throw e;
+                }
+            }
             mDataValid = true;
             // notify the observers about the new cursor
             notifyDataSetChanged();
