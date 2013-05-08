@@ -729,10 +729,11 @@ public class AudioRecord
          * a multiple of the notification period.
          */
         void onPeriodicNotification(AudioRecord recorder);
-
-        /**
-         * Called on the listener to periodically notify it when the data of PCM buffer is available
-         */
+    }
+    public interface OnRecordPositionUpdateListenerEx extends OnRecordPositionUpdateListener{
+    /**
+    * Called on the listener to periodically notify it when the data of PCM buffer is available
+    */
         void onMoreData(AudioRecord recorder, ByteBuffer data, int size);
     }
 
@@ -774,9 +775,12 @@ public class AudioRecord
                 }
                 break;
             case NATIVE_EVENT_MORE_DATA:
-                if (listener != null) {
-                    listener.onMoreData(mAudioRecord, (ByteBuffer)msg.obj, msg.arg2);
-                }
+               if (listener != null) {
+                   if(listener instanceof OnRecordPositionUpdateListenerEx)
+                   {
+                       ((OnRecordPositionUpdateListenerEx)listener).onMoreData(mAudioRecord, (ByteBuffer)msg.obj, msg.arg2);
+                   }
+               }
                 break;
             default:
                 Log.e(TAG, "[ android.media.AudioRecord.NativeEventHandler ] " +
