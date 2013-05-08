@@ -186,7 +186,8 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                 if(ar.userObj  instanceof ApnContext){
                 	apnContext = (ApnContext)ar.userObj;
                 }
-                if (TextUtils.equals(apnContext.getReason(), Phone.REASON_PDP_RESET)) {
+                if (TextUtils.equals(apnContext.getReason(), Phone.REASON_PDP_RESET)
+                        || TextUtils.equals(apnContext.getReason(), Phone.REASON_PDP_LOST)) {
                     log("set RequestConnectPhoneId to active when pdp lost/reset");
                     sRequestConnectPhoneId = sActivePhoneId;
                 } else {

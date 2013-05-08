@@ -177,6 +177,7 @@ public interface Phone extends SprdVideoPhone{
     static final String REASON_RESTORE_DEFAULT_APN = "restoreDefaultApn";
     static final String REASON_RADIO_TURNED_OFF = "radioTurnedOff";
     static final String REASON_PDP_RESET = "pdpReset";
+    static final String REASON_PDP_LOST = "pdpLost";
     static final String REASON_VOICE_CALL_ENDED = "2GVoiceCallEnded";
     static final String REASON_VOICE_CALL_STARTED = "2GVoiceCallStarted";
     static final String REASON_PS_RESTRICT_ENABLED = "psRestrictEnabled";
