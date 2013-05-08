@@ -1382,6 +1382,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 if (apnContext.getState() == State.CONNECTED ||
                        apnContext.getState() == State.CONNECTING ||
                        apnContext.getState() == State.INITING) {
+                    apnContext.setReason(Phone.REASON_PDP_LOST);
                     connectedApns.add(apnContext);
                 }
             }
