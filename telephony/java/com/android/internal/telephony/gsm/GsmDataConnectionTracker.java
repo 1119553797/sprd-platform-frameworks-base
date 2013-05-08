@@ -764,7 +764,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 apnContext.setState(State.IDLE);
             }
             if (apnContext.isReady()) {
-                if (apnContext.getState() == State.IDLE) {
+                if (apnContext.getState() == State.IDLE || apnContext.getState() == State.DISCONNECTING) {
                     apnContext.setReason(reason);
                     trySetupData(apnContext);
                 }
