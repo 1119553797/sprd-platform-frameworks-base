@@ -851,7 +851,7 @@ final class WindowState implements WindowManagerPolicy.WindowState {
         public void binderDied() {
             while (!android.os.Debug.isDeadLock()) {
                 try {
-                    wait(10);
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -3048,7 +3048,7 @@ final class ActivityStack {
 
         while (!android.os.Debug.isStartLock()) {
             try {
-                wait(10);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

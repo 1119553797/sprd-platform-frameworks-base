@@ -887,7 +887,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 + " for thread " + mAppThread.asBinder());
             while (!android.os.Debug.isDeadLock()) {
                 try {
-                    wait(10);
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
