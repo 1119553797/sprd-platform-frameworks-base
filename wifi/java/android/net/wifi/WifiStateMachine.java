@@ -1678,14 +1678,15 @@ public class WifiStateMachine extends StateMachine {
         mWifiInfo.setLinkSpeed(-1);
         mWifiInfo.setMeteredHint(false);
 
-        setNetworkDetailedState(DetailedState.DISCONNECTED);
-        mWifiConfigStore.updateStatus(mLastNetworkId, DetailedState.DISCONNECTED);
+        /* Clear network properties */
+        mLinkProperties.clear();
 
         /* send event to CM & network change broadcast */
         sendNetworkStateChangeBroadcast(mLastBssid);
 
-        /* Clear network properties */
-        mLinkProperties.clear();
+        setNetworkDetailedState(DetailedState.DISCONNECTED);
+        mWifiConfigStore.updateStatus(mLastNetworkId, DetailedState.DISCONNECTED);
+
         /* Clear IP settings if the network used DHCP */
         if (!mWifiConfigStore.isUsingStaticIp(mLastNetworkId)) {
             mWifiConfigStore.clearIpConfiguration(mLastNetworkId);
