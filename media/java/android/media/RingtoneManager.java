@@ -223,6 +223,8 @@ public class RingtoneManager {
     private Cursor[] mCursorArr;
     private Cursor mCursor;
 
+    private Cursor mCustomCursor;
+
     private int mType = TYPE_RINGTONE;
     
     /**
@@ -417,10 +419,17 @@ public class RingtoneManager {
     }
     
     private static Uri getUriFromCursor(Cursor cursor) {
-        return ContentUris.withAppendedId(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor
-                .getLong(ID_COLUMN_INDEX));
+// add for bug151952 start
+        Uri uri = null;
+        try {
+            uri = ContentUris.withAppendedId(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor.getLong(ID_COLUMN_INDEX));
+        } catch (android.database.StaleDataException e) {
+            Log.e(TAG, "Failed to getUriFromCursor " + e);
+        }
+        return uri;
     }
-    
+// add for bug151952 end
+
     /**
      * Gets the position of a {@link Uri} within this {@link RingtoneManager}.
      * 
@@ -813,6 +822,15 @@ public class RingtoneManager {
         if(!status.equals(Environment.MEDIA_MOUNTED) && !status.equals(Environment.MEDIA_MOUNTED_READ_ONLY)){
             return null;
         }
+
+        try {
+            if (mCustomCursor != null && !mCustomCursor.isClosed() && mCustomCursor.requery()) {
+                return mCustomCursor;
+            }
+        } catch (android.database.StaleDataException e) {
+            Log.e(TAG, "requery error: cursor is closed" + e);
+        }
+
 //        if(!"1".equals(SystemProperties.get("ro.device.support.nand"))){
 //            String sd_status = Environment.getExternalStorageStateSd();
 //            if(!sd_status.equals(Environment.MEDIA_MOUNTED) && !sd_status.equals(Environment.MEDIA_MOUNTED_READ_ONLY)){
@@ -841,11 +859,11 @@ public class RingtoneManager {
 //                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MEDIA_COLUMNS,
 //                where.toString(), null,
 //                MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-        return (status.equals(Environment.MEDIA_MOUNTED) || status
+        return mCustomCursor = ((status.equals(Environment.MEDIA_MOUNTED) || status
                 .equals(Environment.MEDIA_MOUNTED_READ_ONLY)) ? query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MEDIA_COLUMNS,
                 where.toString(), null,
-                MediaStore.Audio.Media.DEFAULT_SORT_ORDER) : null;
+                MediaStore.Audio.Media.DEFAULT_SORT_ORDER) : null);
     }
     public Ringtone getCustomRingtone(int position) {
         if (mStopPreviousRingtone && mPreviousRingtone != null) {
@@ -915,6 +933,7 @@ public class RingtoneManager {
      * @hide
      */
     public void closeCursors(){
+        Log.e(TAG, "cursors will be close");
         if(mCursorArr != null && mCursorArr.length > 0){
            for(Cursor c : mCursorArr){
                if(c != null && !c.isClosed()){
@@ -922,5 +941,8 @@ public class RingtoneManager {
                }
             }
          }
+        if(null != mCustomCursor && !mCustomCursor.isClosed()){
+            mCustomCursor.close();
+        }
     }
 }
