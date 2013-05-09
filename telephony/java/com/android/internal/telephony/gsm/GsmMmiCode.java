@@ -860,8 +860,11 @@ public final class GsmMmiCode extends Handler implements MmiCode {
                     }else {
                         // pre-checks OK
                         if (sc.equals(SC_PIN)) {
-                            phone.mCM.changeIccPin(oldPinOrPuk, newPin,
-                                    obtainMessage(EVENT_SET_COMPLETE, this));
+//                            phone.mCM.changeIccPin(oldPinOrPuk, newPin,
+//                                    obtainMessage(EVENT_SET_COMPLETE, this));
+                            Message callback = Message.obtain(this, EVENT_SET_COMPLETE);
+                            phone.getIccCard().changeIccLockPassword(oldPinOrPuk,
+                                    newPin, callback);
                         } else if (sc.equals(SC_PIN2)) {
                             phone.mCM.changeIccPin2(oldPinOrPuk, newPin,
                                     obtainMessage(EVENT_SET_COMPLETE, this));
