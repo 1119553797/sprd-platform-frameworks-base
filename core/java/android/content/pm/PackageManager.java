@@ -2533,6 +2533,15 @@ public abstract class PackageManager {
      */
     public abstract void setComponentEnabledSetting(ComponentName componentName,
             int newState, int flags);
+    /**
+     * add interface for specific app
+     * @param componentName
+     * @param newState
+     * @param flags
+     * @param attr
+     */
+    public abstract void setComponentEnabledSettingForSpecific(ComponentName componentName,
+            int newState, int flags,Intent attr);
 
 
     /**
