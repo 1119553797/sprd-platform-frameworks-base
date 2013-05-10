@@ -1151,6 +1151,16 @@ final class ApplicationPackageManager extends PackageManager {
             // Should never happen!
         }
     }
+    
+    @Override
+    public void setComponentEnabledSettingForSpecific(ComponentName componentName,
+                                           int newState, int flags,Intent attr) {
+        try {
+            mPM.setComponentEnabledSettingForSpecific(componentName, newState, flags, UserId.myUserId(),attr);
+        } catch (RemoteException e) {
+            // Should never happen!
+        }
+    }
 
     @Override
     public int getComponentEnabledSetting(ComponentName componentName) {

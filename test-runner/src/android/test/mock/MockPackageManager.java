@@ -44,6 +44,8 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.RemoteException;
+import android.os.UserId;
 
 import java.util.List;
 
@@ -436,6 +438,12 @@ public class MockPackageManager extends PackageManager {
     @Override
     public void setComponentEnabledSetting(ComponentName componentName,
             int newState, int flags) {
+        throw new UnsupportedOperationException();
+    }
+    
+    @Override
+    public void setComponentEnabledSettingForSpecific(ComponentName componentName,
+            int newState, int flags,Intent attr) {
         throw new UnsupportedOperationException();
     }
 
