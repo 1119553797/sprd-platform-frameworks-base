@@ -3440,18 +3440,23 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
     private void onSetWiredDeviceConnectionState(int device, int state, String name)
     {
         synchronized (mConnectedDevices) {
-//delete for bug141679 start
-/**            if ((state == 0) && ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
+            //delete for bug141679 start
+            /**
+            if ((state == 0) && ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
                     (device == AudioSystem.DEVICE_OUT_WIRED_HEADPHONE))) {
                 setBluetoothA2dpOnInt(true);
             }*/
+            //we place sendDeviceConnectionIntent in front of handleDeviceConnection
+            //to let ACTION_HEADSET_PLUG be handled faster than changed before.
+            sendDeviceConnectionIntent(device, state, name);
             handleDeviceConnection((state == 1), device, "");
-/**            if ((state != 0) && ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
+            /**
+            if ((state != 0) && ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
                     (device == AudioSystem.DEVICE_OUT_WIRED_HEADPHONE))) {
                 setBluetoothA2dpOnInt(false);
             }*/
-//delete for bug141679 end
-            sendDeviceConnectionIntent(device, state, name);
+            //delete for bug141679 end
+
         }
     }
 
