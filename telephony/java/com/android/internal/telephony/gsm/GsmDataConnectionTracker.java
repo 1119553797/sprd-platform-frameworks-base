@@ -1528,11 +1528,13 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 putRecoveryAction(RecoveryAction.RADIO_RESTART);
                 break;
             case RecoveryAction.RADIO_RESTART:
-                EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_RADIO_RESTART,
-                        mSentSinceLastRecv);
-                if (DBG) log("restarting radio");
-                putRecoveryAction(RecoveryAction.RADIO_RESTART_WITH_PROP);
-                restartRadio();
+                if (MsmsGsmDataConnectionTrackerProxy.isAllPhoneIdle()){
+                    EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_RADIO_RESTART,
+                            mSentSinceLastRecv);
+                    if (DBG) log("restarting radio");
+                    putRecoveryAction(RecoveryAction.RADIO_RESTART_WITH_PROP);
+                    restartRadio();
+                }
                 break;
             case RecoveryAction.RADIO_RESTART_WITH_PROP:
                 // This is in case radio restart has not recovered the data.
@@ -1541,15 +1543,17 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 // The implementation of hard reset recovery action is up to OEM product.
                 // Once gsm.radioreset property is consumed, it is expected to set back
                 // to false by RIL.
-                EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_RADIO_RESTART_WITH_PROP, -1);
-                if (DBG) log("restarting radio with gsm.radioreset to true");
-                SystemProperties.set("gsm.radioreset", "true");
-                // give 1 sec so property change can be notified.
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {}
-                restartRadio();
-                putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
+                if (MsmsGsmDataConnectionTrackerProxy.isAllPhoneIdle()) {
+                    EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_RADIO_RESTART_WITH_PROP, -1);
+                    if (DBG) log("restarting radio with gsm.radioreset to true");
+                    SystemProperties.set("gsm.radioreset", "true");
+                    // give 1 sec so property change can be notified.
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {}
+                    restartRadio();
+                    putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
+                }
                 break;
             default:
                 throw new RuntimeException("doRecovery: Invalid recoveryAction=" +
