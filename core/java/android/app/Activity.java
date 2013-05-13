@@ -3116,8 +3116,10 @@ public class Activity extends ContextThemeWrapper
      */
     @Deprecated
     public final void removeDialog(int id) {
+        Log.d("Activity", "removeDialog mManagedDialogs = " + mManagedDialogs);
         if (mManagedDialogs != null) {
             final ManagedDialog md = mManagedDialogs.get(id);
+            Log.d("Activity", "removeDialog md = " + md);
             if (md != null) {
                 md.mDialog.dismiss();
                 mManagedDialogs.remove(id);
