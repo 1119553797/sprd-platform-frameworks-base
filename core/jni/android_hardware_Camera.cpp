@@ -51,6 +51,7 @@ struct fields_t {
 
 static fields_t fields;
 static Mutex sLock;
+bool ErrorCallBackFlag = false;
 
 // provides persistent context for calls from native code to Java
 class JNICameraContext: public CameraListener
@@ -169,7 +170,9 @@ void JNICameraContext::release()
 void JNICameraContext::notify(int32_t msgType, int32_t ext1, int32_t ext2)
 {
     ALOGV("notify");
-
+    if (ext1 = NO_MEMORY) {
+        ErrorCallBackFlag = true;
+    }
     // VM pointer will be NULL if object is released
     Mutex::Autolock _l(mLock);
     if (mCameraJObjectWeak == NULL) {
@@ -573,6 +576,11 @@ static void android_hardware_Camera_startPreview(JNIEnv *env, jobject thiz)
     if (camera == 0) return;
 
     if (camera->startPreview() != NO_ERROR) {
+        if (ErrorCallBackFlag) {
+            jniThrowRuntimeException(env, "no memory");
+            ErrorCallBackFlag = false;
+            return;
+        }
         jniThrowRuntimeException(env, "startPreview failed");
         return;
     }
@@ -583,6 +591,7 @@ static void android_hardware_Camera_stopPreview(JNIEnv *env, jobject thiz)
     ALOGV("stopPreview");
     sp<Camera> c = get_native_camera(env, thiz, NULL);
     if (c == 0) return;
+    ErrorCallBackFlag = false;
 
     c->stopPreview();
 }
@@ -671,6 +680,11 @@ static void android_hardware_Camera_takePicture(JNIEnv *env, jobject thiz, int m
     }
 
     if (camera->takePicture(msgType) != NO_ERROR) {
+        if (ErrorCallBackFlag) {
+            jniThrowRuntimeException(env, "no memory");
+            ErrorCallBackFlag = false;
+            return;
+        }
         jniThrowRuntimeException(env, "takePicture failed");
         return;
     }
