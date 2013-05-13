@@ -224,7 +224,7 @@ public abstract class DataConnectionTracker extends Handler {
     protected static final String NULL_IP = "0.0.0.0";
 
     // Default for the data stall alarm while non-aggressive stall detection
-    protected static final int DATA_STALL_ALARM_NON_AGGRESSIVE_DELAY_IN_MS_DEFAULT = 1000 * 60 * 6;
+    protected static final int DATA_STALL_ALARM_NON_AGGRESSIVE_DELAY_IN_MS_DEFAULT = 1000 * 60 * 60 * 24;
     // Default for the data stall alarm for aggressive stall detection
     protected static final int DATA_STALL_ALARM_AGGRESSIVE_DELAY_IN_MS_DEFAULT = 1000 * 60;
     // If attempt is less than this value we're doing first level recovery

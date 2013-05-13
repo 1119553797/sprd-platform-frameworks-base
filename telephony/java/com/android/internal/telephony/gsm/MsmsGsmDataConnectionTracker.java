@@ -155,11 +155,13 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
         if(phoneId == mPhone.getPhoneId()) {
             if (isConnected() && ! mGsmPhone.mSST.isConcurrentVoiceAndDataAllowed()) {
                 stopNetStatPoll();
+                stopDataStallAlarm();
                 mPhone.notifyDataConnection(Phone.REASON_VOICE_CALL_STARTED);
             }
         } else if(!MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()){
             if (isConnected()) {
                 stopNetStatPoll();
+                stopDataStallAlarm();
                 mPhone.notifyDataConnection(Phone.REASON_VOICE_CALL_STARTED);
             }
         }
@@ -185,6 +187,7 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
                 }
             } else if (!MsmsGsmDataConnectionTrackerProxy.isSupportMultiModem()) {
                 startNetStatPoll();
+                startDataStallAlarm(DATA_STALL_NOT_SUSPECTED);
                 mPhone.notifyDataConnection(Phone.REASON_VOICE_CALL_ENDED);
             }
         } else if (isDisconnecting()) {

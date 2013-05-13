@@ -1888,7 +1888,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 SystemClock.elapsedRealtime() + delayInMs, mDataStallAlarmIntent);
     }
 
-    private void stopDataStallAlarm() {
+    protected void stopDataStallAlarm() {
         AlarmManager am =
             (AlarmManager) mPhone.getContext().getSystemService(Context.ALARM_SERVICE);
 
