@@ -8552,6 +8552,11 @@ public class WindowManagerService extends IWindowManager.Stub
                             + " interesting=" + numInteresting
                             + " drawn=" + wtoken.numDrawnWindows);
                     wtoken.allDrawn = true;
+                    if (wtoken.mAppAnimator.allDrawn) {
+                        //set mAppAnimator.allDrawn false,
+                        //let WindowAnimator.testTokenMayBeDrawnLocked unset AppFreezing
+                        wtoken.mAppAnimator.allDrawn = false;
+                    }
                 }
             }
         }
