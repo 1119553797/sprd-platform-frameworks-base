@@ -585,6 +585,20 @@ public class MediaRecorder
     }
 
     /**
+     *set the file offset. if use64BitFlag is 1, this condition can make sure the duration of videorecord(>= 720p) more than one hour.
+     *
+     *@param use64BitFlag the file offset.0 is use32Bit, 1 is use64Bit.
+     *@hide
+     */
+    public void setParam64BitFileOffset(int use64BitFlag)
+    {
+        if (use64BitFlag !=0 && use64BitFlag != 1) {
+            throw new IllegalArgumentException("use64BitFlag is invalid");
+        }
+        setParameter("param-use-64bit-offset=" + use64BitFlag);
+    }
+
+    /**
      * Currently not implemented. It does nothing.
      * @deprecated Time lapse mode video recording using camera still image capture
      * is not desirable, and will not be supported.
