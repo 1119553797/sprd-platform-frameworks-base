@@ -110,7 +110,7 @@ public class WifiStateMachine extends StateMachine {
 
     private static final String TAG = "WifiStateMachine";
     private static final String NETWORKTYPE = "WIFI";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
     /* TODO: This is no more used with the hostapd code. Clean up */
     private static final String SOFTAP_IFACE = "wl0.1";

@@ -237,6 +237,7 @@ public class WifiStateTracker implements NetworkStateTracker {
                 // don't want to send redundent state messages
                 // TODO can this be fixed in WifiStateMachine?
                 NetworkInfo.State state = mNetworkInfo.getState();
+                Slog.w(TAG, "wifi current state = " + state + ", mLastState = " + mLastState);
                 if (mLastState == state) {
                     return;
                 } else {
