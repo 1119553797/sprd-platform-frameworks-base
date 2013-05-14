@@ -648,6 +648,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         if (mEmergencyOnly && cm.getRadioState().isOn()) {
             plmn = Resources.getSystem().
                 getText(com.android.internal.R.string.emergency_calls_only).toString();
+	    splmn = null;
             show3G = false;
             if (DBG) log("updateSpnDisplay: emergency only and radio is on plmn='" + plmn + "'");
         }
