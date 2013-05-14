@@ -1513,9 +1513,19 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                         mSentSinceLastRecv);
                 if (DBG) log("doRecovery() get data call list");
                 mPhone.mCM.getDataCallList(obtainMessage(EVENT_DATA_STATE_CHANGED));
-                putRecoveryAction(RecoveryAction.CLEANUP);
+                int maxPdpPoll = Settings.Secure.getInt(mResolver,
+                        Settings.Secure.PDP_WATCHDOG_ERROR_POLL_COUNT,
+                        DEFAULT_MAX_PDP_POLL_FAIL);
+                if (DBG) log("doRecovery() mPdpPollCount = " + mPdpPollCount + " and maxPdpPoll = " + maxPdpPoll);
+                if (mPdpPollCount < maxPdpPoll) {
+                    mPdpPollCount++;
+                    putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
+                } else {
+                    putRecoveryAction(RecoveryAction.CLEANUP);
+                }
                 break;
             case RecoveryAction.CLEANUP:
+                mPdpPollCount = 0;
                 EventLog.writeEvent(EventLogTags.DATA_STALL_RECOVERY_CLEANUP, mSentSinceLastRecv);
                 if (DBG) log("doRecovery() cleanup all connections");
                 cleanUpAllConnections(true, Phone.REASON_PDP_RESET);
@@ -1621,6 +1631,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         if ( sent > 0 && received > 0 ) {
             if (DBG) log("updateDataStallInfo: IN/OUT");
             mSentSinceLastRecv = 0;
+            mPdpPollCount = 0;
             putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
         } else if (sent > 0 && received == 0) {
             if (mPhone.getState() == Phone.State.IDLE) {
@@ -1635,6 +1646,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         } else if (sent == 0 && received > 0) {
             if (DBG) log("updateDataStallInfo: IN");
             mSentSinceLastRecv = 0;
+            mPdpPollCount = 0;
             putRecoveryAction(RecoveryAction.GET_DATA_CALL_LIST);
         } else {
             if (DBG) log("updateDataStallInfo: NONE");

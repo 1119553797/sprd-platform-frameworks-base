@@ -202,6 +202,8 @@ public abstract class DataConnectionTracker extends Handler {
     protected static final int POLL_NETSTAT_SLOW_MILLIS = 5000;
     /** Default max failure count before attempting to network re-registration. */
     protected static final int DEFAULT_MAX_PDP_RESET_FAIL = 3;
+    /** Default max failure count before attempting to reset connection. */
+    protected static final int DEFAULT_MAX_PDP_POLL_FAIL = 3;
 
     /**
      * After detecting a potential connection problem, this is the max number
@@ -292,6 +294,8 @@ public abstract class DataConnectionTracker extends Handler {
     // (TODO: Reconsider tying directly to screen, maybe this is
     //        really a lower power mode")
     protected boolean mIsScreenOn = true;
+
+    protected int mPdpPollCount = 0;
 
     /** Allows the generation of unique Id's for DataConnection objects */
     protected AtomicInteger mUniqueIdGenerator = new AtomicInteger(0);
