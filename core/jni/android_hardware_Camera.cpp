@@ -170,7 +170,7 @@ void JNICameraContext::release()
 void JNICameraContext::notify(int32_t msgType, int32_t ext1, int32_t ext2)
 {
     ALOGV("notify");
-    if (ext1 = NO_MEMORY) {
+    if (ext1 == NO_MEMORY) {
         ErrorCallBackFlag = true;
     }
     // VM pointer will be NULL if object is released
