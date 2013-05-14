@@ -645,6 +645,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         synchronized (mDataEnabledLock) {
             if (Phone.APN_TYPE_MMS.equals(apnContext.getApnType())) return true;
             if (Phone.APN_TYPE_WAP.equals(apnContext.getApnType())) return true;
+            if (Phone.APN_TYPE_DM.equals(apnContext.getApnType())) return true;
             return mInternalDataEnabled && mUserDataEnabled && sPolicyDataEnabled;
         }
     }
