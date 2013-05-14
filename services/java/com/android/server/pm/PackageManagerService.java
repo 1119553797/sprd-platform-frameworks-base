@@ -8462,6 +8462,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                         PackageParser.ActivityIntentInfo intent = a.intents.get(i);
                         intent.labelRes = resLabelID != 0 ? resLabelID : intent.labelRes;
                         intent.icon = resIconID != 0 ? resIconID : intent.icon;
+                        a.info.icon = resIconID != 0 ? resIconID : a.info.icon;
                     }
                 }
             }
