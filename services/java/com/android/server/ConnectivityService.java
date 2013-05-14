@@ -2147,9 +2147,9 @@ private NetworkStateTracker makeWimaxStateTracker() {
 
         if (ConnectivityManager.getDefaultNetworkType(netType) == ConnectivityManager.TYPE_MOBILE) {
             if (mNetTrackers[netType].getNetworkInfo().isConnected()) {
-                SystemProperties.set("gsm.gprs.attached", "true");
+                SystemProperties.set("sys.gprs.attached", "true");
             } else {
-                SystemProperties.set("gsm.gprs.attached", "false");
+                SystemProperties.set("sys.gprs.attached", "false");
             }
         }
         // TODO: Temporary notifying upstread change to Tethering.
