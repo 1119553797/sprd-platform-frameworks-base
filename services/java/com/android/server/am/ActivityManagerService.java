@@ -3429,8 +3429,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         String cpuInfo = null;
 
         //user version and lowmem version and anr in foreground app
-        //if (IS_USER_BUILD && Build.IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
-         if (Build.IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
+        if (IS_USER_BUILD && Build.IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
             Slog.w(TAG, "do not dump traces: is user build and lowmem version and anr in backgroound app");
         } else {
             tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids, null);
