@@ -1375,7 +1375,11 @@
     <string name="InCallBarred" msgid="">来电被禁止</string>
 
     <!-- Strings for Gsm Mmi code -->
-    <string name="Pin2Mmi">"更改PIN2"</string>
-    <string name="badPin2">"您键入的旧 PIN2 有误"</string>
-    <string name="mismatchPin2">"您键入的 PIN2 不匹配"</string>
+    <string name="Pin2Mmi">"PIN2 码更改"</string>
+    <string name="badPin2">"您输入的旧 PIN2 不正确"</string>
+    <string name="badPuk2">您输入 PUK2 不正确</string>
+    <string name="mismatchPin2">"您输入的 PIN2 码不一致"</string>
+    <string name="needPinLock">更改 PIN 码需要 PIN 码处于锁定状态</string>
+    <string name="PukMmi">"PIN 解锁"</string>
+    <string name="Puk2Mmi">"PIN2 解锁"</string>
 </resources>
