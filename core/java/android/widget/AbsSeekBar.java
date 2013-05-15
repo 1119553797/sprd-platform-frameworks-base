@@ -403,6 +403,15 @@ public abstract class AbsSeekBar extends ProgressBar {
         return true;
     }
 
+    // add for bug 155600 start
+    private int mMin = 0;
+    /**
+    * @hide
+    */
+    public void setMin(int min){
+       mMin = min;
+    }
+    // add for bug 155600 end
     private void trackTouchEvent(MotionEvent event) {
         final int width = getWidth();
         final int available = width - mPaddingLeft - mPaddingRight;
@@ -417,11 +426,12 @@ public abstract class AbsSeekBar extends ProgressBar {
             scale = (float)(x - mPaddingLeft) / (float)available;
             progress = mTouchProgressOffset;
         }
-        
+
         final int max = getMax();
         progress += scale * max;
-        
-        setProgress((int) progress, true);
+
+        // add for bug 155600
+        setProgress((int) progress + mMin, true);
     }
 
     /**
