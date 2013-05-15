@@ -3922,6 +3922,7 @@ public class WifiStateMachine extends StateMachine {
 
    static void notifyMobileToWlanEvent(String ssid,int networkId) {
        Intent mIntent = new Intent(WifiManager.ACTION_MOBLIE_TO_WLAN);
+       mIntent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
        mIntent.putExtra("ssid", ssid);
        mIntent.putExtra("networkid", networkId);
        mContext.sendBroadcast(mIntent);
