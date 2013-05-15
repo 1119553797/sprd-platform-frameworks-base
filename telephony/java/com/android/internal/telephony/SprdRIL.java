@@ -799,5 +799,16 @@ public final class SprdRIL extends RIL {
 
     }
 
-}
+     public void mmiEnterSim(String pukNewPin, Message result){
 
+         RILRequest rr = RILRequest.obtain(RIL_REQUEST_MMI_ENTER_SIM, result);
+
+         rr.mp.writeString(pukNewPin);
+
+         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + sprdRequestToString(rr.mRequest));
+
+         send(rr);
+
+     }
+
+}

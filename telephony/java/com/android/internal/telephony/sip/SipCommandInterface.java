@@ -594,4 +594,9 @@ class SipCommandInterface extends SprdBaseCommands implements CommandsInterface 
 
 	}
 
+    @Override
+    public void mmiEnterSim(String dailString, Message result) {
+        // TODO Auto-generated method stub
+    }
+
 }
