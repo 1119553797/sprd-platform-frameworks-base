@@ -62,6 +62,7 @@ public interface SprdCommandsInterface {
     public void getSimCapacity(Message result);
     public void setOnStkStin(Handler h, int what, Object obj);
     public void unsetOnStkStin(Handler h);
+    public void mmiEnterSim(String dailString, Message result);
     public void setSIMPower(boolean on, Message result);
 
 }
