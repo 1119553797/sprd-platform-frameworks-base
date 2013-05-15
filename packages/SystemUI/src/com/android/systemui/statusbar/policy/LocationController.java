@@ -98,7 +98,7 @@ public class LocationController extends BroadcastReceiver {
 
                 // Notification.Builder will helpfully fill these out for you no matter what you do
                 n.tickerView = null;
-                n.tickerText = null;
+                n.tickerText = " "; // modify null --> space for bug 161623
                 
                 n.priority = Notification.PRIORITY_HIGH;
 
