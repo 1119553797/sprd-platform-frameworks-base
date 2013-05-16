@@ -102,6 +102,7 @@ public class SIMRecords extends IccRecords {
     boolean simOnsSurport = false;
     boolean simPnnOnsEnabled = false;
     boolean simPnnOplOnsEnabled = false;
+    boolean simOplEnabled = false;
     boolean CPHSFirstRead;//CPHS
     boolean hasCPHSONS = false;
 
@@ -1203,6 +1204,7 @@ public class SIMRecords extends IccRecords {
 
                 if (ar.exception != null) {
                     Log.e(LOG_TAG, "Exception in fetching OPL Records " + ar.exception);
+                    simOplEnabled = false;
                     break;
                 }
                 ArrayList<byte[]> dataOpl = (ArrayList<byte[]>)(ar.result);
@@ -1212,6 +1214,7 @@ public class SIMRecords extends IccRecords {
                     mOplRecords.add(opl);
                     if (DBG) log("OPL"+i+": " + opl);
                 }
+                simOplEnabled = true;
                 break;
 
             case EVENT_GET_ALL_PNN_LOAD_DONE:
@@ -1993,9 +1996,9 @@ public class SIMRecords extends IccRecords {
      */
     public String getSimOnsName(String regPlmn, int lac) {
         String PnnOnsName = null;
-        if (simPnnOplOnsEnabled){
+        if (simPnnOplOnsEnabled && simOplEnabled){
             PnnOnsName = getOnsNameFromOplPnn(regPlmn,lac);
-        }else if (simPnnOnsEnabled){
+        }else if (simPnnOnsEnabled || (simPnnOplOnsEnabled && !simOplEnabled)){
             PnnOnsName = getFirstPnnOns(regPlmn);
         }
         return PnnOnsName;
