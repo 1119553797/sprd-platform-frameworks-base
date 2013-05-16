@@ -185,7 +185,8 @@ class MountService extends IMountService.Stub
     private boolean                               mSendUmsConnectedOnBoot = false;
     // true if we should fake MEDIA_MOUNTED state for external storage
     private boolean                               mEmulateExternalStorage = false;
-
+    
+    private ConnectivityService                   mCs = null;
     /**
      * Private hash of currently mounted secure containers.
      * Used as a lock in methods to manipulate secure containers.
@@ -335,8 +336,26 @@ class MountService extends IMountService.Stub
 
         @Override
         void handleFinished() {
+            //changed for bug 157342, recover when usb is disconnected
+            if(!mCs.isUsbConnected()){
+                Slog.w(TAG, "usb is not connected, not to enable ums 3: "+path);
+                if(path.equals(mPrimaryVolume.getPath())){
+                    mPms.updateExternalMediaStatus(true, false);
+                }
+                return;
+            }
             super.handleFinished();
+            if(!mCs.isUsbConnected()){
+                Slog.w(TAG, "usb is not connected, not to enable ums 4: "+path);
+                doMountVolume(path);
+                return;
+            }
             doShareUnshareVolume(path, method, true);
+            if(!mCs.isUsbConnected()){
+                Slog.w(TAG, "usb is not connected, but ums enable, disable again 5: "+path);
+                setUsbMassStorageEnabled(path, false);
+                return;
+            }
         }
     }
 
@@ -374,6 +393,12 @@ class MountService extends IMountService.Stub
                 case H_UNMOUNT_PM_UPDATE: {
                     if (DEBUG_UNMOUNT) Slog.i(TAG, "H_UNMOUNT_PM_UPDATE");
                     UnmountCallBack ucb = (UnmountCallBack) msg.obj;
+
+                    if(ucb instanceof UmsEnableCallBack && !mCs.isUsbConnected()){
+                        Slog.w(TAG, "usb disconnected, not to enable ums 1: "+ucb.path);
+                        return;
+                    }
+
                     mForceUnmounts.add(ucb);
                     if (DEBUG_UNMOUNT) Slog.i(TAG, " registered = " + mUpdatingStatus);
                     // Register only if needed.
@@ -396,6 +421,13 @@ class MountService extends IMountService.Stub
                     ServiceManager.getService("activity");
                     for (int i = 0; i < size; i++) {
                         UnmountCallBack ucb = mForceUnmounts.get(i);
+                      //add for bug 157342, deal with usb disconnected when enable ums
+                        if(ucb instanceof UmsEnableCallBack && !mCs.isUsbConnected()){
+                            Slog.w(TAG, "usb disconnected, not to enable ums 2: "+ucb.path);
+                            sizeArr[sizeArrN++] = i;
+                            mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_MS,
+                                    ucb));
+                        }else{
                         String path = ucb.path;
                         boolean done = false;
                         if (!ucb.force) {
@@ -429,6 +461,7 @@ class MountService extends IMountService.Stub
                             sizeArr[sizeArrN++] = i;
                             mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_MS,
                                     ucb));
+                        }
                         }
                     }
                     // Remove already processed elements from list.
@@ -483,7 +516,7 @@ class MountService extends IMountService.Stub
 
             if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
                 mBooted = true;
-
+                mCs = (ConnectivityService) ServiceManager.getService("connectivity");
                 /*
                  * In the simulator, we need to broadcast a volume mounted event
                  * to make the media scanner run.
@@ -1021,7 +1054,17 @@ class MountService extends IMountService.Stub
         }
 
         final String path = Environment.getExternalStorageDirectory().getPath();
-        if (avail == false && getVolumeState(path).equals(Environment.MEDIA_SHARED)) {
+        final String second = Environment.getSecondStorageDirectory().getPath();
+        String temp = null;
+        try{
+            temp = getVolumeState(second);
+        }catch(Exception e){
+            Slog.w(TAG, "second storage is not exist: "+second);
+            temp = Environment.MEDIA_REMOVED;
+        }
+        final String secondState = temp;
+        if (avail == false && getVolumeState(path).equals(Environment.MEDIA_SHARED)
+               ||secondState.equals(Environment.MEDIA_SHARED)) {
             /*
              * USB mass storage disconnected while enabled
              */
@@ -1031,11 +1074,21 @@ class MountService extends IMountService.Stub
                     try {
                         int rc;
                         Slog.w(TAG, "Disabling UMS after cable disconnect");
-                        doShareUnshareVolume(path, "ums", false);
-                        if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
-                            Slog.e(TAG, String.format(
-                                    "Failed to remount {%s} on UMS enabled-disconnect (%d)",
-                                            path, rc));
+                        if(getVolumeState(path).equals(Environment.MEDIA_SHARED)){
+	                        doShareUnshareVolume(path, "ums", false);
+	                        if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
+	                            Slog.e(TAG, String.format(
+	                                    "Failed to remount {%s} on UMS enabled-disconnect (%d)",
+	                                            path, rc));
+	                        }
+                        }
+                        if(secondState.equals(Environment.MEDIA_SHARED)){
+                            doShareUnshareVolume(second, "ums", false);
+                            if ((rc = doMountVolume(second)) != StorageResultCode.OperationSucceeded) {
+                                Slog.e(TAG, String.format(
+                                        "Failed to remount {%s} on UMS enabled-disconnect (%d)",
+                                        second, rc));
+                            }
                         }
                     } catch (Exception ex) {
                         Slog.w(TAG, "Failed to mount media on UMS enabled-disconnect", ex);
