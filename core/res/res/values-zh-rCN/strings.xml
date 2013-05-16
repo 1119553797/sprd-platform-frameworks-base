@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -706,6 +706,9 @@
     <string name="lockscreen_battery_short" msgid="4477264849386850266">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"连接您的充电器。"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"没有 SIM 卡"</string>
+    <!-- Add 20130516 Spreadst of 165322 only display english string start -->
+    <string name="lockscreen_blocked_sim_message_short">"SIM卡 PUK锁定"</string>
+    <!-- Add 20130516 Spreadst of 165322 only display english string end-->
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"平板电脑中没有 SIM 卡。"</string>
     <string name="lockscreen_missing_sim_message" product="default" msgid="2186920585695169078">"手机中无 SIM 卡"</string>
     <string name="lockscreen_missing_sim_instructions" msgid="5372787138023272615">"请插入 SIM 卡"</string>
@@ -1366,7 +1369,7 @@
     <string name="myApp_Uninstall_ChkBox">卸载应用</string>
     <string name="myAppLoading">加载中\u2026</string>
     <string name="myAppProcessing">处理中\u2026</string>
-    
+
     <string name="ringtone_waning">错误的文件，请重新选择</string>
     <string name="CallHold" msgid="">通话被保持</string>
     <string name="CallRetrieved" msgid="">通话已恢复</string>
