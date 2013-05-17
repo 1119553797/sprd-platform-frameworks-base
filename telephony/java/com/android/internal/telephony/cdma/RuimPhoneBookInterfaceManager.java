@@ -132,5 +132,8 @@ public class RuimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager 
     public int getPhoneNumMaxLen() {
         return 0;
     }
-}
 
+    public int getUsimGroupNameMaxLen() {
+        return -1;
+    }
+}

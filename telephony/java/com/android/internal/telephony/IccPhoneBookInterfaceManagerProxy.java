@@ -147,4 +147,7 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
     public List<String> getGasInEf(){
         return mIccPhoneBookInterfaceManager.getGasInEf();
     }
+    public int getUsimGroupNameMaxLen(){
+        return mIccPhoneBookInterfaceManager.getUsimGroupNameMaxLen();
+    }
 }

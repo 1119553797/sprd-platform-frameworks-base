@@ -148,4 +148,7 @@ public class CompositeIccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.St
         return mIccPhoneBookInterfaceManager[getSimplePolicyPhoneId()].getGasInEf();
     }
 
+    public int getUsimGroupNameMaxLen(){
+        return mIccPhoneBookInterfaceManager[getSimplePolicyPhoneId()].getUsimGroupNameMaxLen();
+    }
 }

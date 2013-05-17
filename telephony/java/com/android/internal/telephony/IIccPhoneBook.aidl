@@ -154,4 +154,5 @@ interface IIccPhoneBook {
     List<String> getGasInEf();
     int getEmailMaxLen();
     int getPhoneNumMaxLen();
+    int getUsimGroupNameMaxLen();
 }

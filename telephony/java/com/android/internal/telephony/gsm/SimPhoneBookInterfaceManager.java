@@ -199,6 +199,22 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
 
     }
 
+    public int getUsimGroupNameMaxLen() {
+        Log.i(LOG_TAG, "getGroupNameMaxLen");
+        if (adnCache == null) {
+            return -1;
+        }
+        UsimPhoneBookManager mUsimPhoneBookManager = adnCache.getUsimPhoneBookManager();
+        if (mUsimPhoneBookManager == null) {
+            return -1;
+        }
+        int gasEfId = mUsimPhoneBookManager.findEFGasInfo();
+        int[] gasSize = phone.getIccPhoneBookInterfaceManager().getRecordsSize(gasEfId);
+        if (gasSize == null)
+            return -1;
+        return gasSize[0];
+    }
+
     public int getEmailMaxLen() {
 
         Log.i(LOG_TAG, "getEmailMaxLen");
