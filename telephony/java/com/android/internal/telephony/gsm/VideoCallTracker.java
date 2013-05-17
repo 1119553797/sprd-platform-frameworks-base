@@ -501,7 +501,7 @@ public final class VideoCallTracker extends CallTracker {
             			cm.hangupWaitingOrBackground(obtainCompleteMessage());
             			break;
                 }*/
-                    connections[i] = new VideoConnection(phone.getContext(), dc, this, dc.index);
+                    connections[i] = new VideoConnection(phone.getContext(), dc, this, dc.index-1);
 
                     // it's a ringing call
                     if (connections[i].getCall() == ringingCall) {
@@ -539,7 +539,7 @@ public final class VideoCallTracker extends CallTracker {
                 // we were tracking. Assume dropped call and new call
 
                 droppedDuringPoll.add(conn);
-                connections[i] = new VideoConnection (phone.getContext(), dc, this, dc.index);
+                connections[i] = new VideoConnection (phone.getContext(), dc, this, dc.index-1);
 
                 if (connections[i].getCall() == ringingCall) {
                     newRinging = connections[i];

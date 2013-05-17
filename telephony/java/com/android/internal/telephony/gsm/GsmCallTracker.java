@@ -512,7 +512,7 @@ public final class GsmCallTracker extends CallTracker {
                         return;
                     }
                 } else {
-                    connections[i] = new GsmConnection(phone.getContext(), dc, this, dc.index);
+                    connections[i] = new GsmConnection(phone.getContext(), dc, this, dc.index-1);
 
                     // it's a ringing call
                     if (connections[i].getCall() == ringingCall) {
@@ -549,7 +549,7 @@ public final class GsmCallTracker extends CallTracker {
                 // we were tracking. Assume dropped call and new call
 
                 droppedDuringPoll.add(conn);
-                connections[i] = new GsmConnection (phone.getContext(), dc, this, dc.index);
+                connections[i] = new GsmConnection (phone.getContext(), dc, this, dc.index-1);
 
                 if (connections[i].getCall() == ringingCall) {
                     newRinging = connections[i];
