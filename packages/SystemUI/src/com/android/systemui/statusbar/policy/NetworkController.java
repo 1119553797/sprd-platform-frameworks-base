@@ -268,7 +268,7 @@ public class NetworkController extends BroadcastReceiver {
         mShowAtLeastThreeGees = res.getBoolean(R.bool.config_showMin3G);
         mAlwaysShowCdmaRssi = res.getBoolean(
                 com.android.internal.R.bool.config_alwaysUseCdmaRssi);
-
+        
         // set up the default wifi icon, used when no radios have ever appeared
         updateWifiIcons();
         updateWimaxIcons();
@@ -451,7 +451,16 @@ public class NetworkController extends BroadcastReceiver {
             for (int i=0; i < numPhones; i++) {
                 int cardId = i + 1;
                 if(UNIVERSEUI_SUPPORT){
-                    int simColor = mSimColor[i];
+                    SimManager simManager = SimManager.get(mContext);
+                    Sim sim = simManager.getSimById(i);
+                    int simColor;
+                    if (sim != null) {
+                        Log.d(TAG,"sim = null");
+                        simColor = sim.getColor();
+                    } else {
+                        simColor = mSimColor[i];
+                    }
+                    Log.d(TAG,"simColor = "+simColor);
                     updateTelephonySignalStrength(i);
                     if(mAirplaneMode){
                         simColor = Color.TRANSPARENT;
@@ -1234,7 +1243,7 @@ public class NetworkController extends BroadcastReceiver {
 
     void refreshViews(int phoneId) {
         Context context = mContext;
-        Log.d(TAG, "mSimColor[PhoneId]: "+mSimColor[phoneId]);
+        Log.d(TAG, "mSimColor[ " + phoneId + "] = " + mSimColor[phoneId]);
         int combinedSignalIconId = 0;
         int combinedActivityIconId = 0;
         String combinedLabel = "";
