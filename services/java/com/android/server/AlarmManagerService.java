@@ -983,4 +983,33 @@ class AlarmManagerService extends IAlarmManager.Stub {
             }
         }
     }
+
+    /*
+     * for LC_RAM_SUPPORT
+     *
+     * {@hide}
+     */
+    public void removeAlarmForPackageName(String pkgName) {
+        if (pkgName == null) {
+            return;
+        }
+        synchronized (mLock) {
+            removeLocked(pkgName);
+        }
+    }
+
+    /*
+     * for LC_RAM_SUPPORT
+     *
+     * {@hide}
+     */
+    public boolean checkAlarmForPackageName(String pkgName) {
+        if (pkgName == null) {
+            return false;
+        }
+        synchronized (mLock) {
+            return lookForPackageLocked(pkgName);
+        }
+    }
+
 }

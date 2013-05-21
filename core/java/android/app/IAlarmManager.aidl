@@ -33,6 +33,10 @@ interface IAlarmManager {
 /* Add 20121218 Spreadst of 105993  Regular boot development start */
     void removeAlarm(in PendingIntent operation);
 /* Add 20121218 Spreadst of 105993  Regular boot development end */
+
+    //for LC_RAM_SUPPORT
+    void removeAlarmForPackageName(String packageName);
+    boolean checkAlarmForPackageName(String packageName);
 }
 
 

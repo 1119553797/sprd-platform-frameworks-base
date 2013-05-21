@@ -41,6 +41,7 @@ import android.app.AppGlobals;
 import android.app.ApplicationErrorReport;
 import android.app.Dialog;
 import android.app.IActivityController;
+import android.app.IAlarmManager;
 import android.app.IApplicationThread;
 import android.app.IInstrumentationWatcher;
 import android.app.INotificationManager;
@@ -160,6 +161,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import com.android.internal.policy.impl.PhoneWindowManager;
 
+import static com.sprd.android.config.OptConfig.LC_RAM_SUPPORT;
+
 public final class ActivityManagerService extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
     private static final String USER_DATA_DIR = "/data/user/";
@@ -189,6 +192,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final boolean DEBUG_POWER = localLOGV || false;
     static final boolean DEBUG_POWER_QUICK = DEBUG_POWER || false;
     static final boolean DEBUG_MU = localLOGV || false;
+    static final boolean DEBUG_LC = Debug.isDebug(); //for LOW COST DEBUG
     static final boolean VALIDATE_TOKENS = false;
     static final boolean SHOW_ACTIVITY_START_TIME = true;
     
@@ -296,6 +300,28 @@ public final class ActivityManagerService extends ActivityManagerNative
     private boolean isReadMemForRestartService = false;
     private static final boolean DEFAULT_READ_MEM_FOR_RESTART_SERVICE = false;
     private int restartServiceAtMem = 16;
+
+    // for LC_RAM_SUPPORT
+    private static HashSet<String> whiteList;
+    private static HashSet<String> hasAlarmList;
+
+    static {
+        whiteList = new HashSet<String>();
+        hasAlarmList = new HashSet<String>();
+
+        if (LC_RAM_SUPPORT) {
+	        whiteList.add("com.android.phone");
+	        whiteList.add("com.android.contacts");
+	        whiteList.add("com.android.mms");
+	        //whiteList.add("android.process.acore");
+	        whiteList.add("com.android.systemui");
+	        hasAlarmList.add("com.baidu.searchbox");
+	        hasAlarmList.add("com.baidu.searchbox:pushservice_v1");
+	        hasAlarmList.add("com.facebook.katana");
+	        hasAlarmList.add("com.sina.weibo");
+	        hasAlarmList.add("com.tencent.mm:push");
+        }
+    }
 
     private int mStopingPid = -1;
     private boolean mIsKillStop = false;
@@ -926,6 +952,9 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int FIRST_ACTIVITY_STACK_MSG = 100;
     static final int FIRST_BROADCAST_QUEUE_MSG = 200;
     static final int FIRST_COMPAT_MODE_MSG = 300;
+
+    // for LC_RAM_SUPPORT
+    int mDelayMoreTime = 0;
 
     AlertDialog mUidAlert;
     CompatModeDialog mCompatModeDialog;
@@ -3063,6 +3092,40 @@ public final class ActivityManagerService extends ActivityManagerNative
             stats.noteProcessDiedLocked(app.info.uid, pid);
         }
 
+        // for LC_RAM_SUPPORT
+        if (LC_RAM_SUPPORT && !whiteList.contains(app.processName)) {
+            boolean needRemoveAlarm = false;
+            ApplicationInfo diedAppInfo = app.instrumentationInfo != null
+                ? app.instrumentationInfo : app.info;
+
+            if (DEBUG_LC) Slog.w(TAG, "diedAppInfo: pkg=" + diedAppInfo.packageName);
+
+            for (ServiceRecord sr : app.services) {
+                sr.lowMemKilled = needRemoveAlarm = true;
+                sr.delayMoreTime = (mDelayMoreTime++)%10;
+                if (DEBUG_LC) Slog.w(TAG, "LowMemKillService: app=" + diedAppInfo.packageName + ", srv=" + sr.shortName + " adj="+ app.curAdj);
+            }
+
+            if (needRemoveAlarm && hasAlarmList.contains(app.processName)) {
+                final String roguePack = new String(diedAppInfo.packageName);
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            IAlarmManager alarmService = IAlarmManager.Stub.asInterface(ServiceManager.getService("alarm"));
+
+                            if (alarmService.checkAlarmForPackageName(roguePack)) {
+                                alarmService.removeAlarmForPackageName(roguePack);
+                                if (DEBUG_LC) Slog.w(TAG, "RemoveSvcAlarm: pkg=" + roguePack);
+                            }
+                        } catch(Exception e) {
+                                if (DEBUG_LC) Slog.e(TAG, "RemoveSvcAlarm: Error!! " + e);
+                        }
+                    }
+                });
+            }
+        }
+        // end for LC_RAM_SUPPORT
+
         // Clean up already done if the process has been re-started.
         if (app.pid == pid && app.thread != null &&
                 app.thread.asBinder() == thread.asBinder()) {
@@ -3114,6 +3177,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                     mHandler.sendEmptyMessage(REPORT_MEM_USAGE);
                     scheduleAppGcsLocked();
                 }
+                // for LC_RAM_SUPPORT
+                if (LC_RAM_SUPPORT && haveBg) updateOomAdjLocked();
             }
         } else if (app.pid != pid) {
             // A new process has already been started.
@@ -11172,6 +11237,46 @@ public final class ActivityManagerService extends ActivityManagerNative
     // SERVICES
     // =========================================================
 
+    // for LC_RAM_SUPPORT
+    boolean checkServicesDelayRestartLocked(ServiceRecord r) {
+        boolean needDelay = true;
+
+        for (int i = mLruProcesses.size() - 1 ; i >= 0 ; i--) {
+            ProcessRecord pr = mLruProcesses.get(i);
+            if (pr.thread != null &&
+               (pr.curAdj == ProcessList.HOME_APP_ADJ ||
+                pr.curAdj >= ProcessList.HIDDEN_APP_MIN_ADJ)) {
+                needDelay = false;
+            }
+        }
+
+        if (needDelay) {
+            long delayTime = 0;
+            r.delayRestartCount++;
+            if (r.delayRestartCount < 5) {
+                delayTime = 10 * 1000 * r.delayRestartCount;
+            } else {
+                delayTime = 50 * 1000;
+            }
+
+            r.restartDelay = delayTime + r.delayMoreTime * 1000;
+            r.nextRestartTime = SystemClock.uptimeMillis() + r.restartDelay;
+
+            mHandler.postAtTime(r.restarter, r.nextRestartTime);
+            if (DEBUG_LC) Slog.e(TAG, "ServicesDelayRestart: Delay restart service [" + r.shortName + "] wait " + r.restartDelay + "ms");
+
+        }
+
+        if (!needDelay) {
+            if (DEBUG_LC) Slog.w(TAG, "ServicesDelayRestart: Restart service[" + r.shortName + "]");
+            r.lowMemKilled = false;
+            r.delayRestartCount = 0;
+        }
+
+        return needDelay;
+    }
+    // end for LC_RAM_SUPPORT
+
     ActivityManager.RunningServiceInfo makeRunningServiceInfoLocked(ServiceRecord r) {
         ActivityManager.RunningServiceInfo info =
             new ActivityManager.RunningServiceInfo();
@@ -11692,19 +11797,24 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (!mRestartingServices.contains(r)) {
             return;
         }
-        Slog.w(TAG, "performServiceRestartLocked packagename :"+r.packageName);
-        if(isReadMemForRestartService && !"com.android.phone".equals(r.packageName)){
-            long freeMem = readAvailMem();
-            Slog.w(TAG, "restart service :"+r.packageName);
-            if(freeMem < 1024*restartServiceAtMem){
-                Slog.w(TAG, "freeMem < 1024 * "+restartServiceAtMem);
-                /**
-                 * Has been filterd out repeat services in scheduleServiceRestartLocked
-                 */
-                scheduleServiceRestartLocked(r,r.restartForKill);
-                return ;
-            }
-        }
+//        Slog.w(TAG, "performServiceRestartLocked packagename :"+r.packageName);
+//        if(isReadMemForRestartService && !"com.android.phone".equals(r.packageName)){
+//            long freeMem = readAvailMem();
+//            Slog.w(TAG, "restart service :"+r.packageName);
+//            if(freeMem < 1024*restartServiceAtMem){
+//                Slog.w(TAG, "freeMem < 1024 * "+restartServiceAtMem);
+//                /**
+//                 * Has been filterd out repeat services in scheduleServiceRestartLocked
+//                 */
+//                scheduleServiceRestartLocked(r,r.restartForKill);
+//                return ;
+//            }
+//        }
+
+        // for LC_RAM_SUPPORT
+        if (LC_RAM_SUPPORT)
+            if (r.lowMemKilled && checkServicesDelayRestartLocked(r)) return;
+
         bringUpServiceLocked(r, r.intent.getIntent().getFlags(), true);
     }
 

@@ -99,6 +99,12 @@ class ServiceRecord extends Binder {
 
     String stringName;      // caching of toString
     
+    // for LC_RAM_SUPPORT
+    boolean lowMemKilled;   // has killed by AMS when low memory
+    int delayRestartCount;  // count of delay restart by AMS because of low memory
+    int delayMoreTime;      //
+    // end for LC_RAM_SUPPORT
+
     private int lastStartId;    // identifier of most recent start request.
 
     boolean restartForKill;  //see AMS#killServicesLocked(ProcessRecord,boolean) and AMS#realStartServiceLocked(ServiceRecord,ProcessRecord)
