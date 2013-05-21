@@ -6,6 +6,8 @@
  */
 
 #define LOG_TAG "appproc"
+#define LAST_SHUTDOWN_FILE "/data/last_shutdown_flag"
+#define DEXPREOPT_PATH "/data/dalvik-cache"
 
 #include <binder/IPCThreadState.h>
 #include <binder/ProcessState.h>
@@ -16,6 +18,15 @@
 
 #include <stdio.h>
 #include <unistd.h>
+
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <dirent.h>
+#include <string.h>
 
 namespace android {
 
@@ -128,6 +139,52 @@ static void setArgv0(const char *argv0, const char *newArgv0)
     strlcpy(const_cast<char *>(argv0), newArgv0, strlen(argv0));
 }
 
+//delete files in /data/dalvik-cache dir
+void doDelCache()
+{
+    char file_path[PATH_MAX];
+    DIR *d;
+    struct dirent *file;
+    if (access(DEXPREOPT_PATH, F_OK) == -1)
+    {
+        return;
+    }
+    if(!(d = opendir(DEXPREOPT_PATH)))
+    {
+        return;
+    }
+
+    while ((file = readdir(d)) != NULL)
+    {
+        if (strncmp(file->d_name, ".", 1) == 0 || strncmp(file->d_name, "..", 1) == 0)
+            continue;
+
+        strcpy(file_path, DEXPREOPT_PATH);
+        strcat(file_path, "/");
+        strcat(file_path, file->d_name);
+
+        remove(file_path);
+    }
+}
+
+void doLastShutDownCheck()
+{
+    FILE *fp;
+
+    // check whether the file exist
+    if (access(LAST_SHUTDOWN_FILE, F_OK) == -1)
+    {//last shutdown normal.last_shutdown_file is deleted in anroid_os_Power.
+        if ((fp = fopen(LAST_SHUTDOWN_FILE, "w+")) != NULL)
+        {
+            fputs("This is a flag for last shutdown check.Please dont del me!!!", fp);
+        }
+        fclose(fp);
+    } else { //last shutdown unnormal .
+        ALOGV("last shutdown unnormal,delete files in /data/dalvik-cache");
+        doDelCache();
+    }
+}
+
 int main(int argc, const char* const argv[])
 {
     // These are global variables in ProcessState.cpp
@@ -186,6 +243,9 @@ int main(int argc, const char* const argv[])
     runtime.mParentDir = parentDir;
 
     if (zygote) {
+        // do last shutdown check
+        ALOGV("doLastShutDownCheck");
+        doLastShutDownCheck(); 
         runtime.start("com.android.internal.os.ZygoteInit",
                 startSystemServer ? "start-system-server" : "");
     } else if (className) {

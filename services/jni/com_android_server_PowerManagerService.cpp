@@ -17,6 +17,7 @@
 #define LOG_TAG "PowerManagerService-JNI"
 
 //#define LOG_NDEBUG 0
+#define LAST_SHUTDOWN_FILE "/data/last_shutdown_flag"
 
 #include "JNIHelp.h"
 #include "jni.h"
@@ -192,11 +193,27 @@ static int nativeSetScreenState(JNIEnv *env, jobject clazz, jboolean on) {
     return 0;
 }
 
+//del /system/last_shutdown_flag :as normallly shutdown
+void delFlag()
+{
+    if (access(LAST_SHUTDOWN_FILE, F_OK) == -1)
+    {
+        ALOGV( " %s is not exsit.\n", LAST_SHUTDOWN_FILE);
+        return;
+    }
+
+    int res = remove(LAST_SHUTDOWN_FILE);
+    ALOGV( " del %s.res= %d \n", LAST_SHUTDOWN_FILE, res);
+    return;
+}
+
 static void nativeShutdown(JNIEnv *env, jobject clazz) {
+    delFlag();
     android_reboot(ANDROID_RB_POWEROFF, 0, 0);
 }
 
 static void nativeReboot(JNIEnv *env, jobject clazz, jstring reason) {
+    delFlag();
     if (reason == NULL) {
         android_reboot(ANDROID_RB_RESTART2, 0, "power-noreason");
     } else {
