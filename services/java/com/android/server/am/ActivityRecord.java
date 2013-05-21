@@ -797,6 +797,11 @@ final class ActivityRecord {
             }
             startTime = 0;
             finishLaunchTickingLocked();
+            /** SPRD: add for performance optimization of services restarting @{ */
+            if (ActivityManagerService.LC_RAM_SUPPORT) {
+                service.launchEnd(this);
+            }
+            /** @} */
         }
     }
 

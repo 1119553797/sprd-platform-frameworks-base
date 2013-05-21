@@ -32,6 +32,10 @@ interface IAlarmManager {
     void remove(in PendingIntent operation);
     /* SPRD: Modify Bug 208839, Regular boot developmen */
     void removeAlarm(in PendingIntent operation);
+    /** SPRD: add for performance optimization of services restarting @{ */
+    void removeAlarmForPackageName(String packageName);
+    boolean checkAlarmForPackageName(String packageName);
+    /** @} */
 }
 
 

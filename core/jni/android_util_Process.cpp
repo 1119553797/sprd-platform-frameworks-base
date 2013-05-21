@@ -940,6 +940,117 @@ static jlong android_os_Process_getPss(JNIEnv* env, jobject clazz, jint pid)
     return pss * 1024;
 }
 
+/** SPRD: add for performance optimization of services restarting @{ */
+#define READ_BUFFER_SIZE 1024
+
+static long read_little_file_to_buffer(const char *fn, char *buffer, int buffer_len)
+{
+    int fd;
+    long read_len = 0;
+    fd = open(fn, O_RDONLY);
+    if (fd < 0) {
+        fprintf(stderr, "open file %s error:%s", fn, strerror(errno));
+        return -1;
+    }
+
+    read_len = read(fd, buffer, buffer_len);
+    if (read_len < 0) {
+        fprintf(stderr, "read file %s error:%s", fn, strerror(errno));
+        read_len = -1;
+    }
+    close(fd);
+
+    return read_len;
+}
+
+static const char *nexttoksep(char **strp, const char *sep)
+{
+    char *p = strsep(strp,sep);
+    return (p == 0) ? "" : p;
+}
+static const char *nexttok(char **strp)
+{
+    return nexttoksep(strp, " ");
+}
+
+static jlong android_os_Process_getRss(JNIEnv* env, jobject obj, jint pid)
+{
+    char fn[128];
+    char buffer[1024];
+    char *ptr;
+    int res = 0;
+    jlong procRss = 0;
+
+    ALOGV("getRss: pid is %d\n", pid);
+    sprintf(fn, "/proc/%d/stat", pid);
+    //ALOGV("getRss: open file %s\n", fn);
+
+    res = read_little_file_to_buffer(fn, buffer, READ_BUFFER_SIZE);
+    if (res < 0) {
+        ALOGE("getRss: open or read file error!\n");
+        return -1;
+    }
+
+    // fixme:copy form ps->toolbox, if statline format changed, this should be modified
+    ptr = buffer;
+
+    nexttok(&ptr); // 1 skip pid
+    ptr++;          // skip "("
+
+    //name = ptr;     // 2 name
+    ptr = strrchr(ptr, ')'); // Skip to *last* occurence of ')',
+    *ptr++ = '\0';           // and null-terminate name.
+
+    ptr++;         // skip " "
+    nexttok(&ptr); // 3 state
+    nexttok(&ptr); // 4 ppid
+    nexttok(&ptr); // 5 pgrp
+    nexttok(&ptr); // 6 sid
+    nexttok(&ptr); // 7 tty
+
+    nexttok(&ptr); // 8 tpgid
+    nexttok(&ptr); // 9 flags
+    nexttok(&ptr); // 10 minflt
+    nexttok(&ptr); // 11 cminflt
+    nexttok(&ptr); // 12 majflt
+    nexttok(&ptr); // 13 cmajflt
+    nexttok(&ptr); // 14 utime
+    nexttok(&ptr); // 15 stime
+    nexttok(&ptr); // 16 cutime
+    nexttok(&ptr); // 17 cstime
+    nexttok(&ptr); // 18 prio
+    nexttok(&ptr); // 19 nice
+    nexttok(&ptr); // 20 threads
+    nexttok(&ptr); // 21 itrealvalue
+    nexttok(&ptr); // 22 starttime
+    nexttok(&ptr); // 23 vsize
+    procRss = strtol(nexttok(&ptr), NULL, 10); // 24 rss
+    //MYLOGV("getAppUsedMemoryNative: rss is %lld!\n", procRss);
+    //nexttok(&ptr); // rlim
+    //nexttok(&ptr); // startcode
+    //nexttok(&ptr); // endcode
+    //nexttok(&ptr); // startstack
+    //nexttok(&ptr); // kstkesp
+    //nexttok(&ptr); // kstkeip
+    //nexttok(&ptr); // signal
+    //nexttok(&ptr); // blocked
+    //nexttok(&ptr); // sigignore
+    //nexttok(&ptr); // sigcatch
+    //nexttok(&ptr); // wchan
+    //nexttok(&ptr); // nswap
+    //nexttok(&ptr); // cnswap
+    //nexttok(&ptr); // exit signal
+    //nexttok(&ptr); // processor
+    //nexttok(&ptr); // rt_priority
+    //nexttok(&ptr); // scheduling policy
+
+    //nexttok(&ptr); // tty
+
+    // Return the Rss value in bytes, not kilobytes
+    return procRss << 10;
+}
+/** @} */
+
 jintArray android_os_Process_getPidsForCommands(JNIEnv* env, jobject clazz,
         jobjectArray commandNames)
 {
@@ -1062,6 +1173,8 @@ static const JNINativeMethod methods[] = {
     {"parseProcLine", "([BII[I[Ljava/lang/String;[J[F)Z", (void*)android_os_Process_parseProcLine},
     {"getElapsedCpuTime", "()J", (void*)android_os_Process_getElapsedCpuTime},
     {"getPss", "(I)J", (void*)android_os_Process_getPss},
+    // SPRD: add for performance optimization of services restarting
+    {"getRss", "(I)J", (void*)android_os_Process_getRss},
     {"getPidsForCommands", "([Ljava/lang/String;)[I", (void*)android_os_Process_getPidsForCommands},
     //{"setApplicationObject", "(Landroid/os/IBinder;)V", (void*)android_os_Process_setApplicationObject},
 };

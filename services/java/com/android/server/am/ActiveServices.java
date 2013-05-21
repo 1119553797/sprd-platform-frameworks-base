@@ -64,6 +64,11 @@ public class ActiveServices {
     static final String TAG = ActivityManagerService.TAG;
     static final String TAG_MU = ActivityManagerService.TAG_MU;
 
+    // SPRD: add for performance optimization of services restarting
+    static final boolean LC_RAM_SUPPORT = ActivityManagerService.LC_RAM_SUPPORT;
+    static final boolean DEBUG_LC = ActivityManagerService.DEBUG_LC;
+    static HashSet<String> whiteList = ActivityManagerService.whiteList;
+
     // How long we wait for a service to finish executing.
     static final int SERVICE_TIMEOUT = 20*1000;
 
@@ -120,6 +125,11 @@ public class ActiveServices {
      */
     final ArrayList<ServiceRecord> mStoppingServices
             = new ArrayList<ServiceRecord>();
+
+    /** SPRD: add for performance optimization of services restarting @{ */
+    long mRecentAvailMem = 0;
+    long mRecentAvailMemClock = 0;
+    /** @} */
 
     static class ServiceMap {
 
@@ -948,10 +958,108 @@ public class ActiveServices {
         return canceled;
     }
 
+    /** SPRD: add for performance optimization of services restarting @{ */
+    /**
+     * reduce service restart delay time for return back to launcher
+     */
+    void ReduceServicesRestartDelay() {
+        final ArrayList<ServiceRecord> restartingServices = mRestartingServices;
+        final long now1 = SystemClock.uptimeMillis();
+        mAm.mHandler.post(new Runnable(){
+            public void run(){
+                final long now2 = SystemClock.uptimeMillis();
+                synchronized(mRestartingServices) {
+                    for (ServiceRecord sr : restartingServices) {
+                        if (sr.lowMemKilled) {
+                            if (sr.needRestart) {
+                                sr.lowMemKilled = false;
+                            }
+                            sr.restartDelay = sr.delayMoreTime * 1000;
+                            sr.nextRestartTime = now2 > (now1 + sr.restartDelay) ? now2 : (now1 + sr.restartDelay);
+                            sr.restartDelay = sr.nextRestartTime - now2;
+                            if (DEBUG_LC) Slog.e(TAG, "ReduceServicesRestartDelay: Service [" + sr.shortName + "] just wait " + sr.restartDelay + "ms");
+
+                            mAm.mHandler.removeCallbacks(sr.restarter);
+                            mAm.mHandler.postAtTime(sr.restarter, sr.nextRestartTime);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * check if service should be delay
+     */
+    boolean checkServicesDelayRestartLocked(ServiceRecord r) {
+        boolean needDelay = true;
+
+        for (int i = mAm.mLruProcesses.size() - 1 ; i >= 0 ; i--) {
+            ProcessRecord pr = mAm.mLruProcesses.get(i);
+            if (pr.thread != null &&
+               (pr.curAdj >= ProcessList.HIDDEN_APP_MIN_ADJ)) {
+                needDelay = false;
+            }
+        }
+
+        if (needDelay) {
+            if (r.hasFixAdj) {
+                long curClock = SystemClock.uptimeMillis();
+                if (mRecentAvailMem == 0 || (curClock > mRecentAvailMemClock + 10 * 1000)) {
+                    mRecentAvailMem = Process.getAvailMemory();
+                    mRecentAvailMemClock = curClock;
+                }
+                int adjustment = ProcessList.SERVICE_B_ADJ;
+                if (r.appAdj != ProcessRecord.APP_ADJ_DEFAULT) {
+                    adjustment = r.appAdj;
+                }
+                long serviceNeedMem = mAm.mProcessList.getMemLevel(adjustment) >> 10;
+
+                if (mRecentAvailMem > serviceNeedMem) {
+                    needDelay = false;
+                    if (DEBUG_LC) Slog.v(TAG, "ServicesDelayRestart: Mem is enough to restart service [" + r.shortName + "], free mem="
+                        + mRecentAvailMem  + " adj=" + adjustment + " needMem is " + serviceNeedMem);
+                } else {
+                    if (DEBUG_LC) Slog.v(TAG, "ServicesDelayRestart: Delay restart service [" + r.shortName + "], free mem="
+                        + mRecentAvailMem  + " adj=" + adjustment + " needMem is " + serviceNeedMem);
+                }
+            } else {
+                if (DEBUG_LC) Slog.v(TAG, "ServicesDelayRestart: Service [" + r.shortName + "] not have fixAdj");
+            }
+        }
+
+        if (needDelay) {
+            long delayTime = 0;
+            r.delayRestartCount++;
+            if (r.delayRestartCount < 5) {
+                delayTime = 10 * 1000 * r.delayRestartCount;
+            } else {
+                delayTime = 50 * 1000;
+            }
+
+            r.restartDelay = delayTime + r.delayMoreTime * 1000;
+            r.nextRestartTime = SystemClock.uptimeMillis() + r.restartDelay;
+
+            mAm.mHandler.postAtTime(r.restarter, r.nextRestartTime);
+            if (DEBUG_LC) Slog.e(TAG, "ServicesDelayRestart: Delay service [" + r.shortName + "] for " + r.restartDelay + "ms");
+        } else {
+            if (DEBUG_LC) Slog.w(TAG, "ServicesDelayRestart: Restart service[" + r.shortName + "]");
+            r.lowMemKilled = false;
+            r.delayRestartCount = 0;
+        }
+
+        return needDelay;
+    }
+    /** @} */
+
     final void performServiceRestartLocked(ServiceRecord r) {
         if (!mRestartingServices.contains(r)) {
             return;
         }
+        /** SPRD: add for performance optimization of services restarting @{ */
+        if (LC_RAM_SUPPORT)
+            if (r.lowMemKilled && checkServicesDelayRestartLocked(r)) return;
+        /** @} */
         bringUpServiceLocked(r, r.intent.getIntent().getFlags(), true);
     }
 
@@ -1081,6 +1189,12 @@ public class ActiveServices {
         if (DEBUG_MU)
             Slog.v(TAG_MU, "realStartServiceLocked, ServiceRecord.uid = " + r.appInfo.uid
                     + ", ProcessRecord.uid = " + app.uid);
+        /** SPRD: add for performance optimization of services restarting @{ */
+        if (LC_RAM_SUPPORT) {
+            r.appAdj = ProcessRecord.APP_ADJ_DEFAULT;
+            r.hasFixAdj = (app.fixAdj != ProcessRecord.APP_ADJ_DEFAULT);
+        }
+        /** @} */
         r.app = app;
         r.restartTime = r.lastActivity = SystemClock.uptimeMillis();
 
@@ -1465,6 +1579,15 @@ public class ActiveServices {
 
                     mPendingServices.remove(i);
                     i--;
+                    /** SPRD: add for performance optimization of services restarting @{ */
+                    if(LC_RAM_SUPPORT && proc.processName.equals("com.android.systemui") && proc.maxAdj == ProcessList.HIDDEN_APP_MAX_ADJ) {
+                        proc.persistent = true;
+                        proc.maxAdj = ProcessList.PERSISTENT_PROC_ADJ;
+                        if (mAm.mPersistentStartingProcesses.indexOf(proc) < 0) {
+                            mAm.mPersistentStartingProcesses.add(proc);
+                        }
+                    }
+                    /** @} */
                     realStartServiceLocked(sr, proc);
                     didSomething = true;
                 }
@@ -1494,6 +1617,8 @@ public class ActiveServices {
     }
 
     void processStartTimedOutLocked(ProcessRecord proc) {
+        // SPRD: add for performance optimization of services restarting
+        boolean inWhiteList = LC_RAM_SUPPORT && whiteList.contains(proc.processName);
         for (int i=0; i<mPendingServices.size(); i++) {
             ServiceRecord sr = mPendingServices.get(i);
             if ((proc.uid == sr.appInfo.uid
@@ -1503,7 +1628,19 @@ public class ActiveServices {
                 sr.isolatedProc = null;
                 mPendingServices.remove(i);
                 i--;
+                /** SPRD: add for performance optimization of services restarting @{
+                  @orig
                 bringDownServiceLocked(sr, true);
+                 */
+                if (inWhiteList) {
+                    scheduleServiceRestartLocked(sr, true);
+                    sr.lowMemKilled = true;
+                    sr.delayMoreTime = 1;
+                    sr.needRestart = true;
+                } else {
+                    bringDownServiceLocked(sr, true);
+                }
+                /** @} */
             }
         }
     }
@@ -1523,6 +1660,11 @@ public class ActiveServices {
                 Slog.i(TAG, "  Force stopping service " + service);
                 if (service.app != null) {
                     service.app.removed = true;
+                    /** SPRD: add for performance optimization of services restarting @{ */
+                    if (LC_RAM_SUPPORT) {
+                        service.appAdj = service.app.curAdj;
+                    }
+                    /** @} */
                 }
                 service.app = null;
                 service.isolatedProc = null;
@@ -1638,6 +1780,11 @@ public class ActiveServices {
                 synchronized (sr.stats.getBatteryStats()) {
                     sr.stats.stopLaunchedLocked();
                 }
+                /** SPRD: add for performance optimization of services restarting @{ */
+                if (LC_RAM_SUPPORT && sr.app != null) {
+                    sr.appAdj = sr.app.curAdj;
+                }
+                /** @} */
                 sr.app = null;
                 sr.isolatedProc = null;
                 sr.executeNesting = 0;

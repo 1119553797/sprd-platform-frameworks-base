@@ -102,7 +102,16 @@ class ServiceRecord extends Binder {
     long nextRestartTime;   // time when restartDelay will expire.
 
     String stringName;      // caching of toString
-    
+
+    /** SPRD: add for performance optimization of services restarting @{ */
+    boolean lowMemKilled;   // has killed by AMS when low memory
+    int delayRestartCount;  // count of delay restart by AMS because of low memory
+    int delayMoreTime;      //
+    int appAdj = ProcessRecord.APP_ADJ_DEFAULT; // when app dided, set app's adj, used for memory check when check if need restart
+    boolean hasFixAdj;
+    boolean needRestart;
+    /** @} */
+
     private int lastStartId;    // identifier of most recent start request.
 
     static class StartItem {

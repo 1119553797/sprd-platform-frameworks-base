@@ -1079,4 +1079,32 @@ public class Process {
          */
         public boolean usingWrapper;
     }
+
+    /** SPRD: add for performance optimization of services restarting @{ */
+    /**
+     * Gets the available memory could be used, in kB.
+     *
+     * @return available memory could be used in kB,
+     *  or 0 if error occur
+     * @hide
+     */
+    public static final long getAvailMemory() {
+        long freeMem = getFreeMemory();
+        if (freeMem < 0)
+        {
+            freeMem = 0;
+        }
+        return freeMem;
+    }
+
+    /**
+     * Gets the total Rss value for a given process, in bytes.
+     *
+     * @param pid the process to the Rss for
+     * @return the total Rss value for the given process in bytes,
+     *  or -1 if the value cannot be determined
+     * @hide
+     */
+    public static final native long getRss(int pid);
+    /** @} */
 }
