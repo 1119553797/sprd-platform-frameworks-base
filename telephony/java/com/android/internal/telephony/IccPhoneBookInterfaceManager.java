@@ -361,8 +361,10 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
 
     public abstract int getPhoneNumMaxLen();
 
-	public boolean hasEmailInIccCard() {
-		return adnCache.mUsimPhoneBookManager.ishaveEmail;
+    public abstract int getUsimGroupNameMaxLen();
+
+    public boolean hasEmailInIccCard() {
+        return adnCache.mUsimPhoneBookManager.ishaveEmail;
 	}
 
 	public boolean getIshaveAnrField() {
