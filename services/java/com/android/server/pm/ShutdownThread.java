@@ -339,8 +339,11 @@ public final class ShutdownThread extends Thread {
         }
 
         // Shutdown radios.
+        Log.i(TAG, "Shutting down shutdownRadios start");
         shutdownRadios(MAX_RADIO_WAIT_TIME);
+        Log.i(TAG, "Shutting down shutdownRadios end");
         shutdownIccs(MAX_ICC_WAIT_TIME);
+        Log.i(TAG, "Shutting down shutdownIccs end");
 
         // Shutdown MountService to ensure media is in a safe state
         IMountShutdownObserver observer = new IMountShutdownObserver.Stub() {
@@ -406,7 +409,7 @@ public final class ShutdownThread extends Thread {
 
                 for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
                     try {
-                        iccOff[i] = phone[i] == null || !phone[i].isIccCardOn();
+                        iccOff[i] = phone[i] == null || !(phone[i].isIccCardOn() && phone[i].hasIccCard());
                         if (!iccOff[i]) {
                             Log.w(TAG, "Turning off ICC...");
                             phone[i].setIccCard(false);
@@ -423,7 +426,7 @@ public final class ShutdownThread extends Thread {
                     for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
                         if (!iccOff[i]) {
                             try {
-                                iccOff[i] = !phone[i].isIccCardOn();
+                                iccOff[i] = !(phone[i].isIccCardOn() && phone[i].hasIccCard());
                             } catch (RemoteException ex) {
                                 Log.e(TAG, "RemoteException during ICC shutdown", ex);
                                 iccOff[i] = true;
