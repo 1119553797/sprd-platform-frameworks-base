@@ -4551,7 +4551,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             return true;
                         }
                     };
-                    mBootMsgDialog.setTitle(R.string.android_upgrading_title);
+                    /** SPRD: clear dalvik cache when last shutdown abnormal @{ */
+                    //mBootMsgDialog.setTitle(R.string.android_upgrading_title);
+                    boolean isNormal = SystemProperties.get("persist.sys.lastbootflagbak", "unnormal").equals("normal");
+                    mBootMsgDialog.setTitle(isNormal?R.string.android_upgrading_title:
+                                           R.string.android_checking_file_system_title);
+                    /** @} */
                     mBootMsgDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                     mBootMsgDialog.setIndeterminate(true);
                     mBootMsgDialog.getWindow().setType(

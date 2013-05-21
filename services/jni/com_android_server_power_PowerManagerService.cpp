@@ -17,6 +17,8 @@
 #define LOG_TAG "PowerManagerService-JNI"
 
 //#define LOG_NDEBUG 0
+// SPRD: clear dalvik cache when last shutdown abnormal
+#define BOOT_LAST_FLAG  "persist.sys.lastbootflag"
 
 #include "JNIHelp.h"
 #include "jni.h"
@@ -36,6 +38,8 @@
 #include <suspend/autosuspend.h>
 
 #include "com_android_server_power_PowerManagerService.h"
+// SPRD: clear dalvik cache when last shutdown abnormal
+#include "cutils/properties.h"
 
 namespace android {
 
@@ -189,11 +193,23 @@ static void nativeSetAutoSuspend(JNIEnv *env, jclass clazz, jboolean enable) {
     }
 }
 
+/** SPRD: clear dalvik cache when last shutdown abnormal @{ */
+//del /system/last_shutdown_flag :as normallly shutdown
+void changeFlag()
+{
+    property_set((const char*)(BOOT_LAST_FLAG), "normal");
+}
+/** @} */
+
 static void nativeShutdown(JNIEnv *env, jclass clazz) {
+    // SPRD: clear dalvik cache when last shutdown abnormal
+    changeFlag();
     android_reboot(ANDROID_RB_POWEROFF, 0, 0);
 }
 
 static void nativeReboot(JNIEnv *env, jclass clazz, jstring reason) {
+    // SPRD: clear dalvik cache when last shutdown abnormal
+    changeFlag();
     if (reason == NULL) {
         /** SPRD: modify for reboot sliently when system exception crash @{ */
         //android_reboot(ANDROID_RB_RESTART, 0, 0);

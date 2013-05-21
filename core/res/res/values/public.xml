@@ -2077,4 +2077,9 @@
   <!-- SPRD: Modify Bug 208839, Regular boot developmen  -->
   <public type="string" name="shutdown_after_seconds"/>
 
+  <!-- SPRD: add for clear dalvik cache when last shutdown abnormal @{ -->
+  <public type="string" name="android_checking_file_system_title" />
+  <public type="string" name="android_checking_file_system" />
+  <!-- @} -->
+
 </resources>
