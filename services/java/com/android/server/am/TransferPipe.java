@@ -181,6 +181,13 @@ class TransferPipe implements Runnable {
     @Override
     public void run() {
         final byte[] buffer = new byte[1024];
+        if (getReadFd() == null) {
+            synchronized (this) {
+                mFailure = "getReadFd is null";
+                notifyAll();
+                return;
+            }
+        }
         final FileInputStream fis = new FileInputStream(getReadFd().getFileDescriptor());
         final FileOutputStream fos = new FileOutputStream(mOutFd);
 
