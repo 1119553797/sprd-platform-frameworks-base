@@ -36,6 +36,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -84,7 +85,7 @@ import android.telephony.ServiceState;
 public class GpsLocationProvider implements LocationProviderInterface {
 
     private static final String TAG = "GpsLocationProvider";
-
+    private static final boolean LOGD = Debug.isDebug();
     private static final boolean DEBUG = false;
     private static final boolean VERBOSE = false;
 
@@ -583,7 +584,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
             long certainty = mNtpTime.getCacheCertainty();
             long now = System.currentTimeMillis();
 
-            Log.d(TAG, "NTP server returned: "
+            if (LOGD)Log.d(TAG, "NTP server returned: "
                     + time + " (" + new Date(time)
                     + ") reference: " + timeReference
                     + " certainty: " + certainty
@@ -1020,7 +1021,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
             }
 
             int enableOption = Settings.Secure.getInt(mContext.getContentResolver(), "assisted_gps_enable_option", 0);
-            Log.d(TAG, "get the agps enable option is " + enableOption);
+            if (LOGD) Log.d(TAG, "get the agps enable option is " + enableOption);
             if (enableOption == 2) {
                 mPositionMode = GPS_POSITION_MODE_STANDALONE;
             } else if (enableOption == 0) {
@@ -1028,7 +1029,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
                     mPositionMode = GPS_POSITION_MODE_STANDALONE;
                 }
             }
-            Log.d(TAG, "after set mPositionMode = " + mPositionMode);
+            if (LOGD) Log.d(TAG, "after set mPositionMode = " + mPositionMode);
 
             int interval = (hasCapability(GPS_CAPABILITY_SCHEDULING) ? mFixInterval : 1000);
             if (!native_set_position_mode(mPositionMode, GPS_POSITION_RECURRENCE_PERIODIC,
@@ -1311,7 +1312,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 if (result == Phone.APN_ALREADY_ACTIVE) {
                     if (DEBUG) Log.d(TAG, "Phone.APN_ALREADY_ACTIVE");
                     if (mAGpsApn != null) {
-                        Log.d(TAG, "mAGpsDataConnectionIpAddr " + mAGpsDataConnectionIpAddr);
+                        if (LOGD) Log.d(TAG, "mAGpsDataConnectionIpAddr " + mAGpsDataConnectionIpAddr);
                         if (mAGpsDataConnectionIpAddr != 0xffffffff) {
                             boolean route_result;
                             if (DEBUG) Log.d(TAG, "call requestRouteToHost");

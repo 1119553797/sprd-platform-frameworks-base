@@ -27,6 +27,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
+import android.os.Debug;
 
 import com.android.internal.R;
 import com.android.internal.telephony.GsmAlphabet;
@@ -40,7 +41,7 @@ public class GpsNetInitiatedHandler {
 
     private static final String TAG = "GpsNetInitiatedHandler";
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = Debug.isDebug();
     private static final boolean VERBOSE = false;
 
     // NI verify activity for bringing up UI (not used yet)
