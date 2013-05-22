@@ -4282,6 +4282,14 @@ public final class ActivityThread {
             ActivityManagerNative.getDefault().publishContentProviders(
                 getApplicationThread(), results);
         } catch (RemoteException ex) {
+        } catch (SecurityException se) {
+            //could not find the calling app in AMS,just finish self
+            if (Debug.isMonkey()) {
+                Log.w(TAG,"in monkey:could not find the calling app in AMS,just finish self");
+                mAppThread.scheduleExit();
+            } else {
+                throw se;
+            }
         }
     }
 
