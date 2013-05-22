@@ -33,6 +33,7 @@ import android.net.TrafficStats;
 import android.net.wifi.WifiManager;
 import android.os.AsyncResult;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
@@ -67,6 +68,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class DataConnectionTracker extends Handler {
     protected static final boolean DBG = true;
     protected static final boolean VDBG = false;
+    private static final boolean NEED_PRINT = Debug.isDebug();
 
     /**
      * IDLE: ready to start data connection setup, default state
@@ -349,7 +351,9 @@ public abstract class DataConnectionTracker extends Handler {
                 startNetStatPoll();
                 restartDataStallAlarm();
             } else if (action.startsWith(getActionIntentReconnectAlarm())) {
-                log("Reconnect alarm. Previous state was " + mState);
+                if (DBG && NEED_PRINT) {
+                    log("Reconnect alarm. Previous state was " + mState);
+                }
                 onActionIntentReconnectAlarm(intent);
             } else if (action.equals(getActionIntentDataStallAlarm())) {
                 onActionIntentDataStallAlarm(intent);
@@ -592,7 +596,9 @@ public abstract class DataConnectionTracker extends Handler {
 
     protected ApnSetting fetchDunApn() {
         if (SystemProperties.getBoolean("net.tethering.noprovisioning", false)) {
-            log("fetchDunApn: net.tethering.noprovisioning=true ret: null");
+            if (DBG && NEED_PRINT) {
+                log("fetchDunApn: net.tethering.noprovisioning=true ret: null");
+            }
             return null;
         }
         Context c = mPhone.getContext();
@@ -698,7 +704,9 @@ public abstract class DataConnectionTracker extends Handler {
     public void handleMessage(Message msg) {
         switch (msg.what) {
             case AsyncChannel.CMD_CHANNEL_DISCONNECTED: {
-                log("DISCONNECTED_CONNECTED: msg=" + msg);
+                if (DBG && NEED_PRINT) {
+                    log("DISCONNECTED_CONNECTED: msg=" + msg);
+                }
                 DataConnectionAc dcac = (DataConnectionAc) msg.obj;
                 mDataConnectionAsyncChannels.remove(dcac.dataConnection.getDataConnectionId());
                 dcac.disconnected();
@@ -753,7 +761,9 @@ public abstract class DataConnectionTracker extends Handler {
                 break;
 
             case EVENT_DISCONNECT_DONE:
-                log("DataConnectoinTracker.handleMessage: EVENT_DISCONNECT_DONE msg=" + msg);
+                if (DBG && NEED_PRINT) {
+                    log("DataConnectoinTracker.handleMessage: EVENT_DISCONNECT_DONE msg=" + msg);
+                }
                 onDisconnectDone(msg.arg1, (AsyncResult) msg.obj);
                 break;
 
@@ -836,7 +846,9 @@ public abstract class DataConnectionTracker extends Handler {
         synchronized (mDataEnabledLock) {
             result = mPhone.isInEcm() || mPhone.isInEmergencyCall();
         }
-        log("isEmergency: result=" + result);
+        if (DBG && NEED_PRINT) {
+            log("isEmergency: result=" + result);
+        }
         return result;
     }
 
@@ -881,7 +893,9 @@ public abstract class DataConnectionTracker extends Handler {
         case APN_CBS_ID:
             return Phone.APN_TYPE_CBS;
         default:
-            log("Unknown id (" + id + ") in apnIdToType");
+            if (DBG && NEED_PRINT) {
+                log("Unknown id (" + id + ") in apnIdToType");
+            }
             return Phone.APN_TYPE_DEFAULT;
         }
     }
@@ -1168,11 +1182,15 @@ public abstract class DataConnectionTracker extends Handler {
         synchronized (mDataEnabledLock) {
             mInternalDataEnabled = enabled;
             if (enabled) {
-                log("onSetInternalDataEnabled: changed to enabled, try to setup data call");
+                if (DBG && NEED_PRINT) {
+                    log("onSetInternalDataEnabled: changed to enabled, try to setup data call");
+                }
                 resetAllRetryCounts();
                 onTrySetupData(Phone.REASON_DATA_ENABLED);
             } else {
-                log("onSetInternalDataEnabled: changed to disabled, cleanUpAllConnections");
+                if (DBG && NEED_PRINT) {
+                    log("onSetInternalDataEnabled: changed to disabled, cleanUpAllConnections");
+                }
                 cleanUpAllConnections(null);
             }
         }

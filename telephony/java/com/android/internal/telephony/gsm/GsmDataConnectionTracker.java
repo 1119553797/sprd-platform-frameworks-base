@@ -37,6 +37,7 @@ import android.net.ProxyProperties;
 import android.net.TrafficStats;
 import android.net.Uri;
 import android.os.AsyncResult;
+import android.os.Debug;
 import android.os.Message;
 import android.os.ServiceManager;
 import android.os.SystemClock;
@@ -87,6 +88,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     protected final String LOG_TAG = "GSM";
     GSMPhone mGsmPhone;
     private static final boolean RADIO_TESTS = false;
+    private static final boolean NEED_PRINT = Debug.isDebug();
 
     private ArrayList<HashMap<String,Boolean>> ApnFilters = null;
 
@@ -172,7 +174,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
     @Override
     protected void onActionIntentReconnectAlarm(Intent intent) {
         if (intent.getIntExtra("phoneId", -1) != mPhone.getPhoneId()) {
-            log("onActionIntentReconnectAlarm: other phone");
+            if (DBG && NEED_PRINT) {
+                log("onActionIntentReconnectAlarm: other phone");
+            }
             return;
         }
         String reason = intent.getStringExtra(INTENT_RECONNECT_ALARM_EXTRA_REASON);
@@ -808,7 +812,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             apnContext.setState(State.CONNECTED);
             mPhone.notifyDataConnection(apnContext.getReason(), apnContext.getApnType());
 
-            log("trySetupData: (fix?) We're on the simulator; assuming data is connected");
+            if (DBG && NEED_PRINT) {
+                log("trySetupData: (fix?) We're on the simulator; assuming data is connected");
+            }
             return true;
         }
 
@@ -1093,7 +1099,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 return (GsmDataConnection) dc;
             }
         }
-        log("findFreeDataConnection: NO free GsmDataConnection");
+        if (DBG && NEED_PRINT) {
+            log("findFreeDataConnection: NO free GsmDataConnection");
+        }
         return null;
     }
 
@@ -1167,7 +1175,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                }
            }
 
-           Log.d(LOG_TAG, " getApnActivePdpFilter  apntypes:"+apntype+"  filterenable:"+filterenable);
+           if (DBG && NEED_PRINT) {
+               Log.d(LOG_TAG, " getApnActivePdpFilter  apntypes:"+apntype+"  filterenable:"+filterenable);
+           }
 
            return filterenable;
        }
@@ -1182,7 +1192,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
       {
            return  getApnActivePdpFilter(type) ;
       }
-        Log.d(LOG_TAG, " ApnActiveTypeFilter  return false");
+      if (DBG && NEED_PRINT) {
+          Log.d(LOG_TAG, " ApnActiveTypeFilter  return false");
+      }
         return false;
     }
 
@@ -1624,7 +1636,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
         if (RADIO_TESTS) {
             if (SystemProperties.getBoolean("radio.test.data.stall", false)) {
-                log("updateDataStallInfo: radio.test.data.stall true received = 0;");
+                if (DBG && NEED_PRINT) {
+                    log("updateDataStallInfo: radio.test.data.stall true received = 0;");
+                }
                 received = 0;
             }
         }
@@ -2109,7 +2123,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             // setState(State.CONNECTED);
             notifyDataConnection(null);
 
-            log("onRadioAvailable: We're on the simulator; assuming data is connected");
+            if (DBG && NEED_PRINT) {
+                log("onRadioAvailable: We're on the simulator; assuming data is connected");
+            }
         }
 
         if (mPhone.mIccRecords.getRecordsLoaded()) {
@@ -2132,7 +2148,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         if (mPhone.getSimulatedRadioControl() != null) {
             // Assume data is connected on the simulator
             // FIXME  this can be improved
-            log("We're on the simulator; assuming radio off is meaningless");
+            if (DBG && NEED_PRINT) {
+                log("We're on the simulator; assuming radio off is meaningless");
+            }
         } else {
             if (DBG) log("onRadioOffOrNotAvailable: is off and clean up all connections");
             cleanUpAllConnections(false, Phone.REASON_RADIO_TURNED_OFF);
@@ -2165,17 +2183,23 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 ContentResolver cr = mPhone.getContext().getContentResolver();
                 String radioTestProperty = "radio.test.onDSC.null.dcac";
                 if (Settings.System.getInt(cr, radioTestProperty, 0) == 1) {
-                    log("onDataSetupComplete: " + radioTestProperty +
-                            " is true, set dcac to null and reset property to false");
+                    if (DBG && NEED_PRINT) {
+                        log("onDataSetupComplete: " + radioTestProperty +
+                        " is true, set dcac to null and reset property to false");
+                    }
                     dcac = null;
                     Settings.System.putInt(cr, radioTestProperty, 0);
-                    log("onDataSetupComplete: " + radioTestProperty + "=" +
-                            Settings.System.getInt(mPhone.getContext().getContentResolver(),
-                                    radioTestProperty, -1));
+                    if (DBG && NEED_PRINT) {
+                        log("onDataSetupComplete: " + radioTestProperty + "=" +
+                                Settings.System.getInt(mPhone.getContext().getContentResolver(),
+                                        radioTestProperty, -1));
+                    }
                 }
             }
             if (dcac == null) {
-                log("onDataSetupComplete: no connection to DC, handle as error");
+                if (DBG && NEED_PRINT) {
+                    log("onDataSetupComplete: no connection to DC, handle as error");
+                }
                 cause = DataConnection.FailCause.CONNECTION_TO_DATACONNECTIONAC_BROKEN;
                 handleError = true;
             } else {
@@ -2620,17 +2644,23 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
     private void setPreferredApn(int pos) {
         if (!canSetPreferApn) {
-            log("setPreferredApn: X !canSEtPreferApn");
+            if (DBG && NEED_PRINT) {
+                log("setPreferredApn: X !canSEtPreferApn");
+            }
             return;
         }
 
-        log("setPreferredApn: delete");
+        if (DBG && NEED_PRINT) {
+            log("setPreferredApn: delete");
+        }
         Uri preferapn_uri = getPreferApnUriByPhoneId(mPhone.getPhoneId());
         ContentResolver resolver = mPhone.getContext().getContentResolver();
         resolver.delete(preferapn_uri, null, null);
 
         if (pos >= 0) {
-            log("setPreferredApn: insert");
+            if (DBG && NEED_PRINT) {
+                log("setPreferredApn: insert");
+            }
             ContentValues values = new ContentValues();
             values.put(getApnIdByPhoneId(mPhone.getPhoneId()), pos);
             resolver.insert(preferapn_uri, values);
@@ -2639,7 +2669,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
     private ApnSetting getPreferredApn() {
         if (mAllApns.isEmpty()) {
-            log("getPreferredApn: X not found mAllApns.isEmpty");
+            if (DBG && NEED_PRINT) {
+                log("getPreferredApn: X not found mAllApns.isEmpty");
+            }
             return null;
         }
 
@@ -2660,7 +2692,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             pos = cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Carriers._ID));
             for(ApnSetting p:mAllApns) {
                 if (p.id == pos && p.canHandleType(Phone.APN_TYPE_DEFAULT)) {
-                    log("getPreferredApn: X found apnSetting" + p);
+                    if (DBG && NEED_PRINT) {
+                        log("getPreferredApn: X found apnSetting" + p);
+                    }
                     cursor.close();
                     return p;
                 }
@@ -2671,7 +2705,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             cursor.close();
         }
 
-        log("getPreferredApn: X not found");
+        if (DBG && NEED_PRINT) {
+            log("getPreferredApn: X not found");
+        }
         return null;
     }
 
@@ -2769,7 +2805,9 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 break;
 
             case EVENT_SWITCH_PHONE:
-                Log.d(LOG_TAG, "EVENT_SWITCH_PHONE");
+                if (DBG && NEED_PRINT) {
+                    Log.d(LOG_TAG, "EVENT_SWITCH_PHONE");
+                }
                 MsmsGsmDataConnectionTrackerProxy.checkAndSwitchPhone(mPhone.getPhoneId(),
                         mPhone.getContext());
                 break;
