@@ -343,7 +343,7 @@ public class CatService extends Handler implements AppInterface {
                     "icon = "                 + ((DisplayTextParams)cmdParams).textMsg.icon +
                     " iconSelfExplanatory = " + ((DisplayTextParams)cmdParams).textMsg.iconSelfExplanatory +
                     " text = "                + ((DisplayTextParams)cmdParams).textMsg.text);
-            if(((DisplayTextParams)cmdParams).textMsg.icon == null
+            if(((DisplayTextParams)cmdParams).textMsg.icon != null
                     && ((DisplayTextParams)cmdParams).textMsg.iconSelfExplanatory == false
                     && ((DisplayTextParams)cmdParams).textMsg.text == null){
                 sendTerminalResponse(cmdParams.cmdDet, ResultCode.CMD_DATA_NOT_UNDERSTOOD, false,
