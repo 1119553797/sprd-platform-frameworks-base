@@ -1034,6 +1034,8 @@ public class MediaScanner
                                     ContentUris.withAppendedId(tableUri, rowId).toString());
                 } else if (alarms) {
                     setSettingIfNotSet(Settings.System.ALARM_ALERT, tableUri, rowId);
+                    Settings.System.putString(mContext.getContentResolver(), Settings.System.DEFAULT_ALARM, 
+                            ContentUris.withAppendedId(tableUri, rowId).toString());
                     mDefaultAlarmSet = true;
                 }
             }
