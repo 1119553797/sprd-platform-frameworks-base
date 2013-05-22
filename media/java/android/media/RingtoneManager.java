@@ -669,6 +669,9 @@ public class RingtoneManager {
         String notificationUriString = Settings.System.getString(context.getContentResolver(),
                 Settings.System.DEFAULT_NOTIFICATION);
         Uri mDefaultNotificationUri = (notificationUriString != null ? Uri.parse(notificationUriString) : null);
+        String alarmUriString = Settings.System.getString(context.getContentResolver(),
+                Settings.System.DEFAULT_ALARM);
+        Uri mDefaultAlarmUri = (alarmUriString != null ? Uri.parse(alarmUriString) : null);
         try {
             cursor = context.getContentResolver().query(uri,
                     new String[] { MediaStore.Audio.Media.TITLE , MediaStore.Audio.Media.DATA }, null, null, null);
@@ -680,6 +683,8 @@ public class RingtoneManager {
                             uri = mDefaultRingtoneUri;
                         } else if ((type & TYPE_NOTIFICATION) != 0) {
                             uri = mDefaultNotificationUri;
+                        }else if ((type & TYPE_ALARM) != 0) {
+                            uri = mDefaultAlarmUri;
                         }
                     }
                 }
@@ -688,6 +693,8 @@ public class RingtoneManager {
                     uri = mDefaultRingtoneUri;
                 } else if ((type & TYPE_NOTIFICATION) != 0) {
                     uri = mDefaultNotificationUri;
+                }else if ((type & TYPE_ALARM) != 0) {
+                    uri = mDefaultAlarmUri;
                 }
             }
         } catch (Exception sqle) {

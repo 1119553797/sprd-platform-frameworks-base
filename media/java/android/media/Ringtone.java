@@ -66,10 +66,10 @@ public class Ringtone {
     private String mTitle;
 
     private int mStreamType = AudioManager.STREAM_RING;
+    private Uri mDefaultRingtoneUri;
 
     private boolean mLoop = false;
     /* Add 20130407 Spreadst of 144891,not reset to default ringtone start */
-    private static Uri mDefaultRingtoneUri = Uri.parse("content://media/internal/audio/media/9");
     /* Add 20130407 Spreadst of 144891,not reset to default ringtone end */
     /** {@hide} */
     public Ringtone(Context context, boolean allowRemote) {
@@ -207,6 +207,20 @@ public class Ringtone {
              * Add 20130407 Spreadst of 144891,not reset to default ringtone
              * start
              */
+            if (mStreamType == AudioManager.STREAM_RING) {
+                String ringerUriString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.DEFAULT_RINGTONE);
+                mDefaultRingtoneUri = (ringerUriString != null ? Uri.parse(ringerUriString) : null);
+            } else if (mStreamType == AudioManager.STREAM_NOTIFICATION) {
+                String notifiUriString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.DEFAULT_NOTIFICATION);
+                mDefaultRingtoneUri = (notifiUriString != null ? Uri.parse(notifiUriString) : null);
+            } else if (mStreamType == AudioManager.STREAM_ALARM) {
+                String alarmUriString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.DEFAULT_ALARM);
+                mDefaultRingtoneUri = (alarmUriString != null ? Uri.parse(alarmUriString) : null);
+            }
+
             mUri = mDefaultRingtoneUri;
             mLocalPlayer = new MediaPlayer();
             try {

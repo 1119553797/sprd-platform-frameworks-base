@@ -1648,6 +1648,7 @@ public final class Settings {
         public static final String RINGTONE = "ringtone";
         public static final String DEFAULT_RINGTONE = "default_ringtone";
         public static final String DEFAULT_NOTIFICATION = "default_notification";
+        public static final String DEFAULT_ALARM = "default_alarm";
 
         /**
          * A {@link Uri} that will point to the current default ringtone at any
