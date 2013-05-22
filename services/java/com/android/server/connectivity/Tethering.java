@@ -16,6 +16,16 @@
 
 package com.android.server.connectivity;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -36,13 +46,12 @@ import android.net.LinkProperties;
 import android.net.NetworkInfo;
 import android.net.NetworkUtils;
 import android.os.Binder;
+import android.os.Debug;
 import android.os.HandlerThread;
-import android.os.IBinder;
 import android.os.INetworkManagementService;
 import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
-import android.os.ServiceManager;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -51,16 +60,6 @@ import com.android.internal.util.IState;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
 import com.google.android.collect.Lists;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Inet4Address;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * @hide
@@ -73,7 +72,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
 
     private Context mContext;
     private final static String TAG = "Tethering";
-    private final static boolean DBG = true;
+    private final static boolean DBG = Debug.isDebug();
     private final static boolean VDBG = false;
 
     // TODO - remove both of these - should be part of interface inspection/selection stuff
