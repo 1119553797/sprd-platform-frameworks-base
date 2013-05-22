@@ -41,6 +41,7 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
+import android.os.Debug;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -64,7 +65,7 @@ public class UsbDeviceManager {
 
     private static final String TAG = UsbDeviceManager.class.getSimpleName();
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = Debug.isDebug();
 
     private static final String USB_STATE_MATCH =
             "DEVPATH=/devices/virtual/android_usb/android0";
