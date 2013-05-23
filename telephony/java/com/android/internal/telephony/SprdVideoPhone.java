@@ -35,10 +35,6 @@ public interface SprdVideoPhone {
 
     public void unregisterForNewRingingVideoCall(Handler h);
 
-    public void registerForIncomingRingVideoCall(Handler h, int what, Object obj);
-
-    public void unregisterForIncomingRingVideoCall(Handler h);
-
     public void registerForVideoCallDisconnect(Handler h, int what, Object obj);
 
     public void unregisterForVideoCallDisconnect(Handler h);
@@ -50,10 +46,6 @@ public interface SprdVideoPhone {
     public void registerForVideoCallFail(Handler h, int what, Object obj);
 
     public void unregisterForVideoCallFail(Handler h);
-
-    public void registerForRemoteCamera(Handler h, int what, Object obj);
-
-    public void unregisterForRemoteCamera(Handler h);
 
     public void registerForVideoCallCodec(Handler h, int what, Object obj);
 
@@ -72,8 +64,6 @@ public interface SprdVideoPhone {
     public Connection dialVP(String dialString) throws CallStateException;
 
     public void fallBack() throws CallStateException;
-
-    public void acceptFallBack() throws CallStateException;
 
     public void controlCamera(boolean bEnable) throws CallStateException;
 

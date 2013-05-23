@@ -1714,16 +1714,6 @@ public abstract class GSMPhone extends PhoneBase {
         pw.println(" mVmNumber=" + mVmNumber);
     }
 
-    public void registerForGprsAttached(Handler h,int what, Object obj) {
-        Log.i(LOG_TAG, " This registerForGprsAttached for GSM.");
-        mSST.registerForDataConnectionAttached(h, what, obj);
-    }
-
-    public void unregisterForGprsAttached(Handler h) {
-        Log.i(LOG_TAG, " This unregisterForGprsAttached for GSM.");
-        mSST.unregisterForDataConnectionAttached(h);
-    }
-
     class AsyncThread extends Handler {
         public AsyncThread(Looper looper) {
             super(looper);

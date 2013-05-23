@@ -17,7 +17,6 @@ public class MsmsCallManager extends CallManager {
     private static final int EVENT_NEW_RINGING_VIDEO_CALL = 200;
     private static final int EVENT_PRECISE_VIDEO_CALL_STATE_CHANGED = 201;
     private static final int EVENT_VIDEO_CALL_DISCONNECT = 202;
-    private static final int EVENT_INCOMING_RING_VIDEO_CALL = 203;
     private static final int EVENT_VIDEO_CALL_FALL_BACK = 204;
     private static final int EVENT_VIDEO_CALL_FAIL = 205;
     private static final int EVENT_VIDEO_CALL_CODEC  = 206;
@@ -30,9 +29,6 @@ public class MsmsCallManager extends CallManager {
     = new RegistrantList();
 
     protected final RegistrantList mVideoCallDisconnectRegistrants
-    = new RegistrantList();
-
-    protected final RegistrantList mIncomingRingVideoCallRegistrants
     = new RegistrantList();
 
     protected final RegistrantList mVideoCallFallBackRegistrants
@@ -77,32 +73,16 @@ public class MsmsCallManager extends CallManager {
             }
             mPhones.add(basePhone);
 
-         if (basePhone instanceof TDPhone) {
-            TDPhone tdPhone = (TDPhone)basePhone;
-            ArrayList<Call> calls = tdPhone.getRingingCalls();
-            for (Call call : calls) {
-                mRingingCalls.add(call);
-            }
-            calls = tdPhone.getBackgroundCalls();
-            for (Call call : calls) {
-                mBackgroundCalls.add(call);
-            }
-            calls = tdPhone.getForegroundCalls();
-            for (Call call : calls) {
-                mForegroundCalls.add(call);
-            }
-        } else {
             mRingingCalls.add(basePhone.getRingingCall());
             mBackgroundCalls.add(basePhone.getBackgroundCall());
             mForegroundCalls.add(basePhone.getForegroundCall());
-        }
+
             registerForPhoneStates(basePhone);
 
             // for events supported only by 3G Phone
             phone.registerForNewRingingVideoCall(mMsmsHandler, EVENT_NEW_RINGING_VIDEO_CALL, null);
             phone.registerForPreciseVideoCallStateChanged(mMsmsHandler, EVENT_PRECISE_VIDEO_CALL_STATE_CHANGED, null);
             phone.registerForVideoCallDisconnect(mMsmsHandler, EVENT_VIDEO_CALL_DISCONNECT, null);
-            phone.registerForIncomingRingVideoCall(mMsmsHandler, EVENT_INCOMING_RING_VIDEO_CALL, null);
             phone.registerForVideoCallFallBack(mMsmsHandler, EVENT_VIDEO_CALL_FALL_BACK, null);
             phone.registerForVideoCallFail(mMsmsHandler, EVENT_VIDEO_CALL_FAIL, null);
             phone.registerForVideoCallCodec(mMsmsHandler, EVENT_VIDEO_CALL_CODEC, phone);
@@ -128,10 +108,6 @@ public class MsmsCallManager extends CallManager {
                 case EVENT_VIDEO_CALL_DISCONNECT:
                     if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_VIDEO_CALL_DISCONNECT)");
                     mVideoCallDisconnectRegistrants.notifyRegistrants((AsyncResult) msg.obj);
-                    break;
-                case EVENT_INCOMING_RING_VIDEO_CALL:
-                    if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_INCOMING_RING_VIDEO_CALL)");
-                    mIncomingRingVideoCallRegistrants.notifyRegistrants((AsyncResult) msg.obj);
                     break;
                 case EVENT_VIDEO_CALL_FALL_BACK:
                     if (VDBG) Log.d(LOG_TAG, " handleMessage (EVENT_VIDEO_CALL_FALL_BACK)");
@@ -215,27 +191,6 @@ public class MsmsCallManager extends CallManager {
 
     public void unregisterForNewRingingVideoCall(Handler h){
         mNewRingingVideoCallRegistrants.remove(h);
-    }
-
-    /**
-     * Notifies when an incoming call rings.<p>
-     *
-     *  Messages received from this:
-     *  Message.obj will be an AsyncResult
-     *  AsyncResult.userObj = obj
-     *  AsyncResult.result = a Connection. <p>
-     */
-    public void registerForIncomingRingVideoCall(Handler h, int what, Object obj){
-        mIncomingRingVideoCallRegistrants.addUnique(h, what, obj);
-    }
-
-    /**
-     * Unregisters for ring notification.
-     * Extraneous calls are tolerated silently
-     */
-
-    public void unregisterForIncomingRingVideoCall(Handler h){
-        mIncomingRingVideoCallRegistrants.remove(h);
     }
 
     public void registerForVideoCallFallBack(Handler h, int what, Object obj){

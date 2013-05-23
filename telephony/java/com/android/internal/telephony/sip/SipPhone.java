@@ -1006,18 +1006,6 @@ public class SipPhone extends SipPhoneBase {
 	}
 
 	@Override
-	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unregisterForIncomingRingVideoCall(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void registerForVideoCallDisconnect(Handler h, int what, Object obj) {
 		// TODO Auto-generated method stub
 
@@ -1054,18 +1042,6 @@ public class SipPhone extends SipPhoneBase {
 	}
 
 	@Override
-	public void registerForRemoteCamera(Handler h, int what, Object obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void unregisterForRemoteCamera(Handler h) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void registerForVideoCallCodec(Handler h, int what, Object obj) {
 		// TODO Auto-generated method stub
 
@@ -1091,12 +1067,6 @@ public class SipPhone extends SipPhoneBase {
 
 	@Override
 	public void fallBack() throws CallStateException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void acceptFallBack() throws CallStateException {
 		// TODO Auto-generated method stub
 
 	}
