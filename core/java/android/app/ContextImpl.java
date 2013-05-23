@@ -150,6 +150,7 @@ class ReceiverRestrictedContext extends ContextWrapper {
  * context object for Activity and other application components.
  */
 class ContextImpl extends Context {
+    private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
     private final static String TAG = "ApplicationContext";
     private final static boolean DEBUG = false;
 
@@ -1523,6 +1524,9 @@ class ContextImpl extends Context {
             c.mRestricted = (flags & CONTEXT_RESTRICTED) == CONTEXT_RESTRICTED;
             c.init(pi, null, mMainThread, mResources, mBasePackageName);
             if (c.mResources != null) {
+		if (UNIVERSE_UI_SUPPORT) {
+		    ActivityThread.attachTheme(c.getAssets(), pi.getResDir());
+		}
                 return c;
             }
         }

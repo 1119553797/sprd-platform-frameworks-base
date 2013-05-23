@@ -1611,17 +1611,7 @@ public final class ActivityThread {
             isCTSTest = true;
         }
         if (UNIVERSE_UI_SUPPORT && !isCTSTest) {
-            ThemeInfo sysTheme=null;
-            ThemeInfo appTheme=null;
-            try {
-                sysTheme=getThemeManager().getAppliedTheme("/system/framework/framework-res.apk");
-                appTheme=getThemeManager().getAppliedTheme(resDir);
-            } catch (Exception e) {}
-
-            attachThemeAssets(assets, sysTheme, true);
-            attachThemeAssets(assets, appTheme, false);
-
-            attachThemeAssets(AssetManager.getSystem(), sysTheme, true);
+	    attachTheme(assets, resDir);
         }
 
         //Slog.i(TAG, "Resource: key=" + key + ", display metrics=" + metrics);
@@ -4857,7 +4847,7 @@ public final class ActivityThread {
         throw new RuntimeException("Main thread loop unexpectedly exited");
     }
 
-    private boolean attachThemeAssets(AssetManager assets, ThemeInfo theme, boolean forSystem) {
+    private static boolean attachThemeAssets(AssetManager assets, ThemeInfo theme, boolean forSystem) {
 	if (theme==null) {
 	    return false;
 	}
@@ -4873,5 +4863,23 @@ public final class ActivityThread {
 	    return true;
 	}
 	return false;
+    }
+
+    public static void attachTheme(AssetManager assets, String resDir) {
+	if (assets ==null || TextUtils.isEmpty(resDir)) {
+	    return;
+	}
+
+	ThemeInfo sysTheme=null;
+	ThemeInfo appTheme=null;
+	try {
+	    sysTheme=getThemeManager().getAppliedTheme("/system/framework/framework-res.apk");
+	    appTheme=getThemeManager().getAppliedTheme(resDir);
+	} catch (Exception e) {}
+
+	attachThemeAssets(assets, sysTheme, true);
+	attachThemeAssets(assets, appTheme, false);
+
+	attachThemeAssets(AssetManager.getSystem(), sysTheme, true);
     }
 }

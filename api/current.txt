@@ -1067,6 +1067,7 @@ package android {
     field public static final int useIntrinsicSizeAsMinimum = 16843536; // 0x1010310
     field public static final int useLevel = 16843167; // 0x101019f
     field public static final int userVisible = 16843409; // 0x1010291
+    field public static final int uuiTheme = 16843700; // 0x10103b4
     field public static final int value = 16842788; // 0x1010024
     field public static final int valueFrom = 16843486; // 0x10102de
     field public static final int valueTo = 16843487; // 0x10102df
