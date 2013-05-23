@@ -120,6 +120,13 @@ public class AudioSystem
     public static native boolean isStreamActive(int stream, int inPastMs);
 
     /*
+     * Checks whether audio recording is going in AudioFlinger.
+     *
+     * return true if audio recording is going.
+     */
+    public static native boolean isAudioRecording();
+
+    /*
      * Sets a group generic audio configuration parameters. The use of these parameters
      * are platform dependent, see libaudio
      *

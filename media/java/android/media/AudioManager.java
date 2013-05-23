@@ -1533,6 +1533,14 @@ public class AudioManager {
     // modified for FM end
 
     /**
+     * Checks whether audio recording is going in AudioFlinger.
+     * @return true if audio recording is going.
+     */
+    public boolean isAudioRecording() {
+        return AudioSystem.isAudioRecording();
+    }
+
+    /**
      * @hide
      * If the stream is active locally or remotely, adjust its volume according to the enforced
      * priority rules.
