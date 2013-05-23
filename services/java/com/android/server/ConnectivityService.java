@@ -57,6 +57,7 @@ import android.net.RouteInfo;
 import android.net.wifi.WifiStateTracker;
 import android.net.wimax.WimaxManagerConstants;
 import android.os.Binder;
+import android.os.Debug;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -112,6 +113,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     private static final boolean DBG = true;
     private static final boolean VDBG = false;
+    private static final boolean NEED_PRINT = Debug.isDebug();
     private static final String TAG = "ConnectivityService";
 
     private static final boolean LOGD_RULES = false;
@@ -2643,7 +2645,9 @@ private NetworkStateTracker makeWimaxStateTracker() {
                         }
                     }
                     if (causedBy != null) {
-                        log("NetTransition Wakelock for " + causedBy + " released by timeout");
+                        if (DBG && NEED_PRINT) {
+                            log("NetTransition Wakelock for " + causedBy + " released by timeout");
+                        }
                     }
                     break;
                 case EVENT_RESTORE_DEFAULT_NETWORK:

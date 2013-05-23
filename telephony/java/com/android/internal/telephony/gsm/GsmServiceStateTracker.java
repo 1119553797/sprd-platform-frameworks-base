@@ -44,6 +44,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.os.AsyncResult;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
@@ -79,6 +80,7 @@ import com.android.internal.R;
 final class GsmServiceStateTracker extends ServiceStateTracker {
     static final String LOG_TAG = "GSM";
     static final boolean DBG = true;
+    private static final boolean NEED_PRINT = Debug.isDebug();
 
     GSMPhone phone;
     GsmCellLocation cellLoc;
@@ -178,7 +180,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LOG_TAG, "BroadcastReceiver:phoneid="+phone.getPhoneId()+" intent=" + intent.getAction());
+            if (DBG && NEED_PRINT) {
+                Log.d(LOG_TAG, "BroadcastReceiver:phoneid="+phone.getPhoneId()+" intent=" + intent.getAction());
+            }
 
             if (intent.getAction().equals(Intent.ACTION_LOCALE_CHANGED)) {
                 // update emergency string whenever locale changed
@@ -187,7 +191,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 updateSpnDisplay();
             }else if(TelephonyIntents.SIM_CARD_PRESENT.equals(intent.getAction()) && intent.
                     getIntExtra("phone_id",-1)==phone.getPhoneId()){
-                Log.d(LOG_TAG, " intent.getIntExtra(phone_id,-1)=" + intent.getIntExtra("phone_id",-1));
+                if (DBG && NEED_PRINT) {
+                    Log.d(LOG_TAG, " intent.getIntExtra(phone_id,-1)=" + intent.getIntExtra("phone_id",-1));
+                }
                 mLocalLanguageChange = false;
                 Message msg=new Message();
                 msg.what=EVENT_ICC_STATUS_CHANGED;
@@ -201,7 +207,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     private ContentObserver mAutoTimeObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {
-            Log.i("GsmServiceStateTracker", "Auto time state changed");
+            if (DBG && NEED_PRINT) {
+                Log.i("GsmServiceStateTracker", "Auto time state changed");
+            }
             revertToNitzTime();
         }
     };
@@ -209,7 +217,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     private ContentObserver mAutoTimeZoneObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {
-            Log.i("GsmServiceStateTracker", "Auto time zone state changed");
+            if (DBG && NEED_PRINT) {
+                Log.i("GsmServiceStateTracker", "Auto time zone state changed");
+            }
             revertToNitzTimeZone();
         }
     };
@@ -503,7 +513,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
                 intent.putExtra("isReady", true);
                 intent.putExtra("phoneId", phone.getPhoneId());
-                log("send broadcast for EVENT_SIM_SMS_READY phoneId=" + phone.getPhoneId());
+                if (DBG && NEED_PRINT) {
+                    log("send broadcast for EVENT_SIM_SMS_READY phoneId=" + phone.getPhoneId());
+                }
                 phone.getContext().sendStickyBroadcast(intent);
                 break;
 
@@ -535,7 +547,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             if (force || phone.getIccCard().getIccCardState() != IccCard.State.ABSENT
                     && phone.getIccCard().getIccCardState() != IccCard.State.UNKNOWN) {
                 cm.setRadioPower(true, null);
-                log("setPowerStateToDesired : setRadioPower  force --"+force);
+                if (DBG && NEED_PRINT) {
+                    log("setPowerStateToDesired : setRadioPower  force --"+force);
+                }
             }
         } else if (!mDesiredPowerState && cm.getRadioState().isOn()) {
             // If it's on and available and we want it off gracefully
@@ -559,7 +573,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     private String updateSpnToChinese(String numeric, String name) {
         Resources r = Resources.getSystem();
         String newName;
-        Log.d(LOG_TAG, "getCarrierNumericToChinese: old name= " + name+" numeric="+numeric);
+        if (DBG && NEED_PRINT) {
+            Log.d(LOG_TAG, "getCarrierNumericToChinese: old name= " + name+" numeric="+numeric);
+        }
         if ("46000".equals(numeric) ||
                "46002".equals(numeric) ||
                "46007".equals(numeric)) {
@@ -789,7 +805,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     } else {
                         mEmergencyOnly = false;
                     }
-                    log("Set mEmergencyOnly = " + mEmergencyOnly);
+                    if (DBG && NEED_PRINT) {
+                        log("Set mEmergencyOnly = " + mEmergencyOnly);
+                    }
                     // LAC and CID are -1 if not avail
                     newCellLoc.setLacAndCid(lac, cid);
                     newCellLoc.setPsc(psc);
@@ -1037,7 +1055,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             phone.notifyLocationChanged();
             checkSimONSUpdateSpnDisplay();
             hasSpnUpdated = true;
-            Log.d(LOG_TAG,"hasLocationChanged = " + hasLocationChanged +"hasSpnUpdated"+hasSpnUpdated);
+            if (DBG && NEED_PRINT) {
+                Log.d(LOG_TAG,"hasLocationChanged = " + hasLocationChanged +"hasSpnUpdated"+hasSpnUpdated);
+            }
         }
 
         if (hasChanged) {
@@ -1160,13 +1180,17 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     mNeedFixZoneAfterNitz = false;
 
                     if (zone != null) {
-                        log("pollStateDone: zone != null zone.getID=" + zone.getID());
+                        if (DBG && NEED_PRINT) {
+                            log("pollStateDone: zone != null zone.getID=" + zone.getID());
+                        }
                         if (getAutoTimeZone()) {
                             setAndBroadcastNetworkSetTimeZone(zone.getID());
                         }
                         saveNitzTimeZone(zone.getID());
                     } else {
-                        log("pollStateDone: zone == null");
+                        if (DBG && NEED_PRINT) {
+                            log("pollStateDone: zone == null");
+                        }
                     }
                 }
             }
@@ -1319,8 +1343,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                   // POLL_PERIOD_MILLIS) during Radio Technology Change)
                 phone.notifySignalStrength();
            } catch (NullPointerException ex) {
-                log("onSignalStrengthResult() Phone already destroyed: " + ex
-                        + "SignalStrength not notified");
+               if (DBG && NEED_PRINT) {
+                   log("onSignalStrengthResult() Phone already destroyed: " + ex
+                           + "SignalStrength not notified");
+               }
            }
         }
     }
@@ -1418,7 +1444,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
             mRestrictedState = newRs;
         }
-        log("onRestrictedStateChanged: X rs "+ mRestrictedState);
+        if (DBG && NEED_PRINT) {
+            log("onRestrictedStateChanged: X rs "+ mRestrictedState);
+        }
     }
 
     /** code is registration state 0-5 from TS 27.007 7.2 */
@@ -1601,7 +1629,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 int second = Integer.parseInt(nitzSubs[5]);
                 c.set(Calendar.SECOND, second);
             } catch (NumberFormatException e) {
-                log("NITZ: time format is incorrect");
+                if (DBG && NEED_PRINT) {
+                    log("NITZ: time format is incorrect");
+                }
                 // set nitzReceiveTime to an invalid value to bypass the time update
                 nitzReceiveTime = SystemClock.elapsedRealtime() + 60 * 1000;
             }
@@ -1674,7 +1704,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
             String ignore = SystemProperties.get("gsm.ignore-nitz");
             if (ignore != null && ignore.equals("yes")) {
-                log("NITZ: Not setting clock because gsm.ignore-nitz is set");
+                if (DBG && NEED_PRINT) {
+                    log("NITZ: Not setting clock because gsm.ignore-nitz is set");
+                }
                 return;
             }
 
@@ -1717,13 +1749,17 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     }
 
                     setAndBroadcastNetworkSetTime(c.getTimeInMillis());
-                    Log.i(LOG_TAG, "NITZ: after Setting time of day");
+                    if (DBG && NEED_PRINT) {
+                        Log.i(LOG_TAG, "NITZ: after Setting time of day");
+                    }
                 }
                 SystemProperties.set("gsm.nitz.time", String.valueOf(c.getTimeInMillis()));
                 saveNitzTime(c.getTimeInMillis());
                 if (false) {
                     long end = SystemClock.elapsedRealtime();
-                    log("NITZ: end=" + end + " dur=" + (end - start));
+                    if (DBG && NEED_PRINT) {
+                        log("NITZ: end=" + end + " dur=" + (end - start));
+                    }
                 }
                 mNitzUpdatedTime = true;
             } finally {

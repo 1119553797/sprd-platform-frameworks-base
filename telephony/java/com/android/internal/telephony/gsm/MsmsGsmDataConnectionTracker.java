@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.IConnectivityManager;
 import android.os.AsyncResult;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
@@ -43,6 +44,7 @@ import com.android.internal.telephony.gsm.GsmDataConnectionTracker;
 import com.android.internal.telephony.IccCard;
 
 public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
+    private static final boolean NEED_PRINT = Debug.isDebug();
 
     MsmsGsmDataConnectionTracker(GSMPhone p) {
         super(p);
@@ -93,7 +95,9 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
                         onCleanUpAllConnections(Phone.REASON_DATA_DISABLED);
                     }
                 } else if (!mUserDataEnabled && isConnected()) {
-                    log("mUserDataEnabled: " + mUserDataEnabled + " onCleanUpAllConnections");
+                    if (DBG && NEED_PRINT) {
+                        log("mUserDataEnabled: " + mUserDataEnabled + " onCleanUpAllConnections");
+                    }
                     onCleanUpAllConnections(Phone.REASON_DATA_DISABLED);
                 }
             }
@@ -103,7 +107,9 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
     private ContentObserver mDefaultDataPhoneIdObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {
-            log("Default Data Phone Id is changed");
+            if (DBG && NEED_PRINT) {
+                log("Default Data Phone Id is changed");
+            }
             int defaultDataPhoneId = TelephonyManager.getDefaultDataPhoneId(mPhone.getContext());
             if (DBG)
                 log("defaultDataPhoneId=" + defaultDataPhoneId + " dataEnabled[APN_DEFAULT_ID]="
@@ -151,7 +157,9 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
     }
 
     public void onVoiceCallStartedInternal(int phoneId) {
-        log("onVoiceCallStartInternal[" + mPhone.getPhoneId() + "]: isConnected=" + isConnected() +" phoneId="+phoneId);
+        if (DBG && NEED_PRINT) {
+            log("onVoiceCallStartInternal[" + mPhone.getPhoneId() + "]: isConnected=" + isConnected() +" phoneId="+phoneId);
+        }
         if(phoneId == mPhone.getPhoneId()) {
             if (isConnected() && ! mGsmPhone.mSST.isConcurrentVoiceAndDataAllowed()) {
                 stopNetStatPoll();
@@ -168,7 +176,9 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
     }
 
     public void onVoiceCallEndedInternal(int phoneId) {
-        log("onVoiceCallEndedInternal[" + mPhone.getPhoneId() + "]");
+        if (DBG && NEED_PRINT) {
+            log("onVoiceCallEndedInternal[" + mPhone.getPhoneId() + "]");
+        }
         if (isConnected()) {
             if (phoneId == mPhone.getPhoneId()) {
                 if (!mGsmPhone.mSST.isConcurrentVoiceAndDataAllowed()) {

@@ -28,6 +28,7 @@ import android.net.LinkCapabilities;
 import android.net.LinkProperties;
 import android.net.ProxyProperties;
 import android.os.AsyncResult;
+import android.os.Debug;
 import android.os.Message;
 import android.os.SystemProperties;
 import android.text.TextUtils;
@@ -64,6 +65,7 @@ import java.util.List;
 public abstract class DataConnection extends StateMachine {
     protected static final boolean DBG = true;
     protected static final boolean VDBG = false;
+    private static final boolean NEED_PRINT = Debug.isDebug();
 
     protected static Object mCountLock = new Object();
     protected static int[] mCount = new int[PhoneFactory.getPhoneCount()];
@@ -779,7 +781,9 @@ public abstract class DataConnection extends StateMachine {
                                 mRilVersion);
                         }
                     } else {
-                        log("Unexpected exception on EVENT_RIL_CONNECTED");
+                        if (DBG && NEED_PRINT) {
+                            log("Unexpected exception on EVENT_RIL_CONNECTED");
+                        }
                         mRilVersion = -1;
                     }
                     break;
