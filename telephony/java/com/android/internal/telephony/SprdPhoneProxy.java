@@ -72,18 +72,6 @@ public class SprdPhoneProxy extends PhoneProxy {
 		}
 	}
 
-	public void registerForIncomingRingVideoCall(Handler h, int what, Object obj) {
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.registerForIncomingRingVideoCall(h, what, obj);
-		}
-	}
-
-	public void unregisterForIncomingRingVideoCall(Handler h) {
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.unregisterForIncomingRingVideoCall(h);
-		}
-	}
-
 	public void registerForVideoCallDisconnect(Handler h, int what, Object obj) {
 		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.registerForVideoCallDisconnect(h, what, obj);
@@ -117,18 +105,6 @@ public class SprdPhoneProxy extends PhoneProxy {
 	public void unregisterForVideoCallFail(Handler h){
 		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.unregisterForVideoCallFail(h);
-		}
-	}
-
-	public void registerForRemoteCamera(Handler h, int what, Object obj){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.registerForRemoteCamera(h, what, obj);
-		}
-	}
-
-	public void unregisterForRemoteCamera(Handler h){
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.unregisterForRemoteCamera(h);
 		}
 	}
 
@@ -174,12 +150,6 @@ public class SprdPhoneProxy extends PhoneProxy {
 	public void  fallBack() throws CallStateException{
 		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
 			mActivePhone.fallBack();
-		}
-	}
-
-	public void  acceptFallBack() throws CallStateException{
-		/*if (mActivePhone.getPhoneType() == Phone.PHONE_TYPE_TD)*/{
-			mActivePhone.acceptFallBack();
 		}
 	}
 

@@ -70,6 +70,8 @@ public class GsmConnection extends Connection {
 
     int nextPostDialChar;       // index into postDialString
 
+    private boolean mbVideo = false;
+
     DisconnectCause cause = DisconnectCause.NOT_DISCONNECTED;
     PostDialState postDialState = PostDialState.NOT_STARTED;
     int numberPresentation = Connection.PRESENTATION_ALLOWED;
@@ -128,6 +130,7 @@ public class GsmConnection extends Connection {
         createTime = System.currentTimeMillis();
         numberPresentation = dc.numberPresentation;
         uusInfo = dc.uusInfo;
+        mbVideo = !dc.isVoice;
 
         this.index = index;
 
@@ -138,7 +141,7 @@ public class GsmConnection extends Connection {
     /** This is an MO call, created when dialing */
     /*package*/
 //    GsmConnection (Context context, String dialString, GsmCallTracker ct, GsmCall parent) {
-    GsmConnection (Context context, String dialString, GsmCallTracker ct, GsmCall parent, boolean isStkCall) {
+    GsmConnection (Context context, String dialString, GsmCallTracker ct, GsmCall parent, boolean isStkCall, boolean bVideo) {
         createWakeLock(context);
         acquireWakeLock();
 
@@ -162,6 +165,8 @@ public class GsmConnection extends Connection {
 
         isIncoming = false;
         createTime = System.currentTimeMillis();
+
+        mbVideo = bVideo;
 
         this.parent = parent;
         parent.attachFake(this, GsmCall.State.DIALING);
@@ -426,7 +431,13 @@ public class GsmConnection extends Connection {
             if (false) Log.d(LOG_TAG,
                     "[GSMConn] onDisconnect: cause=" + cause);
 
-            owner.phone.notifyDisconnect(this);
+            if (mbVideo) {
+                if (owner.phone instanceof TDPhone) {
+                    ((TDPhone)owner.phone).notifyVideoCallDisconnect(this);
+                }
+            } else {
+                owner.phone.notifyDisconnect(this);
+            }
 
             if (parent != null) {
                 parent.connectionDisconnected(this);
@@ -750,5 +761,9 @@ public class GsmConnection extends Connection {
     @Override
     public UUSInfo getUUSInfo() {
         return uusInfo;
+    }
+
+    public boolean isVideo(){
+        return mbVideo;
     }
 }

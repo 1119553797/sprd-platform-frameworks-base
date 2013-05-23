@@ -316,4 +316,8 @@ public abstract class Connection {
     public boolean getStkCall() {
         return mIsStkCall;
     }
+
+    public boolean isVideo(){
+        return false;
+    }
 }

@@ -53,10 +53,6 @@ SECONDARY_SRC_FILES := $(call find-other-java-files,$(SECONDARY_FRAMEWORKS_SUBDI
 SECONDARY_SRC_FILES += \
        telephony/java/com/android/internal/telephony/MsmsCallManager.java \
        telephony/java/com/android/internal/telephony/MsmsPhoneFactory.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoCall.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoCallTracker.java \
-       telephony/java/com/android/internal/telephony/gsm/VideoConnection.java \
-       telephony/java/com/android/internal/telephony/gsm/TDPhone.java \
        telephony/java/com/android/internal/telephony/SprdRIL.java
 
 

@@ -56,8 +56,6 @@ public abstract class Call {
     // merged, etc.
     protected boolean isGeneric = false;
 
-    protected boolean isVideo = false;
-
     protected final String LOG_TAG = "Call";
 
     /* Instance Methods */
@@ -71,7 +69,6 @@ public abstract class Call {
     public abstract boolean isMultiparty();
     public abstract void hangup() throws CallStateException;
     public abstract void sprdHangupAll() throws CallStateException;
-
 
     /**
      * hasConnection
@@ -257,6 +254,6 @@ public abstract class Call {
     }
 
     public boolean isVideo() {
-        return isVideo;
+        return false;
     }
 }

@@ -210,5 +210,16 @@ class GsmCall extends Call {
             state = State.IDLE;
         }
     }
+
+    @Override
+    public boolean isVideo() {
+        for (int i = 0, s = connections.size()  ; i < s; i ++) {
+            GsmConnection cn = (GsmConnection)connections.get(i);
+            if(cn.isVideo()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
