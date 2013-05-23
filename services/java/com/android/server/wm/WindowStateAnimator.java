@@ -1302,6 +1302,7 @@ class WindowStateAnimator {
                         // loop, this will cause it to restart with a new
                         // layout.
                         mService.mLayoutNeeded = true;
+                        mService.mFocusMayChange = true;
                     }
                 }
             }
