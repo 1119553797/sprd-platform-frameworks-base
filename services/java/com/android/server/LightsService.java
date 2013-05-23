@@ -115,7 +115,7 @@ public class LightsService {
 
         private void setLightLocked(int color, int mode, int onMS, int offMS, int brightnessMode) {
             if (color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
-                if (DEBUG) Slog.v(TAG, "setLight #" + mId + ": color=#"
+                /*if (DEBUG)*/ Slog.v(TAG, "setLight #" + mId + ": color=#"
                         + Integer.toHexString(color));
                 mColor = color;
                 mMode = mode;
