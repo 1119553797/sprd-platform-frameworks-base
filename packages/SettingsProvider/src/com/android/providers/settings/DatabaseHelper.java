@@ -1720,7 +1720,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //Modify for CMCC case: change default input method. START
             boolean supportCMCC = false;
             supportCMCC = SystemProperties.get("ro.operator").equals("cmcc");
-            if (supportCMCC) {
+            if (supportCMCC || SystemProperties.get("ro.operator").equals("cucc")) {
                 loadStringSetting(stmt, Settings.Secure.DEFAULT_INPUT_METHOD,
                     R.string.config_default_input_method);
             }
