@@ -159,7 +159,7 @@ public class CatService extends Handler implements AppInterface {
                     "Service: Input parameters must not be null");
         }
         mPhoneId = ci.getPhoneId();
-        CatLog.d(this, "StkService: mPhoneId=" + mPhoneId);
+        CatLog.i(this, "StkService: mPhoneId=" + mPhoneId);
         mCmdIf = ci;
         mContext = context;
 
@@ -191,15 +191,15 @@ public class CatService extends Handler implements AppInterface {
             mEventList[i] = false;
         }
 
-        CatLog.d(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
+        CatLog.i(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
         if (!mStkActive) {
             mStkActive = true;
             mCmdIf.reportStkServiceIsRunning(null);
         } else {
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
         }
 
-        CatLog.d(this, "<" + mPhoneId + ">" + "StkService: is running");
+        CatLog.i(this, "<" + mPhoneId + ">" + "StkService: is running");
         if(SystemProperties.get(SETUP_MEMU_PREFIX+mPhoneId,"0").equals("1")){
             String data = getSetupMenuData();
 
@@ -227,18 +227,18 @@ public class CatService extends Handler implements AppInterface {
     }
 
     protected void finalize() {
-        CatLog.d(this,  "<" + mPhoneId + ">" + "Service finalized");
+        CatLog.i(this,  "<" + mPhoneId + ">" + "Service finalized");
     }
 
     private void handleRilMsg(RilMessage rilMsg) {
         if (rilMsg == null) {
-            CatLog.d(this,  "<" + mPhoneId + ">" + "rilMsg is null");
+            CatLog.i(this,  "<" + mPhoneId + ">" + "rilMsg is null");
             return;
         }
 
         // dispatch messages
         CommandParams cmdParams = null;
-        CatLog.d(this,  "<" + mPhoneId + ">" + "handleRilMsg rilMsg.mId = " + rilMsg.mId + " mResCode = " + rilMsg.mResCode );
+        CatLog.i(this,  "<" + mPhoneId + ">" + "handleRilMsg rilMsg.mId = " + rilMsg.mId + " mResCode = " + rilMsg.mResCode );
         switch (rilMsg.mId) {
         case MSG_ID_EVENT_NOTIFY:
             if (rilMsg.mResCode == ResultCode.OK) {
@@ -246,7 +246,7 @@ public class CatService extends Handler implements AppInterface {
                 if (cmdParams != null) {
                     handleProactiveCommand(cmdParams);
                 } else {
-                    CatLog.d(this,  "<" + mPhoneId + ">" + "MSG_ID_EVENT_NOTIFY: cmdParams is null");
+                    CatLog.i(this,  "<" + mPhoneId + ">" + "MSG_ID_EVENT_NOTIFY: cmdParams is null");
                 }
             }
             break;
@@ -255,7 +255,7 @@ public class CatService extends Handler implements AppInterface {
                 cmdParams = (CommandParams) rilMsg.mData;
             } catch (ClassCastException e) {
                 // for error handling : cast exception
-                CatLog.d(this, "Fail to parse proactive command");
+                CatLog.i(this, "Fail to parse proactive command");
                 sendTerminalResponse(mCurrntCmd.mCmdDet, ResultCode.CMD_DATA_NOT_UNDERSTOOD,
                                      false, 0x00, null);
                 break;
@@ -286,13 +286,13 @@ public class CatService extends Handler implements AppInterface {
         case MSG_ID_CALL_SETUP:
             // prior event notify command supplied all the information
             // needed for set up call processing.
-            CatLog.d(this,  "<" + mPhoneId + ">" + "[stk] MSG_ID_CALL_SETUP rescode = "+rilMsg.mResCode);
+            CatLog.i(this,  "<" + mPhoneId + ">" + "[stk] MSG_ID_CALL_SETUP rescode = "+rilMsg.mResCode);
             if (rilMsg.mResCode == ResultCode.OK) {
                 cmdParams = (CommandParams) rilMsg.mData;
                 if (cmdParams != null) {
                     handleProactiveCommand(cmdParams);
                 } else {
-                    CatLog.d(this,  "<" + mPhoneId + ">" + "[stk] cmdParams is NULL");
+                    CatLog.i(this,  "<" + mPhoneId + ">" + "[stk] cmdParams is NULL");
                 }
             }
             break;
@@ -305,7 +305,7 @@ public class CatService extends Handler implements AppInterface {
      *
      */
     private void handleProactiveCommand(CommandParams cmdParams) {
-        CatLog.d(this,  "<" + mPhoneId + ">" + cmdParams.getCommandType().name());
+        CatLog.i(this,  "<" + mPhoneId + ">" + cmdParams.getCommandType().name());
 
         CatCmdMessage cmdMsg = new CatCmdMessage(cmdParams);
         DeviceIdentities deviceIdentities = null;
@@ -328,9 +328,9 @@ public class CatService extends Handler implements AppInterface {
                         0, null);
             }
             if (cmdMsg.geTextMessage().isHighPriority == false) {
-                CatLog.d(this,  "<" + mPhoneId + ">" + "[stk] DISPLAY_TEXT is normal Priority");
+                CatLog.i(this,  "<" + mPhoneId + ">" + "[stk] DISPLAY_TEXT is normal Priority");
                 boolean display_flag = isCurrentCanDisplayText();
-                CatLog.d(this,  "<" + mPhoneId + ">" + "[stkapp]display_flag = " + display_flag);
+                CatLog.i(this,  "<" + mPhoneId + ">" + "[stkapp]display_flag = " + display_flag);
                 if (!display_flag) {
                     sendTerminalResponse(cmdParams.cmdDet, ResultCode.TERMINAL_CRNTLY_UNABLE_TO_PROCESS,
                                          true, AddinfoMeProblem.SCREEN_BUSY.value(), null);
@@ -339,7 +339,7 @@ public class CatService extends Handler implements AppInterface {
             }
             break;
         case SET_UP_IDLE_MODE_TEXT:
-            CatLog.d(this,  "<" + mPhoneId + ">" +
+            CatLog.i(this,  "<" + mPhoneId + ">" +
                     "icon = "                 + ((DisplayTextParams)cmdParams).textMsg.icon +
                     " iconSelfExplanatory = " + ((DisplayTextParams)cmdParams).textMsg.iconSelfExplanatory +
                     " text = "                + ((DisplayTextParams)cmdParams).textMsg.text);
@@ -392,20 +392,20 @@ public class CatService extends Handler implements AppInterface {
                     Locale locale = new Locale(language,country);
                     config.locale = locale;
                     config.userSetLocale = true;
-                    CatLog.d(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION country = " + country + " locale = " + locale);
+                    CatLog.i(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION country = " + country + " locale = " + locale);
                 } else {
-                    CatLog.d(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION country is null");
+                    CatLog.i(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION country is null");
                     if (mConfigBak != null) {
                         config = mConfigBak;
-                        CatLog.d(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION use backup config. locale = " + config.locale);
+                        CatLog.i(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION use backup config. locale = " + config.locale);
                     } else {
-                        CatLog.d(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION mConfigBak is null, do nothing");
+                        CatLog.i(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION mConfigBak is null, do nothing");
                     }
                 }
                 am.updateConfiguration(config);
                 BackupManager.dataChanged("com.android.providers.settings");
             }catch(RemoteException e) {
-                CatLog.d(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION exception: " + e);
+                CatLog.i(this,  "<" + mPhoneId + ">" + "LANGUAGE_NOTIFACTION exception: " + e);
                 System.out.println("LANGUAGE_NOTIFACTION exception");
             }
             sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0,
@@ -429,7 +429,7 @@ public class CatService extends Handler implements AppInterface {
             break;
         case SET_UP_EVENT_LIST:
             AppInterface.EventListType[] eventList = cmdMsg.getEventList();
-            CatLog.d(this,  "<" + mPhoneId + ">" + "[stk] handleProactiveCommand: SET_UP_EVENT_LIST");
+            CatLog.i(this,  "<" + mPhoneId + ">" + "[stk] handleProactiveCommand: SET_UP_EVENT_LIST");
 
             for (int i = 0; i < EVENT_NUMBER; i++) {
                 setEventEnabled(i, false);
@@ -443,59 +443,59 @@ public class CatService extends Handler implements AppInterface {
                 	try {
                 		wm.setEventUserActivityNeeded(true);
                 	} catch (RemoteException e) {
-                		CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+                		CatLog.i(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
                 	} catch (NullPointerException e2) {
-                		CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+                		CatLog.i(this, "<" + mPhoneId + ">" + "wm is null");
                 	}
                 }
                 if(isValidEvent(AppInterface.EventListType.Event_IdleScreenAvailable.value())) {
                 	try {
                 		wm.setEventIdleScreenNeeded(true);
                 	} catch (RemoteException e) {
-                		CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+                		CatLog.i(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
                 	} catch (NullPointerException e2) {
-                		CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+                		CatLog.i(this, "<" + mPhoneId + ">" + "wm is null");
                 	}
                 }
             }
             sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, null);
             return;
         case CLOSE_CHANNEL:
-            CatLog.d(this, "<" + mPhoneId + ">" + "handleProactiveCommand: CLOSE_CHANNEL");
+            CatLog.i(this, "<" + mPhoneId + ">" + "handleProactiveCommand: CLOSE_CHANNEL");
             deviceIdentities = cmdMsg.getDeviceIdentities();
             if (deviceIdentities != null) {
                 int channelId = deviceIdentities.destinationId & 0x0f;
-                CatLog.d(this, "<" + mPhoneId + ">" + "CLOSE_CHANNEL channelId = " + channelId);
+                CatLog.i(this, "<" + mPhoneId + ">" + "CLOSE_CHANNEL channelId = " + channelId);
                 if (channelId != AppInterface.DEFAULT_CHANNELID) {
-                    CatLog.d(this, "<" + mPhoneId + ">" + "CLOSE_CHANNEL CHANNEL_ID_INVALID");
+                    CatLog.i(this, "<" + mPhoneId + ">" + "CLOSE_CHANNEL CHANNEL_ID_INVALID");
                     sendTerminalResponse(cmdParams.cmdDet, ResultCode.BIP_ERROR, true,
                             AddinfoBIPProblem.CHANNEL_ID_INVALID.value(), null);
                     return;
                 }
             } else {
-                CatLog.d(this, "<" + mPhoneId + ">" + "deviceIdentities is null, send CHANNEL_ID_INVALID");
+                CatLog.i(this, "<" + mPhoneId + ">" + "deviceIdentities is null, send CHANNEL_ID_INVALID");
                 sendTerminalResponse(cmdParams.cmdDet, ResultCode.BIP_ERROR, true,
                         AddinfoBIPProblem.CHANNEL_ID_INVALID.value(), null);
                 return;
             }
             break;
         case SEND_DATA:
-            CatLog.d(this, "<" + mPhoneId + ">" + "handleProactiveCommand: SEND_DATA");
+            CatLog.i(this, "<" + mPhoneId + ">" + "handleProactiveCommand: SEND_DATA");
             deviceIdentities = cmdMsg.getDeviceIdentities();
             if (deviceIdentities != null) {
                 int channelId = deviceIdentities.destinationId & 0x0f;
-                CatLog.d(this, "<" + mPhoneId + ">" + "SEND_DATA channelId = " + channelId);
+                CatLog.i(this, "<" + mPhoneId + ">" + "SEND_DATA channelId = " + channelId);
                 if (channelId != AppInterface.DEFAULT_CHANNELID) {
                     sendTerminalResponse(cmdParams.cmdDet, ResultCode.BIP_ERROR, true,
                             AddinfoBIPProblem.CHANNEL_ID_INVALID.value(), null);
                     return;
                 }
             } else {
-                CatLog.d(this, "<" + mPhoneId + ">" + "deviceIdentities is null, do nothing");
+                CatLog.i(this, "<" + mPhoneId + ">" + "deviceIdentities is null, do nothing");
             }
             break;
         default:
-            CatLog.d(this, "<" + mPhoneId + ">" + "Unsupported command");
+            CatLog.i(this, "<" + mPhoneId + ">" + "Unsupported command");
             return;
         }
         mCurrntCmd = cmdMsg;
@@ -515,7 +515,7 @@ public class CatService extends Handler implements AppInterface {
      *
      */
     private void handleSessionEnd() {
-        CatLog.d(this, "<" + mPhoneId + ">" + "SESSION END");
+        CatLog.i(this, "<" + mPhoneId + ">" + "SESSION END");
 
         mCurrntCmd = mMenuCmd;
         Intent intent = new Intent(AppInterface.CAT_SESSION_END_ACTION);
@@ -583,7 +583,7 @@ public class CatService extends Handler implements AppInterface {
         byte[] rawData = buf.toByteArray();
         String hexString = IccUtils.bytesToHexString(rawData);
         if (Config.LOGD) {
-            CatLog.d(this, "<" + mPhoneId + ">" + "TERMINAL RESPONSE: " + hexString);
+            CatLog.i(this, "<" + mPhoneId + ">" + "TERMINAL RESPONSE: " + hexString);
         }
 
         mCmdIf.sendTerminalResponse(hexString, null);
@@ -593,7 +593,7 @@ public class CatService extends Handler implements AppInterface {
     private void RemoveLastCmd() {
         // Add Start for bug 77920
         if (lastCmd != null) {
-            CatLog.d(this, "<" + mPhoneId + ">" + "handleCmdResponse:remove lastCmd");
+            CatLog.i(this, "<" + mPhoneId + ">" + "handleCmdResponse:remove lastCmd");
             lastCmd = null;
         }
         // Add End for bug 77920
@@ -620,11 +620,11 @@ public class CatService extends Handler implements AppInterface {
 //                    }
 //                    break;
                 default:
-                    CatLog.d(this, "encodeOptionalTags() Unsupported Cmd:" + cmdDet.typeOfCommand);
+                    CatLog.i(this, "encodeOptionalTags() Unsupported Cmd:" + cmdDet.typeOfCommand);
                     break;
             }
         } else {
-            CatLog.d(this, "encodeOptionalTags() bad Cmd:" + cmdDet.typeOfCommand);
+            CatLog.i(this, "encodeOptionalTags() bad Cmd:" + cmdDet.typeOfCommand);
         }
     }
 
@@ -757,43 +757,43 @@ public class CatService extends Handler implements AppInterface {
 //                HandlerThread thread = new HandlerThread("Cat Telephony service");
 //                thread.start();
 //                sInstance = new CatService(ci, ir, context, fh, ic);
-//                CatLog.d(sInstance, "NEW sInstance");
+//                CatLog.i(sInstance, "NEW sInstance");
 //            } else if ((ir != null) && (mIccRecords != ir)) {
-//                CatLog.d(sInstance, "Reinitialize the Service with SIMRecords");
+//                CatLog.i(sInstance, "Reinitialize the Service with SIMRecords");
 //                mIccRecords = ir;
 //
 //                // re-Register for SIM ready event.
 //                mIccRecords.registerForRecordsLoaded(sInstance, MSG_ID_ICC_RECORDS_LOADED, null);
-//                CatLog.d(sInstance, "sr changed reinitialize and return current sInstance");
+//                CatLog.i(sInstance, "sr changed reinitialize and return current sInstance");
 //            } else {
-//                CatLog.d(sInstance, "Return current sInstance");
+//                CatLog.i(sInstance, "Return current sInstance");
 //            }
 //            return sInstance;
 //        }
         HandlerThread thread = new HandlerThread("Stk Telephony service");
         thread.start();
         sInstance = new CatService(ci, ir, context, fh, ic);
-        CatLog.d(sInstance, "NEW sInstance");
+        CatLog.i(sInstance, "NEW sInstance");
         return sInstance;
     }
 
     public void update(CommandsInterface ci) {
 //    	if ((sr != null) && (mSimRecords != sr)) {
         if ((ci != null) && (mCmdIf != ci)) {
-            CatLog.d(sInstance, "<" + mPhoneId + ">" + "Reinitialize the Service with SIMRecords");
+            CatLog.i(sInstance, "<" + mPhoneId + ">" + "Reinitialize the Service with SIMRecords");
 //            mSimRecords = sr;
 //            mSimRecords.registerForRecordsLoaded(sInstance, MSG_ID_SIM_LOADED, null);
             mCmdIf = ci;
             //mCmdIf.registerForSIMReady(sInstance, MSG_ID_SIM_READY, null);
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
             if (!mStkActive) {
                 mStkActive = true;
                 mCmdIf.reportStkServiceIsRunning(null);
             } else {
-                CatLog.d(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
+                CatLog.i(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
             }
 
-            CatLog.d(sInstance, "<" + mPhoneId + ">" + "sr changed reinitialize and return current sInstance");
+            CatLog.i(sInstance, "<" + mPhoneId + ">" + "sr changed reinitialize and return current sInstance");
 
     	}
     }
@@ -814,7 +814,7 @@ public class CatService extends Handler implements AppInterface {
         try {
             bertlv = BerTlv.decode(IccUtils.hexStringToBytes(data));  
         } catch (ResultException e) {
-            CatLog.d(this, "isSetupMenuCMD BerTlv.decode Exception");
+            CatLog.i(this, "isSetupMenuCMD BerTlv.decode Exception");
             return false;
         }
 
@@ -835,7 +835,7 @@ public class CatService extends Handler implements AppInterface {
         try {
             cmdDet = ValueParser.retrieveCommandDetails(ctlvCmdDet);
         } catch (ResultException e) {
-            CatLog.d(this, "Failed to procees command details");               
+            CatLog.i(this, "Failed to procees command details");               
             return false;
         }
         return (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)==AppInterface.CommandType.SET_UP_MENU);
@@ -872,7 +872,7 @@ public class CatService extends Handler implements AppInterface {
             i++;
         }
         if(data.length()==0 || data.length()!=len) {
-            CatLog.d(this,"<"+mPhoneId+">"+"[stk]getSetupMenuData data.length()="+data.length()+",len="+len);
+            CatLog.i(this,"<"+mPhoneId+">"+"[stk]getSetupMenuData data.length()="+data.length()+",len="+len);
             return null;
         }
         return data;
@@ -887,7 +887,7 @@ public class CatService extends Handler implements AppInterface {
         case MSG_ID_EVENT_NOTIFY:
         case MSG_ID_REFRESH:
         case MSG_ID_CALL_SETUP:
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]ril message arrived = " + msg.what);
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]ril message arrived = " + msg.what);
             String data = null;
             if (msg.obj != null) {
                 AsyncResult ar = (AsyncResult) msg.obj;
@@ -901,7 +901,7 @@ public class CatService extends Handler implements AppInterface {
             }
             // ignore invalid duplicate commands, NEWMS00185824
             if (lastCmd != null && data != null && lastCmd.equals(data)) {
-                CatLog.d(this, "<" + mPhoneId + ">" + "duplicate command, ignored !!");
+                CatLog.i(this, "<" + mPhoneId + ">" + "duplicate command, ignored !!");
                 break;
             }
             if (data != null) {
@@ -922,12 +922,12 @@ public class CatService extends Handler implements AppInterface {
 //            mMsgDecoder.sendStartDecodingMessageParams(new RilMessage(msg.what, null));
 //            break;
         case MSG_ID_ICC_RECORDS_LOADED:
-//            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
+//            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
 //            if (!mStkActive) {
 //                mStkActive = true;
 //                mCmdIf.reportStkServiceIsRunning(null);
 //            } else {
-//                CatLog.d(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
+//                CatLog.i(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
 //            }
             break;
         case MSG_ID_RIL_MSG_DECODED:
@@ -937,12 +937,12 @@ public class CatService extends Handler implements AppInterface {
             handleCmdResponse((CatResponseMessage) msg.obj);
             break;
         case MSG_ID_SIM_READY:
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]active STK mStkActive = " + mStkActive);
             if (!mStkActive) {
                 mStkActive = true;
                 mCmdIf.reportStkServiceIsRunning(null);
             } else {
-                CatLog.d(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
+                CatLog.i(this, "<" + mPhoneId + ">" + "[stk]STK has been activated" );
             }
             break;
 
@@ -969,14 +969,14 @@ public class CatService extends Handler implements AppInterface {
         //CR120717 Modify end
         // Use RIL_UNSOL_SIM_REFRESH instead
 //        case MSG_ID_REFRESH_STIN:
-//            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]MSG_ID_REFRESH_STIN" );
+//            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]MSG_ID_REFRESH_STIN" );
 //            int result = 1;
 //            if (msg.obj != null) {
 //                AsyncResult ar = (AsyncResult) msg.obj;
 //                if (ar != null && ar.result != null) {
 //                    int[] params = (int[])ar.result;
 //                    result = params[0];
-//                    CatLog.d(this, "<" + mPhoneId + ">" + "[stk]MSG_ID_REFRESH_STIN result = " + result);
+//                    CatLog.i(this, "<" + mPhoneId + ">" + "[stk]MSG_ID_REFRESH_STIN result = " + result);
 //                    if (0 == result) {
 //                        mIccRecords.onRefresh(true, null);
 //                    }
@@ -986,7 +986,7 @@ public class CatService extends Handler implements AppInterface {
 //            break;
         // Add for send session end. NEWMS00205430
         case MSG_ID_REFRESH_STIN:
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]MSG_ID_REFRESH_STIN" );
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]MSG_ID_REFRESH_STIN" );
             handleRefreshCmdResponse(0);
             //fix bug 106913 by qianqian.tian
             //handleSessionEnd();
@@ -1019,7 +1019,7 @@ public class CatService extends Handler implements AppInterface {
         if (mCurrntCmd != null) {
             return (resMsg.cmdDet.compareTo(mCurrntCmd.mCmdDet));
         } else {
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk] validateResponse mCurrntCmd is null");
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk] validateResponse mCurrntCmd is null");
         }
         return false;
     }
@@ -1030,7 +1030,7 @@ public class CatService extends Handler implements AppInterface {
                 return true;
             }
         } catch (NullPointerException e) {
-            CatLog.d(this, "<" + mPhoneId + ">" + "Unable to get Menu's items size");
+            CatLog.i(this, "<" + mPhoneId + ">" + "Unable to get Menu's items size");
             return true;
         }
         return false;
@@ -1056,11 +1056,11 @@ public class CatService extends Handler implements AppInterface {
     private void handleEventDownload(CatResponseMessage resMsg) {
         EventListType type = resMsg.event;
         if (!isValidEvent(type.value())) {
-            CatLog.d(this, "<" + mPhoneId + ">" + "handleEventDownload is inValid Event");
+            CatLog.i(this, "<" + mPhoneId + ">" + "handleEventDownload is inValid Event");
             return;
         }
 
-        CatLog.d(this, "<" + mPhoneId + ">" + "handleEventDownload event = " + type);
+        CatLog.i(this, "<" + mPhoneId + ">" + "handleEventDownload event = " + type);
         int sourceId = DEV_ID_TERMINAL;
         int destinationId = DEV_ID_UICC;
         byte[] additionalInfo = null;
@@ -1085,9 +1085,9 @@ public class CatService extends Handler implements AppInterface {
                 try {
                 	wm.setEventUserActivityNeeded(false);
                 } catch (RemoteException e) {
-                	CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+                	CatLog.i(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
                 } catch (NullPointerException e2) {
-                	CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+                	CatLog.i(this, "<" + mPhoneId + ">" + "wm is null");
                 }
                 break;
             case Event_IdleScreenAvailable:
@@ -1096,9 +1096,9 @@ public class CatService extends Handler implements AppInterface {
             	try {
             		wm.setEventIdleScreenNeeded(false);
             	} catch (RemoteException e) {
-            		CatLog.d(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
+            		CatLog.i(this, "<" + mPhoneId + ">" + "Exception when set EventDownloadNeeded flag in WindowManager");
             	} catch (NullPointerException e2) {
-            		CatLog.d(this, "<" + mPhoneId + ">" + "wm is null");
+            		CatLog.i(this, "<" + mPhoneId + ">" + "wm is null");
             	}
                 break;
             case Event_BrowserTermination:
@@ -1129,7 +1129,7 @@ public class CatService extends Handler implements AppInterface {
                 additionalInfo = buf.toByteArray();
                 break;
             default:
-                CatLog.d(this, "<" + mPhoneId + ">" + "unknown event");
+                CatLog.i(this, "<" + mPhoneId + ">" + "unknown event");
                 return;
         }
 
@@ -1152,17 +1152,17 @@ public class CatService extends Handler implements AppInterface {
         // the same command's result again to the StkService and can cause it to
         // get out of sync with the SIM.
         if (!validateResponse(resMsg)) {
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk] validateResponse fail!! ");
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk] validateResponse fail!! ");
             if (mCurrntCmd != null) {
-                CatLog.d(this, "<" + mPhoneId + ">" + "[stk] mCurrntCmd = " +
+                CatLog.i(this, "<" + mPhoneId + ">" + "[stk] mCurrntCmd = " +
                          AppInterface.CommandType.fromInt(mCurrntCmd.mCmdDet.typeOfCommand));
             }
             if (resMsg != null) {
                 AppInterface.CommandType type = AppInterface.CommandType.fromInt(resMsg.cmdDet.typeOfCommand);
-                CatLog.d(this, "<" + mPhoneId + ">" + "[stk] resMsg cmd = " + type);
+                CatLog.i(this, "<" + mPhoneId + ">" + "[stk] resMsg cmd = " + type);
 
                 if (type == AppInterface.CommandType.SET_UP_MENU && mCurrntCmd == null) {
-                    CatLog.d(this, "<" + mPhoneId + ">" + "Warning: force mCurrntCmd to mMenuCmd!!");
+                    CatLog.i(this, "<" + mPhoneId + ">" + "Warning: force mCurrntCmd to mMenuCmd!!");
                     mCurrntCmd = mMenuCmd;
                 }
             }
@@ -1216,25 +1216,25 @@ public class CatService extends Handler implements AppInterface {
             case LAUNCH_BROWSER:
                 break;
             case OPEN_CHANNEL:
-                CatLog.d(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL RES OK");
+                CatLog.i(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL RES OK");
                 resp = new OpenChannelResponseData(resMsg.BearerType, resMsg.BearerParam,
                         resMsg.bufferSize, resMsg.ChannelId, resMsg.LinkStatus);
                 break;
             case SEND_DATA:
-                CatLog.d(this, "<" + mPhoneId + ">" + "SEND_DATA RES OK");
+                CatLog.i(this, "<" + mPhoneId + ">" + "SEND_DATA RES OK");
                 resp = new SendDataResponseData(resMsg.channelDataLen);
                 break;
             case RECEIVE_DATA:
-                CatLog.d(this, "<" + mPhoneId + ">" + "RECEIVE_DATA RES OK");
+                CatLog.i(this, "<" + mPhoneId + ">" + "RECEIVE_DATA RES OK");
                 resp = new ReceiveDataResponseData(resMsg.channelDataLen, resMsg.channelData);
                 break;
             case GET_CHANNEL_STATUS:
-                CatLog.d(this, "<" + mPhoneId + ">" + "GET_CHANNEL_STATUS RES OK");
+                CatLog.i(this, "<" + mPhoneId + ">" + "GET_CHANNEL_STATUS RES OK");
                 resp = new ChannelStatusResponseData(resMsg.ChannelId, resMsg.LinkStatus);
                 break;
             case SET_UP_CALL:
-                CatLog.d(this, "<" + mPhoneId + ">" + "[stk] handleCmdResponse MSG_ID_CALL_SETUP");
-                CatLog.d(this, "<" + mPhoneId + ">" + "[stk] send dialStk req");
+                CatLog.i(this, "<" + mPhoneId + ">" + "[stk] handleCmdResponse MSG_ID_CALL_SETUP");
+                CatLog.i(this, "<" + mPhoneId + ">" + "[stk] send dialStk req");
                 mCmdIf.handleCallSetupRequestFromSim(resMsg.usersConfirm, null);
                 // No need to send terminal response for SET UP CALL. The user's
                 // confirmation result is send back using a dedicated ril message
@@ -1252,12 +1252,12 @@ public class CatService extends Handler implements AppInterface {
         case TERMINAL_CRNTLY_UNABLE_TO_PROCESS:
             switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
             case SET_UP_CALL:
-                CatLog.d(this, "<" + mPhoneId + ">" + "SET_UP_CALL TERMINAL_CRNTLY_UNABLE_TO_PROCESS");
+                CatLog.i(this, "<" + mPhoneId + ">" + "SET_UP_CALL TERMINAL_CRNTLY_UNABLE_TO_PROCESS");
                 AddInfo = true;
                 additionalInfo = AddinfoMeProblem.BUSY_ON_CALL.value();
                 break;
             case OPEN_CHANNEL:
-                CatLog.d(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL TERMINAL_CRNTLY_UNABLE_TO_PROCESS");
+                CatLog.i(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL TERMINAL_CRNTLY_UNABLE_TO_PROCESS");
                 AddInfo = true;
                 additionalInfo = AddinfoMeProblem.BUSY_ON_CALL.value();
                 resp = new OpenChannelResponseData(resMsg.BearerType, resMsg.BearerParam,
@@ -1268,23 +1268,23 @@ public class CatService extends Handler implements AppInterface {
         case NETWORK_CRNTLY_UNABLE_TO_PROCESS:
             switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
             case SET_UP_CALL:
-                CatLog.d(this, "<" + mPhoneId + ">" + "[stk] SET_UP_CALL NETWORK_CRNTLY_UNABLE_TO_PROCESS");
+                CatLog.i(this, "<" + mPhoneId + ">" + "[stk] SET_UP_CALL NETWORK_CRNTLY_UNABLE_TO_PROCESS");
             }
             break;
         case BEYOND_TERMINAL_CAPABILITY:
             switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
             case OPEN_CHANNEL:
-                CatLog.d(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL BEYOND_TERMINAL_CAPABILITY");
+                CatLog.i(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL BEYOND_TERMINAL_CAPABILITY");
                 resp = new OpenChannelResponseData(resMsg.BearerType, resMsg.BearerParam,
                         resMsg.bufferSize, resMsg.ChannelId, resMsg.LinkStatus);
                 break;
             case SEND_DATA:
-                CatLog.d(this, "<" + mPhoneId + ">" + "SEND_DATA BEYOND_TERMINAL_CAPABILITY");
+                CatLog.i(this, "<" + mPhoneId + ">" + "SEND_DATA BEYOND_TERMINAL_CAPABILITY");
                 AddInfo = true;
                 additionalInfo = AddinfoBIPProblem.TRANSPORT_LEVEL_NOT_AVAILABLE.value();
                 break;
             case RECEIVE_DATA:
-                CatLog.d(this, "<" + mPhoneId + ">" + "RECEIVE_DATA BEYOND_TERMINAL_CAPABILITY");
+                CatLog.i(this, "<" + mPhoneId + ">" + "RECEIVE_DATA BEYOND_TERMINAL_CAPABILITY");
                 AddInfo = true;
                 additionalInfo = AddinfoBIPProblem.NO_SPECIFIC_CAUSE.value();
                 break;
@@ -1293,12 +1293,12 @@ public class CatService extends Handler implements AppInterface {
         case BIP_ERROR:
             switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
             case SEND_DATA:
-                CatLog.d(this, "<" + mPhoneId + ">" + "SEND_DATA BIP_ERROR");
+                CatLog.i(this, "<" + mPhoneId + ">" + "SEND_DATA BIP_ERROR");
                 AddInfo = true;
                 additionalInfo = AddinfoBIPProblem.CHANNEL_ID_INVALID.value();
                 break;
             case CLOSE_CHANNEL:
-                CatLog.d(this, "<" + mPhoneId + ">" + "CLOSE_CHANNEL BIP_ERROR");
+                CatLog.i(this, "<" + mPhoneId + ">" + "CLOSE_CHANNEL BIP_ERROR");
                 AddInfo = true;
                 additionalInfo = AddinfoBIPProblem.CHANNEL_CLOSED.value();
                 break;
@@ -1307,7 +1307,7 @@ public class CatService extends Handler implements AppInterface {
         case USER_NOT_ACCEPT:
             switch (AppInterface.CommandType.fromInt(cmdDet.typeOfCommand)) {
             case OPEN_CHANNEL:
-                CatLog.d(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL USER_NOT_ACCEPT");
+                CatLog.i(this, "<" + mPhoneId + ">" + "OPEN_CHANNEL USER_NOT_ACCEPT");
                 resp = new OpenChannelResponseData(resMsg.BearerType, resMsg.BearerParam,
                         resMsg.bufferSize, resMsg.ChannelId, resMsg.LinkStatus);
                 break;
@@ -1373,9 +1373,9 @@ public class CatService extends Handler implements AppInterface {
     //Deal With DTMF Message End
 
     private void handleRefreshCmdResponse(int result) {
-        CatLog.d(this, "<" + mPhoneId + ">" + "handleRefreshCmdResponse enter" );
+        CatLog.i(this, "<" + mPhoneId + ">" + "handleRefreshCmdResponse enter" );
         if (mCurrntCmd == null) {
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]handleRefreshCmdResponse mCurrntCmd is NULL" );
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]handleRefreshCmdResponse mCurrntCmd is NULL" );
             return;
         }
         CommandDetails cmdDet = mCurrntCmd.getCmdDet();
@@ -1387,7 +1387,7 @@ public class CatService extends Handler implements AppInterface {
             mCurrntCmd = null;
             break;
         default:
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]handleRefreshCmdResponse CommandType is wrong" );
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]handleRefreshCmdResponse CommandType is wrong" );
             return;
         }
     }
@@ -1407,17 +1407,17 @@ public class CatService extends Handler implements AppInterface {
         try {
             List<RunningTaskInfo> mRunningTaskInfoList = (List<RunningTaskInfo>)ActivityManagerNative.getDefault().getTasks(1, 0, null);
             int mListSize = mRunningTaskInfoList.size();
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText trace mListSize = " + mListSize);
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText trace mListSize = " + mListSize);
             if(mListSize > 0) {
                 ComponentName cn = mRunningTaskInfoList.get(0).topActivity;
-                CatLog.d(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText cn is " + cn);
+                CatLog.i(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText cn is " + cn);
                 boolean result = ((cn.getClassName().indexOf("com.android.stk") != -1))
                         || isHome(cn)
                         || isInIdleScreen();
                 return result;
             }
         } catch (RemoteException e) {
-            CatLog.d(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText exception");
+            CatLog.i(this, "<" + mPhoneId + ">" + "[stk]isCurrentCanDisplayText exception");
         }
         return false;
     }

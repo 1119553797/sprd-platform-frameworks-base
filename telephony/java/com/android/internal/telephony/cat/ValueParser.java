@@ -123,7 +123,7 @@ abstract class ValueParser {
                 if (naistr != null) {
                     int idx = text.length() + 1;
                     text = text + "\n" + naistr;
-                    CatLog.d("retrieveItem", "<idx>"+idx+"<text>"+ text);
+                    CatLog.i("retrieveItem", "<idx>"+idx+"<text>"+ text);
                     item = new Item(id, text, idx);
                 }else{
                     item = new Item(id, text);
@@ -190,7 +190,7 @@ abstract class ValueParser {
      */
     static ItemsIconId retrieveItemsIconId(ComprehensionTlv ctlv)
             throws ResultException {
-        CatLog.d("ValueParser", "retrieveItemsIconId:");
+        CatLog.i("ValueParser", "retrieveItemsIconId:");
         ItemsIconId id = new ItemsIconId();
 
         byte[] rawValue = ctlv.getRawValue();

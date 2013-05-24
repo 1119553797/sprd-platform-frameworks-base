@@ -69,7 +69,7 @@ public class ImageDescriptor {
 
             d.length = ((rawData[valueIndex++] & 0xff) << 8 | (rawData[valueIndex++] & 0xff));
         } catch (IndexOutOfBoundsException e) {
-            CatLog.d("ImageDescripter", "parse; failed parsing image descriptor");
+            CatLog.i("ImageDescripter", "parse; failed parsing image descriptor");
             d = null;
         }
         return d;

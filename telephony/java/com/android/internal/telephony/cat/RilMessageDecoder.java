@@ -111,7 +111,7 @@ class RilMessageDecoder extends StateMachine {
                     transitionTo(mStateCmdParamsReady);
                 }
             } else {
-                CatLog.d(this, "StateStart unexpected expecting START=" +
+                CatLog.i(this, "StateStart unexpected expecting START=" +
                          CMD_START + " got " + msg.what);
             }
             return true;
@@ -127,7 +127,7 @@ class RilMessageDecoder extends StateMachine {
                 sendCmdForExecution(mCurrentRilMessage);
                 transitionTo(mStateStart);
             } else {
-                CatLog.d(this, "StateCmdParamsReady expecting CMD_PARAMS_READY="
+                CatLog.i(this, "StateCmdParamsReady expecting CMD_PARAMS_READY="
                          + CMD_PARAMS_READY + " got " + msg.what);
                 deferMessage(msg);
             }
@@ -152,17 +152,17 @@ class RilMessageDecoder extends StateMachine {
         case CatService.MSG_ID_REFRESH:
             byte[] rawData = null;
             try {
-                CatLog.d(this, "[stk]ril msg = " + rilMsg.mId + " mData =" + (String)rilMsg.mData);
+                CatLog.i(this, "[stk]ril msg = " + rilMsg.mId + " mData =" + (String)rilMsg.mData);
                 rawData = IccUtils.hexStringToBytes((String) rilMsg.mData);
-                CatLog.d(this, "[stk]rawData length"+rawData.length);
+                CatLog.i(this, "[stk]rawData length"+rawData.length);
                 if (rawData.length == 0) {
-                    CatLog.d(this, "[stk]rawData is empty");
+                    CatLog.i(this, "[stk]rawData is empty");
                     decodingStarted = false;
                     break;
                 }
             } catch (Exception e) {
                 // zombie messages are dropped
-                CatLog.d(this, "[stk] decodemessage Exception e:" + e);
+                CatLog.i(this, "[stk] decodemessage Exception e:" + e);
                 decodingStarted = false;
                 break;
             }
@@ -172,7 +172,7 @@ class RilMessageDecoder extends StateMachine {
                 decodingStarted = true;
             } catch (ResultException e) {
                 // send to Service for proper RIL communication.
-                CatLog.d(this, "[stk]mCmdParamsFactory.make Exception = " + e);
+                CatLog.i(this, "[stk]mCmdParamsFactory.make Exception = " + e);
                 mCurrentRilMessage.mId = CatService.MSG_ID_SESSION_END;
                 mCurrentRilMessage.mResCode = e.result();
                 sendCmdForExecution(mCurrentRilMessage);

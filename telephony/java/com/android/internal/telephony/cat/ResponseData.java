@@ -161,7 +161,7 @@ class LanguageResponseData extends ResponseData {
         int tag = 0x80 | ComprehensionTlvTag.LANGUAGE.value();
         buf.write(tag); // tag
 
-        CatLog.d(this, "mlangCode: " + mlangCode);
+        CatLog.i(this, "mlangCode: " + mlangCode);
         buf.write(2); // length
         buf.write(mlangCode.charAt(0));
         buf.write(mlangCode.charAt(1));
@@ -201,7 +201,7 @@ class DateTimeResponseData extends ResponseData {
         data[6] = (byte)tmp;
 
         mDateTime = data;
-        //CatLog.d(this, "mDateTime: " + IccUtils.bytesToHexString(mDateTime));
+        //CatLog.i(this, "mDateTime: " + IccUtils.bytesToHexString(mDateTime));
     }
 
     @Override
@@ -217,7 +217,7 @@ class DateTimeResponseData extends ResponseData {
 
         // byte[] rawData = buf.toByteArray();
         // String hexString = IccUtils.bytesToHexString(rawData);
-        // CatLog.d(this, "format: " + hexString);
+        // CatLog.i(this, "format: " + hexString);
     }
 }
 
@@ -241,12 +241,12 @@ class OpenChannelResponseData extends ResponseData {
     @Override
     public void format(ByteArrayOutputStream buf) {
         if (buf == null) {
-            CatLog.d(this, "OpenChannelResponseData buf is null");
+            CatLog.i(this, "OpenChannelResponseData buf is null");
             return;
         }
         int tag;
         // Channel status object
-        CatLog.d(this, "[stk] ChannelStatusResponseData mLinkStatus = " + mLinkStatus);
+        CatLog.i(this, "[stk] ChannelStatusResponseData mLinkStatus = " + mLinkStatus);
         if (mLinkStatus) {
             tag = 0x80 | ComprehensionTlvTag.CHANNEL_STATUS.value();
             buf.write(tag);
@@ -297,12 +297,12 @@ class ChannelStatusResponseData extends ResponseData {
     @Override
     public void format(ByteArrayOutputStream buf) {
         if (buf == null) {
-            CatLog.d(this, "ChannelStatusResponseData buf is null");
+            CatLog.i(this, "ChannelStatusResponseData buf is null");
             return;
         }
         int tag;
         // Channel status object
-        CatLog.d(this, "[stk] ChannelStatusResponseData mLinkStatus = " + mLinkStatus);
+        CatLog.i(this, "[stk] ChannelStatusResponseData mLinkStatus = " + mLinkStatus);
         tag = 0x80 | ComprehensionTlvTag.CHANNEL_STATUS.value();
         buf.write(tag);
         // length
@@ -325,12 +325,12 @@ class SendDataResponseData extends ResponseData {
     @Override
     public void format(ByteArrayOutputStream buf) {
         if (buf == null) {
-            CatLog.d(this, "SendDataResponseData buf is null");
+            CatLog.i(this, "SendDataResponseData buf is null");
             return;
         }
         int tag;
         // Channel data length object
-        CatLog.d(this, "[stk] SendDataResponseData mChannelLen = " + mChannelLen);
+        CatLog.i(this, "[stk] SendDataResponseData mChannelLen = " + mChannelLen);
         tag = 0x80 | ComprehensionTlvTag.CHANNEL_DATA_LENGTH.value();
         buf.write(tag);
         // length
@@ -353,12 +353,12 @@ class ReceiveDataResponseData extends ResponseData {
     @Override
     public void format(ByteArrayOutputStream buf) {
         if (buf == null) {
-            CatLog.d(this, "ReceiveDataResponseData buf is null");
+            CatLog.i(this, "ReceiveDataResponseData buf is null");
             return;
         }
         int tag;
         // Channel data object
-        CatLog.d(this, "[stk] ReceiveDataResponseData mDataLen = " + mDataLen +
+        CatLog.i(this, "[stk] ReceiveDataResponseData mDataLen = " + mDataLen +
                         " mDataStr = " + mDataStr);
         tag = 0x80 | ComprehensionTlvTag.CHANNEL_DATA.value();
         buf.write(tag);

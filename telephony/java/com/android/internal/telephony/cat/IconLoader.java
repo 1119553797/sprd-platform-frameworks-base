@@ -134,7 +134,7 @@ class IconLoader extends Handler {
         try {
             switch (msg.what) {
             case EVENT_READ_EF_IMG_RECOED_DONE:
-                CatLog.d(this, "IconLoader EVENT_READ_EF_IMG_RECOED_DONE");
+                CatLog.i(this, "IconLoader EVENT_READ_EF_IMG_RECOED_DONE");
                 ar = (AsyncResult) msg.obj;
                 if (handleImageDescriptor((byte[]) ar.result)) {
                     readIconData();
@@ -143,7 +143,7 @@ class IconLoader extends Handler {
                 }
                 break;
             case EVENT_READ_ICON_DONE:
-                CatLog.d(this, "IconLoader EVENT_READ_ICON_DONE");
+                CatLog.i(this, "IconLoader EVENT_READ_ICON_DONE");
                 ar = (AsyncResult) msg.obj;
                 byte[] rawData = ((byte[]) ar.result);
                 if (mId.codingScheme == ImageDescriptor.CODING_SCHEME_BASIC) {
@@ -167,7 +167,7 @@ class IconLoader extends Handler {
                 break;
             }
         } catch (Exception e) {
-            CatLog.d(this, "Icon load failed e: " + e);
+            CatLog.i(this, "Icon load failed e: " + e);
             // post null icon back to the caller.
             postIcon();
         }
@@ -205,14 +205,14 @@ class IconLoader extends Handler {
             return;
         }
         Message msg = this.obtainMessage(EVENT_READ_EF_IMG_RECOED_DONE);
-        CatLog.d("IconLoader", "start loadEFImgLinearFixed");
+        CatLog.i("IconLoader", "start loadEFImgLinearFixed");
         mSimFH.loadEFImgLinearFixed(mRecordNumber, msg);
     }
 
     // Start reading icon bytes array from SIM card.
     private void readIconData() {
         Message msg = this.obtainMessage(EVENT_READ_ICON_DONE);
-        CatLog.d("IconLoader", "start loadEFImgTransparent");
+        CatLog.i("IconLoader", "start loadEFImgTransparent");
         mSimFH.loadEFImgTransparent(mId.imageId, 0, 0, mId.length ,msg);
     }
 
@@ -260,7 +260,7 @@ class IconLoader extends Handler {
         }
 
         if (pixelIndex != numOfPixels) {
-            CatLog.d("IconLoader", "parseToBnW; size error");
+            CatLog.i("IconLoader", "parseToBnW; size error");
         }
         return Bitmap.createBitmap(pixels, width, height, Bitmap.Config.ARGB_8888);
     }

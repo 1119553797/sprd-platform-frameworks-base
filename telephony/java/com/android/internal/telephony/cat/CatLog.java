@@ -21,7 +21,7 @@ import android.util.Log;
 public abstract class CatLog {
     static final boolean DEBUG = true;
 
-    public static void d(Object caller, String msg) {
+    public static void i(Object caller, String msg) {
         if (!DEBUG) {
             return;
         }
@@ -29,21 +29,21 @@ public abstract class CatLog {
         String className = caller.getClass().getName();
 
         if (className.contains("com.android.stk1")) {
-            Log.d("STK", "<1>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
+            Log.i("STK", "<1>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
         } else if(className.contains("com.android.stk2")) {
-            Log.d("STK", "<2>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
+            Log.i("STK", "<2>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
         } else if(className.contains("com.android.stk")) {
-            Log.d("STK", "<0>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
+            Log.i("STK", "<0>" + className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
         }else{
-            Log.d("STK", className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
+            Log.i("STK", className.substring(className.lastIndexOf('.') + 1) + ": " + msg);
         }
     }
 
-    public static void d(String caller, String msg) {
+    public static void i(String caller, String msg) {
         if (!DEBUG) {
             return;
         }
 
-        Log.d("STK", caller + ": " + msg);
+        Log.i("STK", caller + ": " + msg);
     }
 }

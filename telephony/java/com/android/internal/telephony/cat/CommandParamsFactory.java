@@ -88,7 +88,7 @@ class CommandParamsFactory extends Handler {
                 try {
                     cmdDet = ValueParser.retrieveCommandDetails(ctlvCmdDet);
                 } catch (ResultException e) {
-                    CatLog.d(this, "Failed to procees command details");
+                    CatLog.i(this, "Failed to procees command details");
                 }
             }
         }
@@ -97,7 +97,7 @@ class CommandParamsFactory extends Handler {
 
     void make(BerTlv berTlv) {
         if (berTlv == null) {
-            CatLog.d(this, "make() berTlv is null!!!!!!");
+            CatLog.i(this, "make() berTlv is null!!!!!!");
             sendCmdParams(ResultCode.CMD_TYPE_NOT_UNDERSTOOD);
             return;
         }
@@ -325,7 +325,7 @@ class CommandParamsFactory extends Handler {
             List<ComprehensionTlv> ctlvs)
             throws ResultException {
 
-        CatLog.d(this, "process DisplayText");
+        CatLog.i(this, "process DisplayText");
 
         TextMessage textMsg = new TextMessage();
         IconId iconId = null;
@@ -334,7 +334,7 @@ class CommandParamsFactory extends Handler {
                 ctlvs);
         if (ctlv != null) {
             textMsg.text = ValueParser.retrieveTextString(ctlv);
-            CatLog.d(this, "text = " + textMsg.text);
+            CatLog.i(this, "text = " + textMsg.text);
         }
         // If the tlv object doesn't exist or the it is a null object reply
         // with command not understood.
@@ -386,7 +386,7 @@ class CommandParamsFactory extends Handler {
     private boolean processSetUpIdleModeText(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "process SetUpIdleModeText");
+        CatLog.i(this, "process SetUpIdleModeText");
 
         TextMessage textMsg = new TextMessage();
         IconId iconId = null;
@@ -429,7 +429,7 @@ class CommandParamsFactory extends Handler {
     private boolean processGetInkey(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "process GetInkey");
+        CatLog.i(this, "process GetInkey");
 
         Input input = new Input();
         IconId iconId = null;
@@ -489,7 +489,7 @@ class CommandParamsFactory extends Handler {
     private boolean processGetInput(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "process GetInput");
+        CatLog.i(this, "process GetInput");
 
         Input input = new Input();
         IconId iconId = null;
@@ -582,7 +582,7 @@ class CommandParamsFactory extends Handler {
     private boolean processRefresh(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) {
 
-        CatLog.d(this, "processRefresh command = " + cmdDet.commandQualifier);
+        CatLog.i(this, "processRefresh command = " + cmdDet.commandQualifier);
         TextMessage textMsg = new TextMessage();
         Resources r = Resources.getSystem();
 
@@ -601,7 +601,7 @@ class CommandParamsFactory extends Handler {
 //            mCmdParams = new DisplayTextParams(cmdDet, textMsg);
 //            break;
         default:
-            CatLog.d(this, "processRefresh: wrong commandQualifier");
+            CatLog.i(this, "processRefresh: wrong commandQualifier");
             break;
         }
         return false;
@@ -620,7 +620,7 @@ class CommandParamsFactory extends Handler {
     private boolean processSelectItem(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "process SelectItem");
+        CatLog.i(this, "process SelectItem");
 
         Menu menu = new Menu();
         IconId titleIconId = null;
@@ -636,10 +636,10 @@ class CommandParamsFactory extends Handler {
 
         ctlv = searchForTag(ComprehensionTlvTag.NEXT_ACTION_INDICATOR, ctlvs);
         if (ctlv != null) {
-            CatLog.d(this, "SelectItem found NEXT_ACTION_INDICATOR");
+            CatLog.i(this, "SelectItem found NEXT_ACTION_INDICATOR");
             nextActionData = ValueParser.retrieveByteArray(ctlv, 0);
             if (nextActionData != null) {
-                CatLog.d(this, "SelectItem NEXT_ACTION = "
+                CatLog.i(this, "SelectItem NEXT_ACTION = "
                          + IccUtils.bytesToHexString(nextActionData));
             }
         }
@@ -727,7 +727,7 @@ class CommandParamsFactory extends Handler {
     private boolean processLanguageNotify(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "processLanguageNotify start");
+        CatLog.i(this, "processLanguageNotify start");
         System.out.println("wangsl processLanguageNotify start");
         String language = null;
 
@@ -736,7 +736,7 @@ class CommandParamsFactory extends Handler {
         if (ctlv != null) {
              language = ValueParser.retrieveLanguage(ctlv);
         } else {
-            CatLog.d(this, "processLanguageNotify language is null");
+            CatLog.i(this, "processLanguageNotify language is null");
             //throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
             //CR119858 Modify Start
             //language = StkLanguageDecoder.getInstance().getDefaultLanguage();
@@ -754,7 +754,7 @@ class CommandParamsFactory extends Handler {
     private boolean processSendSsNotify(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "processSendSsNotify start");
+        CatLog.i(this, "processSendSsNotify start");
 
         TextMessage textMsg = new TextMessage();
         IconId iconId = null;
@@ -795,7 +795,7 @@ class CommandParamsFactory extends Handler {
     private boolean processEventNotify(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "process EventNotify");
+        CatLog.i(this, "process EventNotify");
 
         TextMessage textMsg = new TextMessage();
         IconId iconId = null;
@@ -807,7 +807,7 @@ class CommandParamsFactory extends Handler {
         } else {
 //          throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
             textMsg.text = Resources.getSystem().getString(R.string.sms_control_title);
-            CatLog.d(this, "alpha id null, use default="+textMsg.text);
+            CatLog.i(this, "alpha id null, use default="+textMsg.text);
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
@@ -831,7 +831,7 @@ class CommandParamsFactory extends Handler {
     private boolean processEventNotifyUssd(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "process EventNotifyUssd");
+        CatLog.i(this, "process EventNotifyUssd");
 
         TextMessage textMsg = new TextMessage();
         IconId iconId = null;
@@ -843,7 +843,7 @@ class CommandParamsFactory extends Handler {
         } else {
             //throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
             textMsg.text = Resources.getSystem().getString(R.string.sending);
-            CatLog.d(this, "alpha id null, use default="+textMsg.text);
+            CatLog.i(this, "alpha id null, use default="+textMsg.text);
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
@@ -919,7 +919,7 @@ class CommandParamsFactory extends Handler {
     private boolean processSetUpEventList(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) {
 
-        CatLog.d(this, "processSetUpEventList");
+        CatLog.i(this, "processSetUpEventList");
         AppInterface.EventListType[] eventList = null;
 
          ComprehensionTlv ctlv = searchForTag(ComprehensionTlvTag.EVENT_LIST, ctlvs);
@@ -928,21 +928,21 @@ class CommandParamsFactory extends Handler {
                  byte[] rawValue = ctlv.getRawValue();
                  int valueIndex = ctlv.getValueIndex();
                  int valueLen = ctlv.getLength();
-                 CatLog.d(this, "processSetUpEventList valueLen = " + valueLen);
+                 CatLog.i(this, "processSetUpEventList valueLen = " + valueLen);
                  if (valueLen > 0) {
                      eventList = new AppInterface.EventListType[valueLen];
                      for (int i = 0;i < valueLen;i ++) {
                          eventList[i] = AppInterface.EventListType.fromInt(rawValue[valueIndex+i] & 0xff);
-                         CatLog.d(this, "processSetUpEventList:eventtype = " + eventList[i]);
+                         CatLog.i(this, "processSetUpEventList:eventtype = " + eventList[i]);
                      }
                  } else {
-                     CatLog.d(this, "processSetUpEventList empty list");
+                     CatLog.i(this, "processSetUpEventList empty list");
                  }
              } catch (IndexOutOfBoundsException e) {
-                 CatLog.d(this, "ProcessSetUpEventList exception = " + e);
+                 CatLog.i(this, "ProcessSetUpEventList exception = " + e);
              }
          } else {
-             CatLog.d(this, "processSetUpEventList:get ctlv Failed");
+             CatLog.i(this, "processSetUpEventList:get ctlv Failed");
          }
          mCmdParams = new EventListParams(cmdDet, eventList);
         return true;
@@ -961,7 +961,7 @@ class CommandParamsFactory extends Handler {
      private boolean processLaunchBrowser(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "process LaunchBrowser");
+        CatLog.i(this, "process LaunchBrowser");
 
         TextMessage confirmMsg = new TextMessage();
         IconId iconId = null;
@@ -1035,7 +1035,7 @@ class CommandParamsFactory extends Handler {
      private boolean processPlayTone(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
 
-        CatLog.d(this, "process PlayTone");
+        CatLog.i(this, "process PlayTone");
 
         Tone tone = null;
         TextMessage textMsg = new TextMessage();
@@ -1100,7 +1100,7 @@ class CommandParamsFactory extends Handler {
      */
      private boolean processSetupCall(CommandDetails cmdDet,
             List<ComprehensionTlv> ctlvs) throws ResultException {
-        CatLog.d(this, "process SetupCall");
+        CatLog.i(this, "process SetupCall");
 
         Iterator<ComprehensionTlv> iter = ctlvs.iterator();
         ComprehensionTlv ctlv = null;
@@ -1117,7 +1117,7 @@ class CommandParamsFactory extends Handler {
         ctlv = searchForNextTag(ComprehensionTlvTag.ALPHA_ID, iter);
         if (ctlv != null) {
             confirmMsg.text = ValueParser.retrieveAlphaId(ctlv);
-            CatLog.d(this, "process SetupCall confirmMsg =" + confirmMsg.text);
+            CatLog.i(this, "process SetupCall confirmMsg =" + confirmMsg.text);
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
@@ -1130,7 +1130,7 @@ class CommandParamsFactory extends Handler {
         ctlv = searchForNextTag(ComprehensionTlvTag.ALPHA_ID, iter);
         if (ctlv != null) {
             callMsg.text = ValueParser.retrieveAlphaId(ctlv);
-            CatLog.d(this, "process SetupCall callMsg =" + callMsg.text);
+            CatLog.i(this, "process SetupCall callMsg =" + callMsg.text);
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
@@ -1145,15 +1145,15 @@ class CommandParamsFactory extends Handler {
             byte[] rawValue = ctlv.getRawValue();
             int valueIndex = ctlv.getValueIndex();
             int length = ctlv.getLength();
-            CatLog.d(this, "process SetupCall call valueIndex="+valueIndex+" length="+length);
+            CatLog.i(this, "process SetupCall call valueIndex="+valueIndex+" length="+length);
             if ( length > 0) {
                 callAddress.text = PhoneNumberUtils.calledPartyBCDToString(rawValue, valueIndex, length);
-                CatLog.d(this, "process SetupCall call address ="+callAddress.text);
+                CatLog.i(this, "process SetupCall call address ="+callAddress.text);
             } else {
-                CatLog.d(this, "process SetupCall call address is NULL");
+                CatLog.i(this, "process SetupCall call address is NULL");
             }
         } else {
-            CatLog.d(this, "process SetupCall call ctlv not found");
+            CatLog.i(this, "process SetupCall call ctlv not found");
         }
 
         mCmdParams = new CallSetupParams(cmdDet, confirmMsg, callMsg, callAddress);
@@ -1185,7 +1185,7 @@ class CommandParamsFactory extends Handler {
       */
      private boolean processOpenChannel(CommandDetails cmdDet,
              List<ComprehensionTlv> ctlvs) throws ResultException {
-         CatLog.d(this, "process OpenChannel");
+         CatLog.i(this, "process OpenChannel");
 
          Iterator<ComprehensionTlv> iter = ctlvs.iterator();
          IconId iconId = null;
@@ -1196,10 +1196,10 @@ class CommandParamsFactory extends Handler {
              openchanneldata.text = ValueParser.retrieveAlphaId(ctlv);
              if (openchanneldata.text != null) {
                  openchanneldata.isNullAlphaId = false;
-                 CatLog.d(this, "OpenChannel Alpha identifier done");
+                 CatLog.i(this, "OpenChannel Alpha identifier done");
              } else {
                  openchanneldata.isNullAlphaId = true;
-                 CatLog.d(this, "OpenChannel null Alpha id");
+                 CatLog.i(this, "OpenChannel null Alpha id");
              }
          }
          // Icon identifier
@@ -1207,7 +1207,7 @@ class CommandParamsFactory extends Handler {
          if (ctlv != null) {
              iconId = ValueParser.retrieveIconId(ctlv);
              openchanneldata.iconSelfExplanatory = iconId.selfExplanatory;
-             CatLog.d(this, "OpenChannel Icon identifier done");
+             CatLog.i(this, "OpenChannel Icon identifier done");
          }
          // Bearer description
          ctlv = searchForTag(ComprehensionTlvTag.BEARER_DESCRIPTION, ctlvs);
@@ -1219,14 +1219,14 @@ class CommandParamsFactory extends Handler {
                  int length = ctlv.getLength();
                  if (length > 1) {
                      openchanneldata.BearerParam = IccUtils.bytesToHexString(ValueParser.retrieveByteArray(ctlv, 1));
-                     CatLog.d(this, "OpenChannel Bearer description done");
+                     CatLog.i(this, "OpenChannel Bearer description done");
                  }
              } catch (IndexOutOfBoundsException e) {
-                 CatLog.d(this, "OpenChannel BEARER_DESCRIPTION IndexOutOfBoundsException");
+                 CatLog.i(this, "OpenChannel BEARER_DESCRIPTION IndexOutOfBoundsException");
                  throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
              }
          } else {
-             CatLog.d(this, "OpenChannel BEARER_DESCRIPTION ctlv is null");
+             CatLog.i(this, "OpenChannel BEARER_DESCRIPTION ctlv is null");
              throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
          }
          // Buffer size
@@ -1237,13 +1237,13 @@ class CommandParamsFactory extends Handler {
                  int valueIndex = ctlv.getValueIndex();
                  openchanneldata.bufferSize = ((rawValue[valueIndex] & 0xff) << 8) |
                                                 rawValue[valueIndex + 1] & 0xff;
-                 CatLog.d(this, "OpenChannel Buffer size done");
+                 CatLog.i(this, "OpenChannel Buffer size done");
              } catch (IndexOutOfBoundsException e) {
-                 CatLog.d(this, "OpenChannel BUFFER_SIZE IndexOutOfBoundsException");
+                 CatLog.i(this, "OpenChannel BUFFER_SIZE IndexOutOfBoundsException");
                  throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
              }
          } else {
-             CatLog.d(this, "OpenChannel BUFFER_SIZE ctlv is null");
+             CatLog.i(this, "OpenChannel BUFFER_SIZE ctlv is null");
              throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
          }
          // Network Access Name
@@ -1252,7 +1252,7 @@ class CommandParamsFactory extends Handler {
                  //openchanneldata.NetAccessName = IccUtils.bytesToHexString(ValueParser.retrieveByteArray(ctlv, 0));
                  byte[] raw = ValueParser.retrieveByteArray(ctlv, 0);
                  openchanneldata.NetAccessName = convNetworkAccessName(raw);
-                 CatLog.d(this, "OpenChannel Network Access Name done");
+                 CatLog.i(this, "OpenChannel Network Access Name done");
          }
          // Other address (local address)
          ctlv = searchForTag(ComprehensionTlvTag.OTHER_ADDRESS, ctlvs);
@@ -1266,30 +1266,30 @@ class CommandParamsFactory extends Handler {
                      byte [] address = ValueParser.retrieveByteArray(ctlv, 1);
                      if (openchanneldata.OtherAddressType == OpenChannelData.ADDRESS_TYPE_IPV4 && address.length == 4) {
                          openchanneldata.OtherAddress = convIpv4Address(address);
-                         CatLog.d(this, "OpenChannel local address done");
+                         CatLog.i(this, "OpenChannel local address done");
                      } else {
-                         CatLog.d(this, "OpenChannel local Address is not ipv4 format");
+                         CatLog.i(this, "OpenChannel local Address is not ipv4 format");
                          openchanneldata.OtherAddress = "";
                          openchanneldata.OtherAddressType = 0;
                      }
                  } else {
-                     CatLog.d(this, "OpenChannel local address tag length error");
+                     CatLog.i(this, "OpenChannel local address tag length error");
                  }
              } catch (IndexOutOfBoundsException e) {
-                 CatLog.d(this, "OpenChannel OtherAddress IndexOutOfBoundsException");
+                 CatLog.i(this, "OpenChannel OtherAddress IndexOutOfBoundsException");
              }
          }
          // Text String (User login)
          ctlv = searchForNextTag(ComprehensionTlvTag.TEXT_STRING, iter);
          if (ctlv != null) {
              openchanneldata.LoginStr = ValueParser.retrieveTextString(ctlv);
-             CatLog.d(this, "OpenChannel User login done");
+             CatLog.i(this, "OpenChannel User login done");
          }
          // Text String (User password)
          ctlv = searchForNextTag(ComprehensionTlvTag.TEXT_STRING, iter);
          if (ctlv != null) {
              openchanneldata.PwdStr = ValueParser.retrieveTextString(ctlv);
-             CatLog.d(this, "OpenChannel User password done");
+             CatLog.i(this, "OpenChannel User password done");
          }
          // SIM ME interface transport level
          ctlv = searchForTag(ComprehensionTlvTag.TRANSPORT_LEVEL, ctlvs);
@@ -1300,9 +1300,9 @@ class CommandParamsFactory extends Handler {
                  openchanneldata.transportType = rawValue[valueIndex];
                  openchanneldata.portNumber = ((rawValue[valueIndex+1] & 0xff) << 8) |
                                                 rawValue[valueIndex + 2] & 0xff;
-                 CatLog.d(this, "OpenChannel transport level done");
+                 CatLog.i(this, "OpenChannel transport level done");
              } catch (IndexOutOfBoundsException e) {
-                 CatLog.d(this, "OpenChannel TRANSPORT_LEVEL IndexOutOfBoundsException");
+                 CatLog.i(this, "OpenChannel TRANSPORT_LEVEL IndexOutOfBoundsException");
              }
          }
          // Data destination address
@@ -1317,17 +1317,17 @@ class CommandParamsFactory extends Handler {
                      byte [] address = ValueParser.retrieveByteArray(ctlv, 1);
                      if (openchanneldata.DataDstAddressType == OpenChannelData.ADDRESS_TYPE_IPV4 && address.length == 4) {
                          openchanneldata.DataDstAddress = convIpv4Address(address);
-                         CatLog.d(this, "OpenChannel Data destination address done");
+                         CatLog.i(this, "OpenChannel Data destination address done");
                      } else {
-                         CatLog.d(this, "OpenChannel Data destination address is not ipv4 format");
+                         CatLog.i(this, "OpenChannel Data destination address is not ipv4 format");
                          openchanneldata.DataDstAddress = "";
                          openchanneldata.DataDstAddressType = 0;
                      }
                  } else {
-                     CatLog.d(this, "OpenChannel Data destination address tag length error");
+                     CatLog.i(this, "OpenChannel Data destination address tag length error");
                  }
              } catch (IndexOutOfBoundsException e) {
-                 CatLog.d(this, "OpenChannel DataDstAddress IndexOutOfBoundsException");
+                 CatLog.i(this, "OpenChannel DataDstAddress IndexOutOfBoundsException");
              }
          }
 
@@ -1338,7 +1338,7 @@ class CommandParamsFactory extends Handler {
                      .obtainMessage(MSG_ID_LOAD_ICON_DONE));
              return true;
          }
-         CatLog.d(this, "Alpha id: " + openchanneldata.text +
+         CatLog.i(this, "Alpha id: " + openchanneldata.text +
                         ", NetAccessName: " + openchanneldata.NetAccessName +
                         ", bufferSize: " + openchanneldata.bufferSize +
                         ", BearerType: " + openchanneldata.BearerType + "\n" +
@@ -1400,7 +1400,7 @@ class CommandParamsFactory extends Handler {
 
      private boolean processCloseChannel(CommandDetails cmdDet,
              List<ComprehensionTlv> ctlvs) throws ResultException {
-         CatLog.d(this, "process CloseChannel");
+         CatLog.i(this, "process CloseChannel");
          DeviceIdentities deviceIdentities = null;
          IconId iconId = null;
          CloseChannelData closechanneldata = new CloseChannelData();
@@ -1433,7 +1433,7 @@ class CommandParamsFactory extends Handler {
 
      private boolean processReceiveData(CommandDetails cmdDet,
              List<ComprehensionTlv> ctlvs) throws ResultException {
-         CatLog.d(this, "process ReceiveData");
+         CatLog.i(this, "process ReceiveData");
 
          IconId iconId = null;
          ReceiveChannelData receivedata = new ReceiveChannelData();
@@ -1456,11 +1456,11 @@ class CommandParamsFactory extends Handler {
                  int valueIndex = ctlv.getValueIndex();
                  receivedata.channelDataLength = rawValue[valueIndex] & 0xff;
              } catch (IndexOutOfBoundsException e) {
-                 CatLog.d(this, "ReceiveData CHANNEL_DATA_LENGTH IndexOutOfBoundsException");
+                 CatLog.i(this, "ReceiveData CHANNEL_DATA_LENGTH IndexOutOfBoundsException");
                  throw new ResultException(ResultCode.CMD_DATA_NOT_UNDERSTOOD);
              }
          } else {
-             CatLog.d(this, "ReceiveData CHANNEL_DATA_LENGTH ctlv is null");
+             CatLog.i(this, "ReceiveData CHANNEL_DATA_LENGTH ctlv is null");
              throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
          }
 
@@ -1476,7 +1476,7 @@ class CommandParamsFactory extends Handler {
 
      private boolean processSendData(CommandDetails cmdDet,
              List<ComprehensionTlv> ctlvs) throws ResultException {
-         CatLog.d(this, "process SendData");
+         CatLog.i(this, "process SendData");
 
          IconId iconId = null;
          DeviceIdentities deviceIdentities = null;
@@ -1502,10 +1502,10 @@ class CommandParamsFactory extends Handler {
          if (ctlv != null) {
              senddata.sendDataStr = IccUtils.bytesToHexString(ValueParser.retrieveByteArray(ctlv, 0));
          } else {
-             CatLog.d(this, "SendData CHANNEL_DATA ctlv is null");
+             CatLog.i(this, "SendData CHANNEL_DATA ctlv is null");
              throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
          }
-         CatLog.d(this, "Alpha id: " + senddata.text + " senddata: " + senddata.sendDataStr);
+         CatLog.i(this, "Alpha id: " + senddata.text + " senddata: " + senddata.sendDataStr);
 
          mCmdParams = new SendChannelDataParams(cmdDet, senddata, deviceIdentities);
          if (iconId != null) {
@@ -1519,7 +1519,7 @@ class CommandParamsFactory extends Handler {
 
      private void processGetChannelStatus(CommandDetails cmdDet,
              List<ComprehensionTlv> ctlvs) throws ResultException {
-         CatLog.d(this, "process GetChannelStatus");
+         CatLog.i(this, "process GetChannelStatus");
 
          GetChannelStatus channelstatus = new GetChannelStatus();
          mCmdParams = new GetChannelStatusParams(cmdDet, channelstatus);
