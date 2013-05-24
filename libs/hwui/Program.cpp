@@ -181,7 +181,7 @@ void Program::use() {
         glUniform1i(getUniform("sampler"), 0);
         mHasSampler = true;
     }
-    mUse = true;
+    mUse = false;
 }
 
 void Program::remove() {
