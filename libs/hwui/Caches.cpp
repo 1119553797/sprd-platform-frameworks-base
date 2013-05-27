@@ -271,53 +271,37 @@ bool Caches::bindMeshBuffer() {
 }
 
 bool Caches::bindMeshBuffer(const GLuint buffer) {
-    if (mCurrentBuffer != buffer) {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         mCurrentBuffer = buffer;
         return true;
-    }
-    return false;
 }
 
 bool Caches::unbindMeshBuffer() {
-    if (mCurrentBuffer) {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         mCurrentBuffer = 0;
         return true;
-    }
-    return false;
 }
 
 bool Caches::bindIndicesBuffer(const GLuint buffer) {
-    if (mCurrentIndicesBuffer != buffer) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
         mCurrentIndicesBuffer = buffer;
         return true;
-    }
-    return false;
 }
 
 bool Caches::unbindIndicesBuffer() {
-    if (mCurrentIndicesBuffer) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         mCurrentIndicesBuffer = 0;
         return true;
-    }
-    return false;
 }
 
 void Caches::bindPositionVertexPointer(bool force, GLuint slot, GLvoid* vertices, GLsizei stride) {
-    if (force || vertices != mCurrentPositionPointer) {
         glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, stride, vertices);
         mCurrentPositionPointer = vertices;
-    }
 }
 
 void Caches::bindTexCoordsVertexPointer(bool force, GLuint slot, GLvoid* vertices) {
-    if (force || vertices != mCurrentTexCoordsPointer) {
         glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, gMeshStride, vertices);
         mCurrentTexCoordsPointer = vertices;
-    }
 }
 
 void Caches::resetVertexPointers() {
@@ -330,36 +314,28 @@ void Caches::resetTexCoordsVertexPointer() {
 }
 
 void Caches::enableTexCoordsVertexArray() {
-    if (!mTexCoordsArrayEnabled) {
         glEnableVertexAttribArray(Program::kBindingTexCoords);
         mCurrentTexCoordsPointer = this;
         mTexCoordsArrayEnabled = true;
-    }
 }
 
 void Caches::disbaleTexCoordsVertexArray() {
-    if (mTexCoordsArrayEnabled) {
         glDisableVertexAttribArray(Program::kBindingTexCoords);
         mTexCoordsArrayEnabled = false;
-    }
 }
 
 void Caches::activeTexture(GLuint textureUnit) {
-    if (mTextureUnit != textureUnit) {
         glActiveTexture(gTextureUnits[textureUnit]);
         mTextureUnit = textureUnit;
-    }
 }
 
 void Caches::setScissor(GLint x, GLint y, GLint width, GLint height) {
-    if (x != mScissorX || y != mScissorY || width != mScissorWidth || height != mScissorHeight) {
         glScissor(x, y, width, height);
 
         mScissorX = x;
         mScissorY = y;
         mScissorWidth = width;
         mScissorHeight = height;
-    }
 }
 
 void Caches::resetScissor() {
