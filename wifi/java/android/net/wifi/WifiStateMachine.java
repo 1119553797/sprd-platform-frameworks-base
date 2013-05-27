@@ -190,6 +190,8 @@ public class WifiStateMachine extends StateMachine {
     //add by spreadst_lc for cmcc wifi feature
     private static Context mContext;
     private boolean supportCMCC = false;
+    /*Being true to indicate to disconnect an AccessPoint manually*/
+    private boolean manualDisconnect = false;
     //add by spreadst_lc for cmcc wifi feature
 
     private DhcpInfoInternal mDhcpInfoInternal;
@@ -732,6 +734,7 @@ public class WifiStateMachine extends StateMachine {
             sendMessage(obtainMessage(CMD_LOAD_DRIVER, WIFI_STATE_ENABLING, 0));
             sendMessage(CMD_START_SUPPLICANT);
         } else {
+            manualDisconnect = false;
             sendMessage(CMD_STOP_SUPPLICANT);
             /* Argument is the state that is entered upon success */
             sendMessage(obtainMessage(CMD_UNLOAD_DRIVER, WIFI_STATE_DISABLED, 0));
@@ -878,6 +881,7 @@ public class WifiStateMachine extends StateMachine {
      * Disconnect from Access Point
      */
     public void disconnectCommand() {
+        manualDisconnect = true;
         sendMessage(CMD_DISCONNECT);
     }
 
@@ -2661,7 +2665,9 @@ public class WifiStateMachine extends StateMachine {
                 transitionTo(mScanModeState);
             } else {
                 mWifiNative.setScanResultHandling(CONNECT_MODE);
-                //mWifiNative.reconnect();
+                if (!manualDisconnect) {
+                    mWifiNative.reassociate();
+                }
                 // Status pulls in the current supplicant state and network connection state
                 // events over the monitor connection. This helps framework sync up with
                 // current supplicant state
@@ -3008,6 +3014,7 @@ public class WifiStateMachine extends StateMachine {
                         netId = result.getNetworkId();
                     }
 
+                    manualDisconnect = false;
                     if (mWifiConfigStore.selectNetwork(netId) && mWifiNative.reconnect()) {
                         /* The state tracker handles enabling networks upon completion/failure */
                         mSupplicantStateTracker.sendMessage(WifiManager.CONNECT_NETWORK);
