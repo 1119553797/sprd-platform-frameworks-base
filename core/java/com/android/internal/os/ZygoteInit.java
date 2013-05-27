@@ -102,8 +102,6 @@ public class ZygoteInit {
     /** Controls whether we should preload resources during zygote init. */
     private static final boolean PRELOAD_RESOURCES = true;
 
-    private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
-
     /**
      * Invokes a static "main(argv[]) method on class "className".
      * Converts various failing exceptions into RuntimeExceptions, with
@@ -238,13 +236,10 @@ public class ZygoteInit {
         engModeFlag = "engtest".equals(SystemProperties.get("ro.bootmode", "mode"))?true:false;
         if(false == engModeFlag){
             preloadClasses();
-	    if (!UNIVERSE_UI_SUPPORT) {
-	        preloadResources();
-	    }
-	    }else{
-                Log.d(TAG,"engtest mode ,we should not preload resource for fast boot");
+	    preloadResources();
+        }else{
+            Log.d(TAG,"engtest mode ,we should not preload resource for fast boot");
         }
-
     }
 
     /**
