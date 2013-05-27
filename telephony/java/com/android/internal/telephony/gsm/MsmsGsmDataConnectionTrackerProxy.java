@@ -250,6 +250,20 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
                     log("onDisconnectDone: switch Apn on the same phone" + phoneId);
                 }
                 sTracker[phoneId].onDisconnectDoneInternal(connId, ar);
+                if(phoneId == sRequestConnectPhoneId) {
+                    log("onDisconnectDone: reactivate phone" + phoneId);
+                    if (!sTracker[sRequestConnectPhoneId].isAutoAttachOnCreation()) {
+                        // in the case that gprs state will be checked before setup pdp
+                        if (sTracker[sRequestConnectPhoneId].getCurrentGprsState() == ServiceState.STATE_IN_SERVICE) {
+                            sTracker[sRequestConnectPhoneId].setupDataOnReadyApns("switchConnection");
+                        } else {
+                            sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
+                        }
+                    } else {
+                        // in the case that gprs state will NOT be checked before setup pdp
+                        sTracker[sRequestConnectPhoneId].setupDataOnReadyApns("switchConnection");
+                    }
+                }
                 sRequestConnectPhoneId = INVALID_PHONE_ID;
                 // detach if any other sim card is ready
                 if (isAnyIccCardReadyExceptProvided(sActivePhoneId)) {
