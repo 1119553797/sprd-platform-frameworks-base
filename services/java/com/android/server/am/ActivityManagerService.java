@@ -315,9 +315,6 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
     // Maximum number of process that we can set adj.
     static final int MAX_PROCESS_SET_ADJ = 4;
-    // To remember the process which be set
-    appProcess SAP = new appProcess();
-    List<appProcess> setAppList = new ArrayList<appProcess>();
 
     private static final int DEFAULT_SCAN_MEM_GAPTIME = 5000;
 
@@ -2364,39 +2361,26 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
     }
 
-    //add for change process adj
+    // Used by application to change it's oom_adj tempropraly
     public void setProcessAdj(int pid, int adj, boolean reset) {
-        for (int j=mLruProcesses.size()-1; j>=0; j--) {
+        for (int j = mLruProcesses.size() - 1; j >= 0; j--) {
             ProcessRecord app = mLruProcesses.get(j);
             if (app.pid == pid) {
-                if(!reset){
-                    //save old adj
-                    if(setAppList.size()<=MAX_PROCESS_SET_ADJ){
-                        SAP.pid = app.pid;
-                        SAP.processName = app.processName;
-                        SAP.adj = app.curRawAdj;
-
-                        setAppList.add(SAP);
-                    }else{
-                        Log.w(TAG, "Can't set process adj! 4 process has been set!");
-                    }
-
-                    //set new adj
+                int def = ProcessRecord.TMP_CUR_ADJ_DEFAULT;
+                if(reset) {
+                    app.curAdj = app.tmpCurAdj;
+                    app.curRawAdj = app.tmpCurRawAdj;
+                    app.tmpCurAdj = def;
+                    app.tmpCurRawAdj = def;
+                } else {
+                    if (adj < -1) adj = -1;
+                    if (adj == def) adj = def - 1;
+                    app.tmpCurAdj = app.curAdj;
+                    app.tmpCurRawAdj = app.curRawAdj;
                     app.curAdj = adj;
                     app.curRawAdj = adj;
-                 }else{
-                    //reset adj
-                     if(setAppList != null && setAppList.size()>0){
-                         for(int i=0;i<setAppList.size();i++){
-                             appProcess tmpProcess = (appProcess)setAppList.get(i);
-                             if(tmpProcess.pid == pid){
-                                app.curAdj = tmpProcess.adj;
-                                app.curRawAdj = tmpProcess.adj;
-                                setAppList.remove(i);
-                              }
-                          }
-                      }
-                 }
+                }
+                Process.setOomAdj(pid, app.curAdj);
                 break;
             }
         }
@@ -10959,7 +10943,8 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (conn.stableCount > 0) {
                 if (!capp.persistent && capp.thread != null
                         && capp.pid != 0
-                        && capp.pid != MY_PID) {
+                        && capp.pid != MY_PID
+                        && capp.tmpCurAdj == ProcessRecord.TMP_CUR_ADJ_DEFAULT) {
                     Slog.i(TAG, "Kill " + capp.processName
                             + " (pid " + capp.pid + "): provider " + cpr.info.name
                             + " in dying process " + (proc != null ? proc.processName : "??"));
@@ -14850,15 +14835,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         boolean success = true;
 
-        //add for change process adj
-        if(setAppList != null && setAppList.size()>0){
-            for(int i=0;i<setAppList.size();i++){
-                appProcess tmpProcess = (appProcess)setAppList.get(i);
-                if (app.pid != tmpProcess.pid) {
-                    computeOomAdjLocked(app, hiddenAdj, TOP_APP, false, doingAll);
-                }
-            }
-        }else{
+        if (app.tmpCurAdj == ProcessRecord.TMP_CUR_ADJ_DEFAULT) {
             computeOomAdjLocked(app, hiddenAdj, TOP_APP, false, doingAll);
         }
 
@@ -14878,7 +14855,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             app.setRawAdj = app.curRawAdj;
         }
 
-        if (app.curAdj != app.setAdj) {
+        if ((app.tmpCurAdj == ProcessRecord.TMP_CUR_ADJ_DEFAULT) && app.curAdj != app.setAdj) {
             if (Process.setOomAdj(app.pid, app.curAdj)) {
                 if (DEBUG_SWITCH || DEBUG_OOM_ADJ) Slog.v(
                     TAG, "Set " + app.pid + " " + app.processName +
