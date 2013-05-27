@@ -85,6 +85,7 @@ import com.android.internal.statusbar.StatusBarNotification;
 import com.android.systemui.R;
 import com.android.systemui.recent.RecentTasksLoader;
 import com.android.systemui.statusbar.BaseStatusBar;
+import com.android.systemui.statusbar.FloatKeyView;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.NotificationData.Entry;
 import com.android.systemui.statusbar.CommandQueue;
@@ -215,6 +216,8 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     // on-screen navigation buttons
     private NavigationBarView mNavigationBarView = null;
+
+    private FloatKeyView mFloatKeyView;
 
     // the tracker view
     int mTrackingPosition; // the position of the top of the tracking view.
@@ -616,6 +619,12 @@ public class PhoneStatusBar extends BaseStatusBar {
             }
         } catch (RemoteException ex) {
             // no window manager? good luck with that
+        }
+
+        //add FloatKeyView
+        if (SystemProperties.getBoolean("ro.floatkey.show", false)) {
+            mFloatKeyView = new FloatKeyView(context);
+            mFloatKeyView.addToWindow();
         }
 
         // figure out which pixel-format to use for the status bar.
@@ -2174,6 +2183,14 @@ public class PhoneStatusBar extends BaseStatusBar {
                 }
 
                 setStatusBarLowProfile(lightsOut);
+            }
+
+            if (mFloatKeyView != null) {
+                if (0 != (vis & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)) {
+                    mFloatKeyView.removeFromWindow();
+                } else {
+                    mFloatKeyView.addToWindow();
+                }
             }
 
             notifyUiVisibilityChanged();

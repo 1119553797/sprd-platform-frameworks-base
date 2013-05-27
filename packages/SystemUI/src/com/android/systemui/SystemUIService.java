@@ -29,11 +29,8 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.os.SystemProperties;
 import android.util.Slog;
 import android.view.IWindowManager;
-
-import com.android.systemui.statusbar.FloatKeyView;
 
 public class SystemUIService extends Service {
     static final String TAG = "SystemUIService";
@@ -95,12 +92,6 @@ public class SystemUIService extends Service {
             mServices[i].mContext = this;
             Slog.d(TAG, "running: " + mServices[i]);
             mServices[i].start();
-        }
-
-        //add FloatKeyView
-        if (SystemProperties.getBoolean("ro.floatkey.show", false)) {
-            FloatKeyView mFloatKeyView = new FloatKeyView(this);
-            mFloatKeyView.addToWindow();
         }
     }
 

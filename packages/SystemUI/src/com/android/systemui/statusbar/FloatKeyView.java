@@ -67,6 +67,8 @@ public class FloatKeyView extends View implements OnTouchListener {
     private float mDownX;
     private float mDownY;
 
+    private boolean mAddToWindow = false;
+
     private WindowManager mWm;
     private WindowManager.LayoutParams mLp;
     private InputManager mInputManager;
@@ -94,7 +96,7 @@ public class FloatKeyView extends View implements OnTouchListener {
                 BitmapFactory.decodeResource(res, R.drawable.ic_floatkey_close) };
 
         mKeyCodes = new int[] { 
-                KeyEvent.KEYCODE_HOME, 
+                KeyEvent.KEYCODE_HOME,
                 KeyEvent.KEYCODE_MENU,
                 KeyEvent.KEYCODE_BACK
                 // KeyEvent.KEYCODE_SEARCH
@@ -141,11 +143,24 @@ public class FloatKeyView extends View implements OnTouchListener {
     }
 
     public void addToWindow() {
-        mWm.addView(this, mLp);
+        if (!mAddToWindow) {
+            mWm.addView(this, mLp);
+            mAddToWindow = true;
+        }
     }
 
     public void removeFromWindow() {
-        mWm.removeView(this);
+        if (mAddToWindow) {
+            if (isPressed()) {
+                setPressed(false);
+                if (mIsShown && pressKey()) {
+                    removeCallbacks(mCheckLongPress);
+                }
+                mOnDrag = false;
+            }
+            mWm.removeView(this);
+            mAddToWindow = false;
+        }
     }
 
     public boolean isShown() {
@@ -212,6 +227,9 @@ public class FloatKeyView extends View implements OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (!mAddToWindow)
+            return false;
+
         switch (event.getAction()) {
         case MotionEvent.ACTION_DOWN:
             mDownTime = SystemClock.uptimeMillis();
