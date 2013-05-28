@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.Debug;
 import android.os.Handler;
 import android.media.AudioManager;
 import android.media.Ringtone;
@@ -43,9 +44,11 @@ import com.android.systemui.R;
 import com.android.systemui.SystemUI;
 
 public class PowerUI extends SystemUI {
-    static final String TAG = "PowerUI";
+    private static final String TAG = "PowerUI";
 
-    static final boolean DEBUG = false;
+    private static final boolean DEBUG_POWER = false;
+
+    private static final boolean DEBUG = Debug.isDebug();
 
     Handler mHandler = new Handler();
 
@@ -124,7 +127,7 @@ public class PowerUI extends SystemUI {
                 int oldBucket = findBatteryLevelBucket(oldBatteryLevel);
                 int bucket = findBatteryLevelBucket(mBatteryLevel);
 
-                if (DEBUG) {
+                if (DEBUG_POWER) {
                     Slog.d(TAG, "buckets   ....." + mLowBatteryAlertCloseLevel
                             + " .. " + mLowBatteryReminderLevels[0]
                             + " .. " + mLowBatteryReminderLevels[1]);
@@ -137,7 +140,9 @@ public class PowerUI extends SystemUI {
                 }
 
                 if (oldInvalidCharger == 0 && mInvalidCharger != 0) {
-                    Slog.d(TAG, "showing invalid charger warning");
+                    if (DEBUG) {
+                        Slog.d(TAG, "showing invalid charger warning");
+                    }
                     showInvalidChargerDialog();
                     return;
                 } else if (oldInvalidCharger != 0 && mInvalidCharger == 0) {
@@ -163,23 +168,29 @@ public class PowerUI extends SystemUI {
                     showLowBatteryWarning();
                 }
             } else {
-                Slog.w(TAG, "unknown intent: " + intent);
+                if (DEBUG) {
+                    Slog.d(TAG, "unknown intent: " + intent);
+                }
             }
         }
     };
 
     void dismissLowBatteryWarning() {
         if (mLowBatteryDialog != null) {
-            Slog.i(TAG, "closing low battery warning: level=" + mBatteryLevel);
+            if (DEBUG) {
+                Slog.i(TAG, "closing low battery warning: level=" + mBatteryLevel);
+            }
             mLowBatteryDialog.dismiss();
         }
     }
 
     void showLowBatteryWarning() {
-        Slog.i(TAG,
-                ((mBatteryLevelTextView == null) ? "showing" : "updating")
-                + " low battery warning: level=" + mBatteryLevel
-                + " [" + findBatteryLevelBucket(mBatteryLevel) + "]");
+        if (DEBUG) {
+            Slog.i(TAG,
+                    ((mBatteryLevelTextView == null) ? "showing" : "updating")
+                    + " low battery warning: level=" + mBatteryLevel
+                    + " [" + findBatteryLevelBucket(mBatteryLevel) + "]");
+        }
 
         CharSequence levelText = mContext.getString(
                 R.string.battery_low_percent_format, mBatteryLevel);
@@ -256,7 +267,9 @@ public class PowerUI extends SystemUI {
     }
 
     void showInvalidChargerDialog() {
-        Slog.d(TAG, "showing invalid charger dialog");
+        if (DEBUG) {
+            Slog.d(TAG, "showing invalid charger dialog");
+        }
 
         dismissLowBatteryWarning();
 
@@ -278,7 +291,7 @@ public class PowerUI extends SystemUI {
         d.show();
         mInvalidChargerDialog = d;
     }
-    
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.print("mLowBatteryAlertCloseLevel=");
         pw.println(mLowBatteryAlertCloseLevel);

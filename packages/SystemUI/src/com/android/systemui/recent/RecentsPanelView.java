@@ -33,6 +33,7 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Debug;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.provider.Settings;
@@ -69,8 +70,8 @@ import java.util.ArrayList;
 
 public class RecentsPanelView extends FrameLayout implements OnItemClickListener, RecentsCallback,
         StatusBarPanel, Animator.AnimatorListener, View.OnTouchListener {
-    static final String TAG = "RecentsPanelView";
-    static final boolean DEBUG = TabletStatusBar.DEBUG || PhoneStatusBar.DEBUG || false;
+    private static final String TAG = "RecentsPanelView";
+    private static final boolean DEBUG = Debug.isDebug();
     private Context mContext;
     private BaseStatusBar mBar;
     private PopupMenu mPopup;
@@ -664,8 +665,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         if (!mFirstScreenful && tasks.size() == 0) {
             return;
         }
-        mNumItemsWaitingForThumbnailsAndIcons = mFirstScreenful 
-                ? tasks.size() : mRecentTaskDescriptions == null 
+        mNumItemsWaitingForThumbnailsAndIcons = mFirstScreenful
+                ? tasks.size() : mRecentTaskDescriptions == null
                         ? 0 : mRecentTaskDescriptions.size();
         if (mRecentTaskDescriptions == null) {
             mRecentTaskDescriptions = new ArrayList<TaskDescription>(tasks);
@@ -813,8 +814,10 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     public void handleSwipe(View view) {
         TaskDescription ad = ((ViewHolder) view.getTag()).taskDescription;
         if (ad == null) {
-            Log.v(TAG, "Not able to find activity description for swiped task; view=" + view +
-                    " tag=" + view.getTag());
+            if (DEBUG) {
+                Log.v(TAG, "Not able to find activity description for swiped task; view=" + view +
+                        " tag=" + view.getTag());
+            }
             return;
         }
         if (DEBUG) Log.v(TAG, "Jettison " + ad.getLabel());

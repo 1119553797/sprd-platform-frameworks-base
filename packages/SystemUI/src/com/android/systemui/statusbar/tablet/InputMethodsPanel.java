@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Debug;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -50,7 +51,7 @@ import java.util.TreeMap;
 
 public class InputMethodsPanel extends LinearLayout implements StatusBarPanel,
         View.OnClickListener {
-    private static final boolean DEBUG = TabletStatusBar.DEBUG;
+    private static final boolean DEBUG = Debug.isDebug();
     private static final String TAG = "InputMethodsPanel";
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -311,7 +312,9 @@ public class InputMethodsPanel extends LinearLayout implements StatusBarPanel,
         if (mToken != null) {
             mImm.setInputMethodAndSubtype(mToken, imi.getId(), subtype);
         } else {
-            Log.w(TAG, "IME Token is not set yet.");
+            if (DEBUG) {
+                Log.d(TAG, "IME Token is not set yet.");
+            }
         }
     }
 
@@ -343,7 +346,9 @@ public class InputMethodsPanel extends LinearLayout implements StatusBarPanel,
                 RadioButton subtypeRadioButton =
                         (RadioButton) radioView.findViewById(R.id.item_radio);
                 if (subtypeRadioButton == null) {
-                    Log.w(TAG, "RadioButton was not found in the selected subtype view");
+                    if (DEBUG) {
+                        Log.d(TAG, "RadioButton was not found in the selected subtype view");
+                    }
                     return null;
                 }
                 if (radioView == selectedView) {
@@ -375,7 +380,9 @@ public class InputMethodsPanel extends LinearLayout implements StatusBarPanel,
             RadioButton subtypeRadioButton =
                     (RadioButton) radioView.findViewById(R.id.item_radio);
             if (subtypeRadioButton == null) {
-                Log.w(TAG, "RadioButton was not found in the selected subtype view");
+                if (DEBUG) {
+                    Log.d(TAG, "RadioButton was not found in the selected subtype view");
+                }
                 return;
             }
             Pair<InputMethodInfo, InputMethodSubtype> imiAndSubtype =
@@ -466,7 +473,9 @@ public class InputMethodsPanel extends LinearLayout implements StatusBarPanel,
                     return mPackageManager.getApplicationInfo(
                             imi.getPackageName(), 0).loadIcon(mPackageManager);
                 } catch (PackageManager.NameNotFoundException e) {
-                    Log.w(TAG, "IME can't be found: " + imi.getPackageName());
+                    if (DEBUG) {
+                        Log.d(TAG, "IME can't be found: " + imi.getPackageName());
+                    }
                 }
             }
         }

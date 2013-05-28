@@ -882,8 +882,10 @@ public class TabletStatusBar extends BaseStatusBar implements
             // TODO: immersive mode popups for tablet
         } else if (notification.notification.fullScreenIntent != null) {
             // not immersive & a full-screen alert should be shown
-            Slog.w(TAG, "Notification has fullScreenIntent and activity is not immersive;"
-                    + " sending fullScreenIntent");
+            if (DEBUG) {
+                Slog.w(TAG, "Notification has fullScreenIntent and activity is not immersive;"
+                        + " sending fullScreenIntent");
+            }
             try {
                 notification.notification.fullScreenIntent.send();
             } catch (PendingIntent.CanceledException e) {
@@ -921,17 +923,23 @@ public class TabletStatusBar extends BaseStatusBar implements
         // act accordingly
         if ((diff & StatusBarManager.DISABLE_CLOCK) != 0) {
             boolean show = (state & StatusBarManager.DISABLE_CLOCK) == 0;
-            Slog.i(TAG, "DISABLE_CLOCK: " + (show ? "no" : "yes"));
+            if (DEBUG) {
+                Slog.i(TAG, "DISABLE_CLOCK: " + (show ? "no" : "yes"));
+            }
             showClock(show);
         }
         if ((diff & StatusBarManager.DISABLE_SYSTEM_INFO) != 0) {
             boolean show = (state & StatusBarManager.DISABLE_SYSTEM_INFO) == 0;
-            Slog.i(TAG, "DISABLE_SYSTEM_INFO: " + (show ? "no" : "yes"));
+            if (DEBUG) {
+                Slog.i(TAG, "DISABLE_SYSTEM_INFO: " + (show ? "no" : "yes"));
+            }
             mNotificationTrigger.setVisibility(show ? View.VISIBLE : View.GONE);
         }
         if ((diff & StatusBarManager.DISABLE_EXPAND) != 0) {
             if ((state & StatusBarManager.DISABLE_EXPAND) != 0) {
-                Slog.i(TAG, "DISABLE_EXPAND: yes");
+                if (DEBUG) {
+                    Slog.i(TAG, "DISABLE_EXPAND: yes");
+                }
                 animateCollapse();
                 visibilityChanged(false);
             }
@@ -941,10 +949,14 @@ public class TabletStatusBar extends BaseStatusBar implements
                         .getBoolean(Prefs.DO_NOT_DISTURB_PREF, Prefs.DO_NOT_DISTURB_DEFAULT);
 
             if ((state & StatusBarManager.DISABLE_NOTIFICATION_ICONS) != 0) {
-                Slog.i(TAG, "DISABLE_NOTIFICATION_ICONS: yes" + (mNotificationDNDMode?" (DND)":""));
+                if (DEBUG) {
+                    Slog.i(TAG, "DISABLE_NOTIFICATION_ICONS: yes" + (mNotificationDNDMode?" (DND)":""));
+                }
                 mTicker.halt();
             } else {
-                Slog.i(TAG, "DISABLE_NOTIFICATION_ICONS: no" + (mNotificationDNDMode?" (DND)":""));
+                if (DEBUG) {
+                    Slog.i(TAG, "DISABLE_NOTIFICATION_ICONS: no" + (mNotificationDNDMode?" (DND)":""));
+                }
             }
 
             // refresh icons to show either notifications or the DND message
@@ -1104,8 +1116,9 @@ public class TabletStatusBar extends BaseStatusBar implements
         if (mMenuButton.getVisibility() == View.VISIBLE) {
             on = true;
         }
-
-        Slog.v(TAG, "setLightsOn(" + on + ")");
+        if (DEBUG) {
+            Slog.v(TAG, "setLightsOn(" + on + ")");
+        }
         if (on) {
             setSystemUiVisibility(0, View.SYSTEM_UI_FLAG_LOW_PROFILE);
         } else {

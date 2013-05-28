@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Debug;
 import android.provider.Telephony;
 import android.provider.Telephony.Intents;
 import android.text.TextUtils;
@@ -40,6 +41,9 @@ import com.android.internal.telephony.PhoneFactory;
  * minutes.
  */
 public class CarrierLabel extends TextView {
+
+    private static final boolean DEBUG = Debug.isDebug();
+
     private boolean mAttached;
 
     public CarrierLabel(Context context) {
@@ -92,7 +96,7 @@ public class CarrierLabel extends TextView {
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn, int phoneid) {
         if (phoneid != 0) return;
-        if (true) {
+        if (DEBUG) {
             Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn + "phoneid" + phoneid);
         }
