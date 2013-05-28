@@ -555,7 +555,7 @@ public class SIMRecords extends IccRecords {
 
         videoCallForwardingEnabled = enable;
 
-//        ((TDPhone) phone).notifyCallForwardingIndicator(SERVICE_CLASS_DATA_SYNC);
+        if (phone instanceof TDPhone) ((TDPhone) phone).notifyCallForwardingIndicator(SERVICE_CLASS_DATA_SYNC);
     }
 
     /**

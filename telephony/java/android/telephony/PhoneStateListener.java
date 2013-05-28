@@ -326,7 +326,7 @@ public class PhoneStateListener {
         }
 
         public void onCallForwardingIndicatorChanged(boolean cfi) {
-            Message.obtain(mHandler, LISTEN_CALL_FORWARDING_INDICATOR, cfi ? 1 : 0, 0, null)
+            Message.obtain(mHandler, LISTEN_CALL_FORWARDING_INDICATOR, cfi ? 1 : 0, 1, null)
                     .sendToTarget();
         }
 

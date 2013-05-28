@@ -59,7 +59,7 @@ public class TelephonyManager {
     private static final String TAG = "TelephonyManager";
 
     private static Context sContext;
-    private static ITelephonyRegistry sRegistry;
+    private ITelephonyRegistry sRegistry;
     private int mPhoneId;
 
     //About default sim card setting for vioce,video,mms

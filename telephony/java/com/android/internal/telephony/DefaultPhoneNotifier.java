@@ -103,7 +103,7 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
 
     public void notifyCallForwardingChanged(Phone sender, int serviceClass) {
         try {
-            mRegistry.notifyCallForwardingChangedByServiceClass(sender.getCallForwardingIndicator(), serviceClass);
+            mRegistry.notifyCallForwardingChangedByServiceClass(sender.getCallForwardingIndicator(serviceClass), serviceClass);
         } catch (RemoteException ex) {
             // system process is dead
         }
