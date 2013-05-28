@@ -304,13 +304,23 @@ public final class TDPhone extends GSMPhone {
     }
 
     public void registerForGprsAttached(Handler h,int what, Object obj) {
-        Log.i(LOG_TAG, " This registerForGprsAttached for GSM.");
+        Log.i(LOG_TAG, "registerForGprsAttached()");
         mSST.registerForDataConnectionAttached(h, what, obj);
     }
 
     public void unregisterForGprsAttached(Handler h) {
-        Log.i(LOG_TAG, " This unregisterForGprsAttached for GSM.");
+        Log.i(LOG_TAG, "unregisterForGprsAttached()");
         mSST.unregisterForDataConnectionAttached(h);
+    }
+
+    public void registerForGprsDetached(Handler h, int what, Object obj) {
+        Log.i(LOG_TAG, "registerForGprsDetached()");
+        mSST.registerForDataConnectionDetached(h, what, obj);
+    }
+
+    public void unregisterForGprsDetached(Handler h) {
+        Log.i(LOG_TAG, "unregisterForGprsDetached()");
+        mSST.unregisterForDataConnectionDetached(h);
     }
 
     void notifyPreciseVideoCallStateChanged() {
