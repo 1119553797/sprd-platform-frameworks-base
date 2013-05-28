@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.database.DataSetObserver;
 import android.graphics.Canvas;
+import android.os.Debug;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.FloatMath;
@@ -46,8 +47,8 @@ import java.util.Iterator;
 
 public class RecentsVerticalScrollView extends ScrollView
         implements SwipeHelper.Callback, RecentsPanelView.RecentsScrollView {
-    private static final String TAG = RecentsPanelView.TAG;
-    private static final boolean DEBUG = RecentsPanelView.DEBUG;
+    private static final String TAG = "RecentsVerticalScrollView";
+    private static final boolean DEBUG = Debug.isDebug();
     private LinearLayout mLinearLayout;
     private TaskDescriptionAdapter mAdapter;
     private RecentsCallback mCallback;

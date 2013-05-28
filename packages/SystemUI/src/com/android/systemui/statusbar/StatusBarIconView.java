@@ -24,6 +24,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Debug;
 import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -41,6 +42,7 @@ import com.android.systemui.R;
 
 public class StatusBarIconView extends AnimatedImageView {
     private static final String TAG = "StatusBarIconView";
+    private static final boolean DEBUG = Debug.isDebug();
     private static String universeSupportKey = "universe_ui_support";
 
     private StatusBarIcon mIcon;
@@ -127,7 +129,9 @@ public class StatusBarIconView extends AnimatedImageView {
         if (!iconEquals) {
             Drawable drawable = getIcon(icon);
             if (drawable == null) {
-                Slog.w(TAG, "No icon for slot " + mSlot);
+                if (DEBUG) {
+                    Slog.d(TAG, "No icon for slot " + mSlot);
+                }
                 return false;
             }
             setImageDrawable(drawable);
@@ -230,8 +234,10 @@ public class StatusBarIconView extends AnimatedImageView {
     @Override
     protected void debug(int depth) {
         super.debug(depth);
-        Log.d("View", debugIndent(depth) + "slot=" + mSlot);
-        Log.d("View", debugIndent(depth) + "icon=" + mIcon);
+        if (DEBUG) {
+            Log.d("View", debugIndent(depth) + "slot=" + mSlot);
+            Log.d("View", debugIndent(depth) + "icon=" + mIcon);
+        }
     }
 
     void placeNumber() {

@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.os.Debug;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -35,6 +36,7 @@ import android.util.Slog;
 
 public class StorageNotification extends StorageEventListener {
     private static final String TAG = "StorageNotification";
+    private static final boolean DEBUG = Debug.isDebug();
 
     private static final boolean POP_UMS_ACTIVITY_ON_CONNECT = false;
 
@@ -42,10 +44,10 @@ public class StorageNotification extends StorageEventListener {
      * Binder context for this service
      */
     private Context mContext;
-    
+
     /**
      * The notification that is shown when a USB mass storage host
-     * is connected. 
+     * is connected.
      * <p>
      * This is lazily created, so use {@link #setUsbStorageNotification()}.
      */
@@ -72,9 +74,11 @@ public class StorageNotification extends StorageEventListener {
 
         mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
         final boolean connected = mStorageManager.isUsbMassStorageConnected();
-        Slog.d(TAG, String.format( "Startup with UMS connection %s (media state %s)", mUmsAvailable,
-                Environment.getExternalStorageState()));
-        
+        if (DEBUG) {
+            Slog.d(TAG, String.format( "Startup with UMS connection %s (media state %s)", mUmsAvailable,
+                    Environment.getExternalStorageState()));
+        }
+
         HandlerThread thr = new HandlerThread("SystemUI StorageNotification");
         thr.start();
         mAsyncEventHandler = new Handler(thr.getLooper());
@@ -86,7 +90,9 @@ public class StorageNotification extends StorageEventListener {
 
     private final BroadcastReceiver mLocalChangeReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            Slog.d(TAG, "language is change....");
+            if (DEBUG) {
+                Slog.d(TAG, "language is change....");
+            }
             updateUsbMassStorageNotification(mUmsAvailable);
         }
     };
@@ -112,7 +118,9 @@ public class StorageNotification extends StorageEventListener {
          */
         String st = Environment.getExternalStorageState();
 
-        Slog.i(TAG, String.format("UMS connection changed to %s (media state %s)", connected, st));
+        if (DEBUG) {
+            Slog.i(TAG, String.format("UMS connection changed to %s (media state %s)", connected, st));
+        }
 
         if (connected && (st.equals(
                 Environment.MEDIA_REMOVED) || st.equals(Environment.MEDIA_CHECKING))) {
@@ -138,8 +146,10 @@ public class StorageNotification extends StorageEventListener {
     }
 
     private void onStorageStateChangedAsync(String path, String oldState, String newState) {
-        Slog.i(TAG, String.format(
-                "Media {%s} state changed from {%s} -> {%s}", path, oldState, newState));
+        if (DEBUG) {
+            Slog.i(TAG, String.format(
+                    "Media {%s} state changed from {%s} -> {%s}", path, oldState, newState));
+        }
         if (newState.equals(Environment.MEDIA_SHARED)) {
             /*
              * Storage is now shared. Modify the UMS notification
@@ -235,7 +245,7 @@ public class StorageNotification extends StorageEventListener {
             setMediaStorageNotification(
                     com.android.internal.R.string.ext_media_unmountable_notification_title,
                     com.android.internal.R.string.ext_media_unmountable_notification_message,
-                    com.android.internal.R.drawable.stat_notify_sdcard_usb, true, false, pi); 
+                    com.android.internal.R.drawable.stat_notify_sdcard_usb, true, false, pi);
             updateUsbMassStorageNotification(mUmsAvailable);
         } else if (newState.equals(Environment.MEDIA_REMOVED)) {
             /*
@@ -260,7 +270,9 @@ public class StorageNotification extends StorageEventListener {
                     true, true, null);
             updateUsbMassStorageNotification(false);
         } else {
-            Slog.w(TAG, String.format("Ignoring unknown state {%s}", newState));
+            if (DEBUG) {
+                Slog.d(TAG, String.format("Ignoring unknown state {%s}", newState));
+            }
         }
     }
 
@@ -301,7 +313,7 @@ public class StorageNotification extends StorageEventListener {
         if (notificationManager == null) {
             return;
         }
-        
+
         if (visible) {
             Resources r = Resources.getSystem();
             CharSequence title = r.getText(titleId);
@@ -318,7 +330,7 @@ public class StorageNotification extends StorageEventListener {
             } else {
                 mUsbStorageNotification.defaults &= ~Notification.DEFAULT_SOUND;
             }
-                
+
             mUsbStorageNotification.flags = Notification.FLAG_ONGOING_EVENT;
 
             mUsbStorageNotification.tickerText = title;
@@ -346,7 +358,7 @@ public class StorageNotification extends StorageEventListener {
                 mUsbStorageNotification.fullScreenIntent = pi;
             }
         }
-    
+
         final int notificationId = mUsbStorageNotification.icon;
         if (visible) {
             notificationManager.notify(notificationId, mUsbStorageNotification);
@@ -390,7 +402,7 @@ public class StorageNotification extends StorageEventListener {
             final int notificationId = mMediaStorageNotification.icon;
             notificationManager.cancel(notificationId);
         }
-        
+
         if (visible) {
             Resources r = Resources.getSystem();
             CharSequence title = r.getText(titleId);
@@ -418,7 +430,7 @@ public class StorageNotification extends StorageEventListener {
             mMediaStorageNotification.icon = icon;
             mMediaStorageNotification.setLatestEventInfo(mContext, title, message, pi);
         }
-    
+
         final int notificationId = mMediaStorageNotification.icon;
         if (visible) {
             notificationManager.notify(notificationId, mMediaStorageNotification);

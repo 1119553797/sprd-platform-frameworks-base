@@ -23,6 +23,7 @@ import android.animation.ObjectAnimator;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Debug;
 import android.util.Slog;
 import android.view.View;
 import android.view.ViewRootImpl;
@@ -34,8 +35,8 @@ import com.android.systemui.R;
     private static final int OPEN_DURATION = 136;
     private static final int CLOSE_DURATION = 230;
     private static final int SCRIM_DURATION = 400;
-    private static final String TAG = RecentsPanelView.TAG;
-    private static final boolean DEBUG = RecentsPanelView.DEBUG;
+    private static final String TAG = "Choreographer";
+    private static final boolean DEBUG = Debug.isDebug();
 
     boolean mVisible;
     int mPanelHeight;

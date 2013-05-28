@@ -5,6 +5,7 @@ import java.util.HashMap;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.os.Debug;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.android.systemui.R;
 
 public class ToggleViewGroup extends ViewGroup {
     private static final String TAG = "ScrollLayout";
+    private static final boolean DEBUG = Debug.isDebug();
 
     private static final int PORT_CHILD_COUNT = 4;
 
@@ -86,7 +88,9 @@ public class ToggleViewGroup extends ViewGroup {
     }
 
     private void init() {
-        Log.d(TAG, "init()");
+        if (DEBUG) {
+            Log.d(TAG, "init()");
+        }
         final Context context = this.getContext();
         mScroller = new Scroller(context);
         mCurScreen = mDefaultScreen;
@@ -96,20 +100,26 @@ public class ToggleViewGroup extends ViewGroup {
                 R.dimen.status_bar_toggle_childview_width);
         mChildHeight = context.getResources().getDimensionPixelSize(
                 R.dimen.status_bar_toggle_childview_height);
-        Log.d(TAG, "init() mChildWidth = " + mChildWidth + "| mChildHeight = " + mChildHeight);
+        if (DEBUG) {
+            Log.d(TAG, "init() mChildWidth = " + mChildWidth + "| mChildHeight = " + mChildHeight);
+        }
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        Log.d(TAG, "onLayout changed = " + changed + " | l = " + l + "| t = " + t + "| r = " + r
-                + "| b = " + b);
+        if (DEBUG) {
+            Log.d(TAG, "onLayout changed = " + changed + " | l = " + l + "| t = " + t + "| r = " + r
+                    + "| b = " + b);
+        }
         mChildWidth = isLandscape() ? (r - l) / LAND_CHILD_COUNT : (r - l) / PORT_CHILD_COUNT;
         final int orientation = this.getResources().getConfiguration().orientation;
         if (changed || orientation != this.mOrientation) {
             this.mOrientation = orientation;
             int childLeft = 0;
             final int childCount = getChildCount();
-            Log.d(TAG, "onLayout childCount = " + childCount);
+            if (DEBUG) {
+                Log.d(TAG, "onLayout childCount = " + childCount);
+            }
             mChildCache.clear();
             for (int i = 0; i < childCount; i++) {
                 final View childView = getChildAt(i);
@@ -139,17 +149,23 @@ public class ToggleViewGroup extends ViewGroup {
         this.setMeasuredDimension(width, mChildHeight);
 
         final int count = getChildCount();
-        Log.d(TAG, "onMeasure count = " + count);
+        if (DEBUG) {
+            Log.d(TAG, "onMeasure count = " + count);
+        }
         for (int i = 0; i < count; i++) {
             if (i % 2 == 1) {
                 View view = getChildAt(i);
-                Log.d(TAG, "onMeasure mChildWidth = " + mChildWidth + " | mChildHeight = "
-                        + mChildHeight);
+                if (DEBUG) {
+                    Log.d(TAG, "onMeasure mChildWidth = " + mChildWidth + " | mChildHeight = "
+                            + mChildHeight);
+                }
                 view.measure(1, mChildHeight);
             } else {
                 View view = getChildAt(i);
-                Log.d(TAG, "onMeasure mChildWidth = " + mChildWidth + " | mChildHeight = "
-                        + mChildHeight);
+                if (DEBUG) {
+                    Log.d(TAG, "onMeasure mChildWidth = " + mChildWidth + " | mChildHeight = "
+                            + mChildHeight);
+                }
                 view.measure(mChildWidth - 1, mChildHeight);
             }
         }
@@ -163,8 +179,10 @@ public class ToggleViewGroup extends ViewGroup {
     public void snapToDestination() {
         final int screenWidth = getWidth();
         final int destScreen = (getScrollX() + screenWidth / 2) / screenWidth;
-        Log.d(TAG, "snapToDestination  screenWidth = " + screenWidth + "| destScreen = "
-                + destScreen);
+        if (DEBUG) {
+            Log.d(TAG, "snapToDestination  screenWidth = " + screenWidth + "| destScreen = "
+                    + destScreen);
+        }
         snapToScreen(destScreen);
     }
 
@@ -183,8 +201,10 @@ public class ToggleViewGroup extends ViewGroup {
         // whichScreen = Math.max(0, Math.min(whichScreen, getChildCount() -
         // 1));
         whichScreen = Math.min(getMaxCount(), whichScreen);
-        Log.d(TAG, "snapToDestination  getScrollX() = " + getScrollX()
-                + "| whichScreen * getWidth() = " + whichScreen * getWidth());
+        if (DEBUG) {
+            Log.d(TAG, "snapToDestination  getScrollX() = " + getScrollX()
+                    + "| whichScreen * getWidth() = " + whichScreen * getWidth());
+        }
         if (getScrollX() != (whichScreen * getWidth())) {
             final int delta = whichScreen * getWidth() - getScrollX();
             mScroller.startScroll(getScrollX(), 0, delta, 0, Math.abs(delta) * 2);
@@ -194,7 +214,9 @@ public class ToggleViewGroup extends ViewGroup {
     }
 
     public void setToScreen(int whichScreen) {
-        Log.d(TAG, "setToScreen whichScreen = " + whichScreen);
+        if (DEBUG) {
+            Log.d(TAG, "setToScreen whichScreen = " + whichScreen);
+        }
         whichScreen = Math.max(0, Math.min(whichScreen, getChildCount() - 1));
         mCurScreen = whichScreen;
         scrollTo(whichScreen * getWidth(), 0);
@@ -241,7 +263,9 @@ public class ToggleViewGroup extends ViewGroup {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, "onTouchEvent + event = " + event.getAction());
+        if (DEBUG) {
+            Log.d(TAG, "onTouchEvent + event = " + event.getAction());
+        }
         if (mVelocityTracker == null) {
             mVelocityTracker = VelocityTracker.obtain();
         }
@@ -250,11 +274,15 @@ public class ToggleViewGroup extends ViewGroup {
         final float x = event.getX();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                Log.e(TAG, "event down!");
+                if (DEBUG) {
+                    Log.e(TAG, "event down!");
+                }
                 if (!mScroller.isFinished()) {
                     mScroller.abortAnimation();
                 }
-                Log.d(TAG, "onTouchEvent ACTION_DOWN + mLastMotionX = " + mLastMotionX);
+                if (DEBUG) {
+                    Log.d(TAG, "onTouchEvent ACTION_DOWN + mLastMotionX = " + mLastMotionX);
+                }
                 mLastMotionX = x;
                 break;
 
@@ -262,7 +290,9 @@ public class ToggleViewGroup extends ViewGroup {
                 if (getChildCount() > PORT_CHILD_COUNT + 5) {
                     int deltaX = (int) (mLastMotionX - x);
                     mLastMotionX = x;
-                    Log.d(TAG,"this.getMaxCount()" + this.getMaxCount());
+                    if (DEBUG) {
+                        Log.d(TAG,"this.getMaxCount()" + this.getMaxCount());
+                    }
                     final int screenWidth = this.getWidth() * (this.getMaxCount() - 1);
                     // when Fling first or Last screen ,wo reduce deltax =
                     // deltax/3
@@ -271,10 +301,12 @@ public class ToggleViewGroup extends ViewGroup {
                     // deltaX / 2.5f
                     // : deltaX);
                     int moveX = mScrollX + deltaX;
-                    Log.d(TAG, "onTouchEvent ACTION_MOVE + mLastMotionX = " + mLastMotionX
-                            + "|screenWidth = " + screenWidth + "|moveX = " + moveX + "| deltaX = "
-                            + deltaX);
-                        scrollBy(deltaX, 0);
+                    if (DEBUG) {
+                        Log.d(TAG, "onTouchEvent ACTION_MOVE + mLastMotionX = " + mLastMotionX
+                                + "|screenWidth = " + screenWidth + "|moveX = " + moveX + "| deltaX = "
+                                + deltaX);
+                    }
+                    scrollBy(deltaX, 0);
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -288,11 +320,12 @@ public class ToggleViewGroup extends ViewGroup {
     }
 
     private void onTouchUpEvent() {
-        Log.d(TAG, "onTouchUpEvent");
         final VelocityTracker velocityTracker = mVelocityTracker;
         velocityTracker.computeCurrentVelocity(1000);
         int velocityX = (int) velocityTracker.getXVelocity();
-        Log.d("zhl","getChildCount()" + getChildCount());
+        if (DEBUG) {
+            Log.d(TAG,"getChildCount()" + getChildCount());
+        }
         if (velocityX > SNAP_VELOCITY && mCurScreen >= 0) {
             // Fling enough to move left
                 snapToScreen(mCurScreen - 1);
@@ -317,7 +350,9 @@ public class ToggleViewGroup extends ViewGroup {
 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        Log.d(TAG, "onDetachedFromWindow mAttached = " + mAttached);
+        if (DEBUG) {
+            Log.d(TAG, "onDetachedFromWindow mAttached = " + mAttached);
+        }
         if (mAttached) {
             mToggleListener.unregisterReceiver();
             mAttached = false;
@@ -327,7 +362,9 @@ public class ToggleViewGroup extends ViewGroup {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Log.d(TAG, "onAttachedToWindow mAttached = " + mAttached);
+        if (DEBUG) {
+            Log.d(TAG, "onAttachedToWindow mAttached = " + mAttached);
+        }
         if (!mAttached) {
             mAttached = true;
             mToggleListener.registerReceiver();
@@ -339,9 +376,13 @@ public class ToggleViewGroup extends ViewGroup {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 
         final int action = ev.getAction();
-        Log.d(TAG, "onInterceptTouchEvent action = " + action);
+        if (DEBUG) {
+            Log.d(TAG, "onInterceptTouchEvent action = " + action);
+        }
         if ((action == MotionEvent.ACTION_MOVE) && (mTouchState != TOUCH_STATE_REST)) {
-            Log.d(TAG, "onInterceptTouchEvent return true");
+            if (DEBUG) {
+                Log.d(TAG, "onInterceptTouchEvent return true");
+            }
             return true;
         }
 
@@ -350,8 +391,10 @@ public class ToggleViewGroup extends ViewGroup {
             case MotionEvent.ACTION_MOVE:
                 if (getChildCount() > PORT_CHILD_COUNT + 5) {
                     final int xDiff = (int) Math.abs(mLastMotionX - x);
-                    Log.d(TAG, "x = " + x + "|xDiff = " + xDiff + "|mTouchSlop = " + mTouchSlop
-                            + "|mLastMotionX = " + mLastMotionX);
+                    if (DEBUG) {
+                        Log.d(TAG, "x = " + x + "|xDiff = " + xDiff + "|mTouchSlop = " + mTouchSlop
+                                + "|mLastMotionX = " + mLastMotionX);
+                    }
                     if (xDiff > mTouchSlop) {
                         mTouchState = TOUCH_STATE_SCROLLING;
                     }
@@ -359,7 +402,9 @@ public class ToggleViewGroup extends ViewGroup {
                 break;
             case MotionEvent.ACTION_DOWN:
                 mLastMotionX = x;
-                Log.d(TAG, "mScroller.isFinished() = " + mScroller.isFinished());
+                if (DEBUG) {
+                    Log.d(TAG, "mScroller.isFinished() = " + mScroller.isFinished());
+                }
                 mTouchState = mScroller.isFinished() ? TOUCH_STATE_REST : TOUCH_STATE_SCROLLING;
                 break;
 
@@ -368,7 +413,9 @@ public class ToggleViewGroup extends ViewGroup {
                 mTouchState = TOUCH_STATE_REST;
                 break;
         }
-        Log.d(TAG, "mTouchState != TOUCH_STATE_REST = " + (mTouchState != TOUCH_STATE_REST));
+        if (DEBUG) {
+            Log.d(TAG, "mTouchState != TOUCH_STATE_REST = " + (mTouchState != TOUCH_STATE_REST));
+        }
         return mTouchState != TOUCH_STATE_REST;
     }
 
