@@ -597,9 +597,13 @@ class LockScreen extends LinearLayout implements KeyguardScreen {
                         : false;
 
         if (disabledByAdmin) {
-            Log.v(TAG, "Camera disabled by Device Policy");
+            if (DBG) {
+                Log.v(TAG, "Camera disabled by Device Policy");
+            }
         } else if (disabledBySimState) {
-            Log.v(TAG, "Camera disabled by Sim State");
+            if (DBG) {
+                Log.v(TAG, "Camera disabled by Sim State");
+            }
         }
         boolean searchActionAvailable = SearchManager.getAssistIntent(mContext) != null;
         mCameraDisabled = disabledByAdmin || disabledBySimState || !cameraTargetPresent;

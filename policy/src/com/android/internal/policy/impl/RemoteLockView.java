@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Debug;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.AbsLockScreen;
@@ -30,6 +31,7 @@ public class RemoteLockView extends RelativeLayout implements KeyguardScreen,
     // private static LockClassLoader mTSClassLoader = null ;
     private boolean isExecCreate = false;
     private static final String TAG = "RemoteLockView";
+    private static final boolean DEBUG = Debug.isDebug();
 
     RemoteLockView(Context context, LockPatternUtils lockPatternUtils,
             KeyguardUpdateMonitor updateMonitor, KeyguardScreenCallback callback,
@@ -60,7 +62,9 @@ public class RemoteLockView extends RelativeLayout implements KeyguardScreen,
 
     private AbsLockScreen createRemoteLockView(ClassLoader classLoader) {
         Class c;
-        Log.d(TAG, "createRemoteLockView...");
+        if (DEBUG) {
+            Log.d(TAG, "createRemoteLockView...");
+        }
         try {
             /*
              * c = Class.forName("com.android.launcher2.LockscreenPoxy", true,
