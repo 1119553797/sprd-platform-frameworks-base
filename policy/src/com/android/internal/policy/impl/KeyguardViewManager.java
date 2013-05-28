@@ -42,7 +42,7 @@ import android.graphics.Color;
  * reported to this class by the current {@link KeyguardViewBase}.
  */
 public class KeyguardViewManager implements KeyguardWindowController {
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
     private static String TAG = "KeyguardViewManager";
 
     private final Context mContext;
@@ -182,7 +182,7 @@ public class KeyguardViewManager implements KeyguardWindowController {
                 ( View.STATUS_BAR_DISABLE_BACK
                 | View.STATUS_BAR_DISABLE_HOME
                 );
-        Log.v(TAG, "KGVM: Set visibility on " + mKeyguardHost + " to " + visFlags);
+        if (DEBUG) Log.v(TAG, "KGVM: Set visibility on " + mKeyguardHost + " to " + visFlags);
         mKeyguardHost.setSystemUiVisibility(visFlags);
 
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);

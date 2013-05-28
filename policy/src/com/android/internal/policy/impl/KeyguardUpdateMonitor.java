@@ -411,7 +411,9 @@ public class KeyguardUpdateMonitor {
                 {
                 	int messagecount = intent.getIntExtra(EXTRA_MESSAGE_COUNT,0);
                 	mUnreadMessageCount=messagecount;
-                	Log.i(TAG,"ACTION_UNREAD_MESSAGE_COUNT:get num of unread message :"+messagecount);
+                if (DEBUG) {
+                    Log.i(TAG,"ACTION_UNREAD_MESSAGE_COUNT:get num of unread message :"+messagecount);
+                }
                 	mHandler.sendMessage(mHandler.obtainMessage(MSG_UNREAD_MESSAGE_COUNT,messagecount,0));
                 }
                 else if(action.equals(ACTION_DELETE_UNREAD_MESSAGE_COUNT))
@@ -421,7 +423,9 @@ public class KeyguardUpdateMonitor {
                 }
                 else if(action.equals(ACTION_MISSED_CALL_COUNT)){
                 	int mMissedCallCount = intent.getIntExtra(EXTRA_MISSED_CALL_KEY,0);
-                	Log.i(TAG,"ACTION_MISSED_CALL_COUNT:get num of unread message :"+mMissedCallCount);
+                    if (DEBUG) {
+                        Log.i(TAG,"ACTION_MISSED_CALL_COUNT:get num of unread message :"+mMissedCallCount);
+                    }
                     mHandler.sendMessage(mHandler.obtainMessage(MSG_MISSED_CALL_COUNT, mMissedCallCount,0));
                 }
                 else if(action.equals(ACTION_MISSED_CALL_CANCEL)){
@@ -522,7 +526,7 @@ public class KeyguardUpdateMonitor {
      * Handle by phoneId {@link #MSG_CARRIER_INFO_UPDATE}
      */
     private void handleCarrierInfoUpdate(int phoneId){
-    	if(true) Log.d(TAG,"handleCarrierInfoUpdate: plmn = " + mTelephonyPlmn[phoneId]
+        if(DEBUG) Log.d(TAG,"handleCarrierInfoUpdate: plmn = " + mTelephonyPlmn[phoneId]
             + ", spn = " + mTelephonySpn[phoneId] + ",phoneId = "+ phoneId);
     	for (int i=0; i< mInfoCallbacks.size(); i++)
     	{
@@ -540,7 +544,7 @@ public class KeyguardUpdateMonitor {
         final int subscription=simArgs.subscription;
         //add DSDS end
 
-        if (true) {
+        if (DEBUG) {
             Log.d(TAG, "handleSimStateChange: intentValue = " + simArgs + " "
                     + ",state resolved to " + state[subscription].toString() +", PhoneId = "+subscription);
         }
@@ -563,7 +567,7 @@ public class KeyguardUpdateMonitor {
     // add DSDS missed call for lockscreen end
     // add newfeature for lockscreen start
     private void handleMessageCountChanged(int messageCount) {
-        if (true)
+        if (DEBUG)
             Log.d(TAG, "handleMessageCountChanged() :" + messageCount);
         for (int i = 0; i < mInfoCallbacks.size(); i++) {
             mInfoCallbacks.get(i).onMessageCountChanged(messageCount);

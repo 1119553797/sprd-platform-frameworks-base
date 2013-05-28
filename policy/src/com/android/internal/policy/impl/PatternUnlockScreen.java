@@ -163,10 +163,10 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         LayoutInflater inflater = LayoutInflater.from(context);
 
         if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
-            Log.d(TAG, "portrait mode");
+            if (DEBUG) Log.d(TAG, "portrait mode");
             inflater.inflate(R.layout.keyguard_screen_unlock_portrait, this, true);
         } else {
-            Log.d(TAG, "landscape mode");
+            if (DEBUG) Log.d(TAG, "landscape mode");
             inflater.inflate(R.layout.keyguard_screen_unlock_landscape, this, true);
         }
 

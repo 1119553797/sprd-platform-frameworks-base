@@ -84,7 +84,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
 
     private static final int TRANSPORT_USERACTIVITY_TIMEOUT = 10000;
 
-    static final boolean DEBUG_CONFIGURATION = true;
+    static final boolean DEBUG_CONFIGURATION = false;
 
     // time after launching EmergencyDialer before the screen goes blank.
     private static final int EMERGENCY_CALL_TIMEOUT = 10000;

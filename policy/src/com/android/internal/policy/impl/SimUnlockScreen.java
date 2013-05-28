@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -51,7 +52,7 @@ import android.view.inputmethod.InputMethodManager;
 public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, View.OnClickListener {
 
     private static final int DIGIT_PRESS_WAKE_MILLIS = 5000;
-
+    private static final boolean DEBUG = Debug.isDebug();
     private final KeyguardUpdateMonitor mUpdateMonitor;
     private final KeyguardScreenCallback mCallback;
 
@@ -133,7 +134,9 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("SimUnlockScreen", "recieved ACTION_AIRPLANE_MODE_CHANGED");
+                if (DEBUG) {
+                    Log.d("SimUnlockScreen", "recieved ACTION_AIRPLANE_MODE_CHANGED");
+                }
                 String action = intent.getAction();
                 if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(action)) {
                     boolean isAirPlaneMode = intent.getBooleanExtra("state",
@@ -277,7 +280,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         getSimUnlockProgressDialog().show();
 
         new CheckSimPin(mPinText.getText().toString()) {
-            void onSimLockChangedResponse(final boolean success) {      
+            void onSimLockChangedResponse(final boolean success) {
                 mPinText.post(new Runnable() {
                     public void run() {
                         if (mSimUnlockProgressDialog != null) {
@@ -520,5 +523,5 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             digits.delete(0, len);
             mEnteredDigits = 0;
         }
-    }   
+    }
 }
