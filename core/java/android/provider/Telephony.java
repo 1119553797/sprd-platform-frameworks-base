@@ -1473,8 +1473,18 @@ public final class Telephony {
                 uriBuilder.appendQueryParameter("recipient", recipient);
             }
 
-            for (String name : recipientNames) {
-                uriBuilder.appendQueryParameter("recipientNames", name);
+            if (null == recipientNames || recipientNames.size() == 0) {
+                String displayName = null;
+                for (String recipient : recipients) {
+                    displayName = getContactNameByPhoneNumber(context, recipient);
+                    if (null != displayName && !displayName.trim().equals("")) {
+                        uriBuilder.appendQueryParameter("recipientNames", displayName);
+                    }
+                }
+            } else {
+                for (String name : recipientNames) {
+                    uriBuilder.appendQueryParameter("recipientNames", name);
+                }
             }
 
             Uri uri = uriBuilder.build();
@@ -1501,6 +1511,41 @@ public final class Telephony {
             Log.e(TAG, "getOrCreateThreadId failed with uri " + uri.toString());
             throw new IllegalArgumentException("Unable to find or allocate a thread ID.");
         }
+
+        /**
+         * Get contact name by phone number
+         * @param context
+         * @param address
+         * @return
+         */
+        public static String getContactNameByPhoneNumber(Context context, String address) {
+            String[] projection = { ContactsContract.PhoneLookup.DISPLAY_NAME,
+                    ContactsContract.CommonDataKinds.Phone.NUMBER };
+
+            String name = "";
+            Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    projection, // Which columns to return.
+                    ContactsContract.CommonDataKinds.Phone.NUMBER + " = '" + address + "'", // WHERE
+                                                                                            // clause.
+                    null, // WHERE clause value substitution
+                    null); // Sort order.
+
+            if (cursor == null) {
+                Log.d(TAG, "no records exists by phone number");
+                return name;
+            }
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+
+                int nameFieldColumnIndex = cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME);
+                name = cursor.getString(nameFieldColumnIndex);
+                if (name != null && !name.trim().equals("")) {
+                    break;
+                }
+            }
+            return name;
+        }
+
     }
 
     /**
