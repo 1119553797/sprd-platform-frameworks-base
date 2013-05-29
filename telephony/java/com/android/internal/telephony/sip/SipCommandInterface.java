@@ -75,7 +75,11 @@ class SipCommandInterface extends SprdBaseCommands implements CommandsInterface 
     public void getDataCallList(Message result) {
     }
 
-    public void dial(String address, int clirMode, boolean isStkCall, Message result) {
+    public void dial(String address, int clirMode, Message result) {
+    }
+
+    public void dial(String address, int clirMode, UUSInfo uusInfo,
+            Message result) {
     }
 
     public void dial(String address, int clirMode, UUSInfo uusInfo, boolean isStkCall, Message result) {
@@ -599,4 +603,9 @@ class SipCommandInterface extends SprdBaseCommands implements CommandsInterface 
         // TODO Auto-generated method stub
     }
 
+    public void registerForExternalDial(Handler h, int what, Object obj) {
+    }
+
+    public void unregisterForExternalDial(Handler h) {
+    }
 }

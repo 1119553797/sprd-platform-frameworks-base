@@ -140,8 +140,7 @@ public class GsmConnection extends Connection {
 
     /** This is an MO call, created when dialing */
     /*package*/
-//    GsmConnection (Context context, String dialString, GsmCallTracker ct, GsmCall parent) {
-    GsmConnection (Context context, String dialString, GsmCallTracker ct, GsmCall parent, boolean isStkCall, boolean bVideo) {
+    GsmConnection (Context context, String dialString, GsmCallTracker ct, GsmCall parent, boolean bVideo) {
         createWakeLock(context);
         acquireWakeLock();
 
@@ -151,15 +150,7 @@ public class GsmConnection extends Connection {
         this.dialString = dialString;
 
         this.address = PhoneNumberUtils.extractNetworkPortionAlt(dialString);
-//        this.postDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
-        log("GsmConnection: isStkCall=" + isStkCall);
-        super.setStkCall(isStkCall);
-        if (!isStkCall) {
-            this.postDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
-        } else {
-            this.postDialString = "";
-        }
-        log("[dtmf]GsmConnection postDialString = " + this.postDialString);
+        this.postDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
 
         index = -1;
 

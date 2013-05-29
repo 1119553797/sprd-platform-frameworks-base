@@ -69,7 +69,34 @@ public final class SprdRIL extends RIL {
     // zhanglj add end
 
     public void
-	dialVP (String address, String sub_address, int clirMode, Message result) {
+    dial(String address, int clirMode, UUSInfo uusInfo, boolean isStkCall, Message result) {
+        RILRequest rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
+
+        rr.mp.writeString(address);
+        rr.mp.writeInt(clirMode);
+        rr.mp.writeInt(0); // UUS information is absent
+
+        if (uusInfo == null) {
+            rr.mp.writeInt(0); // UUS information is absent
+        } else {
+            rr.mp.writeInt(1); // UUS information is present
+            rr.mp.writeInt(uusInfo.getType());
+            rr.mp.writeInt(uusInfo.getDcs());
+            rr.mp.writeByteArray(uusInfo.getUserData());
+        }
+        rr.mp.writeInt(isStkCall ? 1:0);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+
+        if (isStkCall) {
+            mExternalCallRegistrants.notifyRegistrants(new AsyncResult(null, address, null));
+        }
+    }
+
+    public void
+    dialVP (String address, String sub_address, int clirMode, Message result) {
         RILRequest rr = RILRequest.obtain(RIL_REQUEST_VIDEOPHONE_DIAL/*RIL_REQUEST_DIALVIDEO*/, result);
 
         rr.mp.writeString(address);

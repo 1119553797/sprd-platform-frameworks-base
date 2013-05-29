@@ -230,7 +230,7 @@ abstract class UsimDataDownloadCommands extends BaseCommands {
     }
 
     @Override
-    public void dial(String address, int clirMode, boolean isStkCall, Message result) {
+    public void dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
     }
 
     @Override

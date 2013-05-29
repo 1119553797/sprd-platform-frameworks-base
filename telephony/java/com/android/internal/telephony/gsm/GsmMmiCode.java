@@ -182,7 +182,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
      * Please see flow chart in TS 22.030 6.5.3.2
      */
 
-    static GsmMmiCode
+    public static GsmMmiCode
     newFromDialString(String dialString, GSMPhone phone) {
         Matcher m;
         GsmMmiCode ret = null;
@@ -587,7 +587,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
      *  In temporary mode, to invoke CLIR for a single call enter:
      *       " # 31 # [called number] SEND "
      */
-    boolean
+    public boolean
     isTemporaryModeCLIR() {
         return sc != null && sc.equals(SC_CLIR) && dialingNumber != null
                 && (isActivate() || isDeactivate());
@@ -597,7 +597,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
      * returns CommandsInterface.CLIR_*
      * See also isTemporaryModeCLIR()
      */
-    int
+    public int
     getCLIRMode() {
         if (sc != null && sc.equals(SC_CLIR)) {
             if (isActivate()) {
@@ -1626,5 +1626,9 @@ public final class GsmMmiCode extends Handler implements MmiCode {
         if (pwd != null) sb.append(" pwd=" + pwd);
         sb.append("}");
         return sb.toString();
+    }
+
+    public String getDialingNumber(){
+        return dialingNumber;
     }
 }

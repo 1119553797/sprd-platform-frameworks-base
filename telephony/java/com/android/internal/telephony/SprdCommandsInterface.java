@@ -65,5 +65,8 @@ public interface SprdCommandsInterface {
     public void mmiEnterSim(String dailString, Message result);
     public void setSIMPower(boolean on, Message result);
 
+    public void registerForExternalDial(Handler h, int what, Object obj);
+    public void unregisterForExternalDial(Handler h);
+
 }
 
