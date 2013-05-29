@@ -1616,7 +1616,10 @@ public class Camera {
         /** @hide */
         private static final String KEY_HDR = "hdr";
         /** @hide */
+        private static final String KEY_ZSL = "zsl";
+        /** @hide */
         private static final String KEY_HDR_SUPPORTED = "hdr-supported";
+        private static final String KEY_ZSL_SUPPORTED = "zsl-supported";
         private static final String KEY_JPEG_THUMBNAIL_SIZE = "jpeg-thumbnail-size";
         private static final String KEY_JPEG_THUMBNAIL_WIDTH = "jpeg-thumbnail-width";
         private static final String KEY_JPEG_THUMBNAIL_HEIGHT = "jpeg-thumbnail-height";
@@ -2586,6 +2589,13 @@ public class Camera {
             String str = get(KEY_HDR_SUPPORTED);
             return TRUE.equals(str);
         }
+
+        /** @hide */
+        public boolean isCaptureZslSupported() {
+            String str = get(KEY_ZSL_SUPPORTED);
+            return TRUE.equals(str);
+        }
+
         private String cameraFormatForPixelFormat(int pixel_format) {
             switch(pixel_format) {
             case ImageFormat.NV16:      return PIXEL_FORMAT_YUV422SP;
