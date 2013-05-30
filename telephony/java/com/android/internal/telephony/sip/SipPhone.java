@@ -946,20 +946,6 @@ public class SipPhone extends SipPhoneBase {
     }
 
 	@Override
-	public Connection dial(String dialString, boolean isStkCall)
-			throws CallStateException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Connection dial(String dialString, UUSInfo uusInfo, boolean isStkCall)
-			throws CallStateException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void queryFacilityLock(String facility, String password,
 			int serviceClass, Message onComplete) {
 		// TODO Auto-generated method stub

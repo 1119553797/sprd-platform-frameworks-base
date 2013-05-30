@@ -887,37 +887,13 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
     }
 
     public void
-    dial (String address, int clirMode, boolean isStkCall, Message result) {
-        dial(address, clirMode, null, isStkCall, result);
+    dial (String address, int clirMode, Message result) {
+        dial(address, clirMode, null, result);
     }
 
     public void
-    dial(String address, int clirMode, UUSInfo uusInfo, boolean isStkCall, Message result) {
-        RILRequest rr;
-
-        if (address.indexOf('/') == -1) {
-            rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
-        } else {
-            rr = RILRequest.obtain(RIL_REQUEST_DIAL_EMERGENCY_CALL, result);
-        }
-
-        rr.mp.writeString(address);
-        rr.mp.writeInt(clirMode);
-        rr.mp.writeInt(0); // UUS information is absent
-
-        if (uusInfo == null) {
-            rr.mp.writeInt(0); // UUS information is absent
-        } else {
-            rr.mp.writeInt(1); // UUS information is present
-            rr.mp.writeInt(uusInfo.getType());
-            rr.mp.writeInt(uusInfo.getDcs());
-            rr.mp.writeByteArray(uusInfo.getUserData());
-        }
-        rr.mp.writeInt(isStkCall ? 1:0);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        send(rr);
+    dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
+        dial(address, clirMode, null, false, result);
     }
 
     public void

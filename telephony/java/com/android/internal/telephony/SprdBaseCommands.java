@@ -21,6 +21,7 @@ public abstract class SprdBaseCommands extends BaseCommands {
     protected Registrant mVPRemoteCameraRegistrant;
     protected Registrant mVPMediaStartRegistrant;
     protected RegistrantList mVideoCallStateRegistrants = new RegistrantList();
+    protected RegistrantList mExternalCallRegistrants = new RegistrantList();
     protected Registrant mStkStinRegistrant;
 
     public SprdBaseCommands(Context context) {
@@ -115,6 +116,15 @@ public abstract class SprdBaseCommands extends BaseCommands {
 
     public void unregisterForVideoCallStateChanged(Handler h) {
         mVideoCallStateRegistrants.remove(h);
+    }
+
+    public void registerForExternalDial(Handler h, int what, Object obj) {
+        Registrant r = new Registrant(h, what, obj);
+        mExternalCallRegistrants.add(r);
+    }
+
+    public void unregisterForExternalDial(Handler h) {
+        mExternalCallRegistrants.remove(h);
     }
 
     public void setOnStkStin(Handler h, int what, Object obj) {

@@ -370,16 +370,7 @@ public abstract class CDMAPhone extends PhoneBase {
         return mCT.dial(newDialString);
     }
 
-    public Connection
-    dial (String dialString, boolean isStkCall) throws CallStateException {
-        return dial(dialString, false);
-    }
-
     public Connection dial(String dialString, UUSInfo uusInfo) throws CallStateException {
-        throw new CallStateException("Sending UUS information NOT supported in CDMA!");
-    }
-
-    public Connection dial(String dialString, UUSInfo uusInfo, boolean isStkCall) throws CallStateException {
         throw new CallStateException("Sending UUS information NOT supported in CDMA!");
     }
 

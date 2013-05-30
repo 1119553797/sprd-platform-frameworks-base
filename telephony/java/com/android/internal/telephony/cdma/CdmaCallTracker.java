@@ -233,7 +233,7 @@ public final class CdmaCallTracker extends CallTracker {
 
             // In Ecm mode, if another emergency call is dialed, Ecm mode will not exit.
             if(!isPhoneInEcmMode || (isPhoneInEcmMode && isEmergencyCall)) {
-                cm.dial(pendingMO.address, clirMode, false, obtainCompleteMessage());
+                cm.dial(pendingMO.address, clirMode, obtainCompleteMessage());
             } else {
                 phone.exitEmergencyCallbackMode();
                 phone.setOnEcbModeExitResponse(this,EVENT_EXIT_ECM_RESPONSE_CDMA, null);
@@ -1029,7 +1029,7 @@ public final class CdmaCallTracker extends CallTracker {
             case EVENT_EXIT_ECM_RESPONSE_CDMA:
                //no matter the result, we still do the same here
                if (pendingCallInEcm) {
-                   cm.dial(pendingMO.address, pendingCallClirMode, false, obtainCompleteMessage());
+                   cm.dial(pendingMO.address, pendingCallClirMode, obtainCompleteMessage());
                    pendingCallInEcm = false;
                }
                phone.unsetOnEcbModeExitResponse(this);

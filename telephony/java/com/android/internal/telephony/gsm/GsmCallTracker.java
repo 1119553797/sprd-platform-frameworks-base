@@ -95,8 +95,6 @@ public final class GsmCallTracker extends CallTracker {
 
     boolean desiredMute = false;    // false = mute off
 
-    boolean mIsStkCall = false;    // true = call from STK
-
     Phone.State state = Phone.State.IDLE;
 
 
@@ -114,6 +112,7 @@ public final class GsmCallTracker extends CallTracker {
 
         cm.registerForOn(this, EVENT_RADIO_AVAILABLE, null);
         cm.registerForNotAvailable(this, EVENT_RADIO_NOT_AVAILABLE, null);
+        cm.registerForExternalDial(this, EVENT_EXTERNAL_CALL, null);
         sendEmptyMessage(EVENT_INITIALIZE);
     }
 
@@ -123,6 +122,7 @@ public final class GsmCallTracker extends CallTracker {
         cm.unregisterForVideoCallStateChanged(this);
         cm.unregisterForOn(this);
         cm.unregisterForNotAvailable(this);
+        cm.unregisterForExternalDial(this);
 
         for(GsmConnection c : connections) {
             try {
@@ -215,11 +215,7 @@ public final class GsmCallTracker extends CallTracker {
             throw new CallStateException("cannot dial in current state");
         }
 
-//        pendingMO = new GsmConnection(phone.getContext(), checkForTestEmergencyNumber(dialString),
-//                this, foregroundCall);
-        boolean isStkCall = getStkCall();
-        log("GsmCallTracker dial: isStkCall=" + isStkCall);
-        pendingMO = new GsmConnection(phone.getContext(), dialString, this, foregroundCall, isStkCall, false);
+        pendingMO = new GsmConnection(phone.getContext(), dialString, this, foregroundCall, false);
         hangupPendingMO = false;
 
         if (pendingMO.address == null || pendingMO.address.length() == 0
@@ -243,7 +239,7 @@ public final class GsmCallTracker extends CallTracker {
                 tmpAddr = tmpAddr + "/1";
             }
             //cm.dial(pendingMO.address, clirMode, uusInfo, isStkCall, obtainCompleteMessage());
-            cm.dial(tmpAddr, clirMode, uusInfo, isStkCall, obtainCompleteMessage());
+            cm.dial(tmpAddr, clirMode, uusInfo, obtainCompleteMessage());
             // Add for bug 121825 End
         }
 
@@ -285,7 +281,7 @@ public final class GsmCallTracker extends CallTracker {
             throw new CallStateException("cannot dial in current state");
         }
 
-        pendingMO = new GsmConnection(phone.getContext(), dialString, this, foregroundCall, false, true);
+        pendingMO = new GsmConnection(phone.getContext(), dialString, this, foregroundCall, true);
         hangupPendingMO = false;
 
         if (pendingMO.address == null || pendingMO.address.length() == 0
@@ -1062,19 +1058,21 @@ public final class GsmCallTracker extends CallTracker {
                 handleRadioNotAvailable();
             break;
 
+            case EVENT_EXTERNAL_CALL:{
+                    AsyncResult arOut = (AsyncResult) msg.obj;
+
+                    log("handle EVENT_EXTERNAL_CALL: " + arOut.result);
+                    pendingMO = new GsmConnection(phone.getContext(), (String)arOut.result, this, foregroundCall, false);
+                    hangupPendingMO = false;
+                    updatePhoneState();
+                    phone.notifyPreciseCallStateChanged();
+                }
+            break;
             case EVENT_INITIALIZE:
                 log("handle EVENT_INITIALIZE");
                 phone.notifyPhoneStateChanged();
                 break;
         }
-    }
-
-    void setStkCall(boolean isStkcall) {
-        mIsStkCall = isStkcall;
-    }
-
-    boolean getStkCall() {
-        return mIsStkCall;
     }
 
     protected void log(String msg) {

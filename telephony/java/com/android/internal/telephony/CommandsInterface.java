@@ -759,8 +759,7 @@ public interface CommandsInterface extends SprdCommandsInterface{
      * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
      * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
      */
-//    void dial (String address, int clirMode, Message result);
-    void dial (String address, int clirMode, boolean isStkCall, Message result);
+    void dial (String address, int clirMode, Message result);
 
     /**
      *  returned message
@@ -773,7 +772,19 @@ public interface CommandsInterface extends SprdCommandsInterface{
      * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
      * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
      */
-//    void dial(String address, int clirMode, UUSInfo uusInfo, Message result);
+    void dial(String address, int clirMode, UUSInfo uusInfo, Message result);
+
+    /**
+     *  returned message
+     *  retMsg.obj = AsyncResult ar
+     *  ar.exception carries exception on failure
+     *  ar.userObject contains the orignal value of result.obj
+     *  ar.result is null on success and failure
+     *
+     * CLIR_DEFAULT     == on "use subscription default value"
+     * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
+     * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
+     */
     void dial(String address, int clirMode, UUSInfo uusInfo, boolean isStkCall, Message result);
 
     /**

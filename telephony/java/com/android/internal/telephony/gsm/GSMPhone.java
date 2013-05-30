@@ -134,7 +134,6 @@ public abstract class GSMPhone extends PhoneBase {
     private String mImeiSv;
     private String mVmNumber;
 
-    private boolean mIsStkCall = false;
 
     private static final int MO_CALL = 0;
     private static final int MT_CALL = 1;
@@ -726,21 +725,11 @@ public abstract class GSMPhone extends PhoneBase {
 
     public Connection
     dial(String dialString) throws CallStateException {
-        return dial(dialString, false);
+        return dial(dialString, null);
     }
 
     public Connection
-    dial (String dialString, boolean isStkCall) throws CallStateException {
-        return dial(dialString, (UUSInfo)null, isStkCall);
-    }
-
-    public Connection
-    dial(String dialString, UUSInfo uusInfo) throws CallStateException {
-        return dial(dialString, uusInfo, false);
-    }
-
-    public Connection
-    dial (String dialString, UUSInfo uusInfo, boolean isStkCall) throws CallStateException {
+    dial (String dialString, UUSInfo uusInfo) throws CallStateException {
         // Need to make sure dialString gets parsed properly
         String newDialString = PhoneNumberUtils.stripSeparators(dialString);
 
@@ -755,18 +744,11 @@ public abstract class GSMPhone extends PhoneBase {
         if (LOCAL_DEBUG) Log.d(LOG_TAG,
                                "dialing w/ mmi '" + mmi + "'...");
 
-        Log.d(LOG_TAG, "GsmPhone isStkCall = '" + isStkCall);
-        mCT.setStkCall(isStkCall);
-
         if (mmi == null) {
             return mCT.dial(newDialString, uusInfo);
         } else if (mmi.isTemporaryModeCLIR()) {
             return mCT.dial(mmi.dialingNumber, mmi.getCLIRMode(), uusInfo);
         } else {
-            if (isStkCall) {
-                Log.d(LOG_TAG, " StkCall doesn't run MMI ");
-                return mCT.dial(newDialString, uusInfo);
-            }
             mPendingMMIs.add(mmi);
             mMmiRegistrants.notifyRegistrants(new AsyncResult(null, mmi, null));
             mmi.processCode();
