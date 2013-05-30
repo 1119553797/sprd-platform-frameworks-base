@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="numeric_to_operator">
+        <item>46000=中国移动</item>
+        <item>46001=中国联通</item>
+        <item>46002=中国移动</item>
+        <item>46003=中国电信</item>
+        <item>46007=中国移动</item>
+        <item>43211=IR-MCI</item>
+        <item>43235=Irancell</item>
+        <item>43232=Taliya</item>
+        <item>63903=Airtel</item>
+        <item>63905=yu</item>
+        <item>63907=Orange Kenya</item>
+    </string-array>
+</resources>

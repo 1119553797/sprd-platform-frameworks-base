@@ -18,6 +18,6 @@
 */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Default text encoding for WebSettings. -->
-    <string name="default_text_encoding">Shift_JIS</string>
+  <!-- Default text encoding for WebSettings. -->
+  <string name="default_text_encoding">Shift_JIS</string>
 </resources>
