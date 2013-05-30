@@ -18,7 +18,6 @@
 */
 -->
 <resources>
-
     <!-- Do not translate. -->
     <integer-array name="maps_starting_lat_lng">
         <item>46948020</item>
@@ -28,5 +27,4 @@
     <integer-array name="maps_starting_zoom">
         <item>4</item>
     </integer-array>
-
 </resources>

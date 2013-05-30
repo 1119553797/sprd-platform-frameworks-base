@@ -1,0 +1,1243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="fileSizeSuffix"><xliff:g id="NUMBER">%1$s</xliff:g><xliff:g id="UNIT">%2$s</xliff:g></string>
+    <string name="untitled">&lt;ཁ་བྱང་མེད། &gt;</string>
+    <string name="ellipsis">\u2026</string>
+    <string name="ellipsis_two_dots">\u2025</string>
+    <string name="emptyPhoneNumber">(ཁ་པར་ཨང་གྲངས་མེད། )</string>
+    <string name="unknownName">(ངོས་མི་ཟིན།  )</string>
+    <string name="defaultVoiceMailAlphaTag">སྐད་འཇོག་ཡིག་སྒམ།</string>
+    <string name="mmiError">སྦྲེལ་མཐུད་ལ་གནད་དོན་བྱུང་བའམ MMI ཨང་ཀི་ལ་ནུས་པ་མེད། </string>
+    <string name="mmiFdnError">གཏན་འཁེལ་བྱས་ཟིན་པའི་ཨང་གྲངས་ལ་མ་གཏོགས་ལག་ལེན་བྱས་མི་ཆོག</string>
+    <string name="serviceEnabled">ཞབས་འདེགས་བྱེད་མགོ་བརྩམས་ཟིན། </string>
+    <string name="serviceEnabledFor">གཤམ་གསལ་གྱི་ནང་དོན་ཁག་ལ་ཞབས་འདེགས་བྱེད་མགོ་བརྩམས་ཟིན། </string>
+    <string name="serviceDisabled">ཞབས་འདེགས་བྱེད་མཚམས་བཞག་ཟིན། </string>
+    <string name="serviceRegistered">རྩིས་ཐོ་ལེགས་འགྲུབ་བྱུང་ཟིན། </string>
+    <string name="serviceErased">མེད་པར་བཏང་ཟིན། </string>
+    <string name="passwordIncorrect">ཡང་དག་པའི་གསང་ཨང་འཇུག་རོགས།</string>
+    <string msgid="" name="passwordChange">"གསང་གྲངས་བརྗེ་ཟིན།"</string>
+    <string name="mmiComplete">MMI ཡི་ཨང་གྲངས་བརྗེ་ཟིན། </string>
+    <string name="badPin">སྐུ་ཉིད་ཀྱིས་ནང་འཇུག་བྱས་པའི PIN རྙིང་བ་དེ་མ་དག་པར་འདུག</string>
+    <string name="badPin2">སྐུ་ཉིད་ཀྱིས་ནང་འཇུག་བྱས་པའི PIN2 དེ་མ་དག་པར་འདུག</string>
+    <string name="badPuk">སྐུ་ཉིད་ཀྱིས་ནང་འཇུག་བྱས་པའི PUK ཨང་གྲངས་དེ་མ་དག་པར་འདུག</string>
+    <string name="badPuk2">སྐུ་ཉིད་ཀྱིས་ནང་འཇུག་བྱས་པའི PUK2 ཨང་གྲངས་དེ་མ་དག་པར་འདུག</string>
+    <string name="mismatchPin">སྐུ་ཉིད་ཀྱིས་ནང་འཇུག་བྱས་པའི PIN ཨང་གྲངས་གཅིག་གྱུར་མིན། </string>
+    <string name="mismatchPin2">སྐུ་ཉིད་ཀྱིས་ནང་འཇུག་བྱས་པའི PIN2 ཨང་གྲངས་གཅིག་གྱུར་མིན།</string>
+    <string name="mismatchPuk">སྐུ་ཉིད་ཀྱིས་ནང་འཇུག་བྱས་པའི PUK ཨང་གྲངས་གཅིག་གྱུར་མིན། </string>
+    <string name="mismatchPuk2">སྐུ་ཉིད་ཀྱིས་ནང་འཇུག་བྱས་པའི PUK2 ཨང་གྲངས་གཅིག་གྱུར་མིན། </string>
+    <string name="invalidPin">གྲངས་གནས་4ནས་8བར་གྱི་PINནང་འཇུག་བྱེད།</string>
+    <string name="invalidPuk">གནས་གྲངས་8ཀྱི་PUKནང་འཇུག་བྱེད།</string>
+    <string name="needPuk">SIMལ་བྱང་བུ་ལ PUKཨང་གྲངས་ཀྱིས་ཟྭ་བརྒྱབ་ཟིན།  PUK ཨང་གྲངས་ནང་འཇུག་བྱས་ན་ཟྭ་འབྱེད་ངེས། </string>
+    <string name="needPuk2">PUK2 ཨང་གྲངས་ནང་འཇུག་བྱས་ཏེ།  SIMབྱང་བུའི་ཟྭ་འབྱེད་དགོས</string>
+    <string name="needPinLock">SIM བྱང་བུའི PIN ཨང་གྲངས་བརྗེས་ན། ཐོག་མར་PINཟྭ་རྒྱག་དགོས། ཁ</string>
+    <string name="ClipMmi">ཚུར་ཡོང་བའི་ཁ་པར་ཨང་གྲངས། </string>
+    <string name="ClirMmi">རང་གི་ཁ་པར་ཨང་གྲངས། </string>
+    <string name="ColpMmi">ཉན་ཟིན་པའི་ཁ་པར་ཨང་གྲངས་འཆར་བ། </string>
+    <string name="ColrMmi">ཉན་ཟིན་པའི་ཁ་པར་ཨང་གྲངས་སྐུང་བ། </string>
+    <string name="CfMmi">ཁ་པར་ཡོང་བའི་བརྒྱུད་ལེན།</string>
+    <string msgid="" name="UnConditionCfMmi">"ཆ་རྐྱེན་མེད་པར་ཚུར་ཡོང་བའི་ཁ་པར་བརྒྱུད་སྤྲོད་བྱེད་པ། "</string>
+    <string msgid="" name="BusyCfMmi">"བྲེལ་སྐབས་སུ་ཚུར་ཡོང་བའི་ཁ་པར་བརྒྱུད་སྤྲོད་བྱེད་པ། "</string>
+    <string msgid="" name="NoReplyCfMmi">"ཁ་པར་མ་བླངས་པའི་ཁ་པར་བརྒྱུད་སྤྲོད་བྱེད་པ། "</string>
+    <string msgid="" name="NotReachCfMmi">"ཁ་པར་མི་འགྲོ་བའི་སྐབས་ཀྱི་ཁ་པར་བརྒྱུད་སྤྲོད་བྱེད་པ།  "</string>
+    <string msgid="" name="AllCfMmi">"ཚུར་ཡོང་བའི་ཁ་པར་ཡོད་ཚད་བརྒྱུད་སྤྲོད་བྱེད་པ། "</string>
+    <string msgid="" name="ConditionCfMmi">"ཚུར་ཡོང་བའི་ཆ་རྐྱེན་ལྡན་པའི་ཁ་པར་བརྒྱུད་སྤྲོད་བྱེད་པ། "</string>
+    <string name="CwMmi">ཚུར་ཡོང་བའི་ཁ་པར་ལ་སྒུག་པ། </string>
+    <string name="BaMmi">འབོད་བརྡའི་ཚད་བཀག</string>
+    <string msgid="" name="BaocMmi">"ཚུར་བཏང་བའི་འབོད་བརྡ་ཡོད་ཚད་ལ་ཚད་བཀག་བྱེད་པ། "</string>
+    <string msgid="" name="BaoicMmi">"རྒྱལ་སྤྱིར་འབོད་བརྡ་གཏོང་བར་ཚད་བཀག་ཡོད་པ། "</string>
+    <string msgid="" name="BaoicxhMmi">"རང་རྒྱལ་ཁོ་ན་ལས་རྒྱལ་སྤྱིའི་འབོད་བརྡ་ཡོད་ཚད་ལ་ཚད་བཀག་ཡོད་པ། "</string>
+    <string msgid="" name="BaicMmi">"ཚུར་བཏང་བའི་འབོད་བརྡ་ཡོད་ཚད་ལ་ཚད་བཀག་བྱེད་པ། "</string>
+    <string msgid="" name="BaicrMmi">"ཁོངས་བརྒལ་སྐབས་ཚུར་བཏང་བའི་འབོད་བརྡ་ཡོད་ཚད་ལ་ཚད་བཀག་བྱེད་པ། "</string>
+    <string msgid="" name="BaallMmi">"ཚད་བཀག་ཞབས་འདེགས་ཡོད་ཚད། "</string>
+    <string msgid="" name="BamoMmi">"འབོད་བརྡ་གཏོང་བའི་ཚད་བཀག་ཞབས་འདེགས་ཡོད་ཚད།"</string>
+    <string msgid="" name="BamtMmi">"འབོད་བརྡ་ཡོང་བའི་ཚད་བཀག་ཞབས་འདེགས་ཡོད་ཚད། "</string>
+    <string name="ActiveUnconCf">ཆ་རྐྱེན་མེད་པར་འབོད་བརྡ་བཏང་བ་བརྒྱུད་སྤྲོད་བྱས་ཟིན། </string>
+    <string name="ActiveConCf">ཆ་རྐྱེན་ཡོད་པར་འབོད་བརྡ་བཏང་བ་བརྒྱུད་སྤྲོད་བྱས་ཟིན། </string>
+    <string name="CallForwarded">འབོད་བརྡ་བརྒྱུད་སྤྲོད་བྱས་ཟིན་པ། </string>
+    <string name="CallWaiting">ཁ་པར་ཡོང་ན་སྒུག་སྡོད།</string>
+    <string msgid="" name="OutCallBarred">"འབོད་བརྡ་གཏོང་བར་ཚད་བཀག་ཡོད་པ། "</string>
+    <string msgid="" name="InCallBarred">"འབོད་བརྡ་ཡོང་བར་ཚད་བཀག་ཡོད་པ། "</string>
+    <string name="ForwardedCall">འབོད་བརྡ་བརྒྱུད་སྤྲོད། </string>
+    <string msgid="" name="CallHold">"འབོད་བརྡ་བཟུང་ཡོད། "</string>
+    <string msgid="" name="CallRetrieved">"འབོད་བརྡ་གྲུང་སྐུལ། "</string>
+    <string msgid="" name="IncomingCallForwarded">ཚུར་ཡོང་བའི་འབོད་བརྡ་བརྒྱུད་སྤྲོད་བྱས་ཟིན། </string>
+    <string name="PwdMmi">གསང་གྲངས་བརྗེ་བ།</string>
+    <string name="PinMmi">PIN བརྗེ་བ།</string>
+    <string name="Pin2Mmi">"PIN2 བརྗེ་བ།"</string>
+    <string name="PukMmi">"PIN ཡི་ཟྭ་འབྱེད་པ། "</string>
+    <string name="Puk2Mmi">"PIN2 ཡི་ཟྭ་འབྱེད་པ།"</string>
+    <string name="CnipMmi">ཨང་གྲངས་མངོན་པ།</string>
+    <string name="CnirMmi">ཚུར་ཡོང་བའི་འབོད་བརྡའི་ཨང་གྲངས་ལ་ཚད་བཀག་ཡོད་པ། </string>
+    <string name="ThreeWCMmi">ཕྱོགས་གསུམ་ཁ་བརྡ། </string>
+    <string name="RuacMmi">ཉན་མི་འདོད་པའི་ཁ་པར་ལ་ཚད་བཀག་བྱེད་པ།</string>
+    <string name="CndMmi">ཚུར་ཡོང་བའི་ཨང་གྲངས་བསྐྱལ་བ།</string>
+    <string name="DndMmi">སྐུ་ཉིད་བར་ཆད་མི་བྱེད་རོགས། </string>
+    <string name="CLIRDefaultOnNextCallOn">རང་གི་ཨང་གྲངས་མི་མངོན་པ་དང་། ཐེངས་རྗེས་མའི་ཁ་བརྡའི་ཁྲོད་ཀྱང་མངོན་མི་དགོས། </string>
+    <string name="CLIRDefaultOnNextCallOff">རང་གི་ཨང་གྲངས་མི་མངོན་པ་དང་། འོན་ཀྱང་ཐེངས་རྗེས་མའི་ཁ་བརྡའི་ཁྲོད་མངོན་དགོས།</string>
+    <string name="CLIRDefaultOffNextCallOn">རང་གི་ཨང་གྲངས་མངོན་དགོས་པ་དང་། ཐེངས་རྗེས་མའི་ཁ་བརྡའི་ཁྲོད་མངོན་མི་དགོས།</string>
+    <string name="CLIRDefaultOffNextCallOff">རང་གི་ཨང་གྲངས་མི་མངོན་པ་དང་། ཐེངས་རྗེས་མའི་ཁ་བརྡའི་ཁྲོད་ཀྱང་མངོན་དགོས།</string>
+    <string name="serviceNotProvisioned">ཞབས་འདེགས་ཞུས་མི་འདུག</string>
+    <string name="CLIRPermanent">རང་གི་ཨང་གྲངས་མི་མངོན་པའི་ཇུས་འགོད་བརྗེ་ཐབས་མི་འདུག</string>
+    <string name="RestrictedChangedTitle">ཚུར་ཡོང་ཚད་བཀག་ལ་འགྱུར་ལྡོག་བྱུང་འདུག</string>
+    <string name="RestrictedOnData">གྲངས་ཀའི་ཞབས་འདེགས་ཀྱི་ཁ་བརྒྱབ་འདུག</string>
+    <string name="RestrictedOnEmergency">ཛ་དྲག་ཞབས་འདེགས་ཀྱི་ཁ་བརྒྱབ་འདུག</string>
+    <string name="RestrictedOnNormal">སྐད་འཕྲིན་ཞབས་འདེགས་ཀྱི་ཁ་བརྒྱབ་འདུག</string>
+    <string name="RestrictedOnAllVoice">སྐད་འཕྲིན་ཞབས་འདེགས་ཡོད་ཚད་ཀྱི་ཁ་བརྒྱབ་འདུག</string>
+    <string name="RestrictedOnSms">འཕྲིན་ཐུང་ཞབས་འདེགས་ཀྱི་ཁ་བརྒྱབ་འདུག</string>
+    <string name="RestrictedOnVoiceData">སྐད་འཕྲིན་དང་གྲངས་ཀའི་ཞབས་འདེགས་ཀྱི་ཁ་བརྒྱབ་འདུག</string>
+    <string name="RestrictedOnVoiceSms">སྐད་འཕྲིན་དང་གྲངས་ཀའི་ཞབས་འདེགས་ཀྱི་ཁ་བརྒྱབ་འདུག</string>
+    <string name="RestrictedOnAll">སྐད་འཕྲིན་དང་གྲངས་ཀ། འཕྲིན་ཐུང་ཞབས་འདེགས་བཅས་ཀྱི་ཁ་བརྒྱབ་འདུག</string>
+    <string name="serviceClassVoice">སྐད་འཕྲིན།</string>
+    <string name="serviceClassData">གཞི་གྲངས།</string>
+    <string name="serviceClassFAX">བརྙན་བསྐྱེལ།</string>
+    <string name="serviceClassSMS">འཕྲིན་ཐུང་།</string>
+    <string name="serviceClassDataAsync">གོམ་འགལ།</string>
+    <string name="serviceClassDataSync">གོམ་མཉམ།</string>
+    <string name="serviceClassPacket">ཁུག་མ།</string>
+    <string name="serviceClassPAD">PAD</string>
+    <string name="roamingText0">མྱུལ་བ་བཀོལ་སྤྱོད་ཀྱི་མདའ་རྟགས།</string>
+    <string name="roamingText1">མྱུལ་བ་མི་བཀོལ་བའི་མདའ་རྟགས།</string>
+    <string name="roamingText2">མྱུལ་བའི་མདའ་རྟགས་མངོན་བཞིན་འདུག</string>
+    <string name="roamingText3">ཉེ་འཁོར་དུ་མི་འདུག</string>
+    <string name="roamingText4">ཁང་ཕྱི།</string>
+    <string name="roamingText5">མྱུལ་བ། ཐོག་མའི་མ་ལག</string>
+    <string name="roamingText6">མྱུལ་བ། བཀོལ་ཆོག་པའི་མ་ལག</string>
+    <string name="roamingText7">མྱུལ་བ། སྤྱི་མཐུན་མཉམ་འབྲེལ་བྱེད་རོགས།</string>
+    <string name="roamingText8">མྱུལ་བ། ཆེས་མཐོའི་མཉམ་འབྲེལ་བྱེད་རོགས། </string>
+    <string name="roamingText9">མྱུལ་བ། ཞབས་འདེགས་ཡོད་ཚད་ཀྱི་ནུས་པ།</string>
+    <string name="roamingText10">མྱུལ་བ། ཁ་མི་ཚང་བའི་ཞབས་འདེགས།</string>
+    <string name="roamingText11">མྱུལ་བ་བཀོལ་བའི་རས་གཞི།</string>
+    <string name="roamingText12">མྱུལ་བ་མི་བཀོལ་བའི་རས་གཞི།</string>
+    <string name="roamingTextSearching">ཞབས་འདེགས་བཙལ་བཞིན་པ།</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g> བརྒྱུད་སྤྲོད་བྱས་མེད།</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> རྗེས་སུ་ <xliff:g id="time_delay">{2}</xliff:g> སྐར་ཆ།</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g> བརྒྱུད་སྤྲོད་བྱས་མེད།</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g> བརྒྱུད་སྤྲོད་བྱས་མེད།</string>
+    <string name="fcComplete">ནུས་པའི་ཚབ་གྲངས་བཏགས་ཟིན། </string>
+    <string name="fcError">འབྲེལ་མཐུད་ལ་གནད་དོན་བྱུང་བའམ་ནུས་པའི་ཚབ་གྲངས་ནུས་མེད་དུ་གྱུར།</string>
+    <string name="httpErrorOk">ཁ་རྒྱག་པ།</string>
+    <string name="httpError">དྲ་རྒྱར་ནོར་འཁྲུལ་བྱུང་བ།</string>
+    <string name="httpErrorLookup">དྲ་གནས་རྙེད་མི་ཐུབ།</string>
+    <string name="httpErrorUnsupportedAuthScheme">དྲ་གནས་ཐོབ་ཐང་ཞིབ་བཤེར་ལ་རྒྱབ་སྐྱོར་མི་བྱེད། </string>
+    <string name="httpErrorAuth">ཐོབ་ཐང་ཞིབ་བཤེར་བྱེད་མ་ཐུབ།</string>
+    <string name="httpErrorProxyAuth">ཞབས་འདེགས་ཚབ་མ་བརྒྱུད་དེ་ཐོབ་ཐང་ཞིབ་བཤེར་བྱེད་མ་ཐུབ།</string>
+    <string name="httpErrorConnect">ཞབས་འདེགས་ཡོ་བྱད་ལ་འབྲེལ་བྱེད་མི་ཐུབ།</string>
+    <string name="httpErrorIO">ཞབས་འདེགས་ཡོ་བྱད་ལ་འཕྲིན་བསྐུར་ཐབས་མི་འདུག  ཡང་བསྐྱར་ཚོད་ལྟ་བྱེད་རོགས།</string>
+    <string name="httpErrorTimeout">ཞབས་འདེགས་ཡོ་བྱད་འབྲེལ་མཐུད་བྱེད་པའི་དུས་ཡུན་བརྒལ་སོང་།</string>
+    <string name="httpErrorRedirectLoop">དྲ་ངོས་འདིར་ཞབས་འདེགས་ཡོ་བྱད་བསྐྱར་ཟློས་ཀྱི་ནང་དོན་མང་འདུག</string>
+    <string name="httpErrorUnsupportedScheme">གྲོས་ཆོད་ལ་རྒྱབ་སྐྱོར་མི་བྱེད།</string>
+    <string name="httpErrorFailedSslHandshake">བདེ་འཇགས་འབྲེལ་མཐུད་འཛུགས་ཐབས་མི་འདུག</string>
+    <string name="httpErrorBadUrl">དྲ་གནས་ནུས་མེད་ཡིན་པས། དྲ་ངོས་ཀྱི་ཁ་འབྱེད་ཐབས་མི་འདུག</string>
+    <string name="httpErrorFile">ཡིག་ཆ་འདིར་ལྟ་ཐབས་མི་འདུག</string>
+    <string name="httpErrorFileNotFound">ཉིད་ལ་མཁོ་བའི་ཡིག་ཆ་རྙེད་མི་ཐུབ།</string>
+    <string name="httpErrorTooManyRequests">གནད་དོན་མང་པོར་ཐག་གཅོད་བྱེད་བཞིན་ཡོད་པས། ཅུང་ཙམ་འགོར་རྗེས་ཡང་བསྐྱར་ཚོད་ལྟ་བྱེད་རོགས།</string>
+    <string name="notification_title">ཐོ་འགོད་ནོར་འཁྲུལ <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+    <string name="contentServiceSync">གོམ་མཉམ།</string>
+    <string name="contentServiceSyncNotificationTitle">གོམ་མཉམ།</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc">མང་པོ <xliff:g id="content_type">%s</xliff:g>སུབ་དགོས། <xliff:g id="CONTENT_TYPE">%s</xliff:g>གསུབ་དགོས།</string>
+    <string product="tablet" name="low_memory">ངོས་སྙོམས་རྩིས་འཁོར་གྱི་གསོག་ཉར་སྟོང་ཆ་གང་ཡོད་པས། ཡིག་ཆ་འགའ་གསུབ་སྟེ་སྟོང་ཆ་སྣོན་རོགས།</string>
+    <string product="default" name="low_memory">ཁ་པར་གྱི་གསོག་ཉར་སྟོང་ཆ་གང་ཡོད་པས། ཡིག་ཆ་འགའ་གསུབ་སྟེ་སྟོང་ཆ་སྣོན་རོགས།</string>
+    <string name="me">ང་།</string>
+    <string product="tablet" name="power_dialog">ངོས་སྙོམས་རྩིས་འཁོར་གྱི་གདམ་ཀ</string>
+    <string product="default" name="power_dialog">ཁ་པར་གྱི་གདམ་ཀ</string>
+    <string name="silent_mode">སྒྲ་མེད་དཔེ་རྣམ།</string>
+    <string name="turn_on_radio">སྒྲ་སྡུད་ཀྱི་ཁ་ཕྱེས་པ།</string>
+    <string name="turn_off_radio">སྒྲ་སྡུད་ཀྱི་ཁ་རྒྱག་པ།</string>
+    <string name="screen_lock">བརྙན་ཤེལ་ཟྭ་རྒྱག་སྒྲིག་འགོད།</string>
+    <string name="power_off">ཁ་རྒྱག་པ།</string>
+    <string name="shutdown_progress">ཁ་རྒྱག་བཞིན་ཡོད་པ།</string>
+    <string product="tablet" name="shutdown_confirm">ཁྱེད་ཀྱི་ངོས་སྙོམས་རྩིས་འཁོར་གྱི་ཁ་རྒྱག་རྒྱུ་རེད།</string>
+    <string product="default" name="shutdown_confirm">ཁྱེད་ཀྱི་ངོས་ཁ་པར་གྱི་ཁ་རྒྱག་རྒྱུ་རེད།</string>
+    <string name="shutdown_confirm_question">ཁྱེད་ཀྱིས་ཁ་རྒྱག་འདོད་དམ།</string>
+    <string name="recent_tasks_title">ཉེ་ལམ་གྱི་འགན་ཁུར།</string>
+    <string name="no_recent_tasks">ཉེ་ལམ་གྱི་མ་ལག་མི་འདུག</string>
+    <string product="tablet" name="global_actions">ངོས་སྙོམས་རྩིས་འཁོར་གྱི་གདམ་ཀ</string>
+    <string product="default" name="global_actions">ཁ་པར་གྱི་གདམ་ཀ</string>
+    <string name="global_action_lock">བརྙན་ཤེལ་ཟྭ་རྒྱག་སྒྲིག་འགོད།</string>
+    <string name="global_action_power_off">ཁ་རྒྱག་པ།</string>
+    <string name="global_action_toggle_silent_mode">སྒྲ་མེད་དཔེ་རྣམ།</string>
+    <string name="global_action_silent_mode_on_status">སྒྲ་སྒོ་རྒྱག་པ།</string>
+    <string name="global_action_silent_mode_off_status">སྒྲ་སྒོ་ཕྱེ་བ།</string>
+    <string name="global_actions_toggle_airplane_mode">འབོད་བརྡ་གཏོང་བར་ཚད་བཀག་ཡོད་པ། </string>
+    <string name="global_actions_airplane_mode_on_status">འཕུར་བསྐྱོད་རྣམ་པའི་ཁ་ཕྱེས་འདུག</string>
+    <string name="global_actions_airplane_mode_off_status">འཕུར་བསྐྱོད་རྣམ་པའི་ཁ་བརྒྱབ་འདུག</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="safeMode">བདེ་འཇགས་ཀྱི་རྣམ་པ།</string>
+    <string name="android_system_label">Android མ་ལག</string>
+    <string name="permgrouplab_costMoney">ཁྱེད་ཀྱིས་རིན་པ་སྤྲོད་དགོས་པའི་ཞབས་འདེགས།</string>
+    <string name="permgroupdesc_costMoney">ཁྱེད་ཀྱིས་རིན་པ་སྤྲོད་དགོས་པའི་མ་ལག་ལག་བསྟར་བྱས་ཆོག་པ།</string>
+    <string name="permgrouplab_messages">ཁྱེད་ཀྱི་ཆ་འཕྲིན།</string>
+    <string name="permgroupdesc_messages">འཕྲིན་ཐུང་དང་གློག་རྡུལ་ཡིག་ཟམ་སོགས་ཀྱི་ཆ་འཕྲིན་འདོན་པའམ་འབྲི་བ།</string>
+    <string name="permgrouplab_personalInfo">ཁྱེད་ཀྱི་མི་སྒེར་གྱི་ཆ་འཕྲིན།</string>
+    <string product="tablet" name="permgroupdesc_personalInfo">ངོས་སྙོམས་རྩིས་འཁོར་དུ་གསོག་ཉར་བྱས་པའི་འབྲེལ་གཏུག་མི་སྣ་དང་ཟླ་ཚེས་ལ་ཐད་ཀར་བལྟ་བ།</string>
+    <string product="default" name="permgroupdesc_personalInfo">ཁ་པར་དུ་གསོག་ཉར་བྱས་པའི་འབྲེལ་གཏུག་མི་སྣ་དང་ཟླ་ཚེས་ལ་ཐད་ཀར་བལྟ་བ།</string>
+    <string name="permgrouplab_location">ཁྱེད་ཀྱི་གནས་ཡུལ།</string>
+    <string name="permgroupdesc_location">ཁྱེད་ཀྱི་དངོས་པོའི་གནས་ཡུལ་ལ་བལྟ་བ།</string>
+    <string name="permgrouplab_network">དྲ་རྒྱའི་བརྡ་འཕྲིན།</string>
+    <string name="permgroupdesc_network">དྲ་རྒྱ་སྣ་ཚོགས་ལ་བལྟ་བའི་ནུས་པའི་མ་ལག་བཀོལ་སྤྱོད་བྱས་ཆོག་པ།</string>
+    <string name="permgrouplab_accounts">སྐུ་ཉིད་ཀྱི་རྩིས་ཐོ།</string>
+    <string name="permgroupdesc_accounts">བཀོལ་ཆོག་པའི་རྩིས་ཐོ།</string>
+    <string name="permgrouplab_hardwareControls">སྲ་སྡེར་ལ་ཁ་ལོ་བསྒྱུར་བ།</string>
+    <string name="permgroupdesc_hardwareControls">ཐད་ཀར་ཁ་པར་སྟེང་གི་སྲ་སྡེར་ལ་བལྟ་བ།</string>
+    <string name="permgrouplab_phoneCalls">ཁ་པར་ཁ་བརྡ།</string>
+    <string name="permgroupdesc_phoneCalls">ཁ་པར་འབོད་བརྡ་ཐོ་འགོད་དང་ལྟ་རྟོག ཐག་གཅོད་བཅས་བྱེད་པ། </string>
+    <string name="permgrouplab_systemTools">མ་ལག་ལག་ཆ།</string>
+    <string name="permgroupdesc_systemTools">མ་ལག་ལ་དམའ་རིམ་ལྟ་ཞིབ་དང་ཚོད་འཛིན་བྱེད་པ།</string>
+    <string name="permgrouplab_developmentTools">གསར་འབྱེད་ལག་ཆ།</string>
+    <string name="permgroupdesc_developmentTools">རྒྱུད་ཁོངས་གསར་འབྱེད་པ་ཁོ་ན་དབང་བའི་ནུས་པ།</string>
+    <string name="permgrouplab_storage">གསོག་ཉར།</string>
+    <string product="nosdcard" name="permgroupdesc_storage">USBགསོག་ཉར་བྱེད་ཆས་ལ་བལྟ་བ།</string>
+    <string product="default" name="permgroupdesc_storage">SDབྱང་བུ་ལ་བལྟ་བ།</string>
+    <string name="permlab_statusBar">རྣམ་པའི་སྡེ་ལ་བཟོ་བཟོས་དང་མཚམས་འཇོག་པ།</string>
+    <string name="permdesc_statusBar">རྒྱུད་ཁོངས་ཀྱིས་རྣམ་པའི་སྡེ་མཚམས་འཇོག་པའམ་མ་ལག་གི་རི་མོ་སྣོར་དོར་བྱས་ཆོག</string>
+    <string name="permlab_statusBarService">རྣམ་པའི་སྡེ།</string>
+    <string name="permdesc_statusBarService">རྣམ་པའི་སྡེའི་རྣམ་པ་ལྟར་ཉེར་སྤྱོད་བྱ་རིམ་མངོན་ཆོག</string>
+    <string name="permlab_expandStatusBar">རྣམ་པའི་སྡེ་ཕྱིར་མངོན་པའམ་ནང་དུ་བསྡུ་བ།</string>
+    <string name="permdesc_expandStatusBar">ཉེར་སྤྱོད་བྱ་རིམ་བརྒྱུད་ནས་རྣམ་པའི་སྡེ་མངོན་པའམ་བསྡུས་ཆོག</string>
+    <string name="permlab_processOutgoingCalls">ཕྱིར་གཏོང་བའི་ཁ་པར་འགོག་པ།</string>
+    <string name="permdesc_processOutgoingCalls">ཉེར་སྤྱོད་བྱ་རིམ་བཀོལ་ནས་ཕྱིར་གཏོང་ཁ་པར་གྱི་ཨང་གྲངས་འགོག་པའམ་བཅོས་བསྒྱུར་བྱས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་ནས་ལྟ་རྟོག་དང་བཀག་འགོག བརྒྱུད་སྣེ་གཞན་ནས་ཉན་པ་སོགས་བྱེད་སྲིད། </string>
+    <string name="permlab_receiveSms">འཕྲིན་ཐུང་བསྡུ་ལེན།</string>
+    <string name="permdesc_receiveSms">ཉེར་སྤྱོད་བྱ་རིམ་བཀོལ་ནས་འཕྲིན་ཐུང་བསྡུ་ལེན་དང་ཐག་གཅོད་བྱས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་ནས་ཁྱེད་ཀྱི་འཕྲིན་ཐུང་ལ་ལྟ་རྟོག་དང་མི་མངོན་པར་བྱེད་སྲིད། </string>
+    <string name="permlab_receiveMms">ཚོན་འཕྲིན་བསྡུ་བ། </string>
+    <string name="permdesc_receiveMms">ཉེར་སྤྱོད་བྱ་རིམ་བཀོལ་ནས་ཚོན་འཕྲིན་བསྡུ་ལེན་དང་ཐག་གཅོད་བྱས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་ནས་ཁྱེད་ཀྱི་ཚོནའཕྲིན་ལ་ལྟ་རྟོག་དང་མི་མངོན་པར་བྱེད་སྲིད། </string>
+    <string name="permlab_receiveEmergencyBroadcast">ཛ་དྲག་རྒྱང་བསྒྲགས་བསྡུ་ལེན་བྱེད་པ།</string>
+    <string name="permdesc_receiveEmergencyBroadcast">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཛ་དྲག་རྒྱང་བསྒྲགས་བསྡུ་ལེན་བྱས་ཆོག  མ་ལག་ཉེར་སྤྱོད་བྱ་རིམ་ཁོ་ནས་བཀོལ་ཆོག</string>
+    <string name="permlab_sendSms">འཕྲིན་ཐུང་བསྐུར་བ།</string>
+    <string name="permdesc_sendSms">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འཕྲིན་ཐུང་བསྐུར་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་མོས་མཐུན་མེད་པར་བསྐུར་སྲིད་ལ།  རིན་པ་ལེན་ངེས། </string>
+    <string name="permlab_sendSmsNoConfirmation">མོས་མཐུན་མེད་པར་ཐད་ཀར་འཕྲིན་ཐུང་བསྐུར་བ། </string>
+    <string name="permdesc_sendSmsNoConfirmation">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འཕྲིན་ཐུང་བསྐུར་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་མོས་མཐུན་མེད་པར་བསྐུར་སྲིད་ལ།  རིན་པ་ལེན་ངེས། </string>
+    <string name="permlab_readSms">འཕྲིན་ཐུང་དང་ཚོན་འཕྲིན་ཀློག་པ།</string>
+    <string product="tablet" name="permdesc_readSms">ཉེར་སྤྱོད་བྱ་རིམ་བརྒྱུད་ནས་ཁྱེད་ཀྱི་ངོས་སྙོམས་རྩིས་འཁོར་རམ SIM བྱང་བུས་གསོག་ཉར་བྱས་པའི་འཕྲིན་ཐུང་ཀློག་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་སྒེར་གྱི་ཆ་འཕྲིན་བཀླག་སྲིད། </string>
+    <string product="default" name="permdesc_readSms">ཉེར་སྤྱོད་བྱ་རིམ་བརྒྱུད་ནས་ཁྱེདཀྱི་ཁ་པར་རམ SIM བྱང་བུས་གསོག་ཉར་བྱས་པའི་འཕྲིན་ཐུང་ཀློག་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་སྒེར་གྱི་ཆ་འཕྲིན་བཀླག་སྲིད། </string>
+    <string name="permlab_writeSms">འཕྲིན་ཐུང་ངམ་ཚོན་འཕྲིན་ལ་སྒྲིག་སྦྱོར་བྱེད་པ། </string>
+    <string product="tablet" name="permdesc_writeSms">ཉེར་སྤྱོད་བྱ་རིམ་བརྒྱུད་ནས་ཁྱེད་ཀྱི་ངོས་སྙོམས་རྩིས་འཁོར་རམ SIM བྱང་བུས་གསོག་ཉར་བྱས་པའི་འཕྲིན་ཐུང་བྲིས་ཆོག   གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་སྒེར་གྱི་ཆ་འཕྲིན་གསུབ་སྲིད། </string>
+    <string product="default" name="permdesc_writeSms">ཉེར་སྤྱོད་བྱ་རིམ་བརྒྱུད་ནས་ཁྱེད་ཀྱི་ཁ་པར་རམ SIM བྱང་བུས་གསོག་ཉར་བྱས་པའི་འཕྲིན་ཐུང་བྲིས་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་སྒེར་གྱི་ཆ་འཕྲིན་གསུབ་སྲིད། </string>
+    <string name="permlab_receiveWapPush">WAP བསྡུ་ལེན། </string>
+    <string name="permdesc_receiveWapPush">ཉེར་སྤྱོད་བྱ་རིམ་བརྒྱུད་ནས WAP ཆ་འཕྲིན་བསྡུ་ལེན་དང་ཐག་གཅོད་བྱས་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་ཆ་འཕྲིན་ལ་ལྟ་རྟོག་དང་དོར་བ། མི་མངོན་པ་སོགས་བྱས་ཆོག</string>
+    <string name="permlab_getTasks">ཉེ་ལམ་བཀོལ་སྤྱོད་བྱས་པའི་ཉེར་སྤྱོད་བྱ་རིམ་ལ་རྟོག་ཞིབ་བྱེད་པ། </string>
+    <string name="permdesc_getTasks">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཉེ་ལམ་འགུལ་བསྐྱོད་བྱས་པའི་ཆ་འཕྲིན་ལ་རྟོག་ཞིབ་བྱས་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་འབྲེལ་ཡོད་བྱ་རིམ་གཞན་པ་བརྒྱུད་དེ་ཉིད་ཀྱི་གསང་བ་ལ་བལྟས་ཆོག</string>
+    <string name="permlab_reorderTasks">ད་ལྟ་བཀོལ་བཞིན་པའི་ཉེར་སྤྱོད་བྱ་རིམ་ལ་བསྐྱར་དུ་གོ་རིམ་བསྒྲིག་པ། </string>
+    <string name="permdesc_reorderTasks">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ལས་འགན་སྔོན་དང་རྒྱབ་ཏུ་སྣུར་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྐབས་དང་བསྟུན་ཏེ་དབང་བསྒྱུར་བྱས་ཆོག</string>
+    <string name="permlab_removeTasks">ད་ལྟ་བཀོལ་བཞིན་པའི་ཉེར་སྤྱོད་བྱ་རིམ་མཚམས་འཇོག་པ།</string>
+    <string name="permdesc_removeTasks">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ལས་འགན་མཚམས་འཇོག་དང་དོར་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་ལ་གནོད་ངེས། </string>
+    <string name="permlab_setDebugApp">ཉེར་སྤྱོད་བྱ་རིམ་ཚོད་ལྟའི་ཁ་ཕྱེ་བ། </string>
+    <string name="permdesc_setDebugApp">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་ལ་ཁ་ལོ་བསྒྱུར་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྐབས་དང་བསྟུན་ཏེ་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་དག་མཚམས་བཞག་ཆོག</string>
+    <string name="permlab_changeConfiguration">ཐོ་འགོད་པར་ངོས་བཅོས་བསྒྱུར་ཇུས་འགོད། </string>
+    <string name="permdesc_changeConfiguration">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཉེ་ལམ་སྡེབ་སྒྲིག་ལ་བཅོས་བསྒྱུར་བྱས་ཆོག དཔེར་ན། སྐད་རིགས་ཇུས་འགོད་དང་ཡི་གེའི་ཆེ་ཆུང་བསྒྱུར་ཆོག</string>
+    <string name="permlab_enableCarMode">རླངས་འཁོར་རྣམ་པའི་ཁ་ཕྱེས་པ།</string>
+    <string name="permdesc_enableCarMode">ཉེར་སྤྱོད་བྱ་རིམ་གྱི་རླངས་འཁོར་རྣམ་པའི་ཁ་ཕྱེས་ཆོག</string>
+    <string name="permlab_killBackgroundProcesses">རྒྱབ་ངོས་རིམ་པ་མཚམས་འཇོག་པ།</string>
+    <string name="permdesc_killBackgroundProcesses">གསོག་ཉར་གྱི་སྟོང་ཆ་ཇི་འདྲ་ཡིན་ཡང་། ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་དག་གི་རྒྱབ་ངོས་རིམ་པ་མཚམས་འཇོག་བྱས་ཆོག</string>
+    <string name="permlab_forceStopPackages">བཙན་ཤུགས་ཀྱིས་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་དག་མཚམས་འཇོག་པ།</string>
+    <string name="permdesc_forceStopPackages">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བཙན་ཤུགས་སྒོས་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་དག་མཚམས་འཇོག་བྱས་ཆོག</string>
+    <string name="permlab_forceBack">བཙན་ཤུགས་ཀྱིས་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་སྒོ་རྒྱག་པ།</string>
+    <string name="permdesc_forceBack">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བཙན་ཤུགས་མ་བཀོལ་གོང་བྱ་འགུལ་</string>
+    <string name="permlab_dump">མ་ལག་ནང་ཁུལ་གྱི་རྣམ་པར་ཞིབ་བཤེར་བྱེད་པ། </string>
+    <string name="permdesc_dump">ཉེར་སྤྱོད་བྱ་རིམ་བཀོལ་ནས་མ་ལག་ནང་ཁུལ་གྱི་རྣམ་པར་ཞིབ་བཤེར་བྱས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་་རིམ་གྱིས་འདི་བརྒྱུད་དེ་ཁོ་ཚོར་མི་མཁོ་བའི་གསང་བ་སྣ་ཚོགས་དང་བདེ་འཇགས་ཆ་འཕྲིན་ལ་བལྟ་ཐུབ། </string>
+    <string name="permlab_retrieve_window_content">བརྙན་ཡོལ་ནང་དོན་ལ་ཞིབ་བཤེར། </string>
+    <string name="permdesc_retrieve_window_content">ཉེར་སྤྱོད་བྱ་རིམ་བཀོལ་ནས་སྒེའུ་ཁུང་གི་ནང་དོན་ལ་ཞིབ་བཤེར་བྱས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་་རིམ་གྱིས་འདི་བརྒྱུད་དེ་སྒེའུ་ཁུང་ཡོངས་ཀྱི་ནང་དོན་དང་གསང་གྲངས་སོགས་ལ་བལྟ་སྲིད།</string>
+    <string name="permlab_shutdown">ཆ་ཤས་ཁ་རྒྱག་པ།</string>
+    <string name="permdesc_shutdown">བྱ་བྱེད་དོ་དམ་བརྒྱུད་དེ་སྒོ་རྒྱག་པའི་རྣམ་པའི་སྡེ་བཀོལ་བ། རྩ་བ་ནས་ཁ་མི་རྒྱུག་པ། </string>
+    <string name="permlab_stopAppSwitches">ཉེར་སྤྱོད་བྱ་རིམ་བརྗེ་བསྒྱུར་བྱས་མི་ཆོག</string>
+    <string name="permdesc_stopAppSwitches">ཐོ་འགོད་པས་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་ལ་བརྗེ་བསྒྱུར་བྱས་མི་ཆོག</string>
+    <string name="permlab_runSetActivityWatcher">ཉེར་སྤྱོད་བྱ་རིམ་གྱི་བྱ་བྱེད་ཡོངས་ལ་ལྟ་རྟོག་དང་ཁ་ལོ་བྱེད་པ། </string>
+    <string name="permdesc_runSetActivityWatcher">ཉེར་སྤྱོད་བྱ་རིམ་གྱི་ལྟ་རྟོག་མ་ལག་བཀོལ་ནས་བྱ་བྱེད་རྣམ་པ་་ལ་ཁ་ལོ་བསྒྱུར་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་དེ་མ་ལག་ལ་གཏོར་བརླག་དང་། འདི་ནི་གསར་འབྱེད་བྱེད་སྐབས་ཁོ་ནར་མཁོ་བ་ལས་རྒྱུན་ལྡན་ཉེར་སྤྱོད་བྱ་རིམ་ལ་བཀོལ་མི་ཆོག</string>
+    <string name="permlab_broadcastPackageRemoved">སུབ་ཟིན་པའི་རྒྱང་བསྒྲགས་ཀྱི་ཁུག་མ་བསྐུར་བ། </string>
+    <string name="permdesc_broadcastPackageRemoved">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཉེར་སྤྱོད་བྱ་རིམ་གང་རུང་གི་ཁུག་མ་སུབ་པའི་བརྡ་སྦྱོར་རྒྱང་བསྒྲགས་བྱས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་དེ་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་གཏན་དུ་མཚམས་འཇོག་བྱས་ཆོག</string>
+    <string name="permlab_broadcastSmsReceived">འཕྲིན་ཐུང་དུ་ཐོན་པའི་རྒྱང་བསྒྲགས་བསྐུར་བ། </string>
+    <string name="permdesc_broadcastSmsReceived">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འཕྲིན་ཐུང་འབྱོར་བའི་བརྡ་སྦྱོར་རྒྱང་བསྒྲགས་བྱས་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་འབྱོར་བའི་འཕྲིན་ཐུང་རྫུན་མ་ལས་སྲིད། </string>
+    <string name="permlab_broadcastWapPush">WAP-PUSHལ་འབྱོར་བའི་རྒྱང་བསྒྲགས་བསྐུར་བ། </string>
+    <string name="permdesc_broadcastWapPush">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས WAP-PUSH ལ་འབྱོར་བའི་ཆ་འཕྲིན་གྱི་བརྡ་སྦྱོར་ཁྱབ་བསྒྲགས་བྱས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་དེ་གང་འདོད་དུ་ཚོན་འཕྲིན་བསྐུར་བའམ་དྲ་ངོས་ཀྱི་ནང་དོན་སྐོར་ཞིག་བརྗེ་བསྒྱུར་བྱེད་སྲིད། </string>
+    <string name="permlab_setProcessLimit">བྱ་བ་བྱེད་བཞིན་པའི་འཕེལ་རིམ་སྒེར་གྲངས་ལ་ཚོད་འཛིན་བྱེད་པ། </string>
+    <string name="permdesc_setProcessLimit">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བྱ་བ་བྱེད་བཞིན་པའི་འཕེལ་རིམ་སྒེར་གྲངས་ལ་ཚོད་འཛིན་བྱས་ཆོག  སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_setAlwaysFinish">རྒྱབ་ངོས་ཀྱི་ཉེར་སྤྱོད་བྱ་རིམ་ཡོངས་རྫོགས་ཀྱི་ཁ་རྒྱག་པ། </string>
+    <string name="permdesc_setAlwaysFinish">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བྱ་བ་བྱེད་རྒྱབ་ངོས་སུ་བརྒྱུད་མ་ཐག་ཚོད་འཛིན་བྱས་ཆོག  སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_batteryStats">གློག་རྫས་ཀྱི་རྩིས་རྒྱག་ཆ་འཕྲིན་ལ་བཅོས་བསྒྱུར་བྱེད་པ། </string>
+    <string name="permdesc_batteryStats">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བྱ་བ་བྱེད་རྒྱབ་ངོས་སུ་བརྒྱུད་མ་ཐག་ཚོད་འཛིན་བྱས་ཆོག  སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_backup">རྒྱུད་ཁོངས་གྲབས་ཉར་དང་སླར་གསོ་ལ་ཁ་ལོ་བསྒྱུར་བ། </string>
+    <string name="permdesc_backup">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱུད་ཁོངས་གྲབས་ཉར་དང་སླར་གསོ་ལ་ཚོད་འཛིན་བྱས་ཆོག  སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_confirm_full_backup">རྒྱུད་ཁོངས་གྲབས་ཉར་དང་སླར་གསོ་ཡོངས་འགྲུབ་བྱས་པ་གཏན་འཁེལ་བྱེད་པ། </string>
+    <string name="permdesc_confirm_full_backup">ཉེར་སྤྱོད་བྱ་རིམ་འདིས་རྒྱུད་ཁོངས་གྲབས་ཉར་ཡོངས་འགྲུབ་བྱས་པའི་པར་ངོས་མངོན་ཆོག  ཉེར་སྤྱོད་བྱ་རིམ་གང་གིས་ཀྱང་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_internalSystemWindow">བདག་དབང་མེད་པའི་སྒེའུ་ཁུང་མངོན་པ། </string>
+    <string name="permdesc_internalSystemWindow">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནང་ཁུལ་རྒྱུད་ཁོངས་ཐོ་འགོད་པའི་སྒེའུ་ཁུང་བཟོས་ཆོག  སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_systemAlertWindow">རྒྱུད་ཁོངས་ཉེན་བརྡ་མངོན་པ། </string>
+    <string name="permdesc_systemAlertWindow">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱུད་ཁོངས་ཉེན་བརྡ་མངོན་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་ནས་བརྙན་ཡོལ་ལ་གང་འདོད་བྱས་ཆོག</string>
+    <string name="permlab_setAnimationScale">འགུལ་རིས་ཀྱི་མགྱོགས་ཚད་ལ་བཅོས་བསྒྱུར་བྱེད་པ། </string>
+    <string name="permdesc_setAnimationScale">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་རྒྱུན་འགུལ་རིས་ཀྱི་མགྱོགས་ཚད་ལ་བཟོ་བཅོས་བྱས་ཆོག </string>
+    <string name="permlab_manageAppTokens">ཉེར་སྤྱོད་བྱ་རིམ་གྱི་བཀའ་རྟགས་དོ་དམ། </string>
+    <string name="permdesc_manageAppTokens">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རང་གི་བཀའ་རྟགས་ལ་དོ་དམ་དང་གསར་བཟོ། རྒྱུན་ལྡན་ཁ་ཕྱོགས Z བསྐོར་ཆོག  སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_injectEvents">ཐེབ་གནོན་དང་དབང་བསྒྱུར་གནོན་རྟགས། </string>
+    <string product="tablet" name="permdesc_injectEvents">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རང་གི་ནང་འཇུག་བྱ་བྱེད་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་ལ་མཁོ་སྤྲོད་བྱས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་ནས་ལེབ་ངོས་རྩིས་འཁོར་ལ་དབང་བསྒྱུར་བྱེད་ཐུབ། </string>
+    <string product="default" name="permdesc_injectEvents">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རང་གི་ནང་འཇུག་བྱ་བྱེད་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་ལ་མཁོ་སྤྲོད་བྱས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་ནས་ཁ་པར་ལ་དབང་བསྒྱུར་བྱེད་ཐུབ། </string>
+    <string name="permlab_readInputState">ཁྱེད་ཀྱིས་བཏགས་པའི་ནང་དོན་དང་བྱ་བྱེད་ཟིན་ཐོར་འགོད་པ། </string>
+    <string name="permdesc_readInputState">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་མནན་པའི་ཐེབ་གནོན་ལ་ལྟ་ཞིབ་དང་། ཉེར་སྤྱོད་བྱ་རིམ་གཞན་དག་དང་བརྒྱུད་སྤྲོད་བྱེད་དུས་ཀྱང་ལྟ་ཞིབ་བྱས་ཆོག དཔེར་ན། གསང་གྲངས་ནང་འཇུག་ལྟ་བུ། སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_bindInputMethod">བཏགས་ཐབས་གཏན་འཁེལ་བྱེད་པ། </string>
+    <string name="permdesc_bindInputMethod">ཁ་པར་ཐོ་འགོད་པས་བཏགས་ཐབས་ཀྱི་པར་ངོས་གཏན་འཁེལ་བྱས་ཆོག སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_bindTextService">ཡི་གེའི་ཞབས་འདེགས་གཏན་འཁེལ་བྱེད་པ། </string>
+    <string name="permdesc_bindTextService">ཐོ་འགོད་པས་ཡི་གེའི་ཞབས་འདེགས་ཀྱི་ཆེས་མཐོའི་བརྒྱུད་སྒོ་གཏན་འཁེལ་བྱས་ཆོག དཔེར་ན། ཚེག་བརྡར་ཞིབ་བཤེར་ལྟ་བུ། སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_bindVpnService">VPN ཞབས་འདེགས་གཏན་འཁེལ་བྱེད་པ། </string>
+    <string name="permdesc_bindVpnService">ཁ་པར་ཐོ་འགོད་པསVPN ཞབས་འདེགས་ཀྱི་ཆེས་མཐོའི་བརྒྱུད་སྒོ་གཏན་འཁེལ་བྱས་ཆོག སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_bindWallpaper">བརྙན་རིས་གཏན་འཁེལ་བྱེད་པ། </string>
+    <string name="permdesc_bindWallpaper">ཁ་པར་ཐོ་འགོད་པས་བརྙན་རིས་ཀྱི་ཆེས་མཐོའི་པར་ངོས་གཏན་འཁེལ་བྱས་ཆོག སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་མེད། </string>
+    <string name="permlab_bindRemoteViews">སྒེའུ་ཁུང་གི་ཆ་ཤས་ཞབས་འདེགས་གཏན་འཁེལ་བྱེད་པ། </string>
+    <string name="permdesc_bindRemoteViews">ཁ་པར་ཐོ་འགོད་པས་སྒེའུ་ཁུང་གི་ཆ་ཤས་ཆེས་མཐོའི་ཞབས་འདེགས་ཀྱི་པར་ངོས་གཏན་འཁེལ་བྱས་ཆོག སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད། </string>
+    <string name="permlab_bindDeviceAdmin">སྒྲིག་ཆས་དོ་དམ་བྱེད་ཆས་དང་འབྲེལ་བ། </string>
+    <string name="permdesc_bindDeviceAdmin">ཕར་ཕྱོགས་ཀྱིས་སྒྲིག་ཆས་དོ་དམ་བྱེད་ཆས་ལ་བསྐུར་ཆོག སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད།</string>
+    <string name="permlab_setOrientation">བརྙན་ཡོལ་མངོན་པའི་ཁ་ཕྱོགས་བརྗེ་བ། </string>
+    <string name="permdesc_setOrientation">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་རྒྱུན་བརྙན་ཡོལ་གྱི་ཁ་ཕྱོགས་བསྒྱུར་ཆོག  སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་ལ་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད།</string>
+    <string name="permlab_setPointerSpeed">མདའ་རྟགས་ཀྱི་མགྱོགས་ཚད་བརྗེ་བ། </string>
+    <string name="permdesc_setPointerSpeed">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་རྒྱུན་ཙིག་རྟགས་དང་མདའ་རྟགས་ཀྱི་མགྱོགས་ཚད་བརྗེས་ཆོག  སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་ཡང་འདི་བཀོལ་སྤྱོད་བྱེད་པའི་དབང་ཆ་མེད།</string>
+    <string name="permlab_signalPersistentProcesses">ཉེར་སྤྱོད་བྱ་རིམ་ལ Linux བརྡ་རྟགས་བསྐུར་བ། </string>
+    <string name="permdesc_signalPersistentProcesses">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་མཁོ་སྤྲོད་བྱས་པའི་བརྡ་རྟགས་འཕེལ་གྲངས་འཛིན་མཁན་ཡོད་ཚད་ལ་བསྐུར་ཆོག</string>
+    <string name="permlab_persistentActivity">ཉེར་སྤྱོད་བྱ་རིམ་ནམ་ཡང་བཀོལ་སྤྱོད་བྱེད་པ། </string>
+    <string name="permlab_deletePackages">ཉེར་སྤྱོད་བྱ་རིམ་སུབ་པ། </string>
+    <string name="permdesc_deletePackages">ཉེར་སྤྱད་བྱ་རིམ་གྱིས Android ཁུག་མ་གསུབ་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྐབས་འདི་དང་བསྟུན་ཏེ་ཉེར་སྤྱོད་བྱ་རིམ་གལ་ཆེན་གཞན་རྣམས་གསུབ་སྲིད། </string>
+    <string name="permlab_clearAppUserData">ཉེར་སྤྱོད་བྱ་རིམ་གཞན་གྱི་གྲངས་ཀ་སུབ་པ། </string>
+    <string name="permdesc_clearAppUserData">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཐོ་འགོད་པའི་གྲངས་ཀ་གསུབ་ཆོག</string>
+    <string name="permlab_deleteCacheFiles">ཉེར་སྤྱོད་བྱ་རིམ་གཞན་གྱི་གསོག་ཉར་སུབ་པ། </string>
+    <string name="permdesc_deleteCacheFiles">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཉར་བའི་ཡིག་ཆ་གསུབ་ཆོག</string>
+    <string name="permlab_getPackageSize">རྩིས་འཁོར་གྱི་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་གསོག་ཉར་སྟོང་ཆ། </string>
+    <string name="permdesc_getPackageSize">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཚབ་གྲངས་དང་གྲངས་ཀ གསོག་ཉར་ཆེ་ཆུང་སོགས་ལ་ལྟ་རྟོག་བྱས་ཆོག</string>
+    <string name="permlab_installPackages">ཐད་ཀར་ཉེར་སྤྱོད་བྱ་རིམ་སྒྲིག་འཇུག་བྱེད་པ། </string>
+    <string name="permdesc_installPackages">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས Android ཁུག་མ་སྒྲིག་འཇུག་དང་གསར་འབྱེད་བྱས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་འདི་བརྒྱུད་དེ་བདག་དབང་གང་རུང་ཅན་གྱི་ཉེར་སྤྱོད་བྱ་རིམ་སྣོན་སྲིད། </string>
+    <string name="permlab_clearAppCache">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཉར་བའི་གྲངས་ཀ་ཡོད་ཚད་སུབ་པ། </string>
+    <string product="tablet" name="permdesc_clearAppCache">ཉེར་སྤྱོད་བྱ་རིམ་བརྒྱུད་དེ་གསོག་ཉར་བྱས་པའི་དཀར་ཆག་དང་་ཡིག་ཆ་སུབ་སྟེ་ངོས་ལེབ་རྩིས་འཁོར་གྱི་ཤོང་ཚད་སྟོང་ཆ་ཇེ་མཐོར་བཏང་ཆོག རྒྱུད་ཁོངས་འཕེལ་རིམ་ལ་ཚད་བཀག་ནན་མོ་བྱེད་པ། </string>
+    <string product="default" name="permdesc_clearAppCache">ཉེར་སྤྱོད་བྱ་རིམ་བརྒྱུད་དེ་གསོག་ཉར་བྱས་པའི་དཀར་ཆག་དང་་ཡིག་ཆ་སུབ་སྟེ་ངོས་ལེབ་ཁ་པར་གྱི་ཤོང་ཚད་སྟོང་ཆ་ཇེ་མཐོར་བཏང་ཆོག རྒྱུད་ཁོངས་འཕེལ་རིམ་ལ་ཚད་བཀག་ནན་མོ་བྱེད་པ། </string>
+    <string name="permlab_movePackage">ཉེར་སྤྱོད་བྱ་རིམ་ཐོན་ཁུངས་སྤོ་འགུལ་བྱེད་པ། </string>
+    <string name="permdesc_movePackage">ཁ་པར</string>
+    <string name="permlab_readLogs">ཚོར་སྐྱེན་ཐོ་འགོད་གྲངས་ཀ་ལ་ལྟ་ཞིབ་བྱེད་པ། </string>
+    <string product="tablet" name="permdesc_readLogs">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཐོ་འགོད་ཡིག་ཆའི་ནང་གི་ཆ་འཕྲིན་ཡོད་ཚད་བཀླག་ཆོག ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་ལྟར་ཁྱེད་ཀྱི་ངོས་ལེབ་རྩིས་འཁོར་གྱི་སྤྱིར་བཏང་གི་བཀོལ་སྤྱོད་གནས་ཚུལ་དང་། དེའི་ཁྲོད་ཀྱི་མི་སྒེར་གྱི་ཆ་འཕྲིན་དང་གསང་བ་རྙེད་ཐུབ། </string>
+    <string product="default" name="permdesc_readLogs">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཐོ་འགོད་ཡིག་ཆའི་ནང་གི་ཆ་འཕྲིན་ཡོད་ཚད་བཀླག་ཆོག ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་ལྟར་ཁྱེད་ཀྱི་ལག་འཁྱེར་ཁ་པར་གྱི་སྤྱིར་བཏང་གི་བཀོལ་སྤྱོད་གནས་ཚུལ་དང་། དེའི་ཁྲོད་ཀྱི་མི་སྒེར་གྱི་ཆ་འཕྲིན་དང་གསང་བ་རྙེད་ཐུབ། </string>
+    <string name="permlab_anyCodecForPlayback">སྨྱན་གཟུགས་གང་རུང་བཀོལ་ཏེ་སྨྱན་གཟུགས་གཏོང་བ། </string>
+    <string name="permdesc_anyCodecForPlayback">ཉེར་སྤྱོད་བྱ་རིམ་བཀོལ་ཏེ་སྒྲིག་འཇུག་བྱས་པའི་སྨྱན་གཟུགས་ཨང་དགྲོལ་བྱེད་ཆས་ཀྱིས་སྨྱན་གཏོང་གི་ཨང་གྲངས་དགྲོལ་ཆོག</string>
+    <string name="permlab_diagnostic">བརྟག་དཔྱད་ཀྱི་ཐོན་ཁུངས་ཡོད་ཚད་ཀློག་པའམ་འབྲི་བ། </string>
+    <string name="permdesc_diagnostic">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བརྟག་དཔྱད་ཀྱི་ཐོན་ཁུངས་ཡོད་ཚད་འབྲི་ཀློག་བྱས་ཆོག དཔེར་ན། /dev ནང་གི་ཡིག་ཆ་ལྟ་བུ།  འདིས་རྒྱུད་ཁོངས་ཀྱི་གཏན་འཇགས་དང་བདེ་འཇགས་ལ་ཤན་ཐེབས་སྲིད།  འདི་ནི་ཚོང་བདག་ཁོ་ནས་དབང་བ་དང་ཚོང་བདག་གིས་སྲ་སྡེར་གྱི་གནད་དོན་ལ་བརྟག་དཔྱད་བྱེད་ཆས་ཡིན། </string>
+    <string name="permlab_changeComponentState">ཉེར་སྤྱོད་མ་ལག་གི་སྒྲིག་ཆས་བཀོལ་བའམ་བཀོལ་མཚམས་འཇོག་པ། </string>
+    <string product="tablet" name="permdesc_changeComponentState">ཉེར་སྤྱོད་མ་ལག་གིས་ཉེར་སྤྱོད་མ་ལག་གཞན་གྱི་སྒྲིག་ཆས་བཀོལ་མིན་ལ་བཅོས་བསྒྱུར་བཏང་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་དེ་ངོས་ལེབ་རྩིས་འཁོར་གྱི་ནུས་པ་མཚམས་འཇོག་བྱས་ཆོག  བདག་དབང་འདིའི་བཀོལ་སྤྱོད་ལ་ངེས་པར་ནན་ཏན་བྱེད་དགོས། རྒྱུ་མཚན་འདིའི་དབང་གིས་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་སྒྲིག་ཆས་བཀོལ་མི་ཆོག་པའམ་གཏན་འཇགས་མིན་པའི་རྣམ་པར་འགྱུར་ངེས། </string>
+    <string product="default" name="permdesc_changeComponentState">ཉེར་སྤྱོད་མ་ལག་གིས་ཉེར་སྤྱོད་མ་ལག་གཞན་གྱི་སྒྲིག་ཆས་བཀོལ་མིན་ལ་བཅོས་བསྒྱུར་བཏང་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་དེ་ལག་འཁྱེར་ཁ་པར་གྱི་ནུས་པ་མཚམས་འཇོག་བྱས་ཆོག  བདག་དབང་འདིའི་བཀོལ་སྤྱོད་ལ་ངེས་པར་ནན་ཏན་བྱེད་དགོས། རྒྱུ་མཚན་འདིའི་དབང་གིས་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་སྒྲིག་ཆས་བཀོལ་མི་ཆོག་པའམ་གཏན་འཇགས་མིན་པའི་རྣམ་པར་འགྱུར་ངེས། </string>
+    <string name="permlab_setPreferredApplications">ཉེར་སྤྱོད་བྱ་རིམ་གྱི་སྔོན་སྤྱོད་ཇུས་འགོད། </string>
+    <string name="permdesc_setPreferredApplications">ཉེར་སྤྱོད་བྱ་རིམ་གྱི་སྔོན་སྤྱོད་ཇུས་འགོད་ལ་བཅོས་བསྒྱུར་བཏང་ཆོག  </string>
+    <string name="permlab_writeSettings">རྒྱད་ཁོངས་ཚང་མའི་བཅོས་བསྒྱུར་ཇུས་འགོད། </string>
+    <string name="permdesc_writeSettings">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱུད་ཁོངས་བཅོས་བསྒྱུར་ཕྱོགས་ཀྱི་གྲངས་ཀར་བཅོས་བསྒྱུར་བཏང་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་དེ་ཁྱེད་ཀྱི་རྒྱུད་ཁོངས་སྒྲིག་ཆས་ལ་གཏོར་བརླག་གཏོང་ཐུབ། </string>
+    <string name="permlab_writeSecureSettings">བདེ་འཇགས་རྒྱུད་ཁོངས་ཇུས་འགོད་ལ་བཅོས་བསྒྱུར་བྱེད་པ། </string>
+    <string name="permdesc_writeSecureSettings">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱུད་ཁོངས་བདེ་འཇགས་གྲངས་ཀར་བཅོས་བསྒྱུར་བྱས་ཆོག སྤྱིར་བཏང་གི་ཉེར་སྤྱོད་བྱ་རིམ་ལ་འདི་བཀོལ་སྤྱོད་བྱེད་དབང་མེད། </string>
+    <string name="permlab_writeGservices">Google ཞབས་འདེགས་ས་ཁྲར་བཅོས་བསྒྱུར་བྱེད་པ།  </string>
+    <string name="permdesc_writeGservices">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས Google ཞབས་འདེགས་ས་ཁྲར་བཅོས་བསྒྱུར་བྱས་ཆོག སྤྱིར་བཏང་གི་ཉེར་སྤྱོད་བྱ་རིམ་ལ་འདི་བཀོལ་སྤྱོད་བྱེད་དབང་མེད། </string>
+    <string name="permlab_receiveBootCompleted">གློག་སྒོ་ཕྱེས་མ་ཐག་རང་འགུལ་གྱིས་འགུལ་སྐྱོད་བྱེད་པ། </string>
+    <string product="tablet" name="permdesc_receiveBootCompleted">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱུད་ཁོངས་བྱ་བྱེད་འགྲུབ་པ་དང་ལྷན་དུ་རང་འགུལ་འགུལ་བསྐྱོད་བྱས་ཆོག  འདིས་ཁ་པར་གྱི་ཁ་འབྱེད་པའི་ཡུན་ཇེ་རིང་དུ་གཏོང་བ་དང་། ཉེར་སྤྱོད་བྱ་རིམ་རྒྱུན་དུ་བཀོལ་ན་ལག་འཁྱེར་ཁ་པར་གྱི་མགྱོགས་ཚད་ཇེ་དམའ་རུ་བཏང་ཆོག</string>
+    <string product="default" name="permdesc_receiveBootCompleted">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱུད་ཁོངས་བྱ་བྱེད་འགྲུབ་པ་དང་ལྷན་དུ་རང་འགུལ་འགུལ་བསྐྱོད་བྱས་ཆོག  འདིས་ཁ་པར་གྱི་ཁ་འབྱེད་པའི་ཡུན་ཇེ་རིང་དུ་གཏོང་བ་དང་། ཉེར་སྤྱོད་བྱ་རིམ་རྒྱུན་དུ་བཀོལ་ན་ལག་འཁྱེར་ཁ་པར་གྱི་མགྱོགས་ཚད་ཇེ་དམའ་རུ་བཏང་ཆོག</string>
+    <string name="permlab_broadcastSticky">གཏན་འཇགས་རྒྱང་བསྒྲགས་བསྐུར་བ། </string>
+    <string product="tablet" name="permdesc_broadcastSticky">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གཏན་འཇགས་རྒྱང་བསྒྲགས་བསྐུར་ཆོག རྒྱང་བསྒྲགས་རྣམས་བཏང་ཚར་རྗེས་གསོག་ཉར་བྱེད་པ་དང་། གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྐབས་འདི་དང་བསྟུན་ཏེ་ལག་འཁྱེར་ཁ་པར་གྱི་ཤོང་ཚད་མང་པོ་འཛིན་པ་དང་། ཁ་པར་གྱི་མྱུར་ཚད་དང་གཏན་འཇགས་རང་བཞིན་ཇེ་དམའ་རུ་གཏོང་སྲིད། </string>
+    <string product="default" name="permdesc_broadcastSticky">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གཏན་འཇགས་རྒྱང་བསྒྲགས་བསྐུར་ཆོག རྒྱང་བསྒྲགས་རྣམས་བཏང་ཚར་རྗེས་གསོག་ཉར་བྱེད་པ་དང་། གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྐབས་འདི་དང་བསྟུན་ཏེ་ལག་འཁྱེར་ཁ་པར་གྱི་ཤོང་ཚད་མང་པོ་འཛིན་པ་དང་། ཁ་པར་གྱི་མྱུར་ཚད་དང་གཏན་འཇགས་རང་བཞིན་ཇེ་དམའ་རུ་གཏོང་སྲིད། </string>
+    <string name="permlab_readContacts">འབྲེལ་གཏུག་མི་སྣའི་གྲངས་ཀ་ཀློག་པ། </string>
+    <string product="tablet" name="permdesc_readContacts">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་ངོས་ལེབ་རྩིས་འཁོར་ནང་གི་འབྲེལ་གཏུག་མི་སྣ་ཡོད་ཚད་ཀྱི་གྲངས་ཀ་བཀླག་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་དེ་ཁྱེད་ཀྱི་གྲངས་ཀ་མི་གཞན་ལ་བསྐུར་སྲིད། </string>
+    <string product="default" name="permdesc_readContacts">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་ལག་འཁྱེར་ཁ་པར་ནང་གི་འབྲེལ་གཏུག་མི་སྣ་ཡོད་ཚད་ཀྱི་གྲངས་ཀ་བཀླག་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་དེ་ཁྱེད་ཀྱི་གྲངས་ཀ་མི་གཞན་ལ་བསྐུར་སྲིད། </string>
+    <string name="permlab_writeContacts">འབྲེལ་གཏུག་མི་སྣའི་གྲངས་ཀ་འབྲི་བ། </string>
+    <string product="tablet" name="permdesc_writeContacts">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་ངོས་ལེབ་རྩིས་འཁོར་ནང་་གི་འབྲེལ་གཏུག་མི་སྣ་ཡོད་ཚད་ཀྱི་གྲངས་ཀ་གསོག་ཉར་བྱས་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་གྲངས་ཀ་བཅོས་སུབ་བྱེད་ངེས། </string>
+    <string product="default" name="permdesc_writeContacts">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་ལག་འཁྱེར་ཁ་པར་ནང་གི་འབྲེལ་གཏུག་མི་སྣ་ཡོད་ཚད་ཀྱི་གྲངས་ཀ་གསོག་ཉར་བྱས་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་གྲངས་ཀ་བཅོས་སུབ་བྱེད་ངེས། </string>
+    <string name="permlab_readProfile">ཁྱེད་ཀྱི་མི་སྒེར་ཐོན་ཁུངས་ཀྱི་གྲངས་ཀ་ཀློག་པ། </string>
+    <string product="default" name="permdesc_readProfile">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་སྒྲིག་ཆས་ནང་གི་མི་སྒེར་ཆ་འཕྲིན་བཀླག་ཆོག དཔེར་ན། ཁྱེད་ཀྱི་མིང་དང་འབྲེལ་གཏུག་མི་སྣའི་ཆ་འཕྲིན།  དེ་བས་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་ཁྱེད་ཀྱི་ཐོབ་ཐང་ཤེས་ཐུབ་པ་དང་སྒེར་གྱི་རྒྱུ་ཆ་མི་གཞན་ལ་བསྐུར་ཆོག</string>
+    <string name="permlab_writeProfile">ཁྱེད་ཀྱི་མི་སྒེར་རྒྱུ་ཆའི་གྲངས་ཀ་འབྲི་བ། </string>
+    <string product="default" name="permdesc_writeProfile">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་སྒྲིག་ཆས་ནང་གི་མི་སྒེར་ཆ་འཕྲིན་ལ་བཅོས་བསྒྱུར་དང་ཁ་སྣོན་བྱས་ཆོག དཔེར་ན། ཁྱེད་ཀྱི་མིང་དང་འབྲེལ་གཏུག་མི་སྣའི་ཆ་འཕྲིན།  དེ་བས་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་ཁྱེད་ཀྱི་ཐོབ་ཐང་ཤེས་ཐུབ་པ་དང་སྒེར་གྱི་རྒྱུ་ཆ་མི་གཞན་ལ་བསྐུར་ཆོག</string>
+    <string product="default" name="permlab_readSocialStream">ཁྱེད་ཀྱི་ཁ་བརྡའི་བརྙན་རིས་ཀློག་པ། </string>
+    <string product="default" name="permdesc_readSocialStream">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་དང་ཁྱེད་ཀྱི་གྲོགས་པོ་དག་གི་ཉེ་ལམ་འབྲེལ་འདྲིས་གནས་ཚུལ་ལ་བལྟས་ཆོག ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་དང་ཁྱེད་ཀྱི་གྲོགས་པོ་དག་གི་ཕན་ཚུན་བར་གྱི་ཁ་བརྡའི་ཆ་འཕྲིན་ལ་བལྟ་ཐུབ། </string>
+    <string product="default" name="permlab_writeSocialStream">ཁྱེད་ཀྱི་ཁ་བརྡའི་བརྙན་རིས་འབྲི་བ། </string>
+    <string product="default" name="permdesc_writeSocialStream">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གྲོགས་པོ་རྣམས་ཀྱི་ཉེ་ལམ་ཁ་བརྡའི་གནས་ཚུལ་མངོན་ཐུབ།  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་དེ་ཁྱེད་ཀྱི་གྲོགས་པོར་བརྫུས་ནས་ཁྱེད་ཀྱི་གསང་གྲངས་དང་གསང་བ་ལེན་ཐབས་བྱེད་སྲིད། </string>
+    <string name="permlab_readCalendar">ཉིན་རྒྱུན་བྱ་འགུལ་དང་གསང་བའི་ཆ་འཕྲིན་ཀློག་པ། </string>
+    <string product="tablet" name="permdesc_readCalendar">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་དང་ཁྱེད་ཀྱི་གྲོགས་པོ་རྣམས་ཀྱི་ཉིན་རྒྱུན་བྱ་འགུལ་ངོས་ལེབ་རྩིས་འཁོར་ནང་གསོག་ཉར་བྱས་ཆོག  འདིའི་བདག་དབང་ཡོད་པའི་གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བདག་དབང་འཛིན་མཁན་ལ་མི་མངོན་པར་བྱས་ཏེ་ཉིན་རྒྱུན་ཆ་འཕྲིན་རྣམས་ལེན་སྲིད། </string>
+    <string product="default" name="permdesc_readCalendar">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་དང་ཁྱེད་ཀྱི་གྲོགས་པོ་རྣམས་ཀྱི་ཉིན་རྒྱུན་བྱ་འགུལ་ལག་འཁྱེར་ཁ་པར་ནང་གསོག་ཉར་བྱས་ཆོག  འདིའི་བདག་དབང་ཡོད་པའི་གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བདག་དབང་འཛིན་མཁན་ལ་མི་མངོན་པར་བྱས་ཏེ་ཉིན་རྒྱུན་ཆ་འཕྲིན་རྣམས་ལེན་སྲིད། </string>
+    <string name="permlab_writeCalendar">ཉིན་རྒྱུན་བྱ་འགུལ་ལ་སྣོན་སུབ་བྱེད་པ་དང་། བདག་དབང་འཛིན་མཁན་ལ་མི་མངོན་པར་བྱས་ཏེ་གློག་རྡུལ་ཡིག་ཟམ་བསྐུར་རྒྱུའི་རེ་ཞུ་བྱས་ཆོག</string>
+    <string name="permlab_accessMockLocation">ལད་ཟློས་ས་གནས་ཐོན་ཁུངས་བཀོལ་ནས་ཚོད་ལྟ་བྱེད་པ། </string>
+    <string name="permdesc_accessMockLocation">ལས་ཟློས་ས་གནས་ཐོན་ཁུངས་བཟོས་ཏེ་ཚོད་ལྟ་བྱེད་པ། གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བཀོལ་ཏེ་ས་གནས་ངོ་མའི་གནས་ཡུལ་དང་རྣམ་པ་སོགས་འགེབ་སྲིད། </string>
+    <string name="permlab_accessLocationExtraCommands">ས་གནས་གཞན་གྱི་ཆ་འཕྲིན་བླངས་ཏེ་བྱ་རིམ་བཀོད་འདོམ་བྱེད་པ། </string>
+    <string name="permdesc_accessLocationExtraCommands">ས་གནས་གཞན་གྱི་ཆ་འཕྲིན་བླངས་ཏེ་བྱ་རིམ་བཀོད་འདོམ་བྱེད་པ། གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་དེ GPS དང་གནས་ཡུལ་གཞན་པའི་བྱ་བྱེད་བར་ཆད་བྱེད་ངེས། </string>
+    <string name="permlab_installLocationProvider">སྒྲིག་འཇུག་གནས་ཡུལ་ཆ་འཕྲིན་མཁོ་སྤྲོད་བྱས་ཆོག</string>
+    <string name="permdesc_installLocationProvider">\'ལས་ཟློས་ས་གནས་ཐོན་ཁུངས་བཟོས་ཏེ་ཚོད་ལྟ་བྱེད་པ། གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བཀོལ་ཏེ་ས་གནས་ངོ་མའི་གནས་ཡུལ་དང་རྣམ་པ་སོགས་འགེབ་སྲིད། ཡང་ན་ཁྱེད་ཀྱི་གནས་ཡུལ་ལ་ལྟ་རྟོག་དང་མི་གཞན་ལ་མཁོ་སྤྲོད་བྱེད་ངེས། </string>
+    <string name="permlab_accessFineLocation">ཡང་དག་པའི (GPS) གནས་ཡུལ། </string>
+    <string product="tablet" name="permdesc_accessFineLocation">ཡང་དག་པའི་གནས་ཡུལ་ལ་བལྟ་བ། དཔེར་ན། ངོས་ལེབ་རྩིས་འཁོར་སྟེང་གི་འཛམ་གླིང་གནས་ཡུལ་གཏན་འཁེལ་བྱེད་ཆས། གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་ཁྱེད་ཀྱི་གནས་ཡུལ་གཏན་འཁེལ་དང་།  གློག་རྫས་ཀྱི་ནུས་ཚད་ཇེ་དམའ་རུ་འགྲོ་སྲིད། </string>
+    <string product="default" name="permdesc_accessFineLocation">ཡང་དག་པའི་གནས་ཡུལ་ལ་བལྟ་བ། དཔེར་ན། ལག་འཁྱེར་ཁ་པར་སྟེང་གི་འཛམ་གླིང་གནས་ཡུལ་གཏན་འཁེལ་བྱེད་ཆས། གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བརྒྱུད་ཁྱེད་ཀྱི་གནས་ཡུལ་གཏན་འཁེལ་དང་།  གློག་རྫས་ཀྱི་ནུས་ཚད་ཇེ་དམའ་རུ་འགྲོ་སྲིད། </string>
+    <string name="permlab_accessCoarseLocation">(དྲ་རྒྱ་གཙོ་བྱས་པའི)གནས་ཡུལ་རགས་མོ། </string>
+    <string name="permlab_accessSurfaceFlinger">SurfaceFlinger ལ་བལྟ་བ། </string>
+    <string name="permdesc_accessSurfaceFlinger">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས SurfaceFlinger གྱི་དམའ་རིམ་ནུས་པ་བཀོལ་ཆོག</string>
+    <string name="permlab_readFrameBuffer">ལྷོད་གཏོང་ཁུལ་གྱི་ཆ་འཕྲིན་ཀློག་པ། </string>
+    <string name="permdesc_readFrameBuffer">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ལྷོད་གཏོང་ཁུལ་གྱི་ཆ་འཕྲིན་ནང་དོན་བཀླག་ཆོག</string>
+    <string name="permlab_modifyAudioSettings">ཁྱེད་ཀྱི་སྒྲ་ཟློས་ཇུས་འགོད་བཅོས་བསྒྱུར་བྱེད་པ། </string>
+    <string name="permdesc_modifyAudioSettings">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱུད་ཁོངས་ཡོངས་ཀྱི་སྒྲ་ཟློས་ཇུས་འགོད་བཅོས་བསྒྱུར་བྱས་ཆོག དཔེར་ན། སྒྲ་ཚད་དང་བརྒྱུད་ལམ། </string>
+    <string name="permlab_recordAudio">སྒྲ་ཕབ། </string>
+    <string name="permdesc_recordAudio">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྒྲ་ཕབ་བརྒྱུད་ལམ་ལ་བལྟས་ཆོག</string>
+    <string name="permlab_camera">པར་དང་བརྙན་ལེན་པ། </string>
+    <string name="permdesc_camera">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་པར་ལེན་འཕྲུལ་ཆས་བརྒྱུད་དེ་པར་དང་བརྙན་བླངས་ཆོག ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནམ་རྒྱུན་པར་ཁོངས་ནས་འདྲ་པར་བསྡུ་ལེན་བྱས་ཆོག</string>
+    <string product="tablet" name="permlab_brick">གཏན་དུ་ངོས་ལེབ་རྩིས་འཁོར་བཀོལ་སྤྱོད་བྱེད་མཚམས་འཇོག་པ།</string>
+    <string product="default" name="permlab_brick">གཏན་དུ་ལག་འཁྱེར་ཁ་པར་བཀོལ་མཚམས་འཇོག་པ། </string>
+    <string product="tablet" name="permdesc_brick">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་དུས་གཏན་དུ་ངོས་ལེབ་རྩིས་འཁོར་བཀོལ་མཚམས་བཞག་ཆོག འོན་ཀྱང་བྱ་རིམ་འདིར་ཉེན་ཁ་ཆེ།</string>
+    <string product="default" name="permdesc_brick">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་དུས་གཏན་དུ་ལག་འཁྱེར་ཁ་པར་བཀོལ་མཚམས་བཞག་ཆོག འོན་ཀྱང་བྱ་རིམ་འདིར་ཉེན་ཁ་ཆེ།</string>
+    <string product="tablet" name="permlab_reboot">བཙན་ཤུགས་ཀྱིས་ངོས་ལེབ་རྩིས་འཁོར་གྱི་སྒོ་བསྐྱར་དུ་འབྱེད་པ། </string>
+    <string product="default" name="permlab_reboot">བཙན་ཤུགས་ཀྱིས་ལག་འཁྱེར་ཁ་པར་གྱི་སྒོ་བསྐྱར་དུ་འབྱེད་པ། </string>
+    <string product="tablet" name="permdesc_reboot">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བཙན་ཤུགས་སྒོས་ངོས་ལེབ་རྩིས་འཁོར་གྱི་སྒོ་བསྐྱར་དུ་ཕྱེས་ཆོག</string>
+    <string product="default" name="permdesc_reboot">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བཙན་ཤུགས་སྒོས་ལག་འཁྱེར་ཁ་པར་གྱི་སྒོ་བསྐྱར་དུ་ཕྱེས་ཆོག</string>
+    <string name="permdesc_mount_unmount_filesystems">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྤོ་འགུལ་གསོག་ཉར་བྱེད་ཆས་སུ་ཡིག་ཆའི་རྒྱུད་ཁོངས་དོར་ལེན་བྱས་ཆོག </string>
+    <string name="permdesc_mount_format_filesystems">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཕྱི་ངོས་གསོག་ཉར་བྱེད་ཆས་རྣམ་པར་བཞག་ཆོག</string>
+    <string name="permlab_asec_access">འབྲེལ་ཡོད་ནང་ཁུལ་གསོག་ཉར་བྱེད་ཆས་ཀྱི་ཆ་འཕྲིན་ལེན་པ། </string>
+    <string name="permdesc_asec_access">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འབྲེལ་ཡོད་ནང་ཁུལ་གསོག་ཉར་བྱེད་ཆས་ཀྱི་ཆ་འཕྲིན་བླངས་ཆོག</string>
+    <string name="permlab_asec_create">ནང་ཁུལ་གསོག་ཉར་བྱེད་ཆས་གསར་བཟོ་བྱེད་པ། </string>
+    <string name="permdesc_asec_create">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནང་ཁུལ་གསོག་ཉར་བྱེད་ཆས་གསར་བཟོ་བྱས་ཆོག</string>
+    <string name="permlab_asec_destroy">ནང་ཁུལ་གསོག་ཉར་བྱེད་ཆས་མེད་པར་བཟོ་བ། </string>
+    <string name="permdesc_asec_destroy">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནང་ཁུལ་གསོག་ཉར་བྱེད་ཆས་མེད་པར་བཟོས་ཆོག</string>
+    <string name="permlab_asec_mount_unmount">ནང་ཁུལ་གསོག་ཉར་བྱེད་ཆས་དོར་ལེན་བྱེད་པ། </string>
+    <string name="permdesc_asec_mount_unmount">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནང་ཁུལ་གསོག་ཉར་བྱེད་ཆས་དོར་ལེན་བྱས་ཆོག</string>
+    <string name="permlab_asec_rename">ནང་ཁུལ་གསོག་ཉར་བྱེད་ཆས་ལ་མིང་བསྐྱར་དུ་འདོགས་པ། </string>
+    <string name="permdesc_asec_rename">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ནང་ཁུལ་གསོག་ཉར་བྱེད་ཆས་ལ་མིང་བསྐྱར་དུ་བཏགས་ཆོག</string>
+    <string name="permlab_vibrate">འདར་འགུལ་ཆས་ལ་ཚོད་འཛིན་བྱེད་པ། </string>
+    <string name="permdesc_vibrate">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདར་འགུལ་ཆས་ལ་ཚོད་འཛིན་བྱས་ཆོག</string>
+    <string name="permlab_flashlight">འོད་འཁྱུག་གློག་ལ་ཚོད་འཛིན་བྱེད་པ། </string>
+    <string name="permdesc_flashlight">\'ཉེར་སྤྱོད་བྱ་རིམ་གྱིསའོད་འཁྱུག་གློག་ལ་ཚོད་འཛིན་བྱས་ཆོག</string>
+    <string name="permlab_manageUsb">USB ཡི་ཇུས་འགོད་དང་བདག་དབང་ལ་དོ་དམ་བྱེད་པ། </string>
+    <string name="permdesc_manageUsb">\'ཉེར་སྤྱོད་བྱ་རིམ་གྱིསUSB ཡི་ཇུས་འགོད་དང་བདག་དབང་ལ་དོ་དམ་བྱས་ཆོག</string>
+    <string name="permlab_accessMtp">ཉེར་སྤྱོད MTP གྲོས་ཆོད། </string>
+    <string name="permdesc_accessMtp">\'ཉེར་སྤྱོད་བྱ་རིམ་གྱིས MTP གྱི་སྐུལ་བྱེད་བྱ་རིམ་ལ་བལྟས་ཆོག་པ་དང་། MTP USB གྲོས་ཆོད་བཀོལ་ཆོག </string>
+    <string name="permlab_hardware_test">སྲ་སྡེར་ཚོད་ལྟ་བྱེད་པ། </string>
+    <string name="permdesc_hardware_test">\'ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཕྱི་ངོས་སྒྲིག་ཆས་དང་སྲ་སྡེར་ལ་ཚོད་ལྟ་བྱས་ཆོག</string>
+    <string name="permlab_callPhone">ཐད་ཀར་ཁ་པར་ཨང་གྲངས་གནོན་པ། </string>
+    <string name="permdesc_callPhone">\'ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཉིད་མེད་པའི་སྐབས་སུ་ཁ་པར་བཏང་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་དང་བསྟུན་ཏེ་ཁྱེད་ཀྱི་བཤད་གླ་ཐོ་ཡིག་སྟེང་བཤད་གླ་གཞན་པ་བཟོ་ཐུབ།  མཉམ་འཇོག་དགོས་པ་ཞིག་ལ་ཉེར་སྤྱོད་བྱ་རིམ་འདི་ལ་ཛ་དྲག་མྱུར་སྐྱོབ་ཁ་པར་གཏོང་དབང་མེད། </string>
+    <string name="permlab_callPrivileged">ཐད་ཀར་ཁ་པར་ཨང་གྲངས་གང་རུང་གནོན་པ། </string>
+    <string name="permdesc_callPrivileged">\'ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཉིད་མེད་པའི་སྐབས་སུ་ཁ་པར་བཏང་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་དང་བསྟུན་ཏེ་མྱུར་སྐྱོབ་ལྟེ་གནས་ཁག་ལ་བར་ཆད་དང་ཁྲིམས་འགལ་ཁ་པར་གཏོང་སྲིད། </string>
+    <string product="tablet" name="permlab_performCdmaProvisioning">ཐད་ཀར CDMAངོས་ལེབ་རྩིས་འཁོར་ཇུས་འགོད་འགོ་སློང་བ། </string>
+    <string product="default" name="permlab_performCdmaProvisioning">ཐད་ཀརCDMA ཁ་པར་ཇུས་འགོད་འགོ་སློང་བ། </string>
+    <string name="permdesc_performCdmaProvisioning">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས CDMA ཞབས་འདེགས་མགོ་བརྩམས་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས CDMA ཞབས་འདེགས་ལེགས་འགྲུབ་མེད་པའི་ངང་མགོ་རྩོམ་སྲིད། </string>
+    <string name="permlab_locationUpdates">གནས་ཡུལ་གསར་བའི་བརྡ་སྤྱོར་ལ་ཚོད་འཛིན་བྱེད་པ། </string>
+    <string name="permdesc_locationUpdates">སྒྲ་སྡུད་འཕྲུལ་ཆས་ཀྱི་གནས་ཡུལ་གསར་བའི་བརྡ་སྦྱོར་བཀོལ་བའམ་བཀོལ་མཚམས་བཞག་ཆོག སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་ལ་འདིའི་བདག་དབང་མེད། </string>
+    <string name="permlab_checkinProperties">ལྟ་ཞིབ་རང་བཞིན་ལ་བལྟ་བ། </string>
+    <string name="permdesc_checkinProperties">ལྟ་ཞིབ་རང་བཞིན་ལ་འབྲི་ཀློག་ལྟ་གསུམ་བྱས་ཆོག སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་ལ་འདིའི་བདག་དབང་མེད། </string>
+    <string name="permlab_bindGadget">སྒེའུ་ཁུང་ཆ་ཤས་ཆུང་བ་འདེམ་པ། </string>
+    <string name="permdesc_bindGadget">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱུད་ཁོངས་ལ་ཉེར་སྤྱོད་བྱ་རིམ་གང་གིས་སྒེའུ་ཁུང་ཆ་ཤས་ཆུང་བ་བཀོལ་ཐུབ་བཤད་ཆོག  བདག་དབང་འདི་ཡོད་པའི་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཉེར་སྤྱོད་བྱ་རིམ་གཞན་གྱི་སྒེར་གྱི་གྲངས་ཀ་ལ་བལྟ་ཐུབ།  སྤྱིར་བཏང་ཉེར་སྤྱོད་བྱ་རིམ་ལ་འདིའི་བདག་དབང་མེད། </string>
+    <string name="permlab_modifyPhoneState">ལག་འཁྱེར་ཁ་པར་རྣམ་པ་བཅོས་བསྒྱུར་བྱེད་པ། </string>
+    <string name="permdesc_modifyPhoneState">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྒྲིག་ཆས་ཁ་པར་ནུས་པར་ཚོད་འཛིན་བྱས་ཆོག བདག་དབང་འདི་ཡོད་པའི་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གང་འདོད་དུ་དྲ་རྒྱ་བརྗེ་བའམ་སྐུད་མེད་བརྡ་རྟགས་ཀྱི་སྒོ་ཕྱེ་རྒྱག་བྱེད་ཐུབ་པ་དང་། ཁྱེད་ལ་བརྡ་སྦྱོར་མི་གཏོང་། </string>
+    <string name="permlab_readPhoneState">ལག་འཁྱེར་ཁ་པར་གྱི་རྣམ་པ་དང་ཐོབ་ཐང་ཀློག་པ། </string>
+    <string name="permdesc_readPhoneState">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྒྲིག་ཆས་ལག་འཁྱེར་ཁ་པར་ནུས་པར་ཚོད་འཛིན་བྱས་ཆོག བདག་དབང་འདི་ཡོད་པའི་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གང་འདོད་དུ་ཁ་པར་གྱི་ཨང་གྲངས་དང་གོ་རིམ། ཁ་བརྡ་བྱེད་མིན། ཁ་བརྡ་བྱེད་ཡུལ་གྱི་ཨང་གྲངས་སོགས་ལ་བལྟ་ཐུབ།</string>
+    <string product="tablet" name="permlab_wakeLock">ངོས་ལེབ་རྩིས་འཁོར་གཉིད་པའི་རྣམ་པར་འགྲོ་བ་བཀག་འགོག་བྱེད་པ། </string>
+    <string product="default" name="permlab_wakeLock">ཁ་པར་གཉིད་པའི་རྣམ་པར་འགྲོ་བ་བཀག་འགོག་བྱེད་པ། </string>
+    <string product="tablet" name="permdesc_wakeLock">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ངོས་ལེབ་རྩིས་འཁོར་གཉིད་པའི་རྣམ་པར་འགྲོ་བ་བཀག་འགོག་བྱས་ཆོག</string>
+    <string product="default" name="permdesc_wakeLock">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁ་པར་གཉིད་པའི་རྣམ་པར་འགྲོ་བ་བཀག་འགོག་བྱས་ཆོག</string>
+    <string product="tablet" name="permlab_devicePower">ངོས་ལེབ་རྩིས་འཁོར་གྱི་ཁ་འབྱེད་པ་དང་རྒྱག་པ། </string>
+    <string product="default" name="permlab_devicePower">ཁ་འབྱེད་པ་དང་རྒྱག་པ། </string>
+    <string product="tablet" name="permdesc_devicePower">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ངོས་ལེབ་རྩིས་འཁོར་ཁ་འབྱེད་པ་དང་བརྒྱབ་ཆོག</string>
+    <string product="default" name="permdesc_devicePower">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ལག་འཁྱེར་ཁ་པར་གྱི་ཁ་འབྱེད་པ་དང་བརྒྱབ་ཆོག</string>
+    <string name="permlab_factoryTest">བཟོ་གྲྭ་ནས་ཚོད་ལྟ་བྱེད་པའི་རྣམ་པ་ལྟར་ཁ་འབྱེད་པ། </string>
+    <string product="tablet" name="permdesc_factoryTest">དམའ་རིམ་ཚོང་བདག་གིས་ཚོད་ལྟའི་རྣམ་པ་ལྟར་ཁ་འབྱེད་པ་དང་། ངོས་ལེབ་རྩིས་འཁོར་གྱི་སྲ་ཆས་གཞན་པ་ཡོངས་ལ་བལྟས་ཆོག  བདག་དབང་འདི་ནི་ངོས་ལེབ་རྩིས་འཁོར་བཟོ་མཁན་གྱི་ཚོང་བས་ཚོད་ལྟའི་རྣམ་པ་ལྟར་མ་གཏོགས་བཀོལ་མི་ཆོག</string>
+    <string product="default" name="permdesc_factoryTest">དམའ་རིམ་ཚོང་བདག་གིས་ཚོད་ལྟའི་རྣམ་པ་ལྟར་ཁ་འབྱེད་པ་དང་། ལག་འཁྱེར་ཁ་པར་གྱི་སྲ་ཆས་གཞན་པ་ཡོངས་ལ་བལྟས་ཆོག  བདག་དབང་འདི་ནི་ངོས་ལེབ་རྩིས་འཁོར་བཟོ་མཁན་གྱི་ཚོང་བས་ཚོད་ལྟའི་རྣམ་པ་ལྟར་མ་གཏོགས་བཀོལ་མི་ཆོག</string>
+    <string name="permlab_setWallpaper">རྩིག་ཤོག་སྒྲིག་འགོད།</string>
+    <string name="permdesc_setWallpaper">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱུད་ཁོངས་བརྙན་རིས་ལ་ཇུས་འགོད་བྱས་ཆོག</string>
+    <string name="permlab_setWallpaperHints">བརྙན་རིས་ཀྱི་ཆེ་ཆུང་སྟོན་བྱེད་ལ་ཇུས་འགོད་བྱེད་པ། </string>
+    <string name="permdesc_setWallpaperHints">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་བརྙན་རིས་ཀྱི་ཆེ་ཆུང་སྟོན་བྱེད་ལ་ཇུས་འགོད་བྱས་ཆོག </string>
+    <string name="permlab_masterClear">རྒྱུད་ཁོངས་བཟོ་གྲྭ་ནས་ཐོན་པའི་རྣམ་པར་སླར་གསོ་བྱེད་པ། </string>
+    <string name="permdesc_masterClear">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱུད་ཁོངས་བཟོ་གྲྭ་ནས་ཐོན་པའི་རྣམ་པར་སླར་གསོ་བྱས་ཆོག་པ་དང་། སྒྲིག་འཇུག་བྱས་པའི་ཉེར་སྤྱོད་མ་ལག་དང་གྲངས་ཀ་སོགས་ཚང་མ་མེད་པར་བཏང་ཆོག</string>
+    <string name="permlab_setTime">དུས་ཚོད་སྒྲི་འགོད།</string>
+    <string product="tablet" name="permdesc_setTime">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ངོས་ལེབ་རྩིས་འཁོར་གྱི་དུས་ཚོད་ལ་བཅོས་བསྒྱུར་བྱས་ཆོག</string>
+    <string product="default" name="permdesc_setTime">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ལག་འཁྱེར་ཁ་པར་གྱི་དུས་ཚོད་ལ་བཅོས་བསྒྱུར་བྱས་ཆོག</string>
+    <string name="permlab_setTimeZone">དུས་ཁུལ་ཇུས་འགོད། </string>
+    <string product="tablet" name="permdesc_setTimeZone">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ངོས་ལེབ་རྩིས་འཁོར་གྱི་དུས་ཁུལ་ལ་བཅོས་བསྒྱུར་བྱས་ཆོག</string>
+    <string product="default" name="permdesc_setTimeZone">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ལག་འཁྱེར་ཁ་པར་གྱི་དུས་ཁུལ་ལ་བཅོས་བསྒྱུར་བྱས་ཆོག</string>
+    <string name="permlab_accountManagerService">AccountManagerServiceལྟར་མགོ་རྩོམ་པ། </string>
+    <string name="permdesc_accountManagerService">ཉེར་སྤྱོད་བྱ་རིམ་གྱིསAccountManagerService ལ་འབོད་བརྡ་བཏང་ཆོག</string>
+    <string name="permlab_getAccounts">ཤེས་ཟིན་པའི་རྩིས་ཐོ་གསར་རྙེད་བྱེད་པ། </string>
+    <string product="tablet" name="permdesc_getAccounts">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ངོས་ལེབ་རྩིས་འཁོར་གྱིས་ཤེས་ཟིན་པའི་རྩིས་ཐོའི་རེའུ་མིག་བླངས་ཆོག</string>
+    <string product="default" name="permdesc_getAccounts">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ལག་འཁྱེར་ཁ་པར་གྱིས་ཤེས་ཟིན་པའི་རྩིས་ཐོའི་རེའུ་མིག་བླངས་ཆོག</string>
+    <string name="permlab_authenticateAccounts">རྩིས་ཐོའི་ཐོབ་ཐང་གིས་རྒྱུད་ཁོངས་ལ་ཞིབ་བཤེར་བྱེད་པ། </string>
+    <string name="permdesc_authenticateAccounts">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས AccountManagerབཀོལ་ཏེ་རྩིས་ཐོའི་ཐོབ་ཐང་གིས་རྒྱུད་ཁོངས་ནུས་པར་ཞིབ་བཤེར་དང་། རྩིས་ཐོ་བཟོ་བ་དང་ལེན་པ། གསང་གྲངས་ཇུས་འགོད་སོགས་བྱས་ཆོག</string>
+    <string name="permlab_manageAccounts">རྩིས་ཐོའི་རེའུ་མིག་ལ་དོ་དམ་བྱེད་པ། </string>
+    <string name="permdesc_manageAccounts">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྩིས་ཐོ་སྣོན་པ་དང་སུབ་པ། གསང་གྲངས་བརྗེ་བ་སོགས་ལག་བསྟར་བྱས་ཆོག</string>
+    <string name="permlab_useCredentials">རྩིས་ཐོའི་ཐོབ་ཐང་གི་ཞིབ་བཤེར་དཔང་ཡིག་བཀོལ་བ། </string>
+    <string name="permdesc_useCredentials">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཐོབ་ཐང་ཞིབ་བཤེར་གྱི་རྟགས་མཚན་སྟོན་པའི་རེ་ཞུ་བཏོན་ཆོག</string>
+    <string name="permlab_accessNetworkState">དྲ་རྒྱའི་རྣམ་པར་བལྟ་བ། </string>
+    <string name="permdesc_accessNetworkState">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་དྲ་རྒྱའི་རྣམ་པར་བལྟས་ཆོག</string>
+    <string name="permlab_createNetworkSockets">དྲ་རྒྱ་བཀོལ་བའི་བདག་དབང་ཡོངས་རྫོགས། </string>
+    <string name="permdesc_createNetworkSockets">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་དྲ་རྒྱ་འཁོར་མིག་གསར་བཟོ་བྱས་ཆོག</string>
+    <string name="permlab_writeApnSettings">དྲ་རྒྱ་ཇུས་འགོད་དང་དྲ་རྒྱུན་ལ་བཟོ་བཅོས་དང་བཀག་འགོག་བྱེད་པ། </string>
+    <string name="permdesc_writeApnSettings">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་དྲ་རྒྱའི་ཇུས་འགོད་དང་དྲ་རྒྱུན་ལ་བཟོ་བཅོས་དང་བཀག་འགོག་བྱས་ཆོག  དཔེར་ན། APN གྱི་ཚབ་མ་དང་མཐུད་སྣེ་ལ་བཅོས་བསྒྱུར་བྱེད་པ།  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ལ་མི་མངོན་པར་བྱས་ཏེ་དྲ་རྒྱའི་གྲངས་ཁུག་ལ་ལྟ་རྟོག་དང་བཟོ་བཅོས་བྱེད་ཐུབ། </string>
+    <string name="permlab_changeNetworkState">དྲ་རྒྱའི་འབྲེལ་མཐུད་རང་བཞིན་ལ་བཅོས་བསྒྱུར་བྱེད་པ། </string>
+    <string name="permdesc_changeNetworkState">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་དྲ་རྒྱའི་འབྲེལ་མཐུད་ཀྱི་རྣམ་པར་བཅོས་བསྒྱུར་བྱས་ཆོག</string>
+    <string name="permlab_changeTetherState">དྲ་རྒྱའི་མཉམ་སྤྱོད་འབྲེལ་མཐུད་བརྗེ་བ། </string>
+    <string name="permdesc_changeTetherState">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་དྲ་རྒྱའི་མཉམ་སྤྱོད་བྱེད་དུས་ཀྱི་འབྲེལ་མཐུད་རྣམ་པ་བརྗེ་ཆོག</string>
+    <string name="permlab_changeBackgroundDataSetting">རྒྱབ་ངོས་གྲངས་ཀའི་བཀོལ་སྤྱོད་ཇུས་འགོད་བརྗེ་བ། </string>
+    <string name="permdesc_changeBackgroundDataSetting">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་རྒྱབ་ངོས་གྲངས་ཀའི་བཀོལ་སྤྱོད་ཇུས་འགོད་བརྗེ་ཆོག </string>
+    <string name="permlab_accessWifiState">WLAN རྣམ་པར་བལྟ་བ། </string>
+    <string name="permdesc_accessWifiState">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས WLAN རྣམ་པར་བལྟས་ཆོག</string>
+    <string name="permlab_changeWifiState">WLAN རྣམ་པ་བརྗེ་བ། </string>
+    <string name="permdesc_changeWifiState">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས WLAN མཐུད་སྣེ་འབྲེལ་མཐུད་བྱས་ཆོག་ལ་དོར་ཡང་ཆོག་པ་དང་། WLAN དྲ་རྒྱར་བཟོ་བཅོས་ཀྱང་བྱས་ཆོག</string>
+    <string name="permlab_changeWifiMulticastState">WLAN སྣ་མང་བསྡུ་ལེན་བྱས་ཆོག</string>
+    <string name="permlab_accessWimaxState">WiMAX རྣམ་པར་བལྟ་བ། </string>
+    <string name="permdesc_accessWimaxState">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས WiMAX རྣམ་པའི་ཆ་འཕྲིན་ལ་བལྟས་ཆོག</string>
+    <string name="permlab_changeWimaxState">WiMAX རྣམ་པ་བརྗེ་བ། </string>
+    <string name="permlab_bluetoothAdmin">སོ་སྔོན་ལག་རྩལ་གྱི་དོ་དམ། </string>
+    <string product="tablet" name="permdesc_bluetoothAdmin">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ངོས་ལེབ་རྩིས་འཁོར་གྱི་ས་གནས་སོ་སྔོན་ལག་རྩལ་བཀོལ་ཏེ་རྒྱང་རིང་སྒྲིག་ཆས་དང་འབྲེལ་ཆོག</string>
+    <string product="default" name="permdesc_bluetoothAdmin">\'ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ལག་འཁྱེར་ཁ་པར་གྱི་ས་གནས་སོ་སྔོན་ལག་རྩལ་བཀོལ་ཏེ་རྒྱང་རིང་སྒྲིག་ཆས་དང་འབྲེལ་ཆོག</string>
+    <string name="permlab_bluetooth">སོ་སྔོན་ལག་རྩལ་འབྲེལ་མཐུད་གསར་བཟོ་བྱེད་པ། </string>
+    <string product="tablet" name="permdesc_bluetooth">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁ་པར་གྱི་སོ་སྔོན་ལག་རྩལ་སྒྲིག་ཆས་ལ་ལྟ་ཞིབ་དང་། སྒྲིག་ཆས་གཞན་ལ་འབྲེལ་མཐུད་དང་གཞན་གྱི་འབྲེལ་མཐུད་དང་ལེན་བྱས་ཆོག</string>
+    <string product="default" name="permdesc_bluetooth">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁ་པར་གྱི་སོ་སྔོན་ལག་རྩལ་སྒྲིག་ཆས་ལ་ལྟ་ཞིབ་དང་། སྒྲིག་ཆས་གཞན་ལ་འབྲེལ་མཐུད་དང་གཞན་གྱི་འབྲེལ་མཐུད་དང་ལེན་བྱས་ཆོག</string>
+    <string name="permlab_nfc">ཐག་ཆེས་ཉེ་བའི་བརྡ་འཕྲིན་ལ་ཚོད་འཛིན་བྱེད་པ། </string>
+    <string name="permdesc_nfc">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཐག་ཆེས་ཉེ་བའི(NFC)རྟགས་བྱང་དང་བྱང་བུ། བྱང་བུ་ཀློག་ཆས་བཅས་ལ་བརྡ་འཕྲིན་བཏང་ཆོག</string>
+    <string name="permlab_disableKeyguard">ཐེབ་ཟྭ་མཚམས་འཇོག་པ། </string>
+    <string name="permdesc_disableKeyguard">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཐེབ་ཟྭ་དང་འབྲེལ་ཡོད་བདེ་འཇགས་གསང་གྲངས་ཡོདཚད་ལ་ཇུས་འགོད་བྱས་ཆོག  དཔེར་ན། ཁྱེད་ཀྱི་ཁ་པར་ལེན་སྐབས་དང་ཁ་བརྡ་མཚམས་འཇོག་པའི་སྐབས་སུ་ཐེབ་ཟྭ་མཚམས་འཇོག་པ། </string>
+    <string name="permlab_readSyncSettings">གོམ་མཉམ་ཇུས་འགོད་ཀློག་པ། </string>
+    <string name="permdesc_readSyncSettings">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གོམ་མཉམ་ཇུས་འགོད་བཀླག་ཆོག དཔེར་ན། འབྲེལ་གཏུག་མི་སྣས་གོམ་མཉམ་སྤྱོད་ཀྱིན་ཡོད་མེད། </string>
+    <string name="permlab_writeSyncSettings">གོམ་མཉམ་ཇུས་འགོད་འབྲི་བ། </string>
+    <string name="permdesc_writeSyncSettings">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གོམ་མཉམ་ཇུས་འགོད་ལ་བཅོས་བསྒྱུར་བྱས་ཆོག དཔེར་ན། འབྲེལ་གཏུག་མི་སྣས་གོམ་མཉམ་སྤྱོད་ཀྱིན་ཡོད་མེད། </string>
+    <string name="permlab_readSyncStats">གོམ་མཉམ་ཕྱོགས་བསྡུས་ཆ་འཕྲིན་ཀློག་པ། </string>
+    <string name="permdesc_readSyncStats">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གོམ་མཉམ་ཕྱོགས་བསྡུས་ཆ་འཕྲིན་བཀླག་ཆོག དཔེར་ན། བྱུང་ཟིན་པའི་གོམ་མཉམ་ལོ་རྒྱུས་ཟིན་ཐོ། </string>
+    <string name="permlab_subscribedFeedsRead">མཁོ་སྤྲོད་མ་ཡིག་ཀློག་པ། </string>
+    <string name="permdesc_subscribedFeedsRead">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཉེ་སྔོན་གྱི་གོམ་མཉམ་མཁོ་སྤྲོད་མ་ཡིག་གི་ཆ་འཕྲིན་ཡོངས་རྫོགས་བཀླག་ཆོག</string>
+    <string name="permlab_subscribedFeedsWrite">མཁོ་སྤྲོད་མ་ཡིག་འབྲི་བ།</string>
+    <string name="permdesc_subscribedFeedsWrite">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་ཉེ་སྔོན་གྱི་གོམ་མཉམ་མ་ཡིག་ལ་བཅོས་བསྒྱུར་བྱས་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་འདི་བརྒྱུད་དེ་ཁྱེད་ཀྱི་གོམ་མཉམ་མ་ཡིག་ལ་བཅོས་བསྒྱུར་གཏོང་ཐུབ། </string>
+    <string name="permlab_readDictionary">ཐོ་འགོད་པའི་ཚིག་མཛོད་ཀློག་པ། </string>
+    <string name="permdesc_readDictionary">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཐོ་འགོད་པའི་ཚིག་མཛོད་ནང་དུ་ཉར་བའི་སྒེར་གྱི་རུས་མིང་དང་ཚིག་ཐུང་། ཐ་སྙད་སོགས་བཀླག་ཆོག</string>
+    <string name="permlab_writeDictionary">ཐོ་འགོད་པའི་ཚིག་མཛོད་འབྲི་བ། </string>
+    <string name="permdesc_writeDictionary">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཐོ་འགོད་པའི་ཚིག་མཛོད་ནང་དུ་བྲིས་ཆོག</string>
+    <string product="nosdcard" name="permlab_sdcardWrite">USBགསོག་ཉར་ཆས་ནང་གི་ནང་དོན་ལ་བཅོས་བསྒྱུར་རམ་དོར་བ། </string>
+    <string product="default" name="permlab_sdcardWrite">SDབྱང་བུའི་ནང་གི་ནང་དོན་ལ་བཅོས་བསྒྱུར་རམ་དོར་བ། </string>
+    <string product="nosdcard" name="permdesc_sdcardWrite">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས USB གསོག་ཉར་བྱེད་ཆས་ནང་དུ་བྲིས་ཆོག</string>
+    <string product="default" name="permdesc_sdcardWrite">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས SD བྱང་བུའི་ནང་དུ་བྲིས་ཆོག</string>
+    <string product="default" name="permlab_mediaStorageWrite">སྨྱན་གཟུགས་གསོག་ཉར་བྱེད་ཆས་ཀྱི་ནང་དོན་བཅོས་བསྒྱུར་རམ་དོར་བ། </string>
+    <string product="default" name="permdesc_mediaStorageWrite">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྨྱན་གཟུགས་གསོག་ཉར་བྱེད་ཆས་ཀྱི་ནང་དོན་ལ་བཅོས་བསྒྱུར་བྱས་ཆོག</string>
+    <string name="permlab_cache_filesystem">ལྷོད་གསོག་ཡིག་ཆའི་རྒྱུད་ཁོངས་ལ་བལྟ་བ། </string>
+    <string name="permdesc_cache_filesystem">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ལྷོད་གསོག་ཡིག་ཆའི་རྒྱུད་ཁོངས་ནང་དུ་འབྲི་ཀློག་བྱས་ཆོག</string>
+    <string name="permlab_use_sip">དྲ་རྒྱའི་ཁ་བརྡ་བྱེད་པའམ་ཉན་པ། </string>
+    <string name="permdesc_use_sip">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས SIP ཞབས་འདེགས་བཀོལ་ཏེ་དྲ་རྒྱས་ཕན་ཚུན་བར་ཁ་བརྡ་བྱས་ཆོག</string>
+    <string name="permlab_readNetworkUsageHistory">དྲ་རྒྱ་བཀོལ་སྤྱོད་ཀྱི་ལོ་རྒྱུས་ཟིན་ཐོ་ཀློག་པ། </string>
+    <string name="permdesc_readNetworkUsageHistory">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གཏན་འཁེལ་གྱི་དྲ་རྒྱ་དང་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་དྲ་རྒྱའི་བཀོལ་སྤྱོད་ལོ་རྒྱུས་ཟིན་ཐོ་བཀླག་ཆོག</string>
+    <string name="permlab_manageNetworkPolicy">དྲ་རྒྱའི་སྲིད་ཇུས་ལ་དོ་དམ་བྱེད་པ། </string>
+    <string name="permdesc_manageNetworkPolicy">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་དྲ་རྒྱའི་སྲིད་ཇུས་དང་གཏན་འཁེལ་བྱས་པའི་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་སྒྲིག་ལམ་ལ་དོ་དམ་བྱས་ཆོག</string>
+    <string name="permlab_modifyNetworkAccounting">དྲ་རྒྱ་བཀོལ་སྤྱོད་ཀྱི་ཟིན་ཐོའི་རྣམ་པ་བརྗེ་བ། </string>
+    <string name="permdesc_modifyNetworkAccounting">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གཏན་འཁེལ་བྱས་པའི་དྲ་རྒྱའི་བཀོལ་སྤྱོད་ཀྱི་ཟིན་ཐོའི་རྣམ་པར་བཅོས་བསྒྱུར་བྱས་ཆོག  སྤྱིར་བཏང་གི་ཉེར་སྤྱོད་བྱ་རིམ་ལ་འདི་བཀོལ་དབང་མེད། </string>
+    <string name="policylab_limitPassword">གསང་གྲངས་ཀྱི་སྒྲིག་ལམ་ཇུས་འགོད་བྱེད་པ། </string>
+    <string name="policydesc_limitPassword">བརྙན་རིས་ཀྱི་ཟྭ་འབྱེད་གསང་གྲངས་ཀྱི་རིང་ཐུང་དང་ཡིག་གྲངས་ལ་ཚོད་འཛིན་བྱེད་པ། </string>
+    <string name="policylab_watchLogin">བརྙན་རིས་ཟྭ་འབྱེད་ཀྱི་ཐེངས་གྲངས་ལ་ལྟ་རྟོག་བྱེད་པ། </string>
+    <string product="tablet" name="policydesc_watchLogin">བརྙན་རིས་ཟྭ་འབྱེད་ཀྱི་གསང་གྲངས་ནང་འཇུག་བྱས་པའི་ནོར་འཁྲུལ་གྱི་ཐེངས་གྲངས་ལ་ལྟ་རྟོག་བྱེད་པ།  གལ་ཏེ་གསང་གྲངས་ནང་འཇུག་བྱས་པའི་ཐེངས་གྲངས་མང་ན། ངོས་ལེབ་རྩིས་འཁོར་ལ་ཟྭ་རྒྱག་པའམ་ངོས་ལེབ་རྩིས་འཁོར་ནང་གི་གྲངས་ཀ་ཡོད་ཚད་སུབ་སྲིད། </string>
+    <string product="default" name="policydesc_watchLogin">བརྙན་རིས་ཟྭ་འབྱེད་ཀྱི་གསང་གྲངས་ནང་འཇུག་བྱས་པའི་ནོར་འཁྲུལ་གྱི་ཐེངས་གྲངས་ལ་ལྟ་རྟོག་བྱེད་པ།  གལ་ཏེ་གསང་གྲངས་ནང་འཇུག་བྱས་པའི་ཐེངས་གྲངས་མང་ན། ལག་འཁྱེར་ཁ་པར་ལ་ཟྭ་རྒྱག་པའམ་ཁ་པར་ནང་གི་གྲངས་ཀ་ཡོད་ཚད་སུབ་སྲིད། </string>
+    <string name="policylab_resetPassword">བརྙན་རིས་ཟྭ་འབྱེད་ཀྱི་གསང་གྲངས་བརྗེ་བ། </string>
+    <string name="policydesc_resetPassword">བརྙན་རིས་ཟྭ་འབྱེད་ཀྱི་གསང་གྲངས་བརྗེ་བ། </string>
+    <string name="policylab_forceLock">བརྙན་རིས་ཟྭ་རྒྱག་པ། </string>
+    <string name="policydesc_forceLock">བརྙན་རིས་ཟྭ་རྒྱག་པའི་བྱེད་ཐབས་དང་དུས་ཚོད་ལ་ཚོད་འཛིན་བྱེད་པ། </string>
+    <string name="policylab_wipeData">གྲངས་ཀ་ཡོད་ཚད་གསུབ་པ། </string>
+    <string product="tablet" name="policydesc_wipeData">བཟོ་གྲྭའི་ཇུས་འགོད་སླར་གསོ་བྱེད་སྐབས། རྒྱུད་ཁོངས་ཀྱིས་ཉེན་བརྡ་ཅི་ཡང་མི་བྱེད་པར་ངོས་ལེབ་རྩིས་འཁོར་ནང་གི་གྲངས་ཀ་སུབ་པ། </string>
+    <string product="default" name="policydesc_wipeData">བཟོ་གྲྭའི་ཇུས་འགོད་སླར་གསོ་བྱེད་སྐབས། རྒྱུད་ཁོངས་ཀྱིས་ཉེན་བརྡ་ཅི་ཡང་མི་བྱེད་པར་ལག་འཁྱེར་ཁ་པར་ནང་གི་གྲངས་ཀ་སུབ་པ། </string>
+    <string name="policylab_setGlobalProxy">སྒྲིག་ཆས་ཆ་ཚང་ཚབ་བྱེད་ཇུས་འགོད། </string>
+    <string name="policydesc_setGlobalProxy">སྲིད་ཇུས་བཀོལ་ཏེ་སྒྲིག་ཆས་ཆ་ཚང་ཚབ་བྱེད་ཀྱི་ཇུས་འགོད་བྱེད་པ། དོ་དམ་ཐོག་མ་ཁོ་ནས་ནུས་ལྡན་གྱི་ཆ་ཚང་ཚབ་བྱེད་ཇུས་འགོད་བྱས་ཆོག</string>
+    <string name="policylab_expirePassword">བརྙན་རིས་ཟྭ་འབྱེད་ཀྱི་གསང་གྲངས་ཀྱི་དུས་ཡུན་ལ་ཇུས་འགོད་བྱེད་པ། </string>
+    <string name="policydesc_expirePassword">བརྙན་རིས་ཟྭ་འབྱེད་ཀྱི་གསང་གྲངས་ཀྱི་བརྗེ་ཚད་ལ་ཚོད་འཛིན་བྱེད་པ། </string>
+    <string name="policylab_encryptedStorage">གསོག་ཉར་བྱེད་ཆས་ཀྱི་གསང་གྲངས་ཇུས་འགོད་བྱེད་པ། </string>
+    <string name="policydesc_encryptedStorage">གསོག་ཉར་གྱི་ཉེར་སྤྱོད་བྱ་རིམ་བརྒྱུད་དེ་གསང་གྲངས་འཇོག་དགོས། </string>
+    <string name="policylab_disableCamera">པར་ལེན་མཚམས་འཇོག་པ།</string>
+    <string name="policydesc_disableCamera">པར་ལེན་ཡོ་བྱད་ཡོད་ཚད་བཀོལ་མཚམས་འཇོག་པ།</string>
+    <string-array name="phoneTypes">
+        <item>བརྙན་ཡོལ་གཙོ་བོ།</item>
+        <item>ཁ་པར། </item>
+        <item>ལས་ཁུངས་ཀྱི་ཁ་པར། </item>
+        <item>ལས་ཁུངས་ཀྱི་གཟུགས་བསྐྱེལ། </item>
+        <item>ཁྱིམ་གྱི་གཟུགས་བསྐྱེལ། </item>
+        <item>བརྡ་བསྐྱེལ། </item>
+        <item>གཞན། </item>
+        <item>རང་འཇོག</item>
+    </string-array>
+    <string-array name="emailAddressTypes">
+        <item>བརྙན་ཡོལ་གཙོ་བོ།</item>
+        <item>ལས་ཁུངས་ཀྱི་ཁ་པར། </item>
+        <item>གཞན། </item>
+        <item>རང་འཇོག</item>
+    </string-array>
+    <string-array name="postalAddressTypes">
+        <item>བརྙན་ཡོལ་གཙོ་བོ།</item>
+        <item>ལས་ཁུངས་ཀྱི་ཁ་པར། </item>
+        <item>གཞན། </item>
+        <item>རང་འཇོག</item>
+    </string-array>
+    <string-array name="imAddressTypes">
+        <item>བརྙན་ཡོལ་གཙོ་བོ།</item>
+        <item>ལས་ཁུངས་ཀྱི་ཁ་པར། </item>
+        <item>གཞན། </item>
+        <item>རང་འཇོག</item>
+    </string-array>
+    <string-array name="organizationTypes">
+        <item>ལས་ཁུངས་ཀྱི་ཁ་པར། </item>
+        <item>གཞན། </item>
+        <item>རང་འཇོག</item>
+    </string-array>
+    <string name="phoneTypeCustom">རང་འཇོག</string>
+    <string name="phoneTypeHome">བརྙན་ཡོལ་གཙོ་བོ།</string>
+    <string name="phoneTypeMobile">ཁ་པར། </string>
+    <string name="phoneTypeWork">ལས་ཁུངས་ཀྱི་ཁ་པར། </string>
+    <string name="phoneTypeFaxWork">ལས་ཁུངས་ཀྱི་གཟུགས་བསྐྱེལ། </string>
+    <string name="phoneTypeFaxHome">ཁྱིམ་གྱི་གཟུགས་བསྐྱེལ། </string>
+    <string name="phoneTypePager">བརྡ་བསྐྱེལ། </string>
+    <string name="phoneTypeOther">གཞན། </string>
+    <string name="phoneTypeCallback">ཁ་པར་ཕྱིར་རྒྱག་པ། </string>
+    <string name="phoneTypeCar">རླངས་འཁོར་ཁ་པར། </string>
+    <string name="phoneTypeCompanyMain">ཀུང་སིའི་ཁ་པར། </string>
+    <string name="phoneTypeIsdn">"ISDN"</string>
+    <string name="phoneTypeMain">ཁ་པར་གཙོ་བོ། </string>
+    <string name="phoneTypeOtherFax">གཟུགས་བསྐྱེལ་གཞན་པ།</string>
+    <string name="phoneTypeRadio">སྒྲ་སྡུད་འཕྲུལ་ཆས། </string>
+    <string name="phoneTypeTelex">ཏར་འཕྲིན། </string>
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
+    <string name="phoneTypeWorkMobile">ལས་ཁུངས་ལག་འཁྱེར་ཁ་པར། </string>
+    <string name="phoneTypeWorkPager">ལས་ཁུངས་བརྡ་བསྐྱེལ། </string>
+    <string name="phoneTypeAssistant">ལག་རོགས། </string>
+    <string name="phoneTypeMms">ཚོན་འཕྲིན།</string>
+    <string name="eventTypeCustom">རང་འཇོག</string>
+    <string name="eventTypeBirthday">སྐྱེས་སྐར། </string>
+    <string name="eventTypeAnniversary">ལོ་འཁོར་རྗེས་དྲན། </string>
+    <string name="eventTypeOther">གཞན། </string>
+    <string name="emailTypeCustom">རང་འཇོག</string>
+    <string name="emailTypeHome">བརྙན་ཡོལ་གཙོ་བོ།</string>
+    <string name="emailTypeWork">ལས་ཁུངས་ཀྱི་ཁ་པར། </string>
+    <string name="emailTypeOther">གཞན། </string>
+    <string name="emailTypeMobile">ཁ་པར། </string>
+    <string name="postalTypeCustom">རང་འཇོག</string>
+    <string name="postalTypeHome">བརྙན་ཡོལ་གཙོ་བོ།</string>
+    <string name="postalTypeWork">ལས་ཁུངས་ཀྱི་ཁ་པར། </string>
+    <string name="postalTypeOther">གཞན། </string>
+    <string name="imTypeCustom">རང་འཇོག</string>
+    <string name="imTypeHome">བརྙན་ཡོལ་གཙོ་བོ།</string>
+    <string name="imTypeWork">ལས་ཁུངས་ཀྱི་ཁ་པར། </string>
+    <string name="imTypeOther">གཞན། </string>
+    <string name="imProtocolCustom">རང་འཇོག</string>
+    <string name="orgTypeWork">ལས་ཁུངས་ཀྱི་ཁ་པར། </string>
+    <string name="orgTypeOther">གཞན། </string>
+    <string name="orgTypeCustom">རང་འཇོག</string>
+    <string name="relationTypeCustom">རང་འཇོག</string>
+    <string name="relationTypeAssistant">ལག་རོགས། </string>
+    <string name="relationTypeBrother">སྤུན་ཟླ། </string>
+    <string name="relationTypeChild">བྱིས་པ། </string>
+    <string name="relationTypeDomesticPartner">བཟའ་ཟླ། </string>
+    <string name="relationTypeFather">ཨ་ཕ།</string>
+    <string name="relationTypeFriend">གྲོགས་པོ། </string>
+    <string name="relationTypeManager">སྤྱི་གཉེར་བ། </string>
+    <string name="relationTypeMother">ཨ་མ། </string>
+    <string name="relationTypeParent">ཕ་མ། </string>
+    <string name="relationTypePartner">ལས་གྲོགས། </string>
+    <string name="relationTypeReferredBy">ངོ་སྤྲོད་བྱེད་མཁན། </string>
+    <string name="relationTypeRelative">གཉེན་ཉེ།</string>
+    <string name="relationTypeSister">སྲིང་མོ།</string>
+    <string name="relationTypeSpouse">བཟའ་ཟླ། </string>
+    <string name="sipAddressTypeCustom">རང་འཇོག</string>
+    <string name="sipAddressTypeHome">བརྙན་ཡོལ་གཙོ་བོ།</string>
+    <string name="sipAddressTypeWork">ལས་ཁུངས་ཀྱི་ཁ་པར། </string>
+    <string name="sipAddressTypeOther">གཞན། </string>
+    <string name="keyguard_password_enter_pin_code">PIN ཨང་གྲངས་ནང་འཇུག</string>
+    <string name="keyguard_password_enter_sim1_pin_code">Sim1 PIN ཨང་གྲངས་ནང་འཇུག</string>
+    <string name="keyguard_password_enter_sim2_pin_code">Sim2 PIN ཨང་གྲངས་ནང་འཇུག</string>
+    <string name="keyguard_password_enter_puk_code">PUKདང PIN གསར་བའི་ཨང་གྲངས་ནང་འཇུག</string>
+    <string name="keyguard_password_enter_sim1_puk_code">Sim1 PUK དང PIN གསར་བའི་ཨང་གྲངས་ནང་འཇུག </string>
+    <string name="keyguard_password_enter_sim2_puk_code">Sim2 PUK དང PIN གསར་བའི་ཨང་གྲངས་ནང་འཇུག</string>
+    <string name="keyguard_password_enter_puk_prompt">PUK ཨང་གྲངས་ནང་འཇུག</string>
+    <string name="keyguard_password_enter_pin_prompt">PIN ཨང་གྲངས་ནང་འཇུག</string>
+    <string name="keyguard_password_enter_pin_confirm_prompt">PIN ཨང་གྲངས་ནང་འཇུག</string>
+    <string name="keyguard_password_entry_touch_hint"><font size="17">རེག་སྟེ་གསང་གྲངས་ནང་འཇུག་བྱེད་པ</font></string>
+    <string name="keyguard_password_enter_password_code">གསང་གྲངས་ནང་འཇུག་བྱས་ཏེ་ཟྭ་ཕྱེས་པ། </string>
+    <string name="keyguard_password_enter_pin_password_code">PIN ནང་འཇུག་བྱས་ཏེ་ཟྭ་ཕྱེས་པ། </string>
+    <string name="keyguard_password_wrong_pin_code">PIN ཨང་གྲངས་ནོར་འདུག</string>
+    <string name="keyguard_label_text">ཐོག་མར Menu དང་རྗེས་སུ 0 མནན་ཏེ་ཟྭ་ཕྱེས་པ། </string>
+    <string name="emergency_call_dialog_number_for_display">མྱུར་སྐྱོབ་དང་ཉེན་བརྡའི་ཁ་པར། </string>
+    <string name="lockscreen_carrier_default">ཞབས་འདེགས་མི་འདུག</string>
+    <string name="lockscreen_screen_locked">བརྙན་རོལ་ཟྭ་བརྒྱབ་འདུག</string>
+    <string name="lockscreen_instructions_when_pattern_enabled">Menu མནན་ཏེ་ཟྭ་ཕྱེས་པ། </string>
+    <string name="lockscreen_instructions_when_pattern_disabled">Menu མནན་ཏེ་ཟྭ་ཕྱེས་པ། </string>
+    <string name="lockscreen_pattern_instructions">རི་མོ་བྲིས་ཏེ་ཟྭ་ཕྱེས་པ། </string>
+    <string name="lockscreen_emergency_call">ཛ་དྲག་སྐྱོབ་རོགས།</string>
+    <string name="lockscreen_return_to_call">ཡང་བསྐྱར་ཁ་བརྡར་ལོག་པ། </string>
+    <string name="lockscreen_pattern_correct">འགྲིག་འདུག</string>
+    <string name="lockscreen_pattern_wrong">ཐུགས་རྒྱལ་མ་བཞེངས། ཡང་བསྐྱར་ཚོད་ལྟ་བྱེད་རོགས། </string>
+    <string name="lockscreen_password_wrong">ཐུགས་རྒྱལ་མ་བཞེངས། ཡང་བསྐྱར་ཚོད་ལྟ་བྱེད་རོགས། </string>
+    <string name="lockscreen_plugged_in">གློག་གསོག་བཞིན་པ <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_charged">ཡོངས་སུ་གང་ཡོད། </string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_low_battery">ཁྱེད་གློག་གསོག་ཆས་དང་འབྲེལ་མཐུད་བྱེད་པ། </string>
+    <string name="lockscreen_missing_sim_message_short">SIM བྱང་བུ་མི་འདུག</string>
+    <string name="lockscreen_blocked_sim_message_short">SIM བྱང་བུའི་ཁ་བརྒྱབ་འདུག</string>
+    <string product="tablet" name="lockscreen_missing_sim_message">ལེབ་ངོས་རྩིས་འཁོར་དུ SIMབྱང་བུ་མི་འདུག</string>
+    <string product="default" name="lockscreen_missing_sim_message">ཁ་པར་ནང་དུ SIM བྱང་བུ་མི་འདུག</string>
+    <string name="lockscreen_missing_sim_instructions">ཁྱེད་ཀྱིས SIM བྱང་བུ་འཇོག་རོགས། </string>
+    <string name="lockscreen_missing_sim_instructions_long">SIM བྱང་བུ་བོར་བའམ་འདོན་ཐབས་མེད་ན། SIM བྱང་བུ་གཞན་པ་ཞིག་འཇོག་རོགས། </string>
+    <string name="lockscreen_permanent_disabled_sim_instructions">SIM བྱང་བུ་གཏན་དུ་བཀོལ་མཚམས་བཞག་པ། \nཁྱེད་ཀྱི་སྐུད་མེད་ཞབས་ཞུའི་ཚོང་བདག་དང་འབྲེལ་གཏུག་བྱས་ཏེSIM བྱང་བུ་གཞན་ཞིག་ལེན་པ། </string>
+    <string name="lockscreen_transport_prev_description">གོང་མའི་ཐེབ་གནོན། </string>
+    <string name="lockscreen_transport_next_description">ཞོལ་མའི་མཐེབ་གནོན། </string>
+    <string name="lockscreen_transport_pause_description">མཚམས་གཅོད་མཐེབ་གནོན། </string>
+    <string name="lockscreen_transport_play_description">གཏོང་བའི་མཐེབ་གནོན། </string>
+    <string name="lockscreen_transport_stop_description">མཚམས་འཇོག་མཐེབ་གནོན། </string>
+    <string msgid="2485604591272668370" name="emergency_calls_only">མྱུར་སྐྱོབ་དང་ཉེན་བརྡ་ཁོ་ནར་སྤྱོད་ཆོག་པའི་ཁ་པར།</string>
+    <string name="lockscreen_network_locked_message">དྲ་བའི་སྒོ་བརྒྱབ་པ</string>
+    <string name="lockscreen_sim_puk_locked_message">SIM བྱང་བུ་ལPUKཨང་གྲངས་ཀྱིས་ཟྭ་བརྒྱབ་འདུག</string>
+    <string name="lockscreen_sim_puk_locked_instructions">ཁྱེད་ཀྱིས་ཐོ་འགོད་ཕྱོགས་སྟོན་ཀློག་པའམ་ཞབས་ཞུ་བར་འབྲེལ་གཏུག་བྱས་ཆོག</string>
+    <string name="lockscreen_sim_locked_message">SIM བྱང་བུའི་སྒོ་བརྒྱབ་པ</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message">SIM བྱང་བུའི་ཁ་འབྱེད་བཞིན་པ། </string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message"> ཁྱེད་ཀྱིས་བརྙན་རིས་ཟྭ་འབྱེད་ཀྱི་གྲངས་ཀ་ཐེངས <xliff:g id="number">%d</xliff:g>ནོར་འདུག
+        \n\nསྐར་ཆ <xliff:g id="number">%d</xliff:g> རྗེས་སུ་ཡང་བསྐྱར་ཚོད་ལྟ་བྱེད་རོགས། 
+    </string>
+    <string name="lockscreen_too_many_failed_password_attempts_dialog_message">ཁྱེད་ཀྱིས་ནང་འཇུག་བྱས་པའི་གསང་གྲངས་ཐེངས <xliff:g id="number">%d</xliff:g> ནོར་འདུག
+        \n\nསྐར་ཆ <xliff:g id="number">%d</xliff:g> རྗེས་སུ་ཡང་བསྐྱར་ཚོད་ལྟ་བྱེད་རོགས། 
+    </string>
+    <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">ཁྱེད་ཀྱིས་ནང་འཇུག་བྱས་པའི PIN <xliff:g id="number">%d</xliff:g> ནོར་འདུག
+        \n\nསྐར་ཆ <xliff:g id="number">%d</xliff:g> རྗེས་སུ་ཡང་བསྐྱར་ཚོད་ལྟ་བྱེད་རོགས། 
+    </string>
+    <string product="tablet" name="lockscreen_failed_attempts_almost_glogin">ཁྱེད་ཀྱིས་བརྙན་རིས་ཟྭ་འབྱེད་ཀྱི་ཐེངས<xliff:g id="number">%d</xliff:g>ནོར་འདུག
+       ཐེངས <xliff:g id="number">%d</xliff:g> རྗེས་སུ་ལེགས་འགྲུབ་མ་བྱུང་ན། 
+      རྒྱུད་ཁོངས་ཀྱིས་ཁྱེད་ལ་རང་ཉིད་ཀྱི Google ཐོ་འགོད་བྱེད་བཀོལ་ཏེ་ངོས་ལེབ་རྩིས་འཁོར་གྱི་ཁ་འབྱེད་པའི་རེ་བ་འདོན། \n\n
+       ཁྱེད་ཀྱིས་སྐར་ཆ <xliff:g id="number">%d</xliff:g> རྗེས་སུ་ཡང་བསྐྱར་ཚོད་ལྟ་བྱེད་རོགས། 
+    </string>
+    <string product="default" name="lockscreen_failed_attempts_almost_glogin">ཁྱེད་ཀྱིས་བརྙན་རིས་ཟྭ་འབྱེད་ཀྱི་ཐེངས <xliff:g id="number">%d</xliff:g> ནོར་འདུག
+       ཐེངས <xliff:g id="number">%d</xliff:g>ལེགས་འགྲུབ་མ་བྱུང་ན། 
+        རྒྱུད་ཁོངས་ཀྱི་ཁྱེད་ལ་རང་ཉིད་ཀྱི Google ཐོ་འགོད་བྱེད་བཀོལ་ཏེ་ཁ་པར་གྱི་ཁ་འབྱེད་པའི་རེ་བ་འདོན། \n\n
+       ཁྱེད་ཀྱིས་སྐར་ཆ <xliff:g id="number">%d</xliff:g> seconds. རྗེས་སུ་ཚོད་ལྟ་བྱེད་རོགས། 
+    </string>
+    <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">ཁྱེད་ཀྱིས་ངོས་ལེབ་རྩིས་འཁོར་ཟྭ་འབྱེད་བྱས་པ་ཐེངས<xliff:g id="number">%d</xliff:g> ནོར་སོང་། 
+       ཐེངས <xliff:g id="number">%d</xliff:g> རྗེས་སུ་ལེགས་འགྲུབ་མ་བྱུང་ན། ངོས་ལེབ་རྩིས་འཁོར་གྱིས་བཟོ་གྲྭའི་ཇུས་འགོད་སླར་གསོ་བྱེད་པ་དང་གྲངས་ཀ་ཡོད་ཚད་བོར་ངེས། 
+    </string>
+    <string product="default" name="lockscreen_failed_attempts_almost_at_wipe">
+       ཁྱེད་ཀྱིས་ཁ་པར་ཟྭ་འབྱེད་བྱས་པ་ཐེངས <xliff:g id="number">%d</xliff:g> ནོར་སོང་། 
+       ཐེངས <xliff:g id="number">%d</xliff:g> རྗེས་སུ་ལེགས་འགྲུབ་མ་བྱུང་ན། 
+      ལག་འཁྱེར་ཁ་པར་གྱིས་བཟོ་གྲྭའི་ཇུས་འགོད་སླར་གསོ་བྱེད་པ་དང་གྲངས་ཀ་ཡོད་ཚད་བོར་ངེས།</string>
+    <string product="tablet" name="lockscreen_failed_attempts_now_wiping">
+       ཁྱེད་ཀྱི་ངོས་ལེབ་རྩིས་འཁོར་ཟྭ་འབྱེད་བྱས་པ་ཐེངས <xliff:g id="number">%d</xliff:g> ནོར་སོང་། 
+       ངོས་ལེབ་རྩིས་འཁོར་གྱིས་བཟོ་གྲྭའི་ཇུས་འགོད་རྣམ་པ་སླར་གསོ་བྱེད་རྒྱུ་རེད། 
+    </string>
+    <string product="default" name="lockscreen_failed_attempts_now_wiping">
+       ཁྱེད་ཀྱིས་ངོས་ལག་འཁྱེར་ཁ་པར་ཟྭ་འབྱེད་བྱས་པ་ཐེངས<xliff:g id="number">%d</xliff:g> ནོར་སོང་། 
+       ལག་འཁྱེར་ཁ་པར་གྱིས་བཟོ་གྲྭའི་ཇུས་འགོད་རྣམ་པ་སླར་གསོ་བྱེད་རྒྱུ་རེད། 
+    </string>
+    <string name="lockscreen_too_many_failed_attempts_countdown">སྐར་ཆ <xliff:g id="number">%d</xliff:g> ནང་ཡང་བསྐྱར་ཚོད་ལྟ་བྱེད་རོགས། </string>
+    <string name="lockscreen_forgot_pattern_button_text">དཔེ་རིས་བརྗེད་སོང་ངམ། </string>
+    <string name="lockscreen_glogin_forgot_pattern">རྩིས་ཐོའི་ཟྭ་འབྱེད་པ། </string>
+    <string name="lockscreen_glogin_too_many_attempts">དཔེ་རིས་བལྟ་ཞིབ་ཚད་གྲངས་མང་དྲགས་པ། </string>
+    <string name="lockscreen_glogin_instructions">ཟྭ་འབྱེད་དགོས་ན། ཁྱེད་ཀྱིས Google  རྩིས་ཐོར་ཐོ་འགོད་བྱེད་དགོས། </string>
+    <string name="lockscreen_glogin_username_hint">ཐོ་འགོད་བྱེད་མཁན་གྱི་མིང་།  (ཡིག་ཟམ།)</string>
+    <string name="lockscreen_glogin_password_hint">གསང་ཨང་།</string>
+    <string name="lockscreen_glogin_submit_button">ཐོ་འགོད། </string>
+    <string name="lockscreen_glogin_invalid_input">ཐོ་འགོད་མཁན་གྱི་མིང་ངམ་གསང་གྲངས་ལ་ནུས་པ་མེད།</string>
+    <string name="lockscreen_glogin_account_recovery_hint">ཁྱེད་ཀྱི་ཐོ་འགོད་མིང་དང་གསང་གྲངས་བརྗེད་སོང་ངམ། \n<b>google.com/accounts/recovery</b>བལྟ་རོགས། </string>
+    <string name="lockscreen_glogin_checking_password">བལྟ་ཞིབ་བྱེད་བཞིན་པ། </string>
+    <string name="lockscreen_unlock_label">སྒོ་ཕྱེ་བ།</string>
+    <string name="lockscreen_sound_on_label">སྒྲ་འབྱེད་པ</string>
+    <string name="lockscreen_sound_off_label">སྒྲ་གཏན་པ</string>
+    <string name="lockscreen_access_pattern_start">དཔེ་རིས་བཟོ་བཀོད་བྱེད་པར་རྕོམ་པ</string>
+    <string name="lockscreen_access_pattern_cleared">དཔེ་རིས་སུབ་པ</string>
+    <string name="lockscreen_access_pattern_cell_added">རེའུ་མིག་བསྣན་ཟིན། </string>
+    <string name="lockscreen_access_pattern_detected">དཔེ་རིས་བཟོ་བཀོད་ལེགས་འགྲུབ</string>
+    <string name="password_keyboard_label_symbol_key">\?123</string>
+    <string name="password_keyboard_label_alpha_key">ABC</string>
+    <string name="password_keyboard_label_alt_key">ALT</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>" </string>
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>" </string>
+    <string name="factorytest_failed">བཟོ་གྲྭའི་ཞིབ་བཤེར་ལེགས་འགྲུབ་མ་བྱུང་། </string>
+    <string name="factorytest_not_system">བཟོ་གྲྭའི་ཞིབ་བཤེར་ནི/system/app ནང་སྒྲིག་འཇུག་བྱས་པའི་ཁུག་མའི་ནང་མ་གཏོགས་ལག་བསྟར་བྱས་མི་ཆོག</string>
+    <string name="factorytest_no_action">བཟོ་གྲྭའི་ཞིབ་བཤེར་ལ་རྒྱབ་སྐྱོར་བྱེད་པའི་ཁུག་མ་མི་འདུག</string>
+    <string name="factorytest_reboot">བསྐྱར་འབྱེད</string>
+    <string name="js_dialog_title">\'<xliff:g id="title">%s</xliff:g>\' ནས་ཡོང་བའི་ཕྱོགས་སྟོན། </string>
+    <string name="js_dialog_title_default">JavaScript</string>
+    <string name="js_dialog_before_unload">དྲ་ངོས་འདི་ནས་གཞན་དུ་དྲངས་འདོད་དམ། "\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"འགྲིག་མནན་ཏེ་མུ་མཐུད་པ་དང་དོར་བ་མནན་ཏེ་དྲ་ངོས་སུ་བསྡད་ཆོག</string>
+    <string name="save_password_label">གཏན་འཁེལ།</string>
+    <string name="double_tap_toast">གསལ་སྟོན།  ཐེངས་གཉིས་མནན་ན་ཆེར་བསྐྱེད་དང་ཆུང་བསྐུམ་བྱེད་ཐུབ། </string>
+    <string name="autofill_this_form">རང་འགུལ་ཁ་གསབ</string>
+    <string name="setup_autofill">རང་འགུལ་ཁ་གསབ་ཇུས་འགོད། </string>
+    <string name="autofill_address_name_separator">\u0020</string>
+    <string name="autofill_address_summary_separator">,\u0020</string>
+    <string name="autofill_province">ཞིང་ཆེནཐད་གཏོགས་གྲོང་ཁྱེརརང་སྐྱོང་ཁུལ</string>
+    <string name="autofill_postal_code">སྦྲག་སྲིད་ཨང་རྟགས</string>
+    <string name="autofill_state">ཞིང་ཆེན།/ཐད་སྐྱོང་གྲོང་ཁྱེར།/རང་སྐྱོང་ལྗོངས།</string>
+    <string name="autofill_zip_code">སྦྲགས་སྲིད་ཨང་གྲངས།</string>
+    <string name="autofill_county">རྒྱལ་ཁབ།/ས་ཁུལ།</string>
+    <string name="autofill_island">གླིང་ཕྲན། </string>
+    <string name="autofill_district">རིང་།</string>
+    <string name="autofill_department">ཞིང་ཆེན། </string>
+    <string name="autofill_prefecture">ཁུལ། </string>
+    <string name="autofill_parish">སྲིད་འཛིན་ས་ཁུལ། </string>
+    <string name="autofill_area">ས་ཁུལ། </string>
+    <string name="autofill_emirate">མངའ་བདག་རྒྱལ་ཁབ། </string>
+    <string name="permlab_readHistoryBookmarks">མིག་གཤར་གྱི་ལོ་རྒྱུས་ཟིན་ཐོ་དང་དཔེ་འཛར་ཀློག་པ། </string>
+    <string name="permdesc_readHistoryBookmarks">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་མིག་གཤར་གྱིས་བལྟས་པའི་དྲ་ཚིགས་དང་དཔེ་འཛར་ཡོད་ཚད་བཀླག་ཆོག</string>
+    <string name="permlab_writeHistoryBookmarks">མིག་གཤར་གྱི་ལོ་རྒྱུས་ཟིན་ཐོ་དང་དཔེ་འཛར་འབྲི་བ། </string>
+    <string product="tablet" name="permdesc_writeHistoryBookmarks">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁ་པར་ནང་དུ་ཉར་བའི་མིག་གཤར་ལོ་རྒྱུས་ཟིན་ཐོ་དང་དཔེ་འཛར་བཅོས་བསྒྱུར་བཏང་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་ཀྱིས་འདི་བརྒྱུད་དེ་མིག་གཤར་གྱི་གྲངས་ཀ་བཅོས་བསྒྱུར་དང་དོར་སུབ་བྱེད་ཐུབ། </string>
+    <string product="default" name="permdesc_writeHistoryBookmarks">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁ་པར་ནང་དུ་ཉར་བའི་མིག་གཤར་ལོ་རྒྱུས་ཟིན་ཐོ་དང་དཔེ་འཛར་བཅོས་བསྒྱུར་བཏང་ཆོག གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་ཀྱིས་འདི་བརྒྱུད་དེ་མིག་གཤར་གྱི་གྲངས་ཀ་བཅོས་བསྒྱུར་དང་དོར་སུབ་བྱེད་ཐུབ། </string>
+    <string name="permlab_setAlarm">ཐིར་བརྡའི་ཆུ་ཚོད་ནང་དུ་ཉེན་བརྡ་ཇུས་འགོད་བྱེད་པ། </string>
+    <string name="permdesc_setAlarm">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་སྒྲིག་འཇུག་བྱས་པའི་ཐིར་བརྡའི་ཆུ་ཚོད་ཀྱི་ཉེར་སྤྱོད་བྱ་རིམ་ཁྲོད་ཉེན་བརྡ་ཇུས་འགོད་བྱས་ཆོག  ཐིར་བརྡའི་ཆུ་ཚོད་ཀྱི་ཉེར་སྤྱོད་ལ་ལས་ནུས་པ་འདི་བཀོད་སྤྱོད་བྱེད་མི་ཐུབ། </string>
+    <string name="permlab_addVoicemail">སྐད་འཕྲིན་ཡིག་ཟམ་སྣོན་པ། </string>
+    <string name="permdesc_addVoicemail">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཁྱེད་ཀྱི་སྐད་འཕྲིན་ཡིག་ཟམ་ཁྲོད་དུ་ཆ་འཕྲིན་སྣོན་ཆོག</string>
+    <string name="permlab_writeGeolocationPermissions">མིག་གཤར་གྱི་གནས་ཡུལ་བདག་དབང་ལ་བཅོས་བསྒྱུར་བྱེད་པ། </string>
+    <string name="permdesc_writeGeolocationPermissions">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་མིག་གཤར་གནས་ཡུལ་བདག་དབང་ལ་བཅོས་བསྒྱུར་བྱས་ཆོག  གནོད་ཅན་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་འདི་བཀོལ་ཏེ་གནས་ཡུལ་ཆ་འཕྲིན་དྲ་ཚིགས་གཞན་ལ་བསྐུར་ཐུབ། </string>
+    <string name="permlab_packageVerificationAgent">གཉེན་ཆས་ཁུག་མར་བརྟག་པ། </string>
+    <string name="permdesc_packageVerificationAgent">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་གཉེན་ཆས་ཁུག་མ་སྒྲིག་འཇུག་བྱས་ཆོག་མིན་ལ་བརྟག་ཆོག</string>
+    <string name="permlab_bindPackageVerifier">གཉེན་ཆས་ཁུག་མ་བརྟག་དཔྱད་རྒྱུད་ཁོངས་སུ་གཏན་འཁེལ་བྱེད་པ། </string>
+    <string name="permdesc_bindPackageVerifier">ཁ་པར་ཐོ་འགོད་མཁན་གྱིས་གཉེན་ཆས་ཁུག་མའི་བརྟག་དཔྱད་རྒྱུད་ཁོངས་བཀོལ་ཆོག་པའི་རེ་འདུག་ཞུས་ཆོག  སྤྱིར་བཏང་གི་ཉེར་སྤྱོད་བྱ་རིམ་ལ་འདི་བཀོལ་བའི་བདག་དབང་མེད། </string>
+    <string name="save_password_message">ཁྱེད་ཀྱིས་མིག་གཤར་ཆས་ཀྱིས་གསང་གྲངས་ཡིད་འཛིན་བྱེད་འདོད་དམ། </string>
+    <string name="save_password_notnow">གནས་སྐབས་གསོག་ཉར་མི་བྱེད། </string>
+    <string name="save_password_remember">ཡིད་ལ་འཛིན་པ། </string>
+    <string name="save_password_never">ཚང་མ་མི་དགོས།</string>
+    <string name="open_permission_deny">ཁྱེད་རང་དྲ་ལམ་འདིར་ཞུགས་པའི་བདག་དབང་མེད། </string>
+    <string name="text_copied">ཡིག་ཆ་དྲས་སྦྱར་པང་དུ་བསྐྱར་བཤུས་བྱས་ཟིན། </string>
+    <string name="more_item_label">མང་པོ། </string>
+    <string name="menu_space_shortcut_label">སྟོང་ཆ། </string>
+    <string name="menu_enter_shortcut_label">མཐེབ་གཞོང་། </string>
+    <string name="menu_delete_shortcut_label">སུབ་པ། </string>
+    <string name="search_go">འཚོལ་བཤེར།</string>
+    <string name="searchview_description_search">འཚོལ་བཤེར།</string>
+    <string name="searchview_description_query">འདྲི་བརྩད་བྱེད་པ། </string>
+    <string name="searchview_description_clear">འདྲི་བརྩད་གཙང་བཤེར་བྱེད་པ། </string>
+    <string name="searchview_description_submit">འདྲི་བརྩད་གོང་འབུལ་བྱེད་པ། </string>
+    <string name="searchview_description_voice">སྐད་གདངས་འཚོལ་བཤེར།</string>
+    <string name="oneMonthDurationPast">སྐར་མ་གཅིག་གི་སྔོན། </string>
+    <string name="beforeOneMonthDurationPast">ཟླ་གཅིག་གི་སྔོན། </string>
+    <plurals name="num_seconds_ago">
+        <item quantity="one">སྐར་ཆ་གཅིག་གི་སྔོན། </item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> སྐར་ཆ་འགའི་སྔོན།</item>
+    </plurals>
+    <plurals name="num_minutes_ago">
+        <item quantity="one">སྐར་མ་གཅིག་གི་སྔོན། </item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> སྐར་མ་འགའི་སྔོན། </item>
+    </plurals>
+    <plurals name="num_hours_ago">
+        <item quantity="one">ཆུ་ཚོད་གཅིག་གི་སྔོན། </item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ཆུ་ཚོད་འགའི་སྔོན། </item>
+    </plurals>
+    <plurals name="last_num_days">
+        <item quantity="other">འདས་པའི <xliff:g id="count">%d</xliff:g> ཉིན་འགའ།</item>
+    </plurals>
+    <string name="last_month">ཟླ་བ་སྔོན་མ།</string>
+    <string name="older">སྔོན་ཆད། </string>
+    <plurals name="num_days_ago">
+        <item quantity="one">ཁ་སང་། </item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ཉིན་འགའི་སྔོན། </item>
+    </plurals>
+    <plurals name="in_num_seconds">
+        <item quantity="one">སྐར་ཆ་གཅིག་གི་རྗེས། </item>
+        <item quantity="other">in <xliff:g id="count">%d</xliff:g> སྐར་ཆ་འགའི་རྗེས་སུ།</item>
+    </plurals>
+    <plurals name="in_num_minutes">
+        <item quantity="one">སྐར་མ་གཅིག་གི་ནང་། </item>
+        <item quantity="other">in <xliff:g id="count">%d</xliff:g> སྐར་མ་འགའི་ནང་། </item>
+    </plurals>
+    <plurals name="in_num_hours">
+        <item quantity="one">ཆུ་ཚོད་གཅིག་གི་ནང་། </item>
+        <item quantity="other">in <xliff:g id="count">%d</xliff:g> ཆུ་ཚོད་འགའ། </item>
+    </plurals>
+    <plurals name="in_num_days">
+        <item quantity="one">སང་ཉིན། </item>
+        <item quantity="other">in <xliff:g id="count">%d</xliff:g> ཉིན་འགའི་རྗེས་སུ།</item>
+    </plurals>
+    <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">སྐར་ཆ་འགའི་སྔོན། </item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> སྐར་ཆ་འགའི་སྔོན།</item>
+    </plurals>
+    <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">སྐར་མ་གཅིག་གི་སྔོན། </item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> སྐར་མ་འགའི་སྔོན། </item>
+    </plurals>
+    <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">ཆུ་ཚོད་གཅིག་གི་སྔོན། </item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ཆུ་ཚོད་འགའི་སྔོན། </item>
+    </plurals>
+    <plurals name="abbrev_num_days_ago">
+        <item quantity="one">ཁ་སང་། </item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> ཉིན་འགའི་སྔོན། </item>
+    </plurals>
+    <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">སྐར་ཆ་གཅིག་གི་རྗེས། </item>
+        <item quantity="other">in <xliff:g id="count">%d</xliff:g> སྐར་ཆ་འགའི་རྗེས་སུ།</item>
+    </plurals>
+    <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">སྐར་མ་གཅིག་གི་ནང་། </item>
+        <item quantity="other">in <xliff:g id="count">%d</xliff:g> སྐར་མ་འགའི་ནང་། </item>
+    </plurals>
+    <plurals name="abbrev_in_num_hours">
+        <item quantity="one">ཆུ་ཚོད་གཅིག་གི་ནང་། </item>
+        <item quantity="other">in <xliff:g id="count">%d</xliff:g> ཆུ་ཚོད་འགའ། </item>
+    </plurals>
+    <plurals name="abbrev_in_num_days">
+        <item quantity="one">སང་ཉིན། </item>
+        <item quantity="other">in <xliff:g id="count">%d</xliff:g> ཉིན་འགའི་རྗེས་སུ།</item>
+    </plurals>
+    <string name="preposition_for_date">ཟླ་ཚེས <xliff:g id="date" example="May 29">%s</xliff:g></string>
+    <string name="preposition_for_time">དུས་ཚོད། <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+    <string name="preposition_for_year">ལོ་ཚིགས། <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="day">ཉིནརེར། </string>
+    <string name="days">ཉིན་རྣམས།</string>
+    <string name="hour">ཆུ་ཚོད། </string>
+    <string name="hours">ཆུ་ཚོད། </string>
+    <string name="minute">སྐར་མ།</string>
+    <string name="minutes">སྐར་མ།</string>
+    <string name="second">སྐར་ཆ། </string>
+    <string name="seconds">སྐར་ཆ། </string>
+    <string name="week">གཟའ་འཁོར། </string>
+    <string name="weeks">གཟའ་འཁོར། </string>
+    <string name="year">ལོ། </string>
+    <string name="years">ལོ། </string>
+    <string name="VideoView_error_title">བརྙན་རིས་འདི་ཕབ་གཏོང་བྱེད་མི་ཐུབ།</string>
+    <string name="VideoView_error_text_invalid_progressive_playback">ཐུགས་རྒྱལ་མ་བཞེངས། བརྙན་རིས་འདི་སྒྲིག་ཆས་འདིའི་སྟེང་དུ་གཏོང་བར་མི་འཚམས། </string>
+    <string name="VideoView_error_text_unknown">དགོངས་དག བརྙན་རིས་འདི་ཕབ་གཏོང་བྱེད་མི་ཐུབ།</string>
+    <string name="VideoView_error_button">ཁ་རྒྱག་པ།</string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="noon">ཉིན་གུང་།</string>
+    <string name="Noon">ཉིན་གུང་།</string>
+    <string name="midnight">ནམ་གུང་།</string>
+    <string name="Midnight">ནམ་གུང་།</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="selectAll">ཡོངས་འདེམས།</string>
+    <string name="cut">གཅོད་པ།</string>
+    <string name="copy">འདྲ་བཤུས།</string>
+    <string name="paste">སྦྱར་བ།</string>
+    <string name="replace">བརྗེ་བ།</string>
+    <string name="delete">སུབ་པ།</string>
+    <string name="copyUrl">དྲ་ཚིགས་བསྐྱར་བཤུས། </string>
+    <string name="selectTextMode">ཡིག་ཚགས་འདེམ་པ། </string>
+    <string name="textSelectionCABTitle">ཡི་གེ་འདེམ་པ། </string>
+    <string name="addToDictionary">ཚིག་མཛོད་དུ་སྣོན་པ།</string>
+    <string name="deleteText">སུབ་པ།</string>
+    <string name="inputMethod">བཏགས་ཐབས། </string>
+    <string name="editTextMenuTitle">མ་དཔེའི་ཐབས་ལམ།</string>
+    <string name="low_internal_storage_view_title">གསོག་ཉར་བྱེད་ས་མེད་པ།</string>
+    <string name="ok">ཁ་རྒྱག་པ།</string>
+    <string name="cancel">སྐྱུར་བ།</string>
+    <string name="yes">ཁ་རྒྱག་པ།</string>
+    <string name="no">སྐྱུར་བ།</string>
+    <string name="dialog_alert_title">དོ་སྣང་།</string>
+    <string name="loading">ནང་འཇུག་བྱེད་བཞིན་པ།</string>
+    <string name="capital_on">ཁ་ཕྱེ་བ།</string>
+    <string name="capital_off">ཁ་རྒྱག་པ།</string>
+    <string name="whichApplication">འདམ་ཟིན་པའི་ཉེར་སྤྱོད་བྱ་རིམ་བེད་སྤྱོད་གཏོང་བ།</string>
+    <string name="alwaysUse">སོར་བཞག་གདམ་གསེས་སུ་འགོད་པ། </string>
+    <string name="clearDefaultHintMsg">བརྙན་ཡོལ་གཙོ་བོའི་ཇུས་འགོད &gt; ཉེར་སྤྱོད་བྱ་རིམ &gt; ཉེར་སྤྱོད་བྱ་རིམ་ལ་དོ་དམ་གཏན་འཁེལ་ཇུས་འགོད་དོར་བ། </string>
+    <string name="chooseActivity">ཐབས་ལམ་གཅིག་འདེམ་པ</string>
+    <string name="chooseUsbActivity">USB སྒྲིག་ཆས་ཀྱི་ཉེར་སྤྱོད་བྱ་རིམ་དང་འཚམས་པ་དེ་འདེམ་པ། </string>
+    <string name="noApplications">འདི་ལག་བསྟར་བྱས་ཆོག་པའི་ཉེར་སྤྱོད་བྱ་རིམ་ཞིག་མེད། </string>
+    <string name="aerr_application">དགོངས་པ་མ་ཚོམ། <xliff:g id="application">%1$s</xliff:g> འདི་མཚམས་བཞག་ཟིན། </string>
+    <string name="aerr_process">དགོངས་པ་མ་ཚོམ། འཕེལ་རིམ <xliff:g id="process">%1$s</xliff:g> འདི་མཚམས་བཞག་ཟིན། </string>
+    <string name="anr_activity_application"><xliff:g id="application">%2$s</xliff:g>ཡ་ལན་མེད་པས། \n\nཁྱེད་ཀྱིས་འདིའི་ཁ་རྒྱག་འདོད་དམ། </string>
+    <string name="anr_activity_process">བྱ་བྱེད <xliff:g id="activity">%1$s</xliff:g>འདིར་ཡ་ལན་མེད། \n\nཁྱེད་ཀྱིས་འདིའི་ཁ་རྒྱག་འདོད་དམ། </string>
+    <string name="anr_application_process"><xliff:g id="application">%1$s</xliff:g>འདིར་ཡ་ལན་མེད།  ཁྱེད་ཀྱིས་འདིའི་ཁ་རྒྱག་འདོད་དམ། </string>
+    <string name="anr_process">འཕེལ་རིམ <xliff:g id="process">%1$s</xliff:g> འདིར་ཡ་ལན་མེད། \n\nཁྱེད་ཀྱིས་འདིའི་ཁ་རྒྱག་འདོད་དམ། </string>
+    <string name="force_close">ཁ་རྒྱག་པ།</string>
+    <string name="report">སྙན་ཞུ།</string>
+    <string name="wait">སྒུག་པ།</string>
+    <string name="launch_warning_title">ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ཡང་བསྐྱར་གཏན་འཁེན་བྱེད་པ། </string>
+    <string name="launch_warning_replace"><xliff:g id="APP_NAME">%1$s</xliff:g>མིག་སབར་འགུལ་བསྐྱོད་བྱེད་བཞིན་པ།</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> མགོ་བརྩམས་ཟིན།</string>
+    <string name="screen_compat_mode_scale">ཚད་མཇལ། </string>
+    <string name="screen_compat_mode_show">ནམ་ཡང་མངོན་པ། </string>
+    <string name="screen_compat_mode_hint">ཁྱེད་ཀྱིས &gt; ཉེར་སྤྱོད་བྱ་རིམ &gt; ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་དོ་དམ་བྱས་ཆོག</string>
+    <string name="smv_application">ཉེར་སྤྱོད་བྱ་རིམ <xliff:g id="application">%1$s</xliff:g>
+        (process <xliff:g id="process">%2$s</xliff:g>) རང་ཉིད་བཙན་ཤུགས་ཀྱིས་ལག་བསྟར་བྱས་ཏེ་ནན་ཏན་རྣམ་པའི་སྲིད་ཇུས་དང་འགལ་ཡོད། </string>
+    <string name="smv_process">འཕེལ་རིམ <xliff:g id="process">%1$s</xliff:g> རང་ཉིད་བཙན་ཤུགས་ཀྱིས་ལག་བསྟར་བྱས་ཏེ་ནན་ཏན་རྣམ་པའི་སྲིད་ཇུས་དང་འགལ་ཡོད། </string>
+    <string name="android_upgrading_title">Android འཕར་སྣོན་བྱེད་བཞིན་པ།</string>
+    <string name="android_upgrading_apk">ཉེར་སྤྱོད་བྱ་རིམ
+        <xliff:g id="number" example="123">%1$d</xliff:g> གི
+        <xliff:g id="number" example="123">%2$d</xliff:g> ལེགས་འགྱུར་བྱེད་བཞིན་པ། </string>
+    <string name="android_upgrading_starting_apps">ཉེར་སྤྱོད་བྱ་རིམ་འགོ་སློང་བྱེད་བཞིན་པ།</string>
+    <string name="android_upgrading_complete">མགོ་བརྩམས་ཏེ་འགྲུབ་རྒྱུ་རེད། </string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g>འགུལ་བསྐྱོད་བྱེད་བཞིན་པ།</string>
+    <string name="heavy_weight_notification_detail">ཉེར་སྤྱོད་བྱ་རིམ་བརྗེ་རྒྱུ་འདེམ་པ། </string>
+    <string name="heavy_weight_switcher_title">ཉེར་སྤྱོད་བྱ་རིམ་བརྗེ་རྒྱུ་ཡིན་ནམ། </string>
+    <string name="heavy_weight_switcher_text">ཉེར་སྤྱོད་བྱ་རིམ་ཞིག་བཀོལ་བཞིན་ཡོད་པས། ཁྱེད་ཀྱིས་ཐོག་མར་ཉེར་སྤྱོད་བྱ་རིམ་འདི་མཚམས་འཇོག་དགོས། </string>
+    <string name="old_app_action"><xliff:g id="old_app">%1$s</xliff:g>ཕྱིར་ལོག་པ།</string>
+    <string name="old_app_description">ཉེར་སྤྱོད་བྱ་རིམ་གསར་བ་འགོ་སློང་མི་བྱེད་པ།</string>
+    <string name="new_app_action">འགོ་སློང<xliff:g id="OLD_APP">%1$s</xliff:g></string>
+    <string name="new_app_description">ཉེར་སྤྱོད་བྱ་རིམ་རྙིང་བ་མཚམས་འཇོག་བྱེད་པ་དང་གསོག་ཉར་མི་བྱེད་པ།</string>
+    <string name="sendText">ཡི་གེ་ལག་བསྟར་གྱི་བྱ་རིམ་འདེམ་པ། </string>
+    <string name="volume_ringtone">དྲིལ་སྒྲའི་སྒྲ་ཚད།</string>
+    <string name="volume_music">སྨྱན་གཟུགས་ཀྱི་སྒྲའི་ཚད།</string>
+    <string name="volume_music_hint_playing_through_bluetooth">སོ་སྔོན་ལག་རྩལ་བརྒྱུད་དེ་གཏོང་བཞིན་པ། </string>
+    <string name="volume_music_hint_silent_ringtone_selected">གྲགས་མེད་དྲིལ་སྒྲ་འདེམ་ཟིན། </string>
+    <string name="volume_call">ཁ་བརྡའི་སྒྲ་ཚད། </string>
+    <string name="volume_bluetooth_call">སོ་སྔོན་ལག་རྩལ་བཀོལ་སྐབས་ཀྱི་ཁ་བརྡའི་སྒྲ་ཚད། </string>
+    <string name="volume_alarm">ཐིར་སྒྲ་སྐབས་སྡོད།</string>
+    <string name="volume_notification">བརྡ་སྦྱོར་སྒྲ་ཚད། </string>
+    <string name="volume_unknown">སྒྲའི་ཚད</string>
+    <string name="volume_icon_description_bluetooth">སོ་སྔོན་སྒྲ་ཚད། </string>
+    <string name="volume_icon_description_ringer">ཅོང་བརྡའི་སྒྲའི་ཚད།</string>
+    <string name="volume_icon_description_incall">ཁ་བརྡའི་སྒྲ་ཚད། </string>
+    <string name="volume_icon_description_media">སྨྱན་གཟུགས་ཀྱི་སྒྲའི་ཚད།</string>
+    <string name="volume_icon_description_notification">བརྡ་སྦྱོར་སྒྲ་ཚད། </string>
+    <string name="ringtone_default">གཏན་འཁེལ་དྲིལ་སྒྲ། </string>
+    <string name="ringtone_default_with_actual">གཏན་འཁེལ་དྲིལ་སྒྲ (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
+    <string name="ringtone_silent">སྒྲ་མེད།</string>
+    <string name="ringtone_picker_title">དྲིལ་སྒྲ། </string>
+    <string name="ringtone_unknown">ངོས་མི་ཟིན་པའི་དྲིལ་སྒྲ། </string>
+    <plurals name="wifi_available">
+        <item quantity="one">བེད་སྤྱོད་བྱེད་ཆོག་པའི WLANདྲ་བ།</item>
+        <item quantity="other">བེད་སྤྱོད་བྱེད་ཆོག་པའི WLANདྲ་བ།</item>
+    </plurals>
+    <plurals name="wifi_available_detailed">
+        <item quantity="one">བེད་སྤྱོད་བྱེད་ཆོག་པའི WLANདྲ་བའི་ཁ་འབྱེད་པ།</item>
+        <item quantity="other">བེད་སྤྱོད་བྱེད་ཆོག་པའི WLANདྲ་བའི་ཁ་འབྱེད་པ།</item>
+    </plurals>
+    <string name="wifi_available_sign_in">WLANདང་དྲ་འབྲེལ་བྱེད་པ།</string>
+    <string name="wifi_watchdog_network_disabled">WLANདང་དྲ་འབྲེལ་བྱེདམི་ཐུབ་པ།</string>
+    <string name="wifi_watchdog_network_disabled_detailed">དྲ་རྒྱ་འབྲེལ་མཐུད་གནས་བབས་མི་ལེགས། </string>
+    <string name="wifi_p2p_dialog_title">WLAN Direct</string>
+    <string name="wifi_p2p_turnon_message">WLAN Direct བྱ་བྱེད་མགོ་རྩོམ་པ།  བྱ་བྱེད་འདིས WLAN སྐུ་མགྲོན་དང་རྒྱུགས་ཆེ་བའི་བྱ་བྱེད་མཚམས་འཇོག་སྲིད། </string>
+    <string name="wifi_p2p_failed_message">WLAN Directའགོ་སློང་བྱེད་མི་ཐུབ་པ།</string>
+    <string name="wifi_p2p_enabled_notification_title">WLAN Direct འགོ་སློང་བྱས་ཟིན་པ།</string>
+    <string name="wifi_p2p_enabled_notification_message">རེག་སྟེ་ཇུས་འགོད་བྱེད་པ། </string>
+    <string name="select_character">ཡིག་རྟགས་ནང་འཇུག་བྱེད་པ། </string>
+    <string name="sms_control_title">བརྡ་འཕྲིན་བསྐུར་བཞིན་པ།</string>
+    <string name="sms_control_message">འཕྲིན་ཐུང་འབོད་ཆེན་བསྐུར་བཞིན་པ། ཁྱེད་ཀྱིས \"OK\" བདམས་ཏེ་མུ་མཐུད་པ་དང་། \"Cancel\" བདམས་ཏེ་བསྐུར་མཚམས་བཞག་ཆོག</string>
+    <string name="sms_control_yes">ཁ་རྒྱག་པ།</string>
+    <string name="sms_control_no">སྐྱུར་བ།</string>
+    <string name="sim_removed_title">SIMབྱང་བུ་སྤོ་འདོན་བྱས་ཟིན།</string>
+    <string name="sim_removed_message">སྤོ་འགུལ་དྲ་རྒྱ་བཀོལ་མི་ཆོག  ཁྱེད་ཀྱིས་ནུས་ལྡན་གྱི SIM བྱང་བུ་བཞག་སྟེ་ཡང་བསྐྱར་ཁ་འབྱེད་དགོས། </string>
+    <string name="sim_done_button">རྒྱུས་ལོན་པ།</string>
+    <string name="sim_added_title">SIMབྱང་བུ་ཁ་བསྣོན་བྱས་ཟིན། </string>
+    <string name="sim_added_message">ཁྱེད་ཀྱིས་སྤོ་འགུལ་དྲ་རྒྱ་བཀོལ་སྤྱོད་བྱེད་ན་སྒྲིག་ཆས་སྒོ་ཡང་བསྐྱར་སྒོ་འབྱེད་དགོས། </string>
+    <string name="sim_restart_button">ཡང་བསྐྱར་འགོ་སློང་བྱེད་པ།</string>
+    <string name="time_picker_dialog_title">དུས་ཚོད་སྒྲི་འགོད།</string>
+    <string name="date_picker_dialog_title">ཟླ་ཚེས་སྒྲིག་འགོད།</string>
+    <string name="date_time_set">སྒྲིག་འགོད།</string>
+    <string name="default_permission_group">ཁོག་འཐད།</string>
+    <string name="no_permissions">བདག་དབང་གང་ཡང་མི་དགོས། </string>
+    <string name="perms_hide"><b>གབ་སྦས</b></string>
+    <string name="perms_show_all"><b>ཚང་མ་ཕྱིར་མངོན་པ།</b></string>
+    <string name="usb_storage_activity_title">USBཚད་མཐོ་བའི་གསོག་ཉར་སྒྲིག་ཆས།</string>
+    <string name="usb_storage_title">USB འབྲེལ་མཐུད་བྱས་ཟིན། </string>
+    <string product="nosdcard" name="usb_storage_message">ཁྱེད་ཀྱིས USB བརྒྱུད་དེ་རྩིས་འཁོར་དང་འབྲེལ་མཐུད་བྱས་ཟིན། གལ་ཏེ་ཁྱེད་ཀྱིས་རྩིས་འཁོར་དངAndroid སྒྲིག་ཆས་སྟེང་གི USB གཉིས་བར་བསྐྱར་བཤུས་བྱེད་ན། གཤམ་གྱི་རྟགས་འདི་གནོན་རོགས། </string>
+    <string product="default" name="usb_storage_message">ཁྱེད་ཀྱིས USB བརྒྱུད་དེ་རྩིས་འཁོར་དང་འབྲེལ་མཐུད་བྱས་ཟིན། གལ་ཏེ་ཁྱེད་ཀྱིས་རྩིས་འཁོར་དངAndroid སྒྲིག་ཆས་སྟེང་གི SD བྱང་བུ་གཉིས་བར་བསྐྱར་བཤུས་བྱེད་ན། གཤམ་གྱི་རྟགས་འདི་གནོན་རོགས། </string>
+    <string name="usb_storage_button_mount">USB གསོག་ཉར་བྱེད་ཆས་ཀྱི་ཁ་འབྱེད་པ།</string>
+    <string product="nosdcard" name="usb_storage_error_message">USB གསོག་ཉར་བྱེད་ཆས་དེ་USB གསོག་ཉར་བྱེད་ཆས་ཆེ་བ་ལྟར་བཀོལ་སྐབས་གནད་དོན་ཞིག་བྱུང་འདུག</string>
+    <string product="default" name="usb_storage_error_message">SDབྱང་བུ་དེ USBགསོག་ཉར་བྱེད་ཆས་ལྟར་བཀོལ་སྐབས་གནད་དོན་ཞིག་བྱུང་འདུག</string>
+    <string name="usb_storage_notification_title">USB འབྲེལ་མཐུད་བྱས་ཟིན། </string>
+    <string name="usb_storage_notification_message">རྩིས་འཁོར་ནང་ནས་བསྐྱར་བཤུས་བྱེད་དགོས་པའི་ཡིག་ཆ་རྣམས་འདེམ་པ། </string>
+    <string name="usb_storage_stop_notification_title">USBཉར་གསོག</string>
+    <string name="usb_storage_stop_notification_message">USB གསོག་ཉར་བྱེད་ཆས་བཀོལ་མཚམས་འཇོག་པ། </string>
+    <string name="usb_storage_stop_title">USB གསོག་ཉར་བྱེད་ཆས་བཀོལ་སྤྱོད་བྱེད་བཞིན་ཡོད། </string>
+    <string product="nosdcard" name="usb_storage_stop_message">USB གསོག་ཉར་བྱེད་ཆས་ཀྱི་ཁ་མ་བརྒྱབ་གོང་། ཁྱེད་ཀྱིས་རྩིས་འཁོར་ནང་དུ Android ལག་འཁྱེར་ཁ་པར་གྱི USB གསོག་ཉར་བྱེད་ཆས་ཕྱིར་ལེན་པ། </string>
+    <string product="default" name="usb_storage_stop_message">USB གསོག་ཉར་བྱེད་ཆས་ཀྱི་ཁ་མ་བརྒྱབ་གོང་། ཁྱེད་ཀྱིས་རྩིས་འཁོར་ནང་དུ Android ལག་འཁྱེར་ཁ་པར་གྱི SD བྱང་བུ་ཕྱིར་ལེན་པ། </string>
+    <string name="usb_storage_stop_button_mount">USB གསོག་ཉར་བྱེད་ཆས་ཀྱི་ཁ་རྒྱག་པ། </string>
+    <string name="usb_storage_stop_error_message">USB གསོག་ཉར་བྱེད་ཆས་ཁ་རྒྱག་སྐབས་གནད་དོན་དང་འཕྲད་པ། ཁྱེད་ཀྱིས USB སྒྲིག་ཆས་གཙོ་བོ་དོར་མིན་ཞིབ་བཤེར་དང་། ཡང་བསྐྱར་ཚོད་ལྟ་བྱེད་རོགས། </string>
+    <string name="dlg_confirm_kill_storage_users_title">USB གསོག་ཉར་བྱེད་ཆས་ཀྱི་ཁ་འབྱེད་པ། </string>
+    <string name="dlg_confirm_kill_storage_users_text">གལ་ཏེ་ཁྱེད་ཀྱིས ཁྱེད་ཀྱིས USB གསོག་ཉར་སྒྲིག་ཆས་ཀྱི་ཁ་ཕྱེས་ན། ཁྱེད་ཀྱིས་སྤྱོད་བཞིན་པའི་ཉེར་སྤྱོད་བྱ་རིམ་ལ་ལ་མཚམས་འཇོག་པ་དང་། USB གསོག་ཉར་སྒྲིག་ཆས་ཀྱི་ཁ་མ་བརྒྱབ་བར་དུ་བཀོལ་སྤྱོད་བྱེད་ཐབས་མི་འདུག</string>
+    <string name="dlg_error_title">USB བྱ་རིམ་ལེགས་འགྲུབ་མ་བྱུང་བ།</string>
+    <string name="dlg_ok">ཁ་རྒྱག་པ།</string>
+    <string name="usb_mtp_notification_title">སྨྱན་གཟུགས་སྒྲིག་ཆས་ལྟར་འབྲེལ་མཐུད་བྱེད་པ། </string>
+    <string name="usb_ptp_notification_title">པར་ལེན་འཕྲུལ་ཆས་ལྟར་འབྲེལ་མཐུད་བྱེད་པ། </string>
+    <string name="usb_cd_installer_notification_title">སྒྲིག་འཇུག་རྒྱུད་ཁོངས་ལྟར་འབྲེལ་མཐུད་བྱེད་པ། </string>
+    <string name="usb_accessory_notification_title">USB སྒྲིག་ཆས་དང་འབྲེལ་མཐུད་བྱེད་པ། </string>
+    <string name="usb_cdrom_notification_title">རྟོག་བཟོས་འོད་སྐུལ་མགོ་བརྩམས་ཟིན། </string>
+    <string name="usb_notification_message">རེག་སྟེ USB གཞན་པ་མངོན་པར་བྱེད་པ། </string>
+    <string product="nosdcard" name="extmedia_format_title">USB གསོག་ཉར་བྱེད་ཆས་རྣམ་པར་འཇོག་པ། </string>
+    <string product="default" name="extmedia_format_title">SD བྱང་བུ་རྣམ་པར་འཇོག་པ། </string>
+    <string product="nosdcard" name="extmedia_format_message">USB གསོག་ཉར་བྱེད་ཆས་རྣམ་པར་འཇོག་རྒྱུ་ཡིན་ནམ། ནང་དུ་ཡོད་པའི་ཡིག་ཆ་ཡོད་ཚད་གསུབ་རྒྱུ་ཡིན་ནམ། མགོ་བརྩམས་ཟིན་རྗེས་མཚམས་འཇོག་ཐབས་མེད། </string>
+    <string product="default" name="extmedia_format_message">SD བྱང་བུ་རྣམ་པར་འཇོག་རྒྱུ་ཡིན་ནམ། ནང་དུ་ཡོད་པའི་ཡིག་ཆ་ཡོད་ཚད་གསུབ་རྒྱུ་ཡིན་ནམ། མགོ་བརྩམས་ཟིན་རྗེས་མཚམས་འཇོག་ཐབས་མེད། </string>
+    <string name="extmedia_format_button_format">རྣམ་པར་འཇོག་པ།</string>
+    <string name="adb_active_notification_title">USB ཚོད་སྒྲིག་ལ་འབྲེལ་མཐུད་བྱས་ཟིན། </string>
+    <string name="adb_active_notification_message">USB ཚོད་སྒྲིག་ལ་འབྲེལ་མཐུད་མཚམས་འཇོག་པ། </string>
+    <string name="select_input_method">གཏགས་ཆས་འདེམས་པ།</string>
+    <string name="configure_input_methods">བཏགས་ཐབས་ཇུས་འགོད་བྱེད་པ། </string>
+    <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="candidates_style"><u>གདམ་གསེས།</u></string>
+    <string product="nosdcard" name="ext_media_checking_notification_title">USB གསོག་ཉར་བྱེད་ཆས་སྒྲ་སྒྲིག་བྱེད་བཞིན་པ། </string>
+    <string product="default" name="ext_media_checking_notification_title">SD བྱང་བུ་སྒྲ་སྒྲིག་བྱེད་བཞིན་པ། </string>
+    <string name="ext_media_checking_notification_message">འགྲིག་ཡོད་མིན་ལ་ཞིབ་བཤེར་བྱེད་བཞིན་པ། </string>
+    <string product="nosdcard" name="ext_media_nofs_notification_title">USB གསོག་ཉར་བྱེད་ཆས་ནང་ཡིག་ཆ་གཅིག་ཀྱང་མེད། </string>
+    <string product="default" name="ext_media_nofs_notification_title">SD བྱང་བུ་སྟོང་བ་ཡིན། </string>
+    <string product="nosdcard" name="ext_media_nofs_notification_message">USB གསོག་ཉར་བྱེད་ཆས་ནང་ཡིག་ཆ་གཅིག་ཀྱང་མེད་པའམ། ཡང་ན་རྒྱབ་སྐྱོར་མི་བྱེད་པའི་ཡིག་ཆའི་རྒྱུད་ཁོངས་བཀོལ་མི་ཐུབ། </string>
+    <string product="default" name="ext_media_nofs_notification_message">SD བྱང་བུའི་ནང་དུ་ཡིག་ཆའི་རྒྱུད་ཁོངས་གཅིག་ཀྱང་མེད་པའམ། ཡང་ན་རྒྱབ་སྐྱོར་མི་བྱེད་པའི་ཡིག་ཆའི་རྒྱུད་ཁོངས་བཀོལ་མི་ཐུབ། </string>
+    <string product="nosdcard" name="ext_media_unmountable_notification_title">USB གསོག་ཉར་བྱེད་ཆས་བརླག་འདུག</string>
+    <string product="default" name="ext_media_unmountable_notification_title">SD བྱང་བུ་བརླག་འདུག</string>
+    <string product="nosdcard" name="ext_media_unmountable_notification_message">USB གསོག་ཉར་བྱེད་ཆས་བརླག་འདུག ཁྱེད་ཀྱིས་བསྐྱར་དུ་རྣམ་པར་བཞག་ཆོག</string>
+    <string product="default" name="ext_media_unmountable_notification_message">SD བྱང་བུ་བརླག་འདུག ཁྱེད་ཀྱིས་བསྐྱར་དུ་རྣམ་པར་བཞག་ཆོག</string>
+    <string product="nosdcard" name="ext_media_badremoval_notification_title">USB གསོག་ཉར་བྱེད་ཆས་འོས་མེད་ངང་སྤོ་འགུལ་བྱས་འདུག</string>
+    <string product="default" name="ext_media_badremoval_notification_title">SD བྱང་བུ་འོས་མེད་ངང་སྤོ་འགུལ་བྱས་འདུག</string>
+    <string product="nosdcard" name="ext_media_badremoval_notification_message">གྲངས་ཀ་མི་བོར་བ་སྔོན་འགོག་བྱེད་ཆེད། ཁྱེད་ཀྱིས USB གསོག་ཉར་བྱེད་ཆས་ཁ་བརྒྱབ་རྗེས། ད་གཟོད་སྤོ་འགུལ་བྱས་ཆོག </string>
+    <string product="default" name="ext_media_badremoval_notification_message">གྲངས་ཀ་མི་བོར་བ་སྔོན་འགོག་བྱེད་ཆེད། ཁྱེད་ཀྱིསSD བྱང་བུ་ཁ་བརྒྱབ་རྗེས། ད་གཟོད་སྤོ་འགུལ་བྱས་ཆོག </string>
+    <string product="nosdcard" name="ext_media_safe_unmount_notification_title">USB གསོག་ཉར་བྱེད་ཆས་བདེ་འཇགས་ངང་སྤོ་འགུལ་བྱས་ཟིན། </string>
+    <string product="default" name="ext_media_safe_unmount_notification_title">SD བྱང་བུ་བདེ་འཇགས་ངང་སྤོ་འགུལ་བྱས་ཟིན། </string>
+    <string product="nosdcard" name="ext_media_safe_unmount_notification_message">ཁྱེད་ཀྱིས USB གསོག་ཉར་བྱེད་ཆས་བདེ་འཇགས་ངང་སྤོ་འགུལ་བྱས་ཆོག</string>
+    <string product="default" name="ext_media_safe_unmount_notification_message">ཁྱེད་ཀྱིས SD བྱང་བུ་བདེ་འཇགས་ངང་སྤོ་འགུལ་བྱས་ཆོག</string>
+    <string product="nosdcard" name="ext_media_nomedia_notification_title">USBཉར་གསོག་སྒྲིག་ཆས་མི་འདུག</string>
+    <string product="default" name="ext_media_nomedia_notification_title">SDབྱང་བུ་མེད་པ། </string>
+    <string product="nosdcard" name="ext_media_nomedia_notification_message">USB གསོག་ཉར་བྱེད་ཆས་སྤོ་འགུལ་བྱས་ཟིན། སྨྱན་གཟུགས་གསར་བ་འཇོག་རོགས། </string>
+    <string product="default" name="ext_media_nomedia_notification_message">SD བྱང་བུ་སྤོ་འགུལ་བྱས་ཟིན། SDབྱང་བུ་གསར་བ་འཇོག་རོགས། </string>
+    <string name="activity_list_empty">འོས་འཚམས་ཀྱི་བྱ་བྱེད་མི་རྙེད། </string>
+    <string name="permlab_pkgUsageStats">སྒྲིག་ལྷུ་བཀོལ་སྤྱོད་གནས་བབས་བསྡོམས་རྩིས་ལ་གསར་དུ་བལྟ་བ། </string>
+    <string name="permdesc_pkgUsageStats">བསྡུ་ལེན་བྱས་པའི་སྒྲིག་ལྷུ་བསྡོམས་རྩིས་ལ་བཅོས་བསྒྱུར་བཏང་ཆོག སྤྱིར་བཏང་གི་རྒྱུད་ཁོངས་ལ་འདི་བཀོལ་སྤྱོད་བྱེད་དབང་མེད། </string>
+    <string name="permlab_copyProtectedData">སོར་བཞག་ཞབས་འདེགས་སྣོད་ཀྱི་བསྐྱར་བཤུས་ནང་དོན་བཀོལ་ཆོག སྤྱིར་བཏང་གི་རྒྱུད་ཁོངས་ལ་འདི་བཀོལ་སྤྱོད་བྱེད་དབང་མེད། </string>
+    <string name="permdesc_copyProtectedData">སོར་བཞག་ཞབས་འདེགས་སྣོད་ཀྱི་བསྐྱར་བཤུས་ནང་དོན་བཀོལ་ཆོག སྤྱིར་བཏང་གི་རྒྱུད་ཁོངས་ལ་འདི་བཀོལ་སྤྱོད་བྱེད་དབང་མེད། </string>
+    <string name="tutorial_double_tap_to_zoom_message_short">ཉིས་རྡེབ་བྱས་ན་ཆེ་ཆུང་ལ་ཚོད་འཛིན་བྱས་ཆོག</string>
+    <string name="gadget_host_error_inflating">སྒེའུ་ཁུང་གི་སྒྲིག་ཆས་ཆུང་བ་ཇེ་གཏོང་སྐབས་ནོར་འཁྲུལ་བྱུང་། </string>
+    <string name="ime_action_go">ལྟ་སྤྱོད།</string>
+    <string name="ime_action_search">འཚོལ་བཤེར།</string>
+    <string name="ime_action_send">བསྐུར་སྐྱེལ།</string>
+    <string name="ime_action_next">ཤོག་ལྷེ་རྗེས་མ།</string>
+    <string name="ime_action_done">རྒྱུས་ལོན་པ།</string>
+    <string name="ime_action_previous">ཤོག་ངོས་གོང་མ། </string>
+    <string name="ime_action_default">ལག་བསྟར། </string>
+    <string name="dial_number_using"><xliff:g id="number" example="555">%s</xliff:g>ལ་ཁ་པར་གཏོང་བ།</string>
+    <string name="create_contact_using">གསར་དུ་བཟོས་པའི་ཁ་པར་ཨང་གྲངས་ནི <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="grant_credentials_permission_message_header">གཤམ་གྱི་ཉེར་སྤྱོད་བྱ་རིམ་གྱིས་ད་ལྟ་དང་མ་འོངས་བར་ཁྱེད་ཀྱི་རྩིས་ཐོ་ལ་བལྟས་ཆོག་པའི་བདག་དབང་ལེན་པར་རེ་བ་ཞུ་བ། </string>
+    <string name="grant_credentials_permission_message_footer">ཁྱེད་ཉིད་རེ་འདུན་འདི་ལ་མོས་མཐུན་ཡོད་དམ</string>
+    <string name="grant_permissions_header_text">འདྲི་བརྩད་རེ་ཞུ།</string>
+    <string name="allow">མོས་མཐུན། </string>
+    <string name="deny">ངོས་ལེན་མི་བྱེད་པ། </string>
+    <string name="permission_request_notification_title">མོས་མཐུན་ལ་རེ་ཞུ་བྱས་ཟིན། </string>
+    <string name="permission_request_notification_with_subtitle">རྒྱུད་ཁོངས་འདིས \n རྩིས་ཐོ <xliff:g id="account" example="foo@gmail.com">%s</xliff:g> རེ་ཞུ་ཞུས་ཟིན། </string>
+    <string name="input_method_binding_label">བཏགས་ཐབས། </string>
+    <string name="sync_binding_label">གོམ་མཉམ།</string>
+    <string name="accessibility_binding_label">གྲོགས་བྱེད་ནུས་པ།</string>
+    <string name="wallpaper_binding_label">རྩིག་ཤོག</string>
+    <string name="chooser_wallpaper">བརྙན་རིས་བཅོས་བསྒྱུར།</string>
+    <string name="vpn_title">VPN མགོ་བརྩམས་ཟིན། </string>
+    <string name="vpn_title_long"><xliff:g id="app" example="FooVPN client">%s</xliff:g>གྱིསVPNམགོ་བརྩམས་ཟིན། </string>
+    <string name="vpn_text">མནན་ཏེ་དྲ་རྒྱར་དོ་དམ་བྱེད་པ། </string>
+    <string name="vpn_text_long"><xliff:g id="session" example="office">%s</xliff:g>འདི་འབྲེལ་མཐུད་བྱས་ཟིན། མནན་ཏེ་དྲ་རྒྱར་དོ་དམ་བྱས་ཆོག</string>
+    <string name="upload_file">ཡིག་སྣོད་འདེམ་པ། </string>
+    <string name="no_file_chosen">ཡིག་སྣོད་གང་ཡང་འདེམ་མེད་པ། </string>
+    <string name="reset">ཡང་བསྐྱར་ཇུས་འགོད། </string>
+    <string name="submit">ཡར་སྤྲོད། </string>
+    <string name="car_mode_disable_notification_title">རླངས་འཁོར་རྣམ་པ་མགོ་བརྩམས་ཟིན། </string>
+    <string name="car_mode_disable_notification_message">རླངས་འཁོར་རྣམ་པ་བཀོལ་མཚམས་བཞག་ཟིན། </string>
+    <string name="tethered_notification_title">དྲ་རྒྱ་མཉམ་སྤྱོད་དམ་རྒྱུགས་ཆེ་བ་བཀོལ་ཟིན། </string>
+    <string name="tethered_notification_message">རེག་སྟེ་སྡེབ་སྒྲིག་བྱས་ཆོག</string>
+    <string name="back_button_label">ཕྱིར་ལོག</string>
+    <string name="next_button_label">ཤོག་ལྷེ་རྗེས་མ།</string>
+    <string name="skip_button_label">ཆེ་ཆུང་། </string>
+    <string name="throttle_warning_notification_title">ཁ་པར་རྒྱུགས་ཚད་མང་དྲགས་པ།</string>
+    <string name="throttle_warning_notification_message">རེག་སྟེ་ཁ་པར་གྱི་གྲངས་ཀར་རྒྱུས་ལོན་བྱེད་པ། </string>
+    <string name="throttled_notification_title">ཁ་པར་གྱི་གྲངས་ཀར་ཚད་ལས་བརྒལ་ཟིན། </string>
+    <string name="throttled_notification_message">རེག་སྟེ་ཁ་པར་གྱི་གྲངས་ཀར་རྒྱུས་ལོན་བྱེད་པ། </string>
+    <string name="Low_Memory_Alert">ཁ་པར་གྱི་གསོག་ཉར་སྟོང་ཆ་ཆུང་དུ་འགྲོ་བཞིན་ཡོད་པས། ཁྱེད་ཀྱིས་ཁ་པར་གྱི་གཏན་འཇགས་ལ་ཁེག་ཐེག་བྱེད་ཆེད་གྲངས་ཀ་སྐོར་ཞིག་སུབ་དགོས། </string>
+    <string name="Low_Memory_Free">ཁོམ་ལོང་། </string>
+    <string name="Low_Memory_Application">བེད་སྤྭོད།</string>
+    <string name="Low_Memory_Mail">སྦྲག་སྒམ།</string>
+    <string name="Low_Memory_Sms_Mms">འཕྲིན་ཐུང་དང་ཚོན་འཕྲིན། </string>
+    <string name="Low_Memory_System">ཕྱིར་ལྡོག</string>
+    <string name="Btn_Select_Clear">བདམས་ཏེ་དོར་བ། </string>
+    <string name="myAppTip">སུབ་དགོས་པའི་བྱ་རིམ་འདེམ་པ།</string>
+    <string name="myApp_Start_Btn">འགོ་འཛུགས་པ། </string>
+    <string name="myApp_Move2Sd_ChkBox">SDབྱང་བུ་སྟེང་དུ་སྤོར་བ།</string>
+    <string name="myApp_ClearData_ChkBox">གྲངས་ཐོ་སུབ་པ། </string>
+    <string name="myApp_Uninstall_ChkBox">བཤིག་འདོན།</string>
+    <string name="myAppLoading">ནང་འཇུག་བྱེད་བཞིན་པ།...</string>
+    <string name="myAppProcessing">\u2026བྱེད་བཞིན་པ། </string>
+    <string name="no_matches">ཆ་མཐུན་མི་འདུག</string>
+    <string name="find_on_page">དྲ་ངོས་ནས་འཚོལ་བསྡུ་བྱེད་པ། </string>
+    <plurals name="matches_found">
+        <!-- Case of one match -->
+        <item quantity="one">ཆ་མཐུན་གཅིག</item>
+        <!-- Case of multiple total matches -->
+        <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g>གི <xliff:g id="total" example="137">%d</xliff:g></item>
+    </plurals>
+    <string name="stk_refresh_sim_init_message">SIMབྱང་བུ་ཁ་སྐོང་བྱེད་པ།</string>
+    <string name="stk_refresh_sim_reset_message">ཁ་པར་བསྐྱར་འབྱེད།</string>
+    <string name="action_mode_done">རྒྱུས་ལོན་པ།</string>
+    <string product="nosdcard" name="progress_unmounting">USB གསོག་ཉར་བྱེད་ཆས་དོར་བཞིན་པ། </string>
+    <string product="default" name="progress_unmounting">SDབྱང་བུ་དོར་བཞིན་པ། </string>
+    <string product="nosdcard" name="progress_erasing">USB གསོག་ཉར་བྱེད་ཆས་རྣམ་པར་འཇོག་བཞིན་པ། </string>
+    <string product="default" name="progress_erasing">SDབྱང་བུ་བརྙན་གཟུགས་བྱེད་བཞིན་པ།</string>
+    <string product="nosdcard" name="format_error">USB གསོག་ཉར་བྱེད་ཆས་དོར་ཐབས་མི་འདུག</string>
+    <string product="default" name="format_error">SDབྱང་བུ་གསལ་བོ་བྱེད་མི་ཐུབ་པ།</string>
+    <string name="media_bad_removal">SDབྱང་བུ་མ་དོར་གོང་དུ་སྤོ་འགུལ་བྱས་པ། </string>
+    <string product="nosdcard" name="media_checking">རྒྱུད་ཁོངས་ཀྱིསSDབྱང་བུ་ལ་ཞིབ་བཤེར་བྱེད་བཞིན་པ། </string>
+    <string product="default" name="media_checking">SD བྱང་བུ་ལ་བརྟགས་ཞིབ་བྱེད་པ།</string>
+    <string name="media_removed">SD བྱང་བུ་སྤོ་འགུལ་བྱེད་པ།</string>
+    <string product="nosdcard" name="media_shared">རྩིས་འཁོར་གང་རུང་ཞིག་གིས USB གསོག་ཉར་བྱེད་ཆས་བཀོལ་སྤྱོད་བྱེད་བཞིན་འདུག</string>
+    <string product="default" name="media_shared">མིག་སྔར་རྩིས་འཁོར་གང་རུང་ཞིག་གིས SDབྱང་བུ་བཀོལ་སྤྱོད་བྱེད་བཞིན་འདུག</string>
+    <string name="media_unknown_state">ཕྱི་ངོས་སྨྱན་གཟུགས་ངོས་མི་ཟིན་པའི་རྣམ་པར་ཡོད། </string>
+    <string name="share">མཉམ་སྤྱོད།</string>
+    <string name="find">འཚོལ་བཤེར།</string>
+    <string name="websearch">དྲ་ལམ་ཞིབ་བཤེར།</string>
+    <string name="gpsNotifTicker">གནས་ཡུལ་རེ་ཞུའི་ཡོང་ཁུངས <xliff:g id="name">%s</xliff:g></string>
+    <string name="gpsNotifTitle">གནས་ཡུལ་རེ་ཞུ།</string>
+    <string name="gpsNotifMessage">རེ་ཞུ་བྱེད་མཁན <xliff:g id="name">%1$s</xliff:g> (<xliff:g id="service" example="SUPL-service">%2$s</xliff:g>)</string>
+    <string name="gpsVerifYes">རེད།</string>
+    <string name="gpsVerifNo">མིན།</string>
+    <string name="sync_too_many_deletes">ཚོད་འཛིན་བདག་དབང་དོར་བ། </string>
+    <string name="sync_too_many_deletes_desc">འདི་ནི <xliff:g id="number_of_deleted_items">%1$d</xliff:g> ཆེད་དུ་དོར་བ <xliff:g id="type_of_sync">%2$s</xliff:g>, རྩིས་ཐོ <xliff:g id="account_name">%3$s</xliff:g>ཁྱེད་ཀྱི་ཅི་ལྟར་བྱེད་འདོད་དམ། </string>
+    <string name="sync_really_delete">ངོས་འདི་དག་སུབ་པ།</string>
+    <string name="sync_undo_deletes">སུབ་པ་ཕྱི་ནུར་བྱེད་པ།</string>
+    <string name="sync_do_nothing">མིག་སྔར་བྱ་རིམ་གཅིག་ཀྱང་བཀོལ་སྤྱོད་་བྱེད་མི་ཐུབ་པ།</string>
+    <string name="choose_account_label">རྩིས་ཐོ་འདེམ་པ།</string>
+    <string name="add_account_label">རྩིས་ཐོ་ཁ་བསྣོན་བྱེད་པ།</string>
+    <string name="add_account_button_label">རྩིས་ཐོ་ཁ་སྣོན།</string>
+    <string name="number_picker_increment_button">ཁ་སྣོན།</string>
+    <string name="number_picker_decrement_button">ཉུང་འཕྲི།</string>
+    <string name="number_picker_increment_scroll_mode"><xliff:g id="value" example="3">%s</xliff:g> མནན་ཏེ་འཛིན་པ། </string>
+    <string name="number_picker_increment_scroll_action">ཡར་དེད་ན་སྣོན་པ་དང་། མར་དེད་ན་ཉུང་འཕྲི་བྱེད། </string>
+    <string name="time_picker_increment_minute_button">སྐར་གྲངས་ཁ་སྣོན།</string>
+    <string name="time_picker_decrement_minute_button">སྐར་གྲངས་ཉུང་འཕྲི།</string>
+    <string name="time_picker_increment_hour_button">དུས་ཚོད་ཁ་སྣོན།</string>
+    <string name="time_picker_decrement_hour_button">དུས་ཚོད་ཉུང་འཕྲི།</string>
+    <string name="time_picker_increment_set_pm_button">ཕྱི་དྲོའི་དུས་ཚོད་གཏན་ཁེལ།</string>
+    <string name="time_picker_decrement_set_am_button">སྔ་དྲོའི་དུས་ཚོད་གཏན་ཁེལ།</string>
+    <string name="date_picker_increment_month_button">ཟླ་བ་ཁ་སྣོན་བྱེད་པ།</string>
+    <string name="date_picker_decrement_month_button">ཟླ་བ་ཉུང་འཕྲི་བྱེད་པ།</string>
+    <string name="date_picker_increment_day_button">ཉིན་ཁ་སྣོན་བྱེད་པ།</string>
+    <string name="date_picker_decrement_day_button">ཉིན་ཉུང་འཕྲི་བྱེད་པ།</string>
+    <string name="date_picker_increment_year_button">ལོ་ཁ་སྣོན་བྱེད་པ།</string>
+    <string name="date_picker_decrement_year_button">ལོ་ཉུང་འཕྲི་བྱེད་པ།</string>
+    <string name="keyboardview_keycode_cancel">སྐྱུར་བ།</string>
+    <string name="keyboardview_keycode_done">རྒྱུས་ལོན་པ།</string>
+    <string name="keyboardview_keycode_mode_change">རྣམ་པ་བསྒྱུར་བཅོས།</string>
+    <string name="keyboardview_keycode_shift">Shift</string>
+    <string name="keyboardview_keycode_enter">མཐེབ་གཞོང་། </string>
+    <string name="activitychooserview_choose_application">བྱ་རིམ་མ་ལག་གཅིག་འདེམ་པ།</string>
+    <string name="shareactionprovider_share_with">མཉམ་སྤྱོད་བྱེད་རོགས། </string>
+    <string name="shareactionprovider_share_with_application">མཉམ་སྤྱོད་བྱེད་རོགས <xliff:g id="application_name" example="Bluetooth">%s</xliff:g></string>
+    <string name="content_description_sliding_handle">ཤུད་འགྲོས་ཡུ་བ། མནན་ཏེ་འཛིན་པ། </string>
+    <string name="description_direction_up">ཡར་ཕྱོགས་སུ <xliff:g id="target_description" example="Unlock">%s</xliff:g></string>
+    <string name="description_direction_down">འོག་ཕྱོགས་སུ <xliff:g id="target_description" example="Unlock">%s</xliff:g></string>
+    <string name="description_direction_left">"གཡོན་ཕྱོགས་སུ <xliff:g id="target_description" example="Unlock">%s</xliff:g></string>
+    <string name="description_direction_right">གཡས་ཕྱོགས་སུ <xliff:g id="target_description" example="Unlock">%s</xliff:g></string>
+    <string name="description_target_unlock">སྒོ་ཕྱེ་བ།</string>
+    <string name="description_target_camera">པར་ཆས།</string>
+    <string name="description_target_silent">སྒྲ་མེད།</string>
+    <string name="description_target_soundon">སྒྲ་འབྱེད་པ</string>
+    <string name="description_target_unlock_tablet">ཤུད་འགྲོས་ཟྭ་འབྱེད། </string>
+    <string name="keyboard_headset_required_to_hear_password">རྣར་འཇུག་ཡོད་ན་ད་གཟོད་གསང་གྲངས་མཐེབ་གནོན་གྱི་སྒྲ་ཐོས་ཐུབ། </string>
+    <string name="keyboard_password_character_no_headset">ཚེག</string>
+    <string name="action_bar_home_description">ཕྱོགས་སྟོན་གཙོ་ངོས། </string>
+    <string name="action_bar_up_description">ཡར་ངོས་ཕྱོགས་སྟོན། </string>
+    <string name="action_menu_overflow_description">འདེམ་སྣ་མང་པོ།</string>
+    <string name="storage_internal">ནང་ཁུལ་ཉར་གསོག་ཆས།</string>
+    <string name="storage_sd_card">SDཁཱ།</string>
+    <string name="storage_usb">USBཉར་གསོག</string>
+    <string name="extract_edit_menu_button">སྒྲིག་སྦྱོར། </string>
+    <string name="data_usage_warning_title">སྨྱན་གཟུགས་བཀོལ་པར་ཉེན་བརྡ་རྒྱག་པ།</string>
+    <string name="data_usage_warning_body">རེག་སྟེ་བཀོལ་སྤྱོད་གནས་བབས་དང་ཇུས་འགོད་ལ་བལྟས་ཆོག</string>
+    <string name="data_usage_3g_limit_title">2G-3Gགྲངས་ཀ་བཀོལ་བ་གཏན་འགོག</string>
+    <string name="data_usage_4g_limit_title">4G གྲངས་ཀ་བཀོལ་བ་གཏན་འགོག</string>
+    <string name="data_usage_mobile_limit_title">སྥོ་འགུལ་གྲངས་ཀ་བཀོལ་བ་གཏན་འགོག</string>
+    <string name="data_usage_wifi_limit_title">WLANདྲ་བའི་གྲངས་ཀ་བཀོལ་བ་གཏན་འགོག</string>
+    <string name="data_usage_limit_body">རེག་པ་མགོ་བརྩམས་ཟིན། </string>
+    <string name="data_usage_3g_limit_snoozed_title">2G-3G ལས་བརྒལ་བའི་སྨྱན་གཟུགས་རེའུ་མིག་ཚད་བཀག་བྱེད་པ།</string>
+    <string name="data_usage_4g_limit_snoozed_title">4G ལས་བརྒལ་བའི་སྨྱན་གཟུགས་གྲངས་ཀ་ཚད་བཀག་བྱེད་པ།</string>
+    <string name="data_usage_mobile_limit_snoozed_title">ཁ་པར་གྱི་གྲངས་ཀར་ཚད་ལས་བརྒལ་ཟིན། </string>
+    <string name="data_usage_wifi_limit_snoozed_title">WLAN སྨན་གཟུགས་གྲངས་ཀ་ལས་བརྒལ་ཚེ་ཚད་བཀག་བྱེད་པ།</string>
+    <string name="data_usage_limit_snoozed_body">བརྒལ་མི་ཆོག་པའི་ཚད་གཞི་གཏན་འབེབས <xliff:g id="SIZE">%s</xliff:g>"</string>
+    <string name="data_usage_restricted_title">རྒྱབ་ངོས་གྲངས་ཀར་ཚོད་འཛིན་ཐེབས་པ། </string>
+    <string name="data_usage_restricted_body">རེག་སྟེ་ཚོད་འཛིན་དོར་བ། </string>
+    <string name="ssl_certificate">བདེ་འཇགས་དཔང་ཡིག</string>
+    <string name="ssl_certificate_is_valid">དཔང་ཡིག་འདིར་ནུས་བ་ཡོད།</string>
+    <string name="issued_to">སྟེར་བ།</string>
+    <string name="common_name">རྒྱུན་སྤྱོད་མིང་།</string>
+    <string name="org_name">རྩ་འཛུགས་།</string>
+    <string name="org_unit">རྩ་འཛུགས་ལས་ཁུངས།</string>
+    <string name="issued_by">སྟེར་མཁན། </string>
+    <string name="validity_period">ནུས་ཡོད་དུས་ཡུན། </string>
+    <string name="issued_on">སྟེར་བའི་དུས་ཚོད། </string>
+    <string name="expires_on">ནུས་ལྡན་དུས་བཀག</string>
+    <string name="serial_number">རིམ་གྲངས། </string>
+    <string name="fingerprints">མཛུབ་རིས།</string>
+    <string name="sha256_fingerprint">SHA-256མཛུབ་རིས།</string>
+    <string name="sha1_fingerprint">SHA-1 མཛུབ་རིས།</string>
+    <string name="activity_chooser_view_see_all">ཚང་མར་བལྟ་ཞིབ།</string>
+    <string name="activity_chooser_view_dialog_title_default">བྱ་འགུལ་འདེམ་པ།</string>
+    <string name="share_action_provider_share_with">མཉམ་སྤྱོད་ཐབས་ལམ།</string>
+    <string name="status_bar_device_locked">སྒྲིག་ཆས་ཀྱི་སྒོ་རྒྱབ་ཟིན་པ།</string>
+    <string name="list_delimeter">", "</string>
+    <string name="sending">གཏོང་བཞིན་པ།</string>
+    <string name="launchBrowserDefault">དྲ་རྒྱ་བཤར་ལྟ་ཆས་འགོ་སློང་བ།?</string>
+    <string name="SetupCallDefault">ཁ་པར་ལ་ཉན་དགོས་སམ།</string>
+    <string name="china_mobile_numeric_values">CMCC</string>
+    <string name="china_unicom_numeric_values">CUCC</string>
+    <string name="missed_call">%1$d མ་ཉན་པའི་ཁ་པར།</string>
+    <string name="unread_message">%1$d མ་བལྟས་པའི་བརྡ་འཕྲིན།</string>
+    <string name="shutdown_after_seconds">སྐར་ཆ <xliff:g id="NUMBER">%d</xliff:g> རྗེས་སུ་ཁྱེད་ཀྱི་ཁ་པར་སྒོ་རྒྱག་ངེས། </string>
+</resources>
