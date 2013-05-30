@@ -163,11 +163,16 @@ public class VibratorService extends IVibratorService.Stub
         // We're running in the system server so we cannot crash. Check for a
         // timeout of 0 or negative. This will ensure that a vibration has
         // either a timeout of > 0 or a non-null pattern.
-        if (milliseconds <= 0 || (mCurrentVibration != null
+        try {
+             if (milliseconds <= 0 || (mCurrentVibration != null
                 && mCurrentVibration.hasLongerTimeout(milliseconds))) {
-            // Ignore this vibration since the current vibration will play for
-            // longer than milliseconds.
-            return;
+             // Ignore this vibration since the current vibration will play for
+             // longer than milliseconds.
+             return;
+          }
+        } catch (NullPointerException e){
+           Slog.e(TAG, "We're running in the system server so we cannot crash.Check for a non-null pattern: " + e.getMessage());
+           e.printStackTrace();
         }
 
         Vibration vib = new Vibration(token, milliseconds, uid);
