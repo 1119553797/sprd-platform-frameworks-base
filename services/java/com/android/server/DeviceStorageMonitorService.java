@@ -54,7 +54,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
+import java.io.File;
 
 /**
  * This class implements a service to monitor the amount of disk
@@ -254,6 +254,20 @@ public class DeviceStorageMonitorService extends Binder {
         }
     }
 
+    private void DeleteAllfileOnDir(File dir)
+    {
+       for (File file : dir.listFiles())
+       {
+           try{
+              if (file.isFile()){
+                  file.delete();
+              }
+          }catch(Exception e){
+                //dot do anyting.next file
+          }
+        }//endof for ....
+    }
+
     private final void checkMemory(boolean checkCache) {
         if(mIsCheckingMemory == true) {
             Slog.i(TAG, "other thread is checking memory now ,return");
@@ -307,6 +321,14 @@ public class DeviceStorageMonitorService extends Binder {
                     if (localLOGV) Slog.v(TAG, "Running low on memory " +
                             "notification already sent. do nothing");
                 }
+                //add for delete core file in low memory:
+                try{
+                     DeleteAllfileOnDir(new File("/data/corefile"));
+                }catch(Exception e)
+                {
+                    //did not do anyting.
+                }
+
             } else {
                 if (mUpdateStorageData) {
                     Slog.i(TAG, "update StorageData");
