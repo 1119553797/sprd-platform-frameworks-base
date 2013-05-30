@@ -1701,8 +1701,8 @@ public class TextUtils {
 
     private static final char ZWNBS_CHAR = '\uFEFF';
 
-    private static final String ELLIPSIS_NORMAL = Resources.getSystem().getString(
-            R.string.ellipsis);
-    private static final String ELLIPSIS_TWO_DOTS = Resources.getSystem().getString(
-            R.string.ellipsis_two_dots);
+    private static final String ELLIPSIS_NORMAL = "\u2026";/*Resources.getSystem().getString(
+            R.string.ellipsis);*/
+    private static final String ELLIPSIS_TWO_DOTS = "\u2025";/*Resources.getSystem().getString(
+            R.string.ellipsis_two_dots);*/
 }
