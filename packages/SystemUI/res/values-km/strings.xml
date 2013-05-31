@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">ផ្ទាំងប្រព័ន្ធរបស់អ្នកប្រើប្រាស់</string>
+  <string name="status_bar_clear_all_button">ជម្រះ</string>
+  <string name="status_bar_do_not_disturb_button">កុំរំខាន</string>
+  <string name="status_bar_please_disturb_button">បង្ហាញនូវសេចក្តីជូនដំណឹង</string>
+  <string name="status_bar_recent_remove_item_title">លុបចោលក្នុងតារាង</string>
+  <string name="status_bar_recent_inspect_item_title">ពត៌មានកម្មវិធី</string>
+  <string name="status_bar_no_recent_apps">នៅពេលថ្មីៗនេះអត់ធ្វើកម្មវិធីទេ</string>
+  <string name="status_bar_accessibility_dismiss_recents">បិទកម្មវិធីដែលដំណើរពេលថ្មីនេះ</string>
+  <plurals name="status_bar_accessibility_recent_apps">
+        <item quantity="one">កម្មវិធី1 ដំណើរការថ្មីៗ</item>
+        <item quantity="other">%d កម្មវិធីដំណើរការថ្មីៗ</item>
+    </plurals>
+  <string name="status_bar_no_notifications_title">គ្មានសេចក្តីជូនដំណឹង</string>
+  <string name="status_bar_ongoing_events_title">កំពុងធ្វើ</string>
+  <string name="status_bar_latest_events_title">សេចក្តីជូនដំណឹង</string>
+  <string name="battery_low_title">តភ្ជាប់ប្រដាប់សាក់ថ្ម</string>
+  <string name="battery_low_subtitle">ថ្មពីលខ្សោយ</string>
+  <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g> សល់</string>
+  <string name="invalid_charger">មិនគាំទ្រការសាកថ្មតាមUSB។ \nមានតែប្រើប្រដាប់សាកថ្មដែលបានផ្ដល់។</string>
+  <string name="battery_low_why">ការប្រើប្រាស់ថ្ម</string>
+  <string name="status_bar_settings_settings_button">កំណត់</string>
+  <string name="status_bar_settings_airplane">របៀបហោះហើរ</string>
+  <string name="status_bar_settings_auto_rotation">បង្វិលអេក្រង់-ដោយស្វ័យប្រវត្តិ</string>
+  <string name="status_bar_settings_mute_label">សំឡេងស្ងៀមស្ងាត់</string>
+  <string name="status_bar_settings_auto_brightness_label">ស្វ័យប្រវត្តិ</string>
+  <string name="status_bar_settings_notifications">សេចក្តីជូនដំណឹង</string>
+  <string name="bluetooth_tethered">បានចែករំលែកបណ្តាញតាមBluetooth</string>
+  <string name="status_bar_input_method_settings_configure_input_methods">កំណត់វិធីបញ្ចូលភាសា</string>
+  <string name="status_bar_use_physical_keyboard">ប្រើក្តារគ្រាប់ចុចពិត</string>
+  <string name="usb_device_permission_prompt">អនុញ្ញាតឲ្យកម្មវិធី <xliff:g id="application">%1$s</xliff:g>  តភ្ជាប់គ្រឿងបរិក្ខារUSBនេះឬទេ?</string>
+  <string name="usb_accessory_permission_prompt">អនុញ្ញាតឲ្យកម្មវិធី <xliff:g id="application">%1$s</xliff:g>  តភ្ជាប់គ្រឿងបន្ថែមUSBនេះឬទេ?</string>
+  <string name="usb_device_confirm_prompt">តើត្រូវបើក<xliff:g id="ACTIVITY">%1$s</xliff:g>នៅពេលតភ្ជាប់គ្រឿងបន្លាស់USBដែរឬទេ?</string>
+  <string name="usb_accessory_confirm_prompt">តើត្រូវបើក<xliff:g id="ACTIVITY">%1$s</xliff:g>នៅពេលតភ្ជាប់គ្រឿងបន្លាស់USBដែរឬទេ?</string>
+  <string name="usb_accessory_uri_prompt">មិនដំឡើងកម្មវិធីដែលសមស្របគ្រឿងបន្លាស់USBនេះ​  សូមទស្សនា<xliff:g id="URL">%1$s</xliff:g></string>
+  <string name="title_usb_accessory">ប្រដាប់ប្រដាUSB</string>
+  <string name="label_view">មើល</string>
+  <string name="always_use_device">ប្រើឧបករណ៍USBនេះក្នុងលំនាំដើម</string>
+  <string name="always_use_accessory">ប្រើប្រដាប់ប្រដាUSBនេះក្នុងលំនាំដើម</string>
+  <string name="compat_mode_on">ពង្រីកឲ្យបំពេញអេក្រង់</string>
+  <string name="compat_mode_off">ទាញដើម្បីពេញអេក្រង់ទាំងមូល</string>
+  <string name="compat_mode_help_header">ពង្រីកដែលមានភាពឆបគ្នា</string>
+  <string name="compat_mode_help_body">បើកម្មវិធីត្រូវរចនាសំរាប់អេក្រង់តូចជាង វត្ថុបញ្ជាពង្រីកមួយនឹងបង្ហាញនៅក្បែរនាឡិកា។</string>
+  <string name="screenshot_saving_ticker">កំពុងរក្សាទុករូបភាពកាត់អេក្រង់</string>
+  <string name="screenshot_saving_title">កំពុងរក្សាទុករូបភាពកាត់អេក្រង់</string>
+  <string name="screenshot_saving_text">កំពុងរក្សាទុករូបភាពកាត់អេក្រង់</string>
+  <string name="screenshot_saved_title">បានចាប់រូបភាពកាត់អេក្រង់</string>
+  <string name="screenshot_saved_text">បើចង់មើលរូបថតអេក្រង់ សូមប៉ះវា។</string>
+  <string name="screenshot_failed_title">មិនអាចចាប់យករូបថតអេក្រង់។</string>
+  <string name="screenshot_failed_text">មិនអាចរក្សាទុករូបថតអេក្រង់។អង្គចងចាំត្រូវប្រើ។</string>
+  <string name="usb_preference_title">ជម្រើសផ្ទេរ​ឯកសារUSB</string>
+  <string name="use_mtp_button_title">ដំឡើងតាមរយប្រដាប់មេឌៀ (MTP) </string>
+  <string name="use_ptp_button_title">ដំឡើងតាមរយកាមេរ៉ា</string>
+  <string name="installer_cd_button_title">ដំឡើងឯកសារបញ្ជូនឯកសារAndroid នៅកុំព្យូទ័រMac</string>
+  <string name="accessibility_back">ត្រឡប់ទៅ</string>
+  <string name="accessibility_home">គេហដ្ឋាន</string>
+  <string name="accessibility_menu">បញ្ជី</string>
+  <string name="accessibility_recent">កម្មវិធីដែលកំពុងដើរនាពេលថ្មីៗនេះ</string>
+  <string name="accessibility_ime_switch_button">ប៊ូតុងប្តូរវិធីបញ្ចូលភាសា</string>
+  <string name="accessibility_compatibility_zoom_button">ប៊ូតុងពង្រីកដែលមានភាពឆបគ្នា</string>
+  <string name="accessibility_compatibility_zoom_example">ពង្រីករូបភាពតូចឲ្យបង្ហាញនៅអេក្រង់ធំជាង។</string>
+  <string name="accessibility_bluetooth_connected">Bluetoothបានតភ្ជាប់ហើយ។</string>
+  <string name="accessibility_bluetooth_disconnected">Bluetoothបានផ្តាច់តភ្ជាប់។</string>
+  <string name="accessibility_no_battery">គ្មានថ្ម</string>
+  <string name="accessibility_battery_one_bar">ថ្មមានមួយរបារ។</string>
+  <string name="accessibility_battery_two_bars">ថ្មមានពីររបារ។</string>
+  <string name="accessibility_battery_three_bars">ថ្មមានបីរបារ។</string>
+  <string name="accessibility_battery_full">ថ្មពេញ។</string>
+  <string name="accessibility_no_phone">គ្មានសេវាទូរស័ព្ទដៃ</string>
+  <string name="accessibility_phone_one_bar">ទំហំសេវាទូរស័ព្ទដៃមាន១ក្រឡា</string>
+  <string name="accessibility_phone_two_bars">ទំហំសេវាទូរស័ព្ទដៃមាន២ក្រឡា</string>
+  <string name="accessibility_phone_three_bars">ទំហំសេវាទូរស័ព្ទដៃមាន៣ក្រឡា</string>
+  <string name="accessibility_phone_signal_full">សេវាទូរស័ព្ទពេញ</string>
+  <string name="accessibility_no_data">គ្មានសេវាបណ្តាញទិន្នន័យទេ</string>
+  <string name="accessibility_data_one_bar">ទិន្នន័យមានរបារ១។</string>
+  <string name="accessibility_data_two_bars">ទិន្នន័យមានរបារ២។</string>
+  <string name="accessibility_data_three_bars">ទិន្នន័យមានរបារ៣។</string>
+  <string name="accessibility_data_signal_full">សញ្ញាទិន្នន័យពេញ</string>
+  <string name="accessibility_no_wifi">គ្មានសេវាWIFI</string>
+  <string name="accessibility_wifi_one_bar">ប្រពលភាពសញ្ញាWi-Fiបង្ហាញជា
+​របារ​មួយ។</string>
+  <string name="accessibility_wifi_two_bars">ប្រពលភាពសញ្ញាWi-Fiបង្ហាញជា
+​របារ​ពីរ។</string>
+  <string name="accessibility_wifi_three_bars">ប្រពលភាពសញ្ញាWi-Fiបង្ហាញជា
+​របារ​បី។</string>
+  <string name="accessibility_wifi_signal_full">សញ្ញាWiFiពេញ</string>
+  <string name="accessibility_no_wimax">គ្មានសេវា WiMAX</string>
+  <string name="accessibility_wimax_one_bar">ប្រពលភាពសញ្ញាWiMAXបង្ហាញជា
+​របារ​មួយ។</string>
+  <string name="accessibility_wimax_two_bars">ប្រពលភាពសញ្ញាWiMAXបង្ហាញជា
+​របារពី។</string>
+  <string name="accessibility_wimax_three_bars">ប្រពលភាពសញ្ញាWiMAXបង្ហាញជា
+​របារ​បី។</string>
+  <string name="accessibility_wimax_signal_full">សញ្ញាWiMAXពេញ</string>
+  <string name="accessibility_no_sim">គ្មានកាតSIM</string>
+  <string name="accessibility_bluetooth_tether">កំពុងចែករំលែកបណ្តាញតាមBluetooth</string>
+  <string name="accessibility_airplane_mode">របៀបហោះហើរ។</string>
+  <string name="accessibility_settings_button">កំណត់ដោយប្រព័ន្ធ</string>
+  <string name="accessibility_notifications_button">សេចក្តីជូនដំណឹង</string>
+  <string name="accessibility_remove_notification">ជម្រះការជូនដំណឹង</string>
+  <string name="accessibility_gps_enabled">GPSបានដំណើរការហើយ</string>
+  <string name="accessibility_gps_acquiring">កំពុងទទួលសេវាGPS</string>
+  <string name="accessibility_tty_enabled">ម៉ាស៊ីនបោះពុម្ពអក្សរបានចាប់ផ្តើមដំណើរការហើយ</string>
+  <string name="accessibility_ringer_vibrate">ប្រដាប់</string>
+  <string name="accessibility_ringer_silent">ប្រដាប់រំញ័រស្ងៀមស្ងាត់</string>
+  <string name="accessibility_recents_item_dismissed"><xliff:g id="app" example="Calendar">%s</xliff:g> បានលុបចោល។</string>
+  <string name="data_usage_disabled_dialog_3g_title">ទិន្នន័យ2G-3Gឈប់ប្រើ</string>
+  <string name="data_usage_disabled_dialog_4g_title">ទិន្នន័យ4Gឈប់ប្រើ</string>
+  <string name="data_usage_disabled_dialog_mobile_title">ទិន្នន័យចល័តបានឈប់ហើយ</string>
+  <string name="data_usage_disabled_dialog_title">ទិន្នន័យបានបិទ</string>
+  <string name="data_usage_disabled_dialog">ការប្រើប្រាស់​ទិន្នន័យបានដល់​ដែនកំណត់ហើយ។\n\nIf បើលោកបើកឡើងវិញនូវទិន្នន័យ ការីបណ្ដាញរបស់លោកប្រហែលគិតថ្លៃ។</string>
+  <string name="data_usage_disabled_dialog_enable">ចាប់ផ្តើមតភ្ជាប់ទិន្នន័យម្តងទៀត</string>
+  <string name="status_bar_settings_signal_meter_disconnected">
+        មិនទាន់តភ្ជាប់នឹងអ៊ីនធើណែតទេ
+    </string>
+  <string name="status_bar_settings_signal_meter_wifi_nossid">Wi-Fiត្រូវតភ្ជាប់បាន</string>
+  <string name="gps_notification_searching_text">កំពុងស្វែងរកGPS</string>
+  <string name="gps_notification_found_text">កំណត់ទីកន្លែងតាមរយៈGPS</string>
+  <string name="accessibility_clear_all">ជម្រះការជូនដំណឹងទាំងអស់</string>
+  <string name="weak_signal_title">សញ្ញាខ្សោយ</string>
+  <string name="weak_signal_message">ឥឡូវនេះសេវាWLANខ្សោយ ស្នើសុំជ្រើសរើសសេវាចំណុចតភ្ជាប់ល្អជាង</string>
+  <string name="auto_connect">មិនសួរ តភ្ជាប់កម្មវិធីដែលជឿទុកចិត្តដ៏ស្វ័យប្រវក្តិ</string>
+  <string name="mobile_data_connect_disable">ទេ</string>
+  <string name="mobile_data_connect_enable">បាទ</string>
+  <string name="network_disconnect_title">សេចក្តីជូនដំណឹង</string>
+  <string name="network_disconnect_message">បណ្ដាញWLANដាច់ហើយ។ \nតភ្ជាប់តាមរយ:3Gឬ? \nIf ប្រសិនបើលោកមិន​មានផែនការ​ទិន្នន័យ ​វានឹងបង្កើតសោហ៊ុយបន្ថែមទៀត។</string>
+</resources>
