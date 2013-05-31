@@ -1453,6 +1453,7 @@
   <java-symbol type="array" name="config_oemUsbModeOverride" />
   <java-symbol type="array" name="numeric_to_operator" />
   <java-symbol type="array" name="operator" />
+  <java-symbol type="array" name="numeric_to_operator_names" />
   <java-symbol type="bool" name="config_animateScreenLights" />
   <java-symbol type="bool" name="config_automatic_brightness_available" />
   <java-symbol type="bool" name="config_sf_limitedAlpha" />
