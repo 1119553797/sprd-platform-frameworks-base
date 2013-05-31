@@ -33,7 +33,7 @@ import java.util.Collection;
  * AsyncChannel to a DataConnection
  */
 public class DataConnectionAc extends AsyncChannel {
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
     private String mLogTag;
 
     public DataConnection dataConnection;

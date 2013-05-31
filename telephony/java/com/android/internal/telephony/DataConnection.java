@@ -64,7 +64,7 @@ import java.util.List;
  */
 public abstract class DataConnection extends StateMachine {
     protected static final boolean DBG = true;
-    protected static final boolean VDBG = false;
+    protected static final boolean VDBG = true;
     private static final boolean NEED_PRINT = Debug.isDebug();
 
     protected static Object mCountLock = new Object();
