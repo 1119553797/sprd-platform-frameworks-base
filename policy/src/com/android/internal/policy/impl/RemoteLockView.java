@@ -45,8 +45,6 @@ public class RemoteLockView extends RelativeLayout implements KeyguardScreen,
         setFocusableInTouchMode(true);
         setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
-        mUpdateMonitor.registerInfoCallback(this);
-        mUpdateMonitor.registerSimStateCallback(this);
         mLockScreenProxy = createRemoteLockView(lockClassLoader);
         if (mLockScreenProxy != null) {
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
@@ -57,6 +55,8 @@ public class RemoteLockView extends RelativeLayout implements KeyguardScreen,
             throw new IllegalArgumentException(
                     "Create remote view false ,to create default lock view .");
         }
+        mUpdateMonitor.registerInfoCallback(this);
+        mUpdateMonitor.registerSimStateCallback(this);
         isExecCreate = true;
     }
 
