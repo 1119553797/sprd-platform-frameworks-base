@@ -36,7 +36,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Slog;
 import android.util.TypedValue;
-
+import com.sprd.android.config.OptConfig;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -1883,7 +1883,7 @@ public class PackageParser {
             String tagName = parser.getName();
             if (tagName.equals("activity")) {
                 Activity a = parseActivity(owner, res, parser, attrs, flags, outError, false,
-                        hardwareAccelerated);
+                        hardwareAccelerated, pkgName);
                 if (a == null) {
                     mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
                     return false;
@@ -1892,7 +1892,7 @@ public class PackageParser {
                 owner.activities.add(a);
 
             } else if (tagName.equals("receiver")) {
-                Activity a = parseActivity(owner, res, parser, attrs, flags, outError, true, false);
+                Activity a = parseActivity(owner, res, parser, attrs, flags, outError, true, false, pkgName);
                 if (a == null) {
                     mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
                     return false;
@@ -2032,7 +2032,7 @@ public class PackageParser {
 
     private Activity parseActivity(Package owner, Resources res,
             XmlPullParser parser, AttributeSet attrs, int flags, String[] outError,
-            boolean receiver, boolean hardwareAccelerated)
+            boolean receiver, boolean hardwareAccelerated, String pkgName)
             throws XmlPullParserException, IOException {
         TypedArray sa = res.obtainAttributes(attrs,
                 com.android.internal.R.styleable.AndroidManifestActivity);
@@ -2174,7 +2174,18 @@ public class PackageParser {
             if (sa.getBoolean(
                     com.android.internal.R.styleable.AndroidManifestActivity_hardwareAccelerated,
                     hardwareAccelerated)) {
-                a.info.flags |= ActivityInfo.FLAG_HARDWARE_ACCELERATED;
+            	if (OptConfig.LC_RAM_SUPPORT) {
+                	if (((flags & PARSE_IS_SYSTEM) != 0) && 
+                		  owner.applicationInfo.targetSdkVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+	                	if (!pkgName.equals("com.android.launcher") &&
+	            			!pkgName.equals("com.android.calendar") &&
+	            			!pkgName.equals("com.android.settings")) {
+	                		a.info.flags |= ActivityInfo.FLAG_HARDWARE_ACCELERATED;
+	                	}
+                	}
+                } else {
+                	a.info.flags |= ActivityInfo.FLAG_HARDWARE_ACCELERATED;
+                }
             }
 
             a.info.launchMode = sa.getInt(
