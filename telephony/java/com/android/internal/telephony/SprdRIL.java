@@ -39,6 +39,7 @@ public final class SprdRIL extends RIL {
 
     static final String LOG_TAG = "SprdRILJ";
 
+    protected Registrant mSimNotDetectedRegistrant;
     private final class DSCIInfo {
         int id;
         int idr;
@@ -323,6 +324,14 @@ public final class SprdRIL extends RIL {
         send(rr);
     }
 
+    public void registerForSimNotDetected(Handler h, int what, Object obj) {
+        mSimNotDetectedRegistrant = new Registrant(h, what, obj);
+    }
+
+    public void unregisterForSimNotDetected(Handler h) {
+        mSimNotDetectedRegistrant.clear();
+    }
+
     protected void
     processSolicited (Parcel p) {
         int serial, error;
@@ -459,6 +468,7 @@ public final class SprdRIL extends RIL {
                 case RIL_UNSOL_ON_STIN:ret = responseInts(p); break;
                 case RIL_UNSOL_SIM_SMS_READY:ret = responseVoid(p); break;
                 case RIL_UNSOL_STK_CALL_SETUP: ret = responseString(p); break;
+                case RIL_UNSOL_SIM_DROP: ret = responseVoid(p); break;
                 default:
                     p.setDataPosition(position);
                     super.processUnsolicited(p);
@@ -685,6 +695,13 @@ public final class SprdRIL extends RIL {
                                         new AsyncResult (null, ret, null));
                 }
                 break;
+
+            case RIL_UNSOL_SIM_DROP:
+                if (mSimNotDetectedRegistrant != null) {
+                    mSimNotDetectedRegistrant.notifyRegistrant(
+                            new AsyncResult(null, ret, null));
+                }
+                break;
         }
     }
 
@@ -764,6 +781,7 @@ public final class SprdRIL extends RIL {
             case RIL_UNSOL_VIDEOPHONE_MEDIA_START: return "UNSOL_VIDEOPHONE_MEDIA_START";
             case RIL_UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED: return "UNSOL_RESPONSE_VIDEOCALL_STATE_CHANGED";
             case RIL_UNSOL_SIM_SMS_READY: return "UNSOL_SIM_SMS_READY";
+            case RIL_UNSOL_SIM_DROP: return "RIL_UNSOL_SIM_DROP";
             default: return super.responseToString(request);
 		 }
 	 }

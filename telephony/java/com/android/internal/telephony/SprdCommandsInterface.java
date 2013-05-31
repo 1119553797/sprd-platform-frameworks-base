@@ -68,5 +68,7 @@ public interface SprdCommandsInterface {
     public void registerForExternalDial(Handler h, int what, Object obj);
     public void unregisterForExternalDial(Handler h);
 
+    public void registerForSimNotDetected(Handler h, int what, Object obj);
+    public void unregisterForSimNotDetected(Handler h);
 }
 

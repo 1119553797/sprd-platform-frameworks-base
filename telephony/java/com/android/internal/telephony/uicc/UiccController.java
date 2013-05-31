@@ -18,6 +18,7 @@ package com.android.internal.telephony.uicc;
 
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.PhoneBase;
+import com.android.internal.telephony.SprdIccCard;
 import com.android.internal.telephony.cdma.CDMALTEPhone;
 import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
@@ -83,7 +84,7 @@ public class UiccController {
         }
 
         mIsCurrentCard3gpp = isNewCard3gpp;
-        mIccCard = new IccCard(mCurrentPhone, mCurrentPhone.getPhoneName(),
+        mIccCard = new SprdIccCard(mCurrentPhone, mCurrentPhone.getPhoneName(),
                 isNewCard3gpp, DBG);
     }
 

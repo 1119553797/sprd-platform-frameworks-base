@@ -608,4 +608,12 @@ class SipCommandInterface extends SprdBaseCommands implements CommandsInterface 
 
     public void unregisterForExternalDial(Handler h) {
     }
+
+    @Override
+    public void registerForSimNotDetected(Handler h, int what, Object obj) {
+    }
+
+    @Override
+    public void unregisterForSimNotDetected(Handler h) {
+    }
 }
