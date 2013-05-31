@@ -114,6 +114,7 @@ import android.widget.PopupWindow;
 import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.sprd.android.config.OptConfig;
 
 import junit.framework.Assert;
 
@@ -740,6 +741,10 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
             // Here we just need to clean up the Surface Texture which is static.
             if (level >= TRIM_MEMORY_UI_HIDDEN) {
                 HTML5VideoInline.cleanupSurfaceTexture();
+            }
+
+  	    if (OptConfig.LC_RAM_SUPPORT) {
+            	level = (level < TRIM_MEMORY_UI_HIDDEN) ? TRIM_MEMORY_UI_HIDDEN : level;
             }
             WebViewClassic.nativeOnTrimMemory(level);
         }
@@ -3424,6 +3429,10 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
      */
     @Override
     public void pauseTimers() {
+
+ 	if (OptConfig.LC_RAM_SUPPORT) {
+        	WebViewClassic.nativeOnTrimMemory(ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN);
+        }
         mWebViewCore.sendMessage(EventHub.PAUSE_TIMERS);
     }
 
