@@ -159,6 +159,7 @@ int main(int argc, char** argv)
         //msleep(100);
         ALOGE("=== BTUT test Write EUT mode! ===\n");
         system("echo 1 > /data/bteut.txt");
+        system("chmod 777 /data/bteut.txt");
         ALOGE("=== BTUT test open BT power! ===\n");
         if (set_bluetooth_power(1) < 0) 
         {
@@ -171,6 +172,7 @@ int main(int argc, char** argv)
         sleep(2);
         ALOGE("=== BTUT test hciconfig up! ===\n");
         error = system("hciconfig hci0 up");
+        system("rm /data/bteut.txt");
         if(error == -1 || error == 127)
         {
             ALOGE("=== BTUT test failed on cmd 1! ===\n");
@@ -211,7 +213,6 @@ int main(int argc, char** argv)
                         {
                             ALOGE("=== BTUT test succeed! ===\n");
                             ch = '4';
-                            system("rm /data/bteut.txt");
                         }
                     }
                 }
