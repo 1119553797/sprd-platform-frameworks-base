@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.provider.Settings.System;
 import android.provider.Telephony.Intents;
 import android.telephony.TelephonyManager;
@@ -56,7 +57,7 @@ public class SimManagerService extends ISimManager.Stub {
     public static final String SIM_COLOR_INDEX = "color_index";
 
     public static final String SIM_COUNT = "count";
-
+    
     private final Context mContext;
 
     private Map<String, Sim> mSimCache = new HashMap<String, Sim>();
@@ -102,8 +103,6 @@ public class SimManagerService extends ISimManager.Stub {
             String iccId = mPreferences.getString(SIM_ICC_ID + i, "");
             String name = mPreferences.getString(SIM_NAME + i, "");
             int color = mPreferences.getInt(SIM_COLOR_INDEX + i, 0);
-
-            // set serial num
             Sim sim = new Sim(-1, iccId, name, color);
             sim.setSerialNum(i);
             mSimCache.put(iccId, sim);
@@ -125,7 +124,6 @@ public class SimManagerService extends ISimManager.Stub {
 
             int phoneId = intent.getIntExtra(IccCard.INTENT_KEY_PHONE_ID, 0);
             TelephonyManager telManager = (TelephonyManager) context.getSystemService(PhoneFactory .getServiceName(Context.TELEPHONY_SERVICE, phoneId));
-
             if (TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(intent.getAction())) {
                 String state = intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE);
 
@@ -135,19 +133,15 @@ public class SimManagerService extends ISimManager.Stub {
                     return;
                 }
             } else if (intent.getAction().startsWith(Intents.SPN_STRINGS_UPDATED_ACTION)) {
-
                 Sim sim = mSimCacheByPhoneId.get(phoneId);
-
                 if (sim == null || !TextUtils.isEmpty(sim.getName())) {
                     return;
                 }
-
                 String operator = telManager.getNetworkOperatorName();
                 if (TextUtils.isEmpty(operator)) {
                     Log.i(TAG, "Can not get the operator info now, and the operator is " + operator);
                     return;
                 }
-
                 String name = "";
                 int serial = sim.getSerialNum();
                 if (serial < 10) {
@@ -178,7 +172,23 @@ public class SimManagerService extends ISimManager.Stub {
             if (mSimCache.containsKey(iccId)) {
                 Sim sim = mSimCache.get(iccId);
                 sim.setPhoneId(phoneId);
-
+                if (TextUtils.isEmpty(sim.getName())) {
+                    String name = "";
+                    int serial = sim.getSerialNum();
+                    String operName = getCarrierNameByNumeric(telManager.getSimOperator());
+                    if (!TextUtils.isEmpty(operName)) {
+                        if (serial < 10) {
+                            name = operName + " 0" + serial;
+                        } else {
+                            name = operName + " " + serial;
+                        }
+                    }
+                    Log.i(TAG, "2--sim:name "+name +" operName = "+operName);
+                    SharedPreferences.Editor editor = mPreferences.edit();
+                    editor.putString(SIM_NAME + serial, name);
+                    editor.commit();
+                    sim.setName(name);
+                }
                 mSimCacheByPhoneId.put(phoneId, sim);
                 mUsedColors.add(sim.getColorIndex());
                 Log.i(TAG, "2--sim:" + sim);
@@ -186,19 +196,26 @@ public class SimManagerService extends ISimManager.Stub {
                 mSimCount++;
 
                 // get default name
+                String operName = getCarrierNameByNumeric(telManager.getSimOperator());
                 String operator = telManager.getSimOperatorName();
                 if (TextUtils.isEmpty(operator)) {
                     operator = telManager.getNetworkOperatorName();
                 }
                 String name = "";
-                if (!TextUtils.isEmpty(operator)) {
+                if (!TextUtils.isEmpty(operName)) {
+                    if (mSimCount < 10) {
+                        name = operName + " 0" + mSimCount;
+                    } else {
+                        name = operName + " " + mSimCount;
+                    }
+                }else if(!TextUtils.isEmpty(operator)){
                     if (mSimCount < 10) {
                         name = operator + " 0" + mSimCount;
                     } else {
                         name = operator + " " + mSimCount;
                     }
                 }
-
+                Log.i(TAG, "operator = "+operator +" operName = "+operName + "sim name "+name);
                 // get the default color index
                 int colorIndex = 0;
                 for (int i = 0; i < SimManager.COLORS.length; i++) {
@@ -227,7 +244,23 @@ public class SimManagerService extends ISimManager.Stub {
             sendSimsChangedBroadcast(insertSims);
         }
     }
-
+    
+    private String getCarrierNameByNumeric(String numeric) {
+        if (numeric == null) {
+            Log.i(TAG, "Can not get CarrierName because numeric is null");
+            return null;
+        }
+        Resources r = Resources.getSystem();
+        String itemList[] = r.getStringArray(com.android.internal.R.array.numeric_to_operator_names);
+        for (String item:itemList){
+            String numerics[] = item.split("=");
+            if( numerics[0].equalsIgnoreCase(numeric)){
+                return numerics[1];
+            }
+        }
+        Log.i(TAG, "Can not get CarrierName by numeric = "+numeric);
+        return null;
+    }
     public String getName(int phoneId) {
         Sim sim = mSimCacheByPhoneId.get(phoneId);
         if (sim == null) {
