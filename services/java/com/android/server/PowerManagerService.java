@@ -41,6 +41,7 @@ import android.hardware.SystemSensorManager;
 import android.os.BatteryManager;
 import android.os.BatteryStats;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -92,6 +93,7 @@ public class PowerManagerService extends IPowerManager.Stub
 
     static final boolean DEBUG_SCREEN_ON = false;
 
+    private static final boolean DEBUG = !"user".equals(Build.TYPE);
     private static final boolean LOG_PARTIAL_WL = false;
 
     // Indicates whether touch-down cycles should be logged as part of the
@@ -850,12 +852,13 @@ public class PowerManagerService extends IPowerManager.Stub
 
     public void acquireWakeLockLocked(int flags, IBinder lock, int uid, int pid, String tag,
             WorkSource ws) {
-        if (true) {
+        if (DEBUG) {
             Slog.d(TAG, "acquireWakeLock flags=0x" + Integer.toHexString(flags) + " tag=" + tag);
-        }
+        
 
-        for(int i = 0; i < mLocks.size(); i ++){
-            Log.i(TAG, "mLocks " + i + mLocks.get(i).flags + mLocks.get(i).tag);
+            for(int i = 0; i < mLocks.size(); i ++){
+                Log.i(TAG, "mLocks " + i + mLocks.get(i).flags + mLocks.get(i).tag);
+            }
         }
         if (ws != null && ws.size() == 0) {
             ws = null;
@@ -1020,13 +1023,14 @@ public class PowerManagerService extends IPowerManager.Stub
             return;
         }
 
-        if (true) {
+        if (DEBUG) {
             Slog.d(TAG, "releaseWakeLock flags=0x"
                     + Integer.toHexString(wl.flags) + " tag=" + wl.tag);
-        }
+        
 
-        for(int i = 0; i < mLocks.size(); i ++){
-            Log.i(TAG, "mLocks " + i + mLocks.get(i).flags + mLocks.get(i).tag);
+            for(int i = 0; i < mLocks.size(); i ++){
+                Log.i(TAG, "mLocks " + i + mLocks.get(i).flags + mLocks.get(i).tag);
+            }
         }
         if (isScreenLock(wl.flags)) {
             if ((wl.flags & LOCK_MASK) == PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK) {
@@ -1867,8 +1871,10 @@ public class PowerManagerService extends IPowerManager.Stub
         int err = nativeSetScreenState(on);
 
         Log.i(TAG, "setScreenState: screen_state=" + on + " mPartialCount=" + mPartialCount + "err=" + err);
-        for(int i = 0; i < mLocks.size(); i ++){
-            Log.i(TAG, "mLocks " + i + mLocks.get(i).flags + mLocks.get(i).tag);
+        if(DEBUG) {
+            for(int i = 0; i < mLocks.size(); i ++){
+                Log.i(TAG, "mLocks " + i + mLocks.get(i).flags + mLocks.get(i).tag);
+            }
         }
         if (err == 0) {
             mLastScreenOnTime = (on ? SystemClock.elapsedRealtime() : 0);
@@ -2314,7 +2320,7 @@ public class PowerManagerService extends IPowerManager.Stub
                         int value = msg.arg2;
                         long tStart = SystemClock.uptimeMillis();
                         if ((mask & SCREEN_BRIGHT_BIT) != 0) {
-                            /*if (mDebugLightAnimation)*/ Slog.v(TAG, "Set brightness for LcdLight: " + value);
+                            if (DEBUG) Slog.v(TAG, "Set brightness for LcdLight: " + value);
                             mLcdLight.setBrightness(value, brightnessMode);
                         }
                         long elapsed = SystemClock.uptimeMillis() - tStart;
