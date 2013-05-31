@@ -2788,13 +2788,16 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                     trySetupData(Phone.REASON_PS_RESTRICT_ENABLED, Phone.APN_TYPE_DEFAULT);
                 }
                 break;
+
             case EVENT_TRY_SETUP_DATA:
-                if (msg.obj instanceof ApnContext) {
-                    onTrySetupData((ApnContext)msg.obj);
-                } else if (msg.obj instanceof String) {
-                    onTrySetupData((String)msg.obj);
-                } else {
-                    loge("EVENT_TRY_SETUP request w/o apnContext or String");
+                if (MsmsGsmDataConnectionTrackerProxy.isActivePhoneId(mPhone.getPhoneId())) {
+                    if (msg.obj instanceof ApnContext) {
+                        onTrySetupData((ApnContext)msg.obj);
+                    } else if (msg.obj instanceof String) {
+                        onTrySetupData((String)msg.obj);
+                    } else {
+                        loge("EVENT_TRY_SETUP request w/o apnContext or String");
+                    }
                 }
                 break;
 
