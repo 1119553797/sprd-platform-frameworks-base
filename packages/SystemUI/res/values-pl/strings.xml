@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- 
 /**
  * Copyright (c) 2009, The Android Open Source Project
@@ -16,133 +16,138 @@
  * limitations under the License.
  */
  -->
-
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_label" msgid="7164937344850004466">"Interfejs"</string>
-    <string name="status_bar_clear_all_button" msgid="7774721344716731603">"Wyczyść"</string>
-    <string name="status_bar_do_not_disturb_button" msgid="5812628897510997853">"Nie przeszkadzać"</string>
-    <string name="status_bar_please_disturb_button" msgid="3345398298841572813">"Pokaż powiadomienia"</string>
-    <string name="status_bar_recent_remove_item_title" msgid="6026395868129852968">"Usuń z listy"</string>
-    <string name="status_bar_recent_inspect_item_title" msgid="7793624864528818569">"Informacje o aplikacji"</string>
-    <string name="status_bar_no_recent_apps" msgid="6576392951053994640">"Brak ostatnio uruchomionych aplikacji."</string>
-    <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"Ukryj ostatnie aplikacje"</string>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string msgid="3541196417659166245" name="dreams_dock_launcher">"Włącz wygaszacz ekranu."</string>
+  <string msgid="1163547729015390250" name="status_bar_notification_inspect_item_title">"O aplikacji"</string>
+  <string msgid="8936620513608443224" name="notifications_off_title">"Powiadomienia wyłączone"</string>
+  <string msgid="2529001315769385273" name="notifications_off_text">"Kliknij tutaj, by przywrócić powiadomienia."</string>
+  <string msgid="4062780228931590069" name="accessibility_rotation_lock_off">"Ekran zostanie obrócony automatycznie."</string>
+  <string msgid="6731197337665366273" name="accessibility_rotation_lock_on_landscape">"Ekran jest zablokowany w orientacji poziomej."</string>
+  <string msgid="5809367521644012115" name="accessibility_rotation_lock_on_portrait">"Ekran jest zablokowany w orientacji pionowej."</string>
+  <string msgid="7164937344850004466" name="app_label">"Interfejs"</string>
+  <string name="auto_connect">Nie pytaj i automatycznie łącz z zaufanym AP</string>
+  <string name="weak_signal_message">Sygnał WLAN bardzo słaby, wybierz inny</string>
+  <string name="weak_signal_title">SŁABY SYGNAŁ</string>
+  <string name="network_disconnect_message">Sieć WLAN rozłączona. \nPołączyć przez 3G? \nMoże to wymagać dodatkowych opłat.</string>
+  <string name="network_disconnect_title">Uwaga</string>
+  <string name="mobile_data_connect_enable">Tak</string>
+  <string name="mobile_data_connect_disable">Nr</string>
+  <string msgid="7774721344716731603" name="status_bar_clear_all_button">"Wyczyść"</string>
+  <string msgid="5812628897510997853" name="status_bar_do_not_disturb_button">"Nie przeszkadzać"</string>
+  <string msgid="3345398298841572813" name="status_bar_please_disturb_button">"Pokaż powiadomienia"</string>
+  <string msgid="6026395868129852968" name="status_bar_recent_remove_item_title">"Usuń z listy"</string>
+  <string msgid="7793624864528818569" name="status_bar_recent_inspect_item_title">"Informacje o aplikacji"</string>
+  <string msgid="6576392951053994640" name="status_bar_no_recent_apps">"Brak ostatnio uruchomionych aplikacji."</string>
+  <string msgid="4576076075226540105" name="status_bar_accessibility_dismiss_recents">"Ukryj ostatnie aplikacje"</string>
   <plurals name="status_bar_accessibility_recent_apps">
-    <item quantity="one" msgid="5854176083865845541">"1 ostatnia aplikacja"</item>
-    <item quantity="other" msgid="1040784359794890744">"Ostatnie aplikacje: %d"</item>
+    <item msgid="5854176083865845541" quantity="one">"1 ostatnia aplikacja"</item>
+    <item msgid="1040784359794890744" quantity="other">"Ostatnie aplikacje: %d"</item>
   </plurals>
-    <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"Brak powiadomień"</string>
-    <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Bieżące"</string>
-    <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Powiadomienia"</string>
-    <string name="battery_low_title" msgid="2783104807551211639">"Podłącz ładowarkę"</string>
-    <string name="battery_low_subtitle" msgid="1752040062087829196">"Bateria wkrótce się rozładuje."</string>
-    <string name="battery_low_percent_format" msgid="1077244949318261761">"Pozostało: <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
-    <string name="invalid_charger" msgid="4549105996740522523">"Ładowanie przy użyciu złącza USB nie jest obsługiwane."\n"Należy używać tylko dołączonej ładowarki."</string>
-    <string name="battery_low_why" msgid="7279169609518386372">"Użycie baterii"</string>
-    <string name="status_bar_settings_settings_button" msgid="3023889916699270224">"Ustawienia"</string>
-    <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"Wi-Fi"</string>
-    <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Tryb samolotowy"</string>
-    <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Autoobracanie ekranu"</string>
-    <string name="status_bar_settings_mute_label" msgid="554682549917429396">"WYGAŚ"</string>
-    <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"AUTOM."</string>
-    <string name="status_bar_settings_notifications" msgid="397146176280905137">"Powiadomienia"</string>
-    <string name="bluetooth_tethered" msgid="7094101612161133267">"Bluetooth – podłączono"</string>
-    <string name="status_bar_input_method_settings_configure_input_methods" msgid="3504292471512317827">"Konfiguruj metody wprowadzania"</string>
-    <string name="status_bar_use_physical_keyboard" msgid="7551903084416057810">"Klawiatura fizyczna"</string>
-    <string name="usb_device_permission_prompt" msgid="834698001271562057">"Zezwolić aplikacji <xliff:g id="APPLICATION">%1$s</xliff:g> na dostęp do urządzenia USB?"</string>
-    <string name="usb_accessory_permission_prompt" msgid="5171775411178865750">"Zezwolić aplikacji <xliff:g id="APPLICATION">%1$s</xliff:g> na dostęp do urządzenia USB?"</string>
-    <string name="usb_device_confirm_prompt" msgid="5161205258635253206">"Czy otworzyć <xliff:g id="ACTIVITY">%1$s</xliff:g> po podłączeniu tego urządzenia USB?"</string>
-    <string name="usb_accessory_confirm_prompt" msgid="3808984931830229888">"Czy otworzyć <xliff:g id="ACTIVITY">%1$s</xliff:g> po podłączeniu tego akcesorium USB?"</string>
-    <string name="usb_accessory_uri_prompt" msgid="513450621413733343">"Zainstalowane aplikacje nie działają z tym akcesorium USB. Więcej informacji: <xliff:g id="URL">%1$s</xliff:g>"</string>
-    <string name="title_usb_accessory" msgid="4966265263465181372">"Akcesorium USB"</string>
-    <string name="label_view" msgid="6304565553218192990">"Wyświetl"</string>
-    <string name="always_use_device" msgid="1450287437017315906">"Używaj domyślnie dla tego urządzenia USB"</string>
-    <string name="always_use_accessory" msgid="1210954576979621596">"Używaj domyślnie dla tego akcesorium USB"</string>
-    <string name="compat_mode_on" msgid="6623839244840638213">"Powiększ, aby wypełnić ekran"</string>
-    <string name="compat_mode_off" msgid="4434467572461327898">"Rozciągnij, aby wypełnić ekran"</string>
-    <string name="compat_mode_help_header" msgid="7969493989397529910">"Powiększenie w trybie zgodności"</string>
-    <string name="compat_mode_help_body" msgid="4946726776359270040">"Jeśli aplikacja została przystosowana do mniejszego ekranu, obok zegara zostanie wyświetlony element sterujący powiększeniem."</string>
-    <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Zapisywanie zrzutu ekranu..."</string>
-    <string name="screenshot_saving_title" msgid="8242282144535555697">"Zapisywanie zrzutu ekranu..."</string>
-    <string name="screenshot_saving_text" msgid="2419718443411738818">"Zapisywanie zrzutu ekranu."</string>
-    <string name="screenshot_saved_title" msgid="6461865960961414961">"Wykonano zrzut ekranu."</string>
-    <string name="screenshot_saved_text" msgid="1152839647677558815">"Dotknij, aby wyświetlić zrzut ekranu."</string>
-    <string name="screenshot_failed_title" msgid="705781116746922771">"Nie udało się wykonać zrzutu ekranu."</string>
-    <string name="screenshot_failed_text" msgid="8134011269572415402">"Nie udało się zapisać zrzutu ekranu. Pamięć może być w użyciu."</string>
-    <string name="usb_preference_title" msgid="6551050377388882787">"USB – opcje przesyłania plików"</string>
-    <string name="use_mtp_button_title" msgid="4333504413563023626">"Podłącz jako odtwarzacz multimedialny (MTP)"</string>
-    <string name="use_ptp_button_title" msgid="7517127540301625751">"Podłącz jako aparat (PTP)"</string>
-    <string name="installer_cd_button_title" msgid="2312667578562201583">"Zainstaluj Android File Transfer dla Maca"</string>
-    <string name="accessibility_back" msgid="567011538994429120">"Wróć"</string>
-    <string name="accessibility_home" msgid="8217216074895377641">"Ekran główny"</string>
-    <string name="accessibility_menu" msgid="316839303324695949">"Menu"</string>
-    <string name="accessibility_recent" msgid="8571350598987952883">"Ostatnie aplikacje"</string>
-    <string name="accessibility_ime_switch_button" msgid="5032926134740456424">"Przycisk przełączania metody wprowadzania."</string>
-    <string name="accessibility_compatibility_zoom_button" msgid="8461115318742350699">"Przycisk powiększenia na potrzeby zgodności."</string>
-    <string name="accessibility_compatibility_zoom_example" msgid="4220687294564945780">"Powiększa mniejszy ekran do większego."</string>
-    <string name="accessibility_bluetooth_connected" msgid="2707027633242983370">"Bluetooth połączony."</string>
-    <string name="accessibility_bluetooth_disconnected" msgid="7416648669976870175">"Bluetooth rozłączony."</string>
-    <string name="accessibility_no_battery" msgid="358343022352820946">"Bateria rozładowana."</string>
-    <string name="accessibility_battery_one_bar" msgid="7774887721891057523">"Bateria: jeden pasek."</string>
-    <string name="accessibility_battery_two_bars" msgid="8500650438735009973">"Bateria: dwa paski."</string>
-    <string name="accessibility_battery_three_bars" msgid="2302983330865040446">"Bateria: trzy paski."</string>
-    <string name="accessibility_battery_full" msgid="8909122401720158582">"Bateria naładowana."</string>
-    <string name="accessibility_no_phone" msgid="4894708937052611281">"Brak sygnału telefonu."</string>
-    <string name="accessibility_phone_one_bar" msgid="687699278132664115">"Telefon: jeden pasek."</string>
-    <string name="accessibility_phone_two_bars" msgid="8384905382804815201">"Telefon: dwa paski."</string>
-    <string name="accessibility_phone_three_bars" msgid="8521904843919971885">"Telefon: trzy paski."</string>
-    <string name="accessibility_phone_signal_full" msgid="6471834868580757898">"Telefon: pełna moc sygnału."</string>
-    <string name="accessibility_no_data" msgid="4791966295096867555">"Brak danych."</string>
-    <string name="accessibility_data_one_bar" msgid="1415625833238273628">"Dane: jeden pasek."</string>
-    <string name="accessibility_data_two_bars" msgid="6166018492360432091">"Dane: dwa paski."</string>
-    <string name="accessibility_data_three_bars" msgid="9167670452395038520">"Dane: trzy paski."</string>
-    <string name="accessibility_data_signal_full" msgid="2708384608124519369">"Dane: pełna moc sygnału."</string>
-    <string name="accessibility_no_wifi" msgid="7455607460517331976">"Brak sieci Wi-Fi."</string>
-    <string name="accessibility_wifi_one_bar" msgid="6854947280074467207">"Wi-Fi jeden pasek."</string>
-    <string name="accessibility_wifi_two_bars" msgid="3344340012058984348">"Wi-Fi dwa paski."</string>
-    <string name="accessibility_wifi_three_bars" msgid="928322805193265041">"Wi-Fi trzy paski."</string>
-    <string name="accessibility_wifi_signal_full" msgid="1275764416228473932">"Sieć Wi-Fi: pełna moc sygnału."</string>
-    <string name="accessibility_no_wimax" msgid="4329180129727630368">"WiMAX: brak"</string>
-    <string name="accessibility_wimax_one_bar" msgid="4170994299011863648">"WiMAX: jeden pasek"</string>
-    <string name="accessibility_wimax_two_bars" msgid="9176236858336502288">"WiMAX: dwa paski"</string>
-    <string name="accessibility_wimax_three_bars" msgid="6116551636752103927">"WiMAX: trzy paski"</string>
-    <string name="accessibility_wimax_signal_full" msgid="2768089986795579558">"WiMAX: pełna moc sygnału"</string>
-    <string name="accessibility_data_connection_gprs" msgid="1606477224486747751">"GPRS"</string>
-    <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
-    <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
-    <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
-    <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
-    <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Edge"</string>
-    <string name="accessibility_data_connection_wifi" msgid="2324496756590645221">"Wi-Fi"</string>
-    <string name="accessibility_no_sim" msgid="8274017118472455155">"Brak karty SIM."</string>
-    <string name="accessibility_bluetooth_tether" msgid="4102784498140271969">"Powiązanie Bluetooth."</string>
-    <string name="accessibility_airplane_mode" msgid="834748999790763092">"Tryb samolotowy."</string>
-    <string name="accessibility_battery_level" msgid="7451474187113371965">"Bateria: <xliff:g id="NUMBER">%d</xliff:g> procent."</string>
-    <string name="accessibility_settings_button" msgid="799583911231893380">"Ustawienia systemu."</string>
-    <string name="accessibility_notifications_button" msgid="4498000369779421892">"Powiadomienia."</string>
-    <string name="accessibility_remove_notification" msgid="3603099514902182350">"Usuń powiadomienie."</string>
-    <string name="accessibility_gps_enabled" msgid="3511469499240123019">"GPS włączony."</string>
-    <string name="accessibility_gps_acquiring" msgid="8959333351058967158">"Pobieranie danych GPS."</string>
-    <string name="accessibility_tty_enabled" msgid="4613200365379426561">"Dalekopis (TTY) włączony."</string>
-    <string name="accessibility_ringer_vibrate" msgid="666585363364155055">"Dzwonek z wibracjami."</string>
-    <string name="accessibility_ringer_silent" msgid="9061243307939135383">"Dzwonek wyciszony."</string>
-    <string name="accessibility_recents_item_dismissed" msgid="6803574935084867070">"<xliff:g id="APP">%s</xliff:g>: zamknięto."</string>
-    <string name="data_usage_disabled_dialog_3g_title" msgid="5257833881698644687">"Wyłączono transmisję danych 2G/3G"</string>
-    <string name="data_usage_disabled_dialog_4g_title" msgid="4789143363492682629">"Wyłączono transmisję danych 4G"</string>
-    <string name="data_usage_disabled_dialog_mobile_title" msgid="1046047248844821202">"Wyłączono komórkową transmisję danych"</string>
-    <string name="data_usage_disabled_dialog_title" msgid="2086815304858964954">"Wyłączono transmisję danych"</string>
-    <string name="data_usage_disabled_dialog" msgid="3853117269051806280">"Osiągnięto określony limit wykorzystania transmisji danych."\n\n"Jeśli ponownie włączysz przesyłanie danych, operator może naliczyć opłaty."</string>
-    <string name="data_usage_disabled_dialog_enable" msgid="7729772039208664606">"Włącz transmisję danych"</string>
-    <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Brak internetu"</string>
-    <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Wi-Fi: połączono"</string>
-    <string name="gps_notification_searching_text" msgid="8574247005642736060">"Wyszukiwanie sygnału GPS"</string>
-    <string name="gps_notification_found_text" msgid="4619274244146446464">"Lokalizacja ustawiona według GPS"</string>
-    <string name="accessibility_clear_all" msgid="5235938559247164925">"Usuń wszystkie powiadomienia."</string>
-    <string name="dreams_dock_launcher" msgid="3541196417659166245">"Włącz wygaszacz ekranu."</string>
-    <string name="status_bar_notification_inspect_item_title" msgid="1163547729015390250">"O aplikacji"</string>
-    <string name="notifications_off_title" msgid="8936620513608443224">"Powiadomienia wyłączone"</string>
-    <string name="notifications_off_text" msgid="2529001315769385273">"Kliknij tutaj, by przywrócić powiadomienia."</string>
-    <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"Ekran zostanie obrócony automatycznie."</string>
-    <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Ekran jest zablokowany w orientacji poziomej."</string>
-    <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Ekran jest zablokowany w orientacji pionowej."</string>
+  <string msgid="4755261167193833213" name="status_bar_no_notifications_title">"Brak powiadomień"</string>
+  <string msgid="1682504513316879202" name="status_bar_ongoing_events_title">"Bieżące"</string>
+  <string msgid="6594767438577593172" name="status_bar_latest_events_title">"Powiadomienia"</string>
+  <string msgid="2783104807551211639" name="battery_low_title">"Podłącz ładowarkę"</string>
+  <string msgid="1752040062087829196" name="battery_low_subtitle">"Bateria wkrótce się rozładuje."</string>
+  <string msgid="1077244949318261761" name="battery_low_percent_format">"Pozostało: <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
+  <string msgid="4549105996740522523" name="invalid_charger">"Ładowanie przy użyciu złącza USB nie jest obsługiwane."\n"Należy używać tylko dołączonej ładowarki."</string>
+  <string msgid="7279169609518386372" name="battery_low_why">"Użycie baterii"</string>
+  <string msgid="3023889916699270224" name="status_bar_settings_settings_button">"Ustawienia"</string>
+  <string msgid="1733928151698311923" name="status_bar_settings_wifi_button">"Wi-Fi"</string>
+  <string msgid="4879879698500955300" name="status_bar_settings_airplane">"Tryb samolotowy"</string>
+  <string msgid="3790482541357798421" name="status_bar_settings_auto_rotation">"Autoobracanie ekranu"</string>
+  <string msgid="554682549917429396" name="status_bar_settings_mute_label">"WYGAŚ"</string>
+  <string msgid="511453614962324674" name="status_bar_settings_auto_brightness_label">"AUTOM."</string>
+  <string msgid="397146176280905137" name="status_bar_settings_notifications">"Powiadomienia"</string>
+  <string msgid="7094101612161133267" name="bluetooth_tethered">"Bluetooth – podłączono"</string>
+  <string msgid="3504292471512317827" name="status_bar_input_method_settings_configure_input_methods">"Konfiguruj metody wprowadzania"</string>
+  <string msgid="3695516942412442936" name="status_bar_use_physical_keyboard">"Używaj klawiatury fizycznej"</string>
+  <string msgid="834698001271562057" name="usb_device_permission_prompt">"Zezwolić aplikacji <xliff:g id="APPLICATION">%1$s</xliff:g> na dostęp do urządzenia USB?"</string>
+  <string msgid="5171775411178865750" name="usb_accessory_permission_prompt">"Zezwolić aplikacji <xliff:g id="APPLICATION">%1$s</xliff:g> na dostęp do urządzenia USB?"</string>
+  <string msgid="5161205258635253206" name="usb_device_confirm_prompt">"Czy otworzyć <xliff:g id="ACTIVITY">%1$s</xliff:g> po podłączeniu tego urządzenia USB?"</string>
+  <string msgid="3808984931830229888" name="usb_accessory_confirm_prompt">"Czy otworzyć <xliff:g id="ACTIVITY">%1$s</xliff:g> po podłączeniu tego akcesorium USB?"</string>
+  <string msgid="513450621413733343" name="usb_accessory_uri_prompt">"Zainstalowane aplikacje nie działają z tym akcesorium USB. Więcej informacji: <xliff:g id="URL">%1$s</xliff:g>"</string>
+  <string msgid="4966265263465181372" name="title_usb_accessory">"Akcesorium USB"</string>
+  <string msgid="6304565553218192990" name="label_view">"Wyświetl"</string>
+  <string msgid="1450287437017315906" name="always_use_device">"Używaj domyślnie dla tego urządzenia USB"</string>
+  <string msgid="1210954576979621596" name="always_use_accessory">"Używaj domyślnie dla tego akcesorium USB"</string>
+  <string msgid="6623839244840638213" name="compat_mode_on">"Powiększ, aby wypełnić ekran"</string>
+  <string msgid="4434467572461327898" name="compat_mode_off">"Rozciągnij, aby wypełnić ekran"</string>
+  <string msgid="7969493989397529910" name="compat_mode_help_header">"Powiększenie w trybie zgodności"</string>
+  <string msgid="4946726776359270040" name="compat_mode_help_body">"Jeśli aplikacja została przystosowana do mniejszego ekranu, obok zegara zostanie wyświetlony element sterujący powiększeniem."</string>
+  <string msgid="7403652894056693515" name="screenshot_saving_ticker">"Zapisywanie zrzutu ekranu..."</string>
+  <string msgid="8242282144535555697" name="screenshot_saving_title">"Zapisywanie zrzutu ekranu..."</string>
+  <string msgid="2419718443411738818" name="screenshot_saving_text">"Zapisywanie zrzutu ekranu."</string>
+  <string msgid="6461865960961414961" name="screenshot_saved_title">"Wykonano zrzut ekranu."</string>
+  <string msgid="1152839647677558815" name="screenshot_saved_text">"Dotknij, aby wyświetlić zrzut ekranu."</string>
+  <string msgid="705781116746922771" name="screenshot_failed_title">"Nie udało się wykonać zrzutu ekranu."</string>
+  <string msgid="8134011269572415402" name="screenshot_failed_text">"Nie udało się zapisać zrzutu ekranu. Pamięć może być w użyciu."</string>
+  <string msgid="6551050377388882787" name="usb_preference_title">"USB – opcje przesyłania plików"</string>
+  <string msgid="4333504413563023626" name="use_mtp_button_title">"Podłącz jako odtwarzacz multimedialny (MTP)"</string>
+  <string msgid="7517127540301625751" name="use_ptp_button_title">"Podłącz jako aparat (PTP)"</string>
+  <string msgid="2312667578562201583" name="installer_cd_button_title">"Zainstaluj Android File Transfer dla Maca"</string>
+  <string msgid="567011538994429120" name="accessibility_back">"Wróć"</string>
+  <string msgid="8217216074895377641" name="accessibility_home">"Ekran główny"</string>
+  <string msgid="316839303324695949" name="accessibility_menu">"Menu"</string>
+  <string msgid="8571350598987952883" name="accessibility_recent">"Ostatnie aplikacje"</string>
+  <string msgid="5032926134740456424" name="accessibility_ime_switch_button">"Przycisk przełączania metody wprowadzania."</string>
+  <string msgid="8461115318742350699" name="accessibility_compatibility_zoom_button">"Przycisk powiększenia na potrzeby zgodności."</string>
+  <string msgid="4220687294564945780" name="accessibility_compatibility_zoom_example">"Powiększa mniejszy ekran do większego."</string>
+  <string msgid="2707027633242983370" name="accessibility_bluetooth_connected">"Bluetooth połączony."</string>
+  <string msgid="7416648669976870175" name="accessibility_bluetooth_disconnected">"Bluetooth rozłączony."</string>
+  <string msgid="358343022352820946" name="accessibility_no_battery">"Bateria rozładowana."</string>
+  <string msgid="7774887721891057523" name="accessibility_battery_one_bar">"Bateria: jeden pasek."</string>
+  <string msgid="8500650438735009973" name="accessibility_battery_two_bars">"Bateria: dwa paski."</string>
+  <string msgid="2302983330865040446" name="accessibility_battery_three_bars">"Bateria: trzy paski."</string>
+  <string msgid="8909122401720158582" name="accessibility_battery_full">"Bateria naładowana."</string>
+  <string msgid="4894708937052611281" name="accessibility_no_phone">"Brak sygnału telefonu."</string>
+  <string msgid="687699278132664115" name="accessibility_phone_one_bar">"Telefon: jeden pasek."</string>
+  <string msgid="8384905382804815201" name="accessibility_phone_two_bars">"Telefon: dwa paski."</string>
+  <string msgid="8521904843919971885" name="accessibility_phone_three_bars">"Telefon: trzy paski."</string>
+  <string msgid="6471834868580757898" name="accessibility_phone_signal_full">"Telefon: pełna moc sygnału."</string>
+  <string msgid="4791966295096867555" name="accessibility_no_data">"Brak danych."</string>
+  <string msgid="1415625833238273628" name="accessibility_data_one_bar">"Dane: jeden pasek."</string>
+  <string msgid="6166018492360432091" name="accessibility_data_two_bars">"Dane: dwa paski."</string>
+  <string msgid="9167670452395038520" name="accessibility_data_three_bars">"Dane: trzy paski."</string>
+  <string msgid="2708384608124519369" name="accessibility_data_signal_full">"Dane: pełna moc sygnału."</string>
+  <string msgid="7455607460517331976" name="accessibility_no_wifi">"Brak sieci Wi-Fi."</string>
+  <string msgid="6854947280074467207" name="accessibility_wifi_one_bar">"Wi-Fi jeden pasek."</string>
+  <string msgid="3344340012058984348" name="accessibility_wifi_two_bars">"Wi-Fi dwa paski."</string>
+  <string msgid="928322805193265041" name="accessibility_wifi_three_bars">"Wi-Fi trzy paski."</string>
+  <string msgid="1275764416228473932" name="accessibility_wifi_signal_full">"Sieć Wi-Fi: pełna moc sygnału."</string>
+  <string msgid="4329180129727630368" name="accessibility_no_wimax">"WiMAX: brak"</string>
+  <string msgid="4170994299011863648" name="accessibility_wimax_one_bar">"WiMAX: jeden pasek"</string>
+  <string msgid="9176236858336502288" name="accessibility_wimax_two_bars">"WiMAX: dwa paski"</string>
+  <string msgid="6116551636752103927" name="accessibility_wimax_three_bars">"WiMAX: trzy paski"</string>
+  <string msgid="2768089986795579558" name="accessibility_wimax_signal_full">"WiMAX: pełna moc sygnału"</string>
+  <string msgid="1606477224486747751" name="accessibility_data_connection_gprs">"GPRS"</string>
+  <string msgid="8628562305003568260" name="accessibility_data_connection_3g">"3G"</string>
+  <string msgid="8664845609981692001" name="accessibility_data_connection_3.5g">"3.5G"</string>
+  <string msgid="7741000750630089612" name="accessibility_data_connection_4g">"4G"</string>
+  <string msgid="6132648193978823023" name="accessibility_data_connection_cdma">"CDMA"</string>
+  <string msgid="4477457051631979278" name="accessibility_data_connection_edge">"Edge"</string>
+  <string msgid="2324496756590645221" name="accessibility_data_connection_wifi">"Wi-Fi"</string>
+  <string msgid="8274017118472455155" name="accessibility_no_sim">"Brak karty SIM."</string>
+  <string msgid="4102784498140271969" name="accessibility_bluetooth_tether">"Powiązanie Bluetooth."</string>
+  <string msgid="834748999790763092" name="accessibility_airplane_mode">"Tryb samolotowy."</string>
+  <string msgid="7451474187113371965" name="accessibility_battery_level">"Bateria: <xliff:g id="NUMBER">%d</xliff:g> procent."</string>
+  <string msgid="799583911231893380" name="accessibility_settings_button">"Ustawienia systemu."</string>
+  <string msgid="4498000369779421892" name="accessibility_notifications_button">"Powiadomienia."</string>
+  <string msgid="3603099514902182350" name="accessibility_remove_notification">"Usuń powiadomienie."</string>
+  <string msgid="3511469499240123019" name="accessibility_gps_enabled">"GPS włączony."</string>
+  <string msgid="8959333351058967158" name="accessibility_gps_acquiring">"Pobieranie danych GPS."</string>
+  <string msgid="4613200365379426561" name="accessibility_tty_enabled">"Dalekopis (TTY) włączony."</string>
+  <string msgid="666585363364155055" name="accessibility_ringer_vibrate">"Dzwonek z wibracjami."</string>
+  <string msgid="9061243307939135383" name="accessibility_ringer_silent">"Dzwonek wyciszony."</string>
+  <string msgid="6803574935084867070" name="accessibility_recents_item_dismissed">"<xliff:g id="APP">%s</xliff:g>: zamknięto."</string>
+  <string msgid="5257833881698644687" name="data_usage_disabled_dialog_3g_title">"Wyłączono transmisję danych 2G/3G"</string>
+  <string msgid="4789143363492682629" name="data_usage_disabled_dialog_4g_title">"Wyłączono transmisję danych 4G"</string>
+  <string msgid="1046047248844821202" name="data_usage_disabled_dialog_mobile_title">"Wyłączono komórkową transmisję danych"</string>
+  <string msgid="2086815304858964954" name="data_usage_disabled_dialog_title">"Wyłączono transmisję danych"</string>
+  <string msgid="3853117269051806280" name="data_usage_disabled_dialog">"Osiągnięto określony limit wykorzystania transmisji danych."\n\n"Jeśli ponownie włączysz przesyłanie danych, operator może naliczyć opłaty."</string>
+  <string msgid="7729772039208664606" name="data_usage_disabled_dialog_enable">"Włącz transmisję danych"</string>
+  <string msgid="1940231521274147771" name="status_bar_settings_signal_meter_disconnected">"Brak internetu"</string>
+  <string msgid="6557486452774597820" name="status_bar_settings_signal_meter_wifi_nossid">"Wi-Fi: połączono"</string>
+  <string msgid="8574247005642736060" name="gps_notification_searching_text">"Wyszukiwanie sygnału GPS"</string>
+  <string msgid="4619274244146446464" name="gps_notification_found_text">"Lokalizacja ustawiona według GPS"</string>
+  <string msgid="5235938559247164925" name="accessibility_clear_all">"Usuń wszystkie powiadomienia."</string>
 </resources>
