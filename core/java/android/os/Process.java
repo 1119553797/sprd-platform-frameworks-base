@@ -909,7 +909,70 @@ public class Process {
     /** @hide */
     public static final native long getTotalMemory();
     
-    /** @hide */
+    // S: ====================  Functions for zram  ========================== {
+    /**
+     * Get the compressed zram size.
+     * @hide
+     */
+    public static native long getZramComppressed();
+
+    /**
+     * Get the uncompressed zram size.
+     * @hide
+     */
+    public static native long getZramOriginal();
+
+    /**
+     * Get the total zram size.
+     * @hide
+     */
+    public static native long getZramTotal();
+
+	/**
+	 * @hide
+	 */
+	private static final float getZramCompressRatio() {
+		long comp = getZramComppressed();
+		long orig = getZramOriginal();
+		if (comp == 0) return 2.0F;
+		else return Math.min(((float) orig) / comp, 3.0F);
+	}
+    
+	/**
+	 * @hide
+	 */
+	public static final long getZramTotalMem() {
+		long total = getZramTotal();
+		if (total == 0) {
+			return 0;
+		}
+
+		// compress zram size could be up to total memory / 4
+		long compTotal = getTotalMemory() / 4;
+		long origTotal = (long) (compTotal * getZramCompressRatio());
+		// uncompressed size - compressed size = memory saved
+		return origTotal - compTotal;
+	}
+
+	/**
+	 * @hide
+	 */
+	public static final long getZramAvailableMem() {
+		long total = getZramTotal();
+		if (total == 0) return 0;
+
+		// compressed zram size could be up to total memory / 4
+		long compTotal = getTotalMemory() / 4;
+		long origTotal = (long) (compTotal * getZramCompressRatio());
+		long origAvailable = origTotal - getZramOriginal();
+		if (origAvailable > 0) {
+			return (long) (origAvailable * (getZramCompressRatio() - 1.0F) / getZramCompressRatio());
+		}
+		return 0;
+	}
+	// S: }
+
+	/** @hide */
     public static final native void readProcLines(String path,
             String[] reqFields, long[] outSizes);
     
