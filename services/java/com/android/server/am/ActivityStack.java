@@ -22,6 +22,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import com.android.internal.app.HeavyWeightSwitcherActivity;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.server.am.ActivityManagerService.PendingActivityLaunch;
+import com.sprd.android.config.OptConfig;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -945,7 +946,12 @@ final class ActivityStack {
         mLastPausedActivity = prev;
         prev.state = ActivityState.PAUSING;
         prev.task.touchActiveTime();
-        prev.updateThumbnail(screenshotActivities(prev), null);
+        
+        // S: for low cost case, optimize ram
+        if (OptConfig.LC_RAM_SUPPORT) {
+        	if (!prev.isHomeActivity)
+        		prev.updateThumbnail(screenshotActivities(prev), null);
+        }
 
         mService.updateCpuStats();
         
