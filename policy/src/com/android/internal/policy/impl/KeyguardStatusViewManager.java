@@ -34,6 +34,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
+import android.sim.SimManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -136,7 +137,8 @@ class KeyguardStatusViewManager implements OnClickListener {
 
     protected int mPhoneState;
     private DigitalClock mDigitalClock;
-  
+    private SimManager simManager;
+
     private class TransientTextManager {
         private TextView mTextView;
         private class Data {
@@ -240,7 +242,7 @@ class KeyguardStatusViewManager implements OnClickListener {
         mEmergencyCallButton = (Button) findViewById(R.id.emergencyCallButton);
         mEmergencyCallButtonEnabledInScreen = emergencyButtonEnabledInScreen;
         mDigitalClock = (DigitalClock) findViewById(R.id.time);
-
+        simManager = SimManager.get(getContext());
         // Hide transport control view until we know we need to show it.
         if (mTransportView != null) {
             mTransportView.setVisibility(View.GONE);
@@ -481,6 +483,7 @@ class KeyguardStatusViewManager implements OnClickListener {
 
             int phoneCount = TelephonyManager.getPhoneCount();
             for (int i = 0; i < phoneCount; i++) {
+                mCarrierViews[i].setTextColor(simManager.getColor(i));
                 mCarrierViews[i].setText(mCarrierTexts[i]);
             }
     }
