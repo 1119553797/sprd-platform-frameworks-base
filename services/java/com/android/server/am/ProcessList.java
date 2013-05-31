@@ -18,6 +18,8 @@ package com.android.server.am;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 import com.android.internal.util.MemInfoReader;
 import com.android.server.wm.WindowManagerService;
@@ -172,33 +174,26 @@ class ProcessList {
 
         String lmkProperty = SystemProperties.get("lmk.autocalc", "true");
         boolean autocalc =  "true".equalsIgnoreCase(lmkProperty);
-        if(!autocalc){
-           mOomAdj[0]     = SystemProperties.getInt("ro.LMK_SLOT0_ADJ", 0);
-           mOomAdj[1]     = SystemProperties.getInt("ro.LMK_SLOT1_ADJ", 1);
-           mOomAdj[2]     = SystemProperties.getInt("ro.LMK_SLOT2_ADJ", 2);
-           mOomAdj[3]     = SystemProperties.getInt("ro.LMK_SLOT3_ADJ", 4);
-           mOomAdj[4]     = SystemProperties.getInt("ro.LMK_SLOT4_ADJ", 9);
-           mOomAdj[5]     = SystemProperties.getInt("ro.LMK_SLOT5_ADJ", 15);
-           mOomMinFree[0] = SystemProperties.getInt("ro.LMK_SLOT0_MINFREE", 8192);
-           mOomMinFree[1] = SystemProperties.getInt("ro.LMK_SLOT1_MINFREE", 12288);
-           mOomMinFree[2] = SystemProperties.getInt("ro.LMK_SLOT2_MINFREE", 16384);
-           mOomMinFree[3] = SystemProperties.getInt("ro.LMK_SLOT3_MINFREE", 24576);
-           mOomMinFree[4] = SystemProperties.getInt("ro.LMK_SLOT4_MINFREE", 28672);
-           mOomMinFree[5] = SystemProperties.getInt("ro.LMK_SLOT5_MINFREE", 32768);
-           /* Fix ADJ */
-           /*FOREGROUND_APP_ADJ = SystemProperties.getInt("ro.FOREGROUND_APP_ADJ", 0);
-           VISIBLE_APP_ADJ    = SystemProperties.getInt("ro.VISIBLE_APP_ADJ", 1);
-           PERCEPTIBLE_APP_ADJ = SystemProperties.getInt("ro.PERCEPTIBLE_APP_ADJ", 2);
-           HEAVY_WEIGHT_APP_ADJ = SystemProperties.getInt("ro.HEAVY_WEIGHT_APP_ADJ", 3);
-           BACKUP_APP_ADJ = SystemProperties.getInt("ro.BACKUP_APP_ADJ", 4);
-           SERVICE_ADJ = SystemProperties.getInt("ro.SERVICE_ADJ", 5);
-           HOME_APP_ADJ = SystemProperties.getInt("ro.HOME_APP_ADJ", 6);
-           PREVIOUS_APP_ADJ = SystemProperties.getInt("ro.PREVIOUS_APP_ADJ", 7);
-           SERVICE_B_ADJ = SystemProperties.getInt("ro.SERVICE_B_ADJ", 8);
-           HIDDEN_APP_MIN_ADJ = SystemProperties.getInt("ro.HIDDEN_APP_MIN_ADJ", 9);
-           HIDDEN_APP_MAX_ADJ = SystemProperties.getInt("ro.HIDDEN_APP_MAX_ADJ", 15);*/
-           return;
-        }
+	if(!autocalc)
+	{
+		String adj = readFile("/sys/module/lowmemorykiller/parameters/adj");
+		String minfree = readFile("/sys/module/lowmemorykiller/parameters/minfree");
+		String[] adjs = adj.split(",");
+		String[] minfrees = minfree.split(",");
+		try {
+			int length = adjs.length > mOomAdj.length ? mOomAdj.length :adjs.length;				
+			for (int i = 0; i <length; ++i) {
+				mOomAdj[i] = Integer.parseInt(adjs[i]);
+			   // Log.i(ActivityManagerService.TAG, "adj: " + mOomAdj[i]);
+			}
+			for (int i = 0; i <  length ; ++i) {
+				mOomMinFree[i] = Long.parseLong(minfrees[i]) * PAGE_SIZE / 1024;
+			}
+		} catch (Exception e) {
+			Slog.w(ActivityManagerService.TAG, "adj:"+ adj);
+		}
+		return;
+	 }
 
         if (scale < 0) scale = 0;
         else if (scale > 1) scale = 1;
@@ -249,4 +244,26 @@ class ProcessList {
             }
         }
     }
+   private String readFile(String path) {
+	FileReader fr = null;
+	BufferedReader br = null;
+	try {
+		fr = new FileReader(path);
+		br = new BufferedReader(fr);
+		return br.readLine();
+	} catch (IOException e) {
+		Slog.w(ActivityManagerService.TAG, "Unable to read " + path);
+		return "";
+	} finally {
+		if (br != null) {
+			try {
+				br.close();
+				if (fr != null) {
+					fr.close();
+				}
+			} catch (IOException e) {
+			}
+		}
+	}
+     }	
 }
