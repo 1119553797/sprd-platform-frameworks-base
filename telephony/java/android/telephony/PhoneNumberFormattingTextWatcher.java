@@ -135,7 +135,8 @@ public class PhoneNumberFormattingTextWatcher implements TextWatcher {
         boolean hasCursor = false;
         int len = s.length();
         for (int i = 0; i < len; i++) {
-            char c = PhoneNumberUtils.pAndwToCommaAndSemicolon (s.charAt(i));
+ //           char c = PhoneNumberUtils.pAndwToCommaAndSemicolon (s.charAt(i));
+            char c = s.charAt(i);
             if (PhoneNumberUtils.isNonSeparator(c)) {
                 if (lastNonSeparator != 0) {
                     formatted = getFormattedNumber(lastNonSeparator, hasCursor);
@@ -150,7 +151,8 @@ public class PhoneNumberFormattingTextWatcher implements TextWatcher {
         if (lastNonSeparator != 0) {
             formatted = getFormattedNumber(lastNonSeparator, hasCursor);
         }
-        return PhoneNumberUtils.CommaAndSemicolonTopAndw(formatted);
+//        return PhoneNumberUtils.CommaAndSemicolonTopAndw(formatted);
+        return formatted;
     }
 
     private String getFormattedNumber(char lastNonSeparator, boolean hasCursor) {
