@@ -470,7 +470,7 @@ static jlong getZramByPath(char* path) {
 
     FILE *fp = fopen(path, "r");
     if (fp == 0) {
-    	LOGW("Unable to open %s", path);
+    	ALOGW("Unable to open %s", path);
     	return 0;
     }
     if (fgets(data, 512, fp) != 0) sscanf(data, "%ld", &zram);
