@@ -1616,6 +1616,8 @@ public class Camera {
         /** @hide */
         private static final String KEY_HDR = "hdr";
         /** @hide */
+        private static final String KEY_SHARPNESS = "sharpness";
+        /** @hide */
         private static final String KEY_ZSL = "zsl";
         /** @hide */
         private static final String KEY_HDR_SUPPORTED = "hdr-supported";
@@ -2525,6 +2527,23 @@ public class Camera {
        /** @hide */
 	public List<String> getSupportedBrightness() {
 		String str = get(KEY_BRIGHTNESS + SUPPORTED_VALUES_SUFFIX);
+		return split(str);
+	}
+       /** @hide */
+	public   void setSharpness(String value)
+	{
+		set(KEY_SHARPNESS, value);
+	}
+
+       /** @hide */
+	public  String getSharpness()
+	{
+		return get(KEY_SHARPNESS);
+	}
+
+       /** @hide */
+	public List<String> getSupportedSharpness() {
+		String str = get(KEY_SHARPNESS + SUPPORTED_VALUES_SUFFIX);
 		return split(str);
 	}
 
