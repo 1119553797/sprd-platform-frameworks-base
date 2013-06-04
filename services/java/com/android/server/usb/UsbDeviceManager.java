@@ -93,6 +93,7 @@ public class UsbDeviceManager {
     private static final int MSG_LOCAL_CHANGE = 8;
     private static final int MSG_ENABLE_ACCESSORY = 9;
     private static final int MSG_ENABLE_VSER_GSER = 10;
+    private static final int MSG_ENABLE_ADB_VSER_GSER = 11;
     private static final int AUDIO_MODE_NONE = 0;
     private static final int AUDIO_MODE_SOURCE = 1;
 
@@ -121,6 +122,7 @@ public class UsbDeviceManager {
     private boolean mcdromEnabled;
     private boolean mAccessoryEnabled;
     private boolean mVserGserEnabled;
+    private boolean mAdbVserGserEnabled;
     private boolean mAudioSourceEnabled;
     private Map<String, List<Pair<String, String>>> mOemModeMap;
     private String[] mAccessoryStrings;
@@ -162,6 +164,19 @@ public class UsbDeviceManager {
             boolean enable = (Settings.Secure.getInt(mContentResolver,
                     Settings.Secure.VSER_GSER_ENABLED, 0) > 0);
             mHandler.sendMessage(MSG_ENABLE_VSER_GSER, enable);
+        }
+    }
+
+    private class AdbVserGserSettingsObserver extends ContentObserver {
+        public AdbVserGserSettingsObserver() {
+            super(null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            boolean enable = (Settings.Secure.getInt(mContentResolver,
+                    Settings.Secure.ADB_VSER_GSER_ENABLED, 0) > 0);
+            mHandler.sendMessage(MSG_ENABLE_ADB_VSER_GSER, enable);
         }
     }
 
@@ -440,7 +455,8 @@ public class UsbDeviceManager {
                 mTetherEnabled = containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_RNDIS);
                 mcdromEnabled = containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_CDROM);
                 mAccessoryEnabled = containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY);
-                mVserGserEnabled = containsFunction(mCurrentFunctions, "vser,gser");
+                //mVserGserEnabled = containsFunction(mCurrentFunctions, "vser,gser");
+                mAdbVserGserEnabled = mCurrentFunctions.equalsIgnoreCase("adb,vser,gser");
                 // Upgrade step for previous versions that used persist.service.adb.enable
                 String value = SystemProperties.get("persist.service.adb.enable", "");
                 if (value.length() > 0) {
@@ -470,9 +486,15 @@ public class UsbDeviceManager {
                         Settings.Secure.getUriFor(Settings.Secure.USB_TETHERED),
                         false, new TetherSettingsObserver());
 
+                /*
                 mContentResolver.registerContentObserver(
                         Settings.Secure.getUriFor(Settings.Secure.VSER_GSER_ENABLED),
-                                false, new VserGserSettingsObserver());
+                        false, new VserGserSettingsObserver());
+                */
+
+                mContentResolver.registerContentObserver(
+                        Settings.Secure.getUriFor(Settings.Secure.ADB_VSER_GSER_ENABLED),
+                        false, new AdbVserGserSettingsObserver());
 
                 // Watch for USB configuration changes
                 mUEventObserver.startObserving(USB_STATE_MATCH);
@@ -580,6 +602,19 @@ public class UsbDeviceManager {
             }
         }
 
+        private void setAdbVserGserEnabled(boolean enable) {
+            if (DEBUG)
+                Slog.d(TAG, "setAdbVserGserEnabled: " + enable);
+            if (enable != mAdbVserGserEnabled) {
+                mAdbVserGserEnabled = enable;
+                if (mAdbVserGserEnabled) {
+                    setEnabledFunctions("adb,vser,gser", true);
+                } else {
+                    setEnabledFunctions("mass_storage", true);
+                }
+            }
+        }
+
         private void setAccessoryEnabled(boolean enable) {
             if (enable != mAccessoryEnabled) {
                 mAccessoryEnabled = enable;
@@ -631,7 +666,7 @@ public class UsbDeviceManager {
             // with OEM specific mode.
             if (functions != null && makeDefault && !needsOemUsbOverride()) {
                 boolean adbEnabled = mAdbEnabled;
-                boolean mTempVserGserEnabled = mVserGserEnabled;
+                //boolean mTempVserGserEnabled = mVserGserEnabled;
                 // Caution: We need UI to obey the same rule. It is hard to be handled only in this function
                 if (DEBUG)
                     Slog.d(TAG, "setEnabledFunctions:" + functions);
@@ -640,7 +675,7 @@ public class UsbDeviceManager {
                     mUmsEnabled = false;
                     mcdromEnabled = false;
                     mAccessoryEnabled = false;
-                    mTempVserGserEnabled = false;
+                    //mTempVserGserEnabled = false;
                     if (functions.equalsIgnoreCase("ptp")) {
                         mPtpEnabled = true;
                         mMtpEnabled = false;
@@ -652,7 +687,7 @@ public class UsbDeviceManager {
                         mTetherEnabled = false;
                     }
                     if (functions.equalsIgnoreCase("rndis")) {
-                        mTempVserGserEnabled = mVserGserEnabled;
+                        //mTempVserGserEnabled = mVserGserEnabled;
                         mTetherEnabled = true;
                         mPtpEnabled = false;
                         mMtpEnabled = false;
@@ -662,18 +697,22 @@ public class UsbDeviceManager {
                     mMtpEnabled = mPtpEnabled = adbEnabled = false;
                     mAccessoryEnabled = false;
                     mcdromEnabled = true;
-                    mTempVserGserEnabled = false;
+                    //mTempVserGserEnabled = false;
                 } else if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_ACCESSORY)) {
                     // UsbManager.USB_FUNCTION_ACCESSORY,just support: accessory or accessory,adb ,remove other modes
                     mUmsEnabled = false;
                     mMtpEnabled = mPtpEnabled = mcdromEnabled = mTetherEnabled = false;
                     mAccessoryEnabled = true;
-                    mTempVserGserEnabled = false;
+                    //mTempVserGserEnabled = false;
                 } else if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_MASS_STORAGE)) {
                     mcdromEnabled = mPtpEnabled = mMtpEnabled = mTetherEnabled = false;
                     mAccessoryEnabled = false;
                     mUmsEnabled = true;
                 } else if (functions.equalsIgnoreCase("vser,gser")) {
+                    mcdromEnabled = mPtpEnabled = mMtpEnabled = mTetherEnabled = false;
+                    mAccessoryEnabled = false;
+                    // mUmsEnabled = false;
+                } else if (functions.equalsIgnoreCase("adb,vser,gser")) {
                     mcdromEnabled = mPtpEnabled = mMtpEnabled = mTetherEnabled = false;
                     mAccessoryEnabled = false;
                 } else {
@@ -736,6 +775,7 @@ public class UsbDeviceManager {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_CDROM);
                 }
 
+                /*
                 if (mTempVserGserEnabled) {// if cdrom enabled, remove all other functions
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_PTP);
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_MTP);
@@ -762,6 +802,23 @@ public class UsbDeviceManager {
                 } else {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
+                }
+                */
+
+                if (mAdbVserGserEnabled) {
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_PTP);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_MTP);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
+
+                    if (mTetherEnabled)
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
+                    functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                    functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
+                    functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
                 }
 
                 if (!mDefaultFunctions.equals(functions)) {
@@ -824,8 +881,6 @@ public class UsbDeviceManager {
                 }
 
                 if (mAdbEnabled) {
-                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
-                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
                     functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
                 } else {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
@@ -846,6 +901,7 @@ public class UsbDeviceManager {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_CDROM);
                 }
 
+                /*
                 if (mVserGserEnabled) {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_PTP);
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_MTP);
@@ -872,6 +928,23 @@ public class UsbDeviceManager {
                 } else {
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
                     functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
+                }
+                */
+
+                if (mAdbVserGserEnabled) {
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_PTP);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_MTP);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
+                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
+
+                    if (mTetherEnabled)
+                        functions = addFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
+                    functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                    functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
+                    functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
                 }
 
                 if (!mCurrentFunctions.equals(functions)) {
@@ -1024,6 +1097,9 @@ public class UsbDeviceManager {
                     break;
                 case MSG_ENABLE_VSER_GSER:
                     setVserGserEnabled(msg.arg1 == 1);
+                    break;
+                case MSG_ENABLE_ADB_VSER_GSER:
+                    setAdbVserGserEnabled(msg.arg1 == 1);
                     break;
                 case MSG_ENABLE_ACCESSORY:
                     setAccessoryEnabled(msg.arg1 == 1);
