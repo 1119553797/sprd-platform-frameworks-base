@@ -51,6 +51,7 @@ public class PhoneNumberFormattingTextWatcher implements TextWatcher {
     private boolean mStopFormatting;
 
     private AsYouTypeFormatter mFormatter;
+    private boolean mKeeppAndw =false;
 
     /**
      * The formatting is based on the current system locale and future locale changes
@@ -71,6 +72,12 @@ public class PhoneNumberFormattingTextWatcher implements TextWatcher {
     public PhoneNumberFormattingTextWatcher(String countryCode) {
         if (countryCode == null) throw new IllegalArgumentException();
         mFormatter = PhoneNumberUtil.getInstance().getAsYouTypeFormatter(countryCode);
+    }
+
+    public PhoneNumberFormattingTextWatcher(String countryCode, boolean isKeeppAndw) {
+        if (countryCode == null) throw new IllegalArgumentException();
+        mFormatter = PhoneNumberUtil.getInstance().getAsYouTypeFormatter(countryCode);
+        mKeeppAndw = isKeeppAndw;
     }
 
     @Override
@@ -107,7 +114,7 @@ public class PhoneNumberFormattingTextWatcher implements TextWatcher {
             // Ignore the change caused by s.replace().
             return;
         }
-        String formatted = reformat(s, Selection.getSelectionEnd(s));
+        String formatted = reformat(s, Selection.getSelectionEnd(s), mKeeppAndw);
         if (formatted != null) {
             int rememberedPos = mFormatter.getRememberedPosition();
             mSelfChange = true;
@@ -126,17 +133,21 @@ public class PhoneNumberFormattingTextWatcher implements TextWatcher {
      * nearest dialable char to the left. For instance, if the number is  (650) 123-45678 and '4' is
      * removed then the cursor should be behind '3' instead of '-'.
      */
-    private String reformat(CharSequence s, int cursor) {
+    private String reformat(CharSequence s, int cursor, boolean isKeeppAndw) {
         // The index of char to the leftward of the cursor.
         int curIndex = cursor - 1;
         String formatted = null;
+        char c;
         mFormatter.clear();
         char lastNonSeparator = 0;
         boolean hasCursor = false;
         int len = s.length();
         for (int i = 0; i < len; i++) {
- //           char c = PhoneNumberUtils.pAndwToCommaAndSemicolon (s.charAt(i));
-            char c = s.charAt(i);
+            if(isKeeppAndw){
+                c = PhoneNumberUtils.pAndwToCommaAndSemicolon (s.charAt(i));
+            }else{
+                c = s.charAt(i);
+            }
             if (PhoneNumberUtils.isNonSeparator(c)) {
                 if (lastNonSeparator != 0) {
                     formatted = getFormattedNumber(lastNonSeparator, hasCursor);
@@ -151,8 +162,11 @@ public class PhoneNumberFormattingTextWatcher implements TextWatcher {
         if (lastNonSeparator != 0) {
             formatted = getFormattedNumber(lastNonSeparator, hasCursor);
         }
-//        return PhoneNumberUtils.CommaAndSemicolonTopAndw(formatted);
-        return formatted;
+        if(isKeeppAndw){
+            return PhoneNumberUtils.CommaAndSemicolonTopAndw(formatted);
+        }else{
+            return formatted;
+        }
     }
 
     private String getFormattedNumber(char lastNonSeparator, boolean hasCursor) {
