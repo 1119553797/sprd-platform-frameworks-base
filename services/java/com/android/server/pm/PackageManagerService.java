@@ -8439,6 +8439,11 @@ public class PackageManagerService extends IPackageManager.Stub {
     public void setComponentEnabledSetting(ComponentName componentName,
             int newState, int flags, int userId) {
         if (!sUserManager.exists(userId)) return;
+        String packege = componentName.getPackageName();
+        Log.w(TAG, packege+" == "+newState+" == "+flags+" "+userId);
+        if(packege.startsWith("com.android.stk")){
+            isOpen = true;
+        }
         setEnabledSetting(componentName.getPackageName(),
                 componentName.getClassName(), newState, flags, userId);
     }
