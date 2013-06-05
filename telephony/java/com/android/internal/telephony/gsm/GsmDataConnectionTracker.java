@@ -231,6 +231,8 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
                 EVENT_PS_RESTRICT_ENABLED, null);
         p.getServiceStateTracker().registerForPsRestrictedDisabled(this,
                 EVENT_PS_RESTRICT_DISABLED, null);
+        p.getServiceStateTracker().registerForNetworkAttached(this,
+                EVENT_DATA_CONNECTION_ATTACHED, null);
 
         // install reconnect intent filter for this data connection.
         IntentFilter filter = new IntentFilter();
@@ -269,6 +271,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         mPhone.getServiceStateTracker().unregisterForRoamingOff(this);
         mPhone.getServiceStateTracker().unregisterForPsRestrictedEnabled(this);
         mPhone.getServiceStateTracker().unregisterForPsRestrictedDisabled(this);
+        mPhone.getServiceStateTracker().unregisterForNetworkAttached(this);
 
         mPhone.getContext().getContentResolver().unregisterContentObserver(this.mApnObserver);
         mApnContexts.clear();
