@@ -619,9 +619,12 @@ static jfloat android_view_MotionEvent_nativeGetAxisValue(JNIEnv* env, jclass cl
         jint nativePtr, jint axis, jint pointerIndex, jint historyPos) {
     MotionEvent* event = reinterpret_cast<MotionEvent*>(nativePtr);
     size_t pointerCount = event->getPointerCount();
+//zds delete for bug 153618
+/*
     if (!validatePointerIndex(env, pointerIndex, pointerCount)) {
         return 0;
     }
+*/
 
     if (historyPos == HISTORY_CURRENT) {
         return event->getAxisValue(axis, pointerIndex);
