@@ -34,7 +34,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import com.android.systemui.R;
 
-public class FloatKeyView extends View implements OnTouchListener {
+public final class FloatKeyView extends View implements OnTouchListener {
     private String TAG = "FloatKey";
 
     private Bitmap[] mKeyIcons;
