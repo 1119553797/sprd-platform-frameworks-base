@@ -20313,6 +20313,7 @@ package android.telephony {
 
   public class PhoneNumberFormattingTextWatcher implements android.text.TextWatcher {
     ctor public PhoneNumberFormattingTextWatcher();
+    ctor public PhoneNumberFormattingTextWatcher(java.lang.String, boolean);
     method public synchronized void afterTextChanged(android.text.Editable);
     method public void beforeTextChanged(java.lang.CharSequence, int, int, int);
     method public void onTextChanged(java.lang.CharSequence, int, int, int);
