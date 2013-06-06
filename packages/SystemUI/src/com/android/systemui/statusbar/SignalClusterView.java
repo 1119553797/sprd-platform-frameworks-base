@@ -274,7 +274,7 @@ public class SignalClusterView
             mMobileActivity[phoneId].setImageResource(mMobileActivityId[phoneId]);
             mMobileType[phoneId].setImageResource(mMobileTypeId[phoneId]);
             mMobile[phoneId].setBackgroundColor(mPhoneColor[phoneId]);
-            mMobileDataType[phoneId].setBackgroundColor(mPhoneColor[phoneId]);
+            mMobileType[phoneId].setBackgroundColor(mPhoneColor[phoneId]);
             mMobileGroup[phoneId].setContentDescription(mMobileTypeDescription[phoneId] + " "
                     + mMobileDescription[phoneId]);
             mMobileSignalBar[phoneId].setImageResource(R.drawable.stat_sys_signal_bar_sprd);
