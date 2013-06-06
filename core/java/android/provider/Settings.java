@@ -3036,12 +3036,6 @@ public final class Settings {
         public static final String VSER_GSER_ENABLED = "vser_gser_enabled";
 
         /**
-         * Used to disable adb,vser,gser on a device - defaults to false
-         * @hide
-         */
-        public static final String ADB_VSER_GSER_ENABLED = "adb_vser_gser_enabled";
-
-        /**
          * Used to disable vser on a device - defaults to true
          * @hide
          */
