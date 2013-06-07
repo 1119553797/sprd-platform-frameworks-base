@@ -105,6 +105,13 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         numPhones = TelephonyManager.getPhoneCount();
         hasCard = new boolean[numPhones];
         isStandby = new boolean[numPhones];
+        try {
+            mAirplaneEnable = Settings.System.getInt(
+                    this.mContext.getContentResolver(),
+                    Settings.System.AIRPLANE_MODE_ON) == 1;
+        } catch (SettingNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     // initialize the current state of every quick switch items
