@@ -721,6 +721,14 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             intent.putExtra(Intents.EXTRA_SHORT_PLMN, splmn);
             intent.putExtra(Intents.EXTRA_PHONE_ID, phoneId);
             phone.getContext().sendStickyBroadcast(intent);
+
+            Intent expand_intent = new Intent(Intents.SPN_STRINGS_UPDATED_ACTION + phoneId);
+            expand_intent.putExtra(Intents.EXTRA_SHOW_SPN, showSpn);
+            expand_intent.putExtra(Intents.EXTRA_SPN, spn);
+            expand_intent.putExtra(Intents.EXTRA_SHOW_PLMN, showPlmn);
+            expand_intent.putExtra(Intents.EXTRA_PLMN, plmn);
+            expand_intent.putExtra(Intents.EXTRA_PHONE_ID, phoneId);
+            phone.getContext().sendStickyBroadcast(expand_intent);
         }
 
         curSpnRule = rule;

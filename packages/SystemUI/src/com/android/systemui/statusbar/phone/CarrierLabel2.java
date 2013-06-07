@@ -66,6 +66,7 @@ public class CarrierLabel2 extends TextView {
             mAttached = true;
             IntentFilter filter = new IntentFilter();
             filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION);
+            filter.addAction(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION + 1);
             getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
         }
     }
@@ -83,7 +84,7 @@ public class CarrierLabel2 extends TextView {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (Telephony.Intents.SPN_STRINGS_UPDATED_ACTION.equals(action)) {
+            if (action.startsWith(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION)) {
                 updateNetworkName(intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN, false),
                         intent.getStringExtra(Telephony.Intents.EXTRA_SPN),
                         intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN, false),
@@ -96,7 +97,7 @@ public class CarrierLabel2 extends TextView {
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn, int phoneid) {
         if (phoneid != 1) return;
         if (DEBUG) {
-            Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
+            Slog.d("CarrierLabel2", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn + "phoneid" + phoneid);
         }
         StringBuilder str = new StringBuilder();
