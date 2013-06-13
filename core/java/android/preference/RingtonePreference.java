@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.media.RingtoneManager;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.Settings.System;
 import android.text.TextUtils;
@@ -260,32 +261,15 @@ public class RingtonePreference extends Preference implements
     private boolean isMediaAvaliable(Uri uri) {
         if (uri == null)
             return true;
-        String uriStr = uri.toString();
-        File mediaFile = null;
-        if (uriStr.startsWith("file")) {
-            mediaFile = new File(uriStr.substring(7));
-        } else if (uriStr.startsWith("content://media/")) {
-            Cursor cursor = null;
-            try {
-                ContentResolver cr = getContext().getContentResolver();
-                cursor = cr.query(uri,
-                        new String[] { MediaStore.MediaColumns.DATA }, null,
-                        null, null);
-                if (cursor != null && cursor.getCount() > 0) {
-                    cursor.moveToFirst();
-                    String path = cursor.getString(0);
-                    mediaFile = new File(path);
-                }
-            } finally {
-                if (cursor != null)
-                    cursor.close();
-            }
-        } else
-            return true;
-
-        if (mediaFile == null || !mediaFile.exists() || mediaFile.length() <= 0)
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(getContext(), uri);
+        } catch (Exception ex) {
+            ex.printStackTrace();
             return false;
-
+        } finally {
+            retriever.release();
+        }
         return true;
     }
 
