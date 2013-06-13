@@ -164,6 +164,7 @@ font_src_files += \
     DroidSansThai.ttf \
     DroidSansArmenian.ttf \
     DroidSansGeorgian.ttf \
+    ZawgyiOne.ttf\
     AndroidEmoji.ttf
 
 endif # !MINIMAL_FONT

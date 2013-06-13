@@ -199,6 +199,8 @@ private:
     SkTypeface* mDevanagariRegularTypeface;
     SkTypeface* mTamilRegularTypeface;
     SkTypeface* mTamilBoldTypeface;
+    SkTypeface* mMyanmarTypeface;
+    SkTypeface* mTeluguTypeface;
 
     /**
      * Cache of Harfbuzz faces
