@@ -161,7 +161,9 @@ class ContentProviderRecord {
         if (full) {
             if (hasExternalProcessHandles()) {
                 pw.print(prefix); pw.print("externals=");
+                if(null != externalProcessTokenToHandle){     //fixbug 174611
                         pw.println(externalProcessTokenToHandle.size());
+               }
             }
         } else {
             if (connections.size() > 0 || externalProcessNoHandleCount > 0) {
