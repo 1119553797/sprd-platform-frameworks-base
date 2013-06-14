@@ -84,7 +84,9 @@ public final class Debug
 
     // For Preventing deadlock between AMS and WMS
     private static boolean mDeadLock = true;
+    private static String mDeadLockTag;
     private static boolean mStartLock = true;
+    private static String mStartLockTag;
 
     private Debug() {}
 
@@ -1381,13 +1383,13 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
     //--------------------------------------------------------------------------
     // Add By liwd@spreadst.com to debug hard problems such as Monkey or MTBF 
     //--------------------------------------------------------------------------
-    
+
     /**
      * @hide
      * Detect whether we are in monkey mode.
-     * 
+     *
      * I think the best usage is in "catch" block, like this:
-     *     try {    
+     *     try {
      *         ... ...
      *     } catch (XxxException e) {
      *         if (android.os.Debug.isMonkey()) {
@@ -1397,14 +1399,14 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      *         }
      *     }
      * Because it needs some time to get the system property, pls don't use it
-     * too frequently. 
-     * 
+     * too frequently.
+     *
      * @return Whether in monkey mode
      */
     public static boolean isMonkey() {
        return ActivityManager.isUserAMonkey();
 	}
-    
+
     /**
      * @hide
      * Dump the hprof file of the current process.
@@ -1478,8 +1480,11 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      *
      * @return True - death notice lock is available.
      */
-    public static boolean isDeadLock() {
-        return mDeadLock;
+    public static boolean isDeadLock(String tag) {
+        if (!mDeadLock) {
+            return tag.equals(mDeadLockTag);
+        }
+        return true;
     }
 
     /**
@@ -1487,8 +1492,9 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      * Set whether death notice lock can be obtained.
      * @param bLocked Whether death notice lock can be obtained.
      */
-    public static void setDeadLock(boolean bLocked) {
+    public static void setDeadLock(String tag, boolean bLocked) {
         mDeadLock = bLocked;
+        mDeadLockTag = tag;
     }
 
     /**
@@ -1497,8 +1503,11 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      *
      * @return True - start notice lock is available.
      */
-    public static boolean isStartLock() {
-        return mStartLock;
+    public static boolean isStartLock(String tag) {
+        if (!mStartLock) {
+            return tag.equals(mStartLockTag);
+        }
+        return true;
     }
 
     /**
@@ -1506,7 +1515,9 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      * Set whether start notice lock can be obtained.
      * @param bLocked Whether start notice lock can be obtained.
      */
-    public static void setStartLock(boolean bLocked) {
+    public static void setStartLock(String tag, boolean bLocked) {
+//        Slog.d(TAG, "setStartLock(" + tag + ", " + bLocked + ")");
         mStartLock = bLocked;
+        mStartLockTag = tag;
     }
 }
