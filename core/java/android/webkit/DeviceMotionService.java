@@ -100,6 +100,11 @@ final class DeviceMotionService implements SensorEventListener {
             @Override
             public void run() {
                 assert mIsRunning;
+                //bug 157729 begin
+                if (mLastAcceleration == null) {
+                	return;
+                }
+                //bug 157729 end
                 mManager.onMotionChange(new Double(mLastAcceleration[0]),
                         new Double(mLastAcceleration[1]), new Double(mLastAcceleration[2]),
                         INTERVAL_MILLIS);
