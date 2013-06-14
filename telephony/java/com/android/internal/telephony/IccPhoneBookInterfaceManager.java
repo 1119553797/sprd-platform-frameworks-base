@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import com.android.internal.telephony.IccCardApplication.AppType;
-
+import android.telephony.TelephonyManager;
 /**
  * SimPhoneBookInterfaceManager to provide an inter-process communication to
  * access ADN-like SIM records.
@@ -427,7 +427,14 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
         }
 
         efid = updateEfForIccType(efid);
-
+        if (efid == IccConstants.EF_ADN || efid == IccConstants.EF_PBR) {
+            //load adn start,open real-time mode
+            if (TelephonyManager.MODEM_TYPE_WCDMA == TelephonyManager.getDefault().getModemType()) {
+                //0-close real-time mode,1- open real-time mode
+                Log.d(LOG_TAG, "open real-time mode");
+                phone.getIccFileHandler().setSpeedMode(1, null);
+            }
+        }
         synchronized(mLock) {
             readRecordSuccess =  false;
             checkThread();
@@ -436,6 +443,14 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
             Log.d(LOG_TAG, "requestLoadAllAdnLike  efid = "+efid);
             adnCache.requestLoadAllAdnLike(efid, adnCache.extensionEfForEf(efid), response);
             waitForResult(status);
+        }
+        if (efid == IccConstants.EF_ADN || efid == IccConstants.EF_PBR) {
+            //load adn finish,close real-time mode
+            if (TelephonyManager.MODEM_TYPE_WCDMA == TelephonyManager.getDefault().getModemType()) {
+                //0-close real-time mode,1- open real-time mode
+                Log.d(LOG_TAG, "close real-time mode");
+                phone.getIccFileHandler().setSpeedMode(0, null);
+            }
         }
         if(!readRecordSuccess){
             Log.d(LOG_TAG, "readRecordSuccess = false efid = "+efid);

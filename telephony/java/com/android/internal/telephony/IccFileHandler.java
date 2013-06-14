@@ -154,6 +154,9 @@ public abstract class IccFileHandler extends IccThreadHandler implements IccCons
                         0, 0, GET_RESPONSE_EF_SIZE_BYTES, null, null, mAid, response);
     }
 
+    public void setSpeedMode(int status, Message result) {
+        mCi.setSpeedMode(status,result);
+    }
     /**
      * Load a image instance record from a SIM Linear Fixed EF-IMG
      *
