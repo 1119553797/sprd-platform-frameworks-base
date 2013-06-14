@@ -201,7 +201,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final boolean MONITOR_CPU_USAGE = true;
     static final long MONITOR_CPU_MIN_TIME = 5*1000;        // don't sample cpu less than every 5 seconds.
     static final long MONITOR_CPU_MAX_TIME = 0x0fffffff;    // wait possibly forever for next cpu sample.
-    static final boolean MONITOR_THREAD_CPU_USAGE = false;
+    static final boolean MONITOR_THREAD_CPU_USAGE = true;
 
     // The flags that are set for all calls we make to the package manager.
     static final int STOCK_PM_FLAGS = PackageManager.GET_SHARED_LIBRARY_FILES;
