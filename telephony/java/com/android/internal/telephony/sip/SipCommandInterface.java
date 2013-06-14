@@ -587,6 +587,12 @@ class SipCommandInterface extends SprdBaseCommands implements CommandsInterface 
 	}
 
 	@Override
+	public void setSpeedMode(int status, Message response) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void setCMMS(int status, Message response) {
 		// TODO Auto-generated method stub
 

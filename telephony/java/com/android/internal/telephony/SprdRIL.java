@@ -324,6 +324,19 @@ public final class SprdRIL extends RIL {
         send(rr);
     }
 
+    public void
+    setSpeedMode (int status, Message result) {
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_SET_SPEED_MODE, result);
+
+        rr.mp.writeInt(1);
+        rr.mp.writeInt(status);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+    }
+
     public void registerForSimNotDetected(Handler h, int what, Object obj) {
         mSimNotDetectedRegistrant = new Registrant(h, what, obj);
     }
@@ -379,6 +392,7 @@ public final class SprdRIL extends RIL {
                     case RIL_REQUEST_GET_SIM_CAPACITY: ret =  responseStrings(p); break;
                     case RIL_REQUEST_SET_CMMS: ret =  responseVoid(p); break;
                     case RIL_REQUEST_SIM_POWER: ret =  responseVoid(p); break;
+                    case RIL_REQUEST_SET_SPEED_MODE: ret =  responseVoid(p); break;
                     default:
                         synchronized (mRequestsList) {
                             mRequestsList.add(rr);
@@ -733,6 +747,7 @@ public final class SprdRIL extends RIL {
 			 case RIL_REQUEST_GPRS_DETACH: return "GPRS_DETACH";
 			 case RIL_REQUEST_GET_SIM_CAPACITY: return "GET_SIM_CAPACITY";
 			 case RIL_REQUEST_GET_REMAIN_TIMES: return "REMAIN_TIMES";
+			 case RIL_REQUEST_SET_SPEED_MODE: return "SET_SPEED_MODE";
 			 default: return requestToString(request);
 		 }
 	 }

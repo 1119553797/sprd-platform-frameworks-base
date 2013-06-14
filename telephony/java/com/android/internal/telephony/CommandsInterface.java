@@ -1029,6 +1029,12 @@ public interface CommandsInterface extends SprdCommandsInterface{
     void sendBurstDtmf(String dtmfString, int on, int off, Message result);
 
     /**
+     * @param status status of setSpeedMode when set speed mode
+     * @param response sent when operation completes
+     */
+    void setSpeedMode(int status, Message response);
+
+    /**
      * @param status status of setCMMS when send long message
      * @param response sent when operation completes
      */
