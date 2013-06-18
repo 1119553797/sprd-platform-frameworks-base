@@ -1718,8 +1718,13 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             reply.writeNoException();
             reply.writeInt(res ? 1 : 0);
             return true;
-        } 
-
+        }
+        case START_HOME_PRE: {
+            data.enforceInterface(IActivityManager.descriptor);
+            startHomePre();
+            reply.writeNoException();
+            return true;
+        }
         }
 
         return super.onTransact(code, data, reply, flags);
@@ -3936,7 +3941,14 @@ class ActivityManagerProxy implements IActivityManager
         reply.recycle();
         return res;
     }
-
-
+    public void startHomePre() throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        mRemote.transact(START_HOME_PRE, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+    }
     private IBinder mRemote;
 }

@@ -162,6 +162,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.android.internal.policy.impl.PhoneWindowManager;
 
 import static com.sprd.android.config.OptConfig.LC_RAM_SUPPORT;
+import static com.sprd.android.config.OptConfig.KILL_FRONT_APP;
 
 public final class ActivityManagerService extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
@@ -6138,8 +6139,24 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, "KILL_STOP_FRONT_APP.activity="
                     + mMainStack.mResumedActivity.packageName + " pid=" + pid);
             if (pid > 0) {
+                boolean hasBackApp = false;
+                if (KILL_FRONT_APP) {
+                    for (int i = mLruProcesses.size() - 1; i >= 0; i--) {
+                        ProcessRecord pr = mLruProcesses.get(i);
+                        if (pr.thread != null &&
+                                (pr.curAdj >= ProcessList.HOME_APP_ADJ)) {
+                            hasBackApp = true;
+                            break;
+                        }
+                    }
+                    if (!hasBackApp) {
+                        Slog.w(TAG, "kill the front app anyway");
+                        Process.killProcessQuiet(pid);
+                        return;
+                    }
+                }
                 mStopingPid = pid;
-                Process.sendSignal(pid, Process.SIGNAL_STOP);
+                //Process.sendSignal(pid, Process.SIGNAL_STOP);
 
                 if (!mHandler.hasMessages(KILL_STOP_TIMEOUT)) {
                     Slog.w(TAG, "send kill_stop_timeout");
@@ -6151,7 +6168,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             mIsKillStop = false;
             Slog.w(TAG, "KILL_CONT_STOPPED_APP.mStopingPid=" + mStopingPid);
             if (mStopingPid > 0) {
-                Process.sendSignal(mStopingPid, Process.SIGNAL_CONT);
+                //Process.sendSignal(mStopingPid, Process.SIGNAL_CONT);
                 mHandler.removeMessages(KILL_STOP_TIMEOUT);
                 mStopingPid = -1;
             }
@@ -15823,4 +15840,37 @@ public final class ActivityManagerService extends ActivityManagerNative
     public boolean isHomeKeyPressed() {
         return PhoneWindowManager.mIsHomeKeyPressed.getAndSet(false);
     }
+    //decide whether to kill front app or not
+    public void startHomePre() {
+        if (!Build.IS_LOWMEM_VERSION || !KILL_FRONT_APP) {
+            return;
+        }
+
+        if (mMainStack.mResumedActivity == null
+                || (mMainStack.mResumedActivity.app.info.flags & (ApplicationInfo.FLAG_SYSTEM)) != 0
+                || mMainStack.mResumedActivity.isHomeActivity) {
+            return;
+        }
+        boolean hasBackApp = false;
+        boolean hasHome = false;
+        for (int i = mLruProcesses.size() - 1; i >= 0; i--) {
+            ProcessRecord pr = mLruProcesses.get(i);
+            if (pr.thread != null) {
+               if(pr.curAdj >= ProcessList.HOME_APP_ADJ){
+			if (pr.curAdj == ProcessList.HOME_APP_ADJ){
+				hasHome = true;
+			}else{
+				hasBackApp = true;
+			}
+		}
+            }
+            if (hasHome && hasBackApp) break;
+        }
+
+        if (!hasHome && !hasBackApp) {
+            Slog.w(TAG, "kill front app pid=" + mMainStack.mResumedActivity.app.pid);
+            Process.killProcessQuiet(mMainStack.mResumedActivity.app.pid);
+        }
+    }
+
 }

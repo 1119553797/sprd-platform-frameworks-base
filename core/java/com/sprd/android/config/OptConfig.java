@@ -18,4 +18,11 @@ public class OptConfig {
 	 * @hide
 	 */
 	public static final boolean LC_RAM_SUPPORT = TARGET_LOWCOST_SUPPORT;
+	
+	/**
+	 * home key pressed and incall-screen come,
+	 * flag to control whethe kill-front-app or not
+	 * @hide
+	 */
+	public static final boolean KILL_FRONT_APP = SystemProperties.getBoolean("sys.kill.frontapp", LC_RAM_SUPPORT ? true : false);
 }

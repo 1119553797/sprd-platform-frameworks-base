@@ -363,6 +363,7 @@ public interface IActivityManager extends IInterface {
 
     public boolean isHomeKeyPressed() throws RemoteException;
 
+    public void startHomePre() throws RemoteException;
     /*
      * Private non-Binder interfaces
      */
@@ -611,6 +612,7 @@ public interface IActivityManager extends IInterface {
     int GET_LAUNCHED_FROM_UID_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+149;
     int UNSTABLE_PROVIDER_DIED_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+150;
     int IS_INTENT_SENDER_AN_ACTIVITY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+151;
+    int START_HOME_PRE = IBinder.FIRST_CALL_TRANSACTION+152;
     int SET_PROCESS_ADJ_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+200;
     int IS_HOME_KEY_PRESSED_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+201;
     int KILL_STOP_FRONT_APP_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+202;

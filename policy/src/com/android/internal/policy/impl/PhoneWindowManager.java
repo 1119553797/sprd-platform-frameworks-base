@@ -41,6 +41,7 @@ import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.IAudioService;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -63,8 +64,8 @@ import com.android.internal.policy.PolicyManager;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.widget.PointerLocationView;
+import com.sprd.android.config.OptConfig;
 
-import android.service.dreams.IDreamManager;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Log;
@@ -141,6 +142,7 @@ import android.view.KeyCharacterMap.FallbackAction;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.service.dreams.IDreamManager;
 
 import java.io.File;
 import java.io.FileReader;
@@ -4310,6 +4312,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
     
     void startDockOrHome() {
+        // add
+        if (Build.IS_LOWMEM_VERSION && OptConfig.KILL_FRONT_APP) {
+            try {
+                ActivityManagerNative.getDefault().startHomePre();
+            } catch (RemoteException re) {
+                // ignor
+            }
+        }
         Intent dock = createHomeDockIntent();
         if (dock != null) {
             try {
