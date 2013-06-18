@@ -209,14 +209,18 @@
         android:orientation="vertical">
 
         <!-- emergency call button -->
+        <!-- 20130618 , BUG 163471 , Wenny Cheng START -->
         <Button
             android:id="@+id/emergencyCallButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@android:drawable/ic_emergency"
-            android:drawablePadding="4dip"
             android:text="@android:string/lockscreen_emergency_call"
+            android:drawablePadding="4dip"
+            android:paddingTop="2dip"
+            android:paddingBottom="2dip"
         />
+        <!-- 20130618 , BUG 163471 , Wenny Cheng END -->
     </LinearLayout>
 
 </LinearLayout>
