@@ -38,6 +38,8 @@ namespace android {
 #define TYPEFACE_TAMIL_REGULAR "/system/fonts/DroidSansTamil-Regular.ttf"
 #define TYPEFACE_TAMIL_BOLD "/system/fonts/DroidSansTamil-Bold.ttf"
 #define TYPEFACE_THAI "/system/fonts/DroidSansThai.ttf"
+#define TYPEFACE_MYANMAR "/system/fonts/ZawgyiOne.ttf"
+#define TYPEFACE_TELUGU "/system/fonts/Lohit-Telugu.ttf"
 
 ANDROID_SINGLETON_STATIC_INSTANCE(TextLayoutEngine);
 
@@ -361,6 +363,8 @@ void TextLayoutShaper::init() {
     mDevanagariRegularTypeface = NULL;
     mTamilRegularTypeface = NULL;
     mTamilBoldTypeface = NULL;
+    mMyanmarTypeface=NULL;
+    mTeluguTypeface=NULL;
 }
 
 void TextLayoutShaper::unrefTypefaces() {
@@ -373,6 +377,9 @@ void TextLayoutShaper::unrefTypefaces() {
     SkSafeUnref(mDevanagariRegularTypeface);
     SkSafeUnref(mTamilRegularTypeface);
     SkSafeUnref(mTamilBoldTypeface);
+    SkSafeUnref(mMyanmarTypeface);
+    SkSafeUnref(mTeluguTypeface);
+
 }
 
 TextLayoutShaper::~TextLayoutShaper() {
@@ -700,7 +707,8 @@ void TextLayoutShaper::computeRunValues(const SkPaint* paint, const UChar* chars
         }
 #endif
         // Get Advances and their total
-        jfloat currentAdvance = HBFixedToFloat(mShaperItem.advances[mShaperItem.log_clusters[0]]);
+/* 
+       jfloat currentAdvance = HBFixedToFloat(mShaperItem.advances[mShaperItem.log_clusters[0]]);
         jfloat totalFontRunAdvance = currentAdvance;
         outAdvances->replaceAt(currentAdvance, startScriptRun);
         for (size_t i = 1; i < countScriptRun; i++) {
@@ -715,6 +723,25 @@ void TextLayoutShaper::computeRunValues(const SkPaint* paint, const UChar* chars
         for (size_t i = 1; i < mShaperItem.num_glyphs; i++) {
             currentAdvance = HBFixedToFloat(mShaperItem.advances[i]);
             totalFontRunAdvance += currentAdvance;
+        }
+*/
+        jfloat totalFontRunAdvance = 0;
+        size_t clusterStart = 0;
+        for (size_t i = 0; i < countScriptRun; i++) {
+            size_t cluster = mShaperItem.log_clusters[i];
+            size_t clusterNext = i == countScriptRun - 1 ? mShaperItem.num_glyphs :
+                mShaperItem.log_clusters[i + 1];
+            if (cluster != clusterNext) {
+                jfloat advance = 0;
+                // The advance for the cluster is the sum of the advances of all glyphs within
+                // the cluster.
+                for (size_t j = cluster; j < clusterNext; j++) {
+                    advance += HBFixedToFloat(mShaperItem.advances[j]);
+                }
+                totalFontRunAdvance += advance;
+                outAdvances->replaceAt(advance, startScriptRun + clusterStart);
+                clusterStart = i + 1;
+            }
         }
         totalAdvance += totalFontRunAdvance;
 
@@ -845,6 +872,14 @@ SkTypeface* TextLayoutShaper::typefaceForUnichar(const SkPaint* paint, SkTypefac
 #endif
         }
         break;
+        case HB_Script_Myanmar:
+           typeface = getCachedTypeface(&mMyanmarTypeface, TYPEFACE_MYANMAR);
+           ALOGD("Using Myanmar  Typeface");
+        break;
+        case HB_Script_Telugu:
+           typeface = getCachedTypeface(&mTeluguTypeface, TYPEFACE_TELUGU);
+           ALOGD("Using TELUGU  Typeface");
+        break;
 
     default:
 #if DEBUG_GLYPHS
@@ -878,6 +913,8 @@ size_t TextLayoutShaper::shapeFontRun(const SkPaint* paint, bool isRTL) {
     case HB_Script_Bengali:
     case HB_Script_Devanagari:
     case HB_Script_Tamil:
+    case HB_Script_Myanmar:
+    case HB_Script_Telugu:
     case HB_Script_Thai:{
         const uint16_t* text16 = (const uint16_t*)(mShaperItem.string + mShaperItem.item.pos);
         const uint16_t* text16End = text16 + mShaperItem.item.length;
