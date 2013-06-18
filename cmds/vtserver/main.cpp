@@ -172,7 +172,6 @@ int main(int argc, char** argv)
         sleep(2);
         ALOGE("=== BTUT test hciconfig up! ===\n");
         error = system("hciconfig hci0 up");
-        system("rm /data/bteut.txt");
         if(error == -1 || error == 127)
         {
             ALOGE("=== BTUT test failed on cmd 1! ===\n");
