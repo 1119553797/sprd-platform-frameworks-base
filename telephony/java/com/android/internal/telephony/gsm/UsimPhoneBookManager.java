@@ -17,6 +17,7 @@
 package com.android.internal.telephony.gsm;
 
 import android.os.AsyncResult;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.PhoneNumberUtils;
@@ -49,7 +50,7 @@ import java.util.Set;
  */
 public class UsimPhoneBookManager extends IccThreadHandler implements IccConstants {
     private static final String LOG_TAG = "UsimPhoneBookManager";
-    private static final boolean DBG = true;
+    private static final boolean DBG = Debug.isDebug();
     public PbrFile mPbrFile;
     private Boolean mIsPbrPresent;
     private PhoneBase mPhone;
@@ -334,7 +335,7 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
     // digits are stored in this data item and the remainder is stored in an
     // associated record in the EFEXT1.
     public int getPhoneNumMaxLen() {
-        return 20;
+        return AdnRecord.MAX_LENTH_NUMBER;
     }
 
     // the email ef may be type1 or type2
@@ -1252,6 +1253,7 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
         Integer efId = fileIds.get(USIM_EFADN_TAG);
         if (efId == null)
             return null;
+        Log.d(LOG_TAG, "readAdnFileAndWait:efid = "+ efId+"extEf ="+extEf);
         mAdnCache.requestLoadAllAdnLike(efId, extEf, obtainMessage(EVENT_USIM_ADN_LOAD_DONE));
 
         try {
@@ -2447,9 +2449,10 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
                 }
                 // add by liguxiang 10-24-11 for NEWMS00132125 end
                 log("EVENT_USIM_ADN_LOAD_DONE size " + size);
-
                 if (ar.exception == null) {
                     mPhoneBookRecords.addAll((ArrayList<AdnRecord>) ar.result);
+                }else {
+                    log("EVENT_USIM_ADN_LOAD_DONE exception " + ar.exception);
                 }
                 synchronized (mLock) {
                     mLock.notify();

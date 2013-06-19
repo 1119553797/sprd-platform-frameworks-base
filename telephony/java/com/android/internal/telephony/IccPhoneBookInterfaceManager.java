@@ -100,10 +100,8 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                         if (ar.exception == null) {
                             readRecordSuccess =  true;
                             records = (List<AdnRecord>) ar.result;
-                            Log.d(LOG_TAG, "records = "+records);
                         } else {
                             if(DBG) logd("Cannot load ADN records");
-                            Log.d(LOG_TAG, "Cannot load ADN records");
                             if (records != null) {
                                 // no need to clear the records
                                 // records.clear();
@@ -456,7 +454,7 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
             Log.d(LOG_TAG, "readRecordSuccess = false efid = "+efid);
                   return null;
 		}
-        Log.d(LOG_TAG, "getAdnRecordsInEf records = "+records+" efid = "+efid);
+        Log.d(LOG_TAG, "getAdnRecordsInEf success :efid = "+efid);
         return records;
     }
 

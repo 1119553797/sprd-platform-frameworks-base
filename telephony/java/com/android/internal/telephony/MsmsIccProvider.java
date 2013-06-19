@@ -569,7 +569,6 @@ public class MsmsIccProvider extends IccProvider {
             if (DBG) log(ex.toString());
             Log.w(TAG, "SecurityException "+ex.toString());
         }
-        Log.w(TAG, "loadFromEf : adnRecords "+adnRecords);
         if (adnRecords != null) {
             // Load the results
             final int N = adnRecords.size();
