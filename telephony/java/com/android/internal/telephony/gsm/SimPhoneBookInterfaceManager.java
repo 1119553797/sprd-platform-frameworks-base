@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import android.os.Message;
 import android.util.Log;
 
+import com.android.internal.telephony.AdnRecord;
 import com.android.internal.telephony.IccCardApplication;
 import com.android.internal.telephony.IccConstants;
 import com.android.internal.telephony.IccPhoneBookInterfaceManager;
@@ -245,7 +246,7 @@ public class SimPhoneBookInterfaceManager extends IccPhoneBookInterfaceManager {
     public int getPhoneNumMaxLen() {
         UsimPhoneBookManager mUsimPhoneBookManager = adnCache.getUsimPhoneBookManager();
         if (mUsimPhoneBookManager == null) {
-            return 20;
+            return AdnRecord.MAX_LENTH_NUMBER;
         } else {
             return mUsimPhoneBookManager.getPhoneNumMaxLen();
         }

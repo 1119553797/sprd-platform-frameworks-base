@@ -26,6 +26,7 @@ import com.android.internal.telephony.gsm.UsimPhoneBookManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.android.internal.telephony.IccConstants;
 import android.text.TextUtils;
@@ -42,7 +43,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
     public UsimPhoneBookManager mUsimPhoneBookManager;
 
     // Indexed by EF ID
-    SparseArray<ArrayList<AdnRecord>> adnLikeFiles
+    static SparseArray<ArrayList<AdnRecord>> adnLikeFiles
         = new SparseArray<ArrayList<AdnRecord>>();
 
     // People waiting for ADN-like files to be loaded
@@ -60,11 +61,11 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 	// add multi record and email in usim begin
 	static final int EVENT_UPDATE_USIM_ADN_DONE = 3;
    static final int EVENT_UPDATE_CYCLIC_DONE = 4;
+   static final int EVENT_UPDATE_ANR_DONE = 5;
 
 	public int mInsertId = -1;
 	protected final Object mLock = new Object();
 	public boolean updateOthers = true;
-
 	/*
 	 * public AdnRecordCache(IccFileHandler fh) { mFh = fh;
 	 * mUsimPhoneBookManager = new UsimPhoneBookManager(mFh, this); }
@@ -110,6 +111,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
     public void reset() {
         Log.i(LOG_TAG, "reset adnLikeFiles");
         adnLikeFiles.clear();
+        AdnRecordLoader.extLikeFiles.clear();
         mUsimPhoneBookManager.reset();
 
         clearWaiters();
@@ -146,6 +148,23 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
     }
     public void removedRecordsIfLoaded(int efid) {
         adnLikeFiles.remove(efid);
+    }
+    public static ArrayList<Integer> getUsedExtRecordIndex(int efid) {
+        ArrayList<Integer> usedIndex = new ArrayList<Integer>();
+        ArrayList<AdnRecord> adnList =  adnLikeFiles.get(efid);
+        if(adnList == null){
+            return null;
+        }
+        int index = 0;
+        for (Iterator<AdnRecord> it = adnList.iterator(); it.hasNext();) {
+            index = it.next().extRecord;
+            if (index != 0xFF && index != 0) {
+                if (!usedIndex.contains(index)) {
+                    usedIndex.add(index);
+                }
+            }
+        }
+        return usedIndex;
     }
 
     /**
@@ -204,6 +223,14 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 
         userWriteResponse.put(efid, response);
         mInsertId = recordIndex;
+        if (adnLikeFiles.get(efid) != null) {
+            try {
+                adnLikeFiles.get(efid).get(recordIndex - 1).extRecord = 0xff;
+            } catch (Exception e) {
+                // TODO: handle exception
+                Log.e(LOG_TAG, e.getMessage());
+            }
+        }
         new AdnRecordLoader(mFh).updateEF(adn, efid, extensionEF,
                 recordIndex, pin2,
                 obtainMessage(EVENT_UPDATE_ADN_DONE, efid, recordIndex, adn));
@@ -713,11 +740,24 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 						index,toUpdateIndex, pin2, null);
 
 		      }
-		     if (type == UsimPhoneBookManager.USIM_SUBJCET_ANR) {
-			      adnRecordLoader.updateEFAnrToUsim(newAdn, toUpdateEfids, efid,index,
-						toUpdateNums,toUpdateIndex ,pin2, null);
-		     }
-
+                if (type == UsimPhoneBookManager.USIM_SUBJCET_ANR) {
+                    synchronized (mLock) {
+                        Log.d(LOG_TAG, "updateEFAnrToUsim ");
+                        AtomicBoolean updateAnrStatus = new AtomicBoolean(false);
+                        adnRecordLoader.updateEFAnrToUsim(newAdn, toUpdateEfids, efid, index,
+                                toUpdateNums, toUpdateIndex, pin2,
+                                obtainMessage(EVENT_UPDATE_ANR_DONE, efid, index,
+                                        updateAnrStatus));
+                        try {
+                            mLock.wait();
+                        } catch (InterruptedException e) {
+                            Log.e(LOG_TAG, "Interrupted Exception in updateEFAnrToUsim");
+                        }
+                        if (!updateAnrStatus.get()) {
+                            resultValue = -1;
+                        }
+                    }
+                }
             }
         }
         Log.d(LOG_TAG, "updateSubjectOfAdnForResult:resultValue = " + resultValue);
@@ -793,14 +833,16 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 
         userWriteResponse.put(efid, response);
         AdnRecordLoader adnRecordLoader = new AdnRecordLoader(mFh);
-
-        updateSubjectOfAdn(UsimPhoneBookManager.USIM_SUBJCET_ANR, recNum,
+        int updateAnrResult = updateSubjectOfAdn(UsimPhoneBookManager.USIM_SUBJCET_ANR, recNum,
                 adnRecordLoader, mInsertId,adnIndex, efid, oldAdn, newAdn,iapEF, pin2);
+        if (updateAnrResult < 0) {
+            return;
+        }
         updateSubjectOfAdn(UsimPhoneBookManager.USIM_SUBJCET_EMAIL, recNum,
                 adnRecordLoader, mInsertId,adnIndex, efid, oldAdn, newAdn,iapEF,pin2);
 
         updateGrpOfAdn(adnRecordLoader, adnIndex, recNum, oldAdn, newAdn, pin2);
-        
+        oldAdn.extRecord = 0xff;
         adnRecordLoader.updateEFAdnToUsim(newAdn, efid, extensionEF, adnIndex,
                 pin2, obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, adnIndex,
                         newAdn));
@@ -882,10 +924,21 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                         find_index = false;
                         continue; 
                     }
-
                 }
-                updateSubjectOfAdn(UsimPhoneBookManager.USIM_SUBJCET_ANR, recNum,
+                Message pendingResponse = userWriteResponse.get(efid);
+                if (pendingResponse != null) {
+                    sendErrorResponse(response,IccPhoneBookOperationException.WRITE_OPREATION_FAILED ,
+                            "Have pending update for EF:" + efid);
+                    return;
+                }
+                userWriteResponse.put(efid, response);
+                
+                int updateAnrResult = updateSubjectOfAdn(UsimPhoneBookManager.USIM_SUBJCET_ANR, recNum,
                         adnRecordLoader, mInsertId, index, efid, oldAdn, newAdn, iapEF, pin2);
+                if (updateAnrResult < 0) {
+                    Log.d(LOG_TAG, "update anr failed");
+                    break;
+                }
                 updateGrpOfAdn(adnRecordLoader, index, recNum, oldAdn, newAdn, pin2);
                 
                 adnRecordLoader.updateEFAdnToUsim(newAdn, efid, extensionEF, index,
@@ -900,14 +953,6 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                     "Adn record don't exist for " + oldAdn);
             return;
         }
-
-        Message pendingResponse = userWriteResponse.get(efid);
-        if (pendingResponse != null) {
-            sendErrorResponse(response,IccPhoneBookOperationException.WRITE_OPREATION_FAILED ,
-                    "Have pending update for EF:" + efid);
-            return;
-        }
-        userWriteResponse.put(efid, response);
                 
     }
 
@@ -1156,9 +1201,8 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 
                 if (ar.exception == null) {
                     adnLikeFiles.put(efid, (ArrayList<AdnRecord>) ar.result);
-                    Log.d(LOG_TAG, "efid = "+efid+" adnLikeFiles "+adnLikeFiles.get(efid));
                 }
-                Log.d(LOG_TAG, "efid = "+efid+" ar.exception "+ar.exception);
+                Log.d(LOG_TAG, "EVENT_LOAD_ALL_ADN_LIKE_DONE:efid = "+efid +"ar.exception = " +ar.exception);
                 notifyWaiters(waiters, ar);
                 break;
             case EVENT_UPDATE_ADN_DONE:
@@ -1166,9 +1210,14 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 efid = msg.arg1;
                 index = msg.arg2;
                 adn = (AdnRecord) (ar.userObj);
+                byte[] adnData = (byte[])ar.result;
+                if (adnData != null) {
+                    adn.extRecord = adnData[adnData.length-1];
+                }
                 Log.d(LOG_TAG, "AdnRecordCache:EVENT_UPDATE_ADN_DONE:mInsertId = " + mInsertId);
                 if (ar.exception == null && adnLikeFiles.get(efid) != null) {
                     adn.setRecordNumber(mInsertId);
+                    Log.d(LOG_TAG, "EVENT_UPDATE_ADN_DONE:adn.extRecord = "+adn.extRecord);
                     adnLikeFiles.get(efid).set(index - 1, adn);
                 }
                 Log.i("AdnRecordCache", "efid" + efid);
@@ -1206,12 +1255,41 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 response.sendToTarget();
                 break;
             // add multi record and email in usim begin
+            case EVENT_UPDATE_ANR_DONE:
+                ar = (AsyncResult) msg.obj;
+                efid = msg.arg1;
+                Log.d(LOG_TAG, "EVENT_UPDATE_ANR_DONE exception:"+ar.exception +"efid = "+efid);
+                synchronized (mLock) {
+                    AtomicBoolean updateAnrStatus = (AtomicBoolean) ar.userObj;
+                    if (ar.exception != null) {
+                        updateAnrStatus.set(false);
+                    } else {
+                        updateAnrStatus.set(true);
+                    }
+                    mLock.notify();
+                }
+                if (ar.exception != null) {
+                    response = userWriteResponse.get(efid);
+                    userWriteResponse.delete(efid);
+                    if (response != null) {
+                        AsyncResult.forMessage(response, null, ar.exception);
+                        response.sendToTarget();
+                    }else {
+                        Log.e(LOG_TAG, "EVENT_UPDATE_ANR_DONE response is null efid:"+efid);
+                    }
+                }
+                break;
+
             case EVENT_UPDATE_USIM_ADN_DONE:
                 Log.i("AdnRecordCache", "EVENT_UPDATE_USIM_ADN_DONE");
                 ar = (AsyncResult) msg.obj;
                 efid = msg.arg1;
                 index = msg.arg2;
                 adn = (AdnRecord) (ar.userObj);
+                byte[] data = (byte[])ar.result;
+                if (data != null) {
+                    adn.extRecord = data[data.length-1];
+                }
                 int recNum = -1;
                 for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
                     int adnEF = mUsimPhoneBookManager.findEFInfo(num);
@@ -1230,7 +1308,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                     adnRecNum += mAdnRecordSizeArray[i];
                 }               
                 Log.d(LOG_TAG, "AdnRecordCache:EVENT_UPDATE_USIM_ADN_DONE:mInsertId = "
-                    + mInsertId + "adnRecNum = " + adnRecNum);
+                    + mInsertId + "adnRecNum = " + adnRecNum +"adn.extrecord "+adn.extRecord);
                 if (ar.exception == null && adnLikeFiles.get(efid) != null) {
                     adn.setRecordNumber(mInsertId);
                     mUsimPhoneBookManager.setPhoneBookRecords(adnRecNum, adn);
@@ -1242,9 +1320,10 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 
                 response = userWriteResponse.get(efid);
                 userWriteResponse.delete(efid);
-
-                AsyncResult.forMessage(response, null, ar.exception);
-                response.sendToTarget();
+                if (response != null) {
+                    AsyncResult.forMessage(response, null, ar.exception);
+                    response.sendToTarget();
+                }
 
                 Log.i("AdnRecordCache", "EVENT_UPDATE_USIM_ADN_DONE finish");
 

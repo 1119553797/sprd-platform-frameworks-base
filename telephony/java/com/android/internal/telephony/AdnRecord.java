@@ -38,7 +38,7 @@ import com.android.internal.telephony.IccUtils;
  *
  */
 public class AdnRecord implements Parcelable {
-    static final String LOG_TAG = "GSM";
+    static final String LOG_TAG = "AdnRecord";
 
     //***** Instance Variables
 
@@ -88,6 +88,12 @@ public class AdnRecord implements Parcelable {
     static final int NONE_TYPE1_DATA_LENGTH = 17;
 
     public static final String ANR_SPLIT_FLG = ";";
+
+    public static final int MAX_LENTH_ADN = (ADN_DIALING_NUMBER_END
+            - ADN_DIALING_NUMBER_START + 1) * 2;
+    public static final int MAX_LENTH_NUMBER = (ADN_DIALING_NUMBER_END
+            - ADN_DIALING_NUMBER_START + 1) * 2
+            + MAX_EXT_CALLED_PARTY_LENGTH * 2;
 
     //***** Static Methods
 
@@ -367,58 +373,73 @@ public class AdnRecord implements Parcelable {
      * @return hex byte[recordSize] to be written to EF record
      *          return null for wrong format of dialing number or tag
      */
+
     public byte[] buildAdnString(int recordSize) {
         byte[] bcdNumber = null;
         byte[] byteTag = null;
         byte[] adnString = null;
         int footerOffset = recordSize - FOOTER_SIZE_BYTES;
-        int maxLengthForNumber = (ADN_DIALING_NUMBER_END
-                - ADN_DIALING_NUMBER_START + 1) * 2;
         // create an empty record
         adnString = new byte[recordSize];
         for (int i = 0; i < recordSize; i++) {
             adnString[i] = (byte) 0xFF;
         }
-
+        String numberNoPlus = number;
+        if (!TextUtils.isEmpty(number)) {
+            if (number.charAt(0) == '+') {
+                numberNoPlus = numberNoPlus.substring(1);
+            }
+        }
         Log.i("AdnRecord", "buildAdnString number:" + number + ", alphaTag:"
-                + alphaTag);
+                + alphaTag+"numberNoplus = "+ numberNoPlus);
         if (TextUtils.isEmpty(number) && TextUtils.isEmpty(alphaTag)) {
             Log.w(LOG_TAG, "[buildAdnString] Empty dialing number");
             return adnString;   // return the empty record (for delete)
-        } else if (!TextUtils.isEmpty(number)
-                && number.length() > maxLengthForNumber){
+        } else if (!TextUtils.isEmpty(numberNoPlus)
+                && numberNoPlus.length() > MAX_LENTH_NUMBER){
             Log.w(LOG_TAG,
-                    "[buildAdnString] Max length of dialing number is 20");
+                    "[buildAdnString] Max length of dialing number is "+MAX_LENTH_NUMBER);
             throw new IccPhoneBookOperationException(IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH,
-                     "Max length of dialing number is "+maxLengthForNumber);
+                     "Max length of dialing number is "+MAX_LENTH_NUMBER);
         } else if (alphaTag != null && alphaTag.length() > footerOffset) {
             Log.w(LOG_TAG,
                     "[buildAdnString] Max length of tag is " + footerOffset);
             throw new IccPhoneBookOperationException(IccPhoneBookOperationException.OVER_NAME_MAX_LENGTH,
                     "Max length of name is "+footerOffset);
         } else {
-            if (!TextUtils.isEmpty(number)) {
+            if (!TextUtils.isEmpty(numberNoPlus) && numberNoPlus.length() <= MAX_LENTH_ADN) {
+                Log.d(LOG_TAG, "number.length < " + MAX_LENTH_ADN);
                 bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(number);
-
                 System.arraycopy(bcdNumber, 0, adnString,
                         footerOffset + ADN_TON_AND_NPI, bcdNumber.length);
 
-                adnString[footerOffset + ADN_BCD_NUMBER_LENGTH]
-                     = (byte) (bcdNumber.length);
-                adnString[footerOffset + ADN_CAPABILITY_ID]
-                     = (byte) 0xFF; // Capacility
+                adnString[footerOffset + ADN_BCD_NUMBER_LENGTH] = (byte) (bcdNumber.length);
+                adnString[footerOffset + ADN_CAPABILITY_ID] = (byte) 0xFF; // Capacility
                 // Id
-                adnString[footerOffset + ADN_EXTENSION_ID]
-                     = (byte) 0xFF; // Extension
+                adnString[footerOffset + ADN_EXTENSION_ID] = (byte) 0xFF; // Extension
                 // Record
                 // Id
+            } else if (!TextUtils.isEmpty(numberNoPlus)
+                    && numberNoPlus.length() <= MAX_LENTH_NUMBER) {
+                String adnNumber;
+                if (number.charAt(0) == '+') {
+                    adnNumber = number.substring(0, MAX_LENTH_ADN);
+                } else {
+                    adnNumber = number.substring(0, MAX_LENTH_ADN - 1);
+                }
+                if (!TextUtils.isEmpty(adnNumber)) {
+                    byte[] adnBcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(adnNumber);
+
+                    System.arraycopy(adnBcdNumber, 0, adnString,
+                            footerOffset + ADN_TON_AND_NPI, adnBcdNumber.length);
+                    adnString[footerOffset + ADN_BCD_NUMBER_LENGTH] = (byte) (adnBcdNumber.length);
+                }
+                adnString[footerOffset + ADN_CAPABILITY_ID] = (byte) 0xFF; // Capacility
+                adnString[footerOffset + ADN_EXTENSION_ID] = (byte) 0; // Extension
 			}
 
 			// alphaTag format
 			if (!TextUtils.isEmpty(alphaTag)) {
-				// byteTag = GsmAlphabet.stringToGsm8BitPacked(alphaTag);
-				// System.arraycopy(byteTag, 0, adnString, 0, byteTag.length);
-
 				try {
 					byteTag = GsmAlphabet
 							.stringToGsmAlphaSS(alphaTag);
@@ -450,6 +471,27 @@ public class AdnRecord implements Parcelable {
 		}
 
 	}
+
+    public byte[] buildExtString() {
+        String extNumber;
+        if (number.charAt(0) == '+') {
+            extNumber = number.substring(MAX_LENTH_ADN + 1);
+        } else {
+            extNumber = number.substring(MAX_LENTH_ADN);
+        }
+        byte[] extBcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(extNumber);
+        byte[] extString = new byte[EXT_RECORD_LENGTH_BYTES];
+        for (int i = 0; i < EXT_RECORD_LENGTH_BYTES; i++) {
+            extString[i] = (byte) 0xFF;
+        }
+        extString[0] = (byte) EXT_RECORD_TYPE_ADDITIONAL_DATA;// ext record type
+        extString[1] = (byte) extBcdNumber.length;
+        if (extBcdNumber.length <= MAX_EXT_CALLED_PARTY_LENGTH) {
+            System.arraycopy(extBcdNumber, 0, extString, 2, extBcdNumber.length);
+        }
+        extString[12] = (byte) 0xFF; // only support one ext record
+        return extString;
+    }
 
     /**
      * See TS 51.011 10.5.10
@@ -553,13 +595,16 @@ public class AdnRecord implements Parcelable {
 				Log.e(LOG_TAG, "[buildAnrString] anrRecord is empty. ");
 			} else if (anrRecord.length() > 20) {
 				Log.e(LOG_TAG,
-						"[buildAnrString] Max length of dailing number is 20");
+						"[buildAnrString] Max length of dailing number is 20,throw exception");
+                throw new IccPhoneBookOperationException(
+                        IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH,
+                        "Max length of dialing number is " + MAX_LENTH_ADN);
 			} else {
 				anrString[0] = (byte) 0x01;
 				anrNumber = PhoneNumberUtils.numberToCalledPartyBCD(anrRecord);
 				if (anrNumber == null) {
 				    return anrString;
-				}
+                }
 				anrString[ADN_BCD_NUMBER_LENGTH + 1] = (byte) (anrNumber.length);
 				System.arraycopy(anrNumber, 0, anrString, 2, anrNumber.length);
 				if (recordSize > TYPE1_DATA_LENGTH) {
