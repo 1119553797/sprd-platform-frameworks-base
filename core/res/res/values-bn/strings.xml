@@ -20,10 +20,8 @@
   <string name="gigabyteShort">গিগাবাইট</string>
   <string name="terabyteShort">টিবি</string>
   <string name="petabyteShort">PB</string>
-  <string name="fileSizeSuffix">
-    <xliff:g id="number" example="123">%1$s</xliff:g>
-    <xliff:g id="unit" example="KB">%2$s</xliff:g>
-  </string>
+  <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g>
+    <xliff:g id="unit" example="KB">%2$s</xliff:g></string>
   <string name="untitled">&lt;শিরোনামহীন&gt;</string>
   <string name="ellipsis">\u2026</string>
   <string name="ellipsis_two_dots">\u2025</string>
@@ -76,7 +74,7 @@
   <string msgid="" name="BamoMmi">"সমস্ত প্রাথমিক পরিষেবার জন্য সমস্ত  অউটগোইং"</string>
   <string msgid="" name="BamtMmi">"সমস্ত প্রাথমিক পরিষেবার জন্য সমস্ত  ইনকামিং"</string>
   <string name="ActiveUnconCf">কল ফরওয়ার্ড  নিঃশর্ত</string>
-  <string name="ActiveConCf">কল ফরওয়ার্ড শর্তাধীন </string>
+  <string name="ActiveConCf">কল ফরওয়ার্ড শর্তাধীন</string>
   <string name="CallForwarded">কল ফরওয়ার্ড</string>
   <string name="CallWaiting">কল  ওয়েটিং</string>
   <string msgid="" name="OutCallBarred">"আউটগোয়িং কল বায়ার্ড"</string>
@@ -93,7 +91,7 @@
   <string name="Puk2Mmi">"PIN2 আনলক"</string>
   <string name="CnipMmi">কলিং নাম্ব্বার  উপস্থাপন</string>
   <string name="CnirMmi">কলিং নাম্ব্বার সীমাবদ্ধ</string>
-  <string name="ThreeWCMmi">কলের তিনটি উপায় </string>
+  <string name="ThreeWCMmi">কলের তিনটি উপায়</string>
   <string name="RuacMmi">অবাঞ্ছিত বিরক্তিকর কল প্রত্যাখ্যান</string>
   <string name="CndMmi">কলিং নাম্ব্বার বিলি</string>
   <string name="DndMmi">বিরক্ত করবেন না</string>
@@ -114,7 +112,7 @@
   <string name="RestrictedOnAll">সব ভয়েস / ডেটা /SMS  পরিষেবা অবরুদ্ধ হয়.</string>
   <string name="serviceClassVoice">কণ্ঠস্বর</string>
   <string name="serviceClassData">উপাত্ত</string>
-  <string name="serviceClassFAX">FAX </string>
+  <string name="serviceClassFAX">FAX</string>
   <string name="serviceClassSMS">SMS</string>
   <string name="serviceClassDataAsync">অসিঙ্ক</string>
   <string name="serviceClassDataSync">সিঙ্ক</string>
@@ -205,7 +203,7 @@
   <string name="permgrouplab_network">নেটওয়ার্ক যোগাযোগ</string>
   <string name="permgroupdesc_network">অ্যাপ্লিকেশন অ্যাক্সেস করার অনুমতি দিন
          বিভিন্ন নেটওয়ার্ক বৈশিষ্ট্য আছে.</string>
-  <string name="permgrouplab_accounts">আপনার অ্যাকাউন্ট</string>
+  <string name="permgrouplab_accounts">এই ফাইলটি ইতিমধ্যেই বিদ্যমান, কভারেজ নির্বাচন করুন অথবা বাতিল করুন</string>
   <string name="permgroupdesc_accounts">উপলব্ধ অ্যাকাউন্ট  এ এক্সেস করুন.</string>
   <string name="permgrouplab_hardwareControls">হার্ডওয়্যার নিয়ন্ত্রণ</string>
   <string name="permgroupdesc_hardwareControls">"হার্ডওয়্যার থেকে সরাসরি উপর প্রবেশাধিকার
@@ -302,7 +300,7 @@
   <string name="permdesc_setAlwaysFinish">একটি অ্যাপলিকেশন  ক্রিয়াকলাপ  যত শীঘ্রই সম্পন্ন হয় যখন এটি পটভূমিতে অগ্রসর হয় তা নিয়ন্ত্রণ করে.স্বাভাবিক অ্যাপলিকেশনের জন্য কখনও প্রয়োজনীয় না.</string>
   <string name="permlab_batteryStats">ব্যাটারি পরিসংখ্যান পরিবর্তন</string>
   <string name="permdesc_batteryStats">সংগৃহীত  ব্যাটারি পরিসংখ্যানের পরিমার্জন অনুমোদন করে। স্বাভাবিক অ্যাপলিকেশনের মধ্যে ব্যবহারের জন্য না।</string>
-  <string name="permlab_backup">সিস্টেম ব্যাকআপ এবং পুনরূদ্ধার  নিয়ন্ত্রণ করা </string>
+  <string name="permlab_backup">সিস্টেম ব্যাকআপ এবং পুনরূদ্ধার  নিয়ন্ত্রণ করা</string>
   <string name="permdesc_backup">অ্যাপলিকেশন পদ্ধতি ব্যাকআপ নিয়ন্ত্রণ করতে অনুমোদন করে এবং কৌশল পুনরুদ্ধার করুন। স্বাভাবিক অ্যাপলিকেশনের মধ্যে ব্যবহারের জন্য না।.</string>
   <string name="permlab_confirm_full_backup">একটি সম্পূর্ণ ব্যাকআপ বা নিশ্চিত অপারেশন পুনঃস্থাপন</string>
   <string name="permdesc_confirm_full_backup">আবেদন সম্পূর্ণ ব্যাকআপ নিশ্চিতকরণ UI তে আরম্ভ করার অনুমতি দেয়. কোনো অ্যাপ্লিকেশন দ্বারা ব্যবহার করা হবে না.</string>
@@ -506,9 +504,9 @@
   <string name="permdesc_asec_mount_unmount">অ্যাপলিকেশন মাউন্ট  / আনমাউন্ট সংরক্ষণাগার করতে অনুমোদন করে নিরাপদ করে।</string>
   <string name="permlab_asec_rename">নিরাপদ সংগ্রহস্থল নামান্তর</string>
   <string name="permdesc_asec_rename">অ্যাপলিকেশন সংরক্ষণাগার নামান্তর কর নিরাপদ করতে অনুমোদন করে.</string>
-  <string name="permlab_vibrate">কম্পক নিয়ন্ত্রণ </string>
+  <string name="permlab_vibrate">কম্পক নিয়ন্ত্রণ</string>
   <string name="permdesc_vibrate">অ্যাপলিকেশন কম্পক নিয়ন্ত্রণ করতে অনুমোদন করে।</string>
-  <string name="permlab_flashlight">টর্চলাইটের নিয়ন্ত্রণ </string>
+  <string name="permlab_flashlight">টর্চলাইটের নিয়ন্ত্রণ</string>
   <string name="permdesc_flashlight">অ্যাপলিকেশন টর্চলাইটের নিয়ন্ত্রণ করতে অনুমোদন করে।</string>
   <string name="permlab_manageUsb">পছন্দ USB যন্ত্রগুলির জন্য এবং অনুমতি পরিচালনা</string>
   <string name="permdesc_manageUsb">আবেদন পছন্দ USB যন্ত্রগুলির জন্য এবং অনুমতি পরিচালনা করতে পারবেন.</string>
@@ -523,7 +521,7 @@
   <string product="tablet" name="permlab_performCdmaProvisioning">সরাসরি CDMA ট্যাবলেট সেটআপ শুরু</string>
   <string product="default" name="permlab_performCdmaProvisioning">সরাসরি CDMA ফোন সেটআপ শুরু</string>
   <string name="permdesc_performCdmaProvisioning">অ্যাপ্লিকেশন থেকে CDMA প্রভিশন আরম্ভ করতে পারবেন. অনিষ্টকারী অ্যাপ্লিকেশনের অকারণে CDMA প্রভিশন করার মধ্যে শুরু হতে পারে.</string>
-  <string name="permlab_locationUpdates">আপডেট বিজ্ঞপ্তি এর নিয়ন্ত্রণ অবস্থান </string>
+  <string name="permlab_locationUpdates">আপডেট বিজ্ঞপ্তি এর নিয়ন্ত্রণ অবস্থান</string>
   <string name="permdesc_locationUpdates">অ্যাপলিকেশন রেডিও থেকে সক্রিয়করণ / নিষ্ক্রিয়করণ অবস্থান সাম্প্রতিকীকরন বিজ্ঞপ্তি অনুমোদন করে। স্বাভাবিক অ্যাপলিকেশনের মধ্যে ব্যবহারের জন্য না।.</string>
   <string name="permlab_checkinProperties">বৈশিষ্ট্যের অ্যাক্সেস চেক</string>
   <string name="permdesc_checkinProperties">অ্যাপলিকেশন পরীক্ষা করা চাকরির দ্বারা বৈশিষ্ট্যাবলীতে পড়া / তথ্য উদ্ধার করা অনুমোদন করে লেখে আপলোড করে। স্বাভাবিক অ্যাপলিকেশনের মধ্যে ব্যবহারের জন্য না।.</string>
@@ -582,7 +580,7 @@
   <string name="permlab_changeNetworkState">নেটওয়ার্ক সংযোগ পরিবর্তন</string>
   <string name="permdesc_changeNetworkState">একটি আবেদন পরিবর্তন করতে সক্ষম 
        নেটওয়ার্ক সংযোগ অবস্থা.</string>
-  <string name="permlab_changeTetherState">পরিবর্তন আবদ্ধ সংযোগ </string>
+  <string name="permlab_changeTetherState">পরিবর্তন আবদ্ধ সংযোগ</string>
   <string name="permdesc_changeTetherState">একটি আবেদন পরিবর্তন করতে সক্ষম 
        আবদ্ধ নেটওয়ার্ক সংযোগ অবস্থা.</string>
   <string name="permlab_changeBackgroundDataSetting">পটভূমি ডাটা ব্যবহার সেটিং পরিবর্তন</string>
@@ -637,7 +635,7 @@
   <string product="default" name="permdesc_sdcardWrite">একটি আবেদন এসডি কার্ড লিখতে করতে সক্ষম হবেন.</string>
   <string product="default" name="permlab_mediaStorageWrite">মুছে ফেলা/ সংশোধন করতে অভ্যন্তরীণ মিডিয়া স্টোরেজ বিষয়বস্তু </string>
   <string product="default" name="permdesc_mediaStorageWrite">একটি আবেদন অভ্যন্তরীণ মিডিয়া সঞ্চয়ের বিষয়বস্তু পরিবর্তন করার অনুমতি দেয়.</string>
-  <string name="permlab_cache_filesystem">ক্যাশে ফাইল সিস্টেম এক্সেস </string>
+  <string name="permlab_cache_filesystem">ক্যাশে ফাইল সিস্টেম এক্সেস</string>
   <string name="permdesc_cache_filesystem">একটি অ্যাপলিকেশন ক্যাশ ফাইল   সিস্টেম পড়তে এবং লিখতে অনুমোদন করে.</string>
   <string name="permlab_use_sip">গঠন/ গ্রহণ করা ইন্টারনেট কল </string>
   <string name="permdesc_use_sip">একটি আবেদন SIP সেবা করার জন্য / করা ইন্টারনেট কল পেতে ব্যবহার করতে পারবেন.</string>
@@ -679,7 +677,7 @@
   <string-array name="phoneTypes">
         <item>বাসা</item>
         <item>মোবাইল</item>
-        <item>কাজ</item>
+        <item>শব্দ</item>
         <item>ফ্যাক্স কাজ</item>
         <item>বাড়ির ফ্যাক্স</item>
         <item>পেজার</item>
@@ -818,10 +816,8 @@
   <string name="lockscreen_password_wrong">দুঃখিত, আবার চেষ্টা করুন</string>
   <string name="lockscreen_plugged_in">চার্জিং(<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
   <string name="lockscreen_charged">অভিযুক্ত.</string>
-  <string name="lockscreen_battery_short">
-    <xliff:g id="number">%d</xliff:g>
-    <xliff:g id="percent">%%</xliff:g>
-  </string>
+  <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g>
+    <xliff:g id="percent">%%</xliff:g></string>
   <string name="lockscreen_low_battery">আপনার চার্জার সংযোগ.</string>
   <string name="lockscreen_missing_sim_message_short">কোনো SIM কার্ড নেই.</string>
   <string name="lockscreen_blocked_sim_message_short">SIM কার্ড বন্ধ হয়.</string>
@@ -947,7 +943,7 @@
   <string name="permdesc_bindPackageVerifier">ধারক অনুরোধ করতে অনুমতি দেয়
          প্যাকেজ যাচাই. স্বাভাবিক অ্যাপ্লিকেশনের জন্য প্রয়োজনীয় করা যাবে না. </string>
   <string name="save_password_message">আপনি কি চান  ব্রাউজার এই পাসওয়ার্ড মনে রাখুন ?</string>
-  <string name="save_password_notnow">এখন না </string>
+  <string name="save_password_notnow">এখন না</string>
   <string name="save_password_remember">মনে রাখা</string>
   <string name="save_password_never">কখনো না</string>
   <string name="open_permission_deny">আপনি এই পৃষ্ঠা দেখুন অনুমতি নেই.</string>
@@ -955,7 +951,7 @@
   <string name="more_item_label">অধিক</string>
   <string name="prepend_shortcut_label">মেনু +</string>
   <string name="menu_space_shortcut_label">স্থান</string>
-  <string name="menu_enter_shortcut_label">প্রবেশ </string>
+  <string name="menu_enter_shortcut_label">প্রবেশ</string>
   <string name="menu_delete_shortcut_label">মুছে ফেলা</string>
   <string name="search_go">অনুসন্ধান</string>
   <string name="searchview_description_search">অনুসন্ধান</string>
@@ -1097,7 +1093,7 @@
   <string name="anr_activity_process">কার্যকলাপ <xliff:g id="activity">%1$s</xliff:g> (প্রক্রিয়া <xliff:g id="process">%2$s</xliff:g>) এই বার্তাটির প্রত্যুত্তর প্রাপ্ত না হচ্ছে না.</string>
   <string name="anr_application_process">আবেদন <xliff:g id="application">%1$s</xliff:g> (প্রক্রিয়া <xliff:g id="process">%2$s</xliff:g>)এই বার্তাটির প্রত্যুত্তর প্রাপ্ত না হচ্ছে না..</string>
   <string name="anr_process">প্রক্রিয়া <xliff:g id="process">%1$s</xliff:g> এই বার্তাটির প্রত্যুত্তর প্রাপ্ত না হচ্ছে না.</string>
-  <string name="force_close">বন্ধ বলপূর্বক</string>
+  <string name="force_close">ঠিক আছে</string>
   <string name="report">রিপোর্ট</string>
   <string name="wait">অপেক্ষা করুন</string>
   <string name="launch_warning_title">আবেদন রিডাইরেক্ট</string>
@@ -1253,7 +1249,7 @@
   <string name="permdesc_copyProtectedData">ভিতরের উপাদান কপি করতে ডিফল্ট ধারক চাকরি আবাহন করাতে অনুমোদন করে। স্বাভাবিক অ্যাপলিকেশনের মধ্যে ব্যবহারের জন্য না.</string>
   <string name="tutorial_double_tap_to_zoom_message_short">জুম নিয়ন্ত্রণ জন্য দুইবার টোকা</string>
   <string name="gadget_host_error_inflating">ত্রুটি প্রসারিত  উইজেট</string>
-  <string name="ime_action_go">যাত্তয়া</string>
+  <string name="ime_action_go">গমন</string>
   <string name="ime_action_search">অনুসন্ধান</string>
   <string name="ime_action_send">পাঠান</string>
   <string name="ime_action_next">পরবর্তী</string>
@@ -1360,7 +1356,7 @@
   <string name="keyboardview_keycode_done">কৃত</string>
   <string name="keyboardview_keycode_mode_change">মোড পরিবর্তন</string>
   <string name="keyboardview_keycode_shift">শিফট</string>
-  <string name="keyboardview_keycode_enter">প্রবেশ </string>
+  <string name="keyboardview_keycode_enter">প্রবেশ</string>
   <string name="activitychooserview_choose_application">একটি আবেদন চয়ন করুন</string>
   <string name="shareactionprovider_share_with">সেয়ার করুন</string>
   <string name="shareactionprovider_share_with_application">সেয়ার করুন<xliff:g id="application_name" example="Bluetooth">%s</xliff:g></string>
@@ -1424,4 +1420,197 @@
   <string name="missed_call">%1$d মিসড কল</string>
   <string name="unread_message">%1$d অপঠিত বার্তা</string>
   <string name="shutdown_after_seconds">ফোন বন্ধ করবে <xliff:g id="NUMBER">%d</xliff:g> সেকেন্ড:</string>
+  <string name="imei">IMEI</string>
+  <string name="meid">MEID</string>
+  <string name="silent_mode_silent">রিঙ্গার বন্ধ
+</string>
+  <string name="silent_mode_vibrate">নীরব স্পন্দিত</string>
+  <string name="silent_mode_ring">রিঙ্গার খোলা</string>
+  <string name="silent_mode_outdoor">"রিঙ্গার বহিরঙ্গন"</string>
+  <string name="reboot_safemode_title">নিরাপদ মোডে রিবুট করুন</string>
+  <string name="reboot_safemode_confirm">আপনি নিরাপদ মোড পুনরায় বুট করতে চান?
+          এর ফলে আপনি ইনস্টল করা আছে সব থার্ড পার্টি অ্যাপ্লিকেশন নিষ্ক্রিয় করা হবে.
+          আপনি আবার সিস্টেম পুনরায় বুট করা হলে তারা পুনরুদ্ধার করা হবে.</string>
+  <string name="permlab_readCellBroadcasts">সেল ব্রডকাস্ট বার্তা পড়া</string>
+  <string name="permdesc_readCellBroadcasts">"অ্যাপ্লিকেশন পড়তে পারবেন
+       সেল ব্রডকাস্ট বার্তা আপনার ডিভাইস দ্বারা প্রাপ্ত. সেল ব্রডকাস্ট সঙ্কেত
+       জরুরী পরিস্থিতিতে আপনাকে সতর্ক কিছু স্থানে প্রেরণ করা হয়.
+       বিদ্বেষপূর্ণ এপস আপনার কর্মক্ষমতা বা অপারেশন সঙ্গে হস্তক্ষেপ করতে পারে
+       ডিভাইস জরুরী সেল ব্রডকাস্ট প্রাপ্ত হলে.</string>
+  <string name="permlab_getDetailedTasks">এপস চলমান বিবরণ উদ্ধার</string>
+  <string name="permdesc_getDetailedTasks">অ্যাপ্লিকেশন উদ্ধার করার অনুমতি দেয়
+         বর্তমানে এবং সম্প্রতি কাজগুলো চলমান বিষয়ে বিস্তারিত তথ্য. বিদ্বেষপূর্ণ এপস পারে
+         অন্যান্য এপস সম্পর্কে ব্যক্তিগত তথ্য আবিষ্কার. </string>
+  <string name="permlab_startAnyActivity">কোনো কার্যকলাপ শুরু</string>
+  <string name="permdesc_startAnyActivity">অ্যাপ্লিকেশন নির্বিশেষে অনুমতি সুরক্ষা অথবা এক্সপোর্ট রাষ্ট্র, কোনো কার্যকলাপ শুরু করার অনুমতি দেয়.</string>
+  <string name="permlab_setScreenCompatibility">পর্দা উপযুক্ততা সেট</string>
+  <string name="permdesc_setScreenCompatibility">অ্যাপ্লিকেশন নিয়ন্ত্রণ করতে সক্ষম হবেন
+         অন্যান্য অ্যাপ্লিকেশনের পর্দা সামঞ্জস্যের মোড. দূষিত অ্যাপ্লিকেশন হতে পারে
+         অন্যান্য অ্যাপ্লিকেশনের আচরণ ভঙ্গ করা.</string>
+  <string name="permlab_bindAccessibilityService">একটি অভিগম্যতা পরিষেবা সহিত আবদ্ধ</string>
+  <string name="permdesc_bindAccessibilityService">ধারক উপরের স্তরে আবদ্ধ করার অনুমতি দেয়
+         একটি অভিগম্যতা সেবা ইন্টারফেস. স্বাভাবিক এপ্লিকেশনগুলির প্রয়োজন করা যাবে না.</string>
+  <string name="permlab_setKeyboardLayout">কীবোর্ড লেআউট পরিবর্তন করুন</string>
+  <string name="permdesc_setKeyboardLayout">অ্যাপ্লিকেশন পরিবর্তন করতে পারবেন
+         কীবোর্ড লেআউট. স্বাভাবিক এপ্লিকেশনগুলির প্রয়োজন করা যাবে না.</string>
+  <string product="tablet" name="permdesc_persistentActivity">অ্যাপ্লিকেশন মেমরি জেদি নিজেই অংশ করতে অনুমতি দেয়. এই ট্যাবলেট গতি কমে অন্যান্য এপস উপলব্ধ মেমরি সীমাবদ্ধ করতে পারেন.</string>
+  <string product="default" name="permdesc_persistentActivity">অ্যাপ্লিকেশন মেমরি জেদি নিজেই অংশ করতে অনুমতি দেয়. এই ফোন গতি কমে অন্যান্য এপস উপলব্ধ মেমরি সীমাবদ্ধ করতে পারেন.</string>
+  <string name="permlab_grantRevokePermissions">অনুমতি প্রদান বা প্রত্যাহার</string>
+  <string name="permdesc_grantRevokePermissions">"একটি আবেদন মঞ্জুর বা প্রত্যাহার করার অনুমতি দেয়
+         এটি বা অন্যান্য অ্যাপ্লিকেশনের জন্য সুনির্দিষ্ট অনুমতি. দূষিত অ্যাপ্লিকেশন এই ব্যবহার করতে পারেন
+         বৈশিষ্ট্য অ্যাক্সেস করতে আপনি তাদের অনুমতি দেওয়া হয়নি. "</string>
+  <string name="permlab_readCallLog">লগ কল পড়া</string>
+  <string product="tablet" name="permdesc_readCallLog">অ্যাপ্লিকেশন পড়তে পারবেন
+      অন্তর্মুখী এবং বহির্গামী কল সম্পর্কে তথ্য সহ আপনার ট্যাবলেট এর কল লগ,.
+      এই অনুমতি এপস আপনার কল লগ তথ্য, এবং বিদ্বেষপূর্ণ এপস সংরক্ষণ করতে পারবেন
+      ভাগ করে আপনার জ্ঞান ছাড়া লগ তথ্য কল করতে পারেন. </string>
+  <string product="default" name="permdesc_readCallLog">"অ্যাপ্লিকেশন পড়তে পারবেন
+       অন্তর্মুখী এবং বহির্গামী কল সম্পর্কে তথ্য সহ আপনার ফোন এর কল লগ,.
+       এই অনুমতি এপস আপনার কল লগ তথ্য, এবং বিদ্বেষপূর্ণ এপস সংরক্ষণ করতে পারবেন
+       ভাগ করে আপনার জ্ঞান ছাড়া লগ তথ্য কল করতে পারেন. "</string>
+  <string name="permlab_writeCallLog">লগ ইন কল লিখুন</string>
+  <string product="tablet" name="permdesc_writeCallLog">"অ্যাপ্লিকেশন অন্তর্মুখী এবং বহির্গামী কল সম্পর্কে তথ্য সহ আপনার ফোন এর কল লগ, পরিবর্তন করতে পারবেন.
+         বিদ্বেষপূর্ণ এপস আপনার কল লগ মুছে অথবা পরিবর্তন করার জন্য এই ব্যবহার করতে পারে. "</string>
+  <string product="default" name="permdesc_writeCallLog">"অ্যাপ্লিকেশন অন্তর্মুখী এবং বহির্গামী কল সম্পর্কে তথ্য সহ আপনার ফোন এর কল লগ, পরিবর্তন করতে পারবেন.
+         বিদ্বেষপূর্ণ এপস আপনার কল লগ মুছে অথবা পরিবর্তন করার জন্য এই ব্যবহার করতে পারে. "</string>
+  <string product="tablet" name="permdesc_writeCalendar">অ্যাপ্লিকেশন করার অনুমতি দেয়
+      এর সাহায্যে আপনার ট্যাবলেট উপর সংশোধন করতে পারে যে ঘটনা, পরিবর্তন, অপসারণ, যোগ করুন
+      বন্ধু বা সহকর্মীদের যারা​​. এই এপস টি বার্তা পাঠানোর অনুমতি দিতে পারে
+      যে ঘটনা ছাড়া ক্যালেন্ডার মালিকদের থেকে আসা, বা পরিবর্তন প্রদর্শিত
+      মালিকদের জ্ঞান. </string>
+  <string product="default" name="permdesc_writeCalendar">অ্যাপ্লিকেশন করার অনুমতি দেয়
+      সহ আপনি আপনার ফোন পরিবর্তন করতে পারেন যে ঘটনা, পরিবর্তন, অপসারণ, যোগ করুন
+      বন্ধু বা সহকর্মীদের যারা​​. এই এপস টি বার্তা পাঠানোর অনুমতি দিতে পারে
+      যে ঘটনা ছাড়া ক্যালেন্ডার মালিকদের থেকে আসা, বা পরিবর্তন প্রদর্শিত
+      মালিকদের জ্ঞান. </string>
+  <string name="permdesc_accessCoarseLocation">প্রবেশ
+       যেমন নেটওয়ার্ক সূত্র ব্যবহার করে অবস্থান প্রদানকারীর থেকে আনুমানিক অবস্থান
+       সেল টাওয়ার এবং WLAN. এই অবস্থান পরিষেবা পাওয়া যায় এবং পরিণত করার সময়
+       উপর, এই অনুমতি অ্যাপ্লিকেশন আপনার আনুমানিক নির্ধারণ করা যাবে
+       পাঁচ.</string>
+  <string product="nosdcard" name="permlab_mount_unmount_filesystems">এক্সেস USB সংগ্রহস্থল ফাইল সিস্টেম</string>
+  <string product="default" name="permlab_mount_unmount_filesystems">এক্সেস এসডি কার্ড ফাইল সিস্টেম</string>
+  <string product="nosdcard" name="permlab_mount_format_filesystems">USB স্টোরেজ নিশ্চিহ্ন করা</string>
+  <string product="default" name="permlab_mount_format_filesystems">এসডি কার্ড নিশ্চিহ্ন করা</string>
+  <string product="tablet" name="permdesc_changeWifiMulticastState">অ্যাপ্লিকেশন পাওয়ার অনুমতি
+       প্যাকেট, হবে মাল্টি কাস্ট ঠিকানা ব্যবহার করে একটি WLAN নেটওয়ার্কের সকল ডিভাইস পাঠানো
+       শুধু আপনার ফোন. এটি অ হবে মাল্টি কাস্ট মোড তুলনায় আরো ক্ষমতা ব্যবহার করে. </string>
+  <string product="default" name="permdesc_changeWifiMulticastState">অ্যাপ্লিকেশন পাওয়ার অনুমতি
+       প্যাকেট, হবে মাল্টি কাস্ট ঠিকানা ব্যবহার করে একটি WLAN নেটওয়ার্কের সকল ডিভাইস পাঠানো
+       শুধু আপনার ফোন. এটি অ হবে মাল্টি কাস্ট মোড তুলনায় আরো ক্ষমতা ব্যবহার করে. </string>
+  <string product="tablet" name="permdesc_changeWimaxState">অ্যাপ্লিকেশন করার অনুমতি দেয়
+       আপনি ট্যাবলেট সংযোগ এবং ওয়াইমেস্ক নেটওয়ার্ক থেকে ট্যাবলেট সংযোগ বিচ্ছিন্ন করুন. </string>
+  <string product="default" name="permdesc_changeWimaxState">অ্যাপ্লিকেশন করার অনুমতি দেয়
+       ফোন সংযোগ এবং ওয়াইমেস্ক নেটওয়ার্ক থেকে ফোন সংযোগ বিচ্ছিন্ন করুন. </string>
+  <string product="nosdcard" name="permlab_sdcardRead">সুরক্ষিত স্টোরেজ এক্সেস পরীক্ষা</string>
+  <string product="default" name="permlab_sdcardRead">সুরক্ষিত স্টোরেজ এক্সেস পরীক্ষা</string>
+  <string product="nosdcard" name="permdesc_sdcardRead">অ্যাপ্লিকেশন ভবিষ্যতে ডিভাইস পাওয়া যাবে যে এসডি কার্ড জন্য অনুমতি পরীক্ষা করার অনুমতি দেয়.</string>
+  <string product="default" name="permdesc_sdcardRead">অ্যাপ্লিকেশন ভবিষ্যতে ডিভাইস পাওয়া যাবে যে এসডি কার্ড জন্য অনুমতি পরীক্ষা করার অনুমতি দেয়.</string>
+  <string name="faceunlock_multiple_failures">সর্বাধিক অভিহিত অবরোধমুক্ত প্রচেষ্টা অতিক্রম করেছে</string>
+  <string name="lockscreen_permanent_disabled_sim_message_short">অব্যবহারযোগ্য সিম কার্ড.</string>
+  <string name="granularity_label_character"> 
+অক্ষর</string>
+  <string name="granularity_label_word">শব্দ</string>
+  <string name="granularity_label_link">লিংক</string>
+  <string name="granularity_label_line">লাইন</string>
+  <string name="autofill_attention_ignored_re">attention|attn</string>
+  <string name="autofill_region_ignored_re">province|region|other<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
+  <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
+  <string name="autofill_address_line_1_re">address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_1_label_re">address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_2_re">address.?line2|address2|addr2|street|suite|unit<!-- de-DE -->|adresszusatz|ergänzende.?angaben<!-- es -->|direccion2|colonia|adicional<!-- fr-FR -->|addresssuppl|complementnom|appartement<!-- it-IT -->|indirizzo2<!-- ja-JP -->|住所2</string>
+  <string name="autofill_country_re">country|location<!-- ja-JP -->|国<!-- zh-CN -->|国家</string>
+  <string name="autofill_zip_code_re">zip|postal|post code|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
+  <string name="autofill_zip_4_re">zip|^-$|post2<!-- pt-BR, pt-PT -->|codpos2</string>
+  <string name="autofill_city_re">city|town<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
+  <string name="autofill_state_re">state|county|region|province<!-- de-DE -->|land<!-- en-UK -->|county|principality<!-- ja-JP -->|都道府県<!-- pt-BR, pt-PT -->|estado|provincia<!-- ru -->|область<!-- zh-CN -->|省<!-- zh-TW -->|地區</string>
+  <string name="autofill_address_type_same_as_re">একই</string>
+  <string name="autofill_address_type_use_my_re">আমার ব্যবহার</string>
+  <string name="autofill_billing_designator_re">বিল</string>
+  <string name="autofill_shipping_designator_re">জাহাজ</string>
+  <string name="autofill_email_re">e.?mail<!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
+  <string name="autofill_username_re">user.?name|user.?id<!-- de-DE -->|vollständiger.?name<!-- zh-CN -->|用户名</string>
+  <string name="autofill_name_re">^name|full.?name|your.?name|customer.?name|firstandlastname<!-- es -->|nombre.*y.*apellidos<!-- fr-FR -->|^nom<!-- ja-JP -->|お名前|氏名<!-- pt-BR, pt-PT -->|^nome<!-- zh-CN -->|姓名</string>
+  <string name="autofill_name_specific_re">^নাম<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
+  <string name="autofill_first_name_re">irst.*name|initials|fname|first$<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
+  <string name="autofill_middle_initial_re">মধ্যম * প্রারম্ভিক |m\\.i\\.|mi$</string>
+  <string name="autofill_middle_name_re">middle.*name|mname|middle$<!-- es -->|apellido.?materno|lastlastname</string>
+  <string name="autofill_last_name_re">last.*name|lname|surname|last$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
+  <string name="autofill_phone_re">phone<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
+  <string name="autofill_area_code_re">এলাকা.*code|acode|area</string>
+  <string name="autofill_phone_prefix_re">prefix<!-- fr-FR -->|preselection<!-- pt-BR, pt-PT -->|ddd</string>
+  <string name="autofill_phone_suffix_re">প্রত্যয়</string>
+  <string name="autofill_phone_extension_re">ext <!-- PT-বিআর, PT-পিটি --> | রামাল</string>
+  <string name="autofill_name_on_card_re">card.?holder|name.?on.?card|ccname|owner<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
+  <string name="autofill_name_on_card_contextual_re">নাম</string>
+  <string name="autofill_card_cvc_re">যাচাইকরণ | কার্ড সনাক্তকারী | cvn | নিরাপত্তা কোডটা | cvv কোড | কার্ড সিভিসি</string>
+  <string name="autofill_card_number_re">number|card.?#|card.?no|ccnum<!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
+  <string name="autofill_expiration_month_re">expir|exp.*month|exp.*date|ccmonth<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
+  <string name="autofill_expiration_date_re">exp|^/|year<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
+  <string name="autofill_card_ignored_re">^কার্ড</string>
+  <string name="autofill_fax_re">fax<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
+  <string name="autofill_country_code_re">দেশ.*code|ccode|_cc</string>
+  <string name="autofill_area_code_notext_re">^\\($</string>
+  <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
+  <string name="autofill_phone_suffix_separator_re">^-$</string>
+  <string name="permlab_serialPort">সিরিয়াল পোর্ট অ্যাক্সেস</string>
+  <string name="permdesc_serialPort">ধারক সিরিয়াল ম্যানেজার API টি ব্যবহার করে সিরিয়াল পোর্ট ব্যবহার করতে দেয়.</string>
+  <string name="permlab_accessContentProvidersExternally">বাইরে বিষয়বস্তু প্রদানকারীরা অ্যাক্সেস</string>
+  <string name="permdesc_accessContentProvidersExternally">ধারক বিষয়বস্তু প্রবেশ করার অনুমতি দেয়
+      শেল থেকে প্রদানকারী. স্বাভাবিক এপ্লিকেশনগুলির প্রয়োজন করা হবে না. </string>
+  <string name="permlab_updateLock">স্বয়ংক্রিয় ডিভাইস আপডেট নিরুত্সাহিত</string>
+  <string name="permdesc_updateLock">ধারক ডিভাইস আপগ্রেড করার জন্য একটি অ মিথস্ক্রিয় পুনরায় বুট করার জন্য একটি ভাল সময় হবে যখন সিস্টেমে তথ্য প্রদান করার অনুমতি দেয়.</string>
+  <string name="enable_explore_by_touch_warning_title">স্পর্শ দ্বারা এক্সপ্লোরার সক্ষম করবেন?</string>
+  <string product="tablet" name="enable_explore_by_touch_warning_message"><xliff:g id="accessibility_service_name">%1$s</xliff:g>সক্ষম করতে চায় স্পর্শ দ্বারা অন্বেষণ.স্পর্শ দ্বারা অন্বেষণ চালু করা হয়, আপনার অধীনে কি বর্ণনা শুনতে বা দেখতে পারেন
+             আপনার আঙুল বা ফোন সাথে যোগাযোগ করার জন্য ঠারে সঞ্চালন.</string>
+  <string product="default" name="enable_explore_by_touch_warning_message"><xliff:g id="accessibility_service_name">%1$s</xliff:g>সক্ষম করতে চায় স্পর্শ দ্বারা অন্বেষণ.স্পর্শ দ্বারা অন্বেষণ চালু করা হয়, আপনার অধীনে কি বর্ণনা শুনতে বা দেখতে পারেন
+             আপনার আঙুল বা ফোন সাথে যোগাযোগ করার জন্য ঠারে সঞ্চালন.</string>
+  <string name="low_internal_storage_view_text">কিছু কিছু সিস্টেম ফাংশন কাজ নাও করতে পারে</string>
+  <string name="webpage_unresponsive">পাতা অপ্রতিক্রিয়ামূলক হয়েছে.\n\n আপনি এটা বন্ধ করতে চান?</string>
+  <string name="accept">স্বীকার</string>
+  <string name="decline">অস্বীকার</string>
+  <string name="wifi_p2p_invitation_sent_title">আমন্ত্রণ পাঠানো</string>
+  <string name="wifi_p2p_invitation_to_connect_title">সাথে সংযোগ করার জন্য আমন্ত্রণ</string>
+  <string name="wifi_p2p_from_message">থেকে</string>
+  <string name="wifi_p2p_to_message">থেকে:</string>
+  <string name="wifi_p2p_enter_pin_message">প্রয়োজনীয় পিন টাইপ করুন:</string>
+  <string name="wifi_p2p_show_pin_message">পিন:</string>
+  <string name="date_time_done">কৃত</string>
+  <string name="perms_new_perm_prefix">
+    <font fgcolor="#ff900000" size="12">নতুন: </font>
+  </string>
+  <string name="perms_description_app">উপলব্ধ<xliff:g id="app_name">%1$s</xliff:g>.</string>
+  <string name="use_physical_keyboard">ডিভাইস কীবোর্ড</string>
+  <string name="hardware">হার্ডওয়্যার</string>
+  <string name="select_keyboard_layout_notification_title">কীবোর্ড লেআউট নির্বাচন করুন</string>
+  <string name="select_keyboard_layout_notification_message">একটি কীবোর্ড বিন্যাস নির্বাচন করুন.</string>
+  <string name="permlab_route_media_output">রুট মিডিয়া আউটপুট</string>
+  <string name="permdesc_route_media_output">রুট মিডিয়া আউটপুট অন্য বহিরাগত ডিভাইস থেকে একটি আবেদন করতে পারবেন.</string>
+  <string name="progress_unmounting1">আনমাউন্ট অভ্যন্তরীণ স্টোরেজ ...</string>
+  <string name="progress_erasing1">অভ্যন্তরীণ স্টোরেজ মুছে ...</string>
+  <string name="format_error1">অভ্যন্তরীণ স্টোরেজ নিশ্চিহ্ন করা যায়নি.</string>
+  <string name="media_bad_removal1">অভ্যন্তরীণ স্টোরেজ আনমাউন্ট করা হচ্ছে পূর্বে অপসারণ করা হয়েছে.</string>
+  <string name="media_checking1">অভ্যন্তরীণ সংগ্রহস্থল বর্তমানে পরীক্ষা করা হচ্ছে.</string>
+  <string name="media_removed1">অভ্যন্তরীণ স্টোরেজ অপসারণ করা হয়েছে.</string>
+  <string name="media_shared1">অভ্যন্তরীণ সঞ্চয়ের একটি কম্পিউটার ব্যবহার করছে বর্তমানে.</string>
+  <string name="media_unknown_state1">অজানা রাজ্যের অভ্যন্তরীণ মিডিয়া.</string>
+  <string name="find_prev_title">প্রাকদর্শন</string>
+  <string name="find_next_title">পরবর্তী</string>
+  <string name="description_target_search">অনুসন্ধান</string>
+  <string name="activity_resolver_use_always">সর্বদা</string>
+  <string name="activity_resolver_use_once">শুধু একবার</string>
+  <string product="tablet" name="default_audio_route_name">ট্যাবলেট</string>
+  <string product="default" name="default_audio_route_name">ফোন</string>
+  <string name="default_audio_route_name_headphones">হেডফোনসমূহ</string>
+  <string name="default_audio_route_name_dock_speakers">ডক স্পিকার</string>
+  <string name="default_audio_route_name_hdmi">HDMI অডিও</string>
+  <string name="default_audio_route_category_name">পদ্ধতি</string>
+  <string name="bluetooth_a2dp_audio_route_name">ব্লুটুথ অডিও</string>
+  <string name="media_route_chooser_grouping_done">কৃত</string>
+  <string name="lockscreen_sim_network_locked_message">ফোন সিম নেটওয়ার্ক লক করা আছে</string>
+  <string name="lockscreen_sim_card_locked_message">SIM কার্ড লক আছে.</string>
+  <string name="digtal_formatter">%2$s</string>
+  <string name="description_target_call">কল</string>
+  <string name="description_target_sms">SMS</string>
+  <string name="ringtone_waning">ভুল ফাইল পুনরায় নির্বাচন করুন</string>
 </resources>

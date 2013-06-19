@@ -150,4 +150,14 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"Đang tìm kiếm GPS"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"Vị trí đặt bởi GPS"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"Xóa tất cả thông báo."</string>
+  <string name="accessibility_ringer_outdoor">Tiếng chuông ngoài cửa</string>
+  <string name="datanetwork_error_airplane">Bạn không thể sử dụng dữ liệu Di động khi điện thoại đang trong chế độ máy bay.</string>
+  <string name="bluetooth_error_airplane">Bạn không thể sử dụng Bluetooth khi điện thoại đang trong chế độ máy bay.</string>
+  <string name="status_bar_expanded_notification_stop_button_text">"Dừng"</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">Treo</string>
+  <string name="status_bar_expanded_notification_cancel_button_text">"Hủy bỏ"</string>
+  <string name="status_bar_expanded_notification_latest_button_text">"Thông báo"</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">"Đang diễn ra"</string>
+  <string name="dataConnectSetting">Kết nối Dữ liệu</string>
+  <string name="closeData">"Đóng"</string>
 </resources>

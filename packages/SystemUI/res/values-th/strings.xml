@@ -25,7 +25,7 @@
   <string msgid="6731197337665366273" name="accessibility_rotation_lock_on_landscape">"ขณะนี้หน้าจอถูกล็อกให้วางในแนวนอน"</string>
   <string msgid="5809367521644012115" name="accessibility_rotation_lock_on_portrait">"ขณะนี้หน้าจอถูกล็อกให้วางในแนวตั้ง"</string>
   <string msgid="7164937344850004466" name="app_label">"ส่วนติดต่อผู้ใช้ของระบบ"</string>
-  <string name="auto_connect">ไม่ถามการเชื่อมต่อไปยัง ap ที่คาดหวังอื่น ๆ โดยอัตโมติ</string>
+  <string name="auto_connect">"การเข้าถึงจุดอื่น”</string>
   <string name="weak_signal_message">สัญญาณ WLAN ในตอนนี้อ่อนมาก แนะนำว่าคุณควรเลือกสัญญาณอื่นที่ดีกว่า</string>
   <string name="weak_signal_title">สัญญาณต่ำ</string>
   <string name="network_disconnect_message">เครือข่าย WLAN ถูกตัด \n เชื่อมต่อผ่านระบบ 3G หรือไม่?\n ถ้าคุณไม่ได้ใช้แพ็คเก็จอินเตอร์เน็ต ตรงนี้จะมีค่าใช้จ่ายสูง</string>
@@ -33,7 +33,7 @@
   <string name="mobile_data_connect_enable">ใช่</string>
   <string name="mobile_data_connect_disable">ไม่</string>
   <string msgid="7774721344716731603" name="status_bar_clear_all_button">"ล้างข้อมูล"</string>
-  <string msgid="5812628897510997853" name="status_bar_do_not_disturb_button">"ห้ามรบกวน"</string>
+  <string msgid="5812628897510997853" name="status_bar_do_not_disturb_button">"การเข้าถึงจุดอื่น”</string>
   <string msgid="3345398298841572813" name="status_bar_please_disturb_button">"แสดงการแจ้งเตือน"</string>
   <string msgid="6026395868129852968" name="status_bar_recent_remove_item_title">"ลบจากรายการ"</string>
   <string msgid="7793624864528818569" name="status_bar_recent_inspect_item_title">"ข้อมูลแอปพลิเคชัน"</string>
@@ -150,4 +150,14 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"กำลังค้นหา GPS"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"ตำแหน่งที่กำหนดโดย GPS"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"ล้างการแจ้งเตือนทั้งหมด"</string>
+  <string name="accessibility_ringer_outdoor">เสียงเรียกภายนอก</string>
+  <string name="datanetwork_error_airplane">ไม่สามารถใช้โทรศัพท์เมื่อโทรศัพท์อยู่ในโหมดเครื่องบิน</string>
+  <string name="bluetooth_error_airplane">ไม่สามารถใช้บลูทูธเมื่อโทรศัพท์อยู่ในโหมดเครื่องบิน</string>
+  <string name="status_bar_expanded_notification_stop_button_text">หยุด</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">วางสาย</string>
+  <string name="status_bar_expanded_notification_cancel_button_text">"ยกเลิก"</string>
+  <string name="status_bar_expanded_notification_latest_button_text">"การแจ้งเตือน"</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">"ดำเนินอยู่"</string>
+  <string name="dataConnectSetting">การเชื่อมต่อข้อมูล</string>
+  <string name="closeData">"ปิด"</string>
 </resources>

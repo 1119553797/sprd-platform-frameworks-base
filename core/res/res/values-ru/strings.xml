@@ -18,6 +18,7 @@
 */
  -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="2625429890869005782" name="imei">"IMEI"</string>
   <string msgid="4841221237681254195" name="meid">"MEID"</string>
   <string msgid="319298163018473078" name="silent_mode_silent">"Звонок отключен"</string>
@@ -79,7 +80,6 @@
   <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> хочет включить функцию \"Изучение касанием\". Она позволяет прослушивать или просматривать описание элементов, которых вы касаетесь, и управлять телефоном с помощью жестов."</string>
   <string msgid="6640505817617414371" name="low_internal_storage_view_text">"Некоторые системные функции могут не работать"</string>
   <string msgid="3272758351138122503" name="webpage_unresponsive">"Страница не отвечает."\n\n"Закрыть ее?"</string>
-  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="1645267259272829559" name="accept">"Принять"</string>
   <string msgid="2112225451706137894" name="decline">"Отклонить"</string>
   <string msgid="1318975185112070734" name="wifi_p2p_invitation_sent_title">"Приглашение отправлено"</string>
@@ -132,7 +132,7 @@
   <string name="serviceEnabled">"Служба включена."</string>
   <string name="serviceEnabledFor">"Служба подключена для:"</string>
   <string name="serviceDisabled">"Служба отключена."</string>
-  <string name="serviceRegistered">"Регистрация пройдена успешно."</string>
+  <string name="serviceRegistered">Не подсказывать в дальнейшем</string>
   <string name="serviceErased">"Удаление выполнено успешно."</string>
   <string name="passwordIncorrect">"Неверный пароль."</string>
   <string msgid="" name="passwordChange">"Пароль изменен"</string>
@@ -1357,4 +1357,47 @@
   <string name="missed_call">%1$d Пропущенный вызов</string>
   <string name="unread_message">%1$d непрочитанное сообщение</string>
   <string name="shutdown_after_seconds">Телефон выключится через <xliff:g id="NUMBER">%d</xliff:g> секунд</string>
+  <string name="silent_mode_outdoor">"Режим звонка на улице"</string>
+  <string name="autofill_attention_ignored_re">attention|attn</string>
+  <string name="autofill_region_ignored_re">провинция|регион|другие<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|район</string>
+  <string name="autofill_address_line_3_re">адрес.?line3|address3|addr3|street|line3<!-- es -->|municipio<!-- fr-FR -->|batiment|residence<!-- it-IT -->|indirizzo3</string>
+  <string name="autofill_zip_4_re">zip|^-$|post2<!-- pt-BR, pt-PT -->|codpos2</string>
+  <string name="autofill_address_type_same_as_re">также как</string>
+  <string name="autofill_address_type_use_my_re">использовать мое</string>
+  <string name="autofill_billing_designator_re">счет</string>
+  <string name="autofill_shipping_designator_re">переслать</string>
+  <string name="autofill_name_specific_re">^имя<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
+  <string name="autofill_middle_initial_re">середина.*начало|m\\.i\\.|mi$</string>
+  <string name="autofill_middle_name_re">середина.*имя|mname|middle$<!-- es -->|apellido.?materno|фамилия</string>
+  <string name="autofill_area_code_re">area.*code|acode|area</string>
+  <string name="autofill_phone_prefix_re">приставка<!-- fr-FR -->|предвыбор<!-- pt-BR, pt-PT -->|ddd</string>
+  <string name="autofill_phone_suffix_re">суффикс</string>
+  <string name="autofill_phone_extension_re">ext<!-- pt-BR, pt-PT -->|ramal</string>
+  <string name="autofill_card_cvc_re">верификация|идентификация карты|cvn|код безопасности|cvv код|cvc</string>
+  <string name="autofill_card_ignored_re">\'^карта</string>
+  <string name="autofill_country_code_re">страна. *code|ccode|_cc</string>
+  <string name="wifi_available_sign_in_detailed">
+    <xliff:g id="wifi_network_ssid">%1$s</xliff:g>
+  </string>
+  <string name="Low_Memory_Alert">В памяти телефона мало свободного места. Удалите некоторые данные для поддержания стабильности телефона.</string>
+  <string name="Low_Memory_Free">Бесплатно</string>
+  <string name="Low_Memory_Application">Приложения</string>
+  <string name="Low_Memory_Mail">Почта</string>
+  <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+  <string name="Btn_Select_Clear">Выбрать/Очистить</string>
+  <string name="myAppTip">Выбрать приложения для работы</string>
+  <string name="myApp_Move2Sd_ChkBox">Переместить на SD карту</string>
+  <string name="myApp_ClearData_ChkBox">Очистить данные</string>
+  <string name="myAppProcessing">обработка\u2026</string>
+  <string name="progress_unmounting1">Отключение внутреннего носителя...</string>
+  <string name="progress_erasing1">Стирание внутреннего хранилища...</string>
+  <string name="format_error1">Не удалось стереть внутреннюю память.</string>
+  <string name="media_bad_removal1">Внутренний носитель был извлечен до размонтирования.</string>
+  <string name="media_checking1">Внутренний носитель проверяется.</string>
+  <string name="media_removed1">Внутренний носитель был извлечен.</string>
+  <string name="media_shared1">Внутренний носитель используется компьютером.</string>
+  <string name="media_unknown_state1">Внутренний носитель в неизвестном состоянии.</string>
+  <string name="lockscreen_sim_network_locked_message">SIM карта телефона заблокирована</string>
+  <string name="lockscreen_sim_card_locked_message">sim карта заблокирована.</string>
+  <string name="ringtone_waning">Неправильный файл, выберите другой</string>
 </resources>

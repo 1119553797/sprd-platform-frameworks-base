@@ -18,6 +18,7 @@
 */
  -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="2625429890869005782" name="imei">"IMEI"</string>
   <string msgid="4841221237681254195" name="meid">"MEID"</string>
   <string msgid="319298163018473078" name="silent_mode_silent">"रिंगर बंद"</string>
@@ -79,7 +80,6 @@
   <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> स्‍पर्श के द्वारा अन्‍वेषण करें सक्षम करना चाहती है. स्‍पर्श के द्वारा अन्‍वेष करें चालू होने पर, आप अपनी अंगुली के नीचे क्या है उसका विवरण सुन सकते हैं या देख सकते हैं या फ़ोन से संवाद करने के लिए जेस्‍चर निष्‍पादित कर सकते हैं."</string>
   <string msgid="6640505817617414371" name="low_internal_storage_view_text">"हो सकता है कुछ सिस्टम फ़ंक्शन कार्य न करें"</string>
   <string msgid="3272758351138122503" name="webpage_unresponsive">"पृष्ठ प्रतिसाद नहीं दे रहा है."\n\n"क्‍या आप इसे बंद करना चाहते हैं?"</string>
-  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="1645267259272829559" name="accept">"स्वीकार करें"</string>
   <string msgid="2112225451706137894" name="decline">"अस्वीकार करें"</string>
   <string msgid="1318975185112070734" name="wifi_p2p_invitation_sent_title">"आमंत्रण भेजा गया"</string>
@@ -121,8 +121,8 @@
   <string name="petabyteShort">"PB"</string>
   <string name="fileSizeSuffix">"<xliff:g id="NUMBER">%1$s</xliff:g><xliff:g id="UNIT">%2$s</xliff:g>"</string>
   <string name="untitled">"&lt;शीर्षक-रहित&gt;"</string>
-  <string name="ellipsis">"…"</string>
-  <string name="ellipsis_two_dots">"‥"</string>
+  <string name="ellipsis">\u2026</string>
+  <string name="ellipsis_two_dots">\u2025</string>
   <string name="emptyPhoneNumber">"(कोई फ़ोन नंबर नहीं)"</string>
   <string name="unknownName">"(अज्ञात)"</string>
   <string name="defaultVoiceMailAlphaTag">"ध्वनिमेल"</string>
@@ -770,7 +770,7 @@
   <string name="keyguard_password_enter_sim2_puk_code">सिम2 PUK और नया पिन कोड प्रविष्ट करें</string>
   <string name="keyguard_password_enter_puk_prompt">"PUK कोड"</string>
   <string name="keyguard_password_enter_pin_prompt">"नया पिन कोड"</string>
-  <string name="keyguard_password_enter_pin_confirm_prompt">नए पिन कोड की पुष्टि करें </string>
+  <string name="keyguard_password_enter_pin_confirm_prompt">नए पिन कोड की पुष्टि करें</string>
   <string name="keyguard_password_entry_touch_hint">
     <font size="17">"पासवर्ड दर्ज करने के लिए स्‍पर्श करें"</font>
   </string>
@@ -1357,4 +1357,79 @@
   <string name="missed_call">%1$d छूटी कॉल </string>
   <string name="unread_message">%1$d अपठित संदेश </string>
   <string name="shutdown_after_seconds"><xliff:g id="NUMBER">%d</xliff:g> सेकंड के बाद फोन बंद हो जाएगा</string>
+  <string name="silent_mode_outdoor">"रिंगर आउटडोर"</string>
+  <string name="autofill_attention_ignored_re">attention|attn</string>
+  <string name="autofill_region_ignored_re">प्रान्त|क्षेत्र|अन्य<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|उपनगर</string>
+  <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
+  <string name="autofill_address_line_1_re">address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_1_label_re">पता <!-- FR-एफआर --> | <!-- यह आईटी --> adresse | indirizzo <!-- जावेद-जेपी -> | 住所 <- zh-CN --> | 地址</string>
+  <string name="autofill_address_line_2_re">पता पंक्ति 2 | पते 2 | addr2 | सड़क | सूट |.? <!-- डे डे --> इकाई | पता zusatz |.? <!-- ते --> ergänzende angaben | Direccion 2 | कोलोनिआ |! adicional <!-- fR-एफआर --> | पता suppl | पूरक nom |! Appartement <!-- यह आईटी --> |! indirizzo2 <!-- जावेद-जेपी --> | 住所 2</string>
+  <string name="autofill_address_line_3_re">पता line3 | पता 3 | addr3 | सड़क |.? <!-- ते --> line3 | Municipio <!-- FR-एफआर --> | BATIMENT | <!-- यह आईटी --> निवास | indirizzo3</string>
+  <string name="autofill_country_re">देश | स्थान <!-- जावेद-जेपी --> | 国 <!-- zh-CN --> | 国家</string>
+  <string name="autofill_zip_code_re">zip|postal|post code|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
+  <string name="autofill_zip_4_re">ज़िप|^-$|post2<!-- pt-BR, pt-PT -->|codpos2</string>
+  <string name="autofill_city_re">city|town<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
+  <string name="autofill_state_re">state|county|region|province<!-- de-DE -->|land<!-- en-UK -->|county|principality<!-- ja-JP -->|都道府県<!-- pt-BR, pt-PT -->|estado|provincia<!-- ru -->|область<!-- zh-CN -->|省<!-- zh-TW -->|地區</string>
+  <string name="autofill_address_type_same_as_re">वैसा ही जैसा </string>
+  <string name="autofill_address_type_use_my_re">मेरे का उपयोग करें </string>
+  <string name="autofill_billing_designator_re">बिल </string>
+  <string name="autofill_shipping_designator_re">जहाज </string>
+  <string name="autofill_email_re">e.?mail<!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
+  <string name="autofill_username_re">उपयोगकर्ता नाम |.?.? <!-- डे डे --> उपयोगकर्ता आईडी |.? <!--zh-CN --> vollständiger नाम | 用户 名</string>
+  <string name="autofill_name_re">नाम | पूरा नाम | आपके नाम | ग्राहक नाम | पहली और आखिरी नाम <!-- ते --> |.?.?.?.. Nombre * y * apellidos <!-- FR-एफआर --> | ^ nom <!-- जावेद-जेपी --> | お 名前 | 氏 名 <!-- पीटी -बी.आर., पीटी पीटी --> | <!-- zh-CN --> ^ नोम | 姓名</string>
+  <string name="autofill_name_specific_re">^name<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
+  <string name="autofill_first_name_re">irst.*name|initials|fname|first$<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
+  <string name="autofill_middle_initial_re">middle.*initial|m\\.i\\.|mi$</string>
+  <string name="autofill_middle_name_re">middle.*name|mname|middle$<!-- es -->|apellido.?materno|lastlastname</string>
+  <string name="autofill_last_name_re">last.*name|lname|surname|last$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
+  <string name="autofill_phone_re">phone<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
+  <string name="autofill_area_code_re">area.*code|acode|area</string>
+  <string name="autofill_phone_prefix_re">उपसर्ग<!-- fr-FR -->|preselection<!-- pt-BR, pt-PT -->|ddd</string>
+  <string name="autofill_phone_suffix_re">प्रत्यय </string>
+  <string name="autofill_phone_extension_re">ext<!-- pt-BR, pt-PT -->|ramal</string>
+  <string name="autofill_name_on_card_re">card.?holder|name.?on.?card|ccname|owner<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
+  <string name="autofill_name_on_card_contextual_re">"नाम"</string>
+  <string name="autofill_card_cvc_re">सत्यापन|कार्ड पहचान|cvn|सुरक्षा कोड|cvv कोड|cvc</string>
+  <string name="autofill_card_number_re">number|card.?#|card.?no|ccnum<!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
+  <string name="autofill_expiration_month_re">expir|exp.*month|exp.*date|ccmonth<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
+  <string name="autofill_expiration_date_re">exp|^/|year<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
+  <string name="autofill_card_ignored_re">^कार्ड </string>
+  <string name="autofill_fax_re">fax<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
+  <string name="autofill_country_code_re">country.*code|ccode|_cc</string>
+  <string name="autofill_area_code_notext_re">^\\($</string>
+  <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
+  <string name="autofill_phone_suffix_separator_re">^-$</string>
+  <string name="wifi_available_sign_in_detailed">
+    <xliff:g id="wifi_network_ssid">%1$s</xliff:g>
+  </string>
+  <string name="Low_Memory_Alert">फोन भंडारण का रिक्त स्थान कम होता जा रहा है फोन के स्थायित्व को सुनिश्चित करने के लिए कृपया कुछ डेटा निकाल लें</string>
+  <string name="Low_Memory_Free">मुफ्त </string>
+  <string name="Low_Memory_Application">ऐप्लिकेशन </string>
+  <string name="Low_Memory_Mail">मेल </string>
+  <string name="Low_Memory_Sms_Mms">एसएमएस/एमएमएस </string>
+  <string name="Low_Memory_System">सिस्‍टम</string>
+  <string name="Btn_Select_Clear">चयन/खाली करें </string>
+  <string name="myAppTip">हैंडल करने के लिए ऐप्लिकेशनों का चयन करें </string>
+  <string name="myApp_Start_Btn">शुरू करें </string>
+  <string name="myApp_Move2Sd_ChkBox">एसडी में स्थानांतरित करें </string>
+  <string name="myApp_ClearData_ChkBox">डेटा खाली करें </string>
+  <string name="myApp_Uninstall_ChkBox">"अनइंस्टॉल करें"</string>
+  <string name="myAppLoading">"लोड हो रहा है..."</string>
+  <string name="myAppProcessing">प्रोसेस किया जा रहा है\u2026</string>
+  <string name="progress_unmounting1">आतंरिक भंडारण को अनमाउंट किया जा रहा है...</string>
+  <string name="progress_erasing1">आतंरिक भंडारण को मिटाया जा रहा है...</string>
+  <string name="format_error1">आतंरिक भंडारण को मिटा नहीं पाया </string>
+  <string name="media_bad_removal1">आतंरिक भंडारण को अनमाउंट करने से पहले निकाल लिया गया था।</string>
+  <string name="media_checking1">फ़िलहाल आतंरिक भंडारण की जाँच की जा रही है।</string>
+  <string name="media_removed1">आतंरिक भंडारण को निकाल दिया गया है।</string>
+  <string name="media_shared1">आतंरिक भंडारण फ़िलहाल एक कंप्यूटर द्वारा उपयोगरत है।</string>
+  <string name="media_unknown_state1">आतंरिक मीडिया अज्ञात स्थिति में।</string>
+  <string name="find_prev_title">"पिछला"</string>
+  <string name="find_next_title">"अगला"</string>
+  <string name="lockscreen_sim_network_locked_message">फोन सिम नेटवर्क लॉक्ड है </string>
+  <string name="lockscreen_sim_card_locked_message">"सिम कार्ड लॉक किया गया है."</string>
+  <string name="digtal_formatter">%2$s</string>
+  <string name="description_target_call">कॉल करें </string>
+  <string name="description_target_sms">"SMS"</string>
+  <string name="ringtone_waning">गलत फ़ाइल, कृपया पुनः चयन करें </string>
 </resources>

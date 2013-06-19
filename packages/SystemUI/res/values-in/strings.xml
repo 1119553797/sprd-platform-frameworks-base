@@ -150,4 +150,14 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"Menelusuri GPS"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"Lokasi yang disetel oleh GPS"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"Menghapus semua pemberitahuan."</string>
+  <string name="accessibility_ringer_outdoor">Dering luar ruangan</string>
+  <string name="datanetwork_error_airplane">Anda tidak dapat menggunakan data Ponsel ketika telepon dalam mode pesawat terbang.</string>
+  <string name="bluetooth_error_airplane">Anda tidak dapat menggunakan Bluetooth ketika telepon dalam mode pesawat terbang.</string>
+  <string name="status_bar_expanded_notification_stop_button_text">"Berhenti"</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">Menutup</string>
+  <string name="status_bar_expanded_notification_cancel_button_text">"Batal"</string>
+  <string name="status_bar_expanded_notification_latest_button_text">"Pemberitahuan"</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">"Berkelanjutan"</string>
+  <string name="dataConnectSetting">Koneksi Data</string>
+  <string name="closeData">"Tutup"</string>
 </resources>

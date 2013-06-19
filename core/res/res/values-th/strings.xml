@@ -18,6 +18,7 @@
 */
  -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="2625429890869005782" name="imei">"IMEI"</string>
   <string msgid="4841221237681254195" name="meid">"MEID"</string>
   <string msgid="319298163018473078" name="silent_mode_silent">"ปิดเสียง"</string>
@@ -79,7 +80,6 @@
   <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> ต้องการเปิดใช้งาน \"สำรวจโดยการแตะ\" เมื่อเปิดใช้งานแล้ว คุณสามารถฟังหรือดูคำอธิบายของสิ่งที่อยู่ใต้นิ้วข​​องคุณ หรือใช้ท่าทางสัมผัสต่างๆ เพื่อโต้ตอบกับโทรศัพท์ได้"</string>
   <string msgid="6640505817617414371" name="low_internal_storage_view_text">"บางฟังก์ชันระบบอาจไม่ทำงาน"</string>
   <string msgid="3272758351138122503" name="webpage_unresponsive">"หน้าเว็บนี้ไม่ตอบสนอง"\n\n"คุณต้องการปิดหรือไม่"</string>
-  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="1645267259272829559" name="accept">"ยอมรับ"</string>
   <string msgid="2112225451706137894" name="decline">"ปฏิเสธ"</string>
   <string msgid="1318975185112070734" name="wifi_p2p_invitation_sent_title">"ส่งข้อความเชิญแล้ว"</string>
@@ -121,8 +121,8 @@
   <string name="petabyteShort">"PB"</string>
   <string name="fileSizeSuffix">"<xliff:g id="NUMBER">%1$s</xliff:g><xliff:g id="UNIT">%2$s</xliff:g>"</string>
   <string name="untitled">"&lt;ไม่มีชื่อ&gt;"</string>
-  <string name="ellipsis">"…"</string>
-  <string name="ellipsis_two_dots">"‥"</string>
+  <string name="ellipsis">\u2026</string>
+  <string name="ellipsis_two_dots">\u2025</string>
   <string name="emptyPhoneNumber">"(ไม่มีหมายเลขโทรศัพท์)"</string>
   <string name="unknownName">"(ไม่ทราบ)"</string>
   <string name="defaultVoiceMailAlphaTag">"ข้อความเสียง"</string>
@@ -191,7 +191,7 @@
   <string name="ThreeWCMmi">"การโทรสามสาย"</string>
   <string name="RuacMmi">"การปฏิเสธสายรบกวนที่ไม่ต้องการ"</string>
   <string name="CndMmi">"การส่งหมายเลขที่โทร"</string>
-  <string name="DndMmi">"ห้ามรบกวน"</string>
+  <string name="DndMmi">"การเข้าถึงจุดอื่น”</string>
   <string name="CLIRDefaultOnNextCallOn">"หมายเลขผู้โทรได้รับการตั้งค่าเริ่มต้นเป็นถูกจำกัด การโทรครั้งต่อไป: ถูกจำกัด"</string>
   <string name="CLIRDefaultOnNextCallOff">"หมายเลขผู้โทรได้รับการตั้งค่าเริ่มต้นเป็นถูกจำกัด การโทรครั้งต่อไป: ไม่จำกัด"</string>
   <string name="CLIRDefaultOffNextCallOn">"หมายเลขผู้โทรได้รับการตั้งค่าเริ่มต้นเป็นไม่จำกัด การโทรครั้งต่อไป: ถูกจำกัด"</string>
@@ -379,7 +379,7 @@
   <string name="permdesc_backup">"อนุญาตให้แอปพลิเคชันควบคุมวิธีการสำรองและคืนค่าระบบ ห้ามใช้โดยแอปพลิเคชันทั่วไป"</string>
   <string name="permlab_confirm_full_backup">"ยืนยันการสำรองข้อมูลหรือการคืนค่าทั้งหมด"</string>
   <string name="permdesc_confirm_full_backup">"อนุญาตให้แอปพลิเคชันเปิดอินเทอร์เฟซผู้ใช้สำหรับยืนยันการสำรองข้อมูลทั้งหมด ซึ่งไม่ใช่สำหรับให้แอปพลิเคชันใดๆ ใช้งาน"</string>
-  <string name="permlab_internalSystemWindow">"แสดงหน้าต่างที่ไม่ได้รับอนุญาต"</string>
+  <string name="permlab_internalSystemWindow">"การเข้าถึงจุดอื่น”</string>
   <string name="permdesc_internalSystemWindow">"อนุญาตให้สร้างหน้าต่างสำหรับใช้โดยส่วนติดต่อผู้ใช้ของระบบภายใน ห้ามใช้โดยแอปพลิเคชันทั่วไป"</string>
   <string name="permlab_systemAlertWindow">"แสดงการแจ้งเตือนในระดับระบบ"</string>
   <string name="permdesc_systemAlertWindow">"อนุญาตให้แอปพลิเคชันแสดงหน้าต่างแจ้งเตือนของระบบ แอปพลิเคชันที่เป็นอันตรายอาจเข้าควบคุมหน้าจอทั้งหมดได้"</string>
@@ -411,7 +411,7 @@
   <string name="permlab_signalPersistentProcesses">"ส่งสัญญาณ Linux ไปยังแอปพลิเคชัน"</string>
   <string name="permdesc_signalPersistentProcesses">"อนุญาตให้แอปพลิเคชันร้องขอให้ส่งสัญญาณแจ้งไปยังกระบวนการที่ยังทำงานอยู่ทั้งหมด"</string>
   <string name="permlab_persistentActivity">"ทำให้แอปพลิเคชันทำงานตลอดเวลา"</string>
-  <string name="permlab_deletePackages">"ลบแอปพลิเคชัน"</string>
+  <string name="permlab_deletePackages">ไม่ได้รับการป้อนข้อมูลประเภท APN </string>
   <string name="permdesc_deletePackages">"อนุญาตให้แอปพลิเคชันลบแพคเกจ Android แอปพลิเคชันที่เป็นอันตรายสามารถใช้วิธีนี้ลบแอปพลิเคชันสำคัญได้"</string>
   <string name="permlab_clearAppUserData">"ลบข้อมูลของแอปพลิเคชันอื่น"</string>
   <string name="permdesc_clearAppUserData">"อนุญาตให้แอปพลิเคชันล้างข้อมูลผู้ใช้"</string>
@@ -864,7 +864,7 @@
   <string name="autofill_zip_code">"รหัสไปรษณีย์"</string>
   <string name="autofill_county">"อำเภอ"</string>
   <string name="autofill_island">"เกาะ"</string>
-  <string name="autofill_district">"เขต"</string>
+  <string name="autofill_district">"การเข้าถึงจุดอื่น”</string>
   <string name="autofill_department">"แผนก"</string>
   <string name="autofill_prefecture">"เขตปกครอง"</string>
   <string name="autofill_parish">"เขตการปกครองท้องถิ่น"</string>
@@ -1106,7 +1106,7 @@
   <string name="time_picker_dialog_title">"ตั้งเวลา"</string>
   <string name="date_picker_dialog_title">"ตั้งวันที่"</string>
   <string name="date_time_set">"ตั้งค่า"</string>
-  <string name="default_permission_group">"เริ่มต้น"</string>
+  <string name="default_permission_group">"ค่าเริ่มต้น"</string>
   <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
   <string name="no_permissions">"ไม่ต้องการการอนุญาต"</string>
   <string name="perms_hide">
@@ -1357,4 +1357,79 @@
   <string name="missed_call">สายที่ไม่ได้รับ %1$d</string>
   <string name="unread_message">ข้อความที่ยังไม่ได้อ่าน %1$d</string>
   <string name="shutdown_after_seconds">โทรศัพท์จะดับลงหลังจาก <xliff:g id="NUMBER">%d</xliff:g> วินาที</string>
+  <string name="silent_mode_outdoor">"เสียงเรียกภายนอก"</string>
+  <string name="autofill_attention_ignored_re">ความสนใจเรียน</string>
+  <string name="autofill_region_ignored_re">จังหวัด | ภูมิภาค | อื่น ๆ <!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
+  <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
+  <string name="autofill_address_line_1_re">ที่อยู่.?เส้น|ที่อยู่1|addr1|ถนน<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|บ้าน.?ลื่อ<!-- es -->|direccion|dirección<!-- fr-FR -->|ที่อยู่<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_1_label_re">ที่อยู่<!-- fr-FR -->|ที่อยู่<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_2_re">ที่อยู่.?2เส้น|ที่อยู่ 2 | addr2 | ถนน | ชุด |. <!-- de-DE --> หน่วย |. adresszusatz | ergänzende.? angaben <!-- es --> | direccion2 | โคโลเนีย |! adicional <!-- FR FR--> | addresssuppl | complementnom |!พาร์ทเม้นท์ <!-- มัน-IT --> |! indirizzo2 <!-- ja-JP --> | 住所 2</string>
+  <string name="autofill_address_line_3_re">ที่อยู่.?เส้น3|ที่อยู่3|addr3|ถนน|เส้น3<!-- es -->|municipio<!-- fr-FR -->|batiment|residence<!-- it-IT -->|indirizzo3</string>
+  <string name="autofill_country_re">ประเทศ | สถานที่<!-- ja-JP -->|国<!-- zh-CN -->|国家</string>
+  <string name="autofill_zip_code_re">zip|postal|post code|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
+  <string name="autofill_zip_4_re">ซิป|^-$|post2<!-- pt-BR, pt-PT -->|codpos2</string>
+  <string name="autofill_city_re">city|town<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
+  <string name="autofill_state_re">รัฐ | เขต | ภูมิภาค |<!-- de-DE -->|ที่ดิน<!-- en-UK --> จังหวัด | เขต | <!-- ja-JP -->| </string>
+  <string name="autofill_address_type_same_as_re">เช่นเดียว</string>
+  <string name="autofill_address_type_use_my_re">แวนคูเวอร์ /แคนาดา</string>
+  <string name="autofill_billing_designator_re">บิล</string>
+  <string name="autofill_shipping_designator_re">ชิพ</string>
+  <string name="autofill_email_re">อีเมล์. <!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
+  <string name="autofill_username_re">การตรวจสอบ | บัตรประจำตัวประชาชน | CVV | รหัสรักษาความปลอดภัย | รหัส CVV | CVC</string>
+  <string name="autofill_name_re">^ชื่อ| ชื่อ.?เต็ม | ชื่อ.?คุณ | ชื่อ.?ลูกค้า | ชื่อสกุล <!-- ES --> | nombre * y * apellidos.. <!-- FR-FR --> | ^ Nom <!-- ja-JP --> | お名前 |! 氏名 <!-- PT-BR, PT-PT --> | ^ Nome <!-- zh-CN --> | 姓名</string>
+  <string name="autofill_name_specific_re">^ชื่อ <!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
+  <string name="autofill_first_name_re">irst  *ชื่อ | ชื่อย่อ<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
+  <string name="autofill_middle_initial_re">กลางเริ่มต้น * |. m \ \ i \ \ |.. ไมล์ $</string>
+  <string name="autofill_middle_name_re">* ชื่อกลาง <!-- es -->|apellido.?materno|lastlastname</string>
+  <string name="autofill_last_name_re">last.*name|lname|surname|last$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
+  <string name="autofill_phone_re">โทรศัพท์ <!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
+  <string name="autofill_area_code_re">พื้นที่รหัส * *code|acode|area</string>
+  <string name="autofill_phone_prefix_re">คำนำหน้า <!-- fr-FR -->|preselection<!-- pt-BR, pt-PT -->|ddd</string>
+  <string name="autofill_phone_suffix_re">ต่อท้าย</string>
+  <string name="autofill_phone_extension_re">ext<!-- pt-BR, pt-PT -->|ความจำ</string>
+  <string name="autofill_name_on_card_re">การ์ด.?ชือการ์ด.?on.?card|ccname|owner<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
+  <string name="autofill_name_on_card_contextual_re">"ชื่อ"</string>
+  <string name="autofill_card_cvc_re">กำลังทำงาน</string>
+  <string name="autofill_card_number_re">จำนวน | บัตร <!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
+  <string name="autofill_expiration_month_re">expir|exp.*month|exp.*date|ccmonth<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
+  <string name="autofill_expiration_date_re">exp|^/|year<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
+  <string name="autofill_card_ignored_re">^บัตร</string>
+  <string name="autofill_fax_re">แฟ๊กซ์<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
+  <string name="autofill_country_code_re">รหัส*ประเทศ |ccode|_cc</string>
+  <string name="autofill_area_code_notext_re">^\\($</string>
+  <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
+  <string name="autofill_phone_suffix_separator_re">^-$</string>
+  <string name="wifi_available_sign_in_detailed">
+    <xliff:g id="wifi_network_ssid">%1$s</xliff:g>
+  </string>
+  <string name="Low_Memory_Alert">พื้นที่เก็บข้อมูลโทรศัพท์น้อย กรุณาลบข้อมูลบางอย่างเพื่อความมั่นคงของโทรศัพท์</string>
+  <string name="Low_Memory_Free">ฟรี</string>
+  <string name="Low_Memory_Application">การประยุกต์ใช้งาน</string>
+  <string name="Low_Memory_Mail">เมลล์</string>
+  <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+  <string name="Low_Memory_System">ระบบ</string>
+  <string name="Btn_Select_Clear">เลือก / ล้าง</string>
+  <string name="myAppTip">เลือกโปรแกรมในการจัดการ</string>
+  <string name="myApp_Start_Btn">เริ่ม</string>
+  <string name="myApp_Move2Sd_ChkBox">ย้ายไปที่ SD</string>
+  <string name="myApp_ClearData_ChkBox">ล้างข้อมูล</string>
+  <string name="myApp_Uninstall_ChkBox">"ถอนการติดตั้ง"</string>
+  <string name="myAppLoading">"กำลังโหลด..."</string>
+  <string name="myAppProcessing">การประมวลผล \ u2026</string>
+  <string name="progress_unmounting1">ของฉัน</string>
+  <string name="progress_erasing1">ลบการจัดเก็บข้อมูลภายใน ...</string>
+  <string name="format_error1">ไม่สามารถลบการจัดเก็บข้อมูลภายใน</string>
+  <string name="media_bad_removal1">เก็บข้อมูลภายในจะถูกลบออกก่อนที่จะถูกยกเลิกการต่อเชื่อม</string>
+  <string name="media_checking1">การจัดเก็บข้อมูลภายในได้รับการตรวจสอบ</string>
+  <string name="media_removed1">การจัดเก็บข้อมูลภายในถูกลบออก</string>
+  <string name="media_shared1">การจัดเก็บข้อมูลภายในโดยใช้คอมพิวเตอร์</string>
+  <string name="media_unknown_state1">สื่ออยู่ในสถานะที่ไม่รู้จัก</string>
+  <string name="find_prev_title">"ก่อนหน้า"</string>
+  <string name="find_next_title">ถัดไป</string>
+  <string name="lockscreen_sim_network_locked_message">เครือข่ายSIMที่ถูกล็อค</string>
+  <string name="lockscreen_sim_card_locked_message">SIM การ์ดจะถูกล็อค</string>
+  <string name="digtal_formatter">%2$s</string>
+  <string name="description_target_call">โทร</string>
+  <string name="description_target_sms">"SMS"</string>
+  <string name="ringtone_waning">ไม่มี MMS ในSIM% dในการสำรองข้อมูล</string>
 </resources>

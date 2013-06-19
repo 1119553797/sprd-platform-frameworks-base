@@ -151,4 +151,15 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"Recherche de GPS..."</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"Position définie par GPS"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"Supprimer toutes les notifications"</string>
+  <string name="accessibility_battery_level">Battery <xliff:g id="number">%d</xliff:g>pour cent</string>
+  <string name="accessibility_ringer_outdoor">Sonnerie extérieure</string>
+  <string name="datanetwork_error_airplane">Vous ne pouvez pas utiliser les données mobiles quand le téléphone est en mode avion.</string>
+  <string name="bluetooth_error_airplane">Vous ne pouvez pas utiliser le Bluetooth lorsque le téléphone est en mode avion.</string>
+  <string name="status_bar_expanded_notification_stop_button_text">"Arrêter"</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">Raccroché</string>
+  <string name="status_bar_expanded_notification_cancel_button_text">"Annuler"</string>
+  <string name="status_bar_expanded_notification_latest_button_text">"Notifications"</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">"En cours"</string>
+  <string name="dataConnectSetting">Connexion aux données</string>
+  <string name="closeData">"Fermer"</string>
 </resources>

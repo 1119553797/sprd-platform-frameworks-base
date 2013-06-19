@@ -151,4 +151,5 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"Поиск GPS"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"Местоположение установлено с помощью GPS"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"Удалить все уведомления"</string>
+  <string name="accessibility_battery_level">Аккумулятор <xliff:g id="number">%d</xliff:g> процентов.</string>
 </resources>

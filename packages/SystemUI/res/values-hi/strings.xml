@@ -150,4 +150,14 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"GPS को खोजा जा रहा है"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"GPS द्वारा सेट किया गया स्‍थान"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"सभी सूचनाएं साफ़ करें."</string>
+  <string name="accessibility_ringer_outdoor">रिंगर आउटडोर </string>
+  <string name="datanetwork_error_airplane">आप मोबाइल डेटा का इस्तेमाल नहीं कर सकते जब फोन एयरप्लेन मोड में हो</string>
+  <string name="bluetooth_error_airplane">आप ब्लूटूथ का इस्तेमाल नहीं कर सकते जब फोन एयरप्लेन मोड में हो</string>
+  <string name="status_bar_expanded_notification_stop_button_text">"रोकें"</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">हंगअप </string>
+  <string name="status_bar_expanded_notification_cancel_button_text">"रद्द करें"</string>
+  <string name="status_bar_expanded_notification_latest_button_text">"सूचनाएं"</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">"ऑनगोइंग"</string>
+  <string name="dataConnectSetting">डेटा कनेक्शन </string>
+  <string name="closeData">"घड़ी का प्रदर्शन"</string>
 </resources>

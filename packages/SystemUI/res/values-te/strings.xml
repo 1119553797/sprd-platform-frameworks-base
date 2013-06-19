@@ -1,0 +1,140 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_label">UI సిస్టమ్ </string>
+    <string name="status_bar_clear_all_button">క్లియర్</string>
+    <string name="status_bar_do_not_disturb_button">భంగం లేదు</string>
+    <string name="status_bar_please_disturb_button">ప్రకటనలను చూపించు</string>
+    <string name="status_bar_recent_inspect_item_title">అనువర్తనం సమాచారం</string>
+    <string name="status_bar_no_recent_apps">ఇటీవలి అప్లికేషన్లు ఏవీ లేవు.</string>
+    <string name="status_bar_accessibility_dismiss_recents">ఇటీవలి అప్లికేషన్లను తొలగించు</string>
+    <plurals name="status_bar_accessibility_recent_apps">
+        <item quantity="one">2 ఇటీవలి అప్లికేషన్</item>
+        <item quantity="other">%d ఇటీవలి అప్లికేషన్</item>
+    </plurals>
+    <string name="status_bar_no_notifications_title">ప్రకటనలు లేవు</string>
+    <string name="status_bar_ongoing_events_title">జరుగుతోంది</string>
+    <string name="status_bar_latest_events_title">రిమైండర్ సెట్టింగులు</string>
+    <string name="battery_low_title">ఛార్జర్ ని కనెక్ట్ చేయి</string>
+    <string name="battery_low_subtitle">బ్యాటరీ చాలా బలహీనంగా ఉంది.</string>
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g> మిగతావి</string>
+    <string name="invalid_charger">USB ఛార్జింగ్ మద్దతునివ్వడం లేదు. \n సరఫరా చేయబడిన ఛార్జర్ ని మాత్రమే ఉపయోగించండి.  </string>
+    <string name="battery_low_why">బ్యాటరీ ఉపయోగించండి</string>
+    <string name="status_bar_settings_settings_button">సెట్టింగులు</string>
+    <string name="status_bar_settings_wifi_button">"Wi-Fi"</string>
+    <string name="status_bar_settings_airplane">ఎయిర్ ప్లేన్ విధానం</string>
+    <string name="status_bar_settings_auto_rotation">స్వయంచాలక స్క్రీన్ భ్రమణం</string>
+    <string name="status_bar_settings_auto_brightness_label">ఆటో</string>
+    <string name="status_bar_settings_notifications">రిమైండర్ సెట్టింగులు</string>
+    <string name="bluetooth_tethered">Bluetooth టీథరింగ్</string>
+    <string name="status_bar_input_method_settings_configure_input_methods">ఇన్పుట్ విధానాల సెటప్ చెయ్యండి</string>
+    <string name="status_bar_use_physical_keyboard">పరికర కీబోర్డ్</string>
+    <string name="usb_device_permission_prompt">అప్లికేషన్ ని<xliff:g id="application">%1$s</xliff:g> USB అనుబంధాన్ని యాక్సెస్ చేయడానికి అనుమతించాలా?</string>
+    <string name="usb_accessory_permission_prompt">అప్లికేషన్ ని<xliff:g id="application">%1$s</xliff:g> USB అనుబంధాన్ని యాక్సెస్ చేయడానికి అనుమతించాలా?</string>
+    <string name="usb_device_confirm_prompt">ఈ USB అనుసంధానం కనెక్ట్ చేయబడినపుడు<xliff:g id="activity">%2$s</xliff:g> తెరవాలా ?</string>
+    <string name="usb_accessory_confirm_prompt">ఈ USB అనుసంధానం కనెక్ట్ చేయబడినపుడు<xliff:g id="activity">%2$s</xliff:g> తెరవాలా ?</string>
+    <string name="usb_accessory_uri_prompt">ఈ USB అనుబంధంతో ఏ ఇన్స్టాల్ చేయబడిన అప్లికేషన్లూ పని చేయవు. ఈ అనుబంధం గురించి <xliff:g id="url">%2$s</xliff:g> లో  మరింత ఎక్కువ తెలుసుకోండి.</string>
+    <string name="title_usb_accessory">USB అనుబంధం</string>
+    <string name="label_view">వీక్షణ</string>
+    <string name="always_use_device">ఈ USB పరికరం సిద్ధంగా ఉపయోగించండి</string>
+    <string name="always_use_accessory">ఈ USB అనుబంధం కోసం డిఫాల్ట్ గా ఉండేదాన్నే ఉపయోగించు</string>
+    <string name="compat_mode_on">స్క్రీన్ ని నింపడానికి జూమ్ చేయండి</string>
+    <string name="compat_mode_help_body">ఒక అప్లికేషన్ చిన్నస్క్రీన్ కోసం డిజైన్ చేయబడినపుడు,  గడియారం ద్వారా ఒక జూమ్ కంట్రోల్  కనిపిస్తుంది.  </string>
+    <string name="screenshot_saving_ticker">స్క్రీన్ షాట్ ని సేవ్ చేస్తోంది\u2026</string>
+    <string name="screenshot_saving_title">స్క్రీన్ షాట్ ని సేవ్ చేస్తోంది\u2026</string>
+    <string name="screenshot_saving_text">స్క్రీన్ షాట్ సేవ్ చేయబడుతోంది.</string>
+    <string name="screenshot_saved_title">స్క్రీన్ షాట్ బంధించబడింది.</string>
+    <string name="screenshot_saved_text">మీ స్క్రీన్ షాట్ ని వీక్షించడానికి  టచ్ చేయండి. </string>
+    <string name="screenshot_failed_title">స్క్రీన్ షాట్ ని పట్టుకోలేము.</string>
+    <string name="screenshot_failed_text">స్క్రీన్ షాట్ సేవ్ చేయలేము. మార్పులను సేవ్ చేయలేము  </string>
+    <string name="usb_preference_title">USB ఫైల్ బదిలీ ఐచ్ఛికాలు</string>
+    <string name="use_mtp_button_title">మీడియా ప్లేయర్ లాగా మౌంట్ అవు  (MTP)</string>
+    <string name="use_ptp_button_title">కెమేరాలాగా మౌంట్ అవు (PTP)</string>
+    <string name="installer_cd_button_title">మాక్ కోసం ఆండ్రాయిడ్ ఫైల్ ట్రాన్స్ఫర్ అప్లికేషన్ ఇన్స్టాల్ చేయి</string>
+    <string name="accessibility_back">వెనుకకు</string>
+    <string name="accessibility_home">హోం పేజి</string>
+    <string name="accessibility_menu">మెనూ</string>
+    <string name="accessibility_recent">ఇటీవలి అప్లికేషన్లు</string>
+    <string name="accessibility_ime_switch_button">ఇన్పుట్ పద్ధతి బటన్ మారండి.</string>
+    <string name="accessibility_compatibility_zoom_button">అనుకూలిత జూమ్ బటన్</string>
+    <string name="accessibility_compatibility_zoom_example">చిన్న స్క్రీన్ నించి పెద్ద స్క్రీన్ కి మారడానికి జూమ్ చేయండి</string>
+    <string name="accessibility_bluetooth_connected">బ్లూటూత్ కనెక్ట్ చేయబడింది.</string>
+    <string name="accessibility_bluetooth_disconnected">బ్లూటూత్ డిస్కనెక్ట్ చేయబడింది.</string>
+    <string name="accessibility_no_battery">బ్యాటరీ లేదు.</string>
+    <string name="accessibility_battery_one_bar">బ్యాటరీ ఒక బార్.</string>
+    <string name="accessibility_battery_two_bars">బ్యాటరీ మూడు బార్లు.</string>
+    <string name="accessibility_battery_three_bars">బ్యాటరీ మూడు బార్లు.</string>
+    <string name="accessibility_battery_full">బ్యాటరీ నిండుగా ఉంది.</string>
+    <string name="accessibility_no_phone">ఫోను లేదు.</string>
+    <string name="accessibility_phone_one_bar">ఫోను ఒక బార్.</string>
+    <string name="accessibility_phone_two_bars">ఫోను రెండు బార్లు.</string>
+    <string name="accessibility_phone_three_bars">ఫోను మూడు బార్లు.</string>
+    <string name="accessibility_phone_signal_full">ఫోను సిగ్నల్ నిండుగా ఉంది.</string>
+    <string name="accessibility_no_data">ఏ డేటా లేదు</string>
+    <string name="accessibility_data_one_bar">డేటా ఒక బార్.</string>
+    <string name="accessibility_data_two_bars">డేటా రెండు బార్లు.</string>
+    <string name="accessibility_data_three_bars">డేటా మూడు బార్లు.</string>
+    <string name="accessibility_data_signal_full">డేటా సిగ్నల్  ఉంది.</string>
+    <string name="accessibility_no_wifi">Wi-Fi లేదు. </string>
+    <string name="accessibility_wifi_one_bar">Wi-Fi ఒక బార్.</string>
+    <string name="accessibility_wifi_two_bars">Wi-Fi రెండు బార్లు.</string>
+    <string name="accessibility_wifi_three_bars">Wi-Fi మూడు బార్లు.</string>
+    <string name="accessibility_wifi_signal_full">WiFi సిగ్నల్ పూర్తిగా ఉంది.</string>
+    <string name="accessibility_no_wimax">WiMAX లేదు. </string>
+    <string name="accessibility_wimax_one_bar">WiMAX ఒక బార్.</string>
+    <string name="accessibility_wimax_two_bars">WiMAXరెండుబార్లు.</string>
+    <string name="accessibility_wimax_three_bars">WiMAX మూడు బార్లు.</string>
+    <string name="accessibility_wimax_signal_full">WiMAX సిగ్నల్ పూర్తిగా ఉంది.</string>
+    <string name="accessibility_data_connection_gprs">GPRS</string>
+    <string name="accessibility_data_connection_3g">3G</string>
+    <string name="accessibility_data_connection_3.5g">"3.5G"</string>
+    <string name="accessibility_data_connection_4g">4G</string>
+    <string name="accessibility_data_connection_cdma">"CDMA"</string>
+    <string name="accessibility_data_connection_wifi">"Wi-Fi"</string>
+    <string name="accessibility_no_sim">SIM లేదు.</string>
+    <string name="accessibility_bluetooth_tether">Bluetooth టీథరింగ్</string>
+    <string name="accessibility_airplane_mode">విమానం మోడ్</string>
+    <string name="accessibility_settings_button">సిస్టమ్ సెట్టింగులు.</string>
+    <string name="accessibility_notifications_button">రిమైండర్ సెట్టింగులు</string>
+    <string name="accessibility_remove_notification">ప్రకటన రద్దు చేయి</string>
+    <string name="accessibility_gps_enabled">GPS ప్రారంభించబడింది.</string>
+    <string name="accessibility_gps_acquiring">GPS సంపాదిస్తోంది.</string>
+    <string name="accessibility_tty_enabled">టెలీ టైప్ రైటర్ ప్రారంభించబడింది.</string>
+    <string name="accessibility_ringer_vibrate">రింగర్ వైబ్రేట్ </string>
+    <string name="accessibility_ringer_silent">రింగర్ సైలెంట్</string>
+    <string name="accessibility_ringer_outdoor">రింగర్ ఔట్ డోర్</string>
+    <string name="accessibility_recents_item_dismissed"><xliff:g id="all_but_last_item">%1$s</xliff:g> మరియు <xliff:g id="last_item">%2$s</xliff:g></string>
+    <string name="data_usage_disabled_dialog_3g_title">2G-3G డేటా డిసేబుల్ చేయబడింది.</string>
+    <string name="data_usage_disabled_dialog_4g_title">4G డేటా డిసేబుల్ చేయబడింది.</string>
+    <string name="data_usage_disabled_dialog_mobile_title">మొబైల్ డేటా నిలిపివేయబడింది.</string>
+    <string name="data_usage_disabled_dialog_title">డేటా  నిలిపివేయబడింది</string>
+    <string name="data_usage_disabled_dialog_enable">డేటా తిరిగి ప్రారంభించాలి</string>
+    <string name="status_bar_settings_signal_meter_disconnected">
+        ఇంటర్నెట్ కనెక్షన్ లేదు
+    </string>
+    <string name="status_bar_settings_signal_meter_wifi_nossid">Wi-Fi కనెక్ట్ చేయబడింది</string>
+    <string name="gps_notification_searching_text">GPS కోసం వెతుకుతోంది</string>
+    <string name="gps_notification_found_text">GPS ద్వారా ప్రదేశం అమర్చబడింది</string>
+    <string name="accessibility_clear_all">ప్రకటనలన్నీ రద్దు చేయి</string>
+    <string name="dreams_dock_launcher"> స్క్రీన్ సేవర్ ని క్రియాశీలకం చేయి</string>
+    <string name="status_bar_notification_inspect_item_title">అనువర్తనం సమాచారం</string>
+    <string name="notifications_off_title">ప్రకటనలు లేవు.</string>
+    <string name="notifications_off_text">మళ్లీ ప్రకటనలను ప్రారంభించడానికి ఇక్కడ టాప్ చేయండి.</string>
+    <string name="accessibility_rotation_lock_off">స్క్రీన్ స్వయంచాలకంగా భ్రమిస్తుంది. </string>
+    <string name="accessibility_rotation_lock_on_landscape">సుదూర ప్రకృతి దృశ్య విన్యాసంలో స్క్రీన్ లాక్ చేయబడింది. </string>
+    <string name="accessibility_rotation_lock_on_portrait">స్క్రీన్ చిత్రం దిశలోనైనా లాక్.</string>
+    <string name="weak_signal_title">బలహీన సూచిక</string>
+    <string name="auto_connect">అడగవద్దు మరియు ఇతర విశ్వసనీయ అప్లికేన్లకు స్వయంచాలకంగా కనెక్ట్ కావాలి</string>
+    <string name="mobile_data_connect_disable">వద్దు</string>
+    <string name="mobile_data_connect_enable">అవును</string>
+    <string name="network_disconnect_title">నోటీసు</string>
+    <string name="datanetwork_error_airplane">మీ ఫోను విమానం మోడ్ లో ఉన్నప్పుడు మీరు మొబైల్ డేటాని ఉపయోగించలేరు.  </string>
+    <string name="bluetooth_error_airplane">మీ ఫోను విమానం మోడ్ లో ఉన్నప్పుడు మీరు బ్లూటూత్ ని ఉపయోగించలేరు.  </string>
+    <string name="status_bar_expanded_notification_stop_button_text">ఆపు</string>
+    <string name="status_bar_expanded_notification_hungup_button_text">ఫోను పెట్టేశారు</string>
+    <string name="status_bar_expanded_notification_cancel_button_text">రద్దు</string>
+    <string name="status_bar_expanded_notification_latest_button_text">రిమైండర్ సెట్టింగులు</string>
+    <string name="status_bar_expanded_notification_ongoing_button_text">జరుగుతోంది</string>
+    <string name="dataConnectSetting">డేటా కనెక్షన్</string>
+    <string name="closeData">మూసివేయండి</string>
+</resources>
