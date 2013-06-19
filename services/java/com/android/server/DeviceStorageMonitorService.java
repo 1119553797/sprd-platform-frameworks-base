@@ -269,6 +269,9 @@ public class DeviceStorageMonitorService extends Binder {
     }
 
     private final void checkMemory(boolean checkCache) {
+        File dir_data=new File("/data/corefile");
+        File dir_sd  =new File("/mnt/sdcard/slog/corefile");
+
         if(mIsCheckingMemory == true) {
             Slog.i(TAG, "other thread is checking memory now ,return");
             return;
@@ -323,7 +326,18 @@ public class DeviceStorageMonitorService extends Binder {
                 }
                 //add for delete core file in low memory:
                 try{
-                     DeleteAllfileOnDir(new File("/data/corefile"));
+                    if (dir_data == null) {
+                        throw new NullPointerException("Destination must not be null");
+                    }
+                    if(dir_data.exists() && dir_data.isDirectory() == true) {
+                         DeleteAllfileOnDir(dir_data);
+                    }
+                    if (dir_sd == null) {
+                        throw new NullPointerException("Destination must not be null");
+                    }
+                    if(dir_sd.exists() && dir_sd.isDirectory() == true) {
+                         DeleteAllfileOnDir(dir_sd);
+                    }
                 }catch(Exception e)
                 {
                     //did not do anyting.
