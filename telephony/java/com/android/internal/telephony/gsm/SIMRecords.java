@@ -1476,11 +1476,18 @@ public class SIMRecords extends IccRecords {
 
     protected void onAllRecordsLoaded() {
         String operator = getOperatorNumeric();
-
+        IccCard.State state = IccCard.State.UNKNOWN;
         // Some fields require more than one SIM record to set
 
         log("SIMRecords: onAllRecordsLoaded set 'gsm.sim.operator.numeric' to operator='" +
                 operator + "'");
+
+        state = phone.getIccCard().getIccCardState();
+        if(state != IccCard.State.READY)
+        {
+            log("onAllRecordsLoaded return by icccardstate is not ready ");
+            return;
+        }
         phone.setSystemProperty(PROPERTY_ICC_OPERATOR_NUMERIC, operator);
 
         if (imsi != null) {
