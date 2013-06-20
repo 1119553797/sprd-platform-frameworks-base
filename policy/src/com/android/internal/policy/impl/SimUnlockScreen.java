@@ -465,7 +465,10 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             if (v == mCancelButton) {
                 mPinText.setText(""); // clear the PIN entry field if the user cancels
                 mCallback.updatePinUnlockCancel(mSub);
-                mCallback.goToLockScreen();
+                /*20130620 BUG 171343 WennyCheng START*/
+                //mCallback.goToLockScreen();
+                mCallback.goToUnlockScreen();
+                /*20130620 BUG 171343 WennyCheng END*/
                 return;
             }
 
