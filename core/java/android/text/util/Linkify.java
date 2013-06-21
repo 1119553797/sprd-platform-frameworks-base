@@ -88,7 +88,7 @@ public class Linkify {
      * Don't treat anything with fewer than this many digits as a
      * phone number.
      */
-    private static final int PHONE_NUMBER_MINIMUM_DIGITS = 5;
+    private static final int PHONE_NUMBER_MINIMUM_DIGITS = 3;
 
     /**
      *  Filters out web URL matches that occur after an at-sign (@).  This is
