@@ -1185,7 +1185,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             try {
                 sessionState.session.finishSession();
             } catch (RemoteException e) {
-                Slog.w(TAG, "Session failed to close due to remote exception", e);
+                Slog.w(TAG, "Session failed to close due to remote exception");
                 setImeWindowVisibilityStatusHiddenLocked();
             }
         }
