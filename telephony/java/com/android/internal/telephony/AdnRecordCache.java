@@ -328,7 +328,8 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 	    flag = new int[count];
 	    Log.i(LOG_TAG, "getUpdateSubjectFlag count =" + count);
 	    for (i = 0; i < count; i++) {
-
+            str1 = "";
+            str2 = "";
 	        if (i < oldCount && strArr1[i]!=null) {
 	            str1 = strArr1[i];
 	        } 
