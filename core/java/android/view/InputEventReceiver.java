@@ -139,7 +139,13 @@ public abstract class InputEventReceiver {
             } else {
                 int seq = mSeqMap.valueAt(index);
                 mSeqMap.removeAt(index);
-                nativeFinishInputEvent(mReceiverPtr, seq, handled);
+                //Bug 178732 start
+                try {
+                    nativeFinishInputEvent(mReceiverPtr, seq, handled);
+                } catch (RuntimeException e) {
+                    Log.w(TAG, "Exception from nativeFinishInputEvent", e);
+                }
+                //Bug 178732 end
             }
         }
         event.recycleIfNeededAfterDispatch();
