@@ -2179,15 +2179,18 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 Log.e(TAG, "checkForRingerModeChange() current ringer mode is vibrate" +
                         "but no vibrator is present");
                 break;
-            }
+                                 }
+            //fix bug175701
+            adjustVolumeIndex = false;
             if ((direction == AudioManager.ADJUST_LOWER)) {
                 if (mPrevVolDirection != AudioManager.ADJUST_LOWER) {
                     ringerMode = RINGER_MODE_SILENT;
-                }
+                                            }
             } else if (direction == AudioManager.ADJUST_RAISE) {
                 ringerMode = RINGER_MODE_NORMAL;
-            }
-            adjustVolumeIndex = false;
+                adjustVolumeIndex = true;
+                                }
+            //end
             break;
         case RINGER_MODE_SILENT:
             if (direction == AudioManager.ADJUST_RAISE) {
@@ -2195,8 +2198,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                     ringerMode = RINGER_MODE_VIBRATE;
                 } else {
                     ringerMode = RINGER_MODE_NORMAL;
-                }
-            }
+                                           }
+                                }
             adjustVolumeIndex = false;
             break;
         default:
