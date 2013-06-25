@@ -192,14 +192,17 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
         if (dcac != null) {
             for (ApnContext apnContext : dcac.getApnListSync()) {
-                apnContext.setDataConnectionAc(null);
-                apnContext.setDataConnection(null);
-                apnContext.setReason(reason);
-                apnContext.setRetryCount(retryCount);
-                if (apnContext.getState() == State.FAILED) {
-                    apnContext.setState(State.IDLE);
+                //wangsl
+                if(apnContext.getState() != State.INITING) {
+                    apnContext.setDataConnectionAc(null);
+                    apnContext.setDataConnection(null);
+                    apnContext.setReason(reason);
+                    apnContext.setRetryCount(retryCount);
+                    if (apnContext.getState() == State.FAILED) {
+                        apnContext.setState(State.IDLE);
+                    }
+                    sendMessage(obtainMessage(EVENT_TRY_SETUP_DATA, apnContext));
                 }
-                sendMessage(obtainMessage(EVENT_TRY_SETUP_DATA, apnContext));
             }
             // Alram had expired. Clear pending intent recorded on the DataConnection.
             dcac.setReconnectIntentSync(null);
