@@ -656,57 +656,9 @@ public class RingtoneManager {
      */
 
     public static Uri getActualDefaultRingtoneUri(Context context, int type) {
-        String setting = getSettingForType(type);
-        if (setting == null) return null;
-        final String uriString = Settings.System.getString(context.getContentResolver(), setting);
-        /* Modify 20130306 by Spreadst for bug88517  start */
 
-        Uri uri = ( uriString != null ? Uri.parse(uriString) : null);
-        Cursor cursor = null;
-        String ringerUriString = Settings.System.getString(context.getContentResolver(),
-                Settings.System.DEFAULT_RINGTONE);
-        Uri mDefaultRingtoneUri = (ringerUriString != null ? Uri.parse(ringerUriString) : null);
-        String notificationUriString = Settings.System.getString(context.getContentResolver(),
-                Settings.System.DEFAULT_NOTIFICATION);
-        Uri mDefaultNotificationUri = (notificationUriString != null ? Uri.parse(notificationUriString) : null);
-        String alarmUriString = Settings.System.getString(context.getContentResolver(),
-                Settings.System.DEFAULT_ALARM);
-        Uri mDefaultAlarmUri = (alarmUriString != null ? Uri.parse(alarmUriString) : null);
-        try {
-            cursor = context.getContentResolver().query(uri,
-                    new String[] { MediaStore.Audio.Media.TITLE , MediaStore.Audio.Media.DATA }, null, null, null);
-            if (cursor != null && cursor.getCount() > 0) {
-                if (cursor.moveToFirst()) {
-                    File filePath = new File(cursor.getString(1));
-                    if(!filePath.exists() ) {
-                        if ((type & TYPE_RINGTONE) != 0) {
-                            uri = mDefaultRingtoneUri;
-                        } else if ((type & TYPE_NOTIFICATION) != 0) {
-                            uri = mDefaultNotificationUri;
-                        }else if ((type & TYPE_ALARM) != 0) {
-                            uri = mDefaultAlarmUri;
-                        }
-                    }
-                }
-            } else {
-                if ((type & TYPE_RINGTONE) != 0) {
-                    uri = mDefaultRingtoneUri;
-                } else if ((type & TYPE_NOTIFICATION) != 0) {
-                    uri = mDefaultNotificationUri;
-                }else if ((type & TYPE_ALARM) != 0) {
-                    uri = mDefaultAlarmUri;
-                }
-            }
-        } catch (Exception sqle) {
-            Log.d(TAG, sqle.toString());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-                cursor = null;
-            }
-        }
-        /* Modify 20130306 by Spreadst for bug88517  end */
-        return uri;
+        return getActualDefaultRingtoneUri(context, type, PhoneFactory.DEFAULT_PHONE_ID);
+
     }
     
     /**
@@ -797,10 +749,59 @@ public class RingtoneManager {
     }
 
     public static Uri getActualDefaultRingtoneUri(Context context, int type, int phoneId) {
-        String setting = getSettingForType(type, phoneId);
+
+        String setting = getSettingForType(type,phoneId);
         if (setting == null) return null;
-            final String uriString = Settings.System.getString(context.getContentResolver(), setting);
-            return uriString != null ? Uri.parse(uriString) : null;
+        final String uriString = Settings.System.getString(context.getContentResolver(), setting);
+        /* Modify for bug88517/173250  start */
+
+        Uri uri = ( uriString != null ? Uri.parse(uriString) : null);
+        Cursor cursor = null;
+        String ringerUriString = Settings.System.getString(context.getContentResolver(),
+                Settings.System.DEFAULT_RINGTONE);
+        Uri mDefaultRingtoneUri = (ringerUriString != null ? Uri.parse(ringerUriString) : null);
+        String notificationUriString = Settings.System.getString(context.getContentResolver(),
+                Settings.System.DEFAULT_NOTIFICATION);
+        Uri mDefaultNotificationUri = (notificationUriString != null ? Uri.parse(notificationUriString) : null);
+        String alarmUriString = Settings.System.getString(context.getContentResolver(),
+                Settings.System.DEFAULT_ALARM);
+        Uri mDefaultAlarmUri = (alarmUriString != null ? Uri.parse(alarmUriString) : null);
+        try {
+            cursor = context.getContentResolver().query(uri,
+                    new String[] { MediaStore.Audio.Media.TITLE , MediaStore.Audio.Media.DATA }, null, null, null);
+            if (cursor != null && cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    File filePath = new File(cursor.getString(1));
+                    if(!filePath.exists() ) {
+                        if ((type & TYPE_RINGTONE) != 0) {
+                            uri = mDefaultRingtoneUri;
+                        } else if ((type & TYPE_NOTIFICATION) != 0) {
+                            uri = mDefaultNotificationUri;
+                        }else if ((type & TYPE_ALARM) != 0) {
+                            uri = mDefaultAlarmUri;
+                        }
+                    }
+                }
+            } else {
+                if ((type & TYPE_RINGTONE) != 0) {
+                    uri = mDefaultRingtoneUri;
+                } else if ((type & TYPE_NOTIFICATION) != 0) {
+                    uri = mDefaultNotificationUri;
+                }else if ((type & TYPE_ALARM) != 0) {
+                    uri = mDefaultAlarmUri;
+                }
+            }
+        } catch (Exception sqle) {
+            Log.e(TAG, sqle.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+                cursor = null;
+            }
+        }
+        return uri;
+        /* Modify for bug88517/173250  end */
+
     }
 
     public static void setActualDefaultRingtoneUri(Context context, int type, Uri ringtoneUri, int phoneId) {
