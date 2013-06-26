@@ -84,6 +84,9 @@ public class MsmsIccProvider extends IccProvider {
     /** this is only to match phoneId, it do not care whether the uri is illegal **/
     private static final UriMatcher PHONE_ID_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
+    //owen modify for 174794
+    private int[] mLdnSize = new int[PHONE_COUNT];
+
     static {
         URL_MATCHER.addURI(AUTHORITY, "adn", ADN);
         URL_MATCHER.addURI(AUTHORITY, "fdn", FDN);
@@ -311,6 +314,8 @@ public class MsmsIccProvider extends IccProvider {
         int efType;
         boolean isFdn = false;
         boolean isGas = false;
+        //owen: modify for 174794
+        boolean isLnd = false;
 
         if (DBG)
             log("delete");
@@ -333,7 +338,13 @@ public class MsmsIccProvider extends IccProvider {
                 efType = IccConstants.EF_ADN;
                 isGas = true;
                 break;
-                
+
+             //owen: modify for 174794
+            case LND:
+                efType = IccConstants.EF_LND;
+                isLnd = true;
+                break;
+
             default:
                 throw new UnsupportedOperationException(
                         "Cannot insert into URL: " + url);
@@ -387,7 +398,10 @@ public class MsmsIccProvider extends IccProvider {
         if (DBG)
             log("delete tag: " + tag + ", number:" + number + ", index:" + index);
 
-        if(isFdn){
+//owen modify for 174794
+        if (isLnd){
+            success = deleteLndFromEf(efType, index, tag, number, phoneId);
+        }else  if(isFdn){
             if(-1!=deleteIccRecordFromEf(efType, tag, number, null, "", "", "", pin2, phoneId)) success = true;
         }else if(isGas){
             int result = updateUsimGroupById("", index, phoneId);
@@ -418,6 +432,66 @@ public class MsmsIccProvider extends IccProvider {
         }
         return 1;
     }
+
+//owen modify for 174794
+    private boolean deleteLndFromEf(int efType, int index, String name, String number,  int phoneId) {
+        if (DBG)
+            log("deleteLndFromEf: efType=" + efType + ", name=" + name
+                    + ", number=" + number +",phoneId=" + phoneId + ", index=" + index);
+
+        MatrixCursor mCursor = loadFromEf(efType, phoneId);
+        int retIndex=-1;
+        String[] emails = null;
+        boolean move_succ = mCursor.moveToLast();
+
+        if(move_succ)
+        {
+            for (int i = 0; i<mLdnSize[phoneId] ; i++){
+
+                log("deleteLndFromEf: i =" + i);
+                if (move_succ)
+                {
+                    if (mCursor.getInt(8) != index)//index
+                    {
+                        String mEmail = mCursor.getString(2);
+                        if (mEmail != null) {
+                            emails = new String[1];
+                            emails[0] = mEmail;
+                        }
+
+                        retIndex = addIccRecordToEf(efType, mCursor.getString(0), mCursor.getString(1), emails, 
+                                 mCursor.getString(3), mCursor.getString(4), mCursor.getString(5), mCursor.getString(6), 
+                                 mCursor.getString(7), "", phoneId);
+                    }
+                    else
+                    {
+
+                        retIndex = addIccRecordToEf(efType, "", "", null, "", "",
+                                   "", "", "", "", phoneId);
+
+                    }
+                    move_succ = mCursor.moveToPrevious();
+
+                }
+                else
+                {
+
+                        retIndex = addIccRecordToEf(efType, "", "", null, "", "",
+                                   "", "", "", "", phoneId);
+                }
+            }        }
+
+
+        if (DBG) log("deleteLndFromEf: retindex= " + retIndex);
+
+         if (retIndex < 0) {
+             return false;
+         }else {
+             return true;
+         }
+
+    }
+
 
     @Override
     public int update(Uri url, ContentValues values, String where, String[] whereArgs) {
@@ -573,6 +647,11 @@ public class MsmsIccProvider extends IccProvider {
             // Load the results
             final int N = adnRecords.size();
             final MatrixCursor cursor = new MatrixCursor(ADDRESS_BOOK_COLUMN_NAMES, N);
+            //Owen for 174794
+            if (efType == IccConstants.EF_LND) {
+                mLdnSize[phoneId] = N;
+            }
+
             if (DBG) log("adnRecords.size=" + N);
             for (int i = 0; i < N ; i++) {
                 loadRecord(adnRecords.get(i), cursor, i);
