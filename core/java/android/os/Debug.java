@@ -1417,6 +1417,14 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      * @param pname The current process name.
      */
     public static void dumpHprof(String pname) {
+
+        //only support in debug.
+        boolean isDebuggable = "1".equals(SystemProperties.get("ro.debuggable", "0"));
+        if(false == isDebuggable)
+        {
+            return ;
+        }
+
         String file = "/data/misc/hprofs/";
         File dir = new File(file);
 

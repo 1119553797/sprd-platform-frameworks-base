@@ -4826,20 +4826,19 @@ public final class ActivityThread {
         try {//add by liwd@spreadst.com, the switcher to dump hprof file when OOM
             Looper.loop();
         } catch (OutOfMemoryError e) {
-            if (Debug.isMonkey()) {
-                Debug.dumpHprof(thread.getProcessName());
-            }
+            Debug.dumpHprof(thread.getProcessName());
             throw e;
         } catch (RuntimeException e1) {
-            if (Debug.isMonkey()) {
-            	boolean dump = false;
-            	try {
-	                String cause = Log.getStackTraceString(e1.getCause());
-	                dump = null != cause && cause.contains("Caused by: java.lang.OutOfMemoryError:");
-            	} catch (OutOfMemoryError e2) {//getStackTraceString may be OOM
-            		dump = true;
-            	}
-            	if (dump) Debug.dumpHprof(thread.getProcessName());
+
+            boolean dump = false;
+            try {
+                String cause = Log.getStackTraceString(e1.getCause());
+                dump = null != cause && cause.contains("Caused by: java.lang.OutOfMemoryError:");
+            } catch (OutOfMemoryError e2) {//getStackTraceString may be OOM
+                dump = true;
+            }
+            if (dump){
+                Debug.dumpHprof(thread.getProcessName());
             }
             throw e1;
         }

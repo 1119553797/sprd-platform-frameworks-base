@@ -105,19 +105,13 @@ public class RuntimeInit {
 
         private void dumpHprofInMonkey(String name, Throwable e) {
             if (e instanceof OutOfMemoryError) {
-                if (android.os.Debug.isMonkey()) {
-                    android.os.Debug.dumpHprof(name);
-                } else {
                     Slog.e(TAG, "There is a OOM!");
-                }
+                    android.os.Debug.dumpHprof(name);
             } else if (e instanceof RuntimeException) {
                 String cause = Log.getStackTraceString(e.getCause());
                 if (null != cause && cause.contains("Caused by: java.lang.OutOfMemoryError")) {
-                    if (android.os.Debug.isMonkey()) {
-                        android.os.Debug.dumpHprof(name);
-                    } else {
                         Slog.e(TAG, "There is a OOM!");
-                    }
+                        android.os.Debug.dumpHprof(name);
                 }
             }
         }
