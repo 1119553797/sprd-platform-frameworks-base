@@ -64,8 +64,6 @@ public class AdnRecordLoader extends IccThreadHandler {
 	ArrayList<Integer> emailEfIndex;
 	// add multi record and email in usim end
 
-   static SparseArray<ArrayList<byte[]>> extLikeFiles
-       = new SparseArray<ArrayList<byte[]>>();
 	// For "load one"
 	int recordNumber;
 
@@ -101,7 +99,6 @@ public class AdnRecordLoader extends IccThreadHandler {
 	static final int EVENT_UPDATE_GAS_RECORD_DONE = 17;
     static final int EVENT_UPDATE_EXT_RECORD_DONE = 19;
     static final int EVENT_EXT_LOAD_ALL_DONE = 20;
-
 	// add multi record and email in usim end
 
     //***** Constructor
@@ -144,7 +141,7 @@ public class AdnRecordLoader extends IccThreadHandler {
      * or response.obj.exception is set
      */
     public void
-    loadAllFromEF(int ef, int extensionEF,
+    loadAllExtFromEF(int ef, int extensionEF,
                 Message response) {
         this.ef = ef;
         this.extensionEF = extensionEF;
@@ -153,7 +150,16 @@ public class AdnRecordLoader extends IccThreadHandler {
                 extensionEF,
                 obtainMessage(EVENT_EXT_LOAD_ALL_DONE,ef,extensionEF));
     }
-
+    public void
+    loadAllFromEF(int ef, int extensionEF,
+                Message response) {
+        this.ef = ef;
+        this.extensionEF = extensionEF;
+        this.userResponse = response;
+        mFh.loadEFLinearFixedAll(
+                ef,
+                obtainMessage(EVENT_ADN_LOAD_ALL_DONE,ef,extensionEF));
+    }
     /**
      * Write adn to a EF SIM record
      * It will get the record size of EF record and compose hex adn array
@@ -179,6 +185,21 @@ public class AdnRecordLoader extends IccThreadHandler {
             obtainMessage(EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
     }
 
+    public void
+    updateExtEF(AdnRecord adn, int ef, int extensionEF, int recordNumber,
+            String pin2, Message response) {
+        this.ef = ef;
+        this.extensionEF = extensionEF;
+        this.recordNumber = recordNumber;
+        this.userResponse = response;
+        this.pin2 = pin2;
+        byte[] extData = adn.buildExtString();
+        pendingExtLoads = 1;
+        mFh.updateEFLinearFixed(extensionEF,recordNumber ,
+                extData, pin2, obtainMessage(EVENT_UPDATE_EXT_RECORD_DONE,
+                        extensionEF,recordNumber,extData));
+    }
+    
     public void updateEFCyclic(AdnRecord adn, int ef, int extensionEF, int recordNumber,
             String pin2, Message response) {
         this.ef = ef;
@@ -186,7 +207,6 @@ public class AdnRecordLoader extends IccThreadHandler {
         this.recordNumber = recordNumber;
         this.userResponse = response;
         this.pin2 = pin2;
-        //mFh.getEFLinearRecordSize(ef, obtainMessage(EVENT_EF_LINEAR_RECORD_SIZE_DONE, adn));
         mFh.getEFLinearRecordSize(ef, obtainMessage(EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE, adn));
     }
 	// ***** Overridden from Handler
@@ -302,62 +322,7 @@ public class AdnRecordLoader extends IccThreadHandler {
 
 	}
 
-    public byte getEmptyExtIndex(int extEfId, int efid) {
-        Log.d(LOG_TAG, "getEmptyExtIndex:extEfId = " + extEfId + "efid = " + efid);
-        ArrayList<byte[]> extList = extLikeFiles.get(extEfId);
-        byte[] emptyExtRecord = new byte[AdnRecord.EXT_RECORD_LENGTH_BYTES];
-        for (int i = 0; i < emptyExtRecord.length; i++) {
-            emptyExtRecord[i] = (byte) 0xFF;
-        }
-        byte index = findEmptyExt(extList);
-        Log.d(LOG_TAG, "index& 0xff = " + (index & 0xFF));
-        if ((index & 0xFF) == 0xFF) {
-            // no empty ext record,clean unused ext records
-            ArrayList<Integer> usedExtIndexs = AdnRecordCache.getUsedExtRecordIndex(efid);
-            Log.d(LOG_TAG, "usedExtIndex = " + usedExtIndexs);
-            if (usedExtIndexs == null || extList == null) {
-                Log.e(LOG_TAG, "extList is not existed");
-                return (byte)0xFF;
-            }
-            int extListSize = extList.size();
-            boolean isUsed = false;
-            for (int i = 0; i < extListSize; i++) {
-                isUsed = false;
-                for (Iterator<Integer> it = usedExtIndexs.iterator(); it.hasNext();) {
-                    if (i + 1 == it.next() ) {
-                        isUsed = true;
-                        break;
-                    }
-                }
-                if (isUsed == false) {
-                    Log.d(LOG_TAG, "set emptyRecord : " + (i + 1));
-                    extLikeFiles.get(extEfId).set(i, emptyExtRecord);
-                }
-            }
-            // find empty ext record
-            extList = extLikeFiles.get(extEfId);
-            return findEmptyExt(extList);
-        } else {
-            return (byte)index;
-        }
-    }
 
-    private byte findEmptyExt(ArrayList<byte[]> extList) {
-        if (extList == null) {
-            Log.d(LOG_TAG, "extList is not existed ");
-            return (byte)0xFF;
-        }
-        byte count = 1;
-        for (Iterator<byte[]> it = extList.iterator(); it.hasNext();) {
-            if ((byte) 0xFF == it.next()[0]) {
-                Log.d(LOG_TAG, "we got the index " + count);
-                return count;
-            }
-            count++;
-        }
-        Log.d(LOG_TAG, "find no empty ext");
-        return (byte)0xFF;
-    }
 
 	// add multi record and email in usim end
     public void
@@ -398,66 +363,26 @@ public class AdnRecordLoader extends IccThreadHandler {
                         // TODO: handle exception
                         throw e;
                     }
-                    //has extend number
-                    if (data != null && (data[data.length-1]) != (byte) 0xff) {
-                        data[data.length - 1] = getEmptyExtIndex(extensionEF, ef);
-                        if ((data[data.length - 1]) != (byte)0xff) {
-                            byte[] extData = adn.buildExtString();
-                            ArrayList<byte[]> adnAndExtData = new ArrayList<byte[]>();
-                            adnAndExtData.add(0, data);
-                            adnAndExtData.add(1, extData);
-                            mFh.updateEFLinearFixed(extensionEF, data[data.length - 1],
-                                    extData, pin2, obtainMessage(EVENT_UPDATE_EXT_RECORD_DONE,
-                                            extensionEF, data[data.length - 1], adnAndExtData));
-                            pendingExtLoads = 1;
-                        } else {
-                            Log.d(LOG_TAG, "ext list full");
-                            throw new IccPhoneBookOperationException(
-                                    IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH,
-                                    "ext list full",
-                                    ar.exception);
-                        }
+                    Log.i("AdnRecordLoader", "recordNumber " + recordNumber + "adn.ext"
+                            + adn.extRecord);
+                    mFh.updateEFLinearFixed(ef, recordNumber,
+                            data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
 
-                    } else {
-                        Log.i("AdnRecordLoader", "recordNumber " + recordNumber);
-                        mFh.updateEFLinearFixed(ef, recordNumber,
-                                data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
-
-                        pendingExtLoads = 1;
-                    }
-                 
-
+                    pendingExtLoads = 1;
                     break;
                 case EVENT_UPDATE_EXT_RECORD_DONE:
                     ar = (AsyncResult) (msg.obj);
                     extensionEF = msg.arg1;
                     int index = msg.arg2;
-                    ArrayList<byte[]> adnAndExtDataArrayList = (ArrayList<byte[]>) ar.userObj;
+                    Log.d(LOG_TAG, "EVENT_UPDATE_EXT_RECORD_DONE extensionEF =" + extensionEF  + " index = " + index);
                     if (ar.exception != null) {
                         throw new IccPhoneBookOperationException(
                                 IccPhoneBookOperationException.WRITE_OPREATION_FAILED,
                                 "update EF ext record failed",
                                 ar.exception);
                     }
-                    Log.d(LOG_TAG, "EVENT_UPDATE_EXT_RECORD_DONE extensionEF =" + extensionEF +
-                            " extLikeFile = " + extLikeFiles.get(extensionEF)
-                            + " index = " + index);
-                    if (adnAndExtDataArrayList != null
-                            && extLikeFiles.get(extensionEF) != null) {
-                        if (index <= extLikeFiles.get(extensionEF).size()) {
-                            extLikeFiles.get(extensionEF).set(index - 1,
-                                    adnAndExtDataArrayList.get(1));
-                        }
-                        pendingExtLoads = 0;
-                        mFh.updateEFLinearFixed(
-                                ef,
-                                recordNumber,
-                                adnAndExtDataArrayList.get(0),
-                                pin2,
-                                obtainMessage(EVENT_UPDATE_RECORD_DONE,
-                                        adnAndExtDataArrayList.get(0)));
-                        pendingExtLoads = 1;
-                    }
+                    pendingExtLoads = 0;
+                    result = ar.userObj;
                     break;
                 case EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE:
                     Log.d(LOG_TAG,"AdnRecordLoader handle EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE, ef:" + Integer.toHexString(ef));
@@ -489,11 +414,7 @@ public class AdnRecordLoader extends IccThreadHandler {
                         // TODO: handle exception
                         throw e;
                     }
-
                     Log.i("AdnRecordLoader", "recordNumber " + recordNumber);
-
-                    //mFh.updateEFLinearFixed(ef, recordNumber,
-                            //data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
                     mFh.updateEFCYCLICLinearFixed(ef, recordNumber,
                             data, pin2, obtainMessage(EVENT_UPDATE_RECORD_DONE));
                     pendingExtLoads = 1;
@@ -508,7 +429,6 @@ public class AdnRecordLoader extends IccThreadHandler {
                                 ar.exception);
                     }
                     pendingExtLoads = 0;
-                    result = ar.userObj;
                     break;
                 case EVENT_ADN_LOAD_DONE:
                     ar = (AsyncResult)(msg.obj);
@@ -521,20 +441,6 @@ public class AdnRecordLoader extends IccThreadHandler {
                 
                     adn = new AdnRecord(ef, recordNumber, data);
                     result = adn;
-
-                    if (adn.hasExtendedRecord()) {
-                        // If we have a valid value in the ext record field,
-                        // we're not done yet: we need to read the corresponding
-                        // ext record and append it
-                        Log.d(LOG_TAG, "adn.extRecord = "+adn.extRecord);
-                        if (extLikeFiles.get(extensionEF) != null) {
-                            Log.d(LOG_TAG, "extensionEF"+extensionEF+"size  = "+extLikeFiles.get(extensionEF).size());
-                        }
-                        if (extLikeFiles.get(extensionEF) != null
-                                && adn.extRecord <= extLikeFiles.get(extensionEF).size()) {
-                            adn.appendExtRecord(extLikeFiles.get(extensionEF).get(adn.extRecord-1));
-                        }
-                    }
                 break;
 
                 case EVENT_EXT_RECORD_LOAD_DONE:
@@ -570,42 +476,24 @@ public class AdnRecordLoader extends IccThreadHandler {
                     }
                     adns = new ArrayList<AdnRecord>(datas.size());
                     Log.d(LOG_TAG, "efid = " + ef + " datas.size() = " + datas.size());
-                    result = adns;
-                    pendingExtLoads = 0;
-
                     for (int i = 0, s = datas.size(); i < s; i++) {
                         adn = new AdnRecord(ef, 1 + i, datas.get(i));
                         adns.add(adn);
-                        if (adn.hasExtendedRecord()) {
-                            Log.d(LOG_TAG, "adn.extRecord = " + adn.extRecord);
-                            if (extLikeFiles.get(extensionEF) != null
-                                    && adn.extRecord <= extLikeFiles.get(extensionEF).size()) {
-                                adn.appendExtRecord(extLikeFiles.get(extensionEF).get(
-                                        adn.extRecord - 1));
-                            }
-                        }
                     }
+                    result = adns;
+                    pendingExtLoads = 0;
                     Log.d("AdnRecordLoader", "efid = " + ef + " result = " + result);
-                break;
+                    break;
                 case EVENT_EXT_LOAD_ALL_DONE:
                     ar = (AsyncResult) (msg.obj);
                     ArrayList<byte[]> extDatas = (ArrayList<byte[]>) (ar.result);
-                    int efid = msg.arg1;
-                    int extensionEf = msg.arg2;
-                    Log.d(LOG_TAG, "EVENT_EXT_LOAD_ALL_DONE:" + extensionEF);
+                    Log.d(LOG_TAG, "EVENT_EXT_LOAD_ALL_DONE:" + extensionEF+"extDatas"+extDatas);
                     if (ar.exception != null) {
                         throw new IccPhoneBookOperationException(
                                 IccPhoneBookOperationException.LOAD_ADN_FAIL,
                                 "load all ext failed", ar.exception);
                     }
-                    if (extDatas != null) {
-                        Log.d(LOG_TAG, "efid = " + efid + " extDatas.size() = " + extDatas.size());
-                        extLikeFiles.put(extensionEf, extDatas);
-                    }
-                    mFh.loadEFLinearFixedAll(
-                            efid,
-                            obtainMessage(EVENT_ADN_LOAD_ALL_DONE));
-                    pendingExtLoads = 1;
+                    result = extDatas;
                     break;
 			// add multi record and email in usim begin
 			case EVENT_EF_PBR_EMAIL_LINEAR_RECORD_SIZE_DONE:

@@ -43,9 +43,10 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
     public UsimPhoneBookManager mUsimPhoneBookManager;
 
     // Indexed by EF ID
-    static SparseArray<ArrayList<AdnRecord>> adnLikeFiles
+    SparseArray<ArrayList<AdnRecord>> adnLikeFiles
         = new SparseArray<ArrayList<AdnRecord>>();
-
+    SparseArray<ArrayList<byte[]>> extLikeFiles
+        = new SparseArray<ArrayList<byte[]>>();
     // People waiting for ADN-like files to be loaded
     SparseArray<ArrayList<Message>> adnLikeWaiters
         = new SparseArray<ArrayList<Message>>();
@@ -62,6 +63,8 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 	static final int EVENT_UPDATE_USIM_ADN_DONE = 3;
    static final int EVENT_UPDATE_CYCLIC_DONE = 4;
    static final int EVENT_UPDATE_ANR_DONE = 5;
+   static final int EVENT_LOAD_ALL_EXT_LIKE_DONE = 6;
+   static final int EVENT_UPDATE_EXT_DONE = 7;
 
 	public int mInsertId = -1;
 	protected final Object mLock = new Object();
@@ -111,7 +114,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
     public void reset() {
         Log.i(LOG_TAG, "reset adnLikeFiles");
         adnLikeFiles.clear();
-        AdnRecordLoader.extLikeFiles.clear();
+        extLikeFiles.clear();
         mUsimPhoneBookManager.reset();
 
         clearWaiters();
@@ -148,23 +151,6 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
     }
     public void removedRecordsIfLoaded(int efid) {
         adnLikeFiles.remove(efid);
-    }
-    public static ArrayList<Integer> getUsedExtRecordIndex(int efid) {
-        ArrayList<Integer> usedIndex = new ArrayList<Integer>();
-        ArrayList<AdnRecord> adnList =  adnLikeFiles.get(efid);
-        if(adnList == null){
-            return null;
-        }
-        int index = 0;
-        for (Iterator<AdnRecord> it = adnList.iterator(); it.hasNext();) {
-            index = it.next().extRecord;
-            if (index != 0xFF && index != 0) {
-                if (!usedIndex.contains(index)) {
-                    usedIndex.add(index);
-                }
-            }
-        }
-        return usedIndex;
     }
 
     /**
@@ -204,7 +190,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
      * @param response message to be posted when done
      *        response.exception hold the exception in error
      */
-    public void updateAdnByIndex(int efid, AdnRecord adn, int recordIndex, String pin2,
+    public void updateAdnByIndex(int efid, AdnRecord newAdn, int recordIndex, String pin2,
             Message response) {
 
         int extensionEF = extensionEfForEf(efid);
@@ -221,19 +207,35 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
             return;
         }
 
-        userWriteResponse.put(efid, response);
         mInsertId = recordIndex;
-        if (adnLikeFiles.get(efid) != null) {
-            try {
-                adnLikeFiles.get(efid).get(recordIndex - 1).extRecord = 0xff;
-            } catch (Exception e) {
-                // TODO: handle exception
-                Log.e(LOG_TAG, e.getMessage());
-            }
+
+        ArrayList<AdnRecord> oldAdnList = getRecordsIfLoaded(efid);
+        if (oldAdnList == null) {
+            sendErrorResponse(response, IccPhoneBookOperationException.WRITE_OPREATION_FAILED ,
+                    "Adn list not exist for EF:" + efid);
+            return;
         }
-        new AdnRecordLoader(mFh).updateEF(adn, efid, extensionEF,
+        userWriteResponse.put(efid, response);
+        AdnRecord oldAdn = oldAdnList.get(recordIndex - 1);
+        oldAdn.extRecord = 0xff;
+        if (newAdn.extRecordIsNeeded()) {
+            byte extIndex = getAvailableExtIndex(extensionEF,efid);
+            Log.d(LOG_TAG, "extIndex = " + extIndex);
+            if (extIndex == (byte)0xFF) {
+                Log.d(LOG_TAG, "ext list full");
+                userWriteResponse.delete(efid);
+                sendErrorResponse(response, IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH,
+                        "ext list full");
+                return;
+            }
+            newAdn.extRecord = (int) extIndex;
+            new AdnRecordLoader(mFh).updateExtEF(newAdn, efid, extensionEF,
+                    extIndex, pin2,
+                    obtainMessage(EVENT_UPDATE_EXT_DONE, extensionEF, extIndex));
+        }
+        new AdnRecordLoader(mFh).updateEF(newAdn, efid, extensionEF,
                 recordIndex, pin2,
-                obtainMessage(EVENT_UPDATE_ADN_DONE, efid, recordIndex, adn));
+                obtainMessage(EVENT_UPDATE_ADN_DONE, efid, recordIndex, newAdn));
     }
 
 	// add multi record and email begin
@@ -844,12 +846,25 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
 
         updateGrpOfAdn(adnRecordLoader, adnIndex, recNum, oldAdn, newAdn, pin2);
         oldAdn.extRecord = 0xff;
-        adnRecordLoader.updateEFAdnToUsim(newAdn, efid, extensionEF, adnIndex,
+        if (newAdn.extRecordIsNeeded()) {
+            byte extIndex = getAvailableExtIndex(extensionEF,efid);
+            Log.d(LOG_TAG, "extIndex = "+extIndex);
+            if (extIndex == (byte)0xFF) {
+                Log.d(LOG_TAG, "ext list full");
+                userWriteResponse.delete(efid);
+                sendErrorResponse(response, IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH,
+                        "ext list full");
+                return;
+            }
+            newAdn.extRecord = (int)extIndex;
+            adnRecordLoader.updateExtEF(newAdn, efid, extensionEF,
+                    extIndex, pin2,
+                    obtainMessage(EVENT_UPDATE_EXT_DONE, extensionEF, extIndex));
+        }
+        new AdnRecordLoader(mFh).updateEFAdnToUsim(newAdn, efid, extensionEF, adnIndex,
                 pin2, obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, adnIndex,
                         newAdn));
-
         Log.i(LOG_TAG, "updateUSIMAdnByIndex  finish");
-
     }
 
     public synchronized void updateUSIMAdnBySearch(int efid, AdnRecord oldAdn,
@@ -941,11 +956,25 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                     break;
                 }
                 updateGrpOfAdn(adnRecordLoader, index, recNum, oldAdn, newAdn, pin2);
-                
-                adnRecordLoader.updateEFAdnToUsim(newAdn, efid, extensionEF, index,
+                if (newAdn.extRecordIsNeeded()) {
+                    byte extIndex = getAvailableExtIndex(extensionEF,efid);
+                    Log.d(LOG_TAG, "extIndex = "+(byte)extIndex);
+                    if (extIndex == (byte)0xFF) {
+                        Log.d(LOG_TAG, "ext list full");
+                        userWriteResponse.delete(efid);
+                        sendErrorResponse(response, IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH,
+                                "ext list full");
+                        return;
+                    }
+                    newAdn.extRecord = (int)extIndex;
+                    adnRecordLoader.updateExtEF(newAdn, efid, extensionEF,
+                            extIndex, pin2,
+                            obtainMessage(EVENT_UPDATE_EXT_DONE, extensionEF, extIndex));
+                }
+                new AdnRecordLoader(mFh).updateEFAdnToUsim(newAdn, efid, extensionEF, index,
                         pin2, obtainMessage(EVENT_UPDATE_USIM_ADN_DONE, efid, index,
                                  newAdn));
-                Log.i(LOG_TAG, "updateUSIMAdnBySearch  finish");
+                
                 break;
             }
         }
@@ -954,7 +983,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                     "Adn record don't exist for " + oldAdn);
             return;
         }
-                
+        Log.i(LOG_TAG, "updateUSIMAdnBySearch  finish");
     }
 
 	// add multi record and email in usim end
@@ -1041,14 +1070,102 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
             sendErrorResponse(response,IccPhoneBookOperationException.WRITE_OPREATION_FAILED, "Have pending update for EF:" + efid);
             return;
         }
-
         userWriteResponse.put(efid, response);
-
+        if (newAdn.extRecordIsNeeded()) {
+            byte extIndex = getAvailableExtIndex(extensionEF,efid);
+            Log.d(LOG_TAG, "extIndex = "+extIndex);
+            if (extIndex == (byte)0xFF) {
+                Log.d(LOG_TAG, "ext list full");
+                userWriteResponse.delete(efid);
+                sendErrorResponse(response, IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH,
+                        "ext list full");
+                return;
+            }
+            newAdn.extRecord = (int)extIndex;
+            new AdnRecordLoader(mFh).updateExtEF(newAdn, efid, extensionEF,
+                    extIndex, pin2,
+                    obtainMessage(EVENT_UPDATE_EXT_DONE, extensionEF, extIndex));
+        }
         new AdnRecordLoader(mFh).updateEF(newAdn, efid, extensionEF,
                 index, pin2,
                 obtainMessage(EVENT_UPDATE_ADN_DONE, efid, index, newAdn));
     }
 
+    private byte getAvailableExtIndex(int extEfId, int efid) {
+        Log.d(LOG_TAG, "getAvailableExtIndex:extEfId = " + extEfId);
+        ArrayList<byte[]> extList = extLikeFiles.get(extEfId);
+        byte[] emptyExtRecord = new byte[AdnRecord.EXT_RECORD_LENGTH_BYTES];
+        for (int i = 0; i < emptyExtRecord.length; i++) {
+            emptyExtRecord[i] = (byte) 0xFF;
+        }
+        byte index = findEmptyExt(extList);
+        Log.d(LOG_TAG, "index& 0xff = " + (index & 0xFF));
+        if ((index & 0xFF) == 0xFF) {
+            // no empty ext record,clean unused ext records
+            ArrayList<Integer> usedExtIndexs = getUsedExtRecordIndex(efid);
+            Log.d(LOG_TAG, "usedExtIndex = " + usedExtIndexs);
+            if (usedExtIndexs == null || extList == null) {
+                Log.e(LOG_TAG, "extList is not existed");
+                return (byte) 0xFF;
+            }
+            int extListSize = extList.size();
+            boolean isUsed = false;
+            for (int i = 0; i < extListSize; i++) {
+                isUsed = false;
+                for (Iterator<Integer> it = usedExtIndexs.iterator(); it.hasNext();) {
+                    if (i + 1 == it.next()) {
+                        isUsed = true;
+                        break;
+                    }
+                }
+                if (isUsed == false) {
+                    Log.d(LOG_TAG, "set emptyRecord : " + (i + 1));
+                    extLikeFiles.get(extEfId).set(i, emptyExtRecord);
+                }
+            }
+            // find empty ext record
+            extList = extLikeFiles.get(extEfId);
+            return findEmptyExt(extList);
+        } else {
+            return (byte) index;
+        }
+
+    }
+
+    private byte findEmptyExt(ArrayList<byte[]> extList) {
+        if (extList == null) {
+            Log.d(LOG_TAG, "extList is not existed ");
+            return (byte)0xFF;
+        }
+        byte count = 1;
+        for (Iterator<byte[]> it = extList.iterator(); it.hasNext();) {
+            if ((byte) 0xFF == it.next()[0]) {
+                Log.d(LOG_TAG, "we got the index " + count);
+                return count;
+            }
+            count++;
+        }
+        Log.d(LOG_TAG, "find no empty ext");
+        return (byte)0xFF;
+    }
+
+    private ArrayList<Integer> getUsedExtRecordIndex(int efid) {
+        ArrayList<Integer> usedIndex = new ArrayList<Integer>();
+        ArrayList<AdnRecord> adnList =getRecordsIfLoaded(efid);
+        if (adnList == null) {
+            return null;
+        }
+        int index = 0;
+        for (Iterator<AdnRecord> it = adnList.iterator(); it.hasNext();) {
+            index = it.next().extRecord;
+            if (index != 0xFF && index != 0) {
+                if (!usedIndex.contains(index)) {
+                    usedIndex.add(index);
+                }
+            }
+        }
+        return usedIndex;
+    }
 
 /**
      * Insert newAdn in LND-like record in EF The LND-like records must be read
@@ -1159,8 +1276,8 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
         }
 
         Log.i("AdnRecordCache", "requestLoadAllAdnLike efid " + Integer.toHexString(efid));
-        new AdnRecordLoader(mFh).loadAllFromEF(efid, extensionEf,
-            obtainMessage(EVENT_LOAD_ALL_ADN_LIKE_DONE, efid, 0));
+        new AdnRecordLoader(mFh).loadAllExtFromEF(efid, extensionEf,
+            obtainMessage(EVENT_LOAD_ALL_EXT_LIKE_DONE, efid, extensionEf));
     }
 
     //***** Private methods
@@ -1186,6 +1303,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
     handleMessage(Message msg) {
         AsyncResult ar;
         int efid;
+        int extensionEf;
         int index;
         AdnRecord adn;
         Message response;
@@ -1195,26 +1313,44 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 /* arg1 is efid, obj.result is ArrayList<AdnRecord>*/
                 ar = (AsyncResult) msg.obj;
                 efid = msg.arg1;
+                extensionEf = msg.arg2;
                 ArrayList<Message> waiters;
 
                 waiters = adnLikeWaiters.get(efid);
                 adnLikeWaiters.delete(efid);
 
                 if (ar.exception == null) {
-                    adnLikeFiles.put(efid, (ArrayList<AdnRecord>) ar.result);
+                    ArrayList<AdnRecord> adns = (ArrayList<AdnRecord>) (ar.result);
+                    for(AdnRecord adnRecord:adns){
+                        if (adnRecord.hasExtendedRecord()) {
+                            Log.d(LOG_TAG, "adn.extRecord = " + adnRecord.extRecord);
+                            if (extLikeFiles.get(extensionEf) != null
+                                    && adnRecord.extRecord <= extLikeFiles.get(extensionEf).size()) {
+                                adnRecord.appendExtRecord(extLikeFiles.get(extensionEf).get(
+                                        adnRecord.extRecord - 1));
+                            }
+                        }
+                    }
+                    adnLikeFiles.put(efid, adns);
                 }
                 Log.d(LOG_TAG, "EVENT_LOAD_ALL_ADN_LIKE_DONE:efid = "+efid +"ar.exception = " +ar.exception);
                 notifyWaiters(waiters, ar);
+                break;
+            case EVENT_LOAD_ALL_EXT_LIKE_DONE:
+                ar = (AsyncResult) msg.obj;
+                efid = msg.arg1;
+                extensionEf = msg.arg2;
+                if (ar.exception == null) {
+                    extLikeFiles.put(extensionEf, (ArrayList<byte[]>) ar.result);
+                }
+                new AdnRecordLoader(mFh).loadAllFromEF(efid, extensionEf,
+                        obtainMessage(EVENT_LOAD_ALL_ADN_LIKE_DONE, efid, extensionEf));
                 break;
             case EVENT_UPDATE_ADN_DONE:
                 ar = (AsyncResult)msg.obj;
                 efid = msg.arg1;
                 index = msg.arg2;
                 adn = (AdnRecord) (ar.userObj);
-                byte[] adnData = (byte[])ar.result;
-                if (adnData != null) {
-                    adn.extRecord = adnData[adnData.length-1];
-                }
                 Log.d(LOG_TAG, "AdnRecordCache:EVENT_UPDATE_ADN_DONE:mInsertId = " + mInsertId);
                 if (ar.exception == null && adnLikeFiles.get(efid) != null) {
                     adn.setRecordNumber(mInsertId);
@@ -1233,6 +1369,20 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 Log.i("AdnRecordCache", "response" + response + "index " + index
                         + "target " + response.getTarget());
                 response.sendToTarget();
+                break;
+            case EVENT_UPDATE_EXT_DONE:
+                ar = (AsyncResult) msg.obj;
+                extensionEf = msg.arg1;
+                index = msg.arg2;
+                byte[] extData = (byte[])ar.result;
+                Log.d(LOG_TAG, "EVENT_UPDATE_EXT_DONE index = "+index);
+                if (ar.exception == null && extLikeFiles.get(extensionEf) != null) {
+                    if (index > 0 && index <= extLikeFiles.get(extensionEf).size()) {
+                        extLikeFiles.get(extensionEf).set(index-1, extData);
+                    }
+                }else {
+                    Log.e(LOG_TAG, "EVENT_UPDATE_EXT_DONE failed:"+ar.exception);
+                }
                 break;
                 // add for cyclic files
             case EVENT_UPDATE_CYCLIC_DONE:
@@ -1287,10 +1437,6 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 efid = msg.arg1;
                 index = msg.arg2;
                 adn = (AdnRecord) (ar.userObj);
-                byte[] data = (byte[])ar.result;
-                if (data != null) {
-                    adn.extRecord = data[data.length-1];
-                }
                 int recNum = -1;
                 for (int num = 0; num < mUsimPhoneBookManager.getNumRecs(); num++) {
                     int adnEF = mUsimPhoneBookManager.findEFInfo(num);

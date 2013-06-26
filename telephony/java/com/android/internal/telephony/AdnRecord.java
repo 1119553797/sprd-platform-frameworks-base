@@ -435,7 +435,8 @@ public class AdnRecord implements Parcelable {
                     adnString[footerOffset + ADN_BCD_NUMBER_LENGTH] = (byte) (adnBcdNumber.length);
                 }
                 adnString[footerOffset + ADN_CAPABILITY_ID] = (byte) 0xFF; // Capacility
-                adnString[footerOffset + ADN_EXTENSION_ID] = (byte) 0; // Extension
+                adnString[footerOffset + ADN_EXTENSION_ID] = (byte) extRecord; // Extension
+                Log.d(LOG_TAG, "number.length >20 , extRecord = "+extRecord);
 			}
 
 			// alphaTag format
@@ -472,6 +473,20 @@ public class AdnRecord implements Parcelable {
 
 	}
 
+    public boolean extRecordIsNeeded() {
+        String numberNoPlus = number;
+        if (!TextUtils.isEmpty(number)) {
+            if (number.charAt(0) == '+') {
+                numberNoPlus = numberNoPlus.substring(1);
+            }
+        }
+        if (!TextUtils.isEmpty(numberNoPlus)
+                && numberNoPlus.length() <= MAX_LENTH_NUMBER 
+                && numberNoPlus.length() > MAX_LENTH_ADN) {
+            return true;
+        }
+        return false;
+    }
     public byte[] buildExtString() {
         String extNumber;
         if (number.charAt(0) == '+') {
