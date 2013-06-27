@@ -21,7 +21,7 @@ import com.android.internal.util.XmlUtils;
 import com.android.server.am.ActivityManagerService;
 import com.android.server.pm.PackageManagerService;
 import com.android.server.NativeDaemonConnector.Command;
-
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -97,7 +97,7 @@ class MountService extends IMountService.Stub
         implements INativeDaemonConnectorCallbacks, Watchdog.Monitor {
 
     private static final boolean LOCAL_LOGD = false;
-    private static final boolean DEBUG_UNMOUNT = false;
+    private static final boolean DEBUG_UNMOUNT = true;
     private static final boolean DEBUG_EVENTS = false;
     private static final boolean DEBUG_OBB = false;
 
@@ -430,20 +430,79 @@ class MountService extends IMountService.Stub
                         }else{
                         String path = ucb.path;
                         boolean done = false;
+                        String[] wl_name={"com.android.bluetooth"};
+                        
                         if (!ucb.force) {
                             done = true;
                         } else {
                             int pids[] = getStorageUsers(path);
                             if (pids == null || pids.length == 0) {
                                 done = true;
-                            } else {
-                                // Eliminate system process here?
-                                ams.killPids(pids, "unmount media", true);
-                                // Confirm if file references have been freed.
+                            } else if (ams != null) {
+                                int ll=0;
+                                int mm=0;
+				int nn=0;
+				int wl_pid[]=new int[0x40];
+				int index=0x0;
+                                boolean do_wait;
+                                for(ll=0x0;ll<wl_pid.length; ll++){
+					wl_pid[ll] = 0xffffffff;
+				}
+                                List<RunningAppProcessInfo> runningList = ams.getRunningAppProcesses();
+                                if (runningList != null) {
+                                    for (RunningAppProcessInfo p : runningList) {
+                                           for(ll=0x0; ll<wl_name.length; ll++){
+                                               if (p.processName.equals(wl_name[ll])) {
+                                                   wl_pid[index++%wl_pid.length] = p.pid;
+                                                    Slog.i(TAG, "java process, need kill!");
+                                                    break;
+                                                }
+                                           }
+                                    }
+                                }
+                                //loop till all white list process holds mount point files release files
+                                //note: if there have some process hold mount point files, will never
+                                //unmount successfull.
+                                do{
+				     do_wait=false;
+                                     for(mm=0; mm<pids.length; mm++){
+					  for(nn=0x0; nn<wl_pid.length; nn++){
+		                                    if((pids[mm]== wl_pid[nn]) && (wl_pid[nn] != 0xffffffff)){
+		                                        Slog.i(TAG, "java process, disable white list kill pid:" +wl_pid[nn]);
+                                                        do_wait=true;
+		                                        break;
+		                                    }
+					   }
+					   if(do_wait)
+                                               break;
+                                     }
+                                     if(do_wait){
+                                        try {
+                                            Thread.sleep(1000);
+                                         } catch (InterruptedException iex) {
+                                            Slog.e(TAG, "Interrupted while waiting for white list process release unmount volume file", iex);
+                                         }
+
+                                         pids = getStorageUsers(path);
+                                         if (pids == null || pids.length == 0) {
+                                                do_wait = false ;
+                                         }
+                                     }
+                                }while(do_wait);
                                 pids = getStorageUsers(path);
                                 if (pids == null || pids.length == 0) {
                                     done = true;
+                                }else{
+                                    // Eliminate system process here?
+                                    ams.killPids(pids, "unmount media", true);
+                                    // Confirm if file references have been freed.
+                                    pids = getStorageUsers(path);
+                                    if (pids == null || pids.length == 0) {
+                                        done = true;
+                                    }
                                 }
+                            } else {
+                                Slog.e(TAG, "Fail to get AMS while unmount!");
                             }
                         }
                         if (!done && (ucb.retries < MAX_UNMOUNT_RETRIES)) {
