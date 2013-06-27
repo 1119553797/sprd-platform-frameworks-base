@@ -58,6 +58,9 @@ public class LockPatternView extends View {
     private static final int ASPECT_SQUARE = 0; // View will be the minimum of width/height
     private static final int ASPECT_LOCK_WIDTH = 1; // Fixed width; height will be minimum of (w,h)
     private static final int ASPECT_LOCK_HEIGHT = 2; // Fixed height; width will be minimum of (w,h)
+		/*20130627 wenny cheng BUG 181822 emergency call button disappear in hvga resolution start*/
+    private static final int ASPECT_LOCK_MINWIDTH = 3; // Fixed height; width will be minimum of (w,h)
+		/*20130627 wenny cheng BUG 181822 emergency call button disappear in hvga resolution end*/
 
     private static final boolean PROFILE_DRAWING = false;
     private boolean mDrawingProfilingStarted = false;
@@ -247,13 +250,20 @@ public class LockPatternView extends View {
 
         final String aspect = a.getString(R.styleable.LockPatternView_aspect);
 
+        Log.v(TAG, "LockPatternView aspect  " + aspect);
+
         if ("square".equals(aspect)) {
             mAspect = ASPECT_SQUARE;
         } else if ("lock_width".equals(aspect)) {
             mAspect = ASPECT_LOCK_WIDTH;
         } else if ("lock_height".equals(aspect)) {
             mAspect = ASPECT_LOCK_HEIGHT;
-        } else {
+				/*20130627 wenny cheng BUG 181822 emergency call button disappear in hvga resolution start*/            
+        } else if ("lock_minwidth".equals(aspect)) {
+            mAspect = ASPECT_LOCK_MINWIDTH;
+        }
+				/*20130627 wenny cheng BUG 181822 emergency call button disappear in hvga resolution end*/        
+         else {
             mAspect = ASPECT_SQUARE;
         }
 
@@ -501,6 +511,13 @@ public class LockPatternView extends View {
             case ASPECT_LOCK_HEIGHT:
                 viewWidth = Math.min(viewWidth, viewHeight);
                 break;
+						/*20130627 wenny cheng BUG 181822 emergency call button disappear in hvga resolution end*/                
+            case ASPECT_LOCK_MINWIDTH:
+								viewWidth = viewHeight = minimumWidth;
+								Log.v(TAG, "LockPatternView onMeasure: ASPECT_LOCK_MINWIDTH ");
+								setMeasuredDimension(viewWidth, viewHeight);
+								return;
+						/*20130627 wenny cheng BUG 181822 emergency call button disappear in hvga resolution end*/            		
         }
         // Log.v(TAG, "LockPatternView dimensions: " + viewWidth + "x" + viewHeight);
         setMeasuredDimension(viewWidth, viewHeight);
