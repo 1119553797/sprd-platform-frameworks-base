@@ -192,7 +192,7 @@ public abstract class CursorAdapter extends BaseAdapter implements Filterable,
      * @see android.widget.ListAdapter#getCount()
      */
     public int getCount() {
-        if (mDataValid && mCursor != null) {
+        if (mDataValid && mCursor != null && !mCursor.isClosed()) {
             return mCursor.getCount();
         } else {
             return 0;
@@ -203,7 +203,7 @@ public abstract class CursorAdapter extends BaseAdapter implements Filterable,
      * @see android.widget.ListAdapter#getItem(int)
      */
     public Object getItem(int position) {
-        if (mDataValid && mCursor != null) {
+        if (mDataValid && mCursor != null && !mCursor.isClosed()) {
             mCursor.moveToPosition(position);
             return mCursor;
         } else {
@@ -215,7 +215,7 @@ public abstract class CursorAdapter extends BaseAdapter implements Filterable,
      * @see android.widget.ListAdapter#getItemId(int)
      */
     public long getItemId(int position) {
-        if (mDataValid && mCursor != null) {
+        if (mDataValid && mCursor != null && !mCursor.isClosed()) {
             if (mCursor.moveToPosition(position)) {
                 return mCursor.getLong(mRowIDColumn);
             } else {
