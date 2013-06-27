@@ -516,7 +516,7 @@ public class PhoneNumberUtils
      * enough for caller ID purposes.
      *
      * - Compares from right to left
-     * - requires MIN_MATCH (7) characters to match
+     * - requires MIN_MATCH (8) characters to match
      * - handles common trunk prefixes and international prefixes
      *   (basically, everything except the Russian trunk prefix)
      *
@@ -1620,7 +1620,11 @@ public class PhoneNumberUtils
     //
     // However, in order to loose match 650-555-1212 and 555-1212, we need to set the min match
     // to 7.
-    static final int MIN_MATCH = 7;
+
+	/** Default match characters is set as 8
+    Please change it with different country situation, if needed. */
+    //static final int MIN_MATCH = 7;
+	static final int MIN_MATCH = 8;
 
     private static final String CUSTOM_EMERGENCY_NUMBER = "120,122";
 
