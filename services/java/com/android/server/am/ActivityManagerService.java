@@ -1609,9 +1609,12 @@ public final class ActivityManagerService extends ActivityManagerNative
         restartServiceAtMem = SystemProperties.getInt("persist.sys.lowmem",restartServiceAtMem);
         Slog.i(TAG, "isReadMemForRestartService: " + isReadMemForRestartService + " ,restartServiceAtMem:"+restartServiceAtMem);
 
+        /* Disable lowmem version limitation */
+        /*
         if(Build.IS_LOWMEM_VERSION) {
             mProcessLimitOverride = 0;//add for lowmem[4+2]
         }
+        */
         
         String mode = SystemProperties.get("ro.bootmode", "mode");
         engModeFlag = "engtest".equals(mode)?true:false;
