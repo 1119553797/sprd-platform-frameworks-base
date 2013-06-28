@@ -2960,14 +2960,17 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
     protected Object responseOperatorString(Parcel p) {
         String response[];
         response = p.readStringArray();
-        if( (response[0] == null) && ( response[1] == null ) ) {
-            response[0] = getCarrierNameByNumeric(response[2]);
-            response[1] = getCarrierNameByNumeric(response[2]);
-        }else if(response[0] == null) {
-            response[0] = response[1];
-        }else if(response[1] == null) {
-            response[1] = response[0];
-        }
+
+        //owen.chen modify for 182200
+        String mcc = response[2].substring(0, 3);
+        String mnc = response[2].substring(3);
+
+        //delete zero front of mnc is mncShort
+        int mncShort = Integer.parseInt(mnc);
+        response[2] = mcc + mncShort;
+
+        response[0] = getCarrierNameByNumeric(response[2]);
+        response[1] = getCarrierNameByNumeric(response[2]);
         //i18n
         response[0] = changeOperator(response[0]);
         response[1] = changeOperator(response[1]);
