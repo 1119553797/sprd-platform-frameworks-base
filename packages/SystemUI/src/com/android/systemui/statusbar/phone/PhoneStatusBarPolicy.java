@@ -144,6 +144,13 @@ public class PhoneStatusBarPolicy {
                 }
             }
             /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar end */
+		        /*20130627 wenny cheng , BUG 176395 FDN setting start */
+            else if (action.equals("com.sprd.fdn.STATUS_CHANGED")) {
+                int state = intent.getIntExtra("enable", 0);
+                int phone_id = intent.getIntExtra("phone_id", 0);
+                updateFDN(state , phone_id);
+            }
+		        /*20130627 wenny cheng , BUG 176395 FDN setting end */
         }
     };
 
@@ -163,6 +170,9 @@ public class PhoneStatusBarPolicy {
         /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar start */
         filter.addAction(Intent.ACTION_HEADSET_PLUG);
         /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar end */
+		    /*20130627 wenny cheng , BUG 176395 FDN setting start */
+        filter.addAction("com.sprd.fdn.STATUS_CHANGED");
+        /*20130627 wenny cheng , BUG 176395 FDN setting end */
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
 
         // storage
@@ -207,6 +217,14 @@ public class PhoneStatusBarPolicy {
         mService.setIcon("headset", com.android.internal.R.drawable.stat_sys_headset, 0, null);
         mService.setIconVisibility("headset", false);
         /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar end */
+		    /*20130627 wenny cheng , BUG 176395 FDN setting start */
+        mService.setIcon("fdn", R.drawable.stat_sys_fdn, 0, null);
+        mService.setIconVisibility("fdn", false);
+        
+        mService.setIcon("fdn1", R.drawable.stat_sys_fdn1, 0, null);
+        mService.setIconVisibility("fdn1", false);
+        /*20130627 wenny cheng , BUG 176395 FDN setting end */
+
         updateVolume();
     }
 
@@ -324,4 +342,23 @@ public class PhoneStatusBarPolicy {
         mService.setIconVisibility("headset", show);
     }
     /* Add 20121120 Spreadst of 94363 ,add headset icon in statusbar end */
+		/*20130627 wenny cheng , BUG 176395 FDN setting start */
+    private final void updateFDN(int state , int phone_id) {
+    		if(0 == phone_id)
+    		{
+    			if(1 == state)
+    				mService.setIconVisibility("fdn", true);
+    			else
+    				mService.setIconVisibility("fdn", false);
+    		}
+    		if(1 == phone_id)
+    		{
+    			if(1 == state)
+    				mService.setIconVisibility("fdn1", true);
+    			else
+    				mService.setIconVisibility("fdn1", false);
+    		}
+        
+    }
+		/*20130627 wenny cheng , BUG 176395 FDN setting end */
 }

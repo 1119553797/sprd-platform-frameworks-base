@@ -46,6 +46,11 @@
         <item><xliff:g id="id">headset</xliff:g></item>
         <!-- Add 20121120 Spreadst of 94363 ,add headset icon in statusbar end -->
 
+<!-- wenny START -->
+        <item><xliff:g id="id">fdn</xliff:g></item>
+        <item><xliff:g id="id">fdn1</xliff:g></item>
+        <!-- wenny END -->
+
     </string-array>
 
     <!-- Flag indicating whether the surface flinger has limited
