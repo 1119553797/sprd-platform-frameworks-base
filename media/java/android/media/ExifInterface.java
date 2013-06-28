@@ -231,6 +231,13 @@ public class ExifInterface {
                 mAttributes.put(attrName, attrValue);
             }
         }
+        //for Bug 175697.[CTS] android.hardware.cts.CameraTest testJpegExif
+        mAttributes.put(TAG_MAKE, "Make");
+        mAttributes.put(TAG_MODEL, "Model");
+        Date date = new Date(System.currentTimeMillis());
+        String localDatetime = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").format(date);
+        mAttributes.put(TAG_DATETIME, localDatetime);
+        //end 175697.
     }
 
     /**
