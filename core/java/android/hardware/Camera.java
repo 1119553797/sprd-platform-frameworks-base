@@ -2010,6 +2010,16 @@ public class Camera {
          * @param value the String value of the parameter
          */
         public void set(String key, String value) {
+            //for Bug 175697.
+            if (key.equals(KEY_GPS_LATITUDE) ||
+                    key.equals(KEY_GPS_LONGITUDE) ||
+                    key.equals(KEY_GPS_TIMESTAMP) ||
+                    key.equals(KEY_GPS_ALTITUDE) ||
+                    key.equals(KEY_GPS_PROCESSING_METHOD)) {
+                mMap.put(key, value);
+                return;
+            }
+            //end Bug 175697.
             if (key.indexOf('=') != -1 || key.indexOf(';') != -1 || key.indexOf(0) != -1) {
                 Log.e(TAG, "Key \"" + key + "\" contains invalid character (= or ; or \\0)");
                 return;
