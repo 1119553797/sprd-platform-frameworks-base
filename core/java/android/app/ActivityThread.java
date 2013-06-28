@@ -3053,7 +3053,7 @@ public final class ActivityThread {
 
     private void handleStopActivity(IBinder token, boolean show, int configChanges) {
         ActivityClientRecord r = mActivities.get(token);
-        if (r != null) {
+        if (r != null && r.activity != null) {
 	        r.activity.mConfigChangeFlags |= configChanges;
 	
 	        StopInfo info = new StopInfo();
