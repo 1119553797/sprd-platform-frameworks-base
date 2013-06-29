@@ -423,13 +423,13 @@ public class AdnRecord implements Parcelable {
                     && numberNoPlus.length() <= MAX_LENTH_NUMBER) {
                 String adnNumber;
                 if (number.charAt(0) == '+') {
-                    adnNumber = number.substring(0, MAX_LENTH_ADN);
+                    adnNumber = number.substring(0, MAX_LENTH_ADN + 1);
                 } else {
-                    adnNumber = number.substring(0, MAX_LENTH_ADN - 1);
+                    adnNumber = number.substring(0, MAX_LENTH_ADN);
                 }
+                Log.d(LOG_TAG, "adnNumber="+adnNumber);
                 if (!TextUtils.isEmpty(adnNumber)) {
                     byte[] adnBcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(adnNumber);
-
                     System.arraycopy(adnBcdNumber, 0, adnString,
                             footerOffset + ADN_TON_AND_NPI, adnBcdNumber.length);
                     adnString[footerOffset + ADN_BCD_NUMBER_LENGTH] = (byte) (adnBcdNumber.length);
@@ -494,15 +494,16 @@ public class AdnRecord implements Parcelable {
         } else {
             extNumber = number.substring(MAX_LENTH_ADN);
         }
+        Log.d(LOG_TAG, "extNumber = "+extNumber);
         byte[] extBcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(extNumber);
         byte[] extString = new byte[EXT_RECORD_LENGTH_BYTES];
         for (int i = 0; i < EXT_RECORD_LENGTH_BYTES; i++) {
             extString[i] = (byte) 0xFF;
         }
         extString[0] = (byte) EXT_RECORD_TYPE_ADDITIONAL_DATA;// ext record type
-        extString[1] = (byte) extBcdNumber.length;
-        if (extBcdNumber.length <= MAX_EXT_CALLED_PARTY_LENGTH) {
-            System.arraycopy(extBcdNumber, 0, extString, 2, extBcdNumber.length);
+        extBcdNumber[0] = (byte) (extBcdNumber.length - 1);
+        if (extBcdNumber.length <= MAX_EXT_CALLED_PARTY_LENGTH + 1) {
+            System.arraycopy(extBcdNumber, 0, extString, 1, extBcdNumber.length);
         }
         extString[12] = (byte) 0xFF; // only support one ext record
         return extString;
