@@ -2088,7 +2088,11 @@ public class SIMRecords extends IccRecords {
                 log("getpnnRecordnum  lac:" +lac+", record.mOpllac1:"+record.mOpllac1+", record.mOpllac2:"+record.mOpllac2);
                 if ((record.mOpllac1 <= lac) && (lac <= record.mOpllac2)) {
                     log("record.getPnnRecordNum() = " + record.getPnnRecordNum());
-                    return record.getPnnRecordNum();
+                    //owen, modify for 183909
+                    if (record.getPnnRecordNum()>0)
+                        return record.getPnnRecordNum();
+                    else
+                        return -1;
                 }
             }
 
