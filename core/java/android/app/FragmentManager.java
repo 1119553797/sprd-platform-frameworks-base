@@ -36,6 +36,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -846,6 +847,14 @@ final class FragmentManagerImpl extends FragmentManager {
                                         anim.setTarget(f.mView);
                                         anim.start();
                                     }
+                                    //[spt-zhanglin 2013-06-27]check if parent exists,if so just remove child view {
+                                    ViewParent parent = f.mView.getParent();
+                                    if (parent != null && parent instanceof ViewGroup) { 
+                                        ViewGroup parentView = (ViewGroup)parent;
+                                        parentView.removeView(f.mView);	
+                                        Log.e(TAG, "child view " + f.mView + " already has parent:" + parentView + ", we need to remove it");
+				    }
+                                    //[spt-zhanglin 2013-06-27]check if parent exists,if so just remove child view }
                                     container.addView(f.mView);
                                 }
                                 if (f.mHidden) f.mView.setVisibility(View.GONE);
