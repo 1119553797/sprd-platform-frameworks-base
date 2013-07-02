@@ -27,6 +27,7 @@ import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Locale;
 
 /**
  * Used to record audio and video. The recording control is based on a
@@ -355,8 +356,10 @@ public class MediaRecorder
 
         double timeBetweenFrameCapture = 1 / fps;
         int timeBetweenFrameCaptureMs = (int) (1000 * timeBetweenFrameCapture);
-        setParameter(String.format("time-between-time-lapse-frame-capture=%d",
+        //for Bug  182762 - [ST][7710][4.1][DS][DCXO][\u5370\u5730\u8bed]
+        setParameter(String.format(Locale.US, "time-between-time-lapse-frame-capture=%d",
                     timeBetweenFrameCaptureMs));
+        //end Bug 182762.
     }
 
     /**
