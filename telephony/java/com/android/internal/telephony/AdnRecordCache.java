@@ -857,7 +857,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 return;
             }
             newAdn.extRecord = (int)extIndex;
-            adnRecordLoader.updateExtEF(newAdn, efid, extensionEF,
+            new AdnRecordLoader(mFh).updateExtEF(newAdn, efid, extensionEF,
                     extIndex, pin2,
                     obtainMessage(EVENT_UPDATE_EXT_DONE, extensionEF, extIndex));
         }
@@ -967,7 +967,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                         return;
                     }
                     newAdn.extRecord = (int)extIndex;
-                    adnRecordLoader.updateExtEF(newAdn, efid, extensionEF,
+                    new AdnRecordLoader(mFh).updateExtEF(newAdn, efid, extensionEF,
                             extIndex, pin2,
                             obtainMessage(EVENT_UPDATE_EXT_DONE, extensionEF, extIndex));
                 }
@@ -1164,6 +1164,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 }
             }
         }
+        Log.d(LOG_TAG, "usedIndex = "+usedIndex);
         return usedIndex;
     }
 
@@ -1375,8 +1376,9 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
                 extensionEf = msg.arg1;
                 index = msg.arg2;
                 byte[] extData = (byte[])ar.result;
-                Log.d(LOG_TAG, "EVENT_UPDATE_EXT_DONE index = "+index);
-                if (ar.exception == null && extLikeFiles.get(extensionEf) != null) {
+                Log.d(LOG_TAG, "EVENT_UPDATE_EXT_DONE index = "+index+" extData="+extData);
+                if (ar.exception == null && extLikeFiles.get(extensionEf) != null
+                        && extData != null) {
                     if (index > 0 && index <= extLikeFiles.get(extensionEf).size()) {
                         extLikeFiles.get(extensionEf).set(index-1, extData);
                     }

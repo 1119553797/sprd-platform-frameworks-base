@@ -381,8 +381,8 @@ public class AdnRecordLoader extends IccThreadHandler {
                                 "update EF ext record failed",
                                 ar.exception);
                     }
-                    pendingExtLoads = 0;
                     result = ar.userObj;
+                    pendingExtLoads = 0;
                     break;
                 case EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE:
                     Log.d(LOG_TAG,"AdnRecordLoader handle EVENT_EF_CYCLIC_LINEAR_RECORD_SIZE_DONE, ef:" + Integer.toHexString(ef));
@@ -683,7 +683,6 @@ public class AdnRecordLoader extends IccThreadHandler {
         if (userResponse != null && pendingExtLoads == 0) {
             AsyncResult.forMessage(userResponse).result
                 = result;
-
             userResponse.sendToTarget();
             userResponse = null;
         }
