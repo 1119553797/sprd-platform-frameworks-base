@@ -152,6 +152,11 @@ public class GsmConnection extends Connection {
         this.address = PhoneNumberUtils.extractNetworkPortionAlt(dialString);
         this.postDialString = PhoneNumberUtils.extractPostDialPortion(dialString);
 
+        if(ct.phone.getServiceState().getState() == ServiceState.STATE_OUT_OF_SERVICE) {
+            this.address = PhoneNumberUtils.formatSpecialNumber(this.address);
+        }
+        Log.d(LOG_TAG, "GsmConnection,dialString is " + this.dialString);
+
         index = -1;
 
         isIncoming = false;
