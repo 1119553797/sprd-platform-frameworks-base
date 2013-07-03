@@ -308,7 +308,9 @@
   <java-symbol type="dimen" name="notification_text_size" />
   <java-symbol type="dimen" name="notification_title_text_size" />
   <java-symbol type="dimen" name="notification_subtext_size" />
-
+  <!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal START -->
+  <java-symbol type="dimen" name="keyguard_sim_puk_12key_height" />
+  <!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal END -->
   <java-symbol type="string" name="china_mobile_numeric_values" />
   <java-symbol type="string" name="china_unicom_numeric_values" />
   <java-symbol type="string" name="add_account_button_label" />
@@ -1315,6 +1317,13 @@
   <java-symbol type="id" name="propertyOf" />
   <java-symbol type="id" name="pukDel" />
   <java-symbol type="id" name="pukDisplay" />
+  <!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal START -->
+  <java-symbol type="id" name="keyPad" />
+  <java-symbol type="id" name="firstRowGroup" />
+  <java-symbol type="id" name="secondRowGroup" />
+  <java-symbol type="id" name="thirdRowGroup" />
+  <java-symbol type="id" name="fourthRowGroup" />
+  <!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal END -->
   <java-symbol type="id" name="right_icon" />
   <java-symbol type="id" name="seven" />
   <java-symbol type="id" name="six" />
