@@ -417,6 +417,15 @@ public class GsmConnection extends Connection {
     onDisconnect(DisconnectCause cause) {
         this.cause = cause;
 
+        // Bug#185074 modify start
+        try {
+            SystemProperties.set(GsmCallTracker.CALL_STATE + owner.phone.getPhoneId() + "-"
+                    + getGSMIndex(), GsmCall.State.DISCONNECTED.toString());
+            SystemProperties.set(GsmCallTracker.CALL_REASON + owner.phone.getPhoneId() + "-"
+                    + getGSMIndex(), cause.toString());
+        } catch (Exception e) {}
+        // Bug#185074 modify end
+
         if (!disconnected) {
             index = -1;
 

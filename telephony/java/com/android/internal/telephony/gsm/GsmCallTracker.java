@@ -60,6 +60,11 @@ public final class GsmCallTracker extends CallTracker {
 
     private static final boolean DBG_POLL = true;
 
+    // Bug#185074 modify start
+    static final String CALL_STATE = "gsm.callstate";
+    static final String CALL_REASON = "gsm.callreason";
+    // Bug#185074 modify end
+
     private boolean mMoveToBack = false;
     private static final int THREAD_PRIORITY = -10;
     private int mCurrentPriority = android.os.Process.THREAD_PRIORITY_DEFAULT;
@@ -607,6 +612,13 @@ public final class GsmCallTracker extends CallTracker {
                 changed = conn.update(dc);
                 hasNonHangupStateChanged = hasNonHangupStateChanged || changed;
             }
+
+            // Bug#185074 modify start
+            try {
+                SystemProperties.set(CALL_STATE + phone.getPhoneId() + "-" + conn.getGSMIndex(),
+                        conn.getState().toString());
+            } catch (Exception e) {}
+            // Bug#185074 modify end
 
             if (REPEAT_POLLING) {
                 if (dc != null) {
