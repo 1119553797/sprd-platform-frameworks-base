@@ -21,7 +21,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical">
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/firstRowGroup"
         android:layout_width="fill_parent"
         android:layout_height="60dip"
         android:layout_marginLeft="2dip"
@@ -60,7 +60,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/secondRowGroup"
         android:layout_width="fill_parent"
         android:layout_height="60dip"
         android:layout_marginLeft="2dip"
@@ -98,7 +98,7 @@
         />
     </LinearLayout>
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/thirdRowGroup"
         android:layout_width="fill_parent"
         android:layout_height="60dip"
         android:layout_marginLeft="2dip"
@@ -137,7 +137,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/fourthRowGroup"
         android:layout_width="fill_parent"
         android:layout_height="60dip"
         android:layout_marginLeft="2dip"
