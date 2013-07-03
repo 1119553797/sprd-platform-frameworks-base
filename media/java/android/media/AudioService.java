@@ -488,6 +488,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+	//fix bug184469
+        intentFilter.addAction(Intent.ACTION_FM);
 
         // Register a configuration change listener only if requested by system properties
         // to monitor orientation changes (off by default)
@@ -3634,6 +3636,49 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 AudioSystem.setParameters("screen_state=off");
             } else if (action.equalsIgnoreCase(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 handleConfigurationChanged(context);
+            }
+	    else if (action.equals(Intent.ACTION_FM)){    //fix bug184469
+
+               state = intent.getIntExtra("state", 0);
+               int speaker = intent.getIntExtra("speaker", 0);
+               Log.v(TAG, "FM Intent received state=" + state + " speaker=" + speaker);
+               boolean isConnected = mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_FM_HEADSET);
+	       Log.e(TAG,"isconnected="+isConnected+", state="+state+", speaker="+speaker);
+               if(state==1){
+                   if (speaker == 0) {
+                        Log.e(TAG,"FM headset ON");
+                        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM_SPEAKER,
+                                AudioSystem.DEVICE_STATE_UNAVAILABLE,
+                                "");
+                        mConnectedDevices.remove(AudioSystem.DEVICE_OUT_FM_SPEAKER);
+
+                        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM_HEADSET,
+                                AudioSystem.DEVICE_STATE_AVAILABLE,
+                                "");
+                        mConnectedDevices.put(new Integer(AudioSystem.DEVICE_OUT_FM_HEADSET), "");
+                    } else {
+                        Log.e(TAG,"FM speaker ON");
+                        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM_HEADSET,
+                                AudioSystem.DEVICE_STATE_UNAVAILABLE,
+                                "");
+                        mConnectedDevices.remove(AudioSystem.DEVICE_OUT_FM_HEADSET);
+
+                        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM_SPEAKER,
+                                AudioSystem.DEVICE_STATE_AVAILABLE,
+                                "");
+                        mConnectedDevices.put(new Integer(AudioSystem.DEVICE_OUT_FM_SPEAKER), "");
+                    }
+               } else {
+                    Log.e(TAG ,"FM Audio OFF");
+                    AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM_SPEAKER,
+                            AudioSystem.DEVICE_STATE_UNAVAILABLE,
+                            "");
+                    mConnectedDevices.remove(AudioSystem.DEVICE_OUT_FM_SPEAKER);
+                    AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM_HEADSET,
+                            AudioSystem.DEVICE_STATE_UNAVAILABLE,
+                            "");
+                    mConnectedDevices.remove(AudioSystem.DEVICE_OUT_FM_HEADSET);
+                }
             }
         }
     }
