@@ -11237,6 +11237,42 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
     
     // =========================================================
+    // Add for performance optimization of services restarting
+    // =========================================================
+    private boolean isHomeTop = false;
+
+    void launchEnd(ActivityRecord ar) {
+        if (ar.isHomeActivity) {
+            //Slog.v(TAG, "[lom]Lunch home activity end");
+            isHomeTop = true;
+            ReduceServicesRestartDelay();
+        } else {
+            //Slog.v(TAG, "[lom]Lunch normal activity end");
+            isHomeTop = false;
+        }
+    }
+
+    void ReduceServicesRestartDelay() {
+        final ArrayList<ServiceRecord> restartingServices = mRestartingServices;
+        final long now1 = SystemClock.uptimeMillis();
+        mHandler.post(new Runnable(){
+            public void run(){
+                final long now2 = SystemClock.uptimeMillis();
+                for (ServiceRecord sr : restartingServices) {
+                    if (sr.lowMemKilled) {
+                        sr.restartDelay = sr.delayMoreTime * 1000;
+                        sr.nextRestartTime = now2 > (now1 + sr.restartDelay) ? now2 : (now1 + sr.restartDelay);
+                        sr.restartDelay = sr.nextRestartTime - now2;
+                        if (DEBUG_LC) Slog.e(TAG, "ReduceServicesRestartDelay: Service [" + sr.shortName + "] just wait " + sr.restartDelay + "ms");
+
+                        mHandler.postAtTime(sr.restarter, sr.nextRestartTime);
+                    }
+                }
+            }
+        });
+    }
+
+    // =========================================================
     // SERVICES
     // =========================================================
 
@@ -11247,9 +11283,15 @@ public final class ActivityManagerService extends ActivityManagerNative
         for (int i = mLruProcesses.size() - 1 ; i >= 0 ; i--) {
             ProcessRecord pr = mLruProcesses.get(i);
             if (pr.thread != null &&
-               (pr.curAdj == ProcessList.HOME_APP_ADJ ||
+                //HOME_APP process is nearly the persistant app, needn't take in care
+               (/*pr.curAdj == ProcessList.HOME_APP_ADJ ||*/
+                isHomeTop ||
                 pr.curAdj >= ProcessList.HIDDEN_APP_MIN_ADJ)) {
                 needDelay = false;
+
+                if (DEBUG_LC) Slog.e(TAG, "ServicesDelayRestart: no Delay restart service ["
+                        + pr.processName + "] adj:" + pr.curAdj+" isHomeTop:"+isHomeTop);
+                break;
             }
         }
 

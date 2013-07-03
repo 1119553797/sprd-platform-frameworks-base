@@ -765,6 +765,8 @@ final class ActivityRecord {
             }
             startTime = 0;
             finishLaunchTickingLocked();
+            //call launch end
+            service.launchEnd(this);
         }
     }
 
