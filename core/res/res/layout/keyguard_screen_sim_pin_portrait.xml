@@ -122,14 +122,17 @@
         android:orientation="vertical">
 
         <!-- emergency call button -->
-        <Button
+     <!-- 20130703 Wenny Cheng BUG 184480 START -->
+     <Button
             android:id="@+id/emergencyCallButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@android:drawable/ic_emergency"
             android:drawablePadding="4dip"
             android:text="@android:string/lockscreen_emergency_call"
+            android:paddingTop="2dip"
+            android:paddingBottom="2dip"
         />
-    </LinearLayout>
-
+   <!-- 20130703 Wenny Cheng BUG 184480 END -->
+   </LinearLayout>
 </LinearLayout>

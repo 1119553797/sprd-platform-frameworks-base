@@ -34,6 +34,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -109,6 +110,25 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
         mDelPinButton = findViewById(R.id.pinDel);
         mDelPinButton2 = findViewById(R.id.pinDel2);
         mOkButton = findViewById(R.id.ok);
+
+        /*20130703 Wenny Cheng BUG 184302 puk display abnormal START*/
+        int keypad_row_height = (int) context.getResources().getDimension(R.dimen.keyguard_sim_puk_12key_height);  
+	      if(0!=keypad_row_height)
+        {
+	          LinearLayout keypad = (LinearLayout) findViewById(R.id.keyPad);
+            LinearLayout keypadRow1 = (LinearLayout) keypad.findViewById(R.id.firstRowGroup);
+            LinearLayout keypadRow2 = (LinearLayout) keypad.findViewById(R.id.secondRowGroup);
+            LinearLayout keypadRow3 = (LinearLayout) keypad.findViewById(R.id.thirdRowGroup);
+            LinearLayout keypadRow4 = (LinearLayout) keypad.findViewById(R.id.fourthRowGroup);
+
+            ViewGroup.LayoutParams param = keypadRow1.getLayoutParams();
+            param.height = keypad_row_height;
+            keypadRow1.setLayoutParams(param);
+            keypadRow2.setLayoutParams(param);
+            keypadRow3.setLayoutParams(param);
+            keypadRow4.setLayoutParams(param);
+        }
+        /*20130703 Wenny Cheng BUG 184302 puk display abnormal END*/
 
         mDelPinButton.setOnClickListener(this);
         mDelPinButton2.setOnClickListener(this);

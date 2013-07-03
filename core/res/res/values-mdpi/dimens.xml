@@ -63,23 +63,20 @@
     <dimen name="action_menu_divider_padding">12dip</dimen>
 
     <!-- Default height of a key in the password keyboard for alpha (used by keyguard) -->
-    <dimen name="password_keyboard_key_height_alpha">56dip</dimen>
+    <dimen name="password_keyboard_key_height_alpha">50dip</dimen>
     <!-- Default height of a key in the password keyboard for numeric (used by keyguard) -->
-    <dimen name="password_keyboard_key_height_numeric">56dip</dimen>
+    <dimen name="password_keyboard_key_height_numeric">50dip</dimen>
     <!-- Default correction for the space key in the password keyboard  (used by keyguard) -->
     <dimen name="password_keyboard_spacebar_vertical_correction">4dip</dimen>
     <!-- Default horizontal gap between keys in the password keyboard (used by keyguard) -->
     <dimen name="password_keyboard_horizontalGap">3dip</dimen>
     <!-- Default vertical gap between keys in the password keyboard (used by keyguard) -->
-    <dimen name="password_keyboard_verticalGap">9dip</dimen>
+    <dimen name="password_keyboard_verticalGap">2dip</dimen>
 
     <!-- Size of lockscreen outerring on unsecure unlock LockScreen -->
     <dimen name="keyguard_lockscreen_outerring_diameter">270dp</dimen>
-
-    <!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal START -->
-    <dimen name="keyguard_sim_puk_12key_height">60dip</dimen>
-    <!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal END -->
-
+    
+    <!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal START --><dimen name="keyguard_sim_puk_12key_height">40dip</dimen>		<!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal END -->
     <!-- Default target placement radius for GlowPadView. Should be 1/2 of outerring diameter. -->
     <dimen name="glowpadview_target_placement_radius">135dip</dimen>
 
