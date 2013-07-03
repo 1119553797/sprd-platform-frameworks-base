@@ -11286,7 +11286,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 //HOME_APP process is nearly the persistant app, needn't take in care
                (/*pr.curAdj == ProcessList.HOME_APP_ADJ ||*/
                 isHomeTop ||
-                pr.curAdj >= ProcessList.HIDDEN_APP_MIN_ADJ)) {
+                pr.curAdj > ProcessList.HIDDEN_APP_MIN_ADJ)) {
                 needDelay = false;
 
                 if (DEBUG_LC) Slog.e(TAG, "ServicesDelayRestart: no Delay restart service ["
