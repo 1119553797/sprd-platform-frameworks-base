@@ -1706,7 +1706,9 @@ public class PhoneNumberUtils
         // No ecclist system property, so use our own list.
         return (number.equals("112") || number.equals("911")|| number.equals("110") || number.equals("120") || number.equals("122"));
     }
-
+    /**
+     * @hide
+     */
     public static String formatSpecialNumber(String number) {
 	    if(number.equals("120")||number.equals("122")) {
 	        return number += ",#";
