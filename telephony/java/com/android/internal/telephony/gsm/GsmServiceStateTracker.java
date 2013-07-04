@@ -259,6 +259,11 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         boolean isNotSelected = Settings.System.getInt(cr,Settings.System.POWER_ON_STANDBY_SELECT, 0) == 0;
         mDesiredPowerState = ! (airplaneMode > 0) && isStandby && isNotSelected;
 
+
+        if(!mDesiredPowerState)
+            mDesiredPowerState = SystemProperties.getBoolean("persist.sys.modemresetr", false);//modemreset
+
+
         cr = phone.getContext().getContentResolver();
         cr.registerContentObserver(
                 Settings.System.getUriFor(Settings.System.AUTO_TIME), true,
@@ -543,6 +548,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         // If we want it on and it's off, turn it on
         if (mDesiredPowerState
             && cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF) {
+
+            SystemProperties.set("persist.sys.modemresetr", "0");
             // don't set radio_power on when no card
             if (force || phone.getIccCard().getIccCardState() != IccCard.State.ABSENT
                     && phone.getIccCard().getIccCardState() != IccCard.State.UNKNOWN) {
