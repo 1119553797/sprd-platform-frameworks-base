@@ -59,6 +59,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "SettingsProvider";
     private static final String DATABASE_NAME = "settings.db";
 
+    //Fix Bug 160259
+    private boolean mIsUniverseSupport = SystemProperties.getBoolean("universe_ui_support", false);
+    //Fix Bug 160259
+
     // Please, please please. If you update the database version, check to make sure the
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
@@ -1583,10 +1587,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void loadDefaultAnimationSettings(SQLiteStatement stmt) {
-        loadFractionSetting(stmt, Settings.System.WINDOW_ANIMATION_SCALE,
-                R.fraction.def_window_animation_scale, 1);
-        loadFractionSetting(stmt, Settings.System.TRANSITION_ANIMATION_SCALE,
-                R.fraction.def_window_transition_scale, 1);
+        //Fix Bug 160259
+        if(!mIsUniverseSupport)
+        {
+            loadFractionSetting(stmt, Settings.System.WINDOW_ANIMATION_SCALE,
+                    R.fraction.def_window_animation_scale, 1);
+            loadFractionSetting(stmt, Settings.System.TRANSITION_ANIMATION_SCALE,
+                    R.fraction.def_window_transition_scale, 1);
+        }
+        else
+        {
+            loadFractionSetting(stmt, Settings.System.WINDOW_ANIMATION_SCALE,
+                    R.fraction.def_uui_window_animation_scale, 1);
+            loadFractionSetting(stmt, Settings.System.TRANSITION_ANIMATION_SCALE,
+                    R.fraction.def_uui_window_transition_scale, 1);
+    }
+        //Fix Bug 160259
     }
 
     private void loadDefaultHapticSettings(SQLiteStatement stmt) {
