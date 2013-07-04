@@ -2950,11 +2950,13 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
         String itemList[] = r.getStringArray(R.array.numeric_to_operator);
         for (String item:itemList){
             String numerics[] = item.split("=");
-            Log.d(LOG_TAG, "numeric_to_operator" + item + " numerics[0] " + numerics[0]);
+//            Log.d(LOG_TAG, "numeric_to_operator" + item + " numerics[0] " + numerics[0]);
             if( numerics[0].equalsIgnoreCase(numeric)){
+		        Log.d(LOG_TAG, " getOperatorAlphaShortToChinese: found numerics[0]="+numerics[0]+" numerics[1]= "+numerics[1]);
                 return numerics[1];
             }
         }
+        Log.e(LOG_TAG, " getOperatorAlphaShortToChinese: not found numeric="+numeric);
         return numeric;
     }
     protected Object responseOperatorString(Parcel p) {
@@ -2987,15 +2989,17 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
         String ret = name;
         Log.d(LOG_TAG, " changeOperator: old name= "+name);
         String itemList[] = r.getStringArray(R.array.operator);
-        Log.d(LOG_TAG, " changeOperator: old name= " + name + " itemList=" + itemList.toString());
+//        Log.d(LOG_TAG, " changeOperator: old name= " + name + " itemList=" + itemList.toString());
         for (String item:itemList){
             String  parts[] = item.split("=");
-            Log.d(LOG_TAG, "itemList " + item + " parts[0] " + parts[0]);
+//            Log.d(LOG_TAG, "itemList " + item + " parts[0] " + parts[0]);
             if( parts[0].equalsIgnoreCase(name)){
                 ret = parts[1];
+				Log.d(LOG_TAG, "itemList found: parts[0]= " + parts[0] + " parts[1]= " + parts[1]);
                 break;
             }
         }
+	    Log.e(LOG_TAG, "changeOperator not found: name= "+ name);
         return ret;
      }
     private String getCarrierNumericToChinese(String numeric, String name) {
