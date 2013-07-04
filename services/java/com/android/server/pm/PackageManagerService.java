@@ -3552,6 +3552,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
                 }
             }
+            //Bug#185069 fix low storage ,check the space&delete the temp file weather need.
+            DeviceStorageMonitorService.freeSpace();
         }
     }
 

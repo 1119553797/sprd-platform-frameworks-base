@@ -154,6 +154,9 @@ class ServerThread extends Thread {
         CommonTimeManagementService commonTimeMgmtService = null;
         InputManagerService inputManager = null;
 
+        //Bug#185069 fix low storage ,check the space&delete the temp file weather need.
+        DeviceStorageMonitorService.freeSpace();
+
         // Critical services...
         try {
             Slog.i(TAG, "Entropy Mixer");

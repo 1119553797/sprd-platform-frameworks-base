@@ -55,6 +55,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * This class implements a service to monitor the amount of disk
@@ -168,6 +169,7 @@ public class DeviceStorageMonitorService extends Binder {
             if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
             {
             	bootCompleted = true;
+                createTempFile();  //Bug#185069 add
             } else if (Intent.ACTION_SHOW_STORAGE.equals(intent.getAction())){
                 //show storage
                 postCheckMemoryMsg(true, 0);
@@ -175,6 +177,90 @@ public class DeviceStorageMonitorService extends Binder {
         }
     };
     
+    //Bug#185069 start  fix low storage ,check the space&delete the temp file weather need.
+    private static final String TEMPFILENAME = "/data/data/.space.temp";
+    private static final int TEMPFILESIZE = 5<<20;
+    private static final int USERSPACELIMITED = 1<<20;
+
+    //create temp file
+    private final void createTempFile(){
+        long size = getUserSpace();
+        File f = new File(TEMPFILENAME);
+        int defaultSize = TEMPFILESIZE; //default space 5M
+        long fileSize = (size * 5)/4;
+        if(fileSize > defaultSize){
+            fileSize = defaultSize;
+        }
+        Slog.i(TAG,"Temporary files size "+fileSize/1024 +" kB");
+        if((!f.exists()) || f.length() < fileSize){
+            final int fSize = (int)fileSize;
+        new Thread(
+                new Runnable(){
+
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                            String str = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                                        +"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+                            int count = fSize / str.getBytes().length;
+                            FileOutputStream file = null;
+                            try{
+                                long time = System.currentTimeMillis();
+                                file = new FileOutputStream(new File(TEMPFILENAME));
+                                byte[]bytes = str.getBytes();
+                                for(int i = 0 ; i < count ; i++){
+                                    file.write(bytes);
+                                    if(i > 10 && i % 10 == 0){
+                                        file.flush();
+                                    }
+                                }
+                                Slog.i(TAG,"end time "+(System.currentTimeMillis()-time)/1000 + " m");
+                                Slog.i(TAG,"Temporary files created !");
+                            }catch(Exception e){
+                                Slog.i(TAG,"create temp file exception!");
+                                e.printStackTrace();
+                            }finally{
+                                if(file != null){
+                                    try{
+                                        file.close();
+                                    }catch(Exception e){
+                                        //nothing
+                                    }
+                                }
+                            }
+                        }
+                }
+        ).start();
+        }else{
+            Slog.i(TAG,"Temporary file do not need to create");
+        }
+    }
+    public static long getUserSpace(){
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        return blockSize * availableBlocks;
+    }
+
+    public static void freeSpace()
+    {
+        long size = getUserSpace();
+        Slog.d(TAG,"userdata space size:"+size);
+        if(size < USERSPACELIMITED){
+            Slog.i(TAG,"userdata space size < 1M  !");
+            File temp = new File(TEMPFILENAME);
+            if(temp.exists()){
+                Slog.i(TAG,"Temporary file size "+temp.length()/1024+" KB");
+                temp.delete();
+                Slog.i(TAG,"Temporary file deleted !");
+            }else{
+                Slog.i(TAG,"Temporary file does not exist !");
+            }
+        }
+     }
+     //Bug#185069 end  fix low storage ,check the space&delete the temp file weather need.
+
     class CachePackageDataObserver extends IPackageDataObserver.Stub {
         public void onRemoveCompleted(String packageName, boolean succeeded) {
             mClearSucceeded = succeeded;
