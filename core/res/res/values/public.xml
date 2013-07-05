@@ -578,6 +578,10 @@
   <java-symbol type="string" name="lockscreen_transport_play_description" />
   <java-symbol type="string" name="lockscreen_transport_stop_description" />
   <java-symbol type="string" name="low_memory" />
+  <java-symbol type="string" name="low_internal_storage_ignore" />
+  <java-symbol type="string" name="low_internal_storage_display_details" />
+  <java-symbol type="string" name="low_internal_storage_wait" />
+  <java-symbol type="string" name="low_internal_storage_updating_details" />
   <java-symbol type="string" name="media_bad_removal" />
   <java-symbol type="string" name="media_checking" />
   <java-symbol type="string" name="media_removed" />

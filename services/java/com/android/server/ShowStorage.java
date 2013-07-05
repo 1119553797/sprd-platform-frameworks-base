@@ -14,6 +14,12 @@ import android.widget.TextView;
 import android.util.Slog;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+
 
 /**
  * 1.when /data filesystem free space is less than 5 percent
@@ -27,15 +33,15 @@ public class ShowStorage extends Activity {
 
     private float mTotalSize = -1;
 
-    private long mLastApplicationSize = -1;
+    private long mLastApplicationSize = 0;
 
-    private long mLastMailSize = -1;
+    private long mLastMailSize = 0;
 
-    private long mLastSmsMmsSize = -1;
+    private long mLastSmsMmsSize = 0;
 
-    private long mLastSystemSize = -1;
+    private long mLastSystemSize = 0;
 
-    private long mLastFreeSize = -1;
+    private long mLastFreeSize = -0;
 
     private int mHeight = -1;
 
@@ -49,6 +55,15 @@ public class ShowStorage extends Activity {
     private boolean mDataInitialized = false;
 
     private Button mApplicationBtn, mMailBtn, mSmsMmsBtn;
+
+    private Dialog mAlertDialog;
+    private ProgressDialog mGetDetailsDialog;
+
+    private boolean mDisplayDetails = false;
+    private boolean mNeedUpdate = true;
+
+    // used for reflash details info
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -107,7 +122,62 @@ public class ShowStorage extends Activity {
         if (data != null) {
             long[] lastSize = (long[])data.getSerializable("lastSize");
             getLastSizeFromArray(lastSize);
+        }else {
+            showAlertDialog();
         }
+    }
+
+    private void showAlertDialog() {
+        mAlertDialog = new AlertDialog.Builder(ShowStorage.this)
+            .setTitle(com.android.internal.R.string.low_internal_storage_view_title)
+            .setMessage(com.android.internal.R.string.low_memory)
+            .setPositiveButton(com.android.internal.R.string.low_internal_storage_display_details,
+            new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    mDisplayDetails = true;
+                    getDetailsInfo();
+                }
+            })
+            .setNegativeButton(com.android.internal.R.string.low_internal_storage_ignore,
+            new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    ShowStorage.this.finish();
+                }
+            })
+            .setCancelable(false)
+            .create();
+
+        mAlertDialog.show();
+    }
+
+    private void getDetailsInfo() {
+        mGetDetailsDialog =
+            ProgressDialog.show(ShowStorage.this,
+                                getText(com.android.internal.R.string.low_internal_storage_wait),
+                                getText(com.android.internal.R.string.low_internal_storage_updating_details),
+                                true,
+                                false);
+        new Thread() {
+            public void run() {
+                DeviceStorageMonitorService dsm = (DeviceStorageMonitorService)
+                ServiceManager.getService(DeviceStorageMonitorService.SERVICE);
+                long[] lastSize = null;
+                if (dsm != null) {
+                    try {
+                        dsm.beginGetShowStorageData();
+                        lastSize = dsm.getShowStorageDataOK();
+                        while(lastSize == null) {
+                            Thread.sleep(500);
+                            lastSize = dsm.getShowStorageDataOK();
+                        }
+                        getLastSizeFromArray(lastSize);
+                        updateUI();
+                    } catch (InterruptedException e) {
+                    }
+                }
+                mGetDetailsDialog.dismiss();
+            }
+        }.start();
     }
 
     @Override
@@ -270,40 +340,46 @@ public class ShowStorage extends Activity {
         mLastSmsMmsSize = lastSize[mSMSMMSLOCATION];
         mLastSystemSize = lastSize[mSYSTEMLOCATION];
         mDataInitialized = true;
+        mNeedUpdate = true;
     }
+
 
     @Override
     public void onResume() {
-        if (mStatePaused || !mDataInitialized) { 
-    	    DeviceStorageMonitorService dsm = (DeviceStorageMonitorService)
-            ServiceManager.getService(DeviceStorageMonitorService.SERVICE);
-    	    long[] lastSize = null;
-            if (dsm != null) {
-        	    lastSize = dsm.callOK();
-        	    if (dsm.getCallOKSuccuess()) {
-                    getLastSizeFromArray(lastSize);
-                }
+        if (mStatePaused || !mDataInitialized) {
+            if (mDisplayDetails) {
+                getDetailsInfo();
             }
             mStatePaused = false;
         }
-     
-        if(mLastApplicationSize == 0){
-            mApplicationBtn.setEnabled(false);
-        }
-        if(mLastMailSize == 0){
-            mMailBtn.setEnabled(false);
-        }
-        if(mLastSmsMmsSize == 0){
-            mSmsMmsBtn.setEnabled(false);
-        }
 
-        setAllStatusBar(mLastFreeSize / mTotalSize, mLastApplicationSize / mTotalSize,
-                mLastMailSize / mTotalSize, mLastSmsMmsSize / mTotalSize, mLastSystemSize
-                        / mTotalSize);
-        setAllMemoryViewText();
+        realUpdateUI();
 
         super.onResume();
-    	
-    }    
-   
+
+    }
+
+    private void updateUI() {
+        mHandler.post(new Runnable(){
+            public void run() {
+                realUpdateUI();
+            }
+        });
+    }
+
+    private void realUpdateUI() {
+        if (mNeedUpdate == false) {
+            return;
+        }
+
+        mApplicationBtn.setEnabled(mLastApplicationSize != 0);
+        mMailBtn.setEnabled(mLastMailSize != 0);
+        mSmsMmsBtn.setEnabled(mLastSmsMmsSize != 0);
+
+        setAllStatusBar(mLastFreeSize / mTotalSize, mLastApplicationSize / mTotalSize,
+                        mLastMailSize / mTotalSize, mLastSmsMmsSize / mTotalSize, mLastSystemSize
+                        / mTotalSize);
+        setAllMemoryViewText();
+        mNeedUpdate = false;
+    }
 }
