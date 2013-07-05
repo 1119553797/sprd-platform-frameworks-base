@@ -420,6 +420,9 @@ public abstract class ServiceStateTracker extends Handler {
                     if (DBG) log("Data disconnected, turn off radio right away.");
                     hangupAndPowerOff();
                 } else {
+                    // deatcitve data connection spend too long time(upto 30s), so first hangup call.
+                    hangupAllCall();
+
                     dcTracker.cleanUpAllConnections(Phone.REASON_RADIO_TURNED_OFF);
                     Message msg = Message.obtain(this);
                     msg.what = EVENT_SET_RADIO_POWER_OFF;
@@ -458,6 +461,12 @@ public abstract class ServiceStateTracker extends Handler {
      * Hang up all voice call and turn off radio. Implemented by derived class.
      */
     protected abstract void hangupAndPowerOff();
+
+    /**
+     * Hang up all voice call. allways override by derived class.
+     */
+    protected void hangupAllCall(){
+    }
 
     /** Cancel a pending (if any) pollState() operation */
     protected void cancelPollState() {

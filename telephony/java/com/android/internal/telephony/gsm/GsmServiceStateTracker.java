@@ -565,6 +565,19 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         } // Otherwise, we're in the desired state
     }
 
+
+    // Yuming.han for #Bug 172300  +
+    @Override
+    protected void hangupAllCall() {
+        // hang up all active voice calls
+        if (phone.isInCall()) {
+            phone.mCT.ringingCall.hangupIfAlive();
+            phone.mCT.backgroundCall.hangupIfAlive();
+            phone.mCT.foregroundCall.hangupIfAlive();
+        }
+    }
+    // Yuming.han for #Bug 172300  -
+
     @Override
     protected void hangupAndPowerOff() {
         // hang up all active voice calls
