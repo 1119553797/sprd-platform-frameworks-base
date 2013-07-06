@@ -12131,6 +12131,11 @@ public final class ActivityManagerService extends ActivityManagerNative
             synchronized (r.stats.getBatteryStats()) {
                 r.stats.startRunningLocked();
             }
+
+            if(LC_RAM_SUPPORT && r.lowMemKilled){
+                if (DEBUG_SERVICE) Slog.v(TAG, "START SERVICE ALREADY IN DELAY RESCHEDULE LIST: " + r);
+                return null;
+            }
             if (!bringUpServiceLocked(r, service.getFlags(), false)) {
                 return new ComponentName("!", "Service process is bad");
             }
