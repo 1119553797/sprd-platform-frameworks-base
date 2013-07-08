@@ -73,18 +73,19 @@
     <!-- Default vertical gap between keys in the password keyboard (used by keyguard) -->
     <dimen name="password_keyboard_verticalGap">2dip</dimen>
 
-    <!-- Size of lockscreen outerring on unsecure unlock LockScreen -->
-    <dimen name="keyguard_lockscreen_outerring_diameter">270dp</dimen>
+    <!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal START -->
+    <dimen name="keyguard_sim_puk_12key_height">40dip</dimen>
     
-    <!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal START --><dimen name="keyguard_sim_puk_12key_height">40dip</dimen>		<!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal END -->
-    <!-- Default target placement radius for GlowPadView. Should be 1/2 of outerring diameter. -->
-    <dimen name="glowpadview_target_placement_radius">135dip</dimen>
+<!-- 20130703 Wenny Cheng BUG  184302 PUK display abnormal END -->
+        <!-- Size of lockscreen outerring on unsecure unlock LockScreen -->
+    <dimen name="keyguard_lockscreen_outerring_diameter">180dp</dimen>		<!-- Default target placement radius for GlowPadView. Should be 1/2 of outerring diameter. -->
+    <dimen name="glowpadview_target_placement_radius">90dip</dimen>
 
     <!-- Default glow radius for GlowPadView -->
-    <dimen name="glowpadview_glow_radius">75dip</dimen>
+    <dimen name="glowpadview_glow_radius">45dip</dimen>
 
     <!-- Default distance beyond which GlowPadView snaps to the matching target -->
-    <dimen name="glowpadview_snap_margin">40dip</dimen>
+    <dimen name="glowpadview_snap_margin">20dip</dimen>
 
     <!-- Default distance from each snap target that GlowPadView considers a "hit" -->
     <dimen name="glowpadview_inner_radius">15dip</dimen>
@@ -183,7 +184,7 @@
     <dimen name="action_bar_subtitle_bottom_margin">5dip</dimen>
 
     <!-- Size of clock font in LockScreen on Unsecure unlock screen. -->
-    <dimen name="keyguard_lockscreen_clock_font_size">80dip</dimen>
+    <dimen name="keyguard_lockscreen_clock_font_size">70dip</dimen>
 
     <!-- Size of status line font on Unsecure unlock LockScreen. -->
     <dimen name="keyguard_lockscreen_status_line_font_size">14dip</dimen>
@@ -192,7 +193,7 @@
     <dimen name="keyguard_lockscreen_status_line_font_right_margin">42dip</dimen>
 
     <!-- Size of top margin on Clock font to edge on unlock LockScreen -->
-    <dimen name="keyguard_lockscreen_status_line_clockfont_top_margin">22dip</dimen>
+    <dimen name="keyguard_lockscreen_status_line_clockfont_top_margin">10dip</dimen>
 
     <!-- Size of top margin on Clock font to edge on unlock LockScreen -->
     <dimen name="keyguard_lockscreen_status_line_clockfont_bottom_margin">12dip</dimen>
