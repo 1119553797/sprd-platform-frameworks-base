@@ -1818,9 +1818,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * @see #AXIS_X
      */
     public final float getX() {
-        // owen: modify for 175067
-		float ret_X = nativeGetAxisValue(mNativePtr, AXIS_X, 0, HISTORY_CURRENT);
-        return ret_X >= 0 ? ret_X : 0;
+        return nativeGetAxisValue(mNativePtr, AXIS_X, 0, HISTORY_CURRENT);
     }
 
     /**
@@ -1830,9 +1828,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * @see #AXIS_Y
      */
     public final float getY() {
-         // owen: modify for 175067
-		float ret_Y = nativeGetAxisValue(mNativePtr, AXIS_Y, 0, HISTORY_CURRENT);
-        return ret_Y >= 0 ? ret_Y : 0;
+        return nativeGetAxisValue(mNativePtr, AXIS_Y, 0, HISTORY_CURRENT);
     }
 
     /**

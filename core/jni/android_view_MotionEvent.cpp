@@ -155,8 +155,10 @@ static bool validatePointerCoordsObjArray(JNIEnv* env, jobjectArray pointerCoord
 
 static bool validatePointerIndex(JNIEnv* env, jint pointerIndex, size_t pointerCount) {
     if (pointerIndex < 0 || size_t(pointerIndex) >= pointerCount) {
-        jniThrowException(env, "java/lang/IllegalArgumentException",
-                "pointerIndex out of range");
+        //owen.chen modify for 175067
+	 //jniThrowException(env, "java/lang/IllegalArgumentException",
+        //        "pointerIndex out of range");
+        ALOGE("An exception occurred due to pointerIndex out of range.");
         return false;
     }
     return true;
@@ -619,12 +621,9 @@ static jfloat android_view_MotionEvent_nativeGetAxisValue(JNIEnv* env, jclass cl
         jint nativePtr, jint axis, jint pointerIndex, jint historyPos) {
     MotionEvent* event = reinterpret_cast<MotionEvent*>(nativePtr);
     size_t pointerCount = event->getPointerCount();
-//zds delete for bug 153618
-/*
     if (!validatePointerIndex(env, pointerIndex, pointerCount)) {
         return 0;
     }
-*/
 
     if (historyPos == HISTORY_CURRENT) {
         return event->getAxisValue(axis, pointerIndex);
