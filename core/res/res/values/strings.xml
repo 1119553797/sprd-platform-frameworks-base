@@ -317,6 +317,10 @@
     <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
     <string name="low_memory" product="default">Phone storage is full. Delete some files to free space.</string>
 
+    <string name="low_internal_storage_ignore">Ignore</string>
+    <string name="low_internal_storage_display_details">Details</string>
+    <string name="low_internal_storage_wait">"Waiting…"</string>
+    <string name="low_internal_storage_updating_details">"Updating Details…"</string>
 
     <!-- Display name for any time a piece of data refers to the owner of the phone. For example, this could be used in place of the phone's phone number. -->
     <string name="me">Me</string>

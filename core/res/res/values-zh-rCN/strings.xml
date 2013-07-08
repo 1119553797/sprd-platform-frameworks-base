@@ -154,6 +154,10 @@
   <string name="myApp_Uninstall_ChkBox">卸载应用</string>
   <string name="myAppLoading">加载中\u2026</string>
   <string name="myAppProcessing">处理中\u2026</string>
+  <string name="low_internal_storage_ignore">"忽略"</string>
+  <string name="low_internal_storage_display_details">"查看详情"</string>
+  <string name="low_internal_storage_wait">"请等待…"</string>
+  <string name="low_internal_storage_updating_details">"正在更新详情…"</string>
   <string msgid="8340973892742019101" name="byteShort">"B"</string>
   <string msgid="5973789783504771878" name="kilobyteShort">"KB"</string>
   <string msgid="6355851576770428922" name="megabyteShort">"MB"</string>
