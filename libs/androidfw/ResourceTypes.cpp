@@ -3089,7 +3089,7 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
         }
 
         if (bestPackage != NULL &&
-            (bestItem.isMoreSpecificThan(thisConfig) || bestItem.diff(thisConfig) == 0)) {
+            (bestItem.isBetterThan(thisConfig, desiredConfig) || bestItem.diff(thisConfig) == 0)) {
             // Discard thisConfig not only if bestItem is more specific, but also if the two configs
             // are identical (diff == 0), or overlay packages will not take effect.
             continue;
