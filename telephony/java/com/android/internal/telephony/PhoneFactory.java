@@ -440,21 +440,23 @@ public class PhoneFactory {
         return allCardHandled;
     }
 
-    public static void updateDefaultPhoneId(int settingPhoneId) {
+//owen.chen modify for 185879
+    public static boolean updateDefaultPhoneId(int settingPhoneId) {
         if (!UNIVERSEUI_SUPPORT) {
             if (getSimState(settingPhoneId) != State.READY) {
-                Log.i(LOG_TAG, "PhoneId " + settingPhoneId + " not ready");
-                return;
+                Log.i(LOG_TAG, "PhoneId " + settingPhoneId + " not ready" + ", SimState= "+ getSimState(settingPhoneId));
+                return false;
             }
         } else {
             if (!isCardExist(settingPhoneId)) {
                 Log.i(LOG_TAG, "PhoneId " + settingPhoneId + " not exist");
-                return;
+                return false;
             }
         }
         Log.i(LOG_TAG, "updateDefaultPhoneId=" + settingPhoneId);
         TelephonyManager.setDefaultDataPhoneId(sContext, settingPhoneId);
         sContext.sendBroadcast(new Intent(Intent.ACTION_DEFAULT_PHONE_CHANGE));
+        return true;
     }
 
     public static void forceUpdateDefaultPhoneId(int settingPhoneId) {
