@@ -179,6 +179,45 @@ public class MsmsGsmDataConnectionTrackerProxy extends Handler {
         }
     }
 
+    //modify for Bug#180374 start
+    public static void onEnableNewApn(int phoneId) {
+        synchronized (sInstance) {
+            log("onEnableNewApn(" + phoneId + ") activePhoneId:" + sActivePhoneId);
+            if (phoneId == INVALID_PHONE_ID) {
+                log("phoneId is invalid,onEnableNewApn out!!!");
+                return;
+            }
+            sRequestConnectPhoneId = phoneId;
+            sRequestPhoneIdBeforeVoiceCallEnd = sRequestConnectPhoneId;
+            if (sActivePhoneId != INVALID_PHONE_ID) {
+                if(sRequestConnectPhoneId!=sActivePhoneId){
+                    if (sTracker[sActivePhoneId].isDisconnected()) {
+                        checkAndSwitchPhone(sActivePhoneId, null);
+                    } else {
+                        sTracker[sActivePhoneId].cleanUpAllConnections(true,
+                                Phone.REASON_DATA_DISABLED);
+                    }
+                }else{
+                    sTracker[sActivePhoneId].setupDataOnReadyApns(Phone.REASON_DATA_ENABLED);
+                }
+            } else {
+                if (sTracker[sRequestConnectPhoneId].getCurrentGprsState() == ServiceState.STATE_IN_SERVICE) {
+                    sTracker[sRequestConnectPhoneId].setupDataOnReadyApns(Phone.REASON_DATA_ENABLED);
+                    sActivePhoneId = sRequestConnectPhoneId;
+                } else {
+                    sTracker[sRequestConnectPhoneId].mGsmPhone.mCM.setGprsAttach(null);
+                    sActivePhoneId = sRequestConnectPhoneId;
+                }
+            }
+            if(phoneId == sActivePhoneId){
+                // do not need to switch phone, so we initialize sRequestConnectPhoneId.
+                sRequestConnectPhoneId=INVALID_PHONE_ID;
+            }
+            log("onEnableNewApn out");
+        }
+    }
+    //modify for Bug#180374 end
+
     private static boolean isAnyIccCardReadyExceptProvided(int exceptPhoneId) {
         boolean find = false;
         for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {

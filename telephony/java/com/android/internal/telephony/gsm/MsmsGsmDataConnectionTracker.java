@@ -189,8 +189,10 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
                     // stopped,so if
                     // VoiceCall is ended,we still
                     // need to setup DataCall which is stopped just now.
-                    // MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
-                    // .getRequestPhoneIdBeforeVoiceCallEnd());
+                    // modify for Bug#180374 start
+                    MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
+                     .getRequestPhoneIdBeforeVoiceCallEnd());
+                    // modify for Bug#180374 end
                 } else {
                     // clean slate after call end.
                     resetPollStats();
@@ -210,8 +212,10 @@ public class MsmsGsmDataConnectionTracker extends GsmDataConnectionTracker {
         	resetAllRetryCounts();
             mReregisterOnReconnectFailure = false;
             // in case data setup was attempted when we were on a voice call
-//            MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
-//                    .getRequestPhoneIdBeforeVoiceCallEnd());
+            // modify for Bug#180374 start
+            MsmsGsmDataConnectionTrackerProxy.onEnableNewApn(MsmsGsmDataConnectionTrackerProxy
+                    .getRequestPhoneIdBeforeVoiceCallEnd());
+            // modify for Bug#180374 end
         }
     }
 
