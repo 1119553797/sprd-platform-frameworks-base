@@ -82,12 +82,6 @@ public final class Debug
     // set/cleared by waitForDebugger()
     private static volatile boolean mWaiting = false;
 
-    // For Preventing deadlock between AMS and WMS
-    private static boolean mDeadLock = true;
-    private static String mDeadLockTag;
-    private static boolean mStartLock = true;
-    private static String mStartLockTag;
-
     private Debug() {}
 
     /*
@@ -1480,52 +1474,5 @@ href="{@docRoot}guide/developing/tools/traceview.html">Traceview: A Graphical Lo
      */
     public static boolean isMonkeyOrDebug() {
         return isMonkey() || isDebug();
-    }
-
-    /**
-     * @hide
-     * Whether can get death notice lock.
-     *
-     * @return True - death notice lock is available.
-     */
-    public static boolean isDeadLock(String tag) {
-        if (!mDeadLock) {
-            return tag.equals(mDeadLockTag);
-        }
-        return true;
-    }
-
-    /**
-     * @hide
-     * Set whether death notice lock can be obtained.
-     * @param bLocked Whether death notice lock can be obtained.
-     */
-    public static void setDeadLock(String tag, boolean bLocked) {
-        mDeadLock = bLocked;
-        mDeadLockTag = tag;
-    }
-
-    /**
-     * @hide
-     * Whether can get start notice lock.
-     *
-     * @return True - start notice lock is available.
-     */
-    public static boolean isStartLock(String tag) {
-        if (!mStartLock) {
-            return tag.equals(mStartLockTag);
-        }
-        return true;
-    }
-
-    /**
-     * @hide
-     * Set whether start notice lock can be obtained.
-     * @param bLocked Whether start notice lock can be obtained.
-     */
-    public static void setStartLock(String tag, boolean bLocked) {
-//        Slog.d(TAG, "setStartLock(" + tag + ", " + bLocked + ")");
-        mStartLock = bLocked;
-        mStartLockTag = tag;
     }
 }

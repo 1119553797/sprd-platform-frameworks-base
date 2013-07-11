@@ -2165,14 +2165,6 @@ public class WindowManagerService extends IWindowManager.Stub
         WindowState win = null;
         long origId;
 
-        while (!android.os.Debug.isStartLock(WindowManagerService.TAG)) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        android.os.Debug.setStartLock(WindowManagerService.TAG, false);
         synchronized(mWindowMap) {
             if (mDisplay == null) {
                 throw new IllegalStateException("Display has not been initialialized");
@@ -2180,7 +2172,6 @@ public class WindowManagerService extends IWindowManager.Stub
 
             if (mWindowMap.containsKey(client.asBinder())) {
                 Slog.w(TAG, "Window " + client + " is already added");
-                android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                 return WindowManagerImpl.ADD_DUPLICATE_ADD;
             }
 
@@ -2189,14 +2180,12 @@ public class WindowManagerService extends IWindowManager.Stub
                 if (attachedWindow == null) {
                     Slog.w(TAG, "Attempted to add window with token that is not a window: "
                           + attrs.token + ".  Aborting.");
-                    android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                     return WindowManagerImpl.ADD_BAD_SUBWINDOW_TOKEN;
                 }
                 if (attachedWindow.mAttrs.type >= FIRST_SUB_WINDOW
                         && attachedWindow.mAttrs.type <= LAST_SUB_WINDOW) {
                     Slog.w(TAG, "Attempted to add window with token that is a sub-window: "
                             + attrs.token + ".  Aborting.");
-                    android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                     return WindowManagerImpl.ADD_BAD_SUBWINDOW_TOKEN;
                 }
             }
@@ -2208,25 +2197,21 @@ public class WindowManagerService extends IWindowManager.Stub
                         && attrs.type <= LAST_APPLICATION_WINDOW) {
                     Slog.w(TAG, "Attempted to add application window with unknown token "
                           + attrs.token + ".  Aborting.");
-                    android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                     return WindowManagerImpl.ADD_BAD_APP_TOKEN;
                 }
                 if (attrs.type == TYPE_INPUT_METHOD) {
                     Slog.w(TAG, "Attempted to add input method window with unknown token "
                           + attrs.token + ".  Aborting.");
-                    android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                     return WindowManagerImpl.ADD_BAD_APP_TOKEN;
                 }
                 if (attrs.type == TYPE_WALLPAPER) {
                     Slog.w(TAG, "Attempted to add wallpaper window with unknown token "
                           + attrs.token + ".  Aborting.");
-                    android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                     return WindowManagerImpl.ADD_BAD_APP_TOKEN;
                 }
                 if (attrs.type == TYPE_DREAM) {
                     Slog.w(TAG, "Attempted to add Dream window with unknown token "
                           + attrs.token + ".  Aborting.");
-                    android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                     return WindowManagerImpl.ADD_BAD_APP_TOKEN;
                 }
                 token = new WindowToken(this, attrs.token, -1, false);
@@ -2237,40 +2222,34 @@ public class WindowManagerService extends IWindowManager.Stub
                 if (atoken == null) {
                     Slog.w(TAG, "Attempted to add window with non-application token "
                           + token + ".  Aborting.");
-                    android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                     return WindowManagerImpl.ADD_NOT_APP_TOKEN;
                 } else if (atoken.removed) {
                     Slog.w(TAG, "Attempted to add window with exiting application token "
                           + token + ".  Aborting.");
-                    android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                     return WindowManagerImpl.ADD_APP_EXITING;
                 }
                 if (attrs.type == TYPE_APPLICATION_STARTING && atoken.firstWindowDrawn) {
                     // No need for this guy!
                     if (localLOGV) Slog.v(
                             TAG, "**** NO NEED TO START: " + attrs.getTitle());
-                    android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                     return WindowManagerImpl.ADD_STARTING_NOT_NEEDED;
                 }
             } else if (attrs.type == TYPE_INPUT_METHOD) {
                 if (token.windowType != TYPE_INPUT_METHOD) {
                     Slog.w(TAG, "Attempted to add input method window with bad token "
                             + attrs.token + ".  Aborting.");
-                      android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                       return WindowManagerImpl.ADD_BAD_APP_TOKEN;
                 }
             } else if (attrs.type == TYPE_WALLPAPER) {
                 if (token.windowType != TYPE_WALLPAPER) {
                     Slog.w(TAG, "Attempted to add wallpaper window with bad token "
                             + attrs.token + ".  Aborting.");
-                      android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                       return WindowManagerImpl.ADD_BAD_APP_TOKEN;
                 }
             } else if (attrs.type == TYPE_DREAM) {
                 if (token.windowType != TYPE_DREAM) {
                     Slog.w(TAG, "Attempted to add Dream window with bad token "
                             + attrs.token + ".  Aborting.");
-                    android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                       return WindowManagerImpl.ADD_BAD_APP_TOKEN;
                 }
             }
@@ -2282,7 +2261,6 @@ public class WindowManagerService extends IWindowManager.Stub
                 // continue.
                 Slog.w(TAG, "Adding window client " + client.asBinder()
                         + " that is dead, aborting.");
-                android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                 return WindowManagerImpl.ADD_APP_EXITING;
             }
 
@@ -2290,7 +2268,6 @@ public class WindowManagerService extends IWindowManager.Stub
 
             res = mPolicy.prepareAddWindowLw(win, attrs);
             if (res != WindowManagerImpl.ADD_OKAY) {
-                android.os.Debug.setStartLock(WindowManagerService.TAG, true);
                 return res;
             }
             
@@ -2390,7 +2367,6 @@ public class WindowManagerService extends IWindowManager.Stub
                 reportNewConfig = true;
             }
         }
-        android.os.Debug.setStartLock(WindowManagerService.TAG, true);
 
         if (reportNewConfig) {
             sendNewConfiguration();
@@ -7056,14 +7032,6 @@ public class WindowManagerService extends IWindowManager.Stub
                     if (view != null) {
                         boolean abort = false;
 
-                        while (!android.os.Debug.isStartLock(TAG)) {
-                            try {
-                                Thread.sleep(10);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        android.os.Debug.setStartLock(TAG, false);
                         synchronized(mWindowMap) {
                             if (wtoken.removed || wtoken.startingData == null) {
                                 // If the window was successfully added, then
@@ -7087,7 +7055,6 @@ public class WindowManagerService extends IWindowManager.Stub
                                     + wtoken.startingWindow + " startingView="
                                     + wtoken.startingView);
                         }
-                        android.os.Debug.setStartLock(TAG, true);
 
                         if (abort) {
                             try {

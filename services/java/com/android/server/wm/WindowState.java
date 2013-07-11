@@ -849,14 +849,6 @@ final class WindowState implements WindowManagerPolicy.WindowState {
 
     private class DeathRecipient implements IBinder.DeathRecipient {
         public void binderDied() {
-            while (!android.os.Debug.isDeadLock(WindowManagerService.TAG)) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            android.os.Debug.setDeadLock(WindowManagerService.TAG, false);
             try {
                 synchronized(mService.mWindowMap) {
                     WindowState win = mService.windowForClientLocked(mSession, mClient, false);
@@ -869,7 +861,6 @@ final class WindowState implements WindowManagerPolicy.WindowState {
                 // This will happen if the window has already been
                 // removed.
             }
-            android.os.Debug.setDeadLock(WindowManagerService.TAG, true);
         }
     }
 

@@ -3052,15 +3052,7 @@ final class ActivityStack {
         }
         aInfo = mService.getActivityInfoForUser(aInfo, userId);
 
-        while (!android.os.Debug.isStartLock(TAG)) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        android.os.Debug.setStartLock(TAG, false);
-        synchronized (mService) {
+       synchronized (mService) {
             int callingPid;
             if (callingUid >= 0) {
                 callingPid = -1;
@@ -3098,8 +3090,6 @@ final class ActivityStack {
                                       + " (pid=" + realCallingPid + ") when starting: "
                                       + intent.toString());
                                 ActivityOptions.abort(options);
-
-                                android.os.Debug.setStartLock(TAG, true);
                                 return ActivityManager.START_PERMISSION_DENIED;
                             }
                         }
@@ -3199,7 +3189,6 @@ final class ActivityStack {
                 }
             }
 
-            android.os.Debug.setStartLock(TAG, true);
             return res;
         }
     }
