@@ -2995,11 +2995,11 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
 //            Log.d(LOG_TAG, "itemList " + item + " parts[0] " + parts[0]);
             if( parts[0].equalsIgnoreCase(name)){
                 ret = parts[1];
-				Log.d(LOG_TAG, "itemList found: parts[0]= " + parts[0] + " parts[1]= " + parts[1]);
-                break;
+	            Log.d(LOG_TAG, "itemList found: parts[0]= " + parts[0] + " parts[1]= " + parts[1] + "  ret= "+ret);
+                return ret;
             }
         }
-	    Log.e(LOG_TAG, "changeOperator not found: name= "+ name);
+	    Log.e(LOG_TAG, "changeOperator not found: original name= "+ name + " ret= "+ret);
         return ret;
      }
     private String getCarrierNumericToChinese(String numeric, String name) {

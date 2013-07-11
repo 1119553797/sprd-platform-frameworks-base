@@ -766,6 +766,8 @@
         <item>Claro=Claro</item>
         <item>VIVO=VIVO</item>
         <item>BrTCel=BrTCel</item>
+        <!-- owen.chen for 187167 -->
+        <item>Vodafon=Vodafone</item>
         <!-- \t is space，case 36510's brand don't know -->
         <item>\t=\t</item>
     </string-array>
