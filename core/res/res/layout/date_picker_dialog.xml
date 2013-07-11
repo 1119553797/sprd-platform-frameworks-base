@@ -24,4 +24,6 @@
     android:layout_height="wrap_content"
     android:spinnersShown="true"
     android:calendarViewShown="false"
+    android:startYear="2012"
+    android:endYear"2036"
     />
