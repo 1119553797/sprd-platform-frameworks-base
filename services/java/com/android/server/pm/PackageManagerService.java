@@ -6950,6 +6950,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         int doPostInstall(int status, int uid) {
             if (status != PackageManager.INSTALL_SUCCEEDED) {
+                Runtime.getRuntime().gc();
                 cleanUp();
             } else {
                 final int groupOwner;
