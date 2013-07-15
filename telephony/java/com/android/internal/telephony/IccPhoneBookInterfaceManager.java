@@ -424,6 +424,14 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                     "Requires android.permission.READ_CONTACTS permission");
         }
 
+        //owen.chen modify for 188526
+        if (efid == IccConstants.EF_ADN) {
+            if(phone.getIccCard().getIccCardState() != IccCard.State.READY){
+                Log.d(LOG_TAG, "getAdnRecordsInEf return false, due to icccardstate is not ready, efid = "+efid);
+                      return null;
+             }
+        }
+
         efid = updateEfForIccType(efid);
         if (efid == IccConstants.EF_ADN || efid == IccConstants.EF_PBR) {
             //load adn start,open real-time mode
