@@ -201,11 +201,13 @@ public class SIMRecords extends IccRecords {
             final int phoneId = phone.getPhoneId();
             Log.d(LOG_TAG, "BroadcastReceiver:phoneid=" + phone.getPhoneId() + " intent.action="
                     + action);
-
-            if (action.equals(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE,
-                    phoneId))) {
-                fetchSimRecords();
-            } else if (action.equals(PhoneFactory.getAction(
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+//            if (action.equals(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE,
+//                    phoneId))) {
+//                fetchSimRecords();
+//            } else if (action.equals(PhoneFactory.getAction(
+              if (action.equals(PhoneFactory.getAction(
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
                     TelephonyIntents.ACTION_SIM_READY_LOAD_ICCID, phoneId))) {
                 loadIccId();
             }
@@ -245,7 +247,9 @@ public class SIMRecords extends IccRecords {
         // Start off by setting empty state
         onRadioOffOrNotAvailable();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE, phone.getPhoneId()));
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+//        filter.addAction(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE, phone.getPhoneId()));
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
         filter.addAction(PhoneFactory.getAction(TelephonyIntents.ACTION_SIM_READY_LOAD_ICCID, phone.getPhoneId()));
         phone.getContext().registerReceiver(mIntentReceiver, filter);
     }

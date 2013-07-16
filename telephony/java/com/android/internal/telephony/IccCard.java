@@ -613,7 +613,9 @@ public class IccCard {
         boolean transitionedIntoSimLocked;
         boolean transitionedIntoIccBlocked;
         boolean transitionedIntoPermBlocked;
-        boolean transitionedIntoIccReady;
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+//        boolean transitionedIntoIccReady;
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
         boolean isIccCardRemoved;
         boolean isIccCardAdded;
         boolean transitionedIntoCardPresent;
@@ -651,9 +653,13 @@ public class IccCard {
         transitionedIntoIccBlocked = (oldState != State.BLOCKED && newState == State.BLOCKED);
         transitionedIntoPermBlocked = (oldState != State.PERM_DISABLED
                 && newState == State.PERM_DISABLED);
-        transitionedIntoIccReady = (oldState != State.READY && newState == State.READY);
-        transitionedIntoCardPresent =  !transitionedIntoAbsent;
-
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+//        transitionedIntoIccReady = (oldState != State.READY && newState == State.READY);
+//        transitionedIntoCardPresent =  !transitionedIntoAbsent;
+        transitionedIntoCardPresent = (
+                (oldState == null || !oldState.iccCardExist())
+              &&(newState != null && newState.iccCardExist()));
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
         isIccCardRemoved = (oldState != null &&
                         oldState.iccCardExist() && newState == State.ABSENT);
         isIccCardAdded = (oldState == State.ABSENT &&
@@ -683,9 +689,11 @@ public class IccCard {
         }else if (transitionedIntoIccBlocked) {
             if(mDbg) log("Notify ICC blocked.");
             broadcastIccStateChangedIntent(INTENT_VALUE_ICC_BLOCKED, null);
-        }else if(transitionedIntoIccReady){
-            broadcastGetIccStatusDoneIntent();
-            if(mDbg) log("Notify SIM ready.");
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+//        }else if(transitionedIntoIccReady){
+//            broadcastGetIccStatusDoneIntent();
+//            if(mDbg) log("Notify SIM ready.");
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
         }else if(transitionedIntoCardPresent){
 	        if(mDbg) log("Notify SIM present.");
 	        broadcastIccCardPresentIntent();
@@ -726,14 +734,15 @@ public class IccCard {
 
     private boolean misFirstStart = false;
 
-    public void broadcastGetIccStatusDoneIntent() {
-        Intent intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE, mPhone.getPhoneId()));
-
-        if(mDbg) log("Broadcasting intent ACTION_GET_ICC_STATUS_DONE , phoneid is " + mPhone.getPhoneId());
-
-        ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
-    }
-
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+//    public void broadcastGetIccStatusDoneIntent() {
+//        Intent intent = new Intent(PhoneFactory.getAction(TelephonyIntents.ACTION_GET_ICC_STATUS_DONE, mPhone.getPhoneId()));
+//
+//        if(mDbg) log("Broadcasting intent ACTION_GET_ICC_STATUS_DONE , phoneid is " + mPhone.getPhoneId());
+//
+//        ActivityManagerNative.broadcastStickyIntent(intent, READ_PHONE_STATE);
+//    }
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
     public void broadcastIccCardPresentIntent() {
         Intent intent = new Intent(TelephonyIntents.SIM_CARD_PRESENT);
         intent.putExtra(INTENT_KEY_PHONE_ID, mPhone.getPhoneId());
@@ -1167,7 +1176,10 @@ public class IccCard {
 
         if (mIccCardStatus == null) {
             Log.e(mLogTag, "[IccCard] IccCardStatus is null");
-            return IccCard.State.ABSENT;
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+//            return IccCard.State.ABSENT;
+            return IccCard.State.UNKNOWN;
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
         }
 
         // this is common for all radio technologies
@@ -1177,12 +1189,16 @@ public class IccCard {
 
         RadioState currentRadioState = mPhone.mCM.getRadioState();
         // check radio technology
-        if( currentRadioState == RadioState.RADIO_OFF         ||
-            currentRadioState == RadioState.RADIO_UNAVAILABLE) {
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+//        if( currentRadioState == RadioState.RADIO_OFF         ||
+//            currentRadioState == RadioState.RADIO_UNAVAILABLE) {
+        if (currentRadioState == RadioState.RADIO_UNAVAILABLE) {
             return IccCard.State.NOT_READY;
         }
-
-        if( currentRadioState == RadioState.RADIO_ON ) {
+        if( currentRadioState == RadioState.RADIO_OFF ||
+            currentRadioState == RadioState.RADIO_ON ) {
+//        if( currentRadioState == RadioState.RADIO_ON ) {
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
             State csimState =
                 getAppState(mIccCardStatus.getCdmaSubscriptionAppIndex());
             State usimState =
