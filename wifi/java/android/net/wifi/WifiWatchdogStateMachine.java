@@ -89,7 +89,7 @@ import java.net.URL;
 public class WifiWatchdogStateMachine extends StateMachine {
 
     /* STOPSHIP: Keep this configurable for debugging until ship */
-    private static boolean DBG = false;
+    private static boolean DBG = true;
     private static final String TAG = "WifiWatchdogStateMachine";
     private static final String WALLED_GARDEN_NOTIFICATION_ID = "WifiWatchdog.walledgarden";
 
@@ -861,6 +861,12 @@ public class WifiWatchdogStateMachine extends StateMachine {
         }
 
         if (DBG) log("ARP " + iface + "addr: " + inetAddress + "mac: " + mac + "gw: " + gateway);
+        //+++ for bug162812 debug
+        if(null == iface) {
+            log("null == iface");
+            return false;
+        }
+        //--- for bug162812 debug
 
         try {
             ArpPeer peer = new ArpPeer(iface, inetAddress, mac, gateway);
