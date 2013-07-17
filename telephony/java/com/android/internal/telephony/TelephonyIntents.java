@@ -240,8 +240,9 @@ public class TelephonyIntents {
      */
     public static final String ACTION_SHOW_NOTICE_ECM_BLOCK_OTHERS
             = "android.intent.action.ACTION_SHOW_NOTICE_ECM_BLOCK_OTHERS";
-
-    public static final String ACTION_GET_ICC_STATUS_DONE = "android.intent.action.GET_ICC_STATUS_DONE";
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+//    public static final String ACTION_GET_ICC_STATUS_DONE = "android.intent.action.GET_ICC_STATUS_DONE";
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
     public static final String SIM_ADNCACHE_LOADED = "android.intent.action.SIM_ADNCACHE_LOADED";
 
     /**

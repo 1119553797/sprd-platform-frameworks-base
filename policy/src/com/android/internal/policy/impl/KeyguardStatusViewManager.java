@@ -18,6 +18,7 @@ package com.android.internal.policy.impl;
 
 import com.android.internal.R;
 import com.android.internal.telephony.IccCard;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.IccCard.State;
 import com.android.internal.widget.DigitalClock;
 import com.android.internal.widget.LockPatternUtils;
@@ -46,6 +47,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 /***
  * Manages a number of views inside of LockScreen layouts. See below for a list of widgets
  *
@@ -138,7 +141,12 @@ class KeyguardStatusViewManager implements OnClickListener {
     protected int mPhoneState;
     private DigitalClock mDigitalClock;
     private SimManager simManager;
-
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+    private int numPhones;
+    private TelephonyManager[] mTelephonyManager;
+    private PhoneStateListener[] mPhoneStateListener;
+    ServiceState[] mServiceState;
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
     private class TransientTextManager {
         private TextView mTextView;
         private class Data {
@@ -247,13 +255,31 @@ class KeyguardStatusViewManager implements OnClickListener {
         if (mTransportView != null) {
             mTransportView.setVisibility(View.GONE);
         }
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+	numPhones = TelephonyManager.getPhoneCount();
+        mServiceState = new ServiceState[numPhones];
+        mTelephonyManager = new TelephonyManager[numPhones];
+        mPhoneStateListener = new PhoneStateListener[numPhones];
+        for (int i=0; i < numPhones; i++) {
+            mTelephonyManager[i] = (TelephonyManager)getContext().getSystemService(PhoneFactory.getServiceName(
+                    Context.TELEPHONY_SERVICE, i));
+            mPhoneStateListener[i] = getPhoneStateListener(i);
+            mTelephonyManager[i].listen(mPhoneStateListener[i],PhoneStateListener.LISTEN_SERVICE_STATE);
+        }
 
         if (mEmergencyCallButton != null) {
+            if (!canEmergencyCall()) {
+                mEmergencyCallButton.setClickable(false);
+                mEmergencyCallButton.setText(R.string.emergency_call_no_service);
+
+            } else {
+                mEmergencyCallButton.setClickable(true);
             mEmergencyCallButton.setText(R.string.lockscreen_emergency_call);
+            }
             mEmergencyCallButton.setOnClickListener(this);
             mEmergencyCallButton.setFocusable(false); // touch only!
         }
-
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
         if (TelephonyManager.getPhoneCount() > 0) {
             mTransientTextManager = new TransientTextManager(mCarrierViews[0]);
         }
@@ -280,7 +306,57 @@ class KeyguardStatusViewManager implements OnClickListener {
         }
 
     }
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+    private PhoneStateListener getPhoneStateListener(final int phoneId) {
+        PhoneStateListener phoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onServiceStateChanged(ServiceState state) {
+                if (DEBUG)
+                    Log.v(TAG, "onServiceStateChanged(), and mUpdateMonitor = " + mUpdateMonitor
+                            + ", serviceState = " + state);
+                if (mUpdateMonitor != null && state != null) {
+                    mServiceState[phoneId] = state;
+                }
+                updateEmergencyCallButtonState(mPhoneState);
+            }
+        };
+        return phoneStateListener;
+    }
 
+    private boolean hasService(int subscription) {
+        if (mServiceState[subscription] != null) {
+            switch (mServiceState[subscription].getState()) {
+                case ServiceState.STATE_OUT_OF_SERVICE:
+                case ServiceState.STATE_POWER_OFF:
+                    return false;
+                default:
+                    return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private boolean canEmergencyCall(){
+        boolean isEmergencyOnly = false;
+        boolean hasService = false;
+        for (int i = 0; i < this.numPhones; i++) {
+            if (mServiceState[i] != null) {
+                isEmergencyOnly = isEmergencyOnly ? true : mServiceState[i].isEmergencyOnly();
+                hasService = hasService(i);
+                Log.d(TAG, "canEmergencyCall i = "+ i +"| isEmergencyOnly = " + isEmergencyOnly + "|hasService = " + hasService);
+                if(hasService){
+                    return true;
+                } else {
+                    if(isEmergencyOnly){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
     private boolean inWidgetMode() {
         return mTransportView != null && mTransportView.getVisibility() == View.VISIBLE;
     }
@@ -396,6 +472,13 @@ class KeyguardStatusViewManager implements OnClickListener {
         if (DEBUG) Log.v(TAG, "onPause()");
         mUpdateMonitor.removeCallback(mInfoCallback);
         mUpdateMonitor.removeCallback(mSimStateCallback);
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+        for (int i = 0; i < numPhones; i++) {
+            ((TelephonyManager) getContext().getSystemService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE,i))).listen(
+                    mPhoneStateListener[i],
+                    PhoneStateListener.LISTEN_NONE);
+        }
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
     }
 
     /** {@inheritDoc} */
@@ -409,6 +492,12 @@ class KeyguardStatusViewManager implements OnClickListener {
 
         mUpdateMonitor.registerInfoCallback(mInfoCallback);
         mUpdateMonitor.registerSimStateCallback(mSimStateCallback);
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+	for (int i=0; i < numPhones; i++) {
+            ((TelephonyManager)getContext().getSystemService(PhoneFactory.getServiceName(
+                    Context.TELEPHONY_SERVICE, i))).listen(mPhoneStateListener[i],PhoneStateListener.LISTEN_SERVICE_STATE);
+        }
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
         resetStatusInfo();
         // Issue the biometric unlock failure message in a centralized place
         // TODO: we either need to make the Face Unlock multiple failures string a more general
@@ -823,6 +912,14 @@ class KeyguardStatusViewManager implements OnClickListener {
             //add DSDS end
             mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton,
                     phoneState, shown);
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
+            if (!canEmergencyCall()) {
+                mEmergencyCallButton.setClickable(false);
+                mEmergencyCallButton.setText(R.string.emergency_call_no_service);
+            } else {
+                mEmergencyCallButton.setClickable(true);
+            }
+//20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
         }
     }
 
