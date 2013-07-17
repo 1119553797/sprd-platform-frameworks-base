@@ -397,13 +397,13 @@ class CommandParamsFactory extends Handler {
             textMsg.text = ValueParser.retrieveTextString(ctlv);
         }
         // load icons only when text exist.
-        if (textMsg.text != null) {
+       // if (textMsg.text != null) {
             ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
             if (ctlv != null) {
                 iconId = ValueParser.retrieveIconId(ctlv);
                 textMsg.iconSelfExplanatory = iconId.selfExplanatory;
             }
-        }
+       // }
 
         mCmdParams = new DisplayTextParams(cmdDet, textMsg);
 
