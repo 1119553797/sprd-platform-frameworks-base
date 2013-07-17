@@ -51,7 +51,7 @@
   <string msgid="1077244949318261761" name="battery_low_percent_format">"Залишилося <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
   <string msgid="4549105996740522523" name="invalid_charger">"Заряджання USB не підтримується."\n"Використовуйте лише наданий у комплекті зарядний пристрій."</string>
   <string msgid="7279169609518386372" name="battery_low_why">"Викор. батареї"</string>
-  <string msgid="3023889916699270224" name="status_bar_settings_settings_button">"Налаштування"</string>
+  <string msgid="3023889916699270224" name="status_bar_settings_settings_button">"Настройки"</string>
   <string msgid="1733928151698311923" name="status_bar_settings_wifi_button">"Wi-Fi"</string>
   <string msgid="4879879698500955300" name="status_bar_settings_airplane">"Режим польоту"</string>
   <string msgid="3790482541357798421" name="status_bar_settings_auto_rotation">"Повертати екран автоматично"</string>
@@ -130,7 +130,7 @@
   <string msgid="4102784498140271969" name="accessibility_bluetooth_tether">"Прив’язка Bluetooth."</string>
   <string msgid="834748999790763092" name="accessibility_airplane_mode">"Режим польоту."</string>
   <string msgid="7451474187113371965" name="accessibility_battery_level">"Відсотків батареї: <xliff:g id="NUMBER">%d</xliff:g>."</string>
-  <string msgid="799583911231893380" name="accessibility_settings_button">"Налаштування системи."</string>
+  <string msgid="799583911231893380" name="accessibility_settings_button">"Настройки системи."</string>
   <string msgid="4498000369779421892" name="accessibility_notifications_button">"Сповіщення."</string>
   <string msgid="3603099514902182350" name="accessibility_remove_notification">"Очистити сповіщення."</string>
   <string msgid="3511469499240123019" name="accessibility_gps_enabled">"GPS увімкнено."</string>
@@ -150,4 +150,14 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"Виконується пошук GPS-сигналу"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"Місцезнаходження встановлено за допомогою GPS"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"Очистити всі сповіщення."</string>
+  <string name="accessibility_ringer_outdoor">На вулиці</string>
+  <string name="datanetwork_error_airplane">Ви не можете використовувати мобільні дані в режимі польоту</string>
+  <string name="bluetooth_error_airplane">Ви не можете використовувати Bluetooth в режимі польоту</string>
+  <string name="status_bar_expanded_notification_stop_button_text">Стоп</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">Hungup</string>
+  <string name="status_bar_expanded_notification_cancel_button_text">Скасувати</string>
+  <string name="status_bar_expanded_notification_latest_button_text">Сповіщення</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">Поточні</string>
+  <string name="dataConnectSetting">Передача даних</string>
+  <string name="closeData">Закрити</string>
 </resources>

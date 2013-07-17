@@ -131,10 +131,10 @@
   <string msgid="8274017118472455155" name="accessibility_no_sim">"Žádná karta SIM."</string>
   <string msgid="4102784498140271969" name="accessibility_bluetooth_tether">"Tethering přes Bluetooth."</string>
   <string msgid="834748999790763092" name="accessibility_airplane_mode">"Režim V letadle."</string>
-  <string msgid="799583911231893380" name="accessibility_settings_button">"Systémová nastavení."</string>
-  <string msgid="4498000369779421892" name="accessibility_notifications_button">"Oznámení."</string>
-  <string msgid="3603099514902182350" name="accessibility_remove_notification">"Vymazat oznámení."</string>
-  <string msgid="3511469499240123019" name="accessibility_gps_enabled">"GPS je povoleno."</string>
+  <string msgid="799583911231893380" name="accessibility_settings_button">Vancouver/Kanada</string>
+  <string msgid="4498000369779421892" name="accessibility_notifications_button">San Francisco/USA</string>
+  <string msgid="3603099514902182350" name="accessibility_remove_notification">Honolulu/USA</string>
+  <string msgid="3511469499240123019" name="accessibility_gps_enabled">Textový režim</string>
   <string msgid="8959333351058967158" name="accessibility_gps_acquiring">"Zaměřování GPS."</string>
   <string msgid="4613200365379426561" name="accessibility_tty_enabled">"Rozhraní TeleTypewriter zapnuto."</string>
   <string msgid="666585363364155055" name="accessibility_ringer_vibrate">"Vibrační vyzvánění."</string>
@@ -151,4 +151,15 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"Vyhledávání satelitů GPS"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"Poloha nastavena pomocí systému GPS"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"Vymazat všechna oznámení."</string>
+  <string name="accessibility_battery_level">Baterie <xliff:g id="number">%d</xliff:g> procent.</string>
+  <string name="accessibility_ringer_outdoor">Venkovní vyzvánění.</string>
+  <string name="datanetwork_error_airplane">Nelze používat mobilní data, když je telefon v režimu Letadlo.</string>
+  <string name="bluetooth_error_airplane">Nelze používat Bluetooth, když je telefon v režimu Letadlo.</string>
+  <string name="status_bar_expanded_notification_stop_button_text">"Zastavit"</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">Zavěsit</string>
+  <string name="status_bar_expanded_notification_cancel_button_text">"Zrušit"</string>
+  <string name="status_bar_expanded_notification_latest_button_text">"Oznámení"</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">"Probíhající"</string>
+  <string name="dataConnectSetting">Datové připojení</string>
+  <string name="closeData">"Zavřít"</string>
 </resources>

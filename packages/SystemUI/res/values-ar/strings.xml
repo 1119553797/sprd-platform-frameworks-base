@@ -150,4 +150,14 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"جارٍ البحث عن GPS"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"تم تعيين الموقع بواسطة GPS"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"محو جميع الإشعارات."</string>
+  <string name="accessibility_ringer_outdoor">رنين خارجى.</string>
+  <string name="datanetwork_error_airplane">لا يمكنك استخدام البيانات المتنقلة عندما يكون الهاتف في وضع الطيران.</string>
+  <string name="bluetooth_error_airplane">لا يمكنك استخدام البلوتوث عندما يكون الهاتف في وضع الطيران.</string>
+  <string name="status_bar_expanded_notification_stop_button_text">"إيقاف"</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">تعليق</string>
+  <string name="status_bar_expanded_notification_cancel_button_text">"إلغاء"</string>
+  <string name="status_bar_expanded_notification_latest_button_text">"التنبيهات"</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">"مستمر"</string>
+  <string name="dataConnectSetting">اتصال البيانات</string>
+  <string name="closeData">"إغلاق"</string>
 </resources>
