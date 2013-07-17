@@ -18,6 +18,7 @@
 */
  -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="2625429890869005782" name="imei">"IMEI"</string>
   <string msgid="4841221237681254195" name="meid">"MEID"</string>
   <string msgid="319298163018473078" name="silent_mode_silent">"Дзвінок вимкнено"</string>
@@ -79,7 +80,6 @@
   <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> хоче ввімкнути функцію дослідження дотиком. Увімкнувши функцію дослідження дотиком, можна чути або бачити опис елемента, розташованого під вашим пальцем, або виконувати жести для взаємодії з телефоном."</string>
   <string msgid="6640505817617414371" name="low_internal_storage_view_text">"Деякі системні функції можуть не працювати"</string>
   <string msgid="3272758351138122503" name="webpage_unresponsive">"Сторінка не відповідає."\n\n"Закрити її?"</string>
-  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="1645267259272829559" name="accept">"Прийняти"</string>
   <string msgid="2112225451706137894" name="decline">"Відхилити"</string>
   <string msgid="1318975185112070734" name="wifi_p2p_invitation_sent_title">"Запрошення надіслано"</string>
@@ -814,10 +814,10 @@
   <string msgid="6827749231465145590" name="lockscreen_too_many_failed_pin_attempts_dialog_message">"Неправильно введено PIN-код стільки разів: <xliff:g id="NUMBER_0">%d</xliff:g>. "\n\n"Спробуйте ще через <xliff:g id="NUMBER_1">%d</xliff:g> сек."</string>
   <string msgid="8687762517114904651" product="tablet" name="lockscreen_failed_attempts_almost_glogin">"Неправильно намал. ключ розблокування стільки разів: <xliff:g id="NUMBER_0">%d</xliff:g>. Ваш пристрій потрібно буде розблок-ти за допомогою входу в Google після стількох додатк. неуспішних спроб: <xliff:g id="NUMBER_1">%d</xliff:g>."\n\n" Спробуйте ще через <xliff:g id="NUMBER_2">%d</xliff:g> сек."</string>
   <string msgid="3351013842320127827" product="default" name="lockscreen_failed_attempts_almost_glogin">"Неправильно намал. ключ розблокування стільки разів: <xliff:g id="NUMBER_0">%d</xliff:g>. Ваш телефон потрібно буде розблок-ти за допомогою входу в Google після стількох додатк. неуспішних спроб: <xliff:g id="NUMBER_1">%d</xliff:g>."\n\n" Спробуйте ще через <xliff:g id="NUMBER_2">%d</xliff:g> сек."</string>
-  <string msgid="6128106399745755604" product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">"Кількість невдалих спроб розблокувати пристрій: <xliff:g id="NUMBER_0">%d</xliff:g>. Налаштування пристрою буде змінено на заводські за умовчанням, а всі дані користувача буде втрачено після ще стількох невдалих спроб: <xliff:g id="NUMBER_1">%d</xliff:g>."</string>
-  <string msgid="8603565142156826565" product="default" name="lockscreen_failed_attempts_almost_at_wipe">"Кількість невдалих спроб розблокувати телефон: <xliff:g id="NUMBER_0">%d</xliff:g>. Налаштування телефону буде змінено на заводські за умовчанням, а всі дані користувача буде втрачено після ще стількох невдалих спроб: <xliff:g id="NUMBER_1">%d</xliff:g>."</string>
-  <string msgid="280873516493934365" product="tablet" name="lockscreen_failed_attempts_now_wiping">"Кількість невдалих спроб розблокувати пристрій: <xliff:g id="NUMBER">%d</xliff:g>. Налаштування пристрою буде змінено на заводські за умовчанням."</string>
-  <string msgid="3025504721764922246" product="default" name="lockscreen_failed_attempts_now_wiping">"Кількість невдалих спроб розблокувати телефон: <xliff:g id="NUMBER">%d</xliff:g>. Налаштування телефону буде змінено на заводські за умовчанням."</string>
+  <string msgid="6128106399745755604" product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">"Кількість невдалих спроб розблокувати пристрій: <xliff:g id="NUMBER_0">%d</xliff:g>. Настройки пристрою буде змінено на заводські за умовчанням, а всі дані користувача буде втрачено після ще стількох невдалих спроб: <xliff:g id="NUMBER_1">%d</xliff:g>."</string>
+  <string msgid="8603565142156826565" product="default" name="lockscreen_failed_attempts_almost_at_wipe">"Кількість невдалих спроб розблокувати телефон: <xliff:g id="NUMBER_0">%d</xliff:g>. Настройки телефону буде змінено на заводські за умовчанням, а всі дані користувача буде втрачено після ще стількох невдалих спроб: <xliff:g id="NUMBER_1">%d</xliff:g>."</string>
+  <string msgid="280873516493934365" product="tablet" name="lockscreen_failed_attempts_now_wiping">"Кількість невдалих спроб розблокувати пристрій: <xliff:g id="NUMBER">%d</xliff:g>. Настройки пристрою буде змінено на заводські за умовчанням."</string>
+  <string msgid="3025504721764922246" product="default" name="lockscreen_failed_attempts_now_wiping">"Кількість невдалих спроб розблокувати телефон: <xliff:g id="NUMBER">%d</xliff:g>. Настройки телефону буде змінено на заводські за умовчанням."</string>
   <string msgid="6251480343394389665" name="lockscreen_too_many_failed_attempts_countdown">"Спробуйте ще через <xliff:g id="NUMBER">%d</xliff:g> сек."</string>
   <string msgid="2626999449610695930" name="lockscreen_forgot_pattern_button_text">"Забули ключ?"</string>
   <string msgid="2588521501166032747" name="lockscreen_glogin_forgot_pattern">"Обл. зап. розбл."</string>
@@ -1041,7 +1041,7 @@
   <string msgid="188102023021668683" name="launch_warning_original">"Спочатку було запущено <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
   <string msgid="3202955667675944499" name="screen_compat_mode_scale">"Масштаб"</string>
   <string msgid="4013878876486655892" name="screen_compat_mode_show">"Завжди показувати"</string>
-  <string msgid="2953716574198046484" name="screen_compat_mode_hint">"Знову ввімкнути це в розділі Налаштування &gt; Програми &gt; Керування програмами."</string>
+  <string msgid="2953716574198046484" name="screen_compat_mode_hint">"Знову ввімкнути це в розділі Настройки &gt; Програми &gt; Керування програмами."</string>
   <string msgid="295583804361236288" name="smv_application">"Програма <xliff:g id="APPLICATION">%1$s</xliff:g> (процес <xliff:g id="PROCESS">%2$s</xliff:g>) порушила свою самозастосовну політику StrictMode."</string>
   <string msgid="5120397012047462446" name="smv_process">"Процес <xliff:g id="PROCESS">%1$s</xliff:g> порушив свою самозастосовну політику StrictMode."</string>
   <string msgid="378740715658358071" name="android_upgrading_title">"Android оновлюється..."</string>
@@ -1340,4 +1340,40 @@
   <string msgid="8715108995741758718" name="sending">"Надсилання..."</string>
   <string msgid="2057951947297614725" name="launchBrowserDefault">"Запустити веб-переглядач?"</string>
   <string msgid="6870275517518479651" name="SetupCallDefault">"Прийняти виклик?"</string>
+  <string name="badPin2">Старий PIN2 невірний</string>
+  <string name="silent_mode_outdoor">На вулиці</string>
+  <string name="keyguard_password_enter_sim1_puk_code">Введіть SIM1 PUK та новий PIN</string>
+  <string name="keyguard_password_enter_sim2_puk_code">Введіть SIM2 PUK та новий PIN</string>
+  <string name="keyguard_password_enter_pin_confirm_prompt">Підтвердіть новий PIN</string>
+  <string name="usb_cdrom_notification_title">Віртуальний драйвер ввімкнено</string>
+  <string name="Low_Memory_Alert">Пам\'ять телефону закінчується. Видаліть деякі дані щоб забезпечити стабільність телефону.</string>
+  <string name="Low_Memory_Free">Вільно</string>
+  <string name="Low_Memory_Application">Програми</string>
+  <string name="Low_Memory_Mail">Пошта</string>
+  <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+  <string name="Low_Memory_System">Система</string>
+  <string name="Btn_Select_Clear">Вибрати/Очистити</string>
+  <string name="myAppTip">Виберіть програми</string>
+  <string name="myApp_Start_Btn">Старт</string>
+  <string name="myApp_Move2Sd_ChkBox">Перемістити на SD-карту</string>
+  <string name="myApp_ClearData_ChkBox">Очистити</string>
+  <string name="myApp_Uninstall_ChkBox">Видалити</string>
+  <string name="myAppLoading">завантаження\u2026</string>
+  <string name="myAppProcessing">обробка\u2026</string>
+  <string name="progress_unmounting1">Відключення внутрішньої пам\'яті ...</string>
+  <string name="progress_erasing1">Стирання внутрішньої пам\'яті ...</string>
+  <string name="format_error1">Неможливо очистити</string>
+  <string name="media_bad_removal1">Внутрішня пам\'ять була видалена до вилучення.</string>
+  <string name="media_checking1">Внутрішня пам\'ять у даний час перевіряється.</string>
+  <string name="media_removed1">Внутрішня пам\'ять була вилучена.</string>
+  <string name="media_shared1">Внутрішня пам\'ять використовується в даний час за допомогою комп\'ютера.</string>
+  <string name="media_unknown_state1">Внутрішня ЗМІ в невідомому стані.</string>
+  <string name="find_prev_title">Назад</string>
+  <string name="find_next_title">Далі</string>
+  <string name="missed_call">%1$d Пропущений виклик</string>
+  <string name="unread_message">%1$d Непрочит. повід.</string>
+  <string name="shutdown_after_seconds">Телефон буде вимкнено через <xliff:g id="NUMBER">%d</xliff:g> секунд</string>
+  <string name="lockscreen_sim_network_locked_message">Телефон заблоковано SIM</string>
+  <string name="lockscreen_sim_card_locked_message">SIM заблоковано</string>
+  <string name="ringtone_waning">Невірний файл, виберіть інший</string>
 </resources>

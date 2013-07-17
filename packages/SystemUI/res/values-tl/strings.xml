@@ -150,4 +150,14 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"Naghahanap ng GPS"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"Lokasyong itinatakda ng GPS"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"I-clear ang lahat ng notification."</string>
+  <string name="accessibility_ringer_outdoor">Panlabas na ringer.</string>
+  <string name="datanetwork_error_airplane">Hindi mo magagamit ang Mobile data kapag nasa moda ng eroplano ang phone.</string>
+  <string name="bluetooth_error_airplane">Hindi mo magagamit ang Bluetooth kapag nasa moda ng eroplano ang phone.</string>
+  <string name="status_bar_expanded_notification_stop_button_text">"Huminto"</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">Ibaba</string>
+  <string name="status_bar_expanded_notification_cancel_button_text">"Kanselahin"</string>
+  <string name="status_bar_expanded_notification_latest_button_text">"Mga Notification"</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">"Nagpapatuloy"</string>
+  <string name="dataConnectSetting">Koneksyon sa Data</string>
+  <string name="closeData">"Isara"</string>
 </resources>
