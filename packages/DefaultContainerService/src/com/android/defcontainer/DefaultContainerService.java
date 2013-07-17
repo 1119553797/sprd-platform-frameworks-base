@@ -747,7 +747,18 @@ public class DefaultContainerService extends IntentService {
          */
         if (!emulated && (checkBoth || prefer == PREFER_EXTERNAL)
                 && !Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            return PackageHelper.RECOMMEND_MEDIA_UNAVAILABLE;
+            if (!fitsOnInternal) {
+                try {
+                    fitsOnInternal = isUnderInternalThreshold(apkFile, isForwardLocked, threshold);
+                } catch (IOException e) {
+                    return PackageHelper.RECOMMEND_FAILED_INVALID_URI;
+                }
+            }
+            if (fitsOnInternal) {
+                return PackageHelper.RECOMMEND_INSTALL_INTERNAL;
+            } else {
+                return PackageHelper.RECOMMEND_MEDIA_UNAVAILABLE;
+            }
         } else {
             return PackageHelper.RECOMMEND_FAILED_INSUFFICIENT_STORAGE;
         }
