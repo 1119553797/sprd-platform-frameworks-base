@@ -699,14 +699,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 stmt = db.compileStatement("INSERT INTO system(name,value)"
                         + " VALUES(?,?);");
                 loadSetting(stmt, Secure.SET_INSTALL_LOCATION, 0);
-                // Bug 189188 Set default install location to SD card start
-                /*
                 loadSetting(stmt, Secure.DEFAULT_INSTALL_LOCATION,
                         PackageHelper.APP_INSTALL_AUTO);
-                */
-                loadSetting(stmt, Secure.DEFAULT_INSTALL_LOCATION,
-                        PackageHelper.APP_INSTALL_EXTERNAL);
-                // Bug 189188 Set default install location to SD card end
                 db.setTransactionSuccessful();
              } finally {
                  db.endTransaction();

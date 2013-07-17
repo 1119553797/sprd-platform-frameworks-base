@@ -9679,16 +9679,9 @@ public class PackageManagerService extends IPackageManager.Stub {
    }
 
     public int getInstallLocation() {
-        // Bug 189188 Set default install location to SD start
-        /*
         return android.provider.Settings.System.getInt(mContext.getContentResolver(),
                 android.provider.Settings.Secure.DEFAULT_INSTALL_LOCATION,
                 PackageHelper.APP_INSTALL_AUTO);
-        */
-        return android.provider.Settings.System.getInt(mContext.getContentResolver(),
-                android.provider.Settings.Secure.DEFAULT_INSTALL_LOCATION,
-                PackageHelper.APP_INSTALL_EXTERNAL);
-        // Bug 189188 Set default install location to SD end
     }
 
     public UserInfo createUser(String name, int flags) {
