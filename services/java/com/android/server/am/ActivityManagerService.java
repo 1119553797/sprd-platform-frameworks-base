@@ -288,6 +288,9 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     static final int MY_PID = Process.myPid();
     
+
+    static final String  CONTACTS_PROCESS_NAME = "com.android.contacts";
+
     static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     // add for lowmem & incall
@@ -2201,6 +2204,12 @@ public final class ActivityManagerService extends ActivityManagerNative
             app.pid = 0;
             Slog.e(TAG, "Failure starting process " + app.processName, e);
         }
+        if (LC_RAM_SUPPORT
+                && ((app.info.flags & (ApplicationInfo.FLAG_SYSTEM)) == (ApplicationInfo.FLAG_SYSTEM))
+                && (CONTACTS_PROCESS_NAME.equals(app.processName))) {
+            app.isContactsProcess = true;
+        }
+
     }
 
     void updateUsageStats(ActivityRecord resumedComponent, boolean resumed) {
@@ -14677,6 +14686,12 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         int importance = app.memImportance;
         if (importance == 0 || adj != app.curAdj || schedGroup != app.curSchedGroup) {
+            if (LC_RAM_SUPPORT) {
+                if (app.isContactsProcess && adj > 2) {
+                    adj = 2;
+                    app.curRawAdj = 2;
+                }
+            }
             app.curAdj = adj;
             app.curSchedGroup = schedGroup;
             if (!interesting) {

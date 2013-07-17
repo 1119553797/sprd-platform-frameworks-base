@@ -112,6 +112,7 @@ class ProcessRecord {
     Object adjSource;           // Debugging: option dependent object.
     int adjSourceOom;           // Debugging: oom_adj of adjSource's process.
     Object adjTarget;           // Debugging: target component impacting oom_adj.
+    boolean isContactsProcess;  // S: LC_RAM_SUPPORT, for adjust Contacts' oom_adj
     
     // contains HistoryRecord objects
     final ArrayList<ActivityRecord> activities = new ArrayList<ActivityRecord>();
