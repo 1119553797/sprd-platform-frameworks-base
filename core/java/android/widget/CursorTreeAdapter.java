@@ -404,6 +404,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
         private int mRowIDColumn;
         private MyContentObserver mContentObserver;
         private MyDataSetObserver mDataSetObserver;
+        private boolean mIsObserverRegistered;  //Fix Bug 187751, for monkey IllegalStateException
         
         MyCursorHelper(Cursor cursor) {
             final boolean cursorPresent = cursor != null;
@@ -415,6 +416,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
             if (cursorPresent) {
                 cursor.registerContentObserver(mContentObserver);
                 cursor.registerDataSetObserver(mDataSetObserver);
+                mIsObserverRegistered = true;   //Fix Bug 187751, for monkey IllegalStateException
             }
         }
         
@@ -458,6 +460,7 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
             if (cursor != null) {
                 cursor.registerContentObserver(mContentObserver);
                 cursor.registerDataSetObserver(mDataSetObserver);
+                mIsObserverRegistered = true;   //Fix Bug 187751, for monkey IllegalStateException
                 mRowIDColumn = cursor.getColumnIndex("_id");
                 mDataValid = true;
                 // notify the observers about the new cursor
@@ -474,9 +477,14 @@ public abstract class CursorTreeAdapter extends BaseExpandableListAdapter implem
             if (mCursor == null) {
                 return;
             }
-            
-            mCursor.unregisterContentObserver(mContentObserver);
-            mCursor.unregisterDataSetObserver(mDataSetObserver);
+            //Fix Bug 187751, for monkey IllegalStateException
+            if(mIsObserverRegistered)
+            {
+                mCursor.unregisterContentObserver(mContentObserver);
+                mCursor.unregisterDataSetObserver(mDataSetObserver);
+                mIsObserverRegistered = false;
+            }
+            //Fix Bug 187751, for monkey IllegalStateException
             mCursor.close();
             mCursor = null;
         }
