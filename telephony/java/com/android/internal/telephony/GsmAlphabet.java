@@ -1124,11 +1124,34 @@ public class GsmAlphabet {
 
     /** Highest language code to include in array of single shift counters. */
     private static int sHighestEnabledSingleShiftCode;
-
+    //begin [wulingzheng ,modify for orange,Bug 182931, 20130711]
+    private static final SparseIntArray sUCS2ToCharMap;
+	//end [wulingzheng]
     /**
      * Septet counter for a specific locking shift table and all of
      * the single shift tables that it can be paired with.
      */
+
+    //begin [wulingzheng ,modify for orange,Bug 182931, 20130711]
+    private  static boolean isUcs2Char(char ch)
+    {
+        return (ch & 0xFF80) != 0;
+    }
+    public static String ConvertUCS2Alphbet(String s){
+        SparseIntArray charToLanguageTable = sCharsToGsmTables[0];
+        SparseIntArray charToShiftTable = sCharsToShiftTables[0];
+        StringBuilder buff = new StringBuilder();
+        for (int i = 0; i < s.length(); i++){
+            char ch = s.charAt(i); 
+            if(isUcs2Char(ch) && (charToLanguageTable.get(ch, -1) == -1) && (charToShiftTable.get(ch, -1)) == -1){
+                ch = (char)sUCS2ToCharMap.get(ch, ' '); 
+            }
+            buff.append(ch);
+        }
+        return buff.toString();
+    }
+    //end [wulingzheng]
+    
     private static class LanguagePairCount {
         final int languageCode;
         final int[] septetCounts;
@@ -1486,6 +1509,63 @@ public class GsmAlphabet {
             // B.....CDEF.....0123456789ABCDEF0123456789ABCDEF012345.....6789ABCDEF0123456789ABCDEF
             + "\u06cd[~]\u06d4|ABCDEFGHIJKLMNOPQRSTUVWXYZ          \u20ac                          "
     };
+
+    //begin [wulingzheng ,modify for orange,Bug 182931, 20130711]
+    private static final String[] sUCS2Tables = {
+        "\u00E0\u00E1\u00E2\u00E3\u00E4\u00E5\u00E6\u0101\u01CE",
+        "\u00E7",
+        "\u00E8\u00E9\u00EA\u00EB\u0113\u011B",
+        "\u00EC\u00ED\u00EE\u00EF\u012B\u01D0",
+        "\u00F1\u0144\u0148",
+        "\u00F2\u00F3\u00F4\u00F5\u00F6\u014D\u01D2",
+        "\u0161",
+        "\u00F9u00FAu00FBu00FC\u016B\u01D4\u01D6\u01D8\u01DA\u01DC",
+        "\u00FD\u00FF",
+        "\u00C0\u00C1\u00C2\u00C3\u00C4\u00C5\u00C6",
+        "\u00C7",
+        "\u00C8\u00C9\u00CA\u00CB",
+        "\u00CC\u00CD\u00CE\u00CF",
+        "\u00D1",
+        "\u00D2\u00D3\u00D4\u00D5\u00D6",
+        "0x0160",
+        "\u00D9\u00DA\u00DB\u00DC",
+        "\u00DD\u0178",
+    };
+    private static final char[] sConVertedCharTable = {
+        'a',
+        'c',
+        'e',
+        'i',
+        'n',
+        'o',
+        's',
+        'u',
+        'y',
+        'A',
+        'C',
+        'E',
+        'I',
+        'N',
+        'O',
+        'S',
+        'U',
+        'Y' 
+    }; 
+
+    static {
+        int mapLength = 0;
+        for(int i = 0; i < sUCS2Tables.length; i++){
+            mapLength += sUCS2Tables[i].length();
+        }
+        sUCS2ToCharMap = new SparseIntArray(mapLength);
+        for(int m = 0;m < sUCS2Tables.length; m++){
+            String sUCS2String = sUCS2Tables[m];
+            for(int n = 0; n < sUCS2String.length(); n++){
+                sUCS2ToCharMap.put(sUCS2String.charAt(n),sConVertedCharTable[m]);
+            }
+        }
+    }
+    //end [wulingzheng]
 
     static {
         Resources r = Resources.getSystem();

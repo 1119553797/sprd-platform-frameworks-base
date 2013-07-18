@@ -253,14 +253,15 @@ public class SmsMessage extends SmsMessageBase {
         // Perform null parameter checks.
         if (message == null || destinationAddress == null) {
             return null;
-        }
-
+        } 
+        Log.d("MmsEncodeTest","---languageTable = "+languageTable+" languageShiftTable = "+languageShiftTable +" encoding = "+encoding);
         if (encoding == ENCODING_UNKNOWN) {
             // Find the best encoding to use
             TextEncodingDetails ted = calculateLength(message, false);
             encoding = ted.codeUnitSize;
             languageTable = ted.languageTable;
             languageShiftTable = ted.languageShiftTable;
+            Log.d("MmsEncodeTest","---encoding = "+encoding);
 
             if (encoding == ENCODING_7BIT && (languageTable != 0 || languageShiftTable != 0)) {
                 if (header != null) {
