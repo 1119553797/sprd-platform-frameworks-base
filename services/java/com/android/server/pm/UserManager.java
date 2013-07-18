@@ -42,6 +42,7 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
+import android.os.UserId;
 
 public class UserManager {
     private static final String TAG_NAME = "name";
@@ -59,10 +60,14 @@ public class UserManager {
     private static final String USER_INFO_DIR = "system" + File.separator + "users";
     private static final String USER_LIST_FILENAME = "userlist.xml";
 
+    //private static final String USER_FILENAME = Integer.toString(UserId.myUserId()) + ".xml";
+    private static final String USER_FILENAME = "0.xml";
+
     private SparseArray<UserInfo> mUsers = new SparseArray<UserInfo>();
 
     private final File mUsersDir;
     private final File mUserListFile;
+    private final File mUserFile;
     private int[] mUserIds;
 
     private Installer mInstaller;
@@ -83,6 +88,7 @@ public class UserManager {
                 |FileUtils.S_IROTH|FileUtils.S_IXOTH,
                 -1, -1);
         mUserListFile = new File(mUsersDir, USER_LIST_FILENAME);
+        mUserFile = new File(mUsersDir,USER_FILENAME);
         readUserList();
     }
 
@@ -140,7 +146,7 @@ public class UserManager {
     }
 
     private void readUserListLocked() {
-        if (!mUserListFile.exists()) {
+        if (!mUserListFile.exists()||!mUserFile.exists()) {
             fallbackToSingleUserLocked();
             return;
         }
