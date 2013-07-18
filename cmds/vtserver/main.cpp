@@ -170,6 +170,7 @@ int main(int argc, char** argv)
         ALOGE("=== BTUT test start hciattach! ===\n");
         error = system("setprop ctl.start hciattach");
         sleep(2);
+	 system("rm /data/bteut.txt");
         ALOGE("=== BTUT test hciconfig up! ===\n");
         error = system("hciconfig hci0 up");
         if(error == -1 || error == 127)
@@ -179,7 +180,8 @@ int main(int argc, char** argv)
         }
         else
         {
-            error = system("hcitool cmd 0x03 0x03");
+            error = system("hcitool cmd 0x03 0x0005 0x02 0x00 0x02");
+	     ALOGE("Alex error1==%d\n",error);
             if(error == -1 || error == 127)
             {
                 ALOGE("=== BTUT test failed on cmd 2! ===\n");
@@ -187,7 +189,8 @@ int main(int argc, char** argv)
             }
             else
             {
-                error = system("hcitool cmd 0x03 0x1a 0x03");
+                error = system("hcitool cmd 0x03 0x001A 0x03");
+		  ALOGE("Alex error2==%d\n",error);
                 if(error == -1 || error == 127)
                 {
                     ALOGE("=== BTUT test failed on cmd 3! ===\n");
@@ -195,7 +198,8 @@ int main(int argc, char** argv)
                 }
                 else
                 {
-                    error = system("hcitool cmd 0x03 0x05  0x02 0x00 0x02");
+                    error = system("hcitool cmd 0x06 0x0003");
+		      ALOGE("Alex error3==%d\n",error);
                     if(error == -1 || error == 127)
                     {
                         ALOGE("=== BTUT test failed on cmd 4! ===\n");
@@ -212,6 +216,7 @@ int main(int argc, char** argv)
                         {
                             ALOGE("=== BTUT test succeed! ===\n");
                             ch = '4';
+                            system("rm /data/bteut.txt");
                         }
                     }
                 }
