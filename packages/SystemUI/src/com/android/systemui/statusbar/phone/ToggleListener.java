@@ -65,7 +65,8 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
 
     private static final int[] sDataNetSyncImages = {
             R.drawable.quick_switch_mobile_data_on_sprd,
-            R.drawable.quick_switch_mobile_data_off_sprd
+            R.drawable.quick_switch_mobile_data_off_sprd,
+            R.drawable.quick_switch_mobile_data_ing_sprd
     };
 
     private ToggleViewGroup mToggleViewGroup;
@@ -96,7 +97,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     // indicate whether the data network is on
     private boolean mDataDefaultNetworkOn = false;
     private AlertDialog alertDialog = null;
-    boolean closeFlag = true;
+    boolean closeFlag = false;
 
     public ToggleListener(ToggleViewGroup toggleViewGroup) {
         mToggleViewGroup = toggleViewGroup;
@@ -268,6 +269,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             Log.d(TAG, "ACTION_DATA_CONNECTION_DETTACH");
             updateButtonImage(R.id.quick_switch_mobile_net_icon, sDataNetSyncImages[0]);
             dataViewEnable(true);
+            closeFlag = false;
         }
     }
 
@@ -371,17 +373,17 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         updateButtonImage(R.id.quick_switch_mobile_net_icon, sDataNetSyncImages[1]);
         if (closeFlag) {
             dataViewEnable(false);
+            updateButtonImage(R.id.quick_switch_mobile_net_icon, sDataNetSyncImages[2]);
         }
     }
 
     private void updateDataNetworkButton() {
         Log.d(TAG, "updateDataNetworkBtn");
-        int imageIndex = 1;// init datanetwork is off
-        int[] dataNetSyncImages = new int[2];
-        dataNetSyncImages = sDataNetSyncImages;
+        int imageID = R.drawable.quick_switch_mobile_data_off_sprd ;// init datanetwork is off
+
         // isAirplaneMode or no card can use so update View display and return
         if (mAirplaneEnable || noCanUsedCard()) {
-            updateButtonImage(R.id.quick_switch_mobile_net_icon, dataNetSyncImages[imageIndex]);
+            updateButtonImage(R.id.quick_switch_mobile_net_icon, R.drawable.quick_switch_mobile_data_off_sprd);
             return;
         }
 
@@ -392,8 +394,12 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             mDataDefaultNetworkOn = mConnManager.getMobileDataEnabled();
         }
         Log.d(TAG, "mDataDefaultNetworkOn = " + mDataDefaultNetworkOn);
-        imageIndex = mDataDefaultNetworkOn ? 0 : 1;
-        updateButtonImage(R.id.quick_switch_mobile_net_icon, dataNetSyncImages[imageIndex]);
+        if(closeFlag)
+          imageID = R.drawable.quick_switch_mobile_data_ing_sprd;
+        else
+          imageID = mDataDefaultNetworkOn ? R.drawable.quick_switch_mobile_data_on_sprd : R.drawable.quick_switch_mobile_data_off_sprd;
+
+        updateButtonImage(R.id.quick_switch_mobile_net_icon, imageID);
     }
 
     private void toggleSoundMode() {
@@ -764,6 +770,8 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         }
         setPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
         SimManager simManager = SimManager.get(mContext);
+//20130718 BUG 189145 data connection icon defect START
+        int  mPhoneNumber = TelephonyManager.getPhoneCount();
         if (simManager == null) {
             Log.d(TAG, "simManager = " + null);
             return;
@@ -778,30 +786,34 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         final int closeData = -1;
         boolean isCloseData = false;
         int mobileCount = 0;
-        mSimConnManager = new ConnectivityManager[simNum];
+        mSimConnManager = new ConnectivityManager[mPhoneNumber];
         if (simNum > 0) {
             sims = new Sim[simNum + 1];
         } else {
             sims = sim;
         }
-        for (int i = 0; i < simNum; i++) {
-            sims[i] = sim[i];
+        for (int i = 0; i < mPhoneNumber; i++) {
             mSimConnManager[i] = (ConnectivityManager) mContext
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (!mSimConnManager[i].getMobileDataEnabledByPhoneId(i)) {
-                mobileCount++;
             }
+        for (int i = 0; i < simNum; i++) {
+            sims[i] = sim[i];
         }
-        if (mobileCount == simNum) {
+        ConnectivityManager mConnManager = (ConnectivityManager) mContext
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean mDataDefaultNetworkOn = mConnManager.getMobileDataEnabledByPhoneId(TelephonyManager
+                .getDefaultDataPhoneId(mContext));
+        if (!mDataDefaultNetworkOn) {
             isCloseData = true;
         }
+//20130718 BUG 189145 data connection icon defect END
         sims[simNum] = new Sim(closeData, null, mContext.getResources().getString(
                 R.string.closeData), 0);
         DataListAdapter simsAdapter = new DataListAdapter(mContext, sims,
                 new View.OnClickListener() {
-
-                    public void onClick(View v) {
-                        // TODO Auto-generated method stub
+//20130718 BUG 189145 data connection icon defect START
+                    public void onClick(View v) { // TODO Auto-generated method
+                                                  // stub
                         Log.w(TAG, "simsAdapter data-- position = " + v.getId());
                         int position = v.getId();
                         int phoneId = sims[v.getId()].getPhoneId();
@@ -809,25 +821,14 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                         if (phoneId != -1) {
                             Log.d(TAG, "enter into phoneid = " + phoneId);
                             mSimConnManager[position].setMobileDataEnabledByPhoneId(phoneId, true);
-                            for (int i = 0; i < simNum; i++) {
-                                int indexPhoneId = sims[i].getPhoneId();
-                                if (phoneId == indexPhoneId) {
-                                    mSimConnManager[i].setMobileDataEnabledByPhoneId(phoneId,
-                                            true);
-                                } else {
-                                    mSimConnManager[i].setMobileDataEnabledByPhoneId(indexPhoneId,
-                                            false);
-                                }
-                            }
                             closeFlag = true;
                         } else {
-                            for (int i = 0; i < simNum; i++) {
-                                int indexPhoneId = sims[i].getPhoneId();
-                                mSimConnManager[i].setMobileDataEnabledByPhoneId(indexPhoneId,
-                                        false);
-                            }
+                            if(setPhoneId != -1){
+                                mSimConnManager[setPhoneId].setMobileDataEnabledByPhoneId(setPhoneId,false);
                             closeFlag = false;
                             setPhoneId = -1;
+                                mContext.sendBroadcast(new Intent(Intent.ACTION_DEFAULT_PHONE_CHANGE));
+                            }
                         }
                         toggleDataNetwork();
                         if (phoneId != -1) {
@@ -836,10 +837,9 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                             intent.putExtra("SETTING_ID", setPhoneId);
                             intent.setAction(Intent.ACTION_DATA_CONNECTION_CHANGED);
                             mContext.sendBroadcast(intent);
-                        }
-                    }
+                        }}
                 }, com.android.internal.R.layout.select_sim_singlechoice, isCloseData);
-
+//20130718 BUG 189145 data connection icon defect END
         AlertDialog.Builder b = new AlertDialog.Builder(mContext);
         b.setCancelable(true)
                 .setTitle(R.string.dataConnectSetting)
