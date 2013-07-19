@@ -1388,6 +1388,13 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                         NetworkInfo info = null;
                         try {
                             info = mConnService.getNetworkInfo(netType.intValue());
+                            //Bug#178886 modify start
+                            if(DBG && info!= null) {
+                                Log.d(TAG,"chooseUpstreamType info name is " + info.getTypeName());
+                                Log.d(TAG,"chooseUpstreamType info detail is " + info.getDetailedState());
+                                Log.d(TAG,"chooseUpstreamType info state is " + info.getState());
+                            }
+                            //Bug#178886 modify end
                         } catch (RemoteException e) { }
                         if ((info != null) && info.isConnected()) {
                             upType = netType.intValue();
