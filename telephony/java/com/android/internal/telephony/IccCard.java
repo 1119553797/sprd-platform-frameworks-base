@@ -694,9 +694,11 @@ public class IccCard {
 //            broadcastGetIccStatusDoneIntent();
 //            if(mDbg) log("Notify SIM ready.");
 //20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
-        }else if(transitionedIntoCardPresent){
-	        if(mDbg) log("Notify SIM present.");
-	        broadcastIccCardPresentIntent();
+        }
+
+        if(transitionedIntoCardPresent){
+            if(mDbg) log("Notify SIM present.");
+            broadcastIccCardPresentIntent();
         }
 
         if (mDbg) {
