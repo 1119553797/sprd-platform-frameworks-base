@@ -103,8 +103,9 @@ static void recorderCallback(int event, void* user, void *info) {
     }
     if (event == AudioRecord::EVENT_MORE_DATA) {
         // set size to 0 to signal we're not using the callback to read more data
-        //AudioRecord::Buffer* pBuff = (AudioRecord::Buffer*)info;
-        //pBuff->size = 0;
+        AudioRecord::Buffer* pBuff = (AudioRecord::Buffer*)info;
+        pBuff->size = 0;
+    #if 0
         JNIEnv *env = AndroidRuntime::getJNIEnv();
         if (user && env) {
             AudioRecord::Buffer * pBuffer = (AudioRecord::Buffer *) info;
@@ -125,7 +126,7 @@ static void recorderCallback(int event, void* user, void *info) {
             }
             env->DeleteLocalRef(drectBuffer);
         }
-
+    #endif
     } else if (event == AudioRecord::EVENT_MARKER) {
         JNIEnv *env = AndroidRuntime::getJNIEnv();
         if (user && env) {
