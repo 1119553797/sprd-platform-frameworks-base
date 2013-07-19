@@ -328,7 +328,10 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                     return;
                 }
                 if (!isSecure()) {
-                    getCallback().keyguardDone(true);
+//20130718 Wenny Cheng BUG 191209 lockscreen performance tuning START
+                    toDelayUnlock();
+                    // getCallback().keyguardDone(true);
+//20130718 Wenny Cheng BUG 191209 lockscreen performance tuning END
                 } else {
                     updateScreen(Mode.UnlockScreen, false);
                 }
@@ -513,7 +516,23 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
         updateScreen(getInitialMode(), false);
         maybeEnableFallback(context);
     }
+//20130718 Wenny Cheng BUG 191209 lockscreen performance tuning START
+    private void toDelayUnlock() {
+        removeView(mLockScreen);
+        new Thread() {
 
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                getCallback().keyguardDone(true);
+            };
+        }.start();
+    }
+//20130718 Wenny Cheng BUG 191209 lockscreen performance tuning END
     private class AccountAnalyzer implements AccountManagerCallback<Bundle> {
         private final AccountManager mAccountManager;
         private final Account[] mAccounts;
