@@ -2379,6 +2379,9 @@ public final class Settings {
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
 
         //begin [wulingzheng ,modify for orange,Bug 182931, 20130711]
+        /**
+        * @hide
+        */
         public static final String SMS_ENCODE_TYPE = "SMS_ENCODE_TYPE";
         //end [wulingzheng]
     }
