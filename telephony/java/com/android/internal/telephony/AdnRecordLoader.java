@@ -27,6 +27,8 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.os.Looper;
 import com.android.internal.telephony.IccUtils;
+import com.android.internal.telephony.IccConstants;
+import android.os.SystemProperties;
 
 public class AdnRecordLoader extends IccThreadHandler {
     static String LOG_TAG = "AdnRecordLoader";
@@ -101,6 +103,8 @@ public class AdnRecordLoader extends IccThreadHandler {
     static final int EVENT_EXT_LOAD_ALL_DONE = 20;
 	// add multi record and email in usim end
 
+    static final int SMSC_LIST_MAX_NUM = 5;
+    
     //***** Constructor
 
     public AdnRecordLoader(PhoneBase phone) {
@@ -474,9 +478,16 @@ public class AdnRecordLoader extends IccThreadHandler {
                                 IccPhoneBookOperationException.LOAD_ADN_FAIL,
                                 "load all adn failed", ar.exception);
                     }
-                    adns = new ArrayList<AdnRecord>(datas.size());
+
+                    boolean property = SystemProperties.getBoolean("ro.support.orange", true);
+                    int s = datas.size();
+                    if(property && ef==IccConstants.EF_SMSP) {
+                        s = datas.size()>SMSC_LIST_MAX_NUM?SMSC_LIST_MAX_NUM:datas.size();
+                    }
+                    adns = new ArrayList<AdnRecord>(s);
                     Log.d(LOG_TAG, "efid = " + ef + " datas.size() = " + datas.size());
-                    for (int i = 0, s = datas.size(); i < s; i++) {
+
+                    for (int i = 0; i < s; i++) {
                         adn = new AdnRecord(ef, 1 + i, datas.get(i));
                         adns.add(adn);
                     }

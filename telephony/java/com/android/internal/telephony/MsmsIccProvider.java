@@ -61,6 +61,7 @@ public class MsmsIccProvider extends IccProvider {
     private static final int FDN_S = 4;
     private static final int GAS = 5;
     private static final int LND = 6;
+    private static final int SMSP = 7;
 
     private static final String STR_TAG = "tag";
     private static final String STR_NUMBER = "number";
@@ -94,6 +95,7 @@ public class MsmsIccProvider extends IccProvider {
         URL_MATCHER.addURI(AUTHORITY, "fdn_s", FDN_S);
         URL_MATCHER.addURI(AUTHORITY, "gas", GAS);
         URL_MATCHER.addURI(AUTHORITY, "lnd", LND);
+        URL_MATCHER.addURI(AUTHORITY, "smsp", SMSP);
 
         URL_MATCHER.addURI(AUTHORITY, "#/adn", ADN);
         URL_MATCHER.addURI(AUTHORITY, "#/fdn", FDN);
@@ -101,6 +103,7 @@ public class MsmsIccProvider extends IccProvider {
         URL_MATCHER.addURI(AUTHORITY, "#/fdn_s", FDN_S);
         URL_MATCHER.addURI(AUTHORITY, "#/gas", GAS);
         URL_MATCHER.addURI(AUTHORITY, "#/lnd", LND);
+        URL_MATCHER.addURI(AUTHORITY, "#/smsp", SMSP);
 
         // to match phoneId
         for (int i = 0; i < PHONE_COUNT; i++) {
@@ -162,6 +165,9 @@ public class MsmsIccProvider extends IccProvider {
             case GAS:
                 return loadGas(getPhoneId(url));
 
+            case SMSP:
+                return loadFromEf(IccConstants.EF_SMSP, getPhoneId(url));
+
             default:
                 throw new IllegalArgumentException("Unknown URL " + url);
         }
@@ -211,7 +217,11 @@ public class MsmsIccProvider extends IccProvider {
             case GAS:
                 isGas = true;
                 break;
-                
+
+            case SMSP:
+                efType = IccConstants.EF_SMSP;
+                break;
+
             default:
                 throw new UnsupportedOperationException(
                         "Cannot insert into URL: " + url);
@@ -521,13 +531,20 @@ public class MsmsIccProvider extends IccProvider {
                 isGas = true;
                 break;
 
+            case SMSP:
+                efType = IccConstants.EF_SMSP;
+                //isFdn = true;
+                break;
+
             default:
                 throw new UnsupportedOperationException(
                         "Cannot insert into URL: " + url);
         }
 
+        String tag = values.getAsString(STR_TAG);
         String newTag = values.getAsString(STR_TAG);
-        String newNumber = values.getAsString(STR_NUMBER);
+		String number = values.getAsString(STR_NUMBER);
+        String newNumber = values.getAsString(STR_NEW_NUMBER);
         Integer index = values.getAsInteger(STR_INDEX);         //maybe simIndex or groupId
         String newanr = values.getAsString(STR_ANR);
         String newaas = values.getAsString(STR_AAS);
@@ -553,8 +570,6 @@ public class MsmsIccProvider extends IccProvider {
 
         if(isFdn){
             //added for fdn
-            String tag = "";
-            String number = "";
             tag = values.getAsString(STR_TAG);
             number = values.getAsString(STR_NUMBER);
             newTag = values.getAsString(STR_NEW_TAG);
@@ -654,7 +669,11 @@ public class MsmsIccProvider extends IccProvider {
 
             if (DBG) log("adnRecords.size=" + N);
             for (int i = 0; i < N ; i++) {
-                loadRecord(adnRecords.get(i), cursor, i);
+                if (efType != IccConstants.EF_SMSP) {
+                    loadRecord(adnRecords.get(i), cursor, i);
+                } else {
+                    loadSMSPRecord(adnRecords.get(i), cursor, i);
+                }
             }
             return cursor;
         } else {
@@ -1018,6 +1037,21 @@ public class MsmsIccProvider extends IccProvider {
             log("updateUsimGroupById: " + success);
         return result;
     }   
-    
+
+    private void loadSMSPRecord(AdnRecord record, MatrixCursor cursor, int id) {
+            Object[] contact = new Object[ADDRESS_BOOK_COLUMN_NAMES.length];
+            String alphaTag = record.getAlphaTag();
+            String number = record.getNumber();
+
+            if (DBG) log("loadSMSPRecord: " + alphaTag + ", " + number + ",");
+            contact[0] = alphaTag;
+            contact[1] = number;
+
+            // yeezone:jinwei get sim index from adn record
+            String sim_index = String.valueOf(record.getRecordNumber());
+            Log.d("MsmsIccProvider", "loadRecord::sim_index = " + sim_index);
+
+            cursor.addRow(contact);
+    }
 
 }

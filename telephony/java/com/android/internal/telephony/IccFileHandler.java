@@ -562,6 +562,7 @@ public abstract class IccFileHandler extends IccThreadHandler implements IccCons
         case EF_EXT1:
         case EF_EXT2:
         case EF_EXT3:
+        case EF_SMSP:
             return MF_SIM + DF_TELECOM;
 
         case EF_ICCID:
