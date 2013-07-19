@@ -2377,6 +2377,10 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+
+        //begin [wulingzheng ,modify for orange,Bug 182931, 20130711]
+        public static final String SMS_ENCODE_TYPE = "SMS_ENCODE_TYPE";
+        //end [wulingzheng]
     }
 
     /**

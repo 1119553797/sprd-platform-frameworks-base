@@ -67,6 +67,9 @@ import static android.telephony.SmsManager.RESULT_ERROR_LIMIT_EXCEEDED;
 import static android.telephony.SmsManager.RESULT_ERROR_NO_SERVICE;
 import static android.telephony.SmsManager.RESULT_ERROR_NULL_PDU;
 import static android.telephony.SmsManager.RESULT_ERROR_RADIO_OFF;
+//begin [wulingzheng ,modify for orange,Bug 182931, 20130711]
+import android.provider.Settings;
+//end [wulingzheng]
 
 public abstract class SMSDispatcher extends Handler {
     static final String TAG = "SMS";    // accessed from inner class
@@ -817,17 +820,25 @@ public abstract class SMSDispatcher extends Handler {
         int encoding = android.telephony.SmsMessage.ENCODING_UNKNOWN;
 
         mRemainingMessages = msgCount;
-
-        TextEncodingDetails[] encodingForParts = new TextEncodingDetails[msgCount];
-        for (int i = 0; i < msgCount; i++) {
-            TextEncodingDetails details = calculateLength(parts.get(i), false);
-            if (encoding != details.codeUnitSize
-                    && (encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN
-                            || encoding == android.telephony.SmsMessage.ENCODING_7BIT)) {
-                encoding = details.codeUnitSize;
-            }
-            encodingForParts[i] = details;
+        //begin [wulingzheng ,modify for orange,Bug 182931, 20130711]
+        if(SystemProperties.getBoolean("ro.support.orange", true)){
+            encoding = Settings.System.getInt(mContext.getContentResolver(), Settings.System.SMS_ENCODE_TYPE, 1);
         }
+        Log.d("MmsEncodeTest","orange ---sendMultipartText->>encoding = "+encoding);
+        TextEncodingDetails[] encodingForParts = new TextEncodingDetails[msgCount];
+        if(encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN){
+                for (int i = 0; i < msgCount; i++) {
+                TextEncodingDetails details = calculateLength(parts.get(i), false);
+                if (encoding != details.codeUnitSize
+                        && (encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN
+                                || encoding == android.telephony.SmsMessage.ENCODING_7BIT)) {
+                    encoding = details.codeUnitSize;
+                }
+                encodingForParts[i] = details;
+            }
+        }
+
+        //end [wulingzheng]
 
         for (int i = 0; i < msgCount; i++) {
             SmsHeader.ConcatRef concatRef = new SmsHeader.ConcatRef();
@@ -845,7 +856,8 @@ public abstract class SMSDispatcher extends Handler {
             smsHeader.concatRef = concatRef;
 
             // Set the national language tables for 3GPP 7-bit encoding, if enabled.
-            if (encoding == android.telephony.SmsMessage.ENCODING_7BIT) {
+            Log.d("MmsEncodeTest","orange ---sendMultipartText->>encodingForParts[i] = "+encodingForParts[i]);
+            if (encoding == android.telephony.SmsMessage.ENCODING_7BIT && encodingForParts[i] != null) {
                 smsHeader.languageTable = encodingForParts[i].languageTable;
                 smsHeader.languageShiftTable = encodingForParts[i].languageShiftTable;
             }

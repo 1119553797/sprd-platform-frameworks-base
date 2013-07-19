@@ -49,6 +49,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import static android.telephony.SmsMessage.MessageClass;
+//begin [wulingzheng ,modify for orange,Bug 182931, 20130711]
+import android.provider.Settings;
+//end [wulingzheng]
 
 public final class GsmSMSDispatcher extends SMSDispatcher {
     private static final String TAG = "GSM";
@@ -276,8 +279,20 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27 begin ===
         SmsMessage.getSmsValidity(this.mContext, mPhone.getPhoneId());
         //=== fixed CR<NEWMSOO112910> by luning at 11-08-27  end  ===
-        SmsMessage.SubmitPdu pdu = SmsMessage.getSubmitPdu(
-                scAddr, destAddr, text, (deliveryIntent != null));
+        //begin [wulingzheng ,modify for orange,Bug 182931, 20130711]
+        SmsMessage.SubmitPdu pdu;
+        if(SystemProperties.getBoolean("ro.support.orange", true)){
+            int encodeType = Settings.System.getInt(mContext.getContentResolver(), Settings.System.SMS_ENCODE_TYPE, 1);
+            Log.d(TAG,"orange ---sendText->>encodeType = "+encodeType);
+            pdu = SmsMessage.getSubmitPdu(
+                scAddr, destAddr, text, (deliveryIntent != null), null, encodeType, 0 , 0);
+        }
+        //end [wulingzheng]
+        else{
+            pdu = SmsMessage.getSubmitPdu(
+                    scAddr, destAddr, text, (deliveryIntent != null));
+        }
+
         if (pdu != null) {
             sendRawPdu(pdu.encodedScAddress, pdu.encodedMessage, sentIntent, deliveryIntent, destAddr);
         } else {
