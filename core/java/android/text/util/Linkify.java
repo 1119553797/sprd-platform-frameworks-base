@@ -86,6 +86,9 @@ public class Linkify {
     *  Bit field indicating that USSD number should be matched in methods that
     *  take an options mask
     */
+    /**
+    *@hide
+    */
     public static final int USSD_NUMBERS = 0x10;
 
     /**

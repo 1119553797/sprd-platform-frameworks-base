@@ -219,6 +219,9 @@ public class Patterns {
     *
     * we also reffered to  class GsmMmiCode.newFromDialString().
     */
+    /**
+    *@hide
+    */
     public static final Pattern USSD
         = Pattern.compile(     
                "("
