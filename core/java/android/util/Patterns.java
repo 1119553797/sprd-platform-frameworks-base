@@ -209,6 +209,32 @@ public class Patterns {
                 + "(\\([0-9]+\\)[\\- \\.]*)?"               // (<digits>)<sdd>*
                 + "([0-9][0-9\\- \\.]+[0-9])"); // <digit><digit|sdd>+<digit>
 
+    // David.deng begine for Bug180618 
+    /*
+    * 3G TS 22.090 V3.1.0
+    * A network supporting USSD shall examine the alphabet indicator according to the following rules:
+    * Case a)	1, 2 or 3 digits from the set (*, #) followed by 1X(Y), where X=any number 0-4, Y=any number 0-9, then, optionally "* followed by any number of any characters", and concluding with # SEND:
+    * Case b)	1, 2 or 3 digits from the set (*, #) followed by 1X(Y), where X=any number 5-9, Y=any number 0-9, then, optionally "* followed by any number of any characters", and concluding with # SEND:
+    * Case c)	7(Y) SEND, where Y=any number 0-9:
+    *
+    * we also reffered to  class GsmMmiCode.newFromDialString().
+    */
+    public static final Pattern USSD
+        = Pattern.compile(     
+               "("
+                +"[\\*#]{1,3}"                          //USSD begin with 1~3 * or #
+                + "1\\d(\\d)?"                            //service number (SC). 100~199 10~19
+                + "(\\*[0-9]{1,15})*"               //supplementary information (SI) with * ahead. less then 15 digits suggested
+                + "#"                                         //end with #
+                +")"
+                +"|"
+                +"("
+                +"\\b7(\\d)?\\b"                       //short ussd like 7(X) . X(0,9)
+                +")"
+                );
+    // David.deng end
+
+
     /**
      *  Convenience method to take all of the non-null matching groups in a
      *  regex Matcher and return them as a concatenated string.

@@ -16,6 +16,9 @@
 
 package android.text.util;
 
+// David.deng begin for Bug180618 
+import android.os.SystemProperties;
+// David.deng end 
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.URLSpan;
@@ -77,6 +80,13 @@ public class Linkify {
      *  take an options mask
      */
     public static final int MAP_ADDRESSES = 0x08;
+
+    /*
+    *    David.deng begine for Bug180618 
+    *  Bit field indicating that USSD number should be matched in methods that
+    *  take an options mask
+    */
+    public static final int USSD_NUMBERS = 0x10;
 
     /**
      *  Bit mask indicating that all available patterns should be matched in
@@ -227,6 +237,14 @@ public class Linkify {
                 new String[] { "tel:" },
                 sPhoneNumberMatchFilter, sPhoneNumberTransformFilter, mask);
         }
+        // David.deng begine for Bug180618
+        boolean isOrange = SystemProperties.getBoolean("ro.support.orange", true);
+        if (isOrange && (mask & USSD_NUMBERS) != 0) {
+            gatherLinks(links, text, Patterns.USSD,
+                new String[] { "ussd:" },
+                null, null, mask);
+        }
+        // David.deng end
 
         if ((mask & MAP_ADDRESSES) != 0) {
             gatherMapLinks(links, text);
@@ -596,6 +614,15 @@ public class Linkify {
                 new String[] { "tel:" },
                 sPhoneNumberMatchFilter, sPhoneNumberTransformFilter, mask);
         }
+        
+        // David.deng begine for Bug180618 
+        boolean isOrange = SystemProperties.getBoolean("ro.support.orange", true);
+        if (isOrange && (mask & USSD_NUMBERS) != 0) {
+            gatherLinks(links, text, Patterns.USSD,
+                new String[] { "ussd:" },
+                null, null, mask);
+        }
+        // David.deng end
 
         if ((mask & MAP_ADDRESSES) != 0) {
             gatherMapLinks(links, text);
