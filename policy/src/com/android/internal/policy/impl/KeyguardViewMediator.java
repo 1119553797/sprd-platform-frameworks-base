@@ -684,6 +684,9 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
      * @see #handleNotifyScreenOn
      */
     private void notifyScreenOnLocked(KeyguardViewManager.ShowListener showListener) {
+        if(engModeFlag){
+            return ;
+        }
         if (DEBUG) Log.d(TAG, "notifyScreenOnLocked");
         Message msg = mHandler.obtainMessage(NOTIFY_SCREEN_ON, showListener);
         mHandler.sendMessage(msg);

@@ -183,11 +183,11 @@ class ServerThread extends Thread {
                 ServiceManager.addService("telephony.registry",
                         new TelephonyRegistry(context, 0));
             }
-
-            Slog.i(TAG, "Scheduling Policy");
-            ServiceManager.addService(Context.SCHEDULING_POLICY_SERVICE,
-                    new SchedulingPolicyService());
-
+            if(engModeFlag == false){
+                Slog.i(TAG, "Scheduling Policy");
+                ServiceManager.addService(Context.SCHEDULING_POLICY_SERVICE,
+                        new SchedulingPolicyService());
+            }
             AttributeCache.init(context);
 
             Slog.i(TAG, "Package Manager");
@@ -404,13 +404,14 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 reportWtf("starting StatusBarManagerService", e);
             }
-
-            try {
-                Slog.i(TAG, "Clipboard Service");
-                ServiceManager.addService(Context.CLIPBOARD_SERVICE,
-                    new ClipboardService(context));
-            } catch (Throwable e) {
-                reportWtf("starting Clipboard Service", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "Clipboard Service");
+                    ServiceManager.addService(Context.CLIPBOARD_SERVICE,
+                        new ClipboardService(context));
+                } catch (Throwable e) {
+                    reportWtf("starting Clipboard Service", e);
+                }
             }
 
             try {
@@ -421,12 +422,14 @@ class ServerThread extends Thread {
                 reportWtf("starting NetworkManagement Service", e);
             }
 
-            try {
-                Slog.i(TAG, "Text Service Manager Service");
-                tsms = new TextServicesManagerService(context);
-                ServiceManager.addService(Context.TEXT_SERVICES_MANAGER_SERVICE, tsms);
-            } catch (Throwable e) {
-                reportWtf("starting Text Service Manager Service", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "Text Service Manager Service");
+                    tsms = new TextServicesManagerService(context);
+                    ServiceManager.addService(Context.TEXT_SERVICES_MANAGER_SERVICE, tsms);
+                } catch (Throwable e) {
+                    reportWtf("starting Text Service Manager Service", e);
+                }
             }
 
             try {
@@ -485,21 +488,24 @@ class ServerThread extends Thread {
                 reportWtf("starting Service Discovery Service", e);
             }
 
-            try {
-                Slog.i(TAG, "Throttle Service");
-                throttle = new ThrottleService(context);
-                ServiceManager.addService(
-                        Context.THROTTLE_SERVICE, throttle);
-            } catch (Throwable e) {
-                reportWtf("starting ThrottleService", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "Throttle Service");
+                    throttle = new ThrottleService(context);
+                    ServiceManager.addService(
+                            Context.THROTTLE_SERVICE, throttle);
+                } catch (Throwable e) {
+                    reportWtf("starting ThrottleService", e);
+                }
             }
-
-            try {
-                Slog.i(TAG, "UpdateLock Service");
-                ServiceManager.addService(Context.UPDATE_LOCK_SERVICE,
-                        new UpdateLockService(context));
-            } catch (Throwable e) {
-                reportWtf("starting UpdateLockService", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "UpdateLock Service");
+                    ServiceManager.addService(Context.UPDATE_LOCK_SERVICE,
+                            new UpdateLockService(context));
+                } catch (Throwable e) {
+                    reportWtf("starting UpdateLockService", e);
+                }
             }
 
             /*
@@ -533,13 +539,14 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 reportWtf("starting Notification Manager", e);
             }
-
-            try {
-                Slog.i(TAG, "Device Storage Monitor");
-                ServiceManager.addService(DeviceStorageMonitorService.SERVICE,
-                        new DeviceStorageMonitorService(context));
-            } catch (Throwable e) {
-                reportWtf("starting DeviceStorageMonitor service", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "Device Storage Monitor");
+                    ServiceManager.addService(DeviceStorageMonitorService.SERVICE,
+                            new DeviceStorageMonitorService(context));
+                } catch (Throwable e) {
+                    reportWtf("starting DeviceStorageMonitor service", e);
+                }
             }
 
             try {
@@ -557,13 +564,14 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 reportWtf("starting Country Detector", e);
             }
-
-            try {
-                Slog.i(TAG, "Search Service");
-                ServiceManager.addService(Context.SEARCH_SERVICE,
-                        new SearchManagerService(context));
-            } catch (Throwable e) {
-                reportWtf("starting Search Service", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "Search Service");
+                    ServiceManager.addService(Context.SEARCH_SERVICE,
+                            new SearchManagerService(context));
+                } catch (Throwable e) {
+                    reportWtf("starting Search Service", e);
+                }
             }
 
             try {
@@ -604,15 +612,15 @@ class ServerThread extends Thread {
                     reportWtf("starting Fm Service", e);
                 }
             }
-
-            try {
-                Slog.i(TAG, "Dock Observer");
-                    // Listen for dock station changes
-                dock = new DockObserver(context, power);
-            } catch (Throwable e) {
-                reportWtf("starting DockObserver", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "Dock Observer");
+                        // Listen for dock station changes
+                    dock = new DockObserver(context, power);
+                } catch (Throwable e) {
+                    reportWtf("starting DockObserver", e);
+                }
             }
-
             try {
                 Slog.i(TAG, "Wired Accessory Observer");
                 // Listen for wired headset changes
@@ -638,42 +646,48 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting SerialService", e);
             }
-
-            try {
-                Slog.i(TAG, "UI Mode Manager Service");
-                // Listen for UI mode changes
-                uiMode = new UiModeManagerService(context);
-            } catch (Throwable e) {
-                reportWtf("starting UiModeManagerService", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "UI Mode Manager Service");
+                    // Listen for UI mode changes
+                    uiMode = new UiModeManagerService(context);
+                } catch (Throwable e) {
+                    reportWtf("starting UiModeManagerService", e);
+                }
             }
-
-            try {
-                Slog.i(TAG, "Backup Service");
-                ServiceManager.addService(Context.BACKUP_SERVICE,
-                        new BackupManagerService(context));
-            } catch (Throwable e) {
-                Slog.e(TAG, "Failure starting Backup Service", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "Backup Service");
+                    ServiceManager.addService(Context.BACKUP_SERVICE,
+                            new BackupManagerService(context));
+                } catch (Throwable e) {
+                    Slog.e(TAG, "Failure starting Backup Service", e);
+                }
             }
-            try {
-                Slog.i(TAG, "AppWidget Service");
-                appWidget = new AppWidgetService(context);
-                ServiceManager.addService(Context.APPWIDGET_SERVICE, appWidget);
-            } catch (Throwable e) {
-                reportWtf("starting AppWidget Service", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "AppWidget Service");
+                    appWidget = new AppWidgetService(context);
+                    ServiceManager.addService(Context.APPWIDGET_SERVICE, appWidget);
+                } catch (Throwable e) {
+                    reportWtf("starting AppWidget Service", e);
+                }
             }
-
-            try {
-                Slog.i(TAG, "Recognition Service");
-                recognition = new RecognitionManagerService(context);
-            } catch (Throwable e) {
-                reportWtf("starting Recognition Service", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "Recognition Service");
+                    recognition = new RecognitionManagerService(context);
+                } catch (Throwable e) {
+                    reportWtf("starting Recognition Service", e);
+                }
             }
-
-            try {
-                Slog.i(TAG, "DiskStats Service");
-                ServiceManager.addService("diskstats", new DiskStatsService(context));
-            } catch (Throwable e) {
-                reportWtf("starting DiskStats Service", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "DiskStats Service");
+                    ServiceManager.addService("diskstats", new DiskStatsService(context));
+                } catch (Throwable e) {
+                    reportWtf("starting DiskStats Service", e);
+                }
             }
 
             try {
@@ -694,20 +708,22 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 reportWtf("starting NetworkTimeUpdate service", e);
             }
-
-            try {
-                Slog.i(TAG, "CommonTimeManagementService");
-                commonTimeMgmtService = new CommonTimeManagementService(context);
-                ServiceManager.addService("commontime_management", commonTimeMgmtService);
-            } catch (Throwable e) {
-                reportWtf("starting CommonTimeManagementService service", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "CommonTimeManagementService");
+                    commonTimeMgmtService = new CommonTimeManagementService(context);
+                    ServiceManager.addService("commontime_management", commonTimeMgmtService);
+                } catch (Throwable e) {
+                    reportWtf("starting CommonTimeManagementService service", e);
+                }
             }
-
-            try {
-                Slog.i(TAG, "CertBlacklister");
-                CertBlacklister blacklister = new CertBlacklister(context);
-            } catch (Throwable e) {
-                reportWtf("starting CertBlacklister", e);
+            if(engModeFlag == false){
+                try {
+                    Slog.i(TAG, "CertBlacklister");
+                    CertBlacklister blacklister = new CertBlacklister(context);
+                } catch (Throwable e) {
+                    reportWtf("starting CertBlacklister", e);
+                }
             }
             
             if (context.getResources().getBoolean(

@@ -81,7 +81,7 @@ public class SimManagerService extends ISimManager.Stub {
     public SimManagerService(Context context) {
         Context temp = null;
         try {
-            temp = context.createPackageContext("com.android.settings", Context.CONTEXT_IGNORE_SECURITY);
+            temp = context.createPackageContext("com.android.phone", Context.CONTEXT_IGNORE_SECURITY);
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         };
