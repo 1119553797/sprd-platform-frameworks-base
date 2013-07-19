@@ -621,6 +621,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             DataConnectionTracker dcTracker = phone.mDataConnectionTracker;
             powerOffRadioSafely(dcTracker);
         } // Otherwise, we're in the desired state
+        else{
+            log("setPowerStateToDesired error: mDesiredPowerState="+mDesiredPowerState+" -force --"+force);
+             phone.notifyServiceStateChanged(ss);
+        }
     }
 
 
