@@ -52,6 +52,7 @@ public class IccProvider extends ContentProvider {
     private static final int ADN = 1;
     private static final int FDN = 2;
     private static final int SDN = 3;
+    private static final int SMSP = 4;
 
     private static final String STR_TAG = "tag";
     private static final String STR_NUMBER = "number";
@@ -65,6 +66,7 @@ public class IccProvider extends ContentProvider {
         URL_MATCHER.addURI("icc", "adn", ADN);
         URL_MATCHER.addURI("icc", "fdn", FDN);
         URL_MATCHER.addURI("icc", "sdn", SDN);
+        URL_MATCHER.addURI("icc", "smsp", SMSP);
     }
 
 
@@ -86,6 +88,9 @@ public class IccProvider extends ContentProvider {
             case SDN:
                 return loadFromEf(IccConstants.EF_SDN);
 
+            case SMSP:
+                return loadFromEf(IccConstants.EF_SMSP);
+
             default:
                 throw new IllegalArgumentException("Unknown URL " + url);
         }
@@ -97,6 +102,7 @@ public class IccProvider extends ContentProvider {
             case ADN:
             case FDN:
             case SDN:
+            case SMSP:
                 return "vnd.android.cursor.dir/sim-contact";
 
             default:
@@ -261,6 +267,10 @@ public class IccProvider extends ContentProvider {
             case FDN:
                 efType = IccConstants.EF_FDN;
                 pin2 = values.getAsString("pin2");
+                break;
+
+            case SMSP:
+                efType = IccConstants.EF_SMSP;
                 break;
 
             default:

@@ -29,6 +29,8 @@ import com.android.internal.telephony.GsmAlphabet;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import com.android.internal.telephony.IccUtils;
+import com.android.internal.telephony.IccConstants;
+import android.os.SystemProperties;
 
 /**
  *
@@ -57,11 +59,26 @@ public class AdnRecord implements Parcelable {
     String gas = null;
     int index = -1;
 
+    //Bug#178439: Orange request, start
+    int para_ind=0xff;
+    int prtc_idf=0xff;
+    int data_cod=0xff;
+    int vald_prd=0xff;
+    //Bug#178439: Orange request, end
+
     //***** Constants
 
     // In an ADN record, everything but the alpha identifier
     // is in a footer that's 14 bytes
     static final int FOOTER_SIZE_BYTES = 14;
+
+    //Bug#178439: Orange request, start
+    static final int SMSP_SMSC_FOOTER_SIZE_BYTES = 15;
+    static final int SMSP_PARAMETER_INDICATOR_BYTE_OFFSET = 28;
+    static final int SMSP_PROTOCOL_IDENTIFIER_BYTE_OFFSET = 3;
+    static final int SMSP_DATA_CODING_SCHEME_BYTE_OFFSET  = 2;
+    static final int SMSP_VALIDITY_PERIOD_BYTE_OFFSET     = 1;
+    //Bug#178439: Orange request, end
 
     // Maximum size of the un-extended number field
     static final int MAX_NUMBER_SIZE_BYTES = 11;
@@ -111,6 +128,11 @@ public class AdnRecord implements Parcelable {
             String sne;
             String grp;
             String gas;
+            // add for SMSP
+            int para_ind;
+            int prtc_idf;
+            int data_cod;
+            int vald_prd;
 
             efid = source.readInt();
             recordNumber = source.readInt();
@@ -123,6 +145,10 @@ public class AdnRecord implements Parcelable {
             sne = source.readString();
             grp = source.readString();
             gas = source.readString();
+            para_ind = source.readInt();
+            prtc_idf = source.readInt();
+            data_cod = source.readInt();
+            vald_prd = source.readInt();
             return new AdnRecord(efid, recordNumber, alphaTag, number, emails,
                     anr, aas, sne, grp, gas);
         }
@@ -363,6 +389,10 @@ public class AdnRecord implements Parcelable {
         dest.writeString(sne);
         dest.writeString(grp);
         dest.writeString(gas);
+        dest.writeInt(para_ind);
+        dest.writeInt(prtc_idf);
+        dest.writeInt(data_cod);
+        dest.writeInt(vald_prd);
     }
 
     /**
@@ -378,7 +408,14 @@ public class AdnRecord implements Parcelable {
         byte[] bcdNumber = null;
         byte[] byteTag = null;
         byte[] adnString = null;
-        int footerOffset = recordSize - FOOTER_SIZE_BYTES;
+        int footerOffset = recordSize;
+
+        if(this.efid==IccConstants.EF_SMSP) {
+            footerOffset = recordSize - SMSP_SMSC_FOOTER_SIZE_BYTES;
+        } else {
+            footerOffset = recordSize - FOOTER_SIZE_BYTES;
+        }
+
         // create an empty record
         adnString = new byte[recordSize];
         for (int i = 0; i < recordSize; i++) {
@@ -407,7 +444,20 @@ public class AdnRecord implements Parcelable {
             throw new IccPhoneBookOperationException(IccPhoneBookOperationException.OVER_NAME_MAX_LENGTH,
                     "Max length of name is "+footerOffset);
         } else {
-            if (!TextUtils.isEmpty(numberNoPlus) && numberNoPlus.length() <= MAX_LENTH_ADN) {
+            if(this.efid==IccConstants.EF_SMSP) {
+                bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(number);
+                System.arraycopy(bcdNumber, 0, adnString,
+                        footerOffset + 1, bcdNumber.length);
+                adnString[footerOffset] = (byte) (bcdNumber.length);
+
+                adnString[recordSize-SMSP_PARAMETER_INDICATOR_BYTE_OFFSET]= (byte) para_ind;
+                adnString[recordSize-SMSP_PROTOCOL_IDENTIFIER_BYTE_OFFSET]= (byte) prtc_idf;
+                adnString[recordSize-SMSP_DATA_CODING_SCHEME_BYTE_OFFSET] = (byte) data_cod;
+                adnString[recordSize-SMSP_VALIDITY_PERIOD_BYTE_OFFSET]    = (byte) vald_prd;
+
+                Log.d(LOG_TAG, "buildAdnString for SMSP bcdNumber.length="+bcdNumber.length);
+            } else if (!TextUtils.isEmpty(numberNoPlus)
+                    && numberNoPlus.length() <= MAX_LENTH_ADN) {
                 Log.d(LOG_TAG, "number.length < " + MAX_LENTH_ADN);
                 bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(number);
                 System.arraycopy(bcdNumber, 0, adnString,
@@ -481,7 +531,7 @@ public class AdnRecord implements Parcelable {
             }
         }
         if (!TextUtils.isEmpty(numberNoPlus)
-                && numberNoPlus.length() <= MAX_LENTH_NUMBER 
+                && numberNoPlus.length() <= MAX_LENTH_NUMBER
                 && numberNoPlus.length() > MAX_LENTH_ADN) {
             return true;
         }
@@ -575,7 +625,7 @@ public class AdnRecord implements Parcelable {
 				} catch (java.io.UnsupportedEncodingException ex2) {
 					Log.e(LOG_TAG,
 							"[AdnRecord]emailRecord convert byte exception");
-					
+
 				}
 			}
 		}
@@ -667,9 +717,22 @@ public class AdnRecord implements Parcelable {
     private void
     parseRecord(byte[] record) {
         try {
-            int footerOffset = record.length - FOOTER_SIZE_BYTES;
-            alphaTag = IccUtils.adnStringFieldToString(
+            int footerOffset = 0;
+
+            if(this.efid==IccConstants.EF_SMSP) {
+	            footerOffset = record.length - SMSP_SMSC_FOOTER_SIZE_BYTES;
+			    para_ind = 0xff & record[record.length-28];
+			    prtc_idf = 0xff & record[record.length-3];
+			    data_cod = 0xff & record[record.length-2];
+			    vald_prd = 0xff & record[record.length-1];
+                alphaTag = IccUtils.adnStringFieldToString(
+                            record, 0, (record.length-28));
+            } else {
+                footerOffset = record.length - FOOTER_SIZE_BYTES;
+                alphaTag = IccUtils.adnStringFieldToString(
                             record, 0, footerOffset);
+            }
+
 
             int numberLength = 0xff & record[footerOffset];
 
@@ -690,7 +753,6 @@ public class AdnRecord implements Parcelable {
 
             number = PhoneNumberUtils.calledPartyBCDToString(
                             record, footerOffset + 1, numberLength);
-
 
             extRecord = 0xff & record[record.length - 1];
 

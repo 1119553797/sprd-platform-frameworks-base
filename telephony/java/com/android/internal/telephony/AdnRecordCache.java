@@ -168,6 +168,7 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
             case EF_FDN: return EF_EXT2;
             case EF_MSISDN: return EF_EXT1;
             case EF_PBR: return 0; // The EF PBR doesn't have an extension record
+            case EF_SMSP: return 0;
             default: return -1;
         }
     }
@@ -218,6 +219,16 @@ public final class AdnRecordCache extends IccThreadHandler implements IccConstan
         userWriteResponse.put(efid, response);
         AdnRecord oldAdn = oldAdnList.get(recordIndex - 1);
         oldAdn.extRecord = 0xff;
+
+        if(IccConstants.EF_SMSP==efid){
+            newAdn.para_ind = oldAdn.para_ind;
+            newAdn.prtc_idf = oldAdn.prtc_idf;
+            newAdn.data_cod = oldAdn.data_cod;
+            newAdn.vald_prd = oldAdn.vald_prd;
+            Log.d(LOG_TAG, "SMSP datas para_ind="+newAdn.para_ind+" prtc_idf="+newAdn.prtc_idf
+                          +" data_cod="+newAdn.data_cod+" vald_prd="+newAdn.vald_prd);
+        }
+
         if (newAdn.extRecordIsNeeded()) {
             byte extIndex = getAvailableExtIndex(extensionEF,efid);
             Log.d(LOG_TAG, "extIndex = " + extIndex);
