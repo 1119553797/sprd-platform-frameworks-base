@@ -1,0 +1,22 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="backup_confirm_title">முழு பின்புல சேமிப்பு</string>
+    <string name="restore_confirm_title">முழு மீட்பு</string>
+    <string name="backup_confirm_text">இணைக்கப்பட்டுள்ள டெஸ்க் டாப் கம்பியூட்டருடன் அனைத்து தரவுகளின் முழுமையான பின்புல சேமிப்பு வேண்டப்பட்டுள்ளது. இது நடக்க அனுமதிக்க உங்களுக்கு விருப்பமா\?\n\n நீங்களாக பின்புல சேமிப்பினை வேண்டியிருக்க வில்லையென்றால், இயக்கம் மேற்கொண்டு செல்ல அனுமதிக்க வேண்டாம். </string>
+    <string name="deny_backup_button_label">பின்புல சேமிப்பு செய்ய வேண்டாம்</string>
+    <string name="restore_confirm_text">இணைக்கப்பட்டுள்ள டெஸ்க் டாப் கம்பியூட்டருடன் அனைத்து தரவுகளின் முழுமையான பின்புல சேமிப்பு வேண்டப்பட்டுள்ளது. இது நடக்க அனுமதிக்க உங்களுக்கு விருப்பமா\?\n\n நீங்களாக பின்புல சேமிப்பினை வேண்டியிருக்க வில்லையென்றால், இயக்கம் மேற்கொண்டு செல்ல அனுமதிக்க வேண்டாம். தற்போது சாதனத்தில் இருக்கும் எந்த தரவுகளையும் மாற்றி வைத்துவிடும்!</string>
+    <string name="allow_restore_button_label">எனது தரவுகளை மீட்கவும்.</string>
+    <string name="deny_restore_button_label">மீட்க வேண்டாம்.</string>
+    <string name="current_password_text">உங்கள் நடப்பு பின்புல சேமிப்பு கடவுச்சொல்லை தயவு செய்து கீழே உள்ளிடவும்:</string>
+    <string name="device_encryption_restore_text">உங்கள் சாதனத்தின் மறைகுறியீட்டு கடவுச்சொல்லை தயவு செய்து கீழே உள்ளிடவும்.</string>
+    <string name="device_encryption_backup_text">உங்கள் சாதனத்தின் மறைகுறியீட்டு கடவுச்சொல்லை தயவு செய்து கீழே உள்ளிடவும். இது பின்புல சேமிப்பக களஞ்சியத்தை மறைகுறீயீடு செய்யவும் பயன்படுத்தப்படும்.</string>
+    <string name="backup_enc_password_text">முழு பின்புல சேமிப்பு தரவுகளை மறைகுறீயீடு செய்வதற்கான ஒரு கடவுச்சொல்லை தயவு செய்து உள்ளிடவும். இது காலியாக விடப்பட்டிருந்தால் உங்கள் நடப்பு பின்புல சேமிப்பு கடவுச்சொல் பயன்படுத்தப்படும்:</string>
+    <string name="backup_enc_password_optional">முழு பின்புல சேமிப்பு தரவுகளை மறைகுறீயீடு செய்ய நீங்கள் விரும்பினால் ஒரு கடவுச்சொல்லை தயவு செய்து கீழே </string>
+    <string name="restore_enc_password_text">மீட்பு தரவுகள் மறைகுறியீடு செய்யப்பட்டிருந்தால் அதற்கான கடவுச்சொல்லை தயவு செய்து கீழே உள்ளிடவும்.</string>
+    <string name="toast_backup_started">பின்புல சேமிப்பு துவங்குகிறது...</string>
+    <string name="toast_backup_ended">பின்புல சேமிப்பு முடிந்தது</string>
+    <string name="toast_restore_started">மீட்பு செய்தல் துவங்குகிறது...</string>
+    <string name="toast_restore_ended">மீட்பு செய்தல் முடிந்தது.</string>
+    <string name="toast_timeout">இயக்கம் காலம் கடந்துவிட்டது</string>
+</resources>

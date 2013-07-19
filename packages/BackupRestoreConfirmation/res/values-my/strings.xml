@@ -1,0 +1,22 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="backup_confirm_title">ဘက္ခ္အပ္လုပ္ငန္းအားလံုး လုပ္ၿပီးပါၿပီ။</string>
+    <string name="restore_confirm_title">ျပန္ဆယ္သိမ္းထားျခင္းလုပ္ငန္းအားလံုးၿပီးပါၿပီ။</string>
+    <string name="backup_confirm_text">ေဒတာအားလံုးဘက္ခ္အပ္လုပ္ရန္ ကြန္ျပဴတာနွင့္ခ်ိတ္ဆက္ရန္လိုအပ္ပါသည္။ သင္ခ်ိတ္လိုပါသလား\?\n\n သင္ကိုယ္တိုင္ဘက္ခ္အပ္လုပ္ရန္ ခြင့္မျပဳပါက ေအာ္ပေရးရွင္းမွ ဘက္ခ္အပ္လုပ္ျခင္းကို ဆက္လက္ၿပီး မေဆာင္ရြက္ပါ။</string>
+    <string name="deny_backup_button_label">ဘက္ခ္အပ္မလုပ္ပါ</string>
+    <string name="restore_confirm_text">ကြန္ျပဴတာနွင့္ခ်ိတ္ဆက္ထားသည့္ ေဒတာအားလံုးျပန္ဆယ္ထားရန္ restore လိုအပ္ပါသည္။ သင္ျပန္ ဆယ္ထားလိုပါသလား\?\n\n သင္ကိုယ္တိုင္းျပန္ဆယ္ထားရန္ restore လုပ္ရန္ ခြင့္မျပဳပါက ေအာ္ပေရးရွင္းမွ ျပန္ဆယ္ထားရန္ restoreလုပ္ျခင္းကို ဆက္လက္ၿပီး မေဆာင္ရြက္ပါ။ စက္ရွိ ေဒတာ တစ္စိတ္တစ္ပိုင္းသည္ ျပန္အစားထိုး replace ခံရမည္။</string>
+    <string name="allow_restore_button_label">ကၽြႏုပ္၏ေဒတာအားျပန္ဆယ္ထားရန္ restoreလုပ္ရန္ </string>
+    <string name="deny_restore_button_label">ျပန္ဆယ္ထားရန္ restoreမလုပ္ပါ </string>
+    <string name="current_password_text">ေက်းဇူးျပဳ၍ လက္ရွိ ဘက္ခ္အပ္၏ ေအာက္ပါ  လႈိ႕၀ွက္နံပါတ္အား ထပ္ထည့္ပါ။</string>
+    <string name="device_encryption_restore_text">ေက်းဇူးျပဳ၍ စက္ဆက္တင္းအတြက္ ေအာက္ပါ  လႈိ႕၀ွက္နံပါတ္အား ထပ္ထည့္ပါ။</string>
+    <string name="device_encryption_backup_text">ေက်းဇူးျပဳ၍ စက္ဆက္တင္း အတြက္ လႈိ႕၀ွက္နံပါတ္အား ထပ္ထည့္ပါ။ လႈိ႕၀ွက္နံပါတ္သည္ ဘက္ခ္အပ္ ၏ လႈိ႕၀ွက္နံပါတ္အျဖစ္လည္း သံုးႏိုင္သည္။</string>
+    <string name="backup_enc_password_text">ေက်းဇူးျပဳ၍ ေဒတာဘက္ခ္အပ္ အတြက္  လႈိ႕၀ွက္နံပါတ္အား ထပ္ထည့္ပါ။ အကယ္၍ လႈိ႕၀ွက္နံပါတ္အားဗလာထားလွ်င္ သင္၏ လက္ရွိ ဘက္ခ္အပ္ လႈိ႕၀ွက္နံပါတ္ အား သံုးမည္။</string>
+    <string name="backup_enc_password_optional">ေဒတာအားလံုးကို လႈိ႕၀ွက ္လံုျခံဳ ေစလိုပါက  ေအာက္ပါလႈိ႕၀ွက္နံပါတ္ ကို ထည့္ပါ</string>
+    <string name="restore_enc_password_text">ျပန္ဆယ္သိမ္းထားသည့္ေဒတာကို လႈိ႕၀ွက ္လံုျခံဳ ေစလိုပါက ေက်းဇူးျပဳ၍ ေအာက္ပါ လႈိ႕၀ွက္နံပါတ္ ကို ထည့္ပါ</string>
+    <string name="toast_backup_started">ဘက္ခ္အပ္စတင္ျခင္း</string>
+    <string name="toast_backup_ended">ဘက္ခ္အပ္လုပ္ငန္းၿပီးပါၿပီ။</string>
+    <string name="toast_restore_started">ျပန္ဆယ္ထားရန္ restore စတင္ျခင္း</string>
+    <string name="toast_restore_ended">ျပန္ဆယ္ထားရန္ restoreလုပ္ငန္းၿပီးပါၿပီ။</string>
+    <string name="toast_timeout">လုပ္ငန္းေဆာင္ရြက္ျခင္းအခ်ိန္ လြန္သြားၿပီ။</string>
+</resources>

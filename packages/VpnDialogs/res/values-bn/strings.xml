@@ -1,0 +1,16 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="warning">এগিয়ে গিয়ে, আপনি আবেদন প্রদান
+         সমস্ত নেটওয়ার্ক ট্রাফিক ব্যাহত করার অনুমতি.<b>আপনি আবেদন বিশ্বাস না করা পর্যন্ত গ্রহণ করা হয় না..</b>অন্যথা,
+         আপনি আপনার ডেটা একটি বিদ্বেষপূর্ণ দ্বারা আপোস থাকার ঝুঁকি চালানো
+         সফ্টওয়্যার.</string>
+    <string name="accept">আমি এই আবেদন বিশ্বাস.</string>
+    <string name="legacy_title">তথ্য VPN সংযুক্ত করা হয়</string>
+    <string name="session">সময়: </string>
+    <string name="data_transmitted">এতে পাঠানো হয়েছে: </string>
+    <string name="data_received">বার্তাগুলো:</string>
+    <string name="data_value_format">
+        <xliff:g id="number">%1$s</xliff:g> বাইটস /
+        <xliff:g id="number">%2$s</xliff:g> প্যাকেট</string>
+</resources>

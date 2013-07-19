@@ -1,0 +1,22 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="backup_confirm_title">ఫుల్ బ్యాకప్</string>
+    <string name="restore_confirm_title">ఫుల్ రిస్టోర్</string>
+    <string name="backup_confirm_text">ఒక కనెక్ట్ చేయబడిన డెస్క్ టాప్ కంప్యూటర్ లోని డేటా యొక్క మొత్తం బ్యాకప్ కోసం విన్నపం చేయబడింది. మీరు ఇది అనుమతించాలనుకుంటున్నారా\?\n\n ఒకవేళ బ్యాకప్ తీసుకోవాలని మీరు విన్నపం చేసి ఉండకపోతే, ఈ ఆపరేషన్ అనుమతించనవసరం లేదు. </string>
+    <string name="deny_backup_button_label">బ్యాకప్ చేయవద్దు</string>
+    <string name="restore_confirm_text">ఒక కనెక్ట్ చేయబడిన డెస్క్ టాప్ కంప్యూటర్ లోని డేటా మొత్తం రిస్టోర్ చేయడం కోసం విన్నపం చేయబడింది. మీరు ఇది అనుమతించాలనుకుంటున్నారా\?\n\n ఒకవేళ రిస్టోర్ చేయాలని మీరు విన్నపం చేసి ఉండకపోతే, ఈ ఆపరేషన్ అనుమతించనవసరం లేదు. ఇది ప్రస్తుతం సాధనంలో ఉన్న ఏ రకమైన డేటానైనా తొలగించివేస్తుంది.</string>
+    <string name="allow_restore_button_label">నా డేటాను రిస్టోర్ చేయండి</string>
+    <string name="deny_restore_button_label">రిస్టోర్ చేయవద్దు</string>
+    <string name="current_password_text">దయచేసి మీ ప్రస్తుత బ్యాకప్ పాస్ వర్డ్ ను క్రింద ఎంటర్ చేయండి:</string>
+    <string name="device_encryption_restore_text">దయచేసి మీ సాధనం యొక్క ఎన్ క్రిప్షన్ పాస్ వర్డ్ను క్రింద ఎంటర్ చేయండి.</string>
+    <string name="device_encryption_backup_text">దయచేసి మీ సాధనం యొక్క ఎన్ క్రిప్షన్ పాస్ వర్డ్ను క్రింద ఎంటర్ చేయండి. ఇది బ్యాకప్ ఆర్కయివ్ ను ఎన్ క్రిప్ట్ చేయడానికి కూడా ఉపయోగిస్తారు.</string>
+    <string name="backup_enc_password_text">మొత్తం బ్యాకప్ డేటాను ఎన్ క్రిప్ట్ చేయడానికి ఒక పాస్ వర్డ్ ను దయచేసి ఎంటర్ చేయండి.ఒకవేళ ఇది ఖాళీగ వదిలినట్లయితే, మీ యొక్క ప్రస్తుత బ్యాకప్ పాస్ వర్డ్ ఉపయోగింపబడుతుంది.</string>
+    <string name="backup_enc_password_optional">మీరు మొత్తం బ్యాకప్ డేటాను ఎన్ క్రిప్ట్ చేయాలనుకుంటే ఒక పాస్ వర్డ్ ను క్రింద ఎంటర్ చేయండి:</string>
+    <string name="restore_enc_password_text">ఒకవేళ రిస్టోర్ చేసిన డేటా ఎన్ క్రిప్ట్  చేయాలనుకుంటే ఒక పాస్ వర్డ్ ను క్రింద ఎంటర్ చేయండి:</string>
+    <string name="toast_backup_started">బ్యాకప్ ప్రారంభమవుతోంది..</string>
+    <string name="toast_backup_ended">బ్యాకప్ పూర్తయింది</string>
+    <string name="toast_restore_started">రిస్టోర్ ప్రారంభమవుతోంది..</string>
+    <string name="toast_restore_ended">రిస్టోర్ ముగిసింది</string>
+    <string name="toast_timeout">ఆపరేషన్ టైమ్ అవుట్ అయింది</string>
+</resources>

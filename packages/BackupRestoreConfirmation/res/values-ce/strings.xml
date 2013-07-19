@@ -1,0 +1,22 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="backup_confirm_title">Puno nga backup</string>
+    <string name="restore_confirm_title">Tibuok nga pagbalik</string>
+    <string name="backup_confirm_text">Usa ka puno nga backup sa tanan data ngadto sa usa ka konektado nga desktop nga  komputer kay gihangyo.  Ganahan ka nga tugutan ni mahitabo\?\n\nKung wala nimo gihangyo ang backup, ayaw tuguti ang operasyon nga mupadayon.</string>
+    <string name="deny_backup_button_label">Ayaw pag back up</string>
+    <string name="restore_confirm_text">Usa ka puno nga pagbalik sa tanan data ngadto sa usa ka konektado nga desktop nga  komputer kay gihangyo.  Ganahan ka nga tugutan ni mahitabo\?\n\nKung wala nimo gihangyo ang backup, ayaw tuguti ang operasyon nga mupadayon.</string>
+    <string name="allow_restore_button_label">Ibalik ako data</string>
+    <string name="deny_restore_button_label">Ayaw ibalik</string>
+    <string name="current_password_text">Palihug ug sulod sa imu karon nga backup nga password sa ubos:</string>
+    <string name="device_encryption_restore_text">Palihug ug sulod sa imu password sa pag-encrypt ani nga device sa ubos.</string>
+    <string name="device_encryption_backup_text">Palihug ug sulod sa imu password sa pag-encrypt ani nga device sa ubos. Gamiton pud ni para I-encrypt ang backup sa archive.</string>
+    <string name="backup_enc_password_text">Palihug ug sulod ug password para gamiton sa pag-encrypt sa puno nga nga backup sa data. Kung gibiyaan ni nga blanko, ang imu karon nga backup nga password ang gamiton:</string>
+    <string name="backup_enc_password_optional">Kung gusto nimu I-encrypt ang puno nga backup sa data, pagsulod ug password sa ubos:</string>
+    <string name="restore_enc_password_text">Kung ang balik nga data kay na-encrypt, palihug ug sulod sa password sa ubos:</string>
+    <string name="toast_backup_started">Backup nagsugod...</string>
+    <string name="toast_backup_ended">Backup nahuman</string>
+    <string name="toast_restore_started">Ibalik ang pagsugod...</string>
+    <string name="toast_restore_ended">Pagbalik nahuman</string>
+    <string name="toast_timeout">Operasyon na-time out</string>
+</resources>
