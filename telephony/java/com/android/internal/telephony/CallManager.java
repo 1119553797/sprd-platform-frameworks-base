@@ -849,9 +849,9 @@ public class CallManager {
             Log.d(LOG_TAG, this.toString());
         }
 
-        if (canTransfer(heldCall)) {
+      //  if (canTransfer(heldCall)) {//add by davy for ECT 20130712
             heldCall.getPhone().explicitCallTransfer();
-        }
+      //  }
 
         if (VDBG) {
             Log.d(LOG_TAG, "End explicitCallTransfer(" + heldCall + ")");
