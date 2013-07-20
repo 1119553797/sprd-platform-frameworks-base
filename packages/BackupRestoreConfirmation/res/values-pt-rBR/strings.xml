@@ -1,0 +1,22 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="backup_confirm_title">Reserva cheia</string>
+    <string name="restore_confirm_title">Restaura cheia</string>
+    <string name="backup_confirm_text">Uma reserva inteira de todos os dados para um computador de desktop ligado é solicitada. Quer permitir isso\?\n\nSe você não solicita a reserva por si próprio, não permite a operação para proceder.</string>
+    <string name="deny_backup_button_label">Não reserva</string>
+    <string name="restore_confirm_text">Uma restauração completa de todos os dados de um computador de desktop ligado é solicitada. Quer permitir isso\?\n\nSe não solicita a restauração por si próprio, não permite a operação para proceder. O qual vai substituir quaisquer dados correntemente no aparelho!</string>
+    <string name="allow_restore_button_label">Restaurar meus dados</string>
+    <string name="deny_restore_button_label">Não restaura</string>
+    <string name="current_password_text">Entre a sua senha de reserva corrente abaixo:</string>
+    <string name="device_encryption_restore_text">Entre a sua senha de codificação de aparelho.</string>
+    <string name="device_encryption_backup_text">Entre a sua senha de codificação de aparelho abaixo. A qual também será usada para codificar o arquivo de reserva.</string>
+    <string name="backup_enc_password_text">Entre uma senha para usar para codificar os dados de reserva completos. Se é um bloco deixado, a sua senha de reserva corrente será usada:</string>
+    <string name="backup_enc_password_optional">Se você quer codificar os dados de reserva completos, entre uma senha abaixo:</string>
+    <string name="restore_enc_password_text">Se os dados restaurados são codificados, entre a senha abaixo:</string>
+    <string name="toast_backup_started">Iniciar reservar...</string>
+    <string name="toast_backup_ended">Reserva feita</string>
+    <string name="toast_restore_started">Restaurar iniciar...</string>
+    <string name="toast_restore_ended">Restaura acabada</string>
+    <string name="toast_timeout">Operação de tempo excedido</string>
+</resources>

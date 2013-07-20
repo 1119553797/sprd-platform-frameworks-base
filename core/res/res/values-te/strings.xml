@@ -1328,4 +1328,9 @@
   <string name="digtal_formatter">%2$s</string>
   <string name="description_target_call">కాల్</string>
   <string name="description_target_sms">SMS</string>
+  <string product="tablet" name="enable_explore_by_touch_warning_message">
+            <xliff:g id="accessibility_service_name">%1$s</xliff:g> స్పర్ష ద్వారా ఎక్స్ ప్లోర్ ను ఎనేబుల్ చేయాలనుకుంటుంది.
+ఎప్పుడైతే మీ స్పర్ష ఆన్ చేసి ఉంటుందో, మీ ట్యాబ్లెట్ల్ లో మీ వేలి క్రింద వివరణలను లేదా మీరు ట్యాబ్లెట్ తో అనుసంధానమైనట్లుగా భంగిమలు కనిపిస్తాయి.</string>
+  <string product="default" name="enable_explore_by_touch_warning_message"> <xliff:g id="accessibility_service_name">%1$s</xliff:g> స్పర్ష ద్వారా ఎక్స్ ప్లోర్ ను ఎనేబుల్ చేయాలనుకుంటుంది.
+ఎప్పుడైతే మీ స్పర్ష ఆన్ చేసి ఉంటుందో, మీ ట్యాబ్లెట్ల్ లో మీ వేలి క్రింద వివరణలను లేదా మీరు ఫోన్ తో అనుసంధానమైనట్లుగా భంగిమలు కనిపిస్తాయి</string>
 </resources>

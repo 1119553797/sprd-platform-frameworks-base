@@ -1,0 +1,16 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="warning">Pinaagi sa pagsugod, naghatag ka sa aplikasyon ug permiso nga mu-ali sa trapiko sa network.
+        <b>Ayaw dawata gawas kung nisalig ka sa aplikasyon.</b> Kung dili, imu gitagaan ug higayon ang imu data kay madaot sa malisyoso nga software.
+    </string>
+    <string name="accept">Nisalig ko ani nga aplikasyon.</string>
+    <string name="legacy_title">VPN kay konektado</string>
+    <string name="session">Sesyon:</string>
+    <string name="data_transmitted">Napadala:</string>
+    <string name="data_received">Nadawat:</string>
+    <string name="data_value_format">
+        <xliff:g id="number">%1$s</xliff:g> ka mga  byte /
+        <xliff:g id="number">%2$s</xliff:g> ka mga pakete
+    </string>
+</resources>

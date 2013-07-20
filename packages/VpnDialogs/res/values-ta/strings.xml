@@ -1,0 +1,14 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="warning">மேர்கொண்டு செல்வதன் மூலம், அனைத்து வலைப்பின்னல் போக்குவரத்தினையும் இடைமறிக்க அப்ளிகேஷனுக்கு நீங்கள் அனுமதிக்கிறீர்கள்.  <b>அப்ளிகேஷனை நீங்கள் நம்பினாலே தவிர ஏற்றுக்கொள்ள வேண்டாம். </b> இல்லையெனில் குற்றம்புரியும் மென்பொருள் ஒன்றினால் உங்கள் தரவுகள் பிறழ்வதற்கான ஆபத்தினை ஏற்பீர்கள். </string>
+    <string name="accept">நான் இந்த அப்ளிகேஷனை நம்புகிறேன்.</string>
+    <string name="legacy_title">VPN இணைக்கப்பட்டுள்ளது.</string>
+    <string name="session">அமர்வு காலம்:</string>
+    <string name="data_transmitted">அனுப்பப்பட்டது:</string>
+    <string name="data_received">பெறப்பட்டது:</string>
+    <string name="data_value_format">
+        <xliff:g id="number">%1$s</xliff:g> பைட்டுகள் /
+        <xliff:g id="number">%2$s</xliff:g> பேக்கெட்டுகள்
+    </string>
+</resources>

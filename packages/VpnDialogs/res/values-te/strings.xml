@@ -1,0 +1,15 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="warning">కొనసాగడం ద్వారా, మీరు అప్లికేషన్ కు అన్నిరకాల నెట్ వర్క్ ట్రాఫిక్ తో ఇంటర్ సెప్ట్ కావడానికి అనుమతి ఇస్తున్నారు.
+        <b>మీరు అప్లికేషన్ ను విశ్వసిస్తే తప్ప అనుమతి ఇవ్వవద్దు .</b> లేకపోతే, మీరు మీ డేటా ఏదైనా కలుషితమైన సాఫ్ట్ వేర్ తో కలిసిపోయే ప్రమాదానికి గురి చేయబోతున్నారు. 
+    </string>
+    <string name="accept">’నేను ఈ అప్లికేషన్ విశ్వసిస్తున్నాను.</string>
+    <string name="legacy_title">VPN కనెక్ట్ చేయబడింది  </string>
+    <string name="session">సెషన్ :</string>
+    <string name="data_transmitted">పంపబడింది:</string>
+    <string name="data_received">స్వీకరింపబడింది:</string>
+    <string name="data_value_format">
+        <xliff:g id="number">%1$s</xliff:g> బైట్స్ /
+        <xliff:g id="number">%2$s</xliff:g> ప్యాకెట్స్     </string>
+</resources>

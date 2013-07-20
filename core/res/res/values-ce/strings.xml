@@ -1,5 +1,207 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="imei">IMEI</string>
+  <string name="meid">MEID</string>
+  <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>:Wala naabante</string>
+  <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{1}</xliff:g>:Wala naabante</string>
+  <string name="silent_mode_silent">Tig-ring gipawng</string>
+  <string name="silent_mode_vibrate">Kurog sa  tig-ring</string>
+  <string name="silent_mode_ring">Tig-ring I-on</string>
+  <string name="silent_mode_outdoor">"Tig-ring sa gawas sa purtahan"</string>
+  <string name="reboot_safemode_title">I-reboot balik ngadto sa luwas nga paagi</string>
+  <string name="reboot_safemode_confirm">Gusto nimo I-reboot ngadto sa luwas nga paagi?
+         Kini kay dili paganahon ang ikatulo nga parte nga mga aplikasyon nga imu na-install.
+         Mabalik ra ni sila kung mu-reboot ka ug balik.</string>
+  <string name="permlab_readCellBroadcasts">basa ug mga mensahe sa cell nga broadcast </string>
+  <string name="permdesc_readCellBroadcasts">Tugtan ang app nga mubasa 
+      ug mga mensahe sa cell nga broadcast nga nadawat sa imu device. Mga alerto sa Cell broadcast kay ma-deliver sa mga lokasyon para mu-abiso nimo sa mga kagipit nga mga sitwasyon.
+      Malisyos nga mga app kay pwede musamok sa  pagtrabaho o operasyon sa imu device kung naay kagipit nga broadcast ang nadawat.</string>
+  <string name="permlab_getDetailedTasks">I-balik ang mga detalye sa mga nagdagan nga mga app</string>
+  <string name="permdesc_getDetailedTasks">Tugtan ang app para ibalik ang  detalyado nga impormasyon bahin sa karon ug bagohay nga mga nagdagan nga buhat. Malisyoso nga mga app kay pwede makadiskubre ug pribado nga impormasyon bahin sa uban mga app.</string>
+  <string name="permlab_startAnyActivity">sugdan ang bisag unga nga aktibidad</string>
+  <string name="permdesc_startAnyActivity">Tugtan ang app nga sugdan ang bisag unsa nga aktibidad, walay pakialam sa proteksyon sa permiso o na-export nga estado.</string>
+  <string name="permlab_setScreenCompatibility">Takda ug compatibility sa screen</string>
+  <string name="permdesc_setScreenCompatibility">Tugtan ang app para kontrolon ang paagi sa  
+        compatibility sa screen sa uban mga aplikasyon.  Malisyoso nga mga aplikasyon kay pwede muguba sa pag-asta sa uban mga aplikasyon.</string>
+  <string name="permlab_bindAccessibilityService">ihigot ngadto sa usa ka accessibility sa serbisyo</string>
+  <string name="permdesc_bindAccessibilityService">Tugtan ang tiggunit nga ihigot ngadto sa pinakataas nga level nga interface ang serbisyo sa accessibility. Dili na kinahanglan sa uban mga normal nga mga app.</string>
+  <string name="permlab_setKeyboardLayout">usbon ang porma sa  keyboard </string>
+  <string name="permdesc_setKeyboardLayout">Tugtan ang app nga usbon
+        ang porma sa keyboard. Dili na kinahanglan sa uban mga normal nga mga app.</string>
+  <string product="tablet" name="permdesc_persistentActivity">Tugtan ang app para muhimo ug mga parte sa iya kaugalingon padayon sa memorya.  Kini kay maka limita sa pwede nga memorya ngadto sa uban nga mga app nga nagpahinay sa phone.</string>
+  <string product="default" name="permdesc_persistentActivity">Tugtan ang app para muhimo ug mga parte sa iya kaugalingon padayon sa memorya.  Kini kay maka limita sa pwede nga memorya ngadto sa uban nga mga app nga nagpahinay sa phone.</string>
+  <string name="permlab_grantRevokePermissions">sugtan o  balibaran ang mga permiso</string>
+  <string name="permdesc_grantRevokePermissions">Tugtan ang aplikasyon nga sugtan o balibaran
+        ang gisabot nga mga permiso para ani o uban nga mga aplikasyon.  Malisyoso nga mga aplikasyon kay pwede mugamit ani para I-access ang mga tampok nga wala nimo gitugot sa ilaha.</string>
+  <string name="permlab_readCallLog">basa ug log sa tawag</string>
+  <string product="tablet" name="permdesc_readCallLog">Tugtan ang app para mubasa
+     sa log sa tawag sa imu tablet, apil ang data bahin sa paabot ug pagawas nga mga tawag.
+     Kini nga peermiso kay mutugot sa  mga app nga I-save imu data sa log sa tawag, ug malisyoso nga mga app
+     kay pwede ibahagi ang data sa log nga wala ka kahibaw.</string>
+  <string product="default" name="permdesc_readCallLog">Tugtan ang app para mubasa
+     sa log sa tawag sa imu phone, apil ang data bahin sa paabot ug pagawas nga mga tawag.
+     Kini nga peermiso kay mutugot sa  mga app nga I-save imu data sa log sa tawag, ug malisyoso nga mga app
+     kay pwede ibahagi ang data sa log nga wala ka kahibaw.</string>
+  <string name="permlab_writeCallLog">suwat ug log sa tawag</string>
+  <string product="tablet" name="permdesc_writeCallLog">Tugtan ang app nga usbon ang log sa tawag sa imu tablet, apil ang  data bahin sa pasulod ug paggawas nga mga tawag.
+        Malisyoso nga mga app kay pwede ni gamiton para pad-on o usbon ang log sa imu tawag.</string>
+  <string product="default" name="permdesc_writeCallLog">Tugtan ang app nga usbon ang log sa tawag sa imu phone, apil ang  data bahin sa pasulod ug paggawas nga mga tawag.
+        Malisyoso nga mga app kay pwede ni gamiton para pad-on o usbon ang log sa imu tawag.</string>
+  <string product="tablet" name="permdesc_writeCalendar">Tugtan ang app nga 
+     mudugang, mutanggal, mu-usab ug mga panghitabo nga imu ma-usab sa imu tablet, apil
+     kadtong mga higala sa mga kauabn sa trabaho. Kini kay pwede mutugot sa app nga mupadala ug mga mensahe nga 
+    mugawas nga gikan sa kalendaryo sa mga tag-iya, o usbon ang mga panghitabo nga wala kahibaw ang tag-iya.</string>
+  <string product="default" name="permdesc_writeCalendar">Tugtan ang app nga 
+     mudugang, mutanggal, mu-usab ug mga panghitabo nga imu ma-usab sa imu phone, apil
+     kadtong mga higala sa mga kauabn sa trabaho. Kini kay pwede mutugot sa app nga mupadala ug mga mensahe nga 
+    mugawas nga gikan sa kalendaryo sa mga tag-iya, o usbon ang mga panghitabo nga wala kahibaw ang tag-iya.</string>
+  <string name="permdesc_accessCoarseLocation">I-access
+      ang hapit sakto nga lokasyon gikan sa lokasyon sa mga tighatag gamit ang mga gikanan sa network pareha anang
+      tore sa cell ug WLAN. Kung kini nga mga serbisyo sa lokasyon kay pwede ug naka-on, kini nga permiso kay mutugot sa app nga makahibaw sa hapit sakto nimo nga lokasyon.</string>
+  <string product="nosdcard" name="permlab_mount_unmount_filesystems">I-access ang sistema sa file sa imabkan sa USB</string>
+  <string product="default" name="permlab_mount_unmount_filesystems">I-access ang sistema sa file sa SD Card</string>
+  <string product="nosdcard" name="permlab_mount_format_filesystems">Pala-on ang imbakan sa USB</string>
+  <string product="default" name="permlab_mount_format_filesystems">Pala-on ang SD card</string>
+  <string product="tablet" name="permdesc_changeWifiMulticastState">Tugtan ang app nga mudawat ug mga
+      paket nga giapadal ngadto sa tanan mga device sa usa ka  WLAN nga network gamit ang multicast nga mga address,
+      dili lang ang imu phone.  Mugamit ni ug daghan gahum kaysa paagi sa non-multicast.</string>
+  <string product="default" name="permdesc_changeWifiMulticastState">Tugtan ang app nga mudawat ug mga
+      paket nga giapadal ngadto sa tanan mga device sa usa ka  WLAN nga network gamit ang multicast nga mga address,
+      dili lang ang imu phone.  Mugamit ni ug daghan gahum kaysa paagi sa non-multicast.</string>
+  <string product="tablet" name="permdesc_changeWimaxState">Tugtan ang app ngaa
+      mukonek sa tablet sa ug diskonekta ang tablet gikan sa mga network sa  WiMAX.</string>
+  <string product="default" name="permdesc_changeWimaxState">Tugtan ang app ngaa
+      mukonek sa phone sa ug diskonekta ang phone gikan sa mga network sa  WiMAX.</string>
+  <string product="nosdcard" name="permlab_sdcardRead">suway ug access ngadto sa giprotektahan nga imbakan</string>
+  <string product="default" name="permlab_sdcardRead">suway ug access ngadto sa giprotektahan nga imbakan</string>
+  <string product="nosdcard" name="permdesc_sdcardRead">Tugtana ang app nga suwayan ang persmiso para sa imbakan sa USB nga mahimong pwede sa umaabot nga mga  device.</string>
+  <string product="default" name="permdesc_sdcardRead">Tugtana ang app nga suwayan ang persmiso para sa SD card nga mahimong pwede sa umaabot nga mga  device.</string>
+  <string name="faceunlock_multiple_failures">Pinakadaghan nga suway Face Unlock naapsan na</string>
+  <string name="lockscreen_permanent_disabled_sim_message_short">Dili magamit nga SIM card.</string>
+  <string name="granularity_label_character">karakter</string>
+  <string name="granularity_label_word">salita</string>
+  <string name="granularity_label_link">link</string>
+  <string name="granularity_label_line">linya</string>
+  <string name="hour_cap_ampm">"<xliff:g id="hour" example="4">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+  <string name="autofill_attention_ignored_re">atensyon|attn</string>
+  <string name="autofill_region_ignored_re">probinsya|rehiyon|uban<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
+  <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
+  <string name="autofill_address_line_1_re">address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_1_label_re">address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_2_re">address.?line2|address2|addr2|street|suite|unit<!-- de-DE -->|adresszusatz|ergänzende.?angaben<!-- es -->|direccion2|colonia|adicional<!-- fr-FR -->|addresssuppl|complementnom|appartement<!-- it-IT -->|indirizzo2<!-- ja-JP -->|住所2</string>
+  <string name="autofill_address_line_3_re">address.?line3|address3|addr3|street|line3<!-- es -->|municipio<!-- fr-FR -->|batiment|residence<!-- it-IT -->|indirizzo3</string>
+  <string name="autofill_country_re">nasud|lokasyon<!-- ja-JP -->|国<!-- zh-CN -->|国家</string>
+  <string name="autofill_zip_code_re">zip|postal|post code|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
+  <string name="autofill_zip_4_re">zip|^-$|post2<!-- pt-BR, pt-PT -->|codpos2</string>
+  <string name="autofill_city_re">city|town<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
+  <string name="autofill_state_re">estado|nasud|rehiyon|probinsya<!-- de-DE -->|land<!-- en-UK -->|nasud|principality<!-- ja-JP -->|都道府県<!-- pt-BR, pt-PT -->|estado|provincia<!-- ru -->|область<!-- zh-CN -->|省<!-- zh-TW -->|地區</string>
+  <string name="autofill_address_type_same_as_re">pareha sa</string>
+  <string name="autofill_address_type_use_my_re">gamita ako</string>
+  <string name="autofill_billing_designator_re">bill</string>
+  <string name="autofill_shipping_designator_re">ship</string>
+  <string name="autofill_email_re">e.?mail<!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
+  <string name="autofill_username_re">tiggamit.?pangalan|tiggamit.?id<!-- de-DE -->|vollständiger.?pangalan<!-- zh-CN -->|用户名</string>
+  <string name="autofill_name_re">^name|full.?name|your.?name|customer.?name|firstandlastname<!-- es -->|nombre.*y.*apellidos<!-- fr-FR -->|^nom<!-- ja-JP -->|お名前|氏名<!-- pt-BR, pt-PT -->|^nome<!-- zh-CN -->|姓名</string>
+  <string name="autofill_name_specific_re">^name<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
+  <string name="autofill_first_name_re">una.*pangalan|mga inisiyal|una nga pangalan|una$<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
+  <string name="autofill_middle_initial_re">tunga.*inisiyal|m\\.i\\.|mi$</string>
+  <string name="autofill_middle_name_re">tunga.*pangalan|mpangalan|tunga$<!-- es -->|apellido.?materno|apellido</string>
+  <string name="autofill_last_name_re">uwahi.*pangalan|lpangalan|apellido|last$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
+  <string name="autofill_phone_re">phone<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
+  <string name="autofill_area_code_re">lugar.*code|acode|lugar</string>
+  <string name="autofill_phone_prefix_re">unlapi<!-- fr-FR -->|preselection<!-- pt-BR, pt-PT -->|ddd</string>
+  <string name="autofill_phone_suffix_re">hulapi</string>
+  <string name="autofill_phone_extension_re">ext<!-- pt-BR, pt-PT -->|ramal</string>
+  <string name="autofill_name_on_card_re">card.?tiggunit|pangalan.?on.?card|ccname|tag-iya<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
+  <string name="autofill_name_on_card_contextual_re">Pangalan</string>
+  <string name="autofill_card_cvc_re">pagsiguro|card pagkahibaw|cvn|seguridad nga code|cvv code|cvc</string>
+  <string name="autofill_card_number_re">numero|card.?#|card.?no|ccnum<!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
+  <string name="autofill_expiration_month_re">wa na|exp.*buwan|exp.*petsa|ccbuwan<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
+  <string name="autofill_expiration_date_re">exp|^/|tuig<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
+  <string name="autofill_card_ignored_re">^card</string>
+  <string name="autofill_fax_re">fax<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
+  <string name="autofill_country_code_re">nasud.*code|ccode|_cc</string>
+  <string name="autofill_area_code_notext_re">^\\($</string>
+  <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
+  <string name="autofill_phone_suffix_separator_re">^-$</string>
+  <string name="permlab_serialPort">I-access ang seriyal nga mga pantalan</string>
+  <string name="permdesc_serialPort">Tugtan mgat tiggunit para I-access ang seriyal nga mga pantalan gamit ang SerialManager nga API.</string>
+  <string name="permlab_accessContentProvidersExternally">I-access ang sulod sa tighatag paggawas</string>
+  <string name="permdesc_accessContentProvidersExternally">Tugtan ang tiggunit para I-access ang sulod sa tighatag gikan sa shell. Dili na kinahanglan sa uban mga normal nga mga app.</string>
+  <string name="permlab_updateLock">dili awhagon ang mga awtomatik nga update sa device</string>
+  <string name="permdesc_updateLock">Tugtan ang tiggunit nga muhatag ug impormasyon ngadto sa sistema kung kanusa ang nindot nga oras para sa dili interaktibo nga reboot para I-upgrade ang device.</string>
+  <string name="enable_explore_by_touch_warning_title">Paganahon ang Pagsuroy pinaagi sa Hikap?</string>
+  <string name="low_internal_storage_view_text">Uban mga pagpagana sa sistema kay pwede dili mugana</string>
+  <string name="webpage_unresponsive">Ang pahina kay nahimong dili matinubagon.\n\nGusto nimo isarado ni?</string>
+  <string name="wifi_available_sign_in_detailed">
+    <xliff:g id="wifi_network_ssid">%1$s</xliff:g>
+  </string>
+  <string name="accept">Dawat</string>
+  <string name="decline">Dili sugtan</string>
+  <string name="wifi_p2p_invitation_sent_title">Imbitasyon napadala</string>
+  <string name="wifi_p2p_invitation_to_connect_title">Imbitasyon para mukonek</string>
+  <string name="wifi_p2p_from_message">Gikan</string>
+  <string name="wifi_p2p_to_message">Para:</string>
+  <string name="wifi_p2p_enter_pin_message">I-type and gikinahanglan nga PIN:</string>
+  <string name="wifi_p2p_show_pin_message">PIN:</string>
+  <string name="date_time_done">Humana</string>
+  <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+  <string name="perms_new_perm_prefix">
+    <font fgcolor="#ff900000" size="12">BAGO: </font>
+  </string>
+  <string name="perms_description_app">Gihatag sa <xliff:g id="app_name">%1$s</xliff:g>.</string>
+  <string name="usb_cdrom_notification_title">Virtual nga Drayber kay naka-on</string>
+  <string name="locale_replacement">""</string>
+  <string name="use_physical_keyboard">Keyboard sa device</string>
+  <string name="hardware">Hardware</string>
+  <string name="select_keyboard_layout_notification_title">Pili ug porma sa keyboard</string>
+  <string name="select_keyboard_layout_notification_message">Hikap para mupili ug porma sa keyboard.</string>
+  <string name="permdesc_copyProtectedData">Tugtan ang app nga mamalihug sa serbisyo sa default nga sudlanan para kopyahon ang sulod. Dili gamit para sa mga normal nga app.</string>
+  <string name="permlab_route_media_output">Irouta ang ouput sa media</string>
+  <string name="permdesc_route_media_output">Tugtan ang aplikasyon nga Irouta ang ouput sa media sa uban gawas nga mga device.</string>
+  <string name="alternate_eri_file">/data/eri.xml</string>
+  <string name="Low_Memory_Alert">Spasyo sa imbakan sa telepono padung na muubos. Palihug tanggala ang uban data para masiguro ang istabilidad sa phone.</string>
+  <string name="Low_Memory_Free">Libre</string>
+  <string name="Low_Memory_Application">Mga aplikasyon</string>
+  <string name="Low_Memory_Mail">Suwat</string>
+  <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+  <string name="Low_Memory_System">Sistema</string>
+  <string name="Btn_Select_Clear">Pili/Limas</string>
+  <string name="myAppTip">Pili ug mga aplikasyon nga gunitan</string>
+  <string name="myApp_Start_Btn">sugod</string>
+  <string name="myApp_Move2Sd_ChkBox">BalhinNgadtoSD</string>
+  <string name="myApp_ClearData_ChkBox">Limas ug data</string>
+  <string name="myApp_Uninstall_ChkBox">I-uninstall</string>
+  <string name="myAppLoading">Nagload\u2026</string>
+  <string name="myAppProcessing">Nagproseso\u2026</string>
+  <string name="progress_unmounting1">Nag-naog sa sulod nga imbakan...</string>
+  <string name="progress_erasing1">Nag-pala sa sulod nga imbakan...</string>
+  <string name="format_error1">Dili makapala sa sulod nga imbakan.</string>
+  <string name="media_bad_removal1">Sulod nga imbakan kay natanggal sa wala na naog.</string>
+  <string name="media_checking1">Internal nga storage yana nga gitan-aw</string>
+  <string name="media_removed1">Sulod nga imbakan kay gitanggal.</string>
+  <string name="media_shared1">Sulod nga imbakan kay gigamit karon sa computer.</string>
+  <string name="media_unknown_state1">Sulod nga media kay naa sa wala nahibaw-an nga estado.</string>
+  <string name="find_prev_title">Nilabay</string>
+  <string name="find_next_title">Sunod</string>
+  <string name="description_target_search">Pangita</string>
+  <string name="activity_resolver_use_always">Pirmi</string>
+  <string name="activity_resolver_use_once">Kausa ra</string>
+  <string product="tablet" name="default_audio_route_name">Tablet</string>
+  <string product="default" name="default_audio_route_name">telepono</string>
+  <string name="default_audio_route_name_headphones">Mga headphone</string>
+  <string name="default_audio_route_name_dock_speakers">Pantalan nga mga speaker</string>
+  <string name="default_audio_route_name_hdmi">HDMI nga audio</string>
+  <string name="default_audio_route_category_name">Sistema</string>
+  <string name="bluetooth_a2dp_audio_route_name">Bluetooth nga audio</string>
+  <string name="media_route_chooser_grouping_done">Humana</string>
+  <string name="shutdown_after_seconds">Ang phone kay mapawng kahuman sa  <xliff:g id="NUMBER">%d</xliff:g> ka mga segundo</string>
+  <string name="lockscreen_sim_network_locked_message">Phone kay naka Network lock sa SIM</string>
+  <string name="lockscreen_sim_card_locked_message">SIM card kay nalock.</string>
+  <string name="digtal_formatter">%2$s</string>
+  <string name="description_target_call">Tawag</string>
+  <string name="description_target_sms">SMS</string>
+  <string name="ringtone_waning">Ang di mao nga file, palihug ug pili balik</string>
   <string name="byteShort">B</string>
   <string name="kilobyteShort">KB</string>
   <string name="megabyteShort">MB</string>
@@ -99,7 +301,7 @@
   <string name="serviceClassFAX">FAX</string>
   <string name="serviceClassSMS">SMS</string>
   <string name="serviceClassDataAsync">Async</string>
-  <string name="serviceClassDataSync">I-sync ang</string>
+  <string name="serviceClassDataSync">I-sync ang </string>
   <string name="serviceClassPacket">Paket</string>
   <string name="serviceClassPAD">PAD</string>
   <string name="roamingText0">Tigtudlo sa Tigsuroy I-on</string>
@@ -138,8 +340,8 @@
   <string name="httpErrorFileNotFound">Ang nahangyo nga file kay wala nakit-an.</string>
   <string name="httpErrorTooManyRequests">Daghan ra klaayo mga hangyo nga giproseso. Suway balik unya.</string>
   <string name="notification_title">Sign-in mali para sa <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
-  <string name="contentServiceSync">I-sync ang</string>
-  <string name="contentServiceSyncNotificationTitle">I-sync ang</string>
+  <string name="contentServiceSync">I-sync ang </string>
+  <string name="contentServiceSyncNotificationTitle">I-sync ang </string>
   <string name="contentServiceTooManyDeletesNotificationDesc">Daghan ra kaayo <xliff:g id="content_type">%s</xliff:g> nga mga delet.</string>
   <string product="tablet" name="low_memory">Imbakan sa Tablet kay puno! I-delete ang uban mga file aron mulibre ug spasyo.</string>
   <string product="default" name="low_memory">Imbakan sa phone kay puno! I-delete ang uban mga file aron mulibre ug spasyo.</string>
@@ -265,7 +467,7 @@
   <string name="permdesc_backup">Tugtan ang aplikasyon nga makontrol ang back up sa sistema ug ibalik ang mekanismo. Dili magamit sa mga normal nga mga aplikasyon.</string>
   <string name="permlab_confirm_full_backup">ikumpirma ang puno nga backup o ibalik ang operasyon</string>
   <string name="permdesc_confirm_full_backup">Tugtan ang aplikasyon nga sugdan ang UI sa kumpirmasyon sa puno nga back up. Dili magamit para sa bisag unsa nga aplikasyon.</string>
-  <string name="permlab_internalSystemWindow">ipakita ang mga wala tugti nga bintana</string>
+  <string name="permlab_internalSystemWindow">ipakita ang mga wala tugti nga bintana </string>
   <string name="permdesc_internalSystemWindow">Tugtan sa paghimu ug mga bintana nga gamiton para sa user interface nga pangsulod sa sistema. Dili magamit sa mga normal nga mga aplikasyon.</string>
   <string name="permlab_systemAlertWindow">ipakita ang antas sa sistema nga mga alerto</string>
   <string name="permdesc_systemAlertWindow">Tugtan ang aplikasyon nga ipakita ang bintana sa alerto sa sistema. Mga malisyoso nga mga aplikasyon kay makakontrol sa tibuok screen.</string>
@@ -321,14 +523,16 @@
   <string name="permlab_diagnostic">basa/suwat ngadto sa mga gikanan nga gitag-iyahan sa diag</string>
   <string name="permdesc_diagnostic">Tugtan ang apliksayon nga mubasa ug musuwat sa bisag unsa nga gikanan nga sakop sa diag nga grupo; halimbawa ani, mga file sa /dev. Kini sila kay pwede makaapekto sa kaayuhan ug seguridad sa sistema. Kinahanglan gamiton ra ni para sa gisabutan nga hardware nga pagtanaw sa tighimu o namahala.</string>
   <string name="permlab_changeComponentState">paganahon o dili paganahon ang mga parte sa aplikasyon</string>
-  <string product="tablet" name="permdesc_changeComponentState">Tugtan ang aplikasyon nga muusab ug parte sa lain aplikasyon nakaandar or wala. Mga malisyoso nga mga aplikasyon kay makagamit ani para dili paganahon ang mga importante nga kamaohan sa tablet. Gamiton ang care nga naay permiso kay posible makakuha ug mga parte sa aplikasyon nga dili magamit, walay ayo, ug dili maayo nga estado.</string>
-  <string product="default" name="permdesc_changeComponentState">Tugtan ang aplikasyon nga muusab ug parte sa lain aplikasyon nakaandar or wala. Mga malisyoso nga mga aplikasyon kay makagamit ani para dili paganahon ang mga importante nga kamaohan sa phone. Gamiton ang care nga naay permiso kay posible makakuha ug mga parte sa aplikasyon nga dili magamit, walay ayo, ug dili maayo nga estado.</string>
+  <string product="tablet" name="permdesc_changeComponentState">Tugtan ang aplikasyon nga muusab ug parte sa lain aplikasyon nakaandar or wala. Mga malisyoso nga mga aplikasyon kay makagamit ani para dili paganahon ang mga importante nga kamaohan sa tablet. Gamiton ang care nga naay permiso kay posible makakuha ug mga parte sa aplikasyon nga dili magamit, walay ayo, ug dili maayo nga estado.
+    </string>
+  <string product="default" name="permdesc_changeComponentState">Tugtan ang aplikasyon nga muusab ug parte sa lain aplikasyon nakaandar or wala. Mga malisyoso nga mga aplikasyon kay makagamit ani para dili paganahon ang mga importante nga kamaohan sa phone. Gamiton ang care nga naay permiso kay posible makakuha ug mga parte sa aplikasyon nga dili magamit, walay ayo, ug dili maayo nga estado.
+    </string>
   <string name="permlab_setPreferredApplications">takda ug mga gusto sa aplikasyon</string>
   <string name="permdesc_setPreferredApplications">Tugtan ang aplikasyon nga muusab sa imu gusto nga aplikasyon. Mutugot ni sa mga malisyoso nga pinahilom nga usbon ang aplikasyon nga nagdagan, samukon ang imu nagdagan nga mga aplikasyon aron makakuha ug pribado nga data sa imu.</string>
   <string name="permlab_writeSettings">usbon ang mga global nga setting sa sistema</string>
   <string name="permdesc_writeSettings">Tugtan ang aplikasyon nga muusab sa mga setting sa data sa sistema. Mga malisyoso nga mga aplikasyon kay makadaot sa configuration sa imu sistema.</string>
   <string name="permlab_writeSecureSettings">usbon ang siguro nga mga setting sa sistema</string>
-  <string name="permdesc_writeSecureSettings">Tugtan ang aplikasyon nga muusab sa sigurado nga mga setting sa data sa sistema. Dili magamit para sa mga normal nga aplikasyon.</string>
+  <string name="permdesc_writeSecureSettings">Tugtan ang aplikasyon nga muusab sa sigurado nga mga setting sa data sa sistema. Dili magamit para sa mga normal nga aplikasyon. </string>
   <string name="permlab_writeGservices">usbon ang mapa sa mga serbisyo sa Google</string>
   <string name="permdesc_writeGservices">Tugtan ang aplikasyon nga muusab sa mga serbisyo sa map sa Google. Dili magamit para sa mga normal nga aplikasyon.</string>
   <string name="permlab_receiveBootCompleted">awtomatik nga pagsugod sa pagboot</string>
@@ -508,7 +712,7 @@
   <string name="permlab_readSyncStats">basa ug mga istatistika sa sync</string>
   <string name="permdesc_readSyncStats">Tugtan ang aplikasyon nga mubasa ug mga stat sa sync; e.g., mga kasaysayan ug sync nga niabot.</string>
   <string name="permlab_subscribedFeedsRead">basa ug nasubscribe nga mga feed</string>
-  <string name="permdesc_subscribedFeedsRead">Tugtan ang aplikasyon nga mukuha ug detalye sa mga nasynced nga mga feed karon.</string>
+  <string name="permdesc_subscribedFeedsRead">Tugtan ang aplikasyon nga mukuha ug detalye sa mga nasynced nga mga feed karon. </string>
   <string name="permlab_subscribedFeedsWrite">suwat ug mga nasuskrisyon nga mga feed</string>
   <string name="permdesc_subscribedFeedsWrite">Tugtan ang aplikasyon nga muusab sa mga nasync nga mga feed karon. Makatugot ni sa mga malisyoso nga aplikasyon nga maalisdan ang mga nasync nga mga feed.</string>
   <string name="permlab_readDictionary">basa ug diksyunaryo nga gitakda sa tiggamit</string>
@@ -548,7 +752,8 @@
   <string name="policylab_expirePassword">Takda ug pagkahumana sa password sa lock nga screen</string>
   <string name="policydesc_expirePassword">Kontrolon unsa kapirmihon ang password sa lock-screen nga alisdan</string>
   <string name="policylab_encryptedStorage">Takda ug imbakan sa pag-encrypt</string>
-  <string name="policydesc_encryptedStorage">Panginahanglan nga ang data sa na-imbak nga aplikasyon kay I-encrypt</string>
+  <string name="policydesc_encryptedStorage">Panginahanglan nga ang data sa na-imbak nga aplikasyon kay I-encrypt
+        </string>
   <string name="policylab_disableCamera">Dili paganahon ang mga kamera</string>
   <string name="policydesc_disableCamera">Pugngan ang paggamit sa tanan nga mga kamera sa device</string>
   <string-array name="phoneTypes">
@@ -713,28 +918,46 @@
   <string name="lockscreen_sim_puk_locked_instructions">Palihug ug tanaw sa Gabay sa Tiggamit o kontak sa Customer Care.</string>
   <string name="lockscreen_sim_locked_message">SIM card kay nalock.</string>
   <string name="lockscreen_sim_unlock_progress_dialog_message">Nag-unlock sa SIM card\u2026</string>
-  <string name="lockscreen_too_many_failed_attempts_dialog_message">Wala nimu namao pagdrawing imu pang-unlock nga pagkasunod-sunod ika <xliff:g id="number">%d</xliff:g> na.
-        \n\nPalihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.</string>
-  <string name="lockscreen_too_many_failed_password_attempts_dialog_message">Wala nimu namao pagsulod imu password ika <xliff:g id="number">%d</xliff:g> na.
-        \n\nPalihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.</string>
-  <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">Wala nimu namao pagsulod imu PIN ika <xliff:g id="number">%d</xliff:g> na.
-        \n\nPalihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_glogin">Wala nimu namao pagguhit imu pang-unlock nga pagkasunod-sunod ika <xliff:g id="number">%d</xliff:g> na.
+  <string name="lockscreen_too_many_failed_attempts_dialog_message">
+        Wala nimu namao pagdrawing imu pang-unlock nga pagkasunod-sunod ika <xliff:g id="number">%d</xliff:g> na.
+        \n\nPalihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.
+    </string>
+  <string name="lockscreen_too_many_failed_password_attempts_dialog_message">
+        Wala nimu namao pagsulod imu password ika <xliff:g id="number">%d</xliff:g> na.
+        \n\nPalihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.
+    </string>
+  <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">
+        Wala nimu namao pagsulod imu PIN ika <xliff:g id="number">%d</xliff:g> na.
+        \n\nPalihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.
+    </string>
+  <string product="tablet" name="lockscreen_failed_attempts_almost_glogin">
+        Wala nimu namao pagguhit imu pang-unlock nga pagkasunod-sunod ika <xliff:g id="number">%d</xliff:g> na.
        Kahuman sa <xliff:g id="number">%d</xliff:g> ka mga dili malampuson nga pagsuway, pangutan-on ka nga i-unlock ang imu phone gamit ang Google sign-in.\n\n
-       Palihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_glogin">Wala nimu namao pagguhit imu pang-unlock nga pagkasunod-sunod ika <xliff:g id="number">%d</xliff:g> na.                                          Pagkahuman ug <xliff:g id="number">%d</xliff:g> ka mga dili malampuson nga pagsuway,
+       Palihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.
+    </string>
+  <string product="default" name="lockscreen_failed_attempts_almost_glogin">
+        Wala nimu namao pagguhit imu pang-unlock nga pagkasunod-sunod ika <xliff:g id="number">%d</xliff:g> na.                                          Pagkahuman ug <xliff:g id="number">%d</xliff:g> ka mga dili malampuson nga pagsuway,
        Pangutan-on ka nga I-unlock imu phone gamit and imu sign-in sa Google.\n\n
-        Palihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">Wala nimu namao ug suway ug unlock sa tablet ika <xliff:g id="number">%d</xliff:g> na.
+        Palihug ug suway balik kahuman sa <xliff:g id="number">%d</xliff:g> ka mga segundo.
+    </string>
+  <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">
+       Wala nimu namao ug suway ug unlock sa tablet ika <xliff:g id="number">%d</xliff:g> na.
        Kahuman sa <xliff:g id="number">%d</xliff:g> ka mga dili malampuson nga suway,
-       ang tablet kay ma-reset sa default nga pabrika ug tanan data sa naggamit kay mawala.</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_at_wipe">Wala nimu namao ug suway ug unlock sa phone ika <xliff:g id="number">%d</xliff:g> na.
+       ang tablet kay ma-reset sa default nga pabrika ug tanan data sa naggamit kay mawala.
+    </string>
+  <string product="default" name="lockscreen_failed_attempts_almost_at_wipe">
+       Wala nimu namao ug suway ug unlock sa phone ika <xliff:g id="number">%d</xliff:g> na.
        Kahuman sa <xliff:g id="number">%d</xliff:g> ka mga dili malampuson nga suway,
-       ang phone kay ma-reset sa default nga pabrika ug tanan data sa naggamit kay mawala.</string>
-  <string product="tablet" name="lockscreen_failed_attempts_now_wiping">Wala nimu namao ug suway ug unlock sa tablet ika <xliff:g id="number">%d</xliff:g> na.
-       Ma-reset na ang tablet karon sa default nga pabrika.</string>
-  <string product="default" name="lockscreen_failed_attempts_now_wiping">Wala nimu namao ug suway ug unlock sa phone ika <xliff:g id="number">%d</xliff:g> na.
-       Ma-reset na ang phone karon sa default nga pabrika.</string>
+       ang phone kay ma-reset sa default nga pabrika ug tanan data sa naggamit kay mawala.
+    </string>
+  <string product="tablet" name="lockscreen_failed_attempts_now_wiping">
+       Wala nimu namao ug suway ug unlock sa tablet ika <xliff:g id="number">%d</xliff:g> na.
+       Ma-reset na ang tablet karon sa default nga pabrika.
+    </string>
+  <string product="default" name="lockscreen_failed_attempts_now_wiping">
+       Wala nimu namao ug suway ug unlock sa phone ika <xliff:g id="number">%d</xliff:g> na.
+       Ma-reset na ang phone karon sa default nga pabrika.
+    </string>
   <string name="lockscreen_too_many_failed_attempts_countdown">Suway balik sulod sa <xliff:g id="number">%d</xliff:g> ka segundo.</string>
   <string name="lockscreen_forgot_pattern_button_text">Kalimtana ang pagkasunod-sunod?</string>
   <string name="lockscreen_glogin_forgot_pattern">I-unlock ang account</string>
@@ -742,7 +965,7 @@
   <string name="lockscreen_glogin_instructions">Para I-unlock, sign in sa imu account sa Google</string>
   <string name="lockscreen_glogin_username_hint">Username (email)</string>
   <string name="lockscreen_glogin_password_hint">Password</string>
-  <string name="lockscreen_glogin_submit_button">pirmahan sa</string>
+  <string name="lockscreen_glogin_submit_button">Sign in</string>
   <string name="lockscreen_glogin_invalid_input">Dili mao nga username o password.</string>
   <string name="lockscreen_glogin_account_recovery_hint">Nakalimtan imu username o password\?\nBisitaha ang<b>google.com/accounts/recovery</b></string>
   <string name="lockscreen_glogin_checking_password">Nagtsek...</string>
@@ -1117,7 +1340,7 @@
   <string name="permission_request_notification_title">Permiso Nahangyo</string>
   <string name="permission_request_notification_with_subtitle">Permiso gihangyo\npara sa account nga <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
   <string name="input_method_binding_label">Paagi sa pagsulod</string>
-  <string name="sync_binding_label">I-sync ang</string>
+  <string name="sync_binding_label">I-sync ang </string>
   <string name="accessibility_binding_label">Pagka-access</string>
   <string name="wallpaper_binding_label">Wolpeyper</string>
   <string name="chooser_wallpaper">Alisdan ang wallpaper</string>
@@ -1269,210 +1492,12 @@
   <string name="china_unicom_numeric_values">CUCC</string>
   <string name="missed_call">%1$d Wala natubag nga tawag</string>
   <string name="unread_message">%1$d Wala nabasa nga mensahe</string>
-  <string name="imei">IMEI</string>
-  <string name="meid">MEID</string>
-  <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>:Wala naabante</string>
-  <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{1}</xliff:g>:Wala naabante</string>
-  <string name="silent_mode_silent">Tig-ring gipawng</string>
-  <string name="silent_mode_vibrate">Kurog sa  tig-ring</string>
-  <string name="silent_mode_ring">Tig-ring I-on</string>
-  <string name="silent_mode_outdoor">"Tig-ring sa gawas sa purtahan"</string>
-  <string name="reboot_safemode_title">I-reboot balik ngadto sa luwas nga paagi</string>
-  <string name="reboot_safemode_confirm">Gusto nimo I-reboot ngadto sa luwas nga paagi?
-         Kini kay dili paganahon ang ikatulo nga parte nga mga aplikasyon nga imu na-install.
-         Mabalik ra ni sila kung mu-reboot ka ug balik.</string>
-  <string name="permlab_readCellBroadcasts">basa ug mga mensahe sa cell nga broadcast </string>
-  <string name="permdesc_readCellBroadcasts">Tugtan ang app nga mubasa 
-      ug mga mensahe sa cell nga broadcast nga nadawat sa imu device. Mga alerto sa Cell broadcast kay ma-deliver sa mga lokasyon para mu-abiso nimo sa mga kagipit nga mga sitwasyon.
-      Malisyos nga mga app kay pwede musamok sa  pagtrabaho o operasyon sa imu device kung naay kagipit nga broadcast ang nadawat.</string>
-  <string name="permlab_getDetailedTasks">I-balik ang mga detalye sa mga nagdagan nga mga app</string>
-  <string name="permdesc_getDetailedTasks">Tugtan ang app para ibalik ang  detalyado nga impormasyon bahin sa karon ug bagohay nga mga nagdagan nga buhat. Malisyoso nga mga app kay pwede makadiskubre ug pribado nga impormasyon bahin sa uban mga app.</string>
-  <string name="permlab_startAnyActivity">sugdan ang bisag unga nga aktibidad</string>
-  <string name="permdesc_startAnyActivity">Tugtan ang app nga sugdan ang bisag unsa nga aktibidad, walay pakialam sa proteksyon sa permiso o na-export nga estado.</string>
-  <string name="permlab_setScreenCompatibility">Takda ug compatibility sa screen</string>
-  <string name="permdesc_setScreenCompatibility">Tugtan ang app para kontrolon ang paagi sa  
-        compatibility sa screen sa uban mga aplikasyon.  Malisyoso nga mga aplikasyon kay pwede muguba sa pag-asta sa uban mga aplikasyon.</string>
-  <string name="permlab_bindAccessibilityService">ihigot ngadto sa usa ka accessibility sa serbisyo</string>
-  <string name="permdesc_bindAccessibilityService">Tugtan ang tiggunit nga ihigot ngadto sa pinakataas nga level nga interface ang serbisyo sa accessibility. Dili na kinahanglan sa uban mga normal nga mga app.</string>
-  <string name="permlab_setKeyboardLayout">usbon ang porma sa  keyboard </string>
-  <string name="permdesc_setKeyboardLayout">Tugtan ang app nga usbon
-        ang porma sa keyboard. Dili na kinahanglan sa uban mga normal nga mga app.</string>
-  <string product="tablet" name="permdesc_persistentActivity">Tugtan ang app para muhimo ug mga parte sa iya kaugalingon padayon sa memorya.  Kini kay maka limita sa pwede nga memorya ngadto sa uban nga mga app nga nagpahinay sa phone.</string>
-  <string product="default" name="permdesc_persistentActivity">Tugtan ang app para muhimo ug mga parte sa iya kaugalingon padayon sa memorya.  Kini kay maka limita sa pwede nga memorya ngadto sa uban nga mga app nga nagpahinay sa phone.</string>
-  <string name="permlab_grantRevokePermissions">sugtan o  balibaran ang mga permiso</string>
-  <string name="permdesc_grantRevokePermissions">Tugtan ang aplikasyon nga sugtan o balibaran
-        ang gisabot nga mga permiso para ani o uban nga mga aplikasyon.  Malisyoso nga mga aplikasyon kay pwede mugamit ani para I-access ang mga tampok nga wala nimo gitugot sa ilaha.</string>
-  <string name="permlab_readCallLog">basa ug log sa tawag</string>
-  <string product="tablet" name="permdesc_readCallLog">Tugtan ang app para mubasa
-     sa log sa tawag sa imu tablet, apil ang data bahin sa paabot ug pagawas nga mga tawag.
-     Kini nga peermiso kay mutugot sa  mga app nga I-save imu data sa log sa tawag, ug malisyoso nga mga app
-     kay pwede ibahagi ang data sa log nga wala ka kahibaw.</string>
-  <string product="default" name="permdesc_readCallLog">Tugtan ang app para mubasa
-     sa log sa tawag sa imu phone, apil ang data bahin sa paabot ug pagawas nga mga tawag.
-     Kini nga peermiso kay mutugot sa  mga app nga I-save imu data sa log sa tawag, ug malisyoso nga mga app
-     kay pwede ibahagi ang data sa log nga wala ka kahibaw.</string>
-  <string name="permlab_writeCallLog">suwat ug log sa tawag</string>
-  <string product="tablet" name="permdesc_writeCallLog">Tugtan ang app nga usbon ang log sa tawag sa imu tablet, apil ang  data bahin sa pasulod ug paggawas nga mga tawag.
-        Malisyoso nga mga app kay pwede ni gamiton para pad-on o usbon ang log sa imu tawag.</string>
-  <string product="default" name="permdesc_writeCallLog">Tugtan ang app nga usbon ang log sa tawag sa imu phone, apil ang  data bahin sa pasulod ug paggawas nga mga tawag.
-        Malisyoso nga mga app kay pwede ni gamiton para pad-on o usbon ang log sa imu tawag.</string>
-  <string product="tablet" name="permdesc_writeCalendar">Tugtan ang app nga 
-     mudugang, mutanggal, mu-usab ug mga panghitabo nga imu ma-usab sa imu tablet, apil
-     kadtong mga higala sa mga kauabn sa trabaho. Kini kay pwede mutugot sa app nga mupadala ug mga mensahe nga 
-    mugawas nga gikan sa kalendaryo sa mga tag-iya, o usbon ang mga panghitabo nga wala kahibaw ang tag-iya.</string>
-  <string product="default" name="permdesc_writeCalendar">Tugtan ang app nga 
-     mudugang, mutanggal, mu-usab ug mga panghitabo nga imu ma-usab sa imu phone, apil
-     kadtong mga higala sa mga kauabn sa trabaho. Kini kay pwede mutugot sa app nga mupadala ug mga mensahe nga 
-    mugawas nga gikan sa kalendaryo sa mga tag-iya, o usbon ang mga panghitabo nga wala kahibaw ang tag-iya.</string>
-  <string name="permdesc_accessCoarseLocation">I-access
-      ang hapit sakto nga lokasyon gikan sa lokasyon sa mga tighatag gamit ang mga gikanan sa network pareha anang
-      tore sa cell ug WLAN. Kung kini nga mga serbisyo sa lokasyon kay pwede ug naka-on, kini nga permiso kay mutugot sa app nga makahibaw sa hapit sakto nimo nga lokasyon.</string>
-  <string product="nosdcard" name="permlab_mount_unmount_filesystems">I-access ang sistema sa file sa imabkan sa USB</string>
-  <string product="default" name="permlab_mount_unmount_filesystems">I-access ang sistema sa file sa SD Card</string>
-  <string product="nosdcard" name="permlab_mount_format_filesystems">Pala-on ang imbakan sa USB</string>
-  <string product="default" name="permlab_mount_format_filesystems">Pala-on ang SD card</string>
-  <string product="tablet" name="permdesc_changeWifiMulticastState">Tugtan ang app nga mudawat ug mga
-      paket nga giapadal ngadto sa tanan mga device sa usa ka  WLAN nga network gamit ang multicast nga mga address,
-      dili lang ang imu phone.  Mugamit ni ug daghan gahum kaysa paagi sa non-multicast.</string>
-  <string product="default" name="permdesc_changeWifiMulticastState">Tugtan ang app nga mudawat ug mga
-      paket nga giapadal ngadto sa tanan mga device sa usa ka  WLAN nga network gamit ang multicast nga mga address,
-      dili lang ang imu phone.  Mugamit ni ug daghan gahum kaysa paagi sa non-multicast.</string>
-  <string product="tablet" name="permdesc_changeWimaxState">Tugtan ang app ngaa
-      mukonek sa tablet sa ug diskonekta ang tablet gikan sa mga network sa  WiMAX.</string>
-  <string product="default" name="permdesc_changeWimaxState">Tugtan ang app ngaa
-      mukonek sa phone sa ug diskonekta ang phone gikan sa mga network sa  WiMAX.</string>
-  <string product="nosdcard" name="permlab_sdcardRead">suway ug access ngadto sa giprotektahan nga imbakan</string>
-  <string product="default" name="permlab_sdcardRead">suway ug access ngadto sa giprotektahan nga imbakan</string>
-  <string product="nosdcard" name="permdesc_sdcardRead">Tugtana ang app nga suwayan ang persmiso para sa imbakan sa USB nga mahimong pwede sa umaabot nga mga  device.</string>
-  <string product="default" name="permdesc_sdcardRead">Tugtana ang app nga suwayan ang persmiso para sa SD card nga mahimong pwede sa umaabot nga mga  device.</string>
-  <string name="faceunlock_multiple_failures">Pinakadaghan nga suway Face Unlock naapsan na</string>
-  <string name="lockscreen_permanent_disabled_sim_message_short">Dili magamit nga SIM card.</string>
-  <string name="granularity_label_character">karakter</string>
-  <string name="granularity_label_word">salita</string>
-  <string name="granularity_label_link">link</string>
-  <string name="granularity_label_line">linya</string>
-  <string name="hour_cap_ampm">"<xliff:g id="hour" example="4">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
-  <string name="autofill_attention_ignored_re">atensyon|attn</string>
-  <string name="autofill_region_ignored_re">probinsya|rehiyon|uban<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
-  <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
-  <string name="autofill_address_line_1_re">address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
-  <string name="autofill_address_line_1_label_re">address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
-  <string name="autofill_address_line_2_re">address.?line2|address2|addr2|street|suite|unit<!-- de-DE -->|adresszusatz|ergänzende.?angaben<!-- es -->|direccion2|colonia|adicional<!-- fr-FR -->|addresssuppl|complementnom|appartement<!-- it-IT -->|indirizzo2<!-- ja-JP -->|住所2</string>
-  <string name="autofill_address_line_3_re">address.?line3|address3|addr3|street|line3<!-- es -->|municipio<!-- fr-FR -->|batiment|residence<!-- it-IT -->|indirizzo3</string>
-  <string name="autofill_country_re">nasud|lokasyon<!-- ja-JP -->|国<!-- zh-CN -->|国家</string>
-  <string name="autofill_zip_code_re">zip|postal|post code|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
-  <string name="autofill_zip_4_re">zip|^-$|post2<!-- pt-BR, pt-PT -->|codpos2</string>
-  <string name="autofill_city_re">city|town<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
-  <string name="autofill_state_re">estado|nasud|rehiyon|probinsya<!-- de-DE -->|land<!-- en-UK -->|nasud|principality<!-- ja-JP -->|都道府県<!-- pt-BR, pt-PT -->|estado|provincia<!-- ru -->|область<!-- zh-CN -->|省<!-- zh-TW -->|地區</string>
-  <string name="autofill_address_type_same_as_re">pareha sa</string>
-  <string name="autofill_address_type_use_my_re">gamita ako</string>
-  <string name="autofill_billing_designator_re">bill</string>
-  <string name="autofill_shipping_designator_re">ship</string>
-  <string name="autofill_email_re">e.?mail<!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
-  <string name="autofill_username_re">tiggamit.?pangalan|tiggamit.?id<!-- de-DE -->|vollständiger.?pangalan<!-- zh-CN -->|用户名</string>
-  <string name="autofill_name_re">^name|full.?name|your.?name|customer.?name|firstandlastname<!-- es -->|nombre.*y.*apellidos<!-- fr-FR -->|^nom<!-- ja-JP -->|お名前|氏名<!-- pt-BR, pt-PT -->|^nome<!-- zh-CN -->|姓名</string>
-  <string name="autofill_name_specific_re">^name<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
-  <string name="autofill_first_name_re">una.*pangalan|mga inisiyal|una nga pangalan|una$<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
-  <string name="autofill_middle_initial_re">tunga.*inisiyal|m\\.i\\.|mi$</string>
-  <string name="autofill_middle_name_re">tunga.*pangalan|mpangalan|tunga$<!-- es -->|apellido.?materno|apellido</string>
-  <string name="autofill_last_name_re">uwahi.*pangalan|lpangalan|apellido|last$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
-  <string name="autofill_phone_re">phone<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
-  <string name="autofill_area_code_re">lugar.*code|acode|lugar</string>
-  <string name="autofill_phone_prefix_re">unlapi<!-- fr-FR -->|preselection<!-- pt-BR, pt-PT -->|ddd</string>
-  <string name="autofill_phone_suffix_re">hulapi</string>
-  <string name="autofill_phone_extension_re">ext<!-- pt-BR, pt-PT -->|ramal</string>
-  <string name="autofill_name_on_card_re">card.?tiggunit|pangalan.?on.?card|ccname|tag-iya<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
-  <string name="autofill_name_on_card_contextual_re">Pangalan</string>
-  <string name="autofill_card_cvc_re">pagsiguro|card pagkahibaw|cvn|seguridad nga code|cvv code|cvc</string>
-  <string name="autofill_card_number_re">numero|card.?#|card.?no|ccnum<!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
-  <string name="autofill_expiration_month_re">wa na|exp.*buwan|exp.*petsa|ccbuwan<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
-  <string name="autofill_expiration_date_re">exp|^/|tuig<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
-  <string name="autofill_card_ignored_re">^card</string>
-  <string name="autofill_fax_re">fax<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
-  <string name="autofill_country_code_re">nasud.*code|ccode|_cc</string>
-  <string name="autofill_area_code_notext_re">^\\($</string>
-  <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
-  <string name="autofill_phone_suffix_separator_re">^-$</string>
-  <string name="permlab_serialPort">I-access ang seriyal nga mga pantalan</string>
-  <string name="permdesc_serialPort">Tugtan mgat tiggunit para I-access ang seriyal nga mga pantalan gamit ang SerialManager nga API.</string>
-  <string name="permlab_accessContentProvidersExternally">I-access ang sulod sa tighatag paggawas</string>
-  <string name="permdesc_accessContentProvidersExternally">Tugtan ang tiggunit para I-access ang sulod sa tighatag gikan sa shell. Dili na kinahanglan sa uban mga normal nga mga app.</string>
-  <string name="permlab_updateLock">dili awhagon ang mga awtomatik nga update sa device</string>
-  <string name="permdesc_updateLock">Tugtan ang tiggunit nga muhatag ug impormasyon ngadto sa sistema kung kanusa ang nindot nga oras para sa dili interaktibo nga reboot para I-upgrade ang device.</string>
-  <string name="enable_explore_by_touch_warning_title">Paganahon ang Pagsuroy pinaagi sa Hikap?</string>
-  <string product="tablet" name="enable_explore_by_touch_warning_message"><xliff:g id="accessibility_service_name">%2$s</xliff:g> kay gusto paganahon ang Pagsuroy pinaagi sa Hikap.
-            Kung magsuroy pinaagi sa Hikap kay naka-on, makabi ka o makakita ug mga paglarawan ug unsay naa ilawm sa imu tudlo o pagbuhat ug  mga ku</string>
-  <string product="default" name="enable_explore_by_touch_warning_message"><xliff:g id="accessibility_service_name">%1$s</xliff:g> kay gusto paganahon ang Pagsuroy pinaagi sa Hikap.
-            Kung magsuroy pinaagi sa Hikap kay naka-on, makabi ka o makakita ug mga paglarawan ug unsay naa ilawm sa imu tudlo o pagbuhat ug  mga kumpas para makatabang sa phone.</string>
-  <string name="low_internal_storage_view_text">Uban mga pagpagana sa sistema kay pwede dili mugana</string>
-  <string name="webpage_unresponsive">Ang pahina kay nahimong dili matinubagon.\n\nGusto nimo isarado ni?</string>
-  <string name="wifi_available_sign_in_detailed">
-    <xliff:g id="wifi_network_ssid">%1$s</xliff:g>
-  </string>
-  <string name="accept">Dawat</string>
-  <string name="decline">Dili sugtan</string>
-  <string name="wifi_p2p_invitation_sent_title">Imbitasyon napadala</string>
-  <string name="wifi_p2p_invitation_to_connect_title">Imbitasyon para mukonek</string>
-  <string name="wifi_p2p_from_message">Gikan</string>
-  <string name="wifi_p2p_to_message">Para:</string>
-  <string name="wifi_p2p_enter_pin_message">I-type and gikinahanglan nga PIN:</string>
-  <string name="wifi_p2p_show_pin_message">PIN:</string>
-  <string name="date_time_done">Humana</string>
-  <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
-  <string name="perms_new_perm_prefix">
-    <font fgcolor="#ff900000" size="12">BAGO: </font>
-  </string>
-  <string name="perms_description_app">Gihatag sa <xliff:g id="app_name">%1$s</xliff:g>.</string>
-  <string name="usb_cdrom_notification_title">Virtual nga Drayber kay naka-on</string>
-  <string name="locale_replacement">""</string>
-  <string name="use_physical_keyboard">Keyboard sa device</string>
-  <string name="hardware">Hardware</string>
-  <string name="select_keyboard_layout_notification_title">Pili ug porma sa keyboard</string>
-  <string name="select_keyboard_layout_notification_message">Hikap para mupili ug porma sa keyboard.</string>
-  <string name="permdesc_copyProtectedData">Tugtan ang app nga mamalihug sa serbisyo sa default nga sudlanan para kopyahon ang sulod. Dili gamit para sa mga normal nga app.</string>
-  <string name="permlab_route_media_output">Irouta ang ouput sa media</string>
-  <string name="permdesc_route_media_output">Tugtan ang aplikasyon nga Irouta ang ouput sa media sa uban gawas nga mga device.</string>
-  <string name="alternate_eri_file">/data/eri.xml</string>
-  <string name="Low_Memory_Alert">Spasyo sa imbakan sa telepono padung na muubos. Palihug tanggala ang uban data para masiguro ang istabilidad sa phone.</string>
-  <string name="Low_Memory_Free">Libre</string>
-  <string name="Low_Memory_Application">Mga aplikasyon</string>
-  <string name="Low_Memory_Mail">Suwat</string>
-  <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
-  <string name="Low_Memory_System">Sistema</string>
-  <string name="Btn_Select_Clear">Pili/Limas</string>
-  <string name="myAppTip">Pili ug mga aplikasyon nga gunitan</string>
-  <string name="myApp_Start_Btn">sugod</string>
-  <string name="myApp_Move2Sd_ChkBox">BalhinNgadtoSD</string>
-  <string name="myApp_ClearData_ChkBox">Limas ug data</string>
-  <string name="myApp_Uninstall_ChkBox">I-uninstall</string>
-  <string name="myAppLoading">Nagload\u2026</string>
-  <string name="myAppProcessing">Nagproseso\u2026</string>
-  <string name="progress_unmounting1">Nag-naog sa sulod nga imbakan...</string>
-  <string name="progress_erasing1">Nag-pala sa sulod nga imbakan...</string>
-  <string name="format_error1">Dili makapala sa sulod nga imbakan.</string>
-  <string name="media_bad_removal1">Sulod nga imbakan kay natanggal sa wala na naog.</string>
-  <string name="media_checking1">Internal nga storage yana nga gitan-aw</string>
-  <string name="media_removed1">Sulod nga imbakan kay gitanggal.</string>
-  <string name="media_shared1">Sulod nga imbakan kay gigamit karon sa computer.</string>
-  <string name="media_unknown_state1">Sulod nga media kay naa sa wala nahibaw-an nga estado.</string>
-  <string name="find_prev_title">Nilabay</string>
-  <string name="find_next_title">Sunod</string>
-  <string name="description_target_search">Pangita</string>
-  <string name="activity_resolver_use_always">Pirmi</string>
-  <string name="activity_resolver_use_once">Kausa ra</string>
-  <string product="tablet" name="default_audio_route_name">Tablet</string>
-  <string product="default" name="default_audio_route_name">telepono</string>
-  <string name="default_audio_route_name_headphones">Mga headphone</string>
-  <string name="default_audio_route_name_dock_speakers">Pantalan nga mga speaker</string>
-  <string name="default_audio_route_name_hdmi">HDMI nga audio</string>
-  <string name="default_audio_route_category_name">Sistema</string>
-  <string name="bluetooth_a2dp_audio_route_name">Bluetooth nga audio</string>
-  <string name="media_route_chooser_grouping_done">Humana</string>
-  <string name="shutdown_after_seconds">Ang phone kay mapawng kahuman sa  <xliff:g id="NUMBER">%d</xliff:g> ka mga segundo</string>
-  <string name="lockscreen_sim_network_locked_message">Phone kay naka Network lock sa SIM</string>
-  <string name="lockscreen_sim_card_locked_message">SIM card kay nalock.</string>
-  <string name="digtal_formatter">%2$s</string>
-  <string name="description_target_call">Tawag</string>
-  <string name="description_target_sms">SMS</string>
-  <string name="ringtone_waning">Ang di mao nga file, palihug ug pili balik</string>
+  <string product="tablet" name="enable_explore_by_touch_warning_message">
+            <xliff:g id="accessibility_service_name">%1$s</xliff:g> kay gusto paganahon ang Pagsuroy pinaagi sa Hikap.
+            Kung naka-on ang Pagsuroy pinaagi sa Hikap, makabati ka o makakita ug mga paglarawan ug unsay naa sa ilawm sa
+            imu tudlo o mubuhat ug mga lihok para makigtabang sa tablet.</string>
+  <string product="default" name="enable_explore_by_touch_warning_message">
+            <xliff:g id="accessibility_service_name">%1$s</xliff:g> kay gusto paganahon ang Pagsuroy pinaagi sa Hikap.
+            Kung naka-on ang Pagsuroy pinaagi sa Hikap, makabati ka o makakita ug mga paglarawan ug unsay naa sa ilawm sa
+            imu tudlo o mubuhat ug mga lihok para makigtabang sa phone.</string>
 </resources>

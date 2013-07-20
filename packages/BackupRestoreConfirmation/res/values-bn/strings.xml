@@ -1,0 +1,22 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<resources
+xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="backup_confirm_title">সম্পূর্ণ ব্যাকআপ</string>
+    <string name="restore_confirm_title">সম্পূর্ণ পুনরুদ্ধার</string>
+    <string name="backup_confirm_text">একটি সংযুক্ত ডেস্কটপ কম্পিউটারের সমস্ত তথ্য একটি পুরো ব্যাক অনুরোধ করা হয়েছে. আপনি এই ঘটতে মঞ্জুরি দিতে চান \?\n\nআপনি ব্যাকআপ নিজেকে অনুরোধ না করে থাকেন তাহলে, অপারেশন এগিয়ে যাওয়ার অনুমতি দেয় না.</string>
+    <string name="deny_backup_button_label">ব্যাক আপ করবেন না</string>
+    <string name="restore_confirm_text">একটি সংযুক্ত ডেস্কটপ কম্পিউটার থেকে সমস্ত তথ্য একটি সম্পূর্ণ পুনরুদ্ধার অনুরোধ করা হয়েছে. আপনি এই ঘটতে মঞ্জুরি দিতে চান \?\n\nআপনি নিজেকে পুনরুদ্ধার করতে অনুরোধ না করে থাকেন তাহলে, অপারেশন এগিয়ে যাওয়ার অনুমতি দেয় না. এটি বর্তমানে ডিভাইসের কোনো তথ্য প্রতিস্থাপন করবে!</string>
+    <string name="allow_restore_button_label">আমার ডেটা পুনরুদ্ধার করুন</string>
+    <string name="deny_restore_button_label">পুনঃস্থাপন করবেন না</string>
+    <string name="current_password_text">নিচে আপনার বর্তমান ব্যাকআপ পাসওয়ার্ড প্রবেশ করুন:</string>
+    <string name="device_encryption_restore_text">নিচে আপনার ডিভাইস এনক্রিপশন পাসওয়ার্ড লিখুন.</string>
+    <string name="device_encryption_backup_text">নিচে আপনার ডিভাইস এনক্রিপশন পাসওয়ার্ড লিখুন. এই ব্যাকআপ আর্কাইভ এনক্রিপ্ট করতে ব্যবহৃত হবে.</string>
+    <string name="backup_enc_password_text">পুরো ব্যাকআপ ডেটা এনক্রিপ্ট করার জন্য ব্যবহার করার জন্য একটি পাসওয়ার্ড লিখুন. এই ফাঁকা ছেড়ে দেওয়া থাকে তাহলে, আপনার বর্তমান ব্যাকআপ পাসওয়ার্ড ব্যবহার করা হবে:</string>
+    <string name="backup_enc_password_optional">আপনি সম্পূর্ণ ব্যাকআপ ডেটা এনক্রিপ্ট করতে চান তাহলে, নীচে একটি পাসওয়ার্ড লিখুন:</string>
+    <string name="restore_enc_password_text">পুনরুদ্ধার তথ্য এনক্রিপ্ট করা হয়, তাহলে নীচের পাসওয়ার্ড ব্যবহার করুন:</string>
+    <string name="toast_backup_started">শুরু ব্যাকআপ ...</string>
+    <string name="toast_backup_ended">ব্যাক সমাপ্ত</string>
+    <string name="toast_restore_started">শুরু পুনরুদ্ধার করুন ...</string>
+    <string name="toast_restore_ended">শেষ পুনরুদ্ধার করুন</string>
+    <string name="toast_timeout">ক্রিয়াকলাপের সময় শেষ হয়েছে</string>
+</resources>

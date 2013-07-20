@@ -1,5 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="imei">IMEI</string>
+  <string name="meid">MEID</string>
+  <string name="silent_mode_silent">மணியொலி அணைப்பில்</string>
+  <string name="silent_mode_vibrate">மணியொலி அதிரசெய்க</string>
+  <string name="silent_mode_ring">மணியொலி ஆனில்</string>
+  <string name="silent_mode_outdoor">“மணி ஒலிப்பான் வெளிப்புறம்”</string>
+  <string name="reboot_safemode_title">பாதுகாப்பான மோடுக்கு ரீபூட் செய்க</string>
+  <string name="reboot_safemode_confirm">பாதுகாப்பான மோடுக்குள்ளாக ரீபூட் செய்ய உங்களுக்கு விருப்பமா? நீங்கள் நிறுவிய அனைத்து மூன்றாம் தரப்பு அப்ளிகேஷன்களை இது செயலிழக்க செய்யும். நீங்கள் ரீபூட் செய்கையில் அவை மீடகப்படும்.</string>
+  <string name="permlab_readCellBroadcasts">செல் ஒலிபரப்பு செய்திகள் படிக்கவும்</string>
+  <string name="permdesc_readCellBroadcasts">உங்கள் சாதனத்தினால் பெறப்படும் செல் ஒலிபரப்பு செய்திகளைப் படிக்க அப்ளிஏஷனை அனுமதிக்கிறது.அவசர நிலைமைகளைப் பற்றி உங்களுக்கு எச்சரிக்க சில அமைவிடங்களில் செல் ஒலிபரப்பு எச்சரிக்கைகள் சேர்ப்பிக்கப்படுகின்றன. ஒரு அவசர நிலை ஒலிபரப்பு பெறப்படும்போது குற்றம் புரியும் அப்ளிகேஷன்கள் உங்கள் சாதனத்தின் செயல்பாடு அல்லது இயக்கத்துடன் குறுக்கீடு செய்யக்கூடும்.</string>
+  <string name="permlab_getDetailedTasks">ஓடிக்கொண்டிருக்கும் அப்ளிகேஷன்களின் விபரங்களை மீட்டெடுக்கவும்</string>
+  <string name="permdesc_getDetailedTasks">நடப்பில் மற்றும் சமீபத்தில் ஓடிக்கொண்டிருக்கும் பணிகள் பற்றிய விபரமான தகவல்களை மீட்டுப்பெற அப்ளிகேஷனை அனுமதிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் இதர அப்ளிகேஷன்கள் பற்றிய சொந்தத் தகவல்களை கண்டுபிடிக்க்க்கூடும்.</string>
+  <string name="permlab_startAnyActivity">ஒரு செயலைத் துவக்கவும்</string>
+  <string name="permdesc_startAnyActivity">அனுமதி பாதுகாப்பு அல்லது ஏற்றுமதி செய்யப்பட்ட நிலைமை ஒரு பொருட்டில்லாமல் எந்த செயலினையும் துவக்க அப்ளிகேஷனி அனுமதிக்கிறது. </string>
+  <string name="permlab_setScreenCompatibility">திரை ஒத்துப்போகும் தன்மை அமைக்கவும்</string>
+  <string name="permdesc_setScreenCompatibility">இதர அப்ளிகேஷன்களின் திரையுடன் ஒத்துப்போகும் தன்மை மோட்-இனை கட்டுப்பாட்டில் வைக்க அப்ளிகேஷனை அனுமதிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் இதர அப்ளிகேஷன்களின் நடத்தை பாவனையை உடைக்கக்கூடும். </string>
+  <string name="permlab_bindAccessibilityService">அணுகல் தன்மை சேவை ஒன்றுடன் கட்டவும்</string>
+  <string name="permdesc_bindAccessibilityService">வைத்திருப்பவர் உயர்மட்ட இணையும் அனுமதிக்கிறது
+         ஒரு அணுக சேவை இடைமுகம். சாதாரண பயன்பாடுகள் தேவையான.</string>
+  <string name="permlab_setKeyboardLayout">கீபோர்டு லே அவுட் மாற்றவும்</string>
+  <string name="permdesc_setKeyboardLayout">பயன்பாட்டை மாற்ற அனுமதிக்கிறது
+         விசைப்பலகை. சாதாரண பயன்பாடுகள் தேவையான.</string>
+  <string product="tablet" name="permdesc_persistentActivity">நினைவகத்தில் தனது பாகங்களை விடாப்பிடியாக இருக்க வைக்க அப்ளிகேஷனை அனுமதிக்கிறது. இது இதர அப்ளிகேஷன்களுக்கு கிடைக்க இருக்கும் நினைவகத்தைக் குறைத்து டேப்லெட் வேலை செய்யும் வேகத்தைக் குறைக்கிறது.</string>
+  <string product="default" name="permdesc_persistentActivity">நினைவகத்தில் தனது பாகங்களை விடாப்பிடியாக இருக்க வைக்க அப்ளிகேஷனை அனுமதிக்கிறது. இது இதர அப்ளிகேஷன்களுக்கு கிடைக்க இருக்கும் நினைவகத்தைக் குறைத்து தொலைபேசி வேலை செய்யும் வேகத்தைக் குறைக்கிறது.</string>
+  <string name="permlab_grantRevokePermissions">அனுமதிகளை வழங்கவும் அல்லது திருப்பிப்பெறவும்</string>
+  <string name="permdesc_grantRevokePermissions">ஒரு அப்ளிகேஷன் தனக்கு அல்லது இதர அப்ளிகேஷன்களுக்கு குறிப்பிட்ட அனுமதிகளை வழங்க அல்லது திரும்ப்ப்பெற அதனை அனுமதிக்கிறது.  குற்றம் புரியும் அப்ளிகேஷன்கள் அவைகளுக்காக நீங்கள் வழங்காத இந்த அணுகல் அம்சங்களை பயன்படுத்தக்கூடும்.  </string>
+  <string name="permlab_readCallLog">அழைப்பு லாக் படிக்கவும்</string>
+  <string product="tablet" name="permdesc_readCallLog">உள்வரும் மற்றும் வெளிச்செல்லும் அழைப்புக்கள் பற்றிய தரவுகள் உள்ளிட்ட உங்கள் டேப்லெட்டின் அழைப்புக் குறிப்பேட்டினைப் படிக்க அப்ளிகேஷனை அனுமதிக்கிறது. இந்த அனுமதியானது உங்கள் அழைப்பு குறிப்பேட்டுத் தகவல்களை சேமிக்க அனுமதிக்கிறது, மற்றும்  குற்றம் புரியும் அப்ளிகேஷன்கள் உங்களுக்குத் தெரியாமலேயே அழைப்புக் குறிப்பேட்டுத் தரவுகளை பகிர்ந்து கொள்ளக்கூடும்.</string>
+  <string product="default" name="permdesc_readCallLog">உள்வரும் மற்றும் வெளிச்செல்லும் அழைப்புக்கள் பற்றிய தரவுகள் உள்ளிட்ட உங்கள் தொலைபேசியின் அழைப்புக் குறிப்பேட்டினைப் படிக்க அப்ளிகேஷனை அனுமதிக்கிறது. இந்த அனுமதியானது உங்கள் அழைப்பு குறிப்பேட்டுத் தகவல்களை சேமிக்க அனுமதிக்கிறது, மற்றும்  குற்றம் புரியும் அப்ளிகேஷன்கள் உங்களுக்குத் தெரியாமலேயே அழைப்புக் குறிப்பேட்டுத் தரவுகளை பகிர்ந்து கொள்ளக்கூடும்.</string>
+  <string name="permlab_writeCallLog">அழைப்பு குறிப்பேடு எழுதுக</string>
+  <string product="tablet" name="permdesc_writeCallLog">உள்வரும் மற்றும் வெளிச்செல்லும் அழைப்ப்க்கள் பற்றிய தரவுகள் உள்ளீட்ட உங்கள் தொலைபேசியின் அழைப்புக் குறிப்பேட்டினை திருத்தியமைக்க அப்ளிகேஷனை அனுமதிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் உங்கள் அழைப்புக் குறிப்பேட்டினை அழித்துவிட அல்லது திருத்த இதனை பயன்படுத்தக்கூடும்.</string>
+  <string product="default" name="permdesc_writeCallLog">உள்வரும் மற்றும் வெளிச்செல்லும் அழைப்ப்க்கள் பற்றிய தரவுகள் உள்ளீட்ட உங்கள் தொலைபேசியின் அழைப்புக் குறிப்பேட்டினை திருத்தியமைக்க அப்ளிகேஷனை அனுமதிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் உங்கள் அழைப்புக் குறிப்பேட்டினை அழித்துவிட அல்லது திருத்த இதனை பயன்படுத்தக்கூடும்.</string>
+  <string product="tablet" name="permdesc_writeCalendar">உங்கள் நண்பர்கள் அல்லது சக பணியாளர்கள் உள்பட உங்கள் டேப்லெட்டில் நீங்கள் திருத்தி அமைக்கக்கூடிய நிகழ்வுகளை சேர்க்க, அகற்ற, மாற்றியமைக்க  அப்ளிகேஷனை அனுமதிக்கிறது. இது  நாட்காட்டியின் உடைமையாளர்களிடம் இருந்து வருவதாகத்தோன்றுபவற்றை அனுப்பவோ அல்லது உடைமையாளருக்குத் தெரியாமலேயே நிகழ்ச்சிகளைத் திருத்தவோ  அப்ளிகேஷனை அனுமதிக்கக்கூடும்.</string>
+  <string product="default" name="permdesc_writeCalendar">உங்கள் நண்பர்கள் அல்லது சக பணியாளர்கள் உள்பட உங்கள் தொலைபேசியில் நீங்கள் திருத்தி அமைக்கக்கூடிய நிகழ்வுகளை சேர்க்க, அகற்ற, மாற்றியமைக்க  அப்ளிகேஷனை அனுமதிக்கிறது. இது  நாட்காட்டியின் உடைமையாளர்களிடம் இருந்து வருவதாகத்தோன்றுபவற்றை அனுப்பவோ அல்லது உடைமையாளருக்குத் தெரியாமலேயே நிகழ்ச்சிகளைத் திருத்தவோ  அப்ளிகேஷனை அனுமதிக்கக்கூடும்.</string>
+  <string name="permdesc_accessCoarseLocation">செல் கோபுரம் மற்றும் WLAN போன்ற வலை அமைப்பு ஆதாரங்களை பயன்படுத்தும் அமைவிட அளிப்பாளர்களிடம் இருந்து அமைவிடத்தை கிட்டத்தட்ட அணுகவும்.இந்த அமைவிட சேவைகள் கிடைத்து அவை ஆன் செய்யப்பட்டிருந்தால் இந்த அனுமதியானது உங்கள் அமைவிடத்தை கிட்டத்தட்ட நிர்ணயிக்க இந்த அப்ளிகேஷன் அனுமதிக்கிறது.</string>
+  <string product="nosdcard" name="permlab_mount_unmount_filesystems"> USB சேமிப்பக கோப்பு சிஸ்டத்தினை அணுகவும்</string>
+  <string product="default" name="permlab_mount_unmount_filesystems">அணுகல் SD அட்டை கோப்பு</string>
+  <string product="nosdcard" name="permlab_mount_format_filesystems">USB சேமிப்பகத்தினை அழிக்கவும் </string>
+  <string product="default" name="permlab_mount_format_filesystems">SD கார்டு அழிக்கவும்</string>
+  <string product="tablet" name="permdesc_changeWifiMulticastState">உங்கள் டேப்லெட் மட்டுமல்லாது, அனைத்து சாதனங்களுக்கும்  WLAN வலை அமைப்பினை பல ஒலிபரப்பு முகவரிகளைப் பயன்படுத்தி பேக்கெட்டுகளைப் பெறுவதற்கு அப்ளிகேஷனை அனுமதிக்கிறது. பல ஒலிபரப்பு அல்லாத மோடினைக் காட்டிலும் அதிக மின்சக்தியை இது பயன்படுத்துகிறது.</string>
+  <string product="default" name="permdesc_changeWifiMulticastState">உங்கள் தொலைபேசி மட்டுமல்லாது, அனைத்து சாதனங்களுக்கும்  WLAN வலை அமைப்பினை பல ஒலிபரப்பு முகவரிகளைப் பயன்படுத்தி பேக்கெட்டுகளைப் பெறுவதற்கு அப்ளிகேஷனை அனுமதிக்கிறது. பல ஒலிபரப்பு அல்லாத மோடினைக் காட்டிலும் அதிக மின்சக்தியை இது பயன்படுத்துகிறது.</string>
+  <string product="tablet" name="permdesc_changeWimaxState">WiMAX  வலை அமைப்புக்களுடன்/அமைப்புக்களிலிருந்து டேப்லெட்டை இணைக்க அல்லது துண்டிக்க அப்ளிகேஷனை அனுமதிக்கிறது</string>
+  <string product="default" name="permdesc_changeWimaxState">WiMAX  வலை அமைப்புக்களுடன்/அமைப்புக்களிலிருந்து தொலைபேசியை இணைக்க அல்லது துண்டிக்க அப்ளிகேஷனை அனுமதிக்கிறது</string>
+  <string product="nosdcard" name="permlab_sdcardRead">பாதுகாக்கப்பட்ட சேமிப்பகத்திற்கு அணுகல் சோதிக்கவும்</string>
+  <string product="default" name="permlab_sdcardRead">பாதுகாக்கப்பட்ட சேமிப்பகத்திற்கு அணுகல் சோதிக்கவும்</string>
+  <string product="nosdcard" name="permdesc_sdcardRead">எதிர்கால சாதனங்களில் கிடைக்க இருக்கும் USB சேமிப்பகத்திற்கான ஒரு அனுமதியை சோதிக்க அப்ளிகேஷனை அனுமதிக்கிறது </string>
+  <string product="default" name="permdesc_sdcardRead">எதிர்கால சாதனங்களில் கிடைக்க இருக்கும் SD கார்டுக்கான ஒரு அனுமதியை சோதிக்க அப்ளிகேஷனை அனுமதிக்கிறது </string>
+  <string name="faceunlock_multiple_failures">அதிகபட்ச முகம் பூட்டும் முயற்சிகளைத் தாண்டியது</string>
+  <string name="lockscreen_permanent_disabled_sim_message_short">பயன்படுத்த முடியாத சிம் கார்டு</string>
+  <string name="granularity_label_character">எழுத்து</string>
+  <string name="granularity_label_word">வார்த்தை</string>
+  <string name="granularity_label_link">லின்க்</string>
+  <string name="granularity_label_line">லைன்</string>
+  <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+  <string name="autofill_attention_ignored_re">கவனம்|கவனம்</string>
+  <string name="autofill_region_ignored_re">province|region|other<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
+  <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
+  <string name="autofill_address_line_1_re">address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_1_label_re">address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_2_re">address.?line2|address2|addr2|street|suite|unit<!-- de-DE -->|adresszusatz|ergänzende.?angaben<!-- es -->|direccion2|colonia|adicional<!-- fr-FR -->|addresssuppl|complementnom|appartement<!-- it-IT -->|indirizzo2<!-- ja-JP -->|住所2</string>
+  <string name="autofill_address_line_3_re">address.?line3|address3|addr3|street|line3<!-- es -->|municipio<!-- fr-FR -->|batiment|residence<!-- it-IT -->|indirizzo3</string>
+  <string name="autofill_country_re">நாடு|அமைவிடம்<!-- ja-JP -->|国<!-- zh-CN -->|国家</string>
+  <string name="autofill_zip_code_re">ஜிப்|தபால்|தபால் குறியீடு|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
+  <string name="autofill_zip_4_re">ஜிப்|^-$|தபால்2<!-- pt-BR, pt-PT -->|codpos2</string>
+  <string name="autofill_city_re">மாநகரம்|நகரம்<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
+  <string name="autofill_state_re">மாநிலம்|நாடு|பிராந்தியம்|புராவின்ஸ்<!-- de-DE -->|நிலம்<!-- en-UK -->|கவுண்ட்டி|principality<!-- ja-JP -->|都道府県<!-- pt-BR, pt-PT -->|estado|provincia<!-- ru -->|область<!-- zh-CN -->|省<!-- zh-TW -->|地區</string>
+  <string name="autofill_address_type_same_as_re">அது போலவே</string>
+  <string name="autofill_address_type_use_my_re">பயன்படுத்தவும் எனது</string>
+  <string name="autofill_billing_designator_re">பில்</string>
+  <string name="autofill_shipping_designator_re">கப்பல்</string>
+  <string name="autofill_email_re">e.?mail<!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
+  <string name="autofill_username_re">பயனர்.?பெயர்|பயனர்.?id<!-- de-DE -->|vollständiger.?name<!-- zh-CN -->|用户名</string>
+  <string name="autofill_name_re">^name|full.?name|your.?name|customer.?name|firstandlastname<!-- es -->|nombre.*y.*apellidos<!-- fr-FR -->|^nom<!-- ja-JP -->|お名前|氏名<!-- pt-BR, pt-PT -->|^nome<!-- zh-CN -->|姓名</string>
+  <string name="autofill_name_specific_re">^name<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
+  <string name="autofill_first_name_re">முதலாவது.*பெயர்|சுருக்கெழுத்துக்கள்|fname|முதலாவது$<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
+  <string name="autofill_middle_initial_re">நடுவிலான.*சுருக்கெழுத்து|m\\.i\\.|mi$</string>
+  <string name="autofill_middle_name_re">நடுவிலான.*பெயர்|mname|நடுவிலான$<!-- es -->|apellido.?materno|lastlastname</string>
+  <string name="autofill_last_name_re">கடைசி.*பெயர்|lname|துணைப்பெயர்|கடைசி$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
+  <string name="autofill_phone_re">தொலைபேசி<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
+  <string name="autofill_area_code_re">பகுதி.*குறியீடு|acode|பகுதி</string>
+  <string name="autofill_phone_prefix_re">முன்னெழுத்து<!-- fr-FR -->|முன் தேர்வு<!-- pt-BR, pt-PT -->|ddd</string>
+  <string name="autofill_phone_suffix_re">பின்னெழுத்து</string>
+  <string name="autofill_phone_extension_re">ext<!-- pt-BR, pt-PT -->|ramal</string>
+  <string name="autofill_name_on_card_re">கார்டு.?கொண்டிருப்பவர்|பெயர்.?ஆனில்.?கார்டு|ccபெயர்|உடைமையாளர்<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
+  <string name="autofill_name_on_card_contextual_re">பெயர்</string>
+  <string name="autofill_card_cvc_re">சரிபார்த்தல்|கார்டு அடையாளம் காணுதல்|cvn|பாதுகாப்பு குறியீடு|cvv குறியீடு|cvc</string>
+  <string name="autofill_card_number_re">எண்|கார்டு.?#|கார்டு.?no|ccnum<!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
+  <string name="autofill_expiration_month_re">expir|exp.*month|exp.*date|ccmonth<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
+  <string name="autofill_expiration_date_re">exp|^/|வருடம்<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
+  <string name="autofill_card_ignored_re">^கார்டு</string>
+  <string name="autofill_fax_re">fax<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
+  <string name="autofill_country_code_re">நாடு.*குறியீடு|ccode|_cc</string>
+  <string name="autofill_area_code_notext_re">^\\($</string>
+  <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
+  <string name="autofill_phone_suffix_separator_re">^-$</string>
+  <string name="permlab_serialPort">தொடர் துறைகளில் அணுக</string>
+  <string name="permdesc_serialPort">சீரியல் மேனேஜர் API பயன்படுத்தி சீரியல் போர்ட்டுகளை அணுக வைத்திருப்பவரை அனுமதிக்கிறது.</string>
+  <string name="permlab_accessContentProvidersExternally">உட்பொருள் அளிப்பாளர்களை வெளிப்புறமாக அணுகவும்</string>
+  <string name="permdesc_accessContentProvidersExternally">ஷெல் இல் இருந்தபடி உட்பொருள் அளிப்பாளர்களை அணுக வைத்திருப்பவரை அனுமதிக்கிறது. இயல்பான அப்ளிகேஷன்களுக்கு ஒருபோதும் தேவைப்படக்கூடாது. </string>
+  <string name="permlab_updateLock">தன்னியக்கமாக சாதனம் புதுப்பித்தலை வரவேற்க வேண்டாம்</string>
+  <string name="permdesc_updateLock">சாதனத்தை தரமுயர்த்த பரஸ்பர செயல்பாடற்ற மறு பூட் செய்வதற்கான சரியான தருணம் எதுவாக இருக்கலாம் என்பது பற்றி சிஸ்ட்த்திர்கு தகவல் அளிக்க வைத்திருப்பவரை அனுமதிக்கிறது. </string>
+  <string name="enable_explore_by_touch_warning_title">தொடுவதினால் தேடலை ஏதுவாக்கவா?</string>
+  <string name="low_internal_storage_view_text">சிம் சிஸ்டம் செயல்பாடுகள் பணியாற்றாமல் போகலாம்</string>
+  <string name="webpage_unresponsive">பக்கம் பதிலிறுக்கத்தக்கதாக ஆகி விட்டது. \n\nஅதனை மூடிவிட உங்களுக்கு விருப்பமா?</string>
+  <string name="wifi_available_sign_in_detailed">
+    <xliff:g id="wifi_network_ssid">%1$s</xliff:g>
+  </string>
+  <string name="accept">ஏற்கவும்</string>
+  <string name="decline">மறுத்துவிடு</string>
+  <string name="wifi_p2p_invitation_sent_title">அழைப்பிதழ் அனுப்பப்பட்டது</string>
+  <string name="wifi_p2p_invitation_to_connect_title">இணைப்பதற்கான அழைப்பிதழ்</string>
+  <string name="wifi_p2p_from_message">இதில் இருந்து</string>
+  <string name="wifi_p2p_to_message">பெறுநர்:</string>
+  <string name="wifi_p2p_enter_pin_message">தேவைப்படும் PIN டைப் செய்க:</string>
+  <string name="wifi_p2p_show_pin_message">PIN:</string>
+  <string name="date_time_done">செய்யப்பட்டது</string>
+  <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+  <string name="perms_new_perm_prefix">
+    <font fgcolor="#ff900000" size="12">புதியது: </font>
+  </string>
+  <string name="perms_description_app"><xliff:g id="app_name">%1$s</xliff:g> ஆல் அளிக்கப்பட்டது.</string>
+  <string name="usb_cdrom_notification_title">நிகழ்நிலை டிரைவர் ஆனில்</string>
+  <string name="locale_replacement">""</string>
+  <string name="use_physical_keyboard">பொருள்ரீதியான கீபலகை</string>
+  <string name="hardware">வன்பொருள்</string>
+  <string name="select_keyboard_layout_notification_title">கீ பலகை லே அவுட் தெரிவு செய்க</string>
+  <string name="select_keyboard_layout_notification_message">ஒரு கீபலகை லே அவுட்டை தேர்ந்தெடுக்க தொடவும்</string>
+  <string name="permlab_route_media_output">ரூட் மீடியா அவுட்புட்</string>
+  <string name="permdesc_route_media_output">மற்ற வெளிப்புற சாதனக்களுக்கு மீடியா வெளி வழங்கலுக்கு வழியமைக்க ஒரு அப்ளிகேஷனை அனுமதிக்கிறது.</string>
+  <string name="alternate_eri_file">/தரவுகள்/eri.xml</string>
+  <string name="Low_Memory_Alert">தொலைபேசி சேமிப்பக இடவசதி குறைந்துகொண்டிருக்கிறது. தொலைபேசியின் ஸ்திரத்தன்மையை உறுதி செய்ய தயவு செய்து சில தரவுகளை நீக்கவும்.</string>
+  <string name="Low_Memory_Free">இலவசம்</string>
+  <string name="Low_Memory_Application">அப்ளிகேஷன்கள்</string>
+  <string name="Low_Memory_Mail">அஞ்சல்</string>
+  <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+  <string name="Low_Memory_System">சிஸ்டம்</string>
+  <string name="Btn_Select_Clear">தெரிவு செய்க/அகற்றுக</string>
+  <string name="myAppTip">கையாளுவதற்கான அப்ளிகேஷன்கள் தெரிவு செய்க</string>
+  <string name="myApp_Start_Btn">துவக்கவும்</string>
+  <string name="myApp_Move2Sd_ChkBox">SD  க்கு நகர்த்தவும்</string>
+  <string name="myApp_ClearData_ChkBox">தரவுகள் அகற்றவும்</string>
+  <string name="myApp_Uninstall_ChkBox">நிறுவுதல் நீக்குக</string>
+  <string name="myAppLoading">நினைவேற்றுகிறது\u2026</string>
+  <string name="myAppProcessing">செயல்முறையாகிக் கொண்டிருக்கிறது \u2026</string>
+  <string name="progress_unmounting1">உள்ளக சேமிப்பு இறக்குகிறது</string>
+  <string name="progress_erasing1">உள்ளக சேமிப்பகத்த்தை அழித்துக்கொண்டிருக்கிறது…</string>
+  <string name="format_error1">உள்ளக சேமிப்பகத்தை அழிக்க முடியவில்லை.</string>
+  <string name="media_bad_removal1">உள்ளக சேமிப்பகம் இறக்குவதற்கு முன்பாக அகற்றப்பட்டது</string>
+  <string name="media_checking1">உள்ளக சேமிப்பகம் தற்போது சரிபார்க்கப்பட்டுகிறது.</string>
+  <string name="media_removed1">உள்ளக சேமிப்பகம் நீக்கப்பட்டுள்ளது.</string>
+  <string name="media_shared1">உள்ளக சேமிப்பகம் தற்போது ஒரு கணினியின் பயன்பாட்டில் உள்ளது.</string>
+  <string name="media_unknown_state1">உள்ளக மீடிய தெரியாத நிலையில் உள்ளது</string>
+  <string name="find_prev_title">முன்னோட்டம்</string>
+  <string name="find_next_title">அடுத்தது</string>
+  <string name="description_target_search">தேடுக</string>
+  <string name="activity_resolver_use_always">எப்போதும்</string>
+  <string name="activity_resolver_use_once">ஒருமுறைக்கு மட்டும்</string>
+  <string product="tablet" name="default_audio_route_name">டேப்லெட்</string>
+  <string product="default" name="default_audio_route_name">தொலைபேசி</string>
+  <string name="default_audio_route_name_headphones">தலையில் மாட்டும் ஒலிப்பான்</string>
+  <string name="default_audio_route_name_dock_speakers">டாக் ஸ்பீக்கர்கள்</string>
+  <string name="default_audio_route_name_hdmi">HDMI ஆடியோ</string>
+  <string name="default_audio_route_category_name">சிஸ்டம்</string>
+  <string name="bluetooth_a2dp_audio_route_name">புளூடூத் ஆடியோ</string>
+  <string name="media_route_chooser_grouping_done">செய்யப்பட்டது</string>
+  <string name="shutdown_after_seconds"><xliff:g id="NUMBER">%d</xliff:g> வினாடிகளுக்குப் பின்னர் தொலைபேசி ஷட் டவுன் ஆகும்</string>
+  <string name="lockscreen_sim_network_locked_message">தொலைபேசி சிம் வலைப்பின்னல் பூட்டப்பட்டது</string>
+  <string name="lockscreen_sim_card_locked_message">சிம் கார்டு பூட்டப்பட்டுள்ளது.</string>
+  <string name="digtal_formatter">%2$s</string>
+  <string name="description_target_call">அழைப்பு</string>
+  <string name="description_target_sms">எஸ் எம் எஸ்</string>
+  <string name="ringtone_waning">தவறான கோப்பு, தயவு செய்து மறுதேர்வு செய்க</string>
   <string name="byteShort">B</string>
   <string name="kilobyteShort">KB</string>
   <string name="megabyteShort">MB</string>
@@ -41,7 +213,7 @@
   <string name="ClirMmi">வெளிச்செல்லும் அழைப்பாளர் ID</string>
   <string name="ColpMmi">இணைக்கப்பட்ட லைன் அடையாளப்படுத்தல் அளிப்பு</string>
   <string name="ColrMmi">இணைக்கப்பட்ட லைன் அடையாளப்படுத்தல் தடுப்பு</string>
-  <string name="CfMmi">அழைப்பு முன்செலுத்தல்</string>
+  <string name="CfMmi">அழைப்பு முன்செலுத்தல் </string>
   <string msgid="" name="UnConditionCfMmi">"நிபந்தனையில்லாமல் அழைப்பு முன்செலுத்தப்படுகிறது"</string>
   <string msgid="" name="BusyCfMmi">"பிஸியாக இருக்கும்போது அழைப்பு முன் செலுத்தல்"</string>
   <string msgid="" name="NoReplyCfMmi">"பதில் இல்லாதபோது அழைப்பு முன் செலுத்தல்"</string>
@@ -123,7 +295,7 @@
   <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: முன் தள்ளப்படவில்லை</string>
   <string name="fcComplete">அமசங்கள் குறியீடு பூர்த்தி.</string>
   <string name="fcError">இணைப்பு பிரச்சனை அல்லது செல்லுபடியாகாத அம்சத்தின் குறியீடு.</string>
-  <string name="httpErrorOk">ஓகே</string>
+  <string name="httpErrorOk">OK</string>
   <string name="httpError">ஒரு வலை அமைப்பு பிழை நிகழ்ந்தது.</string>
   <string name="httpErrorLookup">URL காணப்படவில்லை.</string>
   <string name="httpErrorUnsupportedAuthScheme">தள அங்கீகரிப்பு திட்டம் துணை நிற்கவில்லை.</string>
@@ -151,7 +323,7 @@
   <string name="silent_mode">நிசப்த மோட்</string>
   <string name="turn_on_radio">வயர்லெஸ் ஆன் செய்யவும்</string>
   <string name="turn_off_radio">வயர்லெஸ் ஆஃப் செய்யவும்</string>
-  <string name="screen_lock">திரைப்பூட்டு</string>
+  <string name="screen_lock">திரைப்பூட்டு அமைக்கவும்</string>
   <string name="power_off">மின்சக்தி அகல்</string>
   <string name="shutdown_progress">வேலை முடிந்து மூடுகிறது\u2026</string>
   <string product="tablet" name="shutdown_confirm">உங்கள் டேப்லெட் ஷட் டவுன் ஆகும்.</string>
@@ -198,7 +370,7 @@
   <string product="default" name="permgroupdesc_storage">SD கார்டு அணுகவும்.</string>
   <string name="permlab_statusBar">ஸ்டாட்டஸ் பாரை திருத்துக அல்லது செயலிழக்க செய்க</string>
   <string name="permdesc_statusBar">ஸ்டேட்டஸ் பார்-இனை செயலிழ்க்க செய்ய அல்லது சிஸ்டம் உருவகங்களை சேர்க்க அல்லது நீக்க ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
-  <string name="permlab_statusBarService">ஸ்டேட்டஸ் பார்</string>
+  <string name="permlab_statusBarService">ஸ்டேட்டஸ் பார் </string>
   <string name="permdesc_statusBarService">ஸ்டேட்டஸ் பார் ஆக இருக்க அப்ளிகேஷனை அனுமதிக்கிறது.</string>
   <string name="permlab_expandStatusBar">ஸ்டாட்டஸ் பார் விரிவாக்கு/மறை</string>
   <string name="permdesc_expandStatusBar">ஸ்டாட்டஸ் பார்-இனை விரிவுபடுத்த அல்லது மறைக்க ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
@@ -348,9 +520,9 @@
   <string product="default" name="permdesc_readProfile">உங்கள் பெயர் மற்றும் தொடர்பு தகவல்கள் போன்ற உங்கள் சாதனத்தில் சேமிக்கப்பட்ட தனி ந்பர் சுயவிவர தகவல்களைப் படிக்க அப்ளிகேஷனை அனுமதிக்கிறது. அதாவது இதர அப்ளிகேஷன்கள் உங்களை அடையாளம் கண்டு உங்களுடைய சுயவிவரத் தகவல்களை மற்றவர்களுக்கும் அனுப்பலாம் என அர்த்தம்.</string>
   <string name="permlab_writeProfile">உங்கள் சுயவிவரதரவுகளை எழுதவும்</string>
   <string product="default" name="permdesc_writeProfile">உங்கள் பெயர் மற்றும் தொடர்பு போன்ற உங்கள் சாதனத்தில் சேமிக்கப்பட்டுள்ள தனிநபர் சுயவிவர தகவல்களுடன் சேர்க்க அல்லது அவற்றை மாற்ற அப்ளிகேஷனை அனுமதிக்கிறது. அதாவது இதர அப்ளிகேஷன்கள் உங்களை அடையாளம் கண்டு உங்களுடைய சுயவிவரத் தகவல்களை மற்றவர்களுக்கும் அனுப்பலாம் என அர்த்தம்.</string>
-  <string product="default" name="permlab_readSocialStream">உங்கள் சமூக ஓட்டத்தைப் படிக்கவும்</string>
+  <string product="default" name="permlab_readSocialStream">உங்கள் சமூக ஓட்டத்தைப் படிக்கவும் </string>
   <string product="default" name="permdesc_readSocialStream">உங்களிடம் மற்றும் உங்கள் நண்பர்களிடமிருந்து சமூக புதுப்பிப்புக்களைஅணுகி சின்க் செய்ய அப்ளிகேஷனை அனுமதிக்கிறது. சமூக வலையமைப்புக்களில் உங்களுக்கு மற்றும் உங்கள் நண்பர்களுக்கு இடையிலான தனிப்பட்ட தகவல் பரிமாற்றங்களைப் படிக்க  தீங்கு விளைவிக்கும் அப்ளிகேஷன்கள் இதனைப் பயன்படுத்தலாம்.</string>
-  <string product="default" name="permlab_writeSocialStream">உங்களுடைய சமூக தகவல் அரங்கத்திற்கு எழுதவும்</string>
+  <string product="default" name="permlab_writeSocialStream">உங்களுடைய சமூக தகவல் அரங்கத்திற்கு எழுதவும் </string>
   <string product="default" name="permdesc_writeSocialStream">உங்கள் நண்பர்களிடமிருந்து சமூக புதுப்பித்தல்களை திரையிட அப்ளிகேஷனை அனுமதிக்கிறது. தீங்கு விளைவிக்கும் அப்ளிகேஷன்கள் உங்கள் நண்பர்களாக இருப்பதுபோல பாவித்து கடவுச்சொற்கள் அல்லது இதர முக்கிய தகவல்களைக் கறக்க தந்திரமாக இதனைப் பயன்படுத்தலாம்.</string>
   <string name="permlab_readCalendar">நாட்காட்டி நிகழ்ச்சிகள் மற்றும் ரகசிய தகவல்களைப் படிக்கவும்</string>
   <string product="tablet" name="permdesc_readCalendar">நண்பர்கள் அல்லது சக பணியாளர்கள் உள்ளிட்ட உங்கள் டேப்லெட்டில் சேமித்து இருக்கும் அனைத்து நாட்காட்டி நிகழ்ச்சிகளை படிக்க ஒரு அப்ளிகேஷனை அனுமதிக்கிறது. தீங்கு விளைவிக்கும் ஒரு அப்ளிகேஷனானது உடைமையாளருக்கு த் தெரியாமலேயே இந்த நாட்காட்டியிலிருந்து தனிநபர் தகவல்களை இந்த அனுமதியைக் கொண்டு கவர்ந்துவிடும்.</string>
@@ -421,10 +593,10 @@
   <string name="permdesc_bindGadget">எந்த விட்ஜெட்டுகளை எந்த அப்ளிகேஷனால் பயன்படுத்தலாம் என சிஸ்டத்துக்கு கூற ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது. இந்த அனுமதியுடன், அப்ளிகேஷன்கள் தனிப்பட்ட தரவுகளை மற்ற அப்ளிகேஷன்களுக்கு அணுகல் அளித்துவிடும். சாதாரண அப்ளிகேஷன்களுக்கு பயன்படுத்தக் கூடாது.</string>
   <string name="permlab_modifyPhoneState">தொலைபேசி நிலையை திருத்தவும்</string>
   <string name="permdesc_modifyPhoneState">கருவியின் தொலைபேசி அம்சங்களைக் கட்டுப்படுத்த ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது. எப்போதும் உங்களுக்குத் தெரிவிக்காமலேயே வலை அமைப்புக்களை சுவிட்ச் செய்வது, ரேடியோவை ஆன் ஆஃப் செய்வது போன்றவற்றை இந்த அனுமதியுடனான அப்ளிகேஷன் செய்யும்.</string>
-  <string name="permlab_readPhoneState">தொலைபேசி நிலைமை மற்றும் அடியாளம் படிக்கவும்</string>
+  <string name="permlab_readPhoneState">தொலைபேசி நிலைமை மற்றும் அடியாளம் படிக்கவும் </string>
   <string name="permdesc_readPhoneState">சாதனத்தின் தொலைபேசி அம்சங்களை அணுக அப்ளிகேஷனை அனுமதிக்கிறது.  ஒரு அழைப்பு செயல்பாட்டில் இருப்பது, அனத அழைப்பு இணைந்துள்ள எண் மற்றும் இதுபோன்றவை பொருட்டில்லாமல் தொலைபேசியின் எண் இந்த்த் தொலைபேசியின் வரிசை எண் ஆகியவற்றை இந்த அனுமதியுடனான ஒரு அப்ளிகேஷன் தீர்மானிக்க இயலும்.</string>
   <string product="tablet" name="permlab_wakeLock">டேப்லெட் உறங்குவதைத் தடுக்கவும்</string>
-  <string product="default" name="permlab_wakeLock">தொலைபேசி உறங்குவதில் இருந்து தடுக்கவும்</string>
+  <string product="default" name="permlab_wakeLock">தொலைபேசி உறங்குவதில் இருந்து தடுக்கவும் </string>
   <string product="tablet" name="permdesc_wakeLock">டேப்லெட் உறக்கத்திற்கு செல்வதை தடுக்க ஒரு அப்ளிகேஷனை அனுமதிக்கிறது.</string>
   <string product="default" name="permdesc_wakeLock">தொலைபேசி உறக்கத்திற்கு செல்வதை தடுக்க ஒரு அப்ளிகேஷனுக்கு அனுமதியளிக்கிறது.</string>
   <string product="tablet" name="permlab_devicePower">டேப்லெட் மின்சக்தி ஆன் அல்லது ஆஃப்</string>
@@ -778,7 +950,7 @@
   <string name="autofill_province">பிரதேசம்</string>
   <string name="autofill_postal_code">தபால் குறியீடு</string>
   <string name="autofill_state">நிலை</string>
-  <string name="autofill_zip_code">WLAN</string>
+  <string name="autofill_zip_code">ஜிப் குறியீடு</string>
   <string name="autofill_county">நாடு</string>
   <string name="autofill_island">தீவு</string>
   <string name="autofill_district">தூரமான</string>
@@ -908,7 +1080,7 @@
   <string name="VideoView_error_title">வீடியோ ஓட முடியவில்லை</string>
   <string name="VideoView_error_text_invalid_progressive_playback">மன்னிக்கவும், இந்த சாதனத்தில் வீச்சு செலுத்த செல்லுபடியாகாது.</string>
   <string name="VideoView_error_text_unknown">மன்னிக்கவும், இந்த வீடியோ காண்பிக்க வைக்க முடியாது.</string>
-  <string name="VideoView_error_button">ஓகே</string>
+  <string name="VideoView_error_button">OK</string>
   <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
   <string name="noon">நண்பகல்</string>
   <string name="Noon">நண்பகல்</string>
@@ -930,12 +1102,12 @@
   <string name="inputMethod">உள்ளிடும் வழிமுறை</string>
   <string name="editTextMenuTitle">வாசக செயல்கள்</string>
   <string name="low_internal_storage_view_title">காலியிடத்தில் தாழ்வு</string>
-  <string name="ok">ஓகே</string>
+  <string name="ok">OK</string>
   <string name="cancel">ரத்து</string>
-  <string name="yes">ஓகே</string>
+  <string name="yes">OK</string>
   <string name="no">ரத்து</string>
   <string name="dialog_alert_title">கவனம் தேவை</string>
-  <string name="loading">நினைவேற்றுகிறது\u2026</string>
+  <string name="loading">சுமைஏற்றுகிறது</string>
   <string name="capital_on">ஆன்</string>
   <string name="capital_off">ஆஃப்</string>
   <string name="whichApplication">பயன்படுத்தி முழுமையான செயல்</string>
@@ -950,7 +1122,7 @@
   <string name="anr_activity_process">செயல்பாடு <xliff:g id="activity">%1$s</xliff:g>செவிசாய்க்கவில்லை.\n\nஇதனை நீங்கள் மூடிவிட விருப்பமா?</string>
   <string name="anr_application_process"><xliff:g id="application">%1$s</xliff:g> செவிசாய்க்கவில்லை.இதனை மூட உங்களுக்கு விருப்பமா?</string>
   <string name="anr_process">செயல்முறை<xliff:g id="process">%1$s</xliff:g>பதிலளிக்கவில்லை.</string>
-  <string name="force_close">ஓகே</string>
+  <string name="force_close">OK</string>
   <string name="report">தெரியப்படுத்தவும்</string>
   <string name="wait">காத்திரு</string>
   <string name="launch_warning_title">அப்ளிகேஷன் திசை திருப்பப்பட்டது</string>
@@ -1052,7 +1224,7 @@
   <string name="dlg_confirm_kill_storage_users_title">USB சேமிப்பகத்தை ஆன் செய்யவும்</string>
   <string name="dlg_confirm_kill_storage_users_text">நீங்கள் USB சேமிப்பகத்தை ஆன் செய்தால், USB சேமிப்பகத்தை ஆஃப் செய்யும் வரை நீங்கள் பயன்படுத்தும் சில அப்ளிகேஷன்கள் கிடைக்கப்பெறலாம்.</string>
   <string name="dlg_error_title">USB இயக்கம் தோல்வி</string>
-  <string name="dlg_ok">ஓகே</string>
+  <string name="dlg_ok">OK</string>
   <string name="usb_mtp_notification_title">மீடியா சாதனத்தை இணைக்கப்பட்டது</string>
   <string name="usb_ptp_notification_title">கேமிராவாக இணைக்கப்பட்டது</string>
   <string name="usb_cd_installer_notification_title">நிறுவுபவராக இணைக்கப்பட்டது</string>
@@ -1255,7 +1427,7 @@
   <string name="validity_period">செல்லுபடியாகும்தனமை:</string>
   <string name="issued_on">வழங்கிய நாள்:</string>
   <string name="expires_on">காலாவதியாகும் நாள்:</string>
-  <string name="serial_number">GPS open error</string>
+  <string name="serial_number">வரிசை எண்</string>
   <string name="fingerprints">விரல் ரேகைகள்:</string>
   <string name="sha256_fingerprint">SHA-256 விரல்ரேகை:</string>
   <string name="sha1_fingerprint">SHA-1 விரல்ரேகை:</string>
@@ -1271,180 +1443,10 @@
   <string name="china_unicom_numeric_values">CUCC</string>
   <string name="missed_call">%1$d தவறிய அழைப்பு</string>
   <string name="unread_message">%1$d படிக்காத செய்தி</string>
-  <string name="imei">IMEI</string>
-  <string name="meid">MEID</string>
-  <string name="silent_mode_silent">மணியொலி அணைப்பில்</string>
-  <string name="silent_mode_vibrate">மணியொலி அதிரசெய்க</string>
-  <string name="silent_mode_ring">மணியொலி ஆனில்</string>
-  <string name="silent_mode_outdoor">“மணி ஒலிப்பான் வெளிப்புறம்”</string>
-  <string name="reboot_safemode_title">பாதுகாப்பான மோடுக்கு ரீபூட் செய்க</string>
-  <string name="reboot_safemode_confirm">பாதுகாப்பான மோடுக்குள்ளாக ரீபூட் செய்ய உங்களுக்கு விருப்பமா? நீங்கள் நிறுவிய அனைத்து மூன்றாம் தரப்பு அப்ளிகேஷன்களை இது செயலிழக்க செய்யும். நீங்கள் ரீபூட் செய்கையில் அவை மீடகப்படும்.</string>
-  <string name="permlab_readCellBroadcasts">செல் ஒலிபரப்பு செய்திகள் படிக்கவும்</string>
-  <string name="permdesc_readCellBroadcasts">உங்கள் சாதனத்தினால் பெறப்படும் செல் ஒலிபரப்பு செய்திகளைப் படிக்க அப்ளிஏஷனை அனுமதிக்கிறது.அவசர நிலைமைகளைப் பற்றி உங்களுக்கு எச்சரிக்க சில அமைவிடங்களில் செல் ஒலிபரப்பு எச்சரிக்கைகள் சேர்ப்பிக்கப்படுகின்றன. ஒரு அவசர நிலை ஒலிபரப்பு பெறப்படும்போது குற்றம் புரியும் அப்ளிகேஷன்கள் உங்கள் சாதனத்தின் செயல்பாடு அல்லது இயக்கத்துடன் குறுக்கீடு செய்யக்கூடும்.</string>
-  <string name="permlab_getDetailedTasks">ஓடிக்கொண்டிருக்கும் அப்ளிகேஷன்களின் விபரங்களை மீட்டெடுக்கவும்</string>
-  <string name="permdesc_getDetailedTasks">நடப்பில் மற்றும் சமீபத்தில் ஓடிக்கொண்டிருக்கும் பணிகள் பற்றிய விபரமான தகவல்களை மீட்டுப்பெற அப்ளிகேஷனை அனுமதிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் இதர அப்ளிகேஷன்கள் பற்றிய சொந்தத் தகவல்களை கண்டுபிடிக்க்க்கூடும்.</string>
-  <string name="permlab_startAnyActivity">ஒரு செயலைத் துவக்கவும்</string>
-  <string name="permdesc_startAnyActivity">அனுமதி பாதுகாப்பு அல்லது ஏற்றுமதி செய்யப்பட்ட நிலைமை ஒரு பொருட்டில்லாமல் எந்த செயலினையும் துவக்க அப்ளிகேஷனி அனுமதிக்கிறது. </string>
-  <string name="permlab_setScreenCompatibility">திரை ஒத்துப்போகும் தன்மை அமைக்கவும்</string>
-  <string name="permdesc_setScreenCompatibility">இதர அப்ளிகேஷன்களின் திரையுடன் ஒத்துப்போகும் தன்மை மோட்-இனை கட்டுப்பாட்டில் வைக்க அப்ளிகேஷனை அனுமதிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் இதர அப்ளிகேஷன்களின் நடத்தை பாவனையை உடைக்கக்கூடும். </string>
-  <string name="permlab_bindAccessibilityService">அணுகல் தன்மை சேவை ஒன்றுடன் கட்டவும்</string>
-  <string name="permdesc_bindAccessibilityService">வைத்திருப்பவர் உயர்மட்ட இணையும் அனுமதிக்கிறது
-         ஒரு அணுக சேவை இடைமுகம். சாதாரண பயன்பாடுகள் தேவையான.</string>
-  <string name="permlab_setKeyboardLayout">கீபோர்டு லே அவுட் மாற்றவும்</string>
-  <string name="permdesc_setKeyboardLayout">பயன்பாட்டை மாற்ற அனுமதிக்கிறது
-         விசைப்பலகை. சாதாரண பயன்பாடுகள் தேவையான.</string>
-  <string product="tablet" name="permdesc_persistentActivity">நினைவகத்தில் தனது பாகங்களை விடாப்பிடியாக இருக்க வைக்க அப்ளிகேஷனை அனுமதிக்கிறது. இது இதர அப்ளிகேஷன்களுக்கு கிடைக்க இருக்கும் நினைவகத்தைக் குறைத்து டேப்லெட் வேலை செய்யும் வேகத்தைக் குறைக்கிறது.</string>
-  <string product="default" name="permdesc_persistentActivity">நினைவகத்தில் தனது பாகங்களை விடாப்பிடியாக இருக்க வைக்க அப்ளிகேஷனை அனுமதிக்கிறது. இது இதர அப்ளிகேஷன்களுக்கு கிடைக்க இருக்கும் நினைவகத்தைக் குறைத்து தொலைபேசி வேலை செய்யும் வேகத்தைக் குறைக்கிறது.</string>
-  <string name="permlab_grantRevokePermissions">அனுமதிகளை வழங்கவும் அல்லது திருப்பிப்பெறவும்</string>
-  <string name="permdesc_grantRevokePermissions">ஒரு அப்ளிகேஷன் தனக்கு அல்லது இதர அப்ளிகேஷன்களுக்கு குறிப்பிட்ட அனுமதிகளை வழங்க அல்லது திரும்ப்ப்பெற அதனை அனுமதிக்கிறது.  குற்றம் புரியும் அப்ளிகேஷன்கள் அவைகளுக்காக நீங்கள் வழங்காத இந்த அணுகல் அம்சங்களை பயன்படுத்தக்கூடும்.  </string>
-  <string name="permlab_readCallLog">அழைப்பு லாக் படிக்கவும்</string>
-  <string product="tablet" name="permdesc_readCallLog">உள்வரும் மற்றும் வெளிச்செல்லும் அழைப்புக்கள் பற்றிய தரவுகள் உள்ளிட்ட உங்கள் டேப்லெட்டின் அழைப்புக் குறிப்பேட்டினைப் படிக்க அப்ளிகேஷனை அனுமதிக்கிறது. இந்த அனுமதியானது உங்கள் அழைப்பு குறிப்பேட்டுத் தகவல்களை சேமிக்க அனுமதிக்கிறது, மற்றும்  குற்றம் புரியும் அப்ளிகேஷன்கள் உங்களுக்குத் தெரியாமலேயே அழைப்புக் குறிப்பேட்டுத் தரவுகளை பகிர்ந்து கொள்ளக்கூடும்.</string>
-  <string product="default" name="permdesc_readCallLog">உள்வரும் மற்றும் வெளிச்செல்லும் அழைப்புக்கள் பற்றிய தரவுகள் உள்ளிட்ட உங்கள் தொலைபேசியின் அழைப்புக் குறிப்பேட்டினைப் படிக்க அப்ளிகேஷனை அனுமதிக்கிறது. இந்த அனுமதியானது உங்கள் அழைப்பு குறிப்பேட்டுத் தகவல்களை சேமிக்க அனுமதிக்கிறது, மற்றும்  குற்றம் புரியும் அப்ளிகேஷன்கள் உங்களுக்குத் தெரியாமலேயே அழைப்புக் குறிப்பேட்டுத் தரவுகளை பகிர்ந்து கொள்ளக்கூடும்.</string>
-  <string name="permlab_writeCallLog">அழைப்பு குறிப்பேடு எழுதுக</string>
-  <string product="tablet" name="permdesc_writeCallLog">உள்வரும் மற்றும் வெளிச்செல்லும் அழைப்ப்க்கள் பற்றிய தரவுகள் உள்ளீட்ட உங்கள் தொலைபேசியின் அழைப்புக் குறிப்பேட்டினை திருத்தியமைக்க அப்ளிகேஷனை அனுமதிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் உங்கள் அழைப்புக் குறிப்பேட்டினை அழித்துவிட அல்லது திருத்த இதனை பயன்படுத்தக்கூடும்.</string>
-  <string product="default" name="permdesc_writeCallLog">உள்வரும் மற்றும் வெளிச்செல்லும் அழைப்ப்க்கள் பற்றிய தரவுகள் உள்ளீட்ட உங்கள் தொலைபேசியின் அழைப்புக் குறிப்பேட்டினை திருத்தியமைக்க அப்ளிகேஷனை அனுமதிக்கிறது. குற்றம் புரியும் அப்ளிகேஷன்கள் உங்கள் அழைப்புக் குறிப்பேட்டினை அழித்துவிட அல்லது திருத்த இதனை பயன்படுத்தக்கூடும்.</string>
-  <string product="tablet" name="permdesc_writeCalendar">உங்கள் நண்பர்கள் அல்லது சக பணியாளர்கள் உள்பட உங்கள் டேப்லெட்டில் நீங்கள் திருத்தி அமைக்கக்கூடிய நிகழ்வுகளை சேர்க்க, அகற்ற, மாற்றியமைக்க  அப்ளிகேஷனை அனுமதிக்கிறது. இது  நாட்காட்டியின் உடைமையாளர்களிடம் இருந்து வருவதாகத்தோன்றுபவற்றை அனுப்பவோ அல்லது உடைமையாளருக்குத் தெரியாமலேயே நிகழ்ச்சிகளைத் திருத்தவோ  அப்ளிகேஷனை அனுமதிக்கக்கூடும்.</string>
-  <string product="default" name="permdesc_writeCalendar">உங்கள் நண்பர்கள் அல்லது சக பணியாளர்கள் உள்பட உங்கள் தொலைபேசியில் நீங்கள் திருத்தி அமைக்கக்கூடிய நிகழ்வுகளை சேர்க்க, அகற்ற, மாற்றியமைக்க  அப்ளிகேஷனை அனுமதிக்கிறது. இது  நாட்காட்டியின் உடைமையாளர்களிடம் இருந்து வருவதாகத்தோன்றுபவற்றை அனுப்பவோ அல்லது உடைமையாளருக்குத் தெரியாமலேயே நிகழ்ச்சிகளைத் திருத்தவோ  அப்ளிகேஷனை அனுமதிக்கக்கூடும்.</string>
-  <string name="permdesc_accessCoarseLocation">செல் கோபுரம் மற்றும் WLAN போன்ற வலை அமைப்பு ஆதாரங்களை பயன்படுத்தும் அமைவிட அளிப்பாளர்களிடம் இருந்து அமைவிடத்தை கிட்டத்தட்ட அணுகவும்.இந்த அமைவிட சேவைகள் கிடைத்து அவை ஆன் செய்யப்பட்டிருந்தால் இந்த அனுமதியானது உங்கள் அமைவிடத்தை கிட்டத்தட்ட நிர்ணயிக்க இந்த அப்ளிகேஷன் அனுமதிக்கிறது.</string>
-  <string product="nosdcard" name="permlab_mount_unmount_filesystems"> USB சேமிப்பக கோப்பு சிஸ்டத்தினை அணுகவும்</string>
-  <string product="default" name="permlab_mount_unmount_filesystems">அணுகல் SD அட்டை கோப்பு</string>
-  <string product="nosdcard" name="permlab_mount_format_filesystems">USB சேமிப்பகத்தினை அழிக்கவும் </string>
-  <string product="default" name="permlab_mount_format_filesystems">SD கார்டு அழிக்கவும்</string>
-  <string product="tablet" name="permdesc_changeWifiMulticastState">உங்கள் டேப்லெட் மட்டுமல்லாது, அனைத்து சாதனங்களுக்கும்  WLAN வலை அமைப்பினை பல ஒலிபரப்பு முகவரிகளைப் பயன்படுத்தி பேக்கெட்டுகளைப் பெறுவதற்கு அப்ளிகேஷனை அனுமதிக்கிறது. பல ஒலிபரப்பு அல்லாத மோடினைக் காட்டிலும் அதிக மின்சக்தியை இது பயன்படுத்துகிறது.</string>
-  <string product="default" name="permdesc_changeWifiMulticastState">உங்கள் தொலைபேசி மட்டுமல்லாது, அனைத்து சாதனங்களுக்கும்  WLAN வலை அமைப்பினை பல ஒலிபரப்பு முகவரிகளைப் பயன்படுத்தி பேக்கெட்டுகளைப் பெறுவதற்கு அப்ளிகேஷனை அனுமதிக்கிறது. பல ஒலிபரப்பு அல்லாத மோடினைக் காட்டிலும் அதிக மின்சக்தியை இது பயன்படுத்துகிறது.</string>
-  <string product="tablet" name="permdesc_changeWimaxState">WiMAX  வலை அமைப்புக்களுடன்/அமைப்புக்களிலிருந்து டேப்லெட்டை இணைக்க அல்லது துண்டிக்க அப்ளிகேஷனை அனுமதிக்கிறது</string>
-  <string product="default" name="permdesc_changeWimaxState">WiMAX  வலை அமைப்புக்களுடன்/அமைப்புக்களிலிருந்து தொலைபேசியை இணைக்க அல்லது துண்டிக்க அப்ளிகேஷனை அனுமதிக்கிறது</string>
-  <string product="nosdcard" name="permlab_sdcardRead">பாதுகாக்கப்பட்ட சேமிப்பகத்திற்கு அணுகல் சோதிக்கவும்</string>
-  <string product="default" name="permlab_sdcardRead">பாதுகாக்கப்பட்ட சேமிப்பகத்திற்கு அணுகல் சோதிக்கவும்</string>
-  <string product="nosdcard" name="permdesc_sdcardRead">எதிர்கால சாதனங்களில் கிடைக்க இருக்கும் USB சேமிப்பகத்திற்கான ஒரு அனுமதியை சோதிக்க அப்ளிகேஷனை அனுமதிக்கிறது </string>
-  <string product="default" name="permdesc_sdcardRead">எதிர்கால சாதனங்களில் கிடைக்க இருக்கும் SD கார்டுக்கான ஒரு அனுமதியை சோதிக்க அப்ளிகேஷனை அனுமதிக்கிறது </string>
-  <string name="faceunlock_multiple_failures">அதிகபட்ச முகம் பூட்டும் முயற்சிகளைத் தாண்டியது</string>
-  <string name="lockscreen_permanent_disabled_sim_message_short">பயன்படுத்த முடியாத சிம் கார்டு</string>
-  <string name="granularity_label_character">எழுத்து</string>
-  <string name="granularity_label_word">வார்த்தை</string>
-  <string name="granularity_label_link">லின்க்</string>
-  <string name="granularity_label_line">லைன்</string>
-  <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
-  <string name="autofill_attention_ignored_re">கவனம்|கவனம்</string>
-  <string name="autofill_region_ignored_re">province|region|other<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
-  <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
-  <string name="autofill_address_line_1_re">address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
-  <string name="autofill_address_line_1_label_re">address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
-  <string name="autofill_address_line_2_re">address.?line2|address2|addr2|street|suite|unit<!-- de-DE -->|adresszusatz|ergänzende.?angaben<!-- es -->|direccion2|colonia|adicional<!-- fr-FR -->|addresssuppl|complementnom|appartement<!-- it-IT -->|indirizzo2<!-- ja-JP -->|住所2</string>
-  <string name="autofill_address_line_3_re">address.?line3|address3|addr3|street|line3<!-- es -->|municipio<!-- fr-FR -->|batiment|residence<!-- it-IT -->|indirizzo3</string>
-  <string name="autofill_country_re">நாடு|அமைவிடம்<!-- ja-JP -->|国<!-- zh-CN -->|国家</string>
-  <string name="autofill_zip_code_re">ஜிப்|தபால்|தபால் குறியீடு|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
-  <string name="autofill_zip_4_re">ஜிப்|^-$|தபால்2<!-- pt-BR, pt-PT -->|codpos2</string>
-  <string name="autofill_city_re">மாநகரம்|நகரம்<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
-  <string name="autofill_state_re">மாநிலம்|நாடு|பிராந்தியம்|புராவின்ஸ்<!-- de-DE -->|நிலம்<!-- en-UK -->|கவுண்ட்டி|principality<!-- ja-JP -->|都道府県<!-- pt-BR, pt-PT -->|estado|provincia<!-- ru -->|область<!-- zh-CN -->|省<!-- zh-TW -->|地區</string>
-  <string name="autofill_address_type_same_as_re">அது போலவே</string>
-  <string name="autofill_address_type_use_my_re">பயன்படுத்தவும் எனது</string>
-  <string name="autofill_billing_designator_re">பில்</string>
-  <string name="autofill_shipping_designator_re">கப்பல்</string>
-  <string name="autofill_email_re">e.?mail<!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
-  <string name="autofill_username_re">பயனர்.?பெயர்|பயனர்.?id<!-- de-DE -->|vollständiger.?name<!-- zh-CN -->|用户名</string>
-  <string name="autofill_name_re">^name|full.?name|your.?name|customer.?name|firstandlastname<!-- es -->|nombre.*y.*apellidos<!-- fr-FR -->|^nom<!-- ja-JP -->|お名前|氏名<!-- pt-BR, pt-PT -->|^nome<!-- zh-CN -->|姓名</string>
-  <string name="autofill_name_specific_re">^name<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
-  <string name="autofill_first_name_re">முதலாவது.*பெயர்|சுருக்கெழுத்துக்கள்|fname|முதலாவது$<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
-  <string name="autofill_middle_initial_re">நடுவிலான.*சுருக்கெழுத்து|m\\.i\\.|mi$</string>
-  <string name="autofill_middle_name_re">நடுவிலான.*பெயர்|mname|நடுவிலான$<!-- es -->|apellido.?materno|lastlastname</string>
-  <string name="autofill_last_name_re">கடைசி.*பெயர்|lname|துணைப்பெயர்|கடைசி$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
-  <string name="autofill_phone_re">தொலைபேசி<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
-  <string name="autofill_area_code_re">பகுதி.*குறியீடு|acode|பகுதி</string>
-  <string name="autofill_phone_prefix_re">முன்னெழுத்து<!-- fr-FR -->|முன் தேர்வு<!-- pt-BR, pt-PT -->|ddd</string>
-  <string name="autofill_phone_suffix_re">பின்னெழுத்து</string>
-  <string name="autofill_phone_extension_re">ext<!-- pt-BR, pt-PT -->|ramal</string>
-  <string name="autofill_name_on_card_re">கார்டு.?கொண்டிருப்பவர்|பெயர்.?ஆனில்.?கார்டு|ccபெயர்|உடைமையாளர்<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
-  <string name="autofill_name_on_card_contextual_re">பெயர்</string>
-  <string name="autofill_card_cvc_re">சரிபார்த்தல்|கார்டு அடையாளம் காணுதல்|cvn|பாதுகாப்பு குறியீடு|cvv குறியீடு|cvc</string>
-  <string name="autofill_card_number_re">எண்|கார்டு.?#|கார்டு.?no|ccnum<!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
-  <string name="autofill_expiration_month_re">expir|exp.*month|exp.*date|ccmonth<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
-  <string name="autofill_expiration_date_re">exp|^/|வருடம்<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
-  <string name="autofill_card_ignored_re">^கார்டு</string>
-  <string name="autofill_fax_re">fax<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
-  <string name="autofill_country_code_re">நாடு.*குறியீடு|ccode|_cc</string>
-  <string name="autofill_area_code_notext_re">^\\($</string>
-  <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
-  <string name="autofill_phone_suffix_separator_re">^-$</string>
-  <string name="permlab_serialPort">தொடர் துறைகளில் அணுக</string>
-  <string name="permdesc_serialPort">சீரியல் மேனேஜர் API பயன்படுத்தி சீரியல் போர்ட்டுகளை அணுக வைத்திருப்பவரை அனுமதிக்கிறது.</string>
-  <string name="permlab_accessContentProvidersExternally">உட்பொருள் அளிப்பாளர்களை வெளிப்புறமாக அணுகவும்</string>
-  <string name="permdesc_accessContentProvidersExternally">ஷெல் இல் இருந்தபடி உட்பொருள் அளிப்பாளர்களை அணுக வைத்திருப்பவரை அனுமதிக்கிறது. இயல்பான அப்ளிகேஷன்களுக்கு ஒருபோதும் தேவைப்படக்கூடாது. </string>
-  <string name="permlab_updateLock">தன்னியக்கமாக சாதனம் புதுப்பித்தலை வரவேற்க வேண்டாம்</string>
-  <string name="permdesc_updateLock">சாதனத்தை தரமுயர்த்த பரஸ்பர செயல்பாடற்ற மறு பூட் செய்வதற்கான சரியான தருணம் எதுவாக இருக்கலாம் என்பது பற்றி சிஸ்ட்த்திர்கு தகவல் அளிக்க வைத்திருப்பவரை அனுமதிக்கிறது. </string>
-  <string name="enable_explore_by_touch_warning_title">தொடுவதினால் தேடலை ஏதுவாக்கவா?</string>
-  <string product="tablet" name="enable_explore_by_touch_warning_message"><xliff:g id="accessibility_service_name">%1$s</xliff:g> தேடல் தொடுவதினால் ஏதுவாக்க விரும்புகிறது.
-            தொடுவதினால் ஏதுவாக்கல் ஆன் செய்யும்போது உங்கள் விரலின் கீழாக இருப்பது என்ன என்ற விவரிப்புக்களை நீங்கள் கேட்கலாம் அல்லது பார்க்கலாம் அல்லது தொலைபேசியுடன் பரஸ்பரம் செயல்புரிய சைகைகள் செய்யலாம்</string>
-  <string product="default" name="enable_explore_by_touch_warning_message"><xliff:g id="accessibility_service_name">%1$s</xliff:g> தேடல் தொடுவதினால் ஏதுவாக்க விரும்புகிறது.
-            தொடுவதினால் ஏதுவாக்கல் ஆன் செய்யும்போது உங்கள் விரலின் கீழாக இருப்பது என்ன என்ற விவரிப்புக்களை நீங்கள் கேட்கலாம் அல்லது பார்க்கலாம் அல்லது தொலைபேசியுடன் பரஸ்பரம் செயல்புரிய சைகைகள் செய்யலாம்</string>
-  <string name="low_internal_storage_view_text">சிம் சிஸ்டம் செயல்பாடுகள் பணியாற்றாமல் போகலாம்</string>
-  <string name="webpage_unresponsive">பக்கம் பதிலிறுக்கத்தக்கதாக ஆகி விட்டது. \n\nஅதனை மூடிவிட உங்களுக்கு விருப்பமா?</string>
-  <string name="wifi_available_sign_in_detailed">
-    <xliff:g id="wifi_network_ssid">%1$s</xliff:g>
-  </string>
-  <string name="accept">ஏற்கவும்</string>
-  <string name="decline">மறுத்துவிடு</string>
-  <string name="wifi_p2p_invitation_sent_title">அழைப்பிதழ் அனுப்பப்பட்டது</string>
-  <string name="wifi_p2p_invitation_to_connect_title">இணைப்பதற்கான அழைப்பிதழ்</string>
-  <string name="wifi_p2p_from_message">இதில் இருந்து</string>
-  <string name="wifi_p2p_to_message">பெறுநர்:</string>
-  <string name="wifi_p2p_enter_pin_message">தேவைப்படும் PIN டைப் செய்க:</string>
-  <string name="wifi_p2p_show_pin_message">PIN:</string>
-  <string name="date_time_done">செய்யப்பட்டது</string>
-  <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
-  <string name="perms_new_perm_prefix">
-    <font fgcolor="#ff900000" size="12">புதியது: </font>
-  </string>
-  <string name="perms_description_app"><xliff:g id="app_name">%1$s</xliff:g> ஆல் அளிக்கப்பட்டது.</string>
-  <string name="usb_cdrom_notification_title">நிகழ்நிலை டிரைவர் ஆனில்</string>
-  <string name="locale_replacement">""</string>
-  <string name="use_physical_keyboard">பொருள்ரீதியான கீபலகை</string>
-  <string name="hardware">வன்பொருள்</string>
-  <string name="select_keyboard_layout_notification_title">கீ பலகை லே அவுட் தெரிவு செய்க</string>
-  <string name="select_keyboard_layout_notification_message">ஒரு கீபலகை லே அவுட்டை தேர்ந்தெடுக்க தொடவும்</string>
-  <string name="permlab_route_media_output">ரூட் மீடியா அவுட்புட்</string>
-  <string name="permdesc_route_media_output">மற்ற வெளிப்புற சாதனக்களுக்கு மீடியா வெளி வழங்கலுக்கு வழியமைக்க ஒரு அப்ளிகேஷனை அனுமதிக்கிறது.</string>
-  <string name="alternate_eri_file">/தரவுகள்/eri.xml</string>
-  <string name="Low_Memory_Alert">தொலைபேசி சேமிப்பக இடவசதி குறைந்துகொண்டிருக்கிறது. தொலைபேசியின் ஸ்திரத்தன்மையை உறுதி செய்ய தயவு செய்து சில தரவுகளை நீக்கவும்.</string>
-  <string name="Low_Memory_Free">இலவசம்</string>
-  <string name="Low_Memory_Application">அப்ளிகேஷன்கள்</string>
-  <string name="Low_Memory_Mail">அஞ்சல்</string>
-  <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
-  <string name="Low_Memory_System">சிஸ்டம்</string>
-  <string name="Btn_Select_Clear">தெரிவு செய்க/அகற்றுக</string>
-  <string name="myAppTip">கையாளுவதற்கான அப்ளிகேஷன்கள் தெரிவு செய்க</string>
-  <string name="myApp_Start_Btn">துவக்கவும்</string>
-  <string name="myApp_Move2Sd_ChkBox">SD  க்கு நகர்த்தவும்</string>
-  <string name="myApp_ClearData_ChkBox">தரவுகள் அகற்றவும்</string>
-  <string name="myApp_Uninstall_ChkBox">நிறுவுதல் நீக்குக</string>
-  <string name="myAppLoading">நினைவேற்றுகிறது\u2026</string>
-  <string name="myAppProcessing">செயல்முறையாகிக் கொண்டிருக்கிறது \u2026</string>
-  <string name="progress_unmounting1">உள்ளக சேமிப்பு இறக்குகிறது</string>
-  <string name="progress_erasing1">உள்ளக சேமிப்பகத்த்தை அழித்துக்கொண்டிருக்கிறது…</string>
-  <string name="format_error1">உள்ளக சேமிப்பகத்தை அழிக்க முடியவில்லை.</string>
-  <string name="media_bad_removal1">உள்ளக சேமிப்பகம் இறக்குவதற்கு முன்பாக அகற்றப்பட்டது</string>
-  <string name="media_checking1">உள்ளக சேமிப்பகம் தற்போது சரிபார்க்கப்பட்டுகிறது.</string>
-  <string name="media_removed1">உள்ளக சேமிப்பகம் நீக்கப்பட்டுள்ளது.</string>
-  <string name="media_shared1">உள்ளக சேமிப்பகம் தற்போது ஒரு கணினியின் பயன்பாட்டில் உள்ளது.</string>
-  <string name="media_unknown_state1">உள்ளக மீடிய தெரியாத நிலையில் உள்ளது</string>
-  <string name="find_prev_title">முன்னோட்டம்</string>
-  <string name="find_next_title">அடுத்தது</string>
-  <string name="description_target_search">தேடுக</string>
-  <string name="activity_resolver_use_always">எப்போதும்</string>
-  <string name="activity_resolver_use_once">ஒருமுறைக்கு மட்டும்</string>
-  <string product="tablet" name="default_audio_route_name">டேப்லெட்</string>
-  <string product="default" name="default_audio_route_name">தொலைபேசி</string>
-  <string name="default_audio_route_name_headphones">தலையில் மாட்டும் ஒலிப்பான்</string>
-  <string name="default_audio_route_name_dock_speakers">டாக் ஸ்பீக்கர்கள்</string>
-  <string name="default_audio_route_name_hdmi">HDMI ஆடியோ</string>
-  <string name="default_audio_route_category_name">சிஸ்டம்</string>
-  <string name="bluetooth_a2dp_audio_route_name">புளூடூத் ஆடியோ</string>
-  <string name="media_route_chooser_grouping_done">செய்யப்பட்டது</string>
-  <string name="shutdown_after_seconds"><xliff:g id="NUMBER">%d</xliff:g> வினாடிகளுக்குப் பின்னர் தொலைபேசி ஷட் டவுன் ஆகும்</string>
-  <string name="lockscreen_sim_network_locked_message">தொலைபேசி சிம் வலைப்பின்னல் பூட்டப்பட்டது</string>
-  <string name="lockscreen_sim_card_locked_message">சிம் கார்டு பூட்டப்பட்டுள்ளது.</string>
-  <string name="digtal_formatter">%2$s</string>
-  <string name="description_target_call">அழைப்பு</string>
-  <string name="description_target_sms">எஸ் எம் எஸ்</string>
-  <string name="ringtone_waning">தவறான கோப்பு, தயவு செய்து மறுதேர்வு செய்க</string>
+  <string product="tablet" name="enable_explore_by_touch_warning_message">
+             <xliff:g id="accessibility_service_name">%1$s</xliff:g> தொடுவதன் மூலம் தேடல் செய்தலை விரும்புகிறது.
+            தொடுவதன் மூலம் தேடல் செய்தல் ஆன் செய்யப்படுகையில் உங்கள் விரலுக்கு அடியில் என்ன இருக்கிறது என்பதன் விவரிப்புக்களை நீங்கள் கேட்க முடியும் அல்லது பார்க்க அல்லது டேப்லெட்டுடன் பரஸ்பரம் செயல்புரிய சைகைகளை செயல்படுத்த முடியும்.</string>
+  <string product="default" name="enable_explore_by_touch_warning_message">
+             <xliff:g id="accessibility_service_name">%1$s</xliff:g> தொடுவதன் மூலம் தேடல் செய்தலை விரும்புகிறது.
+            தொடுவதன் மூலம் தேடல் செய்தல் ஆன் செய்யப்படுகையில் உங்கள் விரலுக்கு அடியில் என்ன இருக்கிறது என்பதன் விவரிப்புக்களை நீங்கள் கேட்க முடியும் அல்லது பார்க்க அல்லது தொலைபேசியுடன் பரஸ்பரம் செயல்புரிய சைகைகளை செயல்படுத்த முடியும்.</string>
 </resources>

@@ -76,8 +76,8 @@
   <string msgid="3527558366616680889" name="permlab_updateLock">"ป้องกันการอัปเดตอุปกรณ์อัตโนมัติ"</string>
   <string msgid="1655625832166778492" name="permdesc_updateLock">"ช่วยให้เจ้าของแจ้งข้อมูลเกี่ยวกับเวลาที่เหมาะสมในการรีบูตแบบไม่โต้ตอบเพื่ออัปเกรดอุปกรณ์ไปยังระบบได้"</string>
   <string msgid="7460694070309730149" name="enable_explore_by_touch_warning_title">"เปิดใช้งาน \"สำรวจโดยการแตะ\" หรือไม่"</string>
-  <string msgid="8655887539089910577" product="tablet" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> ต้องการเปิดใช้งาน \"สำรวจโดยการแตะ\" เมื่อเปิดใช้งานแล้ว คุณสามารถฟังหรือดูคำอธิบายของสิ่งที่อยู่ใต้นิ้วข​​องคุณ หรือใช้ท่าทางสัมผัสต่างๆ เพื่อโต้ตอบกับแท็บเล็ตได้"</string>
-  <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> ต้องการเปิดใช้งาน \"สำรวจโดยการแตะ\" เมื่อเปิดใช้งานแล้ว คุณสามารถฟังหรือดูคำอธิบายของสิ่งที่อยู่ใต้นิ้วข​​องคุณ หรือใช้ท่าทางสัมผัสต่างๆ เพื่อโต้ตอบกับโทรศัพท์ได้"</string>
+  <string msgid="8655887539089910577" product="tablet" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> ต้องการเปิดใช้งาน \"สำรวจโดยการแตะ\" เมื่อเปิดใช้งานแล้ว คุณสามารถฟังหรือดูคำอธิบายของสิ่งที่อยู่ใต้นิ้วของคุณ หรือใช้ท่าทางสัมผัสต่างๆ เพื่อโต้ตอบกับแท็บเล็ตได้"</string>
+  <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> ต้องการเปิดใช้งาน \"สำรวจโดยการแตะ\" เมื่อเปิดใช้งานแล้ว คุณสามารถฟังหรือดูคำอธิบายของสิ่งที่อยู่ใต้นิ้วของคุณ หรือใช้ท่าทางสัมผัสต่างๆ เพื่อโต้ตอบกับโทรศัพท์ได้"</string>
   <string msgid="6640505817617414371" name="low_internal_storage_view_text">"บางฟังก์ชันระบบอาจไม่ทำงาน"</string>
   <string msgid="3272758351138122503" name="webpage_unresponsive">"หน้าเว็บนี้ไม่ตอบสนอง"\n\n"คุณต้องการปิดหรือไม่"</string>
   <string msgid="1645267259272829559" name="accept">"ยอมรับ"</string>
