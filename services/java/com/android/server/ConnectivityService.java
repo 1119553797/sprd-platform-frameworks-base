@@ -761,8 +761,12 @@ private NetworkStateTracker makeWimaxStateTracker() {
         NetworkInfo info = tracker.getNetworkInfo();
         if (isNetworkBlocked(tracker, uid)) {
             // network is blocked; clone and override state
-            info = new NetworkInfo(info);
-            info.setDetailedState(DetailedState.BLOCKED, null, null);
+            //Bug#178886 modify start
+            if(uid != android.os.Process.SYSTEM_UID) {
+                info = new NetworkInfo(info);
+                info.setDetailedState(DetailedState.BLOCKED, null, null);
+            }
+            //Bug#178886 modify end
         }
         return info;
     }
