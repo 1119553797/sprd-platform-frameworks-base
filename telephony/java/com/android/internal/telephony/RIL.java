@@ -3442,17 +3442,35 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
         ret = new ArrayList<OperatorInfo>(strings.length / 5);
 
         for (int i = 0 ; i < strings.length ; i += 5) {
-            if( (strings[i+0] == null) && ( strings[i+1] == null ) ) {
-                // both OperatorAlphaLong and OperatorAlphaShort are null,
-                // so get both of them by numeric from numeric_operator.xml
+            //owen.chen modify for 190532: using MCC/MNC to match the display name when it is not null
+            if (strings[i+2] != null)
+            {
+                Log.d(LOG_TAG, " responseOperatorInfos: lookup ioerator name with "+strings[i+2]);
+
+                String mcc = strings[i+2].substring(0, 3);
+                String mnc = strings[i+2].substring(3);
+
+                //delete zero front of mnc is mncShort
+                int mncShort = Integer.parseInt(mnc);
+                strings[i+2] = mcc + mncShort;
+
                 strings[i+0] = getCarrierNameByNumeric(strings[i+2]);
                 strings[i+1] = getCarrierNameByNumeric(strings[i+2]);
-            }else if(strings[i+0] == null) {
-                //use OperatorAlphaShort as OperatorAlphaLong
-                strings[i+0] = strings[i+1];
-            }else if(strings[i+1] == null) {
-                //use OperatorAlphaLong as OperatorAlphaShort
-                strings[i+1] = strings[i+0];
+            } else {
+                 Log.d(LOG_TAG, " responseOperatorInfos: lookup ioerator name with "+strings[i+0]+" or "+strings[i+1]);
+
+                if( (strings[i+0] == null) && ( strings[i+1] == null ) ) {
+                    // both OperatorAlphaLong and OperatorAlphaShort are null,
+                    // so get both of them by numeric from numeric_operator.xml
+                    strings[i+0] = getCarrierNameByNumeric(strings[i+2]);
+                    strings[i+1] = getCarrierNameByNumeric(strings[i+2]);
+                }else if(strings[i+0] == null) {
+                    //use OperatorAlphaShort as OperatorAlphaLong
+                    strings[i+0] = strings[i+1];
+                }else if(strings[i+1] == null) {
+                    //use OperatorAlphaLong as OperatorAlphaShort
+                    strings[i+1] = strings[i+0];
+                }
             }
             ret.add (
                 new OperatorInfo(
