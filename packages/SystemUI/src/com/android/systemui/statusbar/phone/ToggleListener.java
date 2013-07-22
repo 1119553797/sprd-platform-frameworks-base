@@ -86,7 +86,6 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     private boolean[] isStandby;
     protected static final int EVENT_AIRPLANE_SWITCH_DELAY_MESSAGE = 3;
     protected static final int DELAY_AIRPLANE_SET_TIME = 5000;
-    private static final String RINGER_MODE = "ringer_mode";
 
     private boolean mAirplaneEnable;
     private boolean mGpsEnable;
@@ -403,42 +402,17 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     }
 
     private void toggleSoundMode() {
-        SharedPreferences mRingerModeSharePre = mContext.getSharedPreferences(RINGER_MODE,
-                Context.MODE_PRIVATE);
-        boolean isSilent = mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
-        if (isSilent) {
-            // reset before mode and set
-            int lastMode = mRingerModeSharePre.getInt("soundmode", 2);
-            boolean isVibrate = mRingerModeSharePre.getBoolean("vibratemode", false);
-            if (lastMode == AudioManager.RINGER_MODE_NORMAL
-                    || lastMode == AudioManager.RINGER_MODE_OUTDOOR) {
-                mAudioManager.setRingerMode(lastMode);
-                if (isVibrate) {
-                    mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ON);
-                    mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
-                            AudioManager.VIBRATE_SETTING_ON);
-                } else {
-                    mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_OFF);
-                    mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
-                            AudioManager.VIBRATE_SETTING_OFF);
-                }
-            } else if (lastMode == AudioManager.RINGER_MODE_VIBRATE) {
-                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                        AudioManager.VIBRATE_SETTING_ON);
-                mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
-                        AudioManager.VIBRATE_SETTING_ON);
-            }
+        int ringerMode = mAudioManager.getRingerMode();
+        ContentResolver mResolver = mContext.getContentResolver();
+        if (AudioManager.RINGER_MODE_SILENT == ringerMode) {
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
+                    AudioManager.VIBRATE_SETTING_ON);
+            mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
+                    AudioManager.VIBRATE_SETTING_ON);
+        } else if (AudioManager.RINGER_MODE_VIBRATE == ringerMode) {
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         } else {
-            // save current mode and set silent
-            int currentMode = mAudioManager.getRingerMode();
-            boolean isVibrate = mAudioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER) == 1;
-            Editor editer = mRingerModeSharePre.edit();
-            editer.putInt("soundmode", currentMode);
-            editer.putBoolean("vibratemode", isVibrate);
-            editer.commit();
             mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
             mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                     AudioManager.VIBRATE_SETTING_OFF);
@@ -448,9 +422,11 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     }
 
     private void updateSoundModeButton() {
-        boolean isSilent = mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
+        int ringerMode = mAudioManager.getRingerMode();
         int iconId = R.drawable.quick_switch_general_on_sprd;
-        if (isSilent) {
+        if (AudioManager.RINGER_MODE_VIBRATE == ringerMode) {
+            iconId = R.drawable.quick_switch_vibrate_on_sprd;
+        } else if (AudioManager.RINGER_MODE_SILENT == ringerMode) {
             iconId = R.drawable.quick_switch_silent_on_sprd;
         } else {
             iconId = R.drawable.quick_switch_general_on_sprd;

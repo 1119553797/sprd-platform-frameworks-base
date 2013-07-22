@@ -11833,6 +11833,7 @@ package android.media {
     method public static android.net.Uri getDefaultUri(int);
     method public android.database.Cursor getExternalMusics();
     method public boolean getIncludeDrm();
+    method public static android.net.Uri getProfileDefaultUri(android.content.Context, int);
     method public android.media.Ringtone getRingtone(int);
     method public static android.media.Ringtone getRingtone(android.content.Context, android.net.Uri);
     method public static int getRingtonePhoneId(android.net.Uri);

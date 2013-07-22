@@ -925,6 +925,17 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
             StreamControl sc = (StreamControl) tag;
             if (getStreamVolume(sc.streamType) != progress) {
                 setStreamVolume(sc.streamType, progress, 0);
+                if (progress == 0) {
+                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                } else if (progress > 0) {
+                    setStreamVolume(sc.streamType, progress, 0);
+                    if (sc.streamType == AudioManager.STREAM_RING
+                            && (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT
+                            || mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)) {
+                        mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    }
+                }
+
             }
         }
         resetTimeout();
@@ -954,6 +965,9 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
             // "published" remote volume value, so the UI reflects the actual volume.
             if (sc.streamType == AudioService.STREAM_REMOTE_MUSIC) {
                 seekBar.setProgress(getStreamVolume(AudioService.STREAM_REMOTE_MUSIC));
+            }
+            if (sc.streamType == AudioManager.STREAM_RING) {
+                seekBar.setProgress(getStreamVolume(AudioManager.STREAM_RING));
             }
         }
     }
