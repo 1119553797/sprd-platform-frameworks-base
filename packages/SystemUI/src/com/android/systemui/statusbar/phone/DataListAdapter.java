@@ -74,33 +74,13 @@ public class DataListAdapter extends BaseAdapter {
     }
 
     private void initSim() {
-        SimManager simManager;
-        Sim sims[];
-        final int closeData = -1;
-        int mSimNum = 0;
-        simManager = SimManager.get(mContext);
-        if (simManager == null) {
-            Log.d("simmanagerActivity", "simManager = " + null);
-            return;
-        }
-        sims = simManager.getSims();
-        mSimNum = sims.length;
-        simData = new Sim[mSimNum + 1];
-        ConnectivityManager mSimConnManager[];
-        mSimConnManager = new ConnectivityManager[mSimNum];
-        int mobileCount = 0;
-        for (int i = 0; i < mSimNum; i++) {
-            simData[i] = sims[i];
-            int phoneId = simData[i].getPhoneId();
-            mSimConnManager[i] = (ConnectivityManager) mContext
-                    .getSystemService(mContext.CONNECTIVITY_SERVICE);
-            if (!mSimConnManager[i].getMobileDataEnabledByPhoneId(phoneId)) {
-                mobileCount++;
-            }
-        }
-        simData[mSimNum] = new Sim(closeData, null, mContext.getResources().getString(
-                R.string.closeData), 0);
-        if (mobileCount == mSimNum) {
+//20130718 BUG 189145 data connection icon defect START
+        ConnectivityManager mConnManager = (ConnectivityManager) mContext
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean mDataDefaultNetworkOn = mConnManager.getMobileDataEnabledByPhoneId(TelephonyManager
+                .getDefaultDataPhoneId(mContext));
+        if(!mDataDefaultNetworkOn){
+//20130718 BUG 189145 data connection icon defect END
             isCloseData = true;
         }
     }
@@ -108,12 +88,12 @@ public class DataListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         initSim();
         ViewHolder holder = null;
-        Sim sim = (Sim) simData[position];
+//20130718 BUG 189145 data connection icon defect START
+        Sim sim = (Sim) mData[position];
+//20130718 BUG 189145 data connection icon defect END
         int val = -1;
         if (convertView == null) {
-
             holder = new ViewHolder();
-
             convertView = mInflater.inflate(mLayoutId, null);
             holder.colorImage = (RelativeLayout) convertView
                     .findViewById(com.android.internal.R.id.sim_color);
