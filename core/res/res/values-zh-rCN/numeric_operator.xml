@@ -293,7 +293,7 @@
         <item>6021=Mobinil</item>
         <item>6022=Vodafone</item>
         <item>6023=Etisalat</item>
-        <item>7061=CTE Telecom Personal</item>
+        <item>7061=Claro</item>
         <item>7062=digicel</item>
         <item>7063=Tigo</item>
         <item>7064=movistar</item>
@@ -529,6 +529,7 @@
         <item>40492=AirTel</item>
         <item>40493=AirTel</item>
         <item>40496=AirTel</item>
+        <item>40497=AirTel</item>
         <item>4051=Reliance</item>
         <item>4053=Reliance</item>
         <item>4054=Reliance</item>
@@ -1259,6 +1260,7 @@
         <item>5200="my" CAT 3G+</item>
         <item>5201=AIS</item>
         <item>5202=CAT CDMA</item>
+        <item>5203=AIS</item>
         <item>52010=\t</item>
         <item>52015=TOT 3G</item>
         <item>52018=dtac</item>
