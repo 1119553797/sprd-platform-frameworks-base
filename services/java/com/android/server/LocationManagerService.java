@@ -30,6 +30,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PackageParser.Provider;
 import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -96,7 +97,7 @@ import java.util.Set;
  */
 public class LocationManagerService extends ILocationManager.Stub implements Runnable {
     private static final String TAG = "LocationManagerService";
-    private static final boolean LOCAL_LOGV = false;
+    private static final boolean LOCAL_LOGV = true;
 
     // The last time a location was written, by provider name.
     private HashMap<String,Long> mLastWriteTime = new HashMap<String,Long>();
@@ -519,10 +520,12 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
         if (mNetworkLocationProviderPackageName != null) {
             String packageName = findBestPackage(LocationProviderProxy.SERVICE_ACTION,
                     mNetworkLocationProviderPackageName);
+            Slog.e(TAG, "mNetworkLocationProviderPackageName = "+mNetworkLocationProviderPackageName+";packageName = "+packageName);
             if (packageName != null) {
                 mNetworkLocationProvider = new LocationProviderProxy(mContext,
                         LocationManager.NETWORK_PROVIDER,
                         packageName, mLocationHandler);
+                Slog.e(TAG,"mNetworkLocationProvider Name " + mNetworkLocationProvider.getName());
                 mNetworkLocationProviderPackageName = packageName;
                 addProvider(mNetworkLocationProvider);
             }
@@ -530,6 +533,7 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
         if (mGeocodeProviderPackageName != null) {
             String packageName = findBestPackage(GeocoderProxy.SERVICE_ACTION,
                     mGeocodeProviderPackageName);
+            Slog.e(TAG, "mGeocodeProviderPackageName = " + mGeocodeProviderPackageName + "; packageName = " + packageName);
             if (packageName != null) {
                 mGeocodeProvider = new GeocoderProxy(mContext, packageName);
                 mGeocodeProviderPackageName = packageName;
@@ -557,13 +561,15 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
         for (ResolveInfo info : infos) {
             String packageName = info.serviceInfo.packageName;
             // check signature
-            if (mPackageManager.checkSignatures(packageName, sigPackageName) !=
-                    PackageManager.SIGNATURE_MATCH) {
-                Slog.w(TAG, packageName + " implements " + serviceIntentName +
-                       " but its signatures don't match those in " + sigPackageName +
-                       ", ignoring");
-                continue;
-            }
+            //remove for bug#190963 start
+            //if (mPackageManager.checkSignatures(packageName, sigPackageName) !=
+            //        PackageManager.SIGNATURE_MATCH) {
+            //    Slog.w(TAG, packageName + " implements " + serviceIntentName +
+            //           " but its signatures don't match those in " + sigPackageName +
+            //           ", ignoring");
+            //    continue;
+            //}
+            //remove for bug#190963 end
             // read version
             int version = 0;
             if (info.serviceInfo.metaData != null) {
@@ -590,6 +596,7 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
 
         mNetworkLocationProviderPackageName = resources.getString(
                 com.android.internal.R.string.config_networkLocationProviderPackageName);
+        Slog.v(TAG, "Get from config : mNetworkLocationProviderPackageName = "+mNetworkLocationProviderPackageName);
         mGeocodeProviderPackageName = resources.getString(
                 com.android.internal.R.string.config_geocodeProviderPackageName);
 
@@ -718,9 +725,9 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
     }
 
     private List<String> _getAllProvidersLocked() {
-        if (LOCAL_LOGV) {
-            Slog.v(TAG, "getAllProviders");
-        }
+        //if (LOCAL_LOGV) {
+        //    Slog.v(TAG, "getAllProviders");
+        //}
         ArrayList<String> out = new ArrayList<String>(mProviders.size());
         for (int i = mProviders.size() - 1; i >= 0; i--) {
             LocationProviderInterface p = mProviders.get(i);
