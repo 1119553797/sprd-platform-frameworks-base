@@ -329,8 +329,9 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 }
                 if (!isSecure()) {
 //20130718 Wenny Cheng BUG 191209 lockscreen performance tuning START
-                    toDelayUnlock();
-                    // getCallback().keyguardDone(true);
+                    //to delete toDelayUnlock for this causing reboot when unlock screen
+                    //toDelayUnlock();
+                    getCallback().keyguardDone(true);
 //20130718 Wenny Cheng BUG 191209 lockscreen performance tuning END
                 } else {
                     updateScreen(Mode.UnlockScreen, false);
