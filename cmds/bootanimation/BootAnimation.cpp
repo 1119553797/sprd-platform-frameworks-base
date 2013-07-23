@@ -239,7 +239,7 @@ status_t BootAnimation::readyToRun() {
 
     SurfaceComposerClient::openGlobalTransaction();
     control->setLayer(0x40000000);
-    SurfaceComposerClient::closeGlobalTransaction();
+    SurfaceComposerClient::closeGlobalTransactionNoSignal();
 
     sp<Surface> s = control->getSurface();
 
