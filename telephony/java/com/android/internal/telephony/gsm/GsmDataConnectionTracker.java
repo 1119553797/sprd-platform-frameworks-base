@@ -656,6 +656,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             if (Phone.APN_TYPE_MMS.equals(apnContext.getApnType())) return true;
             if (Phone.APN_TYPE_WAP.equals(apnContext.getApnType())) return true;
             if (Phone.APN_TYPE_DM.equals(apnContext.getApnType())) return true;
+            if (DBG) log ("getAnyDataEnabled(): mInternalDataEnabled: " + mInternalDataEnabled + ", mUserDataEnabled: " + mUserDataEnabled + ", sPolicyDataEnabled: " + sPolicyDataEnabled);
             return mInternalDataEnabled && mUserDataEnabled && sPolicyDataEnabled;
         }
     }
@@ -830,6 +831,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
 
         boolean desiredPowerState = mPhone.getServiceStateTracker().getDesiredPowerState();
 
+        if (DBG) log("trySetupData(), apnContext.getState(): " + apnContext.getState() + ", isEmergency(): " + isEmergency());
         if ((apnContext.getState() == State.IDLE || apnContext.getState() == State.SCANNING) &&
                 isDataAllowed(apnContext) && getAnyDataEnabled(apnContext) && !isEmergency()) {
 
