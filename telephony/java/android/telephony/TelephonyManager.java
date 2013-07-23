@@ -57,7 +57,6 @@ import java.util.List;
  */
 public class TelephonyManager {
     private static final String TAG = "TelephonyManager";
-
     private static Context sContext;
     private ITelephonyRegistry sRegistry;
     private int mPhoneId;
@@ -1606,9 +1605,12 @@ public class TelephonyManager {
      * @hide
      */
     public static boolean setDefaultDataPhoneId(Context context, int phoneId) {
-        setPropertyDataPhoneId(phoneId);
-        return Settings.System.putInt(context.getContentResolver(),
+	    setPropertyDataPhoneId(phoneId);
+		Log.d(TAG, "set PropertyDataPhoneId success!");
+		boolean setResult = Settings.System.putInt(context.getContentResolver(),
                 Settings.System.MULTI_SIM_DATA_CALL, phoneId);
+        Log.d(TAG, "set MULTI_SIM_DATA_CALL result:"+setResult);
+		return setResult;
     }
 
     /**

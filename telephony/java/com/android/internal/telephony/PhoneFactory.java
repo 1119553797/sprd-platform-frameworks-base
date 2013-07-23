@@ -440,7 +440,7 @@ public class PhoneFactory {
         return allCardHandled;
     }
 
-//owen.chen modify for 185879
+    //owen.chen modify for 185879
     public static boolean updateDefaultPhoneId(int settingPhoneId) {
         if (!UNIVERSEUI_SUPPORT) {
             if (getSimState(settingPhoneId) != State.READY) {
@@ -454,7 +454,9 @@ public class PhoneFactory {
             }
         }
         Log.i(LOG_TAG, "updateDefaultPhoneId=" + settingPhoneId);
-        TelephonyManager.setDefaultDataPhoneId(sContext, settingPhoneId);
+        if (!TelephonyManager.setDefaultDataPhoneId(sContext, settingPhoneId)) {
+            return false;
+        }
         sContext.sendBroadcast(new Intent(Intent.ACTION_DEFAULT_PHONE_CHANGE));
         return true;
     }
