@@ -305,6 +305,15 @@ public class SimManagerService extends ISimManager.Stub {
             return sim.getColorIndex();
         }
     }
+    //for cu bug 180382,we will remove this method later 
+    public int getColorIndexForCU(int phoneId) {
+        Sim sim = mSimCacheByPhoneId.get(phoneId);
+        if (sim == null) {
+            return -1;
+        } else {
+            return sim.getColorIndex();
+        }
+    }
 
     public void setColorIndex(int phoneId, int colorIndex) {
         Sim sim = mSimCacheByPhoneId.get(phoneId);

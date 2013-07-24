@@ -19960,6 +19960,7 @@ package android.sim {
     method public abstract android.sim.Sim[] getAllSims() throws android.os.RemoteException;
     method public abstract int getColor(int) throws android.os.RemoteException;
     method public abstract int getColorIndex(int) throws android.os.RemoteException;
+    method public abstract int getColorIndexForCU(int) throws android.os.RemoteException;
     method public abstract java.lang.String getIccId(int) throws android.os.RemoteException;
     method public abstract java.lang.String getName(int) throws android.os.RemoteException;
     method public abstract android.sim.Sim getSimByIccId(java.lang.String) throws android.os.RemoteException;
@@ -20017,6 +20018,7 @@ package android.sim {
     method public android.sim.Sim[] getAllSims();
     method public int getColor(int);
     method public int getColorIndex(int);
+    method public int getColorIndexForCU(int);
     method public java.lang.String getIccId(int);
     method public java.lang.String getName(int);
     method public android.sim.Sim getSimByIccId(java.lang.String);
@@ -20041,6 +20043,7 @@ package android.sim {
     method public android.sim.Sim[] getAllSims();
     method public int getColor(int);
     method public int getColorIndex(int);
+    method public int getColorIndexForCU(int);
     method public java.lang.String getIccId(int);
     method public java.lang.String getName(int);
     method public android.sim.Sim getSimByIccId(java.lang.String);
