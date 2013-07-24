@@ -31,6 +31,7 @@ interface ISimManager {
     void setName(int phoneId, String name);
     int getColor(int phoneId);
     int getColorIndex(int phoneId);
+    int getColorIndexForCU(int phoneId);
     void setColorIndex(int phoneId, int colorIndex);
     String getIccId(int phoneId);
 }

@@ -210,6 +210,14 @@ public class SimManager {
         }
     }
 
+    public int getColorIndexForCU(int phoneId) {
+        try {
+            return mService.getColorIndexForCU(phoneId);
+        } catch (RemoteException e) {
+            // won't ever happen
+            throw new RuntimeException(e);
+        }
+    }
     public void setColorIndex(int phoneId, int colorIndex) {
         try {
             mService.setColorIndex(phoneId, colorIndex);
