@@ -50,7 +50,6 @@ public class SignalClusterView
     private int mWifiStrengthId = 0, mWifiActivityId = 0;
     private boolean[] mMobileVisible;
     private boolean[] mDataVisible;
-    private int[] mPhoneColor;
 
     private int[] mMobileStrengthId, mMobileActivityId, mMobileTypeId, mMobileCardId;
 
@@ -64,7 +63,6 @@ public class SignalClusterView
     ViewGroup[] mMobileDataType, mMobileSignalType;
     View[] mMobileGroup;
     ImageView[] mMobile, mMobileActivity, mMobileType, mMobileSignalBar;
-    TextView[] mMobileCard;
     ImageView mAirplane;
     Context mContext;
 
@@ -100,7 +98,6 @@ public class SignalClusterView
     	mMobileCardId = new int[mPhoneNumber];
 
     	mMobileTypeId = new int[mPhoneNumber];
-    	mPhoneColor = new int[mPhoneNumber];
 
     	mMobileGroup = new ViewGroup[mPhoneNumber];
     	mMobileSignalType = new ViewGroup[mPhoneNumber];
@@ -109,7 +106,6 @@ public class SignalClusterView
     	mMobileSignalBar = new ImageView[mPhoneNumber];
     	mMobileActivity = new ImageView[mPhoneNumber];
     	mMobileType = new ImageView[mPhoneNumber];
-    	mMobileCard = new TextView[mPhoneNumber];
     	mMobileDescription = new String[mPhoneNumber];
     	mMobileTypeDescription= new String[mPhoneNumber];
 
@@ -120,7 +116,6 @@ public class SignalClusterView
     		mMobileActivityId[i] = 0;
     		mMobileCardId[i] = 0;
     		mMobileTypeId[i] = 0;
-    		mPhoneColor[i] = 0;
     	}
     }
 
@@ -143,7 +138,6 @@ public class SignalClusterView
         	mMobileGroup[i]    = (ViewGroup) mMobileGroup[i].findViewById(R.id.mobile_combo);
         	mMobileSignalType[i] = (ViewGroup) mMobileGroup[i].findViewById(R.id.mobile_signal_type);
             mMobileSignalBar[i] = (ImageView) mMobileGroup[i].findViewById(R.id.mobile_card);
-            mMobileCard[i] = (TextView) mMobileGroup[i].findViewById(R.id.card_id);
         	mMobile[i]         = (ImageView) mMobileGroup[i].findViewById(R.id.mobile_signal);
         	mMobileDataType[i] = (ViewGroup) mMobileGroup[i].findViewById(R.id.mobile_data_type);
         	mMobileActivity[i] = (ImageView) mMobileGroup[i].findViewById(R.id.mobile_inout);
@@ -161,7 +155,6 @@ public class SignalClusterView
         for(int i=0;i<mPhoneNumber;i++){
         	mMobileGroup[i]    = null;
             mMobileSignalBar[i] = null;
-            mMobileCard[i] = null;
         	mMobile[i]         = null;
         	mMobileActivity[i] = null;
         	mMobileType[i]     = null;
@@ -169,7 +162,6 @@ public class SignalClusterView
         	mMobileSignalType[i] = null;
         }
         mMobileGroup    = null;
-        mMobileCard = null;
         mMobileSignalBar = null;
         mMobile         = null;
         mMobileDataType = null;
@@ -193,7 +185,7 @@ public class SignalClusterView
     }
 
     public void setMobileDataIndicators(boolean visible, int strengthIcon, boolean mDataConnected, int activityIcon,
-            int typeIcon, String contentDescription, String typeContentDescription, int phoneColor, int cardId, int phoneId) {
+            int typeIcon, String contentDescription, String typeContentDescription, int cardId, int phoneId) {
     	if(phoneId >= mPhoneNumber){
     		Slog.d(TAG, "setMobileDataIndicators,invalid phoneId=" + phoneId);
     		return;
@@ -205,7 +197,6 @@ public class SignalClusterView
     	mMobileDescription[phoneId] = contentDescription;
     	mMobileTypeDescription[phoneId] = typeContentDescription;
     	mDataVisible[phoneId] = mDataConnected;
-    	mPhoneColor[phoneId] =phoneColor;
         mMobileCardId[phoneId] = cardId;
     	apply(phoneId);
 
@@ -242,7 +233,6 @@ public class SignalClusterView
     		Slog.d(TAG, "setMobileSignalColor,invalid phoneId=" + phoneId);
     		return;
     	}
-    	mPhoneColor[phoneId] = phoneColor;
     }
 
     // Run after each indicator change.
@@ -269,15 +259,12 @@ public class SignalClusterView
 
         if (mMobileVisible[phoneId] && mMobileStrengthId[phoneId] != 0) {
             mMobileGroup[phoneId].setVisibility(View.VISIBLE);
-            mMobileCard[phoneId].setText(mMobileCardId[phoneId] + "");
             mMobile[phoneId].setImageResource(mMobileStrengthId[phoneId]);
             mMobileActivity[phoneId].setImageResource(mMobileActivityId[phoneId]);
             mMobileType[phoneId].setImageResource(mMobileTypeId[phoneId]);
-            mMobile[phoneId].setBackgroundColor(mPhoneColor[phoneId]);
-            mMobileType[phoneId].setBackgroundColor(mPhoneColor[phoneId]);
             mMobileGroup[phoneId].setContentDescription(mMobileTypeDescription[phoneId] + " "
                     + mMobileDescription[phoneId]);
-            mMobileSignalBar[phoneId].setImageResource(R.drawable.stat_sys_signal_bar_sprd);
+            mMobileSignalBar[phoneId].setImageResource(mMobileCardId[phoneId]);
         } else {
             mMobileGroup[phoneId].setVisibility(View.GONE);
         }
@@ -305,12 +292,10 @@ public class SignalClusterView
             mMobileType[phoneId].setVisibility(View.GONE);
             mMobileActivity[phoneId].setVisibility(View.GONE);
             mMobileSignalBar[phoneId].setVisibility(View.GONE);
-            mMobileCard[phoneId].setVisibility(View.GONE);
         } else {
             mMobileType[phoneId].setVisibility(mMobileVisible[phoneId] ? View.VISIBLE : View.GONE);
             mMobileActivity[phoneId].setVisibility(mDataVisible[phoneId] ? View.VISIBLE : View.GONE);
-            mMobileSignalBar[phoneId].setVisibility(mMobileVisible[phoneId]&&"cucc".equals(SystemProperties.get("ro.operator", ""))&& mMobileStrengthId[phoneId] != R.drawable.stat_sys_no_sim_sprd_cucc ? View.VISIBLE : View.GONE);
-            mMobileCard[phoneId].setVisibility(mMobileVisible[phoneId] && "cucc".equals(SystemProperties.get("ro.operator", "")) ? View.VISIBLE : View.GONE);
+            mMobileSignalBar[phoneId].setVisibility((mMobileVisible[phoneId]&&"cucc".equals(SystemProperties.get("ro.operator", "")))? View.VISIBLE : View.GONE);
         }
        //mod by TS_LC for data call icon :end
     }

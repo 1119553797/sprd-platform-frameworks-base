@@ -47,8 +47,133 @@ class TelephonyIcons {
           R.drawable.stat_sys_signal_3_sprd,
           R.drawable.stat_sys_signal_4_sprd }
     };
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR0 = {
+        { R.drawable.stat_sys_signal_0_sprd,
+          R.drawable.stat_sys_signal_1_1_sprd,
+          R.drawable.stat_sys_signal_2_1_sprd,
+          R.drawable.stat_sys_signal_3_1_sprd,
+          R.drawable.stat_sys_signal_4_1_sprd },
+        { R.drawable.stat_sys_signal_0_sprd,
+          R.drawable.stat_sys_signal_1_1_sprd,
+          R.drawable.stat_sys_signal_2_1_sprd,
+          R.drawable.stat_sys_signal_3_1_sprd,
+          R.drawable.stat_sys_signal_4_1_sprd }
+    };
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR1 = {
+        { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_2_sprd,
+            R.drawable.stat_sys_signal_2_2_sprd,
+            R.drawable.stat_sys_signal_3_2_sprd,
+            R.drawable.stat_sys_signal_4_2_sprd },
+          { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_2_sprd,
+            R.drawable.stat_sys_signal_2_2_sprd,
+            R.drawable.stat_sys_signal_3_2_sprd,
+            R.drawable.stat_sys_signal_4_2_sprd }
+      };
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR2 = {
+        { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_3_sprd,
+            R.drawable.stat_sys_signal_2_3_sprd,
+            R.drawable.stat_sys_signal_3_3_sprd,
+            R.drawable.stat_sys_signal_4_3_sprd },
+          { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_3_sprd,
+            R.drawable.stat_sys_signal_2_3_sprd,
+            R.drawable.stat_sys_signal_3_3_sprd,
+            R.drawable.stat_sys_signal_4_3_sprd }
+      };
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR3 = {
+        { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_4_sprd,
+            R.drawable.stat_sys_signal_2_4_sprd,
+            R.drawable.stat_sys_signal_3_4_sprd,
+            R.drawable.stat_sys_signal_4_4_sprd },
+          { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_4_sprd,
+            R.drawable.stat_sys_signal_2_4_sprd,
+            R.drawable.stat_sys_signal_3_4_sprd,
+            R.drawable.stat_sys_signal_4_4_sprd }
+      };
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR4 = {
+        { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_5_sprd,
+            R.drawable.stat_sys_signal_2_5_sprd,
+            R.drawable.stat_sys_signal_3_5_sprd,
+            R.drawable.stat_sys_signal_4_5_sprd },
+          { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_5_sprd,
+            R.drawable.stat_sys_signal_2_5_sprd,
+            R.drawable.stat_sys_signal_3_5_sprd,
+            R.drawable.stat_sys_signal_4_5_sprd }
+      };
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR5 = {
+        { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_6_sprd,
+            R.drawable.stat_sys_signal_2_6_sprd,
+            R.drawable.stat_sys_signal_3_6_sprd,
+            R.drawable.stat_sys_signal_4_6_sprd },
+          { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_6_sprd,
+            R.drawable.stat_sys_signal_2_6_sprd,
+            R.drawable.stat_sys_signal_3_6_sprd,
+            R.drawable.stat_sys_signal_4_6_sprd }
+      };
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR6 = {
+        { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_7_sprd,
+            R.drawable.stat_sys_signal_2_7_sprd,
+            R.drawable.stat_sys_signal_3_7_sprd,
+            R.drawable.stat_sys_signal_4_7_sprd },
+          { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_7_sprd,
+            R.drawable.stat_sys_signal_2_7_sprd,
+            R.drawable.stat_sys_signal_3_7_sprd,
+            R.drawable.stat_sys_signal_4_7_sprd }
+      };
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR7 = {
+        { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_8_sprd,
+            R.drawable.stat_sys_signal_2_8_sprd,
+            R.drawable.stat_sys_signal_3_8_sprd,
+            R.drawable.stat_sys_signal_4_8_sprd },
+          { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_1_8_sprd,
+            R.drawable.stat_sys_signal_2_8_sprd,
+            R.drawable.stat_sys_signal_3_8_sprd,
+            R.drawable.stat_sys_signal_4_8_sprd }
+      };
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR_DEFAULT = {
+        { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_0_sprd },
+          { R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_0_sprd,
+            R.drawable.stat_sys_signal_0_sprd }
+      };
 
     static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI = TELEPHONY_SIGNAL_STRENGTH_UUI;
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR0 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR0;
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR1 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR1;
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR2 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR2;
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR3 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR3;
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR4 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR4;
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR5 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR5;
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR6 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR6;
+    static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR7 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR7;
+
+    static final int[][] DATA_SIGNAL_STRENGTH_UUI_COLOR0 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR0;
+    static final int[][] DATA_SIGNAL_STRENGTH_UUI_COLOR1 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR1;
+    static final int[][] DATA_SIGNAL_STRENGTH_UUI_COLOR2 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR2;
+    static final int[][] DATA_SIGNAL_STRENGTH_UUI_COLOR3 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR3;
+    static final int[][] DATA_SIGNAL_STRENGTH_UUI_COLOR4 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR4;
+    static final int[][] DATA_SIGNAL_STRENGTH_UUI_COLOR5 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR5;
+    static final int[][] DATA_SIGNAL_STRENGTH_UUI_COLOR6 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR6;
+    static final int[][] DATA_SIGNAL_STRENGTH_UUI_COLOR7 = TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR7;
 
     static final int[][] TELEPHONY_SIGNAL_STRENGTH_ROAMING = {
         { R.drawable.stat_sys_signal_0,
@@ -158,6 +283,11 @@ class TelephonyIcons {
           R.drawable.stat_sys_data_fully_connected_roam,
           R.drawable.stat_sys_data_fully_connected_roam,
           R.drawable.stat_sys_data_fully_connected_roam }
+    };
+    static final int SIM_DEFAULT_CARD_ID = 0;
+    static final int[] SIM_CARD_ID = {
+            R.drawable.stat_sys_card1_sprd,
+            R.drawable.stat_sys_card2_sprd
     };
 }
 
