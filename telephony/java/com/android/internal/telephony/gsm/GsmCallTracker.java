@@ -240,8 +240,10 @@ public final class GsmCallTracker extends CallTracker {
             // Add for bug 121825 Start
             String tmpAddr = pendingMO.address;
             if (PhoneNumberUtils.isCustomEmergencyNumber(pendingMO.address)) {
-                Log.d(LOG_TAG,"Pending MO is Custom Emergency call");
-                tmpAddr = tmpAddr + "/1";
+                if(phone.getServiceState().getState() == ServiceState.STATE_OUT_OF_SERVICE){
+                    Log.d(LOG_TAG,"Pending MO is Custom Emergency call");
+                    tmpAddr = tmpAddr + "/1";
+                }
             }
             //cm.dial(pendingMO.address, clirMode, uusInfo, isStkCall, obtainCompleteMessage());
             cm.dial(tmpAddr, clirMode, uusInfo, obtainCompleteMessage());
