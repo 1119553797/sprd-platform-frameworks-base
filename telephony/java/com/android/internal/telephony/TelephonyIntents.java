@@ -169,6 +169,7 @@ public class TelephonyIntents {
 
     public static final String ACTION_SIM_ACTIVED_STATE= "android.intent.action.SIM_ACTIVED_STATE";
 
+    public static final String ACTION_SIM_DONE_LOAD_ICCID = "android.intent.action.SIM_DONE_LOAD_ICCID";
     /**
      * Broadcast Action: The sim card state has changed.
      * The intent will have the following extra values:</p>

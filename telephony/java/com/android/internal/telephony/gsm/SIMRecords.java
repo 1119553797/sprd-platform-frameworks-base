@@ -880,6 +880,10 @@ public class SIMRecords extends IccRecords {
                                         phone.getPhoneId()), 1);
                 Log.d(LOG_TAG, "[SIMRecords] handleMessage EVENT_GET_ICCID_DONE SIM_STANDBY : "
                         + state);
+
+                Intent iccIdDoneIntent = new Intent(TelephonyIntents.ACTION_SIM_DONE_LOAD_ICCID + phone.getPhoneId());
+                phone.getContext().sendBroadcast(iccIdDoneIntent);
+
                 if (state != 1) {
                     broadcastSimDisableStateIntent();
                 }
