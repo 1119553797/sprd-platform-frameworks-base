@@ -219,7 +219,7 @@ public class NetworkController extends BroadcastReceiver {
         void setWifiIndicators(boolean visible, boolean connected,int strengthIcon, int activityIcon,
                 String contentDescription);
         void setMobileDataIndicators(boolean visible, int strengthIcon, boolean mDataConnected, int activityIcon,
-                int typeIcon, String contentDescription, String typeContentDescription, int phoneColor,int cardId, int phoneId);
+                int typeIcon, String contentDescription, String typeContentDescription,int cardId, int phoneId);
         void setIsAirplaneMode(boolean is);
     }
 
@@ -445,26 +445,12 @@ public class NetworkController extends BroadcastReceiver {
                     mMobileActivityIconId[mDDS],
                     mDataTypeIconId[mDDS],
                     mContentDescriptionWimax,
-                    mContentDescriptionDataType[mDDS],Color.TRANSPARENT, 0, mDDS);
+                    mContentDescriptionDataType[mDDS],TelephonyIcons.SIM_DEFAULT_CARD_ID, mDDS);
         } else {
             // normal mobile data
             for (int i=0; i < numPhones; i++) {
-                int cardId = i + 1;
                 if(UNIVERSEUI_SUPPORT){
-                    SimManager simManager = SimManager.get(mContext);
-                    Sim sim = simManager.getSimById(i);
-                    int simColor;
-                    if (sim != null) {
-                        Log.d(TAG,"sim = null");
-                        simColor = sim.getColor();
-                    } else {
-                        simColor = mSimColor[i];
-                    }
-                    Log.d(TAG,"simColor = "+simColor);
                     updateTelephonySignalStrength(i);
-                    if(mAirplaneMode){
-                        simColor = Color.TRANSPARENT;
-                    }
                 cluster.setMobileDataIndicators(
                         mHasMobileDataFeature,
                         mShowPhoneRSSIForData ? mPhoneSignalIconId[i] : mDataSignalIconId[i],
@@ -472,7 +458,7 @@ public class NetworkController extends BroadcastReceiver {
                         mMobileActivityIconId[i],
                         mDataTypeIconId[i],
                         mContentDescriptionPhoneSignal[i],
-                        mContentDescriptionDataType[i],simColor,cardId, i);
+                        mContentDescriptionDataType[i],TelephonyIcons.SIM_CARD_ID[i], i);
                 }else{
                     cluster.setMobileDataIndicators(
                             mHasMobileDataFeature,
@@ -481,7 +467,7 @@ public class NetworkController extends BroadcastReceiver {
                             mMobileActivityIconId[i],
                             mDataTypeIconId[i],
                             mContentDescriptionPhoneSignal[i],
-                            mContentDescriptionDataType[i],Color.TRANSPARENT, cardId, i);
+                            mContentDescriptionDataType[i], TelephonyIcons.SIM_CARD_ID[i], i);
                 }
             }
         }
@@ -698,6 +684,13 @@ public class NetworkController extends BroadcastReceiver {
 
             return;
         }
+        if (Settings.System.getInt(mContext.getContentResolver(), PhoneFactory.getSetting(
+                Settings.System.SIM_STANDBY, phoneId), 1) == 0) {
+            if (CHATTY)Slog.d(TAG, "updateTelephonySignalStrength: SIM_STANDBY");
+            mPhoneSignalIconId[phoneId] = R.drawable.stat_sys_signal_standby_sprd;
+            mDataSignalIconId[phoneId] = R.drawable.stat_sys_signal_standby_sprd;
+            return;
+        }
         if (!hasService(phoneId)) {
             if (CHATTY) Slog.d(TAG, "updateTelephonySignalStrength: !hasService()");
             mPhoneSignalIconId[phoneId] = R.drawable.stat_sys_signal_0_sprd;
@@ -712,30 +705,152 @@ public class NetworkController extends BroadcastReceiver {
             } else {
                 int iconLevel;
                 int[] iconList;
+                SimManager simManager = SimManager.get(mContext);
+                int colorIndex = simManager.getColorIndexForCU(phoneId);
+                Log.d(TAG,"phoneId = "+ phoneId +" colorIndex = "+colorIndex);
                 mLastSignalLevel[phoneId] = iconLevel = mSignalStrength[phoneId].getLevel();
                 if (isCdma(phoneId)) {
                     if (isCdmaEri(phoneId)) {
+                        if(UNIVERSEUI_SUPPORT){
+                            iconList = getStrengthRoamingIconList(mInetCondition,colorIndex);
+                        }else{
                         iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI[mInetCondition];
+                        }
+                    } else {
+                        if(UNIVERSEUI_SUPPORT){
+                            iconList = getStrengthIconList(mInetCondition,colorIndex); 
                     } else {
                         iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI[mInetCondition];
+                    }
                     }
                 } else {
                     // Though mPhone is a Manager, this call is not an IPC
                     if (mPhone[phoneId].isNetworkRoaming()) {
+                        if(UNIVERSEUI_SUPPORT){
+                            iconList = getStrengthRoamingIconList(mInetCondition,colorIndex);
+                        }else{
                         iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI[mInetCondition];
+                        }
+                        
+                    } else {
+                        if(UNIVERSEUI_SUPPORT){
+                            iconList = getStrengthIconList(mInetCondition,colorIndex);
                     } else {
                         iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI[mInetCondition];
                     }
                 }
+                }
                 mPhoneSignalIconId[phoneId] = iconList[iconLevel];
                 mContentDescriptionPhoneSignal[phoneId] = mContext.getString(
                         AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[iconLevel]);
-
+                if(UNIVERSEUI_SUPPORT){
+                    mDataSignalIconId[phoneId] = getDataStrengthIconList(phoneId, mInetCondition,colorIndex,iconLevel);
+                } else {
                 mDataSignalIconId[phoneId] = TelephonyIcons.DATA_SIGNAL_STRENGTH_UUI[mInetCondition][iconLevel];
             }
         }
     }
+    }
+    private int[] getStrengthRoamingIconList(int inetCondition, int colorIndex) {
+        int[] iconList;
+        switch (colorIndex) {
+            case 0:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR0[inetCondition];
+                break;
+            case 1:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR1[inetCondition];
+                break;
+            case 2:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR2[inetCondition];
+                break;
+            case 3:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR3[inetCondition];
+                break;
+            case 4:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR4[inetCondition];
+                break;
+            case 5:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR5[inetCondition];
+                break;
+            case 6:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR6[inetCondition];
+                break;
+            case 7:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING_UUI_COLOR7[inetCondition];
+                break;
+            default:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR_DEFAULT[inetCondition];
+        }
+        return iconList;
+    }
 
+    private int[] getStrengthIconList(int inetCondition, int colorIndex) {
+        int[] iconList;
+
+        switch (colorIndex) {
+            case 0:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR0[mInetCondition]; 
+                break;
+            case 1:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR1[mInetCondition]; 
+                break;
+            case 2:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR2[mInetCondition]; 
+                break;
+            case 3:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR3[mInetCondition]; 
+                break;
+            case 4:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR4[mInetCondition]; 
+                break;
+            case 5:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR5[mInetCondition]; 
+                break;
+            case 6:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR6[mInetCondition]; 
+                break;
+            case 7:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR7[mInetCondition]; 
+                break;
+            default:
+                iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR_DEFAULT[mInetCondition]; 
+                break;
+                }
+
+        return iconList;
+    }
+    private int getDataStrengthIconList(int phoneId, int inetCondition, int colorIndex,int iconLevel) {
+        int icon;
+        switch (colorIndex) {
+            case 0:
+                icon = TelephonyIcons.DATA_SIGNAL_STRENGTH_UUI_COLOR0[mInetCondition][iconLevel];  
+                break;
+            case 1:
+                icon = TelephonyIcons.DATA_SIGNAL_STRENGTH_UUI_COLOR1[mInetCondition][iconLevel];  
+                break;
+            case 2:
+                icon = TelephonyIcons.DATA_SIGNAL_STRENGTH_UUI_COLOR2[mInetCondition][iconLevel];  
+                break;
+            case 3:
+                icon= TelephonyIcons.DATA_SIGNAL_STRENGTH_UUI_COLOR3[mInetCondition][iconLevel];  
+                break;
+            case 4:
+                icon = TelephonyIcons.DATA_SIGNAL_STRENGTH_UUI_COLOR4[mInetCondition][iconLevel];  
+                break;
+            case 5:
+                icon = TelephonyIcons.DATA_SIGNAL_STRENGTH_UUI_COLOR5[mInetCondition][iconLevel];  
+                break;
+            case 6:
+                icon = TelephonyIcons.DATA_SIGNAL_STRENGTH_UUI_COLOR6[mInetCondition][iconLevel];  
+                break;
+            case 7:
+                icon = TelephonyIcons.DATA_SIGNAL_STRENGTH_UUI_COLOR7[mInetCondition][iconLevel];  
+                break;
+            default:
+                icon = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_UUI_COLOR_DEFAULT[mInetCondition][iconLevel];  
+                }
+        return icon;
+    }
     private final void updateDataNetType(int phoneId) {
         if (mAirplaneMode) {
             for (int i = 0; i < numPhones; i++) {
