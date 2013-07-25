@@ -327,7 +327,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
      * the top edge.
      */
     boolean mStackFromBottom;
-
+  
+    // int mScrollingCacheProperty = 0;
     /**
      * When set to true, the list automatically discards the children's
      * bitmap cache after scrolling.
@@ -338,6 +339,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
      * Whether or not to enable the fast scroll feature on this list
      */
     boolean mFastScrollEnabled;
+
+     int mScrollingCacheProperty = SystemProperties.getInt("persist.sys.scrollingcache",1);
 
     /**
      * Optional callback to notify client when scroll position has changed
@@ -477,7 +480,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
      * drags/flings if multiple pointers are used.
      */
     private int mActivePointerId = INVALID_POINTER;
-    
+
+    private int mDecacheThreshold;
     /**
      * Sentinel value for no current active pointer.
      * Used by {@link #mActivePointerId}.
@@ -606,8 +610,22 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
         boolean stackFromBottom = a.getBoolean(R.styleable.AbsListView_stackFromBottom, false);
         setStackFromBottom(stackFromBottom);
+	 boolean scrollingCacheEnabled = true;
+	 switch(mScrollingCacheProperty) {
+		 case 0:
+			 scrollingCacheEnabled = true;
+			 break;
+		 default:
+			 scrollingCacheEnabled = a.getBoolean(R.styleable.AbsListView_scrollingCache, true);
+			 break;
+		 case 2:
+			 scrollingCacheEnabled = a.getBoolean(R.styleable.AbsListView_scrollingCache, false);
+			 break;
+		 case 3:
+		        scrollingCacheEnabled = false;
+			 break;
+	  }
 
-        boolean scrollingCacheEnabled = a.getBoolean(R.styleable.AbsListView_scrollingCache, true);
         setScrollingCacheEnabled(scrollingCacheEnabled);
 
         boolean useTextFilter = a.getBoolean(R.styleable.AbsListView_textFilterEnabled, false);
@@ -635,12 +653,14 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         setFocusableInTouchMode(true);
         setWillNotDraw(false);
         setAlwaysDrawnWithCacheEnabled(false);
-        setScrollingCacheEnabled(true);
+	 boolean scrollingCacheEnabled = (mScrollingCacheProperty < 2);
+	 setScrollingCacheEnabled(scrollingCacheEnabled);
 
         final ViewConfiguration configuration = ViewConfiguration.get(mContext);
         mTouchSlop = configuration.getScaledTouchSlop();
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
+        mDecacheThreshold = mMaximumVelocity / 2;		
         mOverscrollDistance = configuration.getScaledOverscrollDistance();
         mOverflingDistance = configuration.getScaledOverflingDistance();
 

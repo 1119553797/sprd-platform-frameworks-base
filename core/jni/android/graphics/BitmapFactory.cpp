@@ -43,6 +43,7 @@ static jfieldID gFileDescriptor_descriptor;
 #endif
 
 using namespace android;
+bool mPurgeableAssets;
 
 class NinePatchPeeker : public SkImageDecoder::Peeker {
     SkImageDecoder* fHost;
@@ -398,8 +399,8 @@ static jobject nativeDecodeAsset(JNIEnv* env, jobject clazz,
                                  jobject options) { // BitmapFactory$Options
     SkStream* stream;
     Asset* asset = reinterpret_cast<Asset*>(native_asset);
-    bool forcePurgeable = optionsPurgeable(env, options);
-    if (forcePurgeable) {
+    bool forcePurgeable = mPurgeableAssets;
+    if (forcePurgeable || optionsPurgeable(env, options)) {
         // if we could "ref/reopen" the asset, we may not need to copy it here
         // and we could assume optionsShareable, since assets are always RO
         stream = copyAssetToStream(asset);
@@ -565,7 +566,8 @@ int register_android_graphics_BitmapFactory(JNIEnv* env) {
 
     gFileDescriptor_class = make_globalref(env, "java/io/FileDescriptor");
     gFileDescriptor_descriptor = getFieldIDCheck(env, gFileDescriptor_class, "descriptor", "I");
-
+   
+   mPurgeableAssets = true;
     int ret = AndroidRuntime::registerNativeMethods(env,
                                     "android/graphics/BitmapFactory$Options",
                                     gOptionsMethods,

@@ -248,7 +248,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int MAX_SERVICE_INACTIVITY = 30*60*1000;
     
     // How long we wait until we timeout on key dispatching.
-    static final int KEY_DISPATCHING_TIMEOUT = 5*1000;
+    static final int KEY_DISPATCHING_TIMEOUT = 8*1000;
 
     // The minimum time we allow between crashes, for us to consider this
     // application to be bad and stop and its services and reject broadcasts.
@@ -9116,11 +9116,23 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         return canceled;
     }
+    private static HashSet<String> whiteList;
+    static {
+	 whiteList = new HashSet<String>();
+	 whiteList.add("com.android.phone");
+	 whiteList.add("com.android.contacts");
+	 whiteList.add("com.android.mms");
+	 whiteList.add("android.process.acore");
+	 whiteList.add("com.android.systemui");
+    }
 
     final void performServiceRestartLocked(ServiceRecord r) {
         if (!mRestartingServices.contains(r)) {
             return;
         }
+        if (!whiteList.contains(r.app.processName)) {
+            return;
+        }		
         bringUpServiceLocked(r, r.intent.getIntent().getFlags(), true);
     }
 
@@ -11728,7 +11740,17 @@ public final class ActivityManagerService extends ActivityManagerNative
         int adj;
         int schedGroup;
         int N;
-        if (app == TOP_APP) {
+        if ("com.android.mms".equals(app.processName) 
+           ||"com.android.contacts".equals(app.processName)
+           ||"android.process.acore".equals(app.processName)
+          ) {
+            // MMS can die in situations of heavy memory pressure.
+            // Always push it to the top.
+            adj = 2;
+            schedGroup = Process.THREAD_GROUP_DEFAULT;
+            app.adjType = "mms";
+        }
+       else  if (app == TOP_APP) {
             // The last app on the list is the foreground app.
             adj = FOREGROUND_APP_ADJ;
             schedGroup = Process.THREAD_GROUP_DEFAULT;
