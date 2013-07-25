@@ -118,7 +118,7 @@ sp<TextLayoutValue> TextLayoutCache::getValue(const SkPaint* paint,
 
         // Compute advances and store them
         mShaper->computeValues(value.get(), paint,
-                reinterpret_cast<const UChar*>(text), start, count,
+                reinterpret_cast<const UChar*>(key.getText()), start, count,
                 size_t(contextCount), int(dirFlags));
 
         if (mDebugEnabled) {
@@ -146,15 +146,12 @@ sp<TextLayoutValue> TextLayoutCache::getValue(const SkPaint* paint,
             // Update current cache size
             mSize += size;
 
-            // Copy the text when we insert the new entry
-            key.internalTextCopy();
-
             bool putOne = mCache.put(key, value);
             LOG_ALWAYS_FATAL_IF(!putOne, "Failed to put an entry into the cache.  "
                     "This indicates that the cache already has an entry with the "
                     "same key but it should not since we checked earlier!"
                     " - start = %d, count = %d, contextCount = %d - Text = '%s'",
-                    start, count, contextCount, String8(text + start, count).string());
+                    start, count, contextCount, String8(key.getText() + start, count).string());
 
             if (mDebugEnabled) {
                 nsecs_t totalTime = systemTime(SYSTEM_TIME_MONOTONIC) - startTime;
@@ -165,7 +162,7 @@ sp<TextLayoutValue> TextLayoutCache::getValue(const SkPaint* paint,
                         value.get(), start, count, contextCount, size, mMaxSize - mSize,
                         value->getElapsedTime() * 0.000001f,
                         (totalTime - value->getElapsedTime()) * 0.000001f,
-                        String8(text + start, count).string());
+                        String8(key.getText() + start, count).string());
             }
         } else {
             if (mDebugEnabled) {
@@ -175,7 +172,7 @@ sp<TextLayoutValue> TextLayoutCache::getValue(const SkPaint* paint,
                         " - Compute time %0.6f ms - Text = '%s'",
                         start, count, contextCount, size, mMaxSize - mSize,
                         value->getElapsedTime() * 0.000001f,
-                        String8(text + start, count).string());
+                        String8(key.getText() + start, count).string());
             }
         }
     } else {
@@ -232,15 +229,16 @@ void TextLayoutCache::dumpCacheStats() {
 /**
  * TextLayoutCacheKey
  */
-TextLayoutCacheKey::TextLayoutCacheKey(): text(NULL), start(0), count(0), contextCount(0),
+TextLayoutCacheKey::TextLayoutCacheKey(): start(0), count(0), contextCount(0),
         dirFlags(0), typeface(NULL), textSize(0), textSkewX(0), textScaleX(0), flags(0),
         hinting(SkPaint::kNo_Hinting)  {
 }
 
 TextLayoutCacheKey::TextLayoutCacheKey(const SkPaint* paint, const UChar* text,
         size_t start, size_t count, size_t contextCount, int dirFlags) :
-            text(text), start(start), count(count), contextCount(contextCount),
+            start(start), count(count), contextCount(contextCount),
             dirFlags(dirFlags) {
+    textCopy.setTo(text, contextCount);
     typeface = paint->getTypeface();
     textSize = paint->getTextSize();
     textSkewX = paint->getTextSkewX();
@@ -250,7 +248,6 @@ TextLayoutCacheKey::TextLayoutCacheKey(const SkPaint* paint, const UChar* text,
 }
 
 TextLayoutCacheKey::TextLayoutCacheKey(const TextLayoutCacheKey& other) :
-        text(NULL),
         textCopy(other.textCopy),
         start(other.start),
         count(other.count),
@@ -262,9 +259,6 @@ TextLayoutCacheKey::TextLayoutCacheKey(const TextLayoutCacheKey& other) :
         textScaleX(other.textScaleX),
         flags(other.flags),
         hinting(other.hinting) {
-    if (other.text) {
-        textCopy.setTo(other.text, other.contextCount);
-    }
 }
 
 int TextLayoutCacheKey::compare(const TextLayoutCacheKey& lhs, const TextLayoutCacheKey& rhs) {
@@ -301,10 +295,6 @@ int TextLayoutCacheKey::compare(const TextLayoutCacheKey& lhs, const TextLayoutC
     return memcmp(lhs.getText(), rhs.getText(), lhs.contextCount * sizeof(UChar));
 }
 
-void TextLayoutCacheKey::internalTextCopy() {
-    textCopy.setTo(text, contextCount);
-    text = NULL;
-}
 
 size_t TextLayoutCacheKey::getSize() const {
     return sizeof(TextLayoutCacheKey) + sizeof(UChar) * contextCount;
@@ -958,6 +948,8 @@ size_t TextLayoutShaper::shapeFontRun(const SkPaint* paint, bool isRTL) {
         ensureShaperItemGlyphArrays(mShaperItem.num_glyphs * 2);
         mShaperItem.num_glyphs = mShaperItemGlyphArraySize;
     }
+    HB_FreeFace(mShaperItem.face);
+    mShaperItem.face = NULL;
     return baseGlyphCount;
 }
 
@@ -1016,7 +1008,10 @@ HB_Face TextLayoutShaper::getCachedHBFace(SkTypeface* typeface) {
     SkFontID fontId = typeface->uniqueID();
     ssize_t index = mCachedHBFaces.indexOfKey(fontId);
     if (index >= 0) {
-        return mCachedHBFaces.valueAt(index);
+        HB_Face face;
+        face = mCachedHBFaces.valueAt(index);
+        HB_FaceAddref(face);
+        return face;
     }
     HB_Face face = HB_NewFace(typeface, harfbuzzSkiaGetTable);
     if (face) {
@@ -1024,6 +1019,7 @@ HB_Face TextLayoutShaper::getCachedHBFace(SkTypeface* typeface) {
         ALOGD("Created HB_NewFace %p from paint typeface = %p", face, typeface);
 #endif
         mCachedHBFaces.add(fontId, face);
+        HB_FaceAddref(face);
     }
     return face;
 }
