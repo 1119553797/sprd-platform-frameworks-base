@@ -56,7 +56,7 @@
   <string msgid="4879879698500955300" name="status_bar_settings_airplane">"Tryb samolotowy"</string>
   <string msgid="3790482541357798421" name="status_bar_settings_auto_rotation">"Autoobracanie ekranu"</string>
   <string msgid="554682549917429396" name="status_bar_settings_mute_label">"WYGAŚ"</string>
-  <string msgid="511453614962324674" name="status_bar_settings_auto_brightness_label">"AUTOM."</string>
+  <string msgid="511453614962324674" name="status_bar_settings_auto_brightness_label">"Automat."</string>
   <string msgid="397146176280905137" name="status_bar_settings_notifications">"Powiadomienia"</string>
   <string msgid="7094101612161133267" name="bluetooth_tethered">"Bluetooth – podłączono"</string>
   <string msgid="3504292471512317827" name="status_bar_input_method_settings_configure_input_methods">"Konfiguruj metody wprowadzania"</string>
@@ -150,4 +150,16 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"Wyszukiwanie sygnału GPS"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"Lokalizacja ustawiona według GPS"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"Usuń wszystkie powiadomienia."</string>
+  <string name="accessibility_ringer_outdoor">Wzmacniacz dzwonka</string>
+  <string name="datanetwork_error_airplane">Nie można używać danych mobilnych w trybie pracy w samolocie.</string>
+  <string name="bluetooth_error_airplane">Nie można używać bluetootha w trybie pracy w samolocie.
+</string>
+  <string name="status_bar_expanded_notification_stop_button_text">"Zatrzymaj"</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">Zawieszona
+</string>
+  <string name="status_bar_expanded_notification_cancel_button_text">"Anuluj"</string>
+  <string name="status_bar_expanded_notification_latest_button_text">"Powiadomienia"</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">"Bieżące"</string>
+  <string name="dataConnectSetting">Łączenie danych</string>
+  <string name="closeData">"Zamknij"</string>
 </resources>

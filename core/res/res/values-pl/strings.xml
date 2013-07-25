@@ -18,6 +18,7 @@
 */
  -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="2625429890869005782" name="imei">"IMEI"</string>
   <string msgid="4841221237681254195" name="meid">"MEID"</string>
   <string msgid="319298163018473078" name="silent_mode_silent">"Dzwonek wyłączony"</string>
@@ -79,7 +80,6 @@
   <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> chce włączyć Czytanie dotykiem. Gdy ta funkcja jest włączona, słyszysz i widzisz opisy elementów, które są pod Twoim palcem, oraz możesz obsługiwać telefon gestami."</string>
   <string msgid="6640505817617414371" name="low_internal_storage_view_text">"Niektóre funkcje systemu mogą nie działać"</string>
   <string msgid="3272758351138122503" name="webpage_unresponsive">"Strona nie odpowiada na żądania."\n\n"Zamknąć ją?"</string>
-  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="1645267259272829559" name="accept">"Akceptuj"</string>
   <string msgid="2112225451706137894" name="decline">"Odrzuć"</string>
   <string msgid="1318975185112070734" name="wifi_p2p_invitation_sent_title">"Wysłano zaproszenie"</string>
@@ -876,7 +876,7 @@
   <string msgid="8154593408885654044" name="setup_autofill">"Opcje autouzupełniania"</string>
   <string msgid="2504700673286691795" name="autofill_address_name_separator">" "</string>
   <string msgid="3268041054899214945" name="autofill_address_summary_name_format">"$1$2$3"</string>
-  <string msgid="7483307893170324129" name="autofill_address_summary_separator">", "</string>
+  <string msgid="7483307893170324129" name="autofill_address_summary_separator">,\u0020</string>
   <string msgid="4874459455786827344" name="autofill_address_summary_format">"$1$2$3"</string>
   <string msgid="2231806553863422300" name="autofill_province">"Województwo"</string>
   <string msgid="4696430407689377108" name="autofill_postal_code">"Kod pocztowy"</string>
@@ -1362,4 +1362,85 @@
   <string msgid="8715108995741758718" name="sending">"Wysyłanie..."</string>
   <string msgid="2057951947297614725" name="launchBrowserDefault">"Uruchomić przeglądarkę?"</string>
   <string msgid="6870275517518479651" name="SetupCallDefault">"Odebrać połączenie?"</string>
+  <string name="silent_mode_outdoor">"Wzmacniacz dzwonka"
+</string>
+  <string name="autofill_attention_ignored_re">do rąk|do
+</string>
+  <string name="autofill_region_ignored_re">province|region|other<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
+  <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
+  <string name="autofill_address_line_1_re">address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_1_label_re">address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_2_re">address.?line2|address2|addr2|street|suite|unit<!-- de-DE -->|adresszusatz|ergänzende.?angaben<!-- es -->|direccion2|colonia|adicional<!-- fr-FR -->|addresssuppl|complementnom|appartement<!-- it-IT -->|indirizzo2<!-- ja-JP -->|住所2</string>
+  <string name="autofill_address_line_3_re">address.?line3|address3|addr3|street|line3<!-- es -->|municipio<!-- fr-FR -->|batiment|residence<!-- it-IT -->|indirizzo3</string>
+  <string name="autofill_country_re">country|location<!-- ja-JP -->|国<!-- zh-CN -->|国家</string>
+  <string name="autofill_zip_code_re">zip|postal|post code|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
+  <string name="autofill_zip_4_re">zip|^-$|post2<!-- pt-BR, pt-PT -->|codpos2</string>
+  <string name="autofill_city_re">city|town<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
+  <string name="autofill_state_re">state|county|region|province<!-- de-DE -->|land<!-- en-UK -->|county|principality<!-- ja-JP -->|都道府県<!-- pt-BR, pt-PT -->|estado|provincia<!-- ru -->|область<!-- zh-CN -->|省<!-- zh-TW -->|地區</string>
+  <string name="autofill_address_type_same_as_re">taki sam jak
+</string>
+  <string name="autofill_address_type_use_my_re">użyj mojej
+</string>
+  <string name="autofill_billing_designator_re">rachunek
+</string>
+  <string name="autofill_shipping_designator_re">ship</string>
+  <string name="autofill_email_re">e.?mail<!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
+  <string name="autofill_username_re">user.?name|user.?id<!-- de-DE -->|vollständiger.?name<!-- zh-CN -->|用户名</string>
+  <string name="autofill_name_re">^name|full.?name|your.?name|customer.?name|firstandlastname<!-- es -->|nombre.*y.*apellidos<!-- fr-FR -->|^nom<!-- ja-JP -->|お名前|氏名<!-- pt-BR, pt-PT -->|^nome<!-- zh-CN -->|姓名</string>
+  <string name="autofill_name_specific_re">^name<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
+  <string name="autofill_first_name_re">irst.*name|initials|fname|first$<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
+  <string name="autofill_middle_initial_re">middle.*initial|m\\.i\\.|mi$</string>
+  <string name="autofill_middle_name_re">middle.*name|mname|middle$<!-- es -->|apellido.?materno|lastlastname</string>
+  <string name="autofill_phone_re">phone<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
+  <string name="autofill_area_code_re">obszar.*kod|kodob|obszar
+</string>
+  <string name="autofill_phone_prefix_re">prefix<!-- fr-FR -->|preselection<!-- pt-BR, pt-PT -->|ddd</string>
+  <string name="autofill_phone_suffix_re">przyrostek
+</string>
+  <string name="autofill_phone_extension_re">ext<!-- pt-BR, pt-PT -->|ramal</string>
+  <string name="autofill_name_on_card_re">card.?holder|name.?on.?card|ccname|owner<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
+  <string name="autofill_name_on_card_contextual_re">"Nazwa"</string>
+  <string name="autofill_card_cvc_re">verification|card identification|cvn|security code|cvv code|cvc</string>
+  <string name="autofill_card_number_re">number|card.?#|card.?no|ccnum<!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
+  <string name="autofill_expiration_month_re">expir|exp.*month|exp.*date|ccmonth<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
+  <string name="autofill_expiration_date_re">exp|^/|year<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
+  <string name="autofill_card_ignored_re">karta^
+</string>
+  <string name="autofill_fax_re">fax<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
+  <string name="autofill_country_code_re">country.*code|ccode|_cc</string>
+  <string name="autofill_area_code_notext_re">^\\($</string>
+  <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
+  <string name="autofill_phone_suffix_separator_re">^-$</string>
+  <string name="wifi_available_sign_in_detailed">
+    <xliff:g id="wifi_network_ssid">%1$s</xliff:g>
+  </string>
+  <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+  <string name="locale_replacement">""</string>
+  <string name="alternate_eri_file">/data/eri.xml</string>
+  <string name="progress_unmounting1">Deinstalacja pamięci wewnętrznej...
+</string>
+  <string name="progress_erasing1">Kasowanie pamięci wewnętrznej...
+</string>
+  <string name="format_error1">Nie można skasować pamięci wewnętrznej
+</string>
+  <string name="media_bad_removal1">Pamięć USB wyjęto przed deinstalacją.
+</string>
+  <string name="media_checking1">Pamięć wewnętrzna jest właśnie sprawdzana.
+</string>
+  <string name="media_removed1">Wyjęto pamięć wewnętrzną.
+</string>
+  <string name="media_shared1">Pamięć wewnętrzna jest obecnie używana przez komputer.
+</string>
+  <string name="media_unknown_state1">Media wewnętrzne w nieznanym stanie.
+</string>
+  <string name="find_prev_title">"Wstecz"</string>
+  <string name="find_next_title">"Dalej"</string>
+  <string name="lockscreen_sim_network_locked_message">Telefon zablokowany przez sieć SIM.
+</string>
+  <string name="lockscreen_sim_card_locked_message">"Karta SIM jest zablokowana."</string>
+  <string name="digtal_formatter">%2$s</string>
+  <string name="description_target_call">"Zadzwoń"</string>
+  <string name="description_target_sms">"SMS"</string>
+  <string name="ringtone_waning">Nieprawidłowy plik, wybierz ponownie.
+</string>
 </resources>

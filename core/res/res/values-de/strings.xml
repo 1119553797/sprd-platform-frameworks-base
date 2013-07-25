@@ -18,6 +18,7 @@
 */
  -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="2625429890869005782" name="imei">"IMEI"</string>
   <string msgid="4841221237681254195" name="meid">"MEID"</string>
   <string msgid="319298163018473078" name="silent_mode_silent">"Klingelton aus"</string>
@@ -79,7 +80,6 @@
   <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> fordert die Aktivierung von \"Tippen &amp; Entdecken\". Wenn \"Tippen &amp; Entdecken\" aktiviert ist, können Sie Beschreibungen dessen hören oder sehen, was sich unter ihren Fingern befindet, oder Gesten ausführen, um mit dem Telefon zu kommunizieren."</string>
   <string msgid="6640505817617414371" name="low_internal_storage_view_text">"Einige Systemfunktionen funktionieren möglicherweise nicht."</string>
   <string msgid="3272758351138122503" name="webpage_unresponsive">"Die Seite reagiert nicht mehr."\n\n"Möchten Sie die Seite schließen?"</string>
-  <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string msgid="1645267259272829559" name="accept">"Akzeptieren"</string>
   <string msgid="2112225451706137894" name="decline">"Ablehnen"</string>
   <string msgid="1318975185112070734" name="wifi_p2p_invitation_sent_title">"Einladung gesendet"</string>
@@ -182,8 +182,8 @@
   <string msgid="5637816680144990219" name="petabyteShort">"PB"</string>
   <string msgid="7670819340156489359" name="fileSizeSuffix">"<xliff:g id="NUMBER">%1$s</xliff:g> <xliff:g id="UNIT">%2$s</xliff:g>"</string>
   <string msgid="6071602020171759109" name="untitled">"&lt;Unbenannt&gt;"</string>
-  <string msgid="7899829516048813237" name="ellipsis">"…"</string>
-  <string msgid="1228078994866030736" name="ellipsis_two_dots">"‥"</string>
+  <string msgid="7899829516048813237" name="ellipsis">\u2026</string>
+  <string msgid="1228078994866030736" name="ellipsis_two_dots">\u2025</string>
   <string msgid="7694063042079676517" name="emptyPhoneNumber">"(Keine Telefonnummer)"</string>
   <string msgid="2277556546742746522" name="unknownName">"(Unbekannt)"</string>
   <string msgid="2660020990097733077" name="defaultVoiceMailAlphaTag">"Mailbox"</string>
@@ -725,7 +725,7 @@
   <string msgid="3517792160008890912" name="phoneTypeFaxWork">"Fax (geschäftl.)"</string>
   <string msgid="2067265972322971467" name="phoneTypeFaxHome">"Fax (privat)"</string>
   <string msgid="7582359955394921732" name="phoneTypePager">"Pager"</string>
-  <string msgid="1544425847868765990" name="phoneTypeOther">"Sonstige"</string>
+  <string msgid="1544425847868765990" name="phoneTypeOther">"Andere"</string>
   <string msgid="2712175203065678206" name="phoneTypeCallback">"Rückruf"</string>
   <string msgid="8738360689616716982" name="phoneTypeCar">"Auto"</string>
   <string msgid="540434356461478916" name="phoneTypeCompanyMain">"Firma (Hauptnummer)"</string>
@@ -742,20 +742,20 @@
   <string msgid="7837586198458073404" name="eventTypeCustom">"Benutzerdefiniert"</string>
   <string msgid="2813379844211390740" name="eventTypeBirthday">"Geburtstag"</string>
   <string msgid="3876779744518284000" name="eventTypeAnniversary">"Jahrestag"</string>
-  <string msgid="7388178939010143077" name="eventTypeOther">"Sonstige"</string>
+  <string msgid="7388178939010143077" name="eventTypeOther">"Andere"</string>
   <string msgid="8525960257804213846" name="emailTypeCustom">"Benutzerdefiniert"</string>
   <string msgid="449227236140433919" name="emailTypeHome">"Privat"</string>
   <string msgid="3548058059601149973" name="emailTypeWork">"Geschäftlich"</string>
-  <string msgid="2923008695272639549" name="emailTypeOther">"Sonstige"</string>
+  <string msgid="2923008695272639549" name="emailTypeOther">"Andere"</string>
   <string msgid="119919005321166205" name="emailTypeMobile">"Mobil"</string>
   <string msgid="8903206903060479902" name="postalTypeCustom">"Benutzerdefiniert"</string>
   <string msgid="8165756977184483097" name="postalTypeHome">"Privat"</string>
   <string msgid="5268172772387694495" name="postalTypeWork">"Geschäftlich"</string>
-  <string msgid="2726111966623584341" name="postalTypeOther">"Sonstige"</string>
+  <string msgid="2726111966623584341" name="postalTypeOther">"Andere"</string>
   <string msgid="2074028755527826046" name="imTypeCustom">"Benutzerdefiniert"</string>
   <string msgid="6241181032954263892" name="imTypeHome">"Privat"</string>
   <string msgid="1371489290242433090" name="imTypeWork">"Geschäftlich"</string>
-  <string msgid="5377007495735915478" name="imTypeOther">"Sonstige"</string>
+  <string msgid="5377007495735915478" name="imTypeOther">"Andere"</string>
   <string msgid="6919453836618749992" name="imProtocolCustom">"Benutzerdefiniert"</string>
   <string msgid="7050360612368383417" name="imProtocolAim">"AIM"</string>
   <string msgid="144556545420769442" name="imProtocolMsn">"Windows Live"</string>
@@ -767,7 +767,7 @@
   <string msgid="2279917630875771722" name="imProtocolJabber">"Jabber"</string>
   <string msgid="8287625655986827971" name="imProtocolNetMeeting">"NetMeeting"</string>
   <string msgid="29268870505363872" name="orgTypeWork">"Geschäftlich"</string>
-  <string msgid="3951781131570124082" name="orgTypeOther">"Sonstige"</string>
+  <string msgid="3951781131570124082" name="orgTypeOther">"Andere"</string>
   <string msgid="225523415372088322" name="orgTypeCustom">"Benutzerdefiniert"</string>
   <string msgid="3542403679827297300" name="relationTypeCustom">"Benutzerdefiniert"</string>
   <string msgid="6274334825195379076" name="relationTypeAssistant">"Assistent"</string>
@@ -787,7 +787,7 @@
   <string msgid="2473580593111590945" name="sipAddressTypeCustom">"Benutzerdefiniert"</string>
   <string msgid="6093598181069359295" name="sipAddressTypeHome">"Privat"</string>
   <string msgid="6920725730797099047" name="sipAddressTypeWork">"Geschäftlich"</string>
-  <string msgid="4408436162950119849" name="sipAddressTypeOther">"Sonstige"</string>
+  <string msgid="4408436162950119849" name="sipAddressTypeOther">"Andere"</string>
   <string msgid="3731488827218876115" name="keyguard_password_enter_pin_code">"PIN-Code eingeben"</string>
   <string msgid="5965173481572346878" name="keyguard_password_enter_puk_code">"PUK und neuen PIN-Code eingeben"</string>
   <string msgid="1341112146710087048" name="keyguard_password_enter_puk_prompt">"PUK-Code"</string>
@@ -1040,7 +1040,7 @@
   <string msgid="2049658708609043103" name="dialog_alert_title">"Achtung"</string>
   <string msgid="1760724998928255250" name="loading">"Wird geladen..."</string>
   <string msgid="1544682755514494298" name="capital_on">"AN"</string>
-  <string msgid="6815870386972805832" name="capital_off">"AUS"</string>
+  <string msgid="6815870386972805832" name="capital_off">"Aus"</string>
   <string msgid="4533185947064773386" name="whichApplication">"Aktion durchführen mit"</string>
   <string msgid="4583018368000610438" name="alwaysUse">"Immer für diese Aktion verwenden"</string>
   <string msgid="4815455344600932173" name="clearDefaultHintMsg">"Standardeinstellung zurücksetzen unter \"Einstellungen &gt; Apps &gt; Apps verwalten\""</string>
@@ -1362,4 +1362,68 @@
   <string msgid="8715108995741758718" name="sending">"Wird gesendet..."</string>
   <string msgid="2057951947297614725" name="launchBrowserDefault">"Browser starten?"</string>
   <string msgid="6870275517518479651" name="SetupCallDefault">"Anruf annehmen?"</string>
+  <string name="silent_mode_outdoor">"Wecker Außenbereich"</string>
+  <string name="autofill_attention_ignored_re">Achtung|Achtng</string>
+  <string name="autofill_region_ignored_re">province|region|other<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
+  <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
+  <string name="autofill_address_line_1_re">address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_1_label_re">address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
+  <string name="autofill_address_line_2_re">address.?line2|address2|addr2|street|suite|unit<!-- de-DE -->|adresszusatz|ergänzende.?angaben<!-- es -->|direccion2|colonia|adicional<!-- fr-FR -->|addresssuppl|complementnom|appartement<!-- it-IT -->|indirizzo2<!-- ja-JP -->|住所2</string>
+  <string name="autofill_address_line_3_re">address.?line3|address3|addr3|street|line3<!-- es -->|municipio<!-- fr-FR -->|batiment|residence<!-- it-IT -->|indirizzo3</string>
+  <string name="autofill_country_re">country|location<!-- ja-JP -->|国<!-- zh-CN -->|国家</string>
+  <string name="autofill_zip_code_re">zip|postal|post code|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
+  <string name="autofill_zip_4_re">zip|^-$|post2<!-- pt-BR, pt-PT -->|codpos2</string>
+  <string name="autofill_city_re">city|town<!-- de-DE -->|ort|stadt<!-- en-AU -->|suburb<!-- es -->|ciudad|provincia|localidad|poblacion<!-- fr-FR -->|ville|commune<!-- it-IT -->|localita<!-- ja-JP -->|市区町村<!-- pt-BR, pt-PT -->|cidade<!-- ru -->|Город<!-- zh-CN -->|市<!-- zh-TW -->|分區</string>
+  <string name="autofill_state_re">state|county|region|province<!-- de-DE -->|land<!-- en-UK -->|county|principality<!-- ja-JP -->|都道府県<!-- pt-BR, pt-PT -->|estado|provincia<!-- ru -->|область<!-- zh-CN -->|省<!-- zh-TW -->|地區</string>
+  <string name="autofill_address_type_same_as_re">gleich</string>
+  <string name="autofill_address_type_use_my_re">benutze mein</string>
+  <string name="autofill_billing_designator_re">Rechnung</string>
+  <string name="autofill_shipping_designator_re">ship</string>
+  <string name="autofill_email_re">e.?mail<!-- ja-JP -->|メールアドレス<!-- ru -->|Электронной.?Почты<!-- zh-CN -->|邮件|邮箱<!-- zh-TW -->|電郵地址</string>
+  <string name="autofill_username_re">user.?name|user.?id<!-- de-DE -->|vollständiger.?name<!-- zh-CN -->|用户名</string>
+  <string name="autofill_name_re">^name|full.?name|your.?name|customer.?name|firstandlastname<!-- es -->|nombre.*y.*apellidos<!-- fr-FR -->|^nom<!-- ja-JP -->|お名前|氏名<!-- pt-BR, pt-PT -->|^nome<!-- zh-CN -->|姓名</string>
+  <string name="autofill_name_specific_re">^name<!-- fr-FR -->|^nom<!-- pt-BR, pt-PT -->|^nome</string>
+  <string name="autofill_first_name_re">irst.*name|initials|fname|first$<!-- de-DE -->|vorname<!-- es -->|nombre<!-- fr-FR -->|forename|prénom|prenom<!-- ja-JP -->|名<!-- pt-BR, pt-PT -->|nome<!-- ru -->|Имя</string>
+  <string name="autofill_middle_initial_re">middle.*initial|m\\.i\\.|mi$</string>
+  <string name="autofill_middle_name_re">middle.*name|mname|middle$<!-- es -->|apellido.?materno|lastlastname</string>
+  <string name="autofill_last_name_re">last.*name|lname|surname|last$<!-- de-DE -->|nachname<!-- es -->|apellidos<!-- fr-FR -->|famille|^nom<!-- it-IT -->|cognome<!-- ja-JP -->|姓<!-- pt-BR, pt-PT -->|morada|apelidos|surename|sobrenome<!-- ru -->|Фамилия</string>
+  <string name="autofill_phone_re">phone<!-- de-DE -->|telefonnummer<!-- es -->|telefono|teléfono<!-- fr-FR -->|telfixe<!-- ja-JP -->|電話<!-- pt-BR, pt-PT -->|telefone|telemovel<!-- ru -->|телефон<!-- zh-CN -->|电话</string>
+  <string name="autofill_area_code_re">Region.*Code|RCode|Region</string>
+  <string name="autofill_phone_prefix_re">prefix<!-- fr-FR -->|preselection<!-- pt-BR, pt-PT -->|ddd</string>
+  <string name="autofill_phone_suffix_re">Endung</string>
+  <string name="autofill_phone_extension_re">ext<!-- pt-BR, pt-PT -->|ramal</string>
+  <string name="autofill_name_on_card_re">card.?holder|name.?on.?card|ccname|owner<!-- de-DE -->|karteninhaber<!-- es -->|nombre.*tarjeta<!-- fr-FR -->|nom.*carte<!-- it-IT -->|nome.*cart<!-- ja-JP -->|名前<!-- ru -->|Имя.*карты<!-- zh-CN -->|信用卡开户名|开户名|持卡人姓名<!-- zh-TW -->|持卡人姓名</string>
+  <string name="autofill_name_on_card_contextual_re">"Name"</string>
+  <string name="autofill_card_cvc_re">Verifizierung|Kartenidentifikation|KPN|Sicherheitscode|CVV Code|KPN</string>
+  <string name="autofill_card_number_re">number|card.?#|card.?no|ccnum<!-- de-DE -->|nummer<!-- es -->|credito|numero|número<!-- fr-FR -->|numéro<!-- ja-JP -->|カード番号<!-- ru -->|Номер.*карты<!-- zh-CN -->|信用卡号|信用卡号码<!-- zh-TW -->|信用卡卡號</string>
+  <string name="autofill_expiration_month_re">expir|exp.*month|exp.*date|ccmonth<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
+  <string name="autofill_expiration_date_re">exp|^/|year<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
+  <string name="autofill_card_ignored_re">^Karte</string>
+  <string name="autofill_fax_re">fax<!-- fr-FR -->|télécopie|telecopie<!-- ja-JP -->|ファックス<!-- ru -->|факс<!-- zh-CN -->|传真<!-- zh-TW -->|傳真</string>
+  <string name="autofill_country_code_re">country.*code|ccode|_cc</string>
+  <string name="autofill_area_code_notext_re">^\\($</string>
+  <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
+  <string name="autofill_phone_suffix_separator_re">^-$</string>
+  <string name="wifi_available_sign_in_detailed">
+    <xliff:g id="wifi_network_ssid">%1$s</xliff:g>
+  </string>
+  <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+  <string name="locale_replacement">""</string>
+  <string name="alternate_eri_file">/data/eri.xml</string>
+  <string name="progress_unmounting1">Abmeldung Interner Speicher...</string>
+  <string name="progress_erasing1">Löschung Interner Speicher...</string>
+  <string name="format_error1">Konnte Internen Speicher nicht löschen.</string>
+  <string name="media_bad_removal1">Interner Speicher wurde entfernt, bevor das Gerät abgemeldet wurde.</string>
+  <string name="media_checking1">Interner Speicher wird gerade überprüft</string>
+  <string name="media_removed1">Interner Speicher wurde entfernt</string>
+  <string name="media_shared1">Interner Speicher ist gerade in Verwendung durch einen Computer</string>
+  <string name="media_unknown_state1">Interne Medien in unbekannten Zustand.</string>
+  <string name="find_prev_title">"Zurück"</string>
+  <string name="find_next_title">"Weiter"</string>
+  <string name="lockscreen_sim_network_locked_message"> Telefon ist gesperrt für SIM Netzwerk</string>
+  <string name="lockscreen_sim_card_locked_message">"Bitte PIN eingeben"</string>
+  <string name="digtal_formatter">%2$s</string>
+  <string name="description_target_call">"Anruf"</string>
+  <string name="description_target_sms">"SMS"</string>
+  <string name="ringtone_waning">Die falsche Datei, bitte erneut auswählen</string>
 </resources>

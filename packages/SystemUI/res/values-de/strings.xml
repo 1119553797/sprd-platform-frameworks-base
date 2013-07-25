@@ -58,7 +58,7 @@
   <string msgid="4879879698500955300" name="status_bar_settings_airplane">"Flugmodus"</string>
   <string msgid="3790482541357798421" name="status_bar_settings_auto_rotation">"Bildschirm automatisch drehen"</string>
   <string msgid="554682549917429396" name="status_bar_settings_mute_label">"STUMM"</string>
-  <string msgid="511453614962324674" name="status_bar_settings_auto_brightness_label">"AUTO"</string>
+  <string msgid="511453614962324674" name="status_bar_settings_auto_brightness_label">"Autom."</string>
   <string msgid="397146176280905137" name="status_bar_settings_notifications">"Benachrichtigungen"</string>
   <string msgid="7094101612161133267" name="bluetooth_tethered">"Bluetooth-Tethering aktiv"</string>
   <string msgid="3504292471512317827" name="status_bar_input_method_settings_configure_input_methods">"Eingabemethoden einrichten"</string>
@@ -151,4 +151,15 @@
   <string msgid="8574247005642736060" name="gps_notification_searching_text">"GPS wird gesucht"</string>
   <string msgid="4619274244146446464" name="gps_notification_found_text">"Standort durch GPS festgelegt"</string>
   <string msgid="5235938559247164925" name="accessibility_clear_all">"Alle Benachrichtigungen löschen"</string>
+  <string name="accessibility_battery_level">Batterie <xliff:g id="number">%d</xliff:g> Prozent.</string>
+  <string name="accessibility_ringer_outdoor">Wecker Außenbereich.</string>
+  <string name="datanetwork_error_airplane">Sie können die Handydateien nicht im Flugzeugmodus verwenden. </string>
+  <string name="bluetooth_error_airplane">Sie können Bluetooth nicht im Flugzeugmodus verwenden. </string>
+  <string name="status_bar_expanded_notification_stop_button_text">"Beenden"</string>
+  <string name="status_bar_expanded_notification_hungup_button_text">Aufgelegt</string>
+  <string name="status_bar_expanded_notification_cancel_button_text">"Abbrechen"</string>
+  <string name="status_bar_expanded_notification_latest_button_text">"Benachrichtigungen"</string>
+  <string name="status_bar_expanded_notification_ongoing_button_text">"Aktuell"</string>
+  <string name="dataConnectSetting">Datenverbindung</string>
+  <string name="closeData">"Schließen"</string>
 </resources>
