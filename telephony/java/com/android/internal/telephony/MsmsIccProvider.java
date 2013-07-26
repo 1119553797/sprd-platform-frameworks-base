@@ -32,7 +32,7 @@ import android.util.Log;
 
 import java.util.Comparator;
 import java.util.List;
-
+import android.os.SystemProperties;
 
 /**
  * {@hide}
@@ -273,6 +273,14 @@ public class MsmsIccProvider extends IccProvider {
                 Log.d(TAG, "throw exception");
                 throwException(errorCode);
             }
+            //Bug 188117, start
+            //To notify the EXT2 is full.
+            boolean property = SystemProperties.getBoolean("ro.support.orange", true);
+            if(property && efType == IccConstants.EF_FDN
+               && errorCode == IccPhoneBookOperationException.OVER_NUMBER_MAX_LENGTH) {
+                return Uri.parse("fdn/ext_full");
+            }
+            //Bug 188117, end
             return null;
         }
 
@@ -509,6 +517,7 @@ public class MsmsIccProvider extends IccProvider {
         String pin2 = null;
         boolean isFdn = false;
         boolean isGas = false;
+        boolean isSMSP = false;
         if (DBG)
             log("update");
 
@@ -533,7 +542,7 @@ public class MsmsIccProvider extends IccProvider {
 
             case SMSP:
                 efType = IccConstants.EF_SMSP;
-                //isFdn = true;
+                isSMSP = true;
                 break;
 
             default:
@@ -541,10 +550,9 @@ public class MsmsIccProvider extends IccProvider {
                         "Cannot insert into URL: " + url);
         }
 
-        String tag = values.getAsString(STR_TAG);
+        //Bug 188117, rollback to original before 178439
         String newTag = values.getAsString(STR_TAG);
-		String number = values.getAsString(STR_NUMBER);
-        String newNumber = values.getAsString(STR_NEW_NUMBER);
+        String newNumber = values.getAsString(STR_NUMBER);
         Integer index = values.getAsInteger(STR_INDEX);         //maybe simIndex or groupId
         String newanr = values.getAsString(STR_ANR);
         String newaas = values.getAsString(STR_AAS);
@@ -570,13 +578,23 @@ public class MsmsIccProvider extends IccProvider {
 
         if(isFdn){
             //added for fdn
-            tag = values.getAsString(STR_TAG);
-            number = values.getAsString(STR_NUMBER);
             newTag = values.getAsString(STR_NEW_TAG);
             newNumber = values.getAsString(STR_NEW_NUMBER);
-            if(0 <= updateIccRecordInEf(efType, tag, number, null, "", "", "", newTag,
-                    newNumber, null, "", "", "", "", "", pin2, phoneId))
+
+            //Bug 188117, start
+            recIndex = updateIccRecordInEfByIndex(efType, newTag,
+                    newNumber, null, null, null, null, null, null,index,
+                    pin2, phoneId);
+            if (recIndex < 0) {
+                success = false;
+                if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
+                    Log.d(TAG, "throw exception :recIndex = "+recIndex);
+                    throwException(recIndex);
+                }
+            } else {
                 success = true;
+            }
+            //Bug 188117, end
         }else if(isGas){
             recIndex = updateUsimGroupById(newgas, index, phoneId);
             if (recIndex < 0) {
@@ -588,6 +606,24 @@ public class MsmsIccProvider extends IccProvider {
             } else {
                 success = true;
             }
+        //Bug 188117, fix 178439 side effect, start
+        }else if(isSMSP){
+            newTag = values.getAsString(STR_TAG);
+            newNumber = values.getAsString(STR_NEW_NUMBER);
+
+            recIndex = updateIccRecordInEfByIndex(efType, newTag,
+                    newNumber, null, null, null, null, null, null,index,
+                    pin2, phoneId);
+            if (recIndex < 0) {
+                success = false;
+                if (url.getBooleanQueryParameter(WITH_EXCEPTION, false)) {
+                    Log.d(TAG, "throw exception :recIndex = "+recIndex);
+                    throwException(recIndex);
+                }
+            } else {
+                success = true;
+            }
+        //Bug 188117, fix 178439 side effect, end
         }else{
             recIndex = updateIccRecordInEfByIndex(efType, newTag,
                     newNumber, newemails, newanr, newaas, newsne, newgrp, newgas,index,
