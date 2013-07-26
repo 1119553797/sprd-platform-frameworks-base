@@ -232,11 +232,15 @@ int KTFmImpl::setRssi(int rssi) {
 int KTFmImpl::getRssi() {
     Mutex::Autolock _l(mDeviceLock);
 
+    int rssi = -1;
+    int result = -1;
     if (mDevice != NULL) {
-        return mRssi;
+        if ((result = mDevice->getRssi(mDevice, &rssi)) < 0) {
+            rssi = -1;
+        } 
     }
 
-    return -1;
+    return rssi;
 }
 
 };
