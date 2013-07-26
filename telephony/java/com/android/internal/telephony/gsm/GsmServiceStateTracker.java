@@ -605,16 +605,15 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             //if (force || phone.getIccCard().getIccCardState() != IccCard.State.ABSENT
             //        && phone.getIccCard().getIccCardState() != IccCard.State.UNKNOWN) {
             int state = canSetRadioPower();
-            Log.d(LOG_TAG, "setPowerStateToDesired state = " + state);
-            if(force || state != RADIO_POWER_DISABLED){
+            Log.d(LOG_TAG, "setPowerStateToDesired: setRadioPower force = " + force + ",state = " + state);
+            if(force) {
+                cm.setRadioPower(true, null);
+            } else if(state != RADIO_POWER_DISABLED){
                 if (state == RADIO_POWER_CURRENT_ENABLED)
                     cm.setRadioPower(true, null);
                 else
                     PhoneFactory.getDefaultCM().setRadioPower(true, null);
 //20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
-                if (DBG && NEED_PRINT) {
-                    log("setPowerStateToDesired : setRadioPower  force --"+force);
-                }
             }
         } else if (!mDesiredPowerState && cm.getRadioState().isOn()) {
             // If it's on and available and we want it off gracefully
