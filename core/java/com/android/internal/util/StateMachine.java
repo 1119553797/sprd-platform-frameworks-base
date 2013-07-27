@@ -771,7 +771,7 @@ public class StateMachine {
         /**
          * Do any transitions
          */
-        private void performTransitions() {
+        private synchronized void performTransitions() {
             /**
              * If transitionTo has been called, exit and then enter
              * the appropriate states. We loop on this to allow
