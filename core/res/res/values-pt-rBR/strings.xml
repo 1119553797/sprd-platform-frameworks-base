@@ -1078,7 +1078,7 @@
   <string name="volume_icon_description_media">Volume de média</string>
   <string name="volume_icon_description_notification">Volume de notificação</string>
   <string name="ringtone_default">Ringtone padrão</string>
-  <string name="ringtone_default_with_actual">Ringtone padrão ( <xliff:g id="actual_ringtone"> % 1 $ s </xliff:g> )</string>
+  <string name="ringtone_default_with_actual">Ringtone padrão ( <xliff:g id="actual_ringtone">%1$s</xliff:g> )</string>
   <string name="ringtone_silent">Silencioso</string>
   <string name="ringtone_picker_title">Toques</string>
   <string name="ringtone_unknown">Toque desconhecido</string>
