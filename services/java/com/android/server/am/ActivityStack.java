@@ -951,6 +951,8 @@ final class ActivityStack {
         if (OptConfig.LC_RAM_SUPPORT) {
         	if (!prev.isHomeActivity)
         		prev.updateThumbnail(screenshotActivities(prev), null);
+        } else {
+            prev.updateThumbnail(screenshotActivities(prev), null);
         }
 
         mService.updateCpuStats();
