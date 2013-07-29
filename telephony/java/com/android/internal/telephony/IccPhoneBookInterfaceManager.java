@@ -324,7 +324,11 @@ public abstract class IccPhoneBookInterfaceManager extends IIccPhoneBook.Stub {
                         newAnr, newAas, newSne, newGrp, newGas);
 
                 adnCache.updateUSIMAdnByIndex(newid, index, newAdn, pin2,response);
-
+            //Bug 188117, start
+            } else if (newid == IccConstants.EF_FDN){
+                newAdn = new AdnRecord(newid, 0, newTag, newPhoneNumber);
+                adnCache.updateAdnByIndex(newid, newAdn, index, pin2, response);
+            //Bug 188117, end
             } else {
                 if(newid != IccConstants.EF_SMSP) {
                     newAdn = new AdnRecord(newTag, newPhoneNumber);
