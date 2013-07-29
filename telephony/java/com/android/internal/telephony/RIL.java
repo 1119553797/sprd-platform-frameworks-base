@@ -2972,10 +2972,14 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
 
 	        //delete zero front of mnc is mncShort
 	        int mncShort = Integer.parseInt(mnc);
-	        response[2] = mcc + mncShort;
+            //owen.chen modify for 183676 start
+	        //response[2] = mcc + mncShort;
+            String tmpMccMnc = "";
+            tmpMccMnc = mcc + mncShort;
 
-	        response[0] = getCarrierNameByNumeric(response[2]);
-	        response[1] = getCarrierNameByNumeric(response[2]);
+	        response[0] = getCarrierNameByNumeric(tmpMccMnc);
+	        response[1] = getCarrierNameByNumeric(tmpMccMnc);
+            //owen.chen modify for 183676 end
 	        //i18n
 	        response[0] = changeOperator(response[0]);
 	        response[1] = changeOperator(response[1]);
@@ -3445,19 +3449,22 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
             //owen.chen modify for 190532: using MCC/MNC to match the display name when it is not null
             if (strings[i+2] != null)
             {
-                Log.d(LOG_TAG, " responseOperatorInfos: lookup ioerator name with "+strings[i+2]);
+                Log.d(LOG_TAG, " responseOperatorInfos: lookup operator name with "+strings[i+2]);
 
                 String mcc = strings[i+2].substring(0, 3);
                 String mnc = strings[i+2].substring(3);
 
                 //delete zero front of mnc is mncShort
                 int mncShort = Integer.parseInt(mnc);
-                strings[i+2] = mcc + mncShort;
+                //owen.chen modify for 183676 start
+                String tmpMccMnc = "";
+                tmpMccMnc = mcc + mncShort;
 
-                strings[i+0] = getCarrierNameByNumeric(strings[i+2]);
-                strings[i+1] = getCarrierNameByNumeric(strings[i+2]);
+                strings[i+0] = getCarrierNameByNumeric(tmpMccMnc);
+                strings[i+1] = getCarrierNameByNumeric(tmpMccMnc);
+                 //owen.chen modify for 183676 end
             } else {
-                 Log.d(LOG_TAG, " responseOperatorInfos: lookup ioerator name with "+strings[i+0]+" or "+strings[i+1]);
+                 Log.d(LOG_TAG, " responseOperatorInfos: lookup operator name with "+strings[i+0]+" or "+strings[i+1]);
 
                 if( (strings[i+0] == null) && ( strings[i+1] == null ) ) {
                     // both OperatorAlphaLong and OperatorAlphaShort are null,
