@@ -766,6 +766,16 @@
         <item>Claro=Claro</item>
         <item>VIVO=VIVO</item>
         <item>BrTCel=BrTCel</item>
+        <item>Orange AT=Orange AT</item>
+        <item>Orange RDC=Orange RDC</item>
+        <item>Orange GN=Orange GN</item>
+        <item>Orange BS=Orange BS</item>
+        <item>Orange IL=Orange IL</item>
+        <item>Orange JO=Orange JO</item>
+        <item>GSM Telkom=GSM Telkom</item>
+        <item>Orange MG=Orange MG</item>
+        <item>ORANGE ML=ORANGE ML</item>
+        <item>ORANGE UGANDA=ORANGE UGANDA</item>
         <!-- owen.chen for 187167 -->
         <item>Vodafon=Vodafone</item>
         <!-- \t is space，case 36510's brand don't know -->
