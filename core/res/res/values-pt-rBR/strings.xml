@@ -743,7 +743,7 @@
   <string name="lockscreen_pattern_wrong">Tente novamente</string>
   <string name="lockscreen_password_wrong">Tente novamente</string>
   <string name="faceunlock_multiple_failures">Tentativas de bloqueio máximo excedido</string>
-  <string name="lockscreen_plugged_in">Carregando <xliff:g id="number"> % D </xliff:g><xliff:g id="percent"> %% </xliff:g></string>
+  <string name="lockscreen_plugged_in">Carregando <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <string name="lockscreen_charged">Carregado.</string>
   <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
   <string name="lockscreen_low_battery">Conecte seu carregador.</string>
@@ -928,11 +928,11 @@
     </plurals>
   <plurals name="in_num_seconds">
         <item quantity="one">em 1 segundo</item>
-        <item quantity="other">em <xliff:g id="count"> % D </xliff:g> segundos</item>
+        <item quantity="other">em <xliff:g id="count">%d</xliff:g> segundos</item>
     </plurals>
   <plurals name="in_num_minutes">
         <item quantity="one">em 1 min</item>
-        <item quantity="other">em <xliff:g id="count"> % D </xliff:g> mins</item>
+        <item quantity="other">em <xliff:g id="count">%d</xliff:g> mins</item>
     </plurals>
   <plurals name="in_num_hours">
         <item quantity="one">em 1 hora</item>
@@ -960,11 +960,11 @@
     </plurals>
   <plurals name="abbrev_in_num_seconds">
         <item quantity="one">em 1 segundo</item>
-        <item quantity="other">em <xliff:g id="count"> % D </xliff:g> segundos</item>
+        <item quantity="other">em <xliff:g id="count">%d</xliff:g> segundos</item>
     </plurals>
   <plurals name="abbrev_in_num_minutes">
         <item quantity="one">em 1 min</item>
-        <item quantity="other">em <xliff:g id="count"> % D </xliff:g> mins</item>
+        <item quantity="other">em <xliff:g id="count">%d</xliff:g> mins</item>
     </plurals>
   <plurals name="abbrev_in_num_hours">
         <item quantity="one">em 1 hora</item>
@@ -975,8 +975,8 @@
         <item quantity="other">in <xliff:g id="count">%d</xliff:g> dias</item>
     </plurals>
   <string name="preposition_for_date">ligado <xliff:g id="date" example="May 29">%s</xliff:g></string>
-  <string name="preposition_for_time">em <xliff:g id="time" example="2:33 am"> % S </xliff:g></string>
-  <string name="preposition_for_year">em <xliff:g id="year" example="2003"> % S </xliff:g></string>
+  <string name="preposition_for_time">em <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+  <string name="preposition_for_year">em <xliff:g id="year" example="2003">%s</xliff:g></string>
   <string name="day">Dia</string>
   <string name="days">dias</string>
   <string name="hour">hora</string>
@@ -1220,8 +1220,8 @@
   <string name="ime_action_done">Concluído</string>
   <string name="ime_action_previous">Anterior</string>
   <string name="ime_action_default">Executar</string>
-  <string name="dial_number_using">Disque o número de \ nusing <xliff:g id="number" example="555"> % S </xliff:g></string>
-  <string name="create_contact_using">Criar contato \ nusing <xliff:g id="number" example="555"> % S </xliff:g></string>
+  <string name="dial_number_using">Disque o número de \ nusing <xliff:g id="number" example="555">%s</xliff:g></string>
+  <string name="create_contact_using">Criar contato \ nusing <xliff:g id="number" example="555">%s</xliff:g></string>
   <string name="grant_credentials_permission_message_header">Um ou mais dos seguintes aplicativos solicitam permissão para acessar a sua conta, agora e no futuro.</string>
   <string name="grant_credentials_permission_message_footer">Você quer permitir este pedido?</string>
   <string name="grant_permissions_header_text">Pedido de acesso</string>
@@ -1238,7 +1238,7 @@
   <string name="vpn_title">VPN ativado</string>
   <string name="vpn_title_long">VPN está ativado pelo <xliff:g id="app" example="FooVPN client">%s</xliff:g></string>
   <string name="vpn_text">Tocar para gerenciar a rede.</string>
-  <string name="vpn_text_long">Conectado a <xliff:g id="session" example="office"> % S </xliff:g> . Toque para gerenciar a rede.</string>
+  <string name="vpn_text_long">Conectado a <xliff:g id="session" example="office">%s</xliff:g> . Toque para gerenciar a rede.</string>
   <string name="upload_file">Escolher arquivo</string>
   <string name="no_file_chosen">Nenhum arquivo escolhido</string>
   <string name="reset">Redefinir</string>
