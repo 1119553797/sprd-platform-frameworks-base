@@ -2240,10 +2240,11 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
             mIapRecordSizeArray[num] = mIapFileRecord.size();
 
             log("updateAdnRecord,numIapRec  " + numIapRec);
-
+        //owen.chen modify for 195235
+             numIapRec = ((numAdnRecs-mDoneAdnCount) > numIapRec) ? numIapRec : (numAdnRecs -mDoneAdnCount) ;
+        }else{
+             numIapRec = numAdnRecs -mDoneAdnCount;
         }
-
-        numIapRec = ((numAdnRecs-mDoneAdnCount) > numIapRec) ? numIapRec : (numAdnRecs -mDoneAdnCount) ;
 
         log("updateAdnRecord,numIapRec  " + numIapRec + " mDoneAdnCount " + mDoneAdnCount);
         for (int i = mDoneAdnCount; i < (mDoneAdnCount+numIapRec); i++) {
