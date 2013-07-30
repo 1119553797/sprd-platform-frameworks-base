@@ -62,12 +62,12 @@
         <item>50599=One.Tel</item>
         <item>2321=A1</item>
         <item>2323=T-Mobile</item>
-        <item>2325=Orange</item>
+        <item>2325=Orange AT</item>
         <item>2327=tele.ring</item>
         <item>2329=A1</item>
         <item>23210=3</item>
         <item>23211=bob</item>
-        <item>23212=yesss</item>
+        <item>23212=Orange AT</item>
         <item>23214=3</item>
         <item>23215=Barablu</item>
         <item>23291=GSM-R A</item>
@@ -263,7 +263,7 @@
         <item>6304=\t</item>
         <item>6305=Supercell</item>
         <item>63010=Libertis Telecom</item>
-        <item>63086=CCT</item>
+        <item>63086=Orange RDC</item>
         <item>63089=SAIT Telecom</item>
         <item>2381=TDC</item>
         <item>2382=Telenor</item>
@@ -407,13 +407,13 @@
         <item>23455=Sure Mobile</item>
         <item>23450=Wave Telecom</item>
         <item>2343=Airtel Vodafone</item>
-        <item>6111=Orange S.A.</item>
+        <item>6111=Orange GN</item>
         <item>6112=Sotelgui</item>
         <item>6113=Telecel Guinee</item>
         <item>6114=MTN</item>
         <item>6115=Cellcom</item>
         <item>6322=Areeba</item>
-        <item>6323=Orange</item>
+        <item>6323=Orange BS</item>
         <item>7381=Digicel</item>
         <item>7382=GT&amp;T Cellink Plus</item>
         <item>3721=Voila</item>
@@ -650,7 +650,7 @@
         <item>23458=Pronto GSM</item>
         <item>2349=Sure Mobile</item>
         <item>234=Cloud 9 Mobile</item>
-        <item>4251=Orange</item>
+        <item>4251=Orange IL</item>
         <item>4252=Cellcom</item>
         <item>4253=Pelephone</item>
         <item>42577=Mirs</item>
@@ -775,7 +775,7 @@
         <item>4161=zain JO</item>
         <item>4162=XPress Telecom</item>
         <item>4163=Umniah</item>
-        <item>41677=Orange</item>
+        <item>41677=Orange JO</item>
         <item>4011=Beeline</item>
         <item>4012=Kcell</item>
         <item>4017=Dalacom</item>
@@ -783,7 +783,7 @@
         <item>40177=Mobile Telecom Service</item>
         <item>6392=Safaricom</item>
         <item>6393=Airtel</item>
-        <item>6397=Orange Kenya</item>
+        <item>6397=GSM Telkom</item>
         <item>6395=yu</item>
         <item>5459=Kiribati Frigate</item>
         <item>467192=Koryolink</item>
@@ -855,7 +855,7 @@
         <item>2942=ONE</item>
         <item>2943=Vip MK</item>
         <item>6461=Airtel</item>
-        <item>6462=Orange</item>
+        <item>6462=Orange MG</item>
         <item>6463=Sacel</item>
         <item>6464=Telma</item>
         <item>6501=TNM</item>
@@ -878,7 +878,7 @@
         <item>4721=Dhiraagu</item>
         <item>4722=Wataniya</item>
         <item>6101=Malitel</item>
-        <item>6102=Orange</item>
+        <item>6102=ORANGE ML</item>
         <item>2781=Vodafone</item>
         <item>27821=GO</item>
         <item>27877=Melita</item>
@@ -1290,7 +1290,7 @@
         <item>6411=Airtel</item>
         <item>64110=MTN</item>
         <item>64111=UTL</item>
-        <item>64114=Orange</item>
+        <item>64114=ORANGE UGANDA</item>
         <item>64122=Warid Telecom</item>
         <item>2551=MTS</item>
         <item>2552=Beeline</item>
