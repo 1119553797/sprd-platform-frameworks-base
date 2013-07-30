@@ -741,9 +741,15 @@ public class DeviceStorageMonitorService extends Binder {
             myMailMemory = myMailSize / mKiloSize;
             mySmsMmsMemory = mySmsMmsSize / mKiloSize;
             if(DEBUG)Slog.w(TAG, "myMailMemory :"+myMailMemory+" KB , mySmsMmsMemory :"+mySmsMmsMemory+" KB");
+            long totalSystem; //total on /system 
+            long freeSystem;  //free on /system
 
-            mySystemMemory = myTotalMemory - myFreeMemory - myMailMemory - mySmsMmsMemory
-                             - myApplicationMemory;
+            mSystemFileStats.restat(SYSTEM_PATH);
+            totalSystem = (long)mSystemFileStats.getBlockCount()*mSystemFileStats.getBlockSize();
+            freeSystem = (long)mSystemFileStats.getAvailableBlocks()*mSystemFileStats.getBlockSize();
+            mySystemMemory = (totalSystem-freeSystem)/1024;
+            /*mySystemMemory = myTotalMemory - myFreeMemory - myMailMemory - mySmsMmsMemory
+                             - myApplicationMemory;*/
             mGetOver = true;
         }
 
