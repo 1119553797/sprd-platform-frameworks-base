@@ -179,7 +179,11 @@ public class AppManage extends Activity {
         // first steps should have been completed before the list gets filled.
         myAppInfoAdapter.sortList();
         mListView.setAdapter(myAppInfoAdapter);
-        dismissDialog(DLG_LOADING);
+        try {
+            dismissDialog(DLG_LOADING);
+        } catch (Exception e) {
+            Slog.e(TAG, "can't dismissDialog after onDistory :" + e.getMessage());
+        }
     }
 
     protected void refreshUI() {
