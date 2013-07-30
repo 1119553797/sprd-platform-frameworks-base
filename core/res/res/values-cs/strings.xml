@@ -194,7 +194,7 @@
   <string name="myAppProcessing">zpracování\u2026</string>
   <string name="missed_call">%1$d Zmeškaný hovor</string>
   <string name="unread_message">%1$d Nepřečtená zpráva</string>
-  <string name="shutdown_after_seconds">Telefon se vypne po <xliff:g id="NUMBER">%D</xliff:g> sekundách</string>
+  <string name="shutdown_after_seconds">Telefon se vypne po <xliff:g id="NUMBER">%d</xliff:g> sekundách</string>
   <string msgid="8340973892742019101" name="byteShort">"B"</string>
   <string name="stk_refresh_sim_reset_message">Telefon bude restartován</string>
   <string name="stk_refresh_sim_init_message">SIM karta se aktualizuje</string>
