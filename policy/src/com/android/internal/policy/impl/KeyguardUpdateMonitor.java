@@ -67,7 +67,7 @@ public class KeyguardUpdateMonitor {
     static private final String TAG = "KeyguardUpdateMonitor";
     static private final boolean DEBUG = false;
 
-    /* package */ static final int LOW_BATTERY_THRESHOLD = 20;
+    /* package */ static final int LOW_BATTERY_THRESHOLD = 15;
 
     private final Context mContext;
 
