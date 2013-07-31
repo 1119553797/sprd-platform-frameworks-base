@@ -926,7 +926,11 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
             if (getStreamVolume(sc.streamType) != progress) {
                 setStreamVolume(sc.streamType, progress, 0);
                 if (progress == 0) {
-                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                    // Bug 193362 start
+                    if (sc.streamType == AudioManager.STREAM_RING) {
+                        mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                    }
+                    // Bug 193362 end
                 } else if (progress > 0) {
                     setStreamVolume(sc.streamType, progress, 0);
                     if (sc.streamType == AudioManager.STREAM_RING
