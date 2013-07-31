@@ -163,6 +163,8 @@ public final class ShutdownThread extends Thread {
 
         pd.show();
 
+	SystemProperties.set("ctl.start", "boot_complete");
+
         // start the thread that initiates shutdown
         sInstance.mContext = context;
         sInstance.mPowerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
