@@ -21,27 +21,14 @@ copy_from :=                \
     DroidKufi-Regular.ttf     \
     DroidNaskh-Regular.ttf     \
     DroidSansHebrew.ttf     \
-    DroidSansHebrew-Bold.ttf \
     DroidSansThai.ttf       \
     DroidSerif-Regular.ttf  \
     DroidSerif-Bold.ttf     \
     DroidSerif-Italic.ttf   \
     DroidSerif-BoldItalic.ttf   \
     DroidSansMono.ttf        \
-    Lohit-Bengali.ttf        \
-    Lohit-Devanagari.ttf     \
-    Lohit-Tamil.ttf         \
-    Myanmar3.ttf            \
-    ZawgyiOne.ttf           \
-    Lohit-Telugu.ttf        \
-    Clockopia.ttf           \
-    Tibetan.ttf             \
-    Lohit-Punjabi.ttf       \
-    Lohit-Gujarati.ttf      \
-    KhmerOS.ttf             \
-    Phetsarath_OT.ttf       \
-    AbyssinicaSIL-R.ttf     \
-    Georgian.ttf
+    Clockopia.ttf
+
 
 ifneq ($(NO_FALLBACK_FONT),true)
 ifeq ($(filter %system/fonts/DroidSansFallback.ttf,$(PRODUCT_COPY_FILES)),)
