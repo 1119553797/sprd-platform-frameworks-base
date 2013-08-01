@@ -413,10 +413,16 @@ public class AppManage extends Activity {
 
         for (PackageInfo packageinfo : installedPackageList) {
             if ((packageinfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) == 0) {
+                /**
                 if (packageinfo.packageName == MAILPACKAGE) {
                     continue;
                 }
                 if (packageinfo.packageName == MMSPACKAGE) {
+                    continue;
+                }
+                */
+
+                if((packageinfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                     continue;
                 }
                 mPackageList.add(packageinfo);
