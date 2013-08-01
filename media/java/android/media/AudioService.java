@@ -2175,14 +2175,17 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                             "but no vibrator is present");
                     break;
                 }
+
+                adjustVolumeIndex = false;
                 if ((direction == AudioManager.ADJUST_LOWER)) {
                     if (mPrevVolDirection != AudioManager.ADJUST_LOWER) {
                         ringerMode = RINGER_MODE_SILENT;
                     }
                 } else if (direction == AudioManager.ADJUST_RAISE) {
                     ringerMode = RINGER_MODE_NORMAL;
+                    adjustVolumeIndex = true;
                 }
-                adjustVolumeIndex = false;
+
                 break;
             case RINGER_MODE_SILENT:
                 if (direction == AudioManager.ADJUST_RAISE) {
