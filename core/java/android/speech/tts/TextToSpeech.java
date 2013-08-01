@@ -637,8 +637,19 @@ public class TextToSpeech {
     private void dispatchOnInit(int result) {
         synchronized (mStartLock) {
             if (mInitListener != null) {
-                mInitListener.onInit(result);
-                mInitListener = null;
+                //mInitListener.onInit(result);
+                // haili: some listeners may handle incorrectly, here catch possible exceptions. Jul. 30, 2013 >>
+                try {
+                    mInitListener.onInit(result);
+                } catch (NullPointerException exp) {
+                    Log.e(TAG, "caught NullPointerException "+exp);
+                } catch (Exception exp) {
+                    Log.e(TAG, "caught unknown exception "+exp);
+                } finally {
+                    mInitListener = null;
+                }
+                // <<
+                //mInitListener = null;
             }
         }
     }
