@@ -26,6 +26,10 @@ import com.android.server.SystemServer;
 import com.android.server.Watchdog;
 import com.android.server.WindowManagerService;
 import com.android.server.am.ActivityStack.ActivityState;
+import java.io.FileOutputStream;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import  java.io.File;
 
 import dalvik.system.Zygote;
 
@@ -256,6 +260,12 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     // How long we wait until we timeout on key dispatching during instrumentation.
     static final int INSTRUMENTATION_KEY_DISPATCHING_TIMEOUT = 60*1000;
+    static int HIDDEN_APP_MIN_ADJ = 9;
+
+    // The B list of SERVICE_ADJ -- these are the old and decrepit
+    // services that aren't as shiny and interesting as the ones in the A list.
+    static int SERVICE_B_ADJ = 8;
+    static int PREVIOUS_APP_ADJ = 7;
 
     // OOM adjustments for processes in various states:
 
@@ -269,7 +279,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     // so it can be killed without any disruption. Value set in
     // system/rootdir/init.rc on startup.
     static final int HIDDEN_APP_MAX_ADJ;
-    static int HIDDEN_APP_MIN_ADJ;
+    //static int HIDDEN_APP_MIN_ADJ;
 
     // This is a process holding the home application -- we want to try
     // avoiding killing it, even if it would normally be in the background,
@@ -325,7 +335,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int PERCEPTIBLE_APP_MEM;
     static final int VISIBLE_APP_MEM;
     static final int FOREGROUND_APP_MEM;
-
+      int mDelayMoreTime = 0;
     // The minimum number of hidden apps we want to be able to keep around,
     // without empty apps being able to push them out of memory.
     static final int MIN_HIDDEN_APPS = 2;
@@ -961,6 +971,11 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int SHOW_STRICT_MODE_VIOLATION_MSG = 26;
     static final int CHECK_EXCESSIVE_WAKE_LOCKS_MSG = 27;
     static final int CLEAR_DNS_CACHE = 28;
+    static final int GET_AVAIL_MEM_MSG = 35;
+
+    // for LC_RAM_SUPPORT
+    long mRecentAvailMem = 0;
+    long mRecentAvailMemClock = 0;
 
     AlertDialog mUidAlert;
 
@@ -1448,7 +1463,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
 
         Slog.i(TAG, "Memory class: " + ActivityManager.staticGetMemoryClass());
-        
+       updateOomLevels(0,0,false);
         File dataDir = Environment.getDataDirectory();
         File systemDir = new File(dataDir, "system");
         systemDir.mkdirs();
@@ -2696,6 +2711,10 @@ public final class ActivityManagerService extends ActivityManagerNative
         synchronized (stats) {
             stats.noteProcessDiedLocked(app.info.uid, pid);
         }
+	for (ServiceRecord sr : app.services) {
+		sr.lowMemKilled =  true;
+		sr.delayMoreTime = (mDelayMoreTime++)%10;
+		}
 
         // Clean up already done if the process has been re-started.
         if (app.pid == pid && app.thread != null &&
@@ -8647,6 +8666,243 @@ public final class ActivityManagerService extends ActivityManagerNative
     // =========================================================
     // SERVICES
     // =========================================================
+    private int[] mOomAdj = new int[] { 0, 1, 2, 7, 14, 15  };
+    private final long[] mOomMinFreeLow = new long[] {
+            8192, 12288, 16384,
+            24576, 28672, 32768
+    };
+    // These are the high-end OOM level limits.  This is appropriate for a
+    // 1280x800 or larger screen with around 1GB RAM.  Values are in KB.
+    private final long[] mOomMinFreeHigh = new long[] {
+            32768, 40960, 49152,
+            57344, 65536, 81920
+    };	
+    private long[] mOomMinFree = new long[mOomAdj.length];
+    private static native long readAvailMemNative() throws FileNotFoundException, IOException;
+    private void writeFile(String path, String data) {
+			FileOutputStream fos = null;
+			try {
+				fos = new FileOutputStream(path);
+				fos.write(data.getBytes());
+			} catch (IOException e) {
+				Slog.w(ActivityManagerService.TAG, "Unable to write " + path);
+			} finally {
+				if (fos != null) {
+					try {
+						fos.close();
+					} catch (IOException e) {
+					}
+				}
+			}
+		}
+	   private String readFile(String path) {
+		FileReader fr = null;
+		BufferedReader br = null;
+		try {
+			fr = new FileReader(new File(path));
+			br = new BufferedReader(fr);
+			return br.readLine();
+		} catch (IOException e) {
+			Slog.w(ActivityManagerService.TAG, "Unable to read " + path);
+			return "";
+		} finally {
+			if (br != null) {
+				 try {
+					br.close();
+					if (fr != null) {
+						fr.close();
+					}	
+				 }catch(IOException e)
+				 {
+					  Slog.w(ActivityManagerService.TAG, " close fail ");
+				 }
+			}
+		}	
+	}    
+    private long extractMemValue(byte[] buffer, int index) {
+        while (index < buffer.length && buffer[index] != '\n') {
+            if (buffer[index] >= '0' && buffer[index] <= '9') {
+                int start = index;
+                index++;
+                while (index < buffer.length && buffer[index] >= '0'
+                    && buffer[index] <= '9') {
+                    index++;
+                }
+                String str = new String(buffer, 0, start, index-start);
+                return ((long)Integer.parseInt(str)) * 1024;
+            }
+            index++;
+        }
+        return 0;
+    }	   
+    private boolean matchText(byte[] buffer, int index, String text) {
+        int N = text.length();
+        if ((index+N) >= buffer.length) {
+            return false;
+        }
+        for (int i=0; i<N; i++) {
+            if (buffer[index+i] != text.charAt(i)) {
+                return false;
+            }
+        }
+        return true;
+    }	
+    private long readTotalSize() {
+        try {
+	    byte[] buffer = new byte[1024];
+            long memTotal = 0;
+            FileInputStream is = new FileInputStream("/proc/meminfo");
+            int len = is.read(buffer);
+            is.close();
+            final int BUFLEN = buffer.length;
+            for (int i=0; i<len && memTotal == 0; i++) {
+                if (matchText(buffer, i, "MemTotal")) {
+                    i += 8;
+                    memTotal = extractMemValue(buffer, i);
+		    break;
+                }
+                while (i < BUFLEN && buffer[i] != '\n') {
+                    i++;
+                }
+            }
+            return memTotal;
+        } catch (java.io.FileNotFoundException e) {
+        } catch (java.io.IOException e) {
+        }
+        return 0;
+    }
+
+
+    private void updateOomLevels(int displayWidth, int displayHeight, boolean write) {
+        // Scale buckets from avail memory: at 300MB we use the lowest values to
+        // 700MB or more for the top values.
+        float scaleMem = ((float)(readTotalSize()-300))/(700-300);
+
+        // Scale buckets from screen size.
+        int minSize = 320*480;  //  153600
+        int maxSize = 1280*800; // 1024000  230400 870400  .264
+        float scaleDisp = ((float)(displayWidth*displayHeight)-minSize)/(maxSize-minSize);
+        //Slog.i("XXXXXX", "scaleDisp=" + scaleDisp + " dw=" + displayWidth + " dh=" + displayHeight);
+
+        StringBuilder adjString = new StringBuilder();
+        StringBuilder memString = new StringBuilder();
+
+        float scale = scaleMem > scaleDisp ? scaleMem : scaleDisp;
+
+	{
+		String adj = readFile("/sys/module/lowmemorykiller/parameters/adj");
+		String minfree = readFile("/sys/module/lowmemorykiller/parameters/minfree");
+		if(adj != null &&  adj != "" && minfree != null && minfree != "")
+		{			
+			String[] adjs = adj.split(",");
+			String[] minfrees = minfree.split(",");
+			try {
+				int length = adjs.length > mOomAdj.length ? mOomAdj.length :adjs.length;				
+				for (int i = 0; i <length; ++i) {
+					mOomAdj[i] = Integer.parseInt(adjs[i]);
+				   // Log.i(ActivityManagerService.TAG, "adj: " + mOomAdj[i]);
+				}
+				for (int i = 0; i <  length ; ++i) {
+					mOomMinFree[i] = Long.parseLong(minfrees[i]) * PAGE_SIZE / 1024;
+				}
+			} catch (Exception e) {
+				Slog.w(ActivityManagerService.TAG, "adj:"+ adj);
+			}
+			return;
+		}
+	 }
+
+        if (scale < 0) scale = 0;
+        else if (scale > 1) scale = 1;
+        for (int i=0; i<mOomAdj.length; i++) {
+            long low = mOomMinFreeLow[i];
+            long high = mOomMinFreeHigh[i];
+            mOomMinFree[i] = (long)(low + ((high-low)*scale));
+          
+            if (i > 0) {
+                adjString.append(',');
+                memString.append(',');
+            }
+            adjString.append(mOomAdj[i]);
+            memString.append((mOomMinFree[i]*1024)/PAGE_SIZE);
+        }
+
+        //Slog.i("XXXXXXX", "******************************* MINFREE: " + memString);
+        // GB: 2048,3072,4096,6144,7168,8192
+        // HC: 8192,10240,12288,14336,16384,20480
+    }
+
+    private long readAvailMemory() {
+        long freeMem = 0;
+        try {
+            freeMem = readAvailMemNative();
+           // if (DEBUG_LC) Slog.v(TAG, "readAvailMemNative return " + freeMem);
+        } catch (Exception e) {
+            Slog.e(TAG, "readAvailMemNative error", e);
+        }
+        return freeMem;
+    }
+
+    long getMemLevel(int adjustment) {
+        for (int i=0; i<mOomAdj.length; i++) {
+            if (adjustment <= mOomAdj[i]) {
+                return mOomMinFree[i] * 1024;
+            }
+        }
+        return mOomMinFree[mOomAdj.length-1] * 1024;
+    }	
+    boolean checkServicesDelayRestartLocked(ServiceRecord r) {
+        boolean needDelay = true;
+
+        for (int i = mLruProcesses.size() - 1 ; i >= 0 ; i--) {
+            ProcessRecord pr = mLruProcesses.get(i);
+            if (pr.thread != null &&
+               (pr.curAdj >= HIDDEN_APP_MIN_ADJ)) {
+                needDelay = false;
+            }
+        }
+
+        if (needDelay) {
+            long curClock = SystemClock.uptimeMillis();
+            if (mRecentAvailMem == 0 || (curClock > mRecentAvailMemClock + 10 * 1000)) {
+                mRecentAvailMem = readAvailMemory();
+                mRecentAvailMemClock = curClock;
+            }
+            int adjustment = SERVICE_B_ADJ;
+            if (r.app != null) {
+                adjustment = r.app.curAdj;
+            }
+            long serviceNeedMem = getMemLevel(adjustment);
+
+            if (mRecentAvailMem > serviceNeedMem) {
+                needDelay = false;
+               // if (DEBUG_LC) Slog.v(TAG, "ServicesDelayRestart: Mem is enough to restart service [" + r.shortName + "], free mem="
+                 //      + mRecentAvailMem  + " adj=" + adjustment);
+            } else {
+                long delayTime = 0;
+                r.delayRestartCount++;
+                if (r.delayRestartCount < 5) {
+                    delayTime = 10 * 1000 * r.delayRestartCount;
+                } else {
+                    delayTime = 50 * 1000;
+                }
+                
+                r.restartDelay = delayTime + r.delayMoreTime * 1000;
+                r.nextRestartTime = SystemClock.uptimeMillis() + r.restartDelay;
+                
+                mHandler.postAtTime(r.restarter, r.nextRestartTime);
+                //if (DEBUG_LC) Slog.e(TAG, "ServicesDelayRestart: Delay restart service [" + r.shortName + "] wait " + r.restartDelay + "ms");
+            }
+        }
+
+        if (!needDelay) {
+           // if (DEBUG_LC) Slog.w(TAG, "ServicesDelayRestart: Restart service[" + r.shortName + "]");
+            r.lowMemKilled = false;
+            r.delayRestartCount = 0;
+        }
+
+        return needDelay;
+    }
 
     ActivityManager.RunningServiceInfo makeRunningServiceInfoLocked(ServiceRecord r) {
         ActivityManager.RunningServiceInfo info =
@@ -9117,13 +9373,21 @@ public final class ActivityManagerService extends ActivityManagerNative
         return canceled;
     }
     private static HashSet<String> whiteList;
+    private static HashSet<String> raiseAdjList;
+
     static {
 	 whiteList = new HashSet<String>();
+	 raiseAdjList = new HashSet<String>();
 	 whiteList.add("com.android.phone");
 	 whiteList.add("com.android.contacts");
 	 whiteList.add("com.android.mms");
 	 whiteList.add("android.process.acore");
 	 whiteList.add("com.android.systemui");
+         raiseAdjList.add("com.tencent.mobileqq:MSF");
+         raiseAdjList.add("com.tencent.mm:push");
+         raiseAdjList.add("com.sina.weibo");
+	 raiseAdjList.add("cn.com.fetion");
+         raiseAdjList.add("cmccwm.mobilemusic");	 
     }
 
     final void performServiceRestartLocked(ServiceRecord r) {
@@ -9132,7 +9396,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
         if (!whiteList.contains(r.app.processName)) {
             return;
-        }		
+        }	
+       if (r.lowMemKilled && checkServicesDelayRestartLocked(r)) return;		
         bringUpServiceLocked(r, r.intent.getIntent().getFlags(), true);
     }
 
@@ -12009,6 +12274,13 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
         }
+        //LC_RAM_SUPPORT
+       // if (LC_RAM_SUPPORT && app.services.size() != 0) {
+            if( adj >= SERVICE_B_ADJ) {
+                if (raiseAdjList.contains(app.processName))
+                    adj = PREVIOUS_APP_ADJ;
+            }
+       // }
 
         app.curRawAdj = adj;
         

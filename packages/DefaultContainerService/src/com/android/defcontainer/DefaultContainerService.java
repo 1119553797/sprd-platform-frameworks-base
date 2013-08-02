@@ -394,6 +394,17 @@ public class DefaultContainerService extends IntentService {
                     .getContentResolver(),
                     Settings.Secure.DEFAULT_INSTALL_LOCATION,
                     PackageHelper.APP_INSTALL_AUTO);
+            boolean flag = false;
+
+             flag = true;
+             if (installPreference == PackageHelper.APP_INSTALL_INTERNAL) {
+                 checkInt = true;
+                 break check_inner;
+             } else if (installPreference == PackageHelper.APP_INSTALL_EXTERNAL) {
+                checkExt = true;
+                 break check_inner;
+             }
+
 
             // Check flags.
             if ((flags & PackageManager.INSTALL_FORWARD_LOCK) != 0) {
@@ -442,16 +453,19 @@ public class DefaultContainerService extends IntentService {
             }
 
             // Pick user preference
-            if (installPreference == PackageHelper.APP_INSTALL_INTERNAL) {
-                checkInt = true;
-                break check_inner;
-            } else if (installPreference == PackageHelper.APP_INSTALL_EXTERNAL) {
-                checkExt = true;
-                break check_inner;
-            } else {//default policy if nothing else is specified.
-                checkExt = true;
-                checkBoth = true;
-                break check_inner;
+            if(!flag)
+            {
+	            if (installPreference == PackageHelper.APP_INSTALL_INTERNAL) {
+	                checkInt = true;
+	                break check_inner;
+	            } else if (installPreference == PackageHelper.APP_INSTALL_EXTERNAL) {
+	                checkExt = true;
+	                break check_inner;
+	            } else {//default policy if nothing else is specified.
+	                checkExt = true;
+	                checkBoth = true;
+	                break check_inner;
+	            }
             }
             // Fall back to default policy if nothing else is specified.
             //checkInt = true;

@@ -93,6 +93,10 @@ class ServiceRecord extends Binder {
     long restartDelay;      // delay until next restart attempt.
     long restartTime;       // time of last restart.
     long nextRestartTime;   // time when restartDelay will expire.
+    int delayRestartCount;	// count of delay restart by AMS because of low memory
+    int delayMoreTime;	
+    boolean lowMemKilled;
+
 
     String stringName;      // caching of toString
     

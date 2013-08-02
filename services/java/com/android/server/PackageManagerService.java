@@ -767,7 +767,7 @@ class PackageManagerService extends IPackageManager.Stub {
             mSeparateProcesses = null;
         }
 
-        Installer installer = new Installer();
+        Installer installer = new Installer();	
         // Little hacky thing to check if installd is here, to determine
         // whether we are running on the simulator and thus need to take
         // care of building the /data file structure ourself.
@@ -5770,6 +5770,21 @@ class PackageManagerService extends IPackageManager.Stub {
         int retCode;
         if ((newPackage.applicationInfo.flags&ApplicationInfo.FLAG_HAS_CODE) != 0) {
             retCode = mInstaller.movedex(newPackage.mScanPath, newPackage.mPath);
+            /* add for :if app is installed in T-card,
+             * move classes from /data/dalvik-cache to /mnt/sdcard/.Dalcache.
+             * rename from /data/dalvik-cache to /mnt/sdcard/.Dalcache will be failed,errno is EXDEV.
+             */
+            try {
+                if (retCode == -18) { //Cross-device link
+                    Slog.i(TAG,"movedex failed.reason=Cross-device link");
+                    retCode = mInstaller.dexopt(newPackage.mPath, newPackage.applicationInfo.uid, !isForwardLocked(newPackage));
+                    if (retCode == 0) {
+                        return PackageManager.INSTALL_SUCCEEDED;
+                    }
+                 }
+            } catch (Exception e) {
+                //
+            }			
             if (retCode != 0) {
                 if (mNoDexOpt) {
                     /*

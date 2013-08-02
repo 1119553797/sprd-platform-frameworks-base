@@ -76,6 +76,8 @@
 #define DALVIK_CACHE_POSTFIX  "/classes.dex"
 
 #define UPDATE_COMMANDS_DIR_PREFIX  "/system/etc/updatecmds/"
+#define T_DALVIK_CACHE_PREFIX  "/mnt/sdcard/.Dalcache/"
+#define T_DALVIK_CACHE_PATH     "/mnt/sdcard/.Dalcache"
 
 #define PKG_NAME_MAX  128   /* largest allowed package name */
 #define PKG_PATH_MAX  256   /* max size of any path we use */
