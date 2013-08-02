@@ -1270,6 +1270,7 @@
   <public type="drawable" name="presence_audio_away" id="0x010800af" />
   <public type="drawable" name="presence_audio_busy" id="0x010800b0" />
   <public type="drawable" name="presence_audio_online" id="0x010800b1" />
+    <public type="drawable" name="modem_assert" />
 
   <public type="style" name="TextAppearance.StatusBar.Title" id="0x01030065" />
   <public type="style" name="TextAppearance.StatusBar.Icon" id="0x01030066" />

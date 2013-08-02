@@ -335,6 +335,14 @@ class ServerThread extends Thread {
             }
 
             try {
+                Slog.i(TAG, "ModemAssert Service");
+                ServiceManager.addService("com.android.server.ModemAssertService",
+                        new ModemAssertService(context));
+            } catch (Exception e) {
+                Slog.e(TAG, "Failure starting ModemAssert Service", e);
+            }
+
+            try {
                 Slog.i(TAG, "Notification Manager");
                 notification = new NotificationManagerService(context, statusBar, lights);
                 ServiceManager.addService(Context.NOTIFICATION_SERVICE, notification);
