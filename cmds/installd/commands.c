@@ -278,9 +278,15 @@ int move_dex(const char *src, const char *dst)
     if (create_cache_path(dst_dex, dst)) return -1;
 
     LOGI("move %s -> %s\n", src_dex, dst_dex);
-    if (rename(src_dex, dst_dex) < 0) {
+
+    int retCode = rename(src_dex, dst_dex);
+    if (errno == EXDEV) {
         LOGE("Couldn't move %s: %s\n", src_dex, strerror(errno));
-        return -1;
+        return -errno;
+    }
+    if (retCode < 0) {
+        LOGE("Couldn't move %s: %s\n", src_dex, strerror(errno));	
+	return -1;
     } else {
         return 0;
     }
@@ -468,6 +474,18 @@ done:
     return 0;
 }
 
+/*
+ * add for :if app is installed in T-card,
+ * move classes from /data/dalvik-cache to /mnt/sdcard/.Dalcache.
+ * if install in sdcard apk_path is begin as /mnt/asec/xxxx
+ */
+static int hasMntHead(const char *path) {
+    if (path[0] == '/' && path[1] == 'm' && path[2] == 'n' && path[3] == 't') {
+        return 1;
+    }
+    return 0;
+}
+
 
 /* a simpler version of dexOptGenerateCacheFileName() */
 int create_cache_path(char path[PKG_PATH_MAX], const char *src)
@@ -475,6 +493,7 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
     char *tmp;
     int srclen;
     int dstlen;
+    int tPath = 0;
 
     srclen = strlen(src);
 
@@ -487,11 +506,22 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
         return -1;
     }
 
+
     dstlen = srclen + strlen(DALVIK_CACHE_PREFIX) + 
         strlen(DALVIK_CACHE_POSTFIX) + 1;
     
     if (dstlen > PKG_PATH_MAX) {
         return -1;
+    }
+    // add for:if app is installed in T-card,
+    // move classes from /data/dalvik-cache to /mnt/sdcard/.Dalcache
+    if (hasMntHead(src) == 1) {
+        if (access(T_DALVIK_CACHE_PATH, F_OK) == -1 && mkdir(T_DALVIK_CACHE_PATH, 0775) < 0) {
+            LOGE(".Dalcache is not exist,and create is failed.");
+            return -1;
+        } else {
+            tPath = 1;
+        }
     }
 
     sprintf(path,"%s%s%s",
@@ -499,7 +529,7 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
             src + 1, /* skip the leading / */
             DALVIK_CACHE_POSTFIX);
     
-    for(tmp = path + strlen(DALVIK_CACHE_PREFIX); *tmp; tmp++) {
+    for(tmp = path + strlen(tPath == 0 ? DALVIK_CACHE_PREFIX : T_DALVIK_CACHE_PREFIX); *tmp; tmp++) {
         if (*tmp == '/') {
             *tmp = '@';
         }
@@ -592,6 +622,7 @@ int dexopt(const char *apk_path, uid_t uid, int is_public)
     stat(apk_path, &apk_stat);
 
     zip_fd = open(apk_path, O_RDONLY, 0);
+	
     if (zip_fd < 0) {
         LOGE("dexopt cannot open '%s' for input\n", apk_path);
         return -1;
@@ -603,31 +634,35 @@ int dexopt(const char *apk_path, uid_t uid, int is_public)
         LOGE("dexopt cannot open '%s' for output\n", dex_path);
         goto fail;
     }
-    if (fchown(odex_fd, AID_SYSTEM, uid) < 0) {
-        LOGE("dexopt cannot chown '%s'\n", dex_path);
-        goto fail;
+    if (hasMntHead(dex_path) == 0) {
+	    if (fchown(odex_fd, AID_SYSTEM, uid) < 0) {
+	        LOGE("dexopt cannot chown '%s'\n", dex_path);
+	        goto fail;
+	    }
+	    if (fchmod(odex_fd,
+	               S_IRUSR|S_IWUSR|S_IRGRP |
+	               (is_public ? S_IROTH : 0)) < 0) {
+	        LOGE("dexopt cannot chmod '%s'\n", dex_path);
+	        goto fail;
+	    }
     }
-    if (fchmod(odex_fd,
-               S_IRUSR|S_IWUSR|S_IRGRP |
-               (is_public ? S_IROTH : 0)) < 0) {
-        LOGE("dexopt cannot chmod '%s'\n", dex_path);
-        goto fail;
-    }
-
     LOGD("DexInv: --- BEGIN '%s' ---\n", apk_path);
 
     pid_t pid;
     pid = fork();
     if (pid == 0) {
         /* child -- drop privileges before continuing */
-        if (setgid(uid) != 0) {
-            LOGE("setgid(%d) failed during dexopt\n", uid);
-            exit(64);
-        }
-        if (setuid(uid) != 0) {
-            LOGE("setuid(%d) during dexopt\n", uid);
-            exit(65);
-        }
+	if (hasMntHead(dex_path) == 0)
+	{
+	        if (setgid(uid) != 0) {
+	            LOGE("setgid(%d) failed during dexopt\n", uid);
+	            exit(64);
+	        }
+	        if (setuid(uid) != 0) {
+	            LOGE("setuid(%d) during dexopt\n", uid);
+	            exit(65);
+	        }
+	}
         if (flock(odex_fd, LOCK_EX | LOCK_NB) != 0) {
             LOGE("flock(%s) failed: %s\n", dex_path, strerror(errno));
             exit(66);

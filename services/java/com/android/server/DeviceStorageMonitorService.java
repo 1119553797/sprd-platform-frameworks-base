@@ -37,6 +37,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
+import android.os.Debug;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.StatFs;
@@ -127,14 +128,16 @@ class DeviceStorageMonitorService extends Binder {
     private static final int DEFAULT_CRITICAL_THRESHOLD_PERCENTAGE = 5;
     private static final int GET_MEMORY_ERROR = -1;
     private static final int GET_MEMORY_SUCCUESS = 0;
-    private long myTotalMemory = 0;
-    private long myFreeMemory = 0;
-    private long myApplicationMemory = 0;
-    private long myMailMemory = 0;
-    private long mySmsMmsMemory = 0;
-    private long mySystemMemory = 0;
+    //private long myTotalMemory = 0;
+    //private long myFreeMemory = 0;
+   // private long myApplicationMemory = 0;
+    //private long myMailMemory = 0;
+    //private long mySmsMmsMemory = 0;
+   // private long mySystemMemory = 0;
     private boolean mUpdateMemory = false;
-    private boolean mGetMemorySuccuess = true;
+    private boolean mUpdateStorageData = false;
+
+   // private boolean mGetMemorySuccuess = true;
 
     private static final int NO_MEMORY_SMS_NOTIFICATION_ID = 100;
 
@@ -410,7 +413,6 @@ class DeviceStorageMonitorService extends Binder {
         //evaluate threshold value
         return mTotalMemory*value;
     }
-
     /*
      * just query settings to retrieve the memory full threshold.
      * Preferred this over using a ContentObserver since Settings.Secure caches the value
@@ -478,12 +480,8 @@ class DeviceStorageMonitorService extends Binder {
         if(localLOGV) Slog.i(TAG, "Sending low memory notification");
         //log the event to event log with the amount of free storage(in bytes) left on the device
         EventLog.writeEvent(EventLogTags.LOW_STORAGE, mFreeMem);
-
-        Intent showStorageIntent = createShowStorageIntent(false);
-        if (showStorageIntent == null) {
-            Log.w(TAG, "createShowStorageIntent error, do not send low memory notification");
-            return;
-        }
+        Intent lowMemIntent = new Intent(mContext, com.android.server.ShowStorage.class);
+        lowMemIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);		
         NotificationManager mNotificationMgr =
                 (NotificationManager)mContext.getSystemService(
                         Context.NOTIFICATION_SERVICE);
@@ -491,7 +489,7 @@ class DeviceStorageMonitorService extends Binder {
                 com.android.internal.R.string.low_internal_storage_view_title);
         CharSequence details = mContext.getText(
                 com.android.internal.R.string.low_internal_storage_view_text);
-        PendingIntent intent = PendingIntent.getActivity(mContext, 0,  showStorageIntent, 0);
+        PendingIntent intent = PendingIntent.getActivity(mContext, 0,  lowMemIntent, 0);
         Notification notification = new Notification();
         notification.icon = com.android.internal.R.drawable.stat_notify_disk_full;
         notification.tickerText = title;
@@ -558,71 +556,13 @@ class DeviceStorageMonitorService extends Binder {
         return mTotalMemory * value;
     }
 
-    private void getShowStorageData() {
-        // TODO Auto-generated method stub
-        final int mKiloSize = 1024;
-        int ret = 0;
-
-        try {
-            mDataFileStats.restat(DATA_PATH);
-            mFreeMem = (long) mDataFileStats.getAvailableBlocks()
-              *  mDataFileStats.getBlockSize();
-        } catch (IllegalArgumentException e) {
-            // use the old value of mFreeMem
-        }
-
-        myTotalMemory = (long) (mDataFileStats.getBlockCount() * mDataFileStats.getBlockSize()) / mKiloSize;
-
-        myFreeMemory = mFreeMem / mKiloSize;
-
-        ret = getApplicationSize(); // get Application Mail SmsMms Size
-        if (ret == GET_MEMORY_ERROR) {
-            Slog.e(TAG, "Get (MailMemory SmsMmsMemory ApplicationMemory) Error");
-        }
-        mGetMemorySuccuess = (ret == GET_MEMORY_SUCCUESS);
-        mySystemMemory = myTotalMemory - myFreeMemory - myMailMemory - mySmsMmsMemory
-                - myApplicationMemory;
-    }
-
-    private Intent createShowStorageIntent(boolean hasData){
-        Intent showStorageIntent = null;
-        getShowStorageData();
-        if (mGetMemorySuccuess) {
-            showStorageIntent = new Intent(mContext,com.android.server.ShowStorage.class);
-            showStorageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-            if (hasData) {
-                final int mTOTALLOCATION = 0;
-                final int mFREELOCATION = 1;
-                final int mAPPLICATIONLOCATION = 2;
-                final int mMAILLOCATION = 3;
-                final int mSMSMMSLOCATION = 4;
-                final int mSYSTEMLOCATION = 5;
-                final int mELEMENTCOUNT = 6;
-
-                long mySize[] = new long[mELEMENTCOUNT];
-                mySize[mTOTALLOCATION] = myTotalMemory;
-                mySize[mFREELOCATION] = myFreeMemory;
-                mySize[mAPPLICATIONLOCATION] = myApplicationMemory;
-                mySize[mMAILLOCATION] = myMailMemory;
-                mySize[mSMSMMSLOCATION] = mySmsMmsMemory;
-                mySize[mSYSTEMLOCATION] = mySystemMemory;
-
-                Bundle data = new Bundle();
-                data.putSerializable("lastSize", mySize);
-                showStorageIntent.putExtras(data);
-            }
-        }
-        return showStorageIntent;
-    }
-
     private void startShowStorageActivity(){
         if (bootCompleted) {
-            Intent showStorageIntent = createShowStorageIntent(true);
-            if (showStorageIntent != null) {
-                mContext.startActivity(showStorageIntent);
-            }
+            Intent showStorageIntent = new Intent(mContext,com.android.server.ShowStorage.class);
+            showStorageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            mContext.startActivity(showStorageIntent);
         }
+
     }
 
     /**
@@ -653,97 +593,6 @@ class DeviceStorageMonitorService extends Binder {
     }
 
     IPackageManager myPm = IPackageManager.Stub.asInterface(ServiceManager.getService("package"));
-
-    private int getApplicationSize() {
-
-        long myApplicationSize = 0;
-        long myMailSize = 0;
-        long mySmsMmsSize = 0;
-        final String mMAILPACKAGE = "com.android.email";
-        final String mMMSPACKAGE = "com.android.mms";
-
-        PackageStats myPackageStats;
-        SizeObserver mSizeObserver = new SizeObserver();
-
-        if (myPm == null) {
-            Slog.e(TAG, "PM service is not running");
-            return GET_MEMORY_ERROR;
-        }
-
-//        try {
-        	/*
-            String lastread = null;
-            ParceledListSlice<PackageInfo> slice = myPm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES, lastread);
-            final List<PackageInfo> packages = new ArrayList<PackageInfo>();
-            slice.populateList(packages, PackageInfo.CREATOR);
-        	*/ 
-        //bug#12297
-        	final List<PackageInfo> packages = getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
-            int count = packages.size();
-
-            for (int p = 0; p < count; p++) {
-                PackageInfo info = packages.get(p);
-                
-                if(DEBUG)Log.w(TAG, "package:["+info.packageName+"]");
-
-                if ((info.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0) {
-                    continue;
-                } else {
-                    CountDownLatch count1 = new CountDownLatch(1);
-                    mSizeObserver.invokeGetSize(info.packageName, count1);
-
-                    try {
-                        count1.await(500, TimeUnit.MILLISECONDS);
-                    } catch (InterruptedException e) {
-                        Slog.e(TAG, "Failed computing size for pkg : " + info.packageName);
-                    }
-
-                    // Process the package statistics
-                    myPackageStats = mSizeObserver.stats;
-                    boolean succeeded = mSizeObserver.succeeded;
-                    if (myPackageStats == null) {
-                        if (succeeded)
-                            Slog.v(TAG, "Failed getting size for pkg : " + info.packageName);
-                        else
-                            Slog.v(TAG, "Time out getting size for pkg : " + info.packageName);
-                        return GET_MEMORY_ERROR;
-                    }
-
-                    if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-                        if ( mMAILPACKAGE.equals(info.packageName)) {
-                            myMailSize += myPackageStats.dataSize;
-                            continue;
-                        }
-                        if (mMMSPACKAGE.equals(info.packageName)) {
-                            mySmsMmsSize += myPackageStats.dataSize;
-                            continue;
-                        }
-                        myApplicationSize += myPackageStats.dataSize;
-
-                    } else {
-                        if (mMAILPACKAGE.equals(info.packageName)) {
-                            myMailSize += myPackageStats.dataSize + myPackageStats.codeSize;
-                            continue;
-                        }
-                        if (mMMSPACKAGE.equals(info.packageName)) {
-                            mySmsMmsSize += myPackageStats.dataSize + myPackageStats.codeSize;
-                            continue;
-                        }
-                        myApplicationSize += myPackageStats.dataSize + myPackageStats.codeSize;
-
-                    }
-                }
-            }
-//        } catch (RemoteException e) {
-//            Slog.e(TAG, "PM service is not running");
-//        }
-        final int mKiloSize = 1024;
-        myApplicationMemory = myApplicationSize / mKiloSize;
-        myMailMemory = myMailSize / mKiloSize;
-        mySmsMmsMemory = mySmsMmsSize / mKiloSize;
-        if(DEBUG)Log.w(TAG, "myMailMemory :"+myMailMemory+" KB , mySmsMmsMemory :"+mySmsMmsMemory+" KB");
-        return GET_MEMORY_SUCCUESS;
-    }
     
     public List<PackageInfo> getInstalledPackages(int flags) {
         try {
@@ -763,33 +612,217 @@ class DeviceStorageMonitorService extends Binder {
         }
     }
 
-    public long[] callOK() {
-
-        final int mTOTALLOCATION = 0;
-        final int mFREELOCATION = 1;
-        final int mAPPLICATIONLOCATION = 2;
-        final int mMAILLOCATION = 3;
-        final int mSMSMMSLOCATION = 4;
-        final int mSYSTEMLOCATION = 5;
-        final int mELEMENTCOUNT = 6;
-
-        Slog.i(TAG, "remote call is accepted");
-        getShowStorageData();
-
-        long mySize[] = new long[mELEMENTCOUNT];
-        mySize[mTOTALLOCATION] = myTotalMemory;
-        mySize[mFREELOCATION] = myFreeMemory;
-        mySize[mAPPLICATIONLOCATION] = myApplicationMemory;
-        mySize[mMAILLOCATION] = myMailMemory;
-        mySize[mSMSMMSLOCATION] = mySmsMmsMemory;
-        mySize[mSYSTEMLOCATION] = mySystemMemory;
-
-        return mySize;
+    public void setUpdateStorageDataFlag(boolean updateFlag) {
+        mUpdateStorageData = updateFlag;
+        postCheckMemoryMsg(true, 0);
     }
 
-    public boolean getCallOKSuccuess() {
-        return mGetMemorySuccuess;
+    private static GetShowStorageData gssdInstance = null;
+
+    private class GetShowStorageData implements Runnable {
+        long myApplicationSize = 0;
+        long myMailSize = 0;
+        long mySmsMmsSize = 0;
+        final String mMAILPACKAGE = "com.android.email";
+        final String mMMSPACKAGE = "com.android.mms";
+        List<PackageInfo> packages = null;
+        int pkgsCount = 0;
+        int pkgIndex = -1;
+        PackageInfo pkgInfo;
+        CountDownLatch count1 = new CountDownLatch(1);
+
+        private long myTotalMemory = 0;
+        private long myFreeMemory = 0;
+        private long myApplicationMemory = 0;
+        private long myMailMemory = 0;
+        private long mySmsMmsMemory = 0;
+        private long mySystemMemory = 0;
+
+        static final int GET_SIZE_NEXT = 0;
+        static final int GET_SIZE_WAIT = 1;
+        static final int GET_SIZE_OK = 2;
+        int mGetSizeState = GET_SIZE_NEXT;
+
+        private boolean mRunning = false;
+
+        PackageStats myPackageStats;
+        SizeObserver mSizeObserver = new SizeObserver();
+
+        private GetShowStorageData() {
+        }
+
+        synchronized public long[] result() {
+            if (mRunning) {
+                return null;
+            }
+
+            final int mTOTALLOCATION = 0;
+            final int mFREELOCATION = 1;
+            final int mAPPLICATIONLOCATION = 2;
+            final int mMAILLOCATION = 3;
+            final int mSMSMMSLOCATION = 4;
+            final int mSYSTEMLOCATION = 5;
+            final int mELEMENTCOUNT = 6;
+
+            long mySize[] = new long[mELEMENTCOUNT];
+            mySize[mTOTALLOCATION] = myTotalMemory;
+            mySize[mFREELOCATION] = myFreeMemory;
+            mySize[mAPPLICATIONLOCATION] = myApplicationMemory;
+            mySize[mMAILLOCATION] = myMailMemory;
+            mySize[mSMSMMSLOCATION] = mySmsMmsMemory;
+            mySize[mSYSTEMLOCATION] = mySystemMemory;
+
+            return mySize;
+        }
+
+        synchronized public void start() {
+            if(DEBUG)Slog.w(TAG, "start() mRunning is " + mRunning);
+            if (mRunning)
+                return;
+            mRunning = true;
+            myTotalMemory = -1;
+            myFreeMemory = 0;
+            if(DEBUG)Slog.w(TAG, "really start()");
+
+            try {
+                mDataFileStats.restat(DATA_PATH);
+                myFreeMemory = (long) mDataFileStats.getAvailableBlocks() *  mDataFileStats.getBlockSize();
+                myTotalMemory = (long) (mDataFileStats.getBlockCount() * mDataFileStats.getBlockSize());
+            } catch (IllegalArgumentException e) {
+                // use the old value of mFreeMem
+            }
+
+            myApplicationSize = 0;
+            myMailSize = 0;
+            mySmsMmsSize = 0;
+            packages = getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+            pkgsCount = packages.size();
+            pkgIndex = -1;
+            mGetSizeState = GET_SIZE_NEXT;
+            nextRun();
+        }
+
+        synchronized private void end() {
+            if(DEBUG)Slog.w(TAG, "end() mRunning is " + mRunning);
+            myApplicationMemory = myApplicationSize;
+            myMailMemory = myMailSize;
+            mySmsMmsMemory = mySmsMmsSize;
+            mySystemMemory = myTotalMemory - myFreeMemory - myMailMemory - mySmsMmsMemory
+                             - myApplicationMemory;
+            if(DEBUG)Slog.w(TAG, "end()[myFreeMemory:"+myFreeMemory+
+                                "myApplicationMemory:"+myApplicationMemory+
+                                ",myMailMemory:"+myMailMemory+
+                                ",mySmsMmsMemory:"+mySmsMmsMemory+
+                                ",mySystemMemory:"+mySystemMemory+"]");
+
+            mRunning = false;
+        }
+
+        private void nextRun() {
+            mHandler.post(this);
+        }
+
+        public void run() {
+            if (mGetSizeState == GET_SIZE_NEXT) {
+                pkgIndex++;
+                if (pkgIndex >= pkgsCount) {
+                    end();
+                    return;
+                }
+                pkgInfo = packages.get(pkgIndex);
+
+                if(DEBUG)Slog.w(TAG, "package:["+pkgInfo.packageName+"]");
+
+                if("android".equals(pkgInfo.packageName)) {
+                    nextRun();
+                    return;
+                }
+
+                if ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0) {
+                    nextRun();
+                    return;
+                }
+                count1 = new CountDownLatch(1);
+                mSizeObserver.invokeGetSize(pkgInfo.packageName, count1);
+                mGetSizeState = GET_SIZE_WAIT;
+            }
+            if (mGetSizeState == GET_SIZE_WAIT) {
+                boolean waitOK = true;
+                try {
+                    waitOK = count1.await(500, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException e) {
+                    Slog.e(TAG, "Failed computing size for pkg : " + pkgInfo.packageName);
+                }
+                if (waitOK) {
+                    mGetSizeState = GET_SIZE_OK;
+                }
+            }
+            if (mGetSizeState == GET_SIZE_OK && pkgInfo != null) {
+                // Process the package statistics
+                myPackageStats = mSizeObserver.stats;
+                boolean succeeded = mSizeObserver.succeeded;
+                if (myPackageStats == null) {
+                    if (succeeded)
+                        Slog.v(TAG, "Failed getting size for pkg : " + pkgInfo.packageName);
+                    else
+                        Slog.v(TAG, "Time out getting size for pkg : " + pkgInfo.packageName);
+                    nextRun();
+                    return;
+                }
+                if(DEBUG) {
+                    boolean isSystemApp = (pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+
+                    String msg = "";
+                    if (isSystemApp)
+                        msg += "is system app";
+                    else
+                        msg += "is data app";
+                    if (myPackageStats.dataSize != 0) {
+                        msg += ", dataSize:["+myPackageStats.dataSize+"]";
+                    }
+                    if (!isSystemApp && myPackageStats.codeSize != 0) {
+                        msg += ", codeSize:["+myPackageStats.codeSize+"]";
+                    }
+                    Slog.w(TAG, msg);
+                }
+
+                if ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                    if ( mMAILPACKAGE.equals(pkgInfo.packageName)) {
+                        myMailSize += myPackageStats.dataSize;
+                    } else if (mMMSPACKAGE.equals(pkgInfo.packageName)) {
+                        mySmsMmsSize += myPackageStats.dataSize;
+                    } else {
+                        myApplicationSize += myPackageStats.dataSize;
+                    }
+                } else {
+                    if (mMAILPACKAGE.equals(pkgInfo.packageName)) {
+                        myMailSize += myPackageStats.dataSize + myPackageStats.codeSize;
+                    } else if (mMMSPACKAGE.equals(pkgInfo.packageName)) {
+                        mySmsMmsSize += myPackageStats.dataSize + myPackageStats.codeSize;
+                    } else {
+                        myApplicationSize += myPackageStats.dataSize + myPackageStats.codeSize;
+                    }
+                }
+                if(DEBUG)Slog.w(TAG, "myApplicationSize:"+myApplicationSize+
+                                    ",myMailSize:"+myMailSize+
+                                    ",mySmsMmsSize:"+mySmsMmsSize);
+                mGetSizeState = GET_SIZE_NEXT;
+            }
+            nextRun();
+        }
     }
+
+    public void beginGetShowStorageData() {
+        if (gssdInstance == null) {
+            gssdInstance = new GetShowStorageData();
+        }
+        gssdInstance.start();
+    }
+
+    public long[] getShowStorageDataOK() {
+        return gssdInstance.result();
+    }
+
 
     //lino add 2012-12-08 begin for NEWMS00148531
     StorageEventListener mStorageListener = new StorageEventListener() {

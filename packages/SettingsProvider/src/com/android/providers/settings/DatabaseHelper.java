@@ -1119,9 +1119,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_PULSE,
                     R.bool.def_notification_pulse);
             loadSetting(stmt, Settings.Secure.SET_INSTALL_LOCATION, 1);
-            loadSetting(stmt, Settings.Secure.DEFAULT_INSTALL_LOCATION,
-                    PackageHelper.APP_INSTALL_AUTO);
-    
+           // loadSetting(stmt, Settings.Secure.DEFAULT_INSTALL_LOCATION,
+            //        PackageHelper.APP_INSTALL_AUTO);
+
+	   loadSetting(stmt, Settings.Secure.DEFAULT_INSTALL_LOCATION,
+                    PackageHelper.APP_INSTALL_EXTERNAL);
             loadUISoundEffectsSettings(stmt);
     
             loadBooleanSetting(stmt, Settings.System.VIBRATE_IN_SILENT,
