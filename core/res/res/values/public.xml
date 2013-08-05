@@ -3813,4 +3813,5 @@
   
   <java-symbol type="string" name="ringtone_waning" />
   <java-symbol type="string" name="emergency_call_no_service" />
+  <java-symbol type="string" name="language_automatic" />
 </resources>

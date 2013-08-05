@@ -568,6 +568,11 @@ public abstract class IccFileHandler extends IccThreadHandler implements IccCons
         case EF_ICCID:
         case EF_PL:
             return MF_SIM;
+
+        // David.deng begine for bug176398
+        case EF_LP:
+            return MF_SIM + DF_GSM;
+        // David.deng end
         case EF_IMG:
             return MF_SIM + DF_TELECOM + DF_GRAPHICS;
         }

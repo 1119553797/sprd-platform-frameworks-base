@@ -65,6 +65,8 @@ public interface IccConstants {
 
     // ETSI TS.102.221
     static final int EF_PL = 0x2F05;
+    //TS 51.011
+    static final int EF_LP = 0x6F05;
     // 3GPP2 C.S0065
     static final int EF_CSIM_LI = 0x6F3A;
     static final int EF_CSIM_SPN =0x6F41;

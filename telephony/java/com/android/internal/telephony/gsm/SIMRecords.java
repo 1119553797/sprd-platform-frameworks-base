@@ -95,6 +95,7 @@ public class SIMRecords extends IccRecords {
     byte[] efCPHS_MWI =null;
     byte[] mEfCff = null;
     byte[] mEfCfis = null;
+    private String[] mEFlp = null;// David.deng begine for bug 176398
 
     private ArrayList <Oplrecord> mOplRecords;
     private ArrayList <Pnnrecord> mPnnRecords;
@@ -1553,6 +1554,13 @@ public class SIMRecords extends IccRecords {
 
         mFh.loadEFTransparent(EF_ICCID, obtainMessage(EVENT_GET_ICCID_DONE));
         recordsToLoad++;
+
+        // David.deng begine for Bug 176398
+        if(SystemProperties.getBoolean("ro.support.orange", true)) {
+            mFh.loadEFTransparent(EF_LP, obtainMessage(EVENT_GET_ICC_RECORD_DONE, new EFlpLoaded()));
+            recordsToLoad++;
+        }
+        // David.deng end
 
         // FIXME should examine EF[MSISDN]'s capability configuration
         // to determine which is the voice/data/fax line

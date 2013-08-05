@@ -22,11 +22,13 @@ import android.app.IActivityManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.net.wifi.WifiManager;
+import android.os.Environment;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
@@ -257,6 +259,67 @@ public final class MccTable
             }
         }
     }
+
+    /**
+    **David.deng begine for bug176398
+    *  {@hide}
+    */
+    private static boolean isAutoSelLang(){
+        File f = new File(Environment.getDataDirectory()+"/lang_auto_sel");
+        if(f.exists()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    /**
+    ***David.deng begine for bug176398
+    *  {@hide}
+    */
+    public static void setSystemLocaleLock(Context context, String language, String country) {
+        String l = SystemProperties.get("persist.sys.language");
+        String c = SystemProperties.get("persist.sys.country");
+        if(!isAutoSelLang()){
+            return;
+        }
+        if (null == language) {
+            return; // no match possible
+        }
+        language = language.toLowerCase();
+        if (null == country) {
+            country = "  ";
+        }
+        country = country.toUpperCase();
+
+        try {
+            // try to find a good match
+            String[] locales = context.getAssets().getLocales();
+            final int N = locales.length;
+            String bestMatch = null;
+
+            for(int i = 0; i < N; i++) {
+                // only match full (lang + country) locales
+                if (locales[i]!=null && locales[i].length() >= 5 && locales[i].substring(0,2).equals(language)) {
+                    if (locales[i].substring(3,5).equals(country)) {
+                        bestMatch = locales[i];
+                        break;
+                    } else if (null == bestMatch) {
+                        bestMatch = locales[i];
+                    }
+                }
+            }
+            if (null != bestMatch) {
+                    IActivityManager am = ActivityManagerNative.getDefault();
+                    Configuration config = am.getConfiguration();
+                    config.locale = new Locale(bestMatch.substring(0,2), bestMatch.substring(3,5));
+                    config.userSetLocale = true;
+                    am.updateConfiguration(config);
+                }
+        } catch (Exception e) {
+            android.util.Log.e("MccTable","setSystemLocaleLock  set configure exception!");
+        }
+    } 
 
     /**
      * If the timezone is not already set, set it based on the MCC of the SIM.

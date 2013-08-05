@@ -27,6 +27,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -154,6 +155,21 @@ public class LocalePicker extends ListFragment {
             localeInfos[i] = preprocess[i];
         }
         Arrays.sort(localeInfos);
+
+        // David.deng begine for bug176398
+        // add Auto select language menu item for orange. in this case,system will phase language automatically.
+        if(SystemProperties.getBoolean("ro.support.orange", true)) {
+            final Locale DefaultLocale = Locale.getDefault();
+            final LocaleInfo li = new LocaleInfo(resources.getString(R.string.language_automatic), DefaultLocale);
+            final LocaleInfo[] localeInfos_new = new LocaleInfo[finalSize+1];
+            localeInfos_new[0] = li;
+            for (int k = 0; k < finalSize; k++) {
+                localeInfos_new[k+1] = localeInfos[k];
+            }
+            return new ArrayAdapter<LocaleInfo>(context, layoutId, fieldId, localeInfos_new);
+            // David.deng end
+        } 
+
         return new ArrayAdapter<LocaleInfo>(context, layoutId, fieldId, localeInfos);
     }
 
