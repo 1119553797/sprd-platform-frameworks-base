@@ -2243,4 +2243,84 @@ void handleSstOPLPNNData(byte[] data) {
         Log.d(LOG_TAG,
                 "[SIMRecords] broadcastSimDisableStateIntent phoneId : " + phone.getPhoneId());
     }
+
+    // David.deng begine for bug 176398
+    private class EFlpLoaded implements IccRecordLoaded {
+        public String getEfName() {
+            return "EF_LP";
+        }
+        public void onRecordLoaded(AsyncResult ar) {
+            byte[] lancode = (byte[])ar.result;
+            if(lancode != null && lancode.length > 0 && ar!=null){
+                mEFlp = new String[lancode.length];
+                // convert EFlp data to iso 639 format. and refer to TS 23.038
+                for (int i = 0; i < lancode.length; i++) {
+                    switch(lancode[i]) {
+                        case 0x00: mEFlp[i] = "de"; break;
+                        case 0x01: mEFlp[i] = "en"; break;
+                        case 0x02: mEFlp[i] = "it"; break;
+                        case 0x03: mEFlp[i] = "fr"; break;
+                        case 0x04: mEFlp[i] = "es"; break;
+                        case 0x05: mEFlp[i] = "nl"; break;
+                        case 0x06: mEFlp[i] = "sv"; break;
+                        case 0x07: mEFlp[i] = "da"; break;
+                        case 0x08: mEFlp[i] = "pt"; break;
+                        case 0x09: mEFlp[i] = "fi"; break;
+                        case 0x0a: mEFlp[i] = "no"; break;
+                        case 0x0b: mEFlp[i] = "el"; break;
+                        case 0x0c: mEFlp[i] = "tr"; break;
+                        case 0x0d: mEFlp[i] = "hu"; break;
+                        case 0x0e: mEFlp[i] = "pl"; break;
+                        case 0x20: mEFlp[i] = "cs"; break;
+                        case 0x21: mEFlp[i] = "he"; break;
+                        case 0x22: mEFlp[i] = "ar"; break;
+                        case 0x23: mEFlp[i] = "ru"; break;
+                        case 0x24: mEFlp[i] = "is"; break;
+
+                        default: mEFlp[i] = "  "; break;
+                    }
+                }
+                setLocaleFromEFLp();
+                if (DBG) log("EF_lp=" + IccUtils.bytesToHexString(lancode));
+            }
+        }
+
+        private void setLocaleFromEFLp() {
+            String prefLang = null;
+            if(mEFlp.length<=0){
+                return;
+            }
+            prefLang = findBestLanguage(mEFlp);
+            if (prefLang != null) {
+                // check country code from SIM
+                String imsi = getIMSI();
+                String country = null;
+                if (imsi != null) {
+                    country = MccTable.countryCodeForMcc(Integer.parseInt(imsi.substring(0,3)));
+                }
+                if (DBG) log("Setting locale to " + prefLang + "_" + country);
+                MccTable.setSystemLocaleLock(mContext, prefLang, country);
+            } else {
+                if (DBG) log("No suitable LANG selected locale");
+            }
+        }
+
+        private String findBestLanguage(String[] languages) {
+            String[] locales = mContext.getAssets().getLocales();
+            if ((languages == null) || (locales == null)) {
+                return null;
+            }
+            for (int i = 0; i < languages.length; i++) {
+                log(languages[i]);
+                for (int j = 0; j < locales.length; j++) {
+                    if (locales[j] != null && locales[j].length() >= 2 && locales[j].substring(0, 2).equals(languages[i])) {
+                        return languages[i];
+                    }
+                }
+            }
+            return null;// no match found. return null;
+        }
+    }
+    // David.deng end
+
 }
