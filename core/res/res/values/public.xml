@@ -3813,5 +3813,10 @@
   
   <java-symbol type="string" name="ringtone_waning" />
   <java-symbol type="string" name="emergency_call_no_service" />
+  <java-symbol type="string" name="usim_recommanded" />
+  <java-symbol type="string" name="usim_recommanded_for_cucc_app" />
+  <java-symbol type="string" name="usim_for_cucc_app_continue" />
+  <java-symbol type="string" name="pick_yes" />
+  <java-symbol type="string" name="pick_no" />
   <java-symbol type="string" name="language_automatic" />
 </resources>

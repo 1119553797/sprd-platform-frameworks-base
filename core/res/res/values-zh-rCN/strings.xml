@@ -1409,5 +1409,9 @@
   <string name="unread_message">%1$d条未读信息</string>
   <string name="shutdown_after_seconds">您的手机会在<xliff:g id="NUMBER">%d</xliff:g>秒后关机</string>
   <string name="emergency_call_no_service">无可用网络</string>
+  <string name="usim_recommanded">非中国联通USIM卡</string>
+  <string name="usim_recommanded_for_cucc_app">该业务为中国联通自有业务，推荐使用中国联通 USIM 卡进行数据连接，是否继续？</string>
+  <string name="pick_yes">继续</string>
+  <string name="pick_no">取消</string>
   <string name="language_automatic">自动</string>
 </resources>

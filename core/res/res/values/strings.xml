@@ -3686,5 +3686,10 @@
     
     <string name="ringtone_waning">The wrong file, please re-select</string>
     <string name="emergency_call_no_service">No available network</string>
+    <string name="usim_recommanded">Not Using CUCC card</string>
+    <string name="usim_recommanded_for_cucc_app">CUCC app, Usim recommanded. Continue?</string>
+    <string name="usim_for_cucc_app_continue">CUCC app, Usim recommanded. Switch Data Connection to USIM Card(Continue) ?</string>
+    <string name="pick_yes">continue</string>
+    <string name="pick_no">cancel</string>
     <string name="language_automatic">Automatic</string>
 </resources>

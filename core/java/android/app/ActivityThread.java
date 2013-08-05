@@ -28,6 +28,7 @@ import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.IContentProvider;
 import android.content.Intent;
 import android.content.IIntentReceiver;
@@ -51,6 +52,7 @@ import android.graphics.Canvas;
 import android.net.IConnectivityManager;
 import android.net.Proxy;
 import android.net.ProxyProperties;
+import android.net.ConnectivityManager;
 import android.opengl.GLUtils;
 import android.os.AsyncTask;
 import android.os.Binder;
@@ -87,9 +89,11 @@ import android.view.WindowManager;
 import android.view.WindowManagerImpl;
 import android.renderscript.RenderScript;
 
+import com.android.internal.R;
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.RuntimeInit;
 import com.android.internal.os.SamplingProfilerIntegration;
+import android.telephony.TelephonyManager;
 
 import org.apache.harmony.xnet.provider.jsse.OpenSSLSocketImpl;
 
@@ -191,6 +195,12 @@ public final class ActivityThread {
     String mInstrumentedAppLibraryDir = null;
     boolean mSystemThread = false;
     boolean mJitEnabled = false;
+
+    private ActivityClientRecord mCurResumedAct = null;
+    private boolean mUserChoosed = false;
+    private Dialog mAppGoOnDialog = null;
+    private int mStartAppDialogShow = -1;
+    private ConnectivityManager mConnMgr = null;
 
     // These can be accessed by multiple threads; mPackages is the lock.
     // XXX For now we keep around information about all packages we have
@@ -1141,6 +1151,7 @@ public final class ActivityThread {
         public static final int TRIM_MEMORY             = 140;
         public static final int DUMP_PROVIDER           = 141;
         public static final int UNSTABLE_PROVIDER_DIED  = 142;
+        public static final int APP_GOON                = 150;
         String codeToString(int code) {
             if (DEBUG_MESSAGES) {
                 switch (code) {
@@ -1187,6 +1198,7 @@ public final class ActivityThread {
                     case TRIM_MEMORY: return "TRIM_MEMORY";
                     case DUMP_PROVIDER: return "DUMP_PROVIDER";
                     case UNSTABLE_PROVIDER_DIED: return "UNSTABLE_PROVIDER_DIED";
+                    case APP_GOON: return "APP_GOON";
                 }
             }
             return Integer.toString(code);
@@ -1396,6 +1408,9 @@ public final class ActivityThread {
                     break;
                 case UNSTABLE_PROVIDER_DIED:
                     handleUnstableProviderDied((IBinder)msg.obj, false);
+                    break;
+                case APP_GOON:
+                    handleAppGoOn((ActivityClientRecord)msg.obj);
                     break;
             }
             if (DEBUG_MESSAGES) Slog.v(TAG, "<<< done: " + codeToString(msg.what));
@@ -2741,6 +2756,27 @@ public final class ActivityThread {
             }
             r.onlyLocalRequest = false;
 
+            // in cucc version,starting cucc apk when USIM is not cucc will show
+            // dialog.
+            if (SystemProperties.get("ro.operator").equals("cucc")) {
+                if (mStartAppDialogShow == -1 && isCuccApp(r.activityInfo.packageName)) {
+                    mConnMgr = (ConnectivityManager) r.activity
+                            .getSystemService(Context.CONNECTIVITY_SERVICE);
+                    int defaultDataPhoneId = TelephonyManager
+                            .getDefaultDataPhoneId(getSystemContext());
+                    if (!TelephonyManager.isCurrentCard(defaultDataPhoneId) &&
+                            !mConnMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
+                        mStartAppDialogShow = 1;// should show dialog
+                    } else {
+                        mStartAppDialogShow = 0;// dont need
+                    }
+                }
+
+                if (mStartAppDialogShow == 1 && !mUserChoosed) {
+                    Message msg = mH.obtainMessage(H.APP_GOON, r);
+                    mH.sendMessageDelayed(msg, 200);
+                }
+            }
         } else {
             // If an exception was thrown when trying to resume, then
             // just end this activity.
@@ -2750,6 +2786,60 @@ public final class ActivityThread {
             } catch (RemoteException ex) {
             }
         }
+    }
+
+    boolean isCuccApp(String pkgName) {
+        if (pkgName == null) {
+            return false;
+        }
+        return pkgName.equals("com.neusoft.td.android.wo116114") ||
+               pkgName.equals("com.infinit.wostore.ui") ||
+               pkgName.equals("com.sinovatech.unicom.ui");
+    }
+
+    void handleAppGoOn(ActivityClientRecord r) {
+        if (r != null && r.activity != null && mCurResumedAct != null
+                && mCurResumedAct.activity.toString().equals(r.activity.toString())) {
+            // dialog's activity is the same, just return
+            return;
+        }
+        if (mUserChoosed) {
+            // user is already choose one
+            return;
+        }
+        if (mAppGoOnDialog != null) {
+            // this app's pre activity is already show the dialog.dismiss it
+            mAppGoOnDialog.dismiss();
+        }
+        mCurResumedAct = r;
+        mAppGoOnDialog = new AlertDialog.Builder(r.activity)
+                .setTitle(R.string.usim_recommanded)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setMessage(R.string.usim_recommanded_for_cucc_app)
+                .setCancelable(false)
+                .setNegativeButton(R.string.pick_no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                            int which) {
+
+                        Iterator<Map.Entry<IBinder, ActivityClientRecord>> item = mActivities
+                                .entrySet().iterator();
+                        while (item.hasNext()) {
+                            Map.Entry<IBinder, ActivityClientRecord> entry = (Map.Entry<IBinder, ActivityClientRecord>) item
+                                    .next();
+                            ActivityClientRecord act = (ActivityClientRecord) entry.getValue();
+                            act.activity.finish();
+                        }
+                        Process.killProcess(Process.myPid());
+                    }
+                })
+                .setPositiveButton(R.string.pick_yes,
+                        new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                mUserChoosed = true;
+                            }
+                        }).show();
     }
 
     private int mThumbnailWidth = -1;
