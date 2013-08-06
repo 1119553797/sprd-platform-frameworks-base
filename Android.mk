@@ -53,7 +53,9 @@ SECONDARY_SRC_FILES := $(call find-other-java-files,$(SECONDARY_FRAMEWORKS_SUBDI
 SECONDARY_SRC_FILES += \
        telephony/java/com/android/internal/telephony/MsmsCallManager.java \
        telephony/java/com/android/internal/telephony/MsmsPhoneFactory.java \
-       telephony/java/com/android/internal/telephony/SprdRIL.java
+       telephony/java/com/android/internal/telephony/SprdRIL.java \
+       telephony/java/com/android/internal/telephony/RIL.java \
+       telephony/java/com/android/internal/telephony/DebugService.java
 
 
 LOCAL_SRC_FILES := $(filter-out $(SECONDARY_SRC_FILES),$(LOCAL_SRC_FILES))
