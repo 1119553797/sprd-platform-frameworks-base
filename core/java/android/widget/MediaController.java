@@ -96,6 +96,7 @@ public class MediaController extends FrameLayout {
     private ImageButton         mRewButton;
     private ImageButton         mNextButton;
     private ImageButton         mPrevButton;
+	 private long mProgressNewPos = 0L;
 
     public MediaController(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -543,6 +544,7 @@ public class MediaController extends FrameLayout {
             mHandler.removeMessages(SHOW_PROGRESS);
         }
 
+//fixbug 185493 start
         public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
             if (!fromuser) {
                 // We're not interested in programmatically generated changes to
@@ -551,14 +553,15 @@ public class MediaController extends FrameLayout {
             }
 
             long duration = mPlayer.getDuration();
-            long newposition = (duration * progress) / 1000L;
-            mPlayer.seekTo( (int) newposition);
-            if (mCurrentTime != null)
-                mCurrentTime.setText(stringForTime( (int) newposition));
-        }
-
+            mProgressNewPos = (duration * progress) / 1000L;
+}
         public void onStopTrackingTouch(SeekBar bar) {
             mDragging = false;
+         Log.i("OnSeekBarChange>>>>>","onStopTrackTouch...." + mProgressNewPos);
+            mPlayer.seekTo( (int) mProgressNewPos);
+            if (mCurrentTime != null){
+                mCurrentTime.setText(stringForTime( (int) mProgressNewPos));
+                                 }
             setProgress();
             updatePausePlay();
             show(sDefaultTimeout);
@@ -569,7 +572,7 @@ public class MediaController extends FrameLayout {
             mHandler.sendEmptyMessage(SHOW_PROGRESS);
         }
     };
-
+//fixbug 185493 end
     @Override
     public void setEnabled(boolean enabled) {
         if (mPauseButton != null) {
