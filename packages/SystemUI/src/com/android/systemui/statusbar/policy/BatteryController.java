@@ -31,6 +31,7 @@ import android.util.Slog;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import android.os.SystemProperties;
 import com.android.systemui.R;
 
 public class BatteryController extends BroadcastReceiver {
@@ -53,6 +54,7 @@ public class BatteryController extends BroadcastReceiver {
     private static final int LEVEL_D = 43;
     private static final int LEVEL_C = 28;
     private static final int LEVEL_B = 15;
+    public static final boolean bSUPPORT_CUCC = SystemProperties.get("ro.operator").equals("cucc");
     /* Add 20130108 Spreadst of 113654 add changer animation end */
     public BatteryController(Context context) {
         mContext = context;
@@ -100,6 +102,10 @@ public class BatteryController extends BroadcastReceiver {
                     BatteryManager.BATTERY_STATUS_UNKNOWN);
             int icon;
             int N = 0;
+
+            if( true == bSUPPORT_CUCC && level >= 100 )
+                status = BatteryManager.BATTERY_STATUS_FULL;
+
             if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
                 // icon = R.drawable.stat_sys_battery_charge;
                 // replace by animation
