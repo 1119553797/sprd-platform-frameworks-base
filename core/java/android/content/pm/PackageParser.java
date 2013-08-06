@@ -2174,7 +2174,9 @@ public class PackageParser {
             if (sa.getBoolean(
                     com.android.internal.R.styleable.AndroidManifestActivity_hardwareAccelerated,
                     hardwareAccelerated)) {
-            	if (OptConfig.LC_RAM_SUPPORT) {
+                //Bug 198677: performance optimization
+                //if (OptConfig.LC_RAM_SUPPORT) {
+                if (false){
                     //Bug#182758 since optCOnfig.LC_RAM_SUPPORT is always true, parsing activity always goes here,hardware acceleration if set, should be allowed,no matter system one or not
                 	if (/*((flags & PARSE_IS_SYSTEM) != 0) &&*/ 
                 		  owner.applicationInfo.targetSdkVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
