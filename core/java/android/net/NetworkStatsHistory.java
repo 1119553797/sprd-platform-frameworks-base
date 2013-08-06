@@ -30,6 +30,7 @@ import static com.android.internal.util.ArrayUtils.total;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.util.MathUtils;
 
 import com.android.internal.util.IndentingPrintWriter;
@@ -54,6 +55,7 @@ import java.util.Random;
  * @hide
  */
 public class NetworkStatsHistory implements Parcelable {
+    private final static String TAG = "NetworkStatsHistory";
     private static final int VERSION_INIT = 1;
     private static final int VERSION_ADD_PACKETS = 2;
     private static final int VERSION_ADD_ACTIVE = 3;
@@ -304,6 +306,11 @@ public class NetworkStatsHistory implements Parcelable {
 
         // distribute data usage into buckets
         long duration = end - start;
+        if (duration <= 0) {
+           Log.e(TAG, "duration should be more than 0") ;
+           return;
+        }
+
         final int startIndex = getIndexAfter(end);
         for (int i = startIndex; i >= 0; i--) {
             final long curStart = bucketStart[i];
