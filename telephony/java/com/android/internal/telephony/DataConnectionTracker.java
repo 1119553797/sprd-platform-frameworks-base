@@ -1098,7 +1098,10 @@ public abstract class DataConnectionTracker extends Handler {
                 }
             }
             String type = apnIdToType(apnId);
-            if (!isApnTypeActive(type)) {
+            //modify for <bug#187634> start
+            if (!isApnTypeActive(type) || getStateByApnType(type) == State.DISCONNECTING) {
+            //if (!isApnTypeActive(type)) {
+            //modify for <bug#187634> end
                 mRequestedApnType = type;
                 onEnableNewApn(apnContext);
             } else {
