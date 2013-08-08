@@ -238,7 +238,7 @@ public class Linkify {
         if ((mask & PHONE_NUMBERS) != 0) {
             gatherLinks(links, text, Patterns.PHONE,
                 new String[] { "tel:" },
-                sPhoneNumberMatchFilter, sPhoneNumberTransformFilter, mask);
+                sPhoneNumberMatchFilter, sPhoneNumberTransformFilter, PHONE_NUMBERS);
         }
         // David.deng begine for Bug180618
         boolean isOrange = SystemProperties.getBoolean("ro.support.orange", true);
@@ -615,7 +615,7 @@ public class Linkify {
         if ((mask & PHONE_NUMBERS) != 0) {
             gatherLinks(links, text, Patterns.PHONE,
                 new String[] { "tel:" },
-                sPhoneNumberMatchFilter, sPhoneNumberTransformFilter, mask);
+                sPhoneNumberMatchFilter, sPhoneNumberTransformFilter, PHONE_NUMBERS);
         }
         
         // David.deng begine for Bug180618 
