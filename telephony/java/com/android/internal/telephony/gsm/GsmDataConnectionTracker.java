@@ -859,6 +859,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             return retValue;
         } else {
             // TODO: check the condition.
+            MsmsGsmDataConnectionTrackerProxy.resetRequestPhoneIdBeforeVoiceCallEnd();
             if (!apnContext.getApnType().equals(Phone.APN_TYPE_DEFAULT)
                 && (apnContext.getState() == State.IDLE
                     || apnContext.getState() == State.SCANNING))
