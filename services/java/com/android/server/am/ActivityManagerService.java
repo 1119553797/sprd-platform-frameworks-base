@@ -11275,14 +11275,16 @@ public final class ActivityManagerService extends ActivityManagerNative
         mHandler.post(new Runnable(){
             public void run(){
                 final long now2 = SystemClock.uptimeMillis();
-                for (ServiceRecord sr : restartingServices) {
-                    if (sr.lowMemKilled) {
-                        sr.restartDelay = sr.delayMoreTime * 1000;
-                        sr.nextRestartTime = now2 > (now1 + sr.restartDelay) ? now2 : (now1 + sr.restartDelay);
-                        sr.restartDelay = sr.nextRestartTime - now2;
-                        if (DEBUG_LC) Slog.e(TAG, "ReduceServicesRestartDelay: Service [" + sr.shortName + "] just wait " + sr.restartDelay + "ms");
+                synchronized(mRestartingServices) {
+                    for (ServiceRecord sr : restartingServices) {
+                        if (sr.lowMemKilled) {
+                            sr.restartDelay = sr.delayMoreTime * 1000;
+                            sr.nextRestartTime = now2 > (now1 + sr.restartDelay) ? now2 : (now1 + sr.restartDelay);
+                            sr.restartDelay = sr.nextRestartTime - now2;
+                            if (DEBUG_LC) Slog.e(TAG, "ReduceServicesRestartDelay: Service [" + sr.shortName + "] just wait " + sr.restartDelay + "ms");
 
-                        mHandler.postAtTime(sr.restarter, sr.nextRestartTime);
+                            mHandler.postAtTime(sr.restarter, sr.nextRestartTime);
+                        }
                     }
                 }
             }
@@ -11839,7 +11841,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         } while (repeat);
         
         if (!mRestartingServices.contains(r)) {
-            mRestartingServices.add(r);
+            synchronized(mRestartingServices) {
+                mRestartingServices.add(r);
+            }
         }
         r.restartForKill = allowCancel;
         r.cancelNotification();
@@ -11885,7 +11889,9 @@ public final class ActivityManagerService extends ActivityManagerNative
             return false;
         }
         r.resetRestartCounter();
-        mRestartingServices.remove(r);
+        synchronized(mRestartingServices) {
+            mRestartingServices.remove(r);
+        }
         mHandler.removeCallbacks(r.restarter);
         return true;
     }
@@ -11909,8 +11915,9 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         // We are now bringing the service up, so no longer in the
         // restarting state.
-        mRestartingServices.remove(r);
-        
+        synchronized(mRestartingServices) {
+            mRestartingServices.remove(r);
+        }
         // Service is now being launched, its package can't be stopped.
         try {
             AppGlobals.getPackageManager().setPackageStoppedState(
