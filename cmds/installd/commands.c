@@ -1,16 +1,16 @@
 /*
 ** Copyright 2008, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -73,8 +73,12 @@ int uninstall(const char *pkgname, int encrypted_fs_flag)
             return -1;
     }
 
-        /* delete contents AND directory, no exceptions */
-    return delete_dir_contents(pkgdir, 1, 0);
+    /* delete contents AND directory, no exceptions */
+    int ret = delete_dir_contents(pkgdir, 1, NULL);
+    unbinddata(pkgdir);
+    ret = delete_dir_contents(pkgdir, 1, NULL);
+
+    return ret;
 }
 
 int renamepkg(const char *oldpkgname, const char *newpkgname, int encrypted_fs_flag)
@@ -285,7 +289,7 @@ int move_dex(const char *src, const char *dst)
         return -errno;
     }
     if (retCode < 0) {
-        LOGE("Couldn't move %s: %s\n", src_dex, strerror(errno));	
+        LOGE("Couldn't move %s: %s\n", src_dex, strerror(errno));
 	return -1;
     } else {
         return 0;
@@ -506,10 +510,9 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
         return -1;
     }
 
-
-    dstlen = srclen + strlen(DALVIK_CACHE_PREFIX) + 
+    dstlen = srclen + strlen(DALVIK_CACHE_PREFIX) +
         strlen(DALVIK_CACHE_POSTFIX) + 1;
-    
+
     if (dstlen > PKG_PATH_MAX) {
         return -1;
     }
@@ -528,7 +531,8 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
             DALVIK_CACHE_PREFIX,
             src + 1, /* skip the leading / */
             DALVIK_CACHE_POSTFIX);
-    
+
+
     for(tmp = path + strlen(tPath == 0 ? DALVIK_CACHE_PREFIX : T_DALVIK_CACHE_PREFIX); *tmp; tmp++) {
         if (*tmp == '/') {
             *tmp = '@';
@@ -622,7 +626,7 @@ int dexopt(const char *apk_path, uid_t uid, int is_public)
     stat(apk_path, &apk_stat);
 
     zip_fd = open(apk_path, O_RDONLY, 0);
-	
+
     if (zip_fd < 0) {
         LOGE("dexopt cannot open '%s' for input\n", apk_path);
         return -1;
@@ -681,7 +685,7 @@ int dexopt(const char *apk_path, uid_t uid, int is_public)
     ut.actime = apk_stat.st_atime;
     ut.modtime = apk_stat.st_mtime;
     utime(dex_path, &ut);
-    
+
     close(odex_fd);
     close(zip_fd);
     return 0;
@@ -705,7 +709,7 @@ int create_move_path(char path[PKG_PATH_MAX],
     if ((strlen(prefix) + strlen(pkgname) + strlen(leaf) + 1) >= PKG_PATH_MAX) {
         return -1;
     }
-    
+
     sprintf(path, "%s%s/%s", prefix, pkgname, leaf);
     return 0;
 }
@@ -740,12 +744,12 @@ int movefileordir(char* srcpath, char* dstpath, int dstbasepos,
 
     int srcend = strlen(srcpath);
     int dstend = strlen(dstpath);
-    
+
     if (lstat(srcpath, statbuf) < 0) {
         LOGW("Unable to stat %s: %s\n", srcpath, strerror(errno));
         return 1;
     }
-    
+
     if ((statbuf->st_mode&S_IFDIR) == 0) {
         mkinnerdirs(dstpath, dstbasepos, S_IRWXU|S_IRWXG|S_IXOTH,
                 dstuid, dstgid, statbuf);
@@ -771,7 +775,7 @@ int movefileordir(char* srcpath, char* dstpath, int dstbasepos,
     }
 
     res = 0;
-    
+
     while ((de = readdir(d))) {
         const char *name = de->d_name;
             /* always skip "." and ".." */
@@ -779,32 +783,32 @@ int movefileordir(char* srcpath, char* dstpath, int dstbasepos,
             if (name[1] == 0) continue;
             if ((name[1] == '.') && (name[2] == 0)) continue;
         }
-        
+
         if ((srcend+strlen(name)) >= (PKG_PATH_MAX-2)) {
             LOGW("Source path too long; skipping: %s/%s\n", srcpath, name);
             continue;
         }
-        
+
         if ((dstend+strlen(name)) >= (PKG_PATH_MAX-2)) {
             LOGW("Destination path too long; skipping: %s/%s\n", dstpath, name);
             continue;
         }
-        
+
         srcpath[srcend] = dstpath[dstend] = '/';
         strcpy(srcpath+srcend+1, name);
         strcpy(dstpath+dstend+1, name);
-        
+
         if (movefileordir(srcpath, dstpath, dstbasepos, dstuid, dstgid, statbuf) != 0) {
             res = 1;
         }
-        
+
         // Note: we will be leaving empty directories behind in srcpath,
         // but that is okay, the package manager will be erasing all of the
         // data associated with .apks that disappear.
-        
+
         srcpath[srcend] = dstpath[dstend] = 0;
     }
-    
+
     closedir(d);
     return res;
 }
@@ -846,7 +850,7 @@ int movefiles()
                         UPDATE_COMMANDS_DIR_PREFIX, name);
                 continue;
             }
-            
+
             bufp = 0;
             bufe = 0;
             buf[PKG_PATH_MAX] = 0;
@@ -969,6 +973,28 @@ int movefiles()
     }
     closedir(d);
 done:
+    return 0;
+}
+
+int unbinddata(const char* dataDir) {
+    return umount(dataDir);
+}
+
+int binddata(const char* asecDir, const char* pkgDir,  int uid) {
+    mkdir(asecDir, 0751);
+    chown(asecDir, uid, uid) ;
+
+    mount(asecDir, pkgDir, 0, MS_BIND, 0);
+    chmod(pkgDir, 0751);
+
+    char libdir[PKG_PATH_MAX];
+    snprintf(libdir,sizeof(libdir), "%s/%s", pkgDir, PKG_LIB_POSTFIX);
+
+    mkdir(libdir, 0755);
+    chmod(libdir, 0755);
+    chown(libdir, AID_SYSTEM, AID_SYSTEM);
+
+    chown(pkgDir, uid, uid) ;
     return 0;
 }
 

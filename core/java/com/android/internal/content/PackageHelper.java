@@ -56,8 +56,15 @@ public class PackageHelper {
         return null;
     }
 
-    public static String createSdDir(long sizeBytes, String cid,
-            String sdEncKey, int uid) {
+
+    public static String getOrCreateAsecDataDir(int sizeMb, String cid, String sdEncKey, int uid) {
+	createSdDir(sizeMb<<20, cid, sdEncKey, uid);
+	return mountAsecDataDir(cid, sdEncKey, uid);
+    }
+
+    public static String createSdDir(long sizeBytes, String cid, String sdEncKey, int uid) {
+	Log.e("sunway","createSdDir for "+cid);
+
         // Create mount point via MountService
         IMountService mountService = getMountService();
         int sizeMb = (int) (sizeBytes >> 20);
@@ -86,6 +93,22 @@ public class PackageHelper {
         return null;
     }
 
+    public static String mountAsecDataDir(String cid, String key, int ownerUid) {
+	try {
+	    int rc = getMountService().mountSecureContainer(cid, key, ownerUid);
+	    if (rc == StorageResultCode.OperationFailedStorageMounted ||
+		rc == StorageResultCode.OperationSucceeded
+		) {
+		return getMountService().getSecureContainerPath(cid);
+	    } else {
+		return null;
+	    }
+	} catch (RemoteException e) {
+	    Log.e(TAG, "MountService running?");
+	}
+	return null;
+    };
+    
    public static String mountSdDir(String cid, String key, int ownerUid) {
     try {
         int rc = getMountService().mountSecureContainer(cid, key, ownerUid);
