@@ -318,6 +318,8 @@ public class PowerManagerService extends IPowerManager.Stub
     private static native void nativeShutdown();
     private static native void nativeReboot(String reason) throws IOException;
 
+    public static boolean SUPPORT_CUCC = SystemProperties.get("ro.operator").equals("cucc");
+
     /*
     static PrintStream mLog;
     static {
@@ -3274,6 +3276,12 @@ public class PowerManagerService extends IPowerManager.Stub
     public void setBacklightBrightness(int brightness) {
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.DEVICE_POWER, null);
 
+        // Adjust brightness to 75% for UUI version Start
+        if (SUPPORT_CUCC) {
+            brightness = (brightness * 3) / 4;
+        }
+        // Adjust brightness to 75% for UUI version end
+
         //print info for debug check.
         System.out.printf("%n########[ setBacklightBrightness: %d ]###########. %n", brightness);
 
@@ -3297,6 +3305,13 @@ public class PowerManagerService extends IPowerManager.Stub
 
     public void setAutoBrightnessAdjustment(float adj) {
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.DEVICE_POWER, null);
+
+        // Adjust brightness to 75% for UUI version Start
+        if (SUPPORT_CUCC) {
+            adj = (adj * 3) / 4;
+        }
+        // Adjust brightness to 75% for UUI version end
+
         synchronized (mLocks) {
             mLightSensorAdjustSetting = adj;
             if (mSensorManager != null && mLightSensorEnabled) {
