@@ -233,7 +233,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = mView = inflater.inflate(R.layout.volume_adjust, null);
+        mView = inflater.inflate(R.layout.volume_adjust, null);
         mView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 resetTimeout();
@@ -421,6 +421,12 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
                 mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
             sc.icon.setImageResource(R.drawable.ic_audio_ring_notif_vibrate);
         }
+        // Bug 194984 start
+        if (sc.streamType == AudioManager.STREAM_NOTIFICATION &&
+                mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+            sc.icon.setImageResource(R.drawable.ic_audio_ring_notif_vibrate);
+        }
+        // Bug 194984 end
         if (sc.streamType == AudioService.STREAM_REMOTE_MUSIC) {
             // never disable touch interactions for remote playback, the muting is not tied to
             // the state of the phone.
