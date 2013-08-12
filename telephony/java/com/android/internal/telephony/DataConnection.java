@@ -362,10 +362,10 @@ public abstract class DataConnection extends StateMachine {
                 alreadySent = (ApnContext)msg.obj;
             }
             reason = dp.reason;
-            if (VDBG) {
-                log(String.format("msg=%s msg.obj=%s", msg.toString(),
-                    ((msg.obj instanceof String) ? (String) msg.obj : "<no-reason>")));
-            }
+            //if (VDBG) {
+            //    log(String.format("msg=%s msg.obj=%s", msg.toString(),
+            //        ((msg.obj instanceof String) ? (String) msg.obj : "<no-reason>")));
+            //}
             AsyncResult.forMessage(msg);
             msg.sendToTarget();
         }
