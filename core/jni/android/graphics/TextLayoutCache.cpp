@@ -1006,6 +1006,7 @@ SkTypeface* TextLayoutShaper::getCachedTypeface(SkTypeface** typeface, const cha
 
 HB_Face TextLayoutShaper::getCachedHBFace(SkTypeface* typeface) {
     SkFontID fontId = typeface->uniqueID();
+    AutoMutex _l(mCacheLock);
     ssize_t index = mCachedHBFaces.indexOfKey(fontId);
     if (index >= 0) {
         HB_Face face;
@@ -1025,6 +1026,7 @@ HB_Face TextLayoutShaper::getCachedHBFace(SkTypeface* typeface) {
 }
 
 void TextLayoutShaper::purgeCaches() {
+    AutoMutex _l(mCacheLock);
     size_t cacheSize = mCachedHBFaces.size();
     for (size_t i = 0; i < cacheSize; i++) {
         HB_FreeFace(mCachedHBFaces.valueAt(i));
