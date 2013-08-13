@@ -27,6 +27,7 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
+import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Log;
 
@@ -239,14 +240,21 @@ public final class GsmCallTracker extends CallTracker {
 //            cm.dial(pendingMO.address, clirMode, uusInfo, obtainCompleteMessage());
             // Add for bug 121825 Start
             String tmpAddr = pendingMO.address;
+            Boolean isEmergency = false;
             if (PhoneNumberUtils.isCustomEmergencyNumber(pendingMO.address)) {
                 if(phone.getServiceState().getState() == ServiceState.STATE_OUT_OF_SERVICE){
                     Log.d(LOG_TAG,"Pending MO is Custom Emergency call");
                     tmpAddr = tmpAddr + "/1";
                 }
+                isEmergency = true;
             }
+
             //cm.dial(pendingMO.address, clirMode, uusInfo, isStkCall, obtainCompleteMessage());
-            cm.dial(tmpAddr, clirMode, uusInfo, obtainCompleteMessage());
+            if(isEmergency || TextUtils.isEmpty(pendingMO.postDialString)) {
+                cm.dial(tmpAddr, clirMode, uusInfo, obtainCompleteMessage());
+            } else {
+                cm.dial(pendingMO.dialString, clirMode, uusInfo, obtainCompleteMessage());
+            }
             // Add for bug 121825 End
         }
 
