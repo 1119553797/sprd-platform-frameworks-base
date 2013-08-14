@@ -21,6 +21,7 @@ import android.net.LocalSocketAddress;
 import android.net.LocalSocket;
 import android.util.Config;
 import android.util.Slog;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -128,7 +129,7 @@ class Installer {
 		}
 		return true;
 	}
-		
+
 	private synchronized String transaction(String cmd) {
 		if (!connect()) {
             Slog.e(TAG, "connection failed");
@@ -249,7 +250,7 @@ class Installer {
         }
         return execute(builder.toString());
     }
-    
+
     public int clearUserData(String name, boolean useEncryptedFilesystem) {
         StringBuilder builder = new StringBuilder("rmuserdata");
         builder.append(' ');
@@ -262,7 +263,7 @@ class Installer {
         }
         return execute(builder.toString());
     }
-    
+
     public boolean ping() {
         if (execute("ping") < 0) {
             return false;
@@ -270,7 +271,7 @@ class Installer {
             return true;
         }
     }
-    
+
     public int freeCache(long freeStorageSize) {
         StringBuilder builder = new StringBuilder("freecache");
         builder.append(' ');
@@ -291,7 +292,7 @@ class Installer {
         builder.append(gid);
         return execute(builder.toString());
     }
-    
+
     public int getSizeInfo(String pkgName, String apkPath,
             String fwdLockApkPath, PackageStats pStats, boolean useEncryptedFilesystem) {
         StringBuilder builder = new StringBuilder("getsize");
@@ -322,7 +323,7 @@ class Installer {
         } catch (NumberFormatException e) {
             return -1;
         }
-    }    
+    }
 
     public int moveFiles() {
         return execute("movefiles");
@@ -356,4 +357,23 @@ class Installer {
 
         return execute(builder.toString());
     }
+    public int unbind(String dataDir) {
+	Log.e ("sunway","Installer.java:392:" + "unbind:" +  dataDir);
+        StringBuilder builder = new StringBuilder("unbind ");
+        builder.append(dataDir);
+        return execute(builder.toString());
+    }
+
+    public int bind(String from, String to,  int uid) {
+	Log.e ("sunway","Installer.java:392:" + "bind:" +  from + " / " +to +" / " + uid);
+        StringBuilder builder = new StringBuilder("bind ");
+        builder.append(from);
+        builder.append(' ');
+        builder.append(to);
+        builder.append(' ');
+	builder.append(uid);
+        return execute(builder.toString());
+
+    }
+
 }

@@ -16,6 +16,7 @@
 
 package com.android.server;
 
+import android.util.Log;
 import com.android.internal.app.IMediaContainerService;
 import com.android.server.am.ActivityManagerService;
 
@@ -157,6 +158,7 @@ class MountService extends IMountService.Stub
     private boolean                               mBooted = false;
     private boolean                               mReady = false;
     private boolean                               mSendUmsConnectedOnBoot = false;
+
     private ConnectivityService                   mCs = null;
     private boolean                               mUmsConnected = false;
     //Add for share cdrom start
@@ -675,10 +677,12 @@ class MountService extends IMountService.Stub
                     Slog.w(TAG, "Failed to get share availability");
                 }
                 /*
-                 * Now that we've done our initialization, release 
+                 * Now that we've done our initialization, release
                  * the hounds!
                  */
+
                 mReady = true;
+
             }
         }.start();
     }
@@ -742,7 +746,7 @@ class MountService extends IMountService.Stub
 	    		 notifyUsbAvailabilityChange(flag);
 	    	}
 	    }.start();
-	   
+
 	 //add by liguxiang 09-15-11 for whether usb available end
         }else if ((code == VoldResponseCode.VolumeDiskInserted) ||
                    (code == VoldResponseCode.VolumeDiskRemoved) ||
@@ -842,7 +846,7 @@ class MountService extends IMountService.Stub
                             Environment.MEDIA_NOFS) && !vs.equals(
                                     Environment.MEDIA_UNMOUNTABLE) && !getUmsEnabling()) {
                 if (DEBUG_EVENTS) Slog.i(TAG, "updating volume state for media bad removal nofs and unmountable");
-                updatePublicVolumeState(path, Environment.MEDIA_UNMOUNTED);//this google code, 
+                updatePublicVolumeState(path, Environment.MEDIA_UNMOUNTED);//this google code,
                 //updatePublicVolumeState(path, Environment.MEDIA_IDLE);//who did this???
                 in = new Intent(Intent.ACTION_MEDIA_UNMOUNTED, Uri.parse("file://" + path));
             }
@@ -998,6 +1002,8 @@ class MountService extends IMountService.Stub
 
         // Redundant probably. But no harm in updating state again.
         mPms.updateExternalMediaStatus(false, false);
+	mPms.unbindAsecDataDir();
+
         try {
         	/*if(!mCs.isUsbConnected() && mUmsConnected){
         		Log.d(TAG,"return 5");
@@ -1008,7 +1014,7 @@ class MountService extends IMountService.Stub
                     "volume unmount %s%s", path, (force ? " force" : "")));
             // We unmounted the volume. None of the asec containers are available now.
             Log.d(TAG,"doUnmountVolume ----------------------------- end");
-            
+
             //add by liguxiang 10-21-11 for NEWMS00128630 begin
             if(!mCs.isUsbConnected() && mUmsConnected){
             	doMountVolume(path);
@@ -1123,7 +1129,7 @@ class MountService extends IMountService.Stub
                         Slog.w(TAG, "Disabling UMS after cable disconnect");
                         doShareUnshareVolume(path, "ums", false);
                         if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
-                            Slog.e(TAG, String.format(Locale.US, 
+                            Slog.e(TAG, String.format(Locale.US,
                                     "Failed to remount {%s} on UMS enabled-disconnect (%d)",
                                             path, rc));
                         }
@@ -1147,7 +1153,7 @@ class MountService extends IMountService.Stub
 
     private void sendUsbIntent(boolean c){
 	 Log.d(TAG,"send usb intent wiht action : " + (c ? Intent.ACTION_SPRD_USB_AVAILABLE : Intent.ACTION_SPRD_USB_UNAVAILABLE));
-	try{	
+	try{
 		 mContext.sendBroadcast(
 	 	new Intent((c ? Intent.ACTION_SPRD_USB_AVAILABLE : Intent.ACTION_SPRD_USB_UNAVAILABLE)));
 	} catch(IllegalStateException ex){
@@ -1156,7 +1162,7 @@ class MountService extends IMountService.Stub
 	 Log.d(TAG," usb intent  end");
     }
     //add by liguxiang 09-15-11 for whether usb available end
-    
+
     private void validatePermission(String perm) {
         if (mContext.checkCallingOrSelfPermission(perm) != PackageManager.PERMISSION_GRANTED) {
             throw new SecurityException(String.format("Requires %s permission", perm));
@@ -1249,7 +1255,7 @@ class MountService extends IMountService.Stub
 
         String path = Environment.getExternalStorageDirectory().getPath();
         String state = getVolumeState(path);
-        
+
         Slog.i(TAG, "Volume state is " + state );
 
         if (state.equals(Environment.MEDIA_SHARED)) {
@@ -1291,10 +1297,10 @@ class MountService extends IMountService.Stub
         }
         // add by luyongchao
         else {
-        	// the media isn't mount 
+        	// the media isn't mount
         	 if(LOCAL_LOGD)
                  Slog.d(TAG, "Current media state isn't mounted or removable, try notify ShutdownThread.");
-             
+
              if (observer != null) {
                  try {
                      observer.onShutDownComplete(0);
@@ -1374,7 +1380,7 @@ class MountService extends IMountService.Stub
         waitForReady();
         return doGetVolumeShared(Environment.getExternalStorageDirectory().getPath(), "ums");
     }
-    
+
     /**
      * @return state of the volume at the specified mount point
      */
@@ -1546,7 +1552,7 @@ class MountService extends IMountService.Stub
 
         return rc;
     }
-   
+
     public int mountSecureContainer(String id, String key, int ownerUid) {
         validatePermission(android.Manifest.permission.ASEC_MOUNT_UNMOUNT);
         waitForReady();
@@ -1634,7 +1640,7 @@ class MountService extends IMountService.Stub
 
         synchronized (mAsecMountSet) {
             /*
-             * Because a mounted container has active internal state which cannot be 
+             * Because a mounted container has active internal state which cannot be
              * changed while active, we must ensure both ids are not currently mounted.
              */
             if (mAsecMountSet.contains(oldId) || mAsecMountSet.contains(newId)) {
@@ -2348,4 +2354,3 @@ class MountService extends IMountService.Stub
     }
     // Add for share sdrom end
 }
-
