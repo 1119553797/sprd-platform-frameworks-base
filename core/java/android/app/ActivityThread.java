@@ -2794,6 +2794,7 @@ public final class ActivityThread {
         }
         return pkgName.equals("com.neusoft.td.android.wo116114") ||
                pkgName.equals("com.infinit.wostore.ui") ||
+               pkgName.equals("com.asiainfo.android") ||
                pkgName.equals("com.sinovatech.unicom.ui");
     }
 
