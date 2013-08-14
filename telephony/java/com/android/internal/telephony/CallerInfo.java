@@ -144,6 +144,7 @@ public class CallerInfo {
         // TODO: Move all the basic initialization here?
         mIsEmergency = false;
         mIsVoiceMail = false;
+        numberPresentation = Connection.PRESENTATION_ALLOWED;
     }
 
     /**
