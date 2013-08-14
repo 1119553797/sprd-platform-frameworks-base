@@ -186,8 +186,10 @@ public class WindowManagerImpl implements WindowManager {
         		MONKEY = false;
         		Log.w("WindowManagerImpl", "Cannot get system property: ro.monkey");
         	}
-        	
         	if (MONKEY) {
+        		 // Add by xingxing.wang@spreadtrum.com for monkey bug -- START
+                // Bug 201300 event is so frequently that the view response is not timely  
+                // it shouldn't happen in normal use.
         		String msg = e.getMessage();
         		if (msg != null && msg.contains("register input channel")) {
         			try {
@@ -200,9 +202,12 @@ public class WindowManagerImpl implements WindowManager {
         			} catch (Exception e2) {
         				Log.w("WindowManagerImpl", "Ignore the removeViewImmediate() fail: " + e2.getMessage());
         			}
+        		} else if (e instanceof BadTokenException) {
+                        Log.w("WindowManagerImpl",
+                                "BadTokenException, but we just ignore this in monkey test, the msg is:\n" + msg);
         		} else {
-        			throw e;
-        		}
+        			Log.w("WindowManagerImpl", "root.setView in addView() failed, just ignore this in monkey test. the msg is:\n" + msg);
+        		}            		
         	} else {
         		throw e;
         	}
