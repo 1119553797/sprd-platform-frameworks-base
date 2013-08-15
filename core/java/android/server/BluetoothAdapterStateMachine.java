@@ -387,8 +387,12 @@ final class BluetoothAdapterStateMachine extends StateMachine {
                     // we cannot go to power off state yet, we need wait for the Bluetooth
                     // device power off. Unfortunately the stack does not give a event back
                     // so we wait a little bit here
-                    sendMessageDelayed(POWER_DOWN_TIMEOUT,
-                                       POWER_DOWN_TIMEOUT_TIME);
+
+                    //bug#201340 repeat open close airplane mode,BT can't open
+                    //sendMessageDelayed(POWER_DOWN_TIMEOUT,POWER_DOWN_TIMEOUT_TIME);
+
+                    transitionTo(mPowerOff);
+                    broadcastState(BluetoothAdapter.STATE_OFF);
                     break;
                 case POWER_DOWN_TIMEOUT:
                     transitionTo(mPowerOff);
