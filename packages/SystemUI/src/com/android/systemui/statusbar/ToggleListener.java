@@ -482,6 +482,9 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         } else if (mWifiState == WifiManager.WIFI_STATE_DISABLING || mWifiState == WifiManager.WIFI_STATE_ENABLING) {
             i = R.drawable.quick_operation_wifi_ing;
             imagebarId = R.drawable.bottom_bar_icon_off;
+        } else {
+            i = R.drawable.quick_operation_wifi_off;
+            imagebarId = R.drawable.bottom_bar_icon_off;
         }
 
         updateButtonImage(R.id.quick_operation_wifi_icon, i, (mWifiState == WifiManager.WIFI_STATE_DISABLED ||
