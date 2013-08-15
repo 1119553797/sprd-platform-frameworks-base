@@ -2408,6 +2408,9 @@ public final class ActivityManagerService extends ActivityManagerNative
                 } else {
                     if (adj < -1) adj = -1;
                     if (adj == def) adj = def - 1;
+                    if(adj < 0 && app.curAdj < 0) {
+                      return;
+                    }
                     app.tmpCurAdj = app.curAdj;
                     app.tmpCurRawAdj = app.curRawAdj;
                     app.curAdj = adj;
