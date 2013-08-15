@@ -593,12 +593,14 @@ public class RingtoneManager {
             String selection,
             String[] selectionArgs,
             String sortOrder) {
-        if (mActivity != null) {
-            return mActivity.managedQuery(uri, projection, selection, selectionArgs, sortOrder);
-        } else {
+            //Modify 20130815 by Spreadst for bug199266 start 
+  //      if (mActivity != null) {
+   //     return mActivity.managedQuery(uri, projection, selection, selectionArgs, sortOrder);
+//    } else {
             return mContext.getContentResolver().query(uri, projection, selection, selectionArgs,
                     sortOrder);
-        }
+ //     }
+          //Modify 20130815 by Spreadst for bug199266 end
     }
     
     /**
