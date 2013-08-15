@@ -16,6 +16,8 @@
 
 package com.android.server;
 
+import android.os.SystemProperties;
+import android.theme.ThemeManagerService;
 import android.app.ActivityManagerNative;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
@@ -78,7 +80,8 @@ class ServerThread extends Thread {
     private static final String TAG = "SystemServer";
     private static final String ENCRYPTING_STATE = "trigger_restart_min_framework";
     private static final String ENCRYPTED_STATE = "1";
-
+    private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
+    
     ContentResolver mContentResolver;
 
     void reportWtf(String msg, Throwable e) {
@@ -272,6 +275,14 @@ class ServerThread extends Thread {
                 ServiceManager.addService(Context.ACCOUNT_SERVICE, accountManager);
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting Account Manager", e);
+            }
+
+            try {
+                Slog.i(TAG, "Theme Manager");
+                ServiceManager.addService(Context.THEME_SERVICE,
+                        new ThemeManagerService(context));
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting Theme Manager", e);
             }
 
             Slog.i(TAG, "Content Manager");

@@ -87,6 +87,9 @@ public class ActionBarView extends AbsActionBarView {
 
     private static final int DEFAULT_CUSTOM_GRAVITY = Gravity.START | Gravity.CENTER_VERTICAL;
 
+    private boolean mReserveOverflow;
+    private boolean mReserveOverflowSet;
+    
     private int mNavigationMode;
     private int mDisplayOptions = -1;
     private CharSequence mTitle;
@@ -384,6 +387,29 @@ public class ActionBarView extends AbsActionBarView {
         }
     }
 
+    public void setReserveOverflow(boolean reserved) {
+	if (mReserveOverflowSet && mReserveOverflow ==  reserved) {
+	    return;
+	}
+	mReserveOverflow = reserved;
+	mReserveOverflowSet = true;
+	if (mActionMenuPresenter != null) {
+	    mActionMenuPresenter.setReserveOverflow(reserved);
+	    mActionMenuPresenter.updateMenuView(true);
+	} 
+    }
+    
+    @Override
+    public void setAlternativeTabStyle(boolean alternativeTabStyle) {
+	if (mAlternativeTabStyle == alternativeTabStyle) {
+	    return;
+	}
+	if (mSplitView != null) {
+	    mSplitView.setVisibility(alternativeTabStyle? VISIBLE : GONE);
+	}
+	super.setAlternativeTabStyle(alternativeTabStyle);
+    }
+
     public boolean isSplitActionBar() {
         return mSplitActionBar;
     }
@@ -433,6 +459,9 @@ public class ActionBarView extends AbsActionBarView {
         }
         if (mActionMenuPresenter == null) {
             mActionMenuPresenter = new ActionMenuPresenter(mContext);
+	    if (mReserveOverflowSet) {
+		mActionMenuPresenter.setReserveOverflow(mReserveOverflow);		
+	    } 
             mActionMenuPresenter.setCallback(cb);
             mActionMenuPresenter.setId(com.android.internal.R.id.action_menu_presenter);
             mExpandedMenuPresenter = new ExpandedActionViewMenuPresenter();

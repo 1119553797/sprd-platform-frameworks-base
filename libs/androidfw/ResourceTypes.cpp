@@ -43,6 +43,7 @@
 #define TABLE_SUPER_NOISY(x) //x
 #define LOAD_TABLE_NOISY(x) //x
 #define TABLE_THEME(x) //x
+#define SUNWAY_NOISY(x) //x
 
 namespace android {
 
@@ -289,6 +290,10 @@ static status_t getIdmapPackageId(const uint32_t* map, size_t mapSize, uint32_t 
     while (*p == 0) {
         ++p;
     }
+    if (*p+IDMAP_HEADER_SIZE+2 >= mapSize) {
+	SUNWAY_NOISY (ALOGE("sunway:getIdmapPackageId:%d:%d:%d \n",*p,IDMAP_HEADER_SIZE,mapSize));
+	return UNKNOWN_ERROR;
+    } 
     *outId = (map[*p + IDMAP_HEADER_SIZE + 2] >> 24) & 0x000000ff;
     return NO_ERROR;
 }
@@ -2753,6 +2758,9 @@ status_t ResTable::add(const void* data, size_t size, void* cookie, bool copyDat
 
 status_t ResTable::add(Asset* asset, void* cookie, bool copyData, const void* idmap)
 {
+    if (asset == NULL) {
+	return add(NULL, 0, cookie, NULL, false, NULL);
+    }
     const void* data = asset->getBuffer(true);
     if (data == NULL) {
         ALOGW("Unable to get buffer of resource asset file");
@@ -2789,7 +2797,6 @@ status_t ResTable::add(ResTable* src)
 status_t ResTable::add(const void* data, size_t size, void* cookie,
                        Asset* asset, bool copyData, const Asset* idmap)
 {
-    if (!data) return NO_ERROR;
     Header* header = new Header(this);
     header->index = mHeaders.size();
     header->cookie = cookie;
@@ -2806,6 +2813,7 @@ status_t ResTable::add(const void* data, size_t size, void* cookie,
     }
     mHeaders.add(header);
 
+    if (!data) return NO_ERROR;
     const bool notDeviceEndian = htods(0xf0) != 0xf0;
 
     LOAD_TABLE_NOISY(
@@ -3051,12 +3059,14 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
 
     ssize_t rc = BAD_VALUE;
     size_t ip = grp->packages.size();
+    SUNWAY_NOISY(ALOGE("sunway:check resID:%08x in %d packages",resID, ip));
     while (ip > 0) {
         ip--;
         int T = t;
         int E = e;
 
         const Package* const package = grp->packages[ip];
+	SUNWAY_NOISY(ALOGE("sunway:check %d, index: %d",ip, package->header->index));
         if (package->header->resourceIDMap) {
             uint32_t overlayResID = 0x0;
             status_t retval = idmapLookup(package->header->resourceIDMap,
@@ -3065,6 +3075,7 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
             if (retval == NO_ERROR && overlayResID != 0x0) {
                 // for this loop iteration, this is the type and entry we really want
                 ALOGV("resource map 0x%08x -> 0x%08x\n", resID, overlayResID);
+		SUNWAY_NOISY(ALOGE("sunway: resource map 0x%08x -> 0x%08x\n", resID, overlayResID));
                 T = Res_GETTYPE(overlayResID);
                 E = Res_GETENTRY(overlayResID);
             } else {
@@ -3123,7 +3134,7 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
         }
 
         if (bestPackage != NULL &&
-            (bestItem.isMoreSpecificThan(thisConfig) || bestItem.diff(thisConfig) == 0)) {
+            (bestItem.isBetterThan(thisConfig, desiredConfig) || bestItem.diff(thisConfig) == 0)) {
             // Discard thisConfig not only if bestItem is more specific, but also if the two configs
             // are identical (diff == 0), or overlay packages will not take effect.
             continue;
@@ -3145,14 +3156,44 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
             *outConfig = bestItem;
         }
         TABLE_NOISY(size_t len;
-              printf("Found value: pkg=%d, type=%d, str=%s, int=%d\n",
-                     bestPackage->header->index,
-                     outValue->dataType,
-                     outValue->dataType == bestValue->TYPE_STRING
-                     ? String8(bestPackage->header->values.stringAt(
-                         outValue->data, &len)).string()
-                     : "",
-                     outValue->data));
+		    printf("Found value: pkg=%d, type=%d, str=%s, int=%d\n",
+			   bestPackage->header->index,
+			   outValue->dataType,
+			   outValue->dataType == bestValue->TYPE_STRING
+			   ? String8(bestPackage->header->values.stringAt(
+					 outValue->data, &len)).string()
+			   : "",
+			   outValue->data));
+
+	SUNWAY_NOISY(
+	    size_t len;
+	    char *  packageType=0;
+	    if (bestPackage->header->resourceIDMap) {
+		packageType="overlay";
+	    } else {
+		packageType="normal";
+	    }
+	    if (outValue->dataType == bestValue->TYPE_STRING) {
+		ALOGE("sunway: found value in %s package: resID %08x, str=%s",
+		      packageType,
+		      resID,
+		      String8(bestPackage->header->values.stringAt(outValue->data, &len)).string()
+		    );
+	    } else if (outValue->dataType > bestValue->TYPE_FIRST_COLOR_INT && outValue->dataType < bestValue->TYPE_LAST_COLOR_INT) {
+		ALOGE("sunway: found value in %s package: resID %08x, color=%08x",
+		      packageType,
+		      resID,
+		      outValue->data
+		    );
+	    } else {
+		ALOGE("sunway: found value in %s package: resID %08x, value=%08x",
+		      packageType,
+		      resID,
+		      outValue->data
+		    );
+	    }
+	    );
+
         rc = bestPackage->header->index;
         goto out;
     }
@@ -5183,6 +5224,58 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
     return NO_ERROR;
 }
 
+void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
+{
+    mError = NO_ERROR;
+
+    size_t N = mHeaders.size();
+    for (size_t i = 0; i < N; i++) {
+        Header* header = mHeaders[i];
+        if ((size_t)header->cookie == (size_t)cookie) {
+            if (header->ownedData != NULL) {
+                free(header->ownedData);
+            }
+            mHeaders.removeAt(i);
+            break;
+        }
+    }
+    size_t pgCount = mPackageGroups.size();
+    for (size_t pgIndex = 0; pgIndex < pgCount; pgIndex++) {
+        PackageGroup* pg = mPackageGroups[pgIndex];
+
+        size_t pkgCount = pg->packages.size();
+        size_t index = pkgCount;
+        for (size_t pkgIndex = 0; pkgIndex < pkgCount; pkgIndex++) {
+            const Package* pkg = pg->packages[pkgIndex];
+            if (String8(String16(pkg->package->name)).compare(packageName) == 0) {
+                index = pkgIndex;
+                ALOGV("Delete Package %d id=%d name=%s\n",
+                     (int)pkgIndex, pkg->package->id,
+                     String8(String16(pkg->package->name)).string());
+                break;
+            }
+        }
+        if (index < pkgCount) {
+            const Package* pkg = pg->packages[index];
+            uint32_t id = dtohl(pkg->package->id);
+            if (id != 0 && id < 256) {
+                mPackageMap[id] = 0;
+            }
+            if (pkgCount == 1) {
+                ALOGV("Delete Package Group %d id=%d packageCount=%d name=%s\n",
+                      (int)pgIndex, pg->id, (int)pg->packages.size(),
+                      String8(pg->name).string());
+                mPackageGroups.removeAt(pgIndex);
+                delete pg;
+            } else {
+                pg->packages.removeAt(index);
+                delete pkg;
+            }
+            return;
+        }
+    }
+}
+
 status_t ResTable::createIdmap(const ResTable& overlay, uint32_t originalCrc, uint32_t overlayCrc,
                                void** outData, size_t* outSize) const
 {
@@ -5195,7 +5288,19 @@ status_t ResTable::createIdmap(const ResTable& overlay, uint32_t originalCrc, ui
     }
 
     Vector<Vector<uint32_t> > map;
-    const PackageGroup* pg = mPackageGroups[0];
+    
+    // Google has made an assumption that mPackageGroups[0] always contains the
+    // target PackageGroup, but packages like QucikSearchBox makes the
+    // exception: mPackageGroups[0] contains res from the system package
+    // group, while mPackageGroups[1] contains the app package group.
+    // 
+    // Android Asset Overlay mechanism currently seems under heavy development,
+    // for now, we could only make another assumption: if mPackageGroups
+    // contains more than ONE entry, the last entry should be the target PackageGroup.
+    // 
+    // TODO: To verify the assumption, `aapt` source code must be explored.
+   
+    const PackageGroup* pg = mPackageGroups[mPackageGroups.size()-1];
     const Package* pkg = pg->packages[0];
     size_t typeCount = pkg->types.size();
     // starting size is header + first item (number of types in map)
@@ -5232,6 +5337,7 @@ status_t ResTable::createIdmap(const ResTable& overlay, uint32_t originalCrc, ui
                                                               overlayType.size(),
                                                               overlayPackage.string(),
                                                               overlayPackage.size());
+	    SUNWAY_NOISY(ALOGE("sunway: overlay.identifierForName: %s is %08x, orig id is %08x\n", String8(String16(resName.name)).string(), overlayResID, resID));
             if (overlayResID != 0) {
                 overlayResID = pkg_id | (0x00ffffff & overlayResID);
                 last = Res_GETENTRY(resID);
@@ -5240,14 +5346,14 @@ status_t ResTable::createIdmap(const ResTable& overlay, uint32_t originalCrc, ui
                 }
             }
             vector.push(overlayResID);
-#if 0
-            if (overlayResID != 0) {
-                ALOGD("%s/%s 0x%08x -> 0x%08x\n",
-                     String8(String16(resName.type)).string(),
-                     String8(String16(resName.name)).string(),
-                     resID, overlayResID);
-            }
-#endif
+	    SUNWAY_NOISY(
+		if (overlayResID != 0) {
+		    ALOGE("sunway:create map: %s/%s 0x%08x -> 0x%08x\n",
+			  String8(String16(resName.type)).string(),
+			  String8(String16(resName.name)).string(),
+			  resID, overlayResID);
+		}
+		);
         }
 
         if (first != -1) {

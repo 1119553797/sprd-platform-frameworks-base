@@ -18,7 +18,7 @@ package com.android.internal.view.menu;
 
 import com.android.internal.view.ActionBarPolicy;
 import com.android.internal.view.menu.ActionMenuView.ActionMenuChildView;
-
+import android.os.SystemProperties;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -68,6 +68,9 @@ public class ActionMenuPresenter extends BaseMenuPresenter
     final PopupPresenterCallback mPopupPresenterCallback = new PopupPresenterCallback();
     int mOpenSubMenuId;
 
+    private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
+
+
     public ActionMenuPresenter(Context context) {
         super(context, com.android.internal.R.layout.action_menu_layout,
                 com.android.internal.R.layout.action_menu_item_layout);
@@ -81,9 +84,13 @@ public class ActionMenuPresenter extends BaseMenuPresenter
 
         final ActionBarPolicy abp = ActionBarPolicy.get(context);
         if (!mReserveOverflowSet) {
-            mReserveOverflow = abp.showsOverflowMenuButton();
+	    if (UNIVERSE_UI_SUPPORT) {
+		mReserveOverflow = mContext.getResources().getBoolean(
+		    com.android.internal.R.bool.config_hasPermanentMenuKey);
+	    } else {
+		mReserveOverflow = abp.showsOverflowMenuButton();
+	    }
         }
-
         if (!mWidthLimitSet) {
             mWidthLimit = abp.getEmbeddedMenuWidthLimit();
         }

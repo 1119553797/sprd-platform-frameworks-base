@@ -23,6 +23,7 @@ import com.android.internal.util.XmlUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.os.SystemProperties;
 import android.content.pm.ActivityInfo;
 import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
@@ -2051,7 +2052,18 @@ public class Resources {
         } else {
             cs = sPreloadedDrawables[mConfiguration.getLayoutDirection()].get(key);
         }
-        if (cs != null) {
+
+	boolean usePreload = true;
+        // file endsWith .xml is never cached, because of UUI
+	if (SystemProperties.getBoolean("universe_ui_support",false)
+	    && !isColorDrawable
+	    && value.string != null
+	    && value.string.toString().endsWith(".xml")
+	    ) {
+	    usePreload = false;
+	}
+
+	if (usePreload && cs != null) {
             dr = cs.newDrawable(this);
         } else {
             if (isColorDrawable) {

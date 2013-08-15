@@ -26,6 +26,7 @@
   <eat-comment />
 
   <public type="attr" name="theme" id="0x01010000" />
+  <public type="attr" name="uuiTheme" id="0x010103e1" />
   <public type="attr" name="label" id="0x01010001" />
   <public type="attr" name="icon" id="0x01010002" />
   <public type="attr" name="name" id="0x01010003" />

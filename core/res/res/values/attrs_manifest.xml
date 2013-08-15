@@ -32,6 +32,7 @@
          to a style resource defining the theme.  If not set, the default
          system theme will be used. -->
     <attr name="theme" format="reference" />
+    <attr name="uuiTheme" format="reference" />
 
     <!-- A user-legible name for the given item.  Use with the
          application tag (to supply a default label for all application
@@ -886,6 +887,7 @@
              not need it. -->
         <attr name="name" />
         <attr name="theme" />
+	<attr name="uuiTheme" />
         <attr name="label" />
         <attr name="icon" />
         <attr name="logo" />
@@ -1443,6 +1445,7 @@
             is a period then it is appended to your package name. -->
         <attr name="name" />
         <attr name="theme" />
+	<attr name="uuiTheme" />
         <attr name="label" />
         <attr name="description" />
         <attr name="icon" />

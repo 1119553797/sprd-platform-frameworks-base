@@ -16,6 +16,10 @@
 
 package android.app;
 
+import android.os.SystemProperties;
+import android.theme.IThemeManager;
+import android.theme.ThemeManager;
+
 import com.android.internal.policy.PolicyManager;
 import com.android.internal.util.Preconditions;
 
@@ -167,6 +171,8 @@ class ReceiverRestrictedContext extends ContextWrapper {
  */
 class ContextImpl extends Context {
     private final static String TAG = "ContextImpl";
+
+    private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
     private final static boolean DEBUG = false;
 
     private static final HashMap<String, SharedPreferencesImpl> sSharedPrefs =
@@ -295,6 +301,15 @@ class ContextImpl extends Context {
                     return new AccountManager(ctx, service);
                 }});
 
+	if (SystemProperties.getBoolean("universe_ui_support",false)) {
+	    registerService(THEME_SERVICE, new ServiceFetcher() {
+		    public Object createService(ContextImpl ctx) {
+			IBinder b = ServiceManager.getService(THEME_SERVICE);
+			IThemeManager service = IThemeManager.Stub.asInterface(b);
+			return new ThemeManager(ctx, service);
+		    }});
+	}
+	
         registerService(ACTIVITY_SERVICE, new ServiceFetcher() {
                 public Object createService(ContextImpl ctx) {
                     return new ActivityManager(ctx.getOuterContext(), ctx.mMainThread.getHandler());
@@ -1778,6 +1793,9 @@ class ContextImpl extends Context {
             c.mRestricted = (flags & CONTEXT_RESTRICTED) == CONTEXT_RESTRICTED;
             c.init(pi, null, mMainThread, mResources, mBasePackageName, user);
             if (c.mResources != null) {
+		if (UNIVERSE_UI_SUPPORT) {
+		    ActivityThread.attachTheme(c.getAssets(), pi.getResDir());
+		}
                 return c;
             }
         }

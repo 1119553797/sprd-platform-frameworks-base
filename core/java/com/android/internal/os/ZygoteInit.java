@@ -19,6 +19,9 @@ package com.android.internal.os;
 import static libcore.io.OsConstants.S_IRWXG;
 import static libcore.io.OsConstants.S_IRWXO;
 
+
+import android.os.SystemProperties;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.net.LocalServerSocket;
@@ -224,8 +227,14 @@ public class ZygoteInit {
     }
 
     static void preload() {
-        preloadClasses();
-        preloadResources();
+        boolean engModeFlag = false;
+        engModeFlag = "engtest".equals(SystemProperties.get("ro.bootmode", "mode"))?true:false;
+        if(false == engModeFlag){
+            preloadClasses();
+	    preloadResources();
+        }else{
+            Log.d(TAG,"engtest mode ,we should not preload resource for fast boot");
+        }
     }
 
     /**

@@ -209,7 +209,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     }
 
     static final RotationWatcher sRotationWatcher = new RotationWatcher();
-
+    
     public PhoneWindow(Context context) {
         super(context);
         mLayoutInflater = LayoutInflater.from(context);
@@ -589,7 +589,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             if (lp == null) {
                 lp = new ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
             }
-
             int backgroundResId;
             if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
                 // If the contents is fill parent for the width, set the
@@ -607,6 +606,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             if (shownPanelParent != null && shownPanelParent instanceof ViewGroup) {
                 ((ViewGroup) shownPanelParent).removeView(st.shownPanelView);
             }
+	    	    
             st.decorView.addView(st.shownPanelView, lp);
 
             /*
@@ -618,10 +618,10 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             }
         } else if (!st.isInListMode()) {
             width = MATCH_PARENT;
-        } else if (st.createdPanelView != null) {
+        } else if (st.shownPanelView != null) {
             // If we already had a panel view, carry width=MATCH_PARENT through
             // as we did above when it was created.
-            ViewGroup.LayoutParams lp = st.createdPanelView.getLayoutParams();
+            ViewGroup.LayoutParams lp = st.shownPanelView.getLayoutParams();
             if (lp != null && lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
                 width = MATCH_PARENT;
             }
@@ -701,7 +701,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         st.isOpen = false;
 
         // This view is no longer shown, so null it out
-        st.shownPanelView = null;
+        // st.shownPanelView = null;
 
         if (st.isInExpandedMode) {
             // Next time the menu opens, it should not be in expanded mode, so
@@ -812,7 +812,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             if (event.isCanceled() || (mDecor != null && mDecor.mActionMode != null)) {
                 return;
             }
-            
+
             boolean playSoundEffect = false;
             final PanelFeatureState st = getPanelState(featureId, true);
             if (featureId == FEATURE_OPTIONS_PANEL && mActionBar != null &&
@@ -2929,6 +2929,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                         splitActionBar = getWindowStyle().getBoolean(
                                 com.android.internal.R.styleable.Window_windowSplitActionBar, false);
                     }
+
                     final ActionBarContainer splitView = (ActionBarContainer) findViewById(
                             com.android.internal.R.id.split_action_bar);
                     if (splitView != null) {
@@ -3419,9 +3420,12 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                 getIconMenuView(context, cb); // Need this initialized to know where our offset goes
             }
 
+	    
+	    int listMenuItemLayout=com.android.internal.R.layout.list_menu_item_layout;
+
             if (listMenuPresenter == null) {
                 listMenuPresenter = new ListMenuPresenter(
-                        com.android.internal.R.layout.list_menu_item_layout, listPresenterTheme);
+                        listMenuItemLayout, listPresenterTheme);
                 listMenuPresenter.setCallback(cb);
                 listMenuPresenter.setId(com.android.internal.R.id.list_menu_presenter);
                 menu.addMenuPresenter(listMenuPresenter);

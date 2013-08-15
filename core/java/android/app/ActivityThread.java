@@ -16,6 +16,12 @@
 
 package android.app;
 
+import android.os.SystemProperties;
+import android.theme.IThemeManager;
+import android.content.pm.PackageInfo;
+import android.text.TextUtils;
+import android.theme.ThemeInfo;
+import android.theme.ThemeManager;
 import android.app.backup.BackupAgent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
@@ -161,6 +167,8 @@ public final class ActivityThread {
     static ContextImpl mSystemContext = null;
 
     static IPackageManager sPackageManager;
+    static IThemeManager sThemeManager;
+    private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
 
     final ApplicationThread mAppThread = new ApplicationThread();
     final Looper mLooper = Looper.myLooper();
@@ -1609,6 +1617,15 @@ public final class ActivityThread {
         return am != null ? am.mInitialApplication : null;
     }
 
+    public static IThemeManager getThemeManager() {
+        if (sThemeManager != null) {
+            return sThemeManager;
+        }
+        IBinder b = ServiceManager.getService(Context.THEME_SERVICE);
+        sThemeManager = IThemeManager.Stub.asInterface(b);
+        return sThemeManager;
+    }
+
     public static IPackageManager getPackageManager() {
         if (sPackageManager != null) {
             //Slog.v("PackageManager", "returning cur default = " + sPackageManager);
@@ -1716,6 +1733,10 @@ public final class ActivityThread {
         AssetManager assets = new AssetManager();
         if (assets.addAssetPath(resDir) == 0) {
             return null;
+        }
+
+        if (UNIVERSE_UI_SUPPORT) {
+	    attachTheme(assets, resDir);
         }
 
         //Slog.i(TAG, "Resource: key=" + key + ", display metrics=" + metrics);
@@ -5110,5 +5131,41 @@ public final class ActivityThread {
         Looper.loop();
 
         throw new RuntimeException("Main thread loop unexpectedly exited");
+    }
+
+    private static boolean attachThemeAssets(AssetManager assets, ThemeInfo theme, boolean forSystem) {
+	if (theme==null) {
+	    return false;
+	}
+
+	if (assets.getThemeCookie(forSystem)!=0) {
+	    return false;
+	}
+	
+	int cookie = assets.attachThemePath(theme.getTargetResDir(), theme.getResDir());
+	if (cookie != 0) {
+	    assets.setThemePackageName(theme.getPackageName(), forSystem);
+	    assets.setThemeCookie(cookie, forSystem);
+	    return true;
+	}
+	return false;
+    }
+
+    public static void attachTheme(AssetManager assets, String resDir) {
+	if (assets ==null || TextUtils.isEmpty(resDir)) {
+	    return;
+	}
+
+	ThemeInfo sysTheme=null;
+	ThemeInfo appTheme=null;
+	try {
+	    sysTheme=getThemeManager().getAppliedTheme("/system/framework/framework-res.apk");
+	    appTheme=getThemeManager().getAppliedTheme(resDir);
+	} catch (Exception e) {}
+
+	attachThemeAssets(assets, sysTheme, true);
+	attachThemeAssets(assets, appTheme, false);
+
+	attachThemeAssets(AssetManager.getSystem(), sysTheme, true);
     }
 }

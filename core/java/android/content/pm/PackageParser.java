@@ -16,6 +16,7 @@
 
 package android.content.pm;
 
+import android.os.SystemProperties;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -1804,8 +1805,19 @@ public class PackageParser {
                 com.android.internal.R.styleable.AndroidManifestApplication_icon, 0);
         ai.logo = sa.getResourceId(
                 com.android.internal.R.styleable.AndroidManifestApplication_logo, 0);
-        ai.theme = sa.getResourceId(
+
+	if (SystemProperties.getBoolean("universe_ui_support",false)) {
+	    ai.theme = sa.getResourceId(
+                com.android.internal.R.styleable.AndroidManifestApplication_uuiTheme, 0);
+	    if (ai.theme == 0) {
+		ai.theme = sa.getResourceId(
+		    com.android.internal.R.styleable.AndroidManifestApplication_theme, 0);
+	    }
+	} else {
+	    ai.theme = sa.getResourceId(
                 com.android.internal.R.styleable.AndroidManifestApplication_theme, 0);
+	}
+
         ai.descriptionRes = sa.getResourceId(
                 com.android.internal.R.styleable.AndroidManifestApplication_description, 0);
 
@@ -2165,8 +2177,17 @@ public class PackageParser {
                     com.android.internal.R.styleable.AndroidManifestActivity_exported, false);
         }
 
-        a.info.theme = sa.getResourceId(
+	if (SystemProperties.getBoolean("universe_ui_support",false)) {
+	    a.info.theme = sa.getResourceId(
+                com.android.internal.R.styleable.AndroidManifestActivity_uuiTheme, 0);
+	    if (a.info.theme == 0) {
+		a.info.theme = sa.getResourceId(
+		    com.android.internal.R.styleable.AndroidManifestActivity_theme, 0);
+	    }
+	} else {
+	    a.info.theme = sa.getResourceId(
                 com.android.internal.R.styleable.AndroidManifestActivity_theme, 0);
+	}
 
         a.info.uiOptions = sa.getInt(
                 com.android.internal.R.styleable.AndroidManifestActivity_uiOptions,

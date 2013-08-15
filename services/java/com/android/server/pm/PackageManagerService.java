@@ -16,8 +16,11 @@
 
 package com.android.server.pm;
 
+
 import static android.Manifest.permission.GRANT_REVOKE_PERMISSIONS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+
+import android.os.SystemProperties;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED;
@@ -171,6 +174,9 @@ adb shell am instrument -w -e class com.android.unit_tests.PackageManagerTests c
  */
 public class PackageManagerService extends IPackageManager.Stub {
     static final String TAG = "PackageManager";
+
+    private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
+    
     static final boolean DEBUG_SETTINGS = false;
     static final boolean DEBUG_PREFERRED = false;
     static final boolean DEBUG_UPGRADE = false;
@@ -4445,11 +4451,14 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
         pkg.mScanPath = path;
 
+	boolean hasCode=((pkg.applicationInfo.flags&ApplicationInfo.FLAG_HAS_CODE)!=0);
         if ((scanMode&SCAN_NO_DEX) == 0) {
             if (performDexOptLI(pkg, forceDex, (scanMode&SCAN_DEFER_DEX) != 0, false)
                     == DEX_OPT_FAILED) {
-                mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
-                return null;
+		if (! UNIVERSE_UI_SUPPORT || hasCode) {
+		    mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
+		    return null;
+		}
             }
         }
 

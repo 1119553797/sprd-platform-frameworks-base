@@ -16,6 +16,7 @@
 
 package android.content.res;
 
+import android.os.SystemProperties;
 import android.os.ParcelFileDescriptor;
 import android.os.Trace;
 import android.util.Log;
@@ -77,7 +78,15 @@ public final class AssetManager {
     private int mNumRefs = 1;
     private boolean mOpen = true;
     private HashMap<Integer, RuntimeException> mRefStacks; 
- 
+
+    private String mThemePackageName;
+    private int mThemeCookie;
+
+    private String mThemePackageNameForSystem;
+    private int mThemeCookieForSystem;
+
+    // private static boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
+
     /**
      * Create a new AssetManager containing only the basic system assets.
      * Applications will not generally use this method, instead retrieving the
@@ -245,9 +254,14 @@ public final class AssetManager {
 
     /*package*/ final void ensureStringBlocks() {
         if (mStringBlocks == null) {
+	    boolean UNIVERSE_UI_SUPPORT=SystemProperties.getBoolean("universe_ui_support",false);
             synchronized (this) {
                 if (mStringBlocks == null) {
-                    makeStringBlocks(true);
+		    if (UNIVERSE_UI_SUPPORT) {
+			makeStringBlocks(false);
+		    } else {
+		    	makeStringBlocks(true);
+		    }
                 }
             }
         }
@@ -611,6 +625,23 @@ public final class AssetManager {
     private native final int addAssetPathNative(String path);
 
     /**
+     * Delete a set of theme assets from the asset manager. Not for use by
+     * applications. Returns true if succeeded or false on failure.
+     *
+     * @hide
+     */
+    public native final boolean detachThemePath(String packageName, int cookie);
+
+    /**
+     * Attach a set of theme assets to the asset manager. If necessary, this
+     * method will forcefully update the internal ResTable data structure.
+     *
+     * @return Cookie of the added asset or 0 on failure.
+     * @hide
+     */
+    public native final int attachThemePath(String origPath, String path);
+
+    /**
      * Add multiple sets of assets to the asset manager at once.  See
      * {@link #addAssetPath(String)} for more information.  Returns array of
      * cookies for each added asset with 0 indicating failure, or null if
@@ -772,5 +803,53 @@ public final class AssetManager {
         if (mNumRefs == 0) {
             destroy();
         }
+    }
+
+    public String getThemePackageName(boolean forSystem) {
+	if (forSystem) {
+	    return mThemePackageNameForSystem;
+	} else {
+	    return mThemePackageName;	    
+	}
+    }
+
+    /**
+     * Sets package name and highest level style id for current theme (null, 0 is allowed).
+     * {@hide}
+     */
+
+    public void setThemePackageName(String packageName, boolean forSystem) {
+	if (forSystem) {
+	    mThemePackageNameForSystem = packageName;	    
+	} else {
+	    mThemePackageName = packageName;
+	}
+	makeStringBlocks(false);
+    }
+
+    /**
+     * Get asset cookie for current theme (may return 0).
+     * {@hide}
+     */
+    public int getThemeCookie(boolean forSystem) {
+	if (forSystem) {
+	    return mThemeCookieForSystem;	    
+	} else {
+	    return mThemeCookie;
+	}
+
+    }
+
+    /**
+     * Sets asset cookie for current theme (0 if not a themed asset manager).
+     * {@hide}
+     */
+    public void setThemeCookie(int cookie, boolean forSystem) {
+	if (forSystem) {
+	    mThemeCookieForSystem = cookie;	    
+	} else {
+	    mThemeCookie = cookie;
+	}
+
     }
 }

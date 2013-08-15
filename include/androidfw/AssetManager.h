@@ -93,7 +93,9 @@ public:
      * newly-added asset source.
      */
     bool addAssetPath(const String8& path, void** cookie);
-
+    bool addOverlayAssetPath(const String8& origPath, const String8& overlayPath, void** cookie);
+    bool attachThemePath(const String8& origPath, const String8& path, void** cookie);
+    bool detachThemePath(const String8 &packageName, void* cookie);
     /*                                                                       
      * Convenience for adding the standard system assets.  Uses the
      * ANDROID_ROOT environment variable to find them.
@@ -226,6 +228,7 @@ private:
         String8 idmap;
     };
 
+    void updateResTableFromAssetPath(ResTable* rt, const asset_path& ap, void* cookie) const;
     Asset* openInPathLocked(const char* fileName, AccessMode mode,
         const asset_path& path);
     Asset* openNonAssetInPathLocked(const char* fileName, AccessMode mode,
