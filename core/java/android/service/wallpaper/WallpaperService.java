@@ -1019,7 +1019,6 @@ public abstract class WallpaperService extends Service {
         public void executeMessage(Message message) {
             switch (message.what) {
                 case DO_ATTACH: {
-                    /* remove for SPRDROID4.3_DEV
                     try {
                         mConnection.attachEngine(this);
                     } catch (RemoteException e) {
@@ -1029,7 +1028,7 @@ public abstract class WallpaperService extends Service {
                     Engine engine = onCreateEngine();
                     mEngine = engine;
                     mActiveEngines.add(engine);
-                    engine.attach(this);*/
+                    engine.attach(this);
                     return;
                 }
                 case DO_DETACH: {
