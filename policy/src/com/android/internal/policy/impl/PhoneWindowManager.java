@@ -1736,6 +1736,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
             WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
         };
+    
+    //power
+    private PowerManager mPower = null;
+    //lit button light
+    private void litButtonLight() {
+        if (mPower == null) 
+            mPower = (PowerManager)mContext.getSystemService("power");
+
+        mPower.setButtonBrightness(100);
+    } 
 
     /** {@inheritDoc} */
     @Override
@@ -1779,7 +1789,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // it handle it, because that gives us the correct 5 second
         // timeout.
         if (keyCode == KeyEvent.KEYCODE_HOME) {
-
+            litButtonLight();
             WindowManager.LayoutParams attrs = win != null ? win.getAttrs() : null;
             if ((null != attrs) && (null != attrs.packageName) && (attrs.packageName.startsWith("com.spreadst.validationtools"))){
                     return 0;
@@ -1873,7 +1883,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         } else if (keyCode == KeyEvent.KEYCODE_MENU) {
             // Hijack modified menu keys for debugging features
             final int chordBug = KeyEvent.META_SHIFT_ON;
-
+            litButtonLight();
             if (down && repeatCount == 0) {
                 if (mEnableShiftMenuBugReports && (metaState & chordBug) == chordBug) {
                     Intent intent = new Intent(Intent.ACTION_BUG_REPORT);
@@ -1936,6 +1946,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+            litButtonLight();
             if (!down) mIsHomeKeyPressed.set(false);
         } 
 

@@ -497,6 +497,14 @@ public class PowerManager
         }
     }
 
+    public void setButtonBrightness(int brightness)
+    {
+        try {
+            mService.setButtonBrightness(brightness);
+        } catch (RemoteException e) {
+        }
+    }
+    
    /**
      * Returns the set of flags for {@link #newWakeLock(int, String) newWakeLock()}
      * that are supported on the device.
