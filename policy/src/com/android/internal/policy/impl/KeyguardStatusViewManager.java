@@ -46,6 +46,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.os.SystemProperties;
 
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
@@ -54,7 +55,7 @@ import android.telephony.ServiceState;
  *
  */
 class KeyguardStatusViewManager implements OnClickListener {
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final String TAG = "KeyguardStatusView";
 
     public static final int LOCK_ICON = 0; // R.drawable.ic_lock_idle_lock;
@@ -143,6 +144,8 @@ class KeyguardStatusViewManager implements OnClickListener {
     private PhoneStateListener[] mPhoneStateListener;
     ServiceState[] mServiceState;
 //20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
+		static final boolean SUPPORT_CUCC=SystemProperties.get("ro.operator").equals("cucc");
+
     private class TransientTextManager {
         private TextView mTextView;
         private class Data {
@@ -1017,7 +1020,10 @@ class KeyguardStatusViewManager implements OnClickListener {
         final boolean plmnValid = !TextUtils.isEmpty(plmn);
         final boolean spnValid = !TextUtils.isEmpty(spn);
         if (plmnValid && spnValid) {
-            return plmn + "|" + spn;
+            if(true == SUPPORT_CUCC)
+                return plmn ;
+            else
+                return plmn + "|" + spn;
         } else if (plmnValid) {
             return plmn;
         } else if (spnValid) {

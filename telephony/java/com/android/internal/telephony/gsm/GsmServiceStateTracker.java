@@ -182,6 +182,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 //20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen END
     private boolean mLocalLanguageChange = false;// local Language change,true
                                                  // if change
+    static final boolean SUPPORT_CUCC=SystemProperties.get("ro.operator").equals("cucc");
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -708,9 +709,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         int rule = phone.mIccRecords.getDisplayRule(ss.getOperatorNumeric());
         String spn = phone.mIccRecords.getServiceProviderName();
         String plmn = ss.getOperatorAlphaLong();
-	String splmn = ss.getOperatorAlphaShort();
+	      String splmn = ss.getOperatorAlphaShort();
 	
         boolean show3G = false;
+        boolean show2G = true;
 
         if(plmn == null || plmn.length() == 0) {
           plmn = ss.getOperatorAlphaShort();
@@ -744,9 +746,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         // For emergency calls only, pass the EmergencyCallsOnly string via EXTRA_PLMN
         if (mEmergencyOnly && cm.getRadioState().isOn()) {
             plmn = Resources.getSystem().
-                getText(com.android.internal.R.string.emergency_calls_only).toString();
-	    splmn = null;
+                   getText(com.android.internal.R.string.emergency_calls_only).toString();
+	          splmn = null;
             show3G = false;
+            show2G = false;
             if (DBG) log("updateSpnDisplay: emergency only and radio is on plmn='" + plmn + "'");
         }
 
@@ -754,6 +757,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
           plmn = Resources.getSystem().
               getText(com.android.internal.R.string.lockscreen_carrier_default).toString();
           show3G = false;
+          show2G = false;
         }
         if (rule != curSpnRule || mLocalLanguageChange
                 || !TextUtils.equals(spn, curSpn)
@@ -767,6 +771,13 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                if (show3G) {
                     if (plmn != null && plmn.length()!=0) {
                         plmn += "3G";
+                    }
+                }
+                else {
+                    if (true == SUPPORT_CUCC &&
+                        true == show2G &&
+                        plmn != null && plmn.length()!=0) {
+                        plmn += "2G";
                     }
                 }
             } else {
@@ -785,6 +796,13 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                         if (spn != null && spn.length()!=0) {
                             spn += "3G";
                         }
+                    }
+                    else{
+                        if (true == SUPPORT_CUCC &&
+                        true == show2G &&
+                        spn != null && spn.length()!=0) {
+                        spn += "2G";
+                      }
                     }
                 }
             }
