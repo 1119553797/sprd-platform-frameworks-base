@@ -121,10 +121,6 @@ class KeyguardStatusViewManager implements OnClickListener {
     private final boolean mEmergencyCallButtonEnabledInScreen;
     //add DSDS start
     private int mphoneId;
-//    private CharSequence mPlmn;
-//    private CharSequence mSpn;
-//    private CharSequence mPlmn1;
-//    private CharSequence mSpn1;
     private CharSequence[] mPlmn;
     private CharSequence[] mSpn;
     //add DSDS end
@@ -242,6 +238,18 @@ class KeyguardStatusViewManager implements OnClickListener {
                 messageCountViewsetOnClickListener(true);
             }
         }
+
+        mMissedCallTextView = (TextView) findViewById(R.id.missedCallCount);
+        if (mMissedCallTextView != null) {
+            if (mMissedCallCount == 0) {
+                mMissedCallTextView.setVisibility(View.GONE);
+                missedCallTextViewSetOnClickListener(false);
+            } else {
+                mMissedCallTextView.setVisibility(View.VISIBLE);
+                missedCallTextViewSetOnClickListener(true);
+            }
+        }
+
         mDateView = (TextView) findViewById(R.id.date);
         mStatus1View = (TextView) findViewById(R.id.status1);
         mAlarmStatusView = (TextView) findViewById(R.id.alarm_status);
@@ -530,6 +538,7 @@ class KeyguardStatusViewManager implements OnClickListener {
         updateStatus1();
         updateCarrierText();
         updateMessageCountInfoForLockScreen();
+        updateMissedCallInfoForLockScreen(mMissedCallCount);
     }
 
     private void updateAlarmInfo() {
