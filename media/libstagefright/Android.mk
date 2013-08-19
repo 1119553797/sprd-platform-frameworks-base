@@ -48,11 +48,16 @@ LOCAL_SRC_FILES:=                         \
         XINGSeeker.cpp                    \
         avc_utils.cpp                     \
         string.cpp                        \
-	VideoPhoneExtractor.cpp		  \
-	VideoPhoneWriter.cpp		  \
         CharDeviceSource.cpp              \
 	AACExtractor.cpp                  \
-	FLVExtractor.cpp
+	FLVExtractor.cpp		  \
+
+
+ifneq ($(BOARD_SUPPORT_FEATURE_VT),false)
+LOCAL_SRC_FILES += 			  \
+	VideoPhoneExtractor.cpp		  \
+	VideoPhoneWriter.cpp		  
+endif
 
 LOCAL_C_INCLUDES:= \
 	$(JNI_H_INCLUDE) \
@@ -98,7 +103,7 @@ LOCAL_STATIC_LIBRARIES := \
 	libstagefright_cmmb \
 	libstagefright_cmmb_mxd
 
-ifeq ($(BUILD_SPRD_STAGEFRIGHT),true)
+ifneq ($(BUILD_SPRD_STAGEFRIGHT),false)
 LOCAL_STATIC_LIBRARIES += \
 	libstagefright_aacdec_sprd \
         libstagefright_mp3dec_sprd \
@@ -151,6 +156,10 @@ LOCAL_CFLAGS += -DBUILD_SPRD_AAC
 LOCAL_CFLAGS += -DBUILD_SPRD_M4VH263
 LOCAL_CFLAGS += -DBUILD_SPRD_AVC
 #endif
+
+ifeq ($(BOARD_SUPPORT_FEATURE_VT),true)
+LOCAL_CFLAGS += -DBOARD_SUPPORT_FEATURE_VT
+endif
 
 LOCAL_MODULE:= libstagefright
 

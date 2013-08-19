@@ -52,7 +52,10 @@
 #include <media/AudioTrack.h>
 
 #include "MediaRecorderClient.h"
+
+#ifdef BOARD_SUPPORT_FEATURE_VT
 #include "MediaPhoneClient.h" //sprd vt must
+#endif
 #include "MediaPlayerService.h"
 #include "MetadataRetrieverClient.h"
 
@@ -235,9 +238,11 @@ sp<IMediaRecorder> MediaPlayerService::createMediaRecorder(pid_t pid)
     LOGV("Create new media recorder client from pid %d", pid);
     return recorder;
 }
+#ifdef BOARD_SUPPORT_FEATURE_VT
 
 sp<IMediaPhone> MediaPlayerService::createMediaPhone(pid_t pid) //sprd vt must
 {
+
     sp<MediaPhoneClient> phone = new MediaPhoneClient(this, pid);
     wp<MediaPhoneClient> w = phone;
     Mutex::Autolock lock(mLock);
@@ -246,6 +251,14 @@ sp<IMediaPhone> MediaPlayerService::createMediaPhone(pid_t pid) //sprd vt must
     return phone;
 }
 
+void MediaPlayerService::removeMediaPhoneClient(wp<MediaPhoneClient> client) //sprd vt must
+{
+    Mutex::Autolock lock(mLock);
+    mMediaPhoneClients.remove(client);
+    LOGV("Delete media phone client");
+}
+
+#endif
 void MediaPlayerService::removeMediaRecorderClient(wp<MediaRecorderClient> client)
 {
     Mutex::Autolock lock(mLock);
@@ -253,12 +266,6 @@ void MediaPlayerService::removeMediaRecorderClient(wp<MediaRecorderClient> clien
     LOGV("Delete media recorder client");
 }
 
-void MediaPlayerService::removeMediaPhoneClient(wp<MediaPhoneClient> client) //sprd vt must
-{
-    Mutex::Autolock lock(mLock);
-    mMediaPhoneClients.remove(client);
-    LOGV("Delete media phone client");
-}
 
 sp<IMediaMetadataRetriever> MediaPlayerService::createMetadataRetriever(pid_t pid)
 {

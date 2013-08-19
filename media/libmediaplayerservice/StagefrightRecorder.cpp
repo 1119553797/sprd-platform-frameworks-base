@@ -27,9 +27,11 @@
 #include <media/stagefright/FakeCameraSource.h>
 #include <media/stagefright/MPEG2TSWriter.h>
 #include <media/stagefright/MPEG4Writer.h>
-#include <media/stagefright/VideoPhoneWriter.h> //sprd vt must
 #include <media/stagefright/DataSource.h> //sprd vt must
+#ifdef BOARD_SUPPORT_FEATURE_VT
+#include <media/stagefright/VideoPhoneWriter.h> //sprd vt must
 #include "../libstagefright/include/VideoPhoneExtractor.h" //sprd vt must
+#endif
 
 #include <media/stagefright/MediaDebug.h>
 #include <media/stagefright/MediaDefs.h>
@@ -1199,6 +1201,7 @@ status_t StagefrightRecorder::setupAudioEncoder(const sp<MediaWriter>& writer) {
 status_t StagefrightRecorder::startVideoPhoneRecording() //sprd vt must
 {
     	status_t err = OK;
+#ifdef BOARD_SUPPORT_FEATURE_VT
     	sp<MediaWriter> writer 	= new VideoPhoneWriter(dup(mOutputFd));
 		
 	if (mVideoSource == VIDEO_SOURCE_DEFAULT
@@ -1221,7 +1224,9 @@ status_t StagefrightRecorder::startVideoPhoneRecording() //sprd vt must
     	meta->setInt32(kKeyFileType, mOutputFormat);
     	writer->setListener(mListener);
     	mWriter = writer;
-	return mWriter->start(meta.get());
+	err = mWriter->start(meta.get());
+#endif
+	return err ;
 }
 
 status_t StagefrightRecorder::startMPEG4Recording() {
@@ -1243,6 +1248,7 @@ status_t StagefrightRecorder::startMPEG4Recording() {
         writer->addSource(encoder);
         totalBitRate += mVideoBitRate;
     }else if(mVideoSource == VIDEO_SOURCE_VIDEOPHONE_VIDEO_ES){//sprd vt must
+#ifdef BOARD_SUPPORT_FEATURE_VT
         sp<MetaData> AVMeta = new MetaData();
     	switch (mVideoEncoder) {
         	case VIDEO_ENCODER_H263:
@@ -1265,7 +1271,8 @@ status_t StagefrightRecorder::startMPEG4Recording() {
         }
     	sp<MediaSource> videoPhoneVideoES = pSource;
         writer->addSource(videoPhoneVideoES);
-        totalBitRate += mVideoBitRate;		 
+        totalBitRate += mVideoBitRate;		
+#endif		
     }
 
     if (mInterleaveDurationUs > 0) {

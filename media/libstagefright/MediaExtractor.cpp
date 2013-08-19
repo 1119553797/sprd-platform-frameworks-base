@@ -26,7 +26,9 @@
 #include "include/AVIExtractor.h"
 #include "include/MPEG2TSExtractor.h"
 #include "include/CMMBExtractor.h"//cmmb
+#ifdef BOARD_SUPPORT_FEATURE_VT
 #include "include/VideoPhoneExtractor.h"//sprd vt must
+#endif
 #include "matroska/MatroskaExtractor.h"
 #include "include/AACExtractor.h"
 #include "include/FLVExtractor.h"
@@ -89,11 +91,15 @@ sp<MediaExtractor> MediaExtractor::Create(
         return new FLVExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_CMMB)) {//cmmb
         return new CMMBExtractor(source);
-    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263)) {//sprd vt must
+    } 
+#ifdef BOARD_SUPPORT_FEATURE_VT
+       else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_H263)) {//sprd vt must
         return new VideoPhoneExtractor(source, 1);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_VIDEOPHONE_MPEG4)) {//sprd vt must
         return new VideoPhoneExtractor(source, 2);
-    } else if(!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AAC)) {
+    } 
+#endif
+  else if(!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AAC)) {
         return new AACExtractor(source);
     }
 

@@ -41,7 +41,9 @@
 #include <media/AudioTrack.h>
 #include <media/mediaphone.h>
 
+#ifdef BOARD_SUPPORT_FEATURE_VT
 #include "../libstagefright/include/VideoPhoneExtractor.h"//sprd vt must
+#endif
 
 #include "MediaPhoneClient.h"
 #include "MediaPlayerService.h"

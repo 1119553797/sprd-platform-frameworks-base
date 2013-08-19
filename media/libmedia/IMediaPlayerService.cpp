@@ -229,6 +229,7 @@ status_t BnMediaPlayerService::onTransact(
             reply->writeStrongBinder(recorder->asBinder());
             return NO_ERROR;
         } break;
+#ifdef BOARD_SUPPORT_FEATURE_VT
         case CREATE_MEDIA_PHONE: {//sprd vt must
             CHECK_INTERFACE(IMediaPlayerService, data, reply);
             pid_t pid = data.readInt32();
@@ -236,6 +237,7 @@ status_t BnMediaPlayerService::onTransact(
             reply->writeStrongBinder(phone->asBinder());
             return NO_ERROR;
         } break;
+#endif
         case CREATE_METADATA_RETRIEVER: {
             CHECK_INTERFACE(IMediaPlayerService, data, reply);
             pid_t pid = data.readInt32();

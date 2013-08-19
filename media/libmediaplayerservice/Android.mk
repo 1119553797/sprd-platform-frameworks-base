@@ -7,7 +7,6 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:=               \
-    MediaPhoneClient.cpp        \
     MediaRecorderClient.cpp     \
     MediaPlayerService.cpp      \
     MetadataRetrieverClient.cpp \
@@ -15,8 +14,12 @@ LOCAL_SRC_FILES:=               \
     MidiMetadataRetriever.cpp   \
     MidiFile.cpp                \
     StagefrightPlayer.cpp       \
-    StagefrightRecorder.cpp
+    StagefrightRecorder.cpp     \
 
+ifneq ($(BOARD_SUPPORT_FEATURE_VT),false)
+    LOCAL_SRC_FILES += \
+    MediaPhoneClient.cpp
+endif
 ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
 LOCAL_LDLIBS += -ldl -lpthread
 endif
@@ -45,6 +48,10 @@ LOCAL_SHARED_LIBRARIES += \
 #	libopencore_author
 else
 LOCAL_CFLAGS += -DNO_OPENCORE
+endif
+
+ifneq ($(BOARD_SUPPORT_FEATURE_VT),false)
+LOCAL_CFLAGS += -DBOARD_SUPPORT_FEATURE_VT
 endif
 
 ifneq ($(TARGET_SIMULATOR),true)

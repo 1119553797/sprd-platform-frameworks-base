@@ -188,8 +188,10 @@ public:
     // IMediaPlayerService interface
     virtual sp<IMediaRecorder>  createMediaRecorder(pid_t pid);
     void    removeMediaRecorderClient(wp<MediaRecorderClient> client);
+#ifdef BOARD_SUPPORT_FEATURE_VT
     virtual sp<IMediaPhone>  createMediaPhone(pid_t pid); //sprd vt must
     void    removeMediaPhoneClient(wp<MediaPhoneClient> client); //sprd vt must
+#endif
     virtual sp<IMediaMetadataRetriever> createMetadataRetriever(pid_t pid);
 
     // House keeping for media player clients
