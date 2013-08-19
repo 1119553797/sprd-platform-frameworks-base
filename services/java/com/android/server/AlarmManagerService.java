@@ -74,7 +74,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
 
     private static final String TAG = "AlarmManager";
     private static final String ClockReceiver_TAG = "ClockReceiver";
-    private static final boolean localLOGV = false;
+    private static final boolean localLOGV = true;
     private static final int ALARM_EVENT = 1;
     private static final String TIMEZONE_PROPERTY = "persist.sys.timezone";
     
@@ -90,7 +90,9 @@ class AlarmManagerService extends IAlarmManager.Stub {
     private final ArrayList<Alarm> mElapsedRealtimeWakeupAlarms = new ArrayList<Alarm>();
     private final ArrayList<Alarm> mElapsedRealtimeAlarms = new ArrayList<Alarm>();
     private final IncreasingTimeOrder mIncreasingTimeOrder = new IncreasingTimeOrder();
-    
+    private final ArrayList<String> mBlackList = new ArrayList<String>();
+    public static boolean SUPPORT_CUCC = SystemProperties.get("ro.operator").equals("cucc");
+
     private int mDescriptor;
     private int mBroadcastRefCount = 0;
     private PowerManager.WakeLock mWakeLock;
@@ -151,6 +153,22 @@ class AlarmManagerService extends IAlarmManager.Stub {
         } else {
             Slog.w(TAG, "Failed to open alarm driver. Falling back to a handler.");
         }
+        if(SUPPORT_CUCC){
+            mBlackList.add("com.baidu.BaiduMap");
+            mBlackList.add("com.sina.weibopro");
+            mBlackList.add("com.sohu.newsclient");
+            mBlackList.add("com.sohu.inputmethod.sogou");
+            mBlackList.add("com.chinaunicom.deviceregister");
+
+            mBlackList.add("cn.wps.moffice_eng");
+            mBlackList.add("com.infinit.wostore.ui");
+            mBlackList.add("com.sinovatech.unicom.ui");
+            mBlackList.add("com.neusoft.td.android.wo11611");
+            mBlackList.add("com.asiainfo.android");
+
+            mBlackList.add("com.cucc.homepage");
+            mBlackList.add("com.cucc.ireader.IReaderPage");
+        }
     }
     
     protected void finalize() throws Throwable {
@@ -162,14 +180,29 @@ class AlarmManagerService extends IAlarmManager.Stub {
     }
     
     public void set(int type, long triggerAtTime, PendingIntent operation) {
+        if(SUPPORT_CUCC){
+            Slog.d(TAG, "Execution set method operation --> " + operation.getTargetPackage());
+            if(mBlackList.contains(operation.getTargetPackage())){
+                Slog.d(TAG, "Execution set method List contains packages");
+                return;
+            }
+        }
         setRepeating(type, triggerAtTime, 0, operation);
     }
     
     public void setRepeating(int type, long triggerAtTime, long interval, 
             PendingIntent operation) {
-        if (operation == null) {
-            Slog.w(TAG, "set/setRepeating ignored because there is no intent");
-            return;
+        if(SUPPORT_CUCC){
+            Slog.d(TAG, "Execution setRepeating method operation --> " + operation.getTargetPackage() + "interval ---> " +interval + "triggerAtTime" + triggerAtTime);
+            if (operation == null || mBlackList.contains(operation.getTargetPackage())) {
+                Slog.w(TAG, "set/setRepeating ignored because there is no intent");
+                return;
+            }
+        } else {
+            if (operation == null) {
+                Slog.w(TAG, "set/setRepeating ignored because there is no intent");
+                return;
+            }
         }
         synchronized (mLock) {
             Alarm alarm = new Alarm();
@@ -192,9 +225,17 @@ class AlarmManagerService extends IAlarmManager.Stub {
     
     public void setInexactRepeating(int type, long triggerAtTime, long interval, 
             PendingIntent operation) {
-        if (operation == null) {
-            Slog.w(TAG, "setInexactRepeating ignored because there is no intent");
-            return;
+        if(SUPPORT_CUCC){
+            Slog.d(TAG, "Execution InexactRepeating method operation --> " + operation.getTargetPackage());
+            if (operation == null || mBlackList.contains(operation.getTargetPackage())) {
+                Slog.w(TAG, "setInexactRepeating ignored because there is no intent");
+                return;
+            }
+        } else {
+            if (operation == null) {
+                Slog.w(TAG, "setInexactRepeating ignored because there is no intent");
+                return;
+            }
         }
 
         if (interval <= 0) {
