@@ -197,6 +197,7 @@ private:
      * Cache of Harfbuzz faces
      */
     KeyedVector<SkFontID, HB_Face> mCachedHBFaces;
+    Mutex mCacheLock;  //lock for cache .
 
     /**
      * Cache of glyph array size
