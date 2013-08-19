@@ -16159,6 +16159,7 @@ package android.os {
     method public boolean isScreenOn();
     method public android.os.PowerManager.WakeLock newWakeLock(int, java.lang.String);
     method public void reboot(java.lang.String);
+    method public void setButtonBrightness(int);
     method public void userActivity(long, boolean);
     field public static final int ACQUIRE_CAUSES_WAKEUP = 268435456; // 0x10000000
     field public static final int FULL_WAKE_LOCK = 26; // 0x1a
