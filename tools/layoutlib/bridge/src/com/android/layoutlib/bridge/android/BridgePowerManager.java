@@ -99,7 +99,10 @@ public class BridgePowerManager implements IPowerManager {
     public void setBacklightBrightness(int arg0) throws RemoteException {
         // pass for now.
     }
-
+    @Override
+    public void setButtonBrightness(int arg0) throws RemoteException {
+        // pass for now.
+    }
     @Override
     public void setMaximumScreenOffTimeount(int arg0) throws RemoteException {
         // pass for now.
