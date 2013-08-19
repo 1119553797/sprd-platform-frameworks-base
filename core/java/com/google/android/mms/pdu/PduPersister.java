@@ -1007,6 +1007,10 @@ public class PduPersister {
                         return;
                     }
                     is = mContentResolver.openInputStream(dataUri);
+                    if (is == null) {
+                        Log.w(TAG, "Can't find data for this part.");
+                        return;
+                    }
 
                     if (LOCAL_LOGV) {
                         Log.v(TAG, "Saving data to: " + uri);
