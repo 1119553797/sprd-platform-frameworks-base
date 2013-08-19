@@ -44,6 +44,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.IBinder;
 import android.os.IPowerManager;
 import android.os.LocalPowerManager;
@@ -610,6 +611,10 @@ public class PowerManagerService extends IPowerManager.Stub
             forceUserActivityLocked();
             mInitialized = true;
         }
+        
+        mThread = new HandlerThread("PowerManagerService1");
+	mThread.start();
+	mMessageHandler = new MessageHandler(mThread.getLooper());
     }
 
     void initInThread() {
@@ -3271,6 +3276,58 @@ public class PowerManagerService extends IPowerManager.Stub
         }
 
         return result;
+    }
+
+
+    private class MessageHandler extends Handler {
+        public static final int BUTTON_LIGHT_OFF = 0x00001;
+        public static final int BUTTON_LIGHT_ON = 0x00002;
+        
+        MessageHandler(Looper looper) {
+            super(looper);
+        }
+
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case BUTTON_LIGHT_OFF:
+                setButtonBrightnessWithHandler(0);
+                break;
+            case BUTTON_LIGHT_ON:
+                setButtonBrightnessWithHandler(100);
+                Message msg1 = mMessageHandler.obtainMessage(BUTTON_LIGHT_OFF);
+                mMessageHandler.sendMessageDelayed(msg1, 1500);
+                break;
+            }
+        }
+    }
+
+    private void setButtonBrightnessWithHandler(int brightness) {
+        //mContext.enforceCallingOrSelfPermission(android.Manifest.permission.DEVICE_POWER, null);
+
+        synchronized (mLocks) {
+            //brightness = Math.max(brightness, mScreenBrightnessDim);
+            mButtonLight.setBrightness(brightness);
+            long identity = Binder.clearCallingIdentity();
+            try {
+                mBatteryStats.noteScreenBrightness(brightness);
+            } catch (RemoteException e) {
+                Slog.w(TAG, "RemoteException calling noteScreenBrightness on BatteryStatsService", e);
+            } finally {
+                Binder.restoreCallingIdentity(identity);
+            }
+            //mScreenBrightnessAnimator.animateTo(brightness, SCREEN_BRIGHT_BIT, 0);
+        }
+    }
+
+    private MessageHandler mMessageHandler;
+    private HandlerThread mThread;
+    //for just set button brightness
+    public void setButtonBrightness(int brightness) {
+        if (0 < brightness && brightness <= 255) {
+            mMessageHandler.removeMessages(MessageHandler.BUTTON_LIGHT_OFF);
+            Message msg1 = mMessageHandler.obtainMessage(MessageHandler.BUTTON_LIGHT_ON);
+            mMessageHandler.sendMessage(msg1);
+        }
     }
 
     public void setBacklightBrightness(int brightness) {

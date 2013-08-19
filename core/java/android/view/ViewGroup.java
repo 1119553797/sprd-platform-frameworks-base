@@ -33,6 +33,7 @@ import android.graphics.Region;
 import android.os.Build;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.os.PowerManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -1801,11 +1802,17 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         return handled;
     }
 
+    private PowerManager mPower = null;
     /**
      * {@inheritDoc}
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (mPower == null) {
+            mPower = (PowerManager)mContext.getSystemService("power");
+        }
+        mPower.setButtonBrightness(100);
+
         if (mInputEventConsistencyVerifier != null) {
             mInputEventConsistencyVerifier.onTouchEvent(ev, 1);
         }
