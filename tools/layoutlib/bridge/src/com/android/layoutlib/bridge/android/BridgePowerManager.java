@@ -99,6 +99,9 @@ public class BridgePowerManager implements IPowerManager {
     public void setBacklightBrightness(int arg0) throws RemoteException {
         // pass for now.
     }
+    /*
+     *{@hide}
+    */
     @Override
     public void setButtonBrightness(int arg0) throws RemoteException {
         // pass for now.
