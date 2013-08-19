@@ -75,15 +75,22 @@ public:
 
     TextLayoutCacheKey(const TextLayoutCacheKey& other);
 
+     /**
+       * We need to copy the text when we insert the key into the cache itself.
+	* We don't need to copy the text when we are only comparing keys.
+	*/
+    void internalTextCopy();
+
+
     /**
      * Get the size of the Cache key.
      */
     size_t getSize() const;
 
     static int compare(const TextLayoutCacheKey& lhs, const TextLayoutCacheKey& rhs);
-    inline const UChar* getText() const { return textCopy.string(); }
 
 private:
+    const UChar* text; // if text is NULL, use textCopy
     String16 textCopy;
     size_t start;
     size_t count;
@@ -95,6 +102,7 @@ private:
     SkScalar textScaleX;
     uint32_t flags;
     SkPaint::Hinting hinting;
+    inline const UChar* getText() const { return text ? text : textCopy.string(); }
 }; // TextLayoutCacheKey
 
 inline int strictly_order_type(const TextLayoutCacheKey& lhs, const TextLayoutCacheKey& rhs) {
