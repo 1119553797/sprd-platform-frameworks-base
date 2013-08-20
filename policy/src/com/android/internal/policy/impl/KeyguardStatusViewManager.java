@@ -55,7 +55,7 @@ import android.telephony.ServiceState;
  *
  */
 class KeyguardStatusViewManager implements OnClickListener {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final String TAG = "KeyguardStatusView";
 
     public static final int LOCK_ICON = 0; // R.drawable.ic_lock_idle_lock;
