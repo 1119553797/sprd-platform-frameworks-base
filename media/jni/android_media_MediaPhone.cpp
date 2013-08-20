@@ -21,7 +21,11 @@
 #include <surfaceflinger/SurfaceComposerClient.h>
 #include <camera/ICameraService.h>
 #include <camera/Camera.h>
+
+#ifdef BOARD_SUPPORT_FEATURE_VT
 #include <media/mediaphone.h>
+#endif
+
 #include <stdio.h>
 #include <assert.h>
 #include <limits.h>
@@ -64,7 +68,10 @@ static Mutex sLock;
 
 // ----------------------------------------------------------------------------
 // ref-counted object for callbacks
-class JNIMediaPhoneListener: public MediaPhoneListener
+class JNIMediaPhoneListener
+#ifdef BOARD_SUPPORT_FEATURE_VT
+    : public MediaPhoneListener
+#endif
 {
 public:
     JNIMediaPhoneListener(JNIEnv* env, jobject thiz, jobject weak_thiz);
@@ -118,13 +125,14 @@ static sp<Surface> get_surface(JNIEnv* env, jobject clazz)
     Surface* const p = (Surface*)env->GetIntField(clazz, fields.surface_native);
     return sp<Surface>(p);
 }
-
+#ifdef BOARD_SUPPORT_FEATURE_VT
 static sp<MediaPhone> getMediaPhone(JNIEnv* env, jobject thiz)
 {
     Mutex::Autolock l(sLock);
     MediaPhone* const p = (MediaPhone*)env->GetIntField(thiz, fields.context);
     return sp<MediaPhone>(p);
 }
+
 
 static sp<MediaPhone> setMediaPhone(JNIEnv* env, jobject thiz, const sp<MediaPhone>& recorder)
 {
@@ -139,10 +147,11 @@ static sp<MediaPhone> setMediaPhone(JNIEnv* env, jobject thiz, const sp<MediaPho
     env->SetIntField(thiz, fields.context, (int)recorder.get());
     return old;
 }
-
+#endif
 // Returns true if it throws an exception.
 static bool process_media_phone_call(JNIEnv *env, jobject thiz, status_t opStatus, const char* exception, const char* message)
 {
+   #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("process_media_phone_call");
     if (exception == NULL) {  // Don't throw exception. Instead, send an event.
         if (opStatus != (status_t) OK) {
@@ -165,11 +174,13 @@ static bool process_media_phone_call(JNIEnv *env, jobject thiz, status_t opStatu
             }
         }
     }
+    #endif
     return false;
 }
 
 static void android_media_MediaPhone_setCamera(JNIEnv* env, jobject thiz, jobject camera)
 {
+   #ifdef BOARD_SUPPORT_FEATURE_VT
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     // we should not pass a null camera to get_native_camera() call.
     if (camera == NULL) {
@@ -180,8 +191,9 @@ static void android_media_MediaPhone_setCamera(JNIEnv* env, jobject thiz, jobjec
         process_media_phone_call(env, thiz, mp->setCamera(c->remote()),
             "java/lang/RuntimeException", "setCamera failed.");
     }
+   #endif
 }
-
+#ifdef BOARD_SUPPORT_FEATURE_VT
 static void setRemoteSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz)
 {
     jobject surface = env->GetObjectField(thiz, fields.remote_surface);
@@ -199,7 +211,6 @@ static void setRemoteSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz
 		mp->setRemoteSurface(NULL);
     }
 }
-
 static void setLocalSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz)
 {
     jobject surface = env->GetObjectField(thiz, fields.local_surface);
@@ -216,34 +227,41 @@ static void setLocalSurface(const sp<MediaPhone>& mp, JNIEnv *env, jobject thiz)
     	LOGV("setLocalSurface: surface=NULL");
 		mp->setLocalSurface(NULL);
     }
+
 }
+#endif
 
 static void
 android_media_MediaPhone_setRemoteSurface(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return;
     }
     setRemoteSurface(mp, env, thiz);
+    #endif
 }
 
 static void
 android_media_MediaPhone_setLocalSurface(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return;
     }
     setLocalSurface(mp, env, thiz);
+    #endif
 }
 
 
 static void
 android_media_MediaPhone_setParameters(JNIEnv *env, jobject thiz, jstring params)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("setParameter()");
     if (params == NULL)
     {
@@ -262,11 +280,13 @@ android_media_MediaPhone_setParameters(JNIEnv *env, jobject thiz, jstring params
 
     process_media_phone_call(env, thiz, mp->setParameters(String8(params8)), "java/lang/RuntimeException", "setParameter failed.");
     env->ReleaseStringUTFChars(params,params8);
+    #endif
 }
 
 static void
 android_media_MediaPhone_setComm(JNIEnv *env, jobject thiz, jstring path_in, jstring path_out)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
@@ -296,11 +316,13 @@ android_media_MediaPhone_setComm(JNIEnv *env, jobject thiz, jstring path_in, jst
     env->ReleaseStringUTFChars(path_in, pathInStr);
     env->ReleaseStringUTFChars(path_out, pathOutStr);
     process_media_phone_call(env, thiz, opStatus, "java/io/IOException", "setComm failed.");
+    #endif
 }
 
 static void
 android_media_MediaPhone_prepare(JNIEnv *env, jobject thiz)
 {
+   #ifdef BOARD_SUPPORT_FEATURE_VT
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
@@ -311,62 +333,75 @@ android_media_MediaPhone_prepare(JNIEnv *env, jobject thiz)
 	setLocalSurface(mp, env, thiz);
     
     process_media_phone_call( env, thiz, mp->prepare(), "java/io/IOException", "Prepare Async failed.");
+   #endif
 }
 
 static void
 android_media_MediaPhone_prepareAsync(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return;
     }
     process_media_phone_call( env, thiz, mp->prepareAsync(), "java/io/IOException", "Prepare Async failed." );
+    #endif
 }
 
 static void
 android_media_MediaPhone_startPlayer(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("startPlayer");
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     process_media_phone_call(env, thiz, mp->startPlayer(), "java/lang/RuntimeException", "startPlayer failed.");
+    #endif
 }
 
 static void
 android_media_MediaPhone_startRecorder(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("startRecorder");
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     process_media_phone_call(env, thiz, mp->startRecorder(), "java/lang/RuntimeException", "startRecorder failed.");
+    #endif
 }
 
 static void
 android_media_MediaPhone_stop(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("stop");
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     process_media_phone_call(env, thiz, mp->stop(), "java/lang/RuntimeException", "stop failed.");
+    #endif
 }
 
 static void
 android_media_MediaPhone_release(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("release");
     sp<MediaPhone> mp = setMediaPhone(env, thiz, 0);
     if (mp != NULL) {
         mp->setListener(NULL);
         mp->release();
     }
+    #endif
 }
 
 static int
 android_media_MediaPhone_getVideoWidth(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return 0;
     }
+    #endif
     int w;
 //    if (0 != mp->getVideoWidth(&w)) {
 //        LOGE("getVideoWidth failed");
@@ -379,11 +414,13 @@ android_media_MediaPhone_getVideoWidth(JNIEnv *env, jobject thiz)
 static int
 android_media_MediaPhone_getVideoHeight(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return 0;
     }
+    #endif
     int h;
 //    if (0 != mp->getVideoHeight(&h)) {
 //        LOGE("getVideoHeight failed");
@@ -396,6 +433,7 @@ android_media_MediaPhone_getVideoHeight(JNIEnv *env, jobject thiz)
 static void
 android_media_MediaPhone_setDecodeType(JNIEnv *env, jobject thiz, jint type)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("setDecodeType: %d", type);
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
@@ -403,11 +441,13 @@ android_media_MediaPhone_setDecodeType(JNIEnv *env, jobject thiz, jint type)
         return;
     }
     process_media_phone_call(env, thiz, mp->setDecodeType(type) , NULL, NULL);
+    #endif
 }
 
 static void
 android_media_MediaPhone_setEncodeType(JNIEnv *env, jobject thiz, jint type)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("setEncodeType: %d", type);
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
@@ -415,11 +455,13 @@ android_media_MediaPhone_setEncodeType(JNIEnv *env, jobject thiz, jint type)
         return;
     }
     process_media_phone_call(env, thiz, mp->setEncodeType(type) , NULL, NULL);
+    #endif
 }
 
 static void
 android_media_MediaPhone_setAudioStreamType(JNIEnv *env, jobject thiz, jint streamtype)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("setAudioStreamType: %d", streamtype);
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
@@ -427,11 +469,13 @@ android_media_MediaPhone_setAudioStreamType(JNIEnv *env, jobject thiz, jint stre
         return;
     }
     process_media_phone_call(env, thiz, mp->setAudioStreamType(streamtype) , NULL, NULL);
+    #endif
 }
 
 static void
 android_media_MediaPhone_setVolume(JNIEnv *env, jobject thiz, jfloat leftVolume, jfloat rightVolume)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("setVolume: left %f  right %f", leftVolume, rightVolume);
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
@@ -439,11 +483,13 @@ android_media_MediaPhone_setVolume(JNIEnv *env, jobject thiz, jfloat leftVolume,
         return;
     }
     process_media_phone_call(env, thiz, mp->setVolume(leftVolume, rightVolume), NULL, NULL);
+    #endif
 }
 
 static void
 android_media_MediaPhone_enableRecord(JNIEnv *env, jobject thiz, jboolean isEnable, int type, jobject fileDescriptor)
 {		
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("enableRecord: isEnable %d, type: %d", isEnable, type);
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if ((mp == NULL) || ((isEnable && (fileDescriptor == NULL)))) {
@@ -457,11 +503,13 @@ android_media_MediaPhone_enableRecord(JNIEnv *env, jobject thiz, jboolean isEnab
 	} else {
     	process_media_phone_call(env, thiz, mp->enableRecord(isEnable, type, 0), NULL, NULL);
 	}
+    #endif
 }
 
 static void
 android_media_MediaPhone_startUpLink(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("startUpLink: ");
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
@@ -469,11 +517,13 @@ android_media_MediaPhone_startUpLink(JNIEnv *env, jobject thiz)
         return;
     }
     process_media_phone_call(env, thiz, mp->startUpLink(), NULL, NULL);
+    #endif
 }
 
 static void
 android_media_MediaPhone_stopUpLink(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("stopUpLink: ");
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
@@ -481,11 +531,13 @@ android_media_MediaPhone_stopUpLink(JNIEnv *env, jobject thiz)
         return;
     }
     process_media_phone_call(env, thiz, mp->stopUpLink(), NULL, NULL);
+    #endif
 }
 
 static void
 android_media_MediaPhone_startDownLink(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("startDownLink: ");
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
@@ -493,11 +545,13 @@ android_media_MediaPhone_startDownLink(JNIEnv *env, jobject thiz)
         return;
     }
     process_media_phone_call(env, thiz, mp->startDownLink(), NULL, NULL);
+    #endif
 }
 
 static void
 android_media_MediaPhone_stopDownLink(JNIEnv *env, jobject thiz)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("stopDownLink: ");
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
     if (mp == NULL ) {
@@ -505,6 +559,7 @@ android_media_MediaPhone_stopDownLink(JNIEnv *env, jobject thiz)
         return;
     }
     process_media_phone_call(env, thiz, mp->stopDownLink(), NULL, NULL);
+    #endif
 }
 
 // FIXME: deprecated
@@ -517,6 +572,7 @@ android_media_MediaPhone_getFrameAt(JNIEnv *env, jobject thiz, jint msec)
 static void
 android_media_MediaPhone_setCameraParam(JNIEnv *env, jobject thiz, jstring key, jint value)
 {
+    #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("setCameraParam()");
 	const char *temp_key = env->GetStringUTFChars(key, NULL);
     if (temp_key == NULL) {  // Out of memory
@@ -528,12 +584,14 @@ android_media_MediaPhone_setCameraParam(JNIEnv *env, jobject thiz, jstring key, 
     sp<MediaPhone> mp = getMediaPhone(env, thiz);
 	process_media_phone_call(env, thiz, mp->setCameraParam(temp_key, value), NULL, NULL);
 	env->ReleaseStringUTFChars(key, temp_key);
+    #endif
 }
 
 static int
 android_media_MediaPhone_getCameraParam(JNIEnv *env, jobject thiz, jstring key)
 {
-	int value = -1;
+    int value = -1;
+#ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("getCameraParam()");
 	const char *temp_key = env->GetStringUTFChars(key, NULL);
     if (temp_key == NULL) {  // Out of memory
@@ -545,7 +603,8 @@ android_media_MediaPhone_getCameraParam(JNIEnv *env, jobject thiz, jstring key)
 	process_media_phone_call(env, thiz, mp->getCameraParam(temp_key, &value), NULL, NULL);
 	LOGV("getCameraParam: key %s, value %d", temp_key, value);
 	env->ReleaseStringUTFChars(key, temp_key);
-	return value;
+ #endif
+         return value;
 }
 
 const int AT_NONE = 0;
@@ -560,6 +619,7 @@ static int
 android_media_MediaPhone_native_waitRequestForAT(JNIEnv *env, jobject thiz)
 {
 	int retval = AT_NONE;
+       #ifdef BOARD_SUPPORT_FEATURE_VT
 	int vt_pipe_request_iframe = -1;
 	int vt_pipe_report_iframe = -1;
 	if (vt_pipe_request_iframe < 0) vt_pipe_request_iframe = open("/dev/rpipe/ril.vt.1", O_RDWR);
@@ -617,6 +677,7 @@ android_media_MediaPhone_native_waitRequestForAT(JNIEnv *env, jobject thiz)
 	if (vt_pipe_request_iframe > 0) {
 		close(vt_pipe_request_iframe);
 	}
+   #endif
 	return retval;
 }
 
@@ -628,7 +689,7 @@ static void
 android_media_MediaPhone_native_init(JNIEnv *env)
 {
     jclass clazz;
-
+ #ifdef BOARD_SUPPORT_FEATURE_VT
     clazz = env->FindClass("android/media/MediaPhone");
     if (clazz == NULL) {
         jniThrowException(env, "java/lang/RuntimeException", "Can't find android/media/MediaPhone");
@@ -677,12 +738,14 @@ android_media_MediaPhone_native_init(JNIEnv *env)
         jniThrowException(env, "java/lang/RuntimeException", "MediaPhone.postEventFromNative");
         return;
     }
+ #endif
 }
 
 
 static void
 android_media_MediaPhone_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
 {
+   #ifdef BOARD_SUPPORT_FEATURE_VT
     LOGV("setup");
     sp<MediaPhone> mr = new MediaPhone();
     if (mr == NULL) {
@@ -699,6 +762,7 @@ android_media_MediaPhone_native_setup(JNIEnv *env, jobject thiz, jobject weak_th
     mr->setListener(listener);
 
     setMediaPhone(env, thiz, mr);
+   #endif
 }
 
 static void

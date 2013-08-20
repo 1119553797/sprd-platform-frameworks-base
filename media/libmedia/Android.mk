@@ -11,14 +11,11 @@ LOCAL_SRC_FILES:= \
     AudioSystem.cpp \
     mediaplayer.cpp \
     IMediaPlayerService.cpp \
-    IMediaPlayerClient.cpp \
     IMediaRecorderClient.cpp \
     IMediaPlayer.cpp \
     IMediaRecorder.cpp \
-    IMediaPhone.cpp \
     Metadata.cpp \
     mediarecorder.cpp \
-    mediaphone.cpp \
     IMediaMetadataRetriever.cpp \
     mediametadataretriever.cpp \
     ToneGenerator.cpp \
@@ -34,7 +31,18 @@ LOCAL_SRC_FILES:= \
     IEffectClient.cpp \
     AudioEffect.cpp \
     Visualizer.cpp \
-    fixedfft.cpp.arm
+    fixedfft.cpp.arm \
+
+ifneq ($(BOARD_SUPPORT_FEATURE_VT),false)
+LOCAL_SRC_FILES +=\
+    IMediaPhone.cpp\
+    IMediaPlayerClient.cpp\
+    mediaphone.cpp
+endif
+
+ifneq ($(BOARD_SUPPORT_FEATURE_VT),false)
+LOCAL_CFLAGS += -DBOARD_SUPPORT_FEATURE_VT
+endif
 
 LOCAL_SHARED_LIBRARIES := \
 	libui libcutils libutils libbinder libsonivox libicuuc libexpat libsurfaceflinger_client libcamera_client

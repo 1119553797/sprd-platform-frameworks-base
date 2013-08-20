@@ -43,6 +43,10 @@ LOCAL_LDLIBS := -lpthread
 
 LOCAL_MODULE:= libmedia_jni
 
+ifneq ($(BOARD_SUPPORT_FEATURE_VT),false)
+LOCAL_CFLAGS += -DBOARD_SUPPORT_FEATURE_VT
+endif
+
 include $(BUILD_SHARED_LIBRARY)
 
 # build libsoundpool.so
