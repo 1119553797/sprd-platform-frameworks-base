@@ -210,6 +210,7 @@ public class NetworkController extends BroadcastReceiver {
     private AlertDialog wlan2MobileDialog = null;
     private ConnectivityManager mConnectivityManager;
     private boolean supportCMCC = false;
+    static final boolean SUPPORT_CUCC=SystemProperties.get("ro.operator").equals("cucc");
     private static String WHERE = "(" + Downloads.Impl.COLUMN_STATUS + " > '"+(Downloads.Impl.STATUS_PENDING - 1)
         + "') AND (" + Downloads.Impl.COLUMN_STATUS + " < '" + (Downloads.Impl.STATUS_WAITING_FOR_NETWORK + 1) + "')";
     //add by spreadst_lc for cmcc wifi feature
@@ -494,11 +495,11 @@ public class NetworkController extends BroadcastReceiver {
             refreshViews(phoneId);
         } else if (action.equals(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION)) {
             final int phoneId = intent.getIntExtra(Intents.EXTRA_PHONE_ID, 0);
-            updateNetworkNewName(intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN, false),
+            //updateNetworkNewName(intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN, false),
+            updateNetworkName(intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_SPN, false),
                         intent.getStringExtra(Telephony.Intents.EXTRA_SPN),
                         intent.getBooleanExtra(Telephony.Intents.EXTRA_SHOW_PLMN, false),
-                        intent.getStringExtra(Telephony.Intents.EXTRA_PLMN), 
-                        intent.getStringExtra(Telephony.Intents.EXTRA_SHORT_PLMN), 
+                        intent.getStringExtra(Telephony.Intents.EXTRA_PLMN),
                         phoneId);
             refreshViews(phoneId);
         } else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
@@ -1087,39 +1088,49 @@ public class NetworkController extends BroadcastReceiver {
 
         boolean something = false;
         boolean hasSim = PhoneFactory.isCardExist(phoneId);
-        if (showPlmn && plmn != null) {
-            str.append(plmn);
-            something = true;
-        }
-        if (showSpn && spn != null) {
-            if (something) {
-                str.append(" | ");
-            }
-            str.append(spn);
-            something = true;
-        }
 
-        if (something) {
-            if (showPlmn
-                    && plmn != null
-                    && plmn.equals(mContext
-                            .getString(com.android.internal.R.string.lockscreen_carrier_default))) {
-                if (!hasSim) {
-                    str.append(" | ");
-                    str.append(mContext
-                            .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
-                }
-            }
-            mNetworkName[phoneId] = str.toString();
-        } else {
-            str.append(mContext.getString(com.android.internal.R.string.lockscreen_carrier_default));
-            if (!hasSim) {
-                str.append(" | ");
-                str.append(mContext
-                        .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
-            }
-            mNetworkName[phoneId] = str.toString();
-        }
+        if(true == SUPPORT_CUCC){
+					if (showPlmn && plmn != null) {
+					    str.append(plmn);
+					}else if (showSpn && spn != null) {
+					    str.append(spn);
+					}else {
+					    str.append(mContext.getString(com.android.internal.R.string.lockscreen_carrier_default));
+					}
+        }else {
+		        if (showPlmn && plmn != null) {
+		            str.append(plmn);
+		            something = true;
+		        }
+		        if (showSpn && spn != null) {
+		            if (something) {
+		                str.append(" | ");
+		            }
+		            str.append(spn);
+		            something = true;
+		        }
+
+		        if (something) {
+		            if (showPlmn
+		                    && plmn != null
+		                    && plmn.equals(mContext
+		                            .getString(com.android.internal.R.string.lockscreen_carrier_default))) {
+		                if (!hasSim) {
+		                    str.append(" | ");
+		                    str.append(mContext
+		                            .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+		                }
+		            }
+		        } else {
+		            str.append(mContext.getString(com.android.internal.R.string.lockscreen_carrier_default));
+		            if (!hasSim) {
+		                str.append(" | ");
+		                str.append(mContext
+		                        .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+		            }
+		        }
+      }
+      mNetworkName[phoneId] = str.toString();
     }
 
     void updateNetworkNewName(boolean showSpn, String spn, boolean showPlmn, String plmn, String splmn,int phoneId) {
