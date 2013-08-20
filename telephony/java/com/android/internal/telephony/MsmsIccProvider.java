@@ -29,6 +29,8 @@ import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.text.TextUtils;
 import android.util.Log;
+import android.content.Intent;
+import android.app.IntentService;
 
 import java.util.Comparator;
 import java.util.List;
@@ -715,6 +717,12 @@ public class MsmsIccProvider extends IccProvider {
         } else {
             // No results to load
             Log.w(TAG, "Cannot load ADN records efType = "+Integer.toHexString(efType) + ", phoneId=" + phoneId);
+            //owen.chen modify for 201609
+            if (efType == IccConstants.EF_ADN || efType == IccConstants.EF_PBR) {
+                Intent reInitIntent = new Intent("sync_sim_reinit");
+                reInitIntent.putExtra("phoneId", phoneId);
+                getContext().sendBroadcast(reInitIntent);
+            }
             return new MatrixCursor(ADDRESS_BOOK_COLUMN_NAMES);
         }
     }
