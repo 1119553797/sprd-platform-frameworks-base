@@ -73,7 +73,8 @@ public class BitmapFactory {
          * Image are loaded with the {@link Bitmap.Config#ARGB_8888} config by
          * default.
          */
-        public Bitmap.Config inPreferredConfig = Bitmap.Config.ARGB_8888;
+        //public Bitmap.Config inPreferredConfig = Bitmap.Config.ARGB_8888;
+        public Bitmap.Config inPreferredConfig = Bitmap.Config.RGB_565;
 
         /**
          * If dither is true, the decoder will attempt to dither the decoded
@@ -182,7 +183,8 @@ public class BitmapFactory {
          * sharing is allowed, the implementation may still decide to make a
          * deep copy of the input data.
          */
-        public boolean inPurgeable;
+        //public boolean inPurgeable;
+        public boolean inPurgeable = true;
 
         /**
          * This field works in conjuction with inPurgeable. If inPurgeable is
