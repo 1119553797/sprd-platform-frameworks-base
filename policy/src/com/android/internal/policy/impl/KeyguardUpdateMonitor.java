@@ -422,14 +422,14 @@ public class KeyguardUpdateMonitor {
                 	mHandler.sendMessage(mHandler.obtainMessage(MSG_DELETE_UNREAD_MESSAGE_COUNT));
                 }
                 else if(action.equals(ACTION_MISSED_CALL_COUNT)){
-                	int mMissedCallCount = intent.getIntExtra(EXTRA_MISSED_CALL_KEY,0);
+                    mMissedCallCount = intent.getIntExtra(EXTRA_MISSED_CALL_KEY,0);
                     if (DEBUG) {
                         Log.i(TAG,"ACTION_MISSED_CALL_COUNT:get num of unread message :"+mMissedCallCount);
                     }
                     mHandler.sendMessage(mHandler.obtainMessage(MSG_MISSED_CALL_COUNT, mMissedCallCount,0));
                 }
                 else if(action.equals(ACTION_MISSED_CALL_CANCEL)){
-                    int mMissedCallCount = intent.getIntExtra(EXTRA_MISSED_CALL_KEY,0);
+                    mMissedCallCount = intent.getIntExtra(EXTRA_MISSED_CALL_KEY,0);
                     mHandler.sendMessage(mHandler.obtainMessage(MSG_MISSED_CALL_CANCEL, mMissedCallCount,0));
                 }
                 //add newfeature for lockscreen end
@@ -819,6 +819,7 @@ public class KeyguardUpdateMonitor {
 
             callback.onClockVisibilityChanged();
             callback.onMessageCountChanged(mUnreadMessageCount);
+            callback.onMissedCallCountChanged(mMissedCallCount);
         } else {
             if (DEBUG) Log.e(TAG, "Object tried to add another INFO callback",
                     new Exception("Whoops"));
