@@ -88,7 +88,7 @@ void TextLayoutCache::operator()(TextLayoutCacheKey& text, sp<TextLayoutValue>& 
  * Cache clearing
  */
 void TextLayoutCache::clear() {
-    //AutoMutex _l(mLock);
+    AutoMutex _l(mLock);  	//Bug#174474 add for mCache rev.
     mCache.clear();
 }
 
