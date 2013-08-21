@@ -11,6 +11,7 @@ LOCAL_SRC_FILES:= \
     AudioSystem.cpp \
     mediaplayer.cpp \
     IMediaPlayerService.cpp \
+    IMediaPlayerClient.cpp \
     IMediaRecorderClient.cpp \
     IMediaPlayer.cpp \
     IMediaRecorder.cpp \
@@ -36,7 +37,6 @@ LOCAL_SRC_FILES:= \
 ifneq ($(BOARD_SUPPORT_FEATURE_VT),false)
 LOCAL_SRC_FILES +=\
     IMediaPhone.cpp\
-    IMediaPlayerClient.cpp\
     mediaphone.cpp
 endif
 
