@@ -488,7 +488,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
         //fix bug184469
         intentFilter.addAction(Intent.ACTION_FM);
-
+        intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);
         // Register a configuration change listener only if requested by system properties
         // to monitor orientation changes (off by default)
         if (SystemProperties.getBoolean("ro.audio.monitorOrientation", false)) {
@@ -3640,7 +3640,38 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
             } else if (action.equalsIgnoreCase(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 handleConfigurationChanged(context);
             }
-	    else if (action.equals(Intent.ACTION_FM)){    //fix bug184469
+	    else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                state = intent.getIntExtra("state", 0);
+                int microphone = intent.getIntExtra("microphone", 0);
+                Log.v(TAG, "Received HEADSET_PLUG, state=" + state + ",microphone=" + microphone);
+                if (microphone != 0) {
+                    boolean isConnected = mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_WIRED_HEADSET);
+                    if (state == 0 && isConnected) {
+                        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_WIRED_HEADSET,
+                                AudioSystem.DEVICE_STATE_UNAVAILABLE,
+                                "");
+                        mConnectedDevices.remove(AudioSystem.DEVICE_OUT_WIRED_HEADSET);
+                    } else if (state == 1 && !isConnected)  {
+                        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_WIRED_HEADSET,
+                                AudioSystem.DEVICE_STATE_AVAILABLE,
+                                "");
+                        mConnectedDevices.put( new Integer(AudioSystem.DEVICE_OUT_WIRED_HEADSET), "");
+                    }
+                } else {
+                    boolean isConnected = mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_WIRED_HEADPHONE);
+                    if (state == 0 && isConnected) {
+                        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_WIRED_HEADPHONE,
+                                AudioSystem.DEVICE_STATE_UNAVAILABLE,
+                                "");
+                        mConnectedDevices.remove(AudioSystem.DEVICE_OUT_WIRED_HEADPHONE);
+                    } else if (state == 1 && !isConnected)  {
+                        AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_WIRED_HEADPHONE,
+                                AudioSystem.DEVICE_STATE_AVAILABLE,
+                                "");
+                        mConnectedDevices.put( new Integer(AudioSystem.DEVICE_OUT_WIRED_HEADPHONE), "");
+                    }
+                }
+            }else if (action.equals(Intent.ACTION_FM)){    //fix bug184469
 
                state = intent.getIntExtra("state", 0);
                int speaker = intent.getIntExtra("speaker", 0);
