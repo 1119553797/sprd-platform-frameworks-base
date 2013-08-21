@@ -22,7 +22,9 @@
 #include <binder/IMemory.h>
 #include <media/IMediaPlayerService.h>
 #include <media/IMediaRecorder.h>
+#ifdef BOARD_SUPPORT_FEATURE_VT
 #include <media/IMediaPhone.h> //sprd vt must
+#endif
 #include <media/IOMX.h>
 
 #include <utils/Errors.h>  // for status_t
@@ -91,7 +93,7 @@ public:
         remote()->transact(CREATE_MEDIA_RECORDER, data, &reply);
         return interface_cast<IMediaRecorder>(reply.readStrongBinder());
     }
-
+#ifdef BOARD_SUPPORT_FEATURE_VT
     virtual sp<IMediaPhone> createMediaPhone(pid_t pid)//sprd vt must
     {
         Parcel data, reply;
@@ -100,6 +102,7 @@ public:
         remote()->transact(CREATE_MEDIA_PHONE, data, &reply);
         return interface_cast<IMediaPhone>(reply.readStrongBinder());
     }
+#endif
     virtual sp<IMediaPlayer> create(pid_t pid, const sp<IMediaPlayerClient>& client, int fd,
             int64_t offset, int64_t length, int audioSessionId)
     {
