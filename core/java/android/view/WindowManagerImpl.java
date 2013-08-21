@@ -301,8 +301,11 @@ public class WindowManagerImpl implements WindowManager {
                 = new WindowManager.LayoutParams[count-1];
         removeItem(tmpParams, mParams, index);
         mParams = tmpParams;
-
-        view.assignParent(null);
+        
+        //fix bug 204976
+        if (view != null) {
+        	view.assignParent(null);
+        }
         // func doesn't allow null...  does it matter if we clear them?
         //view.setLayoutParams(null);
     }
