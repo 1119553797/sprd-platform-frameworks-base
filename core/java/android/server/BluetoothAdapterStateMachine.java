@@ -391,6 +391,11 @@ final class BluetoothAdapterStateMachine extends StateMachine {
                     //bug#201340 repeat open close airplane mode,BT can't open
                     //sendMessageDelayed(POWER_DOWN_TIMEOUT,POWER_DOWN_TIMEOUT_TIME);
 
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        log("HotOff TURN_COLD Thread.sleep error : " + e.toString());
+                    }
                     transitionTo(mPowerOff);
                     broadcastState(BluetoothAdapter.STATE_OFF);
                     break;
