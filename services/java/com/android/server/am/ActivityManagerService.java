@@ -11140,12 +11140,11 @@ public final class ActivityManagerService extends ActivityManagerNative
         // Look for these and clean up if found.
         // XXX Commented out for now.  Trying to figure out a way to reproduce
         // the actual situation to identify what is actually going on.
-        if (true) {
+        if (true) { //fix 200079
             for (int i=0; i<mLaunchingProviders.size(); i++) {
                 ContentProviderRecord cpr = (ContentProviderRecord)
                         mLaunchingProviders.get(i);
-                if (cpr.connections.size() <= 0 && !cpr.hasExternalProcessHandles()
-                        && cpr.launchingApp && (cpr.launchingApp.pid==app.pid)) {
+                if (cpr.connections.size() <= 0 && !cpr.hasExternalProcessHandles()) {
                     synchronized (cpr) {
                         cpr.launchingApp = null;
                         cpr.notifyAll();
