@@ -15247,7 +15247,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                            app.thread.scheduleTrimMemory(curLevel);
                         } catch (RemoteException e) {
                         }
-                     }
+                    // }
 
                         if (false) {
                             // For now we won't do this; our memory trimming seems
