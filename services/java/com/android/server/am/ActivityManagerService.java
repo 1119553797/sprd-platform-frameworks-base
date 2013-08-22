@@ -15236,18 +15236,18 @@ public final class ActivityManagerService extends ActivityManagerNative
                     if (app.trimMemoryLevel < curLevel && app.thread != null) {
                         //Bug 198677: performance optimization
                         // add code begin
-                        if(app.processName.equals("com.android.launcher")){
+                        /*if(app.processName.equals("com.android.launcher")){
                             try{
                                 app.thread.scheduleTrimMemory(ComponentCallbacks2.TRIM_MEMORY_BACKGROUND);
                             } catch (RemoteException e){
                             }
-                        } else {
+                        } else {*/
                         //added code end
-                            try {
-                                app.thread.scheduleTrimMemory(curLevel);
-                            } catch (RemoteException e) {
-                            }
+                        try {
+                           app.thread.scheduleTrimMemory(curLevel);
+                        } catch (RemoteException e) {
                         }
+                     }
 
                         if (false) {
                             // For now we won't do this; our memory trimming seems
