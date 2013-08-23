@@ -40,6 +40,9 @@ import java.io.IOException;
  */
 public class Ringtone {
     private static final String TAG = "Ringtone";
+    // Bug 203464 start
+    private String silentDefaultUri ="content://settings/system/ringtone";
+    // Bug 203464 end
     private static final boolean LOGD = true;
 
     private static final String[] MEDIA_COLUMNS = new String[] {
@@ -183,6 +186,12 @@ public class Ringtone {
         if (mUri == null) {
             return;
         }
+
+        // Bug 203464 start
+        if (mUri.toString().equals(silentDefaultUri)) {
+            return;
+        }
+        // Bug 203464 end
 
         // TODO: detect READ_EXTERNAL and specific content provider case, instead of relying on throwing
 
