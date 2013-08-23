@@ -162,9 +162,9 @@ public class PhoneFactory {
                     mIccPhoneBookInterfaceManagerProxy[i] = ((SprdPhoneProxy)sProxyPhone[i]).getIccPhoneBookInterfaceManagerProxy();
                     mPhoneSubInfoProxy[i] = ((SprdPhoneProxy)sProxyPhone[i]).getPhoneSubInfoProxy();
                 }
-                new CompositeIccSmsInterfaceManagerProxy(mIccSmsInterfaceManagerProxy);
-                new CompositeIccPhoneBookInterfaceManagerProxy(mIccPhoneBookInterfaceManagerProxy);
-                new CompositePhoneSubInfoProxy(mPhoneSubInfoProxy);
+//                new CompositeIccSmsInterfaceManagerProxy(mIccSmsInterfaceManagerProxy);
+//                new CompositeIccPhoneBookInterfaceManagerProxy(mIccPhoneBookInterfaceManagerProxy);
+//                new CompositePhoneSubInfoProxy(mPhoneSubInfoProxy);
 
                 sMadeDefaults = true;
             }
