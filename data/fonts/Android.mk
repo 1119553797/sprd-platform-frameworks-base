@@ -137,6 +137,12 @@ font_src_files := \
     Clockopia.ttf \
     AndroidClock.ttf \
     AndroidClock_Highlight.ttf \
+	ZawgyiOne.ttf \
+	Tibetan.ttf \
+	Lohit-Punjabi.ttf \
+	Lohit-Gujarati.ttf \
+	KhmerOS.ttf \
+	Phetsarath_OT.ttf \
     AndroidClock_Solid.ttf
 
 ifeq ($(MINIMAL_FONT_FOOTPRINT),true)
@@ -164,7 +170,6 @@ font_src_files += \
     DroidSansThai.ttf \
     DroidSansArmenian.ttf \
     DroidSansGeorgian.ttf \
-    ZawgyiOne.ttf\
     AndroidEmoji.ttf
 
 endif # !MINIMAL_FONT

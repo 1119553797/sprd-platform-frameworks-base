@@ -38,8 +38,16 @@ namespace android {
 #define TYPEFACE_TAMIL_REGULAR "/system/fonts/DroidSansTamil-Regular.ttf"
 #define TYPEFACE_TAMIL_BOLD "/system/fonts/DroidSansTamil-Bold.ttf"
 #define TYPEFACE_THAI "/system/fonts/DroidSansThai.ttf"
-#define TYPEFACE_MYANMAR "/system/fonts/ZawgyiOne.ttf"
+//add for multilangauge
 #define TYPEFACE_TELUGU "/system/fonts/Lohit-Telugu.ttf"
+#define TYPEFACE_MYANMAR "/system/fonts/ZawgyiOne.ttf"
+#define TYPEFACE_TIBETAN "/system/fonts/Tibetan.ttf"
+#define TYPEFACE_GURMUKHI "/system/fonts/Lohit-Punjabi.ttf"
+#define TYPEFACE_GUJARATI "/system/fonts/Lohit-Gujarati.ttf"
+#define TYPEFACE_KHMER "/system/fonts/KhmerOS.ttf"
+#define TYPEFACE_LAO "/system/fonts/Phetsarath_OT.ttf"
+#define TYPEFACE_GEORGIAN "/system/fonts/DroidSansGeorgian.ttf"
+
 
 ANDROID_SINGLETON_STATIC_INSTANCE(TextLayoutEngine);
 
@@ -366,8 +374,16 @@ void TextLayoutShaper::init() {
     mDevanagariRegularTypeface = NULL;
     mTamilRegularTypeface = NULL;
     mTamilBoldTypeface = NULL;
-    mMyanmarTypeface=NULL;
-    mTeluguTypeface=NULL;
+//add for multilangauge
+	mTeluguTypeface = NULL;
+	mMyanmarTypeface = NULL;
+	mTibetanTypeface = NULL;
+	mGurmukhiTypeface = NULL;
+	mGujaratiTypeface = NULL;
+	mKhmerTypeface = NULL;
+	mLaoTypeface = NULL;
+	mGeorgianTypeface = NULL;
+
 }
 
 void TextLayoutShaper::unrefTypefaces() {
@@ -380,8 +396,15 @@ void TextLayoutShaper::unrefTypefaces() {
     SkSafeUnref(mDevanagariRegularTypeface);
     SkSafeUnref(mTamilRegularTypeface);
     SkSafeUnref(mTamilBoldTypeface);
-    SkSafeUnref(mMyanmarTypeface);
-    SkSafeUnref(mTeluguTypeface);
+//add for multilanguage
+	SkSafeUnref(mTeluguTypeface);
+	SkSafeUnref(mMyanmarTypeface);
+	SkSafeUnref(mTibetanTypeface);
+	SkSafeUnref(mGurmukhiTypeface);
+	SkSafeUnref(mGujaratiTypeface);
+	SkSafeUnref(mKhmerTypeface);
+	SkSafeUnref(mLaoTypeface);
+	SkSafeUnref(mGeorgianTypeface);
 
 }
 
@@ -875,14 +898,59 @@ SkTypeface* TextLayoutShaper::typefaceForUnichar(const SkPaint* paint, SkTypefac
 #endif
         }
         break;
-        case HB_Script_Myanmar:
-           typeface = getCachedTypeface(&mMyanmarTypeface, TYPEFACE_MYANMAR);
-           ALOGD("Using Myanmar  Typeface");
-        break;
-        case HB_Script_Telugu:
-           typeface = getCachedTypeface(&mTeluguTypeface, TYPEFACE_TELUGU);
-           ALOGD("Using TELUGU  Typeface");
-        break;
+
+
+//add for multilanguage
+	case HB_Script_Telugu:
+		typeface = getCachedTypeface(&mTeluguTypeface, TYPEFACE_TELUGU);
+#if DEBUG_GLYPHS
+            ALOGD("Using Telugu Typeface");
+#endif
+		break;
+	case HB_Script_Myanmar:
+		typeface = getCachedTypeface(&mMyanmarTypeface, TYPEFACE_MYANMAR);
+#if DEBUG_GLYPHS
+            ALOGD("Using Myanmar Typeface");
+#endif
+		break;
+	case HB_Script_Tibetan:
+		typeface = getCachedTypeface(&mTibetanTypeface, TYPEFACE_TIBETAN);
+#if DEBUG_GLYPHS
+            ALOGD("Using Tibetan Typeface");
+#endif
+		break;
+	case HB_Script_Gurmukhi:
+		typeface = getCachedTypeface(&mGurmukhiTypeface, TYPEFACE_GURMUKHI);
+#if DEBUG_GLYPHS
+            ALOGD("Using Gurmukhi Typeface");
+#endif
+		break;
+	case HB_Script_Gujarati:
+		typeface = getCachedTypeface(&mGujaratiTypeface, TYPEFACE_GUJARATI);//Pajubi
+#if DEBUG_GLYPHS
+            ALOGD("Using Gujarati Typeface");
+#endif
+		break;
+	case HB_Script_Khmer:
+		typeface = getCachedTypeface(&mKhmerTypeface, TYPEFACE_KHMER);
+#if DEBUG_GLYPHS
+            ALOGD("Using Khmer Typeface");
+#endif
+		break;
+	case HB_Script_Lao:	
+		typeface = getCachedTypeface(&mLaoTypeface, TYPEFACE_LAO);
+#if DEBUG_GLYPHS
+            ALOGD("Using Lao Typeface");
+#endif
+		break;
+	case HB_Script_Georgian:
+		typeface = getCachedTypeface(&mGeorgianTypeface, TYPEFACE_GEORGIAN);
+#if DEBUG_GLYPHS
+            ALOGD("Using Georgian Typeface");
+#endif
+		break;
+
+
 
     default:
 #if DEBUG_GLYPHS
@@ -916,8 +984,17 @@ size_t TextLayoutShaper::shapeFontRun(const SkPaint* paint, bool isRTL) {
     case HB_Script_Bengali:
     case HB_Script_Devanagari:
     case HB_Script_Tamil:
-    case HB_Script_Myanmar:
-    case HB_Script_Telugu:
+//add for multilanguage
+	 case HB_Script_Telugu:
+	 case HB_Script_Myanmar:
+	 case HB_Script_Tibetan:
+	 case HB_Script_Gurmukhi:
+	 case HB_Script_Gujarati:
+	 case HB_Script_Khmer:
+	 case HB_Script_Lao:
+	 case HB_Script_Georgian:
+
+
     case HB_Script_Thai:{
         const uint16_t* text16 = (const uint16_t*)(mShaperItem.string + mShaperItem.item.pos);
         const uint16_t* text16End = text16 + mShaperItem.item.length;

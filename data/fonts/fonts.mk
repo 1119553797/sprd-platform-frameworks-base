@@ -43,9 +43,14 @@ PRODUCT_PACKAGES := \
     DroidSansMono.ttf \
     DroidSansArmenian.ttf \
     DroidSansGeorgian.ttf \
-    ZawgyiOne.ttf\
     AndroidEmoji.ttf \
     Clockopia.ttf \
     AndroidClock.ttf \
     AndroidClock_Highlight.ttf \
     AndroidClock_Solid.ttf \
+	ZawgyiOne.ttf \
+	Tibetan.ttf \
+	Lohit-Punjabi.ttf \
+	Lohit-Gujarati.ttf \
+	KhmerOS.ttf \
+	Phetsarath_OT.ttf

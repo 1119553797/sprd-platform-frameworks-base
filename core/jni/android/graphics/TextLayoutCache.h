@@ -198,8 +198,15 @@ private:
     SkTypeface* mDevanagariRegularTypeface;
     SkTypeface* mTamilRegularTypeface;
     SkTypeface* mTamilBoldTypeface;
-    SkTypeface* mMyanmarTypeface;
-    SkTypeface* mTeluguTypeface;
+//add for multilanguage
+	SkTypeface*	mTeluguTypeface;
+	SkTypeface*	mMyanmarTypeface;;
+	SkTypeface*	mTibetanTypeface;
+	SkTypeface*	mGurmukhiTypeface;
+	SkTypeface*	mGujaratiTypeface;
+	SkTypeface*	mKhmerTypeface;
+	SkTypeface*	mLaoTypeface;
+	SkTypeface*	mGeorgianTypeface;
 
     /**
      * Cache of Harfbuzz faces
