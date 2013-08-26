@@ -43,11 +43,6 @@ public class IccPhoneBookInterfaceManagerProxy extends IIccPhoneBook.Stub {
         if(ServiceManager.getService(serviceName) == null) {
             ServiceManager.addService(serviceName, this);
         }
-        if (phoneId == PhoneFactory.getDefaultPhoneId()) {
-            if (ServiceManager.getService("simphonebook") == null) {
-                ServiceManager.addService("simphonebook", this);
-            }
-        }
     }
 
 	public void setmIccPhoneBookInterfaceManager(
