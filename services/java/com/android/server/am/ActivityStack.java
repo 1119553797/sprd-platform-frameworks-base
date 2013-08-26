@@ -1283,7 +1283,15 @@ final class ActivityStack {
         ActivityRecord r;
         boolean behindFullscreen = false;
         for (; i>=0; i--) {
-            r = mHistory.get(i);
+            try {
+                r = mHistory.get(i);
+            } catch (IndexOutOfBoundsException e) {
+                i = mHistory.size() - 1;
+                while (mHistory.get(i) != topRunningActivityLocked(null)) {
+                    i--;
+                }
+                continue;
+            }
             if (DEBUG_VISBILITY) Slog.v(
                     TAG, "Make visible? " + r + " finishing=" + r.finishing
                     + " state=" + r.state);

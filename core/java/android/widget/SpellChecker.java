@@ -731,7 +731,7 @@ public class SpellChecker implements SpellCheckerSessionListener {
                 }
             }
 
-            if (scheduleOtherSpellCheck) {
+            if (scheduleOtherSpellCheck && (wordStart < end)) {
                 // Update range span: start new spell check from last wordStart
                 setRangeSpan(editable, wordStart, end);
             } else {

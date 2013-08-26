@@ -60,6 +60,7 @@ public class Watchdog extends Thread {
     static final boolean RECORD_KERNEL_THREADS = true;
 
     static final int MONITOR = 2718;
+    static final boolean WATCHDOG_DEBUG = true;
 
     static final int TIME_TO_RESTART = DB ? 15*1000 : 60*1000;
     static final int TIME_TO_WAIT = TIME_TO_RESTART / 2;
@@ -127,6 +128,7 @@ public class Watchdog extends Thread {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MONITOR: {
+                    if (WATCHDOG_DEBUG) Slog.v(TAG, " **** 0-CHECK IF FORCE A REBOOT ! **** ");
                     // See if we should force a reboot.
                     int rebootInterval = mReqRebootInterval >= 0
                             ? mReqRebootInterval : REBOOT_DEFAULT_INTERVAL;
@@ -137,6 +139,7 @@ public class Watchdog extends Thread {
                         checkReboot(false);
                     }
 
+                    if (WATCHDOG_DEBUG) Slog.v(TAG, " **** 1-CHECK ALL MONITORS BEGIN ! **** ");
                     final int size = mMonitors.size();
                     for (int i = 0 ; i < size ; i++) {
                         synchronized (Watchdog.this) {
@@ -145,10 +148,13 @@ public class Watchdog extends Thread {
                         mCurrentMonitor.monitor();
                     }
 
+                    if (WATCHDOG_DEBUG) Slog.v(TAG, " **** 2-CHECK ALL MONITORS FINISHED ! **** ");
                     synchronized (Watchdog.this) {
                         mCompleted = true;
                         mCurrentMonitor = null;
                     }
+                    if (WATCHDOG_DEBUG) Slog.v(TAG, " **** 3-SYNC Watchdog.THIS FINISHED ! ****");
+                    if (WATCHDOG_DEBUG) Slog.v(TAG, " ");
                 } break;
             }
         }
@@ -404,8 +410,9 @@ public class Watchdog extends Thread {
         boolean waitedHalf = false;
         while (true) {
             mCompleted = false;
-            mHandler.sendEmptyMessage(MONITOR);
-
+            if (mHandler.sendEmptyMessage(MONITOR)) {
+                if (WATCHDOG_DEBUG) Slog.v(TAG,"**** -1-Watchdog MSG SENT! ****");
+            }
 
             final String name;
             final boolean allowRestart;
@@ -439,6 +446,12 @@ public class Watchdog extends Thread {
                     pids.add(Process.myPid());
                     ActivityManagerService.dumpStackTraces(true, pids, null, null,
                             NATIVE_STACKS_OF_INTEREST);
+                    // The system's been hanging for 30s, another five won't hurt much.
+                    SystemClock.sleep(3000);
+                    if (RECORD_KERNEL_THREADS) {
+                        dumpKernelStackTraces();
+                        SystemClock.sleep(2000);
+                    }
                     waitedHalf = true;
                     continue;
                 }
@@ -451,6 +464,7 @@ public class Watchdog extends Thread {
             // If we got here, that means that the system is most likely hung.
             // First collect stack traces from all threads of the system process.
             // Then kill this process so that the system will restart.
+	    Slog.w(TAG, "*** WATCHDOG IS GOING TO KILL SYSTEM PROCESS: " + name);
             EventLog.writeEvent(EventLogTags.WATCHDOG, name);
 
             ArrayList<Integer> pids = new ArrayList<Integer>();
@@ -463,11 +477,12 @@ public class Watchdog extends Thread {
 
             // Give some extra time to make sure the stack traces get written.
             // The system's been hanging for a minute, another second or two won't hurt much.
-            SystemClock.sleep(2000);
+            SystemClock.sleep(3000);
 
             // Pull our own kernel thread stacks as well if we're configured for that
             if (RECORD_KERNEL_THREADS) {
                 dumpKernelStackTraces();
+		SystemClock.sleep(2000);
             }
 
             // Trigger the kernel to dump all blocked threads to the kernel log

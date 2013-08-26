@@ -2816,7 +2816,14 @@ public final class ActivityThread {
         // we are back active so skip it.
         unscheduleGcIdler();
 
-        ActivityClientRecord r = performResumeActivity(token, clearHide);
+        ActivityClientRecord r;
+        try {
+            r = performResumeActivity(token, clearHide);
+        } catch (Exception e) {
+            Log.e(TAG, "Exception in performResumeActivity: " + e.getMessage() + ", finish it!");
+            e.printStackTrace();
+            r = null;
+        }
 
         if (r != null) {
             final Activity a = r.activity;
