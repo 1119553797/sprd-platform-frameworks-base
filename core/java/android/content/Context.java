@@ -106,14 +106,6 @@ public abstract class Context {
     public static final int BIND_DEBUG_UNBIND = 0x0002;
 
     /**
-     * Flag for {@link #bindService}: If binding from an activity, allow the
-     * target service's process importance to be raised based on whether the
-     * activity is visible to the user, regardless whether another flag is
-     * used to reduce the amount that the client process's overall importance
-     * is used to impact it.
-     */
-    public static final int BIND_ADJUST_WITH_ACTIVITY = 0x0080;
-    /**
      * Flag for {@link #bindService}: don't allow this binding to raise
      * the target service's process to the foreground scheduling priority.
      * It will still be raised to the at least the same memory priority

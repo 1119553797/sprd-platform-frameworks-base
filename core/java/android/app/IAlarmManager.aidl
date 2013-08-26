@@ -31,9 +31,6 @@ interface IAlarmManager {
     void setTimeZone(String zone);
     void remove(in PendingIntent operation);
     void removeAlarm(in PendingIntent operation);
-    //for LC_RAM_SUPPORT
-    void removeAlarmForPackageName(String packageName);
-    boolean checkAlarmForPackageName(String packageName);    
 }
 
 

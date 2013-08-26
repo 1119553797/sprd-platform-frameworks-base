@@ -450,7 +450,6 @@ class ActivityRecord extends IApplicationToken.Stub {
                 launchTime = 0;
                 stack.mInitialStartTime = 0;
             }
-	    service.launchEnd(this);
             startTime = 0;
             stack.reportActivityVisibleLocked(this);
             if (ActivityManagerService.DEBUG_SWITCH) Log.v(
