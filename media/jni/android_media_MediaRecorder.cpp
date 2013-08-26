@@ -352,6 +352,23 @@ android_media_MediaRecorder_start(JNIEnv *env, jobject thiz)
     process_media_recorder_call(env, mr->start(), "java/lang/RuntimeException", "start failed.");
 }
 
+/* SPRD:  Add pause/resume support for MediaRecorder @{ */
+static void
+android_media_MediaRecorder_pause(JNIEnv* env,jobject thiz)
+{
+    ALOGV("pause");
+    sp<MediaRecorder> mr = getMediaRecorder(env,thiz);
+    process_media_recorder_call(env,mr->pause(),"java/lang/RuntimeException","pause failed");
+}
+
+static void
+android_media_MediaRecorder_resume(JNIEnv* env,jobject thiz)
+{
+    ALOGV("resume");
+    sp<MediaRecorder> mr = getMediaRecorder(env,thiz);
+    process_media_recorder_call(env,mr->resume(),"java/lang/RuntimeException","resume failed");
+}
+/* @} */
 static void
 android_media_MediaRecorder_stop(JNIEnv *env, jobject thiz)
 {
@@ -455,6 +472,7 @@ android_media_MediaRecorder_native_finalize(JNIEnv *env, jobject thiz)
 }
 
 // ----------------------------------------------------------------------------
+/* SPRD: add pause/resume support for MediaRecorder @{ */
 
 static JNINativeMethod gMethods[] = {
     {"setCamera",            "(Landroid/hardware/Camera;)V",    (void *)android_media_MediaRecorder_setCamera},
@@ -472,6 +490,8 @@ static JNINativeMethod gMethods[] = {
     {"_prepare",             "()V",                             (void *)android_media_MediaRecorder_prepare},
     {"getMaxAmplitude",      "()I",                             (void *)android_media_MediaRecorder_native_getMaxAmplitude},
     {"start",                "()V",                             (void *)android_media_MediaRecorder_start},
+    {"pause",                "()V",                             (void *)android_media_MediaRecorder_pause},
+    {"resume",                "()V",                             (void *)android_media_MediaRecorder_resume},
     {"stop",                 "()V",                             (void *)android_media_MediaRecorder_stop},
     {"native_reset",         "()V",                             (void *)android_media_MediaRecorder_native_reset},
     {"release",              "()V",                             (void *)android_media_MediaRecorder_release},
@@ -479,6 +499,7 @@ static JNINativeMethod gMethods[] = {
     {"native_setup",         "(Ljava/lang/Object;Ljava/lang/String;)V", (void *)android_media_MediaRecorder_native_setup},
     {"native_finalize",      "()V",                             (void *)android_media_MediaRecorder_native_finalize},
 };
+/* @} */
 
 static const char* const kClassPathName = "android/media/MediaRecorder";
 
