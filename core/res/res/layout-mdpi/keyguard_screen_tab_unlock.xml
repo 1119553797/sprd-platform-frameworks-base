@@ -126,18 +126,13 @@
             android:textColor="?android:attr/textColorSecondary"
             />
     </LinearLayout>
-<!-- emergency call button shown when sim is PUKd and tab_selector is hidden -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="302dip">
-
-        <Button
+    <!-- emergency call button shown when sim is PUKd and tab_selector is hidden -->
+    <Button
             android:id="@+id/emergencyCallButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
+            android:layout_marginTop="2dip"
+                       android:layout_gravity="right"
             android:drawableLeft="@*android:drawable/lockscreen_emergency_button"
             style="?android:attr/buttonBarButtonStyle"
             android:drawablePadding="4dip"
@@ -145,14 +140,16 @@
             android:visibility="gone"
             />
 
+        <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="280dip">
+
         <com.android.internal.widget.multiwaveview.GlowPadView
             android:id="@+id/unlock_widget"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:layout_alignParentBottom="false"
-            android:layout_gravity="top"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
             android:gravity="left|top"
             android:focusable="true"
 
