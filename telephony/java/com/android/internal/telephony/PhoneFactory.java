@@ -260,7 +260,7 @@ public class PhoneFactory {
 
     public static String getServiceName(String defaultServiceName, int phoneId) {
         if (isMultiSim()) {
-            if (phoneId == getPhoneCount()) {
+            if (phoneId == getPhoneCount() || phoneId == RAW_DEFAULT_PHONE_ID) {
                 return defaultServiceName;
             }
             return defaultServiceName + phoneId;
