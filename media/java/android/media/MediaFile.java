@@ -47,6 +47,7 @@ public class MediaFile {
     public static final int FILE_TYPE_OGG     = 7;
     public static final int FILE_TYPE_AAC     = 8;
     public static final int FILE_TYPE_MKA     = 9;
+    public static final int FILE_TYPE_FLAC    = 10;
     private static final int FIRST_AUDIO_FILE_TYPE = FILE_TYPE_MP3;
     private static final int LAST_AUDIO_FILE_TYPE = FILE_TYPE_MKA;
 
@@ -70,6 +71,7 @@ public class MediaFile {
     private static final int FIRST_VIDEO_FILE_TYPE = FILE_TYPE_MP4;
     private static final int LAST_VIDEO_FILE_TYPE = FILE_TYPE_AVI;
     
+	public static final int FILE_TYPE_MP2PS   = 200;
     // Image file types
     public static final int FILE_TYPE_JPEG    = 31;
     public static final int FILE_TYPE_GIF     = 32;
@@ -85,6 +87,24 @@ public class MediaFile {
     public static final int FILE_TYPE_WPL     = 43;
     private static final int FIRST_PLAYLIST_FILE_TYPE = FILE_TYPE_M3U;
     private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_WPL;
+  // Drm file types
+    public static final int FILE_TYPE_FL      = 51;
+    private static final int FIRST_DRM_FILE_TYPE = FILE_TYPE_FL;
+    private static final int LAST_DRM_FILE_TYPE = FILE_TYPE_FL;
+
+    // Other popular file types
+    public static final int FILE_TYPE_TEXT          = 100;
+    public static final int FILE_TYPE_HTML          = 101;
+    public static final int FILE_TYPE_PDF           = 102;
+    public static final int FILE_TYPE_XML           = 103;
+    public static final int FILE_TYPE_MS_WORD       = 104;
+    public static final int FILE_TYPE_MS_EXCEL      = 105;
+    public static final int FILE_TYPE_MS_POWERPOINT = 106;
+    public static final int FILE_TYPE_ZIP           = 107;
+    public static final int FILE_TYPE_APK           =108;
+	public static final int FILE_TYPE_LOG           =109;
+	public static final int FILE_TYPE_IMG           =110;
+
     
     static class MediaFileType {
     
@@ -177,6 +197,22 @@ public class MediaFile {
         addFileType("PLS", FILE_TYPE_PLS, "audio/x-scpls");
         addFileType("WPL", FILE_TYPE_WPL, "application/vnd.ms-wpl");
 
+	 addFileType("FL", FILE_TYPE_FL, "application/x-android-drm-fl");
+
+        addFileType("TXT", FILE_TYPE_TEXT, "text/plain");
+        addFileType("HTM", FILE_TYPE_HTML, "text/html");
+        addFileType("HTML", FILE_TYPE_HTML, "text/html");
+        addFileType("PDF", FILE_TYPE_PDF, "application/pdf");
+        addFileType("DOC", FILE_TYPE_MS_WORD, "application/msword");
+        addFileType("XLS", FILE_TYPE_MS_EXCEL, "application/vnd.ms-excel");
+        addFileType("PPT", FILE_TYPE_MS_POWERPOINT, "application/mspowerpoint");
+        addFileType("FLAC", FILE_TYPE_FLAC, "audio/flac");
+        addFileType("ZIP", FILE_TYPE_ZIP, "application/zip");
+        addFileType("MPG", FILE_TYPE_MP2PS, "video/mp2p");
+        addFileType("MPEG", FILE_TYPE_MP2PS, "video/mp2p");
+	addFileType("APK", FILE_TYPE_APK, "application/apk");
+	addFileType("LOG", FILE_TYPE_APK, "application/log");
+	addFileType("IMG", FILE_TYPE_APK, "application/img");
         // compute file extensions list for native Media Scanner
         StringBuilder builder = new StringBuilder();
         Iterator<String> iterator = sFileTypeMap.keySet().iterator();
@@ -224,4 +260,57 @@ public class MediaFile {
         return (value == null ? 0 : value.intValue());
     }
 
+    // generates a title based on file name
+    public static String getFileTitle(String path) {
+        // extract file name after last slash
+        int lastSlash = path.lastIndexOf('/');
+        if (lastSlash >= 0) {
+            lastSlash++;
+            if (lastSlash < path.length()) {
+                path = path.substring(lastSlash);
+            }
+        }
+        // truncate the file extension (if any)
+        int lastDot = path.lastIndexOf('.');
+        if (lastDot > 0) {
+            path = path.substring(0, lastDot);
+        }
+        return path;
+    }
+
+    // maps mime type to MTP format code
+    private static HashMap<String, Integer> sMimeTypeToFormatMap
+            = new HashMap<String, Integer>();
+    // maps MTP format code to mime type
+    private static HashMap<Integer, String> sFormatToMimeTypeMap
+            = new HashMap<Integer, String>();
+    // maps file extension to MTP format code
+    private static HashMap<String, Integer> sFileTypeToFormatMap
+            = new HashMap<String, Integer>();
+    public static String getMimeTypeForFile(String path) {
+        MediaFileType mediaFileType = getFileType(path);
+        return (mediaFileType == null ? null : mediaFileType.mimeType);
+    }
+
+    public static int getFormatCode(String fileName, String mimeType) {
+        if (mimeType != null) {
+            Integer value = sMimeTypeToFormatMap.get(mimeType);
+            if (value != null) {
+                return value.intValue();
+            }
+        }
+        int lastDot = fileName.lastIndexOf('.');
+        if (lastDot > 0) {
+            String extension = fileName.substring(lastDot + 1);
+            Integer value = sFileTypeToFormatMap.get(extension);
+            if (value != null) {
+                return value.intValue();
+            }
+        }
+        return 0;//MtpConstants.FORMAT_UNDEFINED;
+    }
+
+    public static String getMimeTypeForFormatCode(int formatCode) {
+        return sFormatToMimeTypeMap.get(formatCode);
+    }
 }

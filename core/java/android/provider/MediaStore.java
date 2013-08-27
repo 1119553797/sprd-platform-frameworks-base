@@ -258,7 +258,138 @@ public final class MediaStore {
     /**
      * This class is used internally by Images.Thumbnails and Video.Thumbnails, it's not intended
      * to be accessed elsewhere.
+     * @hide
      */
+    public static final String MEDIA_SCANNER_NEW_OBJECT_ID = "media_scanner_new_object_id";
+    
+    public static final class Files{
+
+        /**
+         * Get the content:// style URI for the files table on the
+         * given volume.
+         *
+         * @param volumeName the name of the volume to get the URI for
+         * @return the URI to the files table on the given volume
+         */
+        public static Uri getContentUri(String volumeName) {
+            return Uri.parse(CONTENT_AUTHORITY_SLASH + volumeName +
+                    "/file");
+        }
+
+        /**
+         * Get the content:// style URI for a single row in the files table on the
+         * given volume.
+         *
+         * @param volumeName the name of the volume to get the URI for
+         * @param rowId the file to get the URI for
+         * @return the URI to the files table on the given volume
+         */
+        public static final Uri getContentUri(String volumeName,
+                long rowId) {
+            return Uri.parse(CONTENT_AUTHORITY_SLASH + volumeName
+                    + "/file/" + rowId);
+        }
+
+        /**
+         * For use only by the MTP implementation.
+         * @hide
+         */
+        public static Uri getMtpObjectsUri(String volumeName) {
+            return Uri.parse(CONTENT_AUTHORITY_SLASH + volumeName +
+                    "/object");
+        }
+
+        /**
+         * For use only by the MTP implementation.
+         * @hide
+         */
+        public static final Uri getMtpObjectsUri(String volumeName,
+                long fileId) {
+            return Uri.parse(CONTENT_AUTHORITY_SLASH + volumeName
+                    + "/object/" + fileId);
+        }
+
+        /**
+         * Used to implement the MTP GetObjectReferences and SetObjectReferences commands.
+         * @hide
+         */
+        public static final Uri getMtpReferencesUri(String volumeName,
+                long fileId) {
+            return Uri.parse(CONTENT_AUTHORITY_SLASH + volumeName
+                    + "/object/" + fileId + "/references");
+        }
+
+        /**
+         * Fields for master table for all media files.
+         * Table also contains MediaColumns._ID, DATA, SIZE and DATE_MODIFIED.
+         */
+        public interface FileColumns extends MediaColumns {
+            /**
+             * The MTP storage ID of the file
+             * <P>Type: INTEGER</P>
+             * @hide
+             */
+            public static final String STORAGE_ID = "storage_id";
+
+            /**
+             * The MTP format code of the file
+             * <P>Type: INTEGER</P>
+             * @hide
+             */
+            public static final String FORMAT = "format";
+
+            /**
+             * The index of the parent directory of the file
+             * <P>Type: INTEGER</P>
+             */
+            public static final String PARENT = "parent";
+
+            /**
+             * The MIME type of the file
+             * <P>Type: TEXT</P>
+             */
+            public static final String MIME_TYPE = "mime_type";
+
+            /**
+             * The title of the content
+             * <P>Type: TEXT</P>
+             */
+            public static final String TITLE = "title";
+
+            /**
+             * The media type (audio, video, image or playlist)
+             * of the file, or 0 for not a media file
+             * <P>Type: TEXT</P>
+             */
+            public static final String MEDIA_TYPE = "media_type";
+
+            /**
+             * Constant for the {@link #MEDIA_TYPE} column indicating that file
+             * is not an audio, image, video or playlist file.
+             */
+            public static final int MEDIA_TYPE_NONE = 0;
+
+            /**
+             * Constant for the {@link #MEDIA_TYPE} column indicating that file is an image file.
+             */
+            public static final int MEDIA_TYPE_IMAGE = 1;
+
+            /**
+             * Constant for the {@link #MEDIA_TYPE} column indicating that file is an audio file.
+             */
+            public static final int MEDIA_TYPE_AUDIO = 2;
+
+            /**
+             * Constant for the {@link #MEDIA_TYPE} column indicating that file is an video file.
+             */
+            public static final int MEDIA_TYPE_VIDEO = 3;
+
+            /**
+             * Constant for the {@link #MEDIA_TYPE} column indicating that file is an playlist file.
+             */
+            public static final int MEDIA_TYPE_PLAYLIST = 4;
+        }
+    }
     private static class InternalThumbnails implements BaseColumns {
         private static final int MINI_KIND = 1;
         private static final int FULL_SCREEN_KIND = 2;
