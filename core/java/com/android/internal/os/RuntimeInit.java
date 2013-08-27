@@ -67,8 +67,10 @@ public class RuntimeInit {
                 mCrashing = true;
 
                 if (mApplicationObject == null) {
+                    dumpHprofInMonkey("system_process", e);// SPRD: Dump hprofile when OOM
                     Slog.e(TAG, "*** FATAL EXCEPTION IN SYSTEM PROCESS: " + t.getName(), e);
                 } else {
+                    dumpHprofInMonkey(t.getName(), e);// SPRD: Dump hprofile when OOM
                     Slog.e(TAG, "FATAL EXCEPTION: " + t.getName(), e);
                 }
 
@@ -87,6 +89,32 @@ public class RuntimeInit {
                 System.exit(10);
             }
         }
+
+		/**
+		 * SPRD: Dump hprofile when OOM. @{
+		 *
+		 * @param: name The name of process
+		 * @param: e The exception
+		 */
+        private void dumpHprofInMonkey(String name, Throwable e) {
+            if (e instanceof OutOfMemoryError) {
+                if (android.os.Debug.isMonkey()) {
+                    android.os.Debug.dumpHprof(name);
+                } else {
+                    Slog.e(TAG, "There is a OOM!");
+                }
+            } else if (e instanceof RuntimeException) {
+                String cause = Log.getStackTraceString(e.getCause());
+                if (null != cause && cause.contains("Caused by: java.lang.OutOfMemoryError")) {
+                    if (android.os.Debug.isMonkey()) {
+                        android.os.Debug.dumpHprof(name);
+                    } else {
+                        Slog.e(TAG, "There is a OOM!");
+                    }
+                }
+            }
+        }
+        /* @} */
     }
 
     private static final void commonInit() {
