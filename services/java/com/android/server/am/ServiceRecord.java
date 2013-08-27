@@ -96,8 +96,9 @@ class ServiceRecord extends Binder {
     int delayRestartCount;	// count of delay restart by AMS because of low memory
     int delayMoreTime;	
     boolean lowMemKilled;
-
-
+    int appAdj = ProcessRecord.TMP_CUR_ADJ_DEFAULT; // when app dided, set app's adj, used for memor y check when check if need restart
+    boolean hasFixAdj;
+    boolean needRestart;
     String stringName;      // caching of toString
     
     static class StartItem {
