@@ -134,7 +134,8 @@ public class TimePickerDialog extends AlertDialog
 
     @Override
     protected void onStop() {
-        tryNotifyTimeSet();
+        /* SPRD: deleted for already do tryNotifyTimeSet in onClick() */
+        //tryNotifyTimeSet();
         super.onStop();
     }
 
