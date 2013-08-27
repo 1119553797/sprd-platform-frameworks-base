@@ -685,6 +685,21 @@ public class MediaRecorder
     public native void start() throws IllegalStateException;
 
     /**
+     * SPRD: pause recording. Call this after start().
+     *
+     * @throws IllegalStateException if it is called before start()
+     */
+
+    public native void pause() throws IllegalStateException;
+
+   /**
+     * SPRD: pause recording. Call this after pause().
+     *
+     * @throws IllegalStateException if it is called before start()
+     */
+    public native void resume() throws IllegalStateException;
+
+    /**
      * Stops recording. Call this after start(). Once recording is stopped,
      * you will have to configure it again as if it has just been constructed.
      * Note that a RuntimeException is intentionally thrown to the
