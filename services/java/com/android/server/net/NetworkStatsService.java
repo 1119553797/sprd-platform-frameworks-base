@@ -213,6 +213,8 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
     }
 
     private final Object mStatsLock = new Object();
+    // SPRD: Add mTimerLock for avoiding deadlock
+    private final Object mTimerLock = new Object();
 
     /** Set of currently active ifaces. */
     private HashMap<String, NetworkIdentitySet> mActiveIfaces = Maps.newHashMap();
@@ -658,7 +660,10 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
 
         final long token = Binder.clearCallingIdentity();
         try {
-            performPoll(FLAG_PERSIST_ALL);
+            /* SPRD: changed for avoiding deadlock @{*/
+            //performPoll(FLAG_PERSIST_ALL);
+            mHandler.obtainMessage(MSG_PERFORM_POLL, FLAG_PERSIST_ALL, 0).sendToTarget();
+            /* @} */
         } finally {
             Binder.restoreCallingIdentity(token);
         }
@@ -945,7 +950,10 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
             mTime.forceRefresh();
         }
 
-        synchronized (mStatsLock) {
+        /* SPRD: changed for avoiding deadlock */
+        //synchronized (mStatsLock) {
+        synchronized (mTimerLock) {
+        /* @} */
             mWakeLock.acquire();
 
             try {
