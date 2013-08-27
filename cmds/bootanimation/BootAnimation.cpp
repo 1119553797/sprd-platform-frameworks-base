@@ -413,7 +413,17 @@ bool BootAnimation::movie()
 
     Animation animation;
     // SPRD: add shutdown animation
-    soundplay();
+    /* SPRD: startup tone should not make sound in silent mode @{ */
+    char silence[PROPERTY_VALUE_MAX];
+    property_get("persist.sys.silence", silence, "0");
+
+    if(strcmp("1", silence)==0){
+        // do something.
+    }else{
+        soundplay();
+    }
+    /* @} */
+
     // Parse the description file
     for (;;) {
         const char* endl = strstr(s, "\n");
