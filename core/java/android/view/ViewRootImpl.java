@@ -1447,6 +1447,11 @@ public final class ViewRootImpl implements ViewParent,
                             }
                             // TODO: should handle create/resize failure
                             layerCanvas = mResizeBuffer.start(hwRendererCanvas);
+                            /* SPRD: Check if it is null @{ */
+                            if (null == layerCanvas) {
+                                return;
+                            }
+                            /* @} */
                             final int restoreCount = layerCanvas.save();
 
                             int yoff;
