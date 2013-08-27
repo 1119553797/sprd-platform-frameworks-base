@@ -47,7 +47,7 @@ int main(int argc, char** argv)
     int noBootAnimation = atoi(value);
     ALOGI_IF(noBootAnimation,  "boot animation disabled");
     if (!noBootAnimation) {
-
+        /* SPRD: Removed for adding shutdown animation @{
         sp<ProcessState> proc(ProcessState::self());
         ProcessState::self()->startThreadPool();
 
@@ -55,7 +55,61 @@ int main(int argc, char** argv)
         sp<BootAnimation> boot = new BootAnimation();
 
         IPCThreadState::self()->joinThreadPool();
+        @} */
 
+        /* SPRD: add shutdonw animation @{ */
+        char argvtmp[2][BOOTANIMATION_PATHSET_MAX];
+
+        memset(argvtmp[0],0,BOOTANIMATION_PATHSET_MAX);
+        memset(argvtmp[1],0,BOOTANIMATION_PATHSET_MAX);
+
+
+        if (argc<2){ /* SPRD: if no param ,exe bootanimation, else exe shutdown animation*/
+            strncpy(argvtmp[0],BOOTANIMATION_BOOT_FILM_PATH_DEFAULT,BOOTANIMATION_PATHSET_MAX);
+            strncpy(argvtmp[1],BOOTANIMATION_BOOT_SOUND_PATH_DEFAULT,BOOTANIMATION_PATHSET_MAX);
+        } else {
+            strncpy(argvtmp[0],BOOTANIMATION_SHUTDOWN_FILM_PATH_DEFAULT,BOOTANIMATION_PATHSET_MAX);
+            strncpy(argvtmp[1],BOOTANIMATION_SHUTDOWN_SOUND_PATH_DEFAULT,BOOTANIMATION_PATHSET_MAX);
+        }
+
+        __android_log_print(ANDROID_LOG_INFO,"BootAnimation", "begine bootanimation!");
+
+        sp<ProcessState> proc(ProcessState::self());
+        ProcessState::self()->startThreadPool();
+
+        // SPRD: create the boot animation object
+        BootAnimation *boota = new BootAnimation();
+        //sp<BootAnimation> boota = new BootAnimation();
+        String8 descname("desc.txt");
+
+        if (argc<2){
+            String8 mpath_default(BOOTANIMATION_BOOT_FILM_PATH_DEFAULT);
+            String8 spath_default(BOOTANIMATION_BOOT_SOUND_PATH_DEFAULT);
+            boota->setmoviepath_default(mpath_default);
+            boota->setsoundpath_default(spath_default);
+            //boota->setdescname_default(descname_default);
+        } else {
+            String8 mpath_default(BOOTANIMATION_SHUTDOWN_FILM_PATH_DEFAULT);
+            String8 spath_default(BOOTANIMATION_SHUTDOWN_SOUND_PATH_DEFAULT);
+            boota->setmoviepath_default(mpath_default);
+            boota->setsoundpath_default(spath_default);
+            //boota->setdescname_default(descname_default);
+
+            __android_log_print(ANDROID_LOG_INFO,"BootAnimation","shutdown exe bootanimation!");
+        }
+
+        String8 mpath(argvtmp[0]);
+        String8 spath(argvtmp[1]);
+
+        boota->setmoviepath(mpath);
+        boota->setsoundpath(spath);
+        boota->setdescname(descname);
+
+        __android_log_print(ANDROID_LOG_INFO,"BootAnimation","%s", mpath.string());
+        __android_log_print(ANDROID_LOG_INFO,"BootAnimation","%s", spath.string());
+        sp<BootAnimation> bootsp = boota;
+        IPCThreadState::self()->joinThreadPool();
+        /* @} */
     }
     return 0;
 }

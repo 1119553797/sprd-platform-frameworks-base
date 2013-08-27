@@ -86,7 +86,11 @@ public final class ShutdownThread extends Thread {
     private Handler mHandler;
 
     private static AlertDialog sConfirmDialog;
-    
+    /* SPRD: add shutdown animation @{ */
+    private static final int MAX_SHUTDOWN_TIME = 5*1000;
+    private static long shutdownTime = 0;
+    /* @} */
+
     private ShutdownThread() {
     }
  
@@ -218,9 +222,19 @@ public final class ShutdownThread extends Thread {
         pd.setIndeterminate(true);
         pd.setCancelable(false);
         pd.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
-
-        pd.show();
-
+        // SPRD: remove for adding shutdown animation
+        // pd.show();
+        /* SPRD: add shutdown animation @{ */
+        shutdownTime = SystemClock.elapsedRealtime() + MAX_SHUTDOWN_TIME;
+        String[] bootcmd = {"bootanimation", "shutdown"} ;
+        try {
+            Log.i(TAG, "exec the bootanimation ");
+            SystemProperties.set("service.bootanim.exit", "0");
+            Runtime.getRuntime().exec(bootcmd);
+        } catch (Exception e){
+             Log.e(TAG,"bootanimation command exe err!");
+        }
+        /* @} */
         sInstance.mContext = context;
         sInstance.mPowerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
 
@@ -366,7 +380,13 @@ public final class ShutdownThread extends Thread {
                 }
             }
         }
-
+        /* SPRD: add shutdown animation @{ */
+        long shutdownDelay = shutdownTime - SystemClock.elapsedRealtime();
+        if (shutdownDelay > 0) {
+            Log.i(TAG, "Shutdown delay:"+shutdownDelay);
+            SystemClock.sleep(shutdownDelay);
+        }
+        /* @} */
         rebootOrShutdown(mReboot, mRebootReason);
     }
 
