@@ -179,6 +179,11 @@ public class MediaRecorder
          *  is applied.
          */
         public static final int VOICE_COMMUNICATION = 7;
+        /** SPRD: RECORD_NO_AUDIO audio source @{
+        *@hide
+        */
+        public static final int RECORD_NO_AUDIO = 9;
+        /** @} */
     }
 
     /**
