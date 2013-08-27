@@ -34,6 +34,7 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Files;
 import android.provider.Settings;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Images;
@@ -296,7 +297,9 @@ public class MediaScanner
         "Euro-House",
         "Dance Hall"
     };
-
+    private static final String[] ID_PROJECTION = new String[] {
+        Files.FileColumns._ID,
+};
     private int mNativeContext;
     private Context mContext;
     private IContentProvider mMediaProvider;
@@ -306,6 +309,7 @@ public class MediaScanner
     private Uri mThumbsUri;
     private Uri mGenresUri;
     private Uri mPlaylistsUri;
+    private Uri mFilesUri;
     private boolean mProcessPlaylists, mProcessGenres;
 
     // used when scanning the image database so we know whether we have to prune
@@ -674,7 +678,7 @@ public class MediaScanner
                 boolean alarms, boolean music, boolean podcasts)
                 throws RemoteException {
             // update database
-            Uri tableUri;
+            Uri tableUri =mFilesUri;
             boolean isAudio = MediaFile.isAudioFileType(mFileType);
             boolean isVideo = MediaFile.isVideoFileType(mFileType);
             boolean isImage = MediaFile.isImageFileType(mFileType);
@@ -686,16 +690,35 @@ public class MediaScanner
                 tableUri = mAudioUri;
             } else {
                 // don't add file to database if not audio, video or image
-                return null;
+                //return null;
+		entry.mTableUri = tableUri;
             }
-            entry.mTableUri = tableUri;
-
+           // entry.mTableUri = tableUri;
+	//entry.mTableUri =mFilesUri;
+	//tableUri =mFilesUri;
+		            Uri result = null;
+	Log.v(TAG, "endfileluqiang " + tableUri);
+	 ContentValues values = toValues();
+	 long rowId = entry.mRowId;
+	    boolean needToSetSettings = false;
+            if (rowId == 0) {
+                //if (mMtpObjectHandle != 0) {
+                    //values.put(MediaStore.MediaColumns.MEDIA_SCANNER_NEW_OBJECT_ID, mMtpObjectHandle);
+                //}
+                if (tableUri == mFilesUri) {
+                    int format = 0;//entry.mFormat;
+                    if (format == 0) {
+                        format = MediaFile.getFormatCode(entry.mPath, mMimeType);
+                    }
+                    //values.put(Files.FileColumns.FORMAT, format);
+                }
+}
              // use album artist if artist is missing
             if (mArtist == null || mArtist.length() == 0) {
                 mArtist = mAlbumArtist;
             }
-
-            ContentValues values = toValues();
+		Log.v(TAG, "endfileluqiangmMimeType " + mMimeType);
+            //ContentValues values = toValues();
             String title = values.getAsString(MediaStore.MediaColumns.TITLE);
             if (title == null || TextUtils.isEmpty(title.trim())) {
                 title = values.getAsString(MediaStore.MediaColumns.DATA);
@@ -734,7 +757,7 @@ public class MediaScanner
                     }
                 }
             }
-            long rowId = entry.mRowId;
+           // long rowId = entry.mRowId;
             if (isAudio && rowId == 0) {
                 // Only set these for new entries. For existing entries, they
                 // may have been modified later, and we want to keep the current
@@ -788,7 +811,7 @@ public class MediaScanner
                 }
             }
 
-            Uri result = null;
+            //Uri result = null;
             if (rowId == 0) {
                 // new file, insert it
                 result = mMediaProvider.insert(tableUri, values);
@@ -1222,6 +1245,7 @@ public class MediaScanner
         mVideoUri = Video.Media.getContentUri(volumeName);
         mImagesUri = Images.Media.getContentUri(volumeName);
         mThumbsUri = Images.Thumbnails.getContentUri(volumeName);
+	mFilesUri = Files.getContentUri(volumeName);
 
         if (!volumeName.equals("internal")) {
             // we only support playlists on external media
@@ -1361,6 +1385,21 @@ public class MediaScanner
         }
 
         try {
+            // check rowid is set. Rowid may be missing if it is inserted by bulkInsert().
+            if (bestMatch.mRowId == 0) {
+                Cursor c = mMediaProvider.query(mAudioUri, ID_PROJECTION,
+                        MediaStore.Files.FileColumns.DATA + "=?",
+                        new String[] { bestMatch.mPath }, null);
+                if (c != null) {
+                    if (c.moveToNext()) {
+                        bestMatch.mRowId = c.getLong(0);
+                    }
+                    c.close();
+                }
+                if (bestMatch.mRowId == 0) {
+                    return false;
+                }
+            }
         // OK, now we need to add this to the database
             values.clear();
             values.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, Integer.valueOf(index));
