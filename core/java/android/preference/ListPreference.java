@@ -16,7 +16,8 @@
 
 package android.preference;
 
-
+// SPRD: try-catch
+import java.util.UnknownFormatConversionException;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +25,8 @@ import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+// SPRD: try-catch
+import android.util.Log;
 
 /**
  * A {@link Preference} that displays a list of entries as
@@ -149,7 +152,18 @@ public class ListPreference extends DialogPreference {
         if (mSummary == null || entry == null) {
             return super.getSummary();
         } else {
-            return String.format(mSummary, entry);
+            /* SPRD: crash when summary contains "%" like
+             * mnt/sdcard/external/Photos/zte c81%#.bmp @{ */
+            String summary = null; 
+            try{
+                summary = String.format(mSummary, entry);
+            }catch(UnknownFormatConversionException e){
+                summary = mSummary;
+                Log.w("ListPreference", "format error in getSummary(), mSummary: " 
+                + mSummary + ", error is: " + e);
+            }
+	    /* @} */ 
+            return summary;
         }
     }
 
