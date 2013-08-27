@@ -886,7 +886,10 @@ public class NetworkController extends BroadcastReceiver {
         } else if (action.equals(WifiManager.RSSI_CHANGED_ACTION)) {
             mWifiRssi = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, -200);
             mWifiLevel = WifiManager.calculateSignalLevel(
-                    mWifiRssi, WifiIcons.WIFI_LEVEL_COUNT);
+                    /* SPRD: modified for showing the same signal with wifi ap list @{*/
+                    //mWifiRssi, WifiIcons.WIFI_LEVEL_COUNT);
+                    mWifiRssi, WifiIcons.WIFI_LEVEL_COUNT - 1) + 1;
+                    /* @} */
         }
 
         updateWifiIcons();
