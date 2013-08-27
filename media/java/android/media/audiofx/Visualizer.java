@@ -380,7 +380,16 @@ public class Visualizer {
             if (mState != STATE_ENABLED) {
                 throw(new IllegalStateException("getWaveForm() called in wrong state: "+mState));
             }
-            return native_getWaveForm(waveform);
+		//modify by 204057  start 2013.08.26
+		int status = native_getWaveForm(waveform);
+		try{
+                  Thread.sleep(30);
+		}catch(Exception e){
+                  e.printStackTrace();
+		}
+            //return native_getWaveForm(waveform);
+            return status;
+		//modify by 204057 end
         }
     }
     /**
