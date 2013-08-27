@@ -19,6 +19,13 @@ LOCAL_SHARED_LIBRARIES := \
     libGLESv1_CM \
     libgui
 
+# SPRD: add shutdown animation @{
+LOCAL_SHARED_LIBRARIES += \
+    libmedia
+
+base := $(LOCAL_PATH)/../..
+# @}
+
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)
 
