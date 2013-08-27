@@ -366,7 +366,10 @@ public final class AccessibilityManager {
      */
     public boolean addAccessibilityStateChangeListener(
             AccessibilityStateChangeListener listener) {
-        return mAccessibilityStateChangeListeners.add(listener);
+        // SPRD: add synchronized
+        synchronized (mHandler) {
+            return mAccessibilityStateChangeListeners.add(listener);
+        }
     }
 
     /**
@@ -377,7 +380,10 @@ public final class AccessibilityManager {
      */
     public boolean removeAccessibilityStateChangeListener(
             AccessibilityStateChangeListener listener) {
-        return mAccessibilityStateChangeListeners.remove(listener);
+        // SPRD: add synchronized
+        synchronized (mHandler) {
+            return mAccessibilityStateChangeListeners.remove(listener);
+        }
     }
 
     /**
