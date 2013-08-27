@@ -62,6 +62,10 @@ import java.util.ArrayList;
  */
 public class ZygoteInit {
 
+    /* SPRD: add Var declaration @{ */
+    private static final boolean LESS_GC = true;
+    private static final boolean ENABLE_NATIVE_PRELOAD = true;
+    /* @} */
     private static final String TAG = "Zygote";
 
     private static final String ANDROID_SOCKET_ENV = "ANDROID_SOCKET_zygote";
@@ -274,6 +278,11 @@ public class ZygoteInit {
                     = new BufferedReader(new InputStreamReader(is), 256);
 
                 int count = 0;
+                /* SPRD: add In the native implementation preloadClass @{ */
+                if (ENABLE_NATIVE_PRELOAD) {
+                    count = runtime.preloadClasses();
+                } else {
+                /* @} */
                 String line;
                 while ((line = br.readLine()) != null) {
                     // Skip comments and blank lines.
@@ -310,6 +319,8 @@ public class ZygoteInit {
                         throw new RuntimeException(t);
                     }
                 }
+            // SPRD: add In the native implementation preloadClass.
+            }
 
                 Log.i(TAG, "...preloaded " + count + " classes in "
                         + (SystemClock.uptimeMillis()-startTime) + "ms.");
@@ -341,8 +352,12 @@ public class ZygoteInit {
 
         Debug.startAllocCounting();
         try {
+            // SPRD: add In the native implementation preloadClass.
+            if(LESS_GC) {
             System.gc();
             runtime.runFinalizationSync();
+            // SPRD: add In the native implementation preloadClass.
+            }
             mResources = Resources.getSystem();
             mResources.startPreloading();
             if (PRELOAD_RESOURCES) {
@@ -379,9 +394,13 @@ public class ZygoteInit {
                 if (false) {
                     Log.v(TAG, " GC at " + Debug.getGlobalAllocSize());
                 }
+                // SPRD: add In the native implementation preloadClass.
+                if(LESS_GC) {
                 System.gc();
                 runtime.runFinalizationSync();
                 Debug.resetGlobalAllocSize();
+                // SPRD: add In the native implementation preloadClass.
+                }
             }
             int id = ar.getResourceId(i, 0);
             if (false) {
@@ -407,9 +426,13 @@ public class ZygoteInit {
                 if (false) {
                     Log.v(TAG, " GC at " + Debug.getGlobalAllocSize());
                 }
+                // SPRD: add In the native implementation preloadClass.
+                if(LESS_GC) {
                 System.gc();
                 runtime.runFinalizationSync();
                 Debug.resetGlobalAllocSize();
+                // SPRD: add In the native implementation preloadClass.
+                }
             }
             int id = ar.getResourceId(i, 0);
             if (false) {
@@ -442,8 +465,12 @@ public class ZygoteInit {
         runtime.runFinalizationSync();
         System.gc();
         runtime.runFinalizationSync();
+        // SPRD: add In the native implementation preloadClass.
+        if(LESS_GC) {
         System.gc();
         runtime.runFinalizationSync();
+        // SPRD: add In the native implementation preloadClass.
+        }
     }
 
     /**
