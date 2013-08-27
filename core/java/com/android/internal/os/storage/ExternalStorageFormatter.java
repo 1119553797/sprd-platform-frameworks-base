@@ -51,12 +51,20 @@ public class ExternalStorageFormatter extends Service
     private boolean mFactoryReset = false;
     private boolean mAlwaysReset = false;
 
+    // SPRD: add state
+    private boolean mFinished = false;
     StorageEventListener mStorageListener = new StorageEventListener() {
         @Override
         public void onStorageStateChanged(String path, String oldState, String newState) {
             Log.i(TAG, "Received storage state changed notification that " +
                     path + " changed state from " + oldState +
                     " to " + newState);
+            /* SPRD: add state for do not update when finished. @{ */
+            if(mFinished){
+                Log.d(TAG, "not to updateProgressState for finished :");
+                return;
+            }
+            /* @} */
             updateProgressState();
         }
     };
@@ -84,12 +92,14 @@ public class ExternalStorageFormatter extends Service
             mAlwaysReset = true;
         }
 
+        // SPRD: add state
+        mFinished = false;
         mStorageVolume = intent.getParcelableExtra(StorageVolume.EXTRA_STORAGE_VOLUME);
 
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(true);
+            mProgressDialog.setCancelable(false);// SPRD: changed true to false 
             mProgressDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             if (!mAlwaysReset) {
                 mProgressDialog.setOnCancelListener(this);
@@ -192,6 +202,8 @@ public class ExternalStorageFormatter extends Service
                         } else {
                             try {
                                 mountService.mountVolume(extStoragePath);
+                                // SPRD: set finish flag to avoid handling mount state again
+                                mFinished = true;
                             } catch (RemoteException e) {
                                 Log.w(TAG, "Failed talking with mount service", e);
                             }
