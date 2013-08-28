@@ -120,4 +120,20 @@ public class PhoneConstants {
     /** APN type for CBS */
     public static final String APN_TYPE_CBS = "cbs";
 
+
+    /* SPRD: @{ */
+    /** SPRD: "Features" accessible through the connectivity manager */
+    public static final String FEATURE_ENABLE_MMS = "enableMMS";
+    public static final String FEATURE_ENABLE_SUPL = "enableSUPL";
+    public static final String FEATURE_ENABLE_DUN = "enableDUN";
+    public static final String FEATURE_ENABLE_HIPRI = "enableHIPRI";
+    public static final String FEATURE_ENABLE_DUN_ALWAYS = "enableDUNAlways";
+    public static final String FEATURE_ENABLE_FOTA = "enableFOTA";
+    public static final String FEATURE_ENABLE_IMS = "enableIMS";
+    public static final String FEATURE_ENABLE_CBS = "enableCBS";
+    public static final String FEATURE_ENABLE_DM = "enableDM";
+    public static final String FEATURE_ENABLE_WAP = "enableWAP";
+    public static final String FEATURE_ENABLE_STK = "enableSTK";
+    /* @} */
+
 }

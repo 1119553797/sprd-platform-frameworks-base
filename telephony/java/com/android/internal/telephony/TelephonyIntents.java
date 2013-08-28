@@ -275,4 +275,54 @@ public class TelephonyIntents {
     public static final String EXTRA_PLMN       = "plmn";
     public static final String EXTRA_SHOW_SPN   = "showSpn";
     public static final String EXTRA_SPN        = "spn";
+
+    /** SPRD: */
+    public static final String EXTRA_SHORT_PLMN = "splmn";
+    /** SPRD: */
+    public static final String EXTRA_PHONE_ID = "phone_id";
+    /** SPRD: */
+    public static final String NOT_NEED_SIMCARD_SELECTION = "NOT_NEED_SIMCARD_SELECTION";
+    /** SPRD: */
+    public static final int SUB1 = 0;
+    /** SPRD: */
+    public static final int SUB2 = 1;
+    /** SPRD: */
+    public static final int SUB3 = 2;
+
+    /** SPRD: */
+    public static final String ACTION_SIM_READY_LOAD_ICCID = "android.intent.action.SIM_READY_LOAD_ICCID";
+
+    /** SPRD: */
+    public static final String ACTION_SIM_DONE_LOAD_ICCID = "android.intent.action.SIM_DONE_LOAD_ICCID";
+
+    /** SPRD: */
+    public static final String ACTION_SIM_ACTIVED_STATE= "android.intent.action.SIM_ACTIVED_STATE";
+
+    /** SPRD: added for phone process restart,send broadcast for rebuilding the adn cache of sim contacts */
+    public static final String ACTION_PHONE_RESTART = "android.intent.action.PHONE_RESTART";
+
+
+    /** SPRD: simcard status changed send action */
+    public static final String ACTION_DEFAULT_PHONE_CHANGE = "android.intent.action.DEFAULT_PHONE_CHANGE_ACTION";
+
+    /**
+     * SPRD:
+     * <p>Broadcast Action: It indicates the STK perform the refresh operation
+     * <p class="note">.
+     * This is a notice to application that the SIM contacts need to be reloaded.
+     *
+     * <p class="note">
+     */
+    public static final String ACTION_STK_REFRESH_SIM_CONTACTS
+            = "android.intent.action.ACTION_STK_REFRESH_SIM_CONTACTS";
+
+    /** SPRD: */
+    public static final String SIM_CARD_PRESENT = "android.intent.action.SIM_CARD_PRESENT";
+    
+    /** SPRD: */
+    public static String ACTION_DATA_CONNECTION_TRACKER_MESSENGER = "com.android.internal.telephony";
+
+    /** SPRD: */
+    public static String EXTRA_MESSENGER = "EXTRA_MESSENGER";
+
 }

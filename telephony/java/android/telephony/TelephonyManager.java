@@ -19,10 +19,13 @@ package android.telephony;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.telephony.Rlog;
 
 import com.android.internal.telephony.IPhoneSubInfo;
@@ -59,35 +62,91 @@ import java.util.regex.Pattern;
 public class TelephonyManager {
     private static final String TAG = "TelephonyManager";
 
-    private static ITelephonyRegistry sRegistry;
+    /** SPRD: @hide */
+    public static final int MODEM_TYPE_GSM = 0;
+    /** SPRD: @hide */
+    public static final int MODEM_TYPE_TDSCDMA = 1;
+    /** SPRD: @hide */
+    public static final int MODEM_TYPE_WCDMA = 2;
+    
+    // SPRD: About default sim card setting for vioce,video,mms
+    public static final int MODE_VOICE = 0;
+    public static final int MODE_VEDIO = 1;
+    public static final int MODE_MMS = 2;
+    public static final int PHONE_ID_INVALID = -1;
+
+    private static final String dualCardDefaultPhone = "com.android.dualcard_settings_preferences";
+    private static final String simCardFavoritekey = "sim_card_favorite";
+    private static final String simCardFavoriteVoicekey = "sim_card_favorite_voice";
+    private static final String simCardFavoriteVideokey = "sim_card_favorite_video";
+    private static final String simCardFavoriteMmskey = "sim_card_favorite_mms";
+    private static final String sharedActivityName = "com.android.phone";
+    //SPRD : we should remove static for dsds.
+    private ITelephonyRegistry sRegistry;
     private final Context mContext;
+    private int mPhoneId;
 
     /** @hide */
     public TelephonyManager(Context context) {
+        this(context, getPhoneCount());
+    }
+
+    /** SPRD: add for dsds.**/
+    public TelephonyManager(Context context, int phoneId) {
         Context appContext = context.getApplicationContext();
         if (appContext != null) {
             mContext = appContext;
         } else {
             mContext = context;
         }
-
         if (sRegistry == null) {
             sRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
-                    "telephony.registry"));
+                    getServiceName("telephony.registry",phoneId)));
         }
+        mPhoneId = phoneId;
     }
 
     /** @hide */
-    private TelephonyManager() {
+    private TelephonyManager(int phoneId) {
         mContext = null;
+        if (sRegistry == null) {
+            sRegistry = ITelephonyRegistry.Stub.asInterface(ServiceManager.getService(
+                    SprdPhoneSupport.getServiceName("telephony.registry", phoneId)));
+        }
+        mPhoneId = phoneId;
     }
 
-    private static TelephonyManager sInstance = new TelephonyManager();
+    //private static TelephonyManager sInstance = new TelephonyManager();
+    private static TelephonyManager[] sInstance;
+
+    static {
+        if (isMultiSim()) {
+            sInstance = new TelephonyManager[getPhoneCount() + 1];
+            for (int i = 0; i <= getPhoneCount(); i++) {
+                sInstance[i] = new TelephonyManager(i);
+            }
+        } else {
+            sInstance = new TelephonyManager[1];
+            sInstance[0] = new TelephonyManager(0);
+        }
+    }
 
     /** @hide
     /* @deprecated - use getSystemService as described above */
     public static TelephonyManager getDefault() {
-        return sInstance;
+        if (isMultiSim()) {
+            return sInstance[getPhoneCount()];
+        } else {
+            return sInstance[0];
+        }
+    }
+
+    /** @hide */
+    public static TelephonyManager getDefault(int phoneId) {
+        if (phoneId >= getPhoneCount()) {
+            throw new IllegalArgumentException("phoneId exceeds phoneCount");
+        }
+        return sInstance[phoneId];
     }
 
     /** {@hide} */
@@ -374,8 +433,11 @@ public class TelephonyManager {
     }
 
     private int getPhoneTypeFromProperty() {
+        String currentActivePhoneProperty = SprdPhoneSupport.getProperty(
+                TelephonyProperties.CURRENT_ACTIVE_PHONE, mPhoneId);
         int type =
-            SystemProperties.getInt(TelephonyProperties.CURRENT_ACTIVE_PHONE,
+            //SystemProperties.getInt(TelephonyProperties.CURRENT_ACTIVE_PHONE,
+            SystemProperties.getInt(currentActivePhoneProperty,
                     getPhoneTypeFromNetworkType());
         return type;
     }
@@ -522,7 +584,16 @@ public class TelephonyManager {
      * on a CDMA network).
      */
     public String getNetworkOperatorName() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ALPHA);
+        //return SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ALPHA);
+        String operatorAlphaProperty = SprdPhoneSupport.getProperty(
+                TelephonyProperties.PROPERTY_OPERATOR_ALPHA, mPhoneId);
+        return SystemProperties.get(operatorAlphaProperty);
+    }
+
+    public String getSimIccId(int phoneId) {
+        String iccidProperty = SprdPhoneSupport.getProperty(TelephonyProperties.PROPERTY_SIM_ICCID,
+                phoneId);
+        return SystemProperties.get(iccidProperty);
     }
 
     /**
@@ -533,7 +604,10 @@ public class TelephonyManager {
      * on a CDMA network).
      */
     public String getNetworkOperator() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_NUMERIC);
+        //return SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_NUMERIC);
+        String operatorNumericProperty = SprdPhoneSupport.getProperty(
+                TelephonyProperties.PROPERTY_OPERATOR_NUMERIC, mPhoneId);
+        return SystemProperties.get(operatorNumericProperty);
     }
 
     /**
@@ -543,7 +617,10 @@ public class TelephonyManager {
      * Availability: Only when user registered to a network.
      */
     public boolean isNetworkRoaming() {
-        return "true".equals(SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ISROAMING));
+        //return "true".equals(SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ISROAMING));
+        String operatorIsRoamingProperty = SprdPhoneSupport.getProperty(
+                TelephonyProperties.PROPERTY_OPERATOR_ISROAMING, mPhoneId);
+        return "true".equals(SystemProperties.get(operatorIsRoamingProperty));
     }
 
     /**
@@ -555,7 +632,10 @@ public class TelephonyManager {
      * on a CDMA network).
      */
     public String getNetworkCountryIso() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY);
+        //return SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY);
+        String operatorIsoCountryProperty = SprdPhoneSupport.getProperty(
+                TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY, mPhoneId);
+        return SystemProperties.get(operatorIsoCountryProperty);
     }
 
     /** Network type is unknown */
@@ -790,6 +870,23 @@ public class TelephonyManager {
     }
 
     /**
+     * SPRD:
+     * 
+     * @return true if a IccFdn enabled
+     */
+    public boolean getIccFdnEnabled() {
+        try {
+            return getITelephony().getIccFdnEnabled();
+        } catch (RemoteException ex) {
+            // Assume no ICC card if remote exception which shouldn't happen
+            return false;
+        } catch (NullPointerException ex) {
+            // This could happen before phone restarts due to crashing
+            return false;
+        }
+    }
+
+    /**
      * Returns a constant indicating the state of the
      * device SIM card.
      *
@@ -801,7 +898,10 @@ public class TelephonyManager {
      * @see #SIM_STATE_READY
      */
     public int getSimState() {
-        String prop = SystemProperties.get(TelephonyProperties.PROPERTY_SIM_STATE);
+        //String prop = SystemProperties.get(TelephonyProperties.PROPERTY_SIM_STATE);
+        String simStateProperty = SprdPhoneSupport.getProperty(TelephonyProperties.PROPERTY_SIM_STATE,
+                mPhoneId);
+        String prop = SystemProperties.get(simStateProperty);
         if ("ABSENT".equals(prop)) {
             return SIM_STATE_ABSENT;
         }
@@ -831,7 +931,10 @@ public class TelephonyManager {
      * @see #getSimState
      */
     public String getSimOperator() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC);
+        //return SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC);
+        String iccOperatorNumericProperty = SprdPhoneSupport.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC, mPhoneId);
+        return SystemProperties.get(iccOperatorNumericProperty);
     }
 
     /**
@@ -842,14 +945,20 @@ public class TelephonyManager {
      * @see #getSimState
      */
     public String getSimOperatorName() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA);
+        //return SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA);
+        String iccOperatorAlphaProperty = SprdPhoneSupport.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA, mPhoneId);
+        return SystemProperties.get(iccOperatorAlphaProperty);
     }
 
     /**
      * Returns the ISO country code equivalent for the SIM provider's country code.
      */
     public String getSimCountryIso() {
-        return SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY);
+        //return SystemProperties.get(TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY);
+        String iccOperatorIsoCountryProperty = SprdPhoneSupport.getProperty(
+                TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY, mPhoneId);
+        return SystemProperties.get(iccOperatorIsoCountryProperty);
     }
 
     /**
@@ -1115,7 +1224,8 @@ public class TelephonyManager {
 
     private IPhoneSubInfo getSubscriberInfo() {
         // get it each time because that process crashes a lot
-        return IPhoneSubInfo.Stub.asInterface(ServiceManager.getService("iphonesubinfo"));
+        //return IPhoneSubInfo.Stub.asInterface(ServiceManager.getService("iphonesubinfo"));
+        return IPhoneSubInfo.Stub.asInterface(ServiceManager.getService(SprdPhoneSupport.getServiceName("iphonesubinfo", mPhoneId)));
     }
 
 
@@ -1216,8 +1326,30 @@ public class TelephonyManager {
         }
     }
 
+    /**
+     * SPRD:
+     * Returns a constant indicating the current data connection state
+     * (cellular).
+     *
+     * @see #DATA_DISCONNECTED
+     * @see #DATA_CONNECTING
+     * @see #DATA_CONNECTED
+     * @see #DATA_SUSPENDED
+     */
+    public int getDataStatebyApnType(String apnType) {
+        try {
+            return getITelephony().getDataStatebyApnType(apnType);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return DATA_DISCONNECTED;
+        } catch (NullPointerException ex) {
+            return DATA_DISCONNECTED;
+        }
+    }
+
     private ITelephony getITelephony() {
-        return ITelephony.Stub.asInterface(ServiceManager.getService(Context.TELEPHONY_SERVICE));
+        //return ITelephony.Stub.asInterface(ServiceManager.getService(Context.TELEPHONY_SERVICE));
+        return ITelephony.Stub.asInterface(ServiceManager.getService(SprdPhoneSupport.getServiceName(Context.TELEPHONY_SERVICE, mPhoneId)));
     }
 
     //
@@ -1399,5 +1531,438 @@ public class TelephonyManager {
         } catch (RemoteException ex) {
         } catch (NullPointerException ex) {
         }
+    }
+
+    /** SPRD: */
+    public static int getPhoneCount() {
+        return SprdPhoneSupport.getPhoneCount();
+    }
+
+    /** SPRD: check if is multiple sim */
+    public static boolean isMultiSim() {
+        return SprdPhoneSupport.isMultiSim();
+    }
+
+    /** SPRD: */
+    public static int getDefaultPhoneId() {
+        return SprdPhoneSupport.getDefaultPhoneId();
+    }
+
+    /** SPRD: */
+    public static String getServiceName(String defaultServiceName, int phoneId) {
+        return SprdPhoneSupport.getServiceName(defaultServiceName, phoneId);
+    }
+
+    /** SPRD: */
+    public static String getFeature(String defaultFeature, int phoneId) {
+        return SprdPhoneSupport.getFeature(defaultFeature, phoneId);
+    }
+
+    /** SPRD: */
+    public static String getProperty(String defaultProperty, int phoneId) {
+        return SprdPhoneSupport.getProperty(defaultProperty, phoneId);
+    }
+
+    /** SPRD: */
+    public static String getSetting(String defaultSetting, int phoneId) {
+        return SprdPhoneSupport.getSetting(defaultSetting, phoneId);
+    }
+
+    /** SPRD: */
+    public static String getAction(String defaultAction, int phoneId) {
+        return SprdPhoneSupport.getAction(defaultAction, phoneId);
+    }
+
+    /** SPRD: */
+    public int getModemType() {
+        String baseBand = SystemProperties.get(
+                SprdPhoneSupport.getProperty(TelephonyProperties.PROPERTY_BASEBAND_VERSION, mPhoneId),
+                "");
+        String modemValue = null;
+
+        if (baseBand != null && !baseBand.equals("")) {
+            // Log.d(TAG, "baseband = "+baseBand);
+            modemValue = baseBand.split("\\|")[1];
+            // Log.d(TAG, "modemValue = "+modemValue);
+            // if(modemValue.equals("sc8805_sp8805")){//fix bug 7294 close
+            /* Add 20130620 Spreadst of 179970 add sc8830 start */
+            if ((modemValue.equals("sc8810_modem"))
+                    || (modemValue.equals("sc8825_modem"))
+                    || (modemValue.equals("sc8830_modem"))) {// fix bug 7294 add
+                return MODEM_TYPE_TDSCDMA;
+            } else if ((modemValue.equals("sc6810_sp6810"))
+                    || (modemValue.equals("sc6825_modem"))) {
+                return MODEM_TYPE_GSM;
+            } else if ((modemValue.equals("sc7702_modem"))
+                    || (modemValue.equals("sc7710g2_modem"))
+                    || (modemValue.equalsIgnoreCase("sc8830_CP0_modem"))) {
+                return MODEM_TYPE_WCDMA;
+            }
+            /* Add 20130620 Spreadst of 179970 add sc8830 end */
+        }
+        Rlog.d(TAG, "can not get the baseband version");
+        return MODEM_TYPE_GSM;
+    }
+
+    /**
+     * SPRD: Returns the array，String[0] - sres,String[1] - kc,
+     * 
+     * @hide
+     */
+    public String[] Mbbms_Gsm_Authenticate(String nonce) {
+        String[] authen;
+        try {
+            authen = getITelephony().Mbbms_Gsm_Authenticate(nonce);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return null;
+        } catch (NullPointerException ex) {
+            return null;
+        }
+        return authen;
+    }
+
+    /**
+     * SPRD: Returns the array，String[0] ，“1” -need GBA recynchronization，“0” -
+     * succeed。 String[1] - res, String[2] -ck, String[3] - ik;
+     * 
+     * @hide
+     */
+    public String[] Mbbms_USim_Authenticate(String nonce, String autn) {
+        String[] authen;
+        try {
+            authen = getITelephony().Mbbms_USim_Authenticate(nonce, autn);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return null;
+        } catch (NullPointerException ex) {
+            return null;
+        }
+        return authen;
+    }
+
+    /** SPRD */
+    public boolean isVTCall() {
+        try {
+            return getITelephony().isVTCall();
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }
+    }
+
+
+    /** SPRD */
+    public static final int UNLOCK_PIN = 0;
+    /** SPRD */
+    public static final int UNLOCK_PIN2 = 1;
+    /** SPRD */
+    public static final int UNLOCK_PUK = 2;
+    /** SPRD */
+    public static final int UNLOCK_PUK2 = 3;
+
+    /**
+     * SPRD:
+     * 
+     * @see TelephonyManager#UNLOCK_PIN
+     * @see TelephonyManager#UNLOCK_PIN2
+     * @see TelephonyManager#UNLOCK_PUK
+     * @see TelephonyManager#UNLOCK_PUK2
+     * @param type
+     * @return -1 if invalid
+     */
+    public int getRemainTimes(int type) {
+        try {
+            return getITelephony().getRemainTimes(type);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return -1;
+        } catch (NullPointerException ex) {
+            return -1;
+        }
+
+    }
+
+    /**
+     * SPRD:
+     * 
+     * @hide
+     */
+    public boolean setApnActivePdpFilter(String apntype, boolean filterenable) {
+        try {
+            return getITelephony().setApnActivePdpFilter(apntype, filterenable);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * SPRD:
+     * 
+     * @hide
+     */
+    public boolean getApnActivePdpFilter(String apntype) {
+        try {
+            return getITelephony().getApnActivePdpFilter(apntype);
+        } catch (RemoteException ex) {
+            // the phone process is restarting.
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }
+    }
+
+
+    /**
+     * SPRD:
+     * 
+     * @see TelephonyManager#MODE_VOICE
+     * @see TelephonyManager#MODE_VEDIO
+     * @see TelephonyManager#MODE_MMS
+     * 
+     * @see TelephonyManager#getDefaultSim(Context, int)
+     */
+    public static boolean setDefaultSim(Context context, int mode, int phoneId) {
+
+        String phoneIdKey = "";
+        switch (mode) {
+            case MODE_VOICE:
+                phoneIdKey = Settings.System.MULTI_SIM_VOICE_CALL;
+                break;
+            case MODE_VEDIO:
+                phoneIdKey = Settings.System.MULTI_SIM_VIDEO_CALL;
+                break;
+            case MODE_MMS:
+                phoneIdKey = Settings.System.MULTI_SIM_MMS;
+                break;
+            default:
+                break;
+        }
+        Rlog.d(TAG, "setDefaultSim:phoneIdKey " + phoneIdKey + " phoneId " + phoneId);
+        return Settings.System.putInt(context.getContentResolver(),
+                phoneIdKey, phoneId);
+    }
+
+    /**
+     * SPRD:
+     * 
+     * @see TelephonyManager#MODE_VOICE
+     * @see TelephonyManager#MODE_VEDIO
+     * @see TelephonyManager#MODE_MMS
+     * 
+     * @see TelephonyManager#setDefaultSim(Context, int, int)
+     */
+    public static int getDefaultSim(Context context, int mode) {
+        if (getPhoneCount() == 1) {
+            return 0;
+        }
+        String phoneIdKey = "";
+        int phoneId = PHONE_ID_INVALID;
+        switch (mode) {
+            case MODE_VOICE:
+                phoneIdKey = Settings.System.MULTI_SIM_VOICE_CALL;
+                phoneId = Settings.System.getInt(context.getContentResolver(),
+                        phoneIdKey, SprdPhoneSupport.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+                break;
+            case MODE_VEDIO:
+                phoneIdKey = Settings.System.MULTI_SIM_VIDEO_CALL;
+                //when modem type is MODEM_TYPE_TDSCDMA or MODEM_TYPE_WCDMA, only phone0 can make a vedio call
+                if (getDefault().getModemType() > 0) {
+                    phoneId = Settings.System.getInt(context.getContentResolver(),
+                            phoneIdKey, SprdPhoneSupport.DEFAULT_PHONE_ID);
+                } else {
+                    phoneId = Settings.System.getInt(context.getContentResolver(),
+                            phoneIdKey, SprdPhoneSupport.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+                }
+                break;
+            case MODE_MMS:
+                phoneIdKey = Settings.System.MULTI_SIM_MMS;
+                phoneId = Settings.System.getInt(context.getContentResolver(),
+                        phoneIdKey, SprdPhoneSupport.DEFAULT_DUAL_SIM_INIT_MMS_PHONE_ID);
+                break;
+            default:
+                break;
+        }
+        int iccCount = 0;
+        int avtivedPhone = PHONE_ID_INVALID;
+        for (int i = 0; i < getPhoneCount(); ++i) {
+            TelephonyManager tmp = getDefault(i);
+            if (tmp != null) {
+                if (tmp.hasIccCard()) {
+                    iccCount++;
+                    avtivedPhone = i;
+                } else if (phoneId == i) {
+                    phoneId = PHONE_ID_INVALID;
+                }
+            }
+        }
+        if (PHONE_ID_INVALID == phoneId && iccCount > 1) {
+            return PHONE_ID_INVALID;
+        }
+        if (iccCount == 1) {
+            phoneId = avtivedPhone;
+            TelephonyManager.setDefaultSim(context, MODE_MMS, phoneId);
+            TelephonyManager.setDefaultSim(context, MODE_VOICE, phoneId);
+            TelephonyManager.setDefaultSim(context, MODE_VEDIO, phoneId);
+        }
+        return phoneId;
+    }
+
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public static int getDefaultDataPhoneId(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.MULTI_SIM_DATA_CALL, SprdPhoneSupport.getDefaultPhoneId());
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public static boolean setDefaultDataPhoneId(Context context, int phoneId) {
+        SprdPhoneSupport.setDefaultPhoneId(phoneId);
+        boolean setResult = Settings.System.putInt(context.getContentResolver(),
+                Settings.System.MULTI_SIM_DATA_CALL, phoneId);
+        return setResult;
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public static int getSettingPhoneId(Context context) {
+        SharedPreferences settings = getPhoneSetting(context);
+        int setPhoneId = settings.getInt(simCardFavoritekey, -1);
+        if (setPhoneId == -1) {
+            setPhoneId = TelephonyManager.getDefaultDataPhoneId(context);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(simCardFavoritekey, setPhoneId);
+            editor.commit();
+        }
+        return setPhoneId;
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public static void setAutoDefaultPhoneId(Context context, int setPhoneId) {
+        SharedPreferences settings = getPhoneSetting(context);
+
+        int DefaultId = settings.getInt(simCardFavoritekey, -1);
+        if (setPhoneId != DefaultId) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(simCardFavoritekey, setPhoneId);
+            editor.commit();
+        }
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public static void setSubscriberDesiredSim(Context context, int mode, int setPhoneId) {
+        SharedPreferences settings = getPhoneSetting(context);
+        String phoneIdKey = "";
+
+        switch (mode) {
+            case MODE_VOICE:
+                phoneIdKey = simCardFavoriteVoicekey;
+                break;
+            case MODE_VEDIO:
+                phoneIdKey = simCardFavoriteVideokey;
+                break;
+            case MODE_MMS:
+                phoneIdKey = simCardFavoriteMmskey;
+                break;
+            default:
+                break;
+        }
+        Rlog.d(TAG, "setDefaultSim:phoneIdKey " + phoneIdKey + " phoneId " + setPhoneId);
+
+        int DefaultId = settings.getInt(phoneIdKey, SprdPhoneSupport.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+        if (setPhoneId != DefaultId) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(phoneIdKey, setPhoneId);
+            editor.commit();
+        }
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public static int getSubscriberDesiredSim(Context context, int mode) {
+        SharedPreferences settings = getPhoneSetting(context);
+        String phoneIdKey = "";
+        int setPhoneId = SprdPhoneSupport.DEFAULT_DUAL_SIM_INIT_PHONE_ID;
+        switch (mode) {
+            case MODE_VOICE:
+                phoneIdKey = simCardFavoriteVoicekey;
+                setPhoneId = settings.getInt(phoneIdKey, SprdPhoneSupport.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+                break;
+            case MODE_VEDIO:
+                phoneIdKey = simCardFavoriteVideokey;
+                //when modem type is MODEM_TYPE_TDSCDMA or MODEM_TYPE_WCDMA, only phone0 can make a vedio call
+                if (getDefault().getModemType() > 0) {
+                    setPhoneId = settings.getInt(phoneIdKey, SprdPhoneSupport.DEFAULT_PHONE_ID);
+                } else {
+                    setPhoneId = settings.getInt(phoneIdKey, SprdPhoneSupport.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+                }
+                break;
+            case MODE_MMS:
+                phoneIdKey = simCardFavoriteMmskey;
+                setPhoneId = settings.getInt(phoneIdKey, SprdPhoneSupport.DEFAULT_DUAL_SIM_INIT_MMS_PHONE_ID);
+                break;
+            default:
+                break;
+        }
+        Rlog.d(TAG, "getSettingDefaultSim:phoneIdKey " + phoneIdKey);
+
+        return setPhoneId;
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    private static SharedPreferences getPhoneSetting(Context context) {
+        Context aimContext = null;
+        try {
+            aimContext = context.createPackageContext(sharedActivityName,
+                    Context.CONTEXT_IGNORE_SECURITY);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return aimContext.getSharedPreferences(dualCardDefaultPhone,
+                Context.MODE_WORLD_READABLE + Context.MODE_WORLD_WRITEABLE);
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public static boolean isRadioBusy(Context context) {
+        return Settings.Secure.getInt(context.getContentResolver(),
+                Settings.Secure.RADIO_OPERATION, 0) == 1;
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public static void setRadioBusy(Context context, boolean mRadioPower) {
+        Rlog.d(TAG, "setRadioBusy " + mRadioPower);
+        Settings.Secure.putInt(context.getContentResolver(),
+                Settings.Secure.RADIO_OPERATION, mRadioPower ? 1 : 0);
     }
 }

@@ -27,6 +27,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.ResultReceiver;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 
 import java.net.InetAddress;
 
@@ -355,11 +356,22 @@ public class ConnectivityManager {
      */
     public static final int TYPE_WIFI_P2P    = 13;
 
+//    /** {@hide} */
+//    public static final int MAX_RADIO_TYPE   = TYPE_WIFI_P2P;
+//
+//    /** {@hide} */
+//    public static final int MAX_NETWORK_TYPE = TYPE_WIFI_P2P;
+
+    /** SPRD : add by spreadst. @{ */
     /** {@hide} */
-    public static final int MAX_RADIO_TYPE   = TYPE_WIFI_P2P;
+    public static final int MAX_TYPE_FOR_ONE_SIM = 100;
 
     /** {@hide} */
-    public static final int MAX_NETWORK_TYPE = TYPE_WIFI_P2P;
+    public static final int MAX_RADIO_TYPE   = TYPE_WIFI_P2P + TelephonyManager.getPhoneCount() * MAX_TYPE_FOR_ONE_SIM;
+
+    /** {@hide} */
+    public static final int MAX_NETWORK_TYPE = TYPE_WIFI_P2P + TelephonyManager.getPhoneCount() * MAX_TYPE_FOR_ONE_SIM;
+    /** @} */
 
     /**
      * If you want to set the default network preference,you can directly
@@ -1370,4 +1382,88 @@ public class ConnectivityManager {
         }
         return null;
     }
+
+    /** SPRD : add by spreadst @{
+     * {@hide}
+     */
+    public static int getNetworkTypeByPhoneId(int phoneId, int defaultType) {
+        int featureType;
+        if (phoneId < TelephonyManager.getPhoneCount()) {
+            featureType = defaultType + (phoneId + 1) * MAX_TYPE_FOR_ONE_SIM;
+        } else {
+            throw new IllegalArgumentException(
+                "phoneId is not leagal!");
+        }
+        return featureType;
+    }
+    /** @} */
+
+    /** SPRD : add by spreadst @{
+     * {@hide}
+     */
+    public static int getDefaultNetworkType(int netType) {
+        return netType % MAX_TYPE_FOR_ONE_SIM;
+    }
+    /** @} */
+
+    /** SPRD : add by spreadst @{
+     * {@hide}
+     */
+    public static int getPhoneIdByNetworkType(int netType) {
+        if (netType < MAX_TYPE_FOR_ONE_SIM) {
+            return TelephonyManager.getPhoneCount();
+        } else {
+            return netType / MAX_TYPE_FOR_ONE_SIM - 1;
+        }
+    }
+    /** @} */
+
+
+    /** SPRD : add by spreadst @{
+     * {@hide}
+     */
+    public static boolean isMmsType(int type) {
+        boolean isMmsType = false;
+        for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+            if (type == getNetworkTypeByPhoneId(i, TYPE_MOBILE_MMS)) {
+                isMmsType = true;
+                break;
+            }
+        }
+        return isMmsType;
+    }
+    /** @} */
+
+    /** SPRD : add by spreadst @{
+     * Gets the value of the setting for enabling Mobile data.
+     *
+     * @param phoneId which phone
+     *
+     * @return Whether mobile data is enabled.
+     * @hide
+     */
+    public boolean getMobileDataEnabledByPhoneId(int phoneId) {
+        try {
+            return mService.getMobileDataEnabledByPhoneId(phoneId);
+        } catch (RemoteException e) {
+            return true;
+        }
+    }
+    /** @} */
+
+    /** SPRD : add by spreadst @{
+     * Sets the persisted value for enabling/disabling Mobile data.
+     *
+     * @param phoneId which phone
+     * @param enabled Whether the mobile data connection should be
+     *            used or not.
+     * @hide
+     */
+    public void setMobileDataEnabledByPhoneId(int phoneId, boolean enabled) {
+        try {
+            mService.setMobileDataEnabledByPhoneId(phoneId, enabled);
+        } catch (RemoteException e) {
+        }
+    }
+    /** @} */
 }

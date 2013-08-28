@@ -984,6 +984,116 @@ public class GsmAlphabet {
         return size;
     }
 
+
+    public static byte[] isAsciiStringToGsm8BitUnpackedField(String s)
+    throws EncodeException{
+	int i;
+	for(i=0;i<s.length();i++)
+	{
+		int c = s.charAt(i);
+		if(c >= 128){
+			 throw new EncodeException("string is not ascii string");}
+	}
+
+	return stringToGsm8BitPacked(s);
+
+    }
+
+ // Starmer.Sun sting2GsmAlpha 80,81,82
+    public static byte[] stringToGsmAlphaSS(String s)
+            throws EncodeException {
+        boolean isUcs2 = false;
+        int alphaType = 0;
+        int tempUcs2 = 0;
+        int maxUcs2 = 0;
+        int minUcs2 = 0;
+        int i = 0;
+        int count = s.length();
+
+        // find the max and min character in this string;
+        for (i = 0; i < count; i++) {
+            tempUcs2 = s.codePointAt(i);
+            if (tempUcs2 > 0x7F) {
+                if (isUcs2 == false) {
+                    isUcs2 = true;
+                    maxUcs2 = tempUcs2;
+                    minUcs2 = tempUcs2;
+                }
+                maxUcs2 = (tempUcs2 > maxUcs2) ? tempUcs2 : maxUcs2;
+                minUcs2 = (tempUcs2 < minUcs2) ? tempUcs2 : minUcs2;
+            }
+        }
+
+        if (count == 0 || isUcs2 == false) {
+            alphaType = 0;
+        } else {
+            if (maxUcs2 - minUcs2 > 128 || count < 3) {
+                alphaType = 80;
+            } else {
+                if (minUcs2 >= 0x8000) {
+                    alphaType = 82;
+                } else if ((maxUcs2 >> 7) == (minUcs2 >> 7)) {
+                    alphaType = 81;
+                } else {
+                    alphaType = 80;
+                }
+            }
+        }
+
+        byte[] ret = null;
+
+        switch (alphaType) {
+            case 0:// ***
+                ret = GsmAlphabet.isAsciiStringToGsm8BitUnpackedField(s.toString());
+                break;
+            case 80:// 0x80+***
+                ret = GsmAlphabet.isAsciiStringToGsm8BitUnpackedField(s.toString());
+                ret[0] = (byte) 0x80;
+                break;
+
+            case 81:// 0x81+length+base+***
+                ret = new byte[count + 3];
+                ret[0] = (byte) 0x81;
+                ret[1] = (byte) count;
+                ret[2] = (byte) (minUcs2 >> 7);
+                for (i = 0; i < count; i++) {
+                    tempUcs2 = s.codePointAt(i) & 0x7F;
+                    if (s.codePointAt(i) >= 0x80) {
+                        tempUcs2 += 0x80;
+                    }
+                    ret[3 + i] = (byte) tempUcs2;
+                }
+                break;
+
+            case 82:// 0x82+length+base_high++base_low+***
+                ret = new byte[count + 4];
+                ret[0] = (byte) 0x82;
+                ret[1] = (byte) count;
+                ret[2] = (byte) (minUcs2 >> 8);
+                ret[3] = (byte) (minUcs2 & 0xFF);
+                for (i = 0; i < count; i++) {
+                    if (s.codePointAt(i) >= 0x80) {
+                        tempUcs2 = s.codePointAt(i) - minUcs2;
+                        tempUcs2 += 0x80;
+                    } else {
+                        tempUcs2 = s.codePointAt(i) & 0x7F;
+                    }
+                    ret[4 + i] = (byte) tempUcs2;
+                }
+
+                break;
+            default:
+                ret = GsmAlphabet.isAsciiStringToGsm8BitUnpackedField(s.toString());
+                break;
+        }
+
+        return ret;
+
+    }
+
+    // Set in the static initializer
+    private static int sGsmSpaceChar;
+
     /**
      * Modify the array of enabled national language single shift tables for SMS
      * encoding. This is used for unit testing, but could also be used to

@@ -145,6 +145,8 @@ public class CallerInfo {
         // TODO: Move all the basic initialization here?
         mIsEmergency = false;
         mIsVoiceMail = false;
+        // fix bug 183341
+        numberPresentation = PhoneConstants.PRESENTATION_ALLOWED;
     }
 
     /**

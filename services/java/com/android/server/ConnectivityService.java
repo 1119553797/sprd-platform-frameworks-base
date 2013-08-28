@@ -59,6 +59,7 @@ import android.net.LinkProperties;
 import android.net.Uri;
 import android.net.LinkProperties.CompareResult;
 import android.net.MobileDataStateTracker;
+import android.net.MsmsMobileDataStateTracker;
 import android.net.NetworkConfig;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.DetailedState;
@@ -105,7 +106,6 @@ import com.android.internal.net.LegacyVpnInfo;
 import com.android.internal.net.VpnConfig;
 import com.android.internal.net.VpnProfile;
 import com.android.internal.telephony.DctConstants;
-import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.XmlUtils;
@@ -152,7 +152,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private static final String TAG = "ConnectivityService";
 
     private static final boolean DBG = true;
-    private static final boolean VDBG = false;
+    private static final boolean VDBG = true;
 
     private static final boolean LOGD_RULES = false;
 
@@ -641,7 +641,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 case TYPE_WIFI:
                     return new WifiStateTracker(targetNetworkType, config.name);
                 case TYPE_MOBILE:
-                    return new MobileDataStateTracker(targetNetworkType, config.name);
+                    /* SPRD : for multi-sim @{ */
+                    //return new MobileDataStateTracker(targetNetworkType, config.name);
+                    return new MsmsMobileDataStateTracker(targetNetworkType % ConnectivityManager.MAX_TYPE_FOR_ONE_SIM,
+                            config.name, ConnectivityManager.getPhoneIdByNetworkType(targetNetworkType));
+                    /* @} */
                 case TYPE_DUMMY:
                     return new DummyDataStateTracker(targetNetworkType, config.name);
                 case TYPE_BLUETOOTH:
@@ -747,6 +751,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     public void setNetworkPreference(int preference) {
         enforceChangePermission();
 
+     // SPRD : add by spreadst
+        preference = getRealNetworkType(preference);
+
         mHandler.sendMessage(
                 mHandler.obtainMessage(EVENT_SET_NETWORK_PREFERENCE, preference, 0));
     }
@@ -757,7 +764,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         synchronized(this) {
             preference = mNetworkPreference;
         }
-        return preference;
+
+        /* SPRD @{ */
+        //return preference;
+        return ConnectivityManager.getDefaultNetworkType(preference);
+        /* @} */
     }
 
     private void handleSetNetworkPreference(int preference) {
@@ -911,6 +922,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private NetworkInfo getNetworkInfo(int networkType, int uid) {
         NetworkInfo info = null;
         if (isNetworkTypeValid(networkType)) {
+
+            // SPRD : add by spreadst
+            networkType = getRealNetworkType(networkType);
+
             final NetworkStateTracker tracker = mNetTrackers[networkType];
             if (tracker != null) {
                 info = getFilteredNetworkInfo(tracker, uid);
@@ -927,6 +942,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         synchronized (mRulesLock) {
             for (NetworkStateTracker tracker : mNetTrackers) {
                 if (tracker != null) {
+
+                    // SPRD : add by spreadst
+                    tracker = getRealNetworkTracker(tracker);
+
                     result.add(getFilteredNetworkInfo(tracker, uid));
                 }
             }
@@ -957,6 +976,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     public LinkProperties getLinkProperties(int networkType) {
         enforceAccessPermission();
         if (isNetworkTypeValid(networkType)) {
+            // SPRD : add by spreadst
+            networkType = getRealNetworkType(networkType);
+
             final NetworkStateTracker tracker = mNetTrackers[networkType];
             if (tracker != null) {
                 return tracker.getLinkProperties();
@@ -972,6 +994,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         final ArrayList<NetworkState> result = Lists.newArrayList();
         synchronized (mRulesLock) {
             for (NetworkStateTracker tracker : mNetTrackers) {
+                // SPRD : add by spreadst
+                tracker = getRealNetworkTracker(tracker);
+
                 if (tracker != null) {
                     final NetworkInfo info = getFilteredNetworkInfo(tracker, uid);
                     result.add(new NetworkState(
@@ -984,6 +1009,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     private NetworkState getNetworkStateUnchecked(int networkType) {
         if (isNetworkTypeValid(networkType)) {
+            // SPRD : add by spreadst
+            networkType = getRealNetworkType(networkType);
+
             final NetworkStateTracker tracker = mNetTrackers[networkType];
             if (tracker != null) {
                 return new NetworkState(tracker.getNetworkInfo(), tracker.getLinkProperties(),
@@ -1045,6 +1073,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     public boolean setRadio(int netType, boolean turnOn) {
         enforceChangePermission();
+        // SPRD : add by spreadst
+        netType = getRealNetworkType(netType);
+
         if (!ConnectivityManager.isNetworkTypeValid(netType)) {
             return false;
         }
@@ -1151,6 +1182,17 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
             FeatureUser f = new FeatureUser(networkType, feature, binder);
 
+            /* SPRD : add by spreadst @{ */
+            if(networkType == ConnectivityManager.TYPE_MOBILE) {
+                Slog.d(TAG, "if type is MMS,continue setup data call");
+                if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature)) &&
+                        !(feature.indexOf(PhoneConstants.FEATURE_ENABLE_MMS) != -1)) {
+                    if (DBG) Slog.d(TAG, "requested special network with data disabled - rejected");
+                    return PhoneConstants.APN_TYPE_NOT_AVAILABLE;
+                }
+            }
+            /* @} */
+
             // TODO - move this into individual networktrackers
             int usedNetworkType = convertFeatureToNetworkType(networkType, feature);
 
@@ -1181,7 +1223,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     NetworkInfo ni = network.getNetworkInfo();
 
                     if (ni.isAvailable() == false) {
-                        if (!TextUtils.equals(feature,Phone.FEATURE_ENABLE_DUN_ALWAYS)) {
+                        if (!TextUtils.equals(feature,PhoneConstants.FEATURE_ENABLE_DUN_ALWAYS)) {
                             if (DBG) log("special network not available ni=" + ni.getTypeName());
                             return PhoneConstants.APN_TYPE_NOT_AVAILABLE;
                         } else {
@@ -1217,6 +1259,16 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     }
 
                     if (restoreTimer >= 0) {
+                        /* SPRD : add by spreadst @{ */
+                        if (isMmsFeature(feature)
+                                && ConnectivityManager.getPhoneIdByNetworkType(usedNetworkType) != TelephonyManager
+                                        .getDefaultDataPhoneId(mContext)) {
+                            restoreTimer = restoreTimer * 2;
+                            if (DBG) {
+                                log("Not default sim reconnect, change restoreTimer to " + restoreTimer);
+                            }
+                        }
+                        /* @} */
                         mHandler.sendMessageDelayed(mHandler.obtainMessage(
                                 EVENT_RESTORE_DEFAULT_NETWORK, f), restoreTimer);
                     }
@@ -1443,6 +1495,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             if (DBG) log("requestRouteToHostAddress on invalid network: " + networkType);
             return false;
         }
+        // SPRD : add by spreadst
+        networkType = getRealNetworkType(networkType);
+
         NetworkStateTracker tracker = mNetTrackers[networkType];
         DetailedState netState = tracker.getNetworkInfo().getDetailedState();
 
@@ -1596,6 +1651,14 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         //       which is where we store the value and maybe make this
         //       asynchronous.
         enforceAccessPermission();
+
+        /* SPRD : add by spreadst @{ */
+        if (TelephonyManager.isMultiSim()) {
+            int phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+            return getMobileDataEnabledByPhoneId(phoneId);
+        }
+        /* @} */
+
         boolean retVal = Settings.Global.getInt(mContext.getContentResolver(),
                 Settings.Global.MOBILE_DATA, 1) == 1;
         if (VDBG) log("getMobileDataEnabled returning " + retVal);
@@ -1681,16 +1744,44 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         enforceChangePermission();
         if (DBG) log("setMobileDataEnabled(" + enabled + ")");
 
+        /* SPRD : add by spreadst @{ */
+        if (TelephonyManager.isMultiSim()) {
+            int phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+            setMobileDataEnabledByPhoneId(phoneId, enabled);
+            return;
+        }
+        /* @} */
+
         mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_MOBILE_DATA,
                 (enabled ? ENABLED : DISABLED), 0));
     }
 
-    private void handleSetMobileData(boolean enabled) {
-        if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
+    /** SPRD : Remove this method. @{ */
+//    private void handleSetMobileData(boolean enabled) {
+//        if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
+//            if (VDBG) {
+//                log(mNetTrackers[ConnectivityManager.TYPE_MOBILE].toString() + enabled);
+//            }
+//            mNetTrackers[ConnectivityManager.TYPE_MOBILE].setUserDataEnable(enabled);
+//        }
+//        if (mNetTrackers[ConnectivityManager.TYPE_WIMAX] != null) {
+//            if (VDBG) {
+//                log(mNetTrackers[ConnectivityManager.TYPE_WIMAX].toString() + enabled);
+//            }
+//            mNetTrackers[ConnectivityManager.TYPE_WIMAX].setUserDataEnable(enabled);
+//        }
+//    }
+    /** @} */
+
+    /** SPRD : add by spreadst. @{ */
+    private void handleSetMobileData(boolean enabled, int phoneId) {
+        int networkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId,
+                ConnectivityManager.TYPE_MOBILE);
+        if (mNetTrackers[networkType] != null) {
             if (VDBG) {
-                log(mNetTrackers[ConnectivityManager.TYPE_MOBILE].toString() + enabled);
+                log(mNetTrackers[networkType].toString() + enabled);
             }
-            mNetTrackers[ConnectivityManager.TYPE_MOBILE].setUserDataEnable(enabled);
+            mNetTrackers[networkType].setUserDataEnable(enabled);
         }
         if (mNetTrackers[ConnectivityManager.TYPE_WIMAX] != null) {
             if (VDBG) {
@@ -1699,6 +1790,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             mNetTrackers[ConnectivityManager.TYPE_WIMAX].setUserDataEnable(enabled);
         }
     }
+    /** @} */
 
     @Override
     public void setPolicyDataEnable(int networkType, boolean enabled) {
@@ -1710,6 +1802,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     private void handleSetPolicyDataEnable(int networkType, boolean enabled) {
+        // SPRD : add by spreadst
+        networkType = getRealNetworkType(networkType);
+
         if (isNetworkTypeValid(networkType)) {
             final NetworkStateTracker tracker = mNetTrackers[networkType];
             if (tracker != null) {
@@ -1758,7 +1853,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      */
     private void handleDisconnect(NetworkInfo info) {
 
-        int prevNetType = info.getType();
+        /* SPRD : add by spreadst @{ */
+        //int prevNetType = info.getType();
+        int prevNetType = getRealNetworkType(info.getType(), info.getPhoneId());
+        /* @} */
 
         mNetTrackers[prevNetType].setTeardownRequested(false);
 
@@ -1882,6 +1980,13 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
 //                if (currentPriority >= mNetConfigs[checkType].mPriority) continue;
 
+                /* SPRD : add by spreadst @{ */
+                if (mNetConfigs[checkType].radio == ConnectivityManager.TYPE_MOBILE
+                        && ConnectivityManager.getPhoneIdByNetworkType(checkType) != TelephonyManager
+                                .getDefaultDataPhoneId(mContext))
+                    continue;
+                /* @} */
+
                 NetworkStateTracker checkTracker = mNetTrackers[checkType];
                 NetworkInfo checkInfo = checkTracker.getNetworkInfo();
                 if (!checkInfo.isConnectedOrConnecting() || checkTracker.isTeardownRequested()) {
@@ -1957,7 +2062,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      * @param info the {@link NetworkInfo} for the failed network
      */
     private void handleConnectionFailure(NetworkInfo info) {
-        mNetTrackers[info.getType()].setTeardownRequested(false);
+        /* SPRD @{ */
+        //mNetTrackers[info.getType()].setTeardownRequested(false);
+        final int type = getRealNetworkType(info.getType(), info.getPhoneId());
+        mNetTrackers[type].setTeardownRequested(false);
+        /* @} */
 
         String reason = info.getReason();
         String extraInfo = info.getExtraInfo();
@@ -1986,9 +2095,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             intent.putExtra(ConnectivityManager.EXTRA_IS_FAILOVER, true);
             info.setFailover(false);
         }
-
-        if (mNetConfigs[info.getType()].isDefault()) {
-            tryFailover(info.getType());
+        /* SPRD @{ */
+//        if (mNetConfigs[info.getType()].isDefault()) {
+//            tryFailover(info.getType());
+        if (mNetConfigs[type].isDefault()) {
+            tryFailover(type);
+            /* @} */
             if (mActiveDefaultNetwork != -1) {
                 NetworkInfo switchTo = mNetTrackers[mActiveDefaultNetwork].getNetworkInfo();
                 intent.putExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO, switchTo);
@@ -2084,7 +2196,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     private void handleConnect(NetworkInfo info) {
-        final int newNetType = info.getType();
+        /* SPRD @{ */
+        //final int newNetType = info.getType();
+        final int newNetType = getRealNetworkType(info.getType(), info.getPhoneId());
+        /* @} */
 
         setupDataActivityTracking(newNetType);
 
@@ -2785,7 +2900,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     // TODO: Temporary allowing network configuration
                     //       change not resetting sockets.
                     //       @see bug/4455071
-                    handleConnectivityChange(info.getType(), false);
+                    /* SPRD @{ */
+                    //handleConnectivityChange(info.getType(), false);
+                    handleConnectivityChange(getRealNetworkType(info.getType(), info.getPhoneId()),
+                            false);
+                    /* @} */
                     break;
                 case NetworkStateTracker.EVENT_NETWORK_SUBTYPE_CHANGED:
                     info = (NetworkInfo) msg.obj;
@@ -2845,7 +2964,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 case EVENT_SET_MOBILE_DATA:
                 {
                     boolean enabled = (msg.arg1 == ENABLED);
-                    handleSetMobileData(enabled);
+                    /* SPRD @{ */
+                    //handleSetMobileData(enabled);
+                    handleSetMobileData(enabled, msg.arg2);
+                    /* @} */
                     break;
                 }
                 case EVENT_APPLY_GLOBAL_HTTP_PROXY:
@@ -3269,24 +3391,50 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         int usedNetworkType = networkType;
 
         if(networkType == ConnectivityManager.TYPE_MOBILE) {
-            if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_MMS;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_SUPL)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_SUPL;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN) ||
-                    TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN_ALWAYS)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_DUN;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_FOTA)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_FOTA;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_IMS)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_IMS;
-            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_CBS)) {
-                usedNetworkType = ConnectivityManager.TYPE_MOBILE_CBS;
+            /* SPRD @{ */
+//            if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_MMS)) {
+//                usedNetworkType = ConnectivityManager.TYPE_MOBILE_MMS;
+//            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_SUPL)) {
+//                usedNetworkType = ConnectivityManager.TYPE_MOBILE_SUPL;
+//            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN) ||
+//                    TextUtils.equals(feature, Phone.FEATURE_ENABLE_DUN_ALWAYS)) {
+//                usedNetworkType = ConnectivityManager.TYPE_MOBILE_DUN;
+//            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_HIPRI)) {
+//                usedNetworkType = ConnectivityManager.TYPE_MOBILE_HIPRI;
+//            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_FOTA)) {
+//                usedNetworkType = ConnectivityManager.TYPE_MOBILE_FOTA;
+//            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_IMS)) {
+//                usedNetworkType = ConnectivityManager.TYPE_MOBILE_IMS;
+//            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_CBS)) {
+//                usedNetworkType = ConnectivityManager.TYPE_MOBILE_CBS;
+            if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_MMS) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_MMS);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_MMS);
+            } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_SUPL) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_SUPL);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_SUPL);
+            } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_DUN) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_DUN);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_DUN);
+            } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_DUN_ALWAYS) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_DUN_ALWAYS);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_DUN);
+            } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_HIPRI) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_HIPRI);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_HIPRI);
+            } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_FOTA) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_FOTA);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_FOTA);
+            } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_IMS) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_IMS);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_IMS);
+            } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_CBS) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_CBS);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_CBS);
             } else {
                 Slog.e(TAG, "Can't match any mobile netTracker!");
             }
+            /* @} */
         } else if (networkType == ConnectivityManager.TYPE_WIFI) {
             if (TextUtils.equals(feature, "p2p")) {
                 usedNetworkType = ConnectivityManager.TYPE_WIFI_P2P;
@@ -3735,7 +3883,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 log("isMobileOk: start hipri url=" + params.mUrl);
                 mCs.setEnableFailFastMobileData(DctConstants.ENABLED);
                 mCs.startUsingNetworkFeature(ConnectivityManager.TYPE_MOBILE,
-                        Phone.FEATURE_ENABLE_HIPRI, new Binder());
+                        PhoneConstants.FEATURE_ENABLE_HIPRI, new Binder());
 
                 // Continue trying to connect until time has run out
                 long endTime = SystemClock.elapsedRealtime() + params.mTimeOutMs;
@@ -3858,7 +4006,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 log("isMobileOk: F stop hipri");
                 mCs.setEnableFailFastMobileData(DctConstants.DISABLED);
                 mCs.stopUsingNetworkFeature(ConnectivityManager.TYPE_MOBILE,
-                        Phone.FEATURE_ENABLE_HIPRI);
+                        PhoneConstants.FEATURE_ENABLE_HIPRI);
                 log("isMobileOk: X result=" + result);
             }
             return result;
@@ -4119,4 +4267,119 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
         return url;
     }
+
+    /** SPRD : for multi-sim @{
+     * used for get mainsim info in multisim version
+     * mainsim could be any slot but called with the same network type
+     * for 3rdparty app.
+     */
+    private int getRealNetworkType(int networkType) {
+        return getRealNetworkType(networkType, TelephonyManager.getDefaultDataPhoneId(mContext));
+    }
+    /** @} */
+
+    /** SPRD : for multi-sim @{ */
+    private int getRealNetworkType(int networkType, int phoneId) {
+        if (networkType < ConnectivityManager.MAX_TYPE_FOR_ONE_SIM
+                && mNetConfigs[networkType] != null
+                && mNetConfigs[networkType].radio == ConnectivityManager.TYPE_MOBILE) {
+            networkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, networkType);
+        }
+        return networkType;
+    }
+    /** @} */
+
+    /** SPRD : for multi-sim @{ */
+    private NetworkStateTracker getRealNetworkTracker(NetworkStateTracker tracker) {
+        NetworkInfo info = tracker.getNetworkInfo();
+        if (info.getPhoneId()  == TelephonyManager.getPhoneCount()) {
+            return mNetTrackers[getRealNetworkType(info.getType())];
+        }
+        return tracker;
+    }
+    /** @} */
+
+    /** SPRD : for multi-sim @{ */
+    private boolean isMmsFeature(String feature) {
+        if (feature != null) {
+            return feature.startsWith(PhoneConstants.FEATURE_ENABLE_MMS);
+        } else {
+            return false;
+        }
+    }
+    /** @} */
+
+    /** SPRD : for multi-sim @{ */
+    private int getPhoneIdByFeature(String feature, String defaultFeature) {
+        int phoneId;
+        if (TextUtils.indexOf(feature, defaultFeature) == -1) {
+            throw new IllegalArgumentException("Illeagal Feature: " + feature + " "
+                    + defaultFeature);
+        }
+        if (feature.length() == defaultFeature.length()) {
+            phoneId = TelephonyManager.getDefaultPhoneId();
+        } else if (feature.length() > defaultFeature.length()) {
+            phoneId = Integer.parseInt(feature.substring(defaultFeature.length()));
+        } else {
+            throw new IllegalArgumentException("Illeagal Feature: " + feature);
+        }
+
+        return phoneId;
+    }
+    /** @} */
+
+    /** SPRD : for multi-sim @{ */
+    private int getPhoneIdByFeature(String feature) {
+        int phoneId = -1;
+        if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_MMS) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_MMS);
+        } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_SUPL) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_SUPL);
+        } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_DUN) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_DUN);
+        } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_DUN_ALWAYS) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_DUN_ALWAYS);
+        } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_HIPRI) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_HIPRI);
+        } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_FOTA) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_FOTA);
+        } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_IMS) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_IMS);
+        } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_CBS) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_CBS);
+        } else {
+            Slog.e(TAG, "Can't match any mobile netTracker!");
+        }
+        return phoneId;
+    }
+    /** @} */
+
+    /** SPRD : for multi-sim @{ */
+    private boolean isMainSimFeature(String feature) {
+        return !isMmsFeature(feature) || TextUtils.equals(feature, PhoneConstants.FEATURE_ENABLE_MMS);
+    }
+    /** @} */
+
+    /** SPRD : for multi-sim @{
+     * @see ConnectivityManager#getMobileDataEnabledByPhoneId(int)
+     */
+    public boolean getMobileDataEnabledByPhoneId(int phoneId) {
+        enforceAccessPermission();
+        boolean retVal = Settings.Global.getIntAtIndex(mContext.getContentResolver(),
+                Settings.Global.MOBILE_DATA, phoneId, 1) == 1;
+        if (DBG) Slog.d(TAG, "getMobileDataEnabled[" + phoneId + "] returning " + retVal);
+        return retVal;
+    }
+    /** @} */
+
+    /** SPRD : for multi-sim @{
+     * @see ConnectivityManager#setMobileDataEnabledByPhoneId(int, boolean)
+     */
+    public synchronized void setMobileDataEnabledByPhoneId(int phoneId, boolean enabled) {
+        enforceChangePermission();
+        if (DBG) Slog.d(TAG, "setMobileDataEnabled(" + phoneId + "," + enabled + ")");
+        mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_MOBILE_DATA,
+                (enabled ? ENABLED : DISABLED), phoneId));
+    }
+    /** @} */
 }

@@ -50,18 +50,18 @@ import java.io.PrintWriter;
  */
 public class MobileDataStateTracker implements NetworkStateTracker {
 
-    private static final String TAG = "MobileDataStateTracker";
+    protected static final String TAG = "MobileDataStateTracker";
     private static final boolean DBG = false;
     private static final boolean VDBG = false;
 
-    private PhoneConstants.DataState mMobileDataState;
-    private ITelephony mPhoneService;
+    protected PhoneConstants.DataState mMobileDataState;
+    protected ITelephony mPhoneService;
 
-    private String mApnType;
-    private NetworkInfo mNetworkInfo;
+    protected String mApnType;
+    protected NetworkInfo mNetworkInfo;
     private boolean mTeardownRequested = false;
-    private Handler mTarget;
-    private Context mContext;
+    protected Handler mTarget;
+    protected Context mContext;
     private LinkProperties mLinkProperties;
     private LinkCapabilities mLinkCapabilities;
     private boolean mPrivateDnsRouteSet = false;
@@ -72,7 +72,7 @@ public class MobileDataStateTracker implements NetworkStateTracker {
     protected boolean mUserDataEnabled = true;
     protected boolean mPolicyDataEnabled = true;
 
-    private Handler mHandler;
+    protected Handler mHandler;
     private AsyncChannel mDataConnectionTrackerAc;
 
     /**
@@ -168,7 +168,7 @@ public class MobileDataStateTracker implements NetworkStateTracker {
     public void releaseWakeLock() {
     }
 
-    private class MobileDataStateReceiver extends BroadcastReceiver {
+    protected class MobileDataStateReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(TelephonyIntents.
@@ -289,7 +289,7 @@ public class MobileDataStateTracker implements NetworkStateTracker {
         }
     }
 
-    private void getPhoneService(boolean forceRefresh) {
+    protected void getPhoneService(boolean forceRefresh) {
         if ((mPhoneService == null) || forceRefresh) {
             mPhoneService = ITelephony.Stub.asInterface(ServiceManager.getService("phone"));
         }
@@ -623,7 +623,7 @@ public class MobileDataStateTracker implements NetworkStateTracker {
         ac.connect(mContext, MobileDataStateTracker.this.mHandler, messenger);
     }
 
-    private void log(String s) {
+    protected void log(String s) {
         Slog.d(TAG, mApnType + ": " + s);
     }
 

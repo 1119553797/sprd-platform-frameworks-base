@@ -2612,6 +2612,31 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+
+        /** SPRD: Persistent store for system-wide default data SIM id */
+        public static final String MULTI_SIM_VOICE_CALL = "multi_sim_voice_call";
+
+        /** SPRD: */
+        public static final String MULTI_SIM_VIDEO_CALL = "multi_sim_video_call";
+
+        /** SPRD: */
+        public static final String MULTI_SIM_MMS = "multi_sim_mms";
+
+        /** SPRD: */
+        public static final String MULTI_SIM_DATA_CALL = "multi_sim_data_call";
+
+        /** SPRD: */
+        public static final String SIM_STANDBY = "sim_standby";
+
+        /** SPRD: */
+        public static final String POWER_ON_STANDBY_SELECT = "power_on_standby_select";
+        
+        /** SPRD: Whether Standby_Select is show,ever. */
+        public static final String Standby_Select_Card_Show = "Is_Standby_Select_Card_Show";
+
+        /** SPRD: */
+        public static final String SMS_VALIDITY_SIM = "sms_validity_sim";
+
     }
 
     /**
@@ -4181,6 +4206,14 @@ public final class Settings {
             putStringForUser(cr, Settings.Secure.LOCATION_PROVIDERS_ALLOWED, provider,
                     userId);
         }
+
+
+        /**
+         * SPRD:
+         * 
+         * @hide
+         */
+        public static final String RADIO_OPERATION = "radio_operation";
     }
 
     /**
@@ -5746,6 +5779,115 @@ public final class Settings {
         public static boolean putFloat(ContentResolver cr, String name, float value) {
             return putString(cr, name, Float.toString(value));
         }
+
+        /* SPRD: @{*/
+        /**
+         * SPRD: add for dsds.
+         * Convenience function for retrieving a single secure settings value
+         * as an integer.  Note that internally setting values are always
+         * stored as strings which are seperated by ","; this function converts
+         * the string to an integer for you.  The default value will be returned
+         * if the setting is not defined or not an integer.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to retrieve.
+         * @param index The index of the seperated part
+         * @param def Value to return if the setting is not defined.
+         *
+         * @return The setting's current value, or 'def' if it is not defined
+         * or not a valid integer.
+         * {@hide}
+         */
+        public static int getIntAtIndex(ContentResolver cr, String name, int index, int def) {
+            try {
+                return getIntAtIndex(cr, name, index);
+            } catch (SettingNotFoundException e) {
+                return def;
+            }
+        }
+
+        /**
+         * SPRD: add for dsds.
+         * Convenience function for retrieving a single secure settings value
+         * as an integer.  Note that internally setting values are always
+         * stored as strings which are seperated by ","; this function converts
+         * the string to an integer for you.
+         * <p>
+         * This version does not take a default value.  If the setting has not
+         * been set, or the string value is not valid,
+         * it throws {@link SettingNotFoundException}.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to retrieve.
+         * @param index The index of the seperated part
+         *
+         * @throws SettingNotFoundException Thrown if a setting by the given
+         * name can't be found or the setting value is not an integer.
+         *
+         * @return The setting's current value.
+         * {@hide}
+         */
+        public static int getIntAtIndex(ContentResolver cr, String name, int index)
+                throws SettingNotFoundException {
+            String v = getString(cr, name);
+            try {
+                String[] valArray = v.split(",");
+                return Integer.parseInt(valArray[index]);
+            } catch (NumberFormatException e) {
+                throw new SettingNotFoundException(name);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new SettingNotFoundException(name);
+            } catch (NullPointerException e) {
+                throw new SettingNotFoundException(name);
+            }
+        }
+
+        /**
+         * SPRD: add for dsds.
+         * Convenience function for updating a single settings value as an
+         * integer. This will either create a new entry in the table if the
+         * given name does not exist, or modify the value of the existing row
+         * with that name.  Note that internally setting values are always
+         * stored as strings, so this function converts the given value to a
+         * string before storing it.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to modify.
+         * @param index The index of the seperated part
+         * @param value The new value for the setting.
+         * @return true if the value was set, false on database errors
+         * {@hide}
+         */
+        public static boolean putIntAtIndex(ContentResolver cr, String name, int index, int value) {
+            String v = getString(cr, name);
+            Log.d(TAG, "putIntAtIndex:" + v);
+            String[] valArray;
+            if (v != null) {
+                valArray = v.split(",");
+            } else {
+                valArray = new String[index + 1];
+                for (int i = 0; i < valArray.length; i++) {
+                    valArray[i] = "";
+                }
+            }
+            if (index >= valArray.length) {
+                String[] array = new String[index + 1];
+                for (int i = 0; i < valArray.length; i++) {
+                    array[i] = valArray[i];
+                }
+                valArray = array;
+                for (int i = valArray.length; i < index + 1; i++) {
+                    valArray[i] = "";
+                }
+            }
+            valArray[index] = Integer.toString(value);
+            StringBuilder s = new StringBuilder(valArray[0]);
+            for (int i = 1; i < valArray.length; i++) {
+                s.append(",").append(valArray[i]);
+            }
+            return putString(cr, name, s.toString());
+        }
+        /* @{ */
     }
 
     /**

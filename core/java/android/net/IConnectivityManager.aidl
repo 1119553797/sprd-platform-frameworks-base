@@ -136,4 +136,12 @@ interface IConnectivityManager
     int checkMobileProvisioning(boolean sendNotification, int suggestedTimeOutMs, in ResultReceiver resultReceiver);
 
     String getMobileProvisioningUrl();
+
+    /** SPRD : add by spreadst. @{ */
+
+    boolean getMobileDataEnabledByPhoneId(int phoneId);
+
+    void setMobileDataEnabledByPhoneId(int phoneId, boolean enabled);
+
+    /** @} */
 }

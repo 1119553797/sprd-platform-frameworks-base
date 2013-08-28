@@ -2054,4 +2054,25 @@
   <public type="style" name="Theme.DeviceDefault.NoActionBar.Overscan" id="0x010301df" />
   <public type="style" name="Theme.DeviceDefault.Light.NoActionBar.Overscan" id="0x010301e0" />
 
+
+<!-- ===============================================================
+     SPRD: Resources added
+     =============================================================== -->
+  <public type="string" name="ActiveUnconCf" />
+  <public type="string" name="ActiveConCf" />
+  <public type="string" name="CallForwarded" />
+  <public type="string" name="CallWaiting" />
+  <public type="string" name="OutCallBarred" />
+  <public type="string" name="InCallBarred" />
+  <public type="string" name="ForwardedCall" />
+  <public type="string" name="CallHold" />
+  <public type="string" name="CallRetrieved" />
+  <public type="string" name="IncomingCallForwarded" />
+  <public type="string" name="Pin2Mmi" />
+  <public type="string" name="PukMmi" />
+  <public type="string" name="Puk2Mmi" />
+<!-- ===============================================================
+     SPRD: end Resources added
+     =============================================================== -->
+
 </resources>

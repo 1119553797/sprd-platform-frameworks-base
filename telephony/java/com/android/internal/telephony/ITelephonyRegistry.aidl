@@ -33,6 +33,8 @@ interface ITelephonyRegistry {
     void notifySignalStrength(in SignalStrength signalStrength);
     void notifyMessageWaitingChanged(boolean mwi);
     void notifyCallForwardingChanged(boolean cfi);
+    //SPRD:
+    void notifyCallForwardingChangedByServiceClass(boolean cfi, int sc);
     void notifyDataActivity(int state);
     void notifyDataConnection(int state, boolean isDataConnectivityPossible,
             String reason, String apn, String apnType, in LinkProperties linkProperties,

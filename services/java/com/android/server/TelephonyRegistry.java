@@ -36,6 +36,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.CellInfo;
+import android.telephony.SprdPhoneSupport;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Slog;
@@ -82,6 +83,9 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     private final Context mContext;
+
+    /** SPRD: add for dsds. **/
+	 private final int mPhoneId;
 
     // access should be inside synchronized (mRecords) for these two fields
     private final ArrayList<IBinder> mRemoveList = new ArrayList<IBinder>();
@@ -164,8 +168,11 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     // In these calls we call with the lock held. This is safe becasuse remote
     // calls go through a oneway interface and local calls going through a
     // handler before they get to app code.
-
-    TelephonyRegistry(Context context) {
+    /** 
+     * SPRD:
+     * @orig TelephonyRegistry(Context context)
+     */
+    TelephonyRegistry(Context context, int phoneId) {
         CellLocation  location = CellLocation.getEmpty();
 
         // Note that location can be null for non-phone builds like
@@ -174,6 +181,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             location.fillInNotifierBundle(mCellLocation);
         }
         mContext = context;
+        mPhoneId = phoneId;// SPRD: 
         mBatteryStats = BatteryStatsService.getService();
         mConnectedApns = new ArrayList<String>();
     }
@@ -455,6 +463,26 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         }
     }
 
+    /** SPRD: **/
+    public void notifyCallForwardingChangedByServiceClass(boolean cfi, int sc) {
+        if (!checkNotifyPermission("notifyCallForwardingChangedByServiceClass()")) {
+            return;
+        }
+        synchronized (mRecords) {
+            mCallForwarding = cfi;
+            for (int i = mRecords.size() - 1; i >= 0; i--) {
+                Record r = mRecords.get(i);
+                if ((r.events & PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR) != 0) {
+                    try {
+                        r.callback.onCallForwardingIndicatorChangedByServiceClass(cfi, sc);
+                    } catch (RemoteException ex) {
+                        remove(r.binder);
+                    }
+                }
+            }
+        }
+    }
+
     public void notifyDataActivity(int state) {
         if (!checkNotifyPermission("notifyDataActivity()" )) {
             return;
@@ -629,6 +657,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             pw.println("  mCellLocation=" + mCellLocation);
             pw.println("  mCellInfo=" + mCellInfo);
             pw.println("registrations: count=" + recordCount);
+            pw.println(" mPhoneId=" + mPhoneId);
             for (Record r : mRecords) {
                 pw.println("  " + r.pkgForDebug + " 0x" + Integer.toHexString(r.events));
             }
@@ -653,7 +682,17 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         Bundle data = new Bundle();
         state.fillInNotifierBundle(data);
         intent.putExtras(data);
-        mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
+        /** SPRD: @{ **/
+        intent.putExtra(TelephonyIntents.EXTRA_PHONE_ID, mPhoneId);
+        if (TelephonyManager.getDefaultPhoneId() == mPhoneId) {
+            mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
+        }
+        if (TelephonyManager.isMultiSim()) {
+            intent.setAction(TelephonyManager.getAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED,
+                    mPhoneId));
+            mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
+        }
+        /** @} **/
     }
 
     private void broadcastSignalStrengthChanged(SignalStrength signalStrength) {
@@ -671,7 +710,17 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         Bundle data = new Bundle();
         signalStrength.fillInNotifierBundle(data);
         intent.putExtras(data);
-        mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
+        /** SPRD: @{ **/
+        intent.putExtra(TelephonyIntents.EXTRA_PHONE_ID, mPhoneId);
+        if (TelephonyManager.getDefaultPhoneId() == mPhoneId) {
+            mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
+        }
+        if (TelephonyManager.isMultiSim()) {
+            intent.setAction(TelephonyManager.getAction(
+                    TelephonyIntents.ACTION_SIGNAL_STRENGTH_CHANGED, mPhoneId));
+            mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
+        }
+        /** @} **/
     }
 
     private void broadcastCallStateChanged(int state, String incomingNumber) {
@@ -694,6 +743,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         if (!TextUtils.isEmpty(incomingNumber)) {
             intent.putExtra(TelephonyManager.EXTRA_INCOMING_NUMBER, incomingNumber);
         }
+        intent.putExtra(TelephonyIntents.EXTRA_PHONE_ID, mPhoneId);
         mContext.sendBroadcastAsUser(intent, UserHandle.ALL,
                 android.Manifest.permission.READ_PHONE_STATE);
     }
@@ -728,6 +778,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
 
         intent.putExtra(PhoneConstants.DATA_APN_KEY, apn);
         intent.putExtra(PhoneConstants.DATA_APN_TYPE_KEY, apnType);
+        intent.putExtra(TelephonyIntents.EXTRA_PHONE_ID, mPhoneId);
         mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
     }
 
@@ -735,6 +786,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         Intent intent = new Intent(TelephonyIntents.ACTION_DATA_CONNECTION_FAILED);
         intent.putExtra(PhoneConstants.FAILURE_REASON_KEY, reason);
         intent.putExtra(PhoneConstants.DATA_APN_TYPE_KEY, apnType);
+        intent.putExtra(TelephonyIntents.EXTRA_PHONE_ID, mPhoneId);
         mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
     }
 

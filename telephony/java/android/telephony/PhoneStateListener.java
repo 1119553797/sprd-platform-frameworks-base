@@ -209,6 +209,16 @@ public class PhoneStateListener {
     }
 
     /**
+     * SPRD: Callback invoked when the call-forwarding indicator changes.
+     * serviceClass voice:1;video:16
+     * 
+     * @hide
+     */
+    public void onCallForwardingIndicatorChangedByServiceClass(boolean cfi ,int serviceClass) {
+        // default implementation empty
+    }
+
+    /**
      * Callback invoked when device cell location changes.
      */
     public void onCellLocationChanged(CellLocation location) {
@@ -311,9 +321,16 @@ public class PhoneStateListener {
         }
 
         public void onCallForwardingIndicatorChanged(boolean cfi) {
-            Message.obtain(mHandler, LISTEN_CALL_FORWARDING_INDICATOR, cfi ? 1 : 0, 0, null)
-                    .sendToTarget();
+            Message.obtain(mHandler, LISTEN_CALL_FORWARDING_INDICATOR, cfi ? 1 : 0, 1, null)
+                    .sendToTarget();// SPRD: modify
         }
+
+        /* SPRD: @{ */
+        public void onCallForwardingIndicatorChangedByServiceClass(boolean cfi, int serviceClass) {
+            Message.obtain(mHandler, LISTEN_CALL_FORWARDING_INDICATOR, cfi ? 1 : 0, serviceClass,
+                    null).sendToTarget();
+        }
+        /* @} */
 
         public void onCellLocationChanged(Bundle bundle) {
             CellLocation location = CellLocation.newFromBundle(bundle);
@@ -361,6 +378,8 @@ public class PhoneStateListener {
                     break;
                 case LISTEN_CALL_FORWARDING_INDICATOR:
                     PhoneStateListener.this.onCallForwardingIndicatorChanged(msg.arg1 != 0);
+                    // SPRD: add for video
+                    PhoneStateListener.this.onCallForwardingIndicatorChangedByServiceClass(msg.arg1 != 0, msg.arg2);
                     break;
                 case LISTEN_CELL_LOCATION:
                     PhoneStateListener.this.onCellLocationChanged((CellLocation)msg.obj);

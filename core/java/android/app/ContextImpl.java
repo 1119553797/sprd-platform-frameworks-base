@@ -484,11 +484,21 @@ class ContextImpl extends Context {
                     }
                 }});
 
-        registerService(TELEPHONY_SERVICE, new ServiceFetcher() {
+        if (TelephonyManager.isMultiSim()) {
+            for (int i = 0; i <= TelephonyManager.getPhoneCount(); i++) {
+                final int phoneid = i;
+                registerService(TelephonyManager.getServiceName(TELEPHONY_SERVICE, i),
+                        new ServiceFetcher() {
+                            public Object createService(ContextImpl ctx) {
+                                return new TelephonyManager(ctx.getOuterContext(), phoneid);
+                            }});
+            }
+        } else {
+            registerService(TELEPHONY_SERVICE, new ServiceFetcher() {
                 public Object createService(ContextImpl ctx) {
                     return new TelephonyManager(ctx.getOuterContext());
                 }});
-
+        }
         registerService(UI_MODE_SERVICE, new ServiceFetcher() {
                 public Object createService(ContextImpl ctx) {
                     return new UiModeManager();

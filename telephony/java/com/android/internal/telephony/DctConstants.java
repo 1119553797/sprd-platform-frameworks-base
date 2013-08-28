@@ -94,7 +94,7 @@ public class DctConstants {
     public static final int EVENT_DISCONNECT_DC_RETRYING = BASE + 34;
     public static final int EVENT_DATA_SETUP_COMPLETE_ERROR = BASE + 35;
     public static final int CMD_SET_ENABLE_FAIL_FAST_MOBILE_DATA = BASE + 36;
-
+    public static final int EVENT_SWITCH_PHONE = BASE + 100; // SPRD : add by spreadst
     /***** Constants *****/
 
     public static final int APN_INVALID_ID = -1;

@@ -72,6 +72,8 @@ interface ITelephony {
      * @return whether it hung up
      */
     boolean endCall();
+    //SPRD:
+    void holdCall();
 
     /**
      * Answer the currently-ringing call.
@@ -154,6 +156,11 @@ interface ITelephony {
      */
     boolean supplyPuk(String puk, String pin);
 
+    //SPRD:
+    String getSmsc();
+    //SPRD:
+    boolean setSmsc(String smscAddr);
+
     /**
      * Handles PIN MMI commands (PIN/PIN2/PUK/PUK2), which are initiated
      * without SEND (so <code>dial</code> is not appropriate).
@@ -162,6 +169,17 @@ interface ITelephony {
      * @return true if MMI command is executed.
      */
     boolean handlePinMmi(String dialString);
+
+    /**
+     * Set the iccCard to on or off
+     */
+    boolean setIccCard(boolean turnOn);
+
+    /**
+     * Check to see if the iccCard is on or not.
+     * @return returns true if the radio is on.
+     */
+    boolean isIccCardOn();
 
     /**
      * Toggles the radio on or off.
@@ -228,6 +246,7 @@ interface ITelephony {
      int getCallState();
      int getDataActivity();
      int getDataState();
+     int getDataStatebyApnType(String apnType);
 
     /**
      * Returns the current active phone type as integer.
@@ -304,5 +323,33 @@ interface ITelephony {
      * Sets minimum time in milli-seconds between onCellInfoChanged
      */
     void setCellInfoListRate(int rateInMillis);
+
+    /**
+     * SPRD:
+     * @return true if a IccFdn enabled
+     */
+    boolean getIccFdnEnabled();
+
+    /**
+     * SPRD:
+     * Return gam Authenticate
+     */
+    String[] Mbbms_Gsm_Authenticate(String nonce);
+
+    /**
+     * SPRD:
+     * Return usim Authenticate
+     */
+    String[] Mbbms_USim_Authenticate(String nonce, String autn);
+    //SPRD:
+    boolean isVTCall();
+    //SPRD:
+    int getRemainTimes(int type);
+    //SPRD:
+    boolean setApnActivePdpFilter(String apntype,boolean filterenable);
+    //SPRD:
+    boolean getApnActivePdpFilter(String apntype);
+    //SPRD:
+    String[] getActiveApnTypes();
 }
 

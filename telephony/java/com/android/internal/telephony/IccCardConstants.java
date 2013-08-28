@@ -46,6 +46,15 @@ public class IccCardConstants {
     public static final String INTENT_VALUE_LOCKED_NETWORK = "NETWORK";
     /* PERM_DISABLED means ICC is permanently disabled due to puk fails */
     public static final String INTENT_VALUE_ABSENT_ON_PERM_DISABLED = "PERM_DISABLED";
+    
+    /** SPRD: REFRESH means ICC is refreshed */
+    static public final String INTENT_VALUE_ICC_REFRESH = "REFRESH";
+    /** SPRD: */
+    static public final String INTENT_KEY_PHONE_ID = TelephonyIntents.EXTRA_PHONE_ID;
+    /** SPRD: */
+    static public final String INTENT_KEY_FDN_STAUS = "fdn_status";
+    /** SPRD: */
+    static public final String INTENT_KEY_FDN_SIM_REFRESH = "fdn_sim_refresh";
 
     /**
      * This is combination of IccCardStatus.CardState and IccCardApplicationStatus.AppState

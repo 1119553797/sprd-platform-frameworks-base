@@ -124,7 +124,27 @@
     <string name="RuacMmi">Rejection of undesired annoying calls</string>
     <string name="CndMmi">Calling number delivery</string>
     <string name="DndMmi">Do not disturb</string>
+    <!-- SPRD: @{ -->
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="ActiveUnconCf">Call forwarded unconditional</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="ActiveConCf">Call forwarded conditional</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="CallForwarded">Call forwarded</string>
+    <!-- Displayed as the title for a MO call status in call forwarding. -->
+    <string name="CallWaiting">Call waiting</string>
+    <string name="OutCallBarred" msgid="">"Outgoing call barred"</string>
+    <string name="InCallBarred" msgid="">"Incomming call barred"</string>
+    <!-- Displayed as the title for a MT call status in call forwarding. -->
+    <string name="ForwardedCall">Forwarded call</string>
+    <string name="CallHold" msgid="">"Call holded"</string>
+    <string name="CallRetrieved" msgid="">"Call retrieved"</string>
+    <string name="IncomingCallForwarded" msgid="">"Additional incoming call forwarded"</string>
 
+    <string name="Pin2Mmi">"PIN2 change"</string>
+    <string name="PukMmi">"PIN unlock"</string>
+    <string name="Puk2Mmi">"PIN2 unlock"</string>
+    <!-- SPRD: @} -->
     <!-- Displayed to confirm to the user that caller ID will be restricted on the next call as usual. -->
     <string name="CLIRDefaultOnNextCallOn">Caller ID defaults to restricted. Next call: Restricted</string>
     <!-- Displayed to confirm to the user that caller ID will be not restricted on the next call even though it usually is. -->

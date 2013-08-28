@@ -125,6 +125,9 @@ public class NetworkInfo implements Parcelable {
      */
     private boolean mIsAvailable;
 
+    // SPRD : add by spreadst
+    private int mPhoneId;
+
     /**
      * @param type network type
      * @deprecated
@@ -150,6 +153,25 @@ public class NetworkInfo implements Parcelable {
         mIsRoaming = false;
     }
 
+    /** SPRD : for multi-sim
+     * @hide
+     */
+    public NetworkInfo(int type, int subtype, String typeName, String subtypeName, int phoneId) {
+        if (!ConnectivityManager.isNetworkTypeValid(type)) {
+            throw new IllegalArgumentException("Invalid network type: " + type);
+        }
+        mNetworkType = type;
+        mSubtype = subtype;
+        mTypeName = typeName;
+        mSubtypeName = subtypeName;
+        setDetailedState(DetailedState.IDLE, null, null);
+        mState = State.UNKNOWN;
+        mIsAvailable = false; // until we're told otherwise, assume unavailable
+        mIsRoaming = false;
+        mPhoneId = phoneId;
+    }
+    /** @} */
+
     /** {@hide} */
     public NetworkInfo(NetworkInfo source) {
         if (source != null) {
@@ -164,6 +186,8 @@ public class NetworkInfo implements Parcelable {
             mIsFailover = source.mIsFailover;
             mIsRoaming = source.mIsRoaming;
             mIsAvailable = source.mIsAvailable;
+            // SPRD : add by spreadst
+            mPhoneId = source.mPhoneId;
         }
     }
 
@@ -180,6 +204,16 @@ public class NetworkInfo implements Parcelable {
             return mNetworkType;
         }
     }
+
+    /** SPRD : add by spreadst
+     * @hide
+     */
+    public int getPhoneId() {
+        synchronized (this) {
+            return mPhoneId;
+        }
+    }
+    /** @} */
 
     /**
      * Return a network-type-specific integer describing the subtype
@@ -405,7 +439,8 @@ public class NetworkInfo implements Parcelable {
             append(", extra: ").append(mExtraInfo == null ? "(none)" : mExtraInfo).
             append(", roaming: ").append(mIsRoaming).
             append(", failover: ").append(mIsFailover).
-            append(", isAvailable: ").append(mIsAvailable);
+            append(", isAvailable: ").append(mIsAvailable).
+            append(", phoneId: ").append(mPhoneId);
             return builder.toString();
         }
     }
@@ -424,6 +459,7 @@ public class NetworkInfo implements Parcelable {
      */
     public void writeToParcel(Parcel dest, int flags) {
         synchronized (this) {
+            dest.writeInt(mPhoneId); // SPRD : add by spreadst
             dest.writeInt(mNetworkType);
             dest.writeInt(mSubtype);
             dest.writeString(mTypeName);
@@ -445,11 +481,15 @@ public class NetworkInfo implements Parcelable {
     public static final Creator<NetworkInfo> CREATOR =
         new Creator<NetworkInfo>() {
             public NetworkInfo createFromParcel(Parcel in) {
+                int phoneId = in.readInt(); // SPRD : add by spreadst
                 int netType = in.readInt();
                 int subtype = in.readInt();
                 String typeName = in.readString();
                 String subtypeName = in.readString();
-                NetworkInfo netInfo = new NetworkInfo(netType, subtype, typeName, subtypeName);
+                /* SPRD : add by spreadst @{ */
+                // NetworkInfo netInfo = new NetworkInfo(netType, subtype, typeName, subtypeName);
+                NetworkInfo netInfo = new NetworkInfo(netType, subtype, typeName, subtypeName, phoneId);
+                /* @} */
                 netInfo.mState = State.valueOf(in.readString());
                 netInfo.mDetailedState = DetailedState.valueOf(in.readString());
                 netInfo.mIsFailover = in.readInt() != 0;

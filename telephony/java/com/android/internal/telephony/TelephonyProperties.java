@@ -187,4 +187,9 @@ public interface TelephonyProperties
      * Ignore RIL_UNSOL_NITZ_TIME_RECEIVED completely, used for debugging/testing.
      */
     static final String PROPERTY_IGNORE_NITZ = "telephony.test.ignore.nitz";
+
+    /**
+     * SPRD: IccId for sim card.
+     */
+    static final String PROPERTY_SIM_ICCID = "gsm.sim.iccid";
 }
