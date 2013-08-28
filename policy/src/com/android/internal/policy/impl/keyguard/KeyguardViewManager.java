@@ -153,9 +153,11 @@ public class KeyguardViewManager {
                     int keyCode = event.getKeyCode();
                     if (keyCode == KeyEvent.KEYCODE_BACK && mKeyguardView.handleBackKey()) {
                         return true;
-                    } else if (keyCode == KeyEvent.KEYCODE_MENU && mKeyguardView.handleMenuKey()) {
-                        return true;
                     }
+                    /* SPRD: Modify 20130828 Spreadst of 207962 unlock lockscreen when clcik MENU @{
+                    else if (keyCode == KeyEvent.KEYCODE_MENU && mKeyguardView.handleMenuKey()) {
+                        return true;
+                    } @} */
                 }
                 // Always process media keys, regardless of focus
                 if (mKeyguardView.dispatchKeyEvent(event)) {
