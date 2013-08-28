@@ -3405,27 +3405,37 @@ public final class ActivityManagerService  extends ActivityManagerNative
         }
 
         final ProcessStats processStats = new ProcessStats(true);
-
-        File tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids, null);
-
+        // SPRD: userdebug & lowmem version ,dont dump anr  trace
+        //File tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids, null);
+        
         String cpuInfo = null;
-        if (MONITOR_CPU_USAGE) {
-            updateCpuStatsNow();
-            synchronized (mProcessStatsThread) {
-                cpuInfo = mProcessStats.printCurrentState(anrTime);
+        /* SPRD: user version and lowmem version and anr in foreground app @{ */
+        File tracesFile = null;
+
+        // SPRD: user version and lowmem version and anr in foreground app
+        if (IS_USER_BUILD && Build.IS_LOWMEM_VERSION && !app.isInterestingToUserLocked()) {
+            Slog.w(TAG, "do not dump traces: is user build and lowmem version and anr in backgroound app");
+        } else {
+            tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids, null);
+            if (MONITOR_CPU_USAGE) {
+                updateCpuStatsNow();
+                synchronized (mProcessStatsThread) {
+                    cpuInfo = mProcessStats.printCurrentState(anrTime);
+                }
+                info.append(processStats.printCurrentLoad());
+                info.append(cpuInfo);
             }
-            info.append(processStats.printCurrentLoad());
-            info.append(cpuInfo);
+
+            info.append(processStats.printCurrentState(anrTime));
+            // SPRD: del user version and lowmem version and anr in foreground app
+            //Slog.e(TAG, info.toString());
+            if (tracesFile == null) {
+                // There is no trace file, so dump (only) the alleged culprit's threads to the log
+                Process.sendSignal(app.pid, Process.SIGNAL_QUIT);
+            }
         }
-
-        info.append(processStats.printCurrentState(anrTime));
-
         Slog.e(TAG, info.toString());
-        if (tracesFile == null) {
-            // There is no trace file, so dump (only) the alleged culprit's threads to the log
-            Process.sendSignal(app.pid, Process.SIGNAL_QUIT);
-        }
-
+        /* @} */
         addErrorToDropBox("anr", app, app.processName, activity, parent, annotation,
                 cpuInfo, tracesFile, null);
 
