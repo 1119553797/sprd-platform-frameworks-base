@@ -806,8 +806,11 @@ public class StateMachine {
         /**
          * Do any transitions
          * @param msgProcessedState is the state that processed the message
+         * 
+         * SPRD: Modified this method to be synchronized for avoiding NullPointerException @{
+         * @orig private void performTransitions(State msgProcessedState, Message msg)
          */
-        private void performTransitions(State msgProcessedState, Message msg) {
+        private synchronized void performTransitions(State msgProcessedState, Message msg) {
             /**
              * If transitionTo has been called, exit and then enter
              * the appropriate states. We loop on this to allow
@@ -892,6 +895,7 @@ public class StateMachine {
                 }
             }
         }
+        /** @} */
 
         /**
          * Cleanup all the static variables and the looper after the SM has been quit.
