@@ -16,21 +16,26 @@
 
 package android.net.wifi;
 
+import static android.net.wifi.WifiManager.WIFI_AP_STATE_DISABLED;
+import static android.net.wifi.WifiManager.WIFI_AP_STATE_DISABLING;
+import static android.net.wifi.WifiManager.WIFI_AP_STATE_ENABLED;
+import static android.net.wifi.WifiManager.WIFI_AP_STATE_ENABLING;
+import static android.net.wifi.WifiManager.WIFI_AP_STATE_FAILED;
 import static android.net.wifi.WifiManager.WIFI_STATE_DISABLED;
 import static android.net.wifi.WifiManager.WIFI_STATE_DISABLING;
 import static android.net.wifi.WifiManager.WIFI_STATE_ENABLED;
 import static android.net.wifi.WifiManager.WIFI_STATE_ENABLING;
 import static android.net.wifi.WifiManager.WIFI_STATE_UNKNOWN;
 
-/**
- * TODO:
- * Deprecate WIFI_STATE_UNKNOWN
- */
-import static android.net.wifi.WifiManager.WIFI_AP_STATE_DISABLED;
-import static android.net.wifi.WifiManager.WIFI_AP_STATE_DISABLING;
-import static android.net.wifi.WifiManager.WIFI_AP_STATE_ENABLED;
-import static android.net.wifi.WifiManager.WIFI_AP_STATE_ENABLING;
-import static android.net.wifi.WifiManager.WIFI_AP_STATE_FAILED;
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -54,21 +59,19 @@ import android.net.NetworkUtils;
 import android.net.wifi.WpsResult.Status;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pService;
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.INetworkManagementService;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.PowerManager;
-import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.WorkSource;
 import android.provider.Settings;
-import android.util.LruCache;
 import android.text.TextUtils;
+import android.util.LruCache;
 
 import com.android.internal.R;
 import com.android.internal.app.IBatteryStats;
@@ -76,16 +79,6 @@ import com.android.internal.util.AsyncChannel;
 import com.android.internal.util.Protocol;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.Iterator;
-import java.util.regex.Pattern;
 
 /**
  * Track the state of Wifi connectivity. All event handling is done here,
@@ -2968,8 +2961,10 @@ public class WifiStateMachine extends StateMachine {
                     mWifiInfo.setBSSID(mLastBssid);
                     mWifiInfo.setNetworkId(mLastNetworkId);
                     /* send event to CM & network change broadcast */
+                    /* SPRD: do this in the ObtainingIpState when not using static ip @{
                     setNetworkDetailedState(DetailedState.OBTAINING_IPADDR);
                     sendNetworkStateChangeBroadcast(mLastBssid);
+                    @} */
                     transitionTo(mObtainingIpState);
                     break;
                 case WifiMonitor.NETWORK_DISCONNECTION_EVENT:
@@ -3105,6 +3100,10 @@ public class WifiStateMachine extends StateMachine {
         @Override
         public void enter() {
             if (!mWifiConfigStore.isUsingStaticIp(mLastNetworkId)) {
+                /* SPRD: send event to CM & network change broadcast when not using static ip @{ */
+                setNetworkDetailedState(DetailedState.OBTAINING_IPADDR);
+                sendNetworkStateChangeBroadcast(mLastBssid);
+                /* @} */
                 startDhcp();
             } else {
                 // stop any running dhcp before assigning static IP
