@@ -1,0 +1,1179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="byteShort">B</string>
+    <string name="kilobyteShort">كىلوبايىت</string>
+    <string name="megabyteShort">مىگابايت</string>
+    <string name="gigabyteShort">GB</string>
+    <string name="terabyteShort">TB</string>
+    <string name="petabyteShort">PB</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="untitled">&lt;تېمىسى يوق&gt;</string>
+    <string name="ellipsis">\u2026</string>
+    <string name="ellipsis_two_dots">\u2025</string>
+    <string name="emptyPhoneNumber">(تېلىفۇن نۇمۇرى يوق)</string>
+    <string name="unknownName">(بىلىنمىگەن)</string>
+    <string name="defaultVoiceMailAlphaTag">ئۈنخەت</string>
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
+    <string name="mmiError">ئۇلىنىش مەسلىسى ياكى MMI نومۇر ماس كەلمىگەن.</string>
+    <string name="mmiFdnError">مەشغۇلات پەقەت موقۇم ئۇرۇلدىغان نومۇردىلا چەكلىمگە ئۇچرايدۇ.</string>
+    <string name="serviceEnabled">مۇلازىمەت قوزغلىش.</string>
+    <string name="serviceEnabledFor">مۇلازىمەت ھالىتنى قوزغاش:</string>
+    <string name="serviceDisabled">مۇلازىمەت چەكلەندى.</string>
+    <string name="serviceRegistered">تېزىمغا ئالدۇرۇش مۇۋاپىققىيەتلىك بولدى.</string>
+    <string name="serviceErased">ئۆچۈرۈش مۇۋاپىقىيەتلىك بولدى.</string>
+    <string name="passwordIncorrect">توغرا شېفىرنى كىرگۈزىڭ.</string>
+    <string name="mmiComplete">MMIئاخىرلاشتى.</string>
+    <string name="badPin">سىز كىرگۈزگەن PIN شېفىرى خاتا.</string>
+    <string name="badPuk">سىز كىرگۈزگەن PUKخاتا.</string>
+    <string name="mismatchPin">كىرگۈزگەنPINنومۇرىڭىزنى ئىشلىتىشگە بولمايدۇ.</string>
+    <string name="invalidPin">4تىن 8گىچە ساندىن تۈۈلگەن PINشېفىرىنى كىرگۈزۈڭ.</string>
+    <string name="invalidPuk">8ساندىن تۈزۈلگەن PUKنى كىرگۈزۈڭ.</string>
+    <string name="needPuk">SIMسىزنىڭ كارتىڭىز قۇلۇپلىنىپ قالغان، نومۇرنى كىرگۈزۈپ قولۇپ ئېچىڭ.</string>
+    <string name="needPuk2">PUK2 كودىنى كىرگۈزۈپ SIM كارتىنى ئېچىڭ.</string>
+    <string name="ClipMmi">كەلگەن نۇمۇرنىڭ سالاھىيىتى</string>
+    <string name="ClirMmi">چاقىرغۇچىنىڭ ID سى سىرتتا</string>
+    <string name="CfMmi">چاقىرىش يۆتكەلدى</string>
+    <string name="CwMmi">چاقىرىشىنى ساقلاش</string>
+    <string name="BaMmi">چاقىرىش چەكلەنمەكتە</string>
+    <string name="PwdMmi">شىفېر ئۆزگەرتىش</string>
+    <string name="PinMmi">PINئۆزگەرتىلدى</string>
+    <string name="CnipMmi">ھازىرقى چاقىرغۇچى نۇمۇر</string>
+    <string name="CnirMmi">چاقىرغۇچى نۇمۇر چەكلەنگەن</string>
+    <string name="ThreeWCMmi">ئۈچ لىنىيەلىك چاقىرىش</string>
+    <string name="RuacMmi">ناتۇنۇش تېلفوننى رەت قىلىش</string>
+    <string name="CndMmi">چاقىرغۇچى نۇمۇرىنىڭ چىقىشى</string>
+    <string name="DndMmi">دەخلى قىلماڭ</string>
+    <string name="CLIRDefaultOnNextCallOn">چاقىرغۇچىنىڭ نۇمۇرى چىقىش چەكلىنىدۇ.كىيىنكى چاقىرىش: چەكلىنىدۇ</string>
+    <string name="CLIRDefaultOnNextCallOff">چاقىرغۇچىنىڭ نۇمۇرى چىقىش چەكلىنىدۇ.كىيىنكى چاقىرىش: چەكلەنمەيدۇ</string>
+    <string name="CLIRDefaultOffNextCallOn">چاقىرغۇچىنىڭ نۇمۇرى چىقىش چەكلەنمەيدۇ.كىيىنكى چاقىرىش: چەكلىنىدۇ</string>
+    <string name="CLIRDefaultOffNextCallOff">چاقىرغۇچىنىڭ نۇمۇرى چىقىش چەكلەنمەيدۇ.كىيىنكى چاقىرىش: چەكلەنمەيدۇ</string>
+    <string name="serviceNotProvisioned">مۇلازىمەت تەمىنلەنمىدى.</string>
+    <string name="CLIRPermanent">چاقىرغۇچى كىملىكىنى ئۆزگەرتىشكە بولمايدۇ.</string>
+    <string name="RestrictedChangedTitle">رەت قىلىش ئۆزگەرتىلدى</string>
+    <string name="RestrictedOnData">سانلىق مەلومات توسۇپ قېلىندى.</string>
+    <string name="RestrictedOnEmergency">جىددى مۇلازىمەت توسۇلۇپ قالغان.</string>
+    <string name="RestrictedOnNormal">ئاۋاز مۇلازىمىتى تاقالدى.</string>
+    <string name="RestrictedOnAllVoice">ھەممە ئاۋازلىق مۇلازمەت توسقۇنلۇققا ئۇچىردى.</string>
+    <string name="RestrictedOnSms">SMSئۇچۇر مۇلازىمىتى تاقالدى.</string>
+    <string name="RestrictedOnVoiceData">ئاۋاز\سانلىق-مەلۇمات مۇلازىمىتى توختىتىلدى.</string>
+    <string name="RestrictedOnVoiceSms">ئاۋاز\SMSئۇچۇر مۇلازىمىتى توختىتىلدى.</string>
+    <string name="RestrictedOnAll">ھەممە ئاۋازلىق /سانلىق/SMSمۇلازمەت توسقۇنلۇققا ئۇچىردى.</string>
+    <string name="serviceClassVoice">ئاۋازلىق پاراڭلىشىش </string>
+    <string name="serviceClassData">سانلىق مەلومات</string>
+    <string name="serviceClassFAX">فاكىس</string>
+    <string name="serviceClassSMS">قىسقا ئۇچۇر </string>
+    <string name="serviceClassDataAsync">بىماس قەدەملىك</string>
+    <string name="serviceClassDataSync">ماس قەدەملىك</string>
+    <string name="serviceClassPacket">ئۇچۇر ساندۇقى</string>
+    <string name="serviceClassPAD">PAD</string>
+    <string name="roamingText0">سەييارە سۆزلىشىش كۆكرسەتكۈچى ئېچىلدى</string>
+    <string name="roamingText1">سەييارە سۆزلىشىش كۆكرسەتكۈچى ئېتىلدى</string>
+    <string name="roamingText2">سەييارە سۆزلىشىش كۆرسەتكۈچىسى يورۇدى</string>
+    <string name="roamingText3">چىگرىدىن چىقىپ كېتىش</string>
+    <string name="roamingText4">قۇرلۇش سىرتىدا</string>
+    <string name="roamingText5">سەييارە سۆزلىشىش سېستىمىسى</string>
+    <string name="roamingText6">سەييارە سۆزلىشىش قولايلىق سېستىمىسى</string>
+    <string name="roamingText7">سەييارە سۆزلىشىش بىرلەشمە رەسىمى</string>
+    <string name="roamingText8">سەييارە سۆزلىشىش ئارتۇقچە ھەققى</string>
+    <string name="roamingText9">سەييارە سۆزلىشىش تولۇق مۇلازىمىتى</string>
+    <string name="roamingText10">سەييارە سۆزلىشىش بۆلەك مۇلازىمىتى</string>
+    <string name="roamingText11">سەييارە سۆزلىشىش ئېچىلدى</string>
+    <string name="roamingText12">سەييارە سۆزلىشىش ئېتىۋېتىلدى</string>
+    <string name="roamingTextSearching">مۇلازىمەتنى ئىزدەۋاتىدۇ</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: يۆتكەپ ئۇلاشقا ئامالسىز.</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> دىن كىيىن  <xliff:g id="time_delay">{2}</xliff:g> سېكۇنت</string>
+    <string name="cfTemplateRegistered"><xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: يۆتكەپ ئۇلاشقا ئامالسىز.</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: يۆتكەپ ئۇلاشقا ئامالسىز.</string>
+    <string name="fcComplete">ئالاھدە نومۇر تاماملاندى.</string>
+    <string name="fcError">ئۇلىنىش مەسلىسى ياكى ئالاھىدە نومۇر ماس كەلمىگەن.</string>
+    <string name="httpErrorOk">بولدى</string>
+    <string name="httpError">تور خاتالىقى كۆرۈلدى.</string>
+    <string name="httpErrorLookup">URL تېپىلمىدى.</string>
+    <string name="httpErrorUnsupportedAuthScheme">سېستىما تور بەت باھالاش پىلانىنى قوللىمىدى.</string>
+    <string name="httpErrorAuth">تەكشۈرۈپ ئىسپاتلاش مەغلۇب بولدى.</string>
+    <string name="httpErrorProxyAuth">ۋاكالەتچى مۇلازىمەت قىلغۇچ ئارقىلىق تەكشۈرۈپ ئىسپاتلاش مەغلۇب بولدى.</string>
+    <string name="httpErrorConnect">مۇلازىمېتىرغا ئۇلىنىش مەغلۇپ بولدى.</string>
+    <string name="httpErrorIO">مۇلازىمتىر ئالاقىلىشالمىدى،سەل تۇرۇپ قايتا سىناڭ.</string>
+    <string name="httpErrorTimeout">مۇلازىمېتىرغا ئۇلىنىش ۋاقتى ئۆتۈپ كەتتى.</string>
+    <string name="httpErrorRedirectLoop">بۇ بەتتە مۇلازىمېتىردىن كەلگەن بەك كۆپ خەت-چەك بار.</string>
+    <string name="httpErrorUnsupportedScheme">لايىھەنى سېستىما قوللىمىدى.</string>
+    <string name="httpErrorFailedSslHandshake">بىر بىخەتەرلىك ئۇلۇنىشىنىڭ قۇرۇلىشى مەغلۇپ بولدى.</string>
+    <string name="httpErrorBadUrl">توربەت ئچىلمايدۇ،چۈنكى URL كۈچكە ئېگە ئەمەس.</string>
+    <string name="httpErrorFile">ھۆججەتنى ئاچقىلى بولمىدى.</string>
+    <string name="httpErrorFileNotFound">تەلەپ قىلىنغان ھۆججەت تېپىلمىدى.</string>
+    <string name="httpErrorTooManyRequests">بۇيرۇق كۆپ بولۇپ كەتتى، كېيىنرەك سىناپ بېقىڭ.</string>
+    <string name="notification_title"><xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g> غا ئىمزالانغاندا چىققان خاتالىق</string>
+    <string name="contentServiceSync">ماس قەدەملىك</string>
+    <string name="contentServiceSyncNotificationTitle">ماس قەدەملىك</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc">تىخمۇ كۆپ<xliff:g id="content_type">%s</xliff:g> ئۆچۈرۈش.</string>
+    <string product="tablet" name="low_memory">تاختا كومپيۇتېربوشلىقى قالمىدى !بىرقىسىم ھۆججەتلەرنى يۇيۇپ بوشلۇقنى بىكارلاڭ.</string>
+    <string product="default" name="low_memory">تېلفۇن ساقلىغۇچ توشۇپ كەتتى،بەزى ماتېرىياللارنى چىقىرۋېتىڭ.</string>
+    <string name="me">مەن</string>
+    <string product="tablet" name="power_dialog">تاختا كومپيۇتېر تاللانمىسى</string>
+    <string product="default" name="power_dialog">تېلفۇن تاللانمىسى</string>
+    <string name="silent_mode">تىنىچ ھالەت</string>
+    <string name="turn_on_radio">سىمسىز تورنى ئېچىش</string>
+    <string name="turn_off_radio">سىمسىز تورنى ئېتىۋېتىڭ</string>
+    <string name="screen_lock">ئېكران قۇلۇپلاشنى تەڭشەش</string>
+    <string name="power_off">كومپىيوتېرنى ئۆچۈرۈش</string>
+    <string name="shutdown_progress"> نى ئېتۋىتىشu2026\</string>
+    <string product="tablet" name="shutdown_confirm">تاختا كومپيۇتېرىڭىز ئىتىۋىتىلىدۇ.</string>
+    <string product="default" name="shutdown_confirm">تىلىفون ئۆچۈپ قالماقچى.</string>
+    <string name="shutdown_confirm_question">ئىتەمسىز؟</string>
+    <string name="recent_tasks_title">يېقىندىن</string>
+    <string name="no_recent_tasks">نۆۋەتتە قوزغۇتۇلغان يۇمشاق دېتال مەۋجۇت ئەمەس.</string>
+    <string product="tablet" name="global_actions">تاختا كومپيۇتېر تاللانمىسى</string>
+    <string product="default" name="global_actions">تېلفۇن تاللانمىسى</string>
+    <string name="global_action_lock">ئېكران تاقىغۇچ</string>
+    <string name="global_action_power_off">كومپىيوتېرنى ئۆچۈرۈش</string>
+    <string name="global_action_toggle_silent_mode">تىنىچ ھالەت</string>
+    <string name="global_action_silent_mode_on_status">ئاۋازنى ئېچىش</string>
+    <string name="global_action_silent_mode_off_status">ئاۋازنى ئېتىش</string>
+    <string name="global_actions_toggle_airplane_mode">ئايرۇپىلان سىخىمىسى</string>
+    <string name="global_actions_airplane_mode_on_status">ئايرۇپىلان سىخىمىسى ئۇچۇق</string>
+    <string name="global_actions_airplane_mode_off_status">ئايرۇپىلان سىخىمىسى ئىتۋېتىلگەن</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="safeMode">بىخەتەر قېلىپ</string>
+    <string name="android_system_label">ئاندىرود  سىستىمىسى</string>
+    <string name="permgrouplab_costMoney">پۇل تۆلەشكە تىگىشلىك مۇلازىمەت</string>
+    <string name="permgroupdesc_costMoney">ئەمەلىي پىروگراممىنىڭ سىزنى ئىستىمال قىلغۇزدىغان ئىشلارنى قىلىشىغا رۇخسەت قىلىش.</string>
+    <string name="permgrouplab_messages">سىزنىڭ قىسقا ئۇچۇرىڭىز</string>
+    <string name="permgroupdesc_messages">SMSقىسقا ئۇچۇرنى،ئىلىكتىرونلۇق خەتنى،ۋە باشقا ئۇچۇرلارنى ئوقۇڭ،يېزىڭ.</string>
+    <string name="permgrouplab_personalInfo">سىزنىڭ شەخسى ئۇچۇرلىرڭىز</string>
+    <string name="permgrouplab_location">سىزنىڭ ئورنىڭىز</string>
+    <string name="permgroupdesc_location">فىزىكىلىق ئورۇننى نازارەت قىلىش</string>
+    <string name="permgrouplab_network">تور ئالاقىسى</string>
+    <string name="permgroupdesc_network">ئەمەلىي پىروگراممىنىڭ ھەر خىل تورلارنى زىيارەت قىلشىغا رۇخسەت قىلىش.</string>
+    <string name="permgrouplab_accounts">سىزنىڭ ھېساۋاتىڭىز</string>
+    <string name="permgroupdesc_accounts">ئىشلەتكىلى بولدىغان ھىسابلارنى زىيارەت قىلىش.</string>
+    <string name="permgrouplab_hardwareControls">قاتتىق دىتال كونتىرول قىلىش</string>
+    <string name="permgroupdesc_hardwareControls">تېلىفۇننىىڭ قاتتىق دىتالنى كۆرۈش.</string>
+    <string name="permgrouplab_phoneCalls">ئۇرۇلغان تېلفۇنلار</string>
+    <string name="permgroupdesc_phoneCalls">نازارەت قىلغۇچى،خاتىرلىگۈچى،تېلىفۇن ئۇرۇش جەريانى.</string>
+    <string name="permgrouplab_systemTools">سېستىما قورالى</string>
+    <string name="permgroupdesc_systemTools">كىرىش ۋە كونتىرول قىلىش تۆۋەت ئىقتىدارى.</string>
+    <string name="permgrouplab_developmentTools">تەرەققىيات ئەسۋابى</string>
+    <string name="permgroupdesc_developmentTools">پروگىرامما تەرەققىياتچىلىرىغا مەخسۇس تەۋە بولغان ئالاھىدىلىك.</string>
+    <string name="permgrouplab_storage">ساقلاش</string>
+    <string product="nosdcard" name="permgroupdesc_storage">USB ساقلىغۇچنى زىيارەت قىلىش.</string>
+    <string product="default" name="permgroupdesc_storage">SD كارتىنى زىيارەت قىلىش.</string>
+    <string name="permlab_statusBar">ھالەت كۆزنىكىنى ئۆزگەرتىش ياكى چەكلەش</string>
+    <string name="permdesc_statusBar">ئەمەلىي پىروگراممىنىڭ ھالەت ئىستونىنى ياكى قۇشۇش ۋە ئۆچۈرۈش سىستىمىسنىڭ ئىشىلتىلىشنى چەكلەش.</string>
+    <string name="permlab_statusBarService">ھالەت رامكىسى</string>
+    <string name="permdesc_statusBarService">قوللانچى پىروگىراممىنىڭ ھالەت سىتونىغا يول قويۇش.</string>
+    <string name="permlab_expandStatusBar">ھالەت كۆزنىكىنى كىڭەيتىش / يوقىتىش</string>
+    <string name="permdesc_expandStatusBar">ئەمەلىي ئىشلەش پىروگىراممىسىنى ھالەت كۆرنىكىنى ئېچىش ۋە يىغىشىغا يول قويۇش.</string>
+    <string name="permlab_processOutgoingCalls">ئۇرغان تېلفۇننى توسۇش</string>
+    <string name="permdesc_processOutgoingCalls">ئەمەلىي ئىشلەش پىروگىراممىسىنى جەرياندا تېلفۇن ئۇرۇش ۋە تېلفۇن ئۆزگەرتىپ ئۇرۇشقا يول قويۇش. ۋىروسلۇق پىروگىراممىلار تەكشۈرۈش، ئۆزگەرتىۋىتىش ۋە ئۇرغان تىلفۇننى توسۇپ قويىدۇ.</string>
+    <string name="permlab_receiveSms">قىسقا ئۇچۇرSMSنى قۇبۇل قىلىش</string>
+    <string name="permdesc_receiveSms">ئەمەلىي ئىشلەش پىروگىراممىسى SMS ئۇچۇرىنى قوبۇل قىلىش ۋە يېزىشغا يول قويۇش. ۋىروسلۇق پىروگىراممىلار بەلكىم ئۇچۇرىڭىزنى كۆرىۋالىدۇ ياكى سىز كۆرۈشتىن بورۇن ئۆچۈرىۋىتىدۇ.</string>
+    <string name="permlab_receiveMms">MMSرەڭلىك ئۇچۇرنى قۇبۇل قىلىش</string>
+    <string name="permdesc_receiveMms">ئەمەلىي ئىشلەش پىروگىراممىسى MMS ئۇچۇرىنى قوبۇل قىلىش ۋە يېزىشغا يول قويۇش. ۋىروسلۇق پىروگىراممىلار بەلكىم ئۇچۇرىڭىزنى كۆرىۋالىدۇ ياكى سىز كۆرۈشتىن بورۇن ئۆچۈرىۋىتىدۇ.</string>
+    <string name="permlab_receiveEmergencyBroadcast">جىددى رادىئو سىگنالىنى قوبۇل قىلىش</string>
+    <string name="permdesc_receiveEmergencyBroadcast">قوللانچى پىروگىراممىنىڭ جىددى رادىئو ئۇچۇرلىرىنى قوبۇل قىلىپ بىر تەرەپ قىلىشغا يول قويۇش، 
+بۇ بىردىنبىر يول قويۇلغان سېستىما قوللانچىسى.</string>
+    <string name="permlab_sendSms">SMSئۇچۇرىنى يوللاش</string>
+    <string name="permdesc_sendSms">ئەمەلىي ئىشلەش پىروگىراممىسىنى  SMS ئۇچۇر يوللاشقا يول قويىدۇ. ۋىروسلۇق پىروگىراممىلار سىزنىڭ مۇقىملاشتۇرىشىڭىزسىز ئۇچۇر يوللاپ پۇلىڭىزنى خورىتىدۇ.</string>
+    <string name="permlab_readSms">SMSقىسقا ئۇچۇر ۋە MMSرەڭلىك ئۇچۇرنى ئوقۇڭ</string>
+    <string product="tablet" name="permdesc_readSms">پىروگرامما تەكشى يۈزلۈك كومپيۇتېر ياكى SIM كارتىدا ساقلانغان ئۇچۇرلارنى ئوقۇسا بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ سىزنىڭ مەخپىي ئۇچۇرلىرىڭىزنى ئوقۇيالايدۇ.</string>
+    <string product="default" name="permdesc_readSms">ئەمەلىي ئىشلەش پىروگىراممىسىنى تېلفۇن ياكى  SIMكارتىغا ساقلانغانSMS ئۇچۇرلارنى ئوقۇشىغا يول قويۇش. ۋىروسلۇق پىروگىرامما بەلكىم سىزنىڭ مەخپىي ئۇچۇرىڭىزنى ئوقۇۋېلىشى مۇمكىن.</string>
+    <string name="permlab_writeSms">SMSياكى MMS نى تەھرىرلەش</string>
+    <string product="tablet" name="permdesc_writeSms">پىروگرامما تەكشى يۈزلۈك كومپيۇتېر ۋە SIM كارتىدا ساقلانغان ئۇچۇرلارنى كىرگۈزسە بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ سىزنىڭ ئۇچۇرلىرىڭىزنى ئۆچۈرۈپ تاشلايدۇ.</string>
+    <string product="default" name="permdesc_writeSms">ئەمەلىي ئىشلەش پىروگىراممىسىنى تېلفۇن ياكى  SIMكارتىغا ساقلانغانSMS ئۇچۇرلارنى يېزىشىغا يول قويۇش. ۋىروسلۇق پىروگىرامما بەلكىم سىزنىڭ مەخپىي ئۇچۇرىڭىزنى ئۆچۈرىۋىتىشى مۇمكىن.</string>
+    <string name="permlab_receiveWapPush">سىمسىز تور كېلىشىمىنى قۇبۇل قىلىشWAP</string>
+    <string name="permdesc_receiveWapPush">ئەمەلىي ئىشلەش پىروگىراممىسى WAP ئۇچۇرىنى قوبۇل قىلىش ۋە يېزىشغا يول قويۇش. ۋىروسلۇق پىروگىراممىلار بەلكىم ئۇچۇرىڭىزنى كۆرىۋالىدۇ ياكى سىز كۆرۈشتىن بورۇن ئۆچۈرىۋىتىدۇ.</string>
+    <string name="permlab_getTasks">يۈرگۈزىلىۋاتقان يۇمشاق دېتال تەكشۇرۈش</string>
+    <string name="permdesc_getTasks">ئەمەلىي ئىشلەش پىروگىراممىسىنى يېقىندا ۋە ھازىر قوزغالغان بارلىق ۋەزىپىلەرنى تەكشۈرۈشكە يول قويۇش. بۇ بەلكىم ۋىروسلۇق پىروگىراممىلارنىڭ باشقا پىروگىراممىلاردىكى ئۇچۇرلارنى. بايقىشىغا يول قويغانلىقتۇر.</string>
+    <string name="permlab_reorderTasks">قوزغىلىۋاتقان يۇمشاق دېتالنى خاتىرىلەش</string>
+    <string name="permdesc_reorderTasks">ئەمەلىي ئىشىلتىش پىروگراممىسىنىڭ ۋەزىپىنىڭ ئالدى كۆرۈنۈشى ۋە ئارقا كۆرۈنۈشىنى يۆتكىشىگە رۇخسەت قىلىش.يامان غەرەزلىك ئىشىلتىش سىزنىڭ كونتىرول قىلشىڭىز يوق ئاساستا كونتىرول قىلالايدۇ.</string>
+    <string name="permlab_removeTasks">نۆۋەتتە ئېلىپ بىرىلىۋاتقان پىروگراممىنى توختىتىش</string>
+    <string name="permdesc_removeTasks">پىروگرامما ۋەزىپىنى تازىلىسا ۋە بۇ ۋەزىپىلەرنى ئىجرا قىلىۋاتقان ئەمەلىي پىروگراممىنى توختاتسا بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار باشقا ئەمەلىي پىروگراممىلارنىڭ ئىجرا قىلىنىشىغا كاشىلا قىلىشى مۇمكىن.</string>
+    <string name="permlab_setDebugApp">ئىناۋەتلىك ئەمەلى پروگرامما تەڭشەك</string>
+    <string name="permdesc_setDebugApp">ئەمەلىي ئىشلەش پىروگراممىسىنىڭ باشقا ئىشلەش پىروگراممىسىدا تەڭشىلىشىنى رۇخسەت قىلىش.يامان غەرەزلىك ئىشلەش پىروگراممىسى بەلكىم ئۇنى ئىشىلتىپ باشقا ئىشلەش پىروگراممىسى. ئۆلتۈرۈشى مۇمكىن.</string>
+    <string name="permlab_changeConfiguration">ئاۋاز چاستوتىسى تەڭشەكنى ئۆزگەرتىش</string>
+    <string name="permdesc_changeConfiguration">ئەمەلىي ئىشلەش پىروگىراممىسىنى ئۆزىنىڭ سەپلىنىشىنى ئۆزگەرتىشكە يول قويۇش،مەسلەن رايونلۇق ۋە پۈتكۈل خەت نۇسخىسى.</string>
+    <string name="permlab_enableCarMode">ئىناۋەتلىك ماشىنا شەكلى</string>
+    <string name="permdesc_enableCarMode">ئەمەلىي ئىشلەش پىروگىراممىسىنى ماشىنا شەكلىنى ئىناۋەتلىك قىلىشقا يول قويۇش.</string>
+    <string name="permlab_killBackgroundProcesses">جەريانىنى يوقىتىش</string>
+    <string name="permdesc_killBackgroundProcesses">ئىچكى ساقلىغۇچ تۆۋەن بولمىسىمۇ، ئەمەلىي ئىشلەش پىروگىراممىسىنىڭ ئارقىدا قوزغىلىۋاتقان باشقا پىروگىراممىنى ئۆچۈرۈشكە يول قويۇش.</string>
+    <string name="permlab_forceStopPackages">باشقا پروگىراممىنى مەجبۇرى تاقاش</string>
+    <string name="permdesc_forceStopPackages">ئەمەلىي ئىشلەش پىروگىراممىسىنى باشقا پىروگىراممىلارنى مەجبۇرى توختىتىشقا يول قويۇش.</string>
+    <string name="permlab_forceBack">پروگىراممىنى مەجبۇرى تاقاش</string>
+    <string name="permdesc_forceBack">ئالدى سۇپىدا ماڭغان كەگەن پائاليەتلەرنىڭ مەجبۇرى بۇلشىغا رۇخسەت قىلىش.نورمال ئىشىلتىلىشنى شەرىت قىلمايدۇ.</string>
+    <string name="permlab_dump">سېستىمىنى تەكشۈرۈش</string>
+    <string name="permdesc_dump">ئەمەلىي ئىشلەش پىروگىراممىسىنى سىسىتىمىنىڭ ئىچكى ئەھۋالىنى تەكشۈرۈشكە يول قويۇش. ۋىروسلۇق پىروگىراممىلار ئۇلارغا لازىم بولمىغان ھەرخىل شەخسى ياكى بىخەتەرلىك ئۇچۇرلىرىنى تەكشۈرىدۇ.</string>
+    <string name="permlab_retrieve_window_content">ئېكران مەزمۇنىنى  ئىزدەش</string>
+    <string name="permdesc_retrieve_window_content">پىروگرامما ھەرىكەتلىك كۆزنەك مەزمۇنىنى ئىزدىسە بولىدۇ. يامان غەرەزلىك پىروگرامما پۈتۈن كۆزنەك مەزمۇنىنى ئىزدەپ تاپالىشى مۇمكىن، شۇنداقلا كود سىرتىدىكى بارلىق تېكستلەرنى تەكشۈرەلىشى مۇمكىن.</string>
+    <string name="permlab_shutdown">مەلۇم قىسمى ئۆچۈرۈلدى</string>
+    <string name="permdesc_shutdown">يۇرگۈزىلىۋاتقان دېتالنى ئېتىۋېتىدۇ.تولۇق ئېتىۋەتمەيدۇ.</string>
+    <string name="permlab_stopAppSwitches">ئالماششتۇرۇشنىڭ ئالدىنى ئېلىڭapp</string>
+    <string name="permdesc_stopAppSwitches">باشقا يومشاق دېتالغا ئالماشتۇرۇشتىن ساقلىنىڭ.</string>
+    <string name="permlab_runSetActivityWatcher">بارلىق قوللىنىشنى ھەركەتلەندۇرۇشنى كونتىرول قىلىش ۋە نازارەت قىلش</string>
+    <string name="permdesc_runSetActivityWatcher">پىروگرامما سىستېما قوزغىتىش ئۇسۇلىنى نازارەت قىلسا بولىدۇ. يامان غەرەزلىك پىروگرامما بۇنىڭدىن پايدىلىنىپ سىستېمىنى پۈتۈنلەي بۇزۇۋېتىدۇ. بۇ ھوقۇق ئېچىش ۋاقتىدا ئىشلىتىلىدۇ، ئادەتتىكى پىروگراممىدا ئىشلىتىلمەيدۇ.</string>
+    <string name="permlab_broadcastPackageRemoved">چىقىرىپ تاشلانغان قاچىلاقلىق رادىئونى يوللاش</string>
+    <string name="permdesc_broadcastPackageRemoved">ئەمەلىي ئىشلەش پىروگىراممىسىنى ئۆچۈرۈلۈپ كەتكەن پىروگىراممىلارنى ئاڭلىتىش ئۇقتۇرۇشىنى بىرىشكە يول قويۇش. ۋىروسلۇق پىروگىراممىلار مۇشۇ رولى ئارقىلىق بەزى قوزغىلىۋاتقان پىروگىراممىلارنى ئۆچۈرۈپ تاشلايدۇ.</string>
+    <string name="permlab_broadcastSmsReceived">قوبۇل قىلىنغان SMSئاڭلىتىشنى يوللاش</string>
+    <string name="permdesc_broadcastSmsReceived">ئەمەلىي ئىشلەش پىروگىراممىسىنى  SMSئۇچۇرىنى تاپشۇرىۋالغانلىق ئاڭلىتىش ئۇقتۇرۇشىنى بىرىشكە يول قويۇش. ۋىروسلۇق پىروگىراممىلار مۇشۇ رولى ئارقىلىق بەزى  SMS ئۇچۇرلارنى توسۇيدۇ.</string>
+    <string name="permlab_broadcastWapPush">قوبۇل قىلىنغان WAP-PUSH ئاڭلىتىشنى يوللاش</string>
+    <string name="permdesc_broadcastWapPush">پىروگرامما تاپشۇرۇۋالغان WAP PUSH ئۇچۇرى ئۇقتۇرۇشىنى ئاڭلاتسا بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ قالايمىقان رەڭلىك ئۇچۇر  تارقىتالايدۇ ياكى ناچار مەزمۇنلارنى تور بەتتىكى مەزمۇنغا يوشۇرۇن ئالماشتۇرۇۋېتەلەيدۇ.</string>
+    <string name="permlab_setProcessLimit">ئەمەلگە ئاشۇرۇش جەريانىنى چەكلەش</string>
+    <string name="permdesc_setProcessLimit">ئەمەلىي ئىشلەش پىروگىراممىسىنى ئىلگىرلەش دەرىجىسىنىڭ قانچىلىك چوڭ مىقداردا بولىدىغانلىقىنى كونتىرول قىلىشقا يول قويۇش. ھەرگىز نورمال ئىشلەشكە مۇھتاج ئەمەس.</string>
+    <string name="permlab_setAlwaysFinish">بارلىق ئارقا كۇرۇنۇش ئىشلىتىلىشنى ئىتىلدىغان قىلىش</string>
+    <string name="permdesc_setAlwaysFinish">ئەمەلىي ئىشلەش پىروگىراممىسىنى پائالىيەتنىڭ ئۇلار ئارقا كۆرۈنۈشكە بېرىشى بىلەن تەڭلا ئاخىرلاشقان يوقلىقىنى كونتىرول قىلىشىغا يول قويۇش. ھەرگىز نورمال ئىشلەشكە مۇھتاج ئەمەس.</string>
+    <string name="permlab_batteryStats">باتارىيە سىتاستىكىسىنى ئۆزگەرتىش</string>
+    <string name="permdesc_batteryStats">يىغىلغان باتارىيەلەرنىڭ ئىشلىتىلىش ئىستاستىكىسىنى ئۆزگەرتىشىنى يول قويۇش.پەقەت نورمال ئىشلىشى ئۈچۈنلا ئەمەس.</string>
+    <string name="permlab_backup">كونتىرول قىلىش سىسىتىمىسىنى تەييارلاش ۋە ئەسلىگە كەلتۈرۈش</string>
+    <string name="permdesc_backup">ئەمەلىي ئىشلەش پىروگىراممىسىنى زاپاسلاش ۋە ئەسلىگە كەلتۈرۈشنى كونتىرول قىلىشىغا يول قويۇش.پەقەت نورمال ئىشلتىش ئۈچۈنلا مۇھتاج ئەمەس.</string>
+    <string name="permlab_confirm_full_backup">تولۇق زاپاس ساقلاشنى بېكىتىش  ياكى مەشغۇلاتنى ئەسلىگە كەلتۈرۈش.</string>
+    <string name="permdesc_confirm_full_backup">بۇ پروگراممېنىڭ ئابونت يۈزىنى تولۇق زاپاسلاشنى مۇقىملاشتۇرۇشقا يول قويۇش. چېچقانداق پروگراممىغا ئىشلىتىلمەيدۇ.</string>
+    <string name="permlab_internalSystemWindow">نوپۇزسىز كۆزنەكتە كۆرسىتىش</string>
+    <string name="permdesc_internalSystemWindow">ئىچكى سىسىتىما تەرىپىدىن ئىشلىتىدىغان كۆزنەك قۇرۇشقا يول قويۇش. پەقەت نورمال ئىشلىشى ئۈچۈنلا ئەمەس.</string>
+    <string name="permlab_systemAlertWindow">سىسىتىما-دەرىجىسى گۈدۈكىنى كۆرسۈتۈش</string>
+    <string name="permdesc_systemAlertWindow">پىروگرامما سىستېما ئاگاھلاندۇرۇش كۆزنىكىنى ئاچسا بولىدۇ. يامان غەرەزلىك پىروگرامما بۇنىڭدىن پايدىلىنىپ پۈتۈن ئېكراننى كونترول قىلىۋالىدۇ.</string>
+    <string name="permlab_setAnimationScale">يەر شارى ھاياجانلىنىش  سۈرئىتىنى لايىھەلەش</string>
+    <string name="permdesc_setAnimationScale">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ئۆزگىرىشىگە رۇخسەت قىلىش(تىز ياكى ئاستا )ھەر قانداق ۋاقىتتا.</string>
+    <string name="permlab_manageAppTokens">ئىشلىتىش خاتىرە بۇيۇمىنى باشقۇرۇش</string>
+    <string name="permdesc_manageAppTokens">ئەمەلىي ئشىلەش پىروگىراممىسىنى نورمال كۆزنەك ئارقىلىق ئۆزىنىڭ ھىسابىنى قۇرۇش ۋە باشقۇرۇشقا يول قويۇش.پەقەت نورمال ئىشلتىش ئۈچۈنلا مۇھتاج ئەمەس.</string>
+    <string name="permlab_injectEvents">كونتۇرول كۇنۇپكىسىنى بېسىڭ</string>
+    <string product="tablet" name="permdesc_injectEvents">پىروگرامما ئۆزىنىڭ كىرگۈزۈش ھەرىكىتى (كۇنۇپكىدا كىرگۈزۈش قاتارلىق) نى باشقا ئەمەلىي پىروگراممىلارغا تەمىنلەپ بەرسە بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ، تەكشى يۈزلۈك كومپيۇتېرنى كونترول قىلىۋالىدۇ.</string>
+    <string product="default" name="permdesc_injectEvents">ئەمەلىي پىروگراممىنىڭ   كىرگۈزۈش ھادىسسىغا رۇخسەت قىلىش. ئۆزىنىڭ كىگۈزۈش ھادىسىسىدىن (كۇنۇپكا بېسىش قاتارلىق)باشقا ئەمەلى پىروگراممىغا.يامان غەرەزلىك پىروگرامما ئۇنى ئىشىلتىپ تىلفۇن قۇبۇللىيالايدۇ.</string>
+    <string name="permlab_readInputState">ھەربىر ھەركىتىڭىزنى خاتىرلىدى</string>
+    <string name="permdesc_readInputState">ئەمەلىي ئشىلەش پروگىراممىسىنى سىز باشقا پىروگىراممىدا باسقان نومۇرنى كۆرۈشكە يول قويۇش( مەسلەن مەخپى شىفىرنى كىرگۈزۈش). پەقەت نورمال ئىشلتىش ئۈچۈنلا مۇھتاج ئەمەس.</string>
+    <string name="permlab_bindInputMethod">كىرگۈزۈش ئۇسۇلىغا باغلىماق</string>
+    <string name="permdesc_bindInputMethod">تۇتقۇچى كىرگۈزۈش ئۇسۇلىنىڭ ئۈستىنكى تەرىپىگە باغلىنىشنى يول قويۇش.پەقەت نورمال ئىشلىشى ئۈچۈنلا ئەمەس.</string>
+    <string name="permlab_bindTextService">ھەرپلىك مۇلازىمەتكە باغلاش</string>
+    <string name="permdesc_bindTextService">ئابۇنتنى ھەرپلىك مۇلازىمەت (مەسىلەن، SpellCheckerService) نىڭ يۇقىرى دەرىجىلىك چېتىش ئېغىزىغا باغلىسا بولىدۇ. ئادەتتىكى پىروگرامما بۇ خىل ھوقۇققا ھەرگىز ئېھتىياجلىق ئەمەس.</string>
+    <string name="permlab_bindVpnService">VPNمۇلازىمىتىگە باغلاش</string>
+    <string name="permdesc_bindVpnService">يانفون ئابۇنتىنى VPN مۇلازىمىتىدىكى يۇقىرى دەرىجىلىك چېتىش ئېغىزىغا باغلىسا بولىدۇ. ئادەتتىكى ئەمەلىي پىروگراممىلار بۇ خىل ھوقۇققا ھەرگىز ئېھتىياجلىق ئەمەس.</string>
+    <string name="permlab_bindWallpaper">تام قەغىزگە باغلىماق</string>
+    <string name="permdesc_bindWallpaper">تۇتقۇچى تام قەغىزىنىڭ ئۈستىنكى تەرىپىگە باغلىنىشنى يول قويۇش.پەقەت نورمال ئىشلىشى ئۈچۈنلا ئەمەس.</string>
+    <string name="permlab_bindRemoteViews">كۆزنەك كىچىك ئۈسكۈنىسى مۇلازىمىتىگە باغلاش</string>
+    <string name="permdesc_bindRemoteViews">يانفون ئابۇنتىنى كۆزنەك كىچىك زاپچاسلىرى مۇلازىمەت قىلىدىغان يۇقىرى دەرىجىلىك كومپيۇتېر يۈزىگە باغلىسا بولىدۇ. ئادەتتىكى ئەمەلىي پىروگراممىلار بىردەك بۇ ھوقۇققا ئېھتىياجلىق ئەمەس.</string>
+    <string name="permlab_bindDeviceAdmin">قوزغىتىشنى باشقۇرغۇچى بىلەن ئالاقىلىشىڭ</string>
+    <string name="permdesc_bindDeviceAdmin">تۇتقۇچىنى ئەسلىھە باشقۇرۇشقا ئىۋەتىشكە يول قويۇش.پەقەت نورمال ئىشلىشى ئۈچۈنلا ئەمەس.</string>
+    <string name="permlab_setOrientation">ئىكران ئورنىنى ئۆزگەرتىش</string>
+    <string name="permdesc_setOrientation">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ئايلىنىدىغان ئىكراننى ھەر قانداق ۋاقىتتا ئۆزگەرتىشىگە رۇخسەت قىلىش.نورمال ھەركەت قىلىشى ھاجەتسىز.</string>
+    <string name="permlab_setPointerSpeed">ئىسترىلكا سۈرئىتىنى ئۆزگەرتىش</string>
+    <string name="permdesc_setPointerSpeed">ئەمەلىي پىروگراممېنىڭ خالىغان ۋاقىتتا مائۇس ياكى سىزىمچان تاختىنىڭ ئىسترېلكا سۈرئىتىنى ئۆزگەرتىشىگە يول قويۇش. ئادەتتىكى ئەمەلىي پىروگراممىلاردا بۇ ھوقۇق زۆرۈر ئەمەس.</string>
+    <string name="permlab_signalPersistentProcesses">ئىشلەتكۇچىگە لىنىكىس سىگنالى يوللاش</string>
+    <string name="permdesc_signalPersistentProcesses">ئەمەلىي ئىشلەش پىروگىراممىسىنى تەمىنلەنگەن بارلىق سىگنالنى بارلىق تەرەققىيات جەريانىغا ئېۋەتىپ بېرىشنى تەلەپ قىلىشقا يول قويۇش.</string>
+    <string name="permlab_persistentActivity">ئىشلىتىلىشنى ھەر ۋاقىت ئىشقا ئاشۇرۇش</string>
+    <string name="permlab_deletePackages">ئەمەلىي پروگىراممىنى ئۆچۈرۈش</string>
+    <string name="permdesc_deletePackages">پىروگراممىنىڭ ماشىنا ئادەم   يۈرۈشلغكىنى ئۆچۈرۈشكەرۇخسەت قىلىش.يامان غەرەزلىك پىروگرامما بۇ مۇھىم پىروگراممىنى ئۆچۈۋىتەلەيدۇ.</string>
+    <string name="permlab_clearAppUserData">باشقا ئەمەلىي پروگراممىلارنى ئۆچۈرۈش\' سانلىق مەلۇمات</string>
+    <string name="permdesc_clearAppUserData">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ئابونىتنىڭ سانلىق ئاساسىنى ئۇچۇقئىشىلتىشىگە رۇخسەت قىلىش.</string>
+    <string name="permlab_deleteCacheFiles">باشقا ئەمەلىي پروگراممىلارنى ئۆچۈرۈش\' نەق پۇل</string>
+    <string name="permdesc_deleteCacheFiles">پىروگراممىنىڭ ساقلانغان ھۆججەتنى ئۆچۈرشىگە رۇخسەت قىلىش.</string>
+    <string name="permlab_getPackageSize">ئۆلچەپ ئىشلىتىشىنى ساقلاش ئورنى</string>
+    <string name="permdesc_getPackageSize">ئەمەلىي ئىشلەش پىروگراممىسىنىڭ ئابونىتىنىڭ كودى،سانلىق ئاساسى ۋە چوڭ كىچىكلىكىنىتەكشۈرۈشكە رۇخسەت قىلىش</string>
+    <string name="permlab_installPackages">ئەمەلىي پروگراممىلارنى بىۋاستە قاچىلاش</string>
+    <string name="permdesc_installPackages">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ يېڭى ماشىنا ئادەم يۈرۈشىنى قاچىلىشىغا  رۇخسەت قىلىش.يامان غەرەزلىك پىروگرامما ھەر قانداق يېڭى كۈچلۈك ھوقۇقنى قوشالايدۇ.</string>
+    <string name="permlab_clearAppCache">بارلىق ئەمەلىي پروگىراممىنى ئۆچۈرۈش</string>
+    <string product="tablet" name="permdesc_clearAppCache">پىروگرامما مۇندەرىجىسىدىكى ھۆججەتلەرنى ئۆچۈرۈپ، تەكشى يۈزلۈك كومپيۇتېرنىڭ ساقلاش بوشلۇقىنى بوشاتسا بولىدۇ. سىستېما تەرەققىياتىنى زىيارەت قىلىش قاتتىق چەكلىمىگە ئۇچرايدۇ.</string>
+    <string product="default" name="permdesc_clearAppCache">ئەمەلىي پىروگراممىنىڭ ھۆججەت ئۈچۈرۈپ ھەقسىز تىلفۇن ساقلاش پىروگراممىسىنى ئىشىلتىشىگە رۇخسەت قىلىش.سىستىمىنىڭ ئىلگىرلىشىگە توسقۇنلۇق قىلىدۇ.</string>
+    <string name="permlab_movePackage">ئىشلىتىلدىغان ماتىرىياللارنى يۆتكەش</string>
+    <string name="permdesc_movePackage">ئەمىلىي ئىشلەش پىروگراممىسىنى ئىشىلتىپ ماتېريال يۆتكىگەندە ئىچىدىن سىرىتتىكى ۋاستىغا قاراپ چىقىدۇ.ئەكسىچە بولسا قارمۇ قارشى بولىدۇ.</string>
+    <string name="permlab_readLogs">سېستىما ھۆججىتىنى ئوقۇڭ</string>
+    <string product="tablet" name="permdesc_readLogs">پىروگرامما سىستېمىدىكى ھەرخىل كۈندىلىك خاتىرە ھۆججىتىدىن ئۇچۇر ئوقۇسا بولىدۇ. بۇ ئارقىلىق پىروگرامما تەكشى يۈزلۈك كومپيۇتېرىڭىزنىڭ ئىشلىتىلىش ئەھۋالىغا ئالاقىدار ئادەتتىكى ئۇچۇرلارنى بايقىيالايدۇ، شەخسىي ئۇچۇر ۋە مەخپىي ئۇچۇرلارنىمۇ ئۆز ئىچىگە ئالىدۇ.</string>
+    <string product="default" name="permdesc_readLogs">ئەمەلىي ئىشلەش پىروگراممىسىنىڭ سىسىتىمىدىن ھەر خىل خاتېرە ھۆججەتلىرىنى ئۇقۇشىغا رۇخسەت قىلىش.بۇ ئۇچۇر سىزنىڭ تىفۇننى نىمىگە ئىشىلتىۋاتقىنىڭىز بىلەن مۇناسۋەتلىك.لىكىن ئۇلار شەخسى مەخپىيەتنى ئۆز ئىچىگە ئالمايدۇ.</string>
+    <string name="permlab_anyCodecForPlayback">ھەر قانداق مېدىيا سىفىر يەشكۈچى ئارقىلىق قويۇش  </string>
+    <string name="permdesc_anyCodecForPlayback">قويۇشقا قولاي بولۇش ئۈچۈن، پىروگرامما خالىغان قاچىلىنىپ بولغان مىدىيا كود يېشىش ئاپپاراتىنى ئىشلەتسە بولىدۇ.</string>
+    <string name="permlab_diagnostic">باربولغان مەنبەنى ئوقۇڭ\يېزىڭ</string>
+    <string name="permdesc_diagnostic">پىروگرامما دىياگنوز گۇرۇپپىسى ئىگە بولغان خالىغان مەنبەنى ئوقۇسا / يازسا بولىدۇ (مەسىلەن، /dev ئىچىدىكى ھۆججەت). بۇ سىستېمېنىڭ تۇراقلىقى ۋە بىخەتەرلىكىگە تەسىر كۆرسىتىشى مۇمكىن. بۇ ھوقۇق پەقەت ياسىغۇچى ۋە يۈرۈشتۈرگۈچى ئورۇننىڭ قاتتىق دېتال مەسىلىسىگە دىياگنوز قويۇشى ئۈچۈن تەمىنلىنىدۇ.</string>
+    <string name="permlab_changeComponentState">ئىناۋەتلىك ياكى ئىناۋەتسىز ئەمەلى پروگىرامما تەركىبى</string>
+    <string product="tablet" name="permdesc_changeComponentState">"ئەمەلىي پىروگراممىنى ئۆزگەرتىشتە باشقا پىروگراممىلارنىڭ زاپچاسلىرىنى قوزغاتسا بولامدۇ؟ يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ تەكشى يۈزلۈك كومپيۇتېرىڭىزنىڭ مۇھىم ئىقتىدارلىرىنى ئېتىۋېتىدۇ. بۇ ھوقۇقنى ئىشلەتكەندە ئېھتىيات قىلىڭ، چۈنكى بۇنىڭ بىلەن پىروگرامما زاپچاسلىرىنى ئىشلەتكىلى بولمايدىغان، ماسلاشمىغان، مۇقىملاشمىغان ھالەتكە كەلتۈرۈپ قويۇشى مۇمكىن. "</string>
+    <string product="default" name="permdesc_changeComponentState">"ئەمەلىي پىروگراممىنى ئۆزگەرتىشتە باشقا پىروگراممىلارنىڭ زاپچاسلىرىنى قوزغاتسا بولامدۇ؟ يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ يانفوننىڭ مۇھىم ئىقتىدارلىرىنى ئېتىۋېتىدۇ. بۇ ھوقۇقنى ئىشلەتكەندە ئېھتىيات قىلىڭ، چۈنكى بۇنىڭ بىلەن پىروگرامما زاپچاسلىرىنى ئىشلەتكىلى بولمايدىغان، ماسلاشمىغان، مۇقىملاشمىغان ھالەتكە كەلتۈرۈپ قويۇشى مۇمكىن."</string>
+    <string name="permlab_setPreferredApplications">باشتىكى ئەمەلى ئىشلەش پىروگىراممىنى تەڭشەش</string>
+    <string name="permdesc_setPreferredApplications">ئەمەلىي ئىشلەش پىروگىراممىسىنى باشتا تاللىغان پىروگىراممىنى ئۆزگەرتىشكە يول قويۇش.بۇ ۋىروسلۇق پىروگىراممىنىڭ قوزغىلىۋاتقان پىروگىراممىنى ئۆزگەرتىش، شەخسى سانلىق مەلوماتنى سىزدىن يىغىش دەپ ئالدىشىغا يول قويۇش.</string>
+    <string name="permlab_writeSettings">يەر شارى سېستىما لايىھەسىنى ئۆزگەرتىش</string>
+    <string name="permdesc_writeSettings">پىروگرامما سىستېما تەڭشىكىگە ئالاقىدار سانلىق مەلۇماتنى ئۆزگەرتسە بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ سىستېما تەڭشىكىڭىزنى بۇزۇۋېتىدۇ.</string>
+    <string name="permlab_writeSecureSettings">سېستىما بىخەتەرلىك لايىھەسىنى ئۆزگەرتىش</string>
+    <string name="permdesc_writeSecureSettings">پىروگراممىنىڭ سىسىتىمىنىڭ ب لاھىيە سانلىق ئاساسىنى ئۆزگەرتىشىگە رۇخسەت قىلىش.ئەمەلىي قوللىنىشنى ئىشلەتمىگەن ئاساستا.يامان غەرەزلىك پىروگراممىلار سىزنىڭ سىستىمىزڭىزنى بۇزالايدۇ.</string>
+    <string name="permlab_writeGservices">گۇ گۇل مۇلازىمەت خەرىتىسىنى ئۇچۇرۇش \ئۆزگەرتىش</string>
+    <string name="permdesc_writeGservices">ئەمەلىي ئىشلەش پىروگراممىسىنىڭ گوگىل خەرىتىسى مۇلازىمىتىنى ئۆزگەرتىشىگە رۇخسەت قىلىش.</string>
+    <string name="permlab_receiveBootCompleted">تىلفۇن ئېچىلغاندىلا ئاپتوماتىك قوزغىلىش</string>
+    <string product="tablet" name="permdesc_receiveBootCompleted">پىروگرامما سىستېما قوزغىتىلغاندىن كېيىن دەرھال ئۆزلۈكىدىن قوزغالسا بولىدۇ. بۇنىڭ بىلەن تەكشى يۈزلۈك كومپيۇتېرنىڭ قوزغىتىلىش ۋاقتىنى ئۇزارتقىلى بولىدۇ، ئەگەر پىروگرامما داۋاملىق ئىجرا قىلىنسا، كومپيۇتېرنىڭ پۈتۈن سۈرئىتىنى ئاستىلىتىۋېتىدۇ.</string>
+    <string product="default" name="permdesc_receiveBootCompleted">ئەمەلىي ئىشلەش پىروگىراممىسىنى ئۆزىنىڭ سىستىمىسى قوزغىلىش بىلەن تەڭ قوزغىلىشىغا يول قويۇش. بۇ تىلفۇننىڭ قوزغىلىش ۋاقتىنى ئۇزارتىپ، تېلفۇن سۈرئىتىنى ئاستىلىتىۋىتىدۇ.</string>
+    <string name="permlab_broadcastSticky">ئاڭلىتىشنى يوللاش</string>
+    <string product="tablet" name="permdesc_broadcastSticky">پىروگرامما جاھىل رادىيو يوللىسا بولىدۇ، بۇ رادىيو ئاڭلىتىشى ئاخىرلاشقاندا يەنە ساقلىنىپ قالىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ تەكشى يۈزلۈك كومپيۇتېرنىڭ كۆپ قىسىم سىغىمىنى تۈگىتىپ، سۇرئەت ۋە تۇراقلىقنى ئاجىزلاشتۇرۇۋېتىدۇ.</string>
+    <string product="default" name="permdesc_broadcastSticky">ئەمەلىي ئىشلەش پروگىراممىسى چاپلاشقا رۇخسەت قىلىدۇ، بۇ ئىجرا قىلىنغاندىن كىيىن ئاياغلىشىدۇ. ۋىروسلانغان پروگىرامما تېلفۇننى تۇراقسىز ياكى سۈرئەتىنى ئاستا قىلىپ تېخىمۇ كۆپ بوشلۇقنى ئىگەللەيدۇ.</string>
+    <string name="permlab_readContacts">ئالاقىلىشىش سانلىق مەلۇماتىنى ئوقۇڭ</string>
+    <string product="tablet" name="permdesc_readContacts">پىروگرامما تەكشى يۈزلۈك كومپيۇتېرىڭىزدا ساقلانغان بارلىق ئالاقىلەشكۈچىلەر (ئادرېسى) سانلىق مەلۇماتىنى ئوقىسا بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ، سانلىق مەلۇماتلىرىڭىزنى باشقىلارغا يوللاپ بېرىدۇ.</string>
+    <string product="default" name="permdesc_readContacts">ئەمەلىي ئىلەش پىروگراممىسنىڭ تېلفۇنىڭىزدىكى بارلىق ئالاقلىشىش(ئادىرسى)سانلىق ئاساسىنى ئۇقۇشىغا رۇخسەت قىلىش.يامان غەرەزلىك پىروگراممىلار سىزنىڭ سانلىق ئاساسىڭىزنى باشقىلارغا ئېۋەتەلەيدۇ.</string>
+    <string name="permlab_writeContacts">سانلىق ئاساسنى يېزىش</string>
+    <string product="tablet" name="permdesc_writeContacts">پىروگرامما تەكشى يۈزلۈك كومپيۇتېرغا ساقلانغان ئالاقىلەشكۈچىلەر (ئادرېسى) سانلىق مەلۇماتىنى ئۆزگەرتسە بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ ئالاقىلەشكۈچىلەر سانلىق مەلۇماتىنى ئۆچۈرۈۋېتىدۇ ياكى ئۆزگەرتىۋېتىدۇ.</string>
+    <string product="default" name="permdesc_writeContacts">ئەمەلىي ئىشلەش پىروگراممىسنىڭ  تېلفۇنىڭىزدا ئالاقلىشىش ئادىرسىنى ئۆزگەرتىشىگە رۇخسەت قىلىش.يامان غەرەزلىك ئىشىلتىش پىروگراممىسى بۇنى ئىشىلتىپ  سانلىق ئاساسلارنى ئۆچۈرۈپ ئۆزگەرتەلەيدۇ.</string>
+    <string name="permlab_readProfile">شەخىس ماتېرىيال سانلىق مەلۇماتىنى ئوقۇش</string>
+    <string product="default" name="permdesc_readProfile">پىروگرامما ئۈسكۈنىڭىزدە ساقلانغان شەخسىي ئۇچۇرلار (مەسىلەن، ئىسىم – فامىلىسى ۋە ئالاقىلەشكۈچىلەر ئۇچۇرى) نى ئوقۇسا بولىدۇ. بۇ ئەمەلىي پىروگراممېنىڭ كىملىكىڭىزنى پەرقلەندۈرۈپ، شەخسىي ئۇچۇرلىرىڭىزنى باشقىلارغا يەتكۈزۈپ بېرىدىغانلىقىنى بىلدۈرىدۇ.</string>
+    <string name="permlab_writeProfile">شەخسى ماتېرىيال سانلىق مەلۇماتلىرىڭىزنى كىرگۈزۈڭ </string>
+    <string product="default" name="permdesc_writeProfile">پىروگرامما ئۈسكۈنىڭىزگە ساقلانغان شەخسىي ئۇچۇر (مەسىلەن، ئىسىم – فامىلە ۋە ئالاقىلەشكۈچى ئۇچۇرى) نى ئۆزگەرتسە ياكى ئۇنىڭغا ئۇچۇر قوشسا بولىدۇ. بۇ باشقا ئەمەلىي پىروگراممىلارنىڭ كىملىكىڭىزنى پەرقلەندۈرەلەيدىغانلىقىنى ھەمدە شەخسىي ئۇچۇرلىرىڭىزنى باشقىلارغا يوللاپ بېرەلەيدىغانلىقىنى بىلدۈرىدۇ.</string>
+    <string product="default" name="permlab_readSocialStream">ئىجدىمائىي مۇناسىۋەت ۋېدىيو ئېقىمىنى ئوقۇش</string>
+    <string product="default" name="permdesc_readSocialStream">پىروگرامما سىزنىڭ ۋە دوستلىرىڭىزنىڭ ئىجتىمائىي ئالاقىدىكى ئەڭ يېڭى ئەھۋالنى زىيارەت قىلسا ۋە ماسلاشتۇرسا بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنپ سىزنىڭ ۋە تور ئالاقىڭىزدىكى دوستلىرىڭىز بىلەن بولغان شەخسىي ئالاقە ئۇچۇرلىرىڭىزنى ئوقالايدۇ.</string>
+    <string product="default" name="permlab_writeSocialStream">ئىجتىمائى مۇناسىۋەت ۋېدىيو ئېقىمىڭىزنى كىرگۈزۈڭ </string>
+    <string product="default" name="permdesc_writeSocialStream">پىروگرامما دوستلىرىڭىزنىڭ ئىجتىمائىي ئالاقىدىكى ئەڭ يېڭى ئەھۋالىنى كۆرسەتسە بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ سىزنىڭ دوستىڭىزنىڭ سىياقىغا كىرىۋېلىپ، ئالداپ كودىڭىز ۋە باشقا مەخپىي ئۇچۇرلىرىڭىزنى ئىگىلىۋالىدۇ.</string>
+    <string name="permlab_readCalendar">كالىندار پائالىيتى بىلەن مەخپى ئۇچۇرنى ئوقۇتۇش</string>
+    <string product="tablet" name="permdesc_readCalendar">پىروگرامما تەكشى يۈزلۈك كومپيۇتېرىڭىزدا ساقلانغان بارلىق كالىندار ھەرىكىتى (دوستلار ۋە خىزمەتداشلار ھەرىكىتى) نى ئوقىسا بولىدۇ. بۇ خىل ھوقۇققا ئىگە يامان غەرەزلىك ئەمەلىي پىروگراممىلار ئىگىدار بىلمىگەن ئەھۋالدا، بۇ كالىنداردىن شەخسىي ئۇچۇرنى ئىگىلىيەلەيدۇ.</string>
+    <string product="default" name="permdesc_readCalendar">پىروگرامما يانفونىڭىزدا ساقلانغان بارلىق كالىندار ھەرىكىتى (دوستلار ۋە خىزمەتداشلار ھەرىكىتى) نى ئوقىسا بولىدۇ. بۇ خىل ھوقۇققا ئىگە يامان غەرەزلىك ئەمەلىي پىروگراممىلار ئىگىدار بىلمىگەن ئەھۋالدا، بۇ كالىنداردىن شەخسىي ئۇچۇرنى ئىگىلىيەلەيدۇ.</string>
+    <string name="permlab_writeCalendar">كالىندار ھەرىكىتىنى قوشۇش ياكى ئۆزگەرتىش ھەمدە ئىگىدار بىلمىگەن ئەھۋالدا تەكلىپ قىلغان ئوبيېكتقا ئېلېكتىرونلۇق يوللانما يوللاش</string>
+    <string name="permlab_accessMockLocation">سىناش ئۈچۈن ماتىرىيال ئورنىنى تەقلىد قىلش</string>
+    <string name="permdesc_accessMockLocation">تەقلىدى ئورۇن مەنبەسى قۇرۇپ  سىناققا كىرشىش.يامان غەرەزلىك ئىشىلتىش پىروگراممىسى يەرشارى ئورۇن بەلگىلىش سىستېمىسى ياكى تور تەمىنلىگۈچى دىگەندەك ئورۇننى قاپلاش /ھالەت قايتىش. ئورۇن پىروگراممىلىرنى ئىشىلتەلەيدۇ.</string>
+    <string name="permlab_accessLocationExtraCommands">ئارتۇقچە ئۇرۇن تەمىنلىگۈچىنىڭ بۇيرۇقىنى ساقلاش</string>
+    <string name="permdesc_accessLocationExtraCommands">ئارتۇقچە ئۇرۇن تەمىنلىگۈچىنىڭ بۇيرۇقىنى ساقلاش.ناچار يۇمشاق دىتاللارى بۇنداق مەشغۇلاتتىكى  GPS ياكى باشقا ئورۇن ئېنىقلىغۇچ ئارقىلىق ئورۇننى ئېنىقلايدۇ.</string>
+    <string name="permlab_installLocationProvider">ئورۇن بەلگۈلىگىچىنى سەپلەشكە رۇخسەت بېرىش </string>
+    <string name="permdesc_installLocationProvider">تەقلىدىي ئورۇن مەنبەسى قۇرۇپ سىناش. ۋىروسلۇق پىروگراممىلار بۇ تاللاش ئارقىلىق ھەقىقىي ئورۇن مەنبەسى (مەسىلەن GPS ياكى تور تەمىنلىگۈچى) قايتۇرغان ئورۇن ياكى/ ۋە ھالەتنى يېپىۋىلىشى مۇمكىن، ياكى سىزنىڭ ئورنىڭىز كۆزىتىپ ھەمدى بۇنى سىرتقى مەنبەگە تەمىنلىشى مۇمكىن.</string>
+    <string name="permlab_accessFineLocation">(GPS) ئورنىنى تېپىش</string>
+    <string name="permlab_accessCoarseLocation">ناچار(تور)ئورنى</string>
+    <string name="permlab_accessSurfaceFlinger">مۇلازىمەت ئۇچىنى زىيارەت قىلىش</string>
+    <string name="permdesc_accessSurfaceFlinger">ئەمەلىي ئىشلەش پىروگىراممىسىنى Surface Flinger تۆۋەن دەرىجىلىك ئالاھىدىلىكنى ئىشىلىتىنى يول قويىدۇ.</string>
+    <string name="permlab_readFrameBuffer">قېلىپ رايونىنى ئوقۇڭ</string>
+    <string name="permdesc_readFrameBuffer">ئەمەلىي ئىشلەش پىروگىراممىسىنى دولقۇننى ئوقۇشقا يول قويۇش.</string>
+    <string name="permlab_modifyAudioSettings">سىمىز تور شەكلىنى ئۆزگەرتىش</string>
+    <string name="permdesc_modifyAudioSettings">ئەمەلىي ئىشلەش پىروگىراممىسىنى بارلىق ئاۋازلىق مۇزىكىنى تەڭشەشكە يول قويۇش، مەسلەن ئاۋاز چوڭ كىچكىلىكى ۋە ئاۋاز يولى. </string>
+    <string name="permlab_recordAudio">سىنغا ئېلىش</string>
+    <string name="permdesc_recordAudio">ئەمەلىي پىروگراممىنىڭ ئاۋاز چاستوتىسىنى خاتىرىلەيدىغان يولىنى زىيارەت قىلىشقا رۇخسەت قىلىش.</string>
+    <string name="permlab_camera">سۈرتكە ۋە سىنغا ئېلىش</string>
+    <string name="permdesc_camera">ئەمەلىي ئىشلەش پىروگىراممىسىنى رەسىم تارتىشقا يول قويۇش. بۇ پىروگىراممىنىڭ  ھەرقانداق ۋاقىتتا كامىراغا چۈشكەن سۈرئەتنى يىغىۋېلىشقا يول قويىشىدۇر.</string>
+    <string product="tablet" name="permlab_brick">تاختا كومپيۇتېر ئىشلىتىشنى ئۇزۇن مۇددەت توختىتىش</string>
+    <string product="default" name="permlab_brick">تېلفۇن ئىشلەتكىلى بولمايدۇ</string>
+    <string product="tablet" name="permdesc_brick">پىروگرامما تەكشى يۈزلۈك كومپيۇتېرنى ئىشلىتىشنى مەڭگۈ توختاتسا بولىدۇ. لېكىن بۇ ناھايىتى خەتەرلىك.</string>
+    <string product="default" name="permdesc_brick">ئەمەلىي ئىشلەش پىروگىراممىسىنى تېلفۇننىڭ مەڭگۈلۈك ئىشلىشىنى چەكلىشىگە يول قويۇش. بۇ ناھايىتى خەتەرلىك.</string>
+    <string product="tablet" name="permlab_reboot"> تاختا كومپيوتېرنى مەجبۇرى قايتا قوزغىتىش</string>
+    <string product="default" name="permlab_reboot">تېلفۇننى مەجبۇرى قويۇش</string>
+    <string product="tablet" name="permdesc_reboot">پىروگرامما تەكشى يۈزلۈك كومپيۇتېرنى مەجبۇرىي قايتا قوزغاتسا بولىدۇ.</string>
+    <string product="default" name="permdesc_reboot">ئەمەلىي ئىشلەش پىروگىراممىسىنى  تېلفۇننى مەجبۇرى قايتا قوزغىتىشىغا يول قويۇش.</string>
+    <string name="permdesc_mount_unmount_filesystems">ئەمەلىي ئىشلەش پىروگىراممىسىنى كۆچمەن ساقلىغۇچ ئۈچۈن ھۆججەتلەرنى قاچىلاش ۋە ئۆچۈرۈشكە يول قويۇش.</string>
+    <string name="permdesc_mount_format_filesystems">ئەمەلىي ئىشلەش پىروگىراممىسىنى ساقىلىغۇچنى فورماتلاشقا يول قويۇش.</string>
+    <string name="permlab_asec_access">بىخەتەر ساقلىغۇچتا ئۇچۇرغا ئىگە بولۇش</string>
+    <string name="permdesc_asec_access">ئەمەلىي ئىشلەش پىروگىراممىسىنى بىخەتەرلىك ساقلىغۇچتىن ئۇچۇرغا ئىگە بولۇشىغا يول قويۇش.</string>
+    <string name="permlab_asec_create">بىخەتەر ئامبار قۇرۇش</string>
+    <string name="permdesc_asec_create">ئەمەلىي ئىشلەش پىروگىراممىسىنى بىخەتەرلىك ساقلىغۇچ قۇرىشىغا يول قويۇش.</string>
+    <string name="permlab_asec_destroy">بىخەتەر ئامبارنى بۇزىۋىتىش</string>
+    <string name="permdesc_asec_destroy">ئەمەلىي ئىشلەش پىروگىراممىسىنى بىخەتەرلىك ساقلىغۇچ بۇزىۋىتىشىغا يول قويۇش.</string>
+    <string name="permlab_asec_mount_unmount">قاچىلاش\قاچىلىماسلىق بىخەتەر ساقلاش</string>
+    <string name="permdesc_asec_mount_unmount">ئەمەلىي ئىشلەش پىروگىراممىسىنى بىخەتەرلىك ساقلىغۇچنى قاچىلاش / ئۆچۈرۈشكە يول قويۇش.</string>
+    <string name="permlab_asec_rename">بىخەتەر ساقلىغۇچنىڭ ئىسمىنى ئۆزگەرتىش</string>
+    <string name="permdesc_asec_rename">ئەمەلىي ئىشلەش پىروگىراممىسىنى بىخەتەرلىك ساقلىغۇچقا قايتىدىن ئىسىم قويۇشقا يول قويۇش.</string>
+    <string name="permlab_vibrate">كونتىرول تىترەتكۈچ</string>
+    <string name="permdesc_vibrate">ئەمەلىي ئىشلەش پىروگىراممىسىنى تىترەش ئەسلىھەسىنى كونتىرول قىلىشىغا يول قويۇش.</string>
+    <string name="permlab_flashlight">قول چىراقنى كونتىرول قىلىش</string>
+    <string name="permdesc_flashlight">ئەمەلىي ئىشلەش پىروگىراممىسىنى چاقماق نۇرنى كونتىرول قىلىشقا يول قويۇش.</string>
+    <string name="permlab_manageUsb">USB ئۈسكۈنىلەرنى بىر تەرەپ قىلىش</string>
+    <string name="permdesc_manageUsb">قوللانچى پىروگىرامما ئارقىلىق USB ئۈسكۈنىسىنىڭ ئالدىنلىقى ۋە ھوقۇقىنى بەلگىلەش.</string>
+    <string name="permlab_accessMtp">MTP  كېلىشىمىنى قوللىنىش</string>
+    <string name="permdesc_accessMtp">" MTP USBكېلىشىمىنى ئىشلىتىشكە قولاي بولسۇن ئۈچۈن، ئىچكى يادرو MTP قوزغاتقۇچى پىروگراممىنى زىيارەت قىلىشقا رۇخسەتمۇ."</string>
+    <string name="permlab_hardware_test">قاتتىق دىتالنى تەكشۈرۈش</string>
+    <string name="permdesc_hardware_test">ئەمەلىي ئىشلەش پىروگىراممىسىنى سىرىتقى ئەسلىھەنى نىشان قىلغان قاتتىق دىتال سىنىقىنى كونتىرول قىلىشىغا يول قويۇش.</string>
+    <string name="permlab_callPhone">تېلفۇن نومۇرىنى بىۋاستە ئۇرۇش</string>
+    <string name="permdesc_callPhone">ئەمەلىي ئىشلەش پىروگىراممىسىنى ھەرقانداق تېلفۇن نومۇرىغا سىزنىڭ تەكلىپىڭىزسىز ئۇرۇشنى يول قويۇش. ۋىروسلۇق پىروگىراممىلار تېلفۇن نومۇر تىزىملىكىدىكى ئويلىمىغان نومۇرغا تېلفۇن ئۇرۇپ قويىدۇ. بۇ جىددى تېلفۇنغا قالايمىقان تېلفۇن ئۇرماسلىقنى ئاگاھلاندۇرىدۇ.</string>
+    <string name="permlab_callPrivileged">نومۇرلارنى بىۋاستە ئۇرۇش</string>
+    <string name="permdesc_callPrivileged">ئەمەلىي ئىشلەش پىروگىراممىسىنى ھەرقانداق تېلفۇن نومۇرىغا سىزنىڭ تەكلىپىڭىزسىز ئۇرۇشنى يول قويۇش، جىددى تېلفۇن قاتارلىقلارنى ئۆز ئىچىگە ئالىدۇ. ۋىروسلۇق پىروگىراممىلار مۇھتاجسىز ۋە قانۇنسىز جىددى تېلفۇنلارغا نومۇر ئۇرىدۇ.</string>
+    <string product="tablet" name="permlab_performCdmaProvisioning">بىۋاستە CDMA تاختا كومپيۇتېر تەڭشىكىنى قوزغىتىش</string>
+    <string product="default" name="permlab_performCdmaProvisioning">CDMA تېلىفۇن قورۇلمىسىدىن بىۋاستە باشلاش</string>
+    <string name="permdesc_performCdmaProvisioning">ئەمەلىي ئىشلەش پىروگىراممىسىنى CDMA تەڭشىكىنى باشلاشقا يول قويۇش. ۋىروسلۇق پىروگىراممىلار CDMAنى بەلكىم زۆرۈرسىز تەڭشىشى مۇمكىن  </string>
+    <string name="permlab_locationUpdates">ئورۇننىڭ يېڭىلىنىشىنى كونتىرول قىلىش ئۇقتۇرۇشى</string>
+    <string name="permdesc_locationUpdates">ئەمەلىي ئىشلەش پروگىراممىسىنى رادىئودىن ئورۇننىڭ يېڭىلىنىشىنى قوزغىتىش /چەكلەشكە يول قويۇش. پەقەت نورمال ئىشلتىش ئۈچۈنلا مۇھتاج ئەمەس.</string>
+    <string name="permlab_checkinProperties">تىزىملىتىش خۇسۇسيىتىنى ئىشىلتىش</string>
+    <string name="permdesc_checkinProperties">ئەمەلىي ئىشلەش پىروگىراممىسىنى مولازىمەتنىڭ رولىنى يوللاشنى ئويۇش / يېزىشىغا يول قويۇش.پەقەت نورمال ئىشلتىش ئۈچۈنلا مۇھتاج ئەمەس.</string>
+    <string name="permlab_bindGadget">كۆزنەك كىچىك دېتالى تاللاش</string>
+    <string name="permdesc_bindGadget">ئەمەلىي ئىشلەش پىروگىراممىسىنى سىسىتىمىغا قايسى ئەسۋاپنىڭ قايسى پىروگىراممىنى ئىشلەتكەنلىكىنى ئېيتىپ بېرىشكە يول قويۇش. مۇشۇ تەستىق بىلەن ئېيىتقاندا، پىروگىراممىلار شەخسى سانلىق مەلوماتنى باشقا پىروگىراممىغا بىلدۇرىدۇ. پەقەت نورمال ئىشلتىش ئۈچۈنلا مۇھتاج ئەمەس.</string>
+    <string name="permlab_modifyPhoneState">تېلىفۇن ھالىتىنى ئۆزگەرتىش</string>
+    <string name="permdesc_modifyPhoneState">ئەمەلىي ئىشلەش پىروگىراممىسىنى تېلفۇن ئەسلىھەسىنىڭ ئالاھىدىلىكىنى كونتىرول قىلىشقا يول قويۇش. ئىلتىماس تەستىقى تورنى ئاچىدۇ، تېلفۇن رادىئوسىنى ئېچىپ ئۆچۈرىدۇ ھەمدە مۇشۇنىڭغا ئوخشاش باشقىلار.</string>
+    <string name="permlab_readPhoneState">تېلفۇننىڭ ھالىتىنى ۋە ئالاھىدىلىكىنى ئوقۇڭ</string>
+    <string name="permdesc_readPhoneState">پىروگرامما ئۈسكۈنىدىكى يانفون ئىقتىدارىنى زىيارەت قىلسا بولىدۇ. بۇ ھوقۇققا ئىگە پىروگرامما بۇ يانفوننىڭ نومۇرى ۋە تەرتىپ نومۇرىنى، سۆزلىشىۋاتقان – سۆزلەشمىگەنلىكىنى، شۇنداقلا قارشى تەرەپنىڭ نومۇرى قاتارلىقلارنى بىلەلەيدۇ.</string>
+    <string product="tablet" name="permlab_wakeLock">تاختا كومپيۇتېرنىڭ ئارام ئېلىش ھالىتىنى چەكلەش</string>
+    <string product="default" name="permlab_wakeLock">تېلفۇننىڭ ئۇخلاپ قېلىشىدىن ساقلىنىڭ</string>
+    <string product="tablet" name="permdesc_wakeLock">پىروگرامما تەكشى يۈزلۈك كومپيۇتېرنىڭ ئۇيقۇلىق ھالەتكە كىرىشىنى توسسا بولىدۇ.</string>
+    <string product="default" name="permdesc_wakeLock">ئەمەلىي ئىشلەش پىروگراممىسنىڭ ئۇخلاشتىن تۇسۇشىغا رۇخسەت قىلىش.</string>
+    <string product="tablet" name="permlab_devicePower">تاختا كومپيۇتېرنى ئۆچۈرۈش ياكى ئېچىش</string>
+    <string product="default" name="permlab_devicePower">تېلېفوننى ئىتىش ۋە ئېچىش</string>
+    <string product="tablet" name="permdesc_devicePower">پىروگرامما تەكشى يۈزلۈك كومپيۇتېرنى ئاچسا ياكى ئەتسە بولىدۇ.</string>
+    <string product="default" name="permdesc_devicePower">ئەمەلىي ئىشلەش پىروگىراممىسىنى تېلفۇننى ئىتىش ياكى ئېچىشقا يول قويۇش.</string>
+    <string name="permlab_factoryTest">زاۋۇت سىنىقى ئېلىپ بېرىش</string>
+    <string product="tablet" name="permdesc_factoryTest">تۆۋەن دەرىجىلىك ياسىغۇچى سۈپىتىدە سىناق قىلىپ، تاختا كومپيۇتېرنىڭ قاتتىق دېتالىغا نىسبەتەن ئومۇمىييۈزلۈك زىيارەت قىلىش. بۇ ھوقۇقنى پەقەت تاختا كومپيۇتېر ياسىغۇچى سىناق شەكلى ئاستىدا ئىشلىتىشكە بولىدۇ.</string>
+    <string product="default" name="permdesc_factoryTest">تۆۋەن دەرىجىلىك سىناق ئېلىپ بېرىش،تېلفۇننىڭ قاتتىق دېتالىنى ئشلىتىش.پەقەت تېلفۇن سىناق ئېلىپ بېرىۋاتقان ۋاقىتتىلا ئىشلەتكىلى بولىدۇ.</string>
+    <string name="permlab_setWallpaper">تام قەغىزىنى تەڭشەش</string>
+    <string name="permdesc_setWallpaper">ئەمەلىي ئىشلەش پىروگىراممىسىنى سىستىمىنى تەڭشەشكە يول قويۇش.</string>
+    <string name="permlab_setWallpaperHints">تام قەغىزىنىڭ چوڭ-كىچىكلىكىنى تەڭشەش</string>
+    <string name="permdesc_setWallpaperHints">ئەمەلىي ئىشلەش پىروگىراممىسىنى سىستىمىنىڭ ئارقا بېتىنىڭ چوڭ كىچىكلىكىنى تەڭشەشكە يول قويۇش.</string>
+    <string name="permlab_masterClear">سېستىمنى زاۋۇتتىن چىقىش ھالىتىگە ئەكىلىشتە خاتالىق كۆرۈلدى</string>
+    <string name="permdesc_masterClear">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ قايتا سىسىتىملاشتۇرۇپ زاۋۇتتىن چىقىش لاھىيەسىگە قايتىشىغا،ھەممە سانلىق ئاساسنى ئۆچۈرۈشكە ھەمدە قاچىلاش ۋە ئىشىلتىشكە رۇخسەت قىلىش.</string>
+    <string name="permlab_setTime">ۋاقىتنى تەڭشەش</string>
+    <string product="tablet" name="permdesc_setTime">پىروگرامما تەكشى يۈزلۈك كومپيۇتېرنىڭ ۋاقتىنى ئۆزگەرتسە بولىدۇ.</string>
+    <string product="default" name="permdesc_setTime">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ۋاقىت ئۆزگەرتىشىگە رۇخسەت قىلىش.</string>
+    <string name="permlab_setTimeZone">ۋاقىت رايۇنىنى تەڭشەش</string>
+    <string product="tablet" name="permdesc_setTimeZone">پىروگرامما تەكشى يۈزلۈك كومپيۇتېرنىڭ ۋاقىت رايونىنى ئۆزگەرتسە بولىدۇ.</string>
+    <string product="default" name="permdesc_setTimeZone">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ۋاقىت رايۇننى ئۆزگەرتىشىگە رۇخسەت قىلىش.</string>
+    <string name="permlab_accountManagerService">چوڭ خېرىدار ىرىكتورى بۇلۇش سالاھىتى بىلەن</string>
+    <string name="permdesc_accountManagerService">ئەمەلىي پىروگراممىنىڭ سىچوت ئىسپاتلاش ئۈچۈن ئابونىتقا تىلاۇن قىلشىغا رۇخسەت قىلىش</string>
+    <string name="permlab_getAccounts">بىرىلگەن ھىساپنى بايقاش</string>
+    <string product="tablet" name="permdesc_getAccounts">پىروگرامما تەكشى يۈزلۈك كومپيۇتېردا بار بولغان ئىسچوت تىزىملىكىگە ئېرىشسە بولىدۇ.</string>
+    <string product="default" name="permdesc_getAccounts">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ھېساۋاتتىكى تىلفۇن تىزىملىكىگە ئېرشىشىگە رۇخسەت قىلىش.</string>
+    <string name="permlab_authenticateAccounts">ئىسچوتنى تەكشۈرۈش پىروگراممىسى</string>
+    <string name="permdesc_authenticateAccounts">ئەمەلىي ئىشلەش پىروگىراممىسىنى ھىساپ تەكشۈرۈش قابىلىيتى بار ئابونت باشلىقىنى ئىشلىتىشىگە يول قويۇش، بۇ ھىساپ قۇرۇش ۋە مەخپىي شىفىرنى تەڭشەش قاتارلىقلارنى ئۆز ئىچىگە ئالىدۇ.</string>
+    <string name="permlab_manageAccounts">ھېسابات تىزىملىكىنى باشقۇرۇش</string>
+    <string name="permdesc_manageAccounts">ئەمەلىي ئىشلەش پىروگىراممىسىنى مەشغۇلات قىلىشىغا يول قويۇش، مەسلەن قوشۇش، ھىساپنى ئۆچۈرۈش ۋە مەخپى شىفىرنى ئۆچۈرۈش قاتارلىق.</string>
+    <string name="permlab_useCredentials">ئەزانىڭ باھالاش كېلىشىمىنى ئىشلىتىش</string>
+    <string name="permdesc_useCredentials">ئەمەلىي ئىشلەش پىروگىراممىسىنى تەكشۈرۈپ نومۇر ئېلىشقا يول قويۇش.</string>
+    <string name="permlab_accessNetworkState">تور ھالىتىنى كۆرۈش</string>
+    <string name="permdesc_accessNetworkState">ئەمەلىي ئىشلەش پروگىراممىسىنى تورنى كۆرسىتىشكە يول قويۇش.</string>
+    <string name="permlab_createNetworkSockets">تولۇق ئىنتىرنىت ئۇلىنىش</string>
+    <string name="permdesc_createNetworkSockets">ئەمەلىي ئىشلەش پىروگىراممىسىنى تور چېتىلغۇچ قۇرۇشىغا يول قويۇش.</string>
+    <string name="permlab_writeApnSettings">تور تەڭشىكى ۋە ئېقىمىنى توسۇش/ ئۆزگەرتىش</string>
+    <string name="permdesc_writeApnSettings">ئەمەلىي پىروگراممېنىڭ تور تەڭشىكىنى ئۆزگەرتىش، توسۇش ۋە بارلىق تور ئېقىمىنى تەكشۈرۈشكە يول قويۇش، مەسىلەن: خالىغان APN ۋەكالەتچىسى ۋە كۆزنەك ئېغىزىنى ئۆزگەرتىش. يامان غەرەزلىك پىروگرامما كۆزىتەلەيدۇ، قايتا يۆنىلىش بەلگىلىيەلەيدۇ، ياكى سىز بىلمىگەن ئەھۋالدا تور سانلىق مەلۇمات بوغچىسىنى ئۆزگەرتىۋېتىدۇ.</string>
+    <string name="permlab_changeNetworkState">تور ئۇلىنىشىنى ئۆزگەرتىش</string>
+    <string name="permdesc_changeNetworkState">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ دۆلەتنىڭ تور ئۇلىنىشنى ئۆزگەرتىشىگە رۇخسەت قىلىش.</string>
+    <string name="permlab_changeTetherState">بولتىنىڭ ئۇلىنىشىنى ئۆزگەرتىش</string>
+    <string name="permdesc_changeTetherState">پىروگرامما توردىن بەھرىلەنگەن ۋاقىتتىكى بارلىق ئۇلىنىش ھالىتىنى ئۆزگەرتىسە بولىدۇ.</string>
+    <string name="permlab_changeBackgroundDataSetting">ئارقا كۆرۈنۈشىدىكى سانلىق مەلوماتنىڭ ئىشلىتىلىش تەڭشىكىنى ئۆزگەرتىش</string>
+    <string name="permdesc_changeBackgroundDataSetting">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ئارقا كۆرۈنۈشتىكى سانلىق ئاساس لاھىيەسىنى ئۆزگەرتىشىگە رۇخسەت قىلىش.</string>
+    <string name="permlab_accessWifiState">Wi-Fiھالىتىنى كۆرۈش</string>
+    <string name="permdesc_accessWifiState">ئەمەلىي پروگىراممىنىڭ Wi-Fi ھالىتىگە ئائىت ئۇچۇرلارنى كۆرىشىكە رۇخسەت قىلىش.</string>
+    <string name="permlab_changeWifiState">WLAN ھالىتىنى ئۆزگەرتىش</string>
+    <string name="permdesc_changeWifiState">پىروگراممىنىڭ سىمسىز ئۇلانمىنى ئۇلىشى ۋە ئۈزىشىگە ھەمدە سىمسىز تورنىڭ ئورۇنلاشتۇرۇشنىڭ ئۆزگىرشىگە رۇخسەت قىلىش.</string>
+    <string name="permlab_changeWifiMulticastState">كۆپخىل سىمسىز تورنى قۇبۇللاشقا رۇخسەت قىلىش</string>
+    <string name="permlab_accessWimaxState">كۆرنۈش WiMAX  ھالىتى</string>
+    <string name="permdesc_accessWimaxState">قوللانچى پىروگىراممىنىڭ كۆرۈشىگە يول قويىلىدۇ. WiMAXغا مۇناسىۋەتلىك ھالەت ئۇچۇرلىرى.</string>
+    <string name="permlab_changeWimaxState">WiMAX ھالىتىنى ئۆزگەرتىش</string>
+    <string name="permlab_bluetoothAdmin">يىشىل چىشنىڭ باشقۇرۇلىشى</string>
+    <string product="tablet" name="permdesc_bluetoothAdmin">پىروگرامما يەرلىك كۆكچىش تەكشى يۈزلۈك كومپيۇتېرىنى تەڭشىسە بولىدۇ ھەمدە يىراق مۇساپىلىك ئۈسكۈنىنى بايقاپ، ئۇنىڭغا چاتسا بولىدۇ.</string>
+    <string product="default" name="permdesc_bluetoothAdmin">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ يىشىل چىشنى ئىشىلتىپ  باشقا قۇرۇلمىنى بايقىشى ۋە جۈپلىشىشگە رۇخسەت قىلىش.</string>
+    <string name="permlab_bluetooth">كۆك چىش ئۇلىنىشىنى قۇرۇش</string>
+    <string product="tablet" name="permdesc_bluetooth">پىروگرامما ئۆز رايونىدىكى كۆكچىش تەكشى يۈزلۈك كومپيۇتېر تەڭشىكىنى تەكشۈرسە بولىدۇ، شۇنداقلا چاتقان ئۈسكۈنە بىلەن بولغان ئۇلىنىشنى قۇرسا ۋە قوبۇل قىلسا بولىدۇ.</string>
+    <string product="default" name="permdesc_bluetooth">ئەمەلىي ئىشلەش پىروگىراممىسىنىڭ كۆك چىشلىق تېلفۇننى ئورۇنلاشتۇرۇشقا يول قويۇش،ھەمدە ئەسلىھە بىلەن ئۇلاشنى قوبۇل قىلدۇرۇش.</string>
+    <string name="permlab_nfc">يىقىن ئارلىقتىن سىمسىز ئالاقىنى باشقۇرۇش</string>
+    <string name="permdesc_nfc">قوللانچى پىروگىراممىنىڭ يىقىن ئالاقىلىش تىخنىكىسى(NFC)، ساقلىغۇچىسى، كارتا، ئوقۇغۇچ بىلەن ئالاقە قىلىشىغا يول قويىلىدۇ.</string>
+    <string name="permlab_disableKeyguard">كونۇپكا تاختىسى قولۇپىنى چەكلەش</string>
+    <string name="permdesc_disableKeyguard">پىروگرامما كۇنۇپكا قۇلۇپى ۋە خالىغان ئالاقىدار كود بىخەتەرلىك تەڭشىكىنى ئېتىۋەتسە بولىدۇ. مەسىلەن، يانفوندا تېلېفون قوبۇل قىلغاندا كۇنۇپكا قۇلۇپىنى ئېتىۋېتىش، سۆزلىشىش ئاخىرلاشقاندا كۇنۇپكا قۇلۇپىنى ئېچىش.</string>
+    <string name="permlab_readSyncSettings">تەسىس قىلغىنىڭىزنى ئوقۇڭ</string>
+    <string name="permdesc_readSyncSettings">ئەمەلىي ئىشلەش پىروگراممىسىنىڭ ماس قەدەم لاھىيەسىگە رۇخسەت قىلىش،مەسلەن،ماس قەدەملىك تىگىشىش ئىناۋەتلىكمۇ يوق.</string>
+    <string name="permlab_writeSyncSettings">ماس قەدەملىك لاھىيەنى يېزىڭ</string>
+    <string name="permdesc_writeSyncSettings">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ماس قەدەملىك لاھىيەسىگە رۇخسەت قىلىش،مەسلەن ماس قەدەم تىگىشىشنى قوزغاش ئىناۋەتلىكمۇ يوق.</string>
+    <string name="permlab_readSyncStats">سىتاتىستىكىنى ئوقۇڭ</string>
+    <string name="permdesc_readSyncStats">ئەمەلىي ئىشلەش پىروگراممىسىنىڭ ماس قەدەم لاھىيەسىنى ئوقۇشىغا رۇخسەت قىلىش،مەسلەن، تارىخى ماس قەدەملىك.</string>
+    <string name="permlab_subscribedFeedsRead">زاكاس قىلغان ئۇچۇرىڭىزنى ئوقۇڭ</string>
+    <string name="permdesc_subscribedFeedsRead">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ماس قەدەملىك ئوغۇت تەپسىلاتىغا ئېرشىشىگە رۇخسەت قىلىش.</string>
+    <string name="permlab_subscribedFeedsWrite">يېزلىپ قويغان بوغۇزنى يېزىش</string>
+    <string name="permdesc_subscribedFeedsWrite">پىروگراممىنىڭ سىزنىڭ ھازىرقى ماس قەدەملىك كىرىشىنى ئۆزگەرتىشىگە رۇخسەت قىلىش.يامان غەرەزلىك پىروگراممىلار سىزنىڭ ھازىرقى ماس قەدەمىڭىزنى ئۆزگەرتەلەيدۇ.</string>
+    <string name="permlab_readDictionary">ئىشلەتكۈچى بېكىتكەن لۇغەتنى ئوقۇڭ</string>
+    <string name="permdesc_readDictionary">ئەمەلىي ئىشىلتىش پىروگراممىسىنىڭ ۋ ھەر قانداق شەخسىىنىڭ خېتى،ئىسمىنى ئۇقۇشىغا ھەمدە ئابونىتنىڭ لۇغىتىگە ساقلىشىغا رۇخسەت قىلىش.</string>
+    <string name="permlab_writeDictionary">ئابونىت ئېنىقلىما بەرگەن لۇغەتكە يېزىڭ</string>
+    <string name="permdesc_writeDictionary">ئەمەلىي ئىشلەش پىروگىراممىسىنى يېڭى سۆزلەرنى لۇغەتكە يېزىشقا يول قويۇش.</string>
+    <string product="nosdcard" name="permlab_sdcardWrite">USB ساقلىغۇچ مۇندەرىجىسىنى ئۆزگەرتىش\يۇيۇش</string>
+    <string product="default" name="permlab_sdcardWrite">SD كارتا مۇندەرىجىسىنى ئۆزگەرتىش\يۇيۇش</string>
+    <string product="nosdcard" name="permdesc_sdcardWrite">قوللانچى پىروگىراممىنىڭ USB ئۈسكۈنىسىگە يىزىشىغا يول قويىلىدۇ.</string>
+    <string product="default" name="permdesc_sdcardWrite">قوللانچى پىروگىراممىنىڭ  SD كارتىسىغا يىزىشىغا يول قويىلىدۇ.</string>
+    <string product="default" name="permlab_mediaStorageWrite">ئىچكى مىدىيا ئچىكى ساقىلىغۇچ ئەسۋابىنىڭ مەزمۇنىنى ئۆزگەرتىش ياكى ئۆچۈرۋىتىش</string>
+    <string product="default" name="permdesc_mediaStorageWrite">پىروگرامما ئىچكى مىدىيا ساقلاش ئۈسكۈنىسىنىڭ مەزمۇنىنى ئۆزگەرتسە بولىدۇ.</string>
+    <string name="permlab_cache_filesystem">ھۆججەتنى  ساقلاش سىسىتىمىسغا ئۇلاش</string>
+    <string name="permdesc_cache_filesystem">ئەمەلىي ئىشلەش پىروگراممىسىنىڭ ھۆججەت سىستىمىسنى ئۇقۇش ۋە يېزىشىغا رۇخسەت قىلىش.</string>
+    <string name="permlab_use_sip">تور تىلفۇنىنى ئۇرۇش\قوبۇل قىلىش </string>
+    <string name="permdesc_use_sip">قوللانچى پىروگىراممىنىڭ SIPنى ئىشلىتىپ / تورتىلفۇن مۇلازىمىتىنى قوبۇل قىلىشقا يول قويىلىدۇ.</string>
+    <string name="permlab_readNetworkUsageHistory">تور ئىشلىتىش ئەھۋالى تارىخ خاتىرىسىنى  ئوقۇتۇش</string>
+    <string name="permdesc_readNetworkUsageHistory">پىروگرامما ئېنىق بەلگىلەنگەن تور ۋە ئەمەلىي پىروگراممېنىڭ تور ئىشلىتىش ئەھۋالى خاتىرىسىنى ئوقۇسا بولىدۇ.</string>
+    <string name="permlab_manageNetworkPolicy">تور سىياسىتىنى باشقۇرۇش</string>
+    <string name="permdesc_manageNetworkPolicy">پىروگرامما تور سىياسىتىنى باشقۇرسا ۋە مەخسۇس ئەمەلىي پىروگراممىغا قارىتىلغان بەلگىلىمىنى تۈزسە بولىدۇ.</string>
+    <string name="permlab_modifyNetworkAccounting">تور ئىشلىتىش ئەھۋالىنى خاتىرلەش ئۇسۇلىنى ئۆزگەرتىش</string>
+    <string name="permdesc_modifyNetworkAccounting">پىروگراممىغا ئاساسەن تور ئىشلىتىش ئەھۋالى خاتىرىلەش ئۇسۇلىنى ئۆزگەرتىشكە يول قويۇش. ئادەتتىكى پىروگراممىغا ماس كەلمەيدۇ.</string>
+    <string name="policylab_limitPassword">مەخپى نۇمۇرنى چەكلەش</string>
+    <string name="policydesc_limitPassword">ئېكران ئېچىش كودىنىڭ يول قويۇلغان ئۇزۇنلۇقى ۋە ھەرپ سانىنى كونترول قىلىش</string>
+    <string name="policylab_watchLogin">ھېسابات نومۇرىغا كىرمەكچى بولۇۋاتقانلارغا دىققەت قىلىڭ </string>
+    <string product="tablet" name="policydesc_watchLogin">ئېكراننى قۇلۇپلاشتىن بۇرۇن پارولنى خاتا كىرگۈزۈش قېتىم سانىنى كۆزىتىدۇ؛ ئەگەر پارولنى خاتا كىرگۈزۈش قېتىم سانى بەك كۆپ بولۇپ كەتسە، تاختا كومپيۇتېر تاقىلىدۇ ياكى ئىچىدىكى بارلىق سانلىق مەلۇماتلار ئۆچۈرۈلىدۇ.</string>
+    <string product="default" name="policydesc_watchLogin">ئېكران قولۇپى پارولى خاتا كىرگۈزۈشنىڭ  قېتىم سانىنى نازارەت قىلىدۇ. ئەگەر خاتا كىرگۈزۈش قېتىم سانى كۆپ بولسا يانفون قۇلۇپلىنىپ قالىدۇ ياكى بارلىق ئۇچۇرلار ئۆچۈپ كېتىدۇ.</string>
+    <string name="policylab_resetPassword">مەخپىي نۇمۇرنى قايتا تەڭشەش</string>
+    <string name="policydesc_resetPassword">مەخپىي نۇمۇرنى قايتا تەڭشەش</string>
+    <string name="policylab_forceLock">مەجبۇرى قۇلۇپلاش</string>
+    <string name="policydesc_forceLock">ئەسلىھە قولۇپلانغاندا كونتىرول قىلىش،سىزدىن مەخپىي نومۇرنى قايتا كىرگۈزۈشىنى سورايدۇ.</string>
+    <string name="policylab_wipeData">پۈتۈن سانلىق مەلومەتنى ئۆچۈرىۋىتىش</string>
+    <string product="tablet" name="policydesc_wipeData">زاۋۇتتىن چىققان ھالىتىگە قايتۇرغان ۋاقتىدا، سىستېما ئاگاھلاندۇرمىغان ئەھۋال ئاستىدا تاختا كومپيوتېردىكى سانلىق مەلۇماتنى   تازىلىۋېتىدۇ</string>
+    <string product="default" name="policydesc_wipeData">زاۋۇتتىن چىققان ھالىتىگە قايتۇرغان ۋاقتىدا، سىستېما ئاگاھلاندۇرمىغان ئەھۋال ئاستىدا يانفوندىكى سانلىق مەلۇماتنى تازىلىۋېتىدۇ</string>
+    <string name="policylab_setGlobalProxy">ئۇسكىنە ئومومىي ۋەزىيەت ۋاكالەتچىسى</string>
+    <string name="policydesc_setGlobalProxy">قوزغىتىش سىياسىتى ئاستىدا ئۈسكۈنىنىڭ ئومۇمىييۈزلۈك ۋاكالەتچىسىنى ئىشلەتمەيدىغان قىلىپ تەڭشەڭ. پەقەت بىرىنچى ئۈسكۈنە باشقۇرغۇچ ئۈنۈملۈك ئومۇمىييۈزلۈك ۋاكالەتچىسى تەڭشىگىلى بولىدۇ.</string>
+    <string name="policylab_expirePassword">ئېكران قۇلۇپىنىڭ ئۈنۈمگە ئىگە ۋاقتىنى تەڭشەش </string>
+    <string name="policydesc_expirePassword">ئېكران قۇلۇپلاش كودىنى ئۆزگەرتىش قېتىم سانىنى كونترول قىلىش</string>
+    <string name="policylab_encryptedStorage">ساقلىغۇچقا پارول ئۇرنىتىشنى تەڭشەش</string>
+    <string name="policydesc_encryptedStorage">ساقلىماقچى بولغان پىروگراممىغا پارول ئىشلىتىش تەلەپ قېلىنىدۇ </string>
+    <string name="policylab_disableCamera">فوتو ئاپپاراتنى ئىشلىتىشتىن توختىتامسىز</string>
+    <string name="policydesc_disableCamera">بارلىق ئۈسكۈنە فوتو ئاپپاراتىنى ئىشلىتشتىن توختىتىش</string>
+    <string-array name="phoneTypes">
+        <item>باش بەت</item>
+        <item>يانفون</item>
+        <item>خىزمەت</item>
+        <item>خىزمەت فاكىسى</item>
+        <item>ئۆي فاكىسى</item>
+        <item>بەت</item>
+        <item>باشقا </item>
+        <item>خېرىدار</item>
+    </string-array>
+    <string-array name="emailAddressTypes">
+        <item>باش بەت</item>
+        <item>خىزمەت</item>
+        <item>باشقا </item>
+        <item>خېرىدار</item>
+    </string-array>
+    <string-array name="postalAddressTypes">
+        <item>باش بەت</item>
+        <item>خىزمەت</item>
+        <item>باشقا </item>
+        <item>خېرىدار</item>
+    </string-array>
+    <string-array name="imAddressTypes">
+        <item>باش بەت</item>
+        <item>خىزمەت</item>
+        <item>باشقا </item>
+        <item>خېرىدار</item>
+    </string-array>
+    <string-array name="organizationTypes">
+        <item>خىزمەت</item>
+        <item>باشقا </item>
+        <item>خېرىدار</item>
+    </string-array>
+    <string-array name="imProtocols">
+        <item>نىشان</item>
+        <item>ھايات كۆزنەك</item>
+        <item>ياخۇ</item>
+        <item>چايخانا Skype</item>
+        <item>QQ</item>
+        <item>Google پاراڭلىشىش</item>
+        <item>ICQ</item>
+        <item>قالايمىقان سۆزلەش</item>
+    </string-array>
+    <string name="phoneTypeCustom">خېرىدار</string>
+    <string name="phoneTypeHome">باش بەت</string>
+    <string name="phoneTypeMobile">يانفون</string>
+    <string name="phoneTypeWork">خىزمەت</string>
+    <string name="phoneTypeFaxWork">خىزمەت فاكىسى</string>
+    <string name="phoneTypeFaxHome">ئۆي فاكىسى</string>
+    <string name="phoneTypePager">بەت</string>
+    <string name="phoneTypeOther">باشقا </string>
+    <string name="phoneTypeCallback">قايتۇرۇپ ئۇرۇش نومۇرى</string>
+    <string name="phoneTypeCar">ماشىنا</string>
+    <string name="phoneTypeCompanyMain">شىركەتنىڭ ئاساسلىق كۈچى</string>
+    <string name="phoneTypeIsdn">ISDN</string>
+    <string name="phoneTypeMain">ئاساسلىق</string>
+    <string name="phoneTypeOtherFax">باشقا فاكس</string>
+    <string name="phoneTypeRadio">رادىئو</string>
+    <string name="phoneTypeTelex">تېلېگرامما</string>
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
+    <string name="phoneTypeWorkMobile">خىزمەت يانفونى</string>
+    <string name="phoneTypeWorkPager">خىزمەت چاقىرغۇسى</string>
+    <string name="phoneTypeAssistant">ياردەمچى</string>
+    <string name="phoneTypeMms">سۆرەتلىك ئۇچۇر</string>
+    <string name="eventTypeCustom">خېرىدار</string>
+    <string name="eventTypeBirthday">تۇغۇلغان كۈن</string>
+    <string name="eventTypeAnniversary">خاتىرەلەش كۈنى</string>
+    <string name="eventTypeOther">باشقا </string>
+    <string name="emailTypeCustom">خېرىدار</string>
+    <string name="emailTypeHome">باش بەت</string>
+    <string name="emailTypeWork">خىزمەت</string>
+    <string name="emailTypeOther">باشقا </string>
+    <string name="emailTypeMobile">يانفون</string>
+    <string name="postalTypeCustom">خېرىدار</string>
+    <string name="postalTypeHome">باش بەت</string>
+    <string name="postalTypeWork">خىزمەت</string>
+    <string name="postalTypeOther">باشقا </string>
+    <string name="imTypeCustom">خېرىدار</string>
+    <string name="imTypeHome">باش بەت</string>
+    <string name="imTypeWork">خىزمەت</string>
+    <string name="imTypeOther">باشقا </string>
+    <string name="imProtocolCustom">خېرىدار</string>
+    <string name="imProtocolAim">نىشان</string>
+    <string name="imProtocolMsn">ھايات كۆزنەك</string>
+    <string name="imProtocolYahoo">ياخۇ</string>
+    <string name="imProtocolSkype">چايخانا Skype</string>
+    <string name="imProtocolQq">QQ</string>
+    <string name="imProtocolGoogleTalk">Google پاراڭلىشىش</string>
+    <string name="imProtocolIcq">ICQ</string>
+    <string name="imProtocolJabber">قالايمىقان سۆزلەش</string>
+    <string name="imProtocolNetMeeting">تور يىغىنى</string>
+    <string name="orgTypeWork">خىزمەت</string>
+    <string name="orgTypeOther">باشقا </string>
+    <string name="orgTypeCustom">خېرىدار</string>
+    <string name="relationTypeCustom">خېرىدار</string>
+    <string name="relationTypeAssistant">ياردەمچى</string>
+    <string name="relationTypeBrother">قېرىنداش</string>
+    <string name="relationTypeChild">پەرزەنت</string>
+    <string name="relationTypeDomesticPartner">بىرگە تۇرىدىغان ھەمرىيى</string>
+    <string name="relationTypeFather">ئاتا</string>
+    <string name="relationTypeFriend">دوست</string>
+    <string name="relationTypeManager">دىرېكتور</string>
+    <string name="relationTypeMother">ئانا</string>
+    <string name="relationTypeParent">ئاتا-ئانا</string>
+    <string name="relationTypePartner">ھەمكارلاشقۇچى</string>
+    <string name="relationTypeReferredBy">تۇنۇشتۇرۇش</string>
+    <string name="relationTypeRelative">تۇغقان</string>
+    <string name="relationTypeSister">ئاچا -سىڭىل</string>
+    <string name="relationTypeSpouse">ئوبېيكىتى</string>
+    <string name="sipAddressTypeCustom">خېرىدار</string>
+    <string name="sipAddressTypeHome">باش بەت</string>
+    <string name="sipAddressTypeWork">خىزمەت</string>
+    <string name="sipAddressTypeOther">باشقا </string>
+    <string name="keyguard_password_enter_pin_code">PIN نومۇرىنى كىرگۈزۈش</string>
+    <string name="keyguard_password_enter_puk_code"> PUK نومۇرى ۋە يېڭى  PINنومۇرىنى كىرگۈزۈڭ</string>
+    <string name="keyguard_password_enter_puk_prompt">PUKكودى</string>
+    <string name="keyguard_password_enter_pin_prompt">يېڭى PIN كودى</string>
+    <string name="keyguard_password_entry_touch_hint"><font size="17">" بېسىپ كود كىرگۈزگىلى بولىدۇ "</font></string>
+    <string name="keyguard_password_enter_password_code">قولۇپنى ئېچىش ئۈچۈن مەخپى شىفىرنى كىرگۈزۈش</string>
+    <string name="keyguard_password_enter_pin_password_code">PIN نومۇرىنى كىرگۈزۈپ قولۇپ ئېچىش</string>
+    <string name="keyguard_password_wrong_pin_code">خاتا PIN نۇمۇرى!</string>
+    <string name="keyguard_label_text">قۇلۇپنى ئاچماقچى بولسىڭىز، تىزىملىك بىلەن 0نى بېسىڭ.</string>
+    <string name="emergency_call_dialog_number_for_display">جىددى ئەھۋال نومۇر</string>
+    <string name="lockscreen_carrier_default">ھېچقانداق مۇلازىمەت يوق</string>
+    <string name="lockscreen_screen_locked">ئېكران تاقالدى.</string>
+    <string name="lockscreen_instructions_when_pattern_enabled">ئېچىش ياكى جىددىي چاقىرىش كۇنۇپكىسىنى بېسىڭ.</string>
+    <string name="lockscreen_instructions_when_pattern_disabled">ئېچىش مۇندەرىجىسىنى بېسىڭ.</string>
+    <string name="lockscreen_pattern_instructions">قولۇپنى ئېچىش ئۈچۈن شەكلىنى سىزىش</string>
+    <string name="lockscreen_emergency_call">جىددى تېلېفون</string>
+    <string name="lockscreen_return_to_call">تېلفۇن قايتۇرۇش</string>
+    <string name="lockscreen_pattern_correct">توغرا!</string>
+    <string name="lockscreen_pattern_wrong">كەچۈرۈڭ، قايتا سىناپ بېقىڭ</string>
+    <string name="lockscreen_password_wrong">كەچۈرۈڭ، قايتا سىناپ بېقىڭ</string>
+    <string name="lockscreen_plugged_in">توك قاچىلىنىۋاتىدۇ، <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
+    <string name="lockscreen_charged">توك قاچىلاندى</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_low_battery">توك قاچىلىغۇچقا ئۇلاش.</string>
+    <string name="lockscreen_missing_sim_message_short">اSIMكارتا يوق.</string>
+    <string product="tablet" name="lockscreen_missing_sim_message">تاختا كومپيۇتېردا SIM كارتىسى يوق.</string>
+    <string product="default" name="lockscreen_missing_sim_message">تېلگۇنىڭىزداSIMكارتا يوق.</string>
+    <string name="lockscreen_missing_sim_instructions">SIM كارتىنى كۈرگۈزىڭ.</string>
+    <string name="lockscreen_missing_sim_instructions_long">SIMكارتىسى يىتىپ كەتتى ياكى ئوقۇلمىدى،SIMكارتىسىنى كىرگۇزۇڭ.</string>
+    <string name="lockscreen_permanent_disabled_sim_instructions"> SIM كارتىسى ئشلىتشتىن توختىتىلدى،"\n"سىمسىز مۇلازىمەت بىلەن تەمىنلىگۇچى بىلەن ئالاقىلىشىپ يېڭى  SIM كارتىسىگە ئېرىشىڭ.</string>
+    <string name="lockscreen_transport_prev_description">ئالدىنقى ناخشا كۇنۇپىكىسى</string>
+    <string name="lockscreen_transport_next_description">كېيىنكى ناخشا كۇنۇپكىسى</string>
+    <string name="lockscreen_transport_pause_description">ۋاقتىنچە توختىتىش كۇنۇپكىسى</string>
+    <string name="lockscreen_transport_play_description">قويۇش كۈنۈپكىسى</string>
+    <string name="lockscreen_transport_stop_description">توختىتىش كونۇپكىسى</string>
+    <string msgid="2485604591272668370" name="emergency_calls_only">جىددىي تېلفۇنلا ئۇلىنىدۇ</string>
+    <string name="lockscreen_network_locked_message">تور ئېتىۋېتىلگەن</string>
+    <string name="lockscreen_sim_puk_locked_message">SIMكارتىغا PUK قۇلپىسى سېلىنغان.</string>
+    <string name="lockscreen_sim_puk_locked_instructions">چۇشەندۈرۈشنى ياخشى ئوقۇڭ ياكى شېركەت بىلەن ئالاقىلىشىڭ.</string>
+    <string name="lockscreen_sim_locked_message">sim تاقالدى</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message">SIM كارتا ئېچىلىۋاتىدۇ\u2026</string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">سىز قۇلۇپنى ئىچىش رەسمىنى خاتا بويدىڭىز<xliff:g id="number">%d</xliff:g> قىتىم. \n\n <xliff:g id="number">%d</xliff:g> مىنۇت ئىچىدە قايتا سىناپ بېقىڭ.</string>
+    <string name="lockscreen_too_many_failed_password_attempts_dialog_message"><xliff:g id="NUMBER_0">%d</xliff:g> قېتىم كودنى خاتا كىرگۈزدىڭىز،"\n\n" <xliff:g id="NUMBER_1">%d</xliff:g>  سېكونتتىن كېيىن قايتا سىناپ كۆرۈڭ.</string>
+    <string name="lockscreen_too_many_failed_pin_attempts_dialog_message"><xliff:g id="NUMBER_0">%d</xliff:g>  قېتىم PIN نى خاتا كىرگۈزدىڭىز."\n\n" <xliff:g id="NUMBER_1">%d</xliff:g>  سېكونتتىن كېيىن قايتا سىناپ كۆرۈڭ.</string>
+    <string product="tablet" name="lockscreen_failed_attempts_almost_glogin"><xliff:g id="NUMBER_0">%d</xliff:g> قېتىم قۇلۇپ ئېچىش سىزما نۇسخىڭىزنى خاتا سىزدىڭىز. قايتا سىنىماقچى بولۇپ،  <xliff:g id="NUMBER_1">%d</xliff:g>قېتىم يەنە مەغلۇب بولسىڭىز، سىستېماGoogle  دا كىرىش ئۇچۇرىڭىز ئارقىلىق قۇلۇپ ئېچىشىڭىزنى تەلەپ قىلىدۇ.  "\n\n" <xliff:g id="NUMBER_2">%d</xliff:g> سېكونتتىن كېيىن قايتا سىناپ كۆرۈڭ.</string>
+    <string product="default" name="lockscreen_failed_attempts_almost_glogin"><xliff:g id="NUMBER_0">%d</xliff:g> قېتىم قۇلۇپ ئېچىش سىزما نۇسخىڭىزنى خاتا يوللىدىڭىز. قايتا سىنىماقچى بولۇپ  <xliff:g id="NUMBER_1">%d</xliff:g>قېتىم يەنە مەغلۇب بولسىڭىز، سىستېماGoogle  دا كىرىش ئۇچۇرىڭىز ئارقىلىق قۇلۇپ ئېچىشىڭىزنى تەلەپ قىلىدۇ.  "\n\n" <xliff:g id="NUMBER_2">%d</xliff:g>سېكونتتىن كېيىن قايتا سىناپ كۆرۈڭ.</string>
+    <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe"><xliff:g id="NUMBER_0">%d</xliff:g> قېتىم قۇلۇپ ئېچىشتا خاتالىق كۆرۈلدى. قايتا سىنىماقچى بولۇپ، <xliff:g id="NUMBER_1">%d</xliff:g> قېتىم يەنە مەغلۇپ بولسىڭىز، تەكشى يۈزلۈك كومپيۇتېر زاۋۇتتىن چىققان ھالەتكە قايتىدۇ، بارلىق ئابۇنت سانلىق مەلۇماتلىرى يوقىلىدۇ.</string>
+    <string product="default" name="lockscreen_failed_attempts_almost_at_wipe"><xliff:g id="NUMBER_0">%d</xliff:g> قېتىم قۇلۇپ ئېچىشتا خاتالىق  كۆرۈلدى. قايتا سىنىماقچى بولۇپ، <xliff:g id="NUMBER_1">%d</xliff:g> قېتىم يەنە مەغلۇپ بولسىڭىز، يانفون زاۋۇتتىن چىققان ھالەتكە قايتىدۇ. بارلىق ئابۇنت سانلىق مەلۇماتلىرى يوقىلىدۇ.</string>
+    <string product="tablet" name="lockscreen_failed_attempts_now_wiping"><xliff:g id="NUMBER">%d</xliff:g> قۇلۇپ ئېچىشتا خاتالىق كۆرۈلدى. تەكشى يۈزلۈك كومپيۇتېر زاۋۇتتىن چىققان ھالەتكە قايتىدۇ.</string>
+    <string product="default" name="lockscreen_failed_attempts_now_wiping"><xliff:g id="NUMBER">%d</xliff:g>  قېتىم قۇلۇپ ئېچىشتا خاتالىق كۆرۈلدى. يانفون زاۋۇتتىن چىققان ھالەتكە قايتىدۇ.</string>
+    <string name="lockscreen_too_many_failed_attempts_countdown"> قايتا سىناش  <xliff:g id="number">%d</xliff:g>  سىكونت ئىچىدە.</string>
+    <string name="lockscreen_forgot_pattern_button_text">شەكلىنى ئۇنتۇش؟</string>
+    <string name="lockscreen_glogin_forgot_pattern">سچوت قۇلۇپنى ئېچىش</string>
+    <string name="lockscreen_glogin_too_many_attempts">شەكىل مەشغۇلاتى كۆپ بولۇپ كەتتى!</string>
+    <string name="lockscreen_glogin_instructions">قۇلۇپنى ئاچماقچى بولسىڭىز،گۇگۇل ھېسابات بومۇرىڭىزغا كىرىڭ</string>
+    <string name="lockscreen_glogin_username_hint">ئابونت نامى(ئېلخەت)</string>
+    <string name="lockscreen_glogin_password_hint">شىفىر</string>
+    <string name="lockscreen_glogin_submit_button">تىزىملاش</string>
+    <string name="lockscreen_glogin_invalid_input">ئىناۋەتسىز ئىسىم ياكى پارول.</string>
+    <string name="lockscreen_glogin_account_recovery_hint">ئابونت ئىسمىڭىز ۋە پارولىڭىزنى ئۇنتۇپ قالدىڭىزمۇ؟ \n  <b> google.com/accounts/recovery </b> نى زىيارەت قىلىڭ</string>
+    <string name="lockscreen_glogin_checking_password">تەكشۈرۈلىۋاتىدۇ...</string>
+    <string name="lockscreen_unlock_label">قولۇپنى ئېچىش</string>
+    <string name="lockscreen_sound_on_label">ئاۋازنى ئېچىش</string>
+    <string name="lockscreen_sound_off_label">ئاۋازنى ئۆچۈرۈش</string>
+    <string name="lockscreen_access_pattern_start">رەسىم سىزىش باشلاندى</string>
+    <string name="lockscreen_access_pattern_cleared">رەسىم ئۆچۈرۋىتلىدى</string>
+    <string name="lockscreen_access_pattern_cell_added">بىرلىك كاتەكچىسى قوشۇلدى</string>
+    <string name="lockscreen_access_pattern_detected">رەسىم سىزىش تاماملاندى</string>
+    <string name="password_keyboard_label_symbol_key">\?123</string>
+    <string name="password_keyboard_label_alpha_key">ABC</string>
+    <string name="password_keyboard_label_alt_key">ALT</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="factorytest_failed">زاۋۇت سىنىقى مەغلۇپ بولدى</string>
+    <string name="factorytest_not_system">/سېستىما /app مەشغۇلاتىنى FACTORY_TEST دە قاچىلانغان قاپتىلا ئېلىپ بارغىلى بولىدۇ.</string>
+    <string name="factorytest_no_action">زاۋۇت سىنىقى تەمىنلەيدىغان پوسۇلكا تېپىلمىدى.</string>
+    <string name="factorytest_reboot">قايتا قوزغىتىش</string>
+    <string name="js_dialog_title">بۇ بەتنىڭ مەنىسى  \'<xliff:g id="title">%s</xliff:g>\' :</string>
+    <string name="js_dialog_title_default">JavaScript</string>
+    <string name="js_dialog_before_unload">بۇ بەتكە چىكىنىپ يول باشلاش؟ \n\n\<xliff:g id="message">%s</xliff:g>\n\n بەلگە ok نى تاللاپ داۋاملاشتۇرۇڭ ياكى بۇ بەتتىن چىكىنىپ چىقىڭ.</string>
+    <string name="save_password_label">مۇقىملاش</string>
+    <string name="double_tap_toast">ئۇسۇل:قوش چېكىپ چوڭايتىپ كىچىلىتىڭ.</string>
+    <string name="autofill_this_form">ئاپتوماتىك تولدۇرۇش</string>
+    <string name="setup_autofill">ئاپتۇماتىك تولدۇرۇشنى تەڭشەش</string>
+    <string name="autofill_address_name_separator">\u0020</string>
+    <string name="autofill_address_summary_name_format">$1$2$3</string>
+    <string name="autofill_address_summary_separator">,\u0020</string>
+    <string name="autofill_address_summary_format">$1$2$3</string>
+    <string name="autofill_province">ئۆلكە بىۋاستە قاراشلق شەھەر ئاپتۇنۇم رايون</string>
+    <string name="autofill_postal_code">پوچتا نومۇرى</string>
+    <string name="autofill_state">ھالىتى</string>
+    <string name="autofill_zip_code">پوچتا نومۇرى</string>
+    <string name="autofill_county">توپ</string>
+    <string name="autofill_island">ئارال</string>
+    <string name="autofill_district">رايون</string>
+    <string name="autofill_department">ئۆلكە</string>
+    <string name="autofill_prefecture">ناھىيە /مەھكىمە/مەركەز/كوچا</string>
+    <string name="autofill_parish">مەمۇرى رايون</string>
+    <string name="autofill_area">رايون</string>
+    <string name="autofill_emirate">ئەمىرلىك</string>
+    <string name="permlab_readHistoryBookmarks">تور كۆز يۈرگۈتكىچىنىڭ تارىخىنى ئوقۇڭ</string>
+    <string name="permdesc_readHistoryBookmarks">ئەمەلىي ئىشلەش پىروگىراممىسىنى تور كۆرگۈچ كۆرىدىغان  URL ئادىرىس ۋە بارلىق تور كۆرگۈچنىڭ خەتكۈچىنى ئوقۇشقا يول قويۇش.</string>
+    <string name="permlab_writeHistoryBookmarks">كۆز يۈگۈرتكۈچنىڭ تارىخى ۋە خەتكۈچىنى يېزىش</string>
+    <string product="tablet" name="permdesc_writeHistoryBookmarks">پىروگرامما تەكشى يۈزلۈك كومپيۇتېرغا ساقلانغان تور كۆرگۈ خاتىرىسى ياكى خەتكۈچنى ئۆزگەرتسە بولىدۇ. يامان غەرەزلىك ئەمەلىي پىروگراممىلار بۇنىڭدىن پايدىلىنىپ تور كۆرگۈ سانلىق مەلۇماتلىرىنى ئۆچۈرۈۋېتىدۇ ياكى ئۆزگەرتىۋېتىدۇ.</string>
+    <string product="default" name="permdesc_writeHistoryBookmarks">ئەمەلىي ئىشلەش پىروگراممىسنىڭ  تىلفۇنىڭىزدا كۆز يۈگۈرتكۈچ تارىخى خاتىرسى ۋە خەتكۈچىنى ئۆزگەرتىشىگە رۇخسەت قىلىش.يامان غەرەزلىك ئىشىلتىش پىروگراممىسى بۇنى ئىشىلتىپ كۆز يۈگۈرتكۈچتىكى سانلىق ئاساسلارنى ئۆچۈرۈپ ئۆزگەرتەلەيدۇ.</string>
+    <string name="permlab_setAlarm">قوڭغۇراقنى تەڭشەش</string>
+    <string name="permdesc_setAlarm">قوللانچى پىروگىراممىغا سىگنال بەلگىلەش
+قاچىلانغىنى سىگنال بىرىش پىروگىراممىسى، بىر قىسىم سائەت قوڭغۇراقلىرى ئىشلىمەسلىكى مۈمكىن.</string>
+    <string name="permlab_addVoicemail">ئاۋازلىق يوللانما قوشۇش</string>
+    <string name="permdesc_addVoicemail">پىروگرامما سىزنىڭ ئاۋازلىق خەت ساندۇقىڭىزنىڭ يوللانما قوبۇل قىلىش ساندۇقىغا يېڭى ئۇچۇر قوشسا بولىدۇ.</string>
+    <string name="permlab_writeGeolocationPermissions">گىروسور گىئولوگىيە ماقۇللىقىنى ئۆزگەرتىش</string>
+    <string name="permdesc_writeGeolocationPermissions">ئەمەلىي ئىشلەش پىروگىراممسىنىڭ كۆرگۈچنىڭ ئورنىنى ئۆزگەرتىش ھوقۇقى بارلىقىغا يول قويۇش. ۋىروسلانغان پروگىراممىلار بۇ يول قويۇشتىن پايدىلىنىپ باشقا تور بەتلەرگە ئورۇن ئۇچۇرىنى ئېۋەتىۋىتىدۇ.</string>
+    <string name="permlab_packageVerificationAgent">يۇمشاق دېتالننى تەكشۈرۈش</string>
+    <string name="permdesc_packageVerificationAgent">پىروگرامما يۇمتال بوغچىسىنى قاچىلىغىلى بولىدىغان – بولمايدىغانلىقىنى تەكشۈرسە بولىدۇ.</string>
+    <string name="permlab_bindPackageVerifier">يۇمتال بوغچىسىنى تەكشۈرۈش پىروگراممىسىغا باغلاش</string>
+    <string name="permdesc_bindPackageVerifier">يانفون ئابۇنتى يۇمتال بوغچىسىنى تەكشۈرۈش پىروگراممىسىنى ئىشلىتىشنى ئىلتىماس قىلسا بولىدۇ. ئادەتتىكى ئەمەلىي پىروگراممىلار بۇ ھوقۇققا ئېھتىياجلىق ئەمەس.</string>
+    <string name="save_password_message">سىز توربەت كۆرگۈچنىڭ مەخپى نومۇرىڭىزنى ئەستە ساقلىشىنى خالامسىز؟</string>
+    <string name="save_password_notnow">ھازىر بولمايدۇ</string>
+    <string name="save_password_remember">ئەستە ساقلاڭ</string>
+    <string name="save_password_never">ھەرگىز</string>
+    <string name="open_permission_deny">بۇ بەتنى ئېچىشقا سالاھىتڭىز توشمايدۇ.</string>
+    <string name="text_copied">خەت تاختىغا چاپلاندى.</string>
+    <string name="more_item_label">تېخىمۇ كۆپ </string>
+    <string name="prepend_shortcut_label">تېزىملىك</string>
+    <string name="menu_space_shortcut_label">بوشلۇق</string>
+    <string name="menu_enter_shortcut_label">Enter  كۇنۇپكىسى</string>
+    <string name="menu_delete_shortcut_label">ئۆچۈرۈش</string>
+    <string name="search_go">ئىزدەش</string>
+    <string name="searchview_description_search">ئىزدەش</string>
+    <string name="searchview_description_query">ئىزدەشنى ئىزدەش</string>
+    <string name="searchview_description_clear">سۈرۈشتۈرۈشنى تازىلاش</string>
+    <string name="searchview_description_submit">تەكشۈرۈشنى تاپشۇرۇش</string>
+    <string name="searchview_description_voice">ئاۋاز ئارقىلىق ئىزدەش</string>
+    <string name="oneMonthDurationPast">1 ئاي بۇرۇندىن ئىلگىرى</string>
+    <string name="beforeOneMonthDurationPast">1 ئاي بۇرۇندىن ئىلگىرى</string>
+    <plurals name="num_seconds_ago">
+        <item quantity="one">1 سېكونت ئىلگىرى</item>
+        <item quantity="other">سېكۇنت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
+    </plurals>
+    <plurals name="num_minutes_ago">
+        <item quantity="one">1 ئاي بۇرۇندىن ئىلگىرى</item>
+        <item quantity="other">مىنۇت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
+    </plurals>
+    <plurals name="num_hours_ago">
+        <item quantity="one">1سائەت ئىلگىرى</item>
+        <item quantity="other">سائەت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
+    </plurals>
+    <plurals name="last_num_days">
+        <item quantity="other">كۈن <xliff:g id="count">%d</xliff:g> ئەڭ ئاخىرقى </item>
+    </plurals>
+    <string name="last_month">ئەڭ ئاخىرقى ئاي</string>
+    <string name="older">كوناراق</string>
+    <plurals name="num_days_ago">
+        <item quantity="one">تۈنۈگۈن </item>
+        <item quantity="other">كۈن بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
+    </plurals>
+    <plurals name="in_num_seconds">
+        <item quantity="one">1  سېكونتتىن كېيىن</item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g>سىكونت</item>
+    </plurals>
+    <plurals name="in_num_minutes">
+        <item quantity="one">1بىر مىنۇت ئىچىدە</item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> مىنۇت</item>
+    </plurals>
+    <plurals name="in_num_hours">
+        <item quantity="one">1بىر سائەت ئىچىدە</item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> سائەت</item>
+    </plurals>
+    <plurals name="in_num_days">
+        <item quantity="one">ئەتە</item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> كۈن</item>
+    </plurals>
+    <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">1 سېكونت ئىلگىرى</item>
+        <item quantity="other">سېكۇنت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
+    </plurals>
+    <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">1مىنۇت ئىلگىرى</item>
+        <item quantity="other">مىنۇت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
+    </plurals>
+    <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">1سائەت ئىلگىرى</item>
+        <item quantity="other">سائەت بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
+    </plurals>
+    <plurals name="abbrev_num_days_ago">
+        <item quantity="one">تۈنۈگۈن </item>
+        <item quantity="other">كۈن بۇرۇن <xliff:g id="count">%d</xliff:g> </item>
+    </plurals>
+    <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">1  سېكونتتىن كېيىن</item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g>سىكونت</item>
+    </plurals>
+    <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">1بىر مىنۇت ئىچىدە</item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> مىنۇت</item>
+    </plurals>
+    <plurals name="abbrev_in_num_hours">
+        <item quantity="one">1بىر سائەت ئىچىدە</item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> سائەت</item>
+    </plurals>
+    <plurals name="abbrev_in_num_days">
+        <item quantity="one">ئەتە</item>
+        <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> كۈن</item>
+    </plurals>
+    <string name="preposition_for_date"> <xliff:g id="date" example="May 29">%s</xliff:g>دا</string>
+    <string name="preposition_for_time">دا <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+    <string name="preposition_for_year">دا <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="day">كۈن</string>
+    <string name="days">ئاسمان</string>
+    <string name="hour">سائەت</string>
+    <string name="hours">سائەت</string>
+    <string name="minute">مىنۇت</string>
+    <string name="minutes">مىنۇت</string>
+    <string name="second">ئككىنچى</string>
+    <string name="seconds">ئككىنچى</string>
+    <string name="week">ھەپتىلەر</string>
+    <string name="weeks">ھەپتىلەر</string>
+    <string name="year">يىل</string>
+    <string name="years">يىللار</string>
+    <string name="VideoView_error_title">كۆرۈنمە چاستوتىنى قۇيالمايدۇ</string>
+    <string name="VideoView_error_text_invalid_progressive_playback">كەچۈرۈڭ، بۇ سىن تېلېغوندا قويۇلمايدۇ.</string>
+    <string name="VideoView_error_text_unknown">كەچۈرۈڭ، بۇ سن قويۇلمايدۇ. </string>
+    <string name="VideoView_error_button">بولدى</string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="noon">چۈش</string>
+    <string name="Noon">چۈش</string>
+    <string name="midnight">يېرىم كىچە</string>
+    <string name="Midnight">يېرىم كىچە</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="selectAll">ھەممىنى تاللاش</string>
+    <string name="cut">كېسىش</string>
+    <string name="copy">كوپيەلەش</string>
+    <string name="paste">چاپلاش</string>
+    <string name="replace">ئالماشتۇرۇش </string>
+    <string name="delete">ئۆچۈرۈش</string>
+    <string name="copyUrl">URL نى كۆپەيتىش</string>
+    <string name="selectTextMode">ئۇچۇرنى تاللاش</string>
+    <string name="textSelectionCABTitle">يېزىق تاللاش</string>
+    <string name="addToDictionary">لۇغەتكە قۇشۇش</string>
+    <string name="deleteText">ئۆچۈرۈش</string>
+    <string name="inputMethod">كىرگۈزۈش ئۇسۇلى</string>
+    <string name="editTextMenuTitle">يېزىق مەشغۇلاتى</string>
+    <string name="low_internal_storage_view_title">تۆۋەنلىكى ۋە ئورنى</string>
+    <string name="ok">بولدى</string>
+    <string name="cancel">"بىكار قىلىش"</string>
+    <string name="yes">بولدى</string>
+    <string name="no">"بىكار قىلىش"</string>
+    <string name="dialog_alert_title">دىققەت</string>
+    <string name="loading">يۈكلەۋاتىدۇ</string>
+    <string name="capital_on">ئېچىش</string>
+    <string name="capital_off">ئىتىۋىتىش</string>
+    <string name="whichApplication">پائالىيەت تاماملاش </string>
+    <string name="alwaysUse">ئەسلى بويىچە مەشغۇلات قىلىش.</string>
+    <string name="clearDefaultHintMsg">تەڭشەكتىكى خاتالىق ئەمەلىي ئىشلىتلىش&gt; ئىلتىماس &gt; باشقۇرۇش تازىلاش.</string>
+    <string name="chooseActivity">بىر ھەركەت تاللاش</string>
+    <string name="chooseUsbActivity">USB ئۈسكىنىسى ئۈچۈن قوللىنىشچان دىتالنى تاللاڭ</string>
+    <string name="noApplications">بۇ بۇيرۇقنى ئجرا قىلدىغان يۇمشاق دېتال مەۋجۇت ئەمەس.</string>
+    <string name="aerr_application">كەچۈرۈڭ، "<xliff:g id="APPLICATION">%1$s</xliff:g>" باسقۇچى ئىجرا قىلىشتىن توختىدى.  </string>
+    <string name="aerr_process">كەچۈرۈڭ، "<xliff:g id="PROCESS">%1$s</xliff:g>" باسقۇچى ئىجرا قىلىشتىن توختىدى  </string>
+    <string name="anr_activity_application"><xliff:g id="APPLICATION">%2$s</xliff:g> دا ئىنكاس يوق. "\n\n" بۇنى ئۆچۈرۈۋېتەمسىز؟</string>
+    <string name="anr_activity_process"><xliff:g id="ACTIVITY">%1$s</xliff:g> تە ئىنكاس يوق. "\n\n" ئۇنى ئۆچۈرەمسىز؟</string>
+    <string name="anr_application_process"><xliff:g id="APPLICATION">%1$s</xliff:g> دا ئىنكاس يوق.  بۇنى ئۆچۈرۈۋېتەمسىز؟</string>
+    <string name="anr_process"> <xliff:g id="PROCESS">%1$s</xliff:g>  مەشغۇلاتىدا ئىنكاس يوق \n\n  نى ئۆچۈرۋىتەمىسز؟</string>
+    <string name="force_close">بولدى</string>
+    <string name="report">دوكىلات</string>
+    <string name="wait">ساقلاڭ </string>
+    <string name="launch_warning_title">قوللانچىنى يېڭىدىن كىرگۈزۈش</string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> ئىجرا قىلىنۋاتىدۇ.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> دەسلەپكى قەدەمدە تونۇشتۇرۇلدى.</string>
+    <string name="screen_compat_mode_scale">چوڭلىتىپ كىچىكلىتىش</string>
+    <string name="screen_compat_mode_show">دائىم ئاشكارە</string>
+    <string name="screen_compat_mode_hint">سىز تەڭشەك  &gt; پىروگرامما  &gt; پىروگرامما باشقۇرۇشتىن بۇ شەكىلنى قايتا قوزغاتسىڭىز بولىدۇ.</string>
+    <string name="smv_application">بۇ قوللانما <xliff:g id="application">%1$s</xliff:g>
+        (جەريان <xliff:g id="process">%2$s</xliff:g> ) تاساددىبى توختىتىلدى،باشا يۇمشاق دىتال بىلەن تەڭشەش ئېلىپ بېرىڭ.</string>
+    <string name="smv_process">بۇ <xliff:g id="process">%1$s</xliff:g> جەريان ئۆزىنىڭ ئۆزلىكىدىن مەجبۇرى ئىجىرا قىلىش سىياسىتىگە خىلاپلىق قىلدى.</string>
+    <string name="android_upgrading_title">Android دەرىجىسى ئۆسۈۋاتىدۇ... </string>
+    <string name="android_upgrading_apk"><xliff:g id="NUMBER_0">%1$d</xliff:g> ىنجى پروگرامما ئىلغارلاشتۇرلىۋاتىدۇ، جەمئىي <xliff:g id="NUMBER_1">%2$d</xliff:g> دانە</string>
+    <string name="android_upgrading_starting_apps">پىروگرامما قوزغىلىۋاتىدۇ.</string>
+    <string name="android_upgrading_complete">قوزغىتىش تاماملىنىش ئالدىدا</string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> ئىجىرا قىلىنۋاتىدۇ</string>
+    <string name="heavy_weight_notification_detail">ئالماشتۇرىدىغان قوللنىشنى تاللاش</string>
+    <string name="heavy_weight_switcher_title">قوللانما دىتالىنى ئالماشتۇرۇش؟</string>
+    <string name="heavy_weight_switcher_text">يېڭى پىروگىرامما قوزغىتىشىتن بۇرۇن باشقا ئىجرا بولىۋاتقان پىروگىراممىنى تاقىۋىتىڭ.</string>
+    <string name="old_app_action"><xliff:g id="old_app">%1$s</xliff:g> غا قايتىش</string>
+    <string name="old_app_description">يىڭى پروگراممىنى قوزغاتماسلىق.</string>
+    <string name="new_app_action"><xliff:g id="old_app">%1$s</xliff:g> نى قوزغىتىش</string>
+    <string name="new_app_description">ساقلىماي چېكىنپ چىقىش.</string>
+    <string name="sendText">ئۇچۇر ئۈچۈن بىر ھەركەت تاللاش</string>
+    <string name="volume_ringtone">قۇڭغۇراق ئاۋازى</string>
+    <string name="volume_music">قۇيۇش ئاۋاز چوڭلىقى</string>
+    <string name="volume_music_hint_playing_through_bluetooth">كۆك چىش ئارقىلىق قويۇش</string>
+    <string name="volume_music_hint_silent_ringtone_selected">ئىتراپ قىلىنغان قۇڭغۇراق ئاۋازىنى تاللاش</string>
+    <string name="volume_call">تېلفۇن ئاۋازى</string>
+    <string name="volume_bluetooth_call">يىشىل چىش سۆزلىشىش ئاۋاز مىقدارى</string>
+    <string name="volume_alarm">قوڭغۇراقلىق سائەت ئاۋازى</string>
+    <string name="volume_notification">ئۇقتۇرۇش ئاۋاز مىقدارى </string>
+    <string name="volume_unknown">ئاۋاز يۇقىرىتۆۋەنلىكى</string>
+    <string name="volume_icon_description_bluetooth">كۆكچىش ئاۋاز دەرىجىسى</string>
+    <string name="volume_icon_description_ringer">قوڭغىراق ئاۋاز مىقدارى</string>
+    <string name="volume_icon_description_incall">تېلفۇن ئاۋازى</string>
+    <string name="volume_icon_description_media">قۇيۇش ئاۋاز چوڭلىقى</string>
+    <string name="volume_icon_description_notification">ئۇقتۇرۇش ئاۋاز مىقدارى </string>
+    <string name="ringtone_default">بارسانالغان قوڭغۇراق</string>
+    <string name="ringtone_default_with_actual">سۈكۈت ھالەتتىكى قوڭغۇراق ئاۋازى (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
+    <string name="ringtone_silent">تىنچ</string>
+    <string name="ringtone_picker_title">قوڭغۇراق مۇزىكىلىرى</string>
+    <string name="ringtone_unknown">نامەلۇم قوڭغۇراق مۇزىكىسى</string>
+    <plurals name="wifi_available">
+        <item quantity="one">تورى بار Wi-Fi</item>
+        <item quantity="other">تورى بار Wi-Fi</item>
+    </plurals>
+    <plurals name="wifi_available_detailed">
+        <item quantity="one">ئىشلەتكىلى بولىدىغانWLAN نى ئېچىش</item>
+        <item quantity="other">ئىشلەتكىلى بولىدىغانWLAN نى ئېچىش</item>
+    </plurals>
+    <string name="wifi_available_sign_in">wlanتورغا ئۇلاش</string>
+    <string name="wifi_watchdog_network_disabled">WLAN غا ئۇلىغىلى بولمايدۇ</string>
+    <string name="wifi_watchdog_network_disabled_detailed">ئالاقە تورىنىڭ ئۇلىنىش ئەھۋالى ياخشى ئەمەس.</string>
+    <string name="wifi_p2p_dialog_title">WLAN Direct</string>
+    <string name="wifi_p2p_turnon_message">WLAN Directمەشغۇلاتنى قوزغىتىش،بۇ مەشغۇلات WLAN ئابونىت بۆلىكىنى/قىززىق مەشغۇلات ئېتىۋىتىدۇ.</string>
+    <string name="wifi_p2p_failed_message">WLAN Direct نى قوزغىتىشقا بولمىدى</string>
+    <string name="wifi_p2p_enabled_notification_title">WLAN Direct نى قوزغۇتۇش </string>
+    <string name="wifi_p2p_enabled_notification_message">بېسىش ئارقىلىق تەڭشەش </string>
+    <string name="select_character">ھەرپ قىستۇرۇش</string>
+    <string name="sms_control_title">SMS ئۇچۇر يوللاۋاتىدۇ</string>
+    <string name="sms_control_message">نۇرغۇنلىغان SMS قىسقا ئۇچۇرى ئېۋەتىلۋاتىدۇ،داۋاملاشتۇرماقچى بولسىڭىز/"ھەئە/"نى تاللاڭ،چىكىندۈرمەكچى بولسىڭىز/"چىكىندۈرۈش/"نى تاللاڭ.</string>
+    <string name="sms_control_yes">بولدى</string>
+    <string name="sms_control_no">"بىكار قىلىش"</string>
+    <string name="sim_removed_title">simكارتىسى يۆتكىۋىتىلدى</string>
+    <string name="sim_removed_message">كۆچمە تورىنى ئىشلىتشكە بولمايدۇ،ئۇنۇملۇك SIM كارتىسىنى سىلىپ قايتا قوزغىتىڭ.</string>
+    <string name="sim_done_button">تاماملاش</string>
+    <string name="sim_added_title">simكارىتىسى قۇشۇلدى</string>
+    <string name="sim_added_message">ئۈسكىنىنى قايتا قوزغاتقاندىلا كۆچمە تورنى زىيارەت قىلالايسىز.</string>
+    <string name="sim_restart_button">قايتا قوزغىتىش</string>
+    <string name="time_picker_dialog_title">ۋاقىتنى تەڭشەش</string>
+    <string name="date_picker_dialog_title">چېسلانى تەڭشەش</string>
+    <string name="date_time_set">تەڭشەك</string>
+    <string name="no_permissions">ئىجازەت بېرىش تەلەپ قىلىنمىدى</string>
+    <string name="usb_storage_activity_title">ئەڭ چوڭ سىغىمى USB</string>
+    <string name="usb_storage_title">USB ئۇلاندى</string>
+    <string product="nosdcard" name="usb_storage_message">USB ئارقىللق كومپيۇتېرغا ئۇلاندى، ئەگەر كومپيۇتېر بىلەنAndroidئۇسكىنىسنڭ  USBئۇسكىنىسى ئوتتۇرىسىدا ھۆججەت نۇسخىلىماقچى بولسىڭىز كونۇپكىڭىزنى چىكىىڭ</string>
+    <string product="default" name="usb_storage_message">USB ئارقىللق كومپيۇتېرغا ئۇلاندى،ئەگەر كومپيۇتېر بىلەنAndroidئۇسكىنىسنڭSDكارتىسى ئوتتۇرىسىدا ھۆججەت نۇسخىلىماقچى بولسىڭىز كونۇپكىڭىزنى چىكىىڭ.</string>
+    <string name="usb_storage_button_mount">USB ساقلىغۇچنى ئېچىش</string>
+    <string product="nosdcard" name="usb_storage_error_message">USB ساقلىغۇچىڭىزدا كۆپ نەرسىلەرنى ساقلاش ئۈچۈن USB ساقلىغۇچىڭىزنى ئىشلىتىشتە مەسىلە بار.</string>
+    <string product="default" name="usb_storage_error_message">SD كارتىڭىزدا كۆپ نەرسىلەرنى ساقلاش ئۈچۈن USB ساقلىغۇچىڭىزنى ئىشلىتىشتە مەسىلە بار.</string>
+    <string name="usb_storage_notification_title">USB ئۇلاندى</string>
+    <string name="usb_storage_notification_message">ھۆججەتنى كۆچۈرۈشنى تاللاش.</string>
+    <string name="usb_storage_stop_notification_title">USB ساقلىغۇچ</string>
+    <string name="usb_storage_stop_notification_message">اUSB ساقلىغۇچنڭ ئۆچۈرۈشنى تاللاش.</string>
+    <string name="usb_storage_stop_title">USB ساقلىغۇچ ئىشلىنىۋاتىدۇ</string>
+    <string product="nosdcard" name="usb_storage_stop_message">ئۈسكۈنىسنى تاقاشتىن بۇرۇن چىقىرىلقىغا كاپالەتلىك قىلىڭ USB  (\u201c تىز كۆرۈنمە \u201d) your  ئاندوريىد\u2018s SD كارتا كومپيۇتېرنىڭ .</string>
+    <string product="default" name="usb_storage_stop_message">ئۈسكۈنىسنى تاقاشتىن بۇرۇن چىقىرىلقىغا كاپالەتلىك قىلىڭ USB  (\u201c تىز كۆرۈنمە\u201d) your  ئاندىرويىد\u2018s SD كارتا كومپيۇتېرنىڭ .</string>
+    <string name="usb_storage_stop_button_mount">USB ساقلىغۇچنى ئۆچۈرۈش</string>
+    <string name="usb_storage_stop_error_message">USB ساقلىغۇچنى ئۆچۈرۈشتە مەسلە بار. USB تۈگۈنەكنى يەشكەن-يەشمىگىنىڭىزنى جەزىملەشتۈرۈپ،ئاندىن قايتا سىناپ بېقىڭ.</string>
+    <string name="dlg_confirm_kill_storage_users_title">USB ساقلىغۇچنى ئېچىش</string>
+    <string name="dlg_confirm_kill_storage_users_text">ئەگەر سىز USBساقلىغۇچنى ئاچسىڭىز،بەزى ئەمەلى ئىشلەش پىروگىراممىلىرى تاكى سىز USBساقلىغۇچنى ئۆچۈرگەنگە قەدەر توختىتىلىدۇ ياكى ئىشلەتكىلى بولمايدۇ.</string>
+    <string name="dlg_error_title">USB مەشغۇلاتى مەغلۇپ بولدى </string>
+    <string name="dlg_ok">بولدى</string>
+    <string name="usb_mtp_notification_title">مىدىيا ئۈسكۈنىسى سۈپىتىدە ئۇلاش</string>
+    <string name="usb_ptp_notification_title">ئاپپارات سۈپىتىدە ئۇلاش</string>
+    <string name="usb_cd_installer_notification_title">قاچىلاش پىروگراممىسى سۈپىتىدە ئۇلاش</string>
+    <string name="usb_accessory_notification_title">USB دېتالىغا ئۇلاندى</string>
+    <string name="usb_notification_message">بېسىش ئارقىلىق باشقا USB تۈرلىرىنى كۆرسىتىش </string>
+    <string product="nosdcard" name="extmedia_format_title">USB ئامبارنى فورماتلاش</string>
+    <string product="default" name="extmedia_format_title">".كارتىسىنى  فورماتلاشتۇرۇشSD"</string>
+    <string product="nosdcard" name="extmedia_format_message">USB ئامبارنى فورماتلاپ، ئۇ يەرگە ساقلانغان بارلىق ھۆججەتلەرنى يۇيۋىتەمسىز؟ ھەرىكەت ئەسلىگە قايتمايدۇ.</string>
+    <string product="default" name="extmedia_format_message">SDكارتىنى راستىنلا فورماتلامسىز؟ كارتىدىكى بارلىق ئۇچۇرلار يوقاپ كىتىدۇ.</string>
+    <string name="extmedia_format_button_format">فورمات</string>
+    <string name="adb_active_notification_title">تەڭشەش ئۇلاندى USB</string>
+    <string name="adb_active_notification_message">بۇ تۈرنى تاللاپUSB نى ئشلىتىشنى مەنئىي قىلىڭ.</string>
+    <string name="select_input_method">كىرگۈزۈش ئۇسۇلىنى تاللاش</string>
+    <string name="configure_input_methods">كىرگۈزۈش ئۇسۇلىنى تەڭشەش</string>
+    <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="candidates_style"><u>"نامزات"</u></string>
+    <string product="nosdcard" name="ext_media_checking_notification_title">USB ساقلىغۇچ تەييارلىنىۋاتىدۇ</string>
+    <string product="default" name="ext_media_checking_notification_title">SD كارتا تەييارلاش</string>
+    <string name="ext_media_checking_notification_message">خاتالىق تەكشۈرۈلدى.</string>
+    <string product="nosdcard" name="ext_media_nofs_notification_title">قۇرۇق USB ساقلىغۇچ</string>
+    <string product="default" name="ext_media_nofs_notification_title">قۇرۇق SDكارتا</string>
+    <string product="nosdcard" name="ext_media_nofs_notification_message">USB ئۈسكۈنىسى قۇرۇق ياكى قوللىمايدىغان ھۆججەت شەكلى.</string>
+    <string product="default" name="ext_media_nofs_notification_message">SD كارتا ئىناۋەتسىز ياكى قوللىمايدىغان سىيىتىما بار.</string>
+    <string product="nosdcard" name="ext_media_unmountable_notification_title">بۇزۇلغان USB ساقلىغۇچ</string>
+    <string product="default" name="ext_media_unmountable_notification_title">بۇزۇلغان SD كارتا</string>
+    <string product="nosdcard" name="ext_media_unmountable_notification_message">USB ئۈسكۈنىسى بۇزۇلغان بولىشى مۈمكىن، فورماتلاپ قايتا سىناپ بىقىڭ.</string>
+    <string product="default" name="ext_media_unmountable_notification_message">SD كارتا بۇزۇلدى،قايتا فورماتلاشقا مۇھتاج.</string>
+    <string product="nosdcard" name="ext_media_badremoval_notification_title">USB   ئۈسكۈنىسى تاساددىبى چىقىرۋىتىلدى</string>
+    <string product="default" name="ext_media_badremoval_notification_title">SD كارتا ئۇشتۇمتۇت ئاجىتىۋىتىلدى</string>
+    <string product="nosdcard" name="ext_media_badremoval_notification_message">USB ئۈسكۈنىسىنى چىقىرۋىتىشتىن بۇرۇن ماتىرياللارنىڭ يوقاپ كىتىشىدىن ساقلىنىڭ. </string>
+    <string product="default" name="ext_media_badremoval_notification_message">SD كارتىنى چىقىرۋىتىش بۇرۇن ماتىرياللارنىڭ يوقاپ كىتىشىدىن ساقلىنىڭ .</string>
+    <string product="nosdcard" name="ext_media_safe_unmount_notification_title">USB   ئۈسكۈنىسىنى بىخەتەر چىقىرىش</string>
+    <string product="default" name="ext_media_safe_unmount_notification_title">SD كارتنى بىخەتەر چىقىرىۋىتىش</string>
+    <string product="nosdcard" name="ext_media_safe_unmount_notification_message">USBئۈسكۈنىڭىزنى  بىخەتەر چىقىرىۋالسىڭىز بۇلىدۇ.</string>
+    <string product="default" name="ext_media_safe_unmount_notification_message">سىزSD كارتىڭىزنى بىخەتەر چىقىرىۋالسىڭىز بۇلىدۇ.</string>
+    <string product="nosdcard" name="ext_media_nomedia_notification_title">USB ئۈسكۈنىسىنى چىقىرىش</string>
+    <string product="default" name="ext_media_nomedia_notification_title">SD كارتىنى چىقىرىش</string>
+    <string product="nosdcard" name="ext_media_nomedia_notification_message">USB ئۈسكۈنىسى چىقىرىدى، يېڭىدىن سىلىڭ.</string>
+    <string product="default" name="ext_media_nomedia_notification_message">SD كارتا چىقىرىۋىتىلدى،باشقا بىرنى قىستۇرۇڭ.</string>
+    <string name="activity_list_empty">ماس كېلىدىغان ھەركەت تېپىلمىدى</string>
+    <string name="permlab_pkgUsageStats">بىرىكمە دىتال ئىشلىتىش ستاتسىتكىسىنى يېڭىلاش</string>
+    <string name="permdesc_pkgUsageStats">يىغىلغان پارچىلارنىڭ ئىشلىتىلىش ئىستاستىكىسىنى ئۆزگەرتىشنى يول قويۇش.پەقەت نورمال ئىشلىشى ئۈچۈنلا ئەمەس.</string>
+    <string name="permlab_copyProtectedData">مەزمۇننى كۆچۈرۈش ئۈچۈن يۇك ساندۇقى مۇلازىمىتىنى تەڭشەشكە يول قويۇش.پەقەت نورمال ئىشلىشى ئۈچۈنلا ئەمەس.</string>
+    <string name="permdesc_copyProtectedData">مەزمۇننى كۆچۈرۈش ئۈچۈن يۇك ساندۇقى مۇلازىمىتىنى تەڭشەشكە يول قويۇش.پەقەت نورمال ئىشلىشى ئۈچۈنلا ئەمەس.</string>
+    <string name="tutorial_double_tap_to_zoom_message_short">قوش چىكىپ چوڭ-كىچىكلىكىنى كونتىرول قىلىش</string>
+    <string name="gadget_host_error_inflating">يەل قاچىلاش زاپچىسىدا خاتالىق بار</string>
+    <string name="ime_action_go">بولىدۇ</string>
+    <string name="ime_action_search">ئىزدەش</string>
+    <string name="ime_action_send">يوللاش</string>
+    <string name="ime_action_next">كېيىنكى</string>
+    <string name="ime_action_done">تاماملاش</string>
+    <string name="ime_action_previous">ئالدىنىقى بەت</string>
+    <string name="ime_action_default">ئىجرا قىلىش</string>
+    <string name="dial_number_using">ئۇرغان نۇمۇر\n <xliff:g id="number" example="555">%s</xliff:g>نى ئىشلىتىۋاتىدۇ</string>
+    <string name="create_contact_using">ئالاقىلاشقۇچىلارنى قۇرۇش \nئىشلىتىۋاتىدۇ <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="grant_credentials_permission_message_header">تۆۋەندىكى بىرنى ئۆز ئىچىگە ئالغان نۇرغۇن قوللىنىشچان دىتاللار سىزنىڭ ئابونتىڭىزغا كىرىشنى ئېلتىماس قىلدى ھەم قىلىۋاتىدۇ. </string>
+    <string name="grant_credentials_permission_message_footer">بۇ شەرتكە يول قويۇمسىز؟</string>
+    <string name="grant_permissions_header_text">ئۇلاش تەلىپى</string>
+    <string name="allow">رۇخسەت</string>
+    <string name="deny">ئىنكار قىلىش</string>
+    <string name="permission_request_notification_title">رۇخسەت بېرىش تەلەپ قىلىندى</string>
+    <string name="permission_request_notification_with_subtitle">تەلەپ قىلىنغان ھوقۇق \n ۋە ئابۇنىت  <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="input_method_binding_label">كىرگۈزۈش ئۇسۇلى</string>
+    <string name="sync_binding_label">ماس قەدەملىك</string>
+    <string name="accessibility_binding_label">زىيارەت قىلىشچانلىقى</string>
+    <string name="wallpaper_binding_label">تام قەغىزى</string>
+    <string name="chooser_wallpaper">تام قەغىزىنى ئۆزگەرتىش</string>
+    <string name="vpn_title">VPN يېڭىلاندى.</string>
+    <string name="vpn_title_long"><xliff:g id="APP">%s</xliff:g>”يېڭىلاندى VPN</string>
+    <string name="vpn_text">چېكىش ئارقىلىق تورنى باشقۇرغىلى بولدۇ.</string>
+    <string name="vpn_text_long"><xliff:g id="SESSION">%s</xliff:g> غا ئۇلاندى. «بېسىش» نى باسسىىز تورنى باشقۇرغىلى بولىدۇ.</string>
+    <string name="upload_file">ھۆججەتنى تاللاش</string>
+    <string name="no_file_chosen">ھېچقانداق ھۆججەت تاللانمىدى</string>
+    <string name="reset">قايتا تەڭشەش</string>
+    <string name="submit">تاپشۇرۇش</string>
+    <string name="car_mode_disable_notification_title">ماشىنا سىخىمىسى ئىناۋەتلىك</string>
+    <string name="car_mode_disable_notification_message">ھازىر بار بولغان ماشىنا ھالىتىنى تاللاش.</string>
+    <string name="tethered_notification_title">چەكلەۋاتىدۇ ياكى قىزىق نۇقتا ھەركەتچان ھالەتتە</string>
+    <string name="tethered_notification_message">چېىكىپ سەپلەڭ</string>
+    <string name="back_button_label">قايتىش</string>
+    <string name="next_button_label">كېيىنكى</string>
+    <string name="skip_button_label">يۆتكەش</string>
+    <string name="throttle_warning_notification_title">تىز سۈرئەتلىك يۆتكىلىدىغان سانلارنى ئىشلىتىش</string>
+    <string name="throttle_warning_notification_message">بۇ يەرنى بېسىپ كۆچمە سانلىق-مەلۇماتلارنى ئىشلىتىش توغۇرسىدا كۆپرەك بىلىم ئىگەللەڭ</string>
+    <string name="throttled_notification_title">كۆچمە خەۋەرلىشىش سانلىرى دائىرىدىن ئېشىپ كەتتى </string>
+    <string name="throttled_notification_message">بۇ يەرنى بېسىپ كۆچمە سانلىق-مەلۇماتلارنى ئىشلىتىش توغۇرسىدا كۆپرەك بىلىم ئىگەللەڭ</string>
+    <string name="no_matches">No matches</string>
+    <string name="find_on_page">توردىن ئىزدەش</string>
+    <plurals name="matches_found">
+        <!-- Case of one match -->
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
+        <!-- <item quantity="one">1 match</item> -->
+        <item quantity="one">1 ماسلاشتۇرۇش تۈرى</item>
+        <!-- Case of multiple total matches -->
+        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
+        <item quantity="other"><xliff:g id="INDEX">%d</xliff:g> ى تۈر، جەمئىي <xliff:g id="TOTAL">%d</xliff:g> تۈر</item>
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
+        </plurals>
+    <string name="action_mode_done">تاماملاش</string>
+    <string product="nosdcard" name="progress_unmounting">USB ئۈسكۈنىسىنى چىقىرۋىتىش ...</string>
+    <string product="default" name="progress_unmounting">SD كارتىنى چىقىرۋىتىش ...</string>
+    <string product="nosdcard" name="progress_erasing">USB ساقلىغۇچنى تازلاش...</string>
+    <string product="default" name="progress_erasing">SD كارتىنى تازلاش...</string>
+    <string product="nosdcard" name="format_error">USB ساقلاش ئۈسكۈنىسىنى تازىلاشقا بولمايدۇ.</string>
+    <string product="default" name="format_error">SD كارتىنى تازىلاشقا بولمايدۇ.</string>
+    <string name="media_bad_removal">SD كارتا ئىشىلتىشتىن بۇرۇن ئېلۋىتىلگەن.</string>
+    <string product="nosdcard" name="media_checking">USB ئۈسكۈنىسى تەكشۈرلىۋاتىدۇ.</string>
+    <string product="default" name="media_checking">SD كارتا تەكشۈرىلىۋاتىدۇ.</string>
+    <string name="media_removed">SD كارتا تىفۇندىن چىقىرۋېتىلىپتۇ.</string>
+    <string product="nosdcard" name="media_shared">USB ئۈسكۈنىسى كومپىيۇتېردا ئىشلىتىلىۋاتىدۇ.</string>
+    <string product="default" name="media_shared">SD كارتا باشقا كومپىيۇتىردا ئىشلىتىلىۋاتىدۇ.</string>
+    <string name="media_unknown_state">سىرىتقى مېدىيا نامەلۇم.</string>
+    <string name="share">بەھرىمان بولۇش</string>
+    <string name="find">ئىزدەش</string>
+    <string name="websearch">تور بەت ئىزدەش </string>
+    <string name="gpsNotifTicker"><xliff:g id="NAME">%s</xliff:g> دىن كەلگەن ئورۇن بېكىتىش تەلىپى</string>
+    <string name="gpsNotifTitle">ئورۇن بىكىتىشنى تەلەپ قىلىش</string>
+    <string name="gpsNotifMessage"><xliff:g id="NAME">%1$s</xliff:g>)<xliff:g id="SERVICE">%2$s</xliff:g>) ئىلتىماس قىلغۇچى</string>
+    <string name="gpsVerifYes">ھەئە</string>
+    <string name="gpsVerifNo">ياق</string>
+    <string name="sync_too_many_deletes">ئارتۇق چەكلىمىنى ئۆچۈرۈش</string>
+    <string name="sync_too_many_deletes_desc">بۇ يەردە بۇ <xliff:g id="number_of_deleted_items">%1$d</xliff:g> يۇيۇلغان تۈر بار، ھىساباتى <xliff:g id="account_name">%3$s</xliff:g>. سىز قانداق قىلىماقچى؟</string>
+    <string name="sync_really_delete">تۈرلەرنى ئۆچۈرۈش.</string>
+    <string name="sync_undo_deletes">ئۆچۈرۈلگەننى ئەسلىگە قايتۇرۇش.</string>
+    <string name="sync_do_nothing">ھازىر ھېچنىمە قىلماسلىق.</string>
+    <string name="choose_account_label">ئىسچوت تاللاش</string>
+    <string name="add_account_label">سچوت قۇشۇپ كۆپەيتىش</string>
+    <string name="add_account_button_label">سچوت قۇشۇپ كۆپەيتىش</string>
+    <string name="number_picker_increment_button">ئاشۇرۇش</string>
+    <string name="number_picker_decrement_button">كېمەيتىش</string>
+    <string name="number_picker_increment_scroll_mode"><xliff:g id="VALUE">%s</xliff:g> قېتىم چېكىڭ ھەم بېسىپ تۇرۇڭ.</string>
+    <string name="number_picker_increment_scroll_action">ئۈسىتىگە سىيرىلغاندا قىممەت قوشقىلى بولدۇ.تۆۋەنگە سىيرىلغاندا قىممەت ئازلاپ ماڭىدۇ.</string>
+    <string name="time_picker_increment_minute_button">مىنۇتىنى  قوشۇش</string>
+    <string name="time_picker_decrement_minute_button">مىنۇت سانىنى كېمەيتىش</string>
+    <string name="time_picker_increment_hour_button">سائېىتىنى  قوشۇش</string>
+    <string name="time_picker_decrement_hour_button">سائەت سانىنى كېمەيتىش</string>
+    <string name="time_picker_increment_set_pm_button">چۈشتىن كېيىنلىك ۋاقىتنى تەڭشەش</string>
+    <string name="time_picker_decrement_set_am_button">چۈشتىن بۇرۇنقى ۋاقىتنى تاللاش</string>
+    <string name="date_picker_increment_month_button">ئاينى  قوشۇش</string>
+    <string name="date_picker_decrement_month_button">ئاي قىممىتىنى كېمەيتىش</string>
+    <string name="date_picker_increment_day_button">كۈنىنى  قوشۇش</string>
+    <string name="date_picker_decrement_day_button">كۈن سانىنى كېمەيتىش</string>
+    <string name="date_picker_increment_year_button">يىلىنى قوشۇش</string>
+    <string name="date_picker_decrement_year_button">يىل قىممىتىنى كېمەيتىش</string>
+    <string name="keyboardview_keycode_alt">ALT</string>
+    <string name="keyboardview_keycode_cancel">"بىكار قىلىش"</string>
+    <string name="keyboardview_keycode_delete">ئۆچۈرۈش</string>
+    <string name="keyboardview_keycode_done">تاماملاش</string>
+    <string name="keyboardview_keycode_mode_change">تۈر يېڭىلاندى</string>
+    <string name="keyboardview_keycode_shift">Shift</string>
+    <string name="keyboardview_keycode_enter">Enter  كۇنۇپكىسى</string>
+    <string name="activitychooserview_choose_application">بىر پىروگرامما تاللاش</string>
+    <string name="shareactionprovider_share_with">ھەمبەھىرلىنىش ئوبېيكىتى</string>
+    <string name="shareactionprovider_share_with_application">«<xliff:g id="APPLICATION_NAME">%s</xliff:g>»بىلەن ھەمبەھىرلىنىش</string>
+    <string name="content_description_sliding_handle">تۇتقۇچنى سىيرىلدۈرۈڭ، «بېسىڭ» كۇنۇپكىسىنى بېسىپ تۇرۇڭ.</string>
+    <string name="description_direction_up"><xliff:g id="TARGET_DESCRIPTION">%s</xliff:g> نى ئۈستىگە يۆتكەش </string>
+    <string name="description_direction_down"><xliff:g id="TARGET_DESCRIPTION">%s</xliff:g> نى تۆۋەنگە سېيرىلدۈرۈڭ.</string>
+    <string name="description_direction_left"><xliff:g id="TARGET_DESCRIPTION">%s</xliff:g> نى سولغا سېرىلدۈرۈڭ.</string>
+    <string name="description_direction_right">"<xliff:g id="TARGET_DESCRIPTION">%s</xliff:g> نى ئوڭغا سۈرۈش."</string>
+    <string name="description_target_unlock">قولۇپنى ئېچىش</string>
+    <string name="description_target_camera">كامېرا</string>
+    <string name="description_target_silent">تىنچ</string>
+    <string name="description_target_soundon">ئاۋازنى ئېچىش</string>
+    <string name="description_target_unlock_tablet">سېيرىپ قۇلۇپ ئېچىش.</string>
+    <string name="keyboard_headset_required_to_hear_password">قۇلاق ياڭراتقۇنى ئۇلىغاندىلا پارولنىڭ كۇنۇپكا باشقان ئاۋازنى ئاڭلىغىلى بولىدۇ.</string>
+    <string name="keyboard_password_character_no_headset">چېكىت</string>
+    <string name="action_bar_home_description">يىتەكلىگۈچ باش بىتى </string>
+    <string name="action_bar_up_description">ئۈسىتى يىتەكلىگۈچ</string>
+    <string name="action_menu_overflow_description">تېخىمۇ كۆپ تاللاش</string>
+    <string name="storage_internal">ئىچكى تېلفۇننى ساقلاش</string>
+    <string name="storage_sd_card">SD كارتا</string>
+    <string name="storage_usb">USB ساقلىغۇچ</string>
+    <string name="extract_edit_menu_button">تەھرىرلەش</string>
+    <string name="data_usage_warning_title">ئېقىم مىقدارى ئىشلىتىلىش ئاگاھلاندۇرۇلىشى</string>
+    <string name="data_usage_warning_body">چېكىش ئارقىلىق ئىشلىتىش ئەھۋالى ۋە تەڭشەكنى كۆرۈشكە بولىدۇ </string>
+    <string name="data_usage_3g_limit_title">2G-3G سانلىق مەلۇماتى توختىتىلدى</string>
+    <string name="data_usage_4g_limit_title">4G سانلىق مەلۇماتى توختىتىلدى</string>
+    <string name="data_usage_mobile_limit_title">سانلىق مەلۇمات يۆتكەشنى توختىتىش</string>
+    <string name="data_usage_wifi_limit_title">WLAN سانلىق مەلۇمات تورى توختىتىلدى  </string>
+    <string name="data_usage_limit_body">چېكىش ئارقىلىق قوزغۇتۇش  </string>
+    <string name="data_usage_3g_limit_snoozed_title">2G-3G سانلىق مەلۇماتنىڭ ئېقىم مىقدار چەكلىمىسىدىن ئېشىپ كەتتى</string>
+    <string name="data_usage_4g_limit_snoozed_title">4G سانلىق مەلۇماتنىڭ ئېقىم مىقدار چەكلىمىسىدىن ئېشىپ كەتتى</string>
+    <string name="data_usage_mobile_limit_snoozed_title">كۆچمە خەۋەرلىشىش سانلىرى دائىرىدىن ئېشىپ كەتتى </string>
+    <string name="data_usage_wifi_limit_snoozed_title">WLAN سانلىق مەلۇمات ئېقىم مىقدار چەكلىمىسىدىن ئېشىپ كەتتى </string>
+    <string name="data_usage_limit_snoozed_body">بەلگىلىك ئۆلچەم <xliff:g id="SIZE">%s</xliff:g> دىن ئېشىپ كەتتى</string>
+    <string name="data_usage_restricted_title">ئارقا سۇپا سانلىق مەلۇماتى چەكلىمىگە ئۇچرىدى</string>
+    <string name="data_usage_restricted_body">چېكىش ئارقىلىق چەكلىمىنى يۇيۋېتىش  </string>
+    <string name="ssl_certificate">بىخەتەرلىك ئىسپاتى</string>
+    <string name="ssl_certificate_is_valid">بۇ گۇۋاھنامە تېخى كۈچكە ئېگە.</string>
+    <string name="issued_to">ئىۋەتىش:</string>
+    <string name="common_name">ئورتاق ئىسىم:</string>
+    <string name="org_name">قۇرۇلما</string>
+    <string name="org_unit">قۇرۇلما بۆلۈكى:</string>
+    <string name="issued_by">ئىۋەتىلگۈچ:</string>
+    <string name="validity_period">ئۈنۈملىكى:</string>
+    <string name="issued_on">ئىۋەتىلگەن:</string>
+    <string name="expires_on">ئىناۋەتلىك ۋاقتى:</string>
+    <string name="serial_number">رەت نومۇرى</string>
+    <string name="fingerprints">بارماق ئىزى:</string>
+    <string name="sha256_fingerprint">SHA-256بارماق ئىزى:</string>
+    <string name="sha1_fingerprint">SHA-1بارماق ئىزى:</string>
+    <string name="activity_chooser_view_see_all">ھەممىسىنى كۆرۈپ چىقىش...</string>
+    <string name="activity_chooser_view_dialog_title_default">پائالىيەت تاللاش</string>
+    <string name="share_action_provider_share_with">«<xliff:g id="APPLICATION_NAME">%s</xliff:g>»بىلەن ھەمبەھىرلىنىش</string>
+    <string name="status_bar_device_locked">ئۈسكۈنە قۇلۇپلاندى.</string>
+    <string name="list_delimeter">"،"</string>
+    <string name="sending">يوللاۋاتىدۇ...</string>
+    <string name="launchBrowserDefault">قاراپ چىققۇچى</string>
+    <string name="SetupCallDefault">تېلېفوننى قوبۇل قىلامسىز؟</string>
+</resources>

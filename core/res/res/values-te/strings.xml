@@ -1,0 +1,1256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="byteShort">B</string>
+    <string name="kilobyteShort">KB</string>
+    <string name="megabyteShort">MB</string>
+    <string name="gigabyteShort">గిగా బైట్స్  </string>
+    <string name="terabyteShort">టీబీ</string>
+    <string name="petabyteShort">PB</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="untitled">&lt;శీర్షిక పెట్టబడలేదు&gt;</string>
+    <string name="ellipsis">\u2026</string>
+    <string name="ellipsis_two_dots">\u2025</string>
+    <string name="emptyPhoneNumber">(ఫోన్ నంబర్ లేదు)</string>
+    <string name="unknownName">(తెలియని)</string>
+    <string name="defaultVoiceMailAlphaTag">వాయిస్ మెయిల్</string>
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
+    <string name="mmiError">కనెక్షన్ సమస్య లేదా చెల్లని MMI కోడ్. </string>
+    <string name="mmiFdnError">ఆపరేషన్ మాత్రమే స్థిర డయలింగ్ సంఖ్యలు తొలగించబడ్డాయి.</string>
+    <string name="serviceEnabled">సేవ ప్రారంభించబడింది.</string>
+    <string name="serviceEnabledFor">కోసం సేవ ప్రారంభించబడింది:</string>
+    <string name="serviceDisabled">సేవ డిజేబుల్ చేయబడింది.</string>
+    <string name="serviceRegistered">రిజిస్ట్రేషన్ విజయవంతం అయింది.</string>
+    <string name="serviceErased">తుడిచివేయడం విజయవంతమైంది.</string>
+    <string name="passwordIncorrect">దయచేసి సరైన పాస్ వార్డ్ ని ఎంటర్ చేయండి.  </string>
+    <string name="mmiComplete">MMI పూర్తి.</string>
+    <string name="badPin">మీరు టైప్ చేసిన పాత PIN సరైనది కాదు.</string>
+    <string name="badPuk">మీరు టైప్ చేసిన PUK సరైనది కాదు.</string>
+    <string name="mismatchPin">మీరు ఎంటర్ చేసిన PIN సరిపోవడం లేదు.</string>
+    <string name="invalidPin">4 నుండి 8 సంఖ్యలు గల ఒక PIN టైప్ చేయండి.</string>
+    <string name="invalidPuk">8 సంఖ్యలు ఒక PUK ని టైప్ చేయండి.</string>
+    <string name="needPuk">మీ SIM కార్డు PUK లాక్ ఉంది. దాన్ని అన్ లాక్ చెయ్యడానికి PUK కోడ్ టైప్ చేయండి.</string>
+    <string name="needPuk2">SIM కార్డ్  అన్ లాక్ చేయడానికి PUK2 అని టైప్ చేయండి.</string>
+    <string name="ClipMmi">కాల్ చేస్తున్న వారి వివరాలు </string>
+    <string name="ClirMmi">అవుట్ గోయింగ్ కాలర్ ఐడి             </string>
+    <string name="CfMmi">కాల్ ఫార్వార్డ్ </string>
+    <string name="CwMmi">కాల్ వెయిటింగ్</string>
+    <string name="BaMmi">నిషేధిత కాల్</string>
+    <string name="PwdMmi">పాస్వర్డ్ మార్పు </string>
+    <string name="PinMmi">PINను మార్చండి </string>
+    <string name="CnipMmi">కాలింగ్ సంఖ్య ఉంది</string>
+    <string name="CnirMmi">కాలింగ్ సంఖ్య పరిమితం</string>
+    <string name="ThreeWCMmi">మూడు మార్గాలు కాల్</string>
+    <string name="RuacMmi">అక్కరలేని బాధించే కాల్స్ తిరస్కరణ</string>
+    <string name="CndMmi">కాలింగ్ సంఖ్య డెలివరీ </string>
+    <string name="DndMmi">భంగం లేదు</string>
+    <string name="CLIRDefaultOnNextCallOn">కాలర్ ఐడి డిఫాల్ట్ లు నిరోధింపబడాలి. తదుపరి కాల్: పరిమితం చెయ్యి</string>
+    <string name="CLIRDefaultOnNextCallOff">కాలర్ ఐడి డిఫాల్ట్ లు నిరోధింపబడాలి. తదుపరి కాల్: పరిమితం కాదు</string>
+    <string name="CLIRDefaultOffNextCallOn">కాలర్ ఐడి డిఫాల్ట్ లను పరిమితం కాదు. తదుపరి కాల్: పరిమితం చెయ్యి</string>
+    <string name="CLIRDefaultOffNextCallOff">కాలర్ ఐడి డిఫాల్ట్ లను పరిమితం కాదు. తదుపరి కాల్: పరిమితం కాదు</string>
+    <string name="serviceNotProvisioned">సేవ సౌలభ్యం లేదు.</string>
+    <string name="CLIRPermanent">కాలర్ ID అమరిక మార్చడం సాధ్యం కాదు.</string>
+    <string name="RestrictedChangedTitle">నిరోధిత యాక్సెస్ మార్చబడింది</string>
+    <string name="RestrictedOnData">డేటా సేవ నిరోధించబడింది.</string>
+    <string name="RestrictedOnEmergency">అత్యవసర సేవ నిరోధించబడింది.</string>
+    <string name="RestrictedOnNormal">వాయిస్ సర్వీస్ నిరోధించబడింది.</string>
+    <string name="RestrictedOnAllVoice">అన్ని వాయిస్ సేవలు బ్లాక్ చేయబడతాయి.</string>
+    <string name="RestrictedOnSms">SMS సేవ నిరోధించబడింది.</string>
+    <string name="RestrictedOnVoiceData">వాయిస్/డేటా సేవలు బ్లాక్ అయ్యాయి.</string>
+    <string name="RestrictedOnVoiceSms">వాయిస్/SMS సేవల బ్లాక్ అయ్యాయి.</string>
+    <string name="RestrictedOnAll">అన్ని వాయిస్ / డేటా / SMS సేవలు బ్లాక్ చేయబడ్డాయి.</string>
+    <string name="serviceClassVoice">వాయిస్</string>
+    <string name="serviceClassData">డేటా</string>
+    <string name="serviceClassFAX">ఫ్యాక్స్     </string>
+    <string name="serviceClassSMS">SMS</string>
+    <string name="serviceClassDataAsync">ఒక సిమ్క్</string>
+    <string name="serviceClassDataSync">సమకాలీకరించు</string>
+    <string name="serviceClassPacket">ప్యాకెట్         </string>
+    <string name="serviceClassPAD">PAD</string>
+    <string name="roamingText0">రోమింగ్ సూచిక ప్రారంభించబడింది</string>
+    <string name="roamingText1">రోమింగ్ సూచిక నిలిపివేయబడింది</string>
+    <string name="roamingText2">సూచిక ఫ్లాష్ చేస్తుంది రోమింగ్</string>
+    <string name="roamingText3">పొరుగు వారికి దూరంగా </string>
+    <string name="roamingText4">బిల్డింగ్ కు అవతల </string>
+    <string name="roamingText5">రోమింగ్ - ఇష్టపడే వ్యవస్థ</string>
+    <string name="roamingText6">రోమింగ్ - అందుబాటులో వ్యవస్థ</string>
+    <string name="roamingText7">రోమింగ్ - అనుబంధ భాగస్వామి</string>
+    <string name="roamingText8">రోమింగ్ - ప్రీమియం భాగస్వామి</string>
+    <string name="roamingText9">రోమింగ్ - పూర్తి సేవా కార్యచరణ</string>
+    <string name="roamingText10">రోమింగ్ - పాక్షిక సేవా కార్యచరణ</string>
+    <string name="roamingText11">రోమింగ్ బ్యానర్ ఆన్ లో ఉంది</string>
+    <string name="roamingText12">రోమింగ్ బ్యానర్ ఆఫ్ లో ఉంది</string>
+    <string name="roamingTextSearching">సేవా కోసం శోధిస్తోంది</string>
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: ఫార్వర్డ్ చేయబడలేదు</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> తర్వాత <xliff:g id="time_delay">{2}</xliff:g> సెకెన్లు</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: ఫార్వర్డ్ చేయబడలేదు</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: ఫార్వర్డ్ చేయబడలేదు</string>
+    <string name="fcComplete">ఫీచర్ కోడ్ పూర్తి. ఫైలు విజయవంతంగా. </string>
+    <string name="fcError">కనెక్షన్ సమస్య లేదా చెల్లని లక్షణం కోడ్. </string>
+    <string name="httpErrorOk">సరి</string>
+    <string name="httpError">ఒక నెట్ వర్క్ లోపం ఏర్పడింది.</string>
+    <string name="httpErrorLookup">URL దొరకలేదు.</string>
+    <string name="httpErrorUnsupportedAuthScheme">సైట్ ప్రమాణీకరణ పథకం మద్దతు లేదు.</string>
+    <string name="httpErrorAuth">ప్రామాణీకరణ విజయవంతం కాలేదు.</string>
+    <string name="httpErrorProxyAuth">ప్రాక్సీ సర్వర్ ద్వారా ప్రమాణీకరణ విజయవంతం కాలేదు.</string>
+    <string name="httpErrorConnect">సర్వర్ కి అనుసంధానం విజయవంతం కాలేదు.</string>
+    <string name="httpErrorIO">సర్వర్ కమ్యూనికేట్ చేయలేదు, దయచేసి మళ్లీ ప్రయత్నించండి.</string>
+    <string name="httpErrorTimeout">సర్వర్ కి కనెక్షన్ సమయం ముగిసిమ్ది.</string>
+    <string name="httpErrorRedirectLoop">పేజీకి చాలా సర్వర్ దారిమార్పులను కలిగి ఉంది.</string>
+    <string name="httpErrorUnsupportedScheme">ప్రొటోకాల్ మద్దత్తునివ్వడం లేదు.</string>
+    <string name="httpErrorFailedSslHandshake">ఒక సురక్షిత కనెక్షన్ ని ఏర్పాటు చేయవచ్చు లేదు.</string>
+    <string name="httpErrorBadUrl">URL చెల్లుబాటులో లేనందున పేజీ స్క్రీన్వడం సాధ్యం కాలేదు.</string>
+    <string name="httpErrorFile">ఫైల్ బదిలీ విజయవంతంగా పూర్తి.</string>
+    <string name="httpErrorFileNotFound">అభ్యర్థించిన ఫైలు దొరకలేదు.</string>
+    <string name="notification_title">సిగ్న్ ఇన్ ఎర్రొర్ ఫర్ <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+    <string name="contentServiceSync">సమకాలీకరించు</string>
+    <string name="contentServiceSyncNotificationTitle">సమకాలీకరించు</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc">చాలా <xliff:g id="content_type">%s</xliff:g> తొలగిస్తే.</string>
+    <string product="tablet" name="low_memory">టాబ్లెట్ నిల్వ పూర్తిగా! కొన్ని ఫైళ్ళను ఖాళీని తొలగించండి.</string>
+    <string product="default" name="low_memory">ఫోన్ మెమరీ నిండినది, దయచేసి మీ ఫోనులో కొన్ని ఫైల్స్ ని తొలగించండి. </string>
+    <string name="me">నాకు</string>
+    <string product="tablet" name="power_dialog">టాబ్లెట్ ఎంపికలు</string>
+    <string product="default" name="power_dialog">ఫోన్ ఎంపికలు        </string>
+    <string name="silent_mode">సైలెంట్ మోడ్</string>
+    <string name="turn_on_radio">వైర్ లెస్ ఆన్ చెయ్యి</string>
+    <string name="turn_off_radio">వైర్ లెస్ ఆఫ్ చెయ్యి</string>
+    <string name="screen_lock">స్క్రీన్ లాక్ సెటప్ చెయ్యి</string>
+    <string name="power_off">పవర్ ఆఫ్</string>
+    <string name="shutdown_progress">క్రిందకి షపెలింగ్ జరుగుతోంది\u2026   </string>
+    <string product="tablet" name="shutdown_confirm">మీ టాబ్లెట్ మూయబడుతుంది.</string>
+    <string product="default" name="shutdown_confirm">మీ ఫోన్ మూసివేసి ఉంటుంది. </string>
+    <string name="shutdown_confirm_question">మీరు మూసివేయాలని మీరు అనుకుంటున్నారా?</string>
+    <string name="recent_tasks_title">ఇటీవలి</string>
+    <string name="no_recent_tasks">ఇటీవలి అప్లికేషన్లు లేవు. </string>
+    <string product="tablet" name="global_actions">టాబ్లెట్ ఎంపికలు</string>
+    <string product="default" name="global_actions">ఫోన్ ఎంపికలు        </string>
+    <string name="global_action_lock">స్క్రీన్ లాక్ సెటప్ చెయ్యి</string>
+    <string name="global_action_power_off">పవర్ ఆఫ్</string>
+    <string name="global_action_toggle_silent_mode">సైలెంట్ మోడ్</string>
+    <string name="global_action_silent_mode_on_status">సౌండ్ ఆఫ్ లో ఉంది   </string>
+    <string name="global_action_silent_mode_off_status">సౌండ్ ఆన్ లో ఉంది</string>
+    <string name="global_actions_toggle_airplane_mode">ఎయిర్ ప్లేన్ విధానం</string>
+    <string name="global_actions_airplane_mode_on_status">ఎయిర్ ప్లేన్ విధానం పని చేస్తోంది</string>
+    <string name="global_actions_airplane_mode_off_status">ఎయిర్ ప్లేన్ విధానం పని చేయడం లేదు</string>
+    <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="safeMode">సేఫ్ మోడ్</string>
+    <string name="android_system_label">ఆండ్రాయిడ్ సిస్టమ్</string>
+    <string name="permgrouplab_costMoney">సేవల కోసం మీకు ఖర్చు అయ్యే డబ్బు </string>
+    <string name="permgroupdesc_costMoney">మీరు డబ్బు ఖర్చు అయ్యే పనులను చేసే అప్లికేషన్లను యాక్సెస్ చేయడానికి అనుమతించు.</string>
+    <string name="permgrouplab_messages">మీ సందేశాలు </string>
+    <string name="permgroupdesc_messages">మీ SMS, ఇ-మెయిల్, మరియు ఇతర సందేశాలు చదవండి, వ్రాయండి. 
+        </string>
+    <string name="permgrouplab_personalInfo">మీ వ్యక్తిగత సమాచారం </string>
+    <string name="permgrouplab_location">మీ స్థానం </string>
+    <string name="permgroupdesc_location">మీ భౌతిక ప్రదేశాన్ని మానిటర్ చేయండి </string>
+    <string name="permgrouplab_network">నెట్ వర్క్ కమ్యూనికేషన్</string>
+    <string name="permgroupdesc_network">వివిధ నెట్ వర్క్ ఫీచర్లను యాక్సెస్ చేయడానికి అప్లికేషన్లను అనుమతించు.</string>
+    <string name="permgrouplab_accounts">మీ ఖాతాలు</string>
+    <string name="permgroupdesc_accounts">అందుబాటులో ఖాతాలను యాక్సెస్ చెయ్యి.</string>
+    <string name="permgrouplab_hardwareControls">హార్డువేర్ ​​నియంత్రణలు</string>
+    <string name="permgroupdesc_hardwareControls">"హ్యాండ్ సెట్ పై హార్డ్వేర్ కి నేరుగా యాక్సెస్."</string>
+    <string name="permgrouplab_phoneCalls">ఫోన్ కాల్స్ </string>
+    <string name="permgroupdesc_phoneCalls">ఫోన్ కాల్స్ ని మానిటర్, రికార్డ్, ప్రోసెస్స్ చేయండి. </string>
+    <string name="permgrouplab_systemTools">సిస్టమ్ టూల్స్</string>
+    <string name="permgroupdesc_systemTools">సిస్టం యొక్క నియంత్రణ మరియు దిగువ స్థాయి యాక్సెస్.</string>
+    <string name="permgrouplab_developmentTools">అభివృద్ధి పరికరాలు</string>
+    <string name="permgroupdesc_developmentTools">అవసరమైన అప్లికేషన్ డెవలపర్లకు మాత్రమే </string>
+    <string name="permgrouplab_storage">స్టోరేజ్</string>
+    <string product="nosdcard" name="permgroupdesc_storage">USB నిల్వ యాక్సెస్ చెయ్యండి.</string>
+    <string product="default" name="permgroupdesc_storage">SD  కార్డు ఆక్సెస్ చెయ్యండి.</string>
+    <string name="permlab_statusBar">స్టేటస్ బార్ నిలిపి వేయి లేదా సవరించు</string>
+    <string name="permdesc_statusBar">స్టేటస్ బార్ ని పని చేయకుండా చేయడానికి లేదా సిస్టమ్ చిహ్నాలను జోడించడానికీ మరియు తొలగించడానికీ ఒక అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string name="permlab_statusBarService">స్టేటస్ బార్</string>
+    <string name="permdesc_statusBarService">అప్లికేషన్ స్థితి బార్ అనుమతిస్తుంది.</string>
+    <string name="permlab_expandStatusBar">స్టేటస్ బార్  విస్తరించు/పడిపోవడం</string>
+    <string name="permdesc_expandStatusBar">స్టేటస్ బార్ విస్తరించడానికీ లేదా పోవడానికీ అప్లికేషన్ అనుమతిస్తుంది.
+</string>
+    <string name="permlab_processOutgoingCalls">మీరు చేసే కాల్స్ ను అడ్డుకొను </string>
+    <string name="permdesc_processOutgoingCalls">అప్లికేషన్ అవుట్ గోయింగ్ కాల్స్ ని ప్రాసెస్ చేయడానికీ, మరియు డయల్ చేయబోయే నెంబర్లను మార్చడానికీ అనుమతిస్తుంది హానికర అప్లికేషన్లు అవుట్ గోయింగ్ కాల్స్ ని పరిశీలించడం, దారి మళ్ళించడం, లేదా నిరోధించడం చేయవచ్చు.</string>
+    <string name="permlab_receiveSms">SMS అందుకోవడానికి</string>
+    <string name="permdesc_receiveSms">ఒక అప్లికేషన్ SMS సందేశాలను అందుకోవడానికీ, మరియు ప్రక్రియలో ఉంచడానికీ  అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మానిటర్ మీ సందేశాలను గమనిస్తూ ఉండ వచ్చు లేదా మీకు వాటిని చూపకుండానే వాటిని తొలగించవచ్చు. </string>
+    <string name="permlab_receiveMms">MMS అందుకుంటారు</string>
+    <string name="permdesc_receiveMms">దరఖాస్తు అందుకున్న అనుమతిస్తుంది మరియు ప్రక్రియ MMS సందేశాలకు. హానికరమైన అప్లికేషన్లు మానిటర్ ఉండవచ్చ మీ సందేశాలు లేదా మీరు వాటిని చూపకుండా వాటిని తొలగించండి.</string>
+    <string name="permlab_receiveEmergencyBroadcast">అత్యవసర ప్రసారాలు అందుకుంటారు</string>
+    <string name="permdesc_receiveEmergencyBroadcast">అప్లికేషన్ ని స్వీకరించడానికి మిమ్మల్ని అనుమతిస్తుంది మరియు ప్రక్రియ అత్యవసర ప్రసార సందేశాలను వ్యవస్థ అనువర్తనాలలో అనుమతి మాత్రమే అందుబాటులో ఉంది.
+      . </string>
+    <string name="permlab_sendSms">SMS సందేశాలు పంపవచ్చు</string>
+    <string name="permdesc_sendSms">ఒక అప్లికేషన్ ని SMS సందేశాలు పంపడానికి మిమ్మల్ని అనుమతిస్తుంది.  హానికరమైన అప్లికేషన్లు మీ నిర్ధారణ లేకుండా సందేశాలు పంపడం ద్వారా మీకు డబ్బు ఖర్చు అయ్యేలా చేయవచ్చు.</string>
+    <string name="permlab_readSms">SMS లేదా MMS చదవండి</string>
+    <string product="tablet" name="permdesc_readSms">మా టాబ్లెట్ లేదా SIM కార్డులో రాయబడ్డ SMS సందేశాలు రాయడానికి అనువర్తనం అనుమతిస్తుంది. క్రూరఅనువర్తనాలు  మీ సందేశాలను డిలీట్ చేయవచ్చు.</string>
+    <string product="default" name="permdesc_readSms">ఒక అప్లికేషన్ ని మీ ఫోన్ లేదా SIM కార్డ్ నిల్వ ఉన్న SMS సందేశాలను చదవడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మీ రహస్య సందేశాలను చదివవచ్చు.</string>
+    <string name="permlab_writeSms">మార్చు SMS లేదా MMS</string>
+    <string product="tablet" name="permdesc_writeSms">మా టాబ్లెట్ లేదా SIM కార్డులో రాయబడ్డ SMS సందేశాలు రాయడానికి అనువర్తనం అనుమతిస్తుంది. క్రూరఅనువర్తనాలు  మీ సందేశాలను డిలీట్ చేయవచ్చు.</string>
+    <string product="default" name="permdesc_writeSms">మీ ఫోన్ లేదా SIM కార్డ్ లో SMS సందేశాలకు నిల్వ చేసేందుకు వీలుగా వ్రాయడానికి ఈ అప్లికేషన్ అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మీ సందేశాలను తొలగించవచ్చు. </string>
+    <string name="permlab_receiveWapPush">WAP అందుకుంటారు</string>
+    <string name="permdesc_receiveWapPush">ఒక అప్లికేషన్ WAP సందేశాలను అందుకోవడానికీ, మరియు ప్రక్రియలో ఉంచడానికీ  అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మానిటర్ మీ సందేశాలను గమనిస్తూ ఉండవచ్చు లేదా మీకు వాటిని చూపకుండానే వాటిని తొలగించవచ్చు.</string>
+    <string name="permlab_getTasks">నడుస్తున్న అప్లికేషన్లను తిరిగి పొందు</string>
+    <string name="permdesc_getTasks">ఒక అప్లికేషన్ ని ప్రస్తుతం మరియు ఇటీవల  నడుస్తున్న పనుల గురించి సమాచారాన్ని తిరిగి పొందడానికి  అనుమతిస్తుంది. హానికర అప్లికేషన్లు.ఇతర అప్లికేషన్ల  ప్రైవేట్ సమాచారం గురించి తెలుసుకోవడానికి అనుమతించవచ్చు. </string>
+    <string name="permlab_reorderTasks">సురక్షిత నిల్వ పేరు</string>
+    <string name="permdesc_reorderTasks">ఒక అప్లికేషన్ ని విధులను వెనుక భాగం నుంచి ముందు భాగానికి తరలించడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు వాటిపై మీ కంట్రోల్ లేకుండా ముందుకు బలవంతంగా తెచ్చే ప్రయత్నం చేయవచ్చు.    </string>
+    <string name="permlab_removeTasks">అనువర్తనాలు అమలు ఆపండి</string>
+    <string name="permdesc_removeTasks">ఒక అనువర్తనం, క్యాలెండర్ యజమాని ఈవెంట్ ఆహ్వానాలు పంపడం మరియు జోడించడానికి, తొలగించడానికి అనుమతిస్తుంది.స్నేహితులు, ఉద్యోగులు సహా మీ పరికరంలో వీటిని సవరించవచ్చు మరియు సంఘటనలు మార్చవచ్చు.</string>
+    <string name="permlab_setDebugApp">అప్లికేషన్ డీబగ్గింగ్ ని ఎనేబుల్ చెయ్యి</string>
+    <string name="permdesc_setDebugApp">ఒక అప్లికేషన్ ని మరొక అప్లికేషన్ కోసం డీ బగ్గింగ్ కి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు దీనిని ఉపయోగించి, ఇతర అప్లికేషన్లను నాశనం చేస్తాయి. </string>
+    <string name="permlab_changeConfiguration">మీ UI సెట్టింగులు మార్చండి</string>
+    <string name="permdesc_changeConfiguration">ఒక అప్లికేషన్ ని లొకేల్ లేదా మొత్తం ఫాంట్ పరిమాణాన్నివంటి ప్రస్తుత ఆకృతీకరణని మార్చడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_enableCarMode">కార్ మోడ్ ని  ఎనేబుల్ చెయ్యి</string>
+    <string name="permdesc_enableCarMode">ఒక అప్లికేషన్ ని  కార్ మోడ్ ని ఎనేబుల్ అనుమతిస్తుంది.</string>
+    <string name="permlab_killBackgroundProcesses">నేపథ్య ప్రక్రియలు చంపడానికి</string>
+    <string name="permdesc_killBackgroundProcesses">ఒక అప్లికేషన్ ని  మెమరీ తక్కువగా లేకున్నా కూడా ఇతర అప్లికేషన్లు నేపధ్యం ప్రక్రియలు నాశనం చేయడానికి  అనుమతిస్తుంది. </string>
+    <string name="permlab_forceStopPackages">ఇతర అప్లికేషన్లు ఉధ్రుతిని ఆపండి </string>
+    <string name="permdesc_forceStopPackages">ఒక అప్లికేషన్ ని బలవంతంగా ఇతర అప్లికేషన్లు ఆపడానికి అనుమతిస్తుంది. </string>
+    <string name="permlab_forceBack">మూసివేయడం శక్తి అప్లికేషన్</string>
+    <string name="permdesc_forceBack">ఒక అప్లికేషన్ ని ని మూసివేసి, వెళ్ళడానికి ముందు ఉన్న ఏ చర్యకైనా అనుమతిస్తుంది. సాధారణ అప్లికేషన్ల కోసం ఎప్పుడూ అవసరం ఉండదు.</string>
+    <string name="permlab_dump">సిస్టమ్ అంతర్గత స్థితి తిరిగి పొందు</string>
+    <string name="permdesc_dump">ఒక అప్లికేషన్ ని సిస్టమ్ యొక్క అంతర్గత స్థితిని తిరిగి పొందడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు  సాధారణంగా వారికి ఎప్పుడూ అవసరం లేని అనేక రకాల విస్తారమైన ప్రైవేట్ మరియు సురక్షిత సమాచారాన్నిపొందవచ్చు.  </string>
+    <string name="permlab_retrieve_window_content">స్క్రీన్ కంటెంట్ తిరిగి పొందు</string>
+    <string name="permdesc_retrieve_window_content">యాక్టివ్ విండోలో ఉన్న సమాచారం తిరిగి పొందడానికి అనువర్తనం అనుమతిస్తుంది. హానికర అనువర్తనాలు మొత్తం విండో కంటెంట్ ను తిరిగి పొందవచ్చు మరియు పాస్వర్డ్ మినహా మిగిలిన టెస్టును పరీక్షించవచ్చు.</string>
+    <string name="permlab_shutdown">పాక్షికంగా షట్ డౌన్ కావడం                </string>
+    <string name="permdesc_shutdown">ఇది యాక్టివిటీ మేనేజర్ ని షట్ డౌన్ స్థితిలో ఉంచుతుంది. పూర్తిగా షట్ డౌన్ కాదు.</string>
+    <string name="permlab_stopAppSwitches">అప్లికేషను స్విచ్ లు నిరోధించడానికి</string>
+    <string name="permdesc_stopAppSwitches">ఇది యూజర్ ని మరొక అప్లికేషన్ కి మారకుండా నిరోధిస్తుంది.  </string>
+    <string name="permlab_runSetActivityWatcher">అప్లికేషన్లను ప్రారంభించినప్పుడు  మానిటర్ ,నియంత్రణ చేయండి </string>
+    <string name="permdesc_runSetActivityWatcher">సిస్టమ్ యాక్టివిటీస్ ఎలా ప్రారంభిస్తుందనే దాన్ని మానిటర్ చేయడం మరియు కంట్రోల్ చేయడానికి అనువర్తనం అనుమతిస్తుంది. డెవలప్మెంట్ కొరకు తప్ప సంప్రదాయ వినియోగానికి ఈ అనుమతి అవసరం లేదు.</string>
+    <string name="permlab_broadcastPackageRemoved">ప్యాకేజీ తొలగించబడింది ప్రసార పంపండి</string>
+    <string name="permdesc_broadcastPackageRemoved">ఒక అప్లికేషన్ ని  ఒక అప్లికేషన్ ని ప్యాకేజీ తొలగించబడిందనే ప్రకటనని ప్రసారం చేయడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు ఇతర  అప్లికేషన్లను నాశనం చేయడానికి దీనిని ఉపయోగించవచ్చు.</string>
+    <string name="permlab_broadcastSmsReceived">ప్రసార SMS-పొందింది పంపండి</string>
+    <string name="permdesc_broadcastSmsReceived">ఒక అప్లికేషన్ ని ఒక SMS సందేశం వచ్చిందనే ప్రకటనని ప్రసారం చేయడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు వచ్చే SMS సందేశాలను నకలు చేయడానికి దీనిని ఉపయోగించవచ్చు.</string>
+    <string name="permlab_broadcastWapPush">WAP-PUSH- అందుకున్నప్రసారం పంపండి</string>
+    <string name="permdesc_broadcastWapPush">WAP PUSH సందేవం ఉన్న నోటిఫికేషన్ బ్రాడ్ కాస్ట్ చేసేందుకు ఇది అనుమతిస్తుంది.మోసపూరిత అప్లికేషన్లు MMS సందేశాన్ని రసీదు లేదా నకలు చేయడానికి ఈ ఉపయోగించవచ్చు.</string>
+    <string name="permlab_setProcessLimit">రన్నింగ్ ప్రక్రియల యొక్క పరిమితిని సంఖ్య</string>
+    <string name="permdesc_setProcessLimit">ఒక అప్లికేషన్ ని  గరిష్ట సంఖ్యను ప్రక్రియలు నడపడం నియంత్రించడాన్ని అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం ఎన్నడూ అవసరమైంది కాదు.</string>
+    <string name="permlab_setAlwaysFinish">అన్ని నేపధ్యం అప్లికేషన్లు మూసివేయండి        </string>
+    <string name="permdesc_setAlwaysFinish">ఒక అప్లికేషన్ ని  నిరంతరం నేపథ్యానికి వెళ్ళగానే ముగిసిపోయేటట్లు  అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం ఎన్నడూ అవసరమైంది కాదు.</string>
+    <string name="permlab_batteryStats">బ్యాటరీ గణాకాలు మార్చండి </string>
+    <string name="permdesc_batteryStats">సేకరించిన బ్యాటరీ గణాంకాలను సవరించడానికి అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం కాదు.</string>
+    <string name="permlab_backup">సిస్టమ్ నియంత్రణ బ్యాకప్ మరియు పునరుద్ధరణ</string>
+    <string name="permdesc_backup">అప్లికేషన్ సిస్టమ్ \ యొక్క బ్యాకప్ నియంత్రించడానికి మరియు మెకానిజం పునరుద్ధరించడానికి అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం కాదు.</string>
+    <string name="permlab_confirm_full_backup">పూర్తి బ్యాకప్ పాకేజీలను ఆపరేషన్ పునరుద్ధరించడాన్ని ధృవీకరించు</string>
+    <string name="permdesc_confirm_full_backup">అప్లికేషన్ పూర్తి బ్యాకప్ నిర్ధారణ UI ప్రారంభించటానికి అనుమతిస్తుంది.ఏదైనా అప్లికేషన్ ద్వారా ఉపయోగించకూడదు.</string>
+    <string name="permlab_internalSystemWindow">అనధికార విండోస్ ప్రదర్శన</string>
+    <string name="permdesc_internalSystemWindow">అంతర్గత సిస్టమ్  యూజర్  ఇంటర్ఫేస్ ద్వారా ఉపయోగించడానికి ఉద్దేశించిన ఉన్న విండోస్ క్రియేషన్ ని అనుమతిస్తుంది. సాధారణ అప్లికేషన్ల ఉపయోగం కోసం కాదు.</string>
+    <string name="permlab_systemAlertWindow">సిస్టమ్ స్థాయి హెచ్చరికలు ప్రదర్శించు</string>
+    <string name="permdesc_systemAlertWindow">సిస్టమ్ అలర్ట్ విండోలు చూపించేందుకు అనువర్తనానికి అనుమతిస్తుంది.హానికర అనువర్తనాలు మొత్తం తెరను ఆక్రమిస్తాయి.</string>
+    <string name="permlab_setAnimationScale">గ్లోబల్ యానిమేషన్ వేగాన్ని మార్చండి     </string>
+    <string name="permdesc_setAnimationScale">ఒక అప్లికేషన్ ని ఏ సమయంలోనైనా ప్రపంచ యానిమేషన్ వేగం (యానిమేషన్లు వేగంగా లేదా నెమ్మదిగా) మార్చడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_manageAppTokens">అప్లికేషన్ టోకెన్లను నిర్వహించు</string>
+    <string name="permdesc_manageAppTokens">వాటి సాధారణ Z-క్రమాన్ని జారీ చేయడం ద్వారా వాటి సొంత  చిహ్నాలను సృజించడానికీ, నిర్వహించడానికీ, ఇది అప్లికేషన్లను అనుమతిస్తుంది.  సాధారణ అప్లికేషన్ల కోసం ఆ అవసరం ఎప్పుడూ రాదు.</string>
+    <string name="permlab_injectEvents">కీ లు మరియు కంట్రోల్ బటన్లను నొక్కండి</string>
+    <string product="tablet" name="permdesc_injectEvents">ఒక అనువర్తనం అందించేందుకు అనుమతిస్తుంది. ఇతర అనువర్తనాలు దాని స్వంత ఇన్పుట్ సంఘటనలు (కీ యంత్రాలపై, మొదలైనవి).ద్వేషపూరిత అప్లికేషన్లు టాబ్లెట్ స్వాధీనం  వీటిని ఈ ఉపయోగించవచ్చు.</string>
+    <string product="default" name="permdesc_injectEvents">ఒక అప్లికేషన్ ని దాని స్వంత ఇన్పుట్ సంఘటనల (కీ ప్రెస్సెస్, మొదలైనవి) ను పంపిణీ చేయడానికి అనుమతిస్తుంది. ఇతర హానికర అప్లికేషన్లు ఫోన్ ని టేక్ ఓవర్ చేయడానికి దీనిని ఉపయోగించవచ్చు.</string>
+    <string name="permlab_readInputState">మీరు  టైప్ చేసేదాన్నీ, మీ చర్యలనూ రికార్డు చేస్తుంది</string>
+    <string name="permdesc_readInputState">మరొక అప్లికేషన్ తో సంభాషిస్తున్నా (ఉదా ఒక పాస్ వర్డ్ ఎంటర్ చేయడం)మీరు ప్రెస్ చేసే కీ లను చూసేందుకు అప్లికేషన్లను అనుమతిస్తుంది. సాధారణ అప్లికేషన్లకి ఇలాంటి అవసరం ఎప్పుడూ రాదు.</string>
+    <string name="permlab_bindInputMethod">ఒక ఇన్పుట్ పద్ధతికి జత కూడు</string>
+    <string name="permdesc_bindInputMethod">హోల్డర్ ని అత్యున్నత స్థాయికి చెందిన ఇన్ పుట్ విధానానికి చెందిన ఇంటర్ఫేస్ తో జత కూడడానికి అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం ఎన్నడూ అవసరం ఉండదు.</string>
+    <string name="permlab_bindTextService">టెక్స్ట్  సర్వీసుకు కట్టుబడి ఉండటం</string>
+    <string name="permdesc_bindTextService">ఒక టెక్స్ట్ సేవ యొక్క ఇంటర్ఫేస్కు హోల్డర్ ఉన్నత స్థాయి జతకూడి అనుమతిస్తుంది (ఉదా: స్పెల్ చెక్కర్ సర్వీస్).సాధారణ అనువర్తనాల్లో అవసరమైన చేయకూడదు.</string>
+    <string name="permlab_bindVpnService">VPN సేవకు కట్టుబడి ఉండటం</string>
+    <string name="permdesc_bindVpnService">ఒక VPN సేవ యొక్క ఇంటర్ఫేస్కు హోల్డర్ ఉన్నత స్థాయి జతకూడి అనుమతిస్తుంది. సాధారణ అనువర్తనాల్లో అవసరమైన చేయకూడదు.</string>
+    <string name="permlab_bindWallpaper">ఒక వాల్ పేపర్ కి బైండ్ అవు</string>
+    <string name="permdesc_bindWallpaper">హోల్డర్ ని అత్యున్నత స్థాయికి చెందిన వాల్ పేపర్ ఇంటర్ఫేస్ తో జత కూడడానికి అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం ఎన్నడూ అవసరం ఉండదు.</string>
+    <string name="permlab_bindRemoteViews">ఒక విడ్జెట్ సేవ జతకూడింది</string>
+    <string name="permdesc_bindRemoteViews">ఒక విడ్జెట్ సేవ యొక్క ఇంటర్ఫేస్ కు హోల్డర్ ఉన్నత స్థాయి జతకూడి అనుమతిస్తుంది.సాధారణ అనువర్తనాల్లో అవసరమైన చేయకూడదు.</string>
+    <string name="permlab_bindDeviceAdmin">పరికరం నిర్వహకుడితో అనుసంధానం అవ్వండి </string>
+    <string name="permdesc_bindDeviceAdmin">డివైస్ మేనేజర్ కి హోల్డర్ ని ఇంటెట్లు పంపేందుకు అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం ఎన్నడూ అవసరం ఉండదు.</string>
+    <string name="permlab_setOrientation">స్క్రీన్ విన్యాసాన్ని మార్చండి</string>
+    <string name="permdesc_setOrientation">ఒక అప్లికేషన్ ని ఏ సమయంలోనైనా స్క్రీన్ భ్రమణాన్ని మార్చడానికి అనుమతిస్తుంది. సాధారణ అప్లికేషన్లకు ఎన్నడూ ఇది అవసరం ఉండదు.</string>
+    <string name="permlab_setPointerSpeed">పాయింటర్ వేగం మార్పు</string>
+    <string name="permdesc_setPointerSpeed">ఏ సమయంలో మౌస్ లేదా ట్రాక్ ప్యాడ్ పాయింటర్ వేగాన్ని ఒక అనువర్తనం మార్చడానికి అనుమతిస్తుంది. ఫర్ సాధారణ అనువర్తనాలు అవసరం ఎప్పుడూ.</string>
+    <string name="permlab_signalPersistentProcesses">అప్లికేషన్లకు Linux సిగ్నల్స్ పంపు</string>
+    <string name="permdesc_signalPersistentProcesses">ఒక అప్లికేషన్ ని  అన్ని నిరంతర ప్రక్రియలకు  సరఫరా చేసే సిగ్నల్ ని అభ్యర్థించడానికి అనుమతిస్తుంది. </string>
+    <string name="permlab_persistentActivity">అప్లికేషన్ ఎల్లప్పుడూ పరిగెత్తించండి     </string>
+    <string name="permlab_deletePackages">అప్లికేషన్లు తొలగించండి</string>
+    <string name="permdesc_deletePackages">ఒక అప్లికేషన్ ని ఆండ్రాయిడ్ ప్యాకేజీలను  తొలగించడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు దీనిని ముఖ్యమైన అప్లికేషన్లు తొలగించడానికి ఉపయోగించవచ్చు.</string>
+    <string name="permlab_clearAppUserData">ఇతర అప్లికేషన్లు\' డేటా తొలగించండి </string>
+    <string name="permdesc_clearAppUserData">ఒక అప్లికేషన్ ని యూజర్ డేటాను క్లియర్ అనుమతిస్తుంది.</string>
+    <string name="permlab_deleteCacheFiles">ఇతర అప్లికేషన్లు\' కాష్ తొలగించండి </string>
+    <string name="permdesc_deleteCacheFiles">ఒక అప్లికేషన్ ని  కాష్ ఫైళ్లని  తొలగించడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_getPackageSize">కొలత అప్లికేషన్ నిల్వ స్థలాన్ని</string>
+    <string name="permdesc_getPackageSize">దాని కోడ్, డేటా, మరియు కాషె పరిమాణాలు తిరిగి పొందేందుకు ఒక అప్లికేషన్ ని  అనుమతిస్తుంది</string>
+    <string name="permlab_installPackages">నేరుగా అప్లికేషన్లు ఇన్స్టాల్ చేయండి</string>
+    <string name="permdesc_installPackages">ఒక అప్లికేషన్ ని ను కొత్తగా లేదా నవీకరించబడిన ఆండ్రాయిడ్ ప్యాకేజీలను ఇన్ స్టాల్ చేసుకోవడానికి అనుమతిస్తుంది . హానికరమైన అప్లికేషన్లు మధ్యంతరంగా శక్తివంతమైన అనుమతులతో కొత్త అప్లికేషన్లు జోడించడానికి దీన్ని ఉపయోగించవచ్చు.</string>
+    <string name="permlab_clearAppCache">అన్ని అప్లికేషన్ల కాషె డేటాను తొలగించవచ్చు</string>
+    <string product="tablet" name="permdesc_clearAppCache">అనువర్తనం కాష్ డైరెక్టరీని ఫైళ్లను తొలగించడం ద్వారాఉచిత టాబ్లెట్ నిల్వ కు అప్లికేషన్ అనుమతిస్తుంది. యాక్సెస్ వెరీ వ్యవస్థ ప్రక్రియ సాధారణంగా పరిమితి ఉంది.</string>
+    <string product="default" name="permdesc_clearAppCache">అప్లికేషన్ కాష్ డైరెక్టరీ లో ఒక అప్లికేషన్ ని లో ఫైళ్లు తొలగించడం ద్వారా ఉచిత ఫోన్ నిల్వకు అనుమతిస్తుంది.  సాధారణంగా, సిస్టమ్ ప్రక్రియ  యాక్సెస్ చాలా  పరిమితం.</string>
+    <string name="permlab_movePackage">అప్లికేషన్ వనరులను తరలించు</string>
+    <string name="permdesc_movePackage">బాహ్య మీడియా నుంచి అంతర్గత  మీడియాకీ, అదే విధంగా అంతర్గత మీడియా నుండి బాహ్య మీడియాకు అప్లికేషన్ వనరులను తరలించడానికి ఒక అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string name="permlab_readLogs">సిస్టమ్ లాగ్ ఫైళ్లను చదవండి</string>
+    <string product="tablet" name="permdesc_readLogs">సిస్టమ్ యొక్క  వివిధ లాగ్ ఫైళ్లను.ఒక అనువర్తనం నుండి చదవడానికి అనుమతిస్తుంది. ఇది సాధారణ కనుగొనడంలో అనుమతిస్తుంది. మీరు టాబ్లెట్ ఏమి చేయుచున్నారో గురించిన  సమాచారం అందిస్తుంది.</string>
+    <string product="default" name="permdesc_readLogs">ఒక అప్లికేషన్ ని సిస్టమ్ \ యొక్క వివిధ లాగ్ ఫైళ్ల నుండి చదవడానికి అనుమతిస్తుంది. ఇది మీరు ఫోన్ తో ఏమి చేస్తున్నారనే సాధారణమైన సమాచారం కనుగొనడానికి అనుమతిస్తుంది. కానీ వారు ఎలాంటి వ్యక్తిగత లేదా ప్రైవేటు సమాచారాన్నీ కలిగి ఉండకూడదు.</string>
+    <string name="permlab_anyCodecForPlayback">ప్లేబ్యాక్ కోసం ఏ మీడియా డికోడర్ ఉపయోగించడానికి</string>
+    <string name="permdesc_anyCodecForPlayback">ఇనస్టల్ చేయబడ్డ మీడియా డీ కోడర్ టూ డీ కోడ్ ను ప్లే బ్యాక్ చేసేందుకు అనువర్తనానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_diagnostic">డియాగ్  ద్వారా స్వంతం చేసుకున్నవనరులకు చదవిన/వ్రాసిన </string>
+    <string name="permdesc_diagnostic">ఉదాహరణకు, /dev లో ఫైళ్ళను; ఒక అప్లికేషన్ దిఅగ్ సమూహం యాజమాన్యంలో ఏ వనరుల చదవడం మరియు వ్రాయడం అనుమతిస్తుంది. ఈ శక్తివంతమైన వ్యవస్థ స్థిరత్వం మరియు భద్రత ప్రభావితం కాలేదు. ఇది తయారీదారు లేదా ఆపరేటర్లు ద్వారా హార్డ్వేర్ విశ్లేషణ కోసం ఉపయోగిస్తారు ఉండాలి.</string>
+    <string name="permlab_changeComponentState">అప్లికేషన్ భాగాలు ఎనేబుల్ లేదా డిసేబుల్</string>
+    <string product="tablet" name="permdesc_changeComponentState">ఒక అనువర్తనం మార్చడానికి అనుమతిస్తుంది లేదోమరో అప్లికేషన్ యొక్క భాగం ప్రారంభించబడిన లేదా. మోసపూరిత ఉపయోగాలు కొరకు దీన్ని ఉపయోగించవచ్చు. ముఖ్యమైన టాబ్లెట్ సామర్థ్యాలను ఆపివేయండి. ఇటు వంటి రక్షణ, తప్పక అనుమతితో వాడాలి.ఒక పనికిరాని, అస్థిరమైన, లేదా అస్థిర రాష్ట్ర లోకి అప్లికేషన్ భాగాలు పొందడం సాధ్యం.</string>
+    <string product="default" name="permdesc_changeComponentState">ఒక అనువర్తనం మార్చడానికి అనుమతిస్తుంది లేదోమరో అప్లికేషన్ యొక్క భాగం ప్రారంభించబడిన లేదా. మోసపూరిత ఉపయోగాలు కొరకు దీన్ని ఉపయోగించవచ్చు. ముఖ్యమైన ఫోన్ సామర్థ్యాలను ఆపివేయండి. ఇటు వంటి రక్షణ, తప్పక అనుమతితో వాడాలి.ఒక పనికిరాని, అస్థిరమైన, లేదా అస్థిర రాష్ట్ర లోకి అప్లికేషన్ భాగాలు పొందడం సాధ్యం.</string>
+    <string name="permlab_setPreferredApplications">ఇష్టపడే అప్లికేషన్ల వలె సెట్ చెయ్యి</string>
+    <string name="permdesc_setPreferredApplications">"ఒక అప్లికేషన్ మీకు ఇష్టమైన అప్లికేషన్లను సవరించడానికి అనుమతిస్తుంది. ఈ హానికర అప్లికేషన్లు నడుస్తున్న అప్లికేషన్లను నిశ్శబ్దంగా మార్చడానికి,  ప్రైవేట్ డేటా సేకరించడానికి ఇప్పటికే  ఉన్న మీ అప్లికేషన్లను  నకలు చేయడానికీ అనుమతిస్తుంది."</string>
+    <string name="permlab_writeSettings">గ్లోబల్ యానిమేషన్  సిస్టం సెట్టింగులను మార్చండి               </string>
+    <string name="permdesc_writeSettings">ఒక అప్లికేషన్ ని  సిస్టమ్ \ యొక్క అమర్పులు డేటాని సవరించడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మీ సిస్టమ్  ఆకృతీకరణను పాడు చేయవచ్చు.</string>
+    <string name="permlab_writeSecureSettings">సిస్టం భధ్రతా సెట్టింగులను మార్చండి</string>
+    <string name="permdesc_writeSecureSettings">ఒక అప్లికేషన్ ని  సిస్టమ్ \ యొక్క సురక్షిత సెట్టింగుల డేటాను సవరించడానికి అనుమతిస్తుంది. సాధారణ అప్లికేషన్ల కోసం ఉపయోగ పడదు.</string>
+    <string name="permlab_writeGservices">గూగూల్ సేవల పటాన్ని మార్చండి </string>
+    <string name="permdesc_writeGservices">ఒక అప్లికేషన్ ని గూగుల్ సేవలు మ్యాప్ లను సవరించడానికి అనుమతిస్తుంది. సాధారణ అప్లికేషన్ల కోసం ఉపయోగ పడదు.</string>
+    <string name="permlab_receiveBootCompleted">స్వయంచాలకంగా బూట్ వద్ద మొదలు పెట్టు</string>
+    <string product="tablet" name="permdesc_receiveBootCompleted">సిస్టమ్ బూటింగ్ పూర్తి చేసిన తరువాత సిస్టమ్ తనంతట తాను ప్రారంభించేందుకు అనువర్తనం అనుమతిస్తుంది. టాబ్లెట్ ప్రారంభించడానికి మరింత సమయం పట్టవచ్చు ఎల్లప్పడూ రన్ చేయడం ద్వారా, అప్లికేషన్ నెమ్మదిగా అయినది. </string>
+    <string product="default" name="permdesc_receiveBootCompleted">ఒక అప్లికేషన్ ని సిస్టమ్ బూటింగ్ పూర్తి అయ్యేసరికి దానికదే వెంటనే మొదలయ్యేలా అనుమతిస్తుంది. ఇది ఫోన్ ప్రారంభించడానికి ఎక్కువ సమయం పట్టేలా చేస్తుంది అలాగే ఎల్లప్పుడూ నడుస్తుండడం ద్వారా అప్లికేషన్  మొత్తం ఫోన్ వేగాన్ని తగ్గించివేస్తుంది.</string>
+    <string name="permlab_broadcastSticky">స్టికీ ప్రసారం పంపండి</string>
+    <string product="tablet" name="permdesc_broadcastSticky">అనువర్తనం స్టిక్కీ బ్రాడ్కాస్టులు పంపడానిని అనుమతిస్తుంది, బ్రాడ్ కాస్ట్ ముగిసిన తరవాత అది ఉంటుంది.చాలా ఎక్కువ మెమరీ కారణంగా టాబ్లెట్ నెమ్మదించడం లేదా అసిర్థం అయ్యేట్లుగా హానికర అనువర్తనాలు చేస్తాయి.</string>
+    <string product="default" name="permdesc_broadcastSticky">ఇది ప్రసారాల చివరన అంటి పెట్టుకుని ఉండే స్టికీ ప్రసారాలను  పంపడానికి ఒక అప్లికేషన్ ని  అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు చాలా మెమరీని ఉపయోగించేలా చేయడం ద్వారా ఫోన్ ని నెమ్మదిగా లేదా అస్థిరంగా చేయవచ్చు.</string>
+    <string name="permlab_readContacts">ఇమెయిల్ జోడింపులను చదవండి</string>
+    <string product="tablet" name="permdesc_readContacts">మీ టాబ్లెట్లో నిల్వ చేయబడ్డవ అన్ని సంప్రదింపుల చిరునామా(అడ్రెస్స్) చదించేందుకు అనుమతిస్తుంది. మీ డేటాను ఇతరులకు పంపడానికి దోషపూరితమైన అప్లికేషన్లు దీన్ని ఉపయోగించుకోవచ్చు.</string>
+    <string product="default" name="permdesc_readContacts">ఒక అప్లికేషన్ ని మీ ఫోన్ లో నిల్వ ఉన్నపరిచయ (చిరునామా) సమాచారం అంతా చదవడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు  మీ డేటాను ఇతర వ్యక్తులకు పంపడానికి దీనిని ఉపయోగించవచ్చు.</string>
+    <string name="permlab_writeContacts">సంపర్క డేటాను వ్రాయండి</string>
+    <string product="tablet" name="permdesc_writeContacts">బ్రౌజర్s చరిత్ర లేదా బుక్ మార్క్ లు మీ టాబ్లెట్ నిల్వ చేసేందుకు ఒక అనువర్తనం సవరించడానికి అనుమతిస్తుందిమోసపూరిత (అడ్రెస్స్) అప్లికేషన్లు మీ బ్రౌజర్  డేటా చెరిపివేయడానికి  లేదా సవరించడానికి దీన్ని ఉపయోగించవచ్చు.</string>
+    <string product="default" name="permdesc_writeContacts">ఒక అప్లికేషన్ ని మీ ఫోన్ లో నిల్వ ఉన్నకాంటాక్ట్ (చిరునామా)  డేటాసవరించడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మీ పరిచయ సమాచారాన్ని తుడిచివేయడానికీ లేదా సవరించడానికి దీన్ని ఉపయోగించవచ్చు.</string>
+    <string name="permlab_readProfile">మీ ప్రొఫైల్ డేటా చదవండి</string>
+    <string product="default" name="permdesc_readProfile">అప్లికేషన్ వ్యక్తిగత చదవడానికి అనుమతిస్తుంది ప్రొఫైల్ సమాచారాన్ని మీ పేరు మరియు పరిచయ సమాచారం వంటి మీ పరికరంలో నిల్వ. ఈ అనువర్తనం మీరు గుర్తించి ఇతరులకు మీ ప్రొఫైల్ సమాచారాన్ని పంపవచ్చు అర్థం.</string>
+    <string name="permlab_writeProfile">మీ ప్రొఫైల్ డేటా వ్రాయండి</string>
+    <string product="default" name="permdesc_writeProfile">మీ పేరు మరియు పరిచయం వంటి మీ పరికరంలో నిల్వ వ్యక్తిగత ప్రొఫైల్ సమాచారాన్ని, మార్చడం లేదా జోడించడానికి  అప్లికేషన్అనుమతిస్తుంది. ఈ ఇతర అప్లికేషన్లు మీరు గుర్తించిన మీ ప్రొఫైల్ పంపవచ్చని అర్థం.</string>
+    <string product="default" name="permlab_readSocialStream">మీ సామాజిక స్ట్రీమ్ చదవండి</string>
+    <string product="default" name="permdesc_readSocialStream">మీ నుంచి మరియు మీ స్నేహితుల నుంచి మీ సామాజిక అప్ డేట్ల సమీకాలీకరణను యాక్సెస్ చేసుకునేందుకు,అప్లికేషన్ అనువర్తిస్తుంది.సామాజిక నెట్ వర్కులపై మీరు మరియు మీ స్నేహితుల మధ్య ఉన్న సంబంధాన్ని చదవడానికి హానికరమైన అనువర్తనాలు ఉపయోగించుకోవచ్చు.</string>
+    <string product="default" name="permlab_writeSocialStream">మీ సామాజిక స్ట్రీమ్ వ్రాయండి</string>
+    <string product="default" name="permdesc_writeSocialStream">మీ స్నేహితుల నుండి సామాజిక నవీకరణలు ప్రదర్శించడానికి అప్లికేషన్ అనుమతిస్తుంది.మోసపూరిత అనువర్తనం ఒక స్నేహితుడు నటించి  పాస్వర్డ్లను లేదా ఇతర రహస్య సమాచారాన్ని బహిర్గతం చేయవచ్చు.</string>
+    <string name="permlab_readCalendar">క్యాలెండర్ ఈవెంట్లు మరియు రహస్య సమాచారం చదవండి</string>
+    <string product="tablet" name="permdesc_readCalendar">ఒక అనువర్తనం అన్ని క్యాలెండర్ చదవడానికి అనుమతిస్తుంది. ఒక హానికరమైన అనువర్తనం, స్నేహితులు లేదా సహోద్యోగులతో పాటు  మీ టాబ్లెట్ నిల్వ ఉన్న ఈవెంట్స్, సమాచారాన్ని  యజమానులు అనుమతిలేకుండా ఈ క్యాలెండర్లు నుండి వ్యక్తిగత సమాచారాన్ని సంగ్రహించవచ్చు.</string>
+    <string product="default" name="permdesc_readCalendar">ఒక అనువర్తనం అన్ని క్యాలెండర్ చదవడానికి అనుమతిస్తుంది. ఒక హానికరమైన అనువర్తనం, స్నేహితులు లేదా సహోద్యోగులతో పాటు  మీ ఫోన్ నిల్వ ఉన్న ఈవెంట్స్, సమాచారాన్ని  యజమానులు అనుమతిలేకుండా ఈ క్యాలెండర్లు నుండి వ్యక్తిగత సమాచారాన్ని సంగ్రహించవచ్చు.</string>
+    <string name="permlab_writeCalendar">గెస్టులకు తెలియకుండా క్యాలెండర్ ఈవెంట్లు పంపబడతాయి మరియు మాడిఫై చేయబడతాయి.</string>
+    <string name="permlab_accessMockLocation">పరీక్ష కోసం మారు ప్రదేశం మూలము </string>
+    <string name="permdesc_accessMockLocation">"పరీక్ష కోసం మోక్ స్థానం మూలాల సృష్టించండి. హానికర అప్లికేషన్లు, GPS లేదా నెట్వర్క్ ప్రొవైడర్ల వంటి వాస్తవమైన లొకేషన్ సోర్సుల ద్వారా తిరిగి మరియు/ లేదా స్థితిని అతిక్రమించడానికి దీనిని ఉపయోగించవచ్చు."</string>
+    <string name="permlab_accessLocationExtraCommands">అదనపు స్థాన ప్రొవైడర్ ఆదేశాలను యాక్సెస్ చేయి</string>
+    <string name="permdesc_accessLocationExtraCommands">"అదనపు ప్రదేశం ప్రొవైడర్ ఆదేశాలను యాక్సెస్ చెయ్యి.   GPS లేదా ఇతర ప్రదేశాల ఆధారాల ఆపరేషన్ సహకారంతో జోక్యం చేసుకోవడానికి హానికర అప్లికేషన్లు దీన్ని ఉపయోగించవచ్చు.</string>
+    <string name="permlab_installLocationProvider">లోకేషన్ ప్రొవైడర్ ఇన్స్టాల్ కు అనుమతి </string>
+    <string name="permdesc_installLocationProvider">పరీక్ష కోసం మాక్ నగర మూలాలు సృష్టించండి.మోసపూరిత అప్లికేషన్లు వాస్తవ స్థానం మరియు/ లేదా స్థితి భర్తీ ని చేయవచ్చు.అటువంటి GPS లేదా నెట్వర్క్ ప్రొవైడర్స్ మూలాలు లేదా మానిటర్ మరియు ఒక బాహ్య మూల మీ స్థానాన్ని రిపోర్ట్ చేయబడతాయి.
+</string>
+    <string name="permlab_accessFineLocation">(GPS) స్థానం బాగుంది </string>
+    <string name="permlab_accessCoarseLocation">ముతక (నెట్వర్క్-ఆధారిత) స్థానం</string>
+    <string name="permlab_accessSurfaceFlinger">యాక్సెస్ సర్ఫేస్ ఫ్లింగర్</string>
+    <string name="permdesc_accessSurfaceFlinger">ఒక అప్లికేషన్ ని తక్కువ స్థాయిలో సర్ఫేస్ ఫ్లింగర్ లక్షణాలు ఉపయోగించడానికి అనుమతిస్తుంది.  </string>
+    <string name="permlab_readFrameBuffer">ఫ్రేమ్ బఫర్ చదవండి</string>
+    <string name="permdesc_readFrameBuffer">అప్లికేషన్ ని ఫ్రేమ్ బఫర్ యొక్క కంటెంట్ ని చదవడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_modifyAudioSettings">మీ ఆడియో సెట్టింగులు మార్చండి</string>
+    <string name="permdesc_modifyAudioSettings">వాల్యూమ్ మరియు రూటింగ్ వంటి ప్రపంచ ఆడియో సెట్టింగులను సవరించడానికి ఒక అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string name="permlab_recordAudio">ఆడియో రికార్డ్ చెయ్యి</string>
+    <string name="permdesc_recordAudio">ఒక  ఆడియో రికార్డు మార్గాన్ని యాక్సెస్ చేయడానికి అప్లికేషన్ ని  అనుమతిస్తుంది.</string>
+    <string name="permlab_camera">చిత్రాలు తీసుకో</string>
+    <string name="permdesc_camera">అప్లికేషన్ కెమెరా తో చిత్రాలను తీసుకోవడానికి అనుమతిస్తుంది.  ఏ సమయంలోనైనా కెమెరా చూస్తున్నచిత్రాలను సేకరించడానికి అప్లికేషన్ ని అనుమతిస్తుంది. </string>
+    <string product="tablet" name="permlab_brick">శాశ్వతంగా టాబ్లెట్ డిసేబుల్ చేయబడింది</string>
+    <string product="default" name="permlab_brick">మీ ఫోన్ శాశ్వతముగా డిసేబుల్ అయినది  </string>
+    <string product="tablet" name="permdesc_brick">అప్లికేషన్ శాశ్వతంగా మొత్తం టాబ్లెట్ అచేతనము చేయడానికి అనుమతిస్తుంది. ఈ చాలా ప్రమాదకరం.</string>
+    <string product="default" name="permdesc_brick">అప్లికేషన్  మొత్తం ఫోన్ ని శాశ్వతంగా పని చేయకుండా చేసేందుకు అనుమతిస్తుంది.  దీనిని చాలా ప్రమాదకరం.</string>
+    <string product="tablet" name="permlab_reboot">ఫోర్స్ టాబ్లెట్ రీబూట్</string>
+    <string product="default" name="permlab_reboot">ఫోర్స్ ఫోన్ ను రీబూట్ చేయండి </string>
+    <string product="tablet" name="permdesc_reboot">టాబ్లెట్ బలవంతం.పునఃప్రారంభించడానికి  అప్లికేషన్ అనుమతిస్తుంది.</string>
+    <string product="default" name="permdesc_reboot">అప్లికేషన్  ఫోన్ ని బలవంతంగా పునః ప్రారంభించేలా చేస్తుంది.</string>
+    <string name="permdesc_mount_unmount_filesystems">అప్లికేషన్  ఫైల్ సిస్టమ్స్ ని మౌంట్  చేయడానికి /అన్ మౌంట్ చేయడానికీ అనుమతిస్తుంది.</string>
+    <string name="permdesc_mount_format_filesystems">అప్లికేషన్ తీసివేయు నిల్వను ఫార్మాట్ చేయడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_asec_access">సురక్షిత నిల్వ న సమాచారాన్ని పొందేందుకు</string>
+    <string name="permdesc_asec_access">అప్లికేషన్ రక్షణ నిల్వలపై సమాచారాన్ని పొందేందుకు అనుమతిస్తుంది.</string>
+    <string name="permlab_asec_create">సురక్షిత నిల్వ సృష్టించుకోండి</string>
+    <string name="permdesc_asec_create">అప్లికేషన్  రక్షణ నిల్వలను సృజించడానికి అనుమతిస్తుంది.  </string>
+    <string name="permlab_asec_destroy">సురక్షిత నిల్వ పాడు చేయి</string>
+    <string name="permdesc_asec_destroy">అప్లికేషన్ రక్షణ నిల్వలను నాశనం చేయడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_asec_mount_unmount">భధ్రత నిల్వను మౌంట్ లేదా అన్ మౌంట్ చేయండి </string>
+    <string name="permdesc_asec_mount_unmount">అప్లికేషన్ రక్షణ నిల్వలను మౌంట్ చేయడానికి /అన్ మౌంట్ చేయడానికీ అనుమతిస్తుంది.</string>
+    <string name="permlab_asec_rename">ఫోల్డర్ పేరు మార్చండి</string>
+    <string name="permdesc_asec_rename">అప్లికేషన్ రక్షణ నిల్వలకి మరో పేరు పెట్టడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_vibrate">నియంత్రణ కంపన చికిత్స సాధనము</string>
+    <string name="permdesc_vibrate">అప్లికేషన్ వైబ్రేటర్ ని నియంత్రించడానికి అనుమతిస్తుంది.  </string>
+    <string name="permlab_flashlight">ఫ్లాష్ లైట్ నియంత్రణ</string>
+    <string name="permdesc_flashlight">అప్లికేషన్ ఫ్లాష్ లైట్ ని నియంత్రించడానికి అనుమతిస్తుంది.  </string>
+    <string name="permlab_manageUsb">USB పరికరాల కోసం ప్రాధాన్యతలు మరియు అనుమతుల నిర్వహించేందుకు</string>
+    <string name="permdesc_manageUsb">అప్లికేషన్ ని USB  పరికరాల కోసం ప్రాధాన్యతలు మరియు అనుమతులను నిర్వహించేందుకు అనుమతిస్తుంది.</string>
+    <string name="permlab_accessMtp">MTP ప్రోటోకాల్ అమలు చేయి</string>
+    <string name="permdesc_accessMtp">MTP USB ప్రోటోకాల్ అమలు కెర్నల్ MTP డ్రైవర్ ప్రాప్యతను అనుమతిస్తుంది.</string>
+    <string name="permlab_hardware_test">పరీక్ష హార్డ్వేర్</string>
+    <string name="permdesc_hardware_test">అప్లికేషన్ హార్డువేర్ ​​పరిశీలన కోసం వివిధ పార్టులను నియంత్రించడానికి అనుమతిస్తుంది.  </string>
+    <string name="permlab_callPhone">నేరుగా ఫోన్ నంబర్లు కాల్ చేయండి</string>
+    <string name="permdesc_callPhone">మీ ప్రమేయం లేకుండా ఫోన్ నంబర్లకు కాల్ చేయడానికి ఈ అప్లికేషన్  అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మీ ఫోన్ బిల్లు నుంచి ఊహించని కాల్స్ చేస్తాయి. అత్యవసర నెంబర్లను కాల్ చేసేందుకు ఈ అప్లికేషన్ అనుమతించదనే విషయం గమనించాలి.</string>
+    <string name="permlab_callPrivileged">నేరుగా ఏ ఫోన్ నంబర్లు అయినా కాల్ చేయండి</string>
+    <string name="permdesc_callPrivileged">మీ ప్రమేయం లేకుండా అత్యవసర నంబర్లతో సహా ఏ ఫోన్ నంబర్ కైనా కాల్ చేయడానికి ఈ అప్లికేషన్  అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు అత్యవసర  సేవలకు అనవసరమైన మరియు చట్ట విరుద్ధమైన కాల్స్ చేయడానికి ప్రయత్నించవచ్చు.  </string>
+    <string product="tablet" name="permlab_performCdmaProvisioning">నేరుగా CDMA టాబ్లెట్ సెటప్ ప్రారంభించడానికి</string>
+    <string product="default" name="permlab_performCdmaProvisioning">నేరుగా CDMA ఫోన్ సెటప్ మొదలు పెట్టండి</string>
+    <string name="permdesc_performCdmaProvisioning">అప్లికేషన్ CDMA ప్రొవిజనింగ్ ని మొదలు పెట్టేందుకు అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు అనవసరంగా CDMA ప్రొవిజనింగ్ ని ఏర్పడవచ్చు.</string>
+    <string name="permlab_locationUpdates">నియంత్రణ స్థానంనవీకరణ  నోటిఫికేషన్లు</string>
+    <string name="permdesc_locationUpdates">పని చేసేలా చేయడం / పని చేయకుండా చేయడం ద్వారా లొకేషన్ నవీకరించే  ప్రకటనలను రేడియో నుండి  అనుమతిస్తుంది . ఇది సాధారణ అప్లికేషన్ల కోసం కాదు.</string>
+    <string name="permlab_checkinProperties">చెక్ ఇన్ లక్షణాలను పొందు</string>
+    <string name="permdesc_checkinProperties">చెక్ ఇన్ సేవ ద్వారా  అప్ లోడ్ చేయబడిన లక్షణాలను చదివేందుకు / వ్రాసేందుకు యాక్సెస్  అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం కాదు.</string>
+    <string name="permlab_bindGadget">విడ్జెట్ల ని ఎంచుకోండి</string>
+    <string name="permdesc_bindGadget">ఏ అప్లికేషన్ లకు ఏ విడ్జెట్లను ఉపయోగించవచ్చునో సిస్టమ్ కి చెప్పడానికి అప్లికేషన్ అనుమతిస్తుంది. ఈ అనుమతితో,అప్లికేషన్లు ఇతర అప్లికేషన్లకు   వ్యక్తిగత డేటాకు యాక్సెస్ అందిస్తాయి. ఇది సాధారణ అప్లికేషన్ల కోసం కాదు.</string>
+    <string name="permlab_modifyPhoneState">ఫోన్ స్థితి ని మార్చండి</string>
+    <string name="permdesc_modifyPhoneState">అప్లికేషన్ పరికరం యొక్క ఫోన్ ఫీచర్లను  నియంత్రించడానికి అనుమతిస్తుంది దీని అనుమతితో ఒక అప్లికేషన్ నెట్ వర్క్లులను స్విచ్ చేస్తుంది. ఎన్నడూ తెలియపర్చకుండానే  ఫోన్ రేడియో ఆన్ మరియు ఆఫ్ చేస్తుంది.  </string>
+    <string name="permlab_readPhoneState">ఫోన్ స్థితి మరియు గుర్తింపు చదవండి</string>
+    <string name="permdesc_readPhoneState">అప్లికేషన్ ఫోన్ లక్షణాలు ప్రాప్యత చేయడానికి అనుమతిస్తుంది.సంఖ్య మరియు కాల్ చురుకుగా అనే ఈ ఫోన్ యొక్క సీరియల్ నంబర్, కాల్ ఆ సంఖ్య కనెక్ట్ చేస్తుంది.</string>
+    <string product="tablet" name="permlab_wakeLock">స్లీపింగ్ నుంచి టాబ్లెట్ నిరోధించండి</string>
+    <string product="default" name="permlab_wakeLock">ఫోన్ ని నిద్ర పోకుండా నివారించేందుకు</string>
+    <string product="tablet" name="permdesc_wakeLock">టాబ్లెట్ స్లీప్ లోనికి వెళ్లకుండా  నివారించడానికి ఒక అనువర్తనం అనుమతిస్తుంది.</string>
+    <string product="default" name="permdesc_wakeLock">ఒక ఫోన్ ని నిద్ర పోకుండా నిరోధించడానికి ఒక అప్లికేషన్ ని  అనుమతిస్తుంది.</string>
+    <string product="tablet" name="permlab_devicePower">పవర్ టాబ్లెట్ ఆన్ లేదా ఆఫ్ </string>
+    <string product="default" name="permlab_devicePower">పవర్ ఫోన్ ఆన్ లేదా ఆఫ్ </string>
+    <string product="tablet" name="permdesc_devicePower">టాబ్లెట్ ను ఆన్ లేదా ఆఫ్  చెయ్యడానికి అప్లికేషన్ అనుమతిస్తుంది.</string>
+    <string product="default" name="permdesc_devicePower">అప్లికేషన్  ఫోన్ ఆన్ లేదా ఆఫ్ చేయడానికి  అనుమతిస్తుంది.</string>
+    <string name="permlab_factoryTest">ఫ్యాక్టరీ పరీక్ష విధానంలో అమలు</string>
+    <string product="tablet" name="permdesc_factoryTest">తక్కువ స్థాయి తయారీదారు పరీక్ష వలె రన్ చేయి,టాబ్లెట్ హార్డ్ వేర్ కు  పూర్తి ప్రాప్తిని అనుమతిస్తుంది. మాత్రమే అందుబాటులో టాబ్లెట్ తయారీదారు పరీక్ష మోడ్లో అమలు ఉన్నప్పుడు.</string>
+    <string product="default" name="permdesc_factoryTest">ఫోన్ హార్డువేరును పూర్తి యాక్సెస్ కి అనుమతిస్తూ, తక్కువ స్థాయి తయారీదారు పరీక్ష గా రన్ చెయ్యి.  ఫోన్ తయారీదారు పరీక్ష మోడ్ అమలు చేసినప్పుడు మాత్రమే అందుబాటులో ఉంటుంది.</string>
+    <string name="permlab_setWallpaper">వాల్ పేపర్ గా సెట్ చెయ్యి</string>
+    <string name="permdesc_setWallpaper">అప్లికేషన్ సిస్టమ్ వాల్ పేపర్ ను సెట్ చేయడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_setWallpaperHints">వాల్ పేపర్ పరిమాణం సూచనలను సెట్ చెయ్యి</string>
+    <string name="permdesc_setWallpaperHints">అప్లికేషన్ సిస్టమ్ వాల్ పేపర్ సైజ్ సూచనలను సెట్ చేయడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_masterClear">ఫ్యాక్టరీ డిఫాల్ట్ లకు సిస్టమ్ ని రీసెట్ చెయ్యి</string>
+    <string name="permdesc_masterClear">ఒక అప్లికేషన్ ని మొత్తం సిస్టమ్ ని దాని ఫ్యాక్టరీ సెట్టింగులకు  పూర్తిగా  రీసెట్ చేసేందుకు, డేటా అంతటినీ తుడిపేందుకూ, ఆకృతీకరణ,  మరియు అప్లికేషన్లు ఇన్ స్టాల్ చేసేందుకూ అనుమతిస్తుంది.</string>
+    <string name="permlab_setTime">సమయమును సెట్ చేయుము</string>
+    <string product="tablet" name="permdesc_setTime">టాబ్లెట్ యొక్క క్లాక్ జోన్ మార్చడానికి ఒక అనువర్తనం మార్చడానికి అనుమతిస్తుంది.</string>
+    <string product="default" name="permdesc_setTime">ఒక అప్లికేషన్ ని  ఫోన్ \ గడియారం యొక్క కాలాన్నిమార్చడానికి అనుమతిస్తుంది .</string>
+    <string name="permlab_setTimeZone">టైం జోన్ ని సెట్ చెయ్యి</string>
+    <string product="tablet" name="permdesc_setTimeZone">టాబ్లెట్ యొక్క టైమ్ జోన్ మార్చడానికి ఒక అనువర్తనం మార్చడానికి అనుమతిస్తుంది.</string>
+    <string product="default" name="permdesc_setTimeZone">ఒక అప్లికేషన్ ని  ఫోన్ \ టైం జోన్ యొక్క కాలాన్నిమార్చడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_accountManagerService">అకౌంట్ మేనేజర్ సర్వీస్ గా వ్యవహరించండి</string>
+    <string name="permdesc_accountManagerService">ఖాతా ధృవీకరణదార్లకు కాల్స్ చేయడానికి ఒక అప్లికేషన్  ని అనుమతిస్తుంది </string>
+    <string name="permlab_getAccounts">తెలిసిన ఖాతాలను కనుగొను</string>
+    <string product="tablet" name="permdesc_getAccounts">టాబ్లెట్ తెలిసిన ఖాతాల జాబితాలకు ఒక అనువర్తనం పొందడానికి అనుమతిస్తుంది</string>
+    <string product="default" name="permdesc_getAccounts">ఒక అప్లికేషన్ ని ఫోన్ ద్వారా తెలిసిన ఖాతాల జాబితా పొందుటకు అనుమతిస్తుంది.</string>
+    <string name="permlab_authenticateAccounts">ఒక ఖాతా ప్రమాణికదారుగా వ్యవహరించండి</string>
+    <string name="permdesc_authenticateAccounts">ఖాతాలను  సృష్టించడం, పాస్ వర్డ్ ను పొందడం, సెట్ చేయడంతో సహా, ఒక అప్లికేషన్ ని  అకౌంట్ మేనేజర్ కి సంబంధించిన ఖాతా ధృవీకరణదారుని యొక్క సామర్థ్యాలను ఉపయోగించడానికి  ఒక అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string name="permlab_manageAccounts">ఎకౌంట్ జాబితాను నిర్వహించండి   తయారీదారు</string>
+    <string name="permdesc_manageAccounts">ఒక అప్లికేషన్ ని ఖాతాలకు జోడించడం, మరియు  తొలగించడం మరియు పాస్ వర్డ్ తుడిపివేయడం వంటి కార్యకలాపాలు నిర్వహించడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_useCredentials">ప్రమాణీకృతమైన ఖాతా యొక్క ఆధారాలను ఉపయోగించండి
+ </string>
+    <string name="permdesc_useCredentials">ఒక అప్లికేషన్ ని  ప్రామాణిక చిహ్నాలను అభ్యర్థించడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_accessNetworkState">నెట్వర్క్ స్థితి వీక్షించేందుకు</string>
+    <string name="permdesc_accessNetworkState">ఒక అప్లికేషన్ ని అన్ని నెట్ వర్క్లుల స్థితినీ చూసేందుకు అనుమతిస్తుంది.  </string>
+    <string name="permlab_createNetworkSockets">పూర్తి ఇంటర్నెట్ యాక్సెస్</string>
+    <string name="permdesc_createNetworkSockets">ఒక అప్లికేషన్ ని  నెట్ వర్క్ సాకెట్ల సృష్టించడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_writeApnSettings">నెట్వర్క్ సెట్టింగ్లు మరియు ట్రాఫిక్ మార్చడానికి / అవరోధం ఏర్పరచండి</string>
+    <string name="permdesc_writeApnSettings">ఒక అనువర్తనం మార్చడానికి అనుమతిస్తుంది లేదోమరో అప్లికేషన్ యొక్క భాగం ప్రారంభించబడిన లేదా. మోసపూరిత ఉపయోగాలు కొరకు దీన్ని ఉపయోగించవచ్చు. ముఖ్యమైన టాబ్లెట్ సామర్థ్యాలను ఆపివేయండి. ఇటు వంటి రక్షణ, తప్పక అనుమతితో వాడాలి.ఒక పనికిరాని, అస్థిరమైన, లేదా అస్థిర రాష్ట్ర లోకి అప్లికేషన్ భాగాలు పొందడం సాధ్యం.</string>
+    <string name="permlab_changeNetworkState">నెట్ వర్క్ అనుసంధానం మార్చేండి</string>
+    <string name="permdesc_changeNetworkState">ఒక అప్లికేషన్ ని  నెట్ వర్క్ అనుసంధాన స్థితిని మార్చడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_changeTetherState">జోడించే కనెక్టివిటీ మార్చండి</string>
+    <string name="permdesc_changeTetherState">ఒక అప్లికేషన్ ని  నెట్ వర్క్ అనుసంధానం స్థితిని మార్చడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_changeBackgroundDataSetting">నేపథ్య డేటా ఉపయోగ సెట్టింగును మార్చు</string>
+    <string name="permdesc_changeBackgroundDataSetting">ఒక అప్లికేషన్ ని నేపథ్య డేటా ఉపయోగ అమరికను మార్చడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_accessWifiState">Wi-Fi స్థితి వీక్షించేందుకు</string>
+    <string name="permdesc_accessWifiState">ఒక అప్లికేషన్ ని చూసేందుకు అనుమతిస్తుంది WLAN స్థితి గురించి సమాచారం.</string>
+    <string name="permlab_changeWifiState">Wi-Fi స్థితి మార్చండి</string>
+    <string name="permdesc_changeWifiState">ఒక అప్లికేషన్ ని కనెక్ట్ అనుమతిస్తుందిమరియు Wi-Fi యాక్సెస్ పాయింట్లు నుండి డిస్కనెక్ట్ చెయ్యడానికి, మరియు మార్పులు చేయుటకు Wi-Fi నెట్ వర్క్లు కన్ఫిగర్.</string>
+    <string name="permlab_changeWifiMulticastState">Wi-Fi బహుళ ప్రసార స్వీకరణను అనుమతిస్తాయి</string>
+    <string name="permlab_accessWimaxState">WiMAX రాష్ట్ర వీక్షించేందుకు</string>
+    <string name="permdesc_accessWimaxState">ఒక అప్లికేషన్ చూసేందుకు అనుమతిస్తుంది
+      డబ్ల్యు ఐ మాక్స్ రాష్ట్రంలో గురించి సమాచారం. </string>
+    <string name="permlab_changeWimaxState">డబ్ల్యు ఐ మాక్స్ రాష్ట్ర మార్చేందుకు</string>
+    <string name="permlab_bluetoothAdmin">బ్లూటూత్ పరిపాలన</string>
+    <string product="tablet" name="permdesc_bluetoothAdmin">స్థానిక Bluetooth టాబ్లెట్,  రిమోట్ పరికరాలు కనుగొనడానికి జత చేయడానికి ఒక అనువర్తనం ఆకృతీకరించుటకు అనుమతిస్తుంది.</string>
+    <string product="default" name="permdesc_bluetoothAdmin">ఒక అప్లికేషన్ ని  స్థానిక బ్లూటూత్ ఫోన్ ని ఆకృతీకరించుటకు మరియు రిమోట్ పరికరాలను కనుగొని, వాటితో జత చేయడానికీ అనుమతిస్తుంది.</string>
+    <string name="permlab_bluetooth">బ్లూటూత్  అనుసంధానాలను సృష్టించు</string>
+    <string product="tablet" name="permdesc_bluetooth">స్థానిక Bluetooth టాబ్లెట్ యొక్క ఆకృతీకరణ, మరియు తయారు మరియు ఆమోదించడానికి అనువర్తనం అనుమతిస్తుందిజత చేసిన పరికరాల సంబంధాలను ఆమోదించే విధంగా చేస్తుంది.</string>
+    <string product="default" name="permdesc_bluetooth">ఒక అప్లికేషన్ ని  స్థానిక బ్లూటూత్ ఫోన్ యొక్క ఆకృతీకరణను చూసేందుకూ, అలాగే జత చేసే పరికరాలతో అనుసంధానాలను తయారుచేయడానికీ మరియు అంగీకరించడానికీ అనుమతిస్తుంది. </string>
+    <string name="permlab_nfc">సమీప క్షేత్ర సంభాషణ నియంత్రణ</string>
+    <string name="permdesc_nfc">ఒక అప్లికేషన్ ని నియర్ ఫీల్డ్ కమ్యూనికేషన్ (NFC) టాగ్ లు, కార్డులు, మరియు పాఠకులతో కమ్యూనికేట్ చేయడానికి అనుమతిస్తుంది. </string>
+    <string name="permlab_disableKeyguard">కీ లాక్  నిలిపి వేయి</string>
+    <string name="permdesc_disableKeyguard">ఒక అనువర్తనం డిసేబుల్ అవ్వడానికొ అనుమతిస్తుంది కీలాక్ మరియు ఏదైనా సంబంధిత పాస్వర్డ్ భద్రతా ఒక చట్టబద్ధమైన ఉదాహరణ గా చెప్పవచ్చు. ఈ ఒక ఇన్కమింగ్ ఫోన్ కాల్ అందుకున్నప్పుడే  డిసేబుల్ ఫోన్ అప్పుడు కాల్ పూర్తి అయినప్పుడు కీ కాల్ మళ్ళీ ప్రారంభించడం జరుగుతుంది.</string>
+    <string name="permlab_readSyncSettings">సమకాలీకరణ అమర్పులను చదవండి</string>
+    <string name="permdesc_readSyncSettings">ఒక అప్లికేషన్ ని సమకాలీకరణ కాంటాక్టులు ఎనేబుల్ చెయ్యబడ్డాయా లేదా అనే సమకాలీకరణ సెట్టింగులు చదవడానికి అనుమతిస్తుంది. </string>
+    <string name="permlab_writeSyncSettings">సమకాలీకరణ అమర్పులను వ్రాయండి</string>
+    <string name="permdesc_writeSyncSettings">ఒక అప్లికేషన్ ని  ఆ సిమ్క్ పరిచయాల కోసం ప్రారంభించడం వంటి సిమ్క్  సెట్టింగులను సవరించడానికి అనుమతిస్తుంది.     </string>
+    <string name="permlab_readSyncStats">సమకాలీకరణ గణాంకాలు చదవండి</string>
+    <string name="permdesc_readSyncStats">ఒక అప్లికేషన్ ని సమకాలీకరణ గణాంకాలు చదవడానికి అనుమతిస్తుంది; ఉదా,  సంభవించిన సిమ్క్స్ చరిత్ర .</string>
+    <string name="permlab_subscribedFeedsRead">సభ్యులు ఫీడ్లను చదవడానికి</string>
+    <string name="permdesc_subscribedFeedsRead">ఒక అప్లికేషన్ ని ప్రస్తుతం సిమ్క్డ్ ఫీడ్ లను గురించి వివరాలను పొందడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_subscribedFeedsWrite">సభ్యత్వ ఫీడ్లను వ్రాయండి</string>
+    <string name="permdesc_subscribedFeedsWrite">ఒక అప్లికేషన్ ని మీ ప్రస్తుత సిమ్క్డ్ ఫీడ్లను  సవరించడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మీ సిమ్క్డ్ ఫీడ్లను  మార్చడానికి ఇది అనుమతించవచ్చు. </string>
+    <string name="permlab_readDictionary">యూజర్ నిర్వచించారు నిఘంటువు చదవండి</string>
+    <string name="permdesc_readDictionary">ఒక అప్లికేషన్ ని యూజర్ నిఘంటువులో యూజర్ భద్రపరుచుకున్న ఏ ప్రైవేట్  పదాలు, పేర్లు మరియు పద బంధాలనైనా చదవడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_writeDictionary">యూజర్ నిర్వచించిన నిఘంటువు వ్రాయండి</string>
+    <string name="permdesc_writeDictionary">ఒక అప్లికేషన్ ని యూజర్ నిఘంటువులోకి కొత్త పదాలను వ్రాయడానికి అనుమతిస్తుంది.</string>
+    <string product="nosdcard" name="permlab_sdcardWrite">తొలగించండి / సవరించడానికి USB నిల్వ విషయాలు</string>
+    <string product="default" name="permlab_sdcardWrite">SD కార్డు విషయాలు సవరించడానికి / తొలగించండి</string>
+    <string product="nosdcard" name="permdesc_sdcardWrite">USB  నిల్వకి రాయడానికి ఒక అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string product="default" name="permdesc_sdcardWrite">SD కార్డుకి రాయడానికి ఒక అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string product="default" name="permlab_mediaStorageWrite">అంతర్గత మీడియా నిల్వ విషయాలు సవరించండి లేదా తొలగించండి</string>
+    <string product="default" name="permdesc_mediaStorageWrite">ఒక అనువర్తనం అంతర్గత మీడియా నిల్వ విషయాలు సవరించడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_cache_filesystem">కాష్ ఫైల్ సిస్టమ్ యాక్సెస్</string>
+    <string name="permdesc_cache_filesystem">ఒక అప్లికేషన్ ని కాషె ఫైల్ సిస్టమ్ ని చదవడానికీ మరియు రాయడానికీ అనుమతిస్తుంది.</string>
+    <string name="permlab_use_sip">ఇంటర్నెట్ కాల్స్ / అందుకోవడానికి</string>
+    <string name="permdesc_use_sip">ఒక అప్లికేషన్ ఇంటర్నెట్ కాల్స్ / అందుకోవడానికి సిప్ సేవ ఉపయోగపడుతుంది.</string>
+    <string name="permlab_readNetworkUsageHistory">చారిత్రక నెట్వర్క్ వినియోగ చదవండి</string>
+    <string name="permdesc_readNetworkUsageHistory">అనువర్తన నిర్దిష్ట నెట్వర్క్ మరియు అనువర్తనాల కోసం చారిత్రక నెట్వర్క్ వినియోగ చదవడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_manageNetworkPolicy">నెట్వర్క్ విధానం నిర్వహించండి</string>
+    <string name="permdesc_manageNetworkPolicy">నెట్వర్క్ విధానాలను నిర్వహించి, నిర్దిష్ట అప్లికేషన్ నిబంధనలకు అప్లికేషన్ అనుమతిస్తుంది.</string>
+    <string name="permlab_modifyNetworkAccounting">నెట్వర్క్ వినియోగ అకౌంటింగ్ సవరించండి</string>
+    <string name="permdesc_modifyNetworkAccounting">మీ అనువర్తనానికి వ్యతిరేకంగా నెట్ వర్క్ వనియోగం ఎలా ఉన్నదనేదాన్ని మాడిఫికేషన్ చేయడానికి అనుమతిస్తుంది. సాధారణ అప్లికేషన్ల ద్వారా అనుమతించడానికి కాదు.</string>
+    <string name="policylab_limitPassword">పాస్ వర్డ్ పరిమితం</string>
+    <string name="policydesc_limitPassword">స్క్రీన్ అన్లాక్ పాస్వర్డ్ లో అనుమతించబడ్డ పొడవు మరియు అక్షరాలు నియంత్రించండి</string>
+    <string name="policylab_watchLogin">లాగిన్ ప్రయత్నాలు చూడండి</string>
+    <string product="tablet" name="policydesc_watchLogin">స్క్రీన్ అన్లాక్  చేసేటప్పుడు తప్పు పాస్వర్డ్లను సంఖ్య మానిటర్ చేస్తుంది మరియు చాలా సార్లు తప్పుగా పాస్వర్డ్ నమోదు చేస్తే మీ టాబ్లెట్లో డేటా మొత్తం తొలగించబడుతుంది లేదా టాబ్లెట్ లాక్ చేయబడుతుంది.</string>
+    <string product="default" name="policydesc_watchLogin">స్క్రీన్ అన్లాక్  చేసేటప్పుడు తప్పు పాస్వర్డ్లను సంఖ్య మానిటర్ చేస్తుంది మరియు చాలా సార్లు తప్పుగా పాస్వర్డ్ నమోదు చేస్తే మీ ఫోన్లో డేటా మొత్తం తొలగించబడుతుంది లేదా ఫోన్లో లాక్ చేయబడుతుంది.</string>
+    <string name="policylab_resetPassword">పాస్వర్డ్ రీసెట్ చెయ్యి</string>
+    <string name="policydesc_resetPassword">పాస్వర్డ్ రీసెట్ చెయ్యి</string>
+    <string name="policylab_forceLock">ఫోర్స్ లాక్</string>
+    <string name="policydesc_forceLock">"పరికరం లాక్ అయినప్పుడు నియంత్రించండి, దాని పాస్వర్డ్ మళ్లీ ఎంటరు చేయడం అవసరం. "</string>
+    <string name="policylab_wipeData">మొత్తం డేటాను తుడిచివేయి</string>
+    <string product="tablet" name="policydesc_wipeData">ఫ్యాక్టరీ డేటా రీసెట్ చేయడం ద్వారా టాబ్లెట్  డేటా ఎలాంటి హెచ్చరిక లేకుండా తొలగించబడుతుంది</string>
+    <string product="default" name="policydesc_wipeData">ఫ్యాక్టరీ డేటా రీసెట్ చేయడం ద్వారా ఫోను డేటా ఎలాంటి హెచ్చరిక లేకుండా తొలగించబడుతుంది</string>
+    <string name="policylab_setGlobalProxy">పరికరం గ్లోబల్ ప్రాక్సీ సెట్ చేయి</string>
+    <string name="policydesc_setGlobalProxy">విధానం ప్రారంభించబడి ఉన్నప్పుడు ఉపయోగించడానికి పరికరాన్ని గ్లోబల్ ప్రాక్సీ సెట్ చేయి.మొదటి పరికరం మాత్రమే అడ్మిన్ ప్రభావవంతమైన ప్రపంచ ప్రాక్సీ అమర్చుతుంది.</string>
+    <string name="policylab_expirePassword">లాక్ స్క్రీన్ పాస్వర్డ్ గడువు సెట్ చేయి</string>
+    <string name="policydesc_expirePassword">లాక్ స్క్రీన్ పాస్వర్డ్ను ఎంత తరచుగా మార్చాలన్న దాన్ని నియంత్రించండి</string>
+    <string name="policylab_encryptedStorage">నిల్వ ఎన్క్రిప్షన్ సెట్ చేయి</string>
+    <string name="policydesc_encryptedStorage">స్టోరు చేయబడ్డ అప్లికేషన్ డేటా ఎన్ క్రిప్టు చేయాల్సి ఉంది</string>
+    <string name="policylab_disableCamera">కెమెరాలు ఆపివేయి</string>
+    <string name="policydesc_disableCamera">అన్ని పరికరాల కెమెరాలు యొక్క వాడకం నిరోధించండి</string>
+    <string-array name="phoneTypes">
+        <item>హోం పేజి</item>
+        <item>మొబైల్       </item>
+        <item>పని</item>
+        <item>ఫ్యాక్స్ పని</item>
+        <item>హోమ్ ఫ్యాక్స్</item>
+        <item>పేజర్     </item>
+        <item>ఇతరాలు</item>
+        <item>ఆచారం</item>
+    </string-array>
+    <string-array name="emailAddressTypes">
+        <item>హోం పేజి</item>
+        <item>పని</item>
+        <item>ఇతరాలు</item>
+        <item>ఆచారం</item>
+    </string-array>
+    <string-array name="postalAddressTypes">
+        <item>హోం పేజి</item>
+        <item>పని</item>
+        <item>ఇతరాలు</item>
+        <item>ఆచారం</item>
+    </string-array>
+    <string-array name="imAddressTypes">
+        <item>హోం పేజి</item>
+        <item>పని</item>
+        <item>ఇతరాలు</item>
+        <item>ఆచారం</item>
+    </string-array>
+    <string-array name="organizationTypes">
+        <item>పని</item>
+        <item>ఇతరాలు</item>
+        <item>ఆచారం</item>
+    </string-array>
+    <string-array name="imProtocols">
+        <item>ఎఐఎమ్ లోకి</item>
+        <item>విండోస్ లైవ్</item>
+        <item>యాహూ</item>
+        <item>స్కైప్</item>
+        <item>QQ</item>
+        <item>గూగుల్  టాక్ </item>
+        <item>ICQ</item>
+        <item>అర్ధం లేని వాగుడు</item>
+    </string-array>
+    <string name="phoneTypeCustom">ఆచారం</string>
+    <string name="phoneTypeHome">హోం పేజి</string>
+    <string name="phoneTypeMobile">మొబైల్       </string>
+    <string name="phoneTypeWork">పని</string>
+    <string name="phoneTypeFaxWork">ఫ్యాక్స్ పని</string>
+    <string name="phoneTypeFaxHome">హోమ్ ఫ్యాక్స్</string>
+    <string name="phoneTypePager">పేజర్     </string>
+    <string name="phoneTypeOther">ఇతరాలు</string>
+    <string name="phoneTypeCallback">కాల్ బ్యాక్  </string>
+    <string name="phoneTypeCar">కారు</string>
+    <string name="phoneTypeCompanyMain">కంపెనీ ప్రధాన </string>
+    <string name="phoneTypeIsdn">ISDN</string>
+    <string name="phoneTypeMain">ప్రధాన  </string>
+    <string name="phoneTypeOtherFax">ఇతర ఫ్యాక్స్ </string>
+    <string name="phoneTypeRadio">రేడియో</string>
+    <string name="phoneTypeTelex">టెలెక్స్</string>
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
+    <string name="phoneTypeWorkMobile">పని చేసే మొబైల్</string>
+    <string name="phoneTypeWorkPager">కార్యాలయ పేజర్</string>
+    <string name="phoneTypeAssistant">సహాయకుడు</string>
+    <string name="phoneTypeMms">MMS</string>
+    <string name="eventTypeCustom">ఆచారం</string>
+    <string name="eventTypeBirthday">పుట్టిన రోజు</string>
+    <string name="eventTypeAnniversary">వార్షికం</string>
+    <string name="eventTypeOther">ఇతరాలు</string>
+    <string name="emailTypeCustom">ఆచారం</string>
+    <string name="emailTypeHome">హోం పేజి</string>
+    <string name="emailTypeWork">పని</string>
+    <string name="emailTypeOther">ఇతరాలు</string>
+    <string name="emailTypeMobile">మొబైల్       </string>
+    <string name="postalTypeCustom">ఆచారం</string>
+    <string name="postalTypeHome">హోం పేజి</string>
+    <string name="postalTypeWork">పని</string>
+    <string name="postalTypeOther">ఇతరాలు</string>
+    <string name="imTypeCustom">ఆచారం</string>
+    <string name="imTypeHome">హోం పేజి</string>
+    <string name="imTypeWork">పని</string>
+    <string name="imTypeOther">ఇతరాలు</string>
+    <string name="imProtocolCustom">ఆచారం</string>
+    <string name="imProtocolAim">ఎఐఎమ్ లోకి</string>
+    <string name="imProtocolMsn">విండోస్ లైవ్</string>
+    <string name="imProtocolYahoo">Yahoo</string>
+    <string name="imProtocolSkype">స్కైప్</string>
+    <string name="imProtocolQq">QQ</string>
+    <string name="imProtocolGoogleTalk">గూగుల్  టాక్ </string>
+    <string name="imProtocolIcq">ICQ</string>
+    <string name="imProtocolJabber">అర్ధం లేని వాగుడు</string>
+    <string name="imProtocolNetMeeting">నెట్ సమావేశం </string>
+    <string name="orgTypeWork">పని</string>
+    <string name="orgTypeOther">ఇతరాలు</string>
+    <string name="orgTypeCustom">ఆచారం</string>
+    <string name="relationTypeCustom">ఆచారం</string>
+    <string name="relationTypeAssistant">సహాయకుడు</string>
+    <string name="relationTypeBrother">బ్రదర్</string>
+    <string name="relationTypeChild">బాలలు</string>
+    <string name="relationTypeDomesticPartner">జీవిత భాగస్వామి</string>
+    <string name="relationTypeFather">ఫాదర్ </string>
+    <string name="relationTypeFriend">స్నేహితుడు</string>
+    <string name="relationTypeManager">మేనేజర్</string>
+    <string name="relationTypeMother">అమ్మ</string>
+    <string name="relationTypeParent">పేరెంట్</string>
+    <string name="relationTypePartner">భాగస్వామి</string>
+    <string name="relationTypeReferredBy">వీరిచే సూచించబడింది</string>
+    <string name="relationTypeRelative">బంధువు</string>
+    <string name="relationTypeSister">సోదరి</string>
+    <string name="relationTypeSpouse">భార్య లేక భర్త</string>
+    <string name="sipAddressTypeCustom">ఆచారం</string>
+    <string name="sipAddressTypeHome">హోం పేజి</string>
+    <string name="sipAddressTypeWork">పని</string>
+    <string name="sipAddressTypeOther">ఇతరాలు</string>
+    <string name="keyguard_password_enter_pin_code">PIN కోడ్ ని ఎంటర్ చేయండి</string>
+    <string name="keyguard_password_enter_puk_code">PUK మరియు కొత్త PIN కోడ్ నమోదు చేయండి</string>
+    <string name="keyguard_password_enter_puk_prompt">PUK కోడ్</string>
+    <string name="keyguard_password_enter_pin_prompt">క్రొత్త పిన్ కోడ్</string>
+    <string name="keyguard_password_entry_touch_hint"><font size="17">పాస్వర్డ్ నమోదు చేయడానికి తాకండి</font></string>
+    <string name="keyguard_password_enter_password_code">పాస్ వర్డ్ ని అన్ లాక్ చేయడానికి ఎంటర్ చేయండి</string>
+    <string name="keyguard_password_enter_pin_password_code">అన్లాక్ చేయడానికి PIN ఎంటర్ చేయండి</string>
+    <string name="keyguard_password_wrong_pin_code">PIN కోడ్ సరియైనది కాదు!</string>
+    <string name="keyguard_label_text">అన్ లాక్ చేయడానికి, మెనూ ప్రెస్ చేసి, 0 నొక్కండి.</string>
+    <string name="emergency_call_dialog_number_for_display">అత్యవసర సంఖ్య</string>
+    <string name="lockscreen_carrier_default">కాదు సేవ</string>
+    <string name="lockscreen_screen_locked">స్క్రీన్ లాక్.</string>
+    <string name="lockscreen_instructions_when_pattern_enabled">అత్యవసర కాల్ ని అన్ లాక్ చేయడం లేదా ఉంచడం కోసం మెనూ నొక్కండి.</string>
+    <string name="lockscreen_instructions_when_pattern_disabled">అన్ లాక్ చేయడానికి మెనూ నొక్కండి.</string>
+    <string name="lockscreen_pattern_instructions">అన్ లాక్ చేయడానికి నమూనా గీయండి</string>
+    <string name="lockscreen_emergency_call">ఎమర్జెన్సీ కాల్</string>
+    <string name="lockscreen_return_to_call">కాల్ కి తిరిగి రా</string>
+    <string name="lockscreen_pattern_correct">సరైనది!</string>
+    <string name="lockscreen_pattern_wrong">క్షమించాలి, మళ్ళీ ప్రయత్నించండి</string>
+    <string name="lockscreen_password_wrong">క్షమించాలి, మళ్ళీ ప్రయత్నించండి</string>
+    <string name="lockscreen_plugged_in">ఛార్జింగ్, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_charged">ఛార్జి అయింది</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+    <string name="lockscreen_low_battery">మీ ఛార్జర్లని కనెక్ట్ చేయండి. </string>
+    <string name="lockscreen_missing_sim_message_short">SIM కార్డ్ లేదు.</string>
+    <string product="tablet" name="lockscreen_missing_sim_message">టాబ్లెట్లో ఏ SIM కార్డు లేదు.</string>
+    <string product="default" name="lockscreen_missing_sim_message">మీ ఫొన్ లో SIM కార్డ్ లేదు. </string>
+    <string name="lockscreen_missing_sim_instructions">దయచేసి SIM కార్డు ని ఇన్ సెర్ట్ చేయండి.</string>
+    <string name="lockscreen_missing_sim_instructions_long">SIM కార్డు మిస్ అయినది లేదా రీడబుల్గా లేదు. దయచేసి SIM కార్డు ఇన్సర్ట్ చెయ్యండి.</string>
+    <string name="lockscreen_permanent_disabled_sim_instructions">మీ SIM కార్డు శాశ్వతంగా నిలిపివెయ్యబడింది. \n మరొక SIM కార్డ్ పొందటానికి మీ వైర్లెస్ సేవ ప్రొవైడర్ను సంప్రదించండి.</string>
+    <string name="lockscreen_transport_prev_description">మునుపటి ట్రాక్ బటన్</string>
+    <string name="lockscreen_transport_next_description">తదుపరి ట్రాక్ బటన్</string>
+    <string name="lockscreen_transport_pause_description">పాజ్ బటన్</string>
+    <string name="lockscreen_transport_play_description">ప్లే బటన్</string>
+    <string name="lockscreen_transport_stop_description">స్టాప్ బటన్ </string>
+    <string msgid="2485604591272668370" name="emergency_calls_only">అత్యవసర కాల్స్ మాత్రమే</string>
+    <string name="lockscreen_network_locked_message">నెట్ వర్క్ లాక్</string>
+    <string name="lockscreen_sim_puk_locked_message">SIM కార్డ్ PUK -లాక్ ఉంది.</string>
+    <string name="lockscreen_sim_puk_locked_instructions">యూజర్ గైడ్ చూడండి లేదా కస్టమర్ కేర్ సంప్రదించండి.</string>
+    <string name="lockscreen_sim_locked_message">SIM కార్డ్ లాక్.</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message">SIM కార్డ్ అన్ లాక్ చేయి\u2026 </string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">
+        మీ అన్ లాక్ నమూనాని తప్పుగా గీశారు <xliff:g id="number">%d</xliff:g> సార్లు.
+        \n\nలో దయచేసి మళ్లీ ప్రయత్నించండి <xliff:g id="number">%d</xliff:g> సెకండ్లు.
+    </string>
+    <string name="lockscreen_too_many_failed_password_attempts_dialog_message">
+       మీరు మీ పాస్వర్డ్ ను తప్పుగా ఎంటర్ చేశారు <xliff:g id="number">%d</xliff:g>టైమ్స్.
+        \n\nమళ్ళీ ప్రయత్నించండి <xliff:g id="number">%d</xliff:g> సెకన్లలో.
+    </string>
+    <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">మీరు మీ PIN తప్పుగా <xliff:g id="number">%d</xliff:g> సార్లు ఎంటర్ చేశారు. \n\n దయచేసి మళ్లీ <xliff:g id="number">%d</xliff:g>సెకన్లు తరువాత ప్రయత్నించండి.</string>
+    <string product="tablet" name="lockscreen_failed_attempts_almost_glogin">మీరు తప్పుగా మీ అన్లాక్ నమూనా <xliff:g id="number">%d</xliff:g> సార్లు డ్రా చేశారు.
+<xliff:g id="number">%d</xliff:g> మరింత ప్రయత్నాలు చేశాక, మీరు మీ Google సైన్ ఇన్ ఉపయోగించి మీ టాబ్లెట్ అన్లాక్ అడిగే. \n\nదయచేసి <xliff:g id="number">%d</xliff:g> సెకన్లలో మళ్లీ ప్రయత్నించండి.
+    </string>
+    <string product="default" name="lockscreen_failed_attempts_almost_glogin">మీరు మీ అన్లాక్ సరళిని సరిగ్గా చేయలేదు <xliff:g id="number">%d</xliff:g> సార్లు. తరువాత <xliff:g id="number">%d</xliff:g> మరిన్ని విజయవంతం కాని ప్రయత్నాలు, Google సైన్ - ఇన్ ఉపయోగించిన మీరు ఫోన్ అన్లాక్ చేయమని మిమ్మల్ని అడగబడుతుంది. \n\n దయచేసి తిరిగి ప్రయత్నించండి<xliff:g id="number">%d</xliff:g> సెకండ్లు.
+    </string>
+    <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">మీరు తప్పుగా <xliff:g id="number">%d</xliff:g>  సార్లు మీ టాబ్లెట్ అన్లాక్ చేయడానికి ప్రయత్నించారు.<xliff:g id="number">%d</xliff:g>  తరువాత మరింత విజయవంతం ప్రయత్నాల తరువాత టాబ్లెట్ ఫ్యాక్టరీ సెట్టింగులకు  రీసెట్ చేయబడుతుంది మరియు  యూజర్ డేటా మొత్తం పోతుంది.</string>
+    <string product="default" name="lockscreen_failed_attempts_almost_at_wipe">మీరు తప్పుగా <xliff:g id="number">%d</xliff:g> సార్లు ఫోన్ అన్లాక్ చేయడానికి ప్రయత్నించారు.<xliff:g id="number">%d</xliff:g> తరువాత మరింత విజయవంతం ప్రయత్నాలు,ఫోన్ ఫ్యాక్టరీ సెట్టింగులకు  రీసెట్ చేయబడుతుంది మరియు  యూజర్ డేటా మొత్తం పోతుంది.</string>
+    <string product="tablet" name="lockscreen_failed_attempts_now_wiping">మీరు తప్పుగా <xliff:g id="number">%d</xliff:g>సార్లు మీ టాబ్లెట్ అన్లాక్ చేయడానికి ప్రయత్నించారు. టాబ్లెట్ ఫ్యాక్టరీ సెట్టింగులకు  రీసెట్ చేయబడుతుంది.</string>
+    <string product="default" name="lockscreen_failed_attempts_now_wiping">మీరు తప్పుగా <xliff:g id="number">%d</xliff:g> సార్లు ఫోన్ అన్లాక్ చేయడానికి ప్రయత్నించారుఫోన్ ఫ్యాక్టరీ సెట్టింగులకు  రీసెట్ చేయబడుతుంది. ఫోన్ ఇప్పుడు ఫ్యాక్టరీ డిఫాల్ట్ రీసెట్ చేయబడుతుంది.</string>
+    <string name="lockscreen_too_many_failed_attempts_countdown">లో మళ్ళీ ప్రయత్నించండి<xliff:g id="number">%d</xliff:g> సెకన్లు.</string>
+    <string name="lockscreen_forgot_pattern_button_text">నమూనా మర్చిపోయారా?</string>
+    <string name="lockscreen_glogin_forgot_pattern">ఖాతాను అన్ లాక్ చేయండి</string>
+    <string name="lockscreen_glogin_too_many_attempts">చాలా దోషపూరితమైన ప్రయత్నాలు!</string>
+    <string name="lockscreen_glogin_instructions">అన్ లాక్ చేయడానికి, మీ గూగుల్  అకౌంటుకు సైన్ ఇన్ చేయండి</string>
+    <string name="lockscreen_glogin_username_hint">వాడుకరి పేరు (ఇమెయిల్)</string>
+    <string name="lockscreen_glogin_password_hint">పాస్ వర్డ్</string>
+    <string name="lockscreen_glogin_submit_button">సైన్ ఇన్ చెయ్యి</string>
+    <string name="lockscreen_glogin_invalid_input">చెల్లని యూజర్పేరు లేదా పాస్వర్డ్.</string>
+    <string name="lockscreen_glogin_account_recovery_hint">మీ వినియోగదారు పేరు లేదా పాస్వర్డ్  మర్చిపోయారా\? \nసందర్శించండి<b>google.com/అకౌంట్స్/పునరుద్ధరణ</b></string>
+    <string name="lockscreen_glogin_checking_password">తనిఖీ చేస్తోంది...</string>
+    <string name="lockscreen_unlock_label">అన్లాక్</string>
+    <string name="lockscreen_sound_on_label">సౌండ్ ఆన్  మీద  </string>
+    <string name="lockscreen_sound_off_label">సౌండ్ ఆఫ్   ఆఫ్</string>
+    <string name="lockscreen_access_pattern_start">సరళి ప్రారంభించబడింది</string>
+    <string name="lockscreen_access_pattern_cleared">సరళి క్లియర్ చేయబడింది</string>
+    <string name="lockscreen_access_pattern_cell_added">సెల్ జోడించారు</string>
+    <string name="lockscreen_access_pattern_detected">సరళి పూర్తయింది</string>
+    <string name="password_keyboard_label_symbol_key">\?123</string>
+    <string name="password_keyboard_label_alpha_key">ABC</string>
+    <string name="password_keyboard_label_alt_key">ALT</string>
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+    <string name="factorytest_failed">ఫ్యాక్టరీ పరీక్షలో విఫలమయ్యింది</string>
+    <string name="factorytest_not_system">FACTORY_TEST చర్య మాత్రమే/సిస్టమ్/app ఇన్ స్టాల్  కోసం మద్దత్తునిస్తోంది. </string>
+    <string name="factorytest_no_action">ఫ్యాక్టరి టెస్ట్ యాక్షన్ కు  ఏవిధమైన ప్యాకేజి కనుగొన బడలేదు.</string>
+    <string name="factorytest_reboot">పునఃప్రారంభించండి</string>
+    <string name="js_dialog_title">వద్ద పేజీ\'<xliff:g id="title">%s</xliff:g>\' చెప్పారు:</string>
+    <string name="js_dialog_title_default">జావాస్క్రిప్ట్    </string>
+    <string name="js_dialog_before_unload">ఈ పేజీ నుండి దూరంగా నావిగేట్ చేయాలా?\n\n<xliff:g id="message">%s</xliff:g>\n\nకొనసాగించడానికి OK లేదా ప్రస్తుత పేజీలోనే ఉండడానికి కేన్సిల్ ఎంచుకోండి, </string>
+    <string name="save_password_label">నిర్థారించండి</string>
+    <string name="double_tap_toast">చిట్కా: బయటకు జూమ్ చెయ్యడానికి, జూమ్ తీసివేయడానికీ రెండు సార్లు టాప్ చేయండి.</string>
+    <string name="autofill_this_form">స్వయం చాలితంగా నింపడం</string>
+    <string name="setup_autofill">స్వీయపూర్తి సెటప్</string>
+    <string name="autofill_address_name_separator">\u0020</string>
+    <string name="autofill_address_summary_name_format">$1$2$3</string>
+    <string name="autofill_address_summary_separator">,\u0020</string>
+    <string name="autofill_address_summary_format">$1$2$3</string>
+    <string name="autofill_province">రాష్ట్రం</string>
+    <string name="autofill_postal_code">పోస్టల్ కోడ్</string>
+    <string name="autofill_state">స్థితి</string>
+    <string name="autofill_zip_code">జిప్ కోడ్</string>
+    <string name="autofill_county">కౌంటీ</string>
+    <string name="autofill_island">దీవి</string>
+    <string name="autofill_district">జిల్లాలు</string>
+    <string name="autofill_department">విభాగం</string>
+    <string name="autofill_prefecture">ప్రి ఫెక్చర్</string>
+    <string name="autofill_parish">పరిష్</string>
+    <string name="autofill_area">వైశాల్యం</string>
+    <string name="autofill_emirate">ఎమిరేట్</string>
+    <string name="permlab_readHistoryBookmarks">బ్రౌజర్ చరిత్ర బుక్మార్క్లులను చదవండి</string>
+    <string name="permdesc_readHistoryBookmarks">అప్లికేషన్   బ్రౌజర్ సందర్శించిన ఆ URL లు, మరియు బ్రౌజర్ \ యొక్క బుక్ మార్క్లులు అన్నీ  చదవడానికి అనుమతిస్తుంది.</string>
+    <string name="permlab_writeHistoryBookmarks">బ్రౌజర్\ యొక్క చరిత్ర మరియు బుక్ మార్క్లులను వ్రాయండి</string>
+    <string product="tablet" name="permdesc_writeHistoryBookmarks">బ్రౌజర్s చరిత్ర లేదా బుక్ మార్క్ లు మీ టాబ్లెట్ నిల్వ చేసేందుకు ఒక అనువర్తనం సవరించడానికి అనుమతిస్తుంది.మోసపూరిత అప్లికేషన్లు మీ బ్రౌజర్  డేటా చెరిపివేయడానికి  లేదా సవరించడానికి దీన్ని ఉపయోగించవచ్చు.</string>
+    <string product="default" name="permdesc_writeHistoryBookmarks">ఒక అప్లికేషన్ ని  మీ ఫోన్ లో నిల్వ ఉన్న ఉన్నబ్రౌజర్ \ యొక్క చరిత్ర లేదా బుక్ మార్క్లుని సవరించడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు మీ బ్రౌజర్ \ బ్రౌజర్ల డేటాని తుడిచి వేయడానికీ లేదా సవరించడానికి దీన్ని ఉపయోగించవచ్చు.</string>
+    <string name="permlab_setAlarm">అలారం గడియారం లో అలారం సెట్</string>
+    <string name="permdesc_setAlarm">అప్లికేషన్లో ఒక అలారం సెట్ కు అనుమతిస్తుంది. సంస్థాపించిన అలారం గడియారం అప్లికేషన్. కొన్ని అలారం గడియారం అప్లికేషన్లు మారవచ్చు ఈ ఫీచర్ అమలు కాదు. </string>
+    <string name="permlab_addVoicemail">వాయిస్ మెయిల్ జోడించండి</string>
+    <string name="permdesc_addVoicemail">మీ వాయిస్ మెయిల్ ఇన్ బాక్ కు సందేశాలను జోడించేందుకు అనువర్తనం అనుమతిస్తుంది.</string>
+    <string name="permlab_writeGeolocationPermissions">భౌగోళిక బ్రౌజర్ అనుమతులను మార్చండి</string>
+    <string name="permdesc_writeGeolocationPermissions">ఒక అప్లికేషన్ ని   బ్రౌజర్ \ యొక్క జియో లొకేషన్ అనుమతులను సవరించడానికి అనుమతిస్తుంది. హానికరమైన అప్లికేషన్లు అనియత వెబ్ సైట్లకు స్థాన సమాచారం పంపడం అనుమతించేందుకు  దీన్నిఉపయోగించవచ్చు.</string>
+    <string name="permlab_packageVerificationAgent">ప్యాకేజీలు తనిఖీ</string>
+    <string name="permdesc_packageVerificationAgent">ఒక ప్యాకేజీ ఇన్ స్టల్ అయినదా లేదాఅని  ధ్రువీకరించడం కొరకు  అప్లికేషన్ అనుమతిస్తుంది.</string>
+    <string name="permlab_bindPackageVerifier">ప్యాకేజీ వెరిఫైర్ కు కట్టుబడి ఉండటం</string>
+    <string name="permdesc_bindPackageVerifier">హోల్డర్ యొక్క అభ్యర్థనలను చేయడానికి అనుమతిస్తుంది ప్యాకేజీ వెరిఫైర్లను. సాధారణ అనువర్తనాల్లో అవసరమైన చేయకూడదు. </string>
+    <string name="save_password_message">మీరు ఈ బ్రౌజర్ ని పాస్వర్డ్ గుర్తుంచుకోవాలని అనుకుంటున్నారా?</string>
+    <string name="save_password_notnow">ఇప్పుడు కాదు</string>
+    <string name="save_password_remember">గుర్తుంచుకో</string>
+    <string name="save_password_never">ఎన్నడూ లేదు</string>
+    <string name="open_permission_deny">మీకు ఈ పేజీని స్క్రీన్ిచేందుకు అనుమతి లేదు.</string>
+    <string name="text_copied">టెక్స్ట్ క్లిప్ బోర్డ్ కాపీ.</string>
+    <string name="more_item_label">మరిన్ని</string>
+    <string name="prepend_shortcut_label">మెనూ+</string>
+    <string name="menu_space_shortcut_label">స్పేస్</string>
+    <string name="menu_enter_shortcut_label">ఎంటర్ చేయండి</string>
+    <string name="menu_delete_shortcut_label">తొలగించాలా</string>
+    <string name="search_go">వెతుకు</string>
+    <string name="searchview_description_search">వెతుకు</string>
+    <string name="searchview_description_query">ప్రశ్న శోధన</string>
+    <string name="searchview_description_clear">ప్రశ్నలు  క్లియర్ చేయండి</string>
+    <string name="searchview_description_submit">ప్రశ్న సబ్మిట్ చేయండి</string>
+    <string name="searchview_description_voice">వాయిస్ అన్వేషణ</string>
+    <string name="oneMonthDurationPast">1 నెల క్రితం</string>
+    <string name="beforeOneMonthDurationPast">1 నెల క్రితం ముందు</string>
+    <plurals name="num_seconds_ago">
+        <item quantity="one">1 సెకను క్రితం</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> సెకండ్ల క్రితం</item>
+    </plurals>
+    <plurals name="num_minutes_ago">
+        <item quantity="one">1 నెల క్రితం</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> నిమిషాల క్రితం</item>
+    </plurals>
+    <plurals name="num_hours_ago">
+        <item quantity="one">1 గంట ముందు</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> గంటల క్రితం</item>
+    </plurals>
+    <plurals name="last_num_days">
+        <item quantity="other">చివరి <xliff:g id="count">%d</xliff:g> రోజుల</item>
+    </plurals>
+    <string name="last_month">గత నెల        </string>
+    <string name="older">పాతవి </string>
+    <plurals name="num_days_ago">
+        <item quantity="one">నిన్నటి రోజు</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> రోజుల క్రితం</item>
+    </plurals>
+    <plurals name="in_num_seconds">
+        <item quantity="one">1 సెకనులో  </item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> సెకండ్లు</item>
+    </plurals>
+    <plurals name="in_num_minutes">
+        <item quantity="one">1 గంటలో </item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> నిముషాలు</item>
+    </plurals>
+    <plurals name="in_num_hours">
+        <item quantity="one">1 గంటలో </item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> గంటలు</item>
+    </plurals>
+    <plurals name="in_num_days">
+        <item quantity="one">రేపు</item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> రోజులు</item>
+    </plurals>
+    <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">1 సెకను క్రితం</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> సెకండ్ల క్రితం</item>
+    </plurals>
+    <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">1 నిమిషం క్రితం</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> నిమిషాల క్రితం</item>
+    </plurals>
+    <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">1 గంట ముందు</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> గంటల క్రితం</item>
+    </plurals>
+    <plurals name="abbrev_num_days_ago">
+        <item quantity="one">నిన్నటి రోజు</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> రోజుల క్రితం</item>
+    </plurals>
+    <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">1 సెకనులో  </item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> సెకండ్లు</item>
+    </plurals>
+    <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">1 గంటలో </item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> నిముషాలు</item>
+    </plurals>
+    <plurals name="abbrev_in_num_hours">
+        <item quantity="one">1 గంటలో </item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> గంటలు</item>
+    </plurals>
+    <plurals name="abbrev_in_num_days">
+        <item quantity="one">రేపు</item>
+        <item quantity="other">లో <xliff:g id="count">%d</xliff:g> రోజులు</item>
+    </plurals>
+    <string name="preposition_for_date">న <xliff:g id="date" example="May 29">%s</xliff:g></string>
+    <string name="preposition_for_time">వద్ద <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+    <string name="preposition_for_year">లో <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="day">రోజు</string>
+    <string name="days">రోజులు</string>
+    <string name="hour">గంట</string>
+    <string name="hours">గంట</string>
+    <string name="minute">నిమిషం</string>
+    <string name="minutes">నిమిషాలు</string>
+    <string name="second">సెకెండ్లు</string>
+    <string name="seconds">సెకెండ్లు</string>
+    <string name="week">వారం</string>
+    <string name="weeks">వారాలు</string>
+    <string name="year">సంవత్సరము</string>
+    <string name="years">సంవత్సరాలు</string>
+    <string name="VideoView_error_title">వీడియో ప్లే కాదు</string>
+    <string name="VideoView_error_text_invalid_progressive_playback">క్షమించాలి, ఈ వీడియో ఈ సాధనాన్ని స్ట్రీమింగ్ కోసం చెల్లుబాటులో లేదు.</string>
+    <string name="VideoView_error_text_unknown">క్షమించాలి, ఈ వీడియో చూపడం సాధ్యం కాదు.</string>
+    <string name="VideoView_error_button">సరి</string>
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="noon">మధ్యాహ్నం</string>
+    <string name="Noon">మధ్యాహ్నం</string>
+    <string name="midnight">"అర్థ రాత్రి"</string>
+    <string name="Midnight">"అర్థ రాత్రి"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="selectAll">అన్నీ ఎంపిక చేయండి</string>
+    <string name="cut">కట్ చేయి</string>
+    <string name="copy">కాపీ</string>
+    <string name="paste">పేస్ట్ </string>
+    <string name="replace">ను పునఃస్థాపించుము\u2026</string>
+    <string name="delete">తొలగించాలా</string>
+    <string name="copyUrl">URLకి కాపీ చెయ్యి</string>
+    <string name="selectTextMode">టెక్స్ట్ ఎంచుకోండి</string>
+    <string name="textSelectionCABTitle">వచన ఎంపిక</string>
+    <string name="addToDictionary">శబ్ద కోశాన్ని జోడించు</string>
+    <string name="deleteText">తొలగించాలా</string>
+    <string name="inputMethod">ఇన్ పుట్  పద్ధతి </string>
+    <string name="editTextMenuTitle">టెక్స్ట్ చర్యలు</string>
+    <string name="low_internal_storage_view_title">తక్కువ స్పేస్</string>
+    <string name="ok">సరి</string>
+    <string name="cancel">రద్దు</string>
+    <string name="yes">సరి</string>
+    <string name="no">రద్దు</string>
+    <string name="dialog_alert_title">జాగ్రత్త</string>
+    <string name="loading">లోడింగ్</string>
+    <string name="capital_on">ఆన్</string>
+    <string name="capital_off">ఆపు</string>
+    <string name="whichApplication">ఉపయోగించి పూర్తి చర్య</string>
+    <string name="alwaysUse">ఈ చర్య కోసం సిద్ధంగా ఉపయోగించండి.</string>
+    <string name="clearDefaultHintMsg">డిఫాల్ట్ హోం సెట్టింగులను క్లియర్ చెయ్యి &gt;అప్లికేషన్లు &gt; అప్లికేషన్లను నిర్వహించు.</string>
+    <string name="chooseActivity">ఒక చర్య ఎంచుకోండి</string>
+    <string name="chooseUsbActivity">USB సాధనం కోసం ఒక అప్లికేషన్ ఎంచుకోండి</string>
+    <string name="noApplications">ఏవిధమైన అప్లికేషను దీనిమీద చర్య తీసుకోలేదు. </string>
+    <string name="aerr_application">దురదృష్టవశాత్తుy, <xliff:g id="application">%1$s</xliff:g> ఆపివేయబడింది</string>
+    <string name="aerr_process">దురదృష్టవశాత్తు<xliff:g id="process">%1$s</xliff:g> ఆపివేయబడింది.</string>
+    <string name="anr_activity_application"><xliff:g id="application">%2$s</xliff:g> స్పందించడం లేదు. \n\nమీరు మూసివేయాలనుకుంటున్నారా?</string>
+    <string name="anr_activity_process">కార్యకలాపం <xliff:g id="activity">%1$s</xliff:g> స్పందించడం లేదు.\n\n దాన్ని మీరు క్లోజ్ చేయాలని అనుకుంటున్నారా?</string>
+    <string name="anr_application_process"><xliff:g id="application">%1$s</xliff:g> స్పందించడం లేదు.మీరు మూసివేయాలనుకుంటున్నారా?</string>
+    <string name="anr_process">ప్రాసెస్ <xliff:g id="process">%1$s</xliff:g> స్పందించడం లేదు.\n\nమీరు మూసివేయాలనుకుంటున్నారా?</string>
+    <string name="force_close">సరి</string>
+    <string name="report">నివేదిక</string>
+    <string name="wait">ఎదురు చూడు</string>
+    <string name="launch_warning_title">అప్లికేషన్ మళ్లించబడింది </string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> ఇప్పుడు రన్ అవుతోంది.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> మొదట్లో ప్రారంభించబడింది. </string>
+    <string name="screen_compat_mode_scale">స్కేల్</string>
+    <string name="screen_compat_mode_show">ఎల్లప్పుడూ చూపించు</string>
+    <string name="screen_compat_mode_hint">ఈ సెట్టింగులు &gt; అనువర్తనాలు &gt; నిర్వహించండి అనువర్తనాలతో తిరిగి ప్రారంభించండి.</string>
+    <string name="smv_application">అప్లికేషన్ ని <xliff:g id="application">%1$s</xliff:g>
+         (ప్రక్రియ <xliff:g id="process">%2$s</xliff:g>) దాని స్వీయ అమలు కఠినమైన మోడ్ విధానం అతిక్రమించారు ఉంది .</string>
+    <string name="smv_process">ప్రక్రియ<xliff:g id="process">%1$s</xliff:g>ఉంది దాని స్వీయ అమలు స్ట్రిక్ట్ మోడ్ విధానం అతిక్రమించారు ఉంది. </string>
+    <string name="android_upgrading_title">Android అప్ డేట్ అవుతోంది ...</string>
+    <string name="android_upgrading_apk">అప్లికేషన్ ఉచ్ఛనీయత 
+<xliff:g id="number" example="123">%1$d</xliff:g> యొక్క
+<xliff:g id="number" example="123">%2$d</xliff:g>.</string>
+    <string name="android_upgrading_starting_apps">ప్రారంభ అప్లికేషన్లు.</string>
+    <string name="android_upgrading_complete">బూట్ ముగుస్తుంది.</string>
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> రన్నింగ్</string>
+    <string name="heavy_weight_notification_detail">అప్లికేషన్ మారాలని ఎంచుకోండి</string>
+    <string name="heavy_weight_switcher_title">అప్లికేషన్లు మారండి?</string>
+    <string name="heavy_weight_switcher_text">మరొక అప్లికేషన్ మొదలు పెట్టాలంటే ఇప్పటికే రన్ అవుతున్న అప్లికేషన్ ముందు ఆ నిలిపివేయబడుతుంది. </string>
+    <string name="old_app_action"><xliff:g id="old_app">%1$s</xliff:g> తిరిగి</string>
+    <string name="old_app_description">కొత్త అప్లికేషన్ ప్రారంభించవద్దు.</string>
+    <string name="new_app_action">ప్రారంభించండి <xliff:g id="old_app">%1$s</xliff:g> </string>
+    <string name="new_app_description">సేవ్ చేయకుండా పాత అప్లికేషన్ ఆపు.</string>
+    <string name="sendText">టెక్స్ట్ కోసం ఒక చర్య ఎంచుకోండి</string>
+    <string name="volume_ringtone">రింగర్ వాల్యూమ్</string>
+    <string name="volume_music">మీడియా వాల్యూమ్</string>
+    <string name="volume_music_hint_playing_through_bluetooth">బ్లూటూత్ ద్వారా సంగీతాన్ని వినవచ్చు  </string>
+    <string name="volume_music_hint_silent_ringtone_selected">సైలెంట్ రింగ్ టోన్ ఎంపిక</string>
+    <string name="volume_call">కాల్ సౌండు లో  </string>
+    <string name="volume_bluetooth_call">బ్లూటూత్ వచ్చే కాల్ వాల్యూమ్</string>
+    <string name="volume_alarm">అలారం వాల్యూమ్</string>
+    <string name="volume_notification">నోటిఫికేషన్ వాల్యుం  </string>
+    <string name="volume_unknown">పరిమాణము</string>
+    <string name="volume_icon_description_bluetooth">Bluetooth వాల్యూమ్</string>
+    <string name="volume_icon_description_ringer">రింగ్టోన్ వాల్యూమ్</string>
+    <string name="volume_icon_description_incall">కాల్ వాల్యూమ్ </string>
+    <string name="volume_icon_description_media">మీడియా వాల్యూమ్</string>
+    <string name="volume_icon_description_notification">నోటిఫికేషన్ వాల్యుం  </string>
+    <string name="ringtone_default">డిఫాల్ట్ రింగ్ టోన్</string>
+    <string name="ringtone_default_with_actual">డిఫాల్ట్ రింగ్ టోన్ (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
+    <string name="ringtone_silent">సైలెంట్</string>
+    <string name="ringtone_picker_title">రింగ్ టోన్లు</string>
+    <string name="ringtone_unknown">తెలియని రింగ్ టోన్</string>
+    <plurals name="wifi_available">
+        <item quantity="one">అందుబాటులో Wi-Fi నెట్ వర్క్</item>
+        <item quantity="other">అందుబాటులో Wi-Fi నెట్వర్క్లు </item>
+    </plurals>
+    <plurals name="wifi_available_detailed">
+        <item quantity="one">Wi-Fi  నెట్ వర్క్ సౌలభ్యాన్ని ఓపెన్ చేయండి </item>
+        <item quantity="other">Wi-Fi  నెట్ వర్క్ సౌలభ్యాన్ని ఓపెన్ చేయండి </item>
+    </plurals>
+    <string name="wifi_available_sign_in">WLAN నెట్వర్క్ సైన్ ఇన్ చేయి</string>
+    <string name="wifi_watchdog_network_disabled">WLAN కనెక్ట్ చేయలేం</string>
+    <string name="wifi_watchdog_network_disabled_detailed">\u0020 పేలవమైన ఇంటర్నెట్ కనెక్షన్.</string>
+    <string name="wifi_p2p_dialog_title">WLAN ప్రత్యక్ష</string>
+    <string name="wifi_p2p_turnon_message">WLAN డైరెక్ట్ ఆపరేషన్ ప్రారంభించండి.ఇది WLAN క్లయింట్ / హాట్ షాట్ ఆపరేషన్ ఆఫ్ చేస్తుంది.</string>
+    <string name="wifi_p2p_failed_message">WLAN డైరెక్ట్ ప్రారంభించలేం</string>
+    <string name="wifi_p2p_enabled_notification_title">WLAN డైరెక్ట్ ఉంది</string>
+    <string name="wifi_p2p_enabled_notification_message">సెట్టింగుల కోసం టచ్</string>
+    <string name="select_character">కేరెక్టర్స్ ని ఇన్సెర్ట్ చేయండి </string>
+    <string name="sms_control_title">SMS సందేశాలు పంపబడుతున్నాయి</string>
+    <string name="sms_control_message">పెద్ద సంఖ్యలో SMS సందేశాలు  పంపబడుతున్నాయి. కొనసాగించటానికి, \"ఓకే\",లేదా  పంపడం ఆపడానికి \"కేన్సిల్\" ఎంచుకోండి.</string>
+    <string name="sms_control_yes">సరి</string>
+    <string name="sms_control_no">రద్దు</string>
+    <string name="sim_removed_title">SIM కార్డు తొలగించబడింది</string>
+    <string name="sim_removed_message">చెల్లుబాటు అయ్యేSIM  కార్డు జొప్పించి తిరిగి ప్రారంభించే వరకు మీ మొబైల్ నెట్ వర్క్ లభ్యంగా ఉండదు.</string>
+    <string name="sim_done_button">జరిగినది</string>
+    <string name="sim_added_title">SIM కార్డు జోడించారు</string>
+    <string name="sim_added_message">మొబైల్ నెట్వర్క్ యాక్సెస్ చెయ్యడానికి మీ పరికరాన్ని పునఃప్రారంభించాలి.</string>
+    <string name="sim_restart_button">పునఃప్రారంభించు</string>
+    <string name="time_picker_dialog_title">సమయమును సెట్ చేయుము</string>
+    <string name="date_picker_dialog_title">తేదీని సెట్ చేయి</string>
+    <string name="date_time_set">సెట్ చేయి</string>
+    <string name="no_permissions">అవసరమైన అనుమతి లేదు </string>
+    <string name="usb_storage_activity_title">USB మాస్ స్టోరేజి</string>
+    <string name="usb_storage_title">USB అనుసంధానింపబడింది</string>
+    <string product="nosdcard" name="usb_storage_message">మీరు USB ద్వారా మీ కంప్యూటర్ కు కనెక్ట్ చేశారు.మీరు మీ కంప్యూటర్ మరియు మీ Android\u2018s USB నిల్వ మధ్య ఫైళ్ళను కాపీ చేయడం కోసం క్రింది బటన్ నొక్కండి.</string>
+    <string product="default" name="usb_storage_message">మీరు USB ద్వారా మీ కంప్యూటర్ కు కనెక్ట్ చేశారు.మీరు మీ కంప్యూటర్ మరియు మీ Android\u2018s SD కార్డ్ మధ్య ఫైళ్ళను కాపీ చేయడం కోసం క్రింది బటన్ నొక్కండి.</string>
+    <string name="usb_storage_button_mount">USB నిల్వ ఆన్ చెయ్యి</string>
+    <string product="nosdcard" name="usb_storage_error_message">USB మాస్  స్టోరేజ్ కోసం మీ USB నిల్వ ఉపయోగించి ఒక సమస్య ఉంది.</string>
+    <string product="default" name="usb_storage_error_message">USB మాస్  స్టోరేజ్ కోసం మీ SD కార్డు ఉపయోగించి ఒక సమస్య ఉంది.</string>
+    <string name="usb_storage_notification_title">USB అనుసంధానింపబడింది</string>
+    <string name="usb_storage_notification_message">ఫైళ్లకు/మీ కంప్యూటర్ నుండి కాపీ ఎంచుకోండి.</string>
+    <string name="usb_storage_stop_notification_title">USB స్టోరేజి</string>
+    <string name="usb_storage_stop_notification_message">USB డీబగ్గింగ్ డిసేబుల్ ఎంచుకోండి.</string>
+    <string name="usb_storage_stop_title">వాడుకలో USB నిల్వ</string>
+    <string product="nosdcard" name="usb_storage_stop_message">యుఎస్ బి నిల్వ ఆఫ్ చెయ్యడానికి ముందు, మీరు మీ కంప్యూటర్ నుండి మీ ఆండ్రాయిడ్ ఎస్ డి కార్డు అన్ మౌంట్ అయేటట్టు జాగ్రత్త తీసుకోండి.(\u201c తెరుచుకుంది \u201d) </string>
+    <string product="default" name="usb_storage_stop_message">యుఎస్ బి నిల్వ ఆఫ్ చెయ్యడానికి ముందు, మీరు మీ కంప్యూటర్ నుండి మీ ఆండ్రాయిడ్ ఎస్ డి కార్డు అన్ మౌంట్ అయేటట్టు జాగ్రత్త తీసుకోండి.(\u201c తెరుచుకుంది \u201d) </string>
+    <string name="usb_storage_stop_button_mount">USB నిల్వ ఆఫ్ చెయ్యి</string>
+    <string name="usb_storage_stop_error_message">USB నిల్వ ఆఫ్ చెయ్యడానికి ఒక సమస్యగా ఉండేది. మీరు USB హోస్ట్ మౌంట్ చేయబడలేదు. జాగ్రత్త తీసుకోండి. ఆపై మళ్ళీ ప్రయత్నించండి.</string>
+    <string name="dlg_confirm_kill_storage_users_title">USB నిల్వ ఆన్ చెయ్యి</string>
+    <string name="dlg_confirm_kill_storage_users_text">మీరు USB నిల్వ ఆన్ ఉంటే, మీరు ఉపయోగిస్తున్న కొన్ని అప్లికేషన్లు ఆపడానికి మరియు మీరు USB నిల్వ ఆఫ్ వరకు అందుబాటులో ఉండకపోవచ్చు.</string>
+    <string name="dlg_error_title">విజయవంతం USB ఆపరేషన్</string>
+    <string name="dlg_ok">సరి</string>
+    <string name="usb_mtp_notification_title">మీడియా పరికరం గా కనెక్ట్ చేయబడింది</string>
+    <string name="usb_ptp_notification_title">కెమెరాలా కనెక్ట్ చేయబడింది</string>
+    <string name="usb_cd_installer_notification_title">ఒక సంస్థాపకి గా కనెక్ట్ చేయబడింది</string>
+    <string name="usb_accessory_notification_title">ఒక USB అనుబంధానికి జోడించబడింది</string>
+    <string name="usb_notification_message">ఇతర USB ఎంపికల కోసం టచ్</string>
+    <string product="nosdcard" name="extmedia_format_title">ఫార్మాట్ యుఎస్ బి నిల్వ</string>
+    <string product="default" name="extmedia_format_title">ఫార్మాట్ ఎస్ డి కార్డు</string>
+    <string product="nosdcard" name="extmedia_format_message">ఫార్మాట్ యుఎస్ బి నిల్వ, అక్కడ నిల్వ ఉన్న అన్ని ఫైళ్ళు చెరిపివేయాలా? యాక్షన్ తిరిగి చెయ్యబడదు!</string>
+    <string product="default" name="extmedia_format_message">మీరుSD కార్డుని ఫార్మాట్ చేయాలనుకుంటున్నారా? మీ కార్డులో ఉన్న డేటా అంతా పోతుంది.</string>
+    <string name="extmedia_format_button_format">ఫార్మాట్</string>
+    <string name="adb_active_notification_title">USB డీబగ్గింగ్ అనుసంధానింపబడింది</string>
+    <string name="adb_active_notification_message">USB డీబగ్గింగ్ డిసేబుల్ ని ఎంచుకోండి.</string>
+    <string name="select_input_method">ఇన్ పుట్ పద్ధతిని ఎంచుకోండి</string>
+    <string name="configure_input_methods">ఇన్పుట్ విధానాల ఆకృతీకరించుము</string>
+    <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="candidates_style"><u> అభ్యర్థులు </u></string>
+    <string product="nosdcard" name="ext_media_checking_notification_title">USB నిల్వ  సిద్ధమౌతోంది</string>
+    <string product="default" name="ext_media_checking_notification_title">SD కార్డు సిద్ధమౌతోంది</string>
+    <string name="ext_media_checking_notification_message">లోపాల కోసం తనిఖీ చేస్తోంది.</string>
+    <string product="nosdcard" name="ext_media_nofs_notification_title">ఖాళీ USB స్టోరేజి</string>
+    <string product="default" name="ext_media_nofs_notification_title">ఖాళీ SD కార్డు</string>
+    <string product="nosdcard" name="ext_media_nofs_notification_message">USB నిల్వ ఖాళీ లేదా మద్దతు ఫైల్సిస్టమ్ కలిగి ఉంది.</string>
+    <string product="default" name="ext_media_nofs_notification_message">SD కార్డు ఖాళీ లేదా మద్దతు ఫైల్సిస్టమ్ కలిగి ఉంది.</string>
+    <string product="nosdcard" name="ext_media_unmountable_notification_title">పాడైపోయిన USB  నిల్వ</string>
+    <string product="default" name="ext_media_unmountable_notification_title">దెబ్బతిన్న SD కార్డు</string>
+    <string product="nosdcard" name="ext_media_unmountable_notification_message">USB నిల్వ దెబ్బతిన్నాయి.  అది రీఫార్మెట్ అవుంతుంది.</string>
+    <string product="default" name="ext_media_unmountable_notification_message">SD కార్డు దెబ్బతిన్నాయి. మీరు అది రీఫార్మెట్ వుంటుంది.</string>
+    <string product="nosdcard" name="ext_media_badremoval_notification_title">USB నిల్వ అనుకోకుండా తొలగించబడింది</string>
+    <string product="default" name="ext_media_badremoval_notification_title">అనుకోకుండా తొలగించబడింది SD కార్డు</string>
+    <string product="nosdcard" name="ext_media_badremoval_notification_message">డేటా నష్టం నివారించేందుకు తొలగించే ముందు తెరవండి USB నిల్వ.</string>
+    <string product="default" name="ext_media_badremoval_notification_message">డేటా నష్టం నివారించేందుకు తొలగించే ముందు తెరవండి SD కార్డు.</string>
+    <string product="nosdcard" name="ext_media_safe_unmount_notification_title">USB నిల్వని సురక్షితంగా తొలగించండి </string>
+    <string product="default" name="ext_media_safe_unmount_notification_title">సురక్షిత SD కార్డు తొలగించడానికి</string>
+    <string product="nosdcard" name="ext_media_safe_unmount_notification_message">మీరు సురక్షితంగా USB నిల్వ తొలగించవచ్చు.</string>
+    <string product="default" name="ext_media_safe_unmount_notification_message">మీరు సురక్షితంగా SD కార్డు తొలగించవచ్చు.</string>
+    <string product="nosdcard" name="ext_media_nomedia_notification_title">తొలగించబడిన USB నిల్వ</string>
+    <string product="default" name="ext_media_nomedia_notification_title">తొలగించబడిన SD కార్డు</string>
+    <string product="nosdcard" name="ext_media_nomedia_notification_message">USB నిల్వ తొలగించింది. కొత్త మీడియా ఇన్సర్ట్ చెయ్యి.</string>
+    <string product="default" name="ext_media_nomedia_notification_message">SD కార్డు తొలగించింది. ఒక కొత్త ఇన్సర్ట్ చెయ్యి.</string>
+    <string name="activity_list_empty">సరిపోలే కార్యకలాపాలు దొరకలేదు</string>
+    <string name="permlab_pkgUsageStats">పరికరాల ఉపయోగ గణాంకాలను నవీకరించండి</string>
+    <string name="permdesc_pkgUsageStats">సేకరించిన భాగం ఉపయోగ గణాంకాల సవరణకు అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం కాదు.</string>
+    <string name="permlab_copyProtectedData">కాపీ కంటెంట్ చేయడానికి డిఫాల్ల్ కంటైనర్ సేవ అర్థించడానికి అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం కాదు.</string>
+    <string name="permdesc_copyProtectedData">కాపీ కంటెంట్ చేయడానికి డిఫాల్ల్ కంటైనర్ సేవ అర్థించడానికి అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం కాదు.</string>
+    <string name="tutorial_double_tap_to_zoom_message_short">జూమ్ నియంత్రణ కోసం రెండుసార్లు టాప్ చెయ్యి</string>
+    <string name="gadget_host_error_inflating">విడ్జెట్ ఇన్ ఫ్లేటింగ్ లోపం</string>
+    <string name="ime_action_go">వెళ్ళు</string>
+    <string name="ime_action_search">వెతుకు</string>
+    <string name="ime_action_send">పంపుము</string>
+    <string name="ime_action_next">తదుపరి</string>
+    <string name="ime_action_done">జరిగినది</string>
+    <string name="ime_action_previous">ముందు జరిగిన</string>
+    <string name="ime_action_default">పర్యవేక్షణ</string>
+    <string name="dial_number_using">నెంబర్ డయల్ చెయ్యి\nఉపయోగిస్తూ <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="create_contact_using">కాంటాక్ట్ క్రియేట్ చెయ్యి\nఉపయోగిస్తూ <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="grant_credentials_permission_message_header">కింది ఒకటి లేదా ఎక్కువ అప్లికేషన్లు ఇప్పుడు మరియు భవిష్యత్తులో, మీ ఖాతాను యాక్సెస్ అనుమతి అభ్యర్థించవచ్చు.</string>
+    <string name="grant_credentials_permission_message_footer">మీరు ఈ అభ్యర్థనను అనుమతించాలనుకుంటున్నారా?</string>
+    <string name="grant_permissions_header_text">యాక్సెస్ వినతి</string>
+    <string name="allow">అనుమతించు</string>
+    <string name="deny">నిరాకరించు</string>
+    <string name="permission_request_notification_title">అనుమతి కోసం అభ్యర్ధించడమైనది </string>
+    <string name="permission_request_notification_with_subtitle">అనుమతి \n ఖాతా అభ్యర్థన <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="input_method_binding_label">ఇన్ పుట్  పద్ధతి </string>
+    <string name="sync_binding_label">సమకాలీకరించు</string>
+    <string name="accessibility_binding_label">అందుబాటు</string>
+    <string name="wallpaper_binding_label">వాల్పేపర్</string>
+    <string name="chooser_wallpaper">వాల్ పేపరును మార్చడం</string>
+    <string name="vpn_title">VPN సక్రియం.</string>
+    <string name="vpn_title_long"><xliff:g id="app" example="FooVPN client">%s</xliff:g> ద్వారా VPN యాక్టివేట్ అయినది</string>
+    <string name="vpn_text">నెట్వర్క్ నిర్వహించడానికి నొక్కండి.</string>
+    <string name="vpn_text_long"><xliff:g id="session" example="office">%s</xliff:g>కు జతచేయబడింది.నెట్వర్క్ నిర్వహించడానికి నొక్కండి.</string>
+    <string name="upload_file">ఫైల్ ఎంచుకోండి</string>
+    <string name="no_file_chosen">ఏ ఫైలు ఎంచుకోలేదు</string>
+    <string name="reset">రీసెట్  </string>
+    <string name="submit">సమర్పించండి</string>
+    <string name="car_mode_disable_notification_title">కార్ మోడ్ ప్రారంభించబడింది</string>
+    <string name="car_mode_disable_notification_message">నిష్క్రమించడానికి కార్ మోడ్ ఎంచుకోండి.</string>
+    <string name="tethered_notification_title">జోడించడం లేదా హాట్ స్పాట్ క్రియాశీలకం</string>
+    <string name="tethered_notification_message">ఆకృతీకరించుటకు టచ్ చేయండి </string>
+    <string name="back_button_label">వెనుకకు</string>
+    <string name="next_button_label">తదుపరి</string>
+    <string name="skip_button_label">దాటవేయి</string>
+    <string name="throttle_warning_notification_title">హై మొబైల్ డేటా ఉపయోగించండి</string>
+    <string name="throttle_warning_notification_message">మొబైల్ డేటాని ఉపయోగించడం గురించి మరింత తెలుసుకోవడానికి టచ్ చేయండి</string>
+    <string name="throttled_notification_title">మొబైల్ డేటా పరిమితి మించిపోయింది         </string>
+    <string name="throttled_notification_message">మొబైల్ డేటాని ఉపయోగించడం గురించి మరింత తెలుసుకోవడానికి టచ్ చేయండి</string>
+    <string name="no_matches">No matches</string>
+    <string name="find_on_page">పేజీలో కనుగొను</string>
+    <plurals name="matches_found">
+        <!-- Case of one match -->
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
+        <!-- <item quantity="one">1 match</item> -->
+        <item quantity="one">1 మ్యాచ్</item>
+        <!-- Case of multiple total matches -->
+        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
+        <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> యొక్క <xliff:g id="total" example="137">%d</xliff:g></item>
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
+        </plurals>
+    <string name="action_mode_done">జరిగినది</string>
+    <string product="nosdcard" name="progress_unmounting">USB నిల్వ ఉన్మౌన్టింగ్ ...</string>
+    <string product="default" name="progress_unmounting">SD కార్డు ఉన్మౌన్టింగ్ ...</string>
+    <string product="nosdcard" name="progress_erasing">యుఎస్ బి నిల్వ చెరిపివేత ...</string>
+    <string product="default" name="progress_erasing">ఎస్ డి కార్డు చెరిపివేత ...</string>
+    <string product="nosdcard" name="format_error">USB నిల్వ చెరిపివేయలేం.</string>
+    <string product="default" name="format_error">SD కార్డు చెరిపివేయలేం.</string>
+    <string name="media_bad_removal">"SD కార్డు మౌంట్ కాకముందు తొలగించబడింది."</string>
+    <string product="nosdcard" name="media_checking">USB నిల్వ ప్రస్తుతం తనిఖీ చేస్తున్నారు.</string>
+    <string product="default" name="media_checking">SD కార్డు ప్రస్తుతం తనిఖీ చేస్తున్నారు.</string>
+    <string name="media_removed">"SD కార్డు తొలగించబడింది."</string>
+    <string product="nosdcard" name="media_shared">ఒక కంప్యూటర్లో  USB నిల్వ ప్రస్తుతం ఉపయోగంలో ఉంది.</string>
+    <string product="default" name="media_shared">SD కార్డు ఒక కంప్యూటర్ ప్రస్తుతం ఉపయోగంలో ఉంది.</string>
+    <string name="media_unknown_state">"బాహ్య మీడియా తెలియని స్థితి."</string>
+    <string name="share">పంచు</string>
+    <string name="find">కనుగొను</string>
+    <string name="websearch">వెబ్ శోధన</string>
+    <string name="gpsNotifTicker"><xliff:g id="name">%s</xliff:g> నుండి పేరు అభ్యర్థన</string>
+    <string name="gpsNotifTitle">నగర అభ్యర్థన</string>
+    <string name="gpsNotifMessage">ద్వారా అభ్యర్థించబడింది <xliff:g id="name">%1$s</xliff:g> (<xliff:g id="service" example="SUPL-service">%2$s</xliff:g>)</string>
+    <string name="gpsVerifYes">అవును</string>
+    <string name="gpsVerifNo">కాదు</string>
+    <string name="sync_too_many_deletes">పరిమితి మించిపోయింది తొలగించు</string>
+    <string name="sync_too_many_deletes_desc">ఇక్కడ ఉన్నాయి<xliff:g id="number_of_deleted_items">%1$d</xliff:g> కొరకు తొలగించబడిన అంశాలు<xliff:g id="type_of_sync">%2$s</xliff:g>, ఖాతా <xliff:g id="account_name">%3$s</xliff:g>. మీరు ఏమి చేయాలని అనుకుంటున్నారు?</string>
+    <string name="sync_really_delete">అంశాలను తొలగించండి.</string>
+    <string name="sync_undo_deletes">తొలగింపులను చేయకు.</string>
+    <string name="sync_do_nothing">ఇప్పుడు  ఏమి చెయ్యవద్దు.</string>
+    <string name="choose_account_label">ఒక ఖాతాను ఎంచుకోండి</string>
+    <string name="add_account_label">ఒక ఖాతాను జోడించు</string>
+    <string name="add_account_button_label">ఖాతా జోడించండి</string>
+    <string name="number_picker_increment_button">పెంపు</string>
+    <string name="number_picker_decrement_button">తరుగుదల</string>
+    <string name="number_picker_increment_scroll_mode"><xliff:g id="value" example="3">%s</xliff:g> తాకండి మరియు పట్టుకోండి.</string>
+    <string name="number_picker_increment_scroll_action">తరుగుదల క్రిందికి  మరియు పైకి పెంచడం కొరకు స్లయిడ్ చేయి.</string>
+    <string name="time_picker_increment_minute_button">పెంపు నిమిషం</string>
+    <string name="time_picker_decrement_minute_button">తరుగుదల నిమిషం</string>
+    <string name="time_picker_increment_hour_button">పెంపు గంట</string>
+    <string name="time_picker_decrement_hour_button">తరుగుదల గంట</string>
+    <string name="time_picker_increment_set_pm_button">PM సెట్ చేయి</string>
+    <string name="time_picker_decrement_set_am_button">AM  సెట్ చేయి</string>
+    <string name="date_picker_increment_month_button">పెంపు నెల</string>
+    <string name="date_picker_decrement_month_button">తరుగుదల నెల</string>
+    <string name="date_picker_increment_day_button">పెంపు రోజు</string>
+    <string name="date_picker_decrement_day_button">తరుగుదల రోజు</string>
+    <string name="date_picker_increment_year_button">పెంపు సంవత్సరం</string>
+    <string name="date_picker_decrement_year_button">తరుగుదల సంవత్సరం</string>
+    <string name="keyboardview_keycode_alt">ALT</string>
+    <string name="keyboardview_keycode_cancel">రద్దు</string>
+    <string name="keyboardview_keycode_delete">తొలగించాలా</string>
+    <string name="keyboardview_keycode_done">జరిగినది</string>
+    <string name="keyboardview_keycode_mode_change">మోడ్ మార్పు</string>
+    <string name="keyboardview_keycode_shift">షిఫ్ట్  </string>
+    <string name="keyboardview_keycode_enter">ఎంటర్ చేయండి</string>
+    <string name="activitychooserview_choose_application">ఒక అనువర్తనం ఎంచుకోండి</string>
+    <string name="shareactionprovider_share_with">తో భాగస్వామ్యం</string>
+    <string name="shareactionprovider_share_with_application"><xliff:g id="application_name" example="Bluetooth">%s</xliff:g>తో పంచుకోండి</string>
+    <string name="content_description_sliding_handle">"హ్యాండిల్ స్లైడింగ్.నొక్కండి మరియు ఉంచండి. "</string>
+    <string name="description_direction_up">కొరకు <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
+    <string name="description_direction_down">కొరకు డౌన్లోడ్ <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
+    <string name="description_direction_left">కొరకు విడిచి పెట్టబడింది <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
+    <string name="description_direction_right">కొరకు సరైనది <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
+    <string name="description_target_unlock">అన్లాక్</string>
+    <string name="description_target_camera">కెమేరా</string>
+    <string name="description_target_silent">సైలెంట్</string>
+    <string name="description_target_soundon">సౌండ్ ఆన్  మీద  </string>
+    <string name="description_target_unlock_tablet">అన్లాక్ కు మార్చు.</string>
+    <string name="keyboard_headset_required_to_hear_password">పెద్దగా మాట్లాడే పాస్వర్డ్  కీలు వినడానికి ఒక హెడ్సెట్ ను  ప్లగ్ లో పెట్టండి.</string>
+    <string name="keyboard_password_character_no_headset">దశాంశ బిందువు</string>
+    <string name="action_bar_home_description">హోం నావిగేట్</string>
+    <string name="action_bar_up_description">పైకి నావిగేట్ చేయి</string>
+    <string name="action_menu_overflow_description">మరిన్ని ఆప్షన్లు</string>
+    <string name="storage_internal">అంతర్గత ఫోన్ నిల్వ</string>
+    <string name="storage_sd_card">SD కార్డు</string>
+    <string name="storage_usb">USB స్టోరేజి</string>
+    <string name="extract_edit_menu_button">ఎడిట్</string>
+    <string name="data_usage_warning_title">డేటా వినియోగం హెచ్చరిక</string>
+    <string name="data_usage_warning_body">వాడుక మరియు సెట్టింగ్లను వీక్షించడానికి టచ్</string>
+    <string name="data_usage_3g_limit_title">2G-3G డేటా డిసేబుల్ చేయబడింది.</string>
+    <string name="data_usage_4g_limit_title">4G డేటా డిసేబుల్ చేయబడింది.</string>
+    <string name="data_usage_mobile_limit_title">మొబైల్ డేటా డిసేబుల్</string>
+    <string name="data_usage_wifi_limit_title">WLAN డేటా డిసేబుల్</string>
+    <string name="data_usage_limit_body">ప్రారంభించడానికి టచ్</string>
+    <string name="data_usage_3g_limit_snoozed_title">2G-3G డేటా పరిమితి మించిపోయింది</string>
+    <string name="data_usage_4g_limit_snoozed_title">4G డేటా పరిమితి మించిపోయింది</string>
+    <string name="data_usage_mobile_limit_snoozed_title">మొబైల్ డేటా పరిమితి మించిపోయింది         </string>
+    <string name="data_usage_wifi_limit_snoozed_title">WLAN డేటా పరిమితి మించిపోయింది</string>
+    <string name="data_usage_limit_snoozed_body"><xliff:g id="size" example="3.8GB">%s</xliff:g> నిర్ధిష్ట పరిమితిపైన</string>
+    <string name="data_usage_restricted_title">బ్యాక్ గ్రౌండ్ డేటా పరిమితం చేయబడింది.</string>
+    <string name="data_usage_restricted_body">పరిమితి తొలగించడానికి టచ్</string>
+    <string name="ssl_certificate">సెక్యూరిటీ సర్టిఫికెట్</string>
+    <string name="ssl_certificate_is_valid">ఈ సర్టిఫికేట్  చెల్లుబాటులో ఉంది.</string>
+    <string name="issued_to">కు జారీ చేయబడినది: </string>
+    <string name="common_name">సాధారణ పేరు:</string>
+    <string name="org_name">సంస్థ </string>
+    <string name="org_unit">సంస్థ యూనిట్: </string>
+    <string name="issued_by">జారీ చేయబడినది: </string>
+    <string name="validity_period">చెల్లుబడి:</string>
+    <string name="issued_on">తేదీన జారీ చేయబడినది: </string>
+    <string name="expires_on">న కాల పరిమితి చెల్లినది :</string>
+    <string name="serial_number">క్రమ సంఖ్య</string>
+    <string name="fingerprints">వేలిముద్రలు:</string>
+    <string name="sha256_fingerprint">SHA-256 వేలిముద్ర:</string>
+    <string name="sha1_fingerprint">SHA-1 వేలిముద్ర:</string>
+    <string name="activity_chooser_view_see_all">అన్ని చూడండి ...</string>
+    <string name="activity_chooser_view_dialog_title_default">ఒక చర్యను ఎంచుకోండి</string>
+    <string name="share_action_provider_share_with">తో భాగస్వామ్యం</string>
+    <string name="status_bar_device_locked">పరికరం లాక్ చేయబడింది.</string>
+    <string name="list_delimeter">", "</string>
+    <string name="sending">పంపుచున్నది...</string>
+    <string name="launchBrowserDefault">బ్రౌజర్ ప్రారంభం?</string>
+    <string name="SetupCallDefault">కాల్ అంగీకరించాలా?</string>
+    <string name="imei">IMEI</string>
+    <string name="reboot_safemode_confirm">ఈ అప్లికేషన్ ని మీరు ఇన్స్టాల్ చేయదలిచారా?
+           అది ఎలాంటి ప్రత్యేక యాక్సిస్ కోరుకోదు.</string>
+    <string name="permdesc_getDetailedTasks">ఇప్పుడు జరుగుతున్న, ఇటీవల జరిగిన కార్యకలాపాల గురించిన  పూర్తి వివరాలు తిరిగి తెప్పించడానికి అప్లికేషన్ ని అనుమతిస్తుంది.                                     హానికర అప్లికేషన్లు, ఇతర అప్లికేషన్ల గురించిన వ్యక్తిగత సమాచారాన్ని కనిపెట్టే అవకాశం ఉంది.</string>
+    <string name="permdesc_startAnyActivity"> అనుమతి భద్రత లేక ఎగుమతి చేయబడిన స్థితితో సంబంధం లేకుండా ఏ పని అయినా ప్రారంభించేందుకు అప్లికేషన్ ని అనుమతిస్తుంది.  </string>
+    <string name="permdesc_setScreenCompatibility">ఇతర అప్లికేషన్ల స్క్రీన్ కంపాటబిలిటీ పద్ధతిని నియంత్రించడానికి అప్లికేషన్ ని అనుమతిస్తుంది.  హానికర అప్లికేషన్లు  
+     ఇతర అప్లికేషన్ల ప్రవర్తనని విచ్ఛిన్నం చేస్తాయి.</string>
+    <string name="permlab_bindAccessibilityService">ఒక సౌలభ్యతా సేవకు కట్టుబడి ఉండు</string>
+    <string name="permdesc_bindAccessibilityService">ఒక విడ్జెట్ సేవ యొక్క ఇంటర్ఫేస్ కు హోల్డర్ ఉన్నత స్థాయి జతకూడి అనుమతిస్తుంది.సాధారణ అనువర్తనాల్లో అవసరమైన చేయకూడదు.</string>
+    <string name="permdesc_setKeyboardLayout">  కీబోర్డ్ లేఅవుట్ ని మార్చడానికి  అప్లికేషన్ ని అనుమతిస్తుంది.  సాధారణ అప్లికేషన్లకి ఎన్నడూ అవసరం పడదు.</string>
+    <string product="tablet" name="permdesc_persistentActivity">మెమరీ లో తనను తాను నిరంతరం భాగాలుగా చేసుకోవడానికి అప్లికేషన్ ని అనుమతిస్తుంది.  ఇది ఇతర అప్లికేషన్లకు అందుబాటులో ఉన్న మెమరీని పరిమితం చేస్తూ ఫోను ని నిదానంగా పనిచేసేలా చేయగలదు.</string>
+    <string product="default" name="permdesc_persistentActivity">మెమరీ లో తనను తాను నిరంతరం భాగాలుగా చేసుకోవడానికి అప్లికేషన్ ని అనుమతిస్తుంది.  ఇది ఇతర అప్లికేషన్లకు అందుబాటులో ఉన్న మెమరీని పరిమితం చేస్తూ ఫోను ని నిదానంగా పనిచేసేలా చేయగలదు.</string>
+    <string name="permdesc_grantRevokePermissions">ఒక అప్లికేషన్ ని సమకాలీకరణ గణాంకాలు చదవడానికి అనుమతిస్తుంది; ఉదా,  సంభవించిన సిమ్క్స్ చరిత్ర .</string>
+    <string product="tablet" name="permdesc_readCallLog">మీ టాబ్లెట్\ యొక్క కాల్ లాగ్, ఇన్ కమింగ్ మరియు అవుట్ గోయింగ్ కాల్స్ గురించిన డేటాతో సహా, చదవడానికి అప్లికేషన్ ని అనుమతిస్తుంది.   
+    ఈ అనుమతి అప్లికేషన్లను మీ కాల్ లాగ్ డేటాని సేవ్ చేయడానికి సమ్మతిస్తుంది, మరియు హానికర అప్లికేషన్లు మీ కాల్ లాగ్ డేటాని మీకు తెలియకుండానే పంచుకోవచ్చు.</string>
+    <string product="default" name="permdesc_readCallLog">మీ ఫోను\ యొక్క కాల్ లాగ్, ఇన్ కమింగ్ మరియు అవుట్ గోయింగ్ కాల్స్ గురించిన డేటాతో సహా, చదవడానికి అప్లికేషన్ ని అనుమతిస్తుంది.   
+    ఈ అనుమతి అప్లికేషన్లను మీ కాల్ లాగ్ డేటాని సేవ్ చేయడానికి సమ్మతిస్తుంది, మరియు హానికర అప్లికేషన్లు మీ కాల్ లాగ్ డేటాని మీకు తెలియకుండానే పంచుకోవచ్చు.</string>
+    <string product="tablet" name="permdesc_writeCallLog">మీ టాబ్లెట్\ యొక్క కాల్ లాగ్, ఇన్ కమింగ్ మరియు అవుట్ గోయింగ్ కాల్స్ గురించిన డేటాతో సహా సవరించడానికి అప్లికేషన్ ని అనుమతిస్తుంది.  
+       హానికరమైన అప్లికేషన్లు  మీ కాల్ లాగ్ ని తుడిచి వేయడానికీ లేదా సవరించడానికి దీన్ని ఉపయోగించవచ్చు.</string>
+    <string product="default" name="permdesc_writeCallLog">మీ ఫోను\ యొక్క కాల్ లాగ్, ఇన్ కమింగ్ మరియు అవుట్ గోయింగ్ కాల్స్ గురించిన డేటాతో సహా సవరించడానికి అప్లికేషన్ ని అనుమతిస్తుంది.  
+       హానికరమైన అప్లికేషన్లు  మీ కాల్ లాగ్ ని తుడిచి వేయడానికీ లేదా సవరించడానికి దీన్ని ఉపయోగించవచ్చు.</string>
+    <string product="tablet" name="permdesc_writeCalendar">మీరు మీ టాబ్లెట్ లోనూ, మీ స్నేహితులు లేదా మీతో పనిచేసే ఉద్యోగస్తుల టాబ్లెట్లతో సహా, సవరించదలచిన సంఘటనలను చేర్చడానికీ,  తొలగించడానికీ, మార్పు చేయడానికీ అప్లికేషన్ ని అనుమతిస్తుంది.  ఇది క్యాలెండర్ యజమానుల నుండి వచ్చేలా కనిపిస్తున్న సందేశాలను పంపడానికీ లేదా  యజమానులకు తెలియకుండానే ఆ సంఘటనలను సవరించడానికీ అనుమతిస్తుంది.  
+   </string>
+    <string product="default" name="permdesc_writeCalendar">మీరు మీ ఫోను లోనూ, మీ స్నేహితులు లేదా మీతో పనిచేసే ఉద్యోగస్తుల ఫోనులతో సహా, సవరించదలచిన సంఘటనలను చేర్చడానికీ,  తొలగించడానికీ, మార్పు చేయడానికీ అప్లికేషన్ ని అనుమతిస్తుంది.  ఇది క్యాలెండర్ యజమానుల నుండి వచ్చేలా కనిపిస్తున్న సందేశాలను పంపడానికీ లేదా  యజమానులకు తెలియకుండానే ఆ సంఘటనలను సవరించడానికీ అనుమతిస్తుంది.  
+   </string>
+    <string product="tablet" name="permdesc_changeWifiMulticastState">కేవలం మీ టాబ్లెట్ కి మాత్రమే కాక,  WLAN నెట్ వర్కులో గల అన్ని పరికరాలకీ పంపబడే ప్యాకెట్లను, మల్టీకాస్ట్ చిరునామాలు ఉపయోగిస్తూ అందుకునేందుకు అప్లికేషన్ ని అనుమతిస్తుంది.  ఇది నాన్ మల్టీకాస్ట్ మోడ్ కంటే ఎక్కువ విద్యుత్ ని ఉపయోగిస్తుంది.</string>
+    <string product="default" name="permdesc_changeWifiMulticastState">కేవలం మీ ఫోను కి మాత్రమే కాక,  WLAN నెట్ వర్కులో గల అన్ని పరికరాలకీ పంపబడే ప్యాకెట్లను, మల్టీకాస్ట్ చిరునామాలు ఉపయోగిస్తూ అందుకునేందుకు అప్లికేషన్ ని అనుమతిస్తుంది.  ఇది నాన్ మల్టీకాస్ట్ మోడ్ కంటే ఎక్కువ విద్యుత్ ని ఉపయోగిస్తుంది.</string>
+    <string product="tablet" name="permdesc_changeWimaxState">టాబ్లెట్ కి కనెక్ట్ చేయడానికీ, WiMAX నెట్వర్కుల నుండి టాబ్లెట్ ని డిస్కనెక్ట్ చేయడానికీ అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string product="default" name="permdesc_changeWimaxState">ఫోను కి కనెక్ట్ చేయడానికీ, WiMAX నెట్వర్కుల నుండి ఫోను ని డిస్కనెక్ట్ చేయడానికీ అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string product="nosdcard" name="permdesc_sdcardRead">భవిష్యత్తులో రాబోయే పరికరాల్లో అందుబాటులో ఉండబోయే USB నిల్వ కోసం అనుమతిని పరీక్షించడానికి  అప్లికేషన్ ని అనుమతిస్తుంది.</string>
+    <string product="default" name="permdesc_sdcardRead">భవిష్యత్తులో రాబోయే పరికరాల్లో అందుబాటులో ఉండబోయే SD కార్డు కోసం అనుమతిని పరీక్షించడానికి  అప్లికేషన్ ని అనుమతిస్తుంది. </string>
+    <string name="granularity_label_word">పదం:</string>
+    <string name="granularity_label_link">లింక్</string>
+    <string name="granularity_label_line">లైన్</string>
+    <string name="autofill_address_line_1_re">address.?line|address1|addr1|street<!-- de-DE -->|strasse|straße|hausnummer|housenumber<!-- en-GB -->|house.?name<!-- es -->|direccion|dirección<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所1<!-- pt-BR, pt-PT -->|morada|endereço<!-- ru -->|Адрес<!-- zh-CN -->|地址</string>
+    <string name="autofill_address_line_1_label_re">address<!-- fr-FR -->|adresse<!-- it-IT -->|indirizzo<!-- ja-JP -->|住所<!-- zh-CN -->|地址</string>
+    <string name="autofill_address_line_2_re">address.?line2|address2|addr2|street|suite|unit<!-- de-DE -->|adresszusatz|ergänzende.?angaben<!-- es -->|direccion2|colonia|adicional<!-- fr-FR -->|addresssuppl|complementnom|appartement<!-- it-IT -->|indirizzo2<!-- ja-JP -->|住所2</string>
+    <string name="autofill_zip_code_re">zip|postal|post code|pcode|^1z$<!-- de-DE -->|postleitzahl<!-- es -->|cp<!-- fr-FR -->|cdp<!-- it-IT -->|cap<!-- ja-JP -->|郵便番号<!-- pt-BR, pt-PT -->|codigo|codpos|cep<!-- ru -->|Почтовый.?Индекс<!--zh-CN -->|邮政编码|邮编<!-- zh-TW -->|郵遞區號</string>
+    <string name="autofill_billing_designator_re">బిల్లు</string>
+    <string name="autofill_name_on_card_contextual_re">పేరు</string>
+    <string name="autofill_expiration_month_re">expir|exp.*month|exp.*date|ccmonth<!-- de-DE -->|gueltig|gültig|monat<!-- es -->|fecha<!-- fr-FR -->|date.*exp<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|月</string>
+    <string name="autofill_expiration_date_re">exp|^/|year<!-- de-DE -->|ablaufdatum|gueltig|gültig|yahr<!-- es -->|fecha<!-- it-IT -->|scadenza<!-- ja-JP -->|有効期限<!-- pt-BR, pt-PT -->|validade<!-- ru -->|Срок действия карты<!-- zh-CN -->|年|有效期</string>
+    <string name="autofill_area_code_notext_re">^\\($</string>
+    <string name="autofill_phone_prefix_separator_re">^-$|^\\)$</string>
+    <string name="autofill_phone_suffix_separator_re">^-$</string>
+    <string name="permdesc_serialPort"> సీరియల్ మేనేజర్ API ని ఉపయోగించి సీరియల్ పోర్టులను యాక్సెస్ చేయడానికి హోల్డర్ ని అనుమతిస్తుంది. </string>
+    <string name="permdesc_accessContentProvidersExternally">హోల్డర్ ని షెల్ నుంచి కంటెంట్ ప్రొవైడర్లను యాక్సెస్ చేయడానికి అనుమతిస్తుంది.  సాధారణ అప్లికేషన్లకు ఎన్నడూ ఆ అవసరం రాదు.</string>
+    <string name="permdesc_updateLock">డివైస్ మేనేజర్ కి హోల్డర్ ని ఇంటెట్లు పంపేందుకు అనుమతిస్తుంది. ఇది సాధారణ అప్లికేషన్ల కోసం ఎన్నడూ అవసరం ఉండదు.</string>
+    <string name="decline">క్షీణించడం</string>
+    <string name="wifi_p2p_to_message">గ్రహీత:</string>
+    <string name="date_time_done">జరిగినది</string>
+    <string name="locale_replacement">""</string>
+    <string name="use_physical_keyboard">పరికర కీబోర్డ్</string>
+    <string name="permdesc_route_media_output">ఒక అప్లికేషన్ ని ఇతర బాహ్య పరికరాలకు రూట్ మీడియా ఔట్ పుట్ కి అనుమతిస్తుంది.  </string>
+    <string name="alternate_eri_file">/data/eri.xml</string>
+    <string name="description_target_search">వెతుకు</string>
+    <string name="activity_resolver_use_always">ఎప్పుడు</string>
+    <string product="tablet" name="default_audio_route_name">టాబ్లెట్</string>
+    <string product="default" name="default_audio_route_name">ఫోన్</string>
+    <string name="default_audio_route_category_name">సిస్టమ్</string>
+    <string name="bluetooth_a2dp_audio_route_name">బ్లూటూత్ ఆడియో</string>
+    <string name="media_route_chooser_grouping_done">జరిగినది</string>
+</resources>

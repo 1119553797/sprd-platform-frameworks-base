@@ -18,15 +18,13 @@
 */
 -->
 <resources>
-
-    <!-- Do not translate. -->
-    <integer-array name="maps_starting_lat_lng">
+  <!-- Do not translate. -->
+  <!-- Do not translate. -->
+  <integer-array name="maps_starting_lat_lng">
         <item>20593684</item>
         <item>78962880</item>
     </integer-array>
-    <!-- Do not translate. -->
-    <integer-array name="maps_starting_zoom">
+  <integer-array name="maps_starting_zoom">
         <item>3</item>
     </integer-array>
-
 </resources>
