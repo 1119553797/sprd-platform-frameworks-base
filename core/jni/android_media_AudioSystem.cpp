@@ -75,6 +75,15 @@ android_media_AudioSystem_isStreamActive(JNIEnv *env, jobject thiz, jint stream,
     return state;
 }
 
+/** SPRD: add method isAudioRecording @{ */
+static jboolean android_media_AudioSystem_isAudioRecording(JNIEnv *env, jobject thiz)
+{
+    bool state = false;
+    AudioSystem::isAudioRecording(&state);
+    return state;
+}
+/** @} */
+
 static jboolean
 android_media_AudioSystem_isStreamActiveRemotely(JNIEnv *env, jobject thiz, jint stream,
         jint inPastMs)
@@ -308,6 +317,7 @@ static JNINativeMethod gMethods[] = {
     {"getPrimaryOutputSamplingRate", "()I", (void *)android_media_AudioSystem_getPrimaryOutputSamplingRate},
     {"getPrimaryOutputFrameCount",   "()I", (void *)android_media_AudioSystem_getPrimaryOutputFrameCount},
     {"getOutputLatency",    "(I)I",     (void *)android_media_AudioSystem_getOutputLatency},
+    {"isAudioRecording",    "()Z",      (void *)android_media_AudioSystem_isAudioRecording},// SPRD: add method isAudioRecording
 };
 
 int register_android_media_AudioSystem(JNIEnv *env)

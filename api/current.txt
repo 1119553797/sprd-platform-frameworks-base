@@ -11275,6 +11275,7 @@ package android.media {
     method public void setStreamMute(int, boolean);
     method public void setStreamSolo(int, boolean);
     method public void setStreamVolume(int, int, int);
+    method public boolean isAudioRecording(); // SPRD: add method isAudioRecording
     method public deprecated void setVibrateSetting(int, int);
     method public deprecated void setWiredHeadsetOn(boolean);
     method public deprecated boolean shouldVibrate(int);

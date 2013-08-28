@@ -144,6 +144,15 @@ public class AudioSystem
      */
     public static native String getParameters(String keys);
 
+
+    /* SPRD: add method isAudioRecording @{
+     * Checks whether audio recording is going in AudioFlinger.
+     *
+     * return true if audio recording is going.
+     */
+    public static native boolean isAudioRecording();
+    /* @} */
+
     // These match the enum AudioError in frameworks/base/core/jni/android_media_AudioSystem.cpp
     /* Command sucessful or Media server restarted. see ErrorCallback */
     public static final int AUDIO_STATUS_OK = 0;
