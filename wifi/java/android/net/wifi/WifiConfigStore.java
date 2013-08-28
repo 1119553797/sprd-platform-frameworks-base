@@ -16,28 +16,7 @@
 
 package android.net.wifi;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.LinkAddress;
-import android.net.LinkProperties;
-import android.net.NetworkUtils;
-import android.net.NetworkInfo.DetailedState;
-import android.net.ProxyProperties;
-import android.net.RouteInfo;
-import android.net.wifi.WifiConfiguration.IpAssignment;
-import android.net.wifi.WifiConfiguration.KeyMgmt;
-import android.net.wifi.WifiConfiguration.ProxySettings;
-import android.net.wifi.WifiConfiguration.Status;
-import android.net.wifi.NetworkUpdateResult;
 import static android.net.wifi.WifiConfiguration.INVALID_NETWORK_ID;
-import android.os.Environment;
-import android.os.Message;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.UserHandle;
-import android.security.KeyStore;
-import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -50,14 +29,31 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import android.content.Context;
+import android.content.Intent;
+import android.net.LinkAddress;
+import android.net.LinkProperties;
+import android.net.NetworkInfo.DetailedState;
+import android.net.NetworkUtils;
+import android.net.ProxyProperties;
+import android.net.RouteInfo;
+import android.net.wifi.WifiConfiguration.IpAssignment;
+import android.net.wifi.WifiConfiguration.KeyMgmt;
+import android.net.wifi.WifiConfiguration.ProxySettings;
+import android.net.wifi.WifiConfiguration.Status;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.UserHandle;
+import android.security.KeyStore;
+import android.text.TextUtils;
+import android.util.Log;
 
 /**
  * This class provides the API to manage configured
@@ -1541,10 +1537,24 @@ class WifiConfigStore {
         } else if (config.allowedKeyManagement.get(KeyMgmt.WPA_EAP) ||
                 config.allowedKeyManagement.get(KeyMgmt.IEEE8021X)) {
             key = config.SSID + KeyMgmt.strings[KeyMgmt.WPA_EAP];
-        } else if (config.wepKeys[0] != null) {
-            key = config.SSID + "WEP";
+        /* SPRD: Modified for connecting to wep aps which index if not 0. @{*/
+        //} else if (config.wepKeys[0] != null) {
+            //key = config.SSID + "WEP";
         } else {
-            key = config.SSID + KeyMgmt.strings[KeyMgmt.NONE];
+            //key = config.SSID + KeyMgmt.strings[KeyMgmt.NONE];
+            boolean hasWepkey = false;
+            for (int i = 0 ; i < config.wepKeys.length ; i ++) {
+                if (config.wepKeys[i] != null) {
+                    hasWepkey = true;
+                    break;
+                }
+            }
+            if (hasWepkey) {
+                key = config.SSID + "WEP";
+            } else {
+                key = config.SSID + KeyMgmt.strings[KeyMgmt.NONE];
+            }
+        /* @} */
         }
 
         return key.hashCode();
