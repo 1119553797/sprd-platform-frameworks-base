@@ -1710,7 +1710,9 @@ public class WifiStateMachine extends StateMachine {
         mWifiInfo.setBSSID(null);
         mWifiInfo.setSSID(null);
         mWifiInfo.setNetworkId(WifiConfiguration.INVALID_NETWORK_ID);
+        /* SPRD: remove for showing real rssi @{
         mWifiInfo.setRssi(MIN_RSSI);
+        @} */
         mWifiInfo.setLinkSpeed(-1);
         mWifiInfo.setMeteredHint(false);
 
