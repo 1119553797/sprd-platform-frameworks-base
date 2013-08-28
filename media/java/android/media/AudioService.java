@@ -1121,6 +1121,16 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
 
     // UI update and Broadcast Intent
     private void sendVolumeUpdate(int streamType, int oldIndex, int index, int flags) {
+        /* SPRD: use property to tell the bootanimation @{ */
+        if (streamType == AudioSystem.STREAM_RING) {
+           if (index == 0) {
+                SystemProperties.set("persist.sys.silence", "1");
+            } else {
+                SystemProperties.set("persist.sys.silence", "0");
+           }
+        }
+        /* @} */
+
         if (!mVoiceCapable && (streamType == AudioSystem.STREAM_RING)) {
             streamType = AudioSystem.STREAM_NOTIFICATION;
         }
@@ -1344,7 +1354,17 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         if ((ringerMode == AudioManager.RINGER_MODE_VIBRATE) && !mHasVibrator) {
             ringerMode = AudioManager.RINGER_MODE_SILENT;
         }
+        Log.e(TAG,"setRingerModeInt  ringerMode="+ringerMode+" ,oldringMode = "
+            + getRingerMode());
         if (ringerMode != getRingerMode()) {
+            /* SPRD: use property to tell the bootanimation @{ */
+            if (ringerMode == AudioManager.RINGER_MODE_SILENT
+                    || ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+                SystemProperties.set("persist.sys.silence", "1");
+            } else {
+                SystemProperties.set("persist.sys.silence", "0");
+            }
+            /* @} */
             setRingerModeInt(ringerMode, true);
             // Send sticky broadcast
             broadcastRingerMode(ringerMode);
