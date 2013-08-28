@@ -30,6 +30,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 public abstract class AbsSeekBar extends ProgressBar {
+    private int mMin = 0; // SPRD: declare seekbar min value
     private Drawable mThumb;
     private int mThumbOffset;
     
@@ -448,7 +449,7 @@ public abstract class AbsSeekBar extends ProgressBar {
         final int max = getMax();
         progress += scale * max;
         
-        setProgress((int) progress, true);
+        setProgress((int) progress + mMin, true); // SPRD: declare seekbar min value
     }
 
     /**
@@ -575,4 +576,12 @@ public abstract class AbsSeekBar extends ProgressBar {
             invalidate();
         }
     }
+
+    /** SPRD: Add set seekbar min value method @{
+    * @hide
+    */
+    public void setMin(int min){
+        mMin = min;
+    }
+    /** @} */
 }
