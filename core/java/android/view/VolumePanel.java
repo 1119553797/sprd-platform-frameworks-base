@@ -1033,6 +1033,17 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
     }
 
     public void onStartTrackingTouch(SeekBar seekBar) {
+        /** SPRD: check current stream,set 1 if STREAM_VOICE_CALL @{ */
+        final Object tag = seekBar.getTag();
+        if (tag instanceof StreamControl) {
+            StreamControl sc = (StreamControl) tag;
+            int progress = seekBar.getProgress();
+            if(sc.streamType == AudioSystem.STREAM_VOICE_CALL){
+                seekBar.setMin(1);
+            }
+            Log.e(TAG, "onStartTrackingTouch   progress = "+progress);
+        }
+        /** @} */
     }
 
     public void onStopTrackingTouch(SeekBar seekBar) {
