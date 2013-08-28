@@ -2564,4 +2564,12 @@ public class AudioManager {
         return AudioSystem.getOutputLatency(streamType);
     }
 
+    /** SPRD: add method isAudioRecording @{
+     * Checks whether audio recording is going in AudioFlinger.
+     * @return true if audio recording is going.
+     */
+    public boolean isAudioRecording() {
+        return AudioSystem.isAudioRecording();
+    }
+    /** @} */
 }
