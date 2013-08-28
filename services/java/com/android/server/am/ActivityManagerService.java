@@ -165,6 +165,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+// SPRD: add home-key pressed interface
+import com.android.internal.policy.impl.PhoneWindowManager;
 
 public final class ActivityManagerService  extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
@@ -15089,4 +15091,9 @@ public final class ActivityManagerService  extends ActivityManagerNative
         info.applicationInfo = getAppInfoForUser(info.applicationInfo, userId);
         return info;
     }
+    /* SPRD: add home-key pressed interface @{ */
+    public boolean isHomeKeyPressed() {
+        return PhoneWindowManager.mIsHomeKeyPressed.getAndSet(false);
+    }
+    /* @} */
 }

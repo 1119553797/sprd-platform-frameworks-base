@@ -109,6 +109,8 @@ import static android.view.WindowManager.LayoutParams.*;
 import static android.view.WindowManagerPolicy.WindowManagerFuncs.LID_ABSENT;
 import static android.view.WindowManagerPolicy.WindowManagerFuncs.LID_OPEN;
 import static android.view.WindowManagerPolicy.WindowManagerFuncs.LID_CLOSED;
+// SPRD: add home-key pressed interface
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * WindowManagerPolicy implementation for the Android phone UI.  This
@@ -156,6 +158,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static public final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
     static public final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
     static public final String SYSTEM_DIALOG_REASON_ASSIST = "assist";
+    
+    /**
+     * SPRD: add home-key pressed interface @{
+     * @hide
+     */
+    public static AtomicBoolean mIsHomeKeyPressed = new AtomicBoolean(false);
+    /* @} */
 
     /**
      * These are the system UI flags that, when changing, can cause the layout
@@ -1934,6 +1943,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // If we have released the home key, and didn't do anything else
             // while it was pressed, then it is time to go home!
             if (!down) {
+                // SPRD: add home-key pressed interface
+                mIsHomeKeyPressed.set(true);
                 cancelPreloadRecentApps();
 
                 mHomePressed = false;
@@ -2085,6 +2096,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mHandler.post(mScreenshotRunnable);
             }
             return -1;
+            /* SPRD: add home-key pressed interface @{ */
+        } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!down) mIsHomeKeyPressed.set(false);
+            /* @} */
         }
 
         // Shortcuts are invoked through Search+key, so intercept those here

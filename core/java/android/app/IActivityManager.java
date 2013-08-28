@@ -378,6 +378,8 @@ public interface IActivityManager extends IInterface {
     public void killUid(int uid, String reason) throws RemoteException;
 
     public void hang(IBinder who, boolean allowRestart) throws RemoteException;
+    // SPRD: add home-key press interface
+    public boolean isHomeKeyPressed() throws RemoteException;
 
     /*
      * Private non-Binder interfaces
@@ -641,4 +643,6 @@ public interface IActivityManager extends IInterface {
     int KILL_UID_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+164;
     int SET_USER_IS_MONKEY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+165;
     int HANG_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+166;
+    // SPRD: add home-key pressed interface
+    int IS_HOME_KEY_PRESSED_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+201;
 }
