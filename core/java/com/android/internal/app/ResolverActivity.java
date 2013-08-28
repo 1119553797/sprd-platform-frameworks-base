@@ -420,6 +420,12 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
             final int oldItemCount = getCount();
             rebuildList();
             notifyDataSetChanged();
+            /* SPRD: The mList maybe is null @{ */
+            if (mList == null || mList.size() < 0) {
+                // We no longer have any items...  just finish the activity.
+                finish();
+            }
+            /* @} */
             final int newItemCount = getCount();
             if (newItemCount == 0) {
                 // We no longer have any items...  just finish the activity.
