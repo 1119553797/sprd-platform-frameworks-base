@@ -282,6 +282,11 @@ public abstract class AbstractCursor implements CrossProcessCursor {
         }
 
         String columnNames[] = getColumnNames();
+        /* SPRD: Check if it is null @{ */
+        if (null == columnNames) {
+            return -1;
+        }
+        /* @} */
         int length = columnNames.length;
         for (int i = 0; i < length; i++) {
             if (columnNames[i].equalsIgnoreCase(columnName)) {
