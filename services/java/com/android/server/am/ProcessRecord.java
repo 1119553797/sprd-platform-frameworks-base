@@ -59,8 +59,6 @@ class ProcessRecord {
     int curAdj;                 // Current OOM adjustment for this process
     int setAdj;                 // Last set OOM adjustment for this process
     static final int TMP_CUR_ADJ_DEFAULT = 100;
-    int tmpCurRawAdj = TMP_CUR_ADJ_DEFAULT; // Set by application to change it's oom_adj tempropraly	64	    int tmpCurRawAdj = TMP_CUR_ADJ_DEFAULT; // Set by application to change it's oom_adj tempropraly
-    int tmpCurAdj = TMP_CUR_ADJ_DEFAULT;    // Set by application to change it's oom_adj tempropraly	65	    int tmpCurAdj = TMP_CUR_ADJ_DEFAULT;     
     static final int TMP_FIX_ADJ_DEFAULT = 1000;
      int fixAdj = TMP_FIX_ADJ_DEFAULT;        
     int curSchedGroup;          // Currently desired scheduling class
@@ -68,9 +66,6 @@ class ProcessRecord {
     boolean keeping;            // Actively running code so don't kill due to that?
     boolean setIsForeground;    // Running foreground UI when last set?
     boolean foregroundServices; // Running any services that are foreground?
-    boolean foregroundActivities; // Running any activities that are foreground?s
-    boolean systemNoUi;         // This is a system process, but not currently showing UI.
-    boolean hasShownUi;         // Has UI been shown in this process since it was started?
     boolean bad;                // True if disabled in the bad process list
     boolean killedBackground;   // True when proc has been killed due to too many bg
     IBinder forcingToForeground;// Token that is forcing this process to be foreground
@@ -96,8 +91,7 @@ class ProcessRecord {
     int adjTypeCode;            // Debugging: adj code to report to app.
     Object adjSource;           // Debugging: option dependent object.
     Object adjTarget;           // Debugging: target component impacting oom_adj.
-    boolean serviceb;           // Process currently is on the service B list    
-    boolean isContactsProcess;  // S: LC_RAM_SUPPORT, for adjust Contacts' oom_adj
+    
     // contains HistoryRecord objects
     final ArrayList<ActivityRecord> activities = new ArrayList<ActivityRecord>();
     // all ServiceRecord running in this process
