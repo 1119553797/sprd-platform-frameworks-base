@@ -253,8 +253,8 @@ public final class ActivityManagerService  extends ActivityManagerNative
     static final int BROADCAST_FG_TIMEOUT = 10*1000;
     static final int BROADCAST_BG_TIMEOUT = 60*1000;
 
-    // How long we wait until we timeout on key dispatching.
-    static final int KEY_DISPATCHING_TIMEOUT = 5*1000;
+    // How long we wait until we timeout on key dispatching. SPRD: modify for lowmem version[4+2]
+    static final int KEY_DISPATCHING_TIMEOUT = Build.IS_LOWMEM_VERSION ? 8*1000 : 5*1000;
 
     // How long we wait until we timeout on key dispatching during instrumentation.
     static final int INSTRUMENTATION_KEY_DISPATCHING_TIMEOUT = 60*1000;
