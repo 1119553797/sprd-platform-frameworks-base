@@ -2228,6 +2228,8 @@ public final class ActivityThread {
             throw e;
 
         } catch (Exception e) {
+            // SPRD: Print the information of the exception
+            e.printStackTrace();
             if (!mInstrumentation.onException(activity, e)) {
                 throw new RuntimeException(
                     "Unable to start activity " + component
@@ -3258,6 +3260,11 @@ public final class ActivityThread {
 
     private void handleStopActivity(IBinder token, boolean show, int configChanges) {
         ActivityClientRecord r = mActivities.get(token);
+        /* SPRD: Check the r is null @{ */
+        if (null == r ) {
+            return;
+        }
+        /* @} */
         r.activity.mConfigChangeFlags |= configChanges;
 
         StopInfo info = new StopInfo();
