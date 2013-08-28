@@ -27,6 +27,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.LabeledIntent;
+// SPRD: filte ResolveInfo
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
@@ -281,6 +283,19 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
 
     void startSelected(int which, boolean always) {
         ResolveInfo ri = mAdapter.resolveInfoForPosition(which);
+        /* SPRD: filte ResolveInfo @{ */
+        try{
+            Log.w("ResolverActivity", "packagename : "+ri.activityInfo.packageName);
+            PackageInfo pInfo= mPm.getPackageInfo(ri.activityInfo.packageName, 0);
+            if(pInfo == null){
+                Log.w("ResolverActivity", "package is uninstall");
+                return;
+            }
+        }catch(Exception e){
+            Log.w("ResolverActivity", "Exception:"+e.getMessage());
+            return ;
+        }
+        /* @} */
         Intent intent = mAdapter.intentForPosition(which);
         onIntentSelected(ri, intent, always);
         finish();
