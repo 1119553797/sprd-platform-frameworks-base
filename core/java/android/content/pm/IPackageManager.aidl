@@ -230,7 +230,13 @@ interface IPackageManager {
      */
     void setComponentEnabledSetting(in ComponentName componentName,
             in int newState, in int flags, int userId);
-
+    /**
+     * As per {@link android.content.pm.PackageManager#setComponentEnabledSetting}.
+     * SPRD: update label and icon for app @{
+     */
+    void setComponentEnabledSettingForSpecific(in ComponentName componentName,
+            in int newState, in int flags, int userId, in Intent attr);
+     /* @} */
     /**
      * As per {@link android.content.pm.PackageManager#getComponentEnabledSetting}.
      */

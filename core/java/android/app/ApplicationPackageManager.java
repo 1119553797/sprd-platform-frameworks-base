@@ -1264,7 +1264,17 @@ final class ApplicationPackageManager extends PackageManager {
             // Should never happen!
         }
     }
-
+    /* SPRD: update label and icon for app @{ */
+    @Override
+    public void setComponentEnabledSettingForSpecific(ComponentName componentName,
+                                           int newState, int flags,Intent attr) {
+        try {
+            mPM.setComponentEnabledSettingForSpecific(componentName, newState, flags, mContext.getUserId(),attr);
+        } catch (RemoteException e) {
+            // Should never happen!
+        }
+    }
+    /* @} */
     @Override
     public int getComponentEnabledSetting(ComponentName componentName) {
         try {

@@ -3024,7 +3024,17 @@ public abstract class PackageManager {
      */
     public abstract void setComponentEnabledSetting(ComponentName componentName,
             int newState, int flags);
-
+    /**
+     * add interface for specific app
+     * @param componentName
+     * @param newState
+     * @param flags
+     * @param attr
+	 * SPRD: update label and icon for app @{ 
+     */
+    public abstract void setComponentEnabledSettingForSpecific(ComponentName componentName,
+            int newState, int flags,Intent attr);
+     /* @} */
 
     /**
      * Return the the enabled setting for a package component (activity,

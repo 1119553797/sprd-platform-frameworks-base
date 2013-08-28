@@ -6939,6 +6939,7 @@ package android.content.pm {
     method public abstract android.content.pm.ResolveInfo resolveService(android.content.Intent, int);
     method public abstract void setApplicationEnabledSetting(java.lang.String, int, int);
     method public abstract void setComponentEnabledSetting(android.content.ComponentName, int, int);
+    method public abstract void setComponentEnabledSettingForSpecific(android.content.ComponentName, int, int, android.content.Intent);
     method public abstract void setInstallerPackageName(java.lang.String, java.lang.String);
     method public abstract void verifyPendingInstall(int, int);
     field public static final int COMPONENT_ENABLED_STATE_DEFAULT = 0; // 0x0
@@ -22656,6 +22657,7 @@ package android.test.mock {
     method public android.content.pm.ResolveInfo resolveService(android.content.Intent, int);
     method public void setApplicationEnabledSetting(java.lang.String, int, int);
     method public void setComponentEnabledSetting(android.content.ComponentName, int, int);
+    method public void setComponentEnabledSettingForSpecific(android.content.ComponentName, int, int, android.content.Intent);
     method public void setInstallerPackageName(java.lang.String, java.lang.String);
     method public void verifyPendingInstall(int, int);
   }

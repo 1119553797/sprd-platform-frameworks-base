@@ -45,6 +45,10 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+/* SPRD: update label and icon for app @{ */
+import android.os.RemoteException;
+import android.os.UserId;
+/* @} */
 
 import java.util.List;
 
@@ -489,6 +493,13 @@ public class MockPackageManager extends PackageManager {
             int newState, int flags) {
         throw new UnsupportedOperationException();
     }
+    /* SPRD: update label and icon for app @{ */
+    @Override
+    public void setComponentEnabledSettingForSpecific(ComponentName componentName,
+            int newState, int flags,Intent attr) {
+        throw new UnsupportedOperationException();
+    }
+    /* @} */
 
     @Override
     public int getComponentEnabledSetting(ComponentName componentName) {

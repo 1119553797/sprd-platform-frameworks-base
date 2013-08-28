@@ -2745,21 +2745,47 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
             return list;
         }
-
+        // SPRD: update label and icon for app
+        List<ResolveInfo> list = null;
         // reader
         synchronized (mPackages) {
             final String pkgName = intent.getPackage();
             if (pkgName == null) {
-                return mActivities.queryIntent(intent, resolvedType, flags, userId);
+			/* SPRD: update label and icon for app @{ */
+                list = mActivities.queryIntent(intent, resolvedType, flags, userId);
+                if(list == null)
+                   return null;
+
+                filterSTK(list);
+			/* @} */
+                return list;
             }
             final PackageParser.Package pkg = mPackages.get(pkgName);
             if (pkg != null) {
-                return mActivities.queryIntentForPackage(intent, resolvedType, flags,
+			/* SPRD: update label and icon for app @{ */
+                list = mActivities.queryIntentForPackage(intent, resolvedType, flags,
                         pkg.activities, userId);
+			/* @} */
+                return list;
             }
             return new ArrayList<ResolveInfo>();
         }
     }
+	/* SPRD: update label and icon for app @{ */
+    private boolean isOpen = false;
+    private void filterSTK(List<ResolveInfo> list){
+            if(isOpen)return;
+            Iterator<ResolveInfo> infos = list.iterator();
+            ResolveInfo info = null;
+            while(infos.hasNext()){
+                info = infos.next();
+                if(info != null && info.activityInfo.packageName.startsWith("com.android.stk")){
+                    Log.w(TAG, "remove "+info.activityInfo.packageName);
+                    infos.remove();
+                }
+            }
+    }
+	/* @} */
 
     @Override
     public List<ResolveInfo> queryIntentActivityOptions(ComponentName caller,
@@ -9615,15 +9641,59 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
         setEnabledSetting(appPackageName, null, newState, flags, userId, callingPackage);
     }
+    /* SPRD: update label and icon for app @{ */
+	public void setComponentEnabledSettingForSpecific(ComponentName componentName,
+            int newState, int flags, int userId ,Intent attr){
+          Log.w("set enable for specific apk ",componentName.toString());
+          if(attr != null){
+            updateProperty(componentName,attr);
+          }
+          setComponentEnabledSetting(componentName,newState,flags,userId);
+    }
+    /* @} */
 
     @Override
     public void setComponentEnabledSetting(ComponentName componentName,
             int newState, int flags, int userId) {
         if (!sUserManager.exists(userId)) return;
+        /* SPRD: update label and icon for app @{ */
+        String packege = componentName.getPackageName();
+        Log.w(TAG, packege+" == "+newState+" == "+flags+" "+userId);
+        if(packege.startsWith("com.android.stk")){
+            isOpen = true;
+        }
+        /* @} */
         setEnabledSetting(componentName.getPackageName(),
                 componentName.getClassName(), newState, flags, userId, null);
     }
-
+    /* SPRD: update label and icon for app @{ */
+    private void updateProperty(ComponentName componentName,Intent attr){
+        String packageName = componentName.getPackageName();
+        if(packageName.startsWith("com.android.stk")){
+            int resIconID = 0,resLabelID = 0;
+            Object temp = attr.getExtra("gsm.stk.icon");
+            if(temp != null)
+                resIconID = (Integer)temp;
+            temp = attr.getExtra("gsm.stk.label");
+            if(temp != null)
+                resLabelID = (Integer)temp;
+            Log.w("resID icon/label ",resIconID+" ~ "+resLabelID);
+            PackageParser.Activity a = mActivities.mActivities.get(componentName);
+            if(a != null){
+                if(resIconID !=0 || resLabelID !=0){
+                    int length = a.intents.size();
+                    for(int i =0 ; i < length ; i++){
+                        PackageParser.ActivityIntentInfo intent = a.intents.get(i);
+                        intent.labelRes = resLabelID != 0 ? resLabelID : intent.labelRes;
+                        intent.icon = resIconID != 0 ? resIconID : intent.icon;
+                        a.info.icon = resIconID != 0 ? resIconID : a.info.icon;
+                    }
+                }
+            }
+            isOpen = true;
+        }
+    }
+    /* @} */
     private void setEnabledSetting(final String packageName, String className, int newState,
             final int flags, int userId, String callingPackage) {
         if (!(newState == COMPONENT_ENABLED_STATE_DEFAULT
