@@ -437,6 +437,20 @@ public class AudioManager {
     }
 
     /**
+    * SPRD:add interface for speaker switch function on videoplayer is invalid. @{
+    * @param   routing device is speaker or headset
+    */
+    public void setSpeakerMediaOn(boolean on) {
+         IAudioService service = getService();
+         try {
+             service.setSpeakerMediaOn(on);
+         } catch (RemoteException e) {
+             Log.e(TAG, "Dead object in setSpeakerMediaOn", e);
+         }
+     }
+    /* @} */
+
+    /**
      * @hide
      */
     public void preDispatchKeyEvent(KeyEvent event, int stream) {

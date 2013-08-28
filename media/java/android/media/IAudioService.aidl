@@ -208,4 +208,10 @@ interface IAudioService {
     AudioRoutesInfo startWatchingRoutes(in IAudioRoutesObserver observer);
 
     boolean isCameraSoundForced();
+
+    /**
+    * SPRD:add interface for speaker switch function on videoplayer is invalid.
+    * @param   routing device is speaker or headset
+    */
+    void setSpeakerMediaOn(boolean on);
 }
