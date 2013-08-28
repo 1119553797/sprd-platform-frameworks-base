@@ -3360,8 +3360,26 @@ public final class ActivityThread {
             }
         } else {
             if (r.stopped && r.activity.mVisibleFromServer) {
-                r.activity.performRestart();
-                r.stopped = false;
+                try {// SPRD: catch exception
+                    r.activity.performRestart();
+                    r.stopped = false;
+                /* SPRD: catch exception @{ */
+                } catch (Exception e) {
+                    Log.e(TAG, "RuntimeException in performRestart: " + e.getMessage()
+                            + ", finish this Activity:" + r);
+                    try {
+                        r.activity.performStop();
+                    } catch (Exception ee) {
+                        if (!mInstrumentation.onException(r.activity, ee)) {
+                            throw new RuntimeException(
+                                    "Unable to stop activity "
+                                            + r.intent.getComponent().toShortString()
+                                            + ": " + ee.toString(), ee);
+                        }
+                    }
+                    r.stopped = true;
+                }
+                /* @} */
             }
         }
     }
