@@ -1115,6 +1115,8 @@ public class NetworkController extends BroadcastReceiver {
             combinedSignalIconId = mWifiIconId; // set by updateWifiIcons()
             mContentDescriptionCombinedSignal = mContentDescriptionWifi;
         } else {
+            // SPRD:update wifi icon when wifi is disconnected
+            mWifiActivityIconId = 0;
             if (mHasMobileDataFeature) {
                 wifiLabel = "";
             } else {
