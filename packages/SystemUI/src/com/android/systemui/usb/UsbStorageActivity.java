@@ -188,7 +188,11 @@ public class UsbStorageActivity extends Activity
         super.onPause();
         
         unregisterReceiver(mUsbStateReceiver);
-        if (mStorageManager == null && mStorageListener != null) {
+        /* SPRD: Code is error @{ */
+        // @orig:
+        //     if (mStorageManager == null && mStorageListener != null) {
+        if (mStorageManager != null && mStorageListener != null) {
+        /* @} */
             mStorageManager.unregisterListener(mStorageListener);
         }
     }
