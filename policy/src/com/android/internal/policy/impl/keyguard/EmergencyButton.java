@@ -111,6 +111,7 @@ public class EmergencyButton extends Button {
     }
 
     private void updateEmergencyCallButton(State simState, int phoneState) {
+        /* SPRD: Modify 20130827 Spreadst of 207632 can not emergency call @{
         boolean enabled = false;
         if (phoneState == TelephonyManager.CALL_STATE_OFFHOOK) {
             enabled = true; // always show "return to call" if phone is off-hook
@@ -124,9 +125,11 @@ public class EmergencyButton extends Button {
                 // hides emergency button on "Slide" screen if device is not secure.
                 enabled = mLockPatternUtils.isSecure();
             }
-        }
-        mLockPatternUtils.updateEmergencyCallButtonState(this, phoneState, enabled,
+        } */
+        // cancel original judge set enabled is true
+        mLockPatternUtils.updateEmergencyCallButtonState(this, phoneState, true,
                 KeyguardViewManager.USE_UPPER_CASE, false);
+        /* @} */
     }
 
 }
