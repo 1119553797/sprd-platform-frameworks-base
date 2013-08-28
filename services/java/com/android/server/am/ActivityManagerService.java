@@ -259,6 +259,13 @@ public final class ActivityManagerService  extends ActivityManagerNative
     // How long we wait until we timeout on key dispatching during instrumentation.
     static final int INSTRUMENTATION_KEY_DISPATCHING_TIMEOUT = 60*1000;
 
+    /* SPRD: How long we wait until we timeout on key dispatching in the first four minutes after booting. @{ */
+    static final int BOOT_KEY_DISPATCHING_TIMEOUT = 15*1000;
+
+    // SPRD: The first four minutes after booting.
+    static final int THE_FIRST_FOUR_MINUTES_AFTER_BOOTING = 240*1000;
+    /* @} */
+
     // Amount of time we wait for observers to handle a user switch before
     // giving up on them and unfreezing the screen.
     static final int USER_SWITCH_TIMEOUT = 2*1000;
@@ -7488,14 +7495,31 @@ public final class ActivityManagerService  extends ActivityManagerNative
     }
 
     public static long getInputDispatchingTimeoutLocked(ActivityRecord r) {
-        return r != null ? getInputDispatchingTimeoutLocked(r.app) : KEY_DISPATCHING_TIMEOUT;
+        /* SPRD: modify for increase anr time when system is booting @{ */
+        if (r != null) {
+            return getInputDispatchingTimeoutLocked(r.app);
+        }
+        if (SystemClock.elapsedRealtime() <= THE_FIRST_FOUR_MINUTES_AFTER_BOOTING) {
+            return BOOT_KEY_DISPATCHING_TIMEOUT;
+        } else {
+            return KEY_DISPATCHING_TIMEOUT;
+        }
+        /* @} */
+        // SPRD: del
+        //return r != null ? getInputDispatchingTimeoutLocked(r.app) : KEY_DISPATCHING_TIMEOUT;
     }
 
     public static long getInputDispatchingTimeoutLocked(ProcessRecord r) {
         if (r != null && (r.instrumentationClass != null || r.usingWrapper)) {
             return INSTRUMENTATION_KEY_DISPATCHING_TIMEOUT;
         }
-        return KEY_DISPATCHING_TIMEOUT;
+        /* SPRD: modify for increase anr time when system is booting @{ */
+        if (SystemClock.elapsedRealtime() <= THE_FIRST_FOUR_MINUTES_AFTER_BOOTING) {
+            return BOOT_KEY_DISPATCHING_TIMEOUT;
+        } else {
+            return KEY_DISPATCHING_TIMEOUT;
+        }
+        /* @} */
     }
 
 
