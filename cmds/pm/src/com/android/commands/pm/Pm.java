@@ -44,6 +44,8 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.os.UserManager;
+// SPRD: check apk
+import android.util.Slog;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -54,6 +56,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.WeakHashMap;
+// SPRD: check apk
+import java.util.zip.ZipFile;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -922,6 +926,13 @@ public final class Pm {
         } else {
             verificationURI = null;
         }
+        /* SPRD: check apk @{ */
+        if (!isDexApk(apkURI.getPath())) {
+            Slog.d("Pm", " Have not classes.dex in package !");
+            System.out.println("Failure [ Have not classes.dex in package ! ]");
+            return;
+        }
+        /* @} */
 
         PackageInstallObserver obs = new PackageInstallObserver();
         try {
@@ -982,7 +993,31 @@ public final class Pm {
 
         return output;
     }
-
+    /* SPRD: check apk @{ */
+    private boolean isDexApk(String filePath) {
+        boolean apk = false;
+        ZipFile zip = null;
+        try {
+            long l = System.currentTimeMillis();
+            zip = new ZipFile(filePath);
+            if (zip.getEntry("classes.dex") != null) {
+                apk = true;
+            }
+            Slog.d("Pm", "time for read apk package :" + (System.currentTimeMillis() - l));
+        } catch (Exception e) {
+            Slog.e("Pm", "read apk package exception :" + e.getMessage());
+            apk = false;
+        } finally {
+            if (zip != null) {
+                try {
+                    zip.close();
+                } catch (Exception e) {
+                }
+            }
+        }
+        return apk;
+    }
+    /* @} */
     public void runCreateUser() {
         String name;
         String arg = nextArg();
