@@ -261,6 +261,26 @@ public class CallLog {
         public static final String CACHED_FORMATTED_NUMBER = "formatted_number";
 
         /**
+         * SPRD: the phone id.
+         * <P>Type: INTEGER</P>
+         */
+        public static final String PHONE_ID = "phone_id";
+
+        /**
+         * SPRD: Whether this call is a video call or not.
+         * <P>Type: INTEGER</P>
+         * @hide
+         */
+        public static final String VIDEO_CALL_FLAG = "video_Call_Flag";
+
+        /** SPRD: UUI The cached formatted phone number.
+         * This value is not guaranteed to be present.
+         * <P>Type: TEXT</P>
+         * @hide
+         */
+        public static final String ICC_ID = "icc_id";
+
+        /**
          * Adds a call to the call log.
          *
          * @param ci the CallerInfo object to get the target contact from.  Can be null
@@ -277,6 +297,18 @@ public class CallLog {
          */
         public static Uri addCall(CallerInfo ci, Context context, String number,
                 int presentation, int callType, long start, int duration) {
+            return addCall(ci, context, number, presentation, callType, start, duration, 0, 0);
+        }
+
+        /** SPRD: add **/
+        public static Uri addCall(CallerInfo ci, Context context, String number,
+                int presentation, int callType, long start, int duration, int phoneId, int videoCallFlag) {
+            return addCall(ci, context, number, presentation, callType, start, duration, 0, 0, null);
+        }
+
+        /** SPRD: add **/
+        public static Uri addCall(CallerInfo ci, Context context, String number,
+                int presentation, int callType, long start, int duration, int phoneId, int videoCallFlag, String iccId) {
             final ContentResolver resolver = context.getContentResolver();
 
             // If this is a private number then set the number to Private, otherwise check
@@ -300,6 +332,13 @@ public class CallLog {
             values.put(DATE, Long.valueOf(start));
             values.put(DURATION, Long.valueOf(duration));
             values.put(NEW, Integer.valueOf(1));
+            /* SPRD: add @{ */
+            values.put(PHONE_ID, Integer.valueOf(phoneId));
+            values.put(VIDEO_CALL_FLAG, Integer.valueOf(videoCallFlag));
+            if (iccId != null) {
+                values.put(ICC_ID, iccId);
+            }
+            /* @} */
             if (callType == MISSED_TYPE) {
                 values.put(IS_READ, Integer.valueOf(0));
             }
@@ -366,13 +405,18 @@ public class CallLog {
          * string if none exist yet.
          */
         public static String getLastOutgoingCall(Context context) {
+            return getLastOutgoingCall(context, 0);//SPRD: remove logic to below
+        }
+
+        /** SPRD: add for query call log by type */
+        public static String getLastOutgoingCall(Context context, int type) {
             final ContentResolver resolver = context.getContentResolver();
             Cursor c = null;
             try {
                 c = resolver.query(
                     CONTENT_URI,
                     new String[] {NUMBER},
-                    TYPE + " = " + OUTGOING_TYPE,
+                    TYPE + " = " + OUTGOING_TYPE + " AND " + VIDEO_CALL_FLAG + " = " + type,
                     null,
                     DEFAULT_SORT_ORDER + " LIMIT 1");
                 if (c == null || !c.moveToFirst()) {
