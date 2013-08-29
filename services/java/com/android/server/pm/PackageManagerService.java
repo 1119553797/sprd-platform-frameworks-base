@@ -135,6 +135,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+/* SPRD: add feature for scan preload dir @{ */
+import java.io.FileWriter;
+import java.io.BufferedReader;
+/* @} */
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -273,6 +277,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     // This is where all application persistent data goes for secondary users.
     final File mUserAppDataDir;
 
+    // SPRD: This is preload app dir
+    final File mPreInstallDir;
     /** The location for ASEC container files on internal storage. */
     final String mAsecInternalPath;
 
@@ -291,7 +297,10 @@ public class PackageManagerService extends IPackageManager.Stub {
     // This is the object monitoring mDrmAppPrivateInstallDir.
     final FileObserver mDrmAppInstallObserver;
 
-    // Used for privilege escalation. MUST NOT BE CALLED WITH mPackages
+    // SPRD: This is the object monitoring mPreInstallDir.
+    final FileObserver mPreInstallObserver;
+
+    // Used for priviledge escalation.  MUST NOT BE CALLED WITH mPackages
     // LOCK HELD.  Can be called with mInstallLock held.
     final Installer mInstaller;
 
@@ -420,6 +429,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     boolean mSystemReady;
     boolean mSafeMode;
     boolean mHasSystemUidErrors;
+    // SPRD: add feature for scan preload dir
+    boolean mFlagInstall;
 
     ApplicationInfo mAndroidApplication;
     final ActivityInfo mResolveActivity = new ActivityInfo();
@@ -1084,7 +1095,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             mDefParseFlags = 0;
             mSeparateProcesses = null;
         }
-
+        // SPRD: add feature for scan preload dir
+        mPreInstallDir = new File("/system/preloadapp");
         mInstaller = installer;
 
         WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
@@ -1238,6 +1250,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
                 }
             }
+            // SPRD: add feature for scan preload dir
+            mFlagInstall = false;
 
             // Find base frameworks (resource packages without code).
             mFrameworkInstallObserver = new AppDirObserver(
@@ -1334,7 +1348,12 @@ public class PackageManagerService extends IPackageManager.Stub {
                     mAppInstallDir.getPath(), OBSERVER_EVENTS, false);
                 mAppInstallObserver.startWatching();
                 scanDirLI(mAppInstallDir, 0, scanMode, 0);
-    
+                /* SPRD: add feature for scan preload dir @{ */
+                mPreInstallObserver = new AppDirObserver(
+                    mPreInstallDir.getPath(), OBSERVER_EVENTS, false);
+                mPreInstallObserver.startWatching();
+                scanDirLI(mPreInstallDir, 0, scanMode, 0);
+                /* @} */
                 mDrmAppInstallObserver = new AppDirObserver(
                     mDrmAppPrivateInstallDir.getPath(), OBSERVER_EVENTS, false);
                 mDrmAppInstallObserver.startWatching();
@@ -1369,10 +1388,13 @@ public class PackageManagerService extends IPackageManager.Stub {
                     reportSettingsProblem(Log.WARN, msg);
                 }
             } else {
+			    // SPRD: add feature for scan preload dir
+                mPreInstallObserver = null;
                 mAppInstallObserver = null;
                 mDrmAppInstallObserver = null;
             }
-
+			// SPRD: add feature for scan preload dir
+            mFlagInstall = true;
             // Now that we know all of the shared libraries, update all clients to have
             // the correct library paths.
             updateAllSharedLibrariesLPw();
@@ -3416,7 +3438,61 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
         return true;
     }
+    /* SPRD: add feature for scan preload dir  @{ */
+    private boolean isPreloadApp(String path){
+       if(path.equals("/system/preloadapp"))
+              return true;
+      return false;
+   }
 
+    private boolean isPreloadApp(ApplicationInfo info) {
+        if(info.sourceDir != null) {
+            return info.sourceDir.startsWith("/system/preloadapp/");
+        }
+        return false;
+    }
+    private boolean isDeleteApp(String packageName){
+      File unInstallRecord = new File("/data/app/.delrecord");
+      BufferedReader br = null;
+      try{
+          br = new BufferedReader(new FileReader(unInstallRecord));
+          String lineContent = null;
+          while( (lineContent = br.readLine()) != null){
+              if(packageName.equals(lineContent)){
+                   return true;
+              }
+          }
+      }catch(IOException e){
+           Log.e(TAG, " isDeleteApp IOException");
+      }finally{
+           try{
+              if(br != null)
+                br.close();
+           }catch(IOException e){
+               Log.e(TAG, " isDeleteApp Close ... IOException");
+           }
+     }
+     return false;
+    }
+
+    private boolean delAppRecord(String packageName,int parseFlags){
+      File delRecord = new File("/data/app/.delrecord");
+      FileWriter writer = null;
+      try{
+         writer = new FileWriter(delRecord, true);
+         writer.write(packageName +"\n");
+         writer.flush();
+      }catch(IOException e){
+           Log.e(TAG, "preloadapp unInstall record:  IOException");
+      }finally{
+           try{
+            if(writer != null)
+                writer.close();
+           }catch(IOException e){}
+      }
+       return true;
+    }
+    /* @} */
     /*
      *  Scan a package and return the newly parsed package.
      *  Returns null in case of errors and the error code is stored in mLastScanError
@@ -3436,6 +3512,12 @@ public class PackageManagerService extends IPackageManager.Stub {
             mLastScanError = pp.getParseError();
             return null;
         }
+        /* SPRD: add feature for scan preload dir  @{ */
+        File delRecord = new File("/data/app/.delrecord");
+        if(isPreloadApp(scanFile.getParent()) && delRecord.exists()){
+            if(isDeleteApp(pkg.packageName))return pkg;
+        }
+        /* @} */
         PackageSetting ps = null;
         PackageSetting updatedPkg;
         // reader
@@ -9086,6 +9168,10 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (DEBUG_REMOVE) Slog.d(TAG, "Removing non-system package:" + ps.name);
             // Kill application pre-emptively especially for apps on sd.
             killApplication(packageName, ps.appId);
+            /* SPRD: add delete preload app record @{ */
+            String path = ps.pkg.mPath.substring(0, ps.pkg.mPath.lastIndexOf("/"));
+            if(isPreloadApp(path)) delAppRecord(ps.pkg.packageName, flags);
+            /* @} */
             ret = deleteInstalledPackageLI(ps, deleteCodeAndResources, flags,
                     allUserHandles, perUserInstalled,
                     outInfo, writeSettings);
@@ -10719,7 +10805,12 @@ public class PackageManagerService extends IPackageManager.Stub {
                 if (pkg.applicationInfo != null && isSystemApp(pkg)) {
                     Slog.w(TAG, "Cannot move system application");
                     returnCode = PackageManager.MOVE_FAILED_SYSTEM_PACKAGE;
-                } else if (pkg.mOperationPending) {
+				/* SPRD: add feature for scan preload dir  @{ */
+                }else if(pkg.applicationInfo.sourceDir != null
+                      && pkg.applicationInfo.sourceDir.startsWith("/system/preloadapp")){
+                      Slog.w(TAG, "Cannot move preload application: " + pkg.applicationInfo.sourceDir);
+                      returnCode = PackageManager.MOVE_FAILED_INTERNAL_ERROR;
+                }/* @} */ else if (pkg.mOperationPending) {
                     Slog.w(TAG, "Attempt to move package which has pending operations");
                     returnCode = PackageManager.MOVE_FAILED_OPERATION_PENDING;
                 } else {
