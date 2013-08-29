@@ -2074,5 +2074,7 @@
 <!-- ===============================================================
      SPRD: end Resources added
      =============================================================== -->
+  <!-- SPRD: Modify Bug 208839, Regular boot developmen  -->
+  <public type="string" name="shutdown_after_seconds"/>
 
 </resources>

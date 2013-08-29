@@ -4132,4 +4132,6 @@
     <!-- Message informing user that the requested activity could not be found [CHAR LIMIT=none] -->
     <string name="app_not_found">No application found to handle this action</string>
     <string name="revoke">Revoke</string>
+    <!-- SPRD: Modify Bug 208839, Regular boot developmen  -->
+    <string name="shutdown_after_seconds">Phone will shut down after <xliff:g id="NUMBER">%d</xliff:g> seconds</string>
 </resources>

@@ -95,6 +95,22 @@ static jint android_server_AlarmManagerService_waitForAlarm(JNIEnv* env, jobject
 
     return result;
 }
+/**
+ * SPRD: Modify Bug 208839, Regular boot developmen @{
+ */
+static void android_server_AlarmManagerService_clear(JNIEnv* env, jobject obj, jint fd, jint type)
+{
+    struct timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = 0;
+
+       int result = ioctl(fd, ANDROID_ALARM_CLEAR(type), &ts);
+       if (result < 0)
+       {
+        ALOGE("Unable to clear alarm: %s\n", strerror(errno));
+    }
+}
+/* @} */
 
 static JNINativeMethod sMethods[] = {
      /* name, signature, funcPtr */
@@ -103,6 +119,9 @@ static JNINativeMethod sMethods[] = {
 	{"set", "(IIJJ)V", (void*)android_server_AlarmManagerService_set},
     {"waitForAlarm", "(I)I", (void*)android_server_AlarmManagerService_waitForAlarm},
     {"setKernelTimezone", "(II)I", (void*)android_server_AlarmManagerService_setKernelTimezone},
+    /* SPRD: Modify Bug 208839, Regular boot developmen @{ */
+    {"clear", "(II)V", (void*)android_server_AlarmManagerService_clear},
+    /* @} */
 };
 
 int register_android_server_AlarmManagerService(JNIEnv* env)

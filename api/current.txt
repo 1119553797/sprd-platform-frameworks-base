@@ -1552,6 +1552,19 @@ package android {
 
   public static final class R.string {
     ctor public R.string();
+    field public static final int ActiveConCf = 17039385; // 0x1040019
+    field public static final int ActiveUnconCf = 17039384; // 0x1040018
+    field public static final int CallForwarded = 17039386; // 0x104001a
+    field public static final int CallHold = 17039391; // 0x104001f
+    field public static final int CallRetrieved = 17039392; // 0x1040020
+    field public static final int CallWaiting = 17039387; // 0x104001b
+    field public static final int ForwardedCall = 17039390; // 0x104001e
+    field public static final int InCallBarred = 17039389; // 0x104001d
+    field public static final int IncomingCallForwarded = 17039393; // 0x1040021
+    field public static final int OutCallBarred = 17039388; // 0x104001c
+    field public static final int Pin2Mmi = 17039394; // 0x1040022
+    field public static final int Puk2Mmi = 17039396; // 0x1040024
+    field public static final int PukMmi = 17039395; // 0x1040023
     field public static final int VideoView_error_button = 17039376; // 0x1040010
     field public static final int VideoView_error_text_invalid_progressive_playback = 17039381; // 0x1040015
     field public static final int VideoView_error_text_unknown = 17039377; // 0x1040011
@@ -1572,6 +1585,7 @@ package android {
     field public static final int search_go = 17039372; // 0x104000c
     field public static final int selectAll = 17039373; // 0x104000d
     field public static final int selectTextMode = 17039382; // 0x1040016
+    field public static final int shutdown_after_seconds = 17039397; // 0x1040025
     field public static final int status_bar_notification_info_overflow = 17039383; // 0x1040017
     field public static final int unknownName = 17039374; // 0x104000e
     field public static final int untitled = 17039375; // 0x104000f
@@ -3031,6 +3045,7 @@ package android.app {
 
   public class AlarmManager {
     method public void cancel(android.app.PendingIntent);
+    method public void cancelAlarm(android.app.PendingIntent);
     method public void set(int, long, android.app.PendingIntent);
     method public void setInexactRepeating(int, long, long, android.app.PendingIntent);
     method public void setRepeating(int, long, long, android.app.PendingIntent);
@@ -3043,6 +3058,7 @@ package android.app {
     field public static final long INTERVAL_HALF_DAY = 43200000L; // 0x2932e00L
     field public static final long INTERVAL_HALF_HOUR = 1800000L; // 0x1b7740L
     field public static final long INTERVAL_HOUR = 3600000L; // 0x36ee80L
+    field public static final int POWER_OFF_WAKEUP = 4; // 0x4
     field public static final int RTC = 1; // 0x1
     field public static final int RTC_WAKEUP = 0; // 0x0
   }
@@ -11251,6 +11267,7 @@ package android.media {
     method public int getStreamMaxVolume(int);
     method public int getStreamVolume(int);
     method public deprecated int getVibrateSetting(int);
+    method public boolean isAudioRecording();
     method public boolean isBluetoothA2dpOn();
     method public boolean isBluetoothScoAvailableOffCall();
     method public boolean isBluetoothScoOn();
@@ -11277,7 +11294,6 @@ package android.media {
     method public void setStreamMute(int, boolean);
     method public void setStreamSolo(int, boolean);
     method public void setStreamVolume(int, int, int);
-    method public boolean isAudioRecording(); // SPRD: add method isAudioRecording
     method public deprecated void setVibrateSetting(int, int);
     method public deprecated void setWiredHeadsetOn(boolean);
     method public deprecated boolean shouldVibrate(int);
@@ -20105,6 +20121,10 @@ package android.provider {
     field public static final deprecated java.lang.String LOGGING_ID = "logging_id";
     field public static final deprecated java.lang.String MODE_RINGER = "mode_ringer";
     field public static final java.lang.String MODE_RINGER_STREAMS_AFFECTED = "mode_ringer_streams_affected";
+    field public static final java.lang.String MULTI_SIM_DATA_CALL = "multi_sim_data_call";
+    field public static final java.lang.String MULTI_SIM_MMS = "multi_sim_mms";
+    field public static final java.lang.String MULTI_SIM_VIDEO_CALL = "multi_sim_video_call";
+    field public static final java.lang.String MULTI_SIM_VOICE_CALL = "multi_sim_voice_call";
     field public static final java.lang.String MUTE_STREAMS_AFFECTED = "mute_streams_affected";
     field public static final deprecated java.lang.String NETWORK_PREFERENCE = "network_preference";
     field public static final java.lang.String NEXT_ALARM_FORMATTED = "next_alarm_formatted";
@@ -20112,6 +20132,7 @@ package android.provider {
     field public static final deprecated java.lang.String PARENTAL_CONTROL_ENABLED = "parental_control_enabled";
     field public static final deprecated java.lang.String PARENTAL_CONTROL_LAST_UPDATE = "parental_control_last_update";
     field public static final deprecated java.lang.String PARENTAL_CONTROL_REDIRECT_URL = "parental_control_redirect_url";
+    field public static final java.lang.String POWER_ON_STANDBY_SELECT = "power_on_standby_select";
     field public static final deprecated java.lang.String RADIO_BLUETOOTH = "bluetooth";
     field public static final deprecated java.lang.String RADIO_CELL = "cell";
     field public static final deprecated java.lang.String RADIO_NFC = "nfc";
@@ -20127,9 +20148,12 @@ package android.provider {
     field public static final java.lang.String SHOW_GTALK_SERVICE_STATUS = "SHOW_GTALK_SERVICE_STATUS";
     field public static final deprecated java.lang.String SHOW_PROCESSES = "show_processes";
     field public static final deprecated java.lang.String SHOW_WEB_SUGGESTIONS = "show_web_suggestions";
+    field public static final java.lang.String SIM_STANDBY = "sim_standby";
+    field public static final java.lang.String SMS_VALIDITY_SIM = "sms_validity_sim";
     field public static final java.lang.String SOUND_EFFECTS_ENABLED = "sound_effects_enabled";
     field public static final deprecated java.lang.String STAY_ON_WHILE_PLUGGED_IN = "stay_on_while_plugged_in";
     field public static final java.lang.String SYS_PROP_SETTING_VERSION = "sys.settings_system_version";
+    field public static final java.lang.String Standby_Select_Card_Show = "Is_Standby_Select_Card_Show";
     field public static final java.lang.String TEXT_AUTO_CAPS = "auto_caps";
     field public static final java.lang.String TEXT_AUTO_PUNCTUATE = "auto_punctuate";
     field public static final java.lang.String TEXT_AUTO_REPLACE = "auto_replace";
@@ -21862,8 +21886,12 @@ package android.telephony {
   }
 
   public final class SmsManager {
+    method public java.lang.String copyMessageToIccEfWithResult(java.lang.String, java.lang.String, java.lang.String, int, long, int);
+    method public java.lang.String copyMessageToIccEfWithResult(byte[], byte[], int, int);
+    method public java.lang.String copyMessageToIccEfWithResult(java.lang.String, java.lang.String, java.lang.String, boolean, int, int);
     method public java.util.ArrayList<java.lang.String> divideMessage(java.lang.String);
     method public static android.telephony.SmsManager getDefault();
+    method public boolean saveMultipartTextMessage(java.lang.String, java.util.ArrayList<java.lang.String>, boolean, java.lang.String);
     method public void sendDataMessage(java.lang.String, java.lang.String, short, byte[], android.app.PendingIntent, android.app.PendingIntent);
     method public void sendMultipartTextMessage(java.lang.String, java.lang.String, java.util.ArrayList<java.lang.String>, java.util.ArrayList<android.app.PendingIntent>, java.util.ArrayList<android.app.PendingIntent>);
     method public void sendTextMessage(java.lang.String, java.lang.String, java.lang.String, android.app.PendingIntent, android.app.PendingIntent);
@@ -21937,22 +21965,36 @@ package android.telephony {
   }
 
   public class TelephonyManager {
+    ctor public TelephonyManager(android.content.Context, int);
+    method public static java.lang.String getAction(java.lang.String, int);
     method public java.util.List<android.telephony.CellInfo> getAllCellInfo();
     method public int getCallState();
     method public android.telephony.CellLocation getCellLocation();
     method public int getDataActivity();
     method public int getDataState();
+    method public int getDataStatebyApnType(java.lang.String);
+    method public static int getDefaultPhoneId();
+    method public static int getDefaultSim(android.content.Context, int);
     method public java.lang.String getDeviceId();
     method public java.lang.String getDeviceSoftwareVersion();
+    method public static java.lang.String getFeature(java.lang.String, int);
     method public java.lang.String getGroupIdLevel1();
+    method public boolean getIccFdnEnabled();
     method public java.lang.String getLine1Number();
+    method public int getModemType();
     method public java.util.List<android.telephony.NeighboringCellInfo> getNeighboringCellInfo();
     method public java.lang.String getNetworkCountryIso();
     method public java.lang.String getNetworkOperator();
     method public java.lang.String getNetworkOperatorName();
     method public int getNetworkType();
+    method public static int getPhoneCount();
     method public int getPhoneType();
+    method public static java.lang.String getProperty(java.lang.String, int);
+    method public int getRemainTimes(int);
+    method public static java.lang.String getServiceName(java.lang.String, int);
+    method public static java.lang.String getSetting(java.lang.String, int);
     method public java.lang.String getSimCountryIso();
+    method public java.lang.String getSimIccId(int);
     method public java.lang.String getSimOperator();
     method public java.lang.String getSimOperatorName();
     method public java.lang.String getSimSerialNumber();
@@ -21961,8 +22003,11 @@ package android.telephony {
     method public java.lang.String getVoiceMailAlphaTag();
     method public java.lang.String getVoiceMailNumber();
     method public boolean hasIccCard();
+    method public static boolean isMultiSim();
     method public boolean isNetworkRoaming();
+    method public boolean isVTCall();
     method public void listen(android.telephony.PhoneStateListener, int);
+    method public static boolean setDefaultSim(android.content.Context, int, int);
     field public static final java.lang.String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
     field public static final java.lang.String ACTION_RESPOND_VIA_MESSAGE = "android.intent.action.RESPOND_VIA_MESSAGE";
     field public static final int CALL_STATE_IDLE = 0; // 0x0
@@ -21982,6 +22027,9 @@ package android.telephony {
     field public static final java.lang.String EXTRA_STATE_IDLE;
     field public static final java.lang.String EXTRA_STATE_OFFHOOK;
     field public static final java.lang.String EXTRA_STATE_RINGING;
+    field public static final int MODE_MMS = 2; // 0x2
+    field public static final int MODE_VEDIO = 1; // 0x1
+    field public static final int MODE_VOICE = 0; // 0x0
     field public static final int NETWORK_TYPE_1xRTT = 7; // 0x7
     field public static final int NETWORK_TYPE_CDMA = 4; // 0x4
     field public static final int NETWORK_TYPE_EDGE = 2; // 0x2
@@ -21998,6 +22046,7 @@ package android.telephony {
     field public static final int NETWORK_TYPE_LTE = 13; // 0xd
     field public static final int NETWORK_TYPE_UMTS = 3; // 0x3
     field public static final int NETWORK_TYPE_UNKNOWN = 0; // 0x0
+    field public static final int PHONE_ID_INVALID = -1; // 0xffffffff
     field public static final int PHONE_TYPE_CDMA = 2; // 0x2
     field public static final int PHONE_TYPE_GSM = 1; // 0x1
     field public static final int PHONE_TYPE_NONE = 0; // 0x0
@@ -22008,6 +22057,10 @@ package android.telephony {
     field public static final int SIM_STATE_PUK_REQUIRED = 3; // 0x3
     field public static final int SIM_STATE_READY = 5; // 0x5
     field public static final int SIM_STATE_UNKNOWN = 0; // 0x0
+    field public static final int UNLOCK_PIN = 0; // 0x0
+    field public static final int UNLOCK_PIN2 = 1; // 0x1
+    field public static final int UNLOCK_PUK = 2; // 0x2
+    field public static final int UNLOCK_PUK2 = 3; // 0x3
   }
 
 }

@@ -30,6 +30,8 @@ interface IAlarmManager {
     void setTime(long millis);
     void setTimeZone(String zone);
     void remove(in PendingIntent operation);
+    /* SPRD: Modify Bug 208839, Regular boot developmen */
+    void removeAlarm(in PendingIntent operation);
 }
 
 

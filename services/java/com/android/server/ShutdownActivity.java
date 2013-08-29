@@ -25,19 +25,25 @@ import android.os.IPowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Slog;
+import android.widget.TextView;
 
 import com.android.server.power.ShutdownThread;
 
-public class ShutdownActivity extends Activity {
+/* SPRD: Modify Bug 208839, Regular boot developmen @{ */
+//public class ShutdownActivity extends Activity {
+public class ShutdownActivity extends ShutdownFullscreenActivity {
 
     private static final String TAG = "ShutdownActivity";
+    /* SPRD: Modify Bug 208839, Regular boot developmen @{
     private boolean mReboot;
     private boolean mConfirm;
+    @} */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /* SPRD: Modify Bug 208839, Regular boot developmen @{
         Intent intent = getIntent();
         mReboot = Intent.ACTION_REBOOT.equals(intent.getAction());
         mConfirm = intent.getBooleanExtra(Intent.EXTRA_KEY_CONFIRM, false);
@@ -65,5 +71,8 @@ public class ShutdownActivity extends Activity {
             thr.join();
         } catch (InterruptedException e) {
         }
+        */
+        setContentView(new TextView(this));
+        /* @} */
     }
 }
