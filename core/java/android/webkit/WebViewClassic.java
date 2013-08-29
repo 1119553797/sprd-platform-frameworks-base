@@ -113,6 +113,7 @@ import android.widget.PopupWindow;
 import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.sprd.android.config.OptConfig;
 
 import junit.framework.Assert;
 
@@ -742,6 +743,13 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
                 HTML5VideoInline.cleanupSurfaceTexture();
                 HTML5VideoView.release();
             }
+	    /**
+	     * SPRD: clear cache. @{
+	    */
+ 	    if (OptConfig.LC_RAM_SUPPORT) {
+            	level = (level < TRIM_MEMORY_UI_HIDDEN) ? TRIM_MEMORY_UI_HIDDEN : level;
+            }
+	    /** @} */
             WebViewClassic.nativeOnTrimMemory(level);
         }
     }
@@ -3498,6 +3506,13 @@ public final class WebViewClassic implements WebViewProvider, WebViewProvider.Sc
      */
     @Override
     public void pauseTimers() {
+	/**
+	 * SPRD: clear cache. @{
+	*/
+ 	if (OptConfig.LC_RAM_SUPPORT) {
+        	WebViewClassic.nativeOnTrimMemory(ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN);
+        }
+	/** @} */
         mWebViewCore.sendMessage(EventHub.PAUSE_TIMERS);
     }
 
