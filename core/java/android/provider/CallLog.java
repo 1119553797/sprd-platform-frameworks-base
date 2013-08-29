@@ -263,6 +263,7 @@ public class CallLog {
         /**
          * SPRD: the phone id.
          * <P>Type: INTEGER</P>
+         * @hide
          */
         public static final String PHONE_ID = "phone_id";
 
@@ -300,13 +301,19 @@ public class CallLog {
             return addCall(ci, context, number, presentation, callType, start, duration, 0, 0);
         }
 
-        /** SPRD: add **/
+        /**
+         * SPRD: add 
+         * {@hide}
+         */
         public static Uri addCall(CallerInfo ci, Context context, String number,
                 int presentation, int callType, long start, int duration, int phoneId, int videoCallFlag) {
             return addCall(ci, context, number, presentation, callType, start, duration, 0, 0, null);
         }
 
-        /** SPRD: add **/
+        /**
+         * SPRD: add 
+         * {@hide}
+         */
         public static Uri addCall(CallerInfo ci, Context context, String number,
                 int presentation, int callType, long start, int duration, int phoneId, int videoCallFlag, String iccId) {
             final ContentResolver resolver = context.getContentResolver();
@@ -408,7 +415,10 @@ public class CallLog {
             return getLastOutgoingCall(context, 0);//SPRD: remove logic to below
         }
 
-        /** SPRD: add for query call log by type */
+        /** 
+         * SPRD: add for query call log by type 
+         * {@hide}
+         */
         public static String getLastOutgoingCall(Context context, int type) {
             final ContentResolver resolver = context.getContentResolver();
             Cursor c = null;
